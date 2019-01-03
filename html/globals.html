@@ -105,17 +105,35 @@ $(document).ready(function(){initNavTree('globals.html','');});
 <li>xe_api_version_t
 : <a class="el" href="xe__umd__api_8h.html#ad69250d10c10e024a5d8aa4dea0fd831">xe_umd_api.h</a>
 </li>
+<li>XE_BIT
+: <a class="el" href="xe__umd__api_8h.html#ac2281c7f49c93289449dbacaa9f59ef5">xe_umd_api.h</a>
+</li>
 <li>XE_COMMAND_LIST_FLAG_NONE
 : <a class="el" href="xe__umd__api_8h.html#a112c19a569dd4e2fa6aeb22214a64c0aaec988ccf52f8898f436210339018365c">xe_umd_api.h</a>
 </li>
 <li>xe_command_list_flags_t
 : <a class="el" href="xe__umd__api_8h.html#a112c19a569dd4e2fa6aeb22214a64c0a">xe_umd_api.h</a>
 </li>
-<li>XE_COMMAND_QUEUE_FLAG_NONE
-: <a class="el" href="xe__umd__api_8h.html#ab3bc19a79aa63e22bade20d2fdde4fc6a9a2c5ad9850cfa7316197e9f9af0d24e">xe_umd_api.h</a>
+<li>XE_COMMAND_QUEUE_FLAG_ASYNCHRONOUS
+: <a class="el" href="xe__umd__api_8h.html#ab3bc19a79aa63e22bade20d2fdde4fc6aef8bb61c7cb17264acdbd11d8e00c63e">xe_umd_api.h</a>
+</li>
+<li>XE_COMMAND_QUEUE_FLAG_DEFAULT
+: <a class="el" href="xe__umd__api_8h.html#ab3bc19a79aa63e22bade20d2fdde4fc6afa7a77ff3db40f2b40df8fa0196cdc14">xe_umd_api.h</a>
+</li>
+<li>XE_COMMAND_QUEUE_FLAG_SYNCHRONOUS
+: <a class="el" href="xe__umd__api_8h.html#ab3bc19a79aa63e22bade20d2fdde4fc6a01a7ef1b2e6570f9974a5a85a5cf95b3">xe_umd_api.h</a>
 </li>
 <li>xe_command_queue_flags_t
 : <a class="el" href="xe__umd__api_8h.html#ab3bc19a79aa63e22bade20d2fdde4fc6">xe_umd_api.h</a>
+</li>
+<li>XE_COMMAND_QUEUE_PARAMETER_CACHE_CONFIG
+: <a class="el" href="xe__umd__api_8h.html#a1c93d3851d6295cf5bac3cb623071c19a77570f6202ecba3ee1ea652e7d6c105f">xe_umd_api.h</a>
+</li>
+<li>XE_COMMAND_QUEUE_PARAMETER_PRIORITY
+: <a class="el" href="xe__umd__api_8h.html#a1c93d3851d6295cf5bac3cb623071c19a9dd6911dd6ba8cf85aba4f27096dd3db">xe_umd_api.h</a>
+</li>
+<li>xe_command_queue_parameter_t
+: <a class="el" href="xe__umd__api_8h.html#a1c93d3851d6295cf5bac3cb623071c19">xe_umd_api.h</a>
 </li>
 <li>XE_DEVICE_ATTRIBUTE_MAX_SIMULTANEOUS_QUEUES
 : <a class="el" href="xe__umd__api_8h.html#a003ecc42f784db9cb9cd02f299849a87a29222b9f4757bb27029b24f9d9415935">xe_umd_api.h</a>
@@ -192,6 +210,18 @@ $(document).ready(function(){initNavTree('globals.html','');});
 <li>xeCommandQueueEnqueueCommandList()
 : <a class="el" href="xe__umd__api_8h.html#ac83912c3d520f90ab6518cdd687e6943">xe_umd_api.h</a>
 </li>
+<li>xeCommandQueueGetParameter()
+: <a class="el" href="xe__umd__api_8h.html#ab585aa7e0b3aabf1fc010fd06333b5bf">xe_umd_api.h</a>
+</li>
+<li>xeCommandQueueResetParameters()
+: <a class="el" href="xe__umd__api_8h.html#a7cd79dc6ba2971b56c6ddcd1670006ea">xe_umd_api.h</a>
+</li>
+<li>xeCommandQueueSetParameter()
+: <a class="el" href="xe__umd__api_8h.html#af24f0f7711afeaf4f7f75aa1f41b4f04">xe_umd_api.h</a>
+</li>
+<li>xeCommandQueueSynchronize()
+: <a class="el" href="xe__umd__api_8h.html#a19db5ba279fde0cc4fdf33a5d114eec6">xe_umd_api.h</a>
+</li>
 <li>xeDeviceGet()
 : <a class="el" href="xe__umd__api_8h.html#aa1a1a914d0ac9d53a62a2b212adb5823">xe_umd_api.h</a>
 </li>
@@ -228,7 +258,7 @@ $(document).ready(function(){initNavTree('globals.html','');});
 <!-- start footer part -->
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
-    <li class="footer">Generated on Thu Jan 3 2019 10:15:04 for Driver API by
+    <li class="footer">Generated on Thu Jan 3 2019 11:51:55 for Driver API by
     <a href="http://www.doxygen.org/index.html">
     <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.8.13 </li>
   </ul>

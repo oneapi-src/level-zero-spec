@@ -12,6 +12,7 @@ var xe__umd__api_8h =
     [ "__xecall", "xe__umd__api_8h.html#aab180c7b54dae19a960d3b4425649275", null ],
     [ "DECLARE_ENUM", "xe__umd__api_8h.html#aa268c6f6ae47f291fab6989858bed74c", null ],
     [ "DECLARE_HANDLE", "xe__umd__api_8h.html#a5ec846cf9fed9ad6454492d589112f9d", null ],
+    [ "XE_BIT", "xe__umd__api_8h.html#ac2281c7f49c93289449dbacaa9f59ef5", null ],
     [ "XE_MAJOR_VERSION", "xe__umd__api_8h.html#a9468649fc9d1c6fd3c47f8b417f85467", null ],
     [ "XE_MINOR_VERSION", "xe__umd__api_8h.html#af48475b0952417678796bccf3d0b7509", null ],
     [ "xe_api_version_t", "xe__umd__api_8h.html#ad69250d10c10e024a5d8aa4dea0fd831", [
@@ -21,7 +22,13 @@ var xe__umd__api_8h =
       [ "XE_COMMAND_LIST_FLAG_NONE", "xe__umd__api_8h.html#a112c19a569dd4e2fa6aeb22214a64c0aaec988ccf52f8898f436210339018365c", null ]
     ] ],
     [ "xe_command_queue_flags_t", "xe__umd__api_8h.html#ab3bc19a79aa63e22bade20d2fdde4fc6", [
-      [ "XE_COMMAND_QUEUE_FLAG_NONE", "xe__umd__api_8h.html#ab3bc19a79aa63e22bade20d2fdde4fc6a9a2c5ad9850cfa7316197e9f9af0d24e", null ]
+      [ "XE_COMMAND_QUEUE_FLAG_DEFAULT", "xe__umd__api_8h.html#ab3bc19a79aa63e22bade20d2fdde4fc6afa7a77ff3db40f2b40df8fa0196cdc14", null ],
+      [ "XE_COMMAND_QUEUE_FLAG_SYNCHRONOUS", "xe__umd__api_8h.html#ab3bc19a79aa63e22bade20d2fdde4fc6a01a7ef1b2e6570f9974a5a85a5cf95b3", null ],
+      [ "XE_COMMAND_QUEUE_FLAG_ASYNCHRONOUS", "xe__umd__api_8h.html#ab3bc19a79aa63e22bade20d2fdde4fc6aef8bb61c7cb17264acdbd11d8e00c63e", null ]
+    ] ],
+    [ "xe_command_queue_parameter_t", "xe__umd__api_8h.html#a1c93d3851d6295cf5bac3cb623071c19", [
+      [ "XE_COMMAND_QUEUE_PARAMETER_PRIORITY", "xe__umd__api_8h.html#a1c93d3851d6295cf5bac3cb623071c19a9dd6911dd6ba8cf85aba4f27096dd3db", null ],
+      [ "XE_COMMAND_QUEUE_PARAMETER_CACHE_CONFIG", "xe__umd__api_8h.html#a1c93d3851d6295cf5bac3cb623071c19a77570f6202ecba3ee1ea652e7d6c105f", null ]
     ] ],
     [ "xe_device_attribute_t", "xe__umd__api_8h.html#a003ecc42f784db9cb9cd02f299849a87", [
       [ "XE_DEVICE_ATTRIBUTE_MAX_THREADS", "xe__umd__api_8h.html#a003ecc42f784db9cb9cd02f299849a87ac2e6cf4a9347ef77bd089b191017bf26", null ],
@@ -52,6 +59,10 @@ var xe__umd__api_8h =
     [ "xeCommandQueueCreate", "xe__umd__api_8h.html#ac5d4d3880fdd5a1b5b4195832fa32736", null ],
     [ "xeCommandQueueDestroy", "xe__umd__api_8h.html#a60eb5d7c4082e66b1eadc8d9547c5b64", null ],
     [ "xeCommandQueueEnqueueCommandList", "xe__umd__api_8h.html#ac83912c3d520f90ab6518cdd687e6943", null ],
+    [ "xeCommandQueueGetParameter", "xe__umd__api_8h.html#ab585aa7e0b3aabf1fc010fd06333b5bf", null ],
+    [ "xeCommandQueueResetParameters", "xe__umd__api_8h.html#a7cd79dc6ba2971b56c6ddcd1670006ea", null ],
+    [ "xeCommandQueueSetParameter", "xe__umd__api_8h.html#af24f0f7711afeaf4f7f75aa1f41b4f04", null ],
+    [ "xeCommandQueueSynchronize", "xe__umd__api_8h.html#a19db5ba279fde0cc4fdf33a5d114eec6", null ],
     [ "xeDeviceGet", "xe__umd__api_8h.html#aa1a1a914d0ac9d53a62a2b212adb5823", null ],
     [ "xeDeviceGetApiVersion", "xe__umd__api_8h.html#ab4fff191d021e8ede3e4caef8d1b8ab0", null ],
     [ "xeDeviceGetAttribute", "xe__umd__api_8h.html#a223e99f5c17e355b4cc46f14f0aaf9fa", null ],

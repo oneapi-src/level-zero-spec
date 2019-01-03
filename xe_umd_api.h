@@ -81,6 +81,9 @@ DECLARE_HANDLE( xe_resource_handle_t );
 #endif
 
 ///////////////////////////////////////////////////////////////////////////////
+#define XE_BIT( N ) ( 1 << N )
+
+///////////////////////////////////////////////////////////////////////////////
 /// @brief Defines Return/Error codes
 DECLARE_ENUM( xe_result_t )
 {
@@ -181,7 +184,11 @@ xe_result_t __xecall
 /// @brief Command Queue creation flags
 DECLARE_ENUM( xe_command_queue_flags_t )
 {
-    XE_COMMAND_QUEUE_FLAG_NONE = 0              ///< default behavior
+    XE_COMMAND_QUEUE_FLAG_DEFAULT = 0,      ///< implicit default behavior (driver heuristics)
+    XE_COMMAND_QUEUE_FLAG_SYNCHRONOUS,      ///< GPU execution always completes immediately on enqueue; 
+                                            ///< CPU thread is blocked using wait on implicit synchronization object
+    XE_COMMAND_QUEUE_FLAG_ASYNCHRONOUS,     ///< GPU execution is scheduled and will complete in future;
+                                            ///< explicit synchronization object must be used to determine completeness
 };
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -192,7 +199,10 @@ typedef struct _xe_command_queue_desc_t
 } xe_command_queue_desc_t;
 
 ///////////////////////////////////////////////////////////////////////////////
-/// @brief Creates a command queue
+/// @brief Creates a command queue on a device
+/// @details A command queue is a FIFO stream used to submit work to the device.
+///     The command queue maintains some machine state, which is inherited by
+///     subsequent execution.
 /// @returns XE_RESULT_SUCCESS, ...
 xe_result_t __xecall
   xeCommandQueueCreate(
@@ -210,6 +220,57 @@ xe_result_t __xecall
     xe_command_queue_handle_t hCommandQueue     ///< [in] handle of command queue object to destroy
     );
 
+///////////////////////////////////////////////////////////////////////////////
+DECLARE_ENUM( xe_command_queue_parameter_t )
+{
+    XE_COMMAND_QUEUE_PARAMETER_PRIORITY = 1,    ///< see xe_command_queue_priority_t
+    XE_COMMAND_QUEUE_PARAMETER_CACHE_CONFIG,    ///< see xe_command_queue_cacheconfig_t
+};
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Sets a command queue's parameter
+/// @returns XE_RESULT_SUCCESS, ...
+xe_result_t __xecall
+  xeCommandQueueSetParameter(
+    xe_command_queue_handle_t hCommandQueue     ///< [in] handle of command queue
+    xe_command_queue_parameter_t parameter,     ///< [in] parameter to change
+    uint32_t value                              ///< [in] value of attribute
+    );
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Retrieves a command queue's parameter
+/// @returns XE_RESULT_SUCCESS, ...
+xe_result_t __xecall
+  xeCommandQueueGetParameter(
+    xe_command_queue_handle_t hCommandQueue     ///< [in] handle of command queue
+    xe_command_queue_parameter_t parameter,     ///< [in] parameter to change
+    uint32_t* value                             ///< [out] value of attribute
+    );
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Resets all command queue parameters to default state
+/// @returns XE_RESULT_SUCCESS, ...
+xe_result_t __xecall
+  xeCommandQueueResetParameters(
+    xe_command_queue_handle_t hCommandQueue     ///< [in] handle of command queue
+    );
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Enqueues a command list into a command queue
+/// @returns XE_RESULT_SUCCESS, ...
+xe_result_t __xecall
+  xeCommandQueueEnqueueCommandList(
+    xe_command_queue_handle_t hCommandQueue,    ///< [in] handle of the command queue
+    xe_command_list_handle_t hCommandList       ///< [in] handle of the command list to execute
+    );
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Synchronizes a command queue
+/// @returns XE_RESULT_SUCCESS, ...
+xe_result_t __xecall
+  xeCommandQueueSynchronize(
+    xe_command_queue_handle_t hCommandQueue     ///< [in] handle of command queue
+    );
 
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Command List creation flags
@@ -245,12 +306,12 @@ xe_result_t __xecall
     );
 
 ///////////////////////////////////////////////////////////////////////////////
-/// @brief Enqueues a command list into a command queue
+/// @brief Encodes an event object into a command list
 /// @returns XE_RESULT_SUCCESS, ...
 xe_result_t __xecall
-  xeCommandQueueEnqueueCommandList(
-    xe_command_queue_handle_t hCommandQueue,    ///< [in] handle of the command queue
-    xe_command_list_handle_t hCommandList       ///< [in] handle of the command list to execute
+  xeCommandListEncodeEvent(
+    xe_command_list_handle_t hCommandList,  ///< [in] handle of the command list
+    xe_event_handle_t hEvent                ///< [in] handle of the event 
     );
 
 
@@ -287,15 +348,6 @@ xe_result_t __xecall
     xe_event_handle_t hEvent                ///< [in] handle of event object to destroy
     );
 
-///////////////////////////////////////////////////////////////////////////////
-/// @brief Encodes an event object into a command list
-/// @returns XE_RESULT_SUCCESS, ...
-xe_result_t __xecall
-  xeCommandListEncodeEvent(
-    xe_command_list_handle_t hCommandList,  ///< [in] handle of the command list
-    xe_event_handle_t hEvent                ///< [in] handle of the event 
-    );
-    
 
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Resource creation flags
