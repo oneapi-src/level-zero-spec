@@ -31,6 +31,12 @@
 #pragma once
 #endif
 
+
+///////////////////////////////////////////////////////////////////////////////
+#if !defined( __cplusplus )
+typedef unsigned int uint32_t;
+#endif
+
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Calling convention for all APIs
 #define __xecall __stdcall
@@ -65,199 +71,245 @@ DECLARE_HANDLE( xe_resource_handle_t );
 
 
 ///////////////////////////////////////////////////////////////////////////////
-/// @brief Defines Return/Error codes
-enum xe_result_t : uint32_t
-{
-    XE_RESULT_SUCCESS = 0,             ///< success
-    XE_RESULT_ERROR_INVALID_PARAMETER, ///< invalid parameter provided
-    XE_RESULT_ERROR_OUT_OF_MEMORY,     ///< insufficient memory to satisfy call
-    XE_RESULT_ERROR_UNKNOWN = -1       ///< internal error
-};
-
+#if defined( __cplusplus )
+#define DECLARE_ENUM( NAME )    \
+    enum NAME : uint32_t
+#else
+#define DECLARE_ENUM( NAME )    \
+    typedef uint32_t NAME;  \
+    enum _##NAME
+#endif
 
 ///////////////////////////////////////////////////////////////////////////////
-/// @brief Device creation flags
-enum xe_device_flags : uint32_t
+/// @brief Defines Return/Error codes
+DECLARE_ENUM( xe_result_t )
 {
-    XE_DEVICE_FLAG_NONE = 0            ///< default behavior
+    XE_RESULT_SUCCESS = 0,              ///< success
+    XE_RESULT_ERROR_INVALID_PARAMETER,  ///< invalid parameter provided
+    XE_RESULT_ERROR_OUT_OF_MEMORY,      ///< insufficient memory to satisfy call
+    XE_RESULT_ERROR_UNKNOWN = -1        ///< internal error
+};
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Defines API versions
+/// @details API versions contain major and minor attributes,
+///     use XE_MAJOR_VERSION and XE_MINOR_VERSION
+DECLARE_ENUM( xe_version_t )
+{
+    XE_VERSION_1_0 = 0x00010000
+};
+
+#define XE_MAJOR_VERSION( ver ) ( ver >> 16 )
+#define XE_MINOR_VERSION( ver ) ( ver & 0x0000ffff )
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Returns the API versions supported by the driver
+/// @details If "versions == nullptr", then "count" returns the number of versions supported.
+///     Otherwise, "count" specifies the length of "versions" to be reported.
+///     In order to only retreive the latest version supported, just pass "count = 1".
+xe_result_t __xecall
+  xeDriverGetSupportedVersions(
+    uint32_t* count,            ///< [in/out] number of versions returned
+    xe_version_t* versions      ///< [out] list of versions supported, from highest to lowest.
+    );
+    
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Device creation flags
+DECLARE_ENUM( xe_device_flags_t )
+{
+    XE_DEVICE_FLAG_NONE = 0             ///< default behavior
 };
 
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Device descriptor
 typedef struct _xe_device_desc
 {
-    xe_device_flags flags;             ///< [in] creation flags
+    xe_device_flags_t flags;            ///< [in] creation flags
 } xe_device_desc_t;
 
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Creates a device object
 /// @returns XE_RESULT_SUCCESS, ...
 xe_result_t __xecall
-  xeCreateDevice( 
-    xe_device_desc_t desc,             ///< [in] device descriptor
-    xe_device_handle_t* phDevice       ///< [out] pointer to handle of device object created
+  xeDeviceCreate( 
+    xe_device_desc_t desc,              ///< [in] device descriptor
+    xe_device_handle_t* phDevice        ///< [out] pointer to handle of device object created
     );
     
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Deletes a device object
 /// @returns XE_RESULT_SUCCESS, ...
 xe_result_t __xecall
-  xeDestroyDevice(
-    xe_device_handle_t hDevice         ///< [in] handle of device object to destroy
+  xeDeviceDestroy(
+    xe_device_handle_t hDevice          ///< [in] handle of device object to destroy
     );
 
+///////////////////////////////////////////////////////////////////////////////
+DECLARE_ENUM( xe_device_attribute_t )
+{
+    XE_DEVICE_ATTRIBUTE_MAX_THREADS     ///< maximum number of threads supported
+};
 
 ///////////////////////////////////////////////////////////////////////////////
+/// @brief Retrieves an attribute of the device
+xe_result_t __xecall
+  xeDeviceGetAttribute(
+    xe_device_handle_t hDevice,         ///< [in] handle of the device object
+    xe_device_attribute_t attribute,    ///< [in] attribute to query
+    uint32_t* value                     ///< [out] value of the attribute
+    );
+    
+///////////////////////////////////////////////////////////////////////////////
 /// @brief Command Queue creation flags
-enum xe_command_queue_flags : uint32_t
+DECLARE_ENUM( xe_command_queue_flags_t )
 {
-    XE_COMMAND_QUEUE_FLAG_NONE = 0             ///< default behavior
+    XE_COMMAND_QUEUE_FLAG_NONE = 0              ///< default behavior
 };
 
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Command Queue descriptor
 typedef struct _xe_command_queue_desc_t
 {
-    xe_command_queue_flags flags;              ///< [in] creation flags
+    xe_command_queue_flags_t flags;             ///< [in] creation flags
 } xe_command_queue_desc_t;
 
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Creates a command queue
 /// @returns XE_RESULT_SUCCESS, ...
 xe_result_t __xecall
-  xeCreateCommandQueue(
-    xe_device_handle_t hDevice,                ///< [in] handle of the device
-    xe_command_queue_desc_t desc,              ///< [in] command queue descriptor
-    xe_command_queue_handle_t* phCommandQueue  ///< [out] pointer to handle of command queue object created
+  xeCommandQueueCreate(
+    xe_device_handle_t hDevice,                 ///< [in] handle of the device
+    xe_command_queue_desc_t desc,               ///< [in] command queue descriptor
+    xe_command_queue_handle_t* phCommandQueue   ///< [out] pointer to handle of command queue object created
     );
 
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Destroys a command queue
 /// @returns XE_RESULT_SUCCESS, ...
 xe_result_t __xecall
-  xeDestroyCommandQueue(
-    xe_device_handle_t hDevice,                ///< [in] handle of the device
-    xe_command_queue_handle_t hCommandQueue    ///< [in] handle of command queue object to destroy
+  xeCommandQueueDestroy(
+    xe_device_handle_t hDevice,                 ///< [in] handle of the device
+    xe_command_queue_handle_t hCommandQueue     ///< [in] handle of command queue object to destroy
     );
 
 
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Command List creation flags
-enum xe_command_list_flags : uint32_t
+DECLARE_ENUM( xe_command_list_flags_t )
 {
-    XE_COMMAND_LIST_FLAG_NONE = 0              ///< default behavior
+    XE_COMMAND_LIST_FLAG_NONE = 0               ///< default behavior
 };
 
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Command List descriptor
 typedef struct _xe_command_list_desc_t
 {
-    xe_command_list_flags flags;               ///< [in] creation flags
+    xe_command_list_flags_t flags;              ///< [in] creation flags
 } xe_command_list_desc_t;
 
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Creates a command list
 /// @returns XE_RESULT_SUCCESS, ...
 xe_result_t __xecall
-  xeCreateCommandList(
-    xe_device_handle_t hDevice,                ///< [in] handle of the device
-    xe_command_list_desc_t desc,               ///< [in] command list descriptor
-    xe_command_list_handle_t* phCommandList    ///< [out] pointer to handle of command list object created
+  xeCommandListCreate(
+    xe_device_handle_t hDevice,                 ///< [in] handle of the device
+    xe_command_list_desc_t desc,                ///< [in] command list descriptor
+    xe_command_list_handle_t* phCommandList     ///< [out] pointer to handle of command list object created
     );
 
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Destroys a command list
 /// @returns XE_RESULT_SUCCESS, ...
 xe_result_t __xecall
-  xeDestroyCommandList(
-    xe_device_handle_t hDevice,                ///< [in] handle of the device
-    xe_command_list_handle_t hCommandList      ///< [in] handle of command list object to destroy
+  xeCommandListDestroy(
+    xe_device_handle_t hDevice,                 ///< [in] handle of the device
+    xe_command_list_handle_t hCommandList       ///< [in] handle of command list object to destroy
     );
 
 ///////////////////////////////////////////////////////////////////////////////
-/// @brief Enqueues a command list to a command queue
+/// @brief Enqueues a command list into a command queue
 /// @returns XE_RESULT_SUCCESS, ...
 xe_result_t __xecall
-  xeEnqueueCommandList(
-    xe_command_queue_handle_t hCommandQueue,   ///< [in] handle of the command queue
-    xe_command_list_handle_t hCommandList      ///< [in] handle of the command list to execute
+  xeCommandQueueEnqueueCommandList(
+    xe_command_queue_handle_t hCommandQueue,    ///< [in] handle of the command queue
+    xe_command_list_handle_t hCommandList       ///< [in] handle of the command list to execute
     );
 
 
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Event creation flags
-enum xe_event_flags : uint32_t
+DECLARE_ENUM( xe_event_flags_t )
 {
-    XE_EVENT_FLAG_NONE = 0                 ///< default behavior
+    XE_EVENT_FLAG_NONE = 0                  ///< default behavior
 };
 
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Event descriptor
 typedef struct _xe_event_desc_t
 {
-    xe_event_flags flags;                  ///< [in] creation flags
+    xe_event_flags_t flags;                 ///< [in] creation flags
 } xe_event_desc_t;
 
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Creates an event object
 /// @returns XE_RESULT_SUCCESS, ...
 xe_result_t __xecall
-  xeCreateEvent( 
-    xe_device_handle_t hDevice,            ///< [in] handle of the device
-    xe_event_desc_t desc,                  ///< [in] event descriptor
-    xe_event_handle_t* phEvent             ///< [out] pointer to handle of event object created
+  xeEventCreate( 
+    xe_device_handle_t hDevice,             ///< [in] handle of the device
+    xe_event_desc_t desc,                   ///< [in] event descriptor
+    xe_event_handle_t* phEvent              ///< [out] pointer to handle of event object created
     );
     
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Deletes an event object
 /// @returns XE_RESULT_SUCCESS, ...
 xe_result_t __xecall
-  xeDestroyEvent(
-    xe_device_handle_t hDevice,            ///< [in] handle of the device
-    xe_event_handle_t hEvent               ///< [in] handle of event object to destroy
+  xeEventDestroy(
+    xe_device_handle_t hDevice,             ///< [in] handle of the device
+    xe_event_handle_t hEvent                ///< [in] handle of event object to destroy
     );
 
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Encodes an event object into a command list
 /// @returns XE_RESULT_SUCCESS, ...
 xe_result_t __xecall
-  xeEncodeEvent(
-    xe_command_list_handle_t hCommandList, ///< [in] handle of the command list
-    xe_event_handle_t hEvent               ///< [in] handle of the event 
+  xeCommandListEncodeEvent(
+    xe_command_list_handle_t hCommandList,  ///< [in] handle of the command list
+    xe_event_handle_t hEvent                ///< [in] handle of the event 
     );
     
 
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Resource creation flags
-enum xe_resource_flags : uint32_t
+DECLARE_ENUM( xe_resource_flags_t )
 {
-    XE_RESOURCE_FLAG_NONE = 0          ///< default behavior
+    XE_RESOURCE_FLAG_NONE = 0           ///< default behavior
 };
 
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Resource descriptor
 typedef struct _xe_resource_desc_t
 {
-    xe_resource_flags flags;           ///< [in] creation flags
+    xe_resource_flags_t flags;          ///< [in] creation flags
 } xe_resource_desc_t;
 
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Creates a resource object
 /// @returns XE_RESULT_SUCCESS, ...
 xe_result_t __xecall
-  xeCreateResource( 
-    xe_device_handle_t hDevice,        ///< [in] handle of the device
-    xe_resource_desc_t desc,           ///< [in] resource descriptor
-    xe_resource_handle_t* phResource   ///< [out] pointer to handle of resource object created
+  xeResourceCreate( 
+    xe_device_handle_t hDevice,         ///< [in] handle of the device
+    xe_resource_desc_t desc,            ///< [in] resource descriptor
+    xe_resource_handle_t* phResource    ///< [out] pointer to handle of resource object created
     );
     
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Deletes a resource object
 /// @returns XE_RESULT_SUCCESS, ...
 xe_result_t __xecall
-  xeDestroyResource(
-    xe_device_handle_t hDevice,        ///< [in] handle of the device
-    xe_resource_handle_t hResource     ///< [in] handle of resource object to destroy
+  xeResourceDestroy(
+    xe_device_handle_t hDevice,         ///< [in] handle of the device
+    xe_resource_handle_t hResource      ///< [in] handle of resource object to destroy
     );
 
 

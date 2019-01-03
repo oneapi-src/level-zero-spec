@@ -1,4 +1,4 @@
 var structxe__command__queue__desc__t =
 [
-    [ "flags", "structxe__command__queue__desc__t.html#a97e3b72e258ee6a6f2a8354686cb75e1", null ]
+    [ "flags", "structxe__command__queue__desc__t.html#a79caa48d21e0cdd41c204c73496a9ab3", null ]
 ];

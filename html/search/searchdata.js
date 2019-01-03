@@ -7,7 +7,7 @@ var indexSectionsWithContent =
   4: "fp",
   5: "x",
   6: "x",
-  7: "_d",
+  7: "_dx",
   8: "l"
 };
 

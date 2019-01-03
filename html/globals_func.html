@@ -80,41 +80,47 @@ $(document).ready(function(){initNavTree('globals_func.html','');});
 
 <div class="contents">
 &#160;<ul>
-<li>xeCreateCommandList()
-: <a class="el" href="xe__umd__api_8h.html#ada99cffdbd81d410ff7774867c6f69d6">xe_umd_api.h</a>
+<li>xeCommandListCreate()
+: <a class="el" href="xe__umd__api_8h.html#a3c7a043de36e3909cdd8f3f8fa3f9bdb">xe_umd_api.h</a>
 </li>
-<li>xeCreateCommandQueue()
-: <a class="el" href="xe__umd__api_8h.html#a599185e735d35f5280326c49382e5d18">xe_umd_api.h</a>
+<li>xeCommandListDestroy()
+: <a class="el" href="xe__umd__api_8h.html#ab4ff165c81ae6c1bfb0678f69eb7bcef">xe_umd_api.h</a>
 </li>
-<li>xeCreateDevice()
-: <a class="el" href="xe__umd__api_8h.html#a3a2fd7ea88b0907c5ed686a33b8bc8d0">xe_umd_api.h</a>
+<li>xeCommandListEncodeEvent()
+: <a class="el" href="xe__umd__api_8h.html#a90e5a4ab9218d0270183fee37890884a">xe_umd_api.h</a>
 </li>
-<li>xeCreateEvent()
-: <a class="el" href="xe__umd__api_8h.html#adff7ccabeebd21bdac2dbbc7496f351c">xe_umd_api.h</a>
+<li>xeCommandQueueCreate()
+: <a class="el" href="xe__umd__api_8h.html#ac5d4d3880fdd5a1b5b4195832fa32736">xe_umd_api.h</a>
 </li>
-<li>xeCreateResource()
-: <a class="el" href="xe__umd__api_8h.html#acabe64aad38410d1e3ff57c92f7b7a0a">xe_umd_api.h</a>
+<li>xeCommandQueueDestroy()
+: <a class="el" href="xe__umd__api_8h.html#a60eb5d7c4082e66b1eadc8d9547c5b64">xe_umd_api.h</a>
 </li>
-<li>xeDestroyCommandList()
-: <a class="el" href="xe__umd__api_8h.html#af9dd807954aded369baf792d5726f84d">xe_umd_api.h</a>
+<li>xeCommandQueueEnqueueCommandList()
+: <a class="el" href="xe__umd__api_8h.html#ac83912c3d520f90ab6518cdd687e6943">xe_umd_api.h</a>
 </li>
-<li>xeDestroyCommandQueue()
-: <a class="el" href="xe__umd__api_8h.html#ad97a774f10e153a260a0076cdf4307b8">xe_umd_api.h</a>
+<li>xeDeviceCreate()
+: <a class="el" href="xe__umd__api_8h.html#a211007d0c11b17a7c7863bbc0de16ddc">xe_umd_api.h</a>
 </li>
-<li>xeDestroyDevice()
-: <a class="el" href="xe__umd__api_8h.html#a2271d5b42fe6c4a4f8e68e7f57a1af24">xe_umd_api.h</a>
+<li>xeDeviceDestroy()
+: <a class="el" href="xe__umd__api_8h.html#a434ace035f5a24b3cfbc947be66b6fa6">xe_umd_api.h</a>
 </li>
-<li>xeDestroyEvent()
-: <a class="el" href="xe__umd__api_8h.html#af4eb090f59b7daf10def9b766820951b">xe_umd_api.h</a>
+<li>xeDeviceGetAttribute()
+: <a class="el" href="xe__umd__api_8h.html#a223e99f5c17e355b4cc46f14f0aaf9fa">xe_umd_api.h</a>
 </li>
-<li>xeDestroyResource()
-: <a class="el" href="xe__umd__api_8h.html#a6d27e3e622339b3c8611e96e2db82a29">xe_umd_api.h</a>
+<li>xeDriverGetSupportedVersions()
+: <a class="el" href="xe__umd__api_8h.html#a93ede6e5ceaf237bb2c040a42bdae118">xe_umd_api.h</a>
 </li>
-<li>xeEncodeEvent()
-: <a class="el" href="xe__umd__api_8h.html#a4ef60e29bff24690a4aa1cd4208ba9c6">xe_umd_api.h</a>
+<li>xeEventCreate()
+: <a class="el" href="xe__umd__api_8h.html#a68af93632ec1d12ba6948ec73f7569f0">xe_umd_api.h</a>
 </li>
-<li>xeEnqueueCommandList()
-: <a class="el" href="xe__umd__api_8h.html#aaa3b35ae893431a0de9182fd2276248e">xe_umd_api.h</a>
+<li>xeEventDestroy()
+: <a class="el" href="xe__umd__api_8h.html#a5308dc4818c04fa81b447f9b1b8588a8">xe_umd_api.h</a>
+</li>
+<li>xeResourceCreate()
+: <a class="el" href="xe__umd__api_8h.html#a63ce1fe43dab6e1bd594d05637f218a0">xe_umd_api.h</a>
+</li>
+<li>xeResourceDestroy()
+: <a class="el" href="xe__umd__api_8h.html#a4cfc7794a7f7ae411f955f9455479cf2">xe_umd_api.h</a>
 </li>
 </ul>
 </div><!-- contents -->
@@ -122,7 +128,7 @@ $(document).ready(function(){initNavTree('globals_func.html','');});
 <!-- start footer part -->
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
-    <li class="footer">Generated on Wed Jan 2 2019 19:55:38 for Driver API by
+    <li class="footer">Generated on Thu Jan 3 2019 09:16:01 for Driver API by
     <a href="http://www.doxygen.org/index.html">
     <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.8.13 </li>
   </ul>
