@@ -5,6 +5,10 @@
 #endif
 
 ///////////////////////////////////////////////////////////////////////////////
+/// @brief Calling convention for all APIs
+#define IOA_ENTRY __stdcall
+
+///////////////////////////////////////////////////////////////////////////////
 /// @brief Declares a strongly typed handle
 #if defined( __cplusplus )
 #define DECLARE_HANDLE( NAME )  \
@@ -17,166 +21,213 @@
                                 \
         inline bool operator==( const NAME& other ) const { return pDriverData == other.pDriverData; } \
         inline bool operator!=( const NAME& other ) const { return pDriverData != other.pDriverData; } \
-    };                          \
+    };
 #else
 #define DECLARE_HANDLE( NAME )  \
     typedef struct _NAME        \
     {                           \
         void* pDriverData;      \
-    } NAME;                     \
+    } NAME;
 #endif
 
-DECLARE_HANDLE( $oa_device_handle_t );
-DECLARE_HANDLE( $oa_command_queue_handle_t );
-DECLARE_HANDLE( $oa_command_list_handle_t );
-DECLARE_HANDLE( $oa_event_handle_t );
-DECLARE_HANDLE( $oa_resource_handle_t );
+DECLARE_HANDLE( ioa_device_handle_t );
+DECLARE_HANDLE( ioa_command_queue_handle_t );
+DECLARE_HANDLE( ioa_command_list_handle_t );
+DECLARE_HANDLE( ioa_event_handle_t );
+DECLARE_HANDLE( ioa_resource_handle_t );
 
 
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Defines Return/Error codes
-enum $oa_result_t : uint32_t
+enum ioa_result_t : uint32_t
 {
-    $OA_RESULT_SUCCESS = 0,             ///< success
-    $OA_RESULT_ERROR_INVALID_PARAMETER, ///< invalid parameter provided
-    $OA_RESULT_ERROR_OUT_OF_MEMORY,     ///< insufficient memory to satisfy call
-    $OA_RESULT_ERROR_UNKNOWN = -1       ///< internal error
+    IOA_RESULT_SUCCESS = 0,             ///< success
+    IOA_RESULT_ERROR_INVALID_PARAMETER, ///< invalid parameter provided
+    IOA_RESULT_ERROR_OUT_OF_MEMORY,     ///< insufficient memory to satisfy call
+    IOA_RESULT_ERROR_UNKNOWN = -1       ///< internal error
 };
 
 
 ///////////////////////////////////////////////////////////////////////////////
-/// @brief Device descriptor
-typedef struct _$oa_device_desc
+/// @brief Device creation flags
+enum ioa_device_flags : uint32_t
 {
-    uint32_t flags; ///< [in] must be 0
-} $oa_device_desc_t;
+    IOA_DEVICE_FLAG_NONE = 0    ///< none
+};
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Device descriptor
+typedef struct _ioa_device_desc
+{
+    ioa_device_flags flags;     ///< [in] creation flags
+} ioa_device_desc_t;
 
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Creates a device object
 /// @returns OA_RESULT_SUCCESS, ...
-$oa_result_t $oaCreateDevice( 
-    $oa_device_desc_t desc,             ///< [in] device descriptor
-    $oa_device_handle_t* phDevice       ///< [out] handle to device object created
-	);
+ioa_result_t IOA_ENTRY
+  ioaCreateDevice( 
+    ioa_device_desc_t desc,             ///< [in] device descriptor
+    ioa_device_handle_t* phDevice       ///< [out] pointer to handle of device object created
+    );
     
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Deletes a device object
 /// @returns OA_RESULT_SUCCESS, ...
-$oa_result_t $oaDestroyDevice(
-    $oa_device_handle_t hDevice     ///< [in] handle to device object to destroy
-	);
+ioa_result_t IOA_ENTRY
+  ioaDestroyDevice(
+    ioa_device_handle_t hDevice     ///< [in] handle of device object to destroy
+    );
 
 
 ///////////////////////////////////////////////////////////////////////////////
-/// @brief Command Queue descriptor
-typedef struct _$oa_command_queue_desc_t
+/// @brief Command Queue creation flags
+enum ioa_command_queue_flags : uint32_t
 {
-    $oa_device_handle_t hDevice; ///< [in] handle to the device
-    uint32_t flags;              ///< [in] must be 0
-} $oa_command_queue_desc_t;
+    IOA_COMMAND_QUEUE_FLAG_NONE = 0 ///< none
+};
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Command Queue descriptor
+typedef struct _ioa_command_queue_desc_t
+{
+    ioa_device_handle_t hDevice;    ///< [in] handle of the device
+    ioa_command_queue_flags flags;  ///< [in] creation flags
+} ioa_command_queue_desc_t;
 
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Creates a command queue
 /// @returns OA_RESULT_SUCCESS, ...
-$oa_result_t $oaCreateCommandQueue(
-    $oa_command_queue_desc_t desc,                  ///< [in] command queue descriptor
-    $oa_command_queue_handle_t* phCommandQueue      ///< [out] handle to command queue object created
-	);
+ioa_result_t IOA_ENTRY
+  ioaCreateCommandQueue(
+    ioa_command_queue_desc_t desc,                  ///< [in] command queue descriptor
+    ioa_command_queue_handle_t* phCommandQueue      ///< [out] pointer to handle of command queue object created
+    );
 
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Destroys a command queue
 /// @returns OA_RESULT_SUCCESS, ...
-$oa_result_t $oaDestroyCommandQueue(
-    $oa_command_queue_handle_t hCommandQueue        ///< [in] handle to command queue object to destroy
-	);
+ioa_result_t IOA_ENTRY
+  ioaDestroyCommandQueue(
+    ioa_command_queue_handle_t hCommandQueue        ///< [in] handle of command queue object to destroy
+    );
 
 
 ///////////////////////////////////////////////////////////////////////////////
-/// @brief Command List descriptor
-typedef struct _$oa_command_list_desc_t
+/// @brief Command List creation flags
+enum ioa_command_list_flags : uint32_t
 {
-    $oa_device_handle_t hDevice; ///< [in] handle to the device
-    uint32_t flags;              ///< [in] must be 0
-} $oa_command_list_desc_t;
+    IOA_COMMAND_LIST_FLAG_NONE = 0  ///< none
+};
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Command List descriptor
+typedef struct _ioa_command_list_desc_t
+{
+    ioa_device_handle_t hDevice;    ///< [in] handle of the device
+    ioa_command_list_flags flags;   ///< [in] creation flags
+} ioa_command_list_desc_t;
 
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Creates a command list
 /// @returns OA_RESULT_SUCCESS, ...
-$oa_result_t $oaCreateCommandList(
-    $oa_command_list_desc_t desc,                   ///< [in] command list descriptor
-    $oa_command_list_handle_t* phCommandList        ///< [out] handle to command list object created
-	);
+ioa_result_t IOA_ENTRY
+  ioaCreateCommandList(
+    ioa_command_list_desc_t desc,               ///< [in] command list descriptor
+    ioa_command_list_handle_t* phCommandList    ///< [out] pointer to handle of command list object created
+    );
 
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Destroys a command list
 /// @returns OA_RESULT_SUCCESS, ...
-$oa_result_t $oaDestroyCommandList(
-    $oa_command_list_handle_t hCommandList          ///< [in] handle to command list object to destroy
-	);
+ioa_result_t IOA_ENTRY
+  ioaDestroyCommandList(
+    ioa_command_list_handle_t hCommandList      ///< [in] handle of command list object to destroy
+    );
 
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Enqueues a command list to a command queue
 /// @returns OA_RESULT_SUCCESS, ...
-$oa_result_t $oaEnqueueCommandList(
-    $oa_command_queue_handle_t hCommandQueue,   ///< [in] handle to the command queue
-    $oa_command_list_handle_t hCommandList      ///< [in] handle to the command list to execute
-	);
+ioa_result_t IOA_ENTRY
+  ioaEnqueueCommandList(
+    ioa_command_queue_handle_t hCommandQueue,   ///< [in] handle of the command queue
+    ioa_command_list_handle_t hCommandList      ///< [in] handle of the command list to execute
+    );
 
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Event creation flags
+enum ioa_event_flags : uint32_t
+{
+    IOA_EVENT_FLAG_NONE = 0 ///< none
+};
 
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Event descriptor
-typedef struct _$oa_event_desc_t
+typedef struct _ioa_event_desc_t
 {
-    $oa_device_handle_t hDevice; ///< [in] handle to the device
-    uint32_t flags;              ///< [in] must be 0
-} $oa_event_desc_t;
+    ioa_device_handle_t hDevice; ///< [in] handle of the device
+    ioa_event_flags flags;       ///< [in] must be 0
+} ioa_event_desc_t;
 
 ///////////////////////////////////////////////////////////////////////////////
-/// @brief Creates a synchronization object
+/// @brief Creates an event object
 /// @returns OA_RESULT_SUCCESS, ...
-$oa_result_t $oaCreateEvent( 
-    $oa_event_desc_t desc,          ///< [in] event descriptor
-    $oa_event_handle_t* phEvent     ///< [out] handle to event object created
-	);
+ioa_result_t IOA_ENTRY
+  ioaCreateEvent( 
+    ioa_event_desc_t desc,          ///< [in] event descriptor
+    ioa_event_handle_t* phEvent     ///< [out] pointer to handle of event object created
+    );
     
 ///////////////////////////////////////////////////////////////////////////////
-/// @brief Deletes a synchronization object
+/// @brief Deletes an event object
 /// @returns OA_RESULT_SUCCESS, ...
-$oa_result_t $oaDestroyEvent(
-    $oa_event_handle_t hEvent       ///< [in] handle to event object to destroy
-	);
+ioa_result_t IOA_ENTRY
+  ioaDestroyEvent(
+    ioa_event_handle_t hEvent       ///< [in] handle of event object to destroy
+    );
 
 ///////////////////////////////////////////////////////////////////////////////
-/// @brief Encodes a synchronization object into a command list
+/// @brief Encodes an event object into a command list
 /// @returns OA_RESULT_SUCCESS, ...
-$oa_result_t $oaEncodeEvent(
-    $oa_command_list_handle_t hCommandList, ///< [in] handle to the command list
-    $oa_event_handle_t hEvent               ///< [in] handle to the event 
-	);
+ioa_result_t IOA_ENTRY
+  ioaEncodeEvent(
+    ioa_command_list_handle_t hCommandList, ///< [in] handle of the command list
+    ioa_event_handle_t hEvent               ///< [in] handle of the event 
+    );
     
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Resource creation flags
+enum ioa_resource_flags : uint32_t
+{
+    IOA_RESOURCE_FLAG_NONE = 0  ///< none
+};
 
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Resource descriptor
-typedef struct _$oa_resource_desc_t
+typedef struct _ioa_resource_desc_t
 {
-    $oa_device_handle_t hDevice; ///< [in] handle to the device
-    uint32_t flags;              ///< [in] must be 0
-} $oa_resource_desc_t;
+    ioa_device_handle_t hDevice; ///< [in] handle of the device
+    ioa_resource_flags flags;    ///< [in] must be 0
+} ioa_resource_desc_t;
 
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Creates a resource object
 /// @returns OA_RESULT_SUCCESS, ...
-$oa_result_t $oaCreateResource( 
-    $oa_resource_desc_t desc,           ///< [in] resource descriptor
-    $oa_resource_handle_t* phResource   ///< [out] handle to resource object created
-	);
+ioa_result_t IOA_ENTRY
+  ioaCreateResource( 
+    ioa_resource_desc_t desc,           ///< [in] resource descriptor
+    ioa_resource_handle_t* phResource   ///< [out] pointer to handle of resource object created
+    );
     
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Deletes a resource object
 /// @returns OA_RESULT_SUCCESS, ...
-$oa_result_t $oaDestroyResource(
-    $oa_resource_handle_t hResource     ///< [in] handle to resource object to destroy
-	);
+ioa_result_t IOA_ENTRY
+  ioaDestroyResource(
+    ioa_resource_handle_t hResource     ///< [in] handle of resource object to destroy
+    );
 
 
 #endif // _DRIVER_API_H
