@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['ioa_5fentry',['IOA_ENTRY',['../driver_a_p_i_8h.html#a3f0579ce996383c053a7fcdda0dd82a7',1,'driverAPI.h']]]
+  ['declare_5fhandle',['DECLARE_HANDLE',['../xe__umd__api_8h.html#a5ec846cf9fed9ad6454492d589112f9d',1,'xe_umd_api.h']]]
 ];

@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['flags',['flags',['../structioa__device__desc__t.html#a105e8d445c76205dae7989de4e1b07fb',1,'ioa_device_desc_t::flags()'],['../structioa__command__queue__desc__t.html#a80a77ba29414ad5e4218ae7e0f0fb4fe',1,'ioa_command_queue_desc_t::flags()'],['../structioa__command__list__desc__t.html#a7129845bab9b7c0085c605682a7547d1',1,'ioa_command_list_desc_t::flags()'],['../structioa__event__desc__t.html#acd97003acd1099907290c6845e36a459',1,'ioa_event_desc_t::flags()'],['../structioa__resource__desc__t.html#af93142b192196ff1c7c7cfec3d419905',1,'ioa_resource_desc_t::flags()']]]
+  ['flags',['flags',['../structxe__device__desc__t.html#abb73a0609f84497ac426c2aaa14fd803',1,'xe_device_desc_t::flags()'],['../structxe__command__queue__desc__t.html#a97e3b72e258ee6a6f2a8354686cb75e1',1,'xe_command_queue_desc_t::flags()'],['../structxe__command__list__desc__t.html#a6c5433190fba534d2328dff2add31f06',1,'xe_command_list_desc_t::flags()'],['../structxe__event__desc__t.html#ad35441155d4a38e2230e9abca9cad319',1,'xe_event_desc_t::flags()'],['../structxe__resource__desc__t.html#a499c8e4c7b3de79aac615fc6de0f658f',1,'xe_resource_desc_t::flags()']]]
 ];

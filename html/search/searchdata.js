@@ -1,13 +1,13 @@
 var indexSectionsWithContent =
 {
-  0: "dfilopr",
-  1: "i",
-  2: "dr",
-  3: "io",
+  0: "_dfloprx",
+  1: "x",
+  2: "rx",
+  3: "ox",
   4: "fp",
-  5: "i",
-  6: "i",
-  7: "di",
+  5: "x",
+  6: "x",
+  7: "_d",
   8: "l"
 };
 
