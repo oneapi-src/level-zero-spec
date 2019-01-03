@@ -72,12 +72,11 @@ var NAVTREEINDEX0 =
 "xe__umd__api_8h.html#a23feded6ed1a07a052e5bf99495122b0":[2,0,0,22],
 "xe__umd__api_8h.html#a23feded6ed1a07a052e5bf99495122b0a96f989ca76afda801922059f7031f0d8":[2,0,0,22,0],
 "xe__umd__api_8h.html#a3c7a043de36e3909cdd8f3f8fa3f9bdb":[2,0,0,25],
-"xe__umd__api_8h.html#a4cfc7794a7f7ae411f955f9455479cf2":[2,0,0,44],
+"xe__umd__api_8h.html#a48232eb8d063b09bddb2bd3b37fcd095":[2,0,0,44],
 "xe__umd__api_8h.html#a5308dc4818c04fa81b447f9b1b8588a8":[2,0,0,41],
 "xe__umd__api_8h.html#a5ec846cf9fed9ad6454492d589112f9d":[2,0,0,11],
 "xe__umd__api_8h.html#a5f5b824bdc0bece28899a552903778a7":[2,0,0,39],
 "xe__umd__api_8h.html#a60eb5d7c4082e66b1eadc8d9547c5b64":[2,0,0,29],
-"xe__umd__api_8h.html#a63ce1fe43dab6e1bd594d05637f218a0":[2,0,0,43],
 "xe__umd__api_8h.html#a68af93632ec1d12ba6948ec73f7569f0":[2,0,0,40],
 "xe__umd__api_8h.html#a7cd79dc6ba2971b56c6ddcd1670006ea":[2,0,0,32],
 "xe__umd__api_8h.html#a90e5a4ab9218d0270183fee37890884a":[2,0,0,27],
@@ -107,5 +106,6 @@ var NAVTREEINDEX0 =
 "xe__umd__api_8h.html#af48475b0952417678796bccf3d0b7509":[2,0,0,14],
 "xe__umd__api_8h.html#af739fb0bed07b9e9012f37fa088cfaa1":[2,0,0,23],
 "xe__umd__api_8h.html#af739fb0bed07b9e9012f37fa088cfaa1af41f846d8441a9b3132e666b88e9ae4c":[2,0,0,23,0],
+"xe__umd__api_8h.html#af95a3e596eb573814170dc0f5aa199b5":[2,0,0,43],
 "xe__umd__api_8h_source.html":[2,0,0]
 };

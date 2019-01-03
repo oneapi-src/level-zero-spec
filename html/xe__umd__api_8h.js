@@ -71,6 +71,6 @@ var xe__umd__api_8h =
     [ "xeEventCreate", "xe__umd__api_8h.html#a68af93632ec1d12ba6948ec73f7569f0", null ],
     [ "xeEventDestroy", "xe__umd__api_8h.html#a5308dc4818c04fa81b447f9b1b8588a8", null ],
     [ "xeInit", "xe__umd__api_8h.html#aa42ffd3cf61a3d417a57aff1bd1fbe14", null ],
-    [ "xeResourceCreate", "xe__umd__api_8h.html#a63ce1fe43dab6e1bd594d05637f218a0", null ],
-    [ "xeResourceDestroy", "xe__umd__api_8h.html#a4cfc7794a7f7ae411f955f9455479cf2", null ]
+    [ "xeResourceCreate", "xe__umd__api_8h.html#af95a3e596eb573814170dc0f5aa199b5", null ],
+    [ "xeResourceDestroy", "xe__umd__api_8h.html#a48232eb8d063b09bddb2bd3b37fcd095", null ]
 ];

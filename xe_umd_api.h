@@ -368,7 +368,6 @@ typedef struct _xe_resource_desc_t
 /// @returns XE_RESULT_SUCCESS, ...
 xe_result_t __xecall
   xeResourceCreate( 
-    xe_device_handle_t hDevice,         ///< [in] handle of the device
     xe_resource_desc_t desc,            ///< [in] resource descriptor
     xe_resource_handle_t* phResource    ///< [out] pointer to handle of resource object created
     );
@@ -378,7 +377,6 @@ xe_result_t __xecall
 /// @returns XE_RESULT_SUCCESS, ...
 xe_result_t __xecall
   xeResourceDestroy(
-    xe_device_handle_t hDevice,         ///< [in] handle of the device
     xe_resource_handle_t hResource      ///< [in] handle of resource object to destroy
     );
 

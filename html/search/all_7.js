@@ -59,6 +59,6 @@ var searchData=
   ['xeeventcreate',['xeEventCreate',['../xe__umd__api_8h.html#a68af93632ec1d12ba6948ec73f7569f0',1,'xe_umd_api.h']]],
   ['xeeventdestroy',['xeEventDestroy',['../xe__umd__api_8h.html#a5308dc4818c04fa81b447f9b1b8588a8',1,'xe_umd_api.h']]],
   ['xeinit',['xeInit',['../xe__umd__api_8h.html#aa42ffd3cf61a3d417a57aff1bd1fbe14',1,'xe_umd_api.h']]],
-  ['xeresourcecreate',['xeResourceCreate',['../xe__umd__api_8h.html#a63ce1fe43dab6e1bd594d05637f218a0',1,'xe_umd_api.h']]],
-  ['xeresourcedestroy',['xeResourceDestroy',['../xe__umd__api_8h.html#a4cfc7794a7f7ae411f955f9455479cf2',1,'xe_umd_api.h']]]
+  ['xeresourcecreate',['xeResourceCreate',['../xe__umd__api_8h.html#af95a3e596eb573814170dc0f5aa199b5',1,'xe_umd_api.h']]],
+  ['xeresourcedestroy',['xeResourceDestroy',['../xe__umd__api_8h.html#a48232eb8d063b09bddb2bd3b37fcd095',1,'xe_umd_api.h']]]
 ];
