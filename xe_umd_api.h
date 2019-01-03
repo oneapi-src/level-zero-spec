@@ -90,64 +90,82 @@ DECLARE_ENUM( xe_result_t )
     XE_RESULT_ERROR_UNKNOWN = -1        ///< internal error
 };
 
+
 ///////////////////////////////////////////////////////////////////////////////
-/// @brief Defines API versions
-/// @details API versions contain major and minor attributes,
-///     use XE_MAJOR_VERSION and XE_MINOR_VERSION
-DECLARE_ENUM( xe_version_t )
+/// @brief Initialization flags
+DECLARE_ENUM( xe_init_flags_t )
 {
-    XE_VERSION_1_0 = 0x00010000
+    XE_INIT_FLAG_NONE = 0       ///< default behavior
 };
 
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Initialize the Xe Driver API and must be called before any other
+///     API function.
+xe_result_t __xecall
+  xeInit( 
+    xe_init_flags_t flags       ///< initialization flags
+    );
+
+///////////////////////////////////////////////////////////////////////////////
 #define XE_MAJOR_VERSION( ver ) ( ver >> 16 )
 #define XE_MINOR_VERSION( ver ) ( ver & 0x0000ffff )
 
 ///////////////////////////////////////////////////////////////////////////////
-/// @brief Returns the API versions supported by the driver
-/// @details If "versions == nullptr", then "count" returns the number of versions supported.
-///     Otherwise, "count" specifies the length of "versions" to be reported.
-///     In order to only retreive the latest version supported, just pass "count = 1".
-xe_result_t __xecall
-  xeDriverGetSupportedVersions(
-    uint32_t* count,            ///< [in/out] number of versions returned
-    xe_version_t* versions      ///< [out] list of versions supported, from highest to lowest.
-    );
-    
-///////////////////////////////////////////////////////////////////////////////
-/// @brief Device creation flags
-DECLARE_ENUM( xe_device_flags_t )
+/// @brief Defines driver versions
+/// @details Driver versions contain major and minor attributes,
+///     use XE_MAJOR_VERSION and XE_MINOR_VERSION
+DECLARE_ENUM( xe_driver_version_t )
 {
-    XE_DEVICE_FLAG_NONE = 0             ///< default behavior
+    XE_DRIVER_VERSION_1_0 = 0x00010000
 };
 
 ///////////////////////////////////////////////////////////////////////////////
-/// @brief Device descriptor
-typedef struct _xe_device_desc
-{
-    xe_device_flags_t flags;            ///< [in] creation flags
-} xe_device_desc_t;
+/// @brief Returns the current versions of the driver
+xe_result_t __xecall
+  xeDriverGetVersion(
+    xe_driver_version_t* version    ///< [out] driver version
+    );
 
 ///////////////////////////////////////////////////////////////////////////////
-/// @brief Creates a device object
-/// @returns XE_RESULT_SUCCESS, ...
+/// @brief Reports the number of devices
 xe_result_t __xecall
-  xeDeviceCreate( 
-    xe_device_desc_t desc,              ///< [in] device descriptor
-    xe_device_handle_t* phDevice        ///< [out] pointer to handle of device object created
+  xeDeviceGetCount(
+    uint32_t* count                 ///< [out] number of devices available
     );
-    
+
 ///////////////////////////////////////////////////////////////////////////////
-/// @brief Deletes a device object
+/// @brief Returns a handle to the device object
 /// @returns XE_RESULT_SUCCESS, ...
 xe_result_t __xecall
-  xeDeviceDestroy(
-    xe_device_handle_t hDevice          ///< [in] handle of device object to destroy
+  xeDeviceGet( 
+    uint32_t ordinal,               ///< [in] ordinal of device to retrieve
+    xe_device_handle_t* phDevice    ///< [out] pointer to handle of device object created
     );
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Defines API versions
+/// @details API versions contain major and minor attributes,
+///     use XE_MAJOR_VERSION and XE_MINOR_VERSION
+DECLARE_ENUM( xe_api_version_t )
+{
+    XE_API_VERSION_1_0 = 0x00010000
+};
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Returns the API version supported by the device
+xe_result_t __xecall
+  xeDeviceGetApiVersion(
+    xe_device_handle_t hDevice,     ///< [in] handle of the device object
+    xe_api_version_t* version       ///< [out] api version
+    );
+
 
 ///////////////////////////////////////////////////////////////////////////////
 DECLARE_ENUM( xe_device_attribute_t )
 {
-    XE_DEVICE_ATTRIBUTE_MAX_THREADS     ///< maximum number of threads supported
+    XE_DEVICE_ATTRIBUTE_MAX_THREADS = 1,            ///< maximum number of threads supported
+    XE_DEVICE_ATTRIBUTE_MAX_SIMULTANEOUS_QUEUES,    ///< maximum number of command queues that can execute in parallel
+    XE_DEVICE_ATTRIBUTE_TOTAL_MEMORY,               ///< total amount of memory available, in megabytes
 };
 
 ///////////////////////////////////////////////////////////////////////////////

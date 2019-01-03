@@ -106,9 +106,6 @@ Data Structures</h2></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structxe__resource__handle__t.html">xe_resource_handle_t</a></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structxe__device__desc__t.html">xe_device_desc_t</a></td></tr>
-<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">Device descriptor.  <a href="structxe__device__desc__t.html#details">More...</a><br /></td></tr>
-<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structxe__command__queue__desc__t.html">xe_command_queue_desc_t</a></td></tr>
 <tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">Command Queue descriptor.  <a href="structxe__command__queue__desc__t.html#details">More...</a><br /></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -146,15 +143,21 @@ Enumerations</h2></td></tr>
  }<tr class="memdesc:a0a81258bd4a02d562b77ce7bc03fe189"><td class="mdescLeft">&#160;</td><td class="mdescRight">Defines Return/Error codes.  <a href="xe__umd__api_8h.html#a0a81258bd4a02d562b77ce7bc03fe189">More...</a><br /></td></tr>
 </td></tr>
 <tr class="separator:a0a81258bd4a02d562b77ce7bc03fe189"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a5cf8a93f227cbee73611d99e01345466"><td class="memItemLeft" align="right" valign="top">enum &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="xe__umd__api_8h.html#a5cf8a93f227cbee73611d99e01345466">xe_version_t</a> : uint32_t { <a class="el" href="xe__umd__api_8h.html#a5cf8a93f227cbee73611d99e01345466a20061bdbc71c2fd66c17dcce4f0e83f9">XE_VERSION_1_0</a> = 0x00010000
- }<tr class="memdesc:a5cf8a93f227cbee73611d99e01345466"><td class="mdescLeft">&#160;</td><td class="mdescRight">Defines API versions.  <a href="xe__umd__api_8h.html#a5cf8a93f227cbee73611d99e01345466">More...</a><br /></td></tr>
+<tr class="memitem:a23feded6ed1a07a052e5bf99495122b0"><td class="memItemLeft" align="right" valign="top">enum &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="xe__umd__api_8h.html#a23feded6ed1a07a052e5bf99495122b0">xe_init_flags_t</a> : uint32_t { <a class="el" href="xe__umd__api_8h.html#a23feded6ed1a07a052e5bf99495122b0a96f989ca76afda801922059f7031f0d8">XE_INIT_FLAG_NONE</a> = 0
+ }<tr class="memdesc:a23feded6ed1a07a052e5bf99495122b0"><td class="mdescLeft">&#160;</td><td class="mdescRight">Initialization flags.  <a href="xe__umd__api_8h.html#a23feded6ed1a07a052e5bf99495122b0">More...</a><br /></td></tr>
 </td></tr>
-<tr class="separator:a5cf8a93f227cbee73611d99e01345466"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a8a2fbb344f840e83c505e8768a69a460"><td class="memItemLeft" align="right" valign="top">enum &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="xe__umd__api_8h.html#a8a2fbb344f840e83c505e8768a69a460">xe_device_flags_t</a> : uint32_t { <a class="el" href="xe__umd__api_8h.html#a8a2fbb344f840e83c505e8768a69a460acf533f9025c9d649fc9ab2c1364ac54b">XE_DEVICE_FLAG_NONE</a> = 0
- }<tr class="memdesc:a8a2fbb344f840e83c505e8768a69a460"><td class="mdescLeft">&#160;</td><td class="mdescRight">Device creation flags.  <a href="xe__umd__api_8h.html#a8a2fbb344f840e83c505e8768a69a460">More...</a><br /></td></tr>
+<tr class="separator:a23feded6ed1a07a052e5bf99495122b0"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ab4941cf20c04442df726aaee5b2c3398"><td class="memItemLeft" align="right" valign="top">enum &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="xe__umd__api_8h.html#ab4941cf20c04442df726aaee5b2c3398">xe_driver_version_t</a> : uint32_t { <a class="el" href="xe__umd__api_8h.html#ab4941cf20c04442df726aaee5b2c3398a5d8cf9c88a2172c08ec58ae3cb3c470f">XE_DRIVER_VERSION_1_0</a> = 0x00010000
+ }<tr class="memdesc:ab4941cf20c04442df726aaee5b2c3398"><td class="mdescLeft">&#160;</td><td class="mdescRight">Defines driver versions.  <a href="xe__umd__api_8h.html#ab4941cf20c04442df726aaee5b2c3398">More...</a><br /></td></tr>
 </td></tr>
-<tr class="separator:a8a2fbb344f840e83c505e8768a69a460"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a003ecc42f784db9cb9cd02f299849a87"><td class="memItemLeft" align="right" valign="top">enum &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="xe__umd__api_8h.html#a003ecc42f784db9cb9cd02f299849a87">xe_device_attribute_t</a> : uint32_t { <a class="el" href="xe__umd__api_8h.html#a003ecc42f784db9cb9cd02f299849a87ac2e6cf4a9347ef77bd089b191017bf26">XE_DEVICE_ATTRIBUTE_MAX_THREADS</a>
+<tr class="separator:ab4941cf20c04442df726aaee5b2c3398"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ad69250d10c10e024a5d8aa4dea0fd831"><td class="memItemLeft" align="right" valign="top">enum &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="xe__umd__api_8h.html#ad69250d10c10e024a5d8aa4dea0fd831">xe_api_version_t</a> : uint32_t { <a class="el" href="xe__umd__api_8h.html#ad69250d10c10e024a5d8aa4dea0fd831a8f5f11a47d3562e3b90643ff9ce77ee0">XE_API_VERSION_1_0</a> = 0x00010000
+ }<tr class="memdesc:ad69250d10c10e024a5d8aa4dea0fd831"><td class="mdescLeft">&#160;</td><td class="mdescRight">Defines API versions.  <a href="xe__umd__api_8h.html#ad69250d10c10e024a5d8aa4dea0fd831">More...</a><br /></td></tr>
+</td></tr>
+<tr class="separator:ad69250d10c10e024a5d8aa4dea0fd831"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a003ecc42f784db9cb9cd02f299849a87"><td class="memItemLeft" align="right" valign="top">enum &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="xe__umd__api_8h.html#a003ecc42f784db9cb9cd02f299849a87">xe_device_attribute_t</a> : uint32_t { <a class="el" href="xe__umd__api_8h.html#a003ecc42f784db9cb9cd02f299849a87ac2e6cf4a9347ef77bd089b191017bf26">XE_DEVICE_ATTRIBUTE_MAX_THREADS</a> = 1, 
+<a class="el" href="xe__umd__api_8h.html#a003ecc42f784db9cb9cd02f299849a87a29222b9f4757bb27029b24f9d9415935">XE_DEVICE_ATTRIBUTE_MAX_SIMULTANEOUS_QUEUES</a>, 
+<a class="el" href="xe__umd__api_8h.html#a003ecc42f784db9cb9cd02f299849a87a25f60d8b9d103fbd73341ed5a39b9c1c">XE_DEVICE_ATTRIBUTE_TOTAL_MEMORY</a>
  }</td></tr>
 <tr class="separator:a003ecc42f784db9cb9cd02f299849a87"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ab3bc19a79aa63e22bade20d2fdde4fc6"><td class="memItemLeft" align="right" valign="top">enum &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="xe__umd__api_8h.html#ab3bc19a79aa63e22bade20d2fdde4fc6">xe_command_queue_flags_t</a> : uint32_t { <a class="el" href="xe__umd__api_8h.html#ab3bc19a79aa63e22bade20d2fdde4fc6a9a2c5ad9850cfa7316197e9f9af0d24e">XE_COMMAND_QUEUE_FLAG_NONE</a> = 0
@@ -176,15 +179,21 @@ Enumerations</h2></td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="func-members"></a>
 Functions</h2></td></tr>
-<tr class="memitem:a93ede6e5ceaf237bb2c040a42bdae118"><td class="memItemLeft" align="right" valign="top"><a class="el" href="xe__umd__api_8h.html#a0a81258bd4a02d562b77ce7bc03fe189">xe_result_t</a> <a class="el" href="xe__umd__api_8h.html#aab180c7b54dae19a960d3b4425649275">__xecall</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="xe__umd__api_8h.html#a93ede6e5ceaf237bb2c040a42bdae118">xeDriverGetSupportedVersions</a> (uint32_t *count, <a class="el" href="xe__umd__api_8h.html#a5cf8a93f227cbee73611d99e01345466">xe_version_t</a> *versions)</td></tr>
-<tr class="memdesc:a93ede6e5ceaf237bb2c040a42bdae118"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns the API versions supported by the driver.  <a href="#a93ede6e5ceaf237bb2c040a42bdae118">More...</a><br /></td></tr>
-<tr class="separator:a93ede6e5ceaf237bb2c040a42bdae118"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a211007d0c11b17a7c7863bbc0de16ddc"><td class="memItemLeft" align="right" valign="top"><a class="el" href="xe__umd__api_8h.html#a0a81258bd4a02d562b77ce7bc03fe189">xe_result_t</a> <a class="el" href="xe__umd__api_8h.html#aab180c7b54dae19a960d3b4425649275">__xecall</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="xe__umd__api_8h.html#a211007d0c11b17a7c7863bbc0de16ddc">xeDeviceCreate</a> (<a class="el" href="structxe__device__desc__t.html">xe_device_desc_t</a> desc, <a class="el" href="structxe__device__handle__t.html">xe_device_handle_t</a> *phDevice)</td></tr>
-<tr class="memdesc:a211007d0c11b17a7c7863bbc0de16ddc"><td class="mdescLeft">&#160;</td><td class="mdescRight">Creates a device object.  <a href="#a211007d0c11b17a7c7863bbc0de16ddc">More...</a><br /></td></tr>
-<tr class="separator:a211007d0c11b17a7c7863bbc0de16ddc"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a434ace035f5a24b3cfbc947be66b6fa6"><td class="memItemLeft" align="right" valign="top"><a class="el" href="xe__umd__api_8h.html#a0a81258bd4a02d562b77ce7bc03fe189">xe_result_t</a> <a class="el" href="xe__umd__api_8h.html#aab180c7b54dae19a960d3b4425649275">__xecall</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="xe__umd__api_8h.html#a434ace035f5a24b3cfbc947be66b6fa6">xeDeviceDestroy</a> (<a class="el" href="structxe__device__handle__t.html">xe_device_handle_t</a> hDevice)</td></tr>
-<tr class="memdesc:a434ace035f5a24b3cfbc947be66b6fa6"><td class="mdescLeft">&#160;</td><td class="mdescRight">Deletes a device object.  <a href="#a434ace035f5a24b3cfbc947be66b6fa6">More...</a><br /></td></tr>
-<tr class="separator:a434ace035f5a24b3cfbc947be66b6fa6"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aa42ffd3cf61a3d417a57aff1bd1fbe14"><td class="memItemLeft" align="right" valign="top"><a class="el" href="xe__umd__api_8h.html#a0a81258bd4a02d562b77ce7bc03fe189">xe_result_t</a> <a class="el" href="xe__umd__api_8h.html#aab180c7b54dae19a960d3b4425649275">__xecall</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="xe__umd__api_8h.html#aa42ffd3cf61a3d417a57aff1bd1fbe14">xeInit</a> (<a class="el" href="xe__umd__api_8h.html#a23feded6ed1a07a052e5bf99495122b0">xe_init_flags_t</a> flags)</td></tr>
+<tr class="memdesc:aa42ffd3cf61a3d417a57aff1bd1fbe14"><td class="mdescLeft">&#160;</td><td class="mdescRight">Initialize the Xe Driver API and must be called before any other API function.  <a href="#aa42ffd3cf61a3d417a57aff1bd1fbe14">More...</a><br /></td></tr>
+<tr class="separator:aa42ffd3cf61a3d417a57aff1bd1fbe14"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a5f5b824bdc0bece28899a552903778a7"><td class="memItemLeft" align="right" valign="top"><a class="el" href="xe__umd__api_8h.html#a0a81258bd4a02d562b77ce7bc03fe189">xe_result_t</a> <a class="el" href="xe__umd__api_8h.html#aab180c7b54dae19a960d3b4425649275">__xecall</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="xe__umd__api_8h.html#a5f5b824bdc0bece28899a552903778a7">xeDriverGetVersion</a> (<a class="el" href="xe__umd__api_8h.html#ab4941cf20c04442df726aaee5b2c3398">xe_driver_version_t</a> *version)</td></tr>
+<tr class="memdesc:a5f5b824bdc0bece28899a552903778a7"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns the current versions of the driver.  <a href="#a5f5b824bdc0bece28899a552903778a7">More...</a><br /></td></tr>
+<tr class="separator:a5f5b824bdc0bece28899a552903778a7"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ad9632680b628200c7bf61f9cce14f608"><td class="memItemLeft" align="right" valign="top"><a class="el" href="xe__umd__api_8h.html#a0a81258bd4a02d562b77ce7bc03fe189">xe_result_t</a> <a class="el" href="xe__umd__api_8h.html#aab180c7b54dae19a960d3b4425649275">__xecall</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="xe__umd__api_8h.html#ad9632680b628200c7bf61f9cce14f608">xeDeviceGetCount</a> (uint32_t *count)</td></tr>
+<tr class="memdesc:ad9632680b628200c7bf61f9cce14f608"><td class="mdescLeft">&#160;</td><td class="mdescRight">Reports the number of devices.  <a href="#ad9632680b628200c7bf61f9cce14f608">More...</a><br /></td></tr>
+<tr class="separator:ad9632680b628200c7bf61f9cce14f608"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aa1a1a914d0ac9d53a62a2b212adb5823"><td class="memItemLeft" align="right" valign="top"><a class="el" href="xe__umd__api_8h.html#a0a81258bd4a02d562b77ce7bc03fe189">xe_result_t</a> <a class="el" href="xe__umd__api_8h.html#aab180c7b54dae19a960d3b4425649275">__xecall</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="xe__umd__api_8h.html#aa1a1a914d0ac9d53a62a2b212adb5823">xeDeviceGet</a> (uint32_t ordinal, <a class="el" href="structxe__device__handle__t.html">xe_device_handle_t</a> *phDevice)</td></tr>
+<tr class="memdesc:aa1a1a914d0ac9d53a62a2b212adb5823"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns a handle to the device object.  <a href="#aa1a1a914d0ac9d53a62a2b212adb5823">More...</a><br /></td></tr>
+<tr class="separator:aa1a1a914d0ac9d53a62a2b212adb5823"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ab4fff191d021e8ede3e4caef8d1b8ab0"><td class="memItemLeft" align="right" valign="top"><a class="el" href="xe__umd__api_8h.html#a0a81258bd4a02d562b77ce7bc03fe189">xe_result_t</a> <a class="el" href="xe__umd__api_8h.html#aab180c7b54dae19a960d3b4425649275">__xecall</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="xe__umd__api_8h.html#ab4fff191d021e8ede3e4caef8d1b8ab0">xeDeviceGetApiVersion</a> (<a class="el" href="structxe__device__handle__t.html">xe_device_handle_t</a> hDevice, <a class="el" href="xe__umd__api_8h.html#ad69250d10c10e024a5d8aa4dea0fd831">xe_api_version_t</a> *version)</td></tr>
+<tr class="memdesc:ab4fff191d021e8ede3e4caef8d1b8ab0"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns the API version supported by the device.  <a href="#ab4fff191d021e8ede3e4caef8d1b8ab0">More...</a><br /></td></tr>
+<tr class="separator:ab4fff191d021e8ede3e4caef8d1b8ab0"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a223e99f5c17e355b4cc46f14f0aaf9fa"><td class="memItemLeft" align="right" valign="top"><a class="el" href="xe__umd__api_8h.html#a0a81258bd4a02d562b77ce7bc03fe189">xe_result_t</a> <a class="el" href="xe__umd__api_8h.html#aab180c7b54dae19a960d3b4425649275">__xecall</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="xe__umd__api_8h.html#a223e99f5c17e355b4cc46f14f0aaf9fa">xeDeviceGetAttribute</a> (<a class="el" href="structxe__device__handle__t.html">xe_device_handle_t</a> hDevice, <a class="el" href="xe__umd__api_8h.html#a003ecc42f784db9cb9cd02f299849a87">xe_device_attribute_t</a> attribute, uint32_t *value)</td></tr>
 <tr class="memdesc:a223e99f5c17e355b4cc46f14f0aaf9fa"><td class="mdescLeft">&#160;</td><td class="mdescRight">Retrieves an attribute of the device.  <a href="#a223e99f5c17e355b4cc46f14f0aaf9fa">More...</a><br /></td></tr>
 <tr class="separator:a223e99f5c17e355b4cc46f14f0aaf9fa"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -303,7 +312,7 @@ Functions</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="xe__umd__api_8h_source.html#l00102">102</a> of file <a class="el" href="xe__umd__api_8h_source.html">xe_umd_api.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="xe__umd__api_8h_source.html#l00110">110</a> of file <a class="el" href="xe__umd__api_8h_source.html">xe_umd_api.h</a>.</p>
 
 </div>
 </div>
@@ -323,11 +332,34 @@ Functions</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="xe__umd__api_8h_source.html#l00103">103</a> of file <a class="el" href="xe__umd__api_8h_source.html">xe_umd_api.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="xe__umd__api_8h_source.html#l00111">111</a> of file <a class="el" href="xe__umd__api_8h_source.html">xe_umd_api.h</a>.</p>
 
 </div>
 </div>
 <h2 class="groupheader">Enumeration Type Documentation</h2>
+<a id="ad69250d10c10e024a5d8aa4dea0fd831"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ad69250d10c10e024a5d8aa4dea0fd831">&#9670;&nbsp;</a></span>xe_api_version_t</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">enum <a class="el" href="xe__umd__api_8h.html#ad69250d10c10e024a5d8aa4dea0fd831">xe_api_version_t</a> : uint32_t</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Defines API versions. </p>
+<p>API versions contain major and minor attributes, use XE_MAJOR_VERSION and XE_MINOR_VERSION </p>
+<table class="fieldtable">
+<tr><th colspan="2">Enumerator</th></tr><tr><td class="fieldname"><a id="ad69250d10c10e024a5d8aa4dea0fd831a8f5f11a47d3562e3b90643ff9ce77ee0"></a>XE_API_VERSION_1_0&#160;</td><td class="fielddoc"></td></tr>
+</table>
+
+<p class="definition">Definition at line <a class="el" href="xe__umd__api_8h_source.html#l00149">149</a> of file <a class="el" href="xe__umd__api_8h_source.html">xe_umd_api.h</a>.</p>
+<div class="fragment"><div class="line"><a name="l00150"></a><span class="lineno">  150</span>&#160;{</div><div class="line"><a name="l00151"></a><span class="lineno">  151</span>&#160;    <a class="code" href="xe__umd__api_8h.html#ad69250d10c10e024a5d8aa4dea0fd831a8f5f11a47d3562e3b90643ff9ce77ee0">XE_API_VERSION_1_0</a> = 0x00010000</div><div class="line"><a name="l00152"></a><span class="lineno">  152</span>&#160;};</div><div class="ttc" id="xe__umd__api_8h_html_ad69250d10c10e024a5d8aa4dea0fd831a8f5f11a47d3562e3b90643ff9ce77ee0"><div class="ttname"><a href="xe__umd__api_8h.html#ad69250d10c10e024a5d8aa4dea0fd831a8f5f11a47d3562e3b90643ff9ce77ee0">XE_API_VERSION_1_0</a></div><div class="ttdef"><b>Definition:</b> <a href="xe__umd__api_8h_source.html#l00151">xe_umd_api.h:151</a></div></div>
+</div><!-- fragment -->
+</div>
+</div>
 <a id="a112c19a569dd4e2fa6aeb22214a64c0a"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a112c19a569dd4e2fa6aeb22214a64c0a">&#9670;&nbsp;</a></span>xe_command_list_flags_t</h2>
 
@@ -346,8 +378,8 @@ Functions</h2></td></tr>
 </td></tr>
 </table>
 
-<p class="definition">Definition at line <a class="el" href="xe__umd__api_8h_source.html#l00198">198</a> of file <a class="el" href="xe__umd__api_8h_source.html">xe_umd_api.h</a>.</p>
-<div class="fragment"><div class="line"><a name="l00199"></a><span class="lineno">  199</span>&#160;{</div><div class="line"><a name="l00200"></a><span class="lineno">  200</span>&#160;    <a class="code" href="xe__umd__api_8h.html#a112c19a569dd4e2fa6aeb22214a64c0aaec988ccf52f8898f436210339018365c">XE_COMMAND_LIST_FLAG_NONE</a> = 0               </div><div class="line"><a name="l00201"></a><span class="lineno">  201</span>&#160;};</div><div class="ttc" id="xe__umd__api_8h_html_a112c19a569dd4e2fa6aeb22214a64c0aaec988ccf52f8898f436210339018365c"><div class="ttname"><a href="xe__umd__api_8h.html#a112c19a569dd4e2fa6aeb22214a64c0aaec988ccf52f8898f436210339018365c">XE_COMMAND_LIST_FLAG_NONE</a></div><div class="ttdoc">default behavior </div><div class="ttdef"><b>Definition:</b> <a href="xe__umd__api_8h_source.html#l00200">xe_umd_api.h:200</a></div></div>
+<p class="definition">Definition at line <a class="el" href="xe__umd__api_8h_source.html#l00216">216</a> of file <a class="el" href="xe__umd__api_8h_source.html">xe_umd_api.h</a>.</p>
+<div class="fragment"><div class="line"><a name="l00217"></a><span class="lineno">  217</span>&#160;{</div><div class="line"><a name="l00218"></a><span class="lineno">  218</span>&#160;    <a class="code" href="xe__umd__api_8h.html#a112c19a569dd4e2fa6aeb22214a64c0aaec988ccf52f8898f436210339018365c">XE_COMMAND_LIST_FLAG_NONE</a> = 0               </div><div class="line"><a name="l00219"></a><span class="lineno">  219</span>&#160;};</div><div class="ttc" id="xe__umd__api_8h_html_a112c19a569dd4e2fa6aeb22214a64c0aaec988ccf52f8898f436210339018365c"><div class="ttname"><a href="xe__umd__api_8h.html#a112c19a569dd4e2fa6aeb22214a64c0aaec988ccf52f8898f436210339018365c">XE_COMMAND_LIST_FLAG_NONE</a></div><div class="ttdoc">default behavior </div><div class="ttdef"><b>Definition:</b> <a href="xe__umd__api_8h_source.html#l00218">xe_umd_api.h:218</a></div></div>
 </div><!-- fragment -->
 </div>
 </div>
@@ -369,8 +401,8 @@ Functions</h2></td></tr>
 </td></tr>
 </table>
 
-<p class="definition">Definition at line <a class="el" href="xe__umd__api_8h_source.html#l00164">164</a> of file <a class="el" href="xe__umd__api_8h_source.html">xe_umd_api.h</a>.</p>
-<div class="fragment"><div class="line"><a name="l00165"></a><span class="lineno">  165</span>&#160;{</div><div class="line"><a name="l00166"></a><span class="lineno">  166</span>&#160;    <a class="code" href="xe__umd__api_8h.html#ab3bc19a79aa63e22bade20d2fdde4fc6a9a2c5ad9850cfa7316197e9f9af0d24e">XE_COMMAND_QUEUE_FLAG_NONE</a> = 0              </div><div class="line"><a name="l00167"></a><span class="lineno">  167</span>&#160;};</div><div class="ttc" id="xe__umd__api_8h_html_ab3bc19a79aa63e22bade20d2fdde4fc6a9a2c5ad9850cfa7316197e9f9af0d24e"><div class="ttname"><a href="xe__umd__api_8h.html#ab3bc19a79aa63e22bade20d2fdde4fc6a9a2c5ad9850cfa7316197e9f9af0d24e">XE_COMMAND_QUEUE_FLAG_NONE</a></div><div class="ttdoc">default behavior </div><div class="ttdef"><b>Definition:</b> <a href="xe__umd__api_8h_source.html#l00166">xe_umd_api.h:166</a></div></div>
+<p class="definition">Definition at line <a class="el" href="xe__umd__api_8h_source.html#l00182">182</a> of file <a class="el" href="xe__umd__api_8h_source.html">xe_umd_api.h</a>.</p>
+<div class="fragment"><div class="line"><a name="l00183"></a><span class="lineno">  183</span>&#160;{</div><div class="line"><a name="l00184"></a><span class="lineno">  184</span>&#160;    <a class="code" href="xe__umd__api_8h.html#ab3bc19a79aa63e22bade20d2fdde4fc6a9a2c5ad9850cfa7316197e9f9af0d24e">XE_COMMAND_QUEUE_FLAG_NONE</a> = 0              </div><div class="line"><a name="l00185"></a><span class="lineno">  185</span>&#160;};</div><div class="ttc" id="xe__umd__api_8h_html_ab3bc19a79aa63e22bade20d2fdde4fc6a9a2c5ad9850cfa7316197e9f9af0d24e"><div class="ttname"><a href="xe__umd__api_8h.html#ab3bc19a79aa63e22bade20d2fdde4fc6a9a2c5ad9850cfa7316197e9f9af0d24e">XE_COMMAND_QUEUE_FLAG_NONE</a></div><div class="ttdoc">default behavior </div><div class="ttdef"><b>Definition:</b> <a href="xe__umd__api_8h_source.html#l00184">xe_umd_api.h:184</a></div></div>
 </div><!-- fragment -->
 </div>
 </div>
@@ -388,33 +420,39 @@ Functions</h2></td></tr>
 <table class="fieldtable">
 <tr><th colspan="2">Enumerator</th></tr><tr><td class="fieldname"><a id="a003ecc42f784db9cb9cd02f299849a87ac2e6cf4a9347ef77bd089b191017bf26"></a>XE_DEVICE_ATTRIBUTE_MAX_THREADS&#160;</td><td class="fielddoc"><p>maximum number of threads supported </p>
 </td></tr>
+<tr><td class="fieldname"><a id="a003ecc42f784db9cb9cd02f299849a87a29222b9f4757bb27029b24f9d9415935"></a>XE_DEVICE_ATTRIBUTE_MAX_SIMULTANEOUS_QUEUES&#160;</td><td class="fielddoc"><p>maximum number of command queues that can execute in parallel </p>
+</td></tr>
+<tr><td class="fieldname"><a id="a003ecc42f784db9cb9cd02f299849a87a25f60d8b9d103fbd73341ed5a39b9c1c"></a>XE_DEVICE_ATTRIBUTE_TOTAL_MEMORY&#160;</td><td class="fielddoc"><p>total amount of memory available, in megabytes </p>
+</td></tr>
 </table>
 
-<p class="definition">Definition at line <a class="el" href="xe__umd__api_8h_source.html#l00148">148</a> of file <a class="el" href="xe__umd__api_8h_source.html">xe_umd_api.h</a>.</p>
-<div class="fragment"><div class="line"><a name="l00149"></a><span class="lineno">  149</span>&#160;{</div><div class="line"><a name="l00150"></a><span class="lineno">  150</span>&#160;    <a class="code" href="xe__umd__api_8h.html#a003ecc42f784db9cb9cd02f299849a87ac2e6cf4a9347ef77bd089b191017bf26">XE_DEVICE_ATTRIBUTE_MAX_THREADS</a>     </div><div class="line"><a name="l00151"></a><span class="lineno">  151</span>&#160;};</div><div class="ttc" id="xe__umd__api_8h_html_a003ecc42f784db9cb9cd02f299849a87ac2e6cf4a9347ef77bd089b191017bf26"><div class="ttname"><a href="xe__umd__api_8h.html#a003ecc42f784db9cb9cd02f299849a87ac2e6cf4a9347ef77bd089b191017bf26">XE_DEVICE_ATTRIBUTE_MAX_THREADS</a></div><div class="ttdoc">maximum number of threads supported </div><div class="ttdef"><b>Definition:</b> <a href="xe__umd__api_8h_source.html#l00150">xe_umd_api.h:150</a></div></div>
+<p class="definition">Definition at line <a class="el" href="xe__umd__api_8h_source.html#l00164">164</a> of file <a class="el" href="xe__umd__api_8h_source.html">xe_umd_api.h</a>.</p>
+<div class="fragment"><div class="line"><a name="l00165"></a><span class="lineno">  165</span>&#160;{</div><div class="line"><a name="l00166"></a><span class="lineno">  166</span>&#160;    <a class="code" href="xe__umd__api_8h.html#a003ecc42f784db9cb9cd02f299849a87ac2e6cf4a9347ef77bd089b191017bf26">XE_DEVICE_ATTRIBUTE_MAX_THREADS</a> = 1,            </div><div class="line"><a name="l00167"></a><span class="lineno">  167</span>&#160;    <a class="code" href="xe__umd__api_8h.html#a003ecc42f784db9cb9cd02f299849a87a29222b9f4757bb27029b24f9d9415935">XE_DEVICE_ATTRIBUTE_MAX_SIMULTANEOUS_QUEUES</a>,    </div><div class="line"><a name="l00168"></a><span class="lineno">  168</span>&#160;    <a class="code" href="xe__umd__api_8h.html#a003ecc42f784db9cb9cd02f299849a87a25f60d8b9d103fbd73341ed5a39b9c1c">XE_DEVICE_ATTRIBUTE_TOTAL_MEMORY</a>,               </div><div class="line"><a name="l00169"></a><span class="lineno">  169</span>&#160;};</div><div class="ttc" id="xe__umd__api_8h_html_a003ecc42f784db9cb9cd02f299849a87a29222b9f4757bb27029b24f9d9415935"><div class="ttname"><a href="xe__umd__api_8h.html#a003ecc42f784db9cb9cd02f299849a87a29222b9f4757bb27029b24f9d9415935">XE_DEVICE_ATTRIBUTE_MAX_SIMULTANEOUS_QUEUES</a></div><div class="ttdoc">maximum number of command queues that can execute in parallel </div><div class="ttdef"><b>Definition:</b> <a href="xe__umd__api_8h_source.html#l00167">xe_umd_api.h:167</a></div></div>
+<div class="ttc" id="xe__umd__api_8h_html_a003ecc42f784db9cb9cd02f299849a87a25f60d8b9d103fbd73341ed5a39b9c1c"><div class="ttname"><a href="xe__umd__api_8h.html#a003ecc42f784db9cb9cd02f299849a87a25f60d8b9d103fbd73341ed5a39b9c1c">XE_DEVICE_ATTRIBUTE_TOTAL_MEMORY</a></div><div class="ttdoc">total amount of memory available, in megabytes </div><div class="ttdef"><b>Definition:</b> <a href="xe__umd__api_8h_source.html#l00168">xe_umd_api.h:168</a></div></div>
+<div class="ttc" id="xe__umd__api_8h_html_a003ecc42f784db9cb9cd02f299849a87ac2e6cf4a9347ef77bd089b191017bf26"><div class="ttname"><a href="xe__umd__api_8h.html#a003ecc42f784db9cb9cd02f299849a87ac2e6cf4a9347ef77bd089b191017bf26">XE_DEVICE_ATTRIBUTE_MAX_THREADS</a></div><div class="ttdoc">maximum number of threads supported </div><div class="ttdef"><b>Definition:</b> <a href="xe__umd__api_8h_source.html#l00166">xe_umd_api.h:166</a></div></div>
 </div><!-- fragment -->
 </div>
 </div>
-<a id="a8a2fbb344f840e83c505e8768a69a460"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a8a2fbb344f840e83c505e8768a69a460">&#9670;&nbsp;</a></span>xe_device_flags_t</h2>
+<a id="ab4941cf20c04442df726aaee5b2c3398"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ab4941cf20c04442df726aaee5b2c3398">&#9670;&nbsp;</a></span>xe_driver_version_t</h2>
 
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">enum <a class="el" href="xe__umd__api_8h.html#a8a2fbb344f840e83c505e8768a69a460">xe_device_flags_t</a> : uint32_t</td>
+          <td class="memname">enum <a class="el" href="xe__umd__api_8h.html#ab4941cf20c04442df726aaee5b2c3398">xe_driver_version_t</a> : uint32_t</td>
         </tr>
       </table>
 </div><div class="memdoc">
 
-<p>Device creation flags. </p>
+<p>Defines driver versions. </p>
+<p>Driver versions contain major and minor attributes, use XE_MAJOR_VERSION and XE_MINOR_VERSION </p>
 <table class="fieldtable">
-<tr><th colspan="2">Enumerator</th></tr><tr><td class="fieldname"><a id="a8a2fbb344f840e83c505e8768a69a460acf533f9025c9d649fc9ab2c1364ac54b"></a>XE_DEVICE_FLAG_NONE&#160;</td><td class="fielddoc"><p>default behavior </p>
-</td></tr>
+<tr><th colspan="2">Enumerator</th></tr><tr><td class="fieldname"><a id="ab4941cf20c04442df726aaee5b2c3398a5d8cf9c88a2172c08ec58ae3cb3c470f"></a>XE_DRIVER_VERSION_1_0&#160;</td><td class="fielddoc"></td></tr>
 </table>
 
-<p class="definition">Definition at line <a class="el" href="xe__umd__api_8h_source.html#l00118">118</a> of file <a class="el" href="xe__umd__api_8h_source.html">xe_umd_api.h</a>.</p>
-<div class="fragment"><div class="line"><a name="l00119"></a><span class="lineno">  119</span>&#160;{</div><div class="line"><a name="l00120"></a><span class="lineno">  120</span>&#160;    <a class="code" href="xe__umd__api_8h.html#a8a2fbb344f840e83c505e8768a69a460acf533f9025c9d649fc9ab2c1364ac54b">XE_DEVICE_FLAG_NONE</a> = 0             </div><div class="line"><a name="l00121"></a><span class="lineno">  121</span>&#160;};</div><div class="ttc" id="xe__umd__api_8h_html_a8a2fbb344f840e83c505e8768a69a460acf533f9025c9d649fc9ab2c1364ac54b"><div class="ttname"><a href="xe__umd__api_8h.html#a8a2fbb344f840e83c505e8768a69a460acf533f9025c9d649fc9ab2c1364ac54b">XE_DEVICE_FLAG_NONE</a></div><div class="ttdoc">default behavior </div><div class="ttdef"><b>Definition:</b> <a href="xe__umd__api_8h_source.html#l00120">xe_umd_api.h:120</a></div></div>
+<p class="definition">Definition at line <a class="el" href="xe__umd__api_8h_source.html#l00117">117</a> of file <a class="el" href="xe__umd__api_8h_source.html">xe_umd_api.h</a>.</p>
+<div class="fragment"><div class="line"><a name="l00118"></a><span class="lineno">  118</span>&#160;{</div><div class="line"><a name="l00119"></a><span class="lineno">  119</span>&#160;    <a class="code" href="xe__umd__api_8h.html#ab4941cf20c04442df726aaee5b2c3398a5d8cf9c88a2172c08ec58ae3cb3c470f">XE_DRIVER_VERSION_1_0</a> = 0x00010000</div><div class="line"><a name="l00120"></a><span class="lineno">  120</span>&#160;};</div><div class="ttc" id="xe__umd__api_8h_html_ab4941cf20c04442df726aaee5b2c3398a5d8cf9c88a2172c08ec58ae3cb3c470f"><div class="ttname"><a href="xe__umd__api_8h.html#ab4941cf20c04442df726aaee5b2c3398a5d8cf9c88a2172c08ec58ae3cb3c470f">XE_DRIVER_VERSION_1_0</a></div><div class="ttdef"><b>Definition:</b> <a href="xe__umd__api_8h_source.html#l00119">xe_umd_api.h:119</a></div></div>
 </div><!-- fragment -->
 </div>
 </div>
@@ -436,8 +474,31 @@ Functions</h2></td></tr>
 </td></tr>
 </table>
 
-<p class="definition">Definition at line <a class="el" href="xe__umd__api_8h_source.html#l00241">241</a> of file <a class="el" href="xe__umd__api_8h_source.html">xe_umd_api.h</a>.</p>
-<div class="fragment"><div class="line"><a name="l00242"></a><span class="lineno">  242</span>&#160;{</div><div class="line"><a name="l00243"></a><span class="lineno">  243</span>&#160;    <a class="code" href="xe__umd__api_8h.html#aa5ae605f51fc360a9a75496825fe5ae1abbf3f5b1d1d1e484ef21d67f8ad8b7fc">XE_EVENT_FLAG_NONE</a> = 0                  </div><div class="line"><a name="l00244"></a><span class="lineno">  244</span>&#160;};</div><div class="ttc" id="xe__umd__api_8h_html_aa5ae605f51fc360a9a75496825fe5ae1abbf3f5b1d1d1e484ef21d67f8ad8b7fc"><div class="ttname"><a href="xe__umd__api_8h.html#aa5ae605f51fc360a9a75496825fe5ae1abbf3f5b1d1d1e484ef21d67f8ad8b7fc">XE_EVENT_FLAG_NONE</a></div><div class="ttdoc">default behavior </div><div class="ttdef"><b>Definition:</b> <a href="xe__umd__api_8h_source.html#l00243">xe_umd_api.h:243</a></div></div>
+<p class="definition">Definition at line <a class="el" href="xe__umd__api_8h_source.html#l00259">259</a> of file <a class="el" href="xe__umd__api_8h_source.html">xe_umd_api.h</a>.</p>
+<div class="fragment"><div class="line"><a name="l00260"></a><span class="lineno">  260</span>&#160;{</div><div class="line"><a name="l00261"></a><span class="lineno">  261</span>&#160;    <a class="code" href="xe__umd__api_8h.html#aa5ae605f51fc360a9a75496825fe5ae1abbf3f5b1d1d1e484ef21d67f8ad8b7fc">XE_EVENT_FLAG_NONE</a> = 0                  </div><div class="line"><a name="l00262"></a><span class="lineno">  262</span>&#160;};</div><div class="ttc" id="xe__umd__api_8h_html_aa5ae605f51fc360a9a75496825fe5ae1abbf3f5b1d1d1e484ef21d67f8ad8b7fc"><div class="ttname"><a href="xe__umd__api_8h.html#aa5ae605f51fc360a9a75496825fe5ae1abbf3f5b1d1d1e484ef21d67f8ad8b7fc">XE_EVENT_FLAG_NONE</a></div><div class="ttdoc">default behavior </div><div class="ttdef"><b>Definition:</b> <a href="xe__umd__api_8h_source.html#l00261">xe_umd_api.h:261</a></div></div>
+</div><!-- fragment -->
+</div>
+</div>
+<a id="a23feded6ed1a07a052e5bf99495122b0"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a23feded6ed1a07a052e5bf99495122b0">&#9670;&nbsp;</a></span>xe_init_flags_t</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">enum <a class="el" href="xe__umd__api_8h.html#a23feded6ed1a07a052e5bf99495122b0">xe_init_flags_t</a> : uint32_t</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Initialization flags. </p>
+<table class="fieldtable">
+<tr><th colspan="2">Enumerator</th></tr><tr><td class="fieldname"><a id="a23feded6ed1a07a052e5bf99495122b0a96f989ca76afda801922059f7031f0d8"></a>XE_INIT_FLAG_NONE&#160;</td><td class="fielddoc"><p>default behavior </p>
+</td></tr>
+</table>
+
+<p class="definition">Definition at line <a class="el" href="xe__umd__api_8h_source.html#l00096">96</a> of file <a class="el" href="xe__umd__api_8h_source.html">xe_umd_api.h</a>.</p>
+<div class="fragment"><div class="line"><a name="l00097"></a><span class="lineno">   97</span>&#160;{</div><div class="line"><a name="l00098"></a><span class="lineno">   98</span>&#160;    <a class="code" href="xe__umd__api_8h.html#a23feded6ed1a07a052e5bf99495122b0a96f989ca76afda801922059f7031f0d8">XE_INIT_FLAG_NONE</a> = 0       </div><div class="line"><a name="l00099"></a><span class="lineno">   99</span>&#160;};</div><div class="ttc" id="xe__umd__api_8h_html_a23feded6ed1a07a052e5bf99495122b0a96f989ca76afda801922059f7031f0d8"><div class="ttname"><a href="xe__umd__api_8h.html#a23feded6ed1a07a052e5bf99495122b0a96f989ca76afda801922059f7031f0d8">XE_INIT_FLAG_NONE</a></div><div class="ttdoc">default behavior </div><div class="ttdef"><b>Definition:</b> <a href="xe__umd__api_8h_source.html#l00098">xe_umd_api.h:98</a></div></div>
 </div><!-- fragment -->
 </div>
 </div>
@@ -459,8 +520,8 @@ Functions</h2></td></tr>
 </td></tr>
 </table>
 
-<p class="definition">Definition at line <a class="el" href="xe__umd__api_8h_source.html#l00284">284</a> of file <a class="el" href="xe__umd__api_8h_source.html">xe_umd_api.h</a>.</p>
-<div class="fragment"><div class="line"><a name="l00285"></a><span class="lineno">  285</span>&#160;{</div><div class="line"><a name="l00286"></a><span class="lineno">  286</span>&#160;    <a class="code" href="xe__umd__api_8h.html#af739fb0bed07b9e9012f37fa088cfaa1af41f846d8441a9b3132e666b88e9ae4c">XE_RESOURCE_FLAG_NONE</a> = 0           </div><div class="line"><a name="l00287"></a><span class="lineno">  287</span>&#160;};</div><div class="ttc" id="xe__umd__api_8h_html_af739fb0bed07b9e9012f37fa088cfaa1af41f846d8441a9b3132e666b88e9ae4c"><div class="ttname"><a href="xe__umd__api_8h.html#af739fb0bed07b9e9012f37fa088cfaa1af41f846d8441a9b3132e666b88e9ae4c">XE_RESOURCE_FLAG_NONE</a></div><div class="ttdoc">default behavior </div><div class="ttdef"><b>Definition:</b> <a href="xe__umd__api_8h_source.html#l00286">xe_umd_api.h:286</a></div></div>
+<p class="definition">Definition at line <a class="el" href="xe__umd__api_8h_source.html#l00302">302</a> of file <a class="el" href="xe__umd__api_8h_source.html">xe_umd_api.h</a>.</p>
+<div class="fragment"><div class="line"><a name="l00303"></a><span class="lineno">  303</span>&#160;{</div><div class="line"><a name="l00304"></a><span class="lineno">  304</span>&#160;    <a class="code" href="xe__umd__api_8h.html#af739fb0bed07b9e9012f37fa088cfaa1af41f846d8441a9b3132e666b88e9ae4c">XE_RESOURCE_FLAG_NONE</a> = 0           </div><div class="line"><a name="l00305"></a><span class="lineno">  305</span>&#160;};</div><div class="ttc" id="xe__umd__api_8h_html_af739fb0bed07b9e9012f37fa088cfaa1af41f846d8441a9b3132e666b88e9ae4c"><div class="ttname"><a href="xe__umd__api_8h.html#af739fb0bed07b9e9012f37fa088cfaa1af41f846d8441a9b3132e666b88e9ae4c">XE_RESOURCE_FLAG_NONE</a></div><div class="ttdoc">default behavior </div><div class="ttdef"><b>Definition:</b> <a href="xe__umd__api_8h_source.html#l00304">xe_umd_api.h:304</a></div></div>
 </div><!-- fragment -->
 </div>
 </div>
@@ -493,29 +554,6 @@ Functions</h2></td></tr>
 <div class="ttc" id="xe__umd__api_8h_html_a0a81258bd4a02d562b77ce7bc03fe189a0e6ce01deeca2124e2f7c0b9ca5d4b11"><div class="ttname"><a href="xe__umd__api_8h.html#a0a81258bd4a02d562b77ce7bc03fe189a0e6ce01deeca2124e2f7c0b9ca5d4b11">XE_RESULT_ERROR_UNKNOWN</a></div><div class="ttdoc">internal error </div><div class="ttdef"><b>Definition:</b> <a href="xe__umd__api_8h_source.html#l00090">xe_umd_api.h:90</a></div></div>
 <div class="ttc" id="xe__umd__api_8h_html_a0a81258bd4a02d562b77ce7bc03fe189af2c8a0ddedb58c6435b1e0acf6c27fe1"><div class="ttname"><a href="xe__umd__api_8h.html#a0a81258bd4a02d562b77ce7bc03fe189af2c8a0ddedb58c6435b1e0acf6c27fe1">XE_RESULT_SUCCESS</a></div><div class="ttdoc">success </div><div class="ttdef"><b>Definition:</b> <a href="xe__umd__api_8h_source.html#l00087">xe_umd_api.h:87</a></div></div>
 <div class="ttc" id="xe__umd__api_8h_html_a0a81258bd4a02d562b77ce7bc03fe189a496076e0b279dd037e48436c1a9f4f46"><div class="ttname"><a href="xe__umd__api_8h.html#a0a81258bd4a02d562b77ce7bc03fe189a496076e0b279dd037e48436c1a9f4f46">XE_RESULT_ERROR_OUT_OF_MEMORY</a></div><div class="ttdoc">insufficient memory to satisfy call </div><div class="ttdef"><b>Definition:</b> <a href="xe__umd__api_8h_source.html#l00089">xe_umd_api.h:89</a></div></div>
-</div><!-- fragment -->
-</div>
-</div>
-<a id="a5cf8a93f227cbee73611d99e01345466"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a5cf8a93f227cbee73611d99e01345466">&#9670;&nbsp;</a></span>xe_version_t</h2>
-
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">enum <a class="el" href="xe__umd__api_8h.html#a5cf8a93f227cbee73611d99e01345466">xe_version_t</a> : uint32_t</td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-<p>Defines API versions. </p>
-<p>API versions contain major and minor attributes, use XE_MAJOR_VERSION and XE_MINOR_VERSION </p>
-<table class="fieldtable">
-<tr><th colspan="2">Enumerator</th></tr><tr><td class="fieldname"><a id="a5cf8a93f227cbee73611d99e01345466a20061bdbc71c2fd66c17dcce4f0e83f9"></a>XE_VERSION_1_0&#160;</td><td class="fielddoc"></td></tr>
-</table>
-
-<p class="definition">Definition at line <a class="el" href="xe__umd__api_8h_source.html#l00097">97</a> of file <a class="el" href="xe__umd__api_8h_source.html">xe_umd_api.h</a>.</p>
-<div class="fragment"><div class="line"><a name="l00098"></a><span class="lineno">   98</span>&#160;{</div><div class="line"><a name="l00099"></a><span class="lineno">   99</span>&#160;    <a class="code" href="xe__umd__api_8h.html#a5cf8a93f227cbee73611d99e01345466a20061bdbc71c2fd66c17dcce4f0e83f9">XE_VERSION_1_0</a> = 0x00010000</div><div class="line"><a name="l00100"></a><span class="lineno">  100</span>&#160;};</div><div class="ttc" id="xe__umd__api_8h_html_a5cf8a93f227cbee73611d99e01345466a20061bdbc71c2fd66c17dcce4f0e83f9"><div class="ttname"><a href="xe__umd__api_8h.html#a5cf8a93f227cbee73611d99e01345466a20061bdbc71c2fd66c17dcce4f0e83f9">XE_VERSION_1_0</a></div><div class="ttdef"><b>Definition:</b> <a href="xe__umd__api_8h_source.html#l00099">xe_umd_api.h:99</a></div></div>
 </div><!-- fragment -->
 </div>
 </div>
@@ -762,17 +800,17 @@ Functions</h2></td></tr>
 
 </div>
 </div>
-<a id="a211007d0c11b17a7c7863bbc0de16ddc"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a211007d0c11b17a7c7863bbc0de16ddc">&#9670;&nbsp;</a></span>xeDeviceCreate()</h2>
+<a id="aa1a1a914d0ac9d53a62a2b212adb5823"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aa1a1a914d0ac9d53a62a2b212adb5823">&#9670;&nbsp;</a></span>xeDeviceGet()</h2>
 
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname"><a class="el" href="xe__umd__api_8h.html#a0a81258bd4a02d562b77ce7bc03fe189">xe_result_t</a> <a class="el" href="xe__umd__api_8h.html#aab180c7b54dae19a960d3b4425649275">__xecall</a> xeDeviceCreate </td>
+          <td class="memname"><a class="el" href="xe__umd__api_8h.html#a0a81258bd4a02d562b77ce7bc03fe189">xe_result_t</a> <a class="el" href="xe__umd__api_8h.html#aab180c7b54dae19a960d3b4425649275">__xecall</a> xeDeviceGet </td>
           <td>(</td>
-          <td class="paramtype"><a class="el" href="structxe__device__desc__t.html">xe_device_desc_t</a>&#160;</td>
-          <td class="paramname"><em>desc</em>, </td>
+          <td class="paramtype">uint32_t&#160;</td>
+          <td class="paramname"><em>ordinal</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
@@ -788,11 +826,11 @@ Functions</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p>Creates a device object. </p>
+<p>Returns a handle to the device object. </p>
 <dl class="section return"><dt>Returns</dt><dd>XE_RESULT_SUCCESS, ... </dd></dl>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
-    <tr><td class="paramdir">[in]</td><td class="paramname">desc</td><td>device descriptor </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">ordinal</td><td>ordinal of device to retrieve </td></tr>
     <tr><td class="paramdir">[out]</td><td class="paramname">phDevice</td><td>pointer to handle of device object created </td></tr>
   </table>
   </dd>
@@ -800,27 +838,37 @@ Functions</h2></td></tr>
 
 </div>
 </div>
-<a id="a434ace035f5a24b3cfbc947be66b6fa6"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a434ace035f5a24b3cfbc947be66b6fa6">&#9670;&nbsp;</a></span>xeDeviceDestroy()</h2>
+<a id="ab4fff191d021e8ede3e4caef8d1b8ab0"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ab4fff191d021e8ede3e4caef8d1b8ab0">&#9670;&nbsp;</a></span>xeDeviceGetApiVersion()</h2>
 
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname"><a class="el" href="xe__umd__api_8h.html#a0a81258bd4a02d562b77ce7bc03fe189">xe_result_t</a> <a class="el" href="xe__umd__api_8h.html#aab180c7b54dae19a960d3b4425649275">__xecall</a> xeDeviceDestroy </td>
+          <td class="memname"><a class="el" href="xe__umd__api_8h.html#a0a81258bd4a02d562b77ce7bc03fe189">xe_result_t</a> <a class="el" href="xe__umd__api_8h.html#aab180c7b54dae19a960d3b4425649275">__xecall</a> xeDeviceGetApiVersion </td>
           <td>(</td>
           <td class="paramtype"><a class="el" href="structxe__device__handle__t.html">xe_device_handle_t</a>&#160;</td>
-          <td class="paramname"><em>hDevice</em></td><td>)</td>
+          <td class="paramname"><em>hDevice</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
           <td></td>
+          <td class="paramtype"><a class="el" href="xe__umd__api_8h.html#ad69250d10c10e024a5d8aa4dea0fd831">xe_api_version_t</a> *&#160;</td>
+          <td class="paramname"><em>version</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
         </tr>
       </table>
 </div><div class="memdoc">
 
-<p>Deletes a device object. </p>
-<dl class="section return"><dt>Returns</dt><dd>XE_RESULT_SUCCESS, ... </dd></dl>
+<p>Returns the API version supported by the device. </p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
-    <tr><td class="paramdir">[in]</td><td class="paramname">hDevice</td><td>handle of device object to destroy </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">hDevice</td><td>handle of the device object </td></tr>
+    <tr><td class="paramdir">[out]</td><td class="paramname">version</td><td>api version </td></tr>
   </table>
   </dd>
 </dl>
@@ -871,38 +919,52 @@ Functions</h2></td></tr>
 
 </div>
 </div>
-<a id="a93ede6e5ceaf237bb2c040a42bdae118"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a93ede6e5ceaf237bb2c040a42bdae118">&#9670;&nbsp;</a></span>xeDriverGetSupportedVersions()</h2>
+<a id="ad9632680b628200c7bf61f9cce14f608"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ad9632680b628200c7bf61f9cce14f608">&#9670;&nbsp;</a></span>xeDeviceGetCount()</h2>
 
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname"><a class="el" href="xe__umd__api_8h.html#a0a81258bd4a02d562b77ce7bc03fe189">xe_result_t</a> <a class="el" href="xe__umd__api_8h.html#aab180c7b54dae19a960d3b4425649275">__xecall</a> xeDriverGetSupportedVersions </td>
+          <td class="memname"><a class="el" href="xe__umd__api_8h.html#a0a81258bd4a02d562b77ce7bc03fe189">xe_result_t</a> <a class="el" href="xe__umd__api_8h.html#aab180c7b54dae19a960d3b4425649275">__xecall</a> xeDeviceGetCount </td>
           <td>(</td>
           <td class="paramtype">uint32_t *&#160;</td>
-          <td class="paramname"><em>count</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
+          <td class="paramname"><em>count</em></td><td>)</td>
           <td></td>
-          <td class="paramtype"><a class="el" href="xe__umd__api_8h.html#a5cf8a93f227cbee73611d99e01345466">xe_version_t</a> *&#160;</td>
-          <td class="paramname"><em>versions</em>&#160;</td>
-        </tr>
-        <tr>
-          <td></td>
-          <td>)</td>
-          <td></td><td></td>
         </tr>
       </table>
 </div><div class="memdoc">
 
-<p>Returns the API versions supported by the driver. </p>
-<p>If "versions == nullptr", then "count" returns the number of versions supported. Otherwise, "count" specifies the length of "versions" to be reported. In order to only retreive the latest version supported, just pass "count = 1". </p>
+<p>Reports the number of devices. </p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
-    <tr><td class="paramdir">[in,out]</td><td class="paramname">count</td><td>number of versions returned </td></tr>
-    <tr><td class="paramdir">[out]</td><td class="paramname">versions</td><td>list of versions supported, from highest to lowest. </td></tr>
+    <tr><td class="paramdir">[out]</td><td class="paramname">count</td><td>number of devices available </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
+<a id="a5f5b824bdc0bece28899a552903778a7"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a5f5b824bdc0bece28899a552903778a7">&#9670;&nbsp;</a></span>xeDriverGetVersion()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="xe__umd__api_8h.html#a0a81258bd4a02d562b77ce7bc03fe189">xe_result_t</a> <a class="el" href="xe__umd__api_8h.html#aab180c7b54dae19a960d3b4425649275">__xecall</a> xeDriverGetVersion </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="xe__umd__api_8h.html#ab4941cf20c04442df726aaee5b2c3398">xe_driver_version_t</a> *&#160;</td>
+          <td class="paramname"><em>version</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Returns the current versions of the driver. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[out]</td><td class="paramname">version</td><td>driver version </td></tr>
   </table>
   </dd>
 </dl>
@@ -986,6 +1048,32 @@ Functions</h2></td></tr>
   <table class="params">
     <tr><td class="paramdir">[in]</td><td class="paramname">hDevice</td><td>handle of the device </td></tr>
     <tr><td class="paramdir">[in]</td><td class="paramname">hEvent</td><td>handle of event object to destroy </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
+<a id="aa42ffd3cf61a3d417a57aff1bd1fbe14"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aa42ffd3cf61a3d417a57aff1bd1fbe14">&#9670;&nbsp;</a></span>xeInit()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="xe__umd__api_8h.html#a0a81258bd4a02d562b77ce7bc03fe189">xe_result_t</a> <a class="el" href="xe__umd__api_8h.html#aab180c7b54dae19a960d3b4425649275">__xecall</a> xeInit </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="xe__umd__api_8h.html#a23feded6ed1a07a052e5bf99495122b0">xe_init_flags_t</a>&#160;</td>
+          <td class="paramname"><em>flags</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Initialize the Xe Driver API and must be called before any other API function. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">flags</td><td>initialization flags </td></tr>
   </table>
   </dd>
 </dl>
@@ -1081,7 +1169,7 @@ Functions</h2></td></tr>
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
     <li class="navelem"><a class="el" href="xe__umd__api_8h.html">xe_umd_api.h</a></li>
-    <li class="footer">Generated on Thu Jan 3 2019 09:16:01 for Driver API by
+    <li class="footer">Generated on Thu Jan 3 2019 10:15:04 for Driver API by
     <a href="http://www.doxygen.org/index.html">
     <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.8.13 </li>
   </ul>

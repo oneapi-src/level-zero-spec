@@ -11,12 +11,14 @@ var searchData=
   ['xecommandqueuecreate',['xeCommandQueueCreate',['../xe__umd__api_8h.html#ac5d4d3880fdd5a1b5b4195832fa32736',1,'xe_umd_api.h']]],
   ['xecommandqueuedestroy',['xeCommandQueueDestroy',['../xe__umd__api_8h.html#a60eb5d7c4082e66b1eadc8d9547c5b64',1,'xe_umd_api.h']]],
   ['xecommandqueueenqueuecommandlist',['xeCommandQueueEnqueueCommandList',['../xe__umd__api_8h.html#ac83912c3d520f90ab6518cdd687e6943',1,'xe_umd_api.h']]],
-  ['xedevicecreate',['xeDeviceCreate',['../xe__umd__api_8h.html#a211007d0c11b17a7c7863bbc0de16ddc',1,'xe_umd_api.h']]],
-  ['xedevicedestroy',['xeDeviceDestroy',['../xe__umd__api_8h.html#a434ace035f5a24b3cfbc947be66b6fa6',1,'xe_umd_api.h']]],
+  ['xedeviceget',['xeDeviceGet',['../xe__umd__api_8h.html#aa1a1a914d0ac9d53a62a2b212adb5823',1,'xe_umd_api.h']]],
+  ['xedevicegetapiversion',['xeDeviceGetApiVersion',['../xe__umd__api_8h.html#ab4fff191d021e8ede3e4caef8d1b8ab0',1,'xe_umd_api.h']]],
   ['xedevicegetattribute',['xeDeviceGetAttribute',['../xe__umd__api_8h.html#a223e99f5c17e355b4cc46f14f0aaf9fa',1,'xe_umd_api.h']]],
-  ['xedrivergetsupportedversions',['xeDriverGetSupportedVersions',['../xe__umd__api_8h.html#a93ede6e5ceaf237bb2c040a42bdae118',1,'xe_umd_api.h']]],
+  ['xedevicegetcount',['xeDeviceGetCount',['../xe__umd__api_8h.html#ad9632680b628200c7bf61f9cce14f608',1,'xe_umd_api.h']]],
+  ['xedrivergetversion',['xeDriverGetVersion',['../xe__umd__api_8h.html#a5f5b824bdc0bece28899a552903778a7',1,'xe_umd_api.h']]],
   ['xeeventcreate',['xeEventCreate',['../xe__umd__api_8h.html#a68af93632ec1d12ba6948ec73f7569f0',1,'xe_umd_api.h']]],
   ['xeeventdestroy',['xeEventDestroy',['../xe__umd__api_8h.html#a5308dc4818c04fa81b447f9b1b8588a8',1,'xe_umd_api.h']]],
+  ['xeinit',['xeInit',['../xe__umd__api_8h.html#aa42ffd3cf61a3d417a57aff1bd1fbe14',1,'xe_umd_api.h']]],
   ['xeresourcecreate',['xeResourceCreate',['../xe__umd__api_8h.html#a63ce1fe43dab6e1bd594d05637f218a0',1,'xe_umd_api.h']]],
   ['xeresourcedestroy',['xeResourceDestroy',['../xe__umd__api_8h.html#a4cfc7794a7f7ae411f955f9455479cf2',1,'xe_umd_api.h']]]
 ];
