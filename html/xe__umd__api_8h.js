@@ -13,8 +13,10 @@ var xe__umd__api_8h =
     [ "XE_BIT", "xe__umd__api_8h.html#ac2281c7f49c93289449dbacaa9f59ef5", null ],
     [ "XE_DECLARE_ENUM", "xe__umd__api_8h.html#a24ec25fbe6d71c732e46b4a91b0efcd8", null ],
     [ "XE_DECLARE_HANDLE", "xe__umd__api_8h.html#a6f8b49dc25370281c0b133c4597ac12b", null ],
-    [ "XE_MAJOR_VERSION", "xe__umd__api_8h.html#a9468649fc9d1c6fd3c47f8b417f85467", null ],
-    [ "XE_MINOR_VERSION", "xe__umd__api_8h.html#af48475b0952417678796bccf3d0b7509", null ],
+    [ "XE_MAJOR_VERSION", "xe__umd__api_8h.html#a18a45f2716d3811bfb24c3dfd0289830", null ],
+    [ "XE_MAKE_VERSION", "xe__umd__api_8h.html#a7c541ed7fa8f9aa2d8ef98132ea245fc", null ],
+    [ "XE_MINOR_VERSION", "xe__umd__api_8h.html#a9c8b3d053cc57fc34a49ff7acf698c8b", null ],
+    [ "XE_UMD_HEADER_VERSION", "xe__umd__api_8h.html#a9123875cc8dd3cc62640c633aba1f894", null ],
     [ "xe_api_version_t", "xe__umd__api_8h.html#ad69250d10c10e024a5d8aa4dea0fd831", [
       [ "XE_API_VERSION_1_0", "xe__umd__api_8h.html#ad69250d10c10e024a5d8aa4dea0fd831a8f5f11a47d3562e3b90643ff9ce77ee0", null ]
     ] ],

@@ -31,9 +31,19 @@
 #pragma once
 #endif
 
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Generic macros for creating and extracting versions
+#define XE_MAKE_VERSION( MAJOR, MINOR ) (( MAJOR << 16 )|( MINOR & 0x0000ffff))
+#define XE_MAJOR_VERSION( V ) ( V >> 16 )
+#define XE_MINOR_VERSION( V ) ( V & 0x0000ffff )
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Current header file version
+#define XE_UMD_HEADER_VERSION   XE_MAKE_VERSION( 1, 0 )
 
 ///////////////////////////////////////////////////////////////////////////////
 #if !defined( __cplusplus )
+/// @brief Declare C++ types
 typedef unsigned int uint32_t;
 #endif
 
@@ -54,23 +64,25 @@ typedef unsigned int uint32_t;
                                 \
         inline bool operator==( const NAME& other ) const { return pDriverData == other.pDriverData; } \
         inline bool operator!=( const NAME& other ) const { return pDriverData != other.pDriverData; } \
-    };
+    }
 #else
 #define XE_DECLARE_HANDLE( NAME )   \
     typedef struct _NAME            \
     {                               \
         void* pDriverData;          \
-    } NAME;
+    } NAME
 #endif
 
-XE_DECLARE_HANDLE( xe_device_handle_t );
-XE_DECLARE_HANDLE( xe_command_queue_handle_t );
-XE_DECLARE_HANDLE( xe_command_list_handle_t );
-XE_DECLARE_HANDLE( xe_event_handle_t );
-XE_DECLARE_HANDLE( xe_resource_handle_t );
+///////////////////////////////////////////////////////////////////////////////
+XE_DECLARE_HANDLE( xe_device_handle_t );            ///< handle of driver's device object
+XE_DECLARE_HANDLE( xe_command_queue_handle_t );     ///< handle of driver's command queue object
+XE_DECLARE_HANDLE( xe_command_list_handle_t );      ///< handle of driver's command list object
+XE_DECLARE_HANDLE( xe_event_handle_t );             ///< handle of driver's event object
+XE_DECLARE_HANDLE( xe_resource_handle_t );          ///< handle of driver's resource object
 
 
 ///////////////////////////////////////////////////////////////////////////////
+/// @brief Declares typed enumeration
 #if defined( __cplusplus )
 #define XE_DECLARE_ENUM( NAME ) \
     enum NAME : uint32_t
@@ -81,6 +93,7 @@ XE_DECLARE_HANDLE( xe_resource_handle_t );
 #endif
 
 ///////////////////////////////////////////////////////////////////////////////
+/// @brief Generic macros for enumerator bit masks
 #define XE_BIT( N ) ( 1 << N )
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -110,16 +123,12 @@ xe_result_t __xecall
     );
 
 ///////////////////////////////////////////////////////////////////////////////
-#define XE_MAJOR_VERSION( ver ) ( ver >> 16 )
-#define XE_MINOR_VERSION( ver ) ( ver & 0x0000ffff )
-
-///////////////////////////////////////////////////////////////////////////////
 /// @brief Defines driver versions
 /// @details Driver versions contain major and minor attributes,
 ///     use XE_MAJOR_VERSION and XE_MINOR_VERSION
 XE_DECLARE_ENUM( xe_driver_version_t )
 {
-    XE_DRIVER_VERSION_1_0 = 0x00010000
+    XE_DRIVER_VERSION_1_0 = XE_MAKE_VERSION( 1, 0 )
 };
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -151,7 +160,7 @@ xe_result_t __xecall
 ///     use XE_MAJOR_VERSION and XE_MINOR_VERSION
 XE_DECLARE_ENUM( xe_api_version_t )
 {
-    XE_API_VERSION_1_0 = 0x00010000
+    XE_API_VERSION_1_0 = XE_MAKE_VERSION( 1, 0 )
 };
 
 ///////////////////////////////////////////////////////////////////////////////
