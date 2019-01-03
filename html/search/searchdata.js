@@ -1,13 +1,13 @@
 var indexSectionsWithContent =
 {
-  0: "_dfloprx",
+  0: "_floprx",
   1: "x",
   2: "rx",
   3: "ox",
   4: "fp",
   5: "x",
   6: "x",
-  7: "_dx",
+  7: "_x",
   8: "l"
 };
 

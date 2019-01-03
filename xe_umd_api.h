@@ -44,11 +44,11 @@ typedef unsigned int uint32_t;
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Declares a strongly typed handle
 #if defined( __cplusplus )
-#define DECLARE_HANDLE( NAME )  \
-    struct NAME                 \
-    {                           \
-        void* pDriverData;      \
-                                \
+#define XE_DECLARE_HANDLE( NAME )   \
+    struct NAME                     \
+    {                               \
+        void* pDriverData;          \
+                                    \
         NAME( void ) : pDriverData( nullptr ) {}        \
         explicit NAME( void* p ) : pDriverData( p ) {}  \
                                 \
@@ -56,26 +56,26 @@ typedef unsigned int uint32_t;
         inline bool operator!=( const NAME& other ) const { return pDriverData != other.pDriverData; } \
     };
 #else
-#define DECLARE_HANDLE( NAME )  \
-    typedef struct _NAME        \
-    {                           \
-        void* pDriverData;      \
+#define XE_DECLARE_HANDLE( NAME )   \
+    typedef struct _NAME            \
+    {                               \
+        void* pDriverData;          \
     } NAME;
 #endif
 
-DECLARE_HANDLE( xe_device_handle_t );
-DECLARE_HANDLE( xe_command_queue_handle_t );
-DECLARE_HANDLE( xe_command_list_handle_t );
-DECLARE_HANDLE( xe_event_handle_t );
-DECLARE_HANDLE( xe_resource_handle_t );
+XE_DECLARE_HANDLE( xe_device_handle_t );
+XE_DECLARE_HANDLE( xe_command_queue_handle_t );
+XE_DECLARE_HANDLE( xe_command_list_handle_t );
+XE_DECLARE_HANDLE( xe_event_handle_t );
+XE_DECLARE_HANDLE( xe_resource_handle_t );
 
 
 ///////////////////////////////////////////////////////////////////////////////
 #if defined( __cplusplus )
-#define DECLARE_ENUM( NAME )    \
+#define XE_DECLARE_ENUM( NAME ) \
     enum NAME : uint32_t
 #else
-#define DECLARE_ENUM( NAME )    \
+#define XE_DECLARE_ENUM( NAME ) \
     typedef uint32_t NAME;  \
     enum _##NAME
 #endif
@@ -85,7 +85,7 @@ DECLARE_HANDLE( xe_resource_handle_t );
 
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Defines Return/Error codes
-DECLARE_ENUM( xe_result_t )
+XE_DECLARE_ENUM( xe_result_t )
 {
     XE_RESULT_SUCCESS = 0,              ///< success
     XE_RESULT_ERROR_INVALID_PARAMETER,  ///< invalid parameter provided
@@ -96,7 +96,7 @@ DECLARE_ENUM( xe_result_t )
 
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Initialization flags
-DECLARE_ENUM( xe_init_flags_t )
+XE_DECLARE_ENUM( xe_init_flags_t )
 {
     XE_INIT_FLAG_NONE = 0       ///< default behavior
 };
@@ -117,7 +117,7 @@ xe_result_t __xecall
 /// @brief Defines driver versions
 /// @details Driver versions contain major and minor attributes,
 ///     use XE_MAJOR_VERSION and XE_MINOR_VERSION
-DECLARE_ENUM( xe_driver_version_t )
+XE_DECLARE_ENUM( xe_driver_version_t )
 {
     XE_DRIVER_VERSION_1_0 = 0x00010000
 };
@@ -125,7 +125,7 @@ DECLARE_ENUM( xe_driver_version_t )
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Returns the current versions of the driver
 xe_result_t __xecall
-  xeDriverGetVersion(
+ xeDriverGetVersion(
     xe_driver_version_t* version    ///< [out] driver version
     );
 
@@ -149,7 +149,7 @@ xe_result_t __xecall
 /// @brief Defines API versions
 /// @details API versions contain major and minor attributes,
 ///     use XE_MAJOR_VERSION and XE_MINOR_VERSION
-DECLARE_ENUM( xe_api_version_t )
+XE_DECLARE_ENUM( xe_api_version_t )
 {
     XE_API_VERSION_1_0 = 0x00010000
 };
@@ -164,7 +164,7 @@ xe_result_t __xecall
 
 
 ///////////////////////////////////////////////////////////////////////////////
-DECLARE_ENUM( xe_device_attribute_t )
+XE_DECLARE_ENUM( xe_device_attribute_t )
 {
     XE_DEVICE_ATTRIBUTE_MAX_THREADS = 1,            ///< maximum number of threads supported
     XE_DEVICE_ATTRIBUTE_MAX_SIMULTANEOUS_QUEUES,    ///< maximum number of command queues that can execute in parallel
@@ -182,7 +182,7 @@ xe_result_t __xecall
     
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Command Queue creation flags
-DECLARE_ENUM( xe_command_queue_flags_t )
+XE_DECLARE_ENUM( xe_command_queue_flags_t )
 {
     XE_COMMAND_QUEUE_FLAG_DEFAULT = 0,      ///< implicit default behavior (driver heuristics)
     XE_COMMAND_QUEUE_FLAG_SYNCHRONOUS,      ///< GPU execution always completes immediately on enqueue; 
@@ -216,12 +216,11 @@ xe_result_t __xecall
 /// @returns XE_RESULT_SUCCESS, ...
 xe_result_t __xecall
   xeCommandQueueDestroy(
-    xe_device_handle_t hDevice,                 ///< [in] handle of the device
     xe_command_queue_handle_t hCommandQueue     ///< [in] handle of command queue object to destroy
     );
 
 ///////////////////////////////////////////////////////////////////////////////
-DECLARE_ENUM( xe_command_queue_parameter_t )
+XE_DECLARE_ENUM( xe_command_queue_parameter_t )
 {
     XE_COMMAND_QUEUE_PARAMETER_PRIORITY = 1,    ///< see xe_command_queue_priority_t
     XE_COMMAND_QUEUE_PARAMETER_CACHE_CONFIG,    ///< see xe_command_queue_cacheconfig_t
@@ -274,7 +273,7 @@ xe_result_t __xecall
 
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Command List creation flags
-DECLARE_ENUM( xe_command_list_flags_t )
+XE_DECLARE_ENUM( xe_command_list_flags_t )
 {
     XE_COMMAND_LIST_FLAG_NONE = 0               ///< default behavior
 };
@@ -301,7 +300,6 @@ xe_result_t __xecall
 /// @returns XE_RESULT_SUCCESS, ...
 xe_result_t __xecall
   xeCommandListDestroy(
-    xe_device_handle_t hDevice,                 ///< [in] handle of the device
     xe_command_list_handle_t hCommandList       ///< [in] handle of command list object to destroy
     );
 
@@ -317,7 +315,7 @@ xe_result_t __xecall
 
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Event creation flags
-DECLARE_ENUM( xe_event_flags_t )
+XE_DECLARE_ENUM( xe_event_flags_t )
 {
     XE_EVENT_FLAG_NONE = 0                  ///< default behavior
 };
@@ -344,14 +342,13 @@ xe_result_t __xecall
 /// @returns XE_RESULT_SUCCESS, ...
 xe_result_t __xecall
   xeEventDestroy(
-    xe_device_handle_t hDevice,             ///< [in] handle of the device
     xe_event_handle_t hEvent                ///< [in] handle of event object to destroy
     );
 
 
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Resource creation flags
-DECLARE_ENUM( xe_resource_flags_t )
+XE_DECLARE_ENUM( xe_resource_flags_t )
 {
     XE_RESOURCE_FLAG_NONE = 0           ///< default behavior
 };

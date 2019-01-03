@@ -10,9 +10,9 @@ var xe__umd__api_8h =
     [ "xe_event_desc_t", "structxe__event__desc__t.html", "structxe__event__desc__t" ],
     [ "xe_resource_desc_t", "structxe__resource__desc__t.html", "structxe__resource__desc__t" ],
     [ "__xecall", "xe__umd__api_8h.html#aab180c7b54dae19a960d3b4425649275", null ],
-    [ "DECLARE_ENUM", "xe__umd__api_8h.html#aa268c6f6ae47f291fab6989858bed74c", null ],
-    [ "DECLARE_HANDLE", "xe__umd__api_8h.html#a5ec846cf9fed9ad6454492d589112f9d", null ],
     [ "XE_BIT", "xe__umd__api_8h.html#ac2281c7f49c93289449dbacaa9f59ef5", null ],
+    [ "XE_DECLARE_ENUM", "xe__umd__api_8h.html#a24ec25fbe6d71c732e46b4a91b0efcd8", null ],
+    [ "XE_DECLARE_HANDLE", "xe__umd__api_8h.html#a6f8b49dc25370281c0b133c4597ac12b", null ],
     [ "XE_MAJOR_VERSION", "xe__umd__api_8h.html#a9468649fc9d1c6fd3c47f8b417f85467", null ],
     [ "XE_MINOR_VERSION", "xe__umd__api_8h.html#af48475b0952417678796bccf3d0b7509", null ],
     [ "xe_api_version_t", "xe__umd__api_8h.html#ad69250d10c10e024a5d8aa4dea0fd831", [
@@ -54,10 +54,10 @@ var xe__umd__api_8h =
       [ "XE_RESULT_ERROR_UNKNOWN", "xe__umd__api_8h.html#a0a81258bd4a02d562b77ce7bc03fe189a0e6ce01deeca2124e2f7c0b9ca5d4b11", null ]
     ] ],
     [ "xeCommandListCreate", "xe__umd__api_8h.html#a3c7a043de36e3909cdd8f3f8fa3f9bdb", null ],
-    [ "xeCommandListDestroy", "xe__umd__api_8h.html#ab4ff165c81ae6c1bfb0678f69eb7bcef", null ],
+    [ "xeCommandListDestroy", "xe__umd__api_8h.html#abdbe571489694586ed3919550f5ef882", null ],
     [ "xeCommandListEncodeEvent", "xe__umd__api_8h.html#a90e5a4ab9218d0270183fee37890884a", null ],
     [ "xeCommandQueueCreate", "xe__umd__api_8h.html#ac5d4d3880fdd5a1b5b4195832fa32736", null ],
-    [ "xeCommandQueueDestroy", "xe__umd__api_8h.html#a60eb5d7c4082e66b1eadc8d9547c5b64", null ],
+    [ "xeCommandQueueDestroy", "xe__umd__api_8h.html#ac7543bb18642ae9b3c5a7e85e1ed08db", null ],
     [ "xeCommandQueueEnqueueCommandList", "xe__umd__api_8h.html#ac83912c3d520f90ab6518cdd687e6943", null ],
     [ "xeCommandQueueGetParameter", "xe__umd__api_8h.html#ab585aa7e0b3aabf1fc010fd06333b5bf", null ],
     [ "xeCommandQueueResetParameters", "xe__umd__api_8h.html#a7cd79dc6ba2971b56c6ddcd1670006ea", null ],
@@ -69,7 +69,7 @@ var xe__umd__api_8h =
     [ "xeDeviceGetCount", "xe__umd__api_8h.html#ad9632680b628200c7bf61f9cce14f608", null ],
     [ "xeDriverGetVersion", "xe__umd__api_8h.html#a5f5b824bdc0bece28899a552903778a7", null ],
     [ "xeEventCreate", "xe__umd__api_8h.html#a68af93632ec1d12ba6948ec73f7569f0", null ],
-    [ "xeEventDestroy", "xe__umd__api_8h.html#a5308dc4818c04fa81b447f9b1b8588a8", null ],
+    [ "xeEventDestroy", "xe__umd__api_8h.html#acaa1ed76b354dec8a0e59278363e6425", null ],
     [ "xeInit", "xe__umd__api_8h.html#aa42ffd3cf61a3d417a57aff1bd1fbe14", null ],
     [ "xeResourceCreate", "xe__umd__api_8h.html#af95a3e596eb573814170dc0f5aa199b5", null ],
     [ "xeResourceDestroy", "xe__umd__api_8h.html#a48232eb8d063b09bddb2bd3b37fcd095", null ]
