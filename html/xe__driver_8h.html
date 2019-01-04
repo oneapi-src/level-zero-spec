@@ -136,11 +136,12 @@ Functions</h2></td></tr>
 <p>Defines driver versions. </p>
 <p>Driver versions contain major and minor attributes, use XE_MAJOR_VERSION and XE_MINOR_VERSION </p>
 <table class="fieldtable">
-<tr><th colspan="2">Enumerator</th></tr><tr><td class="fieldname"><a id="ab4941cf20c04442df726aaee5b2c3398a5d8cf9c88a2172c08ec58ae3cb3c470f"></a>XE_DRIVER_VERSION_1_0&#160;</td><td class="fielddoc"></td></tr>
+<tr><th colspan="2">Enumerator</th></tr><tr><td class="fieldname"><a id="ab4941cf20c04442df726aaee5b2c3398a5d8cf9c88a2172c08ec58ae3cb3c470f"></a>XE_DRIVER_VERSION_1_0&#160;</td><td class="fielddoc"><p>1.0 </p>
+</td></tr>
 </table>
 
-<p class="definition">Definition at line <a class="el" href="xe__driver_8h_source.html#l00055">55</a> of file <a class="el" href="xe__driver_8h_source.html">xe_driver.h</a>.</p>
-<div class="fragment"><div class="line"><a name="l00056"></a><span class="lineno">   56</span>&#160;{</div><div class="line"><a name="l00057"></a><span class="lineno">   57</span>&#160;    <a class="code" href="xe__driver_8h.html#ab4941cf20c04442df726aaee5b2c3398a5d8cf9c88a2172c08ec58ae3cb3c470f">XE_DRIVER_VERSION_1_0</a> = <a class="code" href="xe__common_8h.html#a7c541ed7fa8f9aa2d8ef98132ea245fc">XE_MAKE_VERSION</a>( 1, 0 )</div><div class="line"><a name="l00058"></a><span class="lineno">   58</span>&#160;};</div><div class="ttc" id="xe__driver_8h_html_ab4941cf20c04442df726aaee5b2c3398a5d8cf9c88a2172c08ec58ae3cb3c470f"><div class="ttname"><a href="xe__driver_8h.html#ab4941cf20c04442df726aaee5b2c3398a5d8cf9c88a2172c08ec58ae3cb3c470f">XE_DRIVER_VERSION_1_0</a></div><div class="ttdef"><b>Definition:</b> <a href="xe__driver_8h_source.html#l00057">xe_driver.h:57</a></div></div>
+<p class="definition">Definition at line <a class="el" href="xe__driver_8h_source.html#l00056">56</a> of file <a class="el" href="xe__driver_8h_source.html">xe_driver.h</a>.</p>
+<div class="fragment"><div class="line"><a name="l00057"></a><span class="lineno">   57</span>&#160;{</div><div class="line"><a name="l00058"></a><span class="lineno">   58</span>&#160;    <a class="code" href="xe__driver_8h.html#ab4941cf20c04442df726aaee5b2c3398a5d8cf9c88a2172c08ec58ae3cb3c470f">XE_DRIVER_VERSION_1_0</a> = <a class="code" href="xe__common_8h.html#a7c541ed7fa8f9aa2d8ef98132ea245fc">XE_MAKE_VERSION</a>( 1, 0 ) </div><div class="line"><a name="l00059"></a><span class="lineno">   59</span>&#160;};</div><div class="ttc" id="xe__driver_8h_html_ab4941cf20c04442df726aaee5b2c3398a5d8cf9c88a2172c08ec58ae3cb3c470f"><div class="ttname"><a href="xe__driver_8h.html#ab4941cf20c04442df726aaee5b2c3398a5d8cf9c88a2172c08ec58ae3cb3c470f">XE_DRIVER_VERSION_1_0</a></div><div class="ttdoc">1.0 </div><div class="ttdef"><b>Definition:</b> <a href="xe__driver_8h_source.html#l00058">xe_driver.h:58</a></div></div>
 <div class="ttc" id="xe__common_8h_html_a7c541ed7fa8f9aa2d8ef98132ea245fc"><div class="ttname"><a href="xe__common_8h.html#a7c541ed7fa8f9aa2d8ef98132ea245fc">XE_MAKE_VERSION</a></div><div class="ttdeci">#define XE_MAKE_VERSION(MAJOR, MINOR)</div><div class="ttdoc">Generic macros for creating and extracting versions. </div><div class="ttdef"><b>Definition:</b> <a href="xe__common_8h_source.html#l00036">xe_common.h:36</a></div></div>
 </div><!-- fragment -->
 </div>
@@ -186,7 +187,10 @@ Functions</h2></td></tr>
 </div><div class="memdoc">
 
 <p>Returns the current versions of the driver. </p>
-<p><em>replaces cuDriverGetVersion</em> </p>
+<dl class="section remark"><dt>Remarks</dt><dd><em>Analogues:</em><ul>
+<li><b>cuDriverGetVersion</b> </li>
+</ul>
+</dd></dl>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramdir">[out]</td><td class="paramname">version</td><td>driver version </td></tr>
@@ -213,7 +217,10 @@ Functions</h2></td></tr>
 </div><div class="memdoc">
 
 <p>Initialize the Xe Driver API and must be called before any other API function. </p>
-<p><em>replaces cuInit</em> </p>
+<dl class="section remark"><dt>Remarks</dt><dd><em>Analogues:</em><ul>
+<li><b>cuInit</b> </li>
+</ul>
+</dd></dl>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramname">flags</td><td>initialization flags </td></tr>
@@ -229,7 +236,7 @@ Functions</h2></td></tr>
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
     <li class="navelem"><a class="el" href="xe__driver_8h.html">xe_driver.h</a></li>
-    <li class="footer">Generated on Fri Jan 4 2019 09:44:57 for Driver API by
+    <li class="footer">Generated on Fri Jan 4 2019 10:09:28 for Driver API by
     <a href="http://www.doxygen.org/index.html">
     <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.8.13 </li>
   </ul>

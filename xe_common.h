@@ -39,7 +39,7 @@
 
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Current header file version
-#define XE_UMD_HEADER_VERSION   XE_MAKE_VERSION( 1, 0 )
+#define XE_UMD_HEADER_VERSION   XE_MAKE_VERSION( 1, 0 ) ///< 1.0
 
 ///////////////////////////////////////////////////////////////////////////////
 #if !defined( __cplusplus )
@@ -102,7 +102,8 @@ XE_DECLARE_HANDLE( xe_resource_handle_t );          ///< handle of driver's reso
 
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Defines Return/Error codes
-/// @details _replaces CUresult_
+/// @remarks _Analogues:_
+///     - **CUresult**
 XE_DECLARE_ENUM( xe_result_t )
 {
     XE_RESULT_SUCCESS = 0,                  ///< success

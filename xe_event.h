@@ -48,7 +48,8 @@ typedef struct _xe_event_desc_t
 
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Creates an event object
-/// @details _replaces cuEventCreate_
+/// @remarks _Analogues:_
+///     - **cuEventCreate**
 /// @returns XE_RESULT_SUCCESS, ...
 xe_result_t __xecall
   xeEventCreate( 
@@ -59,7 +60,8 @@ xe_result_t __xecall
     
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Deletes an event object
-/// @details _replaces cuEventDestroy_
+/// @remarks _Analogues:_
+///     - **cuEventDestroy**
 /// @returns XE_RESULT_SUCCESS, ...
 xe_result_t __xecall
   xeEventDestroy(
@@ -68,7 +70,8 @@ xe_result_t __xecall
 
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Encodes an event object into a command list
-/// @details _replaces cuEventRecord_
+/// @remarks _Analogues:_
+///     - **cuEventRecord**
 /// @returns XE_RESULT_SUCCESS, ...
 xe_result_t __xecall
   xeCommandListEncodeEvent(

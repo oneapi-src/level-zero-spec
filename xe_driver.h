@@ -42,7 +42,8 @@ XE_DECLARE_ENUM( xe_init_flags_t )
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Initialize the Xe Driver API and must be called before any other
 ///     API function.
-/// @details _replaces cuInit_
+/// @remarks _Analogues:_
+///     - **cuInit**
 xe_result_t __xecall
   xeInit( 
     xe_init_flags_t flags       ///< initialization flags
@@ -54,12 +55,13 @@ xe_result_t __xecall
 ///     use XE_MAJOR_VERSION and XE_MINOR_VERSION
 XE_DECLARE_ENUM( xe_driver_version_t )
 {
-    XE_DRIVER_VERSION_1_0 = XE_MAKE_VERSION( 1, 0 )
+    XE_DRIVER_VERSION_1_0 = XE_MAKE_VERSION( 1, 0 ) ///< 1.0
 };
 
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Returns the current versions of the driver
-/// @details _replaces cuDriverGetVersion_
+/// @remarks _Analogues:_
+///     - **cuDriverGetVersion**
 xe_result_t __xecall
  xeDriverGetVersion(
     xe_driver_version_t* version    ///< [out] driver version

@@ -55,7 +55,9 @@ typedef struct _xe_command_queue_desc_t
 /// @details A command queue is a FIFO stream used to submit work to the device.
 ///     The command queue maintains some machine state, which is inherited by
 ///     subsequent execution.
-/// @details _replaces cuCtxCreate and cuCtxGetCurrent_
+/// @remarks _Analogues:_
+///     - **cuCtxCreate**
+///     - cuCtxGetCurrent
 /// @returns XE_RESULT_SUCCESS, ...
 xe_result_t __xecall
   xeCommandQueueCreate(
@@ -66,7 +68,8 @@ xe_result_t __xecall
 
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Destroys a command queue
-/// @details _replaces cuCtxDestroy_
+/// @remarks _Analogues:_
+///     - **cuCtxDestroy**
 /// @returns XE_RESULT_SUCCESS, ...
 xe_result_t __xecall
   xeCommandQueueDestroy(
@@ -82,8 +85,10 @@ XE_DECLARE_ENUM( xe_command_queue_parameter_t )
 
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Sets a command queue's parameter
-/// @details _replaces cuCtxSetCacheConfig, cuCtxSetLimit, and
-///     cuCtxSetSharedMemConfig_
+/// @remarks _Analogues:_
+///     - cuCtxSetCacheConfig
+///     - cuCtxSetLimit
+///     - cuCtxSetSharedMemConfig
 /// @returns XE_RESULT_SUCCESS, ...
 xe_result_t __xecall
   xeCommandQueueSetParameter(
@@ -94,8 +99,11 @@ xe_result_t __xecall
 
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Retrieves a command queue's parameter
-/// @details _replaces cuCtxGetCacheConfig, cuCtxGetLimit, cuCtxGetSharedMemConfig,
-///     and cuCtxGetStreamPriorityRange_
+/// @remarks _Analogues:_
+///     - cuCtxGetCacheConfig
+///     - cuCtxGetLimit
+///     - cuCtxGetSharedMemConfig
+///     - cuCtxGetStreamPriorityRange
 /// @returns XE_RESULT_SUCCESS, ...
 xe_result_t __xecall
   xeCommandQueueGetParameter(
@@ -123,7 +131,8 @@ xe_result_t __xecall
 
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Synchronizes a command queue
-/// @details _replaces cuCtxSynchronize_
+/// @remarks _Analogues:_
+///     - **cuCtxSynchronize**
 /// @returns XE_RESULT_SUCCESS, ...
 xe_result_t __xecall
   xeCommandQueueSynchronize(

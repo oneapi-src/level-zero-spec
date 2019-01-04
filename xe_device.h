@@ -34,7 +34,8 @@
 
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Reports the number of devices
-/// @details _replaces cuDeviceGetCount_
+/// @remarks _Analogues:_
+///     - **cuDeviceGetCount**
 xe_result_t __xecall
   xeDeviceGetCount(
     uint32_t* count                 ///< [out] number of devices available
@@ -42,7 +43,8 @@ xe_result_t __xecall
 
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Returns a handle to the device object
-/// @details _replaces cuDeviceGet_
+/// @remarks _Analogues:_
+///     - **cuDeviceGet**
 /// @returns XE_RESULT_SUCCESS, ...
 xe_result_t __xecall
   xeDeviceGet( 
@@ -56,12 +58,13 @@ xe_result_t __xecall
 ///     use XE_MAJOR_VERSION and XE_MINOR_VERSION
 XE_DECLARE_ENUM( xe_api_version_t )
 {
-    XE_API_VERSION_1_0 = XE_MAKE_VERSION( 1, 0 )
+    XE_API_VERSION_1_0 = XE_MAKE_VERSION( 1, 0 )    ///< 1.0
 };
 
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Returns the API version supported by the device
-/// @details _replaces cuCtxGetApiVersion_
+/// @remarks _Analogues:_
+///     - **cuCtxGetApiVersion**
 xe_result_t __xecall
   xeDeviceGetApiVersion(
     xe_device_handle_t hDevice,     ///< [in] handle of the device object
@@ -79,7 +82,9 @@ XE_DECLARE_ENUM( xe_device_attribute_t )
 
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Retrieves an attribute of the device
-/// @details _replaces cuDeviceGetAttribute and cuDeviceTotalMem_
+/// @remarks _Analogues:_
+///     - **cuDeviceGetAttribute**
+///     - cuDeviceTotalMem
 xe_result_t __xecall
   xeDeviceGetAttribute(
     xe_device_handle_t hDevice,         ///< [in] handle of the device object

@@ -192,9 +192,9 @@ Functions</h2></td></tr>
 </td></tr>
 </table>
 
-<p class="definition">Definition at line <a class="el" href="xe__cmdqueue_8h_source.html#l00077">77</a> of file <a class="el" href="xe__cmdqueue_8h_source.html">xe_cmdqueue.h</a>.</p>
-<div class="fragment"><div class="line"><a name="l00078"></a><span class="lineno">   78</span>&#160;{</div><div class="line"><a name="l00079"></a><span class="lineno">   79</span>&#160;    <a class="code" href="xe__cmdqueue_8h.html#a1c93d3851d6295cf5bac3cb623071c19a9dd6911dd6ba8cf85aba4f27096dd3db">XE_COMMAND_QUEUE_PARAMETER_PRIORITY</a> = 1,    </div><div class="line"><a name="l00080"></a><span class="lineno">   80</span>&#160;    <a class="code" href="xe__cmdqueue_8h.html#a1c93d3851d6295cf5bac3cb623071c19a77570f6202ecba3ee1ea652e7d6c105f">XE_COMMAND_QUEUE_PARAMETER_CACHE_CONFIG</a>,    </div><div class="line"><a name="l00081"></a><span class="lineno">   81</span>&#160;};</div><div class="ttc" id="xe__cmdqueue_8h_html_a1c93d3851d6295cf5bac3cb623071c19a9dd6911dd6ba8cf85aba4f27096dd3db"><div class="ttname"><a href="xe__cmdqueue_8h.html#a1c93d3851d6295cf5bac3cb623071c19a9dd6911dd6ba8cf85aba4f27096dd3db">XE_COMMAND_QUEUE_PARAMETER_PRIORITY</a></div><div class="ttdef"><b>Definition:</b> <a href="xe__cmdqueue_8h_source.html#l00079">xe_cmdqueue.h:79</a></div></div>
-<div class="ttc" id="xe__cmdqueue_8h_html_a1c93d3851d6295cf5bac3cb623071c19a77570f6202ecba3ee1ea652e7d6c105f"><div class="ttname"><a href="xe__cmdqueue_8h.html#a1c93d3851d6295cf5bac3cb623071c19a77570f6202ecba3ee1ea652e7d6c105f">XE_COMMAND_QUEUE_PARAMETER_CACHE_CONFIG</a></div><div class="ttdef"><b>Definition:</b> <a href="xe__cmdqueue_8h_source.html#l00080">xe_cmdqueue.h:80</a></div></div>
+<p class="definition">Definition at line <a class="el" href="xe__cmdqueue_8h_source.html#l00080">80</a> of file <a class="el" href="xe__cmdqueue_8h_source.html">xe_cmdqueue.h</a>.</p>
+<div class="fragment"><div class="line"><a name="l00081"></a><span class="lineno">   81</span>&#160;{</div><div class="line"><a name="l00082"></a><span class="lineno">   82</span>&#160;    <a class="code" href="xe__cmdqueue_8h.html#a1c93d3851d6295cf5bac3cb623071c19a9dd6911dd6ba8cf85aba4f27096dd3db">XE_COMMAND_QUEUE_PARAMETER_PRIORITY</a> = 1,    </div><div class="line"><a name="l00083"></a><span class="lineno">   83</span>&#160;    <a class="code" href="xe__cmdqueue_8h.html#a1c93d3851d6295cf5bac3cb623071c19a77570f6202ecba3ee1ea652e7d6c105f">XE_COMMAND_QUEUE_PARAMETER_CACHE_CONFIG</a>,    </div><div class="line"><a name="l00084"></a><span class="lineno">   84</span>&#160;};</div><div class="ttc" id="xe__cmdqueue_8h_html_a1c93d3851d6295cf5bac3cb623071c19a9dd6911dd6ba8cf85aba4f27096dd3db"><div class="ttname"><a href="xe__cmdqueue_8h.html#a1c93d3851d6295cf5bac3cb623071c19a9dd6911dd6ba8cf85aba4f27096dd3db">XE_COMMAND_QUEUE_PARAMETER_PRIORITY</a></div><div class="ttdef"><b>Definition:</b> <a href="xe__cmdqueue_8h_source.html#l00082">xe_cmdqueue.h:82</a></div></div>
+<div class="ttc" id="xe__cmdqueue_8h_html_a1c93d3851d6295cf5bac3cb623071c19a77570f6202ecba3ee1ea652e7d6c105f"><div class="ttname"><a href="xe__cmdqueue_8h.html#a1c93d3851d6295cf5bac3cb623071c19a77570f6202ecba3ee1ea652e7d6c105f">XE_COMMAND_QUEUE_PARAMETER_CACHE_CONFIG</a></div><div class="ttdef"><b>Definition:</b> <a href="xe__cmdqueue_8h_source.html#l00083">xe_cmdqueue.h:83</a></div></div>
 </div><!-- fragment -->
 </div>
 </div>
@@ -232,8 +232,12 @@ Functions</h2></td></tr>
 </div><div class="memdoc">
 
 <p>Creates a command queue on a device. </p>
-<p>A command queue is a FIFO stream used to submit work to the device. The command queue maintains some machine state, which is inherited by subsequent execution.</p>
-<p><em>replaces cuCtxCreate and cuCtxGetCurrent</em> </p><dl class="section return"><dt>Returns</dt><dd>XE_RESULT_SUCCESS, ... </dd></dl>
+<p>A command queue is a FIFO stream used to submit work to the device. The command queue maintains some machine state, which is inherited by subsequent execution. </p><dl class="section remark"><dt>Remarks</dt><dd><em>Analogues:</em><ul>
+<li><b>cuCtxCreate</b></li>
+<li>cuCtxGetCurrent </li>
+</ul>
+</dd></dl>
+<dl class="section return"><dt>Returns</dt><dd>XE_RESULT_SUCCESS, ... </dd></dl>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramdir">[in]</td><td class="paramname">hDevice</td><td>handle of the device </td></tr>
@@ -262,7 +266,11 @@ Functions</h2></td></tr>
 </div><div class="memdoc">
 
 <p>Destroys a command queue. </p>
-<p><em>replaces cuCtxDestroy</em> </p><dl class="section return"><dt>Returns</dt><dd>XE_RESULT_SUCCESS, ... </dd></dl>
+<dl class="section remark"><dt>Remarks</dt><dd><em>Analogues:</em><ul>
+<li><b>cuCtxDestroy</b> </li>
+</ul>
+</dd></dl>
+<dl class="section return"><dt>Returns</dt><dd>XE_RESULT_SUCCESS, ... </dd></dl>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramdir">[in]</td><td class="paramname">hCommandQueue</td><td>handle of command queue object to destroy </td></tr>
@@ -343,7 +351,14 @@ Functions</h2></td></tr>
 </div><div class="memdoc">
 
 <p>Retrieves a command queue's parameter. </p>
-<p><em>replaces cuCtxGetCacheConfig, cuCtxGetLimit, cuCtxGetSharedMemConfig, and cuCtxGetStreamPriorityRange</em> </p><dl class="section return"><dt>Returns</dt><dd>XE_RESULT_SUCCESS, ... </dd></dl>
+<dl class="section remark"><dt>Remarks</dt><dd><em>Analogues:</em><ul>
+<li>cuCtxGetCacheConfig</li>
+<li>cuCtxGetLimit</li>
+<li>cuCtxGetSharedMemConfig</li>
+<li>cuCtxGetStreamPriorityRange </li>
+</ul>
+</dd></dl>
+<dl class="section return"><dt>Returns</dt><dd>XE_RESULT_SUCCESS, ... </dd></dl>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramdir">[in]</td><td class="paramname">hCommandQueue</td><td>handle of command queue </td></tr>
@@ -415,7 +430,13 @@ Functions</h2></td></tr>
 </div><div class="memdoc">
 
 <p>Sets a command queue's parameter. </p>
-<p><em>replaces cuCtxSetCacheConfig, cuCtxSetLimit, and cuCtxSetSharedMemConfig</em> </p><dl class="section return"><dt>Returns</dt><dd>XE_RESULT_SUCCESS, ... </dd></dl>
+<dl class="section remark"><dt>Remarks</dt><dd><em>Analogues:</em><ul>
+<li>cuCtxSetCacheConfig</li>
+<li>cuCtxSetLimit</li>
+<li>cuCtxSetSharedMemConfig </li>
+</ul>
+</dd></dl>
+<dl class="section return"><dt>Returns</dt><dd>XE_RESULT_SUCCESS, ... </dd></dl>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramdir">[in]</td><td class="paramname">hCommandQueue</td><td>handle of command queue </td></tr>
@@ -444,7 +465,11 @@ Functions</h2></td></tr>
 </div><div class="memdoc">
 
 <p>Synchronizes a command queue. </p>
-<p><em>replaces cuCtxSynchronize</em> </p><dl class="section return"><dt>Returns</dt><dd>XE_RESULT_SUCCESS, ... </dd></dl>
+<dl class="section remark"><dt>Remarks</dt><dd><em>Analogues:</em><ul>
+<li><b>cuCtxSynchronize</b> </li>
+</ul>
+</dd></dl>
+<dl class="section return"><dt>Returns</dt><dd>XE_RESULT_SUCCESS, ... </dd></dl>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramdir">[in]</td><td class="paramname">hCommandQueue</td><td>handle of command queue </td></tr>
@@ -460,7 +485,7 @@ Functions</h2></td></tr>
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
     <li class="navelem"><a class="el" href="xe__cmdqueue_8h.html">xe_cmdqueue.h</a></li>
-    <li class="footer">Generated on Fri Jan 4 2019 09:44:57 for Driver API by
+    <li class="footer">Generated on Fri Jan 4 2019 10:09:28 for Driver API by
     <a href="http://www.doxygen.org/index.html">
     <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.8.13 </li>
   </ul>
