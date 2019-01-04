@@ -6,19 +6,28 @@
 *.lo
 *.o
 *.obj
+*.pdb
+*.log
+*.tlog
+*.ilk
+*.idb
+*.CopyComplete
 
 # Precompiled Headers
 *.gch
 *.pch
+*.ipch
 
 # Compiled Dynamic libraries
 *.so
 *.dylib
 *.dll
 
-# Fortran module files
-*.mod
-*.smod
+# Project files
+*.suo
+*.db
+*.opendb
+*.user
 
 # Compiled Static libraries
 *.lai
