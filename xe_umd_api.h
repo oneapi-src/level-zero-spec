@@ -240,7 +240,7 @@ XE_DECLARE_ENUM( xe_command_queue_parameter_t )
 /// @returns XE_RESULT_SUCCESS, ...
 xe_result_t __xecall
   xeCommandQueueSetParameter(
-    xe_command_queue_handle_t hCommandQueue     ///< [in] handle of command queue
+    xe_command_queue_handle_t hCommandQueue,    ///< [in] handle of command queue
     xe_command_queue_parameter_t parameter,     ///< [in] parameter to change
     uint32_t value                              ///< [in] value of attribute
     );
@@ -250,7 +250,7 @@ xe_result_t __xecall
 /// @returns XE_RESULT_SUCCESS, ...
 xe_result_t __xecall
   xeCommandQueueGetParameter(
-    xe_command_queue_handle_t hCommandQueue     ///< [in] handle of command queue
+    xe_command_queue_handle_t hCommandQueue,    ///< [in] handle of command queue
     xe_command_queue_parameter_t parameter,     ///< [in] parameter to change
     uint32_t* value                             ///< [out] value of attribute
     );
