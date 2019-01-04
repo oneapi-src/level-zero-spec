@@ -115,6 +115,9 @@ Functions</h2></td></tr>
 <tr class="memitem:abdbe571489694586ed3919550f5ef882"><td class="memItemLeft" align="right" valign="top"><a class="el" href="xe__common_8h.html#a0a81258bd4a02d562b77ce7bc03fe189">xe_result_t</a> <a class="el" href="xe__common_8h.html#aab180c7b54dae19a960d3b4425649275">__xecall</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="xe__cmdlist_8h.html#abdbe571489694586ed3919550f5ef882">xeCommandListDestroy</a> (<a class="el" href="structxe__command__list__handle__t.html">xe_command_list_handle_t</a> hCommandList)</td></tr>
 <tr class="memdesc:abdbe571489694586ed3919550f5ef882"><td class="mdescLeft">&#160;</td><td class="mdescRight">Destroys a command list.  <a href="#abdbe571489694586ed3919550f5ef882">More...</a><br /></td></tr>
 <tr class="separator:abdbe571489694586ed3919550f5ef882"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a9b72d9fe83f7935fc81d72ea9d0420bb"><td class="memItemLeft" align="right" valign="top"><a class="el" href="xe__common_8h.html#a0a81258bd4a02d562b77ce7bc03fe189">xe_result_t</a> <a class="el" href="xe__common_8h.html#aab180c7b54dae19a960d3b4425649275">__xecall</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="xe__cmdlist_8h.html#a9b72d9fe83f7935fc81d72ea9d0420bb">xeCommandListReset</a> (<a class="el" href="structxe__command__list__handle__t.html">xe_command_list_handle_t</a> hCommandList)</td></tr>
+<tr class="memdesc:a9b72d9fe83f7935fc81d72ea9d0420bb"><td class="mdescLeft">&#160;</td><td class="mdescRight">Reset a command list to initial (empty) state.  <a href="#a9b72d9fe83f7935fc81d72ea9d0420bb">More...</a><br /></td></tr>
+<tr class="separator:a9b72d9fe83f7935fc81d72ea9d0420bb"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><p>Intel Xe Driver APIs for Command List. </p>
@@ -181,6 +184,14 @@ Functions</h2></td></tr>
 </div><div class="memdoc">
 
 <p>Creates a command list. </p>
+<ul>
+<li>A command list represents a sequence of commands for execution on a command queue.</li>
+<li>The command list maintains some machine state, which is inherited by subsequent commands. See ::xe_command_list_parameter_t for details.</li>
+<li>Command lists do not inherit state from other command lists executed on the same command queue. i.e. each command list begins execution in its own state.</li>
+<li>Multiple command lists may be created by an application. For example, an application may want to create multiple command lists per command queue.</li>
+<li>There is no implicit association between a command list and a command queue. Therefore, a command list may be submitted to any, or multiple command queues.</li>
+<li>There is no implicit binding of command lists to CPU threads. Therefore, an application may share a command list handle across multiple CPU threads. However, the application is responsible for ensuring that multiple CPU threads do not access the same command list simultaneously.</li>
+</ul>
 <dl class="section return"><dt>Returns</dt><dd><ul>
 <li><a class="el" href="xe__common_8h.html#a0a81258bd4a02d562b77ce7bc03fe189af2c8a0ddedb58c6435b1e0acf6c27fe1" title="success ">XE_RESULT_SUCCESS</a></li>
 <li><a class="el" href="xe__common_8h.html#a0a81258bd4a02d562b77ce7bc03fe189a3df2351e5ff91446c3dec05b9a9e31d8" title="driver is not initialized ">XE_RESULT_ERROR_UNINITIALIZED</a></li>
@@ -221,6 +232,47 @@ Functions</h2></td></tr>
 </div><div class="memdoc">
 
 <p>Destroys a command list. </p>
+<ul>
+<li>The application is responsible for making sure the GPU is not currently executing from a command list before it is deleted. This should be handled by tracking a completion event associated with the command list.</li>
+</ul>
+<dl class="section return"><dt>Returns</dt><dd><ul>
+<li><a class="el" href="xe__common_8h.html#a0a81258bd4a02d562b77ce7bc03fe189af2c8a0ddedb58c6435b1e0acf6c27fe1" title="success ">XE_RESULT_SUCCESS</a></li>
+<li><a class="el" href="xe__common_8h.html#a0a81258bd4a02d562b77ce7bc03fe189a3df2351e5ff91446c3dec05b9a9e31d8" title="driver is not initialized ">XE_RESULT_ERROR_UNINITIALIZED</a></li>
+<li><a class="el" href="xe__common_8h.html#a0a81258bd4a02d562b77ce7bc03fe189ab4095f98f19805c0d8a2ebc61422a513" title="invalid parameter provided ">XE_RESULT_ERROR_INVALID_PARAMETER</a><ul>
+<li>invalid handle for hCommandList </li>
+</ul>
+</li>
+</ul>
+</dd></dl>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[in]</td><td class="paramname">hCommandList</td><td>handle of command list object to destroy </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
+<a id="a9b72d9fe83f7935fc81d72ea9d0420bb"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a9b72d9fe83f7935fc81d72ea9d0420bb">&#9670;&nbsp;</a></span>xeCommandListReset()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="xe__common_8h.html#a0a81258bd4a02d562b77ce7bc03fe189">xe_result_t</a> <a class="el" href="xe__common_8h.html#aab180c7b54dae19a960d3b4425649275">__xecall</a> xeCommandListReset </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="structxe__command__list__handle__t.html">xe_command_list_handle_t</a>&#160;</td>
+          <td class="paramname"><em>hCommandList</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Reset a command list to initial (empty) state. </p>
+<ul>
+<li>The application is responsible for making sure the GPU is not currently executing from a command list before it is reset. This should be handled by tracking a completion event associated with the command list.</li>
+</ul>
 <dl class="section return"><dt>Returns</dt><dd><ul>
 <li><a class="el" href="xe__common_8h.html#a0a81258bd4a02d562b77ce7bc03fe189af2c8a0ddedb58c6435b1e0acf6c27fe1" title="success ">XE_RESULT_SUCCESS</a></li>
 <li><a class="el" href="xe__common_8h.html#a0a81258bd4a02d562b77ce7bc03fe189a3df2351e5ff91446c3dec05b9a9e31d8" title="driver is not initialized ">XE_RESULT_ERROR_UNINITIALIZED</a></li>
@@ -245,7 +297,7 @@ Functions</h2></td></tr>
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
     <li class="navelem"><a class="el" href="xe__cmdlist_8h.html">xe_cmdlist.h</a></li>
-    <li class="footer">Generated on Fri Jan 4 2019 11:53:27 for Intel Xe Driver API by
+    <li class="footer">Generated on Fri Jan 4 2019 12:45:00 for Intel Xe Driver API by
     <a href="http://www.doxygen.org/index.html">
     <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.8.13 </li>
   </ul>

@@ -55,15 +55,15 @@ typedef struct _xe_command_queue_desc_t
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Creates a command queue on a device
 /// @details 
-///   - A command queue represents a FIFO stream used to submit work to the device.
-///   - The command queue maintains some machine state, which is inherited by
-///     subsequent execution. See ::xe_command_queue_parameter_t for details.
-///   - Multiple command queues may be created by an application.  For example,
-///     an application may want to create a command queue per CPU thread.
-///   - There is no implicit binding of command queues to CPU threads. Therefore,
-///     an application may share a command queue handle across multiple CPU
-///     threads. However, the application is responsible for ensuring that 
-///     multiple CPU threads do not access the same command queue simultaneously.
+///     - A command queue represents a FIFO of command lists submitted to the device.
+///     - The command queue maintains some machine state, which is inherited by
+///       subsequent execution. See ::xe_command_queue_parameter_t for details.
+///     - Multiple command queues may be created by an application.  For example,
+///       an application may want to create a command queue per CPU thread.
+///     - There is no implicit binding of command queues to CPU threads. Therefore,
+///       an application may share a command queue handle across multiple CPU
+///       threads. However, the application is responsible for ensuring that 
+///       multiple CPU threads do not access the same command queue simultaneously.
 ///
 /// @remarks _Analogues:_
 ///     - **cuCtxCreate**
@@ -85,6 +85,12 @@ xe_result_t __xecall
 
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Destroys a command queue
+/// @details
+///     - The application is responsible for making sure the GPU is not currently
+///       executing from a command queue before it is deleted.  This is 
+///       typically done by tracking command list events, but may also be
+///       handled by calling ::xeCommandQueueSynchronize.
+///
 /// @remarks _Analogues:_
 ///     - **cuCtxDestroy**
 /// @returns

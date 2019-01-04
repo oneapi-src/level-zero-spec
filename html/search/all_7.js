@@ -61,6 +61,7 @@ var searchData=
   ['xecommandlistcreate',['xeCommandListCreate',['../xe__cmdlist_8h.html#a6c4a5ed9a7d569d46b0ac28e475e46c4',1,'xe_cmdlist.h']]],
   ['xecommandlistdestroy',['xeCommandListDestroy',['../xe__cmdlist_8h.html#abdbe571489694586ed3919550f5ef882',1,'xe_cmdlist.h']]],
   ['xecommandlistencodeevent',['xeCommandListEncodeEvent',['../xe__event_8h.html#a90e5a4ab9218d0270183fee37890884a',1,'xe_event.h']]],
+  ['xecommandlistreset',['xeCommandListReset',['../xe__cmdlist_8h.html#a9b72d9fe83f7935fc81d72ea9d0420bb',1,'xe_cmdlist.h']]],
   ['xecommandqueuecreate',['xeCommandQueueCreate',['../xe__cmdqueue_8h.html#a0200e971697050650b23d99a1d458155',1,'xe_cmdqueue.h']]],
   ['xecommandqueuedestroy',['xeCommandQueueDestroy',['../xe__cmdqueue_8h.html#ac7543bb18642ae9b3c5a7e85e1ed08db',1,'xe_cmdqueue.h']]],
   ['xecommandqueueenqueuecommandlist',['xeCommandQueueEnqueueCommandList',['../xe__cmdqueue_8h.html#ac83912c3d520f90ab6518cdd687e6943',1,'xe_cmdqueue.h']]],

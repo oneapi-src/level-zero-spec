@@ -50,6 +50,24 @@ typedef struct _xe_command_list_desc_t
 
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Creates a command list
+/// @details
+///     - A command list represents a sequence of commands for execution on
+///       a command queue.
+///     - The command list maintains some machine state, which is inherited by
+///       subsequent commands. See ::xe_command_list_parameter_t for details.
+///     - Command lists do not inherit state from other command lists executed
+///       on the same command queue.  i.e. each command list begins execution
+///       in its own state.
+///     - Multiple command lists may be created by an application.  For example,
+///       an application may want to create multiple command lists per command queue.
+///     - There is no implicit association between a command list and a 
+///       command queue. Therefore, a command list may be submitted to any, or
+///       multiple command queues.
+///     - There is no implicit binding of command lists to CPU threads. Therefore,
+///       an application may share a command list handle across multiple CPU
+///       threads. However, the application is responsible for ensuring that 
+///       multiple CPU threads do not access the same command list simultaneously.
+///
 /// @returns
 ///     - ::XE_RESULT_SUCCESS
 ///     - ::XE_RESULT_ERROR_UNINITIALIZED
@@ -67,6 +85,10 @@ xe_result_t __xecall
 
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Destroys a command list
+///     - The application is responsible for making sure the GPU is not currently
+///       executing from a command list before it is deleted.  This should be
+///       handled by tracking a completion event associated with the command list.
+///
 /// @returns
 ///     - ::XE_RESULT_SUCCESS
 ///     - ::XE_RESULT_ERROR_UNINITIALIZED
@@ -74,6 +96,22 @@ xe_result_t __xecall
 ///         + invalid handle for hCommandList
 xe_result_t __xecall
   xeCommandListDestroy(
+    xe_command_list_handle_t hCommandList       ///< [in] handle of command list object to destroy
+    );
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Reset a command list to initial (empty) state
+///     - The application is responsible for making sure the GPU is not currently
+///       executing from a command list before it is reset.  This should be
+///       handled by tracking a completion event associated with the command list.
+///
+/// @returns
+///     - ::XE_RESULT_SUCCESS
+///     - ::XE_RESULT_ERROR_UNINITIALIZED
+///     - ::XE_RESULT_ERROR_INVALID_PARAMETER
+///         + invalid handle for hCommandList
+xe_result_t __xecall
+  xeCommandListReset(
     xe_command_list_handle_t hCommandList       ///< [in] handle of command list object to destroy
     );
 
