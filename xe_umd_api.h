@@ -54,16 +54,18 @@ typedef unsigned int uint32_t;
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Declares a strongly typed handle
 #if defined( __cplusplus )
-#define XE_DECLARE_HANDLE( NAME )   \
-    struct NAME                     \
-    {                               \
-        void* pDriverData;          \
-                                    \
-        NAME( void ) : pDriverData( nullptr ) {}        \
-        explicit NAME( void* p ) : pDriverData( p ) {}  \
-                                \
-        inline bool operator==( const NAME& other ) const { return pDriverData == other.pDriverData; } \
-        inline bool operator!=( const NAME& other ) const { return pDriverData != other.pDriverData; } \
+#define XE_DECLARE_HANDLE( NAME )                                                       \
+    struct NAME                                                                         \
+    {                                                                                   \
+        void* pDriverData;          /*!< pointer to driver object (opaque)*/            \
+                                                                                        \
+        NAME( void ) : pDriverData( nullptr ) {}        /*!< default constructor */     \
+        explicit NAME( void* p ) : pDriverData( p ) {}  /*!< initialize from pointer */ \
+                                                                                        \
+        inline bool operator==( const NAME& other ) const   /*!< is equal to other */   \
+        { return pDriverData == other.pDriverData; }                                    \
+        inline bool operator!=( const NAME& other ) const   /*!< not equal to other */  \
+        { return pDriverData != other.pDriverData; }                                    \
     }
 #else
 #define XE_DECLARE_HANDLE( NAME )   \
@@ -98,6 +100,7 @@ XE_DECLARE_HANDLE( xe_resource_handle_t );          ///< handle of driver's reso
 
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Defines Return/Error codes
+/// @details _replaces CUresult_
 XE_DECLARE_ENUM( xe_result_t )
 {
     XE_RESULT_SUCCESS = 0,              ///< success
@@ -117,6 +120,7 @@ XE_DECLARE_ENUM( xe_init_flags_t )
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Initialize the Xe Driver API and must be called before any other
 ///     API function.
+/// @details _replaces cuInit_
 xe_result_t __xecall
   xeInit( 
     xe_init_flags_t flags       ///< initialization flags
@@ -133,6 +137,7 @@ XE_DECLARE_ENUM( xe_driver_version_t )
 
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Returns the current versions of the driver
+/// @details _replaces cuDriverGetVersion_
 xe_result_t __xecall
  xeDriverGetVersion(
     xe_driver_version_t* version    ///< [out] driver version
@@ -140,6 +145,7 @@ xe_result_t __xecall
 
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Reports the number of devices
+/// @details _replaces cuDeviceGetCount_
 xe_result_t __xecall
   xeDeviceGetCount(
     uint32_t* count                 ///< [out] number of devices available
@@ -147,6 +153,7 @@ xe_result_t __xecall
 
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Returns a handle to the device object
+/// @details _replaces cuDeviceGet_
 /// @returns XE_RESULT_SUCCESS, ...
 xe_result_t __xecall
   xeDeviceGet( 
@@ -165,6 +172,7 @@ XE_DECLARE_ENUM( xe_api_version_t )
 
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Returns the API version supported by the device
+/// @details _replaces cuCtxGetApiVersion_
 xe_result_t __xecall
   xeDeviceGetApiVersion(
     xe_device_handle_t hDevice,     ///< [in] handle of the device object
@@ -182,6 +190,7 @@ XE_DECLARE_ENUM( xe_device_attribute_t )
 
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Retrieves an attribute of the device
+/// @details _replaces cuDeviceGetAttribute and cuDeviceTotalMem_
 xe_result_t __xecall
   xeDeviceGetAttribute(
     xe_device_handle_t hDevice,         ///< [in] handle of the device object
@@ -212,6 +221,7 @@ typedef struct _xe_command_queue_desc_t
 /// @details A command queue is a FIFO stream used to submit work to the device.
 ///     The command queue maintains some machine state, which is inherited by
 ///     subsequent execution.
+/// @details _replaces cuCtxCreate and cuCtxGetCurrent_
 /// @returns XE_RESULT_SUCCESS, ...
 xe_result_t __xecall
   xeCommandQueueCreate(
@@ -222,6 +232,7 @@ xe_result_t __xecall
 
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Destroys a command queue
+/// @details _replaces cuCtxDestroy_
 /// @returns XE_RESULT_SUCCESS, ...
 xe_result_t __xecall
   xeCommandQueueDestroy(
@@ -231,12 +242,14 @@ xe_result_t __xecall
 ///////////////////////////////////////////////////////////////////////////////
 XE_DECLARE_ENUM( xe_command_queue_parameter_t )
 {
-    XE_COMMAND_QUEUE_PARAMETER_PRIORITY = 1,    ///< see xe_command_queue_priority_t
-    XE_COMMAND_QUEUE_PARAMETER_CACHE_CONFIG,    ///< see xe_command_queue_cacheconfig_t
+    XE_COMMAND_QUEUE_PARAMETER_PRIORITY = 1,    ///< @see xe_command_queue_priority_t
+    XE_COMMAND_QUEUE_PARAMETER_CACHE_CONFIG,    ///< @see xe_command_queue_cacheconfig_t
 };
 
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Sets a command queue's parameter
+/// @details _replaces cuCtxSetCacheConfig, cuCtxSetLimit, and
+///     cuCtxSetSharedMemConfig_
 /// @returns XE_RESULT_SUCCESS, ...
 xe_result_t __xecall
   xeCommandQueueSetParameter(
@@ -247,6 +260,8 @@ xe_result_t __xecall
 
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Retrieves a command queue's parameter
+/// @details _replaces cuCtxGetCacheConfig, cuCtxGetLimit, cuCtxGetSharedMemConfig,
+///     and cuCtxGetStreamPriorityRange_
 /// @returns XE_RESULT_SUCCESS, ...
 xe_result_t __xecall
   xeCommandQueueGetParameter(
@@ -274,6 +289,7 @@ xe_result_t __xecall
 
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Synchronizes a command queue
+/// @details _replaces cuCtxSynchronize_
 /// @returns XE_RESULT_SUCCESS, ...
 xe_result_t __xecall
   xeCommandQueueSynchronize(
@@ -314,6 +330,7 @@ xe_result_t __xecall
 
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Encodes an event object into a command list
+/// @details _replaces cuEventRecord_
 /// @returns XE_RESULT_SUCCESS, ...
 xe_result_t __xecall
   xeCommandListEncodeEvent(
@@ -338,6 +355,7 @@ typedef struct _xe_event_desc_t
 
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Creates an event object
+/// @details _replaces cuEventCreate_
 /// @returns XE_RESULT_SUCCESS, ...
 xe_result_t __xecall
   xeEventCreate( 
@@ -348,6 +366,7 @@ xe_result_t __xecall
     
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Deletes an event object
+/// @details _replaces cuEventDestroy_
 /// @returns XE_RESULT_SUCCESS, ...
 xe_result_t __xecall
   xeEventDestroy(
