@@ -55,10 +55,10 @@ var xe__umd__api_8h =
       [ "XE_RESULT_ERROR_OUT_OF_MEMORY", "xe__umd__api_8h.html#a0a81258bd4a02d562b77ce7bc03fe189a496076e0b279dd037e48436c1a9f4f46", null ],
       [ "XE_RESULT_ERROR_UNKNOWN", "xe__umd__api_8h.html#a0a81258bd4a02d562b77ce7bc03fe189a0e6ce01deeca2124e2f7c0b9ca5d4b11", null ]
     ] ],
-    [ "xeCommandListCreate", "xe__umd__api_8h.html#a3c7a043de36e3909cdd8f3f8fa3f9bdb", null ],
+    [ "xeCommandListCreate", "xe__umd__api_8h.html#a6c4a5ed9a7d569d46b0ac28e475e46c4", null ],
     [ "xeCommandListDestroy", "xe__umd__api_8h.html#abdbe571489694586ed3919550f5ef882", null ],
     [ "xeCommandListEncodeEvent", "xe__umd__api_8h.html#a90e5a4ab9218d0270183fee37890884a", null ],
-    [ "xeCommandQueueCreate", "xe__umd__api_8h.html#ac5d4d3880fdd5a1b5b4195832fa32736", null ],
+    [ "xeCommandQueueCreate", "xe__umd__api_8h.html#a0200e971697050650b23d99a1d458155", null ],
     [ "xeCommandQueueDestroy", "xe__umd__api_8h.html#ac7543bb18642ae9b3c5a7e85e1ed08db", null ],
     [ "xeCommandQueueEnqueueCommandList", "xe__umd__api_8h.html#ac83912c3d520f90ab6518cdd687e6943", null ],
     [ "xeCommandQueueGetParameter", "xe__umd__api_8h.html#ab585aa7e0b3aabf1fc010fd06333b5bf", null ],
@@ -70,9 +70,9 @@ var xe__umd__api_8h =
     [ "xeDeviceGetAttribute", "xe__umd__api_8h.html#a223e99f5c17e355b4cc46f14f0aaf9fa", null ],
     [ "xeDeviceGetCount", "xe__umd__api_8h.html#ad9632680b628200c7bf61f9cce14f608", null ],
     [ "xeDriverGetVersion", "xe__umd__api_8h.html#a5f5b824bdc0bece28899a552903778a7", null ],
-    [ "xeEventCreate", "xe__umd__api_8h.html#a68af93632ec1d12ba6948ec73f7569f0", null ],
+    [ "xeEventCreate", "xe__umd__api_8h.html#ad827fb47dca2fdbdc9b8bfe8e58e9009", null ],
     [ "xeEventDestroy", "xe__umd__api_8h.html#acaa1ed76b354dec8a0e59278363e6425", null ],
     [ "xeInit", "xe__umd__api_8h.html#aa42ffd3cf61a3d417a57aff1bd1fbe14", null ],
-    [ "xeResourceCreate", "xe__umd__api_8h.html#af95a3e596eb573814170dc0f5aa199b5", null ],
+    [ "xeResourceCreate", "xe__umd__api_8h.html#a55cb645116d0333b3c4422a94ca9a48f", null ],
     [ "xeResourceDestroy", "xe__umd__api_8h.html#a48232eb8d063b09bddb2bd3b37fcd095", null ]
 ];

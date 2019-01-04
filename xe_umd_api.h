@@ -216,7 +216,7 @@ typedef struct _xe_command_queue_desc_t
 xe_result_t __xecall
   xeCommandQueueCreate(
     xe_device_handle_t hDevice,                 ///< [in] handle of the device
-    xe_command_queue_desc_t desc,               ///< [in] command queue descriptor
+    xe_command_queue_desc_t* desc,              ///< [in] pointer to command queue descriptor
     xe_command_queue_handle_t* phCommandQueue   ///< [out] pointer to handle of command queue object created
     );
 
@@ -300,7 +300,7 @@ typedef struct _xe_command_list_desc_t
 xe_result_t __xecall
   xeCommandListCreate(
     xe_device_handle_t hDevice,                 ///< [in] handle of the device
-    xe_command_list_desc_t desc,                ///< [in] command list descriptor
+    xe_command_list_desc_t* desc,               ///< [in] pointer to command list descriptor
     xe_command_list_handle_t* phCommandList     ///< [out] pointer to handle of command list object created
     );
 
@@ -342,7 +342,7 @@ typedef struct _xe_event_desc_t
 xe_result_t __xecall
   xeEventCreate( 
     xe_device_handle_t hDevice,             ///< [in] handle of the device
-    xe_event_desc_t desc,                   ///< [in] event descriptor
+    xe_event_desc_t* desc,                  ///< [in] pointer to event descriptor
     xe_event_handle_t* phEvent              ///< [out] pointer to handle of event object created
     );
     
@@ -374,7 +374,7 @@ typedef struct _xe_resource_desc_t
 /// @returns XE_RESULT_SUCCESS, ...
 xe_result_t __xecall
   xeResourceCreate( 
-    xe_resource_desc_t desc,            ///< [in] resource descriptor
+    xe_resource_desc_t* desc,           ///< [in] pointer to resource descriptor
     xe_resource_handle_t* phResource    ///< [out] pointer to handle of resource object created
     );
     
