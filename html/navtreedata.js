@@ -1,6 +1,6 @@
 var NAVTREE =
 [
-  [ "Driver API", "index.html", [
+  [ "Intel Xe Driver API", "index.html", [
     [ "level_zero", "md__r_e_a_d_m_e.html", null ],
     [ "Data Structures", "annotated.html", [
       [ "Data Structures", "annotated.html", "annotated_dup" ],

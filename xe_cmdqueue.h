@@ -47,7 +47,9 @@ XE_DECLARE_ENUM( xe_command_queue_flags_t )
 /// @brief Command Queue descriptor
 typedef struct _xe_command_queue_desc_t
 {
-    xe_command_queue_flags_t flags;             ///< [in] creation flags
+    const uint32_t version = XE_MAKE_VERSION( 1, 0 );   ///< [in] descriptor version
+
+    xe_command_queue_flags_t flags;                     ///< [in] creation flags
 } xe_command_queue_desc_t;
 
 ///////////////////////////////////////////////////////////////////////////////
