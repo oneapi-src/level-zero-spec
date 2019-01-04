@@ -36,6 +36,11 @@
 /// @brief Reports the number of devices
 /// @remarks _Analogues:_
 ///     - **cuDeviceGetCount**
+/// @returns
+///     - ::XE_RESULT_SUCCESS
+///     - ::XE_RESULT_ERROR_UNINITIALIZED
+///     - ::XE_RESULT_ERROR_INVALID_PARAMETER
+///         + nullptr for count
 xe_result_t __xecall
   xeDeviceGetCount(
     uint32_t* count                 ///< [out] number of devices available
@@ -45,7 +50,12 @@ xe_result_t __xecall
 /// @brief Returns a handle to the device object
 /// @remarks _Analogues:_
 ///     - **cuDeviceGet**
-/// @returns XE_RESULT_SUCCESS, ...
+/// @returns
+///     - ::XE_RESULT_SUCCESS
+///     - ::XE_RESULT_ERROR_UNINITIALIZED
+///     - ::XE_RESULT_ERROR_INVALID_PARAMETER
+///         + ordinal is out of range reported by ::xeDeviceGetCount
+///         + nullptr for phDevice
 xe_result_t __xecall
   xeDeviceGet( 
     uint32_t ordinal,               ///< [in] ordinal of device to retrieve
@@ -65,6 +75,12 @@ XE_DECLARE_ENUM( xe_api_version_t )
 /// @brief Returns the API version supported by the device
 /// @remarks _Analogues:_
 ///     - **cuCtxGetApiVersion**
+/// @returns
+///     - ::XE_RESULT_SUCCESS
+///     - ::XE_RESULT_ERROR_UNINITIALIZED
+///     - ::XE_RESULT_ERROR_INVALID_PARAMETER
+///         + invalid handle for hDevice
+///         + nullptr for version
 xe_result_t __xecall
   xeDeviceGetApiVersion(
     xe_device_handle_t hDevice,     ///< [in] handle of the device object
@@ -86,6 +102,13 @@ XE_DECLARE_ENUM( xe_device_attribute_t )
 /// @remarks _Analogues:_
 ///     - **cuDeviceGetAttribute**
 ///     - cuDeviceTotalMem
+/// @returns
+///     - ::XE_RESULT_SUCCESS
+///     - ::XE_RESULT_ERROR_UNINITIALIZED
+///     - ::XE_RESULT_ERROR_INVALID_PARAMETER
+///         + invalid handle for hDevice
+///         + invalid value for attribute
+///         + nullptr for value
 xe_result_t __xecall
   xeDeviceGetAttribute(
     xe_device_handle_t hDevice,         ///< [in] handle of the device object

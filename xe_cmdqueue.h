@@ -66,7 +66,14 @@ typedef struct _xe_command_queue_desc_t
 /// @remarks _Analogues:_
 ///     - **cuCtxCreate**
 ///     - cuCtxGetCurrent
-/// @returns XE_RESULT_SUCCESS, ...
+/// @returns
+///     - ::XE_RESULT_SUCCESS
+///     - ::XE_RESULT_ERROR_UNINITIALIZED
+///     - ::XE_RESULT_ERROR_INVALID_PARAMETER
+///         + invalid handle for hDevice
+///         + nullptr for desc
+///         + nullptr for phCommandQueue
+///     - ::XE_RESULT_ERROR_OUT_OF_MEMORY
 xe_result_t __xecall
   xeCommandQueueCreate(
     xe_device_handle_t hDevice,                 ///< [in] handle of the device
@@ -78,7 +85,11 @@ xe_result_t __xecall
 /// @brief Destroys a command queue
 /// @remarks _Analogues:_
 ///     - **cuCtxDestroy**
-/// @returns XE_RESULT_SUCCESS, ...
+/// @returns
+///     - ::XE_RESULT_SUCCESS
+///     - ::XE_RESULT_ERROR_UNINITIALIZED
+///     - ::XE_RESULT_ERROR_INVALID_PARAMETER
+///         + invalid handle for hCommandQueue
 xe_result_t __xecall
   xeCommandQueueDestroy(
     xe_command_queue_handle_t hCommandQueue     ///< [in] handle of command queue object to destroy
@@ -112,7 +123,13 @@ XE_DECLARE_ENUM( xe_command_queue_cacheconfig_t )
 ///     - cuCtxSetCacheConfig
 ///     - cuCtxSetLimit
 ///     - cuCtxSetSharedMemConfig
-/// @returns XE_RESULT_SUCCESS, ...
+/// @returns
+///     - ::XE_RESULT_SUCCESS
+///     - ::XE_RESULT_ERROR_UNINITIALIZED
+///     - ::XE_RESULT_ERROR_INVALID_PARAMETER
+///         + invalid handle for hCommandQueue
+///         + invalid value for attribute
+///         + invalid value for value
 xe_result_t __xecall
   xeCommandQueueSetParameter(
     xe_command_queue_handle_t hCommandQueue,    ///< [in] handle of command queue
@@ -127,7 +144,13 @@ xe_result_t __xecall
 ///     - cuCtxGetLimit
 ///     - cuCtxGetSharedMemConfig
 ///     - cuCtxGetStreamPriorityRange
-/// @returns XE_RESULT_SUCCESS, ...
+/// @returns
+///     - ::XE_RESULT_SUCCESS
+///     - ::XE_RESULT_ERROR_UNINITIALIZED
+///     - ::XE_RESULT_ERROR_INVALID_PARAMETER
+///         + invalid handle for hCommandQueue
+///         + invalid value for attribute
+///         + nullptr for value
 xe_result_t __xecall
   xeCommandQueueGetParameter(
     xe_command_queue_handle_t hCommandQueue,    ///< [in] handle of command queue
@@ -137,7 +160,11 @@ xe_result_t __xecall
 
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Resets all command queue parameters to default state
-/// @returns XE_RESULT_SUCCESS, ...
+/// @returns
+///     - ::XE_RESULT_SUCCESS
+///     - ::XE_RESULT_ERROR_UNINITIALIZED
+///     - ::XE_RESULT_ERROR_INVALID_PARAMETER
+///         + invalid handle for hCommandQueue
 xe_result_t __xecall
   xeCommandQueueResetParameters(
     xe_command_queue_handle_t hCommandQueue     ///< [in] handle of command queue
@@ -145,7 +172,12 @@ xe_result_t __xecall
 
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Enqueues a command list into a command queue
-/// @returns XE_RESULT_SUCCESS, ...
+/// @returns
+///     - ::XE_RESULT_SUCCESS
+///     - ::XE_RESULT_ERROR_UNINITIALIZED
+///     - ::XE_RESULT_ERROR_INVALID_PARAMETER
+///         + invalid handle for hCommandQueue
+///         + invalid handle for hCommandList
 xe_result_t __xecall
   xeCommandQueueEnqueueCommandList(
     xe_command_queue_handle_t hCommandQueue,    ///< [in] handle of the command queue
@@ -156,7 +188,10 @@ xe_result_t __xecall
 /// @brief Synchronizes a command queue
 /// @remarks _Analogues:_
 ///     - **cuCtxSynchronize**
-/// @returns XE_RESULT_SUCCESS, ...
+///     - ::XE_RESULT_SUCCESS
+///     - ::XE_RESULT_ERROR_UNINITIALIZED
+///     - ::XE_RESULT_ERROR_INVALID_PARAMETER
+///         + invalid handle for hCommandQueue
 xe_result_t __xecall
   xeCommandQueueSynchronize(
     xe_command_queue_handle_t hCommandQueue     ///< [in] handle of command queue

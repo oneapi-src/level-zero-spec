@@ -48,7 +48,14 @@ typedef struct _xe_command_list_desc_t
 
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Creates a command list
-/// @returns XE_RESULT_SUCCESS, ...
+/// @returns
+///     - ::XE_RESULT_SUCCESS
+///     - ::XE_RESULT_ERROR_UNINITIALIZED
+///     - ::XE_RESULT_ERROR_INVALID_PARAMETER
+///         + invalid handle for hDevice
+///         + nullptr for desc
+///         + nullptr for phCommandList
+///     - ::XE_RESULT_ERROR_OUT_OF_MEMORY
 xe_result_t __xecall
   xeCommandListCreate(
     xe_device_handle_t hDevice,                 ///< [in] handle of the device
@@ -58,7 +65,11 @@ xe_result_t __xecall
 
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Destroys a command list
-/// @returns XE_RESULT_SUCCESS, ...
+/// @returns
+///     - ::XE_RESULT_SUCCESS
+///     - ::XE_RESULT_ERROR_UNINITIALIZED
+///     - ::XE_RESULT_ERROR_INVALID_PARAMETER
+///         + invalid handle for hCommandList
 xe_result_t __xecall
   xeCommandListDestroy(
     xe_command_list_handle_t hCommandList       ///< [in] handle of command list object to destroy

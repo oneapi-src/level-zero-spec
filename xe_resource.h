@@ -48,7 +48,13 @@ typedef struct _xe_resource_desc_t
 
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Creates a resource object
-/// @returns XE_RESULT_SUCCESS, ...
+/// @returns
+///     - ::XE_RESULT_SUCCESS
+///     - ::XE_RESULT_ERROR_UNINITIALIZED
+///     - ::XE_RESULT_ERROR_INVALID_PARAMETER
+///         + nullptr for desc
+///         + nullptr for phResource
+///     - ::XE_RESULT_ERROR_OUT_OF_MEMORY
 xe_result_t __xecall
   xeResourceCreate( 
     xe_resource_desc_t* desc,           ///< [in] pointer to resource descriptor
@@ -57,7 +63,11 @@ xe_result_t __xecall
     
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Deletes a resource object
-/// @returns XE_RESULT_SUCCESS, ...
+/// @returns
+///     - ::XE_RESULT_SUCCESS
+///     - ::XE_RESULT_ERROR_UNINITIALIZED
+///     - ::XE_RESULT_ERROR_INVALID_PARAMETER
+///         + invalid handle for desc
 xe_result_t __xecall
   xeResourceDestroy(
     xe_resource_handle_t hResource      ///< [in] handle of resource object to destroy

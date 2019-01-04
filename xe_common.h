@@ -107,6 +107,7 @@ XE_DECLARE_HANDLE( xe_resource_handle_t );          ///< handle of driver's reso
 XE_DECLARE_ENUM( xe_result_t )
 {
     XE_RESULT_SUCCESS = 0,                  ///< success
+    XE_RESULT_ERROR_UNINITIALIZED,          ///< driver is not initialized
     XE_RESULT_ERROR_INVALID_PARAMETER,      ///< invalid parameter provided
     XE_RESULT_ERROR_OUT_OF_MEMORY,          ///< insufficient memory to satisfy call
     XE_RESULT_ERROR_UNKNOWN = 0xffffffff    ///< internal error

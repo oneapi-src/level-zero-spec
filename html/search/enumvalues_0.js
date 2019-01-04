@@ -18,6 +18,7 @@ var searchData=
   ['xe_5fresource_5fflag_5fnone',['XE_RESOURCE_FLAG_NONE',['../xe__resource_8h.html#af739fb0bed07b9e9012f37fa088cfaa1af41f846d8441a9b3132e666b88e9ae4c',1,'xe_resource.h']]],
   ['xe_5fresult_5ferror_5finvalid_5fparameter',['XE_RESULT_ERROR_INVALID_PARAMETER',['../xe__common_8h.html#a0a81258bd4a02d562b77ce7bc03fe189ab4095f98f19805c0d8a2ebc61422a513',1,'xe_common.h']]],
   ['xe_5fresult_5ferror_5fout_5fof_5fmemory',['XE_RESULT_ERROR_OUT_OF_MEMORY',['../xe__common_8h.html#a0a81258bd4a02d562b77ce7bc03fe189a496076e0b279dd037e48436c1a9f4f46',1,'xe_common.h']]],
+  ['xe_5fresult_5ferror_5funinitialized',['XE_RESULT_ERROR_UNINITIALIZED',['../xe__common_8h.html#a0a81258bd4a02d562b77ce7bc03fe189a3df2351e5ff91446c3dec05b9a9e31d8',1,'xe_common.h']]],
   ['xe_5fresult_5ferror_5funknown',['XE_RESULT_ERROR_UNKNOWN',['../xe__common_8h.html#a0a81258bd4a02d562b77ce7bc03fe189a0e6ce01deeca2124e2f7c0b9ca5d4b11',1,'xe_common.h']]],
   ['xe_5fresult_5fsuccess',['XE_RESULT_SUCCESS',['../xe__common_8h.html#a0a81258bd4a02d562b77ce7bc03fe189af2c8a0ddedb58c6435b1e0acf6c27fe1',1,'xe_common.h']]]
 ];

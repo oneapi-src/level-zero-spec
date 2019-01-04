@@ -42,8 +42,15 @@ XE_DECLARE_ENUM( xe_init_flags_t )
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Initialize the Xe Driver API and must be called before any other
 ///     API function.
+/// @details If this function is not called then all other functions will
+///     return ::XE_RESULT_ERROR_UNINITIALIZED
 /// @remarks _Analogues:_
 ///     - **cuInit**
+/// @returns
+///     - ::XE_RESULT_SUCCESS
+///     - ::XE_RESULT_ERROR_INVALID_PARAMETER
+///         + invalid value for flags
+///     - ::XE_RESULT_ERROR_OUT_OF_MEMORY
 xe_result_t __xecall
   xeInit( 
     xe_init_flags_t flags       ///< initialization flags
@@ -62,6 +69,11 @@ XE_DECLARE_ENUM( xe_driver_version_t )
 /// @brief Returns the current versions of the driver
 /// @remarks _Analogues:_
 ///     - **cuDriverGetVersion**
+/// @returns
+///     - ::XE_RESULT_SUCCESS
+///     - ::XE_RESULT_ERROR_UNINITIALIZED
+///     - ::XE_RESULT_ERROR_INVALID_PARAMETER
+///         + nullptr for version
 xe_result_t __xecall
  xeDriverGetVersion(
     xe_driver_version_t* version    ///< [out] driver version

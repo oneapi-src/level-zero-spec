@@ -182,7 +182,16 @@ Functions</h2></td></tr>
 <li><b>cuEventRecord</b> </li>
 </ul>
 </dd></dl>
-<dl class="section return"><dt>Returns</dt><dd>XE_RESULT_SUCCESS, ... </dd></dl>
+<dl class="section return"><dt>Returns</dt><dd><ul>
+<li><a class="el" href="xe__common_8h.html#a0a81258bd4a02d562b77ce7bc03fe189af2c8a0ddedb58c6435b1e0acf6c27fe1" title="success ">XE_RESULT_SUCCESS</a></li>
+<li><a class="el" href="xe__common_8h.html#a0a81258bd4a02d562b77ce7bc03fe189a3df2351e5ff91446c3dec05b9a9e31d8" title="driver is not initialized ">XE_RESULT_ERROR_UNINITIALIZED</a></li>
+<li><a class="el" href="xe__common_8h.html#a0a81258bd4a02d562b77ce7bc03fe189ab4095f98f19805c0d8a2ebc61422a513" title="invalid parameter provided ">XE_RESULT_ERROR_INVALID_PARAMETER</a><ul>
+<li>invalid handle for hCommandList</li>
+<li>invalid handle for hEvent </li>
+</ul>
+</li>
+</ul>
+</dd></dl>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramdir">[in]</td><td class="paramname">hCommandList</td><td>handle of the command list </td></tr>
@@ -230,7 +239,18 @@ Functions</h2></td></tr>
 <li><b>cuEventCreate</b> </li>
 </ul>
 </dd></dl>
-<dl class="section return"><dt>Returns</dt><dd>XE_RESULT_SUCCESS, ... </dd></dl>
+<dl class="section return"><dt>Returns</dt><dd><ul>
+<li><a class="el" href="xe__common_8h.html#a0a81258bd4a02d562b77ce7bc03fe189af2c8a0ddedb58c6435b1e0acf6c27fe1" title="success ">XE_RESULT_SUCCESS</a></li>
+<li><a class="el" href="xe__common_8h.html#a0a81258bd4a02d562b77ce7bc03fe189a3df2351e5ff91446c3dec05b9a9e31d8" title="driver is not initialized ">XE_RESULT_ERROR_UNINITIALIZED</a></li>
+<li><a class="el" href="xe__common_8h.html#a0a81258bd4a02d562b77ce7bc03fe189ab4095f98f19805c0d8a2ebc61422a513" title="invalid parameter provided ">XE_RESULT_ERROR_INVALID_PARAMETER</a><ul>
+<li>invalid handle for hDevice</li>
+<li>nullptr for desc</li>
+<li>nullptr for phEvent</li>
+</ul>
+</li>
+<li><a class="el" href="xe__common_8h.html#a0a81258bd4a02d562b77ce7bc03fe189a496076e0b279dd037e48436c1a9f4f46" title="insufficient memory to satisfy call ">XE_RESULT_ERROR_OUT_OF_MEMORY</a> </li>
+</ul>
+</dd></dl>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramdir">[in]</td><td class="paramname">hDevice</td><td>handle of the device </td></tr>
@@ -263,7 +283,15 @@ Functions</h2></td></tr>
 <li><b>cuEventDestroy</b> </li>
 </ul>
 </dd></dl>
-<dl class="section return"><dt>Returns</dt><dd>XE_RESULT_SUCCESS, ... </dd></dl>
+<dl class="section return"><dt>Returns</dt><dd><ul>
+<li><a class="el" href="xe__common_8h.html#a0a81258bd4a02d562b77ce7bc03fe189af2c8a0ddedb58c6435b1e0acf6c27fe1" title="success ">XE_RESULT_SUCCESS</a></li>
+<li><a class="el" href="xe__common_8h.html#a0a81258bd4a02d562b77ce7bc03fe189a3df2351e5ff91446c3dec05b9a9e31d8" title="driver is not initialized ">XE_RESULT_ERROR_UNINITIALIZED</a></li>
+<li><a class="el" href="xe__common_8h.html#a0a81258bd4a02d562b77ce7bc03fe189ab4095f98f19805c0d8a2ebc61422a513" title="invalid parameter provided ">XE_RESULT_ERROR_INVALID_PARAMETER</a><ul>
+<li>invalid handle for hEvent </li>
+</ul>
+</li>
+</ul>
+</dd></dl>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramdir">[in]</td><td class="paramname">hEvent</td><td>handle of event object to destroy </td></tr>
@@ -279,7 +307,7 @@ Functions</h2></td></tr>
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
     <li class="navelem"><a class="el" href="xe__event_8h.html">xe_event.h</a></li>
-    <li class="footer">Generated on Fri Jan 4 2019 10:56:36 for Driver API by
+    <li class="footer">Generated on Fri Jan 4 2019 11:30:31 for Driver API by
     <a href="http://www.doxygen.org/index.html">
     <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.8.13 </li>
   </ul>

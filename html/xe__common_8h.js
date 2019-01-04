@@ -15,6 +15,7 @@ var xe__common_8h =
     [ "XE_UMD_HEADER_VERSION", "xe__common_8h.html#a9123875cc8dd3cc62640c633aba1f894", null ],
     [ "xe_result_t", "xe__common_8h.html#a0a81258bd4a02d562b77ce7bc03fe189", [
       [ "XE_RESULT_SUCCESS", "xe__common_8h.html#a0a81258bd4a02d562b77ce7bc03fe189af2c8a0ddedb58c6435b1e0acf6c27fe1", null ],
+      [ "XE_RESULT_ERROR_UNINITIALIZED", "xe__common_8h.html#a0a81258bd4a02d562b77ce7bc03fe189a3df2351e5ff91446c3dec05b9a9e31d8", null ],
       [ "XE_RESULT_ERROR_INVALID_PARAMETER", "xe__common_8h.html#a0a81258bd4a02d562b77ce7bc03fe189ab4095f98f19805c0d8a2ebc61422a513", null ],
       [ "XE_RESULT_ERROR_OUT_OF_MEMORY", "xe__common_8h.html#a0a81258bd4a02d562b77ce7bc03fe189a496076e0b279dd037e48436c1a9f4f46", null ],
       [ "XE_RESULT_ERROR_UNKNOWN", "xe__common_8h.html#a0a81258bd4a02d562b77ce7bc03fe189a0e6ce01deeca2124e2f7c0b9ca5d4b11", null ]
