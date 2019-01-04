@@ -33,7 +33,7 @@
 #include "xe_common.h"
 
 ///////////////////////////////////////////////////////////////////////////////
-/// @brief Event creation flags
+/// @brief Supported event creation flags
 XE_DECLARE_ENUM( xe_event_flags_t )
 {
     XE_EVENT_FLAG_NONE = 0                  ///< default behavior

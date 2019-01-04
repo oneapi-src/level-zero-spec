@@ -96,13 +96,14 @@ $(document).ready(function(){initNavTree('xe__device_8h.html','');});
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="enum-members"></a>
 Enumerations</h2></td></tr>
 <tr class="memitem:ad69250d10c10e024a5d8aa4dea0fd831"><td class="memItemLeft" align="right" valign="top">enum &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="xe__device_8h.html#ad69250d10c10e024a5d8aa4dea0fd831">xe_api_version_t</a> : uint32_t { <a class="el" href="xe__device_8h.html#ad69250d10c10e024a5d8aa4dea0fd831a8f5f11a47d3562e3b90643ff9ce77ee0">XE_API_VERSION_1_0</a> = (( 1 &lt;&lt; 16 )|( 0 &amp; 0x0000ffff))
- }<tr class="memdesc:ad69250d10c10e024a5d8aa4dea0fd831"><td class="mdescLeft">&#160;</td><td class="mdescRight">Defines API versions.  <a href="xe__device_8h.html#ad69250d10c10e024a5d8aa4dea0fd831">More...</a><br /></td></tr>
+ }<tr class="memdesc:ad69250d10c10e024a5d8aa4dea0fd831"><td class="mdescLeft">&#160;</td><td class="mdescRight">Supported API versions.  <a href="xe__device_8h.html#ad69250d10c10e024a5d8aa4dea0fd831">More...</a><br /></td></tr>
 </td></tr>
 <tr class="separator:ad69250d10c10e024a5d8aa4dea0fd831"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a003ecc42f784db9cb9cd02f299849a87"><td class="memItemLeft" align="right" valign="top">enum &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="xe__device_8h.html#a003ecc42f784db9cb9cd02f299849a87">xe_device_attribute_t</a> : uint32_t { <a class="el" href="xe__device_8h.html#a003ecc42f784db9cb9cd02f299849a87ac2e6cf4a9347ef77bd089b191017bf26">XE_DEVICE_ATTRIBUTE_MAX_THREADS</a> = 1, 
 <a class="el" href="xe__device_8h.html#a003ecc42f784db9cb9cd02f299849a87a29222b9f4757bb27029b24f9d9415935">XE_DEVICE_ATTRIBUTE_MAX_SIMULTANEOUS_QUEUES</a>, 
 <a class="el" href="xe__device_8h.html#a003ecc42f784db9cb9cd02f299849a87a25f60d8b9d103fbd73341ed5a39b9c1c">XE_DEVICE_ATTRIBUTE_TOTAL_MEMORY</a>
- }</td></tr>
+ }<tr class="memdesc:a003ecc42f784db9cb9cd02f299849a87"><td class="mdescLeft">&#160;</td><td class="mdescRight">Supported device attributes.  <a href="xe__device_8h.html#a003ecc42f784db9cb9cd02f299849a87">More...</a><br /></td></tr>
+</td></tr>
 <tr class="separator:a003ecc42f784db9cb9cd02f299849a87"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="func-members"></a>
@@ -140,7 +141,7 @@ Functions</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p>Defines API versions. </p>
+<p>Supported API versions. </p>
 <p>API versions contain major and minor attributes, use XE_MAJOR_VERSION and XE_MINOR_VERSION </p>
 <table class="fieldtable">
 <tr><th colspan="2">Enumerator</th></tr><tr><td class="fieldname"><a id="ad69250d10c10e024a5d8aa4dea0fd831a8f5f11a47d3562e3b90643ff9ce77ee0"></a>XE_API_VERSION_1_0&#160;</td><td class="fielddoc"><p>1.0 </p>
@@ -164,6 +165,8 @@ Functions</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
+
+<p>Supported device attributes. </p>
 <table class="fieldtable">
 <tr><th colspan="2">Enumerator</th></tr><tr><td class="fieldname"><a id="a003ecc42f784db9cb9cd02f299849a87ac2e6cf4a9347ef77bd089b191017bf26"></a>XE_DEVICE_ATTRIBUTE_MAX_THREADS&#160;</td><td class="fielddoc"><p>maximum number of threads supported </p>
 </td></tr>
@@ -173,10 +176,10 @@ Functions</h2></td></tr>
 </td></tr>
 </table>
 
-<p class="definition">Definition at line <a class="el" href="xe__device_8h_source.html#l00076">76</a> of file <a class="el" href="xe__device_8h_source.html">xe_device.h</a>.</p>
-<div class="fragment"><div class="line"><a name="l00077"></a><span class="lineno">   77</span>&#160;{</div><div class="line"><a name="l00078"></a><span class="lineno">   78</span>&#160;    <a class="code" href="xe__device_8h.html#a003ecc42f784db9cb9cd02f299849a87ac2e6cf4a9347ef77bd089b191017bf26">XE_DEVICE_ATTRIBUTE_MAX_THREADS</a> = 1,            </div><div class="line"><a name="l00079"></a><span class="lineno">   79</span>&#160;    <a class="code" href="xe__device_8h.html#a003ecc42f784db9cb9cd02f299849a87a29222b9f4757bb27029b24f9d9415935">XE_DEVICE_ATTRIBUTE_MAX_SIMULTANEOUS_QUEUES</a>,    </div><div class="line"><a name="l00080"></a><span class="lineno">   80</span>&#160;    <a class="code" href="xe__device_8h.html#a003ecc42f784db9cb9cd02f299849a87a25f60d8b9d103fbd73341ed5a39b9c1c">XE_DEVICE_ATTRIBUTE_TOTAL_MEMORY</a>,               </div><div class="line"><a name="l00081"></a><span class="lineno">   81</span>&#160;};</div><div class="ttc" id="xe__device_8h_html_a003ecc42f784db9cb9cd02f299849a87a29222b9f4757bb27029b24f9d9415935"><div class="ttname"><a href="xe__device_8h.html#a003ecc42f784db9cb9cd02f299849a87a29222b9f4757bb27029b24f9d9415935">XE_DEVICE_ATTRIBUTE_MAX_SIMULTANEOUS_QUEUES</a></div><div class="ttdoc">maximum number of command queues that can execute in parallel </div><div class="ttdef"><b>Definition:</b> <a href="xe__device_8h_source.html#l00079">xe_device.h:79</a></div></div>
-<div class="ttc" id="xe__device_8h_html_a003ecc42f784db9cb9cd02f299849a87ac2e6cf4a9347ef77bd089b191017bf26"><div class="ttname"><a href="xe__device_8h.html#a003ecc42f784db9cb9cd02f299849a87ac2e6cf4a9347ef77bd089b191017bf26">XE_DEVICE_ATTRIBUTE_MAX_THREADS</a></div><div class="ttdoc">maximum number of threads supported </div><div class="ttdef"><b>Definition:</b> <a href="xe__device_8h_source.html#l00078">xe_device.h:78</a></div></div>
-<div class="ttc" id="xe__device_8h_html_a003ecc42f784db9cb9cd02f299849a87a25f60d8b9d103fbd73341ed5a39b9c1c"><div class="ttname"><a href="xe__device_8h.html#a003ecc42f784db9cb9cd02f299849a87a25f60d8b9d103fbd73341ed5a39b9c1c">XE_DEVICE_ATTRIBUTE_TOTAL_MEMORY</a></div><div class="ttdoc">total amount of memory available, in megabytes </div><div class="ttdef"><b>Definition:</b> <a href="xe__device_8h_source.html#l00080">xe_device.h:80</a></div></div>
+<p class="definition">Definition at line <a class="el" href="xe__device_8h_source.html#l00077">77</a> of file <a class="el" href="xe__device_8h_source.html">xe_device.h</a>.</p>
+<div class="fragment"><div class="line"><a name="l00078"></a><span class="lineno">   78</span>&#160;{</div><div class="line"><a name="l00079"></a><span class="lineno">   79</span>&#160;    <a class="code" href="xe__device_8h.html#a003ecc42f784db9cb9cd02f299849a87ac2e6cf4a9347ef77bd089b191017bf26">XE_DEVICE_ATTRIBUTE_MAX_THREADS</a> = 1,            </div><div class="line"><a name="l00080"></a><span class="lineno">   80</span>&#160;    <a class="code" href="xe__device_8h.html#a003ecc42f784db9cb9cd02f299849a87a29222b9f4757bb27029b24f9d9415935">XE_DEVICE_ATTRIBUTE_MAX_SIMULTANEOUS_QUEUES</a>,    </div><div class="line"><a name="l00081"></a><span class="lineno">   81</span>&#160;    <a class="code" href="xe__device_8h.html#a003ecc42f784db9cb9cd02f299849a87a25f60d8b9d103fbd73341ed5a39b9c1c">XE_DEVICE_ATTRIBUTE_TOTAL_MEMORY</a>,               </div><div class="line"><a name="l00082"></a><span class="lineno">   82</span>&#160;};</div><div class="ttc" id="xe__device_8h_html_a003ecc42f784db9cb9cd02f299849a87a29222b9f4757bb27029b24f9d9415935"><div class="ttname"><a href="xe__device_8h.html#a003ecc42f784db9cb9cd02f299849a87a29222b9f4757bb27029b24f9d9415935">XE_DEVICE_ATTRIBUTE_MAX_SIMULTANEOUS_QUEUES</a></div><div class="ttdoc">maximum number of command queues that can execute in parallel </div><div class="ttdef"><b>Definition:</b> <a href="xe__device_8h_source.html#l00080">xe_device.h:80</a></div></div>
+<div class="ttc" id="xe__device_8h_html_a003ecc42f784db9cb9cd02f299849a87ac2e6cf4a9347ef77bd089b191017bf26"><div class="ttname"><a href="xe__device_8h.html#a003ecc42f784db9cb9cd02f299849a87ac2e6cf4a9347ef77bd089b191017bf26">XE_DEVICE_ATTRIBUTE_MAX_THREADS</a></div><div class="ttdoc">maximum number of threads supported </div><div class="ttdef"><b>Definition:</b> <a href="xe__device_8h_source.html#l00079">xe_device.h:79</a></div></div>
+<div class="ttc" id="xe__device_8h_html_a003ecc42f784db9cb9cd02f299849a87a25f60d8b9d103fbd73341ed5a39b9c1c"><div class="ttname"><a href="xe__device_8h.html#a003ecc42f784db9cb9cd02f299849a87a25f60d8b9d103fbd73341ed5a39b9c1c">XE_DEVICE_ATTRIBUTE_TOTAL_MEMORY</a></div><div class="ttdoc">total amount of memory available, in megabytes </div><div class="ttdef"><b>Definition:</b> <a href="xe__device_8h_source.html#l00081">xe_device.h:81</a></div></div>
 </div><!-- fragment -->
 </div>
 </div>
@@ -349,7 +352,7 @@ Functions</h2></td></tr>
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
     <li class="navelem"><a class="el" href="xe__device_8h.html">xe_device.h</a></li>
-    <li class="footer">Generated on Fri Jan 4 2019 10:09:28 for Driver API by
+    <li class="footer">Generated on Fri Jan 4 2019 10:56:36 for Driver API by
     <a href="http://www.doxygen.org/index.html">
     <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.8.13 </li>
   </ul>

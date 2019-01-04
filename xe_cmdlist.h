@@ -33,7 +33,7 @@
 #include "xe_common.h"
 
 ///////////////////////////////////////////////////////////////////////////////
-/// @brief Command List creation flags
+/// @brief Supported command List creation flags
 XE_DECLARE_ENUM( xe_command_list_flags_t )
 {
     XE_COMMAND_LIST_FLAG_NONE = 0               ///< default behavior

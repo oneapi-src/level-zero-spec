@@ -33,7 +33,7 @@
 #include "xe_common.h"
 
 ///////////////////////////////////////////////////////////////////////////////
-/// @brief Initialization flags
+/// @brief Supported initialization flags
 XE_DECLARE_ENUM( xe_init_flags_t )
 {
     XE_INIT_FLAG_NONE = 0       ///< default behavior
@@ -50,7 +50,7 @@ xe_result_t __xecall
     );
 
 ///////////////////////////////////////////////////////////////////////////////
-/// @brief Defines driver versions
+/// @brief Supported driver versions
 /// @details Driver versions contain major and minor attributes,
 ///     use XE_MAJOR_VERSION and XE_MINOR_VERSION
 XE_DECLARE_ENUM( xe_driver_version_t )

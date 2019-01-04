@@ -33,10 +33,10 @@
 #include "xe_common.h"
 
 ///////////////////////////////////////////////////////////////////////////////
-/// @brief Command Queue creation flags
+/// @brief Supported command queue creation flags
 XE_DECLARE_ENUM( xe_command_queue_flags_t )
 {
-    XE_COMMAND_QUEUE_FLAG_DEFAULT = 0,      ///< implicit default behavior (driver heuristics)
+    XE_COMMAND_QUEUE_FLAG_DEFAULT = 0,      ///< implicit default behavior; uses driver-based heuristics
     XE_COMMAND_QUEUE_FLAG_SYNCHRONOUS,      ///< GPU execution always completes immediately on enqueue; 
                                             ///< CPU thread is blocked using wait on implicit synchronization object
     XE_COMMAND_QUEUE_FLAG_ASYNCHRONOUS,     ///< GPU execution is scheduled and will complete in future;
@@ -52,9 +52,17 @@ typedef struct _xe_command_queue_desc_t
 
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Creates a command queue on a device
-/// @details A command queue is a FIFO stream used to submit work to the device.
-///     The command queue maintains some machine state, which is inherited by
-///     subsequent execution.
+/// @details 
+///   - A command queue represents a FIFO stream used to submit work to the device.
+///   - The command queue maintains some machine state, which is inherited by
+///     subsequent execution. See ::xe_command_queue_parameter_t for details.
+///   - Multiple command queues may be created by an application.  For example,
+///     an application may want to create a command queue per CPU thread.
+///   - There is no implicit binding of command queues to CPU threads. Therefore,
+///     an application may share a command queue handle across multiple CPU
+///     threads. However, the application is responsible for ensuring that 
+///     multiple CPU threads do not access the same command queue simultaneously.
+///
 /// @remarks _Analogues:_
 ///     - **cuCtxCreate**
 ///     - cuCtxGetCurrent
@@ -77,10 +85,25 @@ xe_result_t __xecall
     );
 
 ///////////////////////////////////////////////////////////////////////////////
+/// @brief Supported command queue parameters
 XE_DECLARE_ENUM( xe_command_queue_parameter_t )
 {
-    XE_COMMAND_QUEUE_PARAMETER_PRIORITY = 1,    ///< @see xe_command_queue_priority_t
-    XE_COMMAND_QUEUE_PARAMETER_CACHE_CONFIG,    ///< @see xe_command_queue_cacheconfig_t
+    XE_COMMAND_QUEUE_PARAMETER_PRIORITY = 1,    ///< see ::xe_command_queue_priority_t
+    XE_COMMAND_QUEUE_PARAMETER_CACHE_CONFIG,    ///< see ::xe_command_queue_cacheconfig_t
+};
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Supported command queue priorities
+XE_DECLARE_ENUM( xe_command_queue_priority_t )
+{
+    XE_COMMAND_QUEUE_PRIORITY_NORMAL = 0        ///< [default] normal priority
+};
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Supported command queue cache configurations
+XE_DECLARE_ENUM( xe_command_queue_cacheconfig_t )
+{
+    XE_COMMAND_QUEUE_CACHECONFIG_BIAS_NONE = 0  ///< [default] no cache configuration bias; uses driver-based heuristics
 };
 
 ///////////////////////////////////////////////////////////////////////////////

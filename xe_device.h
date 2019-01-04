@@ -53,7 +53,7 @@ xe_result_t __xecall
     );
 
 ///////////////////////////////////////////////////////////////////////////////
-/// @brief Defines API versions
+/// @brief Supported API versions
 /// @details API versions contain major and minor attributes,
 ///     use XE_MAJOR_VERSION and XE_MINOR_VERSION
 XE_DECLARE_ENUM( xe_api_version_t )
@@ -73,6 +73,7 @@ xe_result_t __xecall
 
 
 ///////////////////////////////////////////////////////////////////////////////
+/// @brief Supported device attributes
 XE_DECLARE_ENUM( xe_device_attribute_t )
 {
     XE_DEVICE_ATTRIBUTE_MAX_THREADS = 1,            ///< maximum number of threads supported

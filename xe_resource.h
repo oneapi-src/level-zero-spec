@@ -33,7 +33,7 @@
 #include "xe_common.h"
 
 ///////////////////////////////////////////////////////////////////////////////
-/// @brief Resource creation flags
+/// @brief Supported resource creation flags
 XE_DECLARE_ENUM( xe_resource_flags_t )
 {
     XE_RESOURCE_FLAG_NONE = 0           ///< default behavior
