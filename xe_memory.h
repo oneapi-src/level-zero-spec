@@ -32,4 +32,102 @@
 #endif
 #include "xe_common.h"
 
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Device pointer
+typedef void* xe_device_ptr_t;
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Supported memory allocation flags
+XE_DECLARE_ENUM( xe_memory_flags_t )
+{
+    XE_MEMORY_FLAG_TODO = 0         ///< TODO
+};
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Memory pool descriptor
+typedef struct _xe_mempool_desc_t
+{
+    const uint32_t version = XE_MAKE_VERSION( 1, 0 );   ///< [in] descriptor version
+
+    // TBD: some kind of device plus tile affinity mask?
+} xe_mempool_desc_t;
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Allocates memory that will be automatically managed
+/// @details
+///     - Managed memory is automatically migrated between the host and memory
+///       pool represented by... ?
+///       - TBD: Comprehend multi-tile.
+///       - TBD: Host or cross-device allcations?
+/// @remarks _Analogues:_
+///     - **cuMemAllocManaged**
+/// @returns
+///     - ::XE_RESULT_SUCCESS
+///     - ::XE_RESULT_ERROR_UNINITIALIZED
+///     - TODO
+xe_result_t __xecall
+  xeMemAllocManaged(
+    xe_mempool_desc_t* desc,        ///< [in] pointer to memory pool descriptor
+    xe_memory_flags_t flags,        ///< [in] flags specifying allocation and usage information
+    size_t size,                    ///< [in] size in bytes to allocate
+    uint32_t alignment,             ///< [in] minimum alignment in bytes for the allocation
+    xe_device_ptr_t* ptr            ///< [out] pointer to managed allocation
+    );
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Allocates memory specific to a device 
+/// @remarks _Analogues:_
+///     - **cuMemAlloc**
+/// @returns
+///     - ::XE_RESULT_SUCCESS
+///     - ::XE_RESULT_ERROR_UNINITIALIZED
+///     - TODO
+xe_result_t __xecall
+  xeMemAlloc(
+    xe_mempool_desc_t* desc,        ///< [in] pointer to memory pool descriptor
+    xe_memory_flags_t flags,        ///< [in] flags specifying allocation and usage information
+    size_t size,                    ///< [in] size in bytes to allocate
+    uint32_t alignment,             ///< [in] minimum alignment in bytes for the allocation
+    xe_device_ptr_t* ptr            ///< [out] pointer to managed allocation
+    );
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Frees allocated device memory or managed memory
+/// @remarks _Analogues:_
+///     - **cuMemFree**
+/// @returns
+///     - ::XE_RESULT_SUCCESS
+///     - ::XE_RESULT_ERROR_UNINITIALIZED
+///     - TODO
+xe_result_t __xecall
+  xeMemFree(
+    xe_device_ptr_t ptr             ///< [in] pointer to memory to free
+    );
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Supported memory advice hints
+XE_DECLARE_ENUM( xe_memory_advice_t )
+{
+    XE_MEMORY_ADVICE_TODO = 0       ///< TODO
+};
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Provides advice about the use of a memory range
+/// @details
+///     - TBD: likely will snap to page boundaries
+///     - TBD: which memory advise hints could/should we support?
+/// @remarks _Analogues:_
+///     - **cuMemAdvise**
+/// @returns
+///     - ::XE_RESULT_SUCCESS
+///     - ::XE_RESULT_ERROR_UNINITIALIZED
+///     - TODO
+xe_result_t __xecall
+  xeMemAdvise(
+    xe_mempool_desc_t* desc,        ///< [in] pointer to memory pool descriptor to apply advice to
+    xe_device_ptr_t ptr,            ///< [in] Pointer to the start of the memory range
+    size_t size,                    ///< [in] Size in bytes of the memory range
+    xe_memory_advice_t advice       ///< [in] Memory advice for the memory range
+    );
+
 #endif // _XE_MEMORY_H
