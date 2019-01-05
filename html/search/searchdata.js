@@ -1,6 +1,6 @@
 var indexSectionsWithContent =
 {
-  0: "_floprvx",
+  0: "_foprvx",
   1: "x",
   2: "rx",
   3: "ox",
@@ -8,7 +8,7 @@ var indexSectionsWithContent =
   5: "x",
   6: "x",
   7: "_x",
-  8: "l"
+  8: "p"
 };
 
 var indexSectionNames =

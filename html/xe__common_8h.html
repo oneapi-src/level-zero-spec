@@ -123,7 +123,7 @@ Macros</h2></td></tr>
 <tr class="memitem:a9123875cc8dd3cc62640c633aba1f894"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="xe__common_8h.html#a9123875cc8dd3cc62640c633aba1f894">XE_UMD_HEADER_VERSION</a>&#160;&#160;&#160;<a class="el" href="xe__common_8h.html#a7c541ed7fa8f9aa2d8ef98132ea245fc">XE_MAKE_VERSION</a>( 1, 0 )</td></tr>
 <tr class="memdesc:a9123875cc8dd3cc62640c633aba1f894"><td class="mdescLeft">&#160;</td><td class="mdescRight">Current header file version.  <a href="#a9123875cc8dd3cc62640c633aba1f894">More...</a><br /></td></tr>
 <tr class="separator:a9123875cc8dd3cc62640c633aba1f894"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aab180c7b54dae19a960d3b4425649275"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="xe__common_8h.html#aab180c7b54dae19a960d3b4425649275">__xecall</a>&#160;&#160;&#160;__stdcall</td></tr>
+<tr class="memitem:aab180c7b54dae19a960d3b4425649275"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="xe__common_8h.html#aab180c7b54dae19a960d3b4425649275">__xecall</a></td></tr>
 <tr class="memdesc:aab180c7b54dae19a960d3b4425649275"><td class="mdescLeft">&#160;</td><td class="mdescRight">Calling convention for all APIs.  <a href="#aab180c7b54dae19a960d3b4425649275">More...</a><br /></td></tr>
 <tr class="separator:aab180c7b54dae19a960d3b4425649275"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a6f8b49dc25370281c0b133c4597ac12b"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="xe__common_8h.html#a6f8b49dc25370281c0b133c4597ac12b">XE_DECLARE_HANDLE</a>(NAME)</td></tr>
@@ -165,14 +165,14 @@ Enumerations</h2></td></tr>
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">#define __xecall&#160;&#160;&#160;__stdcall</td>
+          <td class="memname">#define __xecall</td>
         </tr>
       </table>
 </div><div class="memdoc">
 
 <p>Calling convention for all APIs. </p>
 
-<p class="definition">Definition at line <a class="el" href="xe__common_8h_source.html#l00052">52</a> of file <a class="el" href="xe__common_8h_source.html">xe_common.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="xe__common_8h_source.html#l00055">55</a> of file <a class="el" href="xe__common_8h_source.html">xe_common.h</a>.</p>
 
 </div>
 </div>
@@ -194,7 +194,7 @@ Enumerations</h2></td></tr>
 
 <p>Generic macros for enumerator bit masks. </p>
 
-<p class="definition">Definition at line <a class="el" href="xe__common_8h_source.html#l00100">100</a> of file <a class="el" href="xe__common_8h_source.html">xe_common.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="xe__common_8h_source.html#l00103">103</a> of file <a class="el" href="xe__common_8h_source.html">xe_common.h</a>.</p>
 
 </div>
 </div>
@@ -216,7 +216,7 @@ Enumerations</h2></td></tr>
 
 <p>Declares typed enumeration. </p>
 
-<p class="definition">Definition at line <a class="el" href="xe__common_8h_source.html#l00090">90</a> of file <a class="el" href="xe__common_8h_source.html">xe_common.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="xe__common_8h_source.html#l00093">93</a> of file <a class="el" href="xe__common_8h_source.html">xe_common.h</a>.</p>
 
 </div>
 </div>
@@ -238,7 +238,7 @@ Enumerations</h2></td></tr>
 <b>Value:</b><div class="fragment"><div class="line"><span class="keyword">struct </span>NAME                                                                         \</div><div class="line">    {                                                                                   \</div><div class="line">        void* pDriverData;                      \</div><div class="line">                                                                                        \</div><div class="line">        NAME( <span class="keywordtype">void</span> ) : pDriverData( nullptr ) {}             \</div><div class="line">        explicit NAME( <span class="keywordtype">void</span>* p ) : pDriverData( p ) {}   \</div><div class="line">                                                                                        \</div><div class="line">        inline <span class="keywordtype">bool</span> operator==( <span class="keyword">const</span> NAME&amp; other ) <span class="keyword">const</span>      \</div><div class="line">        { <span class="keywordflow">return</span> pDriverData == other.pDriverData; }                                    \</div><div class="line">        inline <span class="keywordtype">bool</span> operator!=( <span class="keyword">const</span> NAME&amp; other ) <span class="keyword">const</span>     \</div><div class="line">        { <span class="keywordflow">return</span> pDriverData != other.pDriverData; }                                    \</div><div class="line">    }</div></div><!-- fragment -->
 <p>Declares a strongly typed handle. </p>
 
-<p class="definition">Definition at line <a class="el" href="xe__common_8h_source.html#l00058">58</a> of file <a class="el" href="xe__common_8h_source.html">xe_common.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="xe__common_8h_source.html#l00061">61</a> of file <a class="el" href="xe__common_8h_source.html">xe_common.h</a>.</p>
 
 </div>
 </div>
@@ -364,12 +364,12 @@ Enumerations</h2></td></tr>
 </td></tr>
 </table>
 
-<p class="definition">Definition at line <a class="el" href="xe__common_8h_source.html#l00107">107</a> of file <a class="el" href="xe__common_8h_source.html">xe_common.h</a>.</p>
-<div class="fragment"><div class="line"><a name="l00108"></a><span class="lineno">  108</span>&#160;{</div><div class="line"><a name="l00109"></a><span class="lineno">  109</span>&#160;    <a class="code" href="xe__common_8h.html#a0a81258bd4a02d562b77ce7bc03fe189af2c8a0ddedb58c6435b1e0acf6c27fe1">XE_RESULT_SUCCESS</a> = 0,                  </div><div class="line"><a name="l00110"></a><span class="lineno">  110</span>&#160;    <a class="code" href="xe__common_8h.html#a0a81258bd4a02d562b77ce7bc03fe189a3df2351e5ff91446c3dec05b9a9e31d8">XE_RESULT_ERROR_UNINITIALIZED</a>,          </div><div class="line"><a name="l00111"></a><span class="lineno">  111</span>&#160;    <a class="code" href="xe__common_8h.html#a0a81258bd4a02d562b77ce7bc03fe189ab4095f98f19805c0d8a2ebc61422a513">XE_RESULT_ERROR_INVALID_PARAMETER</a>,      </div><div class="line"><a name="l00112"></a><span class="lineno">  112</span>&#160;    <a class="code" href="xe__common_8h.html#a0a81258bd4a02d562b77ce7bc03fe189a496076e0b279dd037e48436c1a9f4f46">XE_RESULT_ERROR_OUT_OF_MEMORY</a>,          </div><div class="line"><a name="l00113"></a><span class="lineno">  113</span>&#160;    <a class="code" href="xe__common_8h.html#a0a81258bd4a02d562b77ce7bc03fe189a0e6ce01deeca2124e2f7c0b9ca5d4b11">XE_RESULT_ERROR_UNKNOWN</a> = 0xffffffff    </div><div class="line"><a name="l00114"></a><span class="lineno">  114</span>&#160;};</div><div class="ttc" id="xe__common_8h_html_a0a81258bd4a02d562b77ce7bc03fe189a496076e0b279dd037e48436c1a9f4f46"><div class="ttname"><a href="xe__common_8h.html#a0a81258bd4a02d562b77ce7bc03fe189a496076e0b279dd037e48436c1a9f4f46">XE_RESULT_ERROR_OUT_OF_MEMORY</a></div><div class="ttdoc">insufficient memory to satisfy call </div><div class="ttdef"><b>Definition:</b> <a href="xe__common_8h_source.html#l00112">xe_common.h:112</a></div></div>
-<div class="ttc" id="xe__common_8h_html_a0a81258bd4a02d562b77ce7bc03fe189a0e6ce01deeca2124e2f7c0b9ca5d4b11"><div class="ttname"><a href="xe__common_8h.html#a0a81258bd4a02d562b77ce7bc03fe189a0e6ce01deeca2124e2f7c0b9ca5d4b11">XE_RESULT_ERROR_UNKNOWN</a></div><div class="ttdoc">internal error </div><div class="ttdef"><b>Definition:</b> <a href="xe__common_8h_source.html#l00113">xe_common.h:113</a></div></div>
-<div class="ttc" id="xe__common_8h_html_a0a81258bd4a02d562b77ce7bc03fe189af2c8a0ddedb58c6435b1e0acf6c27fe1"><div class="ttname"><a href="xe__common_8h.html#a0a81258bd4a02d562b77ce7bc03fe189af2c8a0ddedb58c6435b1e0acf6c27fe1">XE_RESULT_SUCCESS</a></div><div class="ttdoc">success </div><div class="ttdef"><b>Definition:</b> <a href="xe__common_8h_source.html#l00109">xe_common.h:109</a></div></div>
-<div class="ttc" id="xe__common_8h_html_a0a81258bd4a02d562b77ce7bc03fe189a3df2351e5ff91446c3dec05b9a9e31d8"><div class="ttname"><a href="xe__common_8h.html#a0a81258bd4a02d562b77ce7bc03fe189a3df2351e5ff91446c3dec05b9a9e31d8">XE_RESULT_ERROR_UNINITIALIZED</a></div><div class="ttdoc">driver is not initialized </div><div class="ttdef"><b>Definition:</b> <a href="xe__common_8h_source.html#l00110">xe_common.h:110</a></div></div>
-<div class="ttc" id="xe__common_8h_html_a0a81258bd4a02d562b77ce7bc03fe189ab4095f98f19805c0d8a2ebc61422a513"><div class="ttname"><a href="xe__common_8h.html#a0a81258bd4a02d562b77ce7bc03fe189ab4095f98f19805c0d8a2ebc61422a513">XE_RESULT_ERROR_INVALID_PARAMETER</a></div><div class="ttdoc">invalid parameter provided </div><div class="ttdef"><b>Definition:</b> <a href="xe__common_8h_source.html#l00111">xe_common.h:111</a></div></div>
+<p class="definition">Definition at line <a class="el" href="xe__common_8h_source.html#l00110">110</a> of file <a class="el" href="xe__common_8h_source.html">xe_common.h</a>.</p>
+<div class="fragment"><div class="line"><a name="l00111"></a><span class="lineno">  111</span>&#160;{</div><div class="line"><a name="l00112"></a><span class="lineno">  112</span>&#160;    <a class="code" href="xe__common_8h.html#a0a81258bd4a02d562b77ce7bc03fe189af2c8a0ddedb58c6435b1e0acf6c27fe1">XE_RESULT_SUCCESS</a> = 0,                  </div><div class="line"><a name="l00113"></a><span class="lineno">  113</span>&#160;    <a class="code" href="xe__common_8h.html#a0a81258bd4a02d562b77ce7bc03fe189a3df2351e5ff91446c3dec05b9a9e31d8">XE_RESULT_ERROR_UNINITIALIZED</a>,          </div><div class="line"><a name="l00114"></a><span class="lineno">  114</span>&#160;    <a class="code" href="xe__common_8h.html#a0a81258bd4a02d562b77ce7bc03fe189ab4095f98f19805c0d8a2ebc61422a513">XE_RESULT_ERROR_INVALID_PARAMETER</a>,      </div><div class="line"><a name="l00115"></a><span class="lineno">  115</span>&#160;    <a class="code" href="xe__common_8h.html#a0a81258bd4a02d562b77ce7bc03fe189a496076e0b279dd037e48436c1a9f4f46">XE_RESULT_ERROR_OUT_OF_MEMORY</a>,          </div><div class="line"><a name="l00116"></a><span class="lineno">  116</span>&#160;    <a class="code" href="xe__common_8h.html#a0a81258bd4a02d562b77ce7bc03fe189a0e6ce01deeca2124e2f7c0b9ca5d4b11">XE_RESULT_ERROR_UNKNOWN</a> = 0xffffffff    </div><div class="line"><a name="l00117"></a><span class="lineno">  117</span>&#160;};</div><div class="ttc" id="xe__common_8h_html_a0a81258bd4a02d562b77ce7bc03fe189a496076e0b279dd037e48436c1a9f4f46"><div class="ttname"><a href="xe__common_8h.html#a0a81258bd4a02d562b77ce7bc03fe189a496076e0b279dd037e48436c1a9f4f46">XE_RESULT_ERROR_OUT_OF_MEMORY</a></div><div class="ttdoc">insufficient memory to satisfy call </div><div class="ttdef"><b>Definition:</b> <a href="xe__common_8h_source.html#l00115">xe_common.h:115</a></div></div>
+<div class="ttc" id="xe__common_8h_html_a0a81258bd4a02d562b77ce7bc03fe189a0e6ce01deeca2124e2f7c0b9ca5d4b11"><div class="ttname"><a href="xe__common_8h.html#a0a81258bd4a02d562b77ce7bc03fe189a0e6ce01deeca2124e2f7c0b9ca5d4b11">XE_RESULT_ERROR_UNKNOWN</a></div><div class="ttdoc">internal error </div><div class="ttdef"><b>Definition:</b> <a href="xe__common_8h_source.html#l00116">xe_common.h:116</a></div></div>
+<div class="ttc" id="xe__common_8h_html_a0a81258bd4a02d562b77ce7bc03fe189af2c8a0ddedb58c6435b1e0acf6c27fe1"><div class="ttname"><a href="xe__common_8h.html#a0a81258bd4a02d562b77ce7bc03fe189af2c8a0ddedb58c6435b1e0acf6c27fe1">XE_RESULT_SUCCESS</a></div><div class="ttdoc">success </div><div class="ttdef"><b>Definition:</b> <a href="xe__common_8h_source.html#l00112">xe_common.h:112</a></div></div>
+<div class="ttc" id="xe__common_8h_html_a0a81258bd4a02d562b77ce7bc03fe189a3df2351e5ff91446c3dec05b9a9e31d8"><div class="ttname"><a href="xe__common_8h.html#a0a81258bd4a02d562b77ce7bc03fe189a3df2351e5ff91446c3dec05b9a9e31d8">XE_RESULT_ERROR_UNINITIALIZED</a></div><div class="ttdoc">driver is not initialized </div><div class="ttdef"><b>Definition:</b> <a href="xe__common_8h_source.html#l00113">xe_common.h:113</a></div></div>
+<div class="ttc" id="xe__common_8h_html_a0a81258bd4a02d562b77ce7bc03fe189ab4095f98f19805c0d8a2ebc61422a513"><div class="ttname"><a href="xe__common_8h.html#a0a81258bd4a02d562b77ce7bc03fe189ab4095f98f19805c0d8a2ebc61422a513">XE_RESULT_ERROR_INVALID_PARAMETER</a></div><div class="ttdoc">invalid parameter provided </div><div class="ttdef"><b>Definition:</b> <a href="xe__common_8h_source.html#l00114">xe_common.h:114</a></div></div>
 </div><!-- fragment -->
 </div>
 </div>
@@ -379,7 +379,7 @@ Enumerations</h2></td></tr>
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
     <li class="navelem"><a class="el" href="xe__common_8h.html">xe_common.h</a></li>
-    <li class="footer">Generated on Fri Jan 4 2019 12:45:00 for Intel Xe Driver API by
+    <li class="footer">Generated by
     <a href="http://www.doxygen.org/index.html">
     <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.8.13 </li>
   </ul>
