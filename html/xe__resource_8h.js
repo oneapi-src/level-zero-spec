@@ -1,6 +1,7 @@
 var xe__resource_8h =
 [
     [ "xe_resource_desc_t", "structxe__resource__desc__t.html", "structxe__resource__desc__t" ],
+    [ "XE_RESOURCE_DESC_VERSION", "xe__resource_8h.html#a139f6c9ad5af1ef3f38c8e9bfb3af525", null ],
     [ "xe_resource_flags_t", "xe__resource_8h.html#af739fb0bed07b9e9012f37fa088cfaa1", [
       [ "XE_RESOURCE_FLAG_NONE", "xe__resource_8h.html#af739fb0bed07b9e9012f37fa088cfaa1af41f846d8441a9b3132e666b88e9ae4c", null ]
     ] ],

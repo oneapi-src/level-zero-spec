@@ -43,10 +43,14 @@ XE_DECLARE_ENUM( xe_command_list_flags_t )
 /// @brief Command List descriptor
 typedef struct _xe_command_list_desc_t
 {
-    const uint32_t version = XE_MAKE_VERSION( 1, 0 );   ///< [in] descriptor version
+    uint32_t version;                           ///< [in] descriptor version
 
-    xe_command_list_flags_t flags;                      ///< [in] creation flags
+    xe_command_list_flags_t flags;              ///< [in] creation flags
 } xe_command_list_desc_t;
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief API version of xe_command_list_desc_t
+#define XE_COMMAND_LIST_DESC_VERSION    XE_MAKE_VERSION( 1, 0 )
 
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Creates a command list

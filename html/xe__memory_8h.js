@@ -1,6 +1,7 @@
 var xe__memory_8h =
 [
     [ "xe_mempool_desc_t", "structxe__mempool__desc__t.html", "structxe__mempool__desc__t" ],
+    [ "XE_MEMPOOL_DESC_VERSION", "xe__memory_8h.html#a58916463891a23aec8725a69fec63cc4", null ],
     [ "xe_device_ptr_t", "xe__memory_8h.html#a9cbb54f2224765d9b0785862ae801dbe", null ],
     [ "xe_memory_advice_t", "xe__memory_8h.html#a6d23e6ed1a7a062c79aeb88e100026a7", [
       [ "XE_MEMORY_ADVICE_TODO", "xe__memory_8h.html#a6d23e6ed1a7a062c79aeb88e100026a7a4ff0d62859d07c23c990c933d40abd03", null ]

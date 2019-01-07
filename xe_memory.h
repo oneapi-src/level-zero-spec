@@ -47,10 +47,14 @@ XE_DECLARE_ENUM( xe_memory_flags_t )
 /// @brief Memory pool descriptor
 typedef struct _xe_mempool_desc_t
 {
-    const uint32_t version = XE_MAKE_VERSION( 1, 0 );   ///< [in] descriptor version
+    uint32_t version;       ///< [in] descriptor version
 
     // TBD: some kind of device plus tile affinity mask?
 } xe_mempool_desc_t;
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief API version of xe_mempool_desc_t
+#define XE_MEMPOOL_DESC_VERSION   XE_MAKE_VERSION( 1, 0 )
 
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Allocates memory that will be automatically managed

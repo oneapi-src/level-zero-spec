@@ -43,10 +43,14 @@ XE_DECLARE_ENUM( xe_event_flags_t )
 /// @brief Event descriptor
 typedef struct _xe_event_desc_t
 {
-    const uint32_t version = XE_MAKE_VERSION( 1, 0 );   ///< [in] descriptor version
+    uint32_t version;                       ///< [in] descriptor version
 
-    xe_event_flags_t flags;                             ///< [in] creation flags
+    xe_event_flags_t flags;                 ///< [in] creation flags
 } xe_event_desc_t;
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief API version of xe_event_desc_t
+#define XE_EVENT_DESC_VERSION   XE_MAKE_VERSION( 1, 0 )
 
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Creates an event object

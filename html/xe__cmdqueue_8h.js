@@ -1,6 +1,7 @@
 var xe__cmdqueue_8h =
 [
     [ "xe_command_queue_desc_t", "structxe__command__queue__desc__t.html", "structxe__command__queue__desc__t" ],
+    [ "XE_COMMAND_QUEUE_DESC_VERSION", "xe__cmdqueue_8h.html#a5a0cb3855622296698bd4b20b3b5a4c3", null ],
     [ "xe_command_queue_cacheconfig_t", "xe__cmdqueue_8h.html#a6f529ee447ed9c2e2dc18465c107517d", [
       [ "XE_COMMAND_QUEUE_CACHECONFIG_BIAS_NONE", "xe__cmdqueue_8h.html#a6f529ee447ed9c2e2dc18465c107517dacf8664cab6f992b49c2ac8c96d5bfb35", null ]
     ] ],
