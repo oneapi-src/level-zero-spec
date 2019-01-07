@@ -39,6 +39,11 @@ XE_DECLARE_ENUM( xe_event_flags_t )
     XE_EVENT_FLAG_NONE = 0                  ///< default behavior
 };
 
+
+//////////////////////////////////////////////////////////////////////////
+/// @brief
+typedef uint64_t xe_event_value_t;
+
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Event descriptor
 typedef struct _xe_event_desc_t
@@ -46,6 +51,9 @@ typedef struct _xe_event_desc_t
     uint32_t version;                       ///< [in] descriptor version
 
     xe_event_flags_t flags;                 ///< [in] creation flags
+
+    xe_event_value_t* location;             ///< [in] device memory location where a value
+                                            ///< will be written upon execution of an event
 } xe_event_desc_t;
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -98,7 +106,25 @@ xe_result_t __xecall
 xe_result_t __xecall
   xeCommandListEncodeEvent(
     xe_command_list_handle_t hCommandList,  ///< [in] handle of the command list
-    xe_event_handle_t hEvent                ///< [in] handle of the event 
+    xe_event_handle_t hEvent,               ///< [in] handle of the event 
+    xe_event_value_t value                  ///< [in] the value to write on event
+    );
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Waits for an event object's value to 
+/// @remarks _Analogues:_
+///     - **cuEventQuery**
+///     - cuEventSynchronize
+/// @returns
+///     - ::XE_RESULT_SUCCESS
+///     - ::XE_RESULT_ERROR_UNINITIALIZED
+///     - ::XE_RESULT_ERROR_INVALID_PARAMETER
+///         + invalid handle for hEvent
+///         + nullptr for value
+xe_result_t __xecall
+  xeEventQuery(
+    xe_event_handle_t hEvent,               ///< [in] handle of the event 
+    xe_event_value_t* value                 ///< [out] the current value of the event
     );
 
 #endif // _XE_EVENT_H
