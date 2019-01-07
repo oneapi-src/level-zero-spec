@@ -1,7 +1,8 @@
 var NAVTREE =
 [
   [ "Intel Xe Driver API", "index.html", [
-    [ "Programming Guide", "md__r_e_a_d_m_e.html", null ],
+    [ "Programming Guide", "md__programming__guide.html", null ],
+    [ "Requirements", "md__requirements.html", null ],
     [ "Data Structures", "annotated.html", [
       [ "Data Structures", "annotated.html", "annotated_dup" ],
       [ "Data Structure Index", "classes.html", null ],
@@ -16,6 +17,7 @@ var NAVTREE =
       [ "Globals", "globals.html", [
         [ "All", "globals.html", null ],
         [ "Functions", "globals_func.html", null ],
+        [ "Typedefs", "globals_type.html", null ],
         [ "Enumerations", "globals_enum.html", null ],
         [ "Enumerator", "globals_eval.html", null ],
         [ "Macros", "globals_defs.html", null ]

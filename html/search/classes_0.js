@@ -7,6 +7,7 @@ var searchData=
   ['xe_5fdevice_5fhandle_5ft',['xe_device_handle_t',['../structxe__device__handle__t.html',1,'']]],
   ['xe_5fevent_5fdesc_5ft',['xe_event_desc_t',['../structxe__event__desc__t.html',1,'']]],
   ['xe_5fevent_5fhandle_5ft',['xe_event_handle_t',['../structxe__event__handle__t.html',1,'']]],
+  ['xe_5fmempool_5fdesc_5ft',['xe_mempool_desc_t',['../structxe__mempool__desc__t.html',1,'']]],
   ['xe_5fresource_5fdesc_5ft',['xe_resource_desc_t',['../structxe__resource__desc__t.html',1,'']]],
   ['xe_5fresource_5fhandle_5ft',['xe_resource_handle_t',['../structxe__resource__handle__t.html',1,'']]]
 ];

@@ -15,6 +15,8 @@ var searchData=
   ['xe_5fdriver_5fversion_5f1_5f0',['XE_DRIVER_VERSION_1_0',['../xe__driver_8h.html#ab4941cf20c04442df726aaee5b2c3398a5d8cf9c88a2172c08ec58ae3cb3c470f',1,'xe_driver.h']]],
   ['xe_5fevent_5fflag_5fnone',['XE_EVENT_FLAG_NONE',['../xe__event_8h.html#aa5ae605f51fc360a9a75496825fe5ae1abbf3f5b1d1d1e484ef21d67f8ad8b7fc',1,'xe_event.h']]],
   ['xe_5finit_5fflag_5fnone',['XE_INIT_FLAG_NONE',['../xe__driver_8h.html#a23feded6ed1a07a052e5bf99495122b0a96f989ca76afda801922059f7031f0d8',1,'xe_driver.h']]],
+  ['xe_5fmemory_5fadvice_5ftodo',['XE_MEMORY_ADVICE_TODO',['../xe__memory_8h.html#a6d23e6ed1a7a062c79aeb88e100026a7a4ff0d62859d07c23c990c933d40abd03',1,'xe_memory.h']]],
+  ['xe_5fmemory_5fflag_5ftodo',['XE_MEMORY_FLAG_TODO',['../xe__memory_8h.html#a49abd6751f22d52be9ebad42d77857eda914c4ec181a617e473518088ff7d2d38',1,'xe_memory.h']]],
   ['xe_5fresource_5fflag_5fnone',['XE_RESOURCE_FLAG_NONE',['../xe__resource_8h.html#af739fb0bed07b9e9012f37fa088cfaa1af41f846d8441a9b3132e666b88e9ae4c',1,'xe_resource.h']]],
   ['xe_5fresult_5ferror_5finvalid_5fparameter',['XE_RESULT_ERROR_INVALID_PARAMETER',['../xe__common_8h.html#a0a81258bd4a02d562b77ce7bc03fe189ab4095f98f19805c0d8a2ebc61422a513',1,'xe_common.h']]],
   ['xe_5fresult_5ferror_5fout_5fof_5fmemory',['XE_RESULT_ERROR_OUT_OF_MEMORY',['../xe__common_8h.html#a0a81258bd4a02d562b77ce7bc03fe189a496076e0b279dd037e48436c1a9f4f46',1,'xe_common.h']]],

@@ -24,6 +24,10 @@ var searchData=
   ['xeeventcreate',['xeEventCreate',['../xe__event_8h.html#ad827fb47dca2fdbdc9b8bfe8e58e9009',1,'xe_event.h']]],
   ['xeeventdestroy',['xeEventDestroy',['../xe__event_8h.html#acaa1ed76b354dec8a0e59278363e6425',1,'xe_event.h']]],
   ['xeinit',['xeInit',['../xe__driver_8h.html#aa42ffd3cf61a3d417a57aff1bd1fbe14',1,'xe_driver.h']]],
+  ['xememadvise',['xeMemAdvise',['../xe__memory_8h.html#ae1ce8827fe11f52adfd953c74034cdc1',1,'xe_memory.h']]],
+  ['xememalloc',['xeMemAlloc',['../xe__memory_8h.html#a83b2a0d79b57c1ea4f58c41a4a0712e4',1,'xe_memory.h']]],
+  ['xememallocmanaged',['xeMemAllocManaged',['../xe__memory_8h.html#a427137015ebee425eda24eed416859e8',1,'xe_memory.h']]],
+  ['xememfree',['xeMemFree',['../xe__memory_8h.html#a3a14309df1f64e0c921f11814c87fac8',1,'xe_memory.h']]],
   ['xeresourcecreate',['xeResourceCreate',['../xe__resource_8h.html#a55cb645116d0333b3c4422a94ca9a48f',1,'xe_resource.h']]],
   ['xeresourcedestroy',['xeResourceDestroy',['../xe__resource_8h.html#a48232eb8d063b09bddb2bd3b37fcd095',1,'xe_resource.h']]]
 ];
