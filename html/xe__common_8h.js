@@ -13,6 +13,7 @@ var xe__common_8h =
     [ "XE_MAKE_VERSION", "xe__common_8h.html#a7c541ed7fa8f9aa2d8ef98132ea245fc", null ],
     [ "XE_MINOR_VERSION", "xe__common_8h.html#a9c8b3d053cc57fc34a49ff7acf698c8b", null ],
     [ "XE_UMD_HEADER_VERSION", "xe__common_8h.html#a9123875cc8dd3cc62640c633aba1f894", null ],
+    [ "xe_device_ptr_t", "xe__common_8h.html#a9cbb54f2224765d9b0785862ae801dbe", null ],
     [ "xe_result_t", "xe__common_8h.html#a0a81258bd4a02d562b77ce7bc03fe189", [
       [ "XE_RESULT_SUCCESS", "xe__common_8h.html#a0a81258bd4a02d562b77ce7bc03fe189af2c8a0ddedb58c6435b1e0acf6c27fe1", null ],
       [ "XE_RESULT_ERROR_UNINITIALIZED", "xe__common_8h.html#a0a81258bd4a02d562b77ce7bc03fe189a3df2351e5ff91446c3dec05b9a9e31d8", null ],
