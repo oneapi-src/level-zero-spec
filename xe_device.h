@@ -89,31 +89,109 @@ xe_result_t __xecall
 
 
 ///////////////////////////////////////////////////////////////////////////////
-/// @brief Supported device attributes
-XE_DECLARE_ENUM( xe_device_attribute_t )
-{
-    XE_DEVICE_ATTRIBUTE_MAX_THREADS = 1,            ///< maximum number of threads supported
-    XE_DEVICE_ATTRIBUTE_MAX_SIMULTANEOUS_QUEUES,    ///< maximum number of command queues that can execute in parallel
-    XE_DEVICE_ATTRIBUTE_TOTAL_MEMORY,               ///< total amount of memory available, in megabytes
-};
+#define XE_MAX_DEVICE_NAME 256
 
 ///////////////////////////////////////////////////////////////////////////////
-/// @brief Retrieves an attribute of the device
+/// @brief Device properties queried using xeGetDeviceProperties()
+typedef struct _xe_device_properties_t
+{
+    uint32_t vendorId;                    ///< [out] vendor id from PCI configuration
+    uint32_t deviceId;                    ///< [out] device id from PCI configuration
+    uint32_t coreClockRate;               ///< [out] Clock rate for device core.
+    uint32_t memClockRate;                ///< [out] Clock rate for device global memory
+    uint32_t memGlobalBusWidth;           ///< [out] Bus width between core and memory.
+    uint32_t totalLocalMemSize;           ///< [out] Total memory size in MB.
+    uint32_t l2CacheSize;                 ///< [out] Device L2 size
+    uint32_t numAsyncComputeEngines;      ///< [out] Num asynchronous compute engines
+    uint32_t numComputeCores;             ///< [out] Num compute cores
+ 
+    char device_name[XE_MAX_DEVICE_NAME]; ///< [out] device name
+
+} xe_device_properties_t;
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Device compute propertiess queried using xeGetDeviceComputeProperties()
+typedef struct _xe_device_compute_properties_t
+{
+    uint32_t MaxThreadsPerGroup;          ///< [out] Max threads per compute group
+    uint32_t MaxGroupDimX;                ///< [out] Max threads for X dimension in group
+    uint32_t MaxGroupDimY;                ///< [out] Max threads for Y dimension in group
+    uint32_t MaxGroupDimZ;                ///< [out] Max threads for Z dimension in group
+    uint32_t MaxDispatchDimX;             ///< [out] Max thread groups dispatched for x dimension
+    uint32_t MaxDipsatchDimY;             ///< [out] Max thread groups dispatched for y dimension
+    uint32_t MaxDispatchDimZ;             ///< [out] Max thread groups dispatched for z dimension
+    uint32_t MaxSharedLocalMemory;        ///< [out] Max shared local memory per group. @todo Should this be in device props?
+    uint32_t MaxGroupRegisters;           ///< [out] Max physical registers available per group
+    uint32_t WarpSize;                    ///< [out] Max threads that can be executed in lock-step.
+} xe_device_compute_properties_t;
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Device compute propertiess queried using xeGetDeviceMemoryProperties()
+typedef struct _xe_device_memory_properties_t
+{
+    bool     isIntegrated;              ///< [out] Host and device share same physical memory.
+    bool     hasSharedVirtualMemory;    ///< [out] Supports shared virtual memory (SVM)
+    uint32_t MaxResourceDims1D;         ///< [out] Maximum resource dimensions for 1D resources.
+    uint32_t MaxResourceDims2D;         ///< [out] Maximum resource dimensions for 2D resources.
+    uint32_t MaxResourceDims3D;         ///< [out] Maximum resource dimensions for 3D resources.
+    uint32_t MaxResourceArraySlices;    ///< [out] Maximum resource array slices
+} xe_device_memory_properties_t;
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Retrieves attributes of the device
 /// @remarks _Analogues:_
 ///     - **cuDeviceGetAttribute**
-///     - cuDeviceTotalMem
+///     - cuDeviceGetName
+///
 /// @returns
 ///     - ::XE_RESULT_SUCCESS
 ///     - ::XE_RESULT_ERROR_UNINITIALIZED
 ///     - ::XE_RESULT_ERROR_INVALID_PARAMETER
 ///         + invalid handle for hDevice
-///         + invalid value for attribute
-///         + nullptr for value
+///         + XE framework has not been initialized.
+///         + nullptr for provided for properties
 xe_result_t __xecall
-  xeDeviceGetAttribute(
-    xe_device_handle_t hDevice,         ///< [in] handle of the device object
-    xe_device_attribute_t attribute,    ///< [in] attribute to query
-    uint32_t* value                     ///< [out] value of the attribute
+    xeGetDeviceProperties(
+        xe_device_handle_t hDevice,                 ///< [in] handle of the device object
+        xe_device_properties_t* pDeviceProperties   ///< [out] query result for device properties
     );
-    
+
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Retrieves compute attributes of the device
+/// @remarks _Analogues:_
+///     - **cuDeviceGetAttribute**
+///
+/// @returns
+///     - ::XE_RESULT_SUCCESS
+///     - ::XE_RESULT_ERROR_UNINITIALIZED
+///     - ::XE_RESULT_ERROR_INVALID_PARAMETER
+///         + invalid handle for hDevice
+///         + XE framework has not been initialized.
+///         + nullptr for provided for properties
+xe_result_t __xecall
+    xeGetDeviceComputeProperties(
+        xe_device_handle_t hDevice,                        ///< [in] handle of the device object
+        xe_device_compute_properties_t* pComputeProperties ///< [out] query result for compute properties
+    );
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Retrieves memory attributes of the device
+/// @remarks _Analogues:_
+///     - **cuDeviceGetAttribute**
+///     - cuDeviceTotalMem
+///
+/// @returns
+///     - ::XE_RESULT_SUCCESS
+///     - ::XE_RESULT_ERROR_UNINITIALIZED
+///     - ::XE_RESULT_ERROR_INVALID_PARAMETER
+///         + invalid handle for hDevice
+///         + XE framework has not been initialized.
+///         + nullptr for provided for properties
+xe_result_t __xecall
+    xeGetDeviceMemoryProperties(
+        xe_device_handle_t hDevice,                        ///< [in] handle of the device object
+        xe_device_memory_properties_t* pMemProperties      ///< [out] query result for compute properties
+    );
+
 #endif // _XE_DEVICE_H
