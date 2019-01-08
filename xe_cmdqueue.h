@@ -206,6 +206,7 @@ xe_result_t __xecall
 /// @brief Synchronizes a command queue
 /// @remarks _Analogues:_
 ///     - **cuCtxSynchronize**
+/// @returns
 ///     - ::XE_RESULT_SUCCESS
 ///     - ::XE_RESULT_ERROR_UNINITIALIZED
 ///     - ::XE_RESULT_ERROR_INVALID_PARAMETER
