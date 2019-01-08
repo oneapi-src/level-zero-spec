@@ -14,9 +14,9 @@ var xe__event_8h =
       [ "XE_EVENT_WAIT_OPERATION_LESS_THAN", "xe__event_8h.html#ac62a000b9f3e0029602e0ae70d69573ca7eea3d120147cd0d11fcd4b228463cc2", null ],
       [ "XE_EVENT_WAIT_OPERATION_LESS_OR_EQUAL_TO", "xe__event_8h.html#ac62a000b9f3e0029602e0ae70d69573ca93a8fa12ad1fee22fef9b42ef47ffe57", null ]
     ] ],
-    [ "xeCommandListEncodeEventSignal", "xe__event_8h.html#af27a725ee4b3d151629d4181ad246f99", null ],
-    [ "xeCommandListEncodeEventWait", "xe__event_8h.html#a939f4f1d25fa6e7ef8c0ec370df2e703", null ],
     [ "xeEventCreate", "xe__event_8h.html#ad827fb47dca2fdbdc9b8bfe8e58e9009", null ],
     [ "xeEventDestroy", "xe__event_8h.html#acaa1ed76b354dec8a0e59278363e6425", null ],
+    [ "xeCommandListEncodeEventSignal", "xe__event_8h.html#af27a725ee4b3d151629d4181ad246f99", null ],
+    [ "xeCommandListEncodeEventWait", "xe__event_8h.html#a939f4f1d25fa6e7ef8c0ec370df2e703", null ],
     [ "xeEventQuery", "xe__event_8h.html#a0b9e8ef410662a59d82fb326e7946b01", null ]
 ];
