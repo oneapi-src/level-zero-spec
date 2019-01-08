@@ -99,6 +99,9 @@ Data Fields</h2></td></tr>
 <tr class="memitem:a79caa48d21e0cdd41c204c73496a9ab3"><td class="memItemLeft" align="right" valign="top"><a class="el" href="xe__cmdqueue_8h.html#ab3bc19a79aa63e22bade20d2fdde4fc6">xe_command_queue_flags_t</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structxe__command__queue__desc__t.html#a79caa48d21e0cdd41c204c73496a9ab3">flags</a></td></tr>
 <tr class="memdesc:a79caa48d21e0cdd41c204c73496a9ab3"><td class="mdescLeft">&#160;</td><td class="mdescRight">[in] creation flags  <a href="#a79caa48d21e0cdd41c204c73496a9ab3">More...</a><br /></td></tr>
 <tr class="separator:a79caa48d21e0cdd41c204c73496a9ab3"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a43af0e4cee6afb1cb4443a24431f3e4e"><td class="memItemLeft" align="right" valign="top">uint32_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structxe__command__queue__desc__t.html#a43af0e4cee6afb1cb4443a24431f3e4e">ordinal</a></td></tr>
+<tr class="memdesc:a43af0e4cee6afb1cb4443a24431f3e4e"><td class="mdescLeft">&#160;</td><td class="mdescRight">[in] must be less than value returned for <a class="el" href="xe__device_8h.html#a003ecc42f784db9cb9cd02f299849a87a29222b9f4757bb27029b24f9d9415935" title="maximum number of command queues that can execute in parallel ">XE_DEVICE_ATTRIBUTE_MAX_SIMULTANEOUS_QUEUES</a>  <a href="#a43af0e4cee6afb1cb4443a24431f3e4e">More...</a><br /></td></tr>
+<tr class="separator:a43af0e4cee6afb1cb4443a24431f3e4e"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><p>Command Queue descriptor. </p>
@@ -120,6 +123,24 @@ Data Fields</h2></td></tr>
 <p>[in] creation flags </p>
 
 <p class="definition">Definition at line <a class="el" href="xe__cmdqueue_8h_source.html#l00052">52</a> of file <a class="el" href="xe__cmdqueue_8h_source.html">xe_cmdqueue.h</a>.</p>
+
+</div>
+</div>
+<a id="a43af0e4cee6afb1cb4443a24431f3e4e"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a43af0e4cee6afb1cb4443a24431f3e4e">&#9670;&nbsp;</a></span>ordinal</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">uint32_t xe_command_queue_desc_t::ordinal</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>[in] must be less than value returned for <a class="el" href="xe__device_8h.html#a003ecc42f784db9cb9cd02f299849a87a29222b9f4757bb27029b24f9d9415935" title="maximum number of command queues that can execute in parallel ">XE_DEVICE_ATTRIBUTE_MAX_SIMULTANEOUS_QUEUES</a> </p>
+
+<p class="definition">Definition at line <a class="el" href="xe__cmdqueue_8h_source.html#l00054">54</a> of file <a class="el" href="xe__cmdqueue_8h_source.html">xe_cmdqueue.h</a>.</p>
 
 </div>
 </div>

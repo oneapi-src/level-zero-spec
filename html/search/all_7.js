@@ -77,6 +77,7 @@ var searchData=
   ['xe_5fresult_5fsuccess',['XE_RESULT_SUCCESS',['../xe__common_8h.html#a0a81258bd4a02d562b77ce7bc03fe189af2c8a0ddedb58c6435b1e0acf6c27fe1',1,'xe_common.h']]],
   ['xe_5fresult_5ft',['xe_result_t',['../xe__common_8h.html#a0a81258bd4a02d562b77ce7bc03fe189',1,'xe_common.h']]],
   ['xe_5fumd_5fheader_5fversion',['XE_UMD_HEADER_VERSION',['../xe__common_8h.html#a9123875cc8dd3cc62640c633aba1f894',1,'xe_common.h']]],
+  ['xecommandlistclose',['xeCommandListClose',['../xe__cmdlist_8h.html#ac672284706aab5e09f3b8d504691db24',1,'xe_cmdlist.h']]],
   ['xecommandlistcreate',['xeCommandListCreate',['../xe__cmdlist_8h.html#a6c4a5ed9a7d569d46b0ac28e475e46c4',1,'xe_cmdlist.h']]],
   ['xecommandlistdestroy',['xeCommandListDestroy',['../xe__cmdlist_8h.html#abdbe571489694586ed3919550f5ef882',1,'xe_cmdlist.h']]],
   ['xecommandlistencodeeventsignal',['xeCommandListEncodeEventSignal',['../xe__event_8h.html#af27a725ee4b3d151629d4181ad246f99',1,'xe_event.h']]],

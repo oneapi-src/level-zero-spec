@@ -5,6 +5,7 @@ var searchData=
   ['xe_5fdevice_5fhandle_5ft',['xe_device_handle_t',['../structxe__device__handle__t.html#a107878797a7e947b25d43016804ba7e2',1,'xe_device_handle_t::xe_device_handle_t(void)'],['../structxe__device__handle__t.html#ab8387f068ba85a8b0f5361d3211ca89c',1,'xe_device_handle_t::xe_device_handle_t(void *p)']]],
   ['xe_5fevent_5fhandle_5ft',['xe_event_handle_t',['../structxe__event__handle__t.html#a849c0be1be9778a1f249a84f327f627f',1,'xe_event_handle_t::xe_event_handle_t(void)'],['../structxe__event__handle__t.html#a8ca3695e3d980c593c2ca2684108f211',1,'xe_event_handle_t::xe_event_handle_t(void *p)']]],
   ['xe_5fresource_5fhandle_5ft',['xe_resource_handle_t',['../structxe__resource__handle__t.html#a775f02818731f0107dfc2c1b315b76dd',1,'xe_resource_handle_t::xe_resource_handle_t(void)'],['../structxe__resource__handle__t.html#afe477f60c11b11c04238a996308b6b7c',1,'xe_resource_handle_t::xe_resource_handle_t(void *p)']]],
+  ['xecommandlistclose',['xeCommandListClose',['../xe__cmdlist_8h.html#ac672284706aab5e09f3b8d504691db24',1,'xe_cmdlist.h']]],
   ['xecommandlistcreate',['xeCommandListCreate',['../xe__cmdlist_8h.html#a6c4a5ed9a7d569d46b0ac28e475e46c4',1,'xe_cmdlist.h']]],
   ['xecommandlistdestroy',['xeCommandListDestroy',['../xe__cmdlist_8h.html#abdbe571489694586ed3919550f5ef882',1,'xe_cmdlist.h']]],
   ['xecommandlistencodeeventsignal',['xeCommandListEncodeEventSignal',['../xe__event_8h.html#af27a725ee4b3d151629d4181ad246f99',1,'xe_event.h']]],
