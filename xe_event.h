@@ -88,7 +88,7 @@ xe_result_t __xecall
     );
 
 ///////////////////////////////////////////////////////////////////////////////
-/// @brief Encodes a signal of a fence into a command list
+/// @brief Encodes a signal of the event from the device into a command list
 /// @remarks _Analogues:_
 ///     - **cuEventRecord**
 /// @returns
@@ -104,7 +104,7 @@ xe_result_t __xecall
     );
 
 ///////////////////////////////////////////////////////////////////////////////
-/// @brief Encodes a wait on event into a command list
+/// @brief Encodes a wait on event from a host signal into a command list
 /// @remarks _Analogues:_
 ///     - none
 /// @returns
@@ -117,6 +117,34 @@ xe_result_t __xecall
   xeCommandListEncodeWaitOnEvent(
     xe_command_list_handle_t hCommandList,  ///< [in] handle of the command list
     xe_event_handle_t hEvent                ///< [in] handle of the event 
+    );
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Signals a event from host
+/// @remarks _Analogues:_
+///     - none
+/// @returns
+///     - ::XE_RESULT_SUCCESS
+///     - ::XE_RESULT_ERROR_UNINITIALIZED
+///     - ::XE_RESULT_ERROR_INVALID_PARAMETER
+///         + invalid handle for hFence
+xe_result_t __xecall
+  xeSignalEvent(
+    xe_fence_handle_t hFence                ///< [in] handle of the fence 
+    );
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief The current host thread waits on an event from a device signal
+/// @remarks _Analogues:_
+///     - **cuEventSynchronize**
+/// @returns
+///     - ::XE_RESULT_SUCCESS
+///     - ::XE_RESULT_ERROR_UNINITIALIZED
+///     - ::XE_RESULT_ERROR_INVALID_PARAMETER
+///         + invalid handle for hFence
+xe_result_t __xecall
+  xeWaitOnEvent(
+    xe_fence_handle_t hFence                ///< [in] handle of the fence 
     );
 
 ///////////////////////////////////////////////////////////////////////////////

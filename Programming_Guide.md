@@ -132,14 +132,18 @@ The following sample code demonstrates submission of commands to a command queue
 ```
 
 ## Synchronization Primitives
-There are three types of synchronization objects:
+There are three types of synchronization primitives:
 1. **Fences** - used to communicate to the host that command queue execution has completed.
-2. **Semaphores** - used to control execution of command lists across multiple, simultaneous command queues.
-3. **Events** - used as fine-grain host-to-device or device-to-host waits and signals within a command list.
+2. **Events** - used as fine-grain host-to-device or device-to-host waits and signals within a command list.
+3. **Semaphores** - used for fine-grain control of command lists execution across multiple, simultaneous command queues.
 
 ### Fences
-A fence can only be signaled from the device's command queue (e.g. between execution of command lists)
-and waits are only allowed on the host.
+- A fence can only be signaled from a device's command queue (e.g. between execution of command lists)
+and can only be waited upon from the host.
+- A fence only has two states: not signaled and signaled.
+- A fence can be enqueued on any command queue from the same device.
+- A fence cannot be enqueud on multiple command queues simultaneously.
+- A fence can be shared across processes.
 
 The following sample code demonstrates a sequence for creation, submission and querying of a fence:
 ```c
@@ -154,31 +158,73 @@ The following sample code demonstrates a sequence for creation, submission and q
     // Enqueue a signal of the fence into a command queue
     xeCommandQueueEnqueueSignalFence(xeCommandQueue, xeFence);
 
-    // 
-    xeFenceGetStatus
-    ...
-```
+    // Wait for fence to be signaled
+    if(XE_RESULT_SUCCESS != xeFenceQueryStatus(xeFence)
+    {
+        xeFenceWait(xeFence);
+    }
 
-### Semaphores
-The following sample code demonstrates...
-```c
+    xeFenceReset(xeFence);
     ...
 ```
 
 ### Events
-An event can be __either__:
-- signaled from within a command list (e.g. between execution of kernels) and waits occur on the host, **or**
-- signaled from the host, and waits occur within a command list.
+- An event can be __either__:
+  + signaled from within a device's command list (e.g. between execution of kernels) and waited upon from the host, **or**
+  + signaled from the host, and waited upon from within a device's command list.
+- An event only has two states: not signaled and signaled.
+- An event can be encoded into any command list from the same device.
+- An event cannot be encoded into multiple command lists simultaneously.
+- An event can be shared across processes.
 
-The following sample code demonstrates a sequence for creation of an event objects:
+The following sample code demonstrates a sequence for creation and submission of an event:
 ```c
-    // Create event(s)
+    // Create event
     xe_event_desc_t xeEventDesc = {
         XE_EVENT_DESC_VERSION,
-        XE_EVENT_FLAG_DEVICE_TO_HOST
+        XE_EVENT_FLAG_HOST_TO_DEVICE
     };
     xe_event_handle_t xeEvent;
     xeEventCreate(xeDevice, &xeEventDesc, &xeEvent);
+
+    // Encode a wait on an event into a command list
+    xeCommandListEncodeWaitOnEvent(xeCommandList, xeEvent);
+
+    // Enqueue wait via the command list into a command queue
+    xeCommandQueueEnqueueCommandList(xeCommandQueue, xeCommandList);
+
+    // Signal the device
+    xeEventSignal(xeEvent);
+    ...
+```
+
+### Semaphores
+- A semaphore can only be signaled and waited upon from within a device's command list.
+- A semaphore has both a state and a value.
+- A semaphore can be encoded into any command list from the same device.
+- A semaphore can be encoded into multiple command lists simultaneously.
+- A semaphore cannot be shared across processes.
+
+The following sample code demonstrates a sequence for creation and submission of a semaphore:
+```c
+    // Create semaphore
+    xe_semaphore_desc_t xeSemaphoreDesc = {
+        XE_SEMAPHORE_DESC_VERSION,
+        XE_SEMAPHORE_FLAG_NONE
+    };
+    xe_semaphore_handle_t xeSemaphore;
+    xeEventCreate(xeDevice, &xeSemaphoreDesc, &xeSemaphore);
+
+    // Encode a wait on an semaphore into a command list
+    xeCommandListEncodeSemaphoreWait(xeCommandList0, xeSemaphore,
+        XE_SEMAPHORE_WAIT_OPERATION_GREATER_OR_EQUAL_TO, 1);
+
+    // Encode a signal of a semaphore into another command list
+    xeCommandListEncodeSemaphoreSignal(xeCommandList1, xeSemaphore, 1);
+
+    // Enqueue the command lists into the parallel command queues
+    xeCommandQueueEnqueueCommandList(xeCommandQueue0, xeCommandList0);
+    xeCommandQueueEnqueueCommandList(xeCommandQueue1, xeCommandList1);
     ...
 ```
 

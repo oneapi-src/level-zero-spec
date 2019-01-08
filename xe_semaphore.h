@@ -40,7 +40,7 @@ XE_DECLARE_ENUM( xe_semaphore_flags_t )
 };
 
 ///////////////////////////////////////////////////////////////////////////////
-/// @brief
+/// @brief Semaphore value
 typedef uint64_t xe_semaphore_value_t;
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -59,7 +59,7 @@ typedef struct _xe_semaphore_desc_t
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Creates an semaphore object
 /// @remarks _Analogues:_
-///     - **cuEventCreate**
+///     - none
 /// @returns
 ///     - ::XE_RESULT_SUCCESS
 ///     - ::XE_RESULT_ERROR_UNINITIALIZED
@@ -79,7 +79,7 @@ xe_result_t __xecall
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Deletes an semaphore object
 /// @remarks _Analogues:_
-///     - **cuEventDestroy**
+///     - none
 /// @returns
 ///     - ::XE_RESULT_SUCCESS
 ///     - ::XE_RESULT_ERROR_UNINITIALIZED
@@ -93,7 +93,7 @@ xe_result_t __xecall
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Encodes an semaphore signal into a command list
 /// @remarks _Analogues:_
-///     - **cuEventRecord**
+///     - none
 /// @returns
 ///     - ::XE_RESULT_SUCCESS
 ///     - ::XE_RESULT_ERROR_UNINITIALIZED
@@ -104,7 +104,7 @@ xe_result_t __xecall
   xeCommandListEncodeSemaphoreSignal(
     xe_command_list_handle_t hCommandList,  ///< [in] handle of the command list
     xe_semaphore_handle_t hSemaphore,       ///< [in] handle of the semaphore 
-    xe_semaphore_value_t value                  ///< [in] the value to write on signal
+    xe_semaphore_value_t value              ///< [in] the value to write on signal
     );
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -122,7 +122,7 @@ XE_DECLARE_ENUM( xe_semaphore_wait_operation_t )
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Encodes an semaphore wait into a command list
 /// @remarks _Analogues:_
-///     - cuEventRecord
+///     - none
 /// @returns
 ///     - ::XE_RESULT_SUCCESS
 ///     - ::XE_RESULT_ERROR_UNINITIALIZED
@@ -131,8 +131,8 @@ XE_DECLARE_ENUM( xe_semaphore_wait_operation_t )
 ///         + invalid handle for hSemaphore
 xe_result_t __xecall
   xeCommandListEncodeSemaphoreWait(
-    xe_command_list_handle_t hCommandList,  ///< [in] handle of the command list
-    xe_semaphore_handle_t hSemaphore,               ///< [in] handle of the semaphore 
+    xe_command_list_handle_t hCommandList,      ///< [in] handle of the command list
+    xe_semaphore_handle_t hSemaphore,           ///< [in] handle of the semaphore 
     xe_semaphore_wait_operation_t operation,    ///< [in] wait operation type
     xe_semaphore_value_t value                  ///< [in] the value to wait upon
     );
@@ -140,8 +140,7 @@ xe_result_t __xecall
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Queries an semaphore object's value
 /// @remarks _Analogues:_
-///     - **cuEventQuery**
-///     - cuEventSynchronize
+///     - none
 /// @returns
 ///     - ::XE_RESULT_SUCCESS
 ///     - ::XE_RESULT_ERROR_UNINITIALIZED
@@ -149,8 +148,8 @@ xe_result_t __xecall
 ///         + invalid handle for hSemaphore
 ///         + nullptr for value
 xe_result_t __xecall
-  xeSemaphoreQuery(
-    xe_semaphore_handle_t hSemaphore,               ///< [in] handle of the semaphore 
+  xeSemaphoreQueryValue(
+    xe_semaphore_handle_t hSemaphore,           ///< [in] handle of the semaphore 
     xe_semaphore_value_t* value                 ///< [out] the current value of the semaphore
     );
 

@@ -10,6 +10,8 @@ var xe__event_8h =
     [ "xeEventDestroy", "xe__event_8h.html#acaa1ed76b354dec8a0e59278363e6425", null ],
     [ "xeCommandListEncodeSignalEvent", "xe__event_8h.html#ae018c712714271119e6ac87b64b7745e", null ],
     [ "xeCommandListEncodeWaitOnEvent", "xe__event_8h.html#aa526a260ff0f48f86a351985750cdd15", null ],
+    [ "xeSignalEvent", "xe__event_8h.html#a789cde0f4e9c544dbf14e650dea495d5", null ],
+    [ "xeWaitOnEvent", "xe__event_8h.html#a30cc85a9ad0120bf89b01835d55b0775", null ],
     [ "xeEventQueryStatus", "xe__event_8h.html#ad0f1f9dc2bfd3ddfdae5ae067747bb03", null ],
     [ "xeEventReset", "xe__event_8h.html#a7345a658a916628d43a7d480366684df", null ]
 ];

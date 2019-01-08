@@ -87,7 +87,7 @@ xe_result_t __xecall
     );
 
 ///////////////////////////////////////////////////////////////////////////////
-/// @brief Encodes a signal of a fence into a command queue
+/// @brief Encodes a signal of the fence into a command queue
 /// @remarks _Analogues:_
 ///     - **cuEventRecord**
 /// @returns
@@ -103,6 +103,20 @@ xe_result_t __xecall
     );
 
 ///////////////////////////////////////////////////////////////////////////////
+/// @brief The current host thread waits on a fence to be signaled
+/// @remarks _Analogues:_
+///     - **cuEventSynchronize**
+/// @returns
+///     - ::XE_RESULT_SUCCESS
+///     - ::XE_RESULT_ERROR_UNINITIALIZED
+///     - ::XE_RESULT_ERROR_INVALID_PARAMETER
+///         + invalid handle for hFence
+xe_result_t __xecall
+  xeWaitOnFence(
+    xe_fence_handle_t hFence                ///< [in] handle of the fence 
+    );
+
+///////////////////////////////////////////////////////////////////////////////
 /// @brief Queries a fence object's status
 /// @remarks _Analogues:_
 ///     - **cuEventQuery**
@@ -114,20 +128,6 @@ xe_result_t __xecall
 ///         + invalid handle for hFence
 xe_result_t __xecall
   xeFenceQueryStatus(
-    xe_fence_handle_t hFence                ///< [in] handle of the fence 
-    );
-
-///////////////////////////////////////////////////////////////////////////////
-/// @brief Forces the current CPU thread to wait on a fence to be signaled
-/// @remarks _Analogues:_
-///     - **cuEventSynchronize**
-/// @returns
-///     - ::XE_RESULT_SUCCESS
-///     - ::XE_RESULT_ERROR_UNINITIALIZED
-///     - ::XE_RESULT_ERROR_INVALID_PARAMETER
-///         + invalid handle for hFence
-xe_result_t __xecall
-  xeFenceWait(
     xe_fence_handle_t hFence                ///< [in] handle of the fence 
     );
 

@@ -35,7 +35,6 @@ var searchData=
   ['xefencedestroy',['xeFenceDestroy',['../xe__fence_8h.html#adee4d67b15b45adc2910ad4eb8273cae',1,'xe_fence.h']]],
   ['xefencequerystatus',['xeFenceQueryStatus',['../xe__fence_8h.html#acd430fa66d67e3ad68b2e37450aee444',1,'xe_fence.h']]],
   ['xefencereset',['xeFenceReset',['../xe__fence_8h.html#ab41293b0d54560c555c359c05831116a',1,'xe_fence.h']]],
-  ['xefencewait',['xeFenceWait',['../xe__fence_8h.html#a5ef2b492f561f673e0f999a89774f917',1,'xe_fence.h']]],
   ['xegetdevicecomputeproperties',['xeGetDeviceComputeProperties',['../xe__device_8h.html#a7272a4f2adf343854cfcd3da66ad9901',1,'xe_device.h']]],
   ['xegetdevicememoryproperties',['xeGetDeviceMemoryProperties',['../xe__device_8h.html#a9252992195be07ffd94e259517658a14',1,'xe_device.h']]],
   ['xegetdeviceproperties',['xeGetDeviceProperties',['../xe__device_8h.html#aabc58c17546a584b9ce8067b15934124',1,'xe_device.h']]],
@@ -48,5 +47,8 @@ var searchData=
   ['xeresourcedestroy',['xeResourceDestroy',['../xe__resource_8h.html#a48232eb8d063b09bddb2bd3b37fcd095',1,'xe_resource.h']]],
   ['xesemaphorecreate',['xeSemaphoreCreate',['../xe__semaphore_8h.html#abfcd61c60d909c85fba5642c66837a90',1,'xe_semaphore.h']]],
   ['xesemaphoredestroy',['xeSemaphoreDestroy',['../xe__semaphore_8h.html#a8b07526ba31b301f40806f9da35a4e65',1,'xe_semaphore.h']]],
-  ['xesemaphorequery',['xeSemaphoreQuery',['../xe__semaphore_8h.html#a43684a69b2acda767940cf749b99664f',1,'xe_semaphore.h']]]
+  ['xesemaphorequeryvalue',['xeSemaphoreQueryValue',['../xe__semaphore_8h.html#aa8321932c6846ab1cc2765cdeb30c7c9',1,'xe_semaphore.h']]],
+  ['xesignalevent',['xeSignalEvent',['../xe__event_8h.html#a789cde0f4e9c544dbf14e650dea495d5',1,'xe_event.h']]],
+  ['xewaitonevent',['xeWaitOnEvent',['../xe__event_8h.html#a30cc85a9ad0120bf89b01835d55b0775',1,'xe_event.h']]],
+  ['xewaitonfence',['xeWaitOnFence',['../xe__fence_8h.html#abaeacd127fad3106802ebade78562567',1,'xe_fence.h']]]
 ];
