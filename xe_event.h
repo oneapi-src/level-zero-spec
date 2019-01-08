@@ -125,7 +125,7 @@ XE_DECLARE_ENUM( xe_event_wait_operation_t )
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Encodes an event wait into a command list
 /// @remarks _Analogues:_
-///     - **cuEventRecord**
+///     - cuEventRecord
 /// @returns
 ///     - ::XE_RESULT_SUCCESS
 ///     - ::XE_RESULT_ERROR_UNINITIALIZED
@@ -141,7 +141,7 @@ xe_result_t __xecall
     );
 
 ///////////////////////////////////////////////////////////////////////////////
-/// @brief Waits for an event object's value to 
+/// @brief Queries an event object's value
 /// @remarks _Analogues:_
 ///     - **cuEventQuery**
 ///     - cuEventSynchronize
