@@ -121,18 +121,54 @@ xe_result_t __xecall
     );
 
 ///////////////////////////////////////////////////////////////////////////////
+/// @brief The current host thread waits on a multiple fences to be signaled
+/// @remarks _Analogues:_
+///     - none
+/// @returns
+///     - ::XE_RESULT_SUCCESS - signaled
+///     - ::XE_RESULT_ERROR_UNINITIALIZED
+///     - ::XE_RESULT_ERROR_INVALID_PARAMETER
+///         + invalid handle for hFences
+///         + fence is not enqueued in a command queue
+xe_result_t __xecall
+  xeWaitOnMultipleFences(
+    uint32_t numFences,                     ///< [in] number of fences in hFences
+    xe_fence_handle_t* hFences              ///< [in] pointer to array of handles of the fences
+    );
+
+///////////////////////////////////////////////////////////////////////////////
 /// @brief Queries a fence object's status
 /// @remarks _Analogues:_
 ///     - **cuEventQuery**
 /// @returns
 ///     - ::XE_RESULT_SUCCESS - signaled
-///     - ::XE_RESULT_NOT_READY - not signaled or not enqueued
+///     - ::XE_RESULT_NOT_READY - not signaled
 ///     - ::XE_RESULT_ERROR_UNINITIALIZED
 ///     - ::XE_RESULT_ERROR_INVALID_PARAMETER
 ///         + invalid handle for hFence
+///         + fence is not enqueued in a command queue
 xe_result_t __xecall
   xeFenceQueryStatus(
     xe_fence_handle_t hFence                ///< [in] handle of the fence 
+    );
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Queries the elapsed time between two fences
+/// @remarks _Analogues:_
+///     - **cuEventElapsedTime**
+/// @returns
+///     - ::XE_RESULT_SUCCESS
+///     - ::XE_RESULT_NOT_READY - either not signaled
+///     - ::XE_RESULT_ERROR_UNINITIALIZED
+///     - ::XE_RESULT_ERROR_INVALID_PARAMETER
+///         + invalid handle for hFence
+///         + either fence not enqueued
+///         + nullptr for pTime
+xe_result_t __xecall
+  xeFenceQueryElapsedTime(
+    xe_fence_handle_t hFenceStart,          ///< [in] handle of the fence 
+    xe_fence_handle_t hFenceEnd,            ///< [in] handle of the fence 
+    double_t* pTime                         ///< [out] time in milliseconds
     );
 
 ///////////////////////////////////////////////////////////////////////////////

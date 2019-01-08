@@ -134,9 +134,15 @@ Functions</h2></td></tr>
 <tr class="memitem:abaeacd127fad3106802ebade78562567"><td class="memItemLeft" align="right" valign="top"><a class="el" href="xe__common_8h.html#a0a81258bd4a02d562b77ce7bc03fe189">xe_result_t</a> <a class="el" href="xe__common_8h.html#aab180c7b54dae19a960d3b4425649275">__xecall</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="xe__fence_8h.html#abaeacd127fad3106802ebade78562567">xeWaitOnFence</a> (<a class="el" href="structxe__fence__handle__t.html">xe_fence_handle_t</a> hFence)</td></tr>
 <tr class="memdesc:abaeacd127fad3106802ebade78562567"><td class="mdescLeft">&#160;</td><td class="mdescRight">The current host thread waits on a fence to be signaled.  <a href="#abaeacd127fad3106802ebade78562567">More...</a><br /></td></tr>
 <tr class="separator:abaeacd127fad3106802ebade78562567"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a22c45542d8a00edb36793d1c326e5d24"><td class="memItemLeft" align="right" valign="top"><a class="el" href="xe__common_8h.html#a0a81258bd4a02d562b77ce7bc03fe189">xe_result_t</a> <a class="el" href="xe__common_8h.html#aab180c7b54dae19a960d3b4425649275">__xecall</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="xe__fence_8h.html#a22c45542d8a00edb36793d1c326e5d24">xeWaitOnMultipleFences</a> (uint32_t numFences, <a class="el" href="structxe__fence__handle__t.html">xe_fence_handle_t</a> *hFences)</td></tr>
+<tr class="memdesc:a22c45542d8a00edb36793d1c326e5d24"><td class="mdescLeft">&#160;</td><td class="mdescRight">The current host thread waits on a multiple fences to be signaled.  <a href="#a22c45542d8a00edb36793d1c326e5d24">More...</a><br /></td></tr>
+<tr class="separator:a22c45542d8a00edb36793d1c326e5d24"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:acd430fa66d67e3ad68b2e37450aee444"><td class="memItemLeft" align="right" valign="top"><a class="el" href="xe__common_8h.html#a0a81258bd4a02d562b77ce7bc03fe189">xe_result_t</a> <a class="el" href="xe__common_8h.html#aab180c7b54dae19a960d3b4425649275">__xecall</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="xe__fence_8h.html#acd430fa66d67e3ad68b2e37450aee444">xeFenceQueryStatus</a> (<a class="el" href="structxe__fence__handle__t.html">xe_fence_handle_t</a> hFence)</td></tr>
 <tr class="memdesc:acd430fa66d67e3ad68b2e37450aee444"><td class="mdescLeft">&#160;</td><td class="mdescRight">Queries a fence object's status.  <a href="#acd430fa66d67e3ad68b2e37450aee444">More...</a><br /></td></tr>
 <tr class="separator:acd430fa66d67e3ad68b2e37450aee444"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ac0153b55948dd301ae2ef5907306233b"><td class="memItemLeft" align="right" valign="top"><a class="el" href="xe__common_8h.html#a0a81258bd4a02d562b77ce7bc03fe189">xe_result_t</a> <a class="el" href="xe__common_8h.html#aab180c7b54dae19a960d3b4425649275">__xecall</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="xe__fence_8h.html#ac0153b55948dd301ae2ef5907306233b">xeFenceQueryElapsedTime</a> (<a class="el" href="structxe__fence__handle__t.html">xe_fence_handle_t</a> hFenceStart, <a class="el" href="structxe__fence__handle__t.html">xe_fence_handle_t</a> hFenceEnd, double_t *pTime)</td></tr>
+<tr class="memdesc:ac0153b55948dd301ae2ef5907306233b"><td class="mdescLeft">&#160;</td><td class="mdescRight">Queries the elapsed time between two fences.  <a href="#ac0153b55948dd301ae2ef5907306233b">More...</a><br /></td></tr>
+<tr class="separator:ac0153b55948dd301ae2ef5907306233b"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ab41293b0d54560c555c359c05831116a"><td class="memItemLeft" align="right" valign="top"><a class="el" href="xe__common_8h.html#a0a81258bd4a02d562b77ce7bc03fe189">xe_result_t</a> <a class="el" href="xe__common_8h.html#aab180c7b54dae19a960d3b4425649275">__xecall</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="xe__fence_8h.html#ab41293b0d54560c555c359c05831116a">xeFenceReset</a> (<a class="el" href="structxe__fence__handle__t.html">xe_fence_handle_t</a> hFence)</td></tr>
 <tr class="memdesc:ab41293b0d54560c555c359c05831116a"><td class="mdescLeft">&#160;</td><td class="mdescRight">Reset a fence back to the not signaled state.  <a href="#ab41293b0d54560c555c359c05831116a">More...</a><br /></td></tr>
 <tr class="separator:ab41293b0d54560c555c359c05831116a"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -386,6 +392,57 @@ Functions</h2></td></tr>
 
 </div>
 </div>
+<a id="a22c45542d8a00edb36793d1c326e5d24"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a22c45542d8a00edb36793d1c326e5d24">&#9670;&nbsp;</a></span>xeWaitOnMultipleFences()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="xe__common_8h.html#a0a81258bd4a02d562b77ce7bc03fe189">xe_result_t</a> <a class="el" href="xe__common_8h.html#aab180c7b54dae19a960d3b4425649275">__xecall</a> xeWaitOnMultipleFences </td>
+          <td>(</td>
+          <td class="paramtype">uint32_t&#160;</td>
+          <td class="paramname"><em>numFences</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="structxe__fence__handle__t.html">xe_fence_handle_t</a> *&#160;</td>
+          <td class="paramname"><em>hFences</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>The current host thread waits on a multiple fences to be signaled. </p>
+<dl class="section remark"><dt>Remarks</dt><dd><em>Analogues:</em><ul>
+<li>none </li>
+</ul>
+</dd></dl>
+<dl class="section return"><dt>Returns</dt><dd><ul>
+<li><a class="el" href="xe__common_8h.html#a0a81258bd4a02d562b77ce7bc03fe189af2c8a0ddedb58c6435b1e0acf6c27fe1" title="success">XE_RESULT_SUCCESS</a> - signaled</li>
+<li><a class="el" href="xe__common_8h.html#a0a81258bd4a02d562b77ce7bc03fe189a3df2351e5ff91446c3dec05b9a9e31d8" title="driver is not initialized">XE_RESULT_ERROR_UNINITIALIZED</a></li>
+<li><a class="el" href="xe__common_8h.html#a0a81258bd4a02d562b77ce7bc03fe189ab4095f98f19805c0d8a2ebc61422a513" title="invalid parameter provided">XE_RESULT_ERROR_INVALID_PARAMETER</a><ul>
+<li>invalid handle for hFences</li>
+<li>fence is not enqueued in a command queue </li>
+</ul>
+</li>
+</ul>
+</dd></dl>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[in]</td><td class="paramname">numFences</td><td>number of fences in hFences </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">hFences</td><td>pointer to array of handles of the fences </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
 <a id="acd430fa66d67e3ad68b2e37450aee444"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#acd430fa66d67e3ad68b2e37450aee444">&#9670;&nbsp;</a></span>xeFenceQueryStatus()</h2>
 
@@ -409,10 +466,11 @@ Functions</h2></td></tr>
 </dd></dl>
 <dl class="section return"><dt>Returns</dt><dd><ul>
 <li><a class="el" href="xe__common_8h.html#a0a81258bd4a02d562b77ce7bc03fe189af2c8a0ddedb58c6435b1e0acf6c27fe1" title="success">XE_RESULT_SUCCESS</a> - signaled</li>
-<li><a class="el" href="xe__common_8h.html#a0a81258bd4a02d562b77ce7bc03fe189ac3de19dc64a4f35fd0a3fa20f24bf297" title="synchronization primitive not signaled">XE_RESULT_NOT_READY</a> - not signaled or not enqueued</li>
+<li><a class="el" href="xe__common_8h.html#a0a81258bd4a02d562b77ce7bc03fe189ac3de19dc64a4f35fd0a3fa20f24bf297" title="synchronization primitive not signaled">XE_RESULT_NOT_READY</a> - not signaled</li>
 <li><a class="el" href="xe__common_8h.html#a0a81258bd4a02d562b77ce7bc03fe189a3df2351e5ff91446c3dec05b9a9e31d8" title="driver is not initialized">XE_RESULT_ERROR_UNINITIALIZED</a></li>
 <li><a class="el" href="xe__common_8h.html#a0a81258bd4a02d562b77ce7bc03fe189ab4095f98f19805c0d8a2ebc61422a513" title="invalid parameter provided">XE_RESULT_ERROR_INVALID_PARAMETER</a><ul>
-<li>invalid handle for hFence </li>
+<li>invalid handle for hFence</li>
+<li>fence is not enqueued in a command queue </li>
 </ul>
 </li>
 </ul>
@@ -420,6 +478,66 @@ Functions</h2></td></tr>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramdir">[in]</td><td class="paramname">hFence</td><td>handle of the fence </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
+<a id="ac0153b55948dd301ae2ef5907306233b"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ac0153b55948dd301ae2ef5907306233b">&#9670;&nbsp;</a></span>xeFenceQueryElapsedTime()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="xe__common_8h.html#a0a81258bd4a02d562b77ce7bc03fe189">xe_result_t</a> <a class="el" href="xe__common_8h.html#aab180c7b54dae19a960d3b4425649275">__xecall</a> xeFenceQueryElapsedTime </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="structxe__fence__handle__t.html">xe_fence_handle_t</a>&#160;</td>
+          <td class="paramname"><em>hFenceStart</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="structxe__fence__handle__t.html">xe_fence_handle_t</a>&#160;</td>
+          <td class="paramname"><em>hFenceEnd</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">double_t *&#160;</td>
+          <td class="paramname"><em>pTime</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Queries the elapsed time between two fences. </p>
+<dl class="section remark"><dt>Remarks</dt><dd><em>Analogues:</em><ul>
+<li><b>cuEventElapsedTime</b> </li>
+</ul>
+</dd></dl>
+<dl class="section return"><dt>Returns</dt><dd><ul>
+<li><a class="el" href="xe__common_8h.html#a0a81258bd4a02d562b77ce7bc03fe189af2c8a0ddedb58c6435b1e0acf6c27fe1" title="success">XE_RESULT_SUCCESS</a></li>
+<li><a class="el" href="xe__common_8h.html#a0a81258bd4a02d562b77ce7bc03fe189ac3de19dc64a4f35fd0a3fa20f24bf297" title="synchronization primitive not signaled">XE_RESULT_NOT_READY</a> - either not signaled</li>
+<li><a class="el" href="xe__common_8h.html#a0a81258bd4a02d562b77ce7bc03fe189a3df2351e5ff91446c3dec05b9a9e31d8" title="driver is not initialized">XE_RESULT_ERROR_UNINITIALIZED</a></li>
+<li><a class="el" href="xe__common_8h.html#a0a81258bd4a02d562b77ce7bc03fe189ab4095f98f19805c0d8a2ebc61422a513" title="invalid parameter provided">XE_RESULT_ERROR_INVALID_PARAMETER</a><ul>
+<li>invalid handle for hFence</li>
+<li>either fence not enqueued</li>
+<li>nullptr for pTime </li>
+</ul>
+</li>
+</ul>
+</dd></dl>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[in]</td><td class="paramname">hFenceStart</td><td>handle of the fence </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">hFenceEnd</td><td>handle of the fence </td></tr>
+    <tr><td class="paramdir">[out]</td><td class="paramname">pTime</td><td>time in milliseconds </td></tr>
   </table>
   </dd>
 </dl>

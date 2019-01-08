@@ -18,5 +18,6 @@ var xe__semaphore_8h =
     [ "xeSemaphoreDestroy", "xe__semaphore_8h.html#a8b07526ba31b301f40806f9da35a4e65", null ],
     [ "xeCommandListEncodeSemaphoreSignal", "xe__semaphore_8h.html#aef5e682c54ae5c5554357ef96bf70d19", null ],
     [ "xeCommandListEncodeSemaphoreWait", "xe__semaphore_8h.html#ac3383f49792f4b1da9c8391555ed7587", null ],
-    [ "xeSemaphoreQueryValue", "xe__semaphore_8h.html#aa8321932c6846ab1cc2765cdeb30c7c9", null ]
+    [ "xeSemaphoreQueryValue", "xe__semaphore_8h.html#a291e67386801564ad2ffbeb489c1cc6a", null ],
+    [ "xeSemaphoreReset", "xe__semaphore_8h.html#ac628d3d0874a43fcdc55685e52f1f677", null ]
 ];

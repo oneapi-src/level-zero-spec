@@ -146,11 +146,23 @@ xe_result_t __xecall
 ///     - ::XE_RESULT_ERROR_UNINITIALIZED
 ///     - ::XE_RESULT_ERROR_INVALID_PARAMETER
 ///         + invalid handle for hSemaphore
-///         + nullptr for value
 xe_result_t __xecall
   xeSemaphoreQueryValue(
-    xe_semaphore_handle_t hSemaphore,           ///< [in] handle of the semaphore 
-    xe_semaphore_value_t* value                 ///< [out] the current value of the semaphore
+    xe_semaphore_handle_t hSemaphore            ///< [in] handle of the semaphore 
+    );
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Reset a semaphore back to the not signaled state, with value of 0
+/// @remarks _Analogues:_
+///     - none
+/// @returns
+///     - ::XE_RESULT_SUCCESS
+///     - ::XE_RESULT_ERROR_UNINITIALIZED
+///     - ::XE_RESULT_ERROR_INVALID_PARAMETER
+///         + invalid handle for hFence
+xe_result_t __xecall
+  xeSemaphoreReset(
+    xe_semaphore_handle_t hSemaphore            ///< [in] handle of the semaphore 
     );
 
 #endif // _XE_SEMAPHORE_H

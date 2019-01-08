@@ -36,8 +36,9 @@
 /// @brief Supported event creation flags
 XE_DECLARE_ENUM( xe_event_flags_t )
 {
-    XE_EVENT_FLAG_HOST_TO_DEVICE = 0,       ///< signals from host, waits on device
-    XE_EVENT_FLAG_DEVICE_TO_HOST = 1        ///< signals from device, waits on host
+    XE_EVENT_FLAG_HOST_TO_DEVICE = XE_BIT(0),   ///< signals from host, waits on device
+    XE_EVENT_FLAG_DEVICE_TO_HOST = XE_BIT(1),   ///< signals from device, waits on host
+    XE_EVENT_FLAG_DEVICE_TO_DEVICE = XE_BIT(2)  ///< signals from device, waits on another device
 };
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -97,7 +98,9 @@ xe_result_t __xecall
 ///     - ::XE_RESULT_ERROR_INVALID_PARAMETER
 ///         + invalid handle for hCommandList
 ///         + invalid handle for hEvent
-///         + event creation flag was not ::XE_EVENT_FLAG_DEVICE_TO_HOST
+///         + event creation flag did not set ::XE_EVENT_FLAG_DEVICE_TO_HOST or ::XE_EVENT_FLAG_DEVICE_TO_DEVICE
+///         + event is in signaled state
+///         + event is used by another command list
 xe_result_t __xecall
   xeCommandListEncodeSignalEvent(
     xe_command_list_handle_t hCommandList,  ///< [in] handle of the command list
@@ -114,11 +117,51 @@ xe_result_t __xecall
 ///     - ::XE_RESULT_ERROR_INVALID_PARAMETER
 ///         + invalid handle for hCommandList
 ///         + invalid handle for hEvent
-///         + event creation flag was not ::XE_EVENT_FLAG_HOST_TO_DEVICE
+///         + event creation flag did not set ::XE_EVENT_FLAG_HOST_TO_DEVICE or ::XE_EVENT_FLAG_DEVICE_TO_DEVICE
+///         + event is used by another command list
 xe_result_t __xecall
   xeCommandListEncodeWaitOnEvent(
     xe_command_list_handle_t hCommandList,  ///< [in] handle of the command list
     xe_event_handle_t hEvent                ///< [in] handle of the event 
+    );
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Encodes a signal of multiple events from the device into a command list
+/// @remarks _Analogues:_
+///     - **cuEventRecord**
+/// @returns
+///     - ::XE_RESULT_SUCCESS
+///     - ::XE_RESULT_ERROR_UNINITIALIZED
+///     - ::XE_RESULT_ERROR_INVALID_PARAMETER
+///         + invalid handle for hCommandList
+///         + invalid handle for hEvent
+///         + event creation flag did not set ::XE_EVENT_FLAG_DEVICE_TO_HOST or ::XE_EVENT_FLAG_DEVICE_TO_DEVICE
+///         + event is in signaled state
+///         + event is used by another command list
+xe_result_t __xecall
+  xeCommandListEncodeSignalMultipleEvents(
+    xe_command_list_handle_t hCommandList,  ///< [in] handle of the command list
+    uint32_t numEvents,                     ///< [in] number of events in hEvents
+    xe_event_handle_t* hEvents              ///< [in] pointer to array of handles of the events 
+    );
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Encodes a wait on multiple events from a host signal into a command list
+/// @remarks _Analogues:_
+///     - none
+/// @returns
+///     - ::XE_RESULT_SUCCESS
+///     - ::XE_RESULT_ERROR_UNINITIALIZED
+///     - ::XE_RESULT_ERROR_INVALID_PARAMETER
+///         + invalid handle for hCommandList
+///         + invalid handle for hEvent
+///         + event creation flag did not set ::XE_EVENT_FLAG_HOST_TO_DEVICE or ::XE_EVENT_FLAG_DEVICE_TO_DEVICE
+///         + event is used by another command list
+xe_result_t __xecall
+  xeCommandListEncodeWaitOnMultipleEvents(
+    xe_command_list_handle_t hCommandList,  ///< [in] handle of the command list
+    uint32_t numEvents,                     ///< [in] number of events in hEvents
+    xe_event_handle_t* hEvents              ///< [in] pointer to array of handles of the events 
     );
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -129,11 +172,12 @@ xe_result_t __xecall
 ///     - ::XE_RESULT_SUCCESS
 ///     - ::XE_RESULT_ERROR_UNINITIALIZED
 ///     - ::XE_RESULT_ERROR_INVALID_PARAMETER
-///         + invalid handle for hFence
-///         + event creation flag was not ::XE_EVENT_FLAG_HOST_TO_DEVICE
+///         + invalid handle for hEvent
+///         + event creation flag did not set ::XE_EVENT_FLAG_HOST_TO_DEVICE or ::XE_EVENT_FLAG_DEVICE_TO_DEVICE
+///         + event is in signaled state
 xe_result_t __xecall
   xeSignalEvent(
-    xe_fence_handle_t hFence                ///< [in] handle of the fence 
+    xe_event_handle_t hEvent                ///< [in] handle of the event 
     );
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -144,11 +188,44 @@ xe_result_t __xecall
 ///     - ::XE_RESULT_SUCCESS - signaled
 ///     - ::XE_RESULT_ERROR_UNINITIALIZED
 ///     - ::XE_RESULT_ERROR_INVALID_PARAMETER
-///         + invalid handle for hFence
-///         + event creation flag was not ::XE_EVENT_FLAG_DEVICE_TO_HOST
+///         + invalid handle for hEvent
+///         + event creation flag did not set ::XE_EVENT_FLAG_DEVICE_TO_HOST or ::XE_EVENT_FLAG_DEVICE_TO_DEVICE
 xe_result_t __xecall
   xeWaitOnEvent(
-    xe_fence_handle_t hFence                ///< [in] handle of the fence 
+    xe_event_handle_t hEvent                ///< [in] handle of the event 
+    );
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Signals multiple events from host
+/// @remarks _Analogues:_
+///     - none
+/// @returns
+///     - ::XE_RESULT_SUCCESS
+///     - ::XE_RESULT_ERROR_UNINITIALIZED
+///     - ::XE_RESULT_ERROR_INVALID_PARAMETER
+///         + invalid handle in hFences
+///         + event creation flag did not set ::XE_EVENT_FLAG_HOST_TO_DEVICE or ::XE_EVENT_FLAG_DEVICE_TO_DEVICE
+///         + event is in signaled state
+xe_result_t __xecall
+  xeSignalMultipleEvents(
+    uint32_t numEvents,                     ///< [in] number of events in hEvents
+    xe_event_handle_t* hEvents              ///< [in] pointer to handles of the events 
+    );
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief The current host thread waits on multiple events from a device signal
+/// @remarks _Analogues:_
+///     - none
+/// @returns
+///     - ::XE_RESULT_SUCCESS - signaled
+///     - ::XE_RESULT_ERROR_UNINITIALIZED
+///     - ::XE_RESULT_ERROR_INVALID_PARAMETER
+///         + invalid handle in hEvents
+///         + event creation flag did not set ::XE_EVENT_FLAG_DEVICE_TO_HOST or ::XE_EVENT_FLAG_DEVICE_TO_DEVICE
+xe_result_t __xecall
+  xeWaitOnMultipleEvents(
+    uint32_t numEvents,                     ///< [in] number of events in hEvents
+    xe_event_handle_t* hEvents              ///< [in] pointer to array of handles of the events 
     );
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -164,6 +241,25 @@ xe_result_t __xecall
 xe_result_t __xecall
   xeEventQueryStatus(
     xe_event_handle_t hEvent                ///< [in] handle of the event 
+    );
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Queries the elapsed time between two events
+/// @remarks _Analogues:_
+///     - **cuEventElapsedTime**
+/// @returns
+///     - ::XE_RESULT_SUCCESS - signaled
+///     - ::XE_RESULT_NOT_READY - not signaled
+///     - ::XE_RESULT_ERROR_UNINITIALIZED
+///     - ::XE_RESULT_ERROR_INVALID_PARAMETER
+///         + invalid handle for hEvent
+///         + either event not enqueued
+///         + nullptr for pTime
+xe_result_t __xecall
+  xeEventQueryElapsedTime(
+    xe_event_handle_t hEventStart,          ///< [in] handle of the event 
+    xe_event_handle_t hEventEnd,            ///< [in] handle of the event 
+    double_t* pTime                         ///< [out] time in milliseconds
     );
 
 ///////////////////////////////////////////////////////////////////////////////

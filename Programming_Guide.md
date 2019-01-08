@@ -134,8 +134,8 @@ The following sample code demonstrates submission of commands to a command queue
 ## Synchronization Primitives
 There are three types of synchronization primitives:
 1. **Fences** - used to communicate to the host that command queue execution has completed.
-2. **Events** - used as fine-grain host-to-device or device-to-host waits and signals within a command list.
-3. **Semaphores** - used for fine-grain control of command lists execution across multiple, simultaneous command queues.
+2. **Events** - used as fine-grain host-to-device, device-to-host or device-to-device waits and signals within a command list.
+3. **Semaphores** - used for fine-grain control of command lists execution across multiple, simultaneous command queues within a device.
 
 ### Fences
 - A fence can only be signaled from a device's command queue (e.g. between execution of command lists)
@@ -170,7 +170,7 @@ The following sample code demonstrates a sequence for creation, submission and q
 
 ### Events
 - An event can be __either__:
-  + signaled from within a device's command list (e.g. between execution of kernels) and waited upon from the host, **or**
+  + signaled from within a device's command list (e.g. between execution of kernels) and waited upon from the host or another device, **or**
   + signaled from the host, and waited upon from within a device's command list.
 - An event only has two states: not signaled and signaled.
 - An event can be encoded into any command list from the same device.
@@ -182,7 +182,7 @@ The following sample code demonstrates a sequence for creation and submission of
     // Create event
     xe_event_desc_t xeEventDesc = {
         XE_EVENT_DESC_VERSION,
-        XE_EVENT_FLAG_HOST_TO_DEVICE
+        XE_EVENT_FLAG_NONE
     };
     xe_event_handle_t xeEvent;
     xeEventCreate(xeDevice, &xeEventDesc, &xeEvent);

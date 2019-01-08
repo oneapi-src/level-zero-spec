@@ -10,6 +10,7 @@ var searchData=
   ['xe_5fcommand_5fqueue_5fparameter_5fpriority',['XE_COMMAND_QUEUE_PARAMETER_PRIORITY',['../xe__cmdqueue_8h.html#a1c93d3851d6295cf5bac3cb623071c19a9dd6911dd6ba8cf85aba4f27096dd3db',1,'xe_cmdqueue.h']]],
   ['xe_5fcommand_5fqueue_5fpriority_5fnormal',['XE_COMMAND_QUEUE_PRIORITY_NORMAL',['../xe__cmdqueue_8h.html#aca234f4ba5add6615bd73b7a31a2b70ea414bcad6bece242d7c93a78facac8b12',1,'xe_cmdqueue.h']]],
   ['xe_5fdriver_5fversion_5f1_5f0',['XE_DRIVER_VERSION_1_0',['../xe__driver_8h.html#ab4941cf20c04442df726aaee5b2c3398a5d8cf9c88a2172c08ec58ae3cb3c470f',1,'xe_driver.h']]],
+  ['xe_5fevent_5fflag_5fdevice_5fto_5fdevice',['XE_EVENT_FLAG_DEVICE_TO_DEVICE',['../xe__event_8h.html#aa5ae605f51fc360a9a75496825fe5ae1a2efe16ad5f1ec12517c35355706d243d',1,'xe_event.h']]],
   ['xe_5fevent_5fflag_5fdevice_5fto_5fhost',['XE_EVENT_FLAG_DEVICE_TO_HOST',['../xe__event_8h.html#aa5ae605f51fc360a9a75496825fe5ae1a658ed84b2778e04278b513836fc4b45b',1,'xe_event.h']]],
   ['xe_5fevent_5fflag_5fhost_5fto_5fdevice',['XE_EVENT_FLAG_HOST_TO_DEVICE',['../xe__event_8h.html#aa5ae605f51fc360a9a75496825fe5ae1a526c24b0cab2b2105065f4002125a847',1,'xe_event.h']]],
   ['xe_5ffence_5fflag_5fnone',['XE_FENCE_FLAG_NONE',['../xe__fence_8h.html#a1d911e9a32d9d36ea19093fdb73c655ea294ee265225c3aec02578a0a66ca3b1d',1,'xe_fence.h']]],

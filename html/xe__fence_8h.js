@@ -9,6 +9,8 @@ var xe__fence_8h =
     [ "xeFenceDestroy", "xe__fence_8h.html#adee4d67b15b45adc2910ad4eb8273cae", null ],
     [ "xeCommandQueueEnqueueSignalFence", "xe__fence_8h.html#aad068aad7b57dd9a0ae9afa8d649114f", null ],
     [ "xeWaitOnFence", "xe__fence_8h.html#abaeacd127fad3106802ebade78562567", null ],
+    [ "xeWaitOnMultipleFences", "xe__fence_8h.html#a22c45542d8a00edb36793d1c326e5d24", null ],
     [ "xeFenceQueryStatus", "xe__fence_8h.html#acd430fa66d67e3ad68b2e37450aee444", null ],
+    [ "xeFenceQueryElapsedTime", "xe__fence_8h.html#ac0153b55948dd301ae2ef5907306233b", null ],
     [ "xeFenceReset", "xe__fence_8h.html#ab41293b0d54560c555c359c05831116a", null ]
 ];
