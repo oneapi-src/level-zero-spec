@@ -9,6 +9,7 @@ var searchData=
   ['xe_5fdevice_5fattribute_5ft',['xe_device_attribute_t',['../xe__device_8h.html#a003ecc42f784db9cb9cd02f299849a87',1,'xe_device.h']]],
   ['xe_5fdriver_5fversion_5ft',['xe_driver_version_t',['../xe__driver_8h.html#ab4941cf20c04442df726aaee5b2c3398',1,'xe_driver.h']]],
   ['xe_5fevent_5fflags_5ft',['xe_event_flags_t',['../xe__event_8h.html#aa5ae605f51fc360a9a75496825fe5ae1',1,'xe_event.h']]],
+  ['xe_5fevent_5fwait_5foperation_5ft',['xe_event_wait_operation_t',['../xe__event_8h.html#ac62a000b9f3e0029602e0ae70d69573c',1,'xe_event.h']]],
   ['xe_5finit_5fflags_5ft',['xe_init_flags_t',['../xe__driver_8h.html#a23feded6ed1a07a052e5bf99495122b0',1,'xe_driver.h']]],
   ['xe_5fmemory_5fadvice_5ft',['xe_memory_advice_t',['../xe__memory_8h.html#a6d23e6ed1a7a062c79aeb88e100026a7',1,'xe_memory.h']]],
   ['xe_5fmemory_5fflags_5ft',['xe_memory_flags_t',['../xe__memory_8h.html#a49abd6751f22d52be9ebad42d77857ed',1,'xe_memory.h']]],

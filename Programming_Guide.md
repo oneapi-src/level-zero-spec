@@ -42,3 +42,4 @@ The following code demonstrates a basic initialization sequence:
 The following diagram illustrates the hierarchy of command lists to command queues and the device.
 ![Hierarchy](../images/cmdqueue.png?raw=true)
 
+## Synchronization Events

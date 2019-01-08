@@ -94,7 +94,7 @@ xe_result_t __xecall
     );
 
 ///////////////////////////////////////////////////////////////////////////////
-/// @brief Encodes an event object into a command list
+/// @brief Encodes an event signal into a command list
 /// @remarks _Analogues:_
 ///     - **cuEventRecord**
 /// @returns
@@ -104,10 +104,40 @@ xe_result_t __xecall
 ///         + invalid handle for hCommandList
 ///         + invalid handle for hEvent
 xe_result_t __xecall
-  xeCommandListEncodeEvent(
+  xeCommandListEncodeEventSignal(
     xe_command_list_handle_t hCommandList,  ///< [in] handle of the command list
     xe_event_handle_t hEvent,               ///< [in] handle of the event 
-    xe_event_value_t value                  ///< [in] the value to write on event
+    xe_event_value_t value                  ///< [in] the value to write on signal
+    );
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Supported event wait operations
+XE_DECLARE_ENUM( xe_event_wait_operation_t )
+{
+    XE_EVENT_WAIT_OPERATION_EQUAL_TO = 1,           ///< event value == wait value
+    XE_EVENT_WAIT_OPERATION_NOT_EQUAL_TO,           ///< event value != wait value
+    XE_EVENT_WAIT_OPERATION_GREATER_THAN,           ///< event value > wait value
+    XE_EVENT_WAIT_OPERATION_GREATER_OR_EQUAL_TO,    ///< event value >= wait value
+    XE_EVENT_WAIT_OPERATION_LESS_THAN,              ///< event value < wait value
+    XE_EVENT_WAIT_OPERATION_LESS_OR_EQUAL_TO,       ///< event value <= wait value
+};
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Encodes an event wait into a command list
+/// @remarks _Analogues:_
+///     - **cuEventRecord**
+/// @returns
+///     - ::XE_RESULT_SUCCESS
+///     - ::XE_RESULT_ERROR_UNINITIALIZED
+///     - ::XE_RESULT_ERROR_INVALID_PARAMETER
+///         + invalid handle for hCommandList
+///         + invalid handle for hEvent
+xe_result_t __xecall
+  xeCommandListEncodeEventWait(
+    xe_command_list_handle_t hCommandList,  ///< [in] handle of the command list
+    xe_event_handle_t hEvent,               ///< [in] handle of the event 
+    xe_event_wait_operation_t operation,    ///< [in] wait operation type
+    xe_event_value_t value                  ///< [in] the value to wait upon
     );
 
 ///////////////////////////////////////////////////////////////////////////////
