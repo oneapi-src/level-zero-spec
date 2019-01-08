@@ -97,6 +97,7 @@ xe_result_t __xecall
 ///     - ::XE_RESULT_ERROR_INVALID_PARAMETER
 ///         + invalid handle for hCommandList
 ///         + invalid handle for hEvent
+///         + event creation flag was not ::XE_EVENT_FLAG_DEVICE_TO_HOST
 xe_result_t __xecall
   xeCommandListEncodeSignalEvent(
     xe_command_list_handle_t hCommandList,  ///< [in] handle of the command list
@@ -113,6 +114,7 @@ xe_result_t __xecall
 ///     - ::XE_RESULT_ERROR_INVALID_PARAMETER
 ///         + invalid handle for hCommandList
 ///         + invalid handle for hEvent
+///         + event creation flag was not ::XE_EVENT_FLAG_HOST_TO_DEVICE
 xe_result_t __xecall
   xeCommandListEncodeWaitOnEvent(
     xe_command_list_handle_t hCommandList,  ///< [in] handle of the command list
@@ -128,6 +130,7 @@ xe_result_t __xecall
 ///     - ::XE_RESULT_ERROR_UNINITIALIZED
 ///     - ::XE_RESULT_ERROR_INVALID_PARAMETER
 ///         + invalid handle for hFence
+///         + event creation flag was not ::XE_EVENT_FLAG_HOST_TO_DEVICE
 xe_result_t __xecall
   xeSignalEvent(
     xe_fence_handle_t hFence                ///< [in] handle of the fence 
@@ -138,10 +141,11 @@ xe_result_t __xecall
 /// @remarks _Analogues:_
 ///     - **cuEventSynchronize**
 /// @returns
-///     - ::XE_RESULT_SUCCESS
+///     - ::XE_RESULT_SUCCESS - signaled
 ///     - ::XE_RESULT_ERROR_UNINITIALIZED
 ///     - ::XE_RESULT_ERROR_INVALID_PARAMETER
 ///         + invalid handle for hFence
+///         + event creation flag was not ::XE_EVENT_FLAG_DEVICE_TO_HOST
 xe_result_t __xecall
   xeWaitOnEvent(
     xe_fence_handle_t hFence                ///< [in] handle of the fence 
@@ -167,8 +171,7 @@ xe_result_t __xecall
 /// @remarks _Analogues:_
 ///     - none
 /// @returns
-///     - ::XE_RESULT_SUCCESS - signaled
-///     - ::XE_RESULT_NOT_READY - not signaled
+///     - ::XE_RESULT_SUCCESS
 ///     - ::XE_RESULT_ERROR_UNINITIALIZED
 ///     - ::XE_RESULT_ERROR_INVALID_PARAMETER
 ///         + invalid handle for hEvent

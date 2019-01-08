@@ -81,6 +81,7 @@ xe_result_t __xecall
 ///     - ::XE_RESULT_ERROR_UNINITIALIZED
 ///     - ::XE_RESULT_ERROR_INVALID_PARAMETER
 ///         + invalid handle for hFence
+///         + fence is enqueued in a command queue
 xe_result_t __xecall
   xeFenceDestroy(
     xe_fence_handle_t hFence                ///< [in] handle of fence object to destroy
@@ -96,6 +97,8 @@ xe_result_t __xecall
 ///     - ::XE_RESULT_ERROR_INVALID_PARAMETER
 ///         + invalid handle for hCommandList
 ///         + invalid handle for hFence
+///         + fence is in signaled state
+///         + fence is enqueued in another command queue
 xe_result_t __xecall
   xeCommandQueueEnqueueSignalFence(
     xe_command_queue_handle_t hCommandList, ///< [in] handle of the command queue
@@ -107,10 +110,11 @@ xe_result_t __xecall
 /// @remarks _Analogues:_
 ///     - **cuEventSynchronize**
 /// @returns
-///     - ::XE_RESULT_SUCCESS
+///     - ::XE_RESULT_SUCCESS - signaled
 ///     - ::XE_RESULT_ERROR_UNINITIALIZED
 ///     - ::XE_RESULT_ERROR_INVALID_PARAMETER
 ///         + invalid handle for hFence
+///         + fence is not enqueued in a command queue
 xe_result_t __xecall
   xeWaitOnFence(
     xe_fence_handle_t hFence                ///< [in] handle of the fence 
@@ -122,7 +126,7 @@ xe_result_t __xecall
 ///     - **cuEventQuery**
 /// @returns
 ///     - ::XE_RESULT_SUCCESS - signaled
-///     - ::XE_RESULT_NOT_READY - not signaled
+///     - ::XE_RESULT_NOT_READY - not signaled or not enqueued
 ///     - ::XE_RESULT_ERROR_UNINITIALIZED
 ///     - ::XE_RESULT_ERROR_INVALID_PARAMETER
 ///         + invalid handle for hFence

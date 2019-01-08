@@ -278,7 +278,8 @@ Functions</h2></td></tr>
 <li><a class="el" href="xe__common_8h.html#a0a81258bd4a02d562b77ce7bc03fe189af2c8a0ddedb58c6435b1e0acf6c27fe1" title="success">XE_RESULT_SUCCESS</a></li>
 <li><a class="el" href="xe__common_8h.html#a0a81258bd4a02d562b77ce7bc03fe189a3df2351e5ff91446c3dec05b9a9e31d8" title="driver is not initialized">XE_RESULT_ERROR_UNINITIALIZED</a></li>
 <li><a class="el" href="xe__common_8h.html#a0a81258bd4a02d562b77ce7bc03fe189ab4095f98f19805c0d8a2ebc61422a513" title="invalid parameter provided">XE_RESULT_ERROR_INVALID_PARAMETER</a><ul>
-<li>invalid handle for hFence </li>
+<li>invalid handle for hFence</li>
+<li>fence is enqueued in a command queue </li>
 </ul>
 </li>
 </ul>
@@ -328,7 +329,9 @@ Functions</h2></td></tr>
 <li><a class="el" href="xe__common_8h.html#a0a81258bd4a02d562b77ce7bc03fe189a3df2351e5ff91446c3dec05b9a9e31d8" title="driver is not initialized">XE_RESULT_ERROR_UNINITIALIZED</a></li>
 <li><a class="el" href="xe__common_8h.html#a0a81258bd4a02d562b77ce7bc03fe189ab4095f98f19805c0d8a2ebc61422a513" title="invalid parameter provided">XE_RESULT_ERROR_INVALID_PARAMETER</a><ul>
 <li>invalid handle for hCommandList</li>
-<li>invalid handle for hFence </li>
+<li>invalid handle for hFence</li>
+<li>fence is in signaled state</li>
+<li>fence is enqueued in another command queue </li>
 </ul>
 </li>
 </ul>
@@ -365,10 +368,11 @@ Functions</h2></td></tr>
 </ul>
 </dd></dl>
 <dl class="section return"><dt>Returns</dt><dd><ul>
-<li><a class="el" href="xe__common_8h.html#a0a81258bd4a02d562b77ce7bc03fe189af2c8a0ddedb58c6435b1e0acf6c27fe1" title="success">XE_RESULT_SUCCESS</a></li>
+<li><a class="el" href="xe__common_8h.html#a0a81258bd4a02d562b77ce7bc03fe189af2c8a0ddedb58c6435b1e0acf6c27fe1" title="success">XE_RESULT_SUCCESS</a> - signaled</li>
 <li><a class="el" href="xe__common_8h.html#a0a81258bd4a02d562b77ce7bc03fe189a3df2351e5ff91446c3dec05b9a9e31d8" title="driver is not initialized">XE_RESULT_ERROR_UNINITIALIZED</a></li>
 <li><a class="el" href="xe__common_8h.html#a0a81258bd4a02d562b77ce7bc03fe189ab4095f98f19805c0d8a2ebc61422a513" title="invalid parameter provided">XE_RESULT_ERROR_INVALID_PARAMETER</a><ul>
-<li>invalid handle for hFence </li>
+<li>invalid handle for hFence</li>
+<li>fence is not enqueued in a command queue </li>
 </ul>
 </li>
 </ul>
@@ -405,7 +409,7 @@ Functions</h2></td></tr>
 </dd></dl>
 <dl class="section return"><dt>Returns</dt><dd><ul>
 <li><a class="el" href="xe__common_8h.html#a0a81258bd4a02d562b77ce7bc03fe189af2c8a0ddedb58c6435b1e0acf6c27fe1" title="success">XE_RESULT_SUCCESS</a> - signaled</li>
-<li><a class="el" href="xe__common_8h.html#a0a81258bd4a02d562b77ce7bc03fe189ac3de19dc64a4f35fd0a3fa20f24bf297" title="synchronization primitive not signaled">XE_RESULT_NOT_READY</a> - not signaled</li>
+<li><a class="el" href="xe__common_8h.html#a0a81258bd4a02d562b77ce7bc03fe189ac3de19dc64a4f35fd0a3fa20f24bf297" title="synchronization primitive not signaled">XE_RESULT_NOT_READY</a> - not signaled or not enqueued</li>
 <li><a class="el" href="xe__common_8h.html#a0a81258bd4a02d562b77ce7bc03fe189a3df2351e5ff91446c3dec05b9a9e31d8" title="driver is not initialized">XE_RESULT_ERROR_UNINITIALIZED</a></li>
 <li><a class="el" href="xe__common_8h.html#a0a81258bd4a02d562b77ce7bc03fe189ab4095f98f19805c0d8a2ebc61422a513" title="invalid parameter provided">XE_RESULT_ERROR_INVALID_PARAMETER</a><ul>
 <li>invalid handle for hFence </li>
