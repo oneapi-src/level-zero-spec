@@ -7,5 +7,6 @@ var xe__cmdlist_8h =
     ] ],
     [ "xeCommandListCreate", "xe__cmdlist_8h.html#a6c4a5ed9a7d569d46b0ac28e475e46c4", null ],
     [ "xeCommandListDestroy", "xe__cmdlist_8h.html#abdbe571489694586ed3919550f5ef882", null ],
+    [ "xeCommandListClose", "xe__cmdlist_8h.html#ac672284706aab5e09f3b8d504691db24", null ],
     [ "xeCommandListReset", "xe__cmdlist_8h.html#a9b72d9fe83f7935fc81d72ea9d0420bb", null ]
 ];

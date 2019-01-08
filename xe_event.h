@@ -39,6 +39,11 @@ XE_DECLARE_ENUM( xe_event_flags_t )
     XE_EVENT_FLAG_NONE = 0                  ///< default behavior
 };
 
+
+//////////////////////////////////////////////////////////////////////////
+/// @brief
+typedef uint64_t xe_event_value_t;
+
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Event descriptor
 typedef struct _xe_event_desc_t
@@ -46,6 +51,9 @@ typedef struct _xe_event_desc_t
     uint32_t version;                       ///< [in] descriptor version
 
     xe_event_flags_t flags;                 ///< [in] creation flags
+
+    xe_event_value_t* location;             ///< [in] device memory location where a value
+                                            ///< will be written upon execution of an event
 } xe_event_desc_t;
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -86,7 +94,7 @@ xe_result_t __xecall
     );
 
 ///////////////////////////////////////////////////////////////////////////////
-/// @brief Encodes an event object into a command list
+/// @brief Encodes an event signal into a command list
 /// @remarks _Analogues:_
 ///     - **cuEventRecord**
 /// @returns
@@ -96,9 +104,57 @@ xe_result_t __xecall
 ///         + invalid handle for hCommandList
 ///         + invalid handle for hEvent
 xe_result_t __xecall
-  xeCommandListEncodeEvent(
+  xeCommandListEncodeEventSignal(
     xe_command_list_handle_t hCommandList,  ///< [in] handle of the command list
-    xe_event_handle_t hEvent                ///< [in] handle of the event 
+    xe_event_handle_t hEvent,               ///< [in] handle of the event 
+    xe_event_value_t value                  ///< [in] the value to write on signal
+    );
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Supported event wait operations
+XE_DECLARE_ENUM( xe_event_wait_operation_t )
+{
+    XE_EVENT_WAIT_OPERATION_EQUAL_TO = 1,           ///< event value == wait value
+    XE_EVENT_WAIT_OPERATION_NOT_EQUAL_TO,           ///< event value != wait value
+    XE_EVENT_WAIT_OPERATION_GREATER_THAN,           ///< event value > wait value
+    XE_EVENT_WAIT_OPERATION_GREATER_OR_EQUAL_TO,    ///< event value >= wait value
+    XE_EVENT_WAIT_OPERATION_LESS_THAN,              ///< event value < wait value
+    XE_EVENT_WAIT_OPERATION_LESS_OR_EQUAL_TO,       ///< event value <= wait value
+};
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Encodes an event wait into a command list
+/// @remarks _Analogues:_
+///     - cuEventRecord
+/// @returns
+///     - ::XE_RESULT_SUCCESS
+///     - ::XE_RESULT_ERROR_UNINITIALIZED
+///     - ::XE_RESULT_ERROR_INVALID_PARAMETER
+///         + invalid handle for hCommandList
+///         + invalid handle for hEvent
+xe_result_t __xecall
+  xeCommandListEncodeEventWait(
+    xe_command_list_handle_t hCommandList,  ///< [in] handle of the command list
+    xe_event_handle_t hEvent,               ///< [in] handle of the event 
+    xe_event_wait_operation_t operation,    ///< [in] wait operation type
+    xe_event_value_t value                  ///< [in] the value to wait upon
+    );
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Queries an event object's value
+/// @remarks _Analogues:_
+///     - **cuEventQuery**
+///     - cuEventSynchronize
+/// @returns
+///     - ::XE_RESULT_SUCCESS
+///     - ::XE_RESULT_ERROR_UNINITIALIZED
+///     - ::XE_RESULT_ERROR_INVALID_PARAMETER
+///         + invalid handle for hEvent
+///         + nullptr for value
+xe_result_t __xecall
+  xeEventQuery(
+    xe_event_handle_t hEvent,               ///< [in] handle of the event 
+    xe_event_value_t* value                 ///< [out] the current value of the event
     );
 
 #endif // _XE_EVENT_H

@@ -30,6 +30,7 @@
 #if defined( __cplusplus )
 #pragma once
 #endif
+#include <stdint.h>
 
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Generic macros for creating and extracting versions
@@ -40,12 +41,6 @@
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Current header file version
 #define XE_UMD_HEADER_VERSION   XE_MAKE_VERSION( 1, 0 ) ///< 1.0
-
-///////////////////////////////////////////////////////////////////////////////
-#if !defined( __cplusplus )
-/// @brief Declare C++ types
-typedef unsigned int uint32_t;
-#endif
 
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Calling convention for all APIs
@@ -115,6 +110,11 @@ XE_DECLARE_ENUM( xe_result_t )
     XE_RESULT_ERROR_OUT_OF_MEMORY,          ///< insufficient memory to satisfy call
     XE_RESULT_ERROR_UNKNOWN = 0xffffffff    ///< internal error
 };
+
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Device pointer
+typedef void* xe_device_ptr_t;
 
 
 #endif // _XE_COMMON_H
