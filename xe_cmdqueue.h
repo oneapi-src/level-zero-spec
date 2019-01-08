@@ -50,6 +50,8 @@ typedef struct _xe_command_queue_desc_t
     uint32_t version;                       ///< [in] descriptor version
 
     xe_command_queue_flags_t flags;         ///< [in] creation flags
+
+    uint32_t ordinal;                       ///< [in] must be less than value returned for ::XE_DEVICE_ATTRIBUTE_MAX_SIMULTANEOUS_QUEUES
 } xe_command_queue_desc_t;
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -59,15 +61,19 @@ typedef struct _xe_command_queue_desc_t
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Creates a command queue on a device
 /// @details 
-///     - A command queue represents a FIFO of command lists submitted to the device.
-///     - The command queue maintains some machine state, which is inherited by
-///       subsequent execution. See ::xe_command_queue_parameter_t for details.
+///     - A command queue represents a physical input stream to the device.
+///     - The number of command queues per device is queried from calling 
+///       ::xeDeviceGetAttribute, for ::XE_DEVICE_ATTRIBUTE_MAX_SIMULTANEOUS_QUEUES.
 ///     - Multiple command queues may be created by an application.  For example,
 ///       an application may want to create a command queue per CPU thread.
 ///     - There is no implicit binding of command queues to CPU threads. Therefore,
 ///       an application may share a command queue handle across multiple CPU
 ///       threads. However, the application is responsible for ensuring that 
 ///       multiple CPU threads do not access the same command queue simultaneously.
+///     - The command queue maintains some machine state, which is inherited by
+///       subsequent execution. See ::xe_command_queue_parameter_t for details.
+///     - Commands are submitted to a command queue via command lists and are
+///       executed in a fifo manner.
 ///
 /// @remarks _Analogues:_
 ///     - **cuCtxCreate**
