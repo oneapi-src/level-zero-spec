@@ -40,8 +40,10 @@
     <ClInclude Include="..\xe_device.h" />
     <ClInclude Include="..\xe_driver.h" />
     <ClInclude Include="..\xe_event.h" />
+    <ClInclude Include="..\xe_fence.h" />
     <ClInclude Include="..\xe_memory.h" />
     <ClInclude Include="..\xe_resource.h" />
+    <ClInclude Include="..\xe_semaphore.h" />
     <ClInclude Include="pch.h" />
   </ItemGroup>
   <ItemGroup>

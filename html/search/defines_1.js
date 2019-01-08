@@ -6,10 +6,13 @@ var searchData=
   ['xe_5fdeclare_5fenum',['XE_DECLARE_ENUM',['../xe__common_8h.html#a24ec25fbe6d71c732e46b4a91b0efcd8',1,'xe_common.h']]],
   ['xe_5fdeclare_5fhandle',['XE_DECLARE_HANDLE',['../xe__common_8h.html#a6f8b49dc25370281c0b133c4597ac12b',1,'xe_common.h']]],
   ['xe_5fevent_5fdesc_5fversion',['XE_EVENT_DESC_VERSION',['../xe__event_8h.html#a5ca4b0121aaa58f1fce450b328098fa4',1,'xe_event.h']]],
+  ['xe_5ffence_5fdesc_5fversion',['XE_FENCE_DESC_VERSION',['../xe__fence_8h.html#a52029eae641e2afb46df65498362e755',1,'xe_fence.h']]],
   ['xe_5fmajor_5fversion',['XE_MAJOR_VERSION',['../xe__common_8h.html#a18a45f2716d3811bfb24c3dfd0289830',1,'xe_common.h']]],
   ['xe_5fmake_5fversion',['XE_MAKE_VERSION',['../xe__common_8h.html#a7c541ed7fa8f9aa2d8ef98132ea245fc',1,'xe_common.h']]],
+  ['xe_5fmax_5fdevice_5fname',['XE_MAX_DEVICE_NAME',['../xe__device_8h.html#a7c1a3934cd7cd580bca6d13105a14b78',1,'xe_device.h']]],
   ['xe_5fmempool_5fdesc_5fversion',['XE_MEMPOOL_DESC_VERSION',['../xe__memory_8h.html#a58916463891a23aec8725a69fec63cc4',1,'xe_memory.h']]],
   ['xe_5fminor_5fversion',['XE_MINOR_VERSION',['../xe__common_8h.html#a9c8b3d053cc57fc34a49ff7acf698c8b',1,'xe_common.h']]],
   ['xe_5fresource_5fdesc_5fversion',['XE_RESOURCE_DESC_VERSION',['../xe__resource_8h.html#a139f6c9ad5af1ef3f38c8e9bfb3af525',1,'xe_resource.h']]],
+  ['xe_5fsemaphore_5fdesc_5fversion',['XE_SEMAPHORE_DESC_VERSION',['../xe__semaphore_8h.html#a7848e1d848ec26a1ce7d3e853163861a',1,'xe_semaphore.h']]],
   ['xe_5fumd_5fheader_5fversion',['XE_UMD_HEADER_VERSION',['../xe__common_8h.html#a9123875cc8dd3cc62640c633aba1f894',1,'xe_common.h']]]
 ];

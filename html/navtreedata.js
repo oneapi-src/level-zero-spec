@@ -26,6 +26,7 @@ var NAVTREE =
   [ "Intel Xe Driver API", "index.html", [
     [ "Programming Guide", "md__programming__guide.html", null ],
     [ "Requirements", "md__requirements.html", null ],
+    [ "Todo List", "todo.html", null ],
     [ "Data Structures", "annotated.html", [
       [ "Data Structures", "annotated.html", "annotated_dup" ],
       [ "Data Structure Index", "classes.html", null ],

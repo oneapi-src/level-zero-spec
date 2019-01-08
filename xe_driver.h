@@ -50,7 +50,7 @@ XE_DECLARE_ENUM( xe_init_flags_t )
 ///     - ::XE_RESULT_SUCCESS
 ///     - ::XE_RESULT_ERROR_INVALID_PARAMETER
 ///         + invalid value for flags
-///     - ::XE_RESULT_ERROR_OUT_OF_MEMORY
+///     - ::XE_RESULT_ERROR_OUT_OF_HOST_MEMORY
 xe_result_t __xecall
   xeInit( 
     xe_init_flags_t flags       ///< initialization flags

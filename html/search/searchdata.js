@@ -1,15 +1,15 @@
 var indexSectionsWithContent =
 {
-  0: "_floprvx",
+  0: "_cdfhilmnoprtvwx",
   1: "x",
   2: "prx",
   3: "ox",
-  4: "flopv",
+  4: "cdfhilmnoptvw",
   5: "x",
   6: "x",
   7: "x",
   8: "_x",
-  9: "pr"
+  9: "prt"
 };
 
 var indexSectionNames =

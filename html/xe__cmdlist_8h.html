@@ -219,14 +219,6 @@ Functions</h2></td></tr>
 </div><div class="memdoc">
 
 <p>Creates a command list. </p>
-<ul>
-<li>A command list represents a sequence of commands for execution on a command queue.</li>
-<li>Multiple command lists may be created by an application. For example, an application may want to create multiple command lists per command queue.</li>
-<li>There is no implicit association between a command list and a command queue. Therefore, a command list may be submitted to any, or multiple command queues.</li>
-<li>There is no implicit binding of command lists to CPU threads. Therefore, an application may share a command list handle across multiple CPU threads. However, the application is responsible for ensuring that multiple CPU threads do not access the same command list simultaneously.</li>
-<li>The command list maintains some machine state, which is inherited by subsequent commands. See ::xe_command_list_parameter_t for details.</li>
-<li>Command lists do not inherit state from other command lists executed on the same command queue. i.e. each command list begins execution in its own state.</li>
-</ul>
 <dl class="section return"><dt>Returns</dt><dd><ul>
 <li><a class="el" href="xe__common_8h.html#a0a81258bd4a02d562b77ce7bc03fe189af2c8a0ddedb58c6435b1e0acf6c27fe1" title="success">XE_RESULT_SUCCESS</a></li>
 <li><a class="el" href="xe__common_8h.html#a0a81258bd4a02d562b77ce7bc03fe189a3df2351e5ff91446c3dec05b9a9e31d8" title="driver is not initialized">XE_RESULT_ERROR_UNINITIALIZED</a></li>
@@ -236,7 +228,8 @@ Functions</h2></td></tr>
 <li>nullptr for phCommandList</li>
 </ul>
 </li>
-<li><a class="el" href="xe__common_8h.html#a0a81258bd4a02d562b77ce7bc03fe189a496076e0b279dd037e48436c1a9f4f46" title="insufficient memory to satisfy call">XE_RESULT_ERROR_OUT_OF_MEMORY</a> </li>
+<li><a class="el" href="xe__common_8h.html#a0a81258bd4a02d562b77ce7bc03fe189ad0b80d808d3d2bd45d62d5d57a9495ed" title="insufficient host memory to satisfy call">XE_RESULT_ERROR_OUT_OF_HOST_MEMORY</a></li>
+<li><a class="el" href="xe__common_8h.html#a0a81258bd4a02d562b77ce7bc03fe189a7cea09e68ec5b46e3c113e11e01e597e" title="insufficient device memory to satisfy call">XE_RESULT_ERROR_OUT_OF_DEVICE_MEMORY</a> </li>
 </ul>
 </dd></dl>
 <dl class="params"><dt>Parameters</dt><dd>
@@ -267,9 +260,6 @@ Functions</h2></td></tr>
 </div><div class="memdoc">
 
 <p>Destroys a command list. </p>
-<ul>
-<li>The application is responsible for making sure the GPU is not currently executing from a command list before it is deleted. This should be handled by tracking a completion event associated with the command list.</li>
-</ul>
 <dl class="section return"><dt>Returns</dt><dd><ul>
 <li><a class="el" href="xe__common_8h.html#a0a81258bd4a02d562b77ce7bc03fe189af2c8a0ddedb58c6435b1e0acf6c27fe1" title="success">XE_RESULT_SUCCESS</a></li>
 <li><a class="el" href="xe__common_8h.html#a0a81258bd4a02d562b77ce7bc03fe189a3df2351e5ff91446c3dec05b9a9e31d8" title="driver is not initialized">XE_RESULT_ERROR_UNINITIALIZED</a></li>
@@ -305,9 +295,6 @@ Functions</h2></td></tr>
 </div><div class="memdoc">
 
 <p>Close a command list. </p>
-<ul>
-<li>The application is responsible for calling close before submission to a command queue.</li>
-</ul>
 <dl class="section return"><dt>Returns</dt><dd><ul>
 <li><a class="el" href="xe__common_8h.html#a0a81258bd4a02d562b77ce7bc03fe189af2c8a0ddedb58c6435b1e0acf6c27fe1" title="success">XE_RESULT_SUCCESS</a></li>
 <li><a class="el" href="xe__common_8h.html#a0a81258bd4a02d562b77ce7bc03fe189a3df2351e5ff91446c3dec05b9a9e31d8" title="driver is not initialized">XE_RESULT_ERROR_UNINITIALIZED</a></li>
@@ -343,9 +330,6 @@ Functions</h2></td></tr>
 </div><div class="memdoc">
 
 <p>Reset a command list to initial (empty) state. </p>
-<ul>
-<li>The application is responsible for making sure the GPU is not currently executing from a command list before it is reset. This should be handled by tracking a completion event associated with the command list.</li>
-</ul>
 <dl class="section return"><dt>Returns</dt><dd><ul>
 <li><a class="el" href="xe__common_8h.html#a0a81258bd4a02d562b77ce7bc03fe189af2c8a0ddedb58c6435b1e0acf6c27fe1" title="success">XE_RESULT_SUCCESS</a></li>
 <li><a class="el" href="xe__common_8h.html#a0a81258bd4a02d562b77ce7bc03fe189a3df2351e5ff91446c3dec05b9a9e31d8" title="driver is not initialized">XE_RESULT_ERROR_UNINITIALIZED</a></li>

@@ -1,5 +1,4 @@
 var searchData=
 [
-  ['requirements',['Requirements',['../md__requirements.html',1,'']]],
-  ['requirements_2emd',['Requirements.md',['../_requirements_8md.html',1,'']]]
+  ['isintegrated',['isIntegrated',['../structxe__device__memory__properties__t.html#af162a526cba1403fa0f01c400d608039',1,'xe_device_memory_properties_t']]]
 ];

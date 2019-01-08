@@ -85,7 +85,9 @@ $(document).ready(function(){initNavTree('globals_func.html','');});
 </div>
 
 <div class="contents">
-&#160;<ul>
+&#160;
+
+<h3><a id="index_x"></a>- x -</h3><ul>
 <li>xeCommandListClose()
 : <a class="el" href="xe__cmdlist_8h.html#ac672284706aab5e09f3b8d504691db24">xe_cmdlist.h</a>
 </li>
@@ -95,11 +97,17 @@ $(document).ready(function(){initNavTree('globals_func.html','');});
 <li>xeCommandListDestroy()
 : <a class="el" href="xe__cmdlist_8h.html#abdbe571489694586ed3919550f5ef882">xe_cmdlist.h</a>
 </li>
-<li>xeCommandListEncodeEventSignal()
-: <a class="el" href="xe__event_8h.html#af27a725ee4b3d151629d4181ad246f99">xe_event.h</a>
+<li>xeCommandListEncodeSemaphoreSignal()
+: <a class="el" href="xe__semaphore_8h.html#aef5e682c54ae5c5554357ef96bf70d19">xe_semaphore.h</a>
 </li>
-<li>xeCommandListEncodeEventWait()
-: <a class="el" href="xe__event_8h.html#a939f4f1d25fa6e7ef8c0ec370df2e703">xe_event.h</a>
+<li>xeCommandListEncodeSemaphoreWait()
+: <a class="el" href="xe__semaphore_8h.html#ac3383f49792f4b1da9c8391555ed7587">xe_semaphore.h</a>
+</li>
+<li>xeCommandListEncodeSignalEvent()
+: <a class="el" href="xe__event_8h.html#ae018c712714271119e6ac87b64b7745e">xe_event.h</a>
+</li>
+<li>xeCommandListEncodeWaitOnEvent()
+: <a class="el" href="xe__event_8h.html#aa526a260ff0f48f86a351985750cdd15">xe_event.h</a>
 </li>
 <li>xeCommandListReset()
 : <a class="el" href="xe__cmdlist_8h.html#a9b72d9fe83f7935fc81d72ea9d0420bb">xe_cmdlist.h</a>
@@ -112,6 +120,9 @@ $(document).ready(function(){initNavTree('globals_func.html','');});
 </li>
 <li>xeCommandQueueEnqueueCommandList()
 : <a class="el" href="xe__cmdqueue_8h.html#ac83912c3d520f90ab6518cdd687e6943">xe_cmdqueue.h</a>
+</li>
+<li>xeCommandQueueEnqueueSignalFence()
+: <a class="el" href="xe__fence_8h.html#aad068aad7b57dd9a0ae9afa8d649114f">xe_fence.h</a>
 </li>
 <li>xeCommandQueueGetParameter()
 : <a class="el" href="xe__cmdqueue_8h.html#af16331b98ce1f6526ed074d1f0eaf65e">xe_cmdqueue.h</a>
@@ -131,9 +142,6 @@ $(document).ready(function(){initNavTree('globals_func.html','');});
 <li>xeDeviceGetApiVersion()
 : <a class="el" href="xe__device_8h.html#ab4fff191d021e8ede3e4caef8d1b8ab0">xe_device.h</a>
 </li>
-<li>xeDeviceGetAttribute()
-: <a class="el" href="xe__device_8h.html#a223e99f5c17e355b4cc46f14f0aaf9fa">xe_device.h</a>
-</li>
 <li>xeDeviceGetCount()
 : <a class="el" href="xe__device_8h.html#ad9632680b628200c7bf61f9cce14f608">xe_device.h</a>
 </li>
@@ -146,8 +154,35 @@ $(document).ready(function(){initNavTree('globals_func.html','');});
 <li>xeEventDestroy()
 : <a class="el" href="xe__event_8h.html#acaa1ed76b354dec8a0e59278363e6425">xe_event.h</a>
 </li>
-<li>xeEventQuery()
-: <a class="el" href="xe__event_8h.html#a0b9e8ef410662a59d82fb326e7946b01">xe_event.h</a>
+<li>xeEventQueryStatus()
+: <a class="el" href="xe__event_8h.html#ad0f1f9dc2bfd3ddfdae5ae067747bb03">xe_event.h</a>
+</li>
+<li>xeEventReset()
+: <a class="el" href="xe__event_8h.html#a7345a658a916628d43a7d480366684df">xe_event.h</a>
+</li>
+<li>xeFenceCreate()
+: <a class="el" href="xe__fence_8h.html#a43f533ef58ad30058f17ca4896e54068">xe_fence.h</a>
+</li>
+<li>xeFenceDestroy()
+: <a class="el" href="xe__fence_8h.html#adee4d67b15b45adc2910ad4eb8273cae">xe_fence.h</a>
+</li>
+<li>xeFenceQueryStatus()
+: <a class="el" href="xe__fence_8h.html#acd430fa66d67e3ad68b2e37450aee444">xe_fence.h</a>
+</li>
+<li>xeFenceReset()
+: <a class="el" href="xe__fence_8h.html#ab41293b0d54560c555c359c05831116a">xe_fence.h</a>
+</li>
+<li>xeFenceWait()
+: <a class="el" href="xe__fence_8h.html#a5ef2b492f561f673e0f999a89774f917">xe_fence.h</a>
+</li>
+<li>xeGetDeviceComputeProperties()
+: <a class="el" href="xe__device_8h.html#a7272a4f2adf343854cfcd3da66ad9901">xe_device.h</a>
+</li>
+<li>xeGetDeviceMemoryProperties()
+: <a class="el" href="xe__device_8h.html#a9252992195be07ffd94e259517658a14">xe_device.h</a>
+</li>
+<li>xeGetDeviceProperties()
+: <a class="el" href="xe__device_8h.html#aabc58c17546a584b9ce8067b15934124">xe_device.h</a>
 </li>
 <li>xeInit()
 : <a class="el" href="xe__driver_8h.html#aa42ffd3cf61a3d417a57aff1bd1fbe14">xe_driver.h</a>
@@ -169,6 +204,15 @@ $(document).ready(function(){initNavTree('globals_func.html','');});
 </li>
 <li>xeResourceDestroy()
 : <a class="el" href="xe__resource_8h.html#a48232eb8d063b09bddb2bd3b37fcd095">xe_resource.h</a>
+</li>
+<li>xeSemaphoreCreate()
+: <a class="el" href="xe__semaphore_8h.html#abfcd61c60d909c85fba5642c66837a90">xe_semaphore.h</a>
+</li>
+<li>xeSemaphoreDestroy()
+: <a class="el" href="xe__semaphore_8h.html#a8b07526ba31b301f40806f9da35a4e65">xe_semaphore.h</a>
+</li>
+<li>xeSemaphoreQuery()
+: <a class="el" href="xe__semaphore_8h.html#a43684a69b2acda767940cf749b99664f">xe_semaphore.h</a>
 </li>
 </ul>
 </div><!-- contents -->

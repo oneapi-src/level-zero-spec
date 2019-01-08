@@ -85,7 +85,9 @@ $(document).ready(function(){initNavTree('globals_eval.html','');});
 </div>
 
 <div class="contents">
-&#160;<ul>
+&#160;
+
+<h3><a id="index_x"></a>- x -</h3><ul>
 <li>XE_API_VERSION_1_0
 : <a class="el" href="xe__device_8h.html#ad69250d10c10e024a5d8aa4dea0fd831a8f5f11a47d3562e3b90643ff9ce77ee0">xe_device.h</a>
 </li>
@@ -113,38 +115,17 @@ $(document).ready(function(){initNavTree('globals_eval.html','');});
 <li>XE_COMMAND_QUEUE_PRIORITY_NORMAL
 : <a class="el" href="xe__cmdqueue_8h.html#aca234f4ba5add6615bd73b7a31a2b70ea414bcad6bece242d7c93a78facac8b12">xe_cmdqueue.h</a>
 </li>
-<li>XE_DEVICE_ATTRIBUTE_MAX_SIMULTANEOUS_QUEUES
-: <a class="el" href="xe__device_8h.html#a003ecc42f784db9cb9cd02f299849a87a29222b9f4757bb27029b24f9d9415935">xe_device.h</a>
-</li>
-<li>XE_DEVICE_ATTRIBUTE_MAX_THREADS
-: <a class="el" href="xe__device_8h.html#a003ecc42f784db9cb9cd02f299849a87ac2e6cf4a9347ef77bd089b191017bf26">xe_device.h</a>
-</li>
-<li>XE_DEVICE_ATTRIBUTE_TOTAL_MEMORY
-: <a class="el" href="xe__device_8h.html#a003ecc42f784db9cb9cd02f299849a87a25f60d8b9d103fbd73341ed5a39b9c1c">xe_device.h</a>
-</li>
 <li>XE_DRIVER_VERSION_1_0
 : <a class="el" href="xe__driver_8h.html#ab4941cf20c04442df726aaee5b2c3398a5d8cf9c88a2172c08ec58ae3cb3c470f">xe_driver.h</a>
 </li>
-<li>XE_EVENT_FLAG_NONE
-: <a class="el" href="xe__event_8h.html#aa5ae605f51fc360a9a75496825fe5ae1abbf3f5b1d1d1e484ef21d67f8ad8b7fc">xe_event.h</a>
+<li>XE_EVENT_FLAG_DEVICE_TO_HOST
+: <a class="el" href="xe__event_8h.html#aa5ae605f51fc360a9a75496825fe5ae1a658ed84b2778e04278b513836fc4b45b">xe_event.h</a>
 </li>
-<li>XE_EVENT_WAIT_OPERATION_EQUAL_TO
-: <a class="el" href="xe__event_8h.html#ac62a000b9f3e0029602e0ae70d69573ca437599841bb009eea6cb1255c6ef7c00">xe_event.h</a>
+<li>XE_EVENT_FLAG_HOST_TO_DEVICE
+: <a class="el" href="xe__event_8h.html#aa5ae605f51fc360a9a75496825fe5ae1a526c24b0cab2b2105065f4002125a847">xe_event.h</a>
 </li>
-<li>XE_EVENT_WAIT_OPERATION_GREATER_OR_EQUAL_TO
-: <a class="el" href="xe__event_8h.html#ac62a000b9f3e0029602e0ae70d69573ca01ad6f80c9360a50b56a5daf14d50474">xe_event.h</a>
-</li>
-<li>XE_EVENT_WAIT_OPERATION_GREATER_THAN
-: <a class="el" href="xe__event_8h.html#ac62a000b9f3e0029602e0ae70d69573caf52bad39862b168ead0c5eb9a17f6a18">xe_event.h</a>
-</li>
-<li>XE_EVENT_WAIT_OPERATION_LESS_OR_EQUAL_TO
-: <a class="el" href="xe__event_8h.html#ac62a000b9f3e0029602e0ae70d69573ca93a8fa12ad1fee22fef9b42ef47ffe57">xe_event.h</a>
-</li>
-<li>XE_EVENT_WAIT_OPERATION_LESS_THAN
-: <a class="el" href="xe__event_8h.html#ac62a000b9f3e0029602e0ae70d69573ca7eea3d120147cd0d11fcd4b228463cc2">xe_event.h</a>
-</li>
-<li>XE_EVENT_WAIT_OPERATION_NOT_EQUAL_TO
-: <a class="el" href="xe__event_8h.html#ac62a000b9f3e0029602e0ae70d69573ca18905da7898941aa1e02066338d5e7a3">xe_event.h</a>
+<li>XE_FENCE_FLAG_NONE
+: <a class="el" href="xe__fence_8h.html#a1d911e9a32d9d36ea19093fdb73c655ea294ee265225c3aec02578a0a66ca3b1d">xe_fence.h</a>
 </li>
 <li>XE_INIT_FLAG_NONE
 : <a class="el" href="xe__driver_8h.html#a23feded6ed1a07a052e5bf99495122b0a96f989ca76afda801922059f7031f0d8">xe_driver.h</a>
@@ -161,8 +142,11 @@ $(document).ready(function(){initNavTree('globals_eval.html','');});
 <li>XE_RESULT_ERROR_INVALID_PARAMETER
 : <a class="el" href="xe__common_8h.html#a0a81258bd4a02d562b77ce7bc03fe189ab4095f98f19805c0d8a2ebc61422a513">xe_common.h</a>
 </li>
-<li>XE_RESULT_ERROR_OUT_OF_MEMORY
-: <a class="el" href="xe__common_8h.html#a0a81258bd4a02d562b77ce7bc03fe189a496076e0b279dd037e48436c1a9f4f46">xe_common.h</a>
+<li>XE_RESULT_ERROR_OUT_OF_DEVICE_MEMORY
+: <a class="el" href="xe__common_8h.html#a0a81258bd4a02d562b77ce7bc03fe189a7cea09e68ec5b46e3c113e11e01e597e">xe_common.h</a>
+</li>
+<li>XE_RESULT_ERROR_OUT_OF_HOST_MEMORY
+: <a class="el" href="xe__common_8h.html#a0a81258bd4a02d562b77ce7bc03fe189ad0b80d808d3d2bd45d62d5d57a9495ed">xe_common.h</a>
 </li>
 <li>XE_RESULT_ERROR_UNINITIALIZED
 : <a class="el" href="xe__common_8h.html#a0a81258bd4a02d562b77ce7bc03fe189a3df2351e5ff91446c3dec05b9a9e31d8">xe_common.h</a>
@@ -170,8 +154,32 @@ $(document).ready(function(){initNavTree('globals_eval.html','');});
 <li>XE_RESULT_ERROR_UNKNOWN
 : <a class="el" href="xe__common_8h.html#a0a81258bd4a02d562b77ce7bc03fe189a0e6ce01deeca2124e2f7c0b9ca5d4b11">xe_common.h</a>
 </li>
+<li>XE_RESULT_NOT_READY
+: <a class="el" href="xe__common_8h.html#a0a81258bd4a02d562b77ce7bc03fe189ac3de19dc64a4f35fd0a3fa20f24bf297">xe_common.h</a>
+</li>
 <li>XE_RESULT_SUCCESS
 : <a class="el" href="xe__common_8h.html#a0a81258bd4a02d562b77ce7bc03fe189af2c8a0ddedb58c6435b1e0acf6c27fe1">xe_common.h</a>
+</li>
+<li>XE_SEMAPHORE_FLAG_NONE
+: <a class="el" href="xe__semaphore_8h.html#a57c3060e1e290d1fe636a8548e66cb41a7c78339ff4b35f5cfb24e619cd087e45">xe_semaphore.h</a>
+</li>
+<li>XE_SEMAPHORE_WAIT_OPERATION_EQUAL_TO
+: <a class="el" href="xe__semaphore_8h.html#a369709051e94c940729b565035aaf370a839ae1f66b6bf37e169b06434b8ca22f">xe_semaphore.h</a>
+</li>
+<li>XE_SEMAPHORE_WAIT_OPERATION_GREATER_OR_EQUAL_TO
+: <a class="el" href="xe__semaphore_8h.html#a369709051e94c940729b565035aaf370a96f50de17f781ea0a1de3b95409ccf1c">xe_semaphore.h</a>
+</li>
+<li>XE_SEMAPHORE_WAIT_OPERATION_GREATER_THAN
+: <a class="el" href="xe__semaphore_8h.html#a369709051e94c940729b565035aaf370a53cfce3ef2c948087ac686146ed68e51">xe_semaphore.h</a>
+</li>
+<li>XE_SEMAPHORE_WAIT_OPERATION_LESS_OR_EQUAL_TO
+: <a class="el" href="xe__semaphore_8h.html#a369709051e94c940729b565035aaf370a63eb9346e092b1795ddff3c794a13b36">xe_semaphore.h</a>
+</li>
+<li>XE_SEMAPHORE_WAIT_OPERATION_LESS_THAN
+: <a class="el" href="xe__semaphore_8h.html#a369709051e94c940729b565035aaf370a434182c27279628682201842544dee05">xe_semaphore.h</a>
+</li>
+<li>XE_SEMAPHORE_WAIT_OPERATION_NOT_EQUAL_TO
+: <a class="el" href="xe__semaphore_8h.html#a369709051e94c940729b565035aaf370a7866cdb62e0853d675d64f49037696fb">xe_semaphore.h</a>
 </li>
 </ul>
 </div><!-- contents -->

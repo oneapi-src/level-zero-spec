@@ -112,6 +112,12 @@ Data Structures</h2></td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structxe__command__list__handle__t.html">xe_command_list_handle_t</a></td></tr>
 <tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">handle of driver's command list object  <a href="structxe__command__list__handle__t.html#details">More...</a><br /></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structxe__fence__handle__t.html">xe_fence_handle_t</a></td></tr>
+<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">handle of driver's fence object  <a href="structxe__fence__handle__t.html#details">More...</a><br /></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structxe__semaphore__handle__t.html">xe_semaphore_handle_t</a></td></tr>
+<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">handle of driver's semaphore object  <a href="structxe__semaphore__handle__t.html#details">More...</a><br /></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structxe__event__handle__t.html">xe_event_handle_t</a></td></tr>
 <tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">handle of driver's event object  <a href="structxe__event__handle__t.html#details">More...</a><br /></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -156,9 +162,11 @@ Enumerations</h2></td></tr>
 &#160;&#160;<a class="el" href="xe__common_8h.html#a0a81258bd4a02d562b77ce7bc03fe189af2c8a0ddedb58c6435b1e0acf6c27fe1">XE_RESULT_SUCCESS</a> = 0, 
 <a class="el" href="xe__common_8h.html#a0a81258bd4a02d562b77ce7bc03fe189a3df2351e5ff91446c3dec05b9a9e31d8">XE_RESULT_ERROR_UNINITIALIZED</a>, 
 <a class="el" href="xe__common_8h.html#a0a81258bd4a02d562b77ce7bc03fe189ab4095f98f19805c0d8a2ebc61422a513">XE_RESULT_ERROR_INVALID_PARAMETER</a>, 
-<a class="el" href="xe__common_8h.html#a0a81258bd4a02d562b77ce7bc03fe189a496076e0b279dd037e48436c1a9f4f46">XE_RESULT_ERROR_OUT_OF_MEMORY</a>, 
+<a class="el" href="xe__common_8h.html#a0a81258bd4a02d562b77ce7bc03fe189ad0b80d808d3d2bd45d62d5d57a9495ed">XE_RESULT_ERROR_OUT_OF_HOST_MEMORY</a>, 
 <br />
-&#160;&#160;<a class="el" href="xe__common_8h.html#a0a81258bd4a02d562b77ce7bc03fe189a0e6ce01deeca2124e2f7c0b9ca5d4b11">XE_RESULT_ERROR_UNKNOWN</a> = 0xffffffff
+&#160;&#160;<a class="el" href="xe__common_8h.html#a0a81258bd4a02d562b77ce7bc03fe189a7cea09e68ec5b46e3c113e11e01e597e">XE_RESULT_ERROR_OUT_OF_DEVICE_MEMORY</a>, 
+<a class="el" href="xe__common_8h.html#a0a81258bd4a02d562b77ce7bc03fe189ac3de19dc64a4f35fd0a3fa20f24bf297">XE_RESULT_NOT_READY</a>, 
+<a class="el" href="xe__common_8h.html#a0a81258bd4a02d562b77ce7bc03fe189a0e6ce01deeca2124e2f7c0b9ca5d4b11">XE_RESULT_ERROR_UNKNOWN</a> = 0xffffffff
 <br />
  }</td></tr>
 <tr class="memdesc:a0a81258bd4a02d562b77ce7bc03fe189"><td class="mdescLeft">&#160;</td><td class="mdescRight">Defines Return/Error codes.  <a href="xe__common_8h.html#a0a81258bd4a02d562b77ce7bc03fe189">More...</a><br /></td></tr>
@@ -321,7 +329,7 @@ Enumerations</h2></td></tr>
 
 <p>Declares typed enumeration. </p>
 
-<p class="definition">Definition at line <a class="el" href="xe__common_8h_source.html#l00088">88</a> of file <a class="el" href="xe__common_8h_source.html">xe_common.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="xe__common_8h_source.html#l00090">90</a> of file <a class="el" href="xe__common_8h_source.html">xe_common.h</a>.</p>
 
 </div>
 </div>
@@ -343,7 +351,7 @@ Enumerations</h2></td></tr>
 
 <p>Generic macros for enumerator bit masks. </p>
 
-<p class="definition">Definition at line <a class="el" href="xe__common_8h_source.html#l00098">98</a> of file <a class="el" href="xe__common_8h_source.html">xe_common.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="xe__common_8h_source.html#l00100">100</a> of file <a class="el" href="xe__common_8h_source.html">xe_common.h</a>.</p>
 
 </div>
 </div>
@@ -362,7 +370,7 @@ Enumerations</h2></td></tr>
 
 <p>Device pointer. </p>
 
-<p class="definition">Definition at line <a class="el" href="xe__common_8h_source.html#l00117">117</a> of file <a class="el" href="xe__common_8h_source.html">xe_common.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="xe__common_8h_source.html#l00121">121</a> of file <a class="el" href="xe__common_8h_source.html">xe_common.h</a>.</p>
 
 </div>
 </div>
@@ -391,18 +399,24 @@ Enumerations</h2></td></tr>
 </td></tr>
 <tr><td class="fieldname"><a id="a0a81258bd4a02d562b77ce7bc03fe189ab4095f98f19805c0d8a2ebc61422a513"></a>XE_RESULT_ERROR_INVALID_PARAMETER&#160;</td><td class="fielddoc"><p>invalid parameter provided </p>
 </td></tr>
-<tr><td class="fieldname"><a id="a0a81258bd4a02d562b77ce7bc03fe189a496076e0b279dd037e48436c1a9f4f46"></a>XE_RESULT_ERROR_OUT_OF_MEMORY&#160;</td><td class="fielddoc"><p>insufficient memory to satisfy call </p>
+<tr><td class="fieldname"><a id="a0a81258bd4a02d562b77ce7bc03fe189ad0b80d808d3d2bd45d62d5d57a9495ed"></a>XE_RESULT_ERROR_OUT_OF_HOST_MEMORY&#160;</td><td class="fielddoc"><p>insufficient host memory to satisfy call </p>
+</td></tr>
+<tr><td class="fieldname"><a id="a0a81258bd4a02d562b77ce7bc03fe189a7cea09e68ec5b46e3c113e11e01e597e"></a>XE_RESULT_ERROR_OUT_OF_DEVICE_MEMORY&#160;</td><td class="fielddoc"><p>insufficient device memory to satisfy call </p>
+</td></tr>
+<tr><td class="fieldname"><a id="a0a81258bd4a02d562b77ce7bc03fe189ac3de19dc64a4f35fd0a3fa20f24bf297"></a>XE_RESULT_NOT_READY&#160;</td><td class="fielddoc"><p>synchronization primitive not signaled </p>
 </td></tr>
 <tr><td class="fieldname"><a id="a0a81258bd4a02d562b77ce7bc03fe189a0e6ce01deeca2124e2f7c0b9ca5d4b11"></a>XE_RESULT_ERROR_UNKNOWN&#160;</td><td class="fielddoc"><p>internal error </p>
 </td></tr>
 </table>
 
-<p class="definition">Definition at line <a class="el" href="xe__common_8h_source.html#l00105">105</a> of file <a class="el" href="xe__common_8h_source.html">xe_common.h</a>.</p>
-<div class="fragment"><div class="line"><a name="l00106"></a><span class="lineno">  106</span>&#160;{</div><div class="line"><a name="l00107"></a><span class="lineno">  107</span>&#160;    <a class="code" href="xe__common_8h.html#a0a81258bd4a02d562b77ce7bc03fe189af2c8a0ddedb58c6435b1e0acf6c27fe1">XE_RESULT_SUCCESS</a> = 0,                  </div><div class="line"><a name="l00108"></a><span class="lineno">  108</span>&#160;    <a class="code" href="xe__common_8h.html#a0a81258bd4a02d562b77ce7bc03fe189a3df2351e5ff91446c3dec05b9a9e31d8">XE_RESULT_ERROR_UNINITIALIZED</a>,          </div><div class="line"><a name="l00109"></a><span class="lineno">  109</span>&#160;    <a class="code" href="xe__common_8h.html#a0a81258bd4a02d562b77ce7bc03fe189ab4095f98f19805c0d8a2ebc61422a513">XE_RESULT_ERROR_INVALID_PARAMETER</a>,      </div><div class="line"><a name="l00110"></a><span class="lineno">  110</span>&#160;    <a class="code" href="xe__common_8h.html#a0a81258bd4a02d562b77ce7bc03fe189a496076e0b279dd037e48436c1a9f4f46">XE_RESULT_ERROR_OUT_OF_MEMORY</a>,          </div><div class="line"><a name="l00111"></a><span class="lineno">  111</span>&#160;    <a class="code" href="xe__common_8h.html#a0a81258bd4a02d562b77ce7bc03fe189a0e6ce01deeca2124e2f7c0b9ca5d4b11">XE_RESULT_ERROR_UNKNOWN</a> = 0xffffffff    </div><div class="line"><a name="l00112"></a><span class="lineno">  112</span>&#160;};</div><div class="ttc" id="xe__common_8h_html_a0a81258bd4a02d562b77ce7bc03fe189a496076e0b279dd037e48436c1a9f4f46"><div class="ttname"><a href="xe__common_8h.html#a0a81258bd4a02d562b77ce7bc03fe189a496076e0b279dd037e48436c1a9f4f46">XE_RESULT_ERROR_OUT_OF_MEMORY</a></div><div class="ttdoc">insufficient memory to satisfy call</div><div class="ttdef"><b>Definition:</b> <a href="xe__common_8h_source.html#l00110">xe_common.h:110</a></div></div>
-<div class="ttc" id="xe__common_8h_html_a0a81258bd4a02d562b77ce7bc03fe189a0e6ce01deeca2124e2f7c0b9ca5d4b11"><div class="ttname"><a href="xe__common_8h.html#a0a81258bd4a02d562b77ce7bc03fe189a0e6ce01deeca2124e2f7c0b9ca5d4b11">XE_RESULT_ERROR_UNKNOWN</a></div><div class="ttdoc">internal error</div><div class="ttdef"><b>Definition:</b> <a href="xe__common_8h_source.html#l00111">xe_common.h:111</a></div></div>
-<div class="ttc" id="xe__common_8h_html_a0a81258bd4a02d562b77ce7bc03fe189af2c8a0ddedb58c6435b1e0acf6c27fe1"><div class="ttname"><a href="xe__common_8h.html#a0a81258bd4a02d562b77ce7bc03fe189af2c8a0ddedb58c6435b1e0acf6c27fe1">XE_RESULT_SUCCESS</a></div><div class="ttdoc">success</div><div class="ttdef"><b>Definition:</b> <a href="xe__common_8h_source.html#l00107">xe_common.h:107</a></div></div>
-<div class="ttc" id="xe__common_8h_html_a0a81258bd4a02d562b77ce7bc03fe189a3df2351e5ff91446c3dec05b9a9e31d8"><div class="ttname"><a href="xe__common_8h.html#a0a81258bd4a02d562b77ce7bc03fe189a3df2351e5ff91446c3dec05b9a9e31d8">XE_RESULT_ERROR_UNINITIALIZED</a></div><div class="ttdoc">driver is not initialized</div><div class="ttdef"><b>Definition:</b> <a href="xe__common_8h_source.html#l00108">xe_common.h:108</a></div></div>
-<div class="ttc" id="xe__common_8h_html_a0a81258bd4a02d562b77ce7bc03fe189ab4095f98f19805c0d8a2ebc61422a513"><div class="ttname"><a href="xe__common_8h.html#a0a81258bd4a02d562b77ce7bc03fe189ab4095f98f19805c0d8a2ebc61422a513">XE_RESULT_ERROR_INVALID_PARAMETER</a></div><div class="ttdoc">invalid parameter provided</div><div class="ttdef"><b>Definition:</b> <a href="xe__common_8h_source.html#l00109">xe_common.h:109</a></div></div>
+<p class="definition">Definition at line <a class="el" href="xe__common_8h_source.html#l00107">107</a> of file <a class="el" href="xe__common_8h_source.html">xe_common.h</a>.</p>
+<div class="fragment"><div class="line"><a name="l00108"></a><span class="lineno">  108</span>&#160;{</div><div class="line"><a name="l00109"></a><span class="lineno">  109</span>&#160;    <a class="code" href="xe__common_8h.html#a0a81258bd4a02d562b77ce7bc03fe189af2c8a0ddedb58c6435b1e0acf6c27fe1">XE_RESULT_SUCCESS</a> = 0,                  </div><div class="line"><a name="l00110"></a><span class="lineno">  110</span>&#160;    <a class="code" href="xe__common_8h.html#a0a81258bd4a02d562b77ce7bc03fe189a3df2351e5ff91446c3dec05b9a9e31d8">XE_RESULT_ERROR_UNINITIALIZED</a>,          </div><div class="line"><a name="l00111"></a><span class="lineno">  111</span>&#160;    <a class="code" href="xe__common_8h.html#a0a81258bd4a02d562b77ce7bc03fe189ab4095f98f19805c0d8a2ebc61422a513">XE_RESULT_ERROR_INVALID_PARAMETER</a>,      </div><div class="line"><a name="l00112"></a><span class="lineno">  112</span>&#160;    <a class="code" href="xe__common_8h.html#a0a81258bd4a02d562b77ce7bc03fe189ad0b80d808d3d2bd45d62d5d57a9495ed">XE_RESULT_ERROR_OUT_OF_HOST_MEMORY</a>,     </div><div class="line"><a name="l00113"></a><span class="lineno">  113</span>&#160;    <a class="code" href="xe__common_8h.html#a0a81258bd4a02d562b77ce7bc03fe189a7cea09e68ec5b46e3c113e11e01e597e">XE_RESULT_ERROR_OUT_OF_DEVICE_MEMORY</a>,   </div><div class="line"><a name="l00114"></a><span class="lineno">  114</span>&#160;    <a class="code" href="xe__common_8h.html#a0a81258bd4a02d562b77ce7bc03fe189ac3de19dc64a4f35fd0a3fa20f24bf297">XE_RESULT_NOT_READY</a>,                    </div><div class="line"><a name="l00115"></a><span class="lineno">  115</span>&#160;    <a class="code" href="xe__common_8h.html#a0a81258bd4a02d562b77ce7bc03fe189a0e6ce01deeca2124e2f7c0b9ca5d4b11">XE_RESULT_ERROR_UNKNOWN</a> = 0xffffffff    </div><div class="line"><a name="l00116"></a><span class="lineno">  116</span>&#160;};</div><div class="ttc" id="xe__common_8h_html_a0a81258bd4a02d562b77ce7bc03fe189a0e6ce01deeca2124e2f7c0b9ca5d4b11"><div class="ttname"><a href="xe__common_8h.html#a0a81258bd4a02d562b77ce7bc03fe189a0e6ce01deeca2124e2f7c0b9ca5d4b11">XE_RESULT_ERROR_UNKNOWN</a></div><div class="ttdoc">internal error</div><div class="ttdef"><b>Definition:</b> <a href="xe__common_8h_source.html#l00115">xe_common.h:115</a></div></div>
+<div class="ttc" id="xe__common_8h_html_a0a81258bd4a02d562b77ce7bc03fe189ac3de19dc64a4f35fd0a3fa20f24bf297"><div class="ttname"><a href="xe__common_8h.html#a0a81258bd4a02d562b77ce7bc03fe189ac3de19dc64a4f35fd0a3fa20f24bf297">XE_RESULT_NOT_READY</a></div><div class="ttdoc">synchronization primitive not signaled</div><div class="ttdef"><b>Definition:</b> <a href="xe__common_8h_source.html#l00114">xe_common.h:114</a></div></div>
+<div class="ttc" id="xe__common_8h_html_a0a81258bd4a02d562b77ce7bc03fe189af2c8a0ddedb58c6435b1e0acf6c27fe1"><div class="ttname"><a href="xe__common_8h.html#a0a81258bd4a02d562b77ce7bc03fe189af2c8a0ddedb58c6435b1e0acf6c27fe1">XE_RESULT_SUCCESS</a></div><div class="ttdoc">success</div><div class="ttdef"><b>Definition:</b> <a href="xe__common_8h_source.html#l00109">xe_common.h:109</a></div></div>
+<div class="ttc" id="xe__common_8h_html_a0a81258bd4a02d562b77ce7bc03fe189ad0b80d808d3d2bd45d62d5d57a9495ed"><div class="ttname"><a href="xe__common_8h.html#a0a81258bd4a02d562b77ce7bc03fe189ad0b80d808d3d2bd45d62d5d57a9495ed">XE_RESULT_ERROR_OUT_OF_HOST_MEMORY</a></div><div class="ttdoc">insufficient host memory to satisfy call</div><div class="ttdef"><b>Definition:</b> <a href="xe__common_8h_source.html#l00112">xe_common.h:112</a></div></div>
+<div class="ttc" id="xe__common_8h_html_a0a81258bd4a02d562b77ce7bc03fe189a3df2351e5ff91446c3dec05b9a9e31d8"><div class="ttname"><a href="xe__common_8h.html#a0a81258bd4a02d562b77ce7bc03fe189a3df2351e5ff91446c3dec05b9a9e31d8">XE_RESULT_ERROR_UNINITIALIZED</a></div><div class="ttdoc">driver is not initialized</div><div class="ttdef"><b>Definition:</b> <a href="xe__common_8h_source.html#l00110">xe_common.h:110</a></div></div>
+<div class="ttc" id="xe__common_8h_html_a0a81258bd4a02d562b77ce7bc03fe189ab4095f98f19805c0d8a2ebc61422a513"><div class="ttname"><a href="xe__common_8h.html#a0a81258bd4a02d562b77ce7bc03fe189ab4095f98f19805c0d8a2ebc61422a513">XE_RESULT_ERROR_INVALID_PARAMETER</a></div><div class="ttdoc">invalid parameter provided</div><div class="ttdef"><b>Definition:</b> <a href="xe__common_8h_source.html#l00111">xe_common.h:111</a></div></div>
+<div class="ttc" id="xe__common_8h_html_a0a81258bd4a02d562b77ce7bc03fe189a7cea09e68ec5b46e3c113e11e01e597e"><div class="ttname"><a href="xe__common_8h.html#a0a81258bd4a02d562b77ce7bc03fe189a7cea09e68ec5b46e3c113e11e01e597e">XE_RESULT_ERROR_OUT_OF_DEVICE_MEMORY</a></div><div class="ttdoc">insufficient device memory to satisfy call</div><div class="ttdef"><b>Definition:</b> <a href="xe__common_8h_source.html#l00113">xe_common.h:113</a></div></div>
 </div><!-- fragment -->
 </div>
 </div>

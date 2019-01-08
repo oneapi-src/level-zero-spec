@@ -34,6 +34,12 @@
     <ClInclude Include="..\xe_resource.h">
       <Filter>xe</Filter>
     </ClInclude>
+    <ClInclude Include="..\xe_fence.h">
+      <Filter>xe</Filter>
+    </ClInclude>
+    <ClInclude Include="..\xe_semaphore.h">
+      <Filter>xe</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

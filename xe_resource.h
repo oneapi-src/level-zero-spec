@@ -60,7 +60,8 @@ typedef struct _xe_resource_desc_t
 ///     - ::XE_RESULT_ERROR_INVALID_PARAMETER
 ///         + nullptr for desc
 ///         + nullptr for phResource
-///     - ::XE_RESULT_ERROR_OUT_OF_MEMORY
+///     - ::XE_RESULT_ERROR_OUT_OF_HOST_MEMORY
+///     - ::XE_RESULT_ERROR_OUT_OF_DEVICE_MEMORY
 xe_result_t __xecall
   xeResourceCreate( 
     xe_resource_desc_t* desc,           ///< [in] pointer to resource descriptor

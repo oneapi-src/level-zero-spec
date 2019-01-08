@@ -38,6 +38,9 @@
 
 #include "xe_cmdqueue.h"
 #include "xe_cmdlist.h"
+
+#include "xe_fence.h"
+#include "xe_semaphore.h"
 #include "xe_event.h"
 
 #endif // _XE_ALL_H

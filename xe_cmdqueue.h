@@ -51,7 +51,7 @@ typedef struct _xe_command_queue_desc_t
 
     xe_command_queue_flags_t flags;         ///< [in] creation flags
 
-    uint32_t ordinal;                       ///< [in] must be less than value returned for ::XE_DEVICE_ATTRIBUTE_MAX_SIMULTANEOUS_QUEUES
+    uint32_t ordinal;                       ///< [in] must be less than value returned for ::xe_device_properties_t.numAsyncComputeEngines
 } xe_command_queue_desc_t;
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -60,21 +60,6 @@ typedef struct _xe_command_queue_desc_t
 
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Creates a command queue on a device
-/// @details 
-///     - A command queue represents a physical input stream to the device.
-///     - The number of command queues per device is queried from calling 
-///       ::xeDeviceGetAttribute, for ::XE_DEVICE_ATTRIBUTE_MAX_SIMULTANEOUS_QUEUES.
-///     - Multiple command queues may be created by an application.  For example,
-///       an application may want to create a command queue per CPU thread.
-///     - There is no implicit binding of command queues to CPU threads. Therefore,
-///       an application may share a command queue handle across multiple CPU
-///       threads. However, the application is responsible for ensuring that 
-///       multiple CPU threads do not access the same command queue simultaneously.
-///     - The command queue maintains some machine state, which is inherited by
-///       subsequent execution. See ::xe_command_queue_parameter_t for details.
-///     - Commands are submitted to a command queue via command lists and are
-///       executed in a fifo manner.
-///
 /// @remarks _Analogues:_
 ///     - **cuCtxCreate**
 ///     - cuCtxGetCurrent
@@ -85,7 +70,8 @@ typedef struct _xe_command_queue_desc_t
 ///         + invalid handle for hDevice
 ///         + nullptr for desc
 ///         + nullptr for phCommandQueue
-///     - ::XE_RESULT_ERROR_OUT_OF_MEMORY
+///     - ::XE_RESULT_ERROR_OUT_OF_HOST_MEMORY
+///     - ::XE_RESULT_ERROR_OUT_OF_DEVICE_MEMORY
 xe_result_t __xecall
   xeCommandQueueCreate(
     xe_device_handle_t hDevice,                 ///< [in] handle of the device
@@ -95,12 +81,6 @@ xe_result_t __xecall
 
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Destroys a command queue
-/// @details
-///     - The application is responsible for making sure the GPU is not currently
-///       executing from a command queue before it is deleted.  This is 
-///       typically done by tracking command list events, but may also be
-///       handled by calling ::xeCommandQueueSynchronize.
-///
 /// @remarks _Analogues:_
 ///     - **cuCtxDestroy**
 /// @returns

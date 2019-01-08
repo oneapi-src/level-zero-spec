@@ -78,6 +78,8 @@
 XE_DECLARE_HANDLE( xe_device_handle_t );            ///< handle of driver's device object
 XE_DECLARE_HANDLE( xe_command_queue_handle_t );     ///< handle of driver's command queue object
 XE_DECLARE_HANDLE( xe_command_list_handle_t );      ///< handle of driver's command list object
+XE_DECLARE_HANDLE( xe_fence_handle_t );             ///< handle of driver's fence object
+XE_DECLARE_HANDLE( xe_semaphore_handle_t );         ///< handle of driver's semaphore object
 XE_DECLARE_HANDLE( xe_event_handle_t );             ///< handle of driver's event object
 XE_DECLARE_HANDLE( xe_resource_handle_t );          ///< handle of driver's resource object
 
@@ -107,7 +109,9 @@ XE_DECLARE_ENUM( xe_result_t )
     XE_RESULT_SUCCESS = 0,                  ///< success
     XE_RESULT_ERROR_UNINITIALIZED,          ///< driver is not initialized
     XE_RESULT_ERROR_INVALID_PARAMETER,      ///< invalid parameter provided
-    XE_RESULT_ERROR_OUT_OF_MEMORY,          ///< insufficient memory to satisfy call
+    XE_RESULT_ERROR_OUT_OF_HOST_MEMORY,     ///< insufficient host memory to satisfy call
+    XE_RESULT_ERROR_OUT_OF_DEVICE_MEMORY,   ///< insufficient device memory to satisfy call
+    XE_RESULT_NOT_READY,                    ///< synchronization primitive not signaled
     XE_RESULT_ERROR_UNKNOWN = 0xffffffff    ///< internal error
 };
 

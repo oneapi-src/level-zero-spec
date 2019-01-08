@@ -7,6 +7,8 @@ var searchData=
   ['xe_5fdevice_2eh',['xe_device.h',['../xe__device_8h.html',1,'']]],
   ['xe_5fdriver_2eh',['xe_driver.h',['../xe__driver_8h.html',1,'']]],
   ['xe_5fevent_2eh',['xe_event.h',['../xe__event_8h.html',1,'']]],
+  ['xe_5ffence_2eh',['xe_fence.h',['../xe__fence_8h.html',1,'']]],
   ['xe_5fmemory_2eh',['xe_memory.h',['../xe__memory_8h.html',1,'']]],
-  ['xe_5fresource_2eh',['xe_resource.h',['../xe__resource_8h.html',1,'']]]
+  ['xe_5fresource_2eh',['xe_resource.h',['../xe__resource_8h.html',1,'']]],
+  ['xe_5fsemaphore_2eh',['xe_semaphore.h',['../xe__semaphore_8h.html',1,'']]]
 ];
