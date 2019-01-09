@@ -8,6 +8,8 @@ var searchData=
   ['xe_5fcommand_5fqueue_5fflag_5fsynchronous',['XE_COMMAND_QUEUE_FLAG_SYNCHRONOUS',['../xe__cmdqueue_8h.html#ab3bc19a79aa63e22bade20d2fdde4fc6a01a7ef1b2e6570f9974a5a85a5cf95b3',1,'xe_cmdqueue.h']]],
   ['xe_5fcommand_5fqueue_5fparameter_5fcache_5fconfig',['XE_COMMAND_QUEUE_PARAMETER_CACHE_CONFIG',['../xe__cmdqueue_8h.html#a1c93d3851d6295cf5bac3cb623071c19a77570f6202ecba3ee1ea652e7d6c105f',1,'xe_cmdqueue.h']]],
   ['xe_5fcommand_5fqueue_5fparameter_5fpriority',['XE_COMMAND_QUEUE_PARAMETER_PRIORITY',['../xe__cmdqueue_8h.html#a1c93d3851d6295cf5bac3cb623071c19a9dd6911dd6ba8cf85aba4f27096dd3db',1,'xe_cmdqueue.h']]],
+  ['xe_5fcommand_5fqueue_5fpriority_5fhigh',['XE_COMMAND_QUEUE_PRIORITY_HIGH',['../xe__cmdqueue_8h.html#aca234f4ba5add6615bd73b7a31a2b70ea0c3dd47a582a5debea0bd8a2843ce7e7',1,'xe_cmdqueue.h']]],
+  ['xe_5fcommand_5fqueue_5fpriority_5flow',['XE_COMMAND_QUEUE_PRIORITY_LOW',['../xe__cmdqueue_8h.html#aca234f4ba5add6615bd73b7a31a2b70ea47ce7fa0869ad05b6e5d7ae1168f4330',1,'xe_cmdqueue.h']]],
   ['xe_5fcommand_5fqueue_5fpriority_5fnormal',['XE_COMMAND_QUEUE_PRIORITY_NORMAL',['../xe__cmdqueue_8h.html#aca234f4ba5add6615bd73b7a31a2b70ea414bcad6bece242d7c93a78facac8b12',1,'xe_cmdqueue.h']]],
   ['xe_5fdriver_5fversion_5f1_5f0',['XE_DRIVER_VERSION_1_0',['../xe__driver_8h.html#ab4941cf20c04442df726aaee5b2c3398a5d8cf9c88a2172c08ec58ae3cb3c470f',1,'xe_driver.h']]],
   ['xe_5fevent_5fflag_5fdevice_5fto_5fdevice',['XE_EVENT_FLAG_DEVICE_TO_DEVICE',['../xe__event_8h.html#aa5ae605f51fc360a9a75496825fe5ae1a2efe16ad5f1ec12517c35355706d243d',1,'xe_event.h']]],

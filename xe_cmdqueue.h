@@ -105,7 +105,9 @@ XE_DECLARE_ENUM( xe_command_queue_parameter_t )
 /// @brief Supported command queue priorities
 XE_DECLARE_ENUM( xe_command_queue_priority_t )
 {
-    XE_COMMAND_QUEUE_PRIORITY_NORMAL = 0        ///< [default] normal priority
+    XE_COMMAND_QUEUE_PRIORITY_NORMAL = 0,       ///< [default] normal priority
+    XE_COMMAND_QUEUE_PRIORITY_LOW = 1,          ///< lower priority than normal
+    XE_COMMAND_QUEUE_PRIORITY_HIGH = 2,         ///< higher priority than normal
 };
 
 ///////////////////////////////////////////////////////////////////////////////

@@ -12,7 +12,9 @@ var xe__cmdqueue_8h =
       [ "XE_COMMAND_QUEUE_PARAMETER_CACHE_CONFIG", "xe__cmdqueue_8h.html#a1c93d3851d6295cf5bac3cb623071c19a77570f6202ecba3ee1ea652e7d6c105f", null ]
     ] ],
     [ "xe_command_queue_priority_t", "xe__cmdqueue_8h.html#aca234f4ba5add6615bd73b7a31a2b70e", [
-      [ "XE_COMMAND_QUEUE_PRIORITY_NORMAL", "xe__cmdqueue_8h.html#aca234f4ba5add6615bd73b7a31a2b70ea414bcad6bece242d7c93a78facac8b12", null ]
+      [ "XE_COMMAND_QUEUE_PRIORITY_NORMAL", "xe__cmdqueue_8h.html#aca234f4ba5add6615bd73b7a31a2b70ea414bcad6bece242d7c93a78facac8b12", null ],
+      [ "XE_COMMAND_QUEUE_PRIORITY_LOW", "xe__cmdqueue_8h.html#aca234f4ba5add6615bd73b7a31a2b70ea47ce7fa0869ad05b6e5d7ae1168f4330", null ],
+      [ "XE_COMMAND_QUEUE_PRIORITY_HIGH", "xe__cmdqueue_8h.html#aca234f4ba5add6615bd73b7a31a2b70ea0c3dd47a582a5debea0bd8a2843ce7e7", null ]
     ] ],
     [ "xe_command_queue_cacheconfig_t", "xe__cmdqueue_8h.html#a6f529ee447ed9c2e2dc18465c107517d", [
       [ "XE_COMMAND_QUEUE_CACHECONFIG_BIAS_NONE", "xe__cmdqueue_8h.html#a6f529ee447ed9c2e2dc18465c107517dacf8664cab6f992b49c2ac8c96d5bfb35", null ]

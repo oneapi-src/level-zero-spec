@@ -23,6 +23,8 @@ var searchData=
   ['xe_5fcommand_5fqueue_5fparameter_5fcache_5fconfig',['XE_COMMAND_QUEUE_PARAMETER_CACHE_CONFIG',['../xe__cmdqueue_8h.html#a1c93d3851d6295cf5bac3cb623071c19a77570f6202ecba3ee1ea652e7d6c105f',1,'xe_cmdqueue.h']]],
   ['xe_5fcommand_5fqueue_5fparameter_5fpriority',['XE_COMMAND_QUEUE_PARAMETER_PRIORITY',['../xe__cmdqueue_8h.html#a1c93d3851d6295cf5bac3cb623071c19a9dd6911dd6ba8cf85aba4f27096dd3db',1,'xe_cmdqueue.h']]],
   ['xe_5fcommand_5fqueue_5fparameter_5ft',['xe_command_queue_parameter_t',['../xe__cmdqueue_8h.html#a1c93d3851d6295cf5bac3cb623071c19',1,'xe_cmdqueue.h']]],
+  ['xe_5fcommand_5fqueue_5fpriority_5fhigh',['XE_COMMAND_QUEUE_PRIORITY_HIGH',['../xe__cmdqueue_8h.html#aca234f4ba5add6615bd73b7a31a2b70ea0c3dd47a582a5debea0bd8a2843ce7e7',1,'xe_cmdqueue.h']]],
+  ['xe_5fcommand_5fqueue_5fpriority_5flow',['XE_COMMAND_QUEUE_PRIORITY_LOW',['../xe__cmdqueue_8h.html#aca234f4ba5add6615bd73b7a31a2b70ea47ce7fa0869ad05b6e5d7ae1168f4330',1,'xe_cmdqueue.h']]],
   ['xe_5fcommand_5fqueue_5fpriority_5fnormal',['XE_COMMAND_QUEUE_PRIORITY_NORMAL',['../xe__cmdqueue_8h.html#aca234f4ba5add6615bd73b7a31a2b70ea414bcad6bece242d7c93a78facac8b12',1,'xe_cmdqueue.h']]],
   ['xe_5fcommand_5fqueue_5fpriority_5ft',['xe_command_queue_priority_t',['../xe__cmdqueue_8h.html#aca234f4ba5add6615bd73b7a31a2b70e',1,'xe_cmdqueue.h']]],
   ['xe_5fcommon_2eh',['xe_common.h',['../xe__common_8h.html',1,'']]],
