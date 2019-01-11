@@ -1,0 +1,89 @@
+---
+type: header
+desc: "Intel $Xx Driver APIs for Command List"
+---
+type: macro
+name: $X_COMMAND_LIST_DESC_VERSION
+desc: "API version of $x_command_list_desc_t"
+value: "$X_MAKE_VERSION( 1, 0 )"
+---
+type: enum
+name: $x_command_list_flags_t
+desc: "Supported command List creation flags"
+etors:
+    - name: $X_COMMAND_LIST_FLAG_NONE
+      value: "0"
+      desc: "default behavior"
+---
+type: struct
+name: $x_command_list_desc_t
+desc: "Command List descriptor"
+members:
+    - type: uint32_t
+      name: version
+      desc: "[in] descriptor version"
+    - type: $x_command_list_flags_t
+      name: flags
+      desc: "[in] creation flags"
+---
+type: function
+name: $xCommandListCreate
+desc: "Creates a command list"
+params:
+    - type: $x_device_handle_t
+      name: hDevice
+      desc: "[in] handle of the device"
+    - type: $x_command_list_desc_t*
+      name: desc
+      desc: "[in] pointer to command list descriptor"
+    - type: $x_command_list_handle_t*
+      name: phCommandList
+      desc: "[out] pointer to handle of command list object created"
+returns:
+    - $X_RESULT_SUCCESS
+    - $X_RESULT_ERROR_UNINITIALIZED
+    - $X_RESULT_ERROR_INVALID_PARAMETER:
+        - "invalid handle for hDevice"
+        - "nullptr for desc"
+        - "nullptr for phCommandList"
+    - $X_RESULT_ERROR_OUT_OF_HOST_MEMORY
+    - $X_RESULT_ERROR_OUT_OF_DEVICE_MEMORY
+---
+type: function
+name: $xCommandListDestroy
+desc: "Destroys a command list"
+params:
+    - type: $x_command_list_handle_t
+      name: hCommandList
+      desc: "[in] handle of command list object to destroy"
+returns:
+    - $X_RESULT_SUCCESS
+    - $X_RESULT_ERROR_UNINITIALIZED
+    - $X_RESULT_ERROR_INVALID_PARAMETER:
+        - "invalid handle for hCommandList"
+---
+type: function
+name: $xCommandListClose
+desc: "Close a command list"
+params:
+    - type: $x_command_list_handle_t
+      name: hCommandList
+      desc: "[in] handle of command list object to close"
+returns:
+    - $X_RESULT_SUCCESS
+    - $X_RESULT_ERROR_UNINITIALIZED
+    - $X_RESULT_ERROR_INVALID_PARAMETER:
+        - "invalid handle for hCommandList"
+---
+type: function
+name: $xCommandListReset
+desc: "Reset a command list to initial (empty) state"
+params:
+    - type: $x_command_list_handle_t
+      name: hCommandList
+      desc: "[in] handle of command list object to reset"
+returns:
+    - $X_RESULT_SUCCESS
+    - $X_RESULT_ERROR_UNINITIALIZED
+    - $X_RESULT_ERROR_INVALID_PARAMETER:
+        - "invalid handle for hCommandList"

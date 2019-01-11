@@ -12,6 +12,7 @@
 *.ilk
 *.idb
 *.CopyComplete
+*.pyc
 
 # Precompiled Headers
 *.gch
