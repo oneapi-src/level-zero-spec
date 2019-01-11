@@ -24,6 +24,8 @@
 *
 * @brief Intel Xe Driver APIs for Command List
 *
+* DO NOT EDIT: generated from /scripts/specs/cmdlist.yml
+*
 ******************************************************************************/
 #ifndef _XE_CMDLIST_H
 #define _XE_CMDLIST_H

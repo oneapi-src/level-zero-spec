@@ -24,6 +24,8 @@
 *
 * @brief Intel Xe Driver API common types
 *
+* DO NOT EDIT: generated from /scripts/specs/common.yml
+*
 ******************************************************************************/
 #ifndef _XE_COMMON_H
 #define _XE_COMMON_H

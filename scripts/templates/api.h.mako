@@ -13,6 +13,26 @@ def append(string, count):
     string = '{str: <{width}}'.format(str=string, width=count)
     return string
 
+def split_line(line, ch_count):
+    if not line:
+        return []
+    words           = line.split(" ")
+    lines           = []
+    word_list       = []
+    for word in words:
+        if re.match(r"(.*)\n", word):
+            word_list.append(re.sub(r"(.*)\n",r"\1",word))
+            lines.append(" ".join(word_list))
+            word_list = []
+        elif sum(map(len, word_list)) + len(word_list) + len(word) <= ch_count:
+            word_list.append(word)
+        else:
+            lines.append(" ".join(word_list))
+            word_list = [word]
+    if len(word_list):
+        lines.append(" ".join(word_list))
+    return lines
+
 def make_line(lformat, rformat, repl, a, b, c):
     rhalf = lformat%(sub(repl,a), sub(repl,b))
     lhalf = rformat%(sub(repl,c))
@@ -62,6 +82,8 @@ def pline(repl, item, more):
 %endif
 %endfor
 *
+* DO NOT EDIT: generated from /scripts/specs/${name}.yml
+*
 ******************************************************************************/
 #ifndef _${x.upper()}_${name.upper()}_H
 #define _${x.upper()}_${name.upper()}_H
@@ -74,13 +96,31 @@ def pline(repl, item, more):
 
 %for doc in docs:
 ///////////////////////////////////////////////////////////////////////////////
-/// @brief ${sub(x, doc['desc'])}
+%for line in split_line(sub(x, doc['desc']), 70):
+    %if loop.index < 1:
+/// @brief ${line}
+    %else:
+///        ${line}
+    %endif
+%endfor
+%if 'details' in doc:
+/// @details
+%for item in doc['details']:
+    %for line in split_line(sub(x, item), 70):
+        %if loop.index < 1:
+///     - ${line}
+        %else:
+///       ${line}
+        %endif
+    %endfor
+%endfor
+%endif
 %if 'analogue' in doc:
 /// @remarks
 ///   _Analogues_
-%for a in doc['analogue']:
-///     - ${a}
-%endfor
+    %for line in doc['analogue']:
+///     - ${line}
+    %endfor
 %endif
 %if re.match(r"macro", doc['type']):
 %if 'condition' in doc:
