@@ -19,7 +19,10 @@ def make_line(lformat, rformat, repl, a, b, c):
     return "%s%s"%(append(rhalf, 48), lhalf)
 
 def eline(repl, item):
-    return make_line("%s = %s,", "///< %s", repl, item['name'], item['value'], item['desc'])
+    if 'value' in item:
+        return make_line("%s = %s,", "///< %s", repl, item['name'], item['value'], item['desc'])
+    else:
+        return make_line("%s%s,", "///< %s", repl, item['name'], "", item['desc'])
 
 def mline(repl, item):
     return make_line("%s %s;", "///< %s", repl, item['type'], item['name'], item['desc'])
@@ -65,13 +68,33 @@ def pline(repl, item, more):
 #if defined(__cplusplus)
 #pragma once
 #endif
+%if not re.match(r"common", name):
 #include "${x}_common.h"
+%endif
 
 %for doc in docs:
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief ${sub(x, doc['desc'])}
+%if 'analogue' in doc:
+/// @remarks
+///   _Analogues_
+%for a in doc['analogue']:
+///     - ${a}
+%endfor
+%endif
 %if re.match(r"macro", doc['type']):
+%if 'condition' in doc:
+#if ${sub(x,doc['condition'])}
+%endif
 #define ${sub(x, doc['name'])}  ${sub(x, doc['value'])}
+%if 'condition' in doc:
+#else
+#define ${sub(x, doc['name'])}
+#endif
+%endif
+
+%elif re.match(r"typedef", doc['type']):
+typedef ${sub(x, doc['value'])} ${sub(x, doc['name'])};
 
 %elif re.match(r"enum", doc['type']):
 typedef enum _${sub(x, doc['name'])}
@@ -79,6 +102,7 @@ typedef enum _${sub(x, doc['name'])}
     %for etor in doc['etors']:
     ${eline(x, etor)}
     %endfor
+
 } ${sub(x, doc['name'])};
 
 %elif re.match(r"struct", doc['type']):
@@ -87,10 +111,13 @@ typedef struct _${sub(x, doc['name'])}
     %for member in doc['members']:
     ${mline(x, member)}
     %endfor
+
 } ${sub(x, doc['name'])};
 
 %elif re.match(r"function", doc['type']):
 /// @returns
+/// - ::${x.upper()}_RESULT_SUCCESS
+/// - ::${x.upper()}_RESULT_ERROR_UNINITIALIZED
 %for item in doc['returns']:
     %if isinstance(item, dict):
     %for key, values in item.items():
@@ -109,6 +136,29 @@ ${x}_result_t __${x}call
     ${pline(x, param, loop.index < len(doc['params'])-1)}
     %endfor
     );
+
+%elif re.match(r"handle", doc['type']):
+#if defined( __cplusplus )
+struct ${sub(x, doc['name'])}
+{
+    void* pDriverData;
+
+    ${sub(x, doc['name'])}( void ) : pDriverData( nullptr ) {}        ///< default constructor
+    explicit ${sub(x, doc['name'])}( void* p ) : pDriverData( p ) {}  ///< initialize from pointer
+
+    inline bool operator==( const ${sub(x, doc['name'])}& other ) const   ///< is equal to other
+    { return pDriverData == other.pDriverData; }
+    inline bool operator!=( const ${sub(x, doc['name'])}& other ) const   ///< not equal to other
+    { return pDriverData != other.pDriverData; }
+
+};
+#else
+typedef struct _${sub(x, doc['name'])}
+{
+    void* pDriverData;
+
+} ${sub(x, doc['name'])};
+#endif
 
 %endif
 %endfor

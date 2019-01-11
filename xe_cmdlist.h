@@ -41,6 +41,7 @@
 typedef enum _xe_command_list_flags_t
 {
     XE_COMMAND_LIST_FLAG_NONE = 0,                  ///< default behavior
+
 } xe_command_list_flags_t;
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -49,6 +50,7 @@ typedef struct _xe_command_list_desc_t
 {
     uint32_t version;                               ///< [in] descriptor version
     xe_command_list_flags_t flags;                  ///< [in] creation flags
+
 } xe_command_list_desc_t;
 
 ///////////////////////////////////////////////////////////////////////////////
