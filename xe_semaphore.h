@@ -35,7 +35,7 @@
 #include "xe_common.h"
 
 ///////////////////////////////////////////////////////////////////////////////
-/// @brief API version of xe_semaphore_desc_t
+/// @brief API version of ::xe_semaphore_desc_t
 #define XE_SEMAPHORE_DESC_VERSION  XE_MAKE_VERSION( 1, 0 )
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -54,7 +54,7 @@ typedef uint64_t xe_semaphore_value_t;
 /// @brief Semaphore descriptor
 typedef struct _xe_semaphore_desc_t
 {
-    uint32_t version;                               ///< [in] XE_SEMAPHORE_DESC_VERSION
+    uint32_t version;                               ///< [in] ::XE_SEMAPHORE_DESC_VERSION
     xe_semaphore_flags_t flags;                     ///< [in] creation flags
 
 } xe_semaphore_desc_t;

@@ -31,7 +31,7 @@ members:
       desc: "[in] creation flags"
     - type: uint32_t
       name: ordinal
-      desc: "[in] must be less than value returned for ::$x_device_properties_t.numAsyncComputeEngines"
+      desc: "[in] must be less than value returned for $x_device_properties_t.numAsyncComputeEngines"
 --- #--------------------------------------------------------------------------
 type: function
 desc: "Creates a command queue on a device"
@@ -76,9 +76,9 @@ name: $x_command_queue_parameter_t
 etors:
     - name: $X_COMMAND_QUEUE_PARAMETER_PRIORITY
       value: "1"
-      desc: "see ::$x_command_queue_priority_t"
+      desc: "see $x_command_queue_priority_t"
     - name: $X_COMMAND_QUEUE_PARAMETER_CACHE_CONFIG
-      desc: "see ::$x_command_queue_cacheconfig_t"
+      desc: "see $x_command_queue_cacheconfig_t"
 --- #--------------------------------------------------------------------------
 type: enum
 desc: "Supported command queue priorities"

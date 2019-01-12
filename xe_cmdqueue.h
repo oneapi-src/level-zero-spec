@@ -35,7 +35,7 @@
 #include "xe_common.h"
 
 ///////////////////////////////////////////////////////////////////////////////
-/// @brief API version of xe_command_queue_desc_t
+/// @brief API version of ::xe_command_queue_desc_t
 #define XE_COMMAND_QUEUE_DESC_VERSION  XE_MAKE_VERSION( 1, 0 )
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -52,7 +52,7 @@ typedef enum _xe_command_queue_flags_t
 /// @brief Command Queue descriptor
 typedef struct _xe_command_queue_desc_t
 {
-    uint32_t version;                               ///< [in] XE_COMMAND_QUEUE_DESC_VERSION
+    uint32_t version;                               ///< [in] ::XE_COMMAND_QUEUE_DESC_VERSION
     xe_command_queue_flags_t flags;                 ///< [in] creation flags
     uint32_t ordinal;                               ///< [in] must be less than value returned for ::xe_device_properties_t.numAsyncComputeEngines
 

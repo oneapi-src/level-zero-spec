@@ -35,7 +35,7 @@
 #include "xe_common.h"
 
 ///////////////////////////////////////////////////////////////////////////////
-/// @brief API version of xe_resource_desc_t
+/// @brief API version of ::xe_resource_desc_t
 #define XE_RESOURCE_DESC_VERSION  XE_MAKE_VERSION( 1, 0 )
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -50,7 +50,7 @@ typedef enum _xe_resource_flags_t
 /// @brief Resource descriptor
 typedef struct _xe_resource_desc_t
 {
-    uint32_t version;                               ///< [in] XE_RESOURCE_DESC_VERSION
+    uint32_t version;                               ///< [in] ::XE_RESOURCE_DESC_VERSION
     xe_resource_flags_t flags;                      ///< [in] creation flags
 
 } xe_resource_desc_t;

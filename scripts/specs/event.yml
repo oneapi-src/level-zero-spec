@@ -3,7 +3,7 @@ type: header
 desc: "Intel $Xx Driver APIs for Event"
 --- #--------------------------------------------------------------------------
 type: macro
-desc: "API version of ::$x_event_desc_t"
+desc: "API version of $x_event_desc_t"
 name: $X_EVENT_DESC_VERSION
 value: "$X_MAKE_VERSION( 1, 0 )"
 --- #--------------------------------------------------------------------------
@@ -27,7 +27,7 @@ name: $x_event_desc_t
 members:
     - type: uint32_t
       name: version
-      desc: "[in] ::$X_EVENT_DESC_VERSION"
+      desc: "[in] $X_EVENT_DESC_VERSION"
     - type: $x_event_flags_t
       name: flags
       desc: "[in] creation flags"
@@ -84,7 +84,7 @@ returns:
     - $X_RESULT_ERROR_INVALID_PARAMETER:
         - "invalid handle for hCommandList"
         - "invalid handle for hEvent"
-        - "event creation flag did not set ::$X_EVENT_FLAG_DEVICE_TO_HOST or ::$X_EVENT_FLAG_DEVICE_TO_DEVICE"
+        - "event creation flag did not set $X_EVENT_FLAG_DEVICE_TO_HOST or $X_EVENT_FLAG_DEVICE_TO_DEVICE"
         - "event is in signaled state"
         - "event is used by another command list"
 --- #--------------------------------------------------------------------------
@@ -102,7 +102,7 @@ returns:
     - $X_RESULT_ERROR_INVALID_PARAMETER:
         - "invalid handle for hCommandList"
         - "invalid handle for hEvent"
-        - "event creation flag did not set ::$X_EVENT_FLAG_HOST_TO_DEVICE or ::$X_EVENT_FLAG_DEVICE_TO_DEVICE"
+        - "event creation flag did not set $X_EVENT_FLAG_HOST_TO_DEVICE or $X_EVENT_FLAG_DEVICE_TO_DEVICE"
         - "event is used by another command list"
 --- #--------------------------------------------------------------------------
 type: function
@@ -123,7 +123,7 @@ returns:
         - "invalid handle for hCommandList"
         - "nullptr for phEvents"
         - "invalid handle in phEvents"
-        - "any event creation flag did not set ::$X_EVENT_FLAG_DEVICE_TO_HOST or ::$X_EVENT_FLAG_DEVICE_TO_DEVICE"
+        - "any event creation flag did not set $X_EVENT_FLAG_DEVICE_TO_HOST or $X_EVENT_FLAG_DEVICE_TO_DEVICE"
         - "any event is in signaled state"
         - "any event is used by another command list"
 --- #--------------------------------------------------------------------------
@@ -145,7 +145,7 @@ returns:
         - "invalid handle for hCommandList"
         - "nullptr for phEvents"
         - "invalid handle in phEvents"
-        - "any event creation flag did not set ::$X_EVENT_FLAG_HOST_TO_DEVICE or ::$X_EVENT_FLAG_DEVICE_TO_DEVICE"
+        - "any event creation flag did not set $X_EVENT_FLAG_HOST_TO_DEVICE or $X_EVENT_FLAG_DEVICE_TO_DEVICE"
         - "any event is used by another command list"
 --- #--------------------------------------------------------------------------
 type: function
@@ -158,7 +158,7 @@ params:
 returns:
     - $X_RESULT_ERROR_INVALID_PARAMETER:
         - "invalid handle for hEvent"
-        - "event creation flag did not set ::$X_EVENT_FLAG_HOST_TO_DEVICE or ::$X_EVENT_FLAG_DEVICE_TO_DEVICE"
+        - "event creation flag did not set $X_EVENT_FLAG_HOST_TO_DEVICE or $X_EVENT_FLAG_DEVICE_TO_DEVICE"
         - "event is in signaled state"
 --- #--------------------------------------------------------------------------
 type: function
@@ -173,7 +173,7 @@ params:
 returns:
     - $X_RESULT_ERROR_INVALID_PARAMETER:
         - "invalid handle for hEvent"
-        - "event creation flag did not set ::$X_EVENT_FLAG_DEVICE_TO_HOST or ::$X_EVENT_FLAG_DEVICE_TO_DEVICE"
+        - "event creation flag did not set $X_EVENT_FLAG_DEVICE_TO_HOST or $X_EVENT_FLAG_DEVICE_TO_DEVICE"
 --- #--------------------------------------------------------------------------
 type: function
 desc: "Signals multiple events from host. @todo move to runtime?"
@@ -189,7 +189,7 @@ returns:
     - $X_RESULT_ERROR_INVALID_PARAMETER:
         - "nullptr for phEvents"
         - "invalid handle in phEvents"
-        - "any event creation flag did not set ::$X_EVENT_FLAG_HOST_TO_DEVICE or ::$X_EVENT_FLAG_DEVICE_TO_DEVICE"
+        - "any event creation flag did not set $X_EVENT_FLAG_HOST_TO_DEVICE or $X_EVENT_FLAG_DEVICE_TO_DEVICE"
         - "any event is in signaled state"
 --- #--------------------------------------------------------------------------
 type: function
@@ -206,7 +206,7 @@ returns:
     - $X_RESULT_ERROR_INVALID_PARAMETER:
         - "nullptr for phEvents"
         - "invalid handle in phEvents"
-        - "any event creation flag did not set ::$X_EVENT_FLAG_DEVICE_TO_HOST or ::$X_EVENT_FLAG_DEVICE_TO_DEVICE"
+        - "any event creation flag did not set $X_EVENT_FLAG_DEVICE_TO_HOST or $X_EVENT_FLAG_DEVICE_TO_DEVICE"
 --- #--------------------------------------------------------------------------
 type: function
 desc: "Queries an event object's status."

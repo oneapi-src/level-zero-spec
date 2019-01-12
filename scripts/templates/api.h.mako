@@ -1,9 +1,10 @@
 <%!
 import re
 
-def sub(repl, string):
-    string = re.sub(r"\$x", repl, string)
+def sub(repl, string, tag=False):
     string = re.sub(r"\$Xx", repl.title(), string)
+    repl = "::"+repl if tag else repl
+    string = re.sub(r"\$x", repl, string)
     string = re.sub(r"\$X", repl.upper(), string)
     return string
 
@@ -35,7 +36,7 @@ def split_line(line, ch_count):
 
 def make_line(lformat, rformat, repl, a, b, c):
     rhalf = lformat%(sub(repl,a), sub(repl,b))
-    lhalf = rformat%(sub(repl,c))
+    lhalf = rformat%(sub(repl,c,True))
     return "%s%s"%(append(rhalf, 48), lhalf)
 
 def eline(repl, item):
@@ -96,7 +97,7 @@ def pline(repl, item, more):
 
 %for doc in docs:
 ///////////////////////////////////////////////////////////////////////////////
-%for line in split_line(sub(x, doc['desc']), 70):
+%for line in split_line(sub(x, doc['desc'], True), 70):
     %if loop.index < 1:
 /// @brief ${line}
     %else:
@@ -106,7 +107,7 @@ def pline(repl, item, more):
 %if 'details' in doc:
 /// @details
 %for item in doc['details']:
-    %for line in split_line(sub(x, item), 70):
+    %for line in split_line(sub(x, item, True), 70):
         %if loop.index < 1:
 ///     - ${line}
         %else:
@@ -161,13 +162,13 @@ typedef struct _${sub(x, doc['name'])}
 %for item in doc['returns']:
     %if isinstance(item, dict):
     %for key, values in item.items():
-/// - ::${sub(x, key)}
+/// - ${sub(x, key, True)}
         %for val in values:
-///     + ${sub(x, val)}
+///     + ${sub(x, val, True)}
         %endfor
     %endfor
     %else:
-/// - ::${sub(x, item)}
+/// - ${sub(x, item, True)}
     %endif
 %endfor
 ${x}_result_t __${x}call

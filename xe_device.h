@@ -105,7 +105,7 @@ xe_result_t __xecall
 /// @brief Device properties queried using ::xeGetDeviceProperties
 typedef struct _xe_device_properties_t
 {
-    uint32_t version;                               ///< [in] XE_DEVICE_PROPERTIES_VERSION
+    uint32_t version;                               ///< [in] ::XE_DEVICE_PROPERTIES_VERSION
     uint32_t vendorId;                              ///< [out] vendor id from PCI configuration
     uint32_t deviceId;                              ///< [out] device id from PCI configuration
     uint32_t coreClockRate;                         ///< [out] Clock rate for device core.
@@ -145,7 +145,7 @@ xe_result_t __xecall
 /// @brief Device compute properties queried using ::xeGetDeviceComputeProperties
 typedef struct _xe_device_compute_properties_t
 {
-    uint32_t version;                               ///< [in] XE_DEVICE_COMPUTE_PROPERTIES_VERSION
+    uint32_t version;                               ///< [in] ::XE_DEVICE_COMPUTE_PROPERTIES_VERSION
     uint32_t maxThreadsPerGroup;                    ///< [out] Max threads per compute group
     uint32_t maxGroupDimX;                          ///< [out] Max threads for X dimension in group
     uint32_t maxGroupDimY;                          ///< [out] Max threads for Y dimension in group
@@ -184,7 +184,7 @@ xe_result_t __xecall
 /// @brief Device memory properties queried using ::xeGetDeviceMemoryProperties
 typedef struct _xe_device_memory_properties_t
 {
-    uint32_t version;                               ///< [in] XE_DEVICE_MEMORY_PROPERTIES_VERSION
+    uint32_t version;                               ///< [in] ::XE_DEVICE_MEMORY_PROPERTIES_VERSION
     bool isIntegrated;                              ///< [out] Host and device share same physical memory.
     bool hasSharedVirtualMemory;                    ///< [out] Supports shared virtual memory (SVM)
     uint32_t maxResourceDims1D;                     ///< [out] Maximum resource dimensions for 1D resources.

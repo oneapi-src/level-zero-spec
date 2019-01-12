@@ -29,14 +29,14 @@ params:
       desc: "[out] pointer to handle of device object created"
 returns:
     - $X_RESULT_ERROR_INVALID_PARAMETER:
-        - "ordinal is out of range reported by ::$xDeviceGetCount"
+        - "ordinal is out of range reported by $xDeviceGetCount"
         - "nullptr for phDevice"
 --- #--------------------------------------------------------------------------
 type: enum
 desc: "Supported API versions"
 name: $x_api_version_t
 details:
-    - "API versions contain major and minor attributes, use ::$X_MAJOR_VERSION and ::$X_MINOR_VERSION"
+    - "API versions contain major and minor attributes, use $X_MAJOR_VERSION and $X_MINOR_VERSION"
 etors:
     - name: $X_API_VERSION_1_0
       value: "$X_MAKE_VERSION( 1, 0 )"
@@ -60,7 +60,7 @@ returns:
         - "nullptr for version"
 --- #--------------------------------------------------------------------------
 type: macro
-desc: "API version of ::$x_device_properties_t"
+desc: "API version of $x_device_properties_t"
 name: $X_DEVICE_PROPERTIES_VERSION
 value: "$X_MAKE_VERSION( 1, 0 )"
 --- #--------------------------------------------------------------------------
@@ -70,7 +70,7 @@ name: $X_MAX_DEVICE_NAME
 value: "256"
 --- #--------------------------------------------------------------------------
 type: struct
-desc: "Device properties queried using ::$xGetDeviceProperties"
+desc: "Device properties queried using $xGetDeviceProperties"
 name: $x_device_properties_t
 members:
     - type: uint32_t
@@ -126,12 +126,12 @@ returns:
         - "nullptr for provided for properties"
 --- #--------------------------------------------------------------------------
 type: macro
-desc: "API version of ::$x_device_compute_properties_t"
+desc: "API version of $x_device_compute_properties_t"
 name: $X_DEVICE_COMPUTE_PROPERTIES_VERSION
 value: "$X_MAKE_VERSION( 1, 0 )"
 --- #--------------------------------------------------------------------------
 type: struct
-desc: "Device compute properties queried using ::$xGetDeviceComputeProperties"
+desc: "Device compute properties queried using $xGetDeviceComputeProperties"
 name: $x_device_compute_properties_t
 members:
     - type: uint32_t
@@ -186,12 +186,12 @@ returns:
         - "nullptr for provided for properties"
 --- #--------------------------------------------------------------------------
 type: macro
-desc: "API version of ::$x_device_memory_properties_t"
+desc: "API version of $x_device_memory_properties_t"
 name: $X_DEVICE_MEMORY_PROPERTIES_VERSION
 value: "$X_MAKE_VERSION( 1, 0 )"
 --- #--------------------------------------------------------------------------
 type: struct
-desc: "Device memory properties queried using ::$xGetDeviceMemoryProperties"
+desc: "Device memory properties queried using $xGetDeviceMemoryProperties"
 name: $x_device_memory_properties_t
 members:
     - type: uint32_t

@@ -35,7 +35,7 @@
 #include "xe_common.h"
 
 ///////////////////////////////////////////////////////////////////////////////
-/// @brief API version of xe_mempool_desc_t
+/// @brief API version of ::xe_mempool_desc_t
 #define XE_MEMPOOL_DESC_VERSION  XE_MAKE_VERSION( 1, 0 )
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -50,7 +50,7 @@ typedef enum _xe_memory_flags_t
 /// @brief Memory pool descriptor.
 typedef struct _xe_mempool_desc_t
 {
-    uint32_t version;                               ///< [in] XE_MEMPOOL_DESC_VERSION
+    uint32_t version;                               ///< [in] ::XE_MEMPOOL_DESC_VERSION
     uint32_t mask;                                  ///< @todo some kind of device plus tile affinity mask?
 
 } xe_mempool_desc_t;
@@ -68,7 +68,7 @@ typedef struct _xe_mempool_desc_t
 /// @returns
 /// - ::XE_RESULT_SUCCESS
 /// - ::XE_RESULT_ERROR_UNINITIALIZED
-/// - ::@todo
+/// - @todo
 xe_result_t __xecall
   xeMemAllocManaged(
     const xe_mempool_desc_t* desc,                  ///< [in] pointer to memory pool descriptor
@@ -86,7 +86,7 @@ xe_result_t __xecall
 /// @returns
 /// - ::XE_RESULT_SUCCESS
 /// - ::XE_RESULT_ERROR_UNINITIALIZED
-/// - ::@todo
+/// - @todo
 xe_result_t __xecall
   xeMemAlloc(
     const xe_mempool_desc_t* desc,                  ///< [in] pointer to memory pool descriptor
@@ -104,7 +104,7 @@ xe_result_t __xecall
 /// @returns
 /// - ::XE_RESULT_SUCCESS
 /// - ::XE_RESULT_ERROR_UNINITIALIZED
-/// - ::@todo
+/// - @todo
 xe_result_t __xecall
   xeMemFree(
     xe_device_ptr_t ptr                             ///< [in] pointer to memory to free
@@ -129,7 +129,7 @@ typedef enum _xe_memory_advice_t
 /// @returns
 /// - ::XE_RESULT_SUCCESS
 /// - ::XE_RESULT_ERROR_UNINITIALIZED
-/// - ::@todo
+/// - @todo
 xe_result_t __xecall
   xeMemAdvise(
     const xe_mempool_desc_t* desc,                  ///< [in] pointer to memory pool descriptor to apply advice to
