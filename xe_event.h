@@ -74,7 +74,7 @@ typedef struct _xe_event_desc_t
 xe_result_t __xecall
   xeEventCreate(
     xe_device_handle_t hDevice,                     ///< [in] handle of the device
-    xe_event_desc_t* desc,                          ///< [in] pointer to event descriptor
+    const xe_event_desc_t* desc,                    ///< [in] pointer to event descriptor
     xe_event_handle_t* phEvent                      ///< [out] pointer to handle of event object created
     );
 

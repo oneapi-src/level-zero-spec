@@ -72,7 +72,7 @@ typedef struct _xe_fence_desc_t
 xe_result_t __xecall
   xeFenceCreate(
     xe_device_handle_t hDevice,                     ///< [in] handle of the device
-    xe_fence_desc_t* desc,                          ///< [in] pointer to fence descriptor
+    const xe_fence_desc_t* desc,                    ///< [in] pointer to fence descriptor
     xe_fence_handle_t* phFence                      ///< [out] pointer to handle of fence object created
     );
 

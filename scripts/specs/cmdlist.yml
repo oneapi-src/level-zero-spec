@@ -33,7 +33,7 @@ params:
     - type: $x_device_handle_t
       name: hDevice
       desc: "[in] handle of the device"
-    - type: $x_command_list_desc_t*
+    - type: "const $x_command_list_desc_t*"
       name: desc
       desc: "[in] pointer to command list descriptor"
     - type: $x_command_list_handle_t*

@@ -76,7 +76,7 @@ typedef struct _xe_command_queue_desc_t
 xe_result_t __xecall
   xeCommandQueueCreate(
     xe_device_handle_t hDevice,                     ///< [in] handle of the device
-    xe_command_queue_desc_t* desc,                  ///< [in] pointer to command queue descriptor
+    const xe_command_queue_desc_t* desc,            ///< [in] pointer to command queue descriptor
     xe_command_queue_handle_t* phCommandQueue       ///< [out] pointer to handle of command queue object created
     );
 
