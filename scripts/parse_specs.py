@@ -10,6 +10,7 @@ def parse():
     specs = []
     files = glob.glob("./specs/*.yml")
     for f in files:
+        print("Parsing %s..."%f)
         specs.append({
             'name': os.path.splitext(os.path.basename(f))[0],
             'docs': util.yamlRead(f)

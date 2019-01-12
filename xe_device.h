@@ -94,6 +94,10 @@ xe_result_t __xecall
     );
 
 ///////////////////////////////////////////////////////////////////////////////
+/// @brief API version of ::xe_device_properties_t
+#define XE_DEVICE_PROPERTIES_VERSION  XE_MAKE_VERSION( 1, 0 )
+
+///////////////////////////////////////////////////////////////////////////////
 /// @brief Maximum device name string size
 #define XE_MAX_DEVICE_NAME  256
 
@@ -101,48 +105,19 @@ xe_result_t __xecall
 /// @brief Device properties queried using ::xeGetDeviceProperties
 typedef struct _xe_device_properties_t
 {
-    uint32_t vendorId;                              ///< vendor id from PCI configuration
-    uint32_t deviceId;                              ///< device id from PCI configuration
-    uint32_t coreClockRate;                         ///< Clock rate for device core.
-    uint32_t memClockRate;                          ///< Clock rate for device global memory
-    uint32_t memGlobalBusWidth;                     ///< Bus width between core and memory.
-    uint32_t totalLocalMemSize;                     ///< Total memory size in MB.
-    uint32_t l2CacheSize;                           ///< Device L2 size
-    uint32_t numAsyncComputeEngines;                ///< Num asynchronous compute engines
-    uint32_t numComputeCores;                       ///< Num compute cores
-    char device_name[XE_MAX_DEVICE_NAME];           ///< Device name
+    uint32_t version;                               ///< [in] XE_DEVICE_PROPERTIES_VERSION
+    uint32_t vendorId;                              ///< [out] vendor id from PCI configuration
+    uint32_t deviceId;                              ///< [out] device id from PCI configuration
+    uint32_t coreClockRate;                         ///< [out] Clock rate for device core.
+    uint32_t memClockRate;                          ///< [out] Clock rate for device global memory
+    uint32_t memGlobalBusWidth;                     ///< [out] Bus width between core and memory.
+    uint32_t totalLocalMemSize;                     ///< [out] Total memory size in MB.
+    uint32_t l2CacheSize;                           ///< [out] Device L2 size
+    uint32_t numAsyncComputeEngines;                ///< [out] Num asynchronous compute engines
+    uint32_t numComputeCores;                       ///< [out] Num compute cores
+    char device_name[XE_MAX_DEVICE_NAME];           ///< [out] Device name
 
 } xe_device_properties_t;
-
-///////////////////////////////////////////////////////////////////////////////
-/// @brief Device compute properties queried using ::xeGetDeviceComputeProperties
-typedef struct _xe_device_compute_properties_t
-{
-    uint32_t maxThreadsPerGroup;                    ///< Max threads per compute group
-    uint32_t maxGroupDimX;                          ///< Max threads for X dimension in group
-    uint32_t maxGroupDimY;                          ///< Max threads for Y dimension in group
-    uint32_t maxGroupDimZ;                          ///< Max threads for Z dimension in group
-    uint32_t maxDispatchDimX;                       ///< Max thread groups dispatched for x dimension
-    uint32_t maxDipsatchDimY;                       ///< Max thread groups dispatched for y dimension
-    uint32_t maxDispatchDimZ;                       ///< Max thread groups dispatched for z dimension
-    uint32_t maxSharedLocalMemory;                  ///< Max shared local memory per group. @todo Should this be in device props?
-    uint32_t maxGroupRegisters;                     ///< Max physical registers available per group
-    uint32_t warpSize;                              ///< Max threads that can be executed in lock-step. @todo: Should we call this something else?
-
-} xe_device_compute_properties_t;
-
-///////////////////////////////////////////////////////////////////////////////
-/// @brief Device compute properties queried using ::xeGetDeviceMemoryProperties
-typedef struct _xe_device_memory_properties_t
-{
-    bool isIntegrated;                              ///< Host and device share same physical memory.
-    bool hasSharedVirtualMemory;                    ///< Supports shared virtual memory (SVM)
-    uint32_t maxResourceDims1D;                     ///< Maximum resource dimensions for 1D resources.
-    uint32_t maxResourceDims2D;                     ///< Maximum resource dimensions for 2D resources.
-    uint32_t maxResourceDims3D;                     ///< Maximum resource dimensions for 3D resources.
-    uint32_t maxResourceArraySlices;                ///< Maximum resource array slices
-
-} xe_device_memory_properties_t;
 
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Retrieves attributes of the device
@@ -163,6 +138,28 @@ xe_result_t __xecall
     );
 
 ///////////////////////////////////////////////////////////////////////////////
+/// @brief API version of ::xe_device_compute_properties_t
+#define XE_DEVICE_COMPUTE_PROPERTIES_VERSION  XE_MAKE_VERSION( 1, 0 )
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Device compute properties queried using ::xeGetDeviceComputeProperties
+typedef struct _xe_device_compute_properties_t
+{
+    uint32_t version;                               ///< [in] XE_DEVICE_COMPUTE_PROPERTIES_VERSION
+    uint32_t maxThreadsPerGroup;                    ///< [out] Max threads per compute group
+    uint32_t maxGroupDimX;                          ///< [out] Max threads for X dimension in group
+    uint32_t maxGroupDimY;                          ///< [out] Max threads for Y dimension in group
+    uint32_t maxGroupDimZ;                          ///< [out] Max threads for Z dimension in group
+    uint32_t maxDispatchDimX;                       ///< [out] Max thread groups dispatched for x dimension
+    uint32_t maxDipsatchDimY;                       ///< [out] Max thread groups dispatched for y dimension
+    uint32_t maxDispatchDimZ;                       ///< [out] Max thread groups dispatched for z dimension
+    uint32_t maxSharedLocalMemory;                  ///< [out] Max shared local memory per group. @todo Should this be in device props?
+    uint32_t maxGroupRegisters;                     ///< [out] Max physical registers available per group
+    uint32_t warpSize;                              ///< [out] Max threads that can be executed in lock-step. @todo: Should we call this something else?
+
+} xe_device_compute_properties_t;
+
+///////////////////////////////////////////////////////////////////////////////
 /// @brief Retrieves compute attributes of the device
 /// @remarks
 ///   _Analogues_
@@ -178,6 +175,24 @@ xe_result_t __xecall
     xe_device_handle_t hDevice,                     ///< [in] handle of the device object
     xe_device_compute_properties_t* pComputeProperties  ///< [out] query result for compute properties
     );
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief API version of ::xe_device_memory_properties_t
+#define XE_DEVICE_MEMORY_PROPERTIES_VERSION  XE_MAKE_VERSION( 1, 0 )
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Device memory properties queried using ::xeGetDeviceMemoryProperties
+typedef struct _xe_device_memory_properties_t
+{
+    uint32_t version;                               ///< [in] XE_DEVICE_MEMORY_PROPERTIES_VERSION
+    bool isIntegrated;                              ///< [out] Host and device share same physical memory.
+    bool hasSharedVirtualMemory;                    ///< [out] Supports shared virtual memory (SVM)
+    uint32_t maxResourceDims1D;                     ///< [out] Maximum resource dimensions for 1D resources.
+    uint32_t maxResourceDims2D;                     ///< [out] Maximum resource dimensions for 2D resources.
+    uint32_t maxResourceDims3D;                     ///< [out] Maximum resource dimensions for 3D resources.
+    uint32_t maxResourceArraySlices;                ///< [out] Maximum resource array slices
+
+} xe_device_memory_properties_t;
 
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Retrieves memory attributes of the device

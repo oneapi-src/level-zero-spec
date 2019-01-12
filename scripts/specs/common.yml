@@ -1,66 +1,66 @@
----
+--- #--------------------------------------------------------------------------
 type: header
 desc: "Intel $Xx Driver API common types"
----
+--- #--------------------------------------------------------------------------
 type: macro
 desc: "Generates generic $Xx API versions"
 name: "$X_MAKE_VERSION( _major, _minor )"
 value: "(( _major << 16 )|( _minor & 0x0000ffff))"
----
+--- #--------------------------------------------------------------------------
 type: macro
 desc: "Extracts $Xx API major version"
 name: "$X_MAJOR_VERSION( _ver )"
 value: "( _ver >> 16 )"
----
+--- #--------------------------------------------------------------------------
 type: macro
 desc: "Extracts $Xx API minor version"
 name: "$X_MINOR_VERSION( _ver )"
 value: "( _ver & 0x0000ffff )"
----
+--- #--------------------------------------------------------------------------
 type: macro
 desc: "Current header file version"
 name: $X_UMD_HEADER_VERSION
 value: "XE_MAKE_VERSION( 1, 0 )"
----
+--- #--------------------------------------------------------------------------
 type: macro
 desc: "Calling convention for all API functions"
 condition: "defined(_WIN32)"
 name: __$xcall
 value: __stdcall
----
+--- #--------------------------------------------------------------------------
 type: handle
 desc: "Handle of driver's device object"
 name: "$x_device_handle_t"
----
+--- #--------------------------------------------------------------------------
 type: handle
 desc: "Handle of driver's command queue object"
 name: "$x_command_queue_handle_t"
----
+--- #--------------------------------------------------------------------------
 type: handle
 desc: "Handle of driver's command list object"
 name: "$x_command_list_handle_t"
----
+--- #--------------------------------------------------------------------------
 type: handle
 desc: "Handle of driver's fence object"
 name: "$x_fence_handle_t"
----
+--- #--------------------------------------------------------------------------
 type: handle
 desc: "Handle of driver's semaphore object"
 name: "$x_semaphore_handle_t"
----
+--- #--------------------------------------------------------------------------
 type: handle
 desc: "Handle of driver's event object"
 name: "$x_event_handle_t"
----
+--- #--------------------------------------------------------------------------
 type: handle
 desc: "Handle of driver's resource object"
 name: "$x_resource_handle_t"
----
+--- #--------------------------------------------------------------------------
 type: macro
 desc: "Generic macro for enumerator bit masks"
 name: "$X_BIT( _i )"
 value: "( 1 << _i )"
----
+--- #--------------------------------------------------------------------------
 type: enum
 desc: "Defines Return/Error codes"
 analogue:
@@ -83,7 +83,7 @@ etors:
     - name: $X_RESULT_ERROR_UNKNOWN
       value: "0x7fffffff"
       desc: "internal error"
----
+--- #--------------------------------------------------------------------------
 type: typedef
 desc: "Device pointer type"
 name: $x_device_ptr_t

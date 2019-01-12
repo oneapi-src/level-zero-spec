@@ -1,29 +1,25 @@
----
+--- #--------------------------------------------------------------------------
 type: header
 desc: "Intel $Xx Driver APIs for Device"
----
+--- #--------------------------------------------------------------------------
 type: function
 desc: "Reports the number of devices"
 name: $xDeviceGetCount
 analogue:
     - "**cuDeviceGetCount**"
-returns:
-    - $X_RESULT_ERROR_INVALID_PARAMETER
-        - "nullptr for count"
 params:
     - type: "uint32_t*"
       name: count
       desc: "[out] number of devices available"
----
+returns:
+    - $X_RESULT_ERROR_INVALID_PARAMETER
+        - "nullptr for count"
+--- #--------------------------------------------------------------------------
 type: function
 desc: "Returns a handle to the device object"
 name: $xDeviceGet
 analogue:
     - "**cuDeviceGet**"
-returns:
-    - $X_RESULT_ERROR_INVALID_PARAMETER:
-        - "ordinal is out of range reported by ::$xDeviceGetCount"
-        - "nullptr for phDevice"
 params:
     - type: uint32_t
       name: ordinal
@@ -31,7 +27,11 @@ params:
     - type: "$x_device_handle_t*"
       name: phDevice
       desc: "[out] pointer to handle of device object created"
----
+returns:
+    - $X_RESULT_ERROR_INVALID_PARAMETER:
+        - "ordinal is out of range reported by ::$xDeviceGetCount"
+        - "nullptr for phDevice"
+--- #--------------------------------------------------------------------------
 type: enum
 desc: "Supported API versions"
 name: $x_api_version_t
@@ -41,16 +41,12 @@ etors:
     - name: $X_API_VERSION_1_0
       value: "$X_MAKE_VERSION( 1, 0 )"
       desc: "1.0"
----
+--- #--------------------------------------------------------------------------
 type: function
 desc: "Returns the API version supported by the device"
 name: $xDeviceGetApiVersion
 analogue:
     - "**cuCtxGetApiVersion**"
-returns:
-    - $X_RESULT_ERROR_INVALID_PARAMETER:
-        - "invalid handle for hDevice"
-        - "nullptr for version"
 params:
     - type: xe_device_handle_t
       name: hDevice
@@ -58,115 +54,65 @@ params:
     - type: "xe_api_version_t*"
       name: version
       desc: "[out] api version"
----
+returns:
+    - $X_RESULT_ERROR_INVALID_PARAMETER:
+        - "invalid handle for hDevice"
+        - "nullptr for version"
+--- #--------------------------------------------------------------------------
+type: macro
+desc: "API version of ::$x_device_properties_t"
+name: $X_DEVICE_PROPERTIES_VERSION
+value: "$X_MAKE_VERSION( 1, 0 )"
+--- #--------------------------------------------------------------------------
 type: macro
 desc: "Maximum device name string size"
 name: $X_MAX_DEVICE_NAME
 value: "256"
----
+--- #--------------------------------------------------------------------------
 type: struct
 desc: "Device properties queried using ::$xGetDeviceProperties"
 name: $x_device_properties_t
 members:
     - type: uint32_t
+      name: version
+      desc: "[in] $X_DEVICE_PROPERTIES_VERSION"
+    - type: uint32_t
       name: vendorId
-      desc: "vendor id from PCI configuration"
+      desc: "[out] vendor id from PCI configuration"
     - type: uint32_t
       name: deviceId
-      desc: "device id from PCI configuration"
+      desc: "[out] device id from PCI configuration"
     - type: uint32_t
       name: coreClockRate
-      desc: "Clock rate for device core."
+      desc: "[out] Clock rate for device core."
     - type: uint32_t
       name: memClockRate
-      desc: "Clock rate for device global memory"
+      desc: "[out] Clock rate for device global memory"
     - type: uint32_t
       name: memGlobalBusWidth
-      desc: "Bus width between core and memory."
+      desc: "[out] Bus width between core and memory."
     - type: uint32_t
       name: totalLocalMemSize
-      desc: "Total memory size in MB."
+      desc: "[out] Total memory size in MB."
     - type: uint32_t
       name: l2CacheSize
-      desc: "Device L2 size"
+      desc: "[out] Device L2 size"
     - type: uint32_t
       name: numAsyncComputeEngines
-      desc: "Num asynchronous compute engines"
+      desc: "[out] Num asynchronous compute engines"
     - type: uint32_t
       name: numComputeCores
-      desc: "Num compute cores"
+      desc: "[out] Num compute cores"
     - type: char
       name: "device_name[$X_MAX_DEVICE_NAME]"
-      desc: "Device name"
----
-type: struct
-desc: "Device compute properties queried using ::$xGetDeviceComputeProperties"
-name: $x_device_compute_properties_t
-members:
-    - type: uint32_t
-      name: maxThreadsPerGroup
-      desc: "Max threads per compute group"
-    - type: uint32_t
-      name: maxGroupDimX
-      desc: "Max threads for X dimension in group"
-    - type: uint32_t
-      name: maxGroupDimY
-      desc: "Max threads for Y dimension in group"
-    - type: uint32_t
-      name: maxGroupDimZ
-      desc: "Max threads for Z dimension in group"
-    - type: uint32_t
-      name: maxDispatchDimX
-      desc: "Max thread groups dispatched for x dimension"
-    - type: uint32_t
-      name: maxDipsatchDimY
-      desc: "Max thread groups dispatched for y dimension"
-    - type: uint32_t
-      name: maxDispatchDimZ
-      desc: "Max thread groups dispatched for z dimension"
-    - type: uint32_t
-      name: maxSharedLocalMemory
-      desc: "Max shared local memory per group. @todo Should this be in device props?"
-    - type: uint32_t
-      name: maxGroupRegisters
-      desc: "Max physical registers available per group"
-    - type: uint32_t
-      name: warpSize
-      desc: "Max threads that can be executed in lock-step. @todo: Should we call this something else?"
----
-type: struct
-desc: "Device compute properties queried using ::$xGetDeviceMemoryProperties"
-name: $x_device_memory_properties_t
-members:
-    - type: bool
-      name: isIntegrated
-      desc: "Host and device share same physical memory."
-    - type: bool
-      name: hasSharedVirtualMemory
-      desc: "Supports shared virtual memory (SVM)"
-    - type: uint32_t
-      name: maxResourceDims1D
-      desc: "Maximum resource dimensions for 1D resources."
-    - type: uint32_t
-      name: maxResourceDims2D
-      desc: "Maximum resource dimensions for 2D resources."
-    - type: uint32_t
-      name: maxResourceDims3D
-      desc: "Maximum resource dimensions for 3D resources."
-    - type: uint32_t
-      name: maxResourceArraySlices
-      desc: "Maximum resource array slices"
----
+      desc: "[out] Device name"
+--- #--------------------------------------------------------------------------
 type: function
 desc: "Retrieves attributes of the device"
 name: $xGetDeviceProperties
 analogue:
     - "**cuDeviceGetAttribute**"
     - "cuDeviceGetName"
-returns:
-    - $X_RESULT_ERROR_INVALID_PARAMETER:
-        - "invalid handle for hDevice"
-        - "nullptr for provided for properties"
 params:
     - type: $x_device_handle_t
       name: hDevice
@@ -174,16 +120,59 @@ params:
     - type: "$x_device_properties_t*"
       name: pDeviceProperties
       desc: "[out] query result for device properties"
----
+returns:
+    - $X_RESULT_ERROR_INVALID_PARAMETER:
+        - "invalid handle for hDevice"
+        - "nullptr for provided for properties"
+--- #--------------------------------------------------------------------------
+type: macro
+desc: "API version of ::$x_device_compute_properties_t"
+name: $X_DEVICE_COMPUTE_PROPERTIES_VERSION
+value: "$X_MAKE_VERSION( 1, 0 )"
+--- #--------------------------------------------------------------------------
+type: struct
+desc: "Device compute properties queried using ::$xGetDeviceComputeProperties"
+name: $x_device_compute_properties_t
+members:
+    - type: uint32_t
+      name: version
+      desc: "[in] $X_DEVICE_COMPUTE_PROPERTIES_VERSION"
+    - type: uint32_t
+      name: maxThreadsPerGroup
+      desc: "[out] Max threads per compute group"
+    - type: uint32_t
+      name: maxGroupDimX
+      desc: "[out] Max threads for X dimension in group"
+    - type: uint32_t
+      name: maxGroupDimY
+      desc: "[out] Max threads for Y dimension in group"
+    - type: uint32_t
+      name: maxGroupDimZ
+      desc: "[out] Max threads for Z dimension in group"
+    - type: uint32_t
+      name: maxDispatchDimX
+      desc: "[out] Max thread groups dispatched for x dimension"
+    - type: uint32_t
+      name: maxDipsatchDimY
+      desc: "[out] Max thread groups dispatched for y dimension"
+    - type: uint32_t
+      name: maxDispatchDimZ
+      desc: "[out] Max thread groups dispatched for z dimension"
+    - type: uint32_t
+      name: maxSharedLocalMemory
+      desc: "[out] Max shared local memory per group. @todo Should this be in device props?"
+    - type: uint32_t
+      name: maxGroupRegisters
+      desc: "[out] Max physical registers available per group"
+    - type: uint32_t
+      name: warpSize
+      desc: "[out] Max threads that can be executed in lock-step. @todo: Should we call this something else?"
+--- #--------------------------------------------------------------------------
 type: function
 desc: "Retrieves compute attributes of the device"
 name: $xGetDeviceComputeProperties
 analogue:
     - "**cuDeviceGetAttribute**"
-returns:
-    - $X_RESULT_ERROR_INVALID_PARAMETER:
-        - "invalid handle for hDevice"
-        - "nullptr for provided for properties"
 params:
     - type: $x_device_handle_t
       name: hDevice
@@ -191,17 +180,48 @@ params:
     - type: "$x_device_compute_properties_t*"
       name: pComputeProperties
       desc: "[out] query result for compute properties"
----
+returns:
+    - $X_RESULT_ERROR_INVALID_PARAMETER:
+        - "invalid handle for hDevice"
+        - "nullptr for provided for properties"
+--- #--------------------------------------------------------------------------
+type: macro
+desc: "API version of ::$x_device_memory_properties_t"
+name: $X_DEVICE_MEMORY_PROPERTIES_VERSION
+value: "$X_MAKE_VERSION( 1, 0 )"
+--- #--------------------------------------------------------------------------
+type: struct
+desc: "Device memory properties queried using ::$xGetDeviceMemoryProperties"
+name: $x_device_memory_properties_t
+members:
+    - type: uint32_t
+      name: version
+      desc: "[in] $X_DEVICE_MEMORY_PROPERTIES_VERSION"
+    - type: bool
+      name: isIntegrated
+      desc: "[out] Host and device share same physical memory."
+    - type: bool
+      name: hasSharedVirtualMemory
+      desc: "[out] Supports shared virtual memory (SVM)"
+    - type: uint32_t
+      name: maxResourceDims1D
+      desc: "[out] Maximum resource dimensions for 1D resources."
+    - type: uint32_t
+      name: maxResourceDims2D
+      desc: "[out] Maximum resource dimensions for 2D resources."
+    - type: uint32_t
+      name: maxResourceDims3D
+      desc: "[out] Maximum resource dimensions for 3D resources."
+    - type: uint32_t
+      name: maxResourceArraySlices
+      desc: "[out] Maximum resource array slices"
+--- #--------------------------------------------------------------------------
 type: function
 desc: "Retrieves memory attributes of the device"
 name: $xGetDeviceMemoryProperties
 analogue:
     - "**cuDeviceGetAttribute**"
     - cuDeviceTotalMem
-returns:
-    - $X_RESULT_ERROR_INVALID_PARAMETER:
-        - "invalid handle for hDevice"
-        - "nullptr for provided for properties"
 params:
     - type: $x_device_handle_t
       name: hDevice
@@ -209,3 +229,7 @@ params:
     - type: "$x_device_memory_properties_t*"
       name: pMemProperties
       desc: "[out] query result for compute properties"
+returns:
+    - $X_RESULT_ERROR_INVALID_PARAMETER:
+        - "invalid handle for hDevice"
+        - "nullptr for provided for properties"

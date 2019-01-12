@@ -52,7 +52,7 @@ typedef enum _xe_command_queue_flags_t
 /// @brief Command Queue descriptor
 typedef struct _xe_command_queue_desc_t
 {
-    uint32_t version;                               ///< [in] descriptor version
+    uint32_t version;                               ///< [in] XE_COMMAND_QUEUE_DESC_VERSION
     xe_command_queue_flags_t flags;                 ///< [in] creation flags
     uint32_t ordinal;                               ///< [in] must be less than value returned for ::xe_device_properties_t.numAsyncComputeEngines
 

@@ -50,7 +50,7 @@ typedef enum _xe_command_list_flags_t
 /// @brief Command List descriptor
 typedef struct _xe_command_list_desc_t
 {
-    uint32_t version;                               ///< [in] descriptor version
+    uint32_t version;                               ///< [in] XE_COMMAND_LIST_DESC_VERSION
     xe_command_list_flags_t flags;                  ///< [in] creation flags
 
 } xe_command_list_desc_t;

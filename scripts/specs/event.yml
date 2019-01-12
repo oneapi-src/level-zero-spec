@@ -1,0 +1,256 @@
+--- #--------------------------------------------------------------------------
+type: header
+desc: "Intel $Xx Driver APIs for Event"
+--- #--------------------------------------------------------------------------
+type: macro
+desc: "API version of ::$x_event_desc_t"
+name: $X_EVENT_DESC_VERSION
+value: "$X_MAKE_VERSION( 1, 0 )"
+--- #--------------------------------------------------------------------------
+type: enum
+desc: "Supported event creation flags"
+name: $x_event_flags_t
+etors:
+    - name: $X_EVENT_FLAG_HOST_TO_DEVICE
+      value: "$X_BIT(0)"
+      desc: "signals from host, waits on device"
+    - name: $X_EVENT_FLAG_DEVICE_TO_HOST
+      value: "$X_BIT(1)"
+      desc: "signals from device, waits on host"
+    - name: $X_EVENT_FLAG_DEVICE_TO_DEVICE
+      value: "$X_BIT(2)"
+      desc: "signals from device, waits on another device"
+--- #--------------------------------------------------------------------------
+type: struct
+desc: "Event descriptor"
+name: $x_event_desc_t
+members:
+    - type: uint32_t
+      name: version
+      desc: "[in] ::$X_EVENT_DESC_VERSION"
+    - type: $x_event_flags_t
+      name: flags
+      desc: "[in] creation flags"
+--- #--------------------------------------------------------------------------
+type: function
+desc: "Creates an event object."
+name: $xEventCreate
+analogue:
+    - "**cuEventCreate**"
+params:
+    - type: $x_device_handle_t
+      name: hDevice
+      desc: "[in] handle of the device"
+    - type: "$x_event_desc_t*"
+      name: desc
+      desc: "[in] pointer to event descriptor"
+    - type: "$x_event_handle_t*"
+      name: phEvent
+      desc: "[out] pointer to handle of event object created"
+returns:
+    - $X_RESULT_ERROR_INVALID_PARAMETER:
+        - "invalid handle for hDevice"
+        - "nullptr for desc"
+        - "nullptr for phEvent"
+    - $X_RESULT_ERROR_OUT_OF_HOST_MEMORY
+    - $X_RESULT_ERROR_OUT_OF_DEVICE_MEMORY
+--- #--------------------------------------------------------------------------
+type: function
+desc: "Deletes an event object."
+name: $xEventDestroy
+analogue:
+     - "**cuEventDestroy**"
+params:
+    - type: $x_event_handle_t
+      name: hEvent
+      desc: "[in] handle of event object to destroy"
+returns:
+     - $X_RESULT_ERROR_INVALID_PARAMETER:
+         - "invalid handle for hEvent"
+--- #--------------------------------------------------------------------------
+type: function
+desc: "Encodes a signal of the event from the device into a command list."
+name: $xCommandListEncodeSignalEvent
+analogue:
+    - "**cuEventRecord**"
+params:
+    - type: $x_command_list_handle_t
+      name: hCommandList
+      desc: "[in] handle of the command list"
+    - type: $x_event_handle_t
+      name: hEvent
+      desc: "[in] handle of the event"
+returns:
+    - $X_RESULT_ERROR_INVALID_PARAMETER:
+        - "invalid handle for hCommandList"
+        - "invalid handle for hEvent"
+        - "event creation flag did not set ::$X_EVENT_FLAG_DEVICE_TO_HOST or ::$X_EVENT_FLAG_DEVICE_TO_DEVICE"
+        - "event is in signaled state"
+        - "event is used by another command list"
+--- #--------------------------------------------------------------------------
+type: function
+desc: "Encodes a wait on event from a host signal into a command list."
+name: $xCommandListEncodeWaitOnEvent
+params:
+    - type: $x_command_list_handle_t
+      name: hCommandList
+      desc: "[in] handle of the command list"
+    - type: $x_event_handle_t
+      name: hEvent
+      desc: "[in] handle of the event"
+returns:
+    - $X_RESULT_ERROR_INVALID_PARAMETER:
+        - "invalid handle for hCommandList"
+        - "invalid handle for hEvent"
+        - "event creation flag did not set ::$X_EVENT_FLAG_HOST_TO_DEVICE or ::$X_EVENT_FLAG_DEVICE_TO_DEVICE"
+        - "event is used by another command list"
+--- #--------------------------------------------------------------------------
+type: function
+desc: "Encodes signals of multiple event from the device into a command list. @todo move to runtime?"
+name: $xCommandListEncodeSignalMultipleEvents
+params:
+    - type: $x_command_list_handle_t
+      name: hCommandList
+      desc: "[in] handle of the command list"
+    - type: uint32_t
+      name: numEvents
+      desc: "[in] number of events pointed to by phEvents"
+    - type: "$x_event_handle_t*"
+      name: phEvents
+      desc: "[in] pointer to array of handles of the events"
+returns:
+    - $X_RESULT_ERROR_INVALID_PARAMETER:
+        - "invalid handle for hCommandList"
+        - "nullptr for phEvents"
+        - "invalid handle in phEvents"
+        - "any event creation flag did not set ::$X_EVENT_FLAG_DEVICE_TO_HOST or ::$X_EVENT_FLAG_DEVICE_TO_DEVICE"
+        - "any event is in signaled state"
+        - "any event is used by another command list"
+--- #--------------------------------------------------------------------------
+type: function
+desc: "Encodes waits on multiple event from a host signal into a command list. @todo move to runtime?"
+name: $xCommandListEncodeWaitOnMultipleEvents
+params:
+    - type: $x_command_list_handle_t
+      name: hCommandList
+      desc: "[in] handle of the command list"
+    - type: uint32_t
+      name: numEvents
+      desc: "[in] number of events pointed to by phEvents"
+    - type: "$x_event_handle_t*"
+      name: phEvents
+      desc: "[in] pointer to array of handles of the events"
+returns:
+    - $X_RESULT_ERROR_INVALID_PARAMETER:
+        - "invalid handle for hCommandList"
+        - "nullptr for phEvents"
+        - "invalid handle in phEvents"
+        - "any event creation flag did not set ::$X_EVENT_FLAG_HOST_TO_DEVICE or ::$X_EVENT_FLAG_DEVICE_TO_DEVICE"
+        - "any event is used by another command list"
+--- #--------------------------------------------------------------------------
+type: function
+desc: "Signals a event from host."
+name: $xSignalEvent
+params:
+    - type: $x_event_handle_t
+      name: hEvent
+      desc: "[in] handle of the event"
+returns:
+    - $X_RESULT_ERROR_INVALID_PARAMETER:
+        - "invalid handle for hEvent"
+        - "event creation flag did not set ::$X_EVENT_FLAG_HOST_TO_DEVICE or ::$X_EVENT_FLAG_DEVICE_TO_DEVICE"
+        - "event is in signaled state"
+--- #--------------------------------------------------------------------------
+type: function
+desc: "The current host thread waits on an event from a device signal."
+name: $xWaitOnEvent
+analogue:
+    - "**cuEventSynchronize**"
+params:
+    - type: $x_event_handle_t
+      name: hEvent
+      desc: "[in] handle of the event"
+returns:
+    - $X_RESULT_ERROR_INVALID_PARAMETER:
+        - "invalid handle for hEvent"
+        - "event creation flag did not set ::$X_EVENT_FLAG_DEVICE_TO_HOST or ::$X_EVENT_FLAG_DEVICE_TO_DEVICE"
+--- #--------------------------------------------------------------------------
+type: function
+desc: "Signals multiple events from host. @todo move to runtime?"
+name: $xSignalMultipleEvents
+params:
+    - type: uint32_t
+      name: numEvents
+      desc: "[in] number of events pointed to by phEvents"
+    - type: "$x_event_handle_t*"
+      name: phEvents
+      desc: "[in] pointer to array of handles of the events"
+returns:
+    - $X_RESULT_ERROR_INVALID_PARAMETER:
+        - "nullptr for phEvents"
+        - "invalid handle in phEvents"
+        - "any event creation flag did not set ::$X_EVENT_FLAG_HOST_TO_DEVICE or ::$X_EVENT_FLAG_DEVICE_TO_DEVICE"
+        - "any event is in signaled state"
+--- #--------------------------------------------------------------------------
+type: function
+desc: "The current host thread waits on multiple events from a device signal. @todo move to runtime?"
+name: $xWaitOnMultipleEvents
+params:
+    - type: uint32_t
+      name: numEvents
+      desc: "[in] number of events pointed to by phEvents"
+    - type: "$x_event_handle_t*"
+      name: phEvents
+      desc: "[in] pointer to array of handles of the events"
+returns:
+    - $X_RESULT_ERROR_INVALID_PARAMETER:
+        - "nullptr for phEvents"
+        - "invalid handle in phEvents"
+        - "any event creation flag did not set ::$X_EVENT_FLAG_DEVICE_TO_HOST or ::$X_EVENT_FLAG_DEVICE_TO_DEVICE"
+--- #--------------------------------------------------------------------------
+type: function
+desc: "Queries an event object's status."
+name: $xEventQueryStatus
+analogue:
+    - "**cuEventQuery**"
+params:
+    - type: $x_event_handle_t
+      name: hEvent
+      desc: "[in] handle of the event"
+returns:
+    - $X_RESULT_NOT_READY - not signaled
+    - $X_RESULT_ERROR_INVALID_PARAMETER:
+        - "invalid handle for hEvent"
+--- #--------------------------------------------------------------------------
+type: function
+desc: "Queries the elapsed time between two signaled events."
+name: $xEventQueryElapsedTime
+analogue:
+    - "**cuEventElapsedTime**"
+params:
+    - type: $x_event_handle_t
+      name: hEventStart
+      desc: "[in] handle of the event"
+    - type: $x_event_handle_t
+      name: hEventEnd
+      desc: "[in] handle of the event"
+    - type: "double_t*"
+      name: pTime
+      desc: "[out] time in milliseconds"
+returns:
+    - $X_RESULT_ERROR_INVALID_PARAMETER:
+        - "invalid handle for hEventStart"
+        - "invalid handle for hEventEnd"
+        - "either event not signaled"
+        - "nullptr for pTime"
+--- #--------------------------------------------------------------------------
+type: function
+desc: "Reset an event back to not signaled state"
+name: $xEventReset
+params:
+    - type: $x_event_handle_t
+      name: hEvent
+      desc: "[in] handle of the event"
+returns:
+    - $X_RESULT_ERROR_INVALID_PARAMETER:
+        - "invalid handle for hEvent"
