@@ -218,7 +218,8 @@ params:
       name: hEvent
       desc: "[in] handle of the event"
 returns:
-    - $X_RESULT_NOT_READY - not signaled
+    - $X_RESULT_NOT_READY:
+        - not signaled
     - $X_RESULT_ERROR_INVALID_PARAMETER:
         - "invalid handle for hEvent"
 --- #--------------------------------------------------------------------------

@@ -238,7 +238,8 @@ xe_result_t __xecall
 /// @returns
 /// - ::XE_RESULT_SUCCESS
 /// - ::XE_RESULT_ERROR_UNINITIALIZED
-/// - ::XE_RESULT_NOT_READY - not signaled
+/// - ::XE_RESULT_NOT_READY
+///     + not signaled
 /// - ::XE_RESULT_ERROR_INVALID_PARAMETER
 ///     + invalid handle for hEvent
 xe_result_t __xecall
