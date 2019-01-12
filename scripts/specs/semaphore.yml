@@ -1,0 +1,143 @@
+--- #--------------------------------------------------------------------------
+type: header
+desc: "Intel $Xx Driver APIs for Semaphore"
+--- #--------------------------------------------------------------------------
+type: macro
+desc: "API version of $x_semaphore_desc_t"
+name: $X_SEMAPHORE_DESC_VERSION
+value: "$X_MAKE_VERSION( 1, 0 )"
+--- #--------------------------------------------------------------------------
+type: enum
+desc: "Supported semaphore creation flags"
+name: $x_semaphore_flags_t
+etors:
+    - name: $X_SEMAPHORE_FLAG_NONE
+      value: "0"
+      desc: "default behavior"
+--- #--------------------------------------------------------------------------
+type: typedef
+desc: "Semaphore value type"
+name: $x_semaphore_value_t
+value: uint64_t
+--- #--------------------------------------------------------------------------
+type: struct
+desc: "Semaphore descriptor"
+name: $x_semaphore_desc_t
+members:
+    - type: uint32_t
+      name: version
+      desc: "[in] $X_SEMAPHORE_DESC_VERSION"
+    - type: $x_semaphore_flags_t
+      name: flags
+      desc: "[in] creation flags"
+--- #--------------------------------------------------------------------------
+type: function
+desc: "Creates an semaphore object."
+name: $xSemaphoreCreate
+params:
+    - type: $x_device_handle_t
+      name: hDevice
+      desc: "[in] handle of the device"
+    - type: "const $x_semaphore_desc_t*"
+      name: desc
+      desc: "[in] pointer to semaphore descriptor"
+    - type: "$x_semaphore_handle_t*"
+      name: phSemaphore
+      desc: "[out] pointer to handle of semaphore object created"
+returns:
+    - $X_RESULT_ERROR_INVALID_PARAMETER:
+        - "invalid handle for hDevice"
+        - "nullptr for desc"
+        - "nullptr for phSemaphore"
+    - $X_RESULT_ERROR_OUT_OF_HOST_MEMORY
+    - $X_RESULT_ERROR_OUT_OF_DEVICE_MEMORY
+--- #--------------------------------------------------------------------------
+type: function
+desc: "Deletes an semaphore object."
+name: $xSemaphoreDestroy
+params:
+    - type: $x_semaphore_handle_t
+      name: hSemaphore
+      desc: "[in] handle of semaphore object to destroy"
+returns:
+    - $X_RESULT_ERROR_INVALID_PARAMETER:
+        - "invalid handle for hSemaphore"
+--- #--------------------------------------------------------------------------
+type: function
+desc: "Encodes an semaphore signal into a command list."
+name: $xCommandListEncodeSemaphoreSignal
+params:
+    - type: $x_command_list_handle_t
+      name: hCommandList
+      desc: "[in] handle of the command list"
+    - type: $x_semaphore_handle_t
+      name: hSemaphore
+      desc: "[in] handle of the semaphore"
+    - type: $x_semaphore_value_t
+      name: value
+      desc: "[in] the value to write on signal"
+returns:
+    - $X_RESULT_ERROR_INVALID_PARAMETER:
+        - "invalid handle for hCommandList"
+        - "invalid handle for hSemaphore"
+--- #--------------------------------------------------------------------------
+type: enum
+desc: "Supported semaphore wait operations"
+name: $x_semaphore_wait_operation_t
+etors:
+    - name: $X_SEMAPHORE_WAIT_OPERATION_EQUAL_TO
+      value: "1"
+      desc: "semaphore value == wait value"
+    - name: $X_SEMAPHORE_WAIT_OPERATION_NOT_EQUAL_TO
+      desc: "semaphore value != wait value"
+    - name: $X_SEMAPHORE_WAIT_OPERATION_GREATER_THAN
+      desc: "semaphore value > wait value"
+    - name: $X_SEMAPHORE_WAIT_OPERATION_GREATER_OR_EQUAL_TO
+      desc: "semaphore value >= wait value"
+    - name: $X_SEMAPHORE_WAIT_OPERATION_LESS_THAN
+      desc: "semaphore value < wait value"
+    - name: $X_SEMAPHORE_WAIT_OPERATION_LESS_OR_EQUAL_TO
+      desc: "semaphore value <= wait value"
+--- #--------------------------------------------------------------------------
+type: function
+desc: "Encodes an semaphore wait into a command list."
+name: $xCommandListEncodeSemaphoreWait
+params:
+    - type: $x_command_list_handle_t
+      name: hCommandList
+      desc: "[in] handle of the command list"
+    - type: $x_semaphore_handle_t
+      name: hSemaphore
+      desc: "[in] handle of the semaphore"
+    - type: $x_semaphore_wait_operation_t
+      name: operation
+      desc: "[in] wait operation type"
+    - type: $x_semaphore_value_t
+      name: value
+      desc: "[in] the value to wait upon"
+returns:
+    - $X_RESULT_ERROR_INVALID_PARAMETER:
+        - "invalid handle for hCommandList"
+        - "invalid handle for hSemaphore"
+--- #--------------------------------------------------------------------------
+type: function
+desc: "Queries an semaphore object's value."
+name: $xSemaphoreQueryValue
+params:
+    - type: $x_semaphore_handle_t
+      name: hSemaphore
+      desc: "[in] handle of the semaphore"
+returns:
+    - $X_RESULT_ERROR_INVALID_PARAMETER:
+        - "invalid handle for hSemaphore"
+--- #--------------------------------------------------------------------------
+type: function
+desc: "Reset a semaphore back to the not signaled state, with value of 0."
+name: $xSemaphoreReset
+params:
+    - type: $x_semaphore_handle_t
+      name: hSemaphore
+      desc: "[in] handle of the semaphore"
+returns:
+    - $X_RESULT_ERROR_INVALID_PARAMETER:
+        - "invalid handle for hSemaphore"

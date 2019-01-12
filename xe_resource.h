@@ -22,7 +22,7 @@
 *
 * @file xe_resource.h
 *
-* @brief Intel Xe Driver APIs for Memory
+* @brief Intel Xe Driver APIs for Resource
 *
 * DO NOT EDIT: generated from /scripts/specs/resource.yml
 *
