@@ -25,6 +25,8 @@
 *.dll
 
 # Project files
+*.sln
+*.vcproj
 *.suo
 *.db
 *.opendb
@@ -40,3 +42,6 @@
 *.exe
 *.out
 *.app
+
+# HTML
+html/

@@ -6,9 +6,9 @@ import glob
     Reads each YML file and extracts data
     Returns list of data per file
 """
-def parse():
+def parse(path):
     specs = []
-    files = glob.glob("./specs/*.yml")
+    files = glob.glob(os.path.join(path,"*.yml"))
     for f in files:
         print("Parsing %s..."%f)
         specs.append({
@@ -17,21 +17,3 @@ def parse():
         })
     #util.jsonWrite("specs.json", specs);
     return specs
-
-"""
-    Parse and print contents (for debug purposes)
-"""
-def main():
-    specs = parse()
-    for s in specs:
-        print("\nFile: %s"%s['name'])
-        for doc in s['docs']:
-            print("    %s"%doc['type'])
-            print("    %s"%doc['name'])
-            print("    %s\n"%doc['desc'])
-
-    print("\nDone")
-
-if __name__ == '__main__':
-    main()
-# END OF FILE    

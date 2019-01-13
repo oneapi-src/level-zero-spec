@@ -11,13 +11,12 @@ def main():
     #args = parser.parse_args()
 
     configParser = util.configRead("config.ini")
-
-    options = {
-        'namespace': configParser.get('API','namespace')
-        }
-
-    specs = parse_specs.parse()
-    generate_api.generate_all(options,specs)
+    
+    driver = parse_specs.parse("./driver")
+    generate_api.generate_all(configParser.get('PATH','driver'), configParser.get('API','namespace'), driver)
+    
+    #runtime = parse_specs.parse("./runtime")
+    #generate_api.generate_all(configParser.get('PATH','runtime'), configParser.get('API','namespace'), runtime)
 
     print("\nDone")
 
