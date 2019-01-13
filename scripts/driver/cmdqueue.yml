@@ -154,7 +154,7 @@ params:
       name: hCommandQueue
       desc: "[in] handle of the command queue"
 returns:
-    - $XE_RESULT_ERROR_INVALID_PARAMETER:
+    - $X_RESULT_ERROR_INVALID_PARAMETER:
        - "invalid handle for hCommandQueue"
 --- #--------------------------------------------------------------------------
 type: function
@@ -168,7 +168,7 @@ params:
       name: hCommandList
       desc: "[in] handle of the command list to execute"
 returns:
-    - $XE_RESULT_ERROR_INVALID_PARAMETER:
+    - $X_RESULT_ERROR_INVALID_PARAMETER:
        - "invalid handle for hCommandQueue"
        - "invalid handle for hCommandList"
 --- #--------------------------------------------------------------------------
@@ -180,5 +180,5 @@ params:
       name: hCommandQueue
       desc: "[in] handle of the command queue"
 returns:
-    - $XE_RESULT_ERROR_INVALID_PARAMETER:
+    - $X_RESULT_ERROR_INVALID_PARAMETER:
        - "invalid handle for hCommandQueue"

@@ -170,7 +170,7 @@ xe_result_t __xecall
 /// @returns
 /// - ::XE_RESULT_SUCCESS
 /// - ::XE_RESULT_ERROR_UNINITIALIZED
-/// - ::XEE_RESULT_ERROR_INVALID_PARAMETER
+/// - ::XE_RESULT_ERROR_INVALID_PARAMETER
 ///     + invalid handle for hCommandQueue
 xe_result_t __xecall
   xeCommandQueueResetParameters(
@@ -182,7 +182,7 @@ xe_result_t __xecall
 /// @returns
 /// - ::XE_RESULT_SUCCESS
 /// - ::XE_RESULT_ERROR_UNINITIALIZED
-/// - ::XEE_RESULT_ERROR_INVALID_PARAMETER
+/// - ::XE_RESULT_ERROR_INVALID_PARAMETER
 ///     + invalid handle for hCommandQueue
 ///     + invalid handle for hCommandList
 xe_result_t __xecall
@@ -196,7 +196,7 @@ xe_result_t __xecall
 /// @returns
 /// - ::XE_RESULT_SUCCESS
 /// - ::XE_RESULT_ERROR_UNINITIALIZED
-/// - ::XEE_RESULT_ERROR_INVALID_PARAMETER
+/// - ::XE_RESULT_ERROR_INVALID_PARAMETER
 ///     + invalid handle for hCommandQueue
 xe_result_t __xecall
   xeCommandQueueSynchronize(
