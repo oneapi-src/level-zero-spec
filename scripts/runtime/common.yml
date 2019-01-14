@@ -1,6 +1,6 @@
 --- #--------------------------------------------------------------------------
 type: header
-desc: "Intel $Xx Driver API common types"
+desc: "Intel $Xx Runtime API common types"
 --- #--------------------------------------------------------------------------
 type: macro
 desc: "Generates generic $Xx API versions"
@@ -29,31 +29,23 @@ name: __$xcall
 value: __stdcall
 --- #--------------------------------------------------------------------------
 type: handle
-desc: "Handle of driver's device object"
+desc: "Handle of runtime's device object"
 name: "$x_device_handle_t"
 --- #--------------------------------------------------------------------------
 type: handle
-desc: "Handle of driver's command queue object"
+desc: "Handle of runtime's command queue object"
 name: "$x_command_queue_handle_t"
 --- #--------------------------------------------------------------------------
 type: handle
-desc: "Handle of driver's command list object"
+desc: "Handle of runtime's command list object"
 name: "$x_command_list_handle_t"
 --- #--------------------------------------------------------------------------
 type: handle
-desc: "Handle of driver's fence object"
+desc: "Handle of runtime's fence object"
 name: "$x_fence_handle_t"
 --- #--------------------------------------------------------------------------
 type: handle
-desc: "Handle of driver's semaphore object"
-name: "$x_semaphore_handle_t"
---- #--------------------------------------------------------------------------
-type: handle
-desc: "Handle of driver's event object"
-name: "$x_event_handle_t"
---- #--------------------------------------------------------------------------
-type: handle
-desc: "Handle of driver's resource object"
+desc: "Handle of runtime's resource object"
 name: "$x_resource_handle_t"
 --- #--------------------------------------------------------------------------
 type: macro
@@ -64,7 +56,7 @@ value: "( 1 << _i )"
 type: enum
 desc: "Defines Return/Error codes"
 analogue:
-    - "**CUresult**"
+    - "**CUDAresult**"
 name: $x_result_t
 etors:
     - name: $X_RESULT_SUCCESS
@@ -73,7 +65,7 @@ etors:
     - name: $X_RESULT_NOT_READY
       desc: "synchronization primitive not signaled"
     - name: $X_RESULT_ERROR_UNINITIALIZED
-      desc: "driver is not initialized"
+      desc: "runtime is not initialized"
     - name: $X_RESULT_ERROR_INVALID_PARAMETER
       desc: "invalid parameter provided"
     - name: $X_RESULT_ERROR_OUT_OF_HOST_MEMORY

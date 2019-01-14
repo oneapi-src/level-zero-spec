@@ -14,10 +14,10 @@ def main():
     configParser = util.configRead("config.ini")
     
     driver = parse_specs.parse("./driver")
-    generate_api.generate_all(configParser.get('PATH','driver'), configParser.get('API','namespace'), driver)
+    generate_api.generate_all(configParser.get('PATH','driver'), configParser.get('NAMESPACE','driver'), driver)
     
-    #runtime = parse_specs.parse("./runtime")
-    #generate_api.generate_all(configParser.get('PATH','runtime'), configParser.get('API','namespace'), runtime)
+    runtime = parse_specs.parse("./runtime")
+    generate_api.generate_all(configParser.get('PATH','runtime'), configParser.get('NAMESPACE','runtime'), runtime)
 
     generate_docs.generate_all()
     

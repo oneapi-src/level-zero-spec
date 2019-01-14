@@ -20,72 +20,72 @@
 * or otherwise. Any license under such intellectual property rights must be
 * express and approved by Intel in writing.
 *
-* @file xe_driver.h
+* @file xi_runtime.h
 *
-* @brief Intel Xe Driver APIs
+* @brief Intel Xi Runtime APIs
 *
-* DO NOT EDIT: generated from /scripts/specs/driver.yml
+* DO NOT EDIT: generated from /scripts/specs/runtime.yml
 *
 ******************************************************************************/
-#ifndef _XE_DRIVER_H
-#define _XE_DRIVER_H
+#ifndef _XI_RUNTIME_H
+#define _XI_RUNTIME_H
 #if defined(__cplusplus)
 #pragma once
 #endif
-#include "xe_common.h"
+#include "xi_common.h"
 
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Supported initialization flags
-typedef enum _xe_init_flags_t
+typedef enum _xi_init_flags_t
 {
-    XE_INIT_FLAG_NONE = 0,                          ///< default behavior
+    XI_INIT_FLAG_NONE = 0,                          ///< default behavior
 
-} xe_init_flags_t;
+} xi_init_flags_t;
 
 ///////////////////////////////////////////////////////////////////////////////
-/// @brief Initialize the Xe Driver API and must be called before any other API
+/// @brief Initialize the Xi Runtime API and must be called before any other API
 ///        function.
 /// @details
 ///     - If this function is not called then all other functions will return
-///       ::XE_RESULT_ERROR_UNINITIALIZED.
+///       ::XI_RESULT_ERROR_UNINITIALIZED.
 /// @remarks
 ///   _Analogues_
 ///     - **cuInit**
 /// @returns
-/// - ::XE_RESULT_SUCCESS
-/// - ::XE_RESULT_ERROR_UNINITIALIZED
-/// - ::XE_RESULT_ERROR_INVALID_PARAMETER
+/// - ::XI_RESULT_SUCCESS
+/// - ::XI_RESULT_ERROR_UNINITIALIZED
+/// - ::XI_RESULT_ERROR_INVALID_PARAMETER
 ///     + invalid value for flags
-/// - ::XE_RESULT_ERROR_OUT_OF_HOST_MEMORY
-xe_result_t __xecall
-  xeInit(
-    xe_init_flags_t flags                           ///< [in] initialization flags
+/// - ::XI_RESULT_ERROR_OUT_OF_HOST_MEMORY
+xi_result_t __xicall
+  xiInit(
+    xi_init_flags_t flags                           ///< [in] initialization flags
     );
 
 ///////////////////////////////////////////////////////////////////////////////
-/// @brief Supported driver versions
+/// @brief Supported runtime versions
 /// @details
-///     - Driver versions contain major and minor attributes, use
-///       ::XE_MAJOR_VERSION and ::XE_MINOR_VERSION.
-typedef enum _xe_driver_version_t
+///     - Runtime versions contain major and minor attributes, use
+///       ::XI_MAJOR_VERSION and ::XI_MINOR_VERSION.
+typedef enum _xi_runtime_version_t
 {
-    XE_DRIVER_VERSION_1_0 = XE_MAKE_VERSION( 1, 0 ),///< 1.0
+    XI_RUNTIME_VERSION_1_0 = XI_MAKE_VERSION( 1, 0 ),   ///< 1.0
 
-} xe_driver_version_t;
+} xi_runtime_version_t;
 
 ///////////////////////////////////////////////////////////////////////////////
-/// @brief Returns the current versions of the driver
+/// @brief Returns the current versions of the runtime
 /// @remarks
 ///   _Analogues_
-///     - **cuDriverGetVersion**
+///     - **cudaRuntimeGetVersion**
 /// @returns
-/// - ::XE_RESULT_SUCCESS
-/// - ::XE_RESULT_ERROR_UNINITIALIZED
-/// - ::XE_RESULT_ERROR_INVALID_PARAMETER
+/// - ::XI_RESULT_SUCCESS
+/// - ::XI_RESULT_ERROR_UNINITIALIZED
+/// - ::XI_RESULT_ERROR_INVALID_PARAMETER
 ///     + nullptr for version
-xe_result_t __xecall
-  xeDriverGetVersion(
-    xe_driver_version_t* version                    ///< [out] driver version
+xi_result_t __xicall
+  xiRuntimeGetVersion(
+    xi_runtime_version_t* version                   ///< [out] runtime version
     );
 
-#endif // _XE_DRIVER_H
+#endif // _XI_RUNTIME_H

@@ -1,6 +1,6 @@
 --- #--------------------------------------------------------------------------
 type: header
-desc: "Intel $Xx Driver APIs for Resource"
+desc: "Intel $Xx Runtime APIs for Resource"
 --- #--------------------------------------------------------------------------
 type: macro
 desc: "API version of $x_resource_desc_t"
