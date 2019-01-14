@@ -29,6 +29,10 @@ name: __$xcall
 value: __stdcall
 --- #--------------------------------------------------------------------------
 type: handle
+desc: "Handle of runtime's context object"
+name: "$x_context_handle_t"
+--- #--------------------------------------------------------------------------
+type: handle
 desc: "Handle of runtime's device object"
 name: "$x_device_handle_t"
 --- #--------------------------------------------------------------------------

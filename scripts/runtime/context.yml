@@ -1,0 +1,59 @@
+--- #--------------------------------------------------------------------------
+type: header
+desc: "Intel $Xx Runtime APIs for Context"
+--- #--------------------------------------------------------------------------
+type: macro
+desc: "API version of $x_context_desc_t"
+name: $X_CONTEXT_DESC_VERSION
+value: "$X_MAKE_VERSION( 1, 0 )"
+--- #--------------------------------------------------------------------------
+type: enum
+desc: "Supported context creation flags"
+name: $x_context_flags_t
+etors:
+    - name: $X_CONTEXT_FLAG_NONE
+      value: "0"
+      desc: "default behavior"
+--- #--------------------------------------------------------------------------
+type: struct
+desc: "Context descriptor"
+name: $x_context_desc_t
+members:
+    - type: uint32_t
+      name: version
+      desc: "[in] $X_CONTEXT_DESC_VERSION"
+    - type: $x_context_flags_t
+      name: flags
+      desc: "[in] creation flags"
+--- #--------------------------------------------------------------------------
+type: function
+desc: "Creates a context."
+name: $xContextCreate
+params:
+    - type: $x_device_handle_t
+      name: hDevice
+      desc: "[in] handle of the device"
+    - type: "const $x_context_desc_t*"
+      name: desc
+      desc: "[in] pointer to context descriptor"
+    - type: $x_context_handle_t*
+      name: phContext
+      desc: "[out] pointer to handle of context object created"
+returns:
+    - $X_RESULT_ERROR_INVALID_PARAMETER:
+        - "invalid handle for hDevice"
+        - "nullptr for desc"
+        - "nullptr for phContext"
+    - $X_RESULT_ERROR_OUT_OF_HOST_MEMORY
+    - $X_RESULT_ERROR_OUT_OF_DEVICE_MEMORY
+--- #--------------------------------------------------------------------------
+type: function
+desc: "Destroys a context."
+name: $xContextDestroy
+params:
+    - type: $x_context_handle_t
+      name: hContext
+      desc: "[in] handle of context object to destroy"
+returns:
+    - $X_RESULT_ERROR_INVALID_PARAMETER:
+        - "invalid handle for hContext"

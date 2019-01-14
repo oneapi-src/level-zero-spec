@@ -58,6 +58,30 @@
 #endif
 
 ///////////////////////////////////////////////////////////////////////////////
+/// @brief Handle of runtime's context object
+#if defined( __cplusplus )
+struct xi_context_handle_t
+{
+    void* pDriverData;
+
+    xi_context_handle_t( void ) : pDriverData( nullptr ) {}        ///< default constructor
+    explicit xi_context_handle_t( void* p ) : pDriverData( p ) {}  ///< initialize from pointer
+
+    inline bool operator==( const xi_context_handle_t& other ) const   ///< is equal to other
+    { return pDriverData == other.pDriverData; }
+    inline bool operator!=( const xi_context_handle_t& other ) const   ///< not equal to other
+    { return pDriverData != other.pDriverData; }
+
+};
+#else
+typedef struct _xi_context_handle_t
+{
+    void* pDriverData;
+
+} xi_context_handle_t;
+#endif
+
+///////////////////////////////////////////////////////////////////////////////
 /// @brief Handle of runtime's device object
 #if defined( __cplusplus )
 struct xi_device_handle_t
