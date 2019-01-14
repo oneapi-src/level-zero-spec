@@ -1,4 +1,4 @@
-# Programming Guide
+# Driver API Programming Guide
 The following documents the high-level programming models and guidelines.
 
 ## Introduction
@@ -47,7 +47,7 @@ The following sample code demonstrates a basic initialization sequence:
 
 ## Command Queues and Command Lists
 The following diagram illustrates the hierarchy of command lists and command queues to the device:
-![Hierarchy](../images/cmdqueue.png?raw=true)
+![Hierarchy](/images/cmdqueue.png?raw=true)
 
 ### Command Queues
 - A command queue represents a physical input stream to the device.
