@@ -66,6 +66,8 @@ def makoWrite(inpath, outpath, **args):
     with open(outpath, 'w') as fout:
         fout.write(rendered)
 
+    return len(rendered.splitlines())
+
 """
     global logfile object
 """

@@ -2,6 +2,7 @@
 import util
 import parse_specs
 import generate_api
+import generate_docs
 
 """
     Do everything...
@@ -18,6 +19,8 @@ def main():
     #runtime = parse_specs.parse("./runtime")
     #generate_api.generate_all(configParser.get('PATH','runtime'), configParser.get('API','namespace'), runtime)
 
+    generate_docs.generate_all()
+    
     print("\nDone")
 
 if __name__ == '__main__':
