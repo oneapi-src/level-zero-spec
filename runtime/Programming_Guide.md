@@ -16,7 +16,7 @@ todo:
 - all apis return ::xi_result_t.
 - apis are gaurenteed to never throw exceptions. etc.
 
-## Driver and Device
+## Runtime, Context and Device
 todo
 
 ### Initialization

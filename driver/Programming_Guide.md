@@ -22,7 +22,18 @@ todo:
 - apis are gaurenteed to never throw exceptions. etc.
 
 ## Driver and Device
-todo
+The following diagram illustrates the hierarchy of devices to the driver:  
+![Driver Hierarchy](../images/driver.png?raw=true)
+
+### Driver
+ - A driver represents an instance of a Xe driver being loaded and initialized into the current process.
+ - Only one instance of a driver per process can be loaded.
+ - There is no reference tracking if multiple drivers are initialized.
+ - A driver has minimal global state associated; only that which is sufficient for querying devices recognized by the driver.
+ 
+ ### Device
+ - A device represents a physical device in the system that can support Xe.
+ - More than one device may be avilable in the system.
 
 ### Initialization
 The following sample code demonstrates a basic initialization sequence:
@@ -46,8 +57,8 @@ The following sample code demonstrates a basic initialization sequence:
 ```
 
 ## Command Queues and Command Lists
-The following diagram illustrates the hierarchy of command lists and command queues to the device:
-![Hierarchy](../images/cmdqueue.png?raw=true)
+The following diagram illustrates the hierarchy of command lists and command queues to the device:  
+![Device Hierarchy](../images/cmdqueue.png?raw=true)
 
 ### Command Queues
 - A command queue represents a physical input stream to the device.

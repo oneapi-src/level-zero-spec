@@ -1,7 +1,7 @@
 import os
 
 def generate_html():
-    print("Generating HTML...")
+    print("\nGenerating HTML...")
     cmdline = "doxygen.exe Doxyfile"
     os.system(cmdline)
     
