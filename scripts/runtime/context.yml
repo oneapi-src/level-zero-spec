@@ -25,14 +25,17 @@ members:
     - type: $x_context_flags_t
       name: flags
       desc: "[in] creation flags"
+    - type: uint32_t
+      name: numDevices
+      desc: "[in] number of devices in hDevices"
+    - type: "$x_device_handle_t*"
+      name: hDevices
+      desc: "[in] pointer to array of handles of the devices"
 --- #--------------------------------------------------------------------------
 type: function
 desc: "Creates a context."
 name: $xContextCreate
 params:
-    - type: $x_device_handle_t
-      name: hDevice
-      desc: "[in] handle of the device"
     - type: "const $x_context_desc_t*"
       name: desc
       desc: "[in] pointer to context descriptor"
@@ -41,8 +44,9 @@ params:
       desc: "[out] pointer to handle of context object created"
 returns:
     - $X_RESULT_ERROR_INVALID_PARAMETER:
-        - "invalid handle for hDevice"
         - "nullptr for desc"
+        - "0 for desc.numDevices"
+        - "invalid handle in desc.hDevices"
         - "nullptr for phContext"
     - $X_RESULT_ERROR_OUT_OF_HOST_MEMORY
     - $X_RESULT_ERROR_OUT_OF_DEVICE_MEMORY

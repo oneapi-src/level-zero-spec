@@ -17,7 +17,12 @@ todo:
 - all apis return ::xi_result_t.
 - apis are gaurenteed to never throw exceptions. etc.
 
-todo
+![Context Hierarchy](../images/context.png?raw=true)
+
+- A context manages memory, command queues and programs for execution on one or more devices
+
+- A device represents a physical device in the system that can support Xi.
+- More than one device may be avilable in the system.
 
 The following sample code demonstrates a basic initialization sequence:
 ```c

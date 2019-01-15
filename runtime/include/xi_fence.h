@@ -66,14 +66,14 @@ typedef struct _xi_fence_desc_t
 /// - ::XI_RESULT_SUCCESS
 /// - ::XI_RESULT_ERROR_UNINITIALIZED
 /// - ::XI_RESULT_ERROR_INVALID_PARAMETER
-///     + invalid handle for hDevice
+///     + invalid handle for hContext
 ///     + nullptr for desc
 ///     + nullptr for phFence
 /// - ::XI_RESULT_ERROR_OUT_OF_HOST_MEMORY
 /// - ::XI_RESULT_ERROR_OUT_OF_DEVICE_MEMORY
 xi_result_t __xicall
   xiFenceCreate(
-    xi_device_handle_t hDevice,                     ///< [in] handle of the device
+    xi_context_handle_t hContext,                   ///< [in] handle of the context
     const xi_fence_desc_t* desc,                    ///< [in] pointer to fence descriptor
     xi_fence_handle_t* phFence                      ///< [out] pointer to handle of fence object created
     );

@@ -54,6 +54,8 @@ typedef struct _xi_context_desc_t
 {
     uint32_t version;                               ///< [in] ::XI_CONTEXT_DESC_VERSION
     xi_context_flags_t flags;                       ///< [in] creation flags
+    uint32_t numDevices;                            ///< [in] number of devices in hDevices
+    xi_device_handle_t* hDevices;                   ///< [in] pointer to array of handles of the devices
 
 } xi_context_desc_t;
 
@@ -63,14 +65,14 @@ typedef struct _xi_context_desc_t
 /// - ::XI_RESULT_SUCCESS
 /// - ::XI_RESULT_ERROR_UNINITIALIZED
 /// - ::XI_RESULT_ERROR_INVALID_PARAMETER
-///     + invalid handle for hDevice
 ///     + nullptr for desc
+///     + 0 for desc.numDevices
+///     + invalid handle in desc.hDevices
 ///     + nullptr for phContext
 /// - ::XI_RESULT_ERROR_OUT_OF_HOST_MEMORY
 /// - ::XI_RESULT_ERROR_OUT_OF_DEVICE_MEMORY
 xi_result_t __xicall
   xiContextCreate(
-    xi_device_handle_t hDevice,                     ///< [in] handle of the device
     const xi_context_desc_t* desc,                  ///< [in] pointer to context descriptor
     xi_context_handle_t* phContext                  ///< [out] pointer to handle of context object created
     );

@@ -20,8 +20,15 @@ todo:
 - all apis return ::${x}_result_t.
 - apis are gaurenteed to never throw exceptions. etc.
 
-## Runtime, Context and Device
-todo
+## Context and Device
+![Context Hierarchy](../images/context.png?raw=true)
+
+### Context
+- A context manages memory, command queues and programs for execution on one or more devices
+
+### Device
+- A device represents a physical device in the system that can support ${Xx}.
+- More than one device may be avilable in the system.
 
 ### Initialization
 The following sample code demonstrates a basic initialization sequence:
