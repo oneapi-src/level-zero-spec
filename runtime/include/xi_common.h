@@ -224,8 +224,4 @@ typedef enum _xi_result_t
 
 } xi_result_t;
 
-///////////////////////////////////////////////////////////////////////////////
-/// @brief Device pointer type
-typedef void* xi_device_ptr_t;
-
 #endif // _XI_COMMON_H

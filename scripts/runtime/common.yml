@@ -79,8 +79,3 @@ etors:
     - name: $X_RESULT_ERROR_UNKNOWN
       value: "0x7fffffff"
       desc: "internal error"
---- #--------------------------------------------------------------------------
-type: typedef
-desc: "Device pointer type"
-name: $x_device_ptr_t
-value: "void*"

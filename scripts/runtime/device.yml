@@ -190,6 +190,25 @@ desc: "API version of $x_device_memory_properties_t"
 name: $X_DEVICE_MEMORY_PROPERTIES_VERSION
 value: "$X_MAKE_VERSION( 1, 0 )"
 --- #--------------------------------------------------------------------------
+type: enum
+desc: "Memory access capabilities"
+name: $x_memory_access_capabilities_t
+details:
+    - "Supported access capabilities for different types of memory allocations"
+etors:
+    - name: $X_MEMORY_ACCESS
+      value: "$X_BIT( 0 )"
+      desc: "Supports load/store access"
+    - name: $X_ATOMIC_ACCESS
+      value: "$X_BIT( 1 )"
+      desc: "Supports atomic access"
+    - name: $X_CONCURRENT_ACCESS
+      value: "$X_BIT( 2 )"
+      desc: "Supports concurrent access"
+    - name: $X_CONCURRENT_ACCESS
+      value: "$X_BIT( 3 )"
+      desc: "Supports concurrent atomic access"
+--- #--------------------------------------------------------------------------
 type: struct
 desc: "Device memory properties queried using $xDeviceGetMemoryProperties"
 name: $x_device_memory_properties_t
@@ -200,9 +219,6 @@ members:
     - type: bool
       name: isIntegrated
       desc: "[out] Host and device share same physical memory."
-    - type: bool
-      name: hasSharedVirtualMemory
-      desc: "[out] Supports shared virtual memory (SVM)"
     - type: uint32_t
       name: maxResourceDims1D
       desc: "[out] Maximum resource dimensions for 1D resources."
@@ -215,6 +231,18 @@ members:
     - type: uint32_t
       name: maxResourceArraySlices
       desc: "[out] Maximum resource array slices"
+    - type: uint32_t
+      name: hostAllocCapabilities
+      desc: "[out] Supported operations on host memory allocations"
+    - type: uint32_t
+      name: deviceAllocCapabilities
+      desc: "[out] Supported operations on device memory allocations"
+    - type: uint32_t
+      name: sharedAllocCapabilities
+      desc: "[out] Supported operations on shared memory allocations"
+    - type: uint32_t
+      name: sharedCrossDeviceAllocCapabilities
+      desc: "[out] Supported operations on cross-device shared memory allocations"
 --- #--------------------------------------------------------------------------
 type: function
 desc: "Retrieves memory attributes of the device"

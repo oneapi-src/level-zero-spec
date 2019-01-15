@@ -183,16 +183,33 @@ xi_result_t __xicall
 #define XI_DEVICE_MEMORY_PROPERTIES_VERSION  XI_MAKE_VERSION( 1, 0 )
 
 ///////////////////////////////////////////////////////////////////////////////
+/// @brief Memory access capabilities
+/// @details
+///     - Supported access capabilities for different types of memory
+///       allocations
+typedef enum _xi_memory_access_capabilities_t
+{
+    XI_MEMORY_ACCESS = XI_BIT( 0 ),                 ///< Supports load/store access
+    XI_ATOMIC_ACCESS = XI_BIT( 1 ),                 ///< Supports atomic access
+    XI_CONCURRENT_ACCESS = XI_BIT( 2 ),             ///< Supports concurrent access
+    XI_CONCURRENT_ACCESS = XI_BIT( 3 ),             ///< Supports concurrent atomic access
+
+} xi_memory_access_capabilities_t;
+
+///////////////////////////////////////////////////////////////////////////////
 /// @brief Device memory properties queried using ::xiDeviceGetMemoryProperties
 typedef struct _xi_device_memory_properties_t
 {
     uint32_t version;                               ///< [in] ::XI_DEVICE_MEMORY_PROPERTIES_VERSION
     bool isIntegrated;                              ///< [out] Host and device share same physical memory.
-    bool hasSharedVirtualMemory;                    ///< [out] Supports shared virtual memory (SVM)
     uint32_t maxResourceDims1D;                     ///< [out] Maximum resource dimensions for 1D resources.
     uint32_t maxResourceDims2D;                     ///< [out] Maximum resource dimensions for 2D resources.
     uint32_t maxResourceDims3D;                     ///< [out] Maximum resource dimensions for 3D resources.
     uint32_t maxResourceArraySlices;                ///< [out] Maximum resource array slices
+    uint32_t hostAllocCapabilities;                 ///< [out] Supported operations on host memory allocations
+    uint32_t deviceAllocCapabilities;               ///< [out] Supported operations on device memory allocations
+    uint32_t sharedAllocCapabilities;               ///< [out] Supported operations on shared memory allocations
+    uint32_t sharedCrossDeviceAllocCapabilities;    ///< [out] Supported operations on cross-device shared memory allocations
 
 } xi_device_memory_properties_t;
 
