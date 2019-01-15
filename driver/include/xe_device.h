@@ -104,7 +104,7 @@ xe_result_t __xecall
 #define XE_MAX_DEVICE_NAME  256
 
 ///////////////////////////////////////////////////////////////////////////////
-/// @brief Device properties queried using ::xeGetDeviceProperties
+/// @brief Device properties queried using ::xeDeviceGetProperties
 typedef struct _xe_device_properties_t
 {
     uint32_t version;                               ///< [in] ::XE_DEVICE_PROPERTIES_VERSION
@@ -134,7 +134,7 @@ typedef struct _xe_device_properties_t
 ///     + invalid handle for hDevice
 ///     + nullptr for provided for properties
 xe_result_t __xecall
-  xeGetDeviceProperties(
+  xeDeviceGetProperties(
     xe_device_handle_t hDevice,                     ///< [in] handle of the device object
     xe_device_properties_t* pDeviceProperties       ///< [out] query result for device properties
     );
@@ -144,7 +144,7 @@ xe_result_t __xecall
 #define XE_DEVICE_COMPUTE_PROPERTIES_VERSION  XE_MAKE_VERSION( 1, 0 )
 
 ///////////////////////////////////////////////////////////////////////////////
-/// @brief Device compute properties queried using ::xeGetDeviceComputeProperties
+/// @brief Device compute properties queried using ::xeDeviceGetComputeProperties
 typedef struct _xe_device_compute_properties_t
 {
     uint32_t version;                               ///< [in] ::XE_DEVICE_COMPUTE_PROPERTIES_VERSION
@@ -173,7 +173,7 @@ typedef struct _xe_device_compute_properties_t
 ///     + invalid handle for hDevice
 ///     + nullptr for provided for properties
 xe_result_t __xecall
-  xeGetDeviceComputeProperties(
+  xeDeviceGetComputeProperties(
     xe_device_handle_t hDevice,                     ///< [in] handle of the device object
     xe_device_compute_properties_t* pComputeProperties  ///< [out] query result for compute properties
     );
@@ -183,7 +183,7 @@ xe_result_t __xecall
 #define XE_DEVICE_MEMORY_PROPERTIES_VERSION  XE_MAKE_VERSION( 1, 0 )
 
 ///////////////////////////////////////////////////////////////////////////////
-/// @brief Device memory properties queried using ::xeGetDeviceMemoryProperties
+/// @brief Device memory properties queried using ::xeDeviceGetMemoryProperties
 typedef struct _xe_device_memory_properties_t
 {
     uint32_t version;                               ///< [in] ::XE_DEVICE_MEMORY_PROPERTIES_VERSION
@@ -209,7 +209,7 @@ typedef struct _xe_device_memory_properties_t
 ///     + invalid handle for hDevice
 ///     + nullptr for provided for properties
 xe_result_t __xecall
-  xeGetDeviceMemoryProperties(
+  xeDeviceGetMemoryProperties(
     xe_device_handle_t hDevice,                     ///< [in] handle of the device object
     xe_device_memory_properties_t* pMemProperties   ///< [out] query result for compute properties
     );

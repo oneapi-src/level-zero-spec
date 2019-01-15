@@ -104,7 +104,7 @@ xi_result_t __xicall
 #define XI_MAX_DEVICE_NAME  256
 
 ///////////////////////////////////////////////////////////////////////////////
-/// @brief Device properties queried using ::xiGetDeviceProperties
+/// @brief Device properties queried using ::xiDeviceGetProperties
 typedef struct _xi_device_properties_t
 {
     uint32_t version;                               ///< [in] ::XI_DEVICE_PROPERTIES_VERSION
@@ -134,7 +134,7 @@ typedef struct _xi_device_properties_t
 ///     + invalid handle for hDevice
 ///     + nullptr for provided for properties
 xi_result_t __xicall
-  xiGetDeviceProperties(
+  xiDeviceGetProperties(
     xi_device_handle_t hDevice,                     ///< [in] handle of the device object
     xi_device_properties_t* pDeviceProperties       ///< [out] query result for device properties
     );
@@ -144,7 +144,7 @@ xi_result_t __xicall
 #define XI_DEVICE_COMPUTE_PROPERTIES_VERSION  XI_MAKE_VERSION( 1, 0 )
 
 ///////////////////////////////////////////////////////////////////////////////
-/// @brief Device compute properties queried using ::xiGetDeviceComputeProperties
+/// @brief Device compute properties queried using ::xiDeviceGetComputeProperties
 typedef struct _xi_device_compute_properties_t
 {
     uint32_t version;                               ///< [in] ::XI_DEVICE_COMPUTE_PROPERTIES_VERSION
@@ -173,7 +173,7 @@ typedef struct _xi_device_compute_properties_t
 ///     + invalid handle for hDevice
 ///     + nullptr for provided for properties
 xi_result_t __xicall
-  xiGetDeviceComputeProperties(
+  xiDeviceGetComputeProperties(
     xi_device_handle_t hDevice,                     ///< [in] handle of the device object
     xi_device_compute_properties_t* pComputeProperties  ///< [out] query result for compute properties
     );
@@ -183,7 +183,7 @@ xi_result_t __xicall
 #define XI_DEVICE_MEMORY_PROPERTIES_VERSION  XI_MAKE_VERSION( 1, 0 )
 
 ///////////////////////////////////////////////////////////////////////////////
-/// @brief Device memory properties queried using ::xiGetDeviceMemoryProperties
+/// @brief Device memory properties queried using ::xiDeviceGetMemoryProperties
 typedef struct _xi_device_memory_properties_t
 {
     uint32_t version;                               ///< [in] ::XI_DEVICE_MEMORY_PROPERTIES_VERSION
@@ -209,7 +209,7 @@ typedef struct _xi_device_memory_properties_t
 ///     + invalid handle for hDevice
 ///     + nullptr for provided for properties
 xi_result_t __xicall
-  xiGetDeviceMemoryProperties(
+  xiDeviceGetMemoryProperties(
     xi_device_handle_t hDevice,                     ///< [in] handle of the device object
     xi_device_memory_properties_t* pMemProperties   ///< [out] query result for compute properties
     );

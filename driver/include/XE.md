@@ -67,7 +67,7 @@ The following diagram illustrates the hierarchy of command lists and command que
 ### Command Queues
 - A command queue represents a physical input stream to the device.
 - The number of command queues per device is queried from calling 
-  ::xeGetDeviceProperties; returned as ::xe_device_properties_t.numAsyncComputeEngines.
+  ::xeDeviceGetProperties; returned as ::xe_device_properties_t.numAsyncComputeEngines.
 - Multiple command queues may be created by an application.  For example,
   an application may want to create a command queue per CPU thread.
 - There is no implicit binding of command queues to CPU threads. Therefore,

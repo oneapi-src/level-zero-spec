@@ -1,0 +1,65 @@
+--- #--------------------------------------------------------------------------
+type: header
+desc: "Intel $Xx Driver APIs for Memory"
+--- #--------------------------------------------------------------------------
+type: function
+desc: "Makes memory resident for the device."
+name: $xDeviceMakeMemoryResident
+params:
+    - type: $x_device_handle_t
+      name: hDevice
+      desc: "[in] handle of the device"
+    - type: $x_device_ptr_t
+      name: ptr
+      desc: "[in] pointer to memory to make resident"
+    - type: size_t
+      name: size
+      desc: "[in] size in bytes to make resident"
+returns:
+    - $X_RESULT_ERROR_INVALID_PARAMETER:
+        - "nullptr for ptr"
+--- #--------------------------------------------------------------------------
+type: function
+desc: "Allows memory to be evicted from the device."
+name: $xDeviceEvictMemory
+params:
+    - type: $x_device_handle_t
+      name: hDevice
+      desc: "[in] handle of the device"
+    - type: $x_device_ptr_t
+      name: ptr
+      desc: "[in] pointer to memory to evict"
+    - type: size_t
+      name: size
+      desc: "[in] size in bytes to evict"
+returns:
+    - $X_RESULT_ERROR_INVALID_PARAMETER:
+        - "nullptr for ptr"
+--- #--------------------------------------------------------------------------
+type: function
+desc: "Makes memory resident for the device."
+name: $xDeviceMakeResourceResident
+params:
+    - type: $x_device_handle_t
+      name: hDevice
+      desc: "[in] handle of the device"
+    - type: $x_resource_handle_t
+      name: hResource
+      desc: "[in] handle of resource to make resident"
+returns:
+    - $X_RESULT_ERROR_INVALID_PARAMETER:
+        - "nullptr for ptr"
+--- #--------------------------------------------------------------------------
+type: function
+desc: "Allows resource to be evicted from the device."
+name: $xDeviceEvictResource
+params:
+    - type: $x_device_handle_t
+      name: hDevice
+      desc: "[in] handle of the device"
+    - type: $x_resource_handle_t
+      name: hResource
+      desc: "[in] handle of resource to make evict"
+returns:
+    - $X_RESULT_ERROR_INVALID_PARAMETER:
+        - "nullptr for ptr"
