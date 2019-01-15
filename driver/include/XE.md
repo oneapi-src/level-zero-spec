@@ -5,6 +5,7 @@ The following documents the high-level programming models and guidelines.
 DO NOT EDIT: generated from /scripts/templates/driver.md.mako
 @endcond
 
+## Introduction
 The Intel Xe Driver API provides the lowest-level, fine-grain and most explicit control over:
 - Memory Allocation and Cross-Process Sharing
 - Kernel Submission
@@ -12,27 +13,33 @@ The Intel Xe Driver API provides the lowest-level, fine-grain and most explicit 
 - Synchronization Primitives
 - Metrics Reporting
 
+### Naming Convention
 todo: 
 - all types follow **xe_\<name\>_t** convention
 - all macros and enumerator values use all caps **XE_\<SCOPE\>_\<NAME\>** convention
 - all functions use **xe\<Actor\>\<Action\>\<Object\>** convention
 - all function input parameters precede output parameters
 
+### Error Handling
 todo:
 - all apis return ::xe_result_t.
 - apis are gaurenteed to never throw exceptions. etc.
 
+## Driver and Device
 The following diagram illustrates the hierarchy of devices to the driver:  
 ![Driver Hierarchy](../images/driver.png?raw=true)
 
+### Driver
 - A driver represents an instance of a Xe driver being loaded and initialized into the current process.
 - Only one instance of a driver per process can be loaded.
 - There is no reference tracking if multiple drivers are initialized.
 - A driver has minimal global state associated; only that which is sufficient for querying devices recognized by the driver.
  
+### Device
 - A device represents a physical device in the system that can support Xe.
 - More than one device may be avilable in the system.
 
+### Initialization
 The following sample code demonstrates a basic initialization sequence:
 ```c
     // Initialize the driver
@@ -53,9 +60,11 @@ The following sample code demonstrates a basic initialization sequence:
     ...
 ```
 
+## Command Queues and Command Lists
 The following diagram illustrates the hierarchy of command lists and command queues to the device:  
 ![Device Hierarchy](../images/cmdqueue.png?raw=true)
 
+### Command Queues
 - A command queue represents a physical input stream to the device.
 - The number of command queues per device is queried from calling 
   ::xeGetDeviceProperties; returned as ::xe_device_properties_t.numAsyncComputeEngines.
@@ -74,6 +83,7 @@ The following diagram illustrates the hierarchy of command lists and command que
   typically done by tracking command list events, but may also be
   handled by calling ::xeCommandQueueSynchronize.
 
+### Command Lists
 - A command list represents a sequence of commands for execution on
   a command queue.
 - Multiple command lists may be created by an application.  For example,
@@ -99,6 +109,7 @@ The following diagram illustrates the hierarchy of command lists and command que
   executing from a command list before it is reset.  This should be
   handled by tracking a completion event associated with the command list.
 
+### Initialization
 The following sample code demonstrates a basic sequence for creation of command queues and command lists:
 ```c
     // Create a command queue
@@ -119,6 +130,7 @@ The following sample code demonstrates a basic sequence for creation of command 
     ...
 ```
 
+### Submission
 The following sample code demonstrates submission of commands to a command queue, via a command list:
 ```c
     // Encode kernel execution into a command list
@@ -134,11 +146,13 @@ The following sample code demonstrates submission of commands to a command queue
     ...
 ```
 
+## Synchronization Primitives
 There are three types of synchronization primitives:
 1. **Fences** - used to communicate to the host that command queue execution has completed.
 2. **Events** - used as fine-grain host-to-device, device-to-host or device-to-device waits and signals within a command list.
 3. **Semaphores** - used for fine-grain control of command lists execution across multiple, simultaneous command queues within a device.
 
+### Fences
 - A fence can only be signaled from a device's command queue (e.g. between execution of command lists)
 and can only be waited upon from the host.
 - A fence only has two states: not signaled and signaled.
@@ -169,6 +183,7 @@ The following sample code demonstrates a sequence for creation, submission and q
     ...
 ```
 
+### Events
 - An event can be __either__:
   + signaled from within a device's command list (e.g. between execution of kernels) and waited upon from the host or another device, **or**
   + signaled from the host, and waited upon from within a device's command list.
@@ -198,6 +213,7 @@ The following sample code demonstrates a sequence for creation and submission of
     ...
 ```
 
+### Semaphores
 - A semaphore can only be signaled and waited upon from within a device's command list.
 - A semaphore has both a state and a value.
 - A semaphore can be encoded into any command list from the same device.
@@ -227,5 +243,6 @@ The following sample code demonstrates a sequence for creation and submission of
     ...
 ```
 
+## Memory Allocation
 todo
 

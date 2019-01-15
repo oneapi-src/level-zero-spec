@@ -1,11 +1,11 @@
-# Driver API Programming Guide
+${"#"} Driver API Programming Guide
 The following documents the high-level programming models and guidelines.
 
 @cond DEV
 DO NOT EDIT: generated from /scripts/templates/driver.md.mako
 @endcond
 
-## Introduction
+${"##"} Introduction
 The Intel ${Xx} Driver API provides the lowest-level, fine-grain and most explicit control over:
 - Memory Allocation and Cross-Process Sharing
 - Kernel Submission
@@ -13,33 +13,33 @@ The Intel ${Xx} Driver API provides the lowest-level, fine-grain and most explic
 - Synchronization Primitives
 - Metrics Reporting
 
-### Naming Convention
+${"###"} Naming Convention
 todo: 
 - all types follow **${x}_\<name\>_t** convention
 - all macros and enumerator values use all caps **${X}_\<SCOPE\>_\<NAME\>** convention
 - all functions use **${x}\<Actor\>\<Action\>\<Object\>** convention
 - all function input parameters precede output parameters
 
-### Error Handling
+${"###"} Error Handling
 todo:
 - all apis return ::${x}_result_t.
 - apis are gaurenteed to never throw exceptions. etc.
 
-## Driver and Device
+${"##"} Driver and Device
 The following diagram illustrates the hierarchy of devices to the driver:  
 ![Driver Hierarchy](../images/driver.png?raw=true)
 
-### Driver
+${"###"} Driver
 - A driver represents an instance of a ${Xx} driver being loaded and initialized into the current process.
 - Only one instance of a driver per process can be loaded.
 - There is no reference tracking if multiple drivers are initialized.
 - A driver has minimal global state associated; only that which is sufficient for querying devices recognized by the driver.
  
- ### Device
+${"###"} Device
 - A device represents a physical device in the system that can support ${Xx}.
 - More than one device may be avilable in the system.
 
-### Initialization
+${"###"} Initialization
 The following sample code demonstrates a basic initialization sequence:
 ```c
     // Initialize the driver
@@ -60,11 +60,11 @@ The following sample code demonstrates a basic initialization sequence:
     ...
 ```
 
-## Command Queues and Command Lists
+${"##"} Command Queues and Command Lists
 The following diagram illustrates the hierarchy of command lists and command queues to the device:  
 ![Device Hierarchy](../images/cmdqueue.png?raw=true)
 
-### Command Queues
+${"###"} Command Queues
 - A command queue represents a physical input stream to the device.
 - The number of command queues per device is queried from calling 
   ::${x}GetDeviceProperties; returned as ::${x}_device_properties_t.numAsyncComputeEngines.
@@ -83,7 +83,7 @@ The following diagram illustrates the hierarchy of command lists and command que
   typically done by tracking command list events, but may also be
   handled by calling ::${x}CommandQueueSynchronize.
 
-### Command Lists
+${"###"} Command Lists
 - A command list represents a sequence of commands for e${x}cution on
   a command queue.
 - Multiple command lists may be created by an application.  For example,
@@ -109,7 +109,7 @@ The following diagram illustrates the hierarchy of command lists and command que
   e${x}cuting from a command list before it is reset.  This should be
   handled by tracking a completion event associated with the command list.
 
-### Initialization
+${"###"} Initialization
 The following sample code demonstrates a basic sequence for creation of command queues and command lists:
 ```c
     // Create a command queue
@@ -130,7 +130,7 @@ The following sample code demonstrates a basic sequence for creation of command 
     ...
 ```
 
-### Submission
+${"###"} Submission
 The following sample code demonstrates submission of commands to a command queue, via a command list:
 ```c
     // Encode kernel e${x}cution into a command list
@@ -146,13 +146,13 @@ The following sample code demonstrates submission of commands to a command queue
     ...
 ```
 
-## Synchronization Primitives
+${"##"} Synchronization Primitives
 There are three types of synchronization primitives:
 1. **Fences** - used to communicate to the host that command queue e${x}cution has completed.
 2. **Events** - used as fine-grain host-to-device, device-to-host or device-to-device waits and signals within a command list.
 3. **Semaphores** - used for fine-grain control of command lists e${x}cution across multiple, simultaneous command queues within a device.
 
-### Fences
+${"###"} Fences
 - A fence can only be signaled from a device's command queue (e.g. between e${x}cution of command lists)
 and can only be waited upon from the host.
 - A fence only has two states: not signaled and signaled.
@@ -183,7 +183,7 @@ The following sample code demonstrates a sequence for creation, submission and q
     ...
 ```
 
-### Events
+${"###"} Events
 - An event can be __either__:
   + signaled from within a device's command list (e.g. between e${x}cution of kernels) and waited upon from the host or another device, **or**
   + signaled from the host, and waited upon from within a device's command list.
@@ -213,7 +213,7 @@ The following sample code demonstrates a sequence for creation and submission of
     ...
 ```
 
-### Semaphores
+${"###"} Semaphores
 - A semaphore can only be signaled and waited upon from within a device's command list.
 - A semaphore has both a state and a value.
 - A semaphore can be encoded into any command list from the same device.
@@ -243,6 +243,6 @@ The following sample code demonstrates a sequence for creation and submission of
     ...
 ```
 
-## Memory Allocation
+${"##"} Memory Allocation
 todo
 
