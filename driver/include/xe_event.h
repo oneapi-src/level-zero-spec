@@ -132,45 +132,6 @@ xe_result_t __xecall
     );
 
 ///////////////////////////////////////////////////////////////////////////////
-/// @brief Encodes signals of multiple event from the device into a command list.
-///        @todo move to runtime?
-/// @returns
-/// - ::XE_RESULT_SUCCESS
-/// - ::XE_RESULT_ERROR_UNINITIALIZED
-/// - ::XE_RESULT_ERROR_INVALID_PARAMETER
-///     + invalid handle for hCommandList
-///     + nullptr for phEvents
-///     + invalid handle in phEvents
-///     + any event creation flag did not set ::XE_EVENT_FLAG_DEVICE_TO_HOST or ::XE_EVENT_FLAG_DEVICE_TO_DEVICE
-///     + any event is in signaled state
-///     + any event is used by another command list
-xe_result_t __xecall
-  xeCommandListEncodeSignalMultipleEvents(
-    xe_command_list_handle_t hCommandList,          ///< [in] handle of the command list
-    uint32_t numEvents,                             ///< [in] number of events pointed to by phEvents
-    xe_event_handle_t* phEvents                     ///< [in] pointer to array of handles of the events
-    );
-
-///////////////////////////////////////////////////////////////////////////////
-/// @brief Encodes waits on multiple event from a host signal into a command
-///        list. @todo move to runtime?
-/// @returns
-/// - ::XE_RESULT_SUCCESS
-/// - ::XE_RESULT_ERROR_UNINITIALIZED
-/// - ::XE_RESULT_ERROR_INVALID_PARAMETER
-///     + invalid handle for hCommandList
-///     + nullptr for phEvents
-///     + invalid handle in phEvents
-///     + any event creation flag did not set ::XE_EVENT_FLAG_HOST_TO_DEVICE or ::XE_EVENT_FLAG_DEVICE_TO_DEVICE
-///     + any event is used by another command list
-xe_result_t __xecall
-  xeCommandListEncodeWaitOnMultipleEvents(
-    xe_command_list_handle_t hCommandList,          ///< [in] handle of the command list
-    uint32_t numEvents,                             ///< [in] number of events pointed to by phEvents
-    xe_event_handle_t* phEvents                     ///< [in] pointer to array of handles of the events
-    );
-
-///////////////////////////////////////////////////////////////////////////////
 /// @brief Signals a event from host.
 /// @returns
 /// - ::XE_RESULT_SUCCESS
@@ -198,38 +159,6 @@ xe_result_t __xecall
 xe_result_t __xecall
   xeWaitOnEvent(
     xe_event_handle_t hEvent                        ///< [in] handle of the event
-    );
-
-///////////////////////////////////////////////////////////////////////////////
-/// @brief Signals multiple events from host. @todo move to runtime?
-/// @returns
-/// - ::XE_RESULT_SUCCESS
-/// - ::XE_RESULT_ERROR_UNINITIALIZED
-/// - ::XE_RESULT_ERROR_INVALID_PARAMETER
-///     + nullptr for phEvents
-///     + invalid handle in phEvents
-///     + any event creation flag did not set ::XE_EVENT_FLAG_HOST_TO_DEVICE or ::XE_EVENT_FLAG_DEVICE_TO_DEVICE
-///     + any event is in signaled state
-xe_result_t __xecall
-  xeSignalMultipleEvents(
-    uint32_t numEvents,                             ///< [in] number of events pointed to by phEvents
-    xe_event_handle_t* phEvents                     ///< [in] pointer to array of handles of the events
-    );
-
-///////////////////////////////////////////////////////////////////////////////
-/// @brief The current host thread waits on multiple events from a device signal.
-///        @todo move to runtime?
-/// @returns
-/// - ::XE_RESULT_SUCCESS
-/// - ::XE_RESULT_ERROR_UNINITIALIZED
-/// - ::XE_RESULT_ERROR_INVALID_PARAMETER
-///     + nullptr for phEvents
-///     + invalid handle in phEvents
-///     + any event creation flag did not set ::XE_EVENT_FLAG_DEVICE_TO_HOST or ::XE_EVENT_FLAG_DEVICE_TO_DEVICE
-xe_result_t __xecall
-  xeWaitOnMultipleEvents(
-    uint32_t numEvents,                             ///< [in] number of events pointed to by phEvents
-    xe_event_handle_t* phEvents                     ///< [in] pointer to array of handles of the events
     );
 
 ///////////////////////////////////////////////////////////////////////////////

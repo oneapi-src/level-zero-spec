@@ -1,6 +1,6 @@
 --- #--------------------------------------------------------------------------
 type: header
-desc: "Intel $Xx Driver APIs for Event"
+desc: "Intel $Xx Runtime APIs for Event"
 --- #--------------------------------------------------------------------------
 type: macro
 desc: "API version of $x_event_desc_t"
@@ -106,6 +106,49 @@ returns:
         - "event is used by another command list"
 --- #--------------------------------------------------------------------------
 type: function
+desc: "Encodes signals of multiple event from the device into a command list."
+name: $xCommandListEncodeSignalMultipleEvents
+params:
+    - type: $x_command_list_handle_t
+      name: hCommandList
+      desc: "[in] handle of the command list"
+    - type: uint32_t
+      name: numEvents
+      desc: "[in] number of events pointed to by phEvents"
+    - type: "$x_event_handle_t*"
+      name: phEvents
+      desc: "[in] pointer to array of handles of the events"
+returns:
+    - $X_RESULT_ERROR_INVALID_PARAMETER:
+        - "invalid handle for hCommandList"
+        - "nullptr for phEvents"
+        - "invalid handle in phEvents"
+        - "any event creation flag did not set $X_EVENT_FLAG_DEVICE_TO_HOST or $X_EVENT_FLAG_DEVICE_TO_DEVICE"
+        - "any event is in signaled state"
+        - "any event is used by another command list"
+--- #--------------------------------------------------------------------------
+type: function
+desc: "Encodes waits on multiple event from a host signal into a command list."
+name: $xCommandListEncodeWaitOnMultipleEvents
+params:
+    - type: $x_command_list_handle_t
+      name: hCommandList
+      desc: "[in] handle of the command list"
+    - type: uint32_t
+      name: numEvents
+      desc: "[in] number of events pointed to by phEvents"
+    - type: "$x_event_handle_t*"
+      name: phEvents
+      desc: "[in] pointer to array of handles of the events"
+returns:
+    - $X_RESULT_ERROR_INVALID_PARAMETER:
+        - "invalid handle for hCommandList"
+        - "nullptr for phEvents"
+        - "invalid handle in phEvents"
+        - "any event creation flag did not set $X_EVENT_FLAG_HOST_TO_DEVICE or $X_EVENT_FLAG_DEVICE_TO_DEVICE"
+        - "any event is used by another command list"
+--- #--------------------------------------------------------------------------
+type: function
 desc: "Signals a event from host."
 name: $xSignalEvent
 params:
@@ -131,6 +174,39 @@ returns:
     - $X_RESULT_ERROR_INVALID_PARAMETER:
         - "invalid handle for hEvent"
         - "event creation flag did not set $X_EVENT_FLAG_DEVICE_TO_HOST or $X_EVENT_FLAG_DEVICE_TO_DEVICE"
+--- #--------------------------------------------------------------------------
+type: function
+desc: "Signals multiple events from host. @todo move to runtime?"
+name: $xSignalMultipleEvents
+params:
+    - type: uint32_t
+      name: numEvents
+      desc: "[in] number of events pointed to by phEvents"
+    - type: "$x_event_handle_t*"
+      name: phEvents
+      desc: "[in] pointer to array of handles of the events"
+returns:
+    - $X_RESULT_ERROR_INVALID_PARAMETER:
+        - "nullptr for phEvents"
+        - "invalid handle in phEvents"
+        - "any event creation flag did not set $X_EVENT_FLAG_HOST_TO_DEVICE or $X_EVENT_FLAG_DEVICE_TO_DEVICE"
+        - "any event is in signaled state"
+--- #--------------------------------------------------------------------------
+type: function
+desc: "The current host thread waits on multiple events from a device signal."
+name: $xWaitOnMultipleEvents
+params:
+    - type: uint32_t
+      name: numEvents
+      desc: "[in] number of events pointed to by phEvents"
+    - type: "$x_event_handle_t*"
+      name: phEvents
+      desc: "[in] pointer to array of handles of the events"
+returns:
+    - $X_RESULT_ERROR_INVALID_PARAMETER:
+        - "nullptr for phEvents"
+        - "invalid handle in phEvents"
+        - "any event creation flag did not set $X_EVENT_FLAG_DEVICE_TO_HOST or $X_EVENT_FLAG_DEVICE_TO_DEVICE"
 --- #--------------------------------------------------------------------------
 type: function
 desc: "Queries an event object's status."
