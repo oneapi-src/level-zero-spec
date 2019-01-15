@@ -153,12 +153,11 @@ There are three types of synchronization primitives:
 3. **Semaphores** - used for fine-grain control of command lists execution across multiple, simultaneous command queues within a device.
 
 ### Fences
+- A fence is associated with single command queue.
 - A fence can only be signaled from a device's command queue (e.g. between execution of command lists)
 and can only be waited upon from the host.
 - A fence only has two states: not signaled and signaled.
-- A fence can be enqueued on any command queue from the same device.
-- A fence cannot be enqueud on multiple command queues simultaneously.
-- A fence can be shared across processes.
+- A fence cannot be shared across processes.
 
 The following sample code demonstrates a sequence for creation, submission and querying of a fence:
 ```c
@@ -168,10 +167,10 @@ The following sample code demonstrates a sequence for creation, submission and q
         XE_FENCE_FLAG_NONE
     };
     xe_fence_handle_t hFence;
-    xeFenceCreate(hDevice, &fenceDesc, &hFence);
+    xeFenceCreate(hCommandQueue, &fenceDesc, &hFence);
 
-    // Enqueue a signal of the fence into a command queue
-    xeCommandQueueEnqueueSignalFence(hCommandQueue, hFence);
+    // Enqueue a signal of the fence into the command queue
+    xeEnqueueSignalFence(hFence);
 
     // Wait for fence to be signaled
     if(XE_RESULT_SUCCESS != xeFenceQueryStatus(hFence)

@@ -151,7 +151,69 @@ The following sample code demonstrates submission of commands to a command queue
 ```
 
 ${"##"} Synchronization Primitives
-todo
+There are two types of synchronization primitives:
+1. **Fences** - used to communicate to the host that command queue execution has completed.
+2. **Events** - used as fine-grain host-to-device, device-to-host or device-to-device waits and signals within a command list.
+
+${"###"} Fences
+- A fence is associated with single command queue.
+- A fence can only be signaled from a command queue (e.g. between execution of command lists)
+and can only be waited upon from the host.
+- A fence only has two states: not signaled and signaled.
+- A fence cannot be shared across processes.
+
+The following sample code demonstrates a sequence for creation, submission and querying of a fence:
+```c
+    // Create fence
+    ${x}_fence_desc_t fenceDesc = {
+        ${X}_FENCE_DESC_VERSION,
+        ${X}_FENCE_FLAG_NONE
+    };
+    ${x}_fence_handle_t hFence;
+    ${x}FenceCreate(hCommandQueue, &fenceDesc, &hFence);
+
+    // Enqueue a signal of the fence into the command queue
+    ${x}EnqueueSignalFence(hFence);
+
+    // Wait for fence to be signaled
+    if(${X}_RESULT_SUCCESS != ${x}FenceQueryStatus(hFence)
+    {
+        ${x}FenceWait(hFence);
+    }
+
+    ${x}FenceReset(hFence);
+    ...
+```
+
+${"###"} Events
+- An event can be __either__:
+  + signaled from within a device's command list (e.g. between execution of kernels) and waited upon from the host or another device, **or**
+  + signaled from the host, and waited upon from within a device's command list.
+- An event only has two states: not signaled and signaled.
+- An event can be encoded into any command list from the same device.
+- An event cannot be encoded into multiple command lists simultaneously.
+- An event can be shared across processes.
+
+The following sample code demonstrates a sequence for creation and submission of an event:
+```c
+    // Create event
+    ${x}_event_desc_t eventDesc = {
+        ${X}_EVENT_DESC_VERSION,
+        ${X}_EVENT_FLAG_NONE
+    };
+    ${x}_event_handle_t hEvent;
+    ${x}EventCreate(hDevice, &eventDesc, &hEvent);
+
+    // Encode a wait on an event into a command list
+    ${x}CommandListEncodeWaitOnEvent(hCommandList, hEvent);
+
+    // Enqueue wait via the command list into a command queue
+    ${x}CommandQueueEnqueueCommandList(hCommandQueue, hCommandList);
+
+    // Signal the device
+    ${x}EventSignal(hEvent);
+    ...
+```
 
 ${"##"} Memory Allocation  
 todo
