@@ -24,7 +24,9 @@
 *
 * @brief Intel Xe Driver APIs for Device
 *
-* DO NOT EDIT: generated from /scripts/specs/device.yml
+* @cond DEV
+* DO NOT EDIT: generated from /scripts/<type>/device.yml
+* @endcond
 *
 ******************************************************************************/
 #ifndef _XE_DEVICE_H

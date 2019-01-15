@@ -24,7 +24,9 @@
 *
 * @brief Intel Xi Runtime APIs for Memory
 *
-* DO NOT EDIT: generated from /scripts/specs/memory.yml
+* @cond DEV
+* DO NOT EDIT: generated from /scripts/<type>/memory.yml
+* @endcond
 *
 ******************************************************************************/
 #ifndef _XI_MEMORY_H

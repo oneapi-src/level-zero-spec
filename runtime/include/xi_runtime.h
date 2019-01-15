@@ -24,7 +24,9 @@
 *
 * @brief Intel Xi Runtime APIs
 *
-* DO NOT EDIT: generated from /scripts/specs/runtime.yml
+* @cond DEV
+* DO NOT EDIT: generated from /scripts/<type>/runtime.yml
+* @endcond
 *
 ******************************************************************************/
 #ifndef _XI_RUNTIME_H

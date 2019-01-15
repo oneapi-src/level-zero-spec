@@ -24,7 +24,9 @@
 *
 * @brief Intel Xi Runtime APIs for Context
 *
-* DO NOT EDIT: generated from /scripts/specs/context.yml
+* @cond DEV
+* DO NOT EDIT: generated from /scripts/<type>/context.yml
+* @endcond
 *
 ******************************************************************************/
 #ifndef _XI_CONTEXT_H

@@ -24,7 +24,9 @@
 *
 * @brief Intel Xe Driver APIs for Memory
 *
-* DO NOT EDIT: generated from /scripts/specs/memory.yml
+* @cond DEV
+* DO NOT EDIT: generated from /scripts/<type>/memory.yml
+* @endcond
 *
 ******************************************************************************/
 #ifndef _XE_MEMORY_H

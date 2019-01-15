@@ -24,7 +24,9 @@
 *
 * @brief Intel Xi Runtime APIs for Resource
 *
-* DO NOT EDIT: generated from /scripts/specs/resource.yml
+* @cond DEV
+* DO NOT EDIT: generated from /scripts/<type>/resource.yml
+* @endcond
 *
 ******************************************************************************/
 #ifndef _XI_RESOURCE_H

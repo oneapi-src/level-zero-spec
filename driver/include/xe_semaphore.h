@@ -24,7 +24,9 @@
 *
 * @brief Intel Xe Driver APIs for Semaphore
 *
-* DO NOT EDIT: generated from /scripts/specs/semaphore.yml
+* @cond DEV
+* DO NOT EDIT: generated from /scripts/<type>/semaphore.yml
+* @endcond
 *
 ******************************************************************************/
 #ifndef _XE_SEMAPHORE_H

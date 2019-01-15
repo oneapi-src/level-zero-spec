@@ -24,7 +24,9 @@
 *
 * @brief Intel Xi Runtime APIs for Command List
 *
-* DO NOT EDIT: generated from /scripts/specs/cmdlist.yml
+* @cond DEV
+* DO NOT EDIT: generated from /scripts/<type>/cmdlist.yml
+* @endcond
 *
 ******************************************************************************/
 #ifndef _XI_CMDLIST_H

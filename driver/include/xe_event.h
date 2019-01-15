@@ -24,7 +24,9 @@
 *
 * @brief Intel Xe Driver APIs for Event
 *
-* DO NOT EDIT: generated from /scripts/specs/event.yml
+* @cond DEV
+* DO NOT EDIT: generated from /scripts/<type>/event.yml
+* @endcond
 *
 ******************************************************************************/
 #ifndef _XE_EVENT_H

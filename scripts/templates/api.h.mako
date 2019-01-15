@@ -83,11 +83,13 @@ def pline(repl, item, more):
 %endif
 %endfor
 *
-* DO NOT EDIT: generated from /scripts/specs/${name}.yml
+* @cond DEV
+* DO NOT EDIT: generated from /scripts/<type>/${name}.yml
+* @endcond
 *
 ******************************************************************************/
-#ifndef _${x.upper()}_${name.upper()}_H
-#define _${x.upper()}_${name.upper()}_H
+#ifndef _${X}_${name.upper()}_H
+#define _${X}_${name.upper()}_H
 #if defined(__cplusplus)
 #pragma once
 #endif
@@ -157,8 +159,8 @@ typedef struct _${sub(x, doc['name'])}
 
 %elif re.match(r"function", doc['type']):
 /// @returns
-/// - ::${x.upper()}_RESULT_SUCCESS
-/// - ::${x.upper()}_RESULT_ERROR_UNINITIALIZED
+/// - ::${X}_RESULT_SUCCESS
+/// - ::${X}_RESULT_ERROR_UNINITIALIZED
 %for item in doc['returns']:
     %if isinstance(item, dict):
     %for key, values in item.items():
@@ -203,4 +205,4 @@ typedef struct _${sub(x, doc['name'])}
 
 %endif
 %endfor
-#endif // _${x.upper()}_${name.upper()}_H
+#endif // _${X}_${name.upper()}_H

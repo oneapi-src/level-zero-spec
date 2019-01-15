@@ -24,7 +24,9 @@
 *
 * @brief Intel Xi Runtime API common types
 *
-* DO NOT EDIT: generated from /scripts/specs/common.yml
+* @cond DEV
+* DO NOT EDIT: generated from /scripts/<type>/common.yml
+* @endcond
 *
 ******************************************************************************/
 #ifndef _XI_COMMON_H

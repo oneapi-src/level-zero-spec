@@ -1,19 +1,23 @@
 # Runtime API Programming Guide
 The following documents the high-level programming models and guidelines.
 
+@cond DEV
+DO NOT EDIT: generated from /scripts/templates/runtime.md.mako
+@endcond
+
 ## Introduction
-The Intel Xi Runtime API provides...
+The Intel ${Xx} Runtime API provides...
 
 ### Naming Convention
 todo: 
-- all types follow **xi_\<name\>_t** convention
-- all macros and enumerator values use all caps **XI_\<SCOPE\>_\<NAME\>** convention
-- all functions use **xi\<Actor\>\<Action\>\<Object\>** convention
+- all types follow **${x}_\<name\>_t** convention
+- all macros and enumerator values use all caps **${X}_\<SCOPE\>_\<NAME\>** convention
+- all functions use **${x}\<Actor\>\<Action\>\<Object\>** convention
 - all function input parameters precede output parameters
 
 ### Error Handling
 todo:
-- all apis return ::xi_result_t.
+- all apis return ::${x}_result_t.
 - apis are gaurenteed to never throw exceptions. etc.
 
 ## Runtime, Context and Device

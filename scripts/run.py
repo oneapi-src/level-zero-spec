@@ -17,14 +17,16 @@ def main():
 
     if "all" == args.filter or "driver" == args.filter:
         driver = parse_specs.parse("./driver")
-        generate_api.generate_all(configParser.get('PATH','driver'), configParser.get('NAMESPACE','driver'), driver)
+        generate_api.generate_cpp_headers(configParser.get('PATH','driver'), configParser.get('NAMESPACE','driver'), driver)
     
     if "all" == args.filter or "runtime" == args.filter:
         runtime = parse_specs.parse("./runtime")
-        generate_api.generate_all(configParser.get('PATH','runtime'), configParser.get('NAMESPACE','runtime'), runtime)
+        generate_api.generate_cpp_headers(configParser.get('PATH','runtime'), configParser.get('NAMESPACE','runtime'), runtime)
 
     if "all" == args.filter or "docs" == args.filter:
-        generate_docs.generate_all()
+        generate_docs.generate_md(configParser.get('PATH','driver'), configParser.get('NAMESPACE','driver'), "driver")
+        generate_docs.generate_md(configParser.get('PATH','runtime'), configParser.get('NAMESPACE','runtime'), "runtime")
+        generate_docs.generate_html()
     
     print("\nDone")
 
