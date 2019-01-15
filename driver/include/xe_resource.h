@@ -79,7 +79,7 @@ xe_result_t __xecall
 /// - ::XE_RESULT_SUCCESS
 /// - ::XE_RESULT_ERROR_UNINITIALIZED
 /// - ::XE_RESULT_ERROR_INVALID_PARAMETER
-///     + invalid handle for desc
+///     + invalid handle for hResource
 xe_result_t __xecall
   xeResourceDestroy(
     xe_resource_handle_t hResource                  ///< [in] handle of resource object to destroy

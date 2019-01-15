@@ -52,4 +52,4 @@ params:
       desc: "[in] handle of resource object to destroy"
 returns:
     - $X_RESULT_ERROR_INVALID_PARAMETER:
-        - "invalid handle for desc"
+        - "invalid handle for hResource"

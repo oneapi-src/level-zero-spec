@@ -79,7 +79,7 @@ xi_result_t __xicall
 /// - ::XI_RESULT_SUCCESS
 /// - ::XI_RESULT_ERROR_UNINITIALIZED
 /// - ::XI_RESULT_ERROR_INVALID_PARAMETER
-///     + invalid handle for desc
+///     + invalid handle for hResource
 xi_result_t __xicall
   xiResourceDestroy(
     xi_resource_handle_t hResource                  ///< [in] handle of resource object to destroy
