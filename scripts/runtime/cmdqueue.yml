@@ -43,6 +43,9 @@ params:
     - type: $x_context_handle_t
       name: hContext
       desc: "[in] handle of the context"
+    - type: $x_device_handle_t
+      name: hDevice
+      desc: "[in] handle of the device object"
     - type: "const $x_command_queue_desc_t*"
       name: desc
       desc: "[in] pointer to command queue descriptor"

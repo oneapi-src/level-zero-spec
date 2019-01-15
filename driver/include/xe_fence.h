@@ -66,14 +66,14 @@ typedef struct _xe_fence_desc_t
 /// - ::XE_RESULT_SUCCESS
 /// - ::XE_RESULT_ERROR_UNINITIALIZED
 /// - ::XE_RESULT_ERROR_INVALID_PARAMETER
-///     + invalid handle for hDevice
+///     + invalid handle for hCommandQueue
 ///     + nullptr for desc
 ///     + nullptr for phFence
 /// - ::XE_RESULT_ERROR_OUT_OF_HOST_MEMORY
 /// - ::XE_RESULT_ERROR_OUT_OF_DEVICE_MEMORY
 xe_result_t __xecall
   xeFenceCreate(
-    xe_device_handle_t hDevice,                     ///< [in] handle of the device
+    xe_command_queue_handle_t hCommandQueue,        ///< [in] handle of command queue
     const xe_fence_desc_t* desc,                    ///< [in] pointer to fence descriptor
     xe_fence_handle_t* phFence                      ///< [out] pointer to handle of fence object created
     );
@@ -103,13 +103,11 @@ xe_result_t __xecall
 /// - ::XE_RESULT_SUCCESS
 /// - ::XE_RESULT_ERROR_UNINITIALIZED
 /// - ::XE_RESULT_ERROR_INVALID_PARAMETER
-///     + invalid handle for hCommandList
 ///     + invalid handle for hFence
 ///     + fence is in signaled state
 ///     + fence is enqueued in another command queue
 xe_result_t __xecall
-  xeCommandQueueEnqueueSignalFence(
-    xe_command_queue_handle_t hCommandList,         ///< [in] handle of the command queue
+  xeEnqueueSignalFence(
     xe_fence_handle_t hFence                        ///< [in] handle of the fence
     );
 
@@ -127,22 +125,6 @@ xe_result_t __xecall
 xe_result_t __xecall
   xeWaitOnFence(
     xe_fence_handle_t hFence                        ///< [in] handle of the fence
-    );
-
-///////////////////////////////////////////////////////////////////////////////
-/// @brief The current host thread waits on a multiple fences to be signaled.
-///        @todo should this be moved to runtime?
-/// @returns
-/// - ::XE_RESULT_SUCCESS
-/// - ::XE_RESULT_ERROR_UNINITIALIZED
-/// - ::XE_RESULT_ERROR_INVALID_PARAMETER
-///     + nullptr for phFences
-///     + any invalid handle in phFences
-///     + any fence is not enqueued in a command queue
-xe_result_t __xecall
-  xeWaitOnMultipleFences(
-    uint32_t numFences,                             ///< [in] number of fences in hFences
-    xe_fence_handle_t* phFences                     ///< [in] pointer to array of handles of the fences
     );
 
 ///////////////////////////////////////////////////////////////////////////////

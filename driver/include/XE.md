@@ -37,7 +37,7 @@ The following diagram illustrates the hierarchy of devices to the driver:
  
 ### Device
 - A device represents a physical device in the system that can support Xe.
-- More than one device may be avilable in the system.
+- More than one device may be available in the system.
 
 ### Initialization
 The following sample code demonstrates a basic initialization sequence:
@@ -55,14 +55,14 @@ The following sample code demonstrates a basic initialization sequence:
     }
 
     // Get the handle for device 0
-    xe_device_handle_t xeDevice;
-    xeDeviceGet(0, &xeDevice);
+    xe_device_handle_t hDevice;
+    xeDeviceGet(0, &hDevice);
     ...
 ```
 
 ## Command Queues and Command Lists
 The following diagram illustrates the hierarchy of command lists and command queues to the device:  
-![Device Hierarchy](../images/cmdqueue.png?raw=true)
+![Device Hierarchy](../images/driver_queue.png?raw=true)
 
 ### Command Queues
 - A command queue represents a physical input stream to the device.
@@ -113,20 +113,20 @@ The following diagram illustrates the hierarchy of command lists and command que
 The following sample code demonstrates a basic sequence for creation of command queues and command lists:
 ```c
     // Create a command queue
-    xe_command_queue_desc_t xeCommandQueueDesc = {
+    xe_command_queue_desc_t commandQueueDesc = {
         XE_COMMAND_QUEUE_DESC_VERSION,
         XE_COMMAND_QUEUE_FLAG_DEFAULT
     };
-    xe_command_queue_handle_t xeCommandQueue;
-    xeCommandQueueCreate(xeDevice, &xeCommandQueueDesc, &xeCommandQueue);
+    xe_command_queue_handle_t hCommandQueue;
+    xeCommandQueueCreate(hDevice, &commandQueueDesc, &hCommandQueue);
 
     // Create a command list
-    xe_command_list_desc_t xeCommandListDesc = {
+    xe_command_list_desc_t commandListDesc = {
         XE_COMMAND_LIST_DESC_VERSION,
         XE_COMMAND_LIST_FLAG_NONE
     };
-    xe_command_list_handle_t xeCommandList;
-    xeCommandListCreate(xeDevice, &xeCommandListDesc, &xeCommandList);
+    xe_command_list_handle_t hCommandList;
+    xeCommandListCreate(hDevice, &commandListDesc, &hCommandList);
     ...
 ```
 
@@ -134,15 +134,15 @@ The following sample code demonstrates a basic sequence for creation of command 
 The following sample code demonstrates submission of commands to a command queue, via a command list:
 ```c
     // Encode kernel execution into a command list
-    xeCommandListEncodeKernelExecution(xeCommandList, xeKernel);
-    xeCommandListClose(xeCommandList); // finished encoding commands
+    xeCommandListEncodeKernelExecution(hCommandList, hKernel);
+    xeCommandListClose(hCommandList); // finished encoding commands
 
     // Enqueue command list execution into command queue
-    xeCommandQueueEnqueueCommandList(xeCommandQueue, xeCommandList);
-    xeCommandQueueSynchronize(xeCommandQueue); // synchronize host and GPU
+    xeCommandQueueEnqueueCommandList(hCommandQueue, hCommandList);
+    xeCommandQueueSynchronize(hCommandQueue); // synchronize host and GPU
 
     // Reset (recycle) command list for new commands
-    xeCommandListReset(xeCommandList);
+    xeCommandListReset(hCommandList);
     ...
 ```
 
@@ -163,23 +163,23 @@ and can only be waited upon from the host.
 The following sample code demonstrates a sequence for creation, submission and querying of a fence:
 ```c
     // Create fence
-    xe_fence_desc_t xeFenceDesc = {
+    xe_fence_desc_t fenceDesc = {
         XE_FENCE_DESC_VERSION,
         XE_FENCE_FLAG_NONE
     };
-    xe_fence_handle_t xeFence;
-    xeFenceCreate(xeDevice, &xeFenceDesc, &xeFence);
+    xe_fence_handle_t hFence;
+    xeFenceCreate(hDevice, &fenceDesc, &hFence);
 
     // Enqueue a signal of the fence into a command queue
-    xeCommandQueueEnqueueSignalFence(xeCommandQueue, xeFence);
+    xeCommandQueueEnqueueSignalFence(hCommandQueue, hFence);
 
     // Wait for fence to be signaled
-    if(XE_RESULT_SUCCESS != xeFenceQueryStatus(xeFence)
+    if(XE_RESULT_SUCCESS != xeFenceQueryStatus(hFence)
     {
-        xeFenceWait(xeFence);
+        xeFenceWait(hFence);
     }
 
-    xeFenceReset(xeFence);
+    xeFenceReset(hFence);
     ...
 ```
 
@@ -195,21 +195,21 @@ The following sample code demonstrates a sequence for creation, submission and q
 The following sample code demonstrates a sequence for creation and submission of an event:
 ```c
     // Create event
-    xe_event_desc_t xeEventDesc = {
+    xe_event_desc_t eventDesc = {
         XE_EVENT_DESC_VERSION,
         XE_EVENT_FLAG_NONE
     };
-    xe_event_handle_t xeEvent;
-    xeEventCreate(xeDevice, &xeEventDesc, &xeEvent);
+    xe_event_handle_t hEvent;
+    xeEventCreate(hDevice, &eventDesc, &hEvent);
 
     // Encode a wait on an event into a command list
-    xeCommandListEncodeWaitOnEvent(xeCommandList, xeEvent);
+    xeCommandListEncodeWaitOnEvent(hCommandList, hEvent);
 
     // Enqueue wait via the command list into a command queue
-    xeCommandQueueEnqueueCommandList(xeCommandQueue, xeCommandList);
+    xeCommandQueueEnqueueCommandList(hCommandQueue, hCommandList);
 
     // Signal the device
-    xeEventSignal(xeEvent);
+    xeEventSignal(hEvent);
     ...
 ```
 
@@ -223,23 +223,23 @@ The following sample code demonstrates a sequence for creation and submission of
 The following sample code demonstrates a sequence for creation and submission of a semaphore:
 ```c
     // Create semaphore
-    xe_semaphore_desc_t xeSemaphoreDesc = {
+    xe_semaphore_desc_t semaphoreDesc = {
         XE_SEMAPHORE_DESC_VERSION,
         XE_SEMAPHORE_FLAG_NONE
     };
-    xe_semaphore_handle_t xeSemaphore;
-    xeEventCreate(xeDevice, &xeSemaphoreDesc, &xeSemaphore);
+    xe_semaphore_handle_t hSemaphore;
+    xeEventCreate(hDevice, &semaphoreDesc, &hSemaphore);
 
     // Encode a wait on an semaphore into a command list
-    xeCommandListEncodeSemaphoreWait(xeCommandList0, xeSemaphore,
+    xeCommandListEncodeSemaphoreWait(hCommandList0, hSemaphore,
         XE_SEMAPHORE_WAIT_OPERATION_GREATER_OR_EQUAL_TO, 1);
 
     // Encode a signal of a semaphore into another command list
-    xeCommandListEncodeSemaphoreSignal(xeCommandList1, xeSemaphore, 1);
+    xeCommandListEncodeSemaphoreSignal(hCommandList1, hSemaphore, 1);
 
     // Enqueue the command lists into the parallel command queues
-    xeCommandQueueEnqueueCommandList(xeCommandQueue0, xeCommandList0);
-    xeCommandQueueEnqueueCommandList(xeCommandQueue1, xeCommandList1);
+    xeCommandQueueEnqueueCommandList(hCommandQueue0, hCommandList0);
+    xeCommandQueueEnqueueCommandList(hCommandQueue1, hCommandList1);
     ...
 ```
 

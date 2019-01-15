@@ -66,14 +66,14 @@ typedef struct _xi_fence_desc_t
 /// - ::XI_RESULT_SUCCESS
 /// - ::XI_RESULT_ERROR_UNINITIALIZED
 /// - ::XI_RESULT_ERROR_INVALID_PARAMETER
-///     + invalid handle for hContext
+///     + invalid handle for hCommandQueue
 ///     + nullptr for desc
 ///     + nullptr for phFence
 /// - ::XI_RESULT_ERROR_OUT_OF_HOST_MEMORY
 /// - ::XI_RESULT_ERROR_OUT_OF_DEVICE_MEMORY
 xi_result_t __xicall
   xiFenceCreate(
-    xi_context_handle_t hContext,                   ///< [in] handle of the context
+    xi_command_queue_handle_t hCommandQueue,        ///< [in] handle of command queue
     const xi_fence_desc_t* desc,                    ///< [in] pointer to fence descriptor
     xi_fence_handle_t* phFence                      ///< [out] pointer to handle of fence object created
     );
@@ -103,13 +103,11 @@ xi_result_t __xicall
 /// - ::XI_RESULT_SUCCESS
 /// - ::XI_RESULT_ERROR_UNINITIALIZED
 /// - ::XI_RESULT_ERROR_INVALID_PARAMETER
-///     + invalid handle for hCommandList
 ///     + invalid handle for hFence
 ///     + fence is in signaled state
 ///     + fence is enqueued in another command queue
 xi_result_t __xicall
-  xiCommandQueueEnqueueSignalFence(
-    xi_command_queue_handle_t hCommandList,         ///< [in] handle of the command queue
+  xiEnqueueSignalFence(
     xi_fence_handle_t hFence                        ///< [in] handle of the fence
     );
 

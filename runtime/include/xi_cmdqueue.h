@@ -78,6 +78,7 @@ typedef struct _xi_command_queue_desc_t
 xi_result_t __xicall
   xiCommandQueueCreate(
     xi_context_handle_t hContext,                   ///< [in] handle of the context
+    xi_device_handle_t hDevice,                     ///< [in] handle of the device object
     const xi_command_queue_desc_t* desc,            ///< [in] pointer to command queue descriptor
     xi_command_queue_handle_t* phCommandQueue       ///< [out] pointer to handle of command queue object created
     );

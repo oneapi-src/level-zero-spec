@@ -28,7 +28,7 @@ todo:
   
 ### Device  
 - A device represents a physical device in the system that can support Xi.
-- More than one device may be avilable in the system.
+- More than one device may be available in the system.
   
 ### Initialization  
 The following sample code demonstrates a basic initialization sequence:
@@ -46,14 +46,14 @@ The following sample code demonstrates a basic initialization sequence:
     }
 
     // Get the handle for device 0
-    xi_device_handle_t xiDevice;
-    xiDeviceGet(0, &xiDevice);
+    xi_device_handle_t hDevice;
+    xiDeviceGet(0, &hDevice);
     
     // Create the context
     xi_context_desc_t desc;
     desc.version = XI_CONTEXT_DESC_VERSION;
     desc.numDevices = 1;
-    desc.hDevices = &xiDevice;
+    desc.hDevices = &hDevice;
     
     $x_context_handle_t hContext;
     if(XI_RESULT_SUCCESS != xiContextCreate(&desc, &hContext))
@@ -64,6 +64,95 @@ The following sample code demonstrates a basic initialization sequence:
     ...
 ```
   
+## Command Queues and Command Lists
+The following diagram illustrates the hierarchy of command lists and command queues to the context and device:  
+![Device Hierarchy](../images/context_queue.png?raw=true)
+
+### Command Queues
+- A command queue represents a physical input stream to the device.
+- The number of command queues per device is queried from calling 
+  ::xiGetDeviceProperties; returned as ::xi_device_properties_t.numAsyncComputeEngines.
+- Multiple command queues may be created by an application.  For example,
+  an application may want to create a command queue per CPU thread.
+- There is no implicit binding of command queues to CPU threads. Therefore,
+  an application may share a command queue handle across multiple CPU
+  threads. However, the application is responsible for ensuring that 
+  multiple CPU threads do not access the same command queue simultaneously.
+- The command queue maintains some machine state, which is inherited by
+  subsequent execution. See ::xi_command_queue_parameter_t for details.
+- Commands are submitted to a command queue via command lists and are
+  executed in a fifo manner.
+- The application is responsible for making sure the GPU is not currently
+  executing from a command queue before it is deleted.  This is 
+  typically done by tracking command list events, but may also be
+  handled by calling ::xiCommandQueueSynchronize.
+
+### Command Lists
+- A command list represents a sequence of commands for execution on
+  a command queue.
+- Multiple command lists may be created by an application.  For example,
+  an application may want to create multiple command lists per command queue.
+- There is no implicit association between a command list and a 
+  command queue. Therefore, a command list may be submitted to any, or
+  multiple command queues.
+- There is no implicit binding of command lists to CPU threads. Therefore,
+  an application may share a command list handle across multiple CPU
+  threads. However, the application is responsible for ensuring that 
+  multiple CPU threads do not access the same command list simultaneously.
+- The command list maintains some machine state, which is inherited by
+  subsequent commands. See xi_command_list_parameter_t for details.
+- Command lists do not inherit state from other command lists executed
+  on the same command queue.  i.e. each command list begins execution
+  in its own state.
+- The application is responsible for calling close before submission
+  to a command queue.
+- The application is responsible for making sure the GPU is not currently
+  executing from a command list before it is deleted.  This should be
+  handled by tracking a completion event associated with the command list.
+- The application is responsible for making sure the GPU is not currently
+  executing from a command list before it is reset.  This should be
+  handled by tracking a completion event associated with the command list.
+
+### Initialization
+The following sample code demonstrates a basic sequence for creation of command queues and command lists:
+```c
+    // Create a command queue
+    xi_command_queue_desc_t commandQueueDesc = {
+        XI_COMMAND_QUEUE_DESC_VERSION,
+        XI_COMMAND_QUEUE_FLAG_DEFAULT
+    };
+    xi_command_queue_handle_t hCommandQueue;
+    xiCommandQueueCreate(hContext, hDevice, &commandQueueDesc, &hCommandQueue);
+
+    // Create a command list
+    xi_command_list_desc_t commandListDesc = {
+        XI_COMMAND_LIST_DESC_VERSION,
+        XI_COMMAND_LIST_FLAG_NONE
+    };
+    xi_command_list_handle_t hCommandList;
+    xiCommandListCreate(hContext, hDevice, &commandListDesc, &hCommandList);
+    ...
+```
+
+### Submission
+The following sample code demonstrates submission of commands to a command queue, via a command list:
+```c
+    // Encode kernel execution into a command list
+    xiCommandListEncodeKernelExecution(hCommandList, hKernel);
+    xiCommandListClose(hCommandList); // finished encoding commands
+
+    // Enqueue command list execution into command queue
+    xiCommandQueueEnqueueCommandList(hCommandQueue, hCommandList);
+    xiCommandQueueSynchronize(hCommandQueue); // synchronize host and GPU
+
+    // Reset (recycle) command list for new commands
+    xiCommandListReset(hCommandList);
+    ...
+```
+
+## Synchronization Primitives
+todo
+
 ## Memory Allocation  
 todo
 
