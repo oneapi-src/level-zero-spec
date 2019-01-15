@@ -27,12 +27,12 @@ members:
       desc: "[in] creation flags"
 --- #--------------------------------------------------------------------------
 type: function
-desc: "Creates a command list"
+desc: "Creates a command list for submitting commands to a command queue."
 name: $xCommandListCreate
 params:
-    - type: $x_device_handle_t
-      name: hDevice
-      desc: "[in] handle of the device"
+    - type: $x_context_handle_t
+      name: hContext
+      desc: "[in] handle of the context"
     - type: "const $x_command_list_desc_t*"
       name: desc
       desc: "[in] pointer to command list descriptor"
@@ -41,7 +41,7 @@ params:
       desc: "[out] pointer to handle of command list object created"
 returns:
     - $X_RESULT_ERROR_INVALID_PARAMETER:
-        - "invalid handle for hDevice"
+        - "invalid handle for hContext"
         - "nullptr for desc"
         - "nullptr for phCommandList"
     - $X_RESULT_ERROR_OUT_OF_HOST_MEMORY

@@ -61,7 +61,7 @@ typedef struct _xi_command_queue_desc_t
 } xi_command_queue_desc_t;
 
 ///////////////////////////////////////////////////////////////////////////////
-/// @brief Creates a command queue on a device
+/// @brief Creates a command queue on a context
 /// @remarks
 ///   _Analogues_
 ///     - **cuCtxCreate**
@@ -70,14 +70,14 @@ typedef struct _xi_command_queue_desc_t
 /// - ::XI_RESULT_SUCCESS
 /// - ::XI_RESULT_ERROR_UNINITIALIZED
 /// - ::XI_RESULT_ERROR_INVALID_PARAMETER
-///     + invalid handle for hDevice
+///     + invalid handle for hContext
 ///     + nullptr for desc
 ///     + nullptr for phCommandQueue
 /// - ::XI_RESULT_ERROR_OUT_OF_HOST_MEMORY
 /// - ::XI_RESULT_ERROR_OUT_OF_DEVICE_MEMORY
 xi_result_t __xicall
   xiCommandQueueCreate(
-    xi_device_handle_t hDevice,                     ///< [in] handle of the device
+    xi_context_handle_t hContext,                   ///< [in] handle of the context
     const xi_command_queue_desc_t* desc,            ///< [in] pointer to command queue descriptor
     xi_command_queue_handle_t* phCommandQueue       ///< [out] pointer to handle of command queue object created
     );

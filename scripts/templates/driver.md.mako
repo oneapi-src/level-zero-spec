@@ -30,14 +30,14 @@ The following diagram illustrates the hierarchy of devices to the driver:
 ![Driver Hierarchy](../images/driver.png?raw=true)
 
 ### Driver
- - A driver represents an instance of a ${Xx} driver being loaded and initialized into the current process.
- - Only one instance of a driver per process can be loaded.
- - There is no reference tracking if multiple drivers are initialized.
- - A driver has minimal global state associated; only that which is sufficient for querying devices recognized by the driver.
+- A driver represents an instance of a ${Xx} driver being loaded and initialized into the current process.
+- Only one instance of a driver per process can be loaded.
+- There is no reference tracking if multiple drivers are initialized.
+- A driver has minimal global state associated; only that which is sufficient for querying devices recognized by the driver.
  
  ### Device
- - A device represents a physical device in the system that can support ${Xx}.
- - More than one device may be avilable in the system.
+- A device represents a physical device in the system that can support ${Xx}.
+- More than one device may be avilable in the system.
 
 ### Initialization
 The following sample code demonstrates a basic initialization sequence:
