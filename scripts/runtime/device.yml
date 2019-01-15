@@ -199,13 +199,13 @@ etors:
     - name: $X_MEMORY_ACCESS
       value: "$X_BIT( 0 )"
       desc: "Supports load/store access"
-    - name: $X_ATOMIC_ACCESS
+    - name: $X_MEMORY_ATOMIC_ACCESS
       value: "$X_BIT( 1 )"
       desc: "Supports atomic access"
-    - name: $X_CONCURRENT_ACCESS
+    - name: $X_MEMORY_CONCURRENT_ACCESS
       value: "$X_BIT( 2 )"
       desc: "Supports concurrent access"
-    - name: $X_CONCURRENT_ACCESS
+    - name: $X_MEMORY_CONCURRENT_ATOMIC_ACCESS
       value: "$X_BIT( 3 )"
       desc: "Supports concurrent atomic access"
 --- #--------------------------------------------------------------------------

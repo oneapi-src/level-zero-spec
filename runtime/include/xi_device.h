@@ -190,9 +190,9 @@ xi_result_t __xicall
 typedef enum _xi_memory_access_capabilities_t
 {
     XI_MEMORY_ACCESS = XI_BIT( 0 ),                 ///< Supports load/store access
-    XI_ATOMIC_ACCESS = XI_BIT( 1 ),                 ///< Supports atomic access
-    XI_CONCURRENT_ACCESS = XI_BIT( 2 ),             ///< Supports concurrent access
-    XI_CONCURRENT_ACCESS = XI_BIT( 3 ),             ///< Supports concurrent atomic access
+    XI_MEMORY_ATOMIC_ACCESS = XI_BIT( 1 ),          ///< Supports atomic access
+    XI_MEMORY_CONCURRENT_ACCESS = XI_BIT( 2 ),      ///< Supports concurrent access
+    XI_MEMORY_CONCURRENT_ATOMIC_ACCESS = XI_BIT( 3 ),   ///< Supports concurrent atomic access
 
 } xi_memory_access_capabilities_t;
 
