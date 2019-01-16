@@ -89,9 +89,9 @@ xi_result_t __xicall
 /// - ::XI_RESULT_ERROR_INVALID_PARAMETER
 ///     + invalid handle for hDevice
 ///     + nullptr for desc
+///     + nullptr for ptr
 ///     + nullptr for phEvent
 /// - ::XI_RESULT_ERROR_OUT_OF_HOST_MEMORY
-/// - ::XI_RESULT_ERROR_OUT_OF_DEVICE_MEMORY
 xi_result_t __xicall
   xiEventPlacement(
     xi_device_handle_t hDevice,                     ///< [in] handle of the device

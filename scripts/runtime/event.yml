@@ -76,9 +76,9 @@ returns:
     - $X_RESULT_ERROR_INVALID_PARAMETER:
         - "invalid handle for hDevice"
         - "nullptr for desc"
+        - "nullptr for ptr"
         - "nullptr for phEvent"
     - $X_RESULT_ERROR_OUT_OF_HOST_MEMORY
-    - $X_RESULT_ERROR_OUT_OF_DEVICE_MEMORY
 --- #--------------------------------------------------------------------------
 type: function
 desc: "Deletes an event object."

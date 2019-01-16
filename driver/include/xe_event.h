@@ -88,9 +88,9 @@ xe_result_t __xecall
 /// - ::XE_RESULT_ERROR_INVALID_PARAMETER
 ///     + invalid handle for hDevice
 ///     + nullptr for desc
+///     + nullptr for ptr
 ///     + nullptr for phEvent
 /// - ::XE_RESULT_ERROR_OUT_OF_HOST_MEMORY
-/// - ::XE_RESULT_ERROR_OUT_OF_DEVICE_MEMORY
 xe_result_t __xecall
   xeEventPlacement(
     xe_device_handle_t hDevice,                     ///< [in] handle of the device
