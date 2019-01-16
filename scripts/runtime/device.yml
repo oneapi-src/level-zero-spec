@@ -103,6 +103,9 @@ members:
     - type: uint32_t
       name: numComputeCores
       desc: "[out] Num compute cores"
+    - type: uint32_t
+      name: maxCommandQueuePriority
+      desc: "[out] Max priority for command queues. Higher value is higher priority."
     - type: char
       name: "device_name[$X_MAX_DEVICE_NAME]"
       desc: "[out] Device name"
