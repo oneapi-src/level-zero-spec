@@ -261,3 +261,47 @@ returns:
     - $X_RESULT_ERROR_INVALID_PARAMETER:
         - "invalid handle for hDevice"
         - "nullptr for provided for properties"
+
+--- #--------------------------------------------------------------------------
+type: macro
+desc: "API version of $x_device_link_properties_t"
+name: $X_DEVICE_LINK_PROPERTIES_VERSION
+value: "$X_MAKE_VERSION( 1, 0 )"
+--- #--------------------------------------------------------------------------
+type: struct
+desc: "Device properties queried using $xDeviceGetLinkProperties"
+name: $x_device_link_properties_t
+members:
+    - type: uint32_t
+      name: version
+      desc: "[in] $X_DEVICE_LINK_PROPERTIES_VERSION"
+    - type: bool
+      name: isP2PSupported
+      desc: "[out] Is P2P access supported across link"
+    - type: bool
+      name: isAtomicsSupported
+      desc: "[out] Are atomics supported across link"
+    - type: uint32_t
+      name: performanceRank
+      desc: "[out] Relative performance rank of link. @todo Should this be different metric?"
+
+--- #--------------------------------------------------------------------------
+type: function
+desc: "Retrieves link properties between src and dest devices."
+name: $xDeviceGetLinkProperties
+analogue:
+    - "**cudaDeviceGetP2PAttribute**"
+params:
+    - type: uint32_t
+      name: srcOrdinal
+      desc: "[in] src device ordinal"
+    - type: uint32_t
+      name: dstOrdinal
+      desc: "[in] dst device ordinal"
+    - type: "$x_device_link_properties_t*"
+      name: pLinkProperties
+      desc: "[out] link properties between src and dest devices"
+returns:
+    - $X_RESULT_ERROR_INVALID_PARAMETER:
+        - "invalid ordinal. Use $xDeviceGetCount for valid range."
+        - "nullptr for provided for properties"
