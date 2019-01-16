@@ -35,6 +35,8 @@ members:
 type: function
 desc: "Creates a context."
 name: $xContextCreate
+analogue:
+    - "**clCreateContext**"
 params:
     - type: "const $x_context_desc_t*"
       name: desc
@@ -54,6 +56,8 @@ returns:
 type: function
 desc: "Destroys a context."
 name: $xContextDestroy
+analogue:
+    - "**clReleaseContext**"
 params:
     - type: $x_context_handle_t
       name: hContext

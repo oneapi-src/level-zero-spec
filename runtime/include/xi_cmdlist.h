@@ -41,7 +41,7 @@
 #define XI_COMMAND_LIST_DESC_VERSION  XI_MAKE_VERSION( 1, 0 )
 
 ///////////////////////////////////////////////////////////////////////////////
-/// @brief Supported command List creation flags
+/// @brief Supported command list creation flags
 typedef enum _xi_command_list_flags_t
 {
     XI_COMMAND_LIST_FLAG_NONE = 0,                  ///< default behavior

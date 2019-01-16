@@ -29,8 +29,6 @@ members:
 type: function
 desc: "Creates a fence object."
 name: $xFenceCreate
-analogue:
-    - "**cuEventCreate**"
 params:
     - type: $x_command_queue_handle_t
       name: hCommandQueue
@@ -52,8 +50,6 @@ returns:
 type: function
 desc: "Deletes a fence object."
 name: $xFenceDestroy
-analogue:
-    - "**cuEventDestroy**"
 params:
     - type: $x_fence_handle_t
       name: hFence
@@ -66,8 +62,6 @@ returns:
 type: function
 desc: "Encodes a signal of the fence into a command queue."
 name: $xEnqueueSignalFence
-analogue:
-    - "**cuEventRecord**"
 params:
     - type: $x_fence_handle_t
       name: hFence
@@ -81,8 +75,6 @@ returns:
 type: function
 desc: "The current host thread waits on a fence to be signaled."
 name: $xWaitOnFence
-analogue:
-    - "**cuEventSynchronize**"
 params:
     - type: $x_fence_handle_t
       name: hFence
@@ -111,8 +103,6 @@ returns:
 type: function
 desc: "Queries a fence object's status."
 name: $xFenceQueryStatus
-analogue:
-    - "**cuEventQuery**"
 params:
     - type: $x_fence_handle_t
       name: hFence
@@ -127,8 +117,6 @@ returns:
 type: function
 desc: "Queries the elapsed time between two signaled fences."
 name: $xFenceQueryElapsedTime
-analogue:
-    - "**cuEventElapsedTime**"
 params:
     - type: $x_fence_handle_t
       name: hFenceStart

@@ -59,9 +59,6 @@ typedef struct _xi_fence_desc_t
 
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Creates a fence object.
-/// @remarks
-///   _Analogues_
-///     - **cuEventCreate**
 /// @returns
 /// - ::XI_RESULT_SUCCESS
 /// - ::XI_RESULT_ERROR_UNINITIALIZED
@@ -80,9 +77,6 @@ xi_result_t __xicall
 
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Deletes a fence object.
-/// @remarks
-///   _Analogues_
-///     - **cuEventDestroy**
 /// @returns
 /// - ::XI_RESULT_SUCCESS
 /// - ::XI_RESULT_ERROR_UNINITIALIZED
@@ -96,9 +90,6 @@ xi_result_t __xicall
 
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Encodes a signal of the fence into a command queue.
-/// @remarks
-///   _Analogues_
-///     - **cuEventRecord**
 /// @returns
 /// - ::XI_RESULT_SUCCESS
 /// - ::XI_RESULT_ERROR_UNINITIALIZED
@@ -113,9 +104,6 @@ xi_result_t __xicall
 
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief The current host thread waits on a fence to be signaled.
-/// @remarks
-///   _Analogues_
-///     - **cuEventSynchronize**
 /// @returns
 /// - ::XI_RESULT_SUCCESS
 /// - ::XI_RESULT_ERROR_UNINITIALIZED
@@ -144,9 +132,6 @@ xi_result_t __xicall
 
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Queries a fence object's status.
-/// @remarks
-///   _Analogues_
-///     - **cuEventQuery**
 /// @returns
 /// - ::XI_RESULT_SUCCESS
 /// - ::XI_RESULT_ERROR_UNINITIALIZED
@@ -162,9 +147,6 @@ xi_result_t __xicall
 
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Queries the elapsed time between two signaled fences.
-/// @remarks
-///   _Analogues_
-///     - **cuEventElapsedTime**
 /// @returns
 /// - ::XI_RESULT_SUCCESS
 /// - ::XI_RESULT_ERROR_UNINITIALIZED

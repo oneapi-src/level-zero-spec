@@ -15,8 +15,6 @@ desc: "Initialize the $Xx Runtime API and must be called before any other API fu
 name: $xInit
 details: 
     - "If this function is not called then all other functions will return $X_RESULT_ERROR_UNINITIALIZED."
-analogue:
-    - "**cuInit**"
 returns:
     - $X_RESULT_ERROR_INVALID_PARAMETER:
         - "invalid value for flags"
@@ -39,8 +37,6 @@ etors:
 type: function
 desc: "Returns the current versions of the runtime"
 name: $xRuntimeGetVersion
-analogue:
-    - "**cudaRuntimeGetVersion**"
 returns:
     - $X_RESULT_ERROR_INVALID_PARAMETER:
         - "nullptr for version"

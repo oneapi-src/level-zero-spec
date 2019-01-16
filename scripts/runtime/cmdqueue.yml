@@ -37,8 +37,7 @@ type: function
 desc: "Creates a command queue on a context"
 name: $xCommandQueueCreate
 analogue:
-    - "**cuCtxCreate**"
-    - "cuCtxGetCurrent"
+    - "**clCreateCommandQueue**"
 params:
     - type: $x_context_handle_t
       name: hContext
@@ -64,7 +63,7 @@ type: function
 desc: "Destroys a command queue"
 name: $xCommandQueueDestroy
 analogue:
-    - "**cuCtxDestroy**"
+    - "**clReleaseCommandQueue**"
 params:
     - type: $x_command_queue_handle_t
       name: hCommandQueue
@@ -105,10 +104,6 @@ etors:
 type: function
 desc: "Sets a command queue's parameter"
 name: $xCommandQueueSetParameter
-analogue:
-    - cuCtxSetCacheConfig
-    - cuCtxSetLimit
-    - cuCtxSetSharedMemConfig
 params:
     - type: $x_command_queue_handle_t
       name: hCommandQueue
@@ -128,11 +123,6 @@ returns:
 type: function
 desc: "Retrieves a command queue's parameter"
 name: $xCommandQueueGetParameter
-analogue:
-    - cuCtxGetCacheConfig
-    - cuCtxGetLimit
-    - cuCtxGetSharedMemConfig
-    - cuCtxGetStreamPriorityRange
 params:
     - type: $x_command_queue_handle_t
       name: hCommandQueue

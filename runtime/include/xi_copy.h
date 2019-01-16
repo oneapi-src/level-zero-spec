@@ -38,6 +38,11 @@
 
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Copies device or managed memory.
+/// @remarks
+///   _Analogues_
+///     - **clEnqueueCopyBuffer**
+///     - clEnqueueReadBuffer
+///     - clEnqueueWriteBuffer
 /// @returns
 /// - ::XI_RESULT_SUCCESS
 /// - ::XI_RESULT_ERROR_UNINITIALIZED
@@ -54,6 +59,9 @@ xi_result_t __xicall
 
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Copies a resource.
+/// @remarks
+///   _Analogues_
+///     - **clEnqueueCopyImage**
 /// @returns
 /// - ::XI_RESULT_SUCCESS
 /// - ::XI_RESULT_ERROR_UNINITIALIZED
@@ -95,6 +103,9 @@ xi_result_t __xicall
 
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Copies from a resource to device or managed memory.
+/// @remarks
+///   _Analogues_
+///     - clEnqueueReadImage
 /// @returns
 /// - ::XI_RESULT_SUCCESS
 /// - ::XI_RESULT_ERROR_UNINITIALIZED
@@ -111,6 +122,9 @@ xi_result_t __xicall
 
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Copies to a resource from device or managed memory.
+/// @remarks
+///   _Analogues_
+///     - clEnqueueWriteImage
 /// @returns
 /// - ::XI_RESULT_SUCCESS
 /// - ::XI_RESULT_ERROR_UNINITIALIZED

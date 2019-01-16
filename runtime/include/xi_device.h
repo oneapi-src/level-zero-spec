@@ -38,9 +38,6 @@
 
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Reports the number of devices
-/// @remarks
-///   _Analogues_
-///     - **cuDeviceGetCount**
 /// @returns
 /// - ::XI_RESULT_SUCCESS
 /// - ::XI_RESULT_ERROR_UNINITIALIZED
@@ -54,7 +51,7 @@ xi_result_t __xicall
 /// @brief Returns a handle to the device object
 /// @remarks
 ///   _Analogues_
-///     - **cuDeviceGet**
+///     - clGetDeviceIDs
 /// @returns
 /// - ::XI_RESULT_SUCCESS
 /// - ::XI_RESULT_ERROR_UNINITIALIZED
@@ -80,9 +77,6 @@ typedef enum _xi_api_version_t
 
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Returns the API version supported by the device
-/// @remarks
-///   _Analogues_
-///     - **cuCtxGetApiVersion**
 /// @returns
 /// - ::XI_RESULT_SUCCESS
 /// - ::XI_RESULT_ERROR_UNINITIALIZED
@@ -125,8 +119,7 @@ typedef struct _xi_device_properties_t
 /// @brief Retrieves attributes of the device
 /// @remarks
 ///   _Analogues_
-///     - **cuDeviceGetAttribute**
-///     - cuDeviceGetName
+///     - clGetDeviceInfo
 /// @returns
 /// - ::XI_RESULT_SUCCESS
 /// - ::XI_RESULT_ERROR_UNINITIALIZED
@@ -165,7 +158,7 @@ typedef struct _xi_device_compute_properties_t
 /// @brief Retrieves compute attributes of the device
 /// @remarks
 ///   _Analogues_
-///     - **cuDeviceGetAttribute**
+///     - clGetDeviceInfo
 /// @returns
 /// - ::XI_RESULT_SUCCESS
 /// - ::XI_RESULT_ERROR_UNINITIALIZED
@@ -217,8 +210,7 @@ typedef struct _xi_device_memory_properties_t
 /// @brief Retrieves memory attributes of the device
 /// @remarks
 ///   _Analogues_
-///     - **cuDeviceGetAttribute**
-///     - cuDeviceTotalMem
+///     - clGetDeviceInfo
 /// @returns
 /// - ::XI_RESULT_SUCCESS
 /// - ::XI_RESULT_ERROR_UNINITIALIZED

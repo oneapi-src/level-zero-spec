@@ -61,6 +61,9 @@ typedef struct _xi_context_desc_t
 
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Creates a context.
+/// @remarks
+///   _Analogues_
+///     - **clCreateContext**
 /// @returns
 /// - ::XI_RESULT_SUCCESS
 /// - ::XI_RESULT_ERROR_UNINITIALIZED
@@ -79,6 +82,9 @@ xi_result_t __xicall
 
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Destroys a context.
+/// @remarks
+///   _Analogues_
+///     - **clReleaseContext**
 /// @returns
 /// - ::XI_RESULT_SUCCESS
 /// - ::XI_RESULT_ERROR_UNINITIALIZED

@@ -64,8 +64,7 @@ typedef struct _xi_command_queue_desc_t
 /// @brief Creates a command queue on a context
 /// @remarks
 ///   _Analogues_
-///     - **cuCtxCreate**
-///     - cuCtxGetCurrent
+///     - **clCreateCommandQueue**
 /// @returns
 /// - ::XI_RESULT_SUCCESS
 /// - ::XI_RESULT_ERROR_UNINITIALIZED
@@ -87,7 +86,7 @@ xi_result_t __xicall
 /// @brief Destroys a command queue
 /// @remarks
 ///   _Analogues_
-///     - **cuCtxDestroy**
+///     - **clReleaseCommandQueue**
 /// @returns
 /// - ::XI_RESULT_SUCCESS
 /// - ::XI_RESULT_ERROR_UNINITIALIZED
@@ -127,11 +126,6 @@ typedef enum _xi_command_queue_cacheconfig_t
 
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Sets a command queue's parameter
-/// @remarks
-///   _Analogues_
-///     - cuCtxSetCacheConfig
-///     - cuCtxSetLimit
-///     - cuCtxSetSharedMemConfig
 /// @returns
 /// - ::XI_RESULT_SUCCESS
 /// - ::XI_RESULT_ERROR_UNINITIALIZED
@@ -148,12 +142,6 @@ xi_result_t __xicall
 
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Retrieves a command queue's parameter
-/// @remarks
-///   _Analogues_
-///     - cuCtxGetCacheConfig
-///     - cuCtxGetLimit
-///     - cuCtxGetSharedMemConfig
-///     - cuCtxGetStreamPriorityRange
 /// @returns
 /// - ::XI_RESULT_SUCCESS
 /// - ::XI_RESULT_ERROR_UNINITIALIZED
