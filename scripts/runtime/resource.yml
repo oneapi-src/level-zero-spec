@@ -29,6 +29,8 @@ members:
 type: function
 desc: "Creates a resource object."
 name: $xResourceCreate
+analogue:
+    - clCreateImage
 params:
     - type: "const $x_resource_desc_t*"
       name: desc

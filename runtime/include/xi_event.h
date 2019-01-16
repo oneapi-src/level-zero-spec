@@ -63,8 +63,7 @@ typedef struct _xi_event_desc_t
 /// @brief Creates an event object.
 /// @remarks
 ///   _Analogues_
-///     - **cudaEventCreate**
-///     - clCreateUserEvent
+///     - **clCreateUserEvent**
 /// @returns
 /// - ::XI_RESULT_SUCCESS
 /// - ::XI_RESULT_ERROR_UNINITIALIZED
@@ -104,7 +103,6 @@ xi_result_t __xicall
 /// @brief Deletes an event object.
 /// @remarks
 ///   _Analogues_
-///     - **cudaEventDestroy**
 ///     - clReleaseEvent
 /// @returns
 /// - ::XI_RESULT_SUCCESS
@@ -118,9 +116,6 @@ xi_result_t __xicall
 
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Encodes a signal of the event from the device into a command list.
-/// @remarks
-///   _Analogues_
-///     - **cudaEventRecord**
 /// @returns
 /// - ::XI_RESULT_SUCCESS
 /// - ::XI_RESULT_ERROR_UNINITIALIZED
@@ -209,9 +204,6 @@ xi_result_t __xicall
 
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief The current host thread waits on an event from a device signal.
-/// @remarks
-///   _Analogues_
-///     - **cudaEventSynchronize**
 /// @returns
 /// - ::XI_RESULT_SUCCESS
 /// - ::XI_RESULT_ERROR_UNINITIALIZED
@@ -261,7 +253,6 @@ xi_result_t __xicall
 /// @brief Queries an event object's status.
 /// @remarks
 ///   _Analogues_
-///     - **cudaEventQuery**
 ///     - clGetEventInfo
 /// @returns
 /// - ::XI_RESULT_SUCCESS
@@ -277,9 +268,6 @@ xi_result_t __xicall
 
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Queries the elapsed time between two signaled events.
-/// @remarks
-///   _Analogues_
-///     - **cudaEventElapsedTime**
 /// @returns
 /// - ::XI_RESULT_SUCCESS
 /// - ::XI_RESULT_ERROR_UNINITIALIZED

@@ -5,6 +5,10 @@ desc: "Intel $Xx Runtime APIs for Copies"
 type: function
 desc: "Copies device or managed memory."
 name: $xCommandListEncodeMemoryCopy
+analogue:
+    - "**clEnqueueCopyBuffer**"
+    - clEnqueueReadBuffer
+    - clEnqueueWriteBuffer
 params:
     - type: $x_command_list_handle_t
       name: hCommandList
@@ -26,6 +30,8 @@ returns:
 type: function
 desc: "Copies a resource."
 name: $xCommandListEncodeResourceCopy
+analogue:
+    - "**clEnqueueCopyImage**"
 params:
     - type: $x_command_list_handle_t
       name: hCommandList
@@ -79,6 +85,8 @@ returns:
 type: function
 desc: "Copies from a resource to device or managed memory."
 name: $xCommandListEncodeResourceCopyToMemory
+analogue:
+    - clEnqueueReadImage
 params:
     - type: $x_command_list_handle_t
       name: hCommandList
@@ -100,6 +108,8 @@ returns:
 type: function
 desc: "Copies to a resource from device or managed memory."
 name: $xCommandListEncodeResourceCopyFromMemory
+analogue:
+    - clEnqueueWriteImage
 params:
     - type: $x_command_list_handle_t
       name: hCommandList

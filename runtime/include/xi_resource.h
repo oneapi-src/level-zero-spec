@@ -59,6 +59,9 @@ typedef struct _xi_resource_desc_t
 
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Creates a resource object.
+/// @remarks
+///   _Analogues_
+///     - clCreateImage
 /// @returns
 /// - ::XI_RESULT_SUCCESS
 /// - ::XI_RESULT_ERROR_UNINITIALIZED

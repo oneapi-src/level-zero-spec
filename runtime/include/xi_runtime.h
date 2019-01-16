@@ -50,9 +50,6 @@ typedef enum _xi_init_flags_t
 /// @details
 ///     - If this function is not called then all other functions will return
 ///       ::XI_RESULT_ERROR_UNINITIALIZED.
-/// @remarks
-///   _Analogues_
-///     - **cuInit**
 /// @returns
 /// - ::XI_RESULT_SUCCESS
 /// - ::XI_RESULT_ERROR_UNINITIALIZED
@@ -77,9 +74,6 @@ typedef enum _xi_runtime_version_t
 
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Returns the current versions of the runtime
-/// @remarks
-///   _Analogues_
-///     - **cudaRuntimeGetVersion**
 /// @returns
 /// - ::XI_RESULT_SUCCESS
 /// - ::XI_RESULT_ERROR_UNINITIALIZED

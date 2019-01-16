@@ -36,8 +36,7 @@ type: function
 desc: "Creates an event object."
 name: $xEventCreate
 analogue:
-    - "**cudaEventCreate**"
-    - clCreateUserEvent
+    - "**clCreateUserEvent**"
 params:
     - type: $x_device_handle_t
       name: hDevice
@@ -84,7 +83,6 @@ type: function
 desc: "Deletes an event object."
 name: $xEventDestroy
 analogue:
-     - "**cudaEventDestroy**"
      - clReleaseEvent
 params:
     - type: $x_event_handle_t
@@ -97,8 +95,6 @@ returns:
 type: function
 desc: "Encodes a signal of the event from the device into a command list."
 name: $xCommandListEncodeSignalEvent
-analogue:
-    - "**cudaEventRecord**"
 params:
     - type: $x_command_list_handle_t
       name: hCommandList
@@ -192,8 +188,6 @@ returns:
 type: function
 desc: "The current host thread waits on an event from a device signal."
 name: $xWaitOnEvent
-analogue:
-    - "**cudaEventSynchronize**"
 params:
     - type: $x_event_handle_t
       name: hEvent
@@ -242,7 +236,6 @@ type: function
 desc: "Queries an event object's status."
 name: $xEventQueryStatus
 analogue:
-    - "**cudaEventQuery**"
     - clGetEventInfo
 params:
     - type: $x_event_handle_t
@@ -257,8 +250,6 @@ returns:
 type: function
 desc: "Queries the elapsed time between two signaled events."
 name: $xEventQueryElapsedTime
-analogue:
-    - "**cudaEventElapsedTime**"
 params:
     - type: $x_event_handle_t
       name: hEventStart

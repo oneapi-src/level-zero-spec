@@ -5,8 +5,6 @@ desc: "Intel $Xx Runtime APIs for Device"
 type: function
 desc: "Reports the number of devices"
 name: $xDeviceGetCount
-analogue:
-    - "**cuDeviceGetCount**"
 params:
     - type: "uint32_t*"
       name: count
@@ -19,7 +17,7 @@ type: function
 desc: "Returns a handle to the device object"
 name: $xDeviceGet
 analogue:
-    - "**cuDeviceGet**"
+    - clGetDeviceIDs
 params:
     - type: uint32_t
       name: ordinal
@@ -45,8 +43,6 @@ etors:
 type: function
 desc: "Returns the API version supported by the device"
 name: $xDeviceGetApiVersion
-analogue:
-    - "**cuCtxGetApiVersion**"
 params:
     - type: $x_device_handle_t
       name: hDevice
@@ -111,8 +107,7 @@ type: function
 desc: "Retrieves attributes of the device"
 name: $xDeviceGetProperties
 analogue:
-    - "**cuDeviceGetAttribute**"
-    - "cuDeviceGetName"
+    - clGetDeviceInfo
 params:
     - type: $x_device_handle_t
       name: hDevice
@@ -172,7 +167,7 @@ type: function
 desc: "Retrieves compute attributes of the device"
 name: $xDeviceGetComputeProperties
 analogue:
-    - "**cuDeviceGetAttribute**"
+    - clGetDeviceInfo
 params:
     - type: $x_device_handle_t
       name: hDevice
@@ -248,8 +243,7 @@ type: function
 desc: "Retrieves memory attributes of the device"
 name: $xDeviceGetMemoryProperties
 analogue:
-    - "**cuDeviceGetAttribute**"
-    - cuDeviceTotalMem
+    - clGetDeviceInfo
 params:
     - type: $x_device_handle_t
       name: hDevice
