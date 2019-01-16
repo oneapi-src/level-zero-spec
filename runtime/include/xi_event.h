@@ -63,7 +63,8 @@ typedef struct _xi_event_desc_t
 /// @brief Creates an event object.
 /// @remarks
 ///   _Analogues_
-///     - **cuEventCreate**
+///     - **cudaEventCreate**
+///     - clCreateUserEvent
 /// @returns
 /// - ::XI_RESULT_SUCCESS
 /// - ::XI_RESULT_ERROR_UNINITIALIZED
@@ -81,10 +82,30 @@ xi_result_t __xicall
     );
 
 ///////////////////////////////////////////////////////////////////////////////
+/// @brief Creates an event object from existing memory.
+/// @returns
+/// - ::XI_RESULT_SUCCESS
+/// - ::XI_RESULT_ERROR_UNINITIALIZED
+/// - ::XI_RESULT_ERROR_INVALID_PARAMETER
+///     + invalid handle for hDevice
+///     + nullptr for desc
+///     + nullptr for ptr
+///     + nullptr for phEvent
+/// - ::XI_RESULT_ERROR_OUT_OF_HOST_MEMORY
+xi_result_t __xicall
+  xiEventPlacement(
+    xi_device_handle_t hDevice,                     ///< [in] handle of the device
+    const xi_event_desc_t* desc,                    ///< [in] pointer to event descriptor
+    void* ptr,                                      ///< [in] pointer to the device pointer where the event should be placed
+    xi_event_handle_t* phEvent                      ///< [out] pointer to handle of event object created
+    );
+
+///////////////////////////////////////////////////////////////////////////////
 /// @brief Deletes an event object.
 /// @remarks
 ///   _Analogues_
-///     - **cuEventDestroy**
+///     - **cudaEventDestroy**
+///     - clReleaseEvent
 /// @returns
 /// - ::XI_RESULT_SUCCESS
 /// - ::XI_RESULT_ERROR_UNINITIALIZED
@@ -99,7 +120,7 @@ xi_result_t __xicall
 /// @brief Encodes a signal of the event from the device into a command list.
 /// @remarks
 ///   _Analogues_
-///     - **cuEventRecord**
+///     - **cudaEventRecord**
 /// @returns
 /// - ::XI_RESULT_SUCCESS
 /// - ::XI_RESULT_ERROR_UNINITIALIZED
@@ -171,6 +192,9 @@ xi_result_t __xicall
 
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Signals a event from host.
+/// @remarks
+///   _Analogues_
+///     - clSetUserEventStatus
 /// @returns
 /// - ::XI_RESULT_SUCCESS
 /// - ::XI_RESULT_ERROR_UNINITIALIZED
@@ -187,7 +211,7 @@ xi_result_t __xicall
 /// @brief The current host thread waits on an event from a device signal.
 /// @remarks
 ///   _Analogues_
-///     - **cuEventSynchronize**
+///     - **cudaEventSynchronize**
 /// @returns
 /// - ::XI_RESULT_SUCCESS
 /// - ::XI_RESULT_ERROR_UNINITIALIZED
@@ -217,6 +241,9 @@ xi_result_t __xicall
 
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief The current host thread waits on multiple events from a device signal.
+/// @remarks
+///   _Analogues_
+///     - clWaitForEvents
 /// @returns
 /// - ::XI_RESULT_SUCCESS
 /// - ::XI_RESULT_ERROR_UNINITIALIZED
@@ -234,7 +261,8 @@ xi_result_t __xicall
 /// @brief Queries an event object's status.
 /// @remarks
 ///   _Analogues_
-///     - **cuEventQuery**
+///     - **cudaEventQuery**
+///     - clGetEventInfo
 /// @returns
 /// - ::XI_RESULT_SUCCESS
 /// - ::XI_RESULT_ERROR_UNINITIALIZED
@@ -251,7 +279,7 @@ xi_result_t __xicall
 /// @brief Queries the elapsed time between two signaled events.
 /// @remarks
 ///   _Analogues_
-///     - **cuEventElapsedTime**
+///     - **cudaEventElapsedTime**
 /// @returns
 /// - ::XI_RESULT_SUCCESS
 /// - ::XI_RESULT_ERROR_UNINITIALIZED

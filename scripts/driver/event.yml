@@ -56,6 +56,30 @@ returns:
     - $X_RESULT_ERROR_OUT_OF_DEVICE_MEMORY
 --- #--------------------------------------------------------------------------
 type: function
+desc: "Creates an event object from existing memory."
+name: $xEventPlacement
+params:
+    - type: $x_device_handle_t
+      name: hDevice
+      desc: "[in] handle of the device"
+    - type: "const $x_event_desc_t*"
+      name: desc
+      desc: "[in] pointer to event descriptor"
+    - type: $x_device_ptr_t
+      name: ptr
+      desc: "[in] pointer to the device pointer where the event should be placed"
+    - type: "$x_event_handle_t*"
+      name: phEvent
+      desc: "[out] pointer to handle of event object created"
+returns:
+    - $X_RESULT_ERROR_INVALID_PARAMETER:
+        - "invalid handle for hDevice"
+        - "nullptr for desc"
+        - "nullptr for ptr"
+        - "nullptr for phEvent"
+    - $X_RESULT_ERROR_OUT_OF_HOST_MEMORY
+--- #--------------------------------------------------------------------------
+type: function
 desc: "Deletes an event object."
 name: $xEventDestroy
 analogue:
