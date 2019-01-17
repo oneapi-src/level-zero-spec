@@ -2,6 +2,21 @@
 type: header
 desc: "Intel $Xx Runtime APIs for Memory"
 --- #--------------------------------------------------------------------------
+type: macro
+desc: "@todo need a kernel property to indicate indirect shared memory access"
+name: "$X_KERNEL_PROPERTY_INDIRECT_SHARED_ACCESS"
+value: "0"
+--- #--------------------------------------------------------------------------
+type: macro
+desc: "@todo possible kernel property to indicate indirect device memory access?"
+name: "$X_KERNEL_PROPERTY_INDIRECT_DEVICE_ACCESS"
+value: "0"
+--- #--------------------------------------------------------------------------
+type: macro
+desc: "@todo possible kernel property to indicate indirect host memory access?"
+name: "$X_KERNEL_PROPERTY_INDIRECT_HOST_ACCESS"
+value: "0"
+--- #--------------------------------------------------------------------------
 type: function
 desc: "Allocates memory that is shared between the host and one or more devices"
 name: $xSharedMemAlloc
