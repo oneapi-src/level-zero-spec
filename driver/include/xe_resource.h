@@ -44,9 +44,40 @@
 /// @brief Supported resource creation flags
 typedef enum _xe_resource_flags_t
 {
-    XE_RESOURCE_FLAG_NONE = 0,                      ///< default behavior
+    XE_RESOURCE_FLAG_KERNEL_READ = XE_BIT( 0 ),     ///< kernels may read contents
+    XE_RESOURCE_FLAG_KERNEL_WRITE = XE_BIT( 1 ),    ///< kernels may write contents
+    XE_RESOURCE_FLAG_HOST_READ = XE_BIT( 2 ),       ///< host may read contents
+    XE_RESOURCE_FLAG_HOST_WRITE = XE_BIT( 3 ),      ///< host may write contents
 
 } xe_resource_flags_t;
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Supported resource types
+typedef enum _xe_resource_type_t
+{
+    XE_RESOURCE_TYPE_BUFFER,                        ///< buffer
+    XE_RESOURCE_TYPE_1D,                            ///< 1D
+    XE_RESOURCE_TYPE_1DARRAY,                       ///< 1D array
+    XE_RESOURCE_TYPE_2D,                            ///< 2D
+    XE_RESOURCE_TYPE_2DARRAY,                       ///< 2D array
+    XE_RESOURCE_TYPE_3D,                            ///< 3D
+
+} xe_resource_type_t;
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Supported resource formats
+typedef enum _xe_resource_format_t
+{
+    XE_RESOURCE_FORMAT_UINT8,                       ///< 8-bit unsigned integer
+    XE_RESOURCE_FORMAT_UINT16,                      ///< 16-bit unsigned integer
+    XE_RESOURCE_FORMAT_UINT32,                      ///< 32-bit unsigned integer
+    XE_RESOURCE_FORMAT_SINT8,                       ///< 8-bit signed integer
+    XE_RESOURCE_FORMAT_SINT16,                      ///< 16-bit signed integer
+    XE_RESOURCE_FORMAT_SINT32,                      ///< 32-bit signed integer
+    XE_RESOURCE_FORMAT_FLOAT16,                     ///< 16-bit float
+    XE_RESOURCE_FORMAT_FLOAT32,                     ///< 32-bit float
+
+} xe_resource_format_t;
 
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Resource descriptor
@@ -54,6 +85,14 @@ typedef struct _xe_resource_desc_t
 {
     uint32_t version;                               ///< [in] ::XE_RESOURCE_DESC_VERSION
     xe_resource_flags_t flags;                      ///< [in] creation flags
+    xe_resource_type_t type;                        ///< [in] resource type
+    xe_resource_format_t format;                    ///< [in] resource channel format
+    uint32_t numChannels;                           ///< [in] number of channels per pixel
+    size_t width;                                   ///< [in] width in pixels
+    size_t height;                                  ///< [in] height in pixels (2D or 3D only)
+    size_t depth;                                   ///< [in] depth in pixels (3D only)
+    size_t arraylevels;                             ///< [in] array levels (array types only)
+    size_t miplevels;                               ///< [in] mipmap levels (must be 0)
 
 } xe_resource_desc_t;
 
