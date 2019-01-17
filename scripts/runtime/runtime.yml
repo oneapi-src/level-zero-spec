@@ -3,28 +3,6 @@ type: header
 desc: "Intel $Xx Runtime APIs"
 --- #--------------------------------------------------------------------------
 type: enum
-desc: "Supported initialization flags"
-name: $x_init_flags_t
-etors:
-    - name: $X_INIT_FLAG_NONE
-      value: "0"
-      desc: "default behavior"
---- #--------------------------------------------------------------------------
-type: function
-desc: "Initialize the $Xx Runtime API and must be called before any other API function."
-name: $xInit
-details: 
-    - "If this function is not called then all other functions will return $X_RESULT_ERROR_UNINITIALIZED."
-returns:
-    - $X_RESULT_ERROR_INVALID_PARAMETER:
-        - "invalid value for flags"
-    - $X_RESULT_ERROR_OUT_OF_HOST_MEMORY
-params:
-    - type: $x_init_flags_t
-      name: flags
-      desc: "[in] initialization flags"
---- #--------------------------------------------------------------------------
-type: enum
 desc: "Supported runtime versions"
 name: $x_runtime_version_t
 details:

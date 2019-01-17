@@ -66,7 +66,6 @@ typedef struct _xi_context_desc_t
 ///     - **clCreateContext**
 /// @returns
 /// - ::XI_RESULT_SUCCESS
-/// - ::XI_RESULT_ERROR_UNINITIALIZED
 /// - ::XI_RESULT_ERROR_INVALID_PARAMETER
 ///     + nullptr for desc
 ///     + 0 for desc.numDevices
@@ -87,7 +86,6 @@ xi_result_t __xicall
 ///     - **clReleaseContext**
 /// @returns
 /// - ::XI_RESULT_SUCCESS
-/// - ::XI_RESULT_ERROR_UNINITIALIZED
 /// - ::XI_RESULT_ERROR_INVALID_PARAMETER
 ///     + invalid handle for hContext
 xi_result_t __xicall

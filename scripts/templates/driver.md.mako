@@ -1,5 +1,5 @@
 ${"#"} Driver API Programming Guide
-The following documents the high-level programming models and guidelines.
+The following documents the high-level programming models and guidelines.  
 
 @cond DEV
 DO NOT EDIT: generated from /scripts/templates/driver.md.mako
@@ -13,17 +13,28 @@ The Intel ${Xx} Driver API provides the lowest-level, fine-grain and most explic
 - Synchronization Primitives
 - Metrics Reporting
 
+The ${Xx} driver API is implemented within the runtime dll, which is copied on the system during installation of the device driver.
+
+Most applications should not require the additional control provided by the driver APIs.  
+The driver APIs are intended for providing explicit controls needed by higher-level runtime APIs and libraries.
+
 ${"###"} Naming Convention
-todo: 
+- all driver entry points are prefixed with ${x}
 - all types follow **${x}_\<name\>_t** convention
 - all macros and enumerator values use all caps **${X}_\<SCOPE\>_\<NAME\>** convention
 - all functions use **${x}\<Actor\>\<Action\>\<Object\>** convention
 - all function input parameters precede output parameters
 
 ${"###"} Error Handling
-todo:
-- all apis return ::${x}_result_t.
-- apis are gaurenteed to never throw exceptions. etc.
+- all functions return ::${x}_result_t.
+- all functions are gaurenteed to never throw exceptions or fail silently.
+
+${"###"} Environment Variables
+The following table documents the supported knobs for overriding default driver behavior.
+
+| Category | Name     | Values   | Description |
+|----------|----------|----------|-------------|
+|          |          |          |             |
 
 ${"##"} Driver and Device
 The following diagram illustrates the hierarchy of devices to the driver:  
@@ -40,6 +51,9 @@ ${"###"} Device
 - More than one device may be available in the system.
 
 ${"###"} Initialization
+The driver API must be initizalized by calling ${x}Init before any other function.
+This function will query the available physical adapters in the system and make this information available to all threads in the current process.
+
 The following sample code demonstrates a basic initialization sequence:
 ```c
     // Initialize the driver

@@ -216,7 +216,6 @@ typedef enum _xi_result_t
 {
     XI_RESULT_SUCCESS = 0,                          ///< success
     XI_RESULT_NOT_READY,                            ///< synchronization primitive not signaled
-    XI_RESULT_ERROR_UNINITIALIZED,                  ///< runtime is not initialized
     XI_RESULT_ERROR_INVALID_PARAMETER,              ///< invalid parameter provided
     XI_RESULT_ERROR_OUT_OF_HOST_MEMORY,             ///< insufficient host memory to satisfy call
     XI_RESULT_ERROR_OUT_OF_DEVICE_MEMORY,           ///< insufficient device memory to satisfy call

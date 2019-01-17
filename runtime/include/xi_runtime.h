@@ -37,31 +37,6 @@
 #include "xi_common.h"
 
 ///////////////////////////////////////////////////////////////////////////////
-/// @brief Supported initialization flags
-typedef enum _xi_init_flags_t
-{
-    XI_INIT_FLAG_NONE = 0,                          ///< default behavior
-
-} xi_init_flags_t;
-
-///////////////////////////////////////////////////////////////////////////////
-/// @brief Initialize the Xi Runtime API and must be called before any other API
-///        function.
-/// @details
-///     - If this function is not called then all other functions will return
-///       ::XI_RESULT_ERROR_UNINITIALIZED.
-/// @returns
-/// - ::XI_RESULT_SUCCESS
-/// - ::XI_RESULT_ERROR_UNINITIALIZED
-/// - ::XI_RESULT_ERROR_INVALID_PARAMETER
-///     + invalid value for flags
-/// - ::XI_RESULT_ERROR_OUT_OF_HOST_MEMORY
-xi_result_t __xicall
-  xiInit(
-    xi_init_flags_t flags                           ///< [in] initialization flags
-    );
-
-///////////////////////////////////////////////////////////////////////////////
 /// @brief Supported runtime versions
 /// @details
 ///     - Runtime versions contain major and minor attributes, use
@@ -76,7 +51,6 @@ typedef enum _xi_runtime_version_t
 /// @brief Returns the current versions of the runtime
 /// @returns
 /// - ::XI_RESULT_SUCCESS
-/// - ::XI_RESULT_ERROR_UNINITIALIZED
 /// - ::XI_RESULT_ERROR_INVALID_PARAMETER
 ///     + nullptr for version
 xi_result_t __xicall

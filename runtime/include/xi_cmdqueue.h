@@ -67,7 +67,6 @@ typedef struct _xi_command_queue_desc_t
 ///     - **clCreateCommandQueue**
 /// @returns
 /// - ::XI_RESULT_SUCCESS
-/// - ::XI_RESULT_ERROR_UNINITIALIZED
 /// - ::XI_RESULT_ERROR_INVALID_PARAMETER
 ///     + invalid handle for hContext
 ///     + nullptr for desc
@@ -89,7 +88,6 @@ xi_result_t __xicall
 ///     - **clReleaseCommandQueue**
 /// @returns
 /// - ::XI_RESULT_SUCCESS
-/// - ::XI_RESULT_ERROR_UNINITIALIZED
 /// - ::XI_RESULT_ERROR_INVALID_PARAMETER
 ///     + invalid handle for hCommandQueue
 xi_result_t __xicall
@@ -128,7 +126,6 @@ typedef enum _xi_command_queue_cacheconfig_t
 /// @brief Sets a command queue's parameter
 /// @returns
 /// - ::XI_RESULT_SUCCESS
-/// - ::XI_RESULT_ERROR_UNINITIALIZED
 /// - ::XI_RESULT_ERROR_INVALID_PARAMETER
 ///     + invalid handle for hCommandQueue
 ///     + invalid value for attribute
@@ -144,7 +141,6 @@ xi_result_t __xicall
 /// @brief Retrieves a command queue's parameter
 /// @returns
 /// - ::XI_RESULT_SUCCESS
-/// - ::XI_RESULT_ERROR_UNINITIALIZED
 /// - ::XI_RESULT_ERROR_INVALID_PARAMETER
 ///     + invalid handle for hCommandQueue
 ///     + invalid value for attribute
@@ -160,7 +156,6 @@ xi_result_t __xicall
 /// @brief Resets all command queue parameters to default state
 /// @returns
 /// - ::XI_RESULT_SUCCESS
-/// - ::XI_RESULT_ERROR_UNINITIALIZED
 /// - ::XI_RESULT_ERROR_INVALID_PARAMETER
 ///     + invalid handle for hCommandQueue
 xi_result_t __xicall
@@ -172,7 +167,6 @@ xi_result_t __xicall
 /// @brief Enqueues a command list into a command queue
 /// @returns
 /// - ::XI_RESULT_SUCCESS
-/// - ::XI_RESULT_ERROR_UNINITIALIZED
 /// - ::XI_RESULT_ERROR_INVALID_PARAMETER
 ///     + invalid handle for hCommandQueue
 ///     + invalid handle for hCommandList
@@ -186,7 +180,6 @@ xi_result_t __xicall
 /// @brief Synchronizes a command queue
 /// @returns
 /// - ::XI_RESULT_SUCCESS
-/// - ::XI_RESULT_ERROR_UNINITIALIZED
 /// - ::XI_RESULT_ERROR_INVALID_PARAMETER
 ///     + invalid handle for hCommandQueue
 xi_result_t __xicall

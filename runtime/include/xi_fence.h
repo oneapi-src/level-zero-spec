@@ -61,7 +61,6 @@ typedef struct _xi_fence_desc_t
 /// @brief Creates a fence object.
 /// @returns
 /// - ::XI_RESULT_SUCCESS
-/// - ::XI_RESULT_ERROR_UNINITIALIZED
 /// - ::XI_RESULT_ERROR_INVALID_PARAMETER
 ///     + invalid handle for hCommandQueue
 ///     + nullptr for desc
@@ -79,7 +78,6 @@ xi_result_t __xicall
 /// @brief Deletes a fence object.
 /// @returns
 /// - ::XI_RESULT_SUCCESS
-/// - ::XI_RESULT_ERROR_UNINITIALIZED
 /// - ::XI_RESULT_ERROR_INVALID_PARAMETER
 ///     + invalid handle for hFence
 ///     + fence is enqueued in a command queue
@@ -92,7 +90,6 @@ xi_result_t __xicall
 /// @brief Encodes a signal of the fence into a command queue.
 /// @returns
 /// - ::XI_RESULT_SUCCESS
-/// - ::XI_RESULT_ERROR_UNINITIALIZED
 /// - ::XI_RESULT_ERROR_INVALID_PARAMETER
 ///     + invalid handle for hFence
 ///     + fence is in signaled state
@@ -106,7 +103,6 @@ xi_result_t __xicall
 /// @brief The current host thread waits on a fence to be signaled.
 /// @returns
 /// - ::XI_RESULT_SUCCESS
-/// - ::XI_RESULT_ERROR_UNINITIALIZED
 /// - ::XI_RESULT_ERROR_INVALID_PARAMETER
 ///     + invalid handle for hFence
 ///     + fence is not enqueued in a command queue
@@ -119,7 +115,6 @@ xi_result_t __xicall
 /// @brief The current host thread waits on a multiple fences to be signaled.
 /// @returns
 /// - ::XI_RESULT_SUCCESS
-/// - ::XI_RESULT_ERROR_UNINITIALIZED
 /// - ::XI_RESULT_ERROR_INVALID_PARAMETER
 ///     + nullptr for phFences
 ///     + any invalid handle in phFences
@@ -134,7 +129,6 @@ xi_result_t __xicall
 /// @brief Queries a fence object's status.
 /// @returns
 /// - ::XI_RESULT_SUCCESS
-/// - ::XI_RESULT_ERROR_UNINITIALIZED
 /// - ::XI_RESULT_NOT_READY
 ///     + not signaled
 /// - ::XI_RESULT_ERROR_INVALID_PARAMETER
@@ -149,7 +143,6 @@ xi_result_t __xicall
 /// @brief Queries the elapsed time between two signaled fences.
 /// @returns
 /// - ::XI_RESULT_SUCCESS
-/// - ::XI_RESULT_ERROR_UNINITIALIZED
 /// - ::XI_RESULT_ERROR_INVALID_PARAMETER
 ///     + invalid handle for hFenceStart
 ///     + invalid handle for hFenceEnd
@@ -166,7 +159,6 @@ xi_result_t __xicall
 /// @brief Reset a fence back to the not signaled state
 /// @returns
 /// - ::XI_RESULT_SUCCESS
-/// - ::XI_RESULT_ERROR_UNINITIALIZED
 /// - ::XI_RESULT_ERROR_INVALID_PARAMETER
 ///     + invalid handle for hFence
 xi_result_t __xicall

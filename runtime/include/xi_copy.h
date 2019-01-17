@@ -45,7 +45,6 @@
 ///     - clEnqueueWriteBuffer
 /// @returns
 /// - ::XI_RESULT_SUCCESS
-/// - ::XI_RESULT_ERROR_UNINITIALIZED
 /// - ::XI_RESULT_ERROR_INVALID_PARAMETER
 ///     + nullptr for dstptr
 ///     + nullptr for srcptr
@@ -64,7 +63,6 @@ xi_result_t __xicall
 ///     - **clEnqueueCopyImage**
 /// @returns
 /// - ::XI_RESULT_SUCCESS
-/// - ::XI_RESULT_ERROR_UNINITIALIZED
 /// - ::XI_RESULT_ERROR_INVALID_PARAMETER
 ///     + invalid handle for hDstResource
 ///     + invalid handle for hSrcResource
@@ -88,7 +86,6 @@ typedef struct _xiResourceRegion
 /// @brief Copies a region of a resource.
 /// @returns
 /// - ::XI_RESULT_SUCCESS
-/// - ::XI_RESULT_ERROR_UNINITIALIZED
 /// - ::XI_RESULT_ERROR_INVALID_PARAMETER
 ///     + invalid handle for hDstResource
 ///     + invalid handle for hSrcResource
@@ -108,7 +105,6 @@ xi_result_t __xicall
 ///     - clEnqueueReadImage
 /// @returns
 /// - ::XI_RESULT_SUCCESS
-/// - ::XI_RESULT_ERROR_UNINITIALIZED
 /// - ::XI_RESULT_ERROR_INVALID_PARAMETER
 ///     + nullptr for dstptr
 ///     + invalid handle for hSrcResource
@@ -127,7 +123,6 @@ xi_result_t __xicall
 ///     - clEnqueueWriteImage
 /// @returns
 /// - ::XI_RESULT_SUCCESS
-/// - ::XI_RESULT_ERROR_UNINITIALIZED
 /// - ::XI_RESULT_ERROR_INVALID_PARAMETER
 ///     + invalid handle for hDstResource
 ///     + nullptr for srcptr

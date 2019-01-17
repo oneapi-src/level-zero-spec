@@ -68,8 +68,6 @@ etors:
       desc: "success"
     - name: $X_RESULT_NOT_READY
       desc: "synchronization primitive not signaled"
-    - name: $X_RESULT_ERROR_UNINITIALIZED
-      desc: "runtime is not initialized"
     - name: $X_RESULT_ERROR_INVALID_PARAMETER
       desc: "invalid parameter provided"
     - name: $X_RESULT_ERROR_OUT_OF_HOST_MEMORY

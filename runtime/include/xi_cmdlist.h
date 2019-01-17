@@ -61,7 +61,6 @@ typedef struct _xi_command_list_desc_t
 /// @brief Creates a command list for submitting commands to a command queue.
 /// @returns
 /// - ::XI_RESULT_SUCCESS
-/// - ::XI_RESULT_ERROR_UNINITIALIZED
 /// - ::XI_RESULT_ERROR_INVALID_PARAMETER
 ///     + invalid handle for hContext
 ///     + nullptr for desc
@@ -80,7 +79,6 @@ xi_result_t __xicall
 /// @brief Destroys a command list
 /// @returns
 /// - ::XI_RESULT_SUCCESS
-/// - ::XI_RESULT_ERROR_UNINITIALIZED
 /// - ::XI_RESULT_ERROR_INVALID_PARAMETER
 ///     + invalid handle for hCommandList
 xi_result_t __xicall
@@ -92,7 +90,6 @@ xi_result_t __xicall
 /// @brief Close a command list
 /// @returns
 /// - ::XI_RESULT_SUCCESS
-/// - ::XI_RESULT_ERROR_UNINITIALIZED
 /// - ::XI_RESULT_ERROR_INVALID_PARAMETER
 ///     + invalid handle for hCommandList
 xi_result_t __xicall
@@ -104,7 +101,6 @@ xi_result_t __xicall
 /// @brief Reset a command list to initial (empty) state
 /// @returns
 /// - ::XI_RESULT_SUCCESS
-/// - ::XI_RESULT_ERROR_UNINITIALIZED
 /// - ::XI_RESULT_ERROR_INVALID_PARAMETER
 ///     + invalid handle for hCommandList
 xi_result_t __xicall

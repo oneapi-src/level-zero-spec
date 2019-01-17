@@ -6,19 +6,25 @@ DO NOT EDIT: generated from /scripts/templates/runtime.md.mako
 @endcond
 
 ## Introduction  
-The Intel Xi Runtime API provides...
-  
+The Intel Xi Runtime API provides low-level support for:
+- Memory Allocation and Cross-Process Sharing
+- Kernel Submission
+- Execution and Scheduling
+- Synchronization Primitives
+- Metrics Reporting
+
+The Xi runtime API is implemented in the xi.dll, which is copied on the system during installation of the device driver.
+
 ### Naming Convention  
-todo: 
+- all runtime entry points are prefixed with xi
 - all types follow **xi_\<name\>_t** convention
 - all macros and enumerator values use all caps **XI_\<SCOPE\>_\<NAME\>** convention
 - all functions use **xi\<Actor\>\<Action\>\<Object\>** convention
 - all function input parameters precede output parameters
   
 ### Error Handling  
-todo:
-- all apis return ::xi_result_t.
-- apis are gaurenteed to never throw exceptions. etc.
+- all functions return ::xi_result_t.
+- all functions are gaurenteed to never throw exceptions or fail silently.
   
 ## Context and Device  
 ![Context Hierarchy](../images/context.png?raw=true)
@@ -31,11 +37,11 @@ todo:
 - More than one device may be available in the system.
   
 ### Initialization  
+The application does not need to explicitly initialize or load the runtime dll.
+The runtime is implicitly initialized on first use.  
+
 The following sample code demonstrates a basic initialization sequence:
 ```c
-    // Initialize the runtime
-    xiInit(XI_INIT_FLAG_NONE);
-
     // Get number of devices supporting Xi
     uint32_t deviceCount = 0;
     xiDeviceGetCount(&deviceCount);

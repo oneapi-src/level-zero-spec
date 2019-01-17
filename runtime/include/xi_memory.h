@@ -61,7 +61,6 @@
 ///     - **cudaMallocManaged**
 /// @returns
 /// - ::XI_RESULT_SUCCESS
-/// - ::XI_RESULT_ERROR_UNINITIALIZED
 /// - ::XI_RESULT_ERROR_INVALID_PARAMETER
 ///     + invalid handle for hContext
 ///     + invalid handle for hDevice
@@ -87,7 +86,6 @@ xi_result_t __xicall
 ///     - **cudaMalloc**
 /// @returns
 /// - ::XI_RESULT_SUCCESS
-/// - ::XI_RESULT_ERROR_UNINITIALIZED
 /// - ::XI_RESULT_ERROR_INVALID_PARAMETER
 ///     + invalid handle for hContext
 ///     + invalid handle for hDevice
@@ -123,7 +121,6 @@ typedef enum _xi_host_mem_alloc_flags_t
 ///     - **cudaHostAlloc**
 /// @returns
 /// - ::XI_RESULT_SUCCESS
-/// - ::XI_RESULT_ERROR_UNINITIALIZED
 /// - ::XI_RESULT_ERROR_INVALID_PARAMETER
 ///     + invalid handle for hContext
 ///     + invalid handle for hDevice
@@ -150,7 +147,6 @@ xi_result_t __xicall
 ///     - **cudaFreeHost**
 /// @returns
 /// - ::XI_RESULT_SUCCESS
-/// - ::XI_RESULT_ERROR_UNINITIALIZED
 /// - ::XI_RESULT_ERROR_INVALID_PARAMETER
 ///     + invalid handle for hContext
 ///     + invalid pointer
@@ -190,7 +186,6 @@ typedef enum _xi_memory_property_t
 ///     - **cudaPointerGetAttributes**
 /// @returns
 /// - ::XI_RESULT_SUCCESS
-/// - ::XI_RESULT_ERROR_UNINITIALIZED
 /// - ::XI_RESULT_ERROR_INVALID_PARAMETER
 ///     + invalid handle for hContext
 ///     + invalid pointer
@@ -222,7 +217,6 @@ typedef enum _xi_memory_advice_t
 ///     - **cudaMemAdvise**
 /// @returns
 /// - ::XI_RESULT_SUCCESS
-/// - ::XI_RESULT_ERROR_UNINITIALIZED
 /// - ::XI_RESULT_ERROR_INVALID_PARAMETER
 ///     + invalid handle for hContext
 ///     + invalid handle for hDevice

@@ -40,7 +40,6 @@
 /// @brief Reports the number of devices
 /// @returns
 /// - ::XI_RESULT_SUCCESS
-/// - ::XI_RESULT_ERROR_UNINITIALIZED
 /// - ::XI_RESULT_ERROR_INVALID_PARAMETER - "nullptr for count"
 xi_result_t __xicall
   xiDeviceGetCount(
@@ -54,7 +53,6 @@ xi_result_t __xicall
 ///     - clGetDeviceIDs
 /// @returns
 /// - ::XI_RESULT_SUCCESS
-/// - ::XI_RESULT_ERROR_UNINITIALIZED
 /// - ::XI_RESULT_ERROR_INVALID_PARAMETER
 ///     + ordinal is out of range reported by ::xiDeviceGetCount
 ///     + nullptr for phDevice
@@ -79,7 +77,6 @@ typedef enum _xi_api_version_t
 /// @brief Returns the API version supported by the device
 /// @returns
 /// - ::XI_RESULT_SUCCESS
-/// - ::XI_RESULT_ERROR_UNINITIALIZED
 /// - ::XI_RESULT_ERROR_INVALID_PARAMETER
 ///     + invalid handle for hDevice
 ///     + nullptr for version
@@ -123,7 +120,6 @@ typedef struct _xi_device_properties_t
 ///     - clGetDeviceInfo
 /// @returns
 /// - ::XI_RESULT_SUCCESS
-/// - ::XI_RESULT_ERROR_UNINITIALIZED
 /// - ::XI_RESULT_ERROR_INVALID_PARAMETER
 ///     + invalid handle for hDevice
 ///     + nullptr for provided for properties
@@ -162,7 +158,6 @@ typedef struct _xi_device_compute_properties_t
 ///     - clGetDeviceInfo
 /// @returns
 /// - ::XI_RESULT_SUCCESS
-/// - ::XI_RESULT_ERROR_UNINITIALIZED
 /// - ::XI_RESULT_ERROR_INVALID_PARAMETER
 ///     + invalid handle for hDevice
 ///     + nullptr for provided for properties
@@ -214,7 +209,6 @@ typedef struct _xi_device_memory_properties_t
 ///     - clGetDeviceInfo
 /// @returns
 /// - ::XI_RESULT_SUCCESS
-/// - ::XI_RESULT_ERROR_UNINITIALIZED
 /// - ::XI_RESULT_ERROR_INVALID_PARAMETER
 ///     + invalid handle for hDevice
 ///     + nullptr for provided for properties
@@ -246,7 +240,6 @@ typedef struct _xi_device_link_properties_t
 ///     - **cudaDeviceGetP2PAttribute**
 /// @returns
 /// - ::XI_RESULT_SUCCESS
-/// - ::XI_RESULT_ERROR_UNINITIALIZED
 /// - ::XI_RESULT_ERROR_INVALID_PARAMETER
 ///     + invalid ordinal. Use ::xiDeviceGetCount for valid range.
 ///     + nullptr for provided for properties
@@ -264,7 +257,6 @@ xi_result_t __xicall
 ///     - **cudaDeviceCanAccessPeer**
 /// @returns
 /// - ::XI_RESULT_SUCCESS
-/// - ::XI_RESULT_ERROR_UNINITIALIZED
 /// - ::XI_RESULT_ERROR_INVALID_PARAMETER
 ///     + invalid handle for hDevice
 ///     + invalid handle for hPeerDevice
@@ -289,7 +281,6 @@ xi_result_t __xicall
 ///     - **cudaDeviceEnablePeerAccess**
 /// @returns
 /// - ::XI_RESULT_SUCCESS
-/// - ::XI_RESULT_ERROR_UNINITIALIZED
 /// - ::XI_RESULT_ERROR_INVALID_PARAMETER
 ///     + invalid handle for hDevice
 ///     + invalid handle for hPeerDevice
@@ -309,7 +300,6 @@ xi_result_t __xicall
 ///     - **cudaDeviceDisablePeerAccess**
 /// @returns
 /// - ::XI_RESULT_SUCCESS
-/// - ::XI_RESULT_ERROR_UNINITIALIZED
 /// - ::XI_RESULT_ERROR_INVALID_PARAMETER
 ///     + invalid handle for hDevice
 ///     + invalid handle for hPeerDevice

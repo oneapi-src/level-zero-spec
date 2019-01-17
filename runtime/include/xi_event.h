@@ -66,7 +66,6 @@ typedef struct _xi_event_desc_t
 ///     - **clCreateUserEvent**
 /// @returns
 /// - ::XI_RESULT_SUCCESS
-/// - ::XI_RESULT_ERROR_UNINITIALIZED
 /// - ::XI_RESULT_ERROR_INVALID_PARAMETER
 ///     + invalid handle for hDevice
 ///     + nullptr for desc
@@ -84,7 +83,6 @@ xi_result_t __xicall
 /// @brief Creates an event object from existing memory.
 /// @returns
 /// - ::XI_RESULT_SUCCESS
-/// - ::XI_RESULT_ERROR_UNINITIALIZED
 /// - ::XI_RESULT_ERROR_INVALID_PARAMETER
 ///     + invalid handle for hDevice
 ///     + nullptr for desc
@@ -106,7 +104,6 @@ xi_result_t __xicall
 ///     - clReleaseEvent
 /// @returns
 /// - ::XI_RESULT_SUCCESS
-/// - ::XI_RESULT_ERROR_UNINITIALIZED
 /// - ::XI_RESULT_ERROR_INVALID_PARAMETER
 ///     + invalid handle for hEvent
 xi_result_t __xicall
@@ -118,7 +115,6 @@ xi_result_t __xicall
 /// @brief Encodes a signal of the event from the device into a command list.
 /// @returns
 /// - ::XI_RESULT_SUCCESS
-/// - ::XI_RESULT_ERROR_UNINITIALIZED
 /// - ::XI_RESULT_ERROR_INVALID_PARAMETER
 ///     + invalid handle for hCommandList
 ///     + invalid handle for hEvent
@@ -135,7 +131,6 @@ xi_result_t __xicall
 /// @brief Encodes a wait on event from a host signal into a command list.
 /// @returns
 /// - ::XI_RESULT_SUCCESS
-/// - ::XI_RESULT_ERROR_UNINITIALIZED
 /// - ::XI_RESULT_ERROR_INVALID_PARAMETER
 ///     + invalid handle for hCommandList
 ///     + invalid handle for hEvent
@@ -151,7 +146,6 @@ xi_result_t __xicall
 /// @brief Encodes signals of multiple event from the device into a command list.
 /// @returns
 /// - ::XI_RESULT_SUCCESS
-/// - ::XI_RESULT_ERROR_UNINITIALIZED
 /// - ::XI_RESULT_ERROR_INVALID_PARAMETER
 ///     + invalid handle for hCommandList
 ///     + nullptr for phEvents
@@ -171,7 +165,6 @@ xi_result_t __xicall
 ///        list.
 /// @returns
 /// - ::XI_RESULT_SUCCESS
-/// - ::XI_RESULT_ERROR_UNINITIALIZED
 /// - ::XI_RESULT_ERROR_INVALID_PARAMETER
 ///     + invalid handle for hCommandList
 ///     + nullptr for phEvents
@@ -192,7 +185,6 @@ xi_result_t __xicall
 ///     - clSetUserEventStatus
 /// @returns
 /// - ::XI_RESULT_SUCCESS
-/// - ::XI_RESULT_ERROR_UNINITIALIZED
 /// - ::XI_RESULT_ERROR_INVALID_PARAMETER
 ///     + invalid handle for hEvent
 ///     + event creation flag did not set ::XI_EVENT_FLAG_HOST_TO_DEVICE or ::XI_EVENT_FLAG_DEVICE_TO_DEVICE
@@ -206,7 +198,6 @@ xi_result_t __xicall
 /// @brief The current host thread waits on an event from a device signal.
 /// @returns
 /// - ::XI_RESULT_SUCCESS
-/// - ::XI_RESULT_ERROR_UNINITIALIZED
 /// - ::XI_RESULT_ERROR_INVALID_PARAMETER
 ///     + invalid handle for hEvent
 ///     + event creation flag did not set ::XI_EVENT_FLAG_DEVICE_TO_HOST or ::XI_EVENT_FLAG_DEVICE_TO_DEVICE
@@ -219,7 +210,6 @@ xi_result_t __xicall
 /// @brief Signals multiple events from host. @todo move to runtime?
 /// @returns
 /// - ::XI_RESULT_SUCCESS
-/// - ::XI_RESULT_ERROR_UNINITIALIZED
 /// - ::XI_RESULT_ERROR_INVALID_PARAMETER
 ///     + nullptr for phEvents
 ///     + invalid handle in phEvents
@@ -238,7 +228,6 @@ xi_result_t __xicall
 ///     - clWaitForEvents
 /// @returns
 /// - ::XI_RESULT_SUCCESS
-/// - ::XI_RESULT_ERROR_UNINITIALIZED
 /// - ::XI_RESULT_ERROR_INVALID_PARAMETER
 ///     + nullptr for phEvents
 ///     + invalid handle in phEvents
@@ -256,7 +245,6 @@ xi_result_t __xicall
 ///     - clGetEventInfo
 /// @returns
 /// - ::XI_RESULT_SUCCESS
-/// - ::XI_RESULT_ERROR_UNINITIALIZED
 /// - ::XI_RESULT_NOT_READY
 ///     + not signaled
 /// - ::XI_RESULT_ERROR_INVALID_PARAMETER
@@ -270,7 +258,6 @@ xi_result_t __xicall
 /// @brief Queries the elapsed time between two signaled events.
 /// @returns
 /// - ::XI_RESULT_SUCCESS
-/// - ::XI_RESULT_ERROR_UNINITIALIZED
 /// - ::XI_RESULT_ERROR_INVALID_PARAMETER
 ///     + invalid handle for hEventStart
 ///     + invalid handle for hEventEnd
@@ -287,7 +274,6 @@ xi_result_t __xicall
 /// @brief Reset an event back to not signaled state
 /// @returns
 /// - ::XI_RESULT_SUCCESS
-/// - ::XI_RESULT_ERROR_UNINITIALIZED
 /// - ::XI_RESULT_ERROR_INVALID_PARAMETER
 ///     + invalid handle for hEvent
 xi_result_t __xicall

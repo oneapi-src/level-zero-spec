@@ -103,7 +103,6 @@ typedef struct _xi_resource_desc_t
 ///     - clCreateImage
 /// @returns
 /// - ::XI_RESULT_SUCCESS
-/// - ::XI_RESULT_ERROR_UNINITIALIZED
 /// - ::XI_RESULT_ERROR_INVALID_PARAMETER
 ///     + nullptr for desc
 ///     + nullptr for phResource
@@ -119,7 +118,6 @@ xi_result_t __xicall
 /// @brief Deletes a resource object.
 /// @returns
 /// - ::XI_RESULT_SUCCESS
-/// - ::XI_RESULT_ERROR_UNINITIALIZED
 /// - ::XI_RESULT_ERROR_INVALID_PARAMETER
 ///     + invalid handle for hResource
 xi_result_t __xicall
