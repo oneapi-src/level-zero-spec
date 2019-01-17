@@ -147,10 +147,53 @@ xi_result_t __xicall
     );
 
 ///////////////////////////////////////////////////////////////////////////////
+/// @brief Memory allocation type
+typedef enum _xi_memory_type_t
+{
+    XI_MEMORY_TYPE_UNKNOWN = 0,                     ///< the memory pointed to was not allocated by Xi
+    XI_MEMORY_TYPE_HOST,                            ///< the memory pointed to is a host allocation
+    XI_MEMORY_TYPE_DEVICE,                          ///< the memory pointed to is a device allocation
+    XI_MEMORY_TYPE_SHARED,                          ///< the memory pointed to is a shared ownership allocation
+
+} xi_memory_type_t;
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Supported memory allocation query properties
+typedef enum _xi_memory_property_t
+{
+    XI_MEMORY_TYPE = 0,                             ///< see ::xi_memory_type_t
+
+} xi_memory_property_t;
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Retrieves a property of an allocation
+/// @details
+///     - @todo do we need to support additional properties: base addr, size,
+///       etc? @todo do we need to support querying the associated device? @todo
+///       should we return all attributes as a (versioned) struct instead?
+/// @remarks
+///   _Analogues_
+///     - **cudaPointerGetAttributes**
+/// @returns
+/// - ::XI_RESULT_SUCCESS
+/// - ::XI_RESULT_ERROR_UNINITIALIZED
+/// - ::XI_RESULT_ERROR_INVALID_PARAMETER
+///     + invalid handle for hContext
+///     + invalid pointer
+///     + invalid property
+xi_result_t __xicall
+  xiMemGetProperty(
+    const xi_context_handle_t hContext,             ///< [in] handle of the context
+    const void* ptr,                                ///< [in] Pointer to query
+    xi_memory_property_t property,                  ///< [in] Property of the allocation to query
+    uint32_t* value                                 ///< [out] Value of the queried property
+    );
+
+///////////////////////////////////////////////////////////////////////////////
 /// @brief Supported memory advice hints
 typedef enum _xi_memory_advice_t
 {
-    XI_MEMORY_ADVICE_NONE = 0,                      ///< @todo
+    XI_MEMORY_ADVICE_TBD = 0,                       ///< @todo
 
 } xi_memory_advice_t;
 
@@ -159,7 +202,7 @@ typedef enum _xi_memory_advice_t
 /// @details
 ///     - Memory advice can be used to override driver heuristics to explicitly
 ///       control shared memory behavior. @todo likely will snap to page
-///       boundaries @todo which memory advise hints could/should we support?
+///       boundaries @todo which memory advice hints could/should we support?
 /// @remarks
 ///   _Analogues_
 ///     - **cudaMemAdvise**
