@@ -55,7 +55,7 @@ The following sample code demonstrates a basic initialization sequence:
     desc.numDevices = 1;
     desc.hDevices = &hDevice;
     
-    $x_context_handle_t hContext;
+    ${x}_context_handle_t hContext;
     if(${X}_RESULT_SUCCESS != ${x}ContextCreate(&desc, &hContext))
     {
         printf("Context creation failed.\n");

@@ -111,6 +111,7 @@ typedef struct _xi_device_properties_t
     uint32_t l2CacheSize;                           ///< [out] Device L2 size
     uint32_t numAsyncComputeEngines;                ///< [out] Num asynchronous compute engines
     uint32_t numComputeCores;                       ///< [out] Num compute cores
+    uint32_t maxCommandQueuePriority;               ///< [out] Max priority for command queues. Higher value is higher priority.
     char device_name[XI_MAX_DEVICE_NAME];           ///< [out] Device name
 
 } xi_device_properties_t;
@@ -221,6 +222,39 @@ xi_result_t __xicall
   xiDeviceGetMemoryProperties(
     xi_device_handle_t hDevice,                     ///< [in] handle of the device object
     xi_device_memory_properties_t* pMemProperties   ///< [out] query result for compute properties
+    );
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief API version of ::xi_device_link_properties_t
+#define XI_DEVICE_LINK_PROPERTIES_VERSION  XI_MAKE_VERSION( 1, 0 )
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Device properties queried using ::xiDeviceGetLinkProperties
+typedef struct _xi_device_link_properties_t
+{
+    uint32_t version;                               ///< [in] ::XI_DEVICE_LINK_PROPERTIES_VERSION
+    bool isP2PSupported;                            ///< [out] Is P2P access supported across link
+    bool isAtomicsSupported;                        ///< [out] Are atomics supported across link
+    uint32_t performanceRank;                       ///< [out] Relative performance rank of link. @todo Should this be different metric?
+
+} xi_device_link_properties_t;
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Retrieves link properties between src and dest devices.
+/// @remarks
+///   _Analogues_
+///     - **cudaDeviceGetP2PAttribute**
+/// @returns
+/// - ::XI_RESULT_SUCCESS
+/// - ::XI_RESULT_ERROR_UNINITIALIZED
+/// - ::XI_RESULT_ERROR_INVALID_PARAMETER
+///     + invalid ordinal. Use ::xiDeviceGetCount for valid range.
+///     + nullptr for provided for properties
+xi_result_t __xicall
+  xiDeviceGetLinkProperties(
+    uint32_t srcOrdinal,                            ///< [in] src device ordinal
+    uint32_t dstOrdinal,                            ///< [in] dst device ordinal
+    xi_device_link_properties_t* pLinkProperties    ///< [out] link properties between src and dest devices
     );
 
 #endif // _XI_DEVICE_H
