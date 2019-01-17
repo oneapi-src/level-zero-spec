@@ -37,12 +37,16 @@
 #include "xi_common.h"
 
 ///////////////////////////////////////////////////////////////////////////////
-/// @brief Copies device or managed memory.
+/// @brief Copies host, device, or shared memory.
+/// @details
+///     - The memory pointed to by both srcptr and dstptr must be accessible by
+///       the device on which the command list is created.
 /// @remarks
 ///   _Analogues_
 ///     - **clEnqueueCopyBuffer**
-///     - clEnqueueReadBuffer
-///     - clEnqueueWriteBuffer
+///     - **clEnqueueReadBuffer**
+///     - **clEnqueueWriteBuffer**
+///     - **clEnqueueSVMMemcpy**
 /// @returns
 /// - ::XI_RESULT_SUCCESS
 /// - ::XI_RESULT_ERROR_INVALID_PARAMETER
@@ -51,8 +55,8 @@
 xi_result_t __xicall
   xiCommandListEncodeMemoryCopy(
     xi_command_list_handle_t hCommandList,          ///< [in] handle of command list
-    xi_device_ptr_t dstptr,                         ///< [in] pointer to destination memory to copy to
-    xi_device_ptr_t srcptr,                         ///< [in] pointer to source memory to copy from
+    void* dstptr,                                   ///< [in] pointer to destination memory to copy to
+    const void* srcptr,                             ///< [in] pointer to source memory to copy from
     size_t size                                     ///< [in] size in bytes to copy
     );
 
@@ -99,7 +103,7 @@ xi_result_t __xicall
     );
 
 ///////////////////////////////////////////////////////////////////////////////
-/// @brief Copies from a resource to device or managed memory.
+/// @brief Copies from a resource to device or shared memory.
 /// @remarks
 ///   _Analogues_
 ///     - clEnqueueReadImage
@@ -117,7 +121,7 @@ xi_result_t __xicall
     );
 
 ///////////////////////////////////////////////////////////////////////////////
-/// @brief Copies to a resource from device or managed memory.
+/// @brief Copies to a resource from device or shared memory.
 /// @remarks
 ///   _Analogues_
 ///     - clEnqueueWriteImage
@@ -132,6 +136,30 @@ xi_result_t __xicall
     xi_resource_handle_t hDstResource,              ///< [in] handle of destination resource to copy to
     xiResourceRegion* pDstRegion,                   ///< [in] destination region descriptor
     xi_device_ptr_t srcptr                          ///< [in] pointer to source memory to copy from
+    );
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Asynchronously prefetches shared memory to the device associated with
+///        the specified command list
+/// @details
+///     - This is a hint to improve performance only and is not required for
+///       correctness. @todo confirm we do not need a synchronous prefetch.
+///       @todo could/should we support prefetches to other devices? @todo
+///       could/should we support prefetches to the host?
+/// @remarks
+///   _Analogues_
+///     - cudaMemPrefetchAsync
+///     - clEnqueueSVMMigrateMem
+/// @returns
+/// - ::XI_RESULT_SUCCESS
+/// - ::XI_RESULT_ERROR_INVALID_PARAMETER
+///     + invalid handle for hDstResource
+///     + nullptr for srcptr
+xi_result_t __xicall
+  xiCommandListEncodeMemoryPrefetch(
+    xi_command_list_handle_t hCommandList,          ///< [in] handle of command list
+    const void* ptr,                                ///< [in] pointer to start of the memory region to prefetch
+    size_t count                                    ///< [in] size in bytes of the memory region to prefetch
     );
 
 #endif // _XI_COPY_H

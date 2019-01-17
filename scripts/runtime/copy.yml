@@ -3,20 +3,24 @@ type: header
 desc: "Intel $Xx Runtime APIs for Copies"
 --- #--------------------------------------------------------------------------
 type: function
-desc: "Copies device or managed memory."
+desc: "Copies host, device, or shared memory."
 name: $xCommandListEncodeMemoryCopy
+details:
+    - "The memory pointed to by both srcptr and dstptr must be accessible by
+      the device on which the command list is created."
 analogue:
     - "**clEnqueueCopyBuffer**"
-    - clEnqueueReadBuffer
-    - clEnqueueWriteBuffer
+    - "**clEnqueueReadBuffer**"
+    - "**clEnqueueWriteBuffer**"
+    - "**clEnqueueSVMMemcpy**"
 params:
     - type: $x_command_list_handle_t
       name: hCommandList
       desc: "[in] handle of command list"
-    - type: $x_device_ptr_t
+    - type: "void*"
       name: dstptr
       desc: "[in] pointer to destination memory to copy to"
-    - type: $x_device_ptr_t
+    - type: "const void*"
       name: srcptr
       desc: "[in] pointer to source memory to copy from"
     - type: size_t
@@ -83,7 +87,7 @@ returns:
         - "invalid handle for hSrcResource"
 --- #--------------------------------------------------------------------------
 type: function
-desc: "Copies from a resource to device or managed memory."
+desc: "Copies from a resource to device or shared memory."
 name: $xCommandListEncodeResourceCopyToMemory
 analogue:
     - clEnqueueReadImage
@@ -106,7 +110,7 @@ returns:
         - "invalid handle for hSrcResource"
 --- #--------------------------------------------------------------------------
 type: function
-desc: "Copies to a resource from device or managed memory."
+desc: "Copies to a resource from device or shared memory."
 name: $xCommandListEncodeResourceCopyFromMemory
 analogue:
     - clEnqueueWriteImage
@@ -123,6 +127,33 @@ params:
     - type: $x_device_ptr_t
       name: srcptr
       desc: "[in] pointer to source memory to copy from"
+returns:
+    - $X_RESULT_ERROR_INVALID_PARAMETER:
+        - "invalid handle for hDstResource"
+        - "nullptr for srcptr"
+--- #--------------------------------------------------------------------------
+type: function
+desc: "Asynchronously prefetches shared memory to the device associated with
+      the specified command list"
+name: $xCommandListEncodeMemoryPrefetch
+details:
+    - "This is a hint to improve performance only and is not required for correctness.
+      @todo confirm we do not need a synchronous prefetch.
+      @todo could/should we support prefetches to other devices?
+      @todo could/should we support prefetches to the host?"
+analogue:
+    - cudaMemPrefetchAsync
+    - clEnqueueSVMMigrateMem
+params:
+    - type: $x_command_list_handle_t
+      name: hCommandList
+      desc: "[in] handle of command list"
+    - type: "const void*"
+      name: ptr
+      desc: "[in] pointer to start of the memory region to prefetch"
+    - type: "size_t"
+      name: count
+      desc: "[in] size in bytes of the memory region to prefetch"
 returns:
     - $X_RESULT_ERROR_INVALID_PARAMETER:
         - "invalid handle for hDstResource"
