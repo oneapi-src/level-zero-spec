@@ -44,9 +44,40 @@
 /// @brief Supported resource creation flags
 typedef enum _xi_resource_flags_t
 {
-    XI_RESOURCE_FLAG_NONE = 0,                      ///< default behavior
+    XI_RESOURCE_FLAG_KERNEL_READ = XI_BIT( 0 ),     ///< kernels may read contents
+    XI_RESOURCE_FLAG_KERNEL_WRITE = XI_BIT( 1 ),    ///< kernels may write contents
+    XI_RESOURCE_FLAG_HOST_READ = XI_BIT( 2 ),       ///< host may read contents
+    XI_RESOURCE_FLAG_HOST_WRITE = XI_BIT( 3 ),      ///< host may write contents
 
 } xi_resource_flags_t;
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Supported resource types
+typedef enum _xi_resource_type_t
+{
+    XI_RESOURCE_TYPE_BUFFER,                        ///< buffer
+    XI_RESOURCE_TYPE_1D,                            ///< 1D
+    XI_RESOURCE_TYPE_1DARRAY,                       ///< 1D array
+    XI_RESOURCE_TYPE_2D,                            ///< 2D
+    XI_RESOURCE_TYPE_2DARRAY,                       ///< 2D array
+    XI_RESOURCE_TYPE_3D,                            ///< 3D
+
+} xi_resource_type_t;
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Supported resource formats
+typedef enum _xi_resource_format_t
+{
+    XI_RESOURCE_FORMAT_UINT8,                       ///< 8-bit unsigned integer
+    XI_RESOURCE_FORMAT_UINT16,                      ///< 16-bit unsigned integer
+    XI_RESOURCE_FORMAT_UINT32,                      ///< 32-bit unsigned integer
+    XI_RESOURCE_FORMAT_SINT8,                       ///< 8-bit signed integer
+    XI_RESOURCE_FORMAT_SINT16,                      ///< 16-bit signed integer
+    XI_RESOURCE_FORMAT_SINT32,                      ///< 32-bit signed integer
+    XI_RESOURCE_FORMAT_FLOAT16,                     ///< 16-bit float
+    XI_RESOURCE_FORMAT_FLOAT32,                     ///< 32-bit float
+
+} xi_resource_format_t;
 
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Resource descriptor
@@ -54,6 +85,14 @@ typedef struct _xi_resource_desc_t
 {
     uint32_t version;                               ///< [in] ::XI_RESOURCE_DESC_VERSION
     xi_resource_flags_t flags;                      ///< [in] creation flags
+    xi_resource_type_t type;                        ///< [in] resource type
+    xi_resource_format_t format;                    ///< [in] resource channel format
+    uint32_t numChannels;                           ///< [in] number of channels per pixel
+    size_t width;                                   ///< [in] width in pixels
+    size_t height;                                  ///< [in] height in pixels (2D or 3D only)
+    size_t depth;                                   ///< [in] depth in pixels (3D only)
+    size_t arraylevels;                             ///< [in] array levels (array types only)
+    size_t miplevels;                               ///< [in] mipmap levels (must be 0)
 
 } xi_resource_desc_t;
 
