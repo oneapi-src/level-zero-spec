@@ -257,4 +257,67 @@ xi_result_t __xicall
     xi_device_link_properties_t* pLinkProperties    ///< [out] link properties between src and dest devices
     );
 
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Queries if one device can directly access peer device allocations
+/// @remarks
+///   _Analogues_
+///     - **cudaDeviceCanAccessPeer**
+/// @returns
+/// - ::XI_RESULT_SUCCESS
+/// - ::XI_RESULT_ERROR_UNINITIALIZED
+/// - ::XI_RESULT_ERROR_INVALID_PARAMETER
+///     + invalid handle for hDevice
+///     + invalid handle for hPeerDevice
+///     + nullptr for value
+xi_result_t __xicall
+  xiDeviceCanAccessPeer(
+    const xi_device_handle_t hDevice,               ///< [in] handle of the device performing the access
+    const xi_device_handle_t hPeerDevice,           ///< [in] handle of the peer device with the allocation
+    bool* value                                     ///< [out] returned access capability
+    );
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Enables direct access to peer device allocations
+/// @details
+///     - The access is uni-directional and only enables access from the device
+///       to allocations on the peer device.
+///     - A separate call is required to enable access from the peer device to
+///       this device. @todo document any limits on number of active p2p
+///       connections @todo document behavior if link is already enabled
+/// @remarks
+///   _Analogues_
+///     - **cudaDeviceEnablePeerAccess**
+/// @returns
+/// - ::XI_RESULT_SUCCESS
+/// - ::XI_RESULT_ERROR_UNINITIALIZED
+/// - ::XI_RESULT_ERROR_INVALID_PARAMETER
+///     + invalid handle for hDevice
+///     + invalid handle for hPeerDevice
+///     + devices do not support peer access
+xi_result_t __xicall
+  xiDeviceEnablePeerAccess(
+    const xi_device_handle_t hDevice,               ///< [in] handle of the device performing the access
+    const xi_device_handle_t hPeerDevice            ///< [in] handle of the peer device
+    );
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Disables direct access to peer device allocations
+/// @details
+///     - @todo document behavior if link is not enabled
+/// @remarks
+///   _Analogues_
+///     - **cudaDeviceDisablePeerAccess**
+/// @returns
+/// - ::XI_RESULT_SUCCESS
+/// - ::XI_RESULT_ERROR_UNINITIALIZED
+/// - ::XI_RESULT_ERROR_INVALID_PARAMETER
+///     + invalid handle for hDevice
+///     + invalid handle for hPeerDevice
+///     + devices do not support peer access
+xi_result_t __xicall
+  xiDeviceDisablePeerAccess(
+    const xi_device_handle_t hDevice,               ///< [in] handle of the device performing the access
+    const xi_device_handle_t hPeerDevice            ///< [in] handle of the peer device
+    );
+
 #endif // _XI_DEVICE_H

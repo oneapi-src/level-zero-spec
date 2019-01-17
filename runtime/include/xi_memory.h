@@ -37,6 +37,20 @@
 #include "xi_common.h"
 
 ///////////////////////////////////////////////////////////////////////////////
+/// @brief @todo need a kernel property to indicate indirect shared memory access
+#define XI_KERNEL_PROPERTY_INDIRECT_SHARED_ACCESS  0
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief @todo possible kernel property to indicate indirect device memory
+///        access?
+#define XI_KERNEL_PROPERTY_INDIRECT_DEVICE_ACCESS  0
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief @todo possible kernel property to indicate indirect host memory
+///        access?
+#define XI_KERNEL_PROPERTY_INDIRECT_HOST_ACCESS  0
+
+///////////////////////////////////////////////////////////////////////////////
 /// @brief Allocates memory that is shared between the host and one or more
 ///        devices
 /// @details

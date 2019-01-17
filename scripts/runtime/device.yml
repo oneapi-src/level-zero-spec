@@ -258,7 +258,6 @@ returns:
     - $X_RESULT_ERROR_INVALID_PARAMETER:
         - "invalid handle for hDevice"
         - "nullptr for provided for properties"
-
 --- #--------------------------------------------------------------------------
 type: macro
 desc: "API version of $x_device_link_properties_t"
@@ -281,7 +280,6 @@ members:
     - type: uint32_t
       name: performanceRank
       desc: "[out] Relative performance rank of link. @todo Should this be different metric?"
-
 --- #--------------------------------------------------------------------------
 type: function
 desc: "Retrieves link properties between src and dest devices."
@@ -302,3 +300,67 @@ returns:
     - $X_RESULT_ERROR_INVALID_PARAMETER:
         - "invalid ordinal. Use $xDeviceGetCount for valid range."
         - "nullptr for provided for properties"
+--- #--------------------------------------------------------------------------
+type: function
+desc: "Queries if one device can directly access peer device allocations"
+name: $xDeviceCanAccessPeer
+analogue:
+    - "**cudaDeviceCanAccessPeer**"
+params:
+    - type: "const $x_device_handle_t"
+      name: hDevice
+      desc: "[in] handle of the device performing the access"
+    - type: "const $x_device_handle_t"
+      name: hPeerDevice
+      desc: "[in] handle of the peer device with the allocation"
+    - type: "bool*"
+      name: value
+      desc: "[out] returned access capability"
+returns:
+    - $X_RESULT_ERROR_INVALID_PARAMETER:
+        - "invalid handle for hDevice"
+        - "invalid handle for hPeerDevice"
+        - "nullptr for value"
+--- #--------------------------------------------------------------------------
+type: function
+desc: "Enables direct access to peer device allocations"
+name: $xDeviceEnablePeerAccess
+details:
+    - "The access is uni-directional and only enables access from the device to allocations on the peer device."
+    - "A separate call is required to enable access from the peer device to this device.
+      @todo document any limits on number of active p2p connections
+      @todo document behavior if link is already enabled"
+analogue:
+    - "**cudaDeviceEnablePeerAccess**"
+params:
+    - type: "const $x_device_handle_t"
+      name: hDevice
+      desc: "[in] handle of the device performing the access"
+    - type: "const $x_device_handle_t"
+      name: hPeerDevice
+      desc: "[in] handle of the peer device"
+returns:
+    - $X_RESULT_ERROR_INVALID_PARAMETER:
+        - "invalid handle for hDevice"
+        - "invalid handle for hPeerDevice"
+        - "devices do not support peer access"
+--- #--------------------------------------------------------------------------
+type: function
+desc: "Disables direct access to peer device allocations"
+name: $xDeviceDisablePeerAccess
+details:
+    - "@todo document behavior if link is not enabled"
+analogue:
+    - "**cudaDeviceDisablePeerAccess**"
+params:
+    - type: "const $x_device_handle_t"
+      name: hDevice
+      desc: "[in] handle of the device performing the access"
+    - type: "const $x_device_handle_t"
+      name: hPeerDevice
+      desc: "[in] handle of the peer device"
+returns:
+    - $X_RESULT_ERROR_INVALID_PARAMETER:
+        - "invalid handle for hDevice"
+        - "invalid handle for hPeerDevice"
+        - "devices do not support peer access"
