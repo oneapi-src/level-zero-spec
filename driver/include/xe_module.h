@@ -44,8 +44,7 @@
 /// @brief Creates module object from ISA
 /// @remarks
 ///   _Analogues_
-///     - **cuCtxCreate**
-///     - cuCtxGetCurrent
+///     - **cuModuleLoad**
 /// @returns
 /// - ::XE_RESULT_SUCCESS
 /// - ::XE_RESULT_ERROR_UNINITIALIZED
@@ -76,7 +75,7 @@ typedef enum _xe_module_ir_type_t
 /// @brief Creates module object from IR
 /// @remarks
 ///   _Analogues_
-///     - **cuCtxCreate**
+///     - **cuModuleLoad**
 ///     - cuCtxGetCurrent
 /// @returns
 /// - ::XE_RESULT_SUCCESS
@@ -101,8 +100,7 @@ xe_result_t __xecall
 /// @brief Creates module ISA object from IR
 /// @remarks
 ///   _Analogues_
-///     - **cuCtxCreate**
-///     - cuCtxGetCurrent
+///     - 
 /// @returns
 /// - ::XE_RESULT_SUCCESS
 /// - ::XE_RESULT_ERROR_UNINITIALIZED
@@ -124,36 +122,10 @@ xe_result_t __xecall
     );
 
 ///////////////////////////////////////////////////////////////////////////////
-/// @brief Creates module object from IR
-/// @remarks
-///   _Analogues_
-///     - **cuCtxCreate**
-///     - cuCtxGetCurrent
-/// @returns
-/// - ::XE_RESULT_SUCCESS
-/// - ::XE_RESULT_ERROR_UNINITIALIZED
-/// - ::XE_RESULT_ERROR_INVALID_PARAMETER
-///     + invalid handle for hDevice
-///     + nullptr for pIRModule
-///     + nullptr for phModule
-///     + 0 for irSize
-/// - ::XE_RESULT_ERROR_OUT_OF_HOST_MEMORY
-/// - ::XE_RESULT_ERROR_OUT_OF_DEVICE_MEMORY
-xe_result_t __xecall
-  xeCreateModuleFromIR(
-    xe_device_handle_t hDevice,                     ///< [in] handle of the device
-    xe_module_ir_type_t irType,                     ///< [in] IR type that is passed in with pIRModule
-    const char** pIRModule,                         ///< [in] pointer to IR module buffer
-    size_t irSize,                                  ///< [in] size of IR module buffer
-    xe_module_handle_t* phModule                    ///< [out] pointer to handle of module object created
-    );
-
-///////////////////////////////////////////////////////////////////////////////
 /// @brief Releases module
 /// @remarks
 ///   _Analogues_
-///     - **cuCtxCreate**
-///     - cuCtxGetCurrent
+///     - **cuModuleUnload**
 /// @returns
 /// - ::XE_RESULT_SUCCESS
 /// - ::XE_RESULT_ERROR_UNINITIALIZED
@@ -168,8 +140,28 @@ xe_result_t __xecall
 /// @brief Create Function object from Module by name
 /// @remarks
 ///   _Analogues_
-///     - **cuCtxCreate**
-///     - cuCtxGetCurrent
+///     - **cuModuleGetGlobal**
+/// @returns
+/// - ::XE_RESULT_SUCCESS
+/// - ::XE_RESULT_ERROR_UNINITIALIZED
+/// - ::XE_RESULT_ERROR_INVALID_PARAMETER
+///     + invalid handle for hModule
+///     + null ptr for pGlobalName
+///     + invalid name for pGlobalName
+///     + null ptr for pGlobalValue
+xe_result_t __xecall
+  xeModuleGetGlobal(
+    xe_module_handle_t hModule,                     ///< [in] handle of the module
+    const char* pGlobalName,                        ///< [in] name of function in global
+    void* pGlobalValue,                             ///< [out] pointer to global value
+    size_t valueSize                                ///< [out] size of value type
+    );
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Create Function object from Module by name
+/// @remarks
+///   _Analogues_
+///     - **cuModuleGetFunction**
 /// @returns
 /// - ::XE_RESULT_SUCCESS
 /// - ::XE_RESULT_ERROR_UNINITIALIZED
@@ -188,7 +180,7 @@ xe_result_t __xecall
 /// @brief Releases Function object
 /// @remarks
 ///   _Analogues_
-///     - **cuCtxCreate**
+///     - **cuModuleUnload**
 ///     - cuCtxGetCurrent
 /// @returns
 /// - ::XE_RESULT_SUCCESS

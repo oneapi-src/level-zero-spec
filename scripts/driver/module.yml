@@ -11,8 +11,7 @@ type: function
 desc: "Creates module object from ISA"
 name: $xCreateModuleFromISA
 analogue:
-    - "**cuCtxCreate**"
-    - "cuCtxGetCurrent"
+    - "**cuModuleLoad**"
 params:
     - type: $x_device_handle_t
       name: hDevice
@@ -47,7 +46,7 @@ type: function
 desc: "Creates module object from IR"
 name: $xCreateModuleFromIR
 analogue:
-    - "**cuCtxCreate**"
+    - "**cuModuleLoad**"
     - "cuCtxGetCurrent"
 params:
     - type: $x_device_handle_t
@@ -78,8 +77,7 @@ type: function
 desc: "Creates module ISA object from IR"
 name: $xCreateModuleISAFromIR
 analogue:
-    - "**cuCtxCreate**"
-    - "cuCtxGetCurrent"
+    - ""
 params:
     - type: $x_device_handle_t
       name: hDevice
@@ -109,42 +107,10 @@ returns:
     - $X_RESULT_ERROR_OUT_OF_DEVICE_MEMORY
 --- #--------------------------------------------------------------------------
 type: function
-desc: "Creates module object from IR"
-name: $xCreateModuleFromIR
-analogue:
-    - "**cuCtxCreate**"
-    - "cuCtxGetCurrent"
-params:
-    - type: $x_device_handle_t
-      name: hDevice
-      desc: "[in] handle of the device"
-    - type: "$x_module_ir_type_t"
-      name: irType
-      desc: "[in] IR type that is passed in with pIRModule"
-    - type: "const char**"
-      name: pIRModule
-      desc: "[in] pointer to IR module buffer"
-    - type: "size_t"
-      name: irSize
-      desc: "[in] size of IR module buffer"
-    - type: "$x_module_handle_t*"
-      name: phModule
-      desc: "[out] pointer to handle of module object created"
-returns:
-    - $X_RESULT_ERROR_INVALID_PARAMETER:
-        - "invalid handle for hDevice"
-        - "nullptr for pIRModule"
-        - "nullptr for phModule"
-        - "0 for irSize"
-    - $X_RESULT_ERROR_OUT_OF_HOST_MEMORY
-    - $X_RESULT_ERROR_OUT_OF_DEVICE_MEMORY
---- #--------------------------------------------------------------------------
-type: function
 desc: "Releases module"
 name: $xReleaseModule
 analogue:
-    - "**cuCtxCreate**"
-    - "cuCtxGetCurrent"
+    - "**cuModuleUnload**"
 params:
     - type: "$x_module_handle_t"
       name: hModule
@@ -155,10 +121,34 @@ returns:
 --- #--------------------------------------------------------------------------
 type: function
 desc: "Create Function object from Module by name"
+name: $xModuleGetGlobal
+analogue:
+    - "**cuModuleGetGlobal**"
+params:
+    - type: "$x_module_handle_t"
+      name: hModule
+      desc: "[in] handle of the module"
+    - type: "const char*"
+      name: pGlobalName
+      desc: "[in] name of function in global"
+    - type: "void*"
+      name:  pGlobalValue
+      desc: "[out] pointer to global value"
+    - type: "size_t"
+      name:  valueSize
+      desc: "[out] size of value type"
+returns:
+    - $X_RESULT_ERROR_INVALID_PARAMETER:
+        - "invalid handle for hModule"
+        - "null ptr for pGlobalName"
+        - "invalid name for pGlobalName"
+        - "null ptr for pGlobalValue"
+--- #--------------------------------------------------------------------------
+type: function
+desc: "Create Function object from Module by name"
 name: $xCreateFunctionFromModule
 analogue:
-    - "**cuCtxCreate**"
-    - "cuCtxGetCurrent"
+    - "**cuModuleGetFunction**"
 params:
     - type: "$x_module_handle_t"
       name: hModule
@@ -179,7 +169,7 @@ type: function
 desc: "Releases Function object"
 name: $xReleaseFunction
 analogue:
-    - "**cuCtxCreate**"
+    - "**cuModuleUnload**"
     - "cuCtxGetCurrent"
 params:
     - type: "$x_function_handle_t"
