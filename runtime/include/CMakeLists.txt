@@ -1,0 +1,16 @@
+target_sources(runtime
+    PRIVATE
+    ${CMAKE_CURRENT_SOURCE_DIR}/CMakeLists.txt
+    ${CMAKE_CURRENT_SOURCE_DIR}/XI.md
+    ${CMAKE_CURRENT_SOURCE_DIR}/xi_cmdlist.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/xi_cmdqueue.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/xi_common.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/xi_context.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/xi_copy.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/xi_device.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/xi_event.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/xi_fence.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/xi_memory.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/xi_resource.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/xi_runtime.h
+)
