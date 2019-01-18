@@ -1,0 +1,10 @@
+components:
+  googletest:
+    branch: master
+    clean_on_sync: true
+    dest_dir: third_party/googletest
+    repository: https://github.com/google/googletest.git
+    revision: 0599a7b8410dc5cfdb477900b280475ae775d7f9
+    type: git
+converter: E-1180
+version: '1'
