@@ -197,7 +197,104 @@ xe_result_t __xecall
 ///     + invalid handle for hModule
 xe_result_t __xecall
   xeReleaseFunction(
-    xe_function_handle_t hModule                    ///< [in] handle of the function object
+    xe_function_handle_t hFunction                  ///< [in] handle of the function object
+    );
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Get the buffer size needed to store and pass function arguments.
+/// @remarks
+///   _Analogues_
+///     - **cuCtxCreate**
+///     - cuCtxGetCurrent
+/// @returns
+/// - ::XE_RESULT_SUCCESS
+/// - ::XE_RESULT_ERROR_UNINITIALIZED
+/// - ::XE_RESULT_ERROR_INVALID_PARAMETER
+///     + invalid handle for hFunction
+///     + null ptr for pSize
+xe_result_t __xecall
+  xeGetFunctionArgsBufferSize(
+    xe_function_handle_t hFunction,                 ///< [in] handle of the function object
+    uint32_t* pSize                                 ///< [out] handle of the function object
+    );
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Set function arguments within arguments buffer.
+/// @remarks
+///   _Analogues_
+///     - **cuCtxCreate**
+///     - cuCtxGetCurrent
+/// @returns
+/// - ::XE_RESULT_SUCCESS
+/// - ::XE_RESULT_ERROR_UNINITIALIZED
+/// - ::XE_RESULT_ERROR_INVALID_PARAMETER
+///     + invalid handle for hFunction
+///     + invalid argument index
+///     + null ptr for pArgValue
+///     + invalid size specified
+///     + null ptr for pMemBuffer
+xe_result_t __xecall
+  xeSetFunctionArgValue(
+    xe_function_handle_t hFunction,                 ///< [in] handle of the function object
+    uint32_t argIndex,                              ///< [in] argument index in range [0, num args - 1]
+    const void* pArgValue,                          ///< [in] argument value represented as matching arg type
+    size_t argSize,                                 ///< [in] size of argument type
+    void* pMemBuffer                                ///< [in/out] pointer to memory buffer supplied by user
+    );
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Function attributes
+/// @remarks
+///   _Analogues_
+///     - **CUfunction_attribute**
+typedef enum _xe_function_attribute_t
+{
+    XE_FUNCTION_ATTR_MAX_REGS_USED = 0,             ///< Maximum device registers used for this function
+    XE_FUNCTION_ATTR_MAX_THREADS_PER_GROUP,         ///< Maximum threads required for this function
+    XE_FUNCTION_ATTR_MAX_SHARED_MEM_SIZE,           ///< Maximum shared memory required for this function
+
+} xe_function_attribute_t;
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Query a function attribute.
+/// @remarks
+///   _Analogues_
+///     - **cuFuncGetAttribute**
+/// @returns
+/// - ::XE_RESULT_SUCCESS
+/// - ::XE_RESULT_ERROR_UNINITIALIZED
+/// - ::XE_RESULT_ERROR_INVALID_PARAMETER
+///     + invalid handle for hFunction
+///     + invalid value for attr
+///     + null ptr for pValue
+xe_result_t __xecall
+  xeQueryFunctionAttribute(
+    xe_function_handle_t hFunction,                 ///< [in] handle of the function object
+    xe_function_attribute_t attr,                   ///< [in] attribute to query
+    uint32_t* pValue                                ///< [out] returned attribute value
+    );
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Dispatch function to queue.
+/// @remarks
+///   _Analogues_
+///     - **cuLaunchKernel**
+/// @returns
+/// - ::XE_RESULT_SUCCESS
+/// - ::XE_RESULT_ERROR_UNINITIALIZED
+/// - ::XE_RESULT_ERROR_INVALID_PARAMETER
+///     + invalid handle for hCommandQueue
+///     + invalid handle for hFunction
+///     + null ptr for function arguments buffer
+///     + invalid group count range for dispatch
+xe_result_t __xecall
+  xeDispatchFunction(
+    xe_command_queue_handle_t hCommandQueue,        ///< [in] handle of the command queue
+    xe_function_handle_t hFunction,                 ///< [in] handle of the function object
+    void* pFunctionArgsBuffer,                      ///< [in] pointer to function arguments buffer.
+    uint32_t groupCountX,                           ///< [in] width of dispatches in X dimension
+    uint32_t groupCountY,                           ///< [in] width of dispatches in Y dimension
+    uint32_t groupCountZ                            ///< [in] width of dispatches in Z dimension
     );
 
 #endif // _XE_MODULE_H
