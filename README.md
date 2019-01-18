@@ -4,7 +4,7 @@ Header files are generated using [scripts](/scripts/README.md).
 
 
 ##If third_party tools are not installed locally, they can be installed
-##via irepo.
+##via irepo (https://github.intel.com/gsdi/irepo).
 
 #Pick the manifest
 irepo select third_party/manifests.yml
