@@ -16,12 +16,12 @@ params:
     - type: $x_device_handle_t
       name: hDevice
       desc: "[in] handle of the device"
-    - type: "const char**"
-      name: pISAModule
-      desc: "[in] pointer to ISA module buffer"
     - type: "size_t"
       name: isaSize
       desc: "[in] size of ISA module buffer"
+    - type: "const char*"
+      name: pISAModule
+      desc: "[in] pointer to ISA module buffer"
     - type: "$x_module_handle_t*"
       name: phModule
       desc: "[out] pointer to handle of module object created"
@@ -55,12 +55,12 @@ params:
     - type: "$x_module_ir_type_t"
       name: irType
       desc: "[in] IR type that is passed in with pIRModule"
-    - type: "const char**"
-      name: pIRModule
-      desc: "[in] pointer to IR module buffer"
     - type: "size_t"
       name: irSize
       desc: "[in] size of IR module buffer"
+    - type: "const char*"
+      name: pIRModule
+      desc: "[in] pointer to IR module buffer"
     - type: "$x_module_handle_t*"
       name: phModule
       desc: "[out] pointer to handle of module object created"
@@ -85,18 +85,18 @@ params:
     - type: "$x_module_ir_type_t"
       name: irType
       desc: "[in] IR type that is passed in with pIRModule"
-    - type: "const char**"
-      name: pIRModule
-      desc: "[in] pointer to IR module buffer"
     - type: "size_t"
       name: irSize
       desc: "[in] size of IR module buffer"
-    - type: "const char**"
-      name: pISAModule
-      desc: "[out] pointer to module ISA"
+    - type: "const char*"
+      name: pIRModule
+      desc: "[in] pointer to IR module buffer"
     - type: "size_t"
       name: isaSize
       desc: "[out] size of ISA module buffer"
+    - type: "const char*"
+      name: pISAModule
+      desc: "[out] pointer to module ISA"
 returns:
     - $X_RESULT_ERROR_INVALID_PARAMETER:
         - "invalid handle for hDevice"
@@ -131,12 +131,12 @@ params:
     - type: "const char*"
       name: pGlobalName
       desc: "[in] name of function in global"
-    - type: "void*"
-      name:  pGlobalValue
-      desc: "[out] pointer to global value"
     - type: "size_t"
       name:  valueSize
       desc: "[out] size of value type"
+    - type: "void*"
+      name:  pGlobalValue
+      desc: "[out] pointer to global value"
 returns:
     - $X_RESULT_ERROR_INVALID_PARAMETER:
         - "invalid handle for hModule"
@@ -155,7 +155,7 @@ params:
       desc: "[in] handle of the module"
     - type: "const char*"
       name: pFunctionName
-      desc: "[in] name of function in Module"
+      desc: "[in] null-terminated name of function in Module"
     - type: "$x_function_handle_t*"
       name:  phFunction
       desc: "[out] handle of the Function object"
@@ -210,12 +210,12 @@ params:
     - type: "uint32_t"
       name: argIndex
       desc: "[in] argument index in range [0, num args - 1]"
-    - type: "const void*"
-      name: pArgValue
-      desc: "[in] argument value represented as matching arg type"
     - type: "size_t"
       name: argSize
       desc: "[in] size of argument type"
+    - type: "const void*"
+      name: pArgValue
+      desc: "[in] argument value represented as matching arg type"
     - type: "void*"
       name: pMemBuffer
       desc: "[in/out] pointer to memory buffer supplied by user"
@@ -268,9 +268,9 @@ name: $xDispatchFunction
 analogue:
     - "**cuLaunchKernel**"
 params:
-    - type: "$x_command_queue_handle_t"
-      name: hCommandQueue
-      desc: "[in] handle of the command queue"
+    - type: "$x_command_list_handle_t"
+      name: hCommandList
+      desc: "[in] handle of the command list"
     - type: "$x_function_handle_t"
       name: hFunction
       desc: "[in] handle of the function object"
@@ -279,12 +279,21 @@ params:
       desc: "[in] pointer to function arguments buffer."
     - type: "uint32_t"
       name: groupCountX
-      desc: "[in] width of dispatches in X dimension"
+      desc: "[in] width of group in X dimension"
     - type: "uint32_t"
       name: groupCountY
-      desc: "[in] width of dispatches in Y dimension"
+      desc: "[in] width of group in Y dimension"
     - type: "uint32_t"
       name: groupCountZ
+      desc: "[in] width of group in Z dimension"
+    - type: "uint32_t"
+      name: dispatchCountX
+      desc: "[in] width of dispatches in X dimension"
+    - type: "uint32_t"
+      name: dispatchCountY
+      desc: "[in] width of dispatches in Y dimension"
+    - type: "uint32_t"
+      name: dispatchCountZ
       desc: "[in] width of dispatches in Z dimension"
 returns:
     - $X_RESULT_ERROR_INVALID_PARAMETER:
@@ -292,3 +301,4 @@ returns:
         - "invalid handle for hFunction"
         - "null ptr for function arguments buffer"
         - "invalid group count range for dispatch"
+        - "invalid dispatch count range for dispatch"

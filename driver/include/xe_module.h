@@ -58,8 +58,8 @@
 xe_result_t __xecall
   xeCreateModuleFromISA(
     xe_device_handle_t hDevice,                     ///< [in] handle of the device
-    const char** pISAModule,                        ///< [in] pointer to ISA module buffer
     size_t isaSize,                                 ///< [in] size of ISA module buffer
+    const char* pISAModule,                         ///< [in] pointer to ISA module buffer
     xe_module_handle_t* phModule                    ///< [out] pointer to handle of module object created
     );
 
@@ -91,8 +91,8 @@ xe_result_t __xecall
   xeCreateModuleFromIR(
     xe_device_handle_t hDevice,                     ///< [in] handle of the device
     xe_module_ir_type_t irType,                     ///< [in] IR type that is passed in with pIRModule
-    const char** pIRModule,                         ///< [in] pointer to IR module buffer
     size_t irSize,                                  ///< [in] size of IR module buffer
+    const char* pIRModule,                          ///< [in] pointer to IR module buffer
     xe_module_handle_t* phModule                    ///< [out] pointer to handle of module object created
     );
 
@@ -115,10 +115,10 @@ xe_result_t __xecall
   xeCreateModuleISAFromIR(
     xe_device_handle_t hDevice,                     ///< [in] handle of the device
     xe_module_ir_type_t irType,                     ///< [in] IR type that is passed in with pIRModule
-    const char** pIRModule,                         ///< [in] pointer to IR module buffer
     size_t irSize,                                  ///< [in] size of IR module buffer
-    const char** pISAModule,                        ///< [out] pointer to module ISA
-    size_t isaSize                                  ///< [out] size of ISA module buffer
+    const char* pIRModule,                          ///< [in] pointer to IR module buffer
+    size_t isaSize,                                 ///< [out] size of ISA module buffer
+    const char* pISAModule                          ///< [out] pointer to module ISA
     );
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -153,8 +153,8 @@ xe_result_t __xecall
   xeModuleGetGlobal(
     xe_module_handle_t hModule,                     ///< [in] handle of the module
     const char* pGlobalName,                        ///< [in] name of function in global
-    void* pGlobalValue,                             ///< [out] pointer to global value
-    size_t valueSize                                ///< [out] size of value type
+    size_t valueSize,                               ///< [out] size of value type
+    void* pGlobalValue                              ///< [out] pointer to global value
     );
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -172,7 +172,7 @@ xe_result_t __xecall
 xe_result_t __xecall
   xeCreateFunctionFromModule(
     xe_module_handle_t hModule,                     ///< [in] handle of the module
-    const char* pFunctionName,                      ///< [in] name of function in Module
+    const char* pFunctionName,                      ///< [in] null-terminated name of function in Module
     xe_function_handle_t* phFunction                ///< [out] handle of the Function object
     );
 
@@ -229,8 +229,8 @@ xe_result_t __xecall
   xeSetFunctionArgValue(
     xe_function_handle_t hFunction,                 ///< [in] handle of the function object
     uint32_t argIndex,                              ///< [in] argument index in range [0, num args - 1]
-    const void* pArgValue,                          ///< [in] argument value represented as matching arg type
     size_t argSize,                                 ///< [in] size of argument type
+    const void* pArgValue,                          ///< [in] argument value represented as matching arg type
     void* pMemBuffer                                ///< [in/out] pointer to memory buffer supplied by user
     );
 
@@ -279,14 +279,18 @@ xe_result_t __xecall
 ///     + invalid handle for hFunction
 ///     + null ptr for function arguments buffer
 ///     + invalid group count range for dispatch
+///     + invalid dispatch count range for dispatch
 xe_result_t __xecall
   xeDispatchFunction(
-    xe_command_queue_handle_t hCommandQueue,        ///< [in] handle of the command queue
+    xe_command_list_handle_t hCommandList,          ///< [in] handle of the command list
     xe_function_handle_t hFunction,                 ///< [in] handle of the function object
     void* pFunctionArgsBuffer,                      ///< [in] pointer to function arguments buffer.
-    uint32_t groupCountX,                           ///< [in] width of dispatches in X dimension
-    uint32_t groupCountY,                           ///< [in] width of dispatches in Y dimension
-    uint32_t groupCountZ                            ///< [in] width of dispatches in Z dimension
+    uint32_t groupCountX,                           ///< [in] width of group in X dimension
+    uint32_t groupCountY,                           ///< [in] width of group in Y dimension
+    uint32_t groupCountZ,                           ///< [in] width of group in Z dimension
+    uint32_t dispatchCountX,                        ///< [in] width of dispatches in X dimension
+    uint32_t dispatchCountY,                        ///< [in] width of dispatches in Y dimension
+    uint32_t dispatchCountZ                         ///< [in] width of dispatches in Z dimension
     );
 
 #endif // _XE_MODULE_H
