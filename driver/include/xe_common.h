@@ -228,6 +228,54 @@ typedef struct _xe_resource_handle_t
 #endif
 
 ///////////////////////////////////////////////////////////////////////////////
+/// @brief Handle of driver's module object
+#if defined( __cplusplus )
+struct xe_module_handle_t
+{
+    void* pDriverData;
+
+    xe_module_handle_t( void ) : pDriverData( nullptr ) {}        ///< default constructor
+    explicit xe_module_handle_t( void* p ) : pDriverData( p ) {}  ///< initialize from pointer
+
+    inline bool operator==( const xe_module_handle_t& other ) const   ///< is equal to other
+    { return pDriverData == other.pDriverData; }
+    inline bool operator!=( const xe_module_handle_t& other ) const   ///< not equal to other
+    { return pDriverData != other.pDriverData; }
+
+};
+#else
+typedef struct _xe_module_handle_t
+{
+    void* pDriverData;
+
+} xe_module_handle_t;
+#endif
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Handle of driver's function object
+#if defined( __cplusplus )
+struct xe_function_handle_t
+{
+    void* pDriverData;
+
+    xe_function_handle_t( void ) : pDriverData( nullptr ) {}        ///< default constructor
+    explicit xe_function_handle_t( void* p ) : pDriverData( p ) {}  ///< initialize from pointer
+
+    inline bool operator==( const xe_function_handle_t& other ) const   ///< is equal to other
+    { return pDriverData == other.pDriverData; }
+    inline bool operator!=( const xe_function_handle_t& other ) const   ///< not equal to other
+    { return pDriverData != other.pDriverData; }
+
+};
+#else
+typedef struct _xe_function_handle_t
+{
+    void* pDriverData;
+
+} xe_function_handle_t;
+#endif
+
+///////////////////////////////////////////////////////////////////////////////
 /// @brief Generic macro for enumerator bit masks
 #define XE_BIT( _i )  ( 1 << _i )
 

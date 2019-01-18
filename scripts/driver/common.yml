@@ -56,6 +56,14 @@ type: handle
 desc: "Handle of driver's resource object"
 name: "$x_resource_handle_t"
 --- #--------------------------------------------------------------------------
+type: handle
+desc: "Handle of driver's module object"
+name: "$x_module_handle_t"
+--- #--------------------------------------------------------------------------
+type: handle
+desc: "Handle of driver's function object"
+name: "$x_function_handle_t"
+--- #--------------------------------------------------------------------------
 type: macro
 desc: "Generic macro for enumerator bit masks"
 name: "$X_BIT( _i )"
