@@ -7,102 +7,70 @@ desc: API version of $x_command_queue_desc_t
 name: $X_MODULE_DESC_VERSION
 value: "$X_MAKE_VERSION( 1, 0 )"
 --- #--------------------------------------------------------------------------
+type: enum
+desc: "Supported module creation input formats"
+name: $x_module_format_t
+etors:
+    - name: $X_MODULE_IL_SPIRV_TEXT
+      value: "0"
+      desc: "Format is SPIRV IL text format"
+    - name: $X_MODULE_ISA
+      desc: "Format is Gen ISA format"
+--- #--------------------------------------------------------------------------
 type: function
-desc: "Creates module object from ISA"
-name: $xCreateModuleFromISA
+desc: "Creates module object from an input IL or ISA."
+name: $xCreateModule
 analogue:
     - "**cuModuleLoad**"
 params:
     - type: $x_device_handle_t
       name: hDevice
       desc: "[in] handle of the device"
-    - type: "size_t"
-      name: isaSize
-      desc: "[in] size of ISA module buffer"
+    - type: "$x_module_format_t"
+      name: format
+      desc: "[in] Module format passed in with pInputModule"
+    - type: "uint32_t"
+      name: inputSize
+      desc: "[in] size of input IL or ISA from pInputModule."
     - type: "const char*"
-      name: pISAModule
-      desc: "[in] pointer to ISA module buffer"
+      name: pInputModule
+      desc: "[in] pointer to IL or ISA"
     - type: "$x_module_handle_t*"
       name: phModule
       desc: "[out] pointer to handle of module object created"
 returns:
     - $X_RESULT_ERROR_INVALID_PARAMETER:
         - "invalid handle for hDevice"
-        - "nullptr for pISAModule"
+        - "invalid format"
+        - "nullptr for pInputModule"
         - "nullptr for phModule"
-        - "0 for isaSize"
+        - "0 for inputSize"
     - $X_RESULT_ERROR_OUT_OF_HOST_MEMORY
     - $X_RESULT_ERROR_OUT_OF_DEVICE_MEMORY
 --- #--------------------------------------------------------------------------
-type: enum
-desc: "Supported IR types"
-name: $x_module_ir_type_t
-etors:
-    - name: $X_MODULE_IR_SPIRV_TEXT
-      value: "0"
-      desc: "IR is spirv text format"
---- #--------------------------------------------------------------------------
 type: function
-desc: "Creates module object from IR"
-name: $xCreateModuleFromIR
+desc: "Creates module object from an input IL or ISA."
+name: $xModuleGetISA
 analogue:
     - "**cuModuleLoad**"
     - "cuCtxGetCurrent"
 params:
-    - type: $x_device_handle_t
-      name: hDevice
+    - type: $x_module_handle_t
+      name: hModule
       desc: "[in] handle of the device"
-    - type: "$x_module_ir_type_t"
-      name: irType
-      desc: "[in] IR type that is passed in with pIRModule"
-    - type: "size_t"
-      name: irSize
-      desc: "[in] size of IR module buffer"
-    - type: "const char*"
-      name: pIRModule
-      desc: "[in] pointer to IR module buffer"
-    - type: "$x_module_handle_t*"
-      name: phModule
-      desc: "[out] pointer to handle of module object created"
+    - type: "uint32_t*"
+      name: pIsaSize
+      desc: "[out] size of ISA buffer provided by pModuleISA."
+    - type: "char**"
+      name: pModuleISA
+      desc: "[out] pointer to IL or ISA"
 returns:
     - $X_RESULT_ERROR_INVALID_PARAMETER:
         - "invalid handle for hDevice"
-        - "nullptr for pIRModule"
+        - "invalid format"
+        - "nullptr for pInputModule"
         - "nullptr for phModule"
-        - "0 for irSize"
-    - $X_RESULT_ERROR_OUT_OF_HOST_MEMORY
-    - $X_RESULT_ERROR_OUT_OF_DEVICE_MEMORY
---- #--------------------------------------------------------------------------
-type: function
-desc: "Creates module ISA object from IR"
-name: $xCreateModuleISAFromIR
-analogue:
-    - ""
-params:
-    - type: $x_device_handle_t
-      name: hDevice
-      desc: "[in] handle of the device"
-    - type: "$x_module_ir_type_t"
-      name: irType
-      desc: "[in] IR type that is passed in with pIRModule"
-    - type: "size_t"
-      name: irSize
-      desc: "[in] size of IR module buffer"
-    - type: "const char*"
-      name: pIRModule
-      desc: "[in] pointer to IR module buffer"
-    - type: "size_t"
-      name: isaSize
-      desc: "[out] size of ISA module buffer"
-    - type: "const char*"
-      name: pISAModule
-      desc: "[out] pointer to module ISA"
-returns:
-    - $X_RESULT_ERROR_INVALID_PARAMETER:
-        - "invalid handle for hDevice"
-        - "nullptr for pIRModule"
-        - "nullptr for pISAModule"
-        - "0 for irSize"
+        - "0 for inputSize"
     - $X_RESULT_ERROR_OUT_OF_HOST_MEMORY
     - $X_RESULT_ERROR_OUT_OF_DEVICE_MEMORY
 --- #--------------------------------------------------------------------------

@@ -41,7 +41,16 @@
 #define XE_MODULE_DESC_VERSION  XE_MAKE_VERSION( 1, 0 )
 
 ///////////////////////////////////////////////////////////////////////////////
-/// @brief Creates module object from ISA
+/// @brief Supported module creation input formats
+typedef enum _xe_module_format_t
+{
+    XE_MODULE_IL_SPIRV_TEXT = 0,                    ///< Format is SPIRV IL text format
+    XE_MODULE_ISA,                                  ///< Format is Gen ISA format
+
+} xe_module_format_t;
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Creates module object from an input IL or ISA.
 /// @remarks
 ///   _Analogues_
 ///     - **cuModuleLoad**
@@ -50,29 +59,23 @@
 /// - ::XE_RESULT_ERROR_UNINITIALIZED
 /// - ::XE_RESULT_ERROR_INVALID_PARAMETER
 ///     + invalid handle for hDevice
-///     + nullptr for pISAModule
+///     + invalid format
+///     + nullptr for pInputModule
 ///     + nullptr for phModule
-///     + 0 for isaSize
+///     + 0 for inputSize
 /// - ::XE_RESULT_ERROR_OUT_OF_HOST_MEMORY
 /// - ::XE_RESULT_ERROR_OUT_OF_DEVICE_MEMORY
 xe_result_t __xecall
-  xeCreateModuleFromISA(
+  xeCreateModule(
     xe_device_handle_t hDevice,                     ///< [in] handle of the device
-    size_t isaSize,                                 ///< [in] size of ISA module buffer
-    const char* pISAModule,                         ///< [in] pointer to ISA module buffer
+    xe_module_format_t format,                      ///< [in] Module format passed in with pInputModule
+    uint32_t inputSize,                             ///< [in] size of input IL or ISA from pInputModule.
+    const char* pInputModule,                       ///< [in] pointer to IL or ISA
     xe_module_handle_t* phModule                    ///< [out] pointer to handle of module object created
     );
 
 ///////////////////////////////////////////////////////////////////////////////
-/// @brief Supported IR types
-typedef enum _xe_module_ir_type_t
-{
-    XE_MODULE_IR_SPIRV_TEXT = 0,                    ///< IR is spirv text format
-
-} xe_module_ir_type_t;
-
-///////////////////////////////////////////////////////////////////////////////
-/// @brief Creates module object from IR
+/// @brief Creates module object from an input IL or ISA.
 /// @remarks
 ///   _Analogues_
 ///     - **cuModuleLoad**
@@ -82,43 +85,17 @@ typedef enum _xe_module_ir_type_t
 /// - ::XE_RESULT_ERROR_UNINITIALIZED
 /// - ::XE_RESULT_ERROR_INVALID_PARAMETER
 ///     + invalid handle for hDevice
-///     + nullptr for pIRModule
+///     + invalid format
+///     + nullptr for pInputModule
 ///     + nullptr for phModule
-///     + 0 for irSize
+///     + 0 for inputSize
 /// - ::XE_RESULT_ERROR_OUT_OF_HOST_MEMORY
 /// - ::XE_RESULT_ERROR_OUT_OF_DEVICE_MEMORY
 xe_result_t __xecall
-  xeCreateModuleFromIR(
-    xe_device_handle_t hDevice,                     ///< [in] handle of the device
-    xe_module_ir_type_t irType,                     ///< [in] IR type that is passed in with pIRModule
-    size_t irSize,                                  ///< [in] size of IR module buffer
-    const char* pIRModule,                          ///< [in] pointer to IR module buffer
-    xe_module_handle_t* phModule                    ///< [out] pointer to handle of module object created
-    );
-
-///////////////////////////////////////////////////////////////////////////////
-/// @brief Creates module ISA object from IR
-/// @remarks
-///   _Analogues_
-///     - 
-/// @returns
-/// - ::XE_RESULT_SUCCESS
-/// - ::XE_RESULT_ERROR_UNINITIALIZED
-/// - ::XE_RESULT_ERROR_INVALID_PARAMETER
-///     + invalid handle for hDevice
-///     + nullptr for pIRModule
-///     + nullptr for pISAModule
-///     + 0 for irSize
-/// - ::XE_RESULT_ERROR_OUT_OF_HOST_MEMORY
-/// - ::XE_RESULT_ERROR_OUT_OF_DEVICE_MEMORY
-xe_result_t __xecall
-  xeCreateModuleISAFromIR(
-    xe_device_handle_t hDevice,                     ///< [in] handle of the device
-    xe_module_ir_type_t irType,                     ///< [in] IR type that is passed in with pIRModule
-    size_t irSize,                                  ///< [in] size of IR module buffer
-    const char* pIRModule,                          ///< [in] pointer to IR module buffer
-    size_t isaSize,                                 ///< [out] size of ISA module buffer
-    const char* pISAModule                          ///< [out] pointer to module ISA
+  xeModuleGetISA(
+    xe_module_handle_t hModule,                     ///< [in] handle of the device
+    uint32_t* pIsaSize,                             ///< [out] size of ISA buffer provided by pModuleISA.
+    char** pModuleISA                               ///< [out] pointer to IL or ISA
     );
 
 ///////////////////////////////////////////////////////////////////////////////
