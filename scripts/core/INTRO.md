@@ -1,4 +1,7 @@
 ${"#"} Introduction
+
+[DO NOT EDIT]: # (generated from /scripts/core/INTRO.md)
+
 The Intel ${Xx} Driver API provides the lowest-level, fine-grain and most explicit control over:
 - Memory Allocation and Cross-Process Sharing
 - Kernel Submission

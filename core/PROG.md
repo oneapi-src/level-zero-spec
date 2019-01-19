@@ -1,9 +1,8 @@
 # Core API Programming Guide
-The following documents the high-level programming models and guidelines.  
 
-@cond DEV
-DO NOT EDIT: generated from /scripts/core/PROG.md
-@endcond
+[DO NOT EDIT]: # (generated from /scripts/core/PROG.md)
+
+The following documents the high-level programming models and guidelines.  
 
 ## Driver and Device
 The following diagram illustrates the hierarchy of devices to the driver:  
