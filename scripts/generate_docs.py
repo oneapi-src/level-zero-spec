@@ -1,16 +1,21 @@
 import os
 import util
 
-def generate_md(path, namespace, name):
-    input = os.path.join("templates", "%s.md.mako"%name)
-    output = os.path.join(path, "%s.md"%namespace.upper())
-    print("Generating %s..."%output)
-    util.makoWrite(input, output,
-        x=namespace,
-        X=namespace.upper(),
-        Xx=namespace.title())
+def generate_md(srcpath, dstpath, namespace):
+    loc = 0
+    util.makePath(dstpath)
+    util.removeFiles(dstpath, "*.md")
+    for fin in util.findFiles(srcpath, "*.md"):
+        fout = os.path.join(dstpath, os.path.basename(fin))
+        print("Generating %s..."%fout)
+        loc += util.makoWrite(fin, fout,
+            x=namespace,
+            X=namespace.upper(),
+            Xx=namespace.title())
+    print("Generated %s lines of markdown.\n"%loc)
 
 def generate_html():
-    print("\nGenerating HTML...")
+    util.removePath("../html")
+    print("Generating HTML...")
     cmdline = "doxygen.exe Doxyfile"
     os.system(cmdline)

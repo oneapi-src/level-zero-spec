@@ -159,20 +159,18 @@ typedef struct _${sub(x, doc['name'])}
 
 %elif re.match(r"function", doc['type']):
 /// @returns
-/// - ::${X}_RESULT_SUCCESS
-%if driver:
-/// - ::${X}_RESULT_ERROR_UNINITIALIZED
-%endif
+///     - ::${X}_RESULT_SUCCESS
+///     - ::${X}_RESULT_ERROR_UNINITIALIZED
 %for item in doc['returns']:
     %if isinstance(item, dict):
     %for key, values in item.items():
-/// - ${sub(x, key, True)}
+///     - ${sub(x, key, True)}
         %for val in values:
-///     + ${sub(x, val, True)}
+///         + ${sub(x, val, True)}
         %endfor
     %endfor
     %else:
-/// - ${sub(x, item, True)}
+///     - ${sub(x, item, True)}
     %endif
 %endfor
 ${x}_result_t __${x}call

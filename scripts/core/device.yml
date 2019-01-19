@@ -1,0 +1,376 @@
+--- #--------------------------------------------------------------------------
+type: header
+desc: "Intel $Xx Driver APIs for Device"
+--- #--------------------------------------------------------------------------
+type: function
+desc: "Reports the number of devices"
+name: $xDeviceGetCount
+analogue:
+    - "**cuDeviceGetCount**"
+params:
+    - type: "uint32_t*"
+      name: count
+      desc: "[out] number of devices available"
+returns:
+    - $X_RESULT_ERROR_INVALID_PARAMETER
+        - "nullptr for count"
+--- #--------------------------------------------------------------------------
+type: function
+desc: "Returns a handle to the device object"
+name: $xDeviceGet
+analogue:
+    - "**cuDeviceGet**"
+    - clGetDeviceIDs
+params:
+    - type: uint32_t
+      name: ordinal
+      desc: "[in] ordinal of device to retrieve"
+    - type: "$x_device_handle_t*"
+      name: phDevice
+      desc: "[out] pointer to handle of device object created"
+returns:
+    - $X_RESULT_ERROR_INVALID_PARAMETER:
+        - "ordinal is out of range reported by $xDeviceGetCount"
+        - "nullptr for phDevice"
+--- #--------------------------------------------------------------------------
+type: enum
+desc: "Supported API versions"
+name: $x_api_version_t
+details:
+    - "API versions contain major and minor attributes, use $X_MAJOR_VERSION and $X_MINOR_VERSION"
+etors:
+    - name: $X_API_VERSION_1_0
+      value: "$X_MAKE_VERSION( 1, 0 )"
+      desc: "1.0"
+--- #--------------------------------------------------------------------------
+type: function
+desc: "Returns the API version supported by the device"
+name: $xDeviceGetApiVersion
+analogue:
+    - "**cuCtxGetApiVersion**"
+params:
+    - type: $x_device_handle_t
+      name: hDevice
+      desc: "[in] handle of the device object"
+    - type: "$x_api_version_t*"
+      name: version
+      desc: "[out] api version"
+returns:
+    - $X_RESULT_ERROR_INVALID_PARAMETER:
+        - "invalid handle for hDevice"
+        - "nullptr for version"
+--- #--------------------------------------------------------------------------
+type: macro
+desc: "API version of $x_device_properties_t"
+name: $X_DEVICE_PROPERTIES_VERSION
+value: "$X_MAKE_VERSION( 1, 0 )"
+--- #--------------------------------------------------------------------------
+type: macro
+desc: "Maximum device name string size"
+name: $X_MAX_DEVICE_NAME
+value: "256"
+--- #--------------------------------------------------------------------------
+type: struct
+desc: "Device properties queried using $xDeviceGetProperties"
+name: $x_device_properties_t
+members:
+    - type: uint32_t
+      name: version
+      desc: "[in] $X_DEVICE_PROPERTIES_VERSION"
+    - type: uint32_t
+      name: vendorId
+      desc: "[out] vendor id from PCI configuration"
+    - type: uint32_t
+      name: deviceId
+      desc: "[out] device id from PCI configuration"
+    - type: uint32_t
+      name: coreClockRate
+      desc: "[out] Clock rate for device core."
+    - type: uint32_t
+      name: memClockRate
+      desc: "[out] Clock rate for device global memory"
+    - type: uint32_t
+      name: memGlobalBusWidth
+      desc: "[out] Bus width between core and memory."
+    - type: uint32_t
+      name: totalLocalMemSize
+      desc: "[out] Total memory size in MB."
+    - type: uint32_t
+      name: l2CacheSize
+      desc: "[out] Device L2 size"
+    - type: uint32_t
+      name: numAsyncComputeEngines
+      desc: "[out] Num asynchronous compute engines"
+    - type: uint32_t
+      name: numComputeCores
+      desc: "[out] Num compute cores"
+    - type: uint32_t
+      name: maxCommandQueuePriority
+      desc: "[out] Max priority for command queues. Higher value is higher priority."
+    - type: char
+      name: "device_name[$X_MAX_DEVICE_NAME]"
+      desc: "[out] Device name"
+--- #--------------------------------------------------------------------------
+type: function
+desc: "Retrieves attributes of the device"
+name: $xDeviceGetProperties
+analogue:
+    - "**cuDeviceGetAttribute**"
+    - cuDeviceGetName
+    - clGetDeviceInfo
+params:
+    - type: $x_device_handle_t
+      name: hDevice
+      desc: "[in] handle of the device object"
+    - type: "$x_device_properties_t*"
+      name: pDeviceProperties
+      desc: "[out] query result for device properties"
+returns:
+    - $X_RESULT_ERROR_INVALID_PARAMETER:
+        - "invalid handle for hDevice"
+        - "nullptr for provided for properties"
+--- #--------------------------------------------------------------------------
+type: macro
+desc: "API version of $x_device_compute_properties_t"
+name: $X_DEVICE_COMPUTE_PROPERTIES_VERSION
+value: "$X_MAKE_VERSION( 1, 0 )"
+--- #--------------------------------------------------------------------------
+type: struct
+desc: "Device compute properties queried using $xDeviceGetComputeProperties"
+name: $x_device_compute_properties_t
+members:
+    - type: uint32_t
+      name: version
+      desc: "[in] $X_DEVICE_COMPUTE_PROPERTIES_VERSION"
+    - type: uint32_t
+      name: maxThreadsPerGroup
+      desc: "[out] Max threads per compute group"
+    - type: uint32_t
+      name: maxGroupDimX
+      desc: "[out] Max threads for X dimension in group"
+    - type: uint32_t
+      name: maxGroupDimY
+      desc: "[out] Max threads for Y dimension in group"
+    - type: uint32_t
+      name: maxGroupDimZ
+      desc: "[out] Max threads for Z dimension in group"
+    - type: uint32_t
+      name: maxDispatchDimX
+      desc: "[out] Max thread groups dispatched for x dimension"
+    - type: uint32_t
+      name: maxDipsatchDimY
+      desc: "[out] Max thread groups dispatched for y dimension"
+    - type: uint32_t
+      name: maxDispatchDimZ
+      desc: "[out] Max thread groups dispatched for z dimension"
+    - type: uint32_t
+      name: maxSharedLocalMemory
+      desc: "[out] Max shared local memory per group. @todo Should this be in device props?"
+    - type: uint32_t
+      name: maxGroupRegisters
+      desc: "[out] Max physical registers available per group"
+    - type: uint32_t
+      name: warpSize
+      desc: "[out] Max threads that can be executed in lock-step. @todo: Should we call this something else?"
+--- #--------------------------------------------------------------------------
+type: function
+desc: "Retrieves compute attributes of the device"
+name: $xDeviceGetComputeProperties
+analogue:
+    - "**cuDeviceGetAttribute**"
+    - clGetDeviceInfo
+params:
+    - type: $x_device_handle_t
+      name: hDevice
+      desc: "[in] handle of the device object"
+    - type: "$x_device_compute_properties_t*"
+      name: pComputeProperties
+      desc: "[out] query result for compute properties"
+returns:
+    - $X_RESULT_ERROR_INVALID_PARAMETER:
+        - "invalid handle for hDevice"
+        - "nullptr for provided for properties"
+--- #--------------------------------------------------------------------------
+type: macro
+desc: "API version of $x_device_memory_properties_t"
+name: $X_DEVICE_MEMORY_PROPERTIES_VERSION
+value: "$X_MAKE_VERSION( 1, 0 )"
+--- #--------------------------------------------------------------------------
+type: enum
+desc: "Memory access capabilities"
+name: $x_memory_access_capabilities_t
+details:
+    - "Supported access capabilities for different types of memory allocations"
+etors:
+    - name: $X_MEMORY_ACCESS
+      value: "$X_BIT( 0 )"
+      desc: "Supports load/store access"
+    - name: $X_MEMORY_ATOMIC_ACCESS
+      value: "$X_BIT( 1 )"
+      desc: "Supports atomic access"
+    - name: $X_MEMORY_CONCURRENT_ACCESS
+      value: "$X_BIT( 2 )"
+      desc: "Supports concurrent access"
+    - name: $X_MEMORY_CONCURRENT_ATOMIC_ACCESS
+      value: "$X_BIT( 3 )"
+      desc: "Supports concurrent atomic access"
+--- #--------------------------------------------------------------------------
+type: struct
+desc: "Device memory properties queried using $xDeviceGetMemoryProperties"
+name: $x_device_memory_properties_t
+members:
+    - type: uint32_t
+      name: version
+      desc: "[in] $X_DEVICE_MEMORY_PROPERTIES_VERSION"
+    - type: bool
+      name: isIntegrated
+      desc: "[out] Host and device share same physical memory."
+    - type: uint32_t
+      name: maxResourceDims1D
+      desc: "[out] Maximum resource dimensions for 1D resources."
+    - type: uint32_t
+      name: maxResourceDims2D
+      desc: "[out] Maximum resource dimensions for 2D resources."
+    - type: uint32_t
+      name: maxResourceDims3D
+      desc: "[out] Maximum resource dimensions for 3D resources."
+    - type: uint32_t
+      name: maxResourceArraySlices
+      desc: "[out] Maximum resource array slices"
+    - type: uint32_t
+      name: hostAllocCapabilities
+      desc: "[out] Supported operations on host memory allocations"
+    - type: uint32_t
+      name: deviceAllocCapabilities
+      desc: "[out] Supported operations on device memory allocations"
+    - type: uint32_t
+      name: sharedAllocCapabilities
+      desc: "[out] Supported operations on shared memory allocations"
+    - type: uint32_t
+      name: sharedCrossDeviceAllocCapabilities
+      desc: "[out] Supported operations on cross-device shared memory allocations"
+--- #--------------------------------------------------------------------------
+type: function
+desc: "Retrieves memory attributes of the device"
+name: $xDeviceGetMemoryProperties
+analogue:
+    - "**cuDeviceGetAttribute**"
+    - cuDeviceTotalMem
+    - clGetDeviceInfo
+params:
+    - type: $x_device_handle_t
+      name: hDevice
+      desc: "[in] handle of the device object"
+    - type: "$x_device_memory_properties_t*"
+      name: pMemProperties
+      desc: "[out] query result for compute properties"
+returns:
+    - $X_RESULT_ERROR_INVALID_PARAMETER:
+        - "invalid handle for hDevice"
+        - "nullptr for provided for properties"
+--- #--------------------------------------------------------------------------
+type: macro
+desc: "API version of $x_device_link_properties_t"
+name: $X_DEVICE_LINK_PROPERTIES_VERSION
+value: "$X_MAKE_VERSION( 1, 0 )"
+--- #--------------------------------------------------------------------------
+type: struct
+desc: "Device properties queried using $xDeviceGetLinkProperties"
+name: $x_device_link_properties_t
+members:
+    - type: uint32_t
+      name: version
+      desc: "[in] $X_DEVICE_LINK_PROPERTIES_VERSION"
+    - type: bool
+      name: isP2PSupported
+      desc: "[out] Is P2P access supported across link"
+    - type: bool
+      name: isAtomicsSupported
+      desc: "[out] Are atomics supported across link"
+    - type: uint32_t
+      name: performanceRank
+      desc: "[out] Relative performance rank of link. @todo Should this be different metric?"
+--- #--------------------------------------------------------------------------
+type: function
+desc: "Retrieves link properties between src and dest devices."
+name: $xDeviceGetLinkProperties
+analogue:
+    - "**cudaDeviceGetP2PAttribute**"
+params:
+    - type: uint32_t
+      name: srcOrdinal
+      desc: "[in] src device ordinal"
+    - type: uint32_t
+      name: dstOrdinal
+      desc: "[in] dst device ordinal"
+    - type: "$x_device_link_properties_t*"
+      name: pLinkProperties
+      desc: "[out] link properties between src and dest devices"
+returns:
+    - $X_RESULT_ERROR_INVALID_PARAMETER:
+        - "invalid ordinal. Use $xDeviceGetCount for valid range."
+        - "nullptr for provided for properties"
+--- #--------------------------------------------------------------------------
+type: function
+desc: "Queries if one device can directly access peer device allocations"
+name: $xDeviceCanAccessPeer
+analogue:
+    - "**cudaDeviceCanAccessPeer**"
+params:
+    - type: "const $x_device_handle_t"
+      name: hDevice
+      desc: "[in] handle of the device performing the access"
+    - type: "const $x_device_handle_t"
+      name: hPeerDevice
+      desc: "[in] handle of the peer device with the allocation"
+    - type: "bool*"
+      name: value
+      desc: "[out] returned access capability"
+returns:
+    - $X_RESULT_ERROR_INVALID_PARAMETER:
+        - "invalid handle for hDevice"
+        - "invalid handle for hPeerDevice"
+        - "nullptr for value"
+--- #--------------------------------------------------------------------------
+type: function
+desc: "Enables direct access to peer device allocations"
+name: $xDeviceEnablePeerAccess
+details:
+    - "The access is uni-directional and only enables access from the device to allocations on the peer device."
+    - "A separate call is required to enable access from the peer device to this device.
+      @todo document any limits on number of active p2p connections
+      @todo document behavior if link is already enabled"
+analogue:
+    - "**cudaDeviceEnablePeerAccess**"
+params:
+    - type: "const $x_device_handle_t"
+      name: hDevice
+      desc: "[in] handle of the device performing the access"
+    - type: "const $x_device_handle_t"
+      name: hPeerDevice
+      desc: "[in] handle of the peer device"
+returns:
+    - $X_RESULT_ERROR_INVALID_PARAMETER:
+        - "invalid handle for hDevice"
+        - "invalid handle for hPeerDevice"
+        - "devices do not support peer access"
+--- #--------------------------------------------------------------------------
+type: function
+desc: "Disables direct access to peer device allocations"
+name: $xDeviceDisablePeerAccess
+details:
+    - "@todo document behavior if link is not enabled"
+analogue:
+    - "**cudaDeviceDisablePeerAccess**"
+params:
+    - type: "const $x_device_handle_t"
+      name: hDevice
+      desc: "[in] handle of the device performing the access"
+    - type: "const $x_device_handle_t"
+      name: hPeerDevice
+      desc: "[in] handle of the peer device"
+returns:
+    - $X_RESULT_ERROR_INVALID_PARAMETER:
+        - "invalid handle for hDevice"
+        - "invalid handle for hPeerDevice"
+        - "devices do not support peer access"

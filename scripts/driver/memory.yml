@@ -1,8 +1,0 @@
---- #--------------------------------------------------------------------------
-type: header
-desc: "Intel $Xx Driver APIs for Memory"
---- #--------------------------------------------------------------------------
-type: macro
-desc: "@todo do we need driver memory APIs?"
-name: "$X_DRIVER_MEMORY_APIS"
-value: "0"

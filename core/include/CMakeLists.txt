@@ -1,0 +1,18 @@
+# DO NOT EDIT: Generated from "scripts/templates/CMakeLists.txt.mako"
+target_sources(xe
+    PRIVATE
+    ${CMAKE_CURRENT_SOURCE_DIR}/CMakeLists.txt
+    ${CMAKE_CURRENT_SOURCE_DIR}/xe_cmdlist.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/xe_cmdqueue.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/xe_common.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/xe_copy.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/xe_device.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/xe_driver.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/xe_event.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/xe_fence.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/xe_memory.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/xe_module.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/xe_residency.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/xe_resource.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/xe_semaphore.h
+)

@@ -19,8 +19,8 @@ option(${PROJECT_NAME}_build_tests "Build unit tests." ON)
 
 add_subdirectory(${THIRD_PARTY_DIR})
 
-add_subdirectory(driver)
-add_subdirectory(runtime)
+add_subdirectory(core)
+add_subdirectory(extended)
 
 if (${PROJECT_NAME}_build_tests)
     add_subdirectory(tests)

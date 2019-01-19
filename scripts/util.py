@@ -1,11 +1,11 @@
 import os
+import shutil
 import re
 import configparser
+import glob
 import json
 import yaml
 from mako.template import Template
-import time
-import traceback
 
 """
     safely checks if path/file exists
@@ -15,6 +15,36 @@ def exists(path):
         return True
     else:
         return False
+
+"""
+    create path if it doesn't exist
+"""
+def makePath(path):
+    if not exists(path):
+        os.makedirs(path)
+
+"""
+    remove directory and all contents
+"""
+def removePath(path):
+    if exists(path):
+        shutil.rmtree(path)
+
+"""
+    returns a list of files in path matching pattern
+"""
+def findFiles(path, pattern):
+    if exists(path):
+        return glob.glob(os.path.join(path, pattern))
+    else:
+        return []
+
+"""
+    removes all files in path matching pattern
+"""
+def removeFiles(path, pattern):
+    for f in findFiles(path, pattern):
+        os.remove(f)
 
 """
     read from ini file, returns config obj
@@ -67,23 +97,5 @@ def makoWrite(inpath, outpath, **args):
         fout.write(rendered)
 
     return len(rendered.splitlines())
-
-"""
-    global logfile object
-"""
-def log(msg, echo=False):
-    timestamp = time.strftime("[%y-%m-%d.%H:%M:%S]", time.localtime())
-    msg = "%s %s\n"%(timestamp,msg)
-    with open("run.log", 'a') as fout:
-        fout.write(msg)
-    if echo:
-        print(msg)
-
-"""
-    returns an exception message
-"""
-def msgException(msg=""):
-    exc_info = sys.exc_info()
-    return "Exception caught: %s\n%s\n%s"%(exc_info[1], traceback.extract_tb(exc_info[2]), msg)
 
 # END OF FILE

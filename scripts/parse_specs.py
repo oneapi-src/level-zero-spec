@@ -1,6 +1,5 @@
 import os
 import util
-import glob
 
 """
     Reads each YML file and extracts data
@@ -8,12 +7,10 @@ import glob
 """
 def parse(path):
     specs = []
-    files = glob.glob(os.path.join(path,"*.yml"))
-    for f in files:
+    for f in util.findFiles(path, "*.yml"):
         print("Parsing %s..."%f)
         specs.append({
             'name': os.path.splitext(os.path.basename(f))[0],
             'docs': util.yamlRead(f)
         })
-    #util.jsonWrite("specs.json", specs);
     return specs

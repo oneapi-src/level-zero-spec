@@ -1,0 +1,186 @@
+--- #--------------------------------------------------------------------------
+type: header
+desc: "Intel $Xx Driver APIs for Command Queue"
+--- #--------------------------------------------------------------------------
+type: macro
+desc: API version of $x_command_queue_desc_t
+name: $X_COMMAND_QUEUE_DESC_VERSION
+value: "$X_MAKE_VERSION( 1, 0 )"
+--- #--------------------------------------------------------------------------
+type: enum
+desc: "Supported command queue creation flags"
+name: $x_command_queue_flags_t
+etors:
+    - name: $X_COMMAND_QUEUE_FLAG_DEFAULT
+      value: "0"
+      desc: "implicit default behavior; uses driver-based heuristics"
+    - name: $X_COMMAND_QUEUE_FLAG_SYNCHRONOUS
+      desc: "GPU execution always completes immediately on enqueue; CPU thread is blocked using wait on implicit synchronization object"
+    - name: $X_COMMAND_QUEUE_FLAG_ASYNCHRONOUS
+      desc: "GPU execution is scheduled and will complete in future; explicit synchronization object must be used to determine completeness"
+--- #--------------------------------------------------------------------------
+type: struct
+desc: "Command Queue descriptor"
+name: $x_command_queue_desc_t
+members:
+    - type: uint32_t
+      name: version
+      desc: "[in] $X_COMMAND_QUEUE_DESC_VERSION"
+    - type: $x_command_queue_flags_t
+      name: flags
+      desc: "[in] creation flags"
+    - type: uint32_t
+      name: ordinal
+      desc: "[in] must be less than value returned for $x_device_properties_t.numAsyncComputeEngines"
+--- #--------------------------------------------------------------------------
+type: function
+desc: "Creates a command queue on a device"
+name: $xCommandQueueCreate
+analogue:
+    - "**clCreateCommandQueue**"
+    - cuCtxCreate
+    - cuCtxGetCurrent
+params:
+    - type: $x_device_handle_t
+      name: hDevice
+      desc: "[in] handle of the device object"
+    - type: "const $x_command_queue_desc_t*"
+      name: desc
+      desc: "[in] pointer to command queue descriptor"
+    - type: "$x_command_queue_handle_t*"
+      name: phCommandQueue
+      desc: "[out] pointer to handle of command queue object created"
+returns:
+    - $X_RESULT_ERROR_INVALID_PARAMETER:
+        - "invalid handle for hDevice"
+        - "nullptr for desc"
+        - "nullptr for phCommandQueue"
+    - $X_RESULT_ERROR_OUT_OF_HOST_MEMORY
+    - $X_RESULT_ERROR_OUT_OF_DEVICE_MEMORY
+--- #--------------------------------------------------------------------------
+type: function
+desc: "Destroys a command queue"
+name: $xCommandQueueDestroy
+analogue:
+    - "**clReleaseCommandQueue**"
+    - cuCtxDestroy
+params:
+    - type: $x_command_queue_handle_t
+      name: hCommandQueue
+      desc: "[in] handle of command queue object to destroy"
+returns:
+    - $X_RESULT_ERROR_INVALID_PARAMETER:
+        - invalid handle for hCommandQueue
+--- #--------------------------------------------------------------------------
+type: enum
+desc: "Supported command queue parameters"
+name: $x_command_queue_parameter_t
+etors:
+    - name: $X_COMMAND_QUEUE_PARAMETER_PRIORITY
+      value: "1"
+      desc: "see $x_command_queue_priority_t"
+    - name: $X_COMMAND_QUEUE_PARAMETER_CACHE_CONFIG
+      desc: "see $x_command_queue_cacheconfig_t"
+--- #--------------------------------------------------------------------------
+type: enum
+desc: "Supported command queue priorities"
+name: $x_command_queue_priority_t
+etors:
+    - name: $X_COMMAND_QUEUE_PRIORITY_NORMAL
+      value: "0"
+      desc: "[default] normal priority"
+    - name: $X_COMMAND_QUEUE_PRIORITY_LOW
+      desc: "lower priority than normal"
+    - name: $X_COMMAND_QUEUE_PRIORITY_HIGH
+      desc: "higher priority than normal"
+--- #--------------------------------------------------------------------------
+type: enum
+desc: "Supported command queue cache configurations"
+name: $x_command_queue_cacheconfig_t
+etors:
+    - name: $X_COMMAND_QUEUE_CACHECONFIG_BIAS_NONE
+      desc: "[default] no cache configuration bias; uses driver-based heuristics"
+--- #--------------------------------------------------------------------------
+type: function
+desc: "Sets a command queue's parameter"
+name: $xCommandQueueSetParameter
+analogue:
+    - cuCtxSetCacheConfig
+    - cuCtxSetLimit
+    - cuCtxSetSharedMemConfig
+params:
+    - type: $x_command_queue_handle_t
+      name: hCommandQueue
+      desc: "[in] handle of command queue"
+    - type: $x_command_queue_parameter_t
+      name: parameter
+      desc: "[in] parameter to change"
+    - type: uint32_t
+      name: value
+      desc: "[in] value of attribute"
+returns:
+    - $X_RESULT_ERROR_INVALID_PARAMETER:
+        - "invalid handle for hCommandQueue"
+        - "invalid value for attribute"
+        - "invalid value for value"
+--- #--------------------------------------------------------------------------
+type: function
+desc: "Retrieves a command queue's parameter"
+name: $xCommandQueueGetParameter
+analogue:
+    - cuCtxGetCacheConfig
+    - cuCtxGetLimit
+    - cuCtxGetSharedMemConfig
+    - cuCtxGetStreamPriorityRange
+params:
+    - type: $x_command_queue_handle_t
+      name: hCommandQueue
+      desc: "[in] handle of command queue"
+    - type: $x_command_queue_parameter_t
+      name: parameter
+      desc: "[in] parameter to change"
+    - type: "uint32_t*"
+      name: value
+      desc: "[out] value of attribute"
+returns:
+    - $X_RESULT_ERROR_INVALID_PARAMETER:
+        - "invalid handle for hCommandQueue"
+        - "invalid value for attribute"
+        - "nullptr for value"
+--- #--------------------------------------------------------------------------
+type: function
+desc: "Resets all command queue parameters to default state"
+name: $xCommandQueueResetParameters
+params:
+    - type: $x_command_queue_handle_t
+      name: hCommandQueue
+      desc: "[in] handle of the command queue"
+returns:
+    - $X_RESULT_ERROR_INVALID_PARAMETER:
+       - "invalid handle for hCommandQueue"
+--- #--------------------------------------------------------------------------
+type: function
+desc: "Enqueues a command list into a command queue"
+name: $xCommandQueueEnqueueCommandList
+params:
+    - type: $x_command_queue_handle_t
+      name: hCommandQueue
+      desc: "[in] handle of the command queue"
+    - type: $x_command_list_handle_t
+      name: hCommandList
+      desc: "[in] handle of the command list to execute"
+returns:
+    - $X_RESULT_ERROR_INVALID_PARAMETER:
+       - "invalid handle for hCommandQueue"
+       - "invalid handle for hCommandList"
+--- #--------------------------------------------------------------------------
+type: function
+desc: "Synchronizes a command queue"
+name: $xCommandQueueSynchronize
+params:
+    - type: $x_command_queue_handle_t
+      name: hCommandQueue
+      desc: "[in] handle of the command queue"
+returns:
+    - $X_RESULT_ERROR_INVALID_PARAMETER:
+       - "invalid handle for hCommandQueue"
