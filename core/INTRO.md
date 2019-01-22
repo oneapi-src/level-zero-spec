@@ -9,10 +9,20 @@ The Intel Xe Driver API provides the lowest-level, fine-grain and most explicit 
 - Synchronization Primitives
 - Metrics Reporting
 
-The Xe driver API is implemented within the xe.dll, which is copied on the system during installation of the device driver.
-
 Most applications should not require the additional control provided by the driver APIs.  
 The driver APIs are intended for providing explicit controls needed by higher-level runtime APIs and libraries.
+
+While heavily influenced by other low-level APIs, such as OpenCL, the driver APIs are designed to evolve independently.
+While heavily influenced by GPU archtiecture, the driver APIs are designed to be supportable across different device types, such as CPUs or FPGAs.
+
+## Cross-Device Support
+In order to both expose the full capabilities of GPUs and remain supportable by other devices, the API definition is sub-divided into "Core" and "Extended".  
+"Core" represents APIs that all fully cross-device while "Extended" represents APIs that are device-specific.
+All implementations must support "Core" APIs while "Extended" APIs are optional.
+An implementation will return "::XE_ERROR_UNSUPPORTED" for any feature request not supported by that device.
+
+## Installation
+The Xe driver API is implemented within the xe.dll, which is copied on the system during installation of the device driver.
 
 ## Naming Convention
 - all driver entry points are prefixed with xe
