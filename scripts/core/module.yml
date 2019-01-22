@@ -75,8 +75,8 @@ returns:
     - $X_RESULT_ERROR_OUT_OF_DEVICE_MEMORY
 --- #--------------------------------------------------------------------------
 type: function
-desc: "Releases module"
-name: $xReleaseModule
+desc: "Destroys module"
+name: $xDestroyModule
 analogue:
     - "**cuModuleUnload**"
 params:
@@ -134,8 +134,8 @@ returns:
         - "invalid name for pFunctionName"
 --- #--------------------------------------------------------------------------
 type: function
-desc: "Releases Function object"
-name: $xReleaseFunction
+desc: "Destroys Function object"
+name: $xDestroyFunction
 analogue:
     - "**cuModuleUnload**"
     - "cuCtxGetCurrent"
@@ -148,8 +148,8 @@ returns:
         - "invalid handle for hFunction"
 --- #--------------------------------------------------------------------------
 type: function
-desc: "Create Function arguments buffer needed to pass arguments to a function."
-name: $xCreateFunctionArgsBuffer
+desc: "Create Function arguments needed to pass arguments to a function."
+name: $xCreateFunctionArgs
 analogue:
     - ""
 params:
@@ -165,8 +165,8 @@ returns:
         - "nullptr for phFunctionArgs"
 --- #--------------------------------------------------------------------------
 type: function
-desc: "Releases Function arguments buffer object"
-name: $xReleaseFunctionArgsBuffer
+desc: "Destroys Function arguments object"
+name: $xDestroyFunctionArgs
 analogue:
     - ""
 params:
@@ -196,7 +196,7 @@ params:
     - type: "const void*"
       name: pArgValue
       desc: "[in] argument value represented as matching arg type"
-    - type: "x_function_args_handle_t"
+    - type: "$x_function_args_handle_t"
       name: hFunctionArgs
       desc: "[in/out] handle of the function arguments buffer object"
 returns:
@@ -254,7 +254,7 @@ params:
     - type: "$x_function_handle_t"
       name: hFunction
       desc: "[in] handle of the function object"
-    - type: "x_function_args_handle_t"
+    - type: "$x_function_args_handle_t"
       name: pFunctionArgs
       desc: "[in] pointer to function arguments buffer."
     - type: "uint32_t"

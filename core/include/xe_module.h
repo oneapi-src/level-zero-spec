@@ -103,7 +103,7 @@ xe_result_t __xecall
     );
 
 ///////////////////////////////////////////////////////////////////////////////
-/// @brief Releases module
+/// @brief Destroys module
 /// 
 /// @remarks
 ///   _Analogues_
@@ -115,7 +115,7 @@ xe_result_t __xecall
 ///     - ::XE_RESULT_ERROR_INVALID_PARAMETER
 ///         + invalid handle for hModule
 xe_result_t __xecall
-  xeReleaseModule(
+  xeDestroyModule(
     xe_module_handle_t hModule                      ///< [in] handle of the module
     );
 
@@ -164,7 +164,7 @@ xe_result_t __xecall
     );
 
 ///////////////////////////////////////////////////////////////////////////////
-/// @brief Releases Function object
+/// @brief Destroys Function object
 /// 
 /// @remarks
 ///   _Analogues_
@@ -177,13 +177,12 @@ xe_result_t __xecall
 ///     - ::XE_RESULT_ERROR_INVALID_PARAMETER
 ///         + invalid handle for hFunction
 xe_result_t __xecall
-  xeReleaseFunction(
+  xeDestroyFunction(
     xe_function_handle_t hFunction                  ///< [in] handle of the function object
     );
 
 ///////////////////////////////////////////////////////////////////////////////
-/// @brief Create Function arguments buffer needed to pass arguments to a
-///        function.
+/// @brief Create Function arguments needed to pass arguments to a function.
 /// 
 /// @remarks
 ///   _Analogues_
@@ -196,13 +195,13 @@ xe_result_t __xecall
 ///         + invalid handle for hFunction
 ///         + nullptr for phFunctionArgs
 xe_result_t __xecall
-  xeCreateFunctionArgsBuffer(
+  xeCreateFunctionArgs(
     xe_function_handle_t hFunction,                 ///< [in] handle of the function
     xe_function_args_handle_t* phFunctionArgs       ///< [out] handle of the Function arguments object
     );
 
 ///////////////////////////////////////////////////////////////////////////////
-/// @brief Releases Function arguments buffer object
+/// @brief Destroys Function arguments object
 /// 
 /// @remarks
 ///   _Analogues_
@@ -214,7 +213,7 @@ xe_result_t __xecall
 ///     - ::XE_RESULT_ERROR_INVALID_PARAMETER
 ///         + invalid handle for hFunctionArgs
 xe_result_t __xecall
-  xeReleaseFunctionArgsBuffer(
+  xeDestroyFunctionArgs(
     xe_function_args_handle_t hFunctionArgs         ///< [in] handle of the function arguments buffer object
     );
 
@@ -241,7 +240,7 @@ xe_result_t __xecall
     uint32_t argIndex,                              ///< [in] argument index in range [0, num args - 1]
     size_t argSize,                                 ///< [in] size of argument type
     const void* pArgValue,                          ///< [in] argument value represented as matching arg type
-    x_function_args_handle_t hFunctionArgs          ///< [in/out] handle of the function arguments buffer object
+    xe_function_args_handle_t hFunctionArgs         ///< [in/out] handle of the function arguments buffer object
     );
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -299,7 +298,7 @@ xe_result_t __xecall
   xeCommandListEncodeDispatchFunction(
     xe_command_list_handle_t hCommandList,          ///< [in] handle of the command list
     xe_function_handle_t hFunction,                 ///< [in] handle of the function object
-    x_function_args_handle_t pFunctionArgs,         ///< [in] pointer to function arguments buffer.
+    xe_function_args_handle_t pFunctionArgs,        ///< [in] pointer to function arguments buffer.
     uint32_t groupCountX,                           ///< [in] width of group in X dimension
     uint32_t groupCountY,                           ///< [in] width of group in Y dimension
     uint32_t groupCountZ,                           ///< [in] width of group in Z dimension
