@@ -243,8 +243,8 @@ returns:
         - "null ptr for pValue"
 --- #--------------------------------------------------------------------------
 type: function
-desc: "Dispatch function to queue."
-name: $xDispatchFunction
+desc: "Dispatch function instances given group and dispatch counts."
+name: $xCommandListEncodeDispatchFunction
 analogue:
     - "**cuLaunchKernel**"
 params:

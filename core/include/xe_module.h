@@ -115,7 +115,7 @@ xe_result_t __xecall
 ///     - ::XE_RESULT_ERROR_INVALID_PARAMETER
 ///         + invalid handle for hModule
 xe_result_t __xecall
-  xeReleaseModulef(
+  xeReleaseModule(
     xe_module_handle_t hModule                      ///< [in] handle of the module
     );
 
@@ -280,7 +280,7 @@ xe_result_t __xecall
     );
 
 ///////////////////////////////////////////////////////////////////////////////
-/// @brief Dispatch function to queue.
+/// @brief Dispatch function instances given group and dispatch counts.
 /// 
 /// @remarks
 ///   _Analogues_
@@ -296,7 +296,7 @@ xe_result_t __xecall
 ///         + invalid group count range for dispatch
 ///         + invalid dispatch count range for dispatch
 xe_result_t __xecall
-  xeDispatchFunction(
+  xeCommandListEncodeDispatchFunction(
     xe_command_list_handle_t hCommandList,          ///< [in] handle of the command list
     xe_function_handle_t hFunction,                 ///< [in] handle of the function object
     x_function_args_handle_t pFunctionArgs,         ///< [in] pointer to function arguments buffer.
