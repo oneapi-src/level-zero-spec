@@ -12,7 +12,7 @@ etors:
 --- #--------------------------------------------------------------------------
 type: function
 desc: "Initialize the $Xx Driver API and must be called before any other API function."
-name: $xInit
+name: $xDriverInit
 details: 
     - "If this function is not called then all other functions will return $X_RESULT_ERROR_UNINITIALIZED."
 analogue:

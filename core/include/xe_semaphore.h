@@ -62,7 +62,7 @@ typedef struct _xe_semaphore_desc_t
 } xe_semaphore_desc_t;
 
 ///////////////////////////////////////////////////////////////////////////////
-/// @brief Creates an semaphore object.
+/// @brief Creates an semaphore object on the device.
 /// @returns
 ///     - ::XE_RESULT_SUCCESS
 ///     - ::XE_RESULT_ERROR_UNINITIALIZED
@@ -73,7 +73,7 @@ typedef struct _xe_semaphore_desc_t
 ///     - ::XE_RESULT_ERROR_OUT_OF_HOST_MEMORY
 ///     - ::XE_RESULT_ERROR_OUT_OF_DEVICE_MEMORY
 xe_result_t __xecall
-  xeSemaphoreCreate(
+  xeDeviceCreateSemaphore(
     xe_device_handle_t hDevice,                     ///< [in] handle of the device
     const xe_semaphore_desc_t* desc,                ///< [in] pointer to semaphore descriptor
     xe_semaphore_handle_t* phSemaphore              ///< [out] pointer to handle of semaphore object created
@@ -81,6 +81,9 @@ xe_result_t __xecall
 
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Deletes an semaphore object.
+/// @details
+///     - The application is responsible for making sure the GPU is not
+///       currently referencing the semaphore before it is deleted
 /// @returns
 ///     - ::XE_RESULT_SUCCESS
 ///     - ::XE_RESULT_ERROR_UNINITIALIZED

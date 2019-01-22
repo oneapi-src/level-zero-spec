@@ -19,7 +19,7 @@ While heavily influenced by GPU archtiecture, the driver APIs are designed to be
 In order to both expose the full capabilities of GPUs and remain supportable by other devices, the API definition is sub-divided into "Core" and "Extended".  
 "Core" represents APIs that all fully cross-device while "Extended" represents APIs that are device-specific.
 All implementations must support "Core" APIs while "Extended" APIs are optional.
-An implementation will return "::XE_ERROR_UNSUPPORTED" for any feature request not supported by that device.
+An implementation will return "::XE_RESULT_ERROR_UNSUPPORTED" for any feature request not supported by that device.
 
 ## Installation
 The Xe driver API is implemented within the xe.dll, which is copied on the system during installation of the device driver.

@@ -79,9 +79,12 @@ etors:
       value: "0"
       desc: "success"
     - name: $X_RESULT_NOT_READY
+      value: "1"
       desc: "synchronization primitive not signaled"
     - name: $X_RESULT_ERROR_UNINITIALIZED
       desc: "driver is not initialized"
+    - name: $X_RESULT_ERROR_UNSUPPORTED
+      desc: "device does not support feature requested"
     - name: $X_RESULT_ERROR_INVALID_PARAMETER
       desc: "invalid parameter provided"
     - name: $X_RESULT_ERROR_OUT_OF_HOST_MEMORY
@@ -90,4 +93,4 @@ etors:
       desc: "insufficient device memory to satisfy call"
     - name: $X_RESULT_ERROR_UNKNOWN
       value: "0x7fffffff"
-      desc: "internal error"
+      desc: "unknown or internal error"

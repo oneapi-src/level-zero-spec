@@ -58,7 +58,7 @@ typedef struct _xe_fence_desc_t
 } xe_fence_desc_t;
 
 ///////////////////////////////////////////////////////////////////////////////
-/// @brief Creates a fence object.
+/// @brief Creates a fence object on the device's command queue.
 /// @remarks
 ///   _Analogues_
 ///     - **cuEventCreate**
@@ -72,7 +72,7 @@ typedef struct _xe_fence_desc_t
 ///     - ::XE_RESULT_ERROR_OUT_OF_HOST_MEMORY
 ///     - ::XE_RESULT_ERROR_OUT_OF_DEVICE_MEMORY
 xe_result_t __xecall
-  xeFenceCreate(
+  xeCommandQueueCreateFence(
     xe_command_queue_handle_t hCommandQueue,        ///< [in] handle of command queue
     const xe_fence_desc_t* desc,                    ///< [in] pointer to fence descriptor
     xe_fence_handle_t* phFence                      ///< [out] pointer to handle of fence object created
@@ -80,6 +80,9 @@ xe_result_t __xecall
 
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Deletes a fence object.
+/// @details
+///     - The application is responsible for making sure the GPU is not
+///       currently referencing the fence before it is deleted
 /// @remarks
 ///   _Analogues_
 ///     - **cuEventDestroy**
@@ -95,7 +98,7 @@ xe_result_t __xecall
     );
 
 ///////////////////////////////////////////////////////////////////////////////
-/// @brief Encodes a signal of the fence into a command queue.
+/// @brief Enqueues a signal of the fence into its command queue.
 /// @remarks
 ///   _Analogues_
 ///     - **cuEventRecord**
@@ -107,7 +110,7 @@ xe_result_t __xecall
 ///         + fence is in signaled state
 ///         + fence is enqueued in another command queue
 xe_result_t __xecall
-  xeEnqueueSignalFence(
+  xeFenceEnqueueSignal(
     xe_fence_handle_t hFence                        ///< [in] handle of the fence
     );
 
@@ -123,7 +126,7 @@ xe_result_t __xecall
 ///         + invalid handle for hFence
 ///         + fence is not enqueued in a command queue
 xe_result_t __xecall
-  xeWaitOnFence(
+  xeHostWaitOnFence(
     xe_fence_handle_t hFence                        ///< [in] handle of the fence
     );
 
@@ -137,7 +140,7 @@ xe_result_t __xecall
 ///         + any invalid handle in phFences
 ///         + any fence is not enqueued in a command queue
 xe_result_t __xecall
-  xeWaitOnMultipleFences(
+  xeHostWaitOnMultipleFences(
     uint32_t numFences,                             ///< [in] number of fences in hFences
     xe_fence_handle_t* phFences                     ///< [in] pointer to array of handles of the fences
     );
@@ -181,7 +184,7 @@ xe_result_t __xecall
     );
 
 ///////////////////////////////////////////////////////////////////////////////
-/// @brief Reset a fence back to the not signaled state
+/// @brief Reset a fence back to the not signaled state.
 /// @returns
 ///     - ::XE_RESULT_SUCCESS
 ///     - ::XE_RESULT_ERROR_UNINITIALIZED

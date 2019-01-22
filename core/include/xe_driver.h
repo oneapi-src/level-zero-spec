@@ -60,7 +60,7 @@ typedef enum _xe_init_flags_t
 ///         + invalid value for flags
 ///     - ::XE_RESULT_ERROR_OUT_OF_HOST_MEMORY
 xe_result_t __xecall
-  xeInit(
+  xeDriverInit(
     xe_init_flags_t flags                           ///< [in] initialization flags
     );
 

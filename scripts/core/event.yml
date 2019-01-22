@@ -33,8 +33,8 @@ members:
       desc: "[in] creation flags"
 --- #--------------------------------------------------------------------------
 type: function
-desc: "Creates an event object."
-name: $xEventCreate
+desc: "Creates an event object on the device."
+name: $xDeviceCreateEvent
 analogue:
     - "**clCreateUserEvent**"
     - cuEventCreate
@@ -57,8 +57,8 @@ returns:
     - $X_RESULT_ERROR_OUT_OF_DEVICE_MEMORY
 --- #--------------------------------------------------------------------------
 type: function
-desc: "Creates an event object from existing memory."
-name: $xEventPlacement
+desc: "Creates an event object on the device from existing memory."
+name: $xDevicePlaceEvent
 params:
     - type: $x_device_handle_t
       name: hDevice
@@ -83,6 +83,8 @@ returns:
 type: function
 desc: "Deletes an event object."
 name: $xEventDestroy
+details:
+    - "The application is responsible for making sure the GPU is not currently referencing the event before it is deleted"
 analogue:
      - "**cuEventDestroy**"
      - clReleaseEvent
@@ -176,7 +178,7 @@ returns:
 --- #--------------------------------------------------------------------------
 type: function
 desc: "Signals a event from host."
-name: $xSignalEvent
+name: $xHostSignalEvent
 analogue:
     - clSetUserEventStatus
 params:
@@ -191,7 +193,7 @@ returns:
 --- #--------------------------------------------------------------------------
 type: function
 desc: "The current host thread waits on an event from a device signal."
-name: $xWaitOnEvent
+name: $xHostWaitOnEvent
 analogue:
     - "**cuEventSynchronize**"
 params:
@@ -204,8 +206,8 @@ returns:
         - "event creation flag did not set $X_EVENT_FLAG_DEVICE_TO_HOST or $X_EVENT_FLAG_DEVICE_TO_DEVICE"
 --- #--------------------------------------------------------------------------
 type: function
-desc: "Signals multiple events from host. @todo move to runtime?"
-name: $xSignalMultipleEvents
+desc: "Signals multiple events from host."
+name: $xHostSignalMultipleEvents
 params:
     - type: uint32_t
       name: numEvents
@@ -222,7 +224,7 @@ returns:
 --- #--------------------------------------------------------------------------
 type: function
 desc: "The current host thread waits on multiple events from a device signal."
-name: $xWaitOnMultipleEvents
+name: $xHostWaitOnMultipleEvents
 analogue:
     - clWaitForEvents
 params:

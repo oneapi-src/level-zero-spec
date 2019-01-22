@@ -19,17 +19,17 @@ ${"###"} Device
 - More than one device may be available in the system.
 
 ${"###"} Initialization
-The driver API must be initizalized by calling ${x}Init before any other function.
+The driver API must be initizalized by calling ${x}DriverInit before any other function.
 This function will query the available physical adapters in the system and make this information available to all threads in the current process.
 
 The following sample code demonstrates a basic initialization sequence:
 ```c
     // Initialize the driver
-    ${x}Init(${X}_INIT_FLAG_NONE);
+    ${x}DriverInit(${X}_INIT_FLAG_NONE);
 
     // Get number of devices supporting ${Xx}
     uint32_t deviceCount = 0;
-    ${x}DeviceGetCount(&deviceCount);
+    ${x}DriverGetDeviceCount(&deviceCount);
     if(0 == deviceCount)
     {
         printf("There is no device supporting ${Xx}.\n");
@@ -38,7 +38,7 @@ The following sample code demonstrates a basic initialization sequence:
 
     // Get the handle for device 0
     ${x}_device_handle_t hDevice;
-    ${x}DeviceGet(0, &hDevice);
+    ${x}DriverGetDevice(0, &hDevice);
     ...
 ```
 
@@ -100,7 +100,7 @@ The following sample code demonstrates a basic sequence for creation of command 
         ${X}_COMMAND_QUEUE_FLAG_DEFAULT
     };
     ${x}_command_queue_handle_t hCommandQueue;
-    ${x}CommandQueueCreate(hDevice, &commandQueueDesc, &hCommandQueue);
+    ${x}DeviceCreateCommandQueue(hDevice, &commandQueueDesc, &hCommandQueue);
 
     // Create a command list
     ${x}_command_list_desc_t commandListDesc = {
@@ -108,7 +108,7 @@ The following sample code demonstrates a basic sequence for creation of command 
         ${X}_COMMAND_LIST_FLAG_NONE
     };
     ${x}_command_list_handle_t hCommandList;
-    ${x}CommandListCreate(hDevice, &commandListDesc, &hCommandList);
+    ${x}DeviceCreateCommandList(hDevice, &commandListDesc, &hCommandList);
     ...
 ```
 
@@ -149,15 +149,15 @@ The following sample code demonstrates a sequence for creation, submission and q
         ${X}_FENCE_FLAG_NONE
     };
     ${x}_fence_handle_t hFence;
-    ${x}FenceCreate(hCommandQueue, &fenceDesc, &hFence);
+    ${x}DeviceCreateFence(hCommandQueue, &fenceDesc, &hFence);
 
     // Enqueue a signal of the fence into the command queue
-    ${x}EnqueueSignalFence(hFence);
+    ${x}FenceEnqueueSignal(hFence);
 
     // Wait for fence to be signaled
     if(${X}_RESULT_SUCCESS != ${x}FenceQueryStatus(hFence)
     {
-        ${x}FenceWait(hFence);
+        ${x}HostWaitOnFence(hFence);
     }
 
     ${x}FenceReset(hFence);
@@ -181,7 +181,7 @@ The following sample code demonstrates a sequence for creation and submission of
         ${X}_EVENT_FLAG_NONE
     };
     ${x}_event_handle_t hEvent;
-    ${x}EventCreate(hDevice, &eventDesc, &hEvent);
+    ${x}DeviceCreateEvent(hDevice, &eventDesc, &hEvent);
 
     // Encode a wait on an event into a command list
     ${x}CommandListEncodeWaitOnEvent(hCommandList, hEvent);
@@ -190,7 +190,7 @@ The following sample code demonstrates a sequence for creation and submission of
     ${x}CommandQueueEnqueueCommandList(hCommandQueue, hCommandList);
 
     // Signal the device
-    ${x}EventSignal(hEvent);
+    ${x}HostSignalEvent(hEvent);
     ...
 ```
 
@@ -209,7 +209,7 @@ The following sample code demonstrates a sequence for creation and submission of
         ${X}_SEMAPHORE_FLAG_NONE
     };
     ${x}_semaphore_handle_t hSemaphore;
-    ${x}EventCreate(hDevice, &semaphoreDesc, &hSemaphore);
+    ${x}DeviceCreateSemaphore(hDevice, &semaphoreDesc, &hSemaphore);
 
     // Encode a wait on an semaphore into a command list
     ${x}CommandListEncodeSemaphoreWait(hCommandList0, hSemaphore,

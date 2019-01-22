@@ -27,8 +27,8 @@ members:
       desc: "[in] creation flags"
 --- #--------------------------------------------------------------------------
 type: function
-desc: "Creates a command list for submitting commands to a command queue."
-name: $xCommandListCreate
+desc: "Creates a command list on the device for submitting commands to any command queue."
+name: $xDeviceCreateCommandList
 params:
     - type: $x_device_handle_t
       name: hDevice
@@ -48,8 +48,10 @@ returns:
     - $X_RESULT_ERROR_OUT_OF_DEVICE_MEMORY
 --- #--------------------------------------------------------------------------
 type: function
-desc: "Destroys a command list"
+desc: "Destroys a command list."
 name: $xCommandListDestroy
+details:
+    - "The application is responsible for making sure the GPU is not currently referencing the command list before it is deleted"
 params:
     - type: $x_command_list_handle_t
       name: hCommandList
@@ -59,7 +61,7 @@ returns:
         - "invalid handle for hCommandList"
 --- #--------------------------------------------------------------------------
 type: function
-desc: "Close a command list"
+desc: "Closes a command list; ready to be enqueued into a command queue."
 name: $xCommandListClose
 params:
     - type: $x_command_list_handle_t
@@ -70,8 +72,10 @@ returns:
         - "invalid handle for hCommandList"
 --- #--------------------------------------------------------------------------
 type: function
-desc: "Reset a command list to initial (empty) state"
+desc: "Reset a command list to initial (empty) state; ready for encoding commands."
 name: $xCommandListReset
+details:
+    - "The application is responsible for making sure the GPU is not currently referencing the command list before it is reset"
 params:
     - type: $x_command_list_handle_t
       name: hCommandList

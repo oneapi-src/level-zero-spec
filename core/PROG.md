@@ -19,17 +19,17 @@ The following diagram illustrates the hierarchy of devices to the driver:
 - More than one device may be available in the system.
 
 ### Initialization
-The driver API must be initizalized by calling xeInit before any other function.
+The driver API must be initizalized by calling xeDriverInit before any other function.
 This function will query the available physical adapters in the system and make this information available to all threads in the current process.
 
 The following sample code demonstrates a basic initialization sequence:
 ```c
     // Initialize the driver
-    xeInit(XE_INIT_FLAG_NONE);
+    xeDriverInit(XE_INIT_FLAG_NONE);
 
     // Get number of devices supporting Xe
     uint32_t deviceCount = 0;
-    xeDeviceGetCount(&deviceCount);
+    xeDriverGetDeviceCount(&deviceCount);
     if(0 == deviceCount)
     {
         printf("There is no device supporting Xe.\n");
@@ -38,7 +38,7 @@ The following sample code demonstrates a basic initialization sequence:
 
     // Get the handle for device 0
     xe_device_handle_t hDevice;
-    xeDeviceGet(0, &hDevice);
+    xeDriverGetDevice(0, &hDevice);
     ...
 ```
 
@@ -100,7 +100,7 @@ The following sample code demonstrates a basic sequence for creation of command 
         XE_COMMAND_QUEUE_FLAG_DEFAULT
     };
     xe_command_queue_handle_t hCommandQueue;
-    xeCommandQueueCreate(hDevice, &commandQueueDesc, &hCommandQueue);
+    xeDeviceCreateCommandQueue(hDevice, &commandQueueDesc, &hCommandQueue);
 
     // Create a command list
     xe_command_list_desc_t commandListDesc = {
@@ -108,7 +108,7 @@ The following sample code demonstrates a basic sequence for creation of command 
         XE_COMMAND_LIST_FLAG_NONE
     };
     xe_command_list_handle_t hCommandList;
-    xeCommandListCreate(hDevice, &commandListDesc, &hCommandList);
+    xeDeviceCreateCommandList(hDevice, &commandListDesc, &hCommandList);
     ...
 ```
 
@@ -149,15 +149,15 @@ The following sample code demonstrates a sequence for creation, submission and q
         XE_FENCE_FLAG_NONE
     };
     xe_fence_handle_t hFence;
-    xeFenceCreate(hCommandQueue, &fenceDesc, &hFence);
+    xeDeviceCreateFence(hCommandQueue, &fenceDesc, &hFence);
 
     // Enqueue a signal of the fence into the command queue
-    xeEnqueueSignalFence(hFence);
+    xeFenceEnqueueSignal(hFence);
 
     // Wait for fence to be signaled
     if(XE_RESULT_SUCCESS != xeFenceQueryStatus(hFence)
     {
-        xeFenceWait(hFence);
+        xeHostWaitOnFence(hFence);
     }
 
     xeFenceReset(hFence);
@@ -181,7 +181,7 @@ The following sample code demonstrates a sequence for creation and submission of
         XE_EVENT_FLAG_NONE
     };
     xe_event_handle_t hEvent;
-    xeEventCreate(hDevice, &eventDesc, &hEvent);
+    xeDeviceCreateEvent(hDevice, &eventDesc, &hEvent);
 
     // Encode a wait on an event into a command list
     xeCommandListEncodeWaitOnEvent(hCommandList, hEvent);
@@ -190,7 +190,7 @@ The following sample code demonstrates a sequence for creation and submission of
     xeCommandQueueEnqueueCommandList(hCommandQueue, hCommandList);
 
     // Signal the device
-    xeEventSignal(hEvent);
+    xeHostSignalEvent(hEvent);
     ...
 ```
 
@@ -209,7 +209,7 @@ The following sample code demonstrates a sequence for creation and submission of
         XE_SEMAPHORE_FLAG_NONE
     };
     xe_semaphore_handle_t hSemaphore;
-    xeEventCreate(hDevice, &semaphoreDesc, &hSemaphore);
+    xeDeviceCreateSemaphore(hDevice, &semaphoreDesc, &hSemaphore);
 
     // Encode a wait on an semaphore into a command list
     xeCommandListEncodeSemaphoreWait(hCommandList0, hSemaphore,

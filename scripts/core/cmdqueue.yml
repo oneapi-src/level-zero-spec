@@ -34,8 +34,8 @@ members:
       desc: "[in] must be less than value returned for $x_device_properties_t.numAsyncComputeEngines"
 --- #--------------------------------------------------------------------------
 type: function
-desc: "Creates a command queue on a device"
-name: $xCommandQueueCreate
+desc: "Creates a command queue on the device."
+name: $xDeviceCreateCommandQueue
 analogue:
     - "**clCreateCommandQueue**"
     - cuCtxCreate
@@ -61,6 +61,8 @@ returns:
 type: function
 desc: "Destroys a command queue"
 name: $xCommandQueueDestroy
+details:
+    - "The application is responsible for making sure the GPU is not currently referencing the command queue before it is deleted"
 analogue:
     - "**clReleaseCommandQueue**"
     - cuCtxDestroy

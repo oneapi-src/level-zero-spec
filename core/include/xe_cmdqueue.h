@@ -61,7 +61,7 @@ typedef struct _xe_command_queue_desc_t
 } xe_command_queue_desc_t;
 
 ///////////////////////////////////////////////////////////////////////////////
-/// @brief Creates a command queue on a device
+/// @brief Creates a command queue on the device.
 /// @remarks
 ///   _Analogues_
 ///     - **clCreateCommandQueue**
@@ -77,7 +77,7 @@ typedef struct _xe_command_queue_desc_t
 ///     - ::XE_RESULT_ERROR_OUT_OF_HOST_MEMORY
 ///     - ::XE_RESULT_ERROR_OUT_OF_DEVICE_MEMORY
 xe_result_t __xecall
-  xeCommandQueueCreate(
+  xeDeviceCreateCommandQueue(
     xe_device_handle_t hDevice,                     ///< [in] handle of the device object
     const xe_command_queue_desc_t* desc,            ///< [in] pointer to command queue descriptor
     xe_command_queue_handle_t* phCommandQueue       ///< [out] pointer to handle of command queue object created
@@ -85,6 +85,9 @@ xe_result_t __xecall
 
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Destroys a command queue
+/// @details
+///     - The application is responsible for making sure the GPU is not
+///       currently referencing the command queue before it is deleted
 /// @remarks
 ///   _Analogues_
 ///     - **clReleaseCommandQueue**

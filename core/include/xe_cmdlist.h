@@ -58,7 +58,8 @@ typedef struct _xe_command_list_desc_t
 } xe_command_list_desc_t;
 
 ///////////////////////////////////////////////////////////////////////////////
-/// @brief Creates a command list for submitting commands to a command queue.
+/// @brief Creates a command list on the device for submitting commands to any
+///        command queue.
 /// @returns
 ///     - ::XE_RESULT_SUCCESS
 ///     - ::XE_RESULT_ERROR_UNINITIALIZED
@@ -69,14 +70,17 @@ typedef struct _xe_command_list_desc_t
 ///     - ::XE_RESULT_ERROR_OUT_OF_HOST_MEMORY
 ///     - ::XE_RESULT_ERROR_OUT_OF_DEVICE_MEMORY
 xe_result_t __xecall
-  xeCommandListCreate(
+  xeDeviceCreateCommandList(
     xe_device_handle_t hDevice,                     ///< [in] handle of the device object
     const xe_command_list_desc_t* desc,             ///< [in] pointer to command list descriptor
     xe_command_list_handle_t* phCommandList         ///< [out] pointer to handle of command list object created
     );
 
 ///////////////////////////////////////////////////////////////////////////////
-/// @brief Destroys a command list
+/// @brief Destroys a command list.
+/// @details
+///     - The application is responsible for making sure the GPU is not
+///       currently referencing the command list before it is deleted
 /// @returns
 ///     - ::XE_RESULT_SUCCESS
 ///     - ::XE_RESULT_ERROR_UNINITIALIZED
@@ -88,7 +92,7 @@ xe_result_t __xecall
     );
 
 ///////////////////////////////////////////////////////////////////////////////
-/// @brief Close a command list
+/// @brief Closes a command list; ready to be enqueued into a command queue.
 /// @returns
 ///     - ::XE_RESULT_SUCCESS
 ///     - ::XE_RESULT_ERROR_UNINITIALIZED
@@ -100,7 +104,11 @@ xe_result_t __xecall
     );
 
 ///////////////////////////////////////////////////////////////////////////////
-/// @brief Reset a command list to initial (empty) state
+/// @brief Reset a command list to initial (empty) state; ready for encoding
+///        commands.
+/// @details
+///     - The application is responsible for making sure the GPU is not
+///       currently referencing the command list before it is reset
 /// @returns
 ///     - ::XE_RESULT_SUCCESS
 ///     - ::XE_RESULT_ERROR_UNINITIALIZED

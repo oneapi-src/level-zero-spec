@@ -46,7 +46,7 @@
 ///     - ::XE_RESULT_ERROR_UNINITIALIZED
 ///     - ::XE_RESULT_ERROR_INVALID_PARAMETER - "nullptr for count"
 xe_result_t __xecall
-  xeDeviceGetCount(
+  xeDriverGetDeviceCount(
     uint32_t* count                                 ///< [out] number of devices available
     );
 
@@ -60,10 +60,10 @@ xe_result_t __xecall
 ///     - ::XE_RESULT_SUCCESS
 ///     - ::XE_RESULT_ERROR_UNINITIALIZED
 ///     - ::XE_RESULT_ERROR_INVALID_PARAMETER
-///         + ordinal is out of range reported by ::xeDeviceGetCount
+///         + ordinal is out of range reported by ::xeDriverGetDeviceCount
 ///         + nullptr for phDevice
 xe_result_t __xecall
-  xeDeviceGet(
+  xeDriverGetDevice(
     uint32_t ordinal,                               ///< [in] ordinal of device to retrieve
     xe_device_handle_t* phDevice                    ///< [out] pointer to handle of device object created
     );
@@ -260,7 +260,7 @@ typedef struct _xe_device_link_properties_t
 ///     - ::XE_RESULT_SUCCESS
 ///     - ::XE_RESULT_ERROR_UNINITIALIZED
 ///     - ::XE_RESULT_ERROR_INVALID_PARAMETER
-///         + invalid ordinal. Use ::xeDeviceGetCount for valid range.
+///         + invalid ordinal. Use ::xeDriverGetDeviceCount for valid range.
 ///         + nullptr for provided for properties
 xe_result_t __xecall
   xeDeviceGetLinkProperties(

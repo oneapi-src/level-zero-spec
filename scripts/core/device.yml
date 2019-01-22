@@ -4,7 +4,7 @@ desc: "Intel $Xx Driver APIs for Device"
 --- #--------------------------------------------------------------------------
 type: function
 desc: "Reports the number of devices"
-name: $xDeviceGetCount
+name: $xDriverGetDeviceCount
 analogue:
     - "**cuDeviceGetCount**"
 params:
@@ -17,7 +17,7 @@ returns:
 --- #--------------------------------------------------------------------------
 type: function
 desc: "Returns a handle to the device object"
-name: $xDeviceGet
+name: $xDriverGetDevice
 analogue:
     - "**cuDeviceGet**"
     - clGetDeviceIDs
@@ -30,7 +30,7 @@ params:
       desc: "[out] pointer to handle of device object created"
 returns:
     - $X_RESULT_ERROR_INVALID_PARAMETER:
-        - "ordinal is out of range reported by $xDeviceGetCount"
+        - "ordinal is out of range reported by $xDriverGetDeviceCount"
         - "nullptr for phDevice"
 --- #--------------------------------------------------------------------------
 type: enum
@@ -308,7 +308,7 @@ params:
       desc: "[out] link properties between src and dest devices"
 returns:
     - $X_RESULT_ERROR_INVALID_PARAMETER:
-        - "invalid ordinal. Use $xDeviceGetCount for valid range."
+        - "invalid ordinal. Use $xDriverGetDeviceCount for valid range."
         - "nullptr for provided for properties"
 --- #--------------------------------------------------------------------------
 type: function

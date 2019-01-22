@@ -97,7 +97,7 @@ typedef struct _xe_resource_desc_t
 } xe_resource_desc_t;
 
 ///////////////////////////////////////////////////////////////////////////////
-/// @brief Creates a resource object.
+/// @brief Creates a resource object on the device.
 /// @remarks
 ///   _Analogues_
 ///     - clCreateImage
@@ -110,13 +110,16 @@ typedef struct _xe_resource_desc_t
 ///     - ::XE_RESULT_ERROR_OUT_OF_HOST_MEMORY
 ///     - ::XE_RESULT_ERROR_OUT_OF_DEVICE_MEMORY
 xe_result_t __xecall
-  xeResourceCreate(
+  xeDeviceCreateResource(
     const xe_resource_desc_t* desc,                 ///< [in] pointer to resource descriptor
     xe_resource_handle_t* phResource                ///< [out] pointer to handle of resource object created
     );
 
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Deletes a resource object.
+/// @details
+///     - The application is responsible for making sure the GPU is not
+///       currently referencing the resource before it is deleted
 /// @returns
 ///     - ::XE_RESULT_SUCCESS
 ///     - ::XE_RESULT_ERROR_UNINITIALIZED

@@ -98,8 +98,8 @@ members:
       desc: "[in] mipmap levels (must be 0)"
 --- #--------------------------------------------------------------------------
 type: function
-desc: "Creates a resource object."
-name: $xResourceCreate
+desc: "Creates a resource object on the device."
+name: $xDeviceCreateResource
 analogue:
     - clCreateImage
 params:
@@ -119,6 +119,8 @@ returns:
 type: function
 desc: "Deletes a resource object."
 name: $xResourceDestroy
+details:
+    - "The application is responsible for making sure the GPU is not currently referencing the resource before it is deleted"
 params:
     - type: $x_resource_handle_t
       name: hResource

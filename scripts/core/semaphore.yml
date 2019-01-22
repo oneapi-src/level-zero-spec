@@ -32,8 +32,8 @@ members:
       desc: "[in] creation flags"
 --- #--------------------------------------------------------------------------
 type: function
-desc: "Creates an semaphore object."
-name: $xSemaphoreCreate
+desc: "Creates an semaphore object on the device."
+name: $xDeviceCreateSemaphore
 params:
     - type: $x_device_handle_t
       name: hDevice
@@ -55,6 +55,8 @@ returns:
 type: function
 desc: "Deletes an semaphore object."
 name: $xSemaphoreDestroy
+details:
+    - "The application is responsible for making sure the GPU is not currently referencing the semaphore before it is deleted"
 params:
     - type: $x_semaphore_handle_t
       name: hSemaphore

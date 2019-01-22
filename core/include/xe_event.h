@@ -60,7 +60,7 @@ typedef struct _xe_event_desc_t
 } xe_event_desc_t;
 
 ///////////////////////////////////////////////////////////////////////////////
-/// @brief Creates an event object.
+/// @brief Creates an event object on the device.
 /// @remarks
 ///   _Analogues_
 ///     - **clCreateUserEvent**
@@ -75,14 +75,14 @@ typedef struct _xe_event_desc_t
 ///     - ::XE_RESULT_ERROR_OUT_OF_HOST_MEMORY
 ///     - ::XE_RESULT_ERROR_OUT_OF_DEVICE_MEMORY
 xe_result_t __xecall
-  xeEventCreate(
+  xeDeviceCreateEvent(
     xe_device_handle_t hDevice,                     ///< [in] handle of the device
     const xe_event_desc_t* desc,                    ///< [in] pointer to event descriptor
     xe_event_handle_t* phEvent                      ///< [out] pointer to handle of event object created
     );
 
 ///////////////////////////////////////////////////////////////////////////////
-/// @brief Creates an event object from existing memory.
+/// @brief Creates an event object on the device from existing memory.
 /// @returns
 ///     - ::XE_RESULT_SUCCESS
 ///     - ::XE_RESULT_ERROR_UNINITIALIZED
@@ -93,7 +93,7 @@ xe_result_t __xecall
 ///         + nullptr for phEvent
 ///     - ::XE_RESULT_ERROR_OUT_OF_HOST_MEMORY
 xe_result_t __xecall
-  xeEventPlacement(
+  xeDevicePlaceEvent(
     xe_device_handle_t hDevice,                     ///< [in] handle of the device
     const xe_event_desc_t* desc,                    ///< [in] pointer to event descriptor
     void* ptr,                                      ///< [in] pointer to the device pointer where the event should be placed
@@ -102,6 +102,9 @@ xe_result_t __xecall
 
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Deletes an event object.
+/// @details
+///     - The application is responsible for making sure the GPU is not
+///       currently referencing the event before it is deleted
 /// @remarks
 ///   _Analogues_
 ///     - **cuEventDestroy**
@@ -203,7 +206,7 @@ xe_result_t __xecall
 ///         + event creation flag did not set ::XE_EVENT_FLAG_HOST_TO_DEVICE or ::XE_EVENT_FLAG_DEVICE_TO_DEVICE
 ///         + event is in signaled state
 xe_result_t __xecall
-  xeSignalEvent(
+  xeHostSignalEvent(
     xe_event_handle_t hEvent                        ///< [in] handle of the event
     );
 
@@ -219,12 +222,12 @@ xe_result_t __xecall
 ///         + invalid handle for hEvent
 ///         + event creation flag did not set ::XE_EVENT_FLAG_DEVICE_TO_HOST or ::XE_EVENT_FLAG_DEVICE_TO_DEVICE
 xe_result_t __xecall
-  xeWaitOnEvent(
+  xeHostWaitOnEvent(
     xe_event_handle_t hEvent                        ///< [in] handle of the event
     );
 
 ///////////////////////////////////////////////////////////////////////////////
-/// @brief Signals multiple events from host. @todo move to runtime?
+/// @brief Signals multiple events from host.
 /// @returns
 ///     - ::XE_RESULT_SUCCESS
 ///     - ::XE_RESULT_ERROR_UNINITIALIZED
@@ -234,7 +237,7 @@ xe_result_t __xecall
 ///         + any event creation flag did not set ::XE_EVENT_FLAG_HOST_TO_DEVICE or ::XE_EVENT_FLAG_DEVICE_TO_DEVICE
 ///         + any event is in signaled state
 xe_result_t __xecall
-  xeSignalMultipleEvents(
+  xeHostSignalMultipleEvents(
     uint32_t numEvents,                             ///< [in] number of events pointed to by phEvents
     xe_event_handle_t* phEvents                     ///< [in] pointer to array of handles of the events
     );
@@ -252,7 +255,7 @@ xe_result_t __xecall
 ///         + invalid handle in phEvents
 ///         + any event creation flag did not set ::XE_EVENT_FLAG_DEVICE_TO_HOST or ::XE_EVENT_FLAG_DEVICE_TO_DEVICE
 xe_result_t __xecall
-  xeWaitOnMultipleEvents(
+  xeHostWaitOnMultipleEvents(
     uint32_t numEvents,                             ///< [in] number of events pointed to by phEvents
     xe_event_handle_t* phEvents                     ///< [in] pointer to array of handles of the events
     );
