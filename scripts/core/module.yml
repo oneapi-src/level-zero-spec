@@ -76,7 +76,7 @@ returns:
 --- #--------------------------------------------------------------------------
 type: function
 desc: "Releases module"
-name: $xReleaseModulef
+name: $xReleaseModule
 analogue:
     - "**cuModuleUnload**"
 params:
