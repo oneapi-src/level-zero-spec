@@ -115,7 +115,7 @@ xe_result_t __xecall
 ///     - ::XE_RESULT_ERROR_INVALID_PARAMETER
 ///         + invalid handle for hModule
 xe_result_t __xecall
-  xeReleaseModule(
+  xeReleaseModulef(
     xe_module_handle_t hModule                      ///< [in] handle of the module
     );
 
@@ -175,30 +175,47 @@ xe_result_t __xecall
 ///     - ::XE_RESULT_SUCCESS
 ///     - ::XE_RESULT_ERROR_UNINITIALIZED
 ///     - ::XE_RESULT_ERROR_INVALID_PARAMETER
-///         + invalid handle for hModule
+///         + invalid handle for hFunction
 xe_result_t __xecall
   xeReleaseFunction(
     xe_function_handle_t hFunction                  ///< [in] handle of the function object
     );
 
 ///////////////////////////////////////////////////////////////////////////////
-/// @brief Get the buffer size needed to store and pass function arguments.
+/// @brief Create Function arguments buffer needed to pass arguments to a
+///        function.
 /// 
 /// @remarks
 ///   _Analogues_
-///     - **cuCtxCreate**
-///     - cuCtxGetCurrent
+///     - 
 /// 
 /// @returns
 ///     - ::XE_RESULT_SUCCESS
 ///     - ::XE_RESULT_ERROR_UNINITIALIZED
 ///     - ::XE_RESULT_ERROR_INVALID_PARAMETER
 ///         + invalid handle for hFunction
-///         + null ptr for pSize
+///         + nullptr for phFunctionArgs
 xe_result_t __xecall
-  xeGetFunctionArgsBufferSize(
-    xe_function_handle_t hFunction,                 ///< [in] handle of the function object
-    uint32_t* pSize                                 ///< [out] handle of the function object
+  xeCreateFunctionArgsBuffer(
+    xe_function_handle_t hFunction,                 ///< [in] handle of the function
+    xe_function_args_handle_t* phFunctionArgs       ///< [out] handle of the Function arguments object
+    );
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Releases Function arguments buffer object
+/// 
+/// @remarks
+///   _Analogues_
+///     - 
+/// 
+/// @returns
+///     - ::XE_RESULT_SUCCESS
+///     - ::XE_RESULT_ERROR_UNINITIALIZED
+///     - ::XE_RESULT_ERROR_INVALID_PARAMETER
+///         + invalid handle for hFunctionArgs
+xe_result_t __xecall
+  xeReleaseFunctionArgsBuffer(
+    xe_function_args_handle_t hFunctionArgs         ///< [in] handle of the function arguments buffer object
     );
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -217,14 +234,14 @@ xe_result_t __xecall
 ///         + invalid argument index
 ///         + null ptr for pArgValue
 ///         + invalid size specified
-///         + null ptr for pMemBuffer
+///         + invalid handle for hFunctionArgs
 xe_result_t __xecall
   xeSetFunctionArgValue(
     xe_function_handle_t hFunction,                 ///< [in] handle of the function object
     uint32_t argIndex,                              ///< [in] argument index in range [0, num args - 1]
     size_t argSize,                                 ///< [in] size of argument type
     const void* pArgValue,                          ///< [in] argument value represented as matching arg type
-    void* pMemBuffer                                ///< [in/out] pointer to memory buffer supplied by user
+    x_function_args_handle_t hFunctionArgs          ///< [in/out] handle of the function arguments buffer object
     );
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -282,7 +299,7 @@ xe_result_t __xecall
   xeDispatchFunction(
     xe_command_list_handle_t hCommandList,          ///< [in] handle of the command list
     xe_function_handle_t hFunction,                 ///< [in] handle of the function object
-    void* pFunctionArgsBuffer,                      ///< [in] pointer to function arguments buffer.
+    x_function_args_handle_t pFunctionArgs,         ///< [in] pointer to function arguments buffer.
     uint32_t groupCountX,                           ///< [in] width of group in X dimension
     uint32_t groupCountY,                           ///< [in] width of group in Y dimension
     uint32_t groupCountZ,                           ///< [in] width of group in Z dimension

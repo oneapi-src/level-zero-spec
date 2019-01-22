@@ -76,7 +76,7 @@ returns:
 --- #--------------------------------------------------------------------------
 type: function
 desc: "Releases module"
-name: $xReleaseModule
+name: $xReleaseModulef
 analogue:
     - "**cuModuleUnload**"
 params:
@@ -145,25 +145,37 @@ params:
       desc: "[in] handle of the function object"
 returns:
     - $X_RESULT_ERROR_INVALID_PARAMETER:
-        - "invalid handle for hModule"
+        - "invalid handle for hFunction"
 --- #--------------------------------------------------------------------------
 type: function
-desc: "Get the buffer size needed to store and pass function arguments."
-name: $xGetFunctionArgsBufferSize
+desc: "Create Function arguments buffer needed to pass arguments to a function."
+name: $xCreateFunctionArgsBuffer
 analogue:
-    - "**cuCtxCreate**"
-    - "cuCtxGetCurrent"
+    - ""
 params:
     - type: "$x_function_handle_t"
       name: hFunction
-      desc: "[in] handle of the function object"
-    - type: "uint32_t*"
-      name: pSize
-      desc: "[out] handle of the function object"
+      desc: "[in] handle of the function"
+    - type: "$x_function_args_handle_t*"
+      name:  phFunctionArgs
+      desc: "[out] handle of the Function arguments object"
 returns:
     - $X_RESULT_ERROR_INVALID_PARAMETER:
         - "invalid handle for hFunction"
-        - "null ptr for pSize"
+        - "nullptr for phFunctionArgs"
+--- #--------------------------------------------------------------------------
+type: function
+desc: "Releases Function arguments buffer object"
+name: $xReleaseFunctionArgsBuffer
+analogue:
+    - ""
+params:
+    - type: "$x_function_args_handle_t"
+      name: hFunctionArgs
+      desc: "[in] handle of the function arguments buffer object"
+returns:
+    - $X_RESULT_ERROR_INVALID_PARAMETER:
+        - "invalid handle for hFunctionArgs"
 --- #--------------------------------------------------------------------------
 type: function
 desc: "Set function arguments within arguments buffer."
@@ -184,16 +196,16 @@ params:
     - type: "const void*"
       name: pArgValue
       desc: "[in] argument value represented as matching arg type"
-    - type: "void*"
-      name: pMemBuffer
-      desc: "[in/out] pointer to memory buffer supplied by user"
+    - type: "x_function_args_handle_t"
+      name: hFunctionArgs
+      desc: "[in/out] handle of the function arguments buffer object"
 returns:
     - $X_RESULT_ERROR_INVALID_PARAMETER:
         - "invalid handle for hFunction"
         - "invalid argument index"
         - "null ptr for pArgValue"
         - "invalid size specified"
-        - "null ptr for pMemBuffer"
+        - "invalid handle for hFunctionArgs"
 --- #--------------------------------------------------------------------------
 type: enum
 desc: "Function attributes"
@@ -242,8 +254,8 @@ params:
     - type: "$x_function_handle_t"
       name: hFunction
       desc: "[in] handle of the function object"
-    - type: "void*"
-      name: pFunctionArgsBuffer
+    - type: "x_function_args_handle_t"
+      name: pFunctionArgs
       desc: "[in] pointer to function arguments buffer."
     - type: "uint32_t"
       name: groupCountX
