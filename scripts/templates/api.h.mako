@@ -107,6 +107,7 @@ def pline(repl, item, more):
     %endif
 %endfor
 %if 'details' in doc:
+/// 
 /// @details
 %for item in doc['details']:
     %for line in split_line(sub(x, item, True), 70):
@@ -119,6 +120,7 @@ def pline(repl, item, more):
 %endfor
 %endif
 %if 'analogue' in doc:
+/// 
 /// @remarks
 ///   _Analogues_
     %for line in doc['analogue']:
@@ -158,6 +160,7 @@ typedef struct _${sub(x, doc['name'])}
 } ${sub(x, doc['name'])};
 
 %elif re.match(r"function", doc['type']):
+/// 
 /// @returns
 ///     - ::${X}_RESULT_SUCCESS
 ///     - ::${X}_RESULT_ERROR_UNINITIALIZED

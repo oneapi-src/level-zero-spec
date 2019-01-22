@@ -61,10 +61,12 @@ typedef struct _xe_event_desc_t
 
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Creates an event object on the device.
+/// 
 /// @remarks
 ///   _Analogues_
 ///     - **clCreateUserEvent**
 ///     - cuEventCreate
+/// 
 /// @returns
 ///     - ::XE_RESULT_SUCCESS
 ///     - ::XE_RESULT_ERROR_UNINITIALIZED
@@ -83,6 +85,7 @@ xe_result_t __xecall
 
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Creates an event object on the device from existing memory.
+/// 
 /// @returns
 ///     - ::XE_RESULT_SUCCESS
 ///     - ::XE_RESULT_ERROR_UNINITIALIZED
@@ -102,13 +105,16 @@ xe_result_t __xecall
 
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Deletes an event object.
+/// 
 /// @details
 ///     - The application is responsible for making sure the GPU is not
 ///       currently referencing the event before it is deleted
+/// 
 /// @remarks
 ///   _Analogues_
 ///     - **cuEventDestroy**
 ///     - clReleaseEvent
+/// 
 /// @returns
 ///     - ::XE_RESULT_SUCCESS
 ///     - ::XE_RESULT_ERROR_UNINITIALIZED
@@ -121,9 +127,11 @@ xe_result_t __xecall
 
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Encodes a signal of the event from the device into a command list.
+/// 
 /// @remarks
 ///   _Analogues_
 ///     - **cuEventRecord**
+/// 
 /// @returns
 ///     - ::XE_RESULT_SUCCESS
 ///     - ::XE_RESULT_ERROR_UNINITIALIZED
@@ -141,6 +149,7 @@ xe_result_t __xecall
 
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Encodes a wait on event from a host signal into a command list.
+/// 
 /// @returns
 ///     - ::XE_RESULT_SUCCESS
 ///     - ::XE_RESULT_ERROR_UNINITIALIZED
@@ -157,6 +166,7 @@ xe_result_t __xecall
 
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Encodes signals of multiple event from the device into a command list.
+/// 
 /// @returns
 ///     - ::XE_RESULT_SUCCESS
 ///     - ::XE_RESULT_ERROR_UNINITIALIZED
@@ -177,6 +187,7 @@ xe_result_t __xecall
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Encodes waits on multiple event from a host signal into a command
 ///        list.
+/// 
 /// @returns
 ///     - ::XE_RESULT_SUCCESS
 ///     - ::XE_RESULT_ERROR_UNINITIALIZED
@@ -195,9 +206,11 @@ xe_result_t __xecall
 
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Signals a event from host.
+/// 
 /// @remarks
 ///   _Analogues_
 ///     - clSetUserEventStatus
+/// 
 /// @returns
 ///     - ::XE_RESULT_SUCCESS
 ///     - ::XE_RESULT_ERROR_UNINITIALIZED
@@ -212,9 +225,11 @@ xe_result_t __xecall
 
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief The current host thread waits on an event from a device signal.
+/// 
 /// @remarks
 ///   _Analogues_
 ///     - **cuEventSynchronize**
+/// 
 /// @returns
 ///     - ::XE_RESULT_SUCCESS
 ///     - ::XE_RESULT_ERROR_UNINITIALIZED
@@ -228,6 +243,7 @@ xe_result_t __xecall
 
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Signals multiple events from host.
+/// 
 /// @returns
 ///     - ::XE_RESULT_SUCCESS
 ///     - ::XE_RESULT_ERROR_UNINITIALIZED
@@ -244,9 +260,11 @@ xe_result_t __xecall
 
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief The current host thread waits on multiple events from a device signal.
+/// 
 /// @remarks
 ///   _Analogues_
 ///     - clWaitForEvents
+/// 
 /// @returns
 ///     - ::XE_RESULT_SUCCESS
 ///     - ::XE_RESULT_ERROR_UNINITIALIZED
@@ -262,10 +280,12 @@ xe_result_t __xecall
 
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Queries an event object's status.
+/// 
 /// @remarks
 ///   _Analogues_
 ///     - **cuEventQuery**
 ///     - clGetEventInfo
+/// 
 /// @returns
 ///     - ::XE_RESULT_SUCCESS
 ///     - ::XE_RESULT_ERROR_UNINITIALIZED
@@ -280,9 +300,11 @@ xe_result_t __xecall
 
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Queries the elapsed time between two signaled events.
+/// 
 /// @remarks
 ///   _Analogues_
 ///     - **cuEventElapsedTime**
+/// 
 /// @returns
 ///     - ::XE_RESULT_SUCCESS
 ///     - ::XE_RESULT_ERROR_UNINITIALIZED
@@ -300,6 +322,7 @@ xe_result_t __xecall
 
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Reset an event back to not signaled state
+/// 
 /// @returns
 ///     - ::XE_RESULT_SUCCESS
 ///     - ::XE_RESULT_ERROR_UNINITIALIZED

@@ -38,9 +38,11 @@
 
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Reports the number of devices
+/// 
 /// @remarks
 ///   _Analogues_
 ///     - **cuDeviceGetCount**
+/// 
 /// @returns
 ///     - ::XE_RESULT_SUCCESS
 ///     - ::XE_RESULT_ERROR_UNINITIALIZED
@@ -52,10 +54,12 @@ xe_result_t __xecall
 
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Returns a handle to the device object
+/// 
 /// @remarks
 ///   _Analogues_
 ///     - **cuDeviceGet**
 ///     - clGetDeviceIDs
+/// 
 /// @returns
 ///     - ::XE_RESULT_SUCCESS
 ///     - ::XE_RESULT_ERROR_UNINITIALIZED
@@ -70,6 +74,7 @@ xe_result_t __xecall
 
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Supported API versions
+/// 
 /// @details
 ///     - API versions contain major and minor attributes, use
 ///       ::XE_MAJOR_VERSION and ::XE_MINOR_VERSION
@@ -81,9 +86,11 @@ typedef enum _xe_api_version_t
 
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Returns the API version supported by the device
+/// 
 /// @remarks
 ///   _Analogues_
 ///     - **cuCtxGetApiVersion**
+/// 
 /// @returns
 ///     - ::XE_RESULT_SUCCESS
 ///     - ::XE_RESULT_ERROR_UNINITIALIZED
@@ -125,11 +132,13 @@ typedef struct _xe_device_properties_t
 
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Retrieves attributes of the device
+/// 
 /// @remarks
 ///   _Analogues_
 ///     - **cuDeviceGetAttribute**
 ///     - cuDeviceGetName
 ///     - clGetDeviceInfo
+/// 
 /// @returns
 ///     - ::XE_RESULT_SUCCESS
 ///     - ::XE_RESULT_ERROR_UNINITIALIZED
@@ -166,10 +175,12 @@ typedef struct _xe_device_compute_properties_t
 
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Retrieves compute attributes of the device
+/// 
 /// @remarks
 ///   _Analogues_
 ///     - **cuDeviceGetAttribute**
 ///     - clGetDeviceInfo
+/// 
 /// @returns
 ///     - ::XE_RESULT_SUCCESS
 ///     - ::XE_RESULT_ERROR_UNINITIALIZED
@@ -188,6 +199,7 @@ xe_result_t __xecall
 
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Memory access capabilities
+/// 
 /// @details
 ///     - Supported access capabilities for different types of memory
 ///       allocations
@@ -219,11 +231,13 @@ typedef struct _xe_device_memory_properties_t
 
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Retrieves memory attributes of the device
+/// 
 /// @remarks
 ///   _Analogues_
 ///     - **cuDeviceGetAttribute**
 ///     - cuDeviceTotalMem
 ///     - clGetDeviceInfo
+/// 
 /// @returns
 ///     - ::XE_RESULT_SUCCESS
 ///     - ::XE_RESULT_ERROR_UNINITIALIZED
@@ -253,9 +267,11 @@ typedef struct _xe_device_link_properties_t
 
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Retrieves link properties between src and dest devices.
+/// 
 /// @remarks
 ///   _Analogues_
 ///     - **cudaDeviceGetP2PAttribute**
+/// 
 /// @returns
 ///     - ::XE_RESULT_SUCCESS
 ///     - ::XE_RESULT_ERROR_UNINITIALIZED
@@ -271,9 +287,11 @@ xe_result_t __xecall
 
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Queries if one device can directly access peer device allocations
+/// 
 /// @remarks
 ///   _Analogues_
 ///     - **cudaDeviceCanAccessPeer**
+/// 
 /// @returns
 ///     - ::XE_RESULT_SUCCESS
 ///     - ::XE_RESULT_ERROR_UNINITIALIZED
@@ -290,15 +308,18 @@ xe_result_t __xecall
 
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Enables direct access to peer device allocations
+/// 
 /// @details
 ///     - The access is uni-directional and only enables access from the device
 ///       to allocations on the peer device.
 ///     - A separate call is required to enable access from the peer device to
 ///       this device. @todo document any limits on number of active p2p
 ///       connections @todo document behavior if link is already enabled
+/// 
 /// @remarks
 ///   _Analogues_
 ///     - **cudaDeviceEnablePeerAccess**
+/// 
 /// @returns
 ///     - ::XE_RESULT_SUCCESS
 ///     - ::XE_RESULT_ERROR_UNINITIALIZED
@@ -314,11 +335,14 @@ xe_result_t __xecall
 
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Disables direct access to peer device allocations
+/// 
 /// @details
 ///     - @todo document behavior if link is not enabled
+/// 
 /// @remarks
 ///   _Analogues_
 ///     - **cudaDeviceDisablePeerAccess**
+/// 
 /// @returns
 ///     - ::XE_RESULT_SUCCESS
 ///     - ::XE_RESULT_ERROR_UNINITIALIZED

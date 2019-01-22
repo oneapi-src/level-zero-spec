@@ -63,6 +63,7 @@ typedef struct _xe_semaphore_desc_t
 
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Creates an semaphore object on the device.
+/// 
 /// @returns
 ///     - ::XE_RESULT_SUCCESS
 ///     - ::XE_RESULT_ERROR_UNINITIALIZED
@@ -81,9 +82,11 @@ xe_result_t __xecall
 
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Deletes an semaphore object.
+/// 
 /// @details
 ///     - The application is responsible for making sure the GPU is not
 ///       currently referencing the semaphore before it is deleted
+/// 
 /// @returns
 ///     - ::XE_RESULT_SUCCESS
 ///     - ::XE_RESULT_ERROR_UNINITIALIZED
@@ -96,6 +99,7 @@ xe_result_t __xecall
 
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Encodes an semaphore signal into a command list.
+/// 
 /// @returns
 ///     - ::XE_RESULT_SUCCESS
 ///     - ::XE_RESULT_ERROR_UNINITIALIZED
@@ -124,6 +128,7 @@ typedef enum _xe_semaphore_wait_operation_t
 
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Encodes an semaphore wait into a command list.
+/// 
 /// @returns
 ///     - ::XE_RESULT_SUCCESS
 ///     - ::XE_RESULT_ERROR_UNINITIALIZED
@@ -140,6 +145,7 @@ xe_result_t __xecall
 
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Queries an semaphore object's value.
+/// 
 /// @returns
 ///     - ::XE_RESULT_SUCCESS
 ///     - ::XE_RESULT_ERROR_UNINITIALIZED
@@ -152,6 +158,7 @@ xe_result_t __xecall
 
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Reset a semaphore back to the not signaled state, with value of 0.
+/// 
 /// @returns
 ///     - ::XE_RESULT_SUCCESS
 ///     - ::XE_RESULT_ERROR_UNINITIALIZED

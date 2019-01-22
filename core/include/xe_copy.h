@@ -38,15 +38,18 @@
 
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Copies host, device, or shared memory.
+/// 
 /// @details
 ///     - The memory pointed to by both srcptr and dstptr must be accessible by
 ///       the device on which the command list is created.
+/// 
 /// @remarks
 ///   _Analogues_
 ///     - **clEnqueueCopyBuffer**
 ///     - **clEnqueueReadBuffer**
 ///     - **clEnqueueWriteBuffer**
 ///     - **clEnqueueSVMMemcpy**
+/// 
 /// @returns
 ///     - ::XE_RESULT_SUCCESS
 ///     - ::XE_RESULT_ERROR_UNINITIALIZED
@@ -63,9 +66,11 @@ xe_result_t __xecall
 
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Copies a resource.
+/// 
 /// @remarks
 ///   _Analogues_
 ///     - **clEnqueueCopyImage**
+/// 
 /// @returns
 ///     - ::XE_RESULT_SUCCESS
 ///     - ::XE_RESULT_ERROR_UNINITIALIZED
@@ -90,6 +95,7 @@ typedef struct _xeResourceRegion
 
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Copies a region of a resource.
+/// 
 /// @returns
 ///     - ::XE_RESULT_SUCCESS
 ///     - ::XE_RESULT_ERROR_UNINITIALIZED
@@ -107,9 +113,11 @@ xe_result_t __xecall
 
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Copies from a resource to device or shared memory.
+/// 
 /// @remarks
 ///   _Analogues_
 ///     - clEnqueueReadImage
+/// 
 /// @returns
 ///     - ::XE_RESULT_SUCCESS
 ///     - ::XE_RESULT_ERROR_UNINITIALIZED
@@ -126,9 +134,11 @@ xe_result_t __xecall
 
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Copies to a resource from device or shared memory.
+/// 
 /// @remarks
 ///   _Analogues_
 ///     - clEnqueueWriteImage
+/// 
 /// @returns
 ///     - ::XE_RESULT_SUCCESS
 ///     - ::XE_RESULT_ERROR_UNINITIALIZED
@@ -146,15 +156,18 @@ xe_result_t __xecall
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Asynchronously prefetches shared memory to the device associated with
 ///        the specified command list
+/// 
 /// @details
 ///     - This is a hint to improve performance only and is not required for
 ///       correctness. @todo confirm we do not need a synchronous prefetch.
 ///       @todo could/should we support prefetches to other devices? @todo
 ///       could/should we support prefetches to the host?
+/// 
 /// @remarks
 ///   _Analogues_
 ///     - cudaMemPrefetchAsync
 ///     - clEnqueueSVMMigrateMem
+/// 
 /// @returns
 ///     - ::XE_RESULT_SUCCESS
 ///     - ::XE_RESULT_ERROR_UNINITIALIZED

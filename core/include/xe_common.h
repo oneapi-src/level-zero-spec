@@ -281,6 +281,7 @@ typedef struct _xe_function_handle_t
 
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Defines Return/Error codes
+/// 
 /// @remarks
 ///   _Analogues_
 ///     - **CUresult**

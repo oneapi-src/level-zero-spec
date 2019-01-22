@@ -59,9 +59,11 @@ typedef struct _xe_fence_desc_t
 
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Creates a fence object on the device's command queue.
+/// 
 /// @remarks
 ///   _Analogues_
 ///     - **cuEventCreate**
+/// 
 /// @returns
 ///     - ::XE_RESULT_SUCCESS
 ///     - ::XE_RESULT_ERROR_UNINITIALIZED
@@ -80,12 +82,15 @@ xe_result_t __xecall
 
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Deletes a fence object.
+/// 
 /// @details
 ///     - The application is responsible for making sure the GPU is not
 ///       currently referencing the fence before it is deleted
+/// 
 /// @remarks
 ///   _Analogues_
 ///     - **cuEventDestroy**
+/// 
 /// @returns
 ///     - ::XE_RESULT_SUCCESS
 ///     - ::XE_RESULT_ERROR_UNINITIALIZED
@@ -99,9 +104,11 @@ xe_result_t __xecall
 
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Enqueues a signal of the fence into its command queue.
+/// 
 /// @remarks
 ///   _Analogues_
 ///     - **cuEventRecord**
+/// 
 /// @returns
 ///     - ::XE_RESULT_SUCCESS
 ///     - ::XE_RESULT_ERROR_UNINITIALIZED
@@ -116,9 +123,11 @@ xe_result_t __xecall
 
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief The current host thread waits on a fence to be signaled.
+/// 
 /// @remarks
 ///   _Analogues_
 ///     - **cuEventSynchronize**
+/// 
 /// @returns
 ///     - ::XE_RESULT_SUCCESS
 ///     - ::XE_RESULT_ERROR_UNINITIALIZED
@@ -132,6 +141,7 @@ xe_result_t __xecall
 
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief The current host thread waits on a multiple fences to be signaled.
+/// 
 /// @returns
 ///     - ::XE_RESULT_SUCCESS
 ///     - ::XE_RESULT_ERROR_UNINITIALIZED
@@ -147,9 +157,11 @@ xe_result_t __xecall
 
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Queries a fence object's status.
+/// 
 /// @remarks
 ///   _Analogues_
 ///     - **cuEventQuery**
+/// 
 /// @returns
 ///     - ::XE_RESULT_SUCCESS
 ///     - ::XE_RESULT_ERROR_UNINITIALIZED
@@ -165,9 +177,11 @@ xe_result_t __xecall
 
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Queries the elapsed time between two signaled fences.
+/// 
 /// @remarks
 ///   _Analogues_
 ///     - **cuEventElapsedTime**
+/// 
 /// @returns
 ///     - ::XE_RESULT_SUCCESS
 ///     - ::XE_RESULT_ERROR_UNINITIALIZED
@@ -185,6 +199,7 @@ xe_result_t __xecall
 
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Reset a fence back to the not signaled state.
+/// 
 /// @returns
 ///     - ::XE_RESULT_SUCCESS
 ///     - ::XE_RESULT_ERROR_UNINITIALIZED

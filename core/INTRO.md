@@ -31,6 +31,21 @@ The Xe driver API is implemented within the xe.dll, which is copied on the syste
 - all functions use **xe\<Actor\>\<Action\>\<Object\>** convention
 - all function input parameters precede output parameters
 
+## Versioning
+There are multiple versions that can be used by the application to determine compatibility:
+1. Header Version - this is the version of the header files included by the application.
+    - This is typically used to determine whether the application is using the latest version of the API header files.
+    - It is determined from ::XE_UMD_HEADER_VERSION.
+2. API Version - this is the version of the API features supported by the device.
+    - This is typically used to determine if the device supports the minimum set of features required by the application.
+    - It is determined from calling ::xeDeviceGetApiVersion
+3. Driver Version - this is the version of the driver installed in the system.
+    - This is typically used to mitigate driver implementation issues for a feature.
+    - It is determined from calling ::xeDriverGetVersion
+4. Structure Version - these are the versions of the structures passed-by-pointer to the driver.
+    - These are typically used by the driver to support applications written to older versions of the API.
+    - They are provided as the first member of every structure passed to the driver.
+
 ## Error Handling
 - all functions return ::xe_result_t.
 - all functions are gaurenteed to never throw exceptions or fail silently.

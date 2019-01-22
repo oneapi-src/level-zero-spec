@@ -53,12 +53,15 @@
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Allocates memory that is shared between the host and one or more
 ///        devices
+/// 
 /// @details
 ///     - Shared allocations share ownership between the host and one or more
 ///       devices. @todo Comprehend multi-tile.
+/// 
 /// @remarks
 ///   _Analogues_
 ///     - **cudaMallocManaged**
+/// 
 /// @returns
 ///     - ::XE_RESULT_SUCCESS
 ///     - ::XE_RESULT_ERROR_UNINITIALIZED
@@ -79,12 +82,15 @@ xe_result_t __xecall
 
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Allocates memory specific to a device
+/// 
 /// @details
 ///     - A device allocation is owned by a specific device. In general, a
 ///       device allocation may only be accessed by the device that owns it.
+/// 
 /// @remarks
 ///   _Analogues_
 ///     - **cudaMalloc**
+/// 
 /// @returns
 ///     - ::XE_RESULT_SUCCESS
 ///     - ::XE_RESULT_ERROR_UNINITIALIZED
@@ -114,13 +120,16 @@ typedef enum _xe_host_mem_alloc_flags_t
 
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Allocates host memory
+/// 
 /// @details
 ///     - A host allocation is owned by the host process. Host allocations are
 ///       accessible by the host and all devices. Host allocations are
 ///       frequently used a staging areas to transfer data to or from devices.
+/// 
 /// @remarks
 ///   _Analogues_
 ///     - **cudaHostAlloc**
+/// 
 /// @returns
 ///     - ::XE_RESULT_SUCCESS
 ///     - ::XE_RESULT_ERROR_UNINITIALIZED
@@ -141,13 +150,16 @@ xe_result_t __xecall
 
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Frees allocated host memory, device memory, or shared memory
+/// 
 /// @details
 ///     - @todo Should the pointer passed to the ::xeMemFree function be const
 ///       or non-const?
+/// 
 /// @remarks
 ///   _Analogues_
 ///     - **cudaFree**
 ///     - **cudaFreeHost**
+/// 
 /// @returns
 ///     - ::XE_RESULT_SUCCESS
 ///     - ::XE_RESULT_ERROR_UNINITIALIZED
@@ -181,13 +193,16 @@ typedef enum _xe_memory_property_t
 
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Retrieves a property of an allocation
+/// 
 /// @details
 ///     - @todo do we need to support additional properties: base addr, size,
 ///       etc? @todo do we need to support querying the associated device? @todo
 ///       should we return all attributes as a (versioned) struct instead?
+/// 
 /// @remarks
 ///   _Analogues_
 ///     - **cudaPointerGetAttributes**
+/// 
 /// @returns
 ///     - ::XE_RESULT_SUCCESS
 ///     - ::XE_RESULT_ERROR_UNINITIALIZED
@@ -213,13 +228,16 @@ typedef enum _xe_memory_advice_t
 
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Provides advice about the use of a shared memory range
+/// 
 /// @details
 ///     - Memory advice can be used to override driver heuristics to explicitly
 ///       control shared memory behavior. @todo likely will snap to page
 ///       boundaries @todo which memory advice hints could/should we support?
+/// 
 /// @remarks
 ///   _Analogues_
 ///     - **cudaMemAdvise**
+/// 
 /// @returns
 ///     - ::XE_RESULT_SUCCESS
 ///     - ::XE_RESULT_ERROR_UNINITIALIZED

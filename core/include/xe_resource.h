@@ -98,9 +98,11 @@ typedef struct _xe_resource_desc_t
 
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Creates a resource object on the device.
+/// 
 /// @remarks
 ///   _Analogues_
 ///     - clCreateImage
+/// 
 /// @returns
 ///     - ::XE_RESULT_SUCCESS
 ///     - ::XE_RESULT_ERROR_UNINITIALIZED
@@ -117,9 +119,11 @@ xe_result_t __xecall
 
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Deletes a resource object.
+/// 
 /// @details
 ///     - The application is responsible for making sure the GPU is not
 ///       currently referencing the resource before it is deleted
+/// 
 /// @returns
 ///     - ::XE_RESULT_SUCCESS
 ///     - ::XE_RESULT_ERROR_UNINITIALIZED

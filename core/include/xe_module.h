@@ -51,9 +51,11 @@ typedef enum _xe_module_format_t
 
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Creates module object from an input IL or ISA.
+/// 
 /// @remarks
 ///   _Analogues_
 ///     - **cuModuleLoad**
+/// 
 /// @returns
 ///     - ::XE_RESULT_SUCCESS
 ///     - ::XE_RESULT_ERROR_UNINITIALIZED
@@ -76,10 +78,12 @@ xe_result_t __xecall
 
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Creates module object from an input IL or ISA.
+/// 
 /// @remarks
 ///   _Analogues_
 ///     - **cuModuleLoad**
 ///     - cuCtxGetCurrent
+/// 
 /// @returns
 ///     - ::XE_RESULT_SUCCESS
 ///     - ::XE_RESULT_ERROR_UNINITIALIZED
@@ -100,9 +104,11 @@ xe_result_t __xecall
 
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Releases module
+/// 
 /// @remarks
 ///   _Analogues_
 ///     - **cuModuleUnload**
+/// 
 /// @returns
 ///     - ::XE_RESULT_SUCCESS
 ///     - ::XE_RESULT_ERROR_UNINITIALIZED
@@ -115,9 +121,11 @@ xe_result_t __xecall
 
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Create Function object from Module by name
+/// 
 /// @remarks
 ///   _Analogues_
 ///     - **cuModuleGetGlobal**
+/// 
 /// @returns
 ///     - ::XE_RESULT_SUCCESS
 ///     - ::XE_RESULT_ERROR_UNINITIALIZED
@@ -136,9 +144,11 @@ xe_result_t __xecall
 
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Create Function object from Module by name
+/// 
 /// @remarks
 ///   _Analogues_
 ///     - **cuModuleGetFunction**
+/// 
 /// @returns
 ///     - ::XE_RESULT_SUCCESS
 ///     - ::XE_RESULT_ERROR_UNINITIALIZED
@@ -155,10 +165,12 @@ xe_result_t __xecall
 
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Releases Function object
+/// 
 /// @remarks
 ///   _Analogues_
 ///     - **cuModuleUnload**
 ///     - cuCtxGetCurrent
+/// 
 /// @returns
 ///     - ::XE_RESULT_SUCCESS
 ///     - ::XE_RESULT_ERROR_UNINITIALIZED
@@ -171,10 +183,12 @@ xe_result_t __xecall
 
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Get the buffer size needed to store and pass function arguments.
+/// 
 /// @remarks
 ///   _Analogues_
 ///     - **cuCtxCreate**
 ///     - cuCtxGetCurrent
+/// 
 /// @returns
 ///     - ::XE_RESULT_SUCCESS
 ///     - ::XE_RESULT_ERROR_UNINITIALIZED
@@ -189,10 +203,12 @@ xe_result_t __xecall
 
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Set function arguments within arguments buffer.
+/// 
 /// @remarks
 ///   _Analogues_
 ///     - **cuCtxCreate**
 ///     - cuCtxGetCurrent
+/// 
 /// @returns
 ///     - ::XE_RESULT_SUCCESS
 ///     - ::XE_RESULT_ERROR_UNINITIALIZED
@@ -213,6 +229,7 @@ xe_result_t __xecall
 
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Function attributes
+/// 
 /// @remarks
 ///   _Analogues_
 ///     - **CUfunction_attribute**
@@ -226,9 +243,11 @@ typedef enum _xe_function_attribute_t
 
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Query a function attribute.
+/// 
 /// @remarks
 ///   _Analogues_
 ///     - **cuFuncGetAttribute**
+/// 
 /// @returns
 ///     - ::XE_RESULT_SUCCESS
 ///     - ::XE_RESULT_ERROR_UNINITIALIZED
@@ -245,9 +264,11 @@ xe_result_t __xecall
 
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Dispatch function to queue.
+/// 
 /// @remarks
 ///   _Analogues_
 ///     - **cuLaunchKernel**
+/// 
 /// @returns
 ///     - ::XE_RESULT_SUCCESS
 ///     - ::XE_RESULT_ERROR_UNINITIALIZED

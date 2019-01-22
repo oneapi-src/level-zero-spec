@@ -47,12 +47,15 @@ typedef enum _xe_init_flags_t
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Initialize the Xe Driver API and must be called before any other API
 ///        function.
+/// 
 /// @details
 ///     - If this function is not called then all other functions will return
 ///       ::XE_RESULT_ERROR_UNINITIALIZED.
+/// 
 /// @remarks
 ///   _Analogues_
 ///     - **cuInit**
+/// 
 /// @returns
 ///     - ::XE_RESULT_SUCCESS
 ///     - ::XE_RESULT_ERROR_UNINITIALIZED
@@ -65,21 +68,16 @@ xe_result_t __xecall
     );
 
 ///////////////////////////////////////////////////////////////////////////////
-/// @brief Supported driver versions
+/// @brief Returns the current version of the installed driver.
+/// 
 /// @details
-///     - Driver versions contain major and minor attributes, use
-///       ::XE_MAJOR_VERSION and ::XE_MINOR_VERSION.
-typedef enum _xe_driver_version_t
-{
-    XE_DRIVER_VERSION_1_0 = XE_MAKE_VERSION( 1, 0 ),///< 1.0
-
-} xe_driver_version_t;
-
-///////////////////////////////////////////////////////////////////////////////
-/// @brief Returns the current versions of the driver
+///     - The driver version is a non-zero, monotonically increasing value where
+///       higher values always indicate a more recent version.
+/// 
 /// @remarks
 ///   _Analogues_
 ///     - **cuDriverGetVersion**
+/// 
 /// @returns
 ///     - ::XE_RESULT_SUCCESS
 ///     - ::XE_RESULT_ERROR_UNINITIALIZED
@@ -87,7 +85,7 @@ typedef enum _xe_driver_version_t
 ///         + nullptr for version
 xe_result_t __xecall
   xeDriverGetVersion(
-    xe_driver_version_t* version                    ///< [out] driver version
+    uint32_t* version                               ///< [out] driver version
     );
 
 #endif // _XE_DRIVER_H

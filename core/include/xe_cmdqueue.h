@@ -62,11 +62,13 @@ typedef struct _xe_command_queue_desc_t
 
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Creates a command queue on the device.
+/// 
 /// @remarks
 ///   _Analogues_
 ///     - **clCreateCommandQueue**
 ///     - cuCtxCreate
 ///     - cuCtxGetCurrent
+/// 
 /// @returns
 ///     - ::XE_RESULT_SUCCESS
 ///     - ::XE_RESULT_ERROR_UNINITIALIZED
@@ -85,13 +87,16 @@ xe_result_t __xecall
 
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Destroys a command queue
+/// 
 /// @details
 ///     - The application is responsible for making sure the GPU is not
 ///       currently referencing the command queue before it is deleted
+/// 
 /// @remarks
 ///   _Analogues_
 ///     - **clReleaseCommandQueue**
 ///     - cuCtxDestroy
+/// 
 /// @returns
 ///     - ::XE_RESULT_SUCCESS
 ///     - ::XE_RESULT_ERROR_UNINITIALIZED
@@ -131,11 +136,13 @@ typedef enum _xe_command_queue_cacheconfig_t
 
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Sets a command queue's parameter
+/// 
 /// @remarks
 ///   _Analogues_
 ///     - cuCtxSetCacheConfig
 ///     - cuCtxSetLimit
 ///     - cuCtxSetSharedMemConfig
+/// 
 /// @returns
 ///     - ::XE_RESULT_SUCCESS
 ///     - ::XE_RESULT_ERROR_UNINITIALIZED
@@ -152,12 +159,14 @@ xe_result_t __xecall
 
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Retrieves a command queue's parameter
+/// 
 /// @remarks
 ///   _Analogues_
 ///     - cuCtxGetCacheConfig
 ///     - cuCtxGetLimit
 ///     - cuCtxGetSharedMemConfig
 ///     - cuCtxGetStreamPriorityRange
+/// 
 /// @returns
 ///     - ::XE_RESULT_SUCCESS
 ///     - ::XE_RESULT_ERROR_UNINITIALIZED
@@ -174,6 +183,7 @@ xe_result_t __xecall
 
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Resets all command queue parameters to default state
+/// 
 /// @returns
 ///     - ::XE_RESULT_SUCCESS
 ///     - ::XE_RESULT_ERROR_UNINITIALIZED
@@ -186,6 +196,7 @@ xe_result_t __xecall
 
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Enqueues a command list into a command queue
+/// 
 /// @returns
 ///     - ::XE_RESULT_SUCCESS
 ///     - ::XE_RESULT_ERROR_UNINITIALIZED
@@ -200,6 +211,7 @@ xe_result_t __xecall
 
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Synchronizes a command queue
+/// 
 /// @returns
 ///     - ::XE_RESULT_SUCCESS
 ///     - ::XE_RESULT_ERROR_UNINITIALIZED

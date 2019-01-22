@@ -60,6 +60,7 @@ typedef struct _xe_command_list_desc_t
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Creates a command list on the device for submitting commands to any
 ///        command queue.
+/// 
 /// @returns
 ///     - ::XE_RESULT_SUCCESS
 ///     - ::XE_RESULT_ERROR_UNINITIALIZED
@@ -78,9 +79,11 @@ xe_result_t __xecall
 
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Destroys a command list.
+/// 
 /// @details
 ///     - The application is responsible for making sure the GPU is not
 ///       currently referencing the command list before it is deleted
+/// 
 /// @returns
 ///     - ::XE_RESULT_SUCCESS
 ///     - ::XE_RESULT_ERROR_UNINITIALIZED
@@ -93,6 +96,7 @@ xe_result_t __xecall
 
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Closes a command list; ready to be enqueued into a command queue.
+/// 
 /// @returns
 ///     - ::XE_RESULT_SUCCESS
 ///     - ::XE_RESULT_ERROR_UNINITIALIZED
@@ -106,9 +110,11 @@ xe_result_t __xecall
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Reset a command list to initial (empty) state; ready for encoding
 ///        commands.
+/// 
 /// @details
 ///     - The application is responsible for making sure the GPU is not
 ///       currently referencing the command list before it is reset
+/// 
 /// @returns
 ///     - ::XE_RESULT_SUCCESS
 ///     - ::XE_RESULT_ERROR_UNINITIALIZED
