@@ -32,13 +32,27 @@ The following sample code demonstrates a basic initialization sequence:
     ${x}DriverGetDeviceCount(&deviceCount);
     if(0 == deviceCount)
     {
-        printf("There is no device supporting ${Xx}.\n");
+        printf("There is no device supporting ${Xx}!\n");
         return;
     }
 
-    // Get the handle for device 0
+    // Get the handle for device that supports required API version
     ${x}_device_handle_t hDevice;
-    ${x}DriverGetDevice(0, &hDevice);
+    for(uint32_t i = 0; i < deviceCount; ++i)
+    {
+        ${x}DriverGetDevice(i, &hDevice);
+        
+        ${x}_api_version_t version;
+        ${x}DeviceGetApiVersion(hDevice, &version);
+        if(${X}_API_VERSION_1_0 <= version)
+            break;
+
+        if(i == deviceCount)
+        {
+            printf("There is no device that supporting ${Xx} version required!\n");
+            return;
+        }
+    }
     ...
 ```
 
@@ -224,6 +238,35 @@ The following sample code demonstrates a sequence for creation and submission of
     ...
 ```
 
-${"##"} Memory Allocation
-todo
+${"##"} Memory and Resource Management
 
+${"###"} Device Cache Settings
+todo: global vs allocation vs command queue
+
+${"###"} Host and Device Content Access
+A resource's contents can be copied to and from other resources, as well as host-accessable memory allocations.
+This is the only method for host access to the contents of a resource.
+This methodology allows for device-specific encoding of resource contents (e.g., tile swizzle patterns, loseless compression, etc.) 
+and avoids exposing these details in the API in a backwards compatible fashion.
+
+```c
+    ...
+```
+
+${"###"} Device Residency
+In most cases, the driver implicitly handles residency of allocations for device access.
+This can be done by inspecting API parameters, including function arguments.
+
+However, in cases where the driver is incapable of determining whether an allocation will be accessed by the device, such as multiple levels of indirection,
+there are two methods available.
+1. the application may set a flag during memory allocation to force the allocation to be always resident.
+2. explcit APIs are included for the application to dynamically change residency as needed.
+
+If the application does not properly manage residency for these cases then the device may experience unrecoverable page-faults.
+
+```c
+    ...
+```
+
+${"##"} Modules and Functions
+todo
