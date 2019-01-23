@@ -10,9 +10,9 @@ target_sources(xe
     ${CMAKE_CURRENT_SOURCE_DIR}/xe_driver.h
     ${CMAKE_CURRENT_SOURCE_DIR}/xe_event.h
     ${CMAKE_CURRENT_SOURCE_DIR}/xe_fence.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/xe_image.h
     ${CMAKE_CURRENT_SOURCE_DIR}/xe_memory.h
     ${CMAKE_CURRENT_SOURCE_DIR}/xe_module.h
     ${CMAKE_CURRENT_SOURCE_DIR}/xe_residency.h
-    ${CMAKE_CURRENT_SOURCE_DIR}/xe_resource.h
     ${CMAKE_CURRENT_SOURCE_DIR}/xe_semaphore.h
 )

@@ -20,72 +20,72 @@
 * or otherwise. Any license under such intellectual property rights must be
 * express and approved by Intel in writing.
 *
-* @file xe_resource.h
+* @file xe_image.h
 *
-* @brief Intel Xe Driver APIs for Resource
+* @brief Intel Xe Driver APIs for Images
 *
 * @cond DEV
-* DO NOT EDIT: generated from /scripts/<type>/resource.yml
+* DO NOT EDIT: generated from /scripts/<type>/image.yml
 * @endcond
 *
 ******************************************************************************/
-#ifndef _XE_RESOURCE_H
-#define _XE_RESOURCE_H
+#ifndef _XE_IMAGE_H
+#define _XE_IMAGE_H
 #if defined(__cplusplus)
 #pragma once
 #endif
 #include "xe_common.h"
 
 ///////////////////////////////////////////////////////////////////////////////
-/// @brief API version of ::xe_resource_desc_t
-#define XE_RESOURCE_DESC_VERSION  XE_MAKE_VERSION( 1, 0 )
+/// @brief API version of ::xe_image_desc_t
+#define XE_IMAGE_DESC_VERSION  XE_MAKE_VERSION( 1, 0 )
 
 ///////////////////////////////////////////////////////////////////////////////
-/// @brief Supported resource creation flags
-typedef enum _xe_resource_flags_t
+/// @brief Supported image creation flags
+typedef enum _xe_image_flags_t
 {
-    XE_RESOURCE_FLAG_KERNEL_READ = XE_BIT( 0 ),     ///< kernels may read contents
-    XE_RESOURCE_FLAG_KERNEL_WRITE = XE_BIT( 1 ),    ///< kernels may write contents
-    XE_RESOURCE_FLAG_HOST_READ = XE_BIT( 2 ),       ///< host may read contents
-    XE_RESOURCE_FLAG_HOST_WRITE = XE_BIT( 3 ),      ///< host may write contents
+    XE_IMAGE_FLAG_KERNEL_READ = XE_BIT( 0 ),        ///< kernels may read contents
+    XE_IMAGE_FLAG_KERNEL_WRITE = XE_BIT( 1 ),       ///< kernels may write contents
+    XE_IMAGE_FLAG_HOST_READ = XE_BIT( 2 ),          ///< host may read contents
+    XE_IMAGE_FLAG_HOST_WRITE = XE_BIT( 3 ),         ///< host may write contents
 
-} xe_resource_flags_t;
+} xe_image_flags_t;
 
 ///////////////////////////////////////////////////////////////////////////////
-/// @brief Supported resource types
-typedef enum _xe_resource_type_t
+/// @brief Supported image types
+typedef enum _xe_image_type_t
 {
-    XE_RESOURCE_TYPE_1D,                            ///< 1D
-    XE_RESOURCE_TYPE_1DARRAY,                       ///< 1D array
-    XE_RESOURCE_TYPE_2D,                            ///< 2D
-    XE_RESOURCE_TYPE_2DARRAY,                       ///< 2D array
-    XE_RESOURCE_TYPE_3D,                            ///< 3D
+    XE_IMAGE_TYPE_1D,                               ///< 1D
+    XE_IMAGE_TYPE_1DARRAY,                          ///< 1D array
+    XE_IMAGE_TYPE_2D,                               ///< 2D
+    XE_IMAGE_TYPE_2DARRAY,                          ///< 2D array
+    XE_IMAGE_TYPE_3D,                               ///< 3D
 
-} xe_resource_type_t;
+} xe_image_type_t;
 
 ///////////////////////////////////////////////////////////////////////////////
-/// @brief Supported resource formats
-typedef enum _xe_resource_format_t
+/// @brief Supported image formats
+typedef enum _xe_image_format_t
 {
-    XE_RESOURCE_FORMAT_UINT8,                       ///< 8-bit unsigned integer
-    XE_RESOURCE_FORMAT_UINT16,                      ///< 16-bit unsigned integer
-    XE_RESOURCE_FORMAT_UINT32,                      ///< 32-bit unsigned integer
-    XE_RESOURCE_FORMAT_SINT8,                       ///< 8-bit signed integer
-    XE_RESOURCE_FORMAT_SINT16,                      ///< 16-bit signed integer
-    XE_RESOURCE_FORMAT_SINT32,                      ///< 32-bit signed integer
-    XE_RESOURCE_FORMAT_FLOAT16,                     ///< 16-bit float
-    XE_RESOURCE_FORMAT_FLOAT32,                     ///< 32-bit float
+    XE_IMAGE_FORMAT_UINT8,                          ///< 8-bit unsigned integer
+    XE_IMAGE_FORMAT_UINT16,                         ///< 16-bit unsigned integer
+    XE_IMAGE_FORMAT_UINT32,                         ///< 32-bit unsigned integer
+    XE_IMAGE_FORMAT_SINT8,                          ///< 8-bit signed integer
+    XE_IMAGE_FORMAT_SINT16,                         ///< 16-bit signed integer
+    XE_IMAGE_FORMAT_SINT32,                         ///< 32-bit signed integer
+    XE_IMAGE_FORMAT_FLOAT16,                        ///< 16-bit float
+    XE_IMAGE_FORMAT_FLOAT32,                        ///< 32-bit float
 
-} xe_resource_format_t;
+} xe_image_format_t;
 
 ///////////////////////////////////////////////////////////////////////////////
-/// @brief Resource descriptor
-typedef struct _xe_resource_desc_t
+/// @brief Image descriptor
+typedef struct _xe_image_desc_t
 {
-    uint32_t version;                               ///< [in] ::XE_RESOURCE_DESC_VERSION
-    xe_resource_flags_t flags;                      ///< [in] creation flags
-    xe_resource_type_t type;                        ///< [in] resource type
-    xe_resource_format_t format;                    ///< [in] resource channel format
+    uint32_t version;                               ///< [in] ::XE_IMAGE_DESC_VERSION
+    xe_image_flags_t flags;                         ///< [in] creation flags
+    xe_image_type_t type;                           ///< [in] image type
+    xe_image_format_t format;                       ///< [in] image channel format
     uint32_t numChannels;                           ///< [in] number of channels per pixel
     size_t width;                                   ///< [in] width in pixels
     size_t height;                                  ///< [in] height in pixels (2D or 3D only)
@@ -93,10 +93,10 @@ typedef struct _xe_resource_desc_t
     size_t arraylevels;                             ///< [in] array levels (array types only)
     size_t miplevels;                               ///< [in] mipmap levels (must be 0)
 
-} xe_resource_desc_t;
+} xe_image_desc_t;
 
 ///////////////////////////////////////////////////////////////////////////////
-/// @brief Creates a resource object on the device.
+/// @brief Creates a image object on the device.
 /// 
 /// @remarks
 ///   _Analogues_
@@ -107,30 +107,30 @@ typedef struct _xe_resource_desc_t
 ///     - ::XE_RESULT_ERROR_UNINITIALIZED
 ///     - ::XE_RESULT_ERROR_INVALID_PARAMETER
 ///         + nullptr for desc
-///         + nullptr for phResource
+///         + nullptr for phImage
 ///     - ::XE_RESULT_ERROR_OUT_OF_HOST_MEMORY
 ///     - ::XE_RESULT_ERROR_OUT_OF_DEVICE_MEMORY
 xe_result_t __xecall
-  xeDeviceCreateResource(
-    const xe_resource_desc_t* desc,                 ///< [in] pointer to resource descriptor
-    xe_resource_handle_t* phResource                ///< [out] pointer to handle of resource object created
+  xeDeviceCreateImage(
+    const xe_image_desc_t* desc,                    ///< [in] pointer to image descriptor
+    xe_image_handle_t* phImage                      ///< [out] pointer to handle of image object created
     );
 
 ///////////////////////////////////////////////////////////////////////////////
-/// @brief Deletes a resource object.
+/// @brief Deletes a image object.
 /// 
 /// @details
 ///     - The application is responsible for making sure the GPU is not
-///       currently referencing the resource before it is deleted
+///       currently referencing the image before it is deleted
 /// 
 /// @returns
 ///     - ::XE_RESULT_SUCCESS
 ///     - ::XE_RESULT_ERROR_UNINITIALIZED
 ///     - ::XE_RESULT_ERROR_INVALID_PARAMETER
-///         + invalid handle for hResource
+///         + invalid handle for hImage
 xe_result_t __xecall
-  xeResourceDestroy(
-    xe_resource_handle_t hResource                  ///< [in] handle of resource object to destroy
+  xeImageDestroy(
+    xe_image_handle_t hImage                        ///< [in] handle of image object to destroy
     );
 
-#endif // _XE_RESOURCE_H
+#endif // _XE_IMAGE_H
