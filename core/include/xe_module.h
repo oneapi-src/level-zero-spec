@@ -236,11 +236,10 @@ xe_result_t __xecall
 ///         + invalid handle for hFunctionArgs
 xe_result_t __xecall
   xeSetFunctionArgValue(
-    xe_function_handle_t hFunction,                 ///< [in] handle of the function object
+    xe_function_args_handle_t hFunctionArgs,        ///< [in/out] handle of the function args object.
     uint32_t argIndex,                              ///< [in] argument index in range [0, num args - 1]
     size_t argSize,                                 ///< [in] size of argument type
-    const void* pArgValue,                          ///< [in] argument value represented as matching arg type
-    xe_function_args_handle_t hFunctionArgs         ///< [in/out] handle of the function arguments buffer object
+    const void* pArgValue                           ///< [in] argument value represented as matching arg type
     );
 
 ///////////////////////////////////////////////////////////////////////////////

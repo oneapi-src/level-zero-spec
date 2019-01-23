@@ -184,9 +184,9 @@ analogue:
     - "**cuCtxCreate**"
     - "cuCtxGetCurrent"
 params:
-    - type: "$x_function_handle_t"
-      name: hFunction
-      desc: "[in] handle of the function object"
+    - type: "$x_function_args_handle_t"
+      name: hFunctionArgs
+      desc: "[in/out] handle of the function args object."
     - type: "uint32_t"
       name: argIndex
       desc: "[in] argument index in range [0, num args - 1]"
@@ -196,9 +196,6 @@ params:
     - type: "const void*"
       name: pArgValue
       desc: "[in] argument value represented as matching arg type"
-    - type: "$x_function_args_handle_t"
-      name: hFunctionArgs
-      desc: "[in/out] handle of the function arguments buffer object"
 returns:
     - $X_RESULT_ERROR_INVALID_PARAMETER:
         - "invalid handle for hFunction"
