@@ -77,6 +77,23 @@ xe_result_t __xecall
     );
 
 ///////////////////////////////////////////////////////////////////////////////
+/// @brief Destroys module
+/// 
+/// @remarks
+///   _Analogues_
+///     - **cuModuleUnload**
+/// 
+/// @returns
+///     - ::XE_RESULT_SUCCESS
+///     - ::XE_RESULT_ERROR_UNINITIALIZED
+///     - ::XE_RESULT_ERROR_INVALID_PARAMETER
+///         + invalid handle for hModule
+xe_result_t __xecall
+  xeDestroyModule(
+    xe_module_handle_t hModule                      ///< [in] handle of the module
+    );
+
+///////////////////////////////////////////////////////////////////////////////
 /// @brief Creates module object from an input IL or ISA.
 /// 
 /// @remarks
@@ -100,23 +117,6 @@ xe_result_t __xecall
     xe_module_handle_t hModule,                     ///< [in] handle of the device
     uint32_t* pIsaSize,                             ///< [out] size of ISA buffer provided by pModuleISA.
     char** pModuleISA                               ///< [out] pointer to IL or ISA
-    );
-
-///////////////////////////////////////////////////////////////////////////////
-/// @brief Destroys module
-/// 
-/// @remarks
-///   _Analogues_
-///     - **cuModuleUnload**
-/// 
-/// @returns
-///     - ::XE_RESULT_SUCCESS
-///     - ::XE_RESULT_ERROR_UNINITIALIZED
-///     - ::XE_RESULT_ERROR_INVALID_PARAMETER
-///         + invalid handle for hModule
-xe_result_t __xecall
-  xeDestroyModule(
-    xe_module_handle_t hModule                      ///< [in] handle of the module
     );
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -157,7 +157,7 @@ xe_result_t __xecall
 ///         + null ptr for pFunctionName
 ///         + invalid name for pFunctionName
 xe_result_t __xecall
-  xeCreateFunctionFromModule(
+  xeModuleCreateFunction(
     xe_module_handle_t hModule,                     ///< [in] handle of the module
     const char* pFunctionName,                      ///< [in] null-terminated name of function in Module
     xe_function_handle_t* phFunction                ///< [out] handle of the Function object

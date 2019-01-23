@@ -49,6 +49,19 @@ returns:
     - $X_RESULT_ERROR_OUT_OF_DEVICE_MEMORY
 --- #--------------------------------------------------------------------------
 type: function
+desc: "Destroys module"
+name: $xDestroyModule
+analogue:
+    - "**cuModuleUnload**"
+params:
+    - type: "$x_module_handle_t"
+      name: hModule
+      desc: "[in] handle of the module"
+returns:
+    - $X_RESULT_ERROR_INVALID_PARAMETER:
+        - "invalid handle for hModule"
+--- #--------------------------------------------------------------------------
+type: function
 desc: "Creates module object from an input IL or ISA."
 name: $xModuleGetISA
 analogue:
@@ -73,19 +86,6 @@ returns:
         - "0 for inputSize"
     - $X_RESULT_ERROR_OUT_OF_HOST_MEMORY
     - $X_RESULT_ERROR_OUT_OF_DEVICE_MEMORY
---- #--------------------------------------------------------------------------
-type: function
-desc: "Destroys module"
-name: $xDestroyModule
-analogue:
-    - "**cuModuleUnload**"
-params:
-    - type: "$x_module_handle_t"
-      name: hModule
-      desc: "[in] handle of the module"
-returns:
-    - $X_RESULT_ERROR_INVALID_PARAMETER:
-        - "invalid handle for hModule"
 --- #--------------------------------------------------------------------------
 type: function
 desc: "Create Function object from Module by name"
@@ -114,7 +114,7 @@ returns:
 --- #--------------------------------------------------------------------------
 type: function
 desc: "Create Function object from Module by name"
-name: $xCreateFunctionFromModule
+name: $xModuleCreateFunction
 analogue:
     - "**cuModuleGetFunction**"
 params:
