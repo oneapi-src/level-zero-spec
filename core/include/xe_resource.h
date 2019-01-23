@@ -55,7 +55,6 @@ typedef enum _xe_resource_flags_t
 /// @brief Supported resource types
 typedef enum _xe_resource_type_t
 {
-    XE_RESOURCE_TYPE_BUFFER,                        ///< buffer
     XE_RESOURCE_TYPE_1D,                            ///< 1D
     XE_RESOURCE_TYPE_1DARRAY,                       ///< 1D array
     XE_RESOURCE_TYPE_2D,                            ///< 2D

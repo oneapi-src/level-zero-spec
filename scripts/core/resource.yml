@@ -28,8 +28,6 @@ type: enum
 desc: "Supported resource types"
 name: $x_resource_type_t
 etors:
-    - name: $X_RESOURCE_TYPE_BUFFER
-      desc: "buffer"
     - name: $X_RESOURCE_TYPE_1D
       desc: "1D"
     - name: $X_RESOURCE_TYPE_1DARRAY
