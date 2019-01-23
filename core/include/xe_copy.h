@@ -127,7 +127,7 @@ xe_result_t __xecall
 xe_result_t __xecall
   xeCommandListEncodeResourceCopyToMemory(
     xe_command_list_handle_t hCommandList,          ///< [in] handle of command list
-    xe_device_ptr_t dstptr,                         ///< [in] pointer to destination memory to copy to
+    void* dstptr,                                   ///< [in] pointer to destination memory to copy to
     xe_resource_handle_t hSrcResource,              ///< [in] handle of source resource to copy from
     xeResourceRegion* pSrcRegion                    ///< [in] source region descriptor
     );
@@ -150,7 +150,7 @@ xe_result_t __xecall
     xe_command_list_handle_t hCommandList,          ///< [in] handle of command list
     xe_resource_handle_t hDstResource,              ///< [in] handle of destination resource to copy to
     xeResourceRegion* pDstRegion,                   ///< [in] destination region descriptor
-    xe_device_ptr_t srcptr                          ///< [in] pointer to source memory to copy from
+    void* srcptr                                    ///< [in] pointer to source memory to copy from
     );
 
 ///////////////////////////////////////////////////////////////////////////////

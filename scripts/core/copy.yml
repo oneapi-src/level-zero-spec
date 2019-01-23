@@ -95,7 +95,7 @@ params:
     - type: $x_command_list_handle_t
       name: hCommandList
       desc: "[in] handle of command list"
-    - type: $x_device_ptr_t
+    - type: "void*"
       name: dstptr
       desc: "[in] pointer to destination memory to copy to"
     - type: $x_resource_handle_t
@@ -124,7 +124,7 @@ params:
     - type: "$xResourceRegion*"
       name: pDstRegion
       desc: "[in] destination region descriptor"
-    - type: $x_device_ptr_t
+    - type: "void*"
       name: srcptr
       desc: "[in] pointer to source memory to copy from"
 returns:
