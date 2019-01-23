@@ -63,8 +63,9 @@ The following diagram illustrates the hierarchy of command lists and command que
 
 ${"###"} Command Queues
 - A command queue represents a physical input stream to the device.
-- The number of command queues per device is queried from calling 
-  ::${x}DeviceGetProperties; returned as ::${x}_device_properties_t.numAsyncComputeEngines.
+- The number of simultaneous command queues per device is queried from calling 
+  ::${x}DeviceGetProperties; returned as ::${x}_device_properties_t.numAsyncComputeEngines
+  and ::${x}_device_properties_t.numAsyncCopyEngines.
 - Multiple command queues may be created by an application.  For example,
   an application may want to create a command queue per CPU thread.
 - There is no implicit binding of command queues to CPU threads. Therefore,
@@ -112,7 +113,8 @@ The following sample code demonstrates a basic sequence for creation of command 
     // Create a command queue
     ${x}_command_queue_desc_t commandQueueDesc = {
         ${X}_COMMAND_QUEUE_DESC_VERSION,
-        ${X}_COMMAND_QUEUE_FLAG_DEFAULT
+        ${X}_COMMAND_QUEUE_FLAG_NONE,
+        ${X}_COMMAND_QUEUE_MODE_DEFAULT
     };
     ${x}_command_queue_handle_t hCommandQueue;
     ${x}DeviceCreateCommandQueue(hDevice, &commandQueueDesc, &hCommandQueue);

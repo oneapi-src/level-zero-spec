@@ -41,22 +41,32 @@
 #define XE_COMMAND_QUEUE_DESC_VERSION  XE_MAKE_VERSION( 1, 0 )
 
 ///////////////////////////////////////////////////////////////////////////////
-/// @brief Supported command queue creation flags
+/// @brief Supported command queue flags
 typedef enum _xe_command_queue_flags_t
 {
-    XE_COMMAND_QUEUE_FLAG_DEFAULT = 0,              ///< implicit default behavior; uses driver-based heuristics
-    XE_COMMAND_QUEUE_FLAG_SYNCHRONOUS,              ///< GPU execution always completes immediately on enqueue; CPU thread is blocked using wait on implicit synchronization object
-    XE_COMMAND_QUEUE_FLAG_ASYNCHRONOUS,             ///< GPU execution is scheduled and will complete in future; explicit synchronization object must be used to determine completeness
+    XE_COMMAND_QUEUE_FLAG_NONE = 0,                 ///< 
+    XE_COMMAND_QUEUE_FLAG_COPY_ONLY = ${X}_BIT(0),  ///< command queue only supports enqueing copy-only command lists
 
 } xe_command_queue_flags_t;
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Supported command queue modes
+typedef enum _xe_command_queue_mode_t
+{
+    XE_COMMAND_QUEUE_MODE_DEFAULT = 0,              ///< implicit default behavior; uses driver-based heuristics
+    XE_COMMAND_QUEUE_MODE_SYNCHRONOUS,              ///< GPU execution always completes immediately on enqueue; CPU thread is blocked using wait on implicit synchronization object
+    XE_COMMAND_QUEUE_MODE_ASYNCHRONOUS,             ///< GPU execution is scheduled and will complete in future; explicit synchronization object must be used to determine completeness
+
+} xe_command_queue_mode_t;
 
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Command Queue descriptor
 typedef struct _xe_command_queue_desc_t
 {
     uint32_t version;                               ///< [in] ::XE_COMMAND_QUEUE_DESC_VERSION
-    xe_command_queue_flags_t flags;                 ///< [in] creation flags
-    uint32_t ordinal;                               ///< [in] must be less than value returned for ::xe_device_properties_t.numAsyncComputeEngines
+    xe_command_queue_mode_t mode;                   ///< [in] creation flags
+    xe_command_queue_mode_t mode;                   ///< [in] operation mode
+    uint32_t ordinal;                               ///< [in] must be less than value returned for ::xe_device_properties_t.numAsyncComputeEngines or ::xe_device_properties_t.numAsyncCopyEngines
 
 } xe_command_queue_desc_t;
 

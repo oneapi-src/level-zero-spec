@@ -123,9 +123,10 @@ typedef struct _xe_device_properties_t
     uint32_t memGlobalBusWidth;                     ///< [out] Bus width between core and memory.
     uint32_t totalLocalMemSize;                     ///< [out] Total memory size in MB.
     uint32_t l2CacheSize;                           ///< [out] Device L2 size
-    uint32_t numAsyncComputeEngines;                ///< [out] Num asynchronous compute engines
-    uint32_t numComputeCores;                       ///< [out] Num compute cores
-    uint32_t maxCommandQueuePriority;               ///< [out] Max priority for command queues. Higher value is higher priority.
+    uint32_t numAsyncComputeEngines;                ///< [out] Number of asynchronous compute engines
+    uint32_t numAsyncCopyEngines;                   ///< [out] Number of asynchronous copy engines
+    uint32_t numComputeCores;                       ///< [out] Number of compute cores
+    uint32_t maxCommandQueuePriority;               ///< [out] Maximum priority for command queues. Higher value is higher priority.
     char device_name[XE_MAX_DEVICE_NAME];           ///< [out] Device name
 
 } xe_device_properties_t;
@@ -160,16 +161,16 @@ xe_result_t __xecall
 typedef struct _xe_device_compute_properties_t
 {
     uint32_t version;                               ///< [in] ::XE_DEVICE_COMPUTE_PROPERTIES_VERSION
-    uint32_t maxThreadsPerGroup;                    ///< [out] Max threads per compute group
-    uint32_t maxGroupDimX;                          ///< [out] Max threads for X dimension in group
-    uint32_t maxGroupDimY;                          ///< [out] Max threads for Y dimension in group
-    uint32_t maxGroupDimZ;                          ///< [out] Max threads for Z dimension in group
-    uint32_t maxDispatchDimX;                       ///< [out] Max thread groups dispatched for x dimension
-    uint32_t maxDipsatchDimY;                       ///< [out] Max thread groups dispatched for y dimension
-    uint32_t maxDispatchDimZ;                       ///< [out] Max thread groups dispatched for z dimension
-    uint32_t maxSharedLocalMemory;                  ///< [out] Max shared local memory per group. @todo Zack: should this be in device props?
-    uint32_t maxGroupRegisters;                     ///< [out] Max physical registers available per group
-    uint32_t warpSize;                              ///< [out] Max threads that can be executed in lock-step. @todo Zack: should we call this something else?
+    uint32_t maxThreadsPerGroup;                    ///< [out] Maximum threads per compute group
+    uint32_t maxGroupDimX;                          ///< [out] Maximum threads for X dimension in group
+    uint32_t maxGroupDimY;                          ///< [out] Maximum threads for Y dimension in group
+    uint32_t maxGroupDimZ;                          ///< [out] Maximum threads for Z dimension in group
+    uint32_t maxDispatchDimX;                       ///< [out] Maximum thread groups dispatched for x dimension
+    uint32_t maxDipsatchDimY;                       ///< [out] Maximum thread groups dispatched for y dimension
+    uint32_t maxDispatchDimZ;                       ///< [out] Maximum thread groups dispatched for z dimension
+    uint32_t maxSharedLocalMemory;                  ///< [out] Maximum shared local memory per group. @todo Zack: should this be in device props?
+    uint32_t maxGroupRegisters;                     ///< [out] Maximum physical registers available per group
+    uint32_t warpSize;                              ///< [out] Maximum threads that can be executed in lock-step. @todo Zack: should we call this something else?
 
 } xe_device_compute_properties_t;
 
@@ -266,7 +267,7 @@ typedef struct _xe_device_link_properties_t
 } xe_device_link_properties_t;
 
 ///////////////////////////////////////////////////////////////////////////////
-/// @brief Retrieves link properties between src and dest devices.
+/// @brief Retrieves link properties between source and destination devices.
 /// 
 /// @remarks
 ///   _Analogues_
@@ -280,9 +281,9 @@ typedef struct _xe_device_link_properties_t
 ///         + nullptr for provided for properties
 xe_result_t __xecall
   xeDeviceGetLinkProperties(
-    uint32_t srcOrdinal,                            ///< [in] src device ordinal
-    uint32_t dstOrdinal,                            ///< [in] dst device ordinal
-    xe_device_link_properties_t* pLinkProperties    ///< [out] link properties between src and dest devices
+    uint32_t srcOrdinal,                            ///< [in] source device ordinal
+    uint32_t dstOrdinal,                            ///< [in] destination device ordinal
+    xe_device_link_properties_t* pLinkProperties    ///< [out] link properties between source and destination devices
     );
 
 ///////////////////////////////////////////////////////////////////////////////

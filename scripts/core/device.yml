@@ -100,13 +100,16 @@ members:
       desc: "[out] Device L2 size"
     - type: uint32_t
       name: numAsyncComputeEngines
-      desc: "[out] Num asynchronous compute engines"
+      desc: "[out] Number of asynchronous compute engines"
+    - type: uint32_t
+      name: numAsyncCopyEngines
+      desc: "[out] Number of asynchronous copy engines"
     - type: uint32_t
       name: numComputeCores
-      desc: "[out] Num compute cores"
+      desc: "[out] Number of compute cores"
     - type: uint32_t
       name: maxCommandQueuePriority
-      desc: "[out] Max priority for command queues. Higher value is higher priority."
+      desc: "[out] Maximum priority for command queues. Higher value is higher priority."
     - type: char
       name: "device_name[$X_MAX_DEVICE_NAME]"
       desc: "[out] Device name"
@@ -144,34 +147,34 @@ members:
       desc: "[in] $X_DEVICE_COMPUTE_PROPERTIES_VERSION"
     - type: uint32_t
       name: maxThreadsPerGroup
-      desc: "[out] Max threads per compute group"
+      desc: "[out] Maximum threads per compute group"
     - type: uint32_t
       name: maxGroupDimX
-      desc: "[out] Max threads for X dimension in group"
+      desc: "[out] Maximum threads for X dimension in group"
     - type: uint32_t
       name: maxGroupDimY
-      desc: "[out] Max threads for Y dimension in group"
+      desc: "[out] Maximum threads for Y dimension in group"
     - type: uint32_t
       name: maxGroupDimZ
-      desc: "[out] Max threads for Z dimension in group"
+      desc: "[out] Maximum threads for Z dimension in group"
     - type: uint32_t
       name: maxDispatchDimX
-      desc: "[out] Max thread groups dispatched for x dimension"
+      desc: "[out] Maximum thread groups dispatched for x dimension"
     - type: uint32_t
       name: maxDipsatchDimY
-      desc: "[out] Max thread groups dispatched for y dimension"
+      desc: "[out] Maximum thread groups dispatched for y dimension"
     - type: uint32_t
       name: maxDispatchDimZ
-      desc: "[out] Max thread groups dispatched for z dimension"
+      desc: "[out] Maximum thread groups dispatched for z dimension"
     - type: uint32_t
       name: maxSharedLocalMemory
-      desc: "[out] Max shared local memory per group. @todo Zack: should this be in device props?"
+      desc: "[out] Maximum shared local memory per group. @todo Zack: should this be in device props?"
     - type: uint32_t
       name: maxGroupRegisters
-      desc: "[out] Max physical registers available per group"
+      desc: "[out] Maximum physical registers available per group"
     - type: uint32_t
       name: warpSize
-      desc: "[out] Max threads that can be executed in lock-step. @todo Zack: should we call this something else?"
+      desc: "[out] Maximum threads that can be executed in lock-step. @todo Zack: should we call this something else?"
 --- #--------------------------------------------------------------------------
 type: function
 desc: "Retrieves compute attributes of the device"
@@ -292,20 +295,20 @@ members:
       desc: "[out] Relative performance rank of link. @todo Zack: should this be different metric?"
 --- #--------------------------------------------------------------------------
 type: function
-desc: "Retrieves link properties between src and dest devices."
+desc: "Retrieves link properties between source and destination devices."
 name: $xDeviceGetLinkProperties
 analogue:
     - "**cudaDeviceGetP2PAttribute**"
 params:
     - type: uint32_t
       name: srcOrdinal
-      desc: "[in] src device ordinal"
+      desc: "[in] source device ordinal"
     - type: uint32_t
       name: dstOrdinal
-      desc: "[in] dst device ordinal"
+      desc: "[in] destination device ordinal"
     - type: "$x_device_link_properties_t*"
       name: pLinkProperties
-      desc: "[out] link properties between src and dest devices"
+      desc: "[out] link properties between source and destination devices"
 returns:
     - $X_RESULT_ERROR_INVALID_PARAMETER:
         - "invalid ordinal. Use $xDriverGetDeviceCount for valid range."
