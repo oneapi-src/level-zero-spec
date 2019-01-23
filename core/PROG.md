@@ -281,7 +281,28 @@ If the application does not properly manage residency for these cases then the d
 ### 
 
 ## Modules and Functions
-@todo Zack: write-up section
+A Module represents a single translation unit that consists of functions that are compiled together.
+
+```c
+    ...
+    xe_module_handle_t hModule;
+    xeCreateModule(hDevice, XE_MODULE_IL_SPIRV_TEXT, strlen(pIR), pIR, &hModule);
+
+    xe_function_handle_t hFunction;
+    xeModuleCreateFunction(hModule, "vecsum", &hFunction);
+
+    xe_function_args_handle_t hFunctionArgs;
+    xeCreateFunctionArgs(hFunction, &hFunctionArgs);
+
+    xeSetFunctionArgValue(hFunction, 0, sizeof(uint32_t), &rowLength, hFunctionArgs);
+
+    xeCommandListEncodeDispatchFunction(hCommandList, hFunction, hFunctionArgs, rowLength, 1, 1, numRows, 1, 1);
+
+    xeDestroyFunctionArgs(hFunctionArgs);
+    xeDestroyFunction(hFunction);
+    xeDestroyModule(hModule);
+    ...
+```
 
 ### Occupancy
 @todo Zack: write-up section
