@@ -1,11 +1,11 @@
 /* The standard CSS for doxygen 1.8.15 */
 
 body, table, div, p, dl {
-	font: 400 14px/22px Roboto,sans-serif;
+	font: 400 14px/22px Intel Clear,neo-sans;
 }
 
 p.reference, p.definition {
-	font: 400 14px/22px Roboto,sans-serif;
+	font: 400 14px/22px Intel Clear,neo-sans;
 }
 
 /* @group Heading Levels */
@@ -15,15 +15,15 @@ h1.groupheader {
 }
 
 .title {
-	font: 400 14px/28px Roboto,sans-serif;
+	font: 400 14px/28px Intel Clear Pro,neo-sans;
 	font-size: 150%;
 	font-weight: bold;
 	margin: 10px 2px;
 }
 
 h2.groupheader {
-	border-bottom: 1px solid #879ECB;
-	color: #354C7B;
+	border-bottom: 1px solid #0071c5;
+	color: #0071c5
 	font-size: 150%;
 	font-weight: normal;
 	margin-top: 1.75em;
@@ -106,7 +106,7 @@ h3.version {
 }
 
 div.qindex, div.navtab{
-	background-color: #EBEFF6;
+	background-color: #BFCDEC;
 	border: 1px solid #A3B4D7;
 	text-align: center;
 }
@@ -324,7 +324,7 @@ div.contents {
 }
 
 td.indexkey {
-	background-color: #EBEFF6;
+	background-color: #BFCDEC;
 	font-weight: bold;
 	border: 1px solid #C4CFE5;
 	margin: 2px 0px 2px 0;
@@ -334,7 +334,7 @@ td.indexkey {
 }
 
 td.indexvalue {
-	background-color: #EBEFF6;
+	background-color: #BFCDEC;
 	border: 1px solid #C4CFE5;
 	padding: 2px 10px;
 	margin: 2px 0px;
@@ -469,7 +469,7 @@ td.tiny {
 }
 
 th.dirtab {
-	background: #EBEFF6;
+	background: #BFCDEC;
 	font-weight: bold;
 }
 
@@ -580,7 +580,7 @@ table.memberdecls {
 }
 
 .memnav {
-	background-color: #EBEFF6;
+	background-color: #BFCDEC;
 	border: 1px solid #A3B4D7;
 	text-align: center;
 	margin: 2px;
@@ -888,7 +888,7 @@ div.directory {
 }
 
 table.directory {
-    font: 400 14px Roboto,sans-serif;
+    font: 400 14px Intel Clear,neo-sans;
 }
 
 /* @end */
@@ -1505,7 +1505,7 @@ tr.heading h2 {
 #powerTip div {
         margin: 0px;
         padding: 0px;
-        font: 12px/16px Roboto,sans-serif;
+        font: 12px/16px Intel Clear,neo-sans;
 }
 
 #powerTip:before, #powerTip:after {
