@@ -3,17 +3,17 @@ type: header
 desc: "Intel $Xx Driver APIs for Memory"
 --- #--------------------------------------------------------------------------
 type: macro
-desc: "@todo need a kernel property to indicate indirect shared memory access"
+desc: "@todo Ben: need a kernel property to indicate indirect shared memory access"
 name: "$X_KERNEL_PROPERTY_INDIRECT_SHARED_ACCESS"
 value: "0"
 --- #--------------------------------------------------------------------------
 type: macro
-desc: "@todo possible kernel property to indicate indirect device memory access?"
+desc: "@todo Ben: possible kernel property to indicate indirect device memory access?"
 name: "$X_KERNEL_PROPERTY_INDIRECT_DEVICE_ACCESS"
 value: "0"
 --- #--------------------------------------------------------------------------
 type: macro
-desc: "@todo possible kernel property to indicate indirect host memory access?"
+desc: "@todo Ben: possible kernel property to indicate indirect host memory access?"
 name: "$X_KERNEL_PROPERTY_INDIRECT_HOST_ACCESS"
 value: "0"
 --- #--------------------------------------------------------------------------
@@ -21,8 +21,8 @@ type: function
 desc: "Allocates memory that is shared between the host and one or more devices"
 name: $xSharedMemAlloc
 details:
-    - "Shared allocations share ownership between the host and one or more devices.
-      @todo Comprehend multi-tile."
+    - "Shared allocations share ownership between the host and one or more devices."
+    - "@todo Ben: comprehend multi-tile?"
 analogue:
     - "**cudaMallocManaged**"
 params:
@@ -129,7 +129,7 @@ type: function
 desc: "Frees allocated host memory, device memory, or shared memory"
 name: $xMemFree
 details:
-    - "@todo Should the pointer passed to the $xMemFree function be const or non-const?"
+    - "@todo Ben: Should the pointer passed to the $xMemFree function be const or non-const?"
 analogue:
     - "**cudaFree**"
     - "**cudaFreeHost**"
@@ -171,9 +171,9 @@ type: function
 desc: "Retrieves a property of an allocation"
 name: $xMemGetProperty
 details:
-    - "@todo do we need to support additional properties: base addr, size, etc?
-      @todo do we need to support querying the associated device?
-      @todo should we return all attributes as a (versioned) struct instead?"
+    - "@todo Ben: do we need to support additional properties: base addr, size, etc? 
+       @todo Ben: do we need to support querying the associated device? 
+       @todo Ben: should we return all attributes as a (versioned) struct instead?"
 analogue:
     - "**cudaPointerGetAttributes**"
 params:
@@ -201,15 +201,14 @@ name: $x_memory_advice_t
 etors:
     - name: $X_MEMORY_ADVICE_TBD
       value: "0"
-      desc: "@todo"
+      desc: "@todo Ben: which memory advice hints could/should we support?"
 --- #--------------------------------------------------------------------------
 type: function
 desc: "Provides advice about the use of a shared memory range"
 name: $xMemAdvise
 details:
-    - "Memory advice can be used to override driver heuristics to explicitly control shared memory behavior.
-      @todo likely will snap to page boundaries
-      @todo which memory advice hints could/should we support?"
+    - "Memory advice can be used to override driver heuristics to explicitly control shared memory behavior."
+    - "@todo Ben: likely will snap to page boundaries"
 analogue:
     - "**cudaMemAdvise**"
 params:

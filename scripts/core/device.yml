@@ -165,13 +165,13 @@ members:
       desc: "[out] Max thread groups dispatched for z dimension"
     - type: uint32_t
       name: maxSharedLocalMemory
-      desc: "[out] Max shared local memory per group. @todo Should this be in device props?"
+      desc: "[out] Max shared local memory per group. @todo Zack: should this be in device props?"
     - type: uint32_t
       name: maxGroupRegisters
       desc: "[out] Max physical registers available per group"
     - type: uint32_t
       name: warpSize
-      desc: "[out] Max threads that can be executed in lock-step. @todo: Should we call this something else?"
+      desc: "[out] Max threads that can be executed in lock-step. @todo Zack: should we call this something else?"
 --- #--------------------------------------------------------------------------
 type: function
 desc: "Retrieves compute attributes of the device"
@@ -289,7 +289,7 @@ members:
       desc: "[out] Are atomics supported across link"
     - type: uint32_t
       name: performanceRank
-      desc: "[out] Relative performance rank of link. @todo Should this be different metric?"
+      desc: "[out] Relative performance rank of link. @todo Zack: should this be different metric?"
 --- #--------------------------------------------------------------------------
 type: function
 desc: "Retrieves link properties between src and dest devices."
@@ -337,9 +337,9 @@ desc: "Enables direct access to peer device allocations"
 name: $xDeviceEnablePeerAccess
 details:
     - "The access is uni-directional and only enables access from the device to allocations on the peer device."
-    - "A separate call is required to enable access from the peer device to this device.
-      @todo document any limits on number of active p2p connections
-      @todo document behavior if link is already enabled"
+    - "A separate call is required to enable access from the peer device to this device."
+    - "@todo Ben: document any limits on number of active p2p connections 
+       @todo Ben: document behavior if link is already enabled"
 analogue:
     - "**cudaDeviceEnablePeerAccess**"
 params:
@@ -359,7 +359,7 @@ type: function
 desc: "Disables direct access to peer device allocations"
 name: $xDeviceDisablePeerAccess
 details:
-    - "@todo document behavior if link is not enabled"
+    - "@todo Ben: document behavior if link is not enabled"
 analogue:
     - "**cudaDeviceDisablePeerAccess**"
 params:

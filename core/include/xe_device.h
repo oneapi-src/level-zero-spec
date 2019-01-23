@@ -167,9 +167,9 @@ typedef struct _xe_device_compute_properties_t
     uint32_t maxDispatchDimX;                       ///< [out] Max thread groups dispatched for x dimension
     uint32_t maxDipsatchDimY;                       ///< [out] Max thread groups dispatched for y dimension
     uint32_t maxDispatchDimZ;                       ///< [out] Max thread groups dispatched for z dimension
-    uint32_t maxSharedLocalMemory;                  ///< [out] Max shared local memory per group. @todo Should this be in device props?
+    uint32_t maxSharedLocalMemory;                  ///< [out] Max shared local memory per group. @todo Zack: should this be in device props?
     uint32_t maxGroupRegisters;                     ///< [out] Max physical registers available per group
-    uint32_t warpSize;                              ///< [out] Max threads that can be executed in lock-step. @todo: Should we call this something else?
+    uint32_t warpSize;                              ///< [out] Max threads that can be executed in lock-step. @todo Zack: should we call this something else?
 
 } xe_device_compute_properties_t;
 
@@ -261,7 +261,7 @@ typedef struct _xe_device_link_properties_t
     uint32_t version;                               ///< [in] ::XE_DEVICE_LINK_PROPERTIES_VERSION
     bool isP2PSupported;                            ///< [out] Is P2P access supported across link
     bool isAtomicsSupported;                        ///< [out] Are atomics supported across link
-    uint32_t performanceRank;                       ///< [out] Relative performance rank of link. @todo Should this be different metric?
+    uint32_t performanceRank;                       ///< [out] Relative performance rank of link. @todo Zack: should this be different metric?
 
 } xe_device_link_properties_t;
 
@@ -313,8 +313,9 @@ xe_result_t __xecall
 ///     - The access is uni-directional and only enables access from the device
 ///       to allocations on the peer device.
 ///     - A separate call is required to enable access from the peer device to
-///       this device. @todo document any limits on number of active p2p
-///       connections @todo document behavior if link is already enabled
+///       this device.
+///     - @todo Ben: document any limits on number of active p2p connections
+///       @todo Ben: document behavior if link is already enabled
 /// 
 /// @remarks
 ///   _Analogues_
@@ -337,7 +338,7 @@ xe_result_t __xecall
 /// @brief Disables direct access to peer device allocations
 /// 
 /// @details
-///     - @todo document behavior if link is not enabled
+///     - @todo Ben: document behavior if link is not enabled
 /// 
 /// @remarks
 ///   _Analogues_

@@ -159,9 +159,10 @@ xe_result_t __xecall
 /// 
 /// @details
 ///     - This is a hint to improve performance only and is not required for
-///       correctness. @todo confirm we do not need a synchronous prefetch.
-///       @todo could/should we support prefetches to other devices? @todo
-///       could/should we support prefetches to the host?
+///       correctness.
+///     - @todo Ben: confirm we do not need a synchronous prefetch. @todo
+///       Ben/Ankur: could/should we support prefetches to other devices? @todo
+///       Ben/Ankur: could/should we support prefetches to the host?
 /// 
 /// @remarks
 ///   _Analogues_

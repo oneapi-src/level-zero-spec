@@ -245,7 +245,7 @@ There are two types of allocations:
 2. Images - non-linear, formatted allocations for direct access from the device.
 
 ### Memory
-@todo standard, managed, and shared
+@todo Ben: describe standard, managed, and shared
 
 ### Images
 An image is used to store multi-dimensional and format-defined memory for optimal device access.
@@ -259,7 +259,7 @@ and avoids exposing these details in the API in a backwards compatible fashion.
 ```
 
 ### Device Cache Settings
-@todo global vs allocation vs command queue
+@todo Ankur: global vs allocation vs command queue
 
 ### Device Residency
 In most cases, the driver implicitly handles residency of allocations for device access.
@@ -279,7 +279,7 @@ If the application does not properly manage residency for these cases then the d
 ### 
 
 ## Modules and Functions
-@todo 
+@todo Zack: write-up section
 
 ### Occupancy
-@todo 
+@todo Zack: write-up section

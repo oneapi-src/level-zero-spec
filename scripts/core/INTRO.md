@@ -55,7 +55,6 @@ The following table documents the supported knobs for overriding default driver 
 
 | Category            | Name                                    | Values                 | Description                                           |
 |---------------------|-----------------------------------------|------------------------|-------------------------------------------------------|
-| Memory              | @todo ${X}_MANAGED_FORCE_DEVICE_ALLOC   | {**0**, 1}             | Forces all managed allocations into device memory     |
-| Programs            | @todo ${X}_PROGRAM_CACHE_DISABLE        | {**0**, 1}             | Disables the disk caching of compiled programs        |
-| Cache               | @todo ${X}_PROGRAM_MOCS_INDEX           | {}                     | Overrides the Memory Object Control State (MOCS) index used for programs, scratch space, and arguments. |
-|||||
+| Memory              | ${X}_MANAGED_FORCE_DEVICE_ALLOC         | {**0**, 1}             | Forces all managed allocations into device memory     |
+| Programs            | ${X}_PROGRAM_CACHE_DISABLE              | {**0**, 1}             | Disables the disk caching of compiled programs        |
+| Cache               | ${X}_PROGRAM_MOCS_INDEX                 | {**0**}                | @todo Ankur: Overrides the Memory Object Control State (MOCS) index used for programs, scratch space, and arguments. |

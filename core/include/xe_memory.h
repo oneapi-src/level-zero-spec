@@ -37,16 +37,17 @@
 #include "xe_common.h"
 
 ///////////////////////////////////////////////////////////////////////////////
-/// @brief @todo need a kernel property to indicate indirect shared memory access
+/// @brief @todo Ben: need a kernel property to indicate indirect shared memory
+///        access
 #define XE_KERNEL_PROPERTY_INDIRECT_SHARED_ACCESS  0
 
 ///////////////////////////////////////////////////////////////////////////////
-/// @brief @todo possible kernel property to indicate indirect device memory
+/// @brief @todo Ben: possible kernel property to indicate indirect device memory
 ///        access?
 #define XE_KERNEL_PROPERTY_INDIRECT_DEVICE_ACCESS  0
 
 ///////////////////////////////////////////////////////////////////////////////
-/// @brief @todo possible kernel property to indicate indirect host memory
+/// @brief @todo Ben: possible kernel property to indicate indirect host memory
 ///        access?
 #define XE_KERNEL_PROPERTY_INDIRECT_HOST_ACCESS  0
 
@@ -56,7 +57,8 @@
 /// 
 /// @details
 ///     - Shared allocations share ownership between the host and one or more
-///       devices. @todo Comprehend multi-tile.
+///       devices.
+///     - @todo Ben: comprehend multi-tile?
 /// 
 /// @remarks
 ///   _Analogues_
@@ -152,8 +154,8 @@ xe_result_t __xecall
 /// @brief Frees allocated host memory, device memory, or shared memory
 /// 
 /// @details
-///     - @todo Should the pointer passed to the ::xeMemFree function be const
-///       or non-const?
+///     - @todo Ben: Should the pointer passed to the ::xeMemFree function be
+///       const or non-const?
 /// 
 /// @remarks
 ///   _Analogues_
@@ -195,9 +197,10 @@ typedef enum _xe_memory_property_t
 /// @brief Retrieves a property of an allocation
 /// 
 /// @details
-///     - @todo do we need to support additional properties: base addr, size,
-///       etc? @todo do we need to support querying the associated device? @todo
-///       should we return all attributes as a (versioned) struct instead?
+///     - @todo Ben: do we need to support additional properties: base addr,
+///       size, etc? @todo Ben: do we need to support querying the associated
+///       device? @todo Ben: should we return all attributes as a (versioned)
+///       struct instead?
 /// 
 /// @remarks
 ///   _Analogues_
@@ -222,7 +225,7 @@ xe_result_t __xecall
 /// @brief Supported memory advice hints
 typedef enum _xe_memory_advice_t
 {
-    XE_MEMORY_ADVICE_TBD = 0,                       ///< @todo
+    XE_MEMORY_ADVICE_TBD = 0,                       ///< @todo Ben: which memory advice hints could/should we support?
 
 } xe_memory_advice_t;
 
@@ -231,8 +234,8 @@ typedef enum _xe_memory_advice_t
 /// 
 /// @details
 ///     - Memory advice can be used to override driver heuristics to explicitly
-///       control shared memory behavior. @todo likely will snap to page
-///       boundaries @todo which memory advice hints could/should we support?
+///       control shared memory behavior.
+///     - @todo Ben: likely will snap to page boundaries
 /// 
 /// @remarks
 ///   _Analogues_
