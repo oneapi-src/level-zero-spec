@@ -13,7 +13,7 @@ Most applications should not require the additional control provided by the driv
 The driver APIs are intended for providing explicit controls needed by higher-level runtime APIs and libraries.
 
 While heavily influenced by other low-level APIs, such as OpenCL, the driver APIs are designed to evolve independently.
-While heavily influenced by GPU archtiecture, the driver APIs are designed to be supportable across different device types, such as CPUs or FPGAs.
+While heavily influenced by GPU archtiecture, the driver APIs are designed to be supportable across different device types, such as FPGAs.
 
 ## Cross-Device Support
 In order to both expose the full capabilities of GPUs and remain supportable by other devices, the API definition is sub-divided into "Core" and "Extended".  
@@ -53,6 +53,9 @@ There are multiple versions that can be used by the application to determine com
 ## Environment Variables
 The following table documents the supported knobs for overriding default driver behavior.
 
-| Category | Name     | Values   | Description |
-|----------|----------|----------|-------------|
-|          |          |          |             |
+| Category            | Name                                    | Values                 | Description                                           |
+|---------------------|-----------------------------------------|------------------------|-------------------------------------------------------|
+| Memory              | @todo XE_MANAGED_FORCE_DEVICE_ALLOC   | {**0**, 1}             | Forces all managed allocations into device memory     |
+| Programs            | @todo XE_PROGRAM_CACHE_DISABLE        | {**0**, 1}             | Disables the disk caching of compiled programs        |
+| Cache               | @todo XE_PROGRAM_MOCS_INDEX           | {}                     | Overrides the Memory Object Control State (MOCS) index used for programs, scratch space, and arguments. |
+|||||

@@ -17,6 +17,7 @@ ${"###"} Driver
 ${"###"} Device
 - A device represents a physical device in the system that can support ${Xx}.
 - More than one device may be available in the system.
+- The application is responsible for sharing memory and explicit submission and synchronization across multiple devices.
 
 ${"###"} Initialization
 The driver API must be initizalized by calling ${x}DriverInit before any other function.
@@ -238,20 +239,27 @@ The following sample code demonstrates a sequence for creation and submission of
     ...
 ```
 
-${"##"} Memory and Resource Management
+${"##"} Memory and Image Management
+There are two types of allocations:
+1. Memory - linear, unformatted allocations for direct access from both the host and device.
+2. Images - non-linear, formatted allocations for direct access from the device.
 
-${"###"} Device Cache Settings
-todo: global vs allocation vs command queue
+${"###"} Memory
+@todo standard, managed, and shared
 
-${"###"} Host and Device Content Access
-A resource's contents can be copied to and from other resources, as well as host-accessable memory allocations.
-This is the only method for host access to the contents of a resource.
-This methodology allows for device-specific encoding of resource contents (e.g., tile swizzle patterns, loseless compression, etc.) 
+${"###"} Images
+An image is used to store multi-dimensional and format-defined memory for optimal device access.
+An image's contents can be copied to and from other images, as well as host-accessable memory allocations.
+This is the only method for host access to the contents of an image.
+This methodology allows for device-specific encoding of image contents (e.g., tile swizzle patterns, loseless compression, etc.) 
 and avoids exposing these details in the API in a backwards compatible fashion.
 
 ```c
     ...
 ```
+
+${"###"} Device Cache Settings
+@todo global vs allocation vs command queue
 
 ${"###"} Device Residency
 In most cases, the driver implicitly handles residency of allocations for device access.
@@ -268,5 +276,10 @@ If the application does not properly manage residency for these cases then the d
     ...
 ```
 
+${"###"} 
+
 ${"##"} Modules and Functions
-todo
+@todo 
+
+${"###"} Occupancy
+@todo 
