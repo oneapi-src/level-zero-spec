@@ -26,9 +26,6 @@ details:
 analogue:
     - "**cudaMallocManaged**"
 params:
-    - type: "const $x_context_handle_t"
-      name: hContext
-      desc: "[in] handle of the context"
     - type: "const $x_device_handle_t"
       name: hDevice
       desc: "[in] handle of the device"
@@ -43,7 +40,6 @@ params:
       desc: "[out] pointer to shared allocation"
 returns:
     - $X_RESULT_ERROR_INVALID_PARAMETER:
-        - "invalid handle for hContext"
         - "invalid handle for hDevice"
         - "unsupported allocation size"
     - $X_RESULT_ERROR_OUT_OF_HOST_MEMORY
@@ -58,9 +54,6 @@ details:
 analogue:
     - "**cudaMalloc**"
 params:
-    - type: "const $x_context_handle_t"
-      name: hContext
-      desc: "[in] handle of the context"
     - type: "const $x_device_handle_t"
       name: hDevice
       desc: "[in] handle of the device"
@@ -75,7 +68,6 @@ params:
       desc: "[out] pointer to device allocation"
 returns:
     - $X_RESULT_ERROR_INVALID_PARAMETER:
-        - "invalid handle for hContext"
         - "invalid handle for hDevice"
         - "unsupported allocation size"
     - $X_RESULT_ERROR_OUT_OF_HOST_MEMORY
@@ -102,9 +94,6 @@ details:
 analogue:
     - "**cudaHostAlloc**"
 params:
-    - type: "const $x_context_handle_t"
-      name: hContext
-      desc: "[in] handle of the context"
     - type: "$x_host_mem_alloc_flags_t"
       name: flags
       desc: "[in] flags controlling specifying additional allocation controls"
@@ -119,7 +108,6 @@ params:
       desc: "[out] pointer to host allocation"
 returns:
     - $X_RESULT_ERROR_INVALID_PARAMETER:
-        - "invalid handle for hContext"
         - "invalid handle for hDevice"
         - "unsupported allocation size"
     - $X_RESULT_ERROR_OUT_OF_HOST_MEMORY
@@ -134,15 +122,11 @@ analogue:
     - "**cudaFree**"
     - "**cudaFreeHost**"
 params:
-    - type: "const $x_context_handle_t"
-      name: hContext
-      desc: "[in] handle of the context"
     - type: "const void*"
       name: ptr
       desc: "[in] pointer to memory to free"
 returns:
     - $X_RESULT_ERROR_INVALID_PARAMETER:
-        - "invalid handle for hContext"
         - "invalid pointer"
 --- #--------------------------------------------------------------------------
 type: enum
@@ -177,9 +161,6 @@ details:
 analogue:
     - "**cudaPointerGetAttributes**"
 params:
-    - type: "const $x_context_handle_t"
-      name: hContext
-      desc: "[in] handle of the context"
     - type: "const void*"
       name: ptr
       desc: "[in] Pointer to query"
@@ -191,7 +172,6 @@ params:
       desc: "[out] Value of the queried property"
 returns:
     - $X_RESULT_ERROR_INVALID_PARAMETER:
-        - "invalid handle for hContext"
         - "invalid pointer"
         - "invalid property"
 --- #--------------------------------------------------------------------------
@@ -212,9 +192,6 @@ details:
 analogue:
     - "**cudaMemAdvise**"
 params:
-    - type: "const $x_context_handle_t"
-      name: hContext
-      desc: "[in] handle of the context"
     - type: "const $x_device_handle_t"
       name: hDevice
       desc: "[in] handle of the device to apply the advice to"
@@ -229,7 +206,6 @@ params:
       desc: "[in] Memory advice for the memory range"
 returns:
     - $X_RESULT_ERROR_INVALID_PARAMETER:
-        - "invalid handle for hContext"
         - "invalid handle for hDevice"
         - "invalid pointer"
         - "invalid advice"

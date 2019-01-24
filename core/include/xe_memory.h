@@ -68,14 +68,12 @@
 ///     - ::XE_RESULT_SUCCESS
 ///     - ::XE_RESULT_ERROR_UNINITIALIZED
 ///     - ::XE_RESULT_ERROR_INVALID_PARAMETER
-///         + invalid handle for hContext
 ///         + invalid handle for hDevice
 ///         + unsupported allocation size
 ///     - ::XE_RESULT_ERROR_OUT_OF_HOST_MEMORY
 ///     - ::XE_RESULT_ERROR_OUT_OF_DEVICE_MEMORY
 xe_result_t __xecall
   xeSharedMemAlloc(
-    const xe_context_handle_t hContext,             ///< [in] handle of the context
     const xe_device_handle_t hDevice,               ///< [in] handle of the device
     size_t size,                                    ///< [in] size in bytes to allocate
     uint32_t alignment,                             ///< [in] minimum alignment in bytes for the allocation
@@ -97,14 +95,12 @@ xe_result_t __xecall
 ///     - ::XE_RESULT_SUCCESS
 ///     - ::XE_RESULT_ERROR_UNINITIALIZED
 ///     - ::XE_RESULT_ERROR_INVALID_PARAMETER
-///         + invalid handle for hContext
 ///         + invalid handle for hDevice
 ///         + unsupported allocation size
 ///     - ::XE_RESULT_ERROR_OUT_OF_HOST_MEMORY
 ///     - ::XE_RESULT_ERROR_OUT_OF_DEVICE_MEMORY
 xe_result_t __xecall
   xeMemAlloc(
-    const xe_context_handle_t hContext,             ///< [in] handle of the context
     const xe_device_handle_t hDevice,               ///< [in] handle of the device
     size_t size,                                    ///< [in] size in bytes to allocate
     uint32_t alignment,                             ///< [in] minimum alignment in bytes for the allocation
@@ -136,14 +132,12 @@ typedef enum _xe_host_mem_alloc_flags_t
 ///     - ::XE_RESULT_SUCCESS
 ///     - ::XE_RESULT_ERROR_UNINITIALIZED
 ///     - ::XE_RESULT_ERROR_INVALID_PARAMETER
-///         + invalid handle for hContext
 ///         + invalid handle for hDevice
 ///         + unsupported allocation size
 ///     - ::XE_RESULT_ERROR_OUT_OF_HOST_MEMORY
 ///     - ::XE_RESULT_ERROR_OUT_OF_DEVICE_MEMORY
 xe_result_t __xecall
   xeHostMemAlloc(
-    const xe_context_handle_t hContext,             ///< [in] handle of the context
     xe_host_mem_alloc_flags_t flags,                ///< [in] flags controlling specifying additional allocation controls
     size_t size,                                    ///< [in] size in bytes to allocate
     uint32_t alignment,                             ///< [in] minimum alignment in bytes for the allocation
@@ -166,11 +160,9 @@ xe_result_t __xecall
 ///     - ::XE_RESULT_SUCCESS
 ///     - ::XE_RESULT_ERROR_UNINITIALIZED
 ///     - ::XE_RESULT_ERROR_INVALID_PARAMETER
-///         + invalid handle for hContext
 ///         + invalid pointer
 xe_result_t __xecall
   xeMemFree(
-    const xe_context_handle_t hContext,             ///< [in] handle of the context
     const void* ptr                                 ///< [in] pointer to memory to free
     );
 
@@ -210,12 +202,10 @@ typedef enum _xe_memory_property_t
 ///     - ::XE_RESULT_SUCCESS
 ///     - ::XE_RESULT_ERROR_UNINITIALIZED
 ///     - ::XE_RESULT_ERROR_INVALID_PARAMETER
-///         + invalid handle for hContext
 ///         + invalid pointer
 ///         + invalid property
 xe_result_t __xecall
   xeMemGetProperty(
-    const xe_context_handle_t hContext,             ///< [in] handle of the context
     const void* ptr,                                ///< [in] Pointer to query
     xe_memory_property_t property,                  ///< [in] Property of the allocation to query
     uint32_t* value                                 ///< [out] Value of the queried property
@@ -245,13 +235,11 @@ typedef enum _xe_memory_advice_t
 ///     - ::XE_RESULT_SUCCESS
 ///     - ::XE_RESULT_ERROR_UNINITIALIZED
 ///     - ::XE_RESULT_ERROR_INVALID_PARAMETER
-///         + invalid handle for hContext
 ///         + invalid handle for hDevice
 ///         + invalid pointer
 ///         + invalid advice
 xe_result_t __xecall
   xeMemAdvise(
-    const xe_context_handle_t hContext,             ///< [in] handle of the context
     const xe_device_handle_t hDevice,               ///< [in] handle of the device to apply the advice to
     const void* ptr,                                ///< [in] Pointer to the start of the memory range
     size_t size,                                    ///< [in] Size in bytes of the memory range
