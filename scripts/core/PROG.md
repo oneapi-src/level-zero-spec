@@ -281,7 +281,34 @@ If the application does not properly manage residency for these cases then the d
 ${"###"} 
 
 ${"##"} Modules and Functions
-@todo Zack: write-up section
+A Module represents a single translation unit that consists of functions that have been compiled together.
+
+- Modules can be created from an IL or directly from ISA using ${x}CreateModule.
+  + ${x}CreateModule takes a format argument that specifies the input format.
+  + ${x}CreateModule performs a compilation step when format is IL.
+- The ISA can be queried from a Module using ${x}ModuleGetISA.
+
+```c
+    ...
+    ${x}_module_handle_t hModule;
+    ${x}CreateModule(hDevice, XE_MODULE_IL_SPIRV_TEXT, strlen(pIL), pIL, &hModule);
+
+    ${x}_function_handle_t hFunction;
+    ${x}ModuleCreateFunction(hModule, "vecsum", &hFunction);
+
+    ${x}_function_args_handle_t hFunctionArgs;
+    ${x}CreateFunctionArgs(hFunction, &hFunctionArgs);
+
+    ${x}SetFunctionArgValue(hFunctionArgs, 0, sizeof(uint32_t), &rowLength);
+
+    ${x}CommandListEncodeDispatchFunction(hCommandList, hFunction, hFunctionArgs, rowLength, 1, 1, numRows, 1, 1);
+
+    ...
+	
+    ${x}DestroyFunctionArgs(hFunctionArgs);
+    ${x}DestroyFunction(hFunction);
+    ${x}DestroyModule(hModule);
+```
 
 ${"###"} Occupancy
 @todo Zack: write-up section
