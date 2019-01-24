@@ -307,6 +307,19 @@ xe_result_t __xecall
     );
 
 ///////////////////////////////////////////////////////////////////////////////
+/// @brief Device properties queried using ::xeDeviceGetProperties
+typedef struct _xe_dispatch_function_arguments_t
+{
+    uint32_t groupCountX;                           ///< width of group in X dimension
+    uint32_t groupCountY;                           ///< width of group in Y dimension
+    uint32_t groupCountZ;                           ///< width of group in Z dimension
+    uint32_t dispatchCountX;                        ///< width of dispatches in X dimension
+    uint32_t dispatchCountY;                        ///< width of dispatches in Y dimension
+    uint32_t dispatchCountZ;                        ///< width of dispatches in Z dimension
+
+} xe_dispatch_function_arguments_t;
+
+///////////////////////////////////////////////////////////////////////////////
 /// @brief Dispatch command over one or more work groups using indirect dispatch
 ///        arguments.
 /// 
@@ -327,7 +340,7 @@ xe_result_t __xecall
     xe_command_list_handle_t hCommandList,          ///< [in] handle of the command list
     xe_function_handle_t hFunction,                 ///< [in] handle of the function object
     xe_function_args_handle_t hFunctionArgs,        ///< [in] handle to function arguments buffer.
-    void* pDispatchArgumentsBuffer                  ///< [in] Pointer to buffer that will contain dispatch arguments. @todo Should this be opaque?
+    const xe_dispatch_function_arguments_t* pDispatchArgumentsBuffer///< [in] Pointer to buffer that will contain dispatch arguments. @todo Should this be opaque?
     );
 
 #endif // _XE_MODULE_H
