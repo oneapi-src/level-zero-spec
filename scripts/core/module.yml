@@ -320,10 +320,31 @@ params:
       desc: "[in] handle to function arguments buffer."
     - type: "const $x_dispatch_function_arguments_t*"
       name: pDispatchArgumentsBuffer
-      desc: "[in] Pointer to buffer that will contain dispatch arguments. @todo Should this be opaque?"
+      desc: "[in] Pointer to buffer that will contain dispatch arguments."
 returns:
     - $X_RESULT_ERROR_INVALID_PARAMETER:
         - "invalid handle for hCommandQueue"
         - "invalid handle for hFunction"
         - "invalid handle for hFunctionArgs."
         - "null ptr for dispatch arguments buffer"
+--- #--------------------------------------------------------------------------
+type: function
+desc: "Compute max groups that can occupy per sublice."
+name: $xOccupancyMaxGroupsPerSublice
+analogue:
+    - "**cuOccupancyMaxActiveBlocksPerMultiprocessor**"
+params:
+    - type: "$x_function_handle_t"
+      name: hFunction
+      desc: "[in] handle of the function object"
+    - type: "$x_dispatch_function_arguments_t*"
+      name: pDispatchArgumentsBuffer
+      desc: "[in] Pointer to buffer that will contain dispatch arguments."
+    - type: "uint32_t*"
+      name: pMaxGroups
+      desc: "[out] Pointer to maximum groups that can occupy subslice for this function."
+returns:
+    - $X_RESULT_ERROR_INVALID_PARAMETER:
+        - "invalid handle for hFunction"
+        - "null ptr for pDispatchArgumentsBuffer."
+        - "null ptr for pMax Groups"
