@@ -64,7 +64,7 @@ typedef enum _xe_command_queue_mode_t
 typedef struct _xe_command_queue_desc_t
 {
     uint32_t version;                               ///< [in] ::XE_COMMAND_QUEUE_DESC_VERSION
-    xe_command_queue_mode_t mode;                   ///< [in] creation flags
+    xe_command_queue_flags_t flags;                 ///< [in] creation flags
     xe_command_queue_mode_t mode;                   ///< [in] operation mode
     uint32_t ordinal;                               ///< [in] must be less than value returned for ::xe_device_properties_t.numAsyncComputeEngines or ::xe_device_properties_t.numAsyncCopyEngines
 

@@ -39,8 +39,8 @@ members:
     - type: uint32_t
       name: version
       desc: "[in] $X_COMMAND_QUEUE_DESC_VERSION"
-    - type: $x_command_queue_mode_t
-      name: mode
+    - type: $x_command_queue_flags_t
+      name: flags
       desc: "[in] creation flags"
     - type: $x_command_queue_mode_t
       name: mode
