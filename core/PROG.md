@@ -175,7 +175,7 @@ The following sample code demonstrates a sequence for creation, submission and q
     xeFenceEnqueueSignal(hFence);
 
     // Wait for fence to be signaled
-    if(XE_RESULT_SUCCESS != xeFenceQueryStatus(hFence)
+    if(XE_RESULT_SUCCESS != xeFenceQueryStatus(hFence))
     {
         xeHostWaitOnFence(hFence);
     }
@@ -251,6 +251,7 @@ There are two types of allocations:
 
 ### Memory
 @todo Ben: describe standard, managed, and shared
+@todo Ben: describe property and advise
 
 ### Images
 An image is used to store multi-dimensional and format-defined memory for optimal device access.
@@ -278,6 +279,30 @@ there are two methods available.
 If the application does not properly manage residency for these cases then the device may experience unrecoverable page-faults.
 
 ```c
+    struct node {
+        node* next;
+    };
+    node* begin = nullptr;
+    xeMemAlloc(hDevice, sizeof(node), &begin);
+    xeMemAlloc(hDevice, sizeof(node), &begin->next);
+    xeMemAlloc(hDevice, sizeof(node), &begin->next->next);
+
+    // 'begin' is passed as function argument and encoded into command list
+    ...
+
+    // Make indirect allocations resident before enqueuing
+    xeDeviceMakeMemoryResident(hDevice, begin->next, sizeof(node));
+    xeDeviceMakeMemoryResident(hDevice, begin->next->next, sizeof(node));
+
+    xeCommandQueueEnqueueCommandList(hCommandQueue, hCommandList);
+
+    // wait until complete
+    xeFenceEnqueueSignal(hFence);
+    xeHostWaitOnFence(hFence);
+
+    // Finally, evict to free device resources
+    xeDeviceEvictMemory(hDevice, begin->next, sizeof(node));
+    xeDeviceEvictMemory(hDevice, begin->next->next, sizeof(node));
     ...
 ```
 

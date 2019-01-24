@@ -175,7 +175,7 @@ The following sample code demonstrates a sequence for creation, submission and q
     ${x}FenceEnqueueSignal(hFence);
 
     // Wait for fence to be signaled
-    if(${X}_RESULT_SUCCESS != ${x}FenceQueryStatus(hFence)
+    if(${X}_RESULT_SUCCESS != ${x}FenceQueryStatus(hFence))
     {
         ${x}HostWaitOnFence(hFence);
     }
@@ -251,6 +251,7 @@ There are two types of allocations:
 
 ${"###"} Memory
 @todo Ben: describe standard, managed, and shared
+@todo Ben: describe property and advise
 
 ${"###"} Images
 An image is used to store multi-dimensional and format-defined memory for optimal device access.
@@ -278,6 +279,30 @@ there are two methods available.
 If the application does not properly manage residency for these cases then the device may experience unrecoverable page-faults.
 
 ```c
+    struct node {
+        node* next;
+    };
+    node* begin = nullptr;
+    ${x}MemAlloc(hDevice, sizeof(node), &begin);
+    ${x}MemAlloc(hDevice, sizeof(node), &begin->next);
+    ${x}MemAlloc(hDevice, sizeof(node), &begin->next->next);
+
+    // 'begin' is passed as function argument and encoded into command list
+    ...
+
+    // Make indirect allocations resident before enqueuing
+    ${x}DeviceMakeMemoryResident(hDevice, begin->next, sizeof(node));
+    ${x}DeviceMakeMemoryResident(hDevice, begin->next->next, sizeof(node));
+
+    ${x}CommandQueueEnqueueCommandList(hCommandQueue, hCommandList);
+
+    // wait until complete
+    ${x}FenceEnqueueSignal(hFence);
+    ${x}HostWaitOnFence(hFence);
+
+    // Finally, evict to free device resources
+    ${x}DeviceEvictMemory(hDevice, begin->next, sizeof(node));
+    ${x}DeviceEvictMemory(hDevice, begin->next->next, sizeof(node));
     ...
 ```
 
