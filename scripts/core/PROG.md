@@ -25,6 +25,9 @@ This function will query the available physical adapters in the system and make 
 
 The following sample code demonstrates a basic initialization sequence:
 ```c
+    // NOTE: Sample code in this document contains little or no error checking for brevity and clarity.
+    //       However, proper error checking is highly recommended and necessary in many cases.
+
     // Initialize the driver
     ${x}DriverInit(${X}_INIT_FLAG_NONE);
 
