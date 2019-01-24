@@ -2,12 +2,22 @@ import os
 import re
 import util
 
-def generate_cmake(path, name, files):
+def generate_cmake(path, namespace, files):
     fin = os.path.join("templates", "CMakeLists.txt.mako")
     fout = os.path.join(path, "CMakeLists.txt")
     util.makoWrite(
         fin, fout,
-        name=name,
+        name=namespace,
+        files=files)
+
+def generate_cpp_header_all(path, namespace, files):
+    fin = os.path.join("templates", "api_all.h.mako")
+    fout = os.path.join(path, "%s_all.h"%namespace)
+    util.makoWrite(
+        fin, fout,
+        x=namespace,
+        X=namespace.upper(),
+        Xx=namespace.title(),
         files=files)
 
 def generate_cpp_headers(path, namespace, specs):
@@ -30,6 +40,6 @@ def generate_cpp_headers(path, namespace, specs):
             name = s['name'],
             docs = s['docs'])
     print("Generated %s lines of code.\n"%loc)
-    
+    generate_cpp_header_all(cpp_path, namespace, files)
     generate_cmake(cpp_path, namespace, files)
     

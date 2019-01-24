@@ -28,7 +28,10 @@ def makePath(path):
 """
 def removePath(path):
     if exists(path):
-        shutil.rmtree(path)
+        try:
+            shutil.rmtree(path)
+        except:
+            print("Warning: failed to completely remove %s\n"%path)
 
 """
     returns a list of files in path matching pattern
