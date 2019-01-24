@@ -34,6 +34,11 @@
 #if defined(__cplusplus)
 #pragma once
 #endif
+#include <stdint.h>
+
+///////////////////////////////////////////////////////////////////////////////
+typedef float  float_t;
+typedef double double_t;
 
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Generates generic Xe API versions
@@ -204,27 +209,27 @@ typedef struct _xe_event_handle_t
 #endif
 
 ///////////////////////////////////////////////////////////////////////////////
-/// @brief Handle of driver's resource object
+/// @brief Handle of driver's image object
 #if defined( __cplusplus )
-struct xe_resource_handle_t
+struct xe_image_handle_t
 {
     void* pDriverData;
 
-    xe_resource_handle_t( void ) : pDriverData( nullptr ) {}        ///< default constructor
-    explicit xe_resource_handle_t( void* p ) : pDriverData( p ) {}  ///< initialize from pointer
+    xe_image_handle_t( void ) : pDriverData( nullptr ) {}        ///< default constructor
+    explicit xe_image_handle_t( void* p ) : pDriverData( p ) {}  ///< initialize from pointer
 
-    inline bool operator==( const xe_resource_handle_t& other ) const   ///< is equal to other
+    inline bool operator==( const xe_image_handle_t& other ) const   ///< is equal to other
     { return pDriverData == other.pDriverData; }
-    inline bool operator!=( const xe_resource_handle_t& other ) const   ///< not equal to other
+    inline bool operator!=( const xe_image_handle_t& other ) const   ///< not equal to other
     { return pDriverData != other.pDriverData; }
 
 };
 #else
-typedef struct _xe_resource_handle_t
+typedef struct _xe_image_handle_t
 {
     void* pDriverData;
 
-} xe_resource_handle_t;
+} xe_image_handle_t;
 #endif
 
 ///////////////////////////////////////////////////////////////////////////////

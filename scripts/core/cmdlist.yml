@@ -15,7 +15,7 @@ etors:
       value: "0"
       desc: "default behavior"
     - name: $X_COMMAND_LIST_FLAG_COPY_ONLY
-      value: "${X}_BIT(0)"
+      value: "$X_BIT(0)"
       desc: "command list **only** contains copy operations (and synchronization primitives)"
 --- #--------------------------------------------------------------------------
 type: struct

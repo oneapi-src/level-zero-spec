@@ -9,7 +9,7 @@ params:
     - type: $x_device_handle_t
       name: hDevice
       desc: "[in] handle of the device"
-    - type: $x_device_ptr_t
+    - type: "void*"
       name: ptr
       desc: "[in] pointer to memory to make resident"
     - type: size_t
@@ -26,7 +26,7 @@ params:
     - type: $x_device_handle_t
       name: hDevice
       desc: "[in] handle of the device"
-    - type: $x_device_ptr_t
+    - type: "void*"
       name: ptr
       desc: "[in] pointer to memory to evict"
     - type: size_t
@@ -37,29 +37,29 @@ returns:
         - "nullptr for ptr"
 --- #--------------------------------------------------------------------------
 type: function
-desc: "Makes memory resident for the device."
-name: $xDeviceMakeResourceResident
+desc: "Makes image resident for the device."
+name: $xDeviceMakeImageResident
 params:
     - type: $x_device_handle_t
       name: hDevice
       desc: "[in] handle of the device"
-    - type: $x_resource_handle_t
-      name: hResource
-      desc: "[in] handle of resource to make resident"
+    - type: $x_image_handle_t
+      name: hImage
+      desc: "[in] handle of image to make resident"
 returns:
     - $X_RESULT_ERROR_INVALID_PARAMETER:
-        - "nullptr for ptr"
+        - "invalid handle for hImage"
 --- #--------------------------------------------------------------------------
 type: function
-desc: "Allows resource to be evicted from the device."
-name: $xDeviceEvictResource
+desc: "Allows image to be evicted from the device."
+name: $xDeviceEvictImage
 params:
     - type: $x_device_handle_t
       name: hDevice
       desc: "[in] handle of the device"
-    - type: $x_resource_handle_t
-      name: hResource
-      desc: "[in] handle of resource to make evict"
+    - type: $x_image_handle_t
+      name: hImage
+      desc: "[in] handle of image to make evict"
 returns:
     - $X_RESULT_ERROR_INVALID_PARAMETER:
-        - "nullptr for ptr"
+        - "invalid handle for hImage"

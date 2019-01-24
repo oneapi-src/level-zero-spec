@@ -45,7 +45,7 @@
 typedef enum _xe_command_queue_flags_t
 {
     XE_COMMAND_QUEUE_FLAG_NONE = 0,                 ///< 
-    XE_COMMAND_QUEUE_FLAG_COPY_ONLY = ${X}_BIT(0),  ///< command queue only supports enqueing copy-only command lists
+    XE_COMMAND_QUEUE_FLAG_COPY_ONLY = XE_BIT(0),    ///< command queue only supports enqueing copy-only command lists
 
 } xe_command_queue_flags_t;
 

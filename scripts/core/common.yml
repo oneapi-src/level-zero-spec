@@ -53,8 +53,8 @@ desc: "Handle of driver's event object"
 name: "$x_event_handle_t"
 --- #--------------------------------------------------------------------------
 type: handle
-desc: "Handle of driver's resource object"
-name: "$x_resource_handle_t"
+desc: "Handle of driver's image object"
+name: "$x_image_handle_t"
 --- #--------------------------------------------------------------------------
 type: handle
 desc: "Handle of driver's module object"

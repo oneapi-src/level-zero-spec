@@ -32,28 +32,28 @@ returns:
         - "nullptr for srcptr"
 --- #--------------------------------------------------------------------------
 type: function
-desc: "Copies a resource."
-name: $xCommandListEncodeResourceCopy
+desc: "Copies a image."
+name: $xCommandListEncodeImageCopy
 analogue:
     - "**clEnqueueCopyImage**"
 params:
     - type: $x_command_list_handle_t
       name: hCommandList
       desc: "[in] handle of command list"
-    - type: $x_resource_handle_t
-      name: hDstResource
-      desc: "[in] handle of destination resource to copy to"
-    - type: $x_resource_handle_t
-      name: hSrcResource
-      desc: "[in] handle of source resource to copy from"
+    - type: $x_image_handle_t
+      name: hDstImage
+      desc: "[in] handle of destination image to copy to"
+    - type: $x_image_handle_t
+      name: hSrcImage
+      desc: "[in] handle of source image to copy from"
 returns:
     - $X_RESULT_ERROR_INVALID_PARAMETER:
-        - "invalid handle for hDstResource"
-        - "invalid handle for hSrcResource"
+        - "invalid handle for hDstImage"
+        - "invalid handle for hSrcImage"
 --- #--------------------------------------------------------------------------
 type: struct
 desc: "Region descriptor"
-name: $xResourceRegion
+name: $xImageRegion
 members:
     - type: size_t
       name: offset
@@ -63,32 +63,32 @@ members:
       desc: "[in] size in bytes from base+offset"
 --- #--------------------------------------------------------------------------
 type: function
-desc: "Copies a region of a resource."
-name: $xCommandListEncodeResourceCopyRegion
+desc: "Copies a region of a image to another image."
+name: $xCommandListEncodeImageCopyRegion
 params:
     - type: $x_command_list_handle_t
       name: hCommandList
       desc: "[in] handle of command list"
-    - type: $x_resource_handle_t
-      name: hDstResource
-      desc: "[in] handle of destination resource to copy to"
-    - type: "$xResourceRegion*"
+    - type: $x_image_handle_t
+      name: hDstImage
+      desc: "[in] handle of destination image to copy to"
+    - type: "$xImageRegion*"
       name: pDstRegion
       desc: "[in] destination region descriptor"
-    - type: $x_resource_handle_t
-      name: hSrcResource
-      desc: "[in] handle of source resource to copy from"
-    - type: "$xResourceRegion*"
+    - type: $x_image_handle_t
+      name: hSrcImage
+      desc: "[in] handle of source image to copy from"
+    - type: "$xImageRegion*"
       name: pSrcRegion
       desc: "[in] source region descriptor"
 returns:
     - $X_RESULT_ERROR_INVALID_PARAMETER:
-        - "invalid handle for hDstResource"
-        - "invalid handle for hSrcResource"
+        - "invalid handle for hDstImage"
+        - "invalid handle for hSrcImage"
 --- #--------------------------------------------------------------------------
 type: function
-desc: "Copies from a resource to device or shared memory."
-name: $xCommandListEncodeResourceCopyToMemory
+desc: "Copies from a image to device or shared memory."
+name: $xCommandListEncodeImageCopyToMemory
 analogue:
     - clEnqueueReadImage
 params:
@@ -98,30 +98,30 @@ params:
     - type: "void*"
       name: dstptr
       desc: "[in] pointer to destination memory to copy to"
-    - type: $x_resource_handle_t
-      name: hSrcResource
-      desc: "[in] handle of source resource to copy from"
-    - type: "$xResourceRegion*"
+    - type: $x_image_handle_t
+      name: hSrcImage
+      desc: "[in] handle of source image to copy from"
+    - type: "$xImageRegion*"
       name: pSrcRegion
       desc: "[in] source region descriptor"
 returns:
     - $X_RESULT_ERROR_INVALID_PARAMETER:
         - "nullptr for dstptr"
-        - "invalid handle for hSrcResource"
+        - "invalid handle for hSrcImage"
 --- #--------------------------------------------------------------------------
 type: function
-desc: "Copies to a resource from device or shared memory."
-name: $xCommandListEncodeResourceCopyFromMemory
+desc: "Copies to a image from device or shared memory."
+name: $xCommandListEncodeImageCopyFromMemory
 analogue:
     - clEnqueueWriteImage
 params:
     - type: $x_command_list_handle_t
       name: hCommandList
       desc: "[in] handle of command list"
-    - type: $x_resource_handle_t
-      name: hDstResource
-      desc: "[in] handle of destination resource to copy to"
-    - type: "$xResourceRegion*"
+    - type: $x_image_handle_t
+      name: hDstImage
+      desc: "[in] handle of destination image to copy to"
+    - type: "$xImageRegion*"
       name: pDstRegion
       desc: "[in] destination region descriptor"
     - type: "void*"
@@ -129,7 +129,7 @@ params:
       desc: "[in] pointer to source memory to copy from"
 returns:
     - $X_RESULT_ERROR_INVALID_PARAMETER:
-        - "invalid handle for hDstResource"
+        - "invalid handle for hDstImage"
         - "nullptr for srcptr"
 --- #--------------------------------------------------------------------------
 type: function
@@ -156,5 +156,5 @@ params:
       desc: "[in] size in bytes of the memory region to prefetch"
 returns:
     - $X_RESULT_ERROR_INVALID_PARAMETER:
-        - "invalid handle for hDstResource"
+        - "invalid handle for hDstImage"
         - "nullptr for srcptr"

@@ -47,7 +47,7 @@
 xe_result_t __xecall
   xeDeviceMakeMemoryResident(
     xe_device_handle_t hDevice,                     ///< [in] handle of the device
-    xe_device_ptr_t ptr,                            ///< [in] pointer to memory to make resident
+    void* ptr,                                      ///< [in] pointer to memory to make resident
     size_t size                                     ///< [in] size in bytes to make resident
     );
 
@@ -62,36 +62,36 @@ xe_result_t __xecall
 xe_result_t __xecall
   xeDeviceEvictMemory(
     xe_device_handle_t hDevice,                     ///< [in] handle of the device
-    xe_device_ptr_t ptr,                            ///< [in] pointer to memory to evict
+    void* ptr,                                      ///< [in] pointer to memory to evict
     size_t size                                     ///< [in] size in bytes to evict
     );
 
 ///////////////////////////////////////////////////////////////////////////////
-/// @brief Makes memory resident for the device.
+/// @brief Makes image resident for the device.
 /// 
 /// @returns
 ///     - ::XE_RESULT_SUCCESS
 ///     - ::XE_RESULT_ERROR_UNINITIALIZED
 ///     - ::XE_RESULT_ERROR_INVALID_PARAMETER
-///         + nullptr for ptr
+///         + invalid handle for hImage
 xe_result_t __xecall
-  xeDeviceMakeResourceResident(
+  xeDeviceMakeImageResident(
     xe_device_handle_t hDevice,                     ///< [in] handle of the device
-    xe_resource_handle_t hResource                  ///< [in] handle of resource to make resident
+    xe_image_handle_t hImage                        ///< [in] handle of image to make resident
     );
 
 ///////////////////////////////////////////////////////////////////////////////
-/// @brief Allows resource to be evicted from the device.
+/// @brief Allows image to be evicted from the device.
 /// 
 /// @returns
 ///     - ::XE_RESULT_SUCCESS
 ///     - ::XE_RESULT_ERROR_UNINITIALIZED
 ///     - ::XE_RESULT_ERROR_INVALID_PARAMETER
-///         + nullptr for ptr
+///         + invalid handle for hImage
 xe_result_t __xecall
-  xeDeviceEvictResource(
+  xeDeviceEvictImage(
     xe_device_handle_t hDevice,                     ///< [in] handle of the device
-    xe_resource_handle_t hResource                  ///< [in] handle of resource to make evict
+    xe_image_handle_t hImage                        ///< [in] handle of image to make evict
     );
 
 #endif // _XE_RESIDENCY_H

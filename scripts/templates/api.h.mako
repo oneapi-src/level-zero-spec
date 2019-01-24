@@ -93,10 +93,17 @@ def pline(repl, item, more):
 #if defined(__cplusplus)
 #pragma once
 #endif
-%if not re.match(r"common", name):
-#include "${x}_common.h"
-%endif
+%if re.match(r"common", name):
+#include <stdint.h>
 
+///////////////////////////////////////////////////////////////////////////////
+typedef float  float_t;
+typedef double double_t;
+
+%else:
+#include "${x}_common.h"
+
+%endif
 %for doc in docs:
 ///////////////////////////////////////////////////////////////////////////////
 %for line in split_line(sub(x, doc['desc'], True), 70):

@@ -15,7 +15,7 @@ etors:
       value: "0"
       desc: ""
     - name: $X_COMMAND_QUEUE_FLAG_COPY_ONLY
-      value: "${X}_BIT(0)"
+      value: "$X_BIT(0)"
       desc: "command queue only supports enqueing copy-only command lists"
 --- #--------------------------------------------------------------------------
 type: enum

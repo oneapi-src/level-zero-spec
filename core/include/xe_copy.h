@@ -65,7 +65,7 @@ xe_result_t __xecall
     );
 
 ///////////////////////////////////////////////////////////////////////////////
-/// @brief Copies a resource.
+/// @brief Copies a image.
 /// 
 /// @remarks
 ///   _Analogues_
@@ -75,44 +75,44 @@ xe_result_t __xecall
 ///     - ::XE_RESULT_SUCCESS
 ///     - ::XE_RESULT_ERROR_UNINITIALIZED
 ///     - ::XE_RESULT_ERROR_INVALID_PARAMETER
-///         + invalid handle for hDstResource
-///         + invalid handle for hSrcResource
+///         + invalid handle for hDstImage
+///         + invalid handle for hSrcImage
 xe_result_t __xecall
-  xeCommandListEncodeResourceCopy(
+  xeCommandListEncodeImageCopy(
     xe_command_list_handle_t hCommandList,          ///< [in] handle of command list
-    xe_resource_handle_t hDstResource,              ///< [in] handle of destination resource to copy to
-    xe_resource_handle_t hSrcResource               ///< [in] handle of source resource to copy from
+    xe_image_handle_t hDstImage,                    ///< [in] handle of destination image to copy to
+    xe_image_handle_t hSrcImage                     ///< [in] handle of source image to copy from
     );
 
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Region descriptor
-typedef struct _xeResourceRegion
+typedef struct _xeImageRegion
 {
     size_t offset;                                  ///< [in] offset in bytes from base
     size_t size;                                    ///< [in] size in bytes from base+offset
 
-} xeResourceRegion;
+} xeImageRegion;
 
 ///////////////////////////////////////////////////////////////////////////////
-/// @brief Copies a region of a resource.
+/// @brief Copies a region of a image to another image.
 /// 
 /// @returns
 ///     - ::XE_RESULT_SUCCESS
 ///     - ::XE_RESULT_ERROR_UNINITIALIZED
 ///     - ::XE_RESULT_ERROR_INVALID_PARAMETER
-///         + invalid handle for hDstResource
-///         + invalid handle for hSrcResource
+///         + invalid handle for hDstImage
+///         + invalid handle for hSrcImage
 xe_result_t __xecall
-  xeCommandListEncodeResourceCopyRegion(
+  xeCommandListEncodeImageCopyRegion(
     xe_command_list_handle_t hCommandList,          ///< [in] handle of command list
-    xe_resource_handle_t hDstResource,              ///< [in] handle of destination resource to copy to
-    xeResourceRegion* pDstRegion,                   ///< [in] destination region descriptor
-    xe_resource_handle_t hSrcResource,              ///< [in] handle of source resource to copy from
-    xeResourceRegion* pSrcRegion                    ///< [in] source region descriptor
+    xe_image_handle_t hDstImage,                    ///< [in] handle of destination image to copy to
+    xeImageRegion* pDstRegion,                      ///< [in] destination region descriptor
+    xe_image_handle_t hSrcImage,                    ///< [in] handle of source image to copy from
+    xeImageRegion* pSrcRegion                       ///< [in] source region descriptor
     );
 
 ///////////////////////////////////////////////////////////////////////////////
-/// @brief Copies from a resource to device or shared memory.
+/// @brief Copies from a image to device or shared memory.
 /// 
 /// @remarks
 ///   _Analogues_
@@ -123,17 +123,17 @@ xe_result_t __xecall
 ///     - ::XE_RESULT_ERROR_UNINITIALIZED
 ///     - ::XE_RESULT_ERROR_INVALID_PARAMETER
 ///         + nullptr for dstptr
-///         + invalid handle for hSrcResource
+///         + invalid handle for hSrcImage
 xe_result_t __xecall
-  xeCommandListEncodeResourceCopyToMemory(
+  xeCommandListEncodeImageCopyToMemory(
     xe_command_list_handle_t hCommandList,          ///< [in] handle of command list
     void* dstptr,                                   ///< [in] pointer to destination memory to copy to
-    xe_resource_handle_t hSrcResource,              ///< [in] handle of source resource to copy from
-    xeResourceRegion* pSrcRegion                    ///< [in] source region descriptor
+    xe_image_handle_t hSrcImage,                    ///< [in] handle of source image to copy from
+    xeImageRegion* pSrcRegion                       ///< [in] source region descriptor
     );
 
 ///////////////////////////////////////////////////////////////////////////////
-/// @brief Copies to a resource from device or shared memory.
+/// @brief Copies to a image from device or shared memory.
 /// 
 /// @remarks
 ///   _Analogues_
@@ -143,13 +143,13 @@ xe_result_t __xecall
 ///     - ::XE_RESULT_SUCCESS
 ///     - ::XE_RESULT_ERROR_UNINITIALIZED
 ///     - ::XE_RESULT_ERROR_INVALID_PARAMETER
-///         + invalid handle for hDstResource
+///         + invalid handle for hDstImage
 ///         + nullptr for srcptr
 xe_result_t __xecall
-  xeCommandListEncodeResourceCopyFromMemory(
+  xeCommandListEncodeImageCopyFromMemory(
     xe_command_list_handle_t hCommandList,          ///< [in] handle of command list
-    xe_resource_handle_t hDstResource,              ///< [in] handle of destination resource to copy to
-    xeResourceRegion* pDstRegion,                   ///< [in] destination region descriptor
+    xe_image_handle_t hDstImage,                    ///< [in] handle of destination image to copy to
+    xeImageRegion* pDstRegion,                      ///< [in] destination region descriptor
     void* srcptr                                    ///< [in] pointer to source memory to copy from
     );
 
@@ -173,7 +173,7 @@ xe_result_t __xecall
 ///     - ::XE_RESULT_SUCCESS
 ///     - ::XE_RESULT_ERROR_UNINITIALIZED
 ///     - ::XE_RESULT_ERROR_INVALID_PARAMETER
-///         + invalid handle for hDstResource
+///         + invalid handle for hDstImage
 ///         + nullptr for srcptr
 xe_result_t __xecall
   xeCommandListEncodeMemoryPrefetch(

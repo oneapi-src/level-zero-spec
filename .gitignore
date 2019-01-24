@@ -27,10 +27,14 @@
 # Project files
 *.sln
 *.vcproj
+*.vcxproj
+*.pyproj
 *.suo
 *.db
 *.opendb
 *.user
+*.filters
+.vs/
 
 # Compiled Static libraries
 *.lai
