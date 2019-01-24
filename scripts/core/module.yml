@@ -280,6 +280,29 @@ returns:
         - "invalid group count range for dispatch"
         - "invalid dispatch count range for dispatch"
 --- #--------------------------------------------------------------------------
+type: struct
+desc: "Device properties queried using $xDeviceGetProperties"
+name: $x_dispatch_function_arguments_t
+members:
+    - type: "uint32_t"
+      name: groupCountX
+      desc: "width of group in X dimension"
+    - type: "uint32_t"
+      name: groupCountY
+      desc: "width of group in Y dimension"
+    - type: "uint32_t"
+      name: groupCountZ
+      desc: "width of group in Z dimension"
+    - type: "uint32_t"
+      name: dispatchCountX
+      desc: "width of dispatches in X dimension"
+    - type: "uint32_t"
+      name: dispatchCountY
+      desc: "width of dispatches in Y dimension"
+    - type: "uint32_t"
+      name: dispatchCountZ
+      desc: "width of dispatches in Z dimension"
+--- #--------------------------------------------------------------------------
 type: function
 desc: "Dispatch command over one or more work groups using indirect dispatch arguments."
 name: $xCommandListEncodeDispatchFunctionIndirect
@@ -295,7 +318,7 @@ params:
     - type: "$x_function_args_handle_t"
       name: hFunctionArgs
       desc: "[in] handle to function arguments buffer."
-    - type: "void*"
+    - type: "const $x_dispatch_function_arguments_t*"
       name: pDispatchArgumentsBuffer
       desc: "[in] Pointer to buffer that will contain dispatch arguments. @todo Should this be opaque?"
 returns:
