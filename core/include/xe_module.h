@@ -340,7 +340,28 @@ xe_result_t __xecall
     xe_command_list_handle_t hCommandList,          ///< [in] handle of the command list
     xe_function_handle_t hFunction,                 ///< [in] handle of the function object
     xe_function_args_handle_t hFunctionArgs,        ///< [in] handle to function arguments buffer.
-    const xe_dispatch_function_arguments_t* pDispatchArgumentsBuffer///< [in] Pointer to buffer that will contain dispatch arguments. @todo Should this be opaque?
+    const xe_dispatch_function_arguments_t* pDispatchArgumentsBuffer///< [in] Pointer to buffer that will contain dispatch arguments.
+    );
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Compute max groups that can occupy per sublice.
+/// 
+/// @remarks
+///   _Analogues_
+///     - **cuOccupancyMaxActiveBlocksPerMultiprocessor**
+/// 
+/// @returns
+///     - ::XE_RESULT_SUCCESS
+///     - ::XE_RESULT_ERROR_UNINITIALIZED
+///     - ::XE_RESULT_ERROR_INVALID_PARAMETER
+///         + invalid handle for hFunction
+///         + null ptr for pDispatchArgumentsBuffer.
+///         + null ptr for pMax Groups
+xe_result_t __xecall
+  xeOccupancyMaxGroupsPerSublice(
+    xe_function_handle_t hFunction,                 ///< [in] handle of the function object
+    xe_dispatch_function_arguments_t* pDispatchArgumentsBuffer, ///< [in] Pointer to buffer that will contain dispatch arguments.
+    uint32_t* pMaxGroups                            ///< [out] Pointer to maximum groups that can occupy subslice for this function.
     );
 
 #endif // _XE_MODULE_H
