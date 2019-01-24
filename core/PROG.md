@@ -261,6 +261,18 @@ This methodology allows for device-specific encoding of image contents (e.g., ti
 and avoids exposing these details in the API in a backwards compatible fashion.
 
 ```c
+    xe_image_desc_t imageDesc = {
+        XE_IMAGE_DESC_VERSION,
+        XE_IMAGE_FLAG_KERNEL_READ,
+        XE_IMAGE_TYPE_2D,
+        XE_IMAGE_FORMAT_FLOAT32, 1,
+        128, 128, 0, 0, 0
+    };
+    xe_image_handle_t hImage;
+    xeDeviceCreateImage(&imageDesc, &hImage);
+
+    // upload contents from host pointer
+    xeCommandListEncodeImageCopyFromMemory(hCommandList, hImage, nullptr, pImageData);
     ...
 ```
 
@@ -305,8 +317,6 @@ If the application does not properly manage residency for these cases then the d
     xeDeviceEvictMemory(hDevice, begin->next->next, sizeof(node));
     ...
 ```
-
-### 
 
 ## Modules and Functions
 A Module represents a single translation unit that consists of functions that have been compiled together.
