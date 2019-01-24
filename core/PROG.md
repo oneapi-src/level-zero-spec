@@ -286,12 +286,12 @@ A Module represents a single translation unit that consists of functions that ha
 - Modules can be created from an IL or directly from ISA using xeCreateModule.
   + xeCreateModule takes a format argument that specifies the input format.
   + xeCreateModule performs a compilation step when format is IL.
-- The ISA can be queried from a Module using xeModuleGetISA. This ISA can be saved and then later used to reconstruct a Module.
+- The ISA can be queried from a Module using xeModuleGetISA.
 
 ```c
     ...
     xe_module_handle_t hModule;
-    xeCreateModule(hDevice, XE_MODULE_IL_SPIRV_TEXT, strlen(pIR), pIR, &hModule);
+    xeCreateModule(hDevice, XE_MODULE_IL_SPIRV_TEXT, strlen(pIL), pIL, &hModule);
 
     xe_function_handle_t hFunction;
     xeModuleCreateFunction(hModule, "vecsum", &hFunction);
@@ -299,14 +299,15 @@ A Module represents a single translation unit that consists of functions that ha
     xe_function_args_handle_t hFunctionArgs;
     xeCreateFunctionArgs(hFunction, &hFunctionArgs);
 
-    xeSetFunctionArgValue(hFunction, 0, sizeof(uint32_t), &rowLength, hFunctionArgs);
+    xeSetFunctionArgValue(hFunctionArgs, 0, sizeof(uint32_t), &rowLength);
 
     xeCommandListEncodeDispatchFunction(hCommandList, hFunction, hFunctionArgs, rowLength, 1, 1, numRows, 1, 1);
 
+    ...
+	
     xeDestroyFunctionArgs(hFunctionArgs);
     xeDestroyFunction(hFunction);
     xeDestroyModule(hModule);
-    ...
 ```
 
 ### Occupancy

@@ -240,7 +240,7 @@ returns:
         - "null ptr for pValue"
 --- #--------------------------------------------------------------------------
 type: function
-desc: "Dispatch function instances given group and dispatch counts."
+desc: "Dispatch command over one or more work groups."
 name: $xCommandListEncodeDispatchFunction
 analogue:
     - "**cuLaunchKernel**"
@@ -252,8 +252,8 @@ params:
       name: hFunction
       desc: "[in] handle of the function object"
     - type: "$x_function_args_handle_t"
-      name: pFunctionArgs
-      desc: "[in] pointer to function arguments buffer."
+      name: hFunctionArgs
+      desc: "[in] handle to function arguments buffer."
     - type: "uint32_t"
       name: groupCountX
       desc: "[in] width of group in X dimension"
@@ -279,3 +279,28 @@ returns:
         - "null ptr for function arguments buffer"
         - "invalid group count range for dispatch"
         - "invalid dispatch count range for dispatch"
+--- #--------------------------------------------------------------------------
+type: function
+desc: "Dispatch command over one or more work groups using indirect dispatch arguments."
+name: $xCommandListEncodeDispatchFunctionIndirect
+analogue:
+    - "**cuLaunchKernel**"
+params:
+    - type: "$x_command_list_handle_t"
+      name: hCommandList
+      desc: "[in] handle of the command list"
+    - type: "$x_function_handle_t"
+      name: hFunction
+      desc: "[in] handle of the function object"
+    - type: "$x_function_args_handle_t"
+      name: hFunctionArgs
+      desc: "[in] handle to function arguments buffer."
+    - type: "void*"
+      name: pDispatchArgumentsBuffer
+      desc: "[in] Pointer to buffer that will contain dispatch arguments. @todo Should this be opaque?"
+returns:
+    - $X_RESULT_ERROR_INVALID_PARAMETER:
+        - "invalid handle for hCommandQueue"
+        - "invalid handle for hFunction"
+        - "invalid handle for hFunctionArgs."
+        - "null ptr for dispatch arguments buffer"
