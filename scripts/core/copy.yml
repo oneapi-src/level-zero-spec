@@ -74,13 +74,13 @@ params:
       desc: "[in] handle of destination image to copy to"
     - type: "$xImageRegion*"
       name: pDstRegion
-      desc: "[in] destination region descriptor (may be nullptr)"
+      desc: "[in][optional] destination region descriptor"
     - type: $x_image_handle_t
       name: hSrcImage
       desc: "[in] handle of source image to copy from"
     - type: "$xImageRegion*"
       name: pSrcRegion
-      desc: "[in] source region descriptor (may be nullptr)"
+      desc: "[in][optional] source region descriptor"
 returns:
     - $X_RESULT_ERROR_INVALID_PARAMETER:
         - "invalid handle for hDstImage"
@@ -100,10 +100,10 @@ params:
       desc: "[in] pointer to destination memory to copy to"
     - type: $x_image_handle_t
       name: hSrcImage
-      desc: "[in] handle of source image to copy from (may be nullptr)"
+      desc: "[in] handle of source image to copy from"
     - type: "$xImageRegion*"
       name: pSrcRegion
-      desc: "[in] source region descriptor"
+      desc: "[in][optional] source region descriptor"
 returns:
     - $X_RESULT_ERROR_INVALID_PARAMETER:
         - "nullptr for dstptr"
@@ -120,10 +120,10 @@ params:
       desc: "[in] handle of command list"
     - type: $x_image_handle_t
       name: hDstImage
-      desc: "[in] handle of destination image to copy to (may be nullptr)"
+      desc: "[in] handle of destination image to copy to"
     - type: "$xImageRegion*"
       name: pDstRegion
-      desc: "[in] destination region descriptor"
+      desc: "[in][optional] destination region descriptor"
     - type: "void*"
       name: srcptr
       desc: "[in] pointer to source memory to copy from"

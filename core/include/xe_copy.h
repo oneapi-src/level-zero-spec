@@ -106,9 +106,9 @@ xe_result_t __xecall
   xeCommandListEncodeImageCopyRegion(
     xe_command_list_handle_t hCommandList,          ///< [in] handle of command list
     xe_image_handle_t hDstImage,                    ///< [in] handle of destination image to copy to
-    xeImageRegion* pDstRegion,                      ///< [in] destination region descriptor (may be nullptr)
+    xeImageRegion* pDstRegion,                      ///< [in][optional] destination region descriptor
     xe_image_handle_t hSrcImage,                    ///< [in] handle of source image to copy from
-    xeImageRegion* pSrcRegion                       ///< [in] source region descriptor (may be nullptr)
+    xeImageRegion* pSrcRegion                       ///< [in][optional] source region descriptor
     );
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -128,8 +128,8 @@ xe_result_t __xecall
   xeCommandListEncodeImageCopyToMemory(
     xe_command_list_handle_t hCommandList,          ///< [in] handle of command list
     void* dstptr,                                   ///< [in] pointer to destination memory to copy to
-    xe_image_handle_t hSrcImage,                    ///< [in] handle of source image to copy from (may be nullptr)
-    xeImageRegion* pSrcRegion                       ///< [in] source region descriptor
+    xe_image_handle_t hSrcImage,                    ///< [in] handle of source image to copy from
+    xeImageRegion* pSrcRegion                       ///< [in][optional] source region descriptor
     );
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -148,8 +148,8 @@ xe_result_t __xecall
 xe_result_t __xecall
   xeCommandListEncodeImageCopyFromMemory(
     xe_command_list_handle_t hCommandList,          ///< [in] handle of command list
-    xe_image_handle_t hDstImage,                    ///< [in] handle of destination image to copy to (may be nullptr)
-    xeImageRegion* pDstRegion,                      ///< [in] destination region descriptor
+    xe_image_handle_t hDstImage,                    ///< [in] handle of destination image to copy to
+    xeImageRegion* pDstRegion,                      ///< [in][optional] destination region descriptor
     void* srcptr                                    ///< [in] pointer to source memory to copy from
     );
 
