@@ -27,6 +27,7 @@ desc: "Calling convention for all API functions"
 condition: "defined(_WIN32)"
 name: __$xcall
 value: __stdcall
+altvalue: ""
 --- #--------------------------------------------------------------------------
 type: macro
 desc: "Disable OpenCL interoperability functions if not explicitly defined"

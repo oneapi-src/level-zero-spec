@@ -61,15 +61,13 @@ typedef double double_t;
 /// @brief Calling convention for all API functions
 #define __xecall  __stdcall
 #else
-#define __xecall
+#define __xecall  
 #endif // defined(_WIN32)
 
 ///////////////////////////////////////////////////////////////////////////////
 #if !defined(XE_ENABLE_OCL_INTEROP)
 /// @brief Disable OpenCL interoperability functions if not explicitly defined
 #define XE_ENABLE_OCL_INTEROP  0
-#else
-#define XE_ENABLE_OCL_INTEROP
 #endif // !defined(XE_ENABLE_OCL_INTEROP)
 
 ///////////////////////////////////////////////////////////////////////////////

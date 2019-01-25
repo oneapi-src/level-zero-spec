@@ -139,9 +139,9 @@ typedef double double_t;
 %endif
 %if re.match(r"macro", doc['type']):
 #define ${sub(x, doc['name'])}  ${sub(x, doc['value'])}
-%if 'condition' in doc:
+%if 'altvalue' in doc:
 #else
-#define ${sub(x, doc['name'])}
+#define ${sub(x, doc['name'])}  ${sub(x, doc['altvalue'])}
 %endif
 %elif re.match(r"typedef", doc['type']):
 typedef ${sub(x, doc['value'])} ${sub(x, doc['name'])};
