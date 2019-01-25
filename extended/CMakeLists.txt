@@ -1,4 +1,4 @@
-add_library(extended
+add_library(xi
     STATIC
     ${CMAKE_CURRENT_SOURCE_DIR}/CMakeLists.txt
 )
