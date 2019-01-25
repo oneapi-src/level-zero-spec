@@ -47,6 +47,9 @@ xe_result_t __xecall
     size_t size                                     ///< [in] size in bytes to make resident
     )
 {
+
+    // @todo: insert <code> here
+
     return XE_RESULT_SUCCESS;
 }
 
@@ -66,6 +69,9 @@ xe_result_t __xecall
     size_t size                                     ///< [in] size in bytes to evict
     )
 {
+
+    // @todo: insert <code> here
+
     return XE_RESULT_SUCCESS;
 }
 
@@ -84,6 +90,9 @@ xe_result_t __xecall
     xe_image_handle_t hImage                        ///< [in] handle of image to make resident
     )
 {
+
+    // @todo: insert <code> here
+
     return XE_RESULT_SUCCESS;
 }
 
@@ -102,6 +111,9 @@ xe_result_t __xecall
     xe_image_handle_t hImage                        ///< [in] handle of image to make evict
     )
 {
+
+    // @todo: insert <code> here
+
     return XE_RESULT_SUCCESS;
 }
 

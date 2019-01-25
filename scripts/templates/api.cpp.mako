@@ -134,6 +134,16 @@ ${x}_result_t __${x}call
     %endfor
     )
 {
+    %for param in obj['params']:
+    %if re.match(r".*\[out\].*", param['desc']):
+    %if re.match(r".*\w+\*+", param['type']):
+    // @todo: check_return(nullptr == ${sub(x, param['name'])}, ${X}_RESULT_ERROR_INVALID_PARAMETER);
+    %endif
+    %endif
+    %endfor
+
+    // @todo: insert <code> here
+
     return ${X}_RESULT_SUCCESS;
 }
 %if 'condition' in obj:

@@ -53,6 +53,10 @@ xe_result_t __xecall
     xe_image_handle_t* phImage                      ///< [out] pointer to handle of image object created
     )
 {
+    // @todo: check_return(nullptr == phImage, XE_RESULT_ERROR_INVALID_PARAMETER);
+
+    // @todo: insert <code> here
+
     return XE_RESULT_SUCCESS;
 }
 
@@ -74,6 +78,9 @@ xe_result_t __xecall
     xe_image_handle_t hImage                        ///< [in] handle of image object to destroy
     )
 {
+
+    // @todo: insert <code> here
+
     return XE_RESULT_SUCCESS;
 }
 

@@ -59,6 +59,10 @@ xe_result_t __xecall
     xe_module_handle_t* phModule                    ///< [out] pointer to handle of module object created
     )
 {
+    // @todo: check_return(nullptr == phModule, XE_RESULT_ERROR_INVALID_PARAMETER);
+
+    // @todo: insert <code> here
+
     return XE_RESULT_SUCCESS;
 }
 
@@ -80,6 +84,9 @@ xe_result_t __xecall
     xe_module_handle_t hModule                      ///< [in] handle of the module
     )
 {
+
+    // @todo: insert <code> here
+
     return XE_RESULT_SUCCESS;
 }
 
@@ -110,6 +117,11 @@ xe_result_t __xecall
     char** pModuleNativeBinary                      ///< [out] pointer to native binary
     )
 {
+    // @todo: check_return(nullptr == pIsaSize, XE_RESULT_ERROR_INVALID_PARAMETER);
+    // @todo: check_return(nullptr == pModuleNativeBinary, XE_RESULT_ERROR_INVALID_PARAMETER);
+
+    // @todo: insert <code> here
+
     return XE_RESULT_SUCCESS;
 }
 
@@ -135,6 +147,10 @@ xe_result_t __xecall
     uint32_t* pArgIndex                             ///< [out] Id for image used by function
     )
 {
+    // @todo: check_return(nullptr == pArgIndex, XE_RESULT_ERROR_INVALID_PARAMETER);
+
+    // @todo: insert <code> here
+
     return XE_RESULT_SUCCESS;
 }
 
@@ -160,6 +176,10 @@ xe_result_t __xecall
     xe_function_handle_t* phFunction                ///< [out] handle of the Function object
     )
 {
+    // @todo: check_return(nullptr == phFunction, XE_RESULT_ERROR_INVALID_PARAMETER);
+
+    // @todo: insert <code> here
+
     return XE_RESULT_SUCCESS;
 }
 
@@ -181,6 +201,9 @@ xe_result_t __xecall
     xe_function_handle_t hFunction                  ///< [in] handle of the function object
     )
 {
+
+    // @todo: insert <code> here
+
     return XE_RESULT_SUCCESS;
 }
 
@@ -204,6 +227,10 @@ xe_result_t __xecall
     xe_function_args_handle_t* phFunctionArgs       ///< [out] handle of the Function arguments object
     )
 {
+    // @todo: check_return(nullptr == phFunctionArgs, XE_RESULT_ERROR_INVALID_PARAMETER);
+
+    // @todo: insert <code> here
+
     return XE_RESULT_SUCCESS;
 }
 
@@ -225,6 +252,9 @@ xe_result_t __xecall
     xe_function_args_handle_t hFunctionArgs         ///< [in] handle of the function arguments buffer object
     )
 {
+
+    // @todo: insert <code> here
+
     return XE_RESULT_SUCCESS;
 }
 
@@ -254,6 +284,9 @@ xe_result_t __xecall
     const void* pArgValue                           ///< [in] argument value represented as matching arg type
     )
 {
+
+    // @todo: insert <code> here
+
     return XE_RESULT_SUCCESS;
 }
 
@@ -279,6 +312,10 @@ xe_result_t __xecall
     uint32_t* pValue                                ///< [out] returned attribute value
     )
 {
+    // @todo: check_return(nullptr == pValue, XE_RESULT_ERROR_INVALID_PARAMETER);
+
+    // @todo: insert <code> here
+
     return XE_RESULT_SUCCESS;
 }
 
@@ -312,6 +349,9 @@ xe_result_t __xecall
     uint32_t groupCountZ                            ///< [in] width of dispatches in Z dimension
     )
 {
+
+    // @todo: insert <code> here
+
     return XE_RESULT_SUCCESS;
 }
 
@@ -340,6 +380,9 @@ xe_result_t __xecall
     const xe_dispatch_function_arguments_t* pDispatchArgumentsBuffer///< [in] Pointer to buffer that will contain dispatch arguments.
     )
 {
+
+    // @todo: insert <code> here
+
     return XE_RESULT_SUCCESS;
 }
 
@@ -365,6 +408,10 @@ xe_result_t __xecall
     uint32_t* pMaxGroups                            ///< [out] Pointer to maximum groups that can occupy subslice for this function.
     )
 {
+    // @todo: check_return(nullptr == pMaxGroups, XE_RESULT_ERROR_INVALID_PARAMETER);
+
+    // @todo: insert <code> here
+
     return XE_RESULT_SUCCESS;
 }
 

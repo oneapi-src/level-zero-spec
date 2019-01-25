@@ -55,6 +55,10 @@ xe_result_t __xecall
     xe_fence_handle_t* phFence                      ///< [out] pointer to handle of fence object created
     )
 {
+    // @todo: check_return(nullptr == phFence, XE_RESULT_ERROR_INVALID_PARAMETER);
+
+    // @todo: insert <code> here
+
     return XE_RESULT_SUCCESS;
 }
 
@@ -81,6 +85,9 @@ xe_result_t __xecall
     xe_fence_handle_t hFence                        ///< [in] handle of fence object to destroy
     )
 {
+
+    // @todo: insert <code> here
+
     return XE_RESULT_SUCCESS;
 }
 
@@ -104,6 +111,9 @@ xe_result_t __xecall
     xe_fence_handle_t hFence                        ///< [in] handle of the fence
     )
 {
+
+    // @todo: insert <code> here
+
     return XE_RESULT_SUCCESS;
 }
 
@@ -126,6 +136,9 @@ xe_result_t __xecall
     xe_fence_handle_t hFence                        ///< [in] handle of the fence
     )
 {
+
+    // @todo: insert <code> here
+
     return XE_RESULT_SUCCESS;
 }
 
@@ -146,6 +159,9 @@ xe_result_t __xecall
     xe_fence_handle_t* phFences                     ///< [in] pointer to array of handles of the fences
     )
 {
+
+    // @todo: insert <code> here
+
     return XE_RESULT_SUCCESS;
 }
 
@@ -170,6 +186,9 @@ xe_result_t __xecall
     xe_fence_handle_t hFence                        ///< [in] handle of the fence
     )
 {
+
+    // @todo: insert <code> here
+
     return XE_RESULT_SUCCESS;
 }
 
@@ -196,6 +215,10 @@ xe_result_t __xecall
     double_t* pTime                                 ///< [out] time in milliseconds
     )
 {
+    // @todo: check_return(nullptr == pTime, XE_RESULT_ERROR_INVALID_PARAMETER);
+
+    // @todo: insert <code> here
+
     return XE_RESULT_SUCCESS;
 }
 
@@ -213,6 +236,9 @@ xe_result_t __xecall
     xe_fence_handle_t hFence                        ///< [in] handle of the fence
     )
 {
+
+    // @todo: insert <code> here
+
     return XE_RESULT_SUCCESS;
 }
 

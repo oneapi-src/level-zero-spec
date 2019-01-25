@@ -57,6 +57,10 @@ xe_result_t __xecall
     xe_command_queue_handle_t* phCommandQueue       ///< [out] pointer to handle of command queue object created
     )
 {
+    // @todo: check_return(nullptr == phCommandQueue, XE_RESULT_ERROR_INVALID_PARAMETER);
+
+    // @todo: insert <code> here
+
     return XE_RESULT_SUCCESS;
 }
 
@@ -83,6 +87,9 @@ xe_result_t __xecall
     xe_command_queue_handle_t hCommandQueue         ///< [in] handle of command queue object to destroy
     )
 {
+
+    // @todo: insert <code> here
+
     return XE_RESULT_SUCCESS;
 }
 
@@ -110,6 +117,9 @@ xe_result_t __xecall
     uint32_t value                                  ///< [in] value of attribute
     )
 {
+
+    // @todo: insert <code> here
+
     return XE_RESULT_SUCCESS;
 }
 
@@ -138,6 +148,10 @@ xe_result_t __xecall
     uint32_t* value                                 ///< [out] value of attribute
     )
 {
+    // @todo: check_return(nullptr == value, XE_RESULT_ERROR_INVALID_PARAMETER);
+
+    // @todo: insert <code> here
+
     return XE_RESULT_SUCCESS;
 }
 
@@ -155,6 +169,9 @@ xe_result_t __xecall
     xe_command_queue_handle_t hCommandQueue         ///< [in] handle of the command queue
     )
 {
+
+    // @todo: insert <code> here
+
     return XE_RESULT_SUCCESS;
 }
 
@@ -174,6 +191,9 @@ xe_result_t __xecall
     xe_command_list_handle_t hCommandList           ///< [in] handle of the command list to execute
     )
 {
+
+    // @todo: insert <code> here
+
     return XE_RESULT_SUCCESS;
 }
 
@@ -191,6 +211,9 @@ xe_result_t __xecall
     xe_command_queue_handle_t hCommandQueue         ///< [in] handle of the command queue
     )
 {
+
+    // @todo: insert <code> here
+
     return XE_RESULT_SUCCESS;
 }
 

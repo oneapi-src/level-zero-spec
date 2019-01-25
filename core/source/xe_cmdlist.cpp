@@ -52,6 +52,10 @@ xe_result_t __xecall
     xe_command_list_handle_t* phCommandList         ///< [out] pointer to handle of command list object created
     )
 {
+    // @todo: check_return(nullptr == phCommandList, XE_RESULT_ERROR_INVALID_PARAMETER);
+
+    // @todo: insert <code> here
+
     return XE_RESULT_SUCCESS;
 }
 
@@ -73,6 +77,9 @@ xe_result_t __xecall
     xe_command_list_handle_t hCommandList           ///< [in] handle of command list object to destroy
     )
 {
+
+    // @todo: insert <code> here
+
     return XE_RESULT_SUCCESS;
 }
 
@@ -90,6 +97,9 @@ xe_result_t __xecall
     xe_command_list_handle_t hCommandList           ///< [in] handle of command list object to close
     )
 {
+
+    // @todo: insert <code> here
+
     return XE_RESULT_SUCCESS;
 }
 
@@ -112,6 +122,9 @@ xe_result_t __xecall
     xe_command_list_handle_t hCommandList           ///< [in] handle of command list object to reset
     )
 {
+
+    // @todo: insert <code> here
+
     return XE_RESULT_SUCCESS;
 }
 

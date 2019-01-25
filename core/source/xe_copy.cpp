@@ -60,6 +60,9 @@ xe_result_t __xecall
     size_t size                                     ///< [in] size in bytes to copy
     )
 {
+
+    // @todo: insert <code> here
+
     return XE_RESULT_SUCCESS;
 }
 
@@ -84,6 +87,9 @@ xe_result_t __xecall
     xe_image_handle_t hSrcImage                     ///< [in] handle of source image to copy from
     )
 {
+
+    // @todo: insert <code> here
+
     return XE_RESULT_SUCCESS;
 }
 
@@ -106,6 +112,9 @@ xe_result_t __xecall
     xeImageRegion* pSrcRegion                       ///< [in][optional] source region descriptor
     )
 {
+
+    // @todo: insert <code> here
+
     return XE_RESULT_SUCCESS;
 }
 
@@ -131,6 +140,9 @@ xe_result_t __xecall
     xeImageRegion* pSrcRegion                       ///< [in][optional] source region descriptor
     )
 {
+
+    // @todo: insert <code> here
+
     return XE_RESULT_SUCCESS;
 }
 
@@ -156,6 +168,9 @@ xe_result_t __xecall
     void* srcptr                                    ///< [in] pointer to source memory to copy from
     )
 {
+
+    // @todo: insert <code> here
+
     return XE_RESULT_SUCCESS;
 }
 
@@ -189,6 +204,9 @@ xe_result_t __xecall
     size_t count                                    ///< [in] size in bytes of the memory region to prefetch
     )
 {
+
+    // @todo: insert <code> here
+
     return XE_RESULT_SUCCESS;
 }
 

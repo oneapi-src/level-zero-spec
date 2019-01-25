@@ -48,6 +48,10 @@ xe_result_t __xecall
     uint32_t* count                                 ///< [out] number of devices available
     )
 {
+    // @todo: check_return(nullptr == count, XE_RESULT_ERROR_INVALID_PARAMETER);
+
+    // @todo: insert <code> here
+
     return XE_RESULT_SUCCESS;
 }
 
@@ -72,6 +76,10 @@ xe_result_t __xecall
     xe_device_handle_t* phDevice                    ///< [out] pointer to handle of device object created
     )
 {
+    // @todo: check_return(nullptr == phDevice, XE_RESULT_ERROR_INVALID_PARAMETER);
+
+    // @todo: insert <code> here
+
     return XE_RESULT_SUCCESS;
 }
 
@@ -95,6 +103,10 @@ xe_result_t __xecall
     xe_api_version_t* version                       ///< [out] api version
     )
 {
+    // @todo: check_return(nullptr == version, XE_RESULT_ERROR_INVALID_PARAMETER);
+
+    // @todo: insert <code> here
+
     return XE_RESULT_SUCCESS;
 }
 
@@ -120,6 +132,10 @@ xe_result_t __xecall
     xe_device_properties_t* pDeviceProperties       ///< [out] query result for device properties
     )
 {
+    // @todo: check_return(nullptr == pDeviceProperties, XE_RESULT_ERROR_INVALID_PARAMETER);
+
+    // @todo: insert <code> here
+
     return XE_RESULT_SUCCESS;
 }
 
@@ -144,6 +160,10 @@ xe_result_t __xecall
     xe_device_compute_properties_t* pComputeProperties  ///< [out] query result for compute properties
     )
 {
+    // @todo: check_return(nullptr == pComputeProperties, XE_RESULT_ERROR_INVALID_PARAMETER);
+
+    // @todo: insert <code> here
+
     return XE_RESULT_SUCCESS;
 }
 
@@ -169,6 +189,10 @@ xe_result_t __xecall
     xe_device_memory_properties_t* pMemProperties   ///< [out] query result for compute properties
     )
 {
+    // @todo: check_return(nullptr == pMemProperties, XE_RESULT_ERROR_INVALID_PARAMETER);
+
+    // @todo: insert <code> here
+
     return XE_RESULT_SUCCESS;
 }
 
@@ -193,6 +217,10 @@ xe_result_t __xecall
     xe_device_link_properties_t* pLinkProperties    ///< [out] link properties between source and destination devices
     )
 {
+    // @todo: check_return(nullptr == pLinkProperties, XE_RESULT_ERROR_INVALID_PARAMETER);
+
+    // @todo: insert <code> here
+
     return XE_RESULT_SUCCESS;
 }
 
@@ -218,6 +246,10 @@ xe_result_t __xecall
     bool* value                                     ///< [out] returned access capability
     )
 {
+    // @todo: check_return(nullptr == value, XE_RESULT_ERROR_INVALID_PARAMETER);
+
+    // @todo: insert <code> here
+
     return XE_RESULT_SUCCESS;
 }
 
@@ -250,6 +282,9 @@ xe_result_t __xecall
     const xe_device_handle_t hPeerDevice            ///< [in] handle of the peer device
     )
 {
+
+    // @todo: insert <code> here
+
     return XE_RESULT_SUCCESS;
 }
 
@@ -277,6 +312,9 @@ xe_result_t __xecall
     const xe_device_handle_t hPeerDevice            ///< [in] handle of the peer device
     )
 {
+
+    // @todo: insert <code> here
+
     return XE_RESULT_SUCCESS;
 }
 

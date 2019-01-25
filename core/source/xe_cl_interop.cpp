@@ -52,6 +52,10 @@ xe_result_t __xecall
     void** ptr                                      ///< [out] pointer to device allocation
     )
 {
+    // @todo: check_return(nullptr == ptr, XE_RESULT_ERROR_INVALID_PARAMETER);
+
+    // @todo: insert <code> here
+
     return XE_RESULT_SUCCESS;
 }
 #endif // XE_ENABLE_OCL_INTEROP
@@ -77,6 +81,10 @@ xe_result_t __xecall
     xe_module_handle_t* phModule                    ///< [out] pointer to handle of module object created
     )
 {
+    // @todo: check_return(nullptr == phModule, XE_RESULT_ERROR_INVALID_PARAMETER);
+
+    // @todo: insert <code> here
+
     return XE_RESULT_SUCCESS;
 }
 #endif // XE_ENABLE_OCL_INTEROP
@@ -102,6 +110,10 @@ xe_result_t __xecall
     xe_command_queue_handle_t* phCommandQueue       ///< [out] pointer to handle of command queue object created
     )
 {
+    // @todo: check_return(nullptr == phCommandQueue, XE_RESULT_ERROR_INVALID_PARAMETER);
+
+    // @todo: insert <code> here
+
     return XE_RESULT_SUCCESS;
 }
 #endif // XE_ENABLE_OCL_INTEROP

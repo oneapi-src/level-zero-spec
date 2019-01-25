@@ -56,6 +56,10 @@ xe_result_t __xecall
     xe_event_handle_t* phEvent                      ///< [out] pointer to handle of event object created
     )
 {
+    // @todo: check_return(nullptr == phEvent, XE_RESULT_ERROR_INVALID_PARAMETER);
+
+    // @todo: insert <code> here
+
     return XE_RESULT_SUCCESS;
 }
 
@@ -80,6 +84,10 @@ xe_result_t __xecall
     xe_event_handle_t* phEvent                      ///< [out] pointer to handle of event object created
     )
 {
+    // @todo: check_return(nullptr == phEvent, XE_RESULT_ERROR_INVALID_PARAMETER);
+
+    // @todo: insert <code> here
+
     return XE_RESULT_SUCCESS;
 }
 
@@ -106,6 +114,9 @@ xe_result_t __xecall
     xe_event_handle_t hEvent                        ///< [in] handle of event object to destroy
     )
 {
+
+    // @todo: insert <code> here
+
     return XE_RESULT_SUCCESS;
 }
 
@@ -132,6 +143,9 @@ xe_result_t __xecall
     xe_event_handle_t hEvent                        ///< [in] handle of the event
     )
 {
+
+    // @todo: insert <code> here
+
     return XE_RESULT_SUCCESS;
 }
 
@@ -153,6 +167,9 @@ xe_result_t __xecall
     xe_event_handle_t hEvent                        ///< [in] handle of the event
     )
 {
+
+    // @todo: insert <code> here
+
     return XE_RESULT_SUCCESS;
 }
 
@@ -177,6 +194,9 @@ xe_result_t __xecall
     xe_event_handle_t* phEvents                     ///< [in] pointer to array of handles of the events
     )
 {
+
+    // @todo: insert <code> here
+
     return XE_RESULT_SUCCESS;
 }
 
@@ -201,6 +221,9 @@ xe_result_t __xecall
     xe_event_handle_t* phEvents                     ///< [in] pointer to array of handles of the events
     )
 {
+
+    // @todo: insert <code> here
+
     return XE_RESULT_SUCCESS;
 }
 
@@ -224,6 +247,9 @@ xe_result_t __xecall
     xe_event_handle_t hEvent                        ///< [in] handle of the event
     )
 {
+
+    // @todo: insert <code> here
+
     return XE_RESULT_SUCCESS;
 }
 
@@ -246,6 +272,9 @@ xe_result_t __xecall
     xe_event_handle_t hEvent                        ///< [in] handle of the event
     )
 {
+
+    // @todo: insert <code> here
+
     return XE_RESULT_SUCCESS;
 }
 
@@ -267,6 +296,9 @@ xe_result_t __xecall
     xe_event_handle_t* phEvents                     ///< [in] pointer to array of handles of the events
     )
 {
+
+    // @todo: insert <code> here
+
     return XE_RESULT_SUCCESS;
 }
 
@@ -291,6 +323,9 @@ xe_result_t __xecall
     xe_event_handle_t* phEvents                     ///< [in] pointer to array of handles of the events
     )
 {
+
+    // @todo: insert <code> here
+
     return XE_RESULT_SUCCESS;
 }
 
@@ -315,6 +350,9 @@ xe_result_t __xecall
     xe_event_handle_t hEvent                        ///< [in] handle of the event
     )
 {
+
+    // @todo: insert <code> here
+
     return XE_RESULT_SUCCESS;
 }
 
@@ -341,6 +379,10 @@ xe_result_t __xecall
     double_t* pTime                                 ///< [out] time in milliseconds
     )
 {
+    // @todo: check_return(nullptr == pTime, XE_RESULT_ERROR_INVALID_PARAMETER);
+
+    // @todo: insert <code> here
+
     return XE_RESULT_SUCCESS;
 }
 
@@ -358,6 +400,9 @@ xe_result_t __xecall
     xe_event_handle_t hEvent                        ///< [in] handle of the event
     )
 {
+
+    // @todo: insert <code> here
+
     return XE_RESULT_SUCCESS;
 }
 
