@@ -1,5 +1,5 @@
 # Add GoogleMock if we're building tests
-if (${PROJECT_NAME}_build_tests)
+if (${PROJECT_NAME}_BUILD_TESTS)
     # Add googlemock support if not already added
     if (NOT TARGET gmock)
         #Allow custom googlemock directory
@@ -15,7 +15,7 @@ if (${PROJECT_NAME}_build_tests)
 
         else()
             message(STATUS "GOOGLE_MOCK_DIR: NOT FOUND.  Disabling tests.")
-            set(${PROJECT_NAME}_build_tests FALSE)
+            set(${PROJECT_NAME}_BUILD_TESTS FALSE)
         endif()
     endif()
 endif()

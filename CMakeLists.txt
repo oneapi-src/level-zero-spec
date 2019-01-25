@@ -28,7 +28,7 @@ if(NOT DEFINED THIRD_PARTY_DIR)
 endif()
 
 # Option to disable tests
-option(${PROJECT_NAME}_build_tests "Build unit tests." ON)
+option(${PROJECT_NAME}_BUILD_TESTS "Build unit tests." ON)
 
 add_subdirectory(${THIRD_PARTY_DIR})
 
@@ -39,6 +39,6 @@ if(COMPUTE_RUNTIME_SUPPORT)
     add_subdirectory(${COMPUTE_RUNTIME_DIR} ${PROJECT_BINARY_DIR}/compute-runtime EXCLUDE_FROM_ALL)
 endif(COMPUTE_RUNTIME_SUPPORT)
 
-if (${PROJECT_NAME}_build_tests)
+if (${PROJECT_NAME}_BUILD_TESTS)
     add_subdirectory(tests)
 endif()
