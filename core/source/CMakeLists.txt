@@ -1,9 +1,19 @@
+# DO NOT EDIT: Generated from "scripts/templates/CMakeLists.txt.mako"
 target_sources(${TARGET_NAME}
     PRIVATE
     ${CMAKE_CURRENT_SOURCE_DIR}/CMakeLists.txt
+    ${CMAKE_CURRENT_SOURCE_DIR}/xe_cl_interop.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/xe_cmdlist.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/xe_cmdqueue.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/xe_common.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/xe_copy.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/xe_device.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/xe_driver.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/xe_event.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/xe_fence.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/xe_image.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/xe_memory.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/xe_module.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/xe_residency.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/xe_semaphore.cpp
 )

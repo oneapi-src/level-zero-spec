@@ -84,7 +84,7 @@ def jsonWrite(path, data):
 def yamlRead(path):
     if exists(path):
         with open(path, 'r') as fin:
-            return yaml.load_all(fin.read())
+            return yaml.load_all(fin.read(), Loader = yaml.CLoader)
     else:
         return None
 

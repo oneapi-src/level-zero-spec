@@ -20,175 +20,197 @@
 * or otherwise. Any license under such intellectual property rights must be
 * express and approved by Intel in writing.
 *
-* @file xe_cmdqueue.cpp
+* @file xe_fence.cpp
 *
-* @brief Intel Xe Driver APIs for Command Queue
+* @brief Intel Xe Driver APIs for Fence
 *
 * @cond DEV
-* DO NOT EDIT: generated from /scripts/<type>/cmdqueue.yml
+* DO NOT EDIT: generated from /scripts/<type>/fence.yml
 * @endcond
 *
 ******************************************************************************/
-#include "../include/xe_cmdqueue.h"
+#include "../include/xe_fence.h"
 
 ///////////////////////////////////////////////////////////////////////////////
-/// @brief Creates a command queue on the device.
+/// @brief Creates a fence object on the device's command queue.
 /// 
 /// @remarks
 ///   _Analogues_
-///     - **clCreateCommandQueue**
-///     - cuCtxCreate
-///     - cuCtxGetCurrent
+///     - **cuEventCreate**
 /// 
 /// @returns
 ///     - ::XE_RESULT_SUCCESS
 ///     - ::XE_RESULT_ERROR_UNINITIALIZED
 ///     - ::XE_RESULT_ERROR_INVALID_PARAMETER
-///         + invalid handle for hDevice
+///         + invalid handle for hCommandQueue
 ///         + nullptr for desc
-///         + nullptr for phCommandQueue
+///         + nullptr for phFence
 ///     - ::XE_RESULT_ERROR_OUT_OF_HOST_MEMORY
 ///     - ::XE_RESULT_ERROR_OUT_OF_DEVICE_MEMORY
 /*@todo: __declspec(dllexport)*/
 xe_result_t __xecall
-  xeDeviceCreateCommandQueue(
-    xe_device_handle_t hDevice,                     ///< [in] handle of the device object
-    const xe_command_queue_desc_t* desc,            ///< [in] pointer to command queue descriptor
-    xe_command_queue_handle_t* phCommandQueue       ///< [out] pointer to handle of command queue object created
+  xeCommandQueueCreateFence(
+    xe_command_queue_handle_t hCommandQueue,        ///< [in] handle of command queue
+    const xe_fence_desc_t* desc,                    ///< [in] pointer to fence descriptor
+    xe_fence_handle_t* phFence                      ///< [out] pointer to handle of fence object created
     )
 {
     return XE_RESULT_SUCCESS;
 }
 
 ///////////////////////////////////////////////////////////////////////////////
-/// @brief Destroys a command queue
+/// @brief Deletes a fence object.
 /// 
 /// @details
 ///     - The application is responsible for making sure the GPU is not
-///       currently referencing the command queue before it is deleted
+///       currently referencing the fence before it is deleted
 /// 
 /// @remarks
 ///   _Analogues_
-///     - **clReleaseCommandQueue**
-///     - cuCtxDestroy
+///     - **cuEventDestroy**
 /// 
 /// @returns
 ///     - ::XE_RESULT_SUCCESS
 ///     - ::XE_RESULT_ERROR_UNINITIALIZED
 ///     - ::XE_RESULT_ERROR_INVALID_PARAMETER
-///         + invalid handle for hCommandQueue
+///         + invalid handle for hFence
+///         + fence is enqueued in a command queue
 /*@todo: __declspec(dllexport)*/
 xe_result_t __xecall
-  xeCommandQueueDestroy(
-    xe_command_queue_handle_t hCommandQueue         ///< [in] handle of command queue object to destroy
+  xeFenceDestroy(
+    xe_fence_handle_t hFence                        ///< [in] handle of fence object to destroy
     )
 {
     return XE_RESULT_SUCCESS;
 }
 
 ///////////////////////////////////////////////////////////////////////////////
-/// @brief Sets a command queue's parameter
+/// @brief Enqueues a signal of the fence into its command queue.
 /// 
 /// @remarks
 ///   _Analogues_
-///     - cuCtxSetCacheConfig
-///     - cuCtxSetLimit
-///     - cuCtxSetSharedMemConfig
+///     - **cuEventRecord**
 /// 
 /// @returns
 ///     - ::XE_RESULT_SUCCESS
 ///     - ::XE_RESULT_ERROR_UNINITIALIZED
 ///     - ::XE_RESULT_ERROR_INVALID_PARAMETER
-///         + invalid handle for hCommandQueue
-///         + invalid value for attribute
-///         + invalid value for value
+///         + invalid handle for hFence
+///         + fence is in signaled state
+///         + fence is enqueued in another command queue
 /*@todo: __declspec(dllexport)*/
 xe_result_t __xecall
-  xeCommandQueueSetParameter(
-    xe_command_queue_handle_t hCommandQueue,        ///< [in] handle of command queue
-    xe_command_queue_parameter_t parameter,         ///< [in] parameter to change
-    uint32_t value                                  ///< [in] value of attribute
+  xeFenceEnqueueSignal(
+    xe_fence_handle_t hFence                        ///< [in] handle of the fence
     )
 {
     return XE_RESULT_SUCCESS;
 }
 
 ///////////////////////////////////////////////////////////////////////////////
-/// @brief Retrieves a command queue's parameter
+/// @brief The current host thread waits on a fence to be signaled.
 /// 
 /// @remarks
 ///   _Analogues_
-///     - cuCtxGetCacheConfig
-///     - cuCtxGetLimit
-///     - cuCtxGetSharedMemConfig
-///     - cuCtxGetStreamPriorityRange
+///     - **cuEventSynchronize**
 /// 
 /// @returns
 ///     - ::XE_RESULT_SUCCESS
 ///     - ::XE_RESULT_ERROR_UNINITIALIZED
 ///     - ::XE_RESULT_ERROR_INVALID_PARAMETER
-///         + invalid handle for hCommandQueue
-///         + invalid value for attribute
-///         + nullptr for value
+///         + invalid handle for hFence
+///         + fence is not enqueued in a command queue
 /*@todo: __declspec(dllexport)*/
 xe_result_t __xecall
-  xeCommandQueueGetParameter(
-    xe_command_queue_handle_t hCommandQueue,        ///< [in] handle of command queue
-    xe_command_queue_parameter_t parameter,         ///< [in] parameter to change
-    uint32_t* value                                 ///< [out] value of attribute
+  xeHostWaitOnFence(
+    xe_fence_handle_t hFence                        ///< [in] handle of the fence
     )
 {
     return XE_RESULT_SUCCESS;
 }
 
 ///////////////////////////////////////////////////////////////////////////////
-/// @brief Resets all command queue parameters to default state
+/// @brief The current host thread waits on a multiple fences to be signaled.
 /// 
 /// @returns
 ///     - ::XE_RESULT_SUCCESS
 ///     - ::XE_RESULT_ERROR_UNINITIALIZED
 ///     - ::XE_RESULT_ERROR_INVALID_PARAMETER
-///         + invalid handle for hCommandQueue
+///         + nullptr for phFences
+///         + any invalid handle in phFences
+///         + any fence is not enqueued in a command queue
 /*@todo: __declspec(dllexport)*/
 xe_result_t __xecall
-  xeCommandQueueResetParameters(
-    xe_command_queue_handle_t hCommandQueue         ///< [in] handle of the command queue
+  xeHostWaitOnMultipleFences(
+    uint32_t numFences,                             ///< [in] number of fences in hFences
+    xe_fence_handle_t* phFences                     ///< [in] pointer to array of handles of the fences
     )
 {
     return XE_RESULT_SUCCESS;
 }
 
 ///////////////////////////////////////////////////////////////////////////////
-/// @brief Enqueues a command list into a command queue
+/// @brief Queries a fence object's status.
+/// 
+/// @remarks
+///   _Analogues_
+///     - **cuEventQuery**
 /// 
 /// @returns
 ///     - ::XE_RESULT_SUCCESS
 ///     - ::XE_RESULT_ERROR_UNINITIALIZED
+///     - ::XE_RESULT_NOT_READY
+///         + not signaled
 ///     - ::XE_RESULT_ERROR_INVALID_PARAMETER
-///         + invalid handle for hCommandQueue
-///         + invalid handle for hCommandList
+///         + invalid handle for hFence
+///         + fence is not enqueued in a command queue
 /*@todo: __declspec(dllexport)*/
 xe_result_t __xecall
-  xeCommandQueueEnqueueCommandList(
-    xe_command_queue_handle_t hCommandQueue,        ///< [in] handle of the command queue
-    xe_command_list_handle_t hCommandList           ///< [in] handle of the command list to execute
+  xeFenceQueryStatus(
+    xe_fence_handle_t hFence                        ///< [in] handle of the fence
     )
 {
     return XE_RESULT_SUCCESS;
 }
 
 ///////////////////////////////////////////////////////////////////////////////
-/// @brief Synchronizes a command queue
+/// @brief Queries the elapsed time between two signaled fences.
+/// 
+/// @remarks
+///   _Analogues_
+///     - **cuEventElapsedTime**
 /// 
 /// @returns
 ///     - ::XE_RESULT_SUCCESS
 ///     - ::XE_RESULT_ERROR_UNINITIALIZED
 ///     - ::XE_RESULT_ERROR_INVALID_PARAMETER
-///         + invalid handle for hCommandQueue
+///         + invalid handle for hFenceStart
+///         + invalid handle for hFenceEnd
+///         + either fence not enqueued
+///         + nullptr for pTime
 /*@todo: __declspec(dllexport)*/
 xe_result_t __xecall
-  xeCommandQueueSynchronize(
-    xe_command_queue_handle_t hCommandQueue         ///< [in] handle of the command queue
+  xeFenceQueryElapsedTime(
+    xe_fence_handle_t hFenceStart,                  ///< [in] handle of the fence
+    xe_fence_handle_t hFenceEnd,                    ///< [in] handle of the fence
+    double_t* pTime                                 ///< [out] time in milliseconds
+    )
+{
+    return XE_RESULT_SUCCESS;
+}
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Reset a fence back to the not signaled state.
+/// 
+/// @returns
+///     - ::XE_RESULT_SUCCESS
+///     - ::XE_RESULT_ERROR_UNINITIALIZED
+///     - ::XE_RESULT_ERROR_INVALID_PARAMETER
+///         + invalid handle for hFence
+/*@todo: __declspec(dllexport)*/
+xe_result_t __xecall
+  xeFenceReset(
+    xe_fence_handle_t hFence                        ///< [in] handle of the fence
     )
 {
     return XE_RESULT_SUCCESS;

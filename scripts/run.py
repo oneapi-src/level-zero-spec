@@ -19,13 +19,13 @@ def main():
     configParser = util.configRead("config.ini")
 
     if "all" == args.filter or "core" == args.filter:
-        generate_api.generate_cpp_headers(
+        generate_api.generate_cpp(
             configParser.get('PATH','core'),
             configParser.get('NAMESPACE','core'),
             parse_specs.parse("./core"))
     
     if "all" == args.filter or "extended" == args.filter:
-        generate_api.generate_cpp_headers(
+        generate_api.generate_cpp(
             configParser.get('PATH','extended'),
             configParser.get('NAMESPACE','extended'),
             parse_specs.parse("./extended"))

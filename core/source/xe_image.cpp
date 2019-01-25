@@ -20,64 +20,58 @@
 * or otherwise. Any license under such intellectual property rights must be
 * express and approved by Intel in writing.
 *
-* @file xe_driver.cpp
+* @file xe_image.cpp
 *
-* @brief Intel Xe Driver APIs
+* @brief Intel Xe Driver APIs for Images
 *
 * @cond DEV
-* DO NOT EDIT: generated from /scripts/<type>/driver.yml
+* DO NOT EDIT: generated from /scripts/<type>/image.yml
 * @endcond
 *
 ******************************************************************************/
-#include "../include/xe_driver.h"
+#include "../include/xe_image.h"
 
 ///////////////////////////////////////////////////////////////////////////////
-/// @brief Initialize the Xe Driver API and must be called before any other API
-///        function.
-/// 
-/// @details
-///     - If this function is not called then all other functions will return
-///       ::XE_RESULT_ERROR_UNINITIALIZED.
+/// @brief Creates a image object on the device.
 /// 
 /// @remarks
 ///   _Analogues_
-///     - **cuInit**
+///     - clCreateImage
 /// 
 /// @returns
 ///     - ::XE_RESULT_SUCCESS
 ///     - ::XE_RESULT_ERROR_UNINITIALIZED
 ///     - ::XE_RESULT_ERROR_INVALID_PARAMETER
-///         + invalid value for flags
+///         + nullptr for desc
+///         + nullptr for phImage
 ///     - ::XE_RESULT_ERROR_OUT_OF_HOST_MEMORY
+///     - ::XE_RESULT_ERROR_OUT_OF_DEVICE_MEMORY
 /*@todo: __declspec(dllexport)*/
 xe_result_t __xecall
-  xeDriverInit(
-    xe_init_flags_t flags                           ///< [in] initialization flags
+  xeDeviceCreateImage(
+    const xe_image_desc_t* desc,                    ///< [in] pointer to image descriptor
+    xe_image_handle_t* phImage                      ///< [out] pointer to handle of image object created
     )
 {
     return XE_RESULT_SUCCESS;
 }
 
 ///////////////////////////////////////////////////////////////////////////////
-/// @brief Returns the current version of the installed driver.
+/// @brief Deletes a image object.
 /// 
 /// @details
-///     - The driver version is a non-zero, monotonically increasing value where
-///       higher values always indicate a more recent version.
-/// 
-/// @remarks
-///   _Analogues_
-///     - **cuDriverGetVersion**
+///     - The application is responsible for making sure the GPU is not
+///       currently referencing the image before it is deleted
 /// 
 /// @returns
 ///     - ::XE_RESULT_SUCCESS
 ///     - ::XE_RESULT_ERROR_UNINITIALIZED
 ///     - ::XE_RESULT_ERROR_INVALID_PARAMETER
-///         + nullptr for version
+///         + invalid handle for hImage
 /*@todo: __declspec(dllexport)*/
 xe_result_t __xecall
-  xeDriverGetVersion(
-    uint32_t* version                               ///< [out] driver version
+  xeImageDestroy(
+    xe_image_handle_t hImage                        ///< [in] handle of image object to destroy
     )
 {
     return XE_RESULT_SUCCESS;

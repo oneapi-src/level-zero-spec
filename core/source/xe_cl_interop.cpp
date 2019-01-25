@@ -20,98 +20,89 @@
 * or otherwise. Any license under such intellectual property rights must be
 * express and approved by Intel in writing.
 *
-* @file xe_cmdlist.cpp
+* @file xe_cl_interop.cpp
 *
-* @brief Intel Xe Driver APIs for Command List
+* @brief Intel Xe Driver APIs for OpenCL Interopability
 *
 * @cond DEV
-* DO NOT EDIT: generated from /scripts/<type>/cmdlist.yml
+* DO NOT EDIT: generated from /scripts/<type>/cl_interop.yml
 * @endcond
 *
 ******************************************************************************/
-#include "../include/xe_cmdlist.h"
+#include "../include/xe_cl_interop.h"
 
 ///////////////////////////////////////////////////////////////////////////////
-/// @brief Creates a command list on the device for submitting commands to any
-///        command queue.
+#if XE_ENABLE_OCL_INTEROP
+/// @brief Registers OpenCL memory with Xe
 /// 
 /// @returns
 ///     - ::XE_RESULT_SUCCESS
 ///     - ::XE_RESULT_ERROR_UNINITIALIZED
 ///     - ::XE_RESULT_ERROR_INVALID_PARAMETER
 ///         + invalid handle for hDevice
-///         + nullptr for desc
-///         + nullptr for phCommandList
+///         + nullptr for ptr
 ///     - ::XE_RESULT_ERROR_OUT_OF_HOST_MEMORY
 ///     - ::XE_RESULT_ERROR_OUT_OF_DEVICE_MEMORY
 /*@todo: __declspec(dllexport)*/
 xe_result_t __xecall
-  xeDeviceCreateCommandList(
-    xe_device_handle_t hDevice,                     ///< [in] handle of the device object
-    const xe_command_list_desc_t* desc,             ///< [in] pointer to command list descriptor
-    xe_command_list_handle_t* phCommandList         ///< [out] pointer to handle of command list object created
+  xeDeviceRegisterCLMemory(
+    xe_device_handle_t hDevice,                     ///< [in] handle to the device
+    cl_context context,                             ///< [in] the OpenCL context that created the memory
+    cl_mem mem,                                     ///< [in] the OpenCL memory to register
+    void** ptr                                      ///< [out] pointer to device allocation
     )
 {
     return XE_RESULT_SUCCESS;
 }
+#endif // XE_ENABLE_OCL_INTEROP
 
 ///////////////////////////////////////////////////////////////////////////////
-/// @brief Destroys a command list.
-/// 
-/// @details
-///     - The application is responsible for making sure the GPU is not
-///       currently referencing the command list before it is deleted
+#if XE_ENABLE_OCL_INTEROP
+/// @brief Registers OpenCL program with Xe
 /// 
 /// @returns
 ///     - ::XE_RESULT_SUCCESS
 ///     - ::XE_RESULT_ERROR_UNINITIALIZED
 ///     - ::XE_RESULT_ERROR_INVALID_PARAMETER
-///         + invalid handle for hCommandList
+///         + invalid handle for hDevice
+///         + nullptr for ptr
+///     - ::XE_RESULT_ERROR_OUT_OF_HOST_MEMORY
+///     - ::XE_RESULT_ERROR_OUT_OF_DEVICE_MEMORY
 /*@todo: __declspec(dllexport)*/
 xe_result_t __xecall
-  xeCommandListDestroy(
-    xe_command_list_handle_t hCommandList           ///< [in] handle of command list object to destroy
+  xeDeviceRegisterCLProgram(
+    xe_device_handle_t hDevice,                     ///< [in] handle to the device
+    cl_context context,                             ///< [in] the OpenCL context that created the program
+    cl_program program,                             ///< [in] the OpenCL program to register
+    xe_module_handle_t* phModule                    ///< [out] pointer to handle of module object created
     )
 {
     return XE_RESULT_SUCCESS;
 }
+#endif // XE_ENABLE_OCL_INTEROP
 
 ///////////////////////////////////////////////////////////////////////////////
-/// @brief Closes a command list; ready to be enqueued into a command queue.
+#if XE_ENABLE_OCL_INTEROP
+/// @brief Registers OpenCL command queue with Xe
 /// 
 /// @returns
 ///     - ::XE_RESULT_SUCCESS
 ///     - ::XE_RESULT_ERROR_UNINITIALIZED
 ///     - ::XE_RESULT_ERROR_INVALID_PARAMETER
-///         + invalid handle for hCommandList
+///         + invalid handle for hDevice
+///         + nullptr for ptr
+///     - ::XE_RESULT_ERROR_OUT_OF_HOST_MEMORY
+///     - ::XE_RESULT_ERROR_OUT_OF_DEVICE_MEMORY
 /*@todo: __declspec(dllexport)*/
 xe_result_t __xecall
-  xeCommandListClose(
-    xe_command_list_handle_t hCommandList           ///< [in] handle of command list object to close
+  xeDeviceRegisterCLCommandQueue(
+    xe_device_handle_t hDevice,                     ///< [in] handle to the device
+    cl_context context,                             ///< [in] the OpenCL context that created the command queue
+    cl_command_queue command_queue,                 ///< [in] the OpenCL command queue to register
+    xe_command_queue_handle_t* phCommandQueue       ///< [out] pointer to handle of command queue object created
     )
 {
     return XE_RESULT_SUCCESS;
 }
-
-///////////////////////////////////////////////////////////////////////////////
-/// @brief Reset a command list to initial (empty) state; ready for encoding
-///        commands.
-/// 
-/// @details
-///     - The application is responsible for making sure the GPU is not
-///       currently referencing the command list before it is reset
-/// 
-/// @returns
-///     - ::XE_RESULT_SUCCESS
-///     - ::XE_RESULT_ERROR_UNINITIALIZED
-///     - ::XE_RESULT_ERROR_INVALID_PARAMETER
-///         + invalid handle for hCommandList
-/*@todo: __declspec(dllexport)*/
-xe_result_t __xecall
-  xeCommandListReset(
-    xe_command_list_handle_t hCommandList           ///< [in] handle of command list object to reset
-    )
-{
-    return XE_RESULT_SUCCESS;
-}
+#endif // XE_ENABLE_OCL_INTEROP
 

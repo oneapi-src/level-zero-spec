@@ -39,15 +39,6 @@ def make_line(lformat, rformat, repl, a, b, c):
     lhalf = rformat%(sub(repl,c,True))
     return "%s%s"%(append(rhalf, 48), lhalf)
 
-def eline(repl, item):
-    if 'value' in item:
-        return make_line("%s = %s,", "///< %s", repl, item['name'], item['value'], item['desc'])
-    else:
-        return make_line("%s%s,", "///< %s", repl, item['name'], "", item['desc'])
-
-def mline(repl, item):
-    return make_line("%s %s;", "///< %s", repl, item['type'], item['name'], item['desc'])
-
 def pline(repl, item, more):
     lformat = "%s %s," if more else "%s %s"
     return make_line(lformat, "///< %s", repl, item['type'], item['name'], item['desc'])
@@ -74,7 +65,7 @@ def pline(repl, item, more):
 * or otherwise. Any license under such intellectual property rights must be
 * express and approved by Intel in writing.
 *
-* @file ${x}_${name}.h
+* @file ${x}_${name}.cpp
 *
 * @brief ${sub(x, header['desc'])}
 *
@@ -83,23 +74,10 @@ def pline(repl, item, more):
 * @endcond
 *
 ******************************************************************************/
-#ifndef _${X}_${name.upper()}_H
-#define _${X}_${name.upper()}_H
-#if defined(__cplusplus)
-#pragma once
-#endif
-%if re.match(r"common", name):
-#include <stdint.h>
+#include "../include/${x}_${name}.h"
 
-///////////////////////////////////////////////////////////////////////////////
-typedef float  float_t;
-typedef double double_t;
-
-%else:
-#include "${x}_common.h"
-
-%endif
 %for obj in objects:
+%if re.match(r"function", obj['type']):
 ///////////////////////////////////////////////////////////////////////////////
 %if 'condition' in obj:
 #if ${sub(x,obj['condition'])}
@@ -132,31 +110,6 @@ typedef double double_t;
 ///     - ${line}
     %endfor
 %endif
-%if re.match(r"macro", obj['type']):
-#define ${sub(x, obj['name'])}  ${sub(x, obj['value'])}
-%if 'altvalue' in obj:
-#else
-#define ${sub(x, obj['name'])}  ${sub(x, obj['altvalue'])}
-%endif
-%elif re.match(r"typedef", obj['type']):
-typedef ${sub(x, obj['value'])} ${sub(x, obj['name'])};
-%elif re.match(r"enum", obj['type']):
-typedef enum _${sub(x, obj['name'])}
-{
-    %for etor in obj['etors']:
-    ${eline(x, etor)}
-    %endfor
-
-} ${sub(x, obj['name'])};
-%elif re.match(r"struct", obj['type']):
-typedef struct _${sub(x, obj['name'])}
-{
-    %for member in obj['members']:
-    ${mline(x, member)}
-    %endfor
-
-} ${sub(x, obj['name'])};
-%elif re.match(r"function", obj['type']):
 /// 
 /// @returns
 ///     - ::${X}_RESULT_SUCCESS
@@ -173,38 +126,19 @@ typedef struct _${sub(x, obj['name'])}
 ///     - ${sub(x, item, True)}
     %endif
 %endfor
+/*@todo: __declspec(dllexport)*/
 ${x}_result_t __${x}call
   ${sub(x, obj['name'])}(
     %for param in obj['params']:
     ${pline(x, param, loop.index < len(obj['params'])-1)}
     %endfor
-    );
-%elif re.match(r"handle", obj['type']):
-#if defined( __cplusplus )
-struct ${sub(x, obj['name'])}
+    )
 {
-    void* pDriverData;
-
-    ${sub(x, obj['name'])}( void ) : pDriverData( nullptr ) {}        ///< default constructor
-    explicit ${sub(x, obj['name'])}( void* p ) : pDriverData( p ) {}  ///< initialize from pointer
-
-    inline bool operator==( const ${sub(x, obj['name'])}& other ) const   ///< is equal to other
-    { return pDriverData == other.pDriverData; }
-    inline bool operator!=( const ${sub(x, obj['name'])}& other ) const   ///< not equal to other
-    { return pDriverData != other.pDriverData; }
-
-};
-#else
-typedef struct _${sub(x, obj['name'])}
-{
-    void* pDriverData;
-
-} ${sub(x, obj['name'])};
-#endif // defined( __cplusplus )
-%endif
+    return ${X}_RESULT_SUCCESS;
+}
 %if 'condition' in obj:
 #endif // ${sub(x,obj['condition'])}
 %endif
 
+%endif
 %endfor
-#endif // _${X}_${name.upper()}_H

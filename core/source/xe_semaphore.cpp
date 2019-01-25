@@ -20,20 +20,19 @@
 * or otherwise. Any license under such intellectual property rights must be
 * express and approved by Intel in writing.
 *
-* @file xe_cmdlist.cpp
+* @file xe_semaphore.cpp
 *
-* @brief Intel Xe Driver APIs for Command List
+* @brief Intel Xe Driver APIs for Semaphore
 *
 * @cond DEV
-* DO NOT EDIT: generated from /scripts/<type>/cmdlist.yml
+* DO NOT EDIT: generated from /scripts/<type>/semaphore.yml
 * @endcond
 *
 ******************************************************************************/
-#include "../include/xe_cmdlist.h"
+#include "../include/xe_semaphore.h"
 
 ///////////////////////////////////////////////////////////////////////////////
-/// @brief Creates a command list on the device for submitting commands to any
-///        command queue.
+/// @brief Creates an semaphore object on the device.
 /// 
 /// @returns
 ///     - ::XE_RESULT_SUCCESS
@@ -41,75 +40,111 @@
 ///     - ::XE_RESULT_ERROR_INVALID_PARAMETER
 ///         + invalid handle for hDevice
 ///         + nullptr for desc
-///         + nullptr for phCommandList
+///         + nullptr for phSemaphore
 ///     - ::XE_RESULT_ERROR_OUT_OF_HOST_MEMORY
 ///     - ::XE_RESULT_ERROR_OUT_OF_DEVICE_MEMORY
 /*@todo: __declspec(dllexport)*/
 xe_result_t __xecall
-  xeDeviceCreateCommandList(
-    xe_device_handle_t hDevice,                     ///< [in] handle of the device object
-    const xe_command_list_desc_t* desc,             ///< [in] pointer to command list descriptor
-    xe_command_list_handle_t* phCommandList         ///< [out] pointer to handle of command list object created
+  xeDeviceCreateSemaphore(
+    xe_device_handle_t hDevice,                     ///< [in] handle of the device
+    const xe_semaphore_desc_t* desc,                ///< [in] pointer to semaphore descriptor
+    xe_semaphore_handle_t* phSemaphore              ///< [out] pointer to handle of semaphore object created
     )
 {
     return XE_RESULT_SUCCESS;
 }
 
 ///////////////////////////////////////////////////////////////////////////////
-/// @brief Destroys a command list.
+/// @brief Deletes an semaphore object.
 /// 
 /// @details
 ///     - The application is responsible for making sure the GPU is not
-///       currently referencing the command list before it is deleted
+///       currently referencing the semaphore before it is deleted
 /// 
 /// @returns
 ///     - ::XE_RESULT_SUCCESS
 ///     - ::XE_RESULT_ERROR_UNINITIALIZED
 ///     - ::XE_RESULT_ERROR_INVALID_PARAMETER
-///         + invalid handle for hCommandList
+///         + invalid handle for hSemaphore
 /*@todo: __declspec(dllexport)*/
 xe_result_t __xecall
-  xeCommandListDestroy(
-    xe_command_list_handle_t hCommandList           ///< [in] handle of command list object to destroy
+  xeSemaphoreDestroy(
+    xe_semaphore_handle_t hSemaphore                ///< [in] handle of semaphore object to destroy
     )
 {
     return XE_RESULT_SUCCESS;
 }
 
 ///////////////////////////////////////////////////////////////////////////////
-/// @brief Closes a command list; ready to be enqueued into a command queue.
+/// @brief Encodes an semaphore signal into a command list.
 /// 
 /// @returns
 ///     - ::XE_RESULT_SUCCESS
 ///     - ::XE_RESULT_ERROR_UNINITIALIZED
 ///     - ::XE_RESULT_ERROR_INVALID_PARAMETER
 ///         + invalid handle for hCommandList
+///         + invalid handle for hSemaphore
 /*@todo: __declspec(dllexport)*/
 xe_result_t __xecall
-  xeCommandListClose(
-    xe_command_list_handle_t hCommandList           ///< [in] handle of command list object to close
+  xeCommandListEncodeSemaphoreSignal(
+    xe_command_list_handle_t hCommandList,          ///< [in] handle of the command list
+    xe_semaphore_handle_t hSemaphore,               ///< [in] handle of the semaphore
+    xe_semaphore_value_t value                      ///< [in] the value to write on signal
     )
 {
     return XE_RESULT_SUCCESS;
 }
 
 ///////////////////////////////////////////////////////////////////////////////
-/// @brief Reset a command list to initial (empty) state; ready for encoding
-///        commands.
-/// 
-/// @details
-///     - The application is responsible for making sure the GPU is not
-///       currently referencing the command list before it is reset
+/// @brief Encodes an semaphore wait into a command list.
 /// 
 /// @returns
 ///     - ::XE_RESULT_SUCCESS
 ///     - ::XE_RESULT_ERROR_UNINITIALIZED
 ///     - ::XE_RESULT_ERROR_INVALID_PARAMETER
 ///         + invalid handle for hCommandList
+///         + invalid handle for hSemaphore
 /*@todo: __declspec(dllexport)*/
 xe_result_t __xecall
-  xeCommandListReset(
-    xe_command_list_handle_t hCommandList           ///< [in] handle of command list object to reset
+  xeCommandListEncodeSemaphoreWait(
+    xe_command_list_handle_t hCommandList,          ///< [in] handle of the command list
+    xe_semaphore_handle_t hSemaphore,               ///< [in] handle of the semaphore
+    xe_semaphore_wait_operation_t operation,        ///< [in] wait operation type
+    xe_semaphore_value_t value                      ///< [in] the value to wait upon
+    )
+{
+    return XE_RESULT_SUCCESS;
+}
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Queries an semaphore object's value.
+/// 
+/// @returns
+///     - ::XE_RESULT_SUCCESS
+///     - ::XE_RESULT_ERROR_UNINITIALIZED
+///     - ::XE_RESULT_ERROR_INVALID_PARAMETER
+///         + invalid handle for hSemaphore
+/*@todo: __declspec(dllexport)*/
+xe_result_t __xecall
+  xeSemaphoreQueryValue(
+    xe_semaphore_handle_t hSemaphore                ///< [in] handle of the semaphore
+    )
+{
+    return XE_RESULT_SUCCESS;
+}
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Reset a semaphore back to the not signaled state, with value of 0.
+/// 
+/// @returns
+///     - ::XE_RESULT_SUCCESS
+///     - ::XE_RESULT_ERROR_UNINITIALIZED
+///     - ::XE_RESULT_ERROR_INVALID_PARAMETER
+///         + invalid handle for hSemaphore
+/*@todo: __declspec(dllexport)*/
+xe_result_t __xecall
+  xeSemaphoreReset(
+    xe_semaphore_handle_t hSemaphore                ///< [in] handle of the semaphore
     )
 {
     return XE_RESULT_SUCCESS;

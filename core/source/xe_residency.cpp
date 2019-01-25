@@ -20,96 +20,86 @@
 * or otherwise. Any license under such intellectual property rights must be
 * express and approved by Intel in writing.
 *
-* @file xe_cmdlist.cpp
+* @file xe_residency.cpp
 *
-* @brief Intel Xe Driver APIs for Command List
+* @brief Intel Xe Driver APIs for Memory
 *
 * @cond DEV
-* DO NOT EDIT: generated from /scripts/<type>/cmdlist.yml
+* DO NOT EDIT: generated from /scripts/<type>/residency.yml
 * @endcond
 *
 ******************************************************************************/
-#include "../include/xe_cmdlist.h"
+#include "../include/xe_residency.h"
 
 ///////////////////////////////////////////////////////////////////////////////
-/// @brief Creates a command list on the device for submitting commands to any
-///        command queue.
+/// @brief Makes memory resident for the device.
 /// 
 /// @returns
 ///     - ::XE_RESULT_SUCCESS
 ///     - ::XE_RESULT_ERROR_UNINITIALIZED
 ///     - ::XE_RESULT_ERROR_INVALID_PARAMETER
-///         + invalid handle for hDevice
-///         + nullptr for desc
-///         + nullptr for phCommandList
-///     - ::XE_RESULT_ERROR_OUT_OF_HOST_MEMORY
-///     - ::XE_RESULT_ERROR_OUT_OF_DEVICE_MEMORY
+///         + nullptr for ptr
 /*@todo: __declspec(dllexport)*/
 xe_result_t __xecall
-  xeDeviceCreateCommandList(
-    xe_device_handle_t hDevice,                     ///< [in] handle of the device object
-    const xe_command_list_desc_t* desc,             ///< [in] pointer to command list descriptor
-    xe_command_list_handle_t* phCommandList         ///< [out] pointer to handle of command list object created
+  xeDeviceMakeMemoryResident(
+    xe_device_handle_t hDevice,                     ///< [in] handle of the device
+    void* ptr,                                      ///< [in] pointer to memory to make resident
+    size_t size                                     ///< [in] size in bytes to make resident
     )
 {
     return XE_RESULT_SUCCESS;
 }
 
 ///////////////////////////////////////////////////////////////////////////////
-/// @brief Destroys a command list.
-/// 
-/// @details
-///     - The application is responsible for making sure the GPU is not
-///       currently referencing the command list before it is deleted
+/// @brief Allows memory to be evicted from the device.
 /// 
 /// @returns
 ///     - ::XE_RESULT_SUCCESS
 ///     - ::XE_RESULT_ERROR_UNINITIALIZED
 ///     - ::XE_RESULT_ERROR_INVALID_PARAMETER
-///         + invalid handle for hCommandList
+///         + nullptr for ptr
 /*@todo: __declspec(dllexport)*/
 xe_result_t __xecall
-  xeCommandListDestroy(
-    xe_command_list_handle_t hCommandList           ///< [in] handle of command list object to destroy
+  xeDeviceEvictMemory(
+    xe_device_handle_t hDevice,                     ///< [in] handle of the device
+    void* ptr,                                      ///< [in] pointer to memory to evict
+    size_t size                                     ///< [in] size in bytes to evict
     )
 {
     return XE_RESULT_SUCCESS;
 }
 
 ///////////////////////////////////////////////////////////////////////////////
-/// @brief Closes a command list; ready to be enqueued into a command queue.
+/// @brief Makes image resident for the device.
 /// 
 /// @returns
 ///     - ::XE_RESULT_SUCCESS
 ///     - ::XE_RESULT_ERROR_UNINITIALIZED
 ///     - ::XE_RESULT_ERROR_INVALID_PARAMETER
-///         + invalid handle for hCommandList
+///         + invalid handle for hImage
 /*@todo: __declspec(dllexport)*/
 xe_result_t __xecall
-  xeCommandListClose(
-    xe_command_list_handle_t hCommandList           ///< [in] handle of command list object to close
+  xeDeviceMakeImageResident(
+    xe_device_handle_t hDevice,                     ///< [in] handle of the device
+    xe_image_handle_t hImage                        ///< [in] handle of image to make resident
     )
 {
     return XE_RESULT_SUCCESS;
 }
 
 ///////////////////////////////////////////////////////////////////////////////
-/// @brief Reset a command list to initial (empty) state; ready for encoding
-///        commands.
-/// 
-/// @details
-///     - The application is responsible for making sure the GPU is not
-///       currently referencing the command list before it is reset
+/// @brief Allows image to be evicted from the device.
 /// 
 /// @returns
 ///     - ::XE_RESULT_SUCCESS
 ///     - ::XE_RESULT_ERROR_UNINITIALIZED
 ///     - ::XE_RESULT_ERROR_INVALID_PARAMETER
-///         + invalid handle for hCommandList
+///         + invalid handle for hImage
 /*@todo: __declspec(dllexport)*/
 xe_result_t __xecall
-  xeCommandListReset(
-    xe_command_list_handle_t hCommandList           ///< [in] handle of command list object to reset
+  xeDeviceEvictImage(
+    xe_device_handle_t hDevice,                     ///< [in] handle of the device
+    xe_image_handle_t hImage                        ///< [in] handle of image to make evict
     )
 {
     return XE_RESULT_SUCCESS;
