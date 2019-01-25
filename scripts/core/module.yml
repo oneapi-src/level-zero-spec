@@ -65,15 +65,14 @@ type: function
 desc: "Retrieve native binary from Module."
 name: $xModuleGetNativeBinary
 analogue:
-    - "**cuModuleLoad**"
-    - "cuCtxGetCurrent"
+    - ""
 params:
     - type: $x_module_handle_t
       name: hModule
       desc: "[in] handle of the device"
     - type: "uint32_t*"
-      name: pIsaSize
-      desc: "[out] size of ISA buffer provided by pModuleISA."
+      name: pSize
+      desc: "[out] size of native binary."
     - type: "char**"
       name: pModuleNativeBinary
       desc: "[out] pointer to native binary"
