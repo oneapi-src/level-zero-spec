@@ -143,6 +143,28 @@ xe_result_t __xecall
     );
 
 ///////////////////////////////////////////////////////////////////////////////
+/// @brief Retrieve an image reference from module
+/// 
+/// @remarks
+///   _Analogues_
+///     - **cuModuleGetTexRef**
+/// 
+/// @returns
+///     - ::XE_RESULT_SUCCESS
+///     - ::XE_RESULT_ERROR_UNINITIALIZED
+///     - ::XE_RESULT_ERROR_INVALID_PARAMETER
+///         + invalid handle for hModule
+///         + null ptr for pImageName
+///         + invalid name for pImageName
+///         + null ptr for phImageRef
+xe_result_t __xecall
+  xeModuleGetImageReference(
+    xe_module_handle_t hModule,                     ///< [in] handle of the module
+    const char* pImageName,                         ///< [in] name of function in global
+    xe_image_reference_t* phImageRef                ///< [out] handle of image reference
+    );
+
+///////////////////////////////////////////////////////////////////////////////
 /// @brief Create Function object from Module by name
 /// 
 /// @remarks
@@ -168,8 +190,7 @@ xe_result_t __xecall
 /// 
 /// @remarks
 ///   _Analogues_
-///     - **cuModuleUnload**
-///     - cuCtxGetCurrent
+///     - 
 /// 
 /// @returns
 ///     - ::XE_RESULT_SUCCESS
@@ -240,6 +261,27 @@ xe_result_t __xecall
     uint32_t argIndex,                              ///< [in] argument index in range [0, num args - 1]
     size_t argSize,                                 ///< [in] size of argument type
     const void* pArgValue                           ///< [in] argument value represented as matching arg type
+    );
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Set function argument to associate image reference to image object.
+/// 
+/// @remarks
+///   _Analogues_
+///     - **cuSetTexAddress**
+/// 
+/// @returns
+///     - ::XE_RESULT_SUCCESS
+///     - ::XE_RESULT_ERROR_UNINITIALIZED
+///     - ::XE_RESULT_ERROR_INVALID_PARAMETER
+///         + invalid handle for hFunction
+///         + invalid handle for hImageRef
+///         + invalid handle for hImage
+xe_result_t __xecall
+  xeSetFunctionArgImage(
+    xe_function_args_handle_t hFunctionArgs,        ///< [in/out] handle of the function args object.
+    xe_image_reference_t hImageRef,                 ///< [in] handle of image reference
+    xe_image_handle_t hImage                        ///< [in] handle of image object
     );
 
 ///////////////////////////////////////////////////////////////////////////////

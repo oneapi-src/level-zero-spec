@@ -57,6 +57,10 @@ desc: "Handle of driver's image object"
 name: "$x_image_handle_t"
 --- #--------------------------------------------------------------------------
 type: handle
+desc: "Reference of modules's image"
+name: "$x_image_reference_t"
+--- #--------------------------------------------------------------------------
+type: handle
 desc: "Handle of driver's module object"
 name: "$x_module_handle_t"
 --- #--------------------------------------------------------------------------

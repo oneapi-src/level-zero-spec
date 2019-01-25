@@ -113,6 +113,28 @@ returns:
         - "null ptr for pGlobalValue"
 --- #--------------------------------------------------------------------------
 type: function
+desc: "Retrieve an image reference from module"
+name: $xModuleGetImageReference
+analogue:
+    - "**cuModuleGetTexRef**"
+params:
+    - type: "$x_module_handle_t"
+      name: hModule
+      desc: "[in] handle of the module"
+    - type: "const char*"
+      name: pImageName
+      desc: "[in] name of function in global"
+    - type: "$x_image_reference_t*"
+      name:  phImageRef
+      desc: "[out] handle of image reference"
+returns:
+    - $X_RESULT_ERROR_INVALID_PARAMETER:
+        - "invalid handle for hModule"
+        - "null ptr for pImageName"
+        - "invalid name for pImageName"
+        - "null ptr for phImageRef"
+--- #--------------------------------------------------------------------------
+type: function
 desc: "Create Function object from Module by name"
 name: $xModuleCreateFunction
 analogue:
@@ -137,8 +159,7 @@ type: function
 desc: "Destroys Function object"
 name: $xDestroyFunction
 analogue:
-    - "**cuModuleUnload**"
-    - "cuCtxGetCurrent"
+    - ""
 params:
     - type: "$x_function_handle_t"
       name: hFunction
@@ -203,6 +224,27 @@ returns:
         - "null ptr for pArgValue"
         - "invalid size specified"
         - "invalid handle for hFunctionArgs"
+--- #--------------------------------------------------------------------------
+type: function
+desc: "Set function argument to associate image reference to image object."
+name: $xSetFunctionArgImage
+analogue:
+    - "**cuSetTexAddress**"
+params:
+    - type: "$x_function_args_handle_t"
+      name: hFunctionArgs
+      desc: "[in/out] handle of the function args object."
+    - type: "$x_image_reference_t"
+      name:  hImageRef
+      desc: "[in] handle of image reference"
+    - type: "$x_image_handle_t"
+      name:  hImage
+      desc: "[in] handle of image object"
+returns:
+    - $X_RESULT_ERROR_INVALID_PARAMETER:
+        - "invalid handle for hFunction"
+        - "invalid handle for hImageRef"
+        - "invalid handle for hImage"
 --- #--------------------------------------------------------------------------
 type: enum
 desc: "Function attributes"

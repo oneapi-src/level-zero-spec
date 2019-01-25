@@ -233,6 +233,30 @@ typedef struct _xe_image_handle_t
 #endif
 
 ///////////////////////////////////////////////////////////////////////////////
+/// @brief Reference of modules's image
+#if defined( __cplusplus )
+struct xe_image_reference_t
+{
+    void* pDriverData;
+
+    xe_image_reference_t( void ) : pDriverData( nullptr ) {}        ///< default constructor
+    explicit xe_image_reference_t( void* p ) : pDriverData( p ) {}  ///< initialize from pointer
+
+    inline bool operator==( const xe_image_reference_t& other ) const   ///< is equal to other
+    { return pDriverData == other.pDriverData; }
+    inline bool operator!=( const xe_image_reference_t& other ) const   ///< not equal to other
+    { return pDriverData != other.pDriverData; }
+
+};
+#else
+typedef struct _xe_image_reference_t
+{
+    void* pDriverData;
+
+} xe_image_reference_t;
+#endif
+
+///////////////////////////////////////////////////////////////////////////////
 /// @brief Handle of driver's module object
 #if defined( __cplusplus )
 struct xe_module_handle_t
