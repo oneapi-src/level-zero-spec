@@ -10,14 +10,17 @@ via irepo (https://github.intel.com/gsdi/irepo).
 
 * Pick the manifest
 ~~~~
-irepo select third_party/manifests.yml
+irepo select third_party/windows.yml
 ~~~~
 
 * Ignore folders not tracked by irepo
 ~~~~
 irepo ignore-folder .git
 irepo ignore-folder build
-irepo ignore-folder driver
+irepo ignore-folder core
+irepo ignore-folder extended
+irepo ignore-folder images
+irepo ignore-folder samples
 irepo ignore-folder scripts
 irepo ignore-folder tests
 ~~~~
