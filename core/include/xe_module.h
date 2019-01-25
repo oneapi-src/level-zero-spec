@@ -44,8 +44,8 @@
 /// @brief Supported module creation input formats
 typedef enum _xe_module_format_t
 {
-    XE_MODULE_IL_SPIRV_TEXT = 0,                    ///< Format is SPIRV IL text format
-    XE_MODULE_ISA,                                  ///< Format is Gen ISA format
+    XE_MODULE_IL_SPIRV = 0,                         ///< Format is SPIRV IL format
+    XE_MODULE_NATIVE,                               ///< Format is Gen native format
 
 } xe_module_format_t;
 
@@ -94,7 +94,7 @@ xe_result_t __xecall
     );
 
 ///////////////////////////////////////////////////////////////////////////////
-/// @brief Creates module object from an input IL or ISA.
+/// @brief Retrieve native binary from Module.
 /// 
 /// @remarks
 ///   _Analogues_
@@ -113,37 +113,14 @@ xe_result_t __xecall
 ///     - ::XE_RESULT_ERROR_OUT_OF_HOST_MEMORY
 ///     - ::XE_RESULT_ERROR_OUT_OF_DEVICE_MEMORY
 xe_result_t __xecall
-  xeModuleGetISA(
+  xeModuleGetNativeBinary(
     xe_module_handle_t hModule,                     ///< [in] handle of the device
     uint32_t* pIsaSize,                             ///< [out] size of ISA buffer provided by pModuleISA.
-    char** pModuleISA                               ///< [out] pointer to IL or ISA
+    char** pModuleNativeBinary                      ///< [out] pointer to native binary
     );
 
 ///////////////////////////////////////////////////////////////////////////////
-/// @brief Create Function object from Module by name
-/// 
-/// @remarks
-///   _Analogues_
-///     - **cuModuleGetGlobal**
-/// 
-/// @returns
-///     - ::XE_RESULT_SUCCESS
-///     - ::XE_RESULT_ERROR_UNINITIALIZED
-///     - ::XE_RESULT_ERROR_INVALID_PARAMETER
-///         + invalid handle for hModule
-///         + null ptr for pGlobalName
-///         + invalid name for pGlobalName
-///         + null ptr for pGlobalValue
-xe_result_t __xecall
-  xeModuleGetGlobal(
-    xe_module_handle_t hModule,                     ///< [in] handle of the module
-    const char* pGlobalName,                        ///< [in] name of function in global
-    size_t valueSize,                               ///< [out] size of value type
-    void* pGlobalValue                              ///< [out] pointer to global value
-    );
-
-///////////////////////////////////////////////////////////////////////////////
-/// @brief Retrieve an image reference from module
+/// @brief Retrieve an image id from module given name.
 /// 
 /// @remarks
 ///   _Analogues_
@@ -154,14 +131,13 @@ xe_result_t __xecall
 ///     - ::XE_RESULT_ERROR_UNINITIALIZED
 ///     - ::XE_RESULT_ERROR_INVALID_PARAMETER
 ///         + invalid handle for hModule
-///         + null ptr for pImageName
-///         + invalid name for pImageName
-///         + null ptr for phImageRef
+///         + null ptr for pName
+///         + null ptr for pArgIndex
 xe_result_t __xecall
-  xeModuleGetImageReference(
+  xeModuleGetArgIndexFromName(
     xe_module_handle_t hModule,                     ///< [in] handle of the module
-    const char* pImageName,                         ///< [in] name of function in global
-    xe_image_reference_t* phImageRef                ///< [out] handle of image reference
+    const char* pName,                              ///< [in] name of function argument
+    uint32_t* pArgIndex                             ///< [out] Id for image used by function
     );
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -264,27 +240,6 @@ xe_result_t __xecall
     );
 
 ///////////////////////////////////////////////////////////////////////////////
-/// @brief Set function argument to associate image reference to image object.
-/// 
-/// @remarks
-///   _Analogues_
-///     - **cuSetTexAddress**
-/// 
-/// @returns
-///     - ::XE_RESULT_SUCCESS
-///     - ::XE_RESULT_ERROR_UNINITIALIZED
-///     - ::XE_RESULT_ERROR_INVALID_PARAMETER
-///         + invalid handle for hFunction
-///         + invalid handle for hImageRef
-///         + invalid handle for hImage
-xe_result_t __xecall
-  xeSetFunctionArgImage(
-    xe_function_args_handle_t hFunctionArgs,        ///< [in/out] handle of the function args object.
-    xe_image_reference_t hImageRef,                 ///< [in] handle of image reference
-    xe_image_handle_t hImage                        ///< [in] handle of image object
-    );
-
-///////////////////////////////////////////////////////////////////////////////
 /// @brief Function attributes
 /// 
 /// @remarks
@@ -340,24 +295,24 @@ xe_result_t __xecall
     xe_command_list_handle_t hCommandList,          ///< [in] handle of the command list
     xe_function_handle_t hFunction,                 ///< [in] handle of the function object
     xe_function_args_handle_t hFunctionArgs,        ///< [in] handle to function arguments buffer.
-    uint32_t groupCountX,                           ///< [in] width of group in X dimension
-    uint32_t groupCountY,                           ///< [in] width of group in Y dimension
-    uint32_t groupCountZ,                           ///< [in] width of group in Z dimension
-    uint32_t dispatchCountX,                        ///< [in] width of dispatches in X dimension
-    uint32_t dispatchCountY,                        ///< [in] width of dispatches in Y dimension
-    uint32_t dispatchCountZ                         ///< [in] width of dispatches in Z dimension
+    uint32_t threadCountX,                          ///< [in] width of group in threads for X dimension
+    uint32_t threadCountY,                          ///< [in] width of group in threads for Y dimension
+    uint32_t threadCountZ,                          ///< [in] width of group in threads for Z dimension
+    uint32_t groupCountX,                           ///< [in] width of dispatches in X dimension
+    uint32_t groupCountY,                           ///< [in] width of dispatches in Y dimension
+    uint32_t groupCountZ                            ///< [in] width of dispatches in Z dimension
     );
 
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Device properties queried using ::xeDeviceGetProperties
 typedef struct _xe_dispatch_function_arguments_t
 {
-    uint32_t groupCountX;                           ///< width of group in X dimension
-    uint32_t groupCountY;                           ///< width of group in Y dimension
-    uint32_t groupCountZ;                           ///< width of group in Z dimension
-    uint32_t dispatchCountX;                        ///< width of dispatches in X dimension
-    uint32_t dispatchCountY;                        ///< width of dispatches in Y dimension
-    uint32_t dispatchCountZ;                        ///< width of dispatches in Z dimension
+    uint32_t threadCountX;                          ///< [in] width of group in threads for X dimension
+    uint32_t threadCountY;                          ///< [in] width of group in threads for Y dimension
+    uint32_t threadCountZ;                          ///< [in] width of group in threads for Z dimension
+    uint32_t groupCountX;                           ///< [in] width of dispatches in X dimension
+    uint32_t groupCountY;                           ///< [in] width of dispatches in Y dimension
+    uint32_t groupCountZ;                           ///< [in] width of dispatches in Z dimension
 
 } xe_dispatch_function_arguments_t;
 

@@ -11,11 +11,11 @@ type: enum
 desc: "Supported module creation input formats"
 name: $x_module_format_t
 etors:
-    - name: $X_MODULE_IL_SPIRV_TEXT
+    - name: $X_MODULE_IL_SPIRV
       value: "0"
-      desc: "Format is SPIRV IL text format"
-    - name: $X_MODULE_ISA
-      desc: "Format is Gen ISA format"
+      desc: "Format is SPIRV IL format"
+    - name: $X_MODULE_NATIVE
+      desc: "Format is Gen native format"
 --- #--------------------------------------------------------------------------
 type: function
 desc: "Creates module object from an input IL or ISA."
@@ -62,8 +62,8 @@ returns:
         - "invalid handle for hModule"
 --- #--------------------------------------------------------------------------
 type: function
-desc: "Creates module object from an input IL or ISA."
-name: $xModuleGetISA
+desc: "Retrieve native binary from Module."
+name: $xModuleGetNativeBinary
 analogue:
     - "**cuModuleLoad**"
     - "cuCtxGetCurrent"
@@ -75,8 +75,8 @@ params:
       name: pIsaSize
       desc: "[out] size of ISA buffer provided by pModuleISA."
     - type: "char**"
-      name: pModuleISA
-      desc: "[out] pointer to IL or ISA"
+      name: pModuleNativeBinary
+      desc: "[out] pointer to native binary"
 returns:
     - $X_RESULT_ERROR_INVALID_PARAMETER:
         - "invalid handle for hDevice"
@@ -88,33 +88,8 @@ returns:
     - $X_RESULT_ERROR_OUT_OF_DEVICE_MEMORY
 --- #--------------------------------------------------------------------------
 type: function
-desc: "Create Function object from Module by name"
-name: $xModuleGetGlobal
-analogue:
-    - "**cuModuleGetGlobal**"
-params:
-    - type: "$x_module_handle_t"
-      name: hModule
-      desc: "[in] handle of the module"
-    - type: "const char*"
-      name: pGlobalName
-      desc: "[in] name of function in global"
-    - type: "size_t"
-      name:  valueSize
-      desc: "[out] size of value type"
-    - type: "void*"
-      name:  pGlobalValue
-      desc: "[out] pointer to global value"
-returns:
-    - $X_RESULT_ERROR_INVALID_PARAMETER:
-        - "invalid handle for hModule"
-        - "null ptr for pGlobalName"
-        - "invalid name for pGlobalName"
-        - "null ptr for pGlobalValue"
---- #--------------------------------------------------------------------------
-type: function
-desc: "Retrieve an image reference from module"
-name: $xModuleGetImageReference
+desc: "Retrieve an image id from module given name."
+name: $xModuleGetArgIndexFromName
 analogue:
     - "**cuModuleGetTexRef**"
 params:
@@ -122,17 +97,16 @@ params:
       name: hModule
       desc: "[in] handle of the module"
     - type: "const char*"
-      name: pImageName
-      desc: "[in] name of function in global"
-    - type: "$x_image_reference_t*"
-      name:  phImageRef
-      desc: "[out] handle of image reference"
+      name: pName
+      desc: "[in] name of function argument"
+    - type: "uint32_t*"
+      name:  pArgIndex
+      desc: "[out] Id for image used by function"
 returns:
     - $X_RESULT_ERROR_INVALID_PARAMETER:
         - "invalid handle for hModule"
-        - "null ptr for pImageName"
-        - "invalid name for pImageName"
-        - "null ptr for phImageRef"
+        - "null ptr for pName"
+        - "null ptr for pArgIndex"
 --- #--------------------------------------------------------------------------
 type: function
 desc: "Create Function object from Module by name"
@@ -225,27 +199,6 @@ returns:
         - "invalid size specified"
         - "invalid handle for hFunctionArgs"
 --- #--------------------------------------------------------------------------
-type: function
-desc: "Set function argument to associate image reference to image object."
-name: $xSetFunctionArgImage
-analogue:
-    - "**cuSetTexAddress**"
-params:
-    - type: "$x_function_args_handle_t"
-      name: hFunctionArgs
-      desc: "[in/out] handle of the function args object."
-    - type: "$x_image_reference_t"
-      name:  hImageRef
-      desc: "[in] handle of image reference"
-    - type: "$x_image_handle_t"
-      name:  hImage
-      desc: "[in] handle of image object"
-returns:
-    - $X_RESULT_ERROR_INVALID_PARAMETER:
-        - "invalid handle for hFunction"
-        - "invalid handle for hImageRef"
-        - "invalid handle for hImage"
---- #--------------------------------------------------------------------------
 type: enum
 desc: "Function attributes"
 analogue:
@@ -297,22 +250,22 @@ params:
       name: hFunctionArgs
       desc: "[in] handle to function arguments buffer."
     - type: "uint32_t"
+      name: threadCountX
+      desc: "[in] width of group in threads for X dimension"
+    - type: "uint32_t"
+      name: threadCountY
+      desc: "[in] width of group in threads for Y dimension"
+    - type: "uint32_t"
+      name: threadCountZ
+      desc: "[in] width of group in threads for Z dimension"
+    - type: "uint32_t"
       name: groupCountX
-      desc: "[in] width of group in X dimension"
-    - type: "uint32_t"
-      name: groupCountY
-      desc: "[in] width of group in Y dimension"
-    - type: "uint32_t"
-      name: groupCountZ
-      desc: "[in] width of group in Z dimension"
-    - type: "uint32_t"
-      name: dispatchCountX
       desc: "[in] width of dispatches in X dimension"
     - type: "uint32_t"
-      name: dispatchCountY
+      name: groupCountY
       desc: "[in] width of dispatches in Y dimension"
     - type: "uint32_t"
-      name: dispatchCountZ
+      name: groupCountZ
       desc: "[in] width of dispatches in Z dimension"
 returns:
     - $X_RESULT_ERROR_INVALID_PARAMETER:
@@ -327,23 +280,23 @@ desc: "Device properties queried using $xDeviceGetProperties"
 name: $x_dispatch_function_arguments_t
 members:
     - type: "uint32_t"
+      name: threadCountX
+      desc: "[in] width of group in threads for X dimension"
+    - type: "uint32_t"
+      name: threadCountY
+      desc: "[in] width of group in threads for Y dimension"
+    - type: "uint32_t"
+      name: threadCountZ
+      desc: "[in] width of group in threads for Z dimension"
+    - type: "uint32_t"
       name: groupCountX
-      desc: "width of group in X dimension"
+      desc: "[in] width of dispatches in X dimension"
     - type: "uint32_t"
       name: groupCountY
-      desc: "width of group in Y dimension"
+      desc: "[in] width of dispatches in Y dimension"
     - type: "uint32_t"
       name: groupCountZ
-      desc: "width of group in Z dimension"
-    - type: "uint32_t"
-      name: dispatchCountX
-      desc: "width of dispatches in X dimension"
-    - type: "uint32_t"
-      name: dispatchCountY
-      desc: "width of dispatches in Y dimension"
-    - type: "uint32_t"
-      name: dispatchCountZ
-      desc: "width of dispatches in Z dimension"
+      desc: "[in] width of dispatches in Z dimension"
 --- #--------------------------------------------------------------------------
 type: function
 desc: "Dispatch command over one or more work groups using indirect dispatch arguments."
