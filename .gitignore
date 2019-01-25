@@ -57,4 +57,9 @@ build/
 .irepo
 
 # third_party files
-/third_party/googletest
+/third_party/googletest/
+/third_party/gmmlib/
+/third_party/igc/
+/third_party/wdk/
+/third_party/compute_runtime/
+/third_party/cotire/

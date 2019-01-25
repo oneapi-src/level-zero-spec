@@ -6,5 +6,36 @@ components:
     repository: https://github.com/google/googletest.git
     revision: 0599a7b8410dc5cfdb477900b280475ae775d7f9
     type: git
+  compute_runtime:
+    branch: master
+    clean_on_sync: false
+    dest_dir: third_party/compute_runtime
+    repository: ssh://bfliflet@git-ger-5.devtools.intel.com:29418/vpg-compute-neo
+    revision: 9d8f280d5c3a1c0feb229301b25f07ada0fa6ab3
+    type: git
+  wdk:
+    asset_name: wdk
+    asset_path: gfx-sandbox-igk/neo/build
+    asset_version: 36a2a0d6a9da5e506439ffcb8dcf49d3e8f0e175-1185
+    clean_on_sync: true
+    dest_dir: third_party/wdk
+    root_url: http://gfx-assets.igk.intel.com/artifactory
+    type: artifactory
+  igc:
+    asset_name: igc
+    asset_path: gfx-sandbox-igk/neo/build/mainline
+    asset_version: 31b96245d0ede86fa5a55537f19cd337a3062310-1185
+    clean_on_sync: true
+    dest_dir: third_party/igc
+    root_url: http://gfx-assets.igk.intel.com/artifactory
+    type: artifactory
+  gmmlib:
+    asset_name: gmmlib
+    asset_path: gfx-sandbox-igk/neo/build/mainline
+    asset_version: intel-gmmlib-18.4.1-1185
+    clean_on_sync: true
+    dest_dir: third_party/gmmlib
+    root_url: http://gfx-assets.igk.intel.com/artifactory
+    type: artifactory
 converter: E-1180
 version: '1'

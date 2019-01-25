@@ -1,18 +1,6 @@
 cmake_minimum_required(VERSION 3.2.0 FATAL_ERROR)
 project(level_zero)
 
-# Add compute runtime support
-if(NOT DEFINED COMPUTE_RUNTIME_DIR)
-    set(COMPUTE_RUNTIME_DIR ${THIRD_PARTY_DIR}/compute_runtime)
-endif()
-
-set(COMPUTE_RUNTIME_SUPPORT TRUE)
-if(NOT EXISTS ${COMPUTE_RUNTIME_DIR}/runtime/command_stream)
-    set(COMPUTE_RUNTIME_SUPPORT FALSE)
-    set(COMPUTE_RUNTIME_DIR "Not found!")
-endif() 
-message(STATUS "COMPUTE_RUNTIME_DIR = ${COMPUTE_RUNTIME_DIR}")
-
 #MSVC compile flags
 if(MSVC)
     string(REPLACE "/MDd" "/MTd" CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG}")
@@ -26,6 +14,21 @@ endif()
 if(NOT DEFINED THIRD_PARTY_DIR)
     set(THIRD_PARTY_DIR ${CMAKE_CURRENT_SOURCE_DIR}/third_party)
 endif()
+
+# Add compute runtime support
+if(NOT DEFINED COMPUTE_RUNTIME_DIR)
+    set(COMPUTE_RUNTIME_DIR ${THIRD_PARTY_DIR}/compute_runtime)
+    set(WDK_DIR ${THIRD_PARTY_DIR}/wdk)
+    set(IGC_DIR ${THIRD_PARTY_DIR}/igc)
+    set(GMM_SOURCE_DIR ${THIRD_PARTY_DIR}/gmmlib)
+endif()
+
+set(COMPUTE_RUNTIME_SUPPORT TRUE)
+if(NOT EXISTS ${COMPUTE_RUNTIME_DIR}/runtime/command_stream)
+    set(COMPUTE_RUNTIME_SUPPORT FALSE)
+    set(COMPUTE_RUNTIME_DIR "Not found!")
+endif() 
+message(STATUS "COMPUTE_RUNTIME_DIR = ${COMPUTE_RUNTIME_DIR}")
 
 # Option to disable tests
 option(${PROJECT_NAME}_BUILD_TESTS "Build unit tests." ON)
