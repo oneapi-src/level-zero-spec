@@ -1,5 +1,9 @@
 target_sources(${TARGET_NAME}
     PRIVATE
     ${CMAKE_CURRENT_SOURCE_DIR}/CMakeLists.txt
-    ${CMAKE_CURRENT_SOURCE_DIR}/stub.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/xe_cmdlist.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/xe_cmdqueue.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/xe_device.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/xe_driver.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/xe_event.cpp
 )

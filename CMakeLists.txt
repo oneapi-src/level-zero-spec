@@ -31,7 +31,6 @@ endif()
 option(${PROJECT_NAME}_BUILD_TESTS "Build unit tests." ON)
 
 add_subdirectory(${THIRD_PARTY_DIR})
-
 add_subdirectory(core)
 add_subdirectory(extended)
 
