@@ -42,6 +42,7 @@ returns:
     - $X_RESULT_ERROR_INVALID_PARAMETER:
         - "invalid handle for hDevice"
         - "unsupported allocation size"
+        - "nullptr for ptr"
     - $X_RESULT_ERROR_OUT_OF_HOST_MEMORY
     - $X_RESULT_ERROR_OUT_OF_DEVICE_MEMORY
 --- #--------------------------------------------------------------------------
@@ -70,6 +71,7 @@ returns:
     - $X_RESULT_ERROR_INVALID_PARAMETER:
         - "invalid handle for hDevice"
         - "unsupported allocation size"
+        - "nullptr for ptr"
     - $X_RESULT_ERROR_OUT_OF_HOST_MEMORY
     - $X_RESULT_ERROR_OUT_OF_DEVICE_MEMORY
 --- #--------------------------------------------------------------------------
@@ -110,6 +112,7 @@ returns:
     - $X_RESULT_ERROR_INVALID_PARAMETER:
         - "invalid handle for hDevice"
         - "unsupported allocation size"
+        - "nullptr for ptr"
     - $X_RESULT_ERROR_OUT_OF_HOST_MEMORY
     - $X_RESULT_ERROR_OUT_OF_DEVICE_MEMORY
 --- #--------------------------------------------------------------------------
