@@ -246,8 +246,8 @@ The following sample code demonstrates a sequence for creation and submission of
 
 ## Memory and Image Management
 There are two types of allocations:
-1. Memory - linear, unformatted allocations for direct access from both the host and device.
-2. Images - non-linear, formatted allocations for direct access from the device.
+1. **Memory** - linear, unformatted allocations for direct access from both the host and device.
+2. **Images** - non-linear, formatted allocations for direct access from the device.
 
 ### Memory
 @todo Ben: describe standard, managed, and shared
@@ -350,3 +350,21 @@ A Module represents a single translation unit that consists of functions that ha
 
 ### Occupancy
 @todo Zack: write-up section
+
+## OpenCL Interoperability
+There are three OpenCL objects that can be shared for interoperability:
+1. **cl_mem** - an OpenCL buffer object
+2. **cl_program** - an OpenCL program object
+3. **cl_command_queue** - an OpenCL command queue object
+
+### cl_mem
+@todo Ben any details about memory sharing
+
+### cl_program
+@todo Zack any details about program sharing
+- clBuildProgram or clCompileProgram/clLinkProgram must be called prior to $xDeviceRegisterCLProgram
+
+### cl_command_queue
+@todo Brandon any details about command queue sharing
+- clFlush must be called prior to any xeCommandQueueEnqueue* function
+

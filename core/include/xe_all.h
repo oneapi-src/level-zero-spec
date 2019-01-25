@@ -33,6 +33,7 @@
 #pragma once
 #endif
 
+#include "xe_cl_interop.h"
 #include "xe_cmdlist.h"
 #include "xe_cmdqueue.h"
 #include "xe_copy.h"

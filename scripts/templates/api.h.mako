@@ -105,6 +105,9 @@ typedef double double_t;
 
 %endif
 %for doc in docs:
+%if 'condition' in doc:
+#if ${sub(x,doc['condition'])}
+%endif
 ///////////////////////////////////////////////////////////////////////////////
 %for line in split_line(sub(x, doc['desc'], True), 70):
     %if loop.index < 1:
@@ -133,9 +136,6 @@ typedef double double_t;
     %for line in doc['analogue']:
 ///     - ${line}
     %endfor
-%endif
-%if 'condition' in doc:
-#if ${sub(x,doc['condition'])}
 %endif
 %if re.match(r"macro", doc['type']):
 #define ${sub(x, doc['name'])}  ${sub(x, doc['value'])}

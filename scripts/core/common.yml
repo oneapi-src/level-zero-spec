@@ -28,6 +28,12 @@ condition: "defined(_WIN32)"
 name: __$xcall
 value: __stdcall
 --- #--------------------------------------------------------------------------
+type: macro
+desc: "Disable OpenCL interoperability functions if not explicitly defined"
+condition: "!defined(${X}_ENABLE_OCL_INTEROP)"
+name: "${X}_ENABLE_OCL_INTEROP"
+value: "0"
+--- #--------------------------------------------------------------------------
 type: handle
 desc: "Handle of driver's device object"
 name: "$x_device_handle_t"
