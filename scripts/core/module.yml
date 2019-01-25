@@ -88,23 +88,23 @@ returns:
     - $X_RESULT_ERROR_OUT_OF_DEVICE_MEMORY
 --- #--------------------------------------------------------------------------
 type: function
-desc: "Retrieve an image id from module given name."
-name: $xModuleGetArgIndexFromName
+desc: "Retrieve a function argument index from name."
+name: $xFunctionGetArgIndexFromName
 analogue:
     - "**cuModuleGetTexRef**"
 params:
-    - type: "$x_module_handle_t"
-      name: hModule
-      desc: "[in] handle of the module"
+    - type: "$x_function_handle_t"
+      name: hFunction
+      desc: "[in] handle of the function"
     - type: "const char*"
       name: pName
       desc: "[in] name of function argument"
     - type: "uint32_t*"
       name:  pArgIndex
-      desc: "[out] Id for image used by function"
+      desc: "[out] Function argument index that can be used for $xSetFunctionArgValue"
 returns:
     - $X_RESULT_ERROR_INVALID_PARAMETER:
-        - "invalid handle for hModule"
+        - "invalid handle for hFunction"
         - "null ptr for pName"
         - "null ptr for pArgIndex"
 --- #--------------------------------------------------------------------------

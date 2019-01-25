@@ -321,31 +321,67 @@ If the application does not properly manage residency for these cases then the d
 ${"##"} Modules and Functions
 A Module represents a single translation unit that consists of functions that have been compiled together.
 
-- Modules can be created from an IL or directly from ISA using ${x}CreateModule.
+- Modules can be created from an IL or directly from native format using ${x}CreateModule.
   + ${x}CreateModule takes a format argument that specifies the input format.
   + ${x}CreateModule performs a compilation step when format is IL.
-- The ISA can be queried from a Module using ${x}ModuleGetISA.
 
+
+The following is an example function written in OCL C.
+```c
+__kernel void image_scaling( __read_only  image2d_t src_img,
+                             __write_only image2d_t dest_img,
+                                          uint WIDTH,     // resized width
+                                          uint HEIGHT )   // resized height
+{
+    int2       coor = (int2)( get_global_id(0), get_global_id(1) );
+    float2 normCoor = convert_float2(coor) / (float2)( WIDTH, HEIGHT );
+
+    float4    color = read_imagef( src_img, SMPL_PREF, normCoor );
+
+    write_imagef( dest_img, coor, color );
+}
+```
+
+The following are the API calls for using this function.
 ```c
     ...
+    // OCL C function has been compiled to SPRIV IL (pImageScalingIL)
     ${x}_module_handle_t hModule;
-    ${x}CreateModule(hDevice, XE_MODULE_IL_SPIRV_TEXT, strlen(pIL), pIL, &hModule);
+    ${x}CreateModule(hDevice, XE_MODULE_IL_SPIRV, ilSize, pImageScalingIL, &hModule);
 
     ${x}_function_handle_t hFunction;
-    ${x}ModuleCreateFunction(hModule, "vecsum", &hFunction);
+    ${x}ModuleCreateFunction(hModule, "image_scaling", &hFunction);
 
     ${x}_function_args_handle_t hFunctionArgs;
     ${x}CreateFunctionArgs(hFunction, &hFunctionArgs);
 
-    ${x}SetFunctionArgValue(hFunctionArgs, 0, sizeof(uint32_t), &rowLength);
+    // Bind arguments
+    ${x}SetFunctionArgValue(hFuncArgs, 0, sizeof(${x}_image_handle_t), &src_image);
+    ${x}SetFunctionArgValue(hFuncArgs, 1, sizeof(${x}_image_handle_t), &dest_image);
+    ${x}SetFunctionArgValue(hFuncArgs, 2, sizeof(uint32_t), &width);
+    ${x}SetFunctionArgValue(hFuncArgs, 3, sizeof(uint32_t), &height);
 
-    ${x}CommandListEncodeDispatchFunction(hCommandList, hFunction, hFunctionArgs, rowLength, 1, 1, numRows, 1, 1);
+    // Encode dispatch command
+    ${x}CommandListEncodeDispatchFunction(hCommandList, hFunction, hFunctionArgs, pixelRegionWidth, pixelRegionHeight, 1, numRegionsX, numRegionsY, 1);
 
     ...
 	
     ${x}DestroyFunctionArgs(hFunctionArgs);
     ${x}DestroyFunction(hFunction);
     ${x}DestroyModule(hModule);
+```
+
+Argument indices can be queried from the function object by name.
+```c
+    ...
+    
+    uint32_t src_img_index;
+    ${x}FunctionGetArgIndexFromName(hFunc, "src_img", &src_img_index);
+
+    // Bind arguments
+    ${x}SetFunctionArgValue(hFuncArgs, src_img_index, sizeof(${x}_image_handle_t), &src_image);
+
+    ...
 ```
 
 ${"###"} Occupancy
