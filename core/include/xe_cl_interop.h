@@ -36,8 +36,8 @@
 #endif
 #include "xe_common.h"
 
-#if XE_ENABLE_OCL_INTEROP
 ///////////////////////////////////////////////////////////////////////////////
+#if XE_ENABLE_OCL_INTEROP
 /// @brief Registers OpenCL memory with Xe
 /// 
 /// @returns
@@ -57,8 +57,8 @@ xe_result_t __xecall
     );
 #endif // XE_ENABLE_OCL_INTEROP
 
-#if XE_ENABLE_OCL_INTEROP
 ///////////////////////////////////////////////////////////////////////////////
+#if XE_ENABLE_OCL_INTEROP
 /// @brief Registers OpenCL program with Xe
 /// 
 /// @returns
@@ -78,8 +78,8 @@ xe_result_t __xecall
     );
 #endif // XE_ENABLE_OCL_INTEROP
 
-#if XE_ENABLE_OCL_INTEROP
 ///////////////////////////////////////////////////////////////////////////////
+#if XE_ENABLE_OCL_INTEROP
 /// @brief Registers OpenCL command queue with Xe
 /// 
 /// @returns

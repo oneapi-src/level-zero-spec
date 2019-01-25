@@ -105,10 +105,10 @@ typedef double double_t;
 
 %endif
 %for doc in docs:
+///////////////////////////////////////////////////////////////////////////////
 %if 'condition' in doc:
 #if ${sub(x,doc['condition'])}
 %endif
-///////////////////////////////////////////////////////////////////////////////
 %for line in split_line(sub(x, doc['desc'], True), 70):
     %if loop.index < 1:
 /// @brief ${line}

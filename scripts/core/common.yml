@@ -30,8 +30,8 @@ value: __stdcall
 --- #--------------------------------------------------------------------------
 type: macro
 desc: "Disable OpenCL interoperability functions if not explicitly defined"
-condition: "!defined(${X}_ENABLE_OCL_INTEROP)"
-name: "${X}_ENABLE_OCL_INTEROP"
+condition: "!defined($X_ENABLE_OCL_INTEROP)"
+name: "$X_ENABLE_OCL_INTEROP"
 value: "0"
 --- #--------------------------------------------------------------------------
 type: handle

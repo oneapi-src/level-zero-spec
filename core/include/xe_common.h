@@ -56,21 +56,21 @@ typedef double double_t;
 /// @brief Current header file version
 #define XE_UMD_HEADER_VERSION  XE_MAKE_VERSION( 1, 0 )
 
-#if defined(_WIN32)
 ///////////////////////////////////////////////////////////////////////////////
+#if defined(_WIN32)
 /// @brief Calling convention for all API functions
 #define __xecall  __stdcall
 #else
 #define __xecall
 #endif // defined(_WIN32)
 
-#if !defined(${X}_ENABLE_OCL_INTEROP)
 ///////////////////////////////////////////////////////////////////////////////
+#if !defined(XE_ENABLE_OCL_INTEROP)
 /// @brief Disable OpenCL interoperability functions if not explicitly defined
-#define ${X}_ENABLE_OCL_INTEROP  0
+#define XE_ENABLE_OCL_INTEROP  0
 #else
-#define ${X}_ENABLE_OCL_INTEROP
-#endif // !defined(${X}_ENABLE_OCL_INTEROP)
+#define XE_ENABLE_OCL_INTEROP
+#endif // !defined(XE_ENABLE_OCL_INTEROP)
 
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Handle of driver's device object
