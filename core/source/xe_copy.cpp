@@ -60,6 +60,12 @@ xe_result_t __xecall
     size_t size                                     ///< [in] size in bytes to copy
     )
 {
+    // @todo: check_return(nullptr == get_driver(), XE_RESULT_ERROR_UNINITIALIZED);
+
+    // Check parameters
+    // @todo: check_return(xe_command_list_handle_t() == hCommandList, XE_RESULT_ERROR_INVALID_PARAMETER);
+    // @todo: check_return(nullptr == dstptr, XE_RESULT_ERROR_INVALID_PARAMETER);
+    // @todo: check_return(nullptr == srcptr, XE_RESULT_ERROR_INVALID_PARAMETER);
 
     // @todo: insert <code> here
 
@@ -87,6 +93,12 @@ xe_result_t __xecall
     xe_image_handle_t hSrcImage                     ///< [in] handle of source image to copy from
     )
 {
+    // @todo: check_return(nullptr == get_driver(), XE_RESULT_ERROR_UNINITIALIZED);
+
+    // Check parameters
+    // @todo: check_return(xe_command_list_handle_t() == hCommandList, XE_RESULT_ERROR_INVALID_PARAMETER);
+    // @todo: check_return(xe_image_handle_t() == hDstImage, XE_RESULT_ERROR_INVALID_PARAMETER);
+    // @todo: check_return(xe_image_handle_t() == hSrcImage, XE_RESULT_ERROR_INVALID_PARAMETER);
 
     // @todo: insert <code> here
 
@@ -112,6 +124,12 @@ xe_result_t __xecall
     xeImageRegion* pSrcRegion                       ///< [in][optional] source region descriptor
     )
 {
+    // @todo: check_return(nullptr == get_driver(), XE_RESULT_ERROR_UNINITIALIZED);
+
+    // Check parameters
+    // @todo: check_return(xe_command_list_handle_t() == hCommandList, XE_RESULT_ERROR_INVALID_PARAMETER);
+    // @todo: check_return(xe_image_handle_t() == hDstImage, XE_RESULT_ERROR_INVALID_PARAMETER);
+    // @todo: check_return(xe_image_handle_t() == hSrcImage, XE_RESULT_ERROR_INVALID_PARAMETER);
 
     // @todo: insert <code> here
 
@@ -140,6 +158,12 @@ xe_result_t __xecall
     xeImageRegion* pSrcRegion                       ///< [in][optional] source region descriptor
     )
 {
+    // @todo: check_return(nullptr == get_driver(), XE_RESULT_ERROR_UNINITIALIZED);
+
+    // Check parameters
+    // @todo: check_return(xe_command_list_handle_t() == hCommandList, XE_RESULT_ERROR_INVALID_PARAMETER);
+    // @todo: check_return(nullptr == dstptr, XE_RESULT_ERROR_INVALID_PARAMETER);
+    // @todo: check_return(xe_image_handle_t() == hSrcImage, XE_RESULT_ERROR_INVALID_PARAMETER);
 
     // @todo: insert <code> here
 
@@ -168,6 +192,12 @@ xe_result_t __xecall
     void* srcptr                                    ///< [in] pointer to source memory to copy from
     )
 {
+    // @todo: check_return(nullptr == get_driver(), XE_RESULT_ERROR_UNINITIALIZED);
+
+    // Check parameters
+    // @todo: check_return(xe_command_list_handle_t() == hCommandList, XE_RESULT_ERROR_INVALID_PARAMETER);
+    // @todo: check_return(xe_image_handle_t() == hDstImage, XE_RESULT_ERROR_INVALID_PARAMETER);
+    // @todo: check_return(nullptr == srcptr, XE_RESULT_ERROR_INVALID_PARAMETER);
 
     // @todo: insert <code> here
 
@@ -204,6 +234,11 @@ xe_result_t __xecall
     size_t count                                    ///< [in] size in bytes of the memory region to prefetch
     )
 {
+    // @todo: check_return(nullptr == get_driver(), XE_RESULT_ERROR_UNINITIALIZED);
+
+    // Check parameters
+    // @todo: check_return(xe_command_list_handle_t() == hCommandList, XE_RESULT_ERROR_INVALID_PARAMETER);
+    // @todo: check_return(nullptr == ptr, XE_RESULT_ERROR_INVALID_PARAMETER);
 
     // @todo: insert <code> here
 

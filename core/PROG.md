@@ -345,7 +345,7 @@ __kernel void image_scaling( __read_only  image2d_t src_img,
 The following are the API calls for using this function.
 ```c
     ...
-    // OCL C function has been compiled to SPRIV IL (pImageScalingIL)
+    // OCL C function has been compiled to SPIRV IL (pImageScalingIL)
     xe_module_handle_t hModule;
     xeCreateModule(hDevice, XE_MODULE_IL_SPIRV, ilSize, pImageScalingIL, &hModule);
 

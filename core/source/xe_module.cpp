@@ -59,6 +59,11 @@ xe_result_t __xecall
     xe_module_handle_t* phModule                    ///< [out] pointer to handle of module object created
     )
 {
+    // @todo: check_return(nullptr == get_driver(), XE_RESULT_ERROR_UNINITIALIZED);
+
+    // Check parameters
+    // @todo: check_return(xe_device_handle_t() == hDevice, XE_RESULT_ERROR_INVALID_PARAMETER);
+    // @todo: check_return(nullptr == pInputModule, XE_RESULT_ERROR_INVALID_PARAMETER);
     // @todo: check_return(nullptr == phModule, XE_RESULT_ERROR_INVALID_PARAMETER);
 
     // @todo: insert <code> here
@@ -84,6 +89,10 @@ xe_result_t __xecall
     xe_module_handle_t hModule                      ///< [in] handle of the module
     )
 {
+    // @todo: check_return(nullptr == get_driver(), XE_RESULT_ERROR_UNINITIALIZED);
+
+    // Check parameters
+    // @todo: check_return(xe_module_handle_t() == hModule, XE_RESULT_ERROR_INVALID_PARAMETER);
 
     // @todo: insert <code> here
 
@@ -95,8 +104,7 @@ xe_result_t __xecall
 /// 
 /// @remarks
 ///   _Analogues_
-///     - **cuModuleLoad**
-///     - cuCtxGetCurrent
+///     - 
 /// 
 /// @returns
 ///     - ::XE_RESULT_SUCCESS
@@ -113,11 +121,15 @@ xe_result_t __xecall
 xe_result_t __xecall
   xeModuleGetNativeBinary(
     xe_module_handle_t hModule,                     ///< [in] handle of the device
-    uint32_t* pIsaSize,                             ///< [out] size of ISA buffer provided by pModuleISA.
+    uint32_t* pSize,                                ///< [out] size of native binary.
     char** pModuleNativeBinary                      ///< [out] pointer to native binary
     )
 {
-    // @todo: check_return(nullptr == pIsaSize, XE_RESULT_ERROR_INVALID_PARAMETER);
+    // @todo: check_return(nullptr == get_driver(), XE_RESULT_ERROR_UNINITIALIZED);
+
+    // Check parameters
+    // @todo: check_return(xe_module_handle_t() == hModule, XE_RESULT_ERROR_INVALID_PARAMETER);
+    // @todo: check_return(nullptr == pSize, XE_RESULT_ERROR_INVALID_PARAMETER);
     // @todo: check_return(nullptr == pModuleNativeBinary, XE_RESULT_ERROR_INVALID_PARAMETER);
 
     // @todo: insert <code> here
@@ -147,6 +159,11 @@ xe_result_t __xecall
     uint32_t* pArgIndex                             ///< [out] Function argument index that can be used for ::xeSetFunctionArgValue
     )
 {
+    // @todo: check_return(nullptr == get_driver(), XE_RESULT_ERROR_UNINITIALIZED);
+
+    // Check parameters
+    // @todo: check_return(xe_function_handle_t() == hFunction, XE_RESULT_ERROR_INVALID_PARAMETER);
+    // @todo: check_return(nullptr == pName, XE_RESULT_ERROR_INVALID_PARAMETER);
     // @todo: check_return(nullptr == pArgIndex, XE_RESULT_ERROR_INVALID_PARAMETER);
 
     // @todo: insert <code> here
@@ -176,6 +193,11 @@ xe_result_t __xecall
     xe_function_handle_t* phFunction                ///< [out] handle of the Function object
     )
 {
+    // @todo: check_return(nullptr == get_driver(), XE_RESULT_ERROR_UNINITIALIZED);
+
+    // Check parameters
+    // @todo: check_return(xe_module_handle_t() == hModule, XE_RESULT_ERROR_INVALID_PARAMETER);
+    // @todo: check_return(nullptr == pFunctionName, XE_RESULT_ERROR_INVALID_PARAMETER);
     // @todo: check_return(nullptr == phFunction, XE_RESULT_ERROR_INVALID_PARAMETER);
 
     // @todo: insert <code> here
@@ -201,6 +223,10 @@ xe_result_t __xecall
     xe_function_handle_t hFunction                  ///< [in] handle of the function object
     )
 {
+    // @todo: check_return(nullptr == get_driver(), XE_RESULT_ERROR_UNINITIALIZED);
+
+    // Check parameters
+    // @todo: check_return(xe_function_handle_t() == hFunction, XE_RESULT_ERROR_INVALID_PARAMETER);
 
     // @todo: insert <code> here
 
@@ -227,6 +253,10 @@ xe_result_t __xecall
     xe_function_args_handle_t* phFunctionArgs       ///< [out] handle of the Function arguments object
     )
 {
+    // @todo: check_return(nullptr == get_driver(), XE_RESULT_ERROR_UNINITIALIZED);
+
+    // Check parameters
+    // @todo: check_return(xe_function_handle_t() == hFunction, XE_RESULT_ERROR_INVALID_PARAMETER);
     // @todo: check_return(nullptr == phFunctionArgs, XE_RESULT_ERROR_INVALID_PARAMETER);
 
     // @todo: insert <code> here
@@ -252,6 +282,10 @@ xe_result_t __xecall
     xe_function_args_handle_t hFunctionArgs         ///< [in] handle of the function arguments buffer object
     )
 {
+    // @todo: check_return(nullptr == get_driver(), XE_RESULT_ERROR_UNINITIALIZED);
+
+    // Check parameters
+    // @todo: check_return(xe_function_args_handle_t() == hFunctionArgs, XE_RESULT_ERROR_INVALID_PARAMETER);
 
     // @todo: insert <code> here
 
@@ -284,6 +318,11 @@ xe_result_t __xecall
     const void* pArgValue                           ///< [in] argument value represented as matching arg type
     )
 {
+    // @todo: check_return(nullptr == get_driver(), XE_RESULT_ERROR_UNINITIALIZED);
+
+    // Check parameters
+    // @todo: check_return(xe_function_args_handle_t() == hFunctionArgs, XE_RESULT_ERROR_INVALID_PARAMETER);
+    // @todo: check_return(nullptr == pArgValue, XE_RESULT_ERROR_INVALID_PARAMETER);
 
     // @todo: insert <code> here
 
@@ -312,6 +351,10 @@ xe_result_t __xecall
     uint32_t* pValue                                ///< [out] returned attribute value
     )
 {
+    // @todo: check_return(nullptr == get_driver(), XE_RESULT_ERROR_UNINITIALIZED);
+
+    // Check parameters
+    // @todo: check_return(xe_function_handle_t() == hFunction, XE_RESULT_ERROR_INVALID_PARAMETER);
     // @todo: check_return(nullptr == pValue, XE_RESULT_ERROR_INVALID_PARAMETER);
 
     // @todo: insert <code> here
@@ -349,6 +392,12 @@ xe_result_t __xecall
     uint32_t groupCountZ                            ///< [in] width of dispatches in Z dimension
     )
 {
+    // @todo: check_return(nullptr == get_driver(), XE_RESULT_ERROR_UNINITIALIZED);
+
+    // Check parameters
+    // @todo: check_return(xe_command_list_handle_t() == hCommandList, XE_RESULT_ERROR_INVALID_PARAMETER);
+    // @todo: check_return(xe_function_handle_t() == hFunction, XE_RESULT_ERROR_INVALID_PARAMETER);
+    // @todo: check_return(xe_function_args_handle_t() == hFunctionArgs, XE_RESULT_ERROR_INVALID_PARAMETER);
 
     // @todo: insert <code> here
 
@@ -380,6 +429,13 @@ xe_result_t __xecall
     const xe_dispatch_function_arguments_t* pDispatchArgumentsBuffer///< [in] Pointer to buffer that will contain dispatch arguments.
     )
 {
+    // @todo: check_return(nullptr == get_driver(), XE_RESULT_ERROR_UNINITIALIZED);
+
+    // Check parameters
+    // @todo: check_return(xe_command_list_handle_t() == hCommandList, XE_RESULT_ERROR_INVALID_PARAMETER);
+    // @todo: check_return(xe_function_handle_t() == hFunction, XE_RESULT_ERROR_INVALID_PARAMETER);
+    // @todo: check_return(xe_function_args_handle_t() == hFunctionArgs, XE_RESULT_ERROR_INVALID_PARAMETER);
+    // @todo: check_return(nullptr == pDispatchArgumentsBuffer, XE_RESULT_ERROR_INVALID_PARAMETER);
 
     // @todo: insert <code> here
 
@@ -408,6 +464,11 @@ xe_result_t __xecall
     uint32_t* pMaxGroups                            ///< [out] Pointer to maximum groups that can occupy subslice for this function.
     )
 {
+    // @todo: check_return(nullptr == get_driver(), XE_RESULT_ERROR_UNINITIALIZED);
+
+    // Check parameters
+    // @todo: check_return(xe_function_handle_t() == hFunction, XE_RESULT_ERROR_INVALID_PARAMETER);
+    // @todo: check_return(nullptr == pDispatchArgumentsBuffer, XE_RESULT_ERROR_INVALID_PARAMETER);
     // @todo: check_return(nullptr == pMaxGroups, XE_RESULT_ERROR_INVALID_PARAMETER);
 
     // @todo: insert <code> here

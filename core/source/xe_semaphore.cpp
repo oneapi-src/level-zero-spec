@@ -51,6 +51,11 @@ xe_result_t __xecall
     xe_semaphore_handle_t* phSemaphore              ///< [out] pointer to handle of semaphore object created
     )
 {
+    // @todo: check_return(nullptr == get_driver(), XE_RESULT_ERROR_UNINITIALIZED);
+
+    // Check parameters
+    // @todo: check_return(xe_device_handle_t() == hDevice, XE_RESULT_ERROR_INVALID_PARAMETER);
+    // @todo: check_return(nullptr == desc, XE_RESULT_ERROR_INVALID_PARAMETER);
     // @todo: check_return(nullptr == phSemaphore, XE_RESULT_ERROR_INVALID_PARAMETER);
 
     // @todo: insert <code> here
@@ -76,6 +81,10 @@ xe_result_t __xecall
     xe_semaphore_handle_t hSemaphore                ///< [in] handle of semaphore object to destroy
     )
 {
+    // @todo: check_return(nullptr == get_driver(), XE_RESULT_ERROR_UNINITIALIZED);
+
+    // Check parameters
+    // @todo: check_return(xe_semaphore_handle_t() == hSemaphore, XE_RESULT_ERROR_INVALID_PARAMETER);
 
     // @todo: insert <code> here
 
@@ -99,6 +108,11 @@ xe_result_t __xecall
     xe_semaphore_value_t value                      ///< [in] the value to write on signal
     )
 {
+    // @todo: check_return(nullptr == get_driver(), XE_RESULT_ERROR_UNINITIALIZED);
+
+    // Check parameters
+    // @todo: check_return(xe_command_list_handle_t() == hCommandList, XE_RESULT_ERROR_INVALID_PARAMETER);
+    // @todo: check_return(xe_semaphore_handle_t() == hSemaphore, XE_RESULT_ERROR_INVALID_PARAMETER);
 
     // @todo: insert <code> here
 
@@ -123,6 +137,11 @@ xe_result_t __xecall
     xe_semaphore_value_t value                      ///< [in] the value to wait upon
     )
 {
+    // @todo: check_return(nullptr == get_driver(), XE_RESULT_ERROR_UNINITIALIZED);
+
+    // Check parameters
+    // @todo: check_return(xe_command_list_handle_t() == hCommandList, XE_RESULT_ERROR_INVALID_PARAMETER);
+    // @todo: check_return(xe_semaphore_handle_t() == hSemaphore, XE_RESULT_ERROR_INVALID_PARAMETER);
 
     // @todo: insert <code> here
 
@@ -143,6 +162,10 @@ xe_result_t __xecall
     xe_semaphore_handle_t hSemaphore                ///< [in] handle of the semaphore
     )
 {
+    // @todo: check_return(nullptr == get_driver(), XE_RESULT_ERROR_UNINITIALIZED);
+
+    // Check parameters
+    // @todo: check_return(xe_semaphore_handle_t() == hSemaphore, XE_RESULT_ERROR_INVALID_PARAMETER);
 
     // @todo: insert <code> here
 
@@ -163,6 +186,10 @@ xe_result_t __xecall
     xe_semaphore_handle_t hSemaphore                ///< [in] handle of the semaphore
     )
 {
+    // @todo: check_return(nullptr == get_driver(), XE_RESULT_ERROR_UNINITIALIZED);
+
+    // Check parameters
+    // @todo: check_return(xe_semaphore_handle_t() == hSemaphore, XE_RESULT_ERROR_INVALID_PARAMETER);
 
     // @todo: insert <code> here
 

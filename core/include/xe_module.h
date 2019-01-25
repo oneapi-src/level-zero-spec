@@ -98,8 +98,7 @@ xe_result_t __xecall
 /// 
 /// @remarks
 ///   _Analogues_
-///     - **cuModuleLoad**
-///     - cuCtxGetCurrent
+///     - 
 /// 
 /// @returns
 ///     - ::XE_RESULT_SUCCESS
@@ -115,7 +114,7 @@ xe_result_t __xecall
 xe_result_t __xecall
   xeModuleGetNativeBinary(
     xe_module_handle_t hModule,                     ///< [in] handle of the device
-    uint32_t* pIsaSize,                             ///< [out] size of ISA buffer provided by pModuleISA.
+    uint32_t* pSize,                                ///< [out] size of native binary.
     char** pModuleNativeBinary                      ///< [out] pointer to native binary
     );
 

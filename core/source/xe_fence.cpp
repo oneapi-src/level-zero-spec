@@ -55,6 +55,11 @@ xe_result_t __xecall
     xe_fence_handle_t* phFence                      ///< [out] pointer to handle of fence object created
     )
 {
+    // @todo: check_return(nullptr == get_driver(), XE_RESULT_ERROR_UNINITIALIZED);
+
+    // Check parameters
+    // @todo: check_return(xe_command_queue_handle_t() == hCommandQueue, XE_RESULT_ERROR_INVALID_PARAMETER);
+    // @todo: check_return(nullptr == desc, XE_RESULT_ERROR_INVALID_PARAMETER);
     // @todo: check_return(nullptr == phFence, XE_RESULT_ERROR_INVALID_PARAMETER);
 
     // @todo: insert <code> here
@@ -85,6 +90,10 @@ xe_result_t __xecall
     xe_fence_handle_t hFence                        ///< [in] handle of fence object to destroy
     )
 {
+    // @todo: check_return(nullptr == get_driver(), XE_RESULT_ERROR_UNINITIALIZED);
+
+    // Check parameters
+    // @todo: check_return(xe_fence_handle_t() == hFence, XE_RESULT_ERROR_INVALID_PARAMETER);
 
     // @todo: insert <code> here
 
@@ -111,6 +120,10 @@ xe_result_t __xecall
     xe_fence_handle_t hFence                        ///< [in] handle of the fence
     )
 {
+    // @todo: check_return(nullptr == get_driver(), XE_RESULT_ERROR_UNINITIALIZED);
+
+    // Check parameters
+    // @todo: check_return(xe_fence_handle_t() == hFence, XE_RESULT_ERROR_INVALID_PARAMETER);
 
     // @todo: insert <code> here
 
@@ -136,6 +149,10 @@ xe_result_t __xecall
     xe_fence_handle_t hFence                        ///< [in] handle of the fence
     )
 {
+    // @todo: check_return(nullptr == get_driver(), XE_RESULT_ERROR_UNINITIALIZED);
+
+    // Check parameters
+    // @todo: check_return(xe_fence_handle_t() == hFence, XE_RESULT_ERROR_INVALID_PARAMETER);
 
     // @todo: insert <code> here
 
@@ -159,6 +176,10 @@ xe_result_t __xecall
     xe_fence_handle_t* phFences                     ///< [in] pointer to array of handles of the fences
     )
 {
+    // @todo: check_return(nullptr == get_driver(), XE_RESULT_ERROR_UNINITIALIZED);
+
+    // Check parameters
+    // @todo: check_return(nullptr == phFences, XE_RESULT_ERROR_INVALID_PARAMETER);
 
     // @todo: insert <code> here
 
@@ -186,6 +207,10 @@ xe_result_t __xecall
     xe_fence_handle_t hFence                        ///< [in] handle of the fence
     )
 {
+    // @todo: check_return(nullptr == get_driver(), XE_RESULT_ERROR_UNINITIALIZED);
+
+    // Check parameters
+    // @todo: check_return(xe_fence_handle_t() == hFence, XE_RESULT_ERROR_INVALID_PARAMETER);
 
     // @todo: insert <code> here
 
@@ -215,6 +240,11 @@ xe_result_t __xecall
     double_t* pTime                                 ///< [out] time in milliseconds
     )
 {
+    // @todo: check_return(nullptr == get_driver(), XE_RESULT_ERROR_UNINITIALIZED);
+
+    // Check parameters
+    // @todo: check_return(xe_fence_handle_t() == hFenceStart, XE_RESULT_ERROR_INVALID_PARAMETER);
+    // @todo: check_return(xe_fence_handle_t() == hFenceEnd, XE_RESULT_ERROR_INVALID_PARAMETER);
     // @todo: check_return(nullptr == pTime, XE_RESULT_ERROR_INVALID_PARAMETER);
 
     // @todo: insert <code> here
@@ -236,6 +266,10 @@ xe_result_t __xecall
     xe_fence_handle_t hFence                        ///< [in] handle of the fence
     )
 {
+    // @todo: check_return(nullptr == get_driver(), XE_RESULT_ERROR_UNINITIALIZED);
+
+    // Check parameters
+    // @todo: check_return(xe_fence_handle_t() == hFence, XE_RESULT_ERROR_INVALID_PARAMETER);
 
     // @todo: insert <code> here
 

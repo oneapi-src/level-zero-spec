@@ -55,6 +55,7 @@ xe_result_t __xecall
     xe_init_flags_t flags                           ///< [in] initialization flags
     )
 {
+    // Check parameters
 
     // @todo: insert <code> here
 
@@ -83,6 +84,9 @@ xe_result_t __xecall
     uint32_t* version                               ///< [out] driver version
     )
 {
+    // @todo: check_return(nullptr == get_driver(), XE_RESULT_ERROR_UNINITIALIZED);
+
+    // Check parameters
     // @todo: check_return(nullptr == version, XE_RESULT_ERROR_INVALID_PARAMETER);
 
     // @todo: insert <code> here

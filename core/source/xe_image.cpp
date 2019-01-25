@@ -53,6 +53,10 @@ xe_result_t __xecall
     xe_image_handle_t* phImage                      ///< [out] pointer to handle of image object created
     )
 {
+    // @todo: check_return(nullptr == get_driver(), XE_RESULT_ERROR_UNINITIALIZED);
+
+    // Check parameters
+    // @todo: check_return(nullptr == desc, XE_RESULT_ERROR_INVALID_PARAMETER);
     // @todo: check_return(nullptr == phImage, XE_RESULT_ERROR_INVALID_PARAMETER);
 
     // @todo: insert <code> here
@@ -78,6 +82,10 @@ xe_result_t __xecall
     xe_image_handle_t hImage                        ///< [in] handle of image object to destroy
     )
 {
+    // @todo: check_return(nullptr == get_driver(), XE_RESULT_ERROR_UNINITIALIZED);
+
+    // Check parameters
+    // @todo: check_return(xe_image_handle_t() == hImage, XE_RESULT_ERROR_INVALID_PARAMETER);
 
     // @todo: insert <code> here
 

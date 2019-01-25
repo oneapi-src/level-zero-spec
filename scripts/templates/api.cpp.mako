@@ -134,11 +134,16 @@ ${x}_result_t __${x}call
     %endfor
     )
 {
-    %for param in obj['params']:
-    %if re.match(r".*\[out\].*", param['desc']):
-    %if re.match(r".*\w+\*+", param['type']):
-    // @todo: check_return(nullptr == ${sub(x, param['name'])}, ${X}_RESULT_ERROR_INVALID_PARAMETER);
+    %if not re.match(r".*DriverInit", obj['name']):
+    // @todo: check_return(nullptr == get_driver(), ${X}_RESULT_ERROR_UNINITIALIZED);
+
     %endif
+    // Check parameters
+    %for param in obj['params']:
+    %if re.match(r".*\w+\*+", param['type']) and not re.match(r".*\[optional\].*", param['desc']):
+    // @todo: check_return(nullptr == ${sub(x, param['name'])}, ${X}_RESULT_ERROR_INVALID_PARAMETER);
+    %elif re.match(r".*handle_t.*", param['type']):
+    // @todo: check_return(${sub(x, param['type'])}() == ${sub(x, param['name'])}, ${X}_RESULT_ERROR_INVALID_PARAMETER);
     %endif
     %endfor
 
