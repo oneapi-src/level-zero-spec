@@ -134,20 +134,17 @@ typedef double double_t;
 ///     - ${line}
     %endfor
 %endif
-%if re.match(r"macro", doc['type']):
 %if 'condition' in doc:
 #if ${sub(x,doc['condition'])}
 %endif
+%if re.match(r"macro", doc['type']):
 #define ${sub(x, doc['name'])}  ${sub(x, doc['value'])}
 %if 'condition' in doc:
 #else
 #define ${sub(x, doc['name'])}
-#endif
 %endif
-
 %elif re.match(r"typedef", doc['type']):
 typedef ${sub(x, doc['value'])} ${sub(x, doc['name'])};
-
 %elif re.match(r"enum", doc['type']):
 typedef enum _${sub(x, doc['name'])}
 {
@@ -156,7 +153,6 @@ typedef enum _${sub(x, doc['name'])}
     %endfor
 
 } ${sub(x, doc['name'])};
-
 %elif re.match(r"struct", doc['type']):
 typedef struct _${sub(x, doc['name'])}
 {
@@ -165,7 +161,6 @@ typedef struct _${sub(x, doc['name'])}
     %endfor
 
 } ${sub(x, doc['name'])};
-
 %elif re.match(r"function", doc['type']):
 /// 
 /// @returns
@@ -189,7 +184,6 @@ ${x}_result_t __${x}call
     ${pline(x, param, loop.index < len(doc['params'])-1)}
     %endfor
     );
-
 %elif re.match(r"handle", doc['type']):
 #if defined( __cplusplus )
 struct ${sub(x, doc['name'])}
@@ -211,8 +205,11 @@ typedef struct _${sub(x, doc['name'])}
     void* pDriverData;
 
 } ${sub(x, doc['name'])};
-#endif
-
+#endif // defined( __cplusplus )
 %endif
+%if 'condition' in doc:
+#endif // ${sub(x,doc['condition'])}
+%endif
+
 %endfor
 #endif // _${X}_${name.upper()}_H

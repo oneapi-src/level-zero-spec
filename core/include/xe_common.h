@@ -62,7 +62,7 @@ typedef double double_t;
 #define __xecall  __stdcall
 #else
 #define __xecall
-#endif
+#endif // defined(_WIN32)
 
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Handle of driver's device object
@@ -86,7 +86,7 @@ typedef struct _xe_device_handle_t
     void* pDriverData;
 
 } xe_device_handle_t;
-#endif
+#endif // defined( __cplusplus )
 
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Handle of driver's command queue object
@@ -110,7 +110,7 @@ typedef struct _xe_command_queue_handle_t
     void* pDriverData;
 
 } xe_command_queue_handle_t;
-#endif
+#endif // defined( __cplusplus )
 
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Handle of driver's command list object
@@ -134,7 +134,7 @@ typedef struct _xe_command_list_handle_t
     void* pDriverData;
 
 } xe_command_list_handle_t;
-#endif
+#endif // defined( __cplusplus )
 
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Handle of driver's fence object
@@ -158,7 +158,7 @@ typedef struct _xe_fence_handle_t
     void* pDriverData;
 
 } xe_fence_handle_t;
-#endif
+#endif // defined( __cplusplus )
 
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Handle of driver's semaphore object
@@ -182,7 +182,7 @@ typedef struct _xe_semaphore_handle_t
     void* pDriverData;
 
 } xe_semaphore_handle_t;
-#endif
+#endif // defined( __cplusplus )
 
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Handle of driver's event object
@@ -206,7 +206,7 @@ typedef struct _xe_event_handle_t
     void* pDriverData;
 
 } xe_event_handle_t;
-#endif
+#endif // defined( __cplusplus )
 
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Handle of driver's image object
@@ -230,7 +230,7 @@ typedef struct _xe_image_handle_t
     void* pDriverData;
 
 } xe_image_handle_t;
-#endif
+#endif // defined( __cplusplus )
 
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Reference of modules's image
@@ -254,7 +254,7 @@ typedef struct _xe_image_reference_t
     void* pDriverData;
 
 } xe_image_reference_t;
-#endif
+#endif // defined( __cplusplus )
 
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Handle of driver's module object
@@ -278,7 +278,7 @@ typedef struct _xe_module_handle_t
     void* pDriverData;
 
 } xe_module_handle_t;
-#endif
+#endif // defined( __cplusplus )
 
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Handle of driver's function object
@@ -302,7 +302,7 @@ typedef struct _xe_function_handle_t
     void* pDriverData;
 
 } xe_function_handle_t;
-#endif
+#endif // defined( __cplusplus )
 
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Handle of driver's function args object
@@ -326,7 +326,7 @@ typedef struct _xe_function_args_handle_t
     void* pDriverData;
 
 } xe_function_args_handle_t;
-#endif
+#endif // defined( __cplusplus )
 
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Generic macro for enumerator bit masks
