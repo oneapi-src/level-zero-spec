@@ -126,7 +126,7 @@ xe_result_t __xecall
 }
 
 ///////////////////////////////////////////////////////////////////////////////
-/// @brief Retrieve an image id from module given name.
+/// @brief Retrieve a function argument index from name.
 /// 
 /// @remarks
 ///   _Analogues_
@@ -136,15 +136,15 @@ xe_result_t __xecall
 ///     - ::XE_RESULT_SUCCESS
 ///     - ::XE_RESULT_ERROR_UNINITIALIZED
 ///     - ::XE_RESULT_ERROR_INVALID_PARAMETER
-///         + invalid handle for hModule
+///         + invalid handle for hFunction
 ///         + null ptr for pName
 ///         + null ptr for pArgIndex
 /*@todo: __declspec(dllexport)*/
 xe_result_t __xecall
-  xeModuleGetArgIndexFromName(
-    xe_module_handle_t hModule,                     ///< [in] handle of the module
+  xeFunctionGetArgIndexFromName(
+    xe_function_handle_t hFunction,                 ///< [in] handle of the function
     const char* pName,                              ///< [in] name of function argument
-    uint32_t* pArgIndex                             ///< [out] Id for image used by function
+    uint32_t* pArgIndex                             ///< [out] Function argument index that can be used for ::xeSetFunctionArgValue
     )
 {
     // @todo: check_return(nullptr == pArgIndex, XE_RESULT_ERROR_INVALID_PARAMETER);
