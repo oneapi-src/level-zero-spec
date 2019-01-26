@@ -50,12 +50,15 @@ if(COMPUTE_RUNTIME_SUPPORT)
             # Gen8 support
             ${COMPUTE_RUNTIME_DIR}/runtime/gen8/enable_gen8.cpp
             ${COMPUTE_RUNTIME_DIR}/runtime/gen8/enable_family_full_gen8.cpp
+            ${COMPUTE_RUNTIME_DIR}/runtime/gen8/enable_hw_info_config_gen8.cpp
             # Gen9 support
             ${COMPUTE_RUNTIME_DIR}/runtime/gen9/enable_gen9.cpp
             ${COMPUTE_RUNTIME_DIR}/runtime/gen9/enable_family_full_gen9.cpp
+            ${COMPUTE_RUNTIME_DIR}/runtime/gen9/enable_hw_info_config_gen9.cpp
             # Gen10 support
             ${COMPUTE_RUNTIME_DIR}/runtime/gen10/enable_gen10.cpp
             ${COMPUTE_RUNTIME_DIR}/runtime/gen10/enable_family_full_gen10.cpp
+            ${COMPUTE_RUNTIME_DIR}/runtime/gen10/enable_hw_info_config_gen10.cpp
     )
 
     target_include_directories(${TARGET_NAME}
