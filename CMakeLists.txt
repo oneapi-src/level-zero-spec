@@ -39,6 +39,7 @@ add_subdirectory(core)
 #add_subdirectory(extended)
 
 if(COMPUTE_RUNTIME_SUPPORT)
+    set(DISABLED_GTPIN_SUPPORT TRUE)
     add_subdirectory(${COMPUTE_RUNTIME_DIR} ${PROJECT_BINARY_DIR}/compute-runtime EXCLUDE_FROM_ALL)
 endif(COMPUTE_RUNTIME_SUPPORT)
 
