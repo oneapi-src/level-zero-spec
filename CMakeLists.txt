@@ -35,7 +35,8 @@ option(${PROJECT_NAME}_BUILD_TESTS "Build unit tests." ON)
 
 add_subdirectory(${THIRD_PARTY_DIR})
 add_subdirectory(core)
-add_subdirectory(extended)
+#TODO: Re-enable once source files added to extended
+#add_subdirectory(extended)
 
 if(COMPUTE_RUNTIME_SUPPORT)
     add_subdirectory(${COMPUTE_RUNTIME_DIR} ${PROJECT_BINARY_DIR}/compute-runtime EXCLUDE_FROM_ALL)
