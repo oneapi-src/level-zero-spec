@@ -28,6 +28,8 @@ if(COMPUTE_RUNTIME_SUPPORT)
         PRIVATE
             ${COMPUTE_RUNTIME_DIR}/runtime/aub/aub_stream_interface.cpp
             ${COMPUTE_RUNTIME_DIR}/runtime/dll/create_command_stream.cpp
+            ${COMPUTE_RUNTIME_DIR}/runtime/dll/create_deferred_deleter.cpp
+            ${COMPUTE_RUNTIME_DIR}/runtime/dll/create_tbx_sockets.cpp
             ${COMPUTE_RUNTIME_DIR}/runtime/dll/source_level_debugger.cpp
             ${COMPUTE_RUNTIME_DIR}/runtime/dll/windows/environment_variables.cpp
             ${COMPUTE_RUNTIME_DIR}/runtime/dll/windows/options.cpp
@@ -45,6 +47,15 @@ if(COMPUTE_RUNTIME_SUPPORT)
             ${COMPUTE_RUNTIME_DIR}/runtime/os_interface/windows/wddm/wddm_create.cpp
             ${COMPUTE_RUNTIME_DIR}/runtime/program/evaluate_unhandled_token.cpp
             ${COMPUTE_RUNTIME_DIR}/runtime/utilities/debug_settings_reader_creator.cpp
+            # Gen8 support
+            ${COMPUTE_RUNTIME_DIR}/runtime/gen8/enable_gen8.cpp
+            ${COMPUTE_RUNTIME_DIR}/runtime/gen8/enable_family_full_gen8.cpp
+            # Gen9 support
+            ${COMPUTE_RUNTIME_DIR}/runtime/gen9/enable_gen9.cpp
+            ${COMPUTE_RUNTIME_DIR}/runtime/gen9/enable_family_full_gen9.cpp
+            # Gen10 support
+            ${COMPUTE_RUNTIME_DIR}/runtime/gen10/enable_gen10.cpp
+            ${COMPUTE_RUNTIME_DIR}/runtime/gen10/enable_family_full_gen10.cpp
     )
 
     target_include_directories(${TARGET_NAME}
@@ -63,6 +74,7 @@ if(COMPUTE_RUNTIME_SUPPORT)
     target_link_libraries(${TARGET_NAME} 
         igdrcl_lib_release
         dxgi
+        ws2_32
     )
 endif(COMPUTE_RUNTIME_SUPPORT)
 
