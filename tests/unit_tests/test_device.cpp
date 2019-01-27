@@ -17,10 +17,9 @@ TEST(deviceCreateCommandList, redirectsToDeviceObject) {
         .Times(1)
         .WillRepeatedly(Return(XE_RESULT_SUCCESS));
 
-    auto result = xe::deviceCreateCommandList(
-        deviceHandle,
-        &desc,
-        &commandList);
+    auto result = xe::xeDeviceCreateCommandList(deviceHandle,
+                                                &desc,
+                                                &commandList);
     EXPECT_EQ(XE_RESULT_SUCCESS, result);
 }
 
@@ -35,10 +34,9 @@ TEST(deviceCreateCommandQueue, redirectsToDeviceObject) {
         .Times(1)
         .WillRepeatedly(Return(XE_RESULT_SUCCESS));
 
-    auto result = xe::deviceCreateCommandQueue(
-        deviceHandle,
-        &desc,
-        &commandQueue);
+    auto result = xe::xeDeviceCreateCommandQueue(deviceHandle,
+                                                 &desc,
+                                                 &commandQueue);
     EXPECT_EQ(XE_RESULT_SUCCESS, result);
 }
 
@@ -53,11 +51,9 @@ TEST(deviceCreateEvent, redirectsToDeviceObject) {
         .Times(1)
         .WillRepeatedly(Return(XE_RESULT_SUCCESS));
 
-    auto result = xe::deviceCreateEvent(
-        deviceHandle,
-        &desc,
-        &event
-    );
+    auto result = xe::xeDeviceCreateEvent(deviceHandle,
+                                          &desc,
+                                          &event);
     ASSERT_EQ(XE_RESULT_SUCCESS, result);
 }
 
@@ -73,9 +69,8 @@ TEST(deviceImpcreateCommandList, returnsSuccess) {
     xe_command_list_handle_t commandList = {};
     xe_command_list_desc_t desc = {};
 
-    auto result = device->createCommandList(
-        &desc,
-        &commandList);
+    auto result = device->createCommandList(&desc,
+                                            &commandList);
     EXPECT_EQ(XE_RESULT_SUCCESS, result);
     EXPECT_NE(nullptr, commandList.pDriverData);
 }
@@ -92,9 +87,8 @@ TEST(deviceImpcreateCommandQueue, returnsSuccess) {
     xe_command_queue_handle_t commandQueue = {};
     xe_command_queue_desc_t desc = {};
 
-    auto result = device->createCommandQueue(
-        &desc,
-        &commandQueue);
+    auto result = device->createCommandQueue(&desc,
+                                             &commandQueue);
     EXPECT_EQ(XE_RESULT_SUCCESS, result);
     EXPECT_NE(nullptr, commandQueue.pDriverData);
 }
@@ -111,9 +105,8 @@ TEST(deviceImpcreateEvent, returnsSuccess) {
     xe_event_handle_t event = {};
     xe_event_desc_t desc = {};
 
-    auto result = device->createEvent(
-        &desc,
-        &event);
+    auto result = device->createEvent(&desc,
+                                      &event);
     EXPECT_EQ(XE_RESULT_SUCCESS, result);
     EXPECT_NE(nullptr, event.pDriverData);
 }

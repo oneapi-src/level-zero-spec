@@ -22,17 +22,17 @@ CommandList *CommandList::create() {
 }
 
 xe_result_t __xecall
-commandListClose(xe_command_list_handle_t hCommandList) {
+xeCommandListClose(xe_command_list_handle_t hCommandList) {
     return CommandList::fromHandle(hCommandList)->close();
 }
 
 xe_result_t __xecall
-commandListDestroy(xe_command_list_handle_t hCommandList) {
+xeCommandListDestroy(xe_command_list_handle_t hCommandList) {
     return CommandList::fromHandle(hCommandList)->destroy();
 }
 
 xe_result_t __xecall
-commandListEncodeWaitOnEvent(xe_command_list_handle_t hCommandList,
+xeCommandListEncodeWaitOnEvent(xe_command_list_handle_t hCommandList,
                              xe_event_handle_t hEvent) {
     return CommandList::fromHandle(hCommandList)->encodeWaitOnEvent(hEvent);
 }

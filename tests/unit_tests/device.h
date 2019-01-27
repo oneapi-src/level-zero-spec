@@ -30,21 +30,21 @@ struct Device {
 };
 
 xe_result_t __xecall
-deviceCreateCommandList(
+xeDeviceCreateCommandList(
     xe_device_handle_t hDevice,             ///< [in] handle of the device object
     const xe_command_list_desc_t *desc,     ///< [in] pointer to command list descriptor
     xe_command_list_handle_t *phCommandList ///< [out] pointer to handle of command list object created
 );
 
 xe_result_t __xecall
-deviceCreateCommandQueue(
+xeDeviceCreateCommandQueue(
     xe_device_handle_t hDevice,               ///< [in] handle of the device object
     const xe_command_queue_desc_t *desc,      ///< [in] pointer to command queue descriptor
     xe_command_queue_handle_t *phCommandQueue ///< [out] pointer to handle of command queue object created
 );
 
 xe_result_t __xecall
-deviceCreateEvent(
+xeDeviceCreateEvent(
     xe_device_handle_t hDevice,  ///< [in] handle of the device
     const xe_event_desc_t *desc, ///< [in] pointer to event descriptor
     xe_event_handle_t *phEvent   ///< [out] pointer to handle of event object created

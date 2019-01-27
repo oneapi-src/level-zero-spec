@@ -38,7 +38,7 @@ Device *Device::create(void *device) {
 }
 
 xe_result_t __xecall
-deviceCreateCommandList(
+xeDeviceCreateCommandList(
     xe_device_handle_t hDevice,
     const xe_command_list_desc_t *desc,
     xe_command_list_handle_t *phCommandList) {
@@ -49,7 +49,7 @@ deviceCreateCommandList(
 }
 
 xe_result_t __xecall
-deviceCreateCommandQueue(
+xeDeviceCreateCommandQueue(
     xe_device_handle_t hDevice,
     const xe_command_queue_desc_t *desc,
     xe_command_queue_handle_t *phCommandQueue) {
@@ -60,7 +60,7 @@ deviceCreateCommandQueue(
 }
 
 xe_result_t __xecall
-deviceCreateEvent(
+xeDeviceCreateEvent(
     xe_device_handle_t hDevice,
     const xe_event_desc_t *desc,
     xe_event_handle_t *phEvent) {

@@ -4,74 +4,52 @@
 #include "gtest/gtest.h"
 
 TEST(sample, waitOnEvent) {
-    auto result = xeDriverInit(
-        XE_INIT_FLAG_NONE ///< [in] initialization flags
-    );
+    auto result = xeDriverInit(XE_INIT_FLAG_NONE);
     ASSERT_EQ(XE_RESULT_SUCCESS, result);
 
     xe_device_handle_t device = {};
-    result = xeDriverGetDevice(
-        0,      ///< [in] ordinal of device to retrieve
-        &device ///< [out] pointer to handle of device object created
-    );
+    result = xeDriverGetDevice(0,
+                               &device);
     ASSERT_EQ(XE_RESULT_SUCCESS, result);
 
     xe_command_queue_handle_t commandQueue = {};
     xe_command_queue_desc_t desc = {};
-    result = xeDeviceCreateCommandQueue(
-        device,       ///< [in] handle of the device
-        &desc,        ///< [in] pointer to command queue descriptor
-        &commandQueue ///< [out] pointer to handle of command queue object created
-    );
+    result = xeDeviceCreateCommandQueue(device,
+                                        &desc,
+                                        &commandQueue);
     ASSERT_EQ(XE_RESULT_SUCCESS, result);
 
     xe_command_list_desc_t descCommandList = {};
     xe_command_list_handle_t commandList = {};
-    result = xeDeviceCreateCommandList(
-        device,           ///< [in] handle of the device
-        &descCommandList, ///< [in] pointer to command list descriptor
-        &commandList      ///< [out] pointer to handle of command list object created
-    );
+    result = xeDeviceCreateCommandList(device,
+                                       &descCommandList,
+                                       &commandList);
     ASSERT_EQ(XE_RESULT_SUCCESS, result);
 
     xe_event_desc_t descEvent = {};
     xe_event_handle_t event = {};
-    result = xeDeviceCreateEvent(
-        device,     ///< [in] handle of the device
-        &descEvent, ///< [in] pointer to event descriptor
-        &event      ///< [out] pointer to handle of event object created
-    );
+    result = xeDeviceCreateEvent(device,
+                                 &descEvent,
+                                 &event);
     ASSERT_EQ(XE_RESULT_SUCCESS, result);
 
-    result = xeCommandListEncodeWaitOnEvent(
-        commandList, ///< [in] handle of the command list
-        event        ///< [in] handle of the event
-    );
+    result = xeCommandListEncodeWaitOnEvent(commandList,
+                                            event);
     ASSERT_EQ(XE_RESULT_SUCCESS, result);
 
-    result = xeCommandListClose(
-        commandList ///< [in] handle of command list object to close
-    );
+    result = xeCommandListClose(commandList);
     ASSERT_EQ(XE_RESULT_SUCCESS, result);
 
-    result = xeCommandQueueEnqueueCommandList(
-        commandQueue, ///< [in] handle of the command queue
-        commandList   ///< [in] handle of the command list to execute
-    );
+    result = xeCommandQueueEnqueueCommandList(commandQueue,
+                                              commandList);
     ASSERT_EQ(XE_RESULT_SUCCESS, result);
 
-    result = xeEventDestroy(
-        event ///< [in] handle of event object to destroy
-    );
+    result = xeEventDestroy(event);
     ASSERT_EQ(XE_RESULT_SUCCESS, result);
 
-    result = xeCommandListDestroy(
-        commandList ///< [in] handle of command list object to destroy
-    );
+    result = xeCommandListDestroy(commandList);
     ASSERT_EQ(XE_RESULT_SUCCESS, result);
 
-    result = xeCommandQueueDestroy(
-        commandQueue ///< [in] handle of command queue object to destroy
-    );
+    result = xeCommandQueueDestroy(commandQueue);
     ASSERT_EQ(XE_RESULT_SUCCESS, result);
 }

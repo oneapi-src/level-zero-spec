@@ -25,17 +25,17 @@ struct CommandList {
 };
 
 xe_result_t __xecall
-commandListClose(
+xeCommandListClose(
     xe_command_list_handle_t hCommandList ///< [in] handle of command list object to close
 );
 
 xe_result_t __xecall
-commandListDestroy(
+xeCommandListDestroy(
     xe_command_list_handle_t hCommandList ///< [in] handle of command list object to destroy
 );
 
 xe_result_t __xecall
-commandListEncodeWaitOnEvent(
+xeCommandListEncodeWaitOnEvent(
     xe_command_list_handle_t hCommandList, ///< [in] handle of the command list
     xe_event_handle_t hEvent               ///< [in] handle of the event
 );

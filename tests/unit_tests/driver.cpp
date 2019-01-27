@@ -24,11 +24,11 @@ struct DriverImp : public Driver {
 static DriverImp driverImp;
 Driver *driver = &driverImp;
 
-xe_result_t DriverInit(xe_init_flags_t flags) {
+xe_result_t xeDriverInit(xe_init_flags_t flags) {
     return driver->initialize(flags);
 }
 
-xe_result_t __xecall DriverGetDevice(
+xe_result_t __xecall xeDriverGetDevice(
     uint32_t ordinal,
     xe_device_handle_t *phDevice) {
     return driver->getDevice(ordinal, phDevice);

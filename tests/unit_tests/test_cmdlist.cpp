@@ -8,7 +8,7 @@ TEST(commandListDestroy, redirectsToCmdListObject) {
 
     EXPECT_CALL(cmdList, destroy()).Times(1);
 
-    auto result = xe::commandListDestroy(commandList);
+    auto result = xe::xeCommandListDestroy(commandList);
     EXPECT_EQ(XE_RESULT_SUCCESS, result);
 }
 
@@ -18,7 +18,7 @@ TEST(commandListClose, redirectsToCmdListObject) {
 
     EXPECT_CALL(cmdList, close()).Times(1);
 
-    auto result = xe::commandListClose(commandList);
+    auto result = xe::xeCommandListClose(commandList);
     EXPECT_EQ(XE_RESULT_SUCCESS, result);
 }
 
@@ -29,7 +29,7 @@ TEST(commandListEncodeWaitOnEvent, redirectsToCmdListObject) {
 
     EXPECT_CALL(cmdList, encodeWaitOnEvent(event)).Times(1);
 
-    auto result = xe::commandListEncodeWaitOnEvent(commandList,
-                                                   event);
+    auto result = xe::xeCommandListEncodeWaitOnEvent(commandList,
+                                                     event);
     EXPECT_EQ(XE_RESULT_SUCCESS, result);
 }

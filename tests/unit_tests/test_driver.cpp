@@ -10,18 +10,14 @@ TEST(driverInit, redirectsToDriverObject) {
 
     EXPECT_CALL(driver, initialize(XE_INIT_FLAG_NONE)).Times(1);
 
-    auto result = xe::DriverInit(
-        XE_INIT_FLAG_NONE ///< [in] initialization flags
-    );
+    auto result = xe::xeDriverInit(XE_INIT_FLAG_NONE);
     EXPECT_EQ(XE_RESULT_SUCCESS, result);
 
     xe::driver = oldDriver;
 }
 
 TEST(driverImpinitialize, returnsSucess) {
-    auto result = xe::DriverInit(
-        XE_INIT_FLAG_NONE ///< [in] initialization flags
-    );
+    auto result = xe::xeDriverInit(XE_INIT_FLAG_NONE);
     EXPECT_EQ(XE_RESULT_SUCCESS, result);
 }
 
@@ -37,10 +33,8 @@ TEST(driverGetDevice, redirectsToDriverObject) {
         .Times(1)
         .WillRepeatedly(Return(XE_RESULT_SUCCESS));
 
-    auto result = xe::DriverGetDevice(
-        ordinal,
-        &deviceHandle
-    );
+    auto result = xe::xeDriverGetDevice(ordinal,
+                                        &deviceHandle);
     EXPECT_EQ(XE_RESULT_SUCCESS, result);
 
     xe::driver = oldDriver;
@@ -49,10 +43,8 @@ TEST(driverGetDevice, redirectsToDriverObject) {
 TEST(driverImpgetDevice, returnsSuccess) {
     xe_device_handle_t deviceHandle = {};
     uint32_t ordinal = 0;
-    auto result = xe::DriverGetDevice(
-        ordinal,
-        &deviceHandle
-    );
+    auto result = xe::xeDriverGetDevice(ordinal,
+                                        &deviceHandle);
     EXPECT_EQ(XE_RESULT_SUCCESS, result);
     EXPECT_NE(nullptr, deviceHandle.pDriverData);
 }
