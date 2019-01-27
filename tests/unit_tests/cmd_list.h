@@ -8,7 +8,7 @@ struct CommandList {
     virtual xe_result_t destroy() = 0;
     virtual xe_result_t encodeWaitOnEvent(xe_event_handle_t hEvent) = 0;
 
-    static CommandList *create();
+    static CommandList *create(uint32_t productFamily);
 
     static CommandList *fromHandle(xe_command_list_handle_t handle) {
         return static_cast<CommandList *>(handle.pDriverData);

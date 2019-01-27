@@ -1,5 +1,6 @@
 #include "mock_cmd_list.h"
 #include "event.h"
+#include "igfxfmid.h"
 #include "gtest/gtest.h"
 
 TEST(commandListDestroy, redirectsToCmdListObject) {
@@ -32,4 +33,15 @@ TEST(commandListEncodeWaitOnEvent, redirectsToCmdListObject) {
     auto result = xe::xeCommandListEncodeWaitOnEvent(commandList,
                                                      event);
     EXPECT_EQ(XE_RESULT_SUCCESS, result);
+}
+
+TEST(commandListCreate, returnsCommandListOnSuccess) {
+    auto commandList = xe::CommandList::create(IGFX_SKYLAKE);
+    ASSERT_NE(nullptr, commandList);
+    commandList->destroy();
+}
+
+TEST(commandListCreate, returnsNullPointerOnFailure) {
+    auto commandList = xe::CommandList::create(IGFX_MAX_PRODUCT);
+    EXPECT_EQ(nullptr, commandList);
 }

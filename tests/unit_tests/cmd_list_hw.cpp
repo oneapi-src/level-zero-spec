@@ -1,4 +1,5 @@
 #include "cmd_list_hw.h"
+#include "igfxfmid.h"
 
 namespace xe {
 
@@ -18,8 +19,10 @@ xe_result_t CommandListHw<Type>::encodeWaitOnEvent(xe_event_handle_t hEvent) {
     return XE_RESULT_SUCCESS;
 }
 
-CommandList *CommandList::create() {
-    return new CommandListHw<void>;
+CommandList *CommandList::create(uint32_t productFamily) {
+    return productFamily < IGFX_MAX_PRODUCT
+        ? new CommandListHw<void>
+        : nullptr;
 }
 
 } // namespace xe
