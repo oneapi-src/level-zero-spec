@@ -1,4 +1,4 @@
-#include "cmd_list_hw.h"
+#include "cmd_list_product_family.h"
 #include "igfxfmid.h"
 
 namespace xe {

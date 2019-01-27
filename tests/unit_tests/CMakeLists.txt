@@ -13,8 +13,8 @@ if(COMPUTE_RUNTIME_SUPPORT)
             environment.cpp
             cmd_list.cpp
             cmd_list.h
-            cmd_list_hw.cpp
-            cmd_list_hw.h
+            cmd_list_product_family.cpp
+            cmd_list_product_family.h
             device.cpp
             device.h
             driver.cpp
