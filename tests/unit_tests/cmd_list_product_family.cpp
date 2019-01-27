@@ -4,24 +4,24 @@
 namespace xe {
 
 template <typename Type>
-xe_result_t CommandListHw<Type>::close() {
+xe_result_t CommandListProductFamily<Type>::close() {
     return XE_RESULT_SUCCESS;
 }
 
 template <typename Type>
-xe_result_t CommandListHw<Type>::destroy() {
+xe_result_t CommandListProductFamily<Type>::destroy() {
     delete this;
     return XE_RESULT_SUCCESS;
 }
 
 template <typename Type>
-xe_result_t CommandListHw<Type>::encodeWaitOnEvent(xe_event_handle_t hEvent) {
+xe_result_t CommandListProductFamily<Type>::encodeWaitOnEvent(xe_event_handle_t hEvent) {
     return XE_RESULT_SUCCESS;
 }
 
 CommandList *CommandList::create(uint32_t productFamily) {
     return productFamily < IGFX_MAX_PRODUCT
-        ? new CommandListHw<void>
+        ? new CommandListProductFamily<void>
         : nullptr;
 }
 
