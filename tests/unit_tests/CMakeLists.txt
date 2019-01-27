@@ -12,10 +12,13 @@ if(COMPUTE_RUNTIME_SUPPORT)
     target_sources(${TARGET_NAME}
         PRIVATE
             environment.cpp
+            cmd_list.cpp
+            cmd_list.h
             device.cpp
             device.h
             driver.cpp
             driver.h
+            mock_cmd_list.h
             mock_device.h
             mock_driver.h
             test_device.cpp
