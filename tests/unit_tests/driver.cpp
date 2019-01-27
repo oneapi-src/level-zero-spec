@@ -10,6 +10,15 @@ struct DriverImp : public Driver {
 
         return XE_RESULT_SUCCESS;
     }
+
+    xe_result_t getDevice(uint32_t ordinal,
+                          xe_device_handle_t *phDevice) override {
+        auto platform = OCLRT::constructPlatform();
+        auto device = platform->getDevice(ordinal);
+        phDevice->pDriverData = device;
+
+        return XE_RESULT_SUCCESS;
+    }
 };
 
 static DriverImp driverImp;
@@ -19,4 +28,10 @@ xe_result_t DriverInit(xe_init_flags_t flags) {
     return driver->initialize(flags);
 }
 
+xe_result_t __xecall DriverGetDevice(
+    uint32_t ordinal,
+    xe_device_handle_t *phDevice) {
+    return driver->getDevice(ordinal, phDevice);
 }
+
+} // namespace xe
