@@ -5,7 +5,6 @@ add_executable(${TARGET_NAME}
     test_cmdqueue.cpp
     test_cmdlist.cpp
     test_device.cpp
-    test_driver.cpp
     test_event.cpp
     test_sample.cpp
 )
@@ -13,6 +12,8 @@ add_executable(${TARGET_NAME}
 if(COMPUTE_RUNTIME_SUPPORT)
     target_sources(${TARGET_NAME}
         PRIVATE
+            environment.cpp
+            test_driver.cpp
             test_platform.cpp
             ${COMPUTE_RUNTIME_HW_ENABLE}
             ${COMPUTE_RUNTIME_HW_ENABLE_ULT}
