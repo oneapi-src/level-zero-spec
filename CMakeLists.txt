@@ -47,4 +47,9 @@ endif(COMPUTE_RUNTIME_SUPPORT)
 
 if (${PROJECT_NAME}_BUILD_TESTS)
     add_subdirectory(tests)
+    set_property(
+        DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}
+        PROPERTY
+            VS_STARTUP_PROJECT ${PROJECT_NAME}_unit_tests
+    )
 endif()
