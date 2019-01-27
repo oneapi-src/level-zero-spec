@@ -3,7 +3,6 @@ set(TARGET_NAME ${PROJECT_NAME}_unit_tests)
 add_executable(${TARGET_NAME}
     main.cpp
     test_cmdqueue.cpp
-    test_cmdlist.cpp
     test_event.cpp
     test_sample.cpp
 )
@@ -24,6 +23,7 @@ if(COMPUTE_RUNTIME_SUPPORT)
             mock_device.h
             mock_driver.h
             mock_event.h
+            test_cmdlist.cpp
             test_device.cpp
             test_driver.cpp
             test_platform.cpp
