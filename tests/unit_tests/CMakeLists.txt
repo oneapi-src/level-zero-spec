@@ -13,6 +13,9 @@ if(COMPUTE_RUNTIME_SUPPORT)
     target_sources(${TARGET_NAME}
         PRIVATE
             environment.cpp
+            driver.cpp
+            driver.h
+            mock_driver.h
             test_driver.cpp
             test_platform.cpp
             ${COMPUTE_RUNTIME_HW_ENABLE}

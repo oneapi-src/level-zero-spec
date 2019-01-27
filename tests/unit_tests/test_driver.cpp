@@ -1,34 +1,5 @@
-#include "xe_driver.h"
-#include "runtime/platform/platform.h"
+#include "mock_driver.h"
 #include "gmock/gmock.h"
-
-namespace xe {
-
-struct Driver {
-    virtual xe_result_t initialize(xe_init_flags_t) = 0;
-};
-
-struct MockDriver : public Driver {
-    MOCK_METHOD1(initialize, xe_result_t(xe_init_flags_t));
-};
-
-struct DriverImp : public Driver {
-    xe_result_t initialize(xe_init_flags_t) override {
-        auto platform = OCLRT::constructPlatform();
-        auto success = platform->initialize();
-
-        return XE_RESULT_SUCCESS;
-    }
-};
-
-static DriverImp driverImp;
-Driver *driver = &driverImp;
-
-xe_result_t DriverInit(xe_init_flags_t flags) {
-    return driver->initialize(flags);
-}
-
-}
 
 TEST(driverInit, returnsSuccess) {
     xe::MockDriver driver;
