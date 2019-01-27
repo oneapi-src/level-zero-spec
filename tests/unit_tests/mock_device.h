@@ -10,6 +10,9 @@ struct MockDevice : public Device {
 
     MOCK_METHOD2(createCommandQueue, xe_result_t(const xe_command_queue_desc_t *desc,
                                                  xe_command_queue_handle_t *commandQueue));
+
+    MOCK_METHOD2(createEvent, xe_result_t(const xe_event_desc_t *desc,
+                                          xe_event_handle_t *event));
 };
 
 } // namespace xe

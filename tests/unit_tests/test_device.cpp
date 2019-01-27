@@ -1,5 +1,6 @@
 #include "mock_device.h"
 #include "xe_cmdlist.h"
+#include "xe_event.h"
 #include "gmock/gmock.h"
 #include "runtime/platform/platform.h"
 
@@ -41,6 +42,25 @@ TEST(deviceCreateCommandQueue, redirectsToDeviceObject) {
     EXPECT_EQ(XE_RESULT_SUCCESS, result);
 }
 
+TEST(deviceCreateEvent, redirectsToDeviceObject) {
+    xe::MockDevice device;
+    auto deviceHandle = device.toHandle();
+
+    xe_event_handle_t event = {};
+    xe_event_desc_t desc = {};
+
+    EXPECT_CALL(device, createEvent(&desc, &event))
+        .Times(1)
+        .WillRepeatedly(Return(XE_RESULT_SUCCESS));
+
+    auto result = xe::deviceCreateEvent(
+        deviceHandle,
+        &desc,
+        &event
+    );
+    ASSERT_EQ(XE_RESULT_SUCCESS, result);
+}
+
 TEST(deviceImpcreateCommandList, returnsSuccess) {
     auto platform = OCLRT::constructPlatform();
     auto success = platform->initialize();
@@ -77,4 +97,23 @@ TEST(deviceImpcreateCommandQueue, returnsSuccess) {
         &commandQueue);
     EXPECT_EQ(XE_RESULT_SUCCESS, result);
     EXPECT_NE(nullptr, commandQueue.pDriverData);
+}
+
+TEST(deviceImpcreateEvent, returnsSuccess) {
+    auto platform = OCLRT::constructPlatform();
+    auto success = platform->initialize();
+    ASSERT_TRUE(success);
+
+    auto deviceRT = platform->getDevice(0);
+    ASSERT_NE(nullptr, deviceRT);
+    auto device = xe::Device::create(deviceRT);
+
+    xe_event_handle_t event = {};
+    xe_event_desc_t desc = {};
+
+    auto result = device->createEvent(
+        &desc,
+        &event);
+    EXPECT_EQ(XE_RESULT_SUCCESS, result);
+    EXPECT_NE(nullptr, event.pDriverData);
 }

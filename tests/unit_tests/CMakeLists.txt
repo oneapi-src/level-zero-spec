@@ -18,9 +18,12 @@ if(COMPUTE_RUNTIME_SUPPORT)
             device.h
             driver.cpp
             driver.h
+            event.cpp
+            event.h
             mock_cmd_list.h
             mock_device.h
             mock_driver.h
+            mock_event.h
             test_device.cpp
             test_driver.cpp
             test_platform.cpp

@@ -1,5 +1,6 @@
-#include "device.h"
 #include "cmd_list.h"
+#include "device.h"
+#include "event.h"
 #include "runtime/device/device.h"
 
 namespace xe {
@@ -17,6 +18,12 @@ struct DeviceImp : public Device {
         auto engineControl = device->getDefaultEngine();
         commandQueue->pDriverData = engineControl.commandStreamReceiver;
 
+        return XE_RESULT_SUCCESS;
+    }
+
+    xe_result_t createEvent(const xe_event_desc_t *desc,
+                            xe_event_handle_t *event) override {
+        event->pDriverData = Event::create();
         return XE_RESULT_SUCCESS;
     }
 
@@ -52,5 +59,14 @@ deviceCreateCommandQueue(
                                       phCommandQueue);
 }
 
-} // namespace xe
+xe_result_t __xecall
+deviceCreateEvent(
+    xe_device_handle_t hDevice,
+    const xe_event_desc_t *desc,
+    xe_event_handle_t *phEvent) {
 
+    auto device = Device::fromHandle(hDevice);
+    return device->createEvent(desc,
+                               phEvent);
+}
+} // namespace xe
