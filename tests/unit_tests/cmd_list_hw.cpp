@@ -1,0 +1,25 @@
+#include "cmd_list_hw.h"
+
+namespace xe {
+
+template <typename Type>
+xe_result_t CommandListHw<Type>::close() {
+    return XE_RESULT_SUCCESS;
+}
+
+template <typename Type>
+xe_result_t CommandListHw<Type>::destroy() {
+    delete this;
+    return XE_RESULT_SUCCESS;
+}
+
+template <typename Type>
+xe_result_t CommandListHw<Type>::encodeWaitOnEvent(xe_event_handle_t hEvent) {
+    return XE_RESULT_SUCCESS;
+}
+
+CommandList *CommandList::create() {
+    return new CommandListHw<void>;
+}
+
+} // namespace xe
