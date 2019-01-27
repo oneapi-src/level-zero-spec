@@ -36,7 +36,7 @@ deviceCreateCommandList(
     const xe_command_list_desc_t *desc,
     xe_command_list_handle_t *phCommandList) {
 
-    auto device = static_cast<Device *>(hDevice.pDriverData);
+    auto device = Device::fromHandle(hDevice);
     return device->createCommandList(desc,
                                      phCommandList);
 }
@@ -47,7 +47,7 @@ deviceCreateCommandQueue(
     const xe_command_queue_desc_t *desc,
     xe_command_queue_handle_t *phCommandQueue) {
 
-    auto device = static_cast<Device *>(hDevice.pDriverData);
+    auto device = Device::fromHandle(hDevice);
     return device->createCommandQueue(desc,
                                       phCommandQueue);
 }

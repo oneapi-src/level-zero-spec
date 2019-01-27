@@ -12,6 +12,16 @@ struct Device {
     virtual xe_result_t createCommandQueue(const xe_command_queue_desc_t *desc,
                                            xe_command_queue_handle_t *commandQueue) = 0;
 
+    static Device *fromHandle(xe_device_handle_t handle) {
+        return static_cast<Device *>(handle.pDriverData);
+    }
+
+    inline xe_device_handle_t toHandle() const {
+        xe_device_handle_t handle;
+        handle.pDriverData = const_cast<Device *>(this);
+        return handle;
+    }
+    
     static Device *create(void *device);
 };
 

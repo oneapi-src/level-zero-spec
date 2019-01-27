@@ -7,8 +7,7 @@ using ::testing::Return;
 
 TEST(deviceCreateCommandList, redirectsToDeviceObject) {
     xe::MockDevice device;
-    xe_device_handle_t deviceHandle = {};
-    deviceHandle.pDriverData = static_cast<xe::Device *>(&device);
+    auto deviceHandle = device.toHandle();
 
     xe_command_list_desc_t desc = {};
     xe_command_list_handle_t commandList = {};
@@ -26,8 +25,7 @@ TEST(deviceCreateCommandList, redirectsToDeviceObject) {
 
 TEST(deviceCreateCommandQueue, redirectsToDeviceObject) {
     xe::MockDevice device;
-    xe_device_handle_t deviceHandle = {};
-    deviceHandle.pDriverData = static_cast<xe::Device *>(&device);
+    auto deviceHandle = device.toHandle();
 
     xe_command_queue_handle_t commandQueue = {};
     xe_command_queue_desc_t desc = {};
