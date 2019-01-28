@@ -10,4 +10,11 @@ struct CommandListProductFamily : public CommandList {
     xe_result_t encodeWaitOnEvent(xe_event_handle_t hEvent) override;
 };
 
+template <uint32_t productFamily>
+struct CommandListProductFamilyAllocator {
+    static CommandList *allocate() {
+        return new CommandListProductFamily<productFamily>;
+    }
+};
+
 } // namespace xe

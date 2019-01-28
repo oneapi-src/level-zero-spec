@@ -19,13 +19,6 @@ xe_result_t CommandListProductFamily<productFamily>::encodeWaitOnEvent(xe_event_
     return XE_RESULT_SUCCESS;
 }
 
-template<uint32_t productFamily>
-struct CommandListProductFamilyAllocator {
-    static CommandList *allocate() {
-        return new CommandListProductFamily<productFamily>;
-    }
-};
-
 using CommandListAllocatorFn = CommandList *(*)();
 
 CommandListAllocatorFn commandListFactory[IGFX_MAX_PRODUCT] = {};
