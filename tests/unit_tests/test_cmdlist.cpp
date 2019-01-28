@@ -35,11 +35,23 @@ TEST(commandListEncodeWaitOnEvent, redirectsToCmdListObject) {
     EXPECT_EQ(XE_RESULT_SUCCESS, result);
 }
 
-TEST(commandListCreate, returnsCommandListOnSuccess) {
-    auto commandList = xe::CommandList::create(IGFX_SKYLAKE);
+using CommandListCreate = ::testing::TestWithParam<uint32_t>;
+
+TEST_P(CommandListCreate, returnsCommandListOnSuccess) {
+    auto commandList = xe::CommandList::create(GetParam());
     ASSERT_NE(nullptr, commandList);
     commandList->destroy();
 }
+
+static uint32_t supportedProductFamilyTable[] = {
+    IGFX_BROADWELL,
+    IGFX_KABYLAKE,
+    IGFX_SKYLAKE
+};
+
+INSTANTIATE_TEST_CASE_P(,
+                        CommandListCreate,
+                        ::testing::ValuesIn(supportedProductFamilyTable));
 
 TEST(commandListCreate, returnsNullPointerOnFailure) {
     auto commandList = xe::CommandList::create(IGFX_MAX_PRODUCT);
