@@ -15,6 +15,7 @@ if(COMPUTE_RUNTIME_SUPPORT)
             cmd_list.h
             cmd_list_product_family.cpp
             cmd_list_product_family.h
+            cmd_list_product_family.inl
             device.cpp
             device.h
             driver.cpp
