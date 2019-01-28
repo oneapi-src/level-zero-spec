@@ -4,6 +4,13 @@
 namespace xe {
 
 struct CommandList {
+    template <typename Type>
+    struct Allocator {
+        static CommandList *allocate() {
+            return new Type;
+        }
+    };
+
     virtual xe_result_t close() = 0;
     virtual xe_result_t destroy();
     virtual xe_result_t encodeWaitOnEvent(xe_event_handle_t hEvent) = 0;
@@ -24,20 +31,13 @@ struct CommandList {
     virtual ~CommandList() = default;
 };
 
-template <typename Type>
-struct CommandListAllocator {
-    static CommandList *allocate() {
-        return new Type;
-    }
-};
-
 using CommandListAllocatorFn = CommandList *(*)();
 extern CommandListAllocatorFn commandListFactory[];
 
 template <uint32_t productFamily, typename CommandListType>
 struct CommandListPopulateFactory {
     CommandListPopulateFactory() {
-        commandListFactory[productFamily] = CommandListAllocator<CommandListType>::allocate;
+        commandListFactory[productFamily] = CommandList::Allocator<CommandListType>::allocate;
     }
 };
 
