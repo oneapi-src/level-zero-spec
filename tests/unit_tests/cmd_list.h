@@ -35,8 +35,8 @@ using CommandListAllocatorFn = CommandList *(*)();
 extern CommandListAllocatorFn commandListFactory[];
 
 template <uint32_t productFamily, typename CommandListType>
-struct CommandListProductFamilyPopulateFactory {
-    CommandListProductFamilyPopulateFactory() {
+struct CommandListPopulateFactory {
+    CommandListPopulateFactory() {
         commandListFactory[productFamily] = CommandListAllocator<CommandListType>::allocate;
     }
 };
