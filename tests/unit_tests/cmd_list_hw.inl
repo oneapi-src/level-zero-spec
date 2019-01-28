@@ -1,4 +1,4 @@
-#include "cmd_list_gfxcore_family.h"
+#include "cmd_list_hw.h"
 #include "runtime/helpers/hw_info.h"
 
 namespace xe {

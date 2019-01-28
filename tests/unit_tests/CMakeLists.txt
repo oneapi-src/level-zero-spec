@@ -14,8 +14,8 @@ if(COMPUTE_RUNTIME_SUPPORT)
             cmd_list.cpp
             cmd_list.h
             cmd_list_bdw.cpp
-            cmd_list_gfxcore_family.h
-            cmd_list_gfxcore_family.inl
+            cmd_list_hw.h
+            cmd_list_hw.inl
             cmd_list_kbl.cpp
             cmd_list_skl.cpp
             device.cpp
