@@ -1,6 +1,7 @@
 #include "cmd_list.h"
 #include "device.h"
 #include "event.h"
+#include "memory_manager.h"
 #include "runtime/device/device.h"
 
 namespace xe {
@@ -8,7 +9,7 @@ namespace xe {
 struct DeviceImp : public Device {
     xe_result_t createCommandList(const xe_command_list_desc_t *desc,
                                   xe_command_list_handle_t *commandList) override {
-        auto productFamily = device->getHardwareInfo().pPlatform->eProductFamily;
+        auto productFamily = deviceRT->getHardwareInfo().pPlatform->eProductFamily;
         commandList->pDriverData = CommandList::create(productFamily, this);
 
         return XE_RESULT_SUCCESS;
@@ -16,7 +17,7 @@ struct DeviceImp : public Device {
 
     xe_result_t createCommandQueue(const xe_command_queue_desc_t *desc,
                                    xe_command_queue_handle_t *commandQueue) override {
-        auto engineControl = device->getDefaultEngine();
+        auto engineControl = deviceRT->getDefaultEngine();
         commandQueue->pDriverData = engineControl.commandStreamReceiver;
 
         return XE_RESULT_SUCCESS;
@@ -28,14 +29,22 @@ struct DeviceImp : public Device {
         return XE_RESULT_SUCCESS;
     }
 
-    OCLRT::Device *device = nullptr;
+    MemoryManager *getMemoryManager() override {
+        return memoryManager;
+    }
+
+    OCLRT::Device *deviceRT = nullptr;
+    MemoryManager *memoryManager = nullptr;
 };
 
-Device *Device::create(void *device) {
-    auto deviceImp = new DeviceImp;
-    deviceImp->device = static_cast<OCLRT::Device *>(device);
+Device *Device::create(void *ptr) {
+    auto device = new DeviceImp;
 
-    return deviceImp;
+    auto deviceRT = static_cast<OCLRT::Device *>(ptr);
+    device->deviceRT = deviceRT;
+    device->memoryManager = MemoryManager::create(deviceRT->getMemoryManager());
+
+    return device;
 }
 
 xe_result_t __xecall

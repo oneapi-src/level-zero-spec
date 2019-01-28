@@ -110,3 +110,16 @@ TEST(DeviceCreateEvent, returnsSuccess) {
     EXPECT_EQ(XE_RESULT_SUCCESS, result);
     EXPECT_NE(nullptr, event.pDriverData);
 }
+
+TEST(DeviceGetMemoryManager, returnsPointer) {
+    auto platform = OCLRT::constructPlatform();
+    auto success = platform->initialize();
+    ASSERT_TRUE(success);
+
+    auto deviceRT = platform->getDevice(0);
+    ASSERT_NE(nullptr, deviceRT);
+    auto device = xe::Device::create(deviceRT);
+
+    auto memoryManager = device->getMemoryManager();
+    EXPECT_NE(nullptr, memoryManager);
+}

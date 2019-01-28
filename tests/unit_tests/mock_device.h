@@ -13,6 +13,8 @@ struct MockDevice : public Device {
 
     MOCK_METHOD2(createEvent, xe_result_t(const xe_event_desc_t *desc,
                                           xe_event_handle_t *event));
+
+    MOCK_METHOD0(getMemoryManager, MemoryManager *());
 };
 
 } // namespace xe

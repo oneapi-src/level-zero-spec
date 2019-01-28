@@ -26,6 +26,8 @@ if(COMPUTE_RUNTIME_SUPPORT)
             driver.h
             event.cpp
             event.h
+            memory_manager.cpp
+            memory_manager.h
             mock_cmd_list.h
             mock_device.h
             mock_driver.h

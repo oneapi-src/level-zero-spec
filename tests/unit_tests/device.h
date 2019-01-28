@@ -5,6 +5,7 @@
 #include "xe_event.h"
 
 namespace xe {
+struct MemoryManager;
 
 struct Device {
     virtual xe_result_t createCommandList(const xe_command_list_desc_t *desc,
@@ -15,6 +16,8 @@ struct Device {
 
     virtual xe_result_t createEvent(const xe_event_desc_t *desc,
                                     xe_event_handle_t *event) = 0;
+
+    virtual MemoryManager *getMemoryManager() = 0;
 
     static Device *fromHandle(xe_device_handle_t handle) {
         return static_cast<Device *>(handle.pDriverData);
