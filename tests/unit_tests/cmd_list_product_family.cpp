@@ -20,7 +20,7 @@ xe_result_t CommandListProductFamily<productFamily>::encodeWaitOnEvent(xe_event_
 }
 
 template<uint32_t productFamily>
-struct CommandListAllocator {
+struct CommandListProductFamilyAllocator {
     static CommandList *allocate() {
         return new CommandListProductFamily<productFamily>;
     }
@@ -31,7 +31,7 @@ using CommandListAllocatorFn = CommandList *(*)();
 CommandListAllocatorFn commandListFactory[IGFX_MAX_PRODUCT] = {};
 
 CommandList *CommandList::create(uint32_t productFamily) {
-    commandListFactory[IGFX_SKYLAKE] = CommandListAllocator<IGFX_SKYLAKE>::allocate;
+    commandListFactory[IGFX_SKYLAKE] = CommandListProductFamilyAllocator<IGFX_SKYLAKE>::allocate;
 
     CommandListAllocatorFn allocator = nullptr;
     if (productFamily < IGFX_MAX_PRODUCT) {
