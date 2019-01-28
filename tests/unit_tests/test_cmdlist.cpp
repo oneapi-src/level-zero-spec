@@ -3,7 +3,7 @@
 #include "igfxfmid.h"
 #include "gtest/gtest.h"
 
-TEST(commandListDestroy, redirectsToCmdListObject) {
+TEST(xeCommandListDestroy, redirectsToCmdListObject) {
     xe::MockCommandList cmdList;
     xe_command_list_handle_t commandList = cmdList.toHandle();
 
@@ -13,7 +13,7 @@ TEST(commandListDestroy, redirectsToCmdListObject) {
     EXPECT_EQ(XE_RESULT_SUCCESS, result);
 }
 
-TEST(commandListClose, redirectsToCmdListObject) {
+TEST(xeCommandListClose, redirectsToCmdListObject) {
     xe::MockCommandList cmdList;
     xe_command_list_handle_t commandList = cmdList.toHandle();
 
@@ -23,7 +23,7 @@ TEST(commandListClose, redirectsToCmdListObject) {
     EXPECT_EQ(XE_RESULT_SUCCESS, result);
 }
 
-TEST(commandListEncodeWaitOnEvent, redirectsToCmdListObject) {
+TEST(xeCommandListEncodeWaitOnEvent, redirectsToCmdListObject) {
     xe::MockCommandList cmdList;
     xe_command_list_handle_t commandList = cmdList.toHandle();
     xe_event_handle_t event = {};
@@ -53,7 +53,7 @@ INSTANTIATE_TEST_CASE_P(,
                         CommandListCreate,
                         ::testing::ValuesIn(supportedProductFamilyTable));
 
-TEST(commandListCreate, returnsNullPointerOnFailure) {
+TEST_F(CommandListCreate, returnsNullPointerOnFailure) {
     auto commandList = xe::CommandList::create(IGFX_MAX_PRODUCT);
     EXPECT_EQ(nullptr, commandList);
 }

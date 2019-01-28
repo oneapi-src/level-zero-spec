@@ -3,7 +3,7 @@
 
 using ::testing::Return;
 
-TEST(driverInit, redirectsToDriverObject) {
+TEST(xeDriverInit, redirectsToDriverObject) {
     xe::MockDriver driver;
     auto oldDriver = xe::driver;
     xe::driver = &driver;
@@ -16,12 +16,12 @@ TEST(driverInit, redirectsToDriverObject) {
     xe::driver = oldDriver;
 }
 
-TEST(driverImpinitialize, returnsSucess) {
+TEST(xeDriverInit, returnsSucess) {
     auto result = xe::xeDriverInit(XE_INIT_FLAG_NONE);
     EXPECT_EQ(XE_RESULT_SUCCESS, result);
 }
 
-TEST(driverGetDevice, redirectsToDriverObject) {
+TEST(xeDriverGetDevice, redirectsToDriverObject) {
     xe::MockDriver driver;
     auto oldDriver = xe::driver;
     xe::driver = &driver;
@@ -40,7 +40,7 @@ TEST(driverGetDevice, redirectsToDriverObject) {
     xe::driver = oldDriver;
 }
 
-TEST(driverImpgetDevice, returnsSuccess) {
+TEST(xeDriverGetDevice, returnsSuccess) {
     xe_device_handle_t deviceHandle = {};
     uint32_t ordinal = 0;
     auto result = xe::xeDriverGetDevice(ordinal,

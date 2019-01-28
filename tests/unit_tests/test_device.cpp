@@ -6,7 +6,7 @@
 
 using ::testing::Return;
 
-TEST(deviceCreateCommandList, redirectsToDeviceObject) {
+TEST(xeDeviceCreateCommandList, redirectsToDeviceObject) {
     xe::MockDevice device;
     auto deviceHandle = device.toHandle();
 
@@ -23,7 +23,7 @@ TEST(deviceCreateCommandList, redirectsToDeviceObject) {
     EXPECT_EQ(XE_RESULT_SUCCESS, result);
 }
 
-TEST(deviceCreateCommandQueue, redirectsToDeviceObject) {
+TEST(xeDeviceCreateCommandQueue, redirectsToDeviceObject) {
     xe::MockDevice device;
     auto deviceHandle = device.toHandle();
 
@@ -40,7 +40,7 @@ TEST(deviceCreateCommandQueue, redirectsToDeviceObject) {
     EXPECT_EQ(XE_RESULT_SUCCESS, result);
 }
 
-TEST(deviceCreateEvent, redirectsToDeviceObject) {
+TEST(xeDeviceCreateEvent, redirectsToDeviceObject) {
     xe::MockDevice device;
     auto deviceHandle = device.toHandle();
 
@@ -57,7 +57,7 @@ TEST(deviceCreateEvent, redirectsToDeviceObject) {
     ASSERT_EQ(XE_RESULT_SUCCESS, result);
 }
 
-TEST(deviceImpcreateCommandList, returnsSuccess) {
+TEST(DeviceCreateCommandList, returnsSuccess) {
     auto platform = OCLRT::constructPlatform();
     auto success = platform->initialize();
     ASSERT_TRUE(success);
@@ -75,7 +75,7 @@ TEST(deviceImpcreateCommandList, returnsSuccess) {
     EXPECT_NE(nullptr, commandList.pDriverData);
 }
 
-TEST(deviceImpcreateCommandQueue, returnsSuccess) {
+TEST(DeviceCreateCommandQueue, returnsSuccess) {
     auto platform = OCLRT::constructPlatform();
     auto success = platform->initialize();
     ASSERT_TRUE(success);
@@ -93,7 +93,7 @@ TEST(deviceImpcreateCommandQueue, returnsSuccess) {
     EXPECT_NE(nullptr, commandQueue.pDriverData);
 }
 
-TEST(deviceImpcreateEvent, returnsSuccess) {
+TEST(DeviceCreateEvent, returnsSuccess) {
     auto platform = OCLRT::constructPlatform();
     auto success = platform->initialize();
     ASSERT_TRUE(success);
