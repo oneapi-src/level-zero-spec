@@ -8,7 +8,13 @@
 namespace xe {
 
 struct CommandListImp : public CommandList {
+    CommandListImp(Device *device) : device(device) {
+    }
+
     xe_result_t destroy() override;
+
+  protected:
+    Device *device;
 };
 
 } // namespace xe

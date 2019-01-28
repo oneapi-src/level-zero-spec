@@ -3,11 +3,13 @@
 
 namespace xe {
 
+struct Device;
+
 struct CommandList {
     template <typename Type>
     struct Allocator {
-        static CommandList *allocate() {
-            return new Type;
+        static CommandList *allocate(Device *device) {
+            return new Type(device);
         }
     };
 
@@ -15,7 +17,7 @@ struct CommandList {
     virtual xe_result_t destroy() = 0;
     virtual xe_result_t encodeWaitOnEvent(xe_event_handle_t hEvent) = 0;
 
-    static CommandList *create(uint32_t productFamily);
+    static CommandList *create(uint32_t productFamily, Device *device);
 
     static CommandList *fromHandle(xe_command_list_handle_t handle) {
         return static_cast<CommandList *>(handle.pDriverData);
@@ -31,7 +33,7 @@ struct CommandList {
     virtual ~CommandList() = default;
 };
 
-using CommandListAllocatorFn = CommandList *(*)();
+using CommandListAllocatorFn = CommandList *(*)(Device *);
 extern CommandListAllocatorFn commandListFactory[];
 
 template <uint32_t productFamily, typename CommandListType>

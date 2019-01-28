@@ -9,7 +9,7 @@ struct DeviceImp : public Device {
     xe_result_t createCommandList(const xe_command_list_desc_t *desc,
                                   xe_command_list_handle_t *commandList) override {
         auto productFamily = device->getHardwareInfo().pPlatform->eProductFamily;
-        commandList->pDriverData = CommandList::create(productFamily);
+        commandList->pDriverData = CommandList::create(productFamily, this);
 
         return XE_RESULT_SUCCESS;
     }

@@ -12,7 +12,7 @@ xe_result_t CommandListImp::destroy() {
     return XE_RESULT_SUCCESS;
 }
 
-CommandList *CommandList::create(uint32_t productFamily) {
+CommandList *CommandList::create(uint32_t productFamily, Device *device) {
     CommandListAllocatorFn allocator = nullptr;
     if (productFamily < IGFX_MAX_PRODUCT) {
         allocator = commandListFactory[productFamily];
@@ -20,7 +20,7 @@ CommandList *CommandList::create(uint32_t productFamily) {
 
     CommandList *commandList = nullptr;
     if (allocator) {
-        commandList = (*allocator)();
+        commandList = (*allocator)(device);
     }
     return commandList;
 }

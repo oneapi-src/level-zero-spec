@@ -1,4 +1,5 @@
 #include "mock_cmd_list.h"
+#include "mock_device.h"
 #include "event.h"
 #include "igfxfmid.h"
 #include "gtest/gtest.h"
@@ -38,8 +39,12 @@ TEST(xeCommandListEncodeWaitOnEvent, redirectsToCmdListObject) {
 using CommandListCreate = ::testing::TestWithParam<uint32_t>;
 
 TEST_P(CommandListCreate, returnsCommandListOnSuccess) {
-    auto commandList = xe::CommandList::create(GetParam());
+    xe::MockDevice device;
+    auto commandList = xe::CommandList::create(GetParam(), &device);
     ASSERT_NE(nullptr, commandList);
+
+    auto commandListAlias = static_cast<xe::WhiteBoxCommandList *>(commandList);
+    EXPECT_EQ(commandListAlias->device, &device);
     commandList->destroy();
 }
 
@@ -56,7 +61,8 @@ INSTANTIATE_TEST_CASE_P(,
 using CommandListCreateFail = ::testing::TestWithParam<uint32_t>;
 
 TEST_P(CommandListCreateFail, returnsNullPointerOnFailure) {
-    auto commandList = xe::CommandList::create(GetParam());
+    xe::MockDevice device;
+    auto commandList = xe::CommandList::create(GetParam(), &device);
     EXPECT_EQ(nullptr, commandList);
 }
 
