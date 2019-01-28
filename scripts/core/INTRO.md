@@ -21,15 +21,20 @@ In order to both expose the full capabilities of GPUs and remain supportable by 
 All implementations must support "Core" APIs while "Extended" APIs are optional.
 An implementation will return ::${X}_RESULT_ERROR_UNSUPPORTED for any feature request not supported by that device.
 
-${"##"} Installation
-The ${Xx} driver API is implemented within the ${x}.dll, which is copied on the system during installation of the device driver.
-
 ${"##"} Naming Convention
+The following naming convention is followed in order to avoid conflicts within the API, or with other APIs and libraries:
 - all driver entry points are prefixed with ${x}
 - all types follow **${x}_\<name\>_t** convention
 - all macros and enumerator values use all caps **${X}_\<SCOPE\>_\<NAME\>** convention
 - all functions use **${x}\<Actor\>\<Action\>\<Object\>** convention
 - all function input parameters precede output parameters
+
+${"##"} Terminology
+This specification uses key words based on [RFC2119](https://www.ietf.org/rfc/rfc2119.txt) to indicate requirement level. 
+In particular, the following words are used to describe the actions of an implementation of this specification:
+- **May**: the word _may_, or the adjective _optional_, mean that conforming implementations are permitted to, but need not behave as described.
+- **Should**: the word _should_, or the adjective _recommended_, mean that there could be reasons for an implementations to deviate from the behavior described, but that such deviation should be avoided.  
+- **Must**: the word _must_, or the term _required_ or _shall_, mean that the behavior described is an absolute requirement of the specification.
 
 ${"##"} Versioning
 There are multiple versions that can be used by the application to determine compatibility:
@@ -47,8 +52,10 @@ There are multiple versions that can be used by the application to determine com
     - They are provided as the first member of every structure passed to the driver.
 
 ${"##"} Error Handling
+The following rules are followed in order to maximize robustness and security:
 - all functions are gaurenteed to never throw exceptions or fail silently.
 - all functions return ::${x}_result_t.
+- all function parameters are validated prior to execution to ensure implementation compatibility.
 
 ${"##"} Multithreading
 In order to eliminate the usage of thread-locks by the implementation, the following design philosophies are adopted:
@@ -59,6 +66,9 @@ such as command queues and command lists
 - the application is responsible for ensuring the GPU is not accessing objects before they are modified, resued or destroyed;
 such as memory, images and command lists
 - there is no implicit garbage collection performed by the implementation
+
+${"##"} Installation
+The ${Xx} driver API is implemented within the ${x}.dll, which is copied on the system during installation of the device driver.
 
 ${"##"} Environment Variables
 The following table documents the supported knobs for overriding default driver behavior.
