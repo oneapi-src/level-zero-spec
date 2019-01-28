@@ -46,14 +46,26 @@ TEST_P(CommandListCreate, returnsCommandListOnSuccess) {
 static uint32_t supportedProductFamilyTable[] = {
     IGFX_BROADWELL,
     IGFX_KABYLAKE,
-    IGFX_SKYLAKE
+    IGFX_SKYLAKE,
 };
 
 INSTANTIATE_TEST_CASE_P(,
                         CommandListCreate,
                         ::testing::ValuesIn(supportedProductFamilyTable));
 
-TEST_F(CommandListCreate, returnsNullPointerOnFailure) {
-    auto commandList = xe::CommandList::create(IGFX_MAX_PRODUCT);
+using CommandListCreateFail = ::testing::TestWithParam<uint32_t>;
+
+TEST_P(CommandListCreateFail, returnsNullPointerOnFailure) {
+    auto commandList = xe::CommandList::create(GetParam());
     EXPECT_EQ(nullptr, commandList);
 }
+
+static uint32_t unsupportedProductFamilyTable[] = {
+    IGFX_HASWELL,
+    IGFX_CANNONLAKE,
+    IGFX_MAX_PRODUCT,
+};
+
+INSTANTIATE_TEST_CASE_P(,
+                        CommandListCreateFail,
+                        ::testing::ValuesIn(unsupportedProductFamilyTable));
