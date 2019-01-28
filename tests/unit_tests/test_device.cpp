@@ -73,6 +73,8 @@ TEST(DeviceCreateCommandList, returnsSuccess) {
                                             &commandList);
     EXPECT_EQ(XE_RESULT_SUCCESS, result);
     EXPECT_NE(nullptr, commandList.pDriverData);
+
+    delete device;
 }
 
 TEST(DeviceCreateCommandQueue, returnsSuccess) {
@@ -91,6 +93,8 @@ TEST(DeviceCreateCommandQueue, returnsSuccess) {
                                              &commandQueue);
     EXPECT_EQ(XE_RESULT_SUCCESS, result);
     EXPECT_NE(nullptr, commandQueue.pDriverData);
+
+    delete device;
 }
 
 TEST(DeviceCreateEvent, returnsSuccess) {
@@ -109,6 +113,8 @@ TEST(DeviceCreateEvent, returnsSuccess) {
                                       &event);
     EXPECT_EQ(XE_RESULT_SUCCESS, result);
     EXPECT_NE(nullptr, event.pDriverData);
+
+    delete device;
 }
 
 TEST(DeviceGetMemoryManager, returnsPointer) {
@@ -122,4 +128,6 @@ TEST(DeviceGetMemoryManager, returnsPointer) {
 
     auto memoryManager = device->getMemoryManager();
     EXPECT_NE(nullptr, memoryManager);
+
+    delete device;
 }
