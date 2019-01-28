@@ -1,6 +1,22 @@
 #include "cmd_list.h"
+#include "igfxfmid.h"
 
 namespace xe {
+
+CommandListAllocatorFn commandListFactory[IGFX_MAX_PRODUCT] = {};
+
+CommandList *CommandList::create(uint32_t productFamily) {
+    CommandListAllocatorFn allocator = nullptr;
+    if (productFamily < IGFX_MAX_PRODUCT) {
+        allocator = commandListFactory[productFamily];
+    }
+
+    CommandList *commandList = nullptr;
+    if (allocator) {
+        commandList = (*allocator)();
+    }
+    return commandList;
+}
 
 xe_result_t __xecall
 xeCommandListClose(xe_command_list_handle_t hCommandList) {

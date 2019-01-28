@@ -24,6 +24,23 @@ struct CommandList {
     virtual ~CommandList() = default;
 };
 
+template <typename Type>
+struct CommandListAllocator {
+    static CommandList *allocate() {
+        return new Type;
+    }
+};
+
+using CommandListAllocatorFn = CommandList *(*)();
+extern CommandListAllocatorFn commandListFactory[];
+
+template <uint32_t productFamily, typename CommandListType>
+struct CommandListProductFamilyPopulateFactory {
+    CommandListProductFamilyPopulateFactory() {
+        commandListFactory[productFamily] = CommandListAllocator<CommandListType>::allocate;
+    }
+};
+
 xe_result_t __xecall
 xeCommandListClose(
     xe_command_list_handle_t hCommandList ///< [in] handle of command list object to close
