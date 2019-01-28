@@ -2,19 +2,21 @@
 #define CMD_LIST_INTERNAL
 #include "cmd_list_imp.h"
 #undef CMD_LIST_INTERNAL
+#include "white_box.h"
 #include "gmock/gmock.h"
 
 namespace xe {
 
-struct WhiteBoxCommandList : public CommandListImp {
-    WhiteBoxCommandList(Device *device) : CommandListImp(device) {
+template <>
+struct WhiteBox<CommandList> : public CommandListImp {
+    WhiteBox(Device *device) : CommandListImp(device) {
     }
 
     using CommandListImp::device;
 };
 
-struct MockCommandList : public WhiteBoxCommandList {
-    MockCommandList(Device *device = nullptr) : WhiteBoxCommandList(device) {
+struct MockCommandList : public WhiteBox<CommandList> {
+    MockCommandList(Device *device = nullptr) : WhiteBox<CommandList>(device) {
     }
 
     MOCK_METHOD0(close, xe_result_t());

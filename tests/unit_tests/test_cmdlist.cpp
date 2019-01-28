@@ -43,7 +43,7 @@ TEST_P(CommandListCreate, returnsCommandListOnSuccess) {
     auto commandList = xe::CommandList::create(GetParam(), &device);
     ASSERT_NE(nullptr, commandList);
 
-    auto commandListAlias = static_cast<xe::WhiteBoxCommandList *>(commandList);
+    auto commandListAlias = whitebox_cast<xe::CommandList>(commandList);
     EXPECT_EQ(commandListAlias->device, &device);
     commandList->destroy();
 }
