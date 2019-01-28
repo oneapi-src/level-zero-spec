@@ -3,7 +3,7 @@
 
 namespace xe {
 
-template <typename Type>
+template <uint32_t productFamily>
 struct CommandListProductFamily : public CommandList {
     xe_result_t close() override;
     xe_result_t destroy() override;
