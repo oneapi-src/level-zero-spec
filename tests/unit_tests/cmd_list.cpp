@@ -5,6 +5,11 @@ namespace xe {
 
 CommandListAllocatorFn commandListFactory[IGFX_MAX_PRODUCT] = {};
 
+xe_result_t CommandList::destroy() {
+    delete this;
+    return XE_RESULT_SUCCESS;
+}
+
 CommandList *CommandList::create(uint32_t productFamily) {
     CommandListAllocatorFn allocator = nullptr;
     if (productFamily < IGFX_MAX_PRODUCT) {
