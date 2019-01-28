@@ -5,6 +5,6 @@
 
 namespace xe {
 
-static CommandListProductFamilyPopulateFactory<IGFX_BROADWELL, CommandListGfxCoreFamily<IGFX_GEN8_CORE>> populateSKL;
+static CommandListProductFamilyPopulateFactory<IGFX_BROADWELL, CommandListHw<IGFX_GEN8_CORE>> populateSKL;
 
 } // namespace xe
