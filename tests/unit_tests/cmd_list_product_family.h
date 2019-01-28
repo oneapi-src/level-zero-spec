@@ -3,27 +3,20 @@
 
 namespace xe {
 
-template <uint32_t productFamily>
-struct CommandListProductFamily : public CommandList {
-    xe_result_t close() override;
-    xe_result_t destroy() override;
-    xe_result_t encodeWaitOnEvent(xe_event_handle_t hEvent) override;
-};
-
-template <uint32_t productFamily>
-struct CommandListProductFamilyAllocator {
+template <typename Type>
+struct CommandListAllocator {
     static CommandList *allocate() {
-        return new CommandListProductFamily<productFamily>;
+        return new Type;
     }
 };
 
 using CommandListAllocatorFn = CommandList *(*)();
 extern CommandListAllocatorFn commandListFactory[];
 
-template <uint32_t productFamily>
+template <uint32_t productFamily, typename CommandListType>
 struct CommandListProductFamilyPopulateFactory {
     CommandListProductFamilyPopulateFactory() {
-        commandListFactory[productFamily] = CommandListProductFamilyAllocator<productFamily>::allocate;
+        commandListFactory[productFamily] = CommandListAllocator<CommandListType>::allocate;
     }
 };
 } // namespace xe
