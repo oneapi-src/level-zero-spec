@@ -32,6 +32,9 @@ members:
 type: function
 desc: "Creates a command list on the device for submitting commands to any command queue."
 name: $xDeviceCreateCommandList
+details:
+    - "This function may be called from simultaneous threads."
+    - "The implementation of this function should be lock-free."
 params:
     - type: $x_device_handle_t
       name: hDevice
@@ -55,6 +58,8 @@ desc: "Destroys a command list."
 name: $xCommandListDestroy
 details:
     - "The application is responsible for making sure the GPU is not currently referencing the command list before it is deleted"
+    - "The application may **not** call this function from simultaneous threads."
+    - "The implementation of this function should be lock-free."
 params:
     - type: $x_command_list_handle_t
       name: hCommandList
@@ -66,6 +71,9 @@ returns:
 type: function
 desc: "Closes a command list; ready to be enqueued into a command queue."
 name: $xCommandListClose
+details:
+    - "The application may **not** call this function from simultaneous threads."
+    - "The implementation of this function should be lock-free."
 params:
     - type: $x_command_list_handle_t
       name: hCommandList
@@ -79,6 +87,8 @@ desc: "Reset a command list to initial (empty) state; ready for encoding command
 name: $xCommandListReset
 details:
     - "The application is responsible for making sure the GPU is not currently referencing the command list before it is reset"
+    - "The application may **not** call this function from simultaneous threads."
+    - "The implementation of this function should be lock-free."
 params:
     - type: $x_command_list_handle_t
       name: hCommandList

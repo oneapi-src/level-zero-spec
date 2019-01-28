@@ -34,6 +34,10 @@
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Creates an event object on the device.
 /// 
+/// @details
+///     - This function may be called from simultaneous threads.
+///     - The implementation of this function should be lock-free.
+/// 
 /// @remarks
 ///   _Analogues_
 ///     - **clCreateUserEvent**
@@ -70,6 +74,10 @@ xe_result_t __xecall
 
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Creates an event object on the device from existing memory.
+/// 
+/// @details
+///     - This function may be called from simultaneous threads.
+///     - The implementation of this function should be lock-free.
 /// 
 /// @returns
 ///     - ::XE_RESULT_SUCCESS
@@ -108,6 +116,7 @@ xe_result_t __xecall
 /// @details
 ///     - The application is responsible for making sure the GPU is not
 ///       currently referencing the event before it is deleted
+///     - The implementation of this function should be lock-free.
 /// 
 /// @remarks
 ///   _Analogues_
@@ -137,6 +146,11 @@ xe_result_t __xecall
 
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Encodes a signal of the event from the device into a command list.
+/// 
+/// @details
+///     - The application may **not** call this function from simultaneous
+///       threads.
+///     - The implementation of this function should be lock-free.
 /// 
 /// @remarks
 ///   _Analogues_
@@ -172,6 +186,11 @@ xe_result_t __xecall
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Encodes a wait on event from a host signal into a command list.
 /// 
+/// @details
+///     - The application may **not** call this function from simultaneous
+///       threads.
+///     - The implementation of this function should be lock-free.
+/// 
 /// @returns
 ///     - ::XE_RESULT_SUCCESS
 ///     - ::XE_RESULT_ERROR_UNINITIALIZED
@@ -200,6 +219,11 @@ xe_result_t __xecall
 
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Encodes signals of multiple event from the device into a command list.
+/// 
+/// @details
+///     - The application may **not** call this function from simultaneous
+///       threads.
+///     - The implementation of this function should be lock-free.
 /// 
 /// @returns
 ///     - ::XE_RESULT_SUCCESS
@@ -234,6 +258,11 @@ xe_result_t __xecall
 /// @brief Encodes waits on multiple event from a host signal into a command
 ///        list.
 /// 
+/// @details
+///     - The application may **not** call this function from simultaneous
+///       threads.
+///     - The implementation of this function should be lock-free.
+/// 
 /// @returns
 ///     - ::XE_RESULT_SUCCESS
 ///     - ::XE_RESULT_ERROR_UNINITIALIZED
@@ -265,6 +294,10 @@ xe_result_t __xecall
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Signals a event from host.
 /// 
+/// @details
+///     - The application may call this function from simultaneous threads.
+///     - The implementation of this function should be lock-free.
+/// 
 /// @remarks
 ///   _Analogues_
 ///     - clSetUserEventStatus
@@ -295,6 +328,10 @@ xe_result_t __xecall
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief The current host thread waits on an event from a device signal.
 /// 
+/// @details
+///     - The application may call this function from simultaneous threads.
+///     - The implementation of this function should be lock-free.
+/// 
 /// @remarks
 ///   _Analogues_
 ///     - **cuEventSynchronize**
@@ -324,6 +361,10 @@ xe_result_t __xecall
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Signals multiple events from host.
 /// 
+/// @details
+///     - The application may call this function from simultaneous threads.
+///     - The implementation of this function should be lock-free.
+/// 
 /// @returns
 ///     - ::XE_RESULT_SUCCESS
 ///     - ::XE_RESULT_ERROR_UNINITIALIZED
@@ -351,6 +392,10 @@ xe_result_t __xecall
 
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief The current host thread waits on multiple events from a device signal.
+/// 
+/// @details
+///     - The application may call this function from simultaneous threads.
+///     - The implementation of this function should be lock-free.
 /// 
 /// @remarks
 ///   _Analogues_
@@ -383,6 +428,10 @@ xe_result_t __xecall
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Queries an event object's status.
 /// 
+/// @details
+///     - The application may call this function from simultaneous threads.
+///     - The implementation of this function should be lock-free.
+/// 
 /// @remarks
 ///   _Analogues_
 ///     - **cuEventQuery**
@@ -413,6 +462,10 @@ xe_result_t __xecall
 
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Queries the elapsed time between two signaled events.
+/// 
+/// @details
+///     - The application may call this function from simultaneous threads.
+///     - The implementation of this function should be lock-free.
 /// 
 /// @remarks
 ///   _Analogues_
@@ -448,6 +501,10 @@ xe_result_t __xecall
 
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Reset an event back to not signaled state
+/// 
+/// @details
+///     - The application may call this function from simultaneous threads.
+///     - The implementation of this function should be lock-free.
 /// 
 /// @returns
 ///     - ::XE_RESULT_SUCCESS

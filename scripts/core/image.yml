@@ -100,6 +100,9 @@ desc: "Creates a image object on the device."
 name: $xDeviceCreateImage
 analogue:
     - clCreateImage
+details:
+    - "The application may call this function from simultaneous threads."
+    - "The implementation of this function should be lock-free."
 params:
     - type: "const $x_image_desc_t*"
       name: desc
@@ -119,6 +122,7 @@ desc: "Deletes a image object."
 name: $xImageDestroy
 details:
     - "The application is responsible for making sure the GPU is not currently referencing the image before it is deleted"
+    - "The implementation of this function should be lock-free."
 params:
     - type: $x_image_handle_t
       name: hImage

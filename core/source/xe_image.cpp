@@ -34,6 +34,10 @@
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Creates a image object on the device.
 /// 
+/// @details
+///     - The application may call this function from simultaneous threads.
+///     - The implementation of this function should be lock-free.
+/// 
 /// @remarks
 ///   _Analogues_
 ///     - clCreateImage
@@ -70,6 +74,7 @@ xe_result_t __xecall
 /// @details
 ///     - The application is responsible for making sure the GPU is not
 ///       currently referencing the image before it is deleted
+///     - The implementation of this function should be lock-free.
 /// 
 /// @returns
 ///     - ::XE_RESULT_SUCCESS

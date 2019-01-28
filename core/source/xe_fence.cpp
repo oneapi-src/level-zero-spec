@@ -34,6 +34,10 @@
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Creates a fence object on the device's command queue.
 /// 
+/// @details
+///     - The application may call this function from simultaneous threads.
+///     - The implementation of this function should be lock-free.
+/// 
 /// @remarks
 ///   _Analogues_
 ///     - **cuEventCreate**
@@ -73,6 +77,7 @@ xe_result_t __xecall
 /// @details
 ///     - The application is responsible for making sure the GPU is not
 ///       currently referencing the fence before it is deleted
+///     - The implementation of this function should be lock-free.
 /// 
 /// @remarks
 ///   _Analogues_
@@ -102,6 +107,11 @@ xe_result_t __xecall
 
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Enqueues a signal of the fence into its command queue.
+/// 
+/// @details
+///     - The application may **not** call this function from simultaneous
+///       threads.
+///     - The implementation of this function should be lock-free.
 /// 
 /// @remarks
 ///   _Analogues_
@@ -133,6 +143,10 @@ xe_result_t __xecall
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief The current host thread waits on a fence to be signaled.
 /// 
+/// @details
+///     - The application may call this function from simultaneous threads.
+///     - The implementation of this function should be lock-free.
+/// 
 /// @remarks
 ///   _Analogues_
 ///     - **cuEventSynchronize**
@@ -162,6 +176,10 @@ xe_result_t __xecall
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief The current host thread waits on a multiple fences to be signaled.
 /// 
+/// @details
+///     - The application may call this function from simultaneous threads.
+///     - The implementation of this function should be lock-free.
+/// 
 /// @returns
 ///     - ::XE_RESULT_SUCCESS
 ///     - ::XE_RESULT_ERROR_UNINITIALIZED
@@ -188,6 +206,10 @@ xe_result_t __xecall
 
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Queries a fence object's status.
+/// 
+/// @details
+///     - The application may call this function from simultaneous threads.
+///     - The implementation of this function should be lock-free.
 /// 
 /// @remarks
 ///   _Analogues_
@@ -219,6 +241,10 @@ xe_result_t __xecall
 
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Queries the elapsed time between two signaled fences.
+/// 
+/// @details
+///     - The application may call this function from simultaneous threads.
+///     - The implementation of this function should be lock-free.
 /// 
 /// @remarks
 ///   _Analogues_
@@ -254,6 +280,10 @@ xe_result_t __xecall
 
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Reset a fence back to the not signaled state.
+/// 
+/// @details
+///     - The application may call this function from simultaneous threads.
+///     - The implementation of this function should be lock-free.
 /// 
 /// @returns
 ///     - ::XE_RESULT_SUCCESS

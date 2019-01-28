@@ -73,6 +73,10 @@ typedef struct _xe_command_queue_desc_t
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Creates a command queue on the device.
 /// 
+/// @details
+///     - This function may be called from simultaneous threads.
+///     - The implementation of this function should be lock-free.
+/// 
 /// @remarks
 ///   _Analogues_
 ///     - **clCreateCommandQueue**
@@ -96,11 +100,12 @@ xe_result_t __xecall
     );
 
 ///////////////////////////////////////////////////////////////////////////////
-/// @brief Destroys a command queue
+/// @brief Destroys a command queue.
 /// 
 /// @details
 ///     - The application is responsible for making sure the GPU is not
 ///       currently referencing the command queue before it is deleted
+///     - The implementation of this function should be lock-free.
 /// 
 /// @remarks
 ///   _Analogues_
@@ -145,7 +150,12 @@ typedef enum _xe_command_queue_cacheconfig_t
 } xe_command_queue_cacheconfig_t;
 
 ///////////////////////////////////////////////////////////////////////////////
-/// @brief Sets a command queue's parameter
+/// @brief Sets a command queue's parameter.
+/// 
+/// @details
+///     - The application may **not** call this function from simultaneous
+///       threads.
+///     - The implementation of this function should be lock-free.
 /// 
 /// @remarks
 ///   _Analogues_
@@ -168,7 +178,12 @@ xe_result_t __xecall
     );
 
 ///////////////////////////////////////////////////////////////////////////////
-/// @brief Retrieves a command queue's parameter
+/// @brief Retrieves a command queue's parameter.
+/// 
+/// @details
+///     - The application may **not** call this function from simultaneous
+///       threads.
+///     - The implementation of this function should be lock-free.
 /// 
 /// @remarks
 ///   _Analogues_
@@ -192,7 +207,12 @@ xe_result_t __xecall
     );
 
 ///////////////////////////////////////////////////////////////////////////////
-/// @brief Resets all command queue parameters to default state
+/// @brief Resets all command queue parameters to default state.
+/// 
+/// @details
+///     - The application may **not** call this function from simultaneous
+///       threads.
+///     - The implementation of this function should be lock-free.
 /// 
 /// @returns
 ///     - ::XE_RESULT_SUCCESS
@@ -205,7 +225,12 @@ xe_result_t __xecall
     );
 
 ///////////////////////////////////////////////////////////////////////////////
-/// @brief Enqueues a command list into a command queue
+/// @brief Enqueues a command list into a command queue.
+/// 
+/// @details
+///     - The application may **not** call this function from simultaneous
+///       threads.
+///     - The implementation of this function should be lock-free.
 /// 
 /// @returns
 ///     - ::XE_RESULT_SUCCESS
@@ -220,7 +245,11 @@ xe_result_t __xecall
     );
 
 ///////////////////////////////////////////////////////////////////////////////
-/// @brief Synchronizes a command queue
+/// @brief Synchronizes a command queue by waiting on the host.
+/// 
+/// @details
+///     - The application may call this function from simultaneous threads.
+///     - The implementation of this function should be lock-free.
 /// 
 /// @returns
 ///     - ::XE_RESULT_SUCCESS

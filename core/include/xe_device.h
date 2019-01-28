@@ -39,6 +39,10 @@
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Reports the number of devices
 /// 
+/// @details
+///     - The application may call this function from simultaneous threads.
+///     - The implementation of this function should be lock-free.
+/// 
 /// @remarks
 ///   _Analogues_
 ///     - **cuDeviceGetCount**
@@ -54,6 +58,10 @@ xe_result_t __xecall
 
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Returns a handle to the device object
+/// 
+/// @details
+///     - The application may call this function from simultaneous threads.
+///     - The implementation of this function should be lock-free.
 /// 
 /// @remarks
 ///   _Analogues_
@@ -86,6 +94,10 @@ typedef enum _xe_api_version_t
 
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Returns the API version supported by the device
+/// 
+/// @details
+///     - The application may call this function from simultaneous threads.
+///     - The implementation of this function should be lock-free.
 /// 
 /// @remarks
 ///   _Analogues_
@@ -134,6 +146,10 @@ typedef struct _xe_device_properties_t
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Retrieves attributes of the device
 /// 
+/// @details
+///     - The application may call this function from simultaneous threads.
+///     - The implementation of this function should be lock-free.
+/// 
 /// @remarks
 ///   _Analogues_
 ///     - **cuDeviceGetAttribute**
@@ -177,6 +193,10 @@ typedef struct _xe_device_compute_properties_t
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Retrieves compute attributes of the device
 /// 
+/// @details
+///     - The application may call this function from simultaneous threads.
+///     - The implementation of this function should be lock-free.
+/// 
 /// @remarks
 ///   _Analogues_
 ///     - **cuDeviceGetAttribute**
@@ -204,6 +224,8 @@ xe_result_t __xecall
 /// @details
 ///     - Supported access capabilities for different types of memory
 ///       allocations
+///     - The application may call this function from simultaneous threads.
+///     - The implementation of this function should be lock-free.
 typedef enum _xe_memory_access_capabilities_t
 {
     XE_MEMORY_ACCESS = XE_BIT( 0 ),                 ///< Supports load/store access
@@ -232,6 +254,10 @@ typedef struct _xe_device_memory_properties_t
 
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Retrieves memory attributes of the device
+/// 
+/// @details
+///     - The application may call this function from simultaneous threads.
+///     - The implementation of this function should be lock-free.
 /// 
 /// @remarks
 ///   _Analogues_
@@ -269,6 +295,10 @@ typedef struct _xe_device_link_properties_t
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Retrieves link properties between source and destination devices.
 /// 
+/// @details
+///     - The application may call this function from simultaneous threads.
+///     - The implementation of this function should be lock-free.
+/// 
 /// @remarks
 ///   _Analogues_
 ///     - **cudaDeviceGetP2PAttribute**
@@ -288,6 +318,10 @@ xe_result_t __xecall
 
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Queries if one device can directly access peer device allocations
+/// 
+/// @details
+///     - The application may call this function from simultaneous threads.
+///     - The implementation of this function should be lock-free.
 /// 
 /// @remarks
 ///   _Analogues_
@@ -315,6 +349,8 @@ xe_result_t __xecall
 ///       to allocations on the peer device.
 ///     - A separate call is required to enable access from the peer device to
 ///       this device.
+///     - The application may **not** call this function from simultaneous
+///       threads.
 ///     - @todo Ben: document any limits on number of active p2p connections
 ///       @todo Ben: document behavior if link is already enabled
 /// 
@@ -339,6 +375,8 @@ xe_result_t __xecall
 /// @brief Disables direct access to peer device allocations
 /// 
 /// @details
+///     - The application may **not** call this function from simultaneous
+///       threads.
 ///     - @todo Ben: document behavior if link is not enabled
 /// 
 /// @remarks

@@ -14,7 +14,10 @@ type: function
 desc: "Initialize the $Xx Driver API and must be called before any other API function."
 name: $xDriverInit
 details: 
+    - "Only one instance of a driver per process can be loaded."
+    - "There is no reference tracking if multiple drivers are initialized."
     - "If this function is not called then all other functions will return $X_RESULT_ERROR_UNINITIALIZED."
+    - "The application may **not** call this function from simultaneous threads."
 analogue:
     - "**cuInit**"
 returns:
@@ -31,6 +34,8 @@ desc: "Returns the current version of the installed driver."
 name: $xDriverGetVersion
 details:
     - "The driver version is a non-zero, monotonically increasing value where higher values always indicate a more recent version."
+    - "The application may **not** call this function from simultaneous threads."
+    - "The implementation of this function should be lock-free."
 analogue:
     - "**cuDriverGetVersion**"
 returns:

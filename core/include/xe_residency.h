@@ -39,6 +39,10 @@
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Makes memory resident for the device.
 /// 
+/// @details
+///     - The application may call this function from simultaneous threads.
+///     - The implementation of this function should be lock-free.
+/// 
 /// @returns
 ///     - ::XE_RESULT_SUCCESS
 ///     - ::XE_RESULT_ERROR_UNINITIALIZED
@@ -53,6 +57,13 @@ xe_result_t __xecall
 
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Allows memory to be evicted from the device.
+/// 
+/// @details
+///     - The application is responsible for making sure the GPU is not
+///       currently referencing the memory before it is evicted
+///     - Memory is always implicitly evicted if it is resident when freed.
+///     - The application may call this function from simultaneous threads.
+///     - The implementation of this function should be lock-free.
 /// 
 /// @returns
 ///     - ::XE_RESULT_SUCCESS
@@ -69,6 +80,10 @@ xe_result_t __xecall
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Makes image resident for the device.
 /// 
+/// @details
+///     - The application may call this function from simultaneous threads.
+///     - The implementation of this function should be lock-free.
+/// 
 /// @returns
 ///     - ::XE_RESULT_SUCCESS
 ///     - ::XE_RESULT_ERROR_UNINITIALIZED
@@ -82,6 +97,14 @@ xe_result_t __xecall
 
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Allows image to be evicted from the device.
+/// 
+/// @details
+///     - The application is responsible for making sure the GPU is not
+///       currently referencing the memory before it is evicted
+///     - An image is always implicitly evicted if it is resident when
+///       destroyed.
+///     - The application may call this function from simultaneous threads.
+///     - The implementation of this function should be lock-free.
 /// 
 /// @returns
 ///     - ::XE_RESULT_SUCCESS

@@ -19,9 +19,12 @@ etors:
 --- #--------------------------------------------------------------------------
 type: function
 desc: "Creates module object from an input IL or ISA."
-name: $xCreateModule
+name: $xDeviceCreateModule
 analogue:
     - "**cuModuleLoad**"
+details:
+    - "This function may be called from simultaneous threads."
+    - "The implementation of this function should be lock-free."
 params:
     - type: $x_device_handle_t
       name: hDevice
@@ -50,9 +53,12 @@ returns:
 --- #--------------------------------------------------------------------------
 type: function
 desc: "Destroys module"
-name: $xDestroyModule
+name: $xModuleDestroy
 analogue:
     - "**cuModuleUnload**"
+details:
+    - "The application is responsible for making sure the GPU is not currently referencing the event before it is deleted"
+    - "The implementation of this function should be lock-free."
 params:
     - type: "$x_module_handle_t"
       name: hModule
@@ -64,8 +70,9 @@ returns:
 type: function
 desc: "Retrieve native binary from Module."
 name: $xModuleGetNativeBinary
-analogue:
-    - ""
+details:
+    - "This function may be called from simultaneous threads."
+    - "The implementation of this function should be lock-free."
 params:
     - type: $x_module_handle_t
       name: hModule
@@ -91,6 +98,9 @@ desc: "Retrieve a function argument index from name."
 name: $xFunctionGetArgIndexFromName
 analogue:
     - "**cuModuleGetTexRef**"
+details:
+    - "This function may be called from simultaneous threads."
+    - "The implementation of this function should be lock-free."
 params:
     - type: "$x_function_handle_t"
       name: hFunction
@@ -112,6 +122,9 @@ desc: "Create Function object from Module by name"
 name: $xModuleCreateFunction
 analogue:
     - "**cuModuleGetFunction**"
+details:
+    - "This function may be called from simultaneous threads."
+    - "The implementation of this function should be lock-free."
 params:
     - type: "$x_module_handle_t"
       name: hModule
@@ -130,9 +143,10 @@ returns:
 --- #--------------------------------------------------------------------------
 type: function
 desc: "Destroys Function object"
-name: $xDestroyFunction
-analogue:
-    - ""
+name: $xFunctionDestroy
+details:
+    - "The application is responsible for making sure the GPU is not currently referencing the event before it is deleted"
+    - "The implementation of this function should be lock-free."
 params:
     - type: "$x_function_handle_t"
       name: hFunction
@@ -143,9 +157,10 @@ returns:
 --- #--------------------------------------------------------------------------
 type: function
 desc: "Create Function arguments needed to pass arguments to a function."
-name: $xCreateFunctionArgs
-analogue:
-    - ""
+name: $xFunctionCreateFunctionArgs
+details:
+    - "This function may be called from simultaneous threads."
+    - "The implementation of this function should be lock-free."
 params:
     - type: "$x_function_handle_t"
       name: hFunction
@@ -160,9 +175,10 @@ returns:
 --- #--------------------------------------------------------------------------
 type: function
 desc: "Destroys Function arguments object"
-name: $xDestroyFunctionArgs
-analogue:
-    - ""
+name: $xFunctionArgsDestroy
+details:
+    - "The application is responsible for making sure the GPU is not currently referencing the event before it is deleted"
+    - "The implementation of this function should be lock-free."
 params:
     - type: "$x_function_args_handle_t"
       name: hFunctionArgs
@@ -173,10 +189,13 @@ returns:
 --- #--------------------------------------------------------------------------
 type: function
 desc: "Set function arguments within arguments buffer."
-name: $xSetFunctionArgValue
+name: $xFunctionArgsSetValue
 analogue:
     - "**cuCtxCreate**"
     - "cuCtxGetCurrent"
+details:
+    - "This function may **not** be called from simultaneous threads."
+    - "The implementation of this function should be lock-free."
 params:
     - type: "$x_function_args_handle_t"
       name: hFunctionArgs
@@ -214,9 +233,12 @@ etors:
 --- #--------------------------------------------------------------------------
 type: function
 desc: "Query a function attribute."
-name: $xQueryFunctionAttribute
+name: $xFunctionQueryAttribute
 analogue:
     - "**cuFuncGetAttribute**"
+details:
+    - "This function may be called from simultaneous threads."
+    - "The implementation of this function should be lock-free."
 params:
     - type: "$x_function_handle_t"
       name: hFunction
@@ -238,6 +260,9 @@ desc: "Dispatch command over one or more work groups."
 name: $xCommandListEncodeDispatchFunction
 analogue:
     - "**cuLaunchKernel**"
+details:
+    - "This function may **not** be called from simultaneous threads."
+    - "The implementation of this function should be lock-free."
 params:
     - type: "$x_command_list_handle_t"
       name: hCommandList
@@ -302,6 +327,9 @@ desc: "Dispatch command over one or more work groups using indirect dispatch arg
 name: $xCommandListEncodeDispatchFunctionIndirect
 analogue:
     - "**cuLaunchKernel**"
+details:
+    - "This function may **not** be called from simultaneous threads."
+    - "The implementation of this function should be lock-free."
 params:
     - type: "$x_command_list_handle_t"
       name: hCommandList
@@ -324,9 +352,12 @@ returns:
 --- #--------------------------------------------------------------------------
 type: function
 desc: "Compute max groups that can occupy per sublice."
-name: $xOccupancyMaxGroupsPerSublice
+name: $xFunctionGetOccupancyMaxGroupsPerSublice
 analogue:
     - "**cuOccupancyMaxActiveBlocksPerMultiprocessor**"
+details:
+    - "This function may be called from simultaneous threads."
+    - "The implementation of this function should be lock-free."
 params:
     - type: "$x_function_handle_t"
       name: hFunction

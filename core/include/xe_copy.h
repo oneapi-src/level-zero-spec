@@ -42,6 +42,9 @@
 /// @details
 ///     - The memory pointed to by both srcptr and dstptr must be accessible by
 ///       the device on which the command list is created.
+///     - The application may **not** call this function from simultaneous
+///       threads.
+///     - The implementation of this function should be lock-free.
 /// 
 /// @remarks
 ///   _Analogues_
@@ -66,6 +69,11 @@ xe_result_t __xecall
 
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Copies a image.
+/// 
+/// @details
+///     - The application may **not** call this function from simultaneous
+///       threads.
+///     - The implementation of this function should be lock-free.
 /// 
 /// @remarks
 ///   _Analogues_
@@ -96,6 +104,11 @@ typedef struct _xeImageRegion
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Copies a region of a image to another image.
 /// 
+/// @details
+///     - The application may **not** call this function from simultaneous
+///       threads.
+///     - The implementation of this function should be lock-free.
+/// 
 /// @returns
 ///     - ::XE_RESULT_SUCCESS
 ///     - ::XE_RESULT_ERROR_UNINITIALIZED
@@ -113,6 +126,13 @@ xe_result_t __xecall
 
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Copies from a image to device or shared memory.
+/// 
+/// @details
+///     - The memory pointed to by dstptr must be accessible by the device on
+///       which the command list is created.
+///     - The application may **not** call this function from simultaneous
+///       threads.
+///     - The implementation of this function should be lock-free.
 /// 
 /// @remarks
 ///   _Analogues_
@@ -134,6 +154,13 @@ xe_result_t __xecall
 
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Copies to a image from device or shared memory.
+/// 
+/// @details
+///     - The memory pointed to by srcptr must be accessible by the device on
+///       which the command list is created.
+///     - The application may **not** call this function from simultaneous
+///       threads.
+///     - The implementation of this function should be lock-free.
 /// 
 /// @remarks
 ///   _Analogues_
@@ -160,6 +187,8 @@ xe_result_t __xecall
 /// @details
 ///     - This is a hint to improve performance only and is not required for
 ///       correctness.
+///     - The application may call this function from simultaneous threads.
+///     - The implementation of this function should be lock-free.
 ///     - @todo Ben: confirm we do not need a synchronous prefetch. @todo
 ///       Ben/Ankur: could/should we support prefetches to other devices? @todo
 ///       Ben/Ankur: could/should we support prefetches to the host?

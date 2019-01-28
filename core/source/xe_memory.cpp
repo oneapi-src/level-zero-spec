@@ -39,6 +39,8 @@
 ///     - Shared allocations share ownership between the host and one or more
 ///       devices.
 ///     - @todo Ben: comprehend multi-tile?
+///     - The application may call this function from simultaneous threads.
+///     - The implementation of this function should be lock-free.
 /// 
 /// @remarks
 ///   _Analogues_
@@ -77,8 +79,11 @@ xe_result_t __xecall
 /// @brief Allocates memory specific to a device
 /// 
 /// @details
-///     - A device allocation is owned by a specific device. In general, a
-///       device allocation may only be accessed by the device that owns it.
+///     - A device allocation is owned by a specific device.
+///     - In general, a device allocation may only be accessed by the device
+///       that owns it.
+///     - The application may call this function from simultaneous threads.
+///     - The implementation of this function should be lock-free.
 /// 
 /// @remarks
 ///   _Analogues_
@@ -117,9 +122,12 @@ xe_result_t __xecall
 /// @brief Allocates host memory
 /// 
 /// @details
-///     - A host allocation is owned by the host process. Host allocations are
-///       accessible by the host and all devices. Host allocations are
-///       frequently used a staging areas to transfer data to or from devices.
+///     - A host allocation is owned by the host process.
+///     - Host allocations are accessible by the host and all devices.
+///     - Host allocations are frequently used a staging areas to transfer data
+///       to or from devices.
+///     - The application may call this function from simultaneous threads.
+///     - The implementation of this function should be lock-free.
 /// 
 /// @remarks
 ///   _Analogues_
@@ -157,6 +165,9 @@ xe_result_t __xecall
 /// @brief Frees allocated host memory, device memory, or shared memory
 /// 
 /// @details
+///     - The application is responsible for making sure the GPU is not
+///       currently referencing the memory before it is freed
+///     - The implementation of this function should be lock-free.
 ///     - @todo Ben: Should the pointer passed to the ::xeMemFree function be
 ///       const or non-const?
 /// 
@@ -190,6 +201,8 @@ xe_result_t __xecall
 /// @brief Retrieves a property of an allocation
 /// 
 /// @details
+///     - The application may call this function from simultaneous threads.
+///     - The implementation of this function should be lock-free.
 ///     - @todo Ben: do we need to support additional properties: base addr,
 ///       size, etc? @todo Ben: do we need to support querying the associated
 ///       device? @todo Ben: should we return all attributes as a (versioned)
@@ -230,6 +243,8 @@ xe_result_t __xecall
 /// @details
 ///     - Memory advice can be used to override driver heuristics to explicitly
 ///       control shared memory behavior.
+///     - The application may call this function from simultaneous threads.
+///     - The implementation of this function should be lock-free.
 ///     - @todo Ben: likely will snap to page boundaries
 /// 
 /// @remarks

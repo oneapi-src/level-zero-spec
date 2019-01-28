@@ -7,6 +7,9 @@ desc: "Reports the number of devices"
 name: $xDriverGetDeviceCount
 analogue:
     - "**cuDeviceGetCount**"
+details:
+    - "The application may call this function from simultaneous threads."
+    - "The implementation of this function should be lock-free."
 params:
     - type: "uint32_t*"
       name: count
@@ -21,6 +24,9 @@ name: $xDriverGetDevice
 analogue:
     - "**cuDeviceGet**"
     - clGetDeviceIDs
+details:
+    - "The application may call this function from simultaneous threads."
+    - "The implementation of this function should be lock-free."
 params:
     - type: uint32_t
       name: ordinal
@@ -48,6 +54,9 @@ desc: "Returns the API version supported by the device"
 name: $xDeviceGetApiVersion
 analogue:
     - "**cuCtxGetApiVersion**"
+details:
+    - "The application may call this function from simultaneous threads."
+    - "The implementation of this function should be lock-free."
 params:
     - type: $x_device_handle_t
       name: hDevice
@@ -121,6 +130,9 @@ analogue:
     - "**cuDeviceGetAttribute**"
     - cuDeviceGetName
     - clGetDeviceInfo
+details:
+    - "The application may call this function from simultaneous threads."
+    - "The implementation of this function should be lock-free."
 params:
     - type: $x_device_handle_t
       name: hDevice
@@ -182,6 +194,9 @@ name: $xDeviceGetComputeProperties
 analogue:
     - "**cuDeviceGetAttribute**"
     - clGetDeviceInfo
+details:
+    - "The application may call this function from simultaneous threads."
+    - "The implementation of this function should be lock-free."
 params:
     - type: $x_device_handle_t
       name: hDevice
@@ -204,6 +219,8 @@ desc: "Memory access capabilities"
 name: $x_memory_access_capabilities_t
 details:
     - "Supported access capabilities for different types of memory allocations"
+    - "The application may call this function from simultaneous threads."
+    - "The implementation of this function should be lock-free."
 etors:
     - name: $X_MEMORY_ACCESS
       value: "$X_BIT( 0 )"
@@ -260,6 +277,9 @@ analogue:
     - "**cuDeviceGetAttribute**"
     - cuDeviceTotalMem
     - clGetDeviceInfo
+details:
+    - "The application may call this function from simultaneous threads."
+    - "The implementation of this function should be lock-free."
 params:
     - type: $x_device_handle_t
       name: hDevice
@@ -299,6 +319,9 @@ desc: "Retrieves link properties between source and destination devices."
 name: $xDeviceGetLinkProperties
 analogue:
     - "**cudaDeviceGetP2PAttribute**"
+details:
+    - "The application may call this function from simultaneous threads."
+    - "The implementation of this function should be lock-free."
 params:
     - type: uint32_t
       name: srcOrdinal
@@ -319,6 +342,9 @@ desc: "Queries if one device can directly access peer device allocations"
 name: $xDeviceCanAccessPeer
 analogue:
     - "**cudaDeviceCanAccessPeer**"
+details:
+    - "The application may call this function from simultaneous threads."
+    - "The implementation of this function should be lock-free."
 params:
     - type: "const $x_device_handle_t"
       name: hDevice
@@ -341,6 +367,7 @@ name: $xDeviceEnablePeerAccess
 details:
     - "The access is uni-directional and only enables access from the device to allocations on the peer device."
     - "A separate call is required to enable access from the peer device to this device."
+    - "The application may **not** call this function from simultaneous threads."
     - "@todo Ben: document any limits on number of active p2p connections 
        @todo Ben: document behavior if link is already enabled"
 analogue:
@@ -362,6 +389,7 @@ type: function
 desc: "Disables direct access to peer device allocations"
 name: $xDeviceDisablePeerAccess
 details:
+    - "The application may **not** call this function from simultaneous threads."
     - "@todo Ben: document behavior if link is not enabled"
 analogue:
     - "**cudaDeviceDisablePeerAccess**"

@@ -20,11 +20,13 @@ value: "0"
 type: function
 desc: "Allocates memory that is shared between the host and one or more devices"
 name: $xSharedMemAlloc
+analogue:
+    - "**cudaMallocManaged**"
 details:
     - "Shared allocations share ownership between the host and one or more devices."
     - "@todo Ben: comprehend multi-tile?"
-analogue:
-    - "**cudaMallocManaged**"
+    - "The application may call this function from simultaneous threads."
+    - "The implementation of this function should be lock-free."
 params:
     - type: "const $x_device_handle_t"
       name: hDevice
@@ -49,11 +51,13 @@ returns:
 type: function
 desc: "Allocates memory specific to a device"
 name: $xMemAlloc
-details:
-    - "A device allocation is owned by a specific device.
-      In general, a device allocation may only be accessed by the device that owns it."
 analogue:
     - "**cudaMalloc**"
+details:
+    - "A device allocation is owned by a specific device."
+    - "In general, a device allocation may only be accessed by the device that owns it."
+    - "The application may call this function from simultaneous threads."
+    - "The implementation of this function should be lock-free."
 params:
     - type: "const $x_device_handle_t"
       name: hDevice
@@ -89,12 +93,14 @@ etors:
 type: function
 desc: "Allocates host memory"
 name: $xHostMemAlloc
-details:
-    - "A host allocation is owned by the host process.
-      Host allocations are accessible by the host and all devices.
-      Host allocations are frequently used a staging areas to transfer data to or from devices."
 analogue:
     - "**cudaHostAlloc**"
+details:
+    - "A host allocation is owned by the host process."
+    - "Host allocations are accessible by the host and all devices."
+    - "Host allocations are frequently used a staging areas to transfer data to or from devices."
+    - "The application may call this function from simultaneous threads."
+    - "The implementation of this function should be lock-free."
 params:
     - type: "$x_host_mem_alloc_flags_t"
       name: flags
@@ -119,11 +125,13 @@ returns:
 type: function
 desc: "Frees allocated host memory, device memory, or shared memory"
 name: $xMemFree
-details:
-    - "@todo Ben: Should the pointer passed to the $xMemFree function be const or non-const?"
 analogue:
     - "**cudaFree**"
     - "**cudaFreeHost**"
+details:
+    - "The application is responsible for making sure the GPU is not currently referencing the memory before it is freed"
+    - "The implementation of this function should be lock-free."
+    - "@todo Ben: Should the pointer passed to the $xMemFree function be const or non-const?"
 params:
     - type: "const void*"
       name: ptr
@@ -157,12 +165,14 @@ etors:
 type: function
 desc: "Retrieves a property of an allocation"
 name: $xMemGetProperty
+analogue:
+    - "**cudaPointerGetAttributes**"
 details:
+    - "The application may call this function from simultaneous threads."
+    - "The implementation of this function should be lock-free."
     - "@todo Ben: do we need to support additional properties: base addr, size, etc? 
        @todo Ben: do we need to support querying the associated device? 
        @todo Ben: should we return all attributes as a (versioned) struct instead?"
-analogue:
-    - "**cudaPointerGetAttributes**"
 params:
     - type: "const void*"
       name: ptr
@@ -189,11 +199,13 @@ etors:
 type: function
 desc: "Provides advice about the use of a shared memory range"
 name: $xMemAdvise
-details:
-    - "Memory advice can be used to override driver heuristics to explicitly control shared memory behavior."
-    - "@todo Ben: likely will snap to page boundaries"
 analogue:
     - "**cudaMemAdvise**"
+details:
+    - "Memory advice can be used to override driver heuristics to explicitly control shared memory behavior."
+    - "The application may call this function from simultaneous threads."
+    - "The implementation of this function should be lock-free."
+    - "@todo Ben: likely will snap to page boundaries"
 params:
     - type: "const $x_device_handle_t"
       name: hDevice

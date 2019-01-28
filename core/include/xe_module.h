@@ -52,6 +52,10 @@ typedef enum _xe_module_format_t
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Creates module object from an input IL or ISA.
 /// 
+/// @details
+///     - This function may be called from simultaneous threads.
+///     - The implementation of this function should be lock-free.
+/// 
 /// @remarks
 ///   _Analogues_
 ///     - **cuModuleLoad**
@@ -68,7 +72,7 @@ typedef enum _xe_module_format_t
 ///     - ::XE_RESULT_ERROR_OUT_OF_HOST_MEMORY
 ///     - ::XE_RESULT_ERROR_OUT_OF_DEVICE_MEMORY
 xe_result_t __xecall
-  xeCreateModule(
+  xeDeviceCreateModule(
     xe_device_handle_t hDevice,                     ///< [in] handle of the device
     xe_module_format_t format,                      ///< [in] Module format passed in with pInputModule
     uint32_t inputSize,                             ///< [in] size of input IL or ISA from pInputModule.
@@ -78,6 +82,11 @@ xe_result_t __xecall
 
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Destroys module
+/// 
+/// @details
+///     - The application is responsible for making sure the GPU is not
+///       currently referencing the event before it is deleted
+///     - The implementation of this function should be lock-free.
 /// 
 /// @remarks
 ///   _Analogues_
@@ -89,16 +98,16 @@ xe_result_t __xecall
 ///     - ::XE_RESULT_ERROR_INVALID_PARAMETER
 ///         + invalid handle for hModule
 xe_result_t __xecall
-  xeDestroyModule(
+  xeModuleDestroy(
     xe_module_handle_t hModule                      ///< [in] handle of the module
     );
 
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Retrieve native binary from Module.
 /// 
-/// @remarks
-///   _Analogues_
-///     - 
+/// @details
+///     - This function may be called from simultaneous threads.
+///     - The implementation of this function should be lock-free.
 /// 
 /// @returns
 ///     - ::XE_RESULT_SUCCESS
@@ -121,6 +130,10 @@ xe_result_t __xecall
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Retrieve a function argument index from name.
 /// 
+/// @details
+///     - This function may be called from simultaneous threads.
+///     - The implementation of this function should be lock-free.
+/// 
 /// @remarks
 ///   _Analogues_
 ///     - **cuModuleGetTexRef**
@@ -141,6 +154,10 @@ xe_result_t __xecall
 
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Create Function object from Module by name
+/// 
+/// @details
+///     - This function may be called from simultaneous threads.
+///     - The implementation of this function should be lock-free.
 /// 
 /// @remarks
 ///   _Analogues_
@@ -163,9 +180,10 @@ xe_result_t __xecall
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Destroys Function object
 /// 
-/// @remarks
-///   _Analogues_
-///     - 
+/// @details
+///     - The application is responsible for making sure the GPU is not
+///       currently referencing the event before it is deleted
+///     - The implementation of this function should be lock-free.
 /// 
 /// @returns
 ///     - ::XE_RESULT_SUCCESS
@@ -173,16 +191,16 @@ xe_result_t __xecall
 ///     - ::XE_RESULT_ERROR_INVALID_PARAMETER
 ///         + invalid handle for hFunction
 xe_result_t __xecall
-  xeDestroyFunction(
+  xeFunctionDestroy(
     xe_function_handle_t hFunction                  ///< [in] handle of the function object
     );
 
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Create Function arguments needed to pass arguments to a function.
 /// 
-/// @remarks
-///   _Analogues_
-///     - 
+/// @details
+///     - This function may be called from simultaneous threads.
+///     - The implementation of this function should be lock-free.
 /// 
 /// @returns
 ///     - ::XE_RESULT_SUCCESS
@@ -191,7 +209,7 @@ xe_result_t __xecall
 ///         + invalid handle for hFunction
 ///         + nullptr for phFunctionArgs
 xe_result_t __xecall
-  xeCreateFunctionArgs(
+  xeFunctionCreateFunctionArgs(
     xe_function_handle_t hFunction,                 ///< [in] handle of the function
     xe_function_args_handle_t* phFunctionArgs       ///< [out] handle of the Function arguments object
     );
@@ -199,9 +217,10 @@ xe_result_t __xecall
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Destroys Function arguments object
 /// 
-/// @remarks
-///   _Analogues_
-///     - 
+/// @details
+///     - The application is responsible for making sure the GPU is not
+///       currently referencing the event before it is deleted
+///     - The implementation of this function should be lock-free.
 /// 
 /// @returns
 ///     - ::XE_RESULT_SUCCESS
@@ -209,12 +228,16 @@ xe_result_t __xecall
 ///     - ::XE_RESULT_ERROR_INVALID_PARAMETER
 ///         + invalid handle for hFunctionArgs
 xe_result_t __xecall
-  xeDestroyFunctionArgs(
+  xeFunctionArgsDestroy(
     xe_function_args_handle_t hFunctionArgs         ///< [in] handle of the function arguments buffer object
     );
 
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Set function arguments within arguments buffer.
+/// 
+/// @details
+///     - This function may **not** be called from simultaneous threads.
+///     - The implementation of this function should be lock-free.
 /// 
 /// @remarks
 ///   _Analogues_
@@ -231,7 +254,7 @@ xe_result_t __xecall
 ///         + invalid size specified
 ///         + invalid handle for hFunctionArgs
 xe_result_t __xecall
-  xeSetFunctionArgValue(
+  xeFunctionArgsSetValue(
     xe_function_args_handle_t hFunctionArgs,        ///< [in/out] handle of the function args object.
     uint32_t argIndex,                              ///< [in] argument index in range [0, num args - 1]
     size_t argSize,                                 ///< [in] size of argument type
@@ -255,6 +278,10 @@ typedef enum _xe_function_attribute_t
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Query a function attribute.
 /// 
+/// @details
+///     - This function may be called from simultaneous threads.
+///     - The implementation of this function should be lock-free.
+/// 
 /// @remarks
 ///   _Analogues_
 ///     - **cuFuncGetAttribute**
@@ -267,7 +294,7 @@ typedef enum _xe_function_attribute_t
 ///         + invalid value for attr
 ///         + null ptr for pValue
 xe_result_t __xecall
-  xeQueryFunctionAttribute(
+  xeFunctionQueryAttribute(
     xe_function_handle_t hFunction,                 ///< [in] handle of the function object
     xe_function_attribute_t attr,                   ///< [in] attribute to query
     uint32_t* pValue                                ///< [out] returned attribute value
@@ -275,6 +302,10 @@ xe_result_t __xecall
 
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Dispatch command over one or more work groups.
+/// 
+/// @details
+///     - This function may **not** be called from simultaneous threads.
+///     - The implementation of this function should be lock-free.
 /// 
 /// @remarks
 ///   _Analogues_
@@ -319,6 +350,10 @@ typedef struct _xe_dispatch_function_arguments_t
 /// @brief Dispatch command over one or more work groups using indirect dispatch
 ///        arguments.
 /// 
+/// @details
+///     - This function may **not** be called from simultaneous threads.
+///     - The implementation of this function should be lock-free.
+/// 
 /// @remarks
 ///   _Analogues_
 ///     - **cuLaunchKernel**
@@ -342,6 +377,10 @@ xe_result_t __xecall
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Compute max groups that can occupy per sublice.
 /// 
+/// @details
+///     - This function may be called from simultaneous threads.
+///     - The implementation of this function should be lock-free.
+/// 
 /// @remarks
 ///   _Analogues_
 ///     - **cuOccupancyMaxActiveBlocksPerMultiprocessor**
@@ -354,7 +393,7 @@ xe_result_t __xecall
 ///         + null ptr for pDispatchArgumentsBuffer.
 ///         + null ptr for pMax Groups
 xe_result_t __xecall
-  xeOccupancyMaxGroupsPerSublice(
+  xeFunctionGetOccupancyMaxGroupsPerSublice(
     xe_function_handle_t hFunction,                 ///< [in] handle of the function object
     xe_dispatch_function_arguments_t* pDispatchArgumentsBuffer, ///< [in] Pointer to buffer that will contain dispatch arguments.
     uint32_t* pMaxGroups                            ///< [out] Pointer to maximum groups that can occupy subslice for this function.

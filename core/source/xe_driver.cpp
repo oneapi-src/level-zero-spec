@@ -36,8 +36,12 @@
 ///        function.
 /// 
 /// @details
+///     - Only one instance of a driver per process can be loaded.
+///     - There is no reference tracking if multiple drivers are initialized.
 ///     - If this function is not called then all other functions will return
 ///       ::XE_RESULT_ERROR_UNINITIALIZED.
+///     - The application may **not** call this function from simultaneous
+///       threads.
 /// 
 /// @remarks
 ///   _Analogues_
@@ -68,6 +72,9 @@ xe_result_t __xecall
 /// @details
 ///     - The driver version is a non-zero, monotonically increasing value where
 ///       higher values always indicate a more recent version.
+///     - The application may **not** call this function from simultaneous
+///       threads.
+///     - The implementation of this function should be lock-free.
 /// 
 /// @remarks
 ///   _Analogues_

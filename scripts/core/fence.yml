@@ -31,6 +31,9 @@ desc: "Creates a fence object on the device's command queue."
 name: $xCommandQueueCreateFence
 analogue:
     - "**cuEventCreate**"
+details:
+    - "The application may call this function from simultaneous threads."
+    - "The implementation of this function should be lock-free."
 params:
     - type: $x_command_queue_handle_t
       name: hCommandQueue
@@ -54,6 +57,7 @@ desc: "Deletes a fence object."
 name: $xFenceDestroy
 details:
     - "The application is responsible for making sure the GPU is not currently referencing the fence before it is deleted"
+    - "The implementation of this function should be lock-free."
 analogue:
     - "**cuEventDestroy**"
 params:
@@ -70,6 +74,9 @@ desc: "Enqueues a signal of the fence into its command queue."
 name: $xFenceEnqueueSignal
 analogue:
     - "**cuEventRecord**"
+details:
+    - "The application may **not** call this function from simultaneous threads."
+    - "The implementation of this function should be lock-free."
 params:
     - type: $x_fence_handle_t
       name: hFence
@@ -85,6 +92,9 @@ desc: "The current host thread waits on a fence to be signaled."
 name: $xHostWaitOnFence
 analogue:
     - "**cuEventSynchronize**"
+details:
+    - "The application may call this function from simultaneous threads."
+    - "The implementation of this function should be lock-free."
 params:
     - type: $x_fence_handle_t
       name: hFence
@@ -97,6 +107,9 @@ returns:
 type: function
 desc: "The current host thread waits on a multiple fences to be signaled."
 name: $xHostWaitOnMultipleFences
+details:
+    - "The application may call this function from simultaneous threads."
+    - "The implementation of this function should be lock-free."
 params:
     - type: uint32_t
       name: numFences
@@ -115,6 +128,9 @@ desc: "Queries a fence object's status."
 name: $xFenceQueryStatus
 analogue:
     - "**cuEventQuery**"
+details:
+    - "The application may call this function from simultaneous threads."
+    - "The implementation of this function should be lock-free."
 params:
     - type: $x_fence_handle_t
       name: hFence
@@ -131,6 +147,9 @@ desc: "Queries the elapsed time between two signaled fences."
 name: $xFenceQueryElapsedTime
 analogue:
     - "**cuEventElapsedTime**"
+details:
+    - "The application may call this function from simultaneous threads."
+    - "The implementation of this function should be lock-free."
 params:
     - type: $x_fence_handle_t
       name: hFenceStart
@@ -151,6 +170,9 @@ returns:
 type: function
 desc: "Reset a fence back to the not signaled state."
 name: $xFenceReset
+details:
+    - "The application may call this function from simultaneous threads."
+    - "The implementation of this function should be lock-free."
 params:
     - type: $x_fence_handle_t
       name: hFence

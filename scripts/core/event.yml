@@ -38,6 +38,9 @@ name: $xDeviceCreateEvent
 analogue:
     - "**clCreateUserEvent**"
     - cuEventCreate
+details:
+    - "This function may be called from simultaneous threads."
+    - "The implementation of this function should be lock-free."
 params:
     - type: $x_device_handle_t
       name: hDevice
@@ -59,6 +62,9 @@ returns:
 type: function
 desc: "Creates an event object on the device from existing memory."
 name: $xDevicePlaceEvent
+details:
+    - "This function may be called from simultaneous threads."
+    - "The implementation of this function should be lock-free."
 params:
     - type: $x_device_handle_t
       name: hDevice
@@ -85,6 +91,7 @@ desc: "Deletes an event object."
 name: $xEventDestroy
 details:
     - "The application is responsible for making sure the GPU is not currently referencing the event before it is deleted"
+    - "The implementation of this function should be lock-free."
 analogue:
      - "**cuEventDestroy**"
      - clReleaseEvent
@@ -101,6 +108,9 @@ desc: "Encodes a signal of the event from the device into a command list."
 name: $xCommandListEncodeSignalEvent
 analogue:
     - "**cuEventRecord**"
+details:
+    - "The application may **not** call this function from simultaneous threads."
+    - "The implementation of this function should be lock-free."
 params:
     - type: $x_command_list_handle_t
       name: hCommandList
@@ -119,6 +129,9 @@ returns:
 type: function
 desc: "Encodes a wait on event from a host signal into a command list."
 name: $xCommandListEncodeWaitOnEvent
+details:
+    - "The application may **not** call this function from simultaneous threads."
+    - "The implementation of this function should be lock-free."
 params:
     - type: $x_command_list_handle_t
       name: hCommandList
@@ -136,6 +149,9 @@ returns:
 type: function
 desc: "Encodes signals of multiple event from the device into a command list."
 name: $xCommandListEncodeSignalMultipleEvents
+details:
+    - "The application may **not** call this function from simultaneous threads."
+    - "The implementation of this function should be lock-free."
 params:
     - type: $x_command_list_handle_t
       name: hCommandList
@@ -158,6 +174,9 @@ returns:
 type: function
 desc: "Encodes waits on multiple event from a host signal into a command list."
 name: $xCommandListEncodeWaitOnMultipleEvents
+details:
+    - "The application may **not** call this function from simultaneous threads."
+    - "The implementation of this function should be lock-free."
 params:
     - type: $x_command_list_handle_t
       name: hCommandList
@@ -181,6 +200,9 @@ desc: "Signals a event from host."
 name: $xHostSignalEvent
 analogue:
     - clSetUserEventStatus
+details:
+    - "The application may call this function from simultaneous threads."
+    - "The implementation of this function should be lock-free."
 params:
     - type: $x_event_handle_t
       name: hEvent
@@ -196,6 +218,9 @@ desc: "The current host thread waits on an event from a device signal."
 name: $xHostWaitOnEvent
 analogue:
     - "**cuEventSynchronize**"
+details:
+    - "The application may call this function from simultaneous threads."
+    - "The implementation of this function should be lock-free."
 params:
     - type: $x_event_handle_t
       name: hEvent
@@ -208,6 +233,9 @@ returns:
 type: function
 desc: "Signals multiple events from host."
 name: $xHostSignalMultipleEvents
+details:
+    - "The application may call this function from simultaneous threads."
+    - "The implementation of this function should be lock-free."
 params:
     - type: uint32_t
       name: numEvents
@@ -227,6 +255,9 @@ desc: "The current host thread waits on multiple events from a device signal."
 name: $xHostWaitOnMultipleEvents
 analogue:
     - clWaitForEvents
+details:
+    - "The application may call this function from simultaneous threads."
+    - "The implementation of this function should be lock-free."
 params:
     - type: uint32_t
       name: numEvents
@@ -246,6 +277,9 @@ name: $xEventQueryStatus
 analogue:
     - "**cuEventQuery**"
     - clGetEventInfo
+details:
+    - "The application may call this function from simultaneous threads."
+    - "The implementation of this function should be lock-free."
 params:
     - type: $x_event_handle_t
       name: hEvent
@@ -261,6 +295,9 @@ desc: "Queries the elapsed time between two signaled events."
 name: $xEventQueryElapsedTime
 analogue:
     - "**cuEventElapsedTime**"
+details:
+    - "The application may call this function from simultaneous threads."
+    - "The implementation of this function should be lock-free."
 params:
     - type: $x_event_handle_t
       name: hEventStart
@@ -281,6 +318,9 @@ returns:
 type: function
 desc: "Reset an event back to not signaled state"
 name: $xEventReset
+details:
+    - "The application may call this function from simultaneous threads."
+    - "The implementation of this function should be lock-free."
 params:
     - type: $x_event_handle_t
       name: hEvent

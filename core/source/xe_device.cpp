@@ -34,6 +34,10 @@
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Reports the number of devices
 /// 
+/// @details
+///     - The application may call this function from simultaneous threads.
+///     - The implementation of this function should be lock-free.
+/// 
 /// @remarks
 ///   _Analogues_
 ///     - **cuDeviceGetCount**
@@ -60,6 +64,10 @@ xe_result_t __xecall
 
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Returns a handle to the device object
+/// 
+/// @details
+///     - The application may call this function from simultaneous threads.
+///     - The implementation of this function should be lock-free.
 /// 
 /// @remarks
 ///   _Analogues_
@@ -92,6 +100,10 @@ xe_result_t __xecall
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Returns the API version supported by the device
 /// 
+/// @details
+///     - The application may call this function from simultaneous threads.
+///     - The implementation of this function should be lock-free.
+/// 
 /// @remarks
 ///   _Analogues_
 ///     - **cuCtxGetApiVersion**
@@ -122,6 +134,10 @@ xe_result_t __xecall
 
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Retrieves attributes of the device
+/// 
+/// @details
+///     - The application may call this function from simultaneous threads.
+///     - The implementation of this function should be lock-free.
 /// 
 /// @remarks
 ///   _Analogues_
@@ -156,6 +172,10 @@ xe_result_t __xecall
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Retrieves compute attributes of the device
 /// 
+/// @details
+///     - The application may call this function from simultaneous threads.
+///     - The implementation of this function should be lock-free.
+/// 
 /// @remarks
 ///   _Analogues_
 ///     - **cuDeviceGetAttribute**
@@ -187,6 +207,10 @@ xe_result_t __xecall
 
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Retrieves memory attributes of the device
+/// 
+/// @details
+///     - The application may call this function from simultaneous threads.
+///     - The implementation of this function should be lock-free.
 /// 
 /// @remarks
 ///   _Analogues_
@@ -221,6 +245,10 @@ xe_result_t __xecall
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Retrieves link properties between source and destination devices.
 /// 
+/// @details
+///     - The application may call this function from simultaneous threads.
+///     - The implementation of this function should be lock-free.
+/// 
 /// @remarks
 ///   _Analogues_
 ///     - **cudaDeviceGetP2PAttribute**
@@ -251,6 +279,10 @@ xe_result_t __xecall
 
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Queries if one device can directly access peer device allocations
+/// 
+/// @details
+///     - The application may call this function from simultaneous threads.
+///     - The implementation of this function should be lock-free.
 /// 
 /// @remarks
 ///   _Analogues_
@@ -291,6 +323,8 @@ xe_result_t __xecall
 ///       to allocations on the peer device.
 ///     - A separate call is required to enable access from the peer device to
 ///       this device.
+///     - The application may **not** call this function from simultaneous
+///       threads.
 ///     - @todo Ben: document any limits on number of active p2p connections
 ///       @todo Ben: document behavior if link is already enabled
 /// 
@@ -327,6 +361,8 @@ xe_result_t __xecall
 /// @brief Disables direct access to peer device allocations
 /// 
 /// @details
+///     - The application may **not** call this function from simultaneous
+///       threads.
 ///     - @todo Ben: document behavior if link is not enabled
 /// 
 /// @remarks

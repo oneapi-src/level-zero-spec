@@ -5,6 +5,9 @@ desc: "Intel $Xx Driver APIs for Memory"
 type: function
 desc: "Makes memory resident for the device."
 name: $xDeviceMakeMemoryResident
+details:
+    - "The application may call this function from simultaneous threads."
+    - "The implementation of this function should be lock-free."
 params:
     - type: $x_device_handle_t
       name: hDevice
@@ -22,6 +25,11 @@ returns:
 type: function
 desc: "Allows memory to be evicted from the device."
 name: $xDeviceEvictMemory
+details:
+    - "The application is responsible for making sure the GPU is not currently referencing the memory before it is evicted"
+    - "Memory is always implicitly evicted if it is resident when freed."
+    - "The application may call this function from simultaneous threads."
+    - "The implementation of this function should be lock-free."
 params:
     - type: $x_device_handle_t
       name: hDevice
@@ -39,6 +47,9 @@ returns:
 type: function
 desc: "Makes image resident for the device."
 name: $xDeviceMakeImageResident
+details:
+    - "The application may call this function from simultaneous threads."
+    - "The implementation of this function should be lock-free."
 params:
     - type: $x_device_handle_t
       name: hDevice
@@ -53,6 +64,11 @@ returns:
 type: function
 desc: "Allows image to be evicted from the device."
 name: $xDeviceEvictImage
+details:
+    - "The application is responsible for making sure the GPU is not currently referencing the memory before it is evicted"
+    - "An image is always implicitly evicted if it is resident when destroyed."
+    - "The application may call this function from simultaneous threads."
+    - "The implementation of this function should be lock-free."
 params:
     - type: $x_device_handle_t
       name: hDevice

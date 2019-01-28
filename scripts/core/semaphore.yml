@@ -34,6 +34,9 @@ members:
 type: function
 desc: "Creates an semaphore object on the device."
 name: $xDeviceCreateSemaphore
+details:
+    - "The application may call this function from simultaneous threads."
+    - "The implementation of this function should be lock-free."
 params:
     - type: $x_device_handle_t
       name: hDevice
@@ -57,6 +60,7 @@ desc: "Deletes an semaphore object."
 name: $xSemaphoreDestroy
 details:
     - "The application is responsible for making sure the GPU is not currently referencing the semaphore before it is deleted"
+    - "The implementation of this function should be lock-free."
 params:
     - type: $x_semaphore_handle_t
       name: hSemaphore
@@ -68,6 +72,9 @@ returns:
 type: function
 desc: "Encodes an semaphore signal into a command list."
 name: $xCommandListEncodeSemaphoreSignal
+details:
+    - "The application may **not** call this function from simultaneous threads."
+    - "The implementation of this function should be lock-free."
 params:
     - type: $x_command_list_handle_t
       name: hCommandList
@@ -104,6 +111,9 @@ etors:
 type: function
 desc: "Encodes an semaphore wait into a command list."
 name: $xCommandListEncodeSemaphoreWait
+details:
+    - "The application may **not** call this function from simultaneous threads."
+    - "The implementation of this function should be lock-free."
 params:
     - type: $x_command_list_handle_t
       name: hCommandList
@@ -125,6 +135,9 @@ returns:
 type: function
 desc: "Queries an semaphore object's value."
 name: $xSemaphoreQueryValue
+details:
+    - "The application may call this function from simultaneous threads."
+    - "The implementation of this function should be lock-free."
 params:
     - type: $x_semaphore_handle_t
       name: hSemaphore
@@ -136,6 +149,9 @@ returns:
 type: function
 desc: "Reset a semaphore back to the not signaled state, with value of 0."
 name: $xSemaphoreReset
+details:
+    - "The application may call this function from simultaneous threads."
+    - "The implementation of this function should be lock-free."
 params:
     - type: $x_semaphore_handle_t
       name: hSemaphore

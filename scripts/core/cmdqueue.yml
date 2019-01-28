@@ -58,6 +58,9 @@ analogue:
     - "**clCreateCommandQueue**"
     - cuCtxCreate
     - cuCtxGetCurrent
+details:
+    - "This function may be called from simultaneous threads."
+    - "The implementation of this function should be lock-free."
 params:
     - type: $x_device_handle_t
       name: hDevice
@@ -77,13 +80,14 @@ returns:
     - $X_RESULT_ERROR_OUT_OF_DEVICE_MEMORY
 --- #--------------------------------------------------------------------------
 type: function
-desc: "Destroys a command queue"
+desc: "Destroys a command queue."
 name: $xCommandQueueDestroy
-details:
-    - "The application is responsible for making sure the GPU is not currently referencing the command queue before it is deleted"
 analogue:
     - "**clReleaseCommandQueue**"
     - cuCtxDestroy
+details:
+    - "The application is responsible for making sure the GPU is not currently referencing the command queue before it is deleted"
+    - "The implementation of this function should be lock-free."
 params:
     - type: $x_command_queue_handle_t
       name: hCommandQueue
@@ -122,12 +126,15 @@ etors:
       desc: "[default] no cache configuration bias; uses driver-based heuristics"
 --- #--------------------------------------------------------------------------
 type: function
-desc: "Sets a command queue's parameter"
+desc: "Sets a command queue's parameter."
 name: $xCommandQueueSetParameter
 analogue:
     - cuCtxSetCacheConfig
     - cuCtxSetLimit
     - cuCtxSetSharedMemConfig
+details:
+    - "The application may **not** call this function from simultaneous threads."
+    - "The implementation of this function should be lock-free."
 params:
     - type: $x_command_queue_handle_t
       name: hCommandQueue
@@ -145,13 +152,16 @@ returns:
         - "invalid value for value"
 --- #--------------------------------------------------------------------------
 type: function
-desc: "Retrieves a command queue's parameter"
+desc: "Retrieves a command queue's parameter."
 name: $xCommandQueueGetParameter
 analogue:
     - cuCtxGetCacheConfig
     - cuCtxGetLimit
     - cuCtxGetSharedMemConfig
     - cuCtxGetStreamPriorityRange
+details:
+    - "The application may **not** call this function from simultaneous threads."
+    - "The implementation of this function should be lock-free."
 params:
     - type: $x_command_queue_handle_t
       name: hCommandQueue
@@ -169,8 +179,11 @@ returns:
         - "nullptr for value"
 --- #--------------------------------------------------------------------------
 type: function
-desc: "Resets all command queue parameters to default state"
+desc: "Resets all command queue parameters to default state."
 name: $xCommandQueueResetParameters
+details:
+    - "The application may **not** call this function from simultaneous threads."
+    - "The implementation of this function should be lock-free."
 params:
     - type: $x_command_queue_handle_t
       name: hCommandQueue
@@ -180,8 +193,11 @@ returns:
        - "invalid handle for hCommandQueue"
 --- #--------------------------------------------------------------------------
 type: function
-desc: "Enqueues a command list into a command queue"
+desc: "Enqueues a command list into a command queue."
 name: $xCommandQueueEnqueueCommandList
+details:
+    - "The application may **not** call this function from simultaneous threads."
+    - "The implementation of this function should be lock-free."
 params:
     - type: $x_command_queue_handle_t
       name: hCommandQueue
@@ -195,8 +211,11 @@ returns:
        - "invalid handle for hCommandList"
 --- #--------------------------------------------------------------------------
 type: function
-desc: "Synchronizes a command queue"
+desc: "Synchronizes a command queue by waiting on the host."
 name: $xCommandQueueSynchronize
+details:
+    - "The application may call this function from simultaneous threads."
+    - "The implementation of this function should be lock-free."
 params:
     - type: $x_command_queue_handle_t
       name: hCommandQueue

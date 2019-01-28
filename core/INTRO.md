@@ -47,8 +47,18 @@ There are multiple versions that can be used by the application to determine com
     - They are provided as the first member of every structure passed to the driver.
 
 ## Error Handling
-- all functions return ::xe_result_t.
 - all functions are gaurenteed to never throw exceptions or fail silently.
+- all functions return ::xe_result_t.
+
+## Multithreading
+In order to eliminate the usage of thread-locks by the implementation, the following design philosophies are adopted:
+- work submission occurs exclusively by enqueing command lists into a command queue
+- multiple, simulateneous threads may encode multiple command lists independently
+- the application is responsible for ensuring multiple, simultaneous threads are not modifying mutable objects;
+such as command queues and command lists
+- the application is responsible for ensuring the GPU is not accessing objects before they are modified, resued or destroyed;
+such as memory, images and command lists
+- there is no implicit garbage collection performed by the implementation
 
 ## Environment Variables
 The following table documents the supported knobs for overriding default driver behavior.

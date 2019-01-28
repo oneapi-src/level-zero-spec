@@ -8,6 +8,8 @@ name: $xCommandListEncodeMemoryCopy
 details:
     - "The memory pointed to by both srcptr and dstptr must be accessible by
       the device on which the command list is created."
+    - "The application may **not** call this function from simultaneous threads."
+    - "The implementation of this function should be lock-free."
 analogue:
     - "**clEnqueueCopyBuffer**"
     - "**clEnqueueReadBuffer**"
@@ -36,6 +38,9 @@ desc: "Copies a image."
 name: $xCommandListEncodeImageCopy
 analogue:
     - "**clEnqueueCopyImage**"
+details:
+    - "The application may **not** call this function from simultaneous threads."
+    - "The implementation of this function should be lock-free."
 params:
     - type: $x_command_list_handle_t
       name: hCommandList
@@ -65,6 +70,9 @@ members:
 type: function
 desc: "Copies a region of a image to another image."
 name: $xCommandListEncodeImageCopyRegion
+details:
+    - "The application may **not** call this function from simultaneous threads."
+    - "The implementation of this function should be lock-free."
 params:
     - type: $x_command_list_handle_t
       name: hCommandList
@@ -91,6 +99,11 @@ desc: "Copies from a image to device or shared memory."
 name: $xCommandListEncodeImageCopyToMemory
 analogue:
     - clEnqueueReadImage
+details:
+    - "The memory pointed to by dstptr must be accessible by
+      the device on which the command list is created."
+    - "The application may **not** call this function from simultaneous threads."
+    - "The implementation of this function should be lock-free."
 params:
     - type: $x_command_list_handle_t
       name: hCommandList
@@ -114,6 +127,11 @@ desc: "Copies to a image from device or shared memory."
 name: $xCommandListEncodeImageCopyFromMemory
 analogue:
     - clEnqueueWriteImage
+details:
+    - "The memory pointed to by srcptr must be accessible by
+      the device on which the command list is created."
+    - "The application may **not** call this function from simultaneous threads."
+    - "The implementation of this function should be lock-free."
 params:
     - type: $x_command_list_handle_t
       name: hCommandList
@@ -138,6 +156,8 @@ desc: "Asynchronously prefetches shared memory to the device associated with
 name: $xCommandListEncodeMemoryPrefetch
 details:
     - "This is a hint to improve performance only and is not required for correctness."
+    - "The application may call this function from simultaneous threads."
+    - "The implementation of this function should be lock-free."
     - "@todo Ben: confirm we do not need a synchronous prefetch.
        @todo Ben/Ankur: could/should we support prefetches to other devices?
        @todo Ben/Ankur: could/should we support prefetches to the host?"
