@@ -117,6 +117,8 @@ xe_result_t __xecall
 /// @details
 ///     - The application is responsible for making sure the GPU is not
 ///       currently referencing the event before it is deleted
+///     - The implementation of this function will immediately free all Host and
+///       Device allocations associated with this event
 ///     - The implementation of this function should be lock-free.
 /// 
 /// @remarks

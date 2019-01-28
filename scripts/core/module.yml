@@ -58,6 +58,7 @@ analogue:
     - "**cuModuleUnload**"
 details:
     - "The application is responsible for making sure the GPU is not currently referencing the event before it is deleted"
+    - "The implementation of this function will immediately free all Host and Device allocations associated with this module"
     - "The implementation of this function should be lock-free."
 params:
     - type: "$x_module_handle_t"
@@ -110,7 +111,7 @@ params:
       desc: "[in] name of function argument"
     - type: "uint32_t*"
       name:  pArgIndex
-      desc: "[out] Function argument index that can be used for $xSetFunctionArgValue"
+      desc: "[out] Function argument index that can be used for $xFunctionArgsSetValue"
 returns:
     - $X_RESULT_ERROR_INVALID_PARAMETER:
         - "invalid handle for hFunction"
@@ -146,6 +147,7 @@ desc: "Destroys Function object"
 name: $xFunctionDestroy
 details:
     - "The application is responsible for making sure the GPU is not currently referencing the event before it is deleted"
+    - "The implementation of this function will immediately free all Host and Device allocations associated with this function"
     - "The implementation of this function should be lock-free."
 params:
     - type: "$x_function_handle_t"
@@ -178,6 +180,7 @@ desc: "Destroys Function arguments object"
 name: $xFunctionArgsDestroy
 details:
     - "The application is responsible for making sure the GPU is not currently referencing the event before it is deleted"
+    - "The implementation of this function will immediately free all Host and Device allocations associated with this function args"
     - "The implementation of this function should be lock-free."
 params:
     - type: "$x_function_args_handle_t"

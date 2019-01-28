@@ -86,6 +86,8 @@ xe_result_t __xecall
 /// @details
 ///     - The application is responsible for making sure the GPU is not
 ///       currently referencing the event before it is deleted
+///     - The implementation of this function will immediately free all Host and
+///       Device allocations associated with this module
 ///     - The implementation of this function should be lock-free.
 /// 
 /// @remarks
@@ -149,7 +151,7 @@ xe_result_t __xecall
   xeFunctionGetArgIndexFromName(
     xe_function_handle_t hFunction,                 ///< [in] handle of the function
     const char* pName,                              ///< [in] name of function argument
-    uint32_t* pArgIndex                             ///< [out] Function argument index that can be used for ::xeSetFunctionArgValue
+    uint32_t* pArgIndex                             ///< [out] Function argument index that can be used for ::xeFunctionArgsSetValue
     );
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -183,6 +185,8 @@ xe_result_t __xecall
 /// @details
 ///     - The application is responsible for making sure the GPU is not
 ///       currently referencing the event before it is deleted
+///     - The implementation of this function will immediately free all Host and
+///       Device allocations associated with this function
 ///     - The implementation of this function should be lock-free.
 /// 
 /// @returns
@@ -220,6 +224,8 @@ xe_result_t __xecall
 /// @details
 ///     - The application is responsible for making sure the GPU is not
 ///       currently referencing the event before it is deleted
+///     - The implementation of this function will immediately free all Host and
+///       Device allocations associated with this function args
 ///     - The implementation of this function should be lock-free.
 /// 
 /// @returns

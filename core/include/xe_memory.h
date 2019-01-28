@@ -161,6 +161,8 @@ xe_result_t __xecall
 /// @details
 ///     - The application is responsible for making sure the GPU is not
 ///       currently referencing the memory before it is freed
+///     - The implementation of this function will immediately free all Host and
+///       Device allocations associated with this memory
 ///     - The implementation of this function should be lock-free.
 ///     - @todo Ben: Should the pointer passed to the ::xeMemFree function be
 ///       const or non-const?

@@ -122,6 +122,7 @@ desc: "Deletes a image object."
 name: $xImageDestroy
 details:
     - "The application is responsible for making sure the GPU is not currently referencing the image before it is deleted"
+    - "The implementation of this function will immediately free all Host and Device allocations associated with this image"
     - "The implementation of this function should be lock-free."
 params:
     - type: $x_image_handle_t

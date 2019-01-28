@@ -321,9 +321,9 @@ If the application does not properly manage residency for these cases then the d
 ${"##"} Modules and Functions
 A Module represents a single translation unit that consists of functions that have been compiled together.
 
-- Modules can be created from an IL or directly from native format using ${x}CreateModule.
-  + ${x}CreateModule takes a format argument that specifies the input format.
-  + ${x}CreateModule performs a compilation step when format is IL.
+- Modules can be created from an IL or directly from native format using ${x}DeviceCreateModule.
+  + ${x}DeviceCreateModule takes a format argument that specifies the input format.
+  + ${x}DeviceCreateModule performs a compilation step when format is IL.
 
 
 The following is an example function written in OCL C.
@@ -347,28 +347,28 @@ The following are the API calls for using this function.
     ...
     // OCL C function has been compiled to SPIRV IL (pImageScalingIL)
     ${x}_module_handle_t hModule;
-    ${x}CreateModule(hDevice, XE_MODULE_IL_SPIRV, ilSize, pImageScalingIL, &hModule);
+    ${x}DeviceCreateModule(hDevice, XE_MODULE_IL_SPIRV, ilSize, pImageScalingIL, &hModule);
 
     ${x}_function_handle_t hFunction;
     ${x}ModuleCreateFunction(hModule, "image_scaling", &hFunction);
 
     ${x}_function_args_handle_t hFunctionArgs;
-    ${x}CreateFunctionArgs(hFunction, &hFunctionArgs);
+    ${x}FunctionCreateFunctionArgs(hFunction, &hFunctionArgs);
 
     // Bind arguments
-    ${x}SetFunctionArgValue(hFuncArgs, 0, sizeof(${x}_image_handle_t), &src_image);
-    ${x}SetFunctionArgValue(hFuncArgs, 1, sizeof(${x}_image_handle_t), &dest_image);
-    ${x}SetFunctionArgValue(hFuncArgs, 2, sizeof(uint32_t), &width);
-    ${x}SetFunctionArgValue(hFuncArgs, 3, sizeof(uint32_t), &height);
+    ${x}FunctionArgsSetValue(hFuncArgs, 0, sizeof(${x}_image_handle_t), &src_image);
+    ${x}FunctionArgsSetValue(hFuncArgs, 1, sizeof(${x}_image_handle_t), &dest_image);
+    ${x}FunctionArgsSetValue(hFuncArgs, 2, sizeof(uint32_t), &width);
+    ${x}FunctionArgsSetValue(hFuncArgs, 3, sizeof(uint32_t), &height);
 
     // Encode dispatch command
     ${x}CommandListEncodeDispatchFunction(hCommandList, hFunction, hFunctionArgs, pixelRegionWidth, pixelRegionHeight, 1, numRegionsX, numRegionsY, 1);
 
     ...
 	
-    ${x}DestroyFunctionArgs(hFunctionArgs);
-    ${x}DestroyFunction(hFunction);
-    ${x}DestroyModule(hModule);
+    ${x}FunctionArgsDestroy(hFunctionArgs);
+    ${x}FunctionDestroy(hFunction);
+    ${x}ModuleDestroy(hModule);
 ```
 
 Argument indices can be queried from the function object by name.
@@ -379,7 +379,7 @@ Argument indices can be queried from the function object by name.
     ${x}FunctionGetArgIndexFromName(hFunc, "src_img", &src_img_index);
 
     // Bind arguments
-    ${x}SetFunctionArgValue(hFuncArgs, src_img_index, sizeof(${x}_image_handle_t), &src_image);
+    ${x}FunctionArgsSetValue(hFuncArgs, src_img_index, sizeof(${x}_image_handle_t), &src_image);
 
     ...
 ```

@@ -321,9 +321,9 @@ If the application does not properly manage residency for these cases then the d
 ## Modules and Functions
 A Module represents a single translation unit that consists of functions that have been compiled together.
 
-- Modules can be created from an IL or directly from native format using xeCreateModule.
-  + xeCreateModule takes a format argument that specifies the input format.
-  + xeCreateModule performs a compilation step when format is IL.
+- Modules can be created from an IL or directly from native format using xeDeviceCreateModule.
+  + xeDeviceCreateModule takes a format argument that specifies the input format.
+  + xeDeviceCreateModule performs a compilation step when format is IL.
 
 
 The following is an example function written in OCL C.
@@ -347,28 +347,28 @@ The following are the API calls for using this function.
     ...
     // OCL C function has been compiled to SPIRV IL (pImageScalingIL)
     xe_module_handle_t hModule;
-    xeCreateModule(hDevice, XE_MODULE_IL_SPIRV, ilSize, pImageScalingIL, &hModule);
+    xeDeviceCreateModule(hDevice, XE_MODULE_IL_SPIRV, ilSize, pImageScalingIL, &hModule);
 
     xe_function_handle_t hFunction;
     xeModuleCreateFunction(hModule, "image_scaling", &hFunction);
 
     xe_function_args_handle_t hFunctionArgs;
-    xeCreateFunctionArgs(hFunction, &hFunctionArgs);
+    xeFunctionCreateFunctionArgs(hFunction, &hFunctionArgs);
 
     // Bind arguments
-    xeSetFunctionArgValue(hFuncArgs, 0, sizeof(xe_image_handle_t), &src_image);
-    xeSetFunctionArgValue(hFuncArgs, 1, sizeof(xe_image_handle_t), &dest_image);
-    xeSetFunctionArgValue(hFuncArgs, 2, sizeof(uint32_t), &width);
-    xeSetFunctionArgValue(hFuncArgs, 3, sizeof(uint32_t), &height);
+    xeFunctionArgsSetValue(hFuncArgs, 0, sizeof(xe_image_handle_t), &src_image);
+    xeFunctionArgsSetValue(hFuncArgs, 1, sizeof(xe_image_handle_t), &dest_image);
+    xeFunctionArgsSetValue(hFuncArgs, 2, sizeof(uint32_t), &width);
+    xeFunctionArgsSetValue(hFuncArgs, 3, sizeof(uint32_t), &height);
 
     // Encode dispatch command
     xeCommandListEncodeDispatchFunction(hCommandList, hFunction, hFunctionArgs, pixelRegionWidth, pixelRegionHeight, 1, numRegionsX, numRegionsY, 1);
 
     ...
 	
-    xeDestroyFunctionArgs(hFunctionArgs);
-    xeDestroyFunction(hFunction);
-    xeDestroyModule(hModule);
+    xeFunctionArgsDestroy(hFunctionArgs);
+    xeFunctionDestroy(hFunction);
+    xeModuleDestroy(hModule);
 ```
 
 Argument indices can be queried from the function object by name.
@@ -379,7 +379,7 @@ Argument indices can be queried from the function object by name.
     xeFunctionGetArgIndexFromName(hFunc, "src_img", &src_img_index);
 
     // Bind arguments
-    xeSetFunctionArgValue(hFuncArgs, src_img_index, sizeof(xe_image_handle_t), &src_image);
+    xeFunctionArgsSetValue(hFuncArgs, src_img_index, sizeof(xe_image_handle_t), &src_image);
 
     ...
 ```
