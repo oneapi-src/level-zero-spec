@@ -16,6 +16,8 @@ if(COMPUTE_RUNTIME_SUPPORT)
             cmd_list_bdw.cpp
             cmd_list_hw.h
             cmd_list_hw.inl
+            cmd_list_imp.cpp
+            cmd_list_imp.h
             cmd_list_kbl.cpp
             cmd_list_skl.cpp
             device.cpp

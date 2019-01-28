@@ -1,10 +1,12 @@
 #pragma once
-#include "cmd_list.h"
+#define CMD_LIST_INTERNAL
+#include "cmd_list_imp.h"
+#undef CMD_LIST_INTERNAL
 
 namespace xe {
 
 template <uint32_t gfxCoreFamily>
-struct CommandListHw : public CommandList {
+struct CommandListHw : public CommandListImp {
     xe_result_t close() override;
     xe_result_t encodeWaitOnEvent(xe_event_handle_t hEvent) override;
 };
