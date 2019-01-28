@@ -17,4 +17,13 @@ struct CommandListProductFamilyAllocator {
     }
 };
 
+using CommandListAllocatorFn = CommandList *(*)();
+extern CommandListAllocatorFn commandListFactory[];
+
+template <uint32_t productFamily>
+struct CommandListProductFamilyPopulateFactory {
+    CommandListProductFamilyPopulateFactory() {
+        commandListFactory[productFamily] = CommandListProductFamilyAllocator<productFamily>::allocate;
+    }
+};
 } // namespace xe
