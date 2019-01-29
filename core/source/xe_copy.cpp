@@ -240,9 +240,8 @@ xe_result_t __xecall
 ///       correctness.
 ///     - The application may call this function from simultaneous threads.
 ///     - The implementation of this function should be lock-free.
-///     - @todo Ben: confirm we do not need a synchronous prefetch. @todo
-///       Ben/Ankur: could/should we support prefetches to other devices? @todo
-///       Ben/Ankur: could/should we support prefetches to the host?
+///     - @todo Ankur: could/should we support prefetches to other devices?
+///       @todo Ankur: could/should we support prefetches to the host?
 /// 
 /// @remarks
 ///   _Analogues_

@@ -75,6 +75,10 @@ type: handle
 desc: "Handle of driver's function args object"
 name: "$x_function_args_handle_t"
 --- #--------------------------------------------------------------------------
+type: handle
+desc: "IPC handle to a memory allocation"
+name: "$x_ipc_mem_handle_t"
+--- #--------------------------------------------------------------------------
 type: macro
 desc: "Generic macro for enumerator bit masks"
 name: "$X_BIT( _i )"

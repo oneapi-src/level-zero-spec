@@ -108,13 +108,12 @@ The Xe driver API is implemented within the xe.dll, which is copied on the syste
 ## Environment Variables
 The following table documents the supported knobs for overriding default driver behavior.
 
-@todo Ben: what variables do we want for "Memory"?
 @todo Zack: what variables for we want for "Programs"?
 @todo Ankur: what variables do we want for "Cache"?
 
 | Category            | Name                                    | Values                 | Description                                           |
 |---------------------|-----------------------------------------|------------------------|-------------------------------------------------------|
-| Memory              | XE_MANAGED_FORCE_DEVICE_ALLOC         | {**0**, 1}             | Forces all managed allocations into device memory     |
+| Memory              | XE_SHARED_FORCE_DEVICE_ALLOC          | {**0**, 1}             | Forces all shared allocations into device memory     |
 | Programs            | XE_PROGRAM_CACHE_DISABLE              | {**0**, 1}             | Disables the disk caching of compiled programs        |
 | Cache               | XE_PROGRAM_MOCS_INDEX                 | {**0**}                | Overrides the Memory Object Control State (MOCS) index used for programs, scratch space, and arguments. |
 (Note: these are only __examples__ of variables the driver could support.)

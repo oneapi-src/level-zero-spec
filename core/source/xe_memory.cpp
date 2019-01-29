@@ -245,9 +245,12 @@ xe_result_t __xecall
 /// @details
 ///     - Memory advice can be used to override driver heuristics to explicitly
 ///       control shared memory behavior.
+///     - Memory advice may only be supported at a device-specific granularity,
+///       such as at a page boundary. In this case, the memory range may be
+///       expanded such that the start and end of the range satisfy granularity
+///       requirements.
 ///     - The application may call this function from simultaneous threads.
 ///     - The implementation of this function should be lock-free.
-///     - @todo Ben: likely will snap to page boundaries
 /// 
 /// @remarks
 ///   _Analogues_
@@ -267,6 +270,129 @@ xe_result_t __xecall
     const void* ptr,                                ///< [in] Pointer to the start of the memory range
     size_t size,                                    ///< [in] Size in bytes of the memory range
     xe_memory_advice_t advice                       ///< [in] Memory advice for the memory range
+    )
+{
+    // @todo: check_return(nullptr == get_driver(), XE_RESULT_ERROR_UNINITIALIZED);
+
+    // Check parameters
+    // @todo: check_return(const xe_device_handle_t() == hDevice, XE_RESULT_ERROR_INVALID_PARAMETER);
+    // @todo: check_return(nullptr == ptr, XE_RESULT_ERROR_INVALID_PARAMETER);
+
+    // @todo: insert <code> here
+
+    return XE_RESULT_SUCCESS;
+}
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Creates an IPC memory handle for the specified allocation in the
+///        sending process
+/// 
+/// @details
+///     - Takes a pointer to the base of a device memory allocation and exports
+///       it for use in another process.
+///     - The application may call this function from simultaneous threads.
+///     - The implementation of this function should be lock-free.
+///     - @todo Ankur: Do we have limitations on which devices / OSes support
+///       IPC functionality?
+/// 
+/// @remarks
+///   _Analogues_
+///     - **cuIpcGetMemHandle**
+/// 
+/// @returns
+///     - ::XE_RESULT_SUCCESS
+///     - ::XE_RESULT_ERROR_UNINITIALIZED
+///     - ::XE_RESULT_ERROR_INVALID_PARAMETER
+///         + invalid pointer
+/*@todo: __declspec(dllexport)*/
+xe_result_t __xecall
+  xeIpcGetMemHandle(
+    const void* ptr,                                ///< [in] Pointer to the device memory allocation
+    xe_ipc_mem_handle_t* pIpcHandle                 ///< [out] Returned IPC memory handle
+    )
+{
+    // @todo: check_return(nullptr == get_driver(), XE_RESULT_ERROR_UNINITIALIZED);
+
+    // Check parameters
+    // @todo: check_return(nullptr == ptr, XE_RESULT_ERROR_INVALID_PARAMETER);
+    // @todo: check_return(nullptr == pIpcHandle, XE_RESULT_ERROR_INVALID_PARAMETER);
+
+    // @todo: insert <code> here
+
+    return XE_RESULT_SUCCESS;
+}
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Opens an IPC memory handle to retrieve a device pointer in a receiving
+///        process
+/// 
+/// @details
+///     - Takes an IPC memory handle from a sending process and associates it
+///       with a device pointer usable in this process.
+///     - The device pointer in this process should not be freed with
+///       ::xeMemFree, but rather with ::xeIpcCloseMemHandle.
+///     - The application may call this function from simultaneous threads.
+///     - The implementation of this function should be lock-free.
+/// 
+/// @remarks
+///   _Analogues_
+///     - **cuIpcOpenMemHandle**
+/// 
+/// @returns
+///     - ::XE_RESULT_SUCCESS
+///     - ::XE_RESULT_ERROR_UNINITIALIZED
+///     - ::XE_RESULT_ERROR_INVALID_PARAMETER
+///         + invalid handle for hDevice
+///         + invalid handle for handle
+///         + invalid flags
+///         + nullptr for ptr
+/*@todo: __declspec(dllexport)*/
+xe_result_t __xecall
+  xeIpcOpenMemHandle(
+    const xe_device_handle_t hDevice,               ///< [in] handle of the device to associate with the IPC memory handle
+    xe_ipc_mem_handle_t handle,                     ///< [in] IPC memory handle
+    xe_ipc_memory_flags_t flags,                    ///< [in] flags controlling the operation
+    void** ptr                                      ///< [out] pointer to device allocation in this process
+    )
+{
+    // @todo: check_return(nullptr == get_driver(), XE_RESULT_ERROR_UNINITIALIZED);
+
+    // Check parameters
+    // @todo: check_return(const xe_device_handle_t() == hDevice, XE_RESULT_ERROR_INVALID_PARAMETER);
+    // @todo: check_return(xe_ipc_mem_handle_t() == handle, XE_RESULT_ERROR_INVALID_PARAMETER);
+    // @todo: check_return(nullptr == ptr, XE_RESULT_ERROR_INVALID_PARAMETER);
+
+    // @todo: insert <code> here
+
+    return XE_RESULT_SUCCESS;
+}
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Closes an IPC memory handle in a receiving process
+/// 
+/// @details
+///     - Closes an IPC memory handle by unmapping memory that was opened in
+///       this process using ::xeIpcOpenMemHandle.
+///     - @todo Ben: Should the pointer passed to the ::xeIpcCloseMemHandle
+///       function be const or non-const?
+///     - The application may call this function from simultaneous threads.
+///     - The implementation of this function should be lock-free.
+/// 
+/// @remarks
+///   _Analogues_
+///     - **cuIpcCloseMemHandle**
+/// 
+/// @returns
+///     - ::XE_RESULT_SUCCESS
+///     - ::XE_RESULT_ERROR_UNINITIALIZED
+///     - ::XE_RESULT_ERROR_INVALID_PARAMETER
+///         + invalid handle for hDevice
+///         + invalid ptr
+/*@todo: __declspec(dllexport)*/
+xe_result_t __xecall
+  xeIpcCloseMemHandle(
+    const xe_device_handle_t hDevice,               ///< [in] handle of the device to associate with the IPC memory handle
+    const void* ptr                                 ///< [in] pointer to memory to free
     )
 {
     // @todo: check_return(nullptr == get_driver(), XE_RESULT_ERROR_UNINITIALIZED);
