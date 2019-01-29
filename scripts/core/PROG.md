@@ -382,33 +382,35 @@ If the application does not properly manage residency for these cases then the d
 ```
 
 ${"#"} <a name="mnf">Modules and Functions</a>
-A Module represents a single translation unit that consists of functions that have been compiled together.
+There are multiple levels of constructs needed for executing functions on the device:
+1. A **Module** represents a single translation unit that consists of functions that have been compiled together.
+2. A **Function** represents the function within the module that will be dispatched directly from a command list.
+3. A **FunctionArgs** represents an instance of arguments to be used by the function when dispatched.
 
-- Modules can be created from an IL or directly from native format using ${x}DeviceCreateModule.
-  + ${x}DeviceCreateModule takes a format argument that specifies the input format.
-  + ${x}DeviceCreateModule performs a compilation step when format is IL.
+${"##"} Modules
+Modules can be created from an IL or directly from native format using ::${x}DeviceCreateModule.
+- ::${x}DeviceCreateModule takes a format argument that specifies the input format.
+- ::${x}DeviceCreateModule performs a compilation step when format is IL.
 
-
-The following is an example function written in OCL C.
+The following sample code demonstrates a sequence for creating a module from an OpenCL function:
 ```c
-__kernel void image_scaling( __read_only  image2d_t src_img,
-                             __write_only image2d_t dest_img,
-                                          uint WIDTH,     // resized width
-                                          uint HEIGHT )   // resized height
-{
-    int2       coor = (int2)( get_global_id(0), get_global_id(1) );
-    float2 normCoor = convert_float2(coor) / (float2)( WIDTH, HEIGHT );
+    __kernel void image_scaling( __read_only  image2d_t src_img,
+                                 __write_only image2d_t dest_img,
+                                              uint WIDTH,     // resized width
+                                              uint HEIGHT )   // resized height
+    {
+        int2       coor = (int2)( get_global_id(0), get_global_id(1) );
+        float2 normCoor = convert_float2(coor) / (float2)( WIDTH, HEIGHT );
 
-    float4    color = read_imagef( src_img, SMPL_PREF, normCoor );
+        float4    color = read_imagef( src_img, SMPL_PREF, normCoor );
 
-    write_imagef( dest_img, coor, color );
-}
+        write_imagef( dest_img, coor, color );
+    }
+    ...
 ```
 
-The following are the API calls for using this function.
 ```c
-    ...
-    // OCL C function has been compiled to SPIRV IL (pImageScalingIL)
+    // OpenCL C function has been compiled to SPIRV IL (pImageScalingIL)
     ${x}_module_desc_t moduleDesc = {
         ${X}_MODULE_DESC_VERSION
         ${X}_MODULE_IL_SPIRV,
@@ -417,7 +419,14 @@ The following are the API calls for using this function.
     };
     ${x}_module_handle_t hModule;
     ${x}DeviceCreateModule(hDevice, &moduleDesc, &hModule);
+    ...
+```
 
+${"##"} Function
+Functions are immuatable references to functions within a module.
+
+The following sample code demonstrates a sequence for creating a function from a module:
+```c
     ${x}_function_desc_t functionDesc = {
         ${X}_FUNCTION_DESC_VERSION,
         ${X}_FUNCTION_FLAG_NONE,
@@ -425,7 +434,14 @@ The following are the API calls for using this function.
     };
     ${x}_function_handle_t hFunction;
     ${x}ModuleCreateFunction(hModule, &functionDesc, &hFunction);
+    ...
+```
 
+${"##"} FunctionArgs
+FunctionArgs represent an instance of argument values to be used by the function when called.
+
+The following sample code demonstrates a sequence for creating function args and dispatching the function:
+```c
     ${x}_function_args_handle_t hFunctionArgs;
     ${x}FunctionCreateFunctionArgs(hFunction, &hFunctionArgs);
 
@@ -437,24 +453,16 @@ The following are the API calls for using this function.
 
     // Encode dispatch command
     ${x}CommandListEncodeDispatchFunction(hCommandList, hFunction, hFunctionArgs, pixelRegionWidth, pixelRegionHeight, 1, numRegionsX, numRegionsY, 1);
-
     ...
-	
-    ${x}FunctionArgsDestroy(hFunctionArgs);
-    ${x}FunctionDestroy(hFunction);
-    ${x}ModuleDestroy(hModule);
 ```
 
-Argument indices can be queried from the function object by name.
+The following sample code demonstrates a sequence for querying argument indices from the function by name:
 ```c
-    ...
-    
     uint32_t src_img_index;
     ${x}FunctionGetArgIndexFromName(hFunc, "src_img", &src_img_index);
 
     // Bind arguments
     ${x}FunctionArgsSetValue(hFuncArgs, src_img_index, sizeof(${x}_image_handle_t), &src_image);
-
     ...
 ```
 
