@@ -10,7 +10,7 @@ components:
     branch: master
     clean_on_sync: false
     dest_dir: third_party/compute_runtime
-    repository: ssh://bfliflet@git-ger-5.devtools.intel.com:29418/vpg-compute-neo
+    repository: ssh://gerrit-gfx.intel.com:29418/gfx/compute/neo
     revision: 9d8f280d5c3a1c0feb229301b25f07ada0fa6ab3
     type: git
   wdk:
