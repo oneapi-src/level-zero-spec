@@ -38,7 +38,7 @@
 /// @details
 ///     - Shared allocations share ownership between the host and one or more
 ///       devices.
-///     - @todo Ben: comprehend multi-tile?
+///     - @todo [**Ben**] comprehend multi-tile?
 ///     - The application may call this function from simultaneous threads.
 ///     - The implementation of this function should be lock-free.
 /// 
@@ -170,8 +170,8 @@ xe_result_t __xecall
 ///     - The implementation of this function will immediately free all Host and
 ///       Device allocations associated with this memory
 ///     - The implementation of this function should be lock-free.
-///     - @todo Ben: Should the pointer passed to the ::xeMemFree function be
-///       const or non-const?
+///     - @todo [**Ben**] Should the pointer passed to the ::xeMemFree function
+///       be const or non-const?
 /// 
 /// @remarks
 ///   _Analogues_
@@ -205,10 +205,10 @@ xe_result_t __xecall
 /// @details
 ///     - The application may call this function from simultaneous threads.
 ///     - The implementation of this function should be lock-free.
-///     - @todo Ben: do we need to support additional properties: base addr,
-///       size, etc? @todo Ben: do we need to support querying the associated
-///       device? @todo Ben: should we return all attributes as a (versioned)
-///       struct instead?
+///     - @todo [**Ben**] do we need to support additional properties: base
+///       addr, size, etc? @todo [**Ben**] do we need to support querying the
+///       associated device? @todo [**Ben**] should we return all attributes as
+///       a (versioned) struct instead?
 /// 
 /// @remarks
 ///   _Analogues_
@@ -292,8 +292,8 @@ xe_result_t __xecall
 ///       it for use in another process.
 ///     - The application may call this function from simultaneous threads.
 ///     - The implementation of this function should be lock-free.
-///     - @todo Ankur: Do we have limitations on which devices / OSes support
-///       IPC functionality?
+///     - @todo [**Ankur**] Do we have limitations on which devices / OSes
+///       support IPC functionality?
 /// 
 /// @remarks
 ///   _Analogues_
@@ -373,7 +373,7 @@ xe_result_t __xecall
 /// @details
 ///     - Closes an IPC memory handle by unmapping memory that was opened in
 ///       this process using ::xeIpcOpenMemHandle.
-///     - @todo Ben: Should the pointer passed to the ::xeIpcCloseMemHandle
+///     - @todo [**Ben**] Should the pointer passed to the ::xeIpcCloseMemHandle
 ///       function be const or non-const?
 ///     - The application may call this function from simultaneous threads.
 ///     - The implementation of this function should be lock-free.

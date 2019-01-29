@@ -45,7 +45,7 @@
 typedef enum _xe_module_format_t
 {
     XE_MODULE_IL_SPIRV = 0,                         ///< Format is SPIRV IL format
-    XE_MODULE_NATIVE,                               ///< Format is Gen native format
+    XE_MODULE_NATIVE,                               ///< Format is device native format
 
 } xe_module_format_t;
 

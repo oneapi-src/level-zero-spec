@@ -11,6 +11,7 @@ The following documents the high-level programming models and guidelines.
 * [Memory and Image Management](#mim)
 * [Modules and Functions](#mnf)
 * [OpenCL Interoperability](#oi)
+* [Inter-Process Communication](#ipc)
 
 # <a name="dnd">Driver and Device</a>
 The following diagram illustrates the hierarchy of devices to the driver:  
@@ -92,6 +93,9 @@ The following diagram illustrates the hierarchy of command lists and command que
   typically done by tracking command list events, but may also be
   handled by calling ::xeCommandQueueSynchronize.
 
+@todo [**Mike**] command queues are free-threaded; remove sync/async @ create
+@todo [**Mike**] enqueue a list of command lists
+
 ## Command Lists
 - A command list represents a sequence of commands for execution on
   a command queue.
@@ -105,7 +109,7 @@ The following diagram illustrates the hierarchy of command lists and command que
   threads. However, the application is responsible for ensuring that 
   multiple CPU threads do not access the same command list simultaneously.
 - The command list maintains some machine state, which is inherited by
-  subsequent commands. See xe_command_list_parameter_t for details.
+  subsequent commands. See ::xe_command_list_parameter_t for details.
 - Command lists do not inherit state from other command lists executed
   on the same command queue.  i.e. each command list begins execution
   in its own state.
@@ -117,6 +121,8 @@ The following diagram illustrates the hierarchy of command lists and command que
 - The application is responsible for making sure the GPU is not currently
   executing from a command list before it is reset.  This should be
   handled by tracking a completion event associated with the command list.
+
+@todo [**Mike**] add "graphs" of command list-based nodes
 
 ## Initialization
 The following sample code demonstrates a basic sequence for creation of command queues and command lists:
@@ -161,6 +167,10 @@ There are three types of synchronization primitives:
 1. **Fences** - used to communicate to the host that command queue execution has completed.
 2. **Events** - used as fine-grain host-to-device, device-to-host or device-to-device waits and signals within a command list.
 3. **Semaphores** - used for fine-grain control of command lists execution across multiple, simultaneous command queues within a device.
+
+@todo [**Mike**] add Vulkan analogues for reference
+@todo [**Mike**] fence should be returned from enqueue [optional]
+@todo [**Mike**] add barriers; defines everything prior is finished (copy vulkan)
 
 ## Fences
 - A fence is associated with single command queue.
@@ -338,7 +348,7 @@ and avoids exposing these details in the API in a backwards compatible fashion.
 ```
 
 ## Device Cache Settings
-@todo Ankur: global vs allocation vs command queue
+@todo [**Ankur**] global vs allocation vs command queue
 
 ## Device Residency
 For devices that do not support page-faults, the driver must ensure that all pages that will be accessed by the kernel are resident before program execution.
@@ -425,6 +435,8 @@ The following sample code demonstrates a sequence for creating a module from an 
 ## Function
 Functions are immuatable references to functions within a module.
 
+@todo [**Ben**] remove SetAttribute on Function, move to module or args?
+
 The following sample code demonstrates a sequence for creating a function from a module:
 ```c
     xe_function_desc_t functionDesc = {
@@ -439,6 +451,9 @@ The following sample code demonstrates a sequence for creating a function from a
 
 ## FunctionArgs
 FunctionArgs represent an instance of argument values to be used by the function when called.
+
+@todo [**Zack**] can Args be reused across different function with same signature?
+@todo [**Zack**] document contract; are Args back by GPU and must be complete, or are they host-only and fully mutable?
 
 The following sample code demonstrates a sequence for creating function args and dispatching the function:
 ```c
@@ -459,6 +474,7 @@ The following sample code demonstrates a sequence for creating function args and
     ...
 ```
 
+@todo [**Zack**] remove the following.
 The following sample code demonstrates a sequence for querying argument indices from the function by name:
 ```c
     uint32_t arg_index[4];
@@ -476,22 +492,26 @@ The following sample code demonstrates a sequence for querying argument indices 
 ```
 
 ## Occupancy
-@todo Zack: write-up section
+@todo [**Zack**] write-up section or remove
 
 # <a name="oi">OpenCL Interoperability</a>
+@todo [**Mike**] write-up summary on how these are one-direction and optimized for unified device drivers.
 There are three OpenCL objects that can be shared for interoperability:
 1. **cl_mem** - an OpenCL buffer object
 2. **cl_program** - an OpenCL program object
 3. **cl_command_queue** - an OpenCL command queue object
 
 ## cl_mem
-@todo Ben any details about memory sharing
+@todo [**Ben**] list any details/rules about memory sharing, Acquire/Release semantics, 
 
 ## cl_program
-@todo Zack any details about program sharing
+@todo [**Zack**} list any details/rules about program sharing
 - clBuildProgram or clCompileProgram/clLinkProgram must be called prior to xeDeviceRegisterCLProgram
 
 ## cl_command_queue
-@todo Brandon any details about command queue sharing
+@todo [**Brandon**} list any details/rules about command queue sharing
 - clFlush must be called prior to any xeCommandQueueEnqueue* function
+
+# <a name="ipc">Inter-Process Communication</a>
+@todo [**Ben**] write-up details on how inter-process communication and resource sharing works; e.g. OCL->XE->IPC->XE or OC->IPC->OCL->XE
 

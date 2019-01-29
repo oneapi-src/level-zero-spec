@@ -325,8 +325,9 @@ xe_result_t __xecall
 ///       this device.
 ///     - The application may **not** call this function from simultaneous
 ///       threads.
-///     - @todo Ben: document any limits on number of active p2p connections
-///       @todo Ben: document behavior if link is already enabled
+///     - @todo [**Ben**] document any limits on number of active p2p
+///       connections @todo [**Ben**] document behavior if link is already
+///       enabled
 /// 
 /// @remarks
 ///   _Analogues_
@@ -363,7 +364,7 @@ xe_result_t __xecall
 /// @details
 ///     - The application may **not** call this function from simultaneous
 ///       threads.
-///     - @todo Ben: document behavior if link is not enabled
+///     - @todo [**Ben**] document behavior if link is not enabled
 /// 
 /// @remarks
 ///   _Analogues_

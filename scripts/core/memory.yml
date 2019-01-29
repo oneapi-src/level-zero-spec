@@ -9,7 +9,7 @@ analogue:
     - "**cudaMallocManaged**"
 details:
     - "Shared allocations share ownership between the host and one or more devices."
-    - "@todo Ben: comprehend multi-tile?"
+    - "@todo [**Ben**] comprehend multi-tile?"
     - "The application may call this function from simultaneous threads."
     - "The implementation of this function should be lock-free."
 params:
@@ -117,7 +117,7 @@ details:
     - "The application is responsible for making sure the GPU is not currently referencing the memory before it is freed"
     - "The implementation of this function will immediately free all Host and Device allocations associated with this memory"
     - "The implementation of this function should be lock-free."
-    - "@todo Ben: Should the pointer passed to the $xMemFree function be const or non-const?"
+    - "@todo [**Ben**] Should the pointer passed to the $xMemFree function be const or non-const?"
 params:
     - type: "const void*"
       name: ptr
@@ -156,9 +156,9 @@ analogue:
 details:
     - "The application may call this function from simultaneous threads."
     - "The implementation of this function should be lock-free."
-    - "@todo Ben: do we need to support additional properties: base addr, size, etc? 
-       @todo Ben: do we need to support querying the associated device? 
-       @todo Ben: should we return all attributes as a (versioned) struct instead?"
+    - "@todo [**Ben**] do we need to support additional properties: base addr, size, etc? 
+       @todo [**Ben**] do we need to support querying the associated device? 
+       @todo [**Ben**] should we return all attributes as a (versioned) struct instead?"
 params:
     - type: "const void*"
       name: ptr
@@ -180,7 +180,7 @@ name: $x_memory_advice_t
 etors:
     - name: $X_MEMORY_ADVICE_TBD
       value: "0"
-      desc: "@todo Ben: which memory advice hints could/should we support?"
+      desc: "@todo [**Ben**] which memory advice hints could/should we support?"
 --- #--------------------------------------------------------------------------
 type: function
 desc: "Provides advice about the use of a shared memory range"
@@ -222,7 +222,7 @@ details:
     - "Takes a pointer to the base of a device memory allocation and exports it for use in another process."
     - "The application may call this function from simultaneous threads."
     - "The implementation of this function should be lock-free."
-    - "@todo Ankur: Do we have limitations on which devices / OSes support IPC functionality?"
+    - "@todo [**Ankur**] Do we have limitations on which devices / OSes support IPC functionality?"
 params:
     - type: "const void*"
       name: ptr
@@ -279,7 +279,7 @@ analogue:
     - "**cuIpcCloseMemHandle**"
 details:
     - "Closes an IPC memory handle by unmapping memory that was opened in this process using $xIpcOpenMemHandle."
-    - "@todo Ben: Should the pointer passed to the $xIpcCloseMemHandle function be const or non-const?"
+    - "@todo [**Ben**] Should the pointer passed to the $xIpcCloseMemHandle function be const or non-const?"
     - "The application may call this function from simultaneous threads."
     - "The implementation of this function should be lock-free."
 params:

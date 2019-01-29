@@ -15,7 +15,7 @@ etors:
       value: "0"
       desc: "Format is SPIRV IL format"
     - name: $X_MODULE_NATIVE
-      desc: "Format is Gen native format"
+      desc: "Format is device native format"
 --- #--------------------------------------------------------------------------
 type: struct
 desc: "Module descriptor"

@@ -35,9 +35,11 @@ available memory and affinity to the compute, user managed cache size and work s
 Memory is visible to upper level stack as unified memory with single VA space covering both GPU and specific device type (e.g GPU or FPGA). 
 For GPU the API exposed 2 levels (potentially 3 levels) of memory hierarchy. 
 The local memory available per device / sub device and user managed shared memory cache size (L1 cache). 
-@todo Murali: Determine the need to expose the last level (L3) cache on GPU, given it is configurable at the very high (buffer or image) level granularity in the HW.  
+@todo [**Murali**] Determine the need to expose the last level (L3) cache on GPU, given it is configurable at the very high (buffer or image) level granularity in the HW.  
 The Level 0 application interface allows allocation of buffers and images at device and sub device granularity. 
 The memory APIs allow 3 kinds of allocation methods and enable implicit and explicit management of the resources by the application or runtimes
+@todo [**Ankur**] add cache capabilities of the device, e.g. max SLM size, L2$ size, L3$ controls
+@todo [**Ben**] SPIR-V has semantics within the kernels to declare cache requests, what about outside of kernels?  Add per-Resource L3$ _HINTS_, overrided by kernels.
 
 ## Cross-Device Support
 In order to both expose the full capabilities of GPUs and remain supportable by other devices, the API definition is sub-divided into "Core" and "Extended".  
@@ -50,6 +52,11 @@ GPUs are typically built with multiple dies, also called as "Tiles" with in the 
 Each Tile is interconnected with neighboring tile using high bandwidth link. 
 Even though, tiles have direct connection to its own memory, the high band width link allows each tile to access its neighboring tile's memory at very low latency. 
 The cross-tile memory is stacked within package allowing applications to access all the device memory with the single continuous view.
+
+@todo [**Ben/Zack**] add support for sub-devices and memory, command queue affinity, etc.
+
+## IPC
+@todo [**Murali**] add high-level goals for IPC.
 
 # <a name="spec">API Specification</a>
 The following section provides high-level design philosophy of the APIs.
@@ -103,17 +110,16 @@ such as memory, images and command lists
 
 # <a name="drv">Drivers</a>
 ## Installation
-The Xe driver API is implemented within the xe.dll, which is copied on the system during installation of the device driver.
+The Xe driver API is implemented within the xe<name>.dll, which is copied on the system during installation of the device driver;
+where <name> ...
+@todo [**Mike**] how would an ICD work?
 
 ## Environment Variables
 The following table documents the supported knobs for overriding default driver behavior.
 
-@todo Zack: what variables for we want for "Programs"?
-@todo Ankur: what variables do we want for "Cache"?
+@todo [**Brandon**] add driver validation levels e.g., {low, **medium**, high}
 
 | Category            | Name                                    | Values                 | Description                                           |
 |---------------------|-----------------------------------------|------------------------|-------------------------------------------------------|
 | Memory              | XE_SHARED_FORCE_DEVICE_ALLOC          | {**0**, 1}             | Forces all shared allocations into device memory     |
-| Programs            | XE_PROGRAM_CACHE_DISABLE              | {**0**, 1}             | Disables the disk caching of compiled programs        |
-| Cache               | XE_PROGRAM_MOCS_INDEX                 | {**0**}                | Overrides the Memory Object Control State (MOCS) index used for programs, scratch space, and arguments. |
-(Note: these are only __examples__ of variables the driver could support.)
+
