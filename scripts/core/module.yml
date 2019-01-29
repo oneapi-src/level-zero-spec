@@ -275,6 +275,12 @@ etors:
       desc: "Maximum threads required for this function"
     - name: $X_FUNCTION_ATTR_MAX_SHARED_MEM_SIZE
       desc: "Maximum shared memory required for this function"
+    - name: $X_FUNCTION_ATTR_INDIRECT_HOST_ACCESS
+      desc: "Indicates that the function accesses host allocations indirectly (default: false)"
+    - name: $X_FUNCTION_ATTR_INDIRECT_DEVICE_ACCESS
+      desc: "Indicates that the function accesses device allocations indirectly (default: false)"
+    - name: $X_FUNCTION_ATTR_INDIRECT_SHARED_ACCESS
+      desc: "Indicates that the function accesses shared allocations indirectly (default: false)"
 --- #--------------------------------------------------------------------------
 type: function
 desc: "Query a function attribute."
@@ -299,6 +305,30 @@ returns:
         - "invalid handle for hFunction"
         - "invalid value for attr"
         - "null ptr for pValue"
+--- #--------------------------------------------------------------------------
+type: function
+desc: "Sets a function attribute"
+name: $xFunctionSetAttribute
+analogue:
+    - "**cuFuncSetAttribute**"
+details:
+    - "This function may **not** be called from simultaneous threads."
+    - "The implementation of this function should be lock-free."
+params:
+    - type: "$x_function_handle_t"
+      name: hFunction
+      desc: "[in] handle of the function object"
+    - type: "$x_function_attribute_t"
+      name: attr
+      desc: "[in] attribute to set"
+    - type: "uint32_t"
+      name: value
+      desc: "[in] attribute value to set"
+returns:
+    - $X_RESULT_ERROR_INVALID_PARAMETER:
+        - "invalid handle for hFunction"
+        - "invalid value for attr"
+        - "invalid value for value"
 --- #--------------------------------------------------------------------------
 type: function
 desc: "Dispatch command over one or more work groups."

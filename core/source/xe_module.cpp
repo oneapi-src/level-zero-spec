@@ -396,6 +396,42 @@ xe_result_t __xecall
 }
 
 ///////////////////////////////////////////////////////////////////////////////
+/// @brief Sets a function attribute
+/// 
+/// @details
+///     - This function may **not** be called from simultaneous threads.
+///     - The implementation of this function should be lock-free.
+/// 
+/// @remarks
+///   _Analogues_
+///     - **cuFuncSetAttribute**
+/// 
+/// @returns
+///     - ::XE_RESULT_SUCCESS
+///     - ::XE_RESULT_ERROR_UNINITIALIZED
+///     - ::XE_RESULT_ERROR_INVALID_PARAMETER
+///         + invalid handle for hFunction
+///         + invalid value for attr
+///         + invalid value for value
+/*@todo: __declspec(dllexport)*/
+xe_result_t __xecall
+  xeFunctionSetAttribute(
+    xe_function_handle_t hFunction,                 ///< [in] handle of the function object
+    xe_function_attribute_t attr,                   ///< [in] attribute to set
+    uint32_t value                                  ///< [in] attribute value to set
+    )
+{
+    // @todo: check_return(nullptr == get_driver(), XE_RESULT_ERROR_UNINITIALIZED);
+
+    // Check parameters
+    // @todo: check_return(xe_function_handle_t() == hFunction, XE_RESULT_ERROR_INVALID_PARAMETER);
+
+    // @todo: insert <code> here
+
+    return XE_RESULT_SUCCESS;
+}
+
+///////////////////////////////////////////////////////////////////////////////
 /// @brief Dispatch command over one or more work groups.
 /// 
 /// @details

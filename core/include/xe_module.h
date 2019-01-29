@@ -312,6 +312,9 @@ typedef enum _xe_function_attribute_t
     XE_FUNCTION_ATTR_MAX_REGS_USED = 0,             ///< Maximum device registers used for this function
     XE_FUNCTION_ATTR_MAX_THREADS_PER_GROUP,         ///< Maximum threads required for this function
     XE_FUNCTION_ATTR_MAX_SHARED_MEM_SIZE,           ///< Maximum shared memory required for this function
+    XE_FUNCTION_ATTR_INDIRECT_HOST_ACCESS,          ///< Indicates that the function accesses host allocations indirectly (default: false)
+    XE_FUNCTION_ATTR_INDIRECT_DEVICE_ACCESS,        ///< Indicates that the function accesses device allocations indirectly (default: false)
+    XE_FUNCTION_ATTR_INDIRECT_SHARED_ACCESS,        ///< Indicates that the function accesses shared allocations indirectly (default: false)
 
 } xe_function_attribute_t;
 
@@ -338,6 +341,31 @@ xe_result_t __xecall
     xe_function_handle_t hFunction,                 ///< [in] handle of the function object
     xe_function_attribute_t attr,                   ///< [in] attribute to query
     uint32_t* pValue                                ///< [out] returned attribute value
+    );
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Sets a function attribute
+/// 
+/// @details
+///     - This function may **not** be called from simultaneous threads.
+///     - The implementation of this function should be lock-free.
+/// 
+/// @remarks
+///   _Analogues_
+///     - **cuFuncSetAttribute**
+/// 
+/// @returns
+///     - ::XE_RESULT_SUCCESS
+///     - ::XE_RESULT_ERROR_UNINITIALIZED
+///     - ::XE_RESULT_ERROR_INVALID_PARAMETER
+///         + invalid handle for hFunction
+///         + invalid value for attr
+///         + invalid value for value
+xe_result_t __xecall
+  xeFunctionSetAttribute(
+    xe_function_handle_t hFunction,                 ///< [in] handle of the function object
+    xe_function_attribute_t attr,                   ///< [in] attribute to set
+    uint32_t value                                  ///< [in] attribute value to set
     );
 
 ///////////////////////////////////////////////////////////////////////////////
