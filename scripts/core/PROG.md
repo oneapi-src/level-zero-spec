@@ -258,8 +258,46 @@ There are two types of allocations:
 2. **Images** - non-linear, formatted allocations for direct access from the device.
 
 ${"##"} Memory
-@todo Ben: describe standard, managed, and shared
-@todo Ben: describe property and advise
+Linear, unformatted allocations are represented as pointers.
+The pointers have the same size on the host and the device.
+Linear, unformatted memory allocations are one of three types.
+The type of allocation describes the _ownership_ of the allocation:
+1. **Host** allocations are owned by the host, and are intended to be allocated out system memory.
+  Host allocations are accessible by the host and devices.
+  The same pointer to a host allocation may be used on the host and on a device; they have _address equivalence_.
+  Host allocations are not expected to migrate between system memory and device local memory.
+2. **Device** allocations are owned by a specific device, and are intended to be allocated out of device local memory.
+  Device allocations generally trade off higher performance for access limitations.
+  With very few exceptions, device allocations may only be accessed by the specific device they are allocated on, or copied to a host or another device allocation.
+3. **Shared** allocations share ownership between the host and one or more devices.
+  Shared allocations are accessible by at least the host and its associated device.
+  Shared allocations are optionally accessible by other devices.
+  In all cases, the same pointer to a shared allocation may be used on the host and all supporting devices.
+  Shared allocations are intended to migrate between host memory and device local memory, when applicable.
+
+Other optional capabilities for allocations include:
+* **Atomic** support - if a device support atomic access allocations of the specified type.
+* **Concurrent Access** support - if a device supports concurrent access allocations of the specified type, or another device's allocation of the specified type.
+* **Concurrent Atomic** support - if a device supports concurrent atomic access to allocations of the specified type, or another device's allocations of the specified type.
+
+In summary:
+
+| Name | Initial Location | Accessible By || Migratable To ||
+| :--: | :--: | :--: | :--: | :--: | :--: |
+| **Host** | Host | Host | Yes | Host | N/A |
+| ^ | ^ | Any Device | Yes (perhaps over PCIe) | Device | No |
+| **Device** | Specific Device | Host | No | Host | No |
+| ^ | ^ | Specific Device | Yes | Device | N/A |
+| ^ | ^ | Another Device | Optional (may require p2p) | Another Device | No |
+| **Shared** | Host, or Specific Device, Or Unspecified | Host | Yes | Host | Yes |
+| ^ | ^ | Specific Device | Yes | Device | Yes |
+| ^ | ^ | Another Device | Optional (may require p2p) | Another Device | Optional |
+
+${"###"} Prefetch and Memory Advice
+
+**Shared** allocations may be prefetched to a supporting device via the `${x}CommandListEncodeMemoryPrefetch` API.
+
+Additionally, an application may provide memory advices for a **shared** allocation via the `${x}MemAdvise` API, to override driver heuristics or migration policies.
 
 ${"##"} Images
 An image is used to store multi-dimensional and format-defined memory for optimal device access.
