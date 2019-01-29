@@ -258,27 +258,25 @@ There are two types of allocations:
 2. **Images** - non-linear, formatted allocations for direct access from the device.
 
 ## Memory
-Linear, unformatted allocations are represented as pointers.
-The pointers have the same size on the host and the device.
-Linear, unformatted memory allocations are one of three types.
-The type of allocation describes the _ownership_ of the allocation:
-1. **Host** allocations are owned by the host, and are intended to be allocated out system memory.
-  Host allocations are accessible by the host and devices.
-  The same pointer to a host allocation may be used on the host and on a device; they have _address equivalence_.
-  Host allocations are not expected to migrate between system memory and device local memory.
-2. **Device** allocations are owned by a specific device, and are intended to be allocated out of device local memory.
-  Device allocations generally trade off higher performance for access limitations.
-  With very few exceptions, device allocations may only be accessed by the specific device they are allocated on, or copied to a host or another device allocation.
-3. **Shared** allocations share ownership between the host and one or more devices.
-  Shared allocations are accessible by at least the host and its associated device.
-  Shared allocations are optionally accessible by other devices.
-  In all cases, the same pointer to a shared allocation may be used on the host and all supporting devices.
-  Shared allocations are intended to migrate between host memory and device local memory, when applicable.
+Linear, unformatted memory allocations are represented as pointers in the host application.
+A pointer on the host has the same size as a pointer on the device.
 
-Other optional capabilities for allocations include:
-* **Atomic** support - if a device support atomic access allocations of the specified type.
-* **Concurrent Access** support - if a device supports concurrent access allocations of the specified type, or another device's allocation of the specified type.
-* **Concurrent Atomic** support - if a device supports concurrent atomic access to allocations of the specified type, or another device's allocations of the specified type.
+Three types of allocations are supported.
+The type of allocation describes the _ownership_ of the allocation:
+1. **Host** allocations are owned by the host and are intended to be allocated out system memory.
+  Host allocations are accessible by the host and one or more devices.
+  The same pointer to a host allocation may be used on the host and all supported devices; they have _address equivalence_.
+  Host allocations are not expected to migrate between system memory and device local memory.
+  Host allocations trade off wide accessibility and transfer benefits for potentially higher per-access costs, such as over PCI express.
+2. **Device** allocations are owned by a specific device and are intended to be allocated out of device local memory, if present.
+  Device allocations generally trade off access limitations for higher performance.
+  With very few exceptions, device allocations may only be accessed by the specific device that they are allocated on, or copied to a host or another device allocation.
+  The same pointer to a device allocation may be used on any supported device.
+3. **Shared** allocations share ownership and are intended to migrate between the host and one or more devices.
+  Shared allocations are accessible by at least the host and an associated device.
+  Shared allocations may be accessed by other devices in some cases.
+  Shared allocations trade off transfer costs for per-access benefits.
+  The same pointer to a shared allocation may be used on the host and all supported devices.
 
 In summary:
 
@@ -293,11 +291,19 @@ In summary:
 | ^ | ^ | Specific Device | Yes | Device | Yes |
 | ^ | ^ | Another Device | Optional (may require p2p) | Another Device | Optional |
 
+Devices may support different capabilities for each type of allocation.
+Supported capabilities are:
+
+* ::XE_MEMORY_ACCESS - if a device supports access (read or write) to allocations of the specified type.
+* ::XE_MEMORY_ATOMIC_ACCESS - if a device support atomic access to allocations of the specified type.
+* ::XE_MEMORY_CONCURRENT_ACCESS - if a device supports concurrent access to allocations of the specified type, or another device's allocation of the specified type.
+* ::XE_MEMORY_CONCURRENT_ATOMIC_ACCESS - if a device supports concurrent atomic access to allocations of the specified type, or another device's allocations of the specified type.
+
 ### Prefetch and Memory Advice
 
-**Shared** allocations may be prefetched to a supporting device via the `xeCommandListEncodeMemoryPrefetch` API.
+**Shared** allocations may be prefetched to a supporting device via the ::xeCommandListEncodeMemoryPrefetch API.
 
-Additionally, an application may provide memory advices for a **shared** allocation via the `xeMemAdvise` API, to override driver heuristics or migration policies.
+Additionally, an application may provide memory advices for a **shared** allocation via the ::xeMemAdvise API, to override driver heuristics or migration policies.
 
 ## Images
 An image is used to store multi-dimensional and format-defined memory for optimal device access.
