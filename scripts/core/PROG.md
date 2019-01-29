@@ -287,7 +287,7 @@ In most cases, the driver implicitly handles residency of allocations for device
 This can be done by inspecting API parameters, including function arguments.
 However, in cases where the devices does **not** support page-faulting _and_ the driver is incapable of determining whether an allocation will be accessed by the device,
 such as multiple levels of indirection, there are two methods available:
-1. the application may set the ${X}_FUNCTION_FLAG_FORCE_RESIDENCY flag during program creation to force all device allocations to be resident during execution.
+1. the application may set the ::${X}_FUNCTION_FLAG_FORCE_RESIDENCY flag during program creation to force all device allocations to be resident during execution.
 2. explcit APIs are included for the application to dynamically change residency as needed.
 
 If the application does not properly manage residency for these cases then the device may experience unrecoverable page-faults.
