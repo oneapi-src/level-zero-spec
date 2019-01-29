@@ -1,6 +1,7 @@
 # Introduction
 
 [DO NOT EDIT]: # (generated from /scripts/core/INTRO.md)
+The objective of the Level 0 APIs to provide direct-to-metal interfaces to offload accelerator devices.
 
 The Intel Xe Driver API provides the lowest-level, fine-grain and most explicit control over:
 - Memory Allocation and Cross-Process Sharing
@@ -13,7 +14,26 @@ Most applications should not require the additional control provided by the driv
 The driver APIs are intended for providing explicit controls needed by higher-level runtime APIs and libraries.
 
 While heavily influenced by other low-level APIs, such as OpenCL, the driver APIs are designed to evolve independently.
-While heavily influenced by GPU archtiecture, the driver APIs are designed to be supportable across different compute device architectures, such as FPGAs.
+While heavily influenced by GPU archtiecture, the driver APIs are designed to be supportable across different compute device architectures, such as FPGAs, CSAs, etc.
+
+The API architecture exposes both physical and logical abstraction of the underlying devices capabilities. 
+The Device, sub device and memory are exposed at physical level and command queues, events and synchronization methods are defined as logical entities. 
+All logical entities will be bound to device level physical capabilities.
+Device discovery APIs enumerate the accelerators functional features. 
+These APIs provide interface to query information like compute unit count within the device or sub device, 
+available memory and affinity to the compute, user managed cache size and work submission command queues.
+
+GPUs are typically built with multiple dies, also called as "Tiles" with in the package. 
+Each Tile is interconnected with neighboring tile using high bandwidth link. 
+Even though, tiles have direct connection to its own memory, the high band width link allows each tile to access its neighboring tile's memory at very low latency. 
+The cross-tile memory is stacked within package allowing applications to access all the device memory with the single continuous view.
+
+Memory is visible to upper level stack as unified memory with single VA space covering both GPU and specific device type (e.g GPU or FPGA). 
+For GPU the API exposed 2 levels (potentially 3 levels) of memory hierarchy. 
+The local memory available per device / sub device and user managed shared memory cache size (L1 cache). 
+@todo Murali: Determine the need to expose the last level (L3) cache on GPU, given it is configurable at the very high (buffer or image) level granularity in the HW.  
+The Level 0 application interface allows allocation of buffers and images at device and sub device granularity. 
+The memory APIs allow 3 kinds of allocation methods and enable implicit and explicit management of the resources by the application or runtimes
 
 ## Cross-Device Support
 In order to both expose the full capabilities of GPUs and remain supportable by other devices, the API definition is sub-divided into "Core" and "Extended".  
