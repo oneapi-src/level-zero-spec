@@ -133,7 +133,7 @@ typedef struct _xe_device_properties_t
     uint32_t coreClockRate;                         ///< [out] Clock rate for device core.
     uint32_t memClockRate;                          ///< [out] Clock rate for device global memory
     uint32_t memGlobalBusWidth;                     ///< [out] Bus width between core and memory.
-    uint32_t totalLocalMemSize;                     ///< [out] Total memory size in MB.
+    uint64_t totalLocalMemSize;                     ///< [out] Total memory size in bytes.
     uint32_t l2CacheSize;                           ///< [out] Device L2 size
     uint32_t numAsyncComputeEngines;                ///< [out] Number of asynchronous compute engines
     uint32_t numAsyncCopyEngines;                   ///< [out] Number of asynchronous copy engines

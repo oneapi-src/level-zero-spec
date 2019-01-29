@@ -288,17 +288,55 @@ xe_result_t __xecall
 ///     - ::XE_RESULT_SUCCESS
 ///     - ::XE_RESULT_ERROR_UNINITIALIZED
 ///     - ::XE_RESULT_ERROR_INVALID_PARAMETER
-///         + invalid handle for hFunction
+///         + invalid handle for hFunctionArgs
 ///         + invalid argument index
 ///         + null ptr for pArgValue
 ///         + invalid size specified
-///         + invalid handle for hFunctionArgs
 xe_result_t __xecall
   xeFunctionArgsSetValue(
     xe_function_args_handle_t hFunctionArgs,        ///< [in/out] handle of the function args object.
     uint32_t argIndex,                              ///< [in] argument index in range [0, num args - 1]
     size_t argSize,                                 ///< [in] size of argument type
     const void* pArgValue                           ///< [in] argument value represented as matching arg type
+    );
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Function argument attributes
+/// 
+/// @remarks
+///   _Analogues_
+///     - **cl_kernel_exec_info**
+typedef enum _xe_function_argument_attribute_t
+{
+    XE_FUNCTION_ARG_ATTR_INDIRECT_HOST_ACCESS = 0,  ///< Indicates that the function accesses host allocations indirectly (default: false)
+    XE_FUNCTION_ARG_ATTR_INDIRECT_DEVICE_ACCESS,    ///< Indicates that the function accesses device allocations indirectly (default: false)
+    XE_FUNCTION_ARG_ATTR_INDIRECT_SHARED_ACCESS,    ///< Indicates that the function accesses shared allocations indirectly (default: false)
+
+} xe_function_argument_attribute_t;
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Sets a function argument attribute
+/// 
+/// @details
+///     - This function may **not** be called from simultaneous threads.
+///     - The implementation of this function should be lock-free.
+/// 
+/// @remarks
+///   _Analogues_
+///     - **clSetKernelExecInfo**
+/// 
+/// @returns
+///     - ::XE_RESULT_SUCCESS
+///     - ::XE_RESULT_ERROR_UNINITIALIZED
+///     - ::XE_RESULT_ERROR_INVALID_PARAMETER
+///         + invalid handle for hFunctionArgs
+///         + invalid value for attr
+///         + invalid value for value
+xe_result_t __xecall
+  xeFunctionArgsSetAttribute(
+    xe_function_args_handle_t hFunctionArgs,        ///< [in/out] handle of the function args object.
+    xe_function_argument_attribute_t attr,          ///< [in] attribute to set
+    uint32_t value                                  ///< [in] attribute value to set
     );
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -312,9 +350,6 @@ typedef enum _xe_function_attribute_t
     XE_FUNCTION_ATTR_MAX_REGS_USED = 0,             ///< Maximum device registers used for this function
     XE_FUNCTION_ATTR_MAX_THREADS_PER_GROUP,         ///< Maximum threads required for this function
     XE_FUNCTION_ATTR_MAX_SHARED_MEM_SIZE,           ///< Maximum shared memory required for this function
-    XE_FUNCTION_ATTR_INDIRECT_HOST_ACCESS,          ///< Indicates that the function accesses host allocations indirectly (default: false)
-    XE_FUNCTION_ATTR_INDIRECT_DEVICE_ACCESS,        ///< Indicates that the function accesses device allocations indirectly (default: false)
-    XE_FUNCTION_ATTR_INDIRECT_SHARED_ACCESS,        ///< Indicates that the function accesses shared allocations indirectly (default: false)
 
 } xe_function_attribute_t;
 
@@ -341,31 +376,6 @@ xe_result_t __xecall
     xe_function_handle_t hFunction,                 ///< [in] handle of the function object
     xe_function_attribute_t attr,                   ///< [in] attribute to query
     uint32_t* pValue                                ///< [out] returned attribute value
-    );
-
-///////////////////////////////////////////////////////////////////////////////
-/// @brief Sets a function attribute
-/// 
-/// @details
-///     - This function may **not** be called from simultaneous threads.
-///     - The implementation of this function should be lock-free.
-/// 
-/// @remarks
-///   _Analogues_
-///     - **cuFuncSetAttribute**
-/// 
-/// @returns
-///     - ::XE_RESULT_SUCCESS
-///     - ::XE_RESULT_ERROR_UNINITIALIZED
-///     - ::XE_RESULT_ERROR_INVALID_PARAMETER
-///         + invalid handle for hFunction
-///         + invalid value for attr
-///         + invalid value for value
-xe_result_t __xecall
-  xeFunctionSetAttribute(
-    xe_function_handle_t hFunction,                 ///< [in] handle of the function object
-    xe_function_attribute_t attr,                   ///< [in] attribute to set
-    uint32_t value                                  ///< [in] attribute value to set
     );
 
 ///////////////////////////////////////////////////////////////////////////////

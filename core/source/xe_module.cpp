@@ -333,11 +333,10 @@ xe_result_t __xecall
 ///     - ::XE_RESULT_SUCCESS
 ///     - ::XE_RESULT_ERROR_UNINITIALIZED
 ///     - ::XE_RESULT_ERROR_INVALID_PARAMETER
-///         + invalid handle for hFunction
+///         + invalid handle for hFunctionArgs
 ///         + invalid argument index
 ///         + null ptr for pArgValue
 ///         + invalid size specified
-///         + invalid handle for hFunctionArgs
 /*@todo: __declspec(dllexport)*/
 xe_result_t __xecall
   xeFunctionArgsSetValue(
@@ -352,6 +351,42 @@ xe_result_t __xecall
     // Check parameters
     // @todo: check_return(xe_function_args_handle_t() == hFunctionArgs, XE_RESULT_ERROR_INVALID_PARAMETER);
     // @todo: check_return(nullptr == pArgValue, XE_RESULT_ERROR_INVALID_PARAMETER);
+
+    // @todo: insert <code> here
+
+    return XE_RESULT_SUCCESS;
+}
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Sets a function argument attribute
+/// 
+/// @details
+///     - This function may **not** be called from simultaneous threads.
+///     - The implementation of this function should be lock-free.
+/// 
+/// @remarks
+///   _Analogues_
+///     - **clSetKernelExecInfo**
+/// 
+/// @returns
+///     - ::XE_RESULT_SUCCESS
+///     - ::XE_RESULT_ERROR_UNINITIALIZED
+///     - ::XE_RESULT_ERROR_INVALID_PARAMETER
+///         + invalid handle for hFunctionArgs
+///         + invalid value for attr
+///         + invalid value for value
+/*@todo: __declspec(dllexport)*/
+xe_result_t __xecall
+  xeFunctionArgsSetAttribute(
+    xe_function_args_handle_t hFunctionArgs,        ///< [in/out] handle of the function args object.
+    xe_function_argument_attribute_t attr,          ///< [in] attribute to set
+    uint32_t value                                  ///< [in] attribute value to set
+    )
+{
+    // @todo: check_return(nullptr == get_driver(), XE_RESULT_ERROR_UNINITIALIZED);
+
+    // Check parameters
+    // @todo: check_return(xe_function_args_handle_t() == hFunctionArgs, XE_RESULT_ERROR_INVALID_PARAMETER);
 
     // @todo: insert <code> here
 
@@ -389,42 +424,6 @@ xe_result_t __xecall
     // Check parameters
     // @todo: check_return(xe_function_handle_t() == hFunction, XE_RESULT_ERROR_INVALID_PARAMETER);
     // @todo: check_return(nullptr == pValue, XE_RESULT_ERROR_INVALID_PARAMETER);
-
-    // @todo: insert <code> here
-
-    return XE_RESULT_SUCCESS;
-}
-
-///////////////////////////////////////////////////////////////////////////////
-/// @brief Sets a function attribute
-/// 
-/// @details
-///     - This function may **not** be called from simultaneous threads.
-///     - The implementation of this function should be lock-free.
-/// 
-/// @remarks
-///   _Analogues_
-///     - **cuFuncSetAttribute**
-/// 
-/// @returns
-///     - ::XE_RESULT_SUCCESS
-///     - ::XE_RESULT_ERROR_UNINITIALIZED
-///     - ::XE_RESULT_ERROR_INVALID_PARAMETER
-///         + invalid handle for hFunction
-///         + invalid value for attr
-///         + invalid value for value
-/*@todo: __declspec(dllexport)*/
-xe_result_t __xecall
-  xeFunctionSetAttribute(
-    xe_function_handle_t hFunction,                 ///< [in] handle of the function object
-    xe_function_attribute_t attr,                   ///< [in] attribute to set
-    uint32_t value                                  ///< [in] attribute value to set
-    )
-{
-    // @todo: check_return(nullptr == get_driver(), XE_RESULT_ERROR_UNINITIALIZED);
-
-    // Check parameters
-    // @todo: check_return(xe_function_handle_t() == hFunction, XE_RESULT_ERROR_INVALID_PARAMETER);
 
     // @todo: insert <code> here
 
