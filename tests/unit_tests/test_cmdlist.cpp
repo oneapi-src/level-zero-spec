@@ -48,6 +48,7 @@ TEST_P(CommandListCreate, returnsCommandListOnSuccess) {
 
     EXPECT_CALL(device, getMemoryManager()).WillRepeatedly(Return(&manager));
     EXPECT_CALL(manager, allocateDeviceMemory()).WillRepeatedly(Return(allocation));
+    EXPECT_CALL(manager, freeMemory(allocation)).WillRepeatedly(Return());
 
     auto commandList = xe::CommandList::create(GetParam(), &device);
     ASSERT_NE(nullptr, commandList);
