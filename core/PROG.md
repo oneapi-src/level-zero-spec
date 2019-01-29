@@ -169,6 +169,9 @@ and can only be waited upon from the host.
 - A fence only has two states: not signaled and signaled.
 - A fence cannot be shared across processes.
 
+The following diagram illustrates an example of fences:
+![Fence](../images/core_fence.png?raw=true)
+
 The following sample code demonstrates a sequence for creation, submission and querying of a fence:
 ```c
     // Create fence
@@ -201,6 +204,9 @@ The following sample code demonstrates a sequence for creation, submission and q
 - An event cannot be encoded into multiple command lists simultaneously.
 - An event can be shared across processes.
 
+The following diagram illustrates an example of events:
+![Event](../images/core_event.png?raw=true)
+
 The following sample code demonstrates a sequence for creation and submission of an event:
 ```c
     // Create event
@@ -228,6 +234,9 @@ The following sample code demonstrates a sequence for creation and submission of
 - A semaphore can be encoded into any command list from the same device.
 - A semaphore can be encoded into multiple command lists simultaneously.
 - A semaphore cannot be shared across processes.
+
+The following diagram illustrates an example of semaphores:
+![Semaphore](../images/core_semaphore.png?raw=true)
 
 The following sample code demonstrates a sequence for creation and submission of a semaphore:
 ```c
