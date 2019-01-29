@@ -189,9 +189,11 @@ analogue:
     - "**cudaMemAdvise**"
 details:
     - "Memory advice can be used to override driver heuristics to explicitly control shared memory behavior."
+    - "Memory advice may only be supported at a device-specific granularity, such as at a page boundary.
+       In this case, the memory range may be expanded such that the start and end of the range satisfy
+       granularity requirements."
     - "The application may call this function from simultaneous threads."
     - "The implementation of this function should be lock-free."
-    - "@todo Ben: likely will snap to page boundaries"
 params:
     - type: "const $x_device_handle_t"
       name: hDevice
