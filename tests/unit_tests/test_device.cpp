@@ -1,3 +1,4 @@
+#include "cmd_list.h"
 #include "mock_device.h"
 #include "xe_cmdlist.h"
 #include "xe_event.h"
@@ -74,6 +75,7 @@ TEST(DeviceCreateCommandList, returnsSuccess) {
     EXPECT_EQ(XE_RESULT_SUCCESS, result);
     EXPECT_NE(nullptr, commandList.pDriverData);
 
+    xe::CommandList::fromHandle(commandList)->destroy();
     delete device;
 }
 

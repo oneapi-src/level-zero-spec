@@ -1,6 +1,8 @@
 #include "mock_cmd_list.h"
 #include "mock_device.h"
+#include "mock_memory_manager.h"
 #include "event.h"
+#include "graphics_allocation.h"
 #include "igfxfmid.h"
 #include "gtest/gtest.h"
 
@@ -36,15 +38,23 @@ TEST(xeCommandListEncodeWaitOnEvent, redirectsToCmdListObject) {
     EXPECT_EQ(XE_RESULT_SUCCESS, result);
 }
 
+using ::testing::Return;
 using CommandListCreate = ::testing::TestWithParam<uint32_t>;
 
 TEST_P(CommandListCreate, returnsCommandListOnSuccess) {
     xe::MockDevice device;
+    xe::MockMemoryManager manager;
+    auto allocation = new xe::GraphicsAllocation;
+
+    EXPECT_CALL(device, getMemoryManager()).WillRepeatedly(Return(&manager));
+    EXPECT_CALL(manager, allocateDeviceMemory()).WillRepeatedly(Return(allocation));
+
     auto commandList = xe::CommandList::create(GetParam(), &device);
     ASSERT_NE(nullptr, commandList);
 
     auto commandListAlias = whitebox_cast<xe::CommandList>(commandList);
-    EXPECT_EQ(commandListAlias->device, &device);
+    EXPECT_EQ(&device, commandListAlias->device);
+    EXPECT_EQ(allocation, commandListAlias->allocation);
     commandList->destroy();
 }
 

@@ -6,15 +6,23 @@
 #include "cmd_list.h"
 
 namespace xe {
+struct GraphicsAllocation;
 
 struct CommandListImp : public CommandList {
-    CommandListImp(Device *device) : device(device) {
+    CommandListImp(Device *device)
+        : device(device),
+          allocation(nullptr) {
     }
 
     xe_result_t destroy() override;
 
+    virtual bool initialize();
+
   protected:
+    virtual ~CommandListImp();
+
     Device *device;
+    GraphicsAllocation *allocation;
 };
 
 } // namespace xe
