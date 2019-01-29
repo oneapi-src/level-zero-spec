@@ -101,9 +101,9 @@ members:
     - type: uint32_t
       name: memGlobalBusWidth
       desc: "[out] Bus width between core and memory."
-    - type: uint32_t
+    - type: uint64_t
       name: totalLocalMemSize
-      desc: "[out] Total memory size in MB."
+      desc: "[out] Total memory size in bytes."
     - type: uint32_t
       name: l2CacheSize
       desc: "[out] Device L2 size"
