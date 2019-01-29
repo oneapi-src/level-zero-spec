@@ -1,7 +1,14 @@
 # Introduction
 
 [DO NOT EDIT]: # (generated from /scripts/core/INTRO.md)
-The objective of the Level 0 APIs to provide direct-to-metal interfaces to offload accelerator devices.
+
+## Table of Contents
+* [Objective](#obj)
+* [API Specification](#spec)
+* [Drivers](#drv)
+
+# <a name="obj">Objective</a>
+The objective of the Level-Zero APIs to provide direct-to-metal interfaces to offload accelerator devices.
 
 The Intel Xe Driver API provides the lowest-level, fine-grain and most explicit control over:
 - Memory Allocation and Cross-Process Sharing
@@ -16,6 +23,7 @@ The driver APIs are intended for providing explicit controls needed by higher-le
 While heavily influenced by other low-level APIs, such as OpenCL, the driver APIs are designed to evolve independently.
 While heavily influenced by GPU archtiecture, the driver APIs are designed to be supportable across different compute device architectures, such as FPGAs, CSAs, etc.
 
+## Devices
 The API architecture exposes both physical and logical abstraction of the underlying devices capabilities. 
 The Device, sub device and memory are exposed at physical level and command queues, events and synchronization methods are defined as logical entities. 
 All logical entities will be bound to device level physical capabilities.
@@ -23,11 +31,7 @@ Device discovery APIs enumerate the accelerators functional features.
 These APIs provide interface to query information like compute unit count within the device or sub device, 
 available memory and affinity to the compute, user managed cache size and work submission command queues.
 
-GPUs are typically built with multiple dies, also called as "Tiles" with in the package. 
-Each Tile is interconnected with neighboring tile using high bandwidth link. 
-Even though, tiles have direct connection to its own memory, the high band width link allows each tile to access its neighboring tile's memory at very low latency. 
-The cross-tile memory is stacked within package allowing applications to access all the device memory with the single continuous view.
-
+## Memory
 Memory is visible to upper level stack as unified memory with single VA space covering both GPU and specific device type (e.g GPU or FPGA). 
 For GPU the API exposed 2 levels (potentially 3 levels) of memory hierarchy. 
 The local memory available per device / sub device and user managed shared memory cache size (L1 cache). 
@@ -40,6 +44,16 @@ In order to both expose the full capabilities of GPUs and remain supportable by 
 "Core" represents APIs that all fully cross-device while "Extended" represents APIs that are device-specific.
 All implementations must support "Core" APIs while "Extended" APIs are optional.
 An implementation will return ::XE_RESULT_ERROR_UNSUPPORTED for any feature request not supported by that device.
+
+## Multi-Die Device Support
+GPUs are typically built with multiple dies, also called as "Tiles" with in the package. 
+Each Tile is interconnected with neighboring tile using high bandwidth link. 
+Even though, tiles have direct connection to its own memory, the high band width link allows each tile to access its neighboring tile's memory at very low latency. 
+The cross-tile memory is stacked within package allowing applications to access all the device memory with the single continuous view.
+
+# <a name="spec">API Specification</a>
+The following section provides high-level design philosophy of the APIs.
+For more detailed information, refer to the programming guides and detailed specification pages.
 
 ## Naming Convention
 The following naming convention is followed in order to avoid conflicts within the API, or with other APIs and libraries:
@@ -87,6 +101,7 @@ such as command queues and command lists
 such as memory, images and command lists
 - there is no implicit garbage collection performed by the implementation
 
+# <a name="drv">Drivers</a>
 ## Installation
 The Xe driver API is implemented within the xe.dll, which is copied on the system during installation of the device driver.
 

@@ -1,25 +1,33 @@
-${"#"} Core API Programming Guide
+${"#"} Programming Guide (Core)
 
 [DO NOT EDIT]: # (generated from /scripts/core/PROG.md)
 
 The following documents the high-level programming models and guidelines.  
 
-${"##"} Driver and Device
+${"##"} Table of Contents
+* [Driver and Device](#dnd)
+* [Command Queues and Command Lists](#cnc)
+* [Synchronization Primitives](#sp)
+* [Memory and Image Management](#mim)
+* [Modules and Functions](#mnf)
+* [OpenCL Interoperability](#oi)
+
+${"#"} <a name="dnd">Driver and Device</a>
 The following diagram illustrates the hierarchy of devices to the driver:  
 ![Driver Hierarchy](../images/core_driver.png?raw=true)
 
-${"###"} Driver
+${"##"} Driver
 - A driver represents an instance of a ${Xx} driver being loaded and initialized into the current process.
 - Only one instance of a driver per process can be loaded.
 - There is no reference tracking if multiple drivers are initialized.
 - A driver has minimal global state associated; only that which is sufficient for querying devices recognized by the driver.
  
-${"###"} Device
+${"##"} Device
 - A device represents a physical device in the system that can support ${Xx}.
 - More than one device may be available in the system.
 - The application is responsible for sharing memory and explicit submission and synchronization across multiple devices.
 
-${"###"} Initialization
+${"##"} Initialization
 The driver API must be initizalized by calling ${x}DriverInit before any other function.
 This function will query the available physical adapters in the system and make this information available to all threads in the current process.
 
@@ -60,11 +68,11 @@ The following sample code demonstrates a basic initialization sequence:
     ...
 ```
 
-${"##"} Command Queues and Command Lists
+${"#"} <a name="cnc">Command Queues and Command Lists</a>
 The following diagram illustrates the hierarchy of command lists and command queues to the device:  
 ![Device Hierarchy](../images/core_queue.png?raw=true)
 
-${"###"} Command Queues
+${"##"} Command Queues
 - A command queue represents a physical input stream to the device.
 - The number of simultaneous command queues per device is queried from calling 
   ::${x}DeviceGetProperties; returned as ::${x}_device_properties_t.numAsyncComputeEngines
@@ -84,7 +92,7 @@ ${"###"} Command Queues
   typically done by tracking command list events, but may also be
   handled by calling ::${x}CommandQueueSynchronize.
 
-${"###"} Command Lists
+${"##"} Command Lists
 - A command list represents a sequence of commands for execution on
   a command queue.
 - Multiple command lists may be created by an application.  For example,
@@ -110,7 +118,7 @@ ${"###"} Command Lists
   executing from a command list before it is reset.  This should be
   handled by tracking a completion event associated with the command list.
 
-${"###"} Initialization
+${"##"} Initialization
 The following sample code demonstrates a basic sequence for creation of command queues and command lists:
 ```c
     // Create a command queue
@@ -132,7 +140,7 @@ The following sample code demonstrates a basic sequence for creation of command 
     ...
 ```
 
-${"###"} Submission
+${"##"} Submission
 The following sample code demonstrates submission of commands to a command queue, via a command list:
 ```c
     // Encode kernel execution into a command list
@@ -148,13 +156,13 @@ The following sample code demonstrates submission of commands to a command queue
     ...
 ```
 
-${"##"} Synchronization Primitives
+${"#"} <a name="sp">Synchronization Primitives</a>
 There are three types of synchronization primitives:
 1. **Fences** - used to communicate to the host that command queue execution has completed.
 2. **Events** - used as fine-grain host-to-device, device-to-host or device-to-device waits and signals within a command list.
 3. **Semaphores** - used for fine-grain control of command lists execution across multiple, simultaneous command queues within a device.
 
-${"###"} Fences
+${"##"} Fences
 - A fence is associated with single command queue.
 - A fence can only be signaled from a device's command queue (e.g. between execution of command lists)
 and can only be waited upon from the host.
@@ -184,7 +192,7 @@ The following sample code demonstrates a sequence for creation, submission and q
     ...
 ```
 
-${"###"} Events
+${"##"} Events
 - An event can be __either__:
   + signaled from within a device's command list (e.g. between execution of kernels) and waited upon from the host or another device, **or**
   + signaled from the host, and waited upon from within a device's command list.
@@ -214,7 +222,7 @@ The following sample code demonstrates a sequence for creation and submission of
     ...
 ```
 
-${"###"} Semaphores
+${"##"} Semaphores
 - A semaphore can only be signaled and waited upon from within a device's command list.
 - A semaphore has both a state and a value.
 - A semaphore can be encoded into any command list from the same device.
@@ -244,16 +252,16 @@ The following sample code demonstrates a sequence for creation and submission of
     ...
 ```
 
-${"##"} Memory and Image Management
+${"#"} <a name="mim">Memory and Image Management</a>
 There are two types of allocations:
 1. **Memory** - linear, unformatted allocations for direct access from both the host and device.
 2. **Images** - non-linear, formatted allocations for direct access from the device.
 
-${"###"} Memory
+${"##"} Memory
 @todo Ben: describe standard, managed, and shared
 @todo Ben: describe property and advise
 
-${"###"} Images
+${"##"} Images
 An image is used to store multi-dimensional and format-defined memory for optimal device access.
 An image's contents can be copied to and from other images, as well as host-accessable memory allocations.
 This is the only method for host access to the contents of an image.
@@ -276,10 +284,10 @@ and avoids exposing these details in the API in a backwards compatible fashion.
     ...
 ```
 
-${"###"} Device Cache Settings
+${"##"} Device Cache Settings
 @todo Ankur: global vs allocation vs command queue
 
-${"###"} Device Residency
+${"##"} Device Residency
 For devices that do not support page-faults, the driver must ensure that all pages that will be accessed by the kernel are resident before program execution.
 This can be determined by checking ${x}_device_memory_properties_t.onDemandPageFaults.
 
@@ -320,7 +328,7 @@ If the application does not properly manage residency for these cases then the d
     ...
 ```
 
-${"##"} Modules and Functions
+${"#"} <a name="mnf">Modules and Functions</a>
 A Module represents a single translation unit that consists of functions that have been compiled together.
 
 - Modules can be created from an IL or directly from native format using ${x}DeviceCreateModule.
@@ -397,23 +405,23 @@ Argument indices can be queried from the function object by name.
     ...
 ```
 
-${"###"} Occupancy
+${"##"} Occupancy
 @todo Zack: write-up section
 
-${"##"} OpenCL Interoperability
+${"#"} <a name="oi">OpenCL Interoperability</a>
 There are three OpenCL objects that can be shared for interoperability:
 1. **cl_mem** - an OpenCL buffer object
 2. **cl_program** - an OpenCL program object
 3. **cl_command_queue** - an OpenCL command queue object
 
-${"###"} cl_mem
+${"##"} cl_mem
 @todo Ben any details about memory sharing
 
-${"###"} cl_program
+${"##"} cl_program
 @todo Zack any details about program sharing
 - clBuildProgram or clCompileProgram/clLinkProgram must be called prior to ${x}DeviceRegisterCLProgram
 
-${"###"} cl_command_queue
+${"##"} cl_command_queue
 @todo Brandon any details about command queue sharing
 - clFlush must be called prior to any ${x}CommandQueueEnqueue* function
 
