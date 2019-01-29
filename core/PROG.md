@@ -452,17 +452,26 @@ The following sample code demonstrates a sequence for creating function args and
     xeFunctionArgsSetValue(hFuncArgs, 3, sizeof(uint32_t), &height);
 
     // Encode dispatch command
-    xeCommandListEncodeDispatchFunction(hCommandList, hFunction, hFunctionArgs, pixelRegionWidth, pixelRegionHeight, 1, numRegionsX, numRegionsY, 1);
+    xeCommandListEncodeDispatchFunction(
+        hCommandList, hFunction, hFunctionArgs, 
+        pixelRegionWidth, pixelRegionHeight, 1, 
+        numRegionsX, numRegionsY, 1);
     ...
 ```
 
 The following sample code demonstrates a sequence for querying argument indices from the function by name:
 ```c
-    uint32_t src_img_index;
-    xeFunctionGetArgIndexFromName(hFunc, "src_img", &src_img_index);
+    uint32_t arg_index[4];
+    xeFunctionGetArgIndexFromName(hFunc, "src_img", &arg_index[0]);
+    xeFunctionGetArgIndexFromName(hFunc, "dest_img", &arg_index[1]);
+    xeFunctionGetArgIndexFromName(hFunc, "WIDTH", &arg_index[2]);
+    xeFunctionGetArgIndexFromName(hFunc, "HEIGHT", &arg_index[3]);
 
     // Bind arguments
-    xeFunctionArgsSetValue(hFuncArgs, src_img_index, sizeof(xe_image_handle_t), &src_image);
+    xeFunctionArgsSetValue(hFuncArgs, arg_index[0], sizeof(xe_image_handle_t), &src_image);
+    xeFunctionArgsSetValue(hFuncArgs, arg_index[1], sizeof(xe_image_handle_t), &dest_image);
+    xeFunctionArgsSetValue(hFuncArgs, arg_index[2], sizeof(uint32_t), &width);
+    xeFunctionArgsSetValue(hFuncArgs, arg_index[3], sizeof(uint32_t), &height);
     ...
 ```
 

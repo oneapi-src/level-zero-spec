@@ -452,17 +452,26 @@ The following sample code demonstrates a sequence for creating function args and
     ${x}FunctionArgsSetValue(hFuncArgs, 3, sizeof(uint32_t), &height);
 
     // Encode dispatch command
-    ${x}CommandListEncodeDispatchFunction(hCommandList, hFunction, hFunctionArgs, pixelRegionWidth, pixelRegionHeight, 1, numRegionsX, numRegionsY, 1);
+    ${x}CommandListEncodeDispatchFunction(
+        hCommandList, hFunction, hFunctionArgs, 
+        pixelRegionWidth, pixelRegionHeight, 1, 
+        numRegionsX, numRegionsY, 1);
     ...
 ```
 
 The following sample code demonstrates a sequence for querying argument indices from the function by name:
 ```c
-    uint32_t src_img_index;
-    ${x}FunctionGetArgIndexFromName(hFunc, "src_img", &src_img_index);
+    uint32_t arg_index[4];
+    ${x}FunctionGetArgIndexFromName(hFunc, "src_img", &arg_index[0]);
+    ${x}FunctionGetArgIndexFromName(hFunc, "dest_img", &arg_index[1]);
+    ${x}FunctionGetArgIndexFromName(hFunc, "WIDTH", &arg_index[2]);
+    ${x}FunctionGetArgIndexFromName(hFunc, "HEIGHT", &arg_index[3]);
 
     // Bind arguments
-    ${x}FunctionArgsSetValue(hFuncArgs, src_img_index, sizeof(${x}_image_handle_t), &src_image);
+    ${x}FunctionArgsSetValue(hFuncArgs, arg_index[0], sizeof(${x}_image_handle_t), &src_image);
+    ${x}FunctionArgsSetValue(hFuncArgs, arg_index[1], sizeof(${x}_image_handle_t), &dest_image);
+    ${x}FunctionArgsSetValue(hFuncArgs, arg_index[2], sizeof(uint32_t), &width);
+    ${x}FunctionArgsSetValue(hFuncArgs, arg_index[3], sizeof(uint32_t), &height);
     ...
 ```
 
