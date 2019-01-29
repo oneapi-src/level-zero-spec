@@ -47,19 +47,18 @@
 ///     - ::XE_RESULT_ERROR_UNINITIALIZED
 ///     - ::XE_RESULT_ERROR_INVALID_PARAMETER
 ///         + invalid handle for hDevice
-///         + invalid format
-///         + nullptr for pInputModule
-///         + nullptr for phModule
-///         + 0 for inputSize
+///         + nullptr for desc
+///         + invalid desc->format
+///         + nullptr for desc->pInputModule
+///         + nullptr for desc->phModule
+///         + 0 for desc->inputSize
 ///     - ::XE_RESULT_ERROR_OUT_OF_HOST_MEMORY
 ///     - ::XE_RESULT_ERROR_OUT_OF_DEVICE_MEMORY
 /*@todo: __declspec(dllexport)*/
 xe_result_t __xecall
   xeDeviceCreateModule(
     xe_device_handle_t hDevice,                     ///< [in] handle of the device
-    xe_module_format_t format,                      ///< [in] Module format passed in with pInputModule
-    uint32_t inputSize,                             ///< [in] size of input IL or ISA from pInputModule.
-    const char* pInputModule,                       ///< [in] pointer to IL or ISA
+    const xe_module_desc_t* desc,                   ///< [in] pointer to module descriptor
     xe_module_handle_t* phModule                    ///< [out] pointer to handle of module object created
     )
 {
@@ -67,7 +66,7 @@ xe_result_t __xecall
 
     // Check parameters
     // @todo: check_return(xe_device_handle_t() == hDevice, XE_RESULT_ERROR_INVALID_PARAMETER);
-    // @todo: check_return(nullptr == pInputModule, XE_RESULT_ERROR_INVALID_PARAMETER);
+    // @todo: check_return(nullptr == desc, XE_RESULT_ERROR_INVALID_PARAMETER);
     // @todo: check_return(nullptr == phModule, XE_RESULT_ERROR_INVALID_PARAMETER);
 
     // @todo: insert <code> here
@@ -149,44 +148,6 @@ xe_result_t __xecall
 }
 
 ///////////////////////////////////////////////////////////////////////////////
-/// @brief Retrieve a function argument index from name.
-/// 
-/// @details
-///     - This function may be called from simultaneous threads.
-///     - The implementation of this function should be lock-free.
-/// 
-/// @remarks
-///   _Analogues_
-///     - **cuModuleGetTexRef**
-/// 
-/// @returns
-///     - ::XE_RESULT_SUCCESS
-///     - ::XE_RESULT_ERROR_UNINITIALIZED
-///     - ::XE_RESULT_ERROR_INVALID_PARAMETER
-///         + invalid handle for hFunction
-///         + null ptr for pName
-///         + null ptr for pArgIndex
-/*@todo: __declspec(dllexport)*/
-xe_result_t __xecall
-  xeFunctionGetArgIndexFromName(
-    xe_function_handle_t hFunction,                 ///< [in] handle of the function
-    const char* pName,                              ///< [in] name of function argument
-    uint32_t* pArgIndex                             ///< [out] Function argument index that can be used for ::xeFunctionArgsSetValue
-    )
-{
-    // @todo: check_return(nullptr == get_driver(), XE_RESULT_ERROR_UNINITIALIZED);
-
-    // Check parameters
-    // @todo: check_return(xe_function_handle_t() == hFunction, XE_RESULT_ERROR_INVALID_PARAMETER);
-    // @todo: check_return(nullptr == pName, XE_RESULT_ERROR_INVALID_PARAMETER);
-    // @todo: check_return(nullptr == pArgIndex, XE_RESULT_ERROR_INVALID_PARAMETER);
-
-    // @todo: insert <code> here
-
-    return XE_RESULT_SUCCESS;
-}
-
-///////////////////////////////////////////////////////////////////////////////
 /// @brief Create Function object from Module by name
 /// 
 /// @details
@@ -202,13 +163,14 @@ xe_result_t __xecall
 ///     - ::XE_RESULT_ERROR_UNINITIALIZED
 ///     - ::XE_RESULT_ERROR_INVALID_PARAMETER
 ///         + invalid handle for hModule
-///         + null ptr for pFunctionName
-///         + invalid name for pFunctionName
+///         + nullptr for desc
+///         + null ptr for desc->pFunctionName
+///         + invalid name for desc->pFunctionName
 /*@todo: __declspec(dllexport)*/
 xe_result_t __xecall
   xeModuleCreateFunction(
     xe_module_handle_t hModule,                     ///< [in] handle of the module
-    const char* pFunctionName,                      ///< [in] null-terminated name of function in Module
+    const xe_function_desc_t* desc,                 ///< [in] pointer to function descriptor
     xe_function_handle_t* phFunction                ///< [out] handle of the Function object
     )
 {
@@ -216,7 +178,7 @@ xe_result_t __xecall
 
     // Check parameters
     // @todo: check_return(xe_module_handle_t() == hModule, XE_RESULT_ERROR_INVALID_PARAMETER);
-    // @todo: check_return(nullptr == pFunctionName, XE_RESULT_ERROR_INVALID_PARAMETER);
+    // @todo: check_return(nullptr == desc, XE_RESULT_ERROR_INVALID_PARAMETER);
     // @todo: check_return(nullptr == phFunction, XE_RESULT_ERROR_INVALID_PARAMETER);
 
     // @todo: insert <code> here
@@ -249,6 +211,44 @@ xe_result_t __xecall
 
     // Check parameters
     // @todo: check_return(xe_function_handle_t() == hFunction, XE_RESULT_ERROR_INVALID_PARAMETER);
+
+    // @todo: insert <code> here
+
+    return XE_RESULT_SUCCESS;
+}
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Retrieve a function argument index from name.
+/// 
+/// @details
+///     - This function may be called from simultaneous threads.
+///     - The implementation of this function should be lock-free.
+/// 
+/// @remarks
+///   _Analogues_
+///     - **cuModuleGetTexRef**
+/// 
+/// @returns
+///     - ::XE_RESULT_SUCCESS
+///     - ::XE_RESULT_ERROR_UNINITIALIZED
+///     - ::XE_RESULT_ERROR_INVALID_PARAMETER
+///         + invalid handle for hFunction
+///         + null ptr for pName
+///         + null ptr for pArgIndex
+/*@todo: __declspec(dllexport)*/
+xe_result_t __xecall
+  xeFunctionGetArgIndexFromName(
+    xe_function_handle_t hFunction,                 ///< [in] handle of the function
+    const char* pName,                              ///< [in] name of function argument
+    uint32_t* pArgIndex                             ///< [out] Function argument index that can be used for ::xeFunctionArgsSetValue
+    )
+{
+    // @todo: check_return(nullptr == get_driver(), XE_RESULT_ERROR_UNINITIALIZED);
+
+    // Check parameters
+    // @todo: check_return(xe_function_handle_t() == hFunction, XE_RESULT_ERROR_INVALID_PARAMETER);
+    // @todo: check_return(nullptr == pName, XE_RESULT_ERROR_INVALID_PARAMETER);
+    // @todo: check_return(nullptr == pArgIndex, XE_RESULT_ERROR_INVALID_PARAMETER);
 
     // @todo: insert <code> here
 

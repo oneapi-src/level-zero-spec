@@ -37,7 +37,7 @@
 #include "xe_common.h"
 
 ///////////////////////////////////////////////////////////////////////////////
-/// @brief API version of ::xe_command_queue_desc_t
+/// @brief API version of ::xe_module_desc_t
 #define XE_MODULE_DESC_VERSION  XE_MAKE_VERSION( 1, 0 )
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -48,6 +48,17 @@ typedef enum _xe_module_format_t
     XE_MODULE_NATIVE,                               ///< Format is Gen native format
 
 } xe_module_format_t;
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Module descriptor
+typedef struct _xe_module_desc_t
+{
+    uint32_t version;                               ///< [in] ::XE_MODULE_DESC_VERSION
+    xe_module_format_t format;                      ///< [in] Module format passed in with pInputModule
+    uint32_t inputSize;                             ///< [in] size of input IL or ISA from pInputModule.
+    const char* pInputModule;                       ///< [in] pointer to IL or ISA
+
+} xe_module_desc_t;
 
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Creates module object from an input IL or ISA.
@@ -65,18 +76,17 @@ typedef enum _xe_module_format_t
 ///     - ::XE_RESULT_ERROR_UNINITIALIZED
 ///     - ::XE_RESULT_ERROR_INVALID_PARAMETER
 ///         + invalid handle for hDevice
-///         + invalid format
-///         + nullptr for pInputModule
-///         + nullptr for phModule
-///         + 0 for inputSize
+///         + nullptr for desc
+///         + invalid desc->format
+///         + nullptr for desc->pInputModule
+///         + nullptr for desc->phModule
+///         + 0 for desc->inputSize
 ///     - ::XE_RESULT_ERROR_OUT_OF_HOST_MEMORY
 ///     - ::XE_RESULT_ERROR_OUT_OF_DEVICE_MEMORY
 xe_result_t __xecall
   xeDeviceCreateModule(
     xe_device_handle_t hDevice,                     ///< [in] handle of the device
-    xe_module_format_t format,                      ///< [in] Module format passed in with pInputModule
-    uint32_t inputSize,                             ///< [in] size of input IL or ISA from pInputModule.
-    const char* pInputModule,                       ///< [in] pointer to IL or ISA
+    const xe_module_desc_t* desc,                   ///< [in] pointer to module descriptor
     xe_module_handle_t* phModule                    ///< [out] pointer to handle of module object created
     );
 
@@ -130,6 +140,75 @@ xe_result_t __xecall
     );
 
 ///////////////////////////////////////////////////////////////////////////////
+/// @brief API version of ::xe_function_desc_t
+#define XE_FUNCTION_DESC_VERSION  XE_MAKE_VERSION( 1, 0 )
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Supported function creation flags
+typedef enum _xe_function_flags_t
+{
+    XE_FUNCTION_FLAG_NONE = 0,                      ///< default driver behavior
+    XE_FUNCTION_FLAG_FORCE_RESIDENCY,               ///< force all device allocations to be resident during execution
+
+} xe_function_flags_t;
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Function descriptor
+typedef struct _xe_function_desc_t
+{
+    uint32_t version;                               ///< [in] ::XE_FUNCTION_DESC_VERSION
+    xe_function_flags_t flags;                      ///< [in] creation flags
+    const char* pFunctionName;                      ///< [in] null-terminated name of function in Module
+
+} xe_function_desc_t;
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Create Function object from Module by name
+/// 
+/// @details
+///     - This function may be called from simultaneous threads.
+///     - The implementation of this function should be lock-free.
+/// 
+/// @remarks
+///   _Analogues_
+///     - **cuModuleGetFunction**
+/// 
+/// @returns
+///     - ::XE_RESULT_SUCCESS
+///     - ::XE_RESULT_ERROR_UNINITIALIZED
+///     - ::XE_RESULT_ERROR_INVALID_PARAMETER
+///         + invalid handle for hModule
+///         + nullptr for desc
+///         + null ptr for desc->pFunctionName
+///         + invalid name for desc->pFunctionName
+xe_result_t __xecall
+  xeModuleCreateFunction(
+    xe_module_handle_t hModule,                     ///< [in] handle of the module
+    const xe_function_desc_t* desc,                 ///< [in] pointer to function descriptor
+    xe_function_handle_t* phFunction                ///< [out] handle of the Function object
+    );
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Destroys Function object
+/// 
+/// @details
+///     - The application is responsible for making sure the GPU is not
+///       currently referencing the event before it is deleted
+///     - The implementation of this function will immediately free all Host and
+///       Device allocations associated with this function
+///     - The implementation of this function should be lock-free.
+/// 
+/// @returns
+///     - ::XE_RESULT_SUCCESS
+///     - ::XE_RESULT_ERROR_UNINITIALIZED
+///     - ::XE_RESULT_ERROR_INVALID_PARAMETER
+///         + invalid handle for hFunction
+xe_result_t __xecall
+  xeFunctionDestroy(
+    xe_function_handle_t hFunction                  ///< [in] handle of the function object
+    );
+
+///////////////////////////////////////////////////////////////////////////////
 /// @brief Retrieve a function argument index from name.
 /// 
 /// @details
@@ -152,51 +231,6 @@ xe_result_t __xecall
     xe_function_handle_t hFunction,                 ///< [in] handle of the function
     const char* pName,                              ///< [in] name of function argument
     uint32_t* pArgIndex                             ///< [out] Function argument index that can be used for ::xeFunctionArgsSetValue
-    );
-
-///////////////////////////////////////////////////////////////////////////////
-/// @brief Create Function object from Module by name
-/// 
-/// @details
-///     - This function may be called from simultaneous threads.
-///     - The implementation of this function should be lock-free.
-/// 
-/// @remarks
-///   _Analogues_
-///     - **cuModuleGetFunction**
-/// 
-/// @returns
-///     - ::XE_RESULT_SUCCESS
-///     - ::XE_RESULT_ERROR_UNINITIALIZED
-///     - ::XE_RESULT_ERROR_INVALID_PARAMETER
-///         + invalid handle for hModule
-///         + null ptr for pFunctionName
-///         + invalid name for pFunctionName
-xe_result_t __xecall
-  xeModuleCreateFunction(
-    xe_module_handle_t hModule,                     ///< [in] handle of the module
-    const char* pFunctionName,                      ///< [in] null-terminated name of function in Module
-    xe_function_handle_t* phFunction                ///< [out] handle of the Function object
-    );
-
-///////////////////////////////////////////////////////////////////////////////
-/// @brief Destroys Function object
-/// 
-/// @details
-///     - The application is responsible for making sure the GPU is not
-///       currently referencing the event before it is deleted
-///     - The implementation of this function will immediately free all Host and
-///       Device allocations associated with this function
-///     - The implementation of this function should be lock-free.
-/// 
-/// @returns
-///     - ::XE_RESULT_SUCCESS
-///     - ::XE_RESULT_ERROR_UNINITIALIZED
-///     - ::XE_RESULT_ERROR_INVALID_PARAMETER
-///         + invalid handle for hFunction
-xe_result_t __xecall
-  xeFunctionDestroy(
-    xe_function_handle_t hFunction                  ///< [in] handle of the function object
     );
 
 ///////////////////////////////////////////////////////////////////////////////

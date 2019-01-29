@@ -240,7 +240,8 @@ typedef enum _xe_memory_access_capabilities_t
 typedef struct _xe_device_memory_properties_t
 {
     uint32_t version;                               ///< [in] ::XE_DEVICE_MEMORY_PROPERTIES_VERSION
-    bool isIntegrated;                              ///< [out] Host and device share same physical memory.
+    bool unifiedMemory;                             ///< [out] Host and device share same physical memory.
+    bool onDemandPageFaults;                        ///< [out] Device supports on-demand page-faulting.
     uint32_t maxResourceDims1D;                     ///< [out] Maximum resource dimensions for 1D resources.
     uint32_t maxResourceDims2D;                     ///< [out] Maximum resource dimensions for 2D resources.
     uint32_t maxResourceDims3D;                     ///< [out] Maximum resource dimensions for 3D resources.

@@ -280,12 +280,14 @@ ${"###"} Device Cache Settings
 @todo Ankur: global vs allocation vs command queue
 
 ${"###"} Device Residency
+For devices that do not support page-faults, the driver must ensure that all pages that will be accessed by the kernel are resident before program execution.
+This can be determined by checking ${x}_device_memory_properties_t.onDemandPageFaults.
+
 In most cases, the driver implicitly handles residency of allocations for device access.
 This can be done by inspecting API parameters, including function arguments.
-
-However, in cases where the driver is incapable of determining whether an allocation will be accessed by the device, such as multiple levels of indirection,
-there are two methods available.
-1. the application may set a flag during memory allocation to force the allocation to be always resident.
+However, in cases where the devices does **not** support page-faulting _and_ the driver is incapable of determining whether an allocation will be accessed by the device,
+such as multiple levels of indirection, there are two methods available:
+1. the application may set the ${X}_FUNCTION_FLAG_FORCE_RESIDENCY flag during program creation to force all device allocations to be resident during execution.
 2. explcit APIs are included for the application to dynamically change residency as needed.
 
 If the application does not properly manage residency for these cases then the device may experience unrecoverable page-faults.
@@ -346,11 +348,22 @@ The following are the API calls for using this function.
 ```c
     ...
     // OCL C function has been compiled to SPIRV IL (pImageScalingIL)
+    ${x}_module_desc_t moduleDesc = {
+        ${X}_MODULE_DESC_VERSION
+        ${X}_MODULE_IL_SPIRV,
+        ilSize,
+        pImageScalingIL
+    };
     ${x}_module_handle_t hModule;
-    ${x}DeviceCreateModule(hDevice, XE_MODULE_IL_SPIRV, ilSize, pImageScalingIL, &hModule);
+    ${x}DeviceCreateModule(hDevice, &moduleDesc, &hModule);
 
+    ${x}_function_desc_t functionDesc = {
+        ${X}_FUNCTION_DESC_VERSION,
+        ${X}_FUNCTION_FLAG_NONE,
+        "image_scaling"
+    };
     ${x}_function_handle_t hFunction;
-    ${x}ModuleCreateFunction(hModule, "image_scaling", &hFunction);
+    ${x}ModuleCreateFunction(hModule, &functionDesc, &hFunction);
 
     ${x}_function_args_handle_t hFunctionArgs;
     ${x}FunctionCreateFunctionArgs(hFunction, &hFunctionArgs);
@@ -398,7 +411,7 @@ ${"###"} cl_mem
 
 ${"###"} cl_program
 @todo Zack any details about program sharing
-- clBuildProgram or clCompileProgram/clLinkProgram must be called prior to $xDeviceRegisterCLProgram
+- clBuildProgram or clCompileProgram/clLinkProgram must be called prior to ${x}DeviceRegisterCLProgram
 
 ${"###"} cl_command_queue
 @todo Brandon any details about command queue sharing

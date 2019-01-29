@@ -280,12 +280,14 @@ and avoids exposing these details in the API in a backwards compatible fashion.
 @todo Ankur: global vs allocation vs command queue
 
 ### Device Residency
+For devices that do not support page-faults, the driver must ensure that all pages that will be accessed by the kernel are resident before program execution.
+This can be determined by checking xe_device_memory_properties_t.onDemandPageFaults.
+
 In most cases, the driver implicitly handles residency of allocations for device access.
 This can be done by inspecting API parameters, including function arguments.
-
-However, in cases where the driver is incapable of determining whether an allocation will be accessed by the device, such as multiple levels of indirection,
-there are two methods available.
-1. the application may set a flag during memory allocation to force the allocation to be always resident.
+However, in cases where the devices does **not** support page-faulting _and_ the driver is incapable of determining whether an allocation will be accessed by the device,
+such as multiple levels of indirection, there are two methods available:
+1. the application may set the XE_FUNCTION_FLAG_FORCE_RESIDENCY flag during program creation to force all device allocations to be resident during execution.
 2. explcit APIs are included for the application to dynamically change residency as needed.
 
 If the application does not properly manage residency for these cases then the device may experience unrecoverable page-faults.
@@ -346,11 +348,22 @@ The following are the API calls for using this function.
 ```c
     ...
     // OCL C function has been compiled to SPIRV IL (pImageScalingIL)
+    xe_module_desc_t moduleDesc = {
+        XE_MODULE_DESC_VERSION
+        XE_MODULE_IL_SPIRV,
+        ilSize,
+        pImageScalingIL
+    };
     xe_module_handle_t hModule;
-    xeDeviceCreateModule(hDevice, XE_MODULE_IL_SPIRV, ilSize, pImageScalingIL, &hModule);
+    xeDeviceCreateModule(hDevice, &moduleDesc, &hModule);
 
+    xe_function_desc_t functionDesc = {
+        XE_FUNCTION_DESC_VERSION,
+        XE_FUNCTION_FLAG_NONE,
+        "image_scaling"
+    };
     xe_function_handle_t hFunction;
-    xeModuleCreateFunction(hModule, "image_scaling", &hFunction);
+    xeModuleCreateFunction(hModule, &functionDesc, &hFunction);
 
     xe_function_args_handle_t hFunctionArgs;
     xeFunctionCreateFunctionArgs(hFunction, &hFunctionArgs);
@@ -398,7 +411,7 @@ There are three OpenCL objects that can be shared for interoperability:
 
 ### cl_program
 @todo Zack any details about program sharing
-- clBuildProgram or clCompileProgram/clLinkProgram must be called prior to $xDeviceRegisterCLProgram
+- clBuildProgram or clCompileProgram/clLinkProgram must be called prior to xeDeviceRegisterCLProgram
 
 ### cl_command_queue
 @todo Brandon any details about command queue sharing

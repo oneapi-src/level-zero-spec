@@ -243,8 +243,11 @@ members:
       name: version
       desc: "[in] $X_DEVICE_MEMORY_PROPERTIES_VERSION"
     - type: bool
-      name: isIntegrated
+      name: unifiedMemory
       desc: "[out] Host and device share same physical memory."
+    - type: bool
+      name: onDemandPageFaults
+      desc: "[out] Device supports on-demand page-faulting."
     - type: uint32_t
       name: maxResourceDims1D
       desc: "[out] Maximum resource dimensions for 1D resources."
