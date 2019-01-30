@@ -1,3 +1,4 @@
+#include "device.h"
 #include "driver.h"
 #include "runtime/platform/platform.h"
 
@@ -14,7 +15,7 @@ struct DriverImp : public Driver {
     xe_result_t getDevice(uint32_t ordinal,
                           xe_device_handle_t *phDevice) override {
         auto platform = OCLRT::constructPlatform();
-        auto device = platform->getDevice(ordinal);
+        auto device = Device::create(platform->getDevice(ordinal));
         phDevice->pDriverData = device;
 
         return XE_RESULT_SUCCESS;
