@@ -243,6 +243,8 @@ xe_result_t __xecall
 /// @brief Provides advice about the use of a shared memory range
 /// 
 /// @details
+///     - Memory advice is a performance hint only; applications are not
+///       required to use this for functionality
 ///     - Memory advice can be used to override driver heuristics to explicitly
 ///       control shared memory behavior.
 ///     - Memory advice may only be supported at a device-specific granularity,

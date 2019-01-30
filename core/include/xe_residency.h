@@ -40,6 +40,8 @@
 /// @brief Makes memory resident for the device.
 /// 
 /// @details
+///     - If the application does not properly manage residency then the device
+///       may experience unrecoverable page-faults.
 ///     - The application may call this function from simultaneous threads.
 ///     - The implementation of this function should be lock-free.
 /// 
@@ -81,6 +83,8 @@ xe_result_t __xecall
 /// @brief Makes image resident for the device.
 /// 
 /// @details
+///     - If the application does not properly manage residency then the device
+///       may experience unrecoverable page-faults.
 ///     - The application may call this function from simultaneous threads.
 ///     - The implementation of this function should be lock-free.
 /// 

@@ -399,24 +399,44 @@ This can be done by inspecting API parameters, including function arguments.
 However, in cases where the devices does **not** support page-faulting _and_ the driver is incapable of determining whether an allocation will be accessed by the device,
 such as multiple levels of indirection, there are two methods available:
 1. the application may set the ::XE_FUNCTION_FLAG_FORCE_RESIDENCY flag during program creation to force all device allocations to be resident during execution.
+ + in addition, the application should indicate the type of allocations that will be indirectly accessed using ::xe_function_argument_attribute_t
 2. explcit APIs are included for the application to dynamically change residency as needed.
 
 If the application does not properly manage residency for these cases then the device may experience unrecoverable page-faults.
 
-@todo ["Mike"] add an example for case 1
-@todo ["Mike"] fix sample code so that it is valid code
-@todo ["Mike"] document Prefetch/MemAdvise are optional and performance hints, while residency is required for functionality
-
+The following sample code demonstrate a sequence for using coarse-grain residency control for indirect arguments:
 ```c
     struct node {
         node* next;
     };
     node* begin = nullptr;
-    xeMemAlloc(hDevice, sizeof(node), &begin);
-    xeMemAlloc(hDevice, sizeof(node), &begin->next);
-    xeMemAlloc(hDevice, sizeof(node), &begin->next->next);
+    xeHostMemAlloc(XE_HOST_MEM_ALLOC_DEFAULT, sizeof(node), 1, &begin);
+    xeHostMemAlloc(XE_HOST_MEM_ALLOC_DEFAULT, sizeof(node), 1, &begin->next);
+    xeHostMemAlloc(XE_HOST_MEM_ALLOC_DEFAULT, sizeof(node), 1, &begin->next->next);
 
     // 'begin' is passed as function argument and encoded into command list
+    xeFunctionArgsSetAttribute(hFuncArgs, XE_FUNCTION_ARG_ATTR_INDIRECT_HOST_ACCESS, 1);
+    xeFunctionArgsSetValue(hFuncArgs, 0, sizeof(node*), &begin);
+    xeCommandListEncodeDispatchFunction(hCommandList, hFunction, hFunctionArgs, ...);
+    ...
+
+    xeCommandQueueEnqueueCommandList(hCommandQueue, hCommandList);
+    ...
+```
+
+The following sample code demonstrate a sequence for using fine-grain residency control for indirect arguments:
+```c
+    struct node {
+        node* next;
+    };
+    node* begin = nullptr;
+    xeHostMemAlloc(XE_HOST_MEM_ALLOC_DEFAULT, sizeof(node), 1, &begin);
+    xeHostMemAlloc(XE_HOST_MEM_ALLOC_DEFAULT, sizeof(node), 1, &begin->next);
+    xeHostMemAlloc(XE_HOST_MEM_ALLOC_DEFAULT, sizeof(node), 1, &begin->next->next);
+
+    // 'begin' is passed as function argument and encoded into command list
+    xeFunctionArgsSetValue(hFuncArgs, 0, sizeof(node*), &begin);
+    xeCommandListEncodeDispatchFunction(hCommandList, hFunction, hFunctionArgs, ...);
     ...
 
     // Make indirect allocations resident before enqueuing

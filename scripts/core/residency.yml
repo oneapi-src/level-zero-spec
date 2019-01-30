@@ -6,6 +6,7 @@ type: function
 desc: "Makes memory resident for the device."
 name: $xDeviceMakeMemoryResident
 details:
+    - "If the application does not properly manage residency then the device may experience unrecoverable page-faults."
     - "The application may call this function from simultaneous threads."
     - "The implementation of this function should be lock-free."
 params:
@@ -48,6 +49,7 @@ type: function
 desc: "Makes image resident for the device."
 name: $xDeviceMakeImageResident
 details:
+    - "If the application does not properly manage residency then the device may experience unrecoverable page-faults."
     - "The application may call this function from simultaneous threads."
     - "The implementation of this function should be lock-free."
 params:

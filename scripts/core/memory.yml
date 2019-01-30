@@ -188,6 +188,7 @@ name: $xMemAdvise
 analogue:
     - "**cudaMemAdvise**"
 details:
+    - "Memory advice is a performance hint only; applications are not required to use this for functionality"
     - "Memory advice can be used to override driver heuristics to explicitly control shared memory behavior."
     - "Memory advice may only be supported at a device-specific granularity, such as at a page boundary.
        In this case, the memory range may be expanded such that the start and end of the range satisfy
