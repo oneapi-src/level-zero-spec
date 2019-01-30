@@ -48,6 +48,10 @@ desc: "Handle of driver's command list object"
 name: "$x_command_list_handle_t"
 --- #--------------------------------------------------------------------------
 type: handle
+desc: "Handle of driver's command graph object"
+name: $x_command_graph_handle_t
+--- #--------------------------------------------------------------------------
+type: handle
 desc: "Handle of driver's fence object"
 name: "$x_fence_handle_t"
 --- #--------------------------------------------------------------------------

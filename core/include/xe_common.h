@@ -98,6 +98,15 @@ typedef void* xe_command_list_handle_t;
 #endif // defined( __cplusplus )
 
 ///////////////////////////////////////////////////////////////////////////////
+/// @brief Handle of driver's command graph object
+#if defined( __cplusplus )
+struct _xe_command_graph_handle_t;
+using xe_command_graph_handle_t = _xe_command_graph_handle_t*;
+#else
+typedef void* xe_command_graph_handle_t;
+#endif // defined( __cplusplus )
+
+///////////////////////////////////////////////////////////////////////////////
 /// @brief Handle of driver's fence object
 #if defined( __cplusplus )
 struct _xe_fence_handle_t;

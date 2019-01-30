@@ -164,7 +164,37 @@ The following sample code demonstrates submission of commands to a command queue
 ```
 
 ## Command Graphs
-@todo [**Mike**] add "graphs" of command list-based nodes
+- A command graph represents non-linear dependencies between command lists to be executed.
+- An implementation may use this information to reorder the execution of command lists to be optimized for the device.
+- The application is responsible for calling close before submission to a command queue.
+- The command graph itself does not allocate any Device memory; therefore is mutable immediately after enqueuing.
+- However, the command graph does have references to existing command lists, which must be removed prior to the command lists being destroyed.
+
+The following sample code demonstrates submission of command lists to a command queue, via a command graph:
+```c
+    ...
+    // create a command graph
+    xe_command_graph_desc_t commandGraphDesc = {
+        XE_COMMAND_GRAPH_DESC_VERSION,
+        XE_COMMAND_GRAPH_FLAG_NONE
+    };
+    xe_command_graph_handle_t hCommandGraph;
+    xeDeviceCreateCommandGraph(hDevice, &commandGraphDesc, &hCommandGraph);
+
+    // add dependencies between command lists
+    xeCommandGraphAddEdge(hCommandGraph, hCommandList1, hCommandList3);
+    xeCommandGraphAddEdge(hCommandGraph, hCommandList2, hCommandList3);
+    xeCommandGraphClose(hCommandGraph);
+
+    // Enqueue command list execution into command queue
+    uint32_t count = 0;
+    hCommandList* pCommandLists = nullptr;
+    xeCommandGraphGetCommandLists(hCommandGraph, &count, &pCommandLists);
+    xeCommandQueueEnqueueCommandList(hCommandQueue, count, pCommandLists, nullptr);
+
+    xeCommandGraphReset(hCommandGraph);
+    ...
+```
 
 # <a name="brr">Barriers</a>
 There are two type of barriers:
