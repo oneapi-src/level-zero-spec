@@ -483,6 +483,8 @@ xe_result_t __xecall
 /// @details
 ///     - This function may **not** be called from simultaneous threads.
 ///     - The implementation of this function should be lock-free.
+///     - @todo [**Zack**] more details on memory type for indirect buffer and
+///       when is safe for application to reuse
 /// 
 /// @remarks
 ///   _Analogues_

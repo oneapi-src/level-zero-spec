@@ -319,10 +319,12 @@ Supported capabilities are:
 * ::XE_MEMORY_CONCURRENT_ATOMIC_ACCESS - if a device supports concurrent atomic access to allocations of the specified type, or another device's allocations of the specified type.
 
 ### Prefetch and Memory Advice
-
 **Shared** allocations may be prefetched to a supporting device via the ::xeCommandListEncodeMemoryPrefetch API.
 
 Additionally, an application may provide memory advices for a **shared** allocation via the ::xeMemAdvise API, to override driver heuristics or migration policies.
+
+@todo [**Ben**] make MemAdvise a command list encode function
+@todo [**Ben**] more details from discussion about what prefetch and memadvise do and _when_ they should be used; sample code?
 
 ## Images
 An image is used to store multi-dimensional and format-defined memory for optimal device access.
@@ -362,6 +364,10 @@ such as multiple levels of indirection, there are two methods available:
 2. explcit APIs are included for the application to dynamically change residency as needed.
 
 If the application does not properly manage residency for these cases then the device may experience unrecoverable page-faults.
+
+@todo ["Mike"] add an example for case 1
+@todo ["Mike"] fix sample code so that it is valid code
+@todo ["Mike"] document Prefetch/MemAdvise are optional and performance hints, while residency is required for functionality
 
 ```c
     struct node {
@@ -432,10 +438,14 @@ The following sample code demonstrates a sequence for creating a module from an 
     ...
 ```
 
+@todo [**Zack**] add optional string for build options; document which ones are valid
+@todo [**Zack**] add optional CreateModdule build_log parameter to dump string of JIT-from-SPIR-V errors/warnings
+@todo [**Zack**] document that disk caching is not handled, must be handled by application using GetNativeBinary
+
 ## Function
 Functions are immuatable references to functions within a module.
 
-@todo [**Ben**] remove SetAttribute on Function, move to module or args?
+@todo [**Ben/Zack**] document valid function attributes
 
 The following sample code demonstrates a sequence for creating a function from a module:
 ```c
@@ -493,6 +503,7 @@ The following sample code demonstrates a sequence for querying argument indices 
 
 ## Occupancy
 @todo [**Zack**] write-up section or remove
+@todo [**Zack**] add function API to query optimal group dimensions from thread count, et al
 
 # <a name="oi">OpenCL Interoperability</a>
 @todo [**Mike**] write-up summary on how these are one-direction and optimized for unified device drivers.

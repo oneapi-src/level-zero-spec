@@ -55,7 +55,10 @@ The cross-tile memory is stacked within package allowing applications to access 
 
 @todo [**Ben/Zack**] add support for sub-devices and memory, command queue affinity, etc.
 
-## IPC
+## Peer-to-Peer Communication
+@todo [**Murali**] add high-level goals for P2P
+
+## Inter-Process Communication
 @todo [**Murali**] add high-level goals for IPC.
 
 # <a name="spec">API Specification</a>
