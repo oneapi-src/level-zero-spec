@@ -1,11 +1,14 @@
 #pragma once
 #include "xe_cmdlist.h"
 
+struct _xe_command_list_handle_t {
+};
+
 namespace xe {
 
 struct Device;
 
-struct CommandList {
+struct CommandList : public _xe_command_list_handle_t {
     template <typename Type>
     struct Allocator {
         static CommandList *allocate(Device *device) {
@@ -20,13 +23,11 @@ struct CommandList {
     static CommandList *create(uint32_t productFamily, Device *device);
 
     static CommandList *fromHandle(xe_command_list_handle_t handle) {
-        return static_cast<CommandList *>(handle.pDriverData);
+        return static_cast<CommandList *>(handle);
     }
 
-    inline xe_command_list_handle_t toHandle() const {
-        xe_command_list_handle_t handle;
-        handle.pDriverData = const_cast<CommandList *>(this);
-        return handle;
+    inline xe_command_list_handle_t toHandle() {
+        return this;
     }
 
   protected:

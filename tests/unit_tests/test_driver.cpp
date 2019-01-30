@@ -38,5 +38,5 @@ TEST(xeDriverGetDevice, returnsSuccess) {
     auto result = xe::xeDriverGetDevice(ordinal,
                                         &deviceHandle);
     EXPECT_EQ(XE_RESULT_SUCCESS, result);
-    EXPECT_NE(nullptr, deviceHandle.pDriverData);
+    EXPECT_NE(nullptr, deviceHandle);
 }

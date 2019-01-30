@@ -73,7 +73,7 @@ TEST(DeviceCreateCommandList, returnsSuccess) {
     auto result = device->createCommandList(&desc,
                                             &commandList);
     EXPECT_EQ(XE_RESULT_SUCCESS, result);
-    EXPECT_NE(nullptr, commandList.pDriverData);
+    EXPECT_NE(nullptr, commandList);
 
     xe::CommandList::fromHandle(commandList)->destroy();
     delete device;
@@ -94,7 +94,7 @@ TEST(DeviceCreateCommandQueue, returnsSuccess) {
     auto result = device->createCommandQueue(&desc,
                                              &commandQueue);
     EXPECT_EQ(XE_RESULT_SUCCESS, result);
-    EXPECT_NE(nullptr, commandQueue.pDriverData);
+    EXPECT_NE(nullptr, commandQueue);
 
     delete device;
 }
@@ -114,7 +114,7 @@ TEST(DeviceCreateEvent, returnsSuccess) {
     auto result = device->createEvent(&desc,
                                       &event);
     EXPECT_EQ(XE_RESULT_SUCCESS, result);
-    EXPECT_NE(nullptr, event.pDriverData);
+    EXPECT_NE(nullptr, event);
 
     delete device;
 }

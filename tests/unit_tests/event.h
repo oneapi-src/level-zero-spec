@@ -1,19 +1,20 @@
 #pragma once
 #include "xe_event.h"
 
+struct _xe_event_handle_t {
+};
+
 namespace xe {
 
-struct Event {
+struct Event : public _xe_event_handle_t {
     static Event *create();
 
     static Event *fromHandle(xe_event_handle_t handle) {
-        return static_cast<Event *>(handle.pDriverData);
+        return static_cast<Event *>(handle);
     }
 
-    inline xe_event_handle_t toHandle() const {
-        xe_event_handle_t handle;
-        handle.pDriverData = const_cast<Event *>(this);
-        return handle;
+    inline xe_event_handle_t toHandle() {
+        return this;
     }
 };
 

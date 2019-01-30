@@ -4,10 +4,13 @@
 #include "xe_device.h"
 #include "xe_event.h"
 
+struct _xe_device_handle_t {
+};
+
 namespace xe {
 struct MemoryManager;
 
-struct Device {
+struct Device : _xe_device_handle_t {
     virtual xe_result_t createCommandList(const xe_command_list_desc_t *desc,
                                           xe_command_list_handle_t *commandList) = 0;
 
@@ -20,13 +23,11 @@ struct Device {
     virtual MemoryManager *getMemoryManager() = 0;
 
     static Device *fromHandle(xe_device_handle_t handle) {
-        return static_cast<Device *>(handle.pDriverData);
+        return static_cast<Device *>(handle);
     }
 
-    inline xe_device_handle_t toHandle() const {
-        xe_device_handle_t handle;
-        handle.pDriverData = const_cast<Device *>(this);
-        return handle;
+    inline xe_device_handle_t toHandle() {
+        return this;
     }
 
     static Device *create(void *device);

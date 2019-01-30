@@ -16,7 +16,7 @@ struct DriverImp : public Driver {
                           xe_device_handle_t *phDevice) override {
         auto platform = OCLRT::constructPlatform();
         auto device = Device::create(platform->getDevice(ordinal));
-        phDevice->pDriverData = device;
+        *phDevice = device;
 
         return XE_RESULT_SUCCESS;
     }

@@ -4,7 +4,6 @@
 #include "igfxfmid.h"
 #include "mock_cmd_list.h"
 #include "mock_device.h"
-#include "mock_event.h"
 #include "mock_memory_manager.h"
 #include "runtime/command_stream/linear_stream.h"
 #include "unit_tests/gen_common/gen_cmd_parse.h"

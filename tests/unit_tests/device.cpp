@@ -1,4 +1,5 @@
 #include "cmd_list.h"
+#include "cmd_queue.h"
 #include "device.h"
 #include "event.h"
 #include "memory_manager.h"
@@ -10,22 +11,23 @@ struct DeviceImp : public Device {
     xe_result_t createCommandList(const xe_command_list_desc_t *desc,
                                   xe_command_list_handle_t *commandList) override {
         auto productFamily = deviceRT->getHardwareInfo().pPlatform->eProductFamily;
-        commandList->pDriverData = CommandList::create(productFamily, this);
+        *commandList = CommandList::create(productFamily, this);
 
         return XE_RESULT_SUCCESS;
     }
 
     xe_result_t createCommandQueue(const xe_command_queue_desc_t *desc,
                                    xe_command_queue_handle_t *commandQueue) override {
-        auto engineControl = deviceRT->getDefaultEngine();
-        commandQueue->pDriverData = engineControl.commandStreamReceiver;
+        *commandQueue = new CommandQueue;
+        //TODO: auto engineControl = deviceRT->getDefaultEngine();
+        //TODO: *commandQueue = engineControl.commandStreamReceiver;
 
         return XE_RESULT_SUCCESS;
     }
 
     xe_result_t createEvent(const xe_event_desc_t *desc,
                             xe_event_handle_t *event) override {
-        event->pDriverData = Event::create();
+        *event = Event::create();
         return XE_RESULT_SUCCESS;
     }
 
