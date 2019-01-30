@@ -7,6 +7,8 @@ static OCLRT::HardwareInfo hwInfo = {};
 static OCLRT::FeatureTable skuTable = {};
 static GT_SYSTEM_INFO sysInfo = {};
 
+PRODUCT_FAMILY productFamily = IGFX_SKYLAKE;
+
 struct Environment : public ::testing::Environment {
     void SetUp() override {
         // Clone default device information
@@ -18,7 +20,7 @@ struct Environment : public ::testing::Environment {
         hwInfo.capabilityTable.defaultPreemptionMode = OCLRT::PreemptionMode::ThreadGroup;
 
         // Initialize hardwareInfo
-        OCLRT::hardwareInfoSetup[IGFX_SKYLAKE](&sysInfo, &skuTable, false, "default");
+        OCLRT::hardwareInfoSetup[productFamily](&sysInfo, &skuTable, false, "default");
 
         // Replace original hardwareInfo with our clone
         hwInfo.pSysInfo = &sysInfo;

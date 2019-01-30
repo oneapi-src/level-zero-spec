@@ -10,6 +10,8 @@
 
 using ::testing::Return;
 
+extern PRODUCT_FAMILY productFamily;
+
 TEST(xeCommandListEncodeWaitOnEvent, redirectsToCmdListObject) {
     xe::MockCommandList commandList;
     xe_event_handle_t event = {};
@@ -32,7 +34,7 @@ TEST(CommandListEncodeWaitOnEvent, addsCommandsToCommandStream) {
     EXPECT_CALL(memoryManager, allocateDeviceMemory)
         .WillOnce(Return(&allocation));
 
-    auto commandList = xe::CommandList::create(IGFX_SKYLAKE, &device);
+    auto commandList = xe::CommandList::create(productFamily, &device);
     auto commandListAlias = whitebox_cast<xe::CommandList>(commandList);
     ASSERT_NE(nullptr, commandListAlias->commandStream);
     auto usedSpaceBefore = commandListAlias->commandStream->getUsed();
