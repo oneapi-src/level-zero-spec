@@ -195,11 +195,7 @@ struct ${sub(x, obj['name'])}
 
 };
 #else
-typedef struct _${sub(x, obj['name'])}
-{
-    void* pDriverData;
-
-} ${sub(x, obj['name'])};
+typedef void* ${sub(x, obj['name'])};
 #endif // defined( __cplusplus )
 %endif
 %if 'condition' in obj:

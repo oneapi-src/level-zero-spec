@@ -87,11 +87,7 @@ struct xe_device_handle_t
 
 };
 #else
-typedef struct _xe_device_handle_t
-{
-    void* pDriverData;
-
-} xe_device_handle_t;
+typedef void* xe_device_handle_t;
 #endif // defined( __cplusplus )
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -111,11 +107,7 @@ struct xe_command_queue_handle_t
 
 };
 #else
-typedef struct _xe_command_queue_handle_t
-{
-    void* pDriverData;
-
-} xe_command_queue_handle_t;
+typedef void* xe_command_queue_handle_t;
 #endif // defined( __cplusplus )
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -135,11 +127,7 @@ struct xe_command_list_handle_t
 
 };
 #else
-typedef struct _xe_command_list_handle_t
-{
-    void* pDriverData;
-
-} xe_command_list_handle_t;
+typedef void* xe_command_list_handle_t;
 #endif // defined( __cplusplus )
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -159,11 +147,7 @@ struct xe_fence_handle_t
 
 };
 #else
-typedef struct _xe_fence_handle_t
-{
-    void* pDriverData;
-
-} xe_fence_handle_t;
+typedef void* xe_fence_handle_t;
 #endif // defined( __cplusplus )
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -183,11 +167,7 @@ struct xe_semaphore_handle_t
 
 };
 #else
-typedef struct _xe_semaphore_handle_t
-{
-    void* pDriverData;
-
-} xe_semaphore_handle_t;
+typedef void* xe_semaphore_handle_t;
 #endif // defined( __cplusplus )
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -207,11 +187,7 @@ struct xe_event_handle_t
 
 };
 #else
-typedef struct _xe_event_handle_t
-{
-    void* pDriverData;
-
-} xe_event_handle_t;
+typedef void* xe_event_handle_t;
 #endif // defined( __cplusplus )
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -231,11 +207,7 @@ struct xe_image_handle_t
 
 };
 #else
-typedef struct _xe_image_handle_t
-{
-    void* pDriverData;
-
-} xe_image_handle_t;
+typedef void* xe_image_handle_t;
 #endif // defined( __cplusplus )
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -255,11 +227,7 @@ struct xe_module_handle_t
 
 };
 #else
-typedef struct _xe_module_handle_t
-{
-    void* pDriverData;
-
-} xe_module_handle_t;
+typedef void* xe_module_handle_t;
 #endif // defined( __cplusplus )
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -279,11 +247,7 @@ struct xe_function_handle_t
 
 };
 #else
-typedef struct _xe_function_handle_t
-{
-    void* pDriverData;
-
-} xe_function_handle_t;
+typedef void* xe_function_handle_t;
 #endif // defined( __cplusplus )
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -303,11 +267,7 @@ struct xe_function_args_handle_t
 
 };
 #else
-typedef struct _xe_function_args_handle_t
-{
-    void* pDriverData;
-
-} xe_function_args_handle_t;
+typedef void* xe_function_args_handle_t;
 #endif // defined( __cplusplus )
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -327,11 +287,7 @@ struct xe_ipc_mem_handle_t
 
 };
 #else
-typedef struct _xe_ipc_mem_handle_t
-{
-    void* pDriverData;
-
-} xe_ipc_mem_handle_t;
+typedef void* xe_ipc_mem_handle_t;
 #endif // defined( __cplusplus )
 
 ///////////////////////////////////////////////////////////////////////////////
