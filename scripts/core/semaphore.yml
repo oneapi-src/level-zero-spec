@@ -34,6 +34,8 @@ members:
 type: function
 desc: "Creates an semaphore object on the device."
 name: $xDeviceCreateSemaphore
+analogue:
+    - "**vkCreateSemaphore**"
 details:
     - "The application may call this function from simultaneous threads."
     - "The implementation of this function should be lock-free."
@@ -58,6 +60,8 @@ returns:
 type: function
 desc: "Deletes an semaphore object."
 name: $xSemaphoreDestroy
+analogue:
+    - "**vkDestroySemaphore**"
 details:
     - "The application is responsible for making sure the GPU is not currently referencing the semaphore before it is deleted"
     - "The implementation of this function will immediately free all Host and Device allocations associated with this semaphore"

@@ -152,7 +152,7 @@ The following sample code demonstrates submission of commands to a command queue
     ${x}CommandListClose(hCommandList);
 
     // Enqueue command list execution into command queue
-    ${x}CommandQueueEnqueueCommandList(hCommandQueue, 1, &hCommandList);
+    ${x}CommandQueueEnqueueCommandList(hCommandQueue, 1, &hCommandList, ${x}_fence_handle_t());
 
     // synchronize host and GPU
     ${x}CommandQueueSynchronize(hCommandQueue);
@@ -168,8 +168,6 @@ There are three types of synchronization primitives:
 2. **Events** - used as fine-grain host-to-device, device-to-host or device-to-device waits and signals within a command list.
 3. **Semaphores** - used for fine-grain control of command lists execution across multiple, simultaneous command queues within a device.
 
-@todo [**Mike**] add Vulkan analogues for reference
-@todo [**Mike**] fence should be returned from enqueue [optional]
 @todo [**Mike**] add barriers; defines everything prior is finished (copy vulkan)
 
 ${"##"} Fences
@@ -193,7 +191,7 @@ The following sample code demonstrates a sequence for creation, submission and q
     ${x}DeviceCreateFence(hCommandQueue, &fenceDesc, &hFence);
 
     // Enqueue a signal of the fence into the command queue
-    ${x}FenceEnqueueSignal(hFence);
+    ${x}CommandQueueEnqueueCommandList(hCommandQueue, 1, &hCommandList, hFence);
 
     // Wait for fence to be signaled
     if(${X}_RESULT_SUCCESS != ${x}FenceQueryStatus(hFence))

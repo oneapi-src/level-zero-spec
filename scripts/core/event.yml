@@ -37,6 +37,7 @@ desc: "Creates an event object on the device."
 name: $xDeviceCreateEvent
 analogue:
     - "**clCreateUserEvent**"
+    - vkCreateEvent
     - cuEventCreate
 details:
     - "This function may be called from simultaneous threads."
@@ -63,6 +64,7 @@ type: function
 desc: "Creates an event object on the device from existing memory."
 name: $xDevicePlaceEvent
 details:
+    - "This function is intended for sharing fences with peer devices or across processes"
     - "This function may be called from simultaneous threads."
     - "The implementation of this function should be lock-free."
 params:
@@ -94,8 +96,9 @@ details:
     - "The implementation of this function will immediately free all Host and Device allocations associated with this event"
     - "The implementation of this function should be lock-free."
 analogue:
-     - "**cuEventDestroy**"
-     - clReleaseEvent
+     - "**clReleaseEvent**"
+     - vkDestroyEvent
+     - cuEventDestroy
 params:
     - type: $x_event_handle_t
       name: hEvent
@@ -108,7 +111,9 @@ type: function
 desc: "Encodes a signal of the event from the device into a command list."
 name: $xCommandListEncodeSignalEvent
 analogue:
-    - "**cuEventRecord**"
+    - "**clSetUserEventStatus**"
+    - cuEventRecord
+    - vkCmdSetEvent
 details:
     - "The application may **not** call this function from simultaneous threads."
     - "The implementation of this function should be lock-free."
@@ -218,7 +223,8 @@ type: function
 desc: "The current host thread waits on an event from a device signal."
 name: $xHostWaitOnEvent
 analogue:
-    - "**cuEventSynchronize**"
+    - clWaitForEvents
+    - cuEventSynchronize
 details:
     - "The application may call this function from simultaneous threads."
     - "The implementation of this function should be lock-free."
@@ -276,8 +282,9 @@ type: function
 desc: "Queries an event object's status."
 name: $xEventQueryStatus
 analogue:
-    - "**cuEventQuery**"
-    - clGetEventInfo
+    - "**clGetEventInfo**"
+    - vkGetEventStatus
+    - cuEventQuery
 details:
     - "The application may call this function from simultaneous threads."
     - "The implementation of this function should be lock-free."
@@ -319,6 +326,8 @@ returns:
 type: function
 desc: "Reset an event back to not signaled state"
 name: $xEventReset
+analogue:
+    - vkResetEvent
 details:
     - "The application may call this function from simultaneous threads."
     - "The implementation of this function should be lock-free."

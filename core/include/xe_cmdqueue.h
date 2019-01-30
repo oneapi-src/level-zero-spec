@@ -142,17 +142,26 @@ xe_result_t __xecall
 ///     - The application may call this function from simultaneous threads.
 ///     - The implementation of this function should be lock-free.
 /// 
+/// @remarks
+///   _Analogues_
+///     - vkQueueSubmit
+/// 
 /// @returns
 ///     - ::XE_RESULT_SUCCESS
 ///     - ::XE_RESULT_ERROR_UNINITIALIZED
 ///     - ::XE_RESULT_ERROR_INVALID_PARAMETER
 ///         + invalid handle for hCommandQueue
-///         + invalid handle for hCommandList
+///         + 0 for numCommandLists
+///         + nullptr for phCommandLists
+///         + invalid handle in phCommandLists
+///         + hFence is in signaled state
+///         + hFence is enqueued in another command queue
 xe_result_t __xecall
   xeCommandQueueEnqueueCommandLists(
     xe_command_queue_handle_t hCommandQueue,        ///< [in] handle of the command queue
     uint32_t numCommandLists,                       ///< [in] number of command lists to enqueue
-    xe_command_list_handle_t* phCommandLists        ///< [in] list of handles of the command lists to execute
+    xe_command_list_handle_t* phCommandLists,       ///< [in] list of handles of the command lists to execute
+    xe_fence_handle_t hFence                        ///< [in][optional] handle of the fence to signal on completion
     );
 
 ///////////////////////////////////////////////////////////////////////////////

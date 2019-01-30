@@ -41,6 +41,7 @@
 /// @remarks
 ///   _Analogues_
 ///     - **clCreateUserEvent**
+///     - vkCreateEvent
 ///     - cuEventCreate
 /// 
 /// @returns
@@ -76,6 +77,8 @@ xe_result_t __xecall
 /// @brief Creates an event object on the device from existing memory.
 /// 
 /// @details
+///     - This function is intended for sharing fences with peer devices or
+///       across processes
 ///     - This function may be called from simultaneous threads.
 ///     - The implementation of this function should be lock-free.
 /// 
@@ -122,8 +125,9 @@ xe_result_t __xecall
 /// 
 /// @remarks
 ///   _Analogues_
-///     - **cuEventDestroy**
-///     - clReleaseEvent
+///     - **clReleaseEvent**
+///     - vkDestroyEvent
+///     - cuEventDestroy
 /// 
 /// @returns
 ///     - ::XE_RESULT_SUCCESS
@@ -156,7 +160,9 @@ xe_result_t __xecall
 /// 
 /// @remarks
 ///   _Analogues_
-///     - **cuEventRecord**
+///     - **clSetUserEventStatus**
+///     - cuEventRecord
+///     - vkCmdSetEvent
 /// 
 /// @returns
 ///     - ::XE_RESULT_SUCCESS
@@ -336,7 +342,8 @@ xe_result_t __xecall
 /// 
 /// @remarks
 ///   _Analogues_
-///     - **cuEventSynchronize**
+///     - clWaitForEvents
+///     - cuEventSynchronize
 /// 
 /// @returns
 ///     - ::XE_RESULT_SUCCESS
@@ -436,8 +443,9 @@ xe_result_t __xecall
 /// 
 /// @remarks
 ///   _Analogues_
-///     - **cuEventQuery**
-///     - clGetEventInfo
+///     - **clGetEventInfo**
+///     - vkGetEventStatus
+///     - cuEventQuery
 /// 
 /// @returns
 ///     - ::XE_RESULT_SUCCESS
@@ -507,6 +515,10 @@ xe_result_t __xecall
 /// @details
 ///     - The application may call this function from simultaneous threads.
 ///     - The implementation of this function should be lock-free.
+/// 
+/// @remarks
+///   _Analogues_
+///     - vkResetEvent
 /// 
 /// @returns
 ///     - ::XE_RESULT_SUCCESS

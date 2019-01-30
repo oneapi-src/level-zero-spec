@@ -40,7 +40,7 @@
 /// 
 /// @remarks
 ///   _Analogues_
-///     - **cuEventCreate**
+///     - **vkCreateFence**
 /// 
 /// @returns
 ///     - ::XE_RESULT_SUCCESS
@@ -83,7 +83,7 @@ xe_result_t __xecall
 /// 
 /// @remarks
 ///   _Analogues_
-///     - **cuEventDestroy**
+///     - **vkDestroyFence**
 /// 
 /// @returns
 ///     - ::XE_RESULT_SUCCESS
@@ -108,41 +108,6 @@ xe_result_t __xecall
 }
 
 ///////////////////////////////////////////////////////////////////////////////
-/// @brief Enqueues a signal of the fence into its command queue.
-/// 
-/// @details
-///     - The application may **not** call this function from simultaneous
-///       threads.
-///     - The implementation of this function should be lock-free.
-/// 
-/// @remarks
-///   _Analogues_
-///     - **cuEventRecord**
-/// 
-/// @returns
-///     - ::XE_RESULT_SUCCESS
-///     - ::XE_RESULT_ERROR_UNINITIALIZED
-///     - ::XE_RESULT_ERROR_INVALID_PARAMETER
-///         + invalid handle for hFence
-///         + fence is in signaled state
-///         + fence is enqueued in another command queue
-/*@todo: __declspec(dllexport)*/
-xe_result_t __xecall
-  xeFenceEnqueueSignal(
-    xe_fence_handle_t hFence                        ///< [in] handle of the fence
-    )
-{
-    // @todo: check_return(nullptr == get_driver(), XE_RESULT_ERROR_UNINITIALIZED);
-
-    // Check parameters
-    // @todo: check_return(xe_fence_handle_t() == hFence, XE_RESULT_ERROR_INVALID_PARAMETER);
-
-    // @todo: insert <code> here
-
-    return XE_RESULT_SUCCESS;
-}
-
-///////////////////////////////////////////////////////////////////////////////
 /// @brief The current host thread waits on a fence to be signaled.
 /// 
 /// @details
@@ -151,7 +116,7 @@ xe_result_t __xecall
 /// 
 /// @remarks
 ///   _Analogues_
-///     - **cuEventSynchronize**
+///     - **vkWaitForFences**
 /// 
 /// @returns
 ///     - ::XE_RESULT_SUCCESS
@@ -181,6 +146,10 @@ xe_result_t __xecall
 /// @details
 ///     - The application may call this function from simultaneous threads.
 ///     - The implementation of this function should be lock-free.
+/// 
+/// @remarks
+///   _Analogues_
+///     - **vkWaitForFences**
 /// 
 /// @returns
 ///     - ::XE_RESULT_SUCCESS
@@ -215,7 +184,7 @@ xe_result_t __xecall
 /// 
 /// @remarks
 ///   _Analogues_
-///     - **cuEventQuery**
+///     - **vkGetFenceStatus**
 /// 
 /// @returns
 ///     - ::XE_RESULT_SUCCESS
@@ -247,10 +216,6 @@ xe_result_t __xecall
 /// @details
 ///     - The application may call this function from simultaneous threads.
 ///     - The implementation of this function should be lock-free.
-/// 
-/// @remarks
-///   _Analogues_
-///     - **cuEventElapsedTime**
 /// 
 /// @returns
 ///     - ::XE_RESULT_SUCCESS
@@ -286,6 +251,29 @@ xe_result_t __xecall
 /// @details
 ///     - The application may call this function from simultaneous threads.
 ///     - The implementation of this function should be lock-free.
+/// 
+/// @remarks
+///   _Analogues_
+///     - -
+///     - "
+///     - *
+///     - *
+///     - v
+///     - k
+///     - R
+///     - e
+///     - s
+///     - e
+///     - t
+///     - F
+///     - e
+///     - n
+///     - c
+///     - e
+///     - s
+///     - *
+///     - *
+///     - "
 /// 
 /// @returns
 ///     - ::XE_RESULT_SUCCESS

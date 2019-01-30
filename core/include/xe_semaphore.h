@@ -68,6 +68,10 @@ typedef struct _xe_semaphore_desc_t
 ///     - The application may call this function from simultaneous threads.
 ///     - The implementation of this function should be lock-free.
 /// 
+/// @remarks
+///   _Analogues_
+///     - **vkCreateSemaphore**
+/// 
 /// @returns
 ///     - ::XE_RESULT_SUCCESS
 ///     - ::XE_RESULT_ERROR_UNINITIALIZED
@@ -93,6 +97,10 @@ xe_result_t __xecall
 ///     - The implementation of this function will immediately free all Host and
 ///       Device allocations associated with this semaphore
 ///     - The implementation of this function should be lock-free.
+/// 
+/// @remarks
+///   _Analogues_
+///     - **vkDestroySemaphore**
 /// 
 /// @returns
 ///     - ::XE_RESULT_SUCCESS

@@ -30,7 +30,7 @@ type: function
 desc: "Creates a fence object on the device's command queue."
 name: $xCommandQueueCreateFence
 analogue:
-    - "**cuEventCreate**"
+    - "**vkCreateFence**"
 details:
     - "The application may call this function from simultaneous threads."
     - "The implementation of this function should be lock-free."
@@ -60,7 +60,7 @@ details:
     - "The implementation of this function will immediately free all Host and Device allocations associated with this fence"
     - "The implementation of this function should be lock-free."
 analogue:
-    - "**cuEventDestroy**"
+    - "**vkDestroyFence**"
 params:
     - type: $x_fence_handle_t
       name: hFence
@@ -71,28 +71,10 @@ returns:
         - "fence is enqueued in a command queue"
 --- #--------------------------------------------------------------------------
 type: function
-desc: "Enqueues a signal of the fence into its command queue."
-name: $xFenceEnqueueSignal
-analogue:
-    - "**cuEventRecord**"
-details:
-    - "The application may **not** call this function from simultaneous threads."
-    - "The implementation of this function should be lock-free."
-params:
-    - type: $x_fence_handle_t
-      name: hFence
-      desc: "[in] handle of the fence"
-returns:
-     - $X_RESULT_ERROR_INVALID_PARAMETER:
-         - "invalid handle for hFence"
-         - "fence is in signaled state"
-         - "fence is enqueued in another command queue"
---- #--------------------------------------------------------------------------
-type: function
 desc: "The current host thread waits on a fence to be signaled."
 name: $xHostWaitOnFence
 analogue:
-    - "**cuEventSynchronize**"
+    - "**vkWaitForFences**"
 details:
     - "The application may call this function from simultaneous threads."
     - "The implementation of this function should be lock-free."
@@ -108,6 +90,8 @@ returns:
 type: function
 desc: "The current host thread waits on a multiple fences to be signaled."
 name: $xHostWaitOnMultipleFences
+analogue:
+    - "**vkWaitForFences**"
 details:
     - "The application may call this function from simultaneous threads."
     - "The implementation of this function should be lock-free."
@@ -128,7 +112,7 @@ type: function
 desc: "Queries a fence object's status."
 name: $xFenceQueryStatus
 analogue:
-    - "**cuEventQuery**"
+    - "**vkGetFenceStatus**"
 details:
     - "The application may call this function from simultaneous threads."
     - "The implementation of this function should be lock-free."
@@ -146,8 +130,6 @@ returns:
 type: function
 desc: "Queries the elapsed time between two signaled fences."
 name: $xFenceQueryElapsedTime
-analogue:
-    - "**cuEventElapsedTime**"
 details:
     - "The application may call this function from simultaneous threads."
     - "The implementation of this function should be lock-free."
@@ -171,6 +153,8 @@ returns:
 type: function
 desc: "Reset a fence back to the not signaled state."
 name: $xFenceReset
+analogue:
+    -"**vkResetFences**"
 details:
     - "The application may call this function from simultaneous threads."
     - "The implementation of this function should be lock-free."

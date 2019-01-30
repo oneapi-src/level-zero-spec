@@ -115,6 +115,8 @@ returns:
 type: function
 desc: "Enqueues a command list into a command queue."
 name: $xCommandQueueEnqueueCommandLists
+analogue:
+    - vkQueueSubmit
 details:
     - "The application may call this function from simultaneous threads."
     - "The implementation of this function should be lock-free."
@@ -128,10 +130,17 @@ params:
     - type: "$x_command_list_handle_t*"
       name: phCommandLists
       desc: "[in] list of handles of the command lists to execute"
+    - type: $x_fence_handle_t
+      name: hFence
+      desc: "[in][optional] handle of the fence to signal on completion"
 returns:
     - $X_RESULT_ERROR_INVALID_PARAMETER:
        - "invalid handle for hCommandQueue"
-       - "invalid handle for hCommandList"
+       - "0 for numCommandLists"
+       - "nullptr for phCommandLists"
+       - "invalid handle in phCommandLists"
+       - "hFence is in signaled state"
+       - "hFence is enqueued in another command queue"
 --- #--------------------------------------------------------------------------
 type: function
 desc: "Synchronizes a command queue by waiting on the host."
