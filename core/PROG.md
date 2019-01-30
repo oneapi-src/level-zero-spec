@@ -74,7 +74,8 @@ The following diagram illustrates the hierarchy of command lists and command que
 ![Device Hierarchy](../images/core_queue.png?raw=true)
 
 ## Command Queues
-- A command queue represents a physical input stream to the device.
+- A command queue represents a physical input stream to the device, 
+  specified by an ordinal at creation time.
 - The number of simultaneous command queues per device is queried from calling 
   ::xeDeviceGetProperties; returned as ::xe_device_properties_t.numAsyncComputeEngines
   and ::xe_device_properties_t.numAsyncCopyEngines.
@@ -84,17 +85,12 @@ The following diagram illustrates the hierarchy of command lists and command que
   an application may share a command queue handle across multiple CPU
   threads. However, the application is responsible for ensuring that 
   multiple CPU threads do not access the same command queue simultaneously.
-- The command queue maintains some machine state, which is inherited by
-  subsequent execution. See ::xe_command_queue_parameter_t for details.
 - Commands are submitted to a command queue via command lists and are
   executed in a fifo manner.
 - The application is responsible for making sure the GPU is not currently
   executing from a command queue before it is deleted.  This is 
   typically done by tracking command list events, but may also be
   handled by calling ::xeCommandQueueSynchronize.
-
-@todo [**Mike**] command queues are free-threaded; remove sync/async @ create
-@todo [**Mike**] enqueue a list of command lists
 
 ## Command Lists
 - A command list represents a sequence of commands for execution on
@@ -131,7 +127,9 @@ The following sample code demonstrates a basic sequence for creation of command 
     xe_command_queue_desc_t commandQueueDesc = {
         XE_COMMAND_QUEUE_DESC_VERSION,
         XE_COMMAND_QUEUE_FLAG_NONE,
-        XE_COMMAND_QUEUE_MODE_DEFAULT
+        XE_COMMAND_QUEUE_MODE_DEFAULT,
+        XE_COMMAND_QUEUE_PRIORITY_NORMAL,
+        0
     };
     xe_command_queue_handle_t hCommandQueue;
     xeDeviceCreateCommandQueue(hDevice, &commandQueueDesc, &hCommandQueue);
@@ -149,13 +147,15 @@ The following sample code demonstrates a basic sequence for creation of command 
 ## Submission
 The following sample code demonstrates submission of commands to a command queue, via a command list:
 ```c
-    // Encode kernel execution into a command list
-    xeCommandListEncodeKernelExecution(hCommandList, hKernel);
-    xeCommandListClose(hCommandList); // finished encoding commands
+    ...
+    // finished encoding commands
+    xeCommandListClose(hCommandList);
 
     // Enqueue command list execution into command queue
-    xeCommandQueueEnqueueCommandList(hCommandQueue, hCommandList);
-    xeCommandQueueSynchronize(hCommandQueue); // synchronize host and GPU
+    xeCommandQueueEnqueueCommandList(hCommandQueue, 1, &hCommandList);
+
+    // synchronize host and GPU
+    xeCommandQueueSynchronize(hCommandQueue);
 
     // Reset (recycle) command list for new commands
     xeCommandListReset(hCommandList);

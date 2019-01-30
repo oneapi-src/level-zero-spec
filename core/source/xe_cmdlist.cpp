@@ -160,3 +160,112 @@ xe_result_t __xecall
     return XE_RESULT_SUCCESS;
 }
 
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Sets a command list's parameter.
+/// 
+/// @details
+///     - The application may **not** call this function from simultaneous
+///       threads.
+///     - The implementation of this function should be lock-free.
+/// 
+/// @remarks
+///   _Analogues_
+///     - cuCtxSetCacheConfig
+///     - cuCtxSetLimit
+///     - cuCtxSetSharedMemConfig
+/// 
+/// @returns
+///     - ::XE_RESULT_SUCCESS
+///     - ::XE_RESULT_ERROR_UNINITIALIZED
+///     - ::XE_RESULT_ERROR_INVALID_PARAMETER
+///         + invalid handle for hCommandList
+///         + invalid value for attribute
+///         + invalid value for value
+/*@todo: __declspec(dllexport)*/
+xe_result_t __xecall
+  xeCommandListSetParameter(
+    xe_command_list_handle_t hCommandList,          ///< [in] handle of command list
+    xe_command_list_parameter_t parameter,          ///< [in] parameter to change
+    uint32_t value                                  ///< [in] value of attribute
+    )
+{
+    // @todo: check_return(nullptr == get_driver(), XE_RESULT_ERROR_UNINITIALIZED);
+
+    // Check parameters
+    // @todo: check_return(xe_command_list_handle_t() == hCommandList, XE_RESULT_ERROR_INVALID_PARAMETER);
+
+    // @todo: insert <code> here
+
+    return XE_RESULT_SUCCESS;
+}
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Retrieves a command list's parameter.
+/// 
+/// @details
+///     - The application may **not** call this function from simultaneous
+///       threads.
+///     - The implementation of this function should be lock-free.
+/// 
+/// @remarks
+///   _Analogues_
+///     - cuCtxGetCacheConfig
+///     - cuCtxGetLimit
+///     - cuCtxGetSharedMemConfig
+///     - cuCtxGetStreamPriorityRange
+/// 
+/// @returns
+///     - ::XE_RESULT_SUCCESS
+///     - ::XE_RESULT_ERROR_UNINITIALIZED
+///     - ::XE_RESULT_ERROR_INVALID_PARAMETER
+///         + invalid handle for hCommandList
+///         + invalid value for attribute
+///         + nullptr for value
+/*@todo: __declspec(dllexport)*/
+xe_result_t __xecall
+  xeCommandListGetParameter(
+    xe_command_list_handle_t hCommandList,          ///< [in] handle of command list
+    xe_command_list_parameter_t parameter,          ///< [in] parameter to change
+    uint32_t* value                                 ///< [out] value of attribute
+    )
+{
+    // @todo: check_return(nullptr == get_driver(), XE_RESULT_ERROR_UNINITIALIZED);
+
+    // Check parameters
+    // @todo: check_return(xe_command_list_handle_t() == hCommandList, XE_RESULT_ERROR_INVALID_PARAMETER);
+    // @todo: check_return(nullptr == value, XE_RESULT_ERROR_INVALID_PARAMETER);
+
+    // @todo: insert <code> here
+
+    return XE_RESULT_SUCCESS;
+}
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Resets all command list parameters to default state.
+/// 
+/// @details
+///     - The application may **not** call this function from simultaneous
+///       threads.
+///     - The implementation of this function should be lock-free.
+/// 
+/// @returns
+///     - ::XE_RESULT_SUCCESS
+///     - ::XE_RESULT_ERROR_UNINITIALIZED
+///     - ::XE_RESULT_ERROR_INVALID_PARAMETER
+///         + invalid handle for hCommandList
+/*@todo: __declspec(dllexport)*/
+xe_result_t __xecall
+  xeCommandListResetParameters(
+    xe_command_list_handle_t hCommandList           ///< [in] handle of the command list
+    )
+{
+    // @todo: check_return(nullptr == get_driver(), XE_RESULT_ERROR_UNINITIALIZED);
+
+    // Check parameters
+    // @todo: check_return(xe_command_list_handle_t() == hCommandList, XE_RESULT_ERROR_INVALID_PARAMETER);
+
+    // @todo: insert <code> here
+
+    return XE_RESULT_SUCCESS;
+}
+

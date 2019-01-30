@@ -60,12 +60,23 @@ typedef enum _xe_command_queue_mode_t
 } xe_command_queue_mode_t;
 
 ///////////////////////////////////////////////////////////////////////////////
+/// @brief Supported command queue priorities
+typedef enum _xe_command_queue_priority_t
+{
+    XE_COMMAND_QUEUE_PRIORITY_NORMAL = 0,           ///< [default] normal priority
+    XE_COMMAND_QUEUE_PRIORITY_LOW,                  ///< lower priority than normal
+    XE_COMMAND_QUEUE_PRIORITY_HIGH,                 ///< higher priority than normal
+
+} xe_command_queue_priority_t;
+
+///////////////////////////////////////////////////////////////////////////////
 /// @brief Command Queue descriptor
 typedef struct _xe_command_queue_desc_t
 {
     uint32_t version;                               ///< [in] ::XE_COMMAND_QUEUE_DESC_VERSION
     xe_command_queue_flags_t flags;                 ///< [in] creation flags
     xe_command_queue_mode_t mode;                   ///< [in] operation mode
+    xe_command_queue_priority_t priority;           ///< [in] priority
     uint32_t ordinal;                               ///< [in] must be less than value returned for ::xe_device_properties_t.numAsyncComputeEngines or ::xe_device_properties_t.numAsyncCopyEngines
 
 } xe_command_queue_desc_t;
@@ -125,113 +136,10 @@ xe_result_t __xecall
     );
 
 ///////////////////////////////////////////////////////////////////////////////
-/// @brief Supported command queue parameters
-typedef enum _xe_command_queue_parameter_t
-{
-    XE_COMMAND_QUEUE_PARAMETER_PRIORITY = 1,        ///< see ::xe_command_queue_priority_t
-    XE_COMMAND_QUEUE_PARAMETER_CACHE_CONFIG,        ///< see ::xe_command_queue_cacheconfig_t
-
-} xe_command_queue_parameter_t;
-
-///////////////////////////////////////////////////////////////////////////////
-/// @brief Supported command queue priorities
-typedef enum _xe_command_queue_priority_t
-{
-    XE_COMMAND_QUEUE_PRIORITY_NORMAL = 0,           ///< [default] normal priority
-    XE_COMMAND_QUEUE_PRIORITY_LOW,                  ///< lower priority than normal
-    XE_COMMAND_QUEUE_PRIORITY_HIGH,                 ///< higher priority than normal
-
-} xe_command_queue_priority_t;
-
-///////////////////////////////////////////////////////////////////////////////
-/// @brief Supported command queue cache configurations
-typedef enum _xe_command_queue_cacheconfig_t
-{
-    XE_COMMAND_QUEUE_CACHECONFIG_BIAS_NONE,         ///< [default] no cache configuration bias; uses driver-based heuristics
-
-} xe_command_queue_cacheconfig_t;
-
-///////////////////////////////////////////////////////////////////////////////
-/// @brief Sets a command queue's parameter.
-/// 
-/// @details
-///     - The application may **not** call this function from simultaneous
-///       threads.
-///     - The implementation of this function should be lock-free.
-/// 
-/// @remarks
-///   _Analogues_
-///     - cuCtxSetCacheConfig
-///     - cuCtxSetLimit
-///     - cuCtxSetSharedMemConfig
-/// 
-/// @returns
-///     - ::XE_RESULT_SUCCESS
-///     - ::XE_RESULT_ERROR_UNINITIALIZED
-///     - ::XE_RESULT_ERROR_INVALID_PARAMETER
-///         + invalid handle for hCommandQueue
-///         + invalid value for attribute
-///         + invalid value for value
-xe_result_t __xecall
-  xeCommandQueueSetParameter(
-    xe_command_queue_handle_t hCommandQueue,        ///< [in] handle of command queue
-    xe_command_queue_parameter_t parameter,         ///< [in] parameter to change
-    uint32_t value                                  ///< [in] value of attribute
-    );
-
-///////////////////////////////////////////////////////////////////////////////
-/// @brief Retrieves a command queue's parameter.
-/// 
-/// @details
-///     - The application may **not** call this function from simultaneous
-///       threads.
-///     - The implementation of this function should be lock-free.
-/// 
-/// @remarks
-///   _Analogues_
-///     - cuCtxGetCacheConfig
-///     - cuCtxGetLimit
-///     - cuCtxGetSharedMemConfig
-///     - cuCtxGetStreamPriorityRange
-/// 
-/// @returns
-///     - ::XE_RESULT_SUCCESS
-///     - ::XE_RESULT_ERROR_UNINITIALIZED
-///     - ::XE_RESULT_ERROR_INVALID_PARAMETER
-///         + invalid handle for hCommandQueue
-///         + invalid value for attribute
-///         + nullptr for value
-xe_result_t __xecall
-  xeCommandQueueGetParameter(
-    xe_command_queue_handle_t hCommandQueue,        ///< [in] handle of command queue
-    xe_command_queue_parameter_t parameter,         ///< [in] parameter to change
-    uint32_t* value                                 ///< [out] value of attribute
-    );
-
-///////////////////////////////////////////////////////////////////////////////
-/// @brief Resets all command queue parameters to default state.
-/// 
-/// @details
-///     - The application may **not** call this function from simultaneous
-///       threads.
-///     - The implementation of this function should be lock-free.
-/// 
-/// @returns
-///     - ::XE_RESULT_SUCCESS
-///     - ::XE_RESULT_ERROR_UNINITIALIZED
-///     - ::XE_RESULT_ERROR_INVALID_PARAMETER
-///         + invalid handle for hCommandQueue
-xe_result_t __xecall
-  xeCommandQueueResetParameters(
-    xe_command_queue_handle_t hCommandQueue         ///< [in] handle of the command queue
-    );
-
-///////////////////////////////////////////////////////////////////////////////
 /// @brief Enqueues a command list into a command queue.
 /// 
 /// @details
-///     - The application may **not** call this function from simultaneous
-///       threads.
+///     - The application may call this function from simultaneous threads.
 ///     - The implementation of this function should be lock-free.
 /// 
 /// @returns
@@ -241,9 +149,10 @@ xe_result_t __xecall
 ///         + invalid handle for hCommandQueue
 ///         + invalid handle for hCommandList
 xe_result_t __xecall
-  xeCommandQueueEnqueueCommandList(
+  xeCommandQueueEnqueueCommandLists(
     xe_command_queue_handle_t hCommandQueue,        ///< [in] handle of the command queue
-    xe_command_list_handle_t hCommandList           ///< [in] handle of the command list to execute
+    uint32_t numCommandLists,                       ///< [in] number of command lists to enqueue
+    xe_command_list_handle_t* phCommandLists        ///< [in] list of handles of the command lists to execute
     );
 
 ///////////////////////////////////////////////////////////////////////////////

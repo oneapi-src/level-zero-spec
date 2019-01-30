@@ -96,3 +96,84 @@ params:
 returns:
     - $X_RESULT_ERROR_INVALID_PARAMETER:
         - "invalid handle for hCommandList"
+--- #--------------------------------------------------------------------------
+type: enum
+desc: "Supported command list parameters"
+name: $x_command_list_parameter_t
+etors:
+    - name: $X_COMMAND_LIST_PARAMETER_CACHE_CONFIG
+      desc: "see $x_command_list_cacheconfig_t"
+--- #--------------------------------------------------------------------------
+type: enum
+desc: "Supported command list cache configurations"
+name: $x_command_list_cacheconfig_t
+etors:
+    - name: $X_COMMAND_LIST_CACHECONFIG_BIAS_NONE
+      desc: "[default] no cache configuration bias; uses driver-based heuristics"
+--- #--------------------------------------------------------------------------
+type: function
+desc: "Sets a command list's parameter."
+name: $xCommandListSetParameter
+analogue:
+    - cuCtxSetCacheConfig
+    - cuCtxSetLimit
+    - cuCtxSetSharedMemConfig
+details:
+    - "The application may **not** call this function from simultaneous threads."
+    - "The implementation of this function should be lock-free."
+params:
+    - type: $x_command_list_handle_t
+      name: hCommandList
+      desc: "[in] handle of command list"
+    - type: $x_command_list_parameter_t
+      name: parameter
+      desc: "[in] parameter to change"
+    - type: uint32_t
+      name: value
+      desc: "[in] value of attribute"
+returns:
+    - $X_RESULT_ERROR_INVALID_PARAMETER:
+        - "invalid handle for hCommandList"
+        - "invalid value for attribute"
+        - "invalid value for value"
+--- #--------------------------------------------------------------------------
+type: function
+desc: "Retrieves a command list's parameter."
+name: $xCommandListGetParameter
+analogue:
+    - cuCtxGetCacheConfig
+    - cuCtxGetLimit
+    - cuCtxGetSharedMemConfig
+    - cuCtxGetStreamPriorityRange
+details:
+    - "The application may **not** call this function from simultaneous threads."
+    - "The implementation of this function should be lock-free."
+params:
+    - type: $x_command_list_handle_t
+      name: hCommandList
+      desc: "[in] handle of command list"
+    - type: $x_command_list_parameter_t
+      name: parameter
+      desc: "[in] parameter to change"
+    - type: "uint32_t*"
+      name: value
+      desc: "[out] value of attribute"
+returns:
+    - $X_RESULT_ERROR_INVALID_PARAMETER:
+        - "invalid handle for hCommandList"
+        - "invalid value for attribute"
+        - "nullptr for value"
+--- #--------------------------------------------------------------------------
+type: function
+desc: "Resets all command list parameters to default state."
+name: $xCommandListResetParameters
+details:
+    - "The application may **not** call this function from simultaneous threads."
+    - "The implementation of this function should be lock-free."
+params:
+    - type: $x_command_list_handle_t
+      name: hCommandList
+      desc: "[in] handle of the command list"
+returns:
+    - $X_RESULT_ERROR_INVALID_PARAMETER:
+       - "invalid handle for hCommandList"

@@ -104,6 +104,7 @@ The following rules are followed in order to maximize robustness and security:
 ## Multithreading
 In order to eliminate the usage of thread-locks by the implementation, the following design philosophies are adopted:
 - work submission occurs exclusively by enqueing command lists into a command queue
+- work submission into a command queue is free-threaded
 - multiple, simulateneous threads may encode multiple command lists independently
 - the application is responsible for ensuring multiple, simultaneous threads are not modifying mutable objects;
 such as command queues and command lists

@@ -32,6 +32,18 @@ etors:
       desc: "GPU execution is scheduled and will complete in future;
             explicit synchronization object must be used to determine completeness"
 --- #--------------------------------------------------------------------------
+type: enum
+desc: "Supported command queue priorities"
+name: $x_command_queue_priority_t
+etors:
+    - name: $X_COMMAND_QUEUE_PRIORITY_NORMAL
+      value: "0"
+      desc: "[default] normal priority"
+    - name: $X_COMMAND_QUEUE_PRIORITY_LOW
+      desc: "lower priority than normal"
+    - name: $X_COMMAND_QUEUE_PRIORITY_HIGH
+      desc: "higher priority than normal"
+--- #--------------------------------------------------------------------------
 type: struct
 desc: "Command Queue descriptor"
 name: $x_command_queue_desc_t
@@ -45,6 +57,9 @@ members:
     - type: $x_command_queue_mode_t
       name: mode
       desc: "[in] operation mode"
+    - type: $x_command_queue_priority_t
+      name: priority
+      desc: "[in] priority"
     - type: uint32_t
       name: ordinal
       desc: "[in] must be less than value returned for
@@ -97,115 +112,22 @@ returns:
     - $X_RESULT_ERROR_INVALID_PARAMETER:
         - invalid handle for hCommandQueue
 --- #--------------------------------------------------------------------------
-type: enum
-desc: "Supported command queue parameters"
-name: $x_command_queue_parameter_t
-etors:
-    - name: $X_COMMAND_QUEUE_PARAMETER_PRIORITY
-      value: "1"
-      desc: "see $x_command_queue_priority_t"
-    - name: $X_COMMAND_QUEUE_PARAMETER_CACHE_CONFIG
-      desc: "see $x_command_queue_cacheconfig_t"
---- #--------------------------------------------------------------------------
-type: enum
-desc: "Supported command queue priorities"
-name: $x_command_queue_priority_t
-etors:
-    - name: $X_COMMAND_QUEUE_PRIORITY_NORMAL
-      value: "0"
-      desc: "[default] normal priority"
-    - name: $X_COMMAND_QUEUE_PRIORITY_LOW
-      desc: "lower priority than normal"
-    - name: $X_COMMAND_QUEUE_PRIORITY_HIGH
-      desc: "higher priority than normal"
---- #--------------------------------------------------------------------------
-type: enum
-desc: "Supported command queue cache configurations"
-name: $x_command_queue_cacheconfig_t
-etors:
-    - name: $X_COMMAND_QUEUE_CACHECONFIG_BIAS_NONE
-      desc: "[default] no cache configuration bias; uses driver-based heuristics"
---- #--------------------------------------------------------------------------
-type: function
-desc: "Sets a command queue's parameter."
-name: $xCommandQueueSetParameter
-analogue:
-    - cuCtxSetCacheConfig
-    - cuCtxSetLimit
-    - cuCtxSetSharedMemConfig
-details:
-    - "The application may **not** call this function from simultaneous threads."
-    - "The implementation of this function should be lock-free."
-params:
-    - type: $x_command_queue_handle_t
-      name: hCommandQueue
-      desc: "[in] handle of command queue"
-    - type: $x_command_queue_parameter_t
-      name: parameter
-      desc: "[in] parameter to change"
-    - type: uint32_t
-      name: value
-      desc: "[in] value of attribute"
-returns:
-    - $X_RESULT_ERROR_INVALID_PARAMETER:
-        - "invalid handle for hCommandQueue"
-        - "invalid value for attribute"
-        - "invalid value for value"
---- #--------------------------------------------------------------------------
-type: function
-desc: "Retrieves a command queue's parameter."
-name: $xCommandQueueGetParameter
-analogue:
-    - cuCtxGetCacheConfig
-    - cuCtxGetLimit
-    - cuCtxGetSharedMemConfig
-    - cuCtxGetStreamPriorityRange
-details:
-    - "The application may **not** call this function from simultaneous threads."
-    - "The implementation of this function should be lock-free."
-params:
-    - type: $x_command_queue_handle_t
-      name: hCommandQueue
-      desc: "[in] handle of command queue"
-    - type: $x_command_queue_parameter_t
-      name: parameter
-      desc: "[in] parameter to change"
-    - type: "uint32_t*"
-      name: value
-      desc: "[out] value of attribute"
-returns:
-    - $X_RESULT_ERROR_INVALID_PARAMETER:
-        - "invalid handle for hCommandQueue"
-        - "invalid value for attribute"
-        - "nullptr for value"
---- #--------------------------------------------------------------------------
-type: function
-desc: "Resets all command queue parameters to default state."
-name: $xCommandQueueResetParameters
-details:
-    - "The application may **not** call this function from simultaneous threads."
-    - "The implementation of this function should be lock-free."
-params:
-    - type: $x_command_queue_handle_t
-      name: hCommandQueue
-      desc: "[in] handle of the command queue"
-returns:
-    - $X_RESULT_ERROR_INVALID_PARAMETER:
-       - "invalid handle for hCommandQueue"
---- #--------------------------------------------------------------------------
 type: function
 desc: "Enqueues a command list into a command queue."
-name: $xCommandQueueEnqueueCommandList
+name: $xCommandQueueEnqueueCommandLists
 details:
-    - "The application may **not** call this function from simultaneous threads."
+    - "The application may call this function from simultaneous threads."
     - "The implementation of this function should be lock-free."
 params:
     - type: $x_command_queue_handle_t
       name: hCommandQueue
       desc: "[in] handle of the command queue"
-    - type: $x_command_list_handle_t
-      name: hCommandList
-      desc: "[in] handle of the command list to execute"
+    - type: uint32_t
+      name: numCommandLists
+      desc: "[in] number of command lists to enqueue"
+    - type: "$x_command_list_handle_t*"
+      name: phCommandLists
+      desc: "[in] list of handles of the command lists to execute"
 returns:
     - $X_RESULT_ERROR_INVALID_PARAMETER:
        - "invalid handle for hCommandQueue"
