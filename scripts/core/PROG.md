@@ -7,6 +7,7 @@ The following documents the high-level programming models and guidelines.
 ${"##"} Table of Contents
 * [Driver and Device](#dnd)
 * [Command Queues and Command Lists](#cnc)
+* [Barriers](#brr)
 * [Synchronization Primitives](#sp)
 * [Memory and Image Management](#mim)
 * [Modules and Functions](#mnf)
@@ -92,6 +93,21 @@ ${"##"} Command Queues
   typically done by tracking command list events, but may also be
   handled by calling ::${x}CommandQueueSynchronize.
 
+  The following sample code demonstrates a basic sequence for creation of command queues:
+```c
+    // Create a command queue
+    ${x}_command_queue_desc_t commandQueueDesc = {
+        ${X}_COMMAND_QUEUE_DESC_VERSION,
+        ${X}_COMMAND_QUEUE_FLAG_NONE,
+        ${X}_COMMAND_QUEUE_MODE_DEFAULT,
+        ${X}_COMMAND_QUEUE_PRIORITY_NORMAL,
+        0
+    };
+    ${x}_command_queue_handle_t hCommandQueue;
+    ${x}DeviceCreateCommandQueue(hDevice, &commandQueueDesc, &hCommandQueue);
+    ...
+```
+
 ${"##"} Command Lists
 - A command list represents a sequence of commands for execution on
   a command queue.
@@ -118,22 +134,8 @@ ${"##"} Command Lists
   executing from a command list before it is reset.  This should be
   handled by tracking a completion event associated with the command list.
 
-@todo [**Mike**] add "graphs" of command list-based nodes
-
-${"##"} Initialization
-The following sample code demonstrates a basic sequence for creation of command queues and command lists:
+The following sample code demonstrates a basic sequence for creation of command lists:
 ```c
-    // Create a command queue
-    ${x}_command_queue_desc_t commandQueueDesc = {
-        ${X}_COMMAND_QUEUE_DESC_VERSION,
-        ${X}_COMMAND_QUEUE_FLAG_NONE,
-        ${X}_COMMAND_QUEUE_MODE_DEFAULT,
-        ${X}_COMMAND_QUEUE_PRIORITY_NORMAL,
-        0
-    };
-    ${x}_command_queue_handle_t hCommandQueue;
-    ${x}DeviceCreateCommandQueue(hDevice, &commandQueueDesc, &hCommandQueue);
-
     // Create a command list
     ${x}_command_list_desc_t commandListDesc = {
         ${X}_COMMAND_LIST_DESC_VERSION,
@@ -144,7 +146,6 @@ The following sample code demonstrates a basic sequence for creation of command 
     ...
 ```
 
-${"##"} Submission
 The following sample code demonstrates submission of commands to a command queue, via a command list:
 ```c
     ...
@@ -152,7 +153,7 @@ The following sample code demonstrates submission of commands to a command queue
     ${x}CommandListClose(hCommandList);
 
     // Enqueue command list execution into command queue
-    ${x}CommandQueueEnqueueCommandList(hCommandQueue, 1, &hCommandList, ${x}_fence_handle_t());
+    ${x}CommandQueueEnqueueCommandList(hCommandQueue, 1, &hCommandList, nullptr);
 
     // synchronize host and GPU
     ${x}CommandQueueSynchronize(hCommandQueue);
@@ -162,13 +163,43 @@ The following sample code demonstrates submission of commands to a command queue
     ...
 ```
 
+${"##"} Command Graphs
+@todo [**Mike**] add "graphs" of command list-based nodes
+
+${"#"} <a name="brr">Barriers</a>
+There are two type of barriers:
+1. **Execution Barriers** - used to insert a dependency between commands submitted to the same command list.
+2. **Memory Barriers** - used to insert a dependency between memory access between another command queue?
+
+${"##"} Execution Barriers
+- Commands submitted to a command list are only gaurenteed to start in the same order in which they are submitted;
+there is no implicit control of which order they complete.
+- Execution barriers provide explicit control to indicate that previous commands must complete prior to
+starting the following commands.
+
+The following sample code demonstrates a sequence for submission of an execution barrier:
+```c
+    ${x}CommandListEncodeDispatchFunction(hCommandList, hFunction1, ...);
+
+    // Encode a barrier into a command list to ensure hFunction1 completes before hFunction2 begins
+    ${x}CommandListEncodeExecutionBarrier(hCommandList);
+
+    ${x}CommandListEncodeDispatchFunction(hCommandList, hFunction2, ...);
+    ...
+```
+
+${"##"} Memory Barriers
+- The execution of commands may store the contents of memory in device-local caches for optimizing execution.
+- The default behavior is to keep these contents in the caches after execution completes for additional command execution until they naturally expire, or...
+- Memory barriers provide explicit control to evict memory contents from these caches to maintain coherency when...
+
+@todo [**Mike**] when are memory barriers required to be explicit, e.g. copy queues?  when does this just work?  when does driver flush caches implicitly, e.g., between enqueues?
+
 ${"#"} <a name="sp">Synchronization Primitives</a>
 There are three types of synchronization primitives:
 1. **Fences** - used to communicate to the host that command queue execution has completed.
 2. **Events** - used as fine-grain host-to-device, device-to-host or device-to-device waits and signals within a command list.
 3. **Semaphores** - used for fine-grain control of command lists execution across multiple, simultaneous command queues within a device.
-
-@todo [**Mike**] add barriers; defines everything prior is finished (copy vulkan)
 
 ${"##"} Fences
 - A fence is associated with single command queue.
@@ -177,7 +208,7 @@ and can only be waited upon from the host.
 - A fence only has two states: not signaled and signaled.
 - A fence cannot be shared across processes.
 
-The following diagram illustrates an example of fences:
+The following diagram illustrates an example of fences:  
 ![Fence](../images/core_fence.png?raw=true)
 
 The following sample code demonstrates a sequence for creation, submission and querying of a fence:
@@ -212,7 +243,7 @@ ${"##"} Events
 - An event cannot be encoded into multiple command lists simultaneously.
 - An event can be shared across processes.
 
-The following diagram illustrates an example of events:
+The following diagram illustrates an example of events:  
 ![Event](../images/core_event.png?raw=true)
 
 The following sample code demonstrates a sequence for creation and submission of an event:
@@ -243,7 +274,7 @@ ${"##"} Semaphores
 - A semaphore can be encoded into multiple command lists simultaneously.
 - A semaphore cannot be shared across processes.
 
-The following diagram illustrates an example of semaphores:
+The following diagram illustrates an example of semaphores:  
 ![Semaphore](../images/core_semaphore.png?raw=true)
 
 The following sample code demonstrates a sequence for creation and submission of a semaphore:
