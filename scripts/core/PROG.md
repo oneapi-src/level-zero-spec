@@ -564,8 +564,11 @@ ${"##"} Occupancy
 @todo [**Zack**] add function API to query optimal group dimensions from thread count, et al
 
 ${"#"} <a name="oi">OpenCL Interoperability</a>
-@todo [**Mike**] write-up summary on how these are one-direction and optimized for unified device drivers.
-There are three OpenCL objects that can be shared for interoperability:
+Interoperability with OpenCL is currently only supported _from_ OpenCL _to_ ${Xx} for a subset of types.
+The APIs are designed to be OS agnostics and allow implementations to optimize for unified device drivers;
+while allowing less-optimal interopability across different device types and/or vendors.
+
+There are three OpenCL types that can be shared for interoperability:
 1. **cl_mem** - an OpenCL buffer object
 2. **cl_program** - an OpenCL program object
 3. **cl_command_queue** - an OpenCL command queue object
