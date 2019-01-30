@@ -41,6 +41,7 @@ if(COMPUTE_RUNTIME_SUPPORT)
             test_graphics_allocation.cpp
             test_memory_manager.cpp
             test_platform.cpp
+            white_box.h
             ${COMPUTE_RUNTIME_HW_ENABLE}
             ${COMPUTE_RUNTIME_HW_ENABLE_ULT}
     )
