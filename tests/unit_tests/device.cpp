@@ -18,9 +18,8 @@ struct DeviceImp : public Device {
 
     xe_result_t createCommandQueue(const xe_command_queue_desc_t *desc,
                                    xe_command_queue_handle_t *commandQueue) override {
-        *commandQueue = new CommandQueue;
-        //TODO: auto engineControl = deviceRT->getDefaultEngine();
-        //TODO: *commandQueue = engineControl.commandStreamReceiver;
+        auto engineControl = deviceRT->getDefaultEngine();
+        *commandQueue = CommandQueue::create(engineControl.commandStreamReceiver);
 
         return XE_RESULT_SUCCESS;
     }

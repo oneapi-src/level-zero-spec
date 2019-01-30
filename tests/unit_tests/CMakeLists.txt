@@ -20,6 +20,7 @@ if(COMPUTE_RUNTIME_SUPPORT)
             cmd_list_imp.h
             cmd_list_kbl.cpp
             cmd_list_skl.cpp
+            cmd_queue.cpp
             cmd_queue.h
             device.cpp
             device.h
@@ -32,6 +33,7 @@ if(COMPUTE_RUNTIME_SUPPORT)
             memory_manager.cpp
             memory_manager.h
             mock_cmd_list.h
+            mock_cmdqueue.h
             mock_device.h
             mock_driver.h
             mock_event.h
@@ -39,6 +41,7 @@ if(COMPUTE_RUNTIME_SUPPORT)
             test_cmdlist.cpp
             test_cmdlist_close.cpp
             test_cmdlist_encodewaitonevent.cpp
+            test_cmdqueue_enqueuecommandlist.cpp
             test_device.cpp
             test_driver.cpp
             test_graphics_allocation.cpp
