@@ -57,6 +57,7 @@ typedef struct _xe_module_desc_t
     xe_module_format_t format;                      ///< [in] Module format passed in with pInputModule
     uint32_t inputSize;                             ///< [in] size of input IL or ISA from pInputModule.
     const char* pInputModule;                       ///< [in] pointer to IL or ISA
+    const char* pBuildFlags;                        ///< [in] string containing compiler flags. See documentation for build flags.
 
 } xe_module_desc_t;
 
@@ -209,31 +210,6 @@ xe_result_t __xecall
     );
 
 ///////////////////////////////////////////////////////////////////////////////
-/// @brief Retrieve a function argument index from name.
-/// 
-/// @details
-///     - This function may be called from simultaneous threads.
-///     - The implementation of this function should be lock-free.
-/// 
-/// @remarks
-///   _Analogues_
-///     - **cuModuleGetTexRef**
-/// 
-/// @returns
-///     - ::XE_RESULT_SUCCESS
-///     - ::XE_RESULT_ERROR_UNINITIALIZED
-///     - ::XE_RESULT_ERROR_INVALID_PARAMETER
-///         + invalid handle for hFunction
-///         + null ptr for pName
-///         + null ptr for pArgIndex
-xe_result_t __xecall
-  xeFunctionGetArgIndexFromName(
-    xe_function_handle_t hFunction,                 ///< [in] handle of the function
-    const char* pName,                              ///< [in] name of function argument
-    uint32_t* pArgIndex                             ///< [out] Function argument index that can be used for ::xeFunctionArgsSetValue
-    );
-
-///////////////////////////////////////////////////////////////////////////////
 /// @brief Create Function arguments needed to pass arguments to a function.
 /// 
 /// @details
@@ -348,8 +324,11 @@ xe_result_t __xecall
 typedef enum _xe_function_attribute_t
 {
     XE_FUNCTION_ATTR_MAX_REGS_USED = 0,             ///< Maximum device registers used for this function
-    XE_FUNCTION_ATTR_MAX_THREADS_PER_GROUP,         ///< Maximum threads required for this function
+    XE_FUNCTION_ATTR_NUM_THREAD_DIMENSIONS,         ///< Maximum dimensions for group for this function
     XE_FUNCTION_ATTR_MAX_SHARED_MEM_SIZE,           ///< Maximum shared memory required for this function
+    XE_FUNCTION_ATTR_HAS_SPILL_FILL,                ///< Function required spill/fills.
+    XE_FUNCTION_ATTR_HAS_BARRIERS,                  ///< Function contains barriers.
+    XE_FUNCTION_ATTR_HAS_DPAS,                      ///< Function contains DPAs.
 
 } xe_function_attribute_t;
 

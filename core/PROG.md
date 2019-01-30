@@ -389,9 +389,8 @@ The required matrix of capabilities are:
 ### Prefetch and Memory Advice
 **Shared** allocations may be prefetched to a supporting device via the ::xeCommandListEncodeMemoryPrefetch API.
 
-Additionally, an application may provide memory advices for a **shared** allocation via the ::xeMemAdvise API, to override driver heuristics or migration policies.
+Additionally, an application may provide memory advices for a **shared** allocation via the ::xeCommandListEncodeMemAdvise API, to override driver heuristics or migration policies.
 
-@todo [**Ben**] make MemAdvise a command list encode function
 @todo [**Ben**] more details from discussion about what prefetch and memadvise do and _when_ they should be used; sample code?
 
 ## Images
@@ -519,7 +518,8 @@ The following sample code demonstrates a sequence for creating a module from an 
         XE_MODULE_DESC_VERSION
         XE_MODULE_IL_SPIRV,
         ilSize,
-        pImageScalingIL
+        pImageScalingIL,
+        nullptr
     };
     xe_module_handle_t hModule;
     xeDeviceCreateModule(hDevice, &moduleDesc, &hModule);
@@ -528,12 +528,28 @@ The following sample code demonstrates a sequence for creating a module from an 
 
 @todo [**Zack**] add optional string for build options; document which ones are valid
 @todo [**Zack**] add optional CreateModdule build_log parameter to dump string of JIT-from-SPIR-V errors/warnings
-@todo [**Zack**] document that disk caching is not handled, must be handled by application using GetNativeBinary
+
+Disk caching of modules is not supported by the driver. If a disk cache for modules is desired then it is the
+responsibility of the application to implement this using xeModuleGetNativeBinary.
+
+```c
+    ...
+    // compute hash for pIL and check cache.
+    ...
+
+    if (cacheUpdateNeeded)
+    {
+        uint32_t size;
+        char* pNativeBinary;  // Pointer to native binary.
+        xeModuleGetNativeBinary(hModule, &size, &pNativeBinary);
+
+        // cache pNativeBinary for corresponding IL
+        ...
+    }
+```
 
 ## Function
-Functions are immuatable references to functions within a module.
-
-@todo [**Ben/Zack**] document valid function attributes
+Functions are immutable references to functions within a module.
 
 The following sample code demonstrates a sequence for creating a function from a module:
 ```c
@@ -547,8 +563,23 @@ The following sample code demonstrates a sequence for creating a function from a
     ...
 ```
 
+## Function Attributes
+
+Use xeFunctionQueryAttribute to query attributes from a function object.
+
+```c
+    ...
+    uint32_t numRegisters;
+
+    // Number of hardware registers used by function.
+    xeFunctionQueryAttribute(hFunction, XE_FUNCTION_ATTR_HAS_BARRIERS, &numRegisters);
+    ...
+```
+
+See xe_function_attribute_t for more information on the attributes.
+
 ## FunctionArgs
-FunctionArgs represent an instance of argument values to be used by the function when called.
+FunctionArgs represent the inputs for a function.
 
 @todo [**Zack**] can Args be reused across different function with same signature?
 @todo [**Zack**] document contract; are Args back by GPU and must be complete, or are they host-only and fully mutable?
@@ -572,25 +603,6 @@ The following sample code demonstrates a sequence for creating function args and
     ...
 ```
 
-@todo [**Zack**] remove the following.
-The following sample code demonstrates a sequence for querying argument indices from the function by name:
-```c
-    uint32_t arg_index[4];
-    xeFunctionGetArgIndexFromName(hFunc, "src_img", &arg_index[0]);
-    xeFunctionGetArgIndexFromName(hFunc, "dest_img", &arg_index[1]);
-    xeFunctionGetArgIndexFromName(hFunc, "WIDTH", &arg_index[2]);
-    xeFunctionGetArgIndexFromName(hFunc, "HEIGHT", &arg_index[3]);
-
-    // Bind arguments
-    xeFunctionArgsSetValue(hFuncArgs, arg_index[0], sizeof(xe_image_handle_t), &src_image);
-    xeFunctionArgsSetValue(hFuncArgs, arg_index[1], sizeof(xe_image_handle_t), &dest_image);
-    xeFunctionArgsSetValue(hFuncArgs, arg_index[2], sizeof(uint32_t), &width);
-    xeFunctionArgsSetValue(hFuncArgs, arg_index[3], sizeof(uint32_t), &height);
-    ...
-```
-
-## Occupancy
-@todo [**Zack**] write-up section or remove
 @todo [**Zack**] add function API to query optimal group dimensions from thread count, et al
 
 # <a name="oi">OpenCL Interoperability</a>
@@ -607,8 +619,8 @@ There are three OpenCL types that can be shared for interoperability:
 @todo [**Ben**] list any details/rules about memory sharing, Acquire/Release semantics, 
 
 ## cl_program
-@todo [**Zack**} list any details/rules about program sharing
-- clBuildProgram or clCompileProgram/clLinkProgram must be called prior to xeDeviceRegisterCLProgram
+Xe modules are always in a compiled state and therore prior to retrieving an xe_module_handle_t from
+a cl_program the caller must ensure the cl_program is compiled and linked.
 
 ## cl_command_queue
 @todo [**Brandon**} list any details/rules about command queue sharing

@@ -518,7 +518,8 @@ The following sample code demonstrates a sequence for creating a module from an 
         ${X}_MODULE_DESC_VERSION
         ${X}_MODULE_IL_SPIRV,
         ilSize,
-        pImageScalingIL
+        pImageScalingIL,
+        nullptr
     };
     ${x}_module_handle_t hModule;
     ${x}DeviceCreateModule(hDevice, &moduleDesc, &hModule);
@@ -527,12 +528,28 @@ The following sample code demonstrates a sequence for creating a module from an 
 
 @todo [**Zack**] add optional string for build options; document which ones are valid
 @todo [**Zack**] add optional CreateModdule build_log parameter to dump string of JIT-from-SPIR-V errors/warnings
-@todo [**Zack**] document that disk caching is not handled, must be handled by application using GetNativeBinary
+
+Disk caching of modules is not supported by the driver. If a disk cache for modules is desired then it is the
+responsibility of the application to implement this using xeModuleGetNativeBinary.
+
+```c
+    ...
+    // compute hash for pIL and check cache.
+    ...
+
+    if (cacheUpdateNeeded)
+    {
+        uint32_t size;
+        char* pNativeBinary;  // Pointer to native binary.
+        ${x}ModuleGetNativeBinary(hModule, &size, &pNativeBinary);
+
+        // cache pNativeBinary for corresponding IL
+        ...
+    }
+```
 
 ${"##"} Function
-Functions are immuatable references to functions within a module.
-
-@todo [**Ben/Zack**] document valid function attributes
+Functions are immutable references to functions within a module.
 
 The following sample code demonstrates a sequence for creating a function from a module:
 ```c
@@ -546,8 +563,23 @@ The following sample code demonstrates a sequence for creating a function from a
     ...
 ```
 
+${"##"} Function Attributes
+
+Use ${x}FunctionQueryAttribute to query attributes from a function object.
+
+```c
+    ...
+    uint32_t numRegisters;
+
+    // Number of hardware registers used by function.
+    ${x}FunctionQueryAttribute(hFunction, XE_FUNCTION_ATTR_HAS_BARRIERS, &numRegisters);
+    ...
+```
+
+See ${x}_function_attribute_t for more information on the attributes.
+
 ${"##"} FunctionArgs
-FunctionArgs represent an instance of argument values to be used by the function when called.
+FunctionArgs represent the inputs for a function.
 
 @todo [**Zack**] can Args be reused across different function with same signature?
 @todo [**Zack**] document contract; are Args back by GPU and must be complete, or are they host-only and fully mutable?
@@ -571,25 +603,6 @@ The following sample code demonstrates a sequence for creating function args and
     ...
 ```
 
-@todo [**Zack**] remove the following.
-The following sample code demonstrates a sequence for querying argument indices from the function by name:
-```c
-    uint32_t arg_index[4];
-    ${x}FunctionGetArgIndexFromName(hFunc, "src_img", &arg_index[0]);
-    ${x}FunctionGetArgIndexFromName(hFunc, "dest_img", &arg_index[1]);
-    ${x}FunctionGetArgIndexFromName(hFunc, "WIDTH", &arg_index[2]);
-    ${x}FunctionGetArgIndexFromName(hFunc, "HEIGHT", &arg_index[3]);
-
-    // Bind arguments
-    ${x}FunctionArgsSetValue(hFuncArgs, arg_index[0], sizeof(${x}_image_handle_t), &src_image);
-    ${x}FunctionArgsSetValue(hFuncArgs, arg_index[1], sizeof(${x}_image_handle_t), &dest_image);
-    ${x}FunctionArgsSetValue(hFuncArgs, arg_index[2], sizeof(uint32_t), &width);
-    ${x}FunctionArgsSetValue(hFuncArgs, arg_index[3], sizeof(uint32_t), &height);
-    ...
-```
-
-${"##"} Occupancy
-@todo [**Zack**] write-up section or remove
 @todo [**Zack**] add function API to query optimal group dimensions from thread count, et al
 
 ${"#"} <a name="oi">OpenCL Interoperability</a>
@@ -606,8 +619,8 @@ ${"##"} cl_mem
 @todo [**Ben**] list any details/rules about memory sharing, Acquire/Release semantics, 
 
 ${"##"} cl_program
-@todo [**Zack**} list any details/rules about program sharing
-- clBuildProgram or clCompileProgram/clLinkProgram must be called prior to ${x}DeviceRegisterCLProgram
+Xe modules are always in a compiled state and therore prior to retrieving an xe_module_handle_t from
+a cl_program the caller must ensure the cl_program is compiled and linked.
 
 ${"##"} cl_command_queue
 @todo [**Brandon**} list any details/rules about command queue sharing

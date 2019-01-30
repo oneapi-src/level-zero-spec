@@ -240,52 +240,6 @@ xe_result_t __xecall
 }
 
 ///////////////////////////////////////////////////////////////////////////////
-/// @brief Provides advice about the use of a shared memory range
-/// 
-/// @details
-///     - Memory advice is a performance hint only; applications are not
-///       required to use this for functionality
-///     - Memory advice can be used to override driver heuristics to explicitly
-///       control shared memory behavior.
-///     - Memory advice may only be supported at a device-specific granularity,
-///       such as at a page boundary. In this case, the memory range may be
-///       expanded such that the start and end of the range satisfy granularity
-///       requirements.
-///     - The application may call this function from simultaneous threads.
-///     - The implementation of this function should be lock-free.
-/// 
-/// @remarks
-///   _Analogues_
-///     - **cudaMemAdvise**
-/// 
-/// @returns
-///     - ::XE_RESULT_SUCCESS
-///     - ::XE_RESULT_ERROR_UNINITIALIZED
-///     - ::XE_RESULT_ERROR_INVALID_PARAMETER
-///         + invalid handle for hDevice
-///         + invalid pointer
-///         + invalid advice
-/*@todo: __declspec(dllexport)*/
-xe_result_t __xecall
-  xeMemAdvise(
-    const xe_device_handle_t hDevice,               ///< [in] handle of the device to apply the advice to
-    const void* ptr,                                ///< [in] Pointer to the start of the memory range
-    size_t size,                                    ///< [in] Size in bytes of the memory range
-    xe_memory_advice_t advice                       ///< [in] Memory advice for the memory range
-    )
-{
-    // @todo: check_return(nullptr == get_driver(), XE_RESULT_ERROR_UNINITIALIZED);
-
-    // Check parameters
-    // @todo: check_return(const xe_device_handle_t() == hDevice, XE_RESULT_ERROR_INVALID_PARAMETER);
-    // @todo: check_return(nullptr == ptr, XE_RESULT_ERROR_INVALID_PARAMETER);
-
-    // @todo: insert <code> here
-
-    return XE_RESULT_SUCCESS;
-}
-
-///////////////////////////////////////////////////////////////////////////////
 /// @brief Creates an IPC memory handle for the specified allocation in the
 ///        sending process
 /// 

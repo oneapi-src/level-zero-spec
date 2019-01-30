@@ -241,6 +241,9 @@ xe_result_t __xecall
 ///     - The application may call this function from simultaneous threads.
 ///     - The implementation of this function should be lock-free.
 ///     - Prefetch to Host and Peer Device are not supported.
+///     - The application may **not** call this function from simultaneous
+///       threads.
+///     - The implementation of this function should be lock-free.
 /// 
 /// @remarks
 ///   _Analogues_
@@ -251,14 +254,59 @@ xe_result_t __xecall
 ///     - ::XE_RESULT_SUCCESS
 ///     - ::XE_RESULT_ERROR_UNINITIALIZED
 ///     - ::XE_RESULT_ERROR_INVALID_PARAMETER
-///         + invalid handle for hDstImage
-///         + nullptr for srcptr
+///         + invalid pointer
 /*@todo: __declspec(dllexport)*/
 xe_result_t __xecall
   xeCommandListEncodeMemoryPrefetch(
     xe_command_list_handle_t hCommandList,          ///< [in] handle of command list
     const void* ptr,                                ///< [in] pointer to start of the memory region to prefetch
     size_t count                                    ///< [in] size in bytes of the memory region to prefetch
+    )
+{
+    // @todo: check_return(nullptr == get_driver(), XE_RESULT_ERROR_UNINITIALIZED);
+
+    // Check parameters
+    // @todo: check_return(xe_command_list_handle_t() == hCommandList, XE_RESULT_ERROR_INVALID_PARAMETER);
+    // @todo: check_return(nullptr == ptr, XE_RESULT_ERROR_INVALID_PARAMETER);
+
+    // @todo: insert <code> here
+
+    return XE_RESULT_SUCCESS;
+}
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Provides advice about the use of a shared memory range
+/// 
+/// @details
+///     - Memory advice is a performance hint only; applications are not
+///       required to use this for functionality.
+///     - Memory advice can be used to override driver heuristics to explicitly
+///       control shared memory behavior.
+///     - Memory advice may only be supported at a device-specific granularity,
+///       such as at a page boundary. In this case, the memory range may be
+///       expanded such that the start and end of the range satisfy granularity
+///       requirements.
+///     - The application may **not** call this function from simultaneous
+///       threads.
+///     - The implementation of this function should be lock-free.
+/// 
+/// @remarks
+///   _Analogues_
+///     - **cudaMemAdvise**
+/// 
+/// @returns
+///     - ::XE_RESULT_SUCCESS
+///     - ::XE_RESULT_ERROR_UNINITIALIZED
+///     - ::XE_RESULT_ERROR_INVALID_PARAMETER
+///         + invalid pointer
+///         + invalid advice
+/*@todo: __declspec(dllexport)*/
+xe_result_t __xecall
+  xeCommandListEncodeMemAdvise(
+    xe_command_list_handle_t hCommandList,          ///< [in] handle of command list
+    const void* ptr,                                ///< [in] Pointer to the start of the memory range
+    size_t size,                                    ///< [in] Size in bytes of the memory range
+    xe_memory_advice_t advice                       ///< [in] Memory advice for the memory range
     )
 {
     // @todo: check_return(nullptr == get_driver(), XE_RESULT_ERROR_UNINITIALIZED);

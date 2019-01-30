@@ -218,44 +218,6 @@ xe_result_t __xecall
 }
 
 ///////////////////////////////////////////////////////////////////////////////
-/// @brief Retrieve a function argument index from name.
-/// 
-/// @details
-///     - This function may be called from simultaneous threads.
-///     - The implementation of this function should be lock-free.
-/// 
-/// @remarks
-///   _Analogues_
-///     - **cuModuleGetTexRef**
-/// 
-/// @returns
-///     - ::XE_RESULT_SUCCESS
-///     - ::XE_RESULT_ERROR_UNINITIALIZED
-///     - ::XE_RESULT_ERROR_INVALID_PARAMETER
-///         + invalid handle for hFunction
-///         + null ptr for pName
-///         + null ptr for pArgIndex
-/*@todo: __declspec(dllexport)*/
-xe_result_t __xecall
-  xeFunctionGetArgIndexFromName(
-    xe_function_handle_t hFunction,                 ///< [in] handle of the function
-    const char* pName,                              ///< [in] name of function argument
-    uint32_t* pArgIndex                             ///< [out] Function argument index that can be used for ::xeFunctionArgsSetValue
-    )
-{
-    // @todo: check_return(nullptr == get_driver(), XE_RESULT_ERROR_UNINITIALIZED);
-
-    // Check parameters
-    // @todo: check_return(xe_function_handle_t() == hFunction, XE_RESULT_ERROR_INVALID_PARAMETER);
-    // @todo: check_return(nullptr == pName, XE_RESULT_ERROR_INVALID_PARAMETER);
-    // @todo: check_return(nullptr == pArgIndex, XE_RESULT_ERROR_INVALID_PARAMETER);
-
-    // @todo: insert <code> here
-
-    return XE_RESULT_SUCCESS;
-}
-
-///////////////////////////////////////////////////////////////////////////////
 /// @brief Create Function arguments needed to pass arguments to a function.
 /// 
 /// @details

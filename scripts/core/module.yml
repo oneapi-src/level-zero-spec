@@ -33,6 +33,9 @@ members:
     - type: "const char*"
       name: pInputModule
       desc: "[in] pointer to IL or ISA"
+    - type: "const char*"
+      name: pBuildFlags
+      desc: "[in] string containing compiler flags. See documentation for build flags."
 --- #--------------------------------------------------------------------------
 type: function
 desc: "Creates module object from an input IL or ISA."
@@ -176,30 +179,6 @@ returns:
         - "invalid handle for hFunction"
 --- #--------------------------------------------------------------------------
 type: function
-desc: "Retrieve a function argument index from name."
-name: $xFunctionGetArgIndexFromName
-analogue:
-    - "**cuModuleGetTexRef**"
-details:
-    - "This function may be called from simultaneous threads."
-    - "The implementation of this function should be lock-free."
-params:
-    - type: "$x_function_handle_t"
-      name: hFunction
-      desc: "[in] handle of the function"
-    - type: "const char*"
-      name: pName
-      desc: "[in] name of function argument"
-    - type: "uint32_t*"
-      name:  pArgIndex
-      desc: "[out] Function argument index that can be used for $xFunctionArgsSetValue"
-returns:
-    - $X_RESULT_ERROR_INVALID_PARAMETER:
-        - "invalid handle for hFunction"
-        - "null ptr for pName"
-        - "null ptr for pArgIndex"
---- #--------------------------------------------------------------------------
-type: function
 desc: "Create Function arguments needed to pass arguments to a function."
 name: $xFunctionCreateFunctionArgs
 details:
@@ -308,10 +287,16 @@ etors:
     - name: $X_FUNCTION_ATTR_MAX_REGS_USED
       value: "0"
       desc: "Maximum device registers used for this function"
-    - name: $X_FUNCTION_ATTR_MAX_THREADS_PER_GROUP
-      desc: "Maximum threads required for this function"
+    - name: $X_FUNCTION_ATTR_NUM_THREAD_DIMENSIONS
+      desc: "Maximum dimensions for group for this function"
     - name: $X_FUNCTION_ATTR_MAX_SHARED_MEM_SIZE
       desc: "Maximum shared memory required for this function"
+    - name: $X_FUNCTION_ATTR_HAS_SPILL_FILL
+      desc: "Function required spill/fills."
+    - name: $X_FUNCTION_ATTR_HAS_BARRIERS
+      desc: "Function contains barriers."
+    - name: $X_FUNCTION_ATTR_HAS_DPAS
+      desc: "Function contains DPAs."
 --- #--------------------------------------------------------------------------
 type: function
 desc: "Query a function attribute."
