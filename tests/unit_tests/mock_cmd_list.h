@@ -12,8 +12,9 @@ struct WhiteBox<CommandList> : public CommandListImp {
     WhiteBox(Device *device) : CommandListImp(device) {
     }
 
-    using CommandListImp::device;
     using CommandListImp::allocation;
+    using CommandListImp::commandStream;
+    using CommandListImp::device;
 };
 
 struct MockCommandList : public WhiteBox<CommandList> {

@@ -4,6 +4,7 @@
 #include "event.h"
 #include "graphics_allocation.h"
 #include "igfxfmid.h"
+#include "runtime/command_stream/linear_stream.h"
 #include "gtest/gtest.h"
 
 TEST(xeCommandListDestroy, redirectsToCmdListObject) {
@@ -57,6 +58,8 @@ TEST_P(CommandListCreate, returnsCommandListOnSuccess) {
     auto commandListAlias = whitebox_cast<xe::CommandList>(commandList);
     EXPECT_EQ(&device, commandListAlias->device);
     EXPECT_EQ(allocation, commandListAlias->allocation);
+    ASSERT_NE(nullptr, commandListAlias->commandStream);
+    EXPECT_LT(0u, commandListAlias->commandStream->getAvailableSpace());
     commandList->destroy();
 }
 

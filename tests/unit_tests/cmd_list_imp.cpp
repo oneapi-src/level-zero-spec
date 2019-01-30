@@ -2,8 +2,10 @@
 #include "cmd_list_imp.h"
 #undef CMD_LIST_INTERNAL
 #include "device.h"
-#include "memory_manager.h"
+#include "graphics_allocation.h"
 #include "igfxfmid.h"
+#include "memory_manager.h"
+#include "runtime/command_stream/linear_stream.h"
 #include <cassert>
 
 namespace xe {
@@ -15,6 +17,8 @@ CommandListImp::~CommandListImp() {
         assert(device);
         device->getMemoryManager()->freeMemory(allocation);
     }
+
+    delete commandStream;
 }
 
 xe_result_t CommandListImp::destroy() {
@@ -24,7 +28,9 @@ xe_result_t CommandListImp::destroy() {
 
 bool CommandListImp::initialize() {
     auto memoryManager = device->getMemoryManager();
-    this->allocation = memoryManager->allocateDeviceMemory();
+    allocation = memoryManager->allocateDeviceMemory();
+
+    commandStream = new OCLRT::LinearStream(allocation->allocationRT);
 
     return true;
 }

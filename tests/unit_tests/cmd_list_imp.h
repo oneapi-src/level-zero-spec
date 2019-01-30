@@ -5,13 +5,18 @@
 
 #include "cmd_list.h"
 
+namespace OCLRT {
+class LinearStream;
+}
+
 namespace xe {
 struct GraphicsAllocation;
 
 struct CommandListImp : public CommandList {
     CommandListImp(Device *device)
         : device(device),
-          allocation(nullptr) {
+          allocation(nullptr),
+          commandStream(nullptr) {
     }
 
     xe_result_t destroy() override;
@@ -23,6 +28,7 @@ struct CommandListImp : public CommandList {
 
     Device *device;
     GraphicsAllocation *allocation;
+    OCLRT::LinearStream *commandStream;
 };
 
 } // namespace xe
