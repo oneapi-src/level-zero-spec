@@ -9,6 +9,19 @@ struct MockDriver : public Driver {
 
     MOCK_METHOD2(getDevice, xe_result_t(uint32_t ordinal,
                                         xe_device_handle_t *phDevice));
+
+    MockDriver() {
+        previousDriver = driver;
+        driver = this;
+    }
+
+    virtual ~MockDriver(){
+        if (driver == this) {
+            driver = previousDriver;
+        }
+    }
+
+    Driver *previousDriver = nullptr;
 };
 
 } // namespace xe

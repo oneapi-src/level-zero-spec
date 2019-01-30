@@ -23,16 +23,16 @@ struct DriverImp : public Driver {
 };
 
 static DriverImp driverImp;
-Driver *driver = &driverImp;
+Driver *Driver::driver = &driverImp;
 
 xe_result_t xeDriverInit(xe_init_flags_t flags) {
-    return driver->initialize(flags);
+    return Driver::get()->initialize(flags);
 }
 
 xe_result_t __xecall xeDriverGetDevice(
     uint32_t ordinal,
     xe_device_handle_t *phDevice) {
-    return driver->getDevice(ordinal, phDevice);
+    return Driver::get()->getDevice(ordinal, phDevice);
 }
 
 } // namespace xe
