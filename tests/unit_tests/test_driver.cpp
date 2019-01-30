@@ -5,15 +5,11 @@ using ::testing::Return;
 
 TEST(xeDriverInit, redirectsToDriverObject) {
     xe::MockDriver driver;
-    auto oldDriver = xe::driver;
-    xe::driver = &driver;
 
     EXPECT_CALL(driver, initialize(XE_INIT_FLAG_NONE)).Times(1);
 
     auto result = xe::xeDriverInit(XE_INIT_FLAG_NONE);
     EXPECT_EQ(XE_RESULT_SUCCESS, result);
-
-    xe::driver = oldDriver;
 }
 
 TEST(xeDriverInit, returnsSucess) {
@@ -23,8 +19,6 @@ TEST(xeDriverInit, returnsSucess) {
 
 TEST(xeDriverGetDevice, redirectsToDriverObject) {
     xe::MockDriver driver;
-    auto oldDriver = xe::driver;
-    xe::driver = &driver;
 
     xe_device_handle_t deviceHandle = {};
     uint32_t ordinal = 0;
@@ -36,8 +30,6 @@ TEST(xeDriverGetDevice, redirectsToDriverObject) {
     auto result = xe::xeDriverGetDevice(ordinal,
                                         &deviceHandle);
     EXPECT_EQ(XE_RESULT_SUCCESS, result);
-
-    xe::driver = oldDriver;
 }
 
 TEST(xeDriverGetDevice, returnsSuccess) {
