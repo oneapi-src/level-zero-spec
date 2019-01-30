@@ -114,8 +114,10 @@ such as memory, images and command lists
 # <a name="drv">Drivers</a>
 ## Installation
 The Xe driver API is implemented within the xe<name>.dll, which is copied on the system during installation of the device driver;
-where <name> ...
-@todo [**Mike**] how would an ICD work?
+where <name> is a name chosen by the device vendor.
+
+This API does not define an Installable Client Driver (ICD), however it is expected that users of this API would prefer to implement
+their own device abstraction layer and communicate directly with the device-driver.
 
 ## Environment Variables
 The following table documents the supported knobs for overriding default driver behavior.
