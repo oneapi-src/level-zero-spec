@@ -150,6 +150,9 @@ set(COMPUTE_RUNTIME_HW_ENABLE_ULT
     ${COMPUTE_RUNTIME_DIR}/unit_tests/libult/gen8.cpp
     ${COMPUTE_RUNTIME_DIR}/unit_tests/libult/gen9.cpp
     ${COMPUTE_RUNTIME_DIR}/unit_tests/libult/gen10.cpp
+    ${COMPUTE_RUNTIME_DIR}/unit_tests/gen8/cmd_parse_gen8.cpp
+    ${COMPUTE_RUNTIME_DIR}/unit_tests/gen9/cmd_parse_gen9.cpp
+    ${COMPUTE_RUNTIME_DIR}/unit_tests/gen10/cmd_parse_gen10.cpp
 )
 
 #Additional includes for ULT builds

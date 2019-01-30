@@ -1,3 +1,4 @@
+#include "test.h"
 #include "xe_all.h"
 #include "graphics_allocation.h"
 #include "igfxfmid.h"
@@ -6,6 +7,7 @@
 #include "mock_event.h"
 #include "mock_memory_manager.h"
 #include "runtime/command_stream/linear_stream.h"
+#include "unit_tests/gen_common/gen_cmd_parse.h"
 #include "gmock/gmock.h"
 
 using ::testing::Return;
@@ -23,7 +25,10 @@ TEST(xeCommandListEncodeWaitOnEvent, redirectsToCmdListObject) {
     EXPECT_EQ(XE_RESULT_SUCCESS, result);
 }
 
-TEST(CommandListEncodeWaitOnEvent, addsCommandsToCommandStream) {
+
+using CommandListEncodeWaitOnEvent = ::testing::Test;
+
+HWTEST_F(CommandListEncodeWaitOnEvent, addsSemaphoreToCommandStream) {
     xe::MockDevice device;
     xe::MockMemoryManager memoryManager;
     EXPECT_CALL(device, getMemoryManager())
@@ -44,5 +49,13 @@ TEST(CommandListEncodeWaitOnEvent, addsCommandsToCommandStream) {
     ASSERT_EQ(XE_RESULT_SUCCESS, result);
 
     auto usedSpaceAfter = commandListAlias->commandStream->getUsed();
-    EXPECT_GT(usedSpaceAfter, usedSpaceBefore);
+    ASSERT_GT(usedSpaceAfter, usedSpaceBefore);
+
+    GenCmdList cmdList;
+    ASSERT_TRUE(FamilyType::PARSE::parseCommandBuffer(cmdList,
+                                                      ptrOffset(commandListAlias->commandStream->getCpuBase(), 0),
+                                                      usedSpaceAfter));
+    using MI_SEMAPHORE_WAIT = typename FamilyType::MI_SEMAPHORE_WAIT;
+    auto itor = find<MI_SEMAPHORE_WAIT *>(cmdList.begin(), cmdList.end());
+    EXPECT_NE(cmdList.end(), itor);
 }
