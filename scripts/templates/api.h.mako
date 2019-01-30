@@ -181,19 +181,8 @@ ${x}_result_t __${x}call
     );
 %elif re.match(r"handle", obj['type']):
 #if defined( __cplusplus )
-struct ${sub(x, obj['name'])}
-{
-    void* pDriverData;
-
-    ${sub(x, obj['name'])}( void ) : pDriverData( nullptr ) {}        ///< default constructor
-    explicit ${sub(x, obj['name'])}( void* p ) : pDriverData( p ) {}  ///< initialize from pointer
-
-    inline bool operator==( const ${sub(x, obj['name'])}& other ) const   ///< is equal to other
-    { return pDriverData == other.pDriverData; }
-    inline bool operator!=( const ${sub(x, obj['name'])}& other ) const   ///< not equal to other
-    { return pDriverData != other.pDriverData; }
-
-};
+struct _${sub(x, obj['name'])};
+using ${sub(x, obj['name'])} = _${sub(x, obj['name'])}*;
 #else
 typedef void* ${sub(x, obj['name'])};
 #endif // defined( __cplusplus )

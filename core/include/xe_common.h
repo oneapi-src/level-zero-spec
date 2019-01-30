@@ -73,19 +73,8 @@ typedef double double_t;
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Handle of driver's device object
 #if defined( __cplusplus )
-struct xe_device_handle_t
-{
-    void* pDriverData;
-
-    xe_device_handle_t( void ) : pDriverData( nullptr ) {}        ///< default constructor
-    explicit xe_device_handle_t( void* p ) : pDriverData( p ) {}  ///< initialize from pointer
-
-    inline bool operator==( const xe_device_handle_t& other ) const   ///< is equal to other
-    { return pDriverData == other.pDriverData; }
-    inline bool operator!=( const xe_device_handle_t& other ) const   ///< not equal to other
-    { return pDriverData != other.pDriverData; }
-
-};
+struct _xe_device_handle_t;
+using xe_device_handle_t = _xe_device_handle_t*;
 #else
 typedef void* xe_device_handle_t;
 #endif // defined( __cplusplus )
@@ -93,19 +82,8 @@ typedef void* xe_device_handle_t;
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Handle of driver's command queue object
 #if defined( __cplusplus )
-struct xe_command_queue_handle_t
-{
-    void* pDriverData;
-
-    xe_command_queue_handle_t( void ) : pDriverData( nullptr ) {}        ///< default constructor
-    explicit xe_command_queue_handle_t( void* p ) : pDriverData( p ) {}  ///< initialize from pointer
-
-    inline bool operator==( const xe_command_queue_handle_t& other ) const   ///< is equal to other
-    { return pDriverData == other.pDriverData; }
-    inline bool operator!=( const xe_command_queue_handle_t& other ) const   ///< not equal to other
-    { return pDriverData != other.pDriverData; }
-
-};
+struct _xe_command_queue_handle_t;
+using xe_command_queue_handle_t = _xe_command_queue_handle_t*;
 #else
 typedef void* xe_command_queue_handle_t;
 #endif // defined( __cplusplus )
@@ -113,19 +91,8 @@ typedef void* xe_command_queue_handle_t;
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Handle of driver's command list object
 #if defined( __cplusplus )
-struct xe_command_list_handle_t
-{
-    void* pDriverData;
-
-    xe_command_list_handle_t( void ) : pDriverData( nullptr ) {}        ///< default constructor
-    explicit xe_command_list_handle_t( void* p ) : pDriverData( p ) {}  ///< initialize from pointer
-
-    inline bool operator==( const xe_command_list_handle_t& other ) const   ///< is equal to other
-    { return pDriverData == other.pDriverData; }
-    inline bool operator!=( const xe_command_list_handle_t& other ) const   ///< not equal to other
-    { return pDriverData != other.pDriverData; }
-
-};
+struct _xe_command_list_handle_t;
+using xe_command_list_handle_t = _xe_command_list_handle_t*;
 #else
 typedef void* xe_command_list_handle_t;
 #endif // defined( __cplusplus )
@@ -133,19 +100,8 @@ typedef void* xe_command_list_handle_t;
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Handle of driver's fence object
 #if defined( __cplusplus )
-struct xe_fence_handle_t
-{
-    void* pDriverData;
-
-    xe_fence_handle_t( void ) : pDriverData( nullptr ) {}        ///< default constructor
-    explicit xe_fence_handle_t( void* p ) : pDriverData( p ) {}  ///< initialize from pointer
-
-    inline bool operator==( const xe_fence_handle_t& other ) const   ///< is equal to other
-    { return pDriverData == other.pDriverData; }
-    inline bool operator!=( const xe_fence_handle_t& other ) const   ///< not equal to other
-    { return pDriverData != other.pDriverData; }
-
-};
+struct _xe_fence_handle_t;
+using xe_fence_handle_t = _xe_fence_handle_t*;
 #else
 typedef void* xe_fence_handle_t;
 #endif // defined( __cplusplus )
@@ -153,19 +109,8 @@ typedef void* xe_fence_handle_t;
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Handle of driver's semaphore object
 #if defined( __cplusplus )
-struct xe_semaphore_handle_t
-{
-    void* pDriverData;
-
-    xe_semaphore_handle_t( void ) : pDriverData( nullptr ) {}        ///< default constructor
-    explicit xe_semaphore_handle_t( void* p ) : pDriverData( p ) {}  ///< initialize from pointer
-
-    inline bool operator==( const xe_semaphore_handle_t& other ) const   ///< is equal to other
-    { return pDriverData == other.pDriverData; }
-    inline bool operator!=( const xe_semaphore_handle_t& other ) const   ///< not equal to other
-    { return pDriverData != other.pDriverData; }
-
-};
+struct _xe_semaphore_handle_t;
+using xe_semaphore_handle_t = _xe_semaphore_handle_t*;
 #else
 typedef void* xe_semaphore_handle_t;
 #endif // defined( __cplusplus )
@@ -173,19 +118,8 @@ typedef void* xe_semaphore_handle_t;
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Handle of driver's event object
 #if defined( __cplusplus )
-struct xe_event_handle_t
-{
-    void* pDriverData;
-
-    xe_event_handle_t( void ) : pDriverData( nullptr ) {}        ///< default constructor
-    explicit xe_event_handle_t( void* p ) : pDriverData( p ) {}  ///< initialize from pointer
-
-    inline bool operator==( const xe_event_handle_t& other ) const   ///< is equal to other
-    { return pDriverData == other.pDriverData; }
-    inline bool operator!=( const xe_event_handle_t& other ) const   ///< not equal to other
-    { return pDriverData != other.pDriverData; }
-
-};
+struct _xe_event_handle_t;
+using xe_event_handle_t = _xe_event_handle_t*;
 #else
 typedef void* xe_event_handle_t;
 #endif // defined( __cplusplus )
@@ -193,19 +127,8 @@ typedef void* xe_event_handle_t;
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Handle of driver's image object
 #if defined( __cplusplus )
-struct xe_image_handle_t
-{
-    void* pDriverData;
-
-    xe_image_handle_t( void ) : pDriverData( nullptr ) {}        ///< default constructor
-    explicit xe_image_handle_t( void* p ) : pDriverData( p ) {}  ///< initialize from pointer
-
-    inline bool operator==( const xe_image_handle_t& other ) const   ///< is equal to other
-    { return pDriverData == other.pDriverData; }
-    inline bool operator!=( const xe_image_handle_t& other ) const   ///< not equal to other
-    { return pDriverData != other.pDriverData; }
-
-};
+struct _xe_image_handle_t;
+using xe_image_handle_t = _xe_image_handle_t*;
 #else
 typedef void* xe_image_handle_t;
 #endif // defined( __cplusplus )
@@ -213,19 +136,8 @@ typedef void* xe_image_handle_t;
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Handle of driver's module object
 #if defined( __cplusplus )
-struct xe_module_handle_t
-{
-    void* pDriverData;
-
-    xe_module_handle_t( void ) : pDriverData( nullptr ) {}        ///< default constructor
-    explicit xe_module_handle_t( void* p ) : pDriverData( p ) {}  ///< initialize from pointer
-
-    inline bool operator==( const xe_module_handle_t& other ) const   ///< is equal to other
-    { return pDriverData == other.pDriverData; }
-    inline bool operator!=( const xe_module_handle_t& other ) const   ///< not equal to other
-    { return pDriverData != other.pDriverData; }
-
-};
+struct _xe_module_handle_t;
+using xe_module_handle_t = _xe_module_handle_t*;
 #else
 typedef void* xe_module_handle_t;
 #endif // defined( __cplusplus )
@@ -233,19 +145,8 @@ typedef void* xe_module_handle_t;
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Handle of driver's function object
 #if defined( __cplusplus )
-struct xe_function_handle_t
-{
-    void* pDriverData;
-
-    xe_function_handle_t( void ) : pDriverData( nullptr ) {}        ///< default constructor
-    explicit xe_function_handle_t( void* p ) : pDriverData( p ) {}  ///< initialize from pointer
-
-    inline bool operator==( const xe_function_handle_t& other ) const   ///< is equal to other
-    { return pDriverData == other.pDriverData; }
-    inline bool operator!=( const xe_function_handle_t& other ) const   ///< not equal to other
-    { return pDriverData != other.pDriverData; }
-
-};
+struct _xe_function_handle_t;
+using xe_function_handle_t = _xe_function_handle_t*;
 #else
 typedef void* xe_function_handle_t;
 #endif // defined( __cplusplus )
@@ -253,19 +154,8 @@ typedef void* xe_function_handle_t;
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Handle of driver's function args object
 #if defined( __cplusplus )
-struct xe_function_args_handle_t
-{
-    void* pDriverData;
-
-    xe_function_args_handle_t( void ) : pDriverData( nullptr ) {}        ///< default constructor
-    explicit xe_function_args_handle_t( void* p ) : pDriverData( p ) {}  ///< initialize from pointer
-
-    inline bool operator==( const xe_function_args_handle_t& other ) const   ///< is equal to other
-    { return pDriverData == other.pDriverData; }
-    inline bool operator!=( const xe_function_args_handle_t& other ) const   ///< not equal to other
-    { return pDriverData != other.pDriverData; }
-
-};
+struct _xe_function_args_handle_t;
+using xe_function_args_handle_t = _xe_function_args_handle_t*;
 #else
 typedef void* xe_function_args_handle_t;
 #endif // defined( __cplusplus )
@@ -273,19 +163,8 @@ typedef void* xe_function_args_handle_t;
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief IPC handle to a memory allocation
 #if defined( __cplusplus )
-struct xe_ipc_mem_handle_t
-{
-    void* pDriverData;
-
-    xe_ipc_mem_handle_t( void ) : pDriverData( nullptr ) {}        ///< default constructor
-    explicit xe_ipc_mem_handle_t( void* p ) : pDriverData( p ) {}  ///< initialize from pointer
-
-    inline bool operator==( const xe_ipc_mem_handle_t& other ) const   ///< is equal to other
-    { return pDriverData == other.pDriverData; }
-    inline bool operator!=( const xe_ipc_mem_handle_t& other ) const   ///< not equal to other
-    { return pDriverData != other.pDriverData; }
-
-};
+struct _xe_ipc_mem_handle_t;
+using xe_ipc_mem_handle_t = _xe_ipc_mem_handle_t*;
 #else
 typedef void* xe_ipc_mem_handle_t;
 #endif // defined( __cplusplus )
