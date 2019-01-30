@@ -318,6 +318,15 @@ Supported capabilities are:
 * ::${X}_MEMORY_CONCURRENT_ACCESS - if a device supports concurrent access to allocations of the specified type, or another device's allocation of the specified type.
 * ::${X}_MEMORY_CONCURRENT_ATOMIC_ACCESS - if a device supports concurrent atomic access to allocations of the specified type, or another device's allocations of the specified type.
 
+The required matrix of capabilities are:
+
+| Allocation Type         | Access   | Atomic Access | Concurrent Access | Concurrent Atomic Access |
+| :--:                    | :--:     | :--:          | :--:              | :--:                     |
+| **Host**                | Required | Optional      | Optional          | Optional                 |
+| **Device**              | Required | Optional      | Optional          | Optional                 |
+| **Shared**              | Optional | Optional      | Optional          | Optional                 |
+| Cross-Device **Shared** | Optional | Optional      | Optional          | Optional                 |
+
 ${"###"} Prefetch and Memory Advice
 **Shared** allocations may be prefetched to a supporting device via the ::${x}CommandListEncodeMemoryPrefetch API.
 
