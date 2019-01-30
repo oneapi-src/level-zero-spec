@@ -12,44 +12,47 @@ TEST(sample, waitOnEvent) {
                                &device);
     ASSERT_EQ(XE_RESULT_SUCCESS, result);
 
-    xe_command_queue_handle_t commandQueue = {};
+    xe_command_queue_handle_t hCommandQueue = {};
     xe_command_queue_desc_t desc = {};
     result = xeDeviceCreateCommandQueue(device,
                                         &desc,
-                                        &commandQueue);
+                                        &hCommandQueue);
     ASSERT_EQ(XE_RESULT_SUCCESS, result);
 
     xe_command_list_desc_t descCommandList = {};
-    xe_command_list_handle_t commandList = {};
+    xe_command_list_handle_t hCommandList = {};
     result = xeDeviceCreateCommandList(device,
                                        &descCommandList,
-                                       &commandList);
+                                       &hCommandList);
     ASSERT_EQ(XE_RESULT_SUCCESS, result);
 
     xe_event_desc_t descEvent = {};
-    xe_event_handle_t event = {};
+    xe_event_handle_t hEvent = {};
     result = xeDeviceCreateEvent(device,
                                  &descEvent,
-                                 &event);
+                                 &hEvent);
     ASSERT_EQ(XE_RESULT_SUCCESS, result);
 
-    result = xeCommandListEncodeWaitOnEvent(commandList,
-                                            event);
+    result = xeCommandListEncodeWaitOnEvent(hCommandList,
+                                            hEvent);
     ASSERT_EQ(XE_RESULT_SUCCESS, result);
 
-    result = xeCommandListClose(commandList);
+    result = xeCommandListClose(hCommandList);
     ASSERT_EQ(XE_RESULT_SUCCESS, result);
 
-    result = xeCommandQueueEnqueueCommandList(commandQueue,
-                                              commandList);
+    xe_fence_handle_t hFence = {};
+    result = xeCommandQueueEnqueueCommandLists(hCommandQueue,
+                                               1,
+                                               &hCommandList,
+                                               (xe_fence_handle_t)0);
     ASSERT_EQ(XE_RESULT_SUCCESS, result);
 
-    result = xeEventDestroy(event);
+    result = xeEventDestroy(hEvent);
     ASSERT_EQ(XE_RESULT_SUCCESS, result);
 
-    result = xeCommandListDestroy(commandList);
+    result = xeCommandListDestroy(hCommandList);
     ASSERT_EQ(XE_RESULT_SUCCESS, result);
 
-    result = xeCommandQueueDestroy(commandQueue);
+    result = xeCommandQueueDestroy(hCommandQueue);
     ASSERT_EQ(XE_RESULT_SUCCESS, result);
 }

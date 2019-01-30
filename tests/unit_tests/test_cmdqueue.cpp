@@ -18,10 +18,13 @@ TEST(xeCommandQueueDestroy, returnsSuccess) {
 }
 
 TEST(xeCommandQueueEnqueueCommandList, returnsSuccess) {
-    xe_command_queue_handle_t commandQueue = {};
-    xe_command_list_handle_t commandList = {};
+    xe_command_queue_handle_t hCommandQueue = {};
+    xe_command_list_handle_t hCommandList = {};
+    xe_fence_handle_t hFence = {};
 
-    auto result = xeCommandQueueEnqueueCommandList(commandQueue,
-                                                   commandList);
+    auto result = xeCommandQueueEnqueueCommandLists(hCommandQueue,
+                                                    1,
+                                                    &hCommandList,
+                                                    hFence);
     EXPECT_EQ(XE_RESULT_SUCCESS, result);
 }
