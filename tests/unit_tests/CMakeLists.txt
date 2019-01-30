@@ -26,6 +26,7 @@ if(COMPUTE_RUNTIME_SUPPORT)
             driver.h
             event.cpp
             event.h
+            graphics_allocation.cpp
             graphics_allocation.h
             memory_manager.cpp
             memory_manager.h
@@ -37,6 +38,7 @@ if(COMPUTE_RUNTIME_SUPPORT)
             test_cmdlist.cpp
             test_device.cpp
             test_driver.cpp
+            test_graphics_allocation.cpp
             test_memory_manager.cpp
             test_platform.cpp
             ${COMPUTE_RUNTIME_HW_ENABLE}

@@ -44,7 +44,8 @@ using CommandListCreate = ::testing::TestWithParam<uint32_t>;
 TEST_P(CommandListCreate, returnsCommandListOnSuccess) {
     xe::MockDevice device;
     xe::MockMemoryManager manager;
-    auto allocation = new xe::GraphicsAllocation;
+    uint8_t buffer[1024];
+    auto allocation = new xe::GraphicsAllocation(buffer, sizeof(buffer));
 
     EXPECT_CALL(device, getMemoryManager()).WillRepeatedly(Return(&manager));
     EXPECT_CALL(manager, allocateDeviceMemory()).WillRepeatedly(Return(allocation));

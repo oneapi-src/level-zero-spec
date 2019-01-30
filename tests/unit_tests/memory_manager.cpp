@@ -8,8 +8,7 @@ struct MemoryManagerImp : public MemoryManager {
     GraphicsAllocation *allocateDeviceMemory() override {
         OCLRT::AllocationProperties properties(65536u, OCLRT::GraphicsAllocation::AllocationType::COMMAND_BUFFER);
 
-        auto allocation = new GraphicsAllocation;
-        allocation->allocationRT =  memoryManagerRT->allocateGraphicsMemory(properties, nullptr);
+        auto allocation = new GraphicsAllocation(memoryManagerRT->allocateGraphicsMemory(properties, nullptr));
 
         return allocation;
     }

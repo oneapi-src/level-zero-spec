@@ -1,9 +1,16 @@
 #pragma once
 
+namespace OCLRT {
+class GraphicsAllocation;
+}
+
 namespace xe {
 
 struct GraphicsAllocation {
-    void *allocationRT = nullptr;
+    GraphicsAllocation(OCLRT::GraphicsAllocation *allocationRT);
+    GraphicsAllocation(void *buffer, size_t size);
+
+    OCLRT::GraphicsAllocation *allocationRT = nullptr;
 };
 
 } // namespace xe
