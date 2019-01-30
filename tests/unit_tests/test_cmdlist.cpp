@@ -17,16 +17,6 @@ TEST(xeCommandListDestroy, redirectsToCmdListObject) {
     EXPECT_EQ(XE_RESULT_SUCCESS, result);
 }
 
-TEST(xeCommandListClose, redirectsToCmdListObject) {
-    xe::MockCommandList cmdList;
-    xe_command_list_handle_t commandList = cmdList.toHandle();
-
-    EXPECT_CALL(cmdList, close()).Times(1);
-
-    auto result = xe::xeCommandListClose(commandList);
-    EXPECT_EQ(XE_RESULT_SUCCESS, result);
-}
-
 using ::testing::Return;
 using CommandListCreate = ::testing::TestWithParam<uint32_t>;
 

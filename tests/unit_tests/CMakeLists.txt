@@ -36,6 +36,7 @@ if(COMPUTE_RUNTIME_SUPPORT)
             mock_event.h
             mock_memory_manager.h
             test_cmdlist.cpp
+            test_cmdlist_close.cpp
             test_cmdlist_encodewaitonevent.cpp
             test_device.cpp
             test_driver.cpp
