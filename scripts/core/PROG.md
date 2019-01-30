@@ -580,9 +580,10 @@ See ${x}_function_attribute_t for more information on the attributes.
 
 ${"##"} FunctionArgs
 FunctionArgs represent the inputs for a function.
-
-@todo [**Zack**] can Args be reused across different function with same signature?
-@todo [**Zack**] document contract; are Args back by GPU and must be complete, or are they host-only and fully mutable?
+- FunctionArgs must be used with the Function object it was created for.
+- Use ${x}FunctionArgsSetValue to setup arguments for a function dispatch.
+- FunctionArgs can updated and used across multiple dispatches for the same function.
+  - The driver will snapshot the arguments when dispatched.
 
 The following sample code demonstrates a sequence for creating function args and dispatching the function:
 ```c
@@ -600,6 +601,17 @@ The following sample code demonstrates a sequence for creating function args and
         hCommandList, hFunction, hFunctionArgs, 
         pixelRegionWidth, pixelRegionHeight, 1, 
         numRegionsX, numRegionsY, 1);
+
+    // Update image pointers to copy and scale next image.
+    ${x}FunctionArgsSetValue(hFuncArgs, 0, sizeof(${x}_image_handle_t), &src2_image);
+    ${x}FunctionArgsSetValue(hFuncArgs, 1, sizeof(${x}_image_handle_t), &dest2_image);
+
+    // Encode dispatch command
+    ${x}CommandListEncodeDispatchFunction(
+        hCommandList, hFunction, hFunctionArgs, 
+        pixelRegionWidth, pixelRegionHeight, 1, 
+        numRegionsX, numRegionsY, 1);
+
     ...
 ```
 
