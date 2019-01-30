@@ -7,6 +7,7 @@ static OCLRT::HardwareInfo hwInfo = {};
 static OCLRT::FeatureTable skuTable = {};
 static GT_SYSTEM_INFO sysInfo = {};
 
+GFXCORE_FAMILY renderCoreFamily = IGFX_GEN9_CORE;
 PRODUCT_FAMILY productFamily = IGFX_SKYLAKE;
 
 struct Environment : public ::testing::Environment {

@@ -14,20 +14,19 @@ using ::testing::Return;
 
 extern PRODUCT_FAMILY productFamily;
 
-TEST(xeCommandListEncodeWaitOnEvent, redirectsToCmdListObject) {
-    xe::MockCommandList commandList;
-    xe_event_handle_t event = {};
+TEST(xeCommandListClose, redirectsToCmdListObject) {
+    xe::MockCommandList cmdList;
+    xe_command_list_handle_t commandList = cmdList.toHandle();
 
-    EXPECT_CALL(commandList, encodeWaitOnEvent(event)).Times(1);
+    EXPECT_CALL(cmdList, close()).Times(1);
 
-    auto result = xe::xeCommandListEncodeWaitOnEvent(commandList.toHandle(),
-                                                     event);
+    auto result = xe::xeCommandListClose(commandList);
     EXPECT_EQ(XE_RESULT_SUCCESS, result);
 }
 
-using CommandListEncodeWaitOnEvent = ::testing::Test;
+using CommandListClose = ::testing::Test;
 
-HWTEST_F(CommandListEncodeWaitOnEvent, addsSemaphoreToCommandStream) {
+HWTEST_F(CommandListClose, addsBatchBufferEndToCommandStream) {
     xe::MockDevice device;
     xe::MockMemoryManager memoryManager;
     EXPECT_CALL(device, getMemoryManager())
@@ -43,8 +42,7 @@ HWTEST_F(CommandListEncodeWaitOnEvent, addsSemaphoreToCommandStream) {
     ASSERT_NE(nullptr, commandListAlias->commandStream);
     auto usedSpaceBefore = commandListAlias->commandStream->getUsed();
 
-    xe::MockEvent event;
-    auto result = commandList->encodeWaitOnEvent(event.toHandle());
+    auto result = commandList->close();
     ASSERT_EQ(XE_RESULT_SUCCESS, result);
 
     auto usedSpaceAfter = commandListAlias->commandStream->getUsed();
@@ -54,7 +52,7 @@ HWTEST_F(CommandListEncodeWaitOnEvent, addsSemaphoreToCommandStream) {
     ASSERT_TRUE(FamilyType::PARSE::parseCommandBuffer(cmdList,
                                                       ptrOffset(commandListAlias->commandStream->getCpuBase(), 0),
                                                       usedSpaceAfter));
-    using MI_SEMAPHORE_WAIT = typename FamilyType::MI_SEMAPHORE_WAIT;
-    auto itor = find<MI_SEMAPHORE_WAIT *>(cmdList.begin(), cmdList.end());
+    using MI_BATCH_BUFFER_END = typename FamilyType::MI_BATCH_BUFFER_END;
+    auto itor = find<MI_BATCH_BUFFER_END *>(cmdList.begin(), cmdList.end());
     EXPECT_NE(cmdList.end(), itor);
 }
