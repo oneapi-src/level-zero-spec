@@ -389,9 +389,8 @@ The required matrix of capabilities are:
 ${"###"} Prefetch and Memory Advice
 **Shared** allocations may be prefetched to a supporting device via the ::${x}CommandListEncodeMemoryPrefetch API.
 
-Additionally, an application may provide memory advices for a **shared** allocation via the ::${x}MemAdvise API, to override driver heuristics or migration policies.
+Additionally, an application may provide memory advices for a **shared** allocation via the ::${x}CommandListEncodeMemAdvise API, to override driver heuristics or migration policies.
 
-@todo [**Ben**] make MemAdvise a command list encode function
 @todo [**Ben**] more details from discussion about what prefetch and memadvise do and _when_ they should be used; sample code?
 
 ${"##"} Images

@@ -159,6 +159,8 @@ details:
     - "The application may call this function from simultaneous threads."
     - "The implementation of this function should be lock-free."
     - "Prefetch to Host and Peer Device are not supported."
+    - "The application may **not** call this function from simultaneous threads."
+    - "The implementation of this function should be lock-free."
 analogue:
     - cudaMemPrefetchAsync
     - clEnqueueSVMMigrateMem
@@ -174,5 +176,43 @@ params:
       desc: "[in] size in bytes of the memory region to prefetch"
 returns:
     - $X_RESULT_ERROR_INVALID_PARAMETER:
-        - "invalid handle for hDstImage"
-        - "nullptr for srcptr"
+        - "invalid pointer"
+--- #--------------------------------------------------------------------------
+type: enum
+desc: "Supported memory advice hints"
+name: $x_memory_advice_t
+etors:
+    - name: $X_MEMORY_ADVICE_TBD
+      value: "0"
+      desc: "@todo [**Ben**] which memory advice hints could/should we support?"
+--- #--------------------------------------------------------------------------
+type: function
+desc: "Provides advice about the use of a shared memory range"
+name: $xCommandListEncodeMemAdvise
+analogue:
+    - "**cudaMemAdvise**"
+details:
+    - "Memory advice is a performance hint only; applications are not required to use this for functionality."
+    - "Memory advice can be used to override driver heuristics to explicitly control shared memory behavior."
+    - "Memory advice may only be supported at a device-specific granularity, such as at a page boundary.
+       In this case, the memory range may be expanded such that the start and end of the range satisfy
+       granularity requirements."
+    - "The application may **not** call this function from simultaneous threads."
+    - "The implementation of this function should be lock-free."
+params:
+    - type: $x_command_list_handle_t
+      name: hCommandList
+      desc: "[in] handle of command list"
+    - type: "const void*"
+      name: ptr
+      desc: "[in] Pointer to the start of the memory range"
+    - type: size_t
+      name: size
+      desc: "[in] Size in bytes of the memory range"
+    - type: $x_memory_advice_t
+      name: advice
+      desc: "[in] Memory advice for the memory range"
+returns:
+    - $X_RESULT_ERROR_INVALID_PARAMETER:
+        - "invalid pointer"
+        - "invalid advice"
