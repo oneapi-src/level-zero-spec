@@ -33,6 +33,7 @@
 #pragma once
 #endif
 
+#include "xe_barrier.h"
 #include "xe_cl_interop.h"
 #include "xe_cmdlist.h"
 #include "xe_cmdqueue.h"
