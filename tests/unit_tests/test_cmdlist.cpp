@@ -27,18 +27,6 @@ TEST(xeCommandListClose, redirectsToCmdListObject) {
     EXPECT_EQ(XE_RESULT_SUCCESS, result);
 }
 
-TEST(xeCommandListEncodeWaitOnEvent, redirectsToCmdListObject) {
-    xe::MockCommandList cmdList;
-    xe_command_list_handle_t commandList = cmdList.toHandle();
-    xe_event_handle_t event = {};
-
-    EXPECT_CALL(cmdList, encodeWaitOnEvent(event)).Times(1);
-
-    auto result = xe::xeCommandListEncodeWaitOnEvent(commandList,
-                                                     event);
-    EXPECT_EQ(XE_RESULT_SUCCESS, result);
-}
-
 using ::testing::Return;
 using CommandListCreate = ::testing::TestWithParam<uint32_t>;
 
