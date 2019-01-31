@@ -17,3 +17,4 @@ Installing Mako and PyYAML:
 
 Documentation is generated from source code using Doxygen.  
   * [Doxygen](http://www.doxygen.nl/) v1.8.15
+  * [MiKTex](https://miktex.org/) v2.9.6930
