@@ -59,26 +59,4 @@ xe_result_t __xecall
     xe_command_list_handle_t hCommandList           ///< [in] handle of the command list
     );
 
-///////////////////////////////////////////////////////////////////////////////
-/// @brief Encodes a memory barrier into a command list.
-/// 
-/// @details
-///     - The application may **not** call this function from simultaneous
-///       threads.
-///     - The implementation of this function should be lock-free.
-/// 
-/// @remarks
-///   _Analogues_
-///     - **vkCmdPipelineBarrier**
-/// 
-/// @returns
-///     - ::XE_RESULT_SUCCESS
-///     - ::XE_RESULT_ERROR_UNINITIALIZED
-///     - ::XE_RESULT_ERROR_INVALID_PARAMETER
-///         + invalid handle for hCommandList
-xe_result_t __xecall
-  xeCommandListEncodeMemoryBarrier(
-    xe_command_list_handle_t hCommandList           ///< [in] handle of the command list
-    );
-
 #endif // _XE_BARRIER_H

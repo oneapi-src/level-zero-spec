@@ -145,17 +145,9 @@ xe_result_t __xecall
 /// @brief Supported command list parameters
 typedef enum _xe_command_list_parameter_t
 {
-    XE_COMMAND_LIST_PARAMETER_CACHE_CONFIG,         ///< see ::xe_command_list_cacheconfig_t
+    XE_COMMAND_LIST_PARAMETER_TBD,                  ///< 
 
 } xe_command_list_parameter_t;
-
-///////////////////////////////////////////////////////////////////////////////
-/// @brief Supported command list cache configurations
-typedef enum _xe_command_list_cacheconfig_t
-{
-    XE_COMMAND_LIST_CACHECONFIG_BIAS_NONE,          ///< [default] no cache configuration bias; uses driver-based heuristics
-
-} xe_command_list_cacheconfig_t;
 
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Sets a command list's parameter.
@@ -210,7 +202,7 @@ xe_result_t __xecall
 xe_result_t __xecall
   xeCommandListGetParameter(
     xe_command_list_handle_t hCommandList,          ///< [in] handle of command list
-    xe_command_list_parameter_t parameter,          ///< [in] parameter to change
+    xe_command_list_parameter_t parameter,          ///< [in] parameter to retrieve
     uint32_t* value                                 ///< [out] value of attribute
     );
 

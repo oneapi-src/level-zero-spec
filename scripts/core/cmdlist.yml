@@ -101,15 +101,8 @@ type: enum
 desc: "Supported command list parameters"
 name: $x_command_list_parameter_t
 etors:
-    - name: $X_COMMAND_LIST_PARAMETER_CACHE_CONFIG
-      desc: "see $x_command_list_cacheconfig_t"
---- #--------------------------------------------------------------------------
-type: enum
-desc: "Supported command list cache configurations"
-name: $x_command_list_cacheconfig_t
-etors:
-    - name: $X_COMMAND_LIST_CACHECONFIG_BIAS_NONE
-      desc: "[default] no cache configuration bias; uses driver-based heuristics"
+    - name: $X_COMMAND_LIST_PARAMETER_TBD
+      desc: ""
 --- #--------------------------------------------------------------------------
 type: function
 desc: "Sets a command list's parameter."
@@ -154,7 +147,7 @@ params:
       desc: "[in] handle of command list"
     - type: $x_command_list_parameter_t
       name: parameter
-      desc: "[in] parameter to change"
+      desc: "[in] parameter to retrieve"
     - type: "uint32_t*"
       name: value
       desc: "[out] value of attribute"

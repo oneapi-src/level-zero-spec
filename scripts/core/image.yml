@@ -11,18 +11,18 @@ type: enum
 desc: "Supported image creation flags"
 name: $x_image_flags_t
 etors:
-    - name: $X_IMAGE_FLAG_KERNEL_READ
+    - name: $X_IMAGE_FLAG_PROGRAM_READ
       value: "$X_BIT( 0 )"
-      desc: "kernels may read contents"
-    - name: $X_IMAGE_FLAG_KERNEL_WRITE
+      desc: "programs will read contents"
+    - name: $X_IMAGE_FLAG_PROGRAM_WRITE
       value: "$X_BIT( 1 )"
-      desc: "kernels may write contents"
-    - name: $X_IMAGE_FLAG_HOST_READ
+      desc: "programs will write contents"
+    - name: $X_IMAGE_FLAG_BIAS_CACHED
       value: "$X_BIT( 2 )"
-      desc: "host may read contents"
-    - name: $X_IMAGE_FLAG_HOST_WRITE
+      desc: "device should cache contents"
+    - name: $X_IMAGE_FLAG_BIAS_UNCACHED
       value: "$X_BIT( 3 )"
-      desc: "host may write contents"
+      desc: "device should not cache contents"
 --- #--------------------------------------------------------------------------
 type: enum
 desc: "Supported image types"

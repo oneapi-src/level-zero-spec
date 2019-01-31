@@ -44,10 +44,10 @@
 /// @brief Supported image creation flags
 typedef enum _xe_image_flags_t
 {
-    XE_IMAGE_FLAG_KERNEL_READ = XE_BIT( 0 ),        ///< kernels may read contents
-    XE_IMAGE_FLAG_KERNEL_WRITE = XE_BIT( 1 ),       ///< kernels may write contents
-    XE_IMAGE_FLAG_HOST_READ = XE_BIT( 2 ),          ///< host may read contents
-    XE_IMAGE_FLAG_HOST_WRITE = XE_BIT( 3 ),         ///< host may write contents
+    XE_IMAGE_FLAG_PROGRAM_READ = XE_BIT( 0 ),       ///< programs will read contents
+    XE_IMAGE_FLAG_PROGRAM_WRITE = XE_BIT( 1 ),      ///< programs will write contents
+    XE_IMAGE_FLAG_BIAS_CACHED = XE_BIT( 2 ),        ///< device should cache contents
+    XE_IMAGE_FLAG_BIAS_UNCACHED = XE_BIT( 3 ),      ///< device should not cache contents
 
 } xe_image_flags_t;
 

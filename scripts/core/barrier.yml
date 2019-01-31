@@ -18,19 +18,3 @@ params:
 returns:
     - $X_RESULT_ERROR_INVALID_PARAMETER:
         - "invalid handle for hCommandList"
---- #--------------------------------------------------------------------------
-type: function
-desc: "Encodes a memory barrier into a command list."
-name: $xCommandListEncodeMemoryBarrier
-analogue:
-    - "**vkCmdPipelineBarrier**"
-details:
-    - "The application may **not** call this function from simultaneous threads."
-    - "The implementation of this function should be lock-free."
-params:
-    - type: $x_command_list_handle_t
-      name: hCommandList
-      desc: "[in] handle of the command list"
-returns:
-    - $X_RESULT_ERROR_INVALID_PARAMETER:
-        - "invalid handle for hCommandList"

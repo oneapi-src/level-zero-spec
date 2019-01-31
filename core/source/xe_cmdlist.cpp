@@ -225,7 +225,7 @@ xe_result_t __xecall
 xe_result_t __xecall
   xeCommandListGetParameter(
     xe_command_list_handle_t hCommandList,          ///< [in] handle of command list
-    xe_command_list_parameter_t parameter,          ///< [in] parameter to change
+    xe_command_list_parameter_t parameter,          ///< [in] parameter to retrieve
     uint32_t* value                                 ///< [out] value of attribute
     )
 {

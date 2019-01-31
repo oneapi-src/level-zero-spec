@@ -124,7 +124,7 @@ ${"##"} Command Lists
   subsequent commands. See ::${x}_command_list_parameter_t for details.
 - Command lists do not inherit state from other command lists executed
   on the same command queue.  i.e. each command list begins execution
-  in its own state.
+  in its own default state.
 - The application is responsible for calling close before submission
   to a command queue.
 - The application is responsible for making sure the GPU is not currently
@@ -197,11 +197,7 @@ The following sample code demonstrates submission of command lists to a command 
 ```
 
 ${"#"} <a name="brr">Barriers</a>
-There are two type of barriers:
-1. **Execution Barriers** - used to insert a dependency between commands submitted to the same command list.
-2. **Memory Barriers** - used to insert a dependency between memory access between another command queue?
-
-${"##"} Execution Barriers
+- Execution Barriers are used to insert a dependency between commands submitted to the same command list.
 - Commands submitted to a command list are only gaurenteed to start in the same order in which they are submitted;
 there is no implicit control of which order they complete.
 - Execution barriers provide explicit control to indicate that previous commands must complete prior to
@@ -217,13 +213,6 @@ The following sample code demonstrates a sequence for submission of an execution
     ${x}CommandListEncodeDispatchFunction(hCommandList, hFunction2, ...);
     ...
 ```
-
-${"##"} Memory Barriers
-- The execution of commands may store the contents of memory in device-local caches for optimizing execution.
-- The default behavior is to keep these contents in the caches after execution completes for additional command execution until they naturally expire, or...
-- Memory barriers provide explicit control to evict memory contents from these caches to maintain coherency when...
-
-@todo [**Mike**] when are memory barriers required to be explicit, e.g. copy queues?  when does this just work?  when does driver flush caches implicitly, e.g., between enqueues?
 
 ${"#"} <a name="sp">Synchronization Primitives</a>
 There are three types of synchronization primitives:
@@ -631,7 +620,7 @@ ${"##"} cl_mem
 @todo [**Ben**] list any details/rules about memory sharing, Acquire/Release semantics, 
 
 ${"##"} cl_program
-Xe modules are always in a compiled state and therore prior to retrieving an xe_module_handle_t from
+${Xx} modules are always in a compiled state and therefore prior to retrieving an ${x}_module_handle_t from
 a cl_program the caller must ensure the cl_program is compiled and linked.
 
 ${"##"} cl_command_queue
