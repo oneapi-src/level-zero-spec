@@ -39,6 +39,49 @@ returns:
         - "ordinal is out of range reported by $xDriverGetDeviceCount"
         - "nullptr for phDevice"
 --- #--------------------------------------------------------------------------
+type: function
+desc: "Reports the number of sub-devices for this device."
+name: $xDeviceGetSubDeviceCount
+analogue:
+    - "**cuDeviceGetCount**"
+details:
+    - "The application may call this function from simultaneous threads."
+    - "The implementation of this function should be lock-free."
+params:
+    - type: $x_device_handle_t
+      name: hDevice
+      desc: "[in] handle of the device object"
+    - type: "uint32_t*"
+      name: count
+      desc: "[out] number of sub-devices available"
+returns:
+    - $X_RESULT_ERROR_INVALID_PARAMETER
+        - "nullptr for count"
+--- #--------------------------------------------------------------------------
+type: function
+desc: "Returns a handle to the sub-device object"
+name: $xDeviceGetSubDevice
+analogue:
+    - "**cuDeviceGet**"
+    - clGetDeviceIDs
+details:
+    - "The application may call this function from simultaneous threads."
+    - "The implementation of this function should be lock-free."
+params:
+    - type: $x_device_handle_t
+      name: hDevice
+      desc: "[in] handle of the device object"
+    - type: uint32_t
+      name: ordinal
+      desc: "[in] ordinal of sub-device to retrieve"
+    - type: "$x_device_handle_t*"
+      name: phSubDevice
+      desc: "[out] pointer to handle of sub-device object."
+returns:
+    - $X_RESULT_ERROR_INVALID_PARAMETER:
+        - "ordinal is out of range reported by $xDeviceGetSubDeviceCount"
+        - "nullptr for phDevice"
+--- #--------------------------------------------------------------------------
 type: enum
 desc: "Supported API versions"
 name: $x_api_version_t
