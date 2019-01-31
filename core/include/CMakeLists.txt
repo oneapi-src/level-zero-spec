@@ -1,6 +1,6 @@
 # DO NOT EDIT: Generated from "scripts/templates/CMakeLists.txt.mako"
 target_sources(${TARGET_NAME}
-    PUBLIC
+    PRIVATE
     ${CMAKE_CURRENT_SOURCE_DIR}/CMakeLists.txt
     ${CMAKE_CURRENT_SOURCE_DIR}/xe_barrier.h
     ${CMAKE_CURRENT_SOURCE_DIR}/xe_cl_interop.h

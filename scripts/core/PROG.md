@@ -658,10 +658,11 @@ There are three OpenCL types that can be shared for interoperability:
 
 ${"##"} cl_mem
 OpenCL buffer objects may be registered for use as an ${Xx} device memory allocation.
-Registering an OpenCL buffer object with ${Xx} does not alter the lifetime of the OpenCL buffer object.
-The registered device allocation is destroyed when the OpenCL buffer object is destroyed, and does not need to be explicitly destroyed or un-registered from ${Xx}.
+Registering an OpenCL buffer object with ${Xx} merely obtains a pointer to the underlying device memory allocation and does not alter the lifetime of the device memory underlying the OpenCL buffer object.
+Freeing the ${Xx} device memory allocation effectively "un-registers" the allocation from ${Xx}, and should be performed before the OpenCL buffer object is destroyed.
+Using the ${Xx} device memory allocation after destroying its associated OpenCL buffer object will result in undefined behavior.
 
-Applications are responsible for enforcing memory consistency for shared buffer objects using existing OpenCL and/or ${Xx} functionality.
+Applications are responsible for enforcing memory consistency for shared buffer objects using existing OpenCL and/or ${Xx} APIs.
 
 ${"##"} cl_program
 ${Xx} modules are always in a compiled state and therefore prior to retrieving an ${x}_module_handle_t from
