@@ -155,18 +155,16 @@ xe_result_t __xecall
 ///     - ::XE_RESULT_SUCCESS
 ///     - ::XE_RESULT_ERROR_UNINITIALIZED
 ///     - ::XE_RESULT_ERROR_INVALID_PARAMETER
-///         + invalid handle for hDevice
-///         + invalid format
-///         + nullptr for pInputModule
-///         + nullptr for phModule
-///         + 0 for inputSize
+///         + nullptr for hBuildLog
+///         + nullptr for pSize
+///         + nullptr for pBuildLog
 ///     - ::XE_RESULT_ERROR_OUT_OF_HOST_MEMORY
 ///     - ::XE_RESULT_ERROR_OUT_OF_DEVICE_MEMORY
 xe_result_t __xecall
   xeModuleBuildLogGetString(
-    xe_module_build_log_handle_t hModule,           ///< [in] handle of the module build log object.
+    xe_module_build_log_handle_t hBuildLog,         ///< [in] handle of the module build log object.
     uint32_t* pSize,                                ///< [out] size of native binary.
-    char** pLog                                     ///< [out] string pointer to log.
+    char** pBuildLog                                ///< [out] string pointer to log.
     );
 
 ///////////////////////////////////////////////////////////////////////////////
