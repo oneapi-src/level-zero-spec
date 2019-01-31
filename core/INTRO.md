@@ -60,7 +60,7 @@ The cross-tile memory is stacked within package allowing applications to access 
 Peer to Peer API's provide capabilities to marshall data across Host to Device, Device to Host and Device to Device. The data marshalling API can be scheduled as asynchronous operations or can be synchronized with kernel execution through command queues. Data coherency is maintained by the driver with out any explicit involement from the user.
 
 ## Inter-Process Communication
-
+Level 0 interface allows sharing of memory objects across different GPU processes. Since each process has it's own virtual address space, there is no guarantee that the same virtual address will be avialble when the memory object is shared in new process. There are set of API's that makes it easier to share the memory objects with ease. 
 
 # <a name="spec">API Specification</a>
 The following section provides high-level design philosophy of the APIs.
