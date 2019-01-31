@@ -32,9 +32,12 @@ endif()
 # Add compute runtime support
 if(NOT DEFINED COMPUTE_RUNTIME_DIR)
     set(COMPUTE_RUNTIME_DIR ${THIRD_PARTY_DIR}/compute_runtime)
-    set(WDK_DIR ${THIRD_PARTY_DIR}/wdk)
     set(IGC_DIR ${THIRD_PARTY_DIR}/igc)
     set(GMM_SOURCE_DIR ${THIRD_PARTY_DIR}/gmmlib)
+
+    if(NOT UNIX)
+        set(WDK_DIR ${THIRD_PARTY_DIR}/wdk)
+    endif()
 endif()
 
 set(COMPUTE_RUNTIME_SUPPORT TRUE)

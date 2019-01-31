@@ -1,4 +1,5 @@
 #pragma once
+#include <cstring>
 
 namespace OCLRT {
 class GraphicsAllocation;

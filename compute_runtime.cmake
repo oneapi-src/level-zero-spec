@@ -31,8 +31,14 @@ set(COMPUTE_RUNTIME_DEFINITIONS
     ${COMPUTE_RUNTIME_DEFINITIONS}
     CL_TARGET_OPENCL_VERSION=210
     GMM_OCL
-    WDDM_VERSION_NUMBER=23
 )
+
+if(WIN32)
+    set(COMPUTE_RUNTIME_DEFINITIONS
+        ${COMPUTE_RUNTIME_DEFINITIONS}
+        WDDM_VERSION_NUMBER=23
+    )
+endif()
 
 configure_file(${COMPUTE_RUNTIME_DIR}/config.h.in ${CMAKE_BINARY_DIR}/config.h)
 
@@ -61,20 +67,12 @@ add_library(compute_runtime_lib_full
         ${COMPUTE_RUNTIME_DIR}/runtime/dll/create_deferred_deleter.cpp
         ${COMPUTE_RUNTIME_DIR}/runtime/dll/create_tbx_sockets.cpp
         ${COMPUTE_RUNTIME_DIR}/runtime/dll/source_level_debugger.cpp
-        ${COMPUTE_RUNTIME_DIR}/runtime/dll/windows/environment_variables.cpp
-        ${COMPUTE_RUNTIME_DIR}/runtime/dll/windows/options.cpp
-        ${COMPUTE_RUNTIME_DIR}/runtime/dll/windows/os_interface.cpp
         ${COMPUTE_RUNTIME_DIR}/runtime/helpers/built_ins_helper.cpp
         ${COMPUTE_RUNTIME_DIR}/runtime/gmm_helper/gmm_memory.cpp
-        ${COMPUTE_RUNTIME_DIR}/runtime/gmm_helper/gmm_memory_base.cpp
         ${COMPUTE_RUNTIME_DIR}/runtime/gmm_helper/page_table_mngr.cpp
         ${COMPUTE_RUNTIME_DIR}/runtime/gmm_helper/resource_info.cpp
         ${COMPUTE_RUNTIME_DIR}/runtime/helpers/abort.cpp
         ${COMPUTE_RUNTIME_DIR}/runtime/helpers/debug_helpers.cpp
-        ${COMPUTE_RUNTIME_DIR}/runtime/os_interface/windows/os_interface.cpp
-        ${COMPUTE_RUNTIME_DIR}/runtime/os_interface/windows/sys_calls.cpp
-        ${COMPUTE_RUNTIME_DIR}/runtime/os_interface/windows/wddm/wddm_calls.cpp
-        ${COMPUTE_RUNTIME_DIR}/runtime/os_interface/windows/wddm/wddm_create.cpp
         ${COMPUTE_RUNTIME_DIR}/runtime/program/evaluate_unhandled_token.cpp
         ${COMPUTE_RUNTIME_DIR}/runtime/utilities/debug_settings_reader_creator.cpp
 )
@@ -82,9 +80,26 @@ add_library(compute_runtime_lib_full
 #Aggregate all ingredients to link
 target_link_libraries(compute_runtime_lib_full 
     compute_runtime_lib
-    dxgi
-    ws2_32
 )
+
+if(WIN32)
+    target_sources(compute_runtime_lib_full
+        PRIVATE
+            ${COMPUTE_RUNTIME_DIR}/runtime/gmm_helper/gmm_memory_base.cpp
+            ${COMPUTE_RUNTIME_DIR}/runtime/dll/windows/environment_variables.cpp
+            ${COMPUTE_RUNTIME_DIR}/runtime/dll/windows/options.cpp
+            ${COMPUTE_RUNTIME_DIR}/runtime/dll/windows/os_interface.cpp
+            ${COMPUTE_RUNTIME_DIR}/runtime/os_interface/windows/os_interface.cpp
+            ${COMPUTE_RUNTIME_DIR}/runtime/os_interface/windows/sys_calls.cpp
+            ${COMPUTE_RUNTIME_DIR}/runtime/os_interface/windows/wddm/wddm_calls.cpp
+            ${COMPUTE_RUNTIME_DIR}/runtime/os_interface/windows/wddm/wddm_create.cpp
+    )
+
+    target_link_libraries(compute_runtime_lib_full
+        dxgi
+        ws2_32
+    )
+endif()
 
 #Put all compute runtime items into the same folder
 set_target_properties(compute_runtime_lib_full
@@ -126,19 +141,11 @@ add_library(compute_runtime_mockable_full
         ${COMPUTE_RUNTIME_DIR}/unit_tests/libult/source_level_debugger_library.cpp
         ${COMPUTE_RUNTIME_DIR}/unit_tests/mocks/mock_cif.cpp
         ${COMPUTE_RUNTIME_DIR}/unit_tests/mocks/mock_compilers.cpp
-        ${COMPUTE_RUNTIME_DIR}/unit_tests/mocks/mock_gmm_memory_base.cpp
         ${COMPUTE_RUNTIME_DIR}/unit_tests/mocks/mock_gmm_resource_info.cpp
         ${COMPUTE_RUNTIME_DIR}/unit_tests/mocks/mock_program.cpp
         ${COMPUTE_RUNTIME_DIR}/unit_tests/mocks/mock_sip.cpp
-        ${COMPUTE_RUNTIME_DIR}/unit_tests/mocks/mock_wddm.cpp
-        ${COMPUTE_RUNTIME_DIR}/unit_tests/os_interface/windows/options.cpp
-        ${COMPUTE_RUNTIME_DIR}/unit_tests/os_interface/windows/sys_calls.cpp
-        ${COMPUTE_RUNTIME_DIR}/unit_tests/os_interface/windows/ult_dxgi_factory.cpp
-        ${COMPUTE_RUNTIME_DIR}/unit_tests/os_interface/windows/wddm_calls.cpp
-        ${COMPUTE_RUNTIME_DIR}/unit_tests/os_interface/windows/wddm_create.cpp
         ${COMPUTE_RUNTIME_DIR}/unit_tests/program/evaluate_unhandled_token_ult.cpp
         ${COMPUTE_RUNTIME_DIR}/unit_tests/utilities/debug_settings_reader_creator.cpp
-
         ${COMPUTE_RUNTIME_DIR}/unit_tests/libult/create_tbx_sockets.cpp
         ${COMPUTE_RUNTIME_DIR}/unit_tests/mocks/mock_deferred_deleter.cpp
         ${COMPUTE_RUNTIME_DIR}/unit_tests/mocks/mock_gmm_page_table_mngr.cpp
@@ -170,11 +177,34 @@ target_compile_definitions(compute_runtime_mockable_full
         NEO_ARCH="x64"
 )
 
+if(WIN32)
+    target_sources(compute_runtime_mockable_full
+        PRIVATE
+            ${COMPUTE_RUNTIME_DIR}/unit_tests/mocks/mock_gmm_memory_base.cpp
+            ${COMPUTE_RUNTIME_DIR}/unit_tests/mocks/mock_wddm.cpp
+            ${COMPUTE_RUNTIME_DIR}/unit_tests/os_interface/windows/options.cpp
+            ${COMPUTE_RUNTIME_DIR}/unit_tests/os_interface/windows/sys_calls.cpp
+            ${COMPUTE_RUNTIME_DIR}/unit_tests/os_interface/windows/ult_dxgi_factory.cpp
+            ${COMPUTE_RUNTIME_DIR}/unit_tests/os_interface/windows/wddm_calls.cpp
+            ${COMPUTE_RUNTIME_DIR}/unit_tests/os_interface/windows/wddm_create.cpp
+    )
+
+    target_link_libraries(compute_runtime_mockable_full
+        ws2_32
+    )
+endif()
+
+if(UNIX)
+    target_link_libraries(compute_runtime_mockable_full
+        dl
+    )
+endif()
+
 #Aggregate all ingredients to link
 target_link_libraries(compute_runtime_mockable_full
     compute_runtime_mockable
     gmock
-    ws2_32
+    dl
 )
 
 #Put all compute runtime items into the same folder
