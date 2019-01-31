@@ -617,7 +617,11 @@ There are three OpenCL types that can be shared for interoperability:
 3. **cl_command_queue** - an OpenCL command queue object
 
 ${"##"} cl_mem
-@todo [**Ben**] list any details/rules about memory sharing, Acquire/Release semantics, 
+OpenCL buffer objects may be registered for use as an ${Xx} device memory allocation.
+Registering an OpenCL buffer object with ${Xx} does not alter the lifetime of the OpenCL buffer object.
+The registered device allocation is destroyed when the OpenCL buffer object is destroyed, and does not need to be explicitly destroyed or un-registered from ${Xx}.
+
+Applications are responsible for enforcing memory consistency for shared buffer objects using existing OpenCL and/or ${Xx} functionality.
 
 ${"##"} cl_program
 ${Xx} modules are always in a compiled state and therefore prior to retrieving an ${x}_module_handle_t from
