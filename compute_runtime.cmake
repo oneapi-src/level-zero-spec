@@ -33,13 +33,6 @@ set(COMPUTE_RUNTIME_DEFINITIONS
     GMM_OCL
 )
 
-if(WIN32)
-    set(COMPUTE_RUNTIME_DEFINITIONS
-        ${COMPUTE_RUNTIME_DEFINITIONS}
-        WDDM_VERSION_NUMBER=23
-    )
-endif()
-
 configure_file(${COMPUTE_RUNTIME_DIR}/config.h.in ${CMAKE_BINARY_DIR}/config.h)
 
 # These need to be added to a project to enable platform support
@@ -143,6 +136,18 @@ set(COMPUTE_RUNTIME_MOCKABLE_DEFINITIONS
     CL_USE_DEPRECATED_OPENCL_2_0_APIS
 )
 
+if(WIN32)
+    set(COMPUTE_RUNTIME_DEFINITIONS
+        ${COMPUTE_RUNTIME_DEFINITIONS}
+        WDDM_VERSION_NUMBER=23
+    )
+
+    set(COMPUTE_RUNTIME_MOCKABLE_DEFINITIONS
+        ${COMPUTE_RUNTIME_MOCKABLE_DEFINITIONS}
+        WDDM_VERSION_NUMBER=23
+    )
+endif()
+
 #Extract compute runtime INCLUDE_DIRECTORIES
 get_property(COMPUTE_RUNTIME_MOCKABLE_INCLUDES
     TARGET compute_runtime_mockable
@@ -199,7 +204,7 @@ target_compile_definitions(compute_runtime_mockable_extra
 )
 
 target_link_libraries(compute_runtime_mockable_extra
-    PRIVATE gmock
+    gmock
 )
 
 if(WIN32)
