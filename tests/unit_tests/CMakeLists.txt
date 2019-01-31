@@ -22,6 +22,7 @@ if(COMPUTE_RUNTIME_SUPPORT)
             cmd_list_skl.cpp
             cmd_queue.cpp
             cmd_queue.h
+            cmd_queue_imp.h
             device.cpp
             device.h
             driver.cpp

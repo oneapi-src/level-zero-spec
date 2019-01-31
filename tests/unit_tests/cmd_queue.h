@@ -5,13 +5,15 @@ struct _xe_command_queue_handle_t {
 };
 
 namespace xe {
+struct Device;
 
 struct CommandQueue : public _xe_command_queue_handle_t {
+    virtual xe_result_t destroy() = 0;
     virtual xe_result_t enqueueCommandLists(uint32_t numCommandLists,
                                             xe_command_list_handle_t *phCommandLists,
                                             xe_fence_handle_t hFence) = 0;
 
-    static CommandQueue *create(void *);
+    static CommandQueue *create(Device *);
 
     static CommandQueue *fromHandle(xe_command_queue_handle_t handle) {
         return static_cast<CommandQueue *>(handle);
