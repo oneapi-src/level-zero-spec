@@ -32,13 +32,12 @@ These APIs provide interface to query information like compute unit count within
 available memory and affinity to the compute, user managed cache size and work submission command queues.
 
 ${"##"} Memory & Caches
-Memory is visible to upper level stack as unified memory with single VA space covering both GPU and specific device type (e.g GPU or FPGA). 
-The Level 0 application interface allows allocation of buffers and images at device and sub device granularity. 
+Memory is visible to upper level SW stack as unified memory with single VA space covering both CPU and with in specific device type (e.g GPU or FPGA).
+For GPU's, the API exposes 2 levels of memory hierarchy. The device memory can be managed at the device or sub device level.
+Last Level Cache (L3) last Level L3 cahce can be controled through memory allocation API's. The low level cache like L1 cache is controlled throguh language intrinsics.
+The Level 0 application interface allows allocation of buffers and images at device and sub device granularity with Cacheablity hints.
 The memory APIs allow 3 kinds of allocation methods and enable implicit and explicit management of the resources by the application or runtimes
 
-For GPU the API exposed 3 levels of memory hierarchy. From view of program hiearchy looks like:
-- Intermediate Cache (L1/L2) -> Last Level Cache (L3) -> local memory available per device / sub device.
-Depending on device, level 0 API provide ways to re-size SLM vs General memory Cache for Intermediate & Last Level Caches. 
 
 @todo [**Murali**] Determine the need to expose the last level (L3) cache on GPU, given it is configurable at the very high (buffer or image) level granularity in the HW.  
 @todo [**Ben**] SPIR-V has semantics within the kernels to declare cache requests, what about outside of kernels?  Add per-Resource L3$ _HINTS_, overrided by kernels.
