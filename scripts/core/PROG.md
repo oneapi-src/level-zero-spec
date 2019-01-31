@@ -624,8 +624,11 @@ ${Xx} modules are always in a compiled state and therefore prior to retrieving a
 a cl_program the caller must ensure the cl_program is compiled and linked.
 
 ${"##"} cl_command_queue
-@todo [**Brandon**} list any details/rules about command queue sharing
-- clFlush must be called prior to any ${x}CommandQueueEnqueue* function
+Sharing OpenCL command queues provide opportunities to minimize transition costs when submitting work from an OpenCL queue followed by submitting work to ${x} command queue and vice-versa.  Enqueuing ${x} command lists to ${x} command queues are immediately dispatched to the device.  OpenCL implementations, however, may not necessarily dispatch tasks to the device unless forced by explicit OpenCL API such as clFlush or clFinish.  To minimize overhead between sharing command queues, applications must explicitly dispatch OpenCL command queues using clFlush, clFinish or similar dispatch operations prior to enqueuing an ${x} command list.  Failing to explicitly dispatch device work may result in undefined behavior.  
+
+Sharing an OpenCL command queue doesn't alter the lifetime of the API object.  It provides knowledge for the driver to potentially reuse some internal resources which may have noticeable overhead when switching the resources.
+
+Memory contents as reflected by any caching schemes will be consistent such that, for example, a memory write  in an OpenCL command queue can be read by a subsequent ${x} command list without any special user action.  The cost to ensure memory consistency may be implementation dependent.  The performance of sharing command queues will be no worse than an application submitting work to OpenCL, calling clFinish followed by submitting an ${x} command list.  In most cases, command queue sharing may be much more efficient. 
 
 ${"#"} <a name="ipc">Inter-Process Communication</a>
 @todo [**Ben**] write-up details on how inter-process communication and resource sharing works; e.g. OCL->XE->IPC->XE or OC->IPC->OCL->XE
