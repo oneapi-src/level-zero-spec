@@ -175,6 +175,9 @@ target_compile_definitions(compute_runtime_mockable_full
         ${COMPUTE_RUNTIME_DEFINITIONS}
         DEFAULT_PLATFORM=SKL
         NEO_ARCH="x64"
+        CL_USE_DEPRECATED_OPENCL_1_1_APIS
+        CL_USE_DEPRECATED_OPENCL_1_2_APIS
+        CL_USE_DEPRECATED_OPENCL_2_0_APIS
 )
 
 if(WIN32)
