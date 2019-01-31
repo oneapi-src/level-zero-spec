@@ -40,8 +40,9 @@
 /// @brief Supported device memory allocation flags
 typedef enum _xe_device_mem_alloc_flags_t
 {
-    XE_DEVICE_MEM_ALLOC_DEFAULT = 0,                ///< implicit default behavior; uses driver-based heuristics
-    XE_DEVICE_MEM_ALLOC_UNCACHED = XE_BIT( 0 ),     ///< allocate device memory as uncached (UC)
+    XE_DEVICE_MEM_ALLOC_FLAG_DEFAULT = 0,           ///< implicit default behavior; uses driver-based heuristics
+    XE_DEVICE_MEM_ALLOC_FLAG_BIAS_CACHED = XE_BIT( 0 ), ///< device should cache allocation
+    XE_DEVICE_MEM_ALLOC_FLAG_BIAS_UNCACHED = XE_BIT( 1 ),   ///< device should not cache allocation (UC)
 
 } xe_device_mem_alloc_flags_t;
 
@@ -49,8 +50,10 @@ typedef enum _xe_device_mem_alloc_flags_t
 /// @brief Supported host memory allocation flags
 typedef enum _xe_host_mem_alloc_flags_t
 {
-    XE_HOST_MEM_ALLOC_DEFAULT = 0,                  ///< implicit default behavior; uses driver-based heuristics
-    XE_HOST_MEM_ALLOC_WRITE_COMBINED = XE_BIT( 0 ), ///< allocate the host memory as write-combined (WC)
+    XE_HOST_MEM_ALLOC_FLAG_DEFAULT = 0,             ///< implicit default behavior; uses driver-based heuristics
+    XE_HOST_MEM_ALLOC_FLAG_BIAS_CACHED = XE_BIT( 0 ),   ///< host should cache allocation
+    XE_HOST_MEM_ALLOC_FLAG_BIAS_UNCACHED = XE_BIT( 1 ), ///< host should not cache allocation (UC)
+    XE_HOST_MEM_ALLOC_FLAG_BIAS_WRITE_COMBINED = XE_BIT( 2 ),   ///< host memory should be allocated write-combined (WC)
 
 } xe_host_mem_alloc_flags_t;
 
