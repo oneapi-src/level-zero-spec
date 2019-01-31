@@ -58,7 +58,7 @@ returns:
 --- #--------------------------------------------------------------------------
 type: struct
 desc: "Region descriptor"
-name: $xImageRegion
+name: $x_image_region_t
 members:
     - type: size_t
       name: offset
@@ -80,13 +80,13 @@ params:
     - type: $x_image_handle_t
       name: hDstImage
       desc: "[in] handle of destination image to copy to"
-    - type: "$xImageRegion*"
+    - type: "$x_image_region_t*"
       name: pDstRegion
       desc: "[in][optional] destination region descriptor"
     - type: $x_image_handle_t
       name: hSrcImage
       desc: "[in] handle of source image to copy from"
-    - type: "$xImageRegion*"
+    - type: "$x_image_region_t*"
       name: pSrcRegion
       desc: "[in][optional] source region descriptor"
 returns:
@@ -114,7 +114,7 @@ params:
     - type: $x_image_handle_t
       name: hSrcImage
       desc: "[in] handle of source image to copy from"
-    - type: "$xImageRegion*"
+    - type: "$x_image_region_t*"
       name: pSrcRegion
       desc: "[in][optional] source region descriptor"
 returns:
@@ -139,7 +139,7 @@ params:
     - type: $x_image_handle_t
       name: hDstImage
       desc: "[in] handle of destination image to copy to"
-    - type: "$xImageRegion*"
+    - type: "$x_image_region_t*"
       name: pDstRegion
       desc: "[in][optional] destination region descriptor"
     - type: "void*"
