@@ -58,6 +58,8 @@
 xe_result_t __xecall
   xeSharedMemAlloc(
     const xe_device_handle_t hDevice,               ///< [in] handle of the device
+    xe_device_mem_alloc_flags_t device_flags,       ///< [in] flags specifying additional device allocation controls
+    xe_host_mem_alloc_flags_t host_flags,           ///< [in] flags specifying additional host allocation controls
     size_t size,                                    ///< [in] size in bytes to allocate
     uint32_t alignment,                             ///< [in] minimum alignment in bytes for the allocation
     void** ptr                                      ///< [out] pointer to shared allocation
@@ -101,6 +103,7 @@ xe_result_t __xecall
 xe_result_t __xecall
   xeMemAlloc(
     const xe_device_handle_t hDevice,               ///< [in] handle of the device
+    xe_device_mem_alloc_flags_t flags,              ///< [in] flags specifying additional allocation controls
     size_t size,                                    ///< [in] size in bytes to allocate
     uint32_t alignment,                             ///< [in] minimum alignment in bytes for the allocation
     void** ptr                                      ///< [out] pointer to device allocation
@@ -144,7 +147,7 @@ xe_result_t __xecall
 /*@todo: __declspec(dllexport)*/
 xe_result_t __xecall
   xeHostMemAlloc(
-    xe_host_mem_alloc_flags_t flags,                ///< [in] flags controlling specifying additional allocation controls
+    xe_host_mem_alloc_flags_t flags,                ///< [in] flags specifying additional allocation controls
     size_t size,                                    ///< [in] size in bytes to allocate
     uint32_t alignment,                             ///< [in] minimum alignment in bytes for the allocation
     void** ptr                                      ///< [out] pointer to host allocation
