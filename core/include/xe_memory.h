@@ -37,6 +37,24 @@
 #include "xe_common.h"
 
 ///////////////////////////////////////////////////////////////////////////////
+/// @brief Supported device memory allocation flags
+typedef enum _xe_device_mem_alloc_flags_t
+{
+    XE_DEVICE_MEM_ALLOC_DEFAULT = 0,                ///< implicit default behavior; uses driver-based heuristics
+    XE_DEVICE_MEM_ALLOC_UNCACHED = XE_BIT( 0 ),     ///< allocate device memory as uncached (UC)
+
+} xe_device_mem_alloc_flags_t;
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Supported host memory allocation flags
+typedef enum _xe_host_mem_alloc_flags_t
+{
+    XE_HOST_MEM_ALLOC_DEFAULT = 0,                  ///< implicit default behavior; uses driver-based heuristics
+    XE_HOST_MEM_ALLOC_WRITE_COMBINED = XE_BIT( 0 ), ///< allocate the host memory as write-combined (WC)
+
+} xe_host_mem_alloc_flags_t;
+
+///////////////////////////////////////////////////////////////////////////////
 /// @brief Allocates memory that is shared between the host and one or more
 ///        devices
 /// 
@@ -62,6 +80,8 @@
 xe_result_t __xecall
   xeSharedMemAlloc(
     const xe_device_handle_t hDevice,               ///< [in] handle of the device
+    xe_device_mem_alloc_flags_t device_flags,       ///< [in] flags specifying additional device allocation controls
+    xe_host_mem_alloc_flags_t host_flags,           ///< [in] flags specifying additional host allocation controls
     size_t size,                                    ///< [in] size in bytes to allocate
     uint32_t alignment,                             ///< [in] minimum alignment in bytes for the allocation
     void** ptr                                      ///< [out] pointer to shared allocation
@@ -93,19 +113,11 @@ xe_result_t __xecall
 xe_result_t __xecall
   xeMemAlloc(
     const xe_device_handle_t hDevice,               ///< [in] handle of the device
+    xe_device_mem_alloc_flags_t flags,              ///< [in] flags specifying additional allocation controls
     size_t size,                                    ///< [in] size in bytes to allocate
     uint32_t alignment,                             ///< [in] minimum alignment in bytes for the allocation
     void** ptr                                      ///< [out] pointer to device allocation
     );
-
-///////////////////////////////////////////////////////////////////////////////
-/// @brief Supported host allocation flags
-typedef enum _xe_host_mem_alloc_flags_t
-{
-    XE_HOST_MEM_ALLOC_DEFAULT = 0,                  ///< implicit default behavior; uses driver-based heuristics
-    XE_HOST_MEM_ALLOC_WRITE_COMBINED = XE_BIT( 0 ), ///< allocate the host memory as write-combined (WC)
-
-} xe_host_mem_alloc_flags_t;
 
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Allocates host memory
@@ -133,7 +145,7 @@ typedef enum _xe_host_mem_alloc_flags_t
 ///     - ::XE_RESULT_ERROR_OUT_OF_DEVICE_MEMORY
 xe_result_t __xecall
   xeHostMemAlloc(
-    xe_host_mem_alloc_flags_t flags,                ///< [in] flags controlling specifying additional allocation controls
+    xe_host_mem_alloc_flags_t flags,                ///< [in] flags specifying additional allocation controls
     size_t size,                                    ///< [in] size in bytes to allocate
     uint32_t alignment,                             ///< [in] minimum alignment in bytes for the allocation
     void** ptr                                      ///< [out] pointer to host allocation

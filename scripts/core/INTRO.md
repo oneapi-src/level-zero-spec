@@ -8,9 +8,10 @@ ${"##"} Table of Contents
 * [Drivers](#drv)
 
 ${"#"} <a name="obj">Objective</a>
-The objective of the Level-Zero APIs to provide direct-to-metal interfaces to offload accelerator devices.
+The objective of the Level-Zero APIs to provide direct-to-metal interfaces to offload accelerator devices. It is an API interface that can be published at a cadence that better match Intel hardware release cadence and tailored to any hardware needs. It can be adapted to support broader set of languages. Support for function pointer, virtual function, unified memory, and  I/O capabilities.
 
 The Intel ${Xx} Driver API provides the lowest-level, fine-grain and most explicit control over:
+- Device Discovery
 - Memory Allocation and Cross-Process Sharing
 - Kernel Submission
 - Asynchronous Execution and Scheduling
@@ -57,10 +58,10 @@ The cross-tile memory is stacked within package allowing applications to access 
 @todo [**Ben/Zack**] add support for sub-devices and memory, command queue affinity, etc.
 
 ${"##"} Peer-to-Peer Communication
-@todo [**Murali**] add high-level goals for P2P
+Peer to Peer API's provide capabilities to marshall data across Host to Device, Device to Host and Device to Device. The data marshalling API can be scheduled as asynchronous operations or can be synchronized with kernel execution through command queues. Data coherency is maintained by the driver with out any explicit involement from the user.
 
 ${"##"} Inter-Process Communication
-@todo [**Murali**] add high-level goals for IPC.
+Level 0 interface allows sharing of memory objects across different GPU processes. Since each process has it's own virtual address space, there is no guarantee that the same virtual address will be avialble when the memory object is shared in new process. There are set of API's that makes it easier to share the memory objects with ease. 
 
 ${"#"} <a name="spec">API Specification</a>
 The following section provides high-level design philosophy of the APIs.

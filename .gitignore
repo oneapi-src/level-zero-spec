@@ -47,8 +47,9 @@
 *.out
 *.app
 
-# HTML
+# Generated docs
 html/
+latex/
 
 # Build files
 build/
