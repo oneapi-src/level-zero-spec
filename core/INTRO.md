@@ -11,6 +11,7 @@
 The objective of the Level-Zero APIs to provide direct-to-metal interfaces to offload accelerator devices.
 
 The Intel Xe Driver API provides the lowest-level, fine-grain and most explicit control over:
+- Device Discovery
 - Memory Allocation and Cross-Process Sharing
 - Kernel Submission
 - Asynchronous Execution and Scheduling
@@ -34,11 +35,11 @@ available memory and affinity to the compute, user managed cache size and work s
 ## Memory
 Memory is visible to upper level stack as unified memory with single VA space covering both GPU and specific device type (e.g GPU or FPGA). 
 For GPU the API exposed 2 levels (potentially 3 levels) of memory hierarchy. 
-The local memory available per device / sub device and user managed shared memory cache size (L1 cache). 
-@todo [**Murali**] Determine the need to expose the last level (L3) cache on GPU, given it is configurable at the very high (buffer or image) level granularity in the HW.  
-The Level 0 application interface allows allocation of buffers and images at device and sub device granularity. 
+The local memory can be managed at the device and sub device level and L1 caches and last Level L3 cahces can be controled through intrinsics and memory allocation API's. API   managed shared memory cache size (L1 cache).
+  
+The Level 0 application interface allows allocation of buffers and images at device and sub device granularity with Cacheablity hints. 
 The memory APIs allow 3 kinds of allocation methods and enable implicit and explicit management of the resources by the application or runtimes
-@todo [**Ankur**] add cache capabilities of the device, e.g. max SLM size, L2$ size, L3$ controls
+
 @todo [**Ben**] SPIR-V has semantics within the kernels to declare cache requests, what about outside of kernels?  Add per-Resource L3$ _HINTS_, overrided by kernels.
 
 ## Cross-Device Support
