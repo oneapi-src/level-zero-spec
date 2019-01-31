@@ -33,9 +33,8 @@ These APIs provide interface to query information like compute unit count within
 available memory and affinity to the compute, user managed cache size and work submission command queues.
 
 ## Memory
-Memory is visible to upper level stack as unified memory with single VA space covering both GPU and specific device type (e.g GPU or FPGA). 
-For GPU the API exposed 2 levels (potentially 3 levels) of memory hierarchy. 
-The local memory can be managed at the device and sub device level and L1 caches and last Level L3 cahces can be controled through intrinsics and memory allocation API's.
+Memory is visible to upper level SW stack as unified memory with single VA space covering both CPU and with in specific device type (e.g GPU or FPGA). 
+For GPU's, the API exposes 2 levels of memory hierarchy. The device memory can be managed at the device or sub device level and last Level L3 cahce can be controled through memory allocation API's. The low level cache like L1 cache is controlled throguh language intrinsics.
   
 The Level 0 application interface allows allocation of buffers and images at device and sub device granularity with Cacheablity hints. 
 The memory APIs allow 3 kinds of allocation methods and enable implicit and explicit management of the resources by the application or runtimes
