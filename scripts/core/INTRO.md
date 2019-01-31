@@ -8,9 +8,10 @@ ${"##"} Table of Contents
 * [Drivers](#drv)
 
 ${"#"} <a name="obj">Objective</a>
-The objective of the Level-Zero APIs to provide direct-to-metal interfaces to offload accelerator devices.
+The objective of the Level-Zero APIs to provide direct-to-metal interfaces to offload accelerator devices. It is an API interface that can be published at a cadence that better match Intel hardware release cadence and tailored to any hardware needs. It can be adapted to support broader set of languages. Support for function pointer, virtual function, unified memory, and  I/O capabilities.
 
 The Intel ${Xx} Driver API provides the lowest-level, fine-grain and most explicit control over:
+- Device Discovery
 - Memory Allocation and Cross-Process Sharing
 - Kernel Submission
 - Asynchronous Execution and Scheduling
@@ -32,13 +33,12 @@ These APIs provide interface to query information like compute unit count within
 available memory and affinity to the compute, user managed cache size and work submission command queues.
 
 ${"##"} Memory
-Memory is visible to upper level stack as unified memory with single VA space covering both GPU and specific device type (e.g GPU or FPGA). 
-For GPU the API exposed 2 levels (potentially 3 levels) of memory hierarchy. 
-The local memory available per device / sub device and user managed shared memory cache size (L1 cache). 
-@todo [**Murali**] Determine the need to expose the last level (L3) cache on GPU, given it is configurable at the very high (buffer or image) level granularity in the HW.  
-The Level 0 application interface allows allocation of buffers and images at device and sub device granularity. 
+Memory is visible to upper level SW stack as unified memory with single VA space covering both CPU and with in specific device type (e.g GPU or FPGA). 
+For GPU's, the API exposes 2 levels of memory hierarchy. The device memory can be managed at the device or sub device level and last Level L3 cahce can be controled through memory allocation API's. The low level cache like L1 cache is controlled throguh language intrinsics.
+  
+The Level 0 application interface allows allocation of buffers and images at device and sub device granularity with Cacheablity hints. 
 The memory APIs allow 3 kinds of allocation methods and enable implicit and explicit management of the resources by the application or runtimes
-@todo [**Ankur**] add cache capabilities of the device, e.g. max SLM size, L2$ size, L3$ controls
+
 @todo [**Ben**] SPIR-V has semantics within the kernels to declare cache requests, what about outside of kernels?  Add per-Resource L3$ _HINTS_, overrided by kernels.
 
 ${"##"} Cross-Device Support
@@ -56,10 +56,10 @@ The cross-tile memory is stacked within package allowing applications to access 
 @todo [**Ben/Zack**] add support for sub-devices and memory, command queue affinity, etc.
 
 ${"##"} Peer-to-Peer Communication
-@todo [**Murali**] add high-level goals for P2P
+Peer to Peer API's provide capabilities to marshall data across Host to Device, Device to Host and Device to Device. The data marshalling API can be scheduled as asynchronous operations or can be synchronized with kernel execution through command queues. Data coherency is maintained by the driver with out any explicit involement from the user.
 
 ${"##"} Inter-Process Communication
-@todo [**Murali**] add high-level goals for IPC.
+Level 0 interface allows sharing of memory objects across different GPU processes. Since each process has it's own virtual address space, there is no guarantee that the same virtual address will be avialble when the memory object is shared in new process. There are set of API's that makes it easier to share the memory objects with ease. 
 
 ${"#"} <a name="spec">API Specification</a>
 The following section provides high-level design philosophy of the APIs.

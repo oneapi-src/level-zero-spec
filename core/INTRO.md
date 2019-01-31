@@ -10,7 +10,6 @@
 # <a name="obj">Objective</a>
 The objective of the Level-Zero APIs to provide direct-to-metal interfaces to offload accelerator devices. It is an API interface that can be published at a cadence that better match Intel hardware release cadence and tailored to any hardware needs. It can be adapted to support broader set of languages. Support for function pointer, virtual function, unified memory, and  I/O capabilities.
 
-
 The Intel Xe Driver API provides the lowest-level, fine-grain and most explicit control over:
 - Device Discovery
 - Memory Allocation and Cross-Process Sharing
