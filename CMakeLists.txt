@@ -1,6 +1,20 @@
 cmake_minimum_required(VERSION 3.2.0 FATAL_ERROR)
 project(level_zero)
 
+#CXX compiler support
+if(NOT MSVC)
+    include(CheckCXXCompilerFlag)
+    CHECK_CXX_COMPILER_FLAG("-std=c++14" COMPILER_SUPPORTS_CXX14)
+    CHECK_CXX_COMPILER_FLAG("-std=c++0x" COMPILER_SUPPORTS_CXX0X)
+    if(COMPILER_SUPPORTS_CXX14)
+        set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++14")
+    elseif(COMPILER_SUPPORTS_CXX0X)
+        set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++0x")
+    else()
+        message(STATUS "The compiler ${CMAKE_CXX_COMPILER} has no C++14 support.  Please use a different C++ compiler.")
+    endif()
+endif()
+
 #MSVC compile flags
 if(MSVC)
     string(REPLACE "/MDd" "/MTd" CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG}")
@@ -18,9 +32,12 @@ endif()
 # Add compute runtime support
 if(NOT DEFINED COMPUTE_RUNTIME_DIR)
     set(COMPUTE_RUNTIME_DIR ${THIRD_PARTY_DIR}/compute_runtime)
-    set(WDK_DIR ${THIRD_PARTY_DIR}/wdk)
     set(IGC_DIR ${THIRD_PARTY_DIR}/igc)
     set(GMM_SOURCE_DIR ${THIRD_PARTY_DIR}/gmmlib)
+
+    if(NOT UNIX)
+        set(WDK_DIR ${THIRD_PARTY_DIR}/wdk)
+    endif()
 endif()
 
 set(COMPUTE_RUNTIME_SUPPORT TRUE)
