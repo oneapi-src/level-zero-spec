@@ -180,12 +180,8 @@ ${x}_result_t __${x}call
     %endfor
     );
 %elif re.match(r"handle", obj['type']):
-#if defined( __cplusplus )
 struct _${sub(x, obj['name'])};
 using ${sub(x, obj['name'])} = _${sub(x, obj['name'])}*;
-#else
-typedef void* ${sub(x, obj['name'])};
-#endif // defined( __cplusplus )
 %endif
 %if 'condition' in obj:
 #endif // ${sub(x,obj['condition'])}

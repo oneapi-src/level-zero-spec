@@ -72,111 +72,63 @@ typedef double double_t;
 
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Handle of driver's device object
-#if defined( __cplusplus )
 struct _xe_device_handle_t;
 using xe_device_handle_t = _xe_device_handle_t*;
-#else
-typedef void* xe_device_handle_t;
-#endif // defined( __cplusplus )
 
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Handle of driver's command queue object
-#if defined( __cplusplus )
 struct _xe_command_queue_handle_t;
 using xe_command_queue_handle_t = _xe_command_queue_handle_t*;
-#else
-typedef void* xe_command_queue_handle_t;
-#endif // defined( __cplusplus )
 
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Handle of driver's command list object
-#if defined( __cplusplus )
 struct _xe_command_list_handle_t;
 using xe_command_list_handle_t = _xe_command_list_handle_t*;
-#else
-typedef void* xe_command_list_handle_t;
-#endif // defined( __cplusplus )
 
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Handle of driver's command graph object
-#if defined( __cplusplus )
 struct _xe_command_graph_handle_t;
 using xe_command_graph_handle_t = _xe_command_graph_handle_t*;
-#else
-typedef void* xe_command_graph_handle_t;
-#endif // defined( __cplusplus )
 
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Handle of driver's fence object
-#if defined( __cplusplus )
 struct _xe_fence_handle_t;
 using xe_fence_handle_t = _xe_fence_handle_t*;
-#else
-typedef void* xe_fence_handle_t;
-#endif // defined( __cplusplus )
 
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Handle of driver's semaphore object
-#if defined( __cplusplus )
 struct _xe_semaphore_handle_t;
 using xe_semaphore_handle_t = _xe_semaphore_handle_t*;
-#else
-typedef void* xe_semaphore_handle_t;
-#endif // defined( __cplusplus )
 
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Handle of driver's event object
-#if defined( __cplusplus )
 struct _xe_event_handle_t;
 using xe_event_handle_t = _xe_event_handle_t*;
-#else
-typedef void* xe_event_handle_t;
-#endif // defined( __cplusplus )
 
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Handle of driver's image object
-#if defined( __cplusplus )
 struct _xe_image_handle_t;
 using xe_image_handle_t = _xe_image_handle_t*;
-#else
-typedef void* xe_image_handle_t;
-#endif // defined( __cplusplus )
 
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Handle of driver's module object
-#if defined( __cplusplus )
 struct _xe_module_handle_t;
 using xe_module_handle_t = _xe_module_handle_t*;
-#else
-typedef void* xe_module_handle_t;
-#endif // defined( __cplusplus )
 
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Handle of driver's function object
-#if defined( __cplusplus )
 struct _xe_function_handle_t;
 using xe_function_handle_t = _xe_function_handle_t*;
-#else
-typedef void* xe_function_handle_t;
-#endif // defined( __cplusplus )
 
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Handle of driver's function args object
-#if defined( __cplusplus )
 struct _xe_function_args_handle_t;
 using xe_function_args_handle_t = _xe_function_args_handle_t*;
-#else
-typedef void* xe_function_args_handle_t;
-#endif // defined( __cplusplus )
 
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief IPC handle to a memory allocation
-#if defined( __cplusplus )
 struct _xe_ipc_mem_handle_t;
 using xe_ipc_mem_handle_t = _xe_ipc_mem_handle_t*;
-#else
-typedef void* xe_ipc_mem_handle_t;
-#endif // defined( __cplusplus )
 
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Generic macro for enumerator bit masks
