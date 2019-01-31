@@ -2,6 +2,28 @@
 type: header
 desc: "Intel $Xx Driver APIs for Memory"
 --- #--------------------------------------------------------------------------
+type: enum
+desc: "Supported device memory allocation flags"
+name: $x_device_mem_alloc_flags_t
+etors:
+    - name: $X_DEVICE_MEM_ALLOC_DEFAULT
+      value: "0"
+      desc: "implicit default behavior; uses driver-based heuristics"
+    - name: $X_DEVICE_MEM_ALLOC_UNCACHED
+      value: "$X_BIT( 0 )"
+      desc: "allocate device memory as uncached (UC)"
+--- #--------------------------------------------------------------------------
+type: enum
+desc: "Supported host memory allocation flags"
+name: $x_host_mem_alloc_flags_t
+etors:
+    - name: $X_HOST_MEM_ALLOC_DEFAULT
+      value: "0"
+      desc: "implicit default behavior; uses driver-based heuristics"
+    - name: $X_HOST_MEM_ALLOC_WRITE_COMBINED
+      value: "$X_BIT( 0 )"
+      desc: "allocate the host memory as write-combined (WC)"
+--- #--------------------------------------------------------------------------
 type: function
 desc: "Allocates memory that is shared between the host and one or more devices"
 name: $xSharedMemAlloc
@@ -15,6 +37,12 @@ params:
     - type: "const $x_device_handle_t"
       name: hDevice
       desc: "[in] handle of the device"
+    - type: "$x_device_mem_alloc_flags_t"
+      name: device_flags
+      desc: "[in] flags specifying additional device allocation controls"
+    - type: "$x_host_mem_alloc_flags_t"
+      name: host_flags
+      desc: "[in] flags specifying additional host allocation controls"
     - type: size_t
       name: size
       desc: "[in] size in bytes to allocate"
@@ -46,6 +74,9 @@ params:
     - type: "const $x_device_handle_t"
       name: hDevice
       desc: "[in] handle of the device"
+    - type: "$x_device_mem_alloc_flags_t"
+      name: flags
+      desc: "[in] flags specifying additional allocation controls"
     - type: size_t
       name: size
       desc: "[in] size in bytes to allocate"
@@ -63,17 +94,6 @@ returns:
     - $X_RESULT_ERROR_OUT_OF_HOST_MEMORY
     - $X_RESULT_ERROR_OUT_OF_DEVICE_MEMORY
 --- #--------------------------------------------------------------------------
-type: enum
-desc: "Supported host allocation flags"
-name: $x_host_mem_alloc_flags_t
-etors:
-    - name: $X_HOST_MEM_ALLOC_DEFAULT
-      value: "0"
-      desc: "implicit default behavior; uses driver-based heuristics"
-    - name: $X_HOST_MEM_ALLOC_WRITE_COMBINED
-      value: "$X_BIT( 0 )"
-      desc: "allocate the host memory as write-combined (WC)"
---- #--------------------------------------------------------------------------
 type: function
 desc: "Allocates host memory"
 name: $xHostMemAlloc
@@ -88,7 +108,7 @@ details:
 params:
     - type: "$x_host_mem_alloc_flags_t"
       name: flags
-      desc: "[in] flags controlling specifying additional allocation controls"
+      desc: "[in] flags specifying additional allocation controls"
     - type: size_t
       name: size
       desc: "[in] size in bytes to allocate"
