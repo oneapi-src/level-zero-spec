@@ -72,6 +72,10 @@ desc: "Handle of driver's module object"
 name: "$x_module_handle_t"
 --- #--------------------------------------------------------------------------
 type: handle
+desc: "Handle of module's build log object"
+name: "$x_module_build_log_handle_t"
+--- #--------------------------------------------------------------------------
+type: handle
 desc: "Handle of driver's function object"
 name: "$x_function_handle_t"
 --- #--------------------------------------------------------------------------

@@ -116,6 +116,11 @@ struct _xe_module_handle_t;
 using xe_module_handle_t = _xe_module_handle_t*;
 
 ///////////////////////////////////////////////////////////////////////////////
+/// @brief Handle of module's build log object
+struct _xe_module_build_log_handle_t;
+using xe_module_build_log_handle_t = _xe_module_build_log_handle_t*;
+
+///////////////////////////////////////////////////////////////////////////////
 /// @brief Handle of driver's function object
 struct _xe_function_handle_t;
 using xe_function_handle_t = _xe_function_handle_t*;

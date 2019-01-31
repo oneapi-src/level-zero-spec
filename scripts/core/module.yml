@@ -45,6 +45,8 @@ analogue:
 details:
     - "This function may be called from simultaneous threads."
     - "The implementation of this function should be lock-free."
+    - "This function will create and compile the module object."
+    - "A build log can optionally be returned to the caller."
 params:
     - type: $x_device_handle_t
       name: hDevice
@@ -55,6 +57,9 @@ params:
     - type: "$x_module_handle_t*"
       name: phModule
       desc: "[out] pointer to handle of module object created"
+    - type: "$x_module_build_log_handle_t*"
+      name: phBuildLog
+      desc: "[out] pointer to handle of module's build log. This is optional and this can be set to nullptr."
 returns:
     - $X_RESULT_ERROR_INVALID_PARAMETER:
         - "invalid handle for hDevice"
@@ -82,6 +87,50 @@ params:
 returns:
     - $X_RESULT_ERROR_INVALID_PARAMETER:
         - "invalid handle for hModule"
+--- #--------------------------------------------------------------------------
+type: function
+desc: "Destroys module build log object"
+name: $xModuleBuildLogDestroy
+analogue:
+    - ""
+details:
+    - "The application is responsible for making sure the GPU is not currently referencing the event before it is deleted"
+    - "The implementation of this function will immediately free all Host and Device allocations associated with this object"
+    - "The implementation of this function should be lock-free."
+    - "This function can be called before or after $xModuleDestroy for the associated module."
+params:
+    - type: "$x_module_build_log_handle_t"
+      name: hBuildLog
+      desc: "[in] handle of the module build log object."
+returns:
+    - $X_RESULT_ERROR_INVALID_PARAMETER:
+        - "invalid handle for hBuildLog"
+--- #--------------------------------------------------------------------------
+type: function
+desc: "Retrieves text string for build log."
+name: $xModuleBuildLogGetString
+details:
+    - "This function may be called from simultaneous threads."
+    - "The implementation of this function should be lock-free."
+params:
+    - type: $x_module_build_log_handle_t
+      name: hModule
+      desc: "[in] handle of the module build log object."
+    - type: "uint32_t*"
+      name: pSize
+      desc: "[out] size of native binary."
+    - type: "char**"
+      name: pLog
+      desc: "[out] string pointer to log."
+returns:
+    - $X_RESULT_ERROR_INVALID_PARAMETER:
+        - "invalid handle for hDevice"
+        - "invalid format"
+        - "nullptr for pInputModule"
+        - "nullptr for phModule"
+        - "0 for inputSize"
+    - $X_RESULT_ERROR_OUT_OF_HOST_MEMORY
+    - $X_RESULT_ERROR_OUT_OF_DEVICE_MEMORY		
 --- #--------------------------------------------------------------------------
 type: function
 desc: "Retrieve native binary from Module."
