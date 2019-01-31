@@ -395,3 +395,73 @@ xe_result_t __xecall
     return XE_RESULT_SUCCESS;
 }
 
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Sets the preferred Intermediate cache configuration for a device.
+/// 
+/// @details
+///     - The application may **not** call this function from simultaneous
+///       threads.
+/// 
+/// @remarks
+///   _Analogues_
+///     - **cudaFuncSetCacheConfig **
+/// 
+/// @returns
+///     - ::XE_RESULT_SUCCESS
+///     - ::XE_RESULT_ERROR_UNINITIALIZED
+///     - ::XE_RESULT_ERROR_INVALID_PARAMETER
+///         + invalid handle for hDevice
+///         + invalid CacheConfig
+///         + devices do not support CacheConfig
+/*@todo: __declspec(dllexport)*/
+xe_result_t __xecall
+  xeDeviceSetIntermediateCacheConfig(
+    const xe_device_handle_t hDevice,               ///< [in] handle of the device 
+    xe_cache_config_t CacheConfig                   ///< [in] CacheConfig
+    )
+{
+    // @todo: check_return(nullptr == get_driver(), XE_RESULT_ERROR_UNINITIALIZED);
+
+    // Check parameters
+    // @todo: check_return(const xe_device_handle_t() == hDevice, XE_RESULT_ERROR_INVALID_PARAMETER);
+
+    // @todo: insert <code> here
+
+    return XE_RESULT_SUCCESS;
+}
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Sets the preferred Last Level cache configuration for a device.
+/// 
+/// @details
+///     - The application may **not** call this function from simultaneous
+///       threads.
+/// 
+/// @remarks
+///   _Analogues_
+///     - **cudaFuncSetCacheConfig **
+/// 
+/// @returns
+///     - ::XE_RESULT_SUCCESS
+///     - ::XE_RESULT_ERROR_UNINITIALIZED
+///     - ::XE_RESULT_ERROR_INVALID_PARAMETER
+///         + invalid handle for hDevice
+///         + invalid CacheConfig
+///         + devices do not support CacheConfig
+/*@todo: __declspec(dllexport)*/
+xe_result_t __xecall
+  xeDeviceSetLastLevelCacheConfig(
+    const xe_device_handle_t hDevice,               ///< [in] handle of the device 
+    xe_cache_config_t CacheConfig                   ///< [in] CacheConfig
+    )
+{
+    // @todo: check_return(nullptr == get_driver(), XE_RESULT_ERROR_UNINITIALIZED);
+
+    // Check parameters
+    // @todo: check_return(const xe_device_handle_t() == hDevice, XE_RESULT_ERROR_INVALID_PARAMETER);
+
+    // @todo: insert <code> here
+
+    return XE_RESULT_SUCCESS;
+}
+

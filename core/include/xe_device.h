@@ -134,7 +134,6 @@ typedef struct _xe_device_properties_t
     uint32_t memClockRate;                          ///< [out] Clock rate for device global memory
     uint32_t memGlobalBusWidth;                     ///< [out] Bus width between core and memory.
     uint64_t totalLocalMemSize;                     ///< [out] Total memory size in bytes.
-    uint32_t l2CacheSize;                           ///< [out] Device L2 size
     uint32_t numAsyncComputeEngines;                ///< [out] Number of asynchronous compute engines
     uint32_t numAsyncCopyEngines;                   ///< [out] Number of asynchronous copy engines
     uint32_t numComputeCores;                       ///< [out] Number of compute cores
@@ -250,6 +249,10 @@ typedef struct _xe_device_memory_properties_t
     uint32_t deviceAllocCapabilities;               ///< [out] Supported operations on device memory allocations
     uint32_t sharedAllocCapabilities;               ///< [out] Supported operations on shared memory allocations
     uint32_t sharedCrossDeviceAllocCapabilities;    ///< [out] Supported operations on cross-device shared memory allocations
+    uint32_t IntermediateCacheSize;                 ///< [out] Device Intermediate Cache(L1/L2) size
+    bool IntermediateCacheControl;                  ///< [out] Support User control on Intermediate Cache(i.e. Resize SLM section vs Generic Cache).
+    uint32_t LastLevelCacheSize;                    ///< [out] Device LastLevelCacheSize(L3) size
+    bool LastLevelCacheSizeControl;                 ///< [out] Support User control on LastLevelCacheSize Cache(i.e. Resize SLM section vs Generic Cache).
 
 } xe_device_memory_properties_t;
 
@@ -396,6 +399,67 @@ xe_result_t __xecall
   xeDeviceDisablePeerAccess(
     const xe_device_handle_t hDevice,               ///< [in] handle of the device performing the access
     const xe_device_handle_t hPeerDevice            ///< [in] handle of the peer device
+    );
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Supported Cache Config
+/// 
+/// @details
+///     - Supported Cache Config (Default, Large SLM, Large Data Cache)
+typedef enum _xe_cache_config_t
+{
+    XE_CACHE_CONFIG_DEFAULT = XE_BIT( 0 ),          ///< Default Config
+    XE_CACHE_CONFIG_LARGE_SLM = XE_BIT( 1 ),        ///< Large SLM size
+    XE_CACHE_CONFIG_LARGE_DATA = XE_BIT( 2 ),       ///< Large General Data size
+
+} xe_cache_config_t;
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Sets the preferred Intermediate cache configuration for a device.
+/// 
+/// @details
+///     - The application may **not** call this function from simultaneous
+///       threads.
+/// 
+/// @remarks
+///   _Analogues_
+///     - **cudaFuncSetCacheConfig **
+/// 
+/// @returns
+///     - ::XE_RESULT_SUCCESS
+///     - ::XE_RESULT_ERROR_UNINITIALIZED
+///     - ::XE_RESULT_ERROR_INVALID_PARAMETER
+///         + invalid handle for hDevice
+///         + invalid CacheConfig
+///         + devices do not support CacheConfig
+xe_result_t __xecall
+  xeDeviceSetIntermediateCacheConfig(
+    const xe_device_handle_t hDevice,               ///< [in] handle of the device 
+    xe_cache_config_t CacheConfig                   ///< [in] CacheConfig
+    );
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Sets the preferred Last Level cache configuration for a device.
+/// 
+/// @details
+///     - The application may **not** call this function from simultaneous
+///       threads.
+/// 
+/// @remarks
+///   _Analogues_
+///     - **cudaFuncSetCacheConfig **
+/// 
+/// @returns
+///     - ::XE_RESULT_SUCCESS
+///     - ::XE_RESULT_ERROR_UNINITIALIZED
+///     - ::XE_RESULT_ERROR_INVALID_PARAMETER
+///         + invalid handle for hDevice
+///         + invalid CacheConfig
+///         + devices do not support CacheConfig
+xe_result_t __xecall
+  xeDeviceSetLastLevelCacheConfig(
+    const xe_device_handle_t hDevice,               ///< [in] handle of the device 
+    xe_cache_config_t CacheConfig                   ///< [in] CacheConfig
     );
 
 #endif // _XE_DEVICE_H
