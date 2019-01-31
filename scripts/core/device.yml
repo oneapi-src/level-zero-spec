@@ -40,25 +40,6 @@ returns:
         - "nullptr for phDevice"
 --- #--------------------------------------------------------------------------
 type: function
-desc: "Reports the number of sub-devices for this device."
-name: $xDeviceGetSubDeviceCount
-analogue:
-    - "**cuDeviceGetCount**"
-details:
-    - "The application may call this function from simultaneous threads."
-    - "The implementation of this function should be lock-free."
-params:
-    - type: $x_device_handle_t
-      name: hDevice
-      desc: "[in] handle of the device object"
-    - type: "uint32_t*"
-      name: count
-      desc: "[out] number of sub-devices available"
-returns:
-    - $X_RESULT_ERROR_INVALID_PARAMETER
-        - "nullptr for count"
---- #--------------------------------------------------------------------------
-type: function
 desc: "Returns a handle to the sub-device object"
 name: $xDeviceGetSubDevice
 analogue:
@@ -147,6 +128,9 @@ members:
     - type: uint64_t
       name: totalLocalMemSize
       desc: "[out] Total memory size in bytes."
+    - type: uint32_t
+      name: numSubDevices
+      desc: "[out] Number of sub-devices."
     - type: uint32_t
       name: numAsyncComputeEngines
       desc: "[out] Number of asynchronous compute engines"

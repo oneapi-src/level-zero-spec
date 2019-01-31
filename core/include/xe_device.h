@@ -81,27 +81,6 @@ xe_result_t __xecall
     );
 
 ///////////////////////////////////////////////////////////////////////////////
-/// @brief Reports the number of sub-devices for this device.
-/// 
-/// @details
-///     - The application may call this function from simultaneous threads.
-///     - The implementation of this function should be lock-free.
-/// 
-/// @remarks
-///   _Analogues_
-///     - **cuDeviceGetCount**
-/// 
-/// @returns
-///     - ::XE_RESULT_SUCCESS
-///     - ::XE_RESULT_ERROR_UNINITIALIZED
-///     - ::XE_RESULT_ERROR_INVALID_PARAMETER - "nullptr for count"
-xe_result_t __xecall
-  xeDeviceGetSubDeviceCount(
-    xe_device_handle_t hDevice,                     ///< [in] handle of the device object
-    uint32_t* count                                 ///< [out] number of sub-devices available
-    );
-
-///////////////////////////////////////////////////////////////////////////////
 /// @brief Returns a handle to the sub-device object
 /// 
 /// @details
@@ -180,6 +159,7 @@ typedef struct _xe_device_properties_t
     uint32_t memClockRate;                          ///< [out] Clock rate for device global memory
     uint32_t memGlobalBusWidth;                     ///< [out] Bus width between core and memory.
     uint64_t totalLocalMemSize;                     ///< [out] Total memory size in bytes.
+    uint32_t numSubDevices;                         ///< [out] Number of sub-devices.
     uint32_t numAsyncComputeEngines;                ///< [out] Number of asynchronous compute engines
     uint32_t numAsyncCopyEngines;                   ///< [out] Number of asynchronous copy engines
     uint32_t numComputeCores;                       ///< [out] Number of compute cores

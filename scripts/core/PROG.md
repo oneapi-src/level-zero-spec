@@ -487,6 +487,41 @@ The following sample code demonstrate a sequence for using fine-grain residency 
     ...
 ```
 
+${"##"} Sub-Device Support
+A multi-tile device consists of tiles that are tied together by high-speed interconnects. Each tile
+has local memory that is shared to other tiles through these interconnects. The API represents tiles
+as sub-devices and there are functions to query and obtain a sub-device. Outside of these functions
+there are no distinction between sub-devices and devices. 
+
+![Subdevice](../images/core_subdevice.png?raw=true)
+
+If you want to allocate memory and dispatch
+tasks to a particular sub-device then obtain the sub-device handle and then use this with the APIs for memory and dispatching work.
+
+```c
+    ...
+    ${x}DeviceGetProperties(device, &deviceProps);
+    ...
+
+    // Code assumes a specific device configuration.
+    assert(deviceProps.numSubDevices == 4);
+
+    // Desire is to allocate and dispatch work to sub-device 2.
+    uint32_t subdeviceId = 2;
+    ${x}DeviceGetSubDevice(device, subdeviceId, &subdevice);
+
+    ...
+    void* pMemForSubDevice2;
+    ${x}MemAlloc(subDevice, XE_DEVICE_MEM_ALLOC_DEFAULT, memSize, sizeof(uint32_t), &pMemForSubDevice2);
+    ...
+    
+    ...
+    xe_command_queue_handle_t commandQueueForSubDevice2;
+    ${x}DeviceCreateCommandQueue(subdevice, desc, &commandQueueForSubDevice2);
+    ...
+```
+
+
 ${"#"} <a name="mnf">Modules and Functions</a>
 There are multiple levels of constructs needed for executing functions on the device:
 1. A **Module** represents a single translation unit that consists of functions that have been compiled together.

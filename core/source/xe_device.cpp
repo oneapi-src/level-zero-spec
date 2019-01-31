@@ -98,39 +98,6 @@ xe_result_t __xecall
 }
 
 ///////////////////////////////////////////////////////////////////////////////
-/// @brief Reports the number of sub-devices for this device.
-/// 
-/// @details
-///     - The application may call this function from simultaneous threads.
-///     - The implementation of this function should be lock-free.
-/// 
-/// @remarks
-///   _Analogues_
-///     - **cuDeviceGetCount**
-/// 
-/// @returns
-///     - ::XE_RESULT_SUCCESS
-///     - ::XE_RESULT_ERROR_UNINITIALIZED
-///     - ::XE_RESULT_ERROR_INVALID_PARAMETER - "nullptr for count"
-/*@todo: __declspec(dllexport)*/
-xe_result_t __xecall
-  xeDeviceGetSubDeviceCount(
-    xe_device_handle_t hDevice,                     ///< [in] handle of the device object
-    uint32_t* count                                 ///< [out] number of sub-devices available
-    )
-{
-    // @todo: check_return(nullptr == get_driver(), XE_RESULT_ERROR_UNINITIALIZED);
-
-    // Check parameters
-    // @todo: check_return(xe_device_handle_t() == hDevice, XE_RESULT_ERROR_INVALID_PARAMETER);
-    // @todo: check_return(nullptr == count, XE_RESULT_ERROR_INVALID_PARAMETER);
-
-    // @todo: insert <code> here
-
-    return XE_RESULT_SUCCESS;
-}
-
-///////////////////////////////////////////////////////////////////////////////
 /// @brief Returns a handle to the sub-device object
 /// 
 /// @details

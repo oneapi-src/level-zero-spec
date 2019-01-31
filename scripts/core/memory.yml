@@ -6,23 +6,32 @@ type: enum
 desc: "Supported device memory allocation flags"
 name: $x_device_mem_alloc_flags_t
 etors:
-    - name: $X_DEVICE_MEM_ALLOC_DEFAULT
+    - name: $X_DEVICE_MEM_ALLOC_FLAG_DEFAULT
       value: "0"
       desc: "implicit default behavior; uses driver-based heuristics"
-    - name: $X_DEVICE_MEM_ALLOC_UNCACHED
+    - name: $X_DEVICE_MEM_ALLOC_FLAG_BIAS_CACHED
       value: "$X_BIT( 0 )"
-      desc: "allocate device memory as uncached (UC)"
+      desc: "device should cache allocation"
+    - name: $X_DEVICE_MEM_ALLOC_FLAG_BIAS_UNCACHED
+      value: "$X_BIT( 1 )"
+      desc: "device should not cache allocation (UC)"
 --- #--------------------------------------------------------------------------
 type: enum
 desc: "Supported host memory allocation flags"
 name: $x_host_mem_alloc_flags_t
 etors:
-    - name: $X_HOST_MEM_ALLOC_DEFAULT
+    - name: $X_HOST_MEM_ALLOC_FLAG_DEFAULT
       value: "0"
       desc: "implicit default behavior; uses driver-based heuristics"
-    - name: $X_HOST_MEM_ALLOC_WRITE_COMBINED
+    - name: $X_HOST_MEM_ALLOC_FLAG_BIAS_CACHED
       value: "$X_BIT( 0 )"
-      desc: "allocate the host memory as write-combined (WC)"
+      desc: "host should cache allocation"
+    - name: $X_HOST_MEM_ALLOC_FLAG_BIAS_UNCACHED
+      value: "$X_BIT( 1 )"
+      desc: "host should not cache allocation (UC)"
+    - name: $X_HOST_MEM_ALLOC_FLAG_BIAS_WRITE_COMBINED
+      value: "$X_BIT( 2 )"
+      desc: "host memory should be allocated write-combined (WC)"
 --- #--------------------------------------------------------------------------
 type: function
 desc: "Allocates memory that is shared between the host and one or more devices"
