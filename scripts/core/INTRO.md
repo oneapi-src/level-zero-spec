@@ -40,8 +40,6 @@ The Level 0 application interface allows allocation of buffers and images at dev
 
 The memory APIs allow 3 kinds of allocation methods to allocate device, host and shared memory. The API's enable both implicit and explicit management of the resources by the application or runtimes. The interface also provides query capabilities for all memory objects.
 
-@todo [**Ben**] SPIR-V has semantics within the kernels to declare cache requests, what about outside of kernels?  Add per-Resource L3$ _HINTS_, overrided by kernels.
-
 ${"##"} Cross-Device Support
 In order to both expose the full capabilities of GPUs and remain supportable by other devices, the API definition is sub-divided into "Core" and "Extended".  
 "Core" represents APIs that all fully cross-device while "Extended" represents APIs that are device-specific.
