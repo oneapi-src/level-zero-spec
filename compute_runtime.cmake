@@ -236,7 +236,7 @@ if(UNIX)
     )
 
     target_link_libraries(compute_runtime_mockable_extra
-        PUBLIC dl
+        dl
     )
 endif()
 

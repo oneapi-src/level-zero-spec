@@ -529,9 +529,35 @@ The following sample code demonstrates a sequence for creating a module from an 
     ...
 ```
 
-@todo [**Zack**] add optional string for build options; document which ones are valid
-@todo [**Zack**] add optional CreateModdule build_log parameter to dump string of JIT-from-SPIR-V errors/warnings
+${"###"} Module Build Options
+Build options can be passed with ::${x}_module_desc_t as a string.
 
+| Build Option         | Description | Default |
+| :--:                 | :--:     | :--:     |
+| -xe-opt-disable      | Disable optimizations.     | Disabled|
+| -xe-opt-greater-than-4GB-buffer-required      | Optimize offset calculations within buffers.     | Disabled|
+| -xe-opt-large-register-file | Increase number of registers available to threads. | Disabled |
+
+${"###"} Module Build Log
+The ::${x}DeviceCreateModule function can optionally generate a build log object ::xe_module_build_log_handle_t.
+
+```c
+    ...
+    ${x}_module_build_log_handle_t buildlog;
+    ${x}DeviceCreateModule(hDevice, &desc, &module, &buildlog);
+
+    uint32_t buildlogSize;
+    char* pBuildLogString;
+    ${x}ModuleBuildLogGetString(buildlog, &buildlogSize, &pBuildLogString);
+
+    // Save log to disk.
+    ...
+
+    ${x}ModuleBuildLogDestroy(buildlog);
+```
+
+
+${"###"} Module Caching
 Disk caching of modules is not supported by the driver. If a disk cache for modules is desired then it is the
 responsibility of the application to implement this using xeModuleGetNativeBinary.
 
