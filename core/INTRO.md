@@ -57,10 +57,10 @@ The cross-tile memory is stacked within package allowing applications to access 
 @todo [**Ben/Zack**] add support for sub-devices and memory, command queue affinity, etc.
 
 ## Peer-to-Peer Communication
-@todo [**Murali**] add high-level goals for P2P
+Peer to Peer API's provide capabilities to marshall data across Host to Device, Device to Host and Device to Device. The data marshalling API can be scheduled as asynchronous operations or can be synchronized with kernel execution through command queues. Data coherency is maintained by the driver with out any explicit involement from the user.
 
 ## Inter-Process Communication
-@todo [**Murali**] add high-level goals for IPC.
+
 
 # <a name="spec">API Specification</a>
 The following section provides high-level design philosophy of the APIs.
