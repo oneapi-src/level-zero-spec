@@ -126,8 +126,31 @@ add_library(compute_runtime_mockable
         igdrcl_lib_mockable 
 )
 
+#Extract compute runtime COMPILE_DEFINITIONS
+get_property(COMPUTE_RUNTIME_MOCKABLE_DEFINITIONS
+    TARGET compute_runtime_mockable
+    PROPERTY COMPILE_DEFINITIONS
+)
+
+#Append additional definitions
+set(COMPUTE_RUNTIME_MOCKABLE_DEFINITIONS
+    ${COMPUTE_RUNTIME_MOCKABLE_DEFINITIONS}
+    CL_TARGET_OPENCL_VERSION=210
+    DEFAULT_PLATFORM=SKL
+    NEO_ARCH="x64"
+    CL_USE_DEPRECATED_OPENCL_1_1_APIS
+    CL_USE_DEPRECATED_OPENCL_1_2_APIS
+    CL_USE_DEPRECATED_OPENCL_2_0_APIS
+)
+
+#Extract compute runtime INCLUDE_DIRECTORIES
+get_property(COMPUTE_RUNTIME_MOCKABLE_INCLUDES
+    TARGET compute_runtime_mockable
+    PROPERTY INCLUDE_DIRECTORIES
+)
+
 # Create a library that has the missing ingredients to link
-add_library(compute_runtime_mockable_full
+add_library(compute_runtime_mockable_extra
     STATIC
     EXCLUDE_FROM_ALL
         ${COMPUTE_RUNTIME_DIR}/runtime/aub/aub_stream_interface.cpp
@@ -163,25 +186,24 @@ set(COMPUTE_RUNTIME_HW_ENABLE_ULT
 )
 
 #Additional includes for ULT builds
-target_include_directories(compute_runtime_mockable_full
+target_include_directories(compute_runtime_mockable_extra
     PUBLIC
-        ${COMPUTE_RUNTIME_INCLUDES}
+        ${COMPUTE_RUNTIME_MOCKABLE_INCLUDES}
         ${COMPUTE_RUNTIME_DIR}/unit_tests/mocks/gmm_memory
 )
 
 #Additional compile definitions for ULT builds
-target_compile_definitions(compute_runtime_mockable_full
+target_compile_definitions(compute_runtime_mockable_extra
     PUBLIC
-        ${COMPUTE_RUNTIME_DEFINITIONS}
-        DEFAULT_PLATFORM=SKL
-        NEO_ARCH="x64"
-        CL_USE_DEPRECATED_OPENCL_1_1_APIS
-        CL_USE_DEPRECATED_OPENCL_1_2_APIS
-        CL_USE_DEPRECATED_OPENCL_2_0_APIS
+        ${COMPUTE_RUNTIME_MOCKABLE_DEFINITIONS}
+)
+
+target_link_libraries(compute_runtime_mockable_extra
+    PRIVATE gmock
 )
 
 if(WIN32)
-    target_sources(compute_runtime_mockable_full
+    target_sources(compute_runtime_mockable_extra
         PRIVATE
             ${COMPUTE_RUNTIME_DIR}/unit_tests/mocks/mock_gmm_memory_base.cpp
             ${COMPUTE_RUNTIME_DIR}/unit_tests/mocks/mock_wddm.cpp
@@ -192,26 +214,29 @@ if(WIN32)
             ${COMPUTE_RUNTIME_DIR}/unit_tests/os_interface/windows/wddm_create.cpp
     )
 
-    target_link_libraries(compute_runtime_mockable_full
+    target_link_libraries(compute_runtime_mockable_extra
         ws2_32
     )
 endif()
 
 if(UNIX)
-    target_link_libraries(compute_runtime_mockable_full
-        dl
+    target_sources(compute_runtime_mockable_extra
+        PRIVATE
+            ${COMPUTE_RUNTIME_DIR}/runtime/command_stream/create_command_stream_impl.cpp
+            ${COMPUTE_RUNTIME_DIR}/runtime/dll/linux/allocator_helper.cpp
+            ${COMPUTE_RUNTIME_DIR}/runtime/os_interface/device_factory.cpp
+            ${COMPUTE_RUNTIME_DIR}/runtime/os_interface/linux/os_library.cpp
+            ${COMPUTE_RUNTIME_DIR}/runtime/tbx/tbx_sockets_imp.cpp
+            ${COMPUTE_RUNTIME_DIR}/unit_tests/os_interface/linux/options.cpp
+    )
+
+    target_link_libraries(compute_runtime_mockable_extra
+        PUBLIC dl
     )
 endif()
 
-#Aggregate all ingredients to link
-target_link_libraries(compute_runtime_mockable_full
-    compute_runtime_mockable
-    gmock
-    dl
-)
-
 #Put all compute runtime items into the same folder
-set_target_properties(compute_runtime_mockable_full
+set_target_properties(compute_runtime_mockable_extra
     PROPERTIES 
         FOLDER "compute runtime"
 )

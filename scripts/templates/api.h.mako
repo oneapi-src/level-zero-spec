@@ -90,6 +90,7 @@ def pline(repl, item, more):
 #endif
 %if re.match(r"common", name):
 #include <stdint.h>
+#include <string.h>
 
 ///////////////////////////////////////////////////////////////////////////////
 typedef float  float_t;

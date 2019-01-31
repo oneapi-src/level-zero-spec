@@ -54,7 +54,8 @@ if(COMPUTE_RUNTIME_SUPPORT)
     )
 
     target_link_libraries(${TARGET_NAME} 
-        compute_runtime_mockable_full
+        compute_runtime_mockable
+        compute_runtime_mockable_extra
     )
 endif(COMPUTE_RUNTIME_SUPPORT)
 
