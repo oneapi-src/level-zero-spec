@@ -16,6 +16,7 @@ def generate_md(srcpath, dstpath, namespace):
 
 def generate_html():
     util.removePath("../html")
-    print("Generating HTML...")
+    util.removePath("../latex")
+    print("Generating HTML/LaTeX...")
     cmdline = "doxygen.exe Doxyfile"
     os.system(cmdline)
