@@ -17,6 +17,7 @@ The following documents the high-level programming models and guidelines.
 # <a name="dnd">Driver and Device</a>
 The following diagram illustrates the hierarchy of devices to the driver:  
 ![Driver Hierarchy](../images/core_driver.png?raw=true)
+@image latex ../images/core_driver.png
 
 ## Driver
 - A driver represents an instance of a Xe driver being loaded and initialized into the current process.
@@ -73,6 +74,7 @@ The following sample code demonstrates a basic initialization sequence:
 # <a name="cnc">Command Queues and Command Lists</a>
 The following diagram illustrates the hierarchy of command lists and command queues to the device:  
 ![Device Hierarchy](../images/core_queue.png?raw=true)
+@image latex ../images/core_queue.png
 
 ## Command Queues
 - A command queue represents a physical input stream to the device, 
@@ -242,6 +244,7 @@ and can only be waited upon from the host.
 
 The following diagram illustrates an example of fences:  
 ![Fence](../images/core_fence.png?raw=true)
+@image latex ../images/core_fence.png
 
 The following sample code demonstrates a sequence for creation, submission and querying of a fence:
 ```c
@@ -278,6 +281,7 @@ The following sample code demonstrates a sequence for creation, submission and q
 
 The following diagram illustrates an example of events:  
 ![Event](../images/core_event.png?raw=true)
+@image latex ../images/core_event.png
 
 The following sample code demonstrates a sequence for creation and submission of an event:
 ```c
@@ -309,6 +313,7 @@ The following sample code demonstrates a sequence for creation and submission of
 
 The following diagram illustrates an example of semaphores:  
 ![Semaphore](../images/core_semaphore.png?raw=true)
+@image latex ../images/core_semaphore.png
 
 The following sample code demonstrates a sequence for creation and submission of a semaphore:
 ```c
@@ -511,6 +516,7 @@ as sub-devices and there are functions to query and obtain a sub-device. Outside
 there are no distinction between sub-devices and devices. 
 
 ![Subdevice](../images/core_subdevice.png?raw=true)
+@image latex ../images/core_subdevice.png
 
 If you want to allocate memory and dispatch
 tasks to a particular sub-device then obtain the sub-device handle and then use this with the APIs for memory and dispatching work.
