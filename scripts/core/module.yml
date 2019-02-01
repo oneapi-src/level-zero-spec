@@ -413,6 +413,41 @@ returns:
         - "invalid group count range for dispatch"
         - "invalid dispatch count range for dispatch"
 --- #--------------------------------------------------------------------------
+type: function
+desc: "Query optimal local group size from global thread count."
+name: $xFunctionQueryOptimalGroupSize
+analogue:
+    - ""
+details:
+    - "This function may be called from simultaneous threads."
+    - "The implementation of this function should be lock-free."
+params:
+    - type: "$x_function_handle_t"
+      name: hFunction
+      desc: "[in] handle of the function object"
+    - type: "uint32_t"
+      name: globalThreadCountX
+      desc: "[in] number of global threads for X dimension"
+    - type: "uint32_t"
+      name: globalThreadCountY
+      desc: "[in] number of global threads for Y dimension"
+    - type: "uint32_t"
+      name: globalThreadCountZ
+      desc: "[in] number of global threads for Z dimension"
+    - type: "uint32_t*"
+      name: optimalThreadCountX
+      desc: "[out] optimal number of threads within group for X dimension"
+    - type: "uint32_t*"
+      name: optimalThreadCountY
+      desc: "[out] optimal number of threads within group for Y dimension"
+    - type: "uint32_t*"
+      name: optimalThreadCountZ
+      desc: "[out] optimal number of threads within group for Z dimension"
+returns:
+    - $X_RESULT_ERROR_INVALID_PARAMETER:
+        - "invalid handle for hFunction"
+        - "invalid number of threads."
+--- #--------------------------------------------------------------------------
 type: struct
 desc: "Device properties queried using $xDeviceGetProperties"
 name: $x_dispatch_function_arguments_t

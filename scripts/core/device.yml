@@ -60,7 +60,7 @@ params:
       desc: "[out] pointer to handle of sub-device object."
 returns:
     - $X_RESULT_ERROR_INVALID_PARAMETER:
-        - "ordinal is out of range reported by $xDeviceGetSubDeviceCount"
+        - "ordinal is out of range reported by device properties."
         - "nullptr for phDevice"
 --- #--------------------------------------------------------------------------
 type: enum

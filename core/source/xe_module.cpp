@@ -516,6 +516,48 @@ xe_result_t __xecall
 }
 
 ///////////////////////////////////////////////////////////////////////////////
+/// @brief Query optimal local group size from global thread count.
+/// 
+/// @details
+///     - This function may be called from simultaneous threads.
+///     - The implementation of this function should be lock-free.
+/// 
+/// @remarks
+///   _Analogues_
+///     - 
+/// 
+/// @returns
+///     - ::XE_RESULT_SUCCESS
+///     - ::XE_RESULT_ERROR_UNINITIALIZED
+///     - ::XE_RESULT_ERROR_INVALID_PARAMETER
+///         + invalid handle for hFunction
+///         + invalid number of threads.
+/*@todo: __declspec(dllexport)*/
+xe_result_t __xecall
+  xeFunctionQueryOptimalGroupSize(
+    xe_function_handle_t hFunction,                 ///< [in] handle of the function object
+    uint32_t globalThreadCountX,                    ///< [in] number of global threads for X dimension
+    uint32_t globalThreadCountY,                    ///< [in] number of global threads for Y dimension
+    uint32_t globalThreadCountZ,                    ///< [in] number of global threads for Z dimension
+    uint32_t* optimalThreadCountX,                  ///< [out] optimal number of threads within group for X dimension
+    uint32_t* optimalThreadCountY,                  ///< [out] optimal number of threads within group for Y dimension
+    uint32_t* optimalThreadCountZ                   ///< [out] optimal number of threads within group for Z dimension
+    )
+{
+    // @todo: check_return(nullptr == get_driver(), XE_RESULT_ERROR_UNINITIALIZED);
+
+    // Check parameters
+    // @todo: check_return(xe_function_handle_t() == hFunction, XE_RESULT_ERROR_INVALID_PARAMETER);
+    // @todo: check_return(nullptr == optimalThreadCountX, XE_RESULT_ERROR_INVALID_PARAMETER);
+    // @todo: check_return(nullptr == optimalThreadCountY, XE_RESULT_ERROR_INVALID_PARAMETER);
+    // @todo: check_return(nullptr == optimalThreadCountZ, XE_RESULT_ERROR_INVALID_PARAMETER);
+
+    // @todo: insert <code> here
+
+    return XE_RESULT_SUCCESS;
+}
+
+///////////////////////////////////////////////////////////////////////////////
 /// @brief Dispatch command over one or more work groups using indirect dispatch
 ///        arguments.
 /// 

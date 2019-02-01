@@ -113,7 +113,7 @@ xe_result_t __xecall
 ///     - ::XE_RESULT_SUCCESS
 ///     - ::XE_RESULT_ERROR_UNINITIALIZED
 ///     - ::XE_RESULT_ERROR_INVALID_PARAMETER
-///         + ordinal is out of range reported by ::xeDeviceGetSubDeviceCount
+///         + ordinal is out of range reported by device properties.
 ///         + nullptr for phDevice
 /*@todo: __declspec(dllexport)*/
 xe_result_t __xecall
