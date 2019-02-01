@@ -153,7 +153,7 @@ The following sample code demonstrates submission of commands to a command queue
     ${x}CommandListClose(hCommandList);
 
     // Enqueue command list execution into command queue
-    ${x}CommandQueueEnqueueCommandList(hCommandQueue, 1, &hCommandList, nullptr);
+    ${x}CommandQueueEnqueueCommandLists(hCommandQueue, 1, &hCommandList, nullptr);
 
     // synchronize host and GPU
     ${x}CommandQueueSynchronize(hCommandQueue);
@@ -190,7 +190,7 @@ The following sample code demonstrates submission of command lists to a command 
     uint32_t count = 0;
     hCommandList* pCommandLists = nullptr;
     ${x}CommandGraphGetCommandLists(hCommandGraph, &count, &pCommandLists);
-    ${x}CommandQueueEnqueueCommandList(hCommandQueue, count, pCommandLists, nullptr);
+    ${x}CommandQueueEnqueueCommandLists(hCommandQueue, count, pCommandLists, nullptr);
 
     ${x}CommandGraphReset(hCommandGraph);
     ...
@@ -241,7 +241,7 @@ The following sample code demonstrates a sequence for creation, submission and q
     ${x}DeviceCreateFence(hCommandQueue, &fenceDesc, &hFence);
 
     // Enqueue a signal of the fence into the command queue
-    ${x}CommandQueueEnqueueCommandList(hCommandQueue, 1, &hCommandList, hFence);
+    ${x}CommandQueueEnqueueCommandLists(hCommandQueue, 1, &hCommandList, hFence);
 
     // Wait for fence to be signaled
     if(${X}_RESULT_SUCCESS != ${x}FenceQueryStatus(hFence))
@@ -279,7 +279,7 @@ The following sample code demonstrates a sequence for creation and submission of
     ${x}CommandListEncodeWaitOnEvent(hCommandList, hEvent);
 
     // Enqueue wait via the command list into a command queue
-    ${x}CommandQueueEnqueueCommandList(hCommandQueue, hCommandList);
+    ${x}CommandQueueEnqueueCommandLists(hCommandQueue, 1, &hCommandList, nullptr);
 
     // Signal the device
     ${x}HostSignalEvent(hEvent);
@@ -314,8 +314,8 @@ The following sample code demonstrates a sequence for creation and submission of
     ${x}CommandListEncodeSemaphoreSignal(hCommandList1, hSemaphore, 1);
 
     // Enqueue the command lists into the parallel command queues
-    ${x}CommandQueueEnqueueCommandList(hCommandQueue0, hCommandList0);
-    ${x}CommandQueueEnqueueCommandList(hCommandQueue1, hCommandList1);
+    ${x}CommandQueueEnqueueCommandLists(hCommandQueue0, 1, &hCommandList0, nullptr);
+    ${x}CommandQueueEnqueueCommandLists(hCommandQueue1, 1, &hCommandList1, nullptr);
     ...
 ```
 
@@ -452,7 +452,7 @@ The following sample code demonstrate a sequence for using coarse-grain residenc
     ${x}CommandListEncodeDispatchFunction(hCommandList, hFunction, hFunctionArgs, ...);
     ...
 
-    ${x}CommandQueueEnqueueCommandList(hCommandQueue, hCommandList);
+    ${x}CommandQueueEnqueueCommandLists(hCommandQueue, 1, &hCommandList, nullptr);
     ...
 ```
 
@@ -475,7 +475,7 @@ The following sample code demonstrate a sequence for using fine-grain residency 
     ${x}DeviceMakeMemoryResident(hDevice, begin->next, sizeof(node));
     ${x}DeviceMakeMemoryResident(hDevice, begin->next->next, sizeof(node));
 
-    ${x}CommandQueueEnqueueCommandList(hCommandQueue, hCommandList);
+    ${x}CommandQueueEnqueueCommandLists(hCommandQueue, 1, &hCommandList, nullptr);
 
     // wait until complete
     ${x}FenceEnqueueSignal(hFence);

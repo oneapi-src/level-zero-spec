@@ -153,7 +153,7 @@ The following sample code demonstrates submission of commands to a command queue
     xeCommandListClose(hCommandList);
 
     // Enqueue command list execution into command queue
-    xeCommandQueueEnqueueCommandList(hCommandQueue, 1, &hCommandList, nullptr);
+    xeCommandQueueEnqueueCommandLists(hCommandQueue, 1, &hCommandList, nullptr);
 
     // synchronize host and GPU
     xeCommandQueueSynchronize(hCommandQueue);
@@ -190,7 +190,7 @@ The following sample code demonstrates submission of command lists to a command 
     uint32_t count = 0;
     hCommandList* pCommandLists = nullptr;
     xeCommandGraphGetCommandLists(hCommandGraph, &count, &pCommandLists);
-    xeCommandQueueEnqueueCommandList(hCommandQueue, count, pCommandLists, nullptr);
+    xeCommandQueueEnqueueCommandLists(hCommandQueue, count, pCommandLists, nullptr);
 
     xeCommandGraphReset(hCommandGraph);
     ...
@@ -241,7 +241,7 @@ The following sample code demonstrates a sequence for creation, submission and q
     xeDeviceCreateFence(hCommandQueue, &fenceDesc, &hFence);
 
     // Enqueue a signal of the fence into the command queue
-    xeCommandQueueEnqueueCommandList(hCommandQueue, 1, &hCommandList, hFence);
+    xeCommandQueueEnqueueCommandLists(hCommandQueue, 1, &hCommandList, hFence);
 
     // Wait for fence to be signaled
     if(XE_RESULT_SUCCESS != xeFenceQueryStatus(hFence))
@@ -279,7 +279,7 @@ The following sample code demonstrates a sequence for creation and submission of
     xeCommandListEncodeWaitOnEvent(hCommandList, hEvent);
 
     // Enqueue wait via the command list into a command queue
-    xeCommandQueueEnqueueCommandList(hCommandQueue, hCommandList);
+    xeCommandQueueEnqueueCommandLists(hCommandQueue, 1, &hCommandList, nullptr);
 
     // Signal the device
     xeHostSignalEvent(hEvent);
@@ -314,8 +314,8 @@ The following sample code demonstrates a sequence for creation and submission of
     xeCommandListEncodeSemaphoreSignal(hCommandList1, hSemaphore, 1);
 
     // Enqueue the command lists into the parallel command queues
-    xeCommandQueueEnqueueCommandList(hCommandQueue0, hCommandList0);
-    xeCommandQueueEnqueueCommandList(hCommandQueue1, hCommandList1);
+    xeCommandQueueEnqueueCommandLists(hCommandQueue0, 1, &hCommandList0, nullptr);
+    xeCommandQueueEnqueueCommandLists(hCommandQueue1, 1, &hCommandList1, nullptr);
     ...
 ```
 
@@ -452,7 +452,7 @@ The following sample code demonstrate a sequence for using coarse-grain residenc
     xeCommandListEncodeDispatchFunction(hCommandList, hFunction, hFunctionArgs, ...);
     ...
 
-    xeCommandQueueEnqueueCommandList(hCommandQueue, hCommandList);
+    xeCommandQueueEnqueueCommandLists(hCommandQueue, 1, &hCommandList, nullptr);
     ...
 ```
 
@@ -475,7 +475,7 @@ The following sample code demonstrate a sequence for using fine-grain residency 
     xeDeviceMakeMemoryResident(hDevice, begin->next, sizeof(node));
     xeDeviceMakeMemoryResident(hDevice, begin->next->next, sizeof(node));
 
-    xeCommandQueueEnqueueCommandList(hCommandQueue, hCommandList);
+    xeCommandQueueEnqueueCommandLists(hCommandQueue, 1, &hCommandList, nullptr);
 
     // wait until complete
     xeFenceEnqueueSignal(hFence);
