@@ -52,7 +52,9 @@ Each Tile is interconnected with neighboring tile using high bandwidth link.
 Even though, tiles have direct connection to its own memory, the high band width link allows each tile to access its neighboring tile's memory at very low latency. 
 The cross-tile memory is stacked within package allowing applications to access all the device memory with the single continuous view.
 
-@todo [**Ben/Zack**] add support for sub-devices and memory, command queue affinity, etc.
+Level 0 interface represents tiles as sub-devices and there are functions to query and obtain a sub-device. Outside of
+these functions there are no distinction between sub-devices and devices. For example, a sub-device can be used with memory allocation
+and tasks dispatch functions and allow placement and dispatch to a specific sub-device.
 
 ## Peer-to-Peer Communication
 Peer to Peer API's provide capabilities to marshall data across Host to Device, Device to Host and Device to Device. The data marshalling API can be scheduled as asynchronous operations or can be synchronized with kernel execution through command queues. Data coherency is maintained by the driver with out any explicit involement from the user.
