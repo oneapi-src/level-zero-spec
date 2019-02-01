@@ -9,8 +9,8 @@ namespace xe {
 
 template <>
 struct WhiteBox<CommandList> : public CommandListImp {
-    WhiteBox(Device *device) : CommandListImp(device) {
-    }
+    WhiteBox(Device *device);
+    virtual ~WhiteBox();
 
     using CommandListImp::allocation;
     using CommandListImp::commandStream;
@@ -18,8 +18,8 @@ struct WhiteBox<CommandList> : public CommandListImp {
 };
 
 struct MockCommandList : public WhiteBox<CommandList> {
-    MockCommandList(Device *device = nullptr) : WhiteBox<CommandList>(device) {
-    }
+    MockCommandList(Device *device = nullptr);
+    virtual ~MockCommandList();
 
     MOCK_METHOD0(close, xe_result_t());
     MOCK_METHOD0(destroy, xe_result_t());

@@ -33,11 +33,17 @@ if(COMPUTE_RUNTIME_SUPPORT)
             graphics_allocation.h
             memory_manager.cpp
             memory_manager.h
+            mock_cmd_list.cpp
             mock_cmd_list.h
+            mock_cmdqueue.cpp
             mock_cmdqueue.h
+            mock_device.cpp
             mock_device.h
+            mock_driver.cpp
             mock_driver.h
+            mock_event.cpp
             mock_event.h
+            mock_memory_manager.cpp
             mock_memory_manager.h
             test_cmdlist.cpp
             test_cmdlist_close.cpp

@@ -7,8 +7,8 @@ namespace xe {
 
 template <>
 struct WhiteBox<CommandQueue> : public CommandQueueImp {
-    WhiteBox(Device *device) : CommandQueueImp(device) {
-    }
+    WhiteBox(Device *device);
+    virtual ~WhiteBox();
 
     using CommandQueueImp::allocation;
     using CommandQueueImp::commandStream;
@@ -16,9 +16,8 @@ struct WhiteBox<CommandQueue> : public CommandQueueImp {
 };
 
 struct MockCommandQueue : public CommandQueueImp {
-    MockCommandQueue(Device *device = nullptr)
-        : CommandQueueImp(device) {
-    }
+    MockCommandQueue(Device *device = nullptr);
+    virtual ~MockCommandQueue();
 
     MOCK_METHOD0(destroy, xe_result_t());
     MOCK_METHOD3(enqueueCommandLists, xe_result_t(uint32_t numCommandLists,

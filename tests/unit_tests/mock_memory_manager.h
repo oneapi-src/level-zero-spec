@@ -10,6 +10,9 @@ struct WhiteBox<MemoryManager> : public MemoryManager {
 };
 
 struct MockMemoryManager : public WhiteBox<MemoryManager> {
+    MockMemoryManager();
+    virtual ~MockMemoryManager();
+
     MOCK_METHOD0(allocateDeviceMemory, GraphicsAllocation *());
     MOCK_METHOD1(freeMemory, void (GraphicsAllocation *allocation));
 };

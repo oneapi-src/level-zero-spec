@@ -5,6 +5,9 @@
 namespace xe {
 
 struct MockDevice : public Device {
+    MockDevice();
+    virtual ~MockDevice();
+
     MOCK_METHOD2(createCommandList, xe_result_t(const xe_command_list_desc_t *desc,
                                                 xe_command_list_handle_t *commandList));
 
