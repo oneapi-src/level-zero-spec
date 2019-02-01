@@ -512,11 +512,11 @@ tasks to a particular sub-device then obtain the sub-device handle and then use 
 
     ...
     void* pMemForSubDevice2;
-    ${x}MemAlloc(subDevice, XE_DEVICE_MEM_ALLOC_DEFAULT, memSize, sizeof(uint32_t), &pMemForSubDevice2);
+    ${x}MemAlloc(subDevice, ${X}_DEVICE_MEM_ALLOC_DEFAULT, memSize, sizeof(uint32_t), &pMemForSubDevice2);
     ...
     
     ...
-    xe_command_queue_handle_t commandQueueForSubDevice2;
+    ${x}_command_queue_handle_t commandQueueForSubDevice2;
     ${x}DeviceCreateCommandQueue(subdevice, desc, &commandQueueForSubDevice2);
     ...
 ```
@@ -567,14 +567,14 @@ The following sample code demonstrates a sequence for creating a module from an 
 ${"###"} Module Build Options
 Build options can be passed with ::${x}_module_desc_t as a string.
 
-| Build Option         | Description | Default |
-| :--:                 | :--:     | :--:     |
-| -xe-opt-disable      | Disable optimizations.     | Disabled|
-| -xe-opt-greater-than-4GB-buffer-required      | Optimize offset calculations within buffers.     | Disabled|
-| -xe-opt-large-register-file | Increase number of registers available to threads. | Disabled |
+| Build Option                                  | Description                                           | Default  |
+| :--                                           | :--                                                   | :--      |
+| -${x}-opt-disable                             | Disable optimizations.                                | Disabled |
+| -${x}-opt-greater-than-4GB-buffer-required    | Optimize offset calculations within buffers.          | Disabled |
+| -${x}-opt-large-register-file                 | Increase number of registers available to threads.    | Disabled |
 
 ${"###"} Module Build Log
-The ::${x}DeviceCreateModule function can optionally generate a build log object ::xe_module_build_log_handle_t.
+The ::${x}DeviceCreateModule function can optionally generate a build log object ::${x}_module_build_log_handle_t.
 
 ```c
     ...
@@ -594,7 +594,7 @@ The ::${x}DeviceCreateModule function can optionally generate a build log object
 
 ${"###"} Module Caching
 Disk caching of modules is not supported by the driver. If a disk cache for modules is desired then it is the
-responsibility of the application to implement this using xeModuleGetNativeBinary.
+responsibility of the application to implement this using ::${x}ModuleGetNativeBinary.
 
 ```c
     ...
@@ -636,7 +636,7 @@ Use ${x}FunctionQueryAttribute to query attributes from a function object.
     uint32_t numRegisters;
 
     // Number of hardware registers used by function.
-    ${x}FunctionQueryAttribute(hFunction, XE_FUNCTION_ATTR_HAS_BARRIERS, &numRegisters);
+    ${x}FunctionQueryAttribute(hFunction, ${X}_FUNCTION_ATTR_HAS_BARRIERS, &numRegisters);
     ...
 ```
 

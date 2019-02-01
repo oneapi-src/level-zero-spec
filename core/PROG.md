@@ -567,11 +567,11 @@ The following sample code demonstrates a sequence for creating a module from an 
 ### Module Build Options
 Build options can be passed with ::xe_module_desc_t as a string.
 
-| Build Option         | Description | Default |
-| :--:                 | :--:     | :--:     |
-| -xe-opt-disable      | Disable optimizations.     | Disabled|
-| -xe-opt-greater-than-4GB-buffer-required      | Optimize offset calculations within buffers.     | Disabled|
-| -xe-opt-large-register-file | Increase number of registers available to threads. | Disabled |
+| Build Option                                  | Description                                           | Default  |
+| :--                                           | :--                                                   | :--      |
+| -xe-opt-disable                             | Disable optimizations.                                | Disabled |
+| -xe-opt-greater-than-4GB-buffer-required    | Optimize offset calculations within buffers.          | Disabled |
+| -xe-opt-large-register-file                 | Increase number of registers available to threads.    | Disabled |
 
 ### Module Build Log
 The ::xeDeviceCreateModule function can optionally generate a build log object ::xe_module_build_log_handle_t.
@@ -594,7 +594,7 @@ The ::xeDeviceCreateModule function can optionally generate a build log object :
 
 ### Module Caching
 Disk caching of modules is not supported by the driver. If a disk cache for modules is desired then it is the
-responsibility of the application to implement this using xeModuleGetNativeBinary.
+responsibility of the application to implement this using ::xeModuleGetNativeBinary.
 
 ```c
     ...
