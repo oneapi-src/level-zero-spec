@@ -15,6 +15,10 @@ def main():
         help="Specify a single subroutine to execute.",
         default="all",
         choices=["all","core","extended","docs"])
+    parser.add_argument(
+        "--compile",
+        help="Enable compilation of cpp files.",
+        action="store_true")
     args = parser.parse_args()
 
     configParser = util.configRead("config.ini")
@@ -25,10 +29,11 @@ def main():
             configParser.get('PATH','core'),
             configParser.get('NAMESPACE','core'),
             specs)
-        #compile_api.compile_cpp_source(
-        #    configParser.get('PATH','core'),
-        #    configParser.get('NAMESPACE','core'),
-        #    specs)
+        if args.compile:
+            compile_api.compile_cpp_source(
+                configParser.get('PATH','core'),
+                configParser.get('NAMESPACE','core'),
+                specs)
 
     if "all" == args.filter or "extended" == args.filter:
         specs = parse_specs.parse("./extended")
@@ -36,10 +41,11 @@ def main():
             configParser.get('PATH','extended'),
             configParser.get('NAMESPACE','extended'),
             specs)
-        #compile_api.compile_cpp_source(
-        #    configParser.get('PATH','extended'),
-        #    configParser.get('NAMESPACE','extended'),
-        #    specs)
+        if args.compile:
+            compile_api.compile_cpp_source(
+                configParser.get('PATH','extended'),
+                configParser.get('NAMESPACE','extended'),
+                specs)
 
     if "all" == args.filter or "docs" == args.filter:
         generate_docs.generate_md(
