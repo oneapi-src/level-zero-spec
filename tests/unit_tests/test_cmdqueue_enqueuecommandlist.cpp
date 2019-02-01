@@ -65,13 +65,16 @@ HWTEST_F(CommandQueueEnqueueCommandQueue, addsASecondLevelBatchBufferPerCommandL
                                                       ptrOffset(commandQueueAlias->commandStream->getCpuBase(), 0),
                                                       usedSpaceAfter));
     using MI_BATCH_BUFFER_START = typename FamilyType::MI_BATCH_BUFFER_START;
-    auto itor = find<MI_BATCH_BUFFER_START *>(cmdList.begin(), cmdList.end());
-    EXPECT_NE(cmdList.end(), itor);
+    auto itorBBS = find<MI_BATCH_BUFFER_START *>(cmdList.begin(), cmdList.end());
+    ASSERT_NE(cmdList.end(), itorBBS);
 
-    auto bbs = genCmdCast<MI_BATCH_BUFFER_START *>(*itor);
+    auto bbs = genCmdCast<MI_BATCH_BUFFER_START *>(*itorBBS);
     ASSERT_NE(nullptr, bbs);
-
     EXPECT_EQ(MI_BATCH_BUFFER_START::SECOND_LEVEL_BATCH_BUFFER_SECOND_LEVEL_BATCH, bbs->getSecondLevelBatchBuffer());
+
+    using MI_BATCH_BUFFER_END = typename FamilyType::MI_BATCH_BUFFER_END;
+    auto itorBBE = find<MI_BATCH_BUFFER_END *>(itorBBS, cmdList.end());
+    EXPECT_NE(cmdList.end(), itorBBE);
 }
 
 } // namespace xe
