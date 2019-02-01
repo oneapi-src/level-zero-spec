@@ -15,6 +15,7 @@ xe_result_t CommandQueueHw<gfxCoreFamily>::enqueueCommandLists(uint32_t numComma
     for (auto i = 0u; i < numCommandLists; ++i) {
         MI_BATCH_BUFFER_START cmd = GfxFamily::cmdInitBatchBufferStart;
         cmd.setSecondLevelBatchBuffer(MI_BATCH_BUFFER_START::SECOND_LEVEL_BATCH_BUFFER_SECOND_LEVEL_BATCH);
+        cmd.setAddressSpaceIndicator(MI_BATCH_BUFFER_START::ADDRESS_SPACE_INDICATOR_PPGTT);
 
         auto buffer = commandStream->getSpace(sizeof(cmd));
         *(MI_BATCH_BUFFER_START *)buffer = cmd;

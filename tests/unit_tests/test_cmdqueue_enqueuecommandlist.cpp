@@ -81,6 +81,7 @@ HWTEST_F(CommandQueueEnqueueCommandQueue, addsASecondLevelBatchBufferPerCommandL
         auto bbs = genCmdCast<MI_BATCH_BUFFER_START *>(*itorCurrent);
         ASSERT_NE(nullptr, bbs);
         EXPECT_EQ(MI_BATCH_BUFFER_START::SECOND_LEVEL_BATCH_BUFFER_SECOND_LEVEL_BATCH, bbs->getSecondLevelBatchBuffer());
+        EXPECT_EQ(MI_BATCH_BUFFER_START::ADDRESS_SPACE_INDICATOR_PPGTT, bbs->getAddressSpaceIndicator());
     }
 
     using MI_BATCH_BUFFER_END = typename FamilyType::MI_BATCH_BUFFER_END;
