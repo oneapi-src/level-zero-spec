@@ -177,6 +177,10 @@ ${"##"} Command Graphs (Experimental)
 - The command graph does not modify or copy any of the command lists.
 - The command graph does have references to existing command lists, which must be removed prior to the command lists being destroyed.
 
+The following diagram illustrates a representation of a command graph and how batches of command lists may be submitted to command queues:  
+![Queue](../images/core_graph.png?raw=true)  
+@image latex ../images/core_graph.png
+
 The following sample code demonstrates submission of command lists to a command queue, via a command graph:
 ```c
     ...
@@ -194,15 +198,18 @@ The following sample code demonstrates submission of command lists to a command 
     ${x}CommandGraphAddEdge(hCommandGraph, hCommandList2, hCommandList3);
     ${x}CommandGraphClose(hCommandGraph);
 
-    // Enqueue batches of command lists into command queue(s)
+    // Enqueue N batches of command lists across M command queue(s)
     uint32_t numbatches = 0;
     ${x}CommandGraphGetComputeBatchCount(hCommandGraph, &numbatches);
 
     for( uint32_t batchIndex = 0; batchIndex < numbatches; ++batchIndex )
     {
-        uint32_t cqindex = 0;
-        uint32_t clcount = 0;
-        ${x}_command_list_handle_t* pCommandLists = nullptr;
+        uint32_t cqindex = 0; // logical index of command queue to enqueue this batch
+                              // must be less than commandGraphDesc.maxComputeQueueCount
+
+        uint32_t clcount = 0; // number of command lists in this batch
+        ${x}_command_list_handle_t* pCommandLists = nullptr; // array of command lists handles in this batch
+
         ${x}CommandGraphGetComputeCommandListBatch(hCommandGraph, batchIndex, &cqindex, &clcount, &pCommandLists);
         ${x}CommandQueueEnqueueCommandLists(phCommandQueue[cqindex], clcount, pCommandLists, nullptr);
     }

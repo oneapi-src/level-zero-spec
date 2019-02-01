@@ -177,6 +177,10 @@ The following sample code demonstrates submission of commands to a command queue
 - The command graph does not modify or copy any of the command lists.
 - The command graph does have references to existing command lists, which must be removed prior to the command lists being destroyed.
 
+The following diagram illustrates a representation of a command graph and how batches of command lists may be submitted to command queues:  
+![Queue](../images/core_graph.png?raw=true)  
+@image latex ../images/core_graph.png
+
 The following sample code demonstrates submission of command lists to a command queue, via a command graph:
 ```c
     ...
@@ -194,15 +198,18 @@ The following sample code demonstrates submission of command lists to a command 
     xeCommandGraphAddEdge(hCommandGraph, hCommandList2, hCommandList3);
     xeCommandGraphClose(hCommandGraph);
 
-    // Enqueue batches of command lists into command queue(s)
+    // Enqueue N batches of command lists across M command queue(s)
     uint32_t numbatches = 0;
     xeCommandGraphGetComputeBatchCount(hCommandGraph, &numbatches);
 
     for( uint32_t batchIndex = 0; batchIndex < numbatches; ++batchIndex )
     {
-        uint32_t cqindex = 0;
-        uint32_t clcount = 0;
-        xe_command_list_handle_t* pCommandLists = nullptr;
+        uint32_t cqindex = 0; // logical index of command queue to enqueue this batch
+                              // must be less than commandGraphDesc.maxComputeQueueCount
+
+        uint32_t clcount = 0; // number of command lists in this batch
+        xe_command_list_handle_t* pCommandLists = nullptr; // array of command lists handles in this batch
+
         xeCommandGraphGetComputeCommandListBatch(hCommandGraph, batchIndex, &cqindex, &clcount, &pCommandLists);
         xeCommandQueueEnqueueCommandLists(phCommandQueue[cqindex], clcount, pCommandLists, nullptr);
     }
