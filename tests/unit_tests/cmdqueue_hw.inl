@@ -11,7 +11,7 @@ xe_result_t CommandQueueHw<gfxCoreFamily>::enqueueCommandLists(uint32_t numComma
     using GfxFamily = typename OCLRT::GfxFamilyMapper<static_cast<GFXCORE_FAMILY>(gfxCoreFamily)>::GfxFamily;
 
     void *buffer;
-    {
+    for (auto i = 0u; i < numCommandLists; ++i) {
         using MI_BATCH_BUFFER_START = typename GfxFamily::MI_BATCH_BUFFER_START;
         MI_BATCH_BUFFER_START cmd = GfxFamily::cmdInitBatchBufferStart;
         buffer = commandStream->getSpace(sizeof(cmd));

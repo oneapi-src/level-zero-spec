@@ -50,9 +50,16 @@ HWTEST_F(CommandQueueEnqueueCommandQueue, addsASecondLevelBatchBufferPerCommandL
     auto usedSpaceBefore = commandQueueAlias->commandStream->getUsed();
 
     MockCommandList commandList;
+    MockCommandList commandList2;
     auto hCommandList = commandList.toHandle();
-    auto result = commandQueue->enqueueCommandLists(1,
-                                                    &hCommandList,
+    auto hCommandList2 = commandList2.toHandle();
+    xe_command_list_handle_t commandLists[] = {
+        hCommandList,
+        hCommandList2
+    };
+    uint32_t numCommandLists = sizeof(commandLists) / sizeof(commandLists[0]);
+    auto result = commandQueue->enqueueCommandLists(numCommandLists,
+                                                    commandLists,
                                                     nullptr);
 
     ASSERT_EQ(XE_RESULT_SUCCESS, result);
@@ -65,15 +72,19 @@ HWTEST_F(CommandQueueEnqueueCommandQueue, addsASecondLevelBatchBufferPerCommandL
                                                       ptrOffset(commandQueueAlias->commandStream->getCpuBase(), 0),
                                                       usedSpaceAfter));
     using MI_BATCH_BUFFER_START = typename FamilyType::MI_BATCH_BUFFER_START;
-    auto itorBBS = find<MI_BATCH_BUFFER_START *>(cmdList.begin(), cmdList.end());
-    ASSERT_NE(cmdList.end(), itorBBS);
+    auto itorCurrent = cmdList.begin();
+        
+    for (auto i = 0u; i < numCommandLists; i++) {
+        itorCurrent = find<MI_BATCH_BUFFER_START *>(itorCurrent, cmdList.end());
+        ASSERT_NE(cmdList.end(), itorCurrent);
 
-    auto bbs = genCmdCast<MI_BATCH_BUFFER_START *>(*itorBBS);
-    ASSERT_NE(nullptr, bbs);
-    EXPECT_EQ(MI_BATCH_BUFFER_START::SECOND_LEVEL_BATCH_BUFFER_SECOND_LEVEL_BATCH, bbs->getSecondLevelBatchBuffer());
+        auto bbs = genCmdCast<MI_BATCH_BUFFER_START *>(*itorCurrent);
+        ASSERT_NE(nullptr, bbs);
+        EXPECT_EQ(MI_BATCH_BUFFER_START::SECOND_LEVEL_BATCH_BUFFER_SECOND_LEVEL_BATCH, bbs->getSecondLevelBatchBuffer());
+    }
 
     using MI_BATCH_BUFFER_END = typename FamilyType::MI_BATCH_BUFFER_END;
-    auto itorBBE = find<MI_BATCH_BUFFER_END *>(itorBBS, cmdList.end());
+    auto itorBBE = find<MI_BATCH_BUFFER_END *>(itorCurrent, cmdList.end());
     EXPECT_NE(cmdList.end(), itorBBE);
 }
 
