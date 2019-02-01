@@ -204,10 +204,6 @@ typedef enum _xe_memory_property_t
 /// @details
 ///     - The application may call this function from simultaneous threads.
 ///     - The implementation of this function should be lock-free.
-///     - @todo [**Ben**] do we need to support additional properties: base
-///       addr, size, etc? @todo [**Ben**] do we need to support querying the
-///       associated device? @todo [**Ben**] should we return all attributes as
-///       a (versioned) struct instead?
 /// 
 /// @remarks
 ///   _Analogues_
