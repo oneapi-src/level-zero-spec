@@ -13,6 +13,7 @@ ${"##"} Table of Contents
 * [Modules and Functions](#mnf)
 * [OpenCL Interoperability](#oi)
 * [Inter-Process Communication](#ipc)
+* [Future](#fut)
 
 ${"#"} <a name="dnd">Driver and Device</a>
 The following diagram illustrates the hierarchy of devices to the driver:  
@@ -773,3 +774,11 @@ Note, there is no guaranteed address equivalence for the values of `dptr` in eac
 ```c
     ${x}MemFree(dptr);
 ```
+
+${"#"} <a name="fut">Future</a>
+The following is a list a features that are still being defined for inclusion:
+- Predicated Execution
+- Execution Flow-Control
+- Timestamps and Metrics
+- GetLastError
+
