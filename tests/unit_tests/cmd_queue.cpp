@@ -1,4 +1,3 @@
-#pragma once
 #include "cmd_queue_imp.h"
 #include "cmd_list_hw.h"
 #include "device.h"
