@@ -358,7 +358,7 @@ xe_result_t __xecall
     );
 
 ///////////////////////////////////////////////////////////////////////////////
-/// @brief Queries the elapsed time between two signaled events.
+/// @brief Queries the elapsed time between two device-signaled events.
 /// 
 /// @details
 ///     - The application may call this function from simultaneous threads.
@@ -374,7 +374,7 @@ xe_result_t __xecall
 ///     - ::XE_RESULT_ERROR_INVALID_PARAMETER
 ///         + invalid handle for hEventStart
 ///         + invalid handle for hEventEnd
-///         + either event not signaled
+///         + either event not signaled by device
 ///         + nullptr for pTime
 xe_result_t __xecall
   xeEventQueryElapsedTime(
