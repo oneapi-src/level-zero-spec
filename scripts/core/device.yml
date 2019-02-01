@@ -185,32 +185,29 @@ members:
       name: maxThreadsPerGroup
       desc: "[out] Maximum threads per compute group"
     - type: uint32_t
-      name: maxGroupDimX
-      desc: "[out] Maximum threads for X dimension in group"
+      name: maxGroupSizeX
+      desc: "[out] Maximum items for X dimension in group"
     - type: uint32_t
-      name: maxGroupDimY
-      desc: "[out] Maximum threads for Y dimension in group"
+      name: maxGroupSizeY
+      desc: "[out] Maximum items for Y dimension in group"
     - type: uint32_t
-      name: maxGroupDimZ
-      desc: "[out] Maximum threads for Z dimension in group"
+      name: maxGroupSizeZ
+      desc: "[out] Maximum items for Z dimension in group"
     - type: uint32_t
-      name: maxDispatchDimX
-      desc: "[out] Maximum thread groups dispatched for x dimension"
+      name: maxGroupCountX
+      desc: "[out] Maximum groups that can be dispatched for x dimension"
     - type: uint32_t
-      name: maxDipsatchDimY
-      desc: "[out] Maximum thread groups dispatched for y dimension"
+      name: maxGroupCountY
+      desc: "[out] Maximum groups that can be dispatched for y dimension"
     - type: uint32_t
-      name: maxDispatchDimZ
-      desc: "[out] Maximum thread groups dispatched for z dimension"
+      name: maxGroupCountZ
+      desc: "[out] Maximum groups that can be dispatched for z dimension"
     - type: uint32_t
       name: maxSharedLocalMemory
       desc: "[out] Maximum shared local memory per group."
     - type: uint32_t
       name: maxGroupRegisters
       desc: "[out] Maximum physical registers available per group"
-    - type: uint32_t
-      name: warpSize
-      desc: "[out] Maximum threads that can be executed in lock-step. @todo [**Zack**] should we call this something else?"
 --- #--------------------------------------------------------------------------
 type: function
 desc: "Retrieves compute attributes of the device"

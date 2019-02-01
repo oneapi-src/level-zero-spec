@@ -203,15 +203,14 @@ typedef struct _xe_device_compute_properties_t
 {
     uint32_t version;                               ///< [in] ::XE_DEVICE_COMPUTE_PROPERTIES_VERSION
     uint32_t maxThreadsPerGroup;                    ///< [out] Maximum threads per compute group
-    uint32_t maxGroupDimX;                          ///< [out] Maximum threads for X dimension in group
-    uint32_t maxGroupDimY;                          ///< [out] Maximum threads for Y dimension in group
-    uint32_t maxGroupDimZ;                          ///< [out] Maximum threads for Z dimension in group
-    uint32_t maxDispatchDimX;                       ///< [out] Maximum thread groups dispatched for x dimension
-    uint32_t maxDipsatchDimY;                       ///< [out] Maximum thread groups dispatched for y dimension
-    uint32_t maxDispatchDimZ;                       ///< [out] Maximum thread groups dispatched for z dimension
+    uint32_t maxGroupSizeX;                         ///< [out] Maximum items for X dimension in group
+    uint32_t maxGroupSizeY;                         ///< [out] Maximum items for Y dimension in group
+    uint32_t maxGroupSizeZ;                         ///< [out] Maximum items for Z dimension in group
+    uint32_t maxGroupCountX;                        ///< [out] Maximum groups that can be dispatched for x dimension
+    uint32_t maxGroupCountY;                        ///< [out] Maximum groups that can be dispatched for y dimension
+    uint32_t maxGroupCountZ;                        ///< [out] Maximum groups that can be dispatched for z dimension
     uint32_t maxSharedLocalMemory;                  ///< [out] Maximum shared local memory per group.
     uint32_t maxGroupRegisters;                     ///< [out] Maximum physical registers available per group
-    uint32_t warpSize;                              ///< [out] Maximum threads that can be executed in lock-step. @todo [**Zack**] should we call this something else?
 
 } xe_device_compute_properties_t;
 
