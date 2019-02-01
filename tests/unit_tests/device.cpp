@@ -18,7 +18,8 @@ struct DeviceImp : public Device {
 
     xe_result_t createCommandQueue(const xe_command_queue_desc_t *desc,
                                    xe_command_queue_handle_t *commandQueue) override {
-        *commandQueue = CommandQueue::create(this);
+        auto productFamily = deviceRT->getHardwareInfo().pPlatform->eProductFamily;
+        *commandQueue = CommandQueue::create(productFamily, this);
 
         return XE_RESULT_SUCCESS;
     }

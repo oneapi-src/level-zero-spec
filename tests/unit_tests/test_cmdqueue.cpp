@@ -1,3 +1,4 @@
+#include "igfxfmid.h"
 #include "mock_cmdqueue.h"
 #include "mock_device.h"
 #include "mock_memory_manager.h"
@@ -36,7 +37,7 @@ TEST(CommandQueueCreate, returnsCommandQueueOnSuccess) {
     EXPECT_CALL(manager, allocateDeviceMemory()).WillRepeatedly(Return(allocation));
     EXPECT_CALL(manager, freeMemory(allocation)).WillRepeatedly(Return());
 
-    auto commandQueue = CommandQueue::create(&device);
+    auto commandQueue = CommandQueue::create(IGFX_SKYLAKE, &device);
     ASSERT_NE(nullptr, commandQueue);
 
     auto commandQueueAlias = whitebox_cast<CommandQueue>(commandQueue);

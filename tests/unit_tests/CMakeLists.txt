@@ -22,7 +22,12 @@ if(COMPUTE_RUNTIME_SUPPORT)
             cmdlist_skl.cpp
             cmdqueue.cpp
             cmdqueue.h
+            cmdqueue_bdw.cpp
+            cmdqueue_hw.h
+            cmdqueue_hw.inl
             cmdqueue_imp.h
+            cmdqueue_kbl.cpp
+            cmdqueue_skl.cpp
             device.cpp
             device.h
             driver.cpp

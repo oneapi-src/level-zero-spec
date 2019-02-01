@@ -2,17 +2,14 @@
 #include "cmdlist_hw.h"
 #include "device.h"
 #include "graphics_allocation.h"
+#include "igfxfmid.h"
 #include "memory_manager.h"
 #include "runtime/command_stream/linear_stream.h"
 #include <cassert>
 
 namespace xe {
 
-xe_result_t CommandQueueImp::enqueueCommandLists(uint32_t numCommandLists,
-                                                 xe_command_list_handle_t *phCommandLists,
-                                                 xe_fence_handle_t hFence) {
-    return XE_RESULT_SUCCESS;
-}
+CommandQueueAllocatorFn commandQueueFactory[IGFX_MAX_PRODUCT] = {};
 
 xe_result_t CommandQueueImp::destroy() {
     delete this;
@@ -28,11 +25,18 @@ void CommandQueueImp::initialize() {
     commandStream = new OCLRT::LinearStream(allocation->allocationRT);
 }
 
-CommandQueue *CommandQueue::create(Device *device) {    
-    auto commandQueue = new CommandQueueImp(device);
+CommandQueue *CommandQueue::create(uint32_t productFamily, Device *device) {
+    CommandQueueAllocatorFn allocator = nullptr;
+    if (productFamily < IGFX_MAX_PRODUCT) {
+        allocator = commandQueueFactory[productFamily];
+    }
 
-    commandQueue->initialize();
+    CommandQueueImp *commandQueue = nullptr;
+    if (allocator) {
+        commandQueue = static_cast<CommandQueueImp *>((*allocator)(device));
 
+        commandQueue->initialize();
+    }
     return commandQueue;
 }
 
