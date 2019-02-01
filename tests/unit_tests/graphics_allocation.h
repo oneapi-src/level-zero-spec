@@ -1,5 +1,6 @@
 #pragma once
 #include <cstring>
+#include <cstdint>
 
 namespace OCLRT {
 class GraphicsAllocation;
@@ -8,8 +9,13 @@ class GraphicsAllocation;
 namespace xe {
 
 struct GraphicsAllocation {
+    GraphicsAllocation(const GraphicsAllocation &) = delete;
+    GraphicsAllocation &operator=(GraphicsAllocation const &) = delete;
+
     GraphicsAllocation(OCLRT::GraphicsAllocation *allocationRT);
     GraphicsAllocation(void *buffer, size_t size);
+
+    uint64_t getGpuAddress() const;
 
     OCLRT::GraphicsAllocation *allocationRT = nullptr;
 };

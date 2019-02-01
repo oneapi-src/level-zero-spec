@@ -10,12 +10,10 @@ class LinearStream;
 }
 
 namespace xe {
-struct GraphicsAllocation;
 
 struct CommandListImp : public CommandList {
     CommandListImp(Device *device)
         : device(device),
-          allocation(nullptr),
           commandStream(nullptr) {
     }
 
@@ -27,7 +25,6 @@ struct CommandListImp : public CommandList {
     virtual ~CommandListImp();
 
     Device *device;
-    GraphicsAllocation *allocation;
     OCLRT::LinearStream *commandStream;
 };
 

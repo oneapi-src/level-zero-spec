@@ -7,6 +7,7 @@ struct _xe_command_list_handle_t {
 namespace xe {
 
 struct Device;
+struct GraphicsAllocation;
 
 struct CommandList : public _xe_command_list_handle_t {
     template <typename Type>
@@ -30,8 +31,14 @@ struct CommandList : public _xe_command_list_handle_t {
         return this;
     }
 
+    GraphicsAllocation &getAllocation() {
+        return *allocation;
+    }
+
   protected:
     virtual ~CommandList() = default;
+
+    GraphicsAllocation *allocation = nullptr;
 };
 
 using CommandListAllocatorFn = CommandList *(*)(Device *);

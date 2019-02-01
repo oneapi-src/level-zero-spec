@@ -42,20 +42,16 @@ HWTEST_F(CommandQueueEnqueueCommandQueue, addsASecondLevelBatchBufferPerCommandL
     int8_t buffer[1024];
     GraphicsAllocation allocation(buffer, sizeof(buffer));
     EXPECT_CALL(memoryManager, allocateDeviceMemory)
-        .WillOnce(Return(&allocation));
+        .WillRepeatedly(Return(&allocation));
 
     auto commandQueue = CommandQueue::create(IGFX_SKYLAKE, &device);
     auto commandQueueAlias = whitebox_cast<CommandQueue>(commandQueue);
     ASSERT_NE(nullptr, commandQueueAlias->commandStream);
     auto usedSpaceBefore = commandQueueAlias->commandStream->getUsed();
 
-    MockCommandList commandList;
-    MockCommandList commandList2;
-    auto hCommandList = commandList.toHandle();
-    auto hCommandList2 = commandList2.toHandle();
     xe_command_list_handle_t commandLists[] = {
-        hCommandList,
-        hCommandList2
+        CommandList::create(IGFX_SKYLAKE, &device)->toHandle(),
+        CommandList::create(IGFX_SKYLAKE, &device)->toHandle()
     };
     uint32_t numCommandLists = sizeof(commandLists) / sizeof(commandLists[0]);
     auto result = commandQueue->enqueueCommandLists(numCommandLists,
@@ -75,6 +71,9 @@ HWTEST_F(CommandQueueEnqueueCommandQueue, addsASecondLevelBatchBufferPerCommandL
     auto itorCurrent = cmdList.begin();
         
     for (auto i = 0u; i < numCommandLists; i++) {
+        auto commandList = CommandList::fromHandle(commandLists[i]);
+        auto &allocation = commandList->getAllocation();
+
         itorCurrent = find<MI_BATCH_BUFFER_START *>(itorCurrent, cmdList.end());
         ASSERT_NE(cmdList.end(), itorCurrent);
 
@@ -82,11 +81,16 @@ HWTEST_F(CommandQueueEnqueueCommandQueue, addsASecondLevelBatchBufferPerCommandL
         ASSERT_NE(nullptr, bbs);
         EXPECT_EQ(MI_BATCH_BUFFER_START::SECOND_LEVEL_BATCH_BUFFER_SECOND_LEVEL_BATCH, bbs->getSecondLevelBatchBuffer());
         EXPECT_EQ(MI_BATCH_BUFFER_START::ADDRESS_SPACE_INDICATOR_PPGTT, bbs->getAddressSpaceIndicator());
+        EXPECT_EQ(allocation.getGpuAddress() >> 2, bbs->getBatchBufferStartAddressGraphicsaddress472());
+
+        commandList->destroy();
     }
 
     using MI_BATCH_BUFFER_END = typename FamilyType::MI_BATCH_BUFFER_END;
     auto itorBBE = find<MI_BATCH_BUFFER_END *>(itorCurrent, cmdList.end());
     EXPECT_NE(cmdList.end(), itorBBE);
+
+    commandQueue->destroy();
 }
 
 } // namespace xe
