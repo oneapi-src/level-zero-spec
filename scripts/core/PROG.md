@@ -149,7 +149,7 @@ The following sample code demonstrates a basic sequence for creation of command 
 The following sample code demonstrates submission of commands to a command queue, via a command list:
 ```c
     ...
-    // finished encoding commands
+    // finished encoding commands (typically done on another thread)
     ${x}CommandListClose(hCommandList);
 
     // Enqueue command list execution into command queue
@@ -164,11 +164,15 @@ The following sample code demonstrates submission of commands to a command queue
 ```
 
 ${"##"} Command Graphs
-- A command graph represents non-linear dependencies between command lists to be executed.
+- A command graph represents non-linear dependencies between a collection of command lists to be executed.
 - An implementation may use this information to reorder the execution of command lists to be optimized for the device.
+- An implementation may also parallelize execution across an application-specified maximum number of command queues.
+- The application is responsible for ensuring there are no inter-command list dependencies that would cause dead-lock;
+  e.g., infinite loops, synchronization primtives, etc. 
 - The application is responsible for calling close before submission to a command queue.
-- The command graph itself does not allocate any Device memory; therefore is mutable immediately after enqueuing.
-- However, the command graph does have references to existing command lists, which must be removed prior to the command lists being destroyed.
+- The command graph itself does not allocate any device memory; therefore is mutable immediately after enqueuing.
+- The command graph does not modify or copy any of the command lists.
+- The command graph does have references to existing command lists, which must be removed prior to the command lists being destroyed.
 
 The following sample code demonstrates submission of command lists to a command queue, via a command graph:
 ```c
@@ -176,21 +180,29 @@ The following sample code demonstrates submission of command lists to a command 
     // create a command graph
     ${x}_command_graph_desc_t commandGraphDesc = {
         ${X}_COMMAND_GRAPH_DESC_VERSION,
-        ${X}_COMMAND_GRAPH_FLAG_NONE
+        ${X}_COMMAND_GRAPH_FLAG_NONE,
+        2, 0
     };
     ${x}_command_graph_handle_t hCommandGraph;
     ${x}DeviceCreateCommandGraph(hDevice, &commandGraphDesc, &hCommandGraph);
 
-    // add dependencies between command lists
+    // add dependencies between command lists (typically done on another thread)
     ${x}CommandGraphAddEdge(hCommandGraph, hCommandList1, hCommandList3);
     ${x}CommandGraphAddEdge(hCommandGraph, hCommandList2, hCommandList3);
     ${x}CommandGraphClose(hCommandGraph);
 
-    // Enqueue command list execution into command queue
-    uint32_t count = 0;
-    hCommandList* pCommandLists = nullptr;
-    ${x}CommandGraphGetCommandLists(hCommandGraph, &count, &pCommandLists);
-    ${x}CommandQueueEnqueueCommandLists(hCommandQueue, count, pCommandLists, nullptr);
+    // Enqueue batches of command lists into command queue(s)
+    uint32_t numbatches = 0;
+    ${x}CommandGraphGetComputeBatchCount(hCommandGraph, &numbatches);
+
+    for( uint32_t batchIndex = 0; batchIndex < numbatches; ++batchIndex )
+    {
+        uint32_t cqindex = 0;
+        uint32_t clcount = 0;
+        ${x}_command_list_handle_t* pCommandLists = nullptr;
+        ${x}CommandGraphGetComputeCommandListBatch(hCommandGraph, batchIndex, &cqindex, &clcount, &pCommandLists);
+        ${x}CommandQueueEnqueueCommandLists(phCommandQueue[cqindex], clcount, pCommandLists, nullptr);
+    }
 
     ${x}CommandGraphReset(hCommandGraph);
     ...
@@ -238,7 +250,7 @@ The following sample code demonstrates a sequence for creation, submission and q
         ${X}_FENCE_FLAG_NONE
     };
     ${x}_fence_handle_t hFence;
-    ${x}DeviceCreateFence(hCommandQueue, &fenceDesc, &hFence);
+    ${x}CommandQueueCreateFence(hCommandQueue, &fenceDesc, &hFence);
 
     // Enqueue a signal of the fence into the command queue
     ${x}CommandQueueEnqueueCommandLists(hCommandQueue, 1, &hCommandList, hFence);
