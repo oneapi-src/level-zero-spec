@@ -16,7 +16,7 @@ The following documents the high-level programming models and guidelines.
 
 # <a name="dnd">Driver and Device</a>
 The following diagram illustrates the hierarchy of devices to the driver:  
-![Driver Hierarchy](../images/core_driver.png?raw=true)
+![Driver](../images/core_driver.png?raw=true)  
 @image latex ../images/core_driver.png
 
 ## Driver
@@ -73,7 +73,7 @@ The following sample code demonstrates a basic initialization sequence:
 
 # <a name="cnc">Command Queues and Command Lists</a>
 The following diagram illustrates the hierarchy of command lists and command queues to the device:  
-![Device Hierarchy](../images/core_queue.png?raw=true)
+![Queue](../images/core_queue.png?raw=true)  
 @image latex ../images/core_queue.png
 
 ## Command Queues
@@ -243,7 +243,7 @@ and can only be waited upon from the host.
 - An application can use ::{X}FenceQueryElapsedTime to calculate the time (in milliseconds) between two fences' signals.
 
 The following diagram illustrates an example of fences:  
-![Fence](../images/core_fence.png?raw=true)
+![Fence](../images/core_fence.png?raw=true)  
 @image latex ../images/core_fence.png
 
 The following sample code demonstrates a sequence for creation, submission and querying of a fence:
@@ -280,7 +280,7 @@ The following sample code demonstrates a sequence for creation, submission and q
 - An application can use ::{X}EventQueryElapsedTime to calculate the time (in milliseconds) between two events signalled by the same device.
 
 The following diagram illustrates an example of events:  
-![Event](../images/core_event.png?raw=true)
+![Event](../images/core_event.png?raw=true)  
 @image latex ../images/core_event.png
 
 The following sample code demonstrates a sequence for creation and submission of an event:
@@ -312,7 +312,7 @@ The following sample code demonstrates a sequence for creation and submission of
 - A semaphore cannot be shared across processes.
 
 The following diagram illustrates an example of semaphores:  
-![Semaphore](../images/core_semaphore.png?raw=true)
+![Semaphore](../images/core_semaphore.png?raw=true)  
 @image latex ../images/core_semaphore.png
 
 The following sample code demonstrates a sequence for creation and submission of a semaphore:
@@ -515,7 +515,7 @@ has local memory that is shared to other tiles through these interconnects. The 
 as sub-devices and there are functions to query and obtain a sub-device. Outside of these functions
 there are no distinction between sub-devices and devices. 
 
-![Subdevice](../images/core_subdevice.png?raw=true)
+![Subdevice](../images/core_subdevice.png?raw=true)  
 @image latex ../images/core_subdevice.png
 
 If you want to allocate memory and dispatch
