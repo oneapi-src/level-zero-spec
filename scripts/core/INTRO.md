@@ -82,6 +82,8 @@ In order to both expose the full capabilities of GPUs and remain supportable by 
 All implementations must support "Core" APIs while "Extended" APIs are optional.
 An implementation will return ::${X}_RESULT_ERROR_UNSUPPORTED for any feature request not supported by that device.
 
+Note: currently all APIs are defined as part of the "Core" specification until they are determined to not be supportable by other devices.
+
 ${"##"} Naming Convention
 The following naming convention is followed in order to avoid conflicts within the API, or with other APIs and libraries:
 - all driver entry points are prefixed with ${x}
@@ -89,6 +91,8 @@ The following naming convention is followed in order to avoid conflicts within t
 - all macros and enumerator values use all caps **${X}_\<SCOPE\>_\<NAME\>** convention
 - all functions use **${x}\<Actor\>\<Action\>\<Object\>** convention
 - all function input parameters precede output parameters
+
+Note: "${Xx}" is a placeholder until One-API branding is decided.
 
 ${"##"} Terminology
 This specification uses key words based on [RFC2119](https://www.ietf.org/rfc/rfc2119.txt) to indicate requirement level. 
