@@ -244,8 +244,6 @@ xe_result_t __xecall
 ///       it for use in another process.
 ///     - The application may call this function from simultaneous threads.
 ///     - The implementation of this function should be lock-free.
-///     - @todo [**Ankur**] Do we have limitations on which devices / OSes
-///       support IPC functionality?
 /// 
 /// @remarks
 ///   _Analogues_

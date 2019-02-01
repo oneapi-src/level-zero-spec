@@ -207,7 +207,6 @@ details:
     - "Takes a pointer to the base of a device memory allocation and exports it for use in another process."
     - "The application may call this function from simultaneous threads."
     - "The implementation of this function should be lock-free."
-    - "@todo [**Ankur**] Do we have limitations on which devices / OSes support IPC functionality?"
 params:
     - type: "const void*"
       name: ptr
