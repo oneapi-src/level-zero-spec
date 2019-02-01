@@ -33,7 +33,7 @@ TEST(xeCommandQueueEnqueueCommandQueue, redirectsToCmdQueueObject) {
 
 using CommandQueueEnqueueCommandQueue = ::testing::Test;
 
-HWTEST_F(CommandQueueEnqueueCommandQueue, addsBatchBufferEndToCommandStream) {
+HWTEST_F(CommandQueueEnqueueCommandQueue, addsASecondLevelBatchBufferPerCommandList) {
     MockDevice device;
     MockMemoryManager memoryManager;
     EXPECT_CALL(device, getMemoryManager())
@@ -67,6 +67,11 @@ HWTEST_F(CommandQueueEnqueueCommandQueue, addsBatchBufferEndToCommandStream) {
     using MI_BATCH_BUFFER_START = typename FamilyType::MI_BATCH_BUFFER_START;
     auto itor = find<MI_BATCH_BUFFER_START *>(cmdList.begin(), cmdList.end());
     EXPECT_NE(cmdList.end(), itor);
+
+    auto bbs = genCmdCast<MI_BATCH_BUFFER_START *>(*itor);
+    ASSERT_NE(nullptr, bbs);
+
+    EXPECT_EQ(MI_BATCH_BUFFER_START::SECOND_LEVEL_BATCH_BUFFER_SECOND_LEVEL_BATCH, bbs->getSecondLevelBatchBuffer());
 }
 
 } // namespace xe
