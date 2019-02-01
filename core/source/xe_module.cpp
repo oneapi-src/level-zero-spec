@@ -241,7 +241,7 @@ xe_result_t __xecall
 ///     - ::XE_RESULT_ERROR_INVALID_PARAMETER
 ///         + invalid handle for hModule
 ///         + nullptr for desc
-///         + null ptr for desc->pFunctionName
+///         + nullptr for desc->pFunctionName
 ///         + invalid name for desc->pFunctionName
 /*@todo: __declspec(dllexport)*/
 xe_result_t __xecall
@@ -374,7 +374,7 @@ xe_result_t __xecall
 ///     - ::XE_RESULT_ERROR_INVALID_PARAMETER
 ///         + invalid handle for hFunctionArgs
 ///         + invalid argument index
-///         + null ptr for pArgValue
+///         + nullptr for pArgValue
 ///         + invalid size specified
 /*@todo: __declspec(dllexport)*/
 xe_result_t __xecall
@@ -449,7 +449,7 @@ xe_result_t __xecall
 ///     - ::XE_RESULT_ERROR_INVALID_PARAMETER
 ///         + invalid handle for hFunction
 ///         + invalid value for attr
-///         + null ptr for pValue
+///         + nullptr for pValue
 /*@todo: __declspec(dllexport)*/
 xe_result_t __xecall
   xeFunctionQueryAttribute(
@@ -486,7 +486,7 @@ xe_result_t __xecall
 ///     - ::XE_RESULT_ERROR_INVALID_PARAMETER
 ///         + invalid handle for hCommandQueue
 ///         + invalid handle for hFunction
-///         + null ptr for function arguments buffer
+///         + nullptr for function arguments buffer
 ///         + invalid group count range for dispatch
 ///         + invalid dispatch count range for dispatch
 /*@todo: __declspec(dllexport)*/
@@ -500,7 +500,8 @@ xe_result_t __xecall
     uint32_t threadCountZ,                          ///< [in] width of group in threads for Z dimension
     uint32_t groupCountX,                           ///< [in] width of dispatches in X dimension
     uint32_t groupCountY,                           ///< [in] width of dispatches in Y dimension
-    uint32_t groupCountZ                            ///< [in] width of dispatches in Z dimension
+    uint32_t groupCountZ,                           ///< [in] width of dispatches in Z dimension
+    xe_event_handle_t hEvent                        ///< [in][optional] handle of the event to signal on completion
     )
 {
     // @todo: check_return(nullptr == get_driver(), XE_RESULT_ERROR_UNINITIALIZED);
@@ -509,6 +510,7 @@ xe_result_t __xecall
     // @todo: check_return(xe_command_list_handle_t() == hCommandList, XE_RESULT_ERROR_INVALID_PARAMETER);
     // @todo: check_return(xe_function_handle_t() == hFunction, XE_RESULT_ERROR_INVALID_PARAMETER);
     // @todo: check_return(xe_function_args_handle_t() == hFunctionArgs, XE_RESULT_ERROR_INVALID_PARAMETER);
+    // @todo: check_return(xe_event_handle_t() == hEvent, XE_RESULT_ERROR_INVALID_PARAMETER);
 
     // @todo: insert <code> here
 
@@ -578,14 +580,15 @@ xe_result_t __xecall
 ///         + invalid handle for hCommandQueue
 ///         + invalid handle for hFunction
 ///         + invalid handle for hFunctionArgs.
-///         + null ptr for dispatch arguments buffer
+///         + nullptr for dispatch arguments buffer
 /*@todo: __declspec(dllexport)*/
 xe_result_t __xecall
   xeCommandListEncodeDispatchFunctionIndirect(
     xe_command_list_handle_t hCommandList,          ///< [in] handle of the command list
     xe_function_handle_t hFunction,                 ///< [in] handle of the function object
     xe_function_args_handle_t hFunctionArgs,        ///< [in] handle to function arguments buffer.
-    const xe_dispatch_function_arguments_t* pDispatchArgumentsBuffer///< [in] Pointer to buffer that will contain dispatch arguments.
+    const xe_dispatch_function_arguments_t* pDispatchArgumentsBuffer,   ///< [in] Pointer to buffer that will contain dispatch arguments.
+    xe_event_handle_t hEvent                        ///< [in][optional] handle of the event to signal on completion
     )
 {
     // @todo: check_return(nullptr == get_driver(), XE_RESULT_ERROR_UNINITIALIZED);
@@ -595,6 +598,7 @@ xe_result_t __xecall
     // @todo: check_return(xe_function_handle_t() == hFunction, XE_RESULT_ERROR_INVALID_PARAMETER);
     // @todo: check_return(xe_function_args_handle_t() == hFunctionArgs, XE_RESULT_ERROR_INVALID_PARAMETER);
     // @todo: check_return(nullptr == pDispatchArgumentsBuffer, XE_RESULT_ERROR_INVALID_PARAMETER);
+    // @todo: check_return(xe_event_handle_t() == hEvent, XE_RESULT_ERROR_INVALID_PARAMETER);
 
     // @todo: insert <code> here
 
@@ -617,8 +621,8 @@ xe_result_t __xecall
 ///     - ::XE_RESULT_ERROR_UNINITIALIZED
 ///     - ::XE_RESULT_ERROR_INVALID_PARAMETER
 ///         + invalid handle for hFunction
-///         + null ptr for pDispatchArgumentsBuffer.
-///         + null ptr for pMax Groups
+///         + nullptr for pDispatchArgumentsBuffer.
+///         + nullptr for pMax Groups
 /*@todo: __declspec(dllexport)*/
 xe_result_t __xecall
   xeFunctionGetOccupancyMaxGroupsPerSublice(

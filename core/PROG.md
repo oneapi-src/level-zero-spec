@@ -165,7 +165,7 @@ The following sample code demonstrates submission of commands to a command queue
     ...
 ```
 
-## Command Graphs
+## Command Graphs (Experimental)
 - A command graph represents non-linear dependencies between a collection of command lists to be executed.
 - An implementation may use this information to reorder the execution of command lists to be optimized for the device.
 - An implementation may also parallelize execution across an application-specified maximum number of command queues.
@@ -687,7 +687,8 @@ The following sample code demonstrates a sequence for creating function args and
     xeCommandListEncodeDispatchFunction(
         hCommandList, hFunction, hFunctionArgs, 
         pixelRegionWidth, pixelRegionHeight, 1, 
-        numRegionsX, numRegionsY, 1);
+        numRegionsX, numRegionsY, 1,
+        nullptr );
 
     // Update image pointers to copy and scale next image.
     xeFunctionArgsSetValue(hFuncArgs, 0, sizeof(xe_image_handle_t), &src2_image);
@@ -697,7 +698,8 @@ The following sample code demonstrates a sequence for creating function args and
     xeCommandListEncodeDispatchFunction(
         hCommandList, hFunction, hFunctionArgs, 
         pixelRegionWidth, pixelRegionHeight, 1, 
-        numRegionsX, numRegionsY, 1);
+        numRegionsX, numRegionsY, 1,
+        nullptr );
 
     ...
 ```

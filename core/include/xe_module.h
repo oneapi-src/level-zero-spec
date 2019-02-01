@@ -232,7 +232,7 @@ typedef struct _xe_function_desc_t
 ///     - ::XE_RESULT_ERROR_INVALID_PARAMETER
 ///         + invalid handle for hModule
 ///         + nullptr for desc
-///         + null ptr for desc->pFunctionName
+///         + nullptr for desc->pFunctionName
 ///         + invalid name for desc->pFunctionName
 xe_result_t __xecall
   xeModuleCreateFunction(
@@ -318,7 +318,7 @@ xe_result_t __xecall
 ///     - ::XE_RESULT_ERROR_INVALID_PARAMETER
 ///         + invalid handle for hFunctionArgs
 ///         + invalid argument index
-///         + null ptr for pArgValue
+///         + nullptr for pArgValue
 ///         + invalid size specified
 xe_result_t __xecall
   xeFunctionArgsSetValue(
@@ -401,7 +401,7 @@ typedef enum _xe_function_attribute_t
 ///     - ::XE_RESULT_ERROR_INVALID_PARAMETER
 ///         + invalid handle for hFunction
 ///         + invalid value for attr
-///         + null ptr for pValue
+///         + nullptr for pValue
 xe_result_t __xecall
   xeFunctionQueryAttribute(
     xe_function_handle_t hFunction,                 ///< [in] handle of the function object
@@ -426,7 +426,7 @@ xe_result_t __xecall
 ///     - ::XE_RESULT_ERROR_INVALID_PARAMETER
 ///         + invalid handle for hCommandQueue
 ///         + invalid handle for hFunction
-///         + null ptr for function arguments buffer
+///         + nullptr for function arguments buffer
 ///         + invalid group count range for dispatch
 ///         + invalid dispatch count range for dispatch
 xe_result_t __xecall
@@ -439,7 +439,8 @@ xe_result_t __xecall
     uint32_t threadCountZ,                          ///< [in] width of group in threads for Z dimension
     uint32_t groupCountX,                           ///< [in] width of dispatches in X dimension
     uint32_t groupCountY,                           ///< [in] width of dispatches in Y dimension
-    uint32_t groupCountZ                            ///< [in] width of dispatches in Z dimension
+    uint32_t groupCountZ,                           ///< [in] width of dispatches in Z dimension
+    xe_event_handle_t hEvent                        ///< [in][optional] handle of the event to signal on completion
     );
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -504,13 +505,14 @@ typedef struct _xe_dispatch_function_arguments_t
 ///         + invalid handle for hCommandQueue
 ///         + invalid handle for hFunction
 ///         + invalid handle for hFunctionArgs.
-///         + null ptr for dispatch arguments buffer
+///         + nullptr for dispatch arguments buffer
 xe_result_t __xecall
   xeCommandListEncodeDispatchFunctionIndirect(
     xe_command_list_handle_t hCommandList,          ///< [in] handle of the command list
     xe_function_handle_t hFunction,                 ///< [in] handle of the function object
     xe_function_args_handle_t hFunctionArgs,        ///< [in] handle to function arguments buffer.
-    const xe_dispatch_function_arguments_t* pDispatchArgumentsBuffer///< [in] Pointer to buffer that will contain dispatch arguments.
+    const xe_dispatch_function_arguments_t* pDispatchArgumentsBuffer,   ///< [in] Pointer to buffer that will contain dispatch arguments.
+    xe_event_handle_t hEvent                        ///< [in][optional] handle of the event to signal on completion
     );
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -529,8 +531,8 @@ xe_result_t __xecall
 ///     - ::XE_RESULT_ERROR_UNINITIALIZED
 ///     - ::XE_RESULT_ERROR_INVALID_PARAMETER
 ///         + invalid handle for hFunction
-///         + null ptr for pDispatchArgumentsBuffer.
-///         + null ptr for pMax Groups
+///         + nullptr for pDispatchArgumentsBuffer.
+///         + nullptr for pMax Groups
 xe_result_t __xecall
   xeFunctionGetOccupancyMaxGroupsPerSublice(
     xe_function_handle_t hFunction,                 ///< [in] handle of the function object

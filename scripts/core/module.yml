@@ -207,7 +207,7 @@ returns:
     - $X_RESULT_ERROR_INVALID_PARAMETER:
         - "invalid handle for hModule"
         - "nullptr for desc"
-        - "null ptr for desc->pFunctionName"
+        - "nullptr for desc->pFunctionName"
         - "invalid name for desc->pFunctionName"
 --- #--------------------------------------------------------------------------
 type: function
@@ -284,7 +284,7 @@ returns:
     - $X_RESULT_ERROR_INVALID_PARAMETER:
         - "invalid handle for hFunctionArgs"
         - "invalid argument index"
-        - "null ptr for pArgValue"
+        - "nullptr for pArgValue"
         - "invalid size specified"
 --- #--------------------------------------------------------------------------
 type: enum
@@ -367,7 +367,7 @@ returns:
     - $X_RESULT_ERROR_INVALID_PARAMETER:
         - "invalid handle for hFunction"
         - "invalid value for attr"
-        - "null ptr for pValue"
+        - "nullptr for pValue"
 --- #--------------------------------------------------------------------------
 type: function
 desc: "Dispatch command over one or more work groups."
@@ -405,11 +405,14 @@ params:
     - type: "uint32_t"
       name: groupCountZ
       desc: "[in] width of dispatches in Z dimension"
+    - type: $x_event_handle_t
+      name: hEvent
+      desc: "[in][optional] handle of the event to signal on completion"
 returns:
     - $X_RESULT_ERROR_INVALID_PARAMETER:
         - "invalid handle for hCommandQueue"
         - "invalid handle for hFunction"
-        - "null ptr for function arguments buffer"
+        - "nullptr for function arguments buffer"
         - "invalid group count range for dispatch"
         - "invalid dispatch count range for dispatch"
 --- #--------------------------------------------------------------------------
@@ -493,12 +496,15 @@ params:
     - type: "const $x_dispatch_function_arguments_t*"
       name: pDispatchArgumentsBuffer
       desc: "[in] Pointer to buffer that will contain dispatch arguments."
+    - type: $x_event_handle_t
+      name: hEvent
+      desc: "[in][optional] handle of the event to signal on completion"
 returns:
     - $X_RESULT_ERROR_INVALID_PARAMETER:
         - "invalid handle for hCommandQueue"
         - "invalid handle for hFunction"
         - "invalid handle for hFunctionArgs."
-        - "null ptr for dispatch arguments buffer"
+        - "nullptr for dispatch arguments buffer"
 --- #--------------------------------------------------------------------------
 type: function
 desc: "Compute max groups that can occupy per sublice."
@@ -521,5 +527,5 @@ params:
 returns:
     - $X_RESULT_ERROR_INVALID_PARAMETER:
         - "invalid handle for hFunction"
-        - "null ptr for pDispatchArgumentsBuffer."
-        - "null ptr for pMax Groups"
+        - "nullptr for pDispatchArgumentsBuffer."
+        - "nullptr for pMax Groups"
