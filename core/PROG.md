@@ -723,5 +723,40 @@ Sharing an OpenCL command queue doesn't alter the lifetime of the API object.  I
 Memory contents as reflected by any caching schemes will be consistent such that, for example, a memory write  in an OpenCL command queue can be read by a subsequent xe command list without any special user action.  The cost to ensure memory consistency may be implementation dependent.  The performance of sharing command queues will be no worse than an application submitting work to OpenCL, calling clFinish followed by submitting an xe command list.  In most cases, command queue sharing may be much more efficient. 
 
 # <a name="ipc">Inter-Process Communication</a>
-@todo [**Ben**] write-up details on how inter-process communication and resource sharing works; e.g. OCL->XE->IPC->XE or OC->IPC->OCL->XE
+The Xe Inter-Process Communication (IPC) APIs allow device memory allocations to be used across processes.
+The following code examples demonstrate how to use the IPC APIs:
 
+1. First, the allocation is made, packaged, and sent on the sending process:
+```c
+    void* dptr = nullptr;
+    xeMemAlloc(..., &dptr);
+
+    xe_ipc_mem_handle_t hIPC;
+    xeIpcGetMemHandle(dptr, &hIPC);
+
+    // Method of sending to receiving process is not defined by Xe:
+    send_to_receiving_process(hIPC);
+```
+
+2. Next, the allocation is received and un-packaged on the receiving process:
+```c
+    // Method of receiving from sending process is not defined by Xe:
+    xe_ipc_mem_handle_t hIPC;
+    hIPC = receive_from_sending_process();
+
+    void* dptr = nullptr;
+    xeIpcOpenMemHandle(..., hIPC, &dptr);
+```
+
+3. Each process may now refer to the same device memory allocation via its `dptr`.
+Note, there is no guaranteed address equivalence for the values of `dptr` in each process.
+
+4. To cleanup, first close the handle in the receiving process:
+```c
+    xeIpcCloseMemHandle(..., dptr);
+```
+
+5. Finally, free the device pointer in the sending process:
+```c
+    xeMemFree(dptr);
+```
