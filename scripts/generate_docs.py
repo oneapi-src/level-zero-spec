@@ -18,5 +18,5 @@ def generate_html():
     util.removePath("../html")
     util.removePath("../latex")
     print("Generating HTML/LaTeX...")
-    cmdline = "doxygen.exe Doxyfile"
+    cmdline = "doxygen Doxyfile"
     os.system(cmdline)
