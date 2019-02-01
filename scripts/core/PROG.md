@@ -777,8 +777,8 @@ Note, there is no guaranteed address equivalence for the values of `dptr` in eac
 
 ${"#"} <a name="fut">Future</a>
 The following is a list a features that are still being defined for inclusion:
-- Predicated Execution
-- Execution Flow-Control
-- Timestamps and Metrics
-- GetLastError
+- Predicated Execution: ability to cull program execution within a command list, based on device-generated value(s)
+- Execution Flow-Control: ability to describe loops and if-else-then type program execution within a command list, based on device-generated value(s)
+- Timestamps and Metrics: ability to retrieve device-specific counters for performance analysis, tuning and tooling
+- GetLastError: quality-of-life addition to enable "assert({X}_RESULT_SUCCESS != GetLastError(*_handle_t));"
 
