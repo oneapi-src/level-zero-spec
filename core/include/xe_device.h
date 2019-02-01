@@ -209,7 +209,7 @@ typedef struct _xe_device_compute_properties_t
     uint32_t maxDispatchDimX;                       ///< [out] Maximum thread groups dispatched for x dimension
     uint32_t maxDipsatchDimY;                       ///< [out] Maximum thread groups dispatched for y dimension
     uint32_t maxDispatchDimZ;                       ///< [out] Maximum thread groups dispatched for z dimension
-    uint32_t maxSharedLocalMemory;                  ///< [out] Maximum shared local memory per group. @todo [**Zack**] should this be in device props?
+    uint32_t maxSharedLocalMemory;                  ///< [out] Maximum shared local memory per group.
     uint32_t maxGroupRegisters;                     ///< [out] Maximum physical registers available per group
     uint32_t warpSize;                              ///< [out] Maximum threads that can be executed in lock-step. @todo [**Zack**] should we call this something else?
 

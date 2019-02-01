@@ -204,7 +204,7 @@ members:
       desc: "[out] Maximum thread groups dispatched for z dimension"
     - type: uint32_t
       name: maxSharedLocalMemory
-      desc: "[out] Maximum shared local memory per group. @todo [**Zack**] should this be in device props?"
+      desc: "[out] Maximum shared local memory per group."
     - type: uint32_t
       name: maxGroupRegisters
       desc: "[out] Maximum physical registers available per group"
