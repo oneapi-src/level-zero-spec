@@ -14,8 +14,10 @@ using ::testing::Return;
 
 extern PRODUCT_FAMILY productFamily;
 
+namespace xe {
+
 TEST(xeCommandListEncodeWaitOnEvent, redirectsToCmdListObject) {
-    xe::MockCommandList commandList;
+    MockCommandList commandList;
     xe_event_handle_t event = {};
 
     EXPECT_CALL(commandList, encodeWaitOnEvent(event)).Times(1);
@@ -28,22 +30,22 @@ TEST(xeCommandListEncodeWaitOnEvent, redirectsToCmdListObject) {
 using CommandListEncodeWaitOnEvent = ::testing::Test;
 
 HWTEST_F(CommandListEncodeWaitOnEvent, addsSemaphoreToCommandStream) {
-    xe::MockDevice device;
-    xe::MockMemoryManager memoryManager;
+    MockDevice device;
+    MockMemoryManager memoryManager;
     EXPECT_CALL(device, getMemoryManager())
         .WillRepeatedly(Return(&memoryManager));
 
     int8_t buffer[1024];
-    xe::GraphicsAllocation allocation(buffer, sizeof(buffer));
+    GraphicsAllocation allocation(buffer, sizeof(buffer));
     EXPECT_CALL(memoryManager, allocateDeviceMemory)
         .WillOnce(Return(&allocation));
 
-    auto commandList = xe::CommandList::create(productFamily, &device);
-    auto commandListAlias = whitebox_cast<xe::CommandList>(commandList);
+    auto commandList = CommandList::create(productFamily, &device);
+    auto commandListAlias = whitebox_cast<CommandList>(commandList);
     ASSERT_NE(nullptr, commandListAlias->commandStream);
     auto usedSpaceBefore = commandListAlias->commandStream->getUsed();
 
-    xe::MockEvent event;
+    MockEvent event;
     auto result = commandList->encodeWaitOnEvent(event.toHandle());
     ASSERT_EQ(XE_RESULT_SUCCESS, result);
 
@@ -58,3 +60,5 @@ HWTEST_F(CommandListEncodeWaitOnEvent, addsSemaphoreToCommandStream) {
     auto itor = find<MI_SEMAPHORE_WAIT *>(cmdList.begin(), cmdList.end());
     EXPECT_NE(cmdList.end(), itor);
 }
+
+} // namespace xe

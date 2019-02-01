@@ -3,6 +3,8 @@
 #include "runtime/platform/platform.h"
 #include "gmock/gmock.h"
 
+namespace xe {
+
 TEST(MemoryManagerallocateDeviceMemory, returnsGraphicsAllocation) {
     auto platform = OCLRT::constructPlatform();
     auto success = platform->initialize();
@@ -10,7 +12,7 @@ TEST(MemoryManagerallocateDeviceMemory, returnsGraphicsAllocation) {
 
     auto deviceRT = platform->getDevice(0);
     ASSERT_NE(nullptr, deviceRT);
-    auto device = xe::Device::create(deviceRT);
+    auto device = Device::create(deviceRT);
 
     auto memoryManager = device->getMemoryManager();
     auto allocation = memoryManager->allocateDeviceMemory();
@@ -20,3 +22,5 @@ TEST(MemoryManagerallocateDeviceMemory, returnsGraphicsAllocation) {
 
     delete device;
 }
+
+} // namespace xe

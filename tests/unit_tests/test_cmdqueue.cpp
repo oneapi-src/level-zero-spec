@@ -8,13 +8,15 @@
 
 using ::testing::Return;
 
+namespace xe {
+
 TEST(xeDeviceCreateCommandQueue, returnsSuccess) {
     xe_device_handle_t device = {};
     xe_command_queue_handle_t commandQueue = {};
     xe_command_queue_desc_t desc = {};
-    auto result = xeDeviceCreateCommandQueue(device,
-                                             &desc,
-                                             &commandQueue);
+    auto result = ::xeDeviceCreateCommandQueue(device,
+                                               &desc,
+                                               &commandQueue);
     EXPECT_EQ(XE_RESULT_SUCCESS, result);
 }
 
@@ -25,22 +27,24 @@ TEST(xeCommandQueueDestroy, returnsSuccess) {
 }
 
 TEST(CommandQueueCreate, returnsCommandQueueOnSuccess) {
-    xe::MockDevice device;
-    xe::MockMemoryManager manager;
+    MockDevice device;
+    MockMemoryManager manager;
     uint8_t buffer[1024];
-    auto allocation = new xe::GraphicsAllocation(buffer, sizeof(buffer));
+    auto allocation = new GraphicsAllocation(buffer, sizeof(buffer));
 
     EXPECT_CALL(device, getMemoryManager()).WillRepeatedly(Return(&manager));
     EXPECT_CALL(manager, allocateDeviceMemory()).WillRepeatedly(Return(allocation));
     EXPECT_CALL(manager, freeMemory(allocation)).WillRepeatedly(Return());
 
-    auto commandQueue = xe::CommandQueue::create(&device);
+    auto commandQueue = CommandQueue::create(&device);
     ASSERT_NE(nullptr, commandQueue);
 
-    auto commandQueueAlias = whitebox_cast<xe::CommandQueue>(commandQueue);
+    auto commandQueueAlias = whitebox_cast<CommandQueue>(commandQueue);
     EXPECT_EQ(&device, commandQueueAlias->device);
     EXPECT_EQ(allocation, commandQueueAlias->allocation);
     ASSERT_NE(nullptr, commandQueueAlias->commandStream);
     EXPECT_LT(0u, commandQueueAlias->commandStream->getAvailableSpace());
     commandQueue->destroy();
 }
+
+} // namespace xe

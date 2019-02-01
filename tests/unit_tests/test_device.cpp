@@ -7,8 +7,10 @@
 
 using ::testing::Return;
 
+namespace xe {
+
 TEST(xeDeviceCreateCommandList, redirectsToDeviceObject) {
-    xe::MockDevice device;
+    MockDevice device;
     auto deviceHandle = device.toHandle();
 
     xe_command_list_desc_t desc = {};
@@ -25,7 +27,7 @@ TEST(xeDeviceCreateCommandList, redirectsToDeviceObject) {
 }
 
 TEST(xeDeviceCreateCommandQueue, redirectsToDeviceObject) {
-    xe::MockDevice device;
+    MockDevice device;
     auto deviceHandle = device.toHandle();
 
     xe_command_queue_handle_t commandQueue = {};
@@ -42,7 +44,7 @@ TEST(xeDeviceCreateCommandQueue, redirectsToDeviceObject) {
 }
 
 TEST(xeDeviceCreateEvent, redirectsToDeviceObject) {
-    xe::MockDevice device;
+    MockDevice device;
     auto deviceHandle = device.toHandle();
 
     xe_event_handle_t event = {};
@@ -65,7 +67,7 @@ TEST(DeviceCreateCommandList, returnsSuccess) {
 
     auto deviceRT = platform->getDevice(0);
     ASSERT_NE(nullptr, deviceRT);
-    auto device = xe::Device::create(deviceRT);
+    auto device = Device::create(deviceRT);
 
     xe_command_list_handle_t commandList = {};
     xe_command_list_desc_t desc = {};
@@ -75,7 +77,7 @@ TEST(DeviceCreateCommandList, returnsSuccess) {
     EXPECT_EQ(XE_RESULT_SUCCESS, result);
     EXPECT_NE(nullptr, commandList);
 
-    xe::CommandList::fromHandle(commandList)->destroy();
+    CommandList::fromHandle(commandList)->destroy();
     delete device;
 }
 
@@ -86,7 +88,7 @@ TEST(DeviceCreateCommandQueue, returnsSuccess) {
 
     auto deviceRT = platform->getDevice(0);
     ASSERT_NE(nullptr, deviceRT);
-    auto device = xe::Device::create(deviceRT);
+    auto device = Device::create(deviceRT);
 
     xe_command_queue_handle_t commandQueue = {};
     xe_command_queue_desc_t desc = {};
@@ -106,7 +108,7 @@ TEST(DeviceCreateEvent, returnsSuccess) {
 
     auto deviceRT = platform->getDevice(0);
     ASSERT_NE(nullptr, deviceRT);
-    auto device = xe::Device::create(deviceRT);
+    auto device = Device::create(deviceRT);
 
     xe_event_handle_t event = {};
     xe_event_desc_t desc = {};
@@ -126,10 +128,12 @@ TEST(DeviceGetMemoryManager, returnsPointer) {
 
     auto deviceRT = platform->getDevice(0);
     ASSERT_NE(nullptr, deviceRT);
-    auto device = xe::Device::create(deviceRT);
+    auto device = Device::create(deviceRT);
 
     auto memoryManager = device->getMemoryManager();
     EXPECT_NE(nullptr, memoryManager);
 
     delete device;
 }
+
+} // namespace xe

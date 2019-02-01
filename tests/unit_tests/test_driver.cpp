@@ -3,8 +3,10 @@
 
 using ::testing::Return;
 
+namespace xe {
+
 TEST(xeDriverInit, redirectsToDriverObject) {
-    xe::MockDriver driver;
+    MockDriver driver;
 
     EXPECT_CALL(driver, initialize(XE_INIT_FLAG_NONE)).Times(1);
 
@@ -18,7 +20,7 @@ TEST(xeDriverInit, returnsSucess) {
 }
 
 TEST(xeDriverGetDevice, redirectsToDriverObject) {
-    xe::MockDriver driver;
+    MockDriver driver;
 
     xe_device_handle_t deviceHandle = {};
     uint32_t ordinal = 0;
@@ -27,16 +29,18 @@ TEST(xeDriverGetDevice, redirectsToDriverObject) {
         .Times(1)
         .WillRepeatedly(Return(XE_RESULT_SUCCESS));
 
-    auto result = xe::xeDriverGetDevice(ordinal,
-                                        &deviceHandle);
+    auto result = xeDriverGetDevice(ordinal,
+                                    &deviceHandle);
     EXPECT_EQ(XE_RESULT_SUCCESS, result);
 }
 
 TEST(xeDriverGetDevice, returnsSuccess) {
     xe_device_handle_t deviceHandle = {};
     uint32_t ordinal = 0;
-    auto result = xe::xeDriverGetDevice(ordinal,
-                                        &deviceHandle);
+    auto result = xeDriverGetDevice(ordinal,
+                                    &deviceHandle);
     EXPECT_EQ(XE_RESULT_SUCCESS, result);
     EXPECT_NE(nullptr, deviceHandle);
 }
+
+} // namespace xe

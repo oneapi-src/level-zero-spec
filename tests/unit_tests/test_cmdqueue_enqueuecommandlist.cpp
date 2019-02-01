@@ -3,10 +3,12 @@
 #include "xe_all.h"
 #include "gtest/gtest.h"
 
-TEST(xeCommandQueueEnqueueCommandList, redirectsToCmdQueueObject) {
-    xe::MockCommandList cmdList;
+namespace xe {
+
+TEST(xeCommandQueueEnqueueCommandQueue, redirectsToCmdQueueObject) {
+    MockCommandList cmdList;
     auto hCommandList = cmdList.toHandle();
-    xe::MockCommandQueue cmdQueue;
+    MockCommandQueue cmdQueue;
     xe_fence_handle_t hFence = {};
 
     EXPECT_CALL(cmdQueue, enqueueCommandLists(1,
@@ -20,3 +22,5 @@ TEST(xeCommandQueueEnqueueCommandList, redirectsToCmdQueueObject) {
                                                         hFence);
     EXPECT_EQ(XE_RESULT_SUCCESS, result);
 }
+
+} // namespace xe

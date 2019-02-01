@@ -3,6 +3,8 @@
 #include "runtime/platform/platform.h"
 #include "runtime/helpers/hw_info.h"
 
+namespace xe {
+
 TEST(platformInitialize, shouldSucceed) {
     auto platform = OCLRT::constructPlatform();
     ASSERT_NE(nullptr, platform);
@@ -23,3 +25,5 @@ TEST(platformGetDevice, returnsDevice) {
     auto device = platform->getDevice(0);
     EXPECT_NE(nullptr, device);
 }
+
+} // namespace xe

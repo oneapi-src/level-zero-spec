@@ -7,8 +7,10 @@
 #include "runtime/command_stream/linear_stream.h"
 #include "gtest/gtest.h"
 
+namespace xe {
+
 TEST(xeCommandListDestroy, redirectsToCmdListObject) {
-    xe::MockCommandList cmdList;
+    MockCommandList cmdList;
     xe_command_list_handle_t commandList = cmdList.toHandle();
 
     EXPECT_CALL(cmdList, destroy()).Times(1);
@@ -21,19 +23,19 @@ using ::testing::Return;
 using CommandListCreate = ::testing::TestWithParam<uint32_t>;
 
 TEST_P(CommandListCreate, returnsCommandListOnSuccess) {
-    xe::MockDevice device;
-    xe::MockMemoryManager manager;
+    MockDevice device;
+    MockMemoryManager manager;
     uint8_t buffer[1024];
-    auto allocation = new xe::GraphicsAllocation(buffer, sizeof(buffer));
+    auto allocation = new GraphicsAllocation(buffer, sizeof(buffer));
 
     EXPECT_CALL(device, getMemoryManager()).WillRepeatedly(Return(&manager));
     EXPECT_CALL(manager, allocateDeviceMemory()).WillRepeatedly(Return(allocation));
     EXPECT_CALL(manager, freeMemory(allocation)).WillRepeatedly(Return());
 
-    auto commandList = xe::CommandList::create(GetParam(), &device);
+    auto commandList = CommandList::create(GetParam(), &device);
     ASSERT_NE(nullptr, commandList);
 
-    auto commandListAlias = whitebox_cast<xe::CommandList>(commandList);
+    auto commandListAlias = whitebox_cast<CommandList>(commandList);
     EXPECT_EQ(&device, commandListAlias->device);
     EXPECT_EQ(allocation, commandListAlias->allocation);
     ASSERT_NE(nullptr, commandListAlias->commandStream);
@@ -54,8 +56,8 @@ INSTANTIATE_TEST_CASE_P(,
 using CommandListCreateFail = ::testing::TestWithParam<uint32_t>;
 
 TEST_P(CommandListCreateFail, returnsNullPointerOnFailure) {
-    xe::MockDevice device;
-    auto commandList = xe::CommandList::create(GetParam(), &device);
+    MockDevice device;
+    auto commandList = CommandList::create(GetParam(), &device);
     EXPECT_EQ(nullptr, commandList);
 }
 
@@ -68,3 +70,5 @@ static uint32_t unsupportedProductFamilyTable[] = {
 INSTANTIATE_TEST_CASE_P(,
                         CommandListCreateFail,
                         ::testing::ValuesIn(unsupportedProductFamilyTable));
+
+} // namespace xe

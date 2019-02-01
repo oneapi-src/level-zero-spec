@@ -13,8 +13,10 @@ using ::testing::Return;
 
 extern PRODUCT_FAMILY productFamily;
 
+namespace xe {
+
 TEST(xeCommandListClose, redirectsToCmdListObject) {
-    xe::MockCommandList cmdList;
+    MockCommandList cmdList;
     xe_command_list_handle_t commandList = cmdList.toHandle();
 
     EXPECT_CALL(cmdList, close()).Times(1);
@@ -26,18 +28,18 @@ TEST(xeCommandListClose, redirectsToCmdListObject) {
 using CommandListClose = ::testing::Test;
 
 HWTEST_F(CommandListClose, addsBatchBufferEndToCommandStream) {
-    xe::MockDevice device;
-    xe::MockMemoryManager memoryManager;
+    MockDevice device;
+    MockMemoryManager memoryManager;
     EXPECT_CALL(device, getMemoryManager())
         .WillRepeatedly(Return(&memoryManager));
 
     int8_t buffer[1024];
-    xe::GraphicsAllocation allocation(buffer, sizeof(buffer));
+    GraphicsAllocation allocation(buffer, sizeof(buffer));
     EXPECT_CALL(memoryManager, allocateDeviceMemory)
         .WillOnce(Return(&allocation));
 
-    auto commandList = xe::CommandList::create(productFamily, &device);
-    auto commandListAlias = whitebox_cast<xe::CommandList>(commandList);
+    auto commandList = CommandList::create(productFamily, &device);
+    auto commandListAlias = whitebox_cast<CommandList>(commandList);
     ASSERT_NE(nullptr, commandListAlias->commandStream);
     auto usedSpaceBefore = commandListAlias->commandStream->getUsed();
 
@@ -55,3 +57,5 @@ HWTEST_F(CommandListClose, addsBatchBufferEndToCommandStream) {
     auto itor = find<MI_BATCH_BUFFER_END *>(cmdList.begin(), cmdList.end());
     EXPECT_NE(cmdList.end(), itor);
 }
+
+} // namespace xe
