@@ -174,6 +174,11 @@ desc: "API version of $x_device_compute_properties_t"
 name: $X_DEVICE_COMPUTE_PROPERTIES_VERSION
 value: "$X_MAKE_VERSION( 1, 0 )"
 --- #--------------------------------------------------------------------------
+type: macro
+desc: "Maximum number of subgroup sizes supported."
+name: $X_SUBGROUPSIZE_COUNT
+value: "8"
+--- #--------------------------------------------------------------------------
 type: struct
 desc: "Device compute properties queried using $xDeviceGetComputeProperties"
 name: $x_device_compute_properties_t
@@ -208,6 +213,12 @@ members:
     - type: uint32_t
       name: maxGroupRegisters
       desc: "[out] Maximum physical registers available per group"
+    - type: uint32_t
+      name: numSubGroupSizes
+      desc: "[out] Number of subgroup sizes supported. This indicates number of entries in subGroupSizes."
+    - type: uint32_t
+      name: subGroupSizes[$X_SUBGROUPSIZE_COUNT]
+      desc: "[out] Size group sizes supported."
 --- #--------------------------------------------------------------------------
 type: function
 desc: "Retrieves compute attributes of the device"

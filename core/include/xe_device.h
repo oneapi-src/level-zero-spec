@@ -198,6 +198,10 @@ xe_result_t __xecall
 #define XE_DEVICE_COMPUTE_PROPERTIES_VERSION  XE_MAKE_VERSION( 1, 0 )
 
 ///////////////////////////////////////////////////////////////////////////////
+/// @brief Maximum number of subgroup sizes supported.
+#define XE_SUBGROUPSIZE_COUNT  8
+
+///////////////////////////////////////////////////////////////////////////////
 /// @brief Device compute properties queried using ::xeDeviceGetComputeProperties
 typedef struct _xe_device_compute_properties_t
 {
@@ -211,6 +215,8 @@ typedef struct _xe_device_compute_properties_t
     uint32_t maxGroupCountZ;                        ///< [out] Maximum groups that can be dispatched for z dimension
     uint32_t maxSharedLocalMemory;                  ///< [out] Maximum shared local memory per group.
     uint32_t maxGroupRegisters;                     ///< [out] Maximum physical registers available per group
+    uint32_t numSubGroupSizes;                      ///< [out] Number of subgroup sizes supported. This indicates number of entries in subGroupSizes.
+    uint32_t subGroupSizes[XE_SUBGROUPSIZE_COUNT];  ///< [out] Size group sizes supported.
 
 } xe_device_compute_properties_t;
 
