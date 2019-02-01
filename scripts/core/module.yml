@@ -417,8 +417,8 @@ returns:
         - "invalid dispatch count range for dispatch"
 --- #--------------------------------------------------------------------------
 type: function
-desc: "Query optimal local group size from global thread count."
-name: $xFunctionQueryOptimalGroupSize
+desc: "Query a suggested group size for function. If the function has an embedded group size then this will be returned. Otherwise, one will be suggested."
+name: $xFunctionSuggestGroupSize
 analogue:
     - ""
 details:
@@ -429,23 +429,23 @@ params:
       name: hFunction
       desc: "[in] handle of the function object"
     - type: "uint32_t"
-      name: globalThreadCountX
-      desc: "[in] number of global threads for X dimension"
+      name: globalSizeX
+      desc: "[in] global width for X dimension."
     - type: "uint32_t"
-      name: globalThreadCountY
-      desc: "[in] number of global threads for Y dimension"
+      name: globalSizeY
+      desc: "[in] global width for Y dimension."
     - type: "uint32_t"
-      name: globalThreadCountZ
-      desc: "[in] number of global threads for Z dimension"
+      name: globalSizeZ
+      desc: "[in] global width for Z dimension."
     - type: "uint32_t*"
-      name: optimalThreadCountX
-      desc: "[out] optimal number of threads within group for X dimension"
+      name: groupSizeX
+      desc: "[out] recommended size of group for X dimension."
     - type: "uint32_t*"
-      name: optimalThreadCountY
-      desc: "[out] optimal number of threads within group for Y dimension"
+      name: groupSizeY
+      desc: "[out] recommended size of group for Y dimension."
     - type: "uint32_t*"
-      name: optimalThreadCountZ
-      desc: "[out] optimal number of threads within group for Z dimension"
+      name: groupSizeZ
+      desc: "[out] recommended size of group for Z dimension."
 returns:
     - $X_RESULT_ERROR_INVALID_PARAMETER:
         - "invalid handle for hFunction"

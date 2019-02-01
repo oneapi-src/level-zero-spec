@@ -518,7 +518,9 @@ xe_result_t __xecall
 }
 
 ///////////////////////////////////////////////////////////////////////////////
-/// @brief Query optimal local group size from global thread count.
+/// @brief Query a suggested group size for function. If the function has an
+///        embedded group size then this will be returned. Otherwise, one will be
+///        suggested.
 /// 
 /// @details
 ///     - This function may be called from simultaneous threads.
@@ -536,23 +538,23 @@ xe_result_t __xecall
 ///         + invalid number of threads.
 /*@todo: __declspec(dllexport)*/
 xe_result_t __xecall
-  xeFunctionQueryOptimalGroupSize(
+  xeFunctionSuggestGroupSize(
     xe_function_handle_t hFunction,                 ///< [in] handle of the function object
-    uint32_t globalThreadCountX,                    ///< [in] number of global threads for X dimension
-    uint32_t globalThreadCountY,                    ///< [in] number of global threads for Y dimension
-    uint32_t globalThreadCountZ,                    ///< [in] number of global threads for Z dimension
-    uint32_t* optimalThreadCountX,                  ///< [out] optimal number of threads within group for X dimension
-    uint32_t* optimalThreadCountY,                  ///< [out] optimal number of threads within group for Y dimension
-    uint32_t* optimalThreadCountZ                   ///< [out] optimal number of threads within group for Z dimension
+    uint32_t globalSizeX,                           ///< [in] global width for X dimension.
+    uint32_t globalSizeY,                           ///< [in] global width for Y dimension.
+    uint32_t globalSizeZ,                           ///< [in] global width for Z dimension.
+    uint32_t* groupSizeX,                           ///< [out] recommended size of group for X dimension.
+    uint32_t* groupSizeY,                           ///< [out] recommended size of group for Y dimension.
+    uint32_t* groupSizeZ                            ///< [out] recommended size of group for Z dimension.
     )
 {
     // @todo: check_return(nullptr == get_driver(), XE_RESULT_ERROR_UNINITIALIZED);
 
     // Check parameters
     // @todo: check_return(xe_function_handle_t() == hFunction, XE_RESULT_ERROR_INVALID_PARAMETER);
-    // @todo: check_return(nullptr == optimalThreadCountX, XE_RESULT_ERROR_INVALID_PARAMETER);
-    // @todo: check_return(nullptr == optimalThreadCountY, XE_RESULT_ERROR_INVALID_PARAMETER);
-    // @todo: check_return(nullptr == optimalThreadCountZ, XE_RESULT_ERROR_INVALID_PARAMETER);
+    // @todo: check_return(nullptr == groupSizeX, XE_RESULT_ERROR_INVALID_PARAMETER);
+    // @todo: check_return(nullptr == groupSizeY, XE_RESULT_ERROR_INVALID_PARAMETER);
+    // @todo: check_return(nullptr == groupSizeZ, XE_RESULT_ERROR_INVALID_PARAMETER);
 
     // @todo: insert <code> here
 

@@ -645,7 +645,7 @@ responsibility of the application to implement this using ::${x}ModuleGetNativeB
     }
 ```
 
-${"##"} Function
+${"##"} Functions
 Functions are immutable references to functions within a module.
 
 The following sample code demonstrates a sequence for creating a function from a module:
@@ -660,7 +660,7 @@ The following sample code demonstrates a sequence for creating a function from a
     ...
 ```
 
-${"##"} Function Attributes
+${"###"} Function Attributes
 
 Use ${x}FunctionQueryAttribute to query attributes from a function object.
 
@@ -675,7 +675,7 @@ Use ${x}FunctionQueryAttribute to query attributes from a function object.
 
 See ${x}_function_attribute_t for more information on the attributes.
 
-${"##"} FunctionArgs
+${"###"} FunctionArgs
 FunctionArgs represent the inputs for a function.
 - FunctionArgs must be used with the Function object it was created for.
 - Use ${x}FunctionArgsSetValue to setup arguments for a function dispatch.
@@ -714,7 +714,28 @@ The following sample code demonstrates a sequence for creating function args and
     ...
 ```
 
-@todo [**Zack**] add function API to query optimal group dimensions from thread count, et al
+${"###"} Function Group Size
+The API supports a query for suggested group size. If the function has an embedded group size then this
+will be returned. Otherwise, one will be suggested. This function should not be used if a group size is
+not already associated with the function and the function requires specific alignment for group size.
+
+```c
+    // Find suggested group size for processing image.
+    uint32_t groupSizeX;
+    uint32_t groupSizeY;
+    ${x}FunctionSuggestGroupSize(function, imageWidth, imageHeight, 1, &groupSizeX, &groupSizeY, nullptr);
+
+    uint32_t numGroupsX = imageWidth / groupSizeX;
+    uint32_t numGroupsY = imageHeight / groupSizeY;
+
+    // Encode dispatch command
+    ${x}CommandListEncodeDispatchFunction(
+        hCommandList, hFunction, hFunctionArgs, 
+        groupSizeX, groupSizeY, 1,
+        numGroupsX, numGroupsY, 1);
+
+    ...
+```
 
 ${"#"} <a name="oi">OpenCL Interoperability</a>
 Interoperability with OpenCL is currently only supported _from_ OpenCL _to_ ${Xx} for a subset of types.
