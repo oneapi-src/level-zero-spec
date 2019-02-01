@@ -282,6 +282,7 @@ xe_result_t __xecall
 ///       required to use this for functionality.
 ///     - Memory advice can be used to override driver heuristics to explicitly
 ///       control shared memory behavior.
+///     - Not all memory advice may be supported by all devices.
 ///     - Memory advice may only be supported at a device-specific granularity,
 ///       such as at a page boundary. In this case, the memory range may be
 ///       expanded such that the start and end of the range satisfy granularity
@@ -298,12 +299,14 @@ xe_result_t __xecall
 ///     - ::XE_RESULT_SUCCESS
 ///     - ::XE_RESULT_ERROR_UNINITIALIZED
 ///     - ::XE_RESULT_ERROR_INVALID_PARAMETER
+///         + invalid handle for hDevice
 ///         + invalid pointer
 ///         + invalid advice
 /*@todo: __declspec(dllexport)*/
 xe_result_t __xecall
   xeCommandListEncodeMemAdvise(
     xe_command_list_handle_t hCommandList,          ///< [in] handle of command list
+    const xe_device_handle_t hDevice,               ///< [in] device associated with the memory advice
     const void* ptr,                                ///< [in] Pointer to the start of the memory range
     size_t size,                                    ///< [in] Size in bytes of the memory range
     xe_memory_advice_t advice                       ///< [in] Memory advice for the memory range
@@ -313,6 +316,7 @@ xe_result_t __xecall
 
     // Check parameters
     // @todo: check_return(xe_command_list_handle_t() == hCommandList, XE_RESULT_ERROR_INVALID_PARAMETER);
+    // @todo: check_return(const xe_device_handle_t() == hDevice, XE_RESULT_ERROR_INVALID_PARAMETER);
     // @todo: check_return(nullptr == ptr, XE_RESULT_ERROR_INVALID_PARAMETER);
 
     // @todo: insert <code> here

@@ -215,7 +215,16 @@ xe_result_t __xecall
 /// @brief Supported memory advice hints
 typedef enum _xe_memory_advice_t
 {
-    XE_MEMORY_ADVICE_TBD = 0,                       ///< @todo [**Ben**] which memory advice hints could/should we support?
+    XE_MEMORY_ADVICE_SET_READ_MOSTLY = 0,           ///< hint that memory will be read from frequently and written to rarely
+    XE_MEMORY_ADVICE_CLEAR_READ_MOSTLY,             ///< removes the affect of ::XE_MEMORY_ADVICE_SET_READ_MOSTLY
+    XE_MEMORY_ADVICE_SET_PREFERRED_LOCATION,        ///< hint that the preferred memory location is the specified device
+    XE_MEMORY_ADVICE_CLEAR_PREFERRED_LOCATION,      ///< removes the affect of ::XE_MEMORY_ADVICE_SET_PREFERRED_LOCATION
+    XE_MEMORY_ADVICE_SET_ACCESSED_BY,               ///< hint that memory will be accessed by the specified device
+    XE_MEMORY_ADVICE_CLEAR_ACCESSED_BY,             ///< removes the affect of ::XE_MEMORY_ADVICE_SET_ACCESSED_BY
+    XE_MEMORY_ADVICE_SET_NON_ATOMIC_MOSTLY,         ///< hints that memory will mostly be accessed non-atomically
+    XE_MEMORY_ADVICE_CLEAR_NON_ATOMIC_MOSTLY,       ///< removes the affect of ::XE_MEMORY_ADVICE_SET_NON_ATOMIC_MOSTLY
+    XE_MEMORY_ADVICE_BIAS_CACHED,                   ///< hints that memory should be cached
+    XE_MEMORY_ADVICE_BIAS_UNCACHED,                 ///< hints that memory should be not be cached
 
 } xe_memory_advice_t;
 
@@ -227,6 +236,7 @@ typedef enum _xe_memory_advice_t
 ///       required to use this for functionality.
 ///     - Memory advice can be used to override driver heuristics to explicitly
 ///       control shared memory behavior.
+///     - Not all memory advice may be supported by all devices.
 ///     - Memory advice may only be supported at a device-specific granularity,
 ///       such as at a page boundary. In this case, the memory range may be
 ///       expanded such that the start and end of the range satisfy granularity
@@ -243,11 +253,13 @@ typedef enum _xe_memory_advice_t
 ///     - ::XE_RESULT_SUCCESS
 ///     - ::XE_RESULT_ERROR_UNINITIALIZED
 ///     - ::XE_RESULT_ERROR_INVALID_PARAMETER
+///         + invalid handle for hDevice
 ///         + invalid pointer
 ///         + invalid advice
 xe_result_t __xecall
   xeCommandListEncodeMemAdvise(
     xe_command_list_handle_t hCommandList,          ///< [in] handle of command list
+    const xe_device_handle_t hDevice,               ///< [in] device associated with the memory advice
     const void* ptr,                                ///< [in] Pointer to the start of the memory range
     size_t size,                                    ///< [in] Size in bytes of the memory range
     xe_memory_advice_t advice                       ///< [in] Memory advice for the memory range

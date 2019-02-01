@@ -182,9 +182,27 @@ type: enum
 desc: "Supported memory advice hints"
 name: $x_memory_advice_t
 etors:
-    - name: $X_MEMORY_ADVICE_TBD
+    - name: $X_MEMORY_ADVICE_SET_READ_MOSTLY
       value: "0"
-      desc: "@todo [**Ben**] which memory advice hints could/should we support?"
+      desc: "hint that memory will be read from frequently and written to rarely"
+    - name: $X_MEMORY_ADVICE_CLEAR_READ_MOSTLY
+      desc: "removes the affect of $X_MEMORY_ADVICE_SET_READ_MOSTLY"
+    - name: $X_MEMORY_ADVICE_SET_PREFERRED_LOCATION
+      desc: "hint that the preferred memory location is the specified device"
+    - name: $X_MEMORY_ADVICE_CLEAR_PREFERRED_LOCATION
+      desc: "removes the affect of $X_MEMORY_ADVICE_SET_PREFERRED_LOCATION"
+    - name: $X_MEMORY_ADVICE_SET_ACCESSED_BY
+      desc: "hint that memory will be accessed by the specified device"
+    - name: $X_MEMORY_ADVICE_CLEAR_ACCESSED_BY
+      desc: "removes the affect of $X_MEMORY_ADVICE_SET_ACCESSED_BY"
+    - name: $X_MEMORY_ADVICE_SET_NON_ATOMIC_MOSTLY
+      desc: "hints that memory will mostly be accessed non-atomically"
+    - name: $X_MEMORY_ADVICE_CLEAR_NON_ATOMIC_MOSTLY
+      desc: "removes the affect of $X_MEMORY_ADVICE_SET_NON_ATOMIC_MOSTLY"
+    - name: $X_MEMORY_ADVICE_BIAS_CACHED
+      desc: "hints that memory should be cached"
+    - name: $X_MEMORY_ADVICE_BIAS_UNCACHED
+      desc: "hints that memory should be not be cached"
 --- #--------------------------------------------------------------------------
 type: function
 desc: "Provides advice about the use of a shared memory range"
@@ -194,6 +212,7 @@ analogue:
 details:
     - "Memory advice is a performance hint only; applications are not required to use this for functionality."
     - "Memory advice can be used to override driver heuristics to explicitly control shared memory behavior."
+    - "Not all memory advice may be supported by all devices."
     - "Memory advice may only be supported at a device-specific granularity, such as at a page boundary.
        In this case, the memory range may be expanded such that the start and end of the range satisfy
        granularity requirements."
@@ -203,6 +222,9 @@ params:
     - type: $x_command_list_handle_t
       name: hCommandList
       desc: "[in] handle of command list"
+    - type: "const $x_device_handle_t"
+      name: hDevice
+      desc: "[in] device associated with the memory advice"
     - type: "const void*"
       name: ptr
       desc: "[in] Pointer to the start of the memory range"
@@ -214,5 +236,6 @@ params:
       desc: "[in] Memory advice for the memory range"
 returns:
     - $X_RESULT_ERROR_INVALID_PARAMETER:
+        - "invalid handle for hDevice"
         - "invalid pointer"
         - "invalid advice"
