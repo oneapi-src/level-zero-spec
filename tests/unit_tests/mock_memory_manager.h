@@ -3,11 +3,11 @@
 #include "white_box.h"
 #include "gmock/gmock.h"
 
-template <>
-struct WhiteBox<xe::MemoryManager> : public xe::MemoryManager {
-};
-
 namespace xe {
+
+template <>
+struct WhiteBox<MemoryManager> : public MemoryManager {
+};
 
 struct MockMemoryManager : public WhiteBox<MemoryManager> {
     MOCK_METHOD0(allocateDeviceMemory, GraphicsAllocation *());

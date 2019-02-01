@@ -3,17 +3,17 @@
 #include "white_box.h"
 #include "gmock/gmock.h"
 
+namespace xe {
+
 template <>
-struct WhiteBox<xe::CommandQueue> : public xe::CommandQueueImp {
-    WhiteBox(xe::Device *device) : xe::CommandQueueImp(device) {
+struct WhiteBox<CommandQueue> : public CommandQueueImp {
+    WhiteBox(Device *device) : CommandQueueImp(device) {
     }
 
-    using xe::CommandQueueImp::allocation;
-    using xe::CommandQueueImp::commandStream;
-    using xe::CommandQueueImp::device;
+    using CommandQueueImp::allocation;
+    using CommandQueueImp::commandStream;
+    using CommandQueueImp::device;
 };
-
-namespace xe {
 
 struct MockCommandQueue : public CommandQueueImp {
     MockCommandQueue(Device *device = nullptr)
