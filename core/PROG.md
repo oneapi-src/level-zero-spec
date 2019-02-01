@@ -4,6 +4,8 @@
 
 The following documents the high-level programming models and guidelines.  
 
+NOTE: This is a **PRELIMINARY** specification, provided for review and feedback.
+
 ## Table of Contents
 * [Driver and Device](#dnd)
 * [Command Queues and Command Lists](#cnc)
@@ -784,8 +786,18 @@ Note, there is no guaranteed address equivalence for the values of `dptr` in eac
 
 # <a name="fut">Future</a>
 The following is a list a features that are still being defined for inclusion:
-- Predicated Execution: ability to cull program execution within a command list, based on device-generated value(s)
-- Execution Flow-Control: ability to describe loops and if-else-then type program execution within a command list, based on device-generated value(s)
-- Timestamps and Metrics: ability to retrieve device-specific counters for performance analysis, tuning and tooling
-- GetLastError: quality-of-life addition to enable "assert({X}_RESULT_SUCCESS != GetLastError(*_handle_t));"
-
+- **Predicated Execution**
+    + ability to cull program execution within a command list, based on device-generated value(s)
+- **Execution Flow-Control**
+    + ability to describe loops and if-else-then type program execution within a command list, based on device-generated value(s)
+- **Timestamps and Metrics**
+    + ability to retrieve device-specific counters for performance analysis, tuning and tooling
+- **GetLastError**
+    + quality-of-life addition to enable debug-only error checks, such as:
+```c
+    assert(XE_RESULT_SUCCESS != GetLastError(hDevice));
+    assert(XE_RESULT_SUCCESS != GetLastError(hCommandList));
+    assert(XE_RESULT_SUCCESS != GetLastError(hCommandQueue));
+    assert(XE_RESULT_SUCCESS != GetLastError(hModule));
+    ...
+```
