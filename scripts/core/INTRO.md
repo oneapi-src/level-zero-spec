@@ -8,9 +8,11 @@ ${"##"} Table of Contents
 * [Drivers](#drv)
 
 ${"#"} <a name="obj">Objective</a>
-The objective of the Level-Zero APIs to provide direct-to-metal interfaces to offload accelerator devices. It is an API interface that can be published at a cadence that better match Intel hardware release cadence and tailored to any hardware needs. It can be adapted to support broader set of languages. Support for function pointer, virtual function, unified memory, and  I/O capabilities.
+The objective of the Level-Zero API is to provide direct-to-metal interfaces to offload accelerator devices. 
+It is a programming interface that can be published at a cadence that better matches Intel hardware releases and can be tailored to any hardware needs. 
+It can be adapted to support broader set of languages features, such as function pointers, virtual functions, unified memory, and  I/O capabilities.
 
-The Intel ${Xx} Driver API provides the lowest-level, fine-grain and most explicit control over:
+The Driver API provides the lowest-level, fine-grain and most explicit control over:
 - Device Discovery
 - Memory Allocation and Cross-Process Sharing
 - Kernel Submission
@@ -18,53 +20,67 @@ The Intel ${Xx} Driver API provides the lowest-level, fine-grain and most explic
 - Synchronization Primitives
 - Metrics Reporting
 
-Most applications should not require the additional control provided by the driver APIs.
-The driver APIs are intended for providing explicit controls needed by higher-level runtime APIs and libraries.
+Most applications should not require the additional control provided by the Driver API.
+The Driver API is intended for providing explicit controls needed by higher-level runtime APIs and libraries.
 
 While heavily influenced by other low-level APIs, such as OpenCL, the driver APIs are designed to evolve independently.
 While heavily influenced by GPU archtiecture, the driver APIs are designed to be supportable across different compute device architectures, such as FPGAs, CSAs, etc.
 
 ${"##"} Devices
 The API architecture exposes both physical and logical abstraction of the underlying devices capabilities. 
-The Device, sub device and memory are exposed at physical level and command queues, events and synchronization methods are defined as logical entities. 
+The device, sub device and memory are exposed at physical level while command queues, events and synchronization methods are defined as logical entities. 
 All logical entities will be bound to device level physical capabilities.
+
 Device discovery APIs enumerate the accelerators functional features. 
 These APIs provide interface to query information like compute unit count within the device or sub device, 
 available memory and affinity to the compute, user managed cache size and work submission command queues.
 
 ${"##"} Memory & Caches
-Memory is visible to upper level SW stack as unified memory with single VA space covering both CPU and with in specific device type (e.g GPU or FPGA).
-For GPU's, the API exposes 2 levels of the device memory hierarchy namely the local device memory and cacheability of it in last level cache. The device memory can be managed at the device or sub device level. Last Level Cache (L3) last Level L3 cahce can be controled through memory allocation API's. The low level L1 cache is controlled throguh just language intrinsics.
+Memory is visible to the upper-level software stack as unified memory with a single virtual address space covering both the Host and a specific device.
 
-The Level 0 application interface allows allocation of buffers and images at device and sub device granularity with full cacheablity hints.  The buffers are transperant object accessed through virtual address pointers and Images are opaque objects accessed through handles.   
+For GPUs, the API exposes two levels of the device memory hierarchy:
+1. Local Device Memory: can be managed at the device and/or sub device level. 
+2. Device Cache(s):
+    + Last Level Cache (L3) can be controled through memory allocation APIs.
+    + Low Level Cache (L1) can be controlled through program language intrinsics.
 
-The memory APIs allow 3 kinds of allocation methods to allocate device, host and shared memory. The API's enable both implicit and explicit management of the resources by the application or runtimes. The interface also provides query capabilities for all memory objects.
+The API allows allocation of buffers and images at device and sub device granularity with full cacheablity hints. 
+- Buffers are transperant memory accessed through virtual address pointers
+- Images are opaque objects accessed through handles
+
+The memory APIs provide allocation methods to allocate either device, host or shared memory. 
+The APIs enable both implicit and explicit management of the resources by the application or runtimes. 
+The interface also provides query capabilities for all memory objects.
+
+${"##"} Multi-Die Device Support
+GPUs are typically built with multiple dies, also called as "Tiles" with in the package. 
+Each Tile is interconnected with neighboring tile using high bandwidth link. 
+Even though tiles have direct connection to its own memory, the high bandwidth link allows each tile to access its neighboring tile's memory at very low latency. 
+The cross-tile memory is stacked within package allowing applications to access all the device memory with the single continuous view.
+
+The API represents tiles as sub-devices and there are functions to query and obtain a sub-device. 
+Outside of these functions there are no distinction between sub-devices and devices. 
+For example, a sub-device can be used with memory allocation and tasks dispatch functions and allow placement and dispatch to a specific sub-device.
+
+${"##"} Peer-to-Peer Communication
+Peer to Peer API's provide capabilities to marshall data across Host to Device, Device to Host and Device to Device. 
+The data marshalling API can be scheduled as asynchronous operations or can be synchronized with kernel execution through command queues. 
+Data coherency is maintained by the driver with out any explicit involement from the user.
+
+${"##"} Inter-Process Communication
+The API allows sharing of memory objects across different GPU processes. 
+Since each process has it's own virtual address space, there is no guarantee that the same virtual address will be available when the memory object is shared in new process. 
+There are a set of APIs that makes it easier to share the memory objects with ease. 
+
+${"#"} <a name="spec">API Specification</a>
+The following section provides high-level design philosophy of the APIs.
+For more detailed information, refer to the programming guides and detailed specification pages.
 
 ${"##"} Cross-Device Support
 In order to both expose the full capabilities of GPUs and remain supportable by other devices, the API definition is sub-divided into "Core" and "Extended".  
 "Core" represents APIs that all fully cross-device while "Extended" represents APIs that are device-specific.
 All implementations must support "Core" APIs while "Extended" APIs are optional.
 An implementation will return ::${X}_RESULT_ERROR_UNSUPPORTED for any feature request not supported by that device.
-
-${"##"} Multi-Die Device Support
-GPUs are typically built with multiple dies, also called as "Tiles" with in the package. 
-Each Tile is interconnected with neighboring tile using high bandwidth link. 
-Even though, tiles have direct connection to its own memory, the high band width link allows each tile to access its neighboring tile's memory at very low latency. 
-The cross-tile memory is stacked within package allowing applications to access all the device memory with the single continuous view.
-
-Level 0 interface represents tiles as sub-devices and there are functions to query and obtain a sub-device. Outside of
-these functions there are no distinction between sub-devices and devices. For example, a sub-device can be used with memory allocation
-and tasks dispatch functions and allow placement and dispatch to a specific sub-device.
-
-${"##"} Peer-to-Peer Communication
-Peer to Peer API's provide capabilities to marshall data across Host to Device, Device to Host and Device to Device. The data marshalling API can be scheduled as asynchronous operations or can be synchronized with kernel execution through command queues. Data coherency is maintained by the driver with out any explicit involement from the user.
-
-${"##"} Inter-Process Communication
-Level 0 interface allows sharing of memory objects across different GPU processes. Since each process has it's own virtual address space, there is no guarantee that the same virtual address will be avialble when the memory object is shared in new process. There are set of API's that makes it easier to share the memory objects with ease. 
-
-${"#"} <a name="spec">API Specification</a>
-The following section provides high-level design philosophy of the APIs.
-For more detailed information, refer to the programming guides and detailed specification pages.
 
 ${"##"} Naming Convention
 The following naming convention is followed in order to avoid conflicts within the API, or with other APIs and libraries:
