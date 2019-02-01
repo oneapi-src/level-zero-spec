@@ -387,12 +387,16 @@ The required matrix of capabilities are:
 | **Shared**              | Optional | Optional      | Optional          | Optional                 |
 | Cross-Device **Shared** | Optional | Optional      | Optional          | Optional                 |
 
-### Prefetch and Memory Advice
+### Cache Hints, Prefetch, and Memory Advice
+Cacheability hints may be provided via separate host and device allocation flags when memory is allocated.
+
 **Shared** allocations may be prefetched to a supporting device via the ::xeCommandListEncodeMemoryPrefetch API.
+Prefetching may allow memory transfers to be scheduled concurrently with other computations and may improve performance.
 
-Additionally, an application may provide memory advices for a **shared** allocation via the ::xeCommandListEncodeMemAdvise API, to override driver heuristics or migration policies.
+Additionally, an application may provide memory advice for a **shared** allocation via the ::xeCommandListEncodeMemAdvise API, to override driver heuristics or migration policies.
+Memory advice may avoid unnecessary or unprofitable memory transfers and may improve performance.
 
-@todo [**Ben**] more details from discussion about what prefetch and memadvise do and _when_ they should be used; sample code?
+Both prefetch and memory advice are asynchronous operations that are encoded into command lists.
 
 ## Images
 An image is used to store multi-dimensional and format-defined memory for optimal device access.
@@ -432,7 +436,6 @@ The following sample code demonstrates a basic sequence for Cache size configura
     ...
 ```
 The following sample code demonstrates a basic sequence for Runtime Hint/Prefrence for Cache:
-@todo [**Ben/Ankur**] more details once flag is defined in memory section sample code?
 
 ## Device Residency
 For devices that do not support page-faults, the driver must ensure that all pages that will be accessed by the kernel are resident before program execution.
