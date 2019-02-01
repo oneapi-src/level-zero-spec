@@ -388,23 +388,23 @@ params:
       name: hFunctionArgs
       desc: "[in] handle to function arguments buffer."
     - type: "uint32_t"
-      name: threadCountX
-      desc: "[in] width of group in threads for X dimension"
+      name: groupSizeX
+      desc: "[in] group size for X dimension"
     - type: "uint32_t"
-      name: threadCountY
-      desc: "[in] width of group in threads for Y dimension"
+      name: groupSizeY
+      desc: "[in] group size for Y dimension"
     - type: "uint32_t"
-      name: threadCountZ
-      desc: "[in] width of group in threads for Z dimension"
+      name: groupSizeZ
+      desc: "[in] group size for Z dimension"
     - type: "uint32_t"
       name: groupCountX
-      desc: "[in] width of dispatches in X dimension"
+      desc: "[in] width of group dispatches in X dimension"
     - type: "uint32_t"
       name: groupCountY
-      desc: "[in] width of dispatches in Y dimension"
+      desc: "[in] width of group dispatches in Y dimension"
     - type: "uint32_t"
       name: groupCountZ
-      desc: "[in] width of dispatches in Z dimension"
+      desc: "[in] width of group dispatches in Z dimension"
     - type: $x_event_handle_t
       name: hEvent
       desc: "[in][optional] handle of the event to signal on completion"
@@ -415,6 +415,63 @@ returns:
         - "nullptr for function arguments buffer"
         - "invalid group count range for dispatch"
         - "invalid dispatch count range for dispatch"
+
+--- #--------------------------------------------------------------------------
+type: struct
+desc: "Indirect function arguments. These arguments are device visible."
+name: $x_dispatch_function_arguments_t
+members:
+    - type: "uint32_t"
+      name: groupSizeX
+      desc: "[in] group size for X dimension"
+    - type: "uint32_t"
+      name: groupSizeY
+      desc: "[in] group size for Y dimension"
+    - type: "uint32_t"
+      name: groupSizeZ
+      desc: "[in] group size for Z dimension"
+    - type: "uint32_t"
+      name: groupCountX
+      desc: "[in] width of dispatches in X dimension"
+    - type: "uint32_t"
+      name: groupCountY
+      desc: "[in] width of dispatches in Y dimension"
+    - type: "uint32_t"
+      name: groupCountZ
+      desc: "[in] width of dispatches in Z dimension"
+--- #--------------------------------------------------------------------------
+type: function
+desc: "Dispatch command over one or more work groups using indirect dispatch arguments."
+name: $xCommandListEncodeDispatchFunctionIndirect
+analogue:
+    - "**cuLaunchKernel**"
+details:
+    - "This function may **not** be called from simultaneous threads."
+    - "The implementation of this function should be lock-free."
+    - "The dispatch arguments need to be device visible."
+    - "The dispatch arguments buffer may not be reusued until dispatch has completed on the device."
+params:
+    - type: "$x_command_list_handle_t"
+      name: hCommandList
+      desc: "[in] handle of the command list"
+    - type: "$x_function_handle_t"
+      name: hFunction
+      desc: "[in] handle of the function object"
+    - type: "$x_function_args_handle_t"
+      name: hFunctionArgs
+      desc: "[in] handle to function arguments buffer."
+    - type: "const $x_dispatch_function_arguments_t*"
+      name: pDispatchArgumentsBuffer
+      desc: "[in] Pointer to buffer that will contain dispatch arguments."
+    - type: $x_event_handle_t
+      name: hEvent
+      desc: "[in][optional] handle of the event to signal on completion"
+returns:
+    - $X_RESULT_ERROR_INVALID_PARAMETER:
+        - "invalid handle for hCommandQueue"
+        - "invalid handle for hFunction"
+        - "invalid handle for hFunctionArgs."
+        - "nullptr for dispatch arguments buffer"
 --- #--------------------------------------------------------------------------
 type: function
 desc: "Query a suggested group size for function. If the function has an embedded group size then this will be returned. Otherwise, one will be suggested."
@@ -450,82 +507,3 @@ returns:
     - $X_RESULT_ERROR_INVALID_PARAMETER:
         - "invalid handle for hFunction"
         - "invalid number of threads."
---- #--------------------------------------------------------------------------
-type: struct
-desc: "Device properties queried using $xDeviceGetProperties"
-name: $x_dispatch_function_arguments_t
-members:
-    - type: "uint32_t"
-      name: threadCountX
-      desc: "[in] width of group in threads for X dimension"
-    - type: "uint32_t"
-      name: threadCountY
-      desc: "[in] width of group in threads for Y dimension"
-    - type: "uint32_t"
-      name: threadCountZ
-      desc: "[in] width of group in threads for Z dimension"
-    - type: "uint32_t"
-      name: groupCountX
-      desc: "[in] width of dispatches in X dimension"
-    - type: "uint32_t"
-      name: groupCountY
-      desc: "[in] width of dispatches in Y dimension"
-    - type: "uint32_t"
-      name: groupCountZ
-      desc: "[in] width of dispatches in Z dimension"
---- #--------------------------------------------------------------------------
-type: function
-desc: "Dispatch command over one or more work groups using indirect dispatch arguments."
-name: $xCommandListEncodeDispatchFunctionIndirect
-analogue:
-    - "**cuLaunchKernel**"
-details:
-    - "This function may **not** be called from simultaneous threads."
-    - "The implementation of this function should be lock-free."
-    - "@todo [**Zack**] more details on memory type for indirect buffer and when is safe for application to reuse"
-params:
-    - type: "$x_command_list_handle_t"
-      name: hCommandList
-      desc: "[in] handle of the command list"
-    - type: "$x_function_handle_t"
-      name: hFunction
-      desc: "[in] handle of the function object"
-    - type: "$x_function_args_handle_t"
-      name: hFunctionArgs
-      desc: "[in] handle to function arguments buffer."
-    - type: "const $x_dispatch_function_arguments_t*"
-      name: pDispatchArgumentsBuffer
-      desc: "[in] Pointer to buffer that will contain dispatch arguments."
-    - type: $x_event_handle_t
-      name: hEvent
-      desc: "[in][optional] handle of the event to signal on completion"
-returns:
-    - $X_RESULT_ERROR_INVALID_PARAMETER:
-        - "invalid handle for hCommandQueue"
-        - "invalid handle for hFunction"
-        - "invalid handle for hFunctionArgs."
-        - "nullptr for dispatch arguments buffer"
---- #--------------------------------------------------------------------------
-type: function
-desc: "Compute max groups that can occupy per sublice."
-name: $xFunctionGetOccupancyMaxGroupsPerSublice
-analogue:
-    - "**cuOccupancyMaxActiveBlocksPerMultiprocessor**"
-details:
-    - "This function may be called from simultaneous threads."
-    - "The implementation of this function should be lock-free."
-params:
-    - type: "$x_function_handle_t"
-      name: hFunction
-      desc: "[in] handle of the function object"
-    - type: "$x_dispatch_function_arguments_t*"
-      name: pDispatchArgumentsBuffer
-      desc: "[in] Pointer to buffer that will contain dispatch arguments."
-    - type: "uint32_t*"
-      name: pMaxGroups
-      desc: "[out] Pointer to maximum groups that can occupy subslice for this function."
-returns:
-    - $X_RESULT_ERROR_INVALID_PARAMETER:
-        - "invalid handle for hFunction"
-        - "nullptr for pDispatchArgumentsBuffer."
-        - "nullptr for pMax Groups"

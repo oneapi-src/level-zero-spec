@@ -495,12 +495,12 @@ xe_result_t __xecall
     xe_command_list_handle_t hCommandList,          ///< [in] handle of the command list
     xe_function_handle_t hFunction,                 ///< [in] handle of the function object
     xe_function_args_handle_t hFunctionArgs,        ///< [in] handle to function arguments buffer.
-    uint32_t threadCountX,                          ///< [in] width of group in threads for X dimension
-    uint32_t threadCountY,                          ///< [in] width of group in threads for Y dimension
-    uint32_t threadCountZ,                          ///< [in] width of group in threads for Z dimension
-    uint32_t groupCountX,                           ///< [in] width of dispatches in X dimension
-    uint32_t groupCountY,                           ///< [in] width of dispatches in Y dimension
-    uint32_t groupCountZ,                           ///< [in] width of dispatches in Z dimension
+    uint32_t groupSizeX,                            ///< [in] group size for X dimension
+    uint32_t groupSizeY,                            ///< [in] group size for Y dimension
+    uint32_t groupSizeZ,                            ///< [in] group size for Z dimension
+    uint32_t groupCountX,                           ///< [in] width of group dispatches in X dimension
+    uint32_t groupCountY,                           ///< [in] width of group dispatches in Y dimension
+    uint32_t groupCountZ,                           ///< [in] width of group dispatches in Z dimension
     xe_event_handle_t hEvent                        ///< [in][optional] handle of the event to signal on completion
     )
 {
@@ -510,6 +510,53 @@ xe_result_t __xecall
     // @todo: check_return(xe_command_list_handle_t() == hCommandList, XE_RESULT_ERROR_INVALID_PARAMETER);
     // @todo: check_return(xe_function_handle_t() == hFunction, XE_RESULT_ERROR_INVALID_PARAMETER);
     // @todo: check_return(xe_function_args_handle_t() == hFunctionArgs, XE_RESULT_ERROR_INVALID_PARAMETER);
+    // @todo: check_return(xe_event_handle_t() == hEvent, XE_RESULT_ERROR_INVALID_PARAMETER);
+
+    // @todo: insert <code> here
+
+    return XE_RESULT_SUCCESS;
+}
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Dispatch command over one or more work groups using indirect dispatch
+///        arguments.
+/// 
+/// @details
+///     - This function may **not** be called from simultaneous threads.
+///     - The implementation of this function should be lock-free.
+///     - The dispatch arguments need to be device visible.
+///     - The dispatch arguments buffer may not be reusued until dispatch has
+///       completed on the device.
+/// 
+/// @remarks
+///   _Analogues_
+///     - **cuLaunchKernel**
+/// 
+/// @returns
+///     - ::XE_RESULT_SUCCESS
+///     - ::XE_RESULT_ERROR_UNINITIALIZED
+///     - ::XE_RESULT_ERROR_INVALID_PARAMETER
+///         + invalid handle for hCommandQueue
+///         + invalid handle for hFunction
+///         + invalid handle for hFunctionArgs.
+///         + nullptr for dispatch arguments buffer
+/*@todo: __declspec(dllexport)*/
+xe_result_t __xecall
+  xeCommandListEncodeDispatchFunctionIndirect(
+    xe_command_list_handle_t hCommandList,          ///< [in] handle of the command list
+    xe_function_handle_t hFunction,                 ///< [in] handle of the function object
+    xe_function_args_handle_t hFunctionArgs,        ///< [in] handle to function arguments buffer.
+    const xe_dispatch_function_arguments_t* pDispatchArgumentsBuffer,   ///< [in] Pointer to buffer that will contain dispatch arguments.
+    xe_event_handle_t hEvent                        ///< [in][optional] handle of the event to signal on completion
+    )
+{
+    // @todo: check_return(nullptr == get_driver(), XE_RESULT_ERROR_UNINITIALIZED);
+
+    // Check parameters
+    // @todo: check_return(xe_command_list_handle_t() == hCommandList, XE_RESULT_ERROR_INVALID_PARAMETER);
+    // @todo: check_return(xe_function_handle_t() == hFunction, XE_RESULT_ERROR_INVALID_PARAMETER);
+    // @todo: check_return(xe_function_args_handle_t() == hFunctionArgs, XE_RESULT_ERROR_INVALID_PARAMETER);
+    // @todo: check_return(nullptr == pDispatchArgumentsBuffer, XE_RESULT_ERROR_INVALID_PARAMETER);
     // @todo: check_return(xe_event_handle_t() == hEvent, XE_RESULT_ERROR_INVALID_PARAMETER);
 
     // @todo: insert <code> here
@@ -555,90 +602,6 @@ xe_result_t __xecall
     // @todo: check_return(nullptr == groupSizeX, XE_RESULT_ERROR_INVALID_PARAMETER);
     // @todo: check_return(nullptr == groupSizeY, XE_RESULT_ERROR_INVALID_PARAMETER);
     // @todo: check_return(nullptr == groupSizeZ, XE_RESULT_ERROR_INVALID_PARAMETER);
-
-    // @todo: insert <code> here
-
-    return XE_RESULT_SUCCESS;
-}
-
-///////////////////////////////////////////////////////////////////////////////
-/// @brief Dispatch command over one or more work groups using indirect dispatch
-///        arguments.
-/// 
-/// @details
-///     - This function may **not** be called from simultaneous threads.
-///     - The implementation of this function should be lock-free.
-///     - @todo [**Zack**] more details on memory type for indirect buffer and
-///       when is safe for application to reuse
-/// 
-/// @remarks
-///   _Analogues_
-///     - **cuLaunchKernel**
-/// 
-/// @returns
-///     - ::XE_RESULT_SUCCESS
-///     - ::XE_RESULT_ERROR_UNINITIALIZED
-///     - ::XE_RESULT_ERROR_INVALID_PARAMETER
-///         + invalid handle for hCommandQueue
-///         + invalid handle for hFunction
-///         + invalid handle for hFunctionArgs.
-///         + nullptr for dispatch arguments buffer
-/*@todo: __declspec(dllexport)*/
-xe_result_t __xecall
-  xeCommandListEncodeDispatchFunctionIndirect(
-    xe_command_list_handle_t hCommandList,          ///< [in] handle of the command list
-    xe_function_handle_t hFunction,                 ///< [in] handle of the function object
-    xe_function_args_handle_t hFunctionArgs,        ///< [in] handle to function arguments buffer.
-    const xe_dispatch_function_arguments_t* pDispatchArgumentsBuffer,   ///< [in] Pointer to buffer that will contain dispatch arguments.
-    xe_event_handle_t hEvent                        ///< [in][optional] handle of the event to signal on completion
-    )
-{
-    // @todo: check_return(nullptr == get_driver(), XE_RESULT_ERROR_UNINITIALIZED);
-
-    // Check parameters
-    // @todo: check_return(xe_command_list_handle_t() == hCommandList, XE_RESULT_ERROR_INVALID_PARAMETER);
-    // @todo: check_return(xe_function_handle_t() == hFunction, XE_RESULT_ERROR_INVALID_PARAMETER);
-    // @todo: check_return(xe_function_args_handle_t() == hFunctionArgs, XE_RESULT_ERROR_INVALID_PARAMETER);
-    // @todo: check_return(nullptr == pDispatchArgumentsBuffer, XE_RESULT_ERROR_INVALID_PARAMETER);
-    // @todo: check_return(xe_event_handle_t() == hEvent, XE_RESULT_ERROR_INVALID_PARAMETER);
-
-    // @todo: insert <code> here
-
-    return XE_RESULT_SUCCESS;
-}
-
-///////////////////////////////////////////////////////////////////////////////
-/// @brief Compute max groups that can occupy per sublice.
-/// 
-/// @details
-///     - This function may be called from simultaneous threads.
-///     - The implementation of this function should be lock-free.
-/// 
-/// @remarks
-///   _Analogues_
-///     - **cuOccupancyMaxActiveBlocksPerMultiprocessor**
-/// 
-/// @returns
-///     - ::XE_RESULT_SUCCESS
-///     - ::XE_RESULT_ERROR_UNINITIALIZED
-///     - ::XE_RESULT_ERROR_INVALID_PARAMETER
-///         + invalid handle for hFunction
-///         + nullptr for pDispatchArgumentsBuffer.
-///         + nullptr for pMax Groups
-/*@todo: __declspec(dllexport)*/
-xe_result_t __xecall
-  xeFunctionGetOccupancyMaxGroupsPerSublice(
-    xe_function_handle_t hFunction,                 ///< [in] handle of the function object
-    xe_dispatch_function_arguments_t* pDispatchArgumentsBuffer, ///< [in] Pointer to buffer that will contain dispatch arguments.
-    uint32_t* pMaxGroups                            ///< [out] Pointer to maximum groups that can occupy subslice for this function.
-    )
-{
-    // @todo: check_return(nullptr == get_driver(), XE_RESULT_ERROR_UNINITIALIZED);
-
-    // Check parameters
-    // @todo: check_return(xe_function_handle_t() == hFunction, XE_RESULT_ERROR_INVALID_PARAMETER);
-    // @todo: check_return(nullptr == pDispatchArgumentsBuffer, XE_RESULT_ERROR_INVALID_PARAMETER);
-    // @todo: check_return(nullptr == pMaxGroups, XE_RESULT_ERROR_INVALID_PARAMETER);
 
     // @todo: insert <code> here
 
