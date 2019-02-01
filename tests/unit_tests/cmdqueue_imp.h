@@ -1,5 +1,5 @@
 #pragma once
-#include "cmd_queue.h"
+#include "cmdqueue.h"
 
 namespace OCLRT {
 class LinearStream;

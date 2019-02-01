@@ -1,5 +1,5 @@
-#include "cmd_list.h"
-#include "cmd_queue.h"
+#include "cmdlist.h"
+#include "cmdqueue.h"
 #include "device.h"
 #include "event.h"
 #include "memory_manager.h"

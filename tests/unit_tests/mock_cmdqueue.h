@@ -1,5 +1,5 @@
 #pragma once
-#include "cmd_queue_imp.h"
+#include "cmdqueue_imp.h"
 #include "white_box.h"
 #include "gmock/gmock.h"
 

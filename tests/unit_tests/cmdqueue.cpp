@@ -1,5 +1,5 @@
-#include "cmd_queue_imp.h"
-#include "cmd_list_hw.h"
+#include "cmdqueue_imp.h"
+#include "cmdlist_hw.h"
 #include "device.h"
 #include "graphics_allocation.h"
 #include "memory_manager.h"

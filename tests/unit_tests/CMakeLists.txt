@@ -11,18 +11,18 @@ if(COMPUTE_RUNTIME_SUPPORT)
     target_sources(${TARGET_NAME}
         PRIVATE
             environment.cpp
-            cmd_list.cpp
-            cmd_list.h
-            cmd_list_bdw.cpp
-            cmd_list_hw.h
-            cmd_list_hw.inl
-            cmd_list_imp.cpp
-            cmd_list_imp.h
-            cmd_list_kbl.cpp
-            cmd_list_skl.cpp
-            cmd_queue.cpp
-            cmd_queue.h
-            cmd_queue_imp.h
+            cmdlist.cpp
+            cmdlist.h
+            cmdlist_bdw.cpp
+            cmdlist_hw.h
+            cmdlist_hw.inl
+            cmdlist_imp.cpp
+            cmdlist_imp.h
+            cmdlist_kbl.cpp
+            cmdlist_skl.cpp
+            cmdqueue.cpp
+            cmdqueue.h
+            cmdqueue_imp.h
             device.cpp
             device.h
             driver.cpp
@@ -33,8 +33,8 @@ if(COMPUTE_RUNTIME_SUPPORT)
             graphics_allocation.h
             memory_manager.cpp
             memory_manager.h
-            mock_cmd_list.cpp
-            mock_cmd_list.h
+            mock_cmdlist.cpp
+            mock_cmdlist.h
             mock_cmdqueue.cpp
             mock_cmdqueue.h
             mock_device.cpp

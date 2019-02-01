@@ -3,7 +3,7 @@
 #error "Don't #include this file directly."
 #endif //CMD_LIST_INTERNAL
 
-#include "cmd_list.h"
+#include "cmdlist.h"
 
 namespace OCLRT {
 class LinearStream;

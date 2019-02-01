@@ -2,7 +2,7 @@
 #include "xe_all.h"
 #include "graphics_allocation.h"
 #include "igfxfmid.h"
-#include "mock_cmd_list.h"
+#include "mock_cmdlist.h"
 #include "mock_device.h"
 #include "mock_memory_manager.h"
 #include "runtime/command_stream/linear_stream.h"
