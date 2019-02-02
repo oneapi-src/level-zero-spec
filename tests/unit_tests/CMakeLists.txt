@@ -2,9 +2,7 @@ set(TARGET_NAME ${PROJECT_NAME}_unit_tests)
 
 add_executable(${TARGET_NAME}
     main.cpp
-    test_cmdqueue.cpp
     test_event.cpp
-    test_sample.cpp
 )
 
 if(COMPUTE_RUNTIME_SUPPORT)
@@ -53,12 +51,14 @@ if(COMPUTE_RUNTIME_SUPPORT)
             test_cmdlist.cpp
             test_cmdlist_close.cpp
             test_cmdlist_encodewaitonevent.cpp
+            test_cmdqueue.cpp
             test_cmdqueue_enqueuecommandlist.cpp
             test_device.cpp
             test_driver.cpp
             test_graphics_allocation.cpp
             test_memory_manager.cpp
             test_platform.cpp
+            test_sample.cpp
             white_box.h
             ${COMPUTE_RUNTIME_HW_ENABLE}
             ${COMPUTE_RUNTIME_HW_ENABLE_ULT}
