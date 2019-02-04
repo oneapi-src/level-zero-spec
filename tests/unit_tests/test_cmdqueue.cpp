@@ -9,6 +9,8 @@
 
 using ::testing::Return;
 
+extern PRODUCT_FAMILY productFamily;
+
 namespace xe {
 namespace ult {
 
@@ -38,7 +40,7 @@ TEST(CommandQueueCreate, returnsCommandQueueOnSuccess) {
     EXPECT_CALL(manager, allocateDeviceMemory()).WillRepeatedly(Return(allocation));
     EXPECT_CALL(manager, freeMemory(allocation)).WillRepeatedly(Return());
 
-    auto commandQueue = whitebox_cast(CommandQueue::create(IGFX_SKYLAKE, &device));
+    auto commandQueue = whitebox_cast(CommandQueue::create(productFamily, &device));
     ASSERT_NE(nullptr, commandQueue);
     EXPECT_EQ(&device, commandQueue->device);
     EXPECT_EQ(allocation, commandQueue->allocation);
