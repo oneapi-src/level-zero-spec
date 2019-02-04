@@ -76,11 +76,11 @@ typedef struct _xe_module_desc_t
 ///       ::xeModuleGetNativeBinary. This can be cached to disk and to create
 ///       new modules.
 ///     - The following build options are supported:
-///     - -::xe-opt-disable - Disable optimizations
-///     - -::xe-opt-greater-than-4GB-buffer-required - Use 64-bit offset
-///       calculations for buffers.
-///     - -::xe-opt-large-register-file - Increase number of registers available
-///       to threads.
+///         + "-::xe-opt-disable" - Disable optimizations
+///         + "-::xe-opt-greater-than-4GB-buffer-required" - Use 64-bit offset
+///           calculations for buffers.
+///         + "-::xe-opt-large-register-file" - Increase number of registers
+///           available to threads.
 /// 
 /// @remarks
 ///   _Analogues_
