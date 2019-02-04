@@ -1,17 +1,19 @@
 #include "mock_cmdlist.h"
 
 namespace xe {
+namespace ult {
 
-WhiteBox<CommandList>::WhiteBox(Device *device) : CommandListImp(device) {
+WhiteBox<::xe::CommandList>::WhiteBox(Device *device) : CommandListImp(device) {
 }
 
-WhiteBox<CommandList>::~WhiteBox() {
+WhiteBox<::xe::CommandList>::~WhiteBox() {
 }
 
-MockCommandList::MockCommandList(Device *device) : WhiteBox<CommandList>(device) {
+MockCommandList::MockCommandList(Device *device) : WhiteBox<::xe::CommandList>(device) {
 }
 
 MockCommandList::~MockCommandList() {
 }
 
+} // namespace ult
 } // namespace xe

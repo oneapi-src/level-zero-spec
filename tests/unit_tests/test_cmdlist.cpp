@@ -8,6 +8,7 @@
 #include "gtest/gtest.h"
 
 namespace xe {
+namespace ult {
 
 TEST(xeCommandListDestroy, redirectsToCmdListObject) {
     MockCommandList cmdList;
@@ -35,7 +36,7 @@ TEST_P(CommandListCreate, returnsCommandListOnSuccess) {
     auto commandList = CommandList::create(GetParam(), &device);
     ASSERT_NE(nullptr, commandList);
 
-    auto commandListAlias = whitebox_cast<CommandList>(commandList);
+    auto commandListAlias = whitebox_cast(commandList);
     EXPECT_EQ(&device, commandListAlias->device);
     EXPECT_EQ(allocation, commandListAlias->allocation);
     ASSERT_NE(nullptr, commandListAlias->commandStream);
@@ -71,4 +72,5 @@ INSTANTIATE_TEST_CASE_P(,
                         CommandListCreateFail,
                         ::testing::ValuesIn(unsupportedProductFamilyTable));
 
+} // namespace ult
 } // namespace xe

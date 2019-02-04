@@ -6,18 +6,20 @@
 #include "gmock/gmock.h"
 
 namespace xe {
+namespace ult {
 
 template <>
-struct WhiteBox<CommandList> : public CommandListImp {
+struct WhiteBox<::xe::CommandList> : public ::xe::CommandListImp {
+    using BaseClass = ::xe::CommandListImp;
+    using BaseClass::allocation;
+    using BaseClass::commandStream;
+    using BaseClass::device;
+
     WhiteBox(Device *device);
     virtual ~WhiteBox();
-
-    using CommandListImp::allocation;
-    using CommandListImp::commandStream;
-    using CommandListImp::device;
 };
 
-struct MockCommandList : public WhiteBox<CommandList> {
+struct MockCommandList : public WhiteBox<::xe::CommandList> {
     MockCommandList(Device *device = nullptr);
     virtual ~MockCommandList();
 
@@ -26,4 +28,7 @@ struct MockCommandList : public WhiteBox<CommandList> {
     MOCK_METHOD1(encodeWaitOnEvent, xe_result_t(xe_event_handle_t hEvent));
 };
 
+using CommandList = WhiteBox<::xe::CommandList>;
+
+} // namespace ult
 } // namespace xe

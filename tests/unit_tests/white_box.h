@@ -1,13 +1,26 @@
 #pragma once
 
 namespace xe {
+namespace ult {
 
 template <typename Type>
-struct WhiteBox;
-
-} // namespace xe
+struct WhiteBox : public Type {
+};
 
 template <typename Type>
-xe::WhiteBox<Type> *whitebox_cast(Type *obj) {
-    return static_cast<xe::WhiteBox<Type> *>(obj);
+WhiteBox<Type> *whitebox_cast(Type *obj) {
+    return static_cast<WhiteBox<Type> *>(obj);
 }
+
+template <typename Type>
+WhiteBox<Type> &whitebox_cast(Type &obj) {
+    return static_cast<WhiteBox<Type> &>(obj);
+}
+
+template <typename Type>
+Type *blackbox_cast(WhiteBox<Type> *obj) {
+    return static_cast<Type *>(obj);
+}
+
+} // namespace ult
+} // namespace xe

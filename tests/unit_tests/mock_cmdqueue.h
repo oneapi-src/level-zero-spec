@@ -4,18 +4,20 @@
 #include "gmock/gmock.h"
 
 namespace xe {
+namespace ult {
 
 template <>
-struct WhiteBox<CommandQueue> : public CommandQueueImp {
+struct WhiteBox<::xe::CommandQueue> : public ::xe::CommandQueueImp {
+    using BaseClass = ::xe::CommandQueueImp;
+    using BaseClass::allocation;
+    using BaseClass::commandStream;
+    using BaseClass::device;
+
     WhiteBox(Device *device);
     virtual ~WhiteBox();
-
-    using CommandQueueImp::allocation;
-    using CommandQueueImp::commandStream;
-    using CommandQueueImp::device;
 };
 
-struct MockCommandQueue : public CommandQueueImp {
+struct MockCommandQueue : public WhiteBox<::xe::CommandQueue> {
     MockCommandQueue(Device *device = nullptr);
     virtual ~MockCommandQueue();
 
@@ -25,4 +27,7 @@ struct MockCommandQueue : public CommandQueueImp {
                                                   xe_fence_handle_t hFence));
 };
 
+using CommandQueue = WhiteBox<::xe::CommandQueue>;
+
+} // namespace ult
 } // namespace xe

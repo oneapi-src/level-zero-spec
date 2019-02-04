@@ -1,19 +1,21 @@
 #include "mock_cmdqueue.h"
 
 namespace xe {
+namespace ult {
 
-WhiteBox<CommandQueue>::WhiteBox(Device *device)
-    : CommandQueueImp(device) {
+WhiteBox<::xe::CommandQueue>::WhiteBox(Device *device)
+    : ::xe::CommandQueueImp(device) {
 }
 
-WhiteBox<CommandQueue>::~WhiteBox() {
+WhiteBox<::xe::CommandQueue>::~WhiteBox() {
 }
 
 MockCommandQueue::MockCommandQueue(Device *device)
-    : CommandQueueImp(device) {
+    : WhiteBox<::xe::CommandQueue>(device) {
 }
 
 MockCommandQueue::~MockCommandQueue() {
 }
 
+} // ult
 } // namespace xe

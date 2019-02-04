@@ -12,6 +12,7 @@
 using ::testing::Return;
 
 namespace xe {
+namespace ult {
 
 TEST(xeCommandQueueEnqueueCommandQueue, redirectsToCmdQueueObject) {
     MockCommandList cmdList;
@@ -45,14 +46,13 @@ HWTEST_F(CommandQueueEnqueueCommandQueue, addsASecondLevelBatchBufferPerCommandL
         .WillRepeatedly(Return(&allocation));
 
     auto commandQueue = CommandQueue::create(IGFX_SKYLAKE, &device);
-    auto commandQueueAlias = whitebox_cast<CommandQueue>(commandQueue);
+    auto commandQueueAlias = whitebox_cast(commandQueue);
     ASSERT_NE(nullptr, commandQueueAlias->commandStream);
     auto usedSpaceBefore = commandQueueAlias->commandStream->getUsed();
 
     xe_command_list_handle_t commandLists[] = {
         CommandList::create(IGFX_SKYLAKE, &device)->toHandle(),
-        CommandList::create(IGFX_SKYLAKE, &device)->toHandle()
-    };
+        CommandList::create(IGFX_SKYLAKE, &device)->toHandle()};
     uint32_t numCommandLists = sizeof(commandLists) / sizeof(commandLists[0]);
     auto result = commandQueue->enqueueCommandLists(numCommandLists,
                                                     commandLists,
@@ -69,7 +69,7 @@ HWTEST_F(CommandQueueEnqueueCommandQueue, addsASecondLevelBatchBufferPerCommandL
                                                       usedSpaceAfter));
     using MI_BATCH_BUFFER_START = typename FamilyType::MI_BATCH_BUFFER_START;
     auto itorCurrent = cmdList.begin();
-        
+
     for (auto i = 0u; i < numCommandLists; i++) {
         auto commandList = CommandList::fromHandle(commandLists[i]);
         auto &allocation = commandList->getAllocation();
@@ -93,4 +93,5 @@ HWTEST_F(CommandQueueEnqueueCommandQueue, addsASecondLevelBatchBufferPerCommandL
     commandQueue->destroy();
 }
 
+} // namespace ult
 } // namespace xe

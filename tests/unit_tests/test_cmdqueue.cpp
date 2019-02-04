@@ -10,6 +10,7 @@
 using ::testing::Return;
 
 namespace xe {
+namespace ult {
 
 TEST(xeDeviceCreateCommandQueue, returnsSuccess) {
     xe_device_handle_t device = {};
@@ -40,7 +41,7 @@ TEST(CommandQueueCreate, returnsCommandQueueOnSuccess) {
     auto commandQueue = CommandQueue::create(IGFX_SKYLAKE, &device);
     ASSERT_NE(nullptr, commandQueue);
 
-    auto commandQueueAlias = whitebox_cast<CommandQueue>(commandQueue);
+    auto commandQueueAlias = whitebox_cast(commandQueue);
     EXPECT_EQ(&device, commandQueueAlias->device);
     EXPECT_EQ(allocation, commandQueueAlias->allocation);
     ASSERT_NE(nullptr, commandQueueAlias->commandStream);
@@ -48,4 +49,5 @@ TEST(CommandQueueCreate, returnsCommandQueueOnSuccess) {
     commandQueue->destroy();
 }
 
+} // namespace ult
 } // namespace xe

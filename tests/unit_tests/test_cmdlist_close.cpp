@@ -14,6 +14,7 @@ using ::testing::Return;
 extern PRODUCT_FAMILY productFamily;
 
 namespace xe {
+namespace ult {
 
 TEST(xeCommandListClose, redirectsToCmdListObject) {
     MockCommandList cmdList;
@@ -39,7 +40,7 @@ HWTEST_F(CommandListClose, addsBatchBufferEndToCommandStream) {
         .WillOnce(Return(&allocation));
 
     auto commandList = CommandList::create(productFamily, &device);
-    auto commandListAlias = whitebox_cast<CommandList>(commandList);
+    auto commandListAlias = whitebox_cast(commandList);
     ASSERT_NE(nullptr, commandListAlias->commandStream);
     auto usedSpaceBefore = commandListAlias->commandStream->getUsed();
 
@@ -58,4 +59,5 @@ HWTEST_F(CommandListClose, addsBatchBufferEndToCommandStream) {
     EXPECT_NE(cmdList.end(), itor);
 }
 
+} // namespace ult
 } // namespace xe
