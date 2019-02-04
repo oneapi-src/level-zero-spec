@@ -602,7 +602,7 @@ Build options can be passed with ::${x}_module_desc_t as a string.
 | Build Option                                  | Description                                           | Default  |
 | :--                                           | :--                                                   | :--      |
 | -${x}-opt-disable                             | Disable optimizations.                                | Disabled |
-| -${x}-opt-greater-than-4GB-buffer-required    | Optimize offset calculations within buffers.          | Disabled |
+| -${x}-opt-greater-than-4GB-buffer-required    | Use 64-bit offset calculations for buffers.          | Disabled |
 | -${x}-opt-large-register-file                 | Increase number of registers available to threads.    | Disabled |
 
 ${"###"} Module Build Log

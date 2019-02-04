@@ -602,7 +602,7 @@ Build options can be passed with ::xe_module_desc_t as a string.
 | Build Option                                  | Description                                           | Default  |
 | :--                                           | :--                                                   | :--      |
 | -xe-opt-disable                             | Disable optimizations.                                | Disabled |
-| -xe-opt-greater-than-4GB-buffer-required    | Optimize offset calculations within buffers.          | Disabled |
+| -xe-opt-greater-than-4GB-buffer-required    | Use 64-bit offset calculations for buffers.          | Disabled |
 | -xe-opt-large-register-file                 | Increase number of registers available to threads.    | Disabled |
 
 ### Module Build Log

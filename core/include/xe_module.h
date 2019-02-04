@@ -62,13 +62,25 @@ typedef struct _xe_module_desc_t
 } xe_module_desc_t;
 
 ///////////////////////////////////////////////////////////////////////////////
-/// @brief Creates module object from an input IL or ISA.
+/// @brief Creates module object from an input IL or native binary.
 /// 
 /// @details
 ///     - This function may be called from simultaneous threads.
 ///     - The implementation of this function should be lock-free.
 ///     - This function will create and compile the module object.
-///     - A build log can optionally be returned to the caller.
+///     - A build log can optionally be returned to the caller. Caller is
+///       responsible for destroying build log using ::xeModuleBuildLogDestroy
+///     - Device memory will be allocated for module during creation.
+///     - A module can be created directly from native binary format.
+///     - A native binary object can be retrieved from a module using
+///       ::xeModuleGetNativeBinary. This can be cached to disk and to create
+///       new modules.
+///     - The following build options are supported:
+///     - -::xe-opt-disable - Disable optimizations
+///     - -::xe-opt-greater-than-4GB-buffer-required - Use 64-bit offset
+///       calculations for buffers.
+///     - -::xe-opt-large-register-file - Increase number of registers available
+///       to threads.
 /// 
 /// @remarks
 ///   _Analogues_
@@ -173,6 +185,11 @@ xe_result_t __xecall
 /// @details
 ///     - This function may be called from simultaneous threads.
 ///     - The implementation of this function should be lock-free.
+///     - The memory for the native binary output is associated with the module.
+///       The output pointer should not be accessed after a module has been
+///       destroyed.
+///     - The native binary output can be cached to disk and new modules can be
+///       later constructed from the cached copy.
 /// 
 /// @returns
 ///     - ::XE_RESULT_SUCCESS
@@ -221,6 +238,7 @@ typedef struct _xe_function_desc_t
 /// @details
 ///     - This function may be called from simultaneous threads.
 ///     - The implementation of this function should be lock-free.
+///     - Function objects should be destroyed before the Module is destroyed.
 /// 
 /// @remarks
 ///   _Analogues_
@@ -267,6 +285,11 @@ xe_result_t __xecall
 /// @details
 ///     - This function may be called from simultaneous threads.
 ///     - The implementation of this function should be lock-free.
+///     - FunctionArgs objects must be used with the Function object it was
+///       created for.
+///     - Use ::xeFunctionArgsSetValue to setup arguments for dispatch.
+///     - FunctionArgs can updated and used across multiple dispatches for the
+///       same function.
 /// 
 /// @returns
 ///     - ::XE_RESULT_SUCCESS
