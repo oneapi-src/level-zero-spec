@@ -19,7 +19,7 @@ value: "( _ver & 0x0000ffff )"
 --- #--------------------------------------------------------------------------
 type: macro
 desc: "Current header file version"
-name: $X_UMD_HEADER_VERSION
+name: $X_API_HEADER_VERSION
 value: "$X_MAKE_VERSION( 1, 0 )"
 --- #--------------------------------------------------------------------------
 type: macro

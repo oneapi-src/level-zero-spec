@@ -68,7 +68,7 @@ The data marshalling API can be scheduled as asynchronous operations or can be s
 Data coherency is maintained by the driver with out any explicit involement from the user.
 
 ${"##"} Inter-Process Communication
-The API allows sharing of memory objects across different GPU processes. 
+The API allows sharing of memory objects across different device processes. 
 Since each process has it's own virtual address space, there is no guarantee that the same virtual address will be available when the memory object is shared in new process. 
 There are a set of APIs that makes it easier to share the memory objects with ease. 
 
@@ -105,7 +105,7 @@ ${"##"} Versioning
 There are multiple versions that can be used by the application to determine compatibility:
 1. Header Version - this is the version of the header files included by the application.
     - This is typically used to determine whether the application is using the latest version of the API header files.
-    - It is determined from ::${X}_UMD_HEADER_VERSION.
+    - It is determined from ::${X}_API_HEADER_VERSION.
 2. API Version - this is the version of the API features supported by the device.
     - This is typically used to determine if the device supports the minimum set of features required by the application.
     - It is determined from calling ::${x}DeviceGetApiVersion
@@ -128,9 +128,9 @@ In order to eliminate the usage of thread-locks by the implementation, the follo
 - work submission into a command queue is free-threaded
 - multiple, simulateneous threads may encode multiple command lists independently
 - the application is responsible for ensuring multiple, simultaneous threads are not modifying mutable objects;
-such as command queues and command lists
-- the application is responsible for ensuring the GPU is not accessing objects before they are modified, resued or destroyed;
-such as memory, images and command lists
+  such as command lists
+- the application is responsible for ensuring the device is not accessing objects before they are modified, resued or destroyed;
+  such as memory, images and command lists
 - there is no implicit garbage collection performed by the implementation
 
 ${"#"} <a name="drv">Drivers</a>
@@ -138,7 +138,7 @@ ${"##"} Installation
 The ${Xx} driver API is implemented within a _${x}_vendor.dll_, which is copied on the system during installation of the device driver;
 where "_vendor_" is chosen by the device vendor.
 
-This API does not define an Installable Client Driver (ICD), however it is expected that users of this API would prefer to implement
+This API does not define an Installable Client Driver (ICD), as it is expected that users of this API would prefer to implement
 their own device abstraction layer and communicate directly with the device-driver.
 
 ${"##"} Environment Variables

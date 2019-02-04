@@ -80,20 +80,19 @@ The following diagram illustrates the hierarchy of command lists and command que
 @image latex ../images/core_queue.png
 
 ${"##"} Command Queues
-- A command queue represents a physical input stream to the device, 
-  specified by an ordinal at creation time.
+- A command queue represents a logical input stream to the device, tied to a physcial input
+  stream via an ordinal at creation time.
 - The number of simultaneous command queues per device is queried from calling 
   ::${x}DeviceGetProperties; returned as ::${x}_device_properties_t.numAsyncComputeEngines
   and ::${x}_device_properties_t.numAsyncCopyEngines.
 - Multiple command queues may be created by an application.  For example,
-  an application may want to create a command queue per CPU thread.
-- There is no implicit binding of command queues to CPU threads. Therefore,
-  an application may share a command queue handle across multiple CPU
-  threads. However, the application is responsible for ensuring that 
-  multiple CPU threads do not access the same command queue simultaneously.
+  an application may want to create a command queue per Host thread.
+- There is no implicit binding of command queues to Host threads. Therefore,
+  an application may share a command queue handle across multiple Host
+  threads.
 - Commands are submitted to a command queue via command lists and are
   executed in a fifo manner.
-- The application is responsible for making sure the GPU is not currently
+- The application is responsible for making sure the device is not currently
   executing from a command queue before it is deleted.  This is 
   typically done by tracking command list events, but may also be
   handled by calling ::${x}CommandQueueSynchronize.
@@ -121,10 +120,10 @@ ${"##"} Command Lists
 - There is no implicit association between a command list and a 
   command queue. Therefore, a command list may be submitted to any, or
   multiple command queues.
-- There is no implicit binding of command lists to CPU threads. Therefore,
-  an application may share a command list handle across multiple CPU
+- There is no implicit binding of command lists to Host threads. Therefore,
+  an application may share a command list handle across multiple Host
   threads. However, the application is responsible for ensuring that 
-  multiple CPU threads do not access the same command list simultaneously.
+  multiple Host threads do not access the same command list simultaneously.
 - The command list maintains some machine state, which is inherited by
   subsequent commands. See ::${x}_command_list_parameter_t for details.
 - Command lists do not inherit state from other command lists executed
@@ -132,10 +131,10 @@ ${"##"} Command Lists
   in its own default state.
 - The application is responsible for calling close before submission
   to a command queue.
-- The application is responsible for making sure the GPU is not currently
+- The application is responsible for making sure the device is not currently
   executing from a command list before it is deleted.  This should be
   handled by tracking a completion event associated with the command list.
-- The application is responsible for making sure the GPU is not currently
+- The application is responsible for making sure the device is not currently
   executing from a command list before it is reset.  This should be
   handled by tracking a completion event associated with the command list.
 
@@ -160,7 +159,7 @@ The following sample code demonstrates submission of commands to a command queue
     // Enqueue command list execution into command queue
     ${x}CommandQueueEnqueueCommandLists(hCommandQueue, 1, &hCommandList, nullptr);
 
-    // synchronize host and GPU
+    // synchronize host and device
     ${x}CommandQueueSynchronize(hCommandQueue);
 
     // Reset (recycle) command list for new commands
