@@ -145,6 +145,9 @@ ${x}_result_t __${x}call
     %elif re.match(r".*handle_t.*", param['type']):
     // @todo: check_return(${sub(x, param['type'])}() == ${sub(x, param['name'])}, ${X}_RESULT_ERROR_INVALID_PARAMETER);
     %endif
+    %if re.match(r".*desc_t.*", param['type']):
+    // @todo: check_return(${re.sub(r"\w*\s*(.*)_t.*", r"\1_VERSION", sub(x, param['type'])).upper()} <= ${param['name']}->version, ${X}_RESULT_ERROR_UNSUPPORTED);
+    %endif
     %endfor
 
     // @todo: insert <code> here

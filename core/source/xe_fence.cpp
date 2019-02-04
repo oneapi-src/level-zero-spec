@@ -64,6 +64,7 @@ xe_result_t __xecall
     // Check parameters
     // @todo: check_return(xe_command_queue_handle_t() == hCommandQueue, XE_RESULT_ERROR_INVALID_PARAMETER);
     // @todo: check_return(nullptr == desc, XE_RESULT_ERROR_INVALID_PARAMETER);
+    // @todo: check_return(XE_FENCE_DESC_VERSION <= desc->version, XE_RESULT_ERROR_UNSUPPORTED);
     // @todo: check_return(nullptr == phFence, XE_RESULT_ERROR_INVALID_PARAMETER);
 
     // @todo: insert <code> here
