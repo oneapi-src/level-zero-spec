@@ -3,6 +3,7 @@ import re
 
 def sub(repl, string, tag=False):
     string = re.sub(r"\$Xx", repl.title(), string)
+    string = re.sub(r"\-\$x", "-"+repl, string) #hack
     repl = "::"+repl if tag else repl
     string = re.sub(r"\$x", repl, string)
     string = re.sub(r"\$X", repl.upper(), string)
