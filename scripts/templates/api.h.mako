@@ -116,6 +116,26 @@ typedef double double_t;
 /// 
 /// @details
 %for item in obj['details']:
+    %if isinstance(item, dict):
+    %for key, values in item.items():
+    %for line in split_line(sub(x, key, True), 70):
+        %if loop.index < 1:
+///     - ${line}
+        %else:
+///       ${line}
+        %endif
+    %endfor
+        %for val in values:
+        %for line in split_line(sub(x, val, True), 66):
+        %if loop.index < 1:
+///         + ${line}
+        %else:
+///           ${line}
+        %endif
+        %endfor
+        %endfor
+    %endfor
+    %else:
     %for line in split_line(sub(x, item, True), 70):
         %if loop.index < 1:
 ///     - ${line}
@@ -123,6 +143,7 @@ typedef double double_t;
 ///       ${line}
         %endif
     %endfor
+    %endif
 %endfor
 %endif
 %if 'analogue' in obj:
@@ -162,6 +183,7 @@ typedef struct _${sub(x, obj['name'])}
 /// @returns
 ///     - ::${X}_RESULT_SUCCESS
 ///     - ::${X}_RESULT_ERROR_UNINITIALIZED
+///     - ::${X}_RESULT_ERROR_UNSUPPORTED
 %for item in obj['returns']:
     %if isinstance(item, dict):
     %for key, values in item.items():
