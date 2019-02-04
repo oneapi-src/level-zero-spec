@@ -3,12 +3,15 @@
 #include "runtime/platform/platform.h"
 #include "runtime/helpers/hw_info.h"
 
+GFXCORE_FAMILY renderCoreFamily = IGFX_GEN9_CORE;
+PRODUCT_FAMILY productFamily = IGFX_SKYLAKE;
+
+namespace xe {
+namespace ult {
+
 static OCLRT::HardwareInfo hwInfo = {};
 static OCLRT::FeatureTable skuTable = {};
 static GT_SYSTEM_INFO sysInfo = {};
-
-GFXCORE_FAMILY renderCoreFamily = IGFX_GEN9_CORE;
-PRODUCT_FAMILY productFamily = IGFX_SKYLAKE;
 
 struct Environment : public ::testing::Environment {
     void SetUp() override {
@@ -39,3 +42,6 @@ struct InitializeEnvironment {
 };
 
 static InitializeEnvironment initializeEnvironment;
+
+} // namespace ult
+} // namespace xe

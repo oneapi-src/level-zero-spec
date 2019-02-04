@@ -9,10 +9,10 @@
 #include "xe_all.h"
 #include "gtest/gtest.h"
 
-using ::testing::Return;
-
 namespace xe {
 namespace ult {
+
+using ::testing::Return;
 
 TEST(xeCommandQueueEnqueueCommandQueue, redirectsToCmdQueueObject) {
     MockCommandList cmdList;
@@ -45,14 +45,13 @@ HWTEST_F(CommandQueueEnqueueCommandQueue, addsASecondLevelBatchBufferPerCommandL
     EXPECT_CALL(memoryManager, allocateDeviceMemory)
         .WillRepeatedly(Return(&allocation));
 
-    auto commandQueue = CommandQueue::create(IGFX_SKYLAKE, &device);
-    auto commandQueueAlias = whitebox_cast(commandQueue);
-    ASSERT_NE(nullptr, commandQueueAlias->commandStream);
-    auto usedSpaceBefore = commandQueueAlias->commandStream->getUsed();
+    auto commandQueue = whitebox_cast(CommandQueue::create(productFamily, &device));
+    ASSERT_NE(nullptr, commandQueue->commandStream);
+    auto usedSpaceBefore = commandQueue->commandStream->getUsed();
 
     xe_command_list_handle_t commandLists[] = {
-        CommandList::create(IGFX_SKYLAKE, &device)->toHandle(),
-        CommandList::create(IGFX_SKYLAKE, &device)->toHandle()};
+        CommandList::create(productFamily, &device)->toHandle(),
+        CommandList::create(productFamily, &device)->toHandle()};
     uint32_t numCommandLists = sizeof(commandLists) / sizeof(commandLists[0]);
     auto result = commandQueue->enqueueCommandLists(numCommandLists,
                                                     commandLists,
@@ -60,12 +59,12 @@ HWTEST_F(CommandQueueEnqueueCommandQueue, addsASecondLevelBatchBufferPerCommandL
 
     ASSERT_EQ(XE_RESULT_SUCCESS, result);
 
-    auto usedSpaceAfter = commandQueueAlias->commandStream->getUsed();
+    auto usedSpaceAfter = commandQueue->commandStream->getUsed();
     ASSERT_GT(usedSpaceAfter, usedSpaceBefore);
 
     GenCmdList cmdList;
     ASSERT_TRUE(FamilyType::PARSE::parseCommandBuffer(cmdList,
-                                                      ptrOffset(commandQueueAlias->commandStream->getCpuBase(), 0),
+                                                      ptrOffset(commandQueue->commandStream->getCpuBase(), 0),
                                                       usedSpaceAfter));
     using MI_BATCH_BUFFER_START = typename FamilyType::MI_BATCH_BUFFER_START;
     auto itorCurrent = cmdList.begin();

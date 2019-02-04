@@ -38,14 +38,12 @@ TEST(CommandQueueCreate, returnsCommandQueueOnSuccess) {
     EXPECT_CALL(manager, allocateDeviceMemory()).WillRepeatedly(Return(allocation));
     EXPECT_CALL(manager, freeMemory(allocation)).WillRepeatedly(Return());
 
-    auto commandQueue = CommandQueue::create(IGFX_SKYLAKE, &device);
+    auto commandQueue = whitebox_cast(CommandQueue::create(IGFX_SKYLAKE, &device));
     ASSERT_NE(nullptr, commandQueue);
-
-    auto commandQueueAlias = whitebox_cast(commandQueue);
-    EXPECT_EQ(&device, commandQueueAlias->device);
-    EXPECT_EQ(allocation, commandQueueAlias->allocation);
-    ASSERT_NE(nullptr, commandQueueAlias->commandStream);
-    EXPECT_LT(0u, commandQueueAlias->commandStream->getAvailableSpace());
+    EXPECT_EQ(&device, commandQueue->device);
+    EXPECT_EQ(allocation, commandQueue->allocation);
+    ASSERT_NE(nullptr, commandQueue->commandStream);
+    EXPECT_LT(0u, commandQueue->commandStream->getAvailableSpace());
     commandQueue->destroy();
 }
 

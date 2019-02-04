@@ -9,12 +9,10 @@
 #include "unit_tests/gen_common/gen_cmd_parse.h"
 #include "gmock/gmock.h"
 
-using ::testing::Return;
-
-extern PRODUCT_FAMILY productFamily;
-
 namespace xe {
 namespace ult {
+
+using ::testing::Return;
 
 TEST(xeCommandListClose, redirectsToCmdListObject) {
     MockCommandList cmdList;
@@ -39,20 +37,19 @@ HWTEST_F(CommandListClose, addsBatchBufferEndToCommandStream) {
     EXPECT_CALL(memoryManager, allocateDeviceMemory)
         .WillOnce(Return(&allocation));
 
-    auto commandList = CommandList::create(productFamily, &device);
-    auto commandListAlias = whitebox_cast(commandList);
-    ASSERT_NE(nullptr, commandListAlias->commandStream);
-    auto usedSpaceBefore = commandListAlias->commandStream->getUsed();
+    auto commandList = whitebox_cast(CommandList::create(productFamily, &device));
+    ASSERT_NE(nullptr, commandList->commandStream);
+    auto usedSpaceBefore = commandList->commandStream->getUsed();
 
     auto result = commandList->close();
     ASSERT_EQ(XE_RESULT_SUCCESS, result);
 
-    auto usedSpaceAfter = commandListAlias->commandStream->getUsed();
+    auto usedSpaceAfter = commandList->commandStream->getUsed();
     ASSERT_GT(usedSpaceAfter, usedSpaceBefore);
 
     GenCmdList cmdList;
     ASSERT_TRUE(FamilyType::PARSE::parseCommandBuffer(cmdList,
-                                                      ptrOffset(commandListAlias->commandStream->getCpuBase(), 0),
+                                                      ptrOffset(commandList->commandStream->getCpuBase(), 0),
                                                       usedSpaceAfter));
     using MI_BATCH_BUFFER_END = typename FamilyType::MI_BATCH_BUFFER_END;
     auto itor = find<MI_BATCH_BUFFER_END *>(cmdList.begin(), cmdList.end());

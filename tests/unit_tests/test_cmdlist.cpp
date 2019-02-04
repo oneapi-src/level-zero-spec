@@ -33,14 +33,13 @@ TEST_P(CommandListCreate, returnsCommandListOnSuccess) {
     EXPECT_CALL(manager, allocateDeviceMemory()).WillRepeatedly(Return(allocation));
     EXPECT_CALL(manager, freeMemory(allocation)).WillRepeatedly(Return());
 
-    auto commandList = CommandList::create(GetParam(), &device);
+    auto commandList = whitebox_cast(CommandList::create(GetParam(), &device));
     ASSERT_NE(nullptr, commandList);
 
-    auto commandListAlias = whitebox_cast(commandList);
-    EXPECT_EQ(&device, commandListAlias->device);
-    EXPECT_EQ(allocation, commandListAlias->allocation);
-    ASSERT_NE(nullptr, commandListAlias->commandStream);
-    EXPECT_LT(0u, commandListAlias->commandStream->getAvailableSpace());
+    EXPECT_EQ(&device, commandList->device);
+    EXPECT_EQ(allocation, commandList->allocation);
+    ASSERT_NE(nullptr, commandList->commandStream);
+    EXPECT_LT(0u, commandList->commandStream->getAvailableSpace());
     commandList->destroy();
 }
 
