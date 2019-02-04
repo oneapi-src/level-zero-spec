@@ -1,5 +1,5 @@
 Python dependencies:
-  * Python v3.6.6
+  * Python v3.6.6 or later
   * [Mako Templates for Python](https://www.makotemplates.org/) v1.0.7
   * [PyYAML](https://pyyaml.org/) v3.13
 
@@ -9,7 +9,7 @@ Installing Mako and PyYAML:
     setx HTTP_PROXY "http://proxy-chain.intel.com:912"
     setx HTTPS_PROXY "http://proxy-chain.intel.com:912"
   ~~~~
-  * Install Mako
+  * Install Mako and PyYAML.
   ~~~~
     py -m pip install Mako
     py -m pip install PyYAML
