@@ -224,4 +224,27 @@ xe_result_t __xecall
     xe_command_list_handle_t hCommandList           ///< [in] handle of the command list
     );
 
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Encode a command list into another command list.
+/// 
+/// @details
+///     - The application may **not** call this function from simultaneous
+///       threads.
+///     - The implementation of this function should be lock-free.
+/// 
+/// @returns
+///     - ::XE_RESULT_SUCCESS
+///     - ::XE_RESULT_ERROR_UNINITIALIZED
+///     - ::XE_RESULT_ERROR_INVALID_PARAMETER
+///         + invalid handle for hCommandList
+///         + 0 for numCommandLists
+///         + nullptr for phCommandLists
+///         + invalid handle in phCommandLists
+xe_result_t __xecall
+  xeCommandListEncodeCommandLists(
+    xe_command_list_handle_t hCommandList,          ///< [in] handle of the command list
+    uint32_t numCommandLists,                       ///< [in] number of command lists to encode
+    xe_command_list_handle_t* phCommandLists        ///< [in] list of handles of the command lists to encode for execution
+    );
+
 #endif // _XE_CMDLIST_H
