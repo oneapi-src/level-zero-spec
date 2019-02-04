@@ -249,7 +249,7 @@ ${"##"} Fences
 and can only be waited upon from the host.
 - A fence only has two states: not signaled and signaled.
 - A fence cannot be shared across processes.
-- An application can use ::{X}FenceQueryElapsedTime to calculate the time (in milliseconds) between two fences' signals.
+- An application can use ::${x}FenceQueryElapsedTime to calculate the time (in milliseconds) between two fences' signals.
 
 The following diagram illustrates an example of fences:  
 ![Fence](../images/core_fence.png?raw=true)  
@@ -286,7 +286,7 @@ ${"##"} Events
 - An event can be encoded into any command list from the same device.
 - An event cannot be encoded into multiple command lists simultaneously.
 - An event can be shared across processes.
-- An application can use ::{X}EventQueryElapsedTime to calculate the time (in milliseconds) between two events signalled by the same device.
+- An application can use ::${x}EventQueryElapsedTime to calculate the time (in milliseconds) between two events signalled by the same device.
 
 The following diagram illustrates an example of events:  
 ![Event](../images/core_event.png?raw=true)  
@@ -447,8 +447,8 @@ For device support cache control and config, there are two methods for cache con
 The following sample code demonstrates a basic sequence for Cache size configuration:
 ```c
     // Large SLM for Intermediate and Last Level cache
-    ${x}DeviceSetIntermediateCacheConfig(hDevice, $X_CACHE_CONFIG_LARGE_SLM);
-    ${x}DeviceSetLastLevelCacheConfig(hDevice, $X_CACHE_CONFIG_LARGE_SLM);
+    ${x}DeviceSetIntermediateCacheConfig(hDevice, ${X}_CACHE_CONFIG_LARGE_SLM);
+    ${x}DeviceSetLastLevelCacheConfig(hDevice, ${X}_CACHE_CONFIG_LARGE_SLM);
     ...
 ```
 The following sample code demonstrates a basic sequence for Runtime Hint/Prefrence for Cache:
