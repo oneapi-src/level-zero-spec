@@ -2,7 +2,7 @@ ${"#"} Programming Guide (Core)
 
 [DO NOT EDIT]: # (generated from /scripts/core/PROG.md)
 
-The following documents the high-level programming models and guidelines.  
+The following documents the high-level programming models and guidelines.
 
 NOTE: This is a **PRELIMINARY** specification, provided for review and feedback.
 
@@ -19,7 +19,7 @@ ${"##"} Table of Contents
 
 ${"#"} <a name="dnd">Driver and Device</a>
 The following diagram illustrates the hierarchy of devices to the driver:  
-![Driver](../images/core_driver.png?raw=true)  
+![Driver](../images/core_driver.png?raw=true)
 @image latex ../images/core_driver.png
 
 ${"##"} Driver

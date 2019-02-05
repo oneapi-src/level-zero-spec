@@ -145,6 +145,46 @@ xe_result_t __xecall
     );
 
 ///////////////////////////////////////////////////////////////////////////////
+/// @brief Device capabilities
+/// 
+/// @details
+///     - Supported device capabilities
+///     - The application may call this function from simultaneous threads.
+///     - The implementation of this function should be lock-free.
+typedef enum _xe_device_capabilities_t
+{
+    XE_DEVICE_CAPS_UNIFIED_MEMORY_SUPPORTED = XE_BIT( 0 ),  ///< Supports unified memory
+    XE_DEVICE_CAPS_ONDEMAND_PAGE_FAULTING = XE_BIT( 1 ),///< Supports on-demand page faulting
+    XE_DEVICE_CAPS_INTERMEDIATE_CACHE_CONTROL = XE_BIT( 2 ),///< Support User control on Intermediate Cache(i.e. Resize SLM section vs Generic Cache).
+
+} xe_device_capabilities_t;
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Returns the supported device capabilities
+/// 
+/// @details
+///     - The application may call this function from simultaneous threads.
+///     - The implementation of this function should be lock-free.
+/// 
+/// @remarks
+///   _Analogues_
+///     - **cuDeviceGetAttribute**
+/// 
+/// @returns
+///     - ::XE_RESULT_SUCCESS
+///     - ::XE_RESULT_ERROR_UNINITIALIZED
+///     - ::XE_RESULT_ERROR_UNSUPPORTED
+///     - ::XE_RESULT_ERROR_INVALID_PARAMETER
+///         + invalid handle for hDevice
+///         + invalid capability
+xe_result_t __xecall
+  xeDeviceQueryCapability(
+    xe_device_handle_t hDevice,                     ///< [in] handle of the device object
+    xe_device_capabilities_t capability,            ///< [out] capability to query
+    bool* pSupport                                  ///< [out] true/false for capability
+    );
+
+///////////////////////////////////////////////////////////////////////////////
 /// @brief API version of ::xe_device_properties_t
 #define XE_DEVICE_PROPERTIES_VERSION  XE_MAKE_VERSION( 1, 0 )
 
