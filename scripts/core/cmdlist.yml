@@ -72,7 +72,7 @@ type: function
 desc: "Closes a command list; ready to be enqueued into a command queue."
 name: $xCommandListClose
 details:
-    - "The application may **not** call this function from simultaneous threads."
+    - "The application may **not** call this function from simultaneous threads with the same command list handle."
     - "The implementation of this function should be lock-free."
 params:
     - type: $x_command_list_handle_t
@@ -87,7 +87,7 @@ desc: "Reset a command list to initial (empty) state; ready for encoding command
 name: $xCommandListReset
 details:
     - "The application is responsible for making sure the GPU is not currently referencing the command list before it is reset"
-    - "The application may **not** call this function from simultaneous threads."
+    - "The application may **not** call this function from simultaneous threads with the same command list handle."
     - "The implementation of this function should be lock-free."
 params:
     - type: $x_command_list_handle_t
@@ -112,7 +112,7 @@ analogue:
     - cuCtxSetLimit
     - cuCtxSetSharedMemConfig
 details:
-    - "The application may **not** call this function from simultaneous threads."
+    - "The application may **not** call this function from simultaneous threads with the same command list handle."
     - "The implementation of this function should be lock-free."
 params:
     - type: $x_command_list_handle_t
@@ -139,7 +139,7 @@ analogue:
     - cuCtxGetSharedMemConfig
     - cuCtxGetStreamPriorityRange
 details:
-    - "The application may **not** call this function from simultaneous threads."
+    - "The application may **not** call this function from simultaneous threads with the same command list handle."
     - "The implementation of this function should be lock-free."
 params:
     - type: $x_command_list_handle_t
@@ -161,7 +161,7 @@ type: function
 desc: "Resets all command list parameters to default state."
 name: $xCommandListResetParameters
 details:
-    - "The application may **not** call this function from simultaneous threads."
+    - "The application may **not** call this function from simultaneous threads with the same command list handle."
     - "The implementation of this function should be lock-free."
 params:
     - type: $x_command_list_handle_t
@@ -175,7 +175,7 @@ type: function
 desc: "Encode a command list into another command list."
 name: $xCommandListEncodeCommandLists
 details:
-    - "The application may **not** call this function from simultaneous threads."
+    - "The application may **not** call this function from simultaneous threads with the same command list handle."
     - "The implementation of this function should be lock-free."
 params:
     - type: $x_command_list_handle_t

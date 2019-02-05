@@ -36,7 +36,7 @@
 /// 
 /// @details
 ///     - The application may **not** call this function from simultaneous
-///       threads.
+///       threads with the same command list handle.
 ///     - The implementation of this function should be lock-free.
 /// 
 /// @remarks

@@ -393,10 +393,10 @@ details:
     - "The application may call this function from simultaneous threads."
     - "The implementation of this function should be lock-free."
 params:
-    - type: "const $x_device_handle_t"
+    - type: "$x_device_handle_t"
       name: hDevice
       desc: "[in] handle of the device performing the access"
-    - type: "const $x_device_handle_t"
+    - type: "$x_device_handle_t"
       name: hPeerDevice
       desc: "[in] handle of the peer device with the allocation"
     - type: "bool*"
@@ -414,16 +414,16 @@ name: $xDeviceEnablePeerAccess
 details:
     - "The access is uni-directional and only enables access from the device to allocations on the peer device."
     - "A separate call is required to enable access from the peer device to this device."
-    - "The application may **not** call this function from simultaneous threads."
+    - "The application may **not** call this function from simultaneous threads with the same device handle."
     - "@todo [**Ben**] document any limits on number of active p2p connections 
        @todo [**Ben**] document behavior if link is already enabled"
 analogue:
     - "**cudaDeviceEnablePeerAccess**"
 params:
-    - type: "const $x_device_handle_t"
+    - type: "$x_device_handle_t"
       name: hDevice
       desc: "[in] handle of the device performing the access"
-    - type: "const $x_device_handle_t"
+    - type: "$x_device_handle_t"
       name: hPeerDevice
       desc: "[in] handle of the peer device"
 returns:
@@ -436,15 +436,15 @@ type: function
 desc: "Disables direct access to peer device allocations"
 name: $xDeviceDisablePeerAccess
 details:
-    - "The application may **not** call this function from simultaneous threads."
+    - "The application may **not** call this function from simultaneous threads with the same device handle."
     - "@todo [**Ben**] document behavior if link is not enabled"
 analogue:
     - "**cudaDeviceDisablePeerAccess**"
 params:
-    - type: "const $x_device_handle_t"
+    - type: "$x_device_handle_t"
       name: hDevice
       desc: "[in] handle of the device performing the access"
-    - type: "const $x_device_handle_t"
+    - type: "$x_device_handle_t"
       name: hPeerDevice
       desc: "[in] handle of the peer device"
 returns:
@@ -473,11 +473,11 @@ type: function
 desc: "Sets the preferred Intermediate cache configuration for a device."
 name: $xDeviceSetIntermediateCacheConfig
 details:
-    - "The application may **not** call this function from simultaneous threads."
+    - "The application may **not** call this function from simultaneous threads with the same device handle."
 analogue:
     - "**cudaFuncSetCacheConfig **"
 params:
-    - type: "const $x_device_handle_t"
+    - type: "$x_device_handle_t"
       name: hDevice
       desc: "[in] handle of the device "
     - type: "$x_cache_config_t"
@@ -493,11 +493,11 @@ type: function
 desc: "Sets the preferred Last Level cache configuration for a device."
 name: $xDeviceSetLastLevelCacheConfig
 details:
-    - "The application may **not** call this function from simultaneous threads."
+    - "The application may **not** call this function from simultaneous threads with the same device handle."
 analogue:
     - "**cudaFuncSetCacheConfig **"
 params:
-    - type: "const $x_device_handle_t"
+    - type: "$x_device_handle_t"
       name: hDevice
       desc: "[in] handle of the device "
     - type: "$x_cache_config_t"

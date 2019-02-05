@@ -132,6 +132,7 @@ In order to eliminate the usage of thread-locks by the implementation, the follo
 - the application is responsible for ensuring the device is not accessing objects before they are modified, resued or destroyed;
   such as memory, images and command lists
 - there is no implicit garbage collection performed by the implementation
+- each API documents more details on the multithreading requirements for that call
 
 # <a name="drv">Drivers</a>
 ## Installation

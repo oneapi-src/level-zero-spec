@@ -335,16 +335,16 @@ xe_result_t __xecall
 /*@todo: __declspec(dllexport)*/
 xe_result_t __xecall
   xeDeviceCanAccessPeer(
-    const xe_device_handle_t hDevice,               ///< [in] handle of the device performing the access
-    const xe_device_handle_t hPeerDevice,           ///< [in] handle of the peer device with the allocation
+    xe_device_handle_t hDevice,                     ///< [in] handle of the device performing the access
+    xe_device_handle_t hPeerDevice,                 ///< [in] handle of the peer device with the allocation
     bool* value                                     ///< [out] returned access capability
     )
 {
     // @todo: check_return(nullptr == get_driver(), XE_RESULT_ERROR_UNINITIALIZED);
 
     // Check parameters
-    // @todo: check_return(const xe_device_handle_t() == hDevice, XE_RESULT_ERROR_INVALID_PARAMETER);
-    // @todo: check_return(const xe_device_handle_t() == hPeerDevice, XE_RESULT_ERROR_INVALID_PARAMETER);
+    // @todo: check_return(xe_device_handle_t() == hDevice, XE_RESULT_ERROR_INVALID_PARAMETER);
+    // @todo: check_return(xe_device_handle_t() == hPeerDevice, XE_RESULT_ERROR_INVALID_PARAMETER);
     // @todo: check_return(nullptr == value, XE_RESULT_ERROR_INVALID_PARAMETER);
 
     // @todo: insert <code> here
@@ -361,7 +361,7 @@ xe_result_t __xecall
 ///     - A separate call is required to enable access from the peer device to
 ///       this device.
 ///     - The application may **not** call this function from simultaneous
-///       threads.
+///       threads with the same device handle.
 ///     - @todo [**Ben**] document any limits on number of active p2p
 ///       connections @todo [**Ben**] document behavior if link is already
 ///       enabled
@@ -380,15 +380,15 @@ xe_result_t __xecall
 /*@todo: __declspec(dllexport)*/
 xe_result_t __xecall
   xeDeviceEnablePeerAccess(
-    const xe_device_handle_t hDevice,               ///< [in] handle of the device performing the access
-    const xe_device_handle_t hPeerDevice            ///< [in] handle of the peer device
+    xe_device_handle_t hDevice,                     ///< [in] handle of the device performing the access
+    xe_device_handle_t hPeerDevice                  ///< [in] handle of the peer device
     )
 {
     // @todo: check_return(nullptr == get_driver(), XE_RESULT_ERROR_UNINITIALIZED);
 
     // Check parameters
-    // @todo: check_return(const xe_device_handle_t() == hDevice, XE_RESULT_ERROR_INVALID_PARAMETER);
-    // @todo: check_return(const xe_device_handle_t() == hPeerDevice, XE_RESULT_ERROR_INVALID_PARAMETER);
+    // @todo: check_return(xe_device_handle_t() == hDevice, XE_RESULT_ERROR_INVALID_PARAMETER);
+    // @todo: check_return(xe_device_handle_t() == hPeerDevice, XE_RESULT_ERROR_INVALID_PARAMETER);
 
     // @todo: insert <code> here
 
@@ -400,7 +400,7 @@ xe_result_t __xecall
 /// 
 /// @details
 ///     - The application may **not** call this function from simultaneous
-///       threads.
+///       threads with the same device handle.
 ///     - @todo [**Ben**] document behavior if link is not enabled
 /// 
 /// @remarks
@@ -417,15 +417,15 @@ xe_result_t __xecall
 /*@todo: __declspec(dllexport)*/
 xe_result_t __xecall
   xeDeviceDisablePeerAccess(
-    const xe_device_handle_t hDevice,               ///< [in] handle of the device performing the access
-    const xe_device_handle_t hPeerDevice            ///< [in] handle of the peer device
+    xe_device_handle_t hDevice,                     ///< [in] handle of the device performing the access
+    xe_device_handle_t hPeerDevice                  ///< [in] handle of the peer device
     )
 {
     // @todo: check_return(nullptr == get_driver(), XE_RESULT_ERROR_UNINITIALIZED);
 
     // Check parameters
-    // @todo: check_return(const xe_device_handle_t() == hDevice, XE_RESULT_ERROR_INVALID_PARAMETER);
-    // @todo: check_return(const xe_device_handle_t() == hPeerDevice, XE_RESULT_ERROR_INVALID_PARAMETER);
+    // @todo: check_return(xe_device_handle_t() == hDevice, XE_RESULT_ERROR_INVALID_PARAMETER);
+    // @todo: check_return(xe_device_handle_t() == hPeerDevice, XE_RESULT_ERROR_INVALID_PARAMETER);
 
     // @todo: insert <code> here
 
@@ -437,7 +437,7 @@ xe_result_t __xecall
 /// 
 /// @details
 ///     - The application may **not** call this function from simultaneous
-///       threads.
+///       threads with the same device handle.
 /// 
 /// @remarks
 ///   _Analogues_
@@ -453,14 +453,14 @@ xe_result_t __xecall
 /*@todo: __declspec(dllexport)*/
 xe_result_t __xecall
   xeDeviceSetIntermediateCacheConfig(
-    const xe_device_handle_t hDevice,               ///< [in] handle of the device 
+    xe_device_handle_t hDevice,                     ///< [in] handle of the device 
     xe_cache_config_t CacheConfig                   ///< [in] CacheConfig
     )
 {
     // @todo: check_return(nullptr == get_driver(), XE_RESULT_ERROR_UNINITIALIZED);
 
     // Check parameters
-    // @todo: check_return(const xe_device_handle_t() == hDevice, XE_RESULT_ERROR_INVALID_PARAMETER);
+    // @todo: check_return(xe_device_handle_t() == hDevice, XE_RESULT_ERROR_INVALID_PARAMETER);
 
     // @todo: insert <code> here
 
@@ -472,7 +472,7 @@ xe_result_t __xecall
 /// 
 /// @details
 ///     - The application may **not** call this function from simultaneous
-///       threads.
+///       threads with the same device handle.
 /// 
 /// @remarks
 ///   _Analogues_
@@ -488,14 +488,14 @@ xe_result_t __xecall
 /*@todo: __declspec(dllexport)*/
 xe_result_t __xecall
   xeDeviceSetLastLevelCacheConfig(
-    const xe_device_handle_t hDevice,               ///< [in] handle of the device 
+    xe_device_handle_t hDevice,                     ///< [in] handle of the device 
     xe_cache_config_t CacheConfig                   ///< [in] CacheConfig
     )
 {
     // @todo: check_return(nullptr == get_driver(), XE_RESULT_ERROR_UNINITIALIZED);
 
     // Check parameters
-    // @todo: check_return(const xe_device_handle_t() == hDevice, XE_RESULT_ERROR_INVALID_PARAMETER);
+    // @todo: check_return(xe_device_handle_t() == hDevice, XE_RESULT_ERROR_INVALID_PARAMETER);
 
     // @todo: insert <code> here
 

@@ -57,7 +57,7 @@
 /*@todo: __declspec(dllexport)*/
 xe_result_t __xecall
   xeSharedMemAlloc(
-    const xe_device_handle_t hDevice,               ///< [in] handle of the device
+    xe_device_handle_t hDevice,                     ///< [in] handle of the device
     xe_device_mem_alloc_flags_t device_flags,       ///< [in] flags specifying additional device allocation controls
     xe_host_mem_alloc_flags_t host_flags,           ///< [in] flags specifying additional host allocation controls
     size_t size,                                    ///< [in] size in bytes to allocate
@@ -68,7 +68,7 @@ xe_result_t __xecall
     // @todo: check_return(nullptr == get_driver(), XE_RESULT_ERROR_UNINITIALIZED);
 
     // Check parameters
-    // @todo: check_return(const xe_device_handle_t() == hDevice, XE_RESULT_ERROR_INVALID_PARAMETER);
+    // @todo: check_return(xe_device_handle_t() == hDevice, XE_RESULT_ERROR_INVALID_PARAMETER);
     // @todo: check_return(nullptr == ptr, XE_RESULT_ERROR_INVALID_PARAMETER);
 
     // @todo: insert <code> here
@@ -102,7 +102,7 @@ xe_result_t __xecall
 /*@todo: __declspec(dllexport)*/
 xe_result_t __xecall
   xeMemAlloc(
-    const xe_device_handle_t hDevice,               ///< [in] handle of the device
+    xe_device_handle_t hDevice,                     ///< [in] handle of the device
     xe_device_mem_alloc_flags_t flags,              ///< [in] flags specifying additional allocation controls
     size_t size,                                    ///< [in] size in bytes to allocate
     uint32_t alignment,                             ///< [in] minimum alignment in bytes for the allocation
@@ -112,7 +112,7 @@ xe_result_t __xecall
     // @todo: check_return(nullptr == get_driver(), XE_RESULT_ERROR_UNINITIALIZED);
 
     // Check parameters
-    // @todo: check_return(const xe_device_handle_t() == hDevice, XE_RESULT_ERROR_INVALID_PARAMETER);
+    // @todo: check_return(xe_device_handle_t() == hDevice, XE_RESULT_ERROR_INVALID_PARAMETER);
     // @todo: check_return(nullptr == ptr, XE_RESULT_ERROR_INVALID_PARAMETER);
 
     // @todo: insert <code> here
@@ -299,7 +299,7 @@ xe_result_t __xecall
 /*@todo: __declspec(dllexport)*/
 xe_result_t __xecall
   xeIpcOpenMemHandle(
-    const xe_device_handle_t hDevice,               ///< [in] handle of the device to associate with the IPC memory handle
+    xe_device_handle_t hDevice,                     ///< [in] handle of the device to associate with the IPC memory handle
     xe_ipc_mem_handle_t handle,                     ///< [in] IPC memory handle
     xe_ipc_memory_flags_t flags,                    ///< [in] flags controlling the operation
     void** ptr                                      ///< [out] pointer to device allocation in this process
@@ -308,7 +308,7 @@ xe_result_t __xecall
     // @todo: check_return(nullptr == get_driver(), XE_RESULT_ERROR_UNINITIALIZED);
 
     // Check parameters
-    // @todo: check_return(const xe_device_handle_t() == hDevice, XE_RESULT_ERROR_INVALID_PARAMETER);
+    // @todo: check_return(xe_device_handle_t() == hDevice, XE_RESULT_ERROR_INVALID_PARAMETER);
     // @todo: check_return(xe_ipc_mem_handle_t() == handle, XE_RESULT_ERROR_INVALID_PARAMETER);
     // @todo: check_return(nullptr == ptr, XE_RESULT_ERROR_INVALID_PARAMETER);
 
@@ -339,14 +339,14 @@ xe_result_t __xecall
 /*@todo: __declspec(dllexport)*/
 xe_result_t __xecall
   xeIpcCloseMemHandle(
-    const xe_device_handle_t hDevice,               ///< [in] handle of the device to associate with the IPC memory handle
+    xe_device_handle_t hDevice,                     ///< [in] handle of the device to associate with the IPC memory handle
     const void* ptr                                 ///< [in] pointer to memory to free
     )
 {
     // @todo: check_return(nullptr == get_driver(), XE_RESULT_ERROR_UNINITIALIZED);
 
     // Check parameters
-    // @todo: check_return(const xe_device_handle_t() == hDevice, XE_RESULT_ERROR_INVALID_PARAMETER);
+    // @todo: check_return(xe_device_handle_t() == hDevice, XE_RESULT_ERROR_INVALID_PARAMETER);
     // @todo: check_return(nullptr == ptr, XE_RESULT_ERROR_INVALID_PARAMETER);
 
     // @todo: insert <code> here

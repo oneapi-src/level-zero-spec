@@ -43,7 +43,7 @@ details:
     - "The application may call this function from simultaneous threads."
     - "The implementation of this function should be lock-free."
 params:
-    - type: "const $x_device_handle_t"
+    - type: "$x_device_handle_t"
       name: hDevice
       desc: "[in] handle of the device"
     - type: "$x_device_mem_alloc_flags_t"
@@ -80,7 +80,7 @@ details:
     - "The application may call this function from simultaneous threads."
     - "The implementation of this function should be lock-free."
 params:
-    - type: "const $x_device_handle_t"
+    - type: "$x_device_handle_t"
       name: hDevice
       desc: "[in] handle of the device"
     - type: "$x_device_mem_alloc_flags_t"
@@ -237,7 +237,7 @@ details:
     - "The application may call this function from simultaneous threads."
     - "The implementation of this function should be lock-free."
 params:
-    - type: "const $x_device_handle_t"
+    - type: "$x_device_handle_t"
       name: hDevice
       desc: "[in] handle of the device to associate with the IPC memory handle"
     - type: $x_ipc_mem_handle_t
@@ -266,7 +266,7 @@ details:
     - "The application may call this function from simultaneous threads."
     - "The implementation of this function should be lock-free."
 params:
-    - type: "const $x_device_handle_t"
+    - type: "$x_device_handle_t"
       name: hDevice
       desc: "[in] handle of the device to associate with the IPC memory handle"
     - type: "const void*"

@@ -8,7 +8,7 @@ name: $xCommandListEncodeMemoryCopy
 details:
     - "The memory pointed to by both srcptr and dstptr must be accessible by
       the device on which the command list is created."
-    - "The application may **not** call this function from simultaneous threads."
+    - "The application may **not** call this function from simultaneous threads with the same command list handle."
     - "The implementation of this function should be lock-free."
 analogue:
     - "**clEnqueueCopyBuffer**"
@@ -39,7 +39,7 @@ name: $xCommandListEncodeImageCopy
 analogue:
     - "**clEnqueueCopyImage**"
 details:
-    - "The application may **not** call this function from simultaneous threads."
+    - "The application may **not** call this function from simultaneous threads with the same command list handle."
     - "The implementation of this function should be lock-free."
 params:
     - type: $x_command_list_handle_t
@@ -71,7 +71,7 @@ type: function
 desc: "Copies a region of a image to another image."
 name: $xCommandListEncodeImageCopyRegion
 details:
-    - "The application may **not** call this function from simultaneous threads."
+    - "The application may **not** call this function from simultaneous threads with the same command list handle."
     - "The implementation of this function should be lock-free."
 params:
     - type: $x_command_list_handle_t
@@ -102,7 +102,7 @@ analogue:
 details:
     - "The memory pointed to by dstptr must be accessible by
       the device on which the command list is created."
-    - "The application may **not** call this function from simultaneous threads."
+    - "The application may **not** call this function from simultaneous threads with the same command list handle."
     - "The implementation of this function should be lock-free."
 params:
     - type: $x_command_list_handle_t
@@ -130,7 +130,7 @@ analogue:
 details:
     - "The memory pointed to by srcptr must be accessible by
       the device on which the command list is created."
-    - "The application may **not** call this function from simultaneous threads."
+    - "The application may **not** call this function from simultaneous threads with the same command list handle."
     - "The implementation of this function should be lock-free."
 params:
     - type: $x_command_list_handle_t
@@ -159,7 +159,7 @@ details:
     - "The application may call this function from simultaneous threads."
     - "The implementation of this function should be lock-free."
     - "Prefetch to Host and Peer Device are not supported."
-    - "The application may **not** call this function from simultaneous threads."
+    - "The application may **not** call this function from simultaneous threads with the same command list handle."
     - "The implementation of this function should be lock-free."
 analogue:
     - cudaMemPrefetchAsync
@@ -216,13 +216,13 @@ details:
     - "Memory advice may only be supported at a device-specific granularity, such as at a page boundary.
        In this case, the memory range may be expanded such that the start and end of the range satisfy
        granularity requirements."
-    - "The application may **not** call this function from simultaneous threads."
+    - "The application may **not** call this function from simultaneous threads with the same command list handle."
     - "The implementation of this function should be lock-free."
 params:
     - type: $x_command_list_handle_t
       name: hCommandList
       desc: "[in] handle of command list"
-    - type: "const $x_device_handle_t"
+    - type: "$x_device_handle_t"
       name: hDevice
       desc: "[in] device associated with the memory advice"
     - type: "const void*"

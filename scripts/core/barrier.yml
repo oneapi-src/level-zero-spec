@@ -9,7 +9,7 @@ analogue:
     - "**vkCmdPipelineBarrier**"
     - clEnqueueBarrierWithWaitList
 details:
-    - "The application may **not** call this function from simultaneous threads."
+    - "The application may **not** call this function from simultaneous threads with the same command list handle."
     - "The implementation of this function should be lock-free."
 params:
     - type: $x_command_list_handle_t

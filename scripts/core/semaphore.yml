@@ -78,7 +78,7 @@ type: function
 desc: "Encodes an semaphore signal into a command list."
 name: $xCommandListEncodeSemaphoreSignal
 details:
-    - "The application may **not** call this function from simultaneous threads."
+    - "The application may **not** call this function from simultaneous threads with the same command list handle."
     - "The implementation of this function should be lock-free."
 params:
     - type: $x_command_list_handle_t
@@ -117,7 +117,7 @@ type: function
 desc: "Encodes an semaphore wait into a command list."
 name: $xCommandListEncodeSemaphoreWait
 details:
-    - "The application may **not** call this function from simultaneous threads."
+    - "The application may **not** call this function from simultaneous threads with the same command list handle."
     - "The implementation of this function should be lock-free."
 params:
     - type: $x_command_list_handle_t

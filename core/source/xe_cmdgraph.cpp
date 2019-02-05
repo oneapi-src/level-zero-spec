@@ -107,7 +107,7 @@ xe_result_t __xecall
 ///     - The application is responsible for making sure a command list is not
 ///       destroyed while the command graph still references
 ///     - The application may **not** call this function from simultaneous
-///       threads.
+///       threads with the same command graph handle.
 ///     - The implementation of this function should be lock-free.
 /// 
 /// @returns
@@ -141,7 +141,7 @@ xe_result_t __xecall
 /// 
 /// @details
 ///     - The application may **not** call this function from simultaneous
-///       threads.
+///       threads with the same command graph handle.
 ///     - The implementation of this function should be lock-free.
 /// 
 /// @returns
@@ -178,7 +178,7 @@ xe_result_t __xecall
 ///       lists.
 ///     - A command list may **not** be reset after the command graph is closed.
 ///     - The application may **not** call this function from simultaneous
-///       threads.
+///       threads with the same command graph handle.
 ///     - The implementation of this function should be lock-free.
 /// 
 /// @returns
@@ -208,7 +208,7 @@ xe_result_t __xecall
 /// 
 /// @details
 ///     - The application may **not** call this function from simultaneous
-///       threads.
+///       threads with the same command graph handle.
 ///     - The implementation of this function should be lock-free.
 /// 
 /// @returns

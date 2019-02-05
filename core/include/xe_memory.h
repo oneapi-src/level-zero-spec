@@ -83,7 +83,7 @@ typedef enum _xe_host_mem_alloc_flags_t
 ///     - ::XE_RESULT_ERROR_OUT_OF_DEVICE_MEMORY
 xe_result_t __xecall
   xeSharedMemAlloc(
-    const xe_device_handle_t hDevice,               ///< [in] handle of the device
+    xe_device_handle_t hDevice,                     ///< [in] handle of the device
     xe_device_mem_alloc_flags_t device_flags,       ///< [in] flags specifying additional device allocation controls
     xe_host_mem_alloc_flags_t host_flags,           ///< [in] flags specifying additional host allocation controls
     size_t size,                                    ///< [in] size in bytes to allocate
@@ -117,7 +117,7 @@ xe_result_t __xecall
 ///     - ::XE_RESULT_ERROR_OUT_OF_DEVICE_MEMORY
 xe_result_t __xecall
   xeMemAlloc(
-    const xe_device_handle_t hDevice,               ///< [in] handle of the device
+    xe_device_handle_t hDevice,                     ///< [in] handle of the device
     xe_device_mem_alloc_flags_t flags,              ///< [in] flags specifying additional allocation controls
     size_t size,                                    ///< [in] size in bytes to allocate
     uint32_t alignment,                             ///< [in] minimum alignment in bytes for the allocation
@@ -288,7 +288,7 @@ typedef enum _xe_ipc_memory_flags_t
 ///         + nullptr for ptr
 xe_result_t __xecall
   xeIpcOpenMemHandle(
-    const xe_device_handle_t hDevice,               ///< [in] handle of the device to associate with the IPC memory handle
+    xe_device_handle_t hDevice,                     ///< [in] handle of the device to associate with the IPC memory handle
     xe_ipc_mem_handle_t handle,                     ///< [in] IPC memory handle
     xe_ipc_memory_flags_t flags,                    ///< [in] flags controlling the operation
     void** ptr                                      ///< [out] pointer to device allocation in this process
@@ -316,7 +316,7 @@ xe_result_t __xecall
 ///         + invalid ptr
 xe_result_t __xecall
   xeIpcCloseMemHandle(
-    const xe_device_handle_t hDevice,               ///< [in] handle of the device to associate with the IPC memory handle
+    xe_device_handle_t hDevice,                     ///< [in] handle of the device to associate with the IPC memory handle
     const void* ptr                                 ///< [in] pointer to memory to free
     );
 

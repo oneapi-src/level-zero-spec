@@ -80,7 +80,7 @@ name: $xCommandGraphAddEdge
 details:
     - "The command graph maintains a const-reference to an existing command list"
     - "The application is responsible for making sure a command list is not destroyed while the command graph still references"
-    - "The application may **not** call this function from simultaneous threads."
+    - "The application may **not** call this function from simultaneous threads with the same command graph handle."
     - "The implementation of this function should be lock-free."
 params:
     - type: $x_command_graph_handle_t
@@ -101,7 +101,7 @@ type: function
 desc: "Removes an edge between two command lists to the command graph."
 name: $xCommandGraphRemoveEdge
 details:
-    - "The application may **not** call this function from simultaneous threads."
+    - "The application may **not** call this function from simultaneous threads with the same command graph handle."
     - "The implementation of this function should be lock-free."
 params:
     - type: $x_command_graph_handle_t
@@ -124,7 +124,7 @@ name: $xCommandGraphClose
 details:
     - "The command graph will optimize the execution order of the command lists."
     - "A command list may **not** be reset after the command graph is closed."
-    - "The application may **not** call this function from simultaneous threads."
+    - "The application may **not** call this function from simultaneous threads with the same command graph handle."
     - "The implementation of this function should be lock-free."
 params:
     - type: $x_command_graph_handle_t
@@ -138,7 +138,7 @@ type: function
 desc: "Reset a command graph to initial (empty) state; ready for adding command lists."
 name: $xCommandGraphReset
 details:
-    - "The application may **not** call this function from simultaneous threads."
+    - "The application may **not** call this function from simultaneous threads with the same command graph handle."
     - "The implementation of this function should be lock-free."
 params:
     - type: $x_command_graph_handle_t

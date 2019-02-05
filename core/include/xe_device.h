@@ -380,8 +380,8 @@ xe_result_t __xecall
 ///         + nullptr for value
 xe_result_t __xecall
   xeDeviceCanAccessPeer(
-    const xe_device_handle_t hDevice,               ///< [in] handle of the device performing the access
-    const xe_device_handle_t hPeerDevice,           ///< [in] handle of the peer device with the allocation
+    xe_device_handle_t hDevice,                     ///< [in] handle of the device performing the access
+    xe_device_handle_t hPeerDevice,                 ///< [in] handle of the peer device with the allocation
     bool* value                                     ///< [out] returned access capability
     );
 
@@ -394,7 +394,7 @@ xe_result_t __xecall
 ///     - A separate call is required to enable access from the peer device to
 ///       this device.
 ///     - The application may **not** call this function from simultaneous
-///       threads.
+///       threads with the same device handle.
 ///     - @todo [**Ben**] document any limits on number of active p2p
 ///       connections @todo [**Ben**] document behavior if link is already
 ///       enabled
@@ -413,8 +413,8 @@ xe_result_t __xecall
 ///         + devices do not support peer access
 xe_result_t __xecall
   xeDeviceEnablePeerAccess(
-    const xe_device_handle_t hDevice,               ///< [in] handle of the device performing the access
-    const xe_device_handle_t hPeerDevice            ///< [in] handle of the peer device
+    xe_device_handle_t hDevice,                     ///< [in] handle of the device performing the access
+    xe_device_handle_t hPeerDevice                  ///< [in] handle of the peer device
     );
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -422,7 +422,7 @@ xe_result_t __xecall
 /// 
 /// @details
 ///     - The application may **not** call this function from simultaneous
-///       threads.
+///       threads with the same device handle.
 ///     - @todo [**Ben**] document behavior if link is not enabled
 /// 
 /// @remarks
@@ -439,8 +439,8 @@ xe_result_t __xecall
 ///         + devices do not support peer access
 xe_result_t __xecall
   xeDeviceDisablePeerAccess(
-    const xe_device_handle_t hDevice,               ///< [in] handle of the device performing the access
-    const xe_device_handle_t hPeerDevice            ///< [in] handle of the peer device
+    xe_device_handle_t hDevice,                     ///< [in] handle of the device performing the access
+    xe_device_handle_t hPeerDevice                  ///< [in] handle of the peer device
     );
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -461,7 +461,7 @@ typedef enum _xe_cache_config_t
 /// 
 /// @details
 ///     - The application may **not** call this function from simultaneous
-///       threads.
+///       threads with the same device handle.
 /// 
 /// @remarks
 ///   _Analogues_
@@ -477,7 +477,7 @@ typedef enum _xe_cache_config_t
 ///         + devices do not support CacheConfig
 xe_result_t __xecall
   xeDeviceSetIntermediateCacheConfig(
-    const xe_device_handle_t hDevice,               ///< [in] handle of the device 
+    xe_device_handle_t hDevice,                     ///< [in] handle of the device 
     xe_cache_config_t CacheConfig                   ///< [in] CacheConfig
     );
 
@@ -486,7 +486,7 @@ xe_result_t __xecall
 /// 
 /// @details
 ///     - The application may **not** call this function from simultaneous
-///       threads.
+///       threads with the same device handle.
 /// 
 /// @remarks
 ///   _Analogues_
@@ -502,7 +502,7 @@ xe_result_t __xecall
 ///         + devices do not support CacheConfig
 xe_result_t __xecall
   xeDeviceSetLastLevelCacheConfig(
-    const xe_device_handle_t hDevice,               ///< [in] handle of the device 
+    xe_device_handle_t hDevice,                     ///< [in] handle of the device 
     xe_cache_config_t CacheConfig                   ///< [in] CacheConfig
     );
 

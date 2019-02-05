@@ -105,7 +105,7 @@ xe_result_t __xecall
 /// 
 /// @details
 ///     - The application may **not** call this function from simultaneous
-///       threads.
+///       threads with the same command list handle.
 ///     - The implementation of this function should be lock-free.
 /// 
 /// @returns
@@ -137,7 +137,7 @@ xe_result_t __xecall
 ///     - The application is responsible for making sure the GPU is not
 ///       currently referencing the command list before it is reset
 ///     - The application may **not** call this function from simultaneous
-///       threads.
+///       threads with the same command list handle.
 ///     - The implementation of this function should be lock-free.
 /// 
 /// @returns
@@ -166,7 +166,7 @@ xe_result_t __xecall
 /// 
 /// @details
 ///     - The application may **not** call this function from simultaneous
-///       threads.
+///       threads with the same command list handle.
 ///     - The implementation of this function should be lock-free.
 /// 
 /// @remarks
@@ -205,7 +205,7 @@ xe_result_t __xecall
 /// 
 /// @details
 ///     - The application may **not** call this function from simultaneous
-///       threads.
+///       threads with the same command list handle.
 ///     - The implementation of this function should be lock-free.
 /// 
 /// @remarks
@@ -246,7 +246,7 @@ xe_result_t __xecall
 /// 
 /// @details
 ///     - The application may **not** call this function from simultaneous
-///       threads.
+///       threads with the same command list handle.
 ///     - The implementation of this function should be lock-free.
 /// 
 /// @returns
@@ -275,7 +275,7 @@ xe_result_t __xecall
 /// 
 /// @details
 ///     - The application may **not** call this function from simultaneous
-///       threads.
+///       threads with the same command list handle.
 ///     - The implementation of this function should be lock-free.
 /// 
 /// @returns

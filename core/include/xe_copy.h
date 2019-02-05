@@ -43,7 +43,7 @@
 ///     - The memory pointed to by both srcptr and dstptr must be accessible by
 ///       the device on which the command list is created.
 ///     - The application may **not** call this function from simultaneous
-///       threads.
+///       threads with the same command list handle.
 ///     - The implementation of this function should be lock-free.
 /// 
 /// @remarks
@@ -73,7 +73,7 @@ xe_result_t __xecall
 /// 
 /// @details
 ///     - The application may **not** call this function from simultaneous
-///       threads.
+///       threads with the same command list handle.
 ///     - The implementation of this function should be lock-free.
 /// 
 /// @remarks
@@ -108,7 +108,7 @@ typedef struct _xe_image_region_t
 /// 
 /// @details
 ///     - The application may **not** call this function from simultaneous
-///       threads.
+///       threads with the same command list handle.
 ///     - The implementation of this function should be lock-free.
 /// 
 /// @returns
@@ -134,7 +134,7 @@ xe_result_t __xecall
 ///     - The memory pointed to by dstptr must be accessible by the device on
 ///       which the command list is created.
 ///     - The application may **not** call this function from simultaneous
-///       threads.
+///       threads with the same command list handle.
 ///     - The implementation of this function should be lock-free.
 /// 
 /// @remarks
@@ -163,7 +163,7 @@ xe_result_t __xecall
 ///     - The memory pointed to by srcptr must be accessible by the device on
 ///       which the command list is created.
 ///     - The application may **not** call this function from simultaneous
-///       threads.
+///       threads with the same command list handle.
 ///     - The implementation of this function should be lock-free.
 /// 
 /// @remarks
@@ -196,7 +196,7 @@ xe_result_t __xecall
 ///     - The implementation of this function should be lock-free.
 ///     - Prefetch to Host and Peer Device are not supported.
 ///     - The application may **not** call this function from simultaneous
-///       threads.
+///       threads with the same command list handle.
 ///     - The implementation of this function should be lock-free.
 /// 
 /// @remarks
@@ -248,7 +248,7 @@ typedef enum _xe_memory_advice_t
 ///       expanded such that the start and end of the range satisfy granularity
 ///       requirements.
 ///     - The application may **not** call this function from simultaneous
-///       threads.
+///       threads with the same command list handle.
 ///     - The implementation of this function should be lock-free.
 /// 
 /// @remarks
@@ -266,7 +266,7 @@ typedef enum _xe_memory_advice_t
 xe_result_t __xecall
   xeCommandListEncodeMemAdvise(
     xe_command_list_handle_t hCommandList,          ///< [in] handle of command list
-    const xe_device_handle_t hDevice,               ///< [in] device associated with the memory advice
+    xe_device_handle_t hDevice,                     ///< [in] device associated with the memory advice
     const void* ptr,                                ///< [in] Pointer to the start of the memory range
     size_t size,                                    ///< [in] Size in bytes of the memory range
     xe_memory_advice_t advice                       ///< [in] Memory advice for the memory range

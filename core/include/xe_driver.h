@@ -78,8 +78,7 @@ xe_result_t __xecall
 /// @details
 ///     - The driver version is a non-zero, monotonically increasing value where
 ///       higher values always indicate a more recent version.
-///     - The application may **not** call this function from simultaneous
-///       threads.
+///     - The application may call this function from simultaneous threads.
 ///     - The implementation of this function should be lock-free.
 /// 
 /// @remarks
