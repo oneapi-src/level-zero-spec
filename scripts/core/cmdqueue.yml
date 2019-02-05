@@ -17,6 +17,9 @@ etors:
     - name: $X_COMMAND_QUEUE_FLAG_COPY_ONLY
       value: "$X_BIT(0)"
       desc: "command queue only supports enqueing copy-only command lists"
+    - name: $X_COMMAND_QUEUE_FLAG_LOGICAL_ONLY
+      value: "$X_BIT(1)"
+      desc: "command queue is not tied to a physical command queue; driver may dynamically assign based on usage"
 --- #--------------------------------------------------------------------------
 type: enum
 desc: "Supported command queue modes"
@@ -62,9 +65,9 @@ members:
       desc: "[in] priority"
     - type: uint32_t
       name: ordinal
-      desc: "[in] must be less than value returned for
-            $x_device_properties_t.numAsyncComputeEngines or
-            $x_device_properties_t.numAsyncCopyEngines"
+      desc: "[in] if logical-only flag is set, then must be 0;
+            else-if copy-only flag is set, then must be less than $x_device_properties_t.numAsyncCopyEngines;
+            otherwise must be less than $x_device_properties_t.numAsyncComputeEngines"
 --- #--------------------------------------------------------------------------
 type: function
 desc: "Creates a command queue on the device."
