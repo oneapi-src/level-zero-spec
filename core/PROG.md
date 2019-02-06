@@ -527,8 +527,12 @@ there are no distinction between sub-devices and devices.
 ![Subdevice](../images/core_subdevice.png?raw=true)  
 @image latex ../images/core_subdevice.png
 
-If you want to allocate memory and dispatch
-tasks to a particular sub-device then obtain the sub-device handle and then use this with the APIs for memory and dispatching work.
+If you want to allocate memory and dispatch tasks to a particular sub-device then obtain the sub-device
+handle and use this with memory and command queue/lists APIs. One thing to note is that the ordinal
+that is used when creating a command queue is relative to the sub-device. This ordinal specifies which
+physical compute queue on the device or sub-device to map the logical queue to. You need to query
+xe_device_properties_t.numAsyncComputeEngines from the sub-device to determine how to set this ordinal.
+See xe_command_queue_desc_t for more details.
 
 ```c
     ...
@@ -542,12 +546,19 @@ tasks to a particular sub-device then obtain the sub-device handle and then use 
     uint32_t subdeviceId = 2;
     xeDeviceGetSubDevice(device, subdeviceId, &subdevice);
 
+    // Query sub-device properties.
+    xe_device_properties_t subdeviceProps;
+    xeDeviceGetProperties(subdevice, &subdeviceProps);
+
     ...
     void* pMemForSubDevice2;
     xeMemAlloc(subDevice, XE_DEVICE_MEM_ALLOC_DEFAULT, memSize, sizeof(uint32_t), &pMemForSubDevice2);
     ...
-    
+
     ...
+    // Check that cmd queue ordinal that was chosen is valid.
+    assert(desc.ordinal < subdeviceProps.numAsyncComputeEngines);
+
     xe_command_queue_handle_t commandQueueForSubDevice2;
     xeDeviceCreateCommandQueue(subdevice, desc, &commandQueueForSubDevice2);
     ...

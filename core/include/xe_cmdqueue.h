@@ -84,7 +84,9 @@ typedef struct _xe_command_queue_desc_t
     uint32_t ordinal;                               ///< [in] if logical-only flag is set, then must be 0; else-if copy-only
                                                     ///< flag is set, then must be less than
                                                     ///< ::xe_device_properties_t.numAsyncCopyEngines; otherwise must be less
-                                                    ///< than ::xe_device_properties_t.numAsyncComputeEngines
+                                                    ///< than ::xe_device_properties_t.numAsyncComputeEngines. When using
+                                                    ///< sub-devices the ::xe_device_properties_t.numAsyncComputeEngines must
+                                                    ///< be queried from the sub-device being used.
 
 } xe_command_queue_desc_t;
 
