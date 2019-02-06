@@ -64,13 +64,15 @@ ${x}_result_t __${x}call
     %endif
     // Check parameters
     %for param in obj['params']:
-    %if re.match(r".*\w+\*+", param['type']) and not re.match(r".*\[optional\].*", param['desc']):
+    %if not re.match(r".*\[optional\].*", param['desc']):
+    %if re.match(r".*\w+\*+", param['type']):
     // @todo: check_return(nullptr == ${th.subx(x, param['name'])}, ${X}_RESULT_ERROR_INVALID_PARAMETER);
     %elif re.match(r".*handle_t.*", param['type']):
     // @todo: check_return(${th.subx(x, param['type'])}() == ${th.subx(x, param['name'])}, ${X}_RESULT_ERROR_INVALID_PARAMETER);
     %endif
     %if re.match(r".*desc_t.*", param['type']):
     // @todo: check_return(${re.sub(r"\w*\s*(.*)_t.*", r"\1_VERSION", th.subx(x, param['type'])).upper()} <= ${param['name']}->version, ${X}_RESULT_ERROR_UNSUPPORTED);
+    %endif
     %endif
     %endfor
 

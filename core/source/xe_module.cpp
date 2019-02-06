@@ -75,7 +75,7 @@ xe_result_t __xecall
     xe_device_handle_t hDevice,                     ///< [in] handle of the device
     const xe_module_desc_t* desc,                   ///< [in] pointer to module descriptor
     xe_module_handle_t* phModule,                   ///< [out] pointer to handle of module object created
-    xe_module_build_log_handle_t* phBuildLog        ///< [out] pointer to handle of module's build log. This is optional and this can be set to nullptr.
+    xe_module_build_log_handle_t* phBuildLog        ///< [out][optional] pointer to handle of module's build log.
     )
 {
     // @todo: check_return(nullptr == get_driver(), XE_RESULT_ERROR_UNINITIALIZED);
@@ -85,7 +85,6 @@ xe_result_t __xecall
     // @todo: check_return(nullptr == desc, XE_RESULT_ERROR_INVALID_PARAMETER);
     // @todo: check_return(XE_MODULE_DESC_VERSION <= desc->version, XE_RESULT_ERROR_UNSUPPORTED);
     // @todo: check_return(nullptr == phModule, XE_RESULT_ERROR_INVALID_PARAMETER);
-    // @todo: check_return(nullptr == phBuildLog, XE_RESULT_ERROR_INVALID_PARAMETER);
 
     // @todo: insert <code> here
 
@@ -548,7 +547,6 @@ xe_result_t __xecall
     // @todo: check_return(xe_command_list_handle_t() == hCommandList, XE_RESULT_ERROR_INVALID_PARAMETER);
     // @todo: check_return(xe_function_handle_t() == hFunction, XE_RESULT_ERROR_INVALID_PARAMETER);
     // @todo: check_return(xe_function_args_handle_t() == hFunctionArgs, XE_RESULT_ERROR_INVALID_PARAMETER);
-    // @todo: check_return(xe_event_handle_t() == hEvent, XE_RESULT_ERROR_INVALID_PARAMETER);
 
     // @todo: insert <code> here
 
@@ -596,7 +594,6 @@ xe_result_t __xecall
     // @todo: check_return(xe_function_handle_t() == hFunction, XE_RESULT_ERROR_INVALID_PARAMETER);
     // @todo: check_return(xe_function_args_handle_t() == hFunctionArgs, XE_RESULT_ERROR_INVALID_PARAMETER);
     // @todo: check_return(nullptr == pDispatchArgumentsBuffer, XE_RESULT_ERROR_INVALID_PARAMETER);
-    // @todo: check_return(xe_event_handle_t() == hEvent, XE_RESULT_ERROR_INVALID_PARAMETER);
 
     // @todo: insert <code> here
 

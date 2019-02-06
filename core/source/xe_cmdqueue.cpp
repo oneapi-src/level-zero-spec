@@ -148,7 +148,6 @@ xe_result_t __xecall
     // Check parameters
     // @todo: check_return(xe_command_queue_handle_t() == hCommandQueue, XE_RESULT_ERROR_INVALID_PARAMETER);
     // @todo: check_return(nullptr == phCommandLists, XE_RESULT_ERROR_INVALID_PARAMETER);
-    // @todo: check_return(xe_fence_handle_t() == hFence, XE_RESULT_ERROR_INVALID_PARAMETER);
 
     // @todo: insert <code> here
 

@@ -102,7 +102,7 @@ desc: "Supported command list parameters"
 name: $x_command_list_parameter_t
 etors:
     - name: $X_COMMAND_LIST_PARAMETER_TBD
-      desc: ""
+      desc: "TBD"
 --- #--------------------------------------------------------------------------
 type: function
 desc: "Sets a command list's parameter."

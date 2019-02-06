@@ -167,7 +167,8 @@ typedef struct _xe_device_properties_t
     uint32_t numAsyncComputeEngines;                ///< [out] Number of asynchronous compute engines
     uint32_t numAsyncCopyEngines;                   ///< [out] Number of asynchronous copy engines
     uint32_t numComputeCores;                       ///< [out] Number of compute cores
-    uint32_t maxCommandQueuePriority;               ///< [out] Maximum priority for command queues. Higher value is higher priority.
+    uint32_t maxCommandQueuePriority;               ///< [out] Maximum priority for command queues. Higher value is higher
+                                                    ///< priority.
     char device_name[XE_MAX_DEVICE_NAME];           ///< [out] Device name
 
 } xe_device_properties_t;
@@ -220,7 +221,8 @@ typedef struct _xe_device_compute_properties_t
     uint32_t maxGroupCountZ;                        ///< [out] Maximum groups that can be dispatched for z dimension
     uint32_t maxSharedLocalMemory;                  ///< [out] Maximum shared local memory per group.
     uint32_t maxGroupRegisters;                     ///< [out] Maximum physical registers available per group
-    uint32_t numSubGroupSizes;                      ///< [out] Number of subgroup sizes supported. This indicates number of entries in subGroupSizes.
+    uint32_t numSubGroupSizes;                      ///< [out] Number of subgroup sizes supported. This indicates number of
+                                                    ///< entries in subGroupSizes.
     uint32_t subGroupSizes[XE_SUBGROUPSIZE_COUNT];  ///< [out] Size group sizes supported.
 
 } xe_device_compute_properties_t;
@@ -287,9 +289,11 @@ typedef struct _xe_device_memory_properties_t
     uint32_t sharedAllocCapabilities;               ///< [out] Supported operations on shared memory allocations
     uint32_t sharedCrossDeviceAllocCapabilities;    ///< [out] Supported operations on cross-device shared memory allocations
     uint32_t IntermediateCacheSize;                 ///< [out] Device Intermediate Cache(L1/L2) size
-    bool IntermediateCacheControl;                  ///< [out] Support User control on Intermediate Cache(i.e. Resize SLM section vs Generic Cache).
+    bool IntermediateCacheControl;                  ///< [out] Support User control on Intermediate Cache(i.e. Resize SLM
+                                                    ///< section vs Generic Cache).
     uint32_t LastLevelCacheSize;                    ///< [out] Device LastLevelCacheSize(L3) size
-    bool LastLevelCacheSizeControl;                 ///< [out] Support User control on LastLevelCacheSize Cache(i.e. Resize SLM section vs Generic Cache).
+    bool LastLevelCacheSizeControl;                 ///< [out] Support User control on LastLevelCacheSize Cache(i.e. Resize SLM
+                                                    ///< section vs Generic Cache).
 
 } xe_device_memory_properties_t;
 
@@ -330,7 +334,8 @@ typedef struct _xe_device_link_properties_t
     uint32_t version;                               ///< [in] ::XE_DEVICE_LINK_PROPERTIES_VERSION
     bool isP2PSupported;                            ///< [out] Is P2P access supported across link
     bool isAtomicsSupported;                        ///< [out] Are atomics supported across link
-    uint32_t performanceRank;                       ///< [out] Relative performance rank of link. @todo [**Zack**] should this be different metric?
+    uint32_t performanceRank;                       ///< [out] Relative performance rank of link. @todo [**Zack**] should this
+                                                    ///< be different metric?
 
 } xe_device_link_properties_t;
 

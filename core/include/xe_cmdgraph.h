@@ -54,8 +54,14 @@ typedef struct _xe_command_graph_desc_t
 {
     uint32_t version;                               ///< [in] ::XE_COMMAND_GRAPH_DESC_VERSION
     xe_command_graph_flags_t flags;                 ///< [in] creation flags
-    uint32_t maxComputeQueueCount;                  ///< [in] maximum number of compute command queues available for parallelism; must be less than ::xe_device_properties_t.numAsyncComputeEngines; must be non-zero if any non-copy-only command lists are to be used.
-    uint32_t maxCopyQueueCount;                     ///< [in] maximum number of copy-only command queues available for parallelism; must be less than ::xe_device_properties_t.numAsyncCopyEngines; must be non-zero if any copy-only command lists are to be used.
+    uint32_t maxComputeQueueCount;                  ///< [in] maximum number of compute command queues available for
+                                                    ///< parallelism; must be less than
+                                                    ///< ::xe_device_properties_t.numAsyncComputeEngines; must be non-zero if
+                                                    ///< any non-copy-only command lists are to be used.
+    uint32_t maxCopyQueueCount;                     ///< [in] maximum number of copy-only command queues available for
+                                                    ///< parallelism; must be less than
+                                                    ///< ::xe_device_properties_t.numAsyncCopyEngines; must be non-zero if any
+                                                    ///< copy-only command lists are to be used.
 
 } xe_command_graph_desc_t;
 

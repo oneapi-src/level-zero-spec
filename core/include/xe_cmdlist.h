@@ -45,7 +45,8 @@
 typedef enum _xe_command_list_flags_t
 {
     XE_COMMAND_LIST_FLAG_NONE = 0,                  ///< default behavior
-    XE_COMMAND_LIST_FLAG_COPY_ONLY = XE_BIT(0),     ///< command list **only** contains copy operations (and synchronization primitives)
+    XE_COMMAND_LIST_FLAG_COPY_ONLY = XE_BIT(0),     ///< command list **only** contains copy operations (and synchronization
+                                                    ///< primitives)
 
 } xe_command_list_flags_t;
 
@@ -149,7 +150,7 @@ xe_result_t __xecall
 /// @brief Supported command list parameters
 typedef enum _xe_command_list_parameter_t
 {
-    XE_COMMAND_LIST_PARAMETER_TBD,                  ///< 
+    XE_COMMAND_LIST_PARAMETER_TBD,                  ///< TBD
 
 } xe_command_list_parameter_t;
 

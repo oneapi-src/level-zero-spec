@@ -13,7 +13,7 @@ name: $x_command_queue_flags_t
 etors:
     - name: $X_COMMAND_QUEUE_FLAG_NONE
       value: "0"
-      desc: ""
+      desc: "default behavior"
     - name: $X_COMMAND_QUEUE_FLAG_COPY_ONLY
       value: "$X_BIT(0)"
       desc: "command queue only supports enqueing copy-only command lists"

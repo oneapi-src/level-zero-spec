@@ -57,7 +57,8 @@ typedef struct _xe_module_desc_t
     xe_module_format_t format;                      ///< [in] Module format passed in with pInputModule
     uint32_t inputSize;                             ///< [in] size of input IL or ISA from pInputModule.
     const char* pInputModule;                       ///< [in] pointer to IL or ISA
-    const char* pBuildFlags;                        ///< [in] string containing compiler flags. See documentation for build flags.
+    const char* pBuildFlags;                        ///< [in] string containing compiler flags. See documentation for build
+                                                    ///< flags.
 
 } xe_module_desc_t;
 
@@ -104,7 +105,7 @@ xe_result_t __xecall
     xe_device_handle_t hDevice,                     ///< [in] handle of the device
     const xe_module_desc_t* desc,                   ///< [in] pointer to module descriptor
     xe_module_handle_t* phModule,                   ///< [out] pointer to handle of module object created
-    xe_module_build_log_handle_t* phBuildLog        ///< [out] pointer to handle of module's build log. This is optional and this can be set to nullptr.
+    xe_module_build_log_handle_t* phBuildLog        ///< [out][optional] pointer to handle of module's build log.
     );
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -369,9 +370,12 @@ xe_result_t __xecall
 ///     - **cl_kernel_exec_info**
 typedef enum _xe_function_argument_attribute_t
 {
-    XE_FUNCTION_ARG_ATTR_INDIRECT_HOST_ACCESS = 0,  ///< Indicates that the function accesses host allocations indirectly (default: false)
-    XE_FUNCTION_ARG_ATTR_INDIRECT_DEVICE_ACCESS,    ///< Indicates that the function accesses device allocations indirectly (default: false)
-    XE_FUNCTION_ARG_ATTR_INDIRECT_SHARED_ACCESS,    ///< Indicates that the function accesses shared allocations indirectly (default: false)
+    XE_FUNCTION_ARG_ATTR_INDIRECT_HOST_ACCESS = 0,  ///< Indicates that the function accesses host allocations indirectly
+                                                    ///< (default: false)
+    XE_FUNCTION_ARG_ATTR_INDIRECT_DEVICE_ACCESS,    ///< Indicates that the function accesses device allocations indirectly
+                                                    ///< (default: false)
+    XE_FUNCTION_ARG_ATTR_INDIRECT_SHARED_ACCESS,    ///< Indicates that the function accesses shared allocations indirectly
+                                                    ///< (default: false)
 
 } xe_function_argument_attribute_t;
 

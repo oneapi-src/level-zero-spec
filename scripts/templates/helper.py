@@ -42,27 +42,37 @@ def make_abc_line(lformat, rformat, repl, a, b, c):
 def make_etor_lines(repl, obj):
     lines = []
     for item in obj['etors']:
-        # todo:for line in split_line(subx(repl, item['desc'], True) 70):
         if 'value' in item:
-            lines.append( make_abc_line("%s = %s,", "///< %s", repl, item['name'], item['value'], item['desc']) )
+            prologue = "%s = %s,"%(subx(repl, item['name']), subx(repl, item['value']))
         else:
-            lines.append( make_abc_line("%s%s,", "///< %s", repl, item['name'], "", item['desc']) )
+            prologue = "%s,"%(subx(repl, item['name']))
+
+        for line in split_line(subx(repl, item['desc'], True), 70):
+            lines.append("%s///< %s"%(append_ws(prologue, 48), line))
+            prologue = ""
     return lines
 
 
 def make_member_lines(repl, obj):
     lines = []
     for item in obj['members']:
-        # todo:for line in split_line(subx(repl, item['desc'], True) 70):
-        lines.append( make_abc_line("%s %s;", "///< %s", repl, item['type'], item['name'], item['desc']) )
+        prologue = "%s %s;"%(subx(repl, item['type']), subx(repl, item['name']))
+        for line in split_line(subx(repl, item['desc'], True), 70):
+            lines.append("%s///< %s"%(append_ws(prologue, 48), line))
+            prologue = ""
     return lines
 
 def make_param_lines(repl, obj):
     lines = []
     for i, item in enumerate(obj['params']):
-        lformat = "%s %s," if i < len(obj['params'])-1 else "%s %s"
-        # todo:for line in split_line(subx(repl, item['desc'], True) 70):
-        lines.append( make_abc_line(lformat, "///< %s", repl, item['type'], item['name'], item['desc']) )
+        if i < len(obj['params'])-1:
+            prologue = "%s %s,"%(subx(repl, item['type']), subx(repl, item['name']))
+        else:
+            prologue = "%s %s"%(subx(repl, item['type']), subx(repl, item['name']))
+
+        for line in split_line(subx(repl, item['desc'], True), 70):
+            lines.append("%s///< %s"%(append_ws(prologue, 48), line))
+            prologue = ""
     return lines
 
 def make_desc_lines(repl, obj):

@@ -44,9 +44,10 @@
 /// @brief Supported command queue flags
 typedef enum _xe_command_queue_flags_t
 {
-    XE_COMMAND_QUEUE_FLAG_NONE = 0,                 ///< 
+    XE_COMMAND_QUEUE_FLAG_NONE = 0,                 ///< default behavior
     XE_COMMAND_QUEUE_FLAG_COPY_ONLY = XE_BIT(0),    ///< command queue only supports enqueing copy-only command lists
-    XE_COMMAND_QUEUE_FLAG_LOGICAL_ONLY = XE_BIT(1), ///< command queue is not tied to a physical command queue; driver may dynamically assign based on usage
+    XE_COMMAND_QUEUE_FLAG_LOGICAL_ONLY = XE_BIT(1), ///< command queue is not tied to a physical command queue; driver may
+                                                    ///< dynamically assign based on usage
 
 } xe_command_queue_flags_t;
 
@@ -55,8 +56,10 @@ typedef enum _xe_command_queue_flags_t
 typedef enum _xe_command_queue_mode_t
 {
     XE_COMMAND_QUEUE_MODE_DEFAULT = 0,              ///< implicit default behavior; uses driver-based heuristics
-    XE_COMMAND_QUEUE_MODE_SYNCHRONOUS,              ///< GPU execution always completes immediately on enqueue; CPU thread is blocked using wait on implicit synchronization object
-    XE_COMMAND_QUEUE_MODE_ASYNCHRONOUS,             ///< GPU execution is scheduled and will complete in future; explicit synchronization object must be used to determine completeness
+    XE_COMMAND_QUEUE_MODE_SYNCHRONOUS,              ///< GPU execution always completes immediately on enqueue; CPU thread is
+                                                    ///< blocked using wait on implicit synchronization object
+    XE_COMMAND_QUEUE_MODE_ASYNCHRONOUS,             ///< GPU execution is scheduled and will complete in future; explicit
+                                                    ///< synchronization object must be used to determine completeness
 
 } xe_command_queue_mode_t;
 
@@ -78,7 +81,10 @@ typedef struct _xe_command_queue_desc_t
     xe_command_queue_flags_t flags;                 ///< [in] creation flags
     xe_command_queue_mode_t mode;                   ///< [in] operation mode
     xe_command_queue_priority_t priority;           ///< [in] priority
-    uint32_t ordinal;                               ///< [in] if logical-only flag is set, then must be 0; else-if copy-only flag is set, then must be less than ::xe_device_properties_t.numAsyncCopyEngines; otherwise must be less than ::xe_device_properties_t.numAsyncComputeEngines
+    uint32_t ordinal;                               ///< [in] if logical-only flag is set, then must be 0; else-if copy-only
+                                                    ///< flag is set, then must be less than
+                                                    ///< ::xe_device_properties_t.numAsyncCopyEngines; otherwise must be less
+                                                    ///< than ::xe_device_properties_t.numAsyncComputeEngines
 
 } xe_command_queue_desc_t;
 
