@@ -174,6 +174,42 @@ xe_result_t __xecall
 }
 
 ///////////////////////////////////////////////////////////////////////////////
+/// @brief Returns the supported device capabilities
+/// 
+/// @details
+///     - The application may call this function from simultaneous threads.
+///     - The implementation of this function should be lock-free.
+/// 
+/// @remarks
+///   _Analogues_
+///     - **cuDeviceGetAttribute**
+/// 
+/// @returns
+///     - ::XE_RESULT_SUCCESS
+///     - ::XE_RESULT_ERROR_UNINITIALIZED
+///     - ::XE_RESULT_ERROR_INVALID_PARAMETER
+///         + invalid handle for hDevice
+///         + invalid capability
+/*@todo: __declspec(dllexport)*/
+xe_result_t __xecall
+  xeDeviceQueryCapability(
+    xe_device_handle_t hDevice,                     ///< [in] handle of the device object
+    xe_device_capabilities_t capability,            ///< [out] capability to query
+    bool* pSupport                                  ///< [out] true/false for capability
+    )
+{
+    // @todo: check_return(nullptr == get_driver(), XE_RESULT_ERROR_UNINITIALIZED);
+
+    // Check parameters
+    // @todo: check_return(xe_device_handle_t() == hDevice, XE_RESULT_ERROR_INVALID_PARAMETER);
+    // @todo: check_return(nullptr == pSupport, XE_RESULT_ERROR_INVALID_PARAMETER);
+
+    // @todo: insert <code> here
+
+    return XE_RESULT_SUCCESS;
+}
+
+///////////////////////////////////////////////////////////////////////////////
 /// @brief Retrieves attributes of the device
 /// 
 /// @details

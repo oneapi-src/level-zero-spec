@@ -93,6 +93,47 @@ returns:
         - "invalid handle for hDevice"
         - "nullptr for version"
 --- #--------------------------------------------------------------------------
+type: enum
+desc: "Device capabilities"
+name: $x_device_capabilities_t
+details:
+    - "Supported device capabilities"
+    - "The application may call this function from simultaneous threads."
+    - "The implementation of this function should be lock-free."
+etors:
+    - name: $X_DEVICE_CAPS_UNIFIED_MEMORY_SUPPORTED
+      value: "$X_BIT( 0 )"
+      desc: "Supports unified memory"
+    - name: $X_DEVICE_CAPS_ONDEMAND_PAGE_FAULTING
+      value: "$X_BIT( 1 )"
+      desc: "Supports on-demand page faulting"
+    - name: $X_DEVICE_CAPS_INTERMEDIATE_CACHE_CONTROL
+      value: "$X_BIT( 2 )"
+      desc: "Support User control on Intermediate Cache(i.e. Resize SLM section vs Generic Cache)."
+--- #--------------------------------------------------------------------------
+type: function
+desc: "Returns the supported device capabilities"
+name: $xDeviceQueryCapability
+analogue:
+    - "**cuDeviceGetAttribute**"
+details:
+    - "The application may call this function from simultaneous threads."
+    - "The implementation of this function should be lock-free."
+params:
+    - type: $x_device_handle_t
+      name: hDevice
+      desc: "[in] handle of the device object"
+    - type: "$x_device_capabilities_t"
+      name: capability
+      desc: "[out] capability to query"
+    - type: "bool*"
+      name: pSupport
+      desc: "[out] true/false for capability"
+returns:
+    - $X_RESULT_ERROR_INVALID_PARAMETER:
+        - "invalid handle for hDevice"
+        - "invalid capability"
+--- #--------------------------------------------------------------------------
 type: macro
 desc: "API version of $x_device_properties_t"
 name: $X_DEVICE_PROPERTIES_VERSION
