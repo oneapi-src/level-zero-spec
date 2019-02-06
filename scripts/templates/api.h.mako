@@ -1,58 +1,6 @@
 <%!
 import re
-
-def sub(repl, string, tag=False):
-    string = re.sub(r"\$Xx", repl.title(), string)
-    string = re.sub(r"\-\$x", "-"+repl, string) #hack
-    repl = "::"+repl if tag else repl
-    string = re.sub(r"\$x", repl, string)
-    string = re.sub(r"\$X", repl.upper(), string)
-    return string
-
-def append(string, count):
-    while len(string) > count:
-        count = count + 4
-    string = '{str: <{width}}'.format(str=string, width=count)
-    return string
-
-def split_line(line, ch_count):
-    if not line:
-        return []
-    words           = line.split(" ")
-    lines           = []
-    word_list       = []
-    for word in words:
-        if re.match(r"(.*)\n", word):
-            word_list.append(re.sub(r"(.*)\n",r"\1",word))
-            lines.append(" ".join(word_list))
-            word_list = []
-        elif sum(map(len, word_list)) + len(word_list) + len(word) <= ch_count:
-            word_list.append(word)
-        else:
-            lines.append(" ".join(word_list))
-            word_list = [word]
-    if len(word_list):
-        lines.append(" ".join(word_list))
-    return lines
-
-def make_line(lformat, rformat, repl, a, b, c):
-    rhalf = lformat%(sub(repl,a), sub(repl,b))
-    lhalf = rformat%(sub(repl,c,True))
-    return "%s%s"%(append(rhalf, 48), lhalf)
-
-def eline(repl, item):
-    if 'value' in item:
-        return make_line("%s = %s,", "///< %s", repl, item['name'], item['value'], item['desc'])
-    else:
-        return make_line("%s%s,", "///< %s", repl, item['name'], "", item['desc'])
-
-def mline(repl, item):
-    return make_line("%s %s;", "///< %s", repl, item['type'], item['name'], item['desc'])
-
-def pline(repl, item, more):
-    lformat = "%s %s," if more else "%s %s"
-    return make_line(lformat, "///< %s", repl, item['type'], item['name'], item['desc'])
-
+from templates import helper as th
 %>/**************************************************************************//**
 *
 * INTEL CONFIDENTIAL
@@ -77,7 +25,7 @@ def pline(repl, item, more):
 *
 * @file ${x}_${name}.h
 *
-* @brief ${sub(x, header['desc'])}
+* @brief ${th.subx(x, header['desc'])}
 *
 * @cond DEV
 * DO NOT EDIT: generated from /scripts/<type>/${name}.yml
@@ -104,111 +52,60 @@ typedef double double_t;
 %for obj in objects:
 ///////////////////////////////////////////////////////////////////////////////
 %if 'condition' in obj:
-#if ${sub(x,obj['condition'])}
+#if ${th.subx(x,obj['condition'])}
 %endif
-%for line in split_line(sub(x, obj['desc'], True), 70):
-    %if loop.index < 1:
-/// @brief ${line}
-    %else:
-///        ${line}
-    %endif
+%for line in th.make_desc_lines(x, obj):
+/// ${line}
 %endfor
-%if 'details' in obj:
-/// 
-/// @details
-%for item in obj['details']:
-    %if isinstance(item, dict):
-    %for key, values in item.items():
-    %for line in split_line(sub(x, key, True), 70):
-        %if loop.index < 1:
-///     - ${line}
-        %else:
-///       ${line}
-        %endif
-    %endfor
-        %for val in values:
-        %for line in split_line(sub(x, val, True), 66):
-        %if loop.index < 1:
-///         + ${line}
-        %else:
-///           ${line}
-        %endif
-        %endfor
-        %endfor
-    %endfor
-    %else:
-    %for line in split_line(sub(x, item, True), 70):
-        %if loop.index < 1:
-///     - ${line}
-        %else:
-///       ${line}
-        %endif
-    %endfor
-    %endif
+%for line in th.make_details_lines(x, obj):
+/// ${line}
 %endfor
-%endif
-%if 'analogue' in obj:
-/// 
-/// @remarks
-///   _Analogues_
-    %for line in obj['analogue']:
-///     - ${line}
-    %endfor
-%endif
+## MACRO ######################################################################
 %if re.match(r"macro", obj['type']):
-#define ${sub(x, obj['name'])}  ${sub(x, obj['value'])}
+#define ${th.subx(x, obj['name'])}  ${th.subx(x, obj['value'])}
 %if 'altvalue' in obj:
 #else
-#define ${sub(x, obj['name'])}  ${sub(x, obj['altvalue'])}
+#define ${th.subx(x, obj['name'])}  ${th.subx(x, obj['altvalue'])}
 %endif
+## TYPEDEF ####################################################################
 %elif re.match(r"typedef", obj['type']):
-typedef ${sub(x, obj['value'])} ${sub(x, obj['name'])};
+typedef ${th.subx(x, obj['value'])} ${th.subx(x, obj['name'])};
 %elif re.match(r"enum", obj['type']):
-typedef enum _${sub(x, obj['name'])}
+typedef enum _${th.subx(x, obj['name'])}
 {
-    %for etor in obj['etors']:
-    ${eline(x, etor)}
+    %for line in th.make_etor_lines(x, obj):
+    ${line}
     %endfor
 
-} ${sub(x, obj['name'])};
+} ${th.subx(x, obj['name'])};
+## STRUCT #####################################################################
 %elif re.match(r"struct", obj['type']):
-typedef struct _${sub(x, obj['name'])}
+typedef struct _${th.subx(x, obj['name'])}
 {
-    %for member in obj['members']:
-    ${mline(x, member)}
+    %for line in th.make_member_lines(x, obj):
+    ${line}
     %endfor
 
-} ${sub(x, obj['name'])};
+} ${th.subx(x, obj['name'])};
+## FUNCTION ###################################################################
 %elif re.match(r"function", obj['type']):
 /// 
-/// @returns
-///     - ::${X}_RESULT_SUCCESS
-///     - ::${X}_RESULT_ERROR_UNINITIALIZED
-///     - ::${X}_RESULT_ERROR_UNSUPPORTED
-%for item in obj['returns']:
-    %if isinstance(item, dict):
-    %for key, values in item.items():
-///     - ${sub(x, key, True)}
-        %for val in values:
-///         + ${sub(x, val, True)}
-        %endfor
-    %endfor
-    %else:
-///     - ${sub(x, item, True)}
-    %endif
+%for line in th.make_return_lines(x, obj):
+/// ${line}
 %endfor
 ${x}_result_t __${x}call
-  ${sub(x, obj['name'])}(
-    %for param in obj['params']:
-    ${pline(x, param, loop.index < len(obj['params'])-1)}
+  ${th.subx(x, obj['name'])}(
+    %for line in th.make_param_lines(x, obj):
+    ${line}
     %endfor
     );
+## HANDLE #####################################################################
 %elif re.match(r"handle", obj['type']):
-struct _${sub(x, obj['name'])};
-using ${sub(x, obj['name'])} = _${sub(x, obj['name'])}*;
+struct _${th.subx(x, obj['name'])};
+using ${th.subx(x, obj['name'])} = _${th.subx(x, obj['name'])}*;
 %endif
 %if 'condition' in obj:
-#endif // ${sub(x,obj['condition'])}
+#endif // ${th.subx(x,obj['condition'])}
 %endif
 
 %endfor

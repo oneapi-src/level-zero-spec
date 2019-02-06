@@ -1,48 +1,6 @@
 <%!
 import re
-
-def sub(repl, string, tag=False):
-    string = re.sub(r"\$Xx", repl.title(), string)
-    repl = "::"+repl if tag else repl
-    string = re.sub(r"\$x", repl, string)
-    string = re.sub(r"\$X", repl.upper(), string)
-    return string
-
-def append(string, count):
-    while len(string) > count:
-        count = count + 4
-    string = '{str: <{width}}'.format(str=string, width=count)
-    return string
-
-def split_line(line, ch_count):
-    if not line:
-        return []
-    words           = line.split(" ")
-    lines           = []
-    word_list       = []
-    for word in words:
-        if re.match(r"(.*)\n", word):
-            word_list.append(re.sub(r"(.*)\n",r"\1",word))
-            lines.append(" ".join(word_list))
-            word_list = []
-        elif sum(map(len, word_list)) + len(word_list) + len(word) <= ch_count:
-            word_list.append(word)
-        else:
-            lines.append(" ".join(word_list))
-            word_list = [word]
-    if len(word_list):
-        lines.append(" ".join(word_list))
-    return lines
-
-def make_line(lformat, rformat, repl, a, b, c):
-    rhalf = lformat%(sub(repl,a), sub(repl,b))
-    lhalf = rformat%(sub(repl,c,True))
-    return "%s%s"%(append(rhalf, 48), lhalf)
-
-def pline(repl, item, more):
-    lformat = "%s %s," if more else "%s %s"
-    return make_line(lformat, "///< %s", repl, item['type'], item['name'], item['desc'])
-
+from templates import helper as th
 %>/**************************************************************************//**
 *
 * INTEL CONFIDENTIAL
@@ -67,7 +25,7 @@ def pline(repl, item, more):
 *
 * @file ${x}_${name}.cpp
 *
-* @brief ${sub(x, header['desc'])}
+* @brief ${th.subx(x, header['desc'])}
 *
 * @cond DEV
 * DO NOT EDIT: generated from /scripts/<type>/${name}.yml
@@ -80,78 +38,23 @@ def pline(repl, item, more):
 %if re.match(r"function", obj['type']):
 ///////////////////////////////////////////////////////////////////////////////
 %if 'condition' in obj:
-#if ${sub(x,obj['condition'])}
+#if ${th.subx(x,obj['condition'])}
 %endif
-%for line in split_line(sub(x, obj['desc'], True), 70):
-    %if loop.index < 1:
-/// @brief ${line}
-    %else:
-///        ${line}
-    %endif
+%for line in th.make_desc_lines(x, obj):
+/// ${line}
 %endfor
-%if 'details' in obj:
-/// 
-/// @details
-%for item in obj['details']:
-    %if isinstance(item, dict):
-    %for key, values in item.items():
-    %for line in split_line(sub(x, key, True), 70):
-        %if loop.index < 1:
-///     - ${line}
-        %else:
-///       ${line}
-        %endif
-    %endfor
-        %for val in values:
-        %for line in split_line(sub(x, val, True), 66):
-        %if loop.index < 1:
-///         + ${line}
-        %else:
-///           ${line}
-        %endif
-        %endfor
-        %endfor
-    %endfor
-    %else:
-    %for line in split_line(sub(x, item, True), 70):
-        %if loop.index < 1:
-///     - ${line}
-        %else:
-///       ${line}
-        %endif
-    %endfor
-    %endif
+%for line in th.make_details_lines(x, obj):
+/// ${line}
 %endfor
-%endif
-%if 'analogue' in obj:
 /// 
-/// @remarks
-///   _Analogues_
-    %for line in obj['analogue']:
-///     - ${line}
-    %endfor
-%endif
-/// 
-/// @returns
-///     - ::${X}_RESULT_SUCCESS
-///     - ::${X}_RESULT_ERROR_UNINITIALIZED
-%for item in obj['returns']:
-    %if isinstance(item, dict):
-    %for key, values in item.items():
-///     - ${sub(x, key, True)}
-        %for val in values:
-///         + ${sub(x, val, True)}
-        %endfor
-    %endfor
-    %else:
-///     - ${sub(x, item, True)}
-    %endif
+%for line in th.make_return_lines(x, obj):
+/// ${line}
 %endfor
 /*@todo: __declspec(dllexport)*/
 ${x}_result_t __${x}call
-  ${sub(x, obj['name'])}(
-    %for param in obj['params']:
-    ${pline(x, param, loop.index < len(obj['params'])-1)}
+  ${th.subx(x, obj['name'])}(
+    %for line in th.make_param_lines(x, obj):
+    ${line}
     %endfor
     )
 {
@@ -162,12 +65,12 @@ ${x}_result_t __${x}call
     // Check parameters
     %for param in obj['params']:
     %if re.match(r".*\w+\*+", param['type']) and not re.match(r".*\[optional\].*", param['desc']):
-    // @todo: check_return(nullptr == ${sub(x, param['name'])}, ${X}_RESULT_ERROR_INVALID_PARAMETER);
+    // @todo: check_return(nullptr == ${th.subx(x, param['name'])}, ${X}_RESULT_ERROR_INVALID_PARAMETER);
     %elif re.match(r".*handle_t.*", param['type']):
-    // @todo: check_return(${sub(x, param['type'])}() == ${sub(x, param['name'])}, ${X}_RESULT_ERROR_INVALID_PARAMETER);
+    // @todo: check_return(${th.subx(x, param['type'])}() == ${th.subx(x, param['name'])}, ${X}_RESULT_ERROR_INVALID_PARAMETER);
     %endif
     %if re.match(r".*desc_t.*", param['type']):
-    // @todo: check_return(${re.sub(r"\w*\s*(.*)_t.*", r"\1_VERSION", sub(x, param['type'])).upper()} <= ${param['name']}->version, ${X}_RESULT_ERROR_UNSUPPORTED);
+    // @todo: check_return(${re.sub(r"\w*\s*(.*)_t.*", r"\1_VERSION", th.subx(x, param['type'])).upper()} <= ${param['name']}->version, ${X}_RESULT_ERROR_UNSUPPORTED);
     %endif
     %endfor
 
@@ -176,7 +79,7 @@ ${x}_result_t __${x}call
     return ${X}_RESULT_SUCCESS;
 }
 %if 'condition' in obj:
-#endif // ${sub(x,obj['condition'])}
+#endif // ${th.subx(x,obj['condition'])}
 %endif
 
 %endif
