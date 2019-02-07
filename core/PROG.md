@@ -75,7 +75,7 @@ The following sample code demonstrates a basic initialization sequence:
 ```
 
 # <a name="cnc">Command Queues and Command Lists</a>
-The following lists the motivation for seperating a command queue from a command list:
+The following are the motivations for seperating a command queue from a command list:
 - Command queues are mostly associated with physical device properties, such as the number of input streams.
 - Command queues provide (near) zero-latency access to the device.
 - Command lists are mostly associated with Host threads for simultaneous construction.
@@ -190,7 +190,7 @@ The following sample code demonstrates submission of commands to a command queue
 - The command graph does have references to existing command lists, which must be removed prior to the command lists being destroyed.
 
 The following diagram illustrates a representation of a command graph and how batches of command lists may be submitted to command queues:  
-![Queue](../images/core_graph.png?raw=true)  
+![Graph](../images/core_graph.png?raw=true)  
 @image latex ../images/core_graph.png
 
 The following sample code demonstrates submission of command lists to a command queue, via a command graph:
@@ -231,11 +231,16 @@ The following sample code demonstrates submission of command lists to a command 
 ```
 
 # <a name="brr">Barriers</a>
-- Execution Barriers are used to insert a dependency between commands submitted to the same command list.
+There are two types of barriers:
+1. **Execution Barriers** - used to insert execution dependency between commands _within_ a command list.
+2. **Memory Barriers** - used to insert a dependency between memory access across command queues, devices or Host.
+
+## Execution Barriers
 - Commands submitted to a command list are only gaurenteed to start in the same order in which they are submitted;
-there is no implicit control of which order they complete.
+  there is no implicit control of which order they complete.
 - Execution barriers provide explicit control to indicate that previous commands must complete prior to
-starting the following commands.
+  starting the following commands.
+- Execution barriers are implicitly added by the driver prior to synchronization primitives.
 
 The following sample code demonstrates a sequence for submission of an execution barrier:
 ```c
@@ -248,16 +253,28 @@ The following sample code demonstrates a sequence for submission of an execution
     ...
 ```
 
+## Memory Barriers
+Memory barriers are always handled implicitly by the driver.
+
+@todo [**Brandon**] need to define the rules when _when_ memory barriers occur.
+
 # <a name="sp">Synchronization Primitives</a>
 There are three types of synchronization primitives:
 1. **Fences** - used to communicate to the host that command queue execution has completed.
 2. **Events** - used as fine-grain host-to-device, device-to-host or device-to-device waits and signals within a command list.
 3. **Semaphores** - used for fine-grain control of command lists execution across multiple, simultaneous command queues within a device.
 
+The following are the motivations for seperating the different types of synchronization primitives:
+- Allows device-specific optimizations for certain types of primitives:
+    + fences may share device memory with all other fences for the queue or device.
+    + events may be implemented using pipelined operations as part of the program execution.
+    + semaphores may be implemented without device memory.
+- Allows distinction on which type of primitive may be shared across devices.
+
 ## Fences
 - A fence is associated with single command queue.
 - A fence can only be signaled from a device's command queue (e.g. between execution of command lists)
-and can only be waited upon from the host.
+  and can only be waited upon from the host.
 - A fence only has two states: not signaled and signaled.
 - A fence cannot be shared across processes.
 - An application can use ::xeFenceQueryElapsedTime to calculate the time (in milliseconds) between two fences' signals.
