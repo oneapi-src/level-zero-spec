@@ -76,7 +76,8 @@ The following sample code demonstrates a basic initialization sequence:
 
 # <a name="cnc">Command Queues and Command Lists</a>
 The following are the motivations for seperating a command queue from a command list:
-- Command queues are mostly associated with physical device properties, such as the number of input streams.
+- Command queues are mostly associated with physical device properties,
+  such as the number of input streams.
 - Command queues provide (near) zero-latency access to the device.
 - Command lists are mostly associated with Host threads for simultaneous construction.
 - Command list encodeing can occur independently of command queue submission.
@@ -94,10 +95,15 @@ The following diagram illustrates the hierarchy of command lists and command que
   allow the driver to choose dynamically, based on usage.
 - Multiple command queues may be created that use the same physical input stream. For example,
   an application may create a command queue per Host thread with different scheduling priorities.
-- Command queue submission is free-treaded, allowing multiple Host threads to share the queue;
-  if multiple Host threads enter simultaneously then execution order is undefined.
-- Command lists created with ::$X_COMMAND_LIST_FLAG_COPY_ONLY may only be submitted to
-  command queues created with ::$X_COMMAND_QUEUE_FLAG_COPY_ONLY.
+- However, an application should avoid creating multiple command queues for the same physical
+  input stream with the same priority due to possible performance penalties with hardware
+  context switching.
+- Instead, command queue submission is free-treaded, allowing multiple Host threads to
+  share the same command queue.
+- If multiple Host threads enter the same command queue simultaneously, then execution order
+  is undefined.
+- Command lists created with ::XE_COMMAND_LIST_FLAG_COPY_ONLY may only be submitted to
+  command queues created with ::XE_COMMAND_QUEUE_FLAG_COPY_ONLY.
 - The number of simultaneous compute command queues per device is queried from 
   ::xe_device_properties_t.numAsyncComputeEngines.
 - The number of simultaneous copy command queues per device is queried from 
@@ -127,12 +133,12 @@ The following diagram illustrates the hierarchy of command lists and command que
 - A command list is created for a device to allow device-specific encoding of commands.
 - By default, commands are executed in the same order in which they are submitted.
   However, an application may allow the driver to optimize the ordering by using
-  ::$X_COMMAND_LIST_FLAG_RELAXED_ORDERING.  Reordering is gaurenteed to be only occur
+  ::XE_COMMAND_LIST_FLAG_RELAXED_ORDERING.  Reordering is gaurenteed to be only occur
   between barriers and synchronization primitives.
 - There is no implicit association between a command list and a command queue. 
   Therefore, a command list may be submitted to any, or multiple command queues.
   However, if a command list is meant to be submitted to a copy-only command queue
-  then the ::$X_COMMAND_LIST_FLAG_COPY_ONLY must be set at creation.
+  then the ::XE_COMMAND_LIST_FLAG_COPY_ONLY must be set at creation.
 - There is no implicit binding of command lists to Host threads. Therefore, an 
   application may share a command list handle across multiple Host threads. However,
   the application is responsible for ensuring that  multiple Host threads do not access
