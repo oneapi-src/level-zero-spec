@@ -117,7 +117,7 @@ returns:
         - invalid handle for hCommandQueue
 --- #--------------------------------------------------------------------------
 type: function
-desc: "Enqueues a command list into a command queue."
+desc: "Enqueues a command list into a command queue for immediate execution."
 name: $xCommandQueueEnqueueCommandLists
 analogue:
     - vkQueueSubmit

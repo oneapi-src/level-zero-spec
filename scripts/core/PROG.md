@@ -75,26 +75,36 @@ The following sample code demonstrates a basic initialization sequence:
 ```
 
 ${"#"} <a name="cnc">Command Queues and Command Lists</a>
+The following lists the motivation for seperating a command queue from a command list:
+- Command queues are mostly associated with physical device properties, such as the number of input streams.
+- Command queues provide (near) zero-latency access to the device.
+- Command lists are mostly associated with Host threads for simultaneous construction.
+- Command list encodeing can occur independently of command queue submission.
+- Command list submission can occur to more than one command queue.
+
 The following diagram illustrates the hierarchy of command lists and command queues to the device:  
 ![Queue](../images/core_queue.png?raw=true)  
 @image latex ../images/core_queue.png
 
 ${"##"} Command Queues
-- A command queue represents a logical input stream to the device, tied to a physcial input
+- A command queue represents a logical input stream to the device, tied to a physical input
   stream via an ordinal at creation time.
-- The number of simultaneous command queues per device is queried from calling 
-  ::${x}DeviceGetProperties; returned as ::${x}_device_properties_t.numAsyncComputeEngines
-  and ::${x}_device_properties_t.numAsyncCopyEngines.
-- Multiple command queues may be created by an application.  For example,
-  an application may want to create a command queue per Host thread.
-- There is no implicit binding of command queues to Host threads. Therefore,
-  an application may share a command queue handle across multiple Host
-  threads.
-- Commands are submitted to a command queue via command lists and are
-  executed in a fifo manner.
+- Command lists submitted to a command queue are **immediately** executed in a fifo manner.
+- The application may explicitly bind the command queue to a physical input stream, or
+  allow the driver to choose dynamically, based on usage.
+- Multiple command queues may be created that use the same physical input stream. For example,
+  an application may create a command queue per Host thread with different scheduling priorities.
+- Command queue submission is free-treaded, allowing multiple Host threads to share the queue;
+  if multiple Host threads enter simultaneously then execution order is undefined.
+- Command lists created with ::$X_COMMAND_LIST_FLAG_COPY_ONLY may only be submitted to
+  command queues created with ::$X_COMMAND_QUEUE_FLAG_COPY_ONLY.
+- The number of simultaneous compute command queues per device is queried from 
+  ::${x}_device_properties_t.numAsyncComputeEngines.
+- The number of simultaneous copy command queues per device is queried from 
+  ::${x}_device_properties_t.numAsyncCopyEngines.
 - The application is responsible for making sure the device is not currently
   executing from a command queue before it is deleted.  This is 
-  typically done by tracking command list events, but may also be
+  typically done by tracking command queue fences, but may also be
   handled by calling ::${x}CommandQueueSynchronize.
 
   The following sample code demonstrates a basic sequence for creation of command queues:
@@ -113,24 +123,25 @@ ${"##"} Command Queues
 ```
 
 ${"##"} Command Lists
-- A command list represents a sequence of commands for execution on
-  a command queue.
-- Multiple command lists may be created by an application.  For example,
-  an application may want to create multiple command lists per command queue.
-- There is no implicit association between a command list and a 
-  command queue. Therefore, a command list may be submitted to any, or
-  multiple command queues.
-- There is no implicit binding of command lists to Host threads. Therefore,
-  an application may share a command list handle across multiple Host
-  threads. However, the application is responsible for ensuring that 
-  multiple Host threads do not access the same command list simultaneously.
-- The command list maintains some machine state, which is inherited by
-  subsequent commands. See ::${x}_command_list_parameter_t for details.
-- Command lists do not inherit state from other command lists executed
-  on the same command queue.  i.e. each command list begins execution
-  in its own default state.
-- The application is responsible for calling close before submission
-  to a command queue.
+- A command list represents a sequence of commands for execution on a command queue.
+- A command list is created for a device to allow device-specific encoding of commands.
+- By default, commands are executed in the same order in which they are submitted.
+  However, an application may allow the driver to optimize the ordering by using
+  ::$X_COMMAND_LIST_FLAG_RELAXED_ORDERING.  Reordering is gaurenteed to be only occur
+  between barriers and synchronization primitives.
+- There is no implicit association between a command list and a command queue. 
+  Therefore, a command list may be submitted to any, or multiple command queues.
+  However, if a command list is meant to be submitted to a copy-only command queue
+  then the ::$X_COMMAND_LIST_FLAG_COPY_ONLY must be set at creation.
+- There is no implicit binding of command lists to Host threads. Therefore, an 
+  application may share a command list handle across multiple Host threads. However,
+  the application is responsible for ensuring that  multiple Host threads do not access
+  the same command list simultaneously.
+- The command list maintains some machine state, which is inherited by subsequent
+  commands. See ::${x}_command_list_parameter_t for details.
+- Command lists do not inherit state from other command lists executed on the same
+  command queue.  i.e. each command list begins execution in its own default state.
+- The application is responsible for calling close before submission to a command queue.
 - The application is responsible for making sure the device is not currently
   executing from a command list before it is deleted.  This should be
   handled by tracking a completion event associated with the command list.

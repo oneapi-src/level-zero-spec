@@ -36,6 +36,7 @@
 ///        command queue.
 /// 
 /// @details
+///     - The command list is created in the 'open' state.
 ///     - This function may be called from simultaneous threads.
 ///     - The implementation of this function should be lock-free.
 /// 
@@ -63,6 +64,49 @@ xe_result_t __xecall
     // @todo: check_return(xe_device_handle_t() == hDevice, XE_RESULT_ERROR_INVALID_PARAMETER);
     // @todo: check_return(nullptr == desc, XE_RESULT_ERROR_INVALID_PARAMETER);
     // @todo: check_return(XE_COMMAND_LIST_DESC_VERSION <= desc->version, XE_RESULT_ERROR_UNSUPPORTED);
+    // @todo: check_return(nullptr == phCommandList, XE_RESULT_ERROR_INVALID_PARAMETER);
+
+    // @todo: insert <code> here
+
+    return XE_RESULT_SUCCESS;
+}
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Copies a command list on the device for submitting commands to any
+///        command queue.
+/// 
+/// @details
+///     - The command list to be copied must be closed.
+///     - The command list created will be in the 'open' state.
+///     - If the device is a different than the one used to create the source
+///       command list, then it must have been created using the
+///       ::XE_COMMAND_LIST_FLAG_CROSS_DEVICE flag.
+///     - This function may be called from simultaneous threads.
+///     - The implementation of this function should be lock-free.
+/// 
+/// @returns
+///     - ::XE_RESULT_SUCCESS
+///     - ::XE_RESULT_ERROR_UNINITIALIZED
+///     - ::XE_RESULT_ERROR_UNSUPPORTED
+///     - ::XE_RESULT_ERROR_INVALID_PARAMETER
+///         + invalid handle for hDevice
+///         + invalid handle for hCommandList
+///         + nullptr for phCommandList
+///     - ::XE_RESULT_ERROR_OUT_OF_HOST_MEMORY
+///     - ::XE_RESULT_ERROR_OUT_OF_DEVICE_MEMORY
+/*@todo: __declspec(dllexport)*/
+xe_result_t __xecall
+  xeDeviceCopyCommandList(
+    xe_device_handle_t hDevice,                     ///< [in] handle of the device object
+    xe_command_list_handle_t hCommandList,          ///< [in] handle to command list to copy
+    xe_command_list_handle_t* phCommandList         ///< [out] pointer to handle of command list object created
+    )
+{
+    // @todo: check_return(nullptr == get_driver(), XE_RESULT_ERROR_UNINITIALIZED);
+
+    // Check parameters
+    // @todo: check_return(xe_device_handle_t() == hDevice, XE_RESULT_ERROR_INVALID_PARAMETER);
+    // @todo: check_return(xe_command_list_handle_t() == hCommandList, XE_RESULT_ERROR_INVALID_PARAMETER);
     // @todo: check_return(nullptr == phCommandList, XE_RESULT_ERROR_INVALID_PARAMETER);
 
     // @todo: insert <code> here

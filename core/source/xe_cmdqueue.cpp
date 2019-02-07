@@ -113,7 +113,7 @@ xe_result_t __xecall
 }
 
 ///////////////////////////////////////////////////////////////////////////////
-/// @brief Enqueues a command list into a command queue.
+/// @brief Enqueues a command list into a command queue for immediate execution.
 /// 
 /// @details
 ///     - The application may call this function from simultaneous threads.

@@ -17,6 +17,15 @@ etors:
     - name: $X_COMMAND_LIST_FLAG_COPY_ONLY
       value: "$X_BIT(0)"
       desc: "command list **only** contains copy operations (and synchronization primitives)"
+    - name: $X_COMMAND_LIST_FLAG_RELAXED_ORDERING
+      value: "$X_BIT(1)"
+      desc: "driver may reorder programs and copys between barriers and synchronization primitives"
+    - name: $X_COMMAND_LIST_FLAG_LOW_LATENCY
+      value: "$X_BIT(2)"
+      desc: "driver should optimize for immediate submission to a command queue"
+    - name: $X_COMMAND_LIST_FLAG_CROSS_DEVICE
+      value: "$X_BIT(3)"
+      desc: "command list can be shared with another device"
 --- #--------------------------------------------------------------------------
 type: struct
 desc: "Command List descriptor"
@@ -33,6 +42,7 @@ type: function
 desc: "Creates a command list on the device for submitting commands to any command queue."
 name: $xDeviceCreateCommandList
 details:
+    - "The command list is created in the 'open' state."
     - "This function may be called from simultaneous threads."
     - "The implementation of this function should be lock-free."
 params:
@@ -49,6 +59,34 @@ returns:
     - $X_RESULT_ERROR_INVALID_PARAMETER:
         - "invalid handle for hDevice"
         - "nullptr for desc"
+        - "nullptr for phCommandList"
+    - $X_RESULT_ERROR_OUT_OF_HOST_MEMORY
+    - $X_RESULT_ERROR_OUT_OF_DEVICE_MEMORY
+--- #--------------------------------------------------------------------------
+type: function
+desc: "Copies a command list on the device for submitting commands to any command queue."
+name: $xDeviceCopyCommandList
+details:
+    - "The command list to be copied must be closed."
+    - "The command list created will be in the 'open' state."
+    - "If the device is a different than the one used to create the source command list,
+      then it must have been created using the $X_COMMAND_LIST_FLAG_CROSS_DEVICE flag."
+    - "This function may be called from simultaneous threads."
+    - "The implementation of this function should be lock-free."
+params:
+    - type: $x_device_handle_t
+      name: hDevice
+      desc: "[in] handle of the device object"
+    - type: $x_command_list_handle_t
+      name: hCommandList
+      desc: "[in] handle to command list to copy"
+    - type: "$x_command_list_handle_t*"
+      name: phCommandList
+      desc: "[out] pointer to handle of command list object created"
+returns:
+    - $X_RESULT_ERROR_INVALID_PARAMETER:
+        - "invalid handle for hDevice"
+        - "invalid handle for hCommandList"
         - "nullptr for phCommandList"
     - $X_RESULT_ERROR_OUT_OF_HOST_MEMORY
     - $X_RESULT_ERROR_OUT_OF_DEVICE_MEMORY

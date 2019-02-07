@@ -136,8 +136,8 @@ In order to eliminate the usage of thread-locks by the implementation, the follo
 
 ${"#"} <a name="drv">Drivers</a>
 ${"##"} Installation
-The ${Xx} driver API is implemented within a _${x}_vendor.dll_, which is copied on the system during installation of the device driver;
-where "_vendor_" is chosen by the device vendor.
+The ${Xx} driver API is implemented within a _${x}_vendor.dll_ (windows) / _${x}_vendor.so_ (linux), which is copied on the system during installation of the device driver;
+where _vendor_ is chosen by the device vendor.
 
 This API does not define an Installable Client Driver (ICD), as it is expected that users of this API would prefer to implement
 their own device abstraction layer and communicate directly with the device-driver.

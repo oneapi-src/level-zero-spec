@@ -47,6 +47,10 @@ typedef enum _xe_command_list_flags_t
     XE_COMMAND_LIST_FLAG_NONE = 0,                  ///< default behavior
     XE_COMMAND_LIST_FLAG_COPY_ONLY = XE_BIT(0),     ///< command list **only** contains copy operations (and synchronization
                                                     ///< primitives)
+    XE_COMMAND_LIST_FLAG_RELAXED_ORDERING = XE_BIT(1),  ///< driver may reorder programs and copys between barriers and
+                                                    ///< synchronization primitives
+    XE_COMMAND_LIST_FLAG_LOW_LATENCY = XE_BIT(2),   ///< driver should optimize for immediate submission to a command queue
+    XE_COMMAND_LIST_FLAG_CROSS_DEVICE = XE_BIT(3),  ///< command list can be shared with another device
 
 } xe_command_list_flags_t;
 
@@ -64,6 +68,7 @@ typedef struct _xe_command_list_desc_t
 ///        command queue.
 /// 
 /// @details
+///     - The command list is created in the 'open' state.
 ///     - This function may be called from simultaneous threads.
 ///     - The implementation of this function should be lock-free.
 /// 
@@ -81,6 +86,36 @@ xe_result_t __xecall
   xeDeviceCreateCommandList(
     xe_device_handle_t hDevice,                     ///< [in] handle of the device object
     const xe_command_list_desc_t* desc,             ///< [in] pointer to command list descriptor
+    xe_command_list_handle_t* phCommandList         ///< [out] pointer to handle of command list object created
+    );
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Copies a command list on the device for submitting commands to any
+///        command queue.
+/// 
+/// @details
+///     - The command list to be copied must be closed.
+///     - The command list created will be in the 'open' state.
+///     - If the device is a different than the one used to create the source
+///       command list, then it must have been created using the
+///       ::XE_COMMAND_LIST_FLAG_CROSS_DEVICE flag.
+///     - This function may be called from simultaneous threads.
+///     - The implementation of this function should be lock-free.
+/// 
+/// @returns
+///     - ::XE_RESULT_SUCCESS
+///     - ::XE_RESULT_ERROR_UNINITIALIZED
+///     - ::XE_RESULT_ERROR_UNSUPPORTED
+///     - ::XE_RESULT_ERROR_INVALID_PARAMETER
+///         + invalid handle for hDevice
+///         + invalid handle for hCommandList
+///         + nullptr for phCommandList
+///     - ::XE_RESULT_ERROR_OUT_OF_HOST_MEMORY
+///     - ::XE_RESULT_ERROR_OUT_OF_DEVICE_MEMORY
+xe_result_t __xecall
+  xeDeviceCopyCommandList(
+    xe_device_handle_t hDevice,                     ///< [in] handle of the device object
+    xe_command_list_handle_t hCommandList,          ///< [in] handle to command list to copy
     xe_command_list_handle_t* phCommandList         ///< [out] pointer to handle of command list object created
     );
 
