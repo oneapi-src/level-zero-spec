@@ -320,7 +320,11 @@ ${"##"} Events
 - An event can be encoded into any command list from the same device.
 - An event cannot be encoded into multiple command lists simultaneously.
 - An event can be shared across processes.
+- An event intended to be signaled by the host or another device after command list submission to a command queue may prevent subsequent forward progress within the command queue itself.
+  + This can create create bubbles in the pipeline or deadlock situations if not correctly scheduled.
 - An application can use ::${x}EventQueryElapsedTime to calculate the time (in milliseconds) between two events signalled by the same device.
+@todo [**Mike**] Explore exposing GPU clocks directly with equivalent query on clock rate.  Common request from other teams.
+@todo [**Mike**] Explore exposing both wall clock time and actual GPU execution time due to preemption.
 
 The following diagram illustrates an example of events:  
 ![Event](../images/core_event.png?raw=true)  
@@ -348,7 +352,7 @@ The following sample code demonstrates a sequence for creation and submission of
 ```
 
 ${"##"} Semaphores
-- A semaphore can only be signaled and waited upon from within a device's command list.
+- A semaphore can only be signaled and waited upon from within a device's command lists.
 - A semaphore has both a state and a value.
 - A semaphore can be encoded into any command list from the same device.
 - A semaphore can be encoded into multiple command lists simultaneously.

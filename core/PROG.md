@@ -133,7 +133,7 @@ The following diagram illustrates the hierarchy of command lists and command que
 - A command list is created for a device to allow device-specific encoding of commands.
 - By default, commands are executed in the same order in which they are submitted.
   However, an application may allow the driver to optimize the ordering by using
-  ::XE_COMMAND_LIST_FLAG_RELAXED_ORDERING.  Reordering is gaurenteed to be only occur
+  ::XE_COMMAND_LIST_FLAG_RELAXED_ORDERING.  Reordering is guarenteed to be only occur
   between barriers and synchronization primitives.
 - There is no implicit association between a command list and a command queue. 
   Therefore, a command list may be submitted to any, or multiple command queues.
@@ -242,7 +242,7 @@ There are two types of barriers:
 2. **Memory Barriers** - used to insert a dependency between memory access across command queues, devices or Host.
 
 ## Execution Barriers
-- Commands submitted to a command list are only gaurenteed to start in the same order in which they are submitted;
+- Commands submitted to a command list are only guarenteed to start in the same order in which they are submitted;
   there is no implicit control of which order they complete.
 - Execution barriers provide explicit control to indicate that previous commands must complete prior to
   starting the following commands.
@@ -320,7 +320,11 @@ The following sample code demonstrates a sequence for creation, submission and q
 - An event can be encoded into any command list from the same device.
 - An event cannot be encoded into multiple command lists simultaneously.
 - An event can be shared across processes.
+- An event intended to be signaled by the host or another device after command list submission to a command queue may prevent subsequent forward progress within the command queue itself.
+  + This can create create bubbles in the pipeline or deadlock situations if not correctly scheduled.
 - An application can use ::xeEventQueryElapsedTime to calculate the time (in milliseconds) between two events signalled by the same device.
+@todo [**Mike**] Explore exposing GPU clocks directly with equivalent query on clock rate.  Common request from other teams.
+@todo [**Mike**] Explore exposing both wall clock time and actual GPU execution time due to preemption.
 
 The following diagram illustrates an example of events:  
 ![Event](../images/core_event.png?raw=true)  
@@ -348,7 +352,7 @@ The following sample code demonstrates a sequence for creation and submission of
 ```
 
 ## Semaphores
-- A semaphore can only be signaled and waited upon from within a device's command list.
+- A semaphore can only be signaled and waited upon from within a device's command lists.
 - A semaphore has both a state and a value.
 - A semaphore can be encoded into any command list from the same device.
 - A semaphore can be encoded into multiple command lists simultaneously.
