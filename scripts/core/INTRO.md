@@ -89,7 +89,8 @@ The following naming convention is followed in order to avoid conflicts within t
 - all driver entry points are prefixed with ${x}
 - all types follow **${x}_\<name\>_t** convention
 - all macros and enumerator values use all caps **${X}_\<SCOPE\>_\<NAME\>** convention
-- all functions use **${x}\<Actor\>\<Action\>\<Object\>** convention
+- all functions use camel case **${x}\<Actor\>\<Action\>\<Object\>** convention
+- all structure members and function parameters use camel case convention
 - all function input parameters precede output parameters
 
 Note: "${Xx}" is a placeholder until One-API branding is decided.

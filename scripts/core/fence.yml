@@ -154,7 +154,7 @@ type: function
 desc: "Reset a fence back to the not signaled state."
 name: $xFenceReset
 analogue:
-    -"**vkResetFences**"
+    - "**vkResetFences**"
 details:
     - "The application may call this function from simultaneous threads."
     - "The implementation of this function should be lock-free."

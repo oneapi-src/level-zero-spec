@@ -251,8 +251,6 @@ desc: "Memory access capabilities"
 name: $x_memory_access_capabilities_t
 details:
     - "Supported access capabilities for different types of memory allocations"
-    - "The application may call this function from simultaneous threads."
-    - "The implementation of this function should be lock-free."
 etors:
     - name: $X_MEMORY_ACCESS
       value: "$X_BIT( 0 )"
