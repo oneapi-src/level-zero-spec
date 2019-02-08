@@ -147,6 +147,10 @@ The following diagram illustrates the hierarchy of command lists and command que
   commands. See ::xe_command_list_parameter_t for details.
 - Command lists do not inherit state from other command lists executed on the same
   command queue.  i.e. each command list begins execution in its own default state.
+- A command list can be called from another command list (nested). In this case, state
+  is inherited and leaked by the nested command list.
+- A command list can be copied to create another command list. The application may use this
+  to copy a command list for use on a different device.
 - The application is responsible for calling close before submission to a command queue.
 - The application is responsible for making sure the device is not currently
   executing from a command list before it is deleted.  This should be
