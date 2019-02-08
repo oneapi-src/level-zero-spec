@@ -133,7 +133,7 @@ ${"##"} Command Lists
 - A command list is created for a device to allow device-specific encoding of commands.
 - By default, commands are executed in the same order in which they are submitted.
   However, an application may allow the driver to optimize the ordering by using
-  ::${X}_COMMAND_LIST_FLAG_RELAXED_ORDERING.  Reordering is gaurenteed to be only occur
+  ::${X}_COMMAND_LIST_FLAG_RELAXED_ORDERING.  Reordering is guarenteed to be only occur
   between barriers and synchronization primitives.
 - There is no implicit association between a command list and a command queue. 
   Therefore, a command list may be submitted to any, or multiple command queues.
@@ -242,7 +242,7 @@ There are two types of barriers:
 2. **Memory Barriers** - used to insert a dependency between memory access across command queues, devices or Host.
 
 ${"##"} Execution Barriers
-- Commands submitted to a command list are only gaurenteed to start in the same order in which they are submitted;
+- Commands submitted to a command list are only guarenteed to start in the same order in which they are submitted;
   there is no implicit control of which order they complete.
 - Execution barriers provide explicit control to indicate that previous commands must complete prior to
   starting the following commands.
