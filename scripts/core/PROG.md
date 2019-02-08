@@ -246,6 +246,7 @@ ${"##"} Execution Barriers
   there is no implicit control of which order they complete.
 - Execution barriers provide explicit control to indicate that previous commands must complete prior to
   starting the following commands.
+- Execution barriers are implicitly added by the driver after each batch of command lists submitted to a command queue.
 - Execution barriers are implicitly added by the driver prior to synchronization primitives.
 
 The following sample code demonstrates a sequence for submission of an execution barrier:
@@ -260,7 +261,8 @@ The following sample code demonstrates a sequence for submission of an execution
 ```
 
 ${"##"} Memory Barriers
-Memory barriers are always handled implicitly by the driver.
+- Memory barriers are implicitly added by the driver after each batch of command lists submitted to a command queue.
+- Memory barriers are implicitly added by the driver prior to synchronization primitives.
 
 @todo [**Brandon**] need to define the rules when _when_ memory barriers occur.
 
@@ -270,11 +272,16 @@ There are three types of synchronization primitives:
 2. **Events** - used as fine-grain host-to-device, device-to-host or device-to-device waits and signals within a command list.
 3. **Semaphores** - used for fine-grain control of command lists execution across multiple, simultaneous command queues within a device.
 
+The following diagram illustrats the relationship of capabilities of these types of synchronization primitives:
+![Graph](../images/core_sync.png?raw=true)  
+@image latex ../images/core_sync.png
+
 The following are the motivations for seperating the different types of synchronization primitives:
 - Allows device-specific optimizations for certain types of primitives:
     + fences may share device memory with all other fences for the queue or device.
     + events may be implemented using pipelined operations as part of the program execution.
     + semaphores may be implemented without device memory.
+    + fences and events implicitly cause execution and memory barriers, while semaphores only cause execution barriers.
 - Allows distinction on which type of primitive may be shared across devices.
 
 ${"##"} Fences
@@ -282,8 +289,15 @@ ${"##"} Fences
 - A fence can only be signaled from a device's command queue (e.g. between execution of command lists)
   and can only be waited upon from the host.
 - A fence only has two states: not signaled and signaled.
+- A fence can only be reset from the Host.
 - A fence cannot be shared across processes.
 - An application can use ::${x}FenceQueryElapsedTime to calculate the time (in milliseconds) between two fences' signals.
+
+The primary usage model(s) for fences are to notify the Host when a command list has finished execution to allow:
+- Recycling of memory and images
+- Recycling of command lists
+- Recycling of other synchronization primitives
+- Explicit memory residency.
 
 The following diagram illustrates an example of fences:  
 ![Fence](../images/core_fence.png?raw=true)  
@@ -314,17 +328,28 @@ The following sample code demonstrates a sequence for creation, submission and q
 
 ${"##"} Events
 - An event can be __either__:
-  + signaled from within a device's command list (e.g. between execution of kernels) and waited upon from the host or another device, **or**
+  + signaled from within a device's command list (e.g. between execution of kernels) and waited upon from the host, another command queue or another device, **or**
   + signaled from the host, and waited upon from within a device's command list.
 - An event only has two states: not signaled and signaled.
+- An event can be reset from the Host or device.
 - An event can be encoded into any command list from the same device.
-- An event cannot be encoded into multiple command lists simultaneously.
+- An event cannot be signaled and waited upon in the same command list or command queue.
+- An event can be encoded into multiple command lists simultaneously.
 - An event can be shared across processes.
-- An event intended to be signaled by the host or another device after command list submission to a command queue may prevent subsequent forward progress within the command queue itself.
+- An event imposes an implicit execution and memory barrier; therefore should be used sparingly to avoid device underutilization.
+- There are no protections against events causing deadlocks, such as circular waits scenarios. 
+  + These problems are left to the application to avoid.
+- An event intended to be signaled by the host, another command queue or another device after command list submission to a command queue may prevent 
+  subsequent forward progress within the command queue itself.
   + This can create create bubbles in the pipeline or deadlock situations if not correctly scheduled.
 - An application can use ::${x}EventQueryElapsedTime to calculate the time (in milliseconds) between two events signalled by the same device.
-@todo [**Mike**] Explore exposing GPU clocks directly with equivalent query on clock rate.  Common request from other teams.
-@todo [**Mike**] Explore exposing both wall clock time and actual GPU execution time due to preemption.
+@todo [**Ben**] Explore exposing GPU clocks directly with equivalent query on clock rate.  Common request from other teams.
+@todo [**Ben**] Explore exposing both wall clock time and actual GPU execution time due to preemption.
+
+Events are generic synchronization primitives that can be used across many different usage-models, includes those of fences and semaphores.
+However, this generality comes with some cost in efficiency.
+
+Events do **not** represent intra-command list dependencies between programs.
 
 The following diagram illustrates an example of events:  
 ![Event](../images/core_event.png?raw=true)  
@@ -353,10 +378,17 @@ The following sample code demonstrates a sequence for creation and submission of
 
 ${"##"} Semaphores
 - A semaphore can only be signaled and waited upon from within a device's command lists.
-- A semaphore has both a state and a value.
+- A semaphore has a 64-bit value, initialized to zero and changed when signaled.
+- A semaphore wait can test its value for less-than, less-than-or-equal, equal, not-equal, greater-than-or-equal, or greater-than another value.
 - A semaphore can be encoded into any command list from the same device.
+- A semaphore can be signaled and waited upon in the same command list.
 - A semaphore can be encoded into multiple command lists simultaneously.
 - A semaphore cannot be shared across processes.
+- A semaphore imposes an implicit execution barrier; therefore should be used sparingly to avoid device underutilization.
+- There are no protections against semaphores causing deadlocks.
+
+The primary usage model(s) for semaphores is:
+- Low-latency device-side scheduling of programs executing concurrently across multiple command queues.
 
 The following diagram illustrates an example of semaphores:  
 ![Semaphore](../images/core_semaphore.png?raw=true)  

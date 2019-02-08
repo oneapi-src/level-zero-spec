@@ -176,9 +176,6 @@ xe_result_t __xecall
 ///     - ::XE_RESULT_ERROR_INVALID_PARAMETER
 ///         + invalid handle for hCommandList
 ///         + invalid handle for hEvent
-///         + event creation flag did not set ::XE_EVENT_FLAG_DEVICE_TO_HOST or ::XE_EVENT_FLAG_DEVICE_TO_DEVICE
-///         + event is in signaled state
-///         + event is used by another command list
 /*@todo: __declspec(dllexport)*/
 xe_result_t __xecall
   xeCommandListEncodeSignalEvent(
@@ -212,8 +209,6 @@ xe_result_t __xecall
 ///     - ::XE_RESULT_ERROR_INVALID_PARAMETER
 ///         + invalid handle for hCommandList
 ///         + invalid handle for hEvent
-///         + event creation flag did not set ::XE_EVENT_FLAG_HOST_TO_DEVICE or ::XE_EVENT_FLAG_DEVICE_TO_DEVICE
-///         + event is used by another command list
 /*@todo: __declspec(dllexport)*/
 xe_result_t __xecall
   xeCommandListEncodeWaitOnEvent(
@@ -248,9 +243,6 @@ xe_result_t __xecall
 ///         + invalid handle for hCommandList
 ///         + nullptr for phEvents
 ///         + invalid handle in phEvents
-///         + any event creation flag did not set ::XE_EVENT_FLAG_DEVICE_TO_HOST or ::XE_EVENT_FLAG_DEVICE_TO_DEVICE
-///         + any event is in signaled state
-///         + any event is used by another command list
 /*@todo: __declspec(dllexport)*/
 xe_result_t __xecall
   xeCommandListEncodeSignalMultipleEvents(
@@ -287,8 +279,6 @@ xe_result_t __xecall
 ///         + invalid handle for hCommandList
 ///         + nullptr for phEvents
 ///         + invalid handle in phEvents
-///         + any event creation flag did not set ::XE_EVENT_FLAG_HOST_TO_DEVICE or ::XE_EVENT_FLAG_DEVICE_TO_DEVICE
-///         + any event is used by another command list
 /*@todo: __declspec(dllexport)*/
 xe_result_t __xecall
   xeCommandListEncodeWaitOnMultipleEvents(
@@ -325,8 +315,6 @@ xe_result_t __xecall
 ///     - ::XE_RESULT_ERROR_UNSUPPORTED
 ///     - ::XE_RESULT_ERROR_INVALID_PARAMETER
 ///         + invalid handle for hEvent
-///         + event creation flag did not set ::XE_EVENT_FLAG_HOST_TO_DEVICE or ::XE_EVENT_FLAG_DEVICE_TO_DEVICE
-///         + event is in signaled state
 /*@todo: __declspec(dllexport)*/
 xe_result_t __xecall
   xeHostSignalEvent(
@@ -361,7 +349,6 @@ xe_result_t __xecall
 ///     - ::XE_RESULT_ERROR_UNSUPPORTED
 ///     - ::XE_RESULT_ERROR_INVALID_PARAMETER
 ///         + invalid handle for hEvent
-///         + event creation flag did not set ::XE_EVENT_FLAG_DEVICE_TO_HOST or ::XE_EVENT_FLAG_DEVICE_TO_DEVICE
 /*@todo: __declspec(dllexport)*/
 xe_result_t __xecall
   xeHostWaitOnEvent(
@@ -392,8 +379,6 @@ xe_result_t __xecall
 ///     - ::XE_RESULT_ERROR_INVALID_PARAMETER
 ///         + nullptr for phEvents
 ///         + invalid handle in phEvents
-///         + any event creation flag did not set ::XE_EVENT_FLAG_HOST_TO_DEVICE or ::XE_EVENT_FLAG_DEVICE_TO_DEVICE
-///         + any event is in signaled state
 /*@todo: __declspec(dllexport)*/
 xe_result_t __xecall
   xeHostSignalMultipleEvents(
@@ -429,7 +414,6 @@ xe_result_t __xecall
 ///     - ::XE_RESULT_ERROR_INVALID_PARAMETER
 ///         + nullptr for phEvents
 ///         + invalid handle in phEvents
-///         + any event creation flag did not set ::XE_EVENT_FLAG_DEVICE_TO_HOST or ::XE_EVENT_FLAG_DEVICE_TO_DEVICE
 /*@todo: __declspec(dllexport)*/
 xe_result_t __xecall
   xeHostWaitOnMultipleEvents(
@@ -540,10 +524,46 @@ xe_result_t __xecall
 ///     - ::XE_RESULT_ERROR_UNINITIALIZED
 ///     - ::XE_RESULT_ERROR_UNSUPPORTED
 ///     - ::XE_RESULT_ERROR_INVALID_PARAMETER
+///         + invalid handle for hCommandList
 ///         + invalid handle for hEvent
 /*@todo: __declspec(dllexport)*/
 xe_result_t __xecall
-  xeEventReset(
+  xeCommandListEncodeEventReset(
+    xe_command_list_handle_t hCommandList,          ///< [in] handle of the command list
+    xe_event_handle_t hEvent                        ///< [in] handle of the event
+    )
+{
+    // @todo: check_return(nullptr == get_driver(), XE_RESULT_ERROR_UNINITIALIZED);
+
+    // Check parameters
+    // @todo: check_return(xe_command_list_handle_t() == hCommandList, XE_RESULT_ERROR_INVALID_PARAMETER);
+    // @todo: check_return(xe_event_handle_t() == hEvent, XE_RESULT_ERROR_INVALID_PARAMETER);
+
+    // @todo: insert <code> here
+
+    return XE_RESULT_SUCCESS;
+}
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Reset an event back to not signaled state
+/// 
+/// @details
+///     - The application may call this function from simultaneous threads.
+///     - The implementation of this function should be lock-free.
+/// 
+/// @remarks
+///   _Analogues_
+///     - vkResetEvent
+/// 
+/// @returns
+///     - ::XE_RESULT_SUCCESS
+///     - ::XE_RESULT_ERROR_UNINITIALIZED
+///     - ::XE_RESULT_ERROR_UNSUPPORTED
+///     - ::XE_RESULT_ERROR_INVALID_PARAMETER
+///         + invalid handle for hEvent
+/*@todo: __declspec(dllexport)*/
+xe_result_t __xecall
+  xeHostEventReset(
     xe_event_handle_t hEvent                        ///< [in] handle of the event
     )
 {

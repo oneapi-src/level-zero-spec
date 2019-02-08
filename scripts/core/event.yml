@@ -11,6 +11,9 @@ type: enum
 desc: "Supported event creation flags"
 name: $x_event_flags_t
 etors:
+    - name: $X_EVENT_FLAG_NONE
+      value: "0"
+      desc: "signals and waits only within the same device"
     - name: $X_EVENT_FLAG_HOST_TO_DEVICE
       value: "$X_BIT(0)"
       desc: "signals from host, waits on device"
@@ -128,9 +131,6 @@ returns:
     - $X_RESULT_ERROR_INVALID_PARAMETER:
         - "invalid handle for hCommandList"
         - "invalid handle for hEvent"
-        - "event creation flag did not set $X_EVENT_FLAG_DEVICE_TO_HOST or $X_EVENT_FLAG_DEVICE_TO_DEVICE"
-        - "event is in signaled state"
-        - "event is used by another command list"
 --- #--------------------------------------------------------------------------
 type: function
 desc: "Encodes a wait on event from a host signal into a command list."
@@ -149,8 +149,6 @@ returns:
     - $X_RESULT_ERROR_INVALID_PARAMETER:
         - "invalid handle for hCommandList"
         - "invalid handle for hEvent"
-        - "event creation flag did not set $X_EVENT_FLAG_HOST_TO_DEVICE or $X_EVENT_FLAG_DEVICE_TO_DEVICE"
-        - "event is used by another command list"
 --- #--------------------------------------------------------------------------
 type: function
 desc: "Encodes signals of multiple event from the device into a command list."
@@ -173,9 +171,6 @@ returns:
         - "invalid handle for hCommandList"
         - "nullptr for phEvents"
         - "invalid handle in phEvents"
-        - "any event creation flag did not set $X_EVENT_FLAG_DEVICE_TO_HOST or $X_EVENT_FLAG_DEVICE_TO_DEVICE"
-        - "any event is in signaled state"
-        - "any event is used by another command list"
 --- #--------------------------------------------------------------------------
 type: function
 desc: "Encodes waits on multiple event from a host signal into a command list."
@@ -198,8 +193,6 @@ returns:
         - "invalid handle for hCommandList"
         - "nullptr for phEvents"
         - "invalid handle in phEvents"
-        - "any event creation flag did not set $X_EVENT_FLAG_HOST_TO_DEVICE or $X_EVENT_FLAG_DEVICE_TO_DEVICE"
-        - "any event is used by another command list"
 --- #--------------------------------------------------------------------------
 type: function
 desc: "Signals a event from host."
@@ -216,8 +209,6 @@ params:
 returns:
     - $X_RESULT_ERROR_INVALID_PARAMETER:
         - "invalid handle for hEvent"
-        - "event creation flag did not set $X_EVENT_FLAG_HOST_TO_DEVICE or $X_EVENT_FLAG_DEVICE_TO_DEVICE"
-        - "event is in signaled state"
 --- #--------------------------------------------------------------------------
 type: function
 desc: "The current host thread waits on an event from a device signal."
@@ -235,7 +226,6 @@ params:
 returns:
     - $X_RESULT_ERROR_INVALID_PARAMETER:
         - "invalid handle for hEvent"
-        - "event creation flag did not set $X_EVENT_FLAG_DEVICE_TO_HOST or $X_EVENT_FLAG_DEVICE_TO_DEVICE"
 --- #--------------------------------------------------------------------------
 type: function
 desc: "Signals multiple events from host."
@@ -254,8 +244,6 @@ returns:
     - $X_RESULT_ERROR_INVALID_PARAMETER:
         - "nullptr for phEvents"
         - "invalid handle in phEvents"
-        - "any event creation flag did not set $X_EVENT_FLAG_HOST_TO_DEVICE or $X_EVENT_FLAG_DEVICE_TO_DEVICE"
-        - "any event is in signaled state"
 --- #--------------------------------------------------------------------------
 type: function
 desc: "The current host thread waits on multiple events from a device signal."
@@ -276,7 +264,6 @@ returns:
     - $X_RESULT_ERROR_INVALID_PARAMETER:
         - "nullptr for phEvents"
         - "invalid handle in phEvents"
-        - "any event creation flag did not set $X_EVENT_FLAG_DEVICE_TO_HOST or $X_EVENT_FLAG_DEVICE_TO_DEVICE"
 --- #--------------------------------------------------------------------------
 type: function
 desc: "Queries an event object's status."
@@ -325,7 +312,27 @@ returns:
 --- #--------------------------------------------------------------------------
 type: function
 desc: "Reset an event back to not signaled state"
-name: $xEventReset
+name: $xCommandListEncodeEventReset
+analogue:
+    - vkResetEvent
+details:
+    - "The application may call this function from simultaneous threads."
+    - "The implementation of this function should be lock-free."
+params:
+    - type: $x_command_list_handle_t
+      name: hCommandList
+      desc: "[in] handle of the command list"
+    - type: $x_event_handle_t
+      name: hEvent
+      desc: "[in] handle of the event"
+returns:
+    - $X_RESULT_ERROR_INVALID_PARAMETER:
+        - "invalid handle for hCommandList"
+        - "invalid handle for hEvent"
+--- #--------------------------------------------------------------------------
+type: function
+desc: "Reset an event back to not signaled state"
+name: $xHostEventReset
 analogue:
     - vkResetEvent
 details:
