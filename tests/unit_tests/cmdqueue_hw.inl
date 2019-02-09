@@ -18,7 +18,7 @@ xe_result_t CommandQueueHw<gfxCoreFamily>::enqueueCommandLists(uint32_t numComma
         MI_BATCH_BUFFER_START cmd = GfxFamily::cmdInitBatchBufferStart;
         cmd.setSecondLevelBatchBuffer(MI_BATCH_BUFFER_START::SECOND_LEVEL_BATCH_BUFFER_SECOND_LEVEL_BATCH);
         cmd.setAddressSpaceIndicator(MI_BATCH_BUFFER_START::ADDRESS_SPACE_INDICATOR_PPGTT);
-        
+
         auto commandList = CommandList::fromHandle(phCommandLists[i]);
         auto &allocation = commandList->getAllocation();
         cmd.setBatchBufferStartAddressGraphicsaddress472(allocation.getGpuAddress() >> 2);
