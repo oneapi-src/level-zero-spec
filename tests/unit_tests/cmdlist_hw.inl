@@ -1,6 +1,8 @@
 #include "cmdlist_hw.h"
+#include "event.h"
 #include "runtime/command_stream/linear_stream.h"
 #include "runtime/helpers/hw_info.h"
+#include <cassert>
 
 namespace xe {
 
@@ -20,9 +22,15 @@ xe_result_t CommandListHw<gfxCoreFamily>::encodeWaitOnEvent(xe_event_handle_t hE
     using GfxFamily = typename OCLRT::GfxFamilyMapper<static_cast<GFXCORE_FAMILY>(gfxCoreFamily)>::GfxFamily;
     using MI_SEMAPHORE_WAIT = typename GfxFamily::MI_SEMAPHORE_WAIT;
     MI_SEMAPHORE_WAIT cmd = GfxFamily::cmdInitMiSemaphoreWait;
+    auto event = Event::fromHandle(hEvent);
+    assert(event);
+
+    cmd.setSemaphoreGraphicsAddress(event->getGpuAddress());
+    cmd.setSemaphoreDataDword(1u);
+    cmd.setCompareOperation(MI_SEMAPHORE_WAIT::COMPARE_OPERATION::COMPARE_OPERATION_SAD_NOT_EQUAL_SDD);
+
     auto buffer = commandStream->getSpace(sizeof(cmd));
     *(MI_SEMAPHORE_WAIT *)buffer = cmd;
-
     return XE_RESULT_SUCCESS;
 }
 

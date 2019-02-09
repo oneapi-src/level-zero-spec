@@ -3,7 +3,9 @@
 
 namespace xe {
 
-MockEvent::MockEvent() {
+MockEvent::MockEvent() :
+    mockAllocation(&memory, sizeof(memory)) {
+    allocation = &mockAllocation;
 }
 
 MockEvent::~MockEvent() {

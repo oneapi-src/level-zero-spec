@@ -26,7 +26,7 @@ struct DeviceImp : public Device {
 
     xe_result_t createEvent(const xe_event_desc_t *desc,
                             xe_event_handle_t *event) override {
-        *event = Event::create();
+        *event = Event::create(this);
         return XE_RESULT_SUCCESS;
     }
 
