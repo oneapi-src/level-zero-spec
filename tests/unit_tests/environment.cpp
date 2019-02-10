@@ -2,9 +2,14 @@
 #include "runtime/helpers/options.h"
 #include "runtime/platform/platform.h"
 #include "runtime/helpers/hw_info.h"
+#include "unit_tests/tests_configuration.h"
 
 GFXCORE_FAMILY renderCoreFamily = IGFX_GEN9_CORE;
 PRODUCT_FAMILY productFamily = IGFX_SKYLAKE;
+
+namespace OCLRT {
+extern TestMode testMode;
+}
 
 namespace xe {
 namespace ult {
@@ -15,6 +20,8 @@ static GT_SYSTEM_INFO sysInfo = {};
 
 struct Environment : public ::testing::Environment {
     void SetUp() override {
+        OCLRT::testMode = OCLRT::TestMode::AubTestsWithTbx;
+
         // Clone default device information
         hwInfo = *OCLRT::platformDevices[0];
         sysInfo = *hwInfo.pSysInfo;
