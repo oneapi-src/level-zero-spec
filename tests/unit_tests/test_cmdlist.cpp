@@ -40,6 +40,8 @@ TEST_P(CommandListCreate, returnsCommandListOnSuccess) {
     EXPECT_EQ(allocation, commandList->allocation);
     ASSERT_NE(nullptr, commandList->commandStream);
     EXPECT_LT(0u, commandList->commandStream->getAvailableSpace());
+    ASSERT_GT(commandList->residencyContainer.size(), 0u);
+    EXPECT_EQ(commandList->residencyContainer.front(), allocation->allocationRT);
     commandList->destroy();
 }
 

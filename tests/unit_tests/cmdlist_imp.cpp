@@ -32,6 +32,9 @@ bool CommandListImp::initialize() {
     allocation = memoryManager->allocateDeviceMemory();
     assert(allocation);
 
+    // Add our allocation to the residency container
+    residencyContainer.push_back(allocation->allocationRT);
+
     commandStream = new OCLRT::LinearStream(allocation->allocationRT);
 
     return true;

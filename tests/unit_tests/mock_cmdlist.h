@@ -16,6 +16,7 @@ struct WhiteBox<::xe::CommandList> : public ::xe::CommandListImp {
     using BaseClass::allocation;
     using BaseClass::commandStream;
     using BaseClass::device;
+    using BaseClass::residencyContainer;
 
     WhiteBox(Device *device);
     virtual ~WhiteBox();

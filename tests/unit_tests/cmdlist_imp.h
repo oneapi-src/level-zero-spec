@@ -4,9 +4,13 @@
 #endif //CMD_LIST_INTERNAL
 
 #include "cmdlist.h"
+#include <vector>
 
 namespace OCLRT {
 class LinearStream;
+class GraphicsAllocation;
+
+using ResidencyContainer = std::vector<GraphicsAllocation *>;
 }
 
 namespace xe {
@@ -26,6 +30,7 @@ struct CommandListImp : public CommandList {
 
     Device *device;
     OCLRT::LinearStream *commandStream;
+    OCLRT::ResidencyContainer residencyContainer;
 };
 
 } // namespace xe
