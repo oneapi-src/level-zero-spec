@@ -32,9 +32,9 @@ TEST(xeCommandQueueEnqueueCommandQueue, redirectsToCmdQueueObject) {
     EXPECT_EQ(XE_RESULT_SUCCESS, result);
 }
 
-using CommandQueueEnqueueCommandQueue = ::testing::Test;
+using CommandQueueEnqueueCommandLists = ::testing::Test;
 
-HWTEST_F(CommandQueueEnqueueCommandQueue, addsASecondLevelBatchBufferPerCommandList) {
+HWTEST_F(CommandQueueEnqueueCommandLists, addsASecondLevelBatchBufferPerCommandList) {
     MockDevice device;
     MockMemoryManager memoryManager;
     EXPECT_CALL(device, getMemoryManager())
