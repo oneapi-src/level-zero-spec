@@ -1,7 +1,8 @@
 #include "gmock/gmock.h"
-#include "runtime/helpers/options.h"
-#include "runtime/platform/platform.h"
 #include "runtime/helpers/hw_info.h"
+#include "runtime/helpers/options.h"
+#include "runtime/os_interface/debug_settings_manager.h"
+#include "runtime/platform/platform.h"
 #include "unit_tests/tests_configuration.h"
 
 GFXCORE_FAMILY renderCoreFamily = IGFX_GEN9_CORE;
@@ -21,8 +22,10 @@ static GT_SYSTEM_INFO sysInfo = {};
 
 struct Environment : public ::testing::Environment {
     void SetUp() override {
-        OCLRT::overrideCommandStreamReceiverCreation = true;
-        OCLRT::testMode = OCLRT::TestMode::AubTestsWithTbx;
+        if (OCLRT::DebugManager.flags.SetCommandStreamReceiver.get()) {
+            OCLRT::overrideCommandStreamReceiverCreation = true;
+            OCLRT::testMode = OCLRT::TestMode::AubTestsWithTbx;        
+        }
 
         // Clone default device information
         hwInfo = *OCLRT::platformDevices[0];
