@@ -6,6 +6,7 @@ class LinearStream;
 }
 
 namespace xe {
+struct CommandList;
 struct GraphicsAllocation;
 
 struct CommandQueueImp : public CommandQueue {
@@ -21,6 +22,8 @@ struct CommandQueueImp : public CommandQueue {
     void initialize();
 
   protected:
+    void processResidency(CommandList *);
+    void submitBatchBuffer();
     Device *device;
     void *csrRT;
     GraphicsAllocation *allocation;

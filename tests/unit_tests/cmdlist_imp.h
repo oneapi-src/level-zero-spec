@@ -25,6 +25,10 @@ struct CommandListImp : public CommandList {
 
     virtual bool initialize();
 
+    OCLRT::ResidencyContainer &getResidencyContainer() {
+        return residencyContainer;
+    }
+
   protected:
     virtual ~CommandListImp();
 

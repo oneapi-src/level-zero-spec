@@ -25,6 +25,9 @@ xe_result_t CommandQueueHw<gfxCoreFamily>::enqueueCommandLists(uint32_t numComma
 
         auto buffer = commandStream->getSpace(sizeof(cmd));
         *(MI_BATCH_BUFFER_START *)buffer = cmd;
+
+        // Add each 
+        processResidency(commandList);
     }
 
     {
@@ -33,6 +36,9 @@ xe_result_t CommandQueueHw<gfxCoreFamily>::enqueueCommandLists(uint32_t numComma
         auto buffer = commandStream->getSpace(sizeof(cmd));
         *(MI_BATCH_BUFFER_END *)buffer = cmd;
     }
+
+    // Submit our batch buffer
+    submitBatchBuffer();
 
     return XE_RESULT_SUCCESS;
 }
