@@ -20,7 +20,7 @@ MockDevice::MockDevice() {
 }
 
 MockDevice::~MockDevice() {
-    delete csrRT;
+    delete static_cast<MockCommandStreamReceiver *>(csrRT);
 }
 
 } // namespace xe

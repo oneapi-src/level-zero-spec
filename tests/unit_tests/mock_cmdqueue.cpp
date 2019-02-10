@@ -24,7 +24,7 @@ MockCommandQueue::MockCommandQueue(Device *device, void *csrRT)
 }
 
 MockCommandQueue::~MockCommandQueue() {
-    delete csrRT;
+    delete static_cast<MockCommandStreamReceiver *>(csrRT);
 }
 
 } // ult
