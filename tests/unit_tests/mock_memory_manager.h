@@ -15,7 +15,7 @@ struct MockMemoryManager : public WhiteBox<::xe::MemoryManager> {
     MockMemoryManager();
     virtual ~MockMemoryManager();
 
-    MOCK_METHOD0(allocateDeviceMemory, GraphicsAllocation *());
+    MOCK_METHOD1(allocateDeviceMemory, GraphicsAllocation *(size_t size));
     MOCK_METHOD1(freeMemory, void(GraphicsAllocation *allocation));
 };
 

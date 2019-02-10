@@ -7,6 +7,7 @@
 #include "xe_cmdqueue.h"
 #include "gtest/gtest.h"
 
+using ::testing::_;
 using ::testing::Return;
 
 extern PRODUCT_FAMILY productFamily;
@@ -33,11 +34,12 @@ TEST(xeCommandQueueDestroy, returnsSuccess) {
 TEST(CommandQueueCreate, returnsCommandQueueOnSuccess) {
     MockDevice device;
     MockMemoryManager manager;
-    uint8_t buffer[1024];
-    auto allocation = new GraphicsAllocation(buffer, sizeof(buffer));
+    size_t sizeBuffer = 16384u;
+    auto buffer = new uint8_t[sizeBuffer];
+    auto allocation = new GraphicsAllocation(buffer, sizeBuffer);
 
     EXPECT_CALL(device, getMemoryManager()).WillRepeatedly(Return(&manager));
-    EXPECT_CALL(manager, allocateDeviceMemory()).WillRepeatedly(Return(allocation));
+    EXPECT_CALL(manager, allocateDeviceMemory(_)).WillOnce(Return(allocation));
     EXPECT_CALL(manager, freeMemory(allocation)).WillRepeatedly(Return());
 
     auto commandQueue = whitebox_cast(CommandQueue::create(productFamily, &device, device.csrRT));
@@ -48,6 +50,8 @@ TEST(CommandQueueCreate, returnsCommandQueueOnSuccess) {
     ASSERT_NE(commandQueue->commandStream, nullptr);
     EXPECT_LT(0u, commandQueue->commandStream->getAvailableSpace());
     commandQueue->destroy();
+
+    delete[] buffer;
 }
 
 } // namespace ult

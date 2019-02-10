@@ -29,7 +29,7 @@ xe_result_t CommandListImp::destroy() {
 bool CommandListImp::initialize() {
     auto memoryManager = device->getMemoryManager();
     assert(memoryManager);
-    allocation = memoryManager->allocateDeviceMemory();
+    allocation = memoryManager->allocateDeviceMemory(65536u);
     assert(allocation);
 
     // Add our allocation to the residency container

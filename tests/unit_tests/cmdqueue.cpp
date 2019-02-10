@@ -20,7 +20,7 @@ xe_result_t CommandQueueImp::destroy() {
 void CommandQueueImp::initialize() {
     auto memoryManager = device->getMemoryManager();
     assert(memoryManager);
-    allocation = memoryManager->allocateDeviceMemory();
+    allocation = memoryManager->allocateDeviceMemory(16384u);
     assert(allocation);
 
     commandStream = new OCLRT::LinearStream(allocation->allocationRT);
