@@ -21,7 +21,7 @@ xe_result_t CommandQueueHw<gfxCoreFamily>::enqueueCommandLists(uint32_t numComma
 
         auto commandList = CommandList::fromHandle(phCommandLists[i]);
         auto &allocation = commandList->getAllocation();
-        cmd.setBatchBufferStartAddressGraphicsaddress472(allocation.getGpuAddress() >> 2);
+        cmd.setBatchBufferStartAddressGraphicsaddress472(allocation.getGpuAddress());
 
         auto buffer = commandStream->getSpace(sizeof(cmd));
         *(MI_BATCH_BUFFER_START *)buffer = cmd;

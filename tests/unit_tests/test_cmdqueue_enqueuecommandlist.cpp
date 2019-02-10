@@ -80,7 +80,7 @@ HWTEST_F(CommandQueueEnqueueCommandLists, addsASecondLevelBatchBufferPerCommandL
         ASSERT_NE(nullptr, bbs);
         EXPECT_EQ(MI_BATCH_BUFFER_START::SECOND_LEVEL_BATCH_BUFFER_SECOND_LEVEL_BATCH, bbs->getSecondLevelBatchBuffer());
         EXPECT_EQ(MI_BATCH_BUFFER_START::ADDRESS_SPACE_INDICATOR_PPGTT, bbs->getAddressSpaceIndicator());
-        EXPECT_EQ(allocation.getGpuAddress() >> 2, bbs->getBatchBufferStartAddressGraphicsaddress472());
+        EXPECT_EQ(allocation.getGpuAddress(), bbs->getBatchBufferStartAddressGraphicsaddress472());
 
         commandList->destroy();
     }
