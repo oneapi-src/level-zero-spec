@@ -9,6 +9,7 @@ Tools can be acquired via instructions in [third_party](/third_party/README.md).
 
 # Building
 Project is defined using [CMake](https://cmake.org/).
+
 **Windows**:
 Generating Visual Studio Project
 ~~~~
