@@ -24,7 +24,7 @@ struct Environment : public ::testing::Environment {
         hwInfo.capabilityTable.defaultPreemptionMode = OCLRT::PreemptionMode::ThreadGroup;
 
         // Initialize hardwareInfo
-        OCLRT::hardwareInfoSetup[productFamily](&sysInfo, &skuTable, false, "default");
+        OCLRT::hardwareInfoSetup[productFamily](&sysInfo, &skuTable, true, "default");
 
         // Replace original hardwareInfo with our clone
         hwInfo.pSysInfo = &sysInfo;

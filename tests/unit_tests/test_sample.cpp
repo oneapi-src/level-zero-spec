@@ -5,9 +5,16 @@
 #include "event.h"
 #include "gtest/gtest.h"
 
+namespace OCLRT {
+extern bool overrideCommandStreamReceiverCreation;
+}
+
 namespace xe {
 
 TEST(sample, waitOnEvent) {
+    // For AUB file, we need to override default CSR
+    OCLRT::overrideCommandStreamReceiverCreation = true;
+
     auto result = xe::xeDriverInit(XE_INIT_FLAG_NONE);
     ASSERT_EQ(XE_RESULT_SUCCESS, result);
 
