@@ -44,6 +44,8 @@ HWTEST_F(CommandQueueEnqueueCommandLists, addsASecondLevelBatchBufferPerCommandL
     GraphicsAllocation allocation(buffer, sizeof(buffer));
     EXPECT_CALL(memoryManager, allocateDeviceMemory)
         .WillRepeatedly(Return(&allocation));
+    EXPECT_CALL(memoryManager, freeMemory)
+        .WillRepeatedly(Return());
 
     auto commandQueue = whitebox_cast(CommandQueue::create(productFamily, &device, device.csrRT));
     ASSERT_NE(nullptr, commandQueue->commandStream);
