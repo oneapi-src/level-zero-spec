@@ -1,5 +1,6 @@
 #include "cmdlist_hw.h"
 #include "event.h"
+#include "graphics_allocation.h"
 #include "runtime/command_stream/linear_stream.h"
 #include "runtime/helpers/hw_info.h"
 #include <cassert>
@@ -24,6 +25,7 @@ xe_result_t CommandListHw<gfxCoreFamily>::encodeWaitOnEvent(xe_event_handle_t hE
     MI_SEMAPHORE_WAIT cmd = GfxFamily::cmdInitMiSemaphoreWait;
     auto event = Event::fromHandle(hEvent);
     assert(event);
+    residencyContainer.push_back(event->getAllocation().allocationRT);
 
     cmd.setSemaphoreGraphicsAddress(event->getGpuAddress());
     cmd.setSemaphoreDataDword(1u);

@@ -19,6 +19,10 @@ struct Event : public _xe_event_handle_t {
         return this;
     }
 
+    GraphicsAllocation &getAllocation() {
+        return *allocation;
+    }
+
     uint64_t getGpuAddress();
 
   protected:

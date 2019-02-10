@@ -66,5 +66,30 @@ HWTEST_F(CommandListEncodeWaitOnEvent, addsSemaphoreToCommandStream) {
     }
 }
 
+HWTEST_F(CommandListEncodeWaitOnEvent, addsEventGraphicsAllocationToResidencyContainer) {
+    MockDevice device;
+    MockMemoryManager memoryManager;
+    EXPECT_CALL(device, getMemoryManager())
+        .WillRepeatedly(Return(&memoryManager));
+
+    int8_t buffer[1024];
+    GraphicsAllocation allocation(buffer, sizeof(buffer));
+    EXPECT_CALL(memoryManager, allocateDeviceMemory)
+        .WillOnce(Return(&allocation));
+
+    auto commandList = whitebox_cast(CommandList::create(productFamily, &device));
+    ASSERT_NE(nullptr, commandList->commandStream);
+    auto usedSpaceBefore = commandList->commandStream->getUsed();
+
+    MockEvent event;
+    auto result = commandList->encodeWaitOnEvent(event.toHandle());
+    ASSERT_EQ(XE_RESULT_SUCCESS, result);
+
+    auto &residencyContainer = commandList->residencyContainer;
+    auto allocationRT = static_cast<OCLRT::GraphicsAllocation *>(event.allocation->allocationRT);
+    auto itor = std::find(std::begin(residencyContainer), std::end(residencyContainer), allocationRT); 
+    EXPECT_NE(itor, std::end(residencyContainer));
+}
+
 } // namespace ult
 } // namespace xe
