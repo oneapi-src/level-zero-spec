@@ -1,6 +1,6 @@
 
 # Unit Level Tests
-Unit level tests (ULTs) are stored in this folder and leverage GoogleTest and GoogleMock located installed on the system or in the third_party folder. 
+Unit level tests (ULTs) are stored in this folder and leverage GoogleTest and GoogleMock installed on the system or located in the third_party folder. 
 
 * **All new functional driver code should have corresponding ULTs for rapid feedback**.
 * ULTs should be as focused as possible to enhance readability and facilitate regression debug.
@@ -16,7 +16,7 @@ Unit level tests (ULTs) are stored in this folder and leverage GoogleTest and Go
 Core driver code may reside in this folder from time to time depending on various stages of iterative development.  Core driver code should ultimately reside in a folder in the base directory.  Core driver code that happens to be in here should be treated as heavily under development and is not yet available in the core driver library.  **Functionality ready for external usage must be put in the proper core driver library folder**.
 
 # Test Samples
-One or more samples may exist in this folder as a proof point of integration and more realistic workloads.  One such example is currently located in **test_sample.cpp**.  By default it behaves like a ULT.  Changing configuration settings as demonstrated below allows it to feed a live simulator via TBX or generate an AUB file for offline analysis and testing.
+One or more samples may exist in this folder as a proof point of integration and more realistic workloads.  One such example is [test_sample.cpp](/tests/unit_tests/test_sample.cpp).  By default it behaves like a ULT.  Changing configuration settings as demonstrated below allows it to feed a live simulator via TBX or generate an AUB file for offline analysis and testing.
 
 # Generating AUB files
 AUB file generation during ULT execution is **disabled by default**.  Setting the following compute runtime configuration prior to running the ULTs can generate one or more AUB files. Example below generates the default product family (currently Skylake) Fulsim AUB file(s).
