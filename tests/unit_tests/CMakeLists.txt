@@ -68,6 +68,8 @@ if(COMPUTE_RUNTIME_SUPPORT)
         compute_runtime_mockable
         compute_runtime_mockable_extra
     )
+
+    add_dependencies(${TARGET_NAME} mock_gmm)
 endif(COMPUTE_RUNTIME_SUPPORT)
 
 set_target_properties(${TARGET_NAME}
