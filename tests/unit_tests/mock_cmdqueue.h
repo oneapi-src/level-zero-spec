@@ -11,14 +11,15 @@ struct WhiteBox<::xe::CommandQueue> : public ::xe::CommandQueueImp {
     using BaseClass = ::xe::CommandQueueImp;
     using BaseClass::allocation;
     using BaseClass::commandStream;
+    using BaseClass::csrRT;
     using BaseClass::device;
 
-    WhiteBox(Device *device);
+    WhiteBox(Device *device, void *csrRT);
     virtual ~WhiteBox();
 };
 
 struct MockCommandQueue : public WhiteBox<::xe::CommandQueue> {
-    MockCommandQueue(Device *device = nullptr);
+    MockCommandQueue(Device *device = nullptr, void *csrRT = nullptr);
     virtual ~MockCommandQueue();
 
     MOCK_METHOD0(destroy, xe_result_t());

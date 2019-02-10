@@ -169,6 +169,7 @@ add_library(compute_runtime_mockable_extra
         ${COMPUTE_RUNTIME_DIR}/unit_tests/libult/source_level_debugger_library.cpp
         ${COMPUTE_RUNTIME_DIR}/unit_tests/mocks/mock_cif.cpp
         ${COMPUTE_RUNTIME_DIR}/unit_tests/mocks/mock_compilers.cpp
+        ${COMPUTE_RUNTIME_DIR}/unit_tests/mocks/mock_csr.cpp
         ${COMPUTE_RUNTIME_DIR}/unit_tests/mocks/mock_gmm_resource_info.cpp
         ${COMPUTE_RUNTIME_DIR}/unit_tests/mocks/mock_program.cpp
         ${COMPUTE_RUNTIME_DIR}/unit_tests/mocks/mock_sip.cpp

@@ -45,7 +45,7 @@ HWTEST_F(CommandQueueEnqueueCommandQueue, addsASecondLevelBatchBufferPerCommandL
     EXPECT_CALL(memoryManager, allocateDeviceMemory)
         .WillRepeatedly(Return(&allocation));
 
-    auto commandQueue = whitebox_cast(CommandQueue::create(productFamily, &device));
+    auto commandQueue = whitebox_cast(CommandQueue::create(productFamily, &device, device.csrRT));
     ASSERT_NE(nullptr, commandQueue->commandStream);
     auto usedSpaceBefore = commandQueue->commandStream->getUsed();
 

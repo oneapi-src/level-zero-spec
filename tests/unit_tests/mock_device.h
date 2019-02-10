@@ -18,6 +18,8 @@ struct MockDevice : public Device {
                                           xe_event_handle_t *event));
 
     MOCK_METHOD0(getMemoryManager, MemoryManager *());
+
+    void *csrRT;
 };
 
 } // namespace xe

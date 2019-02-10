@@ -9,10 +9,11 @@ namespace xe {
 struct GraphicsAllocation;
 
 struct CommandQueueImp : public CommandQueue {
-    CommandQueueImp(Device *device)
+    CommandQueueImp(Device *device, void *csrRT)
         : device(device),
-        allocation(nullptr),
-        commandStream(nullptr) {
+          csrRT(csrRT),
+          allocation(nullptr),
+          commandStream(nullptr) {
     }
 
     xe_result_t destroy() override;
@@ -21,6 +22,7 @@ struct CommandQueueImp : public CommandQueue {
 
   protected:
     Device *device;
+    void *csrRT;
     GraphicsAllocation *allocation;
     OCLRT::LinearStream *commandStream;
 };

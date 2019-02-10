@@ -40,11 +40,12 @@ TEST(CommandQueueCreate, returnsCommandQueueOnSuccess) {
     EXPECT_CALL(manager, allocateDeviceMemory()).WillRepeatedly(Return(allocation));
     EXPECT_CALL(manager, freeMemory(allocation)).WillRepeatedly(Return());
 
-    auto commandQueue = whitebox_cast(CommandQueue::create(productFamily, &device));
-    ASSERT_NE(nullptr, commandQueue);
+    auto commandQueue = whitebox_cast(CommandQueue::create(productFamily, &device, device.csrRT));
+    ASSERT_NE(commandQueue, nullptr);
     EXPECT_EQ(&device, commandQueue->device);
+    EXPECT_EQ(commandQueue->csrRT, device.csrRT);
     EXPECT_EQ(allocation, commandQueue->allocation);
-    ASSERT_NE(nullptr, commandQueue->commandStream);
+    ASSERT_NE(commandQueue->commandStream, nullptr);
     EXPECT_LT(0u, commandQueue->commandStream->getAvailableSpace());
     commandQueue->destroy();
 }

@@ -5,7 +5,7 @@ namespace xe {
 
 template <uint32_t gfxCoreFamily>
 struct CommandQueueHw : public CommandQueueImp {
-    CommandQueueHw(Device *device) : CommandQueueImp(device) {
+    CommandQueueHw(Device *device, void *csrRT) : CommandQueueImp(device, csrRT) {
     }
 
     xe_result_t enqueueCommandLists(uint32_t numCommandLists,

@@ -25,7 +25,7 @@ void CommandQueueImp::initialize() {
     commandStream = new OCLRT::LinearStream(allocation->allocationRT);
 }
 
-CommandQueue *CommandQueue::create(uint32_t productFamily, Device *device) {
+CommandQueue *CommandQueue::create(uint32_t productFamily, Device *device, void *csrRT) {
     CommandQueueAllocatorFn allocator = nullptr;
     if (productFamily < IGFX_MAX_PRODUCT) {
         allocator = commandQueueFactory[productFamily];
@@ -33,7 +33,7 @@ CommandQueue *CommandQueue::create(uint32_t productFamily, Device *device) {
 
     CommandQueueImp *commandQueue = nullptr;
     if (allocator) {
-        commandQueue = static_cast<CommandQueueImp *>((*allocator)(device));
+        commandQueue = static_cast<CommandQueueImp *>((*allocator)(device, csrRT));
 
         commandQueue->initialize();
     }

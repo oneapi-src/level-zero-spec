@@ -10,8 +10,8 @@ struct Device;
 struct CommandQueue : public _xe_command_queue_handle_t {
     template <typename Type>
     struct Allocator {
-        static CommandQueue *allocate(Device *device) {
-            return new Type(device);
+        static CommandQueue *allocate(Device *device, void *csrRT) {
+            return new Type(device, csrRT);
         }
     };
 
@@ -20,7 +20,7 @@ struct CommandQueue : public _xe_command_queue_handle_t {
                                             xe_command_list_handle_t *phCommandLists,
                                             xe_fence_handle_t hFence) = 0;
 
-    static CommandQueue *create(uint32_t productFamily, Device *device);
+    static CommandQueue *create(uint32_t productFamily, Device *device, void *csrRT);
 
     static CommandQueue *fromHandle(xe_command_queue_handle_t handle) {
         return static_cast<CommandQueue *>(handle);
@@ -31,7 +31,7 @@ struct CommandQueue : public _xe_command_queue_handle_t {
     }
 };
 
-using CommandQueueAllocatorFn = CommandQueue *(*)(Device *);
+using CommandQueueAllocatorFn = CommandQueue *(*)(Device *device, void *csrRT);
 extern CommandQueueAllocatorFn commandQueueFactory[];
 
 template <uint32_t productFamily, typename CommandQueueType>
