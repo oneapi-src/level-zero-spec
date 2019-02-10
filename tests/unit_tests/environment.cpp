@@ -8,6 +8,7 @@ GFXCORE_FAMILY renderCoreFamily = IGFX_GEN9_CORE;
 PRODUCT_FAMILY productFamily = IGFX_SKYLAKE;
 
 namespace OCLRT {
+extern bool overrideCommandStreamReceiverCreation;
 extern TestMode testMode;
 }
 
@@ -20,6 +21,7 @@ static GT_SYSTEM_INFO sysInfo = {};
 
 struct Environment : public ::testing::Environment {
     void SetUp() override {
+        OCLRT::overrideCommandStreamReceiverCreation = true;
         OCLRT::testMode = OCLRT::TestMode::AubTestsWithTbx;
 
         // Clone default device information
