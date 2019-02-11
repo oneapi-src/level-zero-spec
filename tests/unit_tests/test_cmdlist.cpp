@@ -26,7 +26,7 @@ using CommandListCreate = ::testing::TestWithParam<uint32_t>;
 
 TEST_P(CommandListCreate, returnsCommandListOnSuccess) {
     Mock<Device> device;
-    MockMemoryManager manager;
+    Mock<MemoryManager> manager;
     auto sizeBuffer = 65536u;
     auto buffer = new uint8_t[sizeBuffer];
     auto allocation = new GraphicsAllocation(buffer, sizeBuffer);

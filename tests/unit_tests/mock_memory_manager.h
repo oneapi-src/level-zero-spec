@@ -1,7 +1,7 @@
 #pragma once
 #include "memory_manager.h"
+#include "mock.h"
 #include "white_box.h"
-#include "gmock/gmock.h"
 
 namespace xe {
 namespace ult {
@@ -11,15 +11,16 @@ struct WhiteBox<::xe::MemoryManager> : public ::xe::MemoryManager {
     using BaseClass = ::xe::MemoryManager;
 };
 
-struct MockMemoryManager : public WhiteBox<::xe::MemoryManager> {
-    MockMemoryManager();
-    virtual ~MockMemoryManager();
+using MemoryManager = WhiteBox<::xe::MemoryManager>;
+
+template<>
+struct Mock<MemoryManager> : public MemoryManager {
+    Mock();
+    virtual ~Mock();
 
     MOCK_METHOD1(allocateDeviceMemory, GraphicsAllocation *(size_t size));
     MOCK_METHOD1(freeMemory, void(GraphicsAllocation *allocation));
 };
-
-using MemoryManager = WhiteBox<::xe::MemoryManager>;
 
 } // namespace ult
 } // namespace xe

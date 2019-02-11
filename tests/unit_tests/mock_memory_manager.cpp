@@ -3,10 +3,10 @@
 namespace xe {
 namespace ult {
 
-MockMemoryManager::MockMemoryManager() {
+Mock<MemoryManager>::Mock() {
 }
 
-MockMemoryManager::~MockMemoryManager() {
+Mock<MemoryManager>::~Mock() {
 }
 
 } // namespace ult

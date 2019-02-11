@@ -33,7 +33,7 @@ TEST(xeCommandQueueDestroy, returnsSuccess) {
 
 TEST(CommandQueueCreate, returnsCommandQueueOnSuccess) {
     Mock<Device> device;
-    MockMemoryManager manager;
+    Mock<MemoryManager> manager;
     size_t sizeBuffer = 16384u;
     auto buffer = new uint8_t[sizeBuffer];
     auto allocation = new GraphicsAllocation(buffer, sizeBuffer);
