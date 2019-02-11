@@ -29,7 +29,7 @@ TEST(xeCommandListEncodeWaitOnEvent, redirectsToCmdListObject) {
 using CommandListEncodeWaitOnEvent = ::testing::Test;
 
 HWTEST_F(CommandListEncodeWaitOnEvent, addsSemaphoreToCommandStream) {
-    MockDevice device;
+    Mock<Device> device;
     MockMemoryManager memoryManager;
     EXPECT_CALL(device, getMemoryManager())
         .WillRepeatedly(Return(&memoryManager));
@@ -67,7 +67,7 @@ HWTEST_F(CommandListEncodeWaitOnEvent, addsSemaphoreToCommandStream) {
 }
 
 HWTEST_F(CommandListEncodeWaitOnEvent, addsEventGraphicsAllocationToResidencyContainer) {
-    MockDevice device;
+    Mock<Device> device;
     MockMemoryManager memoryManager;
     EXPECT_CALL(device, getMemoryManager())
         .WillRepeatedly(Return(&memoryManager));

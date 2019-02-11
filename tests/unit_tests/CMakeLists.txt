@@ -30,6 +30,7 @@ if(COMPUTE_RUNTIME_SUPPORT)
             graphics_allocation.h
             memory_manager.cpp
             memory_manager.h
+            mock.h
             mock_cmdlist.cpp
             mock_cmdlist.h
             mock_cmdqueue.cpp

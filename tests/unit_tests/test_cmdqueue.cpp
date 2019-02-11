@@ -32,7 +32,7 @@ TEST(xeCommandQueueDestroy, returnsSuccess) {
 }
 
 TEST(CommandQueueCreate, returnsCommandQueueOnSuccess) {
-    MockDevice device;
+    Mock<Device> device;
     MockMemoryManager manager;
     size_t sizeBuffer = 16384u;
     auto buffer = new uint8_t[sizeBuffer];

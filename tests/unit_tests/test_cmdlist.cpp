@@ -25,7 +25,7 @@ using ::testing::Return;
 using CommandListCreate = ::testing::TestWithParam<uint32_t>;
 
 TEST_P(CommandListCreate, returnsCommandListOnSuccess) {
-    MockDevice device;
+    Mock<Device> device;
     MockMemoryManager manager;
     auto sizeBuffer = 65536u;
     auto buffer = new uint8_t[sizeBuffer];
@@ -62,7 +62,7 @@ INSTANTIATE_TEST_CASE_P(,
 using CommandListCreateFail = ::testing::TestWithParam<uint32_t>;
 
 TEST_P(CommandListCreateFail, returnsNullPointerOnFailure) {
-    MockDevice device;
+    Mock<Device> device;
     auto commandList = CommandList::create(GetParam(), &device);
     EXPECT_EQ(nullptr, commandList);
 }

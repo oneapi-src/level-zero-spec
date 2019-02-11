@@ -35,7 +35,7 @@ TEST(xeCommandQueueEnqueueCommandQueue, redirectsToCmdQueueObject) {
 using CommandQueueEnqueueCommandLists = ::testing::Test;
 
 HWTEST_F(CommandQueueEnqueueCommandLists, addsASecondLevelBatchBufferPerCommandList) {
-    MockDevice device;
+    Mock<Device> device;
     MockMemoryManager memoryManager;
     EXPECT_CALL(device, getMemoryManager())
         .WillRepeatedly(Return(&memoryManager));

@@ -1,12 +1,21 @@
 #pragma once
 #include "device.h"
-#include "gmock/gmock.h"
+#include "mock.h"
+#include "white_box.h"
 
 namespace xe {
+namespace ult {
 
-struct MockDevice : public Device {
-    MockDevice();
-    virtual ~MockDevice();
+template <>
+struct WhiteBox<Device> : public ::xe::Device {
+};
+
+using Device = WhiteBox<Device>;
+
+template <>
+struct Mock<Device> : public Device {
+    Mock();
+    virtual ~Mock();
 
     MOCK_METHOD2(createCommandList, xe_result_t(const xe_command_list_desc_t *desc,
                                                 xe_command_list_handle_t *commandList));
@@ -22,4 +31,5 @@ struct MockDevice : public Device {
     void *csrRT;
 };
 
+} // namespace ult
 } // namespace xe

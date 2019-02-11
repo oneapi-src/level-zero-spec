@@ -8,9 +8,10 @@
 using ::testing::Return;
 
 namespace xe {
+namespace ult {
 
 TEST(xeDeviceCreateCommandList, redirectsToDeviceObject) {
-    MockDevice device;
+    Mock<Device> device;
     auto deviceHandle = device.toHandle();
 
     xe_command_list_desc_t desc = {};
@@ -27,7 +28,7 @@ TEST(xeDeviceCreateCommandList, redirectsToDeviceObject) {
 }
 
 TEST(xeDeviceCreateCommandQueue, redirectsToDeviceObject) {
-    MockDevice device;
+    Mock<Device> device;
     auto deviceHandle = device.toHandle();
 
     xe_command_queue_handle_t commandQueue = {};
@@ -44,7 +45,7 @@ TEST(xeDeviceCreateCommandQueue, redirectsToDeviceObject) {
 }
 
 TEST(xeDeviceCreateEvent, redirectsToDeviceObject) {
-    MockDevice device;
+    Mock<Device> device;
     auto deviceHandle = device.toHandle();
 
     xe_event_handle_t event = {};
@@ -136,4 +137,5 @@ TEST(DeviceGetMemoryManager, returnsPointer) {
     delete device;
 }
 
+} // namespace ult
 } // namespace xe

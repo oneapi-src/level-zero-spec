@@ -5,8 +5,9 @@
 #include "gmock/gmock.h"
 
 namespace xe {
+namespace ult {
 
-MockDevice::MockDevice() {
+Mock<Device>::Mock() {
     auto ordinal = 0u;
     auto platform = OCLRT::constructPlatform();
     auto success = platform->initialize();
@@ -19,8 +20,9 @@ MockDevice::MockDevice() {
     csrRT = new MockCommandStreamReceiver(*executionEnvironment);
 }
 
-MockDevice::~MockDevice() {
+Mock<Device>::~Mock() {
     delete static_cast<MockCommandStreamReceiver *>(csrRT);
 }
 
+} // namespace ult
 } // namespace xe

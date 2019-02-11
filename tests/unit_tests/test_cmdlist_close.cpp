@@ -27,7 +27,7 @@ TEST(xeCommandListClose, redirectsToCmdListObject) {
 using CommandListClose = ::testing::Test;
 
 HWTEST_F(CommandListClose, addsBatchBufferEndToCommandStream) {
-    MockDevice device;
+    Mock<Device> device;
     MockMemoryManager memoryManager;
     EXPECT_CALL(device, getMemoryManager())
         .WillRepeatedly(Return(&memoryManager));
