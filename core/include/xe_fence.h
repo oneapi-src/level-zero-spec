@@ -231,3 +231,4 @@ xe_result_t __xecall
     );
 
 #endif // _XE_FENCE_H
+

@@ -660,12 +660,10 @@ xe_result_t __xecall
 ///         + null ptr for pUserData.
 /*@todo: __declspec(dllexport)*/
 xe_result_t __xecall
-  xeCommandListEncodeDispatchHostFunction(
+  xexeCommandListEncodeDispatchHostFunction(
     xe_command_list_handle_t hCommandList,          ///< [in] handle of the command list
-    XE_PFN_HOST_FUNC pfnHostFunc,                   ///< [in] pointer to host function.
-    void* pUserData,                                ///< [in] pointer to user data to pass to host function.
-    xe_event_handle_t hEvent                        ///< [in][optional] handle of the event to signal on completion. @todo
-                                                    ///< [**Zack**] Is this needed? Host function could signal?
+    xe_host_pfn_t pfnHostFunc,                      ///< [in] pointer to host function.
+    void* pUserData                                 ///< [in] pointer to user data to pass to host function.
     )
 {
     // @todo: check_return(nullptr == get_driver(), XE_RESULT_ERROR_UNINITIALIZED);

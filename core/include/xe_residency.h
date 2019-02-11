@@ -127,3 +127,4 @@ xe_result_t __xecall
     );
 
 #endif // _XE_RESIDENCY_H
+

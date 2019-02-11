@@ -70,7 +70,16 @@ typedef double double_t;
 %endif
 ## TYPEDEF ####################################################################
 %elif re.match(r"typedef", obj['type']):
+%if 'params' in obj:
+typedef ${obj['returns']}(__${x}call *${th.subx(x, obj['name'])})(
+  %for line in th.make_param_lines(x, obj):
+  ${line}
+  %endfor
+  );
+%else:
 typedef ${th.subx(x, obj['value'])} ${th.subx(x, obj['name'])};
+%endif
+## ENUM #######################################################################
 %elif re.match(r"enum", obj['type']):
 typedef enum _${th.subx(x, obj['name'])}
 {
@@ -88,14 +97,6 @@ typedef struct _${th.subx(x, obj['name'])}
     %endfor
 
 } ${th.subx(x, obj['name'])};
-## FUNCTION_POINTER ###########################################################
-%elif re.match(r"func_ptr", obj['type']):
-///
-typedef void(__${x}call *${th.subx(x, obj['name'])})(
-  %for line in th.make_param_lines(x, obj):
-  ${line}
-  %endfor
-  );
 ## FUNCTION ###################################################################
 %elif re.match(r"function", obj['type']):
 /// 
@@ -119,3 +120,4 @@ using ${th.subx(x, obj['name'])} = _${th.subx(x, obj['name'])}*;
 
 %endfor
 #endif // _${X}_${name.upper()}_H
+

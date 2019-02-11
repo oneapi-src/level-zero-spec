@@ -104,3 +104,4 @@ xe_result_t __xecall
 #endif // XE_ENABLE_OCL_INTEROP
 
 #endif // _XE_CL_INTEROP_H
+
