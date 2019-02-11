@@ -32,6 +32,9 @@ struct Environment : public ::testing::Environment {
         sysInfo = *hwInfo.pSysInfo;
         skuTable = *hwInfo.pSkuTable;
 
+        productFamily = hwInfo.pPlatform->eProductFamily;
+        renderCoreFamily = hwInfo.pPlatform->eRenderCoreFamily;
+
         // Disable mid-thread preemption
         hwInfo.capabilityTable.defaultPreemptionMode = OCLRT::PreemptionMode::ThreadGroup;
 

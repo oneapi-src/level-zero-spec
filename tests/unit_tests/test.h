@@ -33,6 +33,27 @@ extern GFXCORE_FAMILY renderCoreFamily;
 #define CNL_TYPED_TEST_BODY
 #define CNL_TYPED_CMDTEST_BODY
 #endif
+#ifdef TESTS_GEN11
+#define ICL_TYPED_TEST_BODY testBodyHw<typename OCLRT::GfxFamilyMapper<IGFX_GEN11_CORE>::GfxFamily>();
+#define ICL_TYPED_CMDTEST_BODY runCmdTestHwIfSupported<typename OCLRT::GfxFamilyMapper<IGFX_GEN11_CORE>::GfxFamily>();
+#else
+#define ICL_TYPED_TEST_BODY
+#define ICL_TYPED_CMDTEST_BODY
+#endif
+#ifdef TESTS_GEN12HP
+#define ATS_TYPED_TEST_BODY testBodyHw<typename OCLRT::GfxFamilyMapper<IGFX_GEN12_CORE>::GfxFamily>();
+#define ATS_TYPED_CMDTEST_BODY runCmdTestHwIfSupported<typename OCLRT::GfxFamilyMapper<IGFX_GEN12_CORE>::GfxFamily>();
+#else
+#define ATS_TYPED_TEST_BODY
+#define ATS_TYPED_CMDTEST_BODY
+#endif
+#ifdef TESTS_GEN12LP
+#define TGLLP_TYPED_TEST_BODY testBodyHw<typename OCLRT::GfxFamilyMapper<IGFX_GEN12LP_CORE>::GfxFamily>();
+#define TGLLP_TYPED_CMDTEST_BODY runCmdTestHwIfSupported<typename OCLRT::GfxFamilyMapper<IGFX_GEN12LP_CORE>::GfxFamily>();
+#else
+#define TGLLP_TYPED_TEST_BODY
+#define TGLLP_TYPED_CMDTEST_BODY
+#endif
 
 // Macros to provide template based testing.
 // Test can use FamilyType in the test -- equivalent to SKLFamily
@@ -57,6 +78,15 @@ extern GFXCORE_FAMILY renderCoreFamily;
                 break;                                                               \
             case IGFX_GEN10_CORE:                                                    \
                 CNL_TYPED_TEST_BODY                                                  \
+                break;                                                               \
+            case IGFX_GEN11_CORE:                                                    \
+                ICL_TYPED_TEST_BODY                                                  \
+                break;                                                               \
+            case IGFX_GEN12LP_CORE:                                                  \
+                TGLLP_TYPED_TEST_BODY                                                \
+                break;                                                               \
+            case IGFX_GEN12_CORE:                                                    \
+                ATS_TYPED_TEST_BODY                                                  \
                 break;                                                               \
             default:                                                                 \
                 ASSERT_TRUE((false && "Unknown hardware family"));                   \
@@ -119,6 +149,15 @@ extern GFXCORE_FAMILY renderCoreFamily;
                 break;                                                                                    \
             case IGFX_GEN10_CORE:                                                                         \
                 CNL_TYPED_CMDTEST_BODY                                                                    \
+                break;                                                                                    \
+            case IGFX_GEN11_CORE:                                                                         \
+                ICL_TYPED_CMDTEST_BODY                                                                    \
+                break;                                                                                    \
+            case IGFX_GEN12LP_CORE:                                                                       \
+                TGLLP_TYPED_CMDTEST_BODY                                                                  \
+                break;                                                                                    \
+            case IGFX_GEN12_CORE:                                                                         \
+                ATS_TYPED_CMDTEST_BODY                                                                    \
                 break;                                                                                    \
             default:                                                                                      \
                 ASSERT_TRUE((false && "Unknown hardware family"));                                        \
@@ -213,6 +252,15 @@ extern GFXCORE_FAMILY renderCoreFamily;
             case IGFX_GEN10_CORE:                                                                                        \
                 CNL_TYPED_TEST_BODY                                                                                      \
                 break;                                                                                                   \
+            case IGFX_GEN11_CORE:                                                                                        \
+                ICL_TYPED_TEST_BODY                                                                                      \
+                break;                                                                                                   \
+            case IGFX_GEN12_CORE:                                                                                        \
+                ATS_TYPED_TEST_BODY                                                                                      \
+                break;                                                                                                   \
+            case IGFX_GEN12LP_CORE:                                                                                      \
+                TGLLP_TYPED_TEST_BODY                                                                                    \
+                break;                                                                                                   \
             default:                                                                                                     \
                 ASSERT_TRUE((false && "Unknown hardware family"));                                                       \
                 break;                                                                                                   \
@@ -268,6 +316,15 @@ extern GFXCORE_FAMILY renderCoreFamily;
                 break;                                                                                                   \
             case IGFX_GEN10_CORE:                                                                                        \
                 CNL_TYPED_CMDTEST_BODY                                                                                   \
+                break;                                                                                                   \
+            case IGFX_GEN11_CORE:                                                                                        \
+                ICL_TYPED_CMDTEST_BODY                                                                                   \
+                break;                                                                                                   \
+            case IGFX_GEN12_CORE:                                                                                        \
+                ATS_TYPED_CMDTEST_BODY                                                                                   \
+                break;                                                                                                   \
+            case IGFX_GEN12LP_CORE:                                                                                      \
+                TGLLP_TYPED_CMDTEST_BODY                                                                                 \
                 break;                                                                                                   \
             default:                                                                                                     \
                 ASSERT_TRUE((false && "Unknown hardware family"));                                                       \
@@ -455,6 +512,15 @@ extern GFXCORE_FAMILY renderCoreFamily;
                 break;                                                                     \
             case IGFX_GEN10_CORE:                                                          \
                 CNL_TYPED_TEST_BODY                                                        \
+                break;                                                                     \
+            case IGFX_GEN11_CORE:                                                          \
+                ICL_TYPED_TEST_BODY                                                        \
+                break;                                                                     \
+            case IGFX_GEN12_CORE:                                                          \
+                ATS_TYPED_TEST_BODY                                                        \
+                break;                                                                     \
+            case IGFX_GEN12LP_CORE:                                                        \
+                TGLLP_TYPED_TEST_BODY                                                      \
                 break;                                                                     \
             default:                                                                       \
                 ASSERT_TRUE((false && "Unknown hardware family"));                         \
