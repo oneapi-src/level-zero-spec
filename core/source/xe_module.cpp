@@ -518,7 +518,7 @@ xe_result_t __xecall
 ///     - ::XE_RESULT_ERROR_UNINITIALIZED
 ///     - ::XE_RESULT_ERROR_UNSUPPORTED
 ///     - ::XE_RESULT_ERROR_INVALID_PARAMETER
-///         + invalid handle for hCommandQueue
+///         + invalid handle for hCommandList
 ///         + invalid handle for hFunction
 ///         + nullptr for function arguments buffer
 ///         + invalid group count range for dispatch
@@ -570,7 +570,7 @@ xe_result_t __xecall
 ///     - ::XE_RESULT_ERROR_UNINITIALIZED
 ///     - ::XE_RESULT_ERROR_UNSUPPORTED
 ///     - ::XE_RESULT_ERROR_INVALID_PARAMETER
-///         + invalid handle for hCommandQueue
+///         + invalid handle for hCommandList
 ///         + invalid handle for hFunction
 ///         + invalid handle for hFunctionArgs.
 ///         + nullptr for dispatch arguments buffer
@@ -632,6 +632,47 @@ xe_result_t __xecall
     // @todo: check_return(nullptr == groupSizeX, XE_RESULT_ERROR_INVALID_PARAMETER);
     // @todo: check_return(nullptr == groupSizeY, XE_RESULT_ERROR_INVALID_PARAMETER);
     // @todo: check_return(nullptr == groupSizeZ, XE_RESULT_ERROR_INVALID_PARAMETER);
+
+    // @todo: insert <code> here
+
+    return XE_RESULT_SUCCESS;
+}
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Dispatch host function. All work after this command in the command
+///        list will block until host function completes.
+/// 
+/// @details
+///     - This function may **not** be called from simultaneous threads.
+///     - The implementation of this function should be lock-free.
+/// 
+/// @remarks
+///   _Analogues_
+///     - **cuLaunchHostFunc**
+/// 
+/// @returns
+///     - ::XE_RESULT_SUCCESS
+///     - ::XE_RESULT_ERROR_UNINITIALIZED
+///     - ::XE_RESULT_ERROR_UNSUPPORTED
+///     - ::XE_RESULT_ERROR_INVALID_PARAMETER
+///         + invalid handle for hCommandList
+///         + null ptr for pfnHostFunc
+///         + null ptr for pUserData.
+/*@todo: __declspec(dllexport)*/
+xe_result_t __xecall
+  xeCommandListEncodeDispatchHostFunction(
+    xe_command_list_handle_t hCommandList,          ///< [in] handle of the command list
+    XE_PFN_HOST_FUNC pfnHostFunc,                   ///< [in] pointer to host function.
+    void* pUserData,                                ///< [in] pointer to user data to pass to host function.
+    xe_event_handle_t hEvent                        ///< [in][optional] handle of the event to signal on completion. @todo
+                                                    ///< [**Zack**] Is this needed? Host function could signal?
+    )
+{
+    // @todo: check_return(nullptr == get_driver(), XE_RESULT_ERROR_UNINITIALIZED);
+
+    // Check parameters
+    // @todo: check_return(xe_command_list_handle_t() == hCommandList, XE_RESULT_ERROR_INVALID_PARAMETER);
+    // @todo: check_return(nullptr == pUserData, XE_RESULT_ERROR_INVALID_PARAMETER);
 
     // @todo: insert <code> here
 

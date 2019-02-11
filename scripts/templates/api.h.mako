@@ -88,6 +88,14 @@ typedef struct _${th.subx(x, obj['name'])}
     %endfor
 
 } ${th.subx(x, obj['name'])};
+## FUNCTION_POINTER ###########################################################
+%elif re.match(r"func_ptr", obj['type']):
+///
+typedef void(__${x}call *${th.subx(x, obj['name'])})(
+  %for line in th.make_param_lines(x, obj):
+  ${line}
+  %endfor
+  );
 ## FUNCTION ###################################################################
 %elif re.match(r"function", obj['type']):
 /// 
