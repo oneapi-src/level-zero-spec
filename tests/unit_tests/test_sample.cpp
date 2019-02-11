@@ -37,6 +37,10 @@ TEST(sample, waitOnEvent) {
                                      &hEvent);
     ASSERT_EQ(XE_RESULT_SUCCESS, result);
 
+    result = xe::xeCommandListEncodeSignalEvent(hCommandList,
+                                                hEvent);
+    ASSERT_EQ(XE_RESULT_SUCCESS, result);
+
     result = xe::xeCommandListEncodeWaitOnEvent(hCommandList,
                                                 hEvent);
     ASSERT_EQ(XE_RESULT_SUCCESS, result);

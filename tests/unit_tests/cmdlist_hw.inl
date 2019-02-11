@@ -19,6 +19,28 @@ xe_result_t CommandListHw<gfxCoreFamily>::close() {
 }
 
 template <uint32_t gfxCoreFamily>
+xe_result_t CommandListHw<gfxCoreFamily>::encodeSignalEvent(xe_event_handle_t hEvent) {
+    auto event = Event::fromHandle(hEvent);
+    assert(event);
+    residencyContainer.push_back(event->getAllocation().allocationRT);
+
+    using GfxFamily = typename OCLRT::GfxFamilyMapper<static_cast<GFXCORE_FAMILY>(gfxCoreFamily)>::GfxFamily;
+    using PIPE_CONTROL = typename GfxFamily::PIPE_CONTROL;
+    using POST_SYNC_OPERATION = typename PIPE_CONTROL::POST_SYNC_OPERATION;
+    PIPE_CONTROL cmd = GfxFamily::cmdInitPipeControl;
+    cmd.setPostSyncOperation(POST_SYNC_OPERATION::POST_SYNC_OPERATION_WRITE_IMMEDIATE_DATA);
+    cmd.setImmediateData(0u);
+    cmd.setCommandStreamerStallEnable(true);
+    auto gpuAddress = event->getGpuAddress();
+    cmd.setAddressHigh(gpuAddress >> 32u);
+    cmd.setAddress(uint32_t(gpuAddress));
+
+    auto buffer = commandStream->getSpace(sizeof(cmd));
+    *(PIPE_CONTROL *)buffer = cmd;
+    return XE_RESULT_SUCCESS;
+}
+
+template <uint32_t gfxCoreFamily>
 xe_result_t CommandListHw<gfxCoreFamily>::encodeWaitOnEvent(xe_event_handle_t hEvent) {
     using GfxFamily = typename OCLRT::GfxFamilyMapper<static_cast<GFXCORE_FAMILY>(gfxCoreFamily)>::GfxFamily;
     using MI_SEMAPHORE_WAIT = typename GfxFamily::MI_SEMAPHORE_WAIT;

@@ -11,6 +11,7 @@ struct CommandListHw : public CommandListImp {
     }
 
     xe_result_t close() override;
+    xe_result_t encodeSignalEvent(xe_event_handle_t hEvent) override;
     xe_result_t encodeWaitOnEvent(xe_event_handle_t hEvent) override;
 };
 

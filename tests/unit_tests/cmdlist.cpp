@@ -13,6 +13,12 @@ xeCommandListDestroy(xe_command_list_handle_t hCommandList) {
 }
 
 xe_result_t __xecall
+xeCommandListEncodeSignalEvent(xe_command_list_handle_t hCommandList,
+                               xe_event_handle_t hEvent) {
+    return CommandList::fromHandle(hCommandList)->encodeSignalEvent(hEvent);
+}
+
+xe_result_t __xecall
 xeCommandListEncodeWaitOnEvent(xe_command_list_handle_t hCommandList,
                                xe_event_handle_t hEvent) {
     return CommandList::fromHandle(hCommandList)->encodeWaitOnEvent(hEvent);
