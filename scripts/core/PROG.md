@@ -23,13 +23,13 @@ The following diagram illustrates the hierarchy of devices to the driver:
 @image latex ../images/core_driver.png
 
 ${"##"} Driver
-- A driver represents an instance of a ${Xx} driver being loaded and initialized into the current process.
+A driver represents an instance of a ${Xx} driver being loaded and initialized into the current process.
 - Only one instance of a driver per process can be loaded.
 - There is no reference tracking if multiple drivers are initialized.
 - A driver has minimal global state associated; only that which is sufficient for querying devices recognized by the driver.
  
 ${"##"} Device
-- A device represents a physical device in the system that can support ${Xx}.
+A device represents a physical device in the system that can support ${Xx}.
 - More than one device may be available in the system.
 - The application is responsible for sharing memory and explicit submission and synchronization across multiple devices.
 
@@ -88,9 +88,10 @@ The following diagram illustrates the hierarchy of command lists and command que
 @image latex ../images/core_queue.png
 
 ${"##"} Command Queues
-- A command queue represents a logical input stream to the device, tied to a physical input
-  stream via an ordinal at creation time.
-- Command lists submitted to a command queue are **immediately** executed in a fifo manner.
+A command queue represents a logical input stream to the device, tied to a physical input
+stream via an ordinal at creation time.
+
+${"###"} Creation
 - The application may explicitly bind the command queue to a physical input stream, or
   allow the driver to choose dynamically, based on usage.
 - Multiple command queues may be created that use the same physical input stream. For example,
@@ -98,22 +99,12 @@ ${"##"} Command Queues
 - However, an application should avoid creating multiple command queues for the same physical
   input stream with the same priority due to possible performance penalties with hardware
   context switching.
-- Instead, command queue submission is free-treaded, allowing multiple Host threads to
-  share the same command queue.
-- If multiple Host threads enter the same command queue simultaneously, then execution order
-  is undefined.
-- Command lists created with ::${X}_COMMAND_LIST_FLAG_COPY_ONLY may only be submitted to
-  command queues created with ::${X}_COMMAND_QUEUE_FLAG_COPY_ONLY.
 - The number of simultaneous compute command queues per device is queried from 
   ::${x}_device_properties_t.numAsyncComputeEngines.
 - The number of simultaneous copy command queues per device is queried from 
   ::${x}_device_properties_t.numAsyncCopyEngines.
-- The application is responsible for making sure the device is not currently
-  executing from a command queue before it is deleted.  This is 
-  typically done by tracking command queue fences, but may also be
-  handled by calling ::${x}CommandQueueSynchronize.
 
-  The following sample code demonstrates a basic sequence for creation of command queues:
+The following sample code demonstrates a basic sequence for creation of command queues:
 ```c
     // Create a command queue
     ${x}_command_queue_desc_t commandQueueDesc = {
@@ -128,36 +119,42 @@ ${"##"} Command Queues
     ...
 ```
 
+${"###"} Execution
+- Command lists submitted to a command queue are **immediately** executed in a fifo manner.
+- Command queue submission is free-treaded, allowing multiple Host threads to
+  share the same command queue.
+- If multiple Host threads enter the same command queue simultaneously, then execution order
+  is undefined.
+- Command lists created with ::${X}_COMMAND_LIST_FLAG_COPY_ONLY may only be submitted to
+  command queues created with ::${X}_COMMAND_QUEUE_FLAG_COPY_ONLY.
+
+${"###"} Destruction
+- The application is responsible for making sure the device is not currently
+  executing from a command queue before it is deleted.  This is 
+  typically done by tracking command queue fences, but may also be
+  handled by calling ::${x}CommandQueueSynchronize.
+
 ${"##"} Command Lists
-- A command list represents a sequence of commands for execution on a command queue.
+A command list represents a sequence of commands for execution on a command queue.
+
+${"###"} Creation
 - A command list is created for a device to allow device-specific encoding of commands.
+- A command list can be copied to create another command list. The application may use this
+  to copy a command list for use on a different device.
+
+${"###"} Encoding
+- There is no implicit binding of command lists to Host threads. Therefore, an 
+  application may share a command list handle across multiple Host threads. However,
+  the application is responsible for ensuring that multiple Host threads do not access
+  the same command list simultaneously.
 - By default, commands are executed in the same order in which they are submitted.
   However, an application may allow the driver to optimize the ordering by using
   ::${X}_COMMAND_LIST_FLAG_RELAXED_ORDERING.  Reordering is guarenteed to be only occur
   between barriers and synchronization primitives.
-- There is no implicit association between a command list and a command queue. 
-  Therefore, a command list may be submitted to any, or multiple command queues.
-  However, if a command list is meant to be submitted to a copy-only command queue
-  then the ::${X}_COMMAND_LIST_FLAG_COPY_ONLY must be set at creation.
-- There is no implicit binding of command lists to Host threads. Therefore, an 
-  application may share a command list handle across multiple Host threads. However,
-  the application is responsible for ensuring that  multiple Host threads do not access
-  the same command list simultaneously.
 - The command list maintains some machine state, which is inherited by subsequent
   commands. See ::${x}_command_list_parameter_t for details.
-- Command lists do not inherit state from other command lists executed on the same
-  command queue.  i.e. each command list begins execution in its own default state.
 - A command list can be called from another command list (nested). In this case, state
-  is inherited and leaked by the nested command list.
-- A command list can be copied to create another command list. The application may use this
-  to copy a command list for use on a different device.
-- The application is responsible for calling close before submission to a command queue.
-- The application is responsible for making sure the device is not currently
-  executing from a command list before it is deleted.  This should be
-  handled by tracking a completion event associated with the command list.
-- The application is responsible for making sure the device is not currently
-  executing from a command list before it is reset.  This should be
-  handled by tracking a completion event associated with the command list.
+  may be inherited and leaked by the nested command list.
 
 The following sample code demonstrates a basic sequence for creation of command lists:
 ```c
@@ -170,6 +167,15 @@ The following sample code demonstrates a basic sequence for creation of command 
     ${x}DeviceCreateCommandList(hDevice, &commandListDesc, &hCommandList);
     ...
 ```
+
+${"###"} Submission
+- There is no implicit association between a command list and a command queue. 
+  Therefore, a command list may be submitted to any, or multiple command queues.
+  However, if a command list is meant to be submitted to a copy-only command queue
+  then the ::${X}_COMMAND_LIST_FLAG_COPY_ONLY must be set at creation.
+- The application is responsible for calling close before submission to a command queue.
+- Command lists do not inherit state from other command lists executed on the same
+  command queue.  i.e. each command list begins execution in its own default state.
 
 The following sample code demonstrates submission of commands to a command queue, via a command list:
 ```c
@@ -188,8 +194,17 @@ The following sample code demonstrates submission of commands to a command queue
     ...
 ```
 
+${"###"} Recycling
+- A command list may be recycled to avoid the overhead of frequent creation and destruction.
+- The application is responsible for making sure the device is not currently
+  executing from a command list before it is reset.  This should be
+  handled by tracking a completion event associated with the command list.
+- The application is responsible for making sure the device is not currently
+  executing from a command list before it is deleted.  This should be
+  handled by tracking a completion event associated with the command list.
+
 ${"##"} Command Graphs (Experimental)
-- A command graph represents non-linear dependencies between a collection of command lists to be executed.
+A command graph represents non-linear dependencies between a collection of command lists to be executed.
 - An implementation may use this information to reorder the execution of command lists to be optimized for the device.
 - An implementation may also parallelize execution across an application-specified maximum number of command queues.
 - The application is responsible for ensuring there are no inter-command list dependencies that would cause dead-lock;
@@ -272,11 +287,11 @@ ${"##"} Memory Barriers
 
 ${"#"} <a name="sp">Synchronization Primitives</a>
 There are three types of synchronization primitives:
-1. **Fences** - used to communicate to the host that command queue execution has completed.
-2. **Events** - used as fine-grain host-to-device, device-to-host or device-to-device waits and signals within a command list.
-3. **Semaphores** - used for fine-grain control of command lists execution across multiple, simultaneous command queues within a device.
+1. [**Fences**](#fnc) - used to communicate to the host that command queue execution has completed.
+2. [**Events**](#evnt) - used as fine-grain host-to-device, device-to-host or device-to-device waits and signals within a command list.
+3. [**Semaphores**](#sema) - used for fine-grain control of command lists execution across multiple, simultaneous command queues within a device.
 
-The following diagram illustrats the relationship of capabilities of these types of synchronization primitives:
+The following diagram illustrats the relationship of capabilities of these types of synchronization primitives:  
 ![Graph](../images/core_sync.png?raw=true)  
 @image latex ../images/core_sync.png
 
@@ -285,10 +300,11 @@ The following are the motivations for seperating the different types of synchron
     + fences may share device memory with all other fences for the queue or device.
     + events may be implemented using pipelined operations as part of the program execution.
     + semaphores may be implemented without device memory.
-    + fences and events implicitly cause execution and memory barriers, while semaphores only cause execution barriers.
+    + fences and events implicitly cause execution and memory barriers, while semaphores may only cause execution barriers.
 - Allows distinction on which type of primitive may be shared across devices.
 
-${"##"} Fences
+${"##"} <a name="fnc">Fences</a>
+A fence is a lightweight synchronization primitive used to communicate to the host that command queue execution has completed.
 - A fence is associated with single command queue.
 - A fence can only be signaled from a device's command queue (e.g. between execution of command lists)
   and can only be waited upon from the host.
@@ -330,7 +346,8 @@ The following sample code demonstrates a sequence for creation, submission and q
     ...
 ```
 
-${"##"} Events
+${"##"} <a name="evnt">Events</a>
+An event is used as fine-grain host-to-device, device-to-host or device-to-device waits and signals from within a command list.
 - An event can be __either__:
   + signaled from within a device's command list (e.g. between execution of kernels) and waited upon from the host, another command queue or another device, **or**
   + signaled from the host, and waited upon from within a device's command list.
@@ -380,7 +397,8 @@ The following sample code demonstrates a sequence for creation and submission of
     ...
 ```
 
-${"##"} Semaphores
+${"##"} <a name="sema">Semaphores</a>
+A semaphore is used for fine-grain control of command lists execution across multiple, simultaneous command queues within a device.
 - A semaphore can only be signaled and waited upon from within a device's command lists.
 - A semaphore has a 64-bit value, initialized to zero and changed when signaled.
 - A semaphore wait can test its value for less-than, less-than-or-equal, equal, not-equal, greater-than-or-equal, or greater-than another value.
@@ -448,7 +466,6 @@ The type of allocation describes the _ownership_ of the allocation:
   The same pointer to a shared allocation may be used on the host and all supported devices.
 
 In summary:
-
 | Name | Initial Location | Accessible By || Migratable To ||
 | :--: | :--: | :--: | :--: | :--: | :--: |
 | **Host** | Host | Host | Yes | Host | N/A |
@@ -462,14 +479,12 @@ In summary:
 
 Devices may support different capabilities for each type of allocation.
 Supported capabilities are:
-
 * ::${X}_MEMORY_ACCESS - if a device supports access (read or write) to allocations of the specified type.
 * ::${X}_MEMORY_ATOMIC_ACCESS - if a device support atomic access to allocations of the specified type.
 * ::${X}_MEMORY_CONCURRENT_ACCESS - if a device supports concurrent access to allocations of the specified type, or another device's allocation of the specified type.
 * ::${X}_MEMORY_CONCURRENT_ATOMIC_ACCESS - if a device supports concurrent atomic access to allocations of the specified type, or another device's allocations of the specified type.
 
 The required matrix of capabilities are:
-
 | Allocation Type         | Access   | Atomic Access | Concurrent Access | Concurrent Atomic Access |
 | :--:                    | :--:     | :--:          | :--:              | :--:                     |
 | **Host**                | Required | Optional      | Optional          | Optional                 |
@@ -638,14 +653,13 @@ See ${x}_command_queue_desc_t for more details.
     ...
 ```
 
-
 ${"#"} <a name="mnf">Modules and Functions</a>
 There are multiple levels of constructs needed for executing functions on the device:
-1. A **Module** represents a single translation unit that consists of functions that have been compiled together.
-2. A **Function** represents the function within the module that will be dispatched directly from a command list.
-3. A **FunctionArgs** represents an instance of arguments to be used by the function when dispatched.
+1. A [**Module**](#mod) represents a single translation unit that consists of functions that have been compiled together.
+2. A [**Function**](#func) represents the function within the module that will be dispatched directly from a command list.
+3. A [**FunctionArgs**](#arg) represents an instance of arguments to be used by the function when dispatched.
 
-${"##"} Modules
+${"##"} <a name="mod">Modules</a>
 Modules can be created from an IL or directly from native format using ::${x}DeviceCreateModule.
 - ::${x}DeviceCreateModule takes a format argument that specifies the input format.
 - ::${x}DeviceCreateModule performs a compilation step when format is IL.
@@ -708,7 +722,6 @@ The ::${x}DeviceCreateModule function can optionally generate a build log object
     ${x}ModuleBuildLogDestroy(buildlog);
 ```
 
-
 ${"###"} Module Caching
 Disk caching of modules is not supported by the driver. If a disk cache for modules is desired then it is the
 responsibility of the application to implement this using ::${x}ModuleGetNativeBinary.
@@ -729,7 +742,7 @@ responsibility of the application to implement this using ::${x}ModuleGetNativeB
     }
 ```
 
-${"##"} Functions
+${"##"} <a name="func">Functions</a>
 Functions are immutable references to functions within a module.
 
 The following sample code demonstrates a sequence for creating a function from a module:
@@ -745,7 +758,6 @@ The following sample code demonstrates a sequence for creating a function from a
 ```
 
 ${"###"} Function Attributes
-
 Use ${x}FunctionQueryAttribute to query attributes from a function object.
 
 ```c
@@ -759,7 +771,30 @@ Use ${x}FunctionQueryAttribute to query attributes from a function object.
 
 See ${x}_function_attribute_t for more information on the attributes.
 
-${"###"} FunctionArgs
+${"###"} Function Group Size
+The API supports a query for suggested group size. If the function has an embedded group size then this
+will be returned. Otherwise, one will be suggested. This function should not be used if a group size is
+not already associated with the function and the function requires specific alignment for group size.
+
+```c
+    // Find suggested group size for processing image.
+    uint32_t groupSizeX;
+    uint32_t groupSizeY;
+    ${x}FunctionSuggestGroupSize(function, imageWidth, imageHeight, 1, &groupSizeX, &groupSizeY, nullptr);
+
+    uint32_t numGroupsX = imageWidth / groupSizeX;
+    uint32_t numGroupsY = imageHeight / groupSizeY;
+
+    // Encode dispatch command
+    ${x}CommandListEncodeDispatchFunction(
+        hCommandList, hFunction, hFunctionArgs, 
+        groupSizeX, groupSizeY, 1,
+        numGroupsX, numGroupsY, 1);
+
+    ...
+```
+
+${"##"} <a name="arg">FunctionArgs</a>
 FunctionArgs represent the inputs for a function.
 - FunctionArgs must be used with the Function object it was created for.
 - Use ${x}FunctionArgsSetValue to setup arguments for a function dispatch.
@@ -798,29 +833,6 @@ The following sample code demonstrates a sequence for creating function args and
     ...
 ```
 
-${"###"} Function Group Size
-The API supports a query for suggested group size. If the function has an embedded group size then this
-will be returned. Otherwise, one will be suggested. This function should not be used if a group size is
-not already associated with the function and the function requires specific alignment for group size.
-
-```c
-    // Find suggested group size for processing image.
-    uint32_t groupSizeX;
-    uint32_t groupSizeY;
-    ${x}FunctionSuggestGroupSize(function, imageWidth, imageHeight, 1, &groupSizeX, &groupSizeY, nullptr);
-
-    uint32_t numGroupsX = imageWidth / groupSizeX;
-    uint32_t numGroupsY = imageHeight / groupSizeY;
-
-    // Encode dispatch command
-    ${x}CommandListEncodeDispatchFunction(
-        hCommandList, hFunction, hFunctionArgs, 
-        groupSizeX, groupSizeY, 1,
-        numGroupsX, numGroupsY, 1);
-
-    ...
-```
-
 ${"#"} <a name="oi">OpenCL Interoperability</a>
 Interoperability with OpenCL is currently only supported _from_ OpenCL _to_ ${Xx} for a subset of types.
 The APIs are designed to be OS agnostics and allow implementations to optimize for unified device drivers;
@@ -833,9 +845,12 @@ There are three OpenCL types that can be shared for interoperability:
 
 ${"##"} cl_mem
 OpenCL buffer objects may be registered for use as an ${Xx} device memory allocation.
-Registering an OpenCL buffer object with ${Xx} merely obtains a pointer to the underlying device memory allocation and does not alter the lifetime of the device memory underlying the OpenCL buffer object.
-Freeing the ${Xx} device memory allocation effectively "un-registers" the allocation from ${Xx}, and should be performed before the OpenCL buffer object is destroyed.
-Using the ${Xx} device memory allocation after destroying its associated OpenCL buffer object will result in undefined behavior.
+Registering an OpenCL buffer object with ${Xx} merely obtains a pointer to the underlying device memory
+allocation and does not alter the lifetime of the device memory underlying the OpenCL buffer object.
+Freeing the ${Xx} device memory allocation effectively "un-registers" the allocation from ${Xx}, 
+and should be performed before the OpenCL buffer object is destroyed.
+Using the ${Xx} device memory allocation after destroying its associated OpenCL buffer object will
+result in undefined behavior.
 
 Applications are responsible for enforcing memory consistency for shared buffer objects using existing OpenCL and/or ${Xx} APIs.
 
@@ -844,11 +859,22 @@ ${Xx} modules are always in a compiled state and therefore prior to retrieving a
 a cl_program the caller must ensure the cl_program is compiled and linked.
 
 ${"##"} cl_command_queue
-Sharing OpenCL command queues provide opportunities to minimize transition costs when submitting work from an OpenCL queue followed by submitting work to ${x} command queue and vice-versa.  Enqueuing ${x} command lists to ${x} command queues are immediately dispatched to the device.  OpenCL implementations, however, may not necessarily dispatch tasks to the device unless forced by explicit OpenCL API such as clFlush or clFinish.  To minimize overhead between sharing command queues, applications must explicitly dispatch OpenCL command queues using clFlush, clFinish or similar dispatch operations prior to enqueuing an ${x} command list.  Failing to explicitly dispatch device work may result in undefined behavior.  
+Sharing OpenCL command queues provide opportunities to minimize transition costs when submitting work from
+an OpenCL queue followed by submitting work to ${x} command queue and vice-versa.  Enqueuing ${x} command lists
+to ${x} command queues are immediately dispatched to the device.  OpenCL implementations, however, may not
+necessarily dispatch tasks to the device unless forced by explicit OpenCL API such as clFlush or clFinish.
+To minimize overhead between sharing command queues, applications must explicitly dispatch OpenCL command 
+queues using clFlush, clFinish or similar dispatch operations prior to enqueuing an ${x} command list.
+Failing to explicitly dispatch device work may result in undefined behavior.  
 
-Sharing an OpenCL command queue doesn't alter the lifetime of the API object.  It provides knowledge for the driver to potentially reuse some internal resources which may have noticeable overhead when switching the resources.
+Sharing an OpenCL command queue doesn't alter the lifetime of the API object.  It provides knowledge for the
+driver to potentially reuse some internal resources which may have noticeable overhead when switching the resources.
 
-Memory contents as reflected by any caching schemes will be consistent such that, for example, a memory write  in an OpenCL command queue can be read by a subsequent ${x} command list without any special user action.  The cost to ensure memory consistency may be implementation dependent.  The performance of sharing command queues will be no worse than an application submitting work to OpenCL, calling clFinish followed by submitting an ${x} command list.  In most cases, command queue sharing may be much more efficient. 
+Memory contents as reflected by any caching schemes will be consistent such that, for example, a memory write
+in an OpenCL command queue can be read by a subsequent ${x} command list without any special user action. 
+The cost to ensure memory consistency may be implementation dependent.  The performance of sharing command queues
+will be no worse than an application submitting work to OpenCL, calling clFinish followed by submitting an
+${x} command list.  In most cases, command queue sharing may be much more efficient. 
 
 ${"#"} <a name="ipc">Inter-Process Communication</a>
 The ${Xx} Inter-Process Communication (IPC) APIs allow device memory allocations to be used across processes.
@@ -900,9 +926,9 @@ The following is a list a features that are still being defined for inclusion:
 - **GetLastError**
     + quality-of-life addition to enable debug-only error checks, such as:
 ```c
-    assert(${X}_RESULT_SUCCESS != GetLastError(hDevice));
-    assert(${X}_RESULT_SUCCESS != GetLastError(hCommandList));
-    assert(${X}_RESULT_SUCCESS != GetLastError(hCommandQueue));
-    assert(${X}_RESULT_SUCCESS != GetLastError(hModule));
+    assert(${X}_RESULT_SUCCESS == GetLastError(hDevice));
+    assert(${X}_RESULT_SUCCESS == GetLastError(hCommandList));
+    assert(${X}_RESULT_SUCCESS == GetLastError(hCommandQueue));
+    assert(${X}_RESULT_SUCCESS == GetLastError(hModule));
     ...
 ```
