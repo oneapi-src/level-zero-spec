@@ -17,7 +17,7 @@ using ::testing::Return;
 TEST(xeCommandQueueEnqueueCommandQueue, redirectsToCmdQueueObject) {
     Mock<CommandList> cmdList;
     auto hCommandList = cmdList.toHandle();
-    MockCommandQueue cmdQueue;
+    Mock<CommandQueue> cmdQueue;
     xe_fence_handle_t hFence = {};
 
     EXPECT_CALL(cmdQueue, enqueueCommandLists(1,

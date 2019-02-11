@@ -13,7 +13,7 @@ WhiteBox<::xe::CommandQueue>::WhiteBox(Device *device, void *csrRT)
 WhiteBox<::xe::CommandQueue>::~WhiteBox() {
 }
 
-MockCommandQueue::MockCommandQueue(Device *device, void *csrRT)
+Mock<CommandQueue>::Mock(Device *device, void *csrRT)
     : WhiteBox<::xe::CommandQueue>(device, csrRT) {
     auto ordinal = 0u;
     auto platform = OCLRT::constructPlatform();
@@ -23,7 +23,7 @@ MockCommandQueue::MockCommandQueue(Device *device, void *csrRT)
     csrRT = new MockCommandStreamReceiver(*executionEnvironment);
 }
 
-MockCommandQueue::~MockCommandQueue() {
+Mock<CommandQueue>::~Mock() {
     delete static_cast<MockCommandStreamReceiver *>(csrRT);
 }
 
