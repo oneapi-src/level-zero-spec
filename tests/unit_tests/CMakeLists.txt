@@ -64,6 +64,7 @@ if(COMPUTE_RUNTIME_SUPPORT)
                 cmdlist_bdw.cpp
                 cmdqueue_bdw.cpp
         )
+        set(DEFAULT_PRODUCT_FAMILY IGFX_BROADWELL)
     endif()
 
     if(SUPPORT_GEN9)
@@ -74,6 +75,7 @@ if(COMPUTE_RUNTIME_SUPPORT)
                 cmdqueue_kbl.cpp
                 cmdqueue_skl.cpp
         )
+        set(DEFAULT_PRODUCT_FAMILY IGFX_SKYLAKE)
     endif()
 
     #if(SUPPORT_GEN10)
@@ -83,6 +85,7 @@ if(COMPUTE_RUNTIME_SUPPORT)
                 cmdlist_cnl.cpp
                 cmdqueue_cnl.cpp
         )
+        set(DEFAULT_PRODUCT_FAMILY IGFX_CANNONLAKE)
     endif()
 
     if(SUPPORT_GEN11)
@@ -91,6 +94,7 @@ if(COMPUTE_RUNTIME_SUPPORT)
                 cmdlist_icllp.cpp
                 cmdqueue_icllp.cpp
         )
+        set(DEFAULT_PRODUCT_FAMILY IGFX_ICELAKE_LP)
     endif()
 
     if(SUPPORT_GEN12LP)
@@ -99,6 +103,7 @@ if(COMPUTE_RUNTIME_SUPPORT)
                 cmdlist_tgllp.cpp
                 cmdqueue_tgllp.cpp
         )
+        set(DEFAULT_PRODUCT_FAMILY IGFX_TIGERLAKE_LP)
     endif()
 
     if(SUPPORT_GEN12HP)
@@ -107,7 +112,13 @@ if(COMPUTE_RUNTIME_SUPPORT)
                 cmdlist_ats.cpp
                 cmdqueue_ats.cpp
         )
+        set(DEFAULT_PRODUCT_FAMILY IGFX_TIGERLAKE_HP)
     endif()
+
+    target_compile_definitions(${TARGET_NAME}
+        PUBLIC
+            DEFAULT_PRODUCT_FAMILY=${DEFAULT_PRODUCT_FAMILY}
+    )
 
     target_link_libraries(${TARGET_NAME} 
         compute_runtime_mockable

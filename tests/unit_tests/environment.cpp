@@ -5,7 +5,7 @@
 #include "runtime/platform/platform.h"
 #include "unit_tests/tests_configuration.h"
 
-PRODUCT_FAMILY productFamily = IGFX_TIGERLAKE_HP;
+PRODUCT_FAMILY productFamily = DEFAULT_PRODUCT_FAMILY;
 GFXCORE_FAMILY renderCoreFamily;
 
 namespace OCLRT {
