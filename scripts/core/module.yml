@@ -551,7 +551,8 @@ returns:
 --- #--------------------------------------------------------------------------
 type: function
 desc: "Dispatch host function. All work after this command in the command list will block until host function completes."
-name: $xCommandListEncodeDispatchHostFunction
+class: $xCommandList
+name: EncodeDispatchHostFunction
 analogue:
     - "**cuLaunchHostFunc**"
 details:
