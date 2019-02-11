@@ -5,8 +5,8 @@
 #include "runtime/platform/platform.h"
 #include "unit_tests/tests_configuration.h"
 
-GFXCORE_FAMILY renderCoreFamily = IGFX_GEN9_CORE;
-PRODUCT_FAMILY productFamily = IGFX_SKYLAKE;
+PRODUCT_FAMILY productFamily = IGFX_TIGERLAKE_HP;
+GFXCORE_FAMILY renderCoreFamily;
 
 namespace OCLRT {
 extern bool overrideCommandStreamReceiverCreation;
@@ -28,7 +28,8 @@ struct Environment : public ::testing::Environment {
         }
 
         // Clone default device information
-        hwInfo = *OCLRT::platformDevices[0];
+        assert(OCLRT::hardwareInfoTable[productFamily]);
+        hwInfo = *OCLRT::hardwareInfoTable[productFamily];
         sysInfo = *hwInfo.pSysInfo;
         skuTable = *hwInfo.pSkuTable;
 
