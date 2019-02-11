@@ -25,12 +25,13 @@ The following diagram illustrates the hierarchy of devices to the driver:
 ## Driver
 A driver represents an instance of a Xe driver being loaded and initialized into the current process.
 - Only one instance of a driver per process can be loaded.
-- There is no reference tracking if multiple drivers are initialized.
+- Multiple calls to xeDriverInit are silently ignored.
 - A driver has minimal global state associated; only that which is sufficient for querying devices recognized by the driver.
  
 ## Device
 A device represents a physical device in the system that can support Xe.
 - More than one device may be available in the system.
+- The driver will only report devices that are recognized by the driver.
 - The application is responsible for sharing memory and explicit submission and synchronization across multiple devices.
 
 ## Initialization
@@ -701,7 +702,7 @@ Build options can be passed with ::xe_module_desc_t as a string.
 | Build Option                                  | Description                                           | Default  |
 | :--                                           | :--                                                   | :--      |
 | -xe-opt-disable                             | Disable optimizations.                                | Disabled |
-| -xe-opt-greater-than-4GB-buffer-required    | Use 64-bit offset calculations for buffers.          | Disabled |
+| -xe-opt-greater-than-4GB-buffer-required    | Use 64-bit offset calculations for buffers.           | Disabled |
 | -xe-opt-large-register-file                 | Increase number of registers available to threads.    | Disabled |
 
 ### Module Build Log
