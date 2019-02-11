@@ -2,13 +2,14 @@
 #include "mock_event.h"
 
 namespace xe {
+namespace ult {
 
-MockEvent::MockEvent() :
-    mockAllocation(&memory, sizeof(memory)) {
+Mock<Event>::Mock() : mockAllocation(&memory, sizeof(memory)) {
     allocation = &mockAllocation;
 }
 
-MockEvent::~MockEvent() {
+Mock<Event>::~Mock() {
 }
 
+} // namespace ult
 } // namespace xe

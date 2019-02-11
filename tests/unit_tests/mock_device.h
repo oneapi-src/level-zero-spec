@@ -7,10 +7,10 @@ namespace xe {
 namespace ult {
 
 template <>
-struct WhiteBox<Device> : public ::xe::Device {
+struct WhiteBox<::xe::Device> : public ::xe::Device {
 };
 
-using Device = WhiteBox<Device>;
+using Device = WhiteBox<::xe::Device>;
 
 template <>
 struct Mock<Device> : public Device {

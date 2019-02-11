@@ -43,7 +43,7 @@ HWTEST_F(CommandListEncodeWaitOnEvent, addsSemaphoreToCommandStream) {
     ASSERT_NE(nullptr, commandList->commandStream);
     auto usedSpaceBefore = commandList->commandStream->getUsed();
 
-    MockEvent event;
+    Mock<Event> event;
     auto result = commandList->encodeWaitOnEvent(event.toHandle());
     ASSERT_EQ(XE_RESULT_SUCCESS, result);
 
@@ -81,7 +81,7 @@ HWTEST_F(CommandListEncodeWaitOnEvent, addsEventGraphicsAllocationToResidencyCon
     ASSERT_NE(nullptr, commandList->commandStream);
     auto usedSpaceBefore = commandList->commandStream->getUsed();
 
-    MockEvent event;
+    Mock<Event> event;
     auto result = commandList->encodeWaitOnEvent(event.toHandle());
     ASSERT_EQ(XE_RESULT_SUCCESS, result);
 

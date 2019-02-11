@@ -1,12 +1,21 @@
 #pragma once
 #include "driver.h"
-#include "gmock/gmock.h"
+#include "mock.h"
+#include "white_box.h"
 
 namespace xe {
+namespace ult {
 
-struct MockDriver : public Driver {
-    MockDriver();
-    virtual ~MockDriver();
+template <>
+struct WhiteBox<::xe::Driver> : public ::xe::Driver {
+};
+
+using Driver = WhiteBox<::xe::Driver>;
+
+template <>
+struct Mock<Driver> : public Driver {
+    Mock();
+    virtual ~Mock();
 
     MOCK_METHOD1(initialize, xe_result_t(xe_init_flags_t));
 
@@ -16,4 +25,5 @@ struct MockDriver : public Driver {
     Driver *previousDriver = nullptr;
 };
 
+} // namespace ult
 } // namespace xe

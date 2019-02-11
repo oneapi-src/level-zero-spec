@@ -4,9 +4,10 @@
 using ::testing::Return;
 
 namespace xe {
+namespace ult {
 
 TEST(xeDriverInit, redirectsToDriverObject) {
-    MockDriver driver;
+    Mock<Driver> driver;
 
     EXPECT_CALL(driver, initialize(XE_INIT_FLAG_NONE)).Times(1);
 
@@ -20,7 +21,7 @@ TEST(xeDriverInit, returnsSucess) {
 }
 
 TEST(xeDriverGetDevice, redirectsToDriverObject) {
-    MockDriver driver;
+    Mock<Driver> driver;
 
     xe_device_handle_t deviceHandle = {};
     uint32_t ordinal = 0;
@@ -43,4 +44,5 @@ TEST(xeDriverGetDevice, returnsSuccess) {
     EXPECT_NE(nullptr, deviceHandle);
 }
 
+} // namespace ult
 } // namespace xe
