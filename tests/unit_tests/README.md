@@ -1,4 +1,3 @@
-
 # Unit Level Tests
 Unit level tests (ULTs) are stored in this folder and leverage GoogleTest and GoogleMock installed on the system or located in the third_party folder. 
 
@@ -12,8 +11,7 @@ Unit level tests (ULTs) are stored in this folder and leverage GoogleTest and Go
 - HW specific tests can target specific generations such as **GEN9TEST_F**.
 - Product family specific tests can target specific families such as **SKLTEST_F**.
 
-**Core driver code**
-Core driver code may reside in this folder from time to time depending on various stages of iterative development.  Core driver code should ultimately reside in a folder in the base directory.  Core driver code that happens to be in here should be treated as heavily under development and is not yet available in the core driver library.  **Functionality ready for external usage must be put in the proper core driver library folder**.
+Core driver code may reside in this folder from time to time depending on various stages of iterative development.  Core driver code should ultimately reside in a folder in the base directory.  Core driver code that happens to be in here should be treated as heavily under development and is not yet available in the core driver library.  **Functionally ready code intended for external usage must be put in the proper core driver library folder**.
 
 # Test Samples
 One or more samples may exist in this folder as a proof point of integration and more realistic workloads.  One such example is [test_sample.cpp](/tests/unit_tests/test_sample.cpp).  By default it behaves like a ULT.  Changing configuration settings as demonstrated below allows it to feed a live simulator via TBX or generate an AUB file for offline analysis and testing.
