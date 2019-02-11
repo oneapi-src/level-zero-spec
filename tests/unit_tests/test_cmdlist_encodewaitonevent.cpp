@@ -16,7 +16,7 @@ namespace ult {
 using ::testing::Return;
 
 TEST(xeCommandListEncodeWaitOnEvent, redirectsToCmdListObject) {
-    MockCommandList commandList;
+    Mock<CommandList> commandList;
     xe_event_handle_t event = {};
 
     EXPECT_CALL(commandList, encodeWaitOnEvent(event)).Times(1);

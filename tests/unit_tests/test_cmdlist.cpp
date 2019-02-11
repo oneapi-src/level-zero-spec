@@ -11,7 +11,7 @@ namespace xe {
 namespace ult {
 
 TEST(xeCommandListDestroy, redirectsToCmdListObject) {
-    MockCommandList cmdList;
+    Mock<CommandList> cmdList;
     xe_command_list_handle_t commandList = cmdList.toHandle();
 
     EXPECT_CALL(cmdList, destroy()).Times(1);

@@ -3,7 +3,7 @@
 #include "cmdlist_imp.h"
 #undef CMD_LIST_INTERNAL
 #include "white_box.h"
-#include "gmock/gmock.h"
+#include "mock.h"
 
 namespace xe {
 struct GraphicsAllocation;
@@ -22,9 +22,12 @@ struct WhiteBox<::xe::CommandList> : public ::xe::CommandListImp {
     virtual ~WhiteBox();
 };
 
-struct MockCommandList : public WhiteBox<::xe::CommandList> {
-    MockCommandList(Device *device = nullptr);
-    virtual ~MockCommandList();
+using CommandList = WhiteBox<::xe::CommandList>;
+
+template<>
+struct Mock<CommandList> : public CommandList {
+    Mock(Device *device = nullptr);
+    virtual ~Mock();
 
     MOCK_METHOD0(close, xe_result_t());
     MOCK_METHOD0(destroy, xe_result_t());
@@ -33,8 +36,6 @@ struct MockCommandList : public WhiteBox<::xe::CommandList> {
     void *batchBuffer = nullptr;
     GraphicsAllocation *mockAllocation = nullptr;
 };
-
-using CommandList = WhiteBox<::xe::CommandList>;
 
 } // namespace ult
 } // namespace xe

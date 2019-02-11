@@ -10,14 +10,14 @@ WhiteBox<::xe::CommandList>::WhiteBox(Device *device) : CommandListImp(device) {
 WhiteBox<::xe::CommandList>::~WhiteBox() {
 }
 
-MockCommandList::MockCommandList(Device *device) : WhiteBox<::xe::CommandList>(device) {
+Mock<CommandList>::Mock(Device *device) : WhiteBox<::xe::CommandList>(device) {
     size_t batchBufferSize = 65536u;
     batchBuffer = new uint8_t[batchBufferSize];
     mockAllocation = new GraphicsAllocation(batchBuffer, batchBufferSize);
     allocation = mockAllocation;
 }
 
-MockCommandList::~MockCommandList() {
+Mock<CommandList>::~Mock() {
     allocation = nullptr;
     delete mockAllocation;
     delete[] batchBuffer;

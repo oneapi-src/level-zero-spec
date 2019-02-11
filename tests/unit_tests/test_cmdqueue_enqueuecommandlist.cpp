@@ -15,7 +15,7 @@ namespace ult {
 using ::testing::Return;
 
 TEST(xeCommandQueueEnqueueCommandQueue, redirectsToCmdQueueObject) {
-    MockCommandList cmdList;
+    Mock<CommandList> cmdList;
     auto hCommandList = cmdList.toHandle();
     MockCommandQueue cmdQueue;
     xe_fence_handle_t hFence = {};

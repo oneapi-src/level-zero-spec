@@ -15,7 +15,7 @@ namespace ult {
 using ::testing::Return;
 
 TEST(xeCommandListClose, redirectsToCmdListObject) {
-    MockCommandList cmdList;
+    Mock<CommandList> cmdList;
     xe_command_list_handle_t commandList = cmdList.toHandle();
 
     EXPECT_CALL(cmdList, close()).Times(1);
