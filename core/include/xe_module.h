@@ -461,7 +461,7 @@ xe_result_t __xecall
 ///     - ::XE_RESULT_ERROR_UNINITIALIZED
 ///     - ::XE_RESULT_ERROR_UNSUPPORTED
 ///     - ::XE_RESULT_ERROR_INVALID_PARAMETER
-///         + invalid handle for hCommandQueue
+///         + invalid handle for hCommandList
 ///         + invalid handle for hFunction
 ///         + nullptr for function arguments buffer
 ///         + invalid group count range for dispatch
@@ -513,7 +513,7 @@ typedef struct _xe_dispatch_function_arguments_t
 ///     - ::XE_RESULT_ERROR_UNINITIALIZED
 ///     - ::XE_RESULT_ERROR_UNSUPPORTED
 ///     - ::XE_RESULT_ERROR_INVALID_PARAMETER
-///         + invalid handle for hCommandQueue
+///         + invalid handle for hCommandList
 ///         + invalid handle for hFunction
 ///         + invalid handle for hFunctionArgs.
 ///         + nullptr for dispatch arguments buffer
@@ -551,6 +551,51 @@ xe_result_t __xecall
     uint32_t* groupSizeX,                           ///< [out] recommended size of group for X dimension.
     uint32_t* groupSizeY,                           ///< [out] recommended size of group for Y dimension.
     uint32_t* groupSizeZ                            ///< [out] recommended size of group for Z dimension.
+    );
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief type definition for host function pointers used with
+///        ::xeCommandListEncodeDispatchHostFunction
+/// 
+/// @details
+///     - This function may be called from simultaneous threads.
+///     - The implementation of this function should be lock-free.
+/// 
+/// @remarks
+///   _Analogues_
+///     - 
+///
+typedef void(__xecall *XE_PFN_HOST_FUNC)(
+  void* pUserData                                 ///< [in] Pointer to user data to pass to host function.
+  );
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Dispatch host function. All work after this command in the command
+///        list will block until host function completes.
+/// 
+/// @details
+///     - This function may **not** be called from simultaneous threads.
+///     - The implementation of this function should be lock-free.
+/// 
+/// @remarks
+///   _Analogues_
+///     - **cuLaunchHostFunc**
+/// 
+/// @returns
+///     - ::XE_RESULT_SUCCESS
+///     - ::XE_RESULT_ERROR_UNINITIALIZED
+///     - ::XE_RESULT_ERROR_UNSUPPORTED
+///     - ::XE_RESULT_ERROR_INVALID_PARAMETER
+///         + invalid handle for hCommandList
+///         + null ptr for pfnHostFunc
+///         + null ptr for pUserData.
+xe_result_t __xecall
+  xeCommandListEncodeDispatchHostFunction(
+    xe_command_list_handle_t hCommandList,          ///< [in] handle of the command list
+    XE_PFN_HOST_FUNC pfnHostFunc,                   ///< [in] pointer to host function.
+    void* pUserData,                                ///< [in] pointer to user data to pass to host function.
+    xe_event_handle_t hEvent                        ///< [in][optional] handle of the event to signal on completion. @todo
+                                                    ///< [**Zack**] Is this needed? Host function could signal?
     );
 
 #endif // _XE_MODULE_H
