@@ -5,7 +5,8 @@ desc: "Intel $Xx Driver APIs for OpenCL Interopability"
 type: function
 desc: "Registers OpenCL memory with $Xx"
 condition: "$X_ENABLE_OCL_INTEROP"
-name: $xDeviceRegisterCLMemory
+class: Device
+name: RegisterCLMemory
 params:
     - type: $x_device_handle_t
       name: hDevice
@@ -29,7 +30,8 @@ returns:
 type: function
 desc: "Registers OpenCL program with $Xx"
 condition: "$X_ENABLE_OCL_INTEROP"
-name: $xDeviceRegisterCLProgram
+class: Device
+name: RegisterCLProgram
 params:
     - type: $x_device_handle_t
       name: hDevice
@@ -53,7 +55,8 @@ returns:
 type: function
 desc: "Registers OpenCL command queue with $Xx"
 condition: "$X_ENABLE_OCL_INTEROP"
-name: $xDeviceRegisterCLCommandQueue
+class: Device
+name: RegisterCLCommandQueue
 params:
     - type: $x_device_handle_t
       name: hDevice

@@ -146,10 +146,6 @@ xe_result_t __xecall
 ///     - This function can be called before or after ::xeModuleDestroy for the
 ///       associated module.
 /// 
-/// @remarks
-///   _Analogues_
-///     - 
-/// 
 /// @returns
 ///     - ::XE_RESULT_SUCCESS
 ///     - ::XE_RESULT_ERROR_UNINITIALIZED
@@ -538,10 +534,6 @@ xe_result_t __xecall
 /// @details
 ///     - This function may be called from simultaneous threads.
 ///     - The implementation of this function should be lock-free.
-/// 
-/// @remarks
-///   _Analogues_
-///     - 
 /// 
 /// @returns
 ///     - ::XE_RESULT_SUCCESS

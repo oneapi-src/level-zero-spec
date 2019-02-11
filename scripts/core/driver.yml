@@ -12,7 +12,9 @@ etors:
 --- #--------------------------------------------------------------------------
 type: function
 desc: "Initialize the $Xx Driver API and must be called before any other API function."
-name: $xDriverInit
+class: Driver
+name: Init
+decl: static
 details: 
     - "Only one instance of a driver per process can be loaded."
     - "There is no reference tracking if multiple drivers are initialized."
@@ -31,7 +33,8 @@ params:
 --- #--------------------------------------------------------------------------
 type: function
 desc: "Returns the current version of the installed driver."
-name: $xDriverGetVersion
+class: Driver
+name: GetVersion
 details:
     - "The driver version is a non-zero, monotonically increasing value where higher values always indicate a more recent version."
     - "The application may call this function from simultaneous threads."

@@ -40,7 +40,8 @@ members:
 --- #--------------------------------------------------------------------------
 type: function
 desc: "Creates a command list on the device for submitting commands to any command queue."
-name: $xDeviceCreateCommandList
+class: Device
+name: CreateCommandList
 details:
     - "The command list is created in the 'open' state."
     - "This function may be called from simultaneous threads."
@@ -65,7 +66,8 @@ returns:
 --- #--------------------------------------------------------------------------
 type: function
 desc: "Copies a command list on the device for submitting commands to any command queue."
-name: $xDeviceCopyCommandList
+class: Device
+name: CopyCommandList
 details:
     - "The command list to be copied must be closed."
     - "The command list created will be in the 'open' state."
@@ -93,7 +95,8 @@ returns:
 --- #--------------------------------------------------------------------------
 type: function
 desc: "Destroys a command list."
-name: $xCommandListDestroy
+class: CommandList
+name: Destroy
 details:
     - "The application is responsible for making sure the GPU is not currently referencing the command list before it is deleted"
     - "The implementation of this function will immediately free all Host and Device allocations associated with this command list."
@@ -108,7 +111,8 @@ returns:
 --- #--------------------------------------------------------------------------
 type: function
 desc: "Closes a command list; ready to be enqueued into a command queue."
-name: $xCommandListClose
+class: CommandList
+name: Close
 details:
     - "The application may **not** call this function from simultaneous threads with the same command list handle."
     - "The implementation of this function should be lock-free."
@@ -122,7 +126,8 @@ returns:
 --- #--------------------------------------------------------------------------
 type: function
 desc: "Reset a command list to initial (empty) state; ready for encoding commands."
-name: $xCommandListReset
+class: CommandList
+name: Reset
 details:
     - "The application is responsible for making sure the GPU is not currently referencing the command list before it is reset"
     - "The application may **not** call this function from simultaneous threads with the same command list handle."
@@ -144,7 +149,8 @@ etors:
 --- #--------------------------------------------------------------------------
 type: function
 desc: "Sets a command list's parameter."
-name: $xCommandListSetParameter
+class: CommandList
+name: SetParameter
 analogue:
     - cuCtxSetCacheConfig
     - cuCtxSetLimit
@@ -170,7 +176,8 @@ returns:
 --- #--------------------------------------------------------------------------
 type: function
 desc: "Retrieves a command list's parameter."
-name: $xCommandListGetParameter
+class: CommandList
+name: GetParameter
 analogue:
     - cuCtxGetCacheConfig
     - cuCtxGetLimit
@@ -197,7 +204,8 @@ returns:
 --- #--------------------------------------------------------------------------
 type: function
 desc: "Resets all command list parameters to default state."
-name: $xCommandListResetParameters
+class: CommandList
+name: ResetParameters
 details:
     - "The application may **not** call this function from simultaneous threads with the same command list handle."
     - "The implementation of this function should be lock-free."
@@ -211,7 +219,8 @@ returns:
 --- #--------------------------------------------------------------------------
 type: function
 desc: "Encode a command list into another command list."
-name: $xCommandListEncodeCommandLists
+class: CommandList
+name: EncodeCommandLists
 details:
     - "The application may **not** call this function from simultaneous threads with the same command list handle."
     - "The implementation of this function should be lock-free."

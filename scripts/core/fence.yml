@@ -28,7 +28,8 @@ members:
 --- #--------------------------------------------------------------------------
 type: function
 desc: "Creates a fence object on the device's command queue."
-name: $xCommandQueueCreateFence
+class: CommandQueue
+name: CreateFence
 analogue:
     - "**vkCreateFence**"
 details:
@@ -54,7 +55,8 @@ returns:
 --- #--------------------------------------------------------------------------
 type: function
 desc: "Deletes a fence object."
-name: $xFenceDestroy
+class: Fence
+name: Destroy
 details:
     - "The application is responsible for making sure the GPU is not currently referencing the fence before it is deleted"
     - "The implementation of this function will immediately free all Host and Device allocations associated with this fence"
@@ -72,7 +74,7 @@ returns:
 --- #--------------------------------------------------------------------------
 type: function
 desc: "The current host thread waits on a fence to be signaled."
-name: $xHostWaitOnFence
+name: HostWaitOnFence
 analogue:
     - "**vkWaitForFences**"
 details:
@@ -89,7 +91,7 @@ returns:
 --- #--------------------------------------------------------------------------
 type: function
 desc: "The current host thread waits on a multiple fences to be signaled."
-name: $xHostWaitOnMultipleFences
+name: HostWaitOnMultipleFences
 analogue:
     - "**vkWaitForFences**"
 details:
@@ -110,7 +112,8 @@ returns:
 --- #--------------------------------------------------------------------------
 type: function
 desc: "Queries a fence object's status."
-name: $xFenceQueryStatus
+class: Fence
+name: QueryStatus
 analogue:
     - "**vkGetFenceStatus**"
 details:
@@ -129,7 +132,8 @@ returns:
 --- #--------------------------------------------------------------------------
 type: function
 desc: "Queries the elapsed time between two signaled fences."
-name: $xFenceQueryElapsedTime
+class: Fence
+name: QueryElapsedTime
 details:
     - "The application may call this function from simultaneous threads."
     - "The implementation of this function should be lock-free."
@@ -152,7 +156,8 @@ returns:
 --- #--------------------------------------------------------------------------
 type: function
 desc: "Reset a fence back to the not signaled state."
-name: $xFenceReset
+class: Fence
+name: Reset
 analogue:
     - "**vkResetFences**"
 details:

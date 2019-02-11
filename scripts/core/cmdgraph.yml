@@ -38,7 +38,8 @@ members:
 --- #--------------------------------------------------------------------------
 type: function
 desc: "Creates a command graph on the device for submitting commands to any command queue."
-name: $xDeviceCreateCommandGraph
+class: Device
+name: CreateCommandGraph
 details:
     - "This function may be called from simultaneous threads."
     - "The implementation of this function should be lock-free."
@@ -62,7 +63,8 @@ returns:
 --- #--------------------------------------------------------------------------
 type: function
 desc: "Destroys a command graph."
-name: $xCommandGraphDestroy
+class: CommandGraph
+name: Destroy
 details:
     - "The implementation of this function will immediately free all Host allocations associated with this command graph."
     - "The implementation of this function should be lock-free."
@@ -76,7 +78,8 @@ returns:
 --- #--------------------------------------------------------------------------
 type: function
 desc: "Adds an edge between two command lists to the command graph."
-name: $xCommandGraphAddEdge
+class: CommandGraph
+name: AddEdge
 details:
     - "The command graph maintains a const-reference to an existing command list"
     - "The application is responsible for making sure a command list is not destroyed while the command graph still references"
@@ -99,7 +102,8 @@ returns:
 --- #--------------------------------------------------------------------------
 type: function
 desc: "Removes an edge between two command lists to the command graph."
-name: $xCommandGraphRemoveEdge
+class: CommandGraph
+name: RemoveEdge
 details:
     - "The application may **not** call this function from simultaneous threads with the same command graph handle."
     - "The implementation of this function should be lock-free."
@@ -120,7 +124,8 @@ returns:
 --- #--------------------------------------------------------------------------
 type: function
 desc: "Closes a command graph; ready to be enqueued into a command queue."
-name: $xCommandGraphClose
+class: CommandGraph
+name: Close
 details:
     - "The command graph will optimize the execution order of the command lists."
     - "A command list may **not** be reset after the command graph is closed."
@@ -136,7 +141,8 @@ returns:
 --- #--------------------------------------------------------------------------
 type: function
 desc: "Reset a command graph to initial (empty) state; ready for adding command lists."
-name: $xCommandGraphReset
+class: CommandGraph
+name: Reset
 details:
     - "The application may **not** call this function from simultaneous threads with the same command graph handle."
     - "The implementation of this function should be lock-free."
@@ -150,7 +156,8 @@ returns:
 --- #--------------------------------------------------------------------------
 type: function
 desc: "Returns the number of compute command list batches to be enqueued."
-name: $xCommandGraphGetComputeBatchCount
+class: CommandGraph
+name: GetComputeBatchCount
 details:
     - "The application may call this function from simultaneous threads."
     - "The implementation of this function should be lock-free."
@@ -169,7 +176,8 @@ returns:
 --- #--------------------------------------------------------------------------
 type: function
 desc: "Returns the list of compute command lists in optimal execution order."
-name: $xCommandGraphGetComputeCommandListBatch
+class: CommandGraph
+name: GetComputeCommandListBatch
 details:
     - "The application may call this function from simultaneous threads."
     - "The implementation of this function should be lock-free."
@@ -200,7 +208,8 @@ returns:
 --- #--------------------------------------------------------------------------
 type: function
 desc: "Returns the number of copy-only command list batches to be enqueued."
-name: $xCommandGraphGetCopyBatchCount
+class: CommandGraph
+name: GetCopyBatchCount
 details:
     - "The application may call this function from simultaneous threads."
     - "The implementation of this function should be lock-free."
@@ -219,7 +228,8 @@ returns:
 --- #--------------------------------------------------------------------------
 type: function
 desc: "Returns the list of copy-only command lists in optimal execution order."
-name: $xCommandGraphGetCopyCommandListBatch
+class: CommandGraph
+name: GetCopyCommandListBatch
 details:
     - "The application may call this function from simultaneous threads."
     - "The implementation of this function should be lock-free."

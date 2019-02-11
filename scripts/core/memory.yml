@@ -35,7 +35,7 @@ etors:
 --- #--------------------------------------------------------------------------
 type: function
 desc: "Allocates memory that is shared between the host and one or more devices"
-name: $xSharedMemAlloc
+name: SharedMemAlloc
 analogue:
     - "**cudaMallocManaged**"
 details:
@@ -71,7 +71,7 @@ returns:
 --- #--------------------------------------------------------------------------
 type: function
 desc: "Allocates memory specific to a device"
-name: $xMemAlloc
+name: MemAlloc
 analogue:
     - "**cudaMalloc**"
 details:
@@ -105,7 +105,7 @@ returns:
 --- #--------------------------------------------------------------------------
 type: function
 desc: "Allocates host memory"
-name: $xHostMemAlloc
+name: HostMemAlloc
 analogue:
     - "**cudaHostAlloc**"
 details:
@@ -137,7 +137,7 @@ returns:
 --- #--------------------------------------------------------------------------
 type: function
 desc: "Frees allocated host memory, device memory, or shared memory"
-name: $xMemFree
+name: MemFree
 analogue:
     - "**cudaFree**"
     - "**cudaFreeHost**"
@@ -177,7 +177,7 @@ etors:
 --- #--------------------------------------------------------------------------
 type: function
 desc: "Retrieves a property of an allocation"
-name: $xMemGetProperty
+name: MemGetProperty
 analogue:
     - "**cudaPointerGetAttributes**"
 details:
@@ -200,7 +200,7 @@ returns:
 --- #--------------------------------------------------------------------------
 type: function
 desc: "Creates an IPC memory handle for the specified allocation in the sending process"
-name: $xIpcGetMemHandle
+name: IpcGetMemHandle
 analogue:
     - "**cuIpcGetMemHandle**"
 details:
@@ -228,7 +228,7 @@ etors:
 --- #--------------------------------------------------------------------------
 type: function
 desc: "Opens an IPC memory handle to retrieve a device pointer in a receiving process"
-name: $xIpcOpenMemHandle
+name: IpcOpenMemHandle
 analogue:
     - "**cuIpcOpenMemHandle**"
 details:
@@ -258,7 +258,7 @@ returns:
 --- #--------------------------------------------------------------------------
 type: function
 desc: "Closes an IPC memory handle in a receiving process"
-name: $xIpcCloseMemHandle
+name: IpcCloseMemHandle
 analogue:
     - "**cuIpcCloseMemHandle**"
 details:

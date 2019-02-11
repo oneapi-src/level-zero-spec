@@ -37,7 +37,8 @@ members:
 --- #--------------------------------------------------------------------------
 type: function
 desc: "Creates an event object on the device."
-name: $xDeviceCreateEvent
+class: Device
+name: CreateEvent
 analogue:
     - "**clCreateUserEvent**"
     - vkCreateEvent
@@ -65,7 +66,8 @@ returns:
 --- #--------------------------------------------------------------------------
 type: function
 desc: "Creates an event object on the device from existing memory."
-name: $xDevicePlaceEvent
+class: Device
+name: PlaceEvent
 details:
     - "This function is intended for sharing fences with peer devices or across processes"
     - "This function may be called from simultaneous threads."
@@ -93,7 +95,8 @@ returns:
 --- #--------------------------------------------------------------------------
 type: function
 desc: "Deletes an event object."
-name: $xEventDestroy
+class: Event
+name: Destroy
 details:
     - "The application is responsible for making sure the GPU is not currently referencing the event before it is deleted"
     - "The implementation of this function will immediately free all Host and Device allocations associated with this event"
@@ -112,7 +115,8 @@ returns:
 --- #--------------------------------------------------------------------------
 type: function
 desc: "Encodes a signal of the event from the device into a command list."
-name: $xCommandListEncodeSignalEvent
+class: CommandList
+name: EncodeSignalEvent
 analogue:
     - "**clSetUserEventStatus**"
     - cuEventRecord
@@ -134,7 +138,8 @@ returns:
 --- #--------------------------------------------------------------------------
 type: function
 desc: "Encodes a wait on event from a host signal into a command list."
-name: $xCommandListEncodeWaitOnEvent
+class: CommandList
+name: EncodeWaitOnEvent
 details:
     - "The application may **not** call this function from simultaneous threads with the same command list handle."
     - "The implementation of this function should be lock-free."
@@ -152,7 +157,8 @@ returns:
 --- #--------------------------------------------------------------------------
 type: function
 desc: "Encodes signals of multiple event from the device into a command list."
-name: $xCommandListEncodeSignalMultipleEvents
+class: CommandList
+name: EncodeSignalMultipleEvents
 details:
     - "The application may **not** call this function from simultaneous threads with the same command list handle."
     - "The implementation of this function should be lock-free."
@@ -174,7 +180,8 @@ returns:
 --- #--------------------------------------------------------------------------
 type: function
 desc: "Encodes waits on multiple event from a host signal into a command list."
-name: $xCommandListEncodeWaitOnMultipleEvents
+class: CommandList
+name: EncodeWaitOnMultipleEvents
 details:
     - "The application may **not** call this function from simultaneous threads with the same command list handle."
     - "The implementation of this function should be lock-free."
@@ -196,7 +203,7 @@ returns:
 --- #--------------------------------------------------------------------------
 type: function
 desc: "Signals a event from host."
-name: $xHostSignalEvent
+name: HostSignalEvent
 analogue:
     - clSetUserEventStatus
 details:
@@ -212,7 +219,7 @@ returns:
 --- #--------------------------------------------------------------------------
 type: function
 desc: "The current host thread waits on an event from a device signal."
-name: $xHostWaitOnEvent
+name: HostWaitOnEvent
 analogue:
     - clWaitForEvents
     - cuEventSynchronize
@@ -229,7 +236,7 @@ returns:
 --- #--------------------------------------------------------------------------
 type: function
 desc: "Signals multiple events from host."
-name: $xHostSignalMultipleEvents
+name: HostSignalMultipleEvents
 details:
     - "The application may call this function from simultaneous threads."
     - "The implementation of this function should be lock-free."
@@ -247,7 +254,7 @@ returns:
 --- #--------------------------------------------------------------------------
 type: function
 desc: "The current host thread waits on multiple events from a device signal."
-name: $xHostWaitOnMultipleEvents
+name: HostWaitOnMultipleEvents
 analogue:
     - clWaitForEvents
 details:
@@ -267,7 +274,8 @@ returns:
 --- #--------------------------------------------------------------------------
 type: function
 desc: "Queries an event object's status."
-name: $xEventQueryStatus
+class: Event
+name: QueryStatus
 analogue:
     - "**clGetEventInfo**"
     - vkGetEventStatus
@@ -287,7 +295,8 @@ returns:
 --- #--------------------------------------------------------------------------
 type: function
 desc: "Queries the elapsed time between two device-signaled events."
-name: $xEventQueryElapsedTime
+class: Event
+name: QueryElapsedTime
 analogue:
     - "**cuEventElapsedTime**"
 details:
@@ -312,11 +321,12 @@ returns:
 --- #--------------------------------------------------------------------------
 type: function
 desc: "Reset an event back to not signaled state"
-name: $xCommandListEncodeEventReset
+class: CommandList
+name: EncodeEventReset
 analogue:
     - vkResetEvent
 details:
-    - "The application may call this function from simultaneous threads."
+    - "The application may **not** call this function from simultaneous threads."
     - "The implementation of this function should be lock-free."
 params:
     - type: $x_command_list_handle_t
@@ -332,7 +342,8 @@ returns:
 --- #--------------------------------------------------------------------------
 type: function
 desc: "Reset an event back to not signaled state"
-name: $xHostEventReset
+class: Event
+name: Reset
 analogue:
     - vkResetEvent
 details:

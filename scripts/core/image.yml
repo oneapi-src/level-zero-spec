@@ -97,7 +97,8 @@ members:
 --- #--------------------------------------------------------------------------
 type: function
 desc: "Creates a image object on the device."
-name: $xDeviceCreateImage
+class: Device
+name: CreateImage
 analogue:
     - clCreateImage
 details:
@@ -119,7 +120,8 @@ returns:
 --- #--------------------------------------------------------------------------
 type: function
 desc: "Deletes a image object."
-name: $xImageDestroy
+class: Image
+name: Destroy
 details:
     - "The application is responsible for making sure the GPU is not currently referencing the image before it is deleted"
     - "The implementation of this function will immediately free all Host and Device allocations associated with this image"

@@ -61,6 +61,8 @@ xe_result_t __xecall
     xe_init_flags_t flags                           ///< [in] initialization flags
     )
 {
+    // @todo: check_return(nullptr == get_driver(), XE_RESULT_ERROR_UNINITIALIZED);
+
     // Check parameters
 
     // @todo: insert <code> here

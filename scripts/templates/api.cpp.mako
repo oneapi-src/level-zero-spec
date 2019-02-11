@@ -53,7 +53,7 @@ from templates import helper as th
 %endfor
 /*@todo: __declspec(dllexport)*/
 ${x}_result_t __${x}call
-  ${th.subx(x, obj['name'])}(
+  ${th.make_func_name(x, obj)}(
     %for line in th.make_param_lines(x, obj):
     ${line}
     %endfor

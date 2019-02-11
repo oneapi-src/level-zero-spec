@@ -386,7 +386,8 @@ xe_result_t __xecall
 /// @brief Reset an event back to not signaled state
 /// 
 /// @details
-///     - The application may call this function from simultaneous threads.
+///     - The application may **not** call this function from simultaneous
+///       threads.
 ///     - The implementation of this function should be lock-free.
 /// 
 /// @remarks
@@ -424,7 +425,7 @@ xe_result_t __xecall
 ///     - ::XE_RESULT_ERROR_INVALID_PARAMETER
 ///         + invalid handle for hEvent
 xe_result_t __xecall
-  xeHostEventReset(
+  xeEventReset(
     xe_event_handle_t hEvent                        ///< [in] handle of the event
     );
 

@@ -4,7 +4,8 @@ desc: "Intel $Xx Driver APIs for Copies"
 --- #--------------------------------------------------------------------------
 type: function
 desc: "Copies host, device, or shared memory."
-name: $xCommandListEncodeMemoryCopy
+class: CommandList
+name: EncodeMemoryCopy
 details:
     - "The memory pointed to by both srcptr and dstptr must be accessible by
       the device on which the command list is created."
@@ -35,7 +36,8 @@ returns:
 --- #--------------------------------------------------------------------------
 type: function
 desc: "Copies a image."
-name: $xCommandListEncodeImageCopy
+class: CommandList
+name: EncodeImageCopy
 analogue:
     - "**clEnqueueCopyImage**"
 details:
@@ -69,7 +71,8 @@ members:
 --- #--------------------------------------------------------------------------
 type: function
 desc: "Copies a region of a image to another image."
-name: $xCommandListEncodeImageCopyRegion
+class: CommandList
+name: EncodeImageCopyRegion
 details:
     - "The application may **not** call this function from simultaneous threads with the same command list handle."
     - "The implementation of this function should be lock-free."
@@ -96,7 +99,8 @@ returns:
 --- #--------------------------------------------------------------------------
 type: function
 desc: "Copies from a image to device or shared memory."
-name: $xCommandListEncodeImageCopyToMemory
+class: CommandList
+name: EncodeImageCopyToMemory
 analogue:
     - clEnqueueReadImage
 details:
@@ -124,7 +128,8 @@ returns:
 --- #--------------------------------------------------------------------------
 type: function
 desc: "Copies to a image from device or shared memory."
-name: $xCommandListEncodeImageCopyFromMemory
+class: CommandList
+name: EncodeImageCopyFromMemory
 analogue:
     - clEnqueueWriteImage
 details:
@@ -153,7 +158,8 @@ returns:
 type: function
 desc: "Asynchronously prefetches shared memory to the device associated with
       the specified command list"
-name: $xCommandListEncodeMemoryPrefetch
+class: CommandList
+name: EncodeMemoryPrefetch
 details:
     - "This is a hint to improve performance only and is not required for correctness."
     - "The application may call this function from simultaneous threads."
@@ -206,7 +212,8 @@ etors:
 --- #--------------------------------------------------------------------------
 type: function
 desc: "Provides advice about the use of a shared memory range"
-name: $xCommandListEncodeMemAdvise
+class: CommandList
+name: EncodeMemAdvise
 analogue:
     - "**cudaMemAdvise**"
 details:

@@ -209,7 +209,7 @@ xe_result_t __xecall
 }
 
 ///////////////////////////////////////////////////////////////////////////////
-/// @brief Reset a semaphore back to the not signaled state, with value of 0.
+/// @brief Reset a semaphore back to the value of 0.
 /// 
 /// @details
 ///     - The application may call this function from simultaneous threads.

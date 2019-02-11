@@ -130,3 +130,12 @@ def make_return_lines(repl, obj):
         else:
             lines.append("    - %s"%subx(repl, item, True))
     return lines
+
+def make_func_name(repl, obj):
+    if 'class' in obj:
+        name = "$x%s%s"%(obj['class'], obj['name'])
+    else:
+        name = "$x%s"%obj['name']
+    return subx(repl, name)
+
+

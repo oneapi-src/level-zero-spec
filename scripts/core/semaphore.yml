@@ -33,7 +33,8 @@ members:
 --- #--------------------------------------------------------------------------
 type: function
 desc: "Creates an semaphore object on the device."
-name: $xDeviceCreateSemaphore
+class: Device
+name: CreateSemaphore
 analogue:
     - "**vkCreateSemaphore**"
 details:
@@ -59,7 +60,8 @@ returns:
 --- #--------------------------------------------------------------------------
 type: function
 desc: "Deletes an semaphore object."
-name: $xSemaphoreDestroy
+class: Semaphore
+name: Destroy
 analogue:
     - "**vkDestroySemaphore**"
 details:
@@ -76,7 +78,8 @@ returns:
 --- #--------------------------------------------------------------------------
 type: function
 desc: "Encodes an semaphore signal into a command list."
-name: $xCommandListEncodeSemaphoreSignal
+class: CommandList
+name: EncodeSemaphoreSignal
 details:
     - "The application may **not** call this function from simultaneous threads with the same command list handle."
     - "The implementation of this function should be lock-free."
@@ -115,7 +118,8 @@ etors:
 --- #--------------------------------------------------------------------------
 type: function
 desc: "Encodes an semaphore wait into a command list."
-name: $xCommandListEncodeSemaphoreWait
+class: CommandList
+name: EncodeSemaphoreWait
 details:
     - "The application may **not** call this function from simultaneous threads with the same command list handle."
     - "The implementation of this function should be lock-free."
@@ -139,7 +143,8 @@ returns:
 --- #--------------------------------------------------------------------------
 type: function
 desc: "Queries an semaphore object's value."
-name: $xSemaphoreQueryValue
+class: Semaphore
+name: QueryValue
 details:
     - "The application may call this function from simultaneous threads."
     - "The implementation of this function should be lock-free."
@@ -152,8 +157,9 @@ returns:
         - "invalid handle for hSemaphore"
 --- #--------------------------------------------------------------------------
 type: function
-desc: "Reset a semaphore back to the not signaled state, with value of 0."
-name: $xSemaphoreReset
+desc: "Reset a semaphore back to the value of 0."
+class: Semaphore
+name: Reset
 details:
     - "The application may call this function from simultaneous threads."
     - "The implementation of this function should be lock-free."

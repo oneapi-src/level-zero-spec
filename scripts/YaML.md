@@ -98,8 +98,9 @@ name: handle_t
 
 #### function
 * A function initiates the creation of a c/c++ function declaration in the source code
-* A function requires the following scalare fields: "desc" and "name"
+* A function requires the following scalar fields: "desc" and "name"
 * A function requires the following sequence of scalars: "params"
+* A function may take the following optional scalar fields: "class", "decl"
 * A function may take the following optional sequence of sequences: "details", "returns" and "analogue"
 * A param requires the following scalars: "type", "name" and "desc"
 * A detail may be a scalar or sequence

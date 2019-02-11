@@ -39,7 +39,8 @@ members:
 --- #--------------------------------------------------------------------------
 type: function
 desc: "Creates module object from an input IL or native binary."
-name: $xDeviceCreateModule
+class: Device
+name: CreateModule
 analogue:
     - "**cuModuleLoad**"
 details:
@@ -81,7 +82,8 @@ returns:
 --- #--------------------------------------------------------------------------
 type: function
 desc: "Destroys module"
-name: $xModuleDestroy
+class: Module
+name: Destroy
 analogue:
     - "**cuModuleUnload**"
 details:
@@ -98,9 +100,8 @@ returns:
 --- #--------------------------------------------------------------------------
 type: function
 desc: "Destroys module build log object"
-name: $xModuleBuildLogDestroy
-analogue:
-    - ""
+class: Module
+name: BuildLogDestroy
 details:
     - "The application is responsible for making sure the GPU is not currently referencing the event before it is deleted"
     - "The implementation of this function will immediately free all Host and Device allocations associated with this object"
@@ -116,7 +117,8 @@ returns:
 --- #--------------------------------------------------------------------------
 type: function
 desc: "Retrieves text string for build log."
-name: $xModuleBuildLogGetString
+class: Module
+name: BuildLogGetString
 details:
     - "This function may be called from simultaneous threads."
     - "The implementation of this function should be lock-free."
@@ -140,7 +142,8 @@ returns:
 --- #--------------------------------------------------------------------------
 type: function
 desc: "Retrieve native binary from Module."
-name: $xModuleGetNativeBinary
+class: Module
+name: GetNativeBinary
 details:
     - "This function may be called from simultaneous threads."
     - "The implementation of this function should be lock-free."
@@ -197,7 +200,8 @@ members:
 --- #--------------------------------------------------------------------------
 type: function
 desc: "Create Function object from Module by name"
-name: $xModuleCreateFunction
+class: Module
+name: CreateFunction
 analogue:
     - "**cuModuleGetFunction**"
 details:
@@ -223,7 +227,8 @@ returns:
 --- #--------------------------------------------------------------------------
 type: function
 desc: "Destroys Function object"
-name: $xFunctionDestroy
+class: Function
+name: Destroy
 details:
     - "The application is responsible for making sure the GPU is not currently referencing the event before it is deleted"
     - "The implementation of this function will immediately free all Host and Device allocations associated with this function"
@@ -238,7 +243,8 @@ returns:
 --- #--------------------------------------------------------------------------
 type: function
 desc: "Create Function arguments needed to pass arguments to a function."
-name: $xFunctionCreateFunctionArgs
+class: Function
+name: CreateFunctionArgs
 details:
     - "This function may be called from simultaneous threads."
     - "The implementation of this function should be lock-free."
@@ -259,7 +265,8 @@ returns:
 --- #--------------------------------------------------------------------------
 type: function
 desc: "Destroys Function arguments object"
-name: $xFunctionArgsDestroy
+class: FunctionArgs
+name: Destroy
 details:
     - "The application is responsible for making sure the GPU is not currently referencing the event before it is deleted"
     - "The implementation of this function will immediately free all Host and Device allocations associated with this function args"
@@ -274,7 +281,8 @@ returns:
 --- #--------------------------------------------------------------------------
 type: function
 desc: "Set function arguments within arguments buffer."
-name: $xFunctionArgsSetValue
+class: FunctionArgs
+name: SetValue
 analogue:
     - "**cuCtxCreate**"
     - "cuCtxGetCurrent"
@@ -317,7 +325,8 @@ etors:
 --- #--------------------------------------------------------------------------
 type: function
 desc: "Sets a function argument attribute"
-name: $xFunctionArgsSetAttribute
+class: FunctionArgs
+name: SetAttribute
 analogue:
     - "**clSetKernelExecInfo**"
 details:
@@ -361,7 +370,8 @@ etors:
 --- #--------------------------------------------------------------------------
 type: function
 desc: "Query a function attribute."
-name: $xFunctionQueryAttribute
+class: Function
+name: QueryAttribute
 analogue:
     - "**cuFuncGetAttribute**"
 details:
@@ -385,7 +395,8 @@ returns:
 --- #--------------------------------------------------------------------------
 type: function
 desc: "Dispatch command over one or more work groups."
-name: $xCommandListEncodeDispatchFunction
+class: CommandList
+name: EncodeDispatchFunction
 analogue:
     - "**cuLaunchKernel**"
 details:
@@ -456,7 +467,8 @@ members:
 --- #--------------------------------------------------------------------------
 type: function
 desc: "Dispatch command over one or more work groups using indirect dispatch arguments."
-name: $xCommandListEncodeDispatchFunctionIndirect
+class: CommandList
+name: EncodeDispatchFunctionIndirect
 analogue:
     - "**cuLaunchKernel**"
 details:
@@ -489,9 +501,8 @@ returns:
 --- #--------------------------------------------------------------------------
 type: function
 desc: "Query a suggested group size for function. If the function has an embedded group size then this will be returned. Otherwise, one will be suggested."
-name: $xFunctionSuggestGroupSize
-analogue:
-    - ""
+class: Function
+name: SuggestGroupSize
 details:
     - "This function may be called from simultaneous threads."
     - "The implementation of this function should be lock-free."
