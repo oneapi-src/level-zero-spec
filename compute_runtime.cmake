@@ -31,25 +31,101 @@ set(COMPUTE_RUNTIME_DEFINITIONS
     ${COMPUTE_RUNTIME_DEFINITIONS}
     CL_TARGET_OPENCL_VERSION=210
     GMM_OCL
+    __INTEL_EMBARGO__
 )
 
 configure_file(${COMPUTE_RUNTIME_DIR}/config.h.in ${CMAKE_BINARY_DIR}/config.h)
 
-# These need to be added to a project to enable platform support
-set(COMPUTE_RUNTIME_HW_ENABLE
-    # Gen8 support
-    ${COMPUTE_RUNTIME_DIR}/runtime/gen8/enable_gen8.cpp
-    ${COMPUTE_RUNTIME_DIR}/runtime/gen8/enable_family_full_gen8.cpp
-    ${COMPUTE_RUNTIME_DIR}/runtime/gen8/enable_hw_info_config_gen8.cpp
-    # Gen9 support
-    ${COMPUTE_RUNTIME_DIR}/runtime/gen9/enable_gen9.cpp
-    ${COMPUTE_RUNTIME_DIR}/runtime/gen9/enable_family_full_gen9.cpp
-    ${COMPUTE_RUNTIME_DIR}/runtime/gen9/enable_hw_info_config_gen9.cpp
-    # Gen10 support
-    ${COMPUTE_RUNTIME_DIR}/runtime/gen10/enable_gen10.cpp
-    ${COMPUTE_RUNTIME_DIR}/runtime/gen10/enable_family_full_gen10.cpp
-    ${COMPUTE_RUNTIME_DIR}/runtime/gen10/enable_hw_info_config_gen10.cpp
-)
+# These need to be added to a project to enable platform support in ULTs
+if(SUPPORT_GEN8)
+    set(COMPUTE_RUNTIME_HW_ENABLE
+        ${COMPUTE_RUNTIME_HW_ENABLE}
+        ${COMPUTE_RUNTIME_DIR}/runtime/gen8/enable_gen8.cpp
+        ${COMPUTE_RUNTIME_DIR}/runtime/gen8/enable_family_full_gen8.cpp
+        ${COMPUTE_RUNTIME_DIR}/runtime/gen8/enable_hw_info_config_gen8.cpp
+    )
+
+    set(COMPUTE_RUNTIME_HW_ENABLE_ULT
+        ${COMPUTE_RUNTIME_HW_ENABLE_ULT}
+        ${COMPUTE_RUNTIME_DIR}/unit_tests/libult/gen8.cpp
+        ${COMPUTE_RUNTIME_DIR}/unit_tests/gen8/cmd_parse_gen8.cpp
+    )
+endif()
+
+if(SUPPORT_GEN9)
+    set(COMPUTE_RUNTIME_HW_ENABLE
+        ${COMPUTE_RUNTIME_HW_ENABLE}
+        ${COMPUTE_RUNTIME_DIR}/runtime/gen9/enable_gen9.cpp
+        ${COMPUTE_RUNTIME_DIR}/runtime/gen9/enable_family_full_gen9.cpp
+        ${COMPUTE_RUNTIME_DIR}/runtime/gen9/enable_hw_info_config_gen9.cpp
+    )
+
+    set(COMPUTE_RUNTIME_HW_ENABLE_ULT
+        ${COMPUTE_RUNTIME_HW_ENABLE_ULT}
+        ${COMPUTE_RUNTIME_DIR}/unit_tests/libult/gen9.cpp
+        ${COMPUTE_RUNTIME_DIR}/unit_tests/gen9/cmd_parse_gen9.cpp
+    )
+endif()
+
+if(SUPPORT_GEN10)
+    set(COMPUTE_RUNTIME_HW_ENABLE
+        ${COMPUTE_RUNTIME_HW_ENABLE}
+        ${COMPUTE_RUNTIME_DIR}/runtime/gen10/enable_gen10.cpp
+        ${COMPUTE_RUNTIME_DIR}/runtime/gen10/enable_family_full_gen10.cpp
+        ${COMPUTE_RUNTIME_DIR}/runtime/gen10/enable_hw_info_config_gen10.cpp
+    )
+
+    set(COMPUTE_RUNTIME_HW_ENABLE_ULT
+        ${COMPUTE_RUNTIME_HW_ENABLE_ULT}
+        ${COMPUTE_RUNTIME_DIR}/unit_tests/libult/gen10.cpp
+        ${COMPUTE_RUNTIME_DIR}/unit_tests/gen10/cmd_parse_gen10.cpp
+    )
+endif()
+
+if(SUPPORT_GEN11)
+    set(COMPUTE_RUNTIME_HW_ENABLE
+        ${COMPUTE_RUNTIME_HW_ENABLE}
+        ${COMPUTE_RUNTIME_DIR}/runtime/gen11/enable_gen11.cpp
+        ${COMPUTE_RUNTIME_DIR}/runtime/gen11/enable_family_full_gen11.cpp
+        ${COMPUTE_RUNTIME_DIR}/runtime/gen11/enable_hw_info_config_gen11.cpp
+    )
+
+    set(COMPUTE_RUNTIME_HW_ENABLE_ULT
+        ${COMPUTE_RUNTIME_HW_ENABLE_ULT}
+        ${COMPUTE_RUNTIME_DIR}/unit_tests/libult/gen11.cpp
+        ${COMPUTE_RUNTIME_DIR}/unit_tests/gen11/cmd_parse_gen11.cpp
+    )
+endif()
+
+if(SUPPORT_GEN12LP)
+    set(COMPUTE_RUNTIME_HW_ENABLE
+        ${COMPUTE_RUNTIME_HW_ENABLE}
+        ${COMPUTE_RUNTIME_DIR}/runtime/gen12lp/enable_gen12lp.cpp
+        ${COMPUTE_RUNTIME_DIR}/runtime/gen12lp/enable_family_full_gen12lp.cpp
+        ${COMPUTE_RUNTIME_DIR}/runtime/gen12lp/enable_hw_info_config_gen12lp.cpp
+    )
+
+    set(COMPUTE_RUNTIME_HW_ENABLE_ULT
+        ${COMPUTE_RUNTIME_HW_ENABLE_ULT}
+        ${COMPUTE_RUNTIME_DIR}/unit_tests/libult/gen12lp.cpp
+        ${COMPUTE_RUNTIME_DIR}/unit_tests/gen12lp/cmd_parse_gen12lp.cpp
+    )
+endif()
+
+if(SUPPORT_GEN12HP)
+    set(COMPUTE_RUNTIME_HW_ENABLE
+        ${COMPUTE_RUNTIME_HW_ENABLE}
+        ${COMPUTE_RUNTIME_DIR}/runtime/gen12hp/enable_gen12hp.cpp
+        ${COMPUTE_RUNTIME_DIR}/runtime/gen12hp/enable_family_full_gen12hp.cpp
+        ${COMPUTE_RUNTIME_DIR}/runtime/gen12hp/enable_hw_info_config_gen12hp.cpp
+    )
+
+    set(COMPUTE_RUNTIME_HW_ENABLE_ULT
+        ${COMPUTE_RUNTIME_HW_ENABLE_ULT}
+        ${COMPUTE_RUNTIME_DIR}/unit_tests/libult/gen12hp.cpp
+        ${COMPUTE_RUNTIME_DIR}/unit_tests/gen12hp/cmd_parse_gen12hp.cpp
+    )
+endif()
 
 # Create a library that has the missing ingredients to link
 add_library(compute_runtime_lib_full
@@ -134,6 +210,7 @@ set(COMPUTE_RUNTIME_MOCKABLE_DEFINITIONS
     CL_USE_DEPRECATED_OPENCL_1_1_APIS
     CL_USE_DEPRECATED_OPENCL_1_2_APIS
     CL_USE_DEPRECATED_OPENCL_2_0_APIS
+    __INTEL_EMBARGO__
 )
 
 if(WIN32)
@@ -182,14 +259,6 @@ add_library(compute_runtime_mockable_extra
 )
 
 # These need to be added to a project to enable platform support in ULTs
-set(COMPUTE_RUNTIME_HW_ENABLE_ULT
-    ${COMPUTE_RUNTIME_DIR}/unit_tests/libult/gen8.cpp
-    ${COMPUTE_RUNTIME_DIR}/unit_tests/libult/gen9.cpp
-    ${COMPUTE_RUNTIME_DIR}/unit_tests/libult/gen10.cpp
-    ${COMPUTE_RUNTIME_DIR}/unit_tests/gen8/cmd_parse_gen8.cpp
-    ${COMPUTE_RUNTIME_DIR}/unit_tests/gen9/cmd_parse_gen9.cpp
-    ${COMPUTE_RUNTIME_DIR}/unit_tests/gen10/cmd_parse_gen10.cpp
-)
 
 #Additional includes for ULT builds
 target_include_directories(compute_runtime_mockable_extra
@@ -211,6 +280,7 @@ target_link_libraries(compute_runtime_mockable_extra
 if(WIN32)
     target_sources(compute_runtime_mockable_extra
         PRIVATE
+            ${COMPUTE_RUNTIME_DIR}/runtime/dll/windows/environment_variables.cpp
             ${COMPUTE_RUNTIME_DIR}/unit_tests/mocks/mock_gmm_memory_base.cpp
             ${COMPUTE_RUNTIME_DIR}/unit_tests/mocks/mock_wddm.cpp
             ${COMPUTE_RUNTIME_DIR}/unit_tests/os_interface/windows/options.cpp

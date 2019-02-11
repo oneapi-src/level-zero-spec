@@ -1,7 +1,7 @@
 components:
   googletest:
     branch: master
-    clean_on_sync: true
+    clean_on_sync: false
     dest_dir: third_party/googletest
     repository: https://github.com/google/googletest.git
     revision: 0599a7b8410dc5cfdb477900b280475ae775d7f9
@@ -17,7 +17,7 @@ components:
     asset_name: wdk
     asset_path: gfx-sandbox-igk/neo/build
     asset_version: 36a2a0d6a9da5e506439ffcb8dcf49d3e8f0e175-1185
-    clean_on_sync: true
+    clean_on_sync: false
     dest_dir: third_party/wdk
     root_url: http://gfx-assets.igk.intel.com/artifactory
     type: artifactory

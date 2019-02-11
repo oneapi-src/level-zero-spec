@@ -11,21 +11,15 @@ if(COMPUTE_RUNTIME_SUPPORT)
             environment.cpp
             cmdlist.cpp
             cmdlist.h
-            cmdlist_bdw.cpp
             cmdlist_hw.h
             cmdlist_hw.inl
             cmdlist_imp.cpp
             cmdlist_imp.h
-            cmdlist_kbl.cpp
-            cmdlist_skl.cpp
             cmdqueue.cpp
             cmdqueue.h
-            cmdqueue_bdw.cpp
             cmdqueue_hw.h
             cmdqueue_hw.inl
             cmdqueue_imp.h
-            cmdqueue_kbl.cpp
-            cmdqueue_skl.cpp
             device.cpp
             device.h
             driver.cpp
@@ -63,6 +57,57 @@ if(COMPUTE_RUNTIME_SUPPORT)
             ${COMPUTE_RUNTIME_HW_ENABLE}
             ${COMPUTE_RUNTIME_HW_ENABLE_ULT}
     )
+
+    if(SUPPORT_GEN8)
+        target_sources(${TARGET_NAME}
+            PRIVATE
+                cmdlist_bdw.cpp
+                cmdqueue_bdw.cpp
+        )
+    endif()
+
+    if(SUPPORT_GEN9)
+        target_sources(${TARGET_NAME}
+            PRIVATE
+                cmdlist_kbl.cpp
+                cmdlist_skl.cpp
+                cmdqueue_kbl.cpp
+                cmdqueue_skl.cpp
+        )
+    endif()
+
+    #if(SUPPORT_GEN10)
+    if(FALSE)
+        target_sources(${TARGET_NAME}
+            PRIVATE
+                cmdlist_cnl.cpp
+                cmdqueue_cnl.cpp
+        )
+    endif()
+
+    if(SUPPORT_GEN11)
+        target_sources(${TARGET_NAME}
+            PRIVATE
+                cmdlist_icllp.cpp
+                cmdqueue_icllp.cpp
+        )
+    endif()
+
+    if(SUPPORT_GEN12LP)
+        target_sources(${TARGET_NAME}
+            PRIVATE
+                cmdlist_tgllp.cpp
+                cmdqueue_tgllp.cpp
+        )
+    endif()
+
+    if(SUPPORT_GEN12HP)
+        target_sources(${TARGET_NAME}
+            PRIVATE
+                cmdlist_ats.cpp
+                cmdqueue_ats.cpp
+        )
+    endif()
 
     target_link_libraries(${TARGET_NAME} 
         compute_runtime_mockable
