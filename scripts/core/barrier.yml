@@ -4,7 +4,7 @@ desc: "Intel $Xx Driver APIs for Barrier"
 --- #--------------------------------------------------------------------------
 type: function
 desc: "Encodes an execution barrier into a command list."
-class: CommandList
+class: $xCommandList
 name: EncodeExecutionBarrier
 analogue:
     - "**vkCmdPipelineBarrier**"

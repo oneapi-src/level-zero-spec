@@ -4,7 +4,7 @@ desc: "Intel $Xx Driver APIs for Copies"
 --- #--------------------------------------------------------------------------
 type: function
 desc: "Copies host, device, or shared memory."
-class: CommandList
+class: $xCommandList
 name: EncodeMemoryCopy
 details:
     - "The memory pointed to by both srcptr and dstptr must be accessible by
@@ -36,7 +36,7 @@ returns:
 --- #--------------------------------------------------------------------------
 type: function
 desc: "Copies a image."
-class: CommandList
+class: $xCommandList
 name: EncodeImageCopy
 analogue:
     - "**clEnqueueCopyImage**"
@@ -71,7 +71,7 @@ members:
 --- #--------------------------------------------------------------------------
 type: function
 desc: "Copies a region of a image to another image."
-class: CommandList
+class: $xCommandList
 name: EncodeImageCopyRegion
 details:
     - "The application may **not** call this function from simultaneous threads with the same command list handle."
@@ -99,7 +99,7 @@ returns:
 --- #--------------------------------------------------------------------------
 type: function
 desc: "Copies from a image to device or shared memory."
-class: CommandList
+class: $xCommandList
 name: EncodeImageCopyToMemory
 analogue:
     - clEnqueueReadImage
@@ -128,7 +128,7 @@ returns:
 --- #--------------------------------------------------------------------------
 type: function
 desc: "Copies to a image from device or shared memory."
-class: CommandList
+class: $xCommandList
 name: EncodeImageCopyFromMemory
 analogue:
     - clEnqueueWriteImage
@@ -158,7 +158,7 @@ returns:
 type: function
 desc: "Asynchronously prefetches shared memory to the device associated with
       the specified command list"
-class: CommandList
+class: $xCommandList
 name: EncodeMemoryPrefetch
 details:
     - "This is a hint to improve performance only and is not required for correctness."
@@ -212,7 +212,7 @@ etors:
 --- #--------------------------------------------------------------------------
 type: function
 desc: "Provides advice about the use of a shared memory range"
-class: CommandList
+class: $xCommandList
 name: EncodeMemAdvise
 analogue:
     - "**cudaMemAdvise**"

@@ -72,7 +72,7 @@ members:
 --- #--------------------------------------------------------------------------
 type: function
 desc: "Creates a command queue on the device."
-class: Device
+class: $xDevice
 name: CreateCommandQueue
 analogue:
     - "**clCreateCommandQueue**"
@@ -101,7 +101,7 @@ returns:
 --- #--------------------------------------------------------------------------
 type: function
 desc: "Destroys a command queue."
-class: CommandQueue
+class: $xCommandQueue
 name: Destroy
 analogue:
     - "**clReleaseCommandQueue**"
@@ -120,7 +120,7 @@ returns:
 --- #--------------------------------------------------------------------------
 type: function
 desc: "Enqueues a command list into a command queue for immediate execution."
-class: CommandQueue
+class: $xCommandQueue
 name: EnqueueCommandLists
 analogue:
     - vkQueueSubmit
@@ -151,7 +151,7 @@ returns:
 --- #--------------------------------------------------------------------------
 type: function
 desc: "Synchronizes a command queue by waiting on the host."
-class: CommandQueue
+class: $xCommandQueue
 name: Synchronize
 details:
     - "The application may call this function from simultaneous threads."

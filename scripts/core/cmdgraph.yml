@@ -38,7 +38,7 @@ members:
 --- #--------------------------------------------------------------------------
 type: function
 desc: "Creates a command graph on the device for submitting commands to any command queue."
-class: Device
+class: $xDevice
 name: CreateCommandGraph
 details:
     - "This function may be called from simultaneous threads."
@@ -63,7 +63,7 @@ returns:
 --- #--------------------------------------------------------------------------
 type: function
 desc: "Destroys a command graph."
-class: CommandGraph
+class: $xCommandGraph
 name: Destroy
 details:
     - "The implementation of this function will immediately free all Host allocations associated with this command graph."
@@ -78,7 +78,7 @@ returns:
 --- #--------------------------------------------------------------------------
 type: function
 desc: "Adds an edge between two command lists to the command graph."
-class: CommandGraph
+class: $xCommandGraph
 name: AddEdge
 details:
     - "The command graph maintains a const-reference to an existing command list"
@@ -102,7 +102,7 @@ returns:
 --- #--------------------------------------------------------------------------
 type: function
 desc: "Removes an edge between two command lists to the command graph."
-class: CommandGraph
+class: $xCommandGraph
 name: RemoveEdge
 details:
     - "The application may **not** call this function from simultaneous threads with the same command graph handle."
@@ -124,7 +124,7 @@ returns:
 --- #--------------------------------------------------------------------------
 type: function
 desc: "Closes a command graph; ready to be enqueued into a command queue."
-class: CommandGraph
+class: $xCommandGraph
 name: Close
 details:
     - "The command graph will optimize the execution order of the command lists."
@@ -141,7 +141,7 @@ returns:
 --- #--------------------------------------------------------------------------
 type: function
 desc: "Reset a command graph to initial (empty) state; ready for adding command lists."
-class: CommandGraph
+class: $xCommandGraph
 name: Reset
 details:
     - "The application may **not** call this function from simultaneous threads with the same command graph handle."
@@ -156,7 +156,7 @@ returns:
 --- #--------------------------------------------------------------------------
 type: function
 desc: "Returns the number of compute command list batches to be enqueued."
-class: CommandGraph
+class: $xCommandGraph
 name: GetComputeBatchCount
 details:
     - "The application may call this function from simultaneous threads."
@@ -176,7 +176,7 @@ returns:
 --- #--------------------------------------------------------------------------
 type: function
 desc: "Returns the list of compute command lists in optimal execution order."
-class: CommandGraph
+class: $xCommandGraph
 name: GetComputeCommandListBatch
 details:
     - "The application may call this function from simultaneous threads."
@@ -208,7 +208,7 @@ returns:
 --- #--------------------------------------------------------------------------
 type: function
 desc: "Returns the number of copy-only command list batches to be enqueued."
-class: CommandGraph
+class: $xCommandGraph
 name: GetCopyBatchCount
 details:
     - "The application may call this function from simultaneous threads."
@@ -228,7 +228,7 @@ returns:
 --- #--------------------------------------------------------------------------
 type: function
 desc: "Returns the list of copy-only command lists in optimal execution order."
-class: CommandGraph
+class: $xCommandGraph
 name: GetCopyCommandListBatch
 details:
     - "The application may call this function from simultaneous threads."

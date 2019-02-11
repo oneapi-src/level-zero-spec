@@ -4,7 +4,7 @@ desc: "Intel $Xx Driver APIs for Memory"
 --- #--------------------------------------------------------------------------
 type: function
 desc: "Makes memory resident for the device."
-class: Device
+class: $xDevice
 name: MakeMemoryResident
 details:
     - "If the application does not properly manage residency then the device may experience unrecoverable page-faults."
@@ -26,7 +26,7 @@ returns:
 --- #--------------------------------------------------------------------------
 type: function
 desc: "Allows memory to be evicted from the device."
-class: Device
+class: $xDevice
 name: EvictMemory
 details:
     - "The application is responsible for making sure the GPU is not currently referencing the memory before it is evicted"
@@ -49,7 +49,7 @@ returns:
 --- #--------------------------------------------------------------------------
 type: function
 desc: "Makes image resident for the device."
-class: Device
+class: $xDevice
 name: MakeImageResident
 details:
     - "If the application does not properly manage residency then the device may experience unrecoverable page-faults."
@@ -68,7 +68,7 @@ returns:
 --- #--------------------------------------------------------------------------
 type: function
 desc: "Allows image to be evicted from the device."
-class: Device
+class: $xDevice
 name: EvictImage
 details:
     - "The application is responsible for making sure the GPU is not currently referencing the memory before it is evicted"

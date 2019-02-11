@@ -28,7 +28,7 @@ members:
 --- #--------------------------------------------------------------------------
 type: function
 desc: "Creates a fence object on the device's command queue."
-class: CommandQueue
+class: $xCommandQueue
 name: CreateFence
 analogue:
     - "**vkCreateFence**"
@@ -55,7 +55,7 @@ returns:
 --- #--------------------------------------------------------------------------
 type: function
 desc: "Deletes a fence object."
-class: Fence
+class: $xFence
 name: Destroy
 details:
     - "The application is responsible for making sure the GPU is not currently referencing the fence before it is deleted"
@@ -74,6 +74,7 @@ returns:
 --- #--------------------------------------------------------------------------
 type: function
 desc: "The current host thread waits on a fence to be signaled."
+class: $x
 name: HostWaitOnFence
 analogue:
     - "**vkWaitForFences**"
@@ -91,6 +92,7 @@ returns:
 --- #--------------------------------------------------------------------------
 type: function
 desc: "The current host thread waits on a multiple fences to be signaled."
+class: $x
 name: HostWaitOnMultipleFences
 analogue:
     - "**vkWaitForFences**"
@@ -112,7 +114,7 @@ returns:
 --- #--------------------------------------------------------------------------
 type: function
 desc: "Queries a fence object's status."
-class: Fence
+class: $xFence
 name: QueryStatus
 analogue:
     - "**vkGetFenceStatus**"
@@ -132,7 +134,7 @@ returns:
 --- #--------------------------------------------------------------------------
 type: function
 desc: "Queries the elapsed time between two signaled fences."
-class: Fence
+class: $xFence
 name: QueryElapsedTime
 details:
     - "The application may call this function from simultaneous threads."
@@ -156,7 +158,7 @@ returns:
 --- #--------------------------------------------------------------------------
 type: function
 desc: "Reset a fence back to the not signaled state."
-class: Fence
+class: $xFence
 name: Reset
 analogue:
     - "**vkResetFences**"

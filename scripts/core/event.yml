@@ -37,7 +37,7 @@ members:
 --- #--------------------------------------------------------------------------
 type: function
 desc: "Creates an event object on the device."
-class: Device
+class: $xDevice
 name: CreateEvent
 analogue:
     - "**clCreateUserEvent**"
@@ -66,7 +66,7 @@ returns:
 --- #--------------------------------------------------------------------------
 type: function
 desc: "Creates an event object on the device from existing memory."
-class: Device
+class: $xDevice
 name: PlaceEvent
 details:
     - "This function is intended for sharing fences with peer devices or across processes"
@@ -95,7 +95,7 @@ returns:
 --- #--------------------------------------------------------------------------
 type: function
 desc: "Deletes an event object."
-class: Event
+class: $xEvent
 name: Destroy
 details:
     - "The application is responsible for making sure the GPU is not currently referencing the event before it is deleted"
@@ -115,7 +115,7 @@ returns:
 --- #--------------------------------------------------------------------------
 type: function
 desc: "Encodes a signal of the event from the device into a command list."
-class: CommandList
+class: $xCommandList
 name: EncodeSignalEvent
 analogue:
     - "**clSetUserEventStatus**"
@@ -138,7 +138,7 @@ returns:
 --- #--------------------------------------------------------------------------
 type: function
 desc: "Encodes a wait on event from a host signal into a command list."
-class: CommandList
+class: $xCommandList
 name: EncodeWaitOnEvent
 details:
     - "The application may **not** call this function from simultaneous threads with the same command list handle."
@@ -157,7 +157,7 @@ returns:
 --- #--------------------------------------------------------------------------
 type: function
 desc: "Encodes signals of multiple event from the device into a command list."
-class: CommandList
+class: $xCommandList
 name: EncodeSignalMultipleEvents
 details:
     - "The application may **not** call this function from simultaneous threads with the same command list handle."
@@ -180,7 +180,7 @@ returns:
 --- #--------------------------------------------------------------------------
 type: function
 desc: "Encodes waits on multiple event from a host signal into a command list."
-class: CommandList
+class: $xCommandList
 name: EncodeWaitOnMultipleEvents
 details:
     - "The application may **not** call this function from simultaneous threads with the same command list handle."
@@ -203,6 +203,7 @@ returns:
 --- #--------------------------------------------------------------------------
 type: function
 desc: "Signals a event from host."
+class: $x
 name: HostSignalEvent
 analogue:
     - clSetUserEventStatus
@@ -219,6 +220,7 @@ returns:
 --- #--------------------------------------------------------------------------
 type: function
 desc: "The current host thread waits on an event from a device signal."
+class: $x
 name: HostWaitOnEvent
 analogue:
     - clWaitForEvents
@@ -236,6 +238,7 @@ returns:
 --- #--------------------------------------------------------------------------
 type: function
 desc: "Signals multiple events from host."
+class: $x
 name: HostSignalMultipleEvents
 details:
     - "The application may call this function from simultaneous threads."
@@ -254,6 +257,7 @@ returns:
 --- #--------------------------------------------------------------------------
 type: function
 desc: "The current host thread waits on multiple events from a device signal."
+class: $x
 name: HostWaitOnMultipleEvents
 analogue:
     - clWaitForEvents
@@ -274,7 +278,7 @@ returns:
 --- #--------------------------------------------------------------------------
 type: function
 desc: "Queries an event object's status."
-class: Event
+class: $xEvent
 name: QueryStatus
 analogue:
     - "**clGetEventInfo**"
@@ -295,7 +299,7 @@ returns:
 --- #--------------------------------------------------------------------------
 type: function
 desc: "Queries the elapsed time between two device-signaled events."
-class: Event
+class: $xEvent
 name: QueryElapsedTime
 analogue:
     - "**cuEventElapsedTime**"
@@ -321,7 +325,7 @@ returns:
 --- #--------------------------------------------------------------------------
 type: function
 desc: "Reset an event back to not signaled state"
-class: CommandList
+class: $xCommandList
 name: EncodeEventReset
 analogue:
     - vkResetEvent
@@ -342,7 +346,7 @@ returns:
 --- #--------------------------------------------------------------------------
 type: function
 desc: "Reset an event back to not signaled state"
-class: Event
+class: $xEvent
 name: Reset
 analogue:
     - vkResetEvent

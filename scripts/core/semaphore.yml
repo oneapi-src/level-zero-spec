@@ -33,7 +33,7 @@ members:
 --- #--------------------------------------------------------------------------
 type: function
 desc: "Creates an semaphore object on the device."
-class: Device
+class: $xDevice
 name: CreateSemaphore
 analogue:
     - "**vkCreateSemaphore**"
@@ -60,7 +60,7 @@ returns:
 --- #--------------------------------------------------------------------------
 type: function
 desc: "Deletes an semaphore object."
-class: Semaphore
+class: $xSemaphore
 name: Destroy
 analogue:
     - "**vkDestroySemaphore**"
@@ -78,7 +78,7 @@ returns:
 --- #--------------------------------------------------------------------------
 type: function
 desc: "Encodes an semaphore signal into a command list."
-class: CommandList
+class: $xCommandList
 name: EncodeSemaphoreSignal
 details:
     - "The application may **not** call this function from simultaneous threads with the same command list handle."
@@ -118,7 +118,7 @@ etors:
 --- #--------------------------------------------------------------------------
 type: function
 desc: "Encodes an semaphore wait into a command list."
-class: CommandList
+class: $xCommandList
 name: EncodeSemaphoreWait
 details:
     - "The application may **not** call this function from simultaneous threads with the same command list handle."
@@ -143,7 +143,7 @@ returns:
 --- #--------------------------------------------------------------------------
 type: function
 desc: "Queries an semaphore object's value."
-class: Semaphore
+class: $xSemaphore
 name: QueryValue
 details:
     - "The application may call this function from simultaneous threads."
@@ -158,7 +158,7 @@ returns:
 --- #--------------------------------------------------------------------------
 type: function
 desc: "Reset a semaphore back to the value of 0."
-class: Semaphore
+class: $xSemaphore
 name: Reset
 details:
     - "The application may call this function from simultaneous threads."

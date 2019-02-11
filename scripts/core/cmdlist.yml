@@ -40,7 +40,7 @@ members:
 --- #--------------------------------------------------------------------------
 type: function
 desc: "Creates a command list on the device for submitting commands to any command queue."
-class: Device
+class: $xDevice
 name: CreateCommandList
 details:
     - "The command list is created in the 'open' state."
@@ -66,7 +66,7 @@ returns:
 --- #--------------------------------------------------------------------------
 type: function
 desc: "Copies a command list on the device for submitting commands to any command queue."
-class: Device
+class: $xDevice
 name: CopyCommandList
 details:
     - "The command list to be copied must be closed."
@@ -95,7 +95,7 @@ returns:
 --- #--------------------------------------------------------------------------
 type: function
 desc: "Destroys a command list."
-class: CommandList
+class: $xCommandList
 name: Destroy
 details:
     - "The application is responsible for making sure the GPU is not currently referencing the command list before it is deleted"
@@ -111,7 +111,7 @@ returns:
 --- #--------------------------------------------------------------------------
 type: function
 desc: "Closes a command list; ready to be enqueued into a command queue."
-class: CommandList
+class: $xCommandList
 name: Close
 details:
     - "The application may **not** call this function from simultaneous threads with the same command list handle."
@@ -126,7 +126,7 @@ returns:
 --- #--------------------------------------------------------------------------
 type: function
 desc: "Reset a command list to initial (empty) state; ready for encoding commands."
-class: CommandList
+class: $xCommandList
 name: Reset
 details:
     - "The application is responsible for making sure the GPU is not currently referencing the command list before it is reset"
@@ -149,7 +149,7 @@ etors:
 --- #--------------------------------------------------------------------------
 type: function
 desc: "Sets a command list's parameter."
-class: CommandList
+class: $xCommandList
 name: SetParameter
 analogue:
     - cuCtxSetCacheConfig
@@ -176,7 +176,7 @@ returns:
 --- #--------------------------------------------------------------------------
 type: function
 desc: "Retrieves a command list's parameter."
-class: CommandList
+class: $xCommandList
 name: GetParameter
 analogue:
     - cuCtxGetCacheConfig
@@ -204,7 +204,7 @@ returns:
 --- #--------------------------------------------------------------------------
 type: function
 desc: "Resets all command list parameters to default state."
-class: CommandList
+class: $xCommandList
 name: ResetParameters
 details:
     - "The application may **not** call this function from simultaneous threads with the same command list handle."
@@ -219,7 +219,7 @@ returns:
 --- #--------------------------------------------------------------------------
 type: function
 desc: "Encode a command list into another command list."
-class: CommandList
+class: $xCommandList
 name: EncodeCommandLists
 details:
     - "The application may **not** call this function from simultaneous threads with the same command list handle."

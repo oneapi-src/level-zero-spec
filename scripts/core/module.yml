@@ -39,7 +39,7 @@ members:
 --- #--------------------------------------------------------------------------
 type: function
 desc: "Creates module object from an input IL or native binary."
-class: Device
+class: $xDevice
 name: CreateModule
 analogue:
     - "**cuModuleLoad**"
@@ -82,7 +82,7 @@ returns:
 --- #--------------------------------------------------------------------------
 type: function
 desc: "Destroys module"
-class: Module
+class: $xModule
 name: Destroy
 analogue:
     - "**cuModuleUnload**"
@@ -100,7 +100,7 @@ returns:
 --- #--------------------------------------------------------------------------
 type: function
 desc: "Destroys module build log object"
-class: Module
+class: $xModule
 name: BuildLogDestroy
 details:
     - "The application is responsible for making sure the GPU is not currently referencing the event before it is deleted"
@@ -117,7 +117,7 @@ returns:
 --- #--------------------------------------------------------------------------
 type: function
 desc: "Retrieves text string for build log."
-class: Module
+class: $xModule
 name: BuildLogGetString
 details:
     - "This function may be called from simultaneous threads."
@@ -142,7 +142,7 @@ returns:
 --- #--------------------------------------------------------------------------
 type: function
 desc: "Retrieve native binary from Module."
-class: Module
+class: $xModule
 name: GetNativeBinary
 details:
     - "This function may be called from simultaneous threads."
@@ -200,7 +200,7 @@ members:
 --- #--------------------------------------------------------------------------
 type: function
 desc: "Create Function object from Module by name"
-class: Module
+class: $xModule
 name: CreateFunction
 analogue:
     - "**cuModuleGetFunction**"
@@ -227,7 +227,7 @@ returns:
 --- #--------------------------------------------------------------------------
 type: function
 desc: "Destroys Function object"
-class: Function
+class: $xFunction
 name: Destroy
 details:
     - "The application is responsible for making sure the GPU is not currently referencing the event before it is deleted"
@@ -243,7 +243,7 @@ returns:
 --- #--------------------------------------------------------------------------
 type: function
 desc: "Create Function arguments needed to pass arguments to a function."
-class: Function
+class: $xFunction
 name: CreateFunctionArgs
 details:
     - "This function may be called from simultaneous threads."
@@ -265,7 +265,7 @@ returns:
 --- #--------------------------------------------------------------------------
 type: function
 desc: "Destroys Function arguments object"
-class: FunctionArgs
+class: $xFunctionArgs
 name: Destroy
 details:
     - "The application is responsible for making sure the GPU is not currently referencing the event before it is deleted"
@@ -281,7 +281,7 @@ returns:
 --- #--------------------------------------------------------------------------
 type: function
 desc: "Set function arguments within arguments buffer."
-class: FunctionArgs
+class: $xFunctionArgs
 name: SetValue
 analogue:
     - "**cuCtxCreate**"
@@ -325,7 +325,7 @@ etors:
 --- #--------------------------------------------------------------------------
 type: function
 desc: "Sets a function argument attribute"
-class: FunctionArgs
+class: $xFunctionArgs
 name: SetAttribute
 analogue:
     - "**clSetKernelExecInfo**"
@@ -370,7 +370,7 @@ etors:
 --- #--------------------------------------------------------------------------
 type: function
 desc: "Query a function attribute."
-class: Function
+class: $xFunction
 name: QueryAttribute
 analogue:
     - "**cuFuncGetAttribute**"
@@ -395,7 +395,7 @@ returns:
 --- #--------------------------------------------------------------------------
 type: function
 desc: "Dispatch command over one or more work groups."
-class: CommandList
+class: $xCommandList
 name: EncodeDispatchFunction
 analogue:
     - "**cuLaunchKernel**"
@@ -467,7 +467,7 @@ members:
 --- #--------------------------------------------------------------------------
 type: function
 desc: "Dispatch command over one or more work groups using indirect dispatch arguments."
-class: CommandList
+class: $xCommandList
 name: EncodeDispatchFunctionIndirect
 analogue:
     - "**cuLaunchKernel**"
@@ -501,7 +501,7 @@ returns:
 --- #--------------------------------------------------------------------------
 type: function
 desc: "Query a suggested group size for function. If the function has an embedded group size then this will be returned. Otherwise, one will be suggested."
-class: Function
+class: $xFunction
 name: SuggestGroupSize
 details:
     - "This function may be called from simultaneous threads."
