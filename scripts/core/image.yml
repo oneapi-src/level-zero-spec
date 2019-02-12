@@ -78,19 +78,19 @@ members:
       desc: "[in] image channel format"
     - type: uint32_t
       name: numChannels
-      desc: "[in] number of channels per pixel"
+      desc: "[in] number of channels per pixel [1,4]"
     - type: size_t
       name: width
-      desc: "[in] width in pixels"
+      desc: "[in] width in pixels, see $x_device_memory_properties_t::maxImageDims1D/2D/3D"
     - type: size_t
       name: height
-      desc: "[in] height in pixels (2D or 3D only)"
+      desc: "[in] height in pixels (2D or 3D only), see $x_device_memory_properties_t::maxImageDims2D/3D"
     - type: size_t
       name: depth
-      desc: "[in] depth in pixels (3D only)"
+      desc: "[in] depth in pixels (3D only), see $x_device_memory_properties_t::maxImageDims3D"
     - type: size_t
       name: arraylevels
-      desc: "[in] array levels (array types only)"
+      desc: "[in] array levels (array types only), see $x_device_memory_properties_t::maxImageArraySlices"
     - type: size_t
       name: miplevels
       desc: "[in] mipmap levels (must be 0)"

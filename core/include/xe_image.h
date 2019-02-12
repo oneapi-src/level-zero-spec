@@ -87,11 +87,15 @@ typedef struct _xe_image_desc_t
     xe_image_flags_t flags;                         ///< [in] creation flags
     xe_image_type_t type;                           ///< [in] image type
     xe_image_format_t format;                       ///< [in] image channel format
-    uint32_t numChannels;                           ///< [in] number of channels per pixel
-    size_t width;                                   ///< [in] width in pixels
-    size_t height;                                  ///< [in] height in pixels (2D or 3D only)
-    size_t depth;                                   ///< [in] depth in pixels (3D only)
-    size_t arraylevels;                             ///< [in] array levels (array types only)
+    uint32_t numChannels;                           ///< [in] number of channels per pixel [1,4]
+    size_t width;                                   ///< [in] width in pixels, see
+                                                    ///< ::xe_device_memory_properties_t::maxImageDims1D/2D/3D
+    size_t height;                                  ///< [in] height in pixels (2D or 3D only), see
+                                                    ///< ::xe_device_memory_properties_t::maxImageDims2D/3D
+    size_t depth;                                   ///< [in] depth in pixels (3D only), see
+                                                    ///< ::xe_device_memory_properties_t::maxImageDims3D
+    size_t arraylevels;                             ///< [in] array levels (array types only), see
+                                                    ///< ::xe_device_memory_properties_t::maxImageArraySlices
     size_t miplevels;                               ///< [in] mipmap levels (must be 0)
 
 } xe_image_desc_t;

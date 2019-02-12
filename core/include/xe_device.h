@@ -279,10 +279,10 @@ typedef struct _xe_device_memory_properties_t
     uint32_t version;                               ///< [in] ::XE_DEVICE_MEMORY_PROPERTIES_VERSION
     bool unifiedMemory;                             ///< [out] Host and device share same physical memory.
     bool onDemandPageFaults;                        ///< [out] Device supports on-demand page-faulting.
-    uint32_t maxResourceDims1D;                     ///< [out] Maximum resource dimensions for 1D resources.
-    uint32_t maxResourceDims2D;                     ///< [out] Maximum resource dimensions for 2D resources.
-    uint32_t maxResourceDims3D;                     ///< [out] Maximum resource dimensions for 3D resources.
-    uint32_t maxResourceArraySlices;                ///< [out] Maximum resource array slices
+    uint32_t maxImageDims1D;                        ///< [out] Maximum image dimensions for 1D resources.
+    uint32_t maxImageDims2D;                        ///< [out] Maximum image dimensions for 2D resources.
+    uint32_t maxImageDims3D;                        ///< [out] Maximum image dimensions for 3D resources.
+    uint32_t maxImageArraySlices;                   ///< [out] Maximum image array slices
     uint32_t hostAllocCapabilities;                 ///< [out] Supported operations on host memory allocations
     uint32_t deviceAllocCapabilities;               ///< [out] Supported operations on device memory allocations
     uint32_t sharedAllocCapabilities;               ///< [out] Supported operations on shared memory allocations

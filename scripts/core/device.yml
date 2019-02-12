@@ -285,17 +285,17 @@ members:
       name: onDemandPageFaults
       desc: "[out] Device supports on-demand page-faulting."
     - type: uint32_t
-      name: maxResourceDims1D
-      desc: "[out] Maximum resource dimensions for 1D resources."
+      name: maxImageDims1D
+      desc: "[out] Maximum image dimensions for 1D resources."
     - type: uint32_t
-      name: maxResourceDims2D
-      desc: "[out] Maximum resource dimensions for 2D resources."
+      name: maxImageDims2D
+      desc: "[out] Maximum image dimensions for 2D resources."
     - type: uint32_t
-      name: maxResourceDims3D
-      desc: "[out] Maximum resource dimensions for 3D resources."
+      name: maxImageDims3D
+      desc: "[out] Maximum image dimensions for 3D resources."
     - type: uint32_t
-      name: maxResourceArraySlices
-      desc: "[out] Maximum resource array slices"
+      name: maxImageArraySlices
+      desc: "[out] Maximum image array slices"
     - type: uint32_t
       name: hostAllocCapabilities
       desc: "[out] Supported operations on host memory allocations"
