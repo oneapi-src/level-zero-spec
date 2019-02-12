@@ -445,7 +445,7 @@ returns:
 --- #--------------------------------------------------------------------------
 type: struct
 desc: "Indirect function arguments. These arguments are device visible."
-name: $x_dispatch_function_arguments_t
+name: $x_dispatch_function_indirect_arguments_t
 members:
     - type: "uint32_t"
       name: groupSizeX
@@ -487,7 +487,7 @@ params:
     - type: "$x_function_args_handle_t"
       name: hFunctionArgs
       desc: "[in] handle to function arguments buffer."
-    - type: "const $x_dispatch_function_arguments_t*"
+    - type: "const $x_dispatch_function_indirect_arguments_t*"
       name: pDispatchArgumentsBuffer
       desc: "[in] Pointer to buffer that will contain dispatch arguments."
     - type: $x_event_handle_t
