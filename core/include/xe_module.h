@@ -192,6 +192,8 @@ xe_result_t __xecall
 ///       destroyed.
 ///     - The native binary output can be cached to disk and new modules can be
 ///       later constructed from the cached copy.
+///     - The native binary will retain debugging information that is associated
+///       with a module.
 /// 
 /// @returns
 ///     - ::XE_RESULT_SUCCESS

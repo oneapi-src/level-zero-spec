@@ -149,6 +149,7 @@ details:
     - "The implementation of this function should be lock-free."
     - "The memory for the native binary output is associated with the module. The output pointer should not be accessed after a module has been destroyed."
     - "The native binary output can be cached to disk and new modules can be later constructed from the cached copy."
+    - "The native binary will retain debugging information that is associated with a module."
 params:
     - type: $x_module_handle_t
       name: hModule

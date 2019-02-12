@@ -725,7 +725,7 @@ The ::xeDeviceCreateModule function can optionally generate a build log object :
     xeModuleBuildLogDestroy(buildlog);
 ```
 
-### Module Caching
+### Module Caching with Native Binaries
 Disk caching of modules is not supported by the driver. If a disk cache for modules is desired then it is the
 responsibility of the application to implement this using ::xeModuleGetNativeBinary.
 
@@ -744,6 +744,8 @@ responsibility of the application to implement this using ::xeModuleGetNativeBin
         ...
     }
 ```
+Also, note that the native binary will retain all debug information that is associated with the module. This allows debug
+capabilities for modules that are created from native binaries.
 
 ## <a name="func">Functions</a>
 Functions are immutable references to functions within a module.
