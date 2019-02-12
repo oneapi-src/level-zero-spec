@@ -27,7 +27,9 @@ A driver represents an instance of a Xe driver being loaded and initialized into
 - Only one instance of a driver per process can be loaded.
 - Multiple calls to xeDriverInit are silently ignored.
 - A driver has minimal global state associated; only that which is sufficient for querying devices recognized by the driver.
- 
+- There is no explicit unload or shutdown of the driver.
+- Any global resources acquired during xeDriverInit will be released during process detach.
+
 ## Device
 A device represents a physical device in the system that can support Xe.
 - More than one device may be available in the system.

@@ -19,7 +19,7 @@ details:
     - "Only one instance of a driver per process can be loaded."
     - "There is no reference tracking if multiple drivers are initialized."
     - "If this function is not called then all other functions will return $X_RESULT_ERROR_UNINITIALIZED."
-    - "The application may **not** call this function from simultaneous threads."
+    - "This function is thread-safe for scenarios where multiple libraries may initialize the driver simultaneously."
 analogue:
     - "**cuInit**"
 returns:

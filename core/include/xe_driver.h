@@ -54,8 +54,8 @@ typedef enum _xe_init_flags_t
 ///     - There is no reference tracking if multiple drivers are initialized.
 ///     - If this function is not called then all other functions will return
 ///       ::XE_RESULT_ERROR_UNINITIALIZED.
-///     - The application may **not** call this function from simultaneous
-///       threads.
+///     - This function is thread-safe for scenarios where multiple libraries
+///       may initialize the driver simultaneously.
 /// 
 /// @remarks
 ///   _Analogues_
