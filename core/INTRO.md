@@ -8,13 +8,15 @@
 * [Drivers](#drv)
 
 # <a name="obj">Objective</a>
-The objective of the Level-Zero API is to provide direct-to-metal interfaces to offload accelerator devices. 
+The objective of the Level-Zero Driver API is to provide direct-to-metal interfaces to offload accelerator devices. 
 It is a programming interface that can be published at a cadence that better matches Intel hardware releases and can be tailored to any hardware needs. 
 It can be adapted to support broader set of languages features, such as function pointers, virtual functions, unified memory, and  I/O capabilities.
 
 The Driver API provides the lowest-level, fine-grain and most explicit control over:
 - Device Discovery
-- Memory Allocation and Cross-Process Sharing
+- Memory Allocation
+- Peer-to-Peer Communication
+- Inter-Process Sharing
 - Kernel Submission
 - Asynchronous Execution and Scheduling
 - Synchronization Primitives

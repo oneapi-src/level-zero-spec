@@ -8,13 +8,15 @@ ${"##"} Table of Contents
 * [Drivers](#drv)
 
 ${"#"} <a name="obj">Objective</a>
-The objective of the Level-Zero API is to provide direct-to-metal interfaces to offload accelerator devices. 
+The objective of the Level-Zero Driver API is to provide direct-to-metal interfaces to offload accelerator devices. 
 It is a programming interface that can be published at a cadence that better matches Intel hardware releases and can be tailored to any hardware needs. 
 It can be adapted to support broader set of languages features, such as function pointers, virtual functions, unified memory, and  I/O capabilities.
 
 The Driver API provides the lowest-level, fine-grain and most explicit control over:
 - Device Discovery
-- Memory Allocation and Cross-Process Sharing
+- Memory Allocation
+- Peer-to-Peer Communication
+- Inter-Process Sharing
 - Kernel Submission
 - Asynchronous Execution and Scheduling
 - Synchronization Primitives
@@ -107,15 +109,17 @@ There are multiple versions that can be used by the application to determine com
 1. Header Version - this is the version of the header files included by the application.
     - This is typically used to determine whether the application is using the latest version of the API header files.
     - It is determined from ::${X}_API_HEADER_VERSION.
-2. API Version - this is the version of the API features supported by the device.
+2. API Version - this is the version of the API supported by the device.
     - This is typically used to determine if the device supports the minimum set of features required by the application.
-    - It is determined from calling ::${x}DeviceGetApiVersion
-3. Driver Version - this is the version of the driver installed in the system.
-    - This is typically used to mitigate driver implementation issues for a feature.
-    - It is determined from calling ::${x}DriverGetVersion
-4. Structure Version - these are the versions of the structures passed-by-pointer to the driver.
+    - There is a single API version that represents a collection of features.
+    - The value is determined from calling ::${x}DeviceGetApiVersion
+    - The value returned will be the minimum of the ::${X}_API_HEADER_VERSION supported by the device and known by the driver.
+3. Structure Version - these are the versions of the structures passed-by-pointer to the driver.
     - These are typically used by the driver to support applications written to older versions of the API.
     - They are provided as the first member of every structure passed to the driver.
+4. Driver Version - this is the version of the driver installed in the system.
+    - This is typically used to mitigate driver implementation issues for a feature.
+    - The value is determined from calling ::${x}DriverGetVersion
 
 ${"##"} Error Handling
 The following rules are followed in order to maximize robustness and security:
