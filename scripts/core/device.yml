@@ -296,16 +296,16 @@ members:
     - type: uint32_t
       name: maxImageArraySlices
       desc: "[out] Maximum image array slices"
-    - type: uint32_t
+    - type: $x_memory_access_capabilities_t
       name: hostAllocCapabilities
       desc: "[out] Supported operations on host memory allocations"
-    - type: uint32_t
+    - type: $x_memory_access_capabilities_t
       name: deviceAllocCapabilities
       desc: "[out] Supported operations on device memory allocations"
-    - type: uint32_t
+    - type: $x_memory_access_capabilities_t
       name: sharedAllocCapabilities
       desc: "[out] Supported operations on shared memory allocations"
-    - type: uint32_t
+    - type: $x_memory_access_capabilities_t
       name: sharedCrossDeviceAllocCapabilities
       desc: "[out] Supported operations on cross-device shared memory allocations"
     - type: uint32_t
