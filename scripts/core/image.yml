@@ -105,6 +105,9 @@ details:
     - "The application may call this function from simultaneous threads."
     - "The implementation of this function should be lock-free."
 params:
+    - type: $x_device_handle_t
+      name: hDevice
+      desc: "[in] handle of the device"
     - type: "const $x_image_desc_t*"
       name: desc
       desc: "[in] pointer to image descriptor"

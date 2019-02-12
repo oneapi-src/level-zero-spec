@@ -522,7 +522,7 @@ and avoids exposing these details in the API in a backwards compatible fashion.
         128, 128, 0, 0, 0
     };
     xe_image_handle_t hImage;
-    xeDeviceCreateImage(&imageDesc, &hImage);
+    xeDeviceCreateImage(hDevice, &imageDesc, &hImage);
 
     // upload contents from host pointer
     xeCommandListEncodeImageCopyFromMemory(hCommandList, hImage, nullptr, pImageData);

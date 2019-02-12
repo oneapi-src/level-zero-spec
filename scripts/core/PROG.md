@@ -522,7 +522,7 @@ and avoids exposing these details in the API in a backwards compatible fashion.
         128, 128, 0, 0, 0
     };
     ${x}_image_handle_t hImage;
-    ${x}DeviceCreateImage(&imageDesc, &hImage);
+    ${x}DeviceCreateImage(hDevice, &imageDesc, &hImage);
 
     // upload contents from host pointer
     ${x}CommandListEncodeImageCopyFromMemory(hCommandList, hImage, nullptr, pImageData);
