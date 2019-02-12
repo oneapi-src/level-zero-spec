@@ -37,7 +37,7 @@ A device represents a physical device in the system that can support ${Xx}.
 - The application is responsible for sharing memory and explicit submission and synchronization across multiple devices.
 
 ${"##"} Initialization
-The driver API must be initizalized by calling ${x}DriverInit before any other function.
+The driver must be initizalized by calling ${x}DriverInit before any other function.
 This function will query the available physical adapters in the system and make this information available to all threads in the current process.
 
 The following sample code demonstrates a basic initialization sequence:

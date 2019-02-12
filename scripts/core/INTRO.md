@@ -8,11 +8,11 @@ ${"##"} Table of Contents
 * [Drivers](#drv)
 
 ${"#"} <a name="obj">Objective</a>
-The objective of the Level-Zero Driver API is to provide direct-to-metal interfaces to offload accelerator devices. 
+The objective of the Level-Zero API is to provide direct-to-metal interfaces to offload accelerator devices. 
 It is a programming interface that can be published at a cadence that better matches Intel hardware releases and can be tailored to any hardware needs. 
 It can be adapted to support broader set of languages features, such as function pointers, virtual functions, unified memory, and  I/O capabilities.
 
-The Driver API provides the lowest-level, fine-grain and most explicit control over:
+The Level-Zero API provides the lowest-level, fine-grain and most explicit control over:
 - Device Discovery
 - Memory Allocation
 - Peer-to-Peer Communication
@@ -22,11 +22,11 @@ The Driver API provides the lowest-level, fine-grain and most explicit control o
 - Synchronization Primitives
 - Metrics Reporting
 
-Most applications should not require the additional control provided by the Driver API.
-The Driver API is intended for providing explicit controls needed by higher-level runtime APIs and libraries.
+Most applications should not require the additional control provided by the Level-Zero API.
+The Level-Zero API is intended for providing explicit controls needed by higher-level runtime APIs and libraries.
 
-While heavily influenced by other low-level APIs, such as OpenCL, the driver APIs are designed to evolve independently.
-While heavily influenced by GPU archtiecture, the driver APIs are designed to be supportable across different compute device architectures, such as FPGAs, CSAs, etc.
+While heavily influenced by other low-level APIs, such as OpenCL, the Level-Zero APIs are designed to evolve independently.
+While heavily influenced by GPU archtiecture, the Level-Zero APIs are designed to be supportable across different compute device architectures, such as FPGAs, CSAs, etc.
 
 ${"##"} Devices
 The API architecture exposes both physical and logical abstraction of the underlying devices capabilities. 
@@ -141,7 +141,7 @@ In order to eliminate the usage of thread-locks by the implementation, the follo
 
 ${"#"} <a name="drv">Drivers</a>
 ${"##"} Installation
-The ${Xx} driver API is implemented within a _${x}_vendor_device.dll_ (windows) / _${x}_vendor_device.so_ (linux), which is copied on the system during installation of the device driver;
+The Level-Zero API is implemented within a _${x}_vendor_device.dll_ (windows) / _${x}_vendor_device.so_ (linux), which is copied on the system during installation of the device driver;
 where _vendor_ and _device_ are names chosen by the device vendor.  For Intel GPUs, the name would be "${x}_intc_gpu".
 
 This API does not define an Installable Client Driver (ICD), as it is expected that users of this API would prefer to implement
