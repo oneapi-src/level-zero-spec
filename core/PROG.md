@@ -926,6 +926,8 @@ The following is a list a features that are still being defined for inclusion:
     + ability to describe loops and if-else-then type program execution within a command list, based on device-generated value(s)
 - **Timestamps and Metrics**
     + ability to retrieve device-specific counters for performance analysis, tuning and tooling
+- **Execute Indirect**
+    + ability for the device to generate and enqueue more work (better version of device-side enqueue)
 - **GetLastError**
     + quality-of-life addition to enable debug-only error checks, such as:
 ```c
