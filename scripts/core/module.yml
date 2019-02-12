@@ -128,10 +128,10 @@ params:
       desc: "[in] handle of the module build log object."
     - type: "uint32_t*"
       name: pSize
-      desc: "[out] size of native binary."
+      desc: "[out] size of build log string."
     - type: "char**"
       name: pBuildLog
-      desc: "[out] string pointer to log."
+      desc: "[out] pointer to null-terminated string of the log."
 returns:
     - $X_RESULT_ERROR_INVALID_PARAMETER:
         - "nullptr for hBuildLog"

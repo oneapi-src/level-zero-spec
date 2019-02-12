@@ -183,8 +183,8 @@ xe_result_t __xecall
 xe_result_t __xecall
   xeModuleBuildLogGetString(
     xe_module_build_log_handle_t hBuildLog,         ///< [in] handle of the module build log object.
-    uint32_t* pSize,                                ///< [out] size of native binary.
-    char** pBuildLog                                ///< [out] string pointer to log.
+    uint32_t* pSize,                                ///< [out] size of build log string.
+    char** pBuildLog                                ///< [out] pointer to null-terminated string of the log.
     )
 {
     // @todo: check_return(nullptr == get_driver(), XE_RESULT_ERROR_UNINITIALIZED);
