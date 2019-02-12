@@ -35,6 +35,7 @@ A device represents a physical device in the system that can support ${Xx}.
 - More than one device may be available in the system.
 - The driver will only report devices that are recognized by the driver.
 - The application is responsible for sharing memory and explicit submission and synchronization across multiple devices.
+- Device can expose sub-devices that allow finer-grained control of multi-tile devices.
 
 ${"##"} Initialization
 The driver must be initizalized by calling ${x}DriverInit before any other function.
@@ -74,6 +75,61 @@ The following sample code demonstrates a basic initialization sequence:
             return;
         }
     }
+    ...
+
+```
+${"##"} Sub-Device Support
+A multi-tile device consists of tiles that are tied together by high-speed interconnects. Each tile
+has local memory that is shared to other tiles through these interconnects. The API represents tiles
+as sub-devices and there are functions to query and obtain a sub-device. Outside of these functions
+there are no distinction between sub-devices and devices. 
+
+![Subdevice](../images/core_subdevice.png?raw=true)  
+@image latex ../images/core_subdevice.png
+
+Query device properties using ${x}DeviceGetProperties to confirm subdevices are supported with
+$x_device_properties_t.numSubDevices. Use ${x}DeviceGetSubDevice to obtain a sub-device handle.
+There are additional device properties in $x_device_properties_t for sub-devices to confirm a
+device is a sub-device and to query the id. This is useful when needing to pass a sub-device
+handle to another library.
+
+To allocate memory and dispatch tasks to a particular sub-device then obtain the sub-device
+handle and use this with memory and command queue/lists APIs. One thing to note is that the ordinal
+that is used when creating a command queue is relative to the sub-device. This ordinal specifies which
+physical compute queue on the device or sub-device to map the logical queue to. You need to query
+${x}_device_properties_t.numAsyncComputeEngines from the sub-device to determine how to set this ordinal.
+See ${x}_command_queue_desc_t for more details.
+
+```c
+    ...
+    ${x}DeviceGetProperties(device, &deviceProps);
+    ...
+
+    // Code assumes a specific device configuration.
+    assert(deviceProps.numSubDevices == 4);
+
+    // Desire is to allocate and dispatch work to sub-device 2.
+    uint32_t subdeviceId = 2;
+    ${x}DeviceGetSubDevice(device, subdeviceId, &subdevice);
+
+    // Query sub-device properties.
+    ${x}_device_properties_t subdeviceProps;
+    ${x}DeviceGetProperties(subdevice, &subdeviceProps);
+
+    assert(subdeviceProps.isSubdevice == true); // Ensure that we have a handle to a sub-device.
+    assert(subdeviceProps.subdeviceId == 2);    // Ensure that we have a handle to the sub-device we asked for.
+
+    ...
+    void* pMemForSubDevice2;
+    ${x}MemAlloc(subDevice, ${X}_DEVICE_MEM_ALLOC_DEFAULT, memSize, sizeof(uint32_t), &pMemForSubDevice2);
+    ...
+
+    ...
+    // Check that cmd queue ordinal that was chosen is valid.
+    assert(desc.ordinal < subdeviceProps.numAsyncComputeEngines);
+
+    ${x}_command_queue_handle_t commandQueueForSubDevice2;
+    ${x}DeviceCreateCommandQueue(subdevice, desc, &commandQueueForSubDevice2);
     ...
 ```
 
@@ -607,52 +663,6 @@ The following sample code demonstrate a sequence for using fine-grain residency 
     // Finally, evict to free device resources
     ${x}DeviceEvictMemory(hDevice, begin->next, sizeof(node));
     ${x}DeviceEvictMemory(hDevice, begin->next->next, sizeof(node));
-    ...
-```
-
-${"##"} Sub-Device Support
-A multi-tile device consists of tiles that are tied together by high-speed interconnects. Each tile
-has local memory that is shared to other tiles through these interconnects. The API represents tiles
-as sub-devices and there are functions to query and obtain a sub-device. Outside of these functions
-there are no distinction between sub-devices and devices. 
-
-![Subdevice](../images/core_subdevice.png?raw=true)  
-@image latex ../images/core_subdevice.png
-
-If you want to allocate memory and dispatch tasks to a particular sub-device then obtain the sub-device
-handle and use this with memory and command queue/lists APIs. One thing to note is that the ordinal
-that is used when creating a command queue is relative to the sub-device. This ordinal specifies which
-physical compute queue on the device or sub-device to map the logical queue to. You need to query
-${x}_device_properties_t.numAsyncComputeEngines from the sub-device to determine how to set this ordinal.
-See ${x}_command_queue_desc_t for more details.
-
-```c
-    ...
-    ${x}DeviceGetProperties(device, &deviceProps);
-    ...
-
-    // Code assumes a specific device configuration.
-    assert(deviceProps.numSubDevices == 4);
-
-    // Desire is to allocate and dispatch work to sub-device 2.
-    uint32_t subdeviceId = 2;
-    ${x}DeviceGetSubDevice(device, subdeviceId, &subdevice);
-
-    // Query sub-device properties.
-    ${x}_device_properties_t subdeviceProps;
-    ${x}DeviceGetProperties(subdevice, &subdeviceProps);
-
-    ...
-    void* pMemForSubDevice2;
-    ${x}MemAlloc(subDevice, ${X}_DEVICE_MEM_ALLOC_DEFAULT, memSize, sizeof(uint32_t), &pMemForSubDevice2);
-    ...
-
-    ...
-    // Check that cmd queue ordinal that was chosen is valid.
-    assert(desc.ordinal < subdeviceProps.numAsyncComputeEngines);
-
-    ${x}_command_queue_handle_t commandQueueForSubDevice2;
-    ${x}DeviceCreateCommandQueue(subdevice, desc, &commandQueueForSubDevice2);
     ...
 ```
 
