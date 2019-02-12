@@ -240,3 +240,38 @@ returns:
        - "0 for numCommandLists"
        - "nullptr for phCommandLists"
        - "invalid handle in phCommandLists"
+--- #--------------------------------------------------------------------------
+type: enum
+desc: "Support command formats"
+name: $x_command_format_t
+etors:
+    - name: $X_COMMAND_FORMAT_NATIVE
+      desc: "The commands are native device-specific format"
+--- #--------------------------------------------------------------------------
+type: function
+desc: "Encode a pre-formatted blob of commands into the comamnd list."
+class: $xCommandList
+name: EncodeCommands
+details:
+    - "The commands are gaurenteed to be contiguous in the command buffer"
+    - "The application may **not** call this function from simultaneous threads with the same command list handle."
+    - "The implementation of this function should be lock-free."
+params:
+    - type: $x_command_list_handle_t
+      name: hCommandList
+      desc: "[in] handle of the command list"
+    - type: $x_command_format_t
+      name: format
+      desc: "[in] format of the command blob"
+    - type: size_t
+      name: size
+      desc: "[in] size (in bytes) of the command blob"
+    - type: void*
+      name: pBlob
+      desc: "[in] pointer to blob of commands to encode into the command list"
+returns:
+    - $X_RESULT_ERROR_INVALID_PARAMETER:
+       - "invalid handle for hCommandList"
+       - "invalid value for format"
+       - "0 for size"
+       - "nullptr for pBlob"
