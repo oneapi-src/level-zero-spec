@@ -35,6 +35,16 @@ condition: "!defined($X_ENABLE_OCL_INTEROP)"
 name: "$X_ENABLE_OCL_INTEROP"
 value: "0"
 --- #--------------------------------------------------------------------------
+type: typedef
+desc: "naming consistency"
+name: float_t
+value: float
+--- #--------------------------------------------------------------------------
+type: typedef
+desc: "naming consistency"
+name: double_t
+value: double
+--- #--------------------------------------------------------------------------
 type: handle
 desc: "Handle of driver's device object"
 name: "$x_device_handle_t"

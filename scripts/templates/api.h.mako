@@ -41,15 +41,10 @@ from templates import helper as th
 %if re.match(r"common", name):
 #include <stdint.h>
 #include <string.h>
-
-///////////////////////////////////////////////////////////////////////////////
-typedef float  float_t;
-typedef double double_t;
-
 %else:
 #include "${x}_common.h"
-
 %endif
+
 %for obj in objects:
 ///////////////////////////////////////////////////////////////////////////////
 %if 'condition' in obj:
