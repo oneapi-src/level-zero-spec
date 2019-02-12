@@ -484,7 +484,7 @@ xe_result_t __xecall
 
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Indirect function arguments. These arguments are device visible.
-typedef struct _xe_dispatch_function_arguments_t
+typedef struct _xe_dispatch_function_indirect_arguments_t
 {
     uint32_t groupSizeX;                            ///< [in] group size for X dimension
     uint32_t groupSizeY;                            ///< [in] group size for Y dimension
@@ -493,7 +493,7 @@ typedef struct _xe_dispatch_function_arguments_t
     uint32_t groupCountY;                           ///< [in] width of dispatches in Y dimension
     uint32_t groupCountZ;                           ///< [in] width of dispatches in Z dimension
 
-} xe_dispatch_function_arguments_t;
+} xe_dispatch_function_indirect_arguments_t;
 
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Dispatch command over one or more work groups using indirect dispatch
@@ -524,7 +524,7 @@ xe_result_t __xecall
     xe_command_list_handle_t hCommandList,          ///< [in] handle of the command list
     xe_function_handle_t hFunction,                 ///< [in] handle of the function object
     xe_function_args_handle_t hFunctionArgs,        ///< [in] handle to function arguments buffer.
-    const xe_dispatch_function_arguments_t* pDispatchArgumentsBuffer,   ///< [in] Pointer to buffer that will contain dispatch arguments.
+    const xe_dispatch_function_indirect_arguments_t* pDispatchArgumentsBuffer,  ///< [in] Pointer to buffer that will contain dispatch arguments.
     xe_event_handle_t hEvent                        ///< [in][optional] handle of the event to signal on completion
     );
 

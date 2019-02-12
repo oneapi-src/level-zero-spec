@@ -160,11 +160,13 @@ typedef struct _xe_device_properties_t
     uint32_t version;                               ///< [in] ::XE_DEVICE_PROPERTIES_VERSION
     uint32_t vendorId;                              ///< [out] vendor id from PCI configuration
     uint32_t deviceId;                              ///< [out] device id from PCI configuration
+    uint32_t subdeviceId;                           ///< [out] Subdevice id. Only valid if isSubdevice is true.
+    bool isSubdevice;                               ///< [out] Is this a subdevice.
+    uint32_t numSubDevices;                         ///< [out] Number of sub-devices.
     uint32_t coreClockRate;                         ///< [out] Clock rate for device core.
     uint32_t memClockRate;                          ///< [out] Clock rate for device global memory
     uint32_t memGlobalBusWidth;                     ///< [out] Bus width between core and memory.
     uint64_t totalLocalMemSize;                     ///< [out] Total memory size in bytes.
-    uint32_t numSubDevices;                         ///< [out] Number of sub-devices.
     uint32_t numAsyncComputeEngines;                ///< [out] Number of asynchronous compute engines
     uint32_t numAsyncCopyEngines;                   ///< [out] Number of asynchronous copy engines
     uint32_t numComputeCores;                       ///< [out] Number of compute cores

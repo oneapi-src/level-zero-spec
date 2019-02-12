@@ -582,7 +582,7 @@ xe_result_t __xecall
     xe_command_list_handle_t hCommandList,          ///< [in] handle of the command list
     xe_function_handle_t hFunction,                 ///< [in] handle of the function object
     xe_function_args_handle_t hFunctionArgs,        ///< [in] handle to function arguments buffer.
-    const xe_dispatch_function_arguments_t* pDispatchArgumentsBuffer,   ///< [in] Pointer to buffer that will contain dispatch arguments.
+    const xe_dispatch_function_indirect_arguments_t* pDispatchArgumentsBuffer,  ///< [in] Pointer to buffer that will contain dispatch arguments.
     xe_event_handle_t hEvent                        ///< [in][optional] handle of the event to signal on completion
     )
 {
