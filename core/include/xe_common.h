@@ -161,4 +161,3 @@ typedef enum _xe_result_t
 } xe_result_t;
 
 #endif // _XE_COMMON_H
-

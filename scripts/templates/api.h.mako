@@ -120,4 +120,3 @@ using ${th.subx(x, obj['name'])} = _${th.subx(x, obj['name'])}*;
 
 %endfor
 #endif // _${X}_${name.upper()}_H
-

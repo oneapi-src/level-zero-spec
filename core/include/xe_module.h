@@ -585,11 +585,10 @@ typedef void(__xecall *xe_host_pfn_t)(
 ///         + null ptr for pfnHostFunc
 ///         + null ptr for pUserData.
 xe_result_t __xecall
-  xexeCommandListEncodeDispatchHostFunction(
+  xeCommandListEncodeDispatchHostFunction(
     xe_command_list_handle_t hCommandList,          ///< [in] handle of the command list
     xe_host_pfn_t pfnHostFunc,                      ///< [in] pointer to host function.
     void* pUserData                                 ///< [in] pointer to user data to pass to host function.
     );
 
 #endif // _XE_MODULE_H
-

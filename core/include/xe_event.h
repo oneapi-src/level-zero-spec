@@ -430,4 +430,3 @@ xe_result_t __xecall
     );
 
 #endif // _XE_EVENT_H
-
