@@ -2,6 +2,42 @@
 type: header
 desc: "Intel $Xx Driver APIs for Memory"
 --- #--------------------------------------------------------------------------
+type: handle
+desc: "Handle to a memory allocator"
+name: "$x_mem_allocator_handle_t"
+--- #--------------------------------------------------------------------------
+type: function
+desc: "Creates an handle to a memory allocator"
+class: $x
+name: CreateMemAllocator
+details:
+    - "Memory allocators store information about allocations."
+    - "The application may call this function from simultaneous threads."
+    - "The implementation of this function should be lock-free."
+params:
+    - type: $x_mem_allocator_handle_t*
+      name: phMemAllocHandle
+      desc: "[out] Returned memory allocator handle"
+returns:
+    - $X_RESULT_ERROR_INVALID_PARAMETER:
+        - "nullptr for pMemAllocHandle"
+--- #--------------------------------------------------------------------------
+type: function
+desc: "Deletes a memory allocator"
+class: $x
+name: MemAllocatorDestroy
+details:
+    - "The application is responsible for making sure the GPU is not currently referencing any memory allocations associated with this allocator before it is deleted."
+    - "The implementation of this function will immediately free all memory allocations associated with this allocator."
+    - "The implementation of this function should be lock-free."
+params:
+    - type: $x_mem_allocator_handle_t
+      name: hMemAllocHandle
+      desc: "[in] handle of memory allocator to destroy"
+returns:
+    - $X_RESULT_ERROR_INVALID_PARAMETER:
+        - "invalid handle for hMemAllocHandle"
+--- #--------------------------------------------------------------------------
 type: enum
 desc: "Supported device memory allocation flags"
 name: $x_device_mem_alloc_flags_t
@@ -44,6 +80,9 @@ details:
     - "The application may call this function from simultaneous threads."
     - "The implementation of this function should be lock-free."
 params:
+    - type: $x_mem_allocator_handle_t
+      name: hMemAllocHandle
+      desc: "[in] handle of memory allocator for this allocation"
     - type: "$x_device_handle_t"
       name: hDevice
       desc: "[in] handle of the device"
@@ -64,6 +103,7 @@ params:
       desc: "[out] pointer to shared allocation"
 returns:
     - $X_RESULT_ERROR_INVALID_PARAMETER:
+        - "invalid handle for hMemAllocHandle"
         - "invalid handle for hDevice"
         - "unsupported allocation size"
         - "unsupported alignment"
@@ -83,6 +123,9 @@ details:
     - "The application may call this function from simultaneous threads."
     - "The implementation of this function should be lock-free."
 params:
+    - type: $x_mem_allocator_handle_t
+      name: hMemAllocHandle
+      desc: "[in] handle of memory allocator for this allocation"
     - type: "$x_device_handle_t"
       name: hDevice
       desc: "[in] handle of the device"
@@ -100,6 +143,7 @@ params:
       desc: "[out] pointer to device allocation"
 returns:
     - $X_RESULT_ERROR_INVALID_PARAMETER:
+        - "invalid handle for hMemAllocHandle"
         - "invalid handle for hDevice"
         - "unsupported allocation size"
         - "unsupported alignment"
@@ -120,9 +164,9 @@ details:
     - "The application may call this function from simultaneous threads."
     - "The implementation of this function should be lock-free."
 params:
-    - type: "$x_device_handle_t"
-      name: hDevice
-      desc: "[in] handle of the device to track the allocation"
+    - type: $x_mem_allocator_handle_t
+      name: hMemAllocHandle
+      desc: "[in] handle of memory allocator for this allocation"
     - type: "$x_host_mem_alloc_flags_t"
       name: flags
       desc: "[in] flags specifying additional allocation controls"
@@ -137,7 +181,7 @@ params:
       desc: "[out] pointer to host allocation"
 returns:
     - $X_RESULT_ERROR_INVALID_PARAMETER:
-        - "invalid handle for hDevice"
+        - "invalid handle for hMemAllocHandle"
         - "unsupported allocation size"
         - "unsupported alignment"
         - "nullptr for ptr"
@@ -156,15 +200,15 @@ details:
     - "The implementation of this function will immediately free all Host and Device allocations associated with this memory"
     - "The implementation of this function should be lock-free."
 params:
-    - type: "$x_device_handle_t"
-      name: hDevice
-      desc: "[in] handle of the device tracking the allocation"
+    - type: $x_mem_allocator_handle_t
+      name: hMemAllocHandle
+      desc: "[in] handle of memory allocator for this allocation"
     - type: "const void*"
       name: ptr
       desc: "[in] pointer to memory to free"
 returns:
     - $X_RESULT_ERROR_INVALID_PARAMETER:
-        - "invalid handle for hDevice"
+        - "invalid handle for hMemAllocHandle"
         - "invalid ptr"
 --- #--------------------------------------------------------------------------
 type: enum
@@ -199,9 +243,9 @@ details:
     - "The application may call this function from simultaneous threads."
     - "The implementation of this function should be lock-free."
 params:
-    - type: "$x_device_handle_t"
-      name: hDevice
-      desc: "[in] handle of the device tracking the allocation"
+    - type: $x_mem_allocator_handle_t
+      name: hMemAllocHandle
+      desc: "[in] handle of memory allocator for this allocation"
     - type: "const void*"
       name: ptr
       desc: "[in] Pointer to query"
@@ -213,7 +257,7 @@ params:
       desc: "[out] Value of the queried property"
 returns:
     - $X_RESULT_ERROR_INVALID_PARAMETER:
-        - "invalid handle for hDevice"
+        - "invalid handle for hMemAllocHandle"
         - "invalid ptr"
         - "invalid property"
         - "nullptr for pValue"
@@ -228,9 +272,9 @@ details:
     - "The application may call this function from simultaneous threads."
     - "The implementation of this function should be lock-free."
 params:
-    - type: "$x_device_handle_t"
-      name: hDevice
-      desc: "[in] handle of the device tracking the allocation"
+    - type: $x_mem_allocator_handle_t
+      name: hMemAllocHandle
+      desc: "[in] handle of memory allocator for this allocation"
     - type: "const void*"
       name: ptr
       desc: "[in] Pointer to query"
@@ -242,7 +286,7 @@ params:
       desc: "[out] Returned size of the allocation (optional)"
 returns:
     - $X_RESULT_ERROR_INVALID_PARAMETER:
-        - "invalid handle for hDevice"
+        - "invalid handle for hMemAllocHandle"
         - "invalid ptr"
         - "nullptr for both pBase and pSize"
 --- #--------------------------------------------------------------------------
@@ -257,9 +301,9 @@ details:
     - "The application may call this function from simultaneous threads."
     - "The implementation of this function should be lock-free."
 params:
-    - type: "$x_device_handle_t"
-      name: hDevice
-      desc: "[in] handle of the device tracking the allocation"
+    - type: $x_mem_allocator_handle_t
+      name: hMemAllocHandle
+      desc: "[in] handle of memory allocator for this allocation"
     - type: "const void*"
       name: ptr
       desc: "[in] Pointer to the device memory allocation"
@@ -268,7 +312,7 @@ params:
       desc: "[out] Returned IPC memory handle"
 returns:
     - $X_RESULT_ERROR_INVALID_PARAMETER:
-        - "invalid handle for hDevice"
+        - "invalid handle for hMemAllocHandle"
         - "invalid ptr"
         - "nullptr for pIpcHandle"
 --- #--------------------------------------------------------------------------
@@ -292,6 +336,9 @@ details:
     - "The application may call this function from simultaneous threads."
     - "The implementation of this function should be lock-free."
 params:
+    - type: $x_mem_allocator_handle_t
+      name: hMemAllocHandle
+      desc: "[in] handle of memory allocator for this allocation"
     - type: "$x_device_handle_t"
       name: hDevice
       desc: "[in] handle of the device to associate with the IPC memory handle"
@@ -306,6 +353,7 @@ params:
       desc: "[out] pointer to device allocation in this process"
 returns:
     - $X_RESULT_ERROR_INVALID_PARAMETER:
+        - "invalid handle for hMemAllocHandle"
         - "invalid handle for hDevice"
         - "invalid handle for handle"
         - "invalid flags"
@@ -322,13 +370,13 @@ details:
     - "The application may call this function from simultaneous threads."
     - "The implementation of this function should be lock-free."
 params:
-    - type: "$x_device_handle_t"
-      name: hDevice
-      desc: "[in] handle of the device associated with the device pointer"
+    - type: $x_mem_allocator_handle_t
+      name: hMemAllocHandle
+      desc: "[in] handle of memory allocator for this allocation"
     - type: "const void*"
       name: ptr
       desc: "[in] pointer to device allocation in this process"
 returns:
     - $X_RESULT_ERROR_INVALID_PARAMETER:
-        - "invalid handle for hDevice"
+        - "invalid handle for hMemAllocHandle"
         - "invalid ptr"
