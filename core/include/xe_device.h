@@ -392,64 +392,6 @@ xe_result_t __xecall
     );
 
 ///////////////////////////////////////////////////////////////////////////////
-/// @brief Enables direct access to peer device allocations
-/// 
-/// @details
-///     - The access is uni-directional and only enables access from the device
-///       to allocations on the peer device.
-///     - A separate call is required to enable access from the peer device to
-///       this device.
-///     - The application may **not** call this function from simultaneous
-///       threads with the same device handle.
-///     - @todo [**Ben**] document any limits on number of active p2p
-///       connections @todo [**Ben**] document behavior if link is already
-///       enabled
-/// 
-/// @remarks
-///   _Analogues_
-///     - **cudaDeviceEnablePeerAccess**
-/// 
-/// @returns
-///     - ::XE_RESULT_SUCCESS
-///     - ::XE_RESULT_ERROR_UNINITIALIZED
-///     - ::XE_RESULT_ERROR_UNSUPPORTED
-///     - ::XE_RESULT_ERROR_INVALID_PARAMETER
-///         + invalid handle for hDevice
-///         + invalid handle for hPeerDevice
-///         + devices do not support peer access
-xe_result_t __xecall
-  xeDeviceEnablePeerAccess(
-    xe_device_handle_t hDevice,                     ///< [in] handle of the device performing the access
-    xe_device_handle_t hPeerDevice                  ///< [in] handle of the peer device
-    );
-
-///////////////////////////////////////////////////////////////////////////////
-/// @brief Disables direct access to peer device allocations
-/// 
-/// @details
-///     - The application may **not** call this function from simultaneous
-///       threads with the same device handle.
-///     - @todo [**Ben**] document behavior if link is not enabled
-/// 
-/// @remarks
-///   _Analogues_
-///     - **cudaDeviceDisablePeerAccess**
-/// 
-/// @returns
-///     - ::XE_RESULT_SUCCESS
-///     - ::XE_RESULT_ERROR_UNINITIALIZED
-///     - ::XE_RESULT_ERROR_UNSUPPORTED
-///     - ::XE_RESULT_ERROR_INVALID_PARAMETER
-///         + invalid handle for hDevice
-///         + invalid handle for hPeerDevice
-///         + devices do not support peer access
-xe_result_t __xecall
-  xeDeviceDisablePeerAccess(
-    xe_device_handle_t hDevice,                     ///< [in] handle of the device performing the access
-    xe_device_handle_t hPeerDevice                  ///< [in] handle of the peer device
-    );
-
-///////////////////////////////////////////////////////////////////////////////
 /// @brief Supported Cache Config
 /// 
 /// @details
