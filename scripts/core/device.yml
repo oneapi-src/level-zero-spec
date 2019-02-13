@@ -304,16 +304,16 @@ members:
       desc: "[out] Maximum image array slices"
     - type: $x_memory_access_capabilities_t
       name: hostAllocCapabilities
-      desc: "[out] Supported operations on host memory allocations"
+      desc: "[out] Bitfield describing host memory capabilities"
     - type: $x_memory_access_capabilities_t
       name: deviceAllocCapabilities
-      desc: "[out] Supported operations on device memory allocations"
+      desc: "[out] Bitfield describing device memory capabilities"
     - type: $x_memory_access_capabilities_t
       name: sharedAllocCapabilities
-      desc: "[out] Supported operations on shared memory allocations"
+      desc: "[out] Bitfield describing shared memory capabilities"
     - type: $x_memory_access_capabilities_t
       name: sharedCrossDeviceAllocCapabilities
-      desc: "[out] Supported operations on cross-device shared memory allocations"
+      desc: "[out] Bitfield describing cross-device shared memory capabilities"
     - type: uint32_t
       name: IntermediateCacheSize
       desc: "[out] Device Intermediate Cache(L1/L2) size"

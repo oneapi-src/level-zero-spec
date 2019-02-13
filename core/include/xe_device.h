@@ -285,10 +285,10 @@ typedef struct _xe_device_memory_properties_t
     uint32_t maxImageDims2D;                        ///< [out] Maximum image dimensions for 2D resources.
     uint32_t maxImageDims3D;                        ///< [out] Maximum image dimensions for 3D resources.
     uint32_t maxImageArraySlices;                   ///< [out] Maximum image array slices
-    xe_memory_access_capabilities_t hostAllocCapabilities;  ///< [out] Supported operations on host memory allocations
-    xe_memory_access_capabilities_t deviceAllocCapabilities;///< [out] Supported operations on device memory allocations
-    xe_memory_access_capabilities_t sharedAllocCapabilities;///< [out] Supported operations on shared memory allocations
-    xe_memory_access_capabilities_t sharedCrossDeviceAllocCapabilities; ///< [out] Supported operations on cross-device shared memory allocations
+    xe_memory_access_capabilities_t hostAllocCapabilities;  ///< [out] Bitfield describing host memory capabilities
+    xe_memory_access_capabilities_t deviceAllocCapabilities;///< [out] Bitfield describing device memory capabilities
+    xe_memory_access_capabilities_t sharedAllocCapabilities;///< [out] Bitfield describing shared memory capabilities
+    xe_memory_access_capabilities_t sharedCrossDeviceAllocCapabilities; ///< [out] Bitfield describing cross-device shared memory capabilities
     uint32_t IntermediateCacheSize;                 ///< [out] Device Intermediate Cache(L1/L2) size
     bool IntermediateCacheControl;                  ///< [out] Support User control on Intermediate Cache(i.e. Resize SLM
                                                     ///< section vs Generic Cache).
