@@ -39,8 +39,7 @@
 
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Handle to a memory allocator
-struct _xe_mem_allocator_handle_t;
-using xe_mem_allocator_handle_t = _xe_mem_allocator_handle_t*;
+typedef struct _xe_mem_allocator_handle_t *xe_mem_allocator_handle_t;
 
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Creates an handle to a memory allocator

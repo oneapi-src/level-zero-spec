@@ -106,8 +106,7 @@ ${x}_result_t __${x}call
     );
 ## HANDLE #####################################################################
 %elif re.match(r"handle", obj['type']):
-struct _${th.subx(x, obj['name'])};
-using ${th.subx(x, obj['name'])} = _${th.subx(x, obj['name'])}*;
+typedef struct _${th.subx(x, obj['name'])} *${th.subx(x, obj['name'])};
 %endif
 %if 'condition' in obj:
 #endif // ${th.subx(x,obj['condition'])}
