@@ -88,7 +88,7 @@ there are no distinction between sub-devices and devices.
 @image latex ../images/core_subdevice.png
 
 Query device properties using ::xeDeviceGetProperties to confirm subdevices are supported with
-$x_device_properties_t.numSubDevices. Use ::xeDeviceGetSubDevice to obtain a sub-device handle.
+::xe_device_properties_t.numSubDevices. Use ::xeDeviceGetSubDevice to obtain a sub-device handle.
 There are additional device properties in ::xe_device_properties_t for sub-devices to confirm a
 device is a sub-device and to query the id. This is useful when needing to pass a sub-device
 handle to another library.
@@ -97,7 +97,7 @@ To allocate memory and dispatch tasks to a particular sub-device then obtain the
 handle and use this with memory and command queue/lists APIs. One thing to note is that the ordinal
 that is used when creating a command queue is relative to the sub-device. This ordinal specifies which
 physical compute queue on the device or sub-device to map the logical queue to. You need to query
-xe_device_properties_t.numAsyncComputeEngines from the sub-device to determine how to set this ordinal.
+::xe_device_properties_t.numAsyncComputeEngines from the sub-device to determine how to set this ordinal.
 See ::xe_command_queue_desc_t for more details.
 
 ```c
