@@ -124,20 +124,26 @@ There are multiple versions that should be used by the application to determine 
 ${"##"} Error Handling
 The following rules must be followed in order to maximize robustness and security:
 - all functions must return ::${x}_result_t.
-- all functions must never throw exceptions or fail silently.
-- all function parameters should be validated prior to execution to ensure implementation compatibility, such as structure version.
+- functions must never throw unhandled exceptions
+- functions must never fail silently; i.e. return ::{$X}_RETURN_SUCCESS 
+- function parameters should be validated prior to execution to ensure implementation compatibility, such as structure version.
 
-${"##"} Multithreading
-In order to eliminate the usage of thread-locks by the implementation, the following design philosophies are adopted:
+${"##"} Multithreading and Concurrency
+The following design philosophies are adopted in order to maximize Host thread concurrency:
+- APIs are free-threaded when the "Actor" is different.
+    + the driver should avoid thread-locks for these API calls
+- APIs are not thread-safe when the "Actor" is the same, except when explicitly noted.
+    + the application is responsible for ensuring multiple threads do not enter an API when the "Actor" is the same
+- APIs are not thread-safe with other APIs that use the same "Actor"
+    + the application is responsible for ensuring multiple threads do not enter these APIs when the "Actor" is the same
+- the application is responsible for freeing handles and memory, no implcit garabage collection is supported by the driver
+
+Each API function must document details on the multithreading requirements for that call.
+
+The primary usage-model enabled by these rules is:
 - work submission occurs exclusively by enqueing command lists into a command queue
 - work submission into a command queue is free-threaded
 - multiple, simulateneous threads may encode multiple command lists independently
-- the application is responsible for ensuring multiple, simultaneous threads are not modifying mutable objects;
-  such as command lists
-- the application is responsible for ensuring the device is not accessing objects before they are modified, resued or destroyed;
-  such as memory, images and command lists
-- there is no implicit garbage collection of driver objects or memory allocations performed by the application
-- each API documents more details on the multithreading requirements for that call
 
 ${"#"} <a name="drv">Drivers</a>
 ${"##"} Installation
