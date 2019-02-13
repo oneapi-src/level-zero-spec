@@ -67,7 +67,7 @@ For example, a sub-device can be used with memory allocation and tasks dispatch 
 ## Peer-to-Peer Communication
 Peer to Peer API's provide capabilities to marshall data across Host to Device, Device to Host and Device to Device. 
 The data marshalling API can be scheduled as asynchronous operations or can be synchronized with kernel execution through command queues. 
-Data coherency is maintained by the driver with out any explicit involement from the user.
+Data coherency is maintained by the driver with out any explicit involement from the application.
 
 ## Inter-Process Communication
 The API allows sharing of memory objects across different device processes. 
@@ -123,8 +123,8 @@ There are multiple versions that should be used by the application to determine 
 
 ## Error Handling
 The following rules must be followed in order to maximize robustness and security:
-- all functions must never throw exceptions or fail silently.
 - all functions must return ::xe_result_t.
+- all functions must never throw exceptions or fail silently.
 - all function parameters should be validated prior to execution to ensure implementation compatibility, such as structure version.
 
 ## Multithreading

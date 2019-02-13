@@ -611,7 +611,9 @@ However, in cases where the devices does **not** support page-faulting _and_ the
 such as multiple levels of indirection, there are two methods available:
 1. the application may set the ::XE_FUNCTION_FLAG_FORCE_RESIDENCY flag during program creation to force all device allocations to be resident during execution.
  + in addition, the application should indicate the type of allocations that will be indirectly accessed using ::xe_function_argument_attribute_t
-2. explcit APIs are included for the application to dynamically change residency as needed.
+ + if the driver is unable to make all allocations resident, then the call to xeCommandListEncodeDispatchFunction will return $X_RESULT_ERROR_OUT_OF_DEVICE_MEMORY
+2. explcit xeDeviceMakeMemoryResident APIs are included for the application to dynamically change residency as needed. (Windows-only)
+ + if the application over-commits device memory, then a call to xeDeviceMakeMemoryResident will return XE_RESULT_ERROR_OUT_OF_DEVICE_MEMORY
 
 If the application does not properly manage residency for these cases then the device may experience unrecoverable page-faults.
 
@@ -886,7 +888,7 @@ Sharing an OpenCL command queue doesn't alter the lifetime of the API object.  I
 driver to potentially reuse some internal resources which may have noticeable overhead when switching the resources.
 
 Memory contents as reflected by any caching schemes will be consistent such that, for example, a memory write
-in an OpenCL command queue can be read by a subsequent xe command list without any special user action. 
+in an OpenCL command queue can be read by a subsequent xe command list without any special application action. 
 The cost to ensure memory consistency may be implementation dependent.  The performance of sharing command queues
 will be no worse than an application submitting work to OpenCL, calling clFinish followed by submitting an
 xe command list.  In most cases, command queue sharing may be much more efficient. 
