@@ -59,6 +59,33 @@ xe_result_t __xecall
     );
 
 ///////////////////////////////////////////////////////////////////////////////
+/// @brief Retrieve 
+/// 
+/// @details
+///     - The application may call this function from simultaneous threads.
+///     - The implementation of this function should be lock-free.
+/// 
+/// @remarks
+///   _Analogues_
+///     - **cuDeviceGet**
+///     - clGetDeviceIDs
+/// 
+/// @returns
+///     - ::XE_RESULT_SUCCESS
+///     - ::XE_RESULT_ERROR_UNINITIALIZED
+///     - ::XE_RESULT_ERROR_UNSUPPORTED
+///     - ::XE_RESULT_ERROR_INVALID_PARAMETER
+///         + invalid unique id. @todo May need another error code for lost device?
+///         + nullptr for pUniqueIds
+xe_result_t __xecall
+  xeDriverGetDeviceUniqueIds(
+    uint32_t count,                                 ///< [in] size of device unique ids array. Typically, this will be
+                                                    ///< ${x}DeviceGetCount.
+    uint32_t** pUniqueIds                           ///< [out] pointer to an array of unique ids for devices. Caller must
+                                                    ///< supply array.
+    );
+
+///////////////////////////////////////////////////////////////////////////////
 /// @brief Returns a handle to the device object
 /// 
 /// @details
@@ -79,7 +106,8 @@ xe_result_t __xecall
 ///         + nullptr for phDevice
 xe_result_t __xecall
   xeDriverGetDevice(
-    uint32_t ordinal,                               ///< [in] ordinal of device to retrieve
+    uint32_t uniqueId,                              ///< [in] unique id of device to retrieve. Use ${x}DriverGetDeviceUniqueIds
+                                                    ///< to obtain a unique Id.
     xe_device_handle_t* phDevice                    ///< [out] pointer to handle of device object created
     );
 

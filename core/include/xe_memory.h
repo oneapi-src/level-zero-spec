@@ -38,6 +38,52 @@
 #include "xe_common.h"
 
 ///////////////////////////////////////////////////////////////////////////////
+/// @brief Handle to a memory allocator
+struct _xe_mem_allocator_handle_t;
+using xe_mem_allocator_handle_t = _xe_mem_allocator_handle_t*;
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Creates an handle to a memory allocator
+/// 
+/// @details
+///     - Memory allocators store information about allocations.
+///     - The application may call this function from simultaneous threads.
+///     - The implementation of this function should be lock-free.
+/// 
+/// @returns
+///     - ::XE_RESULT_SUCCESS
+///     - ::XE_RESULT_ERROR_UNINITIALIZED
+///     - ::XE_RESULT_ERROR_UNSUPPORTED
+///     - ::XE_RESULT_ERROR_INVALID_PARAMETER
+///         + nullptr for pMemAllocHandle
+xe_result_t __xecall
+  xeCreateMemAllocator(
+    xe_mem_allocator_handle_t* phMemAllocHandle     ///< [out] Returned memory allocator handle
+    );
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Deletes a memory allocator
+/// 
+/// @details
+///     - The application is responsible for making sure the GPU is not
+///       currently referencing any memory allocations associated with this
+///       allocator before it is deleted.
+///     - The implementation of this function will immediately free all memory
+///       allocations associated with this allocator.
+///     - The implementation of this function should be lock-free.
+/// 
+/// @returns
+///     - ::XE_RESULT_SUCCESS
+///     - ::XE_RESULT_ERROR_UNINITIALIZED
+///     - ::XE_RESULT_ERROR_UNSUPPORTED
+///     - ::XE_RESULT_ERROR_INVALID_PARAMETER
+///         + invalid handle for hMemAllocHandle
+xe_result_t __xecall
+  xeMemAllocatorDestroy(
+    xe_mem_allocator_handle_t hMemAllocHandle       ///< [in] handle of memory allocator to destroy
+    );
+
+///////////////////////////////////////////////////////////////////////////////
 /// @brief Supported device memory allocation flags
 typedef enum _xe_device_mem_alloc_flags_t
 {
@@ -77,6 +123,7 @@ typedef enum _xe_host_mem_alloc_flags_t
 ///     - ::XE_RESULT_ERROR_UNINITIALIZED
 ///     - ::XE_RESULT_ERROR_UNSUPPORTED
 ///     - ::XE_RESULT_ERROR_INVALID_PARAMETER
+///         + invalid handle for hMemAllocHandle
 ///         + invalid handle for hDevice
 ///         + unsupported allocation size
 ///         + unsupported alignment
@@ -85,6 +132,7 @@ typedef enum _xe_host_mem_alloc_flags_t
 ///     - ::XE_RESULT_ERROR_OUT_OF_DEVICE_MEMORY
 xe_result_t __xecall
   xeSharedMemAlloc(
+    xe_mem_allocator_handle_t hMemAllocHandle,      ///< [in] handle of memory allocator for this allocation
     xe_device_handle_t hDevice,                     ///< [in] handle of the device
     xe_device_mem_alloc_flags_t device_flags,       ///< [in] flags specifying additional device allocation controls
     xe_host_mem_alloc_flags_t host_flags,           ///< [in] flags specifying additional host allocation controls
@@ -112,6 +160,7 @@ xe_result_t __xecall
 ///     - ::XE_RESULT_ERROR_UNINITIALIZED
 ///     - ::XE_RESULT_ERROR_UNSUPPORTED
 ///     - ::XE_RESULT_ERROR_INVALID_PARAMETER
+///         + invalid handle for hMemAllocHandle
 ///         + invalid handle for hDevice
 ///         + unsupported allocation size
 ///         + unsupported alignment
@@ -120,6 +169,7 @@ xe_result_t __xecall
 ///     - ::XE_RESULT_ERROR_OUT_OF_DEVICE_MEMORY
 xe_result_t __xecall
   xeMemAlloc(
+    xe_mem_allocator_handle_t hMemAllocHandle,      ///< [in] handle of memory allocator for this allocation
     xe_device_handle_t hDevice,                     ///< [in] handle of the device
     xe_device_mem_alloc_flags_t flags,              ///< [in] flags specifying additional allocation controls
     size_t size,                                    ///< [in] size in bytes to allocate
@@ -147,7 +197,7 @@ xe_result_t __xecall
 ///     - ::XE_RESULT_ERROR_UNINITIALIZED
 ///     - ::XE_RESULT_ERROR_UNSUPPORTED
 ///     - ::XE_RESULT_ERROR_INVALID_PARAMETER
-///         + invalid handle for hDevice
+///         + invalid handle for hMemAllocHandle
 ///         + unsupported allocation size
 ///         + unsupported alignment
 ///         + nullptr for ptr
@@ -155,7 +205,7 @@ xe_result_t __xecall
 ///     - ::XE_RESULT_ERROR_OUT_OF_DEVICE_MEMORY
 xe_result_t __xecall
   xeHostMemAlloc(
-    xe_device_handle_t hDevice,                     ///< [in] handle of the device to track the allocation
+    xe_mem_allocator_handle_t hMemAllocHandle,      ///< [in] handle of memory allocator for this allocation
     xe_host_mem_alloc_flags_t flags,                ///< [in] flags specifying additional allocation controls
     size_t size,                                    ///< [in] size in bytes to allocate
     size_t alignment,                               ///< [in] minimum alignment in bytes for the allocation
@@ -182,11 +232,11 @@ xe_result_t __xecall
 ///     - ::XE_RESULT_ERROR_UNINITIALIZED
 ///     - ::XE_RESULT_ERROR_UNSUPPORTED
 ///     - ::XE_RESULT_ERROR_INVALID_PARAMETER
-///         + invalid handle for hDevice
+///         + invalid handle for hMemAllocHandle
 ///         + invalid ptr
 xe_result_t __xecall
   xeMemFree(
-    xe_device_handle_t hDevice,                     ///< [in] handle of the device tracking the allocation
+    xe_mem_allocator_handle_t hMemAllocHandle,      ///< [in] handle of memory allocator for this allocation
     const void* ptr                                 ///< [in] pointer to memory to free
     );
 
@@ -225,13 +275,13 @@ typedef enum _xe_memory_property_t
 ///     - ::XE_RESULT_ERROR_UNINITIALIZED
 ///     - ::XE_RESULT_ERROR_UNSUPPORTED
 ///     - ::XE_RESULT_ERROR_INVALID_PARAMETER
-///         + invalid handle for hDevice
+///         + invalid handle for hMemAllocHandle
 ///         + invalid ptr
 ///         + invalid property
 ///         + nullptr for pValue
 xe_result_t __xecall
   xeMemGetProperty(
-    xe_device_handle_t hDevice,                     ///< [in] handle of the device tracking the allocation
+    xe_mem_allocator_handle_t hMemAllocHandle,      ///< [in] handle of memory allocator for this allocation
     const void* ptr,                                ///< [in] Pointer to query
     xe_memory_property_t property,                  ///< [in] Property of the allocation to query
     void* pValue                                    ///< [out] Value of the queried property
@@ -253,12 +303,12 @@ xe_result_t __xecall
 ///     - ::XE_RESULT_ERROR_UNINITIALIZED
 ///     - ::XE_RESULT_ERROR_UNSUPPORTED
 ///     - ::XE_RESULT_ERROR_INVALID_PARAMETER
-///         + invalid handle for hDevice
+///         + invalid handle for hMemAllocHandle
 ///         + invalid ptr
 ///         + nullptr for both pBase and pSize
 xe_result_t __xecall
   xeMemGetAddressRange(
-    xe_device_handle_t hDevice,                     ///< [in] handle of the device tracking the allocation
+    xe_mem_allocator_handle_t hMemAllocHandle,      ///< [in] handle of memory allocator for this allocation
     const void* ptr,                                ///< [in] Pointer to query
     void** pBase,                                   ///< [out] Returned base address of the allocation (optional)
     size_t* pSize                                   ///< [out] Returned size of the allocation (optional)
@@ -283,12 +333,12 @@ xe_result_t __xecall
 ///     - ::XE_RESULT_ERROR_UNINITIALIZED
 ///     - ::XE_RESULT_ERROR_UNSUPPORTED
 ///     - ::XE_RESULT_ERROR_INVALID_PARAMETER
-///         + invalid handle for hDevice
+///         + invalid handle for hMemAllocHandle
 ///         + invalid ptr
 ///         + nullptr for pIpcHandle
 xe_result_t __xecall
   xeIpcGetMemHandle(
-    xe_device_handle_t hDevice,                     ///< [in] handle of the device tracking the allocation
+    xe_mem_allocator_handle_t hMemAllocHandle,      ///< [in] handle of memory allocator for this allocation
     const void* ptr,                                ///< [in] Pointer to the device memory allocation
     xe_ipc_mem_handle_t* pIpcHandle                 ///< [out] Returned IPC memory handle
     );
@@ -322,12 +372,14 @@ typedef enum _xe_ipc_memory_flags_t
 ///     - ::XE_RESULT_ERROR_UNINITIALIZED
 ///     - ::XE_RESULT_ERROR_UNSUPPORTED
 ///     - ::XE_RESULT_ERROR_INVALID_PARAMETER
+///         + invalid handle for hMemAllocHandle
 ///         + invalid handle for hDevice
 ///         + invalid handle for handle
 ///         + invalid flags
 ///         + nullptr for ptr
 xe_result_t __xecall
   xeIpcOpenMemHandle(
+    xe_mem_allocator_handle_t hMemAllocHandle,      ///< [in] handle of memory allocator for this allocation
     xe_device_handle_t hDevice,                     ///< [in] handle of the device to associate with the IPC memory handle
     xe_ipc_mem_handle_t handle,                     ///< [in] IPC memory handle
     xe_ipc_memory_flags_t flags,                    ///< [in] flags controlling the operation
@@ -352,11 +404,11 @@ xe_result_t __xecall
 ///     - ::XE_RESULT_ERROR_UNINITIALIZED
 ///     - ::XE_RESULT_ERROR_UNSUPPORTED
 ///     - ::XE_RESULT_ERROR_INVALID_PARAMETER
-///         + invalid handle for hDevice
+///         + invalid handle for hMemAllocHandle
 ///         + invalid ptr
 xe_result_t __xecall
   xeIpcCloseMemHandle(
-    xe_device_handle_t hDevice,                     ///< [in] handle of the device associated with the device pointer
+    xe_mem_allocator_handle_t hMemAllocHandle,      ///< [in] handle of memory allocator for this allocation
     const void* ptr                                 ///< [in] pointer to device allocation in this process
     );
 

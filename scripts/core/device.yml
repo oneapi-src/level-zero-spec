@@ -20,6 +20,28 @@ returns:
         - "nullptr for count"
 --- #--------------------------------------------------------------------------
 type: function
+desc: "Retrieve "
+class: $xDriver
+name: GetDeviceUniqueIds
+analogue:
+    - "**cuDeviceGet**"
+    - clGetDeviceIDs
+details:
+    - "The application may call this function from simultaneous threads."
+    - "The implementation of this function should be lock-free."
+params:
+    - type: uint32_t
+      name: count
+      desc: "[in] size of device unique ids array. Typically, this will be ${x}DeviceGetCount."
+    - type: "uint32_t**"
+      name: pUniqueIds
+      desc: "[out] pointer to an array of unique ids for devices. Caller must supply array."
+returns:
+    - $X_RESULT_ERROR_INVALID_PARAMETER:
+        - "invalid unique id. @todo May need another error code for lost device?"
+        - "nullptr for pUniqueIds"
+--- #--------------------------------------------------------------------------
+type: function
 desc: "Returns a handle to the device object"
 class: $xDriver
 name: GetDevice
@@ -31,8 +53,8 @@ details:
     - "The implementation of this function should be lock-free."
 params:
     - type: uint32_t
-      name: ordinal
-      desc: "[in] ordinal of device to retrieve"
+      name: uniqueId
+      desc: "[in] unique id of device to retrieve. Use ${x}DriverGetDeviceUniqueIds to obtain a unique Id."
     - type: "$x_device_handle_t*"
       name: phDevice
       desc: "[out] pointer to handle of device object created"

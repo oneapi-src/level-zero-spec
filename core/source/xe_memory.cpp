@@ -33,6 +33,69 @@
 #include "../include/xe_memory.h"
 
 ///////////////////////////////////////////////////////////////////////////////
+/// @brief Creates an handle to a memory allocator
+/// 
+/// @details
+///     - Memory allocators store information about allocations.
+///     - The application may call this function from simultaneous threads.
+///     - The implementation of this function should be lock-free.
+/// 
+/// @returns
+///     - ::XE_RESULT_SUCCESS
+///     - ::XE_RESULT_ERROR_UNINITIALIZED
+///     - ::XE_RESULT_ERROR_UNSUPPORTED
+///     - ::XE_RESULT_ERROR_INVALID_PARAMETER
+///         + nullptr for pMemAllocHandle
+/*@todo: __declspec(dllexport)*/
+xe_result_t __xecall
+  xeCreateMemAllocator(
+    xe_mem_allocator_handle_t* phMemAllocHandle     ///< [out] Returned memory allocator handle
+    )
+{
+    // @todo: check_return(nullptr == get_driver(), XE_RESULT_ERROR_UNINITIALIZED);
+
+    // Check parameters
+    // @todo: check_return(nullptr == phMemAllocHandle, XE_RESULT_ERROR_INVALID_PARAMETER);
+
+    // @todo: insert <code> here
+
+    return XE_RESULT_SUCCESS;
+}
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Deletes a memory allocator
+/// 
+/// @details
+///     - The application is responsible for making sure the GPU is not
+///       currently referencing any memory allocations associated with this
+///       allocator before it is deleted.
+///     - The implementation of this function will immediately free all memory
+///       allocations associated with this allocator.
+///     - The implementation of this function should be lock-free.
+/// 
+/// @returns
+///     - ::XE_RESULT_SUCCESS
+///     - ::XE_RESULT_ERROR_UNINITIALIZED
+///     - ::XE_RESULT_ERROR_UNSUPPORTED
+///     - ::XE_RESULT_ERROR_INVALID_PARAMETER
+///         + invalid handle for hMemAllocHandle
+/*@todo: __declspec(dllexport)*/
+xe_result_t __xecall
+  xeMemAllocatorDestroy(
+    xe_mem_allocator_handle_t hMemAllocHandle       ///< [in] handle of memory allocator to destroy
+    )
+{
+    // @todo: check_return(nullptr == get_driver(), XE_RESULT_ERROR_UNINITIALIZED);
+
+    // Check parameters
+    // @todo: check_return(xe_mem_allocator_handle_t() == hMemAllocHandle, XE_RESULT_ERROR_INVALID_PARAMETER);
+
+    // @todo: insert <code> here
+
+    return XE_RESULT_SUCCESS;
+}
+
+///////////////////////////////////////////////////////////////////////////////
 /// @brief Allocates memory that is shared between the host and one or more
 ///        devices
 /// 
@@ -51,6 +114,7 @@
 ///     - ::XE_RESULT_ERROR_UNINITIALIZED
 ///     - ::XE_RESULT_ERROR_UNSUPPORTED
 ///     - ::XE_RESULT_ERROR_INVALID_PARAMETER
+///         + invalid handle for hMemAllocHandle
 ///         + invalid handle for hDevice
 ///         + unsupported allocation size
 ///         + unsupported alignment
@@ -60,6 +124,7 @@
 /*@todo: __declspec(dllexport)*/
 xe_result_t __xecall
   xeSharedMemAlloc(
+    xe_mem_allocator_handle_t hMemAllocHandle,      ///< [in] handle of memory allocator for this allocation
     xe_device_handle_t hDevice,                     ///< [in] handle of the device
     xe_device_mem_alloc_flags_t device_flags,       ///< [in] flags specifying additional device allocation controls
     xe_host_mem_alloc_flags_t host_flags,           ///< [in] flags specifying additional host allocation controls
@@ -71,6 +136,7 @@ xe_result_t __xecall
     // @todo: check_return(nullptr == get_driver(), XE_RESULT_ERROR_UNINITIALIZED);
 
     // Check parameters
+    // @todo: check_return(xe_mem_allocator_handle_t() == hMemAllocHandle, XE_RESULT_ERROR_INVALID_PARAMETER);
     // @todo: check_return(xe_device_handle_t() == hDevice, XE_RESULT_ERROR_INVALID_PARAMETER);
     // @todo: check_return(nullptr == ptr, XE_RESULT_ERROR_INVALID_PARAMETER);
 
@@ -98,6 +164,7 @@ xe_result_t __xecall
 ///     - ::XE_RESULT_ERROR_UNINITIALIZED
 ///     - ::XE_RESULT_ERROR_UNSUPPORTED
 ///     - ::XE_RESULT_ERROR_INVALID_PARAMETER
+///         + invalid handle for hMemAllocHandle
 ///         + invalid handle for hDevice
 ///         + unsupported allocation size
 ///         + unsupported alignment
@@ -107,6 +174,7 @@ xe_result_t __xecall
 /*@todo: __declspec(dllexport)*/
 xe_result_t __xecall
   xeMemAlloc(
+    xe_mem_allocator_handle_t hMemAllocHandle,      ///< [in] handle of memory allocator for this allocation
     xe_device_handle_t hDevice,                     ///< [in] handle of the device
     xe_device_mem_alloc_flags_t flags,              ///< [in] flags specifying additional allocation controls
     size_t size,                                    ///< [in] size in bytes to allocate
@@ -117,6 +185,7 @@ xe_result_t __xecall
     // @todo: check_return(nullptr == get_driver(), XE_RESULT_ERROR_UNINITIALIZED);
 
     // Check parameters
+    // @todo: check_return(xe_mem_allocator_handle_t() == hMemAllocHandle, XE_RESULT_ERROR_INVALID_PARAMETER);
     // @todo: check_return(xe_device_handle_t() == hDevice, XE_RESULT_ERROR_INVALID_PARAMETER);
     // @todo: check_return(nullptr == ptr, XE_RESULT_ERROR_INVALID_PARAMETER);
 
@@ -145,7 +214,7 @@ xe_result_t __xecall
 ///     - ::XE_RESULT_ERROR_UNINITIALIZED
 ///     - ::XE_RESULT_ERROR_UNSUPPORTED
 ///     - ::XE_RESULT_ERROR_INVALID_PARAMETER
-///         + invalid handle for hDevice
+///         + invalid handle for hMemAllocHandle
 ///         + unsupported allocation size
 ///         + unsupported alignment
 ///         + nullptr for ptr
@@ -154,7 +223,7 @@ xe_result_t __xecall
 /*@todo: __declspec(dllexport)*/
 xe_result_t __xecall
   xeHostMemAlloc(
-    xe_device_handle_t hDevice,                     ///< [in] handle of the device to track the allocation
+    xe_mem_allocator_handle_t hMemAllocHandle,      ///< [in] handle of memory allocator for this allocation
     xe_host_mem_alloc_flags_t flags,                ///< [in] flags specifying additional allocation controls
     size_t size,                                    ///< [in] size in bytes to allocate
     size_t alignment,                               ///< [in] minimum alignment in bytes for the allocation
@@ -164,7 +233,7 @@ xe_result_t __xecall
     // @todo: check_return(nullptr == get_driver(), XE_RESULT_ERROR_UNINITIALIZED);
 
     // Check parameters
-    // @todo: check_return(xe_device_handle_t() == hDevice, XE_RESULT_ERROR_INVALID_PARAMETER);
+    // @todo: check_return(xe_mem_allocator_handle_t() == hMemAllocHandle, XE_RESULT_ERROR_INVALID_PARAMETER);
     // @todo: check_return(nullptr == ptr, XE_RESULT_ERROR_INVALID_PARAMETER);
 
     // @todo: insert <code> here
@@ -192,19 +261,19 @@ xe_result_t __xecall
 ///     - ::XE_RESULT_ERROR_UNINITIALIZED
 ///     - ::XE_RESULT_ERROR_UNSUPPORTED
 ///     - ::XE_RESULT_ERROR_INVALID_PARAMETER
-///         + invalid handle for hDevice
+///         + invalid handle for hMemAllocHandle
 ///         + invalid ptr
 /*@todo: __declspec(dllexport)*/
 xe_result_t __xecall
   xeMemFree(
-    xe_device_handle_t hDevice,                     ///< [in] handle of the device tracking the allocation
+    xe_mem_allocator_handle_t hMemAllocHandle,      ///< [in] handle of memory allocator for this allocation
     const void* ptr                                 ///< [in] pointer to memory to free
     )
 {
     // @todo: check_return(nullptr == get_driver(), XE_RESULT_ERROR_UNINITIALIZED);
 
     // Check parameters
-    // @todo: check_return(xe_device_handle_t() == hDevice, XE_RESULT_ERROR_INVALID_PARAMETER);
+    // @todo: check_return(xe_mem_allocator_handle_t() == hMemAllocHandle, XE_RESULT_ERROR_INVALID_PARAMETER);
     // @todo: check_return(nullptr == ptr, XE_RESULT_ERROR_INVALID_PARAMETER);
 
     // @todo: insert <code> here
@@ -228,14 +297,14 @@ xe_result_t __xecall
 ///     - ::XE_RESULT_ERROR_UNINITIALIZED
 ///     - ::XE_RESULT_ERROR_UNSUPPORTED
 ///     - ::XE_RESULT_ERROR_INVALID_PARAMETER
-///         + invalid handle for hDevice
+///         + invalid handle for hMemAllocHandle
 ///         + invalid ptr
 ///         + invalid property
 ///         + nullptr for pValue
 /*@todo: __declspec(dllexport)*/
 xe_result_t __xecall
   xeMemGetProperty(
-    xe_device_handle_t hDevice,                     ///< [in] handle of the device tracking the allocation
+    xe_mem_allocator_handle_t hMemAllocHandle,      ///< [in] handle of memory allocator for this allocation
     const void* ptr,                                ///< [in] Pointer to query
     xe_memory_property_t property,                  ///< [in] Property of the allocation to query
     void* pValue                                    ///< [out] Value of the queried property
@@ -244,7 +313,7 @@ xe_result_t __xecall
     // @todo: check_return(nullptr == get_driver(), XE_RESULT_ERROR_UNINITIALIZED);
 
     // Check parameters
-    // @todo: check_return(xe_device_handle_t() == hDevice, XE_RESULT_ERROR_INVALID_PARAMETER);
+    // @todo: check_return(xe_mem_allocator_handle_t() == hMemAllocHandle, XE_RESULT_ERROR_INVALID_PARAMETER);
     // @todo: check_return(nullptr == ptr, XE_RESULT_ERROR_INVALID_PARAMETER);
     // @todo: check_return(nullptr == pValue, XE_RESULT_ERROR_INVALID_PARAMETER);
 
@@ -269,13 +338,13 @@ xe_result_t __xecall
 ///     - ::XE_RESULT_ERROR_UNINITIALIZED
 ///     - ::XE_RESULT_ERROR_UNSUPPORTED
 ///     - ::XE_RESULT_ERROR_INVALID_PARAMETER
-///         + invalid handle for hDevice
+///         + invalid handle for hMemAllocHandle
 ///         + invalid ptr
 ///         + nullptr for both pBase and pSize
 /*@todo: __declspec(dllexport)*/
 xe_result_t __xecall
   xeMemGetAddressRange(
-    xe_device_handle_t hDevice,                     ///< [in] handle of the device tracking the allocation
+    xe_mem_allocator_handle_t hMemAllocHandle,      ///< [in] handle of memory allocator for this allocation
     const void* ptr,                                ///< [in] Pointer to query
     void** pBase,                                   ///< [out] Returned base address of the allocation (optional)
     size_t* pSize                                   ///< [out] Returned size of the allocation (optional)
@@ -284,7 +353,7 @@ xe_result_t __xecall
     // @todo: check_return(nullptr == get_driver(), XE_RESULT_ERROR_UNINITIALIZED);
 
     // Check parameters
-    // @todo: check_return(xe_device_handle_t() == hDevice, XE_RESULT_ERROR_INVALID_PARAMETER);
+    // @todo: check_return(xe_mem_allocator_handle_t() == hMemAllocHandle, XE_RESULT_ERROR_INVALID_PARAMETER);
     // @todo: check_return(nullptr == ptr, XE_RESULT_ERROR_INVALID_PARAMETER);
     // @todo: check_return(nullptr == pBase, XE_RESULT_ERROR_INVALID_PARAMETER);
     // @todo: check_return(nullptr == pSize, XE_RESULT_ERROR_INVALID_PARAMETER);
@@ -313,13 +382,13 @@ xe_result_t __xecall
 ///     - ::XE_RESULT_ERROR_UNINITIALIZED
 ///     - ::XE_RESULT_ERROR_UNSUPPORTED
 ///     - ::XE_RESULT_ERROR_INVALID_PARAMETER
-///         + invalid handle for hDevice
+///         + invalid handle for hMemAllocHandle
 ///         + invalid ptr
 ///         + nullptr for pIpcHandle
 /*@todo: __declspec(dllexport)*/
 xe_result_t __xecall
   xeIpcGetMemHandle(
-    xe_device_handle_t hDevice,                     ///< [in] handle of the device tracking the allocation
+    xe_mem_allocator_handle_t hMemAllocHandle,      ///< [in] handle of memory allocator for this allocation
     const void* ptr,                                ///< [in] Pointer to the device memory allocation
     xe_ipc_mem_handle_t* pIpcHandle                 ///< [out] Returned IPC memory handle
     )
@@ -327,7 +396,7 @@ xe_result_t __xecall
     // @todo: check_return(nullptr == get_driver(), XE_RESULT_ERROR_UNINITIALIZED);
 
     // Check parameters
-    // @todo: check_return(xe_device_handle_t() == hDevice, XE_RESULT_ERROR_INVALID_PARAMETER);
+    // @todo: check_return(xe_mem_allocator_handle_t() == hMemAllocHandle, XE_RESULT_ERROR_INVALID_PARAMETER);
     // @todo: check_return(nullptr == ptr, XE_RESULT_ERROR_INVALID_PARAMETER);
     // @todo: check_return(nullptr == pIpcHandle, XE_RESULT_ERROR_INVALID_PARAMETER);
 
@@ -357,6 +426,7 @@ xe_result_t __xecall
 ///     - ::XE_RESULT_ERROR_UNINITIALIZED
 ///     - ::XE_RESULT_ERROR_UNSUPPORTED
 ///     - ::XE_RESULT_ERROR_INVALID_PARAMETER
+///         + invalid handle for hMemAllocHandle
 ///         + invalid handle for hDevice
 ///         + invalid handle for handle
 ///         + invalid flags
@@ -364,6 +434,7 @@ xe_result_t __xecall
 /*@todo: __declspec(dllexport)*/
 xe_result_t __xecall
   xeIpcOpenMemHandle(
+    xe_mem_allocator_handle_t hMemAllocHandle,      ///< [in] handle of memory allocator for this allocation
     xe_device_handle_t hDevice,                     ///< [in] handle of the device to associate with the IPC memory handle
     xe_ipc_mem_handle_t handle,                     ///< [in] IPC memory handle
     xe_ipc_memory_flags_t flags,                    ///< [in] flags controlling the operation
@@ -373,6 +444,7 @@ xe_result_t __xecall
     // @todo: check_return(nullptr == get_driver(), XE_RESULT_ERROR_UNINITIALIZED);
 
     // Check parameters
+    // @todo: check_return(xe_mem_allocator_handle_t() == hMemAllocHandle, XE_RESULT_ERROR_INVALID_PARAMETER);
     // @todo: check_return(xe_device_handle_t() == hDevice, XE_RESULT_ERROR_INVALID_PARAMETER);
     // @todo: check_return(xe_ipc_mem_handle_t() == handle, XE_RESULT_ERROR_INVALID_PARAMETER);
     // @todo: check_return(nullptr == ptr, XE_RESULT_ERROR_INVALID_PARAMETER);
@@ -400,19 +472,19 @@ xe_result_t __xecall
 ///     - ::XE_RESULT_ERROR_UNINITIALIZED
 ///     - ::XE_RESULT_ERROR_UNSUPPORTED
 ///     - ::XE_RESULT_ERROR_INVALID_PARAMETER
-///         + invalid handle for hDevice
+///         + invalid handle for hMemAllocHandle
 ///         + invalid ptr
 /*@todo: __declspec(dllexport)*/
 xe_result_t __xecall
   xeIpcCloseMemHandle(
-    xe_device_handle_t hDevice,                     ///< [in] handle of the device associated with the device pointer
+    xe_mem_allocator_handle_t hMemAllocHandle,      ///< [in] handle of memory allocator for this allocation
     const void* ptr                                 ///< [in] pointer to device allocation in this process
     )
 {
     // @todo: check_return(nullptr == get_driver(), XE_RESULT_ERROR_UNINITIALIZED);
 
     // Check parameters
-    // @todo: check_return(xe_device_handle_t() == hDevice, XE_RESULT_ERROR_INVALID_PARAMETER);
+    // @todo: check_return(xe_mem_allocator_handle_t() == hMemAllocHandle, XE_RESULT_ERROR_INVALID_PARAMETER);
     // @todo: check_return(nullptr == ptr, XE_RESULT_ERROR_INVALID_PARAMETER);
 
     // @todo: insert <code> here
