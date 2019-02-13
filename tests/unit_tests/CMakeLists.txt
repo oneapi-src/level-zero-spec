@@ -127,6 +127,12 @@ if(COMPUTE_RUNTIME_SUPPORT)
         compute_runtime_mockable_extra
     )
 
+    if(SUPPORT_AUB_STREAM)
+        target_link_libraries(${TARGET_NAME} 
+            aub_stream
+        )
+    endif()
+
     add_dependencies(${TARGET_NAME} mock_gmm)
 endif(COMPUTE_RUNTIME_SUPPORT)
 

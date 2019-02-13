@@ -64,3 +64,4 @@ latex/
 /third_party/wdk/
 /third_party/compute_runtime/
 /third_party/cotire/
+/third_party/aub_stream/

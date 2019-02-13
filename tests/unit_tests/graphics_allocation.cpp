@@ -9,7 +9,7 @@ GraphicsAllocation::GraphicsAllocation(OCLRT::GraphicsAllocation *allocationRT)
 }
 
 GraphicsAllocation::GraphicsAllocation(void *buffer, size_t size) {
-    allocationRT = new OCLRT::GraphicsAllocation(buffer, reinterpret_cast<uint64_t>(buffer), 0, size, 1, false);
+    allocationRT = new OCLRT::GraphicsAllocation(buffer, reinterpret_cast<uint64_t>(buffer), 0, size, false);
 }
 
 uint64_t GraphicsAllocation::getGpuAddress() const {

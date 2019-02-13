@@ -1,4 +1,11 @@
 components:
+  aub_stream:
+    branch: master
+    clean_on_sync: true
+    dest_dir: third_party/aub_stream
+    repository: https://github.intel.com/bfliflet/aub_stream
+    revision: 65c7b9efac0a85f74d538fd70e5b9815b26e1ef7
+    type: git
   googletest:
     branch: master
     clean_on_sync: false
@@ -11,7 +18,7 @@ components:
     clean_on_sync: false
     dest_dir: third_party/compute_runtime
     repository: ssh://gerrit-gfx.intel.com:29418/gfx/compute/neo
-    revision: 9d8f280d5c3a1c0feb229301b25f07ada0fa6ab3
+    revision: 46225890a9d697c05498d54bb62a7e533f035d9b
     type: git
   wdk:
     asset_name: wdk

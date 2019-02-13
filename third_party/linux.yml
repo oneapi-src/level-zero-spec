@@ -11,7 +11,7 @@ components:
     clean_on_sync: false
     dest_dir: third_party/compute_runtime
     repository: ssh://gerrit-gfx.intel.com:29418/gfx/compute/neo
-    revision: 9d8f280d5c3a1c0feb229301b25f07ada0fa6ab3
+    revision: 46225890a9d697c05498d54bb62a7e533f035d9b
     type: git
   igc:
     asset_name: igc

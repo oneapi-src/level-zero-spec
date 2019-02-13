@@ -1,4 +1,11 @@
 components:
+  aub_stream:
+    branch: master
+    clean_on_sync: true
+    dest_dir: third_party/aub_stream
+    repository: https://github.intel.com/bfliflet/aub_stream
+    revision: 65c7b9efac0a85f74d538fd70e5b9815b26e1ef7
+    type: git
   gmmlib:
     asset_name: gmmlib
     asset_path: gfx-sandbox-igk/neo/build/mainline
@@ -35,7 +42,7 @@ components:
     clean_on_sync: false
     dest_dir: third_party/compute_runtime
     repository: ssh://gerrit-gfx.intel.com:29418/gfx/compute/neo
-    revision: 2aeb92fbc70451cf61260134be0f6a3c5fe70b6e
+    revision: 757e955d9906641c982c6e15e058de0f4de59321
     type: git
 converter: E-1180
 version: '1'

@@ -33,6 +33,11 @@ if(NOT DEFINED THIRD_PARTY_DIR)
     set(THIRD_PARTY_DIR ${CMAKE_CURRENT_SOURCE_DIR}/third_party)
 endif()
 
+# Add AubStream support
+if(NOT DEFINED AUB_STREAM_DIR)
+    set(AUB_STREAM_DIR ${THIRD_PARTY_DIR}/aub_stream)
+endif()
+
 # Add compute runtime support
 if(NOT DEFINED COMPUTE_RUNTIME_DIR)
     set(COMPUTE_RUNTIME_DIR ${THIRD_PARTY_DIR}/compute_runtime)
