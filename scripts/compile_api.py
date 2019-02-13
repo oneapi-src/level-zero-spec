@@ -2,7 +2,7 @@ import os
 import util
 
 def cl(filepath):
-    cmdline = "cl.exe /c %s"%filepath
+    cmdline = "cl /c %s"%filepath
     os.system(cmdline)
 
 def compile_cpp_source(path, namespace, specs):

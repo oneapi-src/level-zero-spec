@@ -19,6 +19,10 @@ def main():
         "--compile",
         help="Enable compilation of cpp files.",
         action="store_true")
+    parser.add_argument(
+        "--pdf",
+        help="Enable generation of pdf file.",
+        action="store_true")
     args = parser.parse_args()
 
     configParser = util.configRead("config.ini")
@@ -57,6 +61,8 @@ def main():
             configParser.get('PATH','extended'),
             configParser.get('NAMESPACE','extended'))
         generate_docs.generate_html()
+        if args.pdf:
+            generate_docs.generate_pdf()
 
     print("\nDone")
 

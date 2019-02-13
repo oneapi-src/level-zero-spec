@@ -20,3 +20,8 @@ def generate_html():
     print("Generating HTML/LaTeX...")
     cmdline = "doxygen Doxyfile"
     os.system(cmdline)
+
+def generate_pdf():
+    print("Generating PDF..")
+    cmdline = "..\latex\make.bat"
+    os.system(cmdline)
