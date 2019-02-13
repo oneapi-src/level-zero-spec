@@ -56,7 +56,7 @@ params:
     - type: size_t
       name: size
       desc: "[in] size in bytes to allocate"
-    - type: uint32_t
+    - type: size_t
       name: alignment
       desc: "[in] minimum alignment in bytes for the allocation"
     - type: "void**"
@@ -66,6 +66,7 @@ returns:
     - $X_RESULT_ERROR_INVALID_PARAMETER:
         - "invalid handle for hDevice"
         - "unsupported allocation size"
+        - "unsupported alignment"
         - "nullptr for ptr"
     - $X_RESULT_ERROR_OUT_OF_HOST_MEMORY
     - $X_RESULT_ERROR_OUT_OF_DEVICE_MEMORY
@@ -91,7 +92,7 @@ params:
     - type: size_t
       name: size
       desc: "[in] size in bytes to allocate"
-    - type: uint32_t
+    - type: size_t
       name: alignment
       desc: "[in] minimum alignment in bytes for the allocation"
     - type: "void**"
@@ -101,6 +102,7 @@ returns:
     - $X_RESULT_ERROR_INVALID_PARAMETER:
         - "invalid handle for hDevice"
         - "unsupported allocation size"
+        - "unsupported alignment"
         - "nullptr for ptr"
     - $X_RESULT_ERROR_OUT_OF_HOST_MEMORY
     - $X_RESULT_ERROR_OUT_OF_DEVICE_MEMORY
@@ -118,13 +120,16 @@ details:
     - "The application may call this function from simultaneous threads."
     - "The implementation of this function should be lock-free."
 params:
+    - type: "$x_device_handle_t"
+      name: hDevice
+      desc: "[in] handle of the device to track the allocation"
     - type: "$x_host_mem_alloc_flags_t"
       name: flags
       desc: "[in] flags specifying additional allocation controls"
     - type: size_t
       name: size
       desc: "[in] size in bytes to allocate"
-    - type: uint32_t
+    - type: size_t
       name: alignment
       desc: "[in] minimum alignment in bytes for the allocation"
     - type: "void**"
@@ -134,6 +139,7 @@ returns:
     - $X_RESULT_ERROR_INVALID_PARAMETER:
         - "invalid handle for hDevice"
         - "unsupported allocation size"
+        - "unsupported alignment"
         - "nullptr for ptr"
     - $X_RESULT_ERROR_OUT_OF_HOST_MEMORY
     - $X_RESULT_ERROR_OUT_OF_DEVICE_MEMORY
@@ -150,12 +156,16 @@ details:
     - "The implementation of this function will immediately free all Host and Device allocations associated with this memory"
     - "The implementation of this function should be lock-free."
 params:
+    - type: "$x_device_handle_t"
+      name: hDevice
+      desc: "[in] handle of the device tracking the allocation"
     - type: "const void*"
       name: ptr
       desc: "[in] pointer to memory to free"
 returns:
     - $X_RESULT_ERROR_INVALID_PARAMETER:
-        - "invalid pointer"
+        - "invalid handle for hDevice"
+        - "invalid ptr"
 --- #--------------------------------------------------------------------------
 type: enum
 desc: "Memory allocation type"
@@ -177,31 +187,64 @@ name: $x_memory_property_t
 etors:
     - name: $X_MEMORY_TYPE
       value: "0"
-      desc: "see $x_memory_type_t"
+      desc: "returns the type of allocated memory, see $x_memory_type_t"
 --- #--------------------------------------------------------------------------
 type: function
 desc: "Retrieves a property of an allocation"
 class: $x
 name: MemGetProperty
 analogue:
-    - "**cudaPointerGetAttributes**"
+    - "**cuPointerGetAttribute**"
 details:
     - "The application may call this function from simultaneous threads."
     - "The implementation of this function should be lock-free."
 params:
+    - type: "$x_device_handle_t"
+      name: hDevice
+      desc: "[in] handle of the device tracking the allocation"
     - type: "const void*"
       name: ptr
       desc: "[in] Pointer to query"
     - type: $x_memory_property_t
       name: property
       desc: "[in] Property of the allocation to query"
-    - type: "uint32_t*"
-      name: value
+    - type: "void*"
+      name: pValue
       desc: "[out] Value of the queried property"
 returns:
     - $X_RESULT_ERROR_INVALID_PARAMETER:
-        - "invalid pointer"
+        - "invalid handle for hDevice"
+        - "invalid ptr"
         - "invalid property"
+        - "nullptr for pValue"
+--- #--------------------------------------------------------------------------
+type: function
+desc: "Retrieves the base address and/or size of an allocation"
+class: $x
+name: MemGetAddressRange
+analogue:
+    - "**cuMemGetAddressRange**"
+details:
+    - "The application may call this function from simultaneous threads."
+    - "The implementation of this function should be lock-free."
+params:
+    - type: "$x_device_handle_t"
+      name: hDevice
+      desc: "[in] handle of the device tracking the allocation"
+    - type: "const void*"
+      name: ptr
+      desc: "[in] Pointer to query"
+    - type: "void**"
+      name: pBase
+      desc: "[out] Returned base address of the allocation (optional)"
+    - type: size_t*
+      name: pSize
+      desc: "[out] Returned size of the allocation (optional)"
+returns:
+    - $X_RESULT_ERROR_INVALID_PARAMETER:
+        - "invalid handle for hDevice"
+        - "invalid ptr"
+        - "nullptr for both pBase and pSize"
 --- #--------------------------------------------------------------------------
 type: function
 desc: "Creates an IPC memory handle for the specified allocation in the sending process"
@@ -214,6 +257,9 @@ details:
     - "The application may call this function from simultaneous threads."
     - "The implementation of this function should be lock-free."
 params:
+    - type: "$x_device_handle_t"
+      name: hDevice
+      desc: "[in] handle of the device tracking the allocation"
     - type: "const void*"
       name: ptr
       desc: "[in] Pointer to the device memory allocation"
@@ -222,7 +268,9 @@ params:
       desc: "[out] Returned IPC memory handle"
 returns:
     - $X_RESULT_ERROR_INVALID_PARAMETER:
-        - "invalid pointer"
+        - "invalid handle for hDevice"
+        - "invalid ptr"
+        - "nullptr for pIpcHandle"
 --- #--------------------------------------------------------------------------
 type: enum
 desc: "Supported IPC memory flags"
@@ -276,10 +324,10 @@ details:
 params:
     - type: "$x_device_handle_t"
       name: hDevice
-      desc: "[in] handle of the device to associate with the IPC memory handle"
+      desc: "[in] handle of the device associated with the device pointer"
     - type: "const void*"
       name: ptr
-      desc: "[in] pointer to memory to free"
+      desc: "[in] pointer to device allocation in this process"
 returns:
     - $X_RESULT_ERROR_INVALID_PARAMETER:
         - "invalid handle for hDevice"

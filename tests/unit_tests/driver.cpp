@@ -25,7 +25,7 @@ struct DriverImp : public Driver {
 static DriverImp driverImp;
 Driver *Driver::driver = &driverImp;
 
-xe_result_t xeDriverInit(xe_init_flags_t flags) {
+xe_result_t __xecall xeDriverInit(xe_init_flags_t flags) {
     return Driver::get()->initialize(flags);
 }
 

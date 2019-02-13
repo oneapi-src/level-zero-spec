@@ -52,7 +52,7 @@ html/
 latex/
 
 # Build files
-build/
+/build*/
 
 # irepo files
 .irepo

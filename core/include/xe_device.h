@@ -285,10 +285,10 @@ typedef struct _xe_device_memory_properties_t
     uint32_t maxImageDims2D;                        ///< [out] Maximum image dimensions for 2D resources.
     uint32_t maxImageDims3D;                        ///< [out] Maximum image dimensions for 3D resources.
     uint32_t maxImageArraySlices;                   ///< [out] Maximum image array slices
-    xe_memory_access_capabilities_t hostAllocCapabilities;  ///< [out] Supported operations on host memory allocations
-    xe_memory_access_capabilities_t deviceAllocCapabilities;///< [out] Supported operations on device memory allocations
-    xe_memory_access_capabilities_t sharedAllocCapabilities;///< [out] Supported operations on shared memory allocations
-    xe_memory_access_capabilities_t sharedCrossDeviceAllocCapabilities; ///< [out] Supported operations on cross-device shared memory allocations
+    xe_memory_access_capabilities_t hostAllocCapabilities;  ///< [out] Bitfield describing host memory capabilities
+    xe_memory_access_capabilities_t deviceAllocCapabilities;///< [out] Bitfield describing device memory capabilities
+    xe_memory_access_capabilities_t sharedAllocCapabilities;///< [out] Bitfield describing shared memory capabilities
+    xe_memory_access_capabilities_t sharedCrossDeviceAllocCapabilities; ///< [out] Bitfield describing cross-device shared memory capabilities
     uint32_t IntermediateCacheSize;                 ///< [out] Device Intermediate Cache(L1/L2) size
     bool IntermediateCacheControl;                  ///< [out] Support User control on Intermediate Cache(i.e. Resize SLM
                                                     ///< section vs Generic Cache).
@@ -389,64 +389,6 @@ xe_result_t __xecall
     xe_device_handle_t hDevice,                     ///< [in] handle of the device performing the access
     xe_device_handle_t hPeerDevice,                 ///< [in] handle of the peer device with the allocation
     bool* value                                     ///< [out] returned access capability
-    );
-
-///////////////////////////////////////////////////////////////////////////////
-/// @brief Enables direct access to peer device allocations
-/// 
-/// @details
-///     - The access is uni-directional and only enables access from the device
-///       to allocations on the peer device.
-///     - A separate call is required to enable access from the peer device to
-///       this device.
-///     - The application may **not** call this function from simultaneous
-///       threads with the same device handle.
-///     - @todo [**Ben**] document any limits on number of active p2p
-///       connections @todo [**Ben**] document behavior if link is already
-///       enabled
-/// 
-/// @remarks
-///   _Analogues_
-///     - **cudaDeviceEnablePeerAccess**
-/// 
-/// @returns
-///     - ::XE_RESULT_SUCCESS
-///     - ::XE_RESULT_ERROR_UNINITIALIZED
-///     - ::XE_RESULT_ERROR_UNSUPPORTED
-///     - ::XE_RESULT_ERROR_INVALID_PARAMETER
-///         + invalid handle for hDevice
-///         + invalid handle for hPeerDevice
-///         + devices do not support peer access
-xe_result_t __xecall
-  xeDeviceEnablePeerAccess(
-    xe_device_handle_t hDevice,                     ///< [in] handle of the device performing the access
-    xe_device_handle_t hPeerDevice                  ///< [in] handle of the peer device
-    );
-
-///////////////////////////////////////////////////////////////////////////////
-/// @brief Disables direct access to peer device allocations
-/// 
-/// @details
-///     - The application may **not** call this function from simultaneous
-///       threads with the same device handle.
-///     - @todo [**Ben**] document behavior if link is not enabled
-/// 
-/// @remarks
-///   _Analogues_
-///     - **cudaDeviceDisablePeerAccess**
-/// 
-/// @returns
-///     - ::XE_RESULT_SUCCESS
-///     - ::XE_RESULT_ERROR_UNINITIALIZED
-///     - ::XE_RESULT_ERROR_UNSUPPORTED
-///     - ::XE_RESULT_ERROR_INVALID_PARAMETER
-///         + invalid handle for hDevice
-///         + invalid handle for hPeerDevice
-///         + devices do not support peer access
-xe_result_t __xecall
-  xeDeviceDisablePeerAccess(
-    xe_device_handle_t hDevice,                     ///< [in] handle of the device performing the access
-    xe_device_handle_t hPeerDevice                  ///< [in] handle of the peer device
     );
 
 ///////////////////////////////////////////////////////////////////////////////
