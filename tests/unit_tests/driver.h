@@ -17,8 +17,8 @@ struct Driver {
     static Driver *driver;
 };
 
-xe_result_t xeDriverInit(xe_init_flags_t flags);
+xe_result_t __xecall xeDriverInit(xe_init_flags_t flags);
 
-xe_result_t xeDriverGetDevice(uint32_t ordinal,
+xe_result_t __xecall xeDriverGetDevice(uint32_t ordinal,
                               xe_device_handle_t *phDevice);
 } // namespace xe
