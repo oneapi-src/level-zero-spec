@@ -876,7 +876,7 @@ Sharing an OpenCL command queue doesn't alter the lifetime of the API object.  I
 driver to potentially reuse some internal resources which may have noticeable overhead when switching the resources.
 
 Memory contents as reflected by any caching schemes will be consistent such that, for example, a memory write
-in an OpenCL command queue can be read by a subsequent ${x} command list without any special user action. 
+in an OpenCL command queue can be read by a subsequent ${x} command list without any special application action. 
 The cost to ensure memory consistency may be implementation dependent.  The performance of sharing command queues
 will be no worse than an application submitting work to OpenCL, calling clFinish followed by submitting an
 ${x} command list.  In most cases, command queue sharing may be much more efficient. 
