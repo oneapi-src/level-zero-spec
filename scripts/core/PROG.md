@@ -706,7 +706,7 @@ The following sample code demonstrates a sequence for creating a module from an 
         nullptr
     };
     ${x}_module_handle_t hModule;
-    ${x}DeviceCreateModule(hDevice, &moduleDesc, &hModule);
+    ${x}DeviceCreateModule(hDevice, &moduleDesc, &hModule, nullptr);
     ...
 ```
 
