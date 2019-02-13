@@ -85,7 +85,25 @@ params:
     - type: $x_fence_handle_t
       name: hFence
       desc: "[in] handle of the fence"
+    - type: $x_synchronization_mode_t
+      name: mode
+      desc: "[in] synchronization mode"
+    - type: uint32_t
+      name: delay
+      desc: "[in] if $X_SYNCHRONIZATION_MODE_SLEEP == mode, then time (in milliseconds) to poll before putting Host thread to sleep; 
+            otherwise, must be zero."
+    - type: uint32_t
+      name: interval
+      desc: "[in] if $X_SYNCHRONIZATION_MODE_SLEEP == mode, then maximum time (in milliseconds) to put Host thread to sleep between polling;
+            otherwise, must be zero."
+    - type: uint32_t
+      name: timeout
+      desc: "[in] if non-zero, then indicates the maximum time to poll or sleep before returning;
+            if zero, then only a single status check is made before immediately returning;
+            if -1, then function will not return until complete."
 returns:
+    - $X_RESULT_NOT_READY:
+       - "timeout expired"
     - $X_RESULT_ERROR_INVALID_PARAMETER:
         - "invalid handle for hFence"
         - "fence is not enqueued in a command queue"
@@ -106,7 +124,25 @@ params:
     - type: "$x_fence_handle_t*"
       name: phFences
       desc: "[in] pointer to array of handles of the fences"
+    - type: $x_synchronization_mode_t
+      name: mode
+      desc: "[in] synchronization mode"
+    - type: uint32_t
+      name: delay
+      desc: "[in] if $X_SYNCHRONIZATION_MODE_SLEEP == mode, then time (in milliseconds) to poll before putting Host thread to sleep; 
+            otherwise, must be zero."
+    - type: uint32_t
+      name: interval
+      desc: "[in] if $X_SYNCHRONIZATION_MODE_SLEEP == mode, then maximum time (in milliseconds) to put Host thread to sleep between polling;
+            otherwise, must be zero."
+    - type: uint32_t
+      name: timeout
+      desc: "[in] if non-zero, then indicates the maximum time to poll or sleep before returning;
+            if zero, then only a single status check is made before immediately returning;
+            if -1, then function will not return until complete."
 returns:
+    - $X_RESULT_NOT_READY:
+       - "timeout expired"
     - $X_RESULT_ERROR_INVALID_PARAMETER:
         - "nullptr for phFences"
         - "any invalid handle in phFences"

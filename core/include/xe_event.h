@@ -278,11 +278,24 @@ xe_result_t __xecall
 ///     - ::XE_RESULT_SUCCESS
 ///     - ::XE_RESULT_ERROR_UNINITIALIZED
 ///     - ::XE_RESULT_ERROR_UNSUPPORTED
+///     - ::XE_RESULT_NOT_READY
+///         + timeout expired
 ///     - ::XE_RESULT_ERROR_INVALID_PARAMETER
 ///         + invalid handle for hEvent
 xe_result_t __xecall
   xeHostWaitOnEvent(
-    xe_event_handle_t hEvent                        ///< [in] handle of the event
+    xe_event_handle_t hEvent,                       ///< [in] handle of the event
+    xe_synchronization_mode_t mode,                 ///< [in] synchronization mode
+    uint32_t delay,                                 ///< [in] if ::XE_SYNCHRONIZATION_MODE_SLEEP == mode, then time (in
+                                                    ///< milliseconds) to poll before putting Host thread to sleep; otherwise,
+                                                    ///< must be zero.
+    uint32_t interval,                              ///< [in] if ::XE_SYNCHRONIZATION_MODE_SLEEP == mode, then maximum time (in
+                                                    ///< milliseconds) to put Host thread to sleep between polling; otherwise,
+                                                    ///< must be zero.
+    uint32_t timeout                                ///< [in] if non-zero, then indicates the maximum time to poll or sleep
+                                                    ///< before returning; if zero, then only a single status check is made
+                                                    ///< before immediately returning; if -1, then function will not return
+                                                    ///< until complete.
     );
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -320,13 +333,26 @@ xe_result_t __xecall
 ///     - ::XE_RESULT_SUCCESS
 ///     - ::XE_RESULT_ERROR_UNINITIALIZED
 ///     - ::XE_RESULT_ERROR_UNSUPPORTED
+///     - ::XE_RESULT_NOT_READY
+///         + timeout expired
 ///     - ::XE_RESULT_ERROR_INVALID_PARAMETER
 ///         + nullptr for phEvents
 ///         + invalid handle in phEvents
 xe_result_t __xecall
   xeHostWaitOnMultipleEvents(
     uint32_t numEvents,                             ///< [in] number of events pointed to by phEvents
-    xe_event_handle_t* phEvents                     ///< [in] pointer to array of handles of the events
+    xe_event_handle_t* phEvents,                    ///< [in] pointer to array of handles of the events
+    xe_synchronization_mode_t mode,                 ///< [in] synchronization mode
+    uint32_t delay,                                 ///< [in] if ::XE_SYNCHRONIZATION_MODE_SLEEP == mode, then time (in
+                                                    ///< milliseconds) to poll before putting Host thread to sleep; otherwise,
+                                                    ///< must be zero.
+    uint32_t interval,                              ///< [in] if ::XE_SYNCHRONIZATION_MODE_SLEEP == mode, then maximum time (in
+                                                    ///< milliseconds) to put Host thread to sleep between polling; otherwise,
+                                                    ///< must be zero.
+    uint32_t timeout                                ///< [in] if non-zero, then indicates the maximum time to poll or sleep
+                                                    ///< before returning; if zero, then only a single status check is made
+                                                    ///< before immediately returning; if -1, then function will not return
+                                                    ///< until complete.
     );
 
 ///////////////////////////////////////////////////////////////////////////////

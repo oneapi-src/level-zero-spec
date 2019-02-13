@@ -246,7 +246,7 @@ The following sample code demonstrates submission of commands to a command queue
     xeCommandQueueEnqueueCommandLists(hCommandQueue, 1, &hCommandList, nullptr);
 
     // synchronize host and device
-    xeCommandQueueSynchronize(hCommandQueue);
+    xeCommandQueueSynchronize(hCommandQueue, XE_SYNCHRONIZATION_MODE_POLL, 0, 0, -1);
 
     // Reset (recycle) command list for new commands
     xeCommandListReset(hCommandList);
@@ -398,7 +398,7 @@ The following sample code demonstrates a sequence for creation, submission and q
     // Wait for fence to be signaled
     if(XE_RESULT_SUCCESS != xeFenceQueryStatus(hFence))
     {
-        xeHostWaitOnFence(hFence);
+        xeHostWaitOnFence(hFence, XE_SYNCHRONIZATION_MODE_POLL, 0, 0, -1);
     }
 
     xeFenceReset(hFence);
@@ -660,7 +660,7 @@ The following sample code demonstrate a sequence for using fine-grain residency 
 
     // wait until complete
     xeFenceEnqueueSignal(hFence);
-    xeHostWaitOnFence(hFence);
+    xeHostWaitOnFence(hFence, XE_SYNCHRONIZATION_MODE_SLEEP, 1, 1, -1);
 
     // Finally, evict to free device resources
     xeDeviceEvictMemory(hDevice, begin->next, sizeof(node));

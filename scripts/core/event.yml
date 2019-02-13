@@ -232,7 +232,25 @@ params:
     - type: $x_event_handle_t
       name: hEvent
       desc: "[in] handle of the event"
+    - type: $x_synchronization_mode_t
+      name: mode
+      desc: "[in] synchronization mode"
+    - type: uint32_t
+      name: delay
+      desc: "[in] if $X_SYNCHRONIZATION_MODE_SLEEP == mode, then time (in milliseconds) to poll before putting Host thread to sleep; 
+            otherwise, must be zero."
+    - type: uint32_t
+      name: interval
+      desc: "[in] if $X_SYNCHRONIZATION_MODE_SLEEP == mode, then maximum time (in milliseconds) to put Host thread to sleep between polling;
+            otherwise, must be zero."
+    - type: uint32_t
+      name: timeout
+      desc: "[in] if non-zero, then indicates the maximum time to poll or sleep before returning;
+            if zero, then only a single status check is made before immediately returning;
+            if -1, then function will not return until complete."
 returns:
+    - $X_RESULT_NOT_READY:
+       - "timeout expired"
     - $X_RESULT_ERROR_INVALID_PARAMETER:
         - "invalid handle for hEvent"
 --- #--------------------------------------------------------------------------
@@ -271,7 +289,25 @@ params:
     - type: "$x_event_handle_t*"
       name: phEvents
       desc: "[in] pointer to array of handles of the events"
+    - type: $x_synchronization_mode_t
+      name: mode
+      desc: "[in] synchronization mode"
+    - type: uint32_t
+      name: delay
+      desc: "[in] if $X_SYNCHRONIZATION_MODE_SLEEP == mode, then time (in milliseconds) to poll before putting Host thread to sleep; 
+            otherwise, must be zero."
+    - type: uint32_t
+      name: interval
+      desc: "[in] if $X_SYNCHRONIZATION_MODE_SLEEP == mode, then maximum time (in milliseconds) to put Host thread to sleep between polling;
+            otherwise, must be zero."
+    - type: uint32_t
+      name: timeout
+      desc: "[in] if non-zero, then indicates the maximum time to poll or sleep before returning;
+            if zero, then only a single status check is made before immediately returning;
+            if -1, then function will not return until complete."
 returns:
+    - $X_RESULT_NOT_READY:
+       - "timeout expired"
     - $X_RESULT_ERROR_INVALID_PARAMETER:
         - "nullptr for phEvents"
         - "invalid handle in phEvents"

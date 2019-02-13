@@ -164,4 +164,13 @@ typedef enum _xe_result_t
 
 } xe_result_t;
 
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Supported synchronization modes
+typedef enum _xe_synchronization_mode_t
+{
+    XE_SYNCHRONIZATION_MODE_POLL,                   ///< poll on Host until device signals; lowest latency (default)
+    XE_SYNCHRONIZATION_MODE_SLEEP,                  ///< put Host thread to sleep until device signals
+
+} xe_synchronization_mode_t;
+
 #endif // _XE_COMMON_H

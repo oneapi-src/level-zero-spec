@@ -246,7 +246,7 @@ The following sample code demonstrates submission of commands to a command queue
     ${x}CommandQueueEnqueueCommandLists(hCommandQueue, 1, &hCommandList, nullptr);
 
     // synchronize host and device
-    ${x}CommandQueueSynchronize(hCommandQueue);
+    ${x}CommandQueueSynchronize(hCommandQueue, ${X}_SYNCHRONIZATION_MODE_POLL, 0, 0, -1);
 
     // Reset (recycle) command list for new commands
     ${x}CommandListReset(hCommandList);
@@ -398,7 +398,7 @@ The following sample code demonstrates a sequence for creation, submission and q
     // Wait for fence to be signaled
     if(${X}_RESULT_SUCCESS != ${x}FenceQueryStatus(hFence))
     {
-        ${x}HostWaitOnFence(hFence);
+        ${x}HostWaitOnFence(hFence, ${X}_SYNCHRONIZATION_MODE_POLL, 0, 0, -1);
     }
 
     ${x}FenceReset(hFence);
@@ -660,7 +660,7 @@ The following sample code demonstrate a sequence for using fine-grain residency 
 
     // wait until complete
     ${x}FenceEnqueueSignal(hFence);
-    ${x}HostWaitOnFence(hFence);
+    ${x}HostWaitOnFence(hFence, ${X}_SYNCHRONIZATION_MODE_SLEEP, 1, 1, -1);
 
     // Finally, evict to free device resources
     ${x}DeviceEvictMemory(hDevice, begin->next, sizeof(node));
