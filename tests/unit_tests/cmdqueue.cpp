@@ -33,8 +33,14 @@ void CommandQueueImp::processResidency(CommandList *c) {
     commandStreamReceiver->processResidency(residencyContainer);
 }
 
+//FIXME: Remove direct access to taskCount.
+//Needed below
+struct CommandStreamReceiver : public OCLRT::CommandStreamReceiver {
+    using OCLRT::CommandStreamReceiver::taskCount;
+};
+
 void CommandQueueImp::submitBatchBuffer() {
-    auto commandStreamReceiver = static_cast<OCLRT::CommandStreamReceiver *>(csrRT);
+    auto commandStreamReceiver = static_cast<CommandStreamReceiver *>(csrRT);
     assert(commandStreamReceiver);
 
     OCLRT::BatchBuffer batchBuffer(
@@ -49,6 +55,11 @@ void CommandQueueImp::submitBatchBuffer() {
         commandStream);
     OCLRT::ResidencyContainer residencyContainer;
     commandStreamReceiver->flush(batchBuffer, residencyContainer);
+
+    //FIXME: Remove direct access to taskCount.
+    //Goal here is to access pollForCompletion which isn't directly visible
+    commandStreamReceiver->taskCount++;
+    commandStreamReceiver->waitForTaskCountWithKmdNotifyFallback(0u, 0u, false, false);
 }
 
 CommandQueue *CommandQueue::create(uint32_t productFamily, Device *device, void *csrRT) {

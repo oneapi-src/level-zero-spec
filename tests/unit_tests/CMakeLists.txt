@@ -127,9 +127,10 @@ if(COMPUTE_RUNTIME_SUPPORT)
         compute_runtime_mockable_extra
     )
 
-    if(SUPPORT_AUB_STREAM)
+    if(AUB_STREAM_SUPPORT)
         target_link_libraries(${TARGET_NAME} 
             aub_stream
+            aub_stream_all_hw
         )
     endif()
 

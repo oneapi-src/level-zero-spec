@@ -37,6 +37,10 @@ endif()
 if(NOT DEFINED AUB_STREAM_DIR)
     set(AUB_STREAM_DIR ${THIRD_PARTY_DIR}/aub_stream)
 endif()
+if(EXISTS ${AUB_STREAM_DIR}/aub_mem_dump/aub_stream.cpp)
+    set(AUB_STREAM_SUPPORT TRUE)
+endif()
+
 
 # Add compute runtime support
 if(NOT DEFINED COMPUTE_RUNTIME_DIR)
