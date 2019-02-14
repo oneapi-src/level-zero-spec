@@ -728,14 +728,18 @@ The ::xeDeviceCreateModule function can optionally generate a build log object :
 ```c
     ...
     xe_module_build_log_handle_t buildlog;
-    xeDeviceCreateModule(hDevice, &desc, &module, &buildlog);
+    xe_result_t result = xeDeviceCreateModule(hDevice, &desc, &module, &buildlog);
 
-    uint32_t buildlogSize;
-    char* pBuildLogString;
-    xeModuleBuildLogGetString(buildlog, &buildlogSize, &pBuildLogString);
+    // Only save build logs for module creation errors.
+    if (result != XE_RESULT_SUCESS)
+    {
+        uint32_t buildlogSize;
+        char* pBuildLogString;
+        result = xeModuleBuildLogGetString(buildlog, &buildlogSize, &pBuildLogString);
 
-    // Save log to disk.
-    ...
+        // Save log to disk.
+        ...
+    }
 
     xeModuleBuildLogDestroy(buildlog);
 ```

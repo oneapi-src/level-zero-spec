@@ -72,6 +72,7 @@
 ///         + ::XE_MODULE_DESC_VERSION <= desc->version
 ///     - ::XE_RESULT_ERROR_OUT_OF_HOST_MEMORY
 ///     - ::XE_RESULT_ERROR_OUT_OF_DEVICE_MEMORY
+///     - ::XE_RESULT_ERROR_CREATE_FAILURE - "Failure to create module. See build log for more details."
 /*@todo: __declspec(dllexport)*/
 xe_result_t __xecall
   xeDeviceCreateModule(

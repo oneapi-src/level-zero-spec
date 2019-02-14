@@ -103,6 +103,7 @@ typedef struct _xe_module_desc_t
 ///         + ::XE_MODULE_DESC_VERSION <= desc->version
 ///     - ::XE_RESULT_ERROR_OUT_OF_HOST_MEMORY
 ///     - ::XE_RESULT_ERROR_OUT_OF_DEVICE_MEMORY
+///     - ::XE_RESULT_ERROR_CREATE_FAILURE - "Failure to create module. See build log for more details."
 xe_result_t __xecall
   xeDeviceCreateModule(
     xe_device_handle_t hDevice,                     ///< [in] handle of the device

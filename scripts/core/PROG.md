@@ -728,14 +728,18 @@ The ::${x}DeviceCreateModule function can optionally generate a build log object
 ```c
     ...
     ${x}_module_build_log_handle_t buildlog;
-    ${x}DeviceCreateModule(hDevice, &desc, &module, &buildlog);
+    ${x}_result_t result = ${x}DeviceCreateModule(hDevice, &desc, &module, &buildlog);
 
-    uint32_t buildlogSize;
-    char* pBuildLogString;
-    ${x}ModuleBuildLogGetString(buildlog, &buildlogSize, &pBuildLogString);
+    // Only save build logs for module creation errors.
+    if (result != ${X}_RESULT_SUCESS)
+    {
+        uint32_t buildlogSize;
+        char* pBuildLogString;
+        result = ${x}ModuleBuildLogGetString(buildlog, &buildlogSize, &pBuildLogString);
 
-    // Save log to disk.
-    ...
+        // Save log to disk.
+        ...
+    }
 
     ${x}ModuleBuildLogDestroy(buildlog);
 ```
