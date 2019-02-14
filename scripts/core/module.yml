@@ -417,7 +417,7 @@ params:
     - type: "$x_function_args_handle_t"
       name: hFunctionArgs
       desc: "[in] handle to function arguments buffer."
-    - type: "$x_dispatch_function_arguments_t*"
+    - type: "const $x_dispatch_function_arguments_t*"
       name: pDispatchFuncArgs
       desc: "[in] dispatch function arguments."
     - type: $x_event_handle_t
