@@ -11,10 +11,10 @@ type: enum
 desc: "Supported module creation input formats"
 name: $x_module_format_t
 etors:
-    - name: $X_MODULE_IL_SPIRV
+    - name: $X_MODULE_FORMAT_IL_SPIRV
       value: "0"
       desc: "Format is SPIRV IL format"
-    - name: $X_MODULE_NATIVE
+    - name: $X_MODULE_FORMAT_NATIVE
       desc: "Format is device native format"
 --- #--------------------------------------------------------------------------
 type: struct
@@ -162,7 +162,7 @@ value: "$X_MAKE_VERSION( 1, 0 )"
 --- #--------------------------------------------------------------------------
 type: enum
 desc: "Supported function creation flags"
-name: $x_function_flags_t
+name: $x_function_flag_t
 etors:
     - name: $X_FUNCTION_FLAG_NONE
       value: "0"
@@ -177,7 +177,7 @@ members:
     - type: uint32_t
       name: version
       desc: "[in] $X_FUNCTION_DESC_VERSION"
-    - type: "$x_function_flags_t"
+    - type: "$x_function_flag_t"
       name: flags
       desc: "[in] creation flags"
     - type: "const char*"
@@ -325,18 +325,18 @@ analogue:
     - "**CUfunction_attribute**"
 name: $x_function_attribute_t
 etors:
-    - name: $X_FUNCTION_ATTR_MAX_REGS_USED
+    - name: $X_FUNCTION_ATTRIBUTE_MAX_REGS_USED
       value: "0"
       desc: "Maximum device registers used for this function"
-    - name: $X_FUNCTION_ATTR_NUM_THREAD_DIMENSIONS
+    - name: $X_FUNCTION_ATTRIBUTE_NUM_THREAD_DIMENSIONS
       desc: "Maximum dimensions for group for this function"
-    - name: $X_FUNCTION_ATTR_MAX_SHARED_MEM_SIZE
+    - name: $X_FUNCTION_ATTRIBUTE_MAX_SHARED_MEM_SIZE
       desc: "Maximum shared memory required for this function"
-    - name: $X_FUNCTION_ATTR_HAS_SPILL_FILL
+    - name: $X_FUNCTION_ATTRIBUTE_HAS_SPILL_FILL
       desc: "Function required spill/fills."
-    - name: $X_FUNCTION_ATTR_HAS_BARRIERS
+    - name: $X_FUNCTION_ATTRIBUTE_HAS_BARRIERS
       desc: "Function contains barriers."
-    - name: $X_FUNCTION_ATTR_HAS_DPAS
+    - name: $X_FUNCTION_ATTRIBUTE_HAS_DPAS
       desc: "Function contains DPAs."
 --- #--------------------------------------------------------------------------
 type: function

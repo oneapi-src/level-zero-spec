@@ -1,19 +1,38 @@
 import re
 
+"""
+    substitues $x variations with repl in string
+    if repl is None, then remove $x and any following '_'
+    if tag = True, then insert doxygen '::' tags at beginning (for autogen links)
+"""
 def subx(repl, string, tag=False):
-    string = re.sub(r"\$Xx", repl.title(), string)
-    string = re.sub(r"\-\$x", "-"+repl, string) #hack
-    repl = "::"+repl if tag else repl
-    string = re.sub(r"\$x", repl, string)
-    string = re.sub(r"\$X", repl.upper(), string)
+    if repl:
+        string = re.sub(r"\$Xx", repl.title(), string)
+        string = re.sub(r"\-\$x", "-"+repl, string) #hack
+        repl = "::"+repl if tag else repl
+        string = re.sub(r"\$x", repl, string)
+        string = re.sub(r"\$X", repl.upper(), string)
+    else:
+        string = re.sub(r"\-\$x_?", "-", string) #hack
+        repl = "::" if tag else ""
+        string = re.sub(r"\$x_?", repl, string)
+        string = re.sub(r"\$X_", repl.upper(), string)
     return string
 
+"""
+    appends whitespace (in multiples of 4) to the end of the string,
+    until len(string) > count
+"""
 def append_ws(string, count):
     while len(string) > count:
         count = count + 4
     string = '{str: <{width}}'.format(str=string, width=count)
     return string
 
+"""
+    split the line of text into a list of strings,
+    where each length of each entry is less-than count
+"""
 def split_line(line, ch_count):
     if not line:
         return []
@@ -34,6 +53,9 @@ def split_line(line, ch_count):
         lines.append(" ".join(word_list))
     return lines
 
+"""
+    removes items from the list with the key and whose value do not match filter
+"""
 def filter_items(lst, key, filter):
     flst = []
     for item in lst:
@@ -43,43 +65,73 @@ def filter_items(lst, key, filter):
         flst.append(item)
     return flst
 
-def make_etor_lines(repl, obj):
+"""
+    returns a list of strings for each enumerator in an enumeration
+"""
+def make_etor_lines(repl, obj, trim=False):
     lines = []
     for item in obj['etors']:
-        if 'value' in item:
-            prologue = "%s = %s,"%(subx(repl, item['name']), subx(repl, item['value']))
+        if trim:
+            prefix = re.sub(r"(\w+)_t", r"\1", subx(repl, obj['name'])).upper()
+            name = re.sub(r"%s_(\w+)"%prefix, r"\1", subx(repl, item['name']))
+            name = re.sub(r"(\d+\w+)", r"_\1", name)
         else:
-            prologue = "%s,"%(subx(repl, item['name']))
+            name = subx(repl, item['name'])
+
+        if 'value' in item:
+            value = subx(repl, item['value'])
+            prologue = "%s = %s,"%(name, value)
+        else:
+            prologue = "%s,"%(name)
 
         for line in split_line(subx(repl, item['desc'], True), 70):
             lines.append("%s///< %s"%(append_ws(prologue, 48), line))
             prologue = ""
     return lines
 
-
-def make_member_lines(repl, obj):
+"""
+    returns a list of strings for each member of a structure
+"""
+def make_member_lines(repl, obj, init=False):
     lines = []
     for item in obj['members']:
-        prologue = "%s %s;"%(subx(repl, item['type']), subx(repl, item['name']))
+        name = subx(repl, item['name'])
+        type = subx(repl, item['type'])
+
+        if init:
+            value = "0"
+            prologue = "%s %s = %s;"%(type, name, value)
+        else:
+            prologue = "%s %s;"%(type, name)
+
         for line in split_line(subx(repl, item['desc'], True), 70):
             lines.append("%s///< %s"%(append_ws(prologue, 48), line))
             prologue = ""
     return lines
 
+"""
+    returns a list of strings for each parameter of a function
+"""
 def make_param_lines(repl, obj, cls):
     lines = []
     params = filter_items(obj['params'], 'class', cls)
     for i, item in enumerate(params):
+        name = subx(repl, item['name'])
+        type = subx(repl, item['type'])
+
         if i < len(params)-1:
-            prologue = "%s %s,"%(subx(repl, item['type']), subx(repl, item['name']))
+            prologue = "%s %s,"%(type, name)
         else:
-            prologue = "%s %s"%(subx(repl, item['type']), subx(repl, item['name']))
+            prologue = "%s %s"%(type, name)
 
         for line in split_line(subx(repl, item['desc'], True), 70):
             lines.append("%s///< %s"%(append_ws(prologue, 48), line))
             prologue = ""
     return lines
 
+"""
+    returns a list of strings for the description
+"""
 def make_desc_lines(repl, obj):
     lines = []
     prologue = "@brief"
@@ -88,6 +140,9 @@ def make_desc_lines(repl, obj):
         prologue = "      "
     return lines
 
+"""
+    returns a list of strings for the detailed description
+"""
 def make_details_lines(repl, obj):
     lines = []
     if 'details' in obj:
@@ -119,6 +174,9 @@ def make_details_lines(repl, obj):
             lines.append("    - %s"%line)
     return lines
 
+"""
+    returns a dict of auto-generated parameter validation checks
+"""
 def make_param_checks(repl, obj, cls, tag=False):
     checks = {}
     eip = subx(repl, "$X_RESULT_ERROR_INVALID_PARAMETER", tag)
@@ -138,6 +196,9 @@ def make_param_checks(repl, obj, cls, tag=False):
                 checks[eus].append("%s <= %s->version"%(re.sub(r"\w*\s*(.*)_t.*", r"\1_VERSION", subx(repl, item['type'], tag)).upper(), item['name']))
     return checks
 
+"""
+    returns a list of strings for possible return values
+"""
 def make_return_lines(repl, obj, cls):
     lines = []
     lines.append("@returns")
@@ -169,6 +230,9 @@ def make_return_lines(repl, obj, cls):
             lines.append("        + %s"%val)
     return lines
 
+"""
+    return a list of classes for the obj
+"""
 def get_class_list(obj):
     if 'class' in obj:
         if isinstance(obj['class'], list):
@@ -178,7 +242,8 @@ def get_class_list(obj):
     else:
         return ['none']
 
+"""
+    returns the name of a function
+"""
 def make_func_name(repl, obj, cls):
     return subx(repl, "%s%s"%(cls, obj['name']))
-
-

@@ -9,7 +9,7 @@ value: "$X_MAKE_VERSION( 1, 0 )"
 --- #--------------------------------------------------------------------------
 type: enum
 desc: "Supported image creation flags"
-name: $x_image_flags_t
+name: $x_image_flag_t
 etors:
     - name: $X_IMAGE_FLAG_PROGRAM_READ
       value: "$X_BIT( 0 )"
@@ -67,7 +67,7 @@ members:
     - type: uint32_t
       name: version
       desc: "[in] $X_IMAGE_DESC_VERSION"
-    - type: $x_image_flags_t
+    - type: $x_image_flag_t
       name: flags
       desc: "[in] creation flags"
     - type: $x_image_type_t

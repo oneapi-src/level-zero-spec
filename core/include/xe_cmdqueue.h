@@ -43,14 +43,14 @@
 
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Supported command queue flags
-typedef enum _xe_command_queue_flags_t
+typedef enum _xe_command_queue_flag_t
 {
     XE_COMMAND_QUEUE_FLAG_NONE = 0,                 ///< default behavior
     XE_COMMAND_QUEUE_FLAG_COPY_ONLY = XE_BIT(0),    ///< command queue only supports enqueing copy-only command lists
     XE_COMMAND_QUEUE_FLAG_LOGICAL_ONLY = XE_BIT(1), ///< command queue is not tied to a physical command queue; driver may
                                                     ///< dynamically assign based on usage
 
-} xe_command_queue_flags_t;
+} xe_command_queue_flag_t;
 
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Supported command queue modes
@@ -79,7 +79,7 @@ typedef enum _xe_command_queue_priority_t
 typedef struct _xe_command_queue_desc_t
 {
     uint32_t version;                               ///< [in] ::XE_COMMAND_QUEUE_DESC_VERSION
-    xe_command_queue_flags_t flags;                 ///< [in] creation flags
+    xe_command_queue_flag_t flags;                  ///< [in] creation flags
     xe_command_queue_mode_t mode;                   ///< [in] operation mode
     xe_command_queue_priority_t priority;           ///< [in] priority
     uint32_t ordinal;                               ///< [in] if logical-only flag is set, then must be 0; else-if copy-only

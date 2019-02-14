@@ -43,14 +43,14 @@
 
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Supported image creation flags
-typedef enum _xe_image_flags_t
+typedef enum _xe_image_flag_t
 {
     XE_IMAGE_FLAG_PROGRAM_READ = XE_BIT( 0 ),       ///< programs will read contents
     XE_IMAGE_FLAG_PROGRAM_WRITE = XE_BIT( 1 ),      ///< programs will write contents
     XE_IMAGE_FLAG_BIAS_CACHED = XE_BIT( 2 ),        ///< device should cache contents
     XE_IMAGE_FLAG_BIAS_UNCACHED = XE_BIT( 3 ),      ///< device should not cache contents
 
-} xe_image_flags_t;
+} xe_image_flag_t;
 
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Supported image types
@@ -84,7 +84,7 @@ typedef enum _xe_image_format_t
 typedef struct _xe_image_desc_t
 {
     uint32_t version;                               ///< [in] ::XE_IMAGE_DESC_VERSION
-    xe_image_flags_t flags;                         ///< [in] creation flags
+    xe_image_flag_t flags;                          ///< [in] creation flags
     xe_image_type_t type;                           ///< [in] image type
     xe_image_format_t format;                       ///< [in] image channel format
     uint32_t numChannels;                           ///< [in] number of channels per pixel [1,4]

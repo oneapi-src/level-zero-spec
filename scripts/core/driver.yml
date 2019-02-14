@@ -4,7 +4,7 @@ desc: "Intel $Xx Driver APIs"
 --- #--------------------------------------------------------------------------
 type: enum
 desc: "Supported initialization flags"
-name: $x_init_flags_t
+name: $x_init_flag_t
 etors:
     - name: $X_INIT_FLAG_NONE
       value: "0"
@@ -23,7 +23,7 @@ details:
 analogue:
     - "**cuInit**"
 params:
-    - type: $x_init_flags_t
+    - type: $x_init_flag_t
       name: flags
       desc: "[in] initialization flags"
 returns:

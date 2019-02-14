@@ -39,11 +39,11 @@
 
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Supported initialization flags
-typedef enum _xe_init_flags_t
+typedef enum _xe_init_flag_t
 {
     XE_INIT_FLAG_NONE = 0,                          ///< default behavior
 
-} xe_init_flags_t;
+} xe_init_flag_t;
 
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Initialize the Xe Driver API and must be called before any other API
@@ -70,7 +70,7 @@ typedef enum _xe_init_flags_t
 ///     - ::XE_RESULT_ERROR_OUT_OF_HOST_MEMORY
 xe_result_t __xecall
   xeDriverInit(
-    xe_init_flags_t flags                           ///< [in] initialization flags
+    xe_init_flag_t flags                            ///< [in] initialization flags
     );
 
 ///////////////////////////////////////////////////////////////////////////////

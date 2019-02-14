@@ -3,6 +3,7 @@ import util
 import re
 
 """
+Entry-point:
     Reads each YML file and extracts data
     Returns list of data per file
 """

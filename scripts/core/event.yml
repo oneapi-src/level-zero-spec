@@ -9,7 +9,7 @@ value: "$X_MAKE_VERSION( 1, 0 )"
 --- #--------------------------------------------------------------------------
 type: enum
 desc: "Supported event creation flags"
-name: $x_event_flags_t
+name: $x_event_flag_t
 etors:
     - name: $X_EVENT_FLAG_NONE
       value: "0"
@@ -31,7 +31,7 @@ members:
     - type: uint32_t
       name: version
       desc: "[in] $X_EVENT_DESC_VERSION"
-    - type: $x_event_flags_t
+    - type: $x_event_flag_t
       name: flags
       desc: "[in] creation flags"
 --- #--------------------------------------------------------------------------

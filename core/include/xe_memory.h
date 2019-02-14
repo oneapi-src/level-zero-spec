@@ -84,24 +84,24 @@ xe_result_t __xecall
 
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Supported device memory allocation flags
-typedef enum _xe_device_mem_alloc_flags_t
+typedef enum _xe_device_mem_alloc_flag_t
 {
     XE_DEVICE_MEM_ALLOC_FLAG_DEFAULT = 0,           ///< implicit default behavior; uses driver-based heuristics
     XE_DEVICE_MEM_ALLOC_FLAG_BIAS_CACHED = XE_BIT( 0 ), ///< device should cache allocation
     XE_DEVICE_MEM_ALLOC_FLAG_BIAS_UNCACHED = XE_BIT( 1 ),   ///< device should not cache allocation (UC)
 
-} xe_device_mem_alloc_flags_t;
+} xe_device_mem_alloc_flag_t;
 
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Supported host memory allocation flags
-typedef enum _xe_host_mem_alloc_flags_t
+typedef enum _xe_host_mem_alloc_flag_t
 {
     XE_HOST_MEM_ALLOC_FLAG_DEFAULT = 0,             ///< implicit default behavior; uses driver-based heuristics
     XE_HOST_MEM_ALLOC_FLAG_BIAS_CACHED = XE_BIT( 0 ),   ///< host should cache allocation
     XE_HOST_MEM_ALLOC_FLAG_BIAS_UNCACHED = XE_BIT( 1 ), ///< host should not cache allocation (UC)
     XE_HOST_MEM_ALLOC_FLAG_BIAS_WRITE_COMBINED = XE_BIT( 2 ),   ///< host memory should be allocated write-combined (WC)
 
-} xe_host_mem_alloc_flags_t;
+} xe_host_mem_alloc_flag_t;
 
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Allocates memory that is shared between the host and one or more
@@ -133,8 +133,8 @@ xe_result_t __xecall
   xeSharedMemAlloc(
     xe_mem_allocator_handle_t hMemAllocHandle,      ///< [in] handle of memory allocator for this allocation
     xe_device_handle_t hDevice,                     ///< [in] handle of the device
-    xe_device_mem_alloc_flags_t device_flags,       ///< [in] flags specifying additional device allocation controls
-    xe_host_mem_alloc_flags_t host_flags,           ///< [in] flags specifying additional host allocation controls
+    xe_device_mem_alloc_flag_t device_flags,        ///< [in] flags specifying additional device allocation controls
+    xe_host_mem_alloc_flag_t host_flags,            ///< [in] flags specifying additional host allocation controls
     size_t size,                                    ///< [in] size in bytes to allocate
     size_t alignment,                               ///< [in] minimum alignment in bytes for the allocation
     void** ptr                                      ///< [out] pointer to shared allocation
@@ -170,7 +170,7 @@ xe_result_t __xecall
   xeMemAlloc(
     xe_mem_allocator_handle_t hMemAllocHandle,      ///< [in] handle of memory allocator for this allocation
     xe_device_handle_t hDevice,                     ///< [in] handle of the device
-    xe_device_mem_alloc_flags_t flags,              ///< [in] flags specifying additional allocation controls
+    xe_device_mem_alloc_flag_t flags,               ///< [in] flags specifying additional allocation controls
     size_t size,                                    ///< [in] size in bytes to allocate
     size_t alignment,                               ///< [in] minimum alignment in bytes for the allocation
     void** ptr                                      ///< [out] pointer to device allocation
@@ -205,7 +205,7 @@ xe_result_t __xecall
 xe_result_t __xecall
   xeHostMemAlloc(
     xe_mem_allocator_handle_t hMemAllocHandle,      ///< [in] handle of memory allocator for this allocation
-    xe_host_mem_alloc_flags_t flags,                ///< [in] flags specifying additional allocation controls
+    xe_host_mem_alloc_flag_t flags,                 ///< [in] flags specifying additional allocation controls
     size_t size,                                    ///< [in] size in bytes to allocate
     size_t alignment,                               ///< [in] minimum alignment in bytes for the allocation
     void** ptr                                      ///< [out] pointer to host allocation
@@ -254,7 +254,7 @@ typedef enum _xe_memory_type_t
 /// @brief Supported memory allocation query properties
 typedef enum _xe_memory_property_t
 {
-    XE_MEMORY_TYPE = 0,                             ///< returns the type of allocated memory, see ::xe_memory_type_t
+    XE_MEMORY_PROPERTY_TYPE = 0,                    ///< returns the type of allocated memory, see ::xe_memory_type_t
 
 } xe_memory_property_t;
 
@@ -345,11 +345,11 @@ xe_result_t __xecall
 
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Supported IPC memory flags
-typedef enum _xe_ipc_memory_flags_t
+typedef enum _xe_ipc_memory_flag_t
 {
-    XE_IPC_MEMORY_FLAGS_NONE = 0,                   ///< No special flags
+    XE_IPC_MEMORY_FLAG_NONE = 0,                    ///< No special flags
 
-} xe_ipc_memory_flags_t;
+} xe_ipc_memory_flag_t;
 
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Opens an IPC memory handle to retrieve a device pointer in a receiving
@@ -382,7 +382,7 @@ xe_result_t __xecall
     xe_mem_allocator_handle_t hMemAllocHandle,      ///< [in] handle of memory allocator for this allocation
     xe_device_handle_t hDevice,                     ///< [in] handle of the device to associate with the IPC memory handle
     xe_ipc_mem_handle_t handle,                     ///< [in] IPC memory handle
-    xe_ipc_memory_flags_t flags,                    ///< [in] flags controlling the operation
+    xe_ipc_memory_flag_t flags,                     ///< [in] flags controlling the operation
     void** ptr                                      ///< [out] pointer to device allocation in this process
     );
 

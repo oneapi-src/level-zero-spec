@@ -43,21 +43,21 @@
 
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Supported event creation flags
-typedef enum _xe_event_flags_t
+typedef enum _xe_event_flag_t
 {
     XE_EVENT_FLAG_NONE = 0,                         ///< signals and waits only within the same device
     XE_EVENT_FLAG_HOST_TO_DEVICE = XE_BIT(0),       ///< signals from host, waits on device
     XE_EVENT_FLAG_DEVICE_TO_HOST = XE_BIT(1),       ///< signals from device, waits on host
     XE_EVENT_FLAG_DEVICE_TO_DEVICE = XE_BIT(2),     ///< signals from device, waits on another device
 
-} xe_event_flags_t;
+} xe_event_flag_t;
 
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Event descriptor
 typedef struct _xe_event_desc_t
 {
     uint32_t version;                               ///< [in] ::XE_EVENT_DESC_VERSION
-    xe_event_flags_t flags;                         ///< [in] creation flags
+    xe_event_flag_t flags;                          ///< [in] creation flags
 
 } xe_event_desc_t;
 

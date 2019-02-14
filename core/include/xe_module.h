@@ -45,8 +45,8 @@
 /// @brief Supported module creation input formats
 typedef enum _xe_module_format_t
 {
-    XE_MODULE_IL_SPIRV = 0,                         ///< Format is SPIRV IL format
-    XE_MODULE_NATIVE,                               ///< Format is device native format
+    XE_MODULE_FORMAT_IL_SPIRV = 0,                  ///< Format is SPIRV IL format
+    XE_MODULE_FORMAT_NATIVE,                        ///< Format is device native format
 
 } xe_module_format_t;
 
@@ -222,19 +222,19 @@ xe_result_t __xecall
 
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Supported function creation flags
-typedef enum _xe_function_flags_t
+typedef enum _xe_function_flag_t
 {
     XE_FUNCTION_FLAG_NONE = 0,                      ///< default driver behavior
     XE_FUNCTION_FLAG_FORCE_RESIDENCY,               ///< force all device allocations to be resident during execution
 
-} xe_function_flags_t;
+} xe_function_flag_t;
 
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Function descriptor
 typedef struct _xe_function_desc_t
 {
     uint32_t version;                               ///< [in] ::XE_FUNCTION_DESC_VERSION
-    xe_function_flags_t flags;                      ///< [in] creation flags
+    xe_function_flag_t flags;                       ///< [in] creation flags
     const char* pFunctionName;                      ///< [in] null-terminated name of function in Module
 
 } xe_function_desc_t;
@@ -416,12 +416,12 @@ xe_result_t __xecall
 ///     - **CUfunction_attribute**
 typedef enum _xe_function_attribute_t
 {
-    XE_FUNCTION_ATTR_MAX_REGS_USED = 0,             ///< Maximum device registers used for this function
-    XE_FUNCTION_ATTR_NUM_THREAD_DIMENSIONS,         ///< Maximum dimensions for group for this function
-    XE_FUNCTION_ATTR_MAX_SHARED_MEM_SIZE,           ///< Maximum shared memory required for this function
-    XE_FUNCTION_ATTR_HAS_SPILL_FILL,                ///< Function required spill/fills.
-    XE_FUNCTION_ATTR_HAS_BARRIERS,                  ///< Function contains barriers.
-    XE_FUNCTION_ATTR_HAS_DPAS,                      ///< Function contains DPAs.
+    XE_FUNCTION_ATTRIBUTE_MAX_REGS_USED = 0,        ///< Maximum device registers used for this function
+    XE_FUNCTION_ATTRIBUTE_NUM_THREAD_DIMENSIONS,    ///< Maximum dimensions for group for this function
+    XE_FUNCTION_ATTRIBUTE_MAX_SHARED_MEM_SIZE,      ///< Maximum shared memory required for this function
+    XE_FUNCTION_ATTRIBUTE_HAS_SPILL_FILL,           ///< Function required spill/fills.
+    XE_FUNCTION_ATTRIBUTE_HAS_BARRIERS,             ///< Function contains barriers.
+    XE_FUNCTION_ATTRIBUTE_HAS_DPAS,                 ///< Function contains DPAs.
 
 } xe_function_attribute_t;
 

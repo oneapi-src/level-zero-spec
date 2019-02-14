@@ -1,6 +1,10 @@
 import os
 import util
 
+"""
+Entry-point:
+    generate markdown documents from templates
+"""
 def generate_md(srcpath, dstpath, namespace):
     loc = 0
     util.makePath(dstpath)
@@ -14,6 +18,10 @@ def generate_md(srcpath, dstpath, namespace):
             Xx=namespace.title())
     print("Generated %s lines of markdown.\n"%loc)
 
+"""
+Entry-point:
+    generate HTML files using Doxygen template
+"""
 def generate_html():
     util.removePath("../html")
     util.removePath("../latex")
@@ -21,6 +29,10 @@ def generate_html():
     cmdline = "doxygen Doxyfile"
     os.system(cmdline)
 
+"""
+Entry-point:
+    generate PDF file using generated LaTeX files
+"""
 def generate_pdf():
     print("Generating PDF..")
     cmdline = "..\latex\make.bat"

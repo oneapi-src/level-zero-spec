@@ -43,11 +43,11 @@
 
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Supported semaphore creation flags
-typedef enum _xe_semaphore_flags_t
+typedef enum _xe_semaphore_flag_t
 {
     XE_SEMAPHORE_FLAG_NONE = 0,                     ///< default behavior
 
-} xe_semaphore_flags_t;
+} xe_semaphore_flag_t;
 
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Semaphore value type
@@ -58,7 +58,7 @@ typedef uint64_t xe_semaphore_value_t;
 typedef struct _xe_semaphore_desc_t
 {
     uint32_t version;                               ///< [in] ::XE_SEMAPHORE_DESC_VERSION
-    xe_semaphore_flags_t flags;                     ///< [in] creation flags
+    xe_semaphore_flag_t flags;                      ///< [in] creation flags
 
 } xe_semaphore_desc_t;
 

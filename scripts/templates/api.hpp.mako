@@ -39,79 +39,67 @@ from templates import helper as th
 #pragma once
 #endif
 %if re.match(r"common", name):
-#include "${x}_common.hpp"
-%else:
 #include "${x}_common.h"
-%endif
-
-%for obj in objects:
-%for class in th.get_class_list(obj):
-///////////////////////////////////////////////////////////////////////////////
-%if 'condition' in obj:
-#if ${th.subx(x,obj['condition'])}
-%endif
-%for line in th.make_desc_lines(x, obj):
-/// ${line}
-%endfor
-%for line in th.make_details_lines(x, obj):
-/// ${line}
-%endfor
-## MACRO ######################################################################
-%if re.match(r"macro", obj['type']):
-#define ${th.subx(x, obj['name'])}  ${th.subx(x, obj['value'])}
-%if 'altvalue' in obj:
-#else
-#define ${th.subx(x, obj['name'])}  ${th.subx(x, obj['altvalue'])}
-%endif
-## TYPEDEF ####################################################################
-%elif re.match(r"typedef", obj['type']):
-%if 'params' in obj:
-typedef ${obj['returns']}(__${x}call *${th.subx(x, obj['name'])})(
-  %for line in th.make_param_lines(x, obj):
-  ${line}
-  %endfor
-  );
 %else:
-typedef ${th.subx(x, obj['value'])} ${th.subx(x, obj['name'])};
+#include "${x}_common.hpp"
 %endif
-## ENUM #######################################################################
-%elif re.match(r"enum", obj['type']):
-typedef enum _${th.subx(x, obj['name'])}
+
+namespace ${x}
 {
-    %for line in th.make_etor_lines(x, obj):
-    ${line}
+%for obj in objects:
+    %for cls in th.get_class_list(obj):
+    ///////////////////////////////////////////////////////////////////////////////
+    %if 'condition' in obj:
+    #if ${th.subx(x,obj['condition'])}
+    %endif
+    %for line in th.make_desc_lines(None, obj):
+    /// ${line}
     %endfor
-
-} ${th.subx(x, obj['name'])};
-## STRUCT #####################################################################
-%elif re.match(r"struct", obj['type']):
-typedef struct _${th.subx(x, obj['name'])}
-{
-    %for line in th.make_member_lines(x, obj):
-    ${line}
+    %for line in th.make_details_lines(None, obj):
+    /// ${line}
     %endfor
+    ## TYPEDEF ####################################################################
+    %if re.match(r"typedef", obj['type']):
+    using ${th.subx(None, obj['name'])} = ${th.subx(x, obj['name'])};
+    ## ENUM #######################################################################
+    %elif re.match(r"enum", obj['type']):
+    enum class ${th.subx(None, obj['name'])}
+    {
+        %for line in th.make_etor_lines(None, obj, True):
+        ${line}
+        %endfor
 
-} ${th.subx(x, obj['name'])};
-## FUNCTION ###################################################################
-%elif re.match(r"function", obj['type']):
-/// 
-%for line in th.make_return_lines(x, obj, cls):
-/// ${line}
-%endfor
-${x}_result_t __${x}call
-  ${th.make_func_name(x, obj)}(
-    %for line in th.make_param_lines(x, obj):
-    ${line}
+    };
+    ## STRUCT #####################################################################
+    %elif re.match(r"struct", obj['type']):
+    struct ${th.subx(None, obj['name'])}
+    {
+        %for line in th.make_member_lines(None, obj, True):
+        ${line}
+        %endfor
+
+    };
+    ## FUNCTION ###################################################################
+    %elif re.match(r"function", obj['type']):
+    /// 
+    %for line in th.make_return_lines(None, obj, cls):
+    /// ${line}
     %endfor
-    );
-## HANDLE #####################################################################
-%elif re.match(r"handle", obj['type']):
-typedef struct _${th.subx(x, obj['name'])} *${th.subx(x, obj['name'])};
-%endif
-%if 'condition' in obj:
-#endif // ${th.subx(x,obj['condition'])}
-%endif
+    result_t __${x}call
+      ${th.make_func_name(None, obj, cls)}(
+        %for line in th.make_param_lines(None, obj, cls):
+        ${line}
+        %endfor
+        );
+    ## HANDLE #####################################################################
+    %elif re.match(r"handle", obj['type']):
+    using ${th.subx(None, obj['name'])} = ${th.subx(x, obj['name'])};
+    %endif
+    %if 'condition' in obj:
+    #endif // ${th.subx(x,obj['condition'])}
+    %endif
 
+    %endfor
 %endfor
-%endfor
+} // namespace ${x}
 #endif // _${X}_${name.upper()}_HPP

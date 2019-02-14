@@ -43,7 +43,7 @@
 
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Supported command list creation flags
-typedef enum _xe_command_list_flags_t
+typedef enum _xe_command_list_flag_t
 {
     XE_COMMAND_LIST_FLAG_NONE = 0,                  ///< default behavior
     XE_COMMAND_LIST_FLAG_COPY_ONLY = XE_BIT(0),     ///< command list **only** contains copy operations (and synchronization
@@ -53,14 +53,14 @@ typedef enum _xe_command_list_flags_t
     XE_COMMAND_LIST_FLAG_LOW_LATENCY = XE_BIT(2),   ///< driver should optimize for immediate submission to a command queue
     XE_COMMAND_LIST_FLAG_CROSS_DEVICE = XE_BIT(3),  ///< command list can be shared with another device
 
-} xe_command_list_flags_t;
+} xe_command_list_flag_t;
 
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Command List descriptor
 typedef struct _xe_command_list_desc_t
 {
     uint32_t version;                               ///< [in] ::XE_COMMAND_LIST_DESC_VERSION
-    xe_command_list_flags_t flags;                  ///< [in] creation flags
+    xe_command_list_flag_t flags;                   ///< [in] creation flags
 
 } xe_command_list_desc_t;
 

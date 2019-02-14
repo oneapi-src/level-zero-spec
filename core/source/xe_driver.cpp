@@ -58,7 +58,7 @@
 /*@todo: __declspec(dllexport)*/
 xe_result_t __xecall
   xeDriverInit(
-    xe_init_flags_t flags                           ///< [in] initialization flags
+    xe_init_flag_t flags                            ///< [in] initialization flags
     )
 {
     // @todo: check_return(nullptr == get_driver(), XE_RESULT_ERROR_UNINITIALIZED);

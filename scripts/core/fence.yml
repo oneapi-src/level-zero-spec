@@ -9,7 +9,7 @@ value: "$X_MAKE_VERSION( 1, 0 )"
 --- #--------------------------------------------------------------------------
 type: enum
 desc: "Supported fence creation flags"
-name: $x_fence_flags_t
+name: $x_fence_flag_t
 etors:
     - name: $X_FENCE_FLAG_NONE
       value: "0"
@@ -22,7 +22,7 @@ members:
     - type: uint32_t
       name: version
       desc: "[in] descriptor version"
-    - type: $x_fence_flags_t
+    - type: $x_fence_flag_t
       name: flags
       desc: "[in] creation flags"
 --- #--------------------------------------------------------------------------

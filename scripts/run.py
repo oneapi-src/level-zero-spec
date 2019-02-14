@@ -4,11 +4,13 @@ import parse_specs
 import generate_api
 import compile_api
 import generate_docs
+import time
 
 """
     Do everything...
 """
 def main():
+    # define cmdline arguments
     parser = argparse.ArgumentParser()
     parser.add_argument(
         "--filter",
@@ -25,8 +27,11 @@ def main():
         action="store_true")
     args = parser.parse_args()
 
+    # parse cmdline arguments
     configParser = util.configRead("config.ini")
 
+    start = time.time()
+    # generate 'core' APIs
     if "all" == args.filter or "core" == args.filter:
         specs = parse_specs.parse("./core")
         generate_api.generate_cpp(
@@ -39,6 +44,7 @@ def main():
                 configParser.get('NAMESPACE','core'),
                 specs)
 
+    # generate 'extended' APIs
     if "all" == args.filter or "extended" == args.filter:
         specs = parse_specs.parse("./extended")
         generate_api.generate_cpp(
@@ -51,6 +57,7 @@ def main():
                 configParser.get('NAMESPACE','extended'),
                 specs)
 
+    # generate documentation
     if "all" == args.filter or "docs" == args.filter:
         generate_docs.generate_md(
             "./core",
@@ -64,7 +71,7 @@ def main():
         if args.pdf:
             generate_docs.generate_pdf()
 
-    print("\nDone")
+    print("\nCompleted in %.1f seconds!"%(time.time() - start))
 
 if __name__ == '__main__':
     main()

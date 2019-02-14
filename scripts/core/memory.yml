@@ -34,7 +34,7 @@ params:
 --- #--------------------------------------------------------------------------
 type: enum
 desc: "Supported device memory allocation flags"
-name: $x_device_mem_alloc_flags_t
+name: $x_device_mem_alloc_flag_t
 etors:
     - name: $X_DEVICE_MEM_ALLOC_FLAG_DEFAULT
       value: "0"
@@ -48,7 +48,7 @@ etors:
 --- #--------------------------------------------------------------------------
 type: enum
 desc: "Supported host memory allocation flags"
-name: $x_host_mem_alloc_flags_t
+name: $x_host_mem_alloc_flag_t
 etors:
     - name: $X_HOST_MEM_ALLOC_FLAG_DEFAULT
       value: "0"
@@ -80,10 +80,10 @@ params:
     - type: "$x_device_handle_t"
       name: hDevice
       desc: "[in] handle of the device"
-    - type: "$x_device_mem_alloc_flags_t"
+    - type: "$x_device_mem_alloc_flag_t"
       name: device_flags
       desc: "[in] flags specifying additional device allocation controls"
-    - type: "$x_host_mem_alloc_flags_t"
+    - type: "$x_host_mem_alloc_flag_t"
       name: host_flags
       desc: "[in] flags specifying additional host allocation controls"
     - type: size_t
@@ -120,7 +120,7 @@ params:
     - type: "$x_device_handle_t"
       name: hDevice
       desc: "[in] handle of the device"
-    - type: "$x_device_mem_alloc_flags_t"
+    - type: "$x_device_mem_alloc_flag_t"
       name: flags
       desc: "[in] flags specifying additional allocation controls"
     - type: size_t
@@ -155,7 +155,7 @@ params:
     - type: $x_mem_allocator_handle_t
       name: hMemAllocHandle
       desc: "[in] handle of memory allocator for this allocation"
-    - type: "$x_host_mem_alloc_flags_t"
+    - type: "$x_host_mem_alloc_flag_t"
       name: flags
       desc: "[in] flags specifying additional allocation controls"
     - type: size_t
@@ -211,7 +211,7 @@ type: enum
 desc: "Supported memory allocation query properties"
 name: $x_memory_property_t
 etors:
-    - name: $X_MEMORY_TYPE
+    - name: $X_MEMORY_PROPERTY_TYPE
       value: "0"
       desc: "returns the type of allocated memory, see $x_memory_type_t"
 --- #--------------------------------------------------------------------------
@@ -287,9 +287,9 @@ params:
 --- #--------------------------------------------------------------------------
 type: enum
 desc: "Supported IPC memory flags"
-name: $x_ipc_memory_flags_t
+name: $x_ipc_memory_flag_t
 etors:
-    - name: $X_IPC_MEMORY_FLAGS_NONE
+    - name: $X_IPC_MEMORY_FLAG_NONE
       value: "0"
       desc: "No special flags"
 --- #--------------------------------------------------------------------------
@@ -314,7 +314,7 @@ params:
     - type: $x_ipc_mem_handle_t
       name: handle
       desc: "[in] IPC memory handle"
-    - type: $x_ipc_memory_flags_t
+    - type: $x_ipc_memory_flag_t
       name: flags
       desc: "[in] flags controlling the operation"
     - type: "void**"

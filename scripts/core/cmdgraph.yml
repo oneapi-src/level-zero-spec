@@ -9,7 +9,7 @@ value: "$X_MAKE_VERSION( 1, 0 )"
 --- #--------------------------------------------------------------------------
 type: enum
 desc: "Supported command graph creation flags"
-name: $x_command_graph_flags_t
+name: $x_command_graph_flag_t
 etors:
     - name: $X_COMMAND_GRAPH_FLAG_NONE
       value: "0"
@@ -22,7 +22,7 @@ members:
     - type: uint32_t
       name: version
       desc: "[in] $X_COMMAND_GRAPH_DESC_VERSION"
-    - type: $x_command_graph_flags_t
+    - type: $x_command_graph_flag_t
       name: flags
       desc: "[in] creation flags"
     - type: uint32_t

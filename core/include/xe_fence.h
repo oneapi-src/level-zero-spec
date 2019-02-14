@@ -43,18 +43,18 @@
 
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Supported fence creation flags
-typedef enum _xe_fence_flags_t
+typedef enum _xe_fence_flag_t
 {
     XE_FENCE_FLAG_NONE = 0,                         ///< default behavior
 
-} xe_fence_flags_t;
+} xe_fence_flag_t;
 
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Fence descriptor
 typedef struct _xe_fence_desc_t
 {
     uint32_t version;                               ///< [in] descriptor version
-    xe_fence_flags_t flags;                         ///< [in] creation flags
+    xe_fence_flag_t flags;                          ///< [in] creation flags
 
 } xe_fence_desc_t;
 
