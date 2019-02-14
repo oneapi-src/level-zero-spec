@@ -41,7 +41,6 @@ if(EXISTS ${AUB_STREAM_DIR}/aub_mem_dump/aub_stream.cpp)
     set(AUB_STREAM_SUPPORT TRUE)
 endif()
 
-
 # Add compute runtime support
 if(NOT DEFINED COMPUTE_RUNTIME_DIR)
     set(COMPUTE_RUNTIME_DIR ${THIRD_PARTY_DIR}/compute_runtime)
@@ -65,8 +64,6 @@ option(${PROJECT_NAME}_BUILD_TESTS "Build unit tests." ON)
 
 add_subdirectory(${THIRD_PARTY_DIR})
 add_subdirectory(core)
-#TODO: Re-enable once source files added to extended
-#add_subdirectory(extended)
 
 if(COMPUTE_RUNTIME_SUPPORT)
     set(DISABLED_GTPIN_SUPPORT TRUE)
@@ -74,6 +71,8 @@ if(COMPUTE_RUNTIME_SUPPORT)
 
     include(compute_runtime.cmake)
 endif(COMPUTE_RUNTIME_SUPPORT)
+
+include_directories(${CMAKE_CURRENT_SOURCE_DIR}/core/include)
 
 if (${PROJECT_NAME}_BUILD_TESTS)
     add_subdirectory(tests)
