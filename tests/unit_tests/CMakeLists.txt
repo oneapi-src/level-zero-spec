@@ -60,62 +60,12 @@ if(COMPUTE_RUNTIME_SUPPORT)
             ${COMPUTE_RUNTIME_HW_ENABLE_ULT}
     )
 
-    if(SUPPORT_GEN8)
-        target_sources(${TARGET_NAME}
-            PRIVATE
-                cmdlist_bdw.cpp
-                cmdqueue_bdw.cpp
-        )
-        set(DEFAULT_PRODUCT_FAMILY IGFX_BROADWELL)
-    endif()
-
-    if(SUPPORT_GEN9)
-        target_sources(${TARGET_NAME}
-            PRIVATE
-                cmdlist_kbl.cpp
-                cmdlist_skl.cpp
-                cmdqueue_kbl.cpp
-                cmdqueue_skl.cpp
-        )
-        set(DEFAULT_PRODUCT_FAMILY IGFX_SKYLAKE)
-    endif()
-
-    #if(SUPPORT_GEN10)
-    if(FALSE)
-        target_sources(${TARGET_NAME}
-            PRIVATE
-                cmdlist_cnl.cpp
-                cmdqueue_cnl.cpp
-        )
-        set(DEFAULT_PRODUCT_FAMILY IGFX_CANNONLAKE)
-    endif()
-
-    if(SUPPORT_GEN11)
-        target_sources(${TARGET_NAME}
-            PRIVATE
-                cmdlist_icllp.cpp
-                cmdqueue_icllp.cpp
-        )
-        set(DEFAULT_PRODUCT_FAMILY IGFX_ICELAKE_LP)
-    endif()
-
-    if(SUPPORT_GEN12LP)
-        target_sources(${TARGET_NAME}
-            PRIVATE
-                cmdlist_tgllp.cpp
-                cmdqueue_tgllp.cpp
-        )
-        set(DEFAULT_PRODUCT_FAMILY IGFX_TIGERLAKE_LP)
-    endif()
-
-    if(SUPPORT_GEN12HP)
-        target_sources(${TARGET_NAME}
-            PRIVATE
-                cmdlist_ats.cpp
-                cmdqueue_ats.cpp
-        )
-        set(DEFAULT_PRODUCT_FAMILY IGFX_TIGERLAKE_HP)
-    endif()
+    include(gen8.cmake)
+    include(gen9.cmake)
+    include(gen10.cmake)
+    include(gen11.cmake)
+    include(gen12lp.cmake)
+    include(gen12hp.cmake)
 
     target_compile_definitions(${TARGET_NAME}
         PUBLIC
