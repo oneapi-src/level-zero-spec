@@ -287,10 +287,10 @@ xe_result_t __xecall
     xe_event_handle_t hEvent,                       ///< [in] handle of the event
     xe_synchronization_mode_t mode,                 ///< [in] synchronization mode
     uint32_t delay,                                 ///< [in] if ::XE_SYNCHRONIZATION_MODE_SLEEP == mode, then time (in
-                                                    ///< milliseconds) to poll before putting Host thread to sleep; otherwise,
+                                                    ///< microseconds) to poll before putting Host thread to sleep; otherwise,
                                                     ///< must be zero.
     uint32_t interval,                              ///< [in] if ::XE_SYNCHRONIZATION_MODE_SLEEP == mode, then maximum time (in
-                                                    ///< milliseconds) to put Host thread to sleep between polling; otherwise,
+                                                    ///< microseconds) to put Host thread to sleep between polling; otherwise,
                                                     ///< must be zero.
     uint32_t timeout                                ///< [in] if non-zero, then indicates the maximum time to poll or sleep
                                                     ///< before returning; if zero, then only a single status check is made
@@ -342,10 +342,10 @@ xe_result_t __xecall
     xe_event_handle_t* phEvents,                    ///< [in] pointer to array of handles of the events
     xe_synchronization_mode_t mode,                 ///< [in] synchronization mode
     uint32_t delay,                                 ///< [in] if ::XE_SYNCHRONIZATION_MODE_SLEEP == mode, then time (in
-                                                    ///< milliseconds) to poll before putting Host thread to sleep; otherwise,
+                                                    ///< microseconds) to poll before putting Host thread to sleep; otherwise,
                                                     ///< must be zero.
     uint32_t interval,                              ///< [in] if ::XE_SYNCHRONIZATION_MODE_SLEEP == mode, then maximum time (in
-                                                    ///< milliseconds) to put Host thread to sleep between polling; otherwise,
+                                                    ///< microseconds) to put Host thread to sleep between polling; otherwise,
                                                     ///< must be zero.
     uint32_t timeout                                ///< [in] if non-zero, then indicates the maximum time to poll or sleep
                                                     ///< before returning; if zero, then only a single status check is made

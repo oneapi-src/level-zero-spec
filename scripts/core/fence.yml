@@ -85,11 +85,11 @@ params:
       desc: "[in] synchronization mode"
     - type: uint32_t
       name: delay
-      desc: "[in] if $X_SYNCHRONIZATION_MODE_SLEEP == mode, then time (in milliseconds) to poll before putting Host thread to sleep; 
+      desc: "[in] if $X_SYNCHRONIZATION_MODE_SLEEP == mode, then time (in microseconds) to poll before putting Host thread to sleep; 
             otherwise, must be zero."
     - type: uint32_t
       name: interval
-      desc: "[in] if $X_SYNCHRONIZATION_MODE_SLEEP == mode, then maximum time (in milliseconds) to put Host thread to sleep between polling;
+      desc: "[in] if $X_SYNCHRONIZATION_MODE_SLEEP == mode, then maximum time (in microseconds) to put Host thread to sleep between polling;
             otherwise, must be zero."
     - type: uint32_t
       name: timeout
@@ -123,11 +123,11 @@ params:
       desc: "[in] synchronization mode"
     - type: uint32_t
       name: delay
-      desc: "[in] if $X_SYNCHRONIZATION_MODE_SLEEP == mode, then time (in milliseconds) to poll before putting Host thread to sleep; 
+      desc: "[in] if $X_SYNCHRONIZATION_MODE_SLEEP == mode, then time (in microseconds) to poll before putting Host thread to sleep; 
             otherwise, must be zero."
     - type: uint32_t
       name: interval
-      desc: "[in] if $X_SYNCHRONIZATION_MODE_SLEEP == mode, then maximum time (in milliseconds) to put Host thread to sleep between polling;
+      desc: "[in] if $X_SYNCHRONIZATION_MODE_SLEEP == mode, then maximum time (in microseconds) to put Host thread to sleep between polling;
             otherwise, must be zero."
     - type: uint32_t
       name: timeout

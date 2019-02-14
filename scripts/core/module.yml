@@ -429,7 +429,6 @@ returns:
     - $X_RESULT_ERROR_INVALID_PARAMETER:
         - "invalid group count range for dispatch"
         - "invalid dispatch count range for dispatch"
-
 --- #--------------------------------------------------------------------------
 type: struct
 desc: "Indirect function arguments. These arguments are device visible."
