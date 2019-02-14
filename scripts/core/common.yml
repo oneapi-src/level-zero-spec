@@ -124,8 +124,8 @@ etors:
       desc: "insufficient host memory to satisfy call"
     - name: $X_RESULT_ERROR_OUT_OF_DEVICE_MEMORY
       desc: "insufficient device memory to satisfy call"
-    - name: $X_RESULT_ERROR_CREATE_FAILURE
-      desc: "error in creating object"
+    - name: $X_RESULT_ERROR_MODULE_BUILD_FAILURE
+      desc: "error in building module"
     - name: $X_RESULT_ERROR_UNKNOWN
       value: "0x7fffffff"
       desc: "unknown or internal error"

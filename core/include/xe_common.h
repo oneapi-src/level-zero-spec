@@ -147,7 +147,7 @@ typedef enum _xe_result_t
     XE_RESULT_ERROR_INVALID_PARAMETER,              ///< invalid parameter provided
     XE_RESULT_ERROR_OUT_OF_HOST_MEMORY,             ///< insufficient host memory to satisfy call
     XE_RESULT_ERROR_OUT_OF_DEVICE_MEMORY,           ///< insufficient device memory to satisfy call
-    XE_RESULT_ERROR_CREATE_FAILURE,                 ///< error in creating object
+    XE_RESULT_ERROR_MODULE_BUILD_FAILURE,           ///< error in building module
     XE_RESULT_ERROR_UNKNOWN = 0x7fffffff,           ///< unknown or internal error
 
 } xe_result_t;

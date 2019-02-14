@@ -76,8 +76,8 @@ returns:
         - "0 for desc->inputSize"
     - $X_RESULT_ERROR_OUT_OF_HOST_MEMORY
     - $X_RESULT_ERROR_OUT_OF_DEVICE_MEMORY
-    - $X_RESULT_ERROR_CREATE_FAILURE
-        - "Failure to create module. See build log for more details."
+    - $X_RESULT_ERROR_MODULE_BUILD_FAILURE
+        - "Failure to build module. See build log for more details."
     
 --- #--------------------------------------------------------------------------
 type: function
