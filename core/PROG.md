@@ -805,11 +805,15 @@ not already associated with the function and the function requires specific alig
     uint32_t numGroupsX = imageWidth / groupSizeX;
     uint32_t numGroupsY = imageHeight / groupSizeY;
 
+    xe_dispatch_function_arguments_t dispatchArgs = {
+        XE_DISPATCH_FUNCTION_ARGS_VERSION,
+        groupSizeX, groupSizeY, 1,
+        numGroupsX, numGroupsY, 1
+        };
+
     // Encode dispatch command
     xeCommandListEncodeDispatchFunction(
-        hCommandList, hFunction, hFunctionArgs, 
-        groupSizeX, groupSizeY, 1,
-        numGroupsX, numGroupsY, 1);
+        hCommandList, hFunction, hFunctionArgs, &dispatchArgs, nullptr);
 
     ...
 ```
@@ -832,12 +836,15 @@ The following sample code demonstrates a sequence for creating function args and
     xeFunctionArgsSetValue(hFuncArgs, 2, sizeof(uint32_t), &width);
     xeFunctionArgsSetValue(hFuncArgs, 3, sizeof(uint32_t), &height);
 
+    xe_dispatch_function_arguments_t dispatchArgs = {
+        XE_DISPATCH_FUNCTION_ARGS_VERSION,
+        pixelRegionWidth, pixelRegionHeight, 1,
+        numRegionsX, numRegionsY, 1
+        };
+
     // Encode dispatch command
     xeCommandListEncodeDispatchFunction(
-        hCommandList, hFunction, hFunctionArgs, 
-        pixelRegionWidth, pixelRegionHeight, 1, 
-        numRegionsX, numRegionsY, 1,
-        nullptr );
+        hCommandList, hFunction, hFunctionArgs, &dispatchArgs, nullptr );
 
     // Update image pointers to copy and scale next image.
     xeFunctionArgsSetValue(hFuncArgs, 0, sizeof(xe_image_handle_t), &src2_image);
@@ -845,10 +852,7 @@ The following sample code demonstrates a sequence for creating function args and
 
     // Encode dispatch command
     xeCommandListEncodeDispatchFunction(
-        hCommandList, hFunction, hFunctionArgs, 
-        pixelRegionWidth, pixelRegionHeight, 1, 
-        numRegionsX, numRegionsY, 1,
-        nullptr );
+        hCommandList, hFunction, hFunctionArgs, &dispatchArgs, nullptr );
 
     ...
 ```

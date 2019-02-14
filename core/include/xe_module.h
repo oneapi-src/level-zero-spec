@@ -448,6 +448,24 @@ xe_result_t __xecall
     );
 
 ///////////////////////////////////////////////////////////////////////////////
+/// @brief API version of ::xe_function_desc_t
+#define XE_DISPATCH_FUNCTION_ARGS_VERSION  XE_MAKE_VERSION( 1, 0 )
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Dispatch function arguments.
+typedef struct _xe_dispatch_function_arguments_t
+{
+    uint32_t version;                               ///< [in] ::XE_DISPATCH_FUNCTION_ARGS_VERSION
+    uint32_t groupSizeX;                            ///< [in] group size for X dimension
+    uint32_t groupSizeY;                            ///< [in] group size for Y dimension
+    uint32_t groupSizeZ;                            ///< [in] group size for Z dimension
+    uint32_t groupCountX;                           ///< [in] width of dispatches in X dimension
+    uint32_t groupCountY;                           ///< [in] width of dispatches in Y dimension
+    uint32_t groupCountZ;                           ///< [in] width of dispatches in Z dimension
+
+} xe_dispatch_function_arguments_t;
+
+///////////////////////////////////////////////////////////////////////////////
 /// @brief Dispatch command over one or more work groups.
 /// 
 /// @details
@@ -473,12 +491,7 @@ xe_result_t __xecall
     xe_command_list_handle_t hCommandList,          ///< [in] handle of the command list
     xe_function_handle_t hFunction,                 ///< [in] handle of the function object
     xe_function_args_handle_t hFunctionArgs,        ///< [in] handle to function arguments buffer.
-    uint32_t groupSizeX,                            ///< [in] group size for X dimension
-    uint32_t groupSizeY,                            ///< [in] group size for Y dimension
-    uint32_t groupSizeZ,                            ///< [in] group size for Z dimension
-    uint32_t groupCountX,                           ///< [in] width of group dispatches in X dimension
-    uint32_t groupCountY,                           ///< [in] width of group dispatches in Y dimension
-    uint32_t groupCountZ,                           ///< [in] width of group dispatches in Z dimension
+    xe_dispatch_function_arguments_t* pDispatchFuncArgs,///< [in] dispatch function arguments.
     xe_event_handle_t hEvent                        ///< [in][optional] handle of the event to signal on completion
     );
 

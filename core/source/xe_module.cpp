@@ -531,12 +531,7 @@ xe_result_t __xecall
     xe_command_list_handle_t hCommandList,          ///< [in] handle of the command list
     xe_function_handle_t hFunction,                 ///< [in] handle of the function object
     xe_function_args_handle_t hFunctionArgs,        ///< [in] handle to function arguments buffer.
-    uint32_t groupSizeX,                            ///< [in] group size for X dimension
-    uint32_t groupSizeY,                            ///< [in] group size for Y dimension
-    uint32_t groupSizeZ,                            ///< [in] group size for Z dimension
-    uint32_t groupCountX,                           ///< [in] width of group dispatches in X dimension
-    uint32_t groupCountY,                           ///< [in] width of group dispatches in Y dimension
-    uint32_t groupCountZ,                           ///< [in] width of group dispatches in Z dimension
+    xe_dispatch_function_arguments_t* pDispatchFuncArgs,///< [in] dispatch function arguments.
     xe_event_handle_t hEvent                        ///< [in][optional] handle of the event to signal on completion
     )
 {
@@ -546,6 +541,7 @@ xe_result_t __xecall
     // @todo: check_return(xe_command_list_handle_t() == hCommandList, XE_RESULT_ERROR_INVALID_PARAMETER);
     // @todo: check_return(xe_function_handle_t() == hFunction, XE_RESULT_ERROR_INVALID_PARAMETER);
     // @todo: check_return(xe_function_args_handle_t() == hFunctionArgs, XE_RESULT_ERROR_INVALID_PARAMETER);
+    // @todo: check_return(nullptr == pDispatchFuncArgs, XE_RESULT_ERROR_INVALID_PARAMETER);
 
     // @todo: insert <code> here
 
