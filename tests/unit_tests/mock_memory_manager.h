@@ -20,6 +20,7 @@ struct Mock<MemoryManager> : public MemoryManager {
 
     MOCK_METHOD1(allocateDeviceMemory, GraphicsAllocation *(size_t size));
     MOCK_METHOD1(freeMemory, void(GraphicsAllocation *allocation));
+    MOCK_METHOD1(findAllocation, GraphicsAllocation *(const void *ptr));
 };
 
 } // namespace ult

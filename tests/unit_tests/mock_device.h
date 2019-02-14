@@ -26,8 +26,13 @@ struct Mock<Device> : public Device {
     MOCK_METHOD2(createEvent, xe_result_t(const xe_event_desc_t *desc,
                                           xe_event_handle_t *event));
 
+    MOCK_METHOD3(createModule, xe_result_t(const xe_module_desc_t *desc,
+                                           xe_module_handle_t *module,
+                                           xe_module_build_log_handle_t *buildLog));
+
     MOCK_METHOD0(getMemoryManager, MemoryManager *());
 
+    void *deviceRT;
     void *csrRT;
 };
 
