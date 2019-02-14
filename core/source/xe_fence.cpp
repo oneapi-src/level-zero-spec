@@ -46,11 +46,12 @@
 /// @returns
 ///     - ::XE_RESULT_SUCCESS
 ///     - ::XE_RESULT_ERROR_UNINITIALIZED
-///     - ::XE_RESULT_ERROR_UNSUPPORTED
 ///     - ::XE_RESULT_ERROR_INVALID_PARAMETER
-///         + invalid handle for hCommandQueue
-///         + nullptr for desc
-///         + nullptr for phFence
+///         + nullptr == hCommandQueue
+///         + nullptr == desc
+///         + nullptr == phFence
+///     - ::XE_RESULT_ERROR_UNSUPPORTED
+///         + ::XE_FENCE_DESC_VERSION <= desc->version
 ///     - ::XE_RESULT_ERROR_OUT_OF_HOST_MEMORY
 ///     - ::XE_RESULT_ERROR_OUT_OF_DEVICE_MEMORY
 /*@todo: __declspec(dllexport)*/
@@ -64,10 +65,10 @@ xe_result_t __xecall
     // @todo: check_return(nullptr == get_driver(), XE_RESULT_ERROR_UNINITIALIZED);
 
     // Check parameters
-    // @todo: check_return(xe_command_queue_handle_t() == hCommandQueue, XE_RESULT_ERROR_INVALID_PARAMETER);
+    // @todo: check_return(nullptr == hCommandQueue, XE_RESULT_ERROR_INVALID_PARAMETER);
     // @todo: check_return(nullptr == desc, XE_RESULT_ERROR_INVALID_PARAMETER);
-    // @todo: check_return(XE_FENCE_DESC_VERSION <= desc->version, XE_RESULT_ERROR_UNSUPPORTED);
     // @todo: check_return(nullptr == phFence, XE_RESULT_ERROR_INVALID_PARAMETER);
+    // @todo: check_return(XE_FENCE_DESC_VERSION <= desc->version, XE_RESULT_ERROR_UNSUPPORTED);
 
     // @todo: insert <code> here
 
@@ -91,10 +92,10 @@ xe_result_t __xecall
 /// @returns
 ///     - ::XE_RESULT_SUCCESS
 ///     - ::XE_RESULT_ERROR_UNINITIALIZED
-///     - ::XE_RESULT_ERROR_UNSUPPORTED
 ///     - ::XE_RESULT_ERROR_INVALID_PARAMETER
-///         + invalid handle for hFence
+///         + nullptr == hFence
 ///         + fence is enqueued in a command queue
+///     - ::XE_RESULT_ERROR_UNSUPPORTED
 /*@todo: __declspec(dllexport)*/
 xe_result_t __xecall
   xeFenceDestroy(
@@ -104,7 +105,7 @@ xe_result_t __xecall
     // @todo: check_return(nullptr == get_driver(), XE_RESULT_ERROR_UNINITIALIZED);
 
     // Check parameters
-    // @todo: check_return(xe_fence_handle_t() == hFence, XE_RESULT_ERROR_INVALID_PARAMETER);
+    // @todo: check_return(nullptr == hFence, XE_RESULT_ERROR_INVALID_PARAMETER);
 
     // @todo: insert <code> here
 
@@ -125,12 +126,12 @@ xe_result_t __xecall
 /// @returns
 ///     - ::XE_RESULT_SUCCESS
 ///     - ::XE_RESULT_ERROR_UNINITIALIZED
+///     - ::XE_RESULT_ERROR_INVALID_PARAMETER
+///         + nullptr == hFence
+///         + fence is not enqueued in a command queue
 ///     - ::XE_RESULT_ERROR_UNSUPPORTED
 ///     - ::XE_RESULT_NOT_READY
 ///         + timeout expired
-///     - ::XE_RESULT_ERROR_INVALID_PARAMETER
-///         + invalid handle for hFence
-///         + fence is not enqueued in a command queue
 /*@todo: __declspec(dllexport)*/
 xe_result_t __xecall
   xeHostWaitOnFence(
@@ -151,7 +152,7 @@ xe_result_t __xecall
     // @todo: check_return(nullptr == get_driver(), XE_RESULT_ERROR_UNINITIALIZED);
 
     // Check parameters
-    // @todo: check_return(xe_fence_handle_t() == hFence, XE_RESULT_ERROR_INVALID_PARAMETER);
+    // @todo: check_return(nullptr == hFence, XE_RESULT_ERROR_INVALID_PARAMETER);
 
     // @todo: insert <code> here
 
@@ -172,13 +173,13 @@ xe_result_t __xecall
 /// @returns
 ///     - ::XE_RESULT_SUCCESS
 ///     - ::XE_RESULT_ERROR_UNINITIALIZED
+///     - ::XE_RESULT_ERROR_INVALID_PARAMETER
+///         + nullptr == phFences
+///         + nullptr == any handle in phFences
+///         + any fence is not enqueued in a command queue
 ///     - ::XE_RESULT_ERROR_UNSUPPORTED
 ///     - ::XE_RESULT_NOT_READY
 ///         + timeout expired
-///     - ::XE_RESULT_ERROR_INVALID_PARAMETER
-///         + nullptr for phFences
-///         + any invalid handle in phFences
-///         + any fence is not enqueued in a command queue
 /*@todo: __declspec(dllexport)*/
 xe_result_t __xecall
   xeHostWaitOnMultipleFences(
@@ -221,12 +222,12 @@ xe_result_t __xecall
 /// @returns
 ///     - ::XE_RESULT_SUCCESS
 ///     - ::XE_RESULT_ERROR_UNINITIALIZED
+///     - ::XE_RESULT_ERROR_INVALID_PARAMETER
+///         + nullptr == hFence
+///         + fence is not enqueued in a command queue
 ///     - ::XE_RESULT_ERROR_UNSUPPORTED
 ///     - ::XE_RESULT_NOT_READY
 ///         + not signaled
-///     - ::XE_RESULT_ERROR_INVALID_PARAMETER
-///         + invalid handle for hFence
-///         + fence is not enqueued in a command queue
 /*@todo: __declspec(dllexport)*/
 xe_result_t __xecall
   xeFenceQueryStatus(
@@ -236,7 +237,7 @@ xe_result_t __xecall
     // @todo: check_return(nullptr == get_driver(), XE_RESULT_ERROR_UNINITIALIZED);
 
     // Check parameters
-    // @todo: check_return(xe_fence_handle_t() == hFence, XE_RESULT_ERROR_INVALID_PARAMETER);
+    // @todo: check_return(nullptr == hFence, XE_RESULT_ERROR_INVALID_PARAMETER);
 
     // @todo: insert <code> here
 
@@ -253,12 +254,12 @@ xe_result_t __xecall
 /// @returns
 ///     - ::XE_RESULT_SUCCESS
 ///     - ::XE_RESULT_ERROR_UNINITIALIZED
-///     - ::XE_RESULT_ERROR_UNSUPPORTED
 ///     - ::XE_RESULT_ERROR_INVALID_PARAMETER
-///         + invalid handle for hFenceStart
-///         + invalid handle for hFenceEnd
+///         + nullptr == hFenceStart
+///         + nullptr == hFenceEnd
+///         + nullptr == pTime
 ///         + either fence not enqueued
-///         + nullptr for pTime
+///     - ::XE_RESULT_ERROR_UNSUPPORTED
 /*@todo: __declspec(dllexport)*/
 xe_result_t __xecall
   xeFenceQueryElapsedTime(
@@ -270,8 +271,8 @@ xe_result_t __xecall
     // @todo: check_return(nullptr == get_driver(), XE_RESULT_ERROR_UNINITIALIZED);
 
     // Check parameters
-    // @todo: check_return(xe_fence_handle_t() == hFenceStart, XE_RESULT_ERROR_INVALID_PARAMETER);
-    // @todo: check_return(xe_fence_handle_t() == hFenceEnd, XE_RESULT_ERROR_INVALID_PARAMETER);
+    // @todo: check_return(nullptr == hFenceStart, XE_RESULT_ERROR_INVALID_PARAMETER);
+    // @todo: check_return(nullptr == hFenceEnd, XE_RESULT_ERROR_INVALID_PARAMETER);
     // @todo: check_return(nullptr == pTime, XE_RESULT_ERROR_INVALID_PARAMETER);
 
     // @todo: insert <code> here
@@ -293,9 +294,9 @@ xe_result_t __xecall
 /// @returns
 ///     - ::XE_RESULT_SUCCESS
 ///     - ::XE_RESULT_ERROR_UNINITIALIZED
-///     - ::XE_RESULT_ERROR_UNSUPPORTED
 ///     - ::XE_RESULT_ERROR_INVALID_PARAMETER
-///         + invalid handle for hFence
+///         + nullptr == hFence
+///     - ::XE_RESULT_ERROR_UNSUPPORTED
 /*@todo: __declspec(dllexport)*/
 xe_result_t __xecall
   xeFenceReset(
@@ -305,7 +306,7 @@ xe_result_t __xecall
     // @todo: check_return(nullptr == get_driver(), XE_RESULT_ERROR_UNINITIALIZED);
 
     // Check parameters
-    // @todo: check_return(xe_fence_handle_t() == hFence, XE_RESULT_ERROR_INVALID_PARAMETER);
+    // @todo: check_return(nullptr == hFence, XE_RESULT_ERROR_INVALID_PARAMETER);
 
     // @todo: insert <code> here
 

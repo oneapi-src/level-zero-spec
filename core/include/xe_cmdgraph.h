@@ -77,11 +77,12 @@ typedef struct _xe_command_graph_desc_t
 /// @returns
 ///     - ::XE_RESULT_SUCCESS
 ///     - ::XE_RESULT_ERROR_UNINITIALIZED
-///     - ::XE_RESULT_ERROR_UNSUPPORTED
 ///     - ::XE_RESULT_ERROR_INVALID_PARAMETER
-///         + invalid handle for hDevice
-///         + nullptr for desc
-///         + nullptr for phCommandGraph
+///         + nullptr == hDevice
+///         + nullptr == desc
+///         + nullptr == phCommandGraph
+///     - ::XE_RESULT_ERROR_UNSUPPORTED
+///         + ::XE_COMMAND_GRAPH_DESC_VERSION <= desc->version
 ///     - ::XE_RESULT_ERROR_OUT_OF_HOST_MEMORY
 ///     - ::XE_RESULT_ERROR_OUT_OF_DEVICE_MEMORY
 xe_result_t __xecall
@@ -102,9 +103,9 @@ xe_result_t __xecall
 /// @returns
 ///     - ::XE_RESULT_SUCCESS
 ///     - ::XE_RESULT_ERROR_UNINITIALIZED
-///     - ::XE_RESULT_ERROR_UNSUPPORTED
 ///     - ::XE_RESULT_ERROR_INVALID_PARAMETER
-///         + invalid handle for hCommandGraph
+///         + nullptr == hCommandGraph
+///     - ::XE_RESULT_ERROR_UNSUPPORTED
 xe_result_t __xecall
   xeCommandGraphDestroy(
     xe_command_graph_handle_t hCommandGraph         ///< [in] handle of command graph object to destroy
@@ -125,10 +126,12 @@ xe_result_t __xecall
 /// @returns
 ///     - ::XE_RESULT_SUCCESS
 ///     - ::XE_RESULT_ERROR_UNINITIALIZED
-///     - ::XE_RESULT_ERROR_UNSUPPORTED
 ///     - ::XE_RESULT_ERROR_INVALID_PARAMETER
-///         + invalid handle for hCommandGraph
+///         + nullptr == hCommandGraph
+///         + nullptr == hProducerCommandList
+///         + nullptr == hConsumerCommandList
 ///         + hCommandGraph is closed
+///     - ::XE_RESULT_ERROR_UNSUPPORTED
 xe_result_t __xecall
   xeCommandGraphAddEdge(
     xe_command_graph_handle_t hCommandGraph,        ///< [in] handle of command graph object to add an edge
@@ -147,10 +150,12 @@ xe_result_t __xecall
 /// @returns
 ///     - ::XE_RESULT_SUCCESS
 ///     - ::XE_RESULT_ERROR_UNINITIALIZED
-///     - ::XE_RESULT_ERROR_UNSUPPORTED
 ///     - ::XE_RESULT_ERROR_INVALID_PARAMETER
-///         + invalid handle for hCommandGraph
+///         + nullptr == hCommandGraph
+///         + nullptr == hProducerCommandList
+///         + nullptr == hConsumerCommandList
 ///         + hCommandGraph is closed
+///     - ::XE_RESULT_ERROR_UNSUPPORTED
 xe_result_t __xecall
   xeCommandGraphRemoveEdge(
     xe_command_graph_handle_t hCommandGraph,        ///< [in] handle of command graph object to remove an edge
@@ -172,9 +177,9 @@ xe_result_t __xecall
 /// @returns
 ///     - ::XE_RESULT_SUCCESS
 ///     - ::XE_RESULT_ERROR_UNINITIALIZED
-///     - ::XE_RESULT_ERROR_UNSUPPORTED
 ///     - ::XE_RESULT_ERROR_INVALID_PARAMETER
-///         + invalid handle for hCommandGraph
+///         + nullptr == hCommandGraph
+///     - ::XE_RESULT_ERROR_UNSUPPORTED
 xe_result_t __xecall
   xeCommandGraphClose(
     xe_command_graph_handle_t hCommandGraph         ///< [in] handle of command graph object to close
@@ -192,9 +197,9 @@ xe_result_t __xecall
 /// @returns
 ///     - ::XE_RESULT_SUCCESS
 ///     - ::XE_RESULT_ERROR_UNINITIALIZED
-///     - ::XE_RESULT_ERROR_UNSUPPORTED
 ///     - ::XE_RESULT_ERROR_INVALID_PARAMETER
-///         + invalid handle for hCommandGraph
+///         + nullptr == hCommandGraph
+///     - ::XE_RESULT_ERROR_UNSUPPORTED
 xe_result_t __xecall
   xeCommandGraphReset(
     xe_command_graph_handle_t hCommandGraph         ///< [in] handle of command graph object to reset
@@ -210,11 +215,11 @@ xe_result_t __xecall
 /// @returns
 ///     - ::XE_RESULT_SUCCESS
 ///     - ::XE_RESULT_ERROR_UNINITIALIZED
-///     - ::XE_RESULT_ERROR_UNSUPPORTED
 ///     - ::XE_RESULT_ERROR_INVALID_PARAMETER
-///         + invalid handle for hCommandGraph
-///         + nullptr for pNumBatches
+///         + nullptr == hCommandGraph
+///         + nullptr == pNumBatches
 ///         + hCommandGraph is not closed
+///     - ::XE_RESULT_ERROR_UNSUPPORTED
 xe_result_t __xecall
   xeCommandGraphGetComputeBatchCount(
     xe_command_graph_handle_t hCommandGraph,        ///< [in] handle of command graph object
@@ -231,14 +236,13 @@ xe_result_t __xecall
 /// @returns
 ///     - ::XE_RESULT_SUCCESS
 ///     - ::XE_RESULT_ERROR_UNINITIALIZED
-///     - ::XE_RESULT_ERROR_UNSUPPORTED
 ///     - ::XE_RESULT_ERROR_INVALID_PARAMETER
-///         + invalid handle for hCommandGraph
+///         + nullptr == hCommandGraph
+///         + nullptr == pCommandQueueIndex
+///         + nullptr == pNumCommandLists
+///         + nullptr == pphCommandLists
 ///         + hCommandGraph is not closed
-///         + invalid value for batchIndex
-///         + nullptr for pCommandQueueIndex
-///         + nullptr for pNumCommandLists
-///         + nullptr for pphCommandLists
+///     - ::XE_RESULT_ERROR_UNSUPPORTED
 xe_result_t __xecall
   xeCommandGraphGetComputeCommandListBatch(
     xe_command_graph_handle_t hCommandGraph,        ///< [in] handle of command graph object
@@ -258,11 +262,11 @@ xe_result_t __xecall
 /// @returns
 ///     - ::XE_RESULT_SUCCESS
 ///     - ::XE_RESULT_ERROR_UNINITIALIZED
-///     - ::XE_RESULT_ERROR_UNSUPPORTED
 ///     - ::XE_RESULT_ERROR_INVALID_PARAMETER
-///         + invalid handle for hCommandGraph
-///         + nullptr for pNumBatches
+///         + nullptr == hCommandGraph
+///         + nullptr == pNumBatches
 ///         + hCommandGraph is not closed
+///     - ::XE_RESULT_ERROR_UNSUPPORTED
 xe_result_t __xecall
   xeCommandGraphGetCopyBatchCount(
     xe_command_graph_handle_t hCommandGraph,        ///< [in] handle of command graph object
@@ -280,14 +284,14 @@ xe_result_t __xecall
 /// @returns
 ///     - ::XE_RESULT_SUCCESS
 ///     - ::XE_RESULT_ERROR_UNINITIALIZED
-///     - ::XE_RESULT_ERROR_UNSUPPORTED
 ///     - ::XE_RESULT_ERROR_INVALID_PARAMETER
-///         + invalid handle for hCommandGraph
+///         + nullptr == hCommandGraph
+///         + nullptr == pCommandQueueIndex
+///         + nullptr == pNumCommandLists
+///         + nullptr == pphCommandLists
 ///         + hCommandGraph is not closed
-///         + invalid value for batchIndex
-///         + nullptr for pCommandQueueIndex
-///         + nullptr for pNumCommandLists
-///         + nullptr for pphCommandLists
+///         + batchIndex is out of range
+///     - ::XE_RESULT_ERROR_UNSUPPORTED
 xe_result_t __xecall
   xeCommandGraphGetCopyCommandListBatch(
     xe_command_graph_handle_t hCommandGraph,        ///< [in] handle of command graph object

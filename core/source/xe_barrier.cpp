@@ -48,9 +48,9 @@
 /// @returns
 ///     - ::XE_RESULT_SUCCESS
 ///     - ::XE_RESULT_ERROR_UNINITIALIZED
-///     - ::XE_RESULT_ERROR_UNSUPPORTED
 ///     - ::XE_RESULT_ERROR_INVALID_PARAMETER
-///         + invalid handle for hCommandList
+///         + nullptr == hCommandList
+///     - ::XE_RESULT_ERROR_UNSUPPORTED
 /*@todo: __declspec(dllexport)*/
 xe_result_t __xecall
   xeCommandListEncodeExecutionBarrier(
@@ -60,7 +60,7 @@ xe_result_t __xecall
     // @todo: check_return(nullptr == get_driver(), XE_RESULT_ERROR_UNINITIALIZED);
 
     // Check parameters
-    // @todo: check_return(xe_command_list_handle_t() == hCommandList, XE_RESULT_ERROR_INVALID_PARAMETER);
+    // @todo: check_return(nullptr == hCommandList, XE_RESULT_ERROR_INVALID_PARAMETER);
 
     // @todo: insert <code> here
 

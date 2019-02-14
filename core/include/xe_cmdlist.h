@@ -76,11 +76,12 @@ typedef struct _xe_command_list_desc_t
 /// @returns
 ///     - ::XE_RESULT_SUCCESS
 ///     - ::XE_RESULT_ERROR_UNINITIALIZED
-///     - ::XE_RESULT_ERROR_UNSUPPORTED
 ///     - ::XE_RESULT_ERROR_INVALID_PARAMETER
-///         + invalid handle for hDevice
-///         + nullptr for desc
-///         + nullptr for phCommandList
+///         + nullptr == hDevice
+///         + nullptr == desc
+///         + nullptr == phCommandList
+///     - ::XE_RESULT_ERROR_UNSUPPORTED
+///         + ::XE_COMMAND_LIST_DESC_VERSION <= desc->version
 ///     - ::XE_RESULT_ERROR_OUT_OF_HOST_MEMORY
 ///     - ::XE_RESULT_ERROR_OUT_OF_DEVICE_MEMORY
 xe_result_t __xecall
@@ -106,11 +107,11 @@ xe_result_t __xecall
 /// @returns
 ///     - ::XE_RESULT_SUCCESS
 ///     - ::XE_RESULT_ERROR_UNINITIALIZED
-///     - ::XE_RESULT_ERROR_UNSUPPORTED
 ///     - ::XE_RESULT_ERROR_INVALID_PARAMETER
-///         + invalid handle for hDevice
-///         + invalid handle for hCommandList
-///         + nullptr for phCommandList
+///         + nullptr == hDevice
+///         + nullptr == hCommandList
+///         + nullptr == phCommandList
+///     - ::XE_RESULT_ERROR_UNSUPPORTED
 ///     - ::XE_RESULT_ERROR_OUT_OF_HOST_MEMORY
 ///     - ::XE_RESULT_ERROR_OUT_OF_DEVICE_MEMORY
 xe_result_t __xecall
@@ -133,9 +134,9 @@ xe_result_t __xecall
 /// @returns
 ///     - ::XE_RESULT_SUCCESS
 ///     - ::XE_RESULT_ERROR_UNINITIALIZED
-///     - ::XE_RESULT_ERROR_UNSUPPORTED
 ///     - ::XE_RESULT_ERROR_INVALID_PARAMETER
-///         + invalid handle for hCommandList
+///         + nullptr == hCommandList
+///     - ::XE_RESULT_ERROR_UNSUPPORTED
 xe_result_t __xecall
   xeCommandListDestroy(
     xe_command_list_handle_t hCommandList           ///< [in] handle of command list object to destroy
@@ -152,9 +153,9 @@ xe_result_t __xecall
 /// @returns
 ///     - ::XE_RESULT_SUCCESS
 ///     - ::XE_RESULT_ERROR_UNINITIALIZED
-///     - ::XE_RESULT_ERROR_UNSUPPORTED
 ///     - ::XE_RESULT_ERROR_INVALID_PARAMETER
-///         + invalid handle for hCommandList
+///         + nullptr == hCommandList
+///     - ::XE_RESULT_ERROR_UNSUPPORTED
 xe_result_t __xecall
   xeCommandListClose(
     xe_command_list_handle_t hCommandList           ///< [in] handle of command list object to close
@@ -174,9 +175,9 @@ xe_result_t __xecall
 /// @returns
 ///     - ::XE_RESULT_SUCCESS
 ///     - ::XE_RESULT_ERROR_UNINITIALIZED
-///     - ::XE_RESULT_ERROR_UNSUPPORTED
 ///     - ::XE_RESULT_ERROR_INVALID_PARAMETER
-///         + invalid handle for hCommandList
+///         + nullptr == hCommandList
+///     - ::XE_RESULT_ERROR_UNSUPPORTED
 xe_result_t __xecall
   xeCommandListReset(
     xe_command_list_handle_t hCommandList           ///< [in] handle of command list object to reset
@@ -207,11 +208,11 @@ typedef enum _xe_command_list_parameter_t
 /// @returns
 ///     - ::XE_RESULT_SUCCESS
 ///     - ::XE_RESULT_ERROR_UNINITIALIZED
-///     - ::XE_RESULT_ERROR_UNSUPPORTED
 ///     - ::XE_RESULT_ERROR_INVALID_PARAMETER
-///         + invalid handle for hCommandList
+///         + nullptr == hCommandList
 ///         + invalid value for attribute
 ///         + invalid value for value
+///     - ::XE_RESULT_ERROR_UNSUPPORTED
 xe_result_t __xecall
   xeCommandListSetParameter(
     xe_command_list_handle_t hCommandList,          ///< [in] handle of command list
@@ -237,11 +238,11 @@ xe_result_t __xecall
 /// @returns
 ///     - ::XE_RESULT_SUCCESS
 ///     - ::XE_RESULT_ERROR_UNINITIALIZED
-///     - ::XE_RESULT_ERROR_UNSUPPORTED
 ///     - ::XE_RESULT_ERROR_INVALID_PARAMETER
-///         + invalid handle for hCommandList
+///         + nullptr == hCommandList
+///         + nullptr == value
 ///         + invalid value for attribute
-///         + nullptr for value
+///     - ::XE_RESULT_ERROR_UNSUPPORTED
 xe_result_t __xecall
   xeCommandListGetParameter(
     xe_command_list_handle_t hCommandList,          ///< [in] handle of command list
@@ -260,9 +261,9 @@ xe_result_t __xecall
 /// @returns
 ///     - ::XE_RESULT_SUCCESS
 ///     - ::XE_RESULT_ERROR_UNINITIALIZED
-///     - ::XE_RESULT_ERROR_UNSUPPORTED
 ///     - ::XE_RESULT_ERROR_INVALID_PARAMETER
-///         + invalid handle for hCommandList
+///         + nullptr == hCommandList
+///     - ::XE_RESULT_ERROR_UNSUPPORTED
 xe_result_t __xecall
   xeCommandListResetParameters(
     xe_command_list_handle_t hCommandList           ///< [in] handle of the command list
@@ -279,12 +280,11 @@ xe_result_t __xecall
 /// @returns
 ///     - ::XE_RESULT_SUCCESS
 ///     - ::XE_RESULT_ERROR_UNINITIALIZED
-///     - ::XE_RESULT_ERROR_UNSUPPORTED
 ///     - ::XE_RESULT_ERROR_INVALID_PARAMETER
-///         + invalid handle for hCommandList
+///         + nullptr == hCommandList
+///         + nullptr == phCommandLists
 ///         + 0 for numCommandLists
-///         + nullptr for phCommandLists
-///         + invalid handle in phCommandLists
+///     - ::XE_RESULT_ERROR_UNSUPPORTED
 xe_result_t __xecall
   xeCommandListEncodeCommandLists(
     xe_command_list_handle_t hCommandList,          ///< [in] handle of the command list
@@ -312,12 +312,12 @@ typedef enum _xe_command_format_t
 /// @returns
 ///     - ::XE_RESULT_SUCCESS
 ///     - ::XE_RESULT_ERROR_UNINITIALIZED
-///     - ::XE_RESULT_ERROR_UNSUPPORTED
 ///     - ::XE_RESULT_ERROR_INVALID_PARAMETER
-///         + invalid handle for hCommandList
+///         + nullptr == hCommandList
+///         + nullptr == pBlob
 ///         + invalid value for format
 ///         + 0 for size
-///         + nullptr for pBlob
+///     - ::XE_RESULT_ERROR_UNSUPPORTED
 xe_result_t __xecall
   xeCommandListEncodeCommands(
     xe_command_list_handle_t hCommandList,          ///< [in] handle of the command list

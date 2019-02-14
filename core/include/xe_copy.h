@@ -57,10 +57,11 @@
 /// @returns
 ///     - ::XE_RESULT_SUCCESS
 ///     - ::XE_RESULT_ERROR_UNINITIALIZED
-///     - ::XE_RESULT_ERROR_UNSUPPORTED
 ///     - ::XE_RESULT_ERROR_INVALID_PARAMETER
-///         + nullptr for dstptr
-///         + nullptr for srcptr
+///         + nullptr == hCommandList
+///         + nullptr == dstptr
+///         + nullptr == srcptr
+///     - ::XE_RESULT_ERROR_UNSUPPORTED
 xe_result_t __xecall
   xeCommandListEncodeMemoryCopy(
     xe_command_list_handle_t hCommandList,          ///< [in] handle of command list
@@ -84,10 +85,11 @@ xe_result_t __xecall
 /// @returns
 ///     - ::XE_RESULT_SUCCESS
 ///     - ::XE_RESULT_ERROR_UNINITIALIZED
-///     - ::XE_RESULT_ERROR_UNSUPPORTED
 ///     - ::XE_RESULT_ERROR_INVALID_PARAMETER
-///         + invalid handle for hDstImage
-///         + invalid handle for hSrcImage
+///         + nullptr == hCommandList
+///         + nullptr == hDstImage
+///         + nullptr == hSrcImage
+///     - ::XE_RESULT_ERROR_UNSUPPORTED
 xe_result_t __xecall
   xeCommandListEncodeImageCopy(
     xe_command_list_handle_t hCommandList,          ///< [in] handle of command list
@@ -115,10 +117,11 @@ typedef struct _xe_image_region_t
 /// @returns
 ///     - ::XE_RESULT_SUCCESS
 ///     - ::XE_RESULT_ERROR_UNINITIALIZED
-///     - ::XE_RESULT_ERROR_UNSUPPORTED
 ///     - ::XE_RESULT_ERROR_INVALID_PARAMETER
-///         + invalid handle for hDstImage
-///         + invalid handle for hSrcImage
+///         + nullptr == hCommandList
+///         + nullptr == hDstImage
+///         + nullptr == hSrcImage
+///     - ::XE_RESULT_ERROR_UNSUPPORTED
 xe_result_t __xecall
   xeCommandListEncodeImageCopyRegion(
     xe_command_list_handle_t hCommandList,          ///< [in] handle of command list
@@ -145,10 +148,11 @@ xe_result_t __xecall
 /// @returns
 ///     - ::XE_RESULT_SUCCESS
 ///     - ::XE_RESULT_ERROR_UNINITIALIZED
-///     - ::XE_RESULT_ERROR_UNSUPPORTED
 ///     - ::XE_RESULT_ERROR_INVALID_PARAMETER
-///         + nullptr for dstptr
-///         + invalid handle for hSrcImage
+///         + nullptr == hCommandList
+///         + nullptr == dstptr
+///         + nullptr == hSrcImage
+///     - ::XE_RESULT_ERROR_UNSUPPORTED
 xe_result_t __xecall
   xeCommandListEncodeImageCopyToMemory(
     xe_command_list_handle_t hCommandList,          ///< [in] handle of command list
@@ -174,10 +178,11 @@ xe_result_t __xecall
 /// @returns
 ///     - ::XE_RESULT_SUCCESS
 ///     - ::XE_RESULT_ERROR_UNINITIALIZED
-///     - ::XE_RESULT_ERROR_UNSUPPORTED
 ///     - ::XE_RESULT_ERROR_INVALID_PARAMETER
-///         + invalid handle for hDstImage
-///         + nullptr for srcptr
+///         + nullptr == hCommandList
+///         + nullptr == hDstImage
+///         + nullptr == srcptr
+///     - ::XE_RESULT_ERROR_UNSUPPORTED
 xe_result_t __xecall
   xeCommandListEncodeImageCopyFromMemory(
     xe_command_list_handle_t hCommandList,          ///< [in] handle of command list
@@ -208,9 +213,10 @@ xe_result_t __xecall
 /// @returns
 ///     - ::XE_RESULT_SUCCESS
 ///     - ::XE_RESULT_ERROR_UNINITIALIZED
-///     - ::XE_RESULT_ERROR_UNSUPPORTED
 ///     - ::XE_RESULT_ERROR_INVALID_PARAMETER
-///         + invalid pointer
+///         + nullptr == hCommandList
+///         + nullptr == ptr
+///     - ::XE_RESULT_ERROR_UNSUPPORTED
 xe_result_t __xecall
   xeCommandListEncodeMemoryPrefetch(
     xe_command_list_handle_t hCommandList,          ///< [in] handle of command list
@@ -259,11 +265,12 @@ typedef enum _xe_memory_advice_t
 /// @returns
 ///     - ::XE_RESULT_SUCCESS
 ///     - ::XE_RESULT_ERROR_UNINITIALIZED
-///     - ::XE_RESULT_ERROR_UNSUPPORTED
 ///     - ::XE_RESULT_ERROR_INVALID_PARAMETER
-///         + invalid handle for hDevice
-///         + invalid pointer
-///         + invalid advice
+///         + nullptr == hCommandList
+///         + nullptr == hDevice
+///         + nullptr == ptr
+///         + invalid value for advice
+///     - ::XE_RESULT_ERROR_UNSUPPORTED
 xe_result_t __xecall
   xeCommandListEncodeMemAdvise(
     xe_command_list_handle_t hCommandList,          ///< [in] handle of command list

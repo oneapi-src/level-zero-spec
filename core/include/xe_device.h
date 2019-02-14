@@ -51,8 +51,9 @@
 /// @returns
 ///     - ::XE_RESULT_SUCCESS
 ///     - ::XE_RESULT_ERROR_UNINITIALIZED
+///     - ::XE_RESULT_ERROR_INVALID_PARAMETER
+///         + nullptr == count
 ///     - ::XE_RESULT_ERROR_UNSUPPORTED
-///     - ::XE_RESULT_ERROR_INVALID_PARAMETER - "nullptr for count"
 xe_result_t __xecall
   xeDriverGetDeviceCount(
     uint32_t* count                                 ///< [out] number of devices available
@@ -73,10 +74,10 @@ xe_result_t __xecall
 /// @returns
 ///     - ::XE_RESULT_SUCCESS
 ///     - ::XE_RESULT_ERROR_UNINITIALIZED
-///     - ::XE_RESULT_ERROR_UNSUPPORTED
 ///     - ::XE_RESULT_ERROR_INVALID_PARAMETER
+///         + nullptr == pUniqueIds
 ///         + invalid unique id. @todo May need another error code for lost device?
-///         + nullptr for pUniqueIds
+///     - ::XE_RESULT_ERROR_UNSUPPORTED
 xe_result_t __xecall
   xeDriverGetDeviceUniqueIds(
     uint32_t count,                                 ///< [in] size of device unique ids array. Typically, this will be
@@ -100,10 +101,10 @@ xe_result_t __xecall
 /// @returns
 ///     - ::XE_RESULT_SUCCESS
 ///     - ::XE_RESULT_ERROR_UNINITIALIZED
-///     - ::XE_RESULT_ERROR_UNSUPPORTED
 ///     - ::XE_RESULT_ERROR_INVALID_PARAMETER
+///         + nullptr == phDevice
 ///         + ordinal is out of range reported by ::xeDriverGetDeviceCount
-///         + nullptr for phDevice
+///     - ::XE_RESULT_ERROR_UNSUPPORTED
 xe_result_t __xecall
   xeDriverGetDevice(
     uint32_t uniqueId,                              ///< [in] unique id of device to retrieve. Use ${x}DriverGetDeviceUniqueIds
@@ -126,10 +127,11 @@ xe_result_t __xecall
 /// @returns
 ///     - ::XE_RESULT_SUCCESS
 ///     - ::XE_RESULT_ERROR_UNINITIALIZED
-///     - ::XE_RESULT_ERROR_UNSUPPORTED
 ///     - ::XE_RESULT_ERROR_INVALID_PARAMETER
+///         + nullptr == hDevice
+///         + nullptr == phSubDevice
 ///         + ordinal is out of range reported by device properties.
-///         + nullptr for phDevice
+///     - ::XE_RESULT_ERROR_UNSUPPORTED
 xe_result_t __xecall
   xeDeviceGetSubDevice(
     xe_device_handle_t hDevice,                     ///< [in] handle of the device object
@@ -163,10 +165,10 @@ typedef enum _xe_api_version_t
 /// @returns
 ///     - ::XE_RESULT_SUCCESS
 ///     - ::XE_RESULT_ERROR_UNINITIALIZED
-///     - ::XE_RESULT_ERROR_UNSUPPORTED
 ///     - ::XE_RESULT_ERROR_INVALID_PARAMETER
-///         + invalid handle for hDevice
-///         + nullptr for version
+///         + nullptr == hDevice
+///         + nullptr == version
+///     - ::XE_RESULT_ERROR_UNSUPPORTED
 xe_result_t __xecall
   xeDeviceGetApiVersion(
     xe_device_handle_t hDevice,                     ///< [in] handle of the device object
@@ -220,10 +222,10 @@ typedef struct _xe_device_properties_t
 /// @returns
 ///     - ::XE_RESULT_SUCCESS
 ///     - ::XE_RESULT_ERROR_UNINITIALIZED
-///     - ::XE_RESULT_ERROR_UNSUPPORTED
 ///     - ::XE_RESULT_ERROR_INVALID_PARAMETER
-///         + invalid handle for hDevice
-///         + nullptr for provided for properties
+///         + nullptr == hDevice
+///         + nullptr == pDeviceProperties
+///     - ::XE_RESULT_ERROR_UNSUPPORTED
 xe_result_t __xecall
   xeDeviceGetProperties(
     xe_device_handle_t hDevice,                     ///< [in] handle of the device object
@@ -273,10 +275,10 @@ typedef struct _xe_device_compute_properties_t
 /// @returns
 ///     - ::XE_RESULT_SUCCESS
 ///     - ::XE_RESULT_ERROR_UNINITIALIZED
-///     - ::XE_RESULT_ERROR_UNSUPPORTED
 ///     - ::XE_RESULT_ERROR_INVALID_PARAMETER
-///         + invalid handle for hDevice
-///         + nullptr for provided for properties
+///         + nullptr == hDevice
+///         + nullptr == pComputeProperties
+///     - ::XE_RESULT_ERROR_UNSUPPORTED
 xe_result_t __xecall
   xeDeviceGetComputeProperties(
     xe_device_handle_t hDevice,                     ///< [in] handle of the device object
@@ -342,10 +344,10 @@ typedef struct _xe_device_memory_properties_t
 /// @returns
 ///     - ::XE_RESULT_SUCCESS
 ///     - ::XE_RESULT_ERROR_UNINITIALIZED
-///     - ::XE_RESULT_ERROR_UNSUPPORTED
 ///     - ::XE_RESULT_ERROR_INVALID_PARAMETER
-///         + invalid handle for hDevice
-///         + nullptr for provided for properties
+///         + nullptr == hDevice
+///         + nullptr == pMemProperties
+///     - ::XE_RESULT_ERROR_UNSUPPORTED
 xe_result_t __xecall
   xeDeviceGetMemoryProperties(
     xe_device_handle_t hDevice,                     ///< [in] handle of the device object
@@ -382,10 +384,10 @@ typedef struct _xe_device_link_properties_t
 /// @returns
 ///     - ::XE_RESULT_SUCCESS
 ///     - ::XE_RESULT_ERROR_UNINITIALIZED
-///     - ::XE_RESULT_ERROR_UNSUPPORTED
 ///     - ::XE_RESULT_ERROR_INVALID_PARAMETER
+///         + nullptr == pLinkProperties
 ///         + invalid ordinal. Use ::xeDriverGetDeviceCount for valid range.
-///         + nullptr for provided for properties
+///     - ::XE_RESULT_ERROR_UNSUPPORTED
 xe_result_t __xecall
   xeDeviceGetLinkProperties(
     uint32_t srcOrdinal,                            ///< [in] source device ordinal
@@ -407,11 +409,11 @@ xe_result_t __xecall
 /// @returns
 ///     - ::XE_RESULT_SUCCESS
 ///     - ::XE_RESULT_ERROR_UNINITIALIZED
-///     - ::XE_RESULT_ERROR_UNSUPPORTED
 ///     - ::XE_RESULT_ERROR_INVALID_PARAMETER
-///         + invalid handle for hDevice
-///         + invalid handle for hPeerDevice
-///         + nullptr for value
+///         + nullptr == hDevice
+///         + nullptr == hPeerDevice
+///         + nullptr == value
+///     - ::XE_RESULT_ERROR_UNSUPPORTED
 xe_result_t __xecall
   xeDeviceCanAccessPeer(
     xe_device_handle_t hDevice,                     ///< [in] handle of the device performing the access
@@ -446,11 +448,10 @@ typedef enum _xe_cache_config_t
 /// @returns
 ///     - ::XE_RESULT_SUCCESS
 ///     - ::XE_RESULT_ERROR_UNINITIALIZED
-///     - ::XE_RESULT_ERROR_UNSUPPORTED
 ///     - ::XE_RESULT_ERROR_INVALID_PARAMETER
-///         + invalid handle for hDevice
-///         + invalid CacheConfig
+///         + nullptr == hDevice
 ///         + devices do not support CacheConfig
+///     - ::XE_RESULT_ERROR_UNSUPPORTED
 xe_result_t __xecall
   xeDeviceSetIntermediateCacheConfig(
     xe_device_handle_t hDevice,                     ///< [in] handle of the device 
@@ -471,11 +472,10 @@ xe_result_t __xecall
 /// @returns
 ///     - ::XE_RESULT_SUCCESS
 ///     - ::XE_RESULT_ERROR_UNINITIALIZED
-///     - ::XE_RESULT_ERROR_UNSUPPORTED
 ///     - ::XE_RESULT_ERROR_INVALID_PARAMETER
-///         + invalid handle for hDevice
-///         + invalid CacheConfig
+///         + nullptr == hDevice
 ///         + devices do not support CacheConfig
+///     - ::XE_RESULT_ERROR_UNSUPPORTED
 xe_result_t __xecall
   xeDeviceSetLastLevelCacheConfig(
     xe_device_handle_t hDevice,                     ///< [in] handle of the device 

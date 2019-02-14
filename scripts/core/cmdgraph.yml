@@ -54,10 +54,6 @@ params:
       name: phCommandGraph
       desc: "[out] pointer to handle of command graph object created"
 returns:
-    - $X_RESULT_ERROR_INVALID_PARAMETER:
-        - "invalid handle for hDevice"
-        - "nullptr for desc"
-        - "nullptr for phCommandGraph"
     - $X_RESULT_ERROR_OUT_OF_HOST_MEMORY
     - $X_RESULT_ERROR_OUT_OF_DEVICE_MEMORY
 --- #--------------------------------------------------------------------------
@@ -72,9 +68,6 @@ params:
     - type: $x_command_graph_handle_t
       name: hCommandGraph
       desc: "[in] handle of command graph object to destroy"
-returns:
-    - $X_RESULT_ERROR_INVALID_PARAMETER:
-        - "invalid handle for hCommandGraph"
 --- #--------------------------------------------------------------------------
 type: function
 desc: "Adds an edge between two command lists to the command graph."
@@ -97,7 +90,6 @@ params:
       desc: "[in] handle of command list object consuming dependency"
 returns:
     - $X_RESULT_ERROR_INVALID_PARAMETER:
-        - "invalid handle for hCommandGraph"
         - "hCommandGraph is closed"
 --- #--------------------------------------------------------------------------
 type: function
@@ -119,7 +111,6 @@ params:
       desc: "[in] handle of command list object consuming dependency"
 returns:
     - $X_RESULT_ERROR_INVALID_PARAMETER:
-        - "invalid handle for hCommandGraph"
         - "hCommandGraph is closed"
 --- #--------------------------------------------------------------------------
 type: function
@@ -135,9 +126,6 @@ params:
     - type: $x_command_graph_handle_t
       name: hCommandGraph
       desc: "[in] handle of command graph object to close"
-returns:
-    - $X_RESULT_ERROR_INVALID_PARAMETER:
-        - "invalid handle for hCommandGraph"
 --- #--------------------------------------------------------------------------
 type: function
 desc: "Reset a command graph to initial (empty) state; ready for adding command lists."
@@ -150,9 +138,6 @@ params:
     - type: $x_command_graph_handle_t
       name: hCommandGraph
       desc: "[in] handle of command graph object to reset"
-returns:
-    - $X_RESULT_ERROR_INVALID_PARAMETER:
-        - "invalid handle for hCommandGraph"
 --- #--------------------------------------------------------------------------
 type: function
 desc: "Returns the number of compute command list batches to be enqueued."
@@ -170,8 +155,6 @@ params:
       desc: "[out] the number of batches"
 returns:
     - $X_RESULT_ERROR_INVALID_PARAMETER:
-        - "invalid handle for hCommandGraph"
-        - "nullptr for pNumBatches"
         - "hCommandGraph is not closed"
 --- #--------------------------------------------------------------------------
 type: function
@@ -199,12 +182,7 @@ params:
       desc: "[out] pointer to list of ordered command list handles"
 returns:
     - $X_RESULT_ERROR_INVALID_PARAMETER:
-        - "invalid handle for hCommandGraph"
         - "hCommandGraph is not closed"
-        - "invalid value for batchIndex"
-        - "nullptr for pCommandQueueIndex"
-        - "nullptr for pNumCommandLists"
-        - "nullptr for pphCommandLists"
 --- #--------------------------------------------------------------------------
 type: function
 desc: "Returns the number of copy-only command list batches to be enqueued."
@@ -222,8 +200,6 @@ params:
       desc: "[out] the number of batches"
 returns:
     - $X_RESULT_ERROR_INVALID_PARAMETER:
-        - "invalid handle for hCommandGraph"
-        - "nullptr for pNumBatches"
         - "hCommandGraph is not closed"
 --- #--------------------------------------------------------------------------
 type: function
@@ -251,9 +227,5 @@ params:
       desc: "[out] pointer to list of ordered command list handles"
 returns:
     - $X_RESULT_ERROR_INVALID_PARAMETER:
-        - "invalid handle for hCommandGraph"
         - "hCommandGraph is not closed"
-        - "invalid value for batchIndex"
-        - "nullptr for pCommandQueueIndex"
-        - "nullptr for pNumCommandLists"
-        - "nullptr for pphCommandLists"
+        - "batchIndex is out of range"

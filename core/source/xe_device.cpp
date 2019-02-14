@@ -46,8 +46,9 @@
 /// @returns
 ///     - ::XE_RESULT_SUCCESS
 ///     - ::XE_RESULT_ERROR_UNINITIALIZED
+///     - ::XE_RESULT_ERROR_INVALID_PARAMETER
+///         + nullptr == count
 ///     - ::XE_RESULT_ERROR_UNSUPPORTED
-///     - ::XE_RESULT_ERROR_INVALID_PARAMETER - "nullptr for count"
 /*@todo: __declspec(dllexport)*/
 xe_result_t __xecall
   xeDriverGetDeviceCount(
@@ -79,10 +80,10 @@ xe_result_t __xecall
 /// @returns
 ///     - ::XE_RESULT_SUCCESS
 ///     - ::XE_RESULT_ERROR_UNINITIALIZED
-///     - ::XE_RESULT_ERROR_UNSUPPORTED
 ///     - ::XE_RESULT_ERROR_INVALID_PARAMETER
+///         + nullptr == pUniqueIds
 ///         + invalid unique id. @todo May need another error code for lost device?
-///         + nullptr for pUniqueIds
+///     - ::XE_RESULT_ERROR_UNSUPPORTED
 /*@todo: __declspec(dllexport)*/
 xe_result_t __xecall
   xeDriverGetDeviceUniqueIds(
@@ -117,10 +118,10 @@ xe_result_t __xecall
 /// @returns
 ///     - ::XE_RESULT_SUCCESS
 ///     - ::XE_RESULT_ERROR_UNINITIALIZED
-///     - ::XE_RESULT_ERROR_UNSUPPORTED
 ///     - ::XE_RESULT_ERROR_INVALID_PARAMETER
+///         + nullptr == phDevice
 ///         + ordinal is out of range reported by ::xeDriverGetDeviceCount
-///         + nullptr for phDevice
+///     - ::XE_RESULT_ERROR_UNSUPPORTED
 /*@todo: __declspec(dllexport)*/
 xe_result_t __xecall
   xeDriverGetDevice(
@@ -154,10 +155,11 @@ xe_result_t __xecall
 /// @returns
 ///     - ::XE_RESULT_SUCCESS
 ///     - ::XE_RESULT_ERROR_UNINITIALIZED
-///     - ::XE_RESULT_ERROR_UNSUPPORTED
 ///     - ::XE_RESULT_ERROR_INVALID_PARAMETER
+///         + nullptr == hDevice
+///         + nullptr == phSubDevice
 ///         + ordinal is out of range reported by device properties.
-///         + nullptr for phDevice
+///     - ::XE_RESULT_ERROR_UNSUPPORTED
 /*@todo: __declspec(dllexport)*/
 xe_result_t __xecall
   xeDeviceGetSubDevice(
@@ -169,7 +171,7 @@ xe_result_t __xecall
     // @todo: check_return(nullptr == get_driver(), XE_RESULT_ERROR_UNINITIALIZED);
 
     // Check parameters
-    // @todo: check_return(xe_device_handle_t() == hDevice, XE_RESULT_ERROR_INVALID_PARAMETER);
+    // @todo: check_return(nullptr == hDevice, XE_RESULT_ERROR_INVALID_PARAMETER);
     // @todo: check_return(nullptr == phSubDevice, XE_RESULT_ERROR_INVALID_PARAMETER);
 
     // @todo: insert <code> here
@@ -191,10 +193,10 @@ xe_result_t __xecall
 /// @returns
 ///     - ::XE_RESULT_SUCCESS
 ///     - ::XE_RESULT_ERROR_UNINITIALIZED
-///     - ::XE_RESULT_ERROR_UNSUPPORTED
 ///     - ::XE_RESULT_ERROR_INVALID_PARAMETER
-///         + invalid handle for hDevice
-///         + nullptr for version
+///         + nullptr == hDevice
+///         + nullptr == version
+///     - ::XE_RESULT_ERROR_UNSUPPORTED
 /*@todo: __declspec(dllexport)*/
 xe_result_t __xecall
   xeDeviceGetApiVersion(
@@ -205,7 +207,7 @@ xe_result_t __xecall
     // @todo: check_return(nullptr == get_driver(), XE_RESULT_ERROR_UNINITIALIZED);
 
     // Check parameters
-    // @todo: check_return(xe_device_handle_t() == hDevice, XE_RESULT_ERROR_INVALID_PARAMETER);
+    // @todo: check_return(nullptr == hDevice, XE_RESULT_ERROR_INVALID_PARAMETER);
     // @todo: check_return(nullptr == version, XE_RESULT_ERROR_INVALID_PARAMETER);
 
     // @todo: insert <code> here
@@ -229,10 +231,10 @@ xe_result_t __xecall
 /// @returns
 ///     - ::XE_RESULT_SUCCESS
 ///     - ::XE_RESULT_ERROR_UNINITIALIZED
-///     - ::XE_RESULT_ERROR_UNSUPPORTED
 ///     - ::XE_RESULT_ERROR_INVALID_PARAMETER
-///         + invalid handle for hDevice
-///         + nullptr for provided for properties
+///         + nullptr == hDevice
+///         + nullptr == pDeviceProperties
+///     - ::XE_RESULT_ERROR_UNSUPPORTED
 /*@todo: __declspec(dllexport)*/
 xe_result_t __xecall
   xeDeviceGetProperties(
@@ -243,7 +245,7 @@ xe_result_t __xecall
     // @todo: check_return(nullptr == get_driver(), XE_RESULT_ERROR_UNINITIALIZED);
 
     // Check parameters
-    // @todo: check_return(xe_device_handle_t() == hDevice, XE_RESULT_ERROR_INVALID_PARAMETER);
+    // @todo: check_return(nullptr == hDevice, XE_RESULT_ERROR_INVALID_PARAMETER);
     // @todo: check_return(nullptr == pDeviceProperties, XE_RESULT_ERROR_INVALID_PARAMETER);
 
     // @todo: insert <code> here
@@ -266,10 +268,10 @@ xe_result_t __xecall
 /// @returns
 ///     - ::XE_RESULT_SUCCESS
 ///     - ::XE_RESULT_ERROR_UNINITIALIZED
-///     - ::XE_RESULT_ERROR_UNSUPPORTED
 ///     - ::XE_RESULT_ERROR_INVALID_PARAMETER
-///         + invalid handle for hDevice
-///         + nullptr for provided for properties
+///         + nullptr == hDevice
+///         + nullptr == pComputeProperties
+///     - ::XE_RESULT_ERROR_UNSUPPORTED
 /*@todo: __declspec(dllexport)*/
 xe_result_t __xecall
   xeDeviceGetComputeProperties(
@@ -280,7 +282,7 @@ xe_result_t __xecall
     // @todo: check_return(nullptr == get_driver(), XE_RESULT_ERROR_UNINITIALIZED);
 
     // Check parameters
-    // @todo: check_return(xe_device_handle_t() == hDevice, XE_RESULT_ERROR_INVALID_PARAMETER);
+    // @todo: check_return(nullptr == hDevice, XE_RESULT_ERROR_INVALID_PARAMETER);
     // @todo: check_return(nullptr == pComputeProperties, XE_RESULT_ERROR_INVALID_PARAMETER);
 
     // @todo: insert <code> here
@@ -304,10 +306,10 @@ xe_result_t __xecall
 /// @returns
 ///     - ::XE_RESULT_SUCCESS
 ///     - ::XE_RESULT_ERROR_UNINITIALIZED
-///     - ::XE_RESULT_ERROR_UNSUPPORTED
 ///     - ::XE_RESULT_ERROR_INVALID_PARAMETER
-///         + invalid handle for hDevice
-///         + nullptr for provided for properties
+///         + nullptr == hDevice
+///         + nullptr == pMemProperties
+///     - ::XE_RESULT_ERROR_UNSUPPORTED
 /*@todo: __declspec(dllexport)*/
 xe_result_t __xecall
   xeDeviceGetMemoryProperties(
@@ -318,7 +320,7 @@ xe_result_t __xecall
     // @todo: check_return(nullptr == get_driver(), XE_RESULT_ERROR_UNINITIALIZED);
 
     // Check parameters
-    // @todo: check_return(xe_device_handle_t() == hDevice, XE_RESULT_ERROR_INVALID_PARAMETER);
+    // @todo: check_return(nullptr == hDevice, XE_RESULT_ERROR_INVALID_PARAMETER);
     // @todo: check_return(nullptr == pMemProperties, XE_RESULT_ERROR_INVALID_PARAMETER);
 
     // @todo: insert <code> here
@@ -340,10 +342,10 @@ xe_result_t __xecall
 /// @returns
 ///     - ::XE_RESULT_SUCCESS
 ///     - ::XE_RESULT_ERROR_UNINITIALIZED
-///     - ::XE_RESULT_ERROR_UNSUPPORTED
 ///     - ::XE_RESULT_ERROR_INVALID_PARAMETER
+///         + nullptr == pLinkProperties
 ///         + invalid ordinal. Use ::xeDriverGetDeviceCount for valid range.
-///         + nullptr for provided for properties
+///     - ::XE_RESULT_ERROR_UNSUPPORTED
 /*@todo: __declspec(dllexport)*/
 xe_result_t __xecall
   xeDeviceGetLinkProperties(
@@ -376,11 +378,11 @@ xe_result_t __xecall
 /// @returns
 ///     - ::XE_RESULT_SUCCESS
 ///     - ::XE_RESULT_ERROR_UNINITIALIZED
-///     - ::XE_RESULT_ERROR_UNSUPPORTED
 ///     - ::XE_RESULT_ERROR_INVALID_PARAMETER
-///         + invalid handle for hDevice
-///         + invalid handle for hPeerDevice
-///         + nullptr for value
+///         + nullptr == hDevice
+///         + nullptr == hPeerDevice
+///         + nullptr == value
+///     - ::XE_RESULT_ERROR_UNSUPPORTED
 /*@todo: __declspec(dllexport)*/
 xe_result_t __xecall
   xeDeviceCanAccessPeer(
@@ -392,8 +394,8 @@ xe_result_t __xecall
     // @todo: check_return(nullptr == get_driver(), XE_RESULT_ERROR_UNINITIALIZED);
 
     // Check parameters
-    // @todo: check_return(xe_device_handle_t() == hDevice, XE_RESULT_ERROR_INVALID_PARAMETER);
-    // @todo: check_return(xe_device_handle_t() == hPeerDevice, XE_RESULT_ERROR_INVALID_PARAMETER);
+    // @todo: check_return(nullptr == hDevice, XE_RESULT_ERROR_INVALID_PARAMETER);
+    // @todo: check_return(nullptr == hPeerDevice, XE_RESULT_ERROR_INVALID_PARAMETER);
     // @todo: check_return(nullptr == value, XE_RESULT_ERROR_INVALID_PARAMETER);
 
     // @todo: insert <code> here
@@ -415,11 +417,10 @@ xe_result_t __xecall
 /// @returns
 ///     - ::XE_RESULT_SUCCESS
 ///     - ::XE_RESULT_ERROR_UNINITIALIZED
-///     - ::XE_RESULT_ERROR_UNSUPPORTED
 ///     - ::XE_RESULT_ERROR_INVALID_PARAMETER
-///         + invalid handle for hDevice
-///         + invalid CacheConfig
+///         + nullptr == hDevice
 ///         + devices do not support CacheConfig
+///     - ::XE_RESULT_ERROR_UNSUPPORTED
 /*@todo: __declspec(dllexport)*/
 xe_result_t __xecall
   xeDeviceSetIntermediateCacheConfig(
@@ -430,7 +431,7 @@ xe_result_t __xecall
     // @todo: check_return(nullptr == get_driver(), XE_RESULT_ERROR_UNINITIALIZED);
 
     // Check parameters
-    // @todo: check_return(xe_device_handle_t() == hDevice, XE_RESULT_ERROR_INVALID_PARAMETER);
+    // @todo: check_return(nullptr == hDevice, XE_RESULT_ERROR_INVALID_PARAMETER);
 
     // @todo: insert <code> here
 
@@ -451,11 +452,10 @@ xe_result_t __xecall
 /// @returns
 ///     - ::XE_RESULT_SUCCESS
 ///     - ::XE_RESULT_ERROR_UNINITIALIZED
-///     - ::XE_RESULT_ERROR_UNSUPPORTED
 ///     - ::XE_RESULT_ERROR_INVALID_PARAMETER
-///         + invalid handle for hDevice
-///         + invalid CacheConfig
+///         + nullptr == hDevice
 ///         + devices do not support CacheConfig
+///     - ::XE_RESULT_ERROR_UNSUPPORTED
 /*@todo: __declspec(dllexport)*/
 xe_result_t __xecall
   xeDeviceSetLastLevelCacheConfig(
@@ -466,7 +466,7 @@ xe_result_t __xecall
     // @todo: check_return(nullptr == get_driver(), XE_RESULT_ERROR_UNINITIALIZED);
 
     // Check parameters
-    // @todo: check_return(xe_device_handle_t() == hDevice, XE_RESULT_ERROR_INVALID_PARAMETER);
+    // @todo: check_return(nullptr == hDevice, XE_RESULT_ERROR_INVALID_PARAMETER);
 
     // @todo: insert <code> here
 

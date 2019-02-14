@@ -46,11 +46,12 @@
 /// @returns
 ///     - ::XE_RESULT_SUCCESS
 ///     - ::XE_RESULT_ERROR_UNINITIALIZED
-///     - ::XE_RESULT_ERROR_UNSUPPORTED
 ///     - ::XE_RESULT_ERROR_INVALID_PARAMETER
-///         + invalid handle for hDevice
-///         + nullptr for desc
-///         + nullptr for phSemaphore
+///         + nullptr == hDevice
+///         + nullptr == desc
+///         + nullptr == phSemaphore
+///     - ::XE_RESULT_ERROR_UNSUPPORTED
+///         + ::XE_SEMAPHORE_DESC_VERSION <= desc->version
 ///     - ::XE_RESULT_ERROR_OUT_OF_HOST_MEMORY
 ///     - ::XE_RESULT_ERROR_OUT_OF_DEVICE_MEMORY
 /*@todo: __declspec(dllexport)*/
@@ -64,10 +65,10 @@ xe_result_t __xecall
     // @todo: check_return(nullptr == get_driver(), XE_RESULT_ERROR_UNINITIALIZED);
 
     // Check parameters
-    // @todo: check_return(xe_device_handle_t() == hDevice, XE_RESULT_ERROR_INVALID_PARAMETER);
+    // @todo: check_return(nullptr == hDevice, XE_RESULT_ERROR_INVALID_PARAMETER);
     // @todo: check_return(nullptr == desc, XE_RESULT_ERROR_INVALID_PARAMETER);
-    // @todo: check_return(XE_SEMAPHORE_DESC_VERSION <= desc->version, XE_RESULT_ERROR_UNSUPPORTED);
     // @todo: check_return(nullptr == phSemaphore, XE_RESULT_ERROR_INVALID_PARAMETER);
+    // @todo: check_return(XE_SEMAPHORE_DESC_VERSION <= desc->version, XE_RESULT_ERROR_UNSUPPORTED);
 
     // @todo: insert <code> here
 
@@ -91,9 +92,9 @@ xe_result_t __xecall
 /// @returns
 ///     - ::XE_RESULT_SUCCESS
 ///     - ::XE_RESULT_ERROR_UNINITIALIZED
-///     - ::XE_RESULT_ERROR_UNSUPPORTED
 ///     - ::XE_RESULT_ERROR_INVALID_PARAMETER
-///         + invalid handle for hSemaphore
+///         + nullptr == hSemaphore
+///     - ::XE_RESULT_ERROR_UNSUPPORTED
 /*@todo: __declspec(dllexport)*/
 xe_result_t __xecall
   xeSemaphoreDestroy(
@@ -103,7 +104,7 @@ xe_result_t __xecall
     // @todo: check_return(nullptr == get_driver(), XE_RESULT_ERROR_UNINITIALIZED);
 
     // Check parameters
-    // @todo: check_return(xe_semaphore_handle_t() == hSemaphore, XE_RESULT_ERROR_INVALID_PARAMETER);
+    // @todo: check_return(nullptr == hSemaphore, XE_RESULT_ERROR_INVALID_PARAMETER);
 
     // @todo: insert <code> here
 
@@ -121,10 +122,10 @@ xe_result_t __xecall
 /// @returns
 ///     - ::XE_RESULT_SUCCESS
 ///     - ::XE_RESULT_ERROR_UNINITIALIZED
-///     - ::XE_RESULT_ERROR_UNSUPPORTED
 ///     - ::XE_RESULT_ERROR_INVALID_PARAMETER
-///         + invalid handle for hCommandList
-///         + invalid handle for hSemaphore
+///         + nullptr == hCommandList
+///         + nullptr == hSemaphore
+///     - ::XE_RESULT_ERROR_UNSUPPORTED
 /*@todo: __declspec(dllexport)*/
 xe_result_t __xecall
   xeCommandListEncodeSemaphoreSignal(
@@ -136,8 +137,8 @@ xe_result_t __xecall
     // @todo: check_return(nullptr == get_driver(), XE_RESULT_ERROR_UNINITIALIZED);
 
     // Check parameters
-    // @todo: check_return(xe_command_list_handle_t() == hCommandList, XE_RESULT_ERROR_INVALID_PARAMETER);
-    // @todo: check_return(xe_semaphore_handle_t() == hSemaphore, XE_RESULT_ERROR_INVALID_PARAMETER);
+    // @todo: check_return(nullptr == hCommandList, XE_RESULT_ERROR_INVALID_PARAMETER);
+    // @todo: check_return(nullptr == hSemaphore, XE_RESULT_ERROR_INVALID_PARAMETER);
 
     // @todo: insert <code> here
 
@@ -155,10 +156,10 @@ xe_result_t __xecall
 /// @returns
 ///     - ::XE_RESULT_SUCCESS
 ///     - ::XE_RESULT_ERROR_UNINITIALIZED
-///     - ::XE_RESULT_ERROR_UNSUPPORTED
 ///     - ::XE_RESULT_ERROR_INVALID_PARAMETER
-///         + invalid handle for hCommandList
-///         + invalid handle for hSemaphore
+///         + nullptr == hCommandList
+///         + nullptr == hSemaphore
+///     - ::XE_RESULT_ERROR_UNSUPPORTED
 /*@todo: __declspec(dllexport)*/
 xe_result_t __xecall
   xeCommandListEncodeSemaphoreWait(
@@ -171,8 +172,8 @@ xe_result_t __xecall
     // @todo: check_return(nullptr == get_driver(), XE_RESULT_ERROR_UNINITIALIZED);
 
     // Check parameters
-    // @todo: check_return(xe_command_list_handle_t() == hCommandList, XE_RESULT_ERROR_INVALID_PARAMETER);
-    // @todo: check_return(xe_semaphore_handle_t() == hSemaphore, XE_RESULT_ERROR_INVALID_PARAMETER);
+    // @todo: check_return(nullptr == hCommandList, XE_RESULT_ERROR_INVALID_PARAMETER);
+    // @todo: check_return(nullptr == hSemaphore, XE_RESULT_ERROR_INVALID_PARAMETER);
 
     // @todo: insert <code> here
 
@@ -189,9 +190,9 @@ xe_result_t __xecall
 /// @returns
 ///     - ::XE_RESULT_SUCCESS
 ///     - ::XE_RESULT_ERROR_UNINITIALIZED
-///     - ::XE_RESULT_ERROR_UNSUPPORTED
 ///     - ::XE_RESULT_ERROR_INVALID_PARAMETER
-///         + invalid handle for hSemaphore
+///         + nullptr == hSemaphore
+///     - ::XE_RESULT_ERROR_UNSUPPORTED
 /*@todo: __declspec(dllexport)*/
 xe_result_t __xecall
   xeSemaphoreQueryValue(
@@ -201,7 +202,7 @@ xe_result_t __xecall
     // @todo: check_return(nullptr == get_driver(), XE_RESULT_ERROR_UNINITIALIZED);
 
     // Check parameters
-    // @todo: check_return(xe_semaphore_handle_t() == hSemaphore, XE_RESULT_ERROR_INVALID_PARAMETER);
+    // @todo: check_return(nullptr == hSemaphore, XE_RESULT_ERROR_INVALID_PARAMETER);
 
     // @todo: insert <code> here
 
@@ -218,9 +219,9 @@ xe_result_t __xecall
 /// @returns
 ///     - ::XE_RESULT_SUCCESS
 ///     - ::XE_RESULT_ERROR_UNINITIALIZED
-///     - ::XE_RESULT_ERROR_UNSUPPORTED
 ///     - ::XE_RESULT_ERROR_INVALID_PARAMETER
-///         + invalid handle for hSemaphore
+///         + nullptr == hSemaphore
+///     - ::XE_RESULT_ERROR_UNSUPPORTED
 /*@todo: __declspec(dllexport)*/
 xe_result_t __xecall
   xeSemaphoreReset(
@@ -230,7 +231,7 @@ xe_result_t __xecall
     // @todo: check_return(nullptr == get_driver(), XE_RESULT_ERROR_UNINITIALIZED);
 
     // Check parameters
-    // @todo: check_return(xe_semaphore_handle_t() == hSemaphore, XE_RESULT_ERROR_INVALID_PARAMETER);
+    // @todo: check_return(nullptr == hSemaphore, XE_RESULT_ERROR_INVALID_PARAMETER);
 
     // @todo: insert <code> here
 

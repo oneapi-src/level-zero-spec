@@ -92,10 +92,6 @@ params:
       name: phCommandQueue
       desc: "[out] pointer to handle of command queue object created"
 returns:
-    - $X_RESULT_ERROR_INVALID_PARAMETER:
-        - "invalid handle for hDevice"
-        - "nullptr for desc"
-        - "nullptr for phCommandQueue"
     - $X_RESULT_ERROR_OUT_OF_HOST_MEMORY
     - $X_RESULT_ERROR_OUT_OF_DEVICE_MEMORY
 --- #--------------------------------------------------------------------------
@@ -114,9 +110,6 @@ params:
     - type: $x_command_queue_handle_t
       name: hCommandQueue
       desc: "[in] handle of command queue object to destroy"
-returns:
-    - $X_RESULT_ERROR_INVALID_PARAMETER:
-        - invalid handle for hCommandQueue
 --- #--------------------------------------------------------------------------
 type: function
 desc: "Enqueues a command list into a command queue for immediate execution."
@@ -142,10 +135,7 @@ params:
       desc: "[in][optional] handle of the fence to signal on completion"
 returns:
     - $X_RESULT_ERROR_INVALID_PARAMETER:
-       - "invalid handle for hCommandQueue"
        - "0 for numCommandLists"
-       - "nullptr for phCommandLists"
-       - "invalid handle in phCommandLists"
        - "hFence is in signaled state"
        - "hFence is enqueued in another command queue"
 --- #--------------------------------------------------------------------------
@@ -179,5 +169,3 @@ params:
 returns:
     - $X_RESULT_NOT_READY:
        - "timeout expired"
-    - $X_RESULT_ERROR_INVALID_PARAMETER:
-       - "invalid handle for hCommandQueue"

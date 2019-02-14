@@ -48,11 +48,12 @@
 /// @returns
 ///     - ::XE_RESULT_SUCCESS
 ///     - ::XE_RESULT_ERROR_UNINITIALIZED
-///     - ::XE_RESULT_ERROR_UNSUPPORTED
 ///     - ::XE_RESULT_ERROR_INVALID_PARAMETER
-///         + invalid handle for hDevice
-///         + nullptr for desc
-///         + nullptr for phCommandQueue
+///         + nullptr == hDevice
+///         + nullptr == desc
+///         + nullptr == phCommandQueue
+///     - ::XE_RESULT_ERROR_UNSUPPORTED
+///         + ::XE_COMMAND_QUEUE_DESC_VERSION <= desc->version
 ///     - ::XE_RESULT_ERROR_OUT_OF_HOST_MEMORY
 ///     - ::XE_RESULT_ERROR_OUT_OF_DEVICE_MEMORY
 /*@todo: __declspec(dllexport)*/
@@ -66,10 +67,10 @@ xe_result_t __xecall
     // @todo: check_return(nullptr == get_driver(), XE_RESULT_ERROR_UNINITIALIZED);
 
     // Check parameters
-    // @todo: check_return(xe_device_handle_t() == hDevice, XE_RESULT_ERROR_INVALID_PARAMETER);
+    // @todo: check_return(nullptr == hDevice, XE_RESULT_ERROR_INVALID_PARAMETER);
     // @todo: check_return(nullptr == desc, XE_RESULT_ERROR_INVALID_PARAMETER);
-    // @todo: check_return(XE_COMMAND_QUEUE_DESC_VERSION <= desc->version, XE_RESULT_ERROR_UNSUPPORTED);
     // @todo: check_return(nullptr == phCommandQueue, XE_RESULT_ERROR_INVALID_PARAMETER);
+    // @todo: check_return(XE_COMMAND_QUEUE_DESC_VERSION <= desc->version, XE_RESULT_ERROR_UNSUPPORTED);
 
     // @todo: insert <code> here
 
@@ -94,9 +95,9 @@ xe_result_t __xecall
 /// @returns
 ///     - ::XE_RESULT_SUCCESS
 ///     - ::XE_RESULT_ERROR_UNINITIALIZED
-///     - ::XE_RESULT_ERROR_UNSUPPORTED
 ///     - ::XE_RESULT_ERROR_INVALID_PARAMETER
-///         + invalid handle for hCommandQueue
+///         + nullptr == hCommandQueue
+///     - ::XE_RESULT_ERROR_UNSUPPORTED
 /*@todo: __declspec(dllexport)*/
 xe_result_t __xecall
   xeCommandQueueDestroy(
@@ -106,7 +107,7 @@ xe_result_t __xecall
     // @todo: check_return(nullptr == get_driver(), XE_RESULT_ERROR_UNINITIALIZED);
 
     // Check parameters
-    // @todo: check_return(xe_command_queue_handle_t() == hCommandQueue, XE_RESULT_ERROR_INVALID_PARAMETER);
+    // @todo: check_return(nullptr == hCommandQueue, XE_RESULT_ERROR_INVALID_PARAMETER);
 
     // @todo: insert <code> here
 
@@ -127,14 +128,13 @@ xe_result_t __xecall
 /// @returns
 ///     - ::XE_RESULT_SUCCESS
 ///     - ::XE_RESULT_ERROR_UNINITIALIZED
-///     - ::XE_RESULT_ERROR_UNSUPPORTED
 ///     - ::XE_RESULT_ERROR_INVALID_PARAMETER
-///         + invalid handle for hCommandQueue
+///         + nullptr == hCommandQueue
+///         + nullptr == phCommandLists
 ///         + 0 for numCommandLists
-///         + nullptr for phCommandLists
-///         + invalid handle in phCommandLists
 ///         + hFence is in signaled state
 ///         + hFence is enqueued in another command queue
+///     - ::XE_RESULT_ERROR_UNSUPPORTED
 /*@todo: __declspec(dllexport)*/
 xe_result_t __xecall
   xeCommandQueueEnqueueCommandLists(
@@ -147,7 +147,7 @@ xe_result_t __xecall
     // @todo: check_return(nullptr == get_driver(), XE_RESULT_ERROR_UNINITIALIZED);
 
     // Check parameters
-    // @todo: check_return(xe_command_queue_handle_t() == hCommandQueue, XE_RESULT_ERROR_INVALID_PARAMETER);
+    // @todo: check_return(nullptr == hCommandQueue, XE_RESULT_ERROR_INVALID_PARAMETER);
     // @todo: check_return(nullptr == phCommandLists, XE_RESULT_ERROR_INVALID_PARAMETER);
 
     // @todo: insert <code> here
@@ -165,11 +165,11 @@ xe_result_t __xecall
 /// @returns
 ///     - ::XE_RESULT_SUCCESS
 ///     - ::XE_RESULT_ERROR_UNINITIALIZED
+///     - ::XE_RESULT_ERROR_INVALID_PARAMETER
+///         + nullptr == hCommandQueue
 ///     - ::XE_RESULT_ERROR_UNSUPPORTED
 ///     - ::XE_RESULT_NOT_READY
 ///         + timeout expired
-///     - ::XE_RESULT_ERROR_INVALID_PARAMETER
-///         + invalid handle for hCommandQueue
 /*@todo: __declspec(dllexport)*/
 xe_result_t __xecall
   xeCommandQueueSynchronize(
@@ -190,7 +190,7 @@ xe_result_t __xecall
     // @todo: check_return(nullptr == get_driver(), XE_RESULT_ERROR_UNINITIALIZED);
 
     // Check parameters
-    // @todo: check_return(xe_command_queue_handle_t() == hCommandQueue, XE_RESULT_ERROR_INVALID_PARAMETER);
+    // @todo: check_return(nullptr == hCommandQueue, XE_RESULT_ERROR_INVALID_PARAMETER);
 
     // @todo: insert <code> here
 

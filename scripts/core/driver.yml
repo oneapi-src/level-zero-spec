@@ -22,14 +22,14 @@ details:
     - "This function is thread-safe for scenarios where multiple libraries may initialize the driver simultaneously."
 analogue:
     - "**cuInit**"
-returns:
-    - $X_RESULT_ERROR_INVALID_PARAMETER:
-        - "invalid value for flags"
-    - $X_RESULT_ERROR_OUT_OF_HOST_MEMORY
 params:
     - type: $x_init_flags_t
       name: flags
       desc: "[in] initialization flags"
+returns:
+    - $X_RESULT_ERROR_INVALID_PARAMETER:
+        - "invalid value for flags"
+    - $X_RESULT_ERROR_OUT_OF_HOST_MEMORY
 --- #--------------------------------------------------------------------------
 type: function
 desc: "Returns the current version of the installed driver."
@@ -41,9 +41,6 @@ details:
     - "The implementation of this function should be lock-free."
 analogue:
     - "**cuDriverGetVersion**"
-returns:
-    - $X_RESULT_ERROR_INVALID_PARAMETER:
-        - "nullptr for version"
 params:
     - type: "uint32_t*"
       name: version

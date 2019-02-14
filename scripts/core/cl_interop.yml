@@ -21,9 +21,6 @@ params:
       name: ptr
       desc: "[out] pointer to device allocation"
 returns:
-    - $X_RESULT_ERROR_INVALID_PARAMETER:
-        - "invalid handle for hDevice"
-        - "nullptr for ptr"
     - $X_RESULT_ERROR_OUT_OF_HOST_MEMORY
     - $X_RESULT_ERROR_OUT_OF_DEVICE_MEMORY
 --- #--------------------------------------------------------------------------
@@ -46,9 +43,6 @@ params:
       name: phModule
       desc: "[out] pointer to handle of module object created"
 returns:
-    - $X_RESULT_ERROR_INVALID_PARAMETER:
-        - "invalid handle for hDevice"
-        - "nullptr for ptr"
     - $X_RESULT_ERROR_OUT_OF_HOST_MEMORY
     - $X_RESULT_ERROR_OUT_OF_DEVICE_MEMORY
 --- #--------------------------------------------------------------------------
@@ -71,8 +65,5 @@ params:
       name: phCommandQueue
       desc: "[out] pointer to handle of command queue object created"
 returns:
-    - $X_RESULT_ERROR_INVALID_PARAMETER:
-        - "invalid handle for hDevice"
-        - "nullptr for ptr"
     - $X_RESULT_ERROR_OUT_OF_HOST_MEMORY
     - $X_RESULT_ERROR_OUT_OF_DEVICE_MEMORY

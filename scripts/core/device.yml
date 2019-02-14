@@ -15,9 +15,6 @@ params:
     - type: "uint32_t*"
       name: count
       desc: "[out] number of devices available"
-returns:
-    - $X_RESULT_ERROR_INVALID_PARAMETER
-        - "nullptr for count"
 --- #--------------------------------------------------------------------------
 type: function
 desc: "Retrieve "
@@ -39,7 +36,6 @@ params:
 returns:
     - $X_RESULT_ERROR_INVALID_PARAMETER:
         - "invalid unique id. @todo May need another error code for lost device?"
-        - "nullptr for pUniqueIds"
 --- #--------------------------------------------------------------------------
 type: function
 desc: "Returns a handle to the device object"
@@ -61,7 +57,6 @@ params:
 returns:
     - $X_RESULT_ERROR_INVALID_PARAMETER:
         - "ordinal is out of range reported by $xDriverGetDeviceCount"
-        - "nullptr for phDevice"
 --- #--------------------------------------------------------------------------
 type: function
 desc: "Returns a handle to the sub-device object"
@@ -86,7 +81,6 @@ params:
 returns:
     - $X_RESULT_ERROR_INVALID_PARAMETER:
         - "ordinal is out of range reported by device properties."
-        - "nullptr for phDevice"
 --- #--------------------------------------------------------------------------
 type: enum
 desc: "Supported API versions"
@@ -114,10 +108,6 @@ params:
     - type: "$x_api_version_t*"
       name: version
       desc: "[out] api version"
-returns:
-    - $X_RESULT_ERROR_INVALID_PARAMETER:
-        - "invalid handle for hDevice"
-        - "nullptr for version"
 --- #--------------------------------------------------------------------------
 type: macro
 desc: "API version of $x_device_properties_t"
@@ -197,10 +187,6 @@ params:
     - type: "$x_device_properties_t*"
       name: pDeviceProperties
       desc: "[out] query result for device properties"
-returns:
-    - $X_RESULT_ERROR_INVALID_PARAMETER:
-        - "invalid handle for hDevice"
-        - "nullptr for provided for properties"
 --- #--------------------------------------------------------------------------
 type: macro
 desc: "API version of $x_device_compute_properties_t"
@@ -270,10 +256,6 @@ params:
     - type: "$x_device_compute_properties_t*"
       name: pComputeProperties
       desc: "[out] query result for compute properties"
-returns:
-    - $X_RESULT_ERROR_INVALID_PARAMETER:
-        - "invalid handle for hDevice"
-        - "nullptr for provided for properties"
 --- #--------------------------------------------------------------------------
 type: macro
 desc: "API version of $x_device_memory_properties_t"
@@ -367,10 +349,6 @@ params:
     - type: "$x_device_memory_properties_t*"
       name: pMemProperties
       desc: "[out] query result for compute properties"
-returns:
-    - $X_RESULT_ERROR_INVALID_PARAMETER:
-        - "invalid handle for hDevice"
-        - "nullptr for provided for properties"
 --- #--------------------------------------------------------------------------
 type: macro
 desc: "API version of $x_device_link_properties_t"
@@ -416,7 +394,6 @@ params:
 returns:
     - $X_RESULT_ERROR_INVALID_PARAMETER:
         - "invalid ordinal. Use $xDriverGetDeviceCount for valid range."
-        - "nullptr for provided for properties"
 --- #--------------------------------------------------------------------------
 type: function
 desc: "Queries if one device can directly access peer device allocations"
@@ -437,11 +414,6 @@ params:
     - type: "bool*"
       name: value
       desc: "[out] returned access capability"
-returns:
-    - $X_RESULT_ERROR_INVALID_PARAMETER:
-        - "invalid handle for hDevice"
-        - "invalid handle for hPeerDevice"
-        - "nullptr for value"
 --- #--------------------------------------------------------------------------
 type: enum
 desc: "Supported Cache Config"
@@ -476,8 +448,6 @@ params:
       desc: "[in] CacheConfig"
 returns:
     - $X_RESULT_ERROR_INVALID_PARAMETER:
-        - "invalid handle for hDevice"
-        - "invalid CacheConfig"
         - "devices do not support CacheConfig"
 --- #--------------------------------------------------------------------------
 type: function
@@ -497,6 +467,4 @@ params:
       desc: "[in] CacheConfig"
 returns:
     - $X_RESULT_ERROR_INVALID_PARAMETER:
-        - "invalid handle for hDevice"
-        - "invalid CacheConfig"
         - "devices do not support CacheConfig"

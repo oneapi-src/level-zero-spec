@@ -24,20 +24,28 @@ from templates import helper as th
 * express and approved by Intel in writing.  
 * @endcond
 *
-* @file ${x}_${name}.cpp
+* @file ${x}_${name}.hpp
 *
-* @brief ${th.subx(x, header['desc'])}
+* @brief C++ wrapper of ${th.subx(x, header['desc'])}
 *
 * @cond DEV
 * DO NOT EDIT: generated from /scripts/<type>/${name}.yml
 * @endcond
 *
 ******************************************************************************/
-#include "../include/${x}_${name}.h"
+#ifndef _${X}_${name.upper()}_HPP
+#define _${X}_${name.upper()}_HPP
+#if defined(__cplusplus)
+#pragma once
+#endif
+%if re.match(r"common", name):
+#include "${x}_common.hpp"
+%else:
+#include "${x}_common.h"
+%endif
 
 %for obj in objects:
-%if re.match(r"function", obj['type']):
-%for cls in th.get_class_list(obj):
+%for class in th.get_class_list(obj):
 ///////////////////////////////////////////////////////////////////////////////
 %if 'condition' in obj:
 #if ${th.subx(x,obj['condition'])}
@@ -48,37 +56,62 @@ from templates import helper as th
 %for line in th.make_details_lines(x, obj):
 /// ${line}
 %endfor
+## MACRO ######################################################################
+%if re.match(r"macro", obj['type']):
+#define ${th.subx(x, obj['name'])}  ${th.subx(x, obj['value'])}
+%if 'altvalue' in obj:
+#else
+#define ${th.subx(x, obj['name'])}  ${th.subx(x, obj['altvalue'])}
+%endif
+## TYPEDEF ####################################################################
+%elif re.match(r"typedef", obj['type']):
+%if 'params' in obj:
+typedef ${obj['returns']}(__${x}call *${th.subx(x, obj['name'])})(
+  %for line in th.make_param_lines(x, obj):
+  ${line}
+  %endfor
+  );
+%else:
+typedef ${th.subx(x, obj['value'])} ${th.subx(x, obj['name'])};
+%endif
+## ENUM #######################################################################
+%elif re.match(r"enum", obj['type']):
+typedef enum _${th.subx(x, obj['name'])}
+{
+    %for line in th.make_etor_lines(x, obj):
+    ${line}
+    %endfor
+
+} ${th.subx(x, obj['name'])};
+## STRUCT #####################################################################
+%elif re.match(r"struct", obj['type']):
+typedef struct _${th.subx(x, obj['name'])}
+{
+    %for line in th.make_member_lines(x, obj):
+    ${line}
+    %endfor
+
+} ${th.subx(x, obj['name'])};
+## FUNCTION ###################################################################
+%elif re.match(r"function", obj['type']):
 /// 
 %for line in th.make_return_lines(x, obj, cls):
 /// ${line}
 %endfor
-/*@todo: __declspec(dllexport)*/
 ${x}_result_t __${x}call
-  ${th.make_func_name(x, obj, cls)}(
-    %for line in th.make_param_lines(x, obj, cls):
+  ${th.make_func_name(x, obj)}(
+    %for line in th.make_param_lines(x, obj):
     ${line}
     %endfor
-    )
-{
-    %if not re.match(r".*DriverInit", obj['name']):
-    // @todo: check_return(nullptr == get_driver(), ${X}_RESULT_ERROR_UNINITIALIZED);
-
-    %endif
-    // Check parameters
-    %for key, values in th.make_param_checks(x, obj, cls).items():
-    %for val in values:
-    // @todo: check_return(${val}, ${key});
-    %endfor
-    %endfor
-
-    // @todo: insert <code> here
-
-    return ${X}_RESULT_SUCCESS;
-}
+    );
+## HANDLE #####################################################################
+%elif re.match(r"handle", obj['type']):
+typedef struct _${th.subx(x, obj['name'])} *${th.subx(x, obj['name'])};
+%endif
 %if 'condition' in obj:
 #endif // ${th.subx(x,obj['condition'])}
 %endif
 
 %endfor
-%endif
 %endfor
+#endif // _${X}_${name.upper()}_HPP

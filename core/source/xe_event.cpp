@@ -48,11 +48,12 @@
 /// @returns
 ///     - ::XE_RESULT_SUCCESS
 ///     - ::XE_RESULT_ERROR_UNINITIALIZED
-///     - ::XE_RESULT_ERROR_UNSUPPORTED
 ///     - ::XE_RESULT_ERROR_INVALID_PARAMETER
-///         + invalid handle for hDevice
-///         + nullptr for desc
-///         + nullptr for phEvent
+///         + nullptr == hDevice
+///         + nullptr == desc
+///         + nullptr == phEvent
+///     - ::XE_RESULT_ERROR_UNSUPPORTED
+///         + ::XE_EVENT_DESC_VERSION <= desc->version
 ///     - ::XE_RESULT_ERROR_OUT_OF_HOST_MEMORY
 ///     - ::XE_RESULT_ERROR_OUT_OF_DEVICE_MEMORY
 /*@todo: __declspec(dllexport)*/
@@ -66,10 +67,10 @@ xe_result_t __xecall
     // @todo: check_return(nullptr == get_driver(), XE_RESULT_ERROR_UNINITIALIZED);
 
     // Check parameters
-    // @todo: check_return(xe_device_handle_t() == hDevice, XE_RESULT_ERROR_INVALID_PARAMETER);
+    // @todo: check_return(nullptr == hDevice, XE_RESULT_ERROR_INVALID_PARAMETER);
     // @todo: check_return(nullptr == desc, XE_RESULT_ERROR_INVALID_PARAMETER);
-    // @todo: check_return(XE_EVENT_DESC_VERSION <= desc->version, XE_RESULT_ERROR_UNSUPPORTED);
     // @todo: check_return(nullptr == phEvent, XE_RESULT_ERROR_INVALID_PARAMETER);
+    // @todo: check_return(XE_EVENT_DESC_VERSION <= desc->version, XE_RESULT_ERROR_UNSUPPORTED);
 
     // @todo: insert <code> here
 
@@ -88,12 +89,13 @@ xe_result_t __xecall
 /// @returns
 ///     - ::XE_RESULT_SUCCESS
 ///     - ::XE_RESULT_ERROR_UNINITIALIZED
-///     - ::XE_RESULT_ERROR_UNSUPPORTED
 ///     - ::XE_RESULT_ERROR_INVALID_PARAMETER
-///         + invalid handle for hDevice
-///         + nullptr for desc
-///         + nullptr for ptr
-///         + nullptr for phEvent
+///         + nullptr == hDevice
+///         + nullptr == desc
+///         + nullptr == ptr
+///         + nullptr == phEvent
+///     - ::XE_RESULT_ERROR_UNSUPPORTED
+///         + ::XE_EVENT_DESC_VERSION <= desc->version
 ///     - ::XE_RESULT_ERROR_OUT_OF_HOST_MEMORY
 /*@todo: __declspec(dllexport)*/
 xe_result_t __xecall
@@ -107,11 +109,11 @@ xe_result_t __xecall
     // @todo: check_return(nullptr == get_driver(), XE_RESULT_ERROR_UNINITIALIZED);
 
     // Check parameters
-    // @todo: check_return(xe_device_handle_t() == hDevice, XE_RESULT_ERROR_INVALID_PARAMETER);
+    // @todo: check_return(nullptr == hDevice, XE_RESULT_ERROR_INVALID_PARAMETER);
     // @todo: check_return(nullptr == desc, XE_RESULT_ERROR_INVALID_PARAMETER);
-    // @todo: check_return(XE_EVENT_DESC_VERSION <= desc->version, XE_RESULT_ERROR_UNSUPPORTED);
     // @todo: check_return(nullptr == ptr, XE_RESULT_ERROR_INVALID_PARAMETER);
     // @todo: check_return(nullptr == phEvent, XE_RESULT_ERROR_INVALID_PARAMETER);
+    // @todo: check_return(XE_EVENT_DESC_VERSION <= desc->version, XE_RESULT_ERROR_UNSUPPORTED);
 
     // @todo: insert <code> here
 
@@ -137,9 +139,9 @@ xe_result_t __xecall
 /// @returns
 ///     - ::XE_RESULT_SUCCESS
 ///     - ::XE_RESULT_ERROR_UNINITIALIZED
-///     - ::XE_RESULT_ERROR_UNSUPPORTED
 ///     - ::XE_RESULT_ERROR_INVALID_PARAMETER
-///         + invalid handle for hEvent
+///         + nullptr == hEvent
+///     - ::XE_RESULT_ERROR_UNSUPPORTED
 /*@todo: __declspec(dllexport)*/
 xe_result_t __xecall
   xeEventDestroy(
@@ -149,7 +151,7 @@ xe_result_t __xecall
     // @todo: check_return(nullptr == get_driver(), XE_RESULT_ERROR_UNINITIALIZED);
 
     // Check parameters
-    // @todo: check_return(xe_event_handle_t() == hEvent, XE_RESULT_ERROR_INVALID_PARAMETER);
+    // @todo: check_return(nullptr == hEvent, XE_RESULT_ERROR_INVALID_PARAMETER);
 
     // @todo: insert <code> here
 
@@ -173,10 +175,10 @@ xe_result_t __xecall
 /// @returns
 ///     - ::XE_RESULT_SUCCESS
 ///     - ::XE_RESULT_ERROR_UNINITIALIZED
-///     - ::XE_RESULT_ERROR_UNSUPPORTED
 ///     - ::XE_RESULT_ERROR_INVALID_PARAMETER
-///         + invalid handle for hCommandList
-///         + invalid handle for hEvent
+///         + nullptr == hCommandList
+///         + nullptr == hEvent
+///     - ::XE_RESULT_ERROR_UNSUPPORTED
 /*@todo: __declspec(dllexport)*/
 xe_result_t __xecall
   xeCommandListEncodeSignalEvent(
@@ -187,8 +189,8 @@ xe_result_t __xecall
     // @todo: check_return(nullptr == get_driver(), XE_RESULT_ERROR_UNINITIALIZED);
 
     // Check parameters
-    // @todo: check_return(xe_command_list_handle_t() == hCommandList, XE_RESULT_ERROR_INVALID_PARAMETER);
-    // @todo: check_return(xe_event_handle_t() == hEvent, XE_RESULT_ERROR_INVALID_PARAMETER);
+    // @todo: check_return(nullptr == hCommandList, XE_RESULT_ERROR_INVALID_PARAMETER);
+    // @todo: check_return(nullptr == hEvent, XE_RESULT_ERROR_INVALID_PARAMETER);
 
     // @todo: insert <code> here
 
@@ -206,10 +208,10 @@ xe_result_t __xecall
 /// @returns
 ///     - ::XE_RESULT_SUCCESS
 ///     - ::XE_RESULT_ERROR_UNINITIALIZED
-///     - ::XE_RESULT_ERROR_UNSUPPORTED
 ///     - ::XE_RESULT_ERROR_INVALID_PARAMETER
-///         + invalid handle for hCommandList
-///         + invalid handle for hEvent
+///         + nullptr == hCommandList
+///         + nullptr == hEvent
+///     - ::XE_RESULT_ERROR_UNSUPPORTED
 /*@todo: __declspec(dllexport)*/
 xe_result_t __xecall
   xeCommandListEncodeWaitOnEvent(
@@ -220,8 +222,8 @@ xe_result_t __xecall
     // @todo: check_return(nullptr == get_driver(), XE_RESULT_ERROR_UNINITIALIZED);
 
     // Check parameters
-    // @todo: check_return(xe_command_list_handle_t() == hCommandList, XE_RESULT_ERROR_INVALID_PARAMETER);
-    // @todo: check_return(xe_event_handle_t() == hEvent, XE_RESULT_ERROR_INVALID_PARAMETER);
+    // @todo: check_return(nullptr == hCommandList, XE_RESULT_ERROR_INVALID_PARAMETER);
+    // @todo: check_return(nullptr == hEvent, XE_RESULT_ERROR_INVALID_PARAMETER);
 
     // @todo: insert <code> here
 
@@ -239,11 +241,10 @@ xe_result_t __xecall
 /// @returns
 ///     - ::XE_RESULT_SUCCESS
 ///     - ::XE_RESULT_ERROR_UNINITIALIZED
-///     - ::XE_RESULT_ERROR_UNSUPPORTED
 ///     - ::XE_RESULT_ERROR_INVALID_PARAMETER
-///         + invalid handle for hCommandList
-///         + nullptr for phEvents
-///         + invalid handle in phEvents
+///         + nullptr == hCommandList
+///         + nullptr == phEvents
+///     - ::XE_RESULT_ERROR_UNSUPPORTED
 /*@todo: __declspec(dllexport)*/
 xe_result_t __xecall
   xeCommandListEncodeSignalMultipleEvents(
@@ -255,7 +256,7 @@ xe_result_t __xecall
     // @todo: check_return(nullptr == get_driver(), XE_RESULT_ERROR_UNINITIALIZED);
 
     // Check parameters
-    // @todo: check_return(xe_command_list_handle_t() == hCommandList, XE_RESULT_ERROR_INVALID_PARAMETER);
+    // @todo: check_return(nullptr == hCommandList, XE_RESULT_ERROR_INVALID_PARAMETER);
     // @todo: check_return(nullptr == phEvents, XE_RESULT_ERROR_INVALID_PARAMETER);
 
     // @todo: insert <code> here
@@ -275,11 +276,10 @@ xe_result_t __xecall
 /// @returns
 ///     - ::XE_RESULT_SUCCESS
 ///     - ::XE_RESULT_ERROR_UNINITIALIZED
-///     - ::XE_RESULT_ERROR_UNSUPPORTED
 ///     - ::XE_RESULT_ERROR_INVALID_PARAMETER
-///         + invalid handle for hCommandList
-///         + nullptr for phEvents
-///         + invalid handle in phEvents
+///         + nullptr == hCommandList
+///         + nullptr == phEvents
+///     - ::XE_RESULT_ERROR_UNSUPPORTED
 /*@todo: __declspec(dllexport)*/
 xe_result_t __xecall
   xeCommandListEncodeWaitOnMultipleEvents(
@@ -291,7 +291,7 @@ xe_result_t __xecall
     // @todo: check_return(nullptr == get_driver(), XE_RESULT_ERROR_UNINITIALIZED);
 
     // Check parameters
-    // @todo: check_return(xe_command_list_handle_t() == hCommandList, XE_RESULT_ERROR_INVALID_PARAMETER);
+    // @todo: check_return(nullptr == hCommandList, XE_RESULT_ERROR_INVALID_PARAMETER);
     // @todo: check_return(nullptr == phEvents, XE_RESULT_ERROR_INVALID_PARAMETER);
 
     // @todo: insert <code> here
@@ -313,9 +313,9 @@ xe_result_t __xecall
 /// @returns
 ///     - ::XE_RESULT_SUCCESS
 ///     - ::XE_RESULT_ERROR_UNINITIALIZED
-///     - ::XE_RESULT_ERROR_UNSUPPORTED
 ///     - ::XE_RESULT_ERROR_INVALID_PARAMETER
-///         + invalid handle for hEvent
+///         + nullptr == hEvent
+///     - ::XE_RESULT_ERROR_UNSUPPORTED
 /*@todo: __declspec(dllexport)*/
 xe_result_t __xecall
   xeHostSignalEvent(
@@ -325,7 +325,7 @@ xe_result_t __xecall
     // @todo: check_return(nullptr == get_driver(), XE_RESULT_ERROR_UNINITIALIZED);
 
     // Check parameters
-    // @todo: check_return(xe_event_handle_t() == hEvent, XE_RESULT_ERROR_INVALID_PARAMETER);
+    // @todo: check_return(nullptr == hEvent, XE_RESULT_ERROR_INVALID_PARAMETER);
 
     // @todo: insert <code> here
 
@@ -347,11 +347,11 @@ xe_result_t __xecall
 /// @returns
 ///     - ::XE_RESULT_SUCCESS
 ///     - ::XE_RESULT_ERROR_UNINITIALIZED
+///     - ::XE_RESULT_ERROR_INVALID_PARAMETER
+///         + nullptr == hEvent
 ///     - ::XE_RESULT_ERROR_UNSUPPORTED
 ///     - ::XE_RESULT_NOT_READY
 ///         + timeout expired
-///     - ::XE_RESULT_ERROR_INVALID_PARAMETER
-///         + invalid handle for hEvent
 /*@todo: __declspec(dllexport)*/
 xe_result_t __xecall
   xeHostWaitOnEvent(
@@ -372,7 +372,7 @@ xe_result_t __xecall
     // @todo: check_return(nullptr == get_driver(), XE_RESULT_ERROR_UNINITIALIZED);
 
     // Check parameters
-    // @todo: check_return(xe_event_handle_t() == hEvent, XE_RESULT_ERROR_INVALID_PARAMETER);
+    // @todo: check_return(nullptr == hEvent, XE_RESULT_ERROR_INVALID_PARAMETER);
 
     // @todo: insert <code> here
 
@@ -389,10 +389,9 @@ xe_result_t __xecall
 /// @returns
 ///     - ::XE_RESULT_SUCCESS
 ///     - ::XE_RESULT_ERROR_UNINITIALIZED
-///     - ::XE_RESULT_ERROR_UNSUPPORTED
 ///     - ::XE_RESULT_ERROR_INVALID_PARAMETER
-///         + nullptr for phEvents
-///         + invalid handle in phEvents
+///         + nullptr == phEvents
+///     - ::XE_RESULT_ERROR_UNSUPPORTED
 /*@todo: __declspec(dllexport)*/
 xe_result_t __xecall
   xeHostSignalMultipleEvents(
@@ -424,12 +423,11 @@ xe_result_t __xecall
 /// @returns
 ///     - ::XE_RESULT_SUCCESS
 ///     - ::XE_RESULT_ERROR_UNINITIALIZED
+///     - ::XE_RESULT_ERROR_INVALID_PARAMETER
+///         + nullptr == phEvents
 ///     - ::XE_RESULT_ERROR_UNSUPPORTED
 ///     - ::XE_RESULT_NOT_READY
 ///         + timeout expired
-///     - ::XE_RESULT_ERROR_INVALID_PARAMETER
-///         + nullptr for phEvents
-///         + invalid handle in phEvents
 /*@todo: __declspec(dllexport)*/
 xe_result_t __xecall
   xeHostWaitOnMultipleEvents(
@@ -474,11 +472,11 @@ xe_result_t __xecall
 /// @returns
 ///     - ::XE_RESULT_SUCCESS
 ///     - ::XE_RESULT_ERROR_UNINITIALIZED
+///     - ::XE_RESULT_ERROR_INVALID_PARAMETER
+///         + nullptr == hEvent
 ///     - ::XE_RESULT_ERROR_UNSUPPORTED
 ///     - ::XE_RESULT_NOT_READY
 ///         + not signaled
-///     - ::XE_RESULT_ERROR_INVALID_PARAMETER
-///         + invalid handle for hEvent
 /*@todo: __declspec(dllexport)*/
 xe_result_t __xecall
   xeEventQueryStatus(
@@ -488,7 +486,7 @@ xe_result_t __xecall
     // @todo: check_return(nullptr == get_driver(), XE_RESULT_ERROR_UNINITIALIZED);
 
     // Check parameters
-    // @todo: check_return(xe_event_handle_t() == hEvent, XE_RESULT_ERROR_INVALID_PARAMETER);
+    // @todo: check_return(nullptr == hEvent, XE_RESULT_ERROR_INVALID_PARAMETER);
 
     // @todo: insert <code> here
 
@@ -509,12 +507,12 @@ xe_result_t __xecall
 /// @returns
 ///     - ::XE_RESULT_SUCCESS
 ///     - ::XE_RESULT_ERROR_UNINITIALIZED
-///     - ::XE_RESULT_ERROR_UNSUPPORTED
 ///     - ::XE_RESULT_ERROR_INVALID_PARAMETER
-///         + invalid handle for hEventStart
-///         + invalid handle for hEventEnd
+///         + nullptr == hEventStart
+///         + nullptr == hEventEnd
+///         + nullptr == pTime
 ///         + either event not signaled by device
-///         + nullptr for pTime
+///     - ::XE_RESULT_ERROR_UNSUPPORTED
 /*@todo: __declspec(dllexport)*/
 xe_result_t __xecall
   xeEventQueryElapsedTime(
@@ -526,8 +524,8 @@ xe_result_t __xecall
     // @todo: check_return(nullptr == get_driver(), XE_RESULT_ERROR_UNINITIALIZED);
 
     // Check parameters
-    // @todo: check_return(xe_event_handle_t() == hEventStart, XE_RESULT_ERROR_INVALID_PARAMETER);
-    // @todo: check_return(xe_event_handle_t() == hEventEnd, XE_RESULT_ERROR_INVALID_PARAMETER);
+    // @todo: check_return(nullptr == hEventStart, XE_RESULT_ERROR_INVALID_PARAMETER);
+    // @todo: check_return(nullptr == hEventEnd, XE_RESULT_ERROR_INVALID_PARAMETER);
     // @todo: check_return(nullptr == pTime, XE_RESULT_ERROR_INVALID_PARAMETER);
 
     // @todo: insert <code> here
@@ -550,10 +548,10 @@ xe_result_t __xecall
 /// @returns
 ///     - ::XE_RESULT_SUCCESS
 ///     - ::XE_RESULT_ERROR_UNINITIALIZED
-///     - ::XE_RESULT_ERROR_UNSUPPORTED
 ///     - ::XE_RESULT_ERROR_INVALID_PARAMETER
-///         + invalid handle for hCommandList
-///         + invalid handle for hEvent
+///         + nullptr == hCommandList
+///         + nullptr == hEvent
+///     - ::XE_RESULT_ERROR_UNSUPPORTED
 /*@todo: __declspec(dllexport)*/
 xe_result_t __xecall
   xeCommandListEncodeEventReset(
@@ -564,8 +562,8 @@ xe_result_t __xecall
     // @todo: check_return(nullptr == get_driver(), XE_RESULT_ERROR_UNINITIALIZED);
 
     // Check parameters
-    // @todo: check_return(xe_command_list_handle_t() == hCommandList, XE_RESULT_ERROR_INVALID_PARAMETER);
-    // @todo: check_return(xe_event_handle_t() == hEvent, XE_RESULT_ERROR_INVALID_PARAMETER);
+    // @todo: check_return(nullptr == hCommandList, XE_RESULT_ERROR_INVALID_PARAMETER);
+    // @todo: check_return(nullptr == hEvent, XE_RESULT_ERROR_INVALID_PARAMETER);
 
     // @todo: insert <code> here
 
@@ -586,9 +584,9 @@ xe_result_t __xecall
 /// @returns
 ///     - ::XE_RESULT_SUCCESS
 ///     - ::XE_RESULT_ERROR_UNINITIALIZED
-///     - ::XE_RESULT_ERROR_UNSUPPORTED
 ///     - ::XE_RESULT_ERROR_INVALID_PARAMETER
-///         + invalid handle for hEvent
+///         + nullptr == hEvent
+///     - ::XE_RESULT_ERROR_UNSUPPORTED
 /*@todo: __declspec(dllexport)*/
 xe_result_t __xecall
   xeEventReset(
@@ -598,7 +596,7 @@ xe_result_t __xecall
     // @todo: check_return(nullptr == get_driver(), XE_RESULT_ERROR_UNINITIALIZED);
 
     // Check parameters
-    // @todo: check_return(xe_event_handle_t() == hEvent, XE_RESULT_ERROR_INVALID_PARAMETER);
+    // @todo: check_return(nullptr == hEvent, XE_RESULT_ERROR_INVALID_PARAMETER);
 
     // @todo: insert <code> here
 

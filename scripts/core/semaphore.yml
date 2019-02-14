@@ -51,10 +51,6 @@ params:
       name: phSemaphore
       desc: "[out] pointer to handle of semaphore object created"
 returns:
-    - $X_RESULT_ERROR_INVALID_PARAMETER:
-        - "invalid handle for hDevice"
-        - "nullptr for desc"
-        - "nullptr for phSemaphore"
     - $X_RESULT_ERROR_OUT_OF_HOST_MEMORY
     - $X_RESULT_ERROR_OUT_OF_DEVICE_MEMORY
 --- #--------------------------------------------------------------------------
@@ -72,9 +68,6 @@ params:
     - type: $x_semaphore_handle_t
       name: hSemaphore
       desc: "[in] handle of semaphore object to destroy"
-returns:
-    - $X_RESULT_ERROR_INVALID_PARAMETER:
-        - "invalid handle for hSemaphore"
 --- #--------------------------------------------------------------------------
 type: function
 desc: "Encodes an semaphore signal into a command list."
@@ -93,10 +86,6 @@ params:
     - type: $x_semaphore_value_t
       name: value
       desc: "[in] the value to write on signal"
-returns:
-    - $X_RESULT_ERROR_INVALID_PARAMETER:
-        - "invalid handle for hCommandList"
-        - "invalid handle for hSemaphore"
 --- #--------------------------------------------------------------------------
 type: enum
 desc: "Supported semaphore wait operations"
@@ -136,10 +125,6 @@ params:
     - type: $x_semaphore_value_t
       name: value
       desc: "[in] the value to wait upon"
-returns:
-    - $X_RESULT_ERROR_INVALID_PARAMETER:
-        - "invalid handle for hCommandList"
-        - "invalid handle for hSemaphore"
 --- #--------------------------------------------------------------------------
 type: function
 desc: "Queries an semaphore object's value."
@@ -152,9 +137,6 @@ params:
     - type: $x_semaphore_handle_t
       name: hSemaphore
       desc: "[in] handle of the semaphore"
-returns:
-    - $X_RESULT_ERROR_INVALID_PARAMETER:
-        - "invalid handle for hSemaphore"
 --- #--------------------------------------------------------------------------
 type: function
 desc: "Reset a semaphore back to the value of 0."
@@ -167,6 +149,3 @@ params:
     - type: $x_semaphore_handle_t
       name: hSemaphore
       desc: "[in] handle of the semaphore"
-returns:
-    - $X_RESULT_ERROR_INVALID_PARAMETER:
-        - "invalid handle for hSemaphore"

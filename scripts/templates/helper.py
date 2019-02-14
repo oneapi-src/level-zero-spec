@@ -34,10 +34,14 @@ def split_line(line, ch_count):
         lines.append(" ".join(word_list))
     return lines
 
-def make_abc_line(lformat, rformat, repl, a, b, c):
-    lhalf = lformat%(subx(repl,a), subx(repl,b))
-    rhalf = rformat%(subx(repl,c,True))
-    return "%s%s"%(append_ws(lhalf, 48), rhalf)
+def filter_items(lst, key, filter):
+    flst = []
+    for item in lst:
+        if key in item:
+            if filter != item[key]:
+                continue
+        flst.append(item)
+    return flst
 
 def make_etor_lines(repl, obj):
     lines = []
@@ -62,10 +66,11 @@ def make_member_lines(repl, obj):
             prologue = ""
     return lines
 
-def make_param_lines(repl, obj):
+def make_param_lines(repl, obj, cls):
     lines = []
-    for i, item in enumerate(obj['params']):
-        if i < len(obj['params'])-1:
+    params = filter_items(obj['params'], 'class', cls)
+    for i, item in enumerate(params):
+        if i < len(params)-1:
             prologue = "%s %s,"%(subx(repl, item['type']), subx(repl, item['name']))
         else:
             prologue = "%s %s"%(subx(repl, item['type']), subx(repl, item['name']))
@@ -114,24 +119,66 @@ def make_details_lines(repl, obj):
             lines.append("    - %s"%line)
     return lines
 
-def make_return_lines(repl, obj):
+def make_param_checks(repl, obj, cls, tag=False):
+    checks = {}
+    eip = subx(repl, "$X_RESULT_ERROR_INVALID_PARAMETER", tag)
+    eus = subx(repl, "$X_RESULT_ERROR_UNSUPPORTED", tag)
+    checks[eip] = []
+    checks[eus] = []
+
+    params = filter_items(obj['params'], 'class', cls)
+    for item in params:
+        if not re.match(r".*\[optional\].*", item['desc']): #skip optional params
+            if re.match(r".*\w+\*+", item['type']): # pointer-type
+                checks[eip].append("nullptr == %s"%subx(repl, item['name'], tag))
+            elif re.match(r".*handle_t.*", item['type']): # handle-type
+                checks[eip].append("nullptr == %s"%subx(repl, item['name'], tag))
+
+            if re.match(r".*desc_t.*", item['type']): # descriptor-type
+                checks[eus].append("%s <= %s->version"%(re.sub(r"\w*\s*(.*)_t.*", r"\1_VERSION", subx(repl, item['type'], tag)).upper(), item['name']))
+    return checks
+
+def make_return_lines(repl, obj, cls):
     lines = []
     lines.append("@returns")
     lines.append("    - %s"%subx(repl, "$X_RESULT_SUCCESS", True))
     lines.append("    - %s"%subx(repl, "$X_RESULT_ERROR_UNINITIALIZED", True))
-    lines.append("    - %s"%subx(repl, "$X_RESULT_ERROR_UNSUPPORTED", True))
 
-    for item in obj['returns']:
-        if isinstance(item, dict):
-            for key, values in item.items():
-                lines.append("    - %s"%subx(repl, key, True))
-                for val in values:
-                    lines.append("        + %s"%subx(repl, val, True))
-        else:
-            lines.append("    - %s"%subx(repl, item, True))
+    # generate default checks
+    gen = make_param_checks(repl, obj, cls, True)
+
+    # merge user-specified values
+    if 'returns' in obj:
+        for item in obj['returns']:
+            if isinstance(item, dict):
+                for key, values in item.items():
+                    key = subx(repl, key, True)
+                    if key not in gen:
+                        gen[key] = []
+                    for val in values:
+                        gen[key].append(subx(repl, val, True))
+            else:
+                key = subx(repl, item, True)
+                if key not in gen:
+                    gen[key] = []
+
+    # now make combined lines
+    for key, values in gen.items():
+        lines.append("    - %s"%key)
+        for val in values:
+            lines.append("        + %s"%val)
     return lines
 
-def make_func_name(repl, obj):
-    return subx(repl, "%s%s"%(obj['class'], obj['name']))
+def get_class_list(obj):
+    if 'class' in obj:
+        if isinstance(obj['class'], list):
+            return obj['class']
+        else:
+            return [obj['class']]
+    else:
+        return ['none']
+
+def make_func_name(repl, obj, cls):
+    return subx(repl, "%s%s"%(cls, obj['name']))
 
 

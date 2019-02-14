@@ -70,8 +70,6 @@ params:
       desc: "[out][optional] pointer to handle of module's build log."
 returns:
     - $X_RESULT_ERROR_INVALID_PARAMETER:
-        - "invalid handle for hDevice"
-        - "nullptr for desc"
         - "invalid desc->format"
         - "nullptr for desc->pInputModule"
         - "nullptr for desc->phModule"
@@ -94,9 +92,6 @@ params:
     - type: "$x_module_handle_t"
       name: hModule
       desc: "[in] handle of the module"
-returns:
-    - $X_RESULT_ERROR_INVALID_PARAMETER:
-        - "invalid handle for hModule"
 --- #--------------------------------------------------------------------------
 type: function
 desc: "Destroys module build log object"
@@ -111,9 +106,6 @@ params:
     - type: "$x_module_build_log_handle_t"
       name: hBuildLog
       desc: "[in] handle of the module build log object."
-returns:
-    - $X_RESULT_ERROR_INVALID_PARAMETER:
-        - "invalid handle for hBuildLog"
 --- #--------------------------------------------------------------------------
 type: function
 desc: "Retrieves text string for build log."
@@ -133,10 +125,6 @@ params:
       name: pBuildLog
       desc: "[out] pointer to null-terminated string of the log."
 returns:
-    - $X_RESULT_ERROR_INVALID_PARAMETER:
-        - "nullptr for hBuildLog"
-        - "nullptr for pSize"
-        - "nullptr for pBuildLog"
     - $X_RESULT_ERROR_OUT_OF_HOST_MEMORY
     - $X_RESULT_ERROR_OUT_OF_DEVICE_MEMORY
 --- #--------------------------------------------------------------------------
@@ -162,10 +150,7 @@ params:
       desc: "[out] pointer to native binary"
 returns:
     - $X_RESULT_ERROR_INVALID_PARAMETER:
-        - "invalid handle for hDevice"
         - "invalid format"
-        - "nullptr for pInputModule"
-        - "nullptr for phModule"
         - "0 for inputSize"
     - $X_RESULT_ERROR_OUT_OF_HOST_MEMORY
     - $X_RESULT_ERROR_OUT_OF_DEVICE_MEMORY
@@ -221,8 +206,6 @@ params:
       desc: "[out] handle of the Function object"
 returns:
     - $X_RESULT_ERROR_INVALID_PARAMETER:
-        - "invalid handle for hModule"
-        - "nullptr for desc"
         - "nullptr for desc->pFunctionName"
         - "invalid name for desc->pFunctionName"
 --- #--------------------------------------------------------------------------
@@ -238,9 +221,6 @@ params:
     - type: "$x_function_handle_t"
       name: hFunction
       desc: "[in] handle of the function object"
-returns:
-    - $X_RESULT_ERROR_INVALID_PARAMETER:
-        - "invalid handle for hFunction"
 --- #--------------------------------------------------------------------------
 type: function
 desc: "Create Function arguments needed to pass arguments to a function."
@@ -259,10 +239,6 @@ params:
     - type: "$x_function_args_handle_t*"
       name:  phFunctionArgs
       desc: "[out] handle of the Function arguments object"
-returns:
-    - $X_RESULT_ERROR_INVALID_PARAMETER:
-        - "invalid handle for hFunction"
-        - "nullptr for phFunctionArgs"
 --- #--------------------------------------------------------------------------
 type: function
 desc: "Destroys Function arguments object"
@@ -276,9 +252,6 @@ params:
     - type: "$x_function_args_handle_t"
       name: hFunctionArgs
       desc: "[in] handle of the function arguments buffer object"
-returns:
-    - $X_RESULT_ERROR_INVALID_PARAMETER:
-        - "invalid handle for hFunctionArgs"
 --- #--------------------------------------------------------------------------
 type: function
 desc: "Set function arguments within arguments buffer."
@@ -305,9 +278,7 @@ params:
       desc: "[in] argument value represented as matching arg type"
 returns:
     - $X_RESULT_ERROR_INVALID_PARAMETER:
-        - "invalid handle for hFunctionArgs"
         - "invalid argument index"
-        - "nullptr for pArgValue"
         - "invalid size specified"
 --- #--------------------------------------------------------------------------
 type: enum
@@ -345,7 +316,6 @@ params:
       desc: "[in] attribute value to set"
 returns:
     - $X_RESULT_ERROR_INVALID_PARAMETER:
-        - "invalid handle for hFunctionArgs"
         - "invalid value for attr"
         - "invalid value for value"
 --- #--------------------------------------------------------------------------
@@ -390,9 +360,7 @@ params:
       desc: "[out] returned attribute value"
 returns:
     - $X_RESULT_ERROR_INVALID_PARAMETER:
-        - "invalid handle for hFunction"
         - "invalid value for attr"
-        - "nullptr for pValue"
 --- #--------------------------------------------------------------------------
 type: macro
 desc: API version of $x_function_desc_t
@@ -427,7 +395,7 @@ members:
 --- #--------------------------------------------------------------------------
 type: function
 desc: "Dispatch command over one or more work groups."
-class: $xCommandList
+class: [ $xCommandList, $xCommandGraph ]
 name: EncodeDispatchFunction
 analogue:
     - "**cuLaunchKernel**"
@@ -438,6 +406,11 @@ params:
     - type: "$x_command_list_handle_t"
       name: hCommandList
       desc: "[in] handle of the command list"
+      class: $xCommandList
+    - type: $x_command_graph_handle_t
+      name: hCommandGraph
+      desc: "[in] handle of the command graph"
+      class: $xCommandGraph
     - type: "$x_function_handle_t"
       name: hFunction
       desc: "[in] handle of the function object"
@@ -452,9 +425,6 @@ params:
       desc: "[in][optional] handle of the event to signal on completion"
 returns:
     - $X_RESULT_ERROR_INVALID_PARAMETER:
-        - "invalid handle for hCommandList"
-        - "invalid handle for hFunction"
-        - "nullptr for function arguments buffer"
         - "invalid group count range for dispatch"
         - "invalid dispatch count range for dispatch"
 
@@ -484,7 +454,7 @@ members:
 --- #--------------------------------------------------------------------------
 type: function
 desc: "Dispatch command over one or more work groups using indirect dispatch arguments."
-class: $xCommandList
+class: [ $xCommandList, $xCommandGraph ]
 name: EncodeDispatchFunctionIndirect
 analogue:
     - "**cuLaunchKernel**"
@@ -497,6 +467,11 @@ params:
     - type: "$x_command_list_handle_t"
       name: hCommandList
       desc: "[in] handle of the command list"
+      class: $xCommandList
+    - type: $x_command_graph_handle_t
+      name: hCommandGraph
+      desc: "[in] handle of the command graph"
+      class: $xCommandGraph
     - type: "$x_function_handle_t"
       name: hFunction
       desc: "[in] handle of the function object"
@@ -509,12 +484,6 @@ params:
     - type: $x_event_handle_t
       name: hEvent
       desc: "[in][optional] handle of the event to signal on completion"
-returns:
-    - $X_RESULT_ERROR_INVALID_PARAMETER:
-        - "invalid handle for hCommandList"
-        - "invalid handle for hFunction"
-        - "invalid handle for hFunctionArgs."
-        - "nullptr for dispatch arguments buffer"
 --- #--------------------------------------------------------------------------
 type: function
 desc: "Query a suggested group size for function. If the function has an embedded group size then this will be returned. Otherwise, one will be suggested."
@@ -547,7 +516,6 @@ params:
       desc: "[out] recommended size of group for Z dimension."
 returns:
     - $X_RESULT_ERROR_INVALID_PARAMETER:
-        - "invalid handle for hFunction"
         - "invalid number of threads."
 --- #--------------------------------------------------------------------------
 type: typedef
@@ -564,7 +532,7 @@ params:
 --- #--------------------------------------------------------------------------
 type: function
 desc: "Dispatch host function. All work after this command in the command list will block until host function completes."
-class: $xCommandList
+class: [ $xCommandList, $xCommandGraph ]
 name: EncodeDispatchHostFunction
 analogue:
     - "**cuLaunchHostFunc**"
@@ -575,14 +543,14 @@ params:
     - type: "$x_command_list_handle_t"
       name: hCommandList
       desc: "[in] handle of the command list"
+      class: $xCommandList
+    - type: $x_command_graph_handle_t
+      name: hCommandGraph
+      desc: "[in] handle of the command graph"
+      class: $xCommandGraph
     - type: "$x_host_pfn_t"
       name: pfnHostFunc
       desc: "[in] pointer to host function."
     - type: "void*"
       name: pUserData
       desc: "[in] pointer to user data to pass to host function."
-returns:
-    - $X_RESULT_ERROR_INVALID_PARAMETER:
-        - "invalid handle for hCommandList"
-        - "null ptr for pfnHostFunc"
-        - "null ptr for pUserData."

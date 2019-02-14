@@ -57,10 +57,6 @@ params:
       name: phCommandList
       desc: "[out] pointer to handle of command list object created"
 returns:
-    - $X_RESULT_ERROR_INVALID_PARAMETER:
-        - "invalid handle for hDevice"
-        - "nullptr for desc"
-        - "nullptr for phCommandList"
     - $X_RESULT_ERROR_OUT_OF_HOST_MEMORY
     - $X_RESULT_ERROR_OUT_OF_DEVICE_MEMORY
 --- #--------------------------------------------------------------------------
@@ -86,10 +82,6 @@ params:
       name: phCommandList
       desc: "[out] pointer to handle of command list object created"
 returns:
-    - $X_RESULT_ERROR_INVALID_PARAMETER:
-        - "invalid handle for hDevice"
-        - "invalid handle for hCommandList"
-        - "nullptr for phCommandList"
     - $X_RESULT_ERROR_OUT_OF_HOST_MEMORY
     - $X_RESULT_ERROR_OUT_OF_DEVICE_MEMORY
 --- #--------------------------------------------------------------------------
@@ -105,9 +97,6 @@ params:
     - type: $x_command_list_handle_t
       name: hCommandList
       desc: "[in] handle of command list object to destroy"
-returns:
-    - $X_RESULT_ERROR_INVALID_PARAMETER:
-        - "invalid handle for hCommandList"
 --- #--------------------------------------------------------------------------
 type: function
 desc: "Closes a command list; ready to be enqueued into a command queue."
@@ -120,9 +109,6 @@ params:
     - type: $x_command_list_handle_t
       name: hCommandList
       desc: "[in] handle of command list object to close"
-returns:
-    - $X_RESULT_ERROR_INVALID_PARAMETER:
-        - "invalid handle for hCommandList"
 --- #--------------------------------------------------------------------------
 type: function
 desc: "Reset a command list to initial (empty) state; ready for encoding commands."
@@ -136,9 +122,6 @@ params:
     - type: $x_command_list_handle_t
       name: hCommandList
       desc: "[in] handle of command list object to reset"
-returns:
-    - $X_RESULT_ERROR_INVALID_PARAMETER:
-        - "invalid handle for hCommandList"
 --- #--------------------------------------------------------------------------
 type: enum
 desc: "Supported command list parameters"
@@ -170,7 +153,6 @@ params:
       desc: "[in] value of attribute"
 returns:
     - $X_RESULT_ERROR_INVALID_PARAMETER:
-        - "invalid handle for hCommandList"
         - "invalid value for attribute"
         - "invalid value for value"
 --- #--------------------------------------------------------------------------
@@ -198,9 +180,7 @@ params:
       desc: "[out] value of attribute"
 returns:
     - $X_RESULT_ERROR_INVALID_PARAMETER:
-        - "invalid handle for hCommandList"
         - "invalid value for attribute"
-        - "nullptr for value"
 --- #--------------------------------------------------------------------------
 type: function
 desc: "Resets all command list parameters to default state."
@@ -213,9 +193,6 @@ params:
     - type: $x_command_list_handle_t
       name: hCommandList
       desc: "[in] handle of the command list"
-returns:
-    - $X_RESULT_ERROR_INVALID_PARAMETER:
-       - "invalid handle for hCommandList"
 --- #--------------------------------------------------------------------------
 type: function
 desc: "Encode a command list into another command list."
@@ -236,10 +213,7 @@ params:
       desc: "[in] list of handles of the command lists to encode for execution"
 returns:
     - $X_RESULT_ERROR_INVALID_PARAMETER:
-       - "invalid handle for hCommandList"
        - "0 for numCommandLists"
-       - "nullptr for phCommandLists"
-       - "invalid handle in phCommandLists"
 --- #--------------------------------------------------------------------------
 type: enum
 desc: "Support command formats"
@@ -271,7 +245,5 @@ params:
       desc: "[in] pointer to blob of commands to encode into the command list"
 returns:
     - $X_RESULT_ERROR_INVALID_PARAMETER:
-       - "invalid handle for hCommandList"
        - "invalid value for format"
        - "0 for size"
-       - "nullptr for pBlob"

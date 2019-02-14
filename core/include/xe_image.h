@@ -114,10 +114,12 @@ typedef struct _xe_image_desc_t
 /// @returns
 ///     - ::XE_RESULT_SUCCESS
 ///     - ::XE_RESULT_ERROR_UNINITIALIZED
-///     - ::XE_RESULT_ERROR_UNSUPPORTED
 ///     - ::XE_RESULT_ERROR_INVALID_PARAMETER
-///         + nullptr for desc
-///         + nullptr for phImage
+///         + nullptr == hDevice
+///         + nullptr == desc
+///         + nullptr == phImage
+///     - ::XE_RESULT_ERROR_UNSUPPORTED
+///         + ::XE_IMAGE_DESC_VERSION <= desc->version
 ///     - ::XE_RESULT_ERROR_OUT_OF_HOST_MEMORY
 ///     - ::XE_RESULT_ERROR_OUT_OF_DEVICE_MEMORY
 xe_result_t __xecall
@@ -140,9 +142,9 @@ xe_result_t __xecall
 /// @returns
 ///     - ::XE_RESULT_SUCCESS
 ///     - ::XE_RESULT_ERROR_UNINITIALIZED
-///     - ::XE_RESULT_ERROR_UNSUPPORTED
 ///     - ::XE_RESULT_ERROR_INVALID_PARAMETER
-///         + invalid handle for hImage
+///         + nullptr == hImage
+///     - ::XE_RESULT_ERROR_UNSUPPORTED
 xe_result_t __xecall
   xeImageDestroy(
     xe_image_handle_t hImage                        ///< [in] handle of image object to destroy

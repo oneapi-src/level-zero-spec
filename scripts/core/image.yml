@@ -115,9 +115,6 @@ params:
       name: phImage
       desc: "[out] pointer to handle of image object created"
 returns:
-    - $X_RESULT_ERROR_INVALID_PARAMETER:
-        - "nullptr for desc"
-        - "nullptr for phImage"
     - $X_RESULT_ERROR_OUT_OF_HOST_MEMORY
     - $X_RESULT_ERROR_OUT_OF_DEVICE_MEMORY
 --- #--------------------------------------------------------------------------
@@ -133,6 +130,3 @@ params:
     - type: $x_image_handle_t
       name: hImage
       desc: "[in] handle of image object to destroy"
-returns:
-    - $X_RESULT_ERROR_INVALID_PARAMETER:
-        - "invalid handle for hImage"

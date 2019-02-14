@@ -77,11 +77,12 @@ typedef struct _xe_event_desc_t
 /// @returns
 ///     - ::XE_RESULT_SUCCESS
 ///     - ::XE_RESULT_ERROR_UNINITIALIZED
-///     - ::XE_RESULT_ERROR_UNSUPPORTED
 ///     - ::XE_RESULT_ERROR_INVALID_PARAMETER
-///         + invalid handle for hDevice
-///         + nullptr for desc
-///         + nullptr for phEvent
+///         + nullptr == hDevice
+///         + nullptr == desc
+///         + nullptr == phEvent
+///     - ::XE_RESULT_ERROR_UNSUPPORTED
+///         + ::XE_EVENT_DESC_VERSION <= desc->version
 ///     - ::XE_RESULT_ERROR_OUT_OF_HOST_MEMORY
 ///     - ::XE_RESULT_ERROR_OUT_OF_DEVICE_MEMORY
 xe_result_t __xecall
@@ -103,12 +104,13 @@ xe_result_t __xecall
 /// @returns
 ///     - ::XE_RESULT_SUCCESS
 ///     - ::XE_RESULT_ERROR_UNINITIALIZED
-///     - ::XE_RESULT_ERROR_UNSUPPORTED
 ///     - ::XE_RESULT_ERROR_INVALID_PARAMETER
-///         + invalid handle for hDevice
-///         + nullptr for desc
-///         + nullptr for ptr
-///         + nullptr for phEvent
+///         + nullptr == hDevice
+///         + nullptr == desc
+///         + nullptr == ptr
+///         + nullptr == phEvent
+///     - ::XE_RESULT_ERROR_UNSUPPORTED
+///         + ::XE_EVENT_DESC_VERSION <= desc->version
 ///     - ::XE_RESULT_ERROR_OUT_OF_HOST_MEMORY
 xe_result_t __xecall
   xeDevicePlaceEvent(
@@ -137,9 +139,9 @@ xe_result_t __xecall
 /// @returns
 ///     - ::XE_RESULT_SUCCESS
 ///     - ::XE_RESULT_ERROR_UNINITIALIZED
-///     - ::XE_RESULT_ERROR_UNSUPPORTED
 ///     - ::XE_RESULT_ERROR_INVALID_PARAMETER
-///         + invalid handle for hEvent
+///         + nullptr == hEvent
+///     - ::XE_RESULT_ERROR_UNSUPPORTED
 xe_result_t __xecall
   xeEventDestroy(
     xe_event_handle_t hEvent                        ///< [in] handle of event object to destroy
@@ -162,10 +164,10 @@ xe_result_t __xecall
 /// @returns
 ///     - ::XE_RESULT_SUCCESS
 ///     - ::XE_RESULT_ERROR_UNINITIALIZED
-///     - ::XE_RESULT_ERROR_UNSUPPORTED
 ///     - ::XE_RESULT_ERROR_INVALID_PARAMETER
-///         + invalid handle for hCommandList
-///         + invalid handle for hEvent
+///         + nullptr == hCommandList
+///         + nullptr == hEvent
+///     - ::XE_RESULT_ERROR_UNSUPPORTED
 xe_result_t __xecall
   xeCommandListEncodeSignalEvent(
     xe_command_list_handle_t hCommandList,          ///< [in] handle of the command list
@@ -183,10 +185,10 @@ xe_result_t __xecall
 /// @returns
 ///     - ::XE_RESULT_SUCCESS
 ///     - ::XE_RESULT_ERROR_UNINITIALIZED
-///     - ::XE_RESULT_ERROR_UNSUPPORTED
 ///     - ::XE_RESULT_ERROR_INVALID_PARAMETER
-///         + invalid handle for hCommandList
-///         + invalid handle for hEvent
+///         + nullptr == hCommandList
+///         + nullptr == hEvent
+///     - ::XE_RESULT_ERROR_UNSUPPORTED
 xe_result_t __xecall
   xeCommandListEncodeWaitOnEvent(
     xe_command_list_handle_t hCommandList,          ///< [in] handle of the command list
@@ -204,11 +206,10 @@ xe_result_t __xecall
 /// @returns
 ///     - ::XE_RESULT_SUCCESS
 ///     - ::XE_RESULT_ERROR_UNINITIALIZED
-///     - ::XE_RESULT_ERROR_UNSUPPORTED
 ///     - ::XE_RESULT_ERROR_INVALID_PARAMETER
-///         + invalid handle for hCommandList
-///         + nullptr for phEvents
-///         + invalid handle in phEvents
+///         + nullptr == hCommandList
+///         + nullptr == phEvents
+///     - ::XE_RESULT_ERROR_UNSUPPORTED
 xe_result_t __xecall
   xeCommandListEncodeSignalMultipleEvents(
     xe_command_list_handle_t hCommandList,          ///< [in] handle of the command list
@@ -228,11 +229,10 @@ xe_result_t __xecall
 /// @returns
 ///     - ::XE_RESULT_SUCCESS
 ///     - ::XE_RESULT_ERROR_UNINITIALIZED
-///     - ::XE_RESULT_ERROR_UNSUPPORTED
 ///     - ::XE_RESULT_ERROR_INVALID_PARAMETER
-///         + invalid handle for hCommandList
-///         + nullptr for phEvents
-///         + invalid handle in phEvents
+///         + nullptr == hCommandList
+///         + nullptr == phEvents
+///     - ::XE_RESULT_ERROR_UNSUPPORTED
 xe_result_t __xecall
   xeCommandListEncodeWaitOnMultipleEvents(
     xe_command_list_handle_t hCommandList,          ///< [in] handle of the command list
@@ -254,9 +254,9 @@ xe_result_t __xecall
 /// @returns
 ///     - ::XE_RESULT_SUCCESS
 ///     - ::XE_RESULT_ERROR_UNINITIALIZED
-///     - ::XE_RESULT_ERROR_UNSUPPORTED
 ///     - ::XE_RESULT_ERROR_INVALID_PARAMETER
-///         + invalid handle for hEvent
+///         + nullptr == hEvent
+///     - ::XE_RESULT_ERROR_UNSUPPORTED
 xe_result_t __xecall
   xeHostSignalEvent(
     xe_event_handle_t hEvent                        ///< [in] handle of the event
@@ -277,11 +277,11 @@ xe_result_t __xecall
 /// @returns
 ///     - ::XE_RESULT_SUCCESS
 ///     - ::XE_RESULT_ERROR_UNINITIALIZED
+///     - ::XE_RESULT_ERROR_INVALID_PARAMETER
+///         + nullptr == hEvent
 ///     - ::XE_RESULT_ERROR_UNSUPPORTED
 ///     - ::XE_RESULT_NOT_READY
 ///         + timeout expired
-///     - ::XE_RESULT_ERROR_INVALID_PARAMETER
-///         + invalid handle for hEvent
 xe_result_t __xecall
   xeHostWaitOnEvent(
     xe_event_handle_t hEvent,                       ///< [in] handle of the event
@@ -308,10 +308,9 @@ xe_result_t __xecall
 /// @returns
 ///     - ::XE_RESULT_SUCCESS
 ///     - ::XE_RESULT_ERROR_UNINITIALIZED
-///     - ::XE_RESULT_ERROR_UNSUPPORTED
 ///     - ::XE_RESULT_ERROR_INVALID_PARAMETER
-///         + nullptr for phEvents
-///         + invalid handle in phEvents
+///         + nullptr == phEvents
+///     - ::XE_RESULT_ERROR_UNSUPPORTED
 xe_result_t __xecall
   xeHostSignalMultipleEvents(
     uint32_t numEvents,                             ///< [in] number of events pointed to by phEvents
@@ -332,12 +331,11 @@ xe_result_t __xecall
 /// @returns
 ///     - ::XE_RESULT_SUCCESS
 ///     - ::XE_RESULT_ERROR_UNINITIALIZED
+///     - ::XE_RESULT_ERROR_INVALID_PARAMETER
+///         + nullptr == phEvents
 ///     - ::XE_RESULT_ERROR_UNSUPPORTED
 ///     - ::XE_RESULT_NOT_READY
 ///         + timeout expired
-///     - ::XE_RESULT_ERROR_INVALID_PARAMETER
-///         + nullptr for phEvents
-///         + invalid handle in phEvents
 xe_result_t __xecall
   xeHostWaitOnMultipleEvents(
     uint32_t numEvents,                             ///< [in] number of events pointed to by phEvents
@@ -371,11 +369,11 @@ xe_result_t __xecall
 /// @returns
 ///     - ::XE_RESULT_SUCCESS
 ///     - ::XE_RESULT_ERROR_UNINITIALIZED
+///     - ::XE_RESULT_ERROR_INVALID_PARAMETER
+///         + nullptr == hEvent
 ///     - ::XE_RESULT_ERROR_UNSUPPORTED
 ///     - ::XE_RESULT_NOT_READY
 ///         + not signaled
-///     - ::XE_RESULT_ERROR_INVALID_PARAMETER
-///         + invalid handle for hEvent
 xe_result_t __xecall
   xeEventQueryStatus(
     xe_event_handle_t hEvent                        ///< [in] handle of the event
@@ -395,12 +393,12 @@ xe_result_t __xecall
 /// @returns
 ///     - ::XE_RESULT_SUCCESS
 ///     - ::XE_RESULT_ERROR_UNINITIALIZED
-///     - ::XE_RESULT_ERROR_UNSUPPORTED
 ///     - ::XE_RESULT_ERROR_INVALID_PARAMETER
-///         + invalid handle for hEventStart
-///         + invalid handle for hEventEnd
+///         + nullptr == hEventStart
+///         + nullptr == hEventEnd
+///         + nullptr == pTime
 ///         + either event not signaled by device
-///         + nullptr for pTime
+///     - ::XE_RESULT_ERROR_UNSUPPORTED
 xe_result_t __xecall
   xeEventQueryElapsedTime(
     xe_event_handle_t hEventStart,                  ///< [in] handle of the event
@@ -423,10 +421,10 @@ xe_result_t __xecall
 /// @returns
 ///     - ::XE_RESULT_SUCCESS
 ///     - ::XE_RESULT_ERROR_UNINITIALIZED
-///     - ::XE_RESULT_ERROR_UNSUPPORTED
 ///     - ::XE_RESULT_ERROR_INVALID_PARAMETER
-///         + invalid handle for hCommandList
-///         + invalid handle for hEvent
+///         + nullptr == hCommandList
+///         + nullptr == hEvent
+///     - ::XE_RESULT_ERROR_UNSUPPORTED
 xe_result_t __xecall
   xeCommandListEncodeEventReset(
     xe_command_list_handle_t hCommandList,          ///< [in] handle of the command list
@@ -447,9 +445,9 @@ xe_result_t __xecall
 /// @returns
 ///     - ::XE_RESULT_SUCCESS
 ///     - ::XE_RESULT_ERROR_UNINITIALIZED
-///     - ::XE_RESULT_ERROR_UNSUPPORTED
 ///     - ::XE_RESULT_ERROR_INVALID_PARAMETER
-///         + invalid handle for hEvent
+///         + nullptr == hEvent
+///     - ::XE_RESULT_ERROR_UNSUPPORTED
 xe_result_t __xecall
   xeEventReset(
     xe_event_handle_t hEvent                        ///< [in] handle of the event

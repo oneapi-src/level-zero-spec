@@ -16,6 +16,3 @@ params:
     - type: $x_command_list_handle_t
       name: hCommandList
       desc: "[in] handle of the command list"
-returns:
-    - $X_RESULT_ERROR_INVALID_PARAMETER:
-        - "invalid handle for hCommandList"

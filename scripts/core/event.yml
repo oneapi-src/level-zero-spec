@@ -57,10 +57,6 @@ params:
       name: phEvent
       desc: "[out] pointer to handle of event object created"
 returns:
-    - $X_RESULT_ERROR_INVALID_PARAMETER:
-        - "invalid handle for hDevice"
-        - "nullptr for desc"
-        - "nullptr for phEvent"
     - $X_RESULT_ERROR_OUT_OF_HOST_MEMORY
     - $X_RESULT_ERROR_OUT_OF_DEVICE_MEMORY
 --- #--------------------------------------------------------------------------
@@ -86,11 +82,6 @@ params:
       name: phEvent
       desc: "[out] pointer to handle of event object created"
 returns:
-    - $X_RESULT_ERROR_INVALID_PARAMETER:
-        - "invalid handle for hDevice"
-        - "nullptr for desc"
-        - "nullptr for ptr"
-        - "nullptr for phEvent"
     - $X_RESULT_ERROR_OUT_OF_HOST_MEMORY
 --- #--------------------------------------------------------------------------
 type: function
@@ -109,9 +100,6 @@ params:
     - type: $x_event_handle_t
       name: hEvent
       desc: "[in] handle of event object to destroy"
-returns:
-     - $X_RESULT_ERROR_INVALID_PARAMETER:
-         - "invalid handle for hEvent"
 --- #--------------------------------------------------------------------------
 type: function
 desc: "Encodes a signal of the event from the device into a command list."
@@ -131,10 +119,6 @@ params:
     - type: $x_event_handle_t
       name: hEvent
       desc: "[in] handle of the event"
-returns:
-    - $X_RESULT_ERROR_INVALID_PARAMETER:
-        - "invalid handle for hCommandList"
-        - "invalid handle for hEvent"
 --- #--------------------------------------------------------------------------
 type: function
 desc: "Encodes a wait on event from a host signal into a command list."
@@ -150,10 +134,6 @@ params:
     - type: $x_event_handle_t
       name: hEvent
       desc: "[in] handle of the event"
-returns:
-    - $X_RESULT_ERROR_INVALID_PARAMETER:
-        - "invalid handle for hCommandList"
-        - "invalid handle for hEvent"
 --- #--------------------------------------------------------------------------
 type: function
 desc: "Encodes signals of multiple event from the device into a command list."
@@ -172,11 +152,6 @@ params:
     - type: "$x_event_handle_t*"
       name: phEvents
       desc: "[in] pointer to array of handles of the events"
-returns:
-    - $X_RESULT_ERROR_INVALID_PARAMETER:
-        - "invalid handle for hCommandList"
-        - "nullptr for phEvents"
-        - "invalid handle in phEvents"
 --- #--------------------------------------------------------------------------
 type: function
 desc: "Encodes waits on multiple event from a host signal into a command list."
@@ -195,11 +170,6 @@ params:
     - type: "$x_event_handle_t*"
       name: phEvents
       desc: "[in] pointer to array of handles of the events"
-returns:
-    - $X_RESULT_ERROR_INVALID_PARAMETER:
-        - "invalid handle for hCommandList"
-        - "nullptr for phEvents"
-        - "invalid handle in phEvents"
 --- #--------------------------------------------------------------------------
 type: function
 desc: "Signals a event from host."
@@ -214,9 +184,6 @@ params:
     - type: $x_event_handle_t
       name: hEvent
       desc: "[in] handle of the event"
-returns:
-    - $X_RESULT_ERROR_INVALID_PARAMETER:
-        - "invalid handle for hEvent"
 --- #--------------------------------------------------------------------------
 type: function
 desc: "The current host thread waits on an event from a device signal."
@@ -251,8 +218,6 @@ params:
 returns:
     - $X_RESULT_NOT_READY:
        - "timeout expired"
-    - $X_RESULT_ERROR_INVALID_PARAMETER:
-        - "invalid handle for hEvent"
 --- #--------------------------------------------------------------------------
 type: function
 desc: "Signals multiple events from host."
@@ -268,10 +233,6 @@ params:
     - type: "$x_event_handle_t*"
       name: phEvents
       desc: "[in] pointer to array of handles of the events"
-returns:
-    - $X_RESULT_ERROR_INVALID_PARAMETER:
-        - "nullptr for phEvents"
-        - "invalid handle in phEvents"
 --- #--------------------------------------------------------------------------
 type: function
 desc: "The current host thread waits on multiple events from a device signal."
@@ -308,9 +269,6 @@ params:
 returns:
     - $X_RESULT_NOT_READY:
        - "timeout expired"
-    - $X_RESULT_ERROR_INVALID_PARAMETER:
-        - "nullptr for phEvents"
-        - "invalid handle in phEvents"
 --- #--------------------------------------------------------------------------
 type: function
 desc: "Queries an event object's status."
@@ -330,8 +288,6 @@ params:
 returns:
     - $X_RESULT_NOT_READY:
         - not signaled
-    - $X_RESULT_ERROR_INVALID_PARAMETER:
-        - "invalid handle for hEvent"
 --- #--------------------------------------------------------------------------
 type: function
 desc: "Queries the elapsed time between two device-signaled events."
@@ -354,10 +310,7 @@ params:
       desc: "[out] time in milliseconds"
 returns:
     - $X_RESULT_ERROR_INVALID_PARAMETER:
-        - "invalid handle for hEventStart"
-        - "invalid handle for hEventEnd"
         - "either event not signaled by device"
-        - "nullptr for pTime"
 --- #--------------------------------------------------------------------------
 type: function
 desc: "Reset an event back to not signaled state"
@@ -375,10 +328,6 @@ params:
     - type: $x_event_handle_t
       name: hEvent
       desc: "[in] handle of the event"
-returns:
-    - $X_RESULT_ERROR_INVALID_PARAMETER:
-        - "invalid handle for hCommandList"
-        - "invalid handle for hEvent"
 --- #--------------------------------------------------------------------------
 type: function
 desc: "Reset an event back to not signaled state"
@@ -393,6 +342,3 @@ params:
     - type: $x_event_handle_t
       name: hEvent
       desc: "[in] handle of the event"
-returns:
-    - $X_RESULT_ERROR_INVALID_PARAMETER:
-        - "invalid handle for hEvent"

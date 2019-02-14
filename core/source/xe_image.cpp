@@ -46,10 +46,12 @@
 /// @returns
 ///     - ::XE_RESULT_SUCCESS
 ///     - ::XE_RESULT_ERROR_UNINITIALIZED
-///     - ::XE_RESULT_ERROR_UNSUPPORTED
 ///     - ::XE_RESULT_ERROR_INVALID_PARAMETER
-///         + nullptr for desc
-///         + nullptr for phImage
+///         + nullptr == hDevice
+///         + nullptr == desc
+///         + nullptr == phImage
+///     - ::XE_RESULT_ERROR_UNSUPPORTED
+///         + ::XE_IMAGE_DESC_VERSION <= desc->version
 ///     - ::XE_RESULT_ERROR_OUT_OF_HOST_MEMORY
 ///     - ::XE_RESULT_ERROR_OUT_OF_DEVICE_MEMORY
 /*@todo: __declspec(dllexport)*/
@@ -63,10 +65,10 @@ xe_result_t __xecall
     // @todo: check_return(nullptr == get_driver(), XE_RESULT_ERROR_UNINITIALIZED);
 
     // Check parameters
-    // @todo: check_return(xe_device_handle_t() == hDevice, XE_RESULT_ERROR_INVALID_PARAMETER);
+    // @todo: check_return(nullptr == hDevice, XE_RESULT_ERROR_INVALID_PARAMETER);
     // @todo: check_return(nullptr == desc, XE_RESULT_ERROR_INVALID_PARAMETER);
-    // @todo: check_return(XE_IMAGE_DESC_VERSION <= desc->version, XE_RESULT_ERROR_UNSUPPORTED);
     // @todo: check_return(nullptr == phImage, XE_RESULT_ERROR_INVALID_PARAMETER);
+    // @todo: check_return(XE_IMAGE_DESC_VERSION <= desc->version, XE_RESULT_ERROR_UNSUPPORTED);
 
     // @todo: insert <code> here
 
@@ -86,9 +88,9 @@ xe_result_t __xecall
 /// @returns
 ///     - ::XE_RESULT_SUCCESS
 ///     - ::XE_RESULT_ERROR_UNINITIALIZED
-///     - ::XE_RESULT_ERROR_UNSUPPORTED
 ///     - ::XE_RESULT_ERROR_INVALID_PARAMETER
-///         + invalid handle for hImage
+///         + nullptr == hImage
+///     - ::XE_RESULT_ERROR_UNSUPPORTED
 /*@todo: __declspec(dllexport)*/
 xe_result_t __xecall
   xeImageDestroy(
@@ -98,7 +100,7 @@ xe_result_t __xecall
     // @todo: check_return(nullptr == get_driver(), XE_RESULT_ERROR_UNINITIALIZED);
 
     // Check parameters
-    // @todo: check_return(xe_image_handle_t() == hImage, XE_RESULT_ERROR_INVALID_PARAMETER);
+    // @todo: check_return(nullptr == hImage, XE_RESULT_ERROR_INVALID_PARAMETER);
 
     // @todo: insert <code> here
 

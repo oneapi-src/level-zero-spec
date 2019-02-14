@@ -43,11 +43,12 @@
 /// @returns
 ///     - ::XE_RESULT_SUCCESS
 ///     - ::XE_RESULT_ERROR_UNINITIALIZED
-///     - ::XE_RESULT_ERROR_UNSUPPORTED
 ///     - ::XE_RESULT_ERROR_INVALID_PARAMETER
-///         + invalid handle for hDevice
-///         + nullptr for desc
-///         + nullptr for phCommandGraph
+///         + nullptr == hDevice
+///         + nullptr == desc
+///         + nullptr == phCommandGraph
+///     - ::XE_RESULT_ERROR_UNSUPPORTED
+///         + ::XE_COMMAND_GRAPH_DESC_VERSION <= desc->version
 ///     - ::XE_RESULT_ERROR_OUT_OF_HOST_MEMORY
 ///     - ::XE_RESULT_ERROR_OUT_OF_DEVICE_MEMORY
 /*@todo: __declspec(dllexport)*/
@@ -61,10 +62,10 @@ xe_result_t __xecall
     // @todo: check_return(nullptr == get_driver(), XE_RESULT_ERROR_UNINITIALIZED);
 
     // Check parameters
-    // @todo: check_return(xe_device_handle_t() == hDevice, XE_RESULT_ERROR_INVALID_PARAMETER);
+    // @todo: check_return(nullptr == hDevice, XE_RESULT_ERROR_INVALID_PARAMETER);
     // @todo: check_return(nullptr == desc, XE_RESULT_ERROR_INVALID_PARAMETER);
-    // @todo: check_return(XE_COMMAND_GRAPH_DESC_VERSION <= desc->version, XE_RESULT_ERROR_UNSUPPORTED);
     // @todo: check_return(nullptr == phCommandGraph, XE_RESULT_ERROR_INVALID_PARAMETER);
+    // @todo: check_return(XE_COMMAND_GRAPH_DESC_VERSION <= desc->version, XE_RESULT_ERROR_UNSUPPORTED);
 
     // @todo: insert <code> here
 
@@ -82,9 +83,9 @@ xe_result_t __xecall
 /// @returns
 ///     - ::XE_RESULT_SUCCESS
 ///     - ::XE_RESULT_ERROR_UNINITIALIZED
-///     - ::XE_RESULT_ERROR_UNSUPPORTED
 ///     - ::XE_RESULT_ERROR_INVALID_PARAMETER
-///         + invalid handle for hCommandGraph
+///         + nullptr == hCommandGraph
+///     - ::XE_RESULT_ERROR_UNSUPPORTED
 /*@todo: __declspec(dllexport)*/
 xe_result_t __xecall
   xeCommandGraphDestroy(
@@ -94,7 +95,7 @@ xe_result_t __xecall
     // @todo: check_return(nullptr == get_driver(), XE_RESULT_ERROR_UNINITIALIZED);
 
     // Check parameters
-    // @todo: check_return(xe_command_graph_handle_t() == hCommandGraph, XE_RESULT_ERROR_INVALID_PARAMETER);
+    // @todo: check_return(nullptr == hCommandGraph, XE_RESULT_ERROR_INVALID_PARAMETER);
 
     // @todo: insert <code> here
 
@@ -116,10 +117,12 @@ xe_result_t __xecall
 /// @returns
 ///     - ::XE_RESULT_SUCCESS
 ///     - ::XE_RESULT_ERROR_UNINITIALIZED
-///     - ::XE_RESULT_ERROR_UNSUPPORTED
 ///     - ::XE_RESULT_ERROR_INVALID_PARAMETER
-///         + invalid handle for hCommandGraph
+///         + nullptr == hCommandGraph
+///         + nullptr == hProducerCommandList
+///         + nullptr == hConsumerCommandList
 ///         + hCommandGraph is closed
+///     - ::XE_RESULT_ERROR_UNSUPPORTED
 /*@todo: __declspec(dllexport)*/
 xe_result_t __xecall
   xeCommandGraphAddEdge(
@@ -131,9 +134,9 @@ xe_result_t __xecall
     // @todo: check_return(nullptr == get_driver(), XE_RESULT_ERROR_UNINITIALIZED);
 
     // Check parameters
-    // @todo: check_return(xe_command_graph_handle_t() == hCommandGraph, XE_RESULT_ERROR_INVALID_PARAMETER);
-    // @todo: check_return(xe_command_list_handle_t() == hProducerCommandList, XE_RESULT_ERROR_INVALID_PARAMETER);
-    // @todo: check_return(xe_command_list_handle_t() == hConsumerCommandList, XE_RESULT_ERROR_INVALID_PARAMETER);
+    // @todo: check_return(nullptr == hCommandGraph, XE_RESULT_ERROR_INVALID_PARAMETER);
+    // @todo: check_return(nullptr == hProducerCommandList, XE_RESULT_ERROR_INVALID_PARAMETER);
+    // @todo: check_return(nullptr == hConsumerCommandList, XE_RESULT_ERROR_INVALID_PARAMETER);
 
     // @todo: insert <code> here
 
@@ -151,10 +154,12 @@ xe_result_t __xecall
 /// @returns
 ///     - ::XE_RESULT_SUCCESS
 ///     - ::XE_RESULT_ERROR_UNINITIALIZED
-///     - ::XE_RESULT_ERROR_UNSUPPORTED
 ///     - ::XE_RESULT_ERROR_INVALID_PARAMETER
-///         + invalid handle for hCommandGraph
+///         + nullptr == hCommandGraph
+///         + nullptr == hProducerCommandList
+///         + nullptr == hConsumerCommandList
 ///         + hCommandGraph is closed
+///     - ::XE_RESULT_ERROR_UNSUPPORTED
 /*@todo: __declspec(dllexport)*/
 xe_result_t __xecall
   xeCommandGraphRemoveEdge(
@@ -166,9 +171,9 @@ xe_result_t __xecall
     // @todo: check_return(nullptr == get_driver(), XE_RESULT_ERROR_UNINITIALIZED);
 
     // Check parameters
-    // @todo: check_return(xe_command_graph_handle_t() == hCommandGraph, XE_RESULT_ERROR_INVALID_PARAMETER);
-    // @todo: check_return(xe_command_list_handle_t() == hProducerCommandList, XE_RESULT_ERROR_INVALID_PARAMETER);
-    // @todo: check_return(xe_command_list_handle_t() == hConsumerCommandList, XE_RESULT_ERROR_INVALID_PARAMETER);
+    // @todo: check_return(nullptr == hCommandGraph, XE_RESULT_ERROR_INVALID_PARAMETER);
+    // @todo: check_return(nullptr == hProducerCommandList, XE_RESULT_ERROR_INVALID_PARAMETER);
+    // @todo: check_return(nullptr == hConsumerCommandList, XE_RESULT_ERROR_INVALID_PARAMETER);
 
     // @todo: insert <code> here
 
@@ -189,9 +194,9 @@ xe_result_t __xecall
 /// @returns
 ///     - ::XE_RESULT_SUCCESS
 ///     - ::XE_RESULT_ERROR_UNINITIALIZED
-///     - ::XE_RESULT_ERROR_UNSUPPORTED
 ///     - ::XE_RESULT_ERROR_INVALID_PARAMETER
-///         + invalid handle for hCommandGraph
+///         + nullptr == hCommandGraph
+///     - ::XE_RESULT_ERROR_UNSUPPORTED
 /*@todo: __declspec(dllexport)*/
 xe_result_t __xecall
   xeCommandGraphClose(
@@ -201,7 +206,7 @@ xe_result_t __xecall
     // @todo: check_return(nullptr == get_driver(), XE_RESULT_ERROR_UNINITIALIZED);
 
     // Check parameters
-    // @todo: check_return(xe_command_graph_handle_t() == hCommandGraph, XE_RESULT_ERROR_INVALID_PARAMETER);
+    // @todo: check_return(nullptr == hCommandGraph, XE_RESULT_ERROR_INVALID_PARAMETER);
 
     // @todo: insert <code> here
 
@@ -220,9 +225,9 @@ xe_result_t __xecall
 /// @returns
 ///     - ::XE_RESULT_SUCCESS
 ///     - ::XE_RESULT_ERROR_UNINITIALIZED
-///     - ::XE_RESULT_ERROR_UNSUPPORTED
 ///     - ::XE_RESULT_ERROR_INVALID_PARAMETER
-///         + invalid handle for hCommandGraph
+///         + nullptr == hCommandGraph
+///     - ::XE_RESULT_ERROR_UNSUPPORTED
 /*@todo: __declspec(dllexport)*/
 xe_result_t __xecall
   xeCommandGraphReset(
@@ -232,7 +237,7 @@ xe_result_t __xecall
     // @todo: check_return(nullptr == get_driver(), XE_RESULT_ERROR_UNINITIALIZED);
 
     // Check parameters
-    // @todo: check_return(xe_command_graph_handle_t() == hCommandGraph, XE_RESULT_ERROR_INVALID_PARAMETER);
+    // @todo: check_return(nullptr == hCommandGraph, XE_RESULT_ERROR_INVALID_PARAMETER);
 
     // @todo: insert <code> here
 
@@ -249,11 +254,11 @@ xe_result_t __xecall
 /// @returns
 ///     - ::XE_RESULT_SUCCESS
 ///     - ::XE_RESULT_ERROR_UNINITIALIZED
-///     - ::XE_RESULT_ERROR_UNSUPPORTED
 ///     - ::XE_RESULT_ERROR_INVALID_PARAMETER
-///         + invalid handle for hCommandGraph
-///         + nullptr for pNumBatches
+///         + nullptr == hCommandGraph
+///         + nullptr == pNumBatches
 ///         + hCommandGraph is not closed
+///     - ::XE_RESULT_ERROR_UNSUPPORTED
 /*@todo: __declspec(dllexport)*/
 xe_result_t __xecall
   xeCommandGraphGetComputeBatchCount(
@@ -264,7 +269,7 @@ xe_result_t __xecall
     // @todo: check_return(nullptr == get_driver(), XE_RESULT_ERROR_UNINITIALIZED);
 
     // Check parameters
-    // @todo: check_return(xe_command_graph_handle_t() == hCommandGraph, XE_RESULT_ERROR_INVALID_PARAMETER);
+    // @todo: check_return(nullptr == hCommandGraph, XE_RESULT_ERROR_INVALID_PARAMETER);
     // @todo: check_return(nullptr == pNumBatches, XE_RESULT_ERROR_INVALID_PARAMETER);
 
     // @todo: insert <code> here
@@ -282,14 +287,13 @@ xe_result_t __xecall
 /// @returns
 ///     - ::XE_RESULT_SUCCESS
 ///     - ::XE_RESULT_ERROR_UNINITIALIZED
-///     - ::XE_RESULT_ERROR_UNSUPPORTED
 ///     - ::XE_RESULT_ERROR_INVALID_PARAMETER
-///         + invalid handle for hCommandGraph
+///         + nullptr == hCommandGraph
+///         + nullptr == pCommandQueueIndex
+///         + nullptr == pNumCommandLists
+///         + nullptr == pphCommandLists
 ///         + hCommandGraph is not closed
-///         + invalid value for batchIndex
-///         + nullptr for pCommandQueueIndex
-///         + nullptr for pNumCommandLists
-///         + nullptr for pphCommandLists
+///     - ::XE_RESULT_ERROR_UNSUPPORTED
 /*@todo: __declspec(dllexport)*/
 xe_result_t __xecall
   xeCommandGraphGetComputeCommandListBatch(
@@ -303,7 +307,7 @@ xe_result_t __xecall
     // @todo: check_return(nullptr == get_driver(), XE_RESULT_ERROR_UNINITIALIZED);
 
     // Check parameters
-    // @todo: check_return(xe_command_graph_handle_t() == hCommandGraph, XE_RESULT_ERROR_INVALID_PARAMETER);
+    // @todo: check_return(nullptr == hCommandGraph, XE_RESULT_ERROR_INVALID_PARAMETER);
     // @todo: check_return(nullptr == pCommandQueueIndex, XE_RESULT_ERROR_INVALID_PARAMETER);
     // @todo: check_return(nullptr == pNumCommandLists, XE_RESULT_ERROR_INVALID_PARAMETER);
     // @todo: check_return(nullptr == pphCommandLists, XE_RESULT_ERROR_INVALID_PARAMETER);
@@ -323,11 +327,11 @@ xe_result_t __xecall
 /// @returns
 ///     - ::XE_RESULT_SUCCESS
 ///     - ::XE_RESULT_ERROR_UNINITIALIZED
-///     - ::XE_RESULT_ERROR_UNSUPPORTED
 ///     - ::XE_RESULT_ERROR_INVALID_PARAMETER
-///         + invalid handle for hCommandGraph
-///         + nullptr for pNumBatches
+///         + nullptr == hCommandGraph
+///         + nullptr == pNumBatches
 ///         + hCommandGraph is not closed
+///     - ::XE_RESULT_ERROR_UNSUPPORTED
 /*@todo: __declspec(dllexport)*/
 xe_result_t __xecall
   xeCommandGraphGetCopyBatchCount(
@@ -338,7 +342,7 @@ xe_result_t __xecall
     // @todo: check_return(nullptr == get_driver(), XE_RESULT_ERROR_UNINITIALIZED);
 
     // Check parameters
-    // @todo: check_return(xe_command_graph_handle_t() == hCommandGraph, XE_RESULT_ERROR_INVALID_PARAMETER);
+    // @todo: check_return(nullptr == hCommandGraph, XE_RESULT_ERROR_INVALID_PARAMETER);
     // @todo: check_return(nullptr == pNumBatches, XE_RESULT_ERROR_INVALID_PARAMETER);
 
     // @todo: insert <code> here
@@ -357,14 +361,14 @@ xe_result_t __xecall
 /// @returns
 ///     - ::XE_RESULT_SUCCESS
 ///     - ::XE_RESULT_ERROR_UNINITIALIZED
-///     - ::XE_RESULT_ERROR_UNSUPPORTED
 ///     - ::XE_RESULT_ERROR_INVALID_PARAMETER
-///         + invalid handle for hCommandGraph
+///         + nullptr == hCommandGraph
+///         + nullptr == pCommandQueueIndex
+///         + nullptr == pNumCommandLists
+///         + nullptr == pphCommandLists
 ///         + hCommandGraph is not closed
-///         + invalid value for batchIndex
-///         + nullptr for pCommandQueueIndex
-///         + nullptr for pNumCommandLists
-///         + nullptr for pphCommandLists
+///         + batchIndex is out of range
+///     - ::XE_RESULT_ERROR_UNSUPPORTED
 /*@todo: __declspec(dllexport)*/
 xe_result_t __xecall
   xeCommandGraphGetCopyCommandListBatch(
@@ -378,7 +382,7 @@ xe_result_t __xecall
     // @todo: check_return(nullptr == get_driver(), XE_RESULT_ERROR_UNINITIALIZED);
 
     // Check parameters
-    // @todo: check_return(xe_command_graph_handle_t() == hCommandGraph, XE_RESULT_ERROR_INVALID_PARAMETER);
+    // @todo: check_return(nullptr == hCommandGraph, XE_RESULT_ERROR_INVALID_PARAMETER);
     // @todo: check_return(nullptr == pCommandQueueIndex, XE_RESULT_ERROR_INVALID_PARAMETER);
     // @todo: check_return(nullptr == pNumCommandLists, XE_RESULT_ERROR_INVALID_PARAMETER);
     // @todo: check_return(nullptr == pphCommandLists, XE_RESULT_ERROR_INVALID_PARAMETER);

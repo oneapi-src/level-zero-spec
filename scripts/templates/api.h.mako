@@ -46,6 +46,7 @@ from templates import helper as th
 %endif
 
 %for obj in objects:
+%for cls in th.get_class_list(obj):
 ///////////////////////////////////////////////////////////////////////////////
 %if 'condition' in obj:
 #if ${th.subx(x,obj['condition'])}
@@ -67,7 +68,7 @@ from templates import helper as th
 %elif re.match(r"typedef", obj['type']):
 %if 'params' in obj:
 typedef ${obj['returns']}(__${x}call *${th.subx(x, obj['name'])})(
-  %for line in th.make_param_lines(x, obj):
+  %for line in th.make_param_lines(x, obj, cls):
   ${line}
   %endfor
   );
@@ -95,12 +96,12 @@ typedef struct _${th.subx(x, obj['name'])}
 ## FUNCTION ###################################################################
 %elif re.match(r"function", obj['type']):
 /// 
-%for line in th.make_return_lines(x, obj):
+%for line in th.make_return_lines(x, obj, cls):
 /// ${line}
 %endfor
 ${x}_result_t __${x}call
-  ${th.make_func_name(x, obj)}(
-    %for line in th.make_param_lines(x, obj):
+  ${th.make_func_name(x, obj, cls)}(
+    %for line in th.make_param_lines(x, obj, cls):
     ${line}
     %endfor
     );
@@ -112,5 +113,6 @@ typedef struct _${th.subx(x, obj['name'])} *${th.subx(x, obj['name'])};
 #endif // ${th.subx(x,obj['condition'])}
 %endif
 
+%endfor
 %endfor
 #endif // _${X}_${name.upper()}_H

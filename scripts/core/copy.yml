@@ -29,10 +29,6 @@ params:
     - type: size_t
       name: size
       desc: "[in] size in bytes to copy"
-returns:
-    - $X_RESULT_ERROR_INVALID_PARAMETER:
-        - "nullptr for dstptr"
-        - "nullptr for srcptr"
 --- #--------------------------------------------------------------------------
 type: function
 desc: "Copies a image."
@@ -53,10 +49,6 @@ params:
     - type: $x_image_handle_t
       name: hSrcImage
       desc: "[in] handle of source image to copy from"
-returns:
-    - $X_RESULT_ERROR_INVALID_PARAMETER:
-        - "invalid handle for hDstImage"
-        - "invalid handle for hSrcImage"
 --- #--------------------------------------------------------------------------
 type: struct
 desc: "Region descriptor"
@@ -92,10 +84,6 @@ params:
     - type: "$x_image_region_t*"
       name: pSrcRegion
       desc: "[in][optional] source region descriptor"
-returns:
-    - $X_RESULT_ERROR_INVALID_PARAMETER:
-        - "invalid handle for hDstImage"
-        - "invalid handle for hSrcImage"
 --- #--------------------------------------------------------------------------
 type: function
 desc: "Copies from a image to device or shared memory."
@@ -121,10 +109,6 @@ params:
     - type: "$x_image_region_t*"
       name: pSrcRegion
       desc: "[in][optional] source region descriptor"
-returns:
-    - $X_RESULT_ERROR_INVALID_PARAMETER:
-        - "nullptr for dstptr"
-        - "invalid handle for hSrcImage"
 --- #--------------------------------------------------------------------------
 type: function
 desc: "Copies to a image from device or shared memory."
@@ -150,10 +134,6 @@ params:
     - type: "void*"
       name: srcptr
       desc: "[in] pointer to source memory to copy from"
-returns:
-    - $X_RESULT_ERROR_INVALID_PARAMETER:
-        - "invalid handle for hDstImage"
-        - "nullptr for srcptr"
 --- #--------------------------------------------------------------------------
 type: function
 desc: "Asynchronously prefetches shared memory to the device associated with
@@ -180,9 +160,6 @@ params:
     - type: "size_t"
       name: count
       desc: "[in] size in bytes of the memory region to prefetch"
-returns:
-    - $X_RESULT_ERROR_INVALID_PARAMETER:
-        - "invalid pointer"
 --- #--------------------------------------------------------------------------
 type: enum
 desc: "Supported memory advice hints"
@@ -243,6 +220,4 @@ params:
       desc: "[in] Memory advice for the memory range"
 returns:
     - $X_RESULT_ERROR_INVALID_PARAMETER:
-        - "invalid handle for hDevice"
-        - "invalid pointer"
-        - "invalid advice"
+        - "invalid value for advice"
