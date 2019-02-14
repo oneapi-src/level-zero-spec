@@ -728,14 +728,18 @@ The ::${x}DeviceCreateModule function can optionally generate a build log object
 ```c
     ...
     ${x}_module_build_log_handle_t buildlog;
-    ${x}DeviceCreateModule(hDevice, &desc, &module, &buildlog);
+    ${x}_result_t result = ${x}DeviceCreateModule(hDevice, &desc, &module, &buildlog);
 
-    uint32_t buildlogSize;
-    char* pBuildLogString;
-    ${x}ModuleBuildLogGetString(buildlog, &buildlogSize, &pBuildLogString);
+    // Only save build logs for module creation errors.
+    if (result != ${X}_RESULT_SUCESS)
+    {
+        uint32_t buildlogSize;
+        char* pBuildLogString;
+        result = ${x}ModuleBuildLogGetString(buildlog, &buildlogSize, &pBuildLogString);
 
-    // Save log to disk.
-    ...
+        // Save log to disk.
+        ...
+    }
 
     ${x}ModuleBuildLogDestroy(buildlog);
 ```
@@ -761,6 +765,10 @@ responsibility of the application to implement this using ::${x}ModuleGetNativeB
 ```
 Also, note that the native binary will retain all debug information that is associated with the module. This allows debug
 capabilities for modules that are created from native binaries.
+
+${"###"} Built-in Functions
+Built-in functions are not supported but can be implemented by an upper level runtime or library using the native binary
+interface.
 
 ${"##"} <a name="func">Functions</a>
 Functions are immutable references to functions within a module.

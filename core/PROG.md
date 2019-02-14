@@ -728,14 +728,18 @@ The ::xeDeviceCreateModule function can optionally generate a build log object :
 ```c
     ...
     xe_module_build_log_handle_t buildlog;
-    xeDeviceCreateModule(hDevice, &desc, &module, &buildlog);
+    xe_result_t result = xeDeviceCreateModule(hDevice, &desc, &module, &buildlog);
 
-    uint32_t buildlogSize;
-    char* pBuildLogString;
-    xeModuleBuildLogGetString(buildlog, &buildlogSize, &pBuildLogString);
+    // Only save build logs for module creation errors.
+    if (result != XE_RESULT_SUCESS)
+    {
+        uint32_t buildlogSize;
+        char* pBuildLogString;
+        result = xeModuleBuildLogGetString(buildlog, &buildlogSize, &pBuildLogString);
 
-    // Save log to disk.
-    ...
+        // Save log to disk.
+        ...
+    }
 
     xeModuleBuildLogDestroy(buildlog);
 ```
@@ -761,6 +765,10 @@ responsibility of the application to implement this using ::xeModuleGetNativeBin
 ```
 Also, note that the native binary will retain all debug information that is associated with the module. This allows debug
 capabilities for modules that are created from native binaries.
+
+### Built-in Functions
+Built-in functions are not supported but can be implemented by an upper level runtime or library using the native binary
+interface.
 
 ## <a name="func">Functions</a>
 Functions are immutable references to functions within a module.

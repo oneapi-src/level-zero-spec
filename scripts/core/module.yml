@@ -76,6 +76,8 @@ returns:
         - "0 for desc->inputSize"
     - $X_RESULT_ERROR_OUT_OF_HOST_MEMORY
     - $X_RESULT_ERROR_OUT_OF_DEVICE_MEMORY
+    - $X_RESULT_ERROR_CREATE_FAILURE
+        - "Failure to create module. See build log for more details."
     
 --- #--------------------------------------------------------------------------
 type: function
@@ -417,7 +419,7 @@ params:
     - type: "$x_function_args_handle_t"
       name: hFunctionArgs
       desc: "[in] handle to function arguments buffer."
-    - type: "$x_dispatch_function_arguments_t*"
+    - type: "const $x_dispatch_function_arguments_t*"
       name: pDispatchFuncArgs
       desc: "[in] dispatch function arguments."
     - type: $x_event_handle_t
