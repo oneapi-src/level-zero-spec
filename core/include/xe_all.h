@@ -33,20 +33,20 @@
 #pragma once
 #endif
 
-#include "xe_barrier.h"
-#include "xe_cl_interop.h"
-#include "xe_cmdgraph.h"
-#include "xe_cmdlist.h"
-#include "xe_cmdqueue.h"
-#include "xe_copy.h"
-#include "xe_device.h"
-#include "xe_driver.h"
 #include "xe_event.h"
-#include "xe_fence.h"
-#include "xe_image.h"
-#include "xe_memory.h"
-#include "xe_module.h"
-#include "xe_residency.h"
 #include "xe_semaphore.h"
+#include "xe_cmdqueue.h"
+#include "xe_memory.h"
+#include "xe_image.h"
+#include "xe_cmdgraph.h"
+#include "xe_device.h"
+#include "xe_module.h"
+#include "xe_copy.h"
+#include "xe_cl_interop.h"
+#include "xe_fence.h"
+#include "xe_cmdlist.h"
+#include "xe_driver.h"
+#include "xe_residency.h"
+#include "xe_barrier.h"
 
 #endif // _XE_ALL_H

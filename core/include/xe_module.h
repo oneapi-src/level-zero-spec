@@ -92,6 +92,11 @@ typedef struct _xe_module_desc_t
 ///     - ::XE_RESULT_SUCCESS
 ///     - ::XE_RESULT_ERROR_UNINITIALIZED
 ///     - ::XE_RESULT_ERROR_DEVICE_LOST
+///     - ::XE_RESULT_ERROR_OUT_OF_HOST_MEMORY
+///     - ::XE_RESULT_ERROR_MODULE_BUILD_FAILURE - "Failure to build module. See build log for more details."
+///     - ::XE_RESULT_ERROR_OUT_OF_DEVICE_MEMORY
+///     - ::XE_RESULT_ERROR_UNSUPPORTED
+///         + ::XE_MODULE_DESC_VERSION <= desc->version
 ///     - ::XE_RESULT_ERROR_INVALID_PARAMETER
 ///         + nullptr == hDevice
 ///         + nullptr == desc
@@ -100,11 +105,6 @@ typedef struct _xe_module_desc_t
 ///         + nullptr for desc->pInputModule
 ///         + nullptr for desc->phModule
 ///         + 0 for desc->inputSize
-///     - ::XE_RESULT_ERROR_UNSUPPORTED
-///         + ::XE_MODULE_DESC_VERSION <= desc->version
-///     - ::XE_RESULT_ERROR_OUT_OF_HOST_MEMORY
-///     - ::XE_RESULT_ERROR_OUT_OF_DEVICE_MEMORY
-///     - ::XE_RESULT_ERROR_MODULE_BUILD_FAILURE - "Failure to build module. See build log for more details."
 xe_result_t __xecall
   xeDeviceCreateModule(
     xe_device_handle_t hDevice,                     ///< [in] handle of the device
@@ -131,9 +131,9 @@ xe_result_t __xecall
 ///     - ::XE_RESULT_SUCCESS
 ///     - ::XE_RESULT_ERROR_UNINITIALIZED
 ///     - ::XE_RESULT_ERROR_DEVICE_LOST
+///     - ::XE_RESULT_ERROR_UNSUPPORTED
 ///     - ::XE_RESULT_ERROR_INVALID_PARAMETER
 ///         + nullptr == hModule
-///     - ::XE_RESULT_ERROR_UNSUPPORTED
 xe_result_t __xecall
   xeModuleDestroy(
     xe_module_handle_t hModule                      ///< [in] handle of the module
@@ -155,9 +155,9 @@ xe_result_t __xecall
 ///     - ::XE_RESULT_SUCCESS
 ///     - ::XE_RESULT_ERROR_UNINITIALIZED
 ///     - ::XE_RESULT_ERROR_DEVICE_LOST
+///     - ::XE_RESULT_ERROR_UNSUPPORTED
 ///     - ::XE_RESULT_ERROR_INVALID_PARAMETER
 ///         + nullptr == hBuildLog
-///     - ::XE_RESULT_ERROR_UNSUPPORTED
 xe_result_t __xecall
   xeModuleBuildLogDestroy(
     xe_module_build_log_handle_t hBuildLog          ///< [in] handle of the module build log object.
@@ -174,13 +174,13 @@ xe_result_t __xecall
 ///     - ::XE_RESULT_SUCCESS
 ///     - ::XE_RESULT_ERROR_UNINITIALIZED
 ///     - ::XE_RESULT_ERROR_DEVICE_LOST
+///     - ::XE_RESULT_ERROR_OUT_OF_HOST_MEMORY
+///     - ::XE_RESULT_ERROR_OUT_OF_DEVICE_MEMORY
+///     - ::XE_RESULT_ERROR_UNSUPPORTED
 ///     - ::XE_RESULT_ERROR_INVALID_PARAMETER
 ///         + nullptr == hBuildLog
 ///         + nullptr == pSize
 ///         + nullptr == pBuildLog
-///     - ::XE_RESULT_ERROR_UNSUPPORTED
-///     - ::XE_RESULT_ERROR_OUT_OF_HOST_MEMORY
-///     - ::XE_RESULT_ERROR_OUT_OF_DEVICE_MEMORY
 xe_result_t __xecall
   xeModuleBuildLogGetString(
     xe_module_build_log_handle_t hBuildLog,         ///< [in] handle of the module build log object.
@@ -206,15 +206,15 @@ xe_result_t __xecall
 ///     - ::XE_RESULT_SUCCESS
 ///     - ::XE_RESULT_ERROR_UNINITIALIZED
 ///     - ::XE_RESULT_ERROR_DEVICE_LOST
+///     - ::XE_RESULT_ERROR_OUT_OF_HOST_MEMORY
+///     - ::XE_RESULT_ERROR_OUT_OF_DEVICE_MEMORY
+///     - ::XE_RESULT_ERROR_UNSUPPORTED
 ///     - ::XE_RESULT_ERROR_INVALID_PARAMETER
 ///         + nullptr == hModule
 ///         + nullptr == pSize
 ///         + nullptr == pModuleNativeBinary
 ///         + invalid format
 ///         + 0 for inputSize
-///     - ::XE_RESULT_ERROR_UNSUPPORTED
-///     - ::XE_RESULT_ERROR_OUT_OF_HOST_MEMORY
-///     - ::XE_RESULT_ERROR_OUT_OF_DEVICE_MEMORY
 xe_result_t __xecall
   xeModuleGetNativeBinary(
     xe_module_handle_t hModule,                     ///< [in] handle of the device
@@ -261,14 +261,14 @@ typedef struct _xe_function_desc_t
 ///     - ::XE_RESULT_SUCCESS
 ///     - ::XE_RESULT_ERROR_UNINITIALIZED
 ///     - ::XE_RESULT_ERROR_DEVICE_LOST
+///     - ::XE_RESULT_ERROR_UNSUPPORTED
+///         + ::XE_FUNCTION_DESC_VERSION <= desc->version
 ///     - ::XE_RESULT_ERROR_INVALID_PARAMETER
 ///         + nullptr == hModule
 ///         + nullptr == desc
 ///         + nullptr == phFunction
 ///         + nullptr for desc->pFunctionName
 ///         + invalid name for desc->pFunctionName
-///     - ::XE_RESULT_ERROR_UNSUPPORTED
-///         + ::XE_FUNCTION_DESC_VERSION <= desc->version
 xe_result_t __xecall
   xeModuleCreateFunction(
     xe_module_handle_t hModule,                     ///< [in] handle of the module
@@ -290,9 +290,9 @@ xe_result_t __xecall
 ///     - ::XE_RESULT_SUCCESS
 ///     - ::XE_RESULT_ERROR_UNINITIALIZED
 ///     - ::XE_RESULT_ERROR_DEVICE_LOST
+///     - ::XE_RESULT_ERROR_UNSUPPORTED
 ///     - ::XE_RESULT_ERROR_INVALID_PARAMETER
 ///         + nullptr == hFunction
-///     - ::XE_RESULT_ERROR_UNSUPPORTED
 xe_result_t __xecall
   xeFunctionDestroy(
     xe_function_handle_t hFunction                  ///< [in] handle of the function object
@@ -314,10 +314,10 @@ xe_result_t __xecall
 ///     - ::XE_RESULT_SUCCESS
 ///     - ::XE_RESULT_ERROR_UNINITIALIZED
 ///     - ::XE_RESULT_ERROR_DEVICE_LOST
+///     - ::XE_RESULT_ERROR_UNSUPPORTED
 ///     - ::XE_RESULT_ERROR_INVALID_PARAMETER
 ///         + nullptr == hFunction
 ///         + nullptr == phFunctionArgs
-///     - ::XE_RESULT_ERROR_UNSUPPORTED
 xe_result_t __xecall
   xeFunctionCreateFunctionArgs(
     xe_function_handle_t hFunction,                 ///< [in] handle of the function
@@ -338,9 +338,9 @@ xe_result_t __xecall
 ///     - ::XE_RESULT_SUCCESS
 ///     - ::XE_RESULT_ERROR_UNINITIALIZED
 ///     - ::XE_RESULT_ERROR_DEVICE_LOST
+///     - ::XE_RESULT_ERROR_UNSUPPORTED
 ///     - ::XE_RESULT_ERROR_INVALID_PARAMETER
 ///         + nullptr == hFunctionArgs
-///     - ::XE_RESULT_ERROR_UNSUPPORTED
 xe_result_t __xecall
   xeFunctionArgsDestroy(
     xe_function_args_handle_t hFunctionArgs         ///< [in] handle of the function arguments buffer object
@@ -362,12 +362,12 @@ xe_result_t __xecall
 ///     - ::XE_RESULT_SUCCESS
 ///     - ::XE_RESULT_ERROR_UNINITIALIZED
 ///     - ::XE_RESULT_ERROR_DEVICE_LOST
+///     - ::XE_RESULT_ERROR_UNSUPPORTED
 ///     - ::XE_RESULT_ERROR_INVALID_PARAMETER
 ///         + nullptr == hFunctionArgs
 ///         + nullptr == pArgValue
 ///         + invalid argument index
 ///         + invalid size specified
-///     - ::XE_RESULT_ERROR_UNSUPPORTED
 xe_result_t __xecall
   xeFunctionArgsSetValue(
     xe_function_args_handle_t hFunctionArgs,        ///< [in/out] handle of the function args object.
@@ -408,11 +408,11 @@ typedef enum _xe_function_argument_attribute_t
 ///     - ::XE_RESULT_SUCCESS
 ///     - ::XE_RESULT_ERROR_UNINITIALIZED
 ///     - ::XE_RESULT_ERROR_DEVICE_LOST
+///     - ::XE_RESULT_ERROR_UNSUPPORTED
 ///     - ::XE_RESULT_ERROR_INVALID_PARAMETER
 ///         + nullptr == hFunctionArgs
 ///         + invalid value for attr
 ///         + invalid value for value
-///     - ::XE_RESULT_ERROR_UNSUPPORTED
 xe_result_t __xecall
   xeFunctionArgsSetAttribute(
     xe_function_args_handle_t hFunctionArgs,        ///< [in/out] handle of the function args object.
@@ -452,11 +452,11 @@ typedef enum _xe_function_attribute_t
 ///     - ::XE_RESULT_SUCCESS
 ///     - ::XE_RESULT_ERROR_UNINITIALIZED
 ///     - ::XE_RESULT_ERROR_DEVICE_LOST
+///     - ::XE_RESULT_ERROR_UNSUPPORTED
 ///     - ::XE_RESULT_ERROR_INVALID_PARAMETER
 ///         + nullptr == hFunction
 ///         + nullptr == pValue
 ///         + invalid value for attr
-///     - ::XE_RESULT_ERROR_UNSUPPORTED
 xe_result_t __xecall
   xeFunctionQueryAttribute(
     xe_function_handle_t hFunction,                 ///< [in] handle of the function object
@@ -497,6 +497,7 @@ typedef struct _xe_dispatch_function_arguments_t
 ///     - ::XE_RESULT_SUCCESS
 ///     - ::XE_RESULT_ERROR_UNINITIALIZED
 ///     - ::XE_RESULT_ERROR_DEVICE_LOST
+///     - ::XE_RESULT_ERROR_UNSUPPORTED
 ///     - ::XE_RESULT_ERROR_INVALID_PARAMETER
 ///         + nullptr == hCommandList
 ///         + nullptr == hFunction
@@ -504,7 +505,6 @@ typedef struct _xe_dispatch_function_arguments_t
 ///         + nullptr == pDispatchFuncArgs
 ///         + invalid group count range for dispatch
 ///         + invalid dispatch count range for dispatch
-///     - ::XE_RESULT_ERROR_UNSUPPORTED
 xe_result_t __xecall
   xeCommandListEncodeDispatchFunction(
     xe_command_list_handle_t hCommandList,          ///< [in] handle of the command list
@@ -529,6 +529,7 @@ xe_result_t __xecall
 ///     - ::XE_RESULT_SUCCESS
 ///     - ::XE_RESULT_ERROR_UNINITIALIZED
 ///     - ::XE_RESULT_ERROR_DEVICE_LOST
+///     - ::XE_RESULT_ERROR_UNSUPPORTED
 ///     - ::XE_RESULT_ERROR_INVALID_PARAMETER
 ///         + nullptr == hCommandGraph
 ///         + nullptr == hFunction
@@ -536,7 +537,6 @@ xe_result_t __xecall
 ///         + nullptr == pDispatchFuncArgs
 ///         + invalid group count range for dispatch
 ///         + invalid dispatch count range for dispatch
-///     - ::XE_RESULT_ERROR_UNSUPPORTED
 xe_result_t __xecall
   xeCommandGraphEncodeDispatchFunction(
     xe_command_graph_handle_t hCommandGraph,        ///< [in] handle of the command graph
@@ -578,12 +578,12 @@ typedef struct _xe_dispatch_function_indirect_arguments_t
 ///     - ::XE_RESULT_SUCCESS
 ///     - ::XE_RESULT_ERROR_UNINITIALIZED
 ///     - ::XE_RESULT_ERROR_DEVICE_LOST
+///     - ::XE_RESULT_ERROR_UNSUPPORTED
 ///     - ::XE_RESULT_ERROR_INVALID_PARAMETER
 ///         + nullptr == hCommandList
 ///         + nullptr == hFunction
 ///         + nullptr == hFunctionArgs
 ///         + nullptr == pDispatchArgumentsBuffer
-///     - ::XE_RESULT_ERROR_UNSUPPORTED
 xe_result_t __xecall
   xeCommandListEncodeDispatchFunctionIndirect(
     xe_command_list_handle_t hCommandList,          ///< [in] handle of the command list
@@ -612,12 +612,12 @@ xe_result_t __xecall
 ///     - ::XE_RESULT_SUCCESS
 ///     - ::XE_RESULT_ERROR_UNINITIALIZED
 ///     - ::XE_RESULT_ERROR_DEVICE_LOST
+///     - ::XE_RESULT_ERROR_UNSUPPORTED
 ///     - ::XE_RESULT_ERROR_INVALID_PARAMETER
 ///         + nullptr == hCommandGraph
 ///         + nullptr == hFunction
 ///         + nullptr == hFunctionArgs
 ///         + nullptr == pDispatchArgumentsBuffer
-///     - ::XE_RESULT_ERROR_UNSUPPORTED
 xe_result_t __xecall
   xeCommandGraphEncodeDispatchFunctionIndirect(
     xe_command_graph_handle_t hCommandGraph,        ///< [in] handle of the command graph
@@ -640,13 +640,13 @@ xe_result_t __xecall
 ///     - ::XE_RESULT_SUCCESS
 ///     - ::XE_RESULT_ERROR_UNINITIALIZED
 ///     - ::XE_RESULT_ERROR_DEVICE_LOST
+///     - ::XE_RESULT_ERROR_UNSUPPORTED
 ///     - ::XE_RESULT_ERROR_INVALID_PARAMETER
 ///         + nullptr == hFunction
 ///         + nullptr == groupSizeX
 ///         + nullptr == groupSizeY
 ///         + nullptr == groupSizeZ
 ///         + invalid number of threads.
-///     - ::XE_RESULT_ERROR_UNSUPPORTED
 xe_result_t __xecall
   xeFunctionSuggestGroupSize(
     xe_function_handle_t hFunction,                 ///< [in] handle of the function object
@@ -685,10 +685,10 @@ typedef void(__xecall *xe_host_pfn_t)(
 ///     - ::XE_RESULT_SUCCESS
 ///     - ::XE_RESULT_ERROR_UNINITIALIZED
 ///     - ::XE_RESULT_ERROR_DEVICE_LOST
+///     - ::XE_RESULT_ERROR_UNSUPPORTED
 ///     - ::XE_RESULT_ERROR_INVALID_PARAMETER
 ///         + nullptr == hCommandList
 ///         + nullptr == pUserData
-///     - ::XE_RESULT_ERROR_UNSUPPORTED
 xe_result_t __xecall
   xeCommandListEncodeDispatchHostFunction(
     xe_command_list_handle_t hCommandList,          ///< [in] handle of the command list
@@ -712,10 +712,10 @@ xe_result_t __xecall
 ///     - ::XE_RESULT_SUCCESS
 ///     - ::XE_RESULT_ERROR_UNINITIALIZED
 ///     - ::XE_RESULT_ERROR_DEVICE_LOST
+///     - ::XE_RESULT_ERROR_UNSUPPORTED
 ///     - ::XE_RESULT_ERROR_INVALID_PARAMETER
 ///         + nullptr == hCommandGraph
 ///         + nullptr == pUserData
-///     - ::XE_RESULT_ERROR_UNSUPPORTED
 xe_result_t __xecall
   xeCommandGraphEncodeDispatchHostFunction(
     xe_command_graph_handle_t hCommandGraph,        ///< [in] handle of the command graph

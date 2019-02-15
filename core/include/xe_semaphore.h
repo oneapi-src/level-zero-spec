@@ -77,14 +77,14 @@ typedef struct _xe_semaphore_desc_t
 ///     - ::XE_RESULT_SUCCESS
 ///     - ::XE_RESULT_ERROR_UNINITIALIZED
 ///     - ::XE_RESULT_ERROR_DEVICE_LOST
+///     - ::XE_RESULT_ERROR_OUT_OF_HOST_MEMORY
+///     - ::XE_RESULT_ERROR_OUT_OF_DEVICE_MEMORY
+///     - ::XE_RESULT_ERROR_UNSUPPORTED
+///         + ::XE_SEMAPHORE_DESC_VERSION <= desc->version
 ///     - ::XE_RESULT_ERROR_INVALID_PARAMETER
 ///         + nullptr == hDevice
 ///         + nullptr == desc
 ///         + nullptr == phSemaphore
-///     - ::XE_RESULT_ERROR_UNSUPPORTED
-///         + ::XE_SEMAPHORE_DESC_VERSION <= desc->version
-///     - ::XE_RESULT_ERROR_OUT_OF_HOST_MEMORY
-///     - ::XE_RESULT_ERROR_OUT_OF_DEVICE_MEMORY
 xe_result_t __xecall
   xeDeviceCreateSemaphore(
     xe_device_handle_t hDevice,                     ///< [in] handle of the device
@@ -110,9 +110,9 @@ xe_result_t __xecall
 ///     - ::XE_RESULT_SUCCESS
 ///     - ::XE_RESULT_ERROR_UNINITIALIZED
 ///     - ::XE_RESULT_ERROR_DEVICE_LOST
+///     - ::XE_RESULT_ERROR_UNSUPPORTED
 ///     - ::XE_RESULT_ERROR_INVALID_PARAMETER
 ///         + nullptr == hSemaphore
-///     - ::XE_RESULT_ERROR_UNSUPPORTED
 xe_result_t __xecall
   xeSemaphoreDestroy(
     xe_semaphore_handle_t hSemaphore                ///< [in] handle of semaphore object to destroy
@@ -130,10 +130,10 @@ xe_result_t __xecall
 ///     - ::XE_RESULT_SUCCESS
 ///     - ::XE_RESULT_ERROR_UNINITIALIZED
 ///     - ::XE_RESULT_ERROR_DEVICE_LOST
+///     - ::XE_RESULT_ERROR_UNSUPPORTED
 ///     - ::XE_RESULT_ERROR_INVALID_PARAMETER
 ///         + nullptr == hCommandList
 ///         + nullptr == hSemaphore
-///     - ::XE_RESULT_ERROR_UNSUPPORTED
 xe_result_t __xecall
   xeCommandListEncodeSemaphoreSignal(
     xe_command_list_handle_t hCommandList,          ///< [in] handle of the command list
@@ -166,10 +166,10 @@ typedef enum _xe_semaphore_wait_operation_t
 ///     - ::XE_RESULT_SUCCESS
 ///     - ::XE_RESULT_ERROR_UNINITIALIZED
 ///     - ::XE_RESULT_ERROR_DEVICE_LOST
+///     - ::XE_RESULT_ERROR_UNSUPPORTED
 ///     - ::XE_RESULT_ERROR_INVALID_PARAMETER
 ///         + nullptr == hCommandList
 ///         + nullptr == hSemaphore
-///     - ::XE_RESULT_ERROR_UNSUPPORTED
 xe_result_t __xecall
   xeCommandListEncodeSemaphoreWait(
     xe_command_list_handle_t hCommandList,          ///< [in] handle of the command list
@@ -189,9 +189,9 @@ xe_result_t __xecall
 ///     - ::XE_RESULT_SUCCESS
 ///     - ::XE_RESULT_ERROR_UNINITIALIZED
 ///     - ::XE_RESULT_ERROR_DEVICE_LOST
+///     - ::XE_RESULT_ERROR_UNSUPPORTED
 ///     - ::XE_RESULT_ERROR_INVALID_PARAMETER
 ///         + nullptr == hSemaphore
-///     - ::XE_RESULT_ERROR_UNSUPPORTED
 xe_result_t __xecall
   xeSemaphoreQueryValue(
     xe_semaphore_handle_t hSemaphore                ///< [in] handle of the semaphore
@@ -208,9 +208,9 @@ xe_result_t __xecall
 ///     - ::XE_RESULT_SUCCESS
 ///     - ::XE_RESULT_ERROR_UNINITIALIZED
 ///     - ::XE_RESULT_ERROR_DEVICE_LOST
+///     - ::XE_RESULT_ERROR_UNSUPPORTED
 ///     - ::XE_RESULT_ERROR_INVALID_PARAMETER
 ///         + nullptr == hSemaphore
-///     - ::XE_RESULT_ERROR_UNSUPPORTED
 xe_result_t __xecall
   xeSemaphoreReset(
     xe_semaphore_handle_t hSemaphore                ///< [in] handle of the semaphore
