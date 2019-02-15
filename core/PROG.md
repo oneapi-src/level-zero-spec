@@ -265,8 +265,13 @@ The following sample code demonstrates submission of commands to a command queue
   executing from a command list before it is deleted.  This should be
   handled by tracking a completion event associated with the command list.
 
-## Command Graphs
-Command graphs are under redesign.  Updates coming soon.
+## Command Graphs (Experimental)
+NOTE: Command graphs are under redesign.  Updates coming soon.
+
+A command graph represents non-linear dependencies between a collection of command lists to be executed.
+- An implementation may use this information to reorder the execution of command lists to be optimized for the device.
+- An implementation may also parallelize execution across an application-specified maximum number of command queues.
+- The application is responsible for calling close before submission to a command queue.
 
 # <a name="brr">Barriers</a>
 There are two types of barriers:
@@ -295,8 +300,6 @@ The following sample code demonstrates a sequence for submission of an execution
 ## Memory Barriers
 - Memory barriers are implicitly added by the driver after each batch of command lists submitted to a command queue.
 - Memory barriers are implicitly added by the driver prior to synchronization primitives.
-
-@todo [**Brandon**] need to define the rules when _when_ memory barriers occur.
 
 # <a name="sp">Synchronization Primitives</a>
 There are three types of synchronization primitives:
@@ -377,8 +380,6 @@ An event is used as fine-grain host-to-device, device-to-host or device-to-devic
   subsequent forward progress within the command queue itself.
   + This can create create bubbles in the pipeline or deadlock situations if not correctly scheduled.
 - An application can use ::xeEventQueryElapsedTime to calculate the time (in milliseconds) between two events signalled by the same device.
-@todo [**Ben**] Explore exposing GPU clocks directly with equivalent query on clock rate.  Common request from other teams.
-@todo [**Ben**] Explore exposing both wall clock time and actual GPU execution time due to preemption.
 
 Events are generic synchronization primitives that can be used across many different usage-models, includes those of fences and semaphores.
 However, this generality comes with some cost in efficiency.

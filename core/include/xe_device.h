@@ -76,7 +76,7 @@ xe_result_t __xecall
 ///     - ::XE_RESULT_ERROR_UNINITIALIZED
 ///     - ::XE_RESULT_ERROR_INVALID_PARAMETER
 ///         + nullptr == pUniqueIds
-///         + invalid unique id. @todo May need another error code for lost device?
+///         + invalid unique id.
 ///     - ::XE_RESULT_ERROR_UNSUPPORTED
 xe_result_t __xecall
   xeDriverGetDeviceUniqueIds(
@@ -365,8 +365,7 @@ typedef struct _xe_device_link_properties_t
     uint32_t version;                               ///< [in] ::XE_DEVICE_LINK_PROPERTIES_VERSION
     bool isP2PSupported;                            ///< [out] Is P2P access supported across link
     bool isAtomicsSupported;                        ///< [out] Are atomics supported across link
-    uint32_t performanceRank;                       ///< [out] Relative performance rank of link. @todo [**Zack**] should this
-                                                    ///< be different metric?
+    uint32_t performanceRank;                       ///< [out] Relative performance rank of link.
 
 } xe_device_link_properties_t;
 

@@ -35,7 +35,7 @@ params:
       desc: "[out] pointer to an array of unique ids for devices. Caller must supply array."
 returns:
     - $X_RESULT_ERROR_INVALID_PARAMETER:
-        - "invalid unique id. @todo May need another error code for lost device?"
+        - "invalid unique id."
 --- #--------------------------------------------------------------------------
 type: function
 desc: "Returns a handle to the device object"
@@ -370,7 +370,7 @@ members:
       desc: "[out] Are atomics supported across link"
     - type: uint32_t
       name: performanceRank
-      desc: "[out] Relative performance rank of link. @todo [**Zack**] should this be different metric?"
+      desc: "[out] Relative performance rank of link."
 --- #--------------------------------------------------------------------------
 type: function
 desc: "Retrieves link properties between source and destination devices."

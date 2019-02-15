@@ -82,7 +82,7 @@ xe_result_t __xecall
 ///     - ::XE_RESULT_ERROR_UNINITIALIZED
 ///     - ::XE_RESULT_ERROR_INVALID_PARAMETER
 ///         + nullptr == pUniqueIds
-///         + invalid unique id. @todo May need another error code for lost device?
+///         + invalid unique id.
 ///     - ::XE_RESULT_ERROR_UNSUPPORTED
 /*@todo: __declspec(dllexport)*/
 xe_result_t __xecall
