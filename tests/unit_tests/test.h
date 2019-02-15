@@ -220,14 +220,17 @@ extern GFXCORE_FAMILY renderCoreFamily;
             GTEST_TEST_CLASS_NAME_(test_suite_name, test_name));                                         \
     };                                                                                                   \
                                                                                                          \
-    ::testing::TestInfo *const GTEST_TEST_CLASS_NAME_(test_suite_name, test_name)::test_info_ =          \
+    ::testing::TestInfo *const GTEST_TEST_CLASS_NAME_(test_suite_name,                                   \
+                                                      test_name)::test_info_ =                           \
         ::testing::internal::MakeAndRegisterTestInfo(                                                    \
-            #test_suite_name, #test_name, NULL, NULL,                                                    \
-            (parent_id),                                                                                 \
-            parent_class::SetUpTestCase,                                                                 \
-            parent_class::TearDownTestCase,                                                              \
-            new ::testing::internal::TestFactoryImpl<                                                    \
-                GTEST_TEST_CLASS_NAME_(test_suite_name, test_name)>);                                    \
+            #test_suite_name, #test_name, nullptr, nullptr,                                              \
+            ::testing::internal::CodeLocation(__FILE__, __LINE__), (parent_id),                          \
+            ::testing::internal::SuiteApiResolver<                                                       \
+                parent_class>::GetSetUpCaseOrSuite(),                                                    \
+            ::testing::internal::SuiteApiResolver<                                                       \
+                parent_class>::GetTearDownCaseOrSuite(),                                                 \
+            new ::testing::internal::TestFactoryImpl<GTEST_TEST_CLASS_NAME_(                             \
+                test_suite_name, test_name)>);                                                           \
     template <typename FamilyType>                                                                       \
     void GTEST_TEST_CLASS_NAME_(test_suite_name, test_name)::testBodyHw()
 
@@ -492,6 +495,76 @@ extern GFXCORE_FAMILY renderCoreFamily;
     FAMILYTEST_TEST_P(test_suite_name, test_name, \
                       IGFX_GEN10_CORE,            \
                       IGFX_CANNONLAKE)
+#endif
+#ifdef TESTS_GEN11
+#define ICLLPTEST_F(test_fixture, test_name)                         \
+    FAMILYTEST_TEST_(test_fixture, test_name, test_fixture,          \
+                     ::testing::internal::GetTypeId<test_fixture>(), \
+                     IGFX_GEN11_CORE, IGFX_ICELAKE_LP)
+#define ICLLPTEST_P(test_case_name, test_name)   \
+    FAMILYTEST_TEST_P(test_case_name, test_name, \
+                      IGFX_GEN11_CORE,           \
+                      IGFX_ICELAKE_LP)
+#define LKFTEST_F(test_fixture, test_name)                           \
+    FAMILYTEST_TEST_(test_fixture, test_name, test_fixture,          \
+                     ::testing::internal::GetTypeId<test_fixture>(), \
+                     IGFX_GEN11_CORE, IGFX_LAKEFIELD)
+#define LKFTEST_P(test_case_name, test_name)     \
+    FAMILYTEST_TEST_P(test_case_name, test_name, \
+                      IGFX_GEN11_CORE,           \
+                      IGFX_LAKEFIELD)
+#define EHLTEST_F(test_fixture, test_name)                           \
+    FAMILYTEST_TEST_(test_fixture, test_name, test_fixture,          \
+                     ::testing::internal::GetTypeId<test_fixture>(), \
+                     IGFX_GEN11_CORE, IGFX_JASPERLAKE)
+#define EHLTEST_P(test_case_name, test_name)     \
+    FAMILYTEST_TEST_P(test_case_name, test_name, \
+                      IGFX_GEN11_CORE,           \
+                      IGFX_JASPERLAKE)
+#endif
+#ifdef TESTS_GEN12HP
+#define ATSTEST_F(test_fixture, test_name)                           \
+    FAMILYTEST_TEST_(test_fixture, test_name, test_fixture,          \
+                     ::testing::internal::GetTypeId<test_fixture>(), \
+                     IGFX_GEN12_CORE, IGFX_TIGERLAKE_HP)
+#define ATSTEST_P(test_case_name, test_name)     \
+    FAMILYTEST_TEST_P(test_case_name, test_name, \
+                      IGFX_GEN12_CORE,           \
+                      IGFX_TIGERLAKE_HP)
+#endif
+#ifdef TESTS_GEN12LP
+#define TGLLPTEST_F(test_fixture, test_name)                         \
+    FAMILYTEST_TEST_(test_fixture, test_name, test_fixture,          \
+                     ::testing::internal::GetTypeId<test_fixture>(), \
+                     IGFX_GEN12LP_CORE, IGFX_TIGERLAKE_LP)
+#define TGLLPTEST_P(test_case_name, test_name)   \
+    FAMILYTEST_TEST_P(test_case_name, test_name, \
+                      IGFX_GEN12LP_CORE,         \
+                      IGFX_TIGERLAKE_LP)
+#define RYFTEST_F(test_fixture, test_name)                           \
+    FAMILYTEST_TEST_(test_fixture, test_name, test_fixture,          \
+                     ::testing::internal::GetTypeId<test_fixture>(), \
+                     IGFX_GEN12LP_CORE, IGFX_RYEFIELD)
+#define RYFTEST_P(test_case_name, test_name)     \
+    FAMILYTEST_TEST_P(test_case_name, test_name, \
+                      IGFX_GEN12LP_CORE,         \
+                      IGFX_RYEFIELD)
+#define DG1TEST_F(test_fixture, test_name)                           \
+    FAMILYTEST_TEST_(test_fixture, test_name, test_fixture,          \
+                     ::testing::internal::GetTypeId<test_fixture>(), \
+                     IGFX_GEN12LP_CORE, IGFX_DG1)
+#define DG1TEST_P(test_case_name, test_name)     \
+    FAMILYTEST_TEST_P(test_case_name, test_name, \
+                      IGFX_GEN12LP_CORE,         \
+                      IGFX_DG1)
+#define RKLTEST_F(test_fixture, test_name)                           \
+    FAMILYTEST_TEST_(test_fixture, test_name, test_fixture,          \
+                     ::testing::internal::GetTypeId<test_fixture>(), \
+                     IGFX_GEN12LP_CORE, IGFX_ROCKETLAKE)
+#define RKLTEST_P(test_case_name, test_name)     \
+    FAMILYTEST_TEST_P(test_case_name, test_name, \
+                      IGFX_GEN12LP_CORE,         \
+                      IGFX_ROCKETLAKE)
 #endif
 #define HWTEST_TYPED_TEST(CaseName, TestName)                                              \
     template <typename gtest_TypeParam_>                                                   \
