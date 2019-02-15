@@ -116,6 +116,8 @@ etors:
       desc: "synchronization primitive not signaled"
     - name: $X_RESULT_ERROR_UNINITIALIZED
       desc: "driver is not initialized"
+    - name: $X_RESULT_ERROR_DEVICE_LOST
+      desc: "device hung, reset, was removed, or driver update occurred"
     - name: $X_RESULT_ERROR_UNSUPPORTED
       desc: "device does not support feature requested"
     - name: $X_RESULT_ERROR_INVALID_PARAMETER

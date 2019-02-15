@@ -143,6 +143,7 @@ typedef enum _xe_result_t
     XE_RESULT_SUCCESS = 0,                          ///< success
     XE_RESULT_NOT_READY = 1,                        ///< synchronization primitive not signaled
     XE_RESULT_ERROR_UNINITIALIZED,                  ///< driver is not initialized
+    XE_RESULT_ERROR_DEVICE_LOST,                    ///< device hung, reset, was removed, or driver update occurred
     XE_RESULT_ERROR_UNSUPPORTED,                    ///< device does not support feature requested
     XE_RESULT_ERROR_INVALID_PARAMETER,              ///< invalid parameter provided
     XE_RESULT_ERROR_OUT_OF_HOST_MEMORY,             ///< insufficient host memory to satisfy call

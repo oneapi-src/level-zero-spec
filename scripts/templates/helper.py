@@ -204,6 +204,7 @@ def make_return_lines(repl, obj, cls):
     lines.append("@returns")
     lines.append("    - %s"%subx(repl, "$X_RESULT_SUCCESS", True))
     lines.append("    - %s"%subx(repl, "$X_RESULT_ERROR_UNINITIALIZED", True))
+    lines.append("    - %s"%subx(repl, "$X_RESULT_ERROR_DEVICE_LOST", True))
 
     # generate default checks
     gen = make_param_checks(repl, obj, cls, True)
