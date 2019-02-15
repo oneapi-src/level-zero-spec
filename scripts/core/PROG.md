@@ -59,7 +59,7 @@ The following sample code demonstrates a basic initialization sequence:
     }
 
     uint32_t* uniqueIds = (uint32_t*)malloc(deviceCount * sizeof(uint32_t));
-    ${x}DriverGetDeviceUniqueIds(deviceCount, &uniqueIds);
+    ${x}DriverGetDeviceUniqueIds(deviceCount, uniqueIds);
 
     // Get the handle for device that supports required API version
     ${x}_device_handle_t hDevice;

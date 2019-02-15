@@ -512,12 +512,13 @@ xe_result_t __xecall
 ///         + nullptr == hEventEnd
 ///         + nullptr == pTime
 ///         + either event not signaled by device
+///         + nullptr for pTime
 ///     - ::XE_RESULT_ERROR_UNSUPPORTED
 /*@todo: __declspec(dllexport)*/
 xe_result_t __xecall
   xeEventQueryElapsedTime(
-    xe_event_handle_t hEventStart,                  ///< [in] handle of the event
-    xe_event_handle_t hEventEnd,                    ///< [in] handle of the event
+    xe_event_handle_t hEventStart,                  ///< [in] handle of the start event
+    xe_event_handle_t hEventEnd,                    ///< [in] handle of the end event
     double_t* pTime                                 ///< [out] time in milliseconds
     )
 {
@@ -527,6 +528,46 @@ xe_result_t __xecall
     // @todo: check_return(nullptr == hEventStart, XE_RESULT_ERROR_INVALID_PARAMETER);
     // @todo: check_return(nullptr == hEventEnd, XE_RESULT_ERROR_INVALID_PARAMETER);
     // @todo: check_return(nullptr == pTime, XE_RESULT_ERROR_INVALID_PARAMETER);
+
+    // @todo: insert <code> here
+
+    return XE_RESULT_SUCCESS;
+}
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Queries performance metrics between two device-signaled events.
+/// 
+/// @details
+///     - The application may call this function from simultaneous threads.
+///     - The implementation of this function should be lock-free.
+/// 
+/// @returns
+///     - ::XE_RESULT_SUCCESS
+///     - ::XE_RESULT_ERROR_UNINITIALIZED
+///     - ::XE_RESULT_ERROR_INVALID_PARAMETER
+///         + nullptr == hEventStart
+///         + nullptr == hEventEnd
+///         + nullptr == pReportData
+///         + either event not signaled by device
+///         + either event not create with performance metrics support
+///         + report size too small
+///         + nullptr for pReportData
+///     - ::XE_RESULT_ERROR_UNSUPPORTED
+/*@todo: __declspec(dllexport)*/
+xe_result_t __xecall
+  xeEventQueryMetricsData(
+    xe_event_handle_t hEventStart,                  ///< [in] handle of the start event
+    xe_event_handle_t hEventEnd,                    ///< [in] handle of the end event
+    size_t reportSize,                              ///< [in] size of the report data buffer in bytes
+    uint32_t* pReportData                           ///< [out] report data buffer
+    )
+{
+    // @todo: check_return(nullptr == get_driver(), XE_RESULT_ERROR_UNINITIALIZED);
+
+    // Check parameters
+    // @todo: check_return(nullptr == hEventStart, XE_RESULT_ERROR_INVALID_PARAMETER);
+    // @todo: check_return(nullptr == hEventEnd, XE_RESULT_ERROR_INVALID_PARAMETER);
+    // @todo: check_return(nullptr == pReportData, XE_RESULT_ERROR_INVALID_PARAMETER);
 
     // @todo: insert <code> here
 
