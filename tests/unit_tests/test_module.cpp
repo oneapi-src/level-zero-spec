@@ -1,30 +1,24 @@
 #include "graphics_allocation.h"
 #include "mock_device.h"
 #include "mock_memory_manager.h"
+#include "mock_module.h"
 #include "module.h"
-#include "runtime/platform/platform.h"
+#include "specialized_module_mock_for_MemcpyBytes_Gen12HPcore.h"
 
-#include "igc.opencl.h" // temporarily to instrument NEO's compiler interface
+#include "runtime/device/device.h"
+#include "runtime/platform/platform.h"
 
 #include "gtest/gtest.h"
 
-#include <algorithm>
-#include <cstdint>
 #include <fstream>
-#include <memory>
 
-// temporarily to instrument NEO's compiler interface
-namespace Os {
-    extern const char *frontEndDllName;
-    extern const char *igcDllName;
-}
 
 namespace xe {
 namespace ult {
 
 using ::testing::Return;
 
-std::unique_ptr<char[]> readBinaryTestFile(const std::string &name, size_t &outSize) {
+inline std::unique_ptr<char[]> readBinaryTestFile(const std::string &name, size_t &outSize) {
     std::ifstream file(name, std::ios_base::binary);
     if (false == file.good()) {
         outSize = 0;
@@ -43,31 +37,7 @@ std::unique_ptr<char[]> readBinaryTestFile(const std::string &name, size_t &outS
     return storage;
 }
 
-struct UserRealCompilerGuard {
-    UserRealCompilerGuard(){
-        prevCompilerFcl = Os::frontEndDllName;
-        prevCompilerIgc = Os::igcDllName;
-
-        Os::frontEndDllName = FCL_LIBRARY_NAME;
-        Os::igcDllName = IGC_LIBRARY_NAME;
-    }
-
-    UserRealCompilerGuard(const UserRealCompilerGuard &) = delete;
-    UserRealCompilerGuard(UserRealCompilerGuard &&) = delete;
-    UserRealCompilerGuard &operator=(const UserRealCompilerGuard &) = delete;
-    UserRealCompilerGuard &operator=(UserRealCompilerGuard &&) = delete;
-
-    ~UserRealCompilerGuard(){
-        Os::frontEndDllName = prevCompilerFcl;
-        Os::igcDllName = prevCompilerIgc;
-    }
-
-    const char *prevCompilerFcl = nullptr;
-    const char *prevCompilerIgc = nullptr;
-};
-
-
-TEST(ModuleCreate, fullBlownModuleTest) {
+TEST(ModuleCreate, onlineCompilationModuleTest) {
     UserRealCompilerGuard realCompilerGuard; // just for now
 
     auto platform = OCLRT::constructPlatform();
@@ -125,9 +95,66 @@ TEST(ModuleCreate, fullBlownModuleTest) {
     EXPECT_NE(capturedAllocsFroResidency.end(), std::find(capturedAllocsFroResidency.begin(), capturedAllocsFroResidency.end(), dst));
     EXPECT_NE(capturedAllocsFroResidency.end(), std::find(capturedAllocsFroResidency.begin(), capturedAllocsFroResidency.end(), src));
 
+    bool generateMockData = false;
+    if(generateMockData)
+    {
+        auto deviceName = deviceRT->getFamilyNameWithType();
+        std::string moduleName = std::string("MemcpyBytes");
+        std::stringstream mockDataStream;
+        writeMockData(moduleName, deviceName, function, functionArgs, {{0, dstAddress}, {1, srcAddress}}, mockDataStream);
+        std::string mockData = mockDataStream.str();
+        std::string fileName = "specialized_module_mock_for_" + moduleName + "_" + deviceName + ".h";
+        std::ofstream(fileName, std::ios::binary).write(mockData.data(), mockData.size());
+    }
+
     functionArgs->destroy();
     function->destroy();
     module->destroy();
+}
+
+TEST(ModuleCreate, mockedModuleTestGen12HPcore) { // to do : make this generic (i.e. not tied to GEN)
+    SpecializedFunctionMock function(MemcpyBytes_SimdSize_Gen12HPcore,
+                                     MemcpyBytes_ISA_Gen12HPcore, sizeof(MemcpyBytes_ISA_Gen12HPcore),
+                                     MemcpyBytes_CrossThreadDataBase_Gen12HPcore, sizeof(MemcpyBytes_CrossThreadDataBase_Gen12HPcore),
+                                     MemcpyBytes_BufferArgIndicesAndOffsets_Gen12HPcore, sizeof(MemcpyBytes_BufferArgIndicesAndOffsets_Gen12HPcore) / sizeof(MemcpyBytes_BufferArgIndicesAndOffsets_Gen12HPcore[0]));
+
+    EXPECT_EQ(MemcpyBytes_SimdSize_Gen12HPcore, function.getSimdSize());
+    EXPECT_EQ(MemcpyBytes_ISA_Gen12HPcore, function.getIsaHostMem());
+    EXPECT_EQ(sizeof(MemcpyBytes_ISA_Gen12HPcore), function.getIsaSize());
+
+    GraphicsAllocation mockAlloc1 { nullptr, 0 };
+    GraphicsAllocation mockAlloc2 { nullptr, 0 };
+    SpecializedFunctionArgsMock functionArgs(&function, {&mockAlloc1, &mockAlloc2});
+    EXPECT_EQ(sizeof(MemcpyBytes_CrossThreadDataBase_Gen12HPcore), functionArgs.getCrossThreadDataSize());
+    EXPECT_EQ(0, memcmp(functionArgs.getCrossThreadDataHostMem(), MemcpyBytes_CrossThreadDataBase_Gen12HPcore, sizeof(MemcpyBytes_CrossThreadDataBase_Gen12HPcore)));
+    
+    const auto &residencyFromArgs = functionArgs.getResidencyContainer();
+    EXPECT_NE(residencyFromArgs.end(), std::find(residencyFromArgs.begin(), residencyFromArgs.end(), &mockAlloc1));
+    EXPECT_NE(residencyFromArgs.end(), std::find(residencyFromArgs.begin(), residencyFromArgs.end(), &mockAlloc2));
+
+    auto *crossThreadData = functionArgs.getCrossThreadDataHostMem();
+
+    const uintptr_t *ctdSearchBeg = reinterpret_cast<const uintptr_t*>(crossThreadData);
+    const uintptr_t *ctdSearchEnd = ctdSearchBeg + functionArgs.getCrossThreadDataSize() / sizeof(uintptr_t);
+
+    uintptr_t clearValue = 0;
+    uintptr_t addressToPatch = 2357;
+    while(ctdSearchEnd != std::find(ctdSearchBeg, ctdSearchEnd, addressToPatch)){
+        ++addressToPatch; // find unique value
+    }
+    EXPECT_EQ(ctdSearchEnd, std::find(ctdSearchBeg, ctdSearchEnd, addressToPatch));
+    
+    functionArgs.setValue(0, sizeof(uintptr_t), &addressToPatch);
+    auto arg0 = std::find(ctdSearchBeg, ctdSearchEnd, addressToPatch);
+    EXPECT_NE(ctdSearchEnd, arg0);
+    
+    functionArgs.setValue(0, sizeof(uintptr_t), &clearValue);
+    EXPECT_EQ(ctdSearchEnd, std::find(ctdSearchBeg, ctdSearchEnd, addressToPatch));
+
+    functionArgs.setValue(1, sizeof(uintptr_t), &addressToPatch);
+    auto arg1 = std::find(ctdSearchBeg, ctdSearchEnd, addressToPatch);
+    EXPECT_NE(ctdSearchEnd, arg1);
+    EXPECT_NE(arg0, arg1);
 }
 
 } // namespace ult

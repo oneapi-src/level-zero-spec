@@ -85,6 +85,8 @@ namespace OCLRT_temporary{
         using Kernel::auxTranslationRequired;
         using Kernel::patchedArgumentsNum;
         using Kernel::startOffset;
+    
+        using Kernel::kernelInfo;
     };
 }
 
@@ -176,6 +178,10 @@ struct FunctionImp : Function  {
     
     size_t getIsaSize() const override {
         return kernelRT->getKernelHeapSize();
+    }
+
+    uint32_t getSimdSize() const {
+        return kernelRT->kernelInfo.getMaxSimdSize();
     }
 
     OCLRT_temporary::LightweightOclKernel *getKernelRT() {

@@ -46,6 +46,7 @@ if(COMPUTE_RUNTIME_SUPPORT)
             mock_event.h
             mock_memory_manager.cpp
             mock_memory_manager.h
+            mock_module.h
             test_cmdlist.cpp
             test_cmdlist_close.cpp
             test_cmdlist_encodedispatchfunction.cpp
