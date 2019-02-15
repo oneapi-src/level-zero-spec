@@ -265,14 +265,6 @@ ${"###"} Recycling
   executing from a command list before it is deleted.  This should be
   handled by tracking a completion event associated with the command list.
 
-${"##"} Command Graphs (Experimental)
-NOTE: Command graphs are under redesign.  Updates coming soon.
-
-A command graph represents non-linear dependencies between a collection of command lists to be executed.
-- An implementation may use this information to reorder the execution of command lists to be optimized for the device.
-- An implementation may also parallelize execution across an application-specified maximum number of command queues.
-- The application is responsible for calling close before submission to a command queue.
-
 ${"#"} <a name="brr">Barriers</a>
 There are two types of barriers:
 1. **Execution Barriers** - used to insert execution dependency between commands _within_ a command list.
@@ -901,6 +893,10 @@ Note, there is no guaranteed address equivalence for the values of `dptr` in eac
 
 ${"#"} <a name="fut">Future</a>
 The following is a list a features that are still being defined for inclusion:
+- **Command Graphs**
+    + ability to represent non-linear dependencies between programs to be executed
+    + ability to represent flow-control
+    + ability to represent scheduling and distribution across multiple sub-devices
 - **Predicated Execution**
     + ability to cull program execution within a command list, based on device-generated value(s)
 - **Execution Flow-Control**
@@ -909,12 +905,5 @@ The following is a list a features that are still being defined for inclusion:
     + ability to retrieve device-specific counters for performance analysis, tuning and tooling
 - **Execute Indirect**
     + ability for the device to generate and enqueue more work (better version of device-side enqueue)
-- **GetLastError**
-    + quality-of-life addition to enable debug-only error checks, such as:
-```c
-    assert(${X}_RESULT_SUCCESS == GetLastError(hDevice));
-    assert(${X}_RESULT_SUCCESS == GetLastError(hCommandList));
-    assert(${X}_RESULT_SUCCESS == GetLastError(hCommandQueue));
-    assert(${X}_RESULT_SUCCESS == GetLastError(hModule));
-    ...
-```
+- **C++ Interfaces**
+    + ability to choose between C and C++ interfaces (e.g., by wrapping C++ interfaces with C interfaces)
