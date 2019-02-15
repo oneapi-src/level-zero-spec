@@ -85,12 +85,19 @@ namespace ${x}
     %for line in th.make_return_lines(None, obj, cls):
     /// ${line}
     %endfor
-    result_t __${x}call
+    inline void
       ${th.make_func_name(None, obj, cls)}(
         %for line in th.make_param_lines(None, obj, cls):
         ${line}
         %endfor
-        );
+        )
+    {
+        auto result = ::${th.make_func_name(x, obj, cls)}(
+            %for line in th.make_param_lines(None, obj, cls):
+            ${line}
+            %endfor
+            );
+    }
     ## HANDLE #####################################################################
     %elif re.match(r"handle", obj['type']):
     using ${th.subx(None, obj['name'])} = ${th.subx(x, obj['name'])};
