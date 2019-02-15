@@ -1,5 +1,6 @@
 #pragma once
 #include "xe_cmdlist.h"
+#include "xe_module.h"
 
 struct _xe_command_list_handle_t {
 };
@@ -19,6 +20,11 @@ struct CommandList : public _xe_command_list_handle_t {
 
     virtual xe_result_t close() = 0;
     virtual xe_result_t destroy() = 0;
+    virtual xe_result_t encodeDispatchFunction(xe_function_handle_t hFunction,
+                                               xe_function_args_handle_t hFunctionArgs,
+                                               xe_dispatch_function_arguments_t *pDispatchFuncArgs,
+                                               xe_event_handle_t hEvent) = 0;
+
     virtual xe_result_t encodeSignalEvent(xe_event_handle_t hEvent) = 0;
     virtual xe_result_t encodeWaitOnEvent(xe_event_handle_t hEvent) = 0;
 
@@ -60,6 +66,15 @@ xeCommandListClose(
 xe_result_t __xecall
 xeCommandListDestroy(
     xe_command_list_handle_t hCommandList ///< [in] handle of command list object to destroy
+);
+
+xe_result_t __xecall
+xeCommandListEncodeDispatchFunction(
+    xe_command_list_handle_t hCommandList,               ///< [in] handle of the command list
+    xe_function_handle_t hFunction,                      ///< [in] handle of the function object
+    xe_function_args_handle_t hFunctionArgs,             ///< [in] handle to function arguments buffer.
+    xe_dispatch_function_arguments_t *pDispatchFuncArgs, ///< [in] dispatch function arguments.
+    xe_event_handle_t hEvent                             ///< [in][optional] handle of the event to signal on completion
 );
 
 xe_result_t __xecall

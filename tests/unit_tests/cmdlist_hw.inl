@@ -19,6 +19,16 @@ xe_result_t CommandListHw<gfxCoreFamily>::close() {
 }
 
 template <uint32_t gfxCoreFamily>
+xe_result_t CommandListHw<gfxCoreFamily>::encodeDispatchFunction(xe_function_handle_t hFunction,
+                                                                 xe_function_args_handle_t hFunctionArgs,
+                                                                 xe_dispatch_function_arguments_t *pDispatchFuncArgs,
+                                                                 xe_event_handle_t hEvent) {
+    using GfxFamily = typename OCLRT::GfxFamilyMapper<static_cast<GFXCORE_FAMILY>(gfxCoreFamily)>::GfxFamily;
+
+    return XE_RESULT_SUCCESS;
+}
+
+template <uint32_t gfxCoreFamily>
 xe_result_t CommandListHw<gfxCoreFamily>::encodeSignalEvent(xe_event_handle_t hEvent) {
     auto event = Event::fromHandle(hEvent);
     assert(event);

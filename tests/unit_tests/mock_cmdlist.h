@@ -24,13 +24,17 @@ struct WhiteBox<::xe::CommandList> : public ::xe::CommandListImp {
 
 using CommandList = WhiteBox<::xe::CommandList>;
 
-template<>
+template <>
 struct Mock<CommandList> : public CommandList {
     Mock(Device *device = nullptr);
     virtual ~Mock();
 
     MOCK_METHOD0(close, xe_result_t());
     MOCK_METHOD0(destroy, xe_result_t());
+    MOCK_METHOD4(encodeDispatchFunction, xe_result_t(xe_function_handle_t hFunction,
+                                                     xe_function_args_handle_t hFunctionArgs,
+                                                     xe_dispatch_function_arguments_t *pDispatchFuncArgs,
+                                                     xe_event_handle_t hEvent));
     MOCK_METHOD1(encodeSignalEvent, xe_result_t(xe_event_handle_t hEvent));
     MOCK_METHOD1(encodeWaitOnEvent, xe_result_t(xe_event_handle_t hEvent));
 
