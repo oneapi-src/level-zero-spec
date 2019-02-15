@@ -3,6 +3,7 @@
 #include "xe_cmdqueue.h"
 #include "xe_device.h"
 #include "xe_event.h"
+#include "xe_module.h"
 
 struct _xe_device_handle_t {
 };
@@ -19,6 +20,10 @@ struct Device : _xe_device_handle_t {
 
     virtual xe_result_t createEvent(const xe_event_desc_t *desc,
                                     xe_event_handle_t *event) = 0;
+
+    virtual xe_result_t createModule(const xe_module_desc_t *desc, 
+                                     xe_module_handle_t *module,
+                                     xe_module_build_log_handle_t *buildLog) = 0;
 
     virtual MemoryManager *getMemoryManager() = 0;
 
@@ -52,6 +57,14 @@ xeDeviceCreateEvent(
     xe_device_handle_t hDevice,  ///< [in] handle of the device
     const xe_event_desc_t *desc, ///< [in] pointer to event descriptor
     xe_event_handle_t *phEvent   ///< [out] pointer to handle of event object created
+);
+
+xe_result_t __xecall
+xeDeviceCreateModule(
+    xe_device_handle_t hDevice,                     ///< [in] handle of the device
+    const xe_module_desc_t* desc,                   ///< [in] pointer to module descriptor
+    xe_module_handle_t* phModule,                   ///< [out] pointer to handle of module object created
+    xe_module_build_log_handle_t* phBuildLog        ///< [out][optional] pointer to handle of module's build log.
 );
 
 } // namespace xe

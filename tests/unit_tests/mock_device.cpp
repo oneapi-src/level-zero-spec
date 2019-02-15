@@ -13,6 +13,7 @@ Mock<Device>::Mock() {
     auto success = platform->initialize();
     assert(success);
     auto deviceRT = platform->getDevice(ordinal);
+    this->deviceRT = deviceRT;
     assert(deviceRT);
     auto executionEnvironment = deviceRT->getExecutionEnvironment();
     assert(executionEnvironment);

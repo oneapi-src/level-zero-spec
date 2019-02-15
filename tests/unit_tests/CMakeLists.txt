@@ -30,6 +30,9 @@ if(COMPUTE_RUNTIME_SUPPORT)
             graphics_allocation.h
             memory_manager.cpp
             memory_manager.h
+            module.cpp
+            module.h
+            
             mock.h
             mock_cmdlist.cpp
             mock_cmdlist.h
@@ -53,6 +56,7 @@ if(COMPUTE_RUNTIME_SUPPORT)
             test_driver.cpp
             test_graphics_allocation.cpp
             test_memory_manager.cpp
+            test_module.cpp
             test_platform.cpp
             test_sample.cpp
             white_box.h
@@ -92,6 +96,27 @@ set_target_properties(${TARGET_NAME}
         VS_DEBUGGER_COMMAND_ARGUMENTS "--gtest_filter=* --gtest_catch_exceptions=0"
         VS_DEBUGGER_WORKING_DIRECTORY "$(OutDir)"
 )
+
+add_custom_target(copy_test_files)
+
+add_custom_command(
+    TARGET copy_test_files
+    POST_BUILD
+    COMMAND echo deleting and re-creating "${PROJECT_BINARY_DIR}/bin/$<CONFIG>/test_files" ...
+    COMMAND ${CMAKE_COMMAND} -E remove_directory "${PROJECT_BINARY_DIR}/bin/$<CONFIG>/test_files"
+    COMMAND ${CMAKE_COMMAND} -E make_directory "${PROJECT_BINARY_DIR}/bin/$<CONFIG>/test_files"
+    COMMAND ${CMAKE_COMMAND} -E copy_directory "${CMAKE_CURRENT_SOURCE_DIR}/test_files" "${PROJECT_BINARY_DIR}/bin/$<CONFIG>/test_files"
+    DEPENDS "${CMAKE_CURRENT_SOURCE_DIR}/test_files"
+)
+
+add_custom_command(
+    TARGET copy_test_files
+    POST_BUILD
+    COMMAND ${CMAKE_COMMAND} -E copy_directory "${IGC_DIR}/lib" "${PROJECT_BINARY_DIR}/bin/$<CONFIG>/"
+    DEPENDS "${IGC_DIR}/lib"
+)
+
+add_dependencies(${TARGET_NAME} copy_test_files)
 
 target_link_libraries(${TARGET_NAME}
     xe
