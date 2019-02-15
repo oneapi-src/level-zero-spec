@@ -49,6 +49,7 @@ typedef enum _xe_event_flag_t
     XE_EVENT_FLAG_HOST_TO_DEVICE = XE_BIT(0),       ///< signals from host, waits on device
     XE_EVENT_FLAG_DEVICE_TO_HOST = XE_BIT(1),       ///< signals from device, waits on host
     XE_EVENT_FLAG_DEVICE_TO_DEVICE = XE_BIT(2),     ///< signals from device, waits on another device
+    XE_EVENT_FLAG_PERFORMANCE_METRICS = XE_BIT(3),  ///< supports performance metrics (MDAPI)
 
 } xe_event_flag_t;
 
@@ -398,12 +399,40 @@ xe_result_t __xecall
 ///         + nullptr == hEventEnd
 ///         + nullptr == pTime
 ///         + either event not signaled by device
+///         + nullptr for pTime
 ///     - ::XE_RESULT_ERROR_UNSUPPORTED
 xe_result_t __xecall
   xeEventQueryElapsedTime(
-    xe_event_handle_t hEventStart,                  ///< [in] handle of the event
-    xe_event_handle_t hEventEnd,                    ///< [in] handle of the event
+    xe_event_handle_t hEventStart,                  ///< [in] handle of the start event
+    xe_event_handle_t hEventEnd,                    ///< [in] handle of the end event
     double_t* pTime                                 ///< [out] time in milliseconds
+    );
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Queries performance metrics between two device-signaled events.
+/// 
+/// @details
+///     - The application may call this function from simultaneous threads.
+///     - The implementation of this function should be lock-free.
+/// 
+/// @returns
+///     - ::XE_RESULT_SUCCESS
+///     - ::XE_RESULT_ERROR_UNINITIALIZED
+///     - ::XE_RESULT_ERROR_INVALID_PARAMETER
+///         + nullptr == hEventStart
+///         + nullptr == hEventEnd
+///         + nullptr == pReportData
+///         + either event not signaled by device
+///         + either event not create with performance metrics support
+///         + report size too small
+///         + nullptr for pReportData
+///     - ::XE_RESULT_ERROR_UNSUPPORTED
+xe_result_t __xecall
+  xeEventQueryMetricsData(
+    xe_event_handle_t hEventStart,                  ///< [in] handle of the start event
+    xe_event_handle_t hEventEnd,                    ///< [in] handle of the end event
+    size_t reportSize,                              ///< [in] size of the report data buffer in bytes
+    uint32_t* pReportData                           ///< [out] report data buffer
     );
 
 ///////////////////////////////////////////////////////////////////////////////

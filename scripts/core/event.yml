@@ -23,6 +23,9 @@ etors:
     - name: $X_EVENT_FLAG_DEVICE_TO_DEVICE
       value: "$X_BIT(2)"
       desc: "signals from device, waits on another device"
+    - name: $X_EVENT_FLAG_PERFORMANCE_METRICS
+      value: "$X_BIT(3)"
+      desc: "supports performance metrics (MDAPI)"
 --- #--------------------------------------------------------------------------
 type: struct
 desc: "Event descriptor"
@@ -301,16 +304,44 @@ details:
 params:
     - type: $x_event_handle_t
       name: hEventStart
-      desc: "[in] handle of the event"
+      desc: "[in] handle of the start event"
     - type: $x_event_handle_t
       name: hEventEnd
-      desc: "[in] handle of the event"
+      desc: "[in] handle of the end event"
     - type: "double_t*"
       name: pTime
       desc: "[out] time in milliseconds"
 returns:
     - $X_RESULT_ERROR_INVALID_PARAMETER:
         - "either event not signaled by device"
+        - "nullptr for pTime"
+--- #--------------------------------------------------------------------------
+type: function
+desc: "Queries performance metrics between two device-signaled events."
+class: $xEvent
+name: QueryMetricsData
+details:
+    - "The application may call this function from simultaneous threads."
+    - "The implementation of this function should be lock-free."
+params:
+    - type: $x_event_handle_t
+      name: hEventStart
+      desc: "[in] handle of the start event"
+    - type: $x_event_handle_t
+      name: hEventEnd
+      desc: "[in] handle of the end event"
+    - type: size_t
+      name: reportSize
+      desc: "[in] size of the report data buffer in bytes"
+    - type: "uint32_t*"
+      name: pReportData
+      desc: "[out] report data buffer"
+returns:
+    - $X_RESULT_ERROR_INVALID_PARAMETER:
+        - "either event not signaled by device"
+        - "either event not create with performance metrics support"
+        - "report size too small"
+        - "nullptr for pReportData"
 --- #--------------------------------------------------------------------------
 type: function
 desc: "Reset an event back to not signaled state"
