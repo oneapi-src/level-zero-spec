@@ -55,14 +55,6 @@ typedef struct _xe_command_graph_desc_t
 {
     uint32_t version;                               ///< [in] ::XE_COMMAND_GRAPH_DESC_VERSION
     xe_command_graph_flag_t flags;                  ///< [in] creation flags
-    uint32_t maxComputeQueueCount;                  ///< [in] maximum number of compute command queues available for
-                                                    ///< parallelism; must be less than
-                                                    ///< ::xe_device_properties_t.numAsyncComputeEngines; must be non-zero if
-                                                    ///< any non-copy-only command lists are to be used.
-    uint32_t maxCopyQueueCount;                     ///< [in] maximum number of copy-only command queues available for
-                                                    ///< parallelism; must be less than
-                                                    ///< ::xe_device_properties_t.numAsyncCopyEngines; must be non-zero if any
-                                                    ///< copy-only command lists are to be used.
 
 } xe_command_graph_desc_t;
 
@@ -112,58 +104,6 @@ xe_result_t __xecall
     );
 
 ///////////////////////////////////////////////////////////////////////////////
-/// @brief Adds an edge between two command lists to the command graph.
-/// 
-/// @details
-///     - The command graph maintains a const-reference to an existing command
-///       list
-///     - The application is responsible for making sure a command list is not
-///       destroyed while the command graph still references
-///     - The application may **not** call this function from simultaneous
-///       threads with the same command graph handle.
-///     - The implementation of this function should be lock-free.
-/// 
-/// @returns
-///     - ::XE_RESULT_SUCCESS
-///     - ::XE_RESULT_ERROR_UNINITIALIZED
-///     - ::XE_RESULT_ERROR_INVALID_PARAMETER
-///         + nullptr == hCommandGraph
-///         + nullptr == hProducerCommandList
-///         + nullptr == hConsumerCommandList
-///         + hCommandGraph is closed
-///     - ::XE_RESULT_ERROR_UNSUPPORTED
-xe_result_t __xecall
-  xeCommandGraphAddEdge(
-    xe_command_graph_handle_t hCommandGraph,        ///< [in] handle of command graph object to add an edge
-    xe_command_list_handle_t hProducerCommandList,  ///< [in] handle of command list object producing dependency
-    xe_command_list_handle_t hConsumerCommandList   ///< [in] handle of command list object consuming dependency
-    );
-
-///////////////////////////////////////////////////////////////////////////////
-/// @brief Removes an edge between two command lists to the command graph.
-/// 
-/// @details
-///     - The application may **not** call this function from simultaneous
-///       threads with the same command graph handle.
-///     - The implementation of this function should be lock-free.
-/// 
-/// @returns
-///     - ::XE_RESULT_SUCCESS
-///     - ::XE_RESULT_ERROR_UNINITIALIZED
-///     - ::XE_RESULT_ERROR_INVALID_PARAMETER
-///         + nullptr == hCommandGraph
-///         + nullptr == hProducerCommandList
-///         + nullptr == hConsumerCommandList
-///         + hCommandGraph is closed
-///     - ::XE_RESULT_ERROR_UNSUPPORTED
-xe_result_t __xecall
-  xeCommandGraphRemoveEdge(
-    xe_command_graph_handle_t hCommandGraph,        ///< [in] handle of command graph object to remove an edge
-    xe_command_list_handle_t hProducerCommandList,  ///< [in] handle of command list object producing dependency
-    xe_command_list_handle_t hConsumerCommandList   ///< [in] handle of command list object consuming dependency
-    );
-
-///////////////////////////////////////////////////////////////////////////////
 /// @brief Closes a command graph; ready to be enqueued into a command queue.
 /// 
 /// @details
@@ -203,102 +143,6 @@ xe_result_t __xecall
 xe_result_t __xecall
   xeCommandGraphReset(
     xe_command_graph_handle_t hCommandGraph         ///< [in] handle of command graph object to reset
-    );
-
-///////////////////////////////////////////////////////////////////////////////
-/// @brief Returns the number of compute command list batches to be enqueued.
-/// 
-/// @details
-///     - The application may call this function from simultaneous threads.
-///     - The implementation of this function should be lock-free.
-/// 
-/// @returns
-///     - ::XE_RESULT_SUCCESS
-///     - ::XE_RESULT_ERROR_UNINITIALIZED
-///     - ::XE_RESULT_ERROR_INVALID_PARAMETER
-///         + nullptr == hCommandGraph
-///         + nullptr == pNumBatches
-///         + hCommandGraph is not closed
-///     - ::XE_RESULT_ERROR_UNSUPPORTED
-xe_result_t __xecall
-  xeCommandGraphGetComputeBatchCount(
-    xe_command_graph_handle_t hCommandGraph,        ///< [in] handle of command graph object
-    uint32_t* pNumBatches                           ///< [out] the number of batches
-    );
-
-///////////////////////////////////////////////////////////////////////////////
-/// @brief Returns the list of compute command lists in optimal execution order.
-/// 
-/// @details
-///     - The application may call this function from simultaneous threads.
-///     - The implementation of this function should be lock-free.
-/// 
-/// @returns
-///     - ::XE_RESULT_SUCCESS
-///     - ::XE_RESULT_ERROR_UNINITIALIZED
-///     - ::XE_RESULT_ERROR_INVALID_PARAMETER
-///         + nullptr == hCommandGraph
-///         + nullptr == pCommandQueueIndex
-///         + nullptr == pNumCommandLists
-///         + nullptr == pphCommandLists
-///         + hCommandGraph is not closed
-///     - ::XE_RESULT_ERROR_UNSUPPORTED
-xe_result_t __xecall
-  xeCommandGraphGetComputeCommandListBatch(
-    xe_command_graph_handle_t hCommandGraph,        ///< [in] handle of command graph object
-    uint32_t batchIndex,                            ///< [in] the index of the batch
-    uint32_t* pCommandQueueIndex,                   ///< [out] the index of the command queue for asynchronous execution
-    uint32_t* pNumCommandLists,                     ///< [out] the number of command lists in the returned list
-    xe_command_list_handle_t** pphCommandLists      ///< [out] pointer to list of ordered command list handles
-    );
-
-///////////////////////////////////////////////////////////////////////////////
-/// @brief Returns the number of copy-only command list batches to be enqueued.
-/// 
-/// @details
-///     - The application may call this function from simultaneous threads.
-///     - The implementation of this function should be lock-free.
-/// 
-/// @returns
-///     - ::XE_RESULT_SUCCESS
-///     - ::XE_RESULT_ERROR_UNINITIALIZED
-///     - ::XE_RESULT_ERROR_INVALID_PARAMETER
-///         + nullptr == hCommandGraph
-///         + nullptr == pNumBatches
-///         + hCommandGraph is not closed
-///     - ::XE_RESULT_ERROR_UNSUPPORTED
-xe_result_t __xecall
-  xeCommandGraphGetCopyBatchCount(
-    xe_command_graph_handle_t hCommandGraph,        ///< [in] handle of command graph object
-    uint32_t* pNumBatches                           ///< [out] the number of batches
-    );
-
-///////////////////////////////////////////////////////////////////////////////
-/// @brief Returns the list of copy-only command lists in optimal execution
-///        order.
-/// 
-/// @details
-///     - The application may call this function from simultaneous threads.
-///     - The implementation of this function should be lock-free.
-/// 
-/// @returns
-///     - ::XE_RESULT_SUCCESS
-///     - ::XE_RESULT_ERROR_UNINITIALIZED
-///     - ::XE_RESULT_ERROR_INVALID_PARAMETER
-///         + nullptr == hCommandGraph
-///         + nullptr == pCommandQueueIndex
-///         + nullptr == pNumCommandLists
-///         + nullptr == pphCommandLists
-///         + hCommandGraph is not closed
-///         + batchIndex is out of range
-///     - ::XE_RESULT_ERROR_UNSUPPORTED
-xe_result_t __xecall
-  xeCommandGraphGetCopyCommandListBatch(
-    xe_command_graph_handle_t hCommandGraph,        ///< [in] handle of command graph object
-    uint32_t batchIndex,                            ///< [in] the index of the batch
-    uint32_t* pCommandQueueIndex,                   ///< [out] the index of the command queue for asynchronous execution
-    uint32_t* pNumCommandLists,                     ///< [out] the number of command lists in the returned list
-    xe_command_list_handle_t** pphCommandLists      ///< [out] pointer to list of ordered command list handles
     );
 
 #endif // _XE_CMDGRAPH_H

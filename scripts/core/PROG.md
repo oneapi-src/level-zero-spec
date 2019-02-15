@@ -265,57 +265,8 @@ ${"###"} Recycling
   executing from a command list before it is deleted.  This should be
   handled by tracking a completion event associated with the command list.
 
-${"##"} Command Graphs (Experimental)
-A command graph represents non-linear dependencies between a collection of command lists to be executed.
-- An implementation may use this information to reorder the execution of command lists to be optimized for the device.
-- An implementation may also parallelize execution across an application-specified maximum number of command queues.
-- The application is responsible for ensuring there are no inter-command list dependencies that would cause dead-lock;
-  e.g., infinite loops, synchronization primtives, etc. 
-- The application is responsible for calling close before submission to a command queue.
-- The command graph itself does not allocate any device memory; therefore is mutable immediately after enqueuing.
-- The command graph does not modify or copy any of the command lists.
-- The command graph does have references to existing command lists, which must be removed prior to the command lists being destroyed.
-
-The following diagram illustrates a representation of a command graph and how batches of command lists may be submitted to command queues:  
-![Graph](../images/core_graph.png?raw=true)  
-@image latex ../images/core_graph.png
-
-The following sample code demonstrates submission of command lists to a command queue, via a command graph:
-```c
-    ...
-    // create a command graph
-    ${x}_command_graph_desc_t commandGraphDesc = {
-        ${X}_COMMAND_GRAPH_DESC_VERSION,
-        ${X}_COMMAND_GRAPH_FLAG_NONE,
-        2, 0
-    };
-    ${x}_command_graph_handle_t hCommandGraph;
-    ${x}DeviceCreateCommandGraph(hDevice, &commandGraphDesc, &hCommandGraph);
-
-    // add dependencies between command lists (typically done on another thread)
-    ${x}CommandGraphAddEdge(hCommandGraph, hCommandList1, hCommandList3);
-    ${x}CommandGraphAddEdge(hCommandGraph, hCommandList2, hCommandList3);
-    ${x}CommandGraphClose(hCommandGraph);
-
-    // Enqueue N batches of command lists across M command queue(s)
-    uint32_t numbatches = 0;
-    ${x}CommandGraphGetComputeBatchCount(hCommandGraph, &numbatches);
-
-    for( uint32_t batchIndex = 0; batchIndex < numbatches; ++batchIndex )
-    {
-        uint32_t cqindex = 0; // logical index of command queue to enqueue this batch
-                              // must be less than commandGraphDesc.maxComputeQueueCount
-
-        uint32_t clcount = 0; // number of command lists in this batch
-        ${x}_command_list_handle_t* pCommandLists = nullptr; // array of command lists handles in this batch
-
-        ${x}CommandGraphGetComputeCommandListBatch(hCommandGraph, batchIndex, &cqindex, &clcount, &pCommandLists);
-        ${x}CommandQueueEnqueueCommandLists(phCommandQueue[cqindex], clcount, pCommandLists, nullptr);
-    }
-
-    ${x}CommandGraphReset(hCommandGraph);
-    ...
-```
+${"##"} Command Graphs
+Command graphs are under redesign.  Updates coming soon.
 
 ${"#"} <a name="brr">Barriers</a>
 There are two types of barriers:
