@@ -7,8 +7,12 @@ namespace xe {
 
 template <uint32_t gfxCoreFamily>
 struct CommandListHw : public CommandListImp {
+    using BaseClass = CommandListImp;
+
     CommandListHw(Device *device) : CommandListImp(device) {
     }
+
+    bool initialize() override;
 
     xe_result_t close() override;
     xe_result_t encodeDispatchFunction(xe_function_handle_t hFunction,

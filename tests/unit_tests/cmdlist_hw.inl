@@ -8,6 +8,37 @@
 namespace xe {
 
 template <uint32_t gfxCoreFamily>
+bool CommandListHw<gfxCoreFamily>::initialize() {
+    using GfxFamily = typename OCLRT::GfxFamilyMapper<static_cast<GFXCORE_FAMILY>(gfxCoreFamily)>::GfxFamily;
+
+    if (!BaseClass::initialize()) {
+        return false;
+    }
+
+    using STATE_BASE_ADDRESS = typename GfxFamily::STATE_BASE_ADDRESS;
+    STATE_BASE_ADDRESS cmd = GfxFamily::cmdInitStateBaseAddress;
+
+    {
+        auto allocationHeap = this->allocationIndirectHeaps[INSTRUCTION];
+        assert(allocationHeap != nullptr);
+        cmd.setInstructionBaseAddressModifyEnable(true);
+        cmd.setInstructionBaseAddress(allocationHeap->getGpuAddress());
+    }
+
+    {
+        auto allocationHeap = this->allocationIndirectHeaps[GENERAL_STATE];
+        assert(allocationHeap != nullptr);
+        cmd.setGeneralStateBaseAddressModifyEnable(true);
+        cmd.setGeneralStateBaseAddress(allocationHeap->getGpuAddress());
+    }
+
+    auto buffer = commandStream->getSpace(sizeof(cmd));
+    *(STATE_BASE_ADDRESS *)buffer = cmd;
+
+    return true;
+}
+
+template <uint32_t gfxCoreFamily>
 xe_result_t CommandListHw<gfxCoreFamily>::close() {
     using GfxFamily = typename OCLRT::GfxFamilyMapper<static_cast<GFXCORE_FAMILY>(gfxCoreFamily)>::GfxFamily;
     using MI_BATCH_BUFFER_END = typename GfxFamily::MI_BATCH_BUFFER_END;

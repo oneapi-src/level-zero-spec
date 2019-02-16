@@ -1,6 +1,7 @@
 #pragma once
 #include "xe_cmdlist.h"
 #include "xe_module.h"
+#include <cassert>
 
 struct _xe_command_list_handle_t {
 };
@@ -16,6 +17,15 @@ struct CommandList : public _xe_command_list_handle_t {
         static CommandList *allocate(Device *device) {
             return new Type(device);
         }
+    };
+
+    enum Type : uint32_t {
+        DYNAMIC_STATE = 0u,
+        GENERAL_STATE,
+        INDIRECT_OBJECT,
+        SURFACE_STATE,
+        INSTRUCTION,
+        NUM_HEAPS
     };
 
     virtual xe_result_t close() = 0;
@@ -42,11 +52,16 @@ struct CommandList : public _xe_command_list_handle_t {
         return *allocation;
     }
 
+    GraphicsAllocation &getAllocationIndirectHeap(uint32_t ordinal) {
+        assert(ordinal < NUM_HEAPS);
+        return *allocationIndirectHeaps[ordinal];
+    }
+
   protected:
     virtual ~CommandList() = default;
 
     GraphicsAllocation *allocation = nullptr;
-    GraphicsAllocation *allocationIndirectHeaps[5];
+    GraphicsAllocation *allocationIndirectHeaps[NUM_HEAPS];
 };
 
 using CommandListAllocatorFn = CommandList *(*)(Device *);

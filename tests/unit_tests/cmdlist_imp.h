@@ -42,7 +42,7 @@ struct CommandListImp : public CommandList {
 
     Device *device;
     OCLRT::LinearStream *commandStream;
-    OCLRT::IndirectHeap *indirectHeaps[5];
+    OCLRT::IndirectHeap *indirectHeaps[NUM_HEAPS];
     OCLRT::ResidencyContainer residencyContainer;
 };
 

@@ -5,7 +5,8 @@
 #include "graphics_allocation.h"
 #include "igfxfmid.h"
 #include "runtime/command_stream/linear_stream.h"
-#include "gtest/gtest.h"
+#include "test.h"
+#include "unit_tests/gen_common/gen_cmd_parse.h"
 
 namespace xe {
 namespace ult {
@@ -86,6 +87,42 @@ static uint32_t unsupportedProductFamilyTable[] = {
 INSTANTIATE_TEST_CASE_P(,
                         CommandListCreateFail,
                         ::testing::ValuesIn(unsupportedProductFamilyTable));
+
+HWTEST_F(CommandListCreate, addsStateBaseAddressToBatchBuffer) {
+    Mock<Device> device;
+    Mock<MemoryManager> memoryManager;
+    EXPECT_CALL(device, getMemoryManager())
+        .WillRepeatedly(Return(&memoryManager));
+    EXPECT_CALL(memoryManager, allocateDeviceMemory(_)).Times(AnyNumber());
+    EXPECT_CALL(memoryManager, freeMemory(_)).Times(AnyNumber());
+
+    auto commandList = whitebox_cast(CommandList::create(productFamily, &device));
+    ASSERT_NE(nullptr, commandList->commandStream);
+    auto usedSpaceBefore = commandList->commandStream->getUsed();
+
+    auto result = commandList->close();
+    ASSERT_EQ(XE_RESULT_SUCCESS, result);
+
+    auto usedSpaceAfter = commandList->commandStream->getUsed();
+    ASSERT_GT(usedSpaceAfter, usedSpaceBefore);
+
+    GenCmdList cmdList;
+    ASSERT_TRUE(FamilyType::PARSE::parseCommandBuffer(cmdList,
+                                                      ptrOffset(commandList->commandStream->getCpuBase(), 0),
+                                                      usedSpaceAfter));
+    using STATE_BASE_ADDRESS = typename FamilyType::STATE_BASE_ADDRESS;
+    auto itor = find<STATE_BASE_ADDRESS *>(cmdList.begin(), cmdList.end());
+    EXPECT_NE(cmdList.end(), itor);
+
+    {
+        auto cmd = genCmdCast<STATE_BASE_ADDRESS *>(*itor);
+        EXPECT_TRUE(cmd->getInstructionBaseAddressModifyEnable());
+        EXPECT_NE(cmd->getInstructionBaseAddress(), 0u);
+
+        EXPECT_TRUE(cmd->getGeneralStateBaseAddressModifyEnable());
+        EXPECT_NE(cmd->getGeneralStateBaseAddress(), 0u);
+    }
+}
 
 } // namespace ult
 } // namespace xe
