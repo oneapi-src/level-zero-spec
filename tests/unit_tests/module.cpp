@@ -13,91 +13,90 @@
 #include <cassert>
 #include <memory>
 
-namespace OCLRT_temporary{
-    struct LightweightOclProgram : public OCLRT::Program { // NEO refactor needed : decouple process gen binary, remove context
-        static LightweightOclProgram *create(void *deviceRT){
-            assert(deviceRT != nullptr);
-            LightweightOclProgram *prog = new LightweightOclProgram(static_cast<OCLRT::Device*>(deviceRT));
-            return prog;
-        }
+namespace OCLRT_temporary {
+struct LightweightOclProgram : public OCLRT::Program { // NEO refactor needed : decouple process gen binary, remove context
+    static LightweightOclProgram *create(void *deviceRT) {
+        assert(deviceRT != nullptr);
+        LightweightOclProgram *prog = new LightweightOclProgram(static_cast<OCLRT::Device *>(deviceRT));
+        return prog;
+    }
 
-        LightweightOclProgram(OCLRT::Device *deviceRT) : Program(*deviceRT->getExecutionEnvironment(), nullptr, false), deviceRT(deviceRT) {
-            setDevice(deviceRT);
-        }
+    LightweightOclProgram(OCLRT::Device *deviceRT) : Program(*deviceRT->getExecutionEnvironment(), nullptr, false), deviceRT(deviceRT) {
+        setDevice(deviceRT);
+    }
 
-        ~LightweightOclProgram() {
-        }
+    ~LightweightOclProgram() {
+    }
 
-        void buildSpirV(const char *input, uint32_t inputSize){
-            this->isSpirV = true;
-            this->programBinaryType = CL_PROGRAM_BINARY_TYPE_INTERMEDIATE;
+    void buildSpirV(const char *input, uint32_t inputSize) {
+        this->isSpirV = true;
+        this->programBinaryType = CL_PROGRAM_BINARY_TYPE_INTERMEDIATE;
 
-            OCLRT::CompilerInterface *pCompilerInterface = this->executionEnvironment.getCompilerInterface();
-            assert(pCompilerInterface != nullptr);
+        OCLRT::CompilerInterface *pCompilerInterface = this->executionEnvironment.getCompilerInterface();
+        assert(pCompilerInterface != nullptr);
 
-            std::string internalOptions = this->internalOptions + " -cl-intel-greater-than-4GB-buffer-required"; // Disable surface states for buffers for now
+        std::string internalOptions = this->internalOptions + " -cl-intel-greater-than-4GB-buffer-required"; // Disable surface states for buffers for now
 
-            OCLRT::TranslationArgs inputArgs = {};
-            inputArgs.pInput = const_cast<char*>(input); // this is a broken in the interface, input is considered const in the end
-            inputArgs.InputSize = inputSize;
-            inputArgs.pOptions = options.c_str();
-            inputArgs.OptionsSize = (uint32_t)options.length();
-            inputArgs.pInternalOptions = internalOptions.c_str();
-            inputArgs.InternalOptionsSize = (uint32_t)internalOptions.length();
-            inputArgs.pTracingOptions = nullptr;
-            inputArgs.TracingOptionsCount = 0;
-            inputArgs.GTPinInput = nullptr;
+        OCLRT::TranslationArgs inputArgs = {};
+        inputArgs.pInput = const_cast<char *>(input); // this is a broken in the interface, input is considered const in the end
+        inputArgs.InputSize = inputSize;
+        inputArgs.pOptions = options.c_str();
+        inputArgs.OptionsSize = (uint32_t)options.length();
+        inputArgs.pInternalOptions = internalOptions.c_str();
+        inputArgs.InternalOptionsSize = (uint32_t)internalOptions.length();
+        inputArgs.pTracingOptions = nullptr;
+        inputArgs.TracingOptionsCount = 0;
+        inputArgs.GTPinInput = nullptr;
 
-            cl_int retVal = CL_SUCCESS;
-            retVal = pCompilerInterface->build(*this, inputArgs, false);
-            assert(retVal == CL_SUCCESS);
-                
-            retVal = processGenBinary();
-            assert(retVal == CL_SUCCESS);
+        cl_int retVal = CL_SUCCESS;
+        retVal = pCompilerInterface->build(*this, inputArgs, false);
+        assert(retVal == CL_SUCCESS);
 
-            buildStatus = CL_BUILD_SUCCESS;
-            programBinaryType = CL_PROGRAM_BINARY_TYPE_EXECUTABLE;
-        }
+        retVal = processGenBinary();
+        assert(retVal == CL_SUCCESS);
 
-        OCLRT::Device *deviceRT;
-    };
+        buildStatus = CL_BUILD_SUCCESS;
+        programBinaryType = CL_PROGRAM_BINARY_TYPE_EXECUTABLE;
+    }
 
-    struct LightweightOclKernel : public OCLRT::Kernel {
-        LightweightOclKernel(LightweightOclProgram *program, const OCLRT::KernelInfo &kernelInfo)
-            : Kernel(program, kernelInfo, program->getDevice(0), false){
-        }
+    OCLRT::Device *deviceRT;
+};
 
-        using Kernel::kernelArguments;
-        using Kernel::kernelArgHandlers;
-        using Kernel::kernelSvmGfxAllocations;
+struct LightweightOclKernel : public OCLRT::Kernel {
+    LightweightOclKernel(LightweightOclProgram *program, const OCLRT::KernelInfo &kernelInfo)
+        : Kernel(program, kernelInfo, program->getDevice(0), false) {
+    }
 
-        using Kernel::numberOfBindingTableStates;
-        using Kernel::localBindingTableOffset;
-        using Kernel::pSshLocal;
-        using Kernel::sshLocalSize;
+    using Kernel::kernelArgHandlers;
+    using Kernel::kernelArguments;
+    using Kernel::kernelSvmGfxAllocations;
 
-        using Kernel::crossThreadData;
-        using Kernel::crossThreadDataSize;
+    using Kernel::localBindingTableOffset;
+    using Kernel::numberOfBindingTableStates;
+    using Kernel::pSshLocal;
+    using Kernel::sshLocalSize;
 
-        using Kernel::privateSurface;
-        using Kernel::privateSurfaceSize;
+    using Kernel::crossThreadData;
+    using Kernel::crossThreadDataSize;
 
-        using Kernel::usingSharedObjArgs;
-        using Kernel::usingImagesOnly;
-        using Kernel::auxTranslationRequired;
-        using Kernel::patchedArgumentsNum;
-        using Kernel::startOffset;
-    
-        using Kernel::kernelInfo;
-    };
-}
+    using Kernel::privateSurface;
+    using Kernel::privateSurfaceSize;
+
+    using Kernel::auxTranslationRequired;
+    using Kernel::patchedArgumentsNum;
+    using Kernel::startOffset;
+    using Kernel::usingImagesOnly;
+    using Kernel::usingSharedObjArgs;
+
+    using Kernel::kernelInfo;
+};
+} // namespace OCLRT_temporary
 
 namespace OCLRT {
 namespace Math {
-    using namespace ::Math; // just to emphasize the origin (wich originally is not encapsulated in OCLRT)
+using namespace ::Math; // just to emphasize the origin (wich originally is not encapsulated in OCLRT)
 }
-}
-
+} // namespace OCLRT
 
 namespace xe {
 
@@ -145,8 +144,8 @@ struct ModuleImp : public Module {
         return progRT;
     }
 
-protected:
-    Device *device  = nullptr;
+  protected:
+    Device *device = nullptr;
     OCLRT_temporary::LightweightOclProgram *progRT = nullptr;
 };
 
@@ -157,7 +156,7 @@ Module *Module::create(Device *device, const xe_module_desc_t *desc, void *devic
     return module;
 }
 
-struct FunctionImp : Function  {
+struct FunctionImp : Function {
     FunctionImp(Module *module) : module(module) {}
 
     virtual ~FunctionImp() {
@@ -177,9 +176,9 @@ struct FunctionImp : Function  {
         assert(desc->version == XE_API_HEADER_VERSION);
         assert(desc->flags == 0);
 
-        const OCLRT::KernelInfo *kernelInfoRT = static_cast<ModuleImp*>(module)->getKernelInfoRT(desc->pFunctionName);
+        const OCLRT::KernelInfo *kernelInfoRT = static_cast<ModuleImp *>(module)->getKernelInfoRT(desc->pFunctionName);
         assert(kernelInfoRT != nullptr);
-        kernelRT = new OCLRT_temporary::LightweightOclKernel(static_cast<ModuleImp*>(module)->getProgramRT(), *kernelInfoRT);
+        kernelRT = new OCLRT_temporary::LightweightOclKernel(static_cast<ModuleImp *>(module)->getProgramRT(), *kernelInfoRT);
         kernelRT->initialize();
 
         return true;
@@ -188,7 +187,7 @@ struct FunctionImp : Function  {
     const void *getIsaHostMem() const override {
         return kernelRT->getKernelHeap();
     }
-    
+
     size_t getIsaSize() const override {
         return kernelRT->getKernelHeapSize();
     }
@@ -200,7 +199,8 @@ struct FunctionImp : Function  {
     OCLRT_temporary::LightweightOclKernel *getKernelRT() {
         return kernelRT;
     }
-protected:
+
+  protected:
     OCLRT_temporary::LightweightOclKernel *kernelRT = nullptr;
     Module *module = nullptr;
 };
@@ -229,13 +229,13 @@ struct FunctionArgsImp : FunctionArgs {
     }
 
     xe_result_t setArgBuffer(uint32_t argIndex, size_t argSize, const void *argVal) {
-        const auto &kernelArgInfo = static_cast<FunctionImp*>(function)->getKernelRT()->getKernelInfo().kernelArgInfo[argIndex];
+        const auto &kernelArgInfo = static_cast<FunctionImp *>(function)->getKernelRT()->getKernelInfo().kernelArgInfo[argIndex];
         // patchBufferOffset(kernelArgInfo, nullptr, nullptr); // stateless to stateful buffer offsets disabled
 
         auto patchLocation = ptrOffset(oclInternals.crossThreadData,
                                        kernelArgInfo.kernelArgPatchInfoVector[0].crossthreadOffset);
 
-        patchWithRequiredSize(patchLocation, kernelArgInfo.kernelArgPatchInfoVector[0].size, *reinterpret_cast<const uintptr_t*>(argVal));
+        patchWithRequiredSize(patchLocation, kernelArgInfo.kernelArgPatchInfoVector[0].size, *reinterpret_cast<const uintptr_t *>(argVal));
 
         oclInternals.storeKernelArg(argIndex, OCLRT::Kernel::BUFFER_OBJ, nullptr, argVal, argSize);
 
@@ -244,7 +244,7 @@ struct FunctionArgsImp : FunctionArgs {
         //    Buffer::setSurfaceState(&getDevice(), surfaceState, 0, nullptr);
         //} // no SSH for buffers for now - stateless to stateful disabled
 
-        GraphicsAllocation *alloc = function->getModule()->getDevice()->getMemoryManager()->findAllocation(*reinterpret_cast<void * const *>(argVal));
+        GraphicsAllocation *alloc = function->getModule()->getDevice()->getMemoryManager()->findAllocation(*reinterpret_cast<void *const *>(argVal));
         assert(alloc != nullptr);
         residencyContainer[argIndex] = alloc;
 
@@ -254,7 +254,7 @@ struct FunctionArgsImp : FunctionArgs {
     const void *getCrossThreadDataHostMem() const override {
         return oclInternals.crossThreadData;
     }
-    
+
     size_t getCrossThreadDataSize() const {
         return oclInternals.crossThreadDataSize;
     }
@@ -264,17 +264,17 @@ struct FunctionArgsImp : FunctionArgs {
     }
 
     void setGroupSize(uint32_t groupSizeX, uint32_t groupSizeY, uint32_t groupSizeZ) override {
-        OCLRT_temporary::LightweightOclKernel *kernelRT = static_cast<FunctionImp*>(function)->getKernelRT();
+        OCLRT_temporary::LightweightOclKernel *kernelRT = static_cast<FunctionImp *>(function)->getKernelRT();
 
         auto numChannels = OCLRT::PerThreadDataHelper::getNumLocalIdChannels(*kernelRT->kernelInfo.patchInfo.threadPayload);
-        Vec3<size_t> groupSize{ groupSizeX, groupSizeY, groupSizeZ };
+        Vec3<size_t> groupSize{groupSizeX, groupSizeY, groupSizeZ};
         auto itemsInGroup = OCLRT::Math::computeTotalElementsCount(groupSize);
         size_t perThreadDataSizeNeeded = OCLRT::PerThreadDataHelper::getPerThreadDataSizeTotal(kernelRT->kernelInfo.getMaxSimdSize(), numChannels, itemsInGroup);
         perThreadData.resize(perThreadDataSizeNeeded);
 
         OCLRT::generateLocalIDs(perThreadData.data(), static_cast<uint16_t>(function->getSimdSize()),
-                                std::array<uint16_t, 3>{ {static_cast<uint16_t>(groupSizeX), static_cast<uint16_t>(groupSizeY), static_cast<uint16_t>(groupSizeZ)}},
-                                std::array<uint8_t, 3>{ {0, 1, 2} }, // to do : add support for non-default walk order
+                                std::array<uint16_t, 3>{{static_cast<uint16_t>(groupSizeX), static_cast<uint16_t>(groupSizeY), static_cast<uint16_t>(groupSizeZ)}},
+                                std::array<uint8_t, 3>{{0, 1, 2}}, // to do : add support for non-default walk order
                                 false);
 
         this->groupSizeX = groupSizeX;
@@ -297,28 +297,28 @@ struct FunctionArgsImp : FunctionArgs {
     }
 
     bool initialize() {
-        OCLRT_temporary::LightweightOclKernel *kernelRT = static_cast<FunctionImp*>(function)->getKernelRT();
+        OCLRT_temporary::LightweightOclKernel *kernelRT = static_cast<FunctionImp *>(function)->getKernelRT();
 
         // clone muttables from kernel object - note some may be immutable - fix this later
         this->oclInternals.kernelArguments = kernelRT->kernelArguments;
-        for(auto handleRT : kernelRT->kernelArgHandlers){
-            if(handleRT == &OCLRT::Kernel::setArgBuffer){
+        for (auto handleRT : kernelRT->kernelArgHandlers) {
+            if (handleRT == &OCLRT::Kernel::setArgBuffer) {
                 this->oclInternals.kernelArgHandlers.push_back(&FunctionArgsImp::setArgBuffer);
-            }else{
+            } else {
                 assert(0); // only setArgBuffer for now
-            }          
+            }
         }
         this->oclInternals.kernelSvmGfxAllocations = kernelRT->kernelSvmGfxAllocations;
 
         this->oclInternals.numberOfBindingTableStates = kernelRT->numberOfBindingTableStates;
         this->oclInternals.localBindingTableOffset = kernelRT->localBindingTableOffset;
-        if(kernelRT->sshLocalSize != 0){
+        if (kernelRT->sshLocalSize != 0) {
             this->oclInternals.pSshLocal = std::make_unique<char[]>(kernelRT->sshLocalSize);
             memcpy(this->oclInternals.pSshLocal.get(), kernelRT->pSshLocal.get(), kernelRT->sshLocalSize);
             this->oclInternals.sshLocalSize = kernelRT->sshLocalSize;
         }
 
-        if(kernelRT->crossThreadDataSize != 0){
+        if (kernelRT->crossThreadDataSize != 0) {
             this->oclInternals.crossThreadData = new char[kernelRT->crossThreadDataSize];
             memcpy(this->oclInternals.crossThreadData, kernelRT->crossThreadData, kernelRT->crossThreadDataSize);
             this->oclInternals.crossThreadDataSize = kernelRT->crossThreadDataSize;
@@ -335,11 +335,12 @@ struct FunctionArgsImp : FunctionArgs {
 
         return true;
     }
-protected:
+
+  protected:
     Function *function;
     std::vector<GraphicsAllocation *> residencyContainer;
 
-    typedef xe_result_t(FunctionArgsImp::*FunctionArgHandler)(uint32_t argIndex, size_t argSize, const void *argVal);
+    typedef xe_result_t (FunctionArgsImp::*FunctionArgHandler)(uint32_t argIndex, size_t argSize, const void *argVal);
 
     struct OCLInternal { // cloned from OCLRT::Kernel - keeping types/names the same for simplicity
         std::vector<OCLRT::Kernel::SimpleKernelArgInfo> kernelArguments;
@@ -347,8 +348,8 @@ protected:
         std::vector<OCLRT::GraphicsAllocation *> kernelSvmGfxAllocations;
 
         void storeKernelArg(uint32_t argIndex, OCLRT::Kernel::kernelArgType argType, void *argObject,
-            const void *argValue, size_t argSize,
-            OCLRT::GraphicsAllocation *argSvmAlloc = nullptr, cl_mem_flags argSvmFlags = 0) {
+                            const void *argValue, size_t argSize,
+                            OCLRT::GraphicsAllocation *argSvmAlloc = nullptr, cl_mem_flags argSvmFlags = 0) {
             kernelArguments[argIndex].type = argType;
             kernelArguments[argIndex].object = argObject;
             kernelArguments[argIndex].value = argValue;

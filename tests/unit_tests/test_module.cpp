@@ -97,7 +97,7 @@ TEST(ModuleCreate, onlineCompilationModuleTest) {
     const void *crossThreadData = functionArgs->getCrossThreadDataHostMem();
     ASSERT_NE(nullptr, crossThreadData);
     ASSERT_NE(0U, functionArgs->getCrossThreadDataSize());
-    const uintptr_t *ctdSearchBeg = reinterpret_cast<const uintptr_t*>(crossThreadData);
+    const uintptr_t *ctdSearchBeg = reinterpret_cast<const uintptr_t *>(crossThreadData);
     const uintptr_t *ctdSearchEnd = ctdSearchBeg + functionArgs->getCrossThreadDataSize() / sizeof(uintptr_t);
     EXPECT_NE(ctdSearchEnd, std::find(ctdSearchBeg, ctdSearchEnd, srcAddress));
     EXPECT_NE(ctdSearchEnd, std::find(ctdSearchBeg, ctdSearchEnd, dstAddress));
@@ -121,12 +121,11 @@ TEST(ModuleCreate, onlineCompilationModuleTest) {
     EXPECT_EQ(1U, groupSizeZ);
 
     bool generateMockData = false;
-    if(generateMockData)
-    {
+    if (generateMockData) {
         auto deviceName = deviceRT->getFamilyNameWithType();
         std::string moduleName = std::string("MemcpyBytes");
         std::stringstream mockDataStream;
-        std::vector<std::pair<int, uintptr_t>> bufferArgsIndices { std::make_pair(0, dstAddress), std::make_pair( 1, srcAddress )};
+        std::vector<std::pair<int, uintptr_t>> bufferArgsIndices{std::make_pair(0, dstAddress), std::make_pair(1, srcAddress)};
         writeMockData(__FUNCTION__, moduleName, deviceName, function, functionArgs, bufferArgsIndices, mockDataStream);
         std::string mockData = mockDataStream.str();
         std::string fileName = "specialized_module_mock_for_" + moduleName + "_" + deviceName + ".h";
@@ -150,8 +149,8 @@ TEST(ModuleCreate, mockedModuleTestGen12HPcore) { // to do : make this generic (
     EXPECT_EQ(MemcpyBytes_ISA_Gen12HPcore, function.getIsaHostMem());
     EXPECT_EQ(sizeof(MemcpyBytes_ISA_Gen12HPcore), function.getIsaSize());
 
-    GraphicsAllocation mockAlloc1 { nullptr, 0 };
-    GraphicsAllocation mockAlloc2 { nullptr, 0 };
+    GraphicsAllocation mockAlloc1{nullptr, 0};
+    GraphicsAllocation mockAlloc2{nullptr, 0};
     SpecializedFunctionArgsMock functionArgs(&function, {&mockAlloc1, &mockAlloc2});
     EXPECT_EQ(sizeof(MemcpyBytes_CrossThreadDataBase_Gen12HPcore), functionArgs.getCrossThreadDataSize());
     EXPECT_EQ(0, memcmp(functionArgs.getCrossThreadDataHostMem(), MemcpyBytes_CrossThreadDataBase_Gen12HPcore, sizeof(MemcpyBytes_CrossThreadDataBase_Gen12HPcore)));
@@ -162,12 +161,12 @@ TEST(ModuleCreate, mockedModuleTestGen12HPcore) { // to do : make this generic (
 
     auto *crossThreadData = functionArgs.getCrossThreadDataHostMem();
 
-    const uintptr_t *ctdSearchBeg = reinterpret_cast<const uintptr_t*>(crossThreadData);
+    const uintptr_t *ctdSearchBeg = reinterpret_cast<const uintptr_t *>(crossThreadData);
     const uintptr_t *ctdSearchEnd = ctdSearchBeg + functionArgs.getCrossThreadDataSize() / sizeof(uintptr_t);
 
     uintptr_t clearValue = 0;
     uintptr_t addressToPatch = 2357;
-    while(ctdSearchEnd != std::find(ctdSearchBeg, ctdSearchEnd, addressToPatch)){
+    while (ctdSearchEnd != std::find(ctdSearchBeg, ctdSearchEnd, addressToPatch)) {
         ++addressToPatch; // find unique value
     }
     EXPECT_EQ(ctdSearchEnd, std::find(ctdSearchBeg, ctdSearchEnd, addressToPatch));
