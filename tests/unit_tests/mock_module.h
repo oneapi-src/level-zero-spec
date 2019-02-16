@@ -28,8 +28,9 @@ struct Mock<Module> : public Module {
     Mock() = default;
     virtual ~Mock() = default;
 
+    MOCK_METHOD2(createFunction, xe_result_t (const xe_function_desc_t *desc, xe_function_handle_t *phFunction));
     MOCK_METHOD0(destroy, xe_result_t());
-    MOCK_METHOD0(getDevice, Device*());
+    MOCK_CONST_METHOD0(getDevice, Device*());
 };
 
 template<>

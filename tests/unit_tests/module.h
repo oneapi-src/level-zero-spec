@@ -21,6 +21,8 @@ struct Module : public _xe_module_handle_t {
     virtual xe_result_t destroy() = 0;
     virtual Device *getDevice() const = 0;
 
+    virtual xe_result_t createFunction(const xe_function_desc_t *desc, xe_function_handle_t *phFunction) = 0;
+
     Module() = default;
     Module(const Module&) = delete;
     Module(Module&&) = delete;
@@ -87,5 +89,12 @@ struct FunctionArgs : public _xe_function_args_handle_t {
         return this;
     }
 };
+
+xe_result_t __xecall
+xeModuleCreateFunction(
+    xe_module_handle_t hModule,      ///< [in] handle of the module
+    const xe_function_desc_t *desc,  ///< [in] pointer to function descriptor
+    xe_function_handle_t *phFunction ///< [out] handle of the Function object
+);
 
 } // namespace xe

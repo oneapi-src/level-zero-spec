@@ -12,11 +12,25 @@
 
 #include <fstream>
 
-
 namespace xe {
 namespace ult {
 
 using ::testing::Return;
+
+TEST(xeModuleCreateFunction, redirectsToModuleObject) {
+    Mock<Module> module;
+    xe_function_desc_t desc = {};
+    xe_function_handle_t function = {};
+
+    EXPECT_CALL(module, createFunction(&desc, &function))
+        .Times(1)
+        .WillRepeatedly(Return(XE_RESULT_SUCCESS));
+
+    auto result = xe::xeModuleCreateFunction(module.toHandle(),
+                                             &desc,
+                                             &function);
+    EXPECT_EQ(XE_RESULT_SUCCESS, result);
+}
 
 inline std::unique_ptr<char[]> readBinaryTestFile(const std::string &name, size_t &outSize) {
     std::ifstream file(name, std::ios_base::binary);
@@ -51,7 +65,7 @@ TEST(ModuleCreate, onlineCompilationModuleTest) {
     size_t spvModuleSize = 0;
     auto spvModule = readBinaryTestFile("test_files/spv_modules/cstring_module.spv", spvModuleSize);
     ASSERT_NE(0U, spvModuleSize);
-  
+
     xe_module_desc_t modDesc = {};
     modDesc.version = XE_API_HEADER_VERSION;
     modDesc.format = XE_MODULE_FORMAT_IL_SPIRV;
@@ -124,7 +138,6 @@ TEST(ModuleCreate, onlineCompilationModuleTest) {
     module->destroy();
 }
 
-
 TEST(ModuleCreate, mockedModuleTestGen12HPcore) { // to do : make this generic (i.e. not tied to GEN)
     SpecializedFunctionMock function(MemcpyBytes_SimdSize_Gen12HPcore,
                                      MemcpyBytes_ISA_Gen12HPcore, sizeof(MemcpyBytes_ISA_Gen12HPcore),
@@ -142,7 +155,7 @@ TEST(ModuleCreate, mockedModuleTestGen12HPcore) { // to do : make this generic (
     SpecializedFunctionArgsMock functionArgs(&function, {&mockAlloc1, &mockAlloc2});
     EXPECT_EQ(sizeof(MemcpyBytes_CrossThreadDataBase_Gen12HPcore), functionArgs.getCrossThreadDataSize());
     EXPECT_EQ(0, memcmp(functionArgs.getCrossThreadDataHostMem(), MemcpyBytes_CrossThreadDataBase_Gen12HPcore, sizeof(MemcpyBytes_CrossThreadDataBase_Gen12HPcore)));
-    
+
     const auto &residencyFromArgs = functionArgs.getResidencyContainer();
     EXPECT_NE(residencyFromArgs.end(), std::find(residencyFromArgs.begin(), residencyFromArgs.end(), &mockAlloc1));
     EXPECT_NE(residencyFromArgs.end(), std::find(residencyFromArgs.begin(), residencyFromArgs.end(), &mockAlloc2));
@@ -158,11 +171,11 @@ TEST(ModuleCreate, mockedModuleTestGen12HPcore) { // to do : make this generic (
         ++addressToPatch; // find unique value
     }
     EXPECT_EQ(ctdSearchEnd, std::find(ctdSearchBeg, ctdSearchEnd, addressToPatch));
-    
+
     functionArgs.setValue(0, sizeof(uintptr_t), &addressToPatch);
     auto arg0 = std::find(ctdSearchBeg, ctdSearchEnd, addressToPatch);
     EXPECT_NE(ctdSearchEnd, arg0);
-    
+
     functionArgs.setValue(0, sizeof(uintptr_t), &clearValue);
     EXPECT_EQ(ctdSearchEnd, std::find(ctdSearchBeg, ctdSearchEnd, addressToPatch));
 

@@ -113,6 +113,11 @@ struct ModuleImp : public Module {
         return XE_RESULT_SUCCESS;
     }
 
+    xe_result_t createFunction(const xe_function_desc_t *desc, xe_function_handle_t *phFunction) override {
+        *phFunction = Function::create(this, desc)->toHandle();
+        return XE_RESULT_SUCCESS;
+    }
+
     Device *getDevice() const override {
         return device;
     }
@@ -377,6 +382,16 @@ FunctionArgs *FunctionArgs::create(Function *function) {
     auto functionArgs = new FunctionArgsImp(function);
     functionArgs->initialize();
     return functionArgs;
+}
+
+xe_result_t __xecall
+xeModuleCreateFunction(
+    xe_module_handle_t hModule,
+    const xe_function_desc_t *desc,
+    xe_function_handle_t *phFunction) {
+    auto module = Module::fromHandle(hModule);
+    return module->createFunction(desc,
+                                  phFunction);
 }
 
 } // namespace xe
