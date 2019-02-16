@@ -8,6 +8,7 @@
 #include "gtest/gtest.h"
 
 using ::testing::_;
+using ::testing::AnyNumber;
 using ::testing::Return;
 
 extern PRODUCT_FAMILY productFamily;
@@ -33,25 +34,20 @@ TEST(xeCommandQueueDestroy, returnsSuccess) {
 
 TEST(CommandQueueCreate, returnsCommandQueueOnSuccess) {
     Mock<Device> device;
-    Mock<MemoryManager> manager;
-    size_t sizeBuffer = 16384u;
-    auto buffer = new uint8_t[sizeBuffer];
-    auto allocation = new GraphicsAllocation(buffer, sizeBuffer);
+    Mock<MemoryManager> memoryManager;
 
-    EXPECT_CALL(device, getMemoryManager()).WillRepeatedly(Return(&manager));
-    EXPECT_CALL(manager, allocateDeviceMemory(_)).WillOnce(Return(allocation));
-    EXPECT_CALL(manager, freeMemory(allocation)).WillRepeatedly(Return());
+    EXPECT_CALL(device, getMemoryManager()).WillRepeatedly(Return(&memoryManager));
+    EXPECT_CALL(memoryManager, allocateDeviceMemory(_)).Times(AnyNumber());
+    EXPECT_CALL(memoryManager, freeMemory(_)).Times(AnyNumber());
 
     auto commandQueue = whitebox_cast(CommandQueue::create(productFamily, &device, device.csrRT));
     ASSERT_NE(commandQueue, nullptr);
     EXPECT_EQ(&device, commandQueue->device);
     EXPECT_EQ(commandQueue->csrRT, device.csrRT);
-    EXPECT_EQ(allocation, commandQueue->allocation);
+    EXPECT_NE(commandQueue->allocation, nullptr);
     ASSERT_NE(commandQueue->commandStream, nullptr);
     EXPECT_LT(0u, commandQueue->commandStream->getAvailableSpace());
     commandQueue->destroy();
-
-    delete[] buffer;
 }
 
 } // namespace ult

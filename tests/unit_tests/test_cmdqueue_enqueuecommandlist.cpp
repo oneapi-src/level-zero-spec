@@ -12,6 +12,8 @@
 namespace xe {
 namespace ult {
 
+using ::testing::_;
+using ::testing::AnyNumber;
 using ::testing::Return;
 
 TEST(xeCommandQueueEnqueueCommandQueue, redirectsToCmdQueueObject) {
@@ -39,13 +41,8 @@ HWTEST_F(CommandQueueEnqueueCommandLists, addsASecondLevelBatchBufferPerCommandL
     Mock<MemoryManager> memoryManager;
     EXPECT_CALL(device, getMemoryManager())
         .WillRepeatedly(Return(&memoryManager));
-
-    int8_t buffer[1024];
-    GraphicsAllocation allocation(buffer, sizeof(buffer));
-    EXPECT_CALL(memoryManager, allocateDeviceMemory)
-        .WillRepeatedly(Return(&allocation));
-    EXPECT_CALL(memoryManager, freeMemory)
-        .WillRepeatedly(Return());
+    EXPECT_CALL(memoryManager, allocateDeviceMemory(_)).Times(AnyNumber());
+    EXPECT_CALL(memoryManager, freeMemory(_)).Times(AnyNumber());
 
     auto commandQueue = whitebox_cast(CommandQueue::create(productFamily, &device, device.csrRT));
     ASSERT_NE(nullptr, commandQueue->commandStream);
@@ -78,7 +75,7 @@ HWTEST_F(CommandQueueEnqueueCommandLists, addsASecondLevelBatchBufferPerCommandL
         itorCurrent = find<MI_BATCH_BUFFER_START *>(itorCurrent, cmdList.end());
         ASSERT_NE(cmdList.end(), itorCurrent);
 
-        auto bbs = genCmdCast<MI_BATCH_BUFFER_START *>(*itorCurrent);
+        auto bbs = genCmdCast<MI_BATCH_BUFFER_START *>(*itorCurrent++);
         ASSERT_NE(nullptr, bbs);
         EXPECT_EQ(MI_BATCH_BUFFER_START::SECOND_LEVEL_BATCH_BUFFER_SECOND_LEVEL_BATCH, bbs->getSecondLevelBatchBuffer());
         EXPECT_EQ(MI_BATCH_BUFFER_START::ADDRESS_SPACE_INDICATOR_PPGTT, bbs->getAddressSpaceIndicator());

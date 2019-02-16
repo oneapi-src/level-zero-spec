@@ -13,6 +13,8 @@
 namespace xe {
 namespace ult {
 
+using ::testing::_;
+using ::testing::AnyNumber;
 using ::testing::Return;
 
 TEST(xeCommandListEncodeWaitOnEvent, redirectsToCmdListObject) {
@@ -33,11 +35,8 @@ HWTEST_F(CommandListEncodeWaitOnEvent, addsSemaphoreToCommandStream) {
     Mock<MemoryManager> memoryManager;
     EXPECT_CALL(device, getMemoryManager())
         .WillRepeatedly(Return(&memoryManager));
-
-    int8_t buffer[1024];
-    GraphicsAllocation allocation(buffer, sizeof(buffer));
-    EXPECT_CALL(memoryManager, allocateDeviceMemory)
-        .WillOnce(Return(&allocation));
+    EXPECT_CALL(memoryManager, allocateDeviceMemory(_)).Times(AnyNumber());
+    EXPECT_CALL(memoryManager, freeMemory(_)).Times(AnyNumber());
 
     auto commandList = whitebox_cast(CommandList::create(productFamily, &device));
     ASSERT_NE(nullptr, commandList->commandStream);
@@ -71,11 +70,8 @@ HWTEST_F(CommandListEncodeWaitOnEvent, addsEventGraphicsAllocationToResidencyCon
     Mock<MemoryManager> memoryManager;
     EXPECT_CALL(device, getMemoryManager())
         .WillRepeatedly(Return(&memoryManager));
-
-    int8_t buffer[1024];
-    GraphicsAllocation allocation(buffer, sizeof(buffer));
-    EXPECT_CALL(memoryManager, allocateDeviceMemory)
-        .WillOnce(Return(&allocation));
+    EXPECT_CALL(memoryManager, allocateDeviceMemory(_)).Times(AnyNumber());
+    EXPECT_CALL(memoryManager, freeMemory(_)).Times(AnyNumber());
 
     auto commandList = whitebox_cast(CommandList::create(productFamily, &device));
     ASSERT_NE(nullptr, commandList->commandStream);

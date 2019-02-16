@@ -17,6 +17,8 @@ struct FunctionArguments;
 
 namespace ult {
 
+using ::testing::_;
+using ::testing::AnyNumber;
 using ::testing::Return;
 
 TEST(xeCommandListEncodeDispatchFunction, redirectsToCmdListObject) {
@@ -48,11 +50,9 @@ ATSTEST_F(CommandListEncodeDispatchFunction, addsWalkerToCommandStream) {
     Mock<MemoryManager> memoryManager;
     EXPECT_CALL(device, getMemoryManager())
         .WillRepeatedly(Return(&memoryManager));
+    EXPECT_CALL(memoryManager, allocateDeviceMemory(_)).Times(AnyNumber());
+    EXPECT_CALL(memoryManager, freeMemory(_)).Times(AnyNumber());
 
-    int8_t buffer[1024];
-    GraphicsAllocation allocation(buffer, sizeof(buffer));
-    EXPECT_CALL(memoryManager, allocateDeviceMemory)
-        .WillOnce(Return(&allocation));
 
     auto commandList = whitebox_cast(CommandList::create(productFamily, &device));
     ASSERT_NE(nullptr, commandList->commandStream);

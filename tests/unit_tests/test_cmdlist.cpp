@@ -21,32 +21,30 @@ TEST(xeCommandListDestroy, redirectsToCmdListObject) {
 }
 
 using ::testing::_;
+using ::testing::AnyNumber;
 using ::testing::Return;
 using CommandListCreate = ::testing::TestWithParam<uint32_t>;
 
 TEST_P(CommandListCreate, returnsCommandListOnSuccess) {
     Mock<Device> device;
-    Mock<MemoryManager> manager;
-    auto sizeBuffer = 65536u;
-    auto buffer = new uint8_t[sizeBuffer];
-    auto allocation = new GraphicsAllocation(buffer, sizeBuffer);
+    Mock<MemoryManager> memoryManager;
 
-    EXPECT_CALL(device, getMemoryManager()).WillRepeatedly(Return(&manager));
-    EXPECT_CALL(manager, allocateDeviceMemory(_)).WillOnce(Return(allocation));
-    EXPECT_CALL(manager, freeMemory(allocation)).WillRepeatedly(Return());
+    EXPECT_CALL(device, getMemoryManager()).WillRepeatedly(Return(&memoryManager));
+    EXPECT_CALL(memoryManager, allocateDeviceMemory(_)).Times(AnyNumber());
+    EXPECT_CALL(memoryManager, freeMemory(_)).Times(AnyNumber());
 
     auto commandList = whitebox_cast(CommandList::create(GetParam(), &device));
     ASSERT_NE(nullptr, commandList);
 
     EXPECT_EQ(&device, commandList->device);
-    EXPECT_EQ(allocation, commandList->allocation);
+    ASSERT_NE(commandList->allocation, nullptr);
+    auto allocation = whitebox_cast(commandList->allocation);
+
     ASSERT_NE(nullptr, commandList->commandStream);
     EXPECT_LT(0u, commandList->commandStream->getAvailableSpace());
     ASSERT_GT(commandList->residencyContainer.size(), 0u);
     EXPECT_EQ(commandList->residencyContainer.front(), allocation->allocationRT);
     commandList->destroy();
-
-    delete[] buffer;
 }
 
 static uint32_t supportedProductFamilyTable[] = {
