@@ -1,7 +1,12 @@
-#pragma once
-
 // This is a generated file
 // Check xe::ult::ModuleCreate_onlineCompilationModuleTest_Test::TestBody for details
+
+#pragma once
+
+#include "tests/unit_tests/mock_module_precompiled.h"
+
+namespace xe {
+namespace ult {
 
 static const uint32_t MemcpyBytes_SimdSize_Gen12HPcore = 32;
 
@@ -30,13 +35,15 @@ static const uint32_t MemcpyBytes_ISA_Gen12HPcore[] =
     0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 
     0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 
     0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 
-    0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000};
+    0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000
+};
 
 
 static const uint32_t MemcpyBytes_CrossThreadDataBase_Gen12HPcore[] = 
 {
     0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 
-    0x6c4d0000, 0x0000028f, 0x6c260000, 0x0000028f, 0x00000000, 0x00000000, 0x00000000, 0x00000000};
+    0x87a90000, 0x00000159, 0x87ab0000, 0x00000159, 0x00000000, 0x00000000, 0x00000000, 0x00000000
+};
 
 
 static const uint32_t MemcpyBytes_PerThreadDataBase_Gen12HPcore[] = 
@@ -46,10 +53,24 @@ static const uint32_t MemcpyBytes_PerThreadDataBase_Gen12HPcore[] =
     0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 
     0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 
     0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 
-    0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000};
+    0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000
+};
 
 
 static const std::pair<int, int> MemcpyBytes_BufferArgIndicesAndOffsets_Gen12HPcore[] = { {0x0, 0x20}, {0x1, 0x28},  };
 
-static uint32_t MemcpyBytes_GroupSizeInPerThreadData_Gen12HPcore[] = { 0x20, 0x1, 0x1 };
+static const uint32_t MemcpyBytes_GroupSizeInPerThreadData_Gen12HPcore[] = { 0x20, 0x1, 0x1 };
 
+static const PrecompiledFunctionMockData MemcpyBytes_Gen12HPcore {
+MemcpyBytes_SimdSize_Gen12HPcore,
+MemcpyBytes_ISA_Gen12HPcore, sizeof(MemcpyBytes_ISA_Gen12HPcore),
+MemcpyBytes_CrossThreadDataBase_Gen12HPcore, sizeof(MemcpyBytes_CrossThreadDataBase_Gen12HPcore),
+MemcpyBytes_PerThreadDataBase_Gen12HPcore, sizeof(MemcpyBytes_PerThreadDataBase_Gen12HPcore),
+MemcpyBytes_GroupSizeInPerThreadData_Gen12HPcore,
+MemcpyBytes_BufferArgIndicesAndOffsets_Gen12HPcore, sizeof(MemcpyBytes_BufferArgIndicesAndOffsets_Gen12HPcore) / sizeof(MemcpyBytes_BufferArgIndicesAndOffsets_Gen12HPcore[0])
+};
+
+RegisterPrecompiledFunctionMocksData Register_MemcpyBytes_Gen12HPcore{ & MemcpyBytes_Gen12HPcore, "MemcpyBytes", "Gen12HPcore" }; 
+
+} // namespace xe
+} // namespace ult

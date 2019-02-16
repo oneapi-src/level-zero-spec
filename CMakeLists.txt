@@ -73,6 +73,7 @@ if(COMPUTE_RUNTIME_SUPPORT)
 endif(COMPUTE_RUNTIME_SUPPORT)
 
 include_directories(${CMAKE_CURRENT_SOURCE_DIR}/core/include)
+include_directories("${CMAKE_CURRENT_SOURCE_DIR}")
 
 if (${PROJECT_NAME}_BUILD_TESTS)
     add_subdirectory(tests)

@@ -47,6 +47,7 @@ if(COMPUTE_RUNTIME_SUPPORT)
             mock_memory_manager.cpp
             mock_memory_manager.h
             mock_module.h
+            mock_module_precompiled.h
             test_cmdlist.cpp
             test_cmdlist_close.cpp
             test_cmdlist_encodedispatchfunction.cpp
@@ -91,6 +92,8 @@ if(COMPUTE_RUNTIME_SUPPORT)
     endif()
 
     add_dependencies(${TARGET_NAME} mock_gmm)
+    
+    add_subdirectory(precompiled_function_mock_data)
 endif(COMPUTE_RUNTIME_SUPPORT)
 
 set_target_properties(${TARGET_NAME}
