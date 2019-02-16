@@ -90,10 +90,21 @@ TEST(ModuleCreate, onlineCompilationModuleTest) {
 
     EXPECT_NE(nullptr, function->getIsaHostMem());
     EXPECT_NE(0U, function->getIsaSize());
+    EXPECT_NE(0U, function->getSimdSize());
 
     auto capturedAllocsFroResidency = functionArgs->getResidencyContainer();
     EXPECT_NE(capturedAllocsFroResidency.end(), std::find(capturedAllocsFroResidency.begin(), capturedAllocsFroResidency.end(), dst));
     EXPECT_NE(capturedAllocsFroResidency.end(), std::find(capturedAllocsFroResidency.begin(), capturedAllocsFroResidency.end(), src));
+
+    ASSERT_NE(nullptr, functionArgs->getPerThreadDataHostMem());
+    uint32_t numChannels = 3;
+    EXPECT_EQ(numChannels * function->getSimdSize() * sizeof(uint16_t), functionArgs->getPerThreadDataSize());
+
+    uint32_t groupSizeX, groupSizeY, groupSizeZ;
+    functionArgs->getGroupSize(groupSizeX, groupSizeY, groupSizeZ);
+    EXPECT_EQ(function->getSimdSize(), groupSizeX);
+    EXPECT_EQ(1U, groupSizeY);
+    EXPECT_EQ(1U, groupSizeZ);
 
     bool generateMockData = false;
     if(generateMockData)
@@ -101,7 +112,8 @@ TEST(ModuleCreate, onlineCompilationModuleTest) {
         auto deviceName = deviceRT->getFamilyNameWithType();
         std::string moduleName = std::string("MemcpyBytes");
         std::stringstream mockDataStream;
-        writeMockData(moduleName, deviceName, function, functionArgs, {{0, dstAddress}, {1, srcAddress}}, mockDataStream);
+        std::vector<std::pair<int, uintptr_t>> bufferArgsIndices { std::make_pair(0, dstAddress), std::make_pair( 1, srcAddress )};
+        writeMockData(__FUNCTION__, moduleName, deviceName, function, functionArgs, bufferArgsIndices, mockDataStream);
         std::string mockData = mockDataStream.str();
         std::string fileName = "specialized_module_mock_for_" + moduleName + "_" + deviceName + ".h";
         std::ofstream(fileName, std::ios::binary).write(mockData.data(), mockData.size());
@@ -112,10 +124,13 @@ TEST(ModuleCreate, onlineCompilationModuleTest) {
     module->destroy();
 }
 
+
 TEST(ModuleCreate, mockedModuleTestGen12HPcore) { // to do : make this generic (i.e. not tied to GEN)
     SpecializedFunctionMock function(MemcpyBytes_SimdSize_Gen12HPcore,
                                      MemcpyBytes_ISA_Gen12HPcore, sizeof(MemcpyBytes_ISA_Gen12HPcore),
                                      MemcpyBytes_CrossThreadDataBase_Gen12HPcore, sizeof(MemcpyBytes_CrossThreadDataBase_Gen12HPcore),
+                                     MemcpyBytes_PerThreadDataBase_Gen12HPcore, sizeof(MemcpyBytes_PerThreadDataBase_Gen12HPcore),
+                                     MemcpyBytes_GroupSizeInPerThreadData_Gen12HPcore[0], MemcpyBytes_GroupSizeInPerThreadData_Gen12HPcore[1], MemcpyBytes_GroupSizeInPerThreadData_Gen12HPcore[2],
                                      MemcpyBytes_BufferArgIndicesAndOffsets_Gen12HPcore, sizeof(MemcpyBytes_BufferArgIndicesAndOffsets_Gen12HPcore) / sizeof(MemcpyBytes_BufferArgIndicesAndOffsets_Gen12HPcore[0]));
 
     EXPECT_EQ(MemcpyBytes_SimdSize_Gen12HPcore, function.getSimdSize());
@@ -155,6 +170,15 @@ TEST(ModuleCreate, mockedModuleTestGen12HPcore) { // to do : make this generic (
     auto arg1 = std::find(ctdSearchBeg, ctdSearchEnd, addressToPatch);
     EXPECT_NE(ctdSearchEnd, arg1);
     EXPECT_NE(arg0, arg1);
+
+    uint32_t groupSizeX, groupSizeY, groupSizeZ;
+    functionArgs.getGroupSize(groupSizeX, groupSizeY, groupSizeZ);
+    EXPECT_EQ(MemcpyBytes_GroupSizeInPerThreadData_Gen12HPcore[0], groupSizeX);
+    EXPECT_EQ(MemcpyBytes_GroupSizeInPerThreadData_Gen12HPcore[1], groupSizeY);
+    EXPECT_EQ(MemcpyBytes_GroupSizeInPerThreadData_Gen12HPcore[2], groupSizeZ);
+
+    EXPECT_EQ(MemcpyBytes_PerThreadDataBase_Gen12HPcore, functionArgs.getPerThreadDataHostMem());
+    EXPECT_EQ(sizeof(MemcpyBytes_PerThreadDataBase_Gen12HPcore), functionArgs.getPerThreadDataSize());
 }
 
 } // namespace ult

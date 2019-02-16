@@ -5,6 +5,8 @@
 
 #include "runtime/compiler_interface/compiler_interface.h"
 #include "runtime/context/context.h"
+#include "runtime/helpers/basic_math.h"
+#include "runtime/helpers/per_thread_data.h"
 #include "runtime/kernel/kernel.h"
 #include "runtime/program/program.h"
 
@@ -88,6 +90,12 @@ namespace OCLRT_temporary{
     
         using Kernel::kernelInfo;
     };
+}
+
+namespace OCLRT {
+namespace Math {
+    using namespace ::Math; // just to emphasize the origin (wich originally is not encapsulated in OCLRT)
+}
 }
 
 
@@ -250,6 +258,39 @@ struct FunctionArgsImp : FunctionArgs {
         return residencyContainer;
     }
 
+    void setGroupSize(uint32_t groupSizeX, uint32_t groupSizeY, uint32_t groupSizeZ) override {
+        OCLRT_temporary::LightweightOclKernel *kernelRT = static_cast<FunctionImp*>(function)->getKernelRT();
+
+        auto numChannels = OCLRT::PerThreadDataHelper::getNumLocalIdChannels(*kernelRT->kernelInfo.patchInfo.threadPayload);
+        Vec3<size_t> groupSize{ groupSizeX, groupSizeY, groupSizeZ };
+        auto itemsInGroup = OCLRT::Math::computeTotalElementsCount(groupSize);
+        size_t perThreadDataSizeNeeded = OCLRT::PerThreadDataHelper::getPerThreadDataSizeTotal(kernelRT->kernelInfo.getMaxSimdSize(), numChannels, itemsInGroup);
+        perThreadData.resize(perThreadDataSizeNeeded);
+
+        OCLRT::generateLocalIDs(perThreadData.data(), static_cast<uint16_t>(function->getSimdSize()),
+                                std::array<uint16_t, 3>{ {static_cast<uint16_t>(groupSizeX), static_cast<uint16_t>(groupSizeY), static_cast<uint16_t>(groupSizeZ)}},
+                                std::array<uint8_t, 3>{ {0, 1, 2} }, // to do : add support for non-default walk order
+                                false);
+
+        this->groupSizeX = groupSizeX;
+        this->groupSizeY = groupSizeY;
+        this->groupSizeZ = groupSizeZ;
+    }
+
+    void getGroupSize(uint32_t &outGroupSizeX, uint32_t &outGroupSizeY, uint32_t &outGroupSizeZ) const override {
+        outGroupSizeX = this->groupSizeX;
+        outGroupSizeY = this->groupSizeY;
+        outGroupSizeZ = this->groupSizeZ;
+    }
+
+    const void *getPerThreadDataHostMem() const override {
+        return perThreadData.data();
+    }
+
+    size_t getPerThreadDataSize() const override {
+        return perThreadData.size();
+    }
+
     bool initialize() {
         OCLRT_temporary::LightweightOclKernel *kernelRT = static_cast<FunctionImp*>(function)->getKernelRT();
 
@@ -284,6 +325,8 @@ struct FunctionArgsImp : FunctionArgs {
         this->oclInternals.patchedArgumentsNum = kernelRT->patchedArgumentsNum;
         this->oclInternals.startOffset = kernelRT->startOffset;
         residencyContainer.resize(this->oclInternals.kernelArgHandlers.size(), nullptr); // todo : handle implicit surfaces - printf/private/constant
+
+        this->setGroupSize(kernelRT->kernelInfo.getMaxSimdSize(), 1, 1); // until apps sets-up something smarter
 
         return true;
     }
@@ -323,6 +366,11 @@ protected:
         uint32_t patchedArgumentsNum = 0;
         uint32_t startOffset = 0;
     } oclInternals;
+
+    uint32_t groupSizeX = 0;
+    uint32_t groupSizeY = 0;
+    uint32_t groupSizeZ = 0;
+    std::vector<uint8_t> perThreadData;
 };
 
 FunctionArgs *FunctionArgs::create(Function *function) {

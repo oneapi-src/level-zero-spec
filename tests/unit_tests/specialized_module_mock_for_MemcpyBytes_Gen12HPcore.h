@@ -1,5 +1,8 @@
 #pragma once
 
+// This is a generated file
+// Check xe::ult::ModuleCreate_onlineCompilationModuleTest_Test::TestBody for details
+
 static const uint32_t MemcpyBytes_SimdSize_Gen12HPcore = 32;
 
 static const uint32_t MemcpyBytes_ISA_Gen12HPcore[] = 
@@ -33,8 +36,20 @@ static const uint32_t MemcpyBytes_ISA_Gen12HPcore[] =
 static const uint32_t MemcpyBytes_CrossThreadDataBase_Gen12HPcore[] = 
 {
     0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 
-    0xf0990000, 0x000002a1, 0xf09c0000, 0x000002a1, 0x00000000, 0x00000000, 0x00000000, 0x00000000};
+    0x6c4d0000, 0x0000028f, 0x6c260000, 0x0000028f, 0x00000000, 0x00000000, 0x00000000, 0x00000000};
+
+
+static const uint32_t MemcpyBytes_PerThreadDataBase_Gen12HPcore[] = 
+{
+    0x00010000, 0x00030002, 0x00050004, 0x00070006, 0x00090008, 0x000b000a, 0x000d000c, 0x000f000e, 
+    0x00110010, 0x00130012, 0x00150014, 0x00170016, 0x00190018, 0x001b001a, 0x001d001c, 0x001f001e, 
+    0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 
+    0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 
+    0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 
+    0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000};
 
 
 static const std::pair<int, int> MemcpyBytes_BufferArgIndicesAndOffsets_Gen12HPcore[] = { {0x0, 0x20}, {0x1, 0x28},  };
+
+static uint32_t MemcpyBytes_GroupSizeInPerThreadData_Gen12HPcore[] = { 0x20, 0x1, 0x1 };
 
