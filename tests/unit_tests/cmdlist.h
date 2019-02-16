@@ -46,6 +46,7 @@ struct CommandList : public _xe_command_list_handle_t {
     virtual ~CommandList() = default;
 
     GraphicsAllocation *allocation = nullptr;
+    GraphicsAllocation *allocationIndirectHeaps[5];
 };
 
 using CommandListAllocatorFn = CommandList *(*)(Device *);

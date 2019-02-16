@@ -7,6 +7,7 @@
 #include <vector>
 
 namespace OCLRT {
+class IndirectHeap;
 class LinearStream;
 class GraphicsAllocation;
 
@@ -19,6 +20,13 @@ struct CommandListImp : public CommandList {
     CommandListImp(Device *device)
         : device(device),
           commandStream(nullptr) {
+        for (auto &indirectHeap : indirectHeaps) {
+            indirectHeap = nullptr;
+        }
+
+        for (auto &allocationIndirectHeap : allocationIndirectHeaps) {
+            allocationIndirectHeap = nullptr;
+        }
     }
 
     xe_result_t destroy() override;
@@ -34,6 +42,7 @@ struct CommandListImp : public CommandList {
 
     Device *device;
     OCLRT::LinearStream *commandStream;
+    OCLRT::IndirectHeap *indirectHeaps[5];
     OCLRT::ResidencyContainer residencyContainer;
 };
 

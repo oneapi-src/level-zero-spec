@@ -38,11 +38,23 @@ TEST_P(CommandListCreate, returnsCommandListOnSuccess) {
 
     EXPECT_EQ(&device, commandList->device);
     ASSERT_NE(commandList->allocation, nullptr);
+    auto numAllocations = 0u;
+
     auto allocation = whitebox_cast(commandList->allocation);
+    ++numAllocations;
 
     ASSERT_NE(nullptr, commandList->commandStream);
+    for (auto indirectHeap : commandList->indirectHeaps) {
+        ASSERT_NE(indirectHeap, nullptr);
+    }
+
+    for (auto allocationIndirectHeap : commandList->allocationIndirectHeaps) {
+        ++numAllocations;
+        ASSERT_NE(allocationIndirectHeap, nullptr);
+    }
+
     EXPECT_LT(0u, commandList->commandStream->getAvailableSpace());
-    ASSERT_GT(commandList->residencyContainer.size(), 0u);
+    ASSERT_EQ(commandList->residencyContainer.size(), numAllocations);
     EXPECT_EQ(commandList->residencyContainer.front(), allocation->allocationRT);
     commandList->destroy();
 }

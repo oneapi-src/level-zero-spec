@@ -14,7 +14,9 @@ template <>
 struct WhiteBox<::xe::CommandList> : public ::xe::CommandListImp {
     using BaseClass = ::xe::CommandListImp;
     using BaseClass::allocation;
+    using BaseClass::allocationIndirectHeaps;
     using BaseClass::commandStream;
+    using BaseClass::indirectHeaps;
     using BaseClass::device;
     using BaseClass::residencyContainer;
 
