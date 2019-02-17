@@ -168,6 +168,11 @@ struct FunctionImp : Function {
         return XE_RESULT_SUCCESS;
     }
 
+    xe_result_t createFunctionArgs(xe_function_args_handle_t *phFunctionArgs) override {
+        *phFunctionArgs = FunctionArgs::create(this)->toHandle();
+        return XE_RESULT_SUCCESS;
+    }
+
     Module *getModule() const override {
         return module;
     }
@@ -215,6 +220,7 @@ struct FunctionArgsImp : FunctionArgs {
     FunctionArgsImp(Function *function) : function(function) {}
 
     virtual ~FunctionArgsImp() {
+        alignedFree(perThreadData);
     }
 
     xe_result_t destroy() override {
@@ -270,9 +276,13 @@ struct FunctionArgsImp : FunctionArgs {
         Vec3<size_t> groupSize{groupSizeX, groupSizeY, groupSizeZ};
         auto itemsInGroup = OCLRT::Math::computeTotalElementsCount(groupSize);
         size_t perThreadDataSizeNeeded = OCLRT::PerThreadDataHelper::getPerThreadDataSizeTotal(kernelRT->kernelInfo.getMaxSimdSize(), numChannels, itemsInGroup);
-        perThreadData.resize(perThreadDataSizeNeeded);
+        if(perThreadDataSizeNeeded > perThreadDataSize) {
+            alignedFree(perThreadData);
+            perThreadData = alignedMalloc(perThreadDataSizeNeeded, 32); // alignment for vector instructions
+            perThreadDataSize = perThreadDataSizeNeeded;
+        }
 
-        OCLRT::generateLocalIDs(perThreadData.data(), static_cast<uint16_t>(function->getSimdSize()),
+        OCLRT::generateLocalIDs(perThreadData, static_cast<uint16_t>(function->getSimdSize()),
                                 std::array<uint16_t, 3>{{static_cast<uint16_t>(groupSizeX), static_cast<uint16_t>(groupSizeY), static_cast<uint16_t>(groupSizeZ)}},
                                 std::array<uint8_t, 3>{{0, 1, 2}}, // to do : add support for non-default walk order
                                 false);
@@ -289,11 +299,11 @@ struct FunctionArgsImp : FunctionArgs {
     }
 
     const void *getPerThreadDataHostMem() const override {
-        return perThreadData.data();
+        return perThreadData;
     }
 
     size_t getPerThreadDataSize() const override {
-        return perThreadData.size();
+        return perThreadDataSize;
     }
 
     bool initialize() {
@@ -376,13 +386,21 @@ struct FunctionArgsImp : FunctionArgs {
     uint32_t groupSizeX = 0;
     uint32_t groupSizeY = 0;
     uint32_t groupSizeZ = 0;
-    std::vector<uint8_t> perThreadData;
+    void *perThreadData = nullptr;
+    size_t perThreadDataSize = 0;
 };
 
 FunctionArgs *FunctionArgs::create(Function *function) {
     auto functionArgs = new FunctionArgsImp(function);
     functionArgs->initialize();
     return functionArgs;
+}
+
+xe_result_t __xecall
+xeModuleDestroy(
+    xe_module_handle_t hModule) {
+    auto module = Module::fromHandle(hModule);
+    return module->destroy();
 }
 
 xe_result_t __xecall
@@ -393,6 +411,38 @@ xeModuleCreateFunction(
     auto module = Module::fromHandle(hModule);
     return module->createFunction(desc,
                                   phFunction);
+}
+
+xe_result_t __xecall
+xeFunctionDestroy(
+    xe_function_handle_t phFunction) {
+    auto function = Function::fromHandle(phFunction);
+    return function->destroy();
+}
+
+xe_result_t __xecall
+xeFunctionCreateFunctionArgs(
+    xe_function_handle_t hFunction,          
+    xe_function_args_handle_t* phFunctionArgs){
+    auto function = Function::fromHandle(hFunction);
+    return function->createFunctionArgs(phFunctionArgs);
+}
+
+xe_result_t __xecall
+xeFunctionArgsDestroy(
+    xe_function_args_handle_t hFunctionArgs){
+    auto functionArgs = FunctionArgs::fromHandle(hFunctionArgs);
+    return functionArgs->destroy();
+}
+
+xe_result_t __xecall
+xeFunctionArgsSetValue(
+    xe_function_args_handle_t hFunctionArgs, 
+    uint32_t argIndex,                       
+    size_t argSize,                          
+    const void* pArgValue){
+    auto functionARgs = FunctionArgs::fromHandle(hFunctionArgs);
+    return functionARgs->setValue(argIndex, argSize, pArgValue);
 }
 
 } // namespace xe

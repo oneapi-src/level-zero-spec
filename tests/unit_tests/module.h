@@ -42,6 +42,8 @@ struct Module : public _xe_module_handle_t {
 struct Function : public _xe_function_handle_t {
     static Function *create(Module *module, const xe_function_desc_t *desc);
     virtual xe_result_t destroy() = 0;
+    virtual xe_result_t createFunctionArgs(xe_function_args_handle_t *phFunctionArgs) = 0;
+
     virtual Module *getModule() const = 0;
     virtual const void *getIsaHostMem() const = 0;
     virtual size_t getIsaSize() const = 0;
@@ -67,6 +69,7 @@ struct FunctionArgs : public _xe_function_args_handle_t {
     static FunctionArgs *create(Function *function);
     virtual xe_result_t destroy() = 0;
     virtual xe_result_t setValue(uint32_t argIndex, size_t argSize, const void *pArgValue) = 0;
+
     virtual const void *getCrossThreadDataHostMem() const = 0;
     virtual size_t getCrossThreadDataSize() const = 0;
     virtual const std::vector<GraphicsAllocation *> &getResidencyContainer() const = 0;
@@ -95,6 +98,30 @@ xeModuleCreateFunction(
     xe_module_handle_t hModule,      ///< [in] handle of the module
     const xe_function_desc_t *desc,  ///< [in] pointer to function descriptor
     xe_function_handle_t *phFunction ///< [out] handle of the Function object
+);
+
+xe_result_t __xecall
+xeFunctionDestroy(
+    xe_function_handle_t phFunction
+);
+
+xe_result_t __xecall
+xeFunctionCreateFunctionArgs(
+    xe_function_handle_t hFunction,                 ///< [in] handle of the function
+    xe_function_args_handle_t* phFunctionArgs       ///< [out] handle of the Function arguments object
+);
+
+xe_result_t __xecall
+xeFunctionArgsDestroy(
+    xe_function_args_handle_t hFunctionArgs         ///< [in] handle of the function arguments buffer object
+);
+
+xe_result_t __xecall
+xeFunctionArgsSetValue(
+    xe_function_args_handle_t hFunctionArgs,        ///< [in/out] handle of the function args object.
+    uint32_t argIndex,                              ///< [in] argument index in range [0, num args - 1]
+    size_t argSize,                                 ///< [in] size of argument type
+    const void* pArgValue                           ///< [in] argument value represented as matching arg type
 );
 
 } // namespace xe

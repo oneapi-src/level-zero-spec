@@ -6,6 +6,7 @@
 #include "module.h"
 
 #include "runtime/device/device.h"
+#include "runtime/helpers/aligned_memory.h"
 #include "runtime/platform/platform.h"
 
 #include "gtest/gtest.h"
@@ -106,11 +107,11 @@ TEST(ModuleCreate, onlineCompilationModuleTest) {
     EXPECT_NE(0U, function->getIsaSize());
     EXPECT_NE(0U, function->getSimdSize());
 
-    auto capturedAllocsFroResidency = functionArgs->getResidencyContainer();
-    EXPECT_NE(capturedAllocsFroResidency.end(), std::find(capturedAllocsFroResidency.begin(), capturedAllocsFroResidency.end(), dst));
-    EXPECT_NE(capturedAllocsFroResidency.end(), std::find(capturedAllocsFroResidency.begin(), capturedAllocsFroResidency.end(), src));
-
+    auto capturedAllocsForResidency = functionArgs->getResidencyContainer();
+    EXPECT_NE(capturedAllocsForResidency.end(), std::find(capturedAllocsForResidency.begin(), capturedAllocsForResidency.end(), dst));
+    EXPECT_NE(capturedAllocsForResidency.end(), std::find(capturedAllocsForResidency.begin(), capturedAllocsForResidency.end(), src));
     ASSERT_NE(nullptr, functionArgs->getPerThreadDataHostMem());
+    EXPECT_TRUE(isAligned<32>(functionArgs->getPerThreadDataHostMem())) << "Per thread data not properly aligned for vector instructions"; // todo : make a real test out of this
     uint32_t numChannels = 3;
     EXPECT_EQ(numChannels * function->getSimdSize() * sizeof(uint16_t), functionArgs->getPerThreadDataSize());
 

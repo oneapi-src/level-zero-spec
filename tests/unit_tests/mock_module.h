@@ -31,6 +31,7 @@ struct Mock<Function> : public Function {
     virtual ~Mock() = default;
 
     MOCK_METHOD0(destroy, xe_result_t());
+    MOCK_METHOD1(createFunctionArgs, xe_result_t(xe_function_args_handle_t *phFunctionArgs));
     MOCK_CONST_METHOD0(getModule, Module*());
     MOCK_CONST_METHOD0(getIsaHostMem, const void *());
     MOCK_CONST_METHOD0(getIsaSize, size_t());
