@@ -16,29 +16,31 @@ bool CommandListHw<gfxCoreFamily>::initialize() {
         return false;
     }
 
-    using STATE_BASE_ADDRESS = typename GfxFamily::STATE_BASE_ADDRESS;
-    STATE_BASE_ADDRESS cmd = GfxFamily::cmdInitStateBaseAddress;
-
     {
-        auto heap = this->indirectHeaps[INSTRUCTION];
-        assert(heap != nullptr);
-        cmd.setInstructionBaseAddressModifyEnable(true);
-        cmd.setInstructionBaseAddress(heap->getHeapGpuBase());
-        cmd.setInstructionBufferSizeModifyEnable(true);
-        cmd.setInstructionBufferSize(static_cast<uint32_t>(heap->getMaxAvailableSpace()));
-    }
+        using STATE_BASE_ADDRESS = typename GfxFamily::STATE_BASE_ADDRESS;
+        STATE_BASE_ADDRESS cmd = GfxFamily::cmdInitStateBaseAddress;
 
-    {
-        auto heap = this->indirectHeaps[GENERAL_STATE];
-        assert(heap != nullptr);
-        cmd.setGeneralStateBaseAddressModifyEnable(true);
-        cmd.setGeneralStateBaseAddress(heap->getHeapGpuBase());
-        cmd.setGeneralStateBufferSizeModifyEnable(true);
-        cmd.setGeneralStateBufferSize(static_cast<uint32_t>(heap->getMaxAvailableSpace()));
-    }
+        {
+            auto heap = this->indirectHeaps[INSTRUCTION];
+            assert(heap != nullptr);
+            cmd.setInstructionBaseAddressModifyEnable(true);
+            cmd.setInstructionBaseAddress(heap->getHeapGpuBase());
+            cmd.setInstructionBufferSizeModifyEnable(true);
+            cmd.setInstructionBufferSize(static_cast<uint32_t>(heap->getMaxAvailableSpace()));
+        }
 
-    auto buffer = commandStream->getSpace(sizeof(cmd));
-    *(STATE_BASE_ADDRESS *)buffer = cmd;
+        {
+            auto heap = this->indirectHeaps[GENERAL_STATE];
+            assert(heap != nullptr);
+            cmd.setGeneralStateBaseAddressModifyEnable(true);
+            cmd.setGeneralStateBaseAddress(heap->getHeapGpuBase());
+            cmd.setGeneralStateBufferSizeModifyEnable(true);
+            cmd.setGeneralStateBufferSize(static_cast<uint32_t>(heap->getMaxAvailableSpace()));
+        }
+
+        auto buffer = commandStream->getSpace(sizeof(cmd));
+        *(STATE_BASE_ADDRESS *)buffer = cmd;
+    }
 
     return true;
 }

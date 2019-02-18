@@ -113,7 +113,7 @@ HWTEST_F(CommandListCreate, addsStateBaseAddressToBatchBuffer) {
                                                       usedSpaceAfter));
     using STATE_BASE_ADDRESS = typename FamilyType::STATE_BASE_ADDRESS;
     auto itor = find<STATE_BASE_ADDRESS *>(cmdList.begin(), cmdList.end());
-    EXPECT_NE(cmdList.end(), itor);
+    ASSERT_NE(cmdList.end(), itor);
 
     {
         auto cmd = genCmdCast<STATE_BASE_ADDRESS *>(*itor);
@@ -128,6 +128,37 @@ HWTEST_F(CommandListCreate, addsStateBaseAddressToBatchBuffer) {
         EXPECT_EQ(cmd->getGeneralStateBaseAddress(), heap->getHeapGpuBase());
         EXPECT_TRUE(cmd->getGeneralStateBufferSizeModifyEnable());
         EXPECT_EQ(cmd->getGeneralStateBufferSize(), heap->getMaxAvailableSpace());
+    }
+}
+
+ATSTEST_F(CommandListCreate, addsCfeStateToBatchBuffer) {
+    Mock<Device> device;
+    Mock<MemoryManager> memoryManager;
+    EXPECT_CALL(device, getMemoryManager())
+        .WillRepeatedly(Return(&memoryManager));
+    EXPECT_CALL(memoryManager, allocateDeviceMemory(_)).Times(AnyNumber());
+    EXPECT_CALL(memoryManager, freeMemory(_)).Times(AnyNumber());
+
+    auto commandList = whitebox_cast(CommandList::create(productFamily, &device));
+    ASSERT_NE(nullptr, commandList->commandStream);
+    auto usedSpaceBefore = commandList->commandStream->getUsed();
+
+    auto result = commandList->close();
+    ASSERT_EQ(XE_RESULT_SUCCESS, result);
+
+    auto usedSpaceAfter = commandList->commandStream->getUsed();
+    ASSERT_GT(usedSpaceAfter, usedSpaceBefore);
+
+    GenCmdList cmdList;
+    ASSERT_TRUE(FamilyType::PARSE::parseCommandBuffer(cmdList,
+                                                      ptrOffset(commandList->commandStream->getCpuBase(), 0),
+                                                      usedSpaceAfter));
+    using CFE_STATE = typename FamilyType::CFE_STATE;
+    auto itor = find<CFE_STATE *>(cmdList.begin(), cmdList.end());
+    ASSERT_NE(cmdList.end(), itor);
+
+    {
+        auto cmd = genCmdCast<CFE_STATE *>(*itor);
     }
 }
 
