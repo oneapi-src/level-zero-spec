@@ -58,27 +58,22 @@ xe_result_t CommandListHw<IGFX_GEN12_CORE>::encodeDispatchFunction(xe_function_h
                                                                    xe_event_handle_t hEvent) {
     using GfxFamily = typename OCLRT::GfxFamilyMapper<IGFX_GEN12_CORE>::GfxFamily;
     using COMPUTE_WALKER = typename GfxFamily::COMPUTE_WALKER;
-    auto function = Function::fromHandle(hFunction);
-    assert(function);
-    auto functionArgs = FunctionArgs::fromHandle(hFunctionArgs);
-    assert(functionArgs);
 
     COMPUTE_WALKER cmd = GfxFamily::cmdInitGpgpuWalker;
     cmd.setThreadGroupIdXDimension(pDispatchFuncArgs->groupCountX);
     cmd.setThreadGroupIdYDimension(pDispatchFuncArgs->groupCountY);
     cmd.setThreadGroupIdZDimension(pDispatchFuncArgs->groupCountZ);
-    cmd.setEmitLocalId(0u);
-    cmd.setExecutionMask(0xfffffffful);
 
     // Compute the execution mask
     uint32_t lwsX = 0;
     uint32_t lwsY = 0;
     uint32_t lwsZ = 0;
+    auto functionArgs = FunctionArgs::fromHandle(hFunctionArgs);
+    assert(functionArgs);
     functionArgs->getGroupSize(lwsX, lwsY, lwsZ);
 
-    auto &idd = cmd.getInterfaceDescriptor();
-    idd.setNumberOfThreadsInGpgpuThreadGroup(functionArgs->getThreadsPerThreadGroup());
-
+    // Set execution mask
+    uint32_t executionMask = 0xfffffffful;
 #if 0
     auto remainderSimdLanes = localWorkSize & (simd - 1);
     uint64_t executionMask = (1ull << remainderSimdLanes) - 1;
@@ -86,13 +81,19 @@ xe_result_t CommandListHw<IGFX_GEN12_CORE>::encodeDispatchFunction(xe_function_h
         executionMask = ~executionMask;
     }
 #endif
+    cmd.setExecutionMask(executionMask);
 
+    auto function = Function::fromHandle(hFunction);
+    assert(function);
     auto simdSize = function->getSimdSize();
     auto simdSizeOp =
-        COMPUTE_WALKER::SIMD_SIZE_SIMD32 * (1 & (simdSize >> 5)) |
-        COMPUTE_WALKER::SIMD_SIZE_SIMD16 * (1 & (simdSize >> 4)) |
-        COMPUTE_WALKER::SIMD_SIZE_SIMD8 * (1 & (simdSize >> 3));
+        COMPUTE_WALKER::SIMD_SIZE_SIMD32 * (simdSize == 32) |
+        COMPUTE_WALKER::SIMD_SIZE_SIMD16 * (simdSize == 16) |
+        COMPUTE_WALKER::SIMD_SIZE_SIMD8 * (simdSize ==8);
     cmd.setSimdSize(static_cast<COMPUTE_WALKER::SIMD_SIZE>(simdSizeOp));
+
+    auto &idd = cmd.getInterfaceDescriptor();
+    idd.setNumberOfThreadsInGpgpuThreadGroup(functionArgs->getThreadsPerThreadGroup());
 
     // Copy the kernel to indirect heap
     // TODO: Allocate kernel in graphics memory to avoid the CPU copy
@@ -132,6 +133,8 @@ xe_result_t CommandListHw<IGFX_GEN12_CORE>::encodeDispatchFunction(xe_function_h
         memcpy(ptr, functionArgs->getPerThreadDataHostMem(), sizePerThreadData);
         ptr = ptrOffset(ptr, sizePerThreadData);
 
+        assert(sizePerThreadData && "TODO: enable HW generated local IDs");
+        cmd.setEmitLocalId(!sizePerThreadData);
         cmd.setIndirectDataLength(sizeThreadData);
         cmd.setIndirectDataStartAddress(static_cast<uint32_t>(offset));
     }
