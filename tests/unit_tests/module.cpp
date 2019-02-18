@@ -8,6 +8,7 @@
 #include "runtime/helpers/basic_math.h"
 #include "runtime/helpers/per_thread_data.h"
 #include "runtime/kernel/kernel.h"
+#include "runtime/program/kernel_arg_info.h"
 #include "runtime/program/program.h"
 
 #include <cassert>
@@ -96,6 +97,7 @@ namespace OCLRT {
 namespace Math {
 using namespace ::Math; // just to emphasize the origin (wich originally is not encapsulated in OCLRT)
 }
+using KernelArgInfo = ::KernelArgInfo;
 } // namespace OCLRT
 
 namespace xe {
@@ -293,6 +295,7 @@ struct FunctionArgsImp : FunctionArgs {
 
         auto simdSize = kernelRT->kernelInfo.getMaxSimdSize();
         this->threadsPerThreadGroup = ((groupSizeX * groupSizeY * groupSizeZ) + simdSize - 1u) / simdSize;
+        patchWorkgroupSizeInCrossThreadData(groupSizeX, groupSizeY, groupSizeZ);
     }
 
     void getGroupSize(uint32_t &outGroupSizeX, uint32_t &outGroupSizeY, uint32_t &outGroupSizeZ) const override {
@@ -389,6 +392,29 @@ struct FunctionArgsImp : FunctionArgs {
         uint32_t patchedArgumentsNum = 0;
         uint32_t startOffset = 0;
     } oclInternals;
+
+    template<typename T>
+    void patchCrossThreadDataBasedOnKernelRT(uint32_t location, const T &value){
+        if(OCLRT::KernelArgInfo::undefinedOffset == location){
+            return;
+        }
+        *reinterpret_cast<T*>(ptrOffset(oclInternals.crossThreadData, location)) = value;
+    }
+
+    void patchWorkgroupSizeInCrossThreadData(uint32_t x, uint32_t y, uint32_t z){
+        OCLRT_temporary::LightweightOclKernel *kernelRT = static_cast<FunctionImp *>(function)->getKernelRT();
+        patchCrossThreadDataBasedOnKernelRT(kernelRT->kernelInfo.workloadInfo.localWorkSizeOffsets[0], x);
+        patchCrossThreadDataBasedOnKernelRT(kernelRT->kernelInfo.workloadInfo.localWorkSizeOffsets[1], y);
+        patchCrossThreadDataBasedOnKernelRT(kernelRT->kernelInfo.workloadInfo.localWorkSizeOffsets[2], z);
+
+        patchCrossThreadDataBasedOnKernelRT(kernelRT->kernelInfo.workloadInfo.localWorkSizeOffsets2[0], x); // not sure why we have second set of those
+        patchCrossThreadDataBasedOnKernelRT(kernelRT->kernelInfo.workloadInfo.localWorkSizeOffsets2[1], y);
+        patchCrossThreadDataBasedOnKernelRT(kernelRT->kernelInfo.workloadInfo.localWorkSizeOffsets2[2], z);
+
+        patchCrossThreadDataBasedOnKernelRT(kernelRT->kernelInfo.workloadInfo.enqueuedLocalWorkSizeOffsets[0], x);
+        patchCrossThreadDataBasedOnKernelRT(kernelRT->kernelInfo.workloadInfo.enqueuedLocalWorkSizeOffsets[1], y);
+        patchCrossThreadDataBasedOnKernelRT(kernelRT->kernelInfo.workloadInfo.enqueuedLocalWorkSizeOffsets[2], z);
+    }
 
     uint32_t groupSizeX = 0;
     uint32_t groupSizeY = 0;
