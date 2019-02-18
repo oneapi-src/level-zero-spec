@@ -139,7 +139,10 @@ xe_result_t CommandListHw<IGFX_GEN12_CORE>::encodeDispatchFunction(xe_function_h
 
     // Attach Function residency to our CommandList residency
     {
-        //TODO: functionArgs->getResidencyContainer();
+        auto &residencyContainer = functionArgs->getResidencyContainer();
+        for (auto resource : residencyContainer) {
+            this->residencyContainer.push_back(resource->allocationRT);
+        }
     }
 
     // Commit our command to the commandStream

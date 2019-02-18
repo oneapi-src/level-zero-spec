@@ -6,6 +6,10 @@
 #include "mock_module.h"
 #include "gtest/gtest.h"
 
+//TEMPORARY
+#include "memory_manager.h"
+#include "graphics_allocation.h"
+
 namespace xe {
 namespace ult {
 
@@ -75,21 +79,21 @@ TEST(sample, helloWorld) {
     auto result = xe::xeDriverInit(XE_INIT_FLAG_NONE);
     ASSERT_EQ(XE_RESULT_SUCCESS, result);
 
-    xe_device_handle_t device = {};
+    xe_device_handle_t hDevice = {};
     result = xe::xeDriverGetDevice(0,
-                                   &device);
+                                   &hDevice);
     ASSERT_EQ(XE_RESULT_SUCCESS, result);
 
     xe_command_queue_handle_t commandQueue = {};
     xe_command_queue_desc_t descCommandQueue = {};
-    result = xe::xeDeviceCreateCommandQueue(device,
+    result = xe::xeDeviceCreateCommandQueue(hDevice,
                                             &descCommandQueue,
                                             &commandQueue);
     ASSERT_EQ(XE_RESULT_SUCCESS, result);
 
     xe_command_list_desc_t descCommandList = {};
     xe_command_list_handle_t commandList = {};
-    result = xe::xeDeviceCreateCommandList(device,
+    result = xe::xeDeviceCreateCommandList(hDevice,
                                            &descCommandList,
                                            &commandList);
     ASSERT_EQ(XE_RESULT_SUCCESS, result);
@@ -104,7 +108,7 @@ TEST(sample, helloWorld) {
     descModule.pInputModule = inputModule.get();
     descModule.inputSize = static_cast<uint32_t>(moduleSize);
     descModule.format = XE_MODULE_FORMAT_IL_SPIRV;
-    result = xe::xeDeviceCreateModule(device,
+    result = xe::xeDeviceCreateModule(hDevice,
                                       &descModule,
                                       &module,
                                       nullptr);
@@ -123,6 +127,20 @@ TEST(sample, helloWorld) {
     xe_function_args_handle_t functionArgs = {};
     result = ::xe::xeFunctionCreateFunctionArgs(function,
                                                 &functionArgs);
+    ASSERT_EQ(XE_RESULT_SUCCESS, result);
+
+    auto device = whitebox_cast(Device::fromHandle(hDevice));
+    auto memoryManager = device->getMemoryManager();
+
+    auto destBuffer = memoryManager->allocateDeviceMemory(0x10000);
+    auto dest = destBuffer->getGpuAddress();
+    result = ::xe::xeFunctionArgsSetValue(functionArgs, 0, sizeof(dest), &dest);
+    ASSERT_EQ(XE_RESULT_SUCCESS, result);
+
+    auto srcBuffer = memoryManager->allocateDeviceMemory(0x10000);
+    auto src = srcBuffer->getGpuAddress();
+    memset((void *)src, 0xbf, 0x10000);
+    result = ::xe::xeFunctionArgsSetValue(functionArgs, 1, sizeof(src), &src);
     ASSERT_EQ(XE_RESULT_SUCCESS, result);
 
     xe_dispatch_function_arguments_t dispatchFunctionArgs = {};
@@ -154,6 +172,9 @@ TEST(sample, helloWorld) {
 
     result = xeCommandQueueDestroy(commandQueue);
     ASSERT_EQ(XE_RESULT_SUCCESS, result);
+
+    memoryManager->freeMemory(srcBuffer);
+    memoryManager->freeMemory(destBuffer);
 }
 
 } // namespace ult
