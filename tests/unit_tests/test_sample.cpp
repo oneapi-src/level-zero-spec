@@ -150,7 +150,7 @@ TEST(sample, helloWorld) {
 
     xe_dispatch_function_arguments_t dispatchFunctionArgs = {};
     dispatchFunctionArgs.version = XE_DISPATCH_FUNCTION_ARGS_VERSION;
-    dispatchFunctionArgs.groupCountX = 1;
+    dispatchFunctionArgs.groupCountX = 2;
     dispatchFunctionArgs.groupCountY = 1;
     dispatchFunctionArgs.groupCountZ = 1;
     dispatchFunctionArgs.groupSizeX = 32;
