@@ -32,7 +32,7 @@ TEST_P(CommandListCreate, returnsCommandListOnSuccess) {
     Mock<MemoryManager> memoryManager;
 
     EXPECT_CALL(device, getMemoryManager()).WillRepeatedly(Return(&memoryManager));
-    EXPECT_CALL(memoryManager, allocateDeviceMemory(_)).Times(AnyNumber());
+    EXPECT_CALL(memoryManager, allocateDeviceMemory(_, _)).Times(AnyNumber());
     EXPECT_CALL(memoryManager, freeMemory(_)).Times(AnyNumber());
 
     auto commandList = whitebox_cast(CommandList::create(GetParam(), &device));
@@ -94,7 +94,7 @@ HWTEST_F(CommandListCreate, addsStateBaseAddressToBatchBuffer) {
     Mock<MemoryManager> memoryManager;
     EXPECT_CALL(device, getMemoryManager())
         .WillRepeatedly(Return(&memoryManager));
-    EXPECT_CALL(memoryManager, allocateDeviceMemory(_)).Times(AnyNumber());
+    EXPECT_CALL(memoryManager, allocateDeviceMemory(_, _)).Times(AnyNumber());
     EXPECT_CALL(memoryManager, freeMemory(_)).Times(AnyNumber());
 
     auto commandList = whitebox_cast(CommandList::create(productFamily, &device));
@@ -136,7 +136,7 @@ ATSTEST_F(CommandListCreate, addsCfeStateToBatchBuffer) {
     Mock<MemoryManager> memoryManager;
     EXPECT_CALL(device, getMemoryManager())
         .WillRepeatedly(Return(&memoryManager));
-    EXPECT_CALL(memoryManager, allocateDeviceMemory(_)).Times(AnyNumber());
+    EXPECT_CALL(memoryManager, allocateDeviceMemory(_, _)).Times(AnyNumber());
     EXPECT_CALL(memoryManager, freeMemory(_)).Times(AnyNumber());
 
     auto commandList = whitebox_cast(CommandList::create(productFamily, &device));

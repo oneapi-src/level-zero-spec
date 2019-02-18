@@ -86,8 +86,8 @@ TEST(ModuleCreate, onlineCompilationModuleTest) {
     ASSERT_NE(nullptr, function);
 
     auto memoryManager = device->getMemoryManager();
-    auto dst = memoryManager->allocateDeviceMemory(4096);
-    auto src = memoryManager->allocateDeviceMemory(4096);
+    auto dst = memoryManager->allocateDeviceMemory(4096u, 4096u);
+    auto src = memoryManager->allocateDeviceMemory(4096u, 4096u);
 
     uintptr_t dstAddress = static_cast<uintptr_t>(dst->getGpuAddress());
     functionArgs->setValue(0, sizeof(dstAddress), &dstAddress);

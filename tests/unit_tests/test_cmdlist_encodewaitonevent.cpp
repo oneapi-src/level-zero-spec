@@ -35,7 +35,7 @@ HWTEST_F(CommandListEncodeWaitOnEvent, addsSemaphoreToCommandStream) {
     Mock<MemoryManager> memoryManager;
     EXPECT_CALL(device, getMemoryManager())
         .WillRepeatedly(Return(&memoryManager));
-    EXPECT_CALL(memoryManager, allocateDeviceMemory(_)).Times(AnyNumber());
+    EXPECT_CALL(memoryManager, allocateDeviceMemory(_, _)).Times(AnyNumber());
     EXPECT_CALL(memoryManager, freeMemory(_)).Times(AnyNumber());
 
     auto commandList = whitebox_cast(CommandList::create(productFamily, &device));
@@ -70,7 +70,7 @@ HWTEST_F(CommandListEncodeWaitOnEvent, addsEventGraphicsAllocationToResidencyCon
     Mock<MemoryManager> memoryManager;
     EXPECT_CALL(device, getMemoryManager())
         .WillRepeatedly(Return(&memoryManager));
-    EXPECT_CALL(memoryManager, allocateDeviceMemory(_)).Times(AnyNumber());
+    EXPECT_CALL(memoryManager, allocateDeviceMemory(_, _)).Times(AnyNumber());
     EXPECT_CALL(memoryManager, freeMemory(_)).Times(AnyNumber());
 
     auto commandList = whitebox_cast(CommandList::create(productFamily, &device));

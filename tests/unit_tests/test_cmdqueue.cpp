@@ -37,7 +37,7 @@ TEST(CommandQueueCreate, returnsCommandQueueOnSuccess) {
     Mock<MemoryManager> memoryManager;
 
     EXPECT_CALL(device, getMemoryManager()).WillRepeatedly(Return(&memoryManager));
-    EXPECT_CALL(memoryManager, allocateDeviceMemory(_)).Times(AnyNumber());
+    EXPECT_CALL(memoryManager, allocateDeviceMemory(_, _)).Times(AnyNumber());
     EXPECT_CALL(memoryManager, freeMemory(_)).Times(AnyNumber());
 
     auto commandQueue = whitebox_cast(CommandQueue::create(productFamily, &device, device.csrRT));

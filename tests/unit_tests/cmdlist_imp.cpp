@@ -44,7 +44,7 @@ bool CommandListImp::initialize() {
 
     // Allocate memory for our batch buffer
     {
-        allocation = memoryManager->allocateDeviceMemory(65536u);
+        allocation = memoryManager->allocateDeviceMemory(65536u, 4096u);
         assert(allocation);
 
         // Add our allocation to the residency container
@@ -53,7 +53,7 @@ bool CommandListImp::initialize() {
 
     // Allocate memory for each of our indirect state heaps
     for (auto &allocationIndirectHeap : allocationIndirectHeaps) {
-        allocationIndirectHeap = memoryManager->allocateDeviceMemory(16384u); 
+        allocationIndirectHeap = memoryManager->allocateDeviceMemory(16384u, 4096u); 
         residencyContainer.push_back(allocationIndirectHeap->allocationRT);
     }
 

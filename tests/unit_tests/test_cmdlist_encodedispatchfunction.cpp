@@ -54,11 +54,11 @@ struct CommandListEncodeDispatchFunction : public ::testing::Test {
     void SetUp() override {
         EXPECT_CALL(device, getMemoryManager())
             .WillRepeatedly(Return(&memoryManager));
-        EXPECT_CALL(memoryManager, allocateDeviceMemory(_)).Times(AnyNumber());
+        EXPECT_CALL(memoryManager, allocateDeviceMemory(_, _)).Times(AnyNumber());
         EXPECT_CALL(memoryManager, freeMemory(_)).Times(AnyNumber());
 
-        buffer1 = memoryManager.allocateDeviceMemory(16384);
-        buffer2 = memoryManager.allocateDeviceMemory(16384);
+        buffer1 = memoryManager.allocateDeviceMemory(16384u, 4096u);
+        buffer2 = memoryManager.allocateDeviceMemory(16384u, 4096u);
 
         commandList = whitebox_cast(CommandList::create(productFamily, &device));
         ASSERT_NE(nullptr, commandList->commandStream);

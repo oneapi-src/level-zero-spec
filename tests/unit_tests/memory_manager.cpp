@@ -8,8 +8,9 @@
 namespace xe {
 
 struct MemoryManagerImp : public MemoryManager {
-    GraphicsAllocation *allocateDeviceMemory(size_t size) override {
-        OCLRT::AllocationProperties properties(size, OCLRT::GraphicsAllocation::AllocationType::COMMAND_BUFFER);
+    GraphicsAllocation *allocateDeviceMemory(size_t size, size_t alignment) override {
+        OCLRT::AllocationProperties properties(size, OCLRT::GraphicsAllocation::AllocationType::UNDECIDED);
+        properties.alignment = alignment;
 
         auto allocation = new GraphicsAllocation(memoryManagerRT->allocateGraphicsMemory(properties, nullptr));
         knownAllocations.insert(*allocation->allocationRT); // temporary

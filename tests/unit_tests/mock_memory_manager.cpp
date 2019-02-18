@@ -8,8 +8,8 @@ namespace ult {
 using ::testing::AnyNumber;
 using ::testing::Invoke;
 
-static GraphicsAllocation *createGraphicsAllocation(size_t size) {
-    auto buffer = alignedMalloc(size, 0x1000);
+static GraphicsAllocation *createGraphicsAllocation(size_t size, size_t alignment) {
+    auto buffer = alignedMalloc(size, alignment);
     return new GraphicsAllocation(buffer, size);
 }
 
