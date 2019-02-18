@@ -59,6 +59,8 @@ xe_result_t CommandListHw<IGFX_GEN12_CORE>::encodeDispatchFunction(xe_function_h
     using GfxFamily = typename OCLRT::GfxFamilyMapper<IGFX_GEN12_CORE>::GfxFamily;
     using COMPUTE_WALKER = typename GfxFamily::COMPUTE_WALKER;
 
+    assert(pDispatchFuncArgs);
+    assert(pDispatchFuncArgs->version == XE_DISPATCH_FUNCTION_ARGS_VERSION);
     COMPUTE_WALKER cmd = GfxFamily::cmdInitGpgpuWalker;
     cmd.setThreadGroupIdXDimension(pDispatchFuncArgs->groupCountX);
     cmd.setThreadGroupIdYDimension(pDispatchFuncArgs->groupCountY);
