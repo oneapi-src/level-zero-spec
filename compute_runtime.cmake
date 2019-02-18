@@ -147,6 +147,9 @@ add_library(compute_runtime_lib_full
         ${COMPUTE_RUNTIME_DIR}/runtime/utilities/debug_settings_reader_creator.cpp
 )
 
+get_target_property(COMPUTE_RUNTIME_LIB_INCLUDES compute_runtime_lib INCLUDE_DIRECTORIES)
+target_include_directories(compute_runtime_lib_full PUBLIC ${COMPUTE_RUNTIME_LIB_INCLUDES})
+
 #Aggregate all ingredients to link
 target_link_libraries(compute_runtime_lib_full 
     compute_runtime_lib
@@ -259,6 +262,8 @@ add_library(compute_runtime_mockable_extra
         ${COMPUTE_RUNTIME_DIR}/unit_tests/mocks/mock_gmm_page_table_mngr.cpp
         ${COMPUTE_RUNTIME_DIR}/unit_tests/ult_configuration.cpp
 )
+
+target_compile_definitions(compute_runtime_lib_full PUBLIC ${COMPUTE_RUNTIME_DEFINITIONS})
 
 # These need to be added to a project to enable platform support in ULTs
 

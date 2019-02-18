@@ -28,6 +28,8 @@ if(MSVC)
     set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} /WX /W3 /wd4996")
 endif()
 
+set(XE_ROOT_DIR "${CMAKE_CURRENT_SOURCE_DIR}")
+
 # Allow custom third_party folder
 if(NOT DEFINED THIRD_PARTY_DIR)
     set(THIRD_PARTY_DIR ${CMAKE_CURRENT_SOURCE_DIR}/third_party)
