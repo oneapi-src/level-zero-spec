@@ -33,7 +33,7 @@ TEST(xeModuleCreateFunction, redirectsToModuleObject) {
     EXPECT_EQ(XE_RESULT_SUCCESS, result);
 }
 
-inline std::unique_ptr<char[]> readBinaryTestFile(const std::string &name, size_t &outSize) {
+std::unique_ptr<char[]> readBinaryTestFile(const std::string &name, size_t &outSize) {
     std::ifstream file(name, std::ios_base::binary);
     if (false == file.good()) {
         outSize = 0;
