@@ -52,11 +52,6 @@ struct CommandList : public _xe_command_list_handle_t {
         return *allocation;
     }
 
-    GraphicsAllocation &getAllocationIndirectHeap(uint32_t ordinal) {
-        assert(ordinal < NUM_HEAPS);
-        return *allocationIndirectHeaps[ordinal];
-    }
-
   protected:
     virtual ~CommandList() = default;
 
