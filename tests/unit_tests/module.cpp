@@ -278,7 +278,7 @@ struct FunctionArgsImp : FunctionArgs {
         Vec3<size_t> groupSize{groupSizeX, groupSizeY, groupSizeZ};
         auto itemsInGroup = OCLRT::Math::computeTotalElementsCount(groupSize);
         size_t perThreadDataSizeNeeded = OCLRT::PerThreadDataHelper::getPerThreadDataSizeTotal(kernelRT->kernelInfo.getMaxSimdSize(), numChannels, itemsInGroup);
-        if(perThreadDataSizeNeeded > perThreadDataSize) {
+        if (perThreadDataSizeNeeded > perThreadDataSize) {
             alignedFree(perThreadData);
             perThreadData = alignedMalloc(perThreadDataSizeNeeded, 32); // alignment for vector instructions
             perThreadDataSize = perThreadDataSizeNeeded;
@@ -294,8 +294,15 @@ struct FunctionArgsImp : FunctionArgs {
         this->groupSizeZ = groupSizeZ;
 
         auto simdSize = kernelRT->kernelInfo.getMaxSimdSize();
-        this->threadsPerThreadGroup = ((groupSizeX * groupSizeY * groupSizeZ) + simdSize - 1u) / simdSize;
+        this->threadsPerThreadGroup = static_cast<uint32_t>((itemsInGroup + simdSize - 1u) / simdSize);
         patchWorkgroupSizeInCrossThreadData(groupSizeX, groupSizeY, groupSizeZ);
+
+        // threadExecutionMask - which SIMD lines are active in last thread of group
+        auto remainderSimdLanes = itemsInGroup & (simdSize - 1u);
+        threadExecutionMask = (1ull << remainderSimdLanes) - 1u;
+        if (!threadExecutionMask) {
+            threadExecutionMask = ~threadExecutionMask;
+        }
     }
 
     void getGroupSize(uint32_t &outGroupSizeX, uint32_t &outGroupSizeY, uint32_t &outGroupSizeZ) const override {
@@ -306,6 +313,10 @@ struct FunctionArgsImp : FunctionArgs {
 
     uint32_t getThreadsPerThreadGroup() const override {
         return threadsPerThreadGroup;
+    }
+
+    uint32_t getThreadExecutionMask() const override {
+        return threadExecutionMask;
     }
 
     const void *getPerThreadDataHostMem() const override {
@@ -393,15 +404,15 @@ struct FunctionArgsImp : FunctionArgs {
         uint32_t startOffset = 0;
     } oclInternals;
 
-    template<typename T>
-    void patchCrossThreadDataBasedOnKernelRT(uint32_t location, const T &value){
-        if(OCLRT::KernelArgInfo::undefinedOffset == location){
+    template <typename T>
+    void patchCrossThreadDataBasedOnKernelRT(uint32_t location, const T &value) {
+        if (OCLRT::KernelArgInfo::undefinedOffset == location) {
             return;
         }
-        *reinterpret_cast<T*>(ptrOffset(oclInternals.crossThreadData, location)) = value;
+        *reinterpret_cast<T *>(ptrOffset(oclInternals.crossThreadData, location)) = value;
     }
 
-    void patchWorkgroupSizeInCrossThreadData(uint32_t x, uint32_t y, uint32_t z){
+    void patchWorkgroupSizeInCrossThreadData(uint32_t x, uint32_t y, uint32_t z) {
         OCLRT_temporary::LightweightOclKernel *kernelRT = static_cast<FunctionImp *>(function)->getKernelRT();
         patchCrossThreadDataBasedOnKernelRT(kernelRT->kernelInfo.workloadInfo.localWorkSizeOffsets[0], x);
         patchCrossThreadDataBasedOnKernelRT(kernelRT->kernelInfo.workloadInfo.localWorkSizeOffsets[1], y);
@@ -416,12 +427,13 @@ struct FunctionArgsImp : FunctionArgs {
         patchCrossThreadDataBasedOnKernelRT(kernelRT->kernelInfo.workloadInfo.enqueuedLocalWorkSizeOffsets[2], z);
     }
 
-    uint32_t groupSizeX = 0;
-    uint32_t groupSizeY = 0;
-    uint32_t groupSizeZ = 0;
-    uint32_t threadsPerThreadGroup = 0;
+    uint32_t groupSizeX = 0u;
+    uint32_t groupSizeY = 0u;
+    uint32_t groupSizeZ = 0u;
+    uint32_t threadsPerThreadGroup = 0u;
+    uint32_t threadExecutionMask = 0u;
     void *perThreadData = nullptr;
-    size_t perThreadDataSize = 0;
+    size_t perThreadDataSize = 0u;
 };
 
 FunctionArgs *FunctionArgs::create(Function *function) {
@@ -456,25 +468,25 @@ xeFunctionDestroy(
 
 xe_result_t __xecall
 xeFunctionCreateFunctionArgs(
-    xe_function_handle_t hFunction,          
-    xe_function_args_handle_t* phFunctionArgs){
+    xe_function_handle_t hFunction,
+    xe_function_args_handle_t *phFunctionArgs) {
     auto function = Function::fromHandle(hFunction);
     return function->createFunctionArgs(phFunctionArgs);
 }
 
 xe_result_t __xecall
 xeFunctionArgsDestroy(
-    xe_function_args_handle_t hFunctionArgs){
+    xe_function_args_handle_t hFunctionArgs) {
     auto functionArgs = FunctionArgs::fromHandle(hFunctionArgs);
     return functionArgs->destroy();
 }
 
 xe_result_t __xecall
 xeFunctionArgsSetValue(
-    xe_function_args_handle_t hFunctionArgs, 
-    uint32_t argIndex,                       
-    size_t argSize,                          
-    const void* pArgValue){
+    xe_function_args_handle_t hFunctionArgs,
+    uint32_t argIndex,
+    size_t argSize,
+    const void *pArgValue) {
     auto functionARgs = FunctionArgs::fromHandle(hFunctionArgs);
     return functionARgs->setValue(argIndex, argSize, pArgValue);
 }

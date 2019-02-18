@@ -66,24 +66,10 @@ xe_result_t CommandListHw<IGFX_GEN12_CORE>::encodeDispatchFunction(xe_function_h
     cmd.setThreadGroupIdYDimension(pDispatchFuncArgs->groupCountY);
     cmd.setThreadGroupIdZDimension(pDispatchFuncArgs->groupCountZ);
 
-    // Compute the execution mask
-    uint32_t lwsX = 0;
-    uint32_t lwsY = 0;
-    uint32_t lwsZ = 0;
+    // Set the last thread execution mask
     auto functionArgs = FunctionArgs::fromHandle(hFunctionArgs);
     assert(functionArgs);
-    functionArgs->getGroupSize(lwsX, lwsY, lwsZ);
-
-    // Set execution mask
-    uint32_t executionMask = 0xfffffffful;
-#if 0
-    auto remainderSimdLanes = localWorkSize & (simd - 1);
-    uint64_t executionMask = (1ull << remainderSimdLanes) - 1;
-    if (!executionMask) {
-        executionMask = ~executionMask;
-    }
-#endif
-    cmd.setExecutionMask(executionMask);
+    cmd.setExecutionMask(functionArgs->getThreadExecutionMask());
 
     auto function = Function::fromHandle(hFunction);
     assert(function);
