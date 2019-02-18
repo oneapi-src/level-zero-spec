@@ -39,14 +39,14 @@ TEST(sharedMemAlloc, returnsValidPtr) {
     Mock<MemoryManager> memoryManager;
     EXPECT_CALL(device, getMemoryManager())
         .WillRepeatedly(Return(&memoryManager));
-    EXPECT_CALL(memoryManager, allocateDeviceMemory(_, _)).Times(AnyNumber());
+    EXPECT_CALL(memoryManager, allocateManagedMemory(_, _)).Times(AnyNumber());
     EXPECT_CALL(memoryManager, freeMemory(_)).Times(AnyNumber());
 
     xe_mem_allocator_handle_t handleAllocator = {};
     xe_device_mem_alloc_flag_t flagsDevice = {};
     xe_host_mem_alloc_flag_t flagsHost = {};
-    size_t size = 0x10000;
-    size_t alignment = 0x1000;
+    size_t size = 65536u;
+    size_t alignment = 4096u;
     void *ptr = nullptr;
 
     auto result = ::xe::xeSharedMemAlloc(

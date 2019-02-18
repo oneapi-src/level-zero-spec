@@ -132,14 +132,19 @@ TEST(sample, helloWorld) {
     auto device = whitebox_cast(Device::fromHandle(hDevice));
     auto memoryManager = device->getMemoryManager();
 
-    auto destBuffer = memoryManager->allocateDeviceMemory(0x10000, 0x1000);
+    // TODO: Replace with xe memory allocation
+    size_t bufferSize = 4096u;
+    auto destBuffer = memoryManager->allocateDeviceMemory(bufferSize, 4096u);
     auto dest = destBuffer->getGpuAddress();
+
     result = ::xe::xeFunctionArgsSetValue(functionArgs, 0, sizeof(dest), &dest);
     ASSERT_EQ(XE_RESULT_SUCCESS, result);
 
-    auto srcBuffer = memoryManager->allocateDeviceMemory(0x10000, 0x1000);
+    // TODO: Replace with xe memory allocation
+    auto srcBuffer = memoryManager->allocateDeviceMemory(bufferSize, 4096u);
     auto src = srcBuffer->getGpuAddress();
-    memset((void *)src, 0xbf, 0x10000);
+    memset(reinterpret_cast<void *>(src), 0xbf, bufferSize);
+
     result = ::xe::xeFunctionArgsSetValue(functionArgs, 1, sizeof(src), &src);
     ASSERT_EQ(XE_RESULT_SUCCESS, result);
 
