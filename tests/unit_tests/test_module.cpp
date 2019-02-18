@@ -140,13 +140,13 @@ TEST(ModuleCreate, onlineCompilationModuleTest) {
 
 TEST(ModuleCreate, mockedModuleTest) {
     Mock<Device> device;
-    OCLRT::Device *deviceRT = reinterpret_cast<OCLRT::Device*>(device.deviceRT);
+    OCLRT::Device *deviceRT = reinterpret_cast<OCLRT::Device *>(device.deviceRT);
     const PrecompiledFunctionMockData *expectedData = PrecompiledFunctionMocksDataRegistry::get().getDataFor("MemcpyBytes", deviceRT->getFamilyNameWithType());
     ASSERT_NE(nullptr, expectedData);
-    GraphicsAllocation mockAlloc1{ nullptr, 0 }, mockAlloc2{ nullptr, 0 };
+    GraphicsAllocation mockAlloc1{nullptr, 0}, mockAlloc2{nullptr, 0};
 
     PrecompiledFunctionMock function("MemcpyBytes", deviceRT->getFamilyNameWithType());
-    PrecompiledFunctionArgsMock functionArgs(&function, { &mockAlloc1, &mockAlloc2 });
+    PrecompiledFunctionArgsMock functionArgs(&function, {&mockAlloc1, &mockAlloc2});
 
     EXPECT_EQ(expectedData->simdSize, function.getSimdSize());
     EXPECT_EQ(expectedData->isa, function.getIsaHostMem());
@@ -157,7 +157,7 @@ TEST(ModuleCreate, mockedModuleTest) {
 
     EXPECT_EQ(expectedData->perThreadDataBaseSize, functionArgs.getPerThreadDataSize());
     EXPECT_EQ(0, memcmp(expectedData->perThreadDataBase, functionArgs.getPerThreadDataHostMem(), expectedData->perThreadDataBaseSize));
-    
+
     const auto &residencyFromArgs = functionArgs.getResidencyContainer();
     EXPECT_NE(residencyFromArgs.end(), std::find(residencyFromArgs.begin(), residencyFromArgs.end(), &mockAlloc1));
     EXPECT_NE(residencyFromArgs.end(), std::find(residencyFromArgs.begin(), residencyFromArgs.end(), &mockAlloc2));
@@ -191,6 +191,49 @@ TEST(ModuleCreate, mockedModuleTest) {
     EXPECT_EQ(expectedData->groupSizeInPerThreadDataBase[0], groupSizeX);
     EXPECT_EQ(expectedData->groupSizeInPerThreadDataBase[1], groupSizeY);
     EXPECT_EQ(expectedData->groupSizeInPerThreadDataBase[2], groupSizeZ);
+}
+
+TEST(FunctionArgs_accessors, returnsCorrectThreadGroupParameters) {
+    UserRealCompilerGuard realCompilerGuard;
+
+    auto platform = OCLRT::constructPlatform();
+    auto success = platform->initialize();
+    ASSERT_TRUE(success);
+
+    auto deviceRT = platform->getDevice(0);
+    ASSERT_NE(nullptr, deviceRT);
+    auto device = Device::create(deviceRT);
+
+    size_t spvModuleSize = 0;
+    auto spvModule = readBinaryTestFile("test_files/spv_modules/cstring_module.spv", spvModuleSize);
+    ASSERT_NE(0U, spvModuleSize);
+
+    xe_module_desc_t modDesc = {};
+    modDesc.version = XE_API_HEADER_VERSION;
+    modDesc.format = XE_MODULE_FORMAT_IL_SPIRV;
+    modDesc.inputSize = static_cast<uint32_t>(spvModuleSize);
+    modDesc.pInputModule = spvModule.get();
+
+    auto module = whitebox_cast(Module::create(device, &modDesc, deviceRT));
+    ASSERT_NE(nullptr, module);
+
+    xe_function_desc_t funDesc = {};
+    funDesc.version = XE_API_HEADER_VERSION;
+    funDesc.pFunctionName = "memcpy_bytes";
+    auto function = whitebox_cast(Function::create(module, &funDesc));
+    ASSERT_NE(nullptr, function);
+
+    auto functionArgs = whitebox_cast(FunctionArgs::create(function));
+    ASSERT_NE(nullptr, function);
+
+    functionArgs->setGroupSize(5u, 7u, 13u);
+    EXPECT_EQ(functionArgs->getThreadExecutionMask(), 0x7f);
+    EXPECT_EQ(functionArgs->getThreadsPerThreadGroup(), 15u);
+
+    delete functionArgs;
+    delete function;
+    delete module;
+    delete device;
 }
 
 } // namespace ult
