@@ -28,6 +28,8 @@ if(COMPUTE_RUNTIME_SUPPORT)
             event.h
             graphics_allocation.cpp
             graphics_allocation.h
+            memory.cpp
+            memory.h
             memory_manager.cpp
             memory_manager.h
             module.cpp

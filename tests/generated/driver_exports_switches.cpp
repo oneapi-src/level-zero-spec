@@ -107,7 +107,7 @@
 #define ENABLE_xeImageDestroy 0
 #define ENABLE_xeCreateMemAllocator 0
 #define ENABLE_xeMemAllocatorDestroy 0
-#define ENABLE_xeSharedMemAlloc 0
+#define ENABLE_xeSharedMemAlloc 1
 #define ENABLE_xeMemAlloc 0
 #define ENABLE_xeHostMemAlloc 0
 #define ENABLE_xeMemFree 0
