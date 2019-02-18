@@ -48,6 +48,7 @@ if(COMPUTE_RUNTIME_SUPPORT)
             mock_event.h
             mock_memory_manager.cpp
             mock_memory_manager.h
+            mock_module.cpp
             mock_module.h
             mock_module_precompiled.h
             test_cmdlist.cpp

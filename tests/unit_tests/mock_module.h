@@ -40,7 +40,7 @@ struct Mock<Function> : public Function {
 
 template<>
 struct Mock<FunctionArgs> : public FunctionArgs {
-    Mock() = default;
+    Mock();
     virtual ~Mock() = default;
 
     MOCK_METHOD0(destroy, xe_result_t());

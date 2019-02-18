@@ -63,6 +63,7 @@ struct CommandListEncodeDispatchFunction : public ::testing::Test {
         commandList = whitebox_cast(CommandList::create(productFamily, &device));
         ASSERT_NE(nullptr, commandList->commandStream);
 
+        dispatchFunctionArguments.version = XE_DISPATCH_FUNCTION_ARGS_VERSION;
         dispatchFunctionArguments.groupCountX = 1u;
         dispatchFunctionArguments.groupCountY = 2u;
         dispatchFunctionArguments.groupCountZ = 3u;
@@ -70,6 +71,8 @@ struct CommandListEncodeDispatchFunction : public ::testing::Test {
         std::string deviceName = "Gen12HPcore";
         function = new PrecompiledFunctionMock("MemcpyBytes", deviceName);
         functionArgs = new PrecompiledFunctionArgsMock(function, {&buffer1, &buffer2});
+
+        EXPECT_CALL(*functionArgs, getThreadExecutionMask()).Times(AnyNumber());
     }
 
     void TearDown() override {
@@ -175,6 +178,39 @@ ATSTEST_F(CommandListEncodeDispatchFunction, copiesThreadDataToGeneralStateHeap)
         ptrHeap = ptrOffset(ptrHeap, functionArgs->getCrossThreadDataSize());
         EXPECT_EQ(memcmp(ptrHeap, functionArgs->getPerThreadDataHostMem(), functionArgs->getPerThreadDataSize()), 0u);
         ptrHeap = ptrOffset(ptrHeap, functionArgs->getPerThreadDataSize());
+    }
+}
+
+ATSTEST_F(CommandListEncodeDispatchFunction, copiesKernelIsaToInstructionHeap) {
+    auto result = commandList->encodeDispatchFunction(function->toHandle(),
+                                                      functionArgs->toHandle(),
+                                                      &dispatchFunctionArguments,
+                                                      nullptr);
+    ASSERT_EQ(XE_RESULT_SUCCESS, result);
+
+    auto usedSpaceAfter = commandList->commandStream->getUsed();
+
+    GenCmdList cmdList;
+    ASSERT_TRUE(FamilyType::PARSE::parseCommandBuffer(cmdList,
+                                                      ptrOffset(commandList->commandStream->getCpuBase(), 0),
+                                                      usedSpaceAfter));
+    using COMPUTE_WALKER = typename FamilyType::COMPUTE_WALKER;
+    using INTERFACE_DESCRIPTOR_DATA = typename FamilyType::INTERFACE_DESCRIPTOR_DATA;
+
+    auto itor = find<COMPUTE_WALKER *>(cmdList.begin(), cmdList.end());
+    ASSERT_NE(cmdList.end(), itor);
+
+    {
+        auto cmd = genCmdCast<COMPUTE_WALKER *>(*itor);
+        auto &idd = cmd->getInterfaceDescriptor();
+        uint64_t kernelOffset = idd.getKernelStartPointerHigh();
+        kernelOffset <<= 32u; 
+        kernelOffset |= idd.getKernelStartPointerHigh();
+
+        auto heap = commandList->indirectHeaps[CommandList::INSTRUCTION];
+
+        auto ptrHeap = ptrOffset(heap->getCpuBase(), kernelOffset);
+        EXPECT_EQ(memcmp(ptrHeap, function->getIsaHostMem(), function->getIsaSize()), 0u);
     }
 }
 
