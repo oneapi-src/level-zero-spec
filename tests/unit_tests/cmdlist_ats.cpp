@@ -59,6 +59,7 @@ xe_result_t CommandListHw<IGFX_GEN12_CORE>::encodeDispatchFunction(xe_function_h
     using GfxFamily = typename OCLRT::GfxFamilyMapper<IGFX_GEN12_CORE>::GfxFamily;
     using COMPUTE_WALKER = typename GfxFamily::COMPUTE_WALKER;
 
+    // Set # of threadgroups in each dimension
     assert(pDispatchFuncArgs);
     assert(pDispatchFuncArgs->version == XE_DISPATCH_FUNCTION_ARGS_VERSION);
     COMPUTE_WALKER cmd = GfxFamily::cmdInitGpgpuWalker;
@@ -67,11 +68,12 @@ xe_result_t CommandListHw<IGFX_GEN12_CORE>::encodeDispatchFunction(xe_function_h
     cmd.setThreadGroupIdZDimension(pDispatchFuncArgs->groupCountZ);
 
     // Set the last thread execution mask
-    auto functionArgs = FunctionArgs::fromHandle(hFunctionArgs);
+    const auto functionArgs = FunctionArgs::fromHandle(hFunctionArgs);
     assert(functionArgs);
     cmd.setExecutionMask(functionArgs->getThreadExecutionMask());
 
-    auto function = Function::fromHandle(hFunction);
+    // Set simd size
+    const auto function = Function::fromHandle(hFunction);
     assert(function);
     auto simdSize = function->getSimdSize();
     auto simdSizeOp =
@@ -80,6 +82,7 @@ xe_result_t CommandListHw<IGFX_GEN12_CORE>::encodeDispatchFunction(xe_function_h
         COMPUTE_WALKER::SIMD_SIZE_SIMD8 * (simdSize ==8);
     cmd.setSimdSize(static_cast<COMPUTE_WALKER::SIMD_SIZE>(simdSizeOp));
 
+    // Set number of threads per thead group.
     auto &idd = cmd.getInterfaceDescriptor();
     idd.setNumberOfThreadsInGpgpuThreadGroup(functionArgs->getThreadsPerThreadGroup());
 
