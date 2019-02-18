@@ -100,8 +100,7 @@ xe_result_t CommandListHw<IGFX_GEN12_CORE>::encodeDispatchFunction(xe_function_h
         auto sizeISA = function->getIsaSize();
         auto ptrISA = function->getIsaHostMem();
 
-        constexpr auto INSTRUCTION_HEAP = OCLRT::IndirectHeap::SURFACE_STATE + 1;
-        auto heap = this->indirectHeaps[INSTRUCTION_HEAP];
+        auto heap = this->indirectHeaps[INSTRUCTION];
         assert(heap);
 
         auto ptr = heap->getSpace(sizeISA);
