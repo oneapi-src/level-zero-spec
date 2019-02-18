@@ -50,6 +50,7 @@ struct Mock<FunctionArgs> : public FunctionArgs {
     MOCK_CONST_METHOD0(getResidencyContainer, const std::vector<GraphicsAllocation *> &());
     MOCK_METHOD3(setGroupSize, void(uint32_t groupSizeX, uint32_t groupSizeY, uint32_t groupSizeZ));
     MOCK_CONST_METHOD3(getGroupSize, void(uint32_t &outGroupSizeX, uint32_t &outGroupSizeY, uint32_t &outGroupSizeZ));
+    MOCK_CONST_METHOD0(getThreadsPerThreadGroup, uint32_t ());
     MOCK_CONST_METHOD0(getPerThreadDataHostMem, const void *());
     MOCK_CONST_METHOD0(getPerThreadDataSize, size_t());
 };

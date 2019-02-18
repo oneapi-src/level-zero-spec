@@ -95,6 +95,15 @@ struct PrecompiledFunctionArgsMock : Mock<FunctionArgs> {
         outGroupSizeZ = function->precompiledFunctionMockData->groupSizeInPerThreadDataBase[2];
     }
 
+    uint32_t getThreadsPerThreadGroup() const override {
+        uint32_t lwsX, lwsY, lwsZ;
+        this->getGroupSize(lwsX, lwsY, lwsZ);
+        auto lws = lwsX * lwsY * lwsZ;
+        auto simd = function->getSimdSize();
+
+        return (lws + simd - 1) / simd;
+    }
+
     const void *getPerThreadDataHostMem() const override {
         return function->precompiledFunctionMockData->perThreadDataBase;
     }

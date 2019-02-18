@@ -132,7 +132,7 @@ ATSTEST_F(CommandListEncodeDispatchFunction, addsWalkerToCommandStream) {
         EXPECT_EQ(idd.getSamplerStatePointer(), 0u);
         EXPECT_EQ(idd.getBindingTableEntryCount(), 0u);
         EXPECT_EQ(idd.getBindingTablePointer(), 0u);
-        EXPECT_EQ(idd.getNumberOfThreadsInGpgpuThreadGroup(), 0u);
+        EXPECT_NE(idd.getNumberOfThreadsInGpgpuThreadGroup(), 0u);
         EXPECT_EQ(idd.getSharedLocalMemorySize(), INTERFACE_DESCRIPTOR_DATA::SHARED_LOCAL_MEMORY_SIZE_ENCODES_0K);
         EXPECT_EQ(idd.getBarrierEnable(), 0u);
         EXPECT_EQ(idd.getThreadGroupDispatchSize(), 0u);
@@ -168,7 +168,7 @@ ATSTEST_F(CommandListEncodeDispatchFunction, copiesThreadDataToGeneralStateHeap)
         cmd->getIndirectDataLength();
         cmd->getIndirectDataStartAddress();
         auto heap = commandList->indirectHeaps[CommandList::GENERAL_STATE];
-        
+
         auto ptrHeap = ptrOffset(heap->getCpuBase(), cmd->getIndirectDataStartAddress());
         EXPECT_EQ(memcmp(ptrHeap, functionArgs->getPerThreadDataHostMem(), functionArgs->getPerThreadDataSize()), 0u);
         ptrHeap = ptrOffset(ptrHeap, functionArgs->getPerThreadDataSize());

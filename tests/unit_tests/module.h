@@ -75,6 +75,7 @@ struct FunctionArgs : public _xe_function_args_handle_t {
     virtual const std::vector<GraphicsAllocation *> &getResidencyContainer() const = 0;
     virtual void setGroupSize(uint32_t groupSizeX, uint32_t groupSizeY, uint32_t groupSizeZ) = 0;
     virtual void getGroupSize(uint32_t &outGroupSizeX, uint32_t &outGroupSizeY, uint32_t &outGroupSizeZ) const = 0;
+    virtual uint32_t getThreadsPerThreadGroup() const = 0;
     virtual const void *getPerThreadDataHostMem() const = 0;
     virtual size_t getPerThreadDataSize() const = 0;
 

@@ -26,6 +26,15 @@ xe_result_t CommandListHw<IGFX_GEN12_CORE>::encodeDispatchFunction(xe_function_h
     cmd.setEmitLocalId(0u);
     cmd.setExecutionMask(0xfffffffful);
 
+    // Compute the execution mask
+    uint32_t lwsX = 0;
+    uint32_t lwsY = 0;
+    uint32_t lwsZ = 0;
+    functionArgs->getGroupSize(lwsX, lwsY, lwsZ);
+
+    auto &idd = cmd.getInterfaceDescriptor();
+    idd.setNumberOfThreadsInGpgpuThreadGroup(functionArgs->getThreadsPerThreadGroup());
+
     auto simdSize = function->getSimdSize();
     auto simdSizeOp = 
         COMPUTE_WALKER::SIMD_SIZE_SIMD32 * (1 & (simdSize >> 5)) |

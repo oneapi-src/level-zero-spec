@@ -290,12 +290,19 @@ struct FunctionArgsImp : FunctionArgs {
         this->groupSizeX = groupSizeX;
         this->groupSizeY = groupSizeY;
         this->groupSizeZ = groupSizeZ;
+
+        auto simdSize = kernelRT->kernelInfo.getMaxSimdSize();
+        this->threadsPerThreadGroup = ((groupSizeX * groupSizeY * groupSizeZ) + simdSize - 1u) / simdSize;
     }
 
     void getGroupSize(uint32_t &outGroupSizeX, uint32_t &outGroupSizeY, uint32_t &outGroupSizeZ) const override {
         outGroupSizeX = this->groupSizeX;
         outGroupSizeY = this->groupSizeY;
         outGroupSizeZ = this->groupSizeZ;
+    }
+
+    uint32_t getThreadsPerThreadGroup() const override {
+        return threadsPerThreadGroup;
     }
 
     const void *getPerThreadDataHostMem() const override {
@@ -386,6 +393,7 @@ struct FunctionArgsImp : FunctionArgs {
     uint32_t groupSizeX = 0;
     uint32_t groupSizeY = 0;
     uint32_t groupSizeZ = 0;
+    uint32_t threadsPerThreadGroup = 0;
     void *perThreadData = nullptr;
     size_t perThreadDataSize = 0;
 };
