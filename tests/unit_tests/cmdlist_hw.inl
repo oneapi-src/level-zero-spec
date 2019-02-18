@@ -3,6 +3,7 @@
 #include "graphics_allocation.h"
 #include "runtime/command_stream/linear_stream.h"
 #include "runtime/helpers/hw_info.h"
+#include "runtime/indirect_heap/indirect_heap.h"
 #include <cassert>
 
 namespace xe {
@@ -19,17 +20,21 @@ bool CommandListHw<gfxCoreFamily>::initialize() {
     STATE_BASE_ADDRESS cmd = GfxFamily::cmdInitStateBaseAddress;
 
     {
-        auto allocationHeap = this->allocationIndirectHeaps[INSTRUCTION];
-        assert(allocationHeap != nullptr);
+        auto heap = this->indirectHeaps[INSTRUCTION];
+        assert(heap != nullptr);
         cmd.setInstructionBaseAddressModifyEnable(true);
-        cmd.setInstructionBaseAddress(allocationHeap->getGpuAddress());
+        cmd.setInstructionBaseAddress(heap->getHeapGpuBase());
+        cmd.setInstructionBufferSizeModifyEnable(true);
+        cmd.setInstructionBufferSize(static_cast<uint32_t>(heap->getMaxAvailableSpace()));
     }
 
     {
-        auto allocationHeap = this->allocationIndirectHeaps[GENERAL_STATE];
-        assert(allocationHeap != nullptr);
+        auto heap = this->indirectHeaps[GENERAL_STATE];
+        assert(heap != nullptr);
         cmd.setGeneralStateBaseAddressModifyEnable(true);
-        cmd.setGeneralStateBaseAddress(allocationHeap->getGpuAddress());
+        cmd.setGeneralStateBaseAddress(heap->getHeapGpuBase());
+        cmd.setGeneralStateBufferSizeModifyEnable(true);
+        cmd.setGeneralStateBufferSize(static_cast<uint32_t>(heap->getMaxAvailableSpace()));
     }
 
     auto buffer = commandStream->getSpace(sizeof(cmd));

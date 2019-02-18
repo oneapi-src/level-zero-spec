@@ -1,5 +1,6 @@
 #include "mock_memory_manager.h"
 #include "graphics_allocation.h"
+#include "runtime/helpers/aligned_memory.h"
 
 namespace xe {
 namespace ult {
@@ -8,15 +9,14 @@ using ::testing::AnyNumber;
 using ::testing::Invoke;
 
 static GraphicsAllocation *createGraphicsAllocation(size_t size) {
-    auto buffer = new uint8_t[size];
+    auto buffer = alignedMalloc(size, 0x1000);
     return new GraphicsAllocation(buffer, size);
 }
 
 static void freeGraphicsAllocation(GraphicsAllocation *allocation) {
     assert(allocation);
     auto buffer = reinterpret_cast<uint8_t *>(allocation->getGpuAddress());
-    delete[] buffer;
-    delete allocation;
+    alignedFree(buffer);
 }
 
 Mock<MemoryManager>::Mock() {

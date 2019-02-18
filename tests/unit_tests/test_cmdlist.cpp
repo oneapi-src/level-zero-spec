@@ -5,6 +5,7 @@
 #include "graphics_allocation.h"
 #include "igfxfmid.h"
 #include "runtime/command_stream/linear_stream.h"
+#include "runtime/indirect_heap/indirect_heap.h"
 #include "test.h"
 #include "unit_tests/gen_common/gen_cmd_parse.h"
 
@@ -116,11 +117,17 @@ HWTEST_F(CommandListCreate, addsStateBaseAddressToBatchBuffer) {
 
     {
         auto cmd = genCmdCast<STATE_BASE_ADDRESS *>(*itor);
+        auto heap = commandList->indirectHeaps[CommandList::INSTRUCTION];
         EXPECT_TRUE(cmd->getInstructionBaseAddressModifyEnable());
-        EXPECT_NE(cmd->getInstructionBaseAddress(), 0u);
+        EXPECT_EQ(cmd->getInstructionBaseAddress(), heap->getHeapGpuBase());
+        EXPECT_TRUE(cmd->getInstructionBufferSizeModifyEnable());
+        EXPECT_EQ(cmd->getInstructionBufferSize(), heap->getMaxAvailableSpace());
 
+        heap = commandList->indirectHeaps[CommandList::GENERAL_STATE];
         EXPECT_TRUE(cmd->getGeneralStateBaseAddressModifyEnable());
-        EXPECT_NE(cmd->getGeneralStateBaseAddress(), 0u);
+        EXPECT_EQ(cmd->getGeneralStateBaseAddress(), heap->getHeapGpuBase());
+        EXPECT_TRUE(cmd->getGeneralStateBufferSizeModifyEnable());
+        EXPECT_EQ(cmd->getGeneralStateBufferSize(), heap->getMaxAvailableSpace());
     }
 }
 
