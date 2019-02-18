@@ -16,6 +16,7 @@ struct GraphicsAllocation {
     GraphicsAllocation(void *buffer, size_t size);
 
     uint64_t getGpuAddress() const;
+    void *getHostAddress() const;
 
     OCLRT::GraphicsAllocation *allocationRT = nullptr;
 };

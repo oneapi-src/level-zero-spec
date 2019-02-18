@@ -19,6 +19,17 @@ struct MemoryManagerImp : public MemoryManager {
         return allocation;
     }
 
+    GraphicsAllocation *allocateManagedMemory(size_t size, size_t alignment) override {
+        OCLRT::AllocationProperties properties(size, OCLRT::GraphicsAllocation::AllocationType::UNDECIDED);
+        properties.alignment = alignment;
+
+        auto allocation = new GraphicsAllocation(memoryManagerRT->allocateGraphicsMemory(properties, nullptr));
+        knownAllocations.insert(*allocation->allocationRT); // temporary
+        allocMap[allocation->allocationRT] = allocation; // temporary
+
+        return allocation;
+    }
+
     GraphicsAllocation *findAllocation(const void *ptr) override {
         return allocMap[knownAllocations.get(ptr)]; // temporary
     }

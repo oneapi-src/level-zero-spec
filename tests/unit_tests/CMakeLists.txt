@@ -62,6 +62,7 @@ if(COMPUTE_RUNTIME_SUPPORT)
             test_module.cpp
             test_platform.cpp
             test_sample.cpp
+            test_shared_memalloc.cpp
             white_box.h
             ${COMPUTE_RUNTIME_HW_ENABLE}
             ${COMPUTE_RUNTIME_HW_ENABLE_ULT}

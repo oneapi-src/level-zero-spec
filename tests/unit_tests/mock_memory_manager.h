@@ -19,6 +19,7 @@ struct Mock<MemoryManager> : public MemoryManager {
     virtual ~Mock();
 
     MOCK_METHOD2(allocateDeviceMemory, GraphicsAllocation *(size_t size, size_t alignment));
+    MOCK_METHOD2(allocateManagedMemory, GraphicsAllocation *(size_t size, size_t alignment));
     MOCK_METHOD1(freeMemory, void(GraphicsAllocation *allocation));
     MOCK_METHOD1(findAllocation, GraphicsAllocation *(const void *ptr));
 };

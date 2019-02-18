@@ -24,6 +24,9 @@ Mock<MemoryManager>::Mock() {
     ON_CALL(*this, allocateDeviceMemory)
         .WillByDefault(Invoke(createGraphicsAllocation));
 
+    ON_CALL(*this, allocateManagedMemory)
+        .WillByDefault(Invoke(createGraphicsAllocation));
+
     ON_CALL(*this, freeMemory)
         .WillByDefault(Invoke(freeGraphicsAllocation));
 }

@@ -17,4 +17,9 @@ uint64_t GraphicsAllocation::getGpuAddress() const {
     return allocationRT->getGpuAddress();
 }
 
+void *GraphicsAllocation::getHostAddress() const {
+    assert(allocationRT);
+    return allocationRT->getUnderlyingBuffer();
+}
+
 } // namespace xe
