@@ -9,6 +9,8 @@ namespace ult {
 
 template <>
 struct WhiteBox<::xe::Event> : public ::xe::Event {
+    using BaseClass = ::xe::Event;
+    using BaseClass::allocation;
 };
 
 using Event = WhiteBox<::xe::Event>;

@@ -22,4 +22,9 @@ void *GraphicsAllocation::getHostAddress() const {
     return allocationRT->getUnderlyingBuffer();
 }
 
+size_t GraphicsAllocation::getSize() const {
+    assert(allocationRT);
+    return allocationRT->getUnderlyingBufferSize();
+}
+
 } // namespace xe

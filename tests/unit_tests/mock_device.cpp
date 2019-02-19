@@ -1,4 +1,5 @@
 #include "mock_device.h"
+#include "mock_memory_manager.h"
 #include "runtime/device/device.h"
 #include "runtime/platform/platform.h"
 #include "unit_tests/mocks/mock_csr.h"
@@ -6,6 +7,8 @@
 
 namespace xe {
 namespace ult {
+
+using ::testing::Return;
 
 Mock<Device>::Mock() {
     auto ordinal = 0u;
@@ -19,6 +22,10 @@ Mock<Device>::Mock() {
     assert(executionEnvironment);
 
     csrRT = new MockCommandStreamReceiver(*executionEnvironment);
+
+    static ::testing::NiceMock<Mock<MemoryManager>> memoryManager;
+    ON_CALL(*this, getMemoryManager)
+        .WillByDefault(Return(&memoryManager));
 }
 
 Mock<Device>::~Mock() {
