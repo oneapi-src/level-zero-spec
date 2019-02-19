@@ -79,8 +79,20 @@ xe_result_t CommandListHw<IGFX_GEN12_CORE>::encodeDispatchFunction(xe_function_h
     auto simdSizeOp =
         COMPUTE_WALKER::SIMD_SIZE_SIMD32 * (simdSize == 32) |
         COMPUTE_WALKER::SIMD_SIZE_SIMD16 * (simdSize == 16) |
-        COMPUTE_WALKER::SIMD_SIZE_SIMD8 * (simdSize ==8);
+        COMPUTE_WALKER::SIMD_SIZE_SIMD8 * (simdSize == 8);
     cmd.setSimdSize(static_cast<COMPUTE_WALKER::SIMD_SIZE>(simdSizeOp));
+
+    using POSTSYNC_DATA = typename GfxFamily::POSTSYNC_DATA;
+    auto &postSync = cmd.getPostSync();
+    if (hEvent) {
+        auto event = Event::fromHandle(hEvent);
+        assert(event);
+
+        postSync.setOperation(POSTSYNC_DATA::OPERATION_WRITE_TIMESTAMP);
+        auto gpuAddress = event->getGpuAddress();
+        assert((gpuAddress & 63u) == 0u);
+        postSync.setDestinationAddress(event->getGpuAddress());
+    }
 
     // Set number of threads per thead group.
     auto &idd = cmd.getInterfaceDescriptor();

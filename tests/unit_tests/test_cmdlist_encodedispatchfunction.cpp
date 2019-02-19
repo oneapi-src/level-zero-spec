@@ -112,6 +112,7 @@ ATSTEST_F(CommandListEncodeDispatchFunction, addsWalkerToCommandStream) {
                                                       ptrOffset(commandList->commandStream->getCpuBase(), 0),
                                                       usedSpaceAfter));
     using COMPUTE_WALKER = typename FamilyType::COMPUTE_WALKER;
+    using POSTSYNC_DATA = typename FamilyType::POSTSYNC_DATA;
     using INTERFACE_DESCRIPTOR_DATA = typename FamilyType::INTERFACE_DESCRIPTOR_DATA;
 
     auto itor = find<COMPUTE_WALKER *>(cmdList.begin(), cmdList.end());
@@ -129,10 +130,11 @@ ATSTEST_F(CommandListEncodeDispatchFunction, addsWalkerToCommandStream) {
 
         EXPECT_NE(cmd->getIndirectDataLength(), 0u);
 
+        auto &postSync = cmd->getPostSync();
+        EXPECT_EQ(postSync.getDestinationAddress(), 0u);
+        EXPECT_EQ(postSync.getOperation(), POSTSYNC_DATA::OPERATION_NO_WRITE);
+
         auto &idd = cmd->getInterfaceDescriptor();
-        //TODO: Verify that kernelStartPointer is correct
-        //EXPECT_NE(idd.getKernelStartPointer(), 0u);
-        //EXPECT_EQ(idd.getKernelStartPointerHigh(), 0u);
         EXPECT_EQ(idd.getSamplerCount(), INTERFACE_DESCRIPTOR_DATA::SAMPLER_COUNT_NO_SAMPLERS_USED);
         EXPECT_EQ(idd.getSamplerStatePointer(), 0u);
         EXPECT_EQ(idd.getBindingTableEntryCount(), 0u);
@@ -141,6 +143,38 @@ ATSTEST_F(CommandListEncodeDispatchFunction, addsWalkerToCommandStream) {
         EXPECT_EQ(idd.getSharedLocalMemorySize(), INTERFACE_DESCRIPTOR_DATA::SHARED_LOCAL_MEMORY_SIZE_ENCODES_0K);
         EXPECT_EQ(idd.getBarrierEnable(), 0u);
         EXPECT_EQ(idd.getThreadGroupDispatchSize(), 0u);
+    }
+}
+
+ATSTEST_F(CommandListEncodeDispatchFunction, withEventSetsPostSyncOp) {
+    auto usedSpaceBefore = commandList->commandStream->getUsed();
+    auto event = whitebox_cast(Event::create(&device));
+
+    auto result = commandList->encodeDispatchFunction(function->toHandle(),
+                                                      functionArgs->toHandle(),
+                                                      &dispatchFunctionArguments,
+                                                      event->toHandle());
+    ASSERT_EQ(XE_RESULT_SUCCESS, result);
+
+    auto usedSpaceAfter = commandList->commandStream->getUsed();
+    ASSERT_GT(usedSpaceAfter, usedSpaceBefore);
+
+    GenCmdList cmdList;
+    ASSERT_TRUE(FamilyType::PARSE::parseCommandBuffer(cmdList,
+                                                      ptrOffset(commandList->commandStream->getCpuBase(), 0),
+                                                      usedSpaceAfter));
+    using COMPUTE_WALKER = typename FamilyType::COMPUTE_WALKER;
+    using POSTSYNC_DATA = typename FamilyType::POSTSYNC_DATA;
+
+    auto itor = find<COMPUTE_WALKER *>(cmdList.begin(), cmdList.end());
+    ASSERT_NE(cmdList.end(), itor);
+
+    {
+        auto cmd = genCmdCast<COMPUTE_WALKER *>(*itor);
+        auto &postSync = cmd->getPostSync();
+
+        EXPECT_NE(postSync.getDestinationAddress(), 0u);
+        EXPECT_EQ(postSync.getOperation(), POSTSYNC_DATA::OPERATION_WRITE_TIMESTAMP);
     }
 }
 
