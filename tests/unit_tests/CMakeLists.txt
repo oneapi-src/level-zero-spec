@@ -86,6 +86,7 @@ if(COMPUTE_RUNTIME_SUPPORT)
     target_link_libraries(${TARGET_NAME} 
         compute_runtime_mockable
         compute_runtime_mockable_extra
+        ${HW_LIBS_ULT}
     )
 
     if(AUB_STREAM_SUPPORT)
@@ -104,6 +105,7 @@ if(COMPUTE_RUNTIME_SUPPORT)
         get_target_property(ult_sources ${TARGET_NAME} SOURCES)
         get_target_property(ult_includes ${TARGET_NAME} INCLUDE_DIRECTORIES)
         get_target_property(ult_library_dependencies ${TARGET_NAME} LINK_LIBRARIES)
+        message(STATUS "ult_library_dependencies = ${ult_library_dependencies}")
 
         set(GENERATED_FILES_DIR "${XE_ROOT_DIR}/tests/generated/")
         set(EXPORTS_FILENAME "${CMAKE_CURRENT_BINARY_DIR}/driver_exports.def")
@@ -116,15 +118,17 @@ if(COMPUTE_RUNTIME_SUPPORT)
                 endif()
             endif()
         endforeach()
+        message(STATUS "dll_sources = ${dll_sources}")
         add_library(level_zero_dll SHARED ${dll_sources} "${EXPORTS_FILENAME}" "${GENERATED_FILES_DIR}/driver_exports_switches.cpp")
         target_include_directories(level_zero_dll PRIVATE ${ult_includes})
         
         foreach(loop_var ${ult_library_dependencies})
-            if(NOT(${loop_var} MATCHES "compute_runtime_mockable"))
+            if(NOT(${loop_var} MATCHES "compute_runtime_mockable|_ult"))
                 set(dll_library_dependencies "${dll_library_dependencies};${loop_var}")
             endif()
         endforeach()
-        target_link_libraries(level_zero_dll ${dll_library_dependencies} compute_runtime_lib compute_runtime_lib_full)
+        message(STATUS "dll_library_dependencies = ${dll_library_dependencies}")
+        target_link_libraries(level_zero_dll ${dll_library_dependencies} compute_runtime_lib ${HW_LIBS})
         target_compile_definitions(level_zero_dll PUBLIC RUNTIME_DLL)
         set_target_properties(level_zero_dll PROPERTIES OUTPUT_NAME level_zero)
     endif()

@@ -39,74 +39,66 @@ configure_file(${COMPUTE_RUNTIME_DIR}/config.h.in ${CMAKE_BINARY_DIR}/config.h)
 
 # These need to be added to a project to enable platform support in ULTs
 if(SUPPORT_GEN8)
-    set(COMPUTE_RUNTIME_HW_ENABLE
-        ${COMPUTE_RUNTIME_HW_ENABLE}
+    set(COMPUTE_RUNTIME_GEN8
         ${COMPUTE_RUNTIME_DIR}/runtime/gen8/enable_gen8.cpp
         ${COMPUTE_RUNTIME_DIR}/runtime/gen8/enable_family_full_gen8.cpp
         ${COMPUTE_RUNTIME_DIR}/runtime/gen8/enable_hw_info_config_gen8.cpp
     )
 
-    set(COMPUTE_RUNTIME_HW_ENABLE_ULT
-        ${COMPUTE_RUNTIME_HW_ENABLE_ULT}
+    set(COMPUTE_RUNTIME_ULT_GEN8
         ${COMPUTE_RUNTIME_DIR}/unit_tests/libult/gen8.cpp
         ${COMPUTE_RUNTIME_DIR}/unit_tests/gen8/cmd_parse_gen8.cpp
     )
 endif()
 
 if(SUPPORT_GEN9)
-    set(COMPUTE_RUNTIME_HW_ENABLE
-        ${COMPUTE_RUNTIME_HW_ENABLE}
+    set(COMPUTE_RUNTIME_GEN9
         ${COMPUTE_RUNTIME_DIR}/runtime/gen9/enable_gen9.cpp
         ${COMPUTE_RUNTIME_DIR}/runtime/gen9/enable_family_full_gen9.cpp
         ${COMPUTE_RUNTIME_DIR}/runtime/gen9/enable_hw_info_config_gen9.cpp
     )
 
-    set(COMPUTE_RUNTIME_HW_ENABLE_ULT
-        ${COMPUTE_RUNTIME_HW_ENABLE_ULT}
+    set(COMPUTE_RUNTIME_ULT_GEN9
         ${COMPUTE_RUNTIME_DIR}/unit_tests/libult/gen9.cpp
         ${COMPUTE_RUNTIME_DIR}/unit_tests/gen9/cmd_parse_gen9.cpp
     )
 endif()
 
 if(SUPPORT_GEN10)
-    set(COMPUTE_RUNTIME_HW_ENABLE
-        ${COMPUTE_RUNTIME_HW_ENABLE}
+    set(COMPUTE_RUNTIME_GEN10
         ${COMPUTE_RUNTIME_DIR}/runtime/gen10/enable_gen10.cpp
         ${COMPUTE_RUNTIME_DIR}/runtime/gen10/enable_family_full_gen10.cpp
         ${COMPUTE_RUNTIME_DIR}/runtime/gen10/enable_hw_info_config_gen10.cpp
     )
 
-    set(COMPUTE_RUNTIME_HW_ENABLE_ULT
-        ${COMPUTE_RUNTIME_HW_ENABLE_ULT}
+    set(COMPUTE_RUNTIME_ULT_GEN10
         ${COMPUTE_RUNTIME_DIR}/unit_tests/libult/gen10.cpp
         ${COMPUTE_RUNTIME_DIR}/unit_tests/gen10/cmd_parse_gen10.cpp
     )
 endif()
 
 if(SUPPORT_GEN11)
-    set(COMPUTE_RUNTIME_HW_ENABLE
-        ${COMPUTE_RUNTIME_HW_ENABLE}
+    set(COMPUTE_RUNTIME_GEN11
         ${COMPUTE_RUNTIME_DIR}/runtime/gen11/enable_gen11.cpp
         ${COMPUTE_RUNTIME_DIR}/runtime/gen11/enable_family_full_gen11.cpp
         ${COMPUTE_RUNTIME_DIR}/runtime/gen11/enable_hw_info_config_gen11.cpp
     )
 
-    set(COMPUTE_RUNTIME_HW_ENABLE_ULT
-        ${COMPUTE_RUNTIME_HW_ENABLE_ULT}
+    set(COMPUTE_RUNTIME_ULT_GEN11
         ${COMPUTE_RUNTIME_DIR}/unit_tests/libult/gen11.cpp
         ${COMPUTE_RUNTIME_DIR}/unit_tests/gen11/cmd_parse_gen11.cpp
     )
 endif()
 
 if(SUPPORT_GEN12LP)
-    set(COMPUTE_RUNTIME_HW_ENABLE
+    set(COMPUTE_RUNTIME_GEN12LP
         ${COMPUTE_RUNTIME_HW_ENABLE}
         ${COMPUTE_RUNTIME_DIR}/runtime/gen12lp/enable_gen12lp.cpp
         ${COMPUTE_RUNTIME_DIR}/runtime/gen12lp/enable_family_full_gen12lp.cpp
         ${COMPUTE_RUNTIME_DIR}/runtime/gen12lp/enable_hw_info_config_gen12lp.cpp
     )
 
-    set(COMPUTE_RUNTIME_HW_ENABLE_ULT
+    set(COMPUTE_RUNTIME_ULT_GEN12LP
         ${COMPUTE_RUNTIME_HW_ENABLE_ULT}
         ${COMPUTE_RUNTIME_DIR}/unit_tests/libult/gen12lp.cpp
         ${COMPUTE_RUNTIME_DIR}/unit_tests/gen12lp/cmd_parse_gen12lp.cpp
@@ -114,14 +106,14 @@ if(SUPPORT_GEN12LP)
 endif()
 
 if(SUPPORT_GEN12HP)
-    set(COMPUTE_RUNTIME_HW_ENABLE
+    set(COMPUTE_RUNTIME_GEN12HP
         ${COMPUTE_RUNTIME_HW_ENABLE}
         ${COMPUTE_RUNTIME_DIR}/runtime/gen12hp/enable_gen12hp.cpp
         ${COMPUTE_RUNTIME_DIR}/runtime/gen12hp/enable_family_full_gen12hp.cpp
         ${COMPUTE_RUNTIME_DIR}/runtime/gen12hp/enable_hw_info_config_gen12hp.cpp
     )
 
-    set(COMPUTE_RUNTIME_HW_ENABLE_ULT
+    set(COMPUTE_RUNTIME_ULT_GEN12HP
         ${COMPUTE_RUNTIME_HW_ENABLE_ULT}
         ${COMPUTE_RUNTIME_DIR}/unit_tests/libult/gen12hp.cpp
         ${COMPUTE_RUNTIME_DIR}/unit_tests/gen12hp/cmd_parse_gen12hp.cpp
