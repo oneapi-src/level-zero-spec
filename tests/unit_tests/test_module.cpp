@@ -18,7 +18,7 @@ namespace ult {
 
 using ::testing::Return;
 
-TEST(xeModuleCreateFunction, redirectsToModuleObject) {
+TEST(xeModuleCreateFunction, redirectsToObject) {
     Mock<Module> module;
     xe_function_desc_t desc = {};
     xe_function_handle_t function = {};

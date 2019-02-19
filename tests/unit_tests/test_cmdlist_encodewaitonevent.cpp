@@ -17,7 +17,7 @@ using ::testing::_;
 using ::testing::AnyNumber;
 using ::testing::Return;
 
-TEST(xeCommandListEncodeWaitOnEvent, redirectsToCmdListObject) {
+TEST(xeCommandListEncodeWaitOnEvent, redirectsToObject) {
     Mock<CommandList> commandList;
     xe_event_handle_t event = {};
 

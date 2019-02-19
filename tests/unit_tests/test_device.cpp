@@ -10,10 +10,8 @@ using ::testing::Return;
 namespace xe {
 namespace ult {
 
-TEST(xeDeviceCreateCommandList, redirectsToDeviceObject) {
+TEST(xeDeviceCreateCommandList, redirectsToObject) {
     Mock<Device> device;
-    auto deviceHandle = device.toHandle();
-
     xe_command_list_desc_t desc = {};
     xe_command_list_handle_t commandList = {};
 
@@ -21,16 +19,14 @@ TEST(xeDeviceCreateCommandList, redirectsToDeviceObject) {
         .Times(1)
         .WillRepeatedly(Return(XE_RESULT_SUCCESS));
 
-    auto result = xe::xeDeviceCreateCommandList(deviceHandle,
+    auto result = xe::xeDeviceCreateCommandList(device.toHandle(),
                                                 &desc,
                                                 &commandList);
     EXPECT_EQ(XE_RESULT_SUCCESS, result);
 }
 
-TEST(xeDeviceCreateCommandQueue, redirectsToDeviceObject) {
+TEST(xeDeviceCreateCommandQueue, redirectsToObject) {
     Mock<Device> device;
-    auto deviceHandle = device.toHandle();
-
     xe_command_queue_handle_t commandQueue = {};
     xe_command_queue_desc_t desc = {};
 
@@ -38,16 +34,14 @@ TEST(xeDeviceCreateCommandQueue, redirectsToDeviceObject) {
         .Times(1)
         .WillRepeatedly(Return(XE_RESULT_SUCCESS));
 
-    auto result = xe::xeDeviceCreateCommandQueue(deviceHandle,
+    auto result = xe::xeDeviceCreateCommandQueue(device.toHandle(),
                                                  &desc,
                                                  &commandQueue);
     EXPECT_EQ(XE_RESULT_SUCCESS, result);
 }
 
-TEST(xeDeviceCreateEvent, redirectsToDeviceObject) {
+TEST(xeDeviceCreateEvent, redirectsToObject) {
     Mock<Device> device;
-    auto deviceHandle = device.toHandle();
-
     xe_event_handle_t event = {};
     xe_event_desc_t desc = {};
 
@@ -55,7 +49,7 @@ TEST(xeDeviceCreateEvent, redirectsToDeviceObject) {
         .Times(1)
         .WillRepeatedly(Return(XE_RESULT_SUCCESS));
 
-    auto result = xe::xeDeviceCreateEvent(deviceHandle,
+    auto result = xe::xeDeviceCreateEvent(device.toHandle(),
                                           &desc,
                                           &event);
     ASSERT_EQ(XE_RESULT_SUCCESS, result);

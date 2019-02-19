@@ -16,13 +16,11 @@ using ::testing::_;
 using ::testing::AnyNumber;
 using ::testing::Return;
 
-TEST(xeCommandListClose, redirectsToCmdListObject) {
+TEST(xeCommandListClose, redirectsToObject) {
     Mock<CommandList> cmdList;
-    xe_command_list_handle_t commandList = cmdList.toHandle();
-
     EXPECT_CALL(cmdList, close()).Times(1);
 
-    auto result = xe::xeCommandListClose(commandList);
+    auto result = xe::xeCommandListClose(cmdList.toHandle());
     EXPECT_EQ(XE_RESULT_SUCCESS, result);
 }
 

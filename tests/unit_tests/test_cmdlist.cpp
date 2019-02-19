@@ -12,13 +12,11 @@
 namespace xe {
 namespace ult {
 
-TEST(xeCommandListDestroy, redirectsToCmdListObject) {
+TEST(xeCommandListDestroy, redirectsToObject) {
     Mock<CommandList> cmdList;
-    xe_command_list_handle_t commandList = cmdList.toHandle();
-
     EXPECT_CALL(cmdList, destroy()).Times(1);
 
-    auto result = xe::xeCommandListDestroy(commandList);
+    auto result = xe::xeCommandListDestroy(cmdList.toHandle());
     EXPECT_EQ(XE_RESULT_SUCCESS, result);
 }
 

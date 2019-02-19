@@ -16,7 +16,7 @@ using ::testing::_;
 using ::testing::AnyNumber;
 using ::testing::Return;
 
-TEST(xeCommandQueueEnqueueCommandQueue, redirectsToCmdQueueObject) {
+TEST(xeCommandQueueEnqueueCommandQueue, redirectsToObject) {
     Mock<CommandList> cmdList;
     auto hCommandList = cmdList.toHandle();
     Mock<CommandQueue> cmdQueue;

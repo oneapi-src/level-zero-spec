@@ -24,7 +24,7 @@ using ::testing::_;
 using ::testing::AnyNumber;
 using ::testing::Return;
 
-TEST(xeCommandListEncodeDispatchFunction, redirectsToCmdListObject) {
+TEST(xeCommandListEncodeDispatchFunction, redirectsToObject) {
     Mock<CommandList> commandList;
     xe_event_handle_t event = {};
     xe_function_handle_t function = {};
