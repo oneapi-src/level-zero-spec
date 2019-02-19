@@ -125,7 +125,7 @@ There are multiple versions that should be used by the application to determine 
 The following rules must be followed in order to maximize robustness and security:
 - all functions must return ::xe_result_t.
 - functions must never throw unhandled exceptions
-- functions must never fail silently; i.e. return ::{$X}_RETURN_SUCCESS 
+- functions must never fail silently; i.e. return ::XE_RESULT_SUCCESS 
 - function parameters should be validated prior to execution to ensure implementation compatibility, such as structure version.
 
 ## Multithreading and Concurrency
