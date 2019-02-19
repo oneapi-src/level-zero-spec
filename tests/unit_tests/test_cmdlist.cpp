@@ -29,11 +29,7 @@ using CommandListCreate = ::testing::TestWithParam<uint32_t>;
 
 TEST_P(CommandListCreate, returnsCommandListOnSuccess) {
     Mock<Device> device;
-    Mock<MemoryManager> memoryManager;
-
-    EXPECT_CALL(device, getMemoryManager()).WillRepeatedly(Return(&memoryManager));
-    EXPECT_CALL(memoryManager, allocateDeviceMemory(_, _)).Times(AnyNumber());
-    EXPECT_CALL(memoryManager, freeMemory(_)).Times(AnyNumber());
+    EXPECT_CALL(device, getMemoryManager).Times(AnyNumber());
 
     auto commandList = whitebox_cast(CommandList::create(GetParam(), &device));
     ASSERT_NE(nullptr, commandList);
@@ -91,11 +87,7 @@ INSTANTIATE_TEST_CASE_P(,
 
 HWTEST_F(CommandListCreate, addsStateBaseAddressToBatchBuffer) {
     Mock<Device> device;
-    Mock<MemoryManager> memoryManager;
-    EXPECT_CALL(device, getMemoryManager())
-        .WillRepeatedly(Return(&memoryManager));
-    EXPECT_CALL(memoryManager, allocateDeviceMemory(_, _)).Times(AnyNumber());
-    EXPECT_CALL(memoryManager, freeMemory(_)).Times(AnyNumber());
+    EXPECT_CALL(device, getMemoryManager).Times(AnyNumber());
 
     auto commandList = whitebox_cast(CommandList::create(productFamily, &device));
     ASSERT_NE(nullptr, commandList->commandStream);
@@ -133,11 +125,7 @@ HWTEST_F(CommandListCreate, addsStateBaseAddressToBatchBuffer) {
 
 ATSTEST_F(CommandListCreate, addsCfeStateToBatchBuffer) {
     Mock<Device> device;
-    Mock<MemoryManager> memoryManager;
-    EXPECT_CALL(device, getMemoryManager())
-        .WillRepeatedly(Return(&memoryManager));
-    EXPECT_CALL(memoryManager, allocateDeviceMemory(_, _)).Times(AnyNumber());
-    EXPECT_CALL(memoryManager, freeMemory(_)).Times(AnyNumber());
+    EXPECT_CALL(device, getMemoryManager).Times(AnyNumber());
 
     auto commandList = whitebox_cast(CommandList::create(productFamily, &device));
     ASSERT_NE(nullptr, commandList->commandStream);

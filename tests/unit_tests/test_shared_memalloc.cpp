@@ -12,11 +12,7 @@ namespace ult {
 
 TEST(sharedMemAlloc, returnsValidPtr) {
     Mock<Device> device;
-    Mock<MemoryManager> memoryManager;
-    EXPECT_CALL(device, getMemoryManager())
-        .WillRepeatedly(Return(&memoryManager));
-    EXPECT_CALL(memoryManager, allocateManagedMemory(_, _)).Times(AnyNumber());
-    EXPECT_CALL(memoryManager, freeMemory(_)).Times(AnyNumber());
+    EXPECT_CALL(device, getMemoryManager).Times(AnyNumber());
 
     xe_mem_allocator_handle_t handleAllocator = {};
     xe_device_mem_alloc_flag_t flagsDevice = {};

@@ -30,11 +30,7 @@ using CommandListEncodeSignalEvent = ::testing::Test;
 
 HWTEST_F(CommandListEncodeSignalEvent, addsPipeControlToCommandStream) {
     Mock<Device> device;
-    Mock<MemoryManager> memoryManager;
-    EXPECT_CALL(device, getMemoryManager())
-        .WillRepeatedly(Return(&memoryManager));
-    EXPECT_CALL(memoryManager, allocateDeviceMemory(_, _)).Times(AnyNumber());
-    EXPECT_CALL(memoryManager, freeMemory(_)).Times(AnyNumber());
+    EXPECT_CALL(device, getMemoryManager).Times(AnyNumber());
 
     auto commandList = whitebox_cast(CommandList::create(productFamily, &device));
     ASSERT_NE(nullptr, commandList->commandStream);
@@ -69,11 +65,7 @@ HWTEST_F(CommandListEncodeSignalEvent, addsPipeControlToCommandStream) {
 
 HWTEST_F(CommandListEncodeSignalEvent, addsEventGraphicsAllocationToResidencyContainer) {
     Mock<Device> device;
-    Mock<MemoryManager> memoryManager;
-    EXPECT_CALL(device, getMemoryManager())
-        .WillRepeatedly(Return(&memoryManager));
-    EXPECT_CALL(memoryManager, allocateDeviceMemory(_, _)).Times(AnyNumber());
-    EXPECT_CALL(memoryManager, freeMemory(_)).Times(AnyNumber());
+    EXPECT_CALL(device, getMemoryManager).Times(AnyNumber());
 
     auto commandList = whitebox_cast(CommandList::create(productFamily, &device));
     ASSERT_NE(nullptr, commandList->commandStream);

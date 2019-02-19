@@ -52,16 +52,15 @@ struct CommandListEncodeDispatchFunction : public ::testing::Test {
     }
 
     void SetUp() override {
-        EXPECT_CALL(device, getMemoryManager())
-            .WillRepeatedly(Return(&memoryManager));
-        EXPECT_CALL(memoryManager, allocateDeviceMemory(_, _)).Times(AnyNumber());
-        EXPECT_CALL(memoryManager, freeMemory(_)).Times(AnyNumber());
+        EXPECT_CALL(device, getMemoryManager).Times(AnyNumber());
 
-        buffer1 = memoryManager.allocateDeviceMemory(16384u, 4096u);
-        buffer2 = memoryManager.allocateDeviceMemory(16384u, 4096u);
+        auto memoryManager = device.getMemoryManager();
+        ASSERT_NE(memoryManager, nullptr);
+        buffer1 = memoryManager->allocateDeviceMemory(16384u, 4096u);
+        buffer2 = memoryManager->allocateDeviceMemory(16384u, 4096u);
 
         commandList = whitebox_cast(CommandList::create(productFamily, &device));
-        ASSERT_NE(nullptr, commandList->commandStream);
+        ASSERT_NE(commandList->commandStream, nullptr);
 
         dispatchFunctionArguments.version = XE_DISPATCH_FUNCTION_ARGS_VERSION;
         dispatchFunctionArguments.groupCountX = 1u;
@@ -78,12 +77,14 @@ struct CommandListEncodeDispatchFunction : public ::testing::Test {
     void TearDown() override {
         delete functionArgs;
         delete function;
-        memoryManager.freeMemory(buffer1);
-        memoryManager.freeMemory(buffer2);
+
+        auto memoryManager = device.getMemoryManager();
+        ASSERT_NE(memoryManager, nullptr);
+        memoryManager->freeMemory(buffer1);
+        memoryManager->freeMemory(buffer2);
     }
 
     Mock<Device> device;
-    Mock<MemoryManager> memoryManager;
     WhiteBox<::xe::CommandList> *commandList = nullptr;
 
     PrecompiledFunctionMock *function = nullptr;
