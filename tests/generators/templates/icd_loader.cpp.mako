@@ -24,51 +24,60 @@ import extended_helper as th
 * express and approved by Intel in writing.  
 * @endcond
 *
-* @file ${name}.cpp
+* @file icd_loader.cpp
 *
 * @cond DEV
-* DO NOT EDIT: generated from /scripts/<type>/${name}.yml
+* DO NOT EDIT: generated from /scripts/<type>/*.yml
 * @endcond
 *
 ******************************************************************************/
-#ifndef _${X}_${name.upper()}_H
-#define _${X}_${name.upper()}_H
-#if defined(__cplusplus)
-#pragma once
-#endif
-%if re.match(r"common", name):
-#include <stdint.h>
-#include <string.h>
-%else:
-#include "${x}_all.h"
-%endif
+#include "icd_loader.h"
 
-%for obj in objects:
-%for cls in th.get_class_list(obj):
-%if re.match(r"function", obj['type']):
-#define ENABLE_${th.make_func_name(x, obj, cls)} 0
-%endif
-%endfor
-%endfor
+#include <mutex>
 
-typedef struct _cl_mem* cl_mem;
-typedef struct _cl_command_queue* cl_command_queue;
-typedef struct _cl_context* cl_context;
-typedef struct _cl_program* cl_program;
+// TODO : Add implementation for linux
+#include <Windows.h>
 
-%for obj in objects:
-%for cls in th.get_class_list(obj):
-%if re.match(r"function", obj['type']):
-#if !(ENABLE_${th.make_func_name(x, obj, cls)})
-${x}_result_t __${x}call ${th.make_func_name(x, obj, cls)}(
-    %for line in th.make_param_lines_short(x, obj, cls):
-    ${line}
-    %endfor
-    ){
-    return ${X}_RESULT_ERROR_UNSUPPORTED;
+xe_dispatch_table_t dispatchTable = {};
+bool dispatchTableInitialized = false;
+
+${x}_result_t __xecall ${x}DriverInit(${x}_init_flag_t flags){
+    static std::mutex crit;
+    {
+        std::lock_guard<std::mutex> lockGuard{crit};
+        
+        if(dispatchTableInitialized){
+            return dispatchTable.${x}DriverInit(flags);
+        }
+        
+        auto driverLibrary = LoadLibraryA("level_zero.dll"); // persistent handle
+        dispatchTableInitialized = 
+                load_${x}(driverLibrary, 
+                          [](void *library, const char *funcName)->void* { return GetProcAddress((HMODULE)library, funcName); }, 
+                          &dispatchTable);
+        if(false == dispatchTableInitialized){
+            return ${X}_RESULT_ERROR_UNINITIALIZED;
+        }
+    }
+    return dispatchTable.${x}DriverInit(flags);
 }
-#endif
+
+%for obj in objects:
+%for cls in th.get_class_list(obj):
+%if re.match(r"function", obj['type']):
+%if not "DriverInit" in th.make_func_name(x, obj, cls):
+${x}_result_t __${x}call ${th.make_func_name(x, obj, cls)}(
+        %for line in th.make_param_lines_short(x, obj, cls):
+        ${line}
+        %endfor
+    ){
+    if(dispatchTableInitialized == false){
+        return ${X}_RESULT_ERROR_UNINITIALIZED;
+    }
+    return dispatchTable.${th.make_func_name(x, obj, cls)}(${th.make_params_list_single_line(obj, cls)});
+}
+%endif
 %endif
 %endfor
 %endfor
-#endif // _${X}_${name.upper()}_H
+

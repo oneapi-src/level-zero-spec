@@ -24,51 +24,76 @@ import extended_helper as th
 * express and approved by Intel in writing.  
 * @endcond
 *
-* @file ${name}.cpp
+* @file ${name}.h
 *
 * @cond DEV
 * DO NOT EDIT: generated from /scripts/<type>/${name}.yml
 * @endcond
 *
 ******************************************************************************/
-#ifndef _${X}_${name.upper()}_H
-#define _${X}_${name.upper()}_H
-#if defined(__cplusplus)
 #pragma once
-#endif
-%if re.match(r"common", name):
-#include <stdint.h>
-#include <string.h>
-%else:
+
+#include "${x}_${apiHeader}.h"
 #include "${x}_all.h"
-%endif
 
-%for obj in objects:
-%for cls in th.get_class_list(obj):
-%if re.match(r"function", obj['type']):
-#define ENABLE_${th.make_func_name(x, obj, cls)} 0
-%endif
-%endfor
-%endfor
-
+// for sharing
 typedef struct _cl_mem* cl_mem;
 typedef struct _cl_command_queue* cl_command_queue;
 typedef struct _cl_context* cl_context;
 typedef struct _cl_program* cl_program;
 
+struct _${th.subx(x, handles[name]['name'])} {
+};
+
+
+namespace ${x} {
+
+struct ${th.make_driver_frontend_class_name(name)} : public _${th.subx(x, handles[name]['name'])} {
+    ${th.make_driver_frontend_class_name(name)}() = default;
+    ${th.make_driver_frontend_class_name(name)}(const ${th.make_driver_frontend_class_name(name)} &) = delete;
+    ${th.make_driver_frontend_class_name(name)}(${th.make_driver_frontend_class_name(name)} &&) = delete;
+    ${th.make_driver_frontend_class_name(name)} &operator=(const ${th.make_driver_frontend_class_name(name)} &) = delete;
+    ${th.make_driver_frontend_class_name(name)} &operator=(${th.make_driver_frontend_class_name(name)} &&) = delete;
+    
+    static ${th.make_driver_frontend_class_name(name)} *create();
+    
 %for obj in objects:
 %for cls in th.get_class_list(obj):
+%if name == th.class_to_actor_name(cls):
 %if re.match(r"function", obj['type']):
-#if !(ENABLE_${th.make_func_name(x, obj, cls)})
+    virtual ${x}_result_t ${th.make_driver_frontend_class_member_func_declaration_name(x, obj, cls)}(
+                                    %for line in th.make_param_lines_short_no_actor(x, obj, cls, handles):
+                                    ${line}
+                                    %endfor
+                                    ) = 0;
+
+%endif
+%endif
+%endfor
+%endfor
+
+    static ${th.make_driver_frontend_class_name(name)} *fromHandle(${th.subx(x, handles[name]['name'])} handle) {
+        return static_cast<${th.make_driver_frontend_class_name(name)} *>(handle);
+    }
+
+    inline ${th.subx(x, handles[name]['name'])} toHandle() {
+        return this;
+    }
+};
+
+%for obj in objects:
+%for cls in th.get_class_list(obj):
+%if name == th.class_to_actor_name(cls):
+%if re.match(r"function", obj['type']):
 ${x}_result_t __${x}call ${th.make_func_name(x, obj, cls)}(
     %for line in th.make_param_lines_short(x, obj, cls):
     ${line}
     %endfor
-    ){
-    return ${X}_RESULT_ERROR_UNSUPPORTED;
-}
-#endif
+    );
+
+%endif
 %endif
 %endfor
 %endfor
-#endif // _${X}_${name.upper()}_H
+} // namespace ${x}
+

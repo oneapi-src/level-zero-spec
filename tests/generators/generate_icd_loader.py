@@ -5,14 +5,12 @@ import util
 """
     generates dynamic library loader .h for UMD driver
 """
-def generate_driver_loader(outPath, namespace, specs):
+def generate_icd_loader(outPath, namespace, specs):
     loader_path = outPath
     util.makePath(loader_path)
     util.removeFiles(loader_path, "*.h")
 
     loc = 0
-    template = "driver_loader.h.mako"
-    fin = os.path.join("templates", template)
 
     mergedSpec = dict()
     mergedSpec['header'] = {'type': 'header', 'desc': 'Intel $Xx Driver Loader'}
@@ -21,11 +19,21 @@ def generate_driver_loader(outPath, namespace, specs):
     for s in specs:
         mergedSpec['objects'] = mergedSpec['objects'] + s['objects']
 
-    filename = "driver_loader.h"
-    fout = os.path.join(loader_path, filename)
-    print("Generating %s..."%fout)
+    print("Generating %s..."%os.path.join(loader_path, "icd_loader.h"))
     loc += util.makoWrite(
-        fin, fout,
+        os.path.join("templates", "icd_loader.h.mako"),
+        os.path.join(loader_path, "icd_loader.h"),
+        x=namespace,
+        X=namespace.upper(),
+        Xx=namespace.title(),
+        name = mergedSpec['name'],
+        header = mergedSpec['header'],
+        objects = mergedSpec['objects'])
+
+    print("Generating %s..."%os.path.join(loader_path, "icd_loader.cpp"))
+    loc += util.makoWrite(
+        os.path.join("templates", "icd_loader.cpp.mako"),
+        os.path.join(loader_path, "icd_loader.cpp"),
         x=namespace,
         X=namespace.upper(),
         Xx=namespace.title(),

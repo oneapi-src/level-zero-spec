@@ -24,51 +24,46 @@ import extended_helper as th
 * express and approved by Intel in writing.  
 * @endcond
 *
-* @file ${name}.cpp
+* @file test_forwarding_${name}.cpp
 *
 * @cond DEV
 * DO NOT EDIT: generated from /scripts/<type>/${name}.yml
 * @endcond
 *
 ******************************************************************************/
-#ifndef _${X}_${name.upper()}_H
-#define _${X}_${name.upper()}_H
-#if defined(__cplusplus)
-#pragma once
-#endif
-%if re.match(r"common", name):
-#include <stdint.h>
-#include <string.h>
-%else:
-#include "${x}_all.h"
-%endif
+#include "${name}.h"
+#include "mock_${name}.h"
+
+using ::testing::Return;
+
+namespace xe {
+namespace ult {
 
 %for obj in objects:
 %for cls in th.get_class_list(obj):
 %if re.match(r"function", obj['type']):
-#define ENABLE_${th.make_func_name(x, obj, cls)} 0
-%endif
-%endfor
-%endfor
-
-typedef struct _cl_mem* cl_mem;
-typedef struct _cl_command_queue* cl_command_queue;
-typedef struct _cl_context* cl_context;
-typedef struct _cl_program* cl_program;
-
-%for obj in objects:
-%for cls in th.get_class_list(obj):
-%if re.match(r"function", obj['type']):
-#if !(ENABLE_${th.make_func_name(x, obj, cls)})
-${x}_result_t __${x}call ${th.make_func_name(x, obj, cls)}(
-    %for line in th.make_param_lines_short(x, obj, cls):
-    ${line}
+%if name == th.class_to_actor_name(cls):
+TEST(${x}${th.make_driver_frontend_class_name(name)}${th.change_case_camel_to_pascal(th.make_driver_frontend_class_member_func_declaration_name(x, obj, cls))}, redirectsTo${th.change_case_camel_to_pascal(th.make_driver_frontend_class_name(name))}Object) {
+    Mock<${th.make_driver_frontend_class_name(name)}> ${th.change_case_pascal_to_camel(th.make_driver_frontend_class_name(name))};
+    auto asHandle = ${th.change_case_pascal_to_camel(th.make_driver_frontend_class_name(name))}.toHandle();
+    
+    %for param in obj['params']:
+    ${th.subx(x, param['type'])} ${param['name']} = {};
     %endfor
-    ){
-    return ${X}_RESULT_ERROR_UNSUPPORTED;
+    
+    EXPECT_CALL(${th.change_case_pascal_to_camel(th.make_driver_frontend_class_name(name))}, ${th.make_driver_frontend_class_member_func_declaration_name(x, obj, cls)}(${th.make_params_list_single_line(obj, cls, 1, False)}))
+        .Times(1)
+        .WillRepeatedly(Return(${X}_RESULT_SUCCESS));
+        
+    auto result = ${x}::${th.make_func_name(x, obj, cls)}(asHandle ${th.make_params_list_single_line(obj, cls, 1, True)});
+        
+    EXPECT_EQ(${X}_RESULT_SUCCESS, result);
 }
-#endif
+%endif
 %endif
 %endfor
-%endfor
-#endif // _${X}_${name.upper()}_H
+%endfor 
+
+} // namespace ult
+} // namespace ${x}
+

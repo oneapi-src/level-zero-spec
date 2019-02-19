@@ -24,12 +24,10 @@ import extended_helper as th
 * express and approved by Intel in writing.  
 * @endcond
 *
-* @file ${x}_${name}.h
-*
-* @brief ${th.subx(x, header['desc'])}
+* @file icd_loader.h
 *
 * @cond DEV
-* DO NOT EDIT: generated from /scripts/<type>/${name}.yml
+* DO NOT EDIT: generated from /scripts/<type>/*.yml
 * @endcond
 *
 ******************************************************************************/

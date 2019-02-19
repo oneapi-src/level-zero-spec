@@ -21,12 +21,10 @@
 * express and approved by Intel in writing.  
 * @endcond
 *
-* @file xe_loader.h
-*
-* @brief Intel Xe Driver Loader
+* @file icd_loader.h
 *
 * @cond DEV
-* DO NOT EDIT: generated from /scripts/<type>/loader.yml
+* DO NOT EDIT: generated from /scripts/<type>/*.yml
 * @endcond
 *
 ******************************************************************************/

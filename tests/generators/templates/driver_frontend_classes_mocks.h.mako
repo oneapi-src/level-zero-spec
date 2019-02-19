@@ -24,51 +24,38 @@ import extended_helper as th
 * express and approved by Intel in writing.  
 * @endcond
 *
-* @file ${name}.cpp
+* @file mock_${name}.h
 *
 * @cond DEV
 * DO NOT EDIT: generated from /scripts/<type>/${name}.yml
 * @endcond
 *
 ******************************************************************************/
-#ifndef _${X}_${name.upper()}_H
-#define _${X}_${name.upper()}_H
-#if defined(__cplusplus)
 #pragma once
-#endif
-%if re.match(r"common", name):
-#include <stdint.h>
-#include <string.h>
-%else:
-#include "${x}_all.h"
-%endif
+#include "${name}.h"
 
+#include "white_box.h"
+#include "mock.h"
+
+namespace ${x} {
+namespace ult {
+
+template<>
+struct Mock<${th.make_driver_frontend_class_name(name)}> : public ${th.make_driver_frontend_class_name(name)} {
+    Mock() = default;
+    virtual ~Mock() = default;
+    
 %for obj in objects:
 %for cls in th.get_class_list(obj):
+%if name == th.class_to_actor_name(cls):
 %if re.match(r"function", obj['type']):
-#define ENABLE_${th.make_func_name(x, obj, cls)} 0
+    MOCK_METHOD${th.get_num_params(obj, cls) - 1}(${th.make_driver_frontend_class_member_func_declaration_name(x, obj, cls)}, xe_result_t(${th.merge_into_single_line(th.make_param_lines_short_no_actor(x, obj, cls, handles))}));
+%endif
 %endif
 %endfor
 %endfor
+};
 
-typedef struct _cl_mem* cl_mem;
-typedef struct _cl_command_queue* cl_command_queue;
-typedef struct _cl_context* cl_context;
-typedef struct _cl_program* cl_program;
+} // namespace ult
+} // namespace ${x}
 
-%for obj in objects:
-%for cls in th.get_class_list(obj):
-%if re.match(r"function", obj['type']):
-#if !(ENABLE_${th.make_func_name(x, obj, cls)})
-${x}_result_t __${x}call ${th.make_func_name(x, obj, cls)}(
-    %for line in th.make_param_lines_short(x, obj, cls):
-    ${line}
-    %endfor
-    ){
-    return ${X}_RESULT_ERROR_UNSUPPORTED;
-}
-#endif
-%endif
-%endfor
-%endfor
-#endif // _${X}_${name.upper()}_H
