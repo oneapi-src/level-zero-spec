@@ -1,6 +1,7 @@
 --- #--------------------------------------------------------------------------
 type: header
 desc: "Intel $Xx Driver APIs for Command Queue"
+class: $xCommandQueue
 --- #--------------------------------------------------------------------------
 type: macro
 desc: API version of $x_command_queue_desc_t

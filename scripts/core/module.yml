@@ -1,6 +1,7 @@
 --- #--------------------------------------------------------------------------
 type: header
 desc: "Intel $Xx Driver APIs for Module"
+class: [ $xModule,  $xFunction, $xFunctionArgs]
 --- #--------------------------------------------------------------------------
 type: macro
 desc: API version of $x_module_desc_t

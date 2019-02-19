@@ -1,6 +1,7 @@
 --- #--------------------------------------------------------------------------
 type: header
 desc: "Intel $Xx Driver APIs for Command List"
+class: $xCommandList
 --- #--------------------------------------------------------------------------
 type: macro
 desc: "API version of $x_command_list_desc_t"

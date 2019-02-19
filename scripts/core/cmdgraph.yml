@@ -1,6 +1,7 @@
 --- #--------------------------------------------------------------------------
 type: header
 desc: "Intel $Xx Driver APIs for CommandGraph"
+class: $xCommandGraph
 --- #--------------------------------------------------------------------------
 type: macro
 desc: "API version of $x_command_graph_desc_t"

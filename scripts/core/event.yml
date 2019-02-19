@@ -1,6 +1,7 @@
 --- #--------------------------------------------------------------------------
 type: header
 desc: "Intel $Xx Driver APIs for Event"
+class: $xEvent
 --- #--------------------------------------------------------------------------
 type: macro
 desc: "API version of $x_event_desc_t"

@@ -45,14 +45,14 @@
 ///     - ::XE_RESULT_SUCCESS
 ///     - ::XE_RESULT_ERROR_UNINITIALIZED
 ///     - ::XE_RESULT_ERROR_DEVICE_LOST
-///     - ::XE_RESULT_ERROR_OUT_OF_HOST_MEMORY
-///     - ::XE_RESULT_ERROR_OUT_OF_DEVICE_MEMORY
-///     - ::XE_RESULT_ERROR_UNSUPPORTED
-///         + ::XE_COMMAND_LIST_DESC_VERSION <= desc->version
 ///     - ::XE_RESULT_ERROR_INVALID_PARAMETER
 ///         + nullptr == hDevice
 ///         + nullptr == desc
 ///         + nullptr == phCommandList
+///     - ::XE_RESULT_ERROR_UNSUPPORTED
+///         + ::XE_COMMAND_LIST_DESC_VERSION <= desc->version
+///     - ::XE_RESULT_ERROR_OUT_OF_HOST_MEMORY
+///     - ::XE_RESULT_ERROR_OUT_OF_DEVICE_MEMORY
 /*@todo: __declspec(dllexport)*/
 xe_result_t __xecall
   xeDeviceCreateCommandList(
@@ -64,10 +64,10 @@ xe_result_t __xecall
     // @todo: check_return(nullptr == get_driver(), XE_RESULT_ERROR_UNINITIALIZED);
 
     // Check parameters
-    // @todo: check_return(XE_COMMAND_LIST_DESC_VERSION <= desc->version, XE_RESULT_ERROR_UNSUPPORTED);
     // @todo: check_return(nullptr == hDevice, XE_RESULT_ERROR_INVALID_PARAMETER);
     // @todo: check_return(nullptr == desc, XE_RESULT_ERROR_INVALID_PARAMETER);
     // @todo: check_return(nullptr == phCommandList, XE_RESULT_ERROR_INVALID_PARAMETER);
+    // @todo: check_return(XE_COMMAND_LIST_DESC_VERSION <= desc->version, XE_RESULT_ERROR_UNSUPPORTED);
 
     // @todo: insert <code> here
 
@@ -91,13 +91,13 @@ xe_result_t __xecall
 ///     - ::XE_RESULT_SUCCESS
 ///     - ::XE_RESULT_ERROR_UNINITIALIZED
 ///     - ::XE_RESULT_ERROR_DEVICE_LOST
-///     - ::XE_RESULT_ERROR_OUT_OF_HOST_MEMORY
-///     - ::XE_RESULT_ERROR_OUT_OF_DEVICE_MEMORY
-///     - ::XE_RESULT_ERROR_UNSUPPORTED
 ///     - ::XE_RESULT_ERROR_INVALID_PARAMETER
 ///         + nullptr == hDevice
 ///         + nullptr == hCommandList
 ///         + nullptr == phCommandList
+///     - ::XE_RESULT_ERROR_UNSUPPORTED
+///     - ::XE_RESULT_ERROR_OUT_OF_HOST_MEMORY
+///     - ::XE_RESULT_ERROR_OUT_OF_DEVICE_MEMORY
 /*@todo: __declspec(dllexport)*/
 xe_result_t __xecall
   xeDeviceCopyCommandList(
@@ -132,9 +132,9 @@ xe_result_t __xecall
 ///     - ::XE_RESULT_SUCCESS
 ///     - ::XE_RESULT_ERROR_UNINITIALIZED
 ///     - ::XE_RESULT_ERROR_DEVICE_LOST
-///     - ::XE_RESULT_ERROR_UNSUPPORTED
 ///     - ::XE_RESULT_ERROR_INVALID_PARAMETER
 ///         + nullptr == hCommandList
+///     - ::XE_RESULT_ERROR_UNSUPPORTED
 /*@todo: __declspec(dllexport)*/
 xe_result_t __xecall
   xeCommandListDestroy(
@@ -163,9 +163,9 @@ xe_result_t __xecall
 ///     - ::XE_RESULT_SUCCESS
 ///     - ::XE_RESULT_ERROR_UNINITIALIZED
 ///     - ::XE_RESULT_ERROR_DEVICE_LOST
-///     - ::XE_RESULT_ERROR_UNSUPPORTED
 ///     - ::XE_RESULT_ERROR_INVALID_PARAMETER
 ///         + nullptr == hCommandList
+///     - ::XE_RESULT_ERROR_UNSUPPORTED
 /*@todo: __declspec(dllexport)*/
 xe_result_t __xecall
   xeCommandListClose(
@@ -197,9 +197,9 @@ xe_result_t __xecall
 ///     - ::XE_RESULT_SUCCESS
 ///     - ::XE_RESULT_ERROR_UNINITIALIZED
 ///     - ::XE_RESULT_ERROR_DEVICE_LOST
-///     - ::XE_RESULT_ERROR_UNSUPPORTED
 ///     - ::XE_RESULT_ERROR_INVALID_PARAMETER
 ///         + nullptr == hCommandList
+///     - ::XE_RESULT_ERROR_UNSUPPORTED
 /*@todo: __declspec(dllexport)*/
 xe_result_t __xecall
   xeCommandListReset(
@@ -234,11 +234,11 @@ xe_result_t __xecall
 ///     - ::XE_RESULT_SUCCESS
 ///     - ::XE_RESULT_ERROR_UNINITIALIZED
 ///     - ::XE_RESULT_ERROR_DEVICE_LOST
-///     - ::XE_RESULT_ERROR_UNSUPPORTED
 ///     - ::XE_RESULT_ERROR_INVALID_PARAMETER
 ///         + nullptr == hCommandList
 ///         + invalid value for attribute
 ///         + invalid value for value
+///     - ::XE_RESULT_ERROR_UNSUPPORTED
 /*@todo: __declspec(dllexport)*/
 xe_result_t __xecall
   xeCommandListSetParameter(
@@ -276,11 +276,11 @@ xe_result_t __xecall
 ///     - ::XE_RESULT_SUCCESS
 ///     - ::XE_RESULT_ERROR_UNINITIALIZED
 ///     - ::XE_RESULT_ERROR_DEVICE_LOST
-///     - ::XE_RESULT_ERROR_UNSUPPORTED
 ///     - ::XE_RESULT_ERROR_INVALID_PARAMETER
 ///         + nullptr == hCommandList
 ///         + nullptr == value
 ///         + invalid value for attribute
+///     - ::XE_RESULT_ERROR_UNSUPPORTED
 /*@todo: __declspec(dllexport)*/
 xe_result_t __xecall
   xeCommandListGetParameter(
@@ -312,9 +312,9 @@ xe_result_t __xecall
 ///     - ::XE_RESULT_SUCCESS
 ///     - ::XE_RESULT_ERROR_UNINITIALIZED
 ///     - ::XE_RESULT_ERROR_DEVICE_LOST
-///     - ::XE_RESULT_ERROR_UNSUPPORTED
 ///     - ::XE_RESULT_ERROR_INVALID_PARAMETER
 ///         + nullptr == hCommandList
+///     - ::XE_RESULT_ERROR_UNSUPPORTED
 /*@todo: __declspec(dllexport)*/
 xe_result_t __xecall
   xeCommandListResetParameters(
@@ -343,11 +343,11 @@ xe_result_t __xecall
 ///     - ::XE_RESULT_SUCCESS
 ///     - ::XE_RESULT_ERROR_UNINITIALIZED
 ///     - ::XE_RESULT_ERROR_DEVICE_LOST
-///     - ::XE_RESULT_ERROR_UNSUPPORTED
 ///     - ::XE_RESULT_ERROR_INVALID_PARAMETER
 ///         + nullptr == hCommandList
 ///         + nullptr == phCommandLists
 ///         + 0 for numCommandLists
+///     - ::XE_RESULT_ERROR_UNSUPPORTED
 /*@todo: __declspec(dllexport)*/
 xe_result_t __xecall
   xeCommandListEncodeCommandLists(
@@ -380,12 +380,12 @@ xe_result_t __xecall
 ///     - ::XE_RESULT_SUCCESS
 ///     - ::XE_RESULT_ERROR_UNINITIALIZED
 ///     - ::XE_RESULT_ERROR_DEVICE_LOST
-///     - ::XE_RESULT_ERROR_UNSUPPORTED
 ///     - ::XE_RESULT_ERROR_INVALID_PARAMETER
 ///         + nullptr == hCommandList
 ///         + nullptr == pBlob
 ///         + invalid value for format
 ///         + 0 for size
+///     - ::XE_RESULT_ERROR_UNSUPPORTED
 /*@todo: __declspec(dllexport)*/
 xe_result_t __xecall
   xeCommandListEncodeCommands(

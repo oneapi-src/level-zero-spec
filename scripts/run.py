@@ -33,11 +33,11 @@ def main():
     start = time.time()
     # generate 'core' APIs
     if "all" == args.filter or "core" == args.filter:
-        specs = parse_specs.parse("./core")
+        specs, meta = parse_specs.parse("./core")
         generate_api.generate_cpp(
             configParser.get('PATH','core'),
             configParser.get('NAMESPACE','core'),
-            specs)
+            specs, meta)
         if args.compile:
             compile_api.compile_cpp_source(
                 configParser.get('PATH','core'),
@@ -46,11 +46,11 @@ def main():
 
     # generate 'extended' APIs
     if "all" == args.filter or "extended" == args.filter:
-        specs = parse_specs.parse("./extended")
+        specs, meta = parse_specs.parse("./extended")
         generate_api.generate_cpp(
             configParser.get('PATH','extended'),
             configParser.get('NAMESPACE','extended'),
-            specs)
+            specs, meta)
         if args.compile:
             compile_api.compile_cpp_source(
                 configParser.get('PATH','extended'),

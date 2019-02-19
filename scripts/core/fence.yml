@@ -1,6 +1,7 @@
 --- #--------------------------------------------------------------------------
 type: header
 desc: "Intel $Xx Driver APIs for Fence"
+class: $xFence
 --- #--------------------------------------------------------------------------
 type: macro
 desc: "API version of $x_fence_desc_t"

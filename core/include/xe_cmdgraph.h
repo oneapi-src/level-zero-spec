@@ -70,14 +70,14 @@ typedef struct _xe_command_graph_desc_t
 ///     - ::XE_RESULT_SUCCESS
 ///     - ::XE_RESULT_ERROR_UNINITIALIZED
 ///     - ::XE_RESULT_ERROR_DEVICE_LOST
-///     - ::XE_RESULT_ERROR_OUT_OF_HOST_MEMORY
-///     - ::XE_RESULT_ERROR_OUT_OF_DEVICE_MEMORY
-///     - ::XE_RESULT_ERROR_UNSUPPORTED
-///         + ::XE_COMMAND_GRAPH_DESC_VERSION <= desc->version
 ///     - ::XE_RESULT_ERROR_INVALID_PARAMETER
 ///         + nullptr == hDevice
 ///         + nullptr == desc
 ///         + nullptr == phCommandGraph
+///     - ::XE_RESULT_ERROR_UNSUPPORTED
+///         + ::XE_COMMAND_GRAPH_DESC_VERSION <= desc->version
+///     - ::XE_RESULT_ERROR_OUT_OF_HOST_MEMORY
+///     - ::XE_RESULT_ERROR_OUT_OF_DEVICE_MEMORY
 xe_result_t __xecall
   xeDeviceCreateCommandGraph(
     xe_device_handle_t hDevice,                     ///< [in] handle of the device object
@@ -97,9 +97,9 @@ xe_result_t __xecall
 ///     - ::XE_RESULT_SUCCESS
 ///     - ::XE_RESULT_ERROR_UNINITIALIZED
 ///     - ::XE_RESULT_ERROR_DEVICE_LOST
-///     - ::XE_RESULT_ERROR_UNSUPPORTED
 ///     - ::XE_RESULT_ERROR_INVALID_PARAMETER
 ///         + nullptr == hCommandGraph
+///     - ::XE_RESULT_ERROR_UNSUPPORTED
 xe_result_t __xecall
   xeCommandGraphDestroy(
     xe_command_graph_handle_t hCommandGraph         ///< [in] handle of command graph object to destroy
@@ -120,9 +120,9 @@ xe_result_t __xecall
 ///     - ::XE_RESULT_SUCCESS
 ///     - ::XE_RESULT_ERROR_UNINITIALIZED
 ///     - ::XE_RESULT_ERROR_DEVICE_LOST
-///     - ::XE_RESULT_ERROR_UNSUPPORTED
 ///     - ::XE_RESULT_ERROR_INVALID_PARAMETER
 ///         + nullptr == hCommandGraph
+///     - ::XE_RESULT_ERROR_UNSUPPORTED
 xe_result_t __xecall
   xeCommandGraphClose(
     xe_command_graph_handle_t hCommandGraph         ///< [in] handle of command graph object to close
@@ -141,9 +141,9 @@ xe_result_t __xecall
 ///     - ::XE_RESULT_SUCCESS
 ///     - ::XE_RESULT_ERROR_UNINITIALIZED
 ///     - ::XE_RESULT_ERROR_DEVICE_LOST
-///     - ::XE_RESULT_ERROR_UNSUPPORTED
 ///     - ::XE_RESULT_ERROR_INVALID_PARAMETER
 ///         + nullptr == hCommandGraph
+///     - ::XE_RESULT_ERROR_UNSUPPORTED
 xe_result_t __xecall
   xeCommandGraphReset(
     xe_command_graph_handle_t hCommandGraph         ///< [in] handle of command graph object to reset

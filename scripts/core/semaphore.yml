@@ -1,6 +1,7 @@
 --- #--------------------------------------------------------------------------
 type: header
 desc: "Intel $Xx Driver APIs for Semaphore"
+class: $xSemaphore
 --- #--------------------------------------------------------------------------
 type: macro
 desc: "API version of $x_semaphore_desc_t"

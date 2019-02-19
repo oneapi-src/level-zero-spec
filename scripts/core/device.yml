@@ -1,6 +1,7 @@
 --- #--------------------------------------------------------------------------
 type: header
 desc: "Intel $Xx Driver APIs for Device"
+class: $xDevice
 --- #--------------------------------------------------------------------------
 type: function
 desc: "Reports the number of devices"
