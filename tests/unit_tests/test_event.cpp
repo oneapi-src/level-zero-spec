@@ -1,22 +1,16 @@
-#include "xe_event.h"
+#include "mock_event.h"
 #include "gtest/gtest.h"
 
 namespace xe {
+namespace ult {
 
-TEST(xeDeviceCreateEvent, returnsSuccess) {
-    xe_device_handle_t device = {};
-    xe_event_desc_t descEvent = {};
-    xe_event_handle_t event = {};
-    auto result = xeDeviceCreateEvent(device,
-                                      &descEvent,
-                                      &event);
+TEST(xeEventDestroy, redirectsToObject) {
+    Mock<Event> event;
+    EXPECT_CALL(event, destroy);
+
+    auto result = ::xe::xeEventDestroy(event.toHandle());
     EXPECT_EQ(XE_RESULT_SUCCESS, result);
 }
 
-TEST(xeEventDestroy, returnsSuccess) {
-    xe_event_handle_t event = {};
-    auto result = xeEventDestroy(event);
-    EXPECT_EQ(XE_RESULT_SUCCESS, result);
-}
-
+} // namespace ult
 } // namespace xe

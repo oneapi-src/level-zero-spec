@@ -11,6 +11,8 @@ struct GraphicsAllocation;
 struct Event : public _xe_event_handle_t {
     static Event *create(Device *device);
 
+    virtual xe_result_t destroy();
+
     static Event *fromHandle(xe_event_handle_t handle) {
         return static_cast<Event *>(handle);
     }
@@ -28,5 +30,10 @@ struct Event : public _xe_event_handle_t {
   protected:
     GraphicsAllocation *allocation = nullptr;
 };
+
+xe_result_t __xecall
+  xeEventDestroy(
+    xe_event_handle_t hEvent                        ///< [in] handle of event object to destroy
+    );
 
 } // namespace xe

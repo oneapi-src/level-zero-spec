@@ -18,6 +18,8 @@ struct Mock<Event> : public Event {
     Mock();
     virtual ~Mock();
 
+    MOCK_METHOD0(destroy, xe_result_t ());
+
     // Fake an allocation for event memory
     alignas(16) uint32_t memory = -1;
     GraphicsAllocation mockAllocation;

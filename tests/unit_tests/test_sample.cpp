@@ -61,7 +61,7 @@ TEST(sample, waitOnEvent) {
                                                    (xe_fence_handle_t)0);
     ASSERT_EQ(XE_RESULT_SUCCESS, result);
 
-    result = xeEventDestroy(hEvent);
+    result = xe::xeEventDestroy(hEvent);
     ASSERT_EQ(XE_RESULT_SUCCESS, result);
 
     result = xe::xeCommandListDestroy(hCommandList);
