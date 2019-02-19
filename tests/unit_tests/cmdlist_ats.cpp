@@ -94,30 +94,6 @@ xe_result_t CommandListHw<IGFX_GEN12_CORE>::encodeDispatchFunction(xe_function_h
         postSync.setDestinationAddress(event->getGpuAddress());
     }
 
-    // Set number of threads per thead group.
-    auto &idd = cmd.getInterfaceDescriptor();
-    idd.setNumberOfThreadsInGpgpuThreadGroup(functionArgs->getThreadsPerThreadGroup());
-
-    // Copy the kernel to indirect heap
-    // TODO: Allocate kernel in graphics memory to avoid the CPU copy
-    {
-        auto sizeISA = function->getIsaSize();
-        auto ptrISA = function->getIsaHostMem();
-
-        auto heap = this->indirectHeaps[INSTRUCTION];
-        assert(heap);
-
-        auto ptr = heap->getSpace(sizeISA);
-        assert(ptr);
-        memcpy(ptr, ptrISA, sizeISA);
-
-        auto offset = static_cast<uint32_t>(ptrDiff(ptr, heap->getHeapGpuBase()));
-
-        auto &idd = cmd.getInterfaceDescriptor();
-        idd.setKernelStartPointer(offset);
-        idd.setKernelStartPointerHigh(0u);
-    }
-
     // Copy the threadData to the indirect heap
     {
         auto heap = indirectHeaps[OCLRT::IndirectHeap::GENERAL_STATE];
@@ -140,6 +116,28 @@ xe_result_t CommandListHw<IGFX_GEN12_CORE>::encodeDispatchFunction(xe_function_h
         cmd.setEmitLocalId(!sizePerThreadData);
         cmd.setIndirectDataLength(sizeThreadData);
         cmd.setIndirectDataStartAddress(static_cast<uint32_t>(offset));
+    }
+
+    // Set number of threads per thead group.
+    auto &idd = cmd.getInterfaceDescriptor();
+    idd.setNumberOfThreadsInGpgpuThreadGroup(functionArgs->getThreadsPerThreadGroup());
+
+    // Copy the kernel to indirect heap
+    // TODO: Allocate kernel in graphics memory to avoid the CPU copy
+    {
+        auto sizeISA = function->getIsaSize();
+        auto ptrISA = function->getIsaHostMem();
+
+        auto heap = this->indirectHeaps[INSTRUCTION];
+        assert(heap);
+
+        auto ptr = heap->getSpace(sizeISA);
+        assert(ptr);
+        memcpy(ptr, ptrISA, sizeISA);
+
+        auto offset = static_cast<uint32_t>(ptrDiff(ptr, heap->getHeapGpuBase()));
+        idd.setKernelStartPointer(offset);
+        idd.setKernelStartPointerHigh(0u);
     }
 
     // Attach Function residency to our CommandList residency
