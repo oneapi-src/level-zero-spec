@@ -232,18 +232,6 @@ def make_return_lines(repl, obj, cls):
     return lines
 
 """
-    return a list of classes for the obj
-"""
-def get_class_list(obj):
-    if 'class' in obj:
-        if isinstance(obj['class'], list):
-            return obj['class']
-        else:
-            return [obj['class']]
-    else:
-        return ['none']
-
-"""
     returns the name of a function
 """
 def make_func_name(repl, obj, cls):

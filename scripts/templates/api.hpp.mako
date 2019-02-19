@@ -47,7 +47,7 @@ from templates import helper as th
 namespace ${x}
 {
 %for obj in objects:
-    %for cls in th.get_class_list(obj):
+    %for cls in obj['class']:
     ///////////////////////////////////////////////////////////////////////////////
     %if 'condition' in obj:
     #if ${th.subx(x,obj['condition'])}

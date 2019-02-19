@@ -60,9 +60,11 @@ xe_result_t __xecall
 
     // Check parameters
     // @todo: check_return(nullptr == count, XE_RESULT_ERROR_INVALID_PARAMETER);
+    /// @begin {5c7c465fde2ab4523bf907a3b46343641d9b73a17c0e20334834e54d19ef5103}
 
     // @todo: insert <code> here
 
+    /// @end   {5c7c465fde2ab4523bf907a3b46343641d9b73a17c0e20334834e54d19ef5103}
     return XE_RESULT_SUCCESS;
 }
 
@@ -99,9 +101,11 @@ xe_result_t __xecall
 
     // Check parameters
     // @todo: check_return(nullptr == pUniqueIds, XE_RESULT_ERROR_INVALID_PARAMETER);
+    /// @begin {c26ed99dfec278253de324f242d61516b146acd882d0894d8208cfed698fd1d1}
 
     // @todo: insert <code> here
 
+    /// @end   {c26ed99dfec278253de324f242d61516b146acd882d0894d8208cfed698fd1d1}
     return XE_RESULT_SUCCESS;
 }
 
@@ -137,9 +141,11 @@ xe_result_t __xecall
 
     // Check parameters
     // @todo: check_return(nullptr == phDevice, XE_RESULT_ERROR_INVALID_PARAMETER);
+    /// @begin {0fcaea081072b19126b15d5ddf6bf62c8c5a75b8647a0176af861cfb0adb1697}
 
     // @todo: insert <code> here
 
+    /// @end   {0fcaea081072b19126b15d5ddf6bf62c8c5a75b8647a0176af861cfb0adb1697}
     return XE_RESULT_SUCCESS;
 }
 
@@ -177,9 +183,11 @@ xe_result_t __xecall
     // Check parameters
     // @todo: check_return(nullptr == hDevice, XE_RESULT_ERROR_INVALID_PARAMETER);
     // @todo: check_return(nullptr == phSubDevice, XE_RESULT_ERROR_INVALID_PARAMETER);
+    /// @begin {17a42ce94be984870ef7258c30474c488c4cdd342ac215c9c027a55dcd8613ff}
 
     // @todo: insert <code> here
 
+    /// @end   {17a42ce94be984870ef7258c30474c488c4cdd342ac215c9c027a55dcd8613ff}
     return XE_RESULT_SUCCESS;
 }
 
@@ -214,9 +222,11 @@ xe_result_t __xecall
     // Check parameters
     // @todo: check_return(nullptr == hDevice, XE_RESULT_ERROR_INVALID_PARAMETER);
     // @todo: check_return(nullptr == version, XE_RESULT_ERROR_INVALID_PARAMETER);
+    /// @begin {fc64199c044234983739580abae3a91240008f47d57127d41cd69cd49b4fb013}
 
     // @todo: insert <code> here
 
+    /// @end   {fc64199c044234983739580abae3a91240008f47d57127d41cd69cd49b4fb013}
     return XE_RESULT_SUCCESS;
 }
 
@@ -253,9 +263,11 @@ xe_result_t __xecall
     // Check parameters
     // @todo: check_return(nullptr == hDevice, XE_RESULT_ERROR_INVALID_PARAMETER);
     // @todo: check_return(nullptr == pDeviceProperties, XE_RESULT_ERROR_INVALID_PARAMETER);
+    /// @begin {3db75068efff2256a55cef1327ecc78abc4667e68c27a09621c6312ae779c145}
 
     // @todo: insert <code> here
 
+    /// @end   {3db75068efff2256a55cef1327ecc78abc4667e68c27a09621c6312ae779c145}
     return XE_RESULT_SUCCESS;
 }
 
@@ -291,9 +303,11 @@ xe_result_t __xecall
     // Check parameters
     // @todo: check_return(nullptr == hDevice, XE_RESULT_ERROR_INVALID_PARAMETER);
     // @todo: check_return(nullptr == pComputeProperties, XE_RESULT_ERROR_INVALID_PARAMETER);
+    /// @begin {7f1420ab7455a639874a23c83d2643e649a65a1340bad17572fed4071c94142b}
 
     // @todo: insert <code> here
 
+    /// @end   {7f1420ab7455a639874a23c83d2643e649a65a1340bad17572fed4071c94142b}
     return XE_RESULT_SUCCESS;
 }
 
@@ -330,9 +344,11 @@ xe_result_t __xecall
     // Check parameters
     // @todo: check_return(nullptr == hDevice, XE_RESULT_ERROR_INVALID_PARAMETER);
     // @todo: check_return(nullptr == pMemProperties, XE_RESULT_ERROR_INVALID_PARAMETER);
+    /// @begin {4909cbc4cbb7ee86da7ec399f394605d2c5a91e06cd283a9989a58012b7752f0}
 
     // @todo: insert <code> here
 
+    /// @end   {4909cbc4cbb7ee86da7ec399f394605d2c5a91e06cd283a9989a58012b7752f0}
     return XE_RESULT_SUCCESS;
 }
 
@@ -367,9 +383,11 @@ xe_result_t __xecall
 
     // Check parameters
     // @todo: check_return(nullptr == pLinkProperties, XE_RESULT_ERROR_INVALID_PARAMETER);
+    /// @begin {ec34167e970021b312559839b8f4105aaa14c088f77586203eb745f4b6784d1b}
 
     // @todo: insert <code> here
 
+    /// @end   {ec34167e970021b312559839b8f4105aaa14c088f77586203eb745f4b6784d1b}
     return XE_RESULT_SUCCESS;
 }
 
@@ -407,9 +425,11 @@ xe_result_t __xecall
     // @todo: check_return(nullptr == hDevice, XE_RESULT_ERROR_INVALID_PARAMETER);
     // @todo: check_return(nullptr == hPeerDevice, XE_RESULT_ERROR_INVALID_PARAMETER);
     // @todo: check_return(nullptr == value, XE_RESULT_ERROR_INVALID_PARAMETER);
+    /// @begin {e77d453d30dc6017ed8b9d0d0d5dd6597a4ca30fa37cac35a99658310d7bba4e}
 
     // @todo: insert <code> here
 
+    /// @end   {e77d453d30dc6017ed8b9d0d0d5dd6597a4ca30fa37cac35a99658310d7bba4e}
     return XE_RESULT_SUCCESS;
 }
 
@@ -443,9 +463,11 @@ xe_result_t __xecall
 
     // Check parameters
     // @todo: check_return(nullptr == hDevice, XE_RESULT_ERROR_INVALID_PARAMETER);
+    /// @begin {b2e59b50895488ecaf51f53a705eb7dbae91b1f1d903390571066aa20cc9f588}
 
     // @todo: insert <code> here
 
+    /// @end   {b2e59b50895488ecaf51f53a705eb7dbae91b1f1d903390571066aa20cc9f588}
     return XE_RESULT_SUCCESS;
 }
 
@@ -479,9 +501,11 @@ xe_result_t __xecall
 
     // Check parameters
     // @todo: check_return(nullptr == hDevice, XE_RESULT_ERROR_INVALID_PARAMETER);
+    /// @begin {821981d67b82ce6c7da51cab0dc27d5dad640e710ef2244156e7a8a345e83e24}
 
     // @todo: insert <code> here
 
+    /// @end   {821981d67b82ce6c7da51cab0dc27d5dad640e710ef2244156e7a8a345e83e24}
     return XE_RESULT_SUCCESS;
 }
 

@@ -37,7 +37,7 @@ from templates import helper as th
 
 %for obj in objects:
 %if re.match(r"function", obj['type']):
-%for cls in th.get_class_list(obj):
+%for cli, cls in enumerate(obj['class']):
 ///////////////////////////////////////////////////////////////////////////////
 %if 'condition' in obj:
 #if ${th.subx(x,obj['condition'])}
@@ -70,9 +70,11 @@ ${x}_result_t __${x}call
     // @todo: check_return(${val}, ${key});
     %endfor
     %endfor
+    /// @begin {${obj['hash'][cli]}}
 
     // @todo: insert <code> here
 
+    /// @end   {${obj['hash'][cli]}}
     return ${X}_RESULT_SUCCESS;
 }
 %if 'condition' in obj:

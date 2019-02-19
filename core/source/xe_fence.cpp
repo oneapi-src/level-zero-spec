@@ -70,9 +70,11 @@ xe_result_t __xecall
     // @todo: check_return(nullptr == desc, XE_RESULT_ERROR_INVALID_PARAMETER);
     // @todo: check_return(nullptr == phFence, XE_RESULT_ERROR_INVALID_PARAMETER);
     // @todo: check_return(XE_FENCE_DESC_VERSION <= desc->version, XE_RESULT_ERROR_UNSUPPORTED);
+    /// @begin {d42e38d25d111753f5f120d80296f494f658063005c79d78865c2e62e1ef1803}
 
     // @todo: insert <code> here
 
+    /// @end   {d42e38d25d111753f5f120d80296f494f658063005c79d78865c2e62e1ef1803}
     return XE_RESULT_SUCCESS;
 }
 
@@ -108,9 +110,11 @@ xe_result_t __xecall
 
     // Check parameters
     // @todo: check_return(nullptr == hFence, XE_RESULT_ERROR_INVALID_PARAMETER);
+    /// @begin {422e69b1e222a70a59ec747e63eeaa1f7ea8d690dd3d4cefa6940ea6841f901c}
 
     // @todo: insert <code> here
 
+    /// @end   {422e69b1e222a70a59ec747e63eeaa1f7ea8d690dd3d4cefa6940ea6841f901c}
     return XE_RESULT_SUCCESS;
 }
 
@@ -156,9 +160,11 @@ xe_result_t __xecall
 
     // Check parameters
     // @todo: check_return(nullptr == hFence, XE_RESULT_ERROR_INVALID_PARAMETER);
+    /// @begin {77f047fdfb94150f1b0cda9d8cdbbf224f6bbd82021c5595a03bf1a8be2a03b6}
 
     // @todo: insert <code> here
 
+    /// @end   {77f047fdfb94150f1b0cda9d8cdbbf224f6bbd82021c5595a03bf1a8be2a03b6}
     return XE_RESULT_SUCCESS;
 }
 
@@ -206,9 +212,11 @@ xe_result_t __xecall
 
     // Check parameters
     // @todo: check_return(nullptr == phFences, XE_RESULT_ERROR_INVALID_PARAMETER);
+    /// @begin {a5f76c9bd49faad0a8ae16401ccdd9cc6e8ae394eb876c8eca18dc6dd3cdae7d}
 
     // @todo: insert <code> here
 
+    /// @end   {a5f76c9bd49faad0a8ae16401ccdd9cc6e8ae394eb876c8eca18dc6dd3cdae7d}
     return XE_RESULT_SUCCESS;
 }
 
@@ -243,9 +251,11 @@ xe_result_t __xecall
 
     // Check parameters
     // @todo: check_return(nullptr == hFence, XE_RESULT_ERROR_INVALID_PARAMETER);
+    /// @begin {54d115edc2a41acd09d4b8170e56d9826a2b5706f11c6104736eb5860d23c5bc}
 
     // @todo: insert <code> here
 
+    /// @end   {54d115edc2a41acd09d4b8170e56d9826a2b5706f11c6104736eb5860d23c5bc}
     return XE_RESULT_SUCCESS;
 }
 
@@ -280,9 +290,11 @@ xe_result_t __xecall
     // @todo: check_return(nullptr == hFenceStart, XE_RESULT_ERROR_INVALID_PARAMETER);
     // @todo: check_return(nullptr == hFenceEnd, XE_RESULT_ERROR_INVALID_PARAMETER);
     // @todo: check_return(nullptr == pTime, XE_RESULT_ERROR_INVALID_PARAMETER);
+    /// @begin {7a6913da2907de4abac898cc76844049074ef7ca4429d5b63503b960db530c70}
 
     // @todo: insert <code> here
 
+    /// @end   {7a6913da2907de4abac898cc76844049074ef7ca4429d5b63503b960db530c70}
     return XE_RESULT_SUCCESS;
 }
 
@@ -314,9 +326,11 @@ xe_result_t __xecall
 
     // Check parameters
     // @todo: check_return(nullptr == hFence, XE_RESULT_ERROR_INVALID_PARAMETER);
+    /// @begin {7d06912d2e703c85cf1c3bb4e5b71884212ddfcc87d33f46c5463b83293ed855}
 
     // @todo: insert <code> here
 
+    /// @end   {7d06912d2e703c85cf1c3bb4e5b71884212ddfcc87d33f46c5463b83293ed855}
     return XE_RESULT_SUCCESS;
 }
 

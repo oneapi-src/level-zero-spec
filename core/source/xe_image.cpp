@@ -70,9 +70,11 @@ xe_result_t __xecall
     // @todo: check_return(nullptr == desc, XE_RESULT_ERROR_INVALID_PARAMETER);
     // @todo: check_return(nullptr == phImage, XE_RESULT_ERROR_INVALID_PARAMETER);
     // @todo: check_return(XE_IMAGE_DESC_VERSION <= desc->version, XE_RESULT_ERROR_UNSUPPORTED);
+    /// @begin {27a0a4bcd9c866877aa1fb52838284ccdaae12a2dfd92d87b2b862a4ab19218a}
 
     // @todo: insert <code> here
 
+    /// @end   {27a0a4bcd9c866877aa1fb52838284ccdaae12a2dfd92d87b2b862a4ab19218a}
     return XE_RESULT_SUCCESS;
 }
 
@@ -103,9 +105,11 @@ xe_result_t __xecall
 
     // Check parameters
     // @todo: check_return(nullptr == hImage, XE_RESULT_ERROR_INVALID_PARAMETER);
+    /// @begin {fd023d402207b0213a1e9c7aeaf42f03639cc86e3a20b6267eb86975e7996b94}
 
     // @todo: insert <code> here
 
+    /// @end   {fd023d402207b0213a1e9c7aeaf42f03639cc86e3a20b6267eb86975e7996b94}
     return XE_RESULT_SUCCESS;
 }
 

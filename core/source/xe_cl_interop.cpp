@@ -60,9 +60,11 @@ xe_result_t __xecall
     // Check parameters
     // @todo: check_return(nullptr == hDevice, XE_RESULT_ERROR_INVALID_PARAMETER);
     // @todo: check_return(nullptr == ptr, XE_RESULT_ERROR_INVALID_PARAMETER);
+    /// @begin {5bb3f735cfaa528879ea54f178f75b593388afab07e406a824a1c31599889982}
 
     // @todo: insert <code> here
 
+    /// @end   {5bb3f735cfaa528879ea54f178f75b593388afab07e406a824a1c31599889982}
     return XE_RESULT_SUCCESS;
 }
 #endif // XE_ENABLE_OCL_INTEROP
@@ -95,9 +97,11 @@ xe_result_t __xecall
     // Check parameters
     // @todo: check_return(nullptr == hDevice, XE_RESULT_ERROR_INVALID_PARAMETER);
     // @todo: check_return(nullptr == phModule, XE_RESULT_ERROR_INVALID_PARAMETER);
+    /// @begin {131233a9acfaad50c2b1855120dd31f244b3b394adefa6cb337f162b19d562fd}
 
     // @todo: insert <code> here
 
+    /// @end   {131233a9acfaad50c2b1855120dd31f244b3b394adefa6cb337f162b19d562fd}
     return XE_RESULT_SUCCESS;
 }
 #endif // XE_ENABLE_OCL_INTEROP
@@ -130,9 +134,11 @@ xe_result_t __xecall
     // Check parameters
     // @todo: check_return(nullptr == hDevice, XE_RESULT_ERROR_INVALID_PARAMETER);
     // @todo: check_return(nullptr == phCommandQueue, XE_RESULT_ERROR_INVALID_PARAMETER);
+    /// @begin {4b0d65edbd0514e51b2ab1f197ad0fb7af084f7c4f2b947c771b1d46cac4e83b}
 
     // @todo: insert <code> here
 
+    /// @end   {4b0d65edbd0514e51b2ab1f197ad0fb7af084f7c4f2b947c771b1d46cac4e83b}
     return XE_RESULT_SUCCESS;
 }
 #endif // XE_ENABLE_OCL_INTEROP

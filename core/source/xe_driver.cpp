@@ -65,9 +65,11 @@ xe_result_t __xecall
     // @todo: check_return(nullptr == get_driver(), XE_RESULT_ERROR_UNINITIALIZED);
 
     // Check parameters
+    /// @begin {0ae71bd1cc936ad12438c9cc7d3471f98557ec8f6b1fb62d2649cc618eb16351}
 
     // @todo: insert <code> here
 
+    /// @end   {0ae71bd1cc936ad12438c9cc7d3471f98557ec8f6b1fb62d2649cc618eb16351}
     return XE_RESULT_SUCCESS;
 }
 
@@ -101,9 +103,11 @@ xe_result_t __xecall
 
     // Check parameters
     // @todo: check_return(nullptr == version, XE_RESULT_ERROR_INVALID_PARAMETER);
+    /// @begin {6ae964da2310ff18a63fe79a8fabcfaa071a342064d2f092042eb2b830d7c54f}
 
     // @todo: insert <code> here
 
+    /// @end   {6ae964da2310ff18a63fe79a8fabcfaa071a342064d2f092042eb2b830d7c54f}
     return XE_RESULT_SUCCESS;
 }
 

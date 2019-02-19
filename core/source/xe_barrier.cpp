@@ -62,9 +62,11 @@ xe_result_t __xecall
 
     // Check parameters
     // @todo: check_return(nullptr == hCommandList, XE_RESULT_ERROR_INVALID_PARAMETER);
+    /// @begin {2d1eb476632e411da06d0ff92b64149da43b825416bdaa382c88c04187b02159}
 
     // @todo: insert <code> here
 
+    /// @end   {2d1eb476632e411da06d0ff92b64149da43b825416bdaa382c88c04187b02159}
     return XE_RESULT_SUCCESS;
 }
 
