@@ -82,7 +82,7 @@
 #define ENABLE_xeDriverGetVersion 0
 #define ENABLE_xeDeviceCreateEvent 1
 #define ENABLE_xeDevicePlaceEvent 0
-#define ENABLE_xeEventDestroy 0
+#define ENABLE_xeEventDestroy 1
 #define ENABLE_xeCommandListEncodeSignalEvent 1
 #define ENABLE_xeCommandListEncodeWaitOnEvent 1
 #define ENABLE_xeCommandListEncodeSignalMultipleEvents 0
