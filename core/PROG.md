@@ -456,7 +456,7 @@ A pointer on the host has the same size as a pointer on the device.
 
 Three types of allocations are supported.
 The type of allocation describes the _ownership_ of the allocation:
-1. **Host** allocations are owned by the host and are intended to be allocated out system memory.
+1. **Host** allocations are owned by the host and are intended to be allocated out of system memory.
   Host allocations are accessible by the host and one or more devices.
   The same pointer to a host allocation may be used on the host and all supported devices; they have _address equivalence_.
   Host allocations are not expected to migrate between system memory and device local memory.
@@ -471,6 +471,10 @@ The type of allocation describes the _ownership_ of the allocation:
   Shared allocations trade off transfer costs for per-access benefits.
   The same pointer to a shared allocation may be used on the host and all supported devices.
 
+A **Shared System** allocation is a sub-class of a **Shared** allocation, where the memory is allocated by a _system allocator_ - such as `malloc` or `new` - rather than by a driver allocation API.
+Shared system allocations have no associated device - they are inherently cross-device.
+Like other shared allocations, shared system allocations are intended to migrate between the host and supported devices, and the same pointer to a shared system allocation may be used on the host and all supported devices.
+
 In summary:
 | Name | Initial Location | Accessible By || Migratable To ||
 | :--: | :--: | :--: | :--: | :--: | :--: |
@@ -482,6 +486,8 @@ In summary:
 | **Shared** | Host, or Specific Device, Or Unspecified | Host | Yes | Host | Yes |
 | ^ | ^ | Specific Device | Yes | Device | Yes |
 | ^ | ^ | Another Device | Optional (may require p2p) | Another Device | Optional |
+| **Shared System** | Host | Host | Yes | Host | Yes |
+| ^ | ^ | Device | Yes | Device | Yes |
 
 Devices may support different capabilities for each type of allocation.
 Supported capabilities are:
@@ -490,13 +496,17 @@ Supported capabilities are:
 * ::XE_MEMORY_CONCURRENT_ACCESS - if a device supports concurrent access to allocations of the specified type, or another device's allocation of the specified type.
 * ::XE_MEMORY_CONCURRENT_ATOMIC_ACCESS - if a device supports concurrent atomic access to allocations of the specified type, or another device's allocations of the specified type.
 
+Some devices may _oversubscribe_ some **shared** allocations.
+When and how such oversubscription occurs, including which allocations are evicted when the working set changes, are considered implementation details.
+
 The required matrix of capabilities are:
-| Allocation Type         | Access   | Atomic Access | Concurrent Access | Concurrent Atomic Access |
-| :--:                    | :--:     | :--:          | :--:              | :--:                     |
-| **Host**                | Required | Optional      | Optional          | Optional                 |
-| **Device**              | Required | Optional      | Optional          | Optional                 |
-| **Shared**              | Optional | Optional      | Optional          | Optional                 |
-| Cross-Device **Shared** | Optional | Optional      | Optional          | Optional                 |
+| Allocation Type                  | Access   | Atomic Access | Concurrent Access | Concurrent Atomic Access |
+| :--:                             | :--:     | :--:          | :--:              | :--:                     |
+| **Host**                         | Required | Optional      | Optional          | Optional                 |
+| **Device**                       | Required | Optional      | Optional          | Optional                 |
+| **Shared**                       | Required | Optional      | Optional          | Optional                 |
+| **Shared** (Cross-Device)        | Optional | Optional      | Optional          | Optional                 |
+| **Shared System** (Cross-Device) | Optional | Optional      | Optional          | Optional                 |
 
 ### Cache Hints, Prefetch, and Memory Advice
 Cacheability hints may be provided via separate host and device allocation flags when memory is allocated.

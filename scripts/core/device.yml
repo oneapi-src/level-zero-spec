@@ -318,7 +318,10 @@ members:
       desc: "[out] Bitfield describing shared memory capabilities"
     - type: $x_memory_access_capabilities_t
       name: sharedCrossDeviceAllocCapabilities
-      desc: "[out] Bitfield describing cross-device shared memory capabilities"
+      desc: "[out] Bitfield describing shared (cross-device) memory capabilities"
+    - type: $x_memory_access_capabilities_t
+      name: sharedSystemDeviceAllocCapabilities
+      desc: "[out] Bitfield describing shared (system) memory capabilities"
     - type: uint32_t
       name: IntermediateCacheSize
       desc: "[out] Device Intermediate Cache(L1/L2) size"
