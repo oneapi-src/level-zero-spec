@@ -1,6 +1,7 @@
 #include "cmdlist_hw.h"
 #include "event.h"
 #include "graphics_allocation.h"
+#include "module.h"
 #include "runtime/command_stream/linear_stream.h"
 #include "runtime/helpers/hw_info.h"
 #include "runtime/indirect_heap/indirect_heap.h"
@@ -74,6 +75,114 @@ xe_result_t CommandListCoreFamily<gfxCoreFamily>::encodeDispatchFunction(xe_func
                                                                          const xe_dispatch_function_arguments_t *pDispatchFuncArgs,
                                                                          xe_event_handle_t hEvent) {
     using GfxFamily = typename OCLRT::GfxFamilyMapper<static_cast<GFXCORE_FAMILY>(gfxCoreFamily)>::GfxFamily;
+    using GPGPU_WALKER = typename GfxFamily::GPGPU_WALKER;
+    using MEDIA_INTERFACE_DESCRIPTOR_LOAD = typename GfxFamily::MEDIA_INTERFACE_DESCRIPTOR_LOAD;
+    using INTERFACE_DESCRIPTOR_DATA = typename GfxFamily::INTERFACE_DESCRIPTOR_DATA;
+
+    const auto function = Function::fromHandle(hFunction);
+    assert(function);
+
+    // Copy the kernel to indirect heap
+    // TODO: Allocate kernel in graphics memory to avoid the CPU copy
+    uint64_t kernelStartPointer = 0u;
+    {
+        auto sizeISA = function->getIsaSize();
+        auto ptrISA = function->getIsaHostMem();
+
+        auto heap = this->indirectHeaps[INSTRUCTION];
+        assert(heap);
+
+        auto ptr = heap->getSpace(sizeISA);
+        assert(ptr);
+        memcpy(ptr, ptrISA, sizeISA);
+
+        kernelStartPointer = ptrDiff(ptr, heap->getHeapGpuBase());
+    }
+
+    uint32_t offsetIDD = 0u;
+    auto sizeCrossThreadData = static_cast<uint32_t>(function->getCrossThreadDataSize());
+    auto sizePerThreadData = static_cast<uint32_t>(function->getPerThreadDataSize());
+    {
+        auto heap = indirectHeaps[OCLRT::IndirectHeap::DYNAMIC_STATE];
+        assert(heap);
+
+        auto sizeIDD = sizeof(INTERFACE_DESCRIPTOR_DATA);
+        auto ptr = heap->getSpace(sizeIDD);
+        assert(ptr);
+        auto offset = ptrDiff(ptr, heap->getCpuBase());
+        assert(offset + sizeIDD <= heap->getMaxAvailableSpace());
+
+        INTERFACE_DESCRIPTOR_DATA idd = GfxFamily::cmdInitInterfaceDescriptorData;
+
+        idd.setKernelStartPointerHigh(static_cast<uint32_t>(kernelStartPointer >> 32u));
+        idd.setKernelStartPointer(static_cast<uint32_t>(kernelStartPointer));
+        idd.setNumberOfThreadsInGpgpuThreadGroup(function->getThreadsPerThreadGroup());
+
+        auto numGrfCrossThreadData = static_cast<uint32_t>(sizeCrossThreadData / sizeof(float[8]));
+        assert(numGrfCrossThreadData > 0u);
+        idd.setCrossThreadConstantDataReadLength(numGrfCrossThreadData);
+
+        auto numGrfPerThreadData = static_cast<uint32_t>(sizePerThreadData / sizeof(float[8]));
+        assert(numGrfPerThreadData > 0u);
+        idd.setConstantIndirectUrbEntryReadLength(numGrfPerThreadData);
+
+        memcpy(ptr, &idd, sizeof(idd));
+
+        MEDIA_INTERFACE_DESCRIPTOR_LOAD cmd = GfxFamily::cmdInitMediaInterfaceDescriptorLoad; 
+        cmd.setInterfaceDescriptorDataStartAddress(offsetIDD);
+        cmd.setInterfaceDescriptorTotalLength(sizeof(INTERFACE_DESCRIPTOR_DATA));
+
+        auto buffer = commandStream->getSpace(sizeof(cmd));
+        *(decltype(cmd) *)buffer = cmd;
+    }
+
+    GPGPU_WALKER cmd = GfxFamily::cmdInitGpgpuWalker;
+
+    // Copy the threadData to the indirect heap
+    {
+        auto heap = indirectHeaps[INDIRECT_OBJECT];
+        assert(heap);
+
+        auto sizeThreadData = sizePerThreadData + sizeCrossThreadData;
+        assert((sizeCrossThreadData % GPGPU_WALKER::INDIRECTDATASTARTADDRESS_ALIGN_SIZE) == 0u);
+        assert((sizePerThreadData % GPGPU_WALKER::INDIRECTDATASTARTADDRESS_ALIGN_SIZE) == 0u);
+        assert((sizeThreadData % GPGPU_WALKER::INDIRECTDATASTARTADDRESS_ALIGN_SIZE) == 0u);
+
+        auto ptr = heap->getSpace(sizeThreadData);
+        assert(ptr);
+        auto offset = ptrDiff(ptr, heap->getCpuBase());
+        assert(offset + sizeThreadData <= heap->getMaxAvailableSpace());
+
+        memcpy(ptr, function->getCrossThreadDataHostMem(), sizeCrossThreadData);
+        ptr = ptrOffset(ptr, sizeCrossThreadData);
+        memcpy(ptr, function->getPerThreadDataHostMem(), sizePerThreadData);
+        ptr = ptrOffset(ptr, sizePerThreadData);
+
+        cmd.setIndirectDataLength(sizeThreadData);
+        cmd.setIndirectDataStartAddress(static_cast<uint32_t>(offset));
+    }
+
+
+    // Set # of threadgroups in each dimension
+    assert(pDispatchFuncArgs);
+    assert(pDispatchFuncArgs->version == XE_DISPATCH_FUNCTION_ARGS_VERSION);
+    cmd.setThreadGroupIdXDimension(pDispatchFuncArgs->groupCountX);
+    cmd.setThreadGroupIdYDimension(pDispatchFuncArgs->groupCountY);
+    cmd.setThreadGroupIdZDimension(pDispatchFuncArgs->groupCountZ);
+
+    // Set simd size
+    auto simdSize = function->getSimdSize();
+    auto simdSizeOp =
+        GPGPU_WALKER::SIMD_SIZE_SIMD32 * (simdSize == 32) |
+        GPGPU_WALKER::SIMD_SIZE_SIMD16 * (simdSize == 16) |
+        GPGPU_WALKER::SIMD_SIZE_SIMD8 * (simdSize == 8);
+    cmd.setSimdSize(static_cast<GPGPU_WALKER::SIMD_SIZE>(simdSizeOp));
+    cmd.setRightExecutionMask(function->getThreadExecutionMask());
+    cmd.setBottomExecutionMask(0xffffffff);
+
+    // Commit our command to the commandStream
+    auto buffer = commandStream->getSpace(sizeof(cmd));
+    *(decltype(cmd) *)buffer = cmd;
 
     return XE_RESULT_SUCCESS;
 }

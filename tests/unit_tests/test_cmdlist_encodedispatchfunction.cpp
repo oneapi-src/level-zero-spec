@@ -193,10 +193,9 @@ ATSTEST_F(CommandListEncodeDispatchFunction, copiesThreadDataToGeneralStateHeap)
 
         auto indirectDataLength = function->getPerThreadDataSize() +
                                   function->getCrossThreadDataSize();
+        EXPECT_GE(cmd->getIndirectDataLength(), 0u);
         EXPECT_LE(cmd->getIndirectDataLength(), indirectDataLength);
 
-        cmd->getIndirectDataLength();
-        cmd->getIndirectDataStartAddress();
         auto heap = commandList->indirectHeaps[CommandList::GENERAL_STATE];
 
         auto ptrHeap = ptrOffset(heap->getCpuBase(), cmd->getIndirectDataStartAddress());
@@ -239,5 +238,82 @@ ATSTEST_F(CommandListEncodeDispatchFunction, copiesKernelIsaToInstructionHeap) {
     }
 }
 
+using CommandListEncodeDispatchFunctionGEN9 = CommandListEncodeDispatchFunction;
+GEN9TEST_F(CommandListEncodeDispatchFunctionGEN9, addsWalkerToCommandStream) {
+    auto usedSpaceBefore = commandList->commandStream->getUsed();
+
+    auto result = commandList->encodeDispatchFunction(function->toHandle(),
+                                                      &dispatchFunctionArguments,
+                                                      nullptr);
+    ASSERT_EQ(XE_RESULT_SUCCESS, result);
+
+    auto usedSpaceAfter = commandList->commandStream->getUsed();
+    ASSERT_GT(usedSpaceAfter, usedSpaceBefore);
+
+    GenCmdList cmdList;
+    ASSERT_TRUE(FamilyType::PARSE::parseCommandBuffer(cmdList,
+                                                      ptrOffset(commandList->commandStream->getCpuBase(), 0),
+                                                      usedSpaceAfter));
+    using GPGPU_WALKER = typename FamilyType::GPGPU_WALKER;
+    using INTERFACE_DESCRIPTOR_DATA = typename FamilyType::INTERFACE_DESCRIPTOR_DATA;
+    using MEDIA_INTERFACE_DESCRIPTOR_LOAD = typename FamilyType::MEDIA_INTERFACE_DESCRIPTOR_LOAD;
+
+    auto itorWalker = find<GPGPU_WALKER *>(cmdList.begin(), cmdList.end());
+    ASSERT_NE(cmdList.end(), itorWalker);
+
+    auto itorMIDL = find<MEDIA_INTERFACE_DESCRIPTOR_LOAD *>(cmdList.begin(), itorWalker);
+    ASSERT_NE(itorMIDL, itorWalker);
+    INTERFACE_DESCRIPTOR_DATA *idd = nullptr;
+    {
+        auto cmd = genCmdCast<MEDIA_INTERFACE_DESCRIPTOR_LOAD *>(*itorMIDL);
+        ASSERT_NE(cmd, nullptr);
+
+        EXPECT_EQ(cmd->getInterfaceDescriptorTotalLength(), sizeof(INTERFACE_DESCRIPTOR_DATA));
+        auto dsh = commandList->indirectHeaps[CommandList::DYNAMIC_STATE];
+        EXPECT_LE(cmd->getInterfaceDescriptorDataStartAddress() + cmd->getInterfaceDescriptorTotalLength(), dsh->getUsed());
+        idd = static_cast<INTERFACE_DESCRIPTOR_DATA *>(ptrOffset(dsh->getCpuBase(), cmd->getInterfaceDescriptorDataStartAddress()));
+    }
+
+    {
+        auto cmd = genCmdCast<GPGPU_WALKER *>(*itorWalker);
+        ASSERT_NE(cmd, nullptr);
+
+        EXPECT_EQ(cmd->getThreadGroupIdXDimension(), dispatchFunctionArguments.groupCountX);
+        EXPECT_EQ(cmd->getThreadGroupIdYDimension(), dispatchFunctionArguments.groupCountY);
+        EXPECT_EQ(cmd->getThreadGroupIdZDimension(), dispatchFunctionArguments.groupCountZ);
+        EXPECT_NE(cmd->getRightExecutionMask(), 0u);
+        EXPECT_EQ(cmd->getBottomExecutionMask(), 0xffffffffu);
+        EXPECT_EQ(cmd->getSimdSize(), GPGPU_WALKER::SIMD_SIZE_SIMD32);
+
+        // Index into MIDL table.  Should always be 0
+        EXPECT_EQ(cmd->getInterfaceDescriptorOffset(), 0u);
+
+        // Relative to IndirectObjectBaseAddress
+        auto indirectDataLength = function->getPerThreadDataSize() +
+                                  function->getCrossThreadDataSize();
+        EXPECT_EQ(cmd->getIndirectDataLength() % GPGPU_WALKER::INDIRECTDATASTARTADDRESS_ALIGN_SIZE, 0u);
+        EXPECT_GE(cmd->getIndirectDataLength(), 0u);
+        EXPECT_LE(cmd->getIndirectDataLength(), indirectDataLength);
+
+        auto heap = commandList->indirectHeaps[CommandList::INDIRECT_OBJECT];
+
+        auto ptrHeap = ptrOffset(heap->getCpuBase(), cmd->getIndirectDataStartAddress());
+        EXPECT_EQ(memcmp(ptrHeap, function->getCrossThreadDataHostMem(), function->getCrossThreadDataSize()), 0u);
+        ptrHeap = ptrOffset(ptrHeap, function->getCrossThreadDataSize());
+        EXPECT_EQ(memcmp(ptrHeap, function->getPerThreadDataHostMem(), function->getPerThreadDataSize()), 0u);
+        ptrHeap = ptrOffset(ptrHeap, function->getPerThreadDataSize());
+
+        EXPECT_EQ(idd->getSamplerCount(), INTERFACE_DESCRIPTOR_DATA::SAMPLER_COUNT_NO_SAMPLERS_USED);
+        EXPECT_EQ(idd->getSamplerStatePointer(), 0u);
+        EXPECT_EQ(idd->getBindingTableEntryCount(), 0u);
+        EXPECT_EQ(idd->getBindingTablePointer(), 0u);
+        EXPECT_NE(idd->getNumberOfThreadsInGpgpuThreadGroup(), 0u);
+        EXPECT_EQ(idd->getSharedLocalMemorySize(), INTERFACE_DESCRIPTOR_DATA::SHARED_LOCAL_MEMORY_SIZE_ENCODES_0K);
+        EXPECT_EQ(idd->getBarrierEnable(), 0u);
+
+        EXPECT_NE(idd->getCrossThreadConstantDataReadLength(), 0u);
+        EXPECT_NE(idd->getConstantIndirectUrbEntryReadLength(), 0u);
+    }
+}
 } // namespace ult
 } // namespace L0
