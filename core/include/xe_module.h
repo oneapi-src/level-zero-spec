@@ -101,14 +101,15 @@ typedef struct _xe_module_desc_t
 ///         + nullptr == desc
 ///         + nullptr == phModule
 ///         + invalid desc->format
-///         + nullptr for desc->pInputModule
-///         + nullptr for desc->phModule
-///         + 0 for desc->inputSize
+///         + nullptr == desc->pInputModule
+///         + nullptr == desc->phModule
+///         + 0 == desc->inputSize
 ///     - ::XE_RESULT_ERROR_UNSUPPORTED
 ///         + ::XE_MODULE_DESC_VERSION <= desc->version
 ///     - ::XE_RESULT_ERROR_OUT_OF_HOST_MEMORY
 ///     - ::XE_RESULT_ERROR_OUT_OF_DEVICE_MEMORY
-///     - ::XE_RESULT_ERROR_MODULE_BUILD_FAILURE - "Failure to build module. See build log for more details."
+///     - ::XE_RESULT_ERROR_MODULE_BUILD_FAILURE
+///         + Failure to build module. See build log for more details.
 __xedllport xe_result_t __xecall
   xeDeviceCreateModule(
     xe_device_handle_t hDevice,                     ///< [in] handle of the device
@@ -215,7 +216,6 @@ __xedllport xe_result_t __xecall
 ///         + nullptr == pSize
 ///         + nullptr == pModuleNativeBinary
 ///         + invalid format
-///         + 0 for inputSize
 ///     - ::XE_RESULT_ERROR_UNSUPPORTED
 ///     - ::XE_RESULT_ERROR_OUT_OF_HOST_MEMORY
 ///     - ::XE_RESULT_ERROR_OUT_OF_DEVICE_MEMORY
@@ -269,8 +269,8 @@ typedef struct _xe_function_desc_t
 ///         + nullptr == hModule
 ///         + nullptr == desc
 ///         + nullptr == phFunction
-///         + nullptr for desc->pFunctionName
-///         + invalid name for desc->pFunctionName
+///         + nullptr == desc->pFunctionName
+///         + invalid value for desc->pFunctionName
 ///     - ::XE_RESULT_ERROR_UNSUPPORTED
 ///         + ::XE_FUNCTION_DESC_VERSION <= desc->version
 __xedllport xe_result_t __xecall

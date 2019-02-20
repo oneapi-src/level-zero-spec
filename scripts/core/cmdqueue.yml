@@ -165,7 +165,7 @@ params:
       name: timeout
       desc: "[in] if non-zero, then indicates the maximum time to poll or sleep before returning;
             if zero, then only a single status check is made before immediately returning;
-            if -1, then function will not return until complete."
+            if MAX_UINT32, then function will not return until complete."
 returns:
     - $X_RESULT_NOT_READY:
        - "timeout expired"

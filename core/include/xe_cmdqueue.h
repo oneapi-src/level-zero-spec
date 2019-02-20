@@ -212,8 +212,8 @@ __xedllport xe_result_t __xecall
                                                     ///< must be zero.
     uint32_t timeout                                ///< [in] if non-zero, then indicates the maximum time to poll or sleep
                                                     ///< before returning; if zero, then only a single status check is made
-                                                    ///< before immediately returning; if -1, then function will not return
-                                                    ///< until complete.
+                                                    ///< before immediately returning; if MAX_UINT32, then function will not
+                                                    ///< return until complete.
     );
 
 #if defined(__cplusplus)

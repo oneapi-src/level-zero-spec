@@ -560,8 +560,8 @@ __xedllexport xe_result_t __xecall
                                                     ///< must be zero.
     uint32_t timeout                                ///< [in] if non-zero, then indicates the maximum time to poll or sleep
                                                     ///< before returning; if zero, then only a single status check is made
-                                                    ///< before immediately returning; if -1, then function will not return
-                                                    ///< until complete.
+                                                    ///< before immediately returning; if MAX_UINT32, then function will not
+                                                    ///< return until complete.
     )
 {
     try
@@ -685,8 +685,8 @@ __xedllexport xe_result_t __xecall
                                                     ///< must be zero.
     uint32_t timeout                                ///< [in] if non-zero, then indicates the maximum time to poll or sleep
                                                     ///< before returning; if zero, then only a single status check is made
-                                                    ///< before immediately returning; if -1, then function will not return
-                                                    ///< until complete.
+                                                    ///< before immediately returning; if MAX_UINT32, then function will not
+                                                    ///< return until complete.
     )
 {
     try
@@ -801,7 +801,7 @@ __xedllexport xe_result_t __xecall
 ///         + nullptr == hEventEnd
 ///         + nullptr == pTime
 ///         + either event not signaled by device
-///         + nullptr for pTime
+///         + either event not created with ::XE_EVENT_FLAG_TIMESTAMP
 ///     - ::XE_RESULT_ERROR_UNSUPPORTED
 ///
 /// @hash {e637cce64a455fb95fa0bca51aaf247ab2aab0f6eae8f236d16f76c4f82a004f}
@@ -862,9 +862,8 @@ __xedllexport xe_result_t __xecall
 ///         + nullptr == hEventEnd
 ///         + nullptr == pReportData
 ///         + either event not signaled by device
-///         + either event not create with performance metrics support
+///         + either event not created with ::XE_EVENT_FLAG_PERFORMANCE_METRICS
 ///         + report size too small
-///         + nullptr for pReportData
 ///     - ::XE_RESULT_ERROR_UNSUPPORTED
 ///
 /// @hash {2aadae68763b475a5f8ea4f780f115829c192fe6ab8fdff1c744906cf1cb832e}
