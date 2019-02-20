@@ -493,6 +493,134 @@ __xedllexport xe_result_t __xecall
 }
 
 ///////////////////////////////////////////////////////////////////////////////
+/// @brief Set group size for Function.
+/// 
+/// @details
+///     - The implementation of this function will immediately free all Host and
+///       Device allocations associated with this function
+///     - The implementation of this function should be lock-free.
+///     - This can be called multiple times. The driver copies the group size
+///       information when encoding dispatch functions into a command list.
+/// 
+/// @returns
+///     - ::XE_RESULT_SUCCESS
+///     - ::XE_RESULT_ERROR_UNINITIALIZED
+///     - ::XE_RESULT_ERROR_DEVICE_LOST
+///     - ::XE_RESULT_ERROR_INVALID_PARAMETER
+///         + nullptr == hFunction
+///     - ::XE_RESULT_ERROR_UNSUPPORTED
+///
+/// @hash {0d524eae1de0503fef62776d38c10480c3399fe9307e8349c32f24d255a1d971}
+///
+__xedllexport xe_result_t __xecall
+  xeFunctionSetGroupSize(
+    xe_function_handle_t hFunction,                 ///< [in] handle of the function object
+    uint32_t groupSizeX,                            ///< [in] group size for X dimension to use for this function.
+    uint32_t groupSizeY,                            ///< [in] group size for Y dimension to use for this function.
+    uint32_t groupSizeZ                             ///< [in] group size for Z dimension to use for this function.
+    )
+{
+    try
+    {
+        //if( XE_DRIVER_PARAMETER_VALIDATION_LEVEL >= 0 )
+        {
+            // if( nullptr == driver ) return XE_RESULT_ERROR_UNINITIALIZED;
+
+            // Check parameters
+            if( nullptr == hFunction ) return XE_RESULT_ERROR_INVALID_PARAMETER;
+        }
+        /// @begin
+
+        // @todo: insert <code> here
+
+        /// @end
+        return XE_RESULT_SUCCESS;
+    }
+    catch(xe_result_t& result)
+    {
+        return result;
+    }
+    catch(std::bad_alloc&)
+    {
+        return XE_RESULT_ERROR_OUT_OF_HOST_MEMORY;
+    }
+    catch(std::exception&)
+    {
+        // @todo: pfnOnException(e.what());
+        return XE_RESULT_ERROR_UNKNOWN;
+    }
+}
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Query a suggested group size for function given a global size for each
+///        dimension.
+/// 
+/// @details
+///     - This function may be called from simultaneous threads.
+///     - The implementation of this function should be lock-free.
+///     - This function ignores the group size that is set using
+///       ::xeFunctionSetGroupSize.
+/// 
+/// @returns
+///     - ::XE_RESULT_SUCCESS
+///     - ::XE_RESULT_ERROR_UNINITIALIZED
+///     - ::XE_RESULT_ERROR_DEVICE_LOST
+///     - ::XE_RESULT_ERROR_INVALID_PARAMETER
+///         + nullptr == hFunction
+///         + nullptr == groupSizeX
+///         + nullptr == groupSizeY
+///         + nullptr == groupSizeZ
+///         + invalid number of threads.
+///     - ::XE_RESULT_ERROR_UNSUPPORTED
+///
+/// @hash {f3c0ffef33c7e902e382ada2d1fac7966afd96c3c9989bf29a9917e4ae2856d2}
+///
+__xedllexport xe_result_t __xecall
+  xeFunctionSuggestGroupSize(
+    xe_function_handle_t hFunction,                 ///< [in] handle of the function object
+    uint32_t globalSizeX,                           ///< [in] global width for X dimension.
+    uint32_t globalSizeY,                           ///< [in] global width for Y dimension.
+    uint32_t globalSizeZ,                           ///< [in] global width for Z dimension.
+    uint32_t* groupSizeX,                           ///< [out] recommended size of group for X dimension.
+    uint32_t* groupSizeY,                           ///< [out] recommended size of group for Y dimension.
+    uint32_t* groupSizeZ                            ///< [out] recommended size of group for Z dimension.
+    )
+{
+    try
+    {
+        //if( XE_DRIVER_PARAMETER_VALIDATION_LEVEL >= 0 )
+        {
+            // if( nullptr == driver ) return XE_RESULT_ERROR_UNINITIALIZED;
+
+            // Check parameters
+            if( nullptr == hFunction ) return XE_RESULT_ERROR_INVALID_PARAMETER;
+            if( nullptr == groupSizeX ) return XE_RESULT_ERROR_INVALID_PARAMETER;
+            if( nullptr == groupSizeY ) return XE_RESULT_ERROR_INVALID_PARAMETER;
+            if( nullptr == groupSizeZ ) return XE_RESULT_ERROR_INVALID_PARAMETER;
+        }
+        /// @begin
+
+        // @todo: insert <code> here
+
+        /// @end
+        return XE_RESULT_SUCCESS;
+    }
+    catch(xe_result_t& result)
+    {
+        return result;
+    }
+    catch(std::bad_alloc&)
+    {
+        return XE_RESULT_ERROR_OUT_OF_HOST_MEMORY;
+    }
+    catch(std::exception&)
+    {
+        // @todo: pfnOnException(e.what());
+        return XE_RESULT_ERROR_UNKNOWN;
+    }
+}
+
+///////////////////////////////////////////////////////////////////////////////
 /// @brief Create Function arguments needed to pass arguments to a function.
 /// 
 /// @details
@@ -1054,74 +1182,6 @@ __xedllexport xe_result_t __xecall
             if( nullptr == hFunction ) return XE_RESULT_ERROR_INVALID_PARAMETER;
             if( nullptr == hFunctionArgs ) return XE_RESULT_ERROR_INVALID_PARAMETER;
             if( nullptr == pDispatchArgumentsBuffer ) return XE_RESULT_ERROR_INVALID_PARAMETER;
-        }
-        /// @begin
-
-        // @todo: insert <code> here
-
-        /// @end
-        return XE_RESULT_SUCCESS;
-    }
-    catch(xe_result_t& result)
-    {
-        return result;
-    }
-    catch(std::bad_alloc&)
-    {
-        return XE_RESULT_ERROR_OUT_OF_HOST_MEMORY;
-    }
-    catch(std::exception&)
-    {
-        // @todo: pfnOnException(e.what());
-        return XE_RESULT_ERROR_UNKNOWN;
-    }
-}
-
-///////////////////////////////////////////////////////////////////////////////
-/// @brief Query a suggested group size for function. If the function has an
-///        embedded group size then this will be returned. Otherwise, one will be
-///        suggested.
-/// 
-/// @details
-///     - This function may be called from simultaneous threads.
-///     - The implementation of this function should be lock-free.
-/// 
-/// @returns
-///     - ::XE_RESULT_SUCCESS
-///     - ::XE_RESULT_ERROR_UNINITIALIZED
-///     - ::XE_RESULT_ERROR_DEVICE_LOST
-///     - ::XE_RESULT_ERROR_INVALID_PARAMETER
-///         + nullptr == hFunction
-///         + nullptr == groupSizeX
-///         + nullptr == groupSizeY
-///         + nullptr == groupSizeZ
-///         + invalid number of threads.
-///     - ::XE_RESULT_ERROR_UNSUPPORTED
-///
-/// @hash {f3c0ffef33c7e902e382ada2d1fac7966afd96c3c9989bf29a9917e4ae2856d2}
-///
-__xedllexport xe_result_t __xecall
-  xeFunctionSuggestGroupSize(
-    xe_function_handle_t hFunction,                 ///< [in] handle of the function object
-    uint32_t globalSizeX,                           ///< [in] global width for X dimension.
-    uint32_t globalSizeY,                           ///< [in] global width for Y dimension.
-    uint32_t globalSizeZ,                           ///< [in] global width for Z dimension.
-    uint32_t* groupSizeX,                           ///< [out] recommended size of group for X dimension.
-    uint32_t* groupSizeY,                           ///< [out] recommended size of group for Y dimension.
-    uint32_t* groupSizeZ                            ///< [out] recommended size of group for Z dimension.
-    )
-{
-    try
-    {
-        //if( XE_DRIVER_PARAMETER_VALIDATION_LEVEL >= 0 )
-        {
-            // if( nullptr == driver ) return XE_RESULT_ERROR_UNINITIALIZED;
-
-            // Check parameters
-            if( nullptr == hFunction ) return XE_RESULT_ERROR_INVALID_PARAMETER;
-            if( nullptr == groupSizeX ) return XE_RESULT_ERROR_INVALID_PARAMETER;
-            if( nullptr == groupSizeY ) return XE_RESULT_ERROR_INVALID_PARAMETER;
-            if( nullptr == groupSizeZ ) return XE_RESULT_ERROR_INVALID_PARAMETER;
         }
         /// @begin
 

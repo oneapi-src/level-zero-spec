@@ -282,7 +282,7 @@ The following sample code demonstrates a sequence for submission of an execution
 ```c
     xeCommandListEncodeDispatchFunction(hCommandList, hFunction1, ...);
 
-    // Encode a barrier into a command list to ensure hFunction1 completes before hFunction2 begins
+    // Encode a barrier into a command list to ensure hFunctionFunction1 completes before hFunction2 begins
     xeCommandListEncodeExecutionBarrier(hCommandList);
 
     xeCommandListEncodeDispatchFunction(hCommandList, hFunction2, ...);
@@ -744,9 +744,31 @@ Use xeFunctionQueryAttribute to query attributes from a function object.
 See ::xe_function_attribute_t for more information on the attributes.
 
 ### Function Group Size
-The API supports a query for suggested group size. If the function has an embedded group size then this
-will be returned. Otherwise, one will be suggested. This function should not be used if a group size is
-not already associated with the function and the function requires specific alignment for group size.
+The group size for a function can be set using xeFunctionSetGroupSize. If a group size is not
+set prior to encoding a dispatch function into a command list then a default will be chosen.
+The group size can updated over a series of encode dispatch operations. The driver will copy the
+group size information when encoding the dispatch function into the command list.
+
+```c
+    xeFunctionSetGroupSize(function, groupSizeX, groupSizeY, 1);
+
+    uint32_t numGroupsX = imageWidth / groupSizeX;
+    uint32_t numGroupsY = imageHeight / groupSizeY;
+
+    xe_dispatch_function_arguments_t dispatchArgs = {
+        XE_DISPATCH_FUNCTION_ARGS_VERSION,
+        numGroupsX, numGroupsY, 1
+        };
+
+    // Encode dispatch command
+    xeCommandListEncodeDispatchFunction(
+        hCommandList, hFunction, hFunctionArgs, &dispatchArgs, nullptr);
+
+    ...
+```
+
+The API supports a query for suggested group size when providing the global size. This function ignores the
+group size that was set on the function using xeFunctionSetGroupSize.
 
 ```c
     // Find suggested group size for processing image.
@@ -754,18 +776,7 @@ not already associated with the function and the function requires specific alig
     uint32_t groupSizeY;
     xeFunctionSuggestGroupSize(function, imageWidth, imageHeight, 1, &groupSizeX, &groupSizeY, nullptr);
 
-    uint32_t numGroupsX = imageWidth / groupSizeX;
-    uint32_t numGroupsY = imageHeight / groupSizeY;
-
-    xe_dispatch_function_arguments_t dispatchArgs = {
-        XE_DISPATCH_FUNCTION_ARGS_VERSION,
-        groupSizeX, groupSizeY, 1,
-        numGroupsX, numGroupsY, 1
-        };
-
-    // Encode dispatch command
-    xeCommandListEncodeDispatchFunction(
-        hCommandList, hFunction, hFunctionArgs, &dispatchArgs, nullptr);
+    xeFunctionSetGroupSize(function, groupSizeX, groupSizeY, 1);
 
     ...
 ```

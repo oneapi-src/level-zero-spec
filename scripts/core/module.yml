@@ -185,7 +185,7 @@ members:
       desc: "[in] creation flags"
     - type: "const char*"
       name: pFunctionName
-      desc: "[in] null-terminated name of function in Module"
+      desc: "[in] null-terminated name of function in Module"    
 --- #--------------------------------------------------------------------------
 type: function
 desc: "Create Function object from Module by name"
@@ -223,7 +223,63 @@ details:
 params:
     - type: "$x_function_handle_t"
       name: hFunction
-      desc: "[in] handle of the function object"
+      desc: "[in] handle of the function object"      
+--- #--------------------------------------------------------------------------
+type: function
+desc: "Set group size for Function."
+class: $xFunction
+name: SetGroupSize
+details:
+    - "The implementation of this function will immediately free all Host and Device allocations associated with this function"
+    - "The implementation of this function should be lock-free."
+    - "This can be called multiple times. The driver copies the group size information when encoding dispatch functions into a command list."
+params:
+    - type: "$x_function_handle_t"
+      name: hFunction
+      desc: "[in] handle of the function object" 
+    - type: "uint32_t"
+      name: groupSizeX
+      desc: "[in] group size for X dimension to use for this function."
+    - type: "uint32_t"
+      name: groupSizeY
+      desc: "[in] group size for Y dimension to use for this function."
+    - type: "uint32_t"
+      name: groupSizeZ
+      desc: "[in] group size for Z dimension to use for this function."
+--- #--------------------------------------------------------------------------
+type: function
+desc: "Query a suggested group size for function given a global size for each dimension."
+class: $xFunction
+name: SuggestGroupSize
+details:
+    - "This function may be called from simultaneous threads."
+    - "The implementation of this function should be lock-free."
+    - "This function ignores the group size that is set using $xFunctionSetGroupSize."
+params:
+    - type: "$x_function_handle_t"
+      name: hFunction
+      desc: "[in] handle of the function object" 
+    - type: "uint32_t"
+      name: globalSizeX
+      desc: "[in] global width for X dimension."
+    - type: "uint32_t"
+      name: globalSizeY
+      desc: "[in] global width for Y dimension."
+    - type: "uint32_t"
+      name: globalSizeZ
+      desc: "[in] global width for Z dimension."
+    - type: "uint32_t*"
+      name: groupSizeX
+      desc: "[out] recommended size of group for X dimension."
+    - type: "uint32_t*"
+      name: groupSizeY
+      desc: "[out] recommended size of group for Y dimension."
+    - type: "uint32_t*"
+      name: groupSizeZ
+      desc: "[out] recommended size of group for Z dimension."
+returns:
+    - $X_RESULT_ERROR_INVALID_PARAMETER:
+        - "invalid number of threads."
 --- #--------------------------------------------------------------------------
 type: function
 desc: "Create Function arguments needed to pass arguments to a function."
@@ -378,15 +434,6 @@ members:
       name: version
       desc: "[in] $X_DISPATCH_FUNCTION_ARGS_VERSION"
     - type: "uint32_t"
-      name: groupSizeX
-      desc: "[in] group size for X dimension"
-    - type: "uint32_t"
-      name: groupSizeY
-      desc: "[in] group size for Y dimension"
-    - type: "uint32_t"
-      name: groupSizeZ
-      desc: "[in] group size for Z dimension"
-    - type: "uint32_t"
       name: groupCountX
       desc: "[in] width of dispatches in X dimension"
     - type: "uint32_t"
@@ -436,15 +483,6 @@ desc: "Indirect function arguments. These arguments are device visible."
 name: $x_dispatch_function_indirect_arguments_t
 members:
     - type: "uint32_t"
-      name: groupSizeX
-      desc: "[in] group size for X dimension"
-    - type: "uint32_t"
-      name: groupSizeY
-      desc: "[in] group size for Y dimension"
-    - type: "uint32_t"
-      name: groupSizeZ
-      desc: "[in] group size for Z dimension"
-    - type: "uint32_t"
       name: groupCountX
       desc: "[in] width of dispatches in X dimension"
     - type: "uint32_t"
@@ -486,39 +524,6 @@ params:
     - type: $x_event_handle_t
       name: hEvent
       desc: "[in][optional] handle of the event to signal on completion"
---- #--------------------------------------------------------------------------
-type: function
-desc: "Query a suggested group size for function. If the function has an embedded group size then this will be returned. Otherwise, one will be suggested."
-class: $xFunction
-name: SuggestGroupSize
-details:
-    - "This function may be called from simultaneous threads."
-    - "The implementation of this function should be lock-free."
-params:
-    - type: "$x_function_handle_t"
-      name: hFunction
-      desc: "[in] handle of the function object"
-    - type: "uint32_t"
-      name: globalSizeX
-      desc: "[in] global width for X dimension."
-    - type: "uint32_t"
-      name: globalSizeY
-      desc: "[in] global width for Y dimension."
-    - type: "uint32_t"
-      name: globalSizeZ
-      desc: "[in] global width for Z dimension."
-    - type: "uint32_t*"
-      name: groupSizeX
-      desc: "[out] recommended size of group for X dimension."
-    - type: "uint32_t*"
-      name: groupSizeY
-      desc: "[out] recommended size of group for Y dimension."
-    - type: "uint32_t*"
-      name: groupSizeZ
-      desc: "[out] recommended size of group for Z dimension."
-returns:
-    - $X_RESULT_ERROR_INVALID_PARAMETER:
-        - "invalid number of threads."
 --- #--------------------------------------------------------------------------
 type: typedef
 desc: "type definition for host function pointers used with $xCommandListEncodeDispatchHostFunction"

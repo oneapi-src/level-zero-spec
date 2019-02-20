@@ -303,6 +303,63 @@ __xedllport xe_result_t __xecall
     );
 
 ///////////////////////////////////////////////////////////////////////////////
+/// @brief Set group size for Function.
+/// 
+/// @details
+///     - The implementation of this function will immediately free all Host and
+///       Device allocations associated with this function
+///     - The implementation of this function should be lock-free.
+///     - This can be called multiple times. The driver copies the group size
+///       information when encoding dispatch functions into a command list.
+/// 
+/// @returns
+///     - ::XE_RESULT_SUCCESS
+///     - ::XE_RESULT_ERROR_UNINITIALIZED
+///     - ::XE_RESULT_ERROR_DEVICE_LOST
+///     - ::XE_RESULT_ERROR_INVALID_PARAMETER
+///         + nullptr == hFunction
+///     - ::XE_RESULT_ERROR_UNSUPPORTED
+__xedllport xe_result_t __xecall
+  xeFunctionSetGroupSize(
+    xe_function_handle_t hFunction,                 ///< [in] handle of the function object
+    uint32_t groupSizeX,                            ///< [in] group size for X dimension to use for this function.
+    uint32_t groupSizeY,                            ///< [in] group size for Y dimension to use for this function.
+    uint32_t groupSizeZ                             ///< [in] group size for Z dimension to use for this function.
+    );
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Query a suggested group size for function given a global size for each
+///        dimension.
+/// 
+/// @details
+///     - This function may be called from simultaneous threads.
+///     - The implementation of this function should be lock-free.
+///     - This function ignores the group size that is set using
+///       ::xeFunctionSetGroupSize.
+/// 
+/// @returns
+///     - ::XE_RESULT_SUCCESS
+///     - ::XE_RESULT_ERROR_UNINITIALIZED
+///     - ::XE_RESULT_ERROR_DEVICE_LOST
+///     - ::XE_RESULT_ERROR_INVALID_PARAMETER
+///         + nullptr == hFunction
+///         + nullptr == groupSizeX
+///         + nullptr == groupSizeY
+///         + nullptr == groupSizeZ
+///         + invalid number of threads.
+///     - ::XE_RESULT_ERROR_UNSUPPORTED
+__xedllport xe_result_t __xecall
+  xeFunctionSuggestGroupSize(
+    xe_function_handle_t hFunction,                 ///< [in] handle of the function object
+    uint32_t globalSizeX,                           ///< [in] global width for X dimension.
+    uint32_t globalSizeY,                           ///< [in] global width for Y dimension.
+    uint32_t globalSizeZ,                           ///< [in] global width for Z dimension.
+    uint32_t* groupSizeX,                           ///< [out] recommended size of group for X dimension.
+    uint32_t* groupSizeY,                           ///< [out] recommended size of group for Y dimension.
+    uint32_t* groupSizeZ                            ///< [out] recommended size of group for Z dimension.
+    );
+
+///////////////////////////////////////////////////////////////////////////////
 /// @brief Create Function arguments needed to pass arguments to a function.
 /// 
 /// @details
@@ -477,9 +534,6 @@ __xedllport xe_result_t __xecall
 typedef struct _xe_dispatch_function_arguments_t
 {
     uint32_t version;                               ///< [in] ::XE_DISPATCH_FUNCTION_ARGS_VERSION
-    uint32_t groupSizeX;                            ///< [in] group size for X dimension
-    uint32_t groupSizeY;                            ///< [in] group size for Y dimension
-    uint32_t groupSizeZ;                            ///< [in] group size for Z dimension
     uint32_t groupCountX;                           ///< [in] width of dispatches in X dimension
     uint32_t groupCountY;                           ///< [in] width of dispatches in Y dimension
     uint32_t groupCountZ;                           ///< [in] width of dispatches in Z dimension
@@ -554,9 +608,6 @@ __xedllport xe_result_t __xecall
 /// @brief Indirect function arguments. These arguments are device visible.
 typedef struct _xe_dispatch_function_indirect_arguments_t
 {
-    uint32_t groupSizeX;                            ///< [in] group size for X dimension
-    uint32_t groupSizeY;                            ///< [in] group size for Y dimension
-    uint32_t groupSizeZ;                            ///< [in] group size for Z dimension
     uint32_t groupCountX;                           ///< [in] width of dispatches in X dimension
     uint32_t groupCountY;                           ///< [in] width of dispatches in Y dimension
     uint32_t groupCountZ;                           ///< [in] width of dispatches in Z dimension
@@ -629,37 +680,6 @@ __xedllport xe_result_t __xecall
     xe_function_args_handle_t hFunctionArgs,        ///< [in] handle to function arguments buffer.
     const xe_dispatch_function_indirect_arguments_t* pDispatchArgumentsBuffer,  ///< [in] Pointer to buffer that will contain dispatch arguments.
     xe_event_handle_t hEvent                        ///< [in][optional] handle of the event to signal on completion
-    );
-
-///////////////////////////////////////////////////////////////////////////////
-/// @brief Query a suggested group size for function. If the function has an
-///        embedded group size then this will be returned. Otherwise, one will be
-///        suggested.
-/// 
-/// @details
-///     - This function may be called from simultaneous threads.
-///     - The implementation of this function should be lock-free.
-/// 
-/// @returns
-///     - ::XE_RESULT_SUCCESS
-///     - ::XE_RESULT_ERROR_UNINITIALIZED
-///     - ::XE_RESULT_ERROR_DEVICE_LOST
-///     - ::XE_RESULT_ERROR_INVALID_PARAMETER
-///         + nullptr == hFunction
-///         + nullptr == groupSizeX
-///         + nullptr == groupSizeY
-///         + nullptr == groupSizeZ
-///         + invalid number of threads.
-///     - ::XE_RESULT_ERROR_UNSUPPORTED
-__xedllport xe_result_t __xecall
-  xeFunctionSuggestGroupSize(
-    xe_function_handle_t hFunction,                 ///< [in] handle of the function object
-    uint32_t globalSizeX,                           ///< [in] global width for X dimension.
-    uint32_t globalSizeY,                           ///< [in] global width for Y dimension.
-    uint32_t globalSizeZ,                           ///< [in] global width for Z dimension.
-    uint32_t* groupSizeX,                           ///< [out] recommended size of group for X dimension.
-    uint32_t* groupSizeY,                           ///< [out] recommended size of group for Y dimension.
-    uint32_t* groupSizeZ                            ///< [out] recommended size of group for Z dimension.
     );
 
 ///////////////////////////////////////////////////////////////////////////////
