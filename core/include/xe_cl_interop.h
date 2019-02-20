@@ -37,6 +37,10 @@
 #endif
 #include "xe_common.h"
 
+#if defined(__cplusplus)
+extern "C" {
+#endif
+
 ///////////////////////////////////////////////////////////////////////////////
 #if XE_ENABLE_OCL_INTEROP
 /// @brief Registers OpenCL memory with Xe
@@ -51,7 +55,7 @@
 ///     - ::XE_RESULT_ERROR_UNSUPPORTED
 ///     - ::XE_RESULT_ERROR_OUT_OF_HOST_MEMORY
 ///     - ::XE_RESULT_ERROR_OUT_OF_DEVICE_MEMORY
-xe_result_t __xecall
+__xedllport xe_result_t __xecall
   xeDeviceRegisterCLMemory(
     xe_device_handle_t hDevice,                     ///< [in] handle to the device
     cl_context context,                             ///< [in] the OpenCL context that created the memory
@@ -74,7 +78,7 @@ xe_result_t __xecall
 ///     - ::XE_RESULT_ERROR_UNSUPPORTED
 ///     - ::XE_RESULT_ERROR_OUT_OF_HOST_MEMORY
 ///     - ::XE_RESULT_ERROR_OUT_OF_DEVICE_MEMORY
-xe_result_t __xecall
+__xedllport xe_result_t __xecall
   xeDeviceRegisterCLProgram(
     xe_device_handle_t hDevice,                     ///< [in] handle to the device
     cl_context context,                             ///< [in] the OpenCL context that created the program
@@ -97,7 +101,7 @@ xe_result_t __xecall
 ///     - ::XE_RESULT_ERROR_UNSUPPORTED
 ///     - ::XE_RESULT_ERROR_OUT_OF_HOST_MEMORY
 ///     - ::XE_RESULT_ERROR_OUT_OF_DEVICE_MEMORY
-xe_result_t __xecall
+__xedllport xe_result_t __xecall
   xeDeviceRegisterCLCommandQueue(
     xe_device_handle_t hDevice,                     ///< [in] handle to the device
     cl_context context,                             ///< [in] the OpenCL context that created the command queue
@@ -105,5 +109,9 @@ xe_result_t __xecall
     xe_command_queue_handle_t* phCommandQueue       ///< [out] pointer to handle of command queue object created
     );
 #endif // XE_ENABLE_OCL_INTEROP
+
+#if defined(__cplusplus)
+} // extern "C"
+#endif
 
 #endif // _XE_CL_INTEROP_H

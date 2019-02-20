@@ -28,12 +28,12 @@ from templates import helper as th
 *
 * @brief ${th.subx(x, header['desc'])}
 *
-* @cond DEV
 * DO NOT EDIT: generated from /scripts/<type>/${name}.yml
-* @endcond
 *
 ******************************************************************************/
 #include "../include/${x}_${name}.h"
+
+#include <exception>    // @todo: move to common and/or precompiled header
 
 %for obj in objects:
 %if re.match(r"function", obj['type']):
@@ -52,30 +52,51 @@ from templates import helper as th
 %for line in th.make_return_lines(x, obj, cls):
 /// ${line}
 %endfor
-/*@todo: __declspec(dllexport)*/
-${x}_result_t __${x}call
+///
+/// @hash {${obj['hash'][cli]}}
+///
+__${x}dllexport ${x}_result_t __${x}call
   ${th.make_func_name(x, obj, cls)}(
     %for line in th.make_param_lines(x, obj, cls):
     ${line}
     %endfor
     )
 {
-    %if not re.match(r".*DriverInit", obj['name']):
-    // @todo: check_return(nullptr == get_driver(), ${X}_RESULT_ERROR_UNINITIALIZED);
+    try
+    {
+        //if( ${X}_DRIVER_PARAMETER_VALIDATION_LEVEL >= 0 )
+        {
+            %if not re.match(r".*DriverInit", obj['name']):
+            // if( nullptr == driver ) return ${X}_RESULT_ERROR_UNINITIALIZED;
 
-    %endif
-    // Check parameters
-    %for key, values in th.make_param_checks(x, obj, cls).items():
-    %for val in values:
-    // @todo: check_return(${val}, ${key});
-    %endfor
-    %endfor
-    /// @begin {${obj['hash'][cli]}}
+            %endif
+            // Check parameters
+            %for key, values in th.make_param_checks(x, obj, cls).items():
+            %for val in values:
+            if( ${val} ) return ${key};
+            %endfor
+            %endfor
+        }
+        /// @begin
 
-    // @todo: insert <code> here
+        // @todo: insert <code> here
 
-    /// @end   {${obj['hash'][cli]}}
-    return ${X}_RESULT_SUCCESS;
+        /// @end
+        return ${X}_RESULT_SUCCESS;
+    }
+    catch(${x}_result_t& result)
+    {
+        return result;
+    }
+    catch(std::bad_alloc&)
+    {
+        return XE_RESULT_ERROR_OUT_OF_HOST_MEMORY;
+    }
+    catch(std::exception&)
+    {
+        // @todo: pfnOnException(e.what());
+        return ${X}_RESULT_ERROR_UNKNOWN;
+    }
 }
 %if 'condition' in obj:
 #endif // ${th.subx(x,obj['condition'])}

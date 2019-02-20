@@ -38,6 +38,10 @@
 #include <stdint.h>
 #include <string.h>
 
+#if defined(__cplusplus)
+extern "C" {
+#endif
+
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Generates generic Xe API versions
 #define XE_MAKE_VERSION( _major, _minor )  (( _major << 16 )|( _minor & 0x0000ffff))
@@ -57,10 +61,34 @@
 ///////////////////////////////////////////////////////////////////////////////
 #if defined(_WIN32)
 /// @brief Calling convention for all API functions
-#define __xecall  __stdcall
+#define __xecall  __cdecl
 #else
 #define __xecall  
 #endif // defined(_WIN32)
+
+///////////////////////////////////////////////////////////////////////////////
+#if defined(_WIN32)
+/// @brief Microsoft-specific dllexport storage-class attribute
+#define __xedllexport  __declspec(dllexport)
+#else
+#define __xedllexport  
+#endif // defined(_WIN32)
+
+///////////////////////////////////////////////////////////////////////////////
+#if defined(_WIN32)
+/// @brief Microsoft-specific dllimport storage-class attribute
+#define __xedllimport  __declspec(dllimport)
+#else
+#define __xedllimport  
+#endif // defined(_WIN32)
+
+///////////////////////////////////////////////////////////////////////////////
+#if defined(XE_MAKEDLL)
+/// @brief DLL-specific function call attribute
+#define __xedllport  __xedllexport
+#else
+#define __xedllport  __xedllimport
+#endif // defined(XE_MAKEDLL)
 
 ///////////////////////////////////////////////////////////////////////////////
 #if !defined(XE_ENABLE_OCL_INTEROP)
@@ -161,5 +189,9 @@ typedef enum _xe_synchronization_mode_t
     XE_SYNCHRONIZATION_MODE_SLEEP,                  ///< put Host thread to sleep until device signals
 
 } xe_synchronization_mode_t;
+
+#if defined(__cplusplus)
+} // extern "C"
+#endif
 
 #endif // _XE_COMMON_H

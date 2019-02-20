@@ -25,12 +25,12 @@
 *
 * @brief Intel Xe Driver APIs for Memory
 *
-* @cond DEV
 * DO NOT EDIT: generated from /scripts/<type>/memory.yml
-* @endcond
 *
 ******************************************************************************/
 #include "../include/xe_memory.h"
+
+#include <exception>    // @todo: move to common and/or precompiled header
 
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Creates an handle to a memory allocator
@@ -47,22 +47,43 @@
 ///     - ::XE_RESULT_ERROR_INVALID_PARAMETER
 ///         + nullptr == phMemAllocHandle
 ///     - ::XE_RESULT_ERROR_UNSUPPORTED
-/*@todo: __declspec(dllexport)*/
-xe_result_t __xecall
+///
+/// @hash {9f40961e245036a4f5bae21b30b0fe1eff983d3e3a2c375fa0e5c2ab9e9139f8}
+///
+__xedllexport xe_result_t __xecall
   xeCreateMemAllocator(
     xe_mem_allocator_handle_t* phMemAllocHandle     ///< [out] Returned memory allocator handle
     )
 {
-    // @todo: check_return(nullptr == get_driver(), XE_RESULT_ERROR_UNINITIALIZED);
+    try
+    {
+        //if( XE_DRIVER_PARAMETER_VALIDATION_LEVEL >= 0 )
+        {
+            // if( nullptr == driver ) return XE_RESULT_ERROR_UNINITIALIZED;
 
-    // Check parameters
-    // @todo: check_return(nullptr == phMemAllocHandle, XE_RESULT_ERROR_INVALID_PARAMETER);
-    /// @begin {9f40961e245036a4f5bae21b30b0fe1eff983d3e3a2c375fa0e5c2ab9e9139f8}
+            // Check parameters
+            if( nullptr == phMemAllocHandle ) return XE_RESULT_ERROR_INVALID_PARAMETER;
+        }
+        /// @begin
 
-    // @todo: insert <code> here
+        // @todo: insert <code> here
 
-    /// @end   {9f40961e245036a4f5bae21b30b0fe1eff983d3e3a2c375fa0e5c2ab9e9139f8}
-    return XE_RESULT_SUCCESS;
+        /// @end
+        return XE_RESULT_SUCCESS;
+    }
+    catch(xe_result_t& result)
+    {
+        return result;
+    }
+    catch(std::bad_alloc&)
+    {
+        return XE_RESULT_ERROR_OUT_OF_HOST_MEMORY;
+    }
+    catch(std::exception&)
+    {
+        // @todo: pfnOnException(e.what());
+        return XE_RESULT_ERROR_UNKNOWN;
+    }
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -83,22 +104,43 @@ xe_result_t __xecall
 ///     - ::XE_RESULT_ERROR_INVALID_PARAMETER
 ///         + nullptr == hMemAllocHandle
 ///     - ::XE_RESULT_ERROR_UNSUPPORTED
-/*@todo: __declspec(dllexport)*/
-xe_result_t __xecall
+///
+/// @hash {a2eb24e400146e03f62a0c76e948d2746c332fa8aa4fa3d9927bce3e413a5c84}
+///
+__xedllexport xe_result_t __xecall
   xeMemAllocatorDestroy(
     xe_mem_allocator_handle_t hMemAllocHandle       ///< [in] handle of memory allocator to destroy
     )
 {
-    // @todo: check_return(nullptr == get_driver(), XE_RESULT_ERROR_UNINITIALIZED);
+    try
+    {
+        //if( XE_DRIVER_PARAMETER_VALIDATION_LEVEL >= 0 )
+        {
+            // if( nullptr == driver ) return XE_RESULT_ERROR_UNINITIALIZED;
 
-    // Check parameters
-    // @todo: check_return(nullptr == hMemAllocHandle, XE_RESULT_ERROR_INVALID_PARAMETER);
-    /// @begin {a2eb24e400146e03f62a0c76e948d2746c332fa8aa4fa3d9927bce3e413a5c84}
+            // Check parameters
+            if( nullptr == hMemAllocHandle ) return XE_RESULT_ERROR_INVALID_PARAMETER;
+        }
+        /// @begin
 
-    // @todo: insert <code> here
+        // @todo: insert <code> here
 
-    /// @end   {a2eb24e400146e03f62a0c76e948d2746c332fa8aa4fa3d9927bce3e413a5c84}
-    return XE_RESULT_SUCCESS;
+        /// @end
+        return XE_RESULT_SUCCESS;
+    }
+    catch(xe_result_t& result)
+    {
+        return result;
+    }
+    catch(std::bad_alloc&)
+    {
+        return XE_RESULT_ERROR_OUT_OF_HOST_MEMORY;
+    }
+    catch(std::exception&)
+    {
+        // @todo: pfnOnException(e.what());
+        return XE_RESULT_ERROR_UNKNOWN;
+    }
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -128,8 +170,10 @@ xe_result_t __xecall
 ///     - ::XE_RESULT_ERROR_UNSUPPORTED
 ///     - ::XE_RESULT_ERROR_OUT_OF_HOST_MEMORY
 ///     - ::XE_RESULT_ERROR_OUT_OF_DEVICE_MEMORY
-/*@todo: __declspec(dllexport)*/
-xe_result_t __xecall
+///
+/// @hash {8e4c3077c3008f398c65e52226a9ed7ab31d689ef7666070143cd630c14449a8}
+///
+__xedllexport xe_result_t __xecall
   xeSharedMemAlloc(
     xe_mem_allocator_handle_t hMemAllocHandle,      ///< [in] handle of memory allocator for this allocation
     xe_device_handle_t hDevice,                     ///< [in] handle of the device
@@ -140,18 +184,37 @@ xe_result_t __xecall
     void** ptr                                      ///< [out] pointer to shared allocation
     )
 {
-    // @todo: check_return(nullptr == get_driver(), XE_RESULT_ERROR_UNINITIALIZED);
+    try
+    {
+        //if( XE_DRIVER_PARAMETER_VALIDATION_LEVEL >= 0 )
+        {
+            // if( nullptr == driver ) return XE_RESULT_ERROR_UNINITIALIZED;
 
-    // Check parameters
-    // @todo: check_return(nullptr == hMemAllocHandle, XE_RESULT_ERROR_INVALID_PARAMETER);
-    // @todo: check_return(nullptr == hDevice, XE_RESULT_ERROR_INVALID_PARAMETER);
-    // @todo: check_return(nullptr == ptr, XE_RESULT_ERROR_INVALID_PARAMETER);
-    /// @begin {8e4c3077c3008f398c65e52226a9ed7ab31d689ef7666070143cd630c14449a8}
+            // Check parameters
+            if( nullptr == hMemAllocHandle ) return XE_RESULT_ERROR_INVALID_PARAMETER;
+            if( nullptr == hDevice ) return XE_RESULT_ERROR_INVALID_PARAMETER;
+            if( nullptr == ptr ) return XE_RESULT_ERROR_INVALID_PARAMETER;
+        }
+        /// @begin
 
-    // @todo: insert <code> here
+        // @todo: insert <code> here
 
-    /// @end   {8e4c3077c3008f398c65e52226a9ed7ab31d689ef7666070143cd630c14449a8}
-    return XE_RESULT_SUCCESS;
+        /// @end
+        return XE_RESULT_SUCCESS;
+    }
+    catch(xe_result_t& result)
+    {
+        return result;
+    }
+    catch(std::bad_alloc&)
+    {
+        return XE_RESULT_ERROR_OUT_OF_HOST_MEMORY;
+    }
+    catch(std::exception&)
+    {
+        // @todo: pfnOnException(e.what());
+        return XE_RESULT_ERROR_UNKNOWN;
+    }
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -181,8 +244,10 @@ xe_result_t __xecall
 ///     - ::XE_RESULT_ERROR_UNSUPPORTED
 ///     - ::XE_RESULT_ERROR_OUT_OF_HOST_MEMORY
 ///     - ::XE_RESULT_ERROR_OUT_OF_DEVICE_MEMORY
-/*@todo: __declspec(dllexport)*/
-xe_result_t __xecall
+///
+/// @hash {0c3d522d0293cd5605447882683b2164912ede21c5b24b68e2b486f7a7a32bdc}
+///
+__xedllexport xe_result_t __xecall
   xeMemAlloc(
     xe_mem_allocator_handle_t hMemAllocHandle,      ///< [in] handle of memory allocator for this allocation
     xe_device_handle_t hDevice,                     ///< [in] handle of the device
@@ -192,18 +257,37 @@ xe_result_t __xecall
     void** ptr                                      ///< [out] pointer to device allocation
     )
 {
-    // @todo: check_return(nullptr == get_driver(), XE_RESULT_ERROR_UNINITIALIZED);
+    try
+    {
+        //if( XE_DRIVER_PARAMETER_VALIDATION_LEVEL >= 0 )
+        {
+            // if( nullptr == driver ) return XE_RESULT_ERROR_UNINITIALIZED;
 
-    // Check parameters
-    // @todo: check_return(nullptr == hMemAllocHandle, XE_RESULT_ERROR_INVALID_PARAMETER);
-    // @todo: check_return(nullptr == hDevice, XE_RESULT_ERROR_INVALID_PARAMETER);
-    // @todo: check_return(nullptr == ptr, XE_RESULT_ERROR_INVALID_PARAMETER);
-    /// @begin {0c3d522d0293cd5605447882683b2164912ede21c5b24b68e2b486f7a7a32bdc}
+            // Check parameters
+            if( nullptr == hMemAllocHandle ) return XE_RESULT_ERROR_INVALID_PARAMETER;
+            if( nullptr == hDevice ) return XE_RESULT_ERROR_INVALID_PARAMETER;
+            if( nullptr == ptr ) return XE_RESULT_ERROR_INVALID_PARAMETER;
+        }
+        /// @begin
 
-    // @todo: insert <code> here
+        // @todo: insert <code> here
 
-    /// @end   {0c3d522d0293cd5605447882683b2164912ede21c5b24b68e2b486f7a7a32bdc}
-    return XE_RESULT_SUCCESS;
+        /// @end
+        return XE_RESULT_SUCCESS;
+    }
+    catch(xe_result_t& result)
+    {
+        return result;
+    }
+    catch(std::bad_alloc&)
+    {
+        return XE_RESULT_ERROR_OUT_OF_HOST_MEMORY;
+    }
+    catch(std::exception&)
+    {
+        // @todo: pfnOnException(e.what());
+        return XE_RESULT_ERROR_UNKNOWN;
+    }
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -233,8 +317,10 @@ xe_result_t __xecall
 ///     - ::XE_RESULT_ERROR_UNSUPPORTED
 ///     - ::XE_RESULT_ERROR_OUT_OF_HOST_MEMORY
 ///     - ::XE_RESULT_ERROR_OUT_OF_DEVICE_MEMORY
-/*@todo: __declspec(dllexport)*/
-xe_result_t __xecall
+///
+/// @hash {f2ceab5a53b2c88ef4d17b001d09cf385937bfef71f155e4844751ac93f1bf4f}
+///
+__xedllexport xe_result_t __xecall
   xeHostMemAlloc(
     xe_mem_allocator_handle_t hMemAllocHandle,      ///< [in] handle of memory allocator for this allocation
     xe_host_mem_alloc_flag_t flags,                 ///< [in] flags specifying additional allocation controls
@@ -243,17 +329,36 @@ xe_result_t __xecall
     void** ptr                                      ///< [out] pointer to host allocation
     )
 {
-    // @todo: check_return(nullptr == get_driver(), XE_RESULT_ERROR_UNINITIALIZED);
+    try
+    {
+        //if( XE_DRIVER_PARAMETER_VALIDATION_LEVEL >= 0 )
+        {
+            // if( nullptr == driver ) return XE_RESULT_ERROR_UNINITIALIZED;
 
-    // Check parameters
-    // @todo: check_return(nullptr == hMemAllocHandle, XE_RESULT_ERROR_INVALID_PARAMETER);
-    // @todo: check_return(nullptr == ptr, XE_RESULT_ERROR_INVALID_PARAMETER);
-    /// @begin {f2ceab5a53b2c88ef4d17b001d09cf385937bfef71f155e4844751ac93f1bf4f}
+            // Check parameters
+            if( nullptr == hMemAllocHandle ) return XE_RESULT_ERROR_INVALID_PARAMETER;
+            if( nullptr == ptr ) return XE_RESULT_ERROR_INVALID_PARAMETER;
+        }
+        /// @begin
 
-    // @todo: insert <code> here
+        // @todo: insert <code> here
 
-    /// @end   {f2ceab5a53b2c88ef4d17b001d09cf385937bfef71f155e4844751ac93f1bf4f}
-    return XE_RESULT_SUCCESS;
+        /// @end
+        return XE_RESULT_SUCCESS;
+    }
+    catch(xe_result_t& result)
+    {
+        return result;
+    }
+    catch(std::bad_alloc&)
+    {
+        return XE_RESULT_ERROR_OUT_OF_HOST_MEMORY;
+    }
+    catch(std::exception&)
+    {
+        // @todo: pfnOnException(e.what());
+        return XE_RESULT_ERROR_UNKNOWN;
+    }
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -279,24 +384,45 @@ xe_result_t __xecall
 ///         + nullptr == hMemAllocHandle
 ///         + nullptr == ptr
 ///     - ::XE_RESULT_ERROR_UNSUPPORTED
-/*@todo: __declspec(dllexport)*/
-xe_result_t __xecall
+///
+/// @hash {6995e132992157fdad5d71e539141cbc0908cfd0a01322624ba3e9d1ffd763fd}
+///
+__xedllexport xe_result_t __xecall
   xeMemFree(
     xe_mem_allocator_handle_t hMemAllocHandle,      ///< [in] handle of memory allocator for this allocation
     const void* ptr                                 ///< [in] pointer to memory to free
     )
 {
-    // @todo: check_return(nullptr == get_driver(), XE_RESULT_ERROR_UNINITIALIZED);
+    try
+    {
+        //if( XE_DRIVER_PARAMETER_VALIDATION_LEVEL >= 0 )
+        {
+            // if( nullptr == driver ) return XE_RESULT_ERROR_UNINITIALIZED;
 
-    // Check parameters
-    // @todo: check_return(nullptr == hMemAllocHandle, XE_RESULT_ERROR_INVALID_PARAMETER);
-    // @todo: check_return(nullptr == ptr, XE_RESULT_ERROR_INVALID_PARAMETER);
-    /// @begin {6995e132992157fdad5d71e539141cbc0908cfd0a01322624ba3e9d1ffd763fd}
+            // Check parameters
+            if( nullptr == hMemAllocHandle ) return XE_RESULT_ERROR_INVALID_PARAMETER;
+            if( nullptr == ptr ) return XE_RESULT_ERROR_INVALID_PARAMETER;
+        }
+        /// @begin
 
-    // @todo: insert <code> here
+        // @todo: insert <code> here
 
-    /// @end   {6995e132992157fdad5d71e539141cbc0908cfd0a01322624ba3e9d1ffd763fd}
-    return XE_RESULT_SUCCESS;
+        /// @end
+        return XE_RESULT_SUCCESS;
+    }
+    catch(xe_result_t& result)
+    {
+        return result;
+    }
+    catch(std::bad_alloc&)
+    {
+        return XE_RESULT_ERROR_OUT_OF_HOST_MEMORY;
+    }
+    catch(std::exception&)
+    {
+        // @todo: pfnOnException(e.what());
+        return XE_RESULT_ERROR_UNKNOWN;
+    }
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -320,8 +446,10 @@ xe_result_t __xecall
 ///         + nullptr == pValue
 ///         + invalid property
 ///     - ::XE_RESULT_ERROR_UNSUPPORTED
-/*@todo: __declspec(dllexport)*/
-xe_result_t __xecall
+///
+/// @hash {ca0bc083b4f2907561e61a65f87ffa3527cf21e340760ef655b0905f766be102}
+///
+__xedllexport xe_result_t __xecall
   xeMemGetProperty(
     xe_mem_allocator_handle_t hMemAllocHandle,      ///< [in] handle of memory allocator for this allocation
     const void* ptr,                                ///< [in] Pointer to query
@@ -329,18 +457,37 @@ xe_result_t __xecall
     void* pValue                                    ///< [out] Value of the queried property
     )
 {
-    // @todo: check_return(nullptr == get_driver(), XE_RESULT_ERROR_UNINITIALIZED);
+    try
+    {
+        //if( XE_DRIVER_PARAMETER_VALIDATION_LEVEL >= 0 )
+        {
+            // if( nullptr == driver ) return XE_RESULT_ERROR_UNINITIALIZED;
 
-    // Check parameters
-    // @todo: check_return(nullptr == hMemAllocHandle, XE_RESULT_ERROR_INVALID_PARAMETER);
-    // @todo: check_return(nullptr == ptr, XE_RESULT_ERROR_INVALID_PARAMETER);
-    // @todo: check_return(nullptr == pValue, XE_RESULT_ERROR_INVALID_PARAMETER);
-    /// @begin {ca0bc083b4f2907561e61a65f87ffa3527cf21e340760ef655b0905f766be102}
+            // Check parameters
+            if( nullptr == hMemAllocHandle ) return XE_RESULT_ERROR_INVALID_PARAMETER;
+            if( nullptr == ptr ) return XE_RESULT_ERROR_INVALID_PARAMETER;
+            if( nullptr == pValue ) return XE_RESULT_ERROR_INVALID_PARAMETER;
+        }
+        /// @begin
 
-    // @todo: insert <code> here
+        // @todo: insert <code> here
 
-    /// @end   {ca0bc083b4f2907561e61a65f87ffa3527cf21e340760ef655b0905f766be102}
-    return XE_RESULT_SUCCESS;
+        /// @end
+        return XE_RESULT_SUCCESS;
+    }
+    catch(xe_result_t& result)
+    {
+        return result;
+    }
+    catch(std::bad_alloc&)
+    {
+        return XE_RESULT_ERROR_OUT_OF_HOST_MEMORY;
+    }
+    catch(std::exception&)
+    {
+        // @todo: pfnOnException(e.what());
+        return XE_RESULT_ERROR_UNKNOWN;
+    }
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -364,8 +511,10 @@ xe_result_t __xecall
 ///         + nullptr == pBase
 ///         + nullptr == pSize
 ///     - ::XE_RESULT_ERROR_UNSUPPORTED
-/*@todo: __declspec(dllexport)*/
-xe_result_t __xecall
+///
+/// @hash {674ca4659d3c7a33527c6aa498eabdf2a8532d1ecc1707e9374ecf5ebf5219ef}
+///
+__xedllexport xe_result_t __xecall
   xeMemGetAddressRange(
     xe_mem_allocator_handle_t hMemAllocHandle,      ///< [in] handle of memory allocator for this allocation
     const void* ptr,                                ///< [in] Pointer to query
@@ -373,19 +522,38 @@ xe_result_t __xecall
     size_t* pSize                                   ///< [out] Returned size of the allocation (optional)
     )
 {
-    // @todo: check_return(nullptr == get_driver(), XE_RESULT_ERROR_UNINITIALIZED);
+    try
+    {
+        //if( XE_DRIVER_PARAMETER_VALIDATION_LEVEL >= 0 )
+        {
+            // if( nullptr == driver ) return XE_RESULT_ERROR_UNINITIALIZED;
 
-    // Check parameters
-    // @todo: check_return(nullptr == hMemAllocHandle, XE_RESULT_ERROR_INVALID_PARAMETER);
-    // @todo: check_return(nullptr == ptr, XE_RESULT_ERROR_INVALID_PARAMETER);
-    // @todo: check_return(nullptr == pBase, XE_RESULT_ERROR_INVALID_PARAMETER);
-    // @todo: check_return(nullptr == pSize, XE_RESULT_ERROR_INVALID_PARAMETER);
-    /// @begin {674ca4659d3c7a33527c6aa498eabdf2a8532d1ecc1707e9374ecf5ebf5219ef}
+            // Check parameters
+            if( nullptr == hMemAllocHandle ) return XE_RESULT_ERROR_INVALID_PARAMETER;
+            if( nullptr == ptr ) return XE_RESULT_ERROR_INVALID_PARAMETER;
+            if( nullptr == pBase ) return XE_RESULT_ERROR_INVALID_PARAMETER;
+            if( nullptr == pSize ) return XE_RESULT_ERROR_INVALID_PARAMETER;
+        }
+        /// @begin
 
-    // @todo: insert <code> here
+        // @todo: insert <code> here
 
-    /// @end   {674ca4659d3c7a33527c6aa498eabdf2a8532d1ecc1707e9374ecf5ebf5219ef}
-    return XE_RESULT_SUCCESS;
+        /// @end
+        return XE_RESULT_SUCCESS;
+    }
+    catch(xe_result_t& result)
+    {
+        return result;
+    }
+    catch(std::bad_alloc&)
+    {
+        return XE_RESULT_ERROR_OUT_OF_HOST_MEMORY;
+    }
+    catch(std::exception&)
+    {
+        // @todo: pfnOnException(e.what());
+        return XE_RESULT_ERROR_UNKNOWN;
+    }
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -411,26 +579,47 @@ xe_result_t __xecall
 ///         + nullptr == ptr
 ///         + nullptr == pIpcHandle
 ///     - ::XE_RESULT_ERROR_UNSUPPORTED
-/*@todo: __declspec(dllexport)*/
-xe_result_t __xecall
+///
+/// @hash {b05b49f5ce22e128e73ca066bf16b7d9b0d6d5c7c360c9041811c0db939aeaba}
+///
+__xedllexport xe_result_t __xecall
   xeIpcGetMemHandle(
     xe_mem_allocator_handle_t hMemAllocHandle,      ///< [in] handle of memory allocator for this allocation
     const void* ptr,                                ///< [in] Pointer to the device memory allocation
     xe_ipc_mem_handle_t* pIpcHandle                 ///< [out] Returned IPC memory handle
     )
 {
-    // @todo: check_return(nullptr == get_driver(), XE_RESULT_ERROR_UNINITIALIZED);
+    try
+    {
+        //if( XE_DRIVER_PARAMETER_VALIDATION_LEVEL >= 0 )
+        {
+            // if( nullptr == driver ) return XE_RESULT_ERROR_UNINITIALIZED;
 
-    // Check parameters
-    // @todo: check_return(nullptr == hMemAllocHandle, XE_RESULT_ERROR_INVALID_PARAMETER);
-    // @todo: check_return(nullptr == ptr, XE_RESULT_ERROR_INVALID_PARAMETER);
-    // @todo: check_return(nullptr == pIpcHandle, XE_RESULT_ERROR_INVALID_PARAMETER);
-    /// @begin {b05b49f5ce22e128e73ca066bf16b7d9b0d6d5c7c360c9041811c0db939aeaba}
+            // Check parameters
+            if( nullptr == hMemAllocHandle ) return XE_RESULT_ERROR_INVALID_PARAMETER;
+            if( nullptr == ptr ) return XE_RESULT_ERROR_INVALID_PARAMETER;
+            if( nullptr == pIpcHandle ) return XE_RESULT_ERROR_INVALID_PARAMETER;
+        }
+        /// @begin
 
-    // @todo: insert <code> here
+        // @todo: insert <code> here
 
-    /// @end   {b05b49f5ce22e128e73ca066bf16b7d9b0d6d5c7c360c9041811c0db939aeaba}
-    return XE_RESULT_SUCCESS;
+        /// @end
+        return XE_RESULT_SUCCESS;
+    }
+    catch(xe_result_t& result)
+    {
+        return result;
+    }
+    catch(std::bad_alloc&)
+    {
+        return XE_RESULT_ERROR_OUT_OF_HOST_MEMORY;
+    }
+    catch(std::exception&)
+    {
+        // @todo: pfnOnException(e.what());
+        return XE_RESULT_ERROR_UNKNOWN;
+    }
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -460,8 +649,10 @@ xe_result_t __xecall
 ///         + nullptr == ptr
 ///         + invalid flags
 ///     - ::XE_RESULT_ERROR_UNSUPPORTED
-/*@todo: __declspec(dllexport)*/
-xe_result_t __xecall
+///
+/// @hash {b81880e4766e54a7ec95bc1c35670d6197d46e5ac553160316faad314f7a59ba}
+///
+__xedllexport xe_result_t __xecall
   xeIpcOpenMemHandle(
     xe_mem_allocator_handle_t hMemAllocHandle,      ///< [in] handle of memory allocator for this allocation
     xe_device_handle_t hDevice,                     ///< [in] handle of the device to associate with the IPC memory handle
@@ -470,19 +661,38 @@ xe_result_t __xecall
     void** ptr                                      ///< [out] pointer to device allocation in this process
     )
 {
-    // @todo: check_return(nullptr == get_driver(), XE_RESULT_ERROR_UNINITIALIZED);
+    try
+    {
+        //if( XE_DRIVER_PARAMETER_VALIDATION_LEVEL >= 0 )
+        {
+            // if( nullptr == driver ) return XE_RESULT_ERROR_UNINITIALIZED;
 
-    // Check parameters
-    // @todo: check_return(nullptr == hMemAllocHandle, XE_RESULT_ERROR_INVALID_PARAMETER);
-    // @todo: check_return(nullptr == hDevice, XE_RESULT_ERROR_INVALID_PARAMETER);
-    // @todo: check_return(nullptr == handle, XE_RESULT_ERROR_INVALID_PARAMETER);
-    // @todo: check_return(nullptr == ptr, XE_RESULT_ERROR_INVALID_PARAMETER);
-    /// @begin {b81880e4766e54a7ec95bc1c35670d6197d46e5ac553160316faad314f7a59ba}
+            // Check parameters
+            if( nullptr == hMemAllocHandle ) return XE_RESULT_ERROR_INVALID_PARAMETER;
+            if( nullptr == hDevice ) return XE_RESULT_ERROR_INVALID_PARAMETER;
+            if( nullptr == handle ) return XE_RESULT_ERROR_INVALID_PARAMETER;
+            if( nullptr == ptr ) return XE_RESULT_ERROR_INVALID_PARAMETER;
+        }
+        /// @begin
 
-    // @todo: insert <code> here
+        // @todo: insert <code> here
 
-    /// @end   {b81880e4766e54a7ec95bc1c35670d6197d46e5ac553160316faad314f7a59ba}
-    return XE_RESULT_SUCCESS;
+        /// @end
+        return XE_RESULT_SUCCESS;
+    }
+    catch(xe_result_t& result)
+    {
+        return result;
+    }
+    catch(std::bad_alloc&)
+    {
+        return XE_RESULT_ERROR_OUT_OF_HOST_MEMORY;
+    }
+    catch(std::exception&)
+    {
+        // @todo: pfnOnException(e.what());
+        return XE_RESULT_ERROR_UNKNOWN;
+    }
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -506,23 +716,44 @@ xe_result_t __xecall
 ///         + nullptr == hMemAllocHandle
 ///         + nullptr == ptr
 ///     - ::XE_RESULT_ERROR_UNSUPPORTED
-/*@todo: __declspec(dllexport)*/
-xe_result_t __xecall
+///
+/// @hash {393624ba03af311b28cec458da8b4789d05f7d3754dcf393c3c6dc9bb063bd45}
+///
+__xedllexport xe_result_t __xecall
   xeIpcCloseMemHandle(
     xe_mem_allocator_handle_t hMemAllocHandle,      ///< [in] handle of memory allocator for this allocation
     const void* ptr                                 ///< [in] pointer to device allocation in this process
     )
 {
-    // @todo: check_return(nullptr == get_driver(), XE_RESULT_ERROR_UNINITIALIZED);
+    try
+    {
+        //if( XE_DRIVER_PARAMETER_VALIDATION_LEVEL >= 0 )
+        {
+            // if( nullptr == driver ) return XE_RESULT_ERROR_UNINITIALIZED;
 
-    // Check parameters
-    // @todo: check_return(nullptr == hMemAllocHandle, XE_RESULT_ERROR_INVALID_PARAMETER);
-    // @todo: check_return(nullptr == ptr, XE_RESULT_ERROR_INVALID_PARAMETER);
-    /// @begin {393624ba03af311b28cec458da8b4789d05f7d3754dcf393c3c6dc9bb063bd45}
+            // Check parameters
+            if( nullptr == hMemAllocHandle ) return XE_RESULT_ERROR_INVALID_PARAMETER;
+            if( nullptr == ptr ) return XE_RESULT_ERROR_INVALID_PARAMETER;
+        }
+        /// @begin
 
-    // @todo: insert <code> here
+        // @todo: insert <code> here
 
-    /// @end   {393624ba03af311b28cec458da8b4789d05f7d3754dcf393c3c6dc9bb063bd45}
-    return XE_RESULT_SUCCESS;
+        /// @end
+        return XE_RESULT_SUCCESS;
+    }
+    catch(xe_result_t& result)
+    {
+        return result;
+    }
+    catch(std::bad_alloc&)
+    {
+        return XE_RESULT_ERROR_OUT_OF_HOST_MEMORY;
+    }
+    catch(std::exception&)
+    {
+        // @todo: pfnOnException(e.what());
+        return XE_RESULT_ERROR_UNKNOWN;
+    }
 }
 

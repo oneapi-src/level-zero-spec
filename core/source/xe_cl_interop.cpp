@@ -25,12 +25,12 @@
 *
 * @brief Intel Xe Driver APIs for OpenCL Interopability
 *
-* @cond DEV
 * DO NOT EDIT: generated from /scripts/<type>/cl_interop.yml
-* @endcond
 *
 ******************************************************************************/
 #include "../include/xe_cl_interop.h"
+
+#include <exception>    // @todo: move to common and/or precompiled header
 
 ///////////////////////////////////////////////////////////////////////////////
 #if XE_ENABLE_OCL_INTEROP
@@ -46,8 +46,10 @@
 ///     - ::XE_RESULT_ERROR_UNSUPPORTED
 ///     - ::XE_RESULT_ERROR_OUT_OF_HOST_MEMORY
 ///     - ::XE_RESULT_ERROR_OUT_OF_DEVICE_MEMORY
-/*@todo: __declspec(dllexport)*/
-xe_result_t __xecall
+///
+/// @hash {5bb3f735cfaa528879ea54f178f75b593388afab07e406a824a1c31599889982}
+///
+__xedllexport xe_result_t __xecall
   xeDeviceRegisterCLMemory(
     xe_device_handle_t hDevice,                     ///< [in] handle to the device
     cl_context context,                             ///< [in] the OpenCL context that created the memory
@@ -55,17 +57,36 @@ xe_result_t __xecall
     void** ptr                                      ///< [out] pointer to device allocation
     )
 {
-    // @todo: check_return(nullptr == get_driver(), XE_RESULT_ERROR_UNINITIALIZED);
+    try
+    {
+        //if( XE_DRIVER_PARAMETER_VALIDATION_LEVEL >= 0 )
+        {
+            // if( nullptr == driver ) return XE_RESULT_ERROR_UNINITIALIZED;
 
-    // Check parameters
-    // @todo: check_return(nullptr == hDevice, XE_RESULT_ERROR_INVALID_PARAMETER);
-    // @todo: check_return(nullptr == ptr, XE_RESULT_ERROR_INVALID_PARAMETER);
-    /// @begin {5bb3f735cfaa528879ea54f178f75b593388afab07e406a824a1c31599889982}
+            // Check parameters
+            if( nullptr == hDevice ) return XE_RESULT_ERROR_INVALID_PARAMETER;
+            if( nullptr == ptr ) return XE_RESULT_ERROR_INVALID_PARAMETER;
+        }
+        /// @begin
 
-    // @todo: insert <code> here
+        // @todo: insert <code> here
 
-    /// @end   {5bb3f735cfaa528879ea54f178f75b593388afab07e406a824a1c31599889982}
-    return XE_RESULT_SUCCESS;
+        /// @end
+        return XE_RESULT_SUCCESS;
+    }
+    catch(xe_result_t& result)
+    {
+        return result;
+    }
+    catch(std::bad_alloc&)
+    {
+        return XE_RESULT_ERROR_OUT_OF_HOST_MEMORY;
+    }
+    catch(std::exception&)
+    {
+        // @todo: pfnOnException(e.what());
+        return XE_RESULT_ERROR_UNKNOWN;
+    }
 }
 #endif // XE_ENABLE_OCL_INTEROP
 
@@ -83,8 +104,10 @@ xe_result_t __xecall
 ///     - ::XE_RESULT_ERROR_UNSUPPORTED
 ///     - ::XE_RESULT_ERROR_OUT_OF_HOST_MEMORY
 ///     - ::XE_RESULT_ERROR_OUT_OF_DEVICE_MEMORY
-/*@todo: __declspec(dllexport)*/
-xe_result_t __xecall
+///
+/// @hash {131233a9acfaad50c2b1855120dd31f244b3b394adefa6cb337f162b19d562fd}
+///
+__xedllexport xe_result_t __xecall
   xeDeviceRegisterCLProgram(
     xe_device_handle_t hDevice,                     ///< [in] handle to the device
     cl_context context,                             ///< [in] the OpenCL context that created the program
@@ -92,17 +115,36 @@ xe_result_t __xecall
     xe_module_handle_t* phModule                    ///< [out] pointer to handle of module object created
     )
 {
-    // @todo: check_return(nullptr == get_driver(), XE_RESULT_ERROR_UNINITIALIZED);
+    try
+    {
+        //if( XE_DRIVER_PARAMETER_VALIDATION_LEVEL >= 0 )
+        {
+            // if( nullptr == driver ) return XE_RESULT_ERROR_UNINITIALIZED;
 
-    // Check parameters
-    // @todo: check_return(nullptr == hDevice, XE_RESULT_ERROR_INVALID_PARAMETER);
-    // @todo: check_return(nullptr == phModule, XE_RESULT_ERROR_INVALID_PARAMETER);
-    /// @begin {131233a9acfaad50c2b1855120dd31f244b3b394adefa6cb337f162b19d562fd}
+            // Check parameters
+            if( nullptr == hDevice ) return XE_RESULT_ERROR_INVALID_PARAMETER;
+            if( nullptr == phModule ) return XE_RESULT_ERROR_INVALID_PARAMETER;
+        }
+        /// @begin
 
-    // @todo: insert <code> here
+        // @todo: insert <code> here
 
-    /// @end   {131233a9acfaad50c2b1855120dd31f244b3b394adefa6cb337f162b19d562fd}
-    return XE_RESULT_SUCCESS;
+        /// @end
+        return XE_RESULT_SUCCESS;
+    }
+    catch(xe_result_t& result)
+    {
+        return result;
+    }
+    catch(std::bad_alloc&)
+    {
+        return XE_RESULT_ERROR_OUT_OF_HOST_MEMORY;
+    }
+    catch(std::exception&)
+    {
+        // @todo: pfnOnException(e.what());
+        return XE_RESULT_ERROR_UNKNOWN;
+    }
 }
 #endif // XE_ENABLE_OCL_INTEROP
 
@@ -120,8 +162,10 @@ xe_result_t __xecall
 ///     - ::XE_RESULT_ERROR_UNSUPPORTED
 ///     - ::XE_RESULT_ERROR_OUT_OF_HOST_MEMORY
 ///     - ::XE_RESULT_ERROR_OUT_OF_DEVICE_MEMORY
-/*@todo: __declspec(dllexport)*/
-xe_result_t __xecall
+///
+/// @hash {4b0d65edbd0514e51b2ab1f197ad0fb7af084f7c4f2b947c771b1d46cac4e83b}
+///
+__xedllexport xe_result_t __xecall
   xeDeviceRegisterCLCommandQueue(
     xe_device_handle_t hDevice,                     ///< [in] handle to the device
     cl_context context,                             ///< [in] the OpenCL context that created the command queue
@@ -129,17 +173,36 @@ xe_result_t __xecall
     xe_command_queue_handle_t* phCommandQueue       ///< [out] pointer to handle of command queue object created
     )
 {
-    // @todo: check_return(nullptr == get_driver(), XE_RESULT_ERROR_UNINITIALIZED);
+    try
+    {
+        //if( XE_DRIVER_PARAMETER_VALIDATION_LEVEL >= 0 )
+        {
+            // if( nullptr == driver ) return XE_RESULT_ERROR_UNINITIALIZED;
 
-    // Check parameters
-    // @todo: check_return(nullptr == hDevice, XE_RESULT_ERROR_INVALID_PARAMETER);
-    // @todo: check_return(nullptr == phCommandQueue, XE_RESULT_ERROR_INVALID_PARAMETER);
-    /// @begin {4b0d65edbd0514e51b2ab1f197ad0fb7af084f7c4f2b947c771b1d46cac4e83b}
+            // Check parameters
+            if( nullptr == hDevice ) return XE_RESULT_ERROR_INVALID_PARAMETER;
+            if( nullptr == phCommandQueue ) return XE_RESULT_ERROR_INVALID_PARAMETER;
+        }
+        /// @begin
 
-    // @todo: insert <code> here
+        // @todo: insert <code> here
 
-    /// @end   {4b0d65edbd0514e51b2ab1f197ad0fb7af084f7c4f2b947c771b1d46cac4e83b}
-    return XE_RESULT_SUCCESS;
+        /// @end
+        return XE_RESULT_SUCCESS;
+    }
+    catch(xe_result_t& result)
+    {
+        return result;
+    }
+    catch(std::bad_alloc&)
+    {
+        return XE_RESULT_ERROR_OUT_OF_HOST_MEMORY;
+    }
+    catch(std::exception&)
+    {
+        // @todo: pfnOnException(e.what());
+        return XE_RESULT_ERROR_UNKNOWN;
+    }
 }
 #endif // XE_ENABLE_OCL_INTEROP
 

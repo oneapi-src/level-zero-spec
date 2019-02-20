@@ -37,6 +37,10 @@
 #endif
 #include "xe_common.h"
 
+#if defined(__cplusplus)
+extern "C" {
+#endif
+
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Encodes an execution barrier into a command list.
 /// 
@@ -57,9 +61,13 @@
 ///     - ::XE_RESULT_ERROR_INVALID_PARAMETER
 ///         + nullptr == hCommandList
 ///     - ::XE_RESULT_ERROR_UNSUPPORTED
-xe_result_t __xecall
+__xedllport xe_result_t __xecall
   xeCommandListEncodeExecutionBarrier(
     xe_command_list_handle_t hCommandList           ///< [in] handle of the command list
     );
+
+#if defined(__cplusplus)
+} // extern "C"
+#endif
 
 #endif // _XE_BARRIER_H

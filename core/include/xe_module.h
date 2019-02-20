@@ -37,6 +37,10 @@
 #endif
 #include "xe_common.h"
 
+#if defined(__cplusplus)
+extern "C" {
+#endif
+
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief API version of ::xe_module_desc_t
 #define XE_MODULE_DESC_VERSION  XE_MAKE_VERSION( 1, 0 )
@@ -105,7 +109,7 @@ typedef struct _xe_module_desc_t
 ///     - ::XE_RESULT_ERROR_OUT_OF_HOST_MEMORY
 ///     - ::XE_RESULT_ERROR_OUT_OF_DEVICE_MEMORY
 ///     - ::XE_RESULT_ERROR_MODULE_BUILD_FAILURE - "Failure to build module. See build log for more details."
-xe_result_t __xecall
+__xedllport xe_result_t __xecall
   xeDeviceCreateModule(
     xe_device_handle_t hDevice,                     ///< [in] handle of the device
     const xe_module_desc_t* desc,                   ///< [in] pointer to module descriptor
@@ -134,7 +138,7 @@ xe_result_t __xecall
 ///     - ::XE_RESULT_ERROR_INVALID_PARAMETER
 ///         + nullptr == hModule
 ///     - ::XE_RESULT_ERROR_UNSUPPORTED
-xe_result_t __xecall
+__xedllport xe_result_t __xecall
   xeModuleDestroy(
     xe_module_handle_t hModule                      ///< [in] handle of the module
     );
@@ -158,7 +162,7 @@ xe_result_t __xecall
 ///     - ::XE_RESULT_ERROR_INVALID_PARAMETER
 ///         + nullptr == hBuildLog
 ///     - ::XE_RESULT_ERROR_UNSUPPORTED
-xe_result_t __xecall
+__xedllport xe_result_t __xecall
   xeModuleBuildLogDestroy(
     xe_module_build_log_handle_t hBuildLog          ///< [in] handle of the module build log object.
     );
@@ -181,7 +185,7 @@ xe_result_t __xecall
 ///     - ::XE_RESULT_ERROR_UNSUPPORTED
 ///     - ::XE_RESULT_ERROR_OUT_OF_HOST_MEMORY
 ///     - ::XE_RESULT_ERROR_OUT_OF_DEVICE_MEMORY
-xe_result_t __xecall
+__xedllport xe_result_t __xecall
   xeModuleBuildLogGetString(
     xe_module_build_log_handle_t hBuildLog,         ///< [in] handle of the module build log object.
     uint32_t* pSize,                                ///< [out] size of build log string.
@@ -215,7 +219,7 @@ xe_result_t __xecall
 ///     - ::XE_RESULT_ERROR_UNSUPPORTED
 ///     - ::XE_RESULT_ERROR_OUT_OF_HOST_MEMORY
 ///     - ::XE_RESULT_ERROR_OUT_OF_DEVICE_MEMORY
-xe_result_t __xecall
+__xedllport xe_result_t __xecall
   xeModuleGetNativeBinary(
     xe_module_handle_t hModule,                     ///< [in] handle of the device
     uint32_t* pSize,                                ///< [out] size of native binary.
@@ -269,7 +273,7 @@ typedef struct _xe_function_desc_t
 ///         + invalid name for desc->pFunctionName
 ///     - ::XE_RESULT_ERROR_UNSUPPORTED
 ///         + ::XE_FUNCTION_DESC_VERSION <= desc->version
-xe_result_t __xecall
+__xedllport xe_result_t __xecall
   xeModuleCreateFunction(
     xe_module_handle_t hModule,                     ///< [in] handle of the module
     const xe_function_desc_t* desc,                 ///< [in] pointer to function descriptor
@@ -293,7 +297,7 @@ xe_result_t __xecall
 ///     - ::XE_RESULT_ERROR_INVALID_PARAMETER
 ///         + nullptr == hFunction
 ///     - ::XE_RESULT_ERROR_UNSUPPORTED
-xe_result_t __xecall
+__xedllport xe_result_t __xecall
   xeFunctionDestroy(
     xe_function_handle_t hFunction                  ///< [in] handle of the function object
     );
@@ -318,7 +322,7 @@ xe_result_t __xecall
 ///         + nullptr == hFunction
 ///         + nullptr == phFunctionArgs
 ///     - ::XE_RESULT_ERROR_UNSUPPORTED
-xe_result_t __xecall
+__xedllport xe_result_t __xecall
   xeFunctionCreateFunctionArgs(
     xe_function_handle_t hFunction,                 ///< [in] handle of the function
     xe_function_args_handle_t* phFunctionArgs       ///< [out] handle of the Function arguments object
@@ -341,7 +345,7 @@ xe_result_t __xecall
 ///     - ::XE_RESULT_ERROR_INVALID_PARAMETER
 ///         + nullptr == hFunctionArgs
 ///     - ::XE_RESULT_ERROR_UNSUPPORTED
-xe_result_t __xecall
+__xedllport xe_result_t __xecall
   xeFunctionArgsDestroy(
     xe_function_args_handle_t hFunctionArgs         ///< [in] handle of the function arguments buffer object
     );
@@ -368,7 +372,7 @@ xe_result_t __xecall
 ///         + invalid argument index
 ///         + invalid size specified
 ///     - ::XE_RESULT_ERROR_UNSUPPORTED
-xe_result_t __xecall
+__xedllport xe_result_t __xecall
   xeFunctionArgsSetValue(
     xe_function_args_handle_t hFunctionArgs,        ///< [in/out] handle of the function args object.
     uint32_t argIndex,                              ///< [in] argument index in range [0, num args - 1]
@@ -413,7 +417,7 @@ typedef enum _xe_function_argument_attribute_t
 ///         + invalid value for attr
 ///         + invalid value for value
 ///     - ::XE_RESULT_ERROR_UNSUPPORTED
-xe_result_t __xecall
+__xedllport xe_result_t __xecall
   xeFunctionArgsSetAttribute(
     xe_function_args_handle_t hFunctionArgs,        ///< [in/out] handle of the function args object.
     xe_function_argument_attribute_t attr,          ///< [in] attribute to set
@@ -457,7 +461,7 @@ typedef enum _xe_function_attribute_t
 ///         + nullptr == pValue
 ///         + invalid value for attr
 ///     - ::XE_RESULT_ERROR_UNSUPPORTED
-xe_result_t __xecall
+__xedllport xe_result_t __xecall
   xeFunctionQueryAttribute(
     xe_function_handle_t hFunction,                 ///< [in] handle of the function object
     xe_function_attribute_t attr,                   ///< [in] attribute to query
@@ -505,7 +509,7 @@ typedef struct _xe_dispatch_function_arguments_t
 ///         + invalid group count range for dispatch
 ///         + invalid dispatch count range for dispatch
 ///     - ::XE_RESULT_ERROR_UNSUPPORTED
-xe_result_t __xecall
+__xedllport xe_result_t __xecall
   xeCommandListEncodeDispatchFunction(
     xe_command_list_handle_t hCommandList,          ///< [in] handle of the command list
     xe_function_handle_t hFunction,                 ///< [in] handle of the function object
@@ -537,7 +541,7 @@ xe_result_t __xecall
 ///         + invalid group count range for dispatch
 ///         + invalid dispatch count range for dispatch
 ///     - ::XE_RESULT_ERROR_UNSUPPORTED
-xe_result_t __xecall
+__xedllport xe_result_t __xecall
   xeCommandGraphEncodeDispatchFunction(
     xe_command_graph_handle_t hCommandGraph,        ///< [in] handle of the command graph
     xe_function_handle_t hFunction,                 ///< [in] handle of the function object
@@ -584,7 +588,7 @@ typedef struct _xe_dispatch_function_indirect_arguments_t
 ///         + nullptr == hFunctionArgs
 ///         + nullptr == pDispatchArgumentsBuffer
 ///     - ::XE_RESULT_ERROR_UNSUPPORTED
-xe_result_t __xecall
+__xedllport xe_result_t __xecall
   xeCommandListEncodeDispatchFunctionIndirect(
     xe_command_list_handle_t hCommandList,          ///< [in] handle of the command list
     xe_function_handle_t hFunction,                 ///< [in] handle of the function object
@@ -618,7 +622,7 @@ xe_result_t __xecall
 ///         + nullptr == hFunctionArgs
 ///         + nullptr == pDispatchArgumentsBuffer
 ///     - ::XE_RESULT_ERROR_UNSUPPORTED
-xe_result_t __xecall
+__xedllport xe_result_t __xecall
   xeCommandGraphEncodeDispatchFunctionIndirect(
     xe_command_graph_handle_t hCommandGraph,        ///< [in] handle of the command graph
     xe_function_handle_t hFunction,                 ///< [in] handle of the function object
@@ -647,7 +651,7 @@ xe_result_t __xecall
 ///         + nullptr == groupSizeZ
 ///         + invalid number of threads.
 ///     - ::XE_RESULT_ERROR_UNSUPPORTED
-xe_result_t __xecall
+__xedllport xe_result_t __xecall
   xeFunctionSuggestGroupSize(
     xe_function_handle_t hFunction,                 ///< [in] handle of the function object
     uint32_t globalSizeX,                           ///< [in] global width for X dimension.
@@ -689,7 +693,7 @@ typedef void(__xecall *xe_host_pfn_t)(
 ///         + nullptr == hCommandList
 ///         + nullptr == pUserData
 ///     - ::XE_RESULT_ERROR_UNSUPPORTED
-xe_result_t __xecall
+__xedllport xe_result_t __xecall
   xeCommandListEncodeDispatchHostFunction(
     xe_command_list_handle_t hCommandList,          ///< [in] handle of the command list
     xe_host_pfn_t pfnHostFunc,                      ///< [in] pointer to host function.
@@ -716,11 +720,15 @@ xe_result_t __xecall
 ///         + nullptr == hCommandGraph
 ///         + nullptr == pUserData
 ///     - ::XE_RESULT_ERROR_UNSUPPORTED
-xe_result_t __xecall
+__xedllport xe_result_t __xecall
   xeCommandGraphEncodeDispatchHostFunction(
     xe_command_graph_handle_t hCommandGraph,        ///< [in] handle of the command graph
     xe_host_pfn_t pfnHostFunc,                      ///< [in] pointer to host function.
     void* pUserData                                 ///< [in] pointer to user data to pass to host function.
     );
+
+#if defined(__cplusplus)
+} // extern "C"
+#endif
 
 #endif // _XE_MODULE_H

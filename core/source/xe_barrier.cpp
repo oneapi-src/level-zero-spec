@@ -25,12 +25,12 @@
 *
 * @brief Intel Xe Driver APIs for Barrier
 *
-* @cond DEV
 * DO NOT EDIT: generated from /scripts/<type>/barrier.yml
-* @endcond
 *
 ******************************************************************************/
 #include "../include/xe_barrier.h"
+
+#include <exception>    // @todo: move to common and/or precompiled header
 
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Encodes an execution barrier into a command list.
@@ -52,21 +52,42 @@
 ///     - ::XE_RESULT_ERROR_INVALID_PARAMETER
 ///         + nullptr == hCommandList
 ///     - ::XE_RESULT_ERROR_UNSUPPORTED
-/*@todo: __declspec(dllexport)*/
-xe_result_t __xecall
+///
+/// @hash {2d1eb476632e411da06d0ff92b64149da43b825416bdaa382c88c04187b02159}
+///
+__xedllexport xe_result_t __xecall
   xeCommandListEncodeExecutionBarrier(
     xe_command_list_handle_t hCommandList           ///< [in] handle of the command list
     )
 {
-    // @todo: check_return(nullptr == get_driver(), XE_RESULT_ERROR_UNINITIALIZED);
+    try
+    {
+        //if( XE_DRIVER_PARAMETER_VALIDATION_LEVEL >= 0 )
+        {
+            // if( nullptr == driver ) return XE_RESULT_ERROR_UNINITIALIZED;
 
-    // Check parameters
-    // @todo: check_return(nullptr == hCommandList, XE_RESULT_ERROR_INVALID_PARAMETER);
-    /// @begin {2d1eb476632e411da06d0ff92b64149da43b825416bdaa382c88c04187b02159}
+            // Check parameters
+            if( nullptr == hCommandList ) return XE_RESULT_ERROR_INVALID_PARAMETER;
+        }
+        /// @begin
 
-    // @todo: insert <code> here
+        // @todo: insert <code> here
 
-    /// @end   {2d1eb476632e411da06d0ff92b64149da43b825416bdaa382c88c04187b02159}
-    return XE_RESULT_SUCCESS;
+        /// @end
+        return XE_RESULT_SUCCESS;
+    }
+    catch(xe_result_t& result)
+    {
+        return result;
+    }
+    catch(std::bad_alloc&)
+    {
+        return XE_RESULT_ERROR_OUT_OF_HOST_MEMORY;
+    }
+    catch(std::exception&)
+    {
+        // @todo: pfnOnException(e.what());
+        return XE_RESULT_ERROR_UNKNOWN;
+    }
 }
 

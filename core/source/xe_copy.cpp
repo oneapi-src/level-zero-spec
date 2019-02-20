@@ -25,12 +25,12 @@
 *
 * @brief Intel Xe Driver APIs for Copies
 *
-* @cond DEV
 * DO NOT EDIT: generated from /scripts/<type>/copy.yml
-* @endcond
 *
 ******************************************************************************/
 #include "../include/xe_copy.h"
+
+#include <exception>    // @todo: move to common and/or precompiled header
 
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Copies host, device, or shared memory.
@@ -58,8 +58,10 @@
 ///         + nullptr == dstptr
 ///         + nullptr == srcptr
 ///     - ::XE_RESULT_ERROR_UNSUPPORTED
-/*@todo: __declspec(dllexport)*/
-xe_result_t __xecall
+///
+/// @hash {10322d2f80ab2c4d1de8c74ebd5dcd44b30666c7d93497a0525875fe05511385}
+///
+__xedllexport xe_result_t __xecall
   xeCommandListEncodeMemoryCopy(
     xe_command_list_handle_t hCommandList,          ///< [in] handle of command list
     void* dstptr,                                   ///< [in] pointer to destination memory to copy to
@@ -67,18 +69,37 @@ xe_result_t __xecall
     size_t size                                     ///< [in] size in bytes to copy
     )
 {
-    // @todo: check_return(nullptr == get_driver(), XE_RESULT_ERROR_UNINITIALIZED);
+    try
+    {
+        //if( XE_DRIVER_PARAMETER_VALIDATION_LEVEL >= 0 )
+        {
+            // if( nullptr == driver ) return XE_RESULT_ERROR_UNINITIALIZED;
 
-    // Check parameters
-    // @todo: check_return(nullptr == hCommandList, XE_RESULT_ERROR_INVALID_PARAMETER);
-    // @todo: check_return(nullptr == dstptr, XE_RESULT_ERROR_INVALID_PARAMETER);
-    // @todo: check_return(nullptr == srcptr, XE_RESULT_ERROR_INVALID_PARAMETER);
-    /// @begin {10322d2f80ab2c4d1de8c74ebd5dcd44b30666c7d93497a0525875fe05511385}
+            // Check parameters
+            if( nullptr == hCommandList ) return XE_RESULT_ERROR_INVALID_PARAMETER;
+            if( nullptr == dstptr ) return XE_RESULT_ERROR_INVALID_PARAMETER;
+            if( nullptr == srcptr ) return XE_RESULT_ERROR_INVALID_PARAMETER;
+        }
+        /// @begin
 
-    // @todo: insert <code> here
+        // @todo: insert <code> here
 
-    /// @end   {10322d2f80ab2c4d1de8c74ebd5dcd44b30666c7d93497a0525875fe05511385}
-    return XE_RESULT_SUCCESS;
+        /// @end
+        return XE_RESULT_SUCCESS;
+    }
+    catch(xe_result_t& result)
+    {
+        return result;
+    }
+    catch(std::bad_alloc&)
+    {
+        return XE_RESULT_ERROR_OUT_OF_HOST_MEMORY;
+    }
+    catch(std::exception&)
+    {
+        // @todo: pfnOnException(e.what());
+        return XE_RESULT_ERROR_UNKNOWN;
+    }
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -102,26 +123,47 @@ xe_result_t __xecall
 ///         + nullptr == hDstImage
 ///         + nullptr == hSrcImage
 ///     - ::XE_RESULT_ERROR_UNSUPPORTED
-/*@todo: __declspec(dllexport)*/
-xe_result_t __xecall
+///
+/// @hash {243c2116a4f9a00f96b590eaf48bbc87a5ed95083afa49768bd94c9994d4c5e1}
+///
+__xedllexport xe_result_t __xecall
   xeCommandListEncodeImageCopy(
     xe_command_list_handle_t hCommandList,          ///< [in] handle of command list
     xe_image_handle_t hDstImage,                    ///< [in] handle of destination image to copy to
     xe_image_handle_t hSrcImage                     ///< [in] handle of source image to copy from
     )
 {
-    // @todo: check_return(nullptr == get_driver(), XE_RESULT_ERROR_UNINITIALIZED);
+    try
+    {
+        //if( XE_DRIVER_PARAMETER_VALIDATION_LEVEL >= 0 )
+        {
+            // if( nullptr == driver ) return XE_RESULT_ERROR_UNINITIALIZED;
 
-    // Check parameters
-    // @todo: check_return(nullptr == hCommandList, XE_RESULT_ERROR_INVALID_PARAMETER);
-    // @todo: check_return(nullptr == hDstImage, XE_RESULT_ERROR_INVALID_PARAMETER);
-    // @todo: check_return(nullptr == hSrcImage, XE_RESULT_ERROR_INVALID_PARAMETER);
-    /// @begin {243c2116a4f9a00f96b590eaf48bbc87a5ed95083afa49768bd94c9994d4c5e1}
+            // Check parameters
+            if( nullptr == hCommandList ) return XE_RESULT_ERROR_INVALID_PARAMETER;
+            if( nullptr == hDstImage ) return XE_RESULT_ERROR_INVALID_PARAMETER;
+            if( nullptr == hSrcImage ) return XE_RESULT_ERROR_INVALID_PARAMETER;
+        }
+        /// @begin
 
-    // @todo: insert <code> here
+        // @todo: insert <code> here
 
-    /// @end   {243c2116a4f9a00f96b590eaf48bbc87a5ed95083afa49768bd94c9994d4c5e1}
-    return XE_RESULT_SUCCESS;
+        /// @end
+        return XE_RESULT_SUCCESS;
+    }
+    catch(xe_result_t& result)
+    {
+        return result;
+    }
+    catch(std::bad_alloc&)
+    {
+        return XE_RESULT_ERROR_OUT_OF_HOST_MEMORY;
+    }
+    catch(std::exception&)
+    {
+        // @todo: pfnOnException(e.what());
+        return XE_RESULT_ERROR_UNKNOWN;
+    }
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -141,8 +183,10 @@ xe_result_t __xecall
 ///         + nullptr == hDstImage
 ///         + nullptr == hSrcImage
 ///     - ::XE_RESULT_ERROR_UNSUPPORTED
-/*@todo: __declspec(dllexport)*/
-xe_result_t __xecall
+///
+/// @hash {ec5a7f583e0bfc8d5a755587f411c7bc145e5f9e004527daa436297696035d30}
+///
+__xedllexport xe_result_t __xecall
   xeCommandListEncodeImageCopyRegion(
     xe_command_list_handle_t hCommandList,          ///< [in] handle of command list
     xe_image_handle_t hDstImage,                    ///< [in] handle of destination image to copy to
@@ -151,18 +195,37 @@ xe_result_t __xecall
     xe_image_region_t* pSrcRegion                   ///< [in][optional] source region descriptor
     )
 {
-    // @todo: check_return(nullptr == get_driver(), XE_RESULT_ERROR_UNINITIALIZED);
+    try
+    {
+        //if( XE_DRIVER_PARAMETER_VALIDATION_LEVEL >= 0 )
+        {
+            // if( nullptr == driver ) return XE_RESULT_ERROR_UNINITIALIZED;
 
-    // Check parameters
-    // @todo: check_return(nullptr == hCommandList, XE_RESULT_ERROR_INVALID_PARAMETER);
-    // @todo: check_return(nullptr == hDstImage, XE_RESULT_ERROR_INVALID_PARAMETER);
-    // @todo: check_return(nullptr == hSrcImage, XE_RESULT_ERROR_INVALID_PARAMETER);
-    /// @begin {ec5a7f583e0bfc8d5a755587f411c7bc145e5f9e004527daa436297696035d30}
+            // Check parameters
+            if( nullptr == hCommandList ) return XE_RESULT_ERROR_INVALID_PARAMETER;
+            if( nullptr == hDstImage ) return XE_RESULT_ERROR_INVALID_PARAMETER;
+            if( nullptr == hSrcImage ) return XE_RESULT_ERROR_INVALID_PARAMETER;
+        }
+        /// @begin
 
-    // @todo: insert <code> here
+        // @todo: insert <code> here
 
-    /// @end   {ec5a7f583e0bfc8d5a755587f411c7bc145e5f9e004527daa436297696035d30}
-    return XE_RESULT_SUCCESS;
+        /// @end
+        return XE_RESULT_SUCCESS;
+    }
+    catch(xe_result_t& result)
+    {
+        return result;
+    }
+    catch(std::bad_alloc&)
+    {
+        return XE_RESULT_ERROR_OUT_OF_HOST_MEMORY;
+    }
+    catch(std::exception&)
+    {
+        // @todo: pfnOnException(e.what());
+        return XE_RESULT_ERROR_UNKNOWN;
+    }
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -188,8 +251,10 @@ xe_result_t __xecall
 ///         + nullptr == dstptr
 ///         + nullptr == hSrcImage
 ///     - ::XE_RESULT_ERROR_UNSUPPORTED
-/*@todo: __declspec(dllexport)*/
-xe_result_t __xecall
+///
+/// @hash {69f20a6c73958cc782ea516378e1c353ce2f5620b69c8da457e9fe385274ae41}
+///
+__xedllexport xe_result_t __xecall
   xeCommandListEncodeImageCopyToMemory(
     xe_command_list_handle_t hCommandList,          ///< [in] handle of command list
     void* dstptr,                                   ///< [in] pointer to destination memory to copy to
@@ -197,18 +262,37 @@ xe_result_t __xecall
     xe_image_region_t* pSrcRegion                   ///< [in][optional] source region descriptor
     )
 {
-    // @todo: check_return(nullptr == get_driver(), XE_RESULT_ERROR_UNINITIALIZED);
+    try
+    {
+        //if( XE_DRIVER_PARAMETER_VALIDATION_LEVEL >= 0 )
+        {
+            // if( nullptr == driver ) return XE_RESULT_ERROR_UNINITIALIZED;
 
-    // Check parameters
-    // @todo: check_return(nullptr == hCommandList, XE_RESULT_ERROR_INVALID_PARAMETER);
-    // @todo: check_return(nullptr == dstptr, XE_RESULT_ERROR_INVALID_PARAMETER);
-    // @todo: check_return(nullptr == hSrcImage, XE_RESULT_ERROR_INVALID_PARAMETER);
-    /// @begin {69f20a6c73958cc782ea516378e1c353ce2f5620b69c8da457e9fe385274ae41}
+            // Check parameters
+            if( nullptr == hCommandList ) return XE_RESULT_ERROR_INVALID_PARAMETER;
+            if( nullptr == dstptr ) return XE_RESULT_ERROR_INVALID_PARAMETER;
+            if( nullptr == hSrcImage ) return XE_RESULT_ERROR_INVALID_PARAMETER;
+        }
+        /// @begin
 
-    // @todo: insert <code> here
+        // @todo: insert <code> here
 
-    /// @end   {69f20a6c73958cc782ea516378e1c353ce2f5620b69c8da457e9fe385274ae41}
-    return XE_RESULT_SUCCESS;
+        /// @end
+        return XE_RESULT_SUCCESS;
+    }
+    catch(xe_result_t& result)
+    {
+        return result;
+    }
+    catch(std::bad_alloc&)
+    {
+        return XE_RESULT_ERROR_OUT_OF_HOST_MEMORY;
+    }
+    catch(std::exception&)
+    {
+        // @todo: pfnOnException(e.what());
+        return XE_RESULT_ERROR_UNKNOWN;
+    }
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -234,8 +318,10 @@ xe_result_t __xecall
 ///         + nullptr == hDstImage
 ///         + nullptr == srcptr
 ///     - ::XE_RESULT_ERROR_UNSUPPORTED
-/*@todo: __declspec(dllexport)*/
-xe_result_t __xecall
+///
+/// @hash {9c2889454d2b805cd41419469082ddba5fc930632d7ad1d19e5c05c2ee59e464}
+///
+__xedllexport xe_result_t __xecall
   xeCommandListEncodeImageCopyFromMemory(
     xe_command_list_handle_t hCommandList,          ///< [in] handle of command list
     xe_image_handle_t hDstImage,                    ///< [in] handle of destination image to copy to
@@ -243,18 +329,37 @@ xe_result_t __xecall
     void* srcptr                                    ///< [in] pointer to source memory to copy from
     )
 {
-    // @todo: check_return(nullptr == get_driver(), XE_RESULT_ERROR_UNINITIALIZED);
+    try
+    {
+        //if( XE_DRIVER_PARAMETER_VALIDATION_LEVEL >= 0 )
+        {
+            // if( nullptr == driver ) return XE_RESULT_ERROR_UNINITIALIZED;
 
-    // Check parameters
-    // @todo: check_return(nullptr == hCommandList, XE_RESULT_ERROR_INVALID_PARAMETER);
-    // @todo: check_return(nullptr == hDstImage, XE_RESULT_ERROR_INVALID_PARAMETER);
-    // @todo: check_return(nullptr == srcptr, XE_RESULT_ERROR_INVALID_PARAMETER);
-    /// @begin {9c2889454d2b805cd41419469082ddba5fc930632d7ad1d19e5c05c2ee59e464}
+            // Check parameters
+            if( nullptr == hCommandList ) return XE_RESULT_ERROR_INVALID_PARAMETER;
+            if( nullptr == hDstImage ) return XE_RESULT_ERROR_INVALID_PARAMETER;
+            if( nullptr == srcptr ) return XE_RESULT_ERROR_INVALID_PARAMETER;
+        }
+        /// @begin
 
-    // @todo: insert <code> here
+        // @todo: insert <code> here
 
-    /// @end   {9c2889454d2b805cd41419469082ddba5fc930632d7ad1d19e5c05c2ee59e464}
-    return XE_RESULT_SUCCESS;
+        /// @end
+        return XE_RESULT_SUCCESS;
+    }
+    catch(xe_result_t& result)
+    {
+        return result;
+    }
+    catch(std::bad_alloc&)
+    {
+        return XE_RESULT_ERROR_OUT_OF_HOST_MEMORY;
+    }
+    catch(std::exception&)
+    {
+        // @todo: pfnOnException(e.what());
+        return XE_RESULT_ERROR_UNKNOWN;
+    }
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -284,25 +389,46 @@ xe_result_t __xecall
 ///         + nullptr == hCommandList
 ///         + nullptr == ptr
 ///     - ::XE_RESULT_ERROR_UNSUPPORTED
-/*@todo: __declspec(dllexport)*/
-xe_result_t __xecall
+///
+/// @hash {2d3f1674f77d6735fb9987fcab395bce6dc9726c938772ca747fb9494e4a9c23}
+///
+__xedllexport xe_result_t __xecall
   xeCommandListEncodeMemoryPrefetch(
     xe_command_list_handle_t hCommandList,          ///< [in] handle of command list
     const void* ptr,                                ///< [in] pointer to start of the memory region to prefetch
     size_t count                                    ///< [in] size in bytes of the memory region to prefetch
     )
 {
-    // @todo: check_return(nullptr == get_driver(), XE_RESULT_ERROR_UNINITIALIZED);
+    try
+    {
+        //if( XE_DRIVER_PARAMETER_VALIDATION_LEVEL >= 0 )
+        {
+            // if( nullptr == driver ) return XE_RESULT_ERROR_UNINITIALIZED;
 
-    // Check parameters
-    // @todo: check_return(nullptr == hCommandList, XE_RESULT_ERROR_INVALID_PARAMETER);
-    // @todo: check_return(nullptr == ptr, XE_RESULT_ERROR_INVALID_PARAMETER);
-    /// @begin {2d3f1674f77d6735fb9987fcab395bce6dc9726c938772ca747fb9494e4a9c23}
+            // Check parameters
+            if( nullptr == hCommandList ) return XE_RESULT_ERROR_INVALID_PARAMETER;
+            if( nullptr == ptr ) return XE_RESULT_ERROR_INVALID_PARAMETER;
+        }
+        /// @begin
 
-    // @todo: insert <code> here
+        // @todo: insert <code> here
 
-    /// @end   {2d3f1674f77d6735fb9987fcab395bce6dc9726c938772ca747fb9494e4a9c23}
-    return XE_RESULT_SUCCESS;
+        /// @end
+        return XE_RESULT_SUCCESS;
+    }
+    catch(xe_result_t& result)
+    {
+        return result;
+    }
+    catch(std::bad_alloc&)
+    {
+        return XE_RESULT_ERROR_OUT_OF_HOST_MEMORY;
+    }
+    catch(std::exception&)
+    {
+        // @todo: pfnOnException(e.what());
+        return XE_RESULT_ERROR_UNKNOWN;
+    }
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -336,8 +462,10 @@ xe_result_t __xecall
 ///         + nullptr == ptr
 ///         + invalid value for advice
 ///     - ::XE_RESULT_ERROR_UNSUPPORTED
-/*@todo: __declspec(dllexport)*/
-xe_result_t __xecall
+///
+/// @hash {2c1eaf9d7e8276047aecaeba08566fcadb26720fa7c263446f0445cbe91bf1c6}
+///
+__xedllexport xe_result_t __xecall
   xeCommandListEncodeMemAdvise(
     xe_command_list_handle_t hCommandList,          ///< [in] handle of command list
     xe_device_handle_t hDevice,                     ///< [in] device associated with the memory advice
@@ -346,17 +474,36 @@ xe_result_t __xecall
     xe_memory_advice_t advice                       ///< [in] Memory advice for the memory range
     )
 {
-    // @todo: check_return(nullptr == get_driver(), XE_RESULT_ERROR_UNINITIALIZED);
+    try
+    {
+        //if( XE_DRIVER_PARAMETER_VALIDATION_LEVEL >= 0 )
+        {
+            // if( nullptr == driver ) return XE_RESULT_ERROR_UNINITIALIZED;
 
-    // Check parameters
-    // @todo: check_return(nullptr == hCommandList, XE_RESULT_ERROR_INVALID_PARAMETER);
-    // @todo: check_return(nullptr == hDevice, XE_RESULT_ERROR_INVALID_PARAMETER);
-    // @todo: check_return(nullptr == ptr, XE_RESULT_ERROR_INVALID_PARAMETER);
-    /// @begin {2c1eaf9d7e8276047aecaeba08566fcadb26720fa7c263446f0445cbe91bf1c6}
+            // Check parameters
+            if( nullptr == hCommandList ) return XE_RESULT_ERROR_INVALID_PARAMETER;
+            if( nullptr == hDevice ) return XE_RESULT_ERROR_INVALID_PARAMETER;
+            if( nullptr == ptr ) return XE_RESULT_ERROR_INVALID_PARAMETER;
+        }
+        /// @begin
 
-    // @todo: insert <code> here
+        // @todo: insert <code> here
 
-    /// @end   {2c1eaf9d7e8276047aecaeba08566fcadb26720fa7c263446f0445cbe91bf1c6}
-    return XE_RESULT_SUCCESS;
+        /// @end
+        return XE_RESULT_SUCCESS;
+    }
+    catch(xe_result_t& result)
+    {
+        return result;
+    }
+    catch(std::bad_alloc&)
+    {
+        return XE_RESULT_ERROR_OUT_OF_HOST_MEMORY;
+    }
+    catch(std::exception&)
+    {
+        // @todo: pfnOnException(e.what());
+        return XE_RESULT_ERROR_UNKNOWN;
+    }
 }
 

@@ -25,12 +25,12 @@
 *
 * @brief Intel Xe Driver APIs for Images
 *
-* @cond DEV
 * DO NOT EDIT: generated from /scripts/<type>/image.yml
-* @endcond
 *
 ******************************************************************************/
 #include "../include/xe_image.h"
+
+#include <exception>    // @todo: move to common and/or precompiled header
 
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Creates a image object on the device.
@@ -55,27 +55,48 @@
 ///         + ::XE_IMAGE_DESC_VERSION <= desc->version
 ///     - ::XE_RESULT_ERROR_OUT_OF_HOST_MEMORY
 ///     - ::XE_RESULT_ERROR_OUT_OF_DEVICE_MEMORY
-/*@todo: __declspec(dllexport)*/
-xe_result_t __xecall
+///
+/// @hash {27a0a4bcd9c866877aa1fb52838284ccdaae12a2dfd92d87b2b862a4ab19218a}
+///
+__xedllexport xe_result_t __xecall
   xeDeviceCreateImage(
     xe_device_handle_t hDevice,                     ///< [in] handle of the device
     const xe_image_desc_t* desc,                    ///< [in] pointer to image descriptor
     xe_image_handle_t* phImage                      ///< [out] pointer to handle of image object created
     )
 {
-    // @todo: check_return(nullptr == get_driver(), XE_RESULT_ERROR_UNINITIALIZED);
+    try
+    {
+        //if( XE_DRIVER_PARAMETER_VALIDATION_LEVEL >= 0 )
+        {
+            // if( nullptr == driver ) return XE_RESULT_ERROR_UNINITIALIZED;
 
-    // Check parameters
-    // @todo: check_return(nullptr == hDevice, XE_RESULT_ERROR_INVALID_PARAMETER);
-    // @todo: check_return(nullptr == desc, XE_RESULT_ERROR_INVALID_PARAMETER);
-    // @todo: check_return(nullptr == phImage, XE_RESULT_ERROR_INVALID_PARAMETER);
-    // @todo: check_return(XE_IMAGE_DESC_VERSION <= desc->version, XE_RESULT_ERROR_UNSUPPORTED);
-    /// @begin {27a0a4bcd9c866877aa1fb52838284ccdaae12a2dfd92d87b2b862a4ab19218a}
+            // Check parameters
+            if( nullptr == hDevice ) return XE_RESULT_ERROR_INVALID_PARAMETER;
+            if( nullptr == desc ) return XE_RESULT_ERROR_INVALID_PARAMETER;
+            if( nullptr == phImage ) return XE_RESULT_ERROR_INVALID_PARAMETER;
+            if( XE_IMAGE_DESC_VERSION <= desc->version ) return XE_RESULT_ERROR_UNSUPPORTED;
+        }
+        /// @begin
 
-    // @todo: insert <code> here
+        // @todo: insert <code> here
 
-    /// @end   {27a0a4bcd9c866877aa1fb52838284ccdaae12a2dfd92d87b2b862a4ab19218a}
-    return XE_RESULT_SUCCESS;
+        /// @end
+        return XE_RESULT_SUCCESS;
+    }
+    catch(xe_result_t& result)
+    {
+        return result;
+    }
+    catch(std::bad_alloc&)
+    {
+        return XE_RESULT_ERROR_OUT_OF_HOST_MEMORY;
+    }
+    catch(std::exception&)
+    {
+        // @todo: pfnOnException(e.what());
+        return XE_RESULT_ERROR_UNKNOWN;
+    }
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -95,21 +116,42 @@ xe_result_t __xecall
 ///     - ::XE_RESULT_ERROR_INVALID_PARAMETER
 ///         + nullptr == hImage
 ///     - ::XE_RESULT_ERROR_UNSUPPORTED
-/*@todo: __declspec(dllexport)*/
-xe_result_t __xecall
+///
+/// @hash {fd023d402207b0213a1e9c7aeaf42f03639cc86e3a20b6267eb86975e7996b94}
+///
+__xedllexport xe_result_t __xecall
   xeImageDestroy(
     xe_image_handle_t hImage                        ///< [in] handle of image object to destroy
     )
 {
-    // @todo: check_return(nullptr == get_driver(), XE_RESULT_ERROR_UNINITIALIZED);
+    try
+    {
+        //if( XE_DRIVER_PARAMETER_VALIDATION_LEVEL >= 0 )
+        {
+            // if( nullptr == driver ) return XE_RESULT_ERROR_UNINITIALIZED;
 
-    // Check parameters
-    // @todo: check_return(nullptr == hImage, XE_RESULT_ERROR_INVALID_PARAMETER);
-    /// @begin {fd023d402207b0213a1e9c7aeaf42f03639cc86e3a20b6267eb86975e7996b94}
+            // Check parameters
+            if( nullptr == hImage ) return XE_RESULT_ERROR_INVALID_PARAMETER;
+        }
+        /// @begin
 
-    // @todo: insert <code> here
+        // @todo: insert <code> here
 
-    /// @end   {fd023d402207b0213a1e9c7aeaf42f03639cc86e3a20b6267eb86975e7996b94}
-    return XE_RESULT_SUCCESS;
+        /// @end
+        return XE_RESULT_SUCCESS;
+    }
+    catch(xe_result_t& result)
+    {
+        return result;
+    }
+    catch(std::bad_alloc&)
+    {
+        return XE_RESULT_ERROR_OUT_OF_HOST_MEMORY;
+    }
+    catch(std::exception&)
+    {
+        // @todo: pfnOnException(e.what());
+        return XE_RESULT_ERROR_UNKNOWN;
+    }
 }
 

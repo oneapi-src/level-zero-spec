@@ -37,6 +37,10 @@
 #endif
 #include "xe_common.h"
 
+#if defined(__cplusplus)
+extern "C" {
+#endif
+
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief API version of ::xe_semaphore_desc_t
 #define XE_SEMAPHORE_DESC_VERSION  XE_MAKE_VERSION( 1, 0 )
@@ -85,7 +89,7 @@ typedef struct _xe_semaphore_desc_t
 ///         + ::XE_SEMAPHORE_DESC_VERSION <= desc->version
 ///     - ::XE_RESULT_ERROR_OUT_OF_HOST_MEMORY
 ///     - ::XE_RESULT_ERROR_OUT_OF_DEVICE_MEMORY
-xe_result_t __xecall
+__xedllport xe_result_t __xecall
   xeDeviceCreateSemaphore(
     xe_device_handle_t hDevice,                     ///< [in] handle of the device
     const xe_semaphore_desc_t* desc,                ///< [in] pointer to semaphore descriptor
@@ -113,7 +117,7 @@ xe_result_t __xecall
 ///     - ::XE_RESULT_ERROR_INVALID_PARAMETER
 ///         + nullptr == hSemaphore
 ///     - ::XE_RESULT_ERROR_UNSUPPORTED
-xe_result_t __xecall
+__xedllport xe_result_t __xecall
   xeSemaphoreDestroy(
     xe_semaphore_handle_t hSemaphore                ///< [in] handle of semaphore object to destroy
     );
@@ -134,7 +138,7 @@ xe_result_t __xecall
 ///         + nullptr == hCommandList
 ///         + nullptr == hSemaphore
 ///     - ::XE_RESULT_ERROR_UNSUPPORTED
-xe_result_t __xecall
+__xedllport xe_result_t __xecall
   xeCommandListEncodeSemaphoreSignal(
     xe_command_list_handle_t hCommandList,          ///< [in] handle of the command list
     xe_semaphore_handle_t hSemaphore,               ///< [in] handle of the semaphore
@@ -170,7 +174,7 @@ typedef enum _xe_semaphore_wait_operation_t
 ///         + nullptr == hCommandList
 ///         + nullptr == hSemaphore
 ///     - ::XE_RESULT_ERROR_UNSUPPORTED
-xe_result_t __xecall
+__xedllport xe_result_t __xecall
   xeCommandListEncodeSemaphoreWait(
     xe_command_list_handle_t hCommandList,          ///< [in] handle of the command list
     xe_semaphore_handle_t hSemaphore,               ///< [in] handle of the semaphore
@@ -192,7 +196,7 @@ xe_result_t __xecall
 ///     - ::XE_RESULT_ERROR_INVALID_PARAMETER
 ///         + nullptr == hSemaphore
 ///     - ::XE_RESULT_ERROR_UNSUPPORTED
-xe_result_t __xecall
+__xedllport xe_result_t __xecall
   xeSemaphoreQueryValue(
     xe_semaphore_handle_t hSemaphore                ///< [in] handle of the semaphore
     );
@@ -211,9 +215,13 @@ xe_result_t __xecall
 ///     - ::XE_RESULT_ERROR_INVALID_PARAMETER
 ///         + nullptr == hSemaphore
 ///     - ::XE_RESULT_ERROR_UNSUPPORTED
-xe_result_t __xecall
+__xedllport xe_result_t __xecall
   xeSemaphoreReset(
     xe_semaphore_handle_t hSemaphore                ///< [in] handle of the semaphore
     );
+
+#if defined(__cplusplus)
+} // extern "C"
+#endif
 
 #endif // _XE_SEMAPHORE_H

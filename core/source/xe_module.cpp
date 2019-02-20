@@ -25,12 +25,12 @@
 *
 * @brief Intel Xe Driver APIs for Module
 *
-* @cond DEV
 * DO NOT EDIT: generated from /scripts/<type>/module.yml
-* @endcond
 *
 ******************************************************************************/
 #include "../include/xe_module.h"
+
+#include <exception>    // @todo: move to common and/or precompiled header
 
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Creates module object from an input IL or native binary.
@@ -74,8 +74,10 @@
 ///     - ::XE_RESULT_ERROR_OUT_OF_HOST_MEMORY
 ///     - ::XE_RESULT_ERROR_OUT_OF_DEVICE_MEMORY
 ///     - ::XE_RESULT_ERROR_MODULE_BUILD_FAILURE - "Failure to build module. See build log for more details."
-/*@todo: __declspec(dllexport)*/
-xe_result_t __xecall
+///
+/// @hash {9eb829c1441842e279f9be96688eeb91e18798a1c6f1c8383d0a3ac86bfd4809}
+///
+__xedllexport xe_result_t __xecall
   xeDeviceCreateModule(
     xe_device_handle_t hDevice,                     ///< [in] handle of the device
     const xe_module_desc_t* desc,                   ///< [in] pointer to module descriptor
@@ -83,19 +85,38 @@ xe_result_t __xecall
     xe_module_build_log_handle_t* phBuildLog        ///< [out][optional] pointer to handle of module's build log.
     )
 {
-    // @todo: check_return(nullptr == get_driver(), XE_RESULT_ERROR_UNINITIALIZED);
+    try
+    {
+        //if( XE_DRIVER_PARAMETER_VALIDATION_LEVEL >= 0 )
+        {
+            // if( nullptr == driver ) return XE_RESULT_ERROR_UNINITIALIZED;
 
-    // Check parameters
-    // @todo: check_return(nullptr == hDevice, XE_RESULT_ERROR_INVALID_PARAMETER);
-    // @todo: check_return(nullptr == desc, XE_RESULT_ERROR_INVALID_PARAMETER);
-    // @todo: check_return(nullptr == phModule, XE_RESULT_ERROR_INVALID_PARAMETER);
-    // @todo: check_return(XE_MODULE_DESC_VERSION <= desc->version, XE_RESULT_ERROR_UNSUPPORTED);
-    /// @begin {9eb829c1441842e279f9be96688eeb91e18798a1c6f1c8383d0a3ac86bfd4809}
+            // Check parameters
+            if( nullptr == hDevice ) return XE_RESULT_ERROR_INVALID_PARAMETER;
+            if( nullptr == desc ) return XE_RESULT_ERROR_INVALID_PARAMETER;
+            if( nullptr == phModule ) return XE_RESULT_ERROR_INVALID_PARAMETER;
+            if( XE_MODULE_DESC_VERSION <= desc->version ) return XE_RESULT_ERROR_UNSUPPORTED;
+        }
+        /// @begin
 
-    // @todo: insert <code> here
+        // @todo: insert <code> here
 
-    /// @end   {9eb829c1441842e279f9be96688eeb91e18798a1c6f1c8383d0a3ac86bfd4809}
-    return XE_RESULT_SUCCESS;
+        /// @end
+        return XE_RESULT_SUCCESS;
+    }
+    catch(xe_result_t& result)
+    {
+        return result;
+    }
+    catch(std::bad_alloc&)
+    {
+        return XE_RESULT_ERROR_OUT_OF_HOST_MEMORY;
+    }
+    catch(std::exception&)
+    {
+        // @todo: pfnOnException(e.what());
+        return XE_RESULT_ERROR_UNKNOWN;
+    }
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -119,22 +140,43 @@ xe_result_t __xecall
 ///     - ::XE_RESULT_ERROR_INVALID_PARAMETER
 ///         + nullptr == hModule
 ///     - ::XE_RESULT_ERROR_UNSUPPORTED
-/*@todo: __declspec(dllexport)*/
-xe_result_t __xecall
+///
+/// @hash {349b769d72d44bcbeb8306573eb07e65478f28d404576327cdd45381da9e8b96}
+///
+__xedllexport xe_result_t __xecall
   xeModuleDestroy(
     xe_module_handle_t hModule                      ///< [in] handle of the module
     )
 {
-    // @todo: check_return(nullptr == get_driver(), XE_RESULT_ERROR_UNINITIALIZED);
+    try
+    {
+        //if( XE_DRIVER_PARAMETER_VALIDATION_LEVEL >= 0 )
+        {
+            // if( nullptr == driver ) return XE_RESULT_ERROR_UNINITIALIZED;
 
-    // Check parameters
-    // @todo: check_return(nullptr == hModule, XE_RESULT_ERROR_INVALID_PARAMETER);
-    /// @begin {349b769d72d44bcbeb8306573eb07e65478f28d404576327cdd45381da9e8b96}
+            // Check parameters
+            if( nullptr == hModule ) return XE_RESULT_ERROR_INVALID_PARAMETER;
+        }
+        /// @begin
 
-    // @todo: insert <code> here
+        // @todo: insert <code> here
 
-    /// @end   {349b769d72d44bcbeb8306573eb07e65478f28d404576327cdd45381da9e8b96}
-    return XE_RESULT_SUCCESS;
+        /// @end
+        return XE_RESULT_SUCCESS;
+    }
+    catch(xe_result_t& result)
+    {
+        return result;
+    }
+    catch(std::bad_alloc&)
+    {
+        return XE_RESULT_ERROR_OUT_OF_HOST_MEMORY;
+    }
+    catch(std::exception&)
+    {
+        // @todo: pfnOnException(e.what());
+        return XE_RESULT_ERROR_UNKNOWN;
+    }
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -156,22 +198,43 @@ xe_result_t __xecall
 ///     - ::XE_RESULT_ERROR_INVALID_PARAMETER
 ///         + nullptr == hBuildLog
 ///     - ::XE_RESULT_ERROR_UNSUPPORTED
-/*@todo: __declspec(dllexport)*/
-xe_result_t __xecall
+///
+/// @hash {f3094b9ab0cf409ea4c6bc63c2ec39ad88091a8ee9fe684c984e877f61548d00}
+///
+__xedllexport xe_result_t __xecall
   xeModuleBuildLogDestroy(
     xe_module_build_log_handle_t hBuildLog          ///< [in] handle of the module build log object.
     )
 {
-    // @todo: check_return(nullptr == get_driver(), XE_RESULT_ERROR_UNINITIALIZED);
+    try
+    {
+        //if( XE_DRIVER_PARAMETER_VALIDATION_LEVEL >= 0 )
+        {
+            // if( nullptr == driver ) return XE_RESULT_ERROR_UNINITIALIZED;
 
-    // Check parameters
-    // @todo: check_return(nullptr == hBuildLog, XE_RESULT_ERROR_INVALID_PARAMETER);
-    /// @begin {f3094b9ab0cf409ea4c6bc63c2ec39ad88091a8ee9fe684c984e877f61548d00}
+            // Check parameters
+            if( nullptr == hBuildLog ) return XE_RESULT_ERROR_INVALID_PARAMETER;
+        }
+        /// @begin
 
-    // @todo: insert <code> here
+        // @todo: insert <code> here
 
-    /// @end   {f3094b9ab0cf409ea4c6bc63c2ec39ad88091a8ee9fe684c984e877f61548d00}
-    return XE_RESULT_SUCCESS;
+        /// @end
+        return XE_RESULT_SUCCESS;
+    }
+    catch(xe_result_t& result)
+    {
+        return result;
+    }
+    catch(std::bad_alloc&)
+    {
+        return XE_RESULT_ERROR_OUT_OF_HOST_MEMORY;
+    }
+    catch(std::exception&)
+    {
+        // @todo: pfnOnException(e.what());
+        return XE_RESULT_ERROR_UNKNOWN;
+    }
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -192,26 +255,47 @@ xe_result_t __xecall
 ///     - ::XE_RESULT_ERROR_UNSUPPORTED
 ///     - ::XE_RESULT_ERROR_OUT_OF_HOST_MEMORY
 ///     - ::XE_RESULT_ERROR_OUT_OF_DEVICE_MEMORY
-/*@todo: __declspec(dllexport)*/
-xe_result_t __xecall
+///
+/// @hash {dd35e7a2beba7be9b599e677ac04880f6512aa776568772d8cd128b65b7839d4}
+///
+__xedllexport xe_result_t __xecall
   xeModuleBuildLogGetString(
     xe_module_build_log_handle_t hBuildLog,         ///< [in] handle of the module build log object.
     uint32_t* pSize,                                ///< [out] size of build log string.
     char** pBuildLog                                ///< [out] pointer to null-terminated string of the log.
     )
 {
-    // @todo: check_return(nullptr == get_driver(), XE_RESULT_ERROR_UNINITIALIZED);
+    try
+    {
+        //if( XE_DRIVER_PARAMETER_VALIDATION_LEVEL >= 0 )
+        {
+            // if( nullptr == driver ) return XE_RESULT_ERROR_UNINITIALIZED;
 
-    // Check parameters
-    // @todo: check_return(nullptr == hBuildLog, XE_RESULT_ERROR_INVALID_PARAMETER);
-    // @todo: check_return(nullptr == pSize, XE_RESULT_ERROR_INVALID_PARAMETER);
-    // @todo: check_return(nullptr == pBuildLog, XE_RESULT_ERROR_INVALID_PARAMETER);
-    /// @begin {dd35e7a2beba7be9b599e677ac04880f6512aa776568772d8cd128b65b7839d4}
+            // Check parameters
+            if( nullptr == hBuildLog ) return XE_RESULT_ERROR_INVALID_PARAMETER;
+            if( nullptr == pSize ) return XE_RESULT_ERROR_INVALID_PARAMETER;
+            if( nullptr == pBuildLog ) return XE_RESULT_ERROR_INVALID_PARAMETER;
+        }
+        /// @begin
 
-    // @todo: insert <code> here
+        // @todo: insert <code> here
 
-    /// @end   {dd35e7a2beba7be9b599e677ac04880f6512aa776568772d8cd128b65b7839d4}
-    return XE_RESULT_SUCCESS;
+        /// @end
+        return XE_RESULT_SUCCESS;
+    }
+    catch(xe_result_t& result)
+    {
+        return result;
+    }
+    catch(std::bad_alloc&)
+    {
+        return XE_RESULT_ERROR_OUT_OF_HOST_MEMORY;
+    }
+    catch(std::exception&)
+    {
+        // @todo: pfnOnException(e.what());
+        return XE_RESULT_ERROR_UNKNOWN;
+    }
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -241,26 +325,47 @@ xe_result_t __xecall
 ///     - ::XE_RESULT_ERROR_UNSUPPORTED
 ///     - ::XE_RESULT_ERROR_OUT_OF_HOST_MEMORY
 ///     - ::XE_RESULT_ERROR_OUT_OF_DEVICE_MEMORY
-/*@todo: __declspec(dllexport)*/
-xe_result_t __xecall
+///
+/// @hash {f86dcf1e7e87d03f26bddcbff99420a8d159e89f57619beaaeebfee453cfd62e}
+///
+__xedllexport xe_result_t __xecall
   xeModuleGetNativeBinary(
     xe_module_handle_t hModule,                     ///< [in] handle of the device
     uint32_t* pSize,                                ///< [out] size of native binary.
     char** pModuleNativeBinary                      ///< [out] pointer to native binary
     )
 {
-    // @todo: check_return(nullptr == get_driver(), XE_RESULT_ERROR_UNINITIALIZED);
+    try
+    {
+        //if( XE_DRIVER_PARAMETER_VALIDATION_LEVEL >= 0 )
+        {
+            // if( nullptr == driver ) return XE_RESULT_ERROR_UNINITIALIZED;
 
-    // Check parameters
-    // @todo: check_return(nullptr == hModule, XE_RESULT_ERROR_INVALID_PARAMETER);
-    // @todo: check_return(nullptr == pSize, XE_RESULT_ERROR_INVALID_PARAMETER);
-    // @todo: check_return(nullptr == pModuleNativeBinary, XE_RESULT_ERROR_INVALID_PARAMETER);
-    /// @begin {f86dcf1e7e87d03f26bddcbff99420a8d159e89f57619beaaeebfee453cfd62e}
+            // Check parameters
+            if( nullptr == hModule ) return XE_RESULT_ERROR_INVALID_PARAMETER;
+            if( nullptr == pSize ) return XE_RESULT_ERROR_INVALID_PARAMETER;
+            if( nullptr == pModuleNativeBinary ) return XE_RESULT_ERROR_INVALID_PARAMETER;
+        }
+        /// @begin
 
-    // @todo: insert <code> here
+        // @todo: insert <code> here
 
-    /// @end   {f86dcf1e7e87d03f26bddcbff99420a8d159e89f57619beaaeebfee453cfd62e}
-    return XE_RESULT_SUCCESS;
+        /// @end
+        return XE_RESULT_SUCCESS;
+    }
+    catch(xe_result_t& result)
+    {
+        return result;
+    }
+    catch(std::bad_alloc&)
+    {
+        return XE_RESULT_ERROR_OUT_OF_HOST_MEMORY;
+    }
+    catch(std::exception&)
+    {
+        // @todo: pfnOnException(e.what());
+        return XE_RESULT_ERROR_UNKNOWN;
+    }
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -287,27 +392,48 @@ xe_result_t __xecall
 ///         + invalid name for desc->pFunctionName
 ///     - ::XE_RESULT_ERROR_UNSUPPORTED
 ///         + ::XE_FUNCTION_DESC_VERSION <= desc->version
-/*@todo: __declspec(dllexport)*/
-xe_result_t __xecall
+///
+/// @hash {db1f3dd910ba87cc5f4943397310ef13073b227ef8aad92327a8183e14461837}
+///
+__xedllexport xe_result_t __xecall
   xeModuleCreateFunction(
     xe_module_handle_t hModule,                     ///< [in] handle of the module
     const xe_function_desc_t* desc,                 ///< [in] pointer to function descriptor
     xe_function_handle_t* phFunction                ///< [out] handle of the Function object
     )
 {
-    // @todo: check_return(nullptr == get_driver(), XE_RESULT_ERROR_UNINITIALIZED);
+    try
+    {
+        //if( XE_DRIVER_PARAMETER_VALIDATION_LEVEL >= 0 )
+        {
+            // if( nullptr == driver ) return XE_RESULT_ERROR_UNINITIALIZED;
 
-    // Check parameters
-    // @todo: check_return(nullptr == hModule, XE_RESULT_ERROR_INVALID_PARAMETER);
-    // @todo: check_return(nullptr == desc, XE_RESULT_ERROR_INVALID_PARAMETER);
-    // @todo: check_return(nullptr == phFunction, XE_RESULT_ERROR_INVALID_PARAMETER);
-    // @todo: check_return(XE_FUNCTION_DESC_VERSION <= desc->version, XE_RESULT_ERROR_UNSUPPORTED);
-    /// @begin {db1f3dd910ba87cc5f4943397310ef13073b227ef8aad92327a8183e14461837}
+            // Check parameters
+            if( nullptr == hModule ) return XE_RESULT_ERROR_INVALID_PARAMETER;
+            if( nullptr == desc ) return XE_RESULT_ERROR_INVALID_PARAMETER;
+            if( nullptr == phFunction ) return XE_RESULT_ERROR_INVALID_PARAMETER;
+            if( XE_FUNCTION_DESC_VERSION <= desc->version ) return XE_RESULT_ERROR_UNSUPPORTED;
+        }
+        /// @begin
 
-    // @todo: insert <code> here
+        // @todo: insert <code> here
 
-    /// @end   {db1f3dd910ba87cc5f4943397310ef13073b227ef8aad92327a8183e14461837}
-    return XE_RESULT_SUCCESS;
+        /// @end
+        return XE_RESULT_SUCCESS;
+    }
+    catch(xe_result_t& result)
+    {
+        return result;
+    }
+    catch(std::bad_alloc&)
+    {
+        return XE_RESULT_ERROR_OUT_OF_HOST_MEMORY;
+    }
+    catch(std::exception&)
+    {
+        // @todo: pfnOnException(e.what());
+        return XE_RESULT_ERROR_UNKNOWN;
+    }
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -327,22 +453,43 @@ xe_result_t __xecall
 ///     - ::XE_RESULT_ERROR_INVALID_PARAMETER
 ///         + nullptr == hFunction
 ///     - ::XE_RESULT_ERROR_UNSUPPORTED
-/*@todo: __declspec(dllexport)*/
-xe_result_t __xecall
+///
+/// @hash {81a8e4126290acff1c7d8a2abbac4698476a5f69abd668a5098199163cfb01c7}
+///
+__xedllexport xe_result_t __xecall
   xeFunctionDestroy(
     xe_function_handle_t hFunction                  ///< [in] handle of the function object
     )
 {
-    // @todo: check_return(nullptr == get_driver(), XE_RESULT_ERROR_UNINITIALIZED);
+    try
+    {
+        //if( XE_DRIVER_PARAMETER_VALIDATION_LEVEL >= 0 )
+        {
+            // if( nullptr == driver ) return XE_RESULT_ERROR_UNINITIALIZED;
 
-    // Check parameters
-    // @todo: check_return(nullptr == hFunction, XE_RESULT_ERROR_INVALID_PARAMETER);
-    /// @begin {81a8e4126290acff1c7d8a2abbac4698476a5f69abd668a5098199163cfb01c7}
+            // Check parameters
+            if( nullptr == hFunction ) return XE_RESULT_ERROR_INVALID_PARAMETER;
+        }
+        /// @begin
 
-    // @todo: insert <code> here
+        // @todo: insert <code> here
 
-    /// @end   {81a8e4126290acff1c7d8a2abbac4698476a5f69abd668a5098199163cfb01c7}
-    return XE_RESULT_SUCCESS;
+        /// @end
+        return XE_RESULT_SUCCESS;
+    }
+    catch(xe_result_t& result)
+    {
+        return result;
+    }
+    catch(std::bad_alloc&)
+    {
+        return XE_RESULT_ERROR_OUT_OF_HOST_MEMORY;
+    }
+    catch(std::exception&)
+    {
+        // @todo: pfnOnException(e.what());
+        return XE_RESULT_ERROR_UNKNOWN;
+    }
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -365,24 +512,45 @@ xe_result_t __xecall
 ///         + nullptr == hFunction
 ///         + nullptr == phFunctionArgs
 ///     - ::XE_RESULT_ERROR_UNSUPPORTED
-/*@todo: __declspec(dllexport)*/
-xe_result_t __xecall
+///
+/// @hash {d28a8e65c3c7b08efac12f45a3b9ec5fb16dbfe81f6c2d1fda1625887b62a478}
+///
+__xedllexport xe_result_t __xecall
   xeFunctionCreateFunctionArgs(
     xe_function_handle_t hFunction,                 ///< [in] handle of the function
     xe_function_args_handle_t* phFunctionArgs       ///< [out] handle of the Function arguments object
     )
 {
-    // @todo: check_return(nullptr == get_driver(), XE_RESULT_ERROR_UNINITIALIZED);
+    try
+    {
+        //if( XE_DRIVER_PARAMETER_VALIDATION_LEVEL >= 0 )
+        {
+            // if( nullptr == driver ) return XE_RESULT_ERROR_UNINITIALIZED;
 
-    // Check parameters
-    // @todo: check_return(nullptr == hFunction, XE_RESULT_ERROR_INVALID_PARAMETER);
-    // @todo: check_return(nullptr == phFunctionArgs, XE_RESULT_ERROR_INVALID_PARAMETER);
-    /// @begin {d28a8e65c3c7b08efac12f45a3b9ec5fb16dbfe81f6c2d1fda1625887b62a478}
+            // Check parameters
+            if( nullptr == hFunction ) return XE_RESULT_ERROR_INVALID_PARAMETER;
+            if( nullptr == phFunctionArgs ) return XE_RESULT_ERROR_INVALID_PARAMETER;
+        }
+        /// @begin
 
-    // @todo: insert <code> here
+        // @todo: insert <code> here
 
-    /// @end   {d28a8e65c3c7b08efac12f45a3b9ec5fb16dbfe81f6c2d1fda1625887b62a478}
-    return XE_RESULT_SUCCESS;
+        /// @end
+        return XE_RESULT_SUCCESS;
+    }
+    catch(xe_result_t& result)
+    {
+        return result;
+    }
+    catch(std::bad_alloc&)
+    {
+        return XE_RESULT_ERROR_OUT_OF_HOST_MEMORY;
+    }
+    catch(std::exception&)
+    {
+        // @todo: pfnOnException(e.what());
+        return XE_RESULT_ERROR_UNKNOWN;
+    }
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -402,22 +570,43 @@ xe_result_t __xecall
 ///     - ::XE_RESULT_ERROR_INVALID_PARAMETER
 ///         + nullptr == hFunctionArgs
 ///     - ::XE_RESULT_ERROR_UNSUPPORTED
-/*@todo: __declspec(dllexport)*/
-xe_result_t __xecall
+///
+/// @hash {188738a5c24e1cfdced709bf247351be2c54076aeb5641fd6618850d3ad6d050}
+///
+__xedllexport xe_result_t __xecall
   xeFunctionArgsDestroy(
     xe_function_args_handle_t hFunctionArgs         ///< [in] handle of the function arguments buffer object
     )
 {
-    // @todo: check_return(nullptr == get_driver(), XE_RESULT_ERROR_UNINITIALIZED);
+    try
+    {
+        //if( XE_DRIVER_PARAMETER_VALIDATION_LEVEL >= 0 )
+        {
+            // if( nullptr == driver ) return XE_RESULT_ERROR_UNINITIALIZED;
 
-    // Check parameters
-    // @todo: check_return(nullptr == hFunctionArgs, XE_RESULT_ERROR_INVALID_PARAMETER);
-    /// @begin {188738a5c24e1cfdced709bf247351be2c54076aeb5641fd6618850d3ad6d050}
+            // Check parameters
+            if( nullptr == hFunctionArgs ) return XE_RESULT_ERROR_INVALID_PARAMETER;
+        }
+        /// @begin
 
-    // @todo: insert <code> here
+        // @todo: insert <code> here
 
-    /// @end   {188738a5c24e1cfdced709bf247351be2c54076aeb5641fd6618850d3ad6d050}
-    return XE_RESULT_SUCCESS;
+        /// @end
+        return XE_RESULT_SUCCESS;
+    }
+    catch(xe_result_t& result)
+    {
+        return result;
+    }
+    catch(std::bad_alloc&)
+    {
+        return XE_RESULT_ERROR_OUT_OF_HOST_MEMORY;
+    }
+    catch(std::exception&)
+    {
+        // @todo: pfnOnException(e.what());
+        return XE_RESULT_ERROR_UNKNOWN;
+    }
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -442,8 +631,10 @@ xe_result_t __xecall
 ///         + invalid argument index
 ///         + invalid size specified
 ///     - ::XE_RESULT_ERROR_UNSUPPORTED
-/*@todo: __declspec(dllexport)*/
-xe_result_t __xecall
+///
+/// @hash {a996568e450c8eba49523b384b4ad4b08e476e3e527d9ce286766ccf7d2a05e9}
+///
+__xedllexport xe_result_t __xecall
   xeFunctionArgsSetValue(
     xe_function_args_handle_t hFunctionArgs,        ///< [in/out] handle of the function args object.
     uint32_t argIndex,                              ///< [in] argument index in range [0, num args - 1]
@@ -451,17 +642,36 @@ xe_result_t __xecall
     const void* pArgValue                           ///< [in] argument value represented as matching arg type
     )
 {
-    // @todo: check_return(nullptr == get_driver(), XE_RESULT_ERROR_UNINITIALIZED);
+    try
+    {
+        //if( XE_DRIVER_PARAMETER_VALIDATION_LEVEL >= 0 )
+        {
+            // if( nullptr == driver ) return XE_RESULT_ERROR_UNINITIALIZED;
 
-    // Check parameters
-    // @todo: check_return(nullptr == hFunctionArgs, XE_RESULT_ERROR_INVALID_PARAMETER);
-    // @todo: check_return(nullptr == pArgValue, XE_RESULT_ERROR_INVALID_PARAMETER);
-    /// @begin {a996568e450c8eba49523b384b4ad4b08e476e3e527d9ce286766ccf7d2a05e9}
+            // Check parameters
+            if( nullptr == hFunctionArgs ) return XE_RESULT_ERROR_INVALID_PARAMETER;
+            if( nullptr == pArgValue ) return XE_RESULT_ERROR_INVALID_PARAMETER;
+        }
+        /// @begin
 
-    // @todo: insert <code> here
+        // @todo: insert <code> here
 
-    /// @end   {a996568e450c8eba49523b384b4ad4b08e476e3e527d9ce286766ccf7d2a05e9}
-    return XE_RESULT_SUCCESS;
+        /// @end
+        return XE_RESULT_SUCCESS;
+    }
+    catch(xe_result_t& result)
+    {
+        return result;
+    }
+    catch(std::bad_alloc&)
+    {
+        return XE_RESULT_ERROR_OUT_OF_HOST_MEMORY;
+    }
+    catch(std::exception&)
+    {
+        // @todo: pfnOnException(e.what());
+        return XE_RESULT_ERROR_UNKNOWN;
+    }
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -484,24 +694,45 @@ xe_result_t __xecall
 ///         + invalid value for attr
 ///         + invalid value for value
 ///     - ::XE_RESULT_ERROR_UNSUPPORTED
-/*@todo: __declspec(dllexport)*/
-xe_result_t __xecall
+///
+/// @hash {e8873190019647e8d9f6a5b6f325014dbea173082544527129680e4cc9451b04}
+///
+__xedllexport xe_result_t __xecall
   xeFunctionArgsSetAttribute(
     xe_function_args_handle_t hFunctionArgs,        ///< [in/out] handle of the function args object.
     xe_function_argument_attribute_t attr,          ///< [in] attribute to set
     uint32_t value                                  ///< [in] attribute value to set
     )
 {
-    // @todo: check_return(nullptr == get_driver(), XE_RESULT_ERROR_UNINITIALIZED);
+    try
+    {
+        //if( XE_DRIVER_PARAMETER_VALIDATION_LEVEL >= 0 )
+        {
+            // if( nullptr == driver ) return XE_RESULT_ERROR_UNINITIALIZED;
 
-    // Check parameters
-    // @todo: check_return(nullptr == hFunctionArgs, XE_RESULT_ERROR_INVALID_PARAMETER);
-    /// @begin {e8873190019647e8d9f6a5b6f325014dbea173082544527129680e4cc9451b04}
+            // Check parameters
+            if( nullptr == hFunctionArgs ) return XE_RESULT_ERROR_INVALID_PARAMETER;
+        }
+        /// @begin
 
-    // @todo: insert <code> here
+        // @todo: insert <code> here
 
-    /// @end   {e8873190019647e8d9f6a5b6f325014dbea173082544527129680e4cc9451b04}
-    return XE_RESULT_SUCCESS;
+        /// @end
+        return XE_RESULT_SUCCESS;
+    }
+    catch(xe_result_t& result)
+    {
+        return result;
+    }
+    catch(std::bad_alloc&)
+    {
+        return XE_RESULT_ERROR_OUT_OF_HOST_MEMORY;
+    }
+    catch(std::exception&)
+    {
+        // @todo: pfnOnException(e.what());
+        return XE_RESULT_ERROR_UNKNOWN;
+    }
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -524,25 +755,46 @@ xe_result_t __xecall
 ///         + nullptr == pValue
 ///         + invalid value for attr
 ///     - ::XE_RESULT_ERROR_UNSUPPORTED
-/*@todo: __declspec(dllexport)*/
-xe_result_t __xecall
+///
+/// @hash {cd0ca73d29fe12490a3a61992e20a5d3aeac34c8260b038d069a8e380af49c0a}
+///
+__xedllexport xe_result_t __xecall
   xeFunctionQueryAttribute(
     xe_function_handle_t hFunction,                 ///< [in] handle of the function object
     xe_function_attribute_t attr,                   ///< [in] attribute to query
     uint32_t* pValue                                ///< [out] returned attribute value
     )
 {
-    // @todo: check_return(nullptr == get_driver(), XE_RESULT_ERROR_UNINITIALIZED);
+    try
+    {
+        //if( XE_DRIVER_PARAMETER_VALIDATION_LEVEL >= 0 )
+        {
+            // if( nullptr == driver ) return XE_RESULT_ERROR_UNINITIALIZED;
 
-    // Check parameters
-    // @todo: check_return(nullptr == hFunction, XE_RESULT_ERROR_INVALID_PARAMETER);
-    // @todo: check_return(nullptr == pValue, XE_RESULT_ERROR_INVALID_PARAMETER);
-    /// @begin {cd0ca73d29fe12490a3a61992e20a5d3aeac34c8260b038d069a8e380af49c0a}
+            // Check parameters
+            if( nullptr == hFunction ) return XE_RESULT_ERROR_INVALID_PARAMETER;
+            if( nullptr == pValue ) return XE_RESULT_ERROR_INVALID_PARAMETER;
+        }
+        /// @begin
 
-    // @todo: insert <code> here
+        // @todo: insert <code> here
 
-    /// @end   {cd0ca73d29fe12490a3a61992e20a5d3aeac34c8260b038d069a8e380af49c0a}
-    return XE_RESULT_SUCCESS;
+        /// @end
+        return XE_RESULT_SUCCESS;
+    }
+    catch(xe_result_t& result)
+    {
+        return result;
+    }
+    catch(std::bad_alloc&)
+    {
+        return XE_RESULT_ERROR_OUT_OF_HOST_MEMORY;
+    }
+    catch(std::exception&)
+    {
+        // @todo: pfnOnException(e.what());
+        return XE_RESULT_ERROR_UNKNOWN;
+    }
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -568,8 +820,10 @@ xe_result_t __xecall
 ///         + invalid group count range for dispatch
 ///         + invalid dispatch count range for dispatch
 ///     - ::XE_RESULT_ERROR_UNSUPPORTED
-/*@todo: __declspec(dllexport)*/
-xe_result_t __xecall
+///
+/// @hash {de4ec8dc364024f41980b93d7021d402e874ac946ffb59ea3eb5aa9ab3301066}
+///
+__xedllexport xe_result_t __xecall
   xeCommandListEncodeDispatchFunction(
     xe_command_list_handle_t hCommandList,          ///< [in] handle of the command list
     xe_function_handle_t hFunction,                 ///< [in] handle of the function object
@@ -578,19 +832,38 @@ xe_result_t __xecall
     xe_event_handle_t hEvent                        ///< [in][optional] handle of the event to signal on completion
     )
 {
-    // @todo: check_return(nullptr == get_driver(), XE_RESULT_ERROR_UNINITIALIZED);
+    try
+    {
+        //if( XE_DRIVER_PARAMETER_VALIDATION_LEVEL >= 0 )
+        {
+            // if( nullptr == driver ) return XE_RESULT_ERROR_UNINITIALIZED;
 
-    // Check parameters
-    // @todo: check_return(nullptr == hCommandList, XE_RESULT_ERROR_INVALID_PARAMETER);
-    // @todo: check_return(nullptr == hFunction, XE_RESULT_ERROR_INVALID_PARAMETER);
-    // @todo: check_return(nullptr == hFunctionArgs, XE_RESULT_ERROR_INVALID_PARAMETER);
-    // @todo: check_return(nullptr == pDispatchFuncArgs, XE_RESULT_ERROR_INVALID_PARAMETER);
-    /// @begin {de4ec8dc364024f41980b93d7021d402e874ac946ffb59ea3eb5aa9ab3301066}
+            // Check parameters
+            if( nullptr == hCommandList ) return XE_RESULT_ERROR_INVALID_PARAMETER;
+            if( nullptr == hFunction ) return XE_RESULT_ERROR_INVALID_PARAMETER;
+            if( nullptr == hFunctionArgs ) return XE_RESULT_ERROR_INVALID_PARAMETER;
+            if( nullptr == pDispatchFuncArgs ) return XE_RESULT_ERROR_INVALID_PARAMETER;
+        }
+        /// @begin
 
-    // @todo: insert <code> here
+        // @todo: insert <code> here
 
-    /// @end   {de4ec8dc364024f41980b93d7021d402e874ac946ffb59ea3eb5aa9ab3301066}
-    return XE_RESULT_SUCCESS;
+        /// @end
+        return XE_RESULT_SUCCESS;
+    }
+    catch(xe_result_t& result)
+    {
+        return result;
+    }
+    catch(std::bad_alloc&)
+    {
+        return XE_RESULT_ERROR_OUT_OF_HOST_MEMORY;
+    }
+    catch(std::exception&)
+    {
+        // @todo: pfnOnException(e.what());
+        return XE_RESULT_ERROR_UNKNOWN;
+    }
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -616,8 +889,10 @@ xe_result_t __xecall
 ///         + invalid group count range for dispatch
 ///         + invalid dispatch count range for dispatch
 ///     - ::XE_RESULT_ERROR_UNSUPPORTED
-/*@todo: __declspec(dllexport)*/
-xe_result_t __xecall
+///
+/// @hash {87e742e574cd46be6071af89e21e2ded1f39f92798fdf538870a4187533af411}
+///
+__xedllexport xe_result_t __xecall
   xeCommandGraphEncodeDispatchFunction(
     xe_command_graph_handle_t hCommandGraph,        ///< [in] handle of the command graph
     xe_function_handle_t hFunction,                 ///< [in] handle of the function object
@@ -626,19 +901,38 @@ xe_result_t __xecall
     xe_event_handle_t hEvent                        ///< [in][optional] handle of the event to signal on completion
     )
 {
-    // @todo: check_return(nullptr == get_driver(), XE_RESULT_ERROR_UNINITIALIZED);
+    try
+    {
+        //if( XE_DRIVER_PARAMETER_VALIDATION_LEVEL >= 0 )
+        {
+            // if( nullptr == driver ) return XE_RESULT_ERROR_UNINITIALIZED;
 
-    // Check parameters
-    // @todo: check_return(nullptr == hCommandGraph, XE_RESULT_ERROR_INVALID_PARAMETER);
-    // @todo: check_return(nullptr == hFunction, XE_RESULT_ERROR_INVALID_PARAMETER);
-    // @todo: check_return(nullptr == hFunctionArgs, XE_RESULT_ERROR_INVALID_PARAMETER);
-    // @todo: check_return(nullptr == pDispatchFuncArgs, XE_RESULT_ERROR_INVALID_PARAMETER);
-    /// @begin {87e742e574cd46be6071af89e21e2ded1f39f92798fdf538870a4187533af411}
+            // Check parameters
+            if( nullptr == hCommandGraph ) return XE_RESULT_ERROR_INVALID_PARAMETER;
+            if( nullptr == hFunction ) return XE_RESULT_ERROR_INVALID_PARAMETER;
+            if( nullptr == hFunctionArgs ) return XE_RESULT_ERROR_INVALID_PARAMETER;
+            if( nullptr == pDispatchFuncArgs ) return XE_RESULT_ERROR_INVALID_PARAMETER;
+        }
+        /// @begin
 
-    // @todo: insert <code> here
+        // @todo: insert <code> here
 
-    /// @end   {87e742e574cd46be6071af89e21e2ded1f39f92798fdf538870a4187533af411}
-    return XE_RESULT_SUCCESS;
+        /// @end
+        return XE_RESULT_SUCCESS;
+    }
+    catch(xe_result_t& result)
+    {
+        return result;
+    }
+    catch(std::bad_alloc&)
+    {
+        return XE_RESULT_ERROR_OUT_OF_HOST_MEMORY;
+    }
+    catch(std::exception&)
+    {
+        // @todo: pfnOnException(e.what());
+        return XE_RESULT_ERROR_UNKNOWN;
+    }
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -666,8 +960,10 @@ xe_result_t __xecall
 ///         + nullptr == hFunctionArgs
 ///         + nullptr == pDispatchArgumentsBuffer
 ///     - ::XE_RESULT_ERROR_UNSUPPORTED
-/*@todo: __declspec(dllexport)*/
-xe_result_t __xecall
+///
+/// @hash {57fb8d85b4c8cc16e07ad3342db0be97e5c18c19b72c8ceb3dcbd20f88a98eea}
+///
+__xedllexport xe_result_t __xecall
   xeCommandListEncodeDispatchFunctionIndirect(
     xe_command_list_handle_t hCommandList,          ///< [in] handle of the command list
     xe_function_handle_t hFunction,                 ///< [in] handle of the function object
@@ -676,19 +972,38 @@ xe_result_t __xecall
     xe_event_handle_t hEvent                        ///< [in][optional] handle of the event to signal on completion
     )
 {
-    // @todo: check_return(nullptr == get_driver(), XE_RESULT_ERROR_UNINITIALIZED);
+    try
+    {
+        //if( XE_DRIVER_PARAMETER_VALIDATION_LEVEL >= 0 )
+        {
+            // if( nullptr == driver ) return XE_RESULT_ERROR_UNINITIALIZED;
 
-    // Check parameters
-    // @todo: check_return(nullptr == hCommandList, XE_RESULT_ERROR_INVALID_PARAMETER);
-    // @todo: check_return(nullptr == hFunction, XE_RESULT_ERROR_INVALID_PARAMETER);
-    // @todo: check_return(nullptr == hFunctionArgs, XE_RESULT_ERROR_INVALID_PARAMETER);
-    // @todo: check_return(nullptr == pDispatchArgumentsBuffer, XE_RESULT_ERROR_INVALID_PARAMETER);
-    /// @begin {57fb8d85b4c8cc16e07ad3342db0be97e5c18c19b72c8ceb3dcbd20f88a98eea}
+            // Check parameters
+            if( nullptr == hCommandList ) return XE_RESULT_ERROR_INVALID_PARAMETER;
+            if( nullptr == hFunction ) return XE_RESULT_ERROR_INVALID_PARAMETER;
+            if( nullptr == hFunctionArgs ) return XE_RESULT_ERROR_INVALID_PARAMETER;
+            if( nullptr == pDispatchArgumentsBuffer ) return XE_RESULT_ERROR_INVALID_PARAMETER;
+        }
+        /// @begin
 
-    // @todo: insert <code> here
+        // @todo: insert <code> here
 
-    /// @end   {57fb8d85b4c8cc16e07ad3342db0be97e5c18c19b72c8ceb3dcbd20f88a98eea}
-    return XE_RESULT_SUCCESS;
+        /// @end
+        return XE_RESULT_SUCCESS;
+    }
+    catch(xe_result_t& result)
+    {
+        return result;
+    }
+    catch(std::bad_alloc&)
+    {
+        return XE_RESULT_ERROR_OUT_OF_HOST_MEMORY;
+    }
+    catch(std::exception&)
+    {
+        // @todo: pfnOnException(e.what());
+        return XE_RESULT_ERROR_UNKNOWN;
+    }
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -716,8 +1031,10 @@ xe_result_t __xecall
 ///         + nullptr == hFunctionArgs
 ///         + nullptr == pDispatchArgumentsBuffer
 ///     - ::XE_RESULT_ERROR_UNSUPPORTED
-/*@todo: __declspec(dllexport)*/
-xe_result_t __xecall
+///
+/// @hash {47643fb62b1afef97af02b4695028e484c973c06d358233559925f0353f8e845}
+///
+__xedllexport xe_result_t __xecall
   xeCommandGraphEncodeDispatchFunctionIndirect(
     xe_command_graph_handle_t hCommandGraph,        ///< [in] handle of the command graph
     xe_function_handle_t hFunction,                 ///< [in] handle of the function object
@@ -726,19 +1043,38 @@ xe_result_t __xecall
     xe_event_handle_t hEvent                        ///< [in][optional] handle of the event to signal on completion
     )
 {
-    // @todo: check_return(nullptr == get_driver(), XE_RESULT_ERROR_UNINITIALIZED);
+    try
+    {
+        //if( XE_DRIVER_PARAMETER_VALIDATION_LEVEL >= 0 )
+        {
+            // if( nullptr == driver ) return XE_RESULT_ERROR_UNINITIALIZED;
 
-    // Check parameters
-    // @todo: check_return(nullptr == hCommandGraph, XE_RESULT_ERROR_INVALID_PARAMETER);
-    // @todo: check_return(nullptr == hFunction, XE_RESULT_ERROR_INVALID_PARAMETER);
-    // @todo: check_return(nullptr == hFunctionArgs, XE_RESULT_ERROR_INVALID_PARAMETER);
-    // @todo: check_return(nullptr == pDispatchArgumentsBuffer, XE_RESULT_ERROR_INVALID_PARAMETER);
-    /// @begin {47643fb62b1afef97af02b4695028e484c973c06d358233559925f0353f8e845}
+            // Check parameters
+            if( nullptr == hCommandGraph ) return XE_RESULT_ERROR_INVALID_PARAMETER;
+            if( nullptr == hFunction ) return XE_RESULT_ERROR_INVALID_PARAMETER;
+            if( nullptr == hFunctionArgs ) return XE_RESULT_ERROR_INVALID_PARAMETER;
+            if( nullptr == pDispatchArgumentsBuffer ) return XE_RESULT_ERROR_INVALID_PARAMETER;
+        }
+        /// @begin
 
-    // @todo: insert <code> here
+        // @todo: insert <code> here
 
-    /// @end   {47643fb62b1afef97af02b4695028e484c973c06d358233559925f0353f8e845}
-    return XE_RESULT_SUCCESS;
+        /// @end
+        return XE_RESULT_SUCCESS;
+    }
+    catch(xe_result_t& result)
+    {
+        return result;
+    }
+    catch(std::bad_alloc&)
+    {
+        return XE_RESULT_ERROR_OUT_OF_HOST_MEMORY;
+    }
+    catch(std::exception&)
+    {
+        // @todo: pfnOnException(e.what());
+        return XE_RESULT_ERROR_UNKNOWN;
+    }
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -761,8 +1097,10 @@ xe_result_t __xecall
 ///         + nullptr == groupSizeZ
 ///         + invalid number of threads.
 ///     - ::XE_RESULT_ERROR_UNSUPPORTED
-/*@todo: __declspec(dllexport)*/
-xe_result_t __xecall
+///
+/// @hash {f3c0ffef33c7e902e382ada2d1fac7966afd96c3c9989bf29a9917e4ae2856d2}
+///
+__xedllexport xe_result_t __xecall
   xeFunctionSuggestGroupSize(
     xe_function_handle_t hFunction,                 ///< [in] handle of the function object
     uint32_t globalSizeX,                           ///< [in] global width for X dimension.
@@ -773,19 +1111,38 @@ xe_result_t __xecall
     uint32_t* groupSizeZ                            ///< [out] recommended size of group for Z dimension.
     )
 {
-    // @todo: check_return(nullptr == get_driver(), XE_RESULT_ERROR_UNINITIALIZED);
+    try
+    {
+        //if( XE_DRIVER_PARAMETER_VALIDATION_LEVEL >= 0 )
+        {
+            // if( nullptr == driver ) return XE_RESULT_ERROR_UNINITIALIZED;
 
-    // Check parameters
-    // @todo: check_return(nullptr == hFunction, XE_RESULT_ERROR_INVALID_PARAMETER);
-    // @todo: check_return(nullptr == groupSizeX, XE_RESULT_ERROR_INVALID_PARAMETER);
-    // @todo: check_return(nullptr == groupSizeY, XE_RESULT_ERROR_INVALID_PARAMETER);
-    // @todo: check_return(nullptr == groupSizeZ, XE_RESULT_ERROR_INVALID_PARAMETER);
-    /// @begin {f3c0ffef33c7e902e382ada2d1fac7966afd96c3c9989bf29a9917e4ae2856d2}
+            // Check parameters
+            if( nullptr == hFunction ) return XE_RESULT_ERROR_INVALID_PARAMETER;
+            if( nullptr == groupSizeX ) return XE_RESULT_ERROR_INVALID_PARAMETER;
+            if( nullptr == groupSizeY ) return XE_RESULT_ERROR_INVALID_PARAMETER;
+            if( nullptr == groupSizeZ ) return XE_RESULT_ERROR_INVALID_PARAMETER;
+        }
+        /// @begin
 
-    // @todo: insert <code> here
+        // @todo: insert <code> here
 
-    /// @end   {f3c0ffef33c7e902e382ada2d1fac7966afd96c3c9989bf29a9917e4ae2856d2}
-    return XE_RESULT_SUCCESS;
+        /// @end
+        return XE_RESULT_SUCCESS;
+    }
+    catch(xe_result_t& result)
+    {
+        return result;
+    }
+    catch(std::bad_alloc&)
+    {
+        return XE_RESULT_ERROR_OUT_OF_HOST_MEMORY;
+    }
+    catch(std::exception&)
+    {
+        // @todo: pfnOnException(e.what());
+        return XE_RESULT_ERROR_UNKNOWN;
+    }
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -808,25 +1165,46 @@ xe_result_t __xecall
 ///         + nullptr == hCommandList
 ///         + nullptr == pUserData
 ///     - ::XE_RESULT_ERROR_UNSUPPORTED
-/*@todo: __declspec(dllexport)*/
-xe_result_t __xecall
+///
+/// @hash {63f4382ff32ea764dd175c3c286a9799cd23b3e32aa90c1b948a6b1e0405b4ba}
+///
+__xedllexport xe_result_t __xecall
   xeCommandListEncodeDispatchHostFunction(
     xe_command_list_handle_t hCommandList,          ///< [in] handle of the command list
     xe_host_pfn_t pfnHostFunc,                      ///< [in] pointer to host function.
     void* pUserData                                 ///< [in] pointer to user data to pass to host function.
     )
 {
-    // @todo: check_return(nullptr == get_driver(), XE_RESULT_ERROR_UNINITIALIZED);
+    try
+    {
+        //if( XE_DRIVER_PARAMETER_VALIDATION_LEVEL >= 0 )
+        {
+            // if( nullptr == driver ) return XE_RESULT_ERROR_UNINITIALIZED;
 
-    // Check parameters
-    // @todo: check_return(nullptr == hCommandList, XE_RESULT_ERROR_INVALID_PARAMETER);
-    // @todo: check_return(nullptr == pUserData, XE_RESULT_ERROR_INVALID_PARAMETER);
-    /// @begin {63f4382ff32ea764dd175c3c286a9799cd23b3e32aa90c1b948a6b1e0405b4ba}
+            // Check parameters
+            if( nullptr == hCommandList ) return XE_RESULT_ERROR_INVALID_PARAMETER;
+            if( nullptr == pUserData ) return XE_RESULT_ERROR_INVALID_PARAMETER;
+        }
+        /// @begin
 
-    // @todo: insert <code> here
+        // @todo: insert <code> here
 
-    /// @end   {63f4382ff32ea764dd175c3c286a9799cd23b3e32aa90c1b948a6b1e0405b4ba}
-    return XE_RESULT_SUCCESS;
+        /// @end
+        return XE_RESULT_SUCCESS;
+    }
+    catch(xe_result_t& result)
+    {
+        return result;
+    }
+    catch(std::bad_alloc&)
+    {
+        return XE_RESULT_ERROR_OUT_OF_HOST_MEMORY;
+    }
+    catch(std::exception&)
+    {
+        // @todo: pfnOnException(e.what());
+        return XE_RESULT_ERROR_UNKNOWN;
+    }
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -849,24 +1227,45 @@ xe_result_t __xecall
 ///         + nullptr == hCommandGraph
 ///         + nullptr == pUserData
 ///     - ::XE_RESULT_ERROR_UNSUPPORTED
-/*@todo: __declspec(dllexport)*/
-xe_result_t __xecall
+///
+/// @hash {25ee33b5152b0dcbfaa702a00fef20f87383ad225fa62703b0344b6bd4569eee}
+///
+__xedllexport xe_result_t __xecall
   xeCommandGraphEncodeDispatchHostFunction(
     xe_command_graph_handle_t hCommandGraph,        ///< [in] handle of the command graph
     xe_host_pfn_t pfnHostFunc,                      ///< [in] pointer to host function.
     void* pUserData                                 ///< [in] pointer to user data to pass to host function.
     )
 {
-    // @todo: check_return(nullptr == get_driver(), XE_RESULT_ERROR_UNINITIALIZED);
+    try
+    {
+        //if( XE_DRIVER_PARAMETER_VALIDATION_LEVEL >= 0 )
+        {
+            // if( nullptr == driver ) return XE_RESULT_ERROR_UNINITIALIZED;
 
-    // Check parameters
-    // @todo: check_return(nullptr == hCommandGraph, XE_RESULT_ERROR_INVALID_PARAMETER);
-    // @todo: check_return(nullptr == pUserData, XE_RESULT_ERROR_INVALID_PARAMETER);
-    /// @begin {25ee33b5152b0dcbfaa702a00fef20f87383ad225fa62703b0344b6bd4569eee}
+            // Check parameters
+            if( nullptr == hCommandGraph ) return XE_RESULT_ERROR_INVALID_PARAMETER;
+            if( nullptr == pUserData ) return XE_RESULT_ERROR_INVALID_PARAMETER;
+        }
+        /// @begin
 
-    // @todo: insert <code> here
+        // @todo: insert <code> here
 
-    /// @end   {25ee33b5152b0dcbfaa702a00fef20f87383ad225fa62703b0344b6bd4569eee}
-    return XE_RESULT_SUCCESS;
+        /// @end
+        return XE_RESULT_SUCCESS;
+    }
+    catch(xe_result_t& result)
+    {
+        return result;
+    }
+    catch(std::bad_alloc&)
+    {
+        return XE_RESULT_ERROR_OUT_OF_HOST_MEMORY;
+    }
+    catch(std::exception&)
+    {
+        // @todo: pfnOnException(e.what());
+        return XE_RESULT_ERROR_UNKNOWN;
+    }
 }
 

@@ -37,6 +37,10 @@
 #endif
 #include "xe_common.h"
 
+#if defined(__cplusplus)
+extern "C" {
+#endif
+
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief API version of ::xe_command_list_desc_t
 #define XE_COMMAND_LIST_DESC_VERSION  XE_MAKE_VERSION( 1, 0 )
@@ -85,7 +89,7 @@ typedef struct _xe_command_list_desc_t
 ///         + ::XE_COMMAND_LIST_DESC_VERSION <= desc->version
 ///     - ::XE_RESULT_ERROR_OUT_OF_HOST_MEMORY
 ///     - ::XE_RESULT_ERROR_OUT_OF_DEVICE_MEMORY
-xe_result_t __xecall
+__xedllport xe_result_t __xecall
   xeDeviceCreateCommandList(
     xe_device_handle_t hDevice,                     ///< [in] handle of the device object
     const xe_command_list_desc_t* desc,             ///< [in] pointer to command list descriptor
@@ -116,7 +120,7 @@ xe_result_t __xecall
 ///     - ::XE_RESULT_ERROR_UNSUPPORTED
 ///     - ::XE_RESULT_ERROR_OUT_OF_HOST_MEMORY
 ///     - ::XE_RESULT_ERROR_OUT_OF_DEVICE_MEMORY
-xe_result_t __xecall
+__xedllport xe_result_t __xecall
   xeDeviceCopyCommandList(
     xe_device_handle_t hDevice,                     ///< [in] handle of the device object
     xe_command_list_handle_t hCommandList,          ///< [in] handle to command list to copy
@@ -140,7 +144,7 @@ xe_result_t __xecall
 ///     - ::XE_RESULT_ERROR_INVALID_PARAMETER
 ///         + nullptr == hCommandList
 ///     - ::XE_RESULT_ERROR_UNSUPPORTED
-xe_result_t __xecall
+__xedllport xe_result_t __xecall
   xeCommandListDestroy(
     xe_command_list_handle_t hCommandList           ///< [in] handle of command list object to destroy
     );
@@ -160,7 +164,7 @@ xe_result_t __xecall
 ///     - ::XE_RESULT_ERROR_INVALID_PARAMETER
 ///         + nullptr == hCommandList
 ///     - ::XE_RESULT_ERROR_UNSUPPORTED
-xe_result_t __xecall
+__xedllport xe_result_t __xecall
   xeCommandListClose(
     xe_command_list_handle_t hCommandList           ///< [in] handle of command list object to close
     );
@@ -183,7 +187,7 @@ xe_result_t __xecall
 ///     - ::XE_RESULT_ERROR_INVALID_PARAMETER
 ///         + nullptr == hCommandList
 ///     - ::XE_RESULT_ERROR_UNSUPPORTED
-xe_result_t __xecall
+__xedllport xe_result_t __xecall
   xeCommandListReset(
     xe_command_list_handle_t hCommandList           ///< [in] handle of command list object to reset
     );
@@ -219,7 +223,7 @@ typedef enum _xe_command_list_parameter_t
 ///         + invalid value for attribute
 ///         + invalid value for value
 ///     - ::XE_RESULT_ERROR_UNSUPPORTED
-xe_result_t __xecall
+__xedllport xe_result_t __xecall
   xeCommandListSetParameter(
     xe_command_list_handle_t hCommandList,          ///< [in] handle of command list
     xe_command_list_parameter_t parameter,          ///< [in] parameter to change
@@ -250,7 +254,7 @@ xe_result_t __xecall
 ///         + nullptr == value
 ///         + invalid value for attribute
 ///     - ::XE_RESULT_ERROR_UNSUPPORTED
-xe_result_t __xecall
+__xedllport xe_result_t __xecall
   xeCommandListGetParameter(
     xe_command_list_handle_t hCommandList,          ///< [in] handle of command list
     xe_command_list_parameter_t parameter,          ///< [in] parameter to retrieve
@@ -272,7 +276,7 @@ xe_result_t __xecall
 ///     - ::XE_RESULT_ERROR_INVALID_PARAMETER
 ///         + nullptr == hCommandList
 ///     - ::XE_RESULT_ERROR_UNSUPPORTED
-xe_result_t __xecall
+__xedllport xe_result_t __xecall
   xeCommandListResetParameters(
     xe_command_list_handle_t hCommandList           ///< [in] handle of the command list
     );
@@ -294,7 +298,7 @@ xe_result_t __xecall
 ///         + nullptr == phCommandLists
 ///         + 0 for numCommandLists
 ///     - ::XE_RESULT_ERROR_UNSUPPORTED
-xe_result_t __xecall
+__xedllport xe_result_t __xecall
   xeCommandListEncodeCommandLists(
     xe_command_list_handle_t hCommandList,          ///< [in] handle of the command list
     uint32_t numCommandLists,                       ///< [in] number of command lists to encode
@@ -328,12 +332,16 @@ typedef enum _xe_command_format_t
 ///         + invalid value for format
 ///         + 0 for size
 ///     - ::XE_RESULT_ERROR_UNSUPPORTED
-xe_result_t __xecall
+__xedllport xe_result_t __xecall
   xeCommandListEncodeCommands(
     xe_command_list_handle_t hCommandList,          ///< [in] handle of the command list
     xe_command_format_t format,                     ///< [in] format of the command blob
     size_t size,                                    ///< [in] size (in bytes) of the command blob
     void* pBlob                                     ///< [in] pointer to blob of commands to encode into the command list
     );
+
+#if defined(__cplusplus)
+} // extern "C"
+#endif
 
 #endif // _XE_CMDLIST_H

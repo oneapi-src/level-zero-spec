@@ -25,10 +25,10 @@
 *
 * @brief Intel Xe Driver API common types
 *
-* @cond DEV
 * DO NOT EDIT: generated from /scripts/<type>/common.yml
-* @endcond
 *
 ******************************************************************************/
 #include "../include/xe_common.h"
+
+#include <exception>    // @todo: move to common and/or precompiled header
 

@@ -37,6 +37,10 @@
 #endif
 #include "xe_common.h"
 
+#if defined(__cplusplus)
+extern "C" {
+#endif
+
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Reports the number of devices
 /// 
@@ -55,7 +59,7 @@
 ///     - ::XE_RESULT_ERROR_INVALID_PARAMETER
 ///         + nullptr == count
 ///     - ::XE_RESULT_ERROR_UNSUPPORTED
-xe_result_t __xecall
+__xedllport xe_result_t __xecall
   xeDriverGetDeviceCount(
     uint32_t* count                                 ///< [out] number of devices available
     );
@@ -80,7 +84,7 @@ xe_result_t __xecall
 ///         + nullptr == pUniqueIds
 ///         + invalid unique id.
 ///     - ::XE_RESULT_ERROR_UNSUPPORTED
-xe_result_t __xecall
+__xedllport xe_result_t __xecall
   xeDriverGetDeviceUniqueIds(
     uint32_t count,                                 ///< [in] size of device unique ids array. Typically, this will be
                                                     ///< ${x}DeviceGetCount.
@@ -108,7 +112,7 @@ xe_result_t __xecall
 ///         + nullptr == phDevice
 ///         + ordinal is out of range reported by ::xeDriverGetDeviceCount
 ///     - ::XE_RESULT_ERROR_UNSUPPORTED
-xe_result_t __xecall
+__xedllport xe_result_t __xecall
   xeDriverGetDevice(
     uint32_t uniqueId,                              ///< [in] unique id of device to retrieve. Use ${x}DriverGetDeviceUniqueIds
                                                     ///< to obtain a unique Id.
@@ -136,7 +140,7 @@ xe_result_t __xecall
 ///         + nullptr == phSubDevice
 ///         + ordinal is out of range reported by device properties.
 ///     - ::XE_RESULT_ERROR_UNSUPPORTED
-xe_result_t __xecall
+__xedllport xe_result_t __xecall
   xeDeviceGetSubDevice(
     xe_device_handle_t hDevice,                     ///< [in] handle of the device object
     uint32_t ordinal,                               ///< [in] ordinal of sub-device to retrieve
@@ -174,7 +178,7 @@ typedef enum _xe_api_version_t
 ///         + nullptr == hDevice
 ///         + nullptr == version
 ///     - ::XE_RESULT_ERROR_UNSUPPORTED
-xe_result_t __xecall
+__xedllport xe_result_t __xecall
   xeDeviceGetApiVersion(
     xe_device_handle_t hDevice,                     ///< [in] handle of the device object
     xe_api_version_t* version                       ///< [out] api version
@@ -232,7 +236,7 @@ typedef struct _xe_device_properties_t
 ///         + nullptr == hDevice
 ///         + nullptr == pDeviceProperties
 ///     - ::XE_RESULT_ERROR_UNSUPPORTED
-xe_result_t __xecall
+__xedllport xe_result_t __xecall
   xeDeviceGetProperties(
     xe_device_handle_t hDevice,                     ///< [in] handle of the device object
     xe_device_properties_t* pDeviceProperties       ///< [out] query result for device properties
@@ -286,7 +290,7 @@ typedef struct _xe_device_compute_properties_t
 ///         + nullptr == hDevice
 ///         + nullptr == pComputeProperties
 ///     - ::XE_RESULT_ERROR_UNSUPPORTED
-xe_result_t __xecall
+__xedllport xe_result_t __xecall
   xeDeviceGetComputeProperties(
     xe_device_handle_t hDevice,                     ///< [in] handle of the device object
     xe_device_compute_properties_t* pComputeProperties  ///< [out] query result for compute properties
@@ -356,7 +360,7 @@ typedef struct _xe_device_memory_properties_t
 ///         + nullptr == hDevice
 ///         + nullptr == pMemProperties
 ///     - ::XE_RESULT_ERROR_UNSUPPORTED
-xe_result_t __xecall
+__xedllport xe_result_t __xecall
   xeDeviceGetMemoryProperties(
     xe_device_handle_t hDevice,                     ///< [in] handle of the device object
     xe_device_memory_properties_t* pMemProperties   ///< [out] query result for compute properties
@@ -396,7 +400,7 @@ typedef struct _xe_device_link_properties_t
 ///         + nullptr == pLinkProperties
 ///         + invalid ordinal. Use ::xeDriverGetDeviceCount for valid range.
 ///     - ::XE_RESULT_ERROR_UNSUPPORTED
-xe_result_t __xecall
+__xedllport xe_result_t __xecall
   xeDeviceGetLinkProperties(
     uint32_t srcOrdinal,                            ///< [in] source device ordinal
     uint32_t dstOrdinal,                            ///< [in] destination device ordinal
@@ -423,7 +427,7 @@ xe_result_t __xecall
 ///         + nullptr == hPeerDevice
 ///         + nullptr == value
 ///     - ::XE_RESULT_ERROR_UNSUPPORTED
-xe_result_t __xecall
+__xedllport xe_result_t __xecall
   xeDeviceCanAccessPeer(
     xe_device_handle_t hDevice,                     ///< [in] handle of the device performing the access
     xe_device_handle_t hPeerDevice,                 ///< [in] handle of the peer device with the allocation
@@ -462,7 +466,7 @@ typedef enum _xe_cache_config_t
 ///         + nullptr == hDevice
 ///         + devices do not support CacheConfig
 ///     - ::XE_RESULT_ERROR_UNSUPPORTED
-xe_result_t __xecall
+__xedllport xe_result_t __xecall
   xeDeviceSetIntermediateCacheConfig(
     xe_device_handle_t hDevice,                     ///< [in] handle of the device 
     xe_cache_config_t CacheConfig                   ///< [in] CacheConfig
@@ -487,10 +491,14 @@ xe_result_t __xecall
 ///         + nullptr == hDevice
 ///         + devices do not support CacheConfig
 ///     - ::XE_RESULT_ERROR_UNSUPPORTED
-xe_result_t __xecall
+__xedllport xe_result_t __xecall
   xeDeviceSetLastLevelCacheConfig(
     xe_device_handle_t hDevice,                     ///< [in] handle of the device 
     xe_cache_config_t CacheConfig                   ///< [in] CacheConfig
     );
+
+#if defined(__cplusplus)
+} // extern "C"
+#endif
 
 #endif // _XE_DEVICE_H

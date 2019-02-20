@@ -37,6 +37,10 @@
 #endif
 #include "xe_common.h"
 
+#if defined(__cplusplus)
+extern "C" {
+#endif
+
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Supported initialization flags
 typedef enum _xe_init_flag_t
@@ -69,7 +73,7 @@ typedef enum _xe_init_flag_t
 ///         + invalid value for flags
 ///     - ::XE_RESULT_ERROR_UNSUPPORTED
 ///     - ::XE_RESULT_ERROR_OUT_OF_HOST_MEMORY
-xe_result_t __xecall
+__xedllport xe_result_t __xecall
   xeDriverInit(
     xe_init_flag_t flags                            ///< [in] initialization flags
     );
@@ -94,9 +98,13 @@ xe_result_t __xecall
 ///     - ::XE_RESULT_ERROR_INVALID_PARAMETER
 ///         + nullptr == version
 ///     - ::XE_RESULT_ERROR_UNSUPPORTED
-xe_result_t __xecall
+__xedllport xe_result_t __xecall
   xeDriverGetVersion(
     uint32_t* version                               ///< [out] driver version
     );
+
+#if defined(__cplusplus)
+} // extern "C"
+#endif
 
 #endif // _XE_DRIVER_H

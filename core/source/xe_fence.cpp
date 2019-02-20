@@ -25,12 +25,12 @@
 *
 * @brief Intel Xe Driver APIs for Fence
 *
-* @cond DEV
 * DO NOT EDIT: generated from /scripts/<type>/fence.yml
-* @endcond
 *
 ******************************************************************************/
 #include "../include/xe_fence.h"
+
+#include <exception>    // @todo: move to common and/or precompiled header
 
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Creates a fence object on the device's command queue.
@@ -55,27 +55,48 @@
 ///         + ::XE_FENCE_DESC_VERSION <= desc->version
 ///     - ::XE_RESULT_ERROR_OUT_OF_HOST_MEMORY
 ///     - ::XE_RESULT_ERROR_OUT_OF_DEVICE_MEMORY
-/*@todo: __declspec(dllexport)*/
-xe_result_t __xecall
+///
+/// @hash {d42e38d25d111753f5f120d80296f494f658063005c79d78865c2e62e1ef1803}
+///
+__xedllexport xe_result_t __xecall
   xeCommandQueueCreateFence(
     xe_command_queue_handle_t hCommandQueue,        ///< [in] handle of command queue
     const xe_fence_desc_t* desc,                    ///< [in] pointer to fence descriptor
     xe_fence_handle_t* phFence                      ///< [out] pointer to handle of fence object created
     )
 {
-    // @todo: check_return(nullptr == get_driver(), XE_RESULT_ERROR_UNINITIALIZED);
+    try
+    {
+        //if( XE_DRIVER_PARAMETER_VALIDATION_LEVEL >= 0 )
+        {
+            // if( nullptr == driver ) return XE_RESULT_ERROR_UNINITIALIZED;
 
-    // Check parameters
-    // @todo: check_return(nullptr == hCommandQueue, XE_RESULT_ERROR_INVALID_PARAMETER);
-    // @todo: check_return(nullptr == desc, XE_RESULT_ERROR_INVALID_PARAMETER);
-    // @todo: check_return(nullptr == phFence, XE_RESULT_ERROR_INVALID_PARAMETER);
-    // @todo: check_return(XE_FENCE_DESC_VERSION <= desc->version, XE_RESULT_ERROR_UNSUPPORTED);
-    /// @begin {d42e38d25d111753f5f120d80296f494f658063005c79d78865c2e62e1ef1803}
+            // Check parameters
+            if( nullptr == hCommandQueue ) return XE_RESULT_ERROR_INVALID_PARAMETER;
+            if( nullptr == desc ) return XE_RESULT_ERROR_INVALID_PARAMETER;
+            if( nullptr == phFence ) return XE_RESULT_ERROR_INVALID_PARAMETER;
+            if( XE_FENCE_DESC_VERSION <= desc->version ) return XE_RESULT_ERROR_UNSUPPORTED;
+        }
+        /// @begin
 
-    // @todo: insert <code> here
+        // @todo: insert <code> here
 
-    /// @end   {d42e38d25d111753f5f120d80296f494f658063005c79d78865c2e62e1ef1803}
-    return XE_RESULT_SUCCESS;
+        /// @end
+        return XE_RESULT_SUCCESS;
+    }
+    catch(xe_result_t& result)
+    {
+        return result;
+    }
+    catch(std::bad_alloc&)
+    {
+        return XE_RESULT_ERROR_OUT_OF_HOST_MEMORY;
+    }
+    catch(std::exception&)
+    {
+        // @todo: pfnOnException(e.what());
+        return XE_RESULT_ERROR_UNKNOWN;
+    }
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -100,22 +121,43 @@ xe_result_t __xecall
 ///         + nullptr == hFence
 ///         + fence is enqueued in a command queue
 ///     - ::XE_RESULT_ERROR_UNSUPPORTED
-/*@todo: __declspec(dllexport)*/
-xe_result_t __xecall
+///
+/// @hash {422e69b1e222a70a59ec747e63eeaa1f7ea8d690dd3d4cefa6940ea6841f901c}
+///
+__xedllexport xe_result_t __xecall
   xeFenceDestroy(
     xe_fence_handle_t hFence                        ///< [in] handle of fence object to destroy
     )
 {
-    // @todo: check_return(nullptr == get_driver(), XE_RESULT_ERROR_UNINITIALIZED);
+    try
+    {
+        //if( XE_DRIVER_PARAMETER_VALIDATION_LEVEL >= 0 )
+        {
+            // if( nullptr == driver ) return XE_RESULT_ERROR_UNINITIALIZED;
 
-    // Check parameters
-    // @todo: check_return(nullptr == hFence, XE_RESULT_ERROR_INVALID_PARAMETER);
-    /// @begin {422e69b1e222a70a59ec747e63eeaa1f7ea8d690dd3d4cefa6940ea6841f901c}
+            // Check parameters
+            if( nullptr == hFence ) return XE_RESULT_ERROR_INVALID_PARAMETER;
+        }
+        /// @begin
 
-    // @todo: insert <code> here
+        // @todo: insert <code> here
 
-    /// @end   {422e69b1e222a70a59ec747e63eeaa1f7ea8d690dd3d4cefa6940ea6841f901c}
-    return XE_RESULT_SUCCESS;
+        /// @end
+        return XE_RESULT_SUCCESS;
+    }
+    catch(xe_result_t& result)
+    {
+        return result;
+    }
+    catch(std::bad_alloc&)
+    {
+        return XE_RESULT_ERROR_OUT_OF_HOST_MEMORY;
+    }
+    catch(std::exception&)
+    {
+        // @todo: pfnOnException(e.what());
+        return XE_RESULT_ERROR_UNKNOWN;
+    }
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -139,8 +181,10 @@ xe_result_t __xecall
 ///     - ::XE_RESULT_ERROR_UNSUPPORTED
 ///     - ::XE_RESULT_NOT_READY
 ///         + timeout expired
-/*@todo: __declspec(dllexport)*/
-xe_result_t __xecall
+///
+/// @hash {77f047fdfb94150f1b0cda9d8cdbbf224f6bbd82021c5595a03bf1a8be2a03b6}
+///
+__xedllexport xe_result_t __xecall
   xeHostWaitOnFence(
     xe_fence_handle_t hFence,                       ///< [in] handle of the fence
     xe_synchronization_mode_t mode,                 ///< [in] synchronization mode
@@ -156,16 +200,35 @@ xe_result_t __xecall
                                                     ///< until complete.
     )
 {
-    // @todo: check_return(nullptr == get_driver(), XE_RESULT_ERROR_UNINITIALIZED);
+    try
+    {
+        //if( XE_DRIVER_PARAMETER_VALIDATION_LEVEL >= 0 )
+        {
+            // if( nullptr == driver ) return XE_RESULT_ERROR_UNINITIALIZED;
 
-    // Check parameters
-    // @todo: check_return(nullptr == hFence, XE_RESULT_ERROR_INVALID_PARAMETER);
-    /// @begin {77f047fdfb94150f1b0cda9d8cdbbf224f6bbd82021c5595a03bf1a8be2a03b6}
+            // Check parameters
+            if( nullptr == hFence ) return XE_RESULT_ERROR_INVALID_PARAMETER;
+        }
+        /// @begin
 
-    // @todo: insert <code> here
+        // @todo: insert <code> here
 
-    /// @end   {77f047fdfb94150f1b0cda9d8cdbbf224f6bbd82021c5595a03bf1a8be2a03b6}
-    return XE_RESULT_SUCCESS;
+        /// @end
+        return XE_RESULT_SUCCESS;
+    }
+    catch(xe_result_t& result)
+    {
+        return result;
+    }
+    catch(std::bad_alloc&)
+    {
+        return XE_RESULT_ERROR_OUT_OF_HOST_MEMORY;
+    }
+    catch(std::exception&)
+    {
+        // @todo: pfnOnException(e.what());
+        return XE_RESULT_ERROR_UNKNOWN;
+    }
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -190,8 +253,10 @@ xe_result_t __xecall
 ///     - ::XE_RESULT_ERROR_UNSUPPORTED
 ///     - ::XE_RESULT_NOT_READY
 ///         + timeout expired
-/*@todo: __declspec(dllexport)*/
-xe_result_t __xecall
+///
+/// @hash {a5f76c9bd49faad0a8ae16401ccdd9cc6e8ae394eb876c8eca18dc6dd3cdae7d}
+///
+__xedllexport xe_result_t __xecall
   xeHostWaitOnMultipleFences(
     uint32_t numFences,                             ///< [in] number of fences in hFences
     xe_fence_handle_t* phFences,                    ///< [in] pointer to array of handles of the fences
@@ -208,16 +273,35 @@ xe_result_t __xecall
                                                     ///< until complete.
     )
 {
-    // @todo: check_return(nullptr == get_driver(), XE_RESULT_ERROR_UNINITIALIZED);
+    try
+    {
+        //if( XE_DRIVER_PARAMETER_VALIDATION_LEVEL >= 0 )
+        {
+            // if( nullptr == driver ) return XE_RESULT_ERROR_UNINITIALIZED;
 
-    // Check parameters
-    // @todo: check_return(nullptr == phFences, XE_RESULT_ERROR_INVALID_PARAMETER);
-    /// @begin {a5f76c9bd49faad0a8ae16401ccdd9cc6e8ae394eb876c8eca18dc6dd3cdae7d}
+            // Check parameters
+            if( nullptr == phFences ) return XE_RESULT_ERROR_INVALID_PARAMETER;
+        }
+        /// @begin
 
-    // @todo: insert <code> here
+        // @todo: insert <code> here
 
-    /// @end   {a5f76c9bd49faad0a8ae16401ccdd9cc6e8ae394eb876c8eca18dc6dd3cdae7d}
-    return XE_RESULT_SUCCESS;
+        /// @end
+        return XE_RESULT_SUCCESS;
+    }
+    catch(xe_result_t& result)
+    {
+        return result;
+    }
+    catch(std::bad_alloc&)
+    {
+        return XE_RESULT_ERROR_OUT_OF_HOST_MEMORY;
+    }
+    catch(std::exception&)
+    {
+        // @todo: pfnOnException(e.what());
+        return XE_RESULT_ERROR_UNKNOWN;
+    }
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -241,22 +325,43 @@ xe_result_t __xecall
 ///     - ::XE_RESULT_ERROR_UNSUPPORTED
 ///     - ::XE_RESULT_NOT_READY
 ///         + not signaled
-/*@todo: __declspec(dllexport)*/
-xe_result_t __xecall
+///
+/// @hash {54d115edc2a41acd09d4b8170e56d9826a2b5706f11c6104736eb5860d23c5bc}
+///
+__xedllexport xe_result_t __xecall
   xeFenceQueryStatus(
     xe_fence_handle_t hFence                        ///< [in] handle of the fence
     )
 {
-    // @todo: check_return(nullptr == get_driver(), XE_RESULT_ERROR_UNINITIALIZED);
+    try
+    {
+        //if( XE_DRIVER_PARAMETER_VALIDATION_LEVEL >= 0 )
+        {
+            // if( nullptr == driver ) return XE_RESULT_ERROR_UNINITIALIZED;
 
-    // Check parameters
-    // @todo: check_return(nullptr == hFence, XE_RESULT_ERROR_INVALID_PARAMETER);
-    /// @begin {54d115edc2a41acd09d4b8170e56d9826a2b5706f11c6104736eb5860d23c5bc}
+            // Check parameters
+            if( nullptr == hFence ) return XE_RESULT_ERROR_INVALID_PARAMETER;
+        }
+        /// @begin
 
-    // @todo: insert <code> here
+        // @todo: insert <code> here
 
-    /// @end   {54d115edc2a41acd09d4b8170e56d9826a2b5706f11c6104736eb5860d23c5bc}
-    return XE_RESULT_SUCCESS;
+        /// @end
+        return XE_RESULT_SUCCESS;
+    }
+    catch(xe_result_t& result)
+    {
+        return result;
+    }
+    catch(std::bad_alloc&)
+    {
+        return XE_RESULT_ERROR_OUT_OF_HOST_MEMORY;
+    }
+    catch(std::exception&)
+    {
+        // @todo: pfnOnException(e.what());
+        return XE_RESULT_ERROR_UNKNOWN;
+    }
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -276,26 +381,47 @@ xe_result_t __xecall
 ///         + nullptr == pTime
 ///         + either fence not enqueued
 ///     - ::XE_RESULT_ERROR_UNSUPPORTED
-/*@todo: __declspec(dllexport)*/
-xe_result_t __xecall
+///
+/// @hash {7a6913da2907de4abac898cc76844049074ef7ca4429d5b63503b960db530c70}
+///
+__xedllexport xe_result_t __xecall
   xeFenceQueryElapsedTime(
     xe_fence_handle_t hFenceStart,                  ///< [in] handle of the fence
     xe_fence_handle_t hFenceEnd,                    ///< [in] handle of the fence
     double_t* pTime                                 ///< [out] time in milliseconds
     )
 {
-    // @todo: check_return(nullptr == get_driver(), XE_RESULT_ERROR_UNINITIALIZED);
+    try
+    {
+        //if( XE_DRIVER_PARAMETER_VALIDATION_LEVEL >= 0 )
+        {
+            // if( nullptr == driver ) return XE_RESULT_ERROR_UNINITIALIZED;
 
-    // Check parameters
-    // @todo: check_return(nullptr == hFenceStart, XE_RESULT_ERROR_INVALID_PARAMETER);
-    // @todo: check_return(nullptr == hFenceEnd, XE_RESULT_ERROR_INVALID_PARAMETER);
-    // @todo: check_return(nullptr == pTime, XE_RESULT_ERROR_INVALID_PARAMETER);
-    /// @begin {7a6913da2907de4abac898cc76844049074ef7ca4429d5b63503b960db530c70}
+            // Check parameters
+            if( nullptr == hFenceStart ) return XE_RESULT_ERROR_INVALID_PARAMETER;
+            if( nullptr == hFenceEnd ) return XE_RESULT_ERROR_INVALID_PARAMETER;
+            if( nullptr == pTime ) return XE_RESULT_ERROR_INVALID_PARAMETER;
+        }
+        /// @begin
 
-    // @todo: insert <code> here
+        // @todo: insert <code> here
 
-    /// @end   {7a6913da2907de4abac898cc76844049074ef7ca4429d5b63503b960db530c70}
-    return XE_RESULT_SUCCESS;
+        /// @end
+        return XE_RESULT_SUCCESS;
+    }
+    catch(xe_result_t& result)
+    {
+        return result;
+    }
+    catch(std::bad_alloc&)
+    {
+        return XE_RESULT_ERROR_OUT_OF_HOST_MEMORY;
+    }
+    catch(std::exception&)
+    {
+        // @todo: pfnOnException(e.what());
+        return XE_RESULT_ERROR_UNKNOWN;
+    }
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -316,21 +442,42 @@ xe_result_t __xecall
 ///     - ::XE_RESULT_ERROR_INVALID_PARAMETER
 ///         + nullptr == hFence
 ///     - ::XE_RESULT_ERROR_UNSUPPORTED
-/*@todo: __declspec(dllexport)*/
-xe_result_t __xecall
+///
+/// @hash {7d06912d2e703c85cf1c3bb4e5b71884212ddfcc87d33f46c5463b83293ed855}
+///
+__xedllexport xe_result_t __xecall
   xeFenceReset(
     xe_fence_handle_t hFence                        ///< [in] handle of the fence
     )
 {
-    // @todo: check_return(nullptr == get_driver(), XE_RESULT_ERROR_UNINITIALIZED);
+    try
+    {
+        //if( XE_DRIVER_PARAMETER_VALIDATION_LEVEL >= 0 )
+        {
+            // if( nullptr == driver ) return XE_RESULT_ERROR_UNINITIALIZED;
 
-    // Check parameters
-    // @todo: check_return(nullptr == hFence, XE_RESULT_ERROR_INVALID_PARAMETER);
-    /// @begin {7d06912d2e703c85cf1c3bb4e5b71884212ddfcc87d33f46c5463b83293ed855}
+            // Check parameters
+            if( nullptr == hFence ) return XE_RESULT_ERROR_INVALID_PARAMETER;
+        }
+        /// @begin
 
-    // @todo: insert <code> here
+        // @todo: insert <code> here
 
-    /// @end   {7d06912d2e703c85cf1c3bb4e5b71884212ddfcc87d33f46c5463b83293ed855}
-    return XE_RESULT_SUCCESS;
+        /// @end
+        return XE_RESULT_SUCCESS;
+    }
+    catch(xe_result_t& result)
+    {
+        return result;
+    }
+    catch(std::bad_alloc&)
+    {
+        return XE_RESULT_ERROR_OUT_OF_HOST_MEMORY;
+    }
+    catch(std::exception&)
+    {
+        // @todo: pfnOnException(e.what());
+        return XE_RESULT_ERROR_UNKNOWN;
+    }
 }
 

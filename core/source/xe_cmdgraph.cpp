@@ -25,12 +25,12 @@
 *
 * @brief Intel Xe Driver APIs for CommandGraph
 *
-* @cond DEV
 * DO NOT EDIT: generated from /scripts/<type>/cmdgraph.yml
-* @endcond
 *
 ******************************************************************************/
 #include "../include/xe_cmdgraph.h"
+
+#include <exception>    // @todo: move to common and/or precompiled header
 
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Creates a command graph on the device for submitting commands to any
@@ -52,27 +52,48 @@
 ///         + ::XE_COMMAND_GRAPH_DESC_VERSION <= desc->version
 ///     - ::XE_RESULT_ERROR_OUT_OF_HOST_MEMORY
 ///     - ::XE_RESULT_ERROR_OUT_OF_DEVICE_MEMORY
-/*@todo: __declspec(dllexport)*/
-xe_result_t __xecall
+///
+/// @hash {3b85e08ac6895a0dec2d64fbfb9c2e5ff0dc065fc10cfdf4e13e2903a6f626ca}
+///
+__xedllexport xe_result_t __xecall
   xeDeviceCreateCommandGraph(
     xe_device_handle_t hDevice,                     ///< [in] handle of the device object
     const xe_command_graph_desc_t* desc,            ///< [in] pointer to command graph descriptor
     xe_command_graph_handle_t* phCommandGraph       ///< [out] pointer to handle of command graph object created
     )
 {
-    // @todo: check_return(nullptr == get_driver(), XE_RESULT_ERROR_UNINITIALIZED);
+    try
+    {
+        //if( XE_DRIVER_PARAMETER_VALIDATION_LEVEL >= 0 )
+        {
+            // if( nullptr == driver ) return XE_RESULT_ERROR_UNINITIALIZED;
 
-    // Check parameters
-    // @todo: check_return(nullptr == hDevice, XE_RESULT_ERROR_INVALID_PARAMETER);
-    // @todo: check_return(nullptr == desc, XE_RESULT_ERROR_INVALID_PARAMETER);
-    // @todo: check_return(nullptr == phCommandGraph, XE_RESULT_ERROR_INVALID_PARAMETER);
-    // @todo: check_return(XE_COMMAND_GRAPH_DESC_VERSION <= desc->version, XE_RESULT_ERROR_UNSUPPORTED);
-    /// @begin {3b85e08ac6895a0dec2d64fbfb9c2e5ff0dc065fc10cfdf4e13e2903a6f626ca}
+            // Check parameters
+            if( nullptr == hDevice ) return XE_RESULT_ERROR_INVALID_PARAMETER;
+            if( nullptr == desc ) return XE_RESULT_ERROR_INVALID_PARAMETER;
+            if( nullptr == phCommandGraph ) return XE_RESULT_ERROR_INVALID_PARAMETER;
+            if( XE_COMMAND_GRAPH_DESC_VERSION <= desc->version ) return XE_RESULT_ERROR_UNSUPPORTED;
+        }
+        /// @begin
 
-    // @todo: insert <code> here
+        // @todo: insert <code> here
 
-    /// @end   {3b85e08ac6895a0dec2d64fbfb9c2e5ff0dc065fc10cfdf4e13e2903a6f626ca}
-    return XE_RESULT_SUCCESS;
+        /// @end
+        return XE_RESULT_SUCCESS;
+    }
+    catch(xe_result_t& result)
+    {
+        return result;
+    }
+    catch(std::bad_alloc&)
+    {
+        return XE_RESULT_ERROR_OUT_OF_HOST_MEMORY;
+    }
+    catch(std::exception&)
+    {
+        // @todo: pfnOnException(e.what());
+        return XE_RESULT_ERROR_UNKNOWN;
+    }
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -90,22 +111,43 @@ xe_result_t __xecall
 ///     - ::XE_RESULT_ERROR_INVALID_PARAMETER
 ///         + nullptr == hCommandGraph
 ///     - ::XE_RESULT_ERROR_UNSUPPORTED
-/*@todo: __declspec(dllexport)*/
-xe_result_t __xecall
+///
+/// @hash {ca29e107ea24beb8541932fc6be7c98805f20ced8106a62fc76cfa3381110226}
+///
+__xedllexport xe_result_t __xecall
   xeCommandGraphDestroy(
     xe_command_graph_handle_t hCommandGraph         ///< [in] handle of command graph object to destroy
     )
 {
-    // @todo: check_return(nullptr == get_driver(), XE_RESULT_ERROR_UNINITIALIZED);
+    try
+    {
+        //if( XE_DRIVER_PARAMETER_VALIDATION_LEVEL >= 0 )
+        {
+            // if( nullptr == driver ) return XE_RESULT_ERROR_UNINITIALIZED;
 
-    // Check parameters
-    // @todo: check_return(nullptr == hCommandGraph, XE_RESULT_ERROR_INVALID_PARAMETER);
-    /// @begin {ca29e107ea24beb8541932fc6be7c98805f20ced8106a62fc76cfa3381110226}
+            // Check parameters
+            if( nullptr == hCommandGraph ) return XE_RESULT_ERROR_INVALID_PARAMETER;
+        }
+        /// @begin
 
-    // @todo: insert <code> here
+        // @todo: insert <code> here
 
-    /// @end   {ca29e107ea24beb8541932fc6be7c98805f20ced8106a62fc76cfa3381110226}
-    return XE_RESULT_SUCCESS;
+        /// @end
+        return XE_RESULT_SUCCESS;
+    }
+    catch(xe_result_t& result)
+    {
+        return result;
+    }
+    catch(std::bad_alloc&)
+    {
+        return XE_RESULT_ERROR_OUT_OF_HOST_MEMORY;
+    }
+    catch(std::exception&)
+    {
+        // @todo: pfnOnException(e.what());
+        return XE_RESULT_ERROR_UNKNOWN;
+    }
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -126,22 +168,43 @@ xe_result_t __xecall
 ///     - ::XE_RESULT_ERROR_INVALID_PARAMETER
 ///         + nullptr == hCommandGraph
 ///     - ::XE_RESULT_ERROR_UNSUPPORTED
-/*@todo: __declspec(dllexport)*/
-xe_result_t __xecall
+///
+/// @hash {85412d12c54a9c3632a9e390efce8ad3ad8fbccc1401d7970387baa3b197c3da}
+///
+__xedllexport xe_result_t __xecall
   xeCommandGraphClose(
     xe_command_graph_handle_t hCommandGraph         ///< [in] handle of command graph object to close
     )
 {
-    // @todo: check_return(nullptr == get_driver(), XE_RESULT_ERROR_UNINITIALIZED);
+    try
+    {
+        //if( XE_DRIVER_PARAMETER_VALIDATION_LEVEL >= 0 )
+        {
+            // if( nullptr == driver ) return XE_RESULT_ERROR_UNINITIALIZED;
 
-    // Check parameters
-    // @todo: check_return(nullptr == hCommandGraph, XE_RESULT_ERROR_INVALID_PARAMETER);
-    /// @begin {85412d12c54a9c3632a9e390efce8ad3ad8fbccc1401d7970387baa3b197c3da}
+            // Check parameters
+            if( nullptr == hCommandGraph ) return XE_RESULT_ERROR_INVALID_PARAMETER;
+        }
+        /// @begin
 
-    // @todo: insert <code> here
+        // @todo: insert <code> here
 
-    /// @end   {85412d12c54a9c3632a9e390efce8ad3ad8fbccc1401d7970387baa3b197c3da}
-    return XE_RESULT_SUCCESS;
+        /// @end
+        return XE_RESULT_SUCCESS;
+    }
+    catch(xe_result_t& result)
+    {
+        return result;
+    }
+    catch(std::bad_alloc&)
+    {
+        return XE_RESULT_ERROR_OUT_OF_HOST_MEMORY;
+    }
+    catch(std::exception&)
+    {
+        // @todo: pfnOnException(e.what());
+        return XE_RESULT_ERROR_UNKNOWN;
+    }
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -160,21 +223,42 @@ xe_result_t __xecall
 ///     - ::XE_RESULT_ERROR_INVALID_PARAMETER
 ///         + nullptr == hCommandGraph
 ///     - ::XE_RESULT_ERROR_UNSUPPORTED
-/*@todo: __declspec(dllexport)*/
-xe_result_t __xecall
+///
+/// @hash {528e83125c070c5e70c5fd5f376cb08b0feb42d3b1b83e7fc7eb656c2277e709}
+///
+__xedllexport xe_result_t __xecall
   xeCommandGraphReset(
     xe_command_graph_handle_t hCommandGraph         ///< [in] handle of command graph object to reset
     )
 {
-    // @todo: check_return(nullptr == get_driver(), XE_RESULT_ERROR_UNINITIALIZED);
+    try
+    {
+        //if( XE_DRIVER_PARAMETER_VALIDATION_LEVEL >= 0 )
+        {
+            // if( nullptr == driver ) return XE_RESULT_ERROR_UNINITIALIZED;
 
-    // Check parameters
-    // @todo: check_return(nullptr == hCommandGraph, XE_RESULT_ERROR_INVALID_PARAMETER);
-    /// @begin {528e83125c070c5e70c5fd5f376cb08b0feb42d3b1b83e7fc7eb656c2277e709}
+            // Check parameters
+            if( nullptr == hCommandGraph ) return XE_RESULT_ERROR_INVALID_PARAMETER;
+        }
+        /// @begin
 
-    // @todo: insert <code> here
+        // @todo: insert <code> here
 
-    /// @end   {528e83125c070c5e70c5fd5f376cb08b0feb42d3b1b83e7fc7eb656c2277e709}
-    return XE_RESULT_SUCCESS;
+        /// @end
+        return XE_RESULT_SUCCESS;
+    }
+    catch(xe_result_t& result)
+    {
+        return result;
+    }
+    catch(std::bad_alloc&)
+    {
+        return XE_RESULT_ERROR_OUT_OF_HOST_MEMORY;
+    }
+    catch(std::exception&)
+    {
+        // @todo: pfnOnException(e.what());
+        return XE_RESULT_ERROR_UNKNOWN;
+    }
 }
 
