@@ -3,12 +3,9 @@
 #include "driver.h"
 #include "device.h"
 #include "event.h"
+#include "memory.h"
 #include "mock_module.h"
 #include "gtest/gtest.h"
-
-//TEMPORARY
-#include "memory_manager.h"
-#include "graphics_allocation.h"
 
 namespace xe {
 namespace ult {
@@ -129,20 +126,32 @@ TEST(sample, helloWorld) {
                                                 &functionArgs);
     ASSERT_EQ(XE_RESULT_SUCCESS, result);
 
-    auto device = whitebox_cast(Device::fromHandle(hDevice));
-    auto memoryManager = device->getMemoryManager();
-
-    // TODO: Replace with xe memory allocation
+    xe_mem_allocator_handle_t hMemAllocHandle = {};
+    xe_device_mem_alloc_flag_t deviceFlags = {};
+    xe_host_mem_alloc_flag_t hostFlags = {};
     size_t bufferSize = 4096u;
-    auto destBuffer = memoryManager->allocateDeviceMemory(bufferSize, 4096u);
-    auto dest = destBuffer->getGpuAddress();
+    void *dest = nullptr;
+    result = ::xe::xeSharedMemAlloc(hMemAllocHandle,
+                                    hDevice,
+                                    deviceFlags,
+                                    hostFlags,
+                                    bufferSize,
+                                    4096u,
+                                    &dest);
+    ASSERT_EQ(XE_RESULT_SUCCESS, result);
 
     result = ::xe::xeFunctionArgsSetValue(functionArgs, 0, sizeof(dest), &dest);
     ASSERT_EQ(XE_RESULT_SUCCESS, result);
 
-    // TODO: Replace with xe memory allocation
-    auto srcBuffer = memoryManager->allocateDeviceMemory(bufferSize, 4096u);
-    auto src = srcBuffer->getGpuAddress();
+    void *src = nullptr;
+    result = ::xe::xeSharedMemAlloc(hMemAllocHandle,
+                                    hDevice,
+                                    deviceFlags,
+                                    hostFlags,
+                                    bufferSize,
+                                    4096u,
+                                    &src);
+    ASSERT_EQ(XE_RESULT_SUCCESS, result);
     memset(reinterpret_cast<void *>(src), 0xbf, bufferSize);
 
     result = ::xe::xeFunctionArgsSetValue(functionArgs, 1, sizeof(src), &src);
@@ -172,14 +181,17 @@ TEST(sample, helloWorld) {
                                                    (xe_fence_handle_t)0);
     ASSERT_EQ(XE_RESULT_SUCCESS, result);
 
+    result = xeMemFree(hMemAllocHandle, src);
+    ASSERT_EQ(XE_RESULT_SUCCESS, result);
+
+    result = xeMemFree(hMemAllocHandle, dest);
+    ASSERT_EQ(XE_RESULT_SUCCESS, result);
+
     result = xe::xeCommandListDestroy(commandList);
     ASSERT_EQ(XE_RESULT_SUCCESS, result);
 
     result = xeCommandQueueDestroy(commandQueue);
     ASSERT_EQ(XE_RESULT_SUCCESS, result);
-
-    memoryManager->freeMemory(srcBuffer);
-    memoryManager->freeMemory(destBuffer);
 }
 
 } // namespace ult
