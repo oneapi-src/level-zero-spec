@@ -1,7 +1,6 @@
 --- #--------------------------------------------------------------------------
 type: header
 desc: "Intel $Xx Driver APIs"
-class: $xDriver
 --- #--------------------------------------------------------------------------
 type: enum
 desc: "Supported initialization flags"

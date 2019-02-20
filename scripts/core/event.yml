@@ -1,7 +1,6 @@
 --- #--------------------------------------------------------------------------
 type: header
 desc: "Intel $Xx Driver APIs for Event"
-class: $xEvent
 --- #--------------------------------------------------------------------------
 type: macro
 desc: "API version of $x_event_desc_t"
@@ -374,3 +373,14 @@ params:
     - type: $x_event_handle_t
       name: hEvent
       desc: "[in] handle of the event"
+--- #--------------------------------------------------------------------------
+type: class
+desc: "C++ wrapper for event"
+name: $xEvent
+members:
+    - type: $x_event_handle_t
+      name: handle
+      desc: "handle of event object"
+    - type: $x_event_desc_t
+      name: desc
+      desc: "descriptor of the event object"

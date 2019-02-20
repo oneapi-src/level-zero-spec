@@ -1,7 +1,6 @@
 --- #--------------------------------------------------------------------------
 type: header
 desc: "Intel $Xx Driver APIs for Semaphore"
-class: $xSemaphore
 --- #--------------------------------------------------------------------------
 type: macro
 desc: "API version of $x_semaphore_desc_t"
@@ -150,3 +149,14 @@ params:
     - type: $x_semaphore_handle_t
       name: hSemaphore
       desc: "[in] handle of the semaphore"
+--- #--------------------------------------------------------------------------
+type: class
+desc: "C++ wrapper for semaphore"
+name: $xSemaphore
+members:
+    - type: $x_semaphore_handle_t
+      name: handle
+      desc: "handle of semaphore object"
+    - type: $x_semaphore_desc_t
+      name: desc
+      desc: "descriptor of the semaphore object"

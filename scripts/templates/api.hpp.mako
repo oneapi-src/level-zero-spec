@@ -37,7 +37,6 @@ from templates import helper as th
 #define _${X}_${name.upper()}_HPP
 #if defined(__cplusplus)
 #pragma once
-#endif
 %if re.match(r"common", name):
 #include "${x}_common.h"
 %else:
@@ -47,7 +46,8 @@ from templates import helper as th
 namespace ${x}
 {
 %for obj in objects:
-    %for cls in obj['class']:
+%for cls in obj['class']:
+%if not re.match(r"macro", obj['type']) and not re.match(r"function", obj['type']):
     ///////////////////////////////////////////////////////////////////////////////
     %if 'condition' in obj:
     #if ${th.subx(x,obj['condition'])}
@@ -60,7 +60,7 @@ namespace ${x}
     %endfor
     ## TYPEDEF ####################################################################
     %if re.match(r"typedef", obj['type']):
-    using ${th.subx(None, obj['name'])} = ${th.subx(x, obj['name'])};
+    using ${th.subx(None, obj['name'])} = ::${th.subx(x, obj['name'])};
     ## ENUM #######################################################################
     %elif re.match(r"enum", obj['type']):
     enum class ${th.subx(None, obj['name'])}
@@ -79,25 +79,29 @@ namespace ${x}
         %endfor
 
     };
-    ## FUNCTION ###################################################################
-    %elif re.match(r"function", obj['type']):
-    /// 
-    %for line in th.make_return_lines(None, obj, cls):
-    /// ${line}
-    %endfor
-    inline void
-      ${th.make_func_name(None, obj, cls)}(
-        %for line in th.make_param_lines(None, obj, cls):
+    ## CLASS ###################################################################
+    %elif re.match(r"class", obj['type']):
+    class ${th.subx(None, obj['name'])}
+    {
+    protected:
+        %for line in th.make_member_lines(None, obj):
         ${line}
         %endfor
-        )
-    {
-        auto result = ::${th.make_func_name(x, obj, cls)}(
-            %for line in th.make_param_lines(None, obj, cls):
+
+    public:
+        %for f in th.get_member_funcs(obj['name'], specs):
+        ///////////////////////////////////////////////////////////////////////////////
+        inline ${x}_result_t ${th.subx(None, f['name'])}(
+            %for line in th.make_param_lines(None, f, 'this'):
             ${line}
             %endfor
-            );
-    }
+            )
+        {
+            ::${th.make_func_name(x, f, obj['name'])}( ${th.make_param_call_str("handle", None, f, 'this')} );
+        }
+
+        %endfor
+    };
     ## HANDLE #####################################################################
     %elif re.match(r"handle", obj['type']):
     using ${th.subx(None, obj['name'])} = ${th.subx(x, obj['name'])};
@@ -106,7 +110,9 @@ namespace ${x}
     #endif // ${th.subx(x,obj['condition'])}
     %endif
 
-    %endfor
+%endif
+%endfor
 %endfor
 } // namespace ${x}
+#endif // defined(__cplusplus)
 #endif // _${X}_${name.upper()}_HPP

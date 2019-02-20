@@ -1,7 +1,6 @@
 --- #--------------------------------------------------------------------------
 type: header
 desc: "Intel $Xx Driver APIs for Module"
-class: [ $xModule,  $xFunction, $xFunctionArgs]
 --- #--------------------------------------------------------------------------
 type: macro
 desc: API version of $x_module_desc_t
@@ -561,3 +560,33 @@ params:
     - type: "void*"
       name: pUserData
       desc: "[in] pointer to user data to pass to host function."
+--- #--------------------------------------------------------------------------
+type: class
+desc: "C++ wrapper for module"
+name: $xModule
+members:
+    - type: $x_module_handle_t
+      name: handle
+      desc: "handle of module object"
+    - type: $x_module_desc_t
+      name: desc
+      desc: "descriptor of the module object"
+--- #--------------------------------------------------------------------------
+type: class
+desc: "C++ wrapper for function"
+name: $xFunction
+members:
+    - type: $x_function_handle_t
+      name: handle
+      desc: "handle of function object"
+    - type: $x_function_desc_t
+      name: desc
+      desc: "descriptor of the function object"
+--- #--------------------------------------------------------------------------
+type: class
+desc: "C++ wrapper for function arguments"
+name: $xFunctionArgs
+members:
+    - type: $x_function_args_handle_t
+      name: handle
+      desc: "handle of function arguments object"

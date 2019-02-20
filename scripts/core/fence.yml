@@ -1,7 +1,6 @@
 --- #--------------------------------------------------------------------------
 type: header
 desc: "Intel $Xx Driver APIs for Fence"
-class: $xFence
 --- #--------------------------------------------------------------------------
 type: macro
 desc: "API version of $x_fence_desc_t"
@@ -195,3 +194,14 @@ params:
     - type: $x_fence_handle_t
       name: hFence
       desc: "[in] handle of the fence"
+--- #--------------------------------------------------------------------------
+type: class
+desc: "C++ wrapper for fence"
+name: $xFence
+members:
+    - type: $x_fence_handle_t
+      name: handle
+      desc: "handle of fence object"
+    - type: $x_fence_desc_t
+      name: desc
+      desc: "descriptor of the fence object"

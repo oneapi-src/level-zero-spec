@@ -1,7 +1,6 @@
 --- #--------------------------------------------------------------------------
 type: header
 desc: "Intel $Xx Driver APIs for Device"
-class: $xDevice
 --- #--------------------------------------------------------------------------
 type: function
 desc: "Reports the number of devices"
@@ -472,3 +471,11 @@ params:
 returns:
     - $X_RESULT_ERROR_INVALID_PARAMETER:
         - "devices do not support CacheConfig"
+--- #--------------------------------------------------------------------------
+type: class
+desc: "C++ wrapper for device"
+name: $xDevice
+members:
+    - type: $x_device_handle_t
+      name: handle
+      desc: "handle of device object"

@@ -1,7 +1,6 @@
 --- #--------------------------------------------------------------------------
 type: header
 desc: "Intel $Xx Driver APIs for CommandGraph"
-class: $xCommandGraph
 --- #--------------------------------------------------------------------------
 type: macro
 desc: "API version of $x_command_graph_desc_t"
@@ -85,3 +84,14 @@ params:
     - type: $x_command_graph_handle_t
       name: hCommandGraph
       desc: "[in] handle of command graph object to reset"
+--- #--------------------------------------------------------------------------
+type: class
+desc: "C++ wrapper for command graph"
+name: $xCommandGraph
+members:
+    - type: $x_command_graph_handle_t
+      name: handle
+      desc: "handle of command graph object"
+    - type: $x_command_graph_desc_t
+      name: desc
+      desc: "descriptor of the command graph object"

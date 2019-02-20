@@ -51,6 +51,7 @@ extern "C" {
 
 %for obj in objects:
 %for cls in obj['class']:
+%if not re.match(r"class", obj['type']):
 ///////////////////////////////////////////////////////////////////////////////
 %if 'condition' in obj:
 #if ${th.subx(x,obj['condition'])}
@@ -117,6 +118,7 @@ typedef struct _${th.subx(x, obj['name'])} *${th.subx(x, obj['name'])};
 #endif // ${th.subx(x,obj['condition'])}
 %endif
 
+%endif
 %endfor
 %endfor
 #if defined(__cplusplus)

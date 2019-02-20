@@ -90,7 +90,7 @@ def make_etor_lines(repl, obj, trim=False):
     return lines
 
 """
-    returns a list of strings for each member of a structure
+    returns a list of strings for each member of a structure or class
 """
 def make_member_lines(repl, obj, init=False):
     lines = []
@@ -112,9 +112,14 @@ def make_member_lines(repl, obj, init=False):
 """
     returns a list of strings for each parameter of a function
 """
-def make_param_lines(repl, obj, cls):
+def make_param_lines(repl, obj, filter):
     lines = []
-    params = filter_items(obj['params'], 'class', cls)
+
+    if re.match(r"this", filter):
+        params = filter_items(obj['params'][1:], 'class', filter)
+    else:
+        params = filter_items(obj['params'], 'class', filter)
+
     for i, item in enumerate(params):
         name = subx(repl, item['name'])
         type = subx(repl, item['type'])
@@ -128,6 +133,23 @@ def make_param_lines(repl, obj, cls):
             lines.append("%s///< %s"%(append_ws(prologue, 48), line))
             prologue = ""
     return lines
+
+"""
+    returns a string of parameter names for passing to a function
+"""
+def make_param_call_str(prologue, repl, obj, filter):
+    str = prologue
+
+    if re.match(r"this", filter):
+        params = filter_items(obj['params'][1:], 'class', filter)
+    else:
+        params = filter_items(obj['params'], 'class', filter)
+
+    for item in params:
+        if len(str) > 0:
+            str += ", "
+        str += subx(repl, item['name'])
+    return str
 
 """
     returns a list of strings for the description
@@ -177,14 +199,14 @@ def make_details_lines(repl, obj):
 """
     returns a dict of auto-generated parameter validation checks
 """
-def make_param_checks(repl, obj, cls, tag=False):
+def make_param_checks(repl, obj, filter, tag=False):
     checks = {}
     eip = subx(repl, "$X_RESULT_ERROR_INVALID_PARAMETER", tag)
     eus = subx(repl, "$X_RESULT_ERROR_UNSUPPORTED", tag)
     checks[eip] = []
     checks[eus] = []
 
-    params = filter_items(obj['params'], 'class', cls)
+    params = filter_items(obj['params'], 'class', filter)
     for item in params:
         if not re.match(r".*\[optional\].*", item['desc']): #skip optional params
             if re.match(r".*\w+\*+", item['type']): # pointer-type
@@ -199,7 +221,7 @@ def make_param_checks(repl, obj, cls, tag=False):
 """
     returns a list of strings for possible return values
 """
-def make_return_lines(repl, obj, cls):
+def make_return_lines(repl, obj, filter):
     lines = []
     lines.append("@returns")
     lines.append("    - %s"%subx(repl, "$X_RESULT_SUCCESS", True))
@@ -207,7 +229,7 @@ def make_return_lines(repl, obj, cls):
     lines.append("    - %s"%subx(repl, "$X_RESULT_ERROR_DEVICE_LOST", True))
 
     # generate default checks
-    gen = make_param_checks(repl, obj, cls, True)
+    gen = make_param_checks(repl, obj, filter, True)
 
     # merge user-specified values
     if 'returns' in obj:
@@ -234,5 +256,21 @@ def make_return_lines(repl, obj, cls):
 """
     returns the name of a function
 """
-def make_func_name(repl, obj, cls):
-    return subx(repl, "%s%s"%(cls, obj['name']))
+def make_func_name(repl, obj, cls, cpp=False):
+    if cpp:
+        return subx(repl, "%s::%s"%(cls, obj['name']))
+    else:
+        return subx(repl, "%s%s"%(cls, obj['name']))
+
+"""
+    returns a list of all function objects that belong to the class
+"""
+def get_member_funcs(cls, specs):
+    # find all the functions that belong to this class
+    funcs = []
+    for s in specs:
+        for obj in s['objects']:
+            if re.match(r"function", obj['type']):
+                if cls in obj['class']:
+                    funcs.append(obj)
+    return funcs

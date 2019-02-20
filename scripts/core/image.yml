@@ -1,7 +1,6 @@
 --- #--------------------------------------------------------------------------
 type: header
 desc: "Intel $Xx Driver APIs for Images"
-class: $xImage
 --- #--------------------------------------------------------------------------
 type: macro
 desc: "API version of $x_image_desc_t"
@@ -131,3 +130,14 @@ params:
     - type: $x_image_handle_t
       name: hImage
       desc: "[in] handle of image object to destroy"
+--- #--------------------------------------------------------------------------
+type: class
+desc: "C++ wrapper for image"
+name: $xImage
+members:
+    - type: $x_image_handle_t
+      name: handle
+      desc: "handle of image object"
+    - type: $x_image_desc_t
+      name: desc
+      desc: "descriptor of the image object"

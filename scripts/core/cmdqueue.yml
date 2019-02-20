@@ -1,7 +1,6 @@
 --- #--------------------------------------------------------------------------
 type: header
 desc: "Intel $Xx Driver APIs for Command Queue"
-class: $xCommandQueue
 --- #--------------------------------------------------------------------------
 type: macro
 desc: API version of $x_command_queue_desc_t
@@ -170,3 +169,14 @@ params:
 returns:
     - $X_RESULT_NOT_READY:
        - "timeout expired"
+--- #--------------------------------------------------------------------------
+type: class
+desc: "C++ wrapper for command queue"
+name: $xCommandQueue
+members:
+    - type: $x_command_queue_handle_t
+      name: handle
+      desc: "handle of command queue object"
+    - type: $x_command_queue_desc_t
+      name: desc
+      desc: "descriptor of the command queue object"
