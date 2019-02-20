@@ -1,8 +1,17 @@
 set(TARGET_NAME ${PROJECT_NAME}_unit_tests)
 
+include(gen8.cmake)
+include(gen9.cmake)
+include(gen10.cmake)
+include(gen11.cmake)
+include(gen12lp.cmake)
+include(gen12hp.cmake)
+
 add_executable(${TARGET_NAME}
     main.cpp
     test_event.cpp
+    ${HW_SOURCES_ULT}
+    $<TARGET_OBJECTS:aub_stream_all_hw>
 )
 
 if(COMPUTE_RUNTIME_SUPPORT)
@@ -71,13 +80,6 @@ if(COMPUTE_RUNTIME_SUPPORT)
             ${COMPUTE_RUNTIME_HW_ENABLE_ULT}
     )
 
-    include(gen8.cmake)
-    include(gen9.cmake)
-    include(gen10.cmake)
-    include(gen11.cmake)
-    include(gen12lp.cmake)
-    include(gen12hp.cmake)
-
     target_compile_definitions(${TARGET_NAME}
         PUBLIC
             DEFAULT_PRODUCT_FAMILY=${DEFAULT_PRODUCT_FAMILY}
@@ -92,7 +94,6 @@ if(COMPUTE_RUNTIME_SUPPORT)
     if(AUB_STREAM_SUPPORT)
         target_link_libraries(${TARGET_NAME} 
             aub_stream
-            aub_stream_all_hw
         )
     endif()
 
