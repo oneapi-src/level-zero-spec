@@ -16,6 +16,8 @@ extern TestMode testMode;
 namespace xe {
 namespace ult {
 
+extern ::testing::Environment *environment;
+
 static OCLRT::HardwareInfo hwInfo = {};
 static OCLRT::FeatureTable skuTable = {};
 static GT_SYSTEM_INFO sysInfo = {};
@@ -51,8 +53,6 @@ struct Environment : public ::testing::Environment {
 
 struct InitializeEnvironment {
     InitializeEnvironment() {
-        extern ::testing::Environment *environment;
-
         environment = new Environment;
     }
 };
