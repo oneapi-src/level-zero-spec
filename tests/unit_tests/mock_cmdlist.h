@@ -40,7 +40,7 @@ struct Mock<CommandList> : public CommandList {
     MOCK_METHOD1(encodeSignalEvent, xe_result_t(xe_event_handle_t hEvent));
     MOCK_METHOD1(encodeWaitOnEvent, xe_result_t(xe_event_handle_t hEvent));
 
-    void *batchBuffer = nullptr;
+    uint8_t *batchBuffer = nullptr;
     GraphicsAllocation *mockAllocation = nullptr;
 };
 

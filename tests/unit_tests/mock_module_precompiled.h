@@ -191,8 +191,7 @@ inline void writeMockData(const std::string sourceOrigin, std::string &mockName,
                           std::ostream &out) {
     out << "// This is a generated file\n";
     out << "// Check " << sourceOrigin << " for details\n\n";
-    out << "#pragma once\n\n"
-            "#include \"tests/unit_tests/mock_module_precompiled.h\"\n"
+    out << "#include \"tests/unit_tests/mock_module_precompiled.h\"\n"
             "\n"
             "namespace xe {\n"
             "namespace ult {\n\n";

@@ -1,4 +1,5 @@
 #pragma once
+#include <cstddef>
 
 namespace xe {
 struct GraphicsAllocation;

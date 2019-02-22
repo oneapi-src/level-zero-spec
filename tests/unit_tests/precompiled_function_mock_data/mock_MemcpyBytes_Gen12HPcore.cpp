@@ -1,8 +1,6 @@
 // This is a generated file
 // Check xe::ult::ModuleCreate_onlineCompilationModuleTest_Test::TestBody for details
 
-#pragma once
-
 #include "tests/unit_tests/mock_module_precompiled.h"
 
 namespace xe {
