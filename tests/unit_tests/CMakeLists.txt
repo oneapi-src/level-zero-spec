@@ -101,6 +101,12 @@ if(COMPUTE_RUNTIME_SUPPORT)
     add_subdirectory(precompiled_function_mock_data)
     
     set(CREATE_DLL_FROM_ULT ON)
+
+    #Temporarily disable DLL from Linux builds until fixed.
+    if(NOT MSVC)
+        set(CREATE_DLL_FROM_ULT OFF)
+    endif()
+
     if(CREATE_DLL_FROM_ULT)
         get_target_property(ult_sources ${TARGET_NAME} SOURCES)
         get_target_property(ult_includes ${TARGET_NAME} INCLUDE_DIRECTORIES)
