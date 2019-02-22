@@ -12,10 +12,7 @@ generate_html:
 
 pages:
   stage: deploy
-  script:
-  - mkdir .public
-  - cp -r html/* .public
-  - mv .public public
+  script: ci/publish_docs.cmd
   artifacts:
     paths:
     - public

@@ -19,7 +19,7 @@ ${"##"} Table of Contents
 
 ${"#"} <a name="dnd">Driver and Device</a>
 The following diagram illustrates the hierarchy of devices to the driver:  
-![Driver](../images/core_driver.png?raw=true)  
+![Driver](./images/core_driver.png?raw=true)  
 @image latex core_driver.png
 
 ${"##"} Driver
@@ -87,7 +87,7 @@ has local memory that is shared to other tiles through these interconnects. The 
 as sub-devices and there are functions to query and obtain a sub-device. Outside of these functions
 there are no distinction between sub-devices and devices. 
 
-![Subdevice](../images/core_subdevice.png?raw=true)  
+![Subdevice](./images/core_subdevice.png?raw=true)  
 @image latex core_subdevice.png
 
 Query device properties using ::${x}DeviceGetProperties to confirm subdevices are supported with
@@ -146,7 +146,7 @@ The following are the motivations for seperating a command queue from a command 
 - Command list submission can occur to more than one command queue.
 
 The following diagram illustrates the hierarchy of command lists and command queues to the device:  
-![Queue](../images/core_queue.png?raw=true)  
+![Queue](./images/core_queue.png?raw=true)  
 @image latex core_queue.png
 
 ${"##"} Command Queues
@@ -300,7 +300,7 @@ There are three types of synchronization primitives:
 3. [**Semaphores**](#sema) - used for fine-grain control of command lists execution across multiple, simultaneous command queues within a device.
 
 The following diagram illustrats the relationship of capabilities of these types of synchronization primitives:  
-![Graph](../images/core_sync.png?raw=true)  
+![Graph](./images/core_sync.png?raw=true)  
 @image latex core_sync.png
 
 The following are the motivations for seperating the different types of synchronization primitives:
@@ -328,7 +328,7 @@ The primary usage model(s) for fences are to notify the Host when a command list
 - Explicit memory residency.
 
 The following diagram illustrates an example of fences:  
-![Fence](../images/core_fence.png?raw=true)  
+![Fence](./images/core_fence.png?raw=true)  
 @image latex core_fence.png
 
 The following sample code demonstrates a sequence for creation, submission and querying of a fence:
@@ -379,7 +379,7 @@ However, this generality comes with some cost in efficiency.
 Events do **not** represent intra-command list dependencies between programs.
 
 The following diagram illustrates an example of events:  
-![Event](../images/core_event.png?raw=true)  
+![Event](./images/core_event.png?raw=true)  
 @image latex core_event.png
 
 The following sample code demonstrates a sequence for creation and submission of an event:
@@ -419,7 +419,7 @@ The primary usage model(s) for semaphores is:
 - Low-latency device-side scheduling of programs executing concurrently across multiple command queues.
 
 The following diagram illustrates an example of semaphores:  
-![Semaphore](../images/core_semaphore.png?raw=true)  
+![Semaphore](./images/core_semaphore.png?raw=true)  
 @image latex core_semaphore.png
 
 The following sample code demonstrates a sequence for creation and submission of a semaphore:

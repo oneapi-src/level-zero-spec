@@ -68,8 +68,13 @@ def main():
             configParser.get('PATH','extended'),
             configParser.get('NAMESPACE','extended'))
         generate_docs.generate_html()
+        generate_docs.fix_md_paths([
+            "../core",
+            "../extended",
+        ])
         if args.pdf:
             generate_docs.generate_pdf()
+
 
     print("\nCompleted in %.1f seconds!"%(time.time() - start))
 

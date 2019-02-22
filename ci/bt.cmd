@@ -51,7 +51,7 @@ exit /b %ERRORLEVEL%
 
 :Invoke
 :: Remove script name from the arglist and place the remaining args in PY_ARGS
-:: call "%~dp0utils.cmd" :PopArgs 1 _PY_ARGS %*
+call "%~dp0utils.cmd" :PopArgs 1 _PY_ARGS %*
 
 :: Execute command
 set _FULL_CMD="!_PYDIR!\!_PYTHON_EXE!" !_SCRIPT! !_PY_ARGS!
