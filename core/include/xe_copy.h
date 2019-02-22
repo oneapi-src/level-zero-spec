@@ -76,6 +76,39 @@ xe_result_t __xecall
     );
 
 ///////////////////////////////////////////////////////////////////////////////
+/// @brief Initializes host, device, or shared memory.
+/// 
+/// @details
+///     - The memory pointed to by dstptr must be accessible by the device on
+///       which the command list is created.
+///     - The value to initialize memory to is interpreted as an 8-bit unsigned
+///       char; the upper 24-bits are ignored.
+///     - The application may **not** call this function from simultaneous
+///       threads with the same command list handle.
+///     - The implementation of this function should be lock-free.
+/// 
+/// @remarks
+///   _Analogues_
+///     - **clEnqueueFillBuffer**
+///     - **clEnqueueSVMMemFill**
+/// 
+/// @returns
+///     - ::XE_RESULT_SUCCESS
+///     - ::XE_RESULT_ERROR_UNINITIALIZED
+///     - ::XE_RESULT_ERROR_DEVICE_LOST
+///     - ::XE_RESULT_ERROR_INVALID_PARAMETER
+///         + nullptr == hCommandList
+///         + nullptr == ptr
+///     - ::XE_RESULT_ERROR_UNSUPPORTED
+xe_result_t __xecall
+  xeCommandListEncodeMemorySet(
+    xe_command_list_handle_t hCommandList,          ///< [in] handle of command list
+    void* ptr,                                      ///< [in] pointer to memory to initialize
+    int value,                                      ///< [in] value to initialize memory to
+    size_t size                                     ///< [in] size in bytes to initailize
+    );
+
+///////////////////////////////////////////////////////////////////////////////
 /// @brief Copies a image.
 /// 
 /// @details

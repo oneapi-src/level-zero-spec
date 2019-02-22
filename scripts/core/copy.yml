@@ -31,6 +31,32 @@ params:
       desc: "[in] size in bytes to copy"
 --- #--------------------------------------------------------------------------
 type: function
+desc: "Initializes host, device, or shared memory."
+class: $xCommandList
+name: EncodeMemorySet
+details:
+    - "The memory pointed to by dstptr must be accessible by the device on which the command list is created."
+    - "The value to initialize memory to is interpreted as an 8-bit unsigned char; the upper 24-bits are ignored."
+    - "The application may **not** call this function from simultaneous threads with the same command list handle."
+    - "The implementation of this function should be lock-free."
+analogue:
+    - "**clEnqueueFillBuffer**"
+    - "**clEnqueueSVMMemFill**"
+params:
+    - type: $x_command_list_handle_t
+      name: hCommandList
+      desc: "[in] handle of command list"
+    - type: "void*"
+      name: ptr
+      desc: "[in] pointer to memory to initialize"
+    - type: "int"
+      name: value
+      desc: "[in] value to initialize memory to"
+    - type: size_t
+      name: size
+      desc: "[in] size in bytes to initailize"
+--- #--------------------------------------------------------------------------
+type: function
 desc: "Copies a image."
 class: $xCommandList
 name: EncodeImageCopy

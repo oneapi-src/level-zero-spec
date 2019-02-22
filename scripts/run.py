@@ -70,7 +70,7 @@ def main():
         generate_docs.generate_html()
         generate_docs.fix_md_paths([
             "../core",
-            "../extended",
+            #"../extended",
         ])
         if args.pdf:
             generate_docs.generate_pdf()

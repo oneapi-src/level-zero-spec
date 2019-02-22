@@ -103,6 +103,74 @@ xe_result_t __xecall
 }
 
 ///////////////////////////////////////////////////////////////////////////////
+/// @brief Initializes host, device, or shared memory.
+/// 
+/// @details
+///     - The memory pointed to by dstptr must be accessible by the device on
+///       which the command list is created.
+///     - The value to initialize memory to is interpreted as an 8-bit unsigned
+///       char; the upper 24-bits are ignored.
+///     - The application may **not** call this function from simultaneous
+///       threads with the same command list handle.
+///     - The implementation of this function should be lock-free.
+/// 
+/// @remarks
+///   _Analogues_
+///     - **clEnqueueFillBuffer**
+///     - **clEnqueueSVMMemFill**
+/// 
+/// @returns
+///     - ::XE_RESULT_SUCCESS
+///     - ::XE_RESULT_ERROR_UNINITIALIZED
+///     - ::XE_RESULT_ERROR_DEVICE_LOST
+///     - ::XE_RESULT_ERROR_INVALID_PARAMETER
+///         + nullptr == hCommandList
+///         + nullptr == ptr
+///     - ::XE_RESULT_ERROR_UNSUPPORTED
+///
+/// @hash {06d09263da59d527bcc056dd1270ecbd1e6a536c4e0535f9b036d4d638a7cd4a}
+///
+xe_result_t __xecall
+  xeCommandListEncodeMemorySet(
+    xe_command_list_handle_t hCommandList,          ///< [in] handle of command list
+    void* ptr,                                      ///< [in] pointer to memory to initialize
+    int value,                                      ///< [in] value to initialize memory to
+    size_t size                                     ///< [in] size in bytes to initailize
+    )
+{
+    try
+    {
+        //if( XE_DRIVER_PARAMETER_VALIDATION_LEVEL >= 0 )
+        {
+            // if( nullptr == driver ) return XE_RESULT_ERROR_UNINITIALIZED;
+
+            // Check parameters
+            if( nullptr == hCommandList ) return XE_RESULT_ERROR_INVALID_PARAMETER;
+            if( nullptr == ptr ) return XE_RESULT_ERROR_INVALID_PARAMETER;
+        }
+        /// @begin
+
+        // @todo: insert <code> here
+
+        /// @end
+        return XE_RESULT_SUCCESS;
+    }
+    catch(xe_result_t& result)
+    {
+        return result;
+    }
+    catch(std::bad_alloc&)
+    {
+        return XE_RESULT_ERROR_OUT_OF_HOST_MEMORY;
+    }
+    catch(std::exception&)
+    {
+        // @todo: pfnOnException(e.what());
+        return XE_RESULT_ERROR_UNKNOWN;
+    }
+}
+
+///////////////////////////////////////////////////////////////////////////////
 /// @brief Copies a image.
 /// 
 /// @details
