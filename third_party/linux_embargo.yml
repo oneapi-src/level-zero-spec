@@ -1,7 +1,7 @@
 components:
   aub_stream:
     branch: master
-    clean_on_sync: true
+    clean_on_sync: false
     dest_dir: third_party/aub_stream
     repository: https://github.intel.com/bfliflet/aub_stream
     revision: 65c7b9efac0a85f74d538fd70e5b9815b26e1ef7
@@ -17,10 +17,10 @@ components:
   igc:
     asset_name: igc
     asset_path: gfx-sandbox-igk/neo/build/mainline
-    asset_version: 31b96245d0ede86fa5a55537f19cd337a3062310-1185
+    asset_version: dbf7f8fe3cf36e9d945d258d2e3f531fffe91246-1185
     clean_on_sync: true
     dest_dir: third_party/igc
-    root_url: http://gfx-assets.igk.intel.com/artifactory
+    root_url: https://gfx-assets.igk.intel.com/artifactory
     type: artifactory
   googletest:
     branch: master
@@ -30,19 +30,11 @@ components:
     revision: 0599a7b8410dc5cfdb477900b280475ae775d7f9
     type: git
   compute_runtime:
-    branch: master
+    branch: embargo
     clean_on_sync: false
     dest_dir: third_party/compute_runtime
     repository: ssh://gerrit-gfx.intel.com:29418/gfx/compute/neo
-    revision: 46225890a9d697c05498d54bb62a7e533f035d9b
+    revision: 757e955d9906641c982c6e15e058de0f4de59321
     type: git
-  wdk:
-    asset_name: wdk
-    asset_path: gfx-sandbox-igk/neo/build
-    asset_version: 36a2a0d6a9da5e506439ffcb8dcf49d3e8f0e175-1185
-    clean_on_sync: false
-    dest_dir: third_party/wdk
-    root_url: http://gfx-assets.igk.intel.com/artifactory
-    type: artifactory
 converter: E-1180
 version: '1'

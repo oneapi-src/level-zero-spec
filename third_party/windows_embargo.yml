@@ -22,14 +22,6 @@ components:
     dest_dir: third_party/igc
     root_url: https://gfx-assets.igk.intel.com/artifactory
     type: artifactory
-  wdk:
-    asset_name: wdk
-    asset_path: gfx-sandbox-igk/neo/build
-    asset_version: 36a2a0d6a9da5e506439ffcb8dcf49d3e8f0e175-1185
-    clean_on_sync: false
-    dest_dir: third_party/wdk
-    root_url: https://gfx-assets.igk.intel.com/artifactory
-    type: artifactory
   googletest:
     branch: master
     clean_on_sync: false
@@ -44,5 +36,13 @@ components:
     repository: ssh://gerrit-gfx.intel.com:29418/gfx/compute/neo
     revision: 757e955d9906641c982c6e15e058de0f4de59321
     type: git
+  wdk:
+    asset_name: wdk
+    asset_path: gfx-sandbox-igk/neo/build
+    asset_version: 36a2a0d6a9da5e506439ffcb8dcf49d3e8f0e175-1185
+    clean_on_sync: false
+    dest_dir: third_party/wdk
+    root_url: https://gfx-assets.igk.intel.com/artifactory
+    type: artifactory
 converter: E-1180
 version: '1'
