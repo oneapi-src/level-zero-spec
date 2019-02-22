@@ -2,7 +2,7 @@
 Header files are generated using [scripts](/scripts/README.md).  
 
 # Documentation
-[Documentation](/html/index.html) is generated from source code using Doxygen.  
+[Documentation](https://one-api.gitlab-pages.devtools.intel.com/level_zero/) is generated from source code using Doxygen.
 
 # Third-Party Tools
 Tools can be acquired via instructions in [third_party](/third_party/README.md).
