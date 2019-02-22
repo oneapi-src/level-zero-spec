@@ -512,7 +512,7 @@ xe_result_t __xecall
 ///
 /// @hash {0d524eae1de0503fef62776d38c10480c3399fe9307e8349c32f24d255a1d971}
 ///
-__xedllexport xe_result_t __xecall
+xe_result_t __xecall
   xeFunctionSetGroupSize(
     xe_function_handle_t hFunction,                 ///< [in] handle of the function object
     uint32_t groupSizeX,                            ///< [in] group size for X dimension to use for this function.

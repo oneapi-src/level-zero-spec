@@ -71,7 +71,7 @@ struct CommandListEncodeDispatchFunction : public ::testing::Test {
         function = new PrecompiledFunctionMock("MemcpyBytes", deviceName);
         functionArgs = new PrecompiledFunctionArgsMock(function, {&buffer1, &buffer2});
 
-        EXPECT_CALL(*functionArgs, getThreadExecutionMask()).Times(AnyNumber());
+        EXPECT_CALL(*function, getThreadExecutionMask()).Times(AnyNumber());
     }
 
     void TearDown() override {
@@ -200,7 +200,7 @@ ATSTEST_F(CommandListEncodeDispatchFunction, copiesThreadDataToGeneralStateHeap)
     {
         auto cmd = genCmdCast<COMPUTE_WALKER *>(*itor);
 
-        auto indirectDataLength = functionArgs->getPerThreadDataSize() +
+        auto indirectDataLength = function->getPerThreadDataSize() +
                                   functionArgs->getCrossThreadDataSize();
         EXPECT_LE(cmd->getIndirectDataLength(), indirectDataLength);
 
@@ -211,8 +211,8 @@ ATSTEST_F(CommandListEncodeDispatchFunction, copiesThreadDataToGeneralStateHeap)
         auto ptrHeap = ptrOffset(heap->getCpuBase(), cmd->getIndirectDataStartAddress());
         EXPECT_EQ(memcmp(ptrHeap, functionArgs->getCrossThreadDataHostMem(), functionArgs->getCrossThreadDataSize()), 0u);
         ptrHeap = ptrOffset(ptrHeap, functionArgs->getCrossThreadDataSize());
-        EXPECT_EQ(memcmp(ptrHeap, functionArgs->getPerThreadDataHostMem(), functionArgs->getPerThreadDataSize()), 0u);
-        ptrHeap = ptrOffset(ptrHeap, functionArgs->getPerThreadDataSize());
+        EXPECT_EQ(memcmp(ptrHeap, function->getPerThreadDataHostMem(), function->getPerThreadDataSize()), 0u);
+        ptrHeap = ptrOffset(ptrHeap, function->getPerThreadDataSize());
     }
 }
 

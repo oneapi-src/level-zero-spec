@@ -52,6 +52,33 @@ struct PrecompiledFunctionMock : Mock<Function> {
         return precompiledFunctionMockData->isaSize;
     }
 
+    void getGroupSize(uint32_t &outGroupSizeX, uint32_t &outGroupSizeY, uint32_t &outGroupSizeZ) const override {
+        outGroupSizeX = precompiledFunctionMockData->groupSizeInPerThreadDataBase[0];
+        outGroupSizeY = precompiledFunctionMockData->groupSizeInPerThreadDataBase[1];
+        outGroupSizeZ = precompiledFunctionMockData->groupSizeInPerThreadDataBase[2];
+    }
+
+    uint32_t getThreadsPerThreadGroup() const override {
+        uint32_t lwsX, lwsY, lwsZ;
+        this->getGroupSize(lwsX, lwsY, lwsZ);
+        auto lws = lwsX * lwsY * lwsZ;
+        auto simd = getSimdSize();
+
+        return (lws + simd - 1) / simd;
+    }
+
+    const void *getPerThreadDataHostMem() const override {
+        return precompiledFunctionMockData->perThreadDataBase;
+    }
+
+    size_t getPerThreadDataSize() const override {
+        return precompiledFunctionMockData->perThreadDataBaseSize;
+    }
+
+    uint32_t getThreadExecutionMask() const override {
+        return 0xfffffffful;
+    }
+
     const PrecompiledFunctionMockData *precompiledFunctionMockData = nullptr;
     std::unordered_map<int, int> bufferArgOffsetMap;
 };
@@ -83,33 +110,6 @@ struct PrecompiledFunctionArgsMock : Mock<FunctionArgs> {
 
     const std::vector<GraphicsAllocation *> &getResidencyContainer() const override {
         return allocationsForResidency;
-    }
-
-    void setGroupSize(uint32_t groupSizeX, uint32_t groupSizeY, uint32_t groupSizeZ) override {
-        // assert/warning  that perThreadData is precompiled?
-    }
-
-    void getGroupSize(uint32_t &outGroupSizeX, uint32_t &outGroupSizeY, uint32_t &outGroupSizeZ) const override {
-        outGroupSizeX = function->precompiledFunctionMockData->groupSizeInPerThreadDataBase[0];
-        outGroupSizeY = function->precompiledFunctionMockData->groupSizeInPerThreadDataBase[1];
-        outGroupSizeZ = function->precompiledFunctionMockData->groupSizeInPerThreadDataBase[2];
-    }
-
-    uint32_t getThreadsPerThreadGroup() const override {
-        uint32_t lwsX, lwsY, lwsZ;
-        this->getGroupSize(lwsX, lwsY, lwsZ);
-        auto lws = lwsX * lwsY * lwsZ;
-        auto simd = function->getSimdSize();
-
-        return (lws + simd - 1) / simd;
-    }
-
-    const void *getPerThreadDataHostMem() const override {
-        return function->precompiledFunctionMockData->perThreadDataBase;
-    }
-
-    size_t getPerThreadDataSize() const override {
-        return function->precompiledFunctionMockData->perThreadDataBaseSize;
     }
 
     PrecompiledFunctionMock *function;
@@ -213,7 +213,7 @@ inline void writeMockData(const std::string sourceOrigin, std::string &mockName,
     writeAsCppArrayInitializer(functionArgs->getCrossThreadDataHostMem(), functionArgs->getCrossThreadDataSize(), out);
     out << "\n\n";
     out << "static const uint32_t " << globalNamePerThreadData << "[] = \n";
-    writeAsCppArrayInitializer(functionArgs->getPerThreadDataHostMem(), functionArgs->getPerThreadDataSize(), out);
+    writeAsCppArrayInitializer(function->getPerThreadDataHostMem(), function->getPerThreadDataSize(), out);
     out << "\n\n";
 
     out << "static const std::pair<int, int> " << globalNameBufferArgIndices << "[] = { ";
@@ -230,7 +230,7 @@ inline void writeMockData(const std::string sourceOrigin, std::string &mockName,
     out << " };\n\n";
 
     uint32_t groupSizeX, groupSizeY, groupSizeZ;
-    functionArgs->getGroupSize(groupSizeX, groupSizeY, groupSizeZ);
+    function->getGroupSize(groupSizeX, groupSizeY, groupSizeZ);
     out << "static const uint32_t " << globalNameGroupSize << "[] = { ";
     out << "0x" << groupSizeX << ", " << "0x" << groupSizeY << ", " << "0x" << groupSizeZ;
     out << " };\n\n";

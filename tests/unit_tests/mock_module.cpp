@@ -5,7 +5,7 @@ using ::testing::Return;
 namespace xe {
 namespace ult {
 
-Mock<FunctionArgs>::Mock() {
+Mock<Function>::Mock() {
     ON_CALL(*this, getThreadExecutionMask)
         .WillByDefault(Return(0xfffffffful));
 }

@@ -162,6 +162,7 @@ struct FunctionImp : Function {
     FunctionImp(Module *module) : module(module) {}
 
     virtual ~FunctionImp() {
+        alignedFree(perThreadData);
         kernelRT->release();
     }
 
@@ -173,6 +174,48 @@ struct FunctionImp : Function {
     xe_result_t createFunctionArgs(xe_function_args_handle_t *phFunctionArgs) override {
         *phFunctionArgs = FunctionArgs::create(this)->toHandle();
         return XE_RESULT_SUCCESS;
+    }
+
+    xe_result_t setGroupSize(uint32_t groupSizeX,
+                             uint32_t groupSizeY,
+                             uint32_t groupSizeZ) override {
+        auto numChannels = OCLRT::PerThreadDataHelper::getNumLocalIdChannels(*kernelRT->kernelInfo.patchInfo.threadPayload);
+        Vec3<size_t> groupSize{groupSizeX, groupSizeY, groupSizeZ};
+        auto itemsInGroup = OCLRT::Math::computeTotalElementsCount(groupSize);
+        size_t perThreadDataSizeNeeded = OCLRT::PerThreadDataHelper::getPerThreadDataSizeTotal(kernelRT->kernelInfo.getMaxSimdSize(), numChannels, itemsInGroup);
+        if (perThreadDataSizeNeeded > perThreadDataSize) {
+            alignedFree(perThreadData);
+            perThreadData = alignedMalloc(perThreadDataSizeNeeded, 32); // alignment for vector instructions
+            perThreadDataSize = perThreadDataSizeNeeded;
+        }
+
+        OCLRT::generateLocalIDs(perThreadData, static_cast<uint16_t>(getSimdSize()),
+                                std::array<uint16_t, 3>{{static_cast<uint16_t>(groupSizeX), static_cast<uint16_t>(groupSizeY), static_cast<uint16_t>(groupSizeZ)}},
+                                std::array<uint8_t, 3>{{0, 1, 2}}, // to do : add support for non-default walk order
+                                false);
+
+        this->groupSizeX = groupSizeX;
+        this->groupSizeY = groupSizeY;
+        this->groupSizeZ = groupSizeZ;
+
+        auto simdSize = kernelRT->kernelInfo.getMaxSimdSize();
+        this->threadsPerThreadGroup = static_cast<uint32_t>((itemsInGroup + simdSize - 1u) / simdSize);
+        patchWorkgroupSizeInCrossThreadData(groupSizeX, groupSizeY, groupSizeZ);
+
+        // threadExecutionMask - which SIMD lines are active in last thread of group
+        auto remainderSimdLanes = itemsInGroup & (simdSize - 1u);
+        threadExecutionMask = (1ull << remainderSimdLanes) - 1u;
+        if (!threadExecutionMask) {
+            threadExecutionMask = ~threadExecutionMask;
+        }
+
+        return XE_RESULT_SUCCESS;
+    }
+
+    void getGroupSize(uint32_t &outGroupSizeX, uint32_t &outGroupSizeY, uint32_t &outGroupSizeZ) const override {
+        outGroupSizeX = this->groupSizeX;
+        outGroupSizeY = this->groupSizeY;
+        outGroupSizeZ = this->groupSizeZ;
     }
 
     Module *getModule() const override {
@@ -188,6 +231,8 @@ struct FunctionImp : Function {
         kernelRT = new OCLRT_temporary::LightweightOclKernel(static_cast<ModuleImp *>(module)->getProgramRT(), *kernelInfoRT);
         kernelRT->initialize();
 
+        setGroupSize(getSimdSize(), 1, 1); // until apps sets-up something smarter
+
         return true;
     }
 
@@ -199,8 +244,24 @@ struct FunctionImp : Function {
         return kernelRT->getKernelHeapSize();
     }
 
+    const void *getPerThreadDataHostMem() const override {
+        return perThreadData;
+    }
+
+    size_t getPerThreadDataSize() const override {
+        return perThreadDataSize;
+    }
+
     uint32_t getSimdSize() const {
         return kernelRT->kernelInfo.getMaxSimdSize();
+    }
+
+    uint32_t getThreadsPerThreadGroup() const override {
+        return threadsPerThreadGroup;
+    }
+
+    uint32_t getThreadExecutionMask() const override {
+        return threadExecutionMask;
     }
 
     OCLRT_temporary::LightweightOclKernel *getKernelRT() {
@@ -208,8 +269,40 @@ struct FunctionImp : Function {
     }
 
   protected:
+    template <typename T>
+    void patchCrossThreadDataBasedOnKernelRT(uint32_t location, const T &value) {
+        if (OCLRT::KernelArgInfo::undefinedOffset == location) {
+            return;
+        }
+        *reinterpret_cast<T *>(ptrOffset(kernelRT->crossThreadData, location)) = value;
+    }
+
+    void patchWorkgroupSizeInCrossThreadData(uint32_t x, uint32_t y, uint32_t z) {
+        patchCrossThreadDataBasedOnKernelRT(kernelRT->kernelInfo.workloadInfo.localWorkSizeOffsets[0], x);
+        patchCrossThreadDataBasedOnKernelRT(kernelRT->kernelInfo.workloadInfo.localWorkSizeOffsets[1], y);
+        patchCrossThreadDataBasedOnKernelRT(kernelRT->kernelInfo.workloadInfo.localWorkSizeOffsets[2], z);
+
+        patchCrossThreadDataBasedOnKernelRT(kernelRT->kernelInfo.workloadInfo.localWorkSizeOffsets2[0], x); // not sure why we have second set of those
+        patchCrossThreadDataBasedOnKernelRT(kernelRT->kernelInfo.workloadInfo.localWorkSizeOffsets2[1], y);
+        patchCrossThreadDataBasedOnKernelRT(kernelRT->kernelInfo.workloadInfo.localWorkSizeOffsets2[2], z);
+
+        patchCrossThreadDataBasedOnKernelRT(kernelRT->kernelInfo.workloadInfo.enqueuedLocalWorkSizeOffsets[0], x);
+        patchCrossThreadDataBasedOnKernelRT(kernelRT->kernelInfo.workloadInfo.enqueuedLocalWorkSizeOffsets[1], y);
+        patchCrossThreadDataBasedOnKernelRT(kernelRT->kernelInfo.workloadInfo.enqueuedLocalWorkSizeOffsets[2], z);
+    }
+
     OCLRT_temporary::LightweightOclKernel *kernelRT = nullptr;
     Module *module = nullptr;
+
+    uint32_t groupSizeX = 0u;
+    uint32_t groupSizeY = 0u;
+    uint32_t groupSizeZ = 0u;
+
+    void *perThreadData = nullptr;
+    size_t perThreadDataSize = 0u;
+
+    uint32_t threadsPerThreadGroup = 0u;
+    uint32_t threadExecutionMask = 0u;
 };
 
 Function *Function::create(Module *module, const xe_function_desc_t *desc) {
@@ -222,7 +315,6 @@ struct FunctionArgsImp : FunctionArgs {
     FunctionArgsImp(Function *function) : function(function) {}
 
     virtual ~FunctionArgsImp() {
-        alignedFree(perThreadData);
     }
 
     xe_result_t destroy() override {
@@ -240,7 +332,7 @@ struct FunctionArgsImp : FunctionArgs {
         const auto &kernelArgInfo = static_cast<FunctionImp *>(function)->getKernelRT()->getKernelInfo().kernelArgInfo[argIndex];
         // patchBufferOffset(kernelArgInfo, nullptr, nullptr); // stateless to stateful buffer offsets disabled
 
-        auto patchLocation = ptrOffset(oclInternals.crossThreadData,
+        auto patchLocation = ptrOffset(crossThreadData,
                                        kernelArgInfo.kernelArgPatchInfoVector[0].crossthreadOffset);
 
         patchWithRequiredSize(patchLocation, kernelArgInfo.kernelArgPatchInfoVector[0].size, *reinterpret_cast<const uintptr_t *>(argVal));
@@ -260,71 +352,15 @@ struct FunctionArgsImp : FunctionArgs {
     }
 
     const void *getCrossThreadDataHostMem() const override {
-        return oclInternals.crossThreadData;
+        return crossThreadData;
     }
 
     size_t getCrossThreadDataSize() const {
-        return oclInternals.crossThreadDataSize;
+        return crossThreadDataSize;
     }
 
     const std::vector<GraphicsAllocation *> &getResidencyContainer() const override {
         return residencyContainer;
-    }
-
-    void setGroupSize(uint32_t groupSizeX, uint32_t groupSizeY, uint32_t groupSizeZ) override {
-        OCLRT_temporary::LightweightOclKernel *kernelRT = static_cast<FunctionImp *>(function)->getKernelRT();
-
-        auto numChannels = OCLRT::PerThreadDataHelper::getNumLocalIdChannels(*kernelRT->kernelInfo.patchInfo.threadPayload);
-        Vec3<size_t> groupSize{groupSizeX, groupSizeY, groupSizeZ};
-        auto itemsInGroup = OCLRT::Math::computeTotalElementsCount(groupSize);
-        size_t perThreadDataSizeNeeded = OCLRT::PerThreadDataHelper::getPerThreadDataSizeTotal(kernelRT->kernelInfo.getMaxSimdSize(), numChannels, itemsInGroup);
-        if (perThreadDataSizeNeeded > perThreadDataSize) {
-            alignedFree(perThreadData);
-            perThreadData = alignedMalloc(perThreadDataSizeNeeded, 32); // alignment for vector instructions
-            perThreadDataSize = perThreadDataSizeNeeded;
-        }
-
-        OCLRT::generateLocalIDs(perThreadData, static_cast<uint16_t>(function->getSimdSize()),
-                                std::array<uint16_t, 3>{{static_cast<uint16_t>(groupSizeX), static_cast<uint16_t>(groupSizeY), static_cast<uint16_t>(groupSizeZ)}},
-                                std::array<uint8_t, 3>{{0, 1, 2}}, // to do : add support for non-default walk order
-                                false);
-
-        this->groupSizeX = groupSizeX;
-        this->groupSizeY = groupSizeY;
-        this->groupSizeZ = groupSizeZ;
-
-        auto simdSize = kernelRT->kernelInfo.getMaxSimdSize();
-        this->threadsPerThreadGroup = static_cast<uint32_t>((itemsInGroup + simdSize - 1u) / simdSize);
-        patchWorkgroupSizeInCrossThreadData(groupSizeX, groupSizeY, groupSizeZ);
-
-        // threadExecutionMask - which SIMD lines are active in last thread of group
-        auto remainderSimdLanes = itemsInGroup & (simdSize - 1u);
-        threadExecutionMask = (1ull << remainderSimdLanes) - 1u;
-        if (!threadExecutionMask) {
-            threadExecutionMask = ~threadExecutionMask;
-        }
-    }
-
-    void getGroupSize(uint32_t &outGroupSizeX, uint32_t &outGroupSizeY, uint32_t &outGroupSizeZ) const override {
-        outGroupSizeX = this->groupSizeX;
-        outGroupSizeY = this->groupSizeY;
-        outGroupSizeZ = this->groupSizeZ;
-    }
-
-    uint32_t getThreadsPerThreadGroup() const override {
-        return threadsPerThreadGroup;
-    }
-
-    uint32_t getThreadExecutionMask() const override {
-        return threadExecutionMask;
-    }
-
-    const void *getPerThreadDataHostMem() const override {
-        return perThreadData;
-    }
-
-    size_t getPerThreadDataSize() const override {
-        return perThreadDataSize;
     }
 
     bool initialize() {
@@ -350,9 +386,9 @@ struct FunctionArgsImp : FunctionArgs {
         }
 
         if (kernelRT->crossThreadDataSize != 0) {
-            this->oclInternals.crossThreadData = new char[kernelRT->crossThreadDataSize];
-            memcpy(this->oclInternals.crossThreadData, kernelRT->crossThreadData, kernelRT->crossThreadDataSize);
-            this->oclInternals.crossThreadDataSize = kernelRT->crossThreadDataSize;
+            this->crossThreadData = new char[kernelRT->crossThreadDataSize];
+            memcpy(this->crossThreadData, kernelRT->crossThreadData, kernelRT->crossThreadDataSize);
+            this->crossThreadDataSize = kernelRT->crossThreadDataSize;
         }
 
         this->oclInternals.usingSharedObjArgs = kernelRT->usingSharedObjArgs;
@@ -362,14 +398,15 @@ struct FunctionArgsImp : FunctionArgs {
         this->oclInternals.startOffset = kernelRT->startOffset;
         residencyContainer.resize(this->oclInternals.kernelArgHandlers.size(), nullptr); // todo : handle implicit surfaces - printf/private/constant
 
-        this->setGroupSize(kernelRT->kernelInfo.getMaxSimdSize(), 1, 1); // until apps sets-up something smarter
-
         return true;
     }
 
   protected:
     Function *function;
     std::vector<GraphicsAllocation *> residencyContainer;
+
+    char *crossThreadData = 0;
+    uint32_t crossThreadDataSize = 0;
 
     typedef xe_result_t (FunctionArgsImp::*FunctionArgHandler)(uint32_t argIndex, size_t argSize, const void *argVal);
 
@@ -394,9 +431,6 @@ struct FunctionArgsImp : FunctionArgs {
         std::unique_ptr<char[]> pSshLocal = nullptr;
         uint32_t sshLocalSize = 0;
 
-        char *crossThreadData = 0;
-        uint32_t crossThreadDataSize = 0;
-
         bool usingSharedObjArgs = false;
         bool usingImagesOnly = false;
         bool auxTranslationRequired = false;
@@ -409,31 +443,8 @@ struct FunctionArgsImp : FunctionArgs {
         if (OCLRT::KernelArgInfo::undefinedOffset == location) {
             return;
         }
-        *reinterpret_cast<T *>(ptrOffset(oclInternals.crossThreadData, location)) = value;
+        *reinterpret_cast<T *>(ptrOffset(crossThreadData, location)) = value;
     }
-
-    void patchWorkgroupSizeInCrossThreadData(uint32_t x, uint32_t y, uint32_t z) {
-        OCLRT_temporary::LightweightOclKernel *kernelRT = static_cast<FunctionImp *>(function)->getKernelRT();
-        patchCrossThreadDataBasedOnKernelRT(kernelRT->kernelInfo.workloadInfo.localWorkSizeOffsets[0], x);
-        patchCrossThreadDataBasedOnKernelRT(kernelRT->kernelInfo.workloadInfo.localWorkSizeOffsets[1], y);
-        patchCrossThreadDataBasedOnKernelRT(kernelRT->kernelInfo.workloadInfo.localWorkSizeOffsets[2], z);
-
-        patchCrossThreadDataBasedOnKernelRT(kernelRT->kernelInfo.workloadInfo.localWorkSizeOffsets2[0], x); // not sure why we have second set of those
-        patchCrossThreadDataBasedOnKernelRT(kernelRT->kernelInfo.workloadInfo.localWorkSizeOffsets2[1], y);
-        patchCrossThreadDataBasedOnKernelRT(kernelRT->kernelInfo.workloadInfo.localWorkSizeOffsets2[2], z);
-
-        patchCrossThreadDataBasedOnKernelRT(kernelRT->kernelInfo.workloadInfo.enqueuedLocalWorkSizeOffsets[0], x);
-        patchCrossThreadDataBasedOnKernelRT(kernelRT->kernelInfo.workloadInfo.enqueuedLocalWorkSizeOffsets[1], y);
-        patchCrossThreadDataBasedOnKernelRT(kernelRT->kernelInfo.workloadInfo.enqueuedLocalWorkSizeOffsets[2], z);
-    }
-
-    uint32_t groupSizeX = 0u;
-    uint32_t groupSizeY = 0u;
-    uint32_t groupSizeZ = 0u;
-    uint32_t threadsPerThreadGroup = 0u;
-    uint32_t threadExecutionMask = 0u;
-    void *perThreadData = nullptr;
-    size_t perThreadDataSize = 0u;
 };
 
 FunctionArgs *FunctionArgs::create(Function *function) {
@@ -472,6 +483,18 @@ xeFunctionCreateFunctionArgs(
     xe_function_args_handle_t *phFunctionArgs) {
     auto function = Function::fromHandle(hFunction);
     return function->createFunctionArgs(phFunctionArgs);
+}
+
+xe_result_t __xecall
+xeFunctionSetGroupSize(
+    xe_function_handle_t hFunction, ///< [in] handle of the function object
+    uint32_t groupSizeX,            ///< [in] group size for X dimension to use for this function.
+    uint32_t groupSizeY,            ///< [in] group size for Y dimension to use for this function.
+    uint32_t groupSizeZ             ///< [in] group size for Z dimension to use for this function.
+) {
+    return Function::fromHandle(hFunction)->setGroupSize(groupSizeX,
+                                                         groupSizeY,
+                                                         groupSizeZ);
 }
 
 xe_result_t __xecall

@@ -67,11 +67,6 @@ xe_result_t CommandListHw<IGFX_GEN12_CORE>::encodeDispatchFunction(xe_function_h
     cmd.setThreadGroupIdYDimension(pDispatchFuncArgs->groupCountY);
     cmd.setThreadGroupIdZDimension(pDispatchFuncArgs->groupCountZ);
 
-    // Set the last thread execution mask
-    const auto functionArgs = FunctionArgs::fromHandle(hFunctionArgs);
-    assert(functionArgs);
-    cmd.setExecutionMask(functionArgs->getThreadExecutionMask());
-
     // Set simd size
     const auto function = Function::fromHandle(hFunction);
     assert(function);
@@ -81,6 +76,9 @@ xe_result_t CommandListHw<IGFX_GEN12_CORE>::encodeDispatchFunction(xe_function_h
         COMPUTE_WALKER::SIMD_SIZE_SIMD16 * (simdSize == 16) |
         COMPUTE_WALKER::SIMD_SIZE_SIMD8 * (simdSize == 8);
     cmd.setSimdSize(static_cast<COMPUTE_WALKER::SIMD_SIZE>(simdSizeOp));
+
+    // Set the last thread execution mask
+    cmd.setExecutionMask(function->getThreadExecutionMask());
 
     using POSTSYNC_DATA = typename GfxFamily::POSTSYNC_DATA;
     auto &postSync = cmd.getPostSync();
@@ -94,13 +92,16 @@ xe_result_t CommandListHw<IGFX_GEN12_CORE>::encodeDispatchFunction(xe_function_h
         postSync.setDestinationAddress(event->getGpuAddress());
     }
 
+    const auto functionArgs = FunctionArgs::fromHandle(hFunctionArgs);
+    assert(functionArgs);
+
     // Copy the threadData to the indirect heap
     {
         auto heap = indirectHeaps[OCLRT::IndirectHeap::GENERAL_STATE];
         assert(heap);
 
         auto sizeCrossThreadData = static_cast<uint32_t>(functionArgs->getCrossThreadDataSize());
-        auto sizePerThreadData = static_cast<uint32_t>(functionArgs->getPerThreadDataSize());
+        auto sizePerThreadData = static_cast<uint32_t>(function->getPerThreadDataSize());
         auto sizeThreadData = sizePerThreadData + sizeCrossThreadData;
         auto ptr = heap->getSpace(sizeThreadData);
         assert(ptr);
@@ -109,7 +110,7 @@ xe_result_t CommandListHw<IGFX_GEN12_CORE>::encodeDispatchFunction(xe_function_h
 
         memcpy(ptr, functionArgs->getCrossThreadDataHostMem(), sizeCrossThreadData);
         ptr = ptrOffset(ptr, sizeCrossThreadData);
-        memcpy(ptr, functionArgs->getPerThreadDataHostMem(), sizePerThreadData);
+        memcpy(ptr, function->getPerThreadDataHostMem(), sizePerThreadData);
         ptr = ptrOffset(ptr, sizePerThreadData);
 
         assert(sizePerThreadData && "TODO: enable HW generated local IDs");
@@ -120,7 +121,7 @@ xe_result_t CommandListHw<IGFX_GEN12_CORE>::encodeDispatchFunction(xe_function_h
 
     // Set number of threads per thead group.
     auto &idd = cmd.getInterfaceDescriptor();
-    idd.setNumberOfThreadsInGpgpuThreadGroup(functionArgs->getThreadsPerThreadGroup());
+    idd.setNumberOfThreadsInGpgpuThreadGroup(function->getThreadsPerThreadGroup());
 
     // Copy the kernel to indirect heap
     // TODO: Allocate kernel in graphics memory to avoid the CPU copy

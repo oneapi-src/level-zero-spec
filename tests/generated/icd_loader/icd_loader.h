@@ -446,6 +446,21 @@ typedef xe_result_t (__xecall *pfn_xeModuleCreateFunction)(
 typedef xe_result_t (__xecall *pfn_xeFunctionDestroy)(
     xe_function_handle_t hFunction
     );
+typedef xe_result_t (__xecall *pfn_xeFunctionSetGroupSize)(
+    xe_function_handle_t hFunction,
+    uint32_t groupSizeX,
+    uint32_t groupSizeY,
+    uint32_t groupSizeZ
+    );
+typedef xe_result_t (__xecall *pfn_xeFunctionSuggestGroupSize)(
+    xe_function_handle_t hFunction,
+    uint32_t globalSizeX,
+    uint32_t globalSizeY,
+    uint32_t globalSizeZ,
+    uint32_t* groupSizeX,
+    uint32_t* groupSizeY,
+    uint32_t* groupSizeZ
+    );
 typedef xe_result_t (__xecall *pfn_xeFunctionCreateFunctionArgs)(
     xe_function_handle_t hFunction,
     xe_function_args_handle_t* phFunctionArgs
@@ -648,6 +663,7 @@ typedef struct _xe_dispatch_table_t
     pfn_xeModuleGetNativeBinary xeModuleGetNativeBinary;
     pfn_xeModuleCreateFunction xeModuleCreateFunction;
     pfn_xeFunctionDestroy xeFunctionDestroy;
+    pfn_xeFunctionSetGroupSize xeFunctionSetGroupSize;
     pfn_xeFunctionCreateFunctionArgs xeFunctionCreateFunctionArgs;
     pfn_xeFunctionArgsDestroy xeFunctionArgsDestroy;
     pfn_xeFunctionArgsSetValue xeFunctionArgsSetValue;

@@ -8,39 +8,48 @@
 
 // temporarily to instrument NEO's compiler interface
 namespace Os {
-    extern const char *frontEndDllName;
-    extern const char *igcDllName;
-}
+extern const char *frontEndDllName;
+extern const char *igcDllName;
+} // namespace Os
 
 namespace xe {
 namespace ult {
 
-template<>
+template <>
 struct Mock<Module> : public Module {
     Mock() = default;
     virtual ~Mock() = default;
 
-    MOCK_METHOD2(createFunction, xe_result_t (const xe_function_desc_t *desc, xe_function_handle_t *phFunction));
+    MOCK_METHOD2(createFunction, xe_result_t(const xe_function_desc_t *desc, xe_function_handle_t *phFunction));
     MOCK_METHOD0(destroy, xe_result_t());
-    MOCK_CONST_METHOD0(getDevice, Device*());
+    MOCK_CONST_METHOD0(getDevice, Device *());
 };
 
-template<>
+template <>
 struct Mock<Function> : public Function {
-    Mock() = default;
+    Mock();
     virtual ~Mock() = default;
 
     MOCK_METHOD0(destroy, xe_result_t());
     MOCK_METHOD1(createFunctionArgs, xe_result_t(xe_function_args_handle_t *phFunctionArgs));
-    MOCK_CONST_METHOD0(getModule, Module*());
+    MOCK_METHOD3(setGroupSize, xe_result_t(uint32_t groupSizeX,
+                                           uint32_t groupSizeY,
+                                           uint32_t groupSizeZ));
+
+    MOCK_CONST_METHOD3(getGroupSize, void(uint32_t &outGroupSizeX, uint32_t &outGroupSizeY, uint32_t &outGroupSizeZ));
     MOCK_CONST_METHOD0(getIsaHostMem, const void *());
     MOCK_CONST_METHOD0(getIsaSize, size_t());
+    MOCK_CONST_METHOD0(getModule, Module *());
+    MOCK_CONST_METHOD0(getPerThreadDataHostMem, const void *());
+    MOCK_CONST_METHOD0(getPerThreadDataSize, size_t());
     MOCK_CONST_METHOD0(getSimdSize, uint32_t());
+    MOCK_CONST_METHOD0(getThreadsPerThreadGroup, uint32_t());
+    MOCK_CONST_METHOD0(getThreadExecutionMask, uint32_t());
 };
 
-template<>
+template <>
 struct Mock<FunctionArgs> : public FunctionArgs {
-    Mock();
+    Mock() = default;
     virtual ~Mock() = default;
 
     MOCK_METHOD0(destroy, xe_result_t());
@@ -48,13 +57,6 @@ struct Mock<FunctionArgs> : public FunctionArgs {
     MOCK_CONST_METHOD0(getCrossThreadDataHostMem, const void *());
     MOCK_CONST_METHOD0(getCrossThreadDataSize, size_t());
     MOCK_CONST_METHOD0(getResidencyContainer, const std::vector<GraphicsAllocation *> &());
-    MOCK_METHOD3(setGroupSize, void(uint32_t groupSizeX, uint32_t groupSizeY, uint32_t groupSizeZ));
-    MOCK_CONST_METHOD3(getGroupSize, void(uint32_t &outGroupSizeX, uint32_t &outGroupSizeY, uint32_t &outGroupSizeZ));
-    MOCK_CONST_METHOD0(getThreadsPerThreadGroup, uint32_t ());
-    MOCK_CONST_METHOD0(getThreadExecutionMask, uint32_t ());
-
-    MOCK_CONST_METHOD0(getPerThreadDataHostMem, const void *());
-    MOCK_CONST_METHOD0(getPerThreadDataSize, size_t());
 };
 
 struct UserRealCompilerGuard {

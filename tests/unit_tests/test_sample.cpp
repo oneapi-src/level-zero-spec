@@ -121,6 +121,15 @@ TEST(sample, helloWorld) {
                                         &function);
     ASSERT_EQ(XE_RESULT_SUCCESS, result);
 
+    uint32_t groupSizeX = 32u;
+    uint32_t groupSizeY = 1u;
+    uint32_t groupSizeZ = 1u;
+    result = xe::xeFunctionSetGroupSize(function,
+                                        groupSizeX,
+                                        groupSizeY,
+                                        groupSizeZ);
+    ASSERT_EQ(XE_RESULT_SUCCESS, result);
+
     xe_function_args_handle_t functionArgs = {};
     result = ::xe::xeFunctionCreateFunctionArgs(function,
                                                 &functionArgs);
@@ -162,9 +171,6 @@ TEST(sample, helloWorld) {
     dispatchFunctionArgs.groupCountX = 2;
     dispatchFunctionArgs.groupCountY = 1;
     dispatchFunctionArgs.groupCountZ = 1;
-    dispatchFunctionArgs.groupSizeX = 32;
-    dispatchFunctionArgs.groupSizeX = 1;
-    dispatchFunctionArgs.groupSizeX = 1;
     result = xe::xeCommandListEncodeDispatchFunction(commandList,
                                                      function,
                                                      functionArgs,

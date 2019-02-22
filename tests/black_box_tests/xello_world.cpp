@@ -82,6 +82,11 @@ int main(){
         SUCCESS_OR_TERMINATE(xeApi.xeModuleCreateFunction(module, &functionDesc,  &function));
     }
 
+    uint32_t groupSizeX = 32u;
+    uint32_t groupSizeY = 1u;
+    uint32_t groupSizeZ = 1u;
+    SUCCESS_OR_TERMINATE(xeApi.xeFunctionSetGroupSize(function, groupSizeX, groupSizeY, groupSizeZ));
+
     SUCCESS_OR_TERMINATE(xeApi.xeFunctionCreateFunctionArgs(function, &functionArgs0));
 
     {
@@ -111,13 +116,10 @@ int main(){
     SUCCESS_OR_TERMINATE(xeApi.xeFunctionArgsSetValue(functionArgs0, 1, sizeof(srcBuffer), &srcBuffer));
     {
         xe_dispatch_function_arguments_t dispatchTraits { XE_DISPATCH_FUNCTION_ARGS_VERSION };
-        dispatchTraits.groupSizeX = 32;
-        dispatchTraits.groupSizeY = 1;
-        dispatchTraits.groupSizeZ = 1;
-        dispatchTraits.groupCountX = allocSize / dispatchTraits.groupSizeX;
+        dispatchTraits.groupCountX = allocSize / groupSizeX;
         dispatchTraits.groupCountY = 1;
         dispatchTraits.groupCountZ = 1;
-        SUCCESS_OR_TERMINATE_BOOL(dispatchTraits.groupCountX * dispatchTraits.groupSizeX == allocSize);
+        SUCCESS_OR_TERMINATE_BOOL(dispatchTraits.groupCountX * groupSizeX == allocSize);
         SUCCESS_OR_TERMINATE(xeApi.xeCommandListEncodeDispatchFunction(cmdList, function, functionArgs0, &dispatchTraits, xe_event_handle_t {}));
     }
 

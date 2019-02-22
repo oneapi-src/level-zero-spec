@@ -887,6 +887,17 @@ xe_result_t __xecall xeFunctionDestroy(
     }
     return dispatchTable.xeFunctionDestroy(hFunction);
 }
+xe_result_t __xecall xeFunctionSetGroupSize(
+    xe_function_handle_t hFunction,
+    uint32_t groupSizeX,
+    uint32_t groupSizeY,
+    uint32_t groupSizeZ
+    ){
+    if(dispatchTableInitialized == false){
+        return XE_RESULT_ERROR_UNINITIALIZED;
+    }
+    return dispatchTable.xeFunctionSetGroupSize(hFunction, groupSizeX, groupSizeY, groupSizeZ);
+}
 xe_result_t __xecall xeFunctionCreateFunctionArgs(
         xe_function_handle_t hFunction,
         xe_function_args_handle_t* phFunctionArgs

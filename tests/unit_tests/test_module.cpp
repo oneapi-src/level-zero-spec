@@ -110,13 +110,13 @@ TEST(ModuleCreate, onlineCompilationModuleTest) {
     auto capturedAllocsForResidency = functionArgs->getResidencyContainer();
     EXPECT_NE(capturedAllocsForResidency.end(), std::find(capturedAllocsForResidency.begin(), capturedAllocsForResidency.end(), dst));
     EXPECT_NE(capturedAllocsForResidency.end(), std::find(capturedAllocsForResidency.begin(), capturedAllocsForResidency.end(), src));
-    ASSERT_NE(nullptr, functionArgs->getPerThreadDataHostMem());
-    EXPECT_TRUE(isAligned<32>(functionArgs->getPerThreadDataHostMem())) << "Per thread data not properly aligned for vector instructions"; // todo : make a real test out of this
+    ASSERT_NE(nullptr, function->getPerThreadDataHostMem());
+    EXPECT_TRUE(isAligned<32>(function->getPerThreadDataHostMem())) << "Per thread data not properly aligned for vector instructions"; // todo : make a real test out of this
     uint32_t numChannels = 3;
-    EXPECT_EQ(numChannels * function->getSimdSize() * sizeof(uint16_t), functionArgs->getPerThreadDataSize());
+    EXPECT_EQ(numChannels * function->getSimdSize() * sizeof(uint16_t), function->getPerThreadDataSize());
 
     uint32_t groupSizeX, groupSizeY, groupSizeZ;
-    functionArgs->getGroupSize(groupSizeX, groupSizeY, groupSizeZ);
+    function->getGroupSize(groupSizeX, groupSizeY, groupSizeZ);
     EXPECT_EQ(function->getSimdSize(), groupSizeX);
     EXPECT_EQ(1U, groupSizeY);
     EXPECT_EQ(1U, groupSizeZ);
@@ -155,8 +155,8 @@ TEST(ModuleCreate, mockedModuleTest) {
     EXPECT_EQ(expectedData->crossThreadDataBaseSize, functionArgs.getCrossThreadDataSize());
     EXPECT_EQ(0, memcmp(expectedData->crossThreadDataBase, functionArgs.getCrossThreadDataHostMem(), expectedData->crossThreadDataBaseSize));
 
-    EXPECT_EQ(expectedData->perThreadDataBaseSize, functionArgs.getPerThreadDataSize());
-    EXPECT_EQ(0, memcmp(expectedData->perThreadDataBase, functionArgs.getPerThreadDataHostMem(), expectedData->perThreadDataBaseSize));
+    EXPECT_EQ(expectedData->perThreadDataBaseSize, function.getPerThreadDataSize());
+    EXPECT_EQ(0, memcmp(expectedData->perThreadDataBase, function.getPerThreadDataHostMem(), expectedData->perThreadDataBaseSize));
 
     const auto &residencyFromArgs = functionArgs.getResidencyContainer();
     EXPECT_NE(residencyFromArgs.end(), std::find(residencyFromArgs.begin(), residencyFromArgs.end(), &mockAlloc1));
@@ -187,7 +187,7 @@ TEST(ModuleCreate, mockedModuleTest) {
     EXPECT_NE(arg0, arg1);
 
     uint32_t groupSizeX, groupSizeY, groupSizeZ;
-    functionArgs.getGroupSize(groupSizeX, groupSizeY, groupSizeZ);
+    function.getGroupSize(groupSizeX, groupSizeY, groupSizeZ);
     EXPECT_EQ(expectedData->groupSizeInPerThreadDataBase[0], groupSizeX);
     EXPECT_EQ(expectedData->groupSizeInPerThreadDataBase[1], groupSizeY);
     EXPECT_EQ(expectedData->groupSizeInPerThreadDataBase[2], groupSizeZ);
@@ -226,9 +226,9 @@ TEST(FunctionArgs_accessors, returnsCorrectThreadGroupParameters) {
     auto functionArgs = whitebox_cast(FunctionArgs::create(function));
     ASSERT_NE(nullptr, function);
 
-    functionArgs->setGroupSize(5u, 7u, 13u);
-    EXPECT_EQ(functionArgs->getThreadExecutionMask(), 0x7f);
-    EXPECT_EQ(functionArgs->getThreadsPerThreadGroup(), 15u);
+    function->setGroupSize(5u, 7u, 13u);
+    EXPECT_EQ(function->getThreadExecutionMask(), 0x7f);
+    EXPECT_EQ(function->getThreadsPerThreadGroup(), 15u);
 
     delete functionArgs;
     delete function;

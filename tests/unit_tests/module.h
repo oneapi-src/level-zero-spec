@@ -43,11 +43,21 @@ struct Function : public _xe_function_handle_t {
     static Function *create(Module *module, const xe_function_desc_t *desc);
     virtual xe_result_t destroy() = 0;
     virtual xe_result_t createFunctionArgs(xe_function_args_handle_t *phFunctionArgs) = 0;
+    virtual xe_result_t setGroupSize(uint32_t groupSizeX,
+                                     uint32_t groupSizeY,
+                                     uint32_t groupSizeZ) = 0;
 
-    virtual Module *getModule() const = 0;
+    virtual void getGroupSize(uint32_t &outGroupSizeX,
+                              uint32_t &outGroupSizeY,
+                              uint32_t &outGroupSizeZ) const = 0;
     virtual const void *getIsaHostMem() const = 0;
     virtual size_t getIsaSize() const = 0;
+    virtual Module *getModule() const = 0;
+    virtual const void *getPerThreadDataHostMem() const = 0;
+    virtual size_t getPerThreadDataSize() const = 0;
     virtual uint32_t getSimdSize() const = 0;
+    virtual uint32_t getThreadsPerThreadGroup() const = 0;
+    virtual uint32_t getThreadExecutionMask() const = 0;
 
     Function() = default;
     Function(const Function &) = delete;
@@ -73,12 +83,6 @@ struct FunctionArgs : public _xe_function_args_handle_t {
     virtual const void *getCrossThreadDataHostMem() const = 0;
     virtual size_t getCrossThreadDataSize() const = 0;
     virtual const std::vector<GraphicsAllocation *> &getResidencyContainer() const = 0;
-    virtual void setGroupSize(uint32_t groupSizeX, uint32_t groupSizeY, uint32_t groupSizeZ) = 0;
-    virtual void getGroupSize(uint32_t &outGroupSizeX, uint32_t &outGroupSizeY, uint32_t &outGroupSizeZ) const = 0;
-    virtual uint32_t getThreadsPerThreadGroup() const = 0;
-    virtual uint32_t getThreadExecutionMask() const = 0;
-    virtual const void *getPerThreadDataHostMem() const = 0;
-    virtual size_t getPerThreadDataSize() const = 0;
 
     FunctionArgs() = default;
     FunctionArgs(const FunctionArgs &) = delete;
@@ -104,26 +108,33 @@ xeModuleCreateFunction(
 
 xe_result_t __xecall
 xeFunctionDestroy(
-    xe_function_handle_t phFunction
-);
+    xe_function_handle_t phFunction);
 
 xe_result_t __xecall
 xeFunctionCreateFunctionArgs(
-    xe_function_handle_t hFunction,                 ///< [in] handle of the function
-    xe_function_args_handle_t* phFunctionArgs       ///< [out] handle of the Function arguments object
+    xe_function_handle_t hFunction,           ///< [in] handle of the function
+    xe_function_args_handle_t *phFunctionArgs ///< [out] handle of the Function arguments object
+);
+
+xe_result_t __xecall
+xeFunctionSetGroupSize(
+    xe_function_handle_t hFunction, ///< [in] handle of the function object
+    uint32_t groupSizeX,            ///< [in] group size for X dimension to use for this function.
+    uint32_t groupSizeY,            ///< [in] group size for Y dimension to use for this function.
+    uint32_t groupSizeZ             ///< [in] group size for Z dimension to use for this function.
 );
 
 xe_result_t __xecall
 xeFunctionArgsDestroy(
-    xe_function_args_handle_t hFunctionArgs         ///< [in] handle of the function arguments buffer object
+    xe_function_args_handle_t hFunctionArgs ///< [in] handle of the function arguments buffer object
 );
 
 xe_result_t __xecall
 xeFunctionArgsSetValue(
-    xe_function_args_handle_t hFunctionArgs,        ///< [in/out] handle of the function args object.
-    uint32_t argIndex,                              ///< [in] argument index in range [0, num args - 1]
-    size_t argSize,                                 ///< [in] size of argument type
-    const void* pArgValue                           ///< [in] argument value represented as matching arg type
+    xe_function_args_handle_t hFunctionArgs, ///< [in/out] handle of the function args object.
+    uint32_t argIndex,                       ///< [in] argument index in range [0, num args - 1]
+    size_t argSize,                          ///< [in] size of argument type
+    const void *pArgValue                    ///< [in] argument value represented as matching arg type
 );
 
 } // namespace xe
