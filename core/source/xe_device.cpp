@@ -53,7 +53,7 @@
 ///
 /// @hash {5c7c465fde2ab4523bf907a3b46343641d9b73a17c0e20334834e54d19ef5103}
 ///
-__xedllexport xe_result_t __xecall
+xe_result_t __xecall
   xeDriverGetDeviceCount(
     uint32_t* count                                 ///< [out] number of devices available
     )
@@ -112,7 +112,7 @@ __xedllexport xe_result_t __xecall
 ///
 /// @hash {c26ed99dfec278253de324f242d61516b146acd882d0894d8208cfed698fd1d1}
 ///
-__xedllexport xe_result_t __xecall
+xe_result_t __xecall
   xeDriverGetDeviceUniqueIds(
     uint32_t count,                                 ///< [in] size of device unique ids array. Typically, this will be
                                                     ///< ${x}DeviceGetCount.
@@ -174,7 +174,7 @@ __xedllexport xe_result_t __xecall
 ///
 /// @hash {0fcaea081072b19126b15d5ddf6bf62c8c5a75b8647a0176af861cfb0adb1697}
 ///
-__xedllexport xe_result_t __xecall
+xe_result_t __xecall
   xeDriverGetDevice(
     uint32_t uniqueId,                              ///< [in] unique id of device to retrieve. Use ${x}DriverGetDeviceUniqueIds
                                                     ///< to obtain a unique Id.
@@ -236,7 +236,7 @@ __xedllexport xe_result_t __xecall
 ///
 /// @hash {17a42ce94be984870ef7258c30474c488c4cdd342ac215c9c027a55dcd8613ff}
 ///
-__xedllexport xe_result_t __xecall
+xe_result_t __xecall
   xeDeviceGetSubDevice(
     xe_device_handle_t hDevice,                     ///< [in] handle of the device object
     uint32_t ordinal,                               ///< [in] ordinal of sub-device to retrieve
@@ -297,7 +297,7 @@ __xedllexport xe_result_t __xecall
 ///
 /// @hash {fc64199c044234983739580abae3a91240008f47d57127d41cd69cd49b4fb013}
 ///
-__xedllexport xe_result_t __xecall
+xe_result_t __xecall
   xeDeviceGetApiVersion(
     xe_device_handle_t hDevice,                     ///< [in] handle of the device object
     xe_api_version_t* version                       ///< [out] api version
@@ -359,7 +359,7 @@ __xedllexport xe_result_t __xecall
 ///
 /// @hash {3db75068efff2256a55cef1327ecc78abc4667e68c27a09621c6312ae779c145}
 ///
-__xedllexport xe_result_t __xecall
+xe_result_t __xecall
   xeDeviceGetProperties(
     xe_device_handle_t hDevice,                     ///< [in] handle of the device object
     xe_device_properties_t* pDeviceProperties       ///< [out] query result for device properties
@@ -420,7 +420,7 @@ __xedllexport xe_result_t __xecall
 ///
 /// @hash {7f1420ab7455a639874a23c83d2643e649a65a1340bad17572fed4071c94142b}
 ///
-__xedllexport xe_result_t __xecall
+xe_result_t __xecall
   xeDeviceGetComputeProperties(
     xe_device_handle_t hDevice,                     ///< [in] handle of the device object
     xe_device_compute_properties_t* pComputeProperties  ///< [out] query result for compute properties
@@ -482,7 +482,7 @@ __xedllexport xe_result_t __xecall
 ///
 /// @hash {4909cbc4cbb7ee86da7ec399f394605d2c5a91e06cd283a9989a58012b7752f0}
 ///
-__xedllexport xe_result_t __xecall
+xe_result_t __xecall
   xeDeviceGetMemoryProperties(
     xe_device_handle_t hDevice,                     ///< [in] handle of the device object
     xe_device_memory_properties_t* pMemProperties   ///< [out] query result for compute properties
@@ -542,7 +542,7 @@ __xedllexport xe_result_t __xecall
 ///
 /// @hash {ec34167e970021b312559839b8f4105aaa14c088f77586203eb745f4b6784d1b}
 ///
-__xedllexport xe_result_t __xecall
+xe_result_t __xecall
   xeDeviceGetLinkProperties(
     uint32_t srcOrdinal,                            ///< [in] source device ordinal
     uint32_t dstOrdinal,                            ///< [in] destination device ordinal
@@ -603,7 +603,7 @@ __xedllexport xe_result_t __xecall
 ///
 /// @hash {e77d453d30dc6017ed8b9d0d0d5dd6597a4ca30fa37cac35a99658310d7bba4e}
 ///
-__xedllexport xe_result_t __xecall
+xe_result_t __xecall
   xeDeviceCanAccessPeer(
     xe_device_handle_t hDevice,                     ///< [in] handle of the device performing the access
     xe_device_handle_t hPeerDevice,                 ///< [in] handle of the peer device with the allocation
@@ -665,7 +665,7 @@ __xedllexport xe_result_t __xecall
 ///
 /// @hash {b2e59b50895488ecaf51f53a705eb7dbae91b1f1d903390571066aa20cc9f588}
 ///
-__xedllexport xe_result_t __xecall
+xe_result_t __xecall
   xeDeviceSetIntermediateCacheConfig(
     xe_device_handle_t hDevice,                     ///< [in] handle of the device 
     xe_cache_config_t CacheConfig                   ///< [in] CacheConfig
@@ -724,7 +724,7 @@ __xedllexport xe_result_t __xecall
 ///
 /// @hash {821981d67b82ce6c7da51cab0dc27d5dad640e710ef2244156e7a8a345e83e24}
 ///
-__xedllexport xe_result_t __xecall
+xe_result_t __xecall
   xeDeviceSetLastLevelCacheConfig(
     xe_device_handle_t hDevice,                     ///< [in] handle of the device 
     xe_cache_config_t CacheConfig                   ///< [in] CacheConfig

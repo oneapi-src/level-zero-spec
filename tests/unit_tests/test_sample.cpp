@@ -181,10 +181,10 @@ TEST(sample, helloWorld) {
                                                    (xe_fence_handle_t)0);
     ASSERT_EQ(XE_RESULT_SUCCESS, result);
 
-    result = xeMemFree(hMemAllocHandle, src);
+    result = xe::xeMemFree(hMemAllocHandle, src);
     ASSERT_EQ(XE_RESULT_SUCCESS, result);
 
-    result = xeMemFree(hMemAllocHandle, dest);
+    result = xe::xeMemFree(hMemAllocHandle, dest);
     ASSERT_EQ(XE_RESULT_SUCCESS, result);
 
     result = xe::xeCommandListDestroy(commandList);

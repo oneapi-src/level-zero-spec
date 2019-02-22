@@ -61,7 +61,7 @@ extern "C" {
 ///     - ::XE_RESULT_ERROR_INVALID_PARAMETER
 ///         + nullptr == hCommandList
 ///     - ::XE_RESULT_ERROR_UNSUPPORTED
-__xedllport xe_result_t __xecall
+xe_result_t __xecall
   xeCommandListEncodeExecutionBarrier(
     xe_command_list_handle_t hCommandList           ///< [in] handle of the command list
     );

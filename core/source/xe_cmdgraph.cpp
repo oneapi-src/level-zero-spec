@@ -55,7 +55,7 @@
 ///
 /// @hash {3b85e08ac6895a0dec2d64fbfb9c2e5ff0dc065fc10cfdf4e13e2903a6f626ca}
 ///
-__xedllexport xe_result_t __xecall
+xe_result_t __xecall
   xeDeviceCreateCommandGraph(
     xe_device_handle_t hDevice,                     ///< [in] handle of the device object
     const xe_command_graph_desc_t* desc,            ///< [in] pointer to command graph descriptor
@@ -114,7 +114,7 @@ __xedllexport xe_result_t __xecall
 ///
 /// @hash {ca29e107ea24beb8541932fc6be7c98805f20ced8106a62fc76cfa3381110226}
 ///
-__xedllexport xe_result_t __xecall
+xe_result_t __xecall
   xeCommandGraphDestroy(
     xe_command_graph_handle_t hCommandGraph         ///< [in] handle of command graph object to destroy
     )
@@ -171,7 +171,7 @@ __xedllexport xe_result_t __xecall
 ///
 /// @hash {85412d12c54a9c3632a9e390efce8ad3ad8fbccc1401d7970387baa3b197c3da}
 ///
-__xedllexport xe_result_t __xecall
+xe_result_t __xecall
   xeCommandGraphClose(
     xe_command_graph_handle_t hCommandGraph         ///< [in] handle of command graph object to close
     )
@@ -226,7 +226,7 @@ __xedllexport xe_result_t __xecall
 ///
 /// @hash {528e83125c070c5e70c5fd5f376cb08b0feb42d3b1b83e7fc7eb656c2277e709}
 ///
-__xedllexport xe_result_t __xecall
+xe_result_t __xecall
   xeCommandGraphReset(
     xe_command_graph_handle_t hCommandGraph         ///< [in] handle of command graph object to reset
     )

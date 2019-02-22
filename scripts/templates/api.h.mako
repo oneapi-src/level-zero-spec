@@ -104,7 +104,7 @@ typedef struct _${th.subx(x, obj['name'])}
 %for line in th.make_return_lines(x, obj, cls):
 /// ${line}
 %endfor
-__${x}dllport ${x}_result_t __${x}call
+${x}_result_t __${x}call
   ${th.make_func_name(x, obj, cls)}(
     %for line in th.make_param_lines(x, obj, cls):
     ${line}

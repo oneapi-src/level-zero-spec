@@ -59,7 +59,7 @@
 ///
 /// @hash {0ae71bd1cc936ad12438c9cc7d3471f98557ec8f6b1fb62d2649cc618eb16351}
 ///
-__xedllexport xe_result_t __xecall
+xe_result_t __xecall
   xeDriverInit(
     xe_init_flag_t flags                            ///< [in] initialization flags
     )
@@ -117,7 +117,7 @@ __xedllexport xe_result_t __xecall
 ///
 /// @hash {6ae964da2310ff18a63fe79a8fabcfaa071a342064d2f092042eb2b830d7c54f}
 ///
-__xedllexport xe_result_t __xecall
+xe_result_t __xecall
   xeDriverGetVersion(
     uint32_t* version                               ///< [out] driver version
     )

@@ -7,6 +7,13 @@
 namespace xe {
 
 xe_result_t __xecall
+xeMemFree(
+    xe_mem_allocator_handle_t hMemAllocHandle,
+    const void *ptr) {
+    return XE_RESULT_SUCCESS;
+}
+
+xe_result_t __xecall
 xeSharedMemAlloc(
     xe_mem_allocator_handle_t hMemAllocHandle,
     xe_device_handle_t hDevice,

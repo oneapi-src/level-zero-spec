@@ -78,7 +78,7 @@
 ///
 /// @hash {9eb829c1441842e279f9be96688eeb91e18798a1c6f1c8383d0a3ac86bfd4809}
 ///
-__xedllexport xe_result_t __xecall
+xe_result_t __xecall
   xeDeviceCreateModule(
     xe_device_handle_t hDevice,                     ///< [in] handle of the device
     const xe_module_desc_t* desc,                   ///< [in] pointer to module descriptor
@@ -144,7 +144,7 @@ __xedllexport xe_result_t __xecall
 ///
 /// @hash {349b769d72d44bcbeb8306573eb07e65478f28d404576327cdd45381da9e8b96}
 ///
-__xedllexport xe_result_t __xecall
+xe_result_t __xecall
   xeModuleDestroy(
     xe_module_handle_t hModule                      ///< [in] handle of the module
     )
@@ -202,7 +202,7 @@ __xedllexport xe_result_t __xecall
 ///
 /// @hash {f3094b9ab0cf409ea4c6bc63c2ec39ad88091a8ee9fe684c984e877f61548d00}
 ///
-__xedllexport xe_result_t __xecall
+xe_result_t __xecall
   xeModuleBuildLogDestroy(
     xe_module_build_log_handle_t hBuildLog          ///< [in] handle of the module build log object.
     )
@@ -259,7 +259,7 @@ __xedllexport xe_result_t __xecall
 ///
 /// @hash {dd35e7a2beba7be9b599e677ac04880f6512aa776568772d8cd128b65b7839d4}
 ///
-__xedllexport xe_result_t __xecall
+xe_result_t __xecall
   xeModuleBuildLogGetString(
     xe_module_build_log_handle_t hBuildLog,         ///< [in] handle of the module build log object.
     uint32_t* pSize,                                ///< [out] size of build log string.
@@ -328,7 +328,7 @@ __xedllexport xe_result_t __xecall
 ///
 /// @hash {f86dcf1e7e87d03f26bddcbff99420a8d159e89f57619beaaeebfee453cfd62e}
 ///
-__xedllexport xe_result_t __xecall
+xe_result_t __xecall
   xeModuleGetNativeBinary(
     xe_module_handle_t hModule,                     ///< [in] handle of the device
     uint32_t* pSize,                                ///< [out] size of native binary.
@@ -395,7 +395,7 @@ __xedllexport xe_result_t __xecall
 ///
 /// @hash {db1f3dd910ba87cc5f4943397310ef13073b227ef8aad92327a8183e14461837}
 ///
-__xedllexport xe_result_t __xecall
+xe_result_t __xecall
   xeModuleCreateFunction(
     xe_module_handle_t hModule,                     ///< [in] handle of the module
     const xe_function_desc_t* desc,                 ///< [in] pointer to function descriptor
@@ -456,7 +456,7 @@ __xedllexport xe_result_t __xecall
 ///
 /// @hash {81a8e4126290acff1c7d8a2abbac4698476a5f69abd668a5098199163cfb01c7}
 ///
-__xedllexport xe_result_t __xecall
+xe_result_t __xecall
   xeFunctionDestroy(
     xe_function_handle_t hFunction                  ///< [in] handle of the function object
     )
@@ -575,7 +575,7 @@ __xedllexport xe_result_t __xecall
 ///
 /// @hash {f3c0ffef33c7e902e382ada2d1fac7966afd96c3c9989bf29a9917e4ae2856d2}
 ///
-__xedllexport xe_result_t __xecall
+xe_result_t __xecall
   xeFunctionSuggestGroupSize(
     xe_function_handle_t hFunction,                 ///< [in] handle of the function object
     uint32_t globalSizeX,                           ///< [in] global width for X dimension.
@@ -643,7 +643,7 @@ __xedllexport xe_result_t __xecall
 ///
 /// @hash {d28a8e65c3c7b08efac12f45a3b9ec5fb16dbfe81f6c2d1fda1625887b62a478}
 ///
-__xedllexport xe_result_t __xecall
+xe_result_t __xecall
   xeFunctionCreateFunctionArgs(
     xe_function_handle_t hFunction,                 ///< [in] handle of the function
     xe_function_args_handle_t* phFunctionArgs       ///< [out] handle of the Function arguments object
@@ -701,7 +701,7 @@ __xedllexport xe_result_t __xecall
 ///
 /// @hash {188738a5c24e1cfdced709bf247351be2c54076aeb5641fd6618850d3ad6d050}
 ///
-__xedllexport xe_result_t __xecall
+xe_result_t __xecall
   xeFunctionArgsDestroy(
     xe_function_args_handle_t hFunctionArgs         ///< [in] handle of the function arguments buffer object
     )
@@ -762,7 +762,7 @@ __xedllexport xe_result_t __xecall
 ///
 /// @hash {a996568e450c8eba49523b384b4ad4b08e476e3e527d9ce286766ccf7d2a05e9}
 ///
-__xedllexport xe_result_t __xecall
+xe_result_t __xecall
   xeFunctionArgsSetValue(
     xe_function_args_handle_t hFunctionArgs,        ///< [in/out] handle of the function args object.
     uint32_t argIndex,                              ///< [in] argument index in range [0, num args - 1]
@@ -825,7 +825,7 @@ __xedllexport xe_result_t __xecall
 ///
 /// @hash {e8873190019647e8d9f6a5b6f325014dbea173082544527129680e4cc9451b04}
 ///
-__xedllexport xe_result_t __xecall
+xe_result_t __xecall
   xeFunctionArgsSetAttribute(
     xe_function_args_handle_t hFunctionArgs,        ///< [in/out] handle of the function args object.
     xe_function_argument_attribute_t attr,          ///< [in] attribute to set
@@ -886,7 +886,7 @@ __xedllexport xe_result_t __xecall
 ///
 /// @hash {cd0ca73d29fe12490a3a61992e20a5d3aeac34c8260b038d069a8e380af49c0a}
 ///
-__xedllexport xe_result_t __xecall
+xe_result_t __xecall
   xeFunctionQueryAttribute(
     xe_function_handle_t hFunction,                 ///< [in] handle of the function object
     xe_function_attribute_t attr,                   ///< [in] attribute to query
@@ -951,7 +951,7 @@ __xedllexport xe_result_t __xecall
 ///
 /// @hash {de4ec8dc364024f41980b93d7021d402e874ac946ffb59ea3eb5aa9ab3301066}
 ///
-__xedllexport xe_result_t __xecall
+xe_result_t __xecall
   xeCommandListEncodeDispatchFunction(
     xe_command_list_handle_t hCommandList,          ///< [in] handle of the command list
     xe_function_handle_t hFunction,                 ///< [in] handle of the function object
@@ -1020,7 +1020,7 @@ __xedllexport xe_result_t __xecall
 ///
 /// @hash {87e742e574cd46be6071af89e21e2ded1f39f92798fdf538870a4187533af411}
 ///
-__xedllexport xe_result_t __xecall
+xe_result_t __xecall
   xeCommandGraphEncodeDispatchFunction(
     xe_command_graph_handle_t hCommandGraph,        ///< [in] handle of the command graph
     xe_function_handle_t hFunction,                 ///< [in] handle of the function object
@@ -1091,7 +1091,7 @@ __xedllexport xe_result_t __xecall
 ///
 /// @hash {57fb8d85b4c8cc16e07ad3342db0be97e5c18c19b72c8ceb3dcbd20f88a98eea}
 ///
-__xedllexport xe_result_t __xecall
+xe_result_t __xecall
   xeCommandListEncodeDispatchFunctionIndirect(
     xe_command_list_handle_t hCommandList,          ///< [in] handle of the command list
     xe_function_handle_t hFunction,                 ///< [in] handle of the function object
@@ -1162,7 +1162,7 @@ __xedllexport xe_result_t __xecall
 ///
 /// @hash {47643fb62b1afef97af02b4695028e484c973c06d358233559925f0353f8e845}
 ///
-__xedllexport xe_result_t __xecall
+xe_result_t __xecall
   xeCommandGraphEncodeDispatchFunctionIndirect(
     xe_command_graph_handle_t hCommandGraph,        ///< [in] handle of the command graph
     xe_function_handle_t hFunction,                 ///< [in] handle of the function object
@@ -1228,7 +1228,7 @@ __xedllexport xe_result_t __xecall
 ///
 /// @hash {63f4382ff32ea764dd175c3c286a9799cd23b3e32aa90c1b948a6b1e0405b4ba}
 ///
-__xedllexport xe_result_t __xecall
+xe_result_t __xecall
   xeCommandListEncodeDispatchHostFunction(
     xe_command_list_handle_t hCommandList,          ///< [in] handle of the command list
     xe_host_pfn_t pfnHostFunc,                      ///< [in] pointer to host function.
@@ -1290,7 +1290,7 @@ __xedllexport xe_result_t __xecall
 ///
 /// @hash {25ee33b5152b0dcbfaa702a00fef20f87383ad225fa62703b0344b6bd4569eee}
 ///
-__xedllexport xe_result_t __xecall
+xe_result_t __xecall
   xeCommandGraphEncodeDispatchHostFunction(
     xe_command_graph_handle_t hCommandGraph,        ///< [in] handle of the command graph
     xe_host_pfn_t pfnHostFunc,                      ///< [in] pointer to host function.

@@ -60,7 +60,7 @@
 ///
 /// @hash {64cb11be0bd61d15890524c332cd41e37a7ff6c4b24ce3b3bdb3b0d19d687ad8}
 ///
-__xedllexport xe_result_t __xecall
+xe_result_t __xecall
   xeDeviceCreateCommandQueue(
     xe_device_handle_t hDevice,                     ///< [in] handle of the device object
     const xe_command_queue_desc_t* desc,            ///< [in] pointer to command queue descriptor
@@ -126,7 +126,7 @@ __xedllexport xe_result_t __xecall
 ///
 /// @hash {d2b4274520dcb902a966ba04f31f4c7e3976a1a6e0b6ad73d64713baa10785d4}
 ///
-__xedllexport xe_result_t __xecall
+xe_result_t __xecall
   xeCommandQueueDestroy(
     xe_command_queue_handle_t hCommandQueue         ///< [in] handle of command queue object to destroy
     )
@@ -187,7 +187,7 @@ __xedllexport xe_result_t __xecall
 ///
 /// @hash {3d9d4e4b61d47939ee851c18dce4cb2d2e5d99585ca8349927a49a7ee1aaceab}
 ///
-__xedllexport xe_result_t __xecall
+xe_result_t __xecall
   xeCommandQueueEnqueueCommandLists(
     xe_command_queue_handle_t hCommandQueue,        ///< [in] handle of the command queue
     uint32_t numCommandLists,                       ///< [in] number of command lists to enqueue
@@ -246,7 +246,7 @@ __xedllexport xe_result_t __xecall
 ///
 /// @hash {643f20374b51ae704dcb5e1c4d9e883d481cec8ce0ab0ebe52eb12aa25a2956e}
 ///
-__xedllexport xe_result_t __xecall
+xe_result_t __xecall
   xeCommandQueueSynchronize(
     xe_command_queue_handle_t hCommandQueue,        ///< [in] handle of the command queue
     xe_synchronization_mode_t mode,                 ///< [in] synchronization mode

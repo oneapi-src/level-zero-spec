@@ -67,30 +67,6 @@ extern "C" {
 #endif // defined(_WIN32)
 
 ///////////////////////////////////////////////////////////////////////////////
-#if defined(_WIN32)
-/// @brief Microsoft-specific dllexport storage-class attribute
-#define __xedllexport  __declspec(dllexport)
-#else
-#define __xedllexport  
-#endif // defined(_WIN32)
-
-///////////////////////////////////////////////////////////////////////////////
-#if defined(_WIN32)
-/// @brief Microsoft-specific dllimport storage-class attribute
-#define __xedllimport  __declspec(dllimport)
-#else
-#define __xedllimport  
-#endif // defined(_WIN32)
-
-///////////////////////////////////////////////////////////////////////////////
-#if defined(XE_MAKEDLL)
-/// @brief DLL-specific function call attribute
-#define __xedllport  __xedllexport
-#else
-#define __xedllport  __xedllimport
-#endif // defined(XE_MAKEDLL)
-
-///////////////////////////////////////////////////////////////////////////////
 #if !defined(XE_ENABLE_OCL_INTEROP)
 /// @brief Disable OpenCL interoperability functions if not explicitly defined
 #define XE_ENABLE_OCL_INTEROP  0

@@ -120,7 +120,7 @@ typedef struct _xe_command_queue_desc_t
 ///         + ::XE_COMMAND_QUEUE_DESC_VERSION <= desc->version
 ///     - ::XE_RESULT_ERROR_OUT_OF_HOST_MEMORY
 ///     - ::XE_RESULT_ERROR_OUT_OF_DEVICE_MEMORY
-__xedllport xe_result_t __xecall
+xe_result_t __xecall
   xeDeviceCreateCommandQueue(
     xe_device_handle_t hDevice,                     ///< [in] handle of the device object
     const xe_command_queue_desc_t* desc,            ///< [in] pointer to command queue descriptor
@@ -149,7 +149,7 @@ __xedllport xe_result_t __xecall
 ///     - ::XE_RESULT_ERROR_INVALID_PARAMETER
 ///         + nullptr == hCommandQueue
 ///     - ::XE_RESULT_ERROR_UNSUPPORTED
-__xedllport xe_result_t __xecall
+xe_result_t __xecall
   xeCommandQueueDestroy(
     xe_command_queue_handle_t hCommandQueue         ///< [in] handle of command queue object to destroy
     );
@@ -176,7 +176,7 @@ __xedllport xe_result_t __xecall
 ///         + hFence is in signaled state
 ///         + hFence is enqueued in another command queue
 ///     - ::XE_RESULT_ERROR_UNSUPPORTED
-__xedllport xe_result_t __xecall
+xe_result_t __xecall
   xeCommandQueueEnqueueCommandLists(
     xe_command_queue_handle_t hCommandQueue,        ///< [in] handle of the command queue
     uint32_t numCommandLists,                       ///< [in] number of command lists to enqueue
@@ -200,7 +200,7 @@ __xedllport xe_result_t __xecall
 ///     - ::XE_RESULT_ERROR_UNSUPPORTED
 ///     - ::XE_RESULT_NOT_READY
 ///         + timeout expired
-__xedllport xe_result_t __xecall
+xe_result_t __xecall
   xeCommandQueueSynchronize(
     xe_command_queue_handle_t hCommandQueue,        ///< [in] handle of the command queue
     xe_synchronization_mode_t mode,                 ///< [in] synchronization mode

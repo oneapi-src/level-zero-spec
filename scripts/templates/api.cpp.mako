@@ -55,7 +55,7 @@ from templates import helper as th
 ///
 /// @hash {${obj['hash'][cli]}}
 ///
-__${x}dllexport ${x}_result_t __${x}call
+${x}_result_t __${x}call
   ${th.make_func_name(x, obj, cls)}(
     %for line in th.make_param_lines(x, obj, cls):
     ${line}

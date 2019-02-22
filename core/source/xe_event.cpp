@@ -60,7 +60,7 @@
 ///
 /// @hash {2c5763b8ec9726ab95422bca4616275ec9ed4e3d4b7a42a8b4e7089c813350d6}
 ///
-__xedllexport xe_result_t __xecall
+xe_result_t __xecall
   xeDeviceCreateEvent(
     xe_device_handle_t hDevice,                     ///< [in] handle of the device
     const xe_event_desc_t* desc,                    ///< [in] pointer to event descriptor
@@ -125,7 +125,7 @@ __xedllexport xe_result_t __xecall
 ///
 /// @hash {ff2fcb0cf2905079d5fb305c78b9dc0d9f1c4e5ab7792007b01cd832e94bae5c}
 ///
-__xedllexport xe_result_t __xecall
+xe_result_t __xecall
   xeDevicePlaceEvent(
     xe_device_handle_t hDevice,                     ///< [in] handle of the device
     const xe_event_desc_t* desc,                    ///< [in] pointer to event descriptor
@@ -194,7 +194,7 @@ __xedllexport xe_result_t __xecall
 ///
 /// @hash {0e82f51d7da70ece36da3299c7607c0ce273c15a6401a026d89b8a6e24b52985}
 ///
-__xedllexport xe_result_t __xecall
+xe_result_t __xecall
   xeEventDestroy(
     xe_event_handle_t hEvent                        ///< [in] handle of event object to destroy
     )
@@ -255,7 +255,7 @@ __xedllexport xe_result_t __xecall
 ///
 /// @hash {f66119ce56a773182ebed031c151a8faf6280e74d7b56718b71177f01141bc97}
 ///
-__xedllexport xe_result_t __xecall
+xe_result_t __xecall
   xeCommandListEncodeSignalEvent(
     xe_command_list_handle_t hCommandList,          ///< [in] handle of the command list
     xe_event_handle_t hEvent                        ///< [in] handle of the event
@@ -312,7 +312,7 @@ __xedllexport xe_result_t __xecall
 ///
 /// @hash {b8409ab2ea47c3520b0faabc15232c79b1b0494defcc29b08c09a95b5b4e97df}
 ///
-__xedllexport xe_result_t __xecall
+xe_result_t __xecall
   xeCommandListEncodeWaitOnEvent(
     xe_command_list_handle_t hCommandList,          ///< [in] handle of the command list
     xe_event_handle_t hEvent                        ///< [in] handle of the event
@@ -369,7 +369,7 @@ __xedllexport xe_result_t __xecall
 ///
 /// @hash {b6c4b3102db77f8114696fb2f220387c48408770e4bed49fa83d44159b8af5f6}
 ///
-__xedllexport xe_result_t __xecall
+xe_result_t __xecall
   xeCommandListEncodeSignalMultipleEvents(
     xe_command_list_handle_t hCommandList,          ///< [in] handle of the command list
     uint32_t numEvents,                             ///< [in] number of events pointed to by phEvents
@@ -428,7 +428,7 @@ __xedllexport xe_result_t __xecall
 ///
 /// @hash {9bc2eeadc113dfc5be97a3a4590743a2b7b4ee4e12237b86fc7be4f208da95d8}
 ///
-__xedllexport xe_result_t __xecall
+xe_result_t __xecall
   xeCommandListEncodeWaitOnMultipleEvents(
     xe_command_list_handle_t hCommandList,          ///< [in] handle of the command list
     uint32_t numEvents,                             ///< [in] number of events pointed to by phEvents
@@ -488,7 +488,7 @@ __xedllexport xe_result_t __xecall
 ///
 /// @hash {809272a0febf2e56f09e04c5a53b8568b0c6905e5acd124c0e1e4151b542dab6}
 ///
-__xedllexport xe_result_t __xecall
+xe_result_t __xecall
   xeHostSignalEvent(
     xe_event_handle_t hEvent                        ///< [in] handle of the event
     )
@@ -548,7 +548,7 @@ __xedllexport xe_result_t __xecall
 ///
 /// @hash {580d70d65f44535c9b2585408c20f2c0af086f6b54945445e7b09d31493403e0}
 ///
-__xedllexport xe_result_t __xecall
+xe_result_t __xecall
   xeHostWaitOnEvent(
     xe_event_handle_t hEvent,                       ///< [in] handle of the event
     xe_synchronization_mode_t mode,                 ///< [in] synchronization mode
@@ -612,7 +612,7 @@ __xedllexport xe_result_t __xecall
 ///
 /// @hash {6bfaa4edb5accb4ff4433b13b89b7371377931bb1eb613bb04878ef02ac4f666}
 ///
-__xedllexport xe_result_t __xecall
+xe_result_t __xecall
   xeHostSignalMultipleEvents(
     uint32_t numEvents,                             ///< [in] number of events pointed to by phEvents
     xe_event_handle_t* phEvents                     ///< [in] pointer to array of handles of the events
@@ -672,7 +672,7 @@ __xedllexport xe_result_t __xecall
 ///
 /// @hash {e52ffd62217e9fcf9ed29e74f4453d0d1930803fe7e4289225b27f2526df83d0}
 ///
-__xedllexport xe_result_t __xecall
+xe_result_t __xecall
   xeHostWaitOnMultipleEvents(
     uint32_t numEvents,                             ///< [in] number of events pointed to by phEvents
     xe_event_handle_t* phEvents,                    ///< [in] pointer to array of handles of the events
@@ -745,7 +745,7 @@ __xedllexport xe_result_t __xecall
 ///
 /// @hash {1091660d20f5595dad7bbbf969b0a8e9238f218438ff4f2c908b93135147cfa6}
 ///
-__xedllexport xe_result_t __xecall
+xe_result_t __xecall
   xeEventQueryStatus(
     xe_event_handle_t hEvent                        ///< [in] handle of the event
     )
@@ -806,7 +806,7 @@ __xedllexport xe_result_t __xecall
 ///
 /// @hash {e637cce64a455fb95fa0bca51aaf247ab2aab0f6eae8f236d16f76c4f82a004f}
 ///
-__xedllexport xe_result_t __xecall
+xe_result_t __xecall
   xeEventQueryElapsedTime(
     xe_event_handle_t hEventStart,                  ///< [in] handle of the start event
     xe_event_handle_t hEventEnd,                    ///< [in] handle of the end event
@@ -868,7 +868,7 @@ __xedllexport xe_result_t __xecall
 ///
 /// @hash {2aadae68763b475a5f8ea4f780f115829c192fe6ab8fdff1c744906cf1cb832e}
 ///
-__xedllexport xe_result_t __xecall
+xe_result_t __xecall
   xeEventQueryMetricsData(
     xe_event_handle_t hEventStart,                  ///< [in] handle of the start event
     xe_event_handle_t hEventEnd,                    ///< [in] handle of the end event
@@ -932,7 +932,7 @@ __xedllexport xe_result_t __xecall
 ///
 /// @hash {06205f20ab4babe3494b5f61b9e94ba192b5f0f68c0f27e75651983ccc6f0b3e}
 ///
-__xedllexport xe_result_t __xecall
+xe_result_t __xecall
   xeCommandListEncodeEventReset(
     xe_command_list_handle_t hCommandList,          ///< [in] handle of the command list
     xe_event_handle_t hEvent                        ///< [in] handle of the event
@@ -991,7 +991,7 @@ __xedllexport xe_result_t __xecall
 ///
 /// @hash {8bd5a629cd3d5cdbf21ba95b68945eb87003476ae6e65e32a1da5666b9851719}
 ///
-__xedllexport xe_result_t __xecall
+xe_result_t __xecall
   xeEventReset(
     xe_event_handle_t hEvent                        ///< [in] handle of the event
     )

@@ -55,7 +55,7 @@ extern "C" {
 ///     - ::XE_RESULT_ERROR_UNSUPPORTED
 ///     - ::XE_RESULT_ERROR_OUT_OF_HOST_MEMORY
 ///     - ::XE_RESULT_ERROR_OUT_OF_DEVICE_MEMORY
-__xedllport xe_result_t __xecall
+xe_result_t __xecall
   xeDeviceRegisterCLMemory(
     xe_device_handle_t hDevice,                     ///< [in] handle to the device
     cl_context context,                             ///< [in] the OpenCL context that created the memory
@@ -78,7 +78,7 @@ __xedllport xe_result_t __xecall
 ///     - ::XE_RESULT_ERROR_UNSUPPORTED
 ///     - ::XE_RESULT_ERROR_OUT_OF_HOST_MEMORY
 ///     - ::XE_RESULT_ERROR_OUT_OF_DEVICE_MEMORY
-__xedllport xe_result_t __xecall
+xe_result_t __xecall
   xeDeviceRegisterCLProgram(
     xe_device_handle_t hDevice,                     ///< [in] handle to the device
     cl_context context,                             ///< [in] the OpenCL context that created the program
@@ -101,7 +101,7 @@ __xedllport xe_result_t __xecall
 ///     - ::XE_RESULT_ERROR_UNSUPPORTED
 ///     - ::XE_RESULT_ERROR_OUT_OF_HOST_MEMORY
 ///     - ::XE_RESULT_ERROR_OUT_OF_DEVICE_MEMORY
-__xedllport xe_result_t __xecall
+xe_result_t __xecall
   xeDeviceRegisterCLCommandQueue(
     xe_device_handle_t hDevice,                     ///< [in] handle to the device
     cl_context context,                             ///< [in] the OpenCL context that created the command queue

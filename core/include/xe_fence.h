@@ -85,7 +85,7 @@ typedef struct _xe_fence_desc_t
 ///         + ::XE_FENCE_DESC_VERSION <= desc->version
 ///     - ::XE_RESULT_ERROR_OUT_OF_HOST_MEMORY
 ///     - ::XE_RESULT_ERROR_OUT_OF_DEVICE_MEMORY
-__xedllport xe_result_t __xecall
+xe_result_t __xecall
   xeCommandQueueCreateFence(
     xe_command_queue_handle_t hCommandQueue,        ///< [in] handle of command queue
     const xe_fence_desc_t* desc,                    ///< [in] pointer to fence descriptor
@@ -114,7 +114,7 @@ __xedllport xe_result_t __xecall
 ///         + nullptr == hFence
 ///         + fence is enqueued in a command queue
 ///     - ::XE_RESULT_ERROR_UNSUPPORTED
-__xedllport xe_result_t __xecall
+xe_result_t __xecall
   xeFenceDestroy(
     xe_fence_handle_t hFence                        ///< [in] handle of fence object to destroy
     );
@@ -140,7 +140,7 @@ __xedllport xe_result_t __xecall
 ///     - ::XE_RESULT_ERROR_UNSUPPORTED
 ///     - ::XE_RESULT_NOT_READY
 ///         + timeout expired
-__xedllport xe_result_t __xecall
+xe_result_t __xecall
   xeHostWaitOnFence(
     xe_fence_handle_t hFence,                       ///< [in] handle of the fence
     xe_synchronization_mode_t mode,                 ///< [in] synchronization mode
@@ -178,7 +178,7 @@ __xedllport xe_result_t __xecall
 ///     - ::XE_RESULT_ERROR_UNSUPPORTED
 ///     - ::XE_RESULT_NOT_READY
 ///         + timeout expired
-__xedllport xe_result_t __xecall
+xe_result_t __xecall
   xeHostWaitOnMultipleFences(
     uint32_t numFences,                             ///< [in] number of fences in hFences
     xe_fence_handle_t* phFences,                    ///< [in] pointer to array of handles of the fences
@@ -216,7 +216,7 @@ __xedllport xe_result_t __xecall
 ///     - ::XE_RESULT_ERROR_UNSUPPORTED
 ///     - ::XE_RESULT_NOT_READY
 ///         + not signaled
-__xedllport xe_result_t __xecall
+xe_result_t __xecall
   xeFenceQueryStatus(
     xe_fence_handle_t hFence                        ///< [in] handle of the fence
     );
@@ -238,7 +238,7 @@ __xedllport xe_result_t __xecall
 ///         + nullptr == pTime
 ///         + either fence not enqueued
 ///     - ::XE_RESULT_ERROR_UNSUPPORTED
-__xedllport xe_result_t __xecall
+xe_result_t __xecall
   xeFenceQueryElapsedTime(
     xe_fence_handle_t hFenceStart,                  ///< [in] handle of the fence
     xe_fence_handle_t hFenceEnd,                    ///< [in] handle of the fence
@@ -263,7 +263,7 @@ __xedllport xe_result_t __xecall
 ///     - ::XE_RESULT_ERROR_INVALID_PARAMETER
 ///         + nullptr == hFence
 ///     - ::XE_RESULT_ERROR_UNSUPPORTED
-__xedllport xe_result_t __xecall
+xe_result_t __xecall
   xeFenceReset(
     xe_fence_handle_t hFence                        ///< [in] handle of the fence
     );

@@ -58,7 +58,7 @@
 ///
 /// @hash {bc7abd02e1ba7c06025ed3c7d01f144f18685dd525e498c6509a8bb82faf788e}
 ///
-__xedllexport xe_result_t __xecall
+xe_result_t __xecall
   xeDeviceCreateSemaphore(
     xe_device_handle_t hDevice,                     ///< [in] handle of the device
     const xe_semaphore_desc_t* desc,                ///< [in] pointer to semaphore descriptor
@@ -123,7 +123,7 @@ __xedllexport xe_result_t __xecall
 ///
 /// @hash {43bb60d0801393aa47dec1e05417fc2e6081d35e5278113300295bb24aa17f78}
 ///
-__xedllexport xe_result_t __xecall
+xe_result_t __xecall
   xeSemaphoreDestroy(
     xe_semaphore_handle_t hSemaphore                ///< [in] handle of semaphore object to destroy
     )
@@ -178,7 +178,7 @@ __xedllexport xe_result_t __xecall
 ///
 /// @hash {12b429a676cf34244774ff30ac1e0dda194e98d90f481a8fb280f8582c21e030}
 ///
-__xedllexport xe_result_t __xecall
+xe_result_t __xecall
   xeCommandListEncodeSemaphoreSignal(
     xe_command_list_handle_t hCommandList,          ///< [in] handle of the command list
     xe_semaphore_handle_t hSemaphore,               ///< [in] handle of the semaphore
@@ -236,7 +236,7 @@ __xedllexport xe_result_t __xecall
 ///
 /// @hash {887d86319b5e817467bb2593eb1854d47ab9fb2a64cfa9532f4355eb8035e660}
 ///
-__xedllexport xe_result_t __xecall
+xe_result_t __xecall
   xeCommandListEncodeSemaphoreWait(
     xe_command_list_handle_t hCommandList,          ///< [in] handle of the command list
     xe_semaphore_handle_t hSemaphore,               ///< [in] handle of the semaphore
@@ -293,7 +293,7 @@ __xedllexport xe_result_t __xecall
 ///
 /// @hash {7554d75e51006df2fed4431132d3a6a6f5402c4bda1a118fe028ee58c400063c}
 ///
-__xedllexport xe_result_t __xecall
+xe_result_t __xecall
   xeSemaphoreQueryValue(
     xe_semaphore_handle_t hSemaphore                ///< [in] handle of the semaphore
     )
@@ -346,7 +346,7 @@ __xedllexport xe_result_t __xecall
 ///
 /// @hash {528c3f956a9521cef0604f1cc9dcdbf0bbdfb65160893e20d167acdb89ab4878}
 ///
-__xedllexport xe_result_t __xecall
+xe_result_t __xecall
   xeSemaphoreReset(
     xe_semaphore_handle_t hSemaphore                ///< [in] handle of the semaphore
     )

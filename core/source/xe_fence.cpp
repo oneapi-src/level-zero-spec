@@ -58,7 +58,7 @@
 ///
 /// @hash {d42e38d25d111753f5f120d80296f494f658063005c79d78865c2e62e1ef1803}
 ///
-__xedllexport xe_result_t __xecall
+xe_result_t __xecall
   xeCommandQueueCreateFence(
     xe_command_queue_handle_t hCommandQueue,        ///< [in] handle of command queue
     const xe_fence_desc_t* desc,                    ///< [in] pointer to fence descriptor
@@ -124,7 +124,7 @@ __xedllexport xe_result_t __xecall
 ///
 /// @hash {422e69b1e222a70a59ec747e63eeaa1f7ea8d690dd3d4cefa6940ea6841f901c}
 ///
-__xedllexport xe_result_t __xecall
+xe_result_t __xecall
   xeFenceDestroy(
     xe_fence_handle_t hFence                        ///< [in] handle of fence object to destroy
     )
@@ -184,7 +184,7 @@ __xedllexport xe_result_t __xecall
 ///
 /// @hash {77f047fdfb94150f1b0cda9d8cdbbf224f6bbd82021c5595a03bf1a8be2a03b6}
 ///
-__xedllexport xe_result_t __xecall
+xe_result_t __xecall
   xeHostWaitOnFence(
     xe_fence_handle_t hFence,                       ///< [in] handle of the fence
     xe_synchronization_mode_t mode,                 ///< [in] synchronization mode
@@ -256,7 +256,7 @@ __xedllexport xe_result_t __xecall
 ///
 /// @hash {a5f76c9bd49faad0a8ae16401ccdd9cc6e8ae394eb876c8eca18dc6dd3cdae7d}
 ///
-__xedllexport xe_result_t __xecall
+xe_result_t __xecall
   xeHostWaitOnMultipleFences(
     uint32_t numFences,                             ///< [in] number of fences in hFences
     xe_fence_handle_t* phFences,                    ///< [in] pointer to array of handles of the fences
@@ -328,7 +328,7 @@ __xedllexport xe_result_t __xecall
 ///
 /// @hash {54d115edc2a41acd09d4b8170e56d9826a2b5706f11c6104736eb5860d23c5bc}
 ///
-__xedllexport xe_result_t __xecall
+xe_result_t __xecall
   xeFenceQueryStatus(
     xe_fence_handle_t hFence                        ///< [in] handle of the fence
     )
@@ -384,7 +384,7 @@ __xedllexport xe_result_t __xecall
 ///
 /// @hash {7a6913da2907de4abac898cc76844049074ef7ca4429d5b63503b960db530c70}
 ///
-__xedllexport xe_result_t __xecall
+xe_result_t __xecall
   xeFenceQueryElapsedTime(
     xe_fence_handle_t hFenceStart,                  ///< [in] handle of the fence
     xe_fence_handle_t hFenceEnd,                    ///< [in] handle of the fence
@@ -445,7 +445,7 @@ __xedllexport xe_result_t __xecall
 ///
 /// @hash {7d06912d2e703c85cf1c3bb4e5b71884212ddfcc87d33f46c5463b83293ed855}
 ///
-__xedllexport xe_result_t __xecall
+xe_result_t __xecall
   xeFenceReset(
     xe_fence_handle_t hFence                        ///< [in] handle of the fence
     )
