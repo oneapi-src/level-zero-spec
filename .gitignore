@@ -14,6 +14,7 @@
 *.idb
 *.CopyComplete
 *.pyc
+*.tmp
 
 # Precompiled Headers
 *.gch
@@ -36,6 +37,7 @@
 *.user
 *.filters
 .vs/
+.idea/
 
 # Compiled Static libraries
 *.lai
@@ -59,10 +61,4 @@ latex/
 .irepo
 
 # third_party files
-/third_party/googletest/
-/third_party/gmmlib/
-/third_party/igc/
-/third_party/wdk/
-/third_party/compute_runtime/
-/third_party/cotire/
-/third_party/aub_stream/
+/third_party/*/

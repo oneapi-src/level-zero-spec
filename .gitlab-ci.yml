@@ -1,0 +1,21 @@
+stages:
+- build
+- deploy
+
+generate_html:
+  stage: build
+  script: ci/gen_docs.cmd
+  artifacts:
+    name: "%CI_JOB_NAME%"
+    paths:
+      - html/
+
+pages:
+  stage: deploy
+  script:
+  - mkdir .public
+  - cp -r html/* .public
+  - mv .public public
+  artifacts:
+    paths:
+    - public
