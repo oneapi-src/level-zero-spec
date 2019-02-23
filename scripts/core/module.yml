@@ -97,8 +97,8 @@ params:
 --- #--------------------------------------------------------------------------
 type: function
 desc: "Destroys module build log object"
-class: $xModule
-name: BuildLogDestroy
+class: $xModuleBuildLog
+name: Destroy
 details:
     - "The application is responsible for making sure the GPU is not currently referencing the event before it is deleted"
     - "The implementation of this function will immediately free all Host and Device allocations associated with this object"
@@ -106,19 +106,19 @@ details:
     - "This function can be called before or after $xModuleDestroy for the associated module."
 params:
     - type: "$x_module_build_log_handle_t"
-      name: hBuildLog
+      name: hModuleBuildLog
       desc: "[in] handle of the module build log object."
 --- #--------------------------------------------------------------------------
 type: function
 desc: "Retrieves text string for build log."
-class: $xModule
-name: BuildLogGetString
+class: $xModuleBuildLog
+name: GetString
 details:
     - "This function may be called from simultaneous threads."
     - "The implementation of this function should be lock-free."
 params:
     - type: $x_module_build_log_handle_t
-      name: hBuildLog
+      name: hModuleBuildLog
       desc: "[in] handle of the module build log object."
     - type: "uint32_t*"
       name: pSize

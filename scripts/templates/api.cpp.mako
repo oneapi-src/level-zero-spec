@@ -32,6 +32,7 @@ from templates import helper as th
 *
 ******************************************************************************/
 #include "../include/${x}_${name}.h"
+#include "${name}.h"
 
 #include <exception>    // @todo: move to common and/or precompiled header
 
@@ -55,7 +56,7 @@ from templates import helper as th
 ///
 /// @hash {${obj['hash'][cli]}}
 ///
-${x}_result_t __${x}call
+__${x}dllexport ${x}_result_t __${x}call
   ${th.make_func_name(x, obj, cls)}(
     %for line in th.make_param_lines(x, obj, cls):
     ${line}
@@ -66,9 +67,8 @@ ${x}_result_t __${x}call
     {
         //if( ${X}_DRIVER_PARAMETER_VALIDATION_LEVEL >= 0 )
         {
-            %if not re.match(r".*DriverInit", obj['name']):
+            %if not re.match(r".*Driver", th.make_func_name(x, obj, cls)):
             // if( nullptr == driver ) return ${X}_RESULT_ERROR_UNINITIALIZED;
-
             %endif
             // Check parameters
             %for key, values in th.make_param_checks(x, obj, cls).items():
@@ -79,10 +79,9 @@ ${x}_result_t __${x}call
         }
         /// @begin
 
-        // @todo: insert <code> here
+        return ${x}::${th.make_obj_accessor(x, obj, cls)}
 
         /// @end
-        return ${X}_RESULT_SUCCESS;
     }
     catch(${x}_result_t& result)
     {

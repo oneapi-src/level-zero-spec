@@ -65,7 +65,6 @@ message(STATUS "COMPUTE_RUNTIME_DIR = ${COMPUTE_RUNTIME_DIR}")
 option(${PROJECT_NAME}_BUILD_TESTS "Build unit tests." ON)
 
 add_subdirectory(${THIRD_PARTY_DIR})
-add_subdirectory(core)
 
 if(COMPUTE_RUNTIME_SUPPORT)
     set(DISABLED_GTPIN_SUPPORT TRUE)
@@ -73,6 +72,8 @@ if(COMPUTE_RUNTIME_SUPPORT)
 
     include(compute_runtime.cmake)
 endif(COMPUTE_RUNTIME_SUPPORT)
+
+add_subdirectory(core)
 
 include_directories(${CMAKE_CURRENT_SOURCE_DIR}/core/include)
 include_directories("${CMAKE_CURRENT_SOURCE_DIR}")

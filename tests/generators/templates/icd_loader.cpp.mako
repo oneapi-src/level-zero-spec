@@ -41,6 +41,10 @@ import extended_helper as th
 xe_dispatch_table_t dispatchTable = {};
 bool dispatchTableInitialized = false;
 
+#if defined(__cplusplus)
+extern "C" {
+#endif
+
 ${x}_result_t __xecall ${x}DriverInit(${x}_init_flag_t flags){
     static std::mutex crit;
     {
@@ -66,7 +70,7 @@ ${x}_result_t __xecall ${x}DriverInit(${x}_init_flag_t flags){
 %for cls in th.get_class_list(obj):
 %if re.match(r"function", obj['type']):
 %if not "DriverInit" in th.make_func_name(x, obj, cls):
-${x}_result_t __${x}call ${th.make_func_name(x, obj, cls)}(
+__${x}dllexport ${x}_result_t __${x}call ${th.make_func_name(x, obj, cls)}(
         %for line in th.make_param_lines_short(x, obj, cls):
         ${line}
         %endfor
@@ -81,3 +85,6 @@ ${x}_result_t __${x}call ${th.make_func_name(x, obj, cls)}(
 %endfor
 %endfor
 
+#if defined(__cplusplus)
+};
+#endif

@@ -19,9 +19,9 @@ TEST(xeDeviceCreateCommandList, redirectsToObject) {
         .Times(1)
         .WillRepeatedly(Return(XE_RESULT_SUCCESS));
 
-    auto result = xe::xeDeviceCreateCommandList(device.toHandle(),
-                                                &desc,
-                                                &commandList);
+    auto result = xeDeviceCreateCommandList(device.toHandle(),
+                                            &desc,
+                                            &commandList);
     EXPECT_EQ(XE_RESULT_SUCCESS, result);
 }
 
@@ -34,9 +34,9 @@ TEST(xeDeviceCreateCommandQueue, redirectsToObject) {
         .Times(1)
         .WillRepeatedly(Return(XE_RESULT_SUCCESS));
 
-    auto result = xe::xeDeviceCreateCommandQueue(device.toHandle(),
-                                                 &desc,
-                                                 &commandQueue);
+    auto result = xeDeviceCreateCommandQueue(device.toHandle(),
+                                             &desc,
+                                             &commandQueue);
     EXPECT_EQ(XE_RESULT_SUCCESS, result);
 }
 
@@ -49,9 +49,9 @@ TEST(xeDeviceCreateEvent, redirectsToObject) {
         .Times(1)
         .WillRepeatedly(Return(XE_RESULT_SUCCESS));
 
-    auto result = xe::xeDeviceCreateEvent(device.toHandle(),
-                                          &desc,
-                                          &event);
+    auto result = xeDeviceCreateEvent(device.toHandle(),
+                                      &desc,
+                                      &event);
     ASSERT_EQ(XE_RESULT_SUCCESS, result);
 }
 

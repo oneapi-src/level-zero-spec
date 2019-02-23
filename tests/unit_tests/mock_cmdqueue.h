@@ -25,10 +25,16 @@ struct Mock<CommandQueue> : public CommandQueue {
     Mock(Device *device = nullptr, void *csrRT = nullptr);
     virtual ~Mock();
 
+    MOCK_METHOD2(createFence, xe_result_t(const xe_fence_desc_t *desc,
+                                          xe_fence_handle_t *phFence));
     MOCK_METHOD0(destroy, xe_result_t());
     MOCK_METHOD3(enqueueCommandLists, xe_result_t(uint32_t numCommandLists,
                                                   xe_command_list_handle_t *phCommandLists,
                                                   xe_fence_handle_t hFence));
+    MOCK_METHOD4(synchronize, xe_result_t(xe_synchronization_mode_t mode,
+                                          uint32_t delay,
+                                          uint32_t interval,
+                                          uint32_t timeout));
 };
 
 } // namespace ult

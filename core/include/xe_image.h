@@ -124,10 +124,10 @@ typedef struct _xe_image_desc_t
 ///         + nullptr == desc
 ///         + nullptr == phImage
 ///     - ::XE_RESULT_ERROR_UNSUPPORTED
-///         + ::XE_IMAGE_DESC_VERSION <= desc->version
+///         + ::XE_IMAGE_DESC_VERSION < desc->version
 ///     - ::XE_RESULT_ERROR_OUT_OF_HOST_MEMORY
 ///     - ::XE_RESULT_ERROR_OUT_OF_DEVICE_MEMORY
-xe_result_t __xecall
+__xedllport xe_result_t __xecall
   xeDeviceCreateImage(
     xe_device_handle_t hDevice,                     ///< [in] handle of the device
     const xe_image_desc_t* desc,                    ///< [in] pointer to image descriptor
@@ -151,7 +151,7 @@ xe_result_t __xecall
 ///     - ::XE_RESULT_ERROR_INVALID_PARAMETER
 ///         + nullptr == hImage
 ///     - ::XE_RESULT_ERROR_UNSUPPORTED
-xe_result_t __xecall
+__xedllport xe_result_t __xecall
   xeImageDestroy(
     xe_image_handle_t hImage                        ///< [in] handle of image object to destroy
     );

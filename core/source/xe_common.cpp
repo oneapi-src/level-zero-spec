@@ -29,6 +29,7 @@
 *
 ******************************************************************************/
 #include "../include/xe_common.h"
+#include "common.h"
 
 #include <exception>    // @todo: move to common and/or precompiled header
 

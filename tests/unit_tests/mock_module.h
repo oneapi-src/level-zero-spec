@@ -22,6 +22,9 @@ struct Mock<Module> : public Module {
 
     MOCK_METHOD2(createFunction, xe_result_t(const xe_function_desc_t *desc, xe_function_handle_t *phFunction));
     MOCK_METHOD0(destroy, xe_result_t());
+    MOCK_METHOD2(getNativeBinary, xe_result_t(uint32_t *pSize,
+                                              char **pModuleNativeBinary));
+
     MOCK_CONST_METHOD0(getDevice, Device *());
 };
 
@@ -30,11 +33,19 @@ struct Mock<Function> : public Function {
     Mock();
     virtual ~Mock() = default;
 
-    MOCK_METHOD0(destroy, xe_result_t());
     MOCK_METHOD1(createFunctionArgs, xe_result_t(xe_function_args_handle_t *phFunctionArgs));
+    MOCK_METHOD0(destroy, xe_result_t());
+    MOCK_METHOD2(queryAttribute, xe_result_t(xe_function_attribute_t attr,
+                                             uint32_t *pValue));
     MOCK_METHOD3(setGroupSize, xe_result_t(uint32_t groupSizeX,
                                            uint32_t groupSizeY,
                                            uint32_t groupSizeZ));
+    MOCK_METHOD6(suggestGroupSize, xe_result_t(uint32_t globalSizeX,
+                                               uint32_t globalSizeY,
+                                               uint32_t globalSizeZ,
+                                               uint32_t *groupSizeX,
+                                               uint32_t *groupSizeY,
+                                               uint32_t *groupSizeZ));
 
     MOCK_CONST_METHOD3(getGroupSize, void(uint32_t &outGroupSizeX, uint32_t &outGroupSizeY, uint32_t &outGroupSizeZ));
     MOCK_CONST_METHOD0(getIsaHostMem, const void *());
@@ -53,7 +64,10 @@ struct Mock<FunctionArgs> : public FunctionArgs {
     virtual ~Mock() = default;
 
     MOCK_METHOD0(destroy, xe_result_t());
+    MOCK_METHOD2(setAttribute, xe_result_t(xe_function_argument_attribute_t attr,
+                                           uint32_t value));
     MOCK_METHOD3(setValue, xe_result_t(uint32_t argIndex, size_t argSize, const void *pArgValue));
+
     MOCK_CONST_METHOD0(getCrossThreadDataHostMem, const void *());
     MOCK_CONST_METHOD0(getCrossThreadDataSize, size_t());
     MOCK_CONST_METHOD0(getResidencyContainer, const std::vector<GraphicsAllocation *> &());

@@ -29,6 +29,7 @@
 *
 ******************************************************************************/
 #include "../include/xe_cl_interop.h"
+#include "cl_interop.h"
 
 #include <exception>    // @todo: move to common and/or precompiled header
 
@@ -49,7 +50,7 @@
 ///
 /// @hash {5bb3f735cfaa528879ea54f178f75b593388afab07e406a824a1c31599889982}
 ///
-xe_result_t __xecall
+__xedllexport xe_result_t __xecall
   xeDeviceRegisterCLMemory(
     xe_device_handle_t hDevice,                     ///< [in] handle to the device
     cl_context context,                             ///< [in] the OpenCL context that created the memory
@@ -62,17 +63,15 @@ xe_result_t __xecall
         //if( XE_DRIVER_PARAMETER_VALIDATION_LEVEL >= 0 )
         {
             // if( nullptr == driver ) return XE_RESULT_ERROR_UNINITIALIZED;
-
             // Check parameters
             if( nullptr == hDevice ) return XE_RESULT_ERROR_INVALID_PARAMETER;
             if( nullptr == ptr ) return XE_RESULT_ERROR_INVALID_PARAMETER;
         }
         /// @begin
 
-        // @todo: insert <code> here
+        return xe::Device::fromHandle(hDevice)->registerCLMemory(context, mem, ptr);
 
         /// @end
-        return XE_RESULT_SUCCESS;
     }
     catch(xe_result_t& result)
     {
@@ -107,7 +106,7 @@ xe_result_t __xecall
 ///
 /// @hash {131233a9acfaad50c2b1855120dd31f244b3b394adefa6cb337f162b19d562fd}
 ///
-xe_result_t __xecall
+__xedllexport xe_result_t __xecall
   xeDeviceRegisterCLProgram(
     xe_device_handle_t hDevice,                     ///< [in] handle to the device
     cl_context context,                             ///< [in] the OpenCL context that created the program
@@ -120,17 +119,15 @@ xe_result_t __xecall
         //if( XE_DRIVER_PARAMETER_VALIDATION_LEVEL >= 0 )
         {
             // if( nullptr == driver ) return XE_RESULT_ERROR_UNINITIALIZED;
-
             // Check parameters
             if( nullptr == hDevice ) return XE_RESULT_ERROR_INVALID_PARAMETER;
             if( nullptr == phModule ) return XE_RESULT_ERROR_INVALID_PARAMETER;
         }
         /// @begin
 
-        // @todo: insert <code> here
+        return xe::Device::fromHandle(hDevice)->registerCLProgram(context, program, phModule);
 
         /// @end
-        return XE_RESULT_SUCCESS;
     }
     catch(xe_result_t& result)
     {
@@ -165,7 +162,7 @@ xe_result_t __xecall
 ///
 /// @hash {4b0d65edbd0514e51b2ab1f197ad0fb7af084f7c4f2b947c771b1d46cac4e83b}
 ///
-xe_result_t __xecall
+__xedllexport xe_result_t __xecall
   xeDeviceRegisterCLCommandQueue(
     xe_device_handle_t hDevice,                     ///< [in] handle to the device
     cl_context context,                             ///< [in] the OpenCL context that created the command queue
@@ -178,17 +175,15 @@ xe_result_t __xecall
         //if( XE_DRIVER_PARAMETER_VALIDATION_LEVEL >= 0 )
         {
             // if( nullptr == driver ) return XE_RESULT_ERROR_UNINITIALIZED;
-
             // Check parameters
             if( nullptr == hDevice ) return XE_RESULT_ERROR_INVALID_PARAMETER;
             if( nullptr == phCommandQueue ) return XE_RESULT_ERROR_INVALID_PARAMETER;
         }
         /// @begin
 
-        // @todo: insert <code> here
+        return xe::Device::fromHandle(hDevice)->registerCLCommandQueue(context, command_queue, phCommandQueue);
 
         /// @end
-        return XE_RESULT_SUCCESS;
     }
     catch(xe_result_t& result)
     {

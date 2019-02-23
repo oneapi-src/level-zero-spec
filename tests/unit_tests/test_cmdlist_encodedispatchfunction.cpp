@@ -26,23 +26,23 @@ using ::testing::Return;
 
 TEST(xeCommandListEncodeDispatchFunction, redirectsToObject) {
     Mock<CommandList> commandList;
-    xe_event_handle_t event = {};
-    xe_function_handle_t function = {};
-    xe_function_args_handle_t functionArgs = {};
+    Mock<Event> event;
+    Mock<Function> function;
+    Mock<FunctionArgs> functionArgs;
     xe_dispatch_function_arguments_t dispatchFunctionArguments;
 
     EXPECT_CALL(commandList, encodeDispatchFunction(
-                                 function,
-                                 functionArgs,
+                                 function.toHandle(),
+                                 functionArgs.toHandle(),
                                  &dispatchFunctionArguments,
-                                 event))
+                                 event.toHandle()))
         .Times(1);
 
-    auto result = xe::xeCommandListEncodeDispatchFunction(commandList.toHandle(),
-                                                          function,
-                                                          functionArgs,
-                                                          &dispatchFunctionArguments,
-                                                          event);
+    auto result = xeCommandListEncodeDispatchFunction(commandList.toHandle(),
+                                                      function.toHandle(),
+                                                      functionArgs.toHandle(),
+                                                      &dispatchFunctionArguments,
+                                                      event.toHandle());
     EXPECT_EQ(XE_RESULT_SUCCESS, result);
 }
 
@@ -239,7 +239,7 @@ ATSTEST_F(CommandListEncodeDispatchFunction, copiesKernelIsaToInstructionHeap) {
         auto cmd = genCmdCast<COMPUTE_WALKER *>(*itor);
         auto &idd = cmd->getInterfaceDescriptor();
         uint64_t kernelOffset = idd.getKernelStartPointerHigh();
-        kernelOffset <<= 32u; 
+        kernelOffset <<= 32u;
         kernelOffset |= idd.getKernelStartPointerHigh();
 
         auto heap = commandList->indirectHeaps[CommandList::INSTRUCTION];

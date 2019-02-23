@@ -2,9 +2,9 @@ if(SUPPORT_GEN11)
     set(HW_SOURCES
         ${HW_SOURCES}
         ${COMPUTE_RUNTIME_GEN11}
-        cmdlist_icllp.cpp
-        cmdqueue_icllp.cpp
-        gen11.cmake
+        ${CMAKE_CURRENT_SOURCE_DIR}/cmdlist_icllp.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/cmdqueue_icllp.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/gen11.cmake
     )
 
     set(HW_SOURCES_ULT

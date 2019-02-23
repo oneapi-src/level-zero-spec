@@ -215,7 +215,7 @@ def make_param_checks(repl, obj, filter, tag=False):
                 checks[eip].append("nullptr == %s"%subx(repl, item['name'], tag))
 
             if re.match(r".*desc_t.*", item['type']): # descriptor-type
-                checks[eus].append("%s <= %s->version"%(re.sub(r"\w*\s*(.*)_t.*", r"\1_VERSION", subx(repl, item['type'], tag)).upper(), item['name']))
+                checks[eus].append("%s < %s->version"%(re.sub(r"\w*\s*(.*)_t.*", r"\1_VERSION", subx(repl, item['type'], tag)).upper(), item['name']))
     return checks
 
 """
@@ -261,6 +261,56 @@ def make_func_name(repl, obj, cls, cpp=False):
         return subx(repl, "%s::%s"%(cls, obj['name']))
     else:
         return subx(repl, "%s%s"%(cls, obj['name']))
+
+"""
+    returns the name of a function
+"""
+def make_obj_accessor(repl, obj, cls):
+#    objectString = subx(repl, cls)
+#    matchString = subx(repl, "^$xDriver|^$xHost")
+#    matchString = subx(repl, "^$xDriver|")
+#    matchString += subx(repl, "")
+#    print(objectString)
+#    print(matchString)
+    noobject = repl == subx(repl, cls)
+    singleton=re.match(subx(repl, "^$xDriver|^$xHost"), subx(repl, cls))
+    if noobject:
+        method = obj['name'][0].lower() + obj['name'][1:] 
+        str = subx("", "%s("%(method))
+        str += make_param_call_str("", "", obj, "")
+        str += ");"
+    elif singleton:
+        method = obj['name'][0].lower() + obj['name'][1:] 
+        str = subx("", "%s::get()->%s("%(cls, method))
+        str += make_param_call_str("", "", obj, "")
+        str += ");"
+    else:
+        params = obj['params']
+        str = subx("", "%s::fromHandle("%cls)
+        method = obj['name'][0].lower() + obj['name'][1:] 
+        argStr=""
+        lastArg=""
+        calledMethod=False
+        for item in params:
+            if len(lastArg) == 0:
+                #First must match class name
+                if item['name'] == subx("h",cls):
+                    str += item['name'] + ")->" + method + "("
+                    calledMethod=True
+                elif item.get('class',"") == "":
+                    argStr += item['name']
+                    lastArg=item['name']
+            else:
+                if len(argStr) > 0:
+                    argStr += ", "
+                argStr += item['name']
+                lastArg=item['name']
+        if not calledMethod:
+            str += ")->" + method + "("
+        str += argStr
+        str += ");"
+ 
+    return str
 
 """
     returns a list of all function objects that belong to the class

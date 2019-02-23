@@ -67,7 +67,7 @@ extern "C" {
 ///         + nullptr == dstptr
 ///         + nullptr == srcptr
 ///     - ::XE_RESULT_ERROR_UNSUPPORTED
-xe_result_t __xecall
+__xedllport xe_result_t __xecall
   xeCommandListEncodeMemoryCopy(
     xe_command_list_handle_t hCommandList,          ///< [in] handle of command list
     void* dstptr,                                   ///< [in] pointer to destination memory to copy to
@@ -100,7 +100,7 @@ xe_result_t __xecall
 ///         + nullptr == hCommandList
 ///         + nullptr == ptr
 ///     - ::XE_RESULT_ERROR_UNSUPPORTED
-xe_result_t __xecall
+__xedllport xe_result_t __xecall
   xeCommandListEncodeMemorySet(
     xe_command_list_handle_t hCommandList,          ///< [in] handle of command list
     void* ptr,                                      ///< [in] pointer to memory to initialize
@@ -129,7 +129,7 @@ xe_result_t __xecall
 ///         + nullptr == hDstImage
 ///         + nullptr == hSrcImage
 ///     - ::XE_RESULT_ERROR_UNSUPPORTED
-xe_result_t __xecall
+__xedllport xe_result_t __xecall
   xeCommandListEncodeImageCopy(
     xe_command_list_handle_t hCommandList,          ///< [in] handle of command list
     xe_image_handle_t hDstImage,                    ///< [in] handle of destination image to copy to
@@ -162,7 +162,7 @@ typedef struct _xe_image_region_t
 ///         + nullptr == hDstImage
 ///         + nullptr == hSrcImage
 ///     - ::XE_RESULT_ERROR_UNSUPPORTED
-xe_result_t __xecall
+__xedllport xe_result_t __xecall
   xeCommandListEncodeImageCopyRegion(
     xe_command_list_handle_t hCommandList,          ///< [in] handle of command list
     xe_image_handle_t hDstImage,                    ///< [in] handle of destination image to copy to
@@ -194,7 +194,7 @@ xe_result_t __xecall
 ///         + nullptr == dstptr
 ///         + nullptr == hSrcImage
 ///     - ::XE_RESULT_ERROR_UNSUPPORTED
-xe_result_t __xecall
+__xedllport xe_result_t __xecall
   xeCommandListEncodeImageCopyToMemory(
     xe_command_list_handle_t hCommandList,          ///< [in] handle of command list
     void* dstptr,                                   ///< [in] pointer to destination memory to copy to
@@ -225,7 +225,7 @@ xe_result_t __xecall
 ///         + nullptr == hDstImage
 ///         + nullptr == srcptr
 ///     - ::XE_RESULT_ERROR_UNSUPPORTED
-xe_result_t __xecall
+__xedllport xe_result_t __xecall
   xeCommandListEncodeImageCopyFromMemory(
     xe_command_list_handle_t hCommandList,          ///< [in] handle of command list
     xe_image_handle_t hDstImage,                    ///< [in] handle of destination image to copy to
@@ -260,7 +260,7 @@ xe_result_t __xecall
 ///         + nullptr == hCommandList
 ///         + nullptr == ptr
 ///     - ::XE_RESULT_ERROR_UNSUPPORTED
-xe_result_t __xecall
+__xedllport xe_result_t __xecall
   xeCommandListEncodeMemoryPrefetch(
     xe_command_list_handle_t hCommandList,          ///< [in] handle of command list
     const void* ptr,                                ///< [in] pointer to start of the memory region to prefetch
@@ -315,7 +315,7 @@ typedef enum _xe_memory_advice_t
 ///         + nullptr == ptr
 ///         + invalid value for advice
 ///     - ::XE_RESULT_ERROR_UNSUPPORTED
-xe_result_t __xecall
+__xedllport xe_result_t __xecall
   xeCommandListEncodeMemAdvise(
     xe_command_list_handle_t hCommandList,          ///< [in] handle of command list
     xe_device_handle_t hDevice,                     ///< [in] device associated with the memory advice

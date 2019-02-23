@@ -1,62 +1,5 @@
-include(gen8.cmake)
-include(gen9.cmake)
-include(gen10.cmake)
-include(gen11.cmake)
-include(gen12lp.cmake)
-include(gen12hp.cmake)
-
-# Create our shared library/DLL
-set(TARGET_NAME ${PROJECT_NAME})
-
-set(L0_RUNTIME_SOURCES 
-    cmdlist.cpp
-    cmdlist.h
-    cmdlist_hw.h
-    cmdlist_hw.inl
-    cmdlist_imp.cpp
-    cmdlist_imp.h
-    cmdqueue.cpp
-    cmdqueue.h
-    cmdqueue_hw.h
-    cmdqueue_hw.inl
-    cmdqueue_imp.h
-    device.cpp
-    device.h
-    driver.cpp
-    driver.h
-    event.cpp
-    event.h
-    graphics_allocation.cpp
-    graphics_allocation.h
-    memory.cpp
-    memory.h
-    memory_manager.cpp
-    memory_manager.h
-    module.cpp
-    module.h
-)
-
-add_library(${TARGET_NAME} 
-    SHARED
-        ${L0_RUNTIME_SOURCES}
-)
-
-target_compile_definitions(${TARGET_NAME}
-    PRIVATE
-        ${COMPUTE_RUNTIME_DEFINITIONS}
-)
-
-target_include_directories(${TARGET_NAME}
-    PRIVATE
-        ${COMPUTE_RUNTIME_INCLUDES}
-)
-
-target_link_libraries(${TARGET_NAME}
-    compute_runtime_lib
-    compute_runtime_lib_full
-)
-
 set(TARGET_NAME ${PROJECT_NAME}_unit_tests)
+
 add_executable(${TARGET_NAME}
     ${L0_RUNTIME_SOURCES}            
     environment.cpp
@@ -97,18 +40,25 @@ add_executable(${TARGET_NAME}
     ${HW_SOURCES_ULT}
     ${COMPUTE_RUNTIME_HW_ENABLE}
     ${COMPUTE_RUNTIME_HW_ENABLE_ULT}
+    ${L0_RUNTIME_SOURCES}
 )
 
 target_compile_definitions(${TARGET_NAME}
     PUBLIC
         DEFAULT_PRODUCT_FAMILY=${DEFAULT_PRODUCT_FAMILY}
+        XE_MAKEDLL
+)
+
+target_include_directories(${TARGET_NAME}
+    BEFORE
+    PRIVATE
+        $<TARGET_PROPERTY:${PROJECT_NAME},SOURCE_DIR>/source
 )
 
 target_link_libraries(${TARGET_NAME} 
     compute_runtime_mockable
     compute_runtime_mockable_extra
     ${HW_LIBS_ULT}
-    xe
     gmock
 )
 

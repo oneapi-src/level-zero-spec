@@ -29,6 +29,7 @@
 *
 ******************************************************************************/
 #include "../include/xe_memory.h"
+#include "memory.h"
 
 #include <exception>    // @todo: move to common and/or precompiled header
 
@@ -50,7 +51,7 @@
 ///
 /// @hash {9f40961e245036a4f5bae21b30b0fe1eff983d3e3a2c375fa0e5c2ab9e9139f8}
 ///
-xe_result_t __xecall
+__xedllexport xe_result_t __xecall
   xeCreateMemAllocator(
     xe_mem_allocator_handle_t* phMemAllocHandle     ///< [out] Returned memory allocator handle
     )
@@ -60,16 +61,14 @@ xe_result_t __xecall
         //if( XE_DRIVER_PARAMETER_VALIDATION_LEVEL >= 0 )
         {
             // if( nullptr == driver ) return XE_RESULT_ERROR_UNINITIALIZED;
-
             // Check parameters
             if( nullptr == phMemAllocHandle ) return XE_RESULT_ERROR_INVALID_PARAMETER;
         }
         /// @begin
 
-        // @todo: insert <code> here
+        return xe::createMemAllocator(phMemAllocHandle);
 
         /// @end
-        return XE_RESULT_SUCCESS;
     }
     catch(xe_result_t& result)
     {
@@ -107,7 +106,7 @@ xe_result_t __xecall
 ///
 /// @hash {a2eb24e400146e03f62a0c76e948d2746c332fa8aa4fa3d9927bce3e413a5c84}
 ///
-xe_result_t __xecall
+__xedllexport xe_result_t __xecall
   xeMemAllocatorDestroy(
     xe_mem_allocator_handle_t hMemAllocHandle       ///< [in] handle of memory allocator to destroy
     )
@@ -117,16 +116,14 @@ xe_result_t __xecall
         //if( XE_DRIVER_PARAMETER_VALIDATION_LEVEL >= 0 )
         {
             // if( nullptr == driver ) return XE_RESULT_ERROR_UNINITIALIZED;
-
             // Check parameters
             if( nullptr == hMemAllocHandle ) return XE_RESULT_ERROR_INVALID_PARAMETER;
         }
         /// @begin
 
-        // @todo: insert <code> here
+        return xe::memAllocatorDestroy(hMemAllocHandle);
 
         /// @end
-        return XE_RESULT_SUCCESS;
     }
     catch(xe_result_t& result)
     {
@@ -173,7 +170,7 @@ xe_result_t __xecall
 ///
 /// @hash {8e4c3077c3008f398c65e52226a9ed7ab31d689ef7666070143cd630c14449a8}
 ///
-xe_result_t __xecall
+__xedllexport xe_result_t __xecall
   xeSharedMemAlloc(
     xe_mem_allocator_handle_t hMemAllocHandle,      ///< [in] handle of memory allocator for this allocation
     xe_device_handle_t hDevice,                     ///< [in] handle of the device
@@ -189,7 +186,6 @@ xe_result_t __xecall
         //if( XE_DRIVER_PARAMETER_VALIDATION_LEVEL >= 0 )
         {
             // if( nullptr == driver ) return XE_RESULT_ERROR_UNINITIALIZED;
-
             // Check parameters
             if( nullptr == hMemAllocHandle ) return XE_RESULT_ERROR_INVALID_PARAMETER;
             if( nullptr == hDevice ) return XE_RESULT_ERROR_INVALID_PARAMETER;
@@ -197,10 +193,9 @@ xe_result_t __xecall
         }
         /// @begin
 
-        // @todo: insert <code> here
+        return xe::sharedMemAlloc(hMemAllocHandle, hDevice, device_flags, host_flags, size, alignment, ptr);
 
         /// @end
-        return XE_RESULT_SUCCESS;
     }
     catch(xe_result_t& result)
     {
@@ -247,7 +242,7 @@ xe_result_t __xecall
 ///
 /// @hash {0c3d522d0293cd5605447882683b2164912ede21c5b24b68e2b486f7a7a32bdc}
 ///
-xe_result_t __xecall
+__xedllexport xe_result_t __xecall
   xeMemAlloc(
     xe_mem_allocator_handle_t hMemAllocHandle,      ///< [in] handle of memory allocator for this allocation
     xe_device_handle_t hDevice,                     ///< [in] handle of the device
@@ -262,7 +257,6 @@ xe_result_t __xecall
         //if( XE_DRIVER_PARAMETER_VALIDATION_LEVEL >= 0 )
         {
             // if( nullptr == driver ) return XE_RESULT_ERROR_UNINITIALIZED;
-
             // Check parameters
             if( nullptr == hMemAllocHandle ) return XE_RESULT_ERROR_INVALID_PARAMETER;
             if( nullptr == hDevice ) return XE_RESULT_ERROR_INVALID_PARAMETER;
@@ -270,10 +264,9 @@ xe_result_t __xecall
         }
         /// @begin
 
-        // @todo: insert <code> here
+        return xe::memAlloc(hMemAllocHandle, hDevice, flags, size, alignment, ptr);
 
         /// @end
-        return XE_RESULT_SUCCESS;
     }
     catch(xe_result_t& result)
     {
@@ -320,7 +313,7 @@ xe_result_t __xecall
 ///
 /// @hash {f2ceab5a53b2c88ef4d17b001d09cf385937bfef71f155e4844751ac93f1bf4f}
 ///
-xe_result_t __xecall
+__xedllexport xe_result_t __xecall
   xeHostMemAlloc(
     xe_mem_allocator_handle_t hMemAllocHandle,      ///< [in] handle of memory allocator for this allocation
     xe_host_mem_alloc_flag_t flags,                 ///< [in] flags specifying additional allocation controls
@@ -334,17 +327,15 @@ xe_result_t __xecall
         //if( XE_DRIVER_PARAMETER_VALIDATION_LEVEL >= 0 )
         {
             // if( nullptr == driver ) return XE_RESULT_ERROR_UNINITIALIZED;
-
             // Check parameters
             if( nullptr == hMemAllocHandle ) return XE_RESULT_ERROR_INVALID_PARAMETER;
             if( nullptr == ptr ) return XE_RESULT_ERROR_INVALID_PARAMETER;
         }
         /// @begin
 
-        // @todo: insert <code> here
+        return xe::hostMemAlloc(hMemAllocHandle, flags, size, alignment, ptr);
 
         /// @end
-        return XE_RESULT_SUCCESS;
     }
     catch(xe_result_t& result)
     {
@@ -387,7 +378,7 @@ xe_result_t __xecall
 ///
 /// @hash {6995e132992157fdad5d71e539141cbc0908cfd0a01322624ba3e9d1ffd763fd}
 ///
-xe_result_t __xecall
+__xedllexport xe_result_t __xecall
   xeMemFree(
     xe_mem_allocator_handle_t hMemAllocHandle,      ///< [in] handle of memory allocator for this allocation
     const void* ptr                                 ///< [in] pointer to memory to free
@@ -398,17 +389,15 @@ xe_result_t __xecall
         //if( XE_DRIVER_PARAMETER_VALIDATION_LEVEL >= 0 )
         {
             // if( nullptr == driver ) return XE_RESULT_ERROR_UNINITIALIZED;
-
             // Check parameters
             if( nullptr == hMemAllocHandle ) return XE_RESULT_ERROR_INVALID_PARAMETER;
             if( nullptr == ptr ) return XE_RESULT_ERROR_INVALID_PARAMETER;
         }
         /// @begin
 
-        // @todo: insert <code> here
+        return xe::memFree(hMemAllocHandle, ptr);
 
         /// @end
-        return XE_RESULT_SUCCESS;
     }
     catch(xe_result_t& result)
     {
@@ -449,7 +438,7 @@ xe_result_t __xecall
 ///
 /// @hash {ca0bc083b4f2907561e61a65f87ffa3527cf21e340760ef655b0905f766be102}
 ///
-xe_result_t __xecall
+__xedllexport xe_result_t __xecall
   xeMemGetProperty(
     xe_mem_allocator_handle_t hMemAllocHandle,      ///< [in] handle of memory allocator for this allocation
     const void* ptr,                                ///< [in] Pointer to query
@@ -462,7 +451,6 @@ xe_result_t __xecall
         //if( XE_DRIVER_PARAMETER_VALIDATION_LEVEL >= 0 )
         {
             // if( nullptr == driver ) return XE_RESULT_ERROR_UNINITIALIZED;
-
             // Check parameters
             if( nullptr == hMemAllocHandle ) return XE_RESULT_ERROR_INVALID_PARAMETER;
             if( nullptr == ptr ) return XE_RESULT_ERROR_INVALID_PARAMETER;
@@ -470,10 +458,9 @@ xe_result_t __xecall
         }
         /// @begin
 
-        // @todo: insert <code> here
+        return xe::memGetProperty(hMemAllocHandle, ptr, property, pValue);
 
         /// @end
-        return XE_RESULT_SUCCESS;
     }
     catch(xe_result_t& result)
     {
@@ -514,7 +501,7 @@ xe_result_t __xecall
 ///
 /// @hash {674ca4659d3c7a33527c6aa498eabdf2a8532d1ecc1707e9374ecf5ebf5219ef}
 ///
-xe_result_t __xecall
+__xedllexport xe_result_t __xecall
   xeMemGetAddressRange(
     xe_mem_allocator_handle_t hMemAllocHandle,      ///< [in] handle of memory allocator for this allocation
     const void* ptr,                                ///< [in] Pointer to query
@@ -527,7 +514,6 @@ xe_result_t __xecall
         //if( XE_DRIVER_PARAMETER_VALIDATION_LEVEL >= 0 )
         {
             // if( nullptr == driver ) return XE_RESULT_ERROR_UNINITIALIZED;
-
             // Check parameters
             if( nullptr == hMemAllocHandle ) return XE_RESULT_ERROR_INVALID_PARAMETER;
             if( nullptr == ptr ) return XE_RESULT_ERROR_INVALID_PARAMETER;
@@ -536,10 +522,9 @@ xe_result_t __xecall
         }
         /// @begin
 
-        // @todo: insert <code> here
+        return xe::memGetAddressRange(hMemAllocHandle, ptr, pBase, pSize);
 
         /// @end
-        return XE_RESULT_SUCCESS;
     }
     catch(xe_result_t& result)
     {
@@ -582,7 +567,7 @@ xe_result_t __xecall
 ///
 /// @hash {b05b49f5ce22e128e73ca066bf16b7d9b0d6d5c7c360c9041811c0db939aeaba}
 ///
-xe_result_t __xecall
+__xedllexport xe_result_t __xecall
   xeIpcGetMemHandle(
     xe_mem_allocator_handle_t hMemAllocHandle,      ///< [in] handle of memory allocator for this allocation
     const void* ptr,                                ///< [in] Pointer to the device memory allocation
@@ -594,7 +579,6 @@ xe_result_t __xecall
         //if( XE_DRIVER_PARAMETER_VALIDATION_LEVEL >= 0 )
         {
             // if( nullptr == driver ) return XE_RESULT_ERROR_UNINITIALIZED;
-
             // Check parameters
             if( nullptr == hMemAllocHandle ) return XE_RESULT_ERROR_INVALID_PARAMETER;
             if( nullptr == ptr ) return XE_RESULT_ERROR_INVALID_PARAMETER;
@@ -602,10 +586,9 @@ xe_result_t __xecall
         }
         /// @begin
 
-        // @todo: insert <code> here
+        return xe::ipcGetMemHandle(hMemAllocHandle, ptr, pIpcHandle);
 
         /// @end
-        return XE_RESULT_SUCCESS;
     }
     catch(xe_result_t& result)
     {
@@ -652,7 +635,7 @@ xe_result_t __xecall
 ///
 /// @hash {b81880e4766e54a7ec95bc1c35670d6197d46e5ac553160316faad314f7a59ba}
 ///
-xe_result_t __xecall
+__xedllexport xe_result_t __xecall
   xeIpcOpenMemHandle(
     xe_mem_allocator_handle_t hMemAllocHandle,      ///< [in] handle of memory allocator for this allocation
     xe_device_handle_t hDevice,                     ///< [in] handle of the device to associate with the IPC memory handle
@@ -666,7 +649,6 @@ xe_result_t __xecall
         //if( XE_DRIVER_PARAMETER_VALIDATION_LEVEL >= 0 )
         {
             // if( nullptr == driver ) return XE_RESULT_ERROR_UNINITIALIZED;
-
             // Check parameters
             if( nullptr == hMemAllocHandle ) return XE_RESULT_ERROR_INVALID_PARAMETER;
             if( nullptr == hDevice ) return XE_RESULT_ERROR_INVALID_PARAMETER;
@@ -675,10 +657,9 @@ xe_result_t __xecall
         }
         /// @begin
 
-        // @todo: insert <code> here
+        return xe::ipcOpenMemHandle(hMemAllocHandle, hDevice, handle, flags, ptr);
 
         /// @end
-        return XE_RESULT_SUCCESS;
     }
     catch(xe_result_t& result)
     {
@@ -719,7 +700,7 @@ xe_result_t __xecall
 ///
 /// @hash {393624ba03af311b28cec458da8b4789d05f7d3754dcf393c3c6dc9bb063bd45}
 ///
-xe_result_t __xecall
+__xedllexport xe_result_t __xecall
   xeIpcCloseMemHandle(
     xe_mem_allocator_handle_t hMemAllocHandle,      ///< [in] handle of memory allocator for this allocation
     const void* ptr                                 ///< [in] pointer to device allocation in this process
@@ -730,17 +711,15 @@ xe_result_t __xecall
         //if( XE_DRIVER_PARAMETER_VALIDATION_LEVEL >= 0 )
         {
             // if( nullptr == driver ) return XE_RESULT_ERROR_UNINITIALIZED;
-
             // Check parameters
             if( nullptr == hMemAllocHandle ) return XE_RESULT_ERROR_INVALID_PARAMETER;
             if( nullptr == ptr ) return XE_RESULT_ERROR_INVALID_PARAMETER;
         }
         /// @begin
 
-        // @todo: insert <code> here
+        return xe::ipcCloseMemHandle(hMemAllocHandle, ptr);
 
         /// @end
-        return XE_RESULT_SUCCESS;
     }
     catch(xe_result_t& result)
     {

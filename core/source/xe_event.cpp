@@ -29,6 +29,7 @@
 *
 ******************************************************************************/
 #include "../include/xe_event.h"
+#include "event.h"
 
 #include <exception>    // @todo: move to common and/or precompiled header
 
@@ -54,13 +55,13 @@
 ///         + nullptr == desc
 ///         + nullptr == phEvent
 ///     - ::XE_RESULT_ERROR_UNSUPPORTED
-///         + ::XE_EVENT_DESC_VERSION <= desc->version
+///         + ::XE_EVENT_DESC_VERSION < desc->version
 ///     - ::XE_RESULT_ERROR_OUT_OF_HOST_MEMORY
 ///     - ::XE_RESULT_ERROR_OUT_OF_DEVICE_MEMORY
 ///
 /// @hash {2c5763b8ec9726ab95422bca4616275ec9ed4e3d4b7a42a8b4e7089c813350d6}
 ///
-xe_result_t __xecall
+__xedllexport xe_result_t __xecall
   xeDeviceCreateEvent(
     xe_device_handle_t hDevice,                     ///< [in] handle of the device
     const xe_event_desc_t* desc,                    ///< [in] pointer to event descriptor
@@ -72,19 +73,17 @@ xe_result_t __xecall
         //if( XE_DRIVER_PARAMETER_VALIDATION_LEVEL >= 0 )
         {
             // if( nullptr == driver ) return XE_RESULT_ERROR_UNINITIALIZED;
-
             // Check parameters
             if( nullptr == hDevice ) return XE_RESULT_ERROR_INVALID_PARAMETER;
             if( nullptr == desc ) return XE_RESULT_ERROR_INVALID_PARAMETER;
             if( nullptr == phEvent ) return XE_RESULT_ERROR_INVALID_PARAMETER;
-            if( XE_EVENT_DESC_VERSION <= desc->version ) return XE_RESULT_ERROR_UNSUPPORTED;
+            if( XE_EVENT_DESC_VERSION < desc->version ) return XE_RESULT_ERROR_UNSUPPORTED;
         }
         /// @begin
 
-        // @todo: insert <code> here
+        return xe::Device::fromHandle(hDevice)->createEvent(desc, phEvent);
 
         /// @end
-        return XE_RESULT_SUCCESS;
     }
     catch(xe_result_t& result)
     {
@@ -120,12 +119,12 @@ xe_result_t __xecall
 ///         + nullptr == ptr
 ///         + nullptr == phEvent
 ///     - ::XE_RESULT_ERROR_UNSUPPORTED
-///         + ::XE_EVENT_DESC_VERSION <= desc->version
+///         + ::XE_EVENT_DESC_VERSION < desc->version
 ///     - ::XE_RESULT_ERROR_OUT_OF_HOST_MEMORY
 ///
 /// @hash {ff2fcb0cf2905079d5fb305c78b9dc0d9f1c4e5ab7792007b01cd832e94bae5c}
 ///
-xe_result_t __xecall
+__xedllexport xe_result_t __xecall
   xeDevicePlaceEvent(
     xe_device_handle_t hDevice,                     ///< [in] handle of the device
     const xe_event_desc_t* desc,                    ///< [in] pointer to event descriptor
@@ -138,20 +137,18 @@ xe_result_t __xecall
         //if( XE_DRIVER_PARAMETER_VALIDATION_LEVEL >= 0 )
         {
             // if( nullptr == driver ) return XE_RESULT_ERROR_UNINITIALIZED;
-
             // Check parameters
             if( nullptr == hDevice ) return XE_RESULT_ERROR_INVALID_PARAMETER;
             if( nullptr == desc ) return XE_RESULT_ERROR_INVALID_PARAMETER;
             if( nullptr == ptr ) return XE_RESULT_ERROR_INVALID_PARAMETER;
             if( nullptr == phEvent ) return XE_RESULT_ERROR_INVALID_PARAMETER;
-            if( XE_EVENT_DESC_VERSION <= desc->version ) return XE_RESULT_ERROR_UNSUPPORTED;
+            if( XE_EVENT_DESC_VERSION < desc->version ) return XE_RESULT_ERROR_UNSUPPORTED;
         }
         /// @begin
 
-        // @todo: insert <code> here
+        return xe::Device::fromHandle(hDevice)->placeEvent(desc, ptr, phEvent);
 
         /// @end
-        return XE_RESULT_SUCCESS;
     }
     catch(xe_result_t& result)
     {
@@ -194,7 +191,7 @@ xe_result_t __xecall
 ///
 /// @hash {0e82f51d7da70ece36da3299c7607c0ce273c15a6401a026d89b8a6e24b52985}
 ///
-xe_result_t __xecall
+__xedllexport xe_result_t __xecall
   xeEventDestroy(
     xe_event_handle_t hEvent                        ///< [in] handle of event object to destroy
     )
@@ -204,16 +201,14 @@ xe_result_t __xecall
         //if( XE_DRIVER_PARAMETER_VALIDATION_LEVEL >= 0 )
         {
             // if( nullptr == driver ) return XE_RESULT_ERROR_UNINITIALIZED;
-
             // Check parameters
             if( nullptr == hEvent ) return XE_RESULT_ERROR_INVALID_PARAMETER;
         }
         /// @begin
 
-        // @todo: insert <code> here
+        return xe::Event::fromHandle(hEvent)->destroy();
 
         /// @end
-        return XE_RESULT_SUCCESS;
     }
     catch(xe_result_t& result)
     {
@@ -255,7 +250,7 @@ xe_result_t __xecall
 ///
 /// @hash {f66119ce56a773182ebed031c151a8faf6280e74d7b56718b71177f01141bc97}
 ///
-xe_result_t __xecall
+__xedllexport xe_result_t __xecall
   xeCommandListEncodeSignalEvent(
     xe_command_list_handle_t hCommandList,          ///< [in] handle of the command list
     xe_event_handle_t hEvent                        ///< [in] handle of the event
@@ -266,17 +261,15 @@ xe_result_t __xecall
         //if( XE_DRIVER_PARAMETER_VALIDATION_LEVEL >= 0 )
         {
             // if( nullptr == driver ) return XE_RESULT_ERROR_UNINITIALIZED;
-
             // Check parameters
             if( nullptr == hCommandList ) return XE_RESULT_ERROR_INVALID_PARAMETER;
             if( nullptr == hEvent ) return XE_RESULT_ERROR_INVALID_PARAMETER;
         }
         /// @begin
 
-        // @todo: insert <code> here
+        return xe::CommandList::fromHandle(hCommandList)->encodeSignalEvent(hEvent);
 
         /// @end
-        return XE_RESULT_SUCCESS;
     }
     catch(xe_result_t& result)
     {
@@ -312,7 +305,7 @@ xe_result_t __xecall
 ///
 /// @hash {b8409ab2ea47c3520b0faabc15232c79b1b0494defcc29b08c09a95b5b4e97df}
 ///
-xe_result_t __xecall
+__xedllexport xe_result_t __xecall
   xeCommandListEncodeWaitOnEvent(
     xe_command_list_handle_t hCommandList,          ///< [in] handle of the command list
     xe_event_handle_t hEvent                        ///< [in] handle of the event
@@ -323,17 +316,15 @@ xe_result_t __xecall
         //if( XE_DRIVER_PARAMETER_VALIDATION_LEVEL >= 0 )
         {
             // if( nullptr == driver ) return XE_RESULT_ERROR_UNINITIALIZED;
-
             // Check parameters
             if( nullptr == hCommandList ) return XE_RESULT_ERROR_INVALID_PARAMETER;
             if( nullptr == hEvent ) return XE_RESULT_ERROR_INVALID_PARAMETER;
         }
         /// @begin
 
-        // @todo: insert <code> here
+        return xe::CommandList::fromHandle(hCommandList)->encodeWaitOnEvent(hEvent);
 
         /// @end
-        return XE_RESULT_SUCCESS;
     }
     catch(xe_result_t& result)
     {
@@ -369,7 +360,7 @@ xe_result_t __xecall
 ///
 /// @hash {b6c4b3102db77f8114696fb2f220387c48408770e4bed49fa83d44159b8af5f6}
 ///
-xe_result_t __xecall
+__xedllexport xe_result_t __xecall
   xeCommandListEncodeSignalMultipleEvents(
     xe_command_list_handle_t hCommandList,          ///< [in] handle of the command list
     uint32_t numEvents,                             ///< [in] number of events pointed to by phEvents
@@ -381,17 +372,15 @@ xe_result_t __xecall
         //if( XE_DRIVER_PARAMETER_VALIDATION_LEVEL >= 0 )
         {
             // if( nullptr == driver ) return XE_RESULT_ERROR_UNINITIALIZED;
-
             // Check parameters
             if( nullptr == hCommandList ) return XE_RESULT_ERROR_INVALID_PARAMETER;
             if( nullptr == phEvents ) return XE_RESULT_ERROR_INVALID_PARAMETER;
         }
         /// @begin
 
-        // @todo: insert <code> here
+        return xe::CommandList::fromHandle(hCommandList)->encodeSignalMultipleEvents(numEvents, phEvents);
 
         /// @end
-        return XE_RESULT_SUCCESS;
     }
     catch(xe_result_t& result)
     {
@@ -428,7 +417,7 @@ xe_result_t __xecall
 ///
 /// @hash {9bc2eeadc113dfc5be97a3a4590743a2b7b4ee4e12237b86fc7be4f208da95d8}
 ///
-xe_result_t __xecall
+__xedllexport xe_result_t __xecall
   xeCommandListEncodeWaitOnMultipleEvents(
     xe_command_list_handle_t hCommandList,          ///< [in] handle of the command list
     uint32_t numEvents,                             ///< [in] number of events pointed to by phEvents
@@ -440,17 +429,15 @@ xe_result_t __xecall
         //if( XE_DRIVER_PARAMETER_VALIDATION_LEVEL >= 0 )
         {
             // if( nullptr == driver ) return XE_RESULT_ERROR_UNINITIALIZED;
-
             // Check parameters
             if( nullptr == hCommandList ) return XE_RESULT_ERROR_INVALID_PARAMETER;
             if( nullptr == phEvents ) return XE_RESULT_ERROR_INVALID_PARAMETER;
         }
         /// @begin
 
-        // @todo: insert <code> here
+        return xe::CommandList::fromHandle(hCommandList)->encodeWaitOnMultipleEvents(numEvents, phEvents);
 
         /// @end
-        return XE_RESULT_SUCCESS;
     }
     catch(xe_result_t& result)
     {
@@ -486,9 +473,9 @@ xe_result_t __xecall
 ///         + nullptr == hEvent
 ///     - ::XE_RESULT_ERROR_UNSUPPORTED
 ///
-/// @hash {809272a0febf2e56f09e04c5a53b8568b0c6905e5acd124c0e1e4151b542dab6}
+/// @hash {8fe37c68daaeb9874d9858ef3118f29bb121815b7f72123f14580e5ca4fd9994}
 ///
-xe_result_t __xecall
+__xedllexport xe_result_t __xecall
   xeHostSignalEvent(
     xe_event_handle_t hEvent                        ///< [in] handle of the event
     )
@@ -498,16 +485,14 @@ xe_result_t __xecall
         //if( XE_DRIVER_PARAMETER_VALIDATION_LEVEL >= 0 )
         {
             // if( nullptr == driver ) return XE_RESULT_ERROR_UNINITIALIZED;
-
             // Check parameters
             if( nullptr == hEvent ) return XE_RESULT_ERROR_INVALID_PARAMETER;
         }
         /// @begin
 
-        // @todo: insert <code> here
+        return xe::Host::get()->signalEvent(hEvent);
 
         /// @end
-        return XE_RESULT_SUCCESS;
     }
     catch(xe_result_t& result)
     {
@@ -546,9 +531,9 @@ xe_result_t __xecall
 ///     - ::XE_RESULT_NOT_READY
 ///         + timeout expired
 ///
-/// @hash {580d70d65f44535c9b2585408c20f2c0af086f6b54945445e7b09d31493403e0}
+/// @hash {bd6edacacf3e5767a4f599f3cc9d0d2fd2ce8b8f66ad162170d6cba587941368}
 ///
-xe_result_t __xecall
+__xedllexport xe_result_t __xecall
   xeHostWaitOnEvent(
     xe_event_handle_t hEvent,                       ///< [in] handle of the event
     xe_synchronization_mode_t mode,                 ///< [in] synchronization mode
@@ -569,16 +554,14 @@ xe_result_t __xecall
         //if( XE_DRIVER_PARAMETER_VALIDATION_LEVEL >= 0 )
         {
             // if( nullptr == driver ) return XE_RESULT_ERROR_UNINITIALIZED;
-
             // Check parameters
             if( nullptr == hEvent ) return XE_RESULT_ERROR_INVALID_PARAMETER;
         }
         /// @begin
 
-        // @todo: insert <code> here
+        return xe::Host::get()->waitOnEvent(hEvent, mode, delay, interval, timeout);
 
         /// @end
-        return XE_RESULT_SUCCESS;
     }
     catch(xe_result_t& result)
     {
@@ -610,9 +593,9 @@ xe_result_t __xecall
 ///         + nullptr == phEvents
 ///     - ::XE_RESULT_ERROR_UNSUPPORTED
 ///
-/// @hash {6bfaa4edb5accb4ff4433b13b89b7371377931bb1eb613bb04878ef02ac4f666}
+/// @hash {9dc878996ddb4270ef16dd3116a25c67f4b0b0e458f06ff10375e79c3ab75194}
 ///
-xe_result_t __xecall
+__xedllexport xe_result_t __xecall
   xeHostSignalMultipleEvents(
     uint32_t numEvents,                             ///< [in] number of events pointed to by phEvents
     xe_event_handle_t* phEvents                     ///< [in] pointer to array of handles of the events
@@ -623,16 +606,14 @@ xe_result_t __xecall
         //if( XE_DRIVER_PARAMETER_VALIDATION_LEVEL >= 0 )
         {
             // if( nullptr == driver ) return XE_RESULT_ERROR_UNINITIALIZED;
-
             // Check parameters
             if( nullptr == phEvents ) return XE_RESULT_ERROR_INVALID_PARAMETER;
         }
         /// @begin
 
-        // @todo: insert <code> here
+        return xe::Host::get()->signalMultipleEvents(numEvents, phEvents);
 
         /// @end
-        return XE_RESULT_SUCCESS;
     }
     catch(xe_result_t& result)
     {
@@ -670,9 +651,9 @@ xe_result_t __xecall
 ///     - ::XE_RESULT_NOT_READY
 ///         + timeout expired
 ///
-/// @hash {e52ffd62217e9fcf9ed29e74f4453d0d1930803fe7e4289225b27f2526df83d0}
+/// @hash {fdc2d90a28f3f1e1ea5fe6cd7d65170d8ff373a0899394351a80b9c63039d051}
 ///
-xe_result_t __xecall
+__xedllexport xe_result_t __xecall
   xeHostWaitOnMultipleEvents(
     uint32_t numEvents,                             ///< [in] number of events pointed to by phEvents
     xe_event_handle_t* phEvents,                    ///< [in] pointer to array of handles of the events
@@ -694,16 +675,14 @@ xe_result_t __xecall
         //if( XE_DRIVER_PARAMETER_VALIDATION_LEVEL >= 0 )
         {
             // if( nullptr == driver ) return XE_RESULT_ERROR_UNINITIALIZED;
-
             // Check parameters
             if( nullptr == phEvents ) return XE_RESULT_ERROR_INVALID_PARAMETER;
         }
         /// @begin
 
-        // @todo: insert <code> here
+        return xe::Host::get()->waitOnMultipleEvents(numEvents, phEvents, mode, delay, interval, timeout);
 
         /// @end
-        return XE_RESULT_SUCCESS;
     }
     catch(xe_result_t& result)
     {
@@ -745,7 +724,7 @@ xe_result_t __xecall
 ///
 /// @hash {1091660d20f5595dad7bbbf969b0a8e9238f218438ff4f2c908b93135147cfa6}
 ///
-xe_result_t __xecall
+__xedllexport xe_result_t __xecall
   xeEventQueryStatus(
     xe_event_handle_t hEvent                        ///< [in] handle of the event
     )
@@ -755,16 +734,14 @@ xe_result_t __xecall
         //if( XE_DRIVER_PARAMETER_VALIDATION_LEVEL >= 0 )
         {
             // if( nullptr == driver ) return XE_RESULT_ERROR_UNINITIALIZED;
-
             // Check parameters
             if( nullptr == hEvent ) return XE_RESULT_ERROR_INVALID_PARAMETER;
         }
         /// @begin
 
-        // @todo: insert <code> here
+        return xe::Event::fromHandle(hEvent)->queryStatus();
 
         /// @end
-        return XE_RESULT_SUCCESS;
     }
     catch(xe_result_t& result)
     {
@@ -804,9 +781,9 @@ xe_result_t __xecall
 ///         + either event not created with ::XE_EVENT_FLAG_TIMESTAMP
 ///     - ::XE_RESULT_ERROR_UNSUPPORTED
 ///
-/// @hash {e637cce64a455fb95fa0bca51aaf247ab2aab0f6eae8f236d16f76c4f82a004f}
+/// @hash {e27fc7ab1b4c00fd10605fd7c45adee5ce6b22dc102ee8450ab689a513de4314}
 ///
-xe_result_t __xecall
+__xedllexport xe_result_t __xecall
   xeEventQueryElapsedTime(
     xe_event_handle_t hEventStart,                  ///< [in] handle of the start event
     xe_event_handle_t hEventEnd,                    ///< [in] handle of the end event
@@ -818,7 +795,6 @@ xe_result_t __xecall
         //if( XE_DRIVER_PARAMETER_VALIDATION_LEVEL >= 0 )
         {
             // if( nullptr == driver ) return XE_RESULT_ERROR_UNINITIALIZED;
-
             // Check parameters
             if( nullptr == hEventStart ) return XE_RESULT_ERROR_INVALID_PARAMETER;
             if( nullptr == hEventEnd ) return XE_RESULT_ERROR_INVALID_PARAMETER;
@@ -826,10 +802,9 @@ xe_result_t __xecall
         }
         /// @begin
 
-        // @todo: insert <code> here
+        return xe::eventQueryElapsedTime(hEventStart, hEventEnd, pTime);
 
         /// @end
-        return XE_RESULT_SUCCESS;
     }
     catch(xe_result_t& result)
     {
@@ -866,9 +841,9 @@ xe_result_t __xecall
 ///         + report size too small
 ///     - ::XE_RESULT_ERROR_UNSUPPORTED
 ///
-/// @hash {2aadae68763b475a5f8ea4f780f115829c192fe6ab8fdff1c744906cf1cb832e}
+/// @hash {86bf02b143940d38911ff1c385a99d93c8aa0d6aef16ee9e18cddb4e1c51dfa5}
 ///
-xe_result_t __xecall
+__xedllexport xe_result_t __xecall
   xeEventQueryMetricsData(
     xe_event_handle_t hEventStart,                  ///< [in] handle of the start event
     xe_event_handle_t hEventEnd,                    ///< [in] handle of the end event
@@ -881,7 +856,6 @@ xe_result_t __xecall
         //if( XE_DRIVER_PARAMETER_VALIDATION_LEVEL >= 0 )
         {
             // if( nullptr == driver ) return XE_RESULT_ERROR_UNINITIALIZED;
-
             // Check parameters
             if( nullptr == hEventStart ) return XE_RESULT_ERROR_INVALID_PARAMETER;
             if( nullptr == hEventEnd ) return XE_RESULT_ERROR_INVALID_PARAMETER;
@@ -889,10 +863,9 @@ xe_result_t __xecall
         }
         /// @begin
 
-        // @todo: insert <code> here
+        return xe::eventQueryMetricsData(hEventStart, hEventEnd, reportSize, pReportData);
 
         /// @end
-        return XE_RESULT_SUCCESS;
     }
     catch(xe_result_t& result)
     {
@@ -932,7 +905,7 @@ xe_result_t __xecall
 ///
 /// @hash {06205f20ab4babe3494b5f61b9e94ba192b5f0f68c0f27e75651983ccc6f0b3e}
 ///
-xe_result_t __xecall
+__xedllexport xe_result_t __xecall
   xeCommandListEncodeEventReset(
     xe_command_list_handle_t hCommandList,          ///< [in] handle of the command list
     xe_event_handle_t hEvent                        ///< [in] handle of the event
@@ -943,17 +916,15 @@ xe_result_t __xecall
         //if( XE_DRIVER_PARAMETER_VALIDATION_LEVEL >= 0 )
         {
             // if( nullptr == driver ) return XE_RESULT_ERROR_UNINITIALIZED;
-
             // Check parameters
             if( nullptr == hCommandList ) return XE_RESULT_ERROR_INVALID_PARAMETER;
             if( nullptr == hEvent ) return XE_RESULT_ERROR_INVALID_PARAMETER;
         }
         /// @begin
 
-        // @todo: insert <code> here
+        return xe::CommandList::fromHandle(hCommandList)->encodeEventReset(hEvent);
 
         /// @end
-        return XE_RESULT_SUCCESS;
     }
     catch(xe_result_t& result)
     {
@@ -991,7 +962,7 @@ xe_result_t __xecall
 ///
 /// @hash {8bd5a629cd3d5cdbf21ba95b68945eb87003476ae6e65e32a1da5666b9851719}
 ///
-xe_result_t __xecall
+__xedllexport xe_result_t __xecall
   xeEventReset(
     xe_event_handle_t hEvent                        ///< [in] handle of the event
     )
@@ -1001,16 +972,14 @@ xe_result_t __xecall
         //if( XE_DRIVER_PARAMETER_VALIDATION_LEVEL >= 0 )
         {
             // if( nullptr == driver ) return XE_RESULT_ERROR_UNINITIALIZED;
-
             // Check parameters
             if( nullptr == hEvent ) return XE_RESULT_ERROR_INVALID_PARAMETER;
         }
         /// @begin
 
-        // @todo: insert <code> here
+        return xe::Event::fromHandle(hEvent)->reset();
 
         /// @end
-        return XE_RESULT_SUCCESS;
     }
     catch(xe_result_t& result)
     {

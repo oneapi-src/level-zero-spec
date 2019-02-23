@@ -2,9 +2,9 @@ if(SUPPORT_GEN10)
     set(HW_SOURCES
         ${HW_SOURCES}
         ${COMPUTE_RUNTIME_GEN10}
-#        cmdlist_cnl.cpp
-#        cmdqueue_cnl.cpp
-        gen10.cmake
+#        ${CMAKE_CURRENT_SOURCE_DIR}/cmdlist_cnl.cpp
+#        ${CMAKE_CURRENT_SOURCE_DIR}/cmdqueue_cnl.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/gen10.cmake
     )
 
     set(HW_SOURCES_ULT

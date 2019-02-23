@@ -2,9 +2,9 @@ if(SUPPORT_GEN12HP)
     set(HW_SOURCES
         ${HW_SOURCES}
         ${COMPUTE_RUNTIME_GEN12HP}
-        cmdlist_ats.cpp
-        cmdqueue_ats.cpp
-        gen12hp.cmake
+        ${CMAKE_CURRENT_SOURCE_DIR}/cmdlist_ats.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/cmdqueue_ats.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/gen12hp.cmake
     )
 
     set(HW_SOURCES_ULT

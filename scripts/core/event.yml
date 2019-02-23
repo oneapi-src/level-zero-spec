@@ -179,8 +179,8 @@ params:
 --- #--------------------------------------------------------------------------
 type: function
 desc: "Signals a event from host."
-class: $x
-name: HostSignalEvent
+class: $xHost
+name: SignalEvent
 analogue:
     - clSetUserEventStatus
 details:
@@ -193,8 +193,8 @@ params:
 --- #--------------------------------------------------------------------------
 type: function
 desc: "The current host thread waits on an event from a device signal."
-class: $x
-name: HostWaitOnEvent
+class: $xHost
+name: WaitOnEvent
 analogue:
     - clWaitForEvents
     - cuEventSynchronize
@@ -227,8 +227,8 @@ returns:
 --- #--------------------------------------------------------------------------
 type: function
 desc: "Signals multiple events from host."
-class: $x
-name: HostSignalMultipleEvents
+class: $xHost
+name: SignalMultipleEvents
 details:
     - "The application may call this function from simultaneous threads."
     - "The implementation of this function should be lock-free."
@@ -242,8 +242,8 @@ params:
 --- #--------------------------------------------------------------------------
 type: function
 desc: "The current host thread waits on multiple events from a device signal."
-class: $x
-name: HostWaitOnMultipleEvents
+class: $xHost
+name: WaitOnMultipleEvents
 analogue:
     - clWaitForEvents
 details:
@@ -297,8 +297,8 @@ returns:
 --- #--------------------------------------------------------------------------
 type: function
 desc: "Queries the elapsed time between two device-signaled events."
-class: $xEvent
-name: QueryElapsedTime
+class: $x
+name: EventQueryElapsedTime
 analogue:
     - "**cuEventElapsedTime**"
 details:
@@ -321,8 +321,8 @@ returns:
 --- #--------------------------------------------------------------------------
 type: function
 desc: "Queries performance metrics between two device-signaled events."
-class: $xEvent
-name: QueryMetricsData
+class: $x
+name: EventQueryMetricsData
 details:
     - "The application may call this function from simultaneous threads."
     - "The implementation of this function should be lock-free."

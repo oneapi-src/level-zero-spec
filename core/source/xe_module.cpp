@@ -29,6 +29,7 @@
 *
 ******************************************************************************/
 #include "../include/xe_module.h"
+#include "module.h"
 
 #include <exception>    // @todo: move to common and/or precompiled header
 
@@ -70,7 +71,7 @@
 ///         + nullptr == desc->phModule
 ///         + 0 == desc->inputSize
 ///     - ::XE_RESULT_ERROR_UNSUPPORTED
-///         + ::XE_MODULE_DESC_VERSION <= desc->version
+///         + ::XE_MODULE_DESC_VERSION < desc->version
 ///     - ::XE_RESULT_ERROR_OUT_OF_HOST_MEMORY
 ///     - ::XE_RESULT_ERROR_OUT_OF_DEVICE_MEMORY
 ///     - ::XE_RESULT_ERROR_MODULE_BUILD_FAILURE
@@ -78,7 +79,7 @@
 ///
 /// @hash {9eb829c1441842e279f9be96688eeb91e18798a1c6f1c8383d0a3ac86bfd4809}
 ///
-xe_result_t __xecall
+__xedllexport xe_result_t __xecall
   xeDeviceCreateModule(
     xe_device_handle_t hDevice,                     ///< [in] handle of the device
     const xe_module_desc_t* desc,                   ///< [in] pointer to module descriptor
@@ -91,19 +92,17 @@ xe_result_t __xecall
         //if( XE_DRIVER_PARAMETER_VALIDATION_LEVEL >= 0 )
         {
             // if( nullptr == driver ) return XE_RESULT_ERROR_UNINITIALIZED;
-
             // Check parameters
             if( nullptr == hDevice ) return XE_RESULT_ERROR_INVALID_PARAMETER;
             if( nullptr == desc ) return XE_RESULT_ERROR_INVALID_PARAMETER;
             if( nullptr == phModule ) return XE_RESULT_ERROR_INVALID_PARAMETER;
-            if( XE_MODULE_DESC_VERSION <= desc->version ) return XE_RESULT_ERROR_UNSUPPORTED;
+            if( XE_MODULE_DESC_VERSION < desc->version ) return XE_RESULT_ERROR_UNSUPPORTED;
         }
         /// @begin
 
-        // @todo: insert <code> here
+        return xe::Device::fromHandle(hDevice)->createModule(desc, phModule, phBuildLog);
 
         /// @end
-        return XE_RESULT_SUCCESS;
     }
     catch(xe_result_t& result)
     {
@@ -144,7 +143,7 @@ xe_result_t __xecall
 ///
 /// @hash {349b769d72d44bcbeb8306573eb07e65478f28d404576327cdd45381da9e8b96}
 ///
-xe_result_t __xecall
+__xedllexport xe_result_t __xecall
   xeModuleDestroy(
     xe_module_handle_t hModule                      ///< [in] handle of the module
     )
@@ -154,16 +153,14 @@ xe_result_t __xecall
         //if( XE_DRIVER_PARAMETER_VALIDATION_LEVEL >= 0 )
         {
             // if( nullptr == driver ) return XE_RESULT_ERROR_UNINITIALIZED;
-
             // Check parameters
             if( nullptr == hModule ) return XE_RESULT_ERROR_INVALID_PARAMETER;
         }
         /// @begin
 
-        // @todo: insert <code> here
+        return xe::Module::fromHandle(hModule)->destroy();
 
         /// @end
-        return XE_RESULT_SUCCESS;
     }
     catch(xe_result_t& result)
     {
@@ -197,14 +194,14 @@ xe_result_t __xecall
 ///     - ::XE_RESULT_ERROR_UNINITIALIZED
 ///     - ::XE_RESULT_ERROR_DEVICE_LOST
 ///     - ::XE_RESULT_ERROR_INVALID_PARAMETER
-///         + nullptr == hBuildLog
+///         + nullptr == hModuleBuildLog
 ///     - ::XE_RESULT_ERROR_UNSUPPORTED
 ///
-/// @hash {f3094b9ab0cf409ea4c6bc63c2ec39ad88091a8ee9fe684c984e877f61548d00}
+/// @hash {9c101cf3fd365132a5537247d01f3cefa6f7b60ba9c15da3f2380f61a4f6fa5c}
 ///
-xe_result_t __xecall
+__xedllexport xe_result_t __xecall
   xeModuleBuildLogDestroy(
-    xe_module_build_log_handle_t hBuildLog          ///< [in] handle of the module build log object.
+    xe_module_build_log_handle_t hModuleBuildLog    ///< [in] handle of the module build log object.
     )
 {
     try
@@ -212,16 +209,14 @@ xe_result_t __xecall
         //if( XE_DRIVER_PARAMETER_VALIDATION_LEVEL >= 0 )
         {
             // if( nullptr == driver ) return XE_RESULT_ERROR_UNINITIALIZED;
-
             // Check parameters
-            if( nullptr == hBuildLog ) return XE_RESULT_ERROR_INVALID_PARAMETER;
+            if( nullptr == hModuleBuildLog ) return XE_RESULT_ERROR_INVALID_PARAMETER;
         }
         /// @begin
 
-        // @todo: insert <code> here
+        return xe::ModuleBuildLog::fromHandle(hModuleBuildLog)->destroy();
 
         /// @end
-        return XE_RESULT_SUCCESS;
     }
     catch(xe_result_t& result)
     {
@@ -250,18 +245,18 @@ xe_result_t __xecall
 ///     - ::XE_RESULT_ERROR_UNINITIALIZED
 ///     - ::XE_RESULT_ERROR_DEVICE_LOST
 ///     - ::XE_RESULT_ERROR_INVALID_PARAMETER
-///         + nullptr == hBuildLog
+///         + nullptr == hModuleBuildLog
 ///         + nullptr == pSize
 ///         + nullptr == pBuildLog
 ///     - ::XE_RESULT_ERROR_UNSUPPORTED
 ///     - ::XE_RESULT_ERROR_OUT_OF_HOST_MEMORY
 ///     - ::XE_RESULT_ERROR_OUT_OF_DEVICE_MEMORY
 ///
-/// @hash {dd35e7a2beba7be9b599e677ac04880f6512aa776568772d8cd128b65b7839d4}
+/// @hash {1511eabbbd7e6f36c9a31f1e94d1934d76bd762428186f352f5bf5cbcb863f67}
 ///
-xe_result_t __xecall
+__xedllexport xe_result_t __xecall
   xeModuleBuildLogGetString(
-    xe_module_build_log_handle_t hBuildLog,         ///< [in] handle of the module build log object.
+    xe_module_build_log_handle_t hModuleBuildLog,   ///< [in] handle of the module build log object.
     uint32_t* pSize,                                ///< [out] size of build log string.
     char** pBuildLog                                ///< [out] pointer to null-terminated string of the log.
     )
@@ -271,18 +266,16 @@ xe_result_t __xecall
         //if( XE_DRIVER_PARAMETER_VALIDATION_LEVEL >= 0 )
         {
             // if( nullptr == driver ) return XE_RESULT_ERROR_UNINITIALIZED;
-
             // Check parameters
-            if( nullptr == hBuildLog ) return XE_RESULT_ERROR_INVALID_PARAMETER;
+            if( nullptr == hModuleBuildLog ) return XE_RESULT_ERROR_INVALID_PARAMETER;
             if( nullptr == pSize ) return XE_RESULT_ERROR_INVALID_PARAMETER;
             if( nullptr == pBuildLog ) return XE_RESULT_ERROR_INVALID_PARAMETER;
         }
         /// @begin
 
-        // @todo: insert <code> here
+        return xe::ModuleBuildLog::fromHandle(hModuleBuildLog)->getString(pSize, pBuildLog);
 
         /// @end
-        return XE_RESULT_SUCCESS;
     }
     catch(xe_result_t& result)
     {
@@ -328,7 +321,7 @@ xe_result_t __xecall
 ///
 /// @hash {f86dcf1e7e87d03f26bddcbff99420a8d159e89f57619beaaeebfee453cfd62e}
 ///
-xe_result_t __xecall
+__xedllexport xe_result_t __xecall
   xeModuleGetNativeBinary(
     xe_module_handle_t hModule,                     ///< [in] handle of the device
     uint32_t* pSize,                                ///< [out] size of native binary.
@@ -340,7 +333,6 @@ xe_result_t __xecall
         //if( XE_DRIVER_PARAMETER_VALIDATION_LEVEL >= 0 )
         {
             // if( nullptr == driver ) return XE_RESULT_ERROR_UNINITIALIZED;
-
             // Check parameters
             if( nullptr == hModule ) return XE_RESULT_ERROR_INVALID_PARAMETER;
             if( nullptr == pSize ) return XE_RESULT_ERROR_INVALID_PARAMETER;
@@ -348,10 +340,9 @@ xe_result_t __xecall
         }
         /// @begin
 
-        // @todo: insert <code> here
+        return xe::Module::fromHandle(hModule)->getNativeBinary(pSize, pModuleNativeBinary);
 
         /// @end
-        return XE_RESULT_SUCCESS;
     }
     catch(xe_result_t& result)
     {
@@ -391,11 +382,11 @@ xe_result_t __xecall
 ///         + nullptr == desc->pFunctionName
 ///         + invalid value for desc->pFunctionName
 ///     - ::XE_RESULT_ERROR_UNSUPPORTED
-///         + ::XE_FUNCTION_DESC_VERSION <= desc->version
+///         + ::XE_FUNCTION_DESC_VERSION < desc->version
 ///
 /// @hash {db1f3dd910ba87cc5f4943397310ef13073b227ef8aad92327a8183e14461837}
 ///
-xe_result_t __xecall
+__xedllexport xe_result_t __xecall
   xeModuleCreateFunction(
     xe_module_handle_t hModule,                     ///< [in] handle of the module
     const xe_function_desc_t* desc,                 ///< [in] pointer to function descriptor
@@ -407,19 +398,17 @@ xe_result_t __xecall
         //if( XE_DRIVER_PARAMETER_VALIDATION_LEVEL >= 0 )
         {
             // if( nullptr == driver ) return XE_RESULT_ERROR_UNINITIALIZED;
-
             // Check parameters
             if( nullptr == hModule ) return XE_RESULT_ERROR_INVALID_PARAMETER;
             if( nullptr == desc ) return XE_RESULT_ERROR_INVALID_PARAMETER;
             if( nullptr == phFunction ) return XE_RESULT_ERROR_INVALID_PARAMETER;
-            if( XE_FUNCTION_DESC_VERSION <= desc->version ) return XE_RESULT_ERROR_UNSUPPORTED;
+            if( XE_FUNCTION_DESC_VERSION < desc->version ) return XE_RESULT_ERROR_UNSUPPORTED;
         }
         /// @begin
 
-        // @todo: insert <code> here
+        return xe::Module::fromHandle(hModule)->createFunction(desc, phFunction);
 
         /// @end
-        return XE_RESULT_SUCCESS;
     }
     catch(xe_result_t& result)
     {
@@ -456,7 +445,7 @@ xe_result_t __xecall
 ///
 /// @hash {81a8e4126290acff1c7d8a2abbac4698476a5f69abd668a5098199163cfb01c7}
 ///
-xe_result_t __xecall
+__xedllexport xe_result_t __xecall
   xeFunctionDestroy(
     xe_function_handle_t hFunction                  ///< [in] handle of the function object
     )
@@ -466,16 +455,14 @@ xe_result_t __xecall
         //if( XE_DRIVER_PARAMETER_VALIDATION_LEVEL >= 0 )
         {
             // if( nullptr == driver ) return XE_RESULT_ERROR_UNINITIALIZED;
-
             // Check parameters
             if( nullptr == hFunction ) return XE_RESULT_ERROR_INVALID_PARAMETER;
         }
         /// @begin
 
-        // @todo: insert <code> here
+        return xe::Function::fromHandle(hFunction)->destroy();
 
         /// @end
-        return XE_RESULT_SUCCESS;
     }
     catch(xe_result_t& result)
     {
@@ -512,7 +499,7 @@ xe_result_t __xecall
 ///
 /// @hash {0d524eae1de0503fef62776d38c10480c3399fe9307e8349c32f24d255a1d971}
 ///
-xe_result_t __xecall
+__xedllexport xe_result_t __xecall
   xeFunctionSetGroupSize(
     xe_function_handle_t hFunction,                 ///< [in] handle of the function object
     uint32_t groupSizeX,                            ///< [in] group size for X dimension to use for this function.
@@ -525,16 +512,14 @@ xe_result_t __xecall
         //if( XE_DRIVER_PARAMETER_VALIDATION_LEVEL >= 0 )
         {
             // if( nullptr == driver ) return XE_RESULT_ERROR_UNINITIALIZED;
-
             // Check parameters
             if( nullptr == hFunction ) return XE_RESULT_ERROR_INVALID_PARAMETER;
         }
         /// @begin
 
-        // @todo: insert <code> here
+        return xe::Function::fromHandle(hFunction)->setGroupSize(groupSizeX, groupSizeY, groupSizeZ);
 
         /// @end
-        return XE_RESULT_SUCCESS;
     }
     catch(xe_result_t& result)
     {
@@ -575,7 +560,7 @@ xe_result_t __xecall
 ///
 /// @hash {f3c0ffef33c7e902e382ada2d1fac7966afd96c3c9989bf29a9917e4ae2856d2}
 ///
-xe_result_t __xecall
+__xedllexport xe_result_t __xecall
   xeFunctionSuggestGroupSize(
     xe_function_handle_t hFunction,                 ///< [in] handle of the function object
     uint32_t globalSizeX,                           ///< [in] global width for X dimension.
@@ -591,7 +576,6 @@ xe_result_t __xecall
         //if( XE_DRIVER_PARAMETER_VALIDATION_LEVEL >= 0 )
         {
             // if( nullptr == driver ) return XE_RESULT_ERROR_UNINITIALIZED;
-
             // Check parameters
             if( nullptr == hFunction ) return XE_RESULT_ERROR_INVALID_PARAMETER;
             if( nullptr == groupSizeX ) return XE_RESULT_ERROR_INVALID_PARAMETER;
@@ -600,10 +584,9 @@ xe_result_t __xecall
         }
         /// @begin
 
-        // @todo: insert <code> here
+        return xe::Function::fromHandle(hFunction)->suggestGroupSize(globalSizeX, globalSizeY, globalSizeZ, groupSizeX, groupSizeY, groupSizeZ);
 
         /// @end
-        return XE_RESULT_SUCCESS;
     }
     catch(xe_result_t& result)
     {
@@ -643,7 +626,7 @@ xe_result_t __xecall
 ///
 /// @hash {d28a8e65c3c7b08efac12f45a3b9ec5fb16dbfe81f6c2d1fda1625887b62a478}
 ///
-xe_result_t __xecall
+__xedllexport xe_result_t __xecall
   xeFunctionCreateFunctionArgs(
     xe_function_handle_t hFunction,                 ///< [in] handle of the function
     xe_function_args_handle_t* phFunctionArgs       ///< [out] handle of the Function arguments object
@@ -654,17 +637,15 @@ xe_result_t __xecall
         //if( XE_DRIVER_PARAMETER_VALIDATION_LEVEL >= 0 )
         {
             // if( nullptr == driver ) return XE_RESULT_ERROR_UNINITIALIZED;
-
             // Check parameters
             if( nullptr == hFunction ) return XE_RESULT_ERROR_INVALID_PARAMETER;
             if( nullptr == phFunctionArgs ) return XE_RESULT_ERROR_INVALID_PARAMETER;
         }
         /// @begin
 
-        // @todo: insert <code> here
+        return xe::Function::fromHandle(hFunction)->createFunctionArgs(phFunctionArgs);
 
         /// @end
-        return XE_RESULT_SUCCESS;
     }
     catch(xe_result_t& result)
     {
@@ -701,7 +682,7 @@ xe_result_t __xecall
 ///
 /// @hash {188738a5c24e1cfdced709bf247351be2c54076aeb5641fd6618850d3ad6d050}
 ///
-xe_result_t __xecall
+__xedllexport xe_result_t __xecall
   xeFunctionArgsDestroy(
     xe_function_args_handle_t hFunctionArgs         ///< [in] handle of the function arguments buffer object
     )
@@ -711,16 +692,14 @@ xe_result_t __xecall
         //if( XE_DRIVER_PARAMETER_VALIDATION_LEVEL >= 0 )
         {
             // if( nullptr == driver ) return XE_RESULT_ERROR_UNINITIALIZED;
-
             // Check parameters
             if( nullptr == hFunctionArgs ) return XE_RESULT_ERROR_INVALID_PARAMETER;
         }
         /// @begin
 
-        // @todo: insert <code> here
+        return xe::FunctionArgs::fromHandle(hFunctionArgs)->destroy();
 
         /// @end
-        return XE_RESULT_SUCCESS;
     }
     catch(xe_result_t& result)
     {
@@ -762,7 +741,7 @@ xe_result_t __xecall
 ///
 /// @hash {a996568e450c8eba49523b384b4ad4b08e476e3e527d9ce286766ccf7d2a05e9}
 ///
-xe_result_t __xecall
+__xedllexport xe_result_t __xecall
   xeFunctionArgsSetValue(
     xe_function_args_handle_t hFunctionArgs,        ///< [in/out] handle of the function args object.
     uint32_t argIndex,                              ///< [in] argument index in range [0, num args - 1]
@@ -775,17 +754,15 @@ xe_result_t __xecall
         //if( XE_DRIVER_PARAMETER_VALIDATION_LEVEL >= 0 )
         {
             // if( nullptr == driver ) return XE_RESULT_ERROR_UNINITIALIZED;
-
             // Check parameters
             if( nullptr == hFunctionArgs ) return XE_RESULT_ERROR_INVALID_PARAMETER;
             if( nullptr == pArgValue ) return XE_RESULT_ERROR_INVALID_PARAMETER;
         }
         /// @begin
 
-        // @todo: insert <code> here
+        return xe::FunctionArgs::fromHandle(hFunctionArgs)->setValue(argIndex, argSize, pArgValue);
 
         /// @end
-        return XE_RESULT_SUCCESS;
     }
     catch(xe_result_t& result)
     {
@@ -825,7 +802,7 @@ xe_result_t __xecall
 ///
 /// @hash {e8873190019647e8d9f6a5b6f325014dbea173082544527129680e4cc9451b04}
 ///
-xe_result_t __xecall
+__xedllexport xe_result_t __xecall
   xeFunctionArgsSetAttribute(
     xe_function_args_handle_t hFunctionArgs,        ///< [in/out] handle of the function args object.
     xe_function_argument_attribute_t attr,          ///< [in] attribute to set
@@ -837,16 +814,14 @@ xe_result_t __xecall
         //if( XE_DRIVER_PARAMETER_VALIDATION_LEVEL >= 0 )
         {
             // if( nullptr == driver ) return XE_RESULT_ERROR_UNINITIALIZED;
-
             // Check parameters
             if( nullptr == hFunctionArgs ) return XE_RESULT_ERROR_INVALID_PARAMETER;
         }
         /// @begin
 
-        // @todo: insert <code> here
+        return xe::FunctionArgs::fromHandle(hFunctionArgs)->setAttribute(attr, value);
 
         /// @end
-        return XE_RESULT_SUCCESS;
     }
     catch(xe_result_t& result)
     {
@@ -886,7 +861,7 @@ xe_result_t __xecall
 ///
 /// @hash {cd0ca73d29fe12490a3a61992e20a5d3aeac34c8260b038d069a8e380af49c0a}
 ///
-xe_result_t __xecall
+__xedllexport xe_result_t __xecall
   xeFunctionQueryAttribute(
     xe_function_handle_t hFunction,                 ///< [in] handle of the function object
     xe_function_attribute_t attr,                   ///< [in] attribute to query
@@ -898,17 +873,15 @@ xe_result_t __xecall
         //if( XE_DRIVER_PARAMETER_VALIDATION_LEVEL >= 0 )
         {
             // if( nullptr == driver ) return XE_RESULT_ERROR_UNINITIALIZED;
-
             // Check parameters
             if( nullptr == hFunction ) return XE_RESULT_ERROR_INVALID_PARAMETER;
             if( nullptr == pValue ) return XE_RESULT_ERROR_INVALID_PARAMETER;
         }
         /// @begin
 
-        // @todo: insert <code> here
+        return xe::Function::fromHandle(hFunction)->queryAttribute(attr, pValue);
 
         /// @end
-        return XE_RESULT_SUCCESS;
     }
     catch(xe_result_t& result)
     {
@@ -951,7 +924,7 @@ xe_result_t __xecall
 ///
 /// @hash {de4ec8dc364024f41980b93d7021d402e874ac946ffb59ea3eb5aa9ab3301066}
 ///
-xe_result_t __xecall
+__xedllexport xe_result_t __xecall
   xeCommandListEncodeDispatchFunction(
     xe_command_list_handle_t hCommandList,          ///< [in] handle of the command list
     xe_function_handle_t hFunction,                 ///< [in] handle of the function object
@@ -965,7 +938,6 @@ xe_result_t __xecall
         //if( XE_DRIVER_PARAMETER_VALIDATION_LEVEL >= 0 )
         {
             // if( nullptr == driver ) return XE_RESULT_ERROR_UNINITIALIZED;
-
             // Check parameters
             if( nullptr == hCommandList ) return XE_RESULT_ERROR_INVALID_PARAMETER;
             if( nullptr == hFunction ) return XE_RESULT_ERROR_INVALID_PARAMETER;
@@ -974,10 +946,9 @@ xe_result_t __xecall
         }
         /// @begin
 
-        // @todo: insert <code> here
+        return xe::CommandList::fromHandle(hCommandList)->encodeDispatchFunction(hFunction, hFunctionArgs, pDispatchFuncArgs, hEvent);
 
         /// @end
-        return XE_RESULT_SUCCESS;
     }
     catch(xe_result_t& result)
     {
@@ -1020,7 +991,7 @@ xe_result_t __xecall
 ///
 /// @hash {87e742e574cd46be6071af89e21e2ded1f39f92798fdf538870a4187533af411}
 ///
-xe_result_t __xecall
+__xedllexport xe_result_t __xecall
   xeCommandGraphEncodeDispatchFunction(
     xe_command_graph_handle_t hCommandGraph,        ///< [in] handle of the command graph
     xe_function_handle_t hFunction,                 ///< [in] handle of the function object
@@ -1034,7 +1005,6 @@ xe_result_t __xecall
         //if( XE_DRIVER_PARAMETER_VALIDATION_LEVEL >= 0 )
         {
             // if( nullptr == driver ) return XE_RESULT_ERROR_UNINITIALIZED;
-
             // Check parameters
             if( nullptr == hCommandGraph ) return XE_RESULT_ERROR_INVALID_PARAMETER;
             if( nullptr == hFunction ) return XE_RESULT_ERROR_INVALID_PARAMETER;
@@ -1043,10 +1013,9 @@ xe_result_t __xecall
         }
         /// @begin
 
-        // @todo: insert <code> here
+        return xe::CommandGraph::fromHandle(hCommandGraph)->encodeDispatchFunction(hFunction, hFunctionArgs, pDispatchFuncArgs, hEvent);
 
         /// @end
-        return XE_RESULT_SUCCESS;
     }
     catch(xe_result_t& result)
     {
@@ -1091,7 +1060,7 @@ xe_result_t __xecall
 ///
 /// @hash {57fb8d85b4c8cc16e07ad3342db0be97e5c18c19b72c8ceb3dcbd20f88a98eea}
 ///
-xe_result_t __xecall
+__xedllexport xe_result_t __xecall
   xeCommandListEncodeDispatchFunctionIndirect(
     xe_command_list_handle_t hCommandList,          ///< [in] handle of the command list
     xe_function_handle_t hFunction,                 ///< [in] handle of the function object
@@ -1105,7 +1074,6 @@ xe_result_t __xecall
         //if( XE_DRIVER_PARAMETER_VALIDATION_LEVEL >= 0 )
         {
             // if( nullptr == driver ) return XE_RESULT_ERROR_UNINITIALIZED;
-
             // Check parameters
             if( nullptr == hCommandList ) return XE_RESULT_ERROR_INVALID_PARAMETER;
             if( nullptr == hFunction ) return XE_RESULT_ERROR_INVALID_PARAMETER;
@@ -1114,10 +1082,9 @@ xe_result_t __xecall
         }
         /// @begin
 
-        // @todo: insert <code> here
+        return xe::CommandList::fromHandle(hCommandList)->encodeDispatchFunctionIndirect(hFunction, hFunctionArgs, pDispatchArgumentsBuffer, hEvent);
 
         /// @end
-        return XE_RESULT_SUCCESS;
     }
     catch(xe_result_t& result)
     {
@@ -1162,7 +1129,7 @@ xe_result_t __xecall
 ///
 /// @hash {47643fb62b1afef97af02b4695028e484c973c06d358233559925f0353f8e845}
 ///
-xe_result_t __xecall
+__xedllexport xe_result_t __xecall
   xeCommandGraphEncodeDispatchFunctionIndirect(
     xe_command_graph_handle_t hCommandGraph,        ///< [in] handle of the command graph
     xe_function_handle_t hFunction,                 ///< [in] handle of the function object
@@ -1176,7 +1143,6 @@ xe_result_t __xecall
         //if( XE_DRIVER_PARAMETER_VALIDATION_LEVEL >= 0 )
         {
             // if( nullptr == driver ) return XE_RESULT_ERROR_UNINITIALIZED;
-
             // Check parameters
             if( nullptr == hCommandGraph ) return XE_RESULT_ERROR_INVALID_PARAMETER;
             if( nullptr == hFunction ) return XE_RESULT_ERROR_INVALID_PARAMETER;
@@ -1185,10 +1151,9 @@ xe_result_t __xecall
         }
         /// @begin
 
-        // @todo: insert <code> here
+        return xe::CommandGraph::fromHandle(hCommandGraph)->encodeDispatchFunctionIndirect(hFunction, hFunctionArgs, pDispatchArgumentsBuffer, hEvent);
 
         /// @end
-        return XE_RESULT_SUCCESS;
     }
     catch(xe_result_t& result)
     {
@@ -1228,7 +1193,7 @@ xe_result_t __xecall
 ///
 /// @hash {63f4382ff32ea764dd175c3c286a9799cd23b3e32aa90c1b948a6b1e0405b4ba}
 ///
-xe_result_t __xecall
+__xedllexport xe_result_t __xecall
   xeCommandListEncodeDispatchHostFunction(
     xe_command_list_handle_t hCommandList,          ///< [in] handle of the command list
     xe_host_pfn_t pfnHostFunc,                      ///< [in] pointer to host function.
@@ -1240,17 +1205,15 @@ xe_result_t __xecall
         //if( XE_DRIVER_PARAMETER_VALIDATION_LEVEL >= 0 )
         {
             // if( nullptr == driver ) return XE_RESULT_ERROR_UNINITIALIZED;
-
             // Check parameters
             if( nullptr == hCommandList ) return XE_RESULT_ERROR_INVALID_PARAMETER;
             if( nullptr == pUserData ) return XE_RESULT_ERROR_INVALID_PARAMETER;
         }
         /// @begin
 
-        // @todo: insert <code> here
+        return xe::CommandList::fromHandle(hCommandList)->encodeDispatchHostFunction(pfnHostFunc, pUserData);
 
         /// @end
-        return XE_RESULT_SUCCESS;
     }
     catch(xe_result_t& result)
     {
@@ -1290,7 +1253,7 @@ xe_result_t __xecall
 ///
 /// @hash {25ee33b5152b0dcbfaa702a00fef20f87383ad225fa62703b0344b6bd4569eee}
 ///
-xe_result_t __xecall
+__xedllexport xe_result_t __xecall
   xeCommandGraphEncodeDispatchHostFunction(
     xe_command_graph_handle_t hCommandGraph,        ///< [in] handle of the command graph
     xe_host_pfn_t pfnHostFunc,                      ///< [in] pointer to host function.
@@ -1302,17 +1265,15 @@ xe_result_t __xecall
         //if( XE_DRIVER_PARAMETER_VALIDATION_LEVEL >= 0 )
         {
             // if( nullptr == driver ) return XE_RESULT_ERROR_UNINITIALIZED;
-
             // Check parameters
             if( nullptr == hCommandGraph ) return XE_RESULT_ERROR_INVALID_PARAMETER;
             if( nullptr == pUserData ) return XE_RESULT_ERROR_INVALID_PARAMETER;
         }
         /// @begin
 
-        // @todo: insert <code> here
+        return xe::CommandGraph::fromHandle(hCommandGraph)->encodeDispatchHostFunction(pfnHostFunc, pUserData);
 
         /// @end
-        return XE_RESULT_SUCCESS;
     }
     catch(xe_result_t& result)
     {

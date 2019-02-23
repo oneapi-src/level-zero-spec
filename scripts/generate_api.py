@@ -66,7 +66,7 @@ def generate_h_include(path, namespace, specs, meta):
 
     loc, files = generate_code(cpp_path, namespace, specs, meta, ".h")
     loc += generate_include_all(cpp_path, namespace, files, ".h")
-    generate_cmake(cpp_path, namespace, files)
+#    generate_cmake(cpp_path, namespace, files)
     return loc
 
 """
@@ -79,7 +79,7 @@ def generate_hpp_include(path, namespace, specs, meta):
 
     loc, files = generate_code(cpp_path, namespace, specs, meta, ".hpp")
     loc += generate_include_all(cpp_path, namespace, files, ".hpp")
-    generate_cmake(cpp_path, namespace, files)
+#    generate_cmake(cpp_path, namespace, files)
     return loc
 
 """
@@ -91,7 +91,7 @@ def generate_cpp_source(path, namespace, specs, meta):
     util.removeFiles(path, "*.cpp")
 
     loc, files = generate_code(cpp_path, namespace, specs, meta, ".cpp")
-    generate_cmake(cpp_path, namespace, files)
+#    generate_cmake(cpp_path, namespace, files)
     return loc
 
 """

@@ -29,6 +29,7 @@
 *
 ******************************************************************************/
 #include "../include/xe_driver.h"
+#include "driver.h"
 
 #include <exception>    // @todo: move to common and/or precompiled header
 
@@ -59,7 +60,7 @@
 ///
 /// @hash {0ae71bd1cc936ad12438c9cc7d3471f98557ec8f6b1fb62d2649cc618eb16351}
 ///
-xe_result_t __xecall
+__xedllexport xe_result_t __xecall
   xeDriverInit(
     xe_init_flag_t flags                            ///< [in] initialization flags
     )
@@ -68,16 +69,70 @@ xe_result_t __xecall
     {
         //if( XE_DRIVER_PARAMETER_VALIDATION_LEVEL >= 0 )
         {
-            // if( nullptr == driver ) return XE_RESULT_ERROR_UNINITIALIZED;
-
             // Check parameters
         }
         /// @begin
 
-        // @todo: insert <code> here
+        return xe::Driver::get()->init(flags);
 
         /// @end
-        return XE_RESULT_SUCCESS;
+    }
+    catch(xe_result_t& result)
+    {
+        return result;
+    }
+    catch(std::bad_alloc&)
+    {
+        return XE_RESULT_ERROR_OUT_OF_HOST_MEMORY;
+    }
+    catch(std::exception&)
+    {
+        // @todo: pfnOnException(e.what());
+        return XE_RESULT_ERROR_UNKNOWN;
+    }
+}
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Retrieves link properties between source and destination devices.
+/// 
+/// @details
+///     - The application may call this function from simultaneous threads.
+///     - The implementation of this function should be lock-free.
+/// 
+/// @remarks
+///   _Analogues_
+///     - **cudaDeviceGetP2PAttribute**
+/// 
+/// @returns
+///     - ::XE_RESULT_SUCCESS
+///     - ::XE_RESULT_ERROR_UNINITIALIZED
+///     - ::XE_RESULT_ERROR_DEVICE_LOST
+///     - ::XE_RESULT_ERROR_INVALID_PARAMETER
+///         + nullptr == pLinkProperties
+///         + invalid ordinal. Use ::xeDriverGetDeviceCount for valid range.
+///     - ::XE_RESULT_ERROR_UNSUPPORTED
+///
+/// @hash {79b2708acac94e6f35d9669f6fd3269b5f48b8e96f7f7fa2eb962f65357c2a39}
+///
+__xedllexport xe_result_t __xecall
+  xeDriverGetDeviceLinkProperties(
+    uint32_t srcOrdinal,                            ///< [in] source device ordinal
+    uint32_t dstOrdinal,                            ///< [in] destination device ordinal
+    xe_device_link_properties_t* pLinkProperties    ///< [out] link properties between source and destination devices
+    )
+{
+    try
+    {
+        //if( XE_DRIVER_PARAMETER_VALIDATION_LEVEL >= 0 )
+        {
+            // Check parameters
+            if( nullptr == pLinkProperties ) return XE_RESULT_ERROR_INVALID_PARAMETER;
+        }
+        /// @begin
+
+        return xe::Driver::get()->getDeviceLinkProperties(srcOrdinal, dstOrdinal, pLinkProperties);
+
+        /// @end
     }
     catch(xe_result_t& result)
     {
@@ -117,7 +172,7 @@ xe_result_t __xecall
 ///
 /// @hash {6ae964da2310ff18a63fe79a8fabcfaa071a342064d2f092042eb2b830d7c54f}
 ///
-xe_result_t __xecall
+__xedllexport xe_result_t __xecall
   xeDriverGetVersion(
     uint32_t* version                               ///< [out] driver version
     )
@@ -126,17 +181,14 @@ xe_result_t __xecall
     {
         //if( XE_DRIVER_PARAMETER_VALIDATION_LEVEL >= 0 )
         {
-            // if( nullptr == driver ) return XE_RESULT_ERROR_UNINITIALIZED;
-
             // Check parameters
             if( nullptr == version ) return XE_RESULT_ERROR_INVALID_PARAMETER;
         }
         /// @begin
 
-        // @todo: insert <code> here
+        return xe::Driver::get()->getVersion(version);
 
         /// @end
-        return XE_RESULT_SUCCESS;
     }
     catch(xe_result_t& result)
     {

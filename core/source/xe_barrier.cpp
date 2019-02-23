@@ -29,6 +29,7 @@
 *
 ******************************************************************************/
 #include "../include/xe_barrier.h"
+#include "barrier.h"
 
 #include <exception>    // @todo: move to common and/or precompiled header
 
@@ -55,7 +56,7 @@
 ///
 /// @hash {2d1eb476632e411da06d0ff92b64149da43b825416bdaa382c88c04187b02159}
 ///
-xe_result_t __xecall
+__xedllexport xe_result_t __xecall
   xeCommandListEncodeExecutionBarrier(
     xe_command_list_handle_t hCommandList           ///< [in] handle of the command list
     )
@@ -65,16 +66,14 @@ xe_result_t __xecall
         //if( XE_DRIVER_PARAMETER_VALIDATION_LEVEL >= 0 )
         {
             // if( nullptr == driver ) return XE_RESULT_ERROR_UNINITIALIZED;
-
             // Check parameters
             if( nullptr == hCommandList ) return XE_RESULT_ERROR_INVALID_PARAMETER;
         }
         /// @begin
 
-        // @todo: insert <code> here
+        return xe::CommandList::fromHandle(hCommandList)->encodeExecutionBarrier();
 
         /// @end
-        return XE_RESULT_SUCCESS;
     }
     catch(xe_result_t& result)
     {

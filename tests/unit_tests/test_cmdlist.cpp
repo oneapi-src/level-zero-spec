@@ -16,7 +16,7 @@ TEST(xeCommandListDestroy, redirectsToObject) {
     Mock<CommandList> cmdList;
     EXPECT_CALL(cmdList, destroy()).Times(1);
 
-    auto result = xe::xeCommandListDestroy(cmdList.toHandle());
+    auto result = xeCommandListDestroy(cmdList.toHandle());
     EXPECT_EQ(XE_RESULT_SUCCESS, result);
 }
 

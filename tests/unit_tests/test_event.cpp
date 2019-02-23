@@ -9,7 +9,7 @@ TEST(xeEventDestroy, redirectsToObject) {
     Mock<Event> event;
     EXPECT_CALL(event, destroy);
 
-    auto result = ::xe::xeEventDestroy(event.toHandle());
+    auto result = xeEventDestroy(event.toHandle());
     EXPECT_EQ(XE_RESULT_SUCCESS, result);
 }
 

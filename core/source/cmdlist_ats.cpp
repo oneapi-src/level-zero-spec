@@ -54,7 +54,7 @@ bool CommandListHw<IGFX_GEN12_CORE>::initialize() {
 template <>
 xe_result_t CommandListHw<IGFX_GEN12_CORE>::encodeDispatchFunction(xe_function_handle_t hFunction,
                                                                    xe_function_args_handle_t hFunctionArgs,
-                                                                   xe_dispatch_function_arguments_t *pDispatchFuncArgs,
+                                                                   const xe_dispatch_function_arguments_t *pDispatchFuncArgs,
                                                                    xe_event_handle_t hEvent) {
     using GfxFamily = typename OCLRT::GfxFamilyMapper<IGFX_GEN12_CORE>::GfxFamily;
     using COMPUTE_WALKER = typename GfxFamily::COMPUTE_WALKER;

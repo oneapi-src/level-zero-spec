@@ -73,9 +73,50 @@ typedef enum _xe_init_flag_t
 ///         + invalid value for flags
 ///     - ::XE_RESULT_ERROR_UNSUPPORTED
 ///     - ::XE_RESULT_ERROR_OUT_OF_HOST_MEMORY
-xe_result_t __xecall
+__xedllport xe_result_t __xecall
   xeDriverInit(
     xe_init_flag_t flags                            ///< [in] initialization flags
+    );
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief API version of ::xe_device_link_properties_t
+#define XE_DEVICE_LINK_PROPERTIES_VERSION  XE_MAKE_VERSION( 1, 0 )
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Device properties queried using ::xeDriverGetDeviceLinkProperties
+typedef struct _xe_device_link_properties_t
+{
+    uint32_t version;                               ///< [in] ::XE_DEVICE_LINK_PROPERTIES_VERSION
+    bool isP2PSupported;                            ///< [out] Is P2P access supported across link
+    bool isAtomicsSupported;                        ///< [out] Are atomics supported across link
+    uint32_t performanceRank;                       ///< [out] Relative performance rank of link.
+
+} xe_device_link_properties_t;
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Retrieves link properties between source and destination devices.
+/// 
+/// @details
+///     - The application may call this function from simultaneous threads.
+///     - The implementation of this function should be lock-free.
+/// 
+/// @remarks
+///   _Analogues_
+///     - **cudaDeviceGetP2PAttribute**
+/// 
+/// @returns
+///     - ::XE_RESULT_SUCCESS
+///     - ::XE_RESULT_ERROR_UNINITIALIZED
+///     - ::XE_RESULT_ERROR_DEVICE_LOST
+///     - ::XE_RESULT_ERROR_INVALID_PARAMETER
+///         + nullptr == pLinkProperties
+///         + invalid ordinal. Use ::xeDriverGetDeviceCount for valid range.
+///     - ::XE_RESULT_ERROR_UNSUPPORTED
+__xedllport xe_result_t __xecall
+  xeDriverGetDeviceLinkProperties(
+    uint32_t srcOrdinal,                            ///< [in] source device ordinal
+    uint32_t dstOrdinal,                            ///< [in] destination device ordinal
+    xe_device_link_properties_t* pLinkProperties    ///< [out] link properties between source and destination devices
     );
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -98,7 +139,7 @@ xe_result_t __xecall
 ///     - ::XE_RESULT_ERROR_INVALID_PARAMETER
 ///         + nullptr == version
 ///     - ::XE_RESULT_ERROR_UNSUPPORTED
-xe_result_t __xecall
+__xedllport xe_result_t __xecall
   xeDriverGetVersion(
     uint32_t* version                               ///< [out] driver version
     );

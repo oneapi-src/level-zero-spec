@@ -29,6 +29,7 @@
 *
 ******************************************************************************/
 #include "../include/xe_image.h"
+#include "image.h"
 
 #include <exception>    // @todo: move to common and/or precompiled header
 
@@ -52,13 +53,13 @@
 ///         + nullptr == desc
 ///         + nullptr == phImage
 ///     - ::XE_RESULT_ERROR_UNSUPPORTED
-///         + ::XE_IMAGE_DESC_VERSION <= desc->version
+///         + ::XE_IMAGE_DESC_VERSION < desc->version
 ///     - ::XE_RESULT_ERROR_OUT_OF_HOST_MEMORY
 ///     - ::XE_RESULT_ERROR_OUT_OF_DEVICE_MEMORY
 ///
 /// @hash {27a0a4bcd9c866877aa1fb52838284ccdaae12a2dfd92d87b2b862a4ab19218a}
 ///
-xe_result_t __xecall
+__xedllexport xe_result_t __xecall
   xeDeviceCreateImage(
     xe_device_handle_t hDevice,                     ///< [in] handle of the device
     const xe_image_desc_t* desc,                    ///< [in] pointer to image descriptor
@@ -70,19 +71,17 @@ xe_result_t __xecall
         //if( XE_DRIVER_PARAMETER_VALIDATION_LEVEL >= 0 )
         {
             // if( nullptr == driver ) return XE_RESULT_ERROR_UNINITIALIZED;
-
             // Check parameters
             if( nullptr == hDevice ) return XE_RESULT_ERROR_INVALID_PARAMETER;
             if( nullptr == desc ) return XE_RESULT_ERROR_INVALID_PARAMETER;
             if( nullptr == phImage ) return XE_RESULT_ERROR_INVALID_PARAMETER;
-            if( XE_IMAGE_DESC_VERSION <= desc->version ) return XE_RESULT_ERROR_UNSUPPORTED;
+            if( XE_IMAGE_DESC_VERSION < desc->version ) return XE_RESULT_ERROR_UNSUPPORTED;
         }
         /// @begin
 
-        // @todo: insert <code> here
+        return xe::Device::fromHandle(hDevice)->createImage(desc, phImage);
 
         /// @end
-        return XE_RESULT_SUCCESS;
     }
     catch(xe_result_t& result)
     {
@@ -119,7 +118,7 @@ xe_result_t __xecall
 ///
 /// @hash {fd023d402207b0213a1e9c7aeaf42f03639cc86e3a20b6267eb86975e7996b94}
 ///
-xe_result_t __xecall
+__xedllexport xe_result_t __xecall
   xeImageDestroy(
     xe_image_handle_t hImage                        ///< [in] handle of image object to destroy
     )
@@ -129,16 +128,14 @@ xe_result_t __xecall
         //if( XE_DRIVER_PARAMETER_VALIDATION_LEVEL >= 0 )
         {
             // if( nullptr == driver ) return XE_RESULT_ERROR_UNINITIALIZED;
-
             // Check parameters
             if( nullptr == hImage ) return XE_RESULT_ERROR_INVALID_PARAMETER;
         }
         /// @begin
 
-        // @todo: insert <code> here
+        return xe::Image::fromHandle(hImage)->destroy();
 
         /// @end
-        return XE_RESULT_SUCCESS;
     }
     catch(xe_result_t& result)
     {

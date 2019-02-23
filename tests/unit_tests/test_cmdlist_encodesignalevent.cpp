@@ -17,12 +17,12 @@ using ::testing::Return;
 
 TEST(xeCommandListEncodeSignalEvent, redirectsToObject) {
     Mock<CommandList> commandList;
-    xe_event_handle_t event = {};
+    Mock<Event> event;
 
-    EXPECT_CALL(commandList, encodeSignalEvent(event)).Times(1);
+    EXPECT_CALL(commandList, encodeSignalEvent(event.toHandle())).Times(1);
 
-    auto result = xe::xeCommandListEncodeSignalEvent(commandList.toHandle(),
-                                                     event);
+    auto result = xeCommandListEncodeSignalEvent(commandList.toHandle(),
+                                                 event.toHandle());
     EXPECT_EQ(XE_RESULT_SUCCESS, result);
 }
 
@@ -77,7 +77,7 @@ HWTEST_F(CommandListEncodeSignalEvent, addsEventGraphicsAllocationToResidencyCon
 
     auto &residencyContainer = commandList->residencyContainer;
     auto allocationRT = static_cast<OCLRT::GraphicsAllocation *>(event.allocation->allocationRT);
-    auto itor = std::find(std::begin(residencyContainer), std::end(residencyContainer), allocationRT); 
+    auto itor = std::find(std::begin(residencyContainer), std::end(residencyContainer), allocationRT);
     EXPECT_NE(itor, std::end(residencyContainer));
 }
 

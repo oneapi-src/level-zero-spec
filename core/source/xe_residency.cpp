@@ -29,6 +29,7 @@
 *
 ******************************************************************************/
 #include "../include/xe_residency.h"
+#include "residency.h"
 
 #include <exception>    // @todo: move to common and/or precompiled header
 
@@ -52,7 +53,7 @@
 ///
 /// @hash {c375436f97e741749fea829e663fe0e5a1d79ee64addfdf2ee289dc4a85e9e79}
 ///
-xe_result_t __xecall
+__xedllexport xe_result_t __xecall
   xeDeviceMakeMemoryResident(
     xe_device_handle_t hDevice,                     ///< [in] handle of the device
     void* ptr,                                      ///< [in] pointer to memory to make resident
@@ -64,17 +65,15 @@ xe_result_t __xecall
         //if( XE_DRIVER_PARAMETER_VALIDATION_LEVEL >= 0 )
         {
             // if( nullptr == driver ) return XE_RESULT_ERROR_UNINITIALIZED;
-
             // Check parameters
             if( nullptr == hDevice ) return XE_RESULT_ERROR_INVALID_PARAMETER;
             if( nullptr == ptr ) return XE_RESULT_ERROR_INVALID_PARAMETER;
         }
         /// @begin
 
-        // @todo: insert <code> here
+        return xe::Device::fromHandle(hDevice)->makeMemoryResident(ptr, size);
 
         /// @end
-        return XE_RESULT_SUCCESS;
     }
     catch(xe_result_t& result)
     {
@@ -112,7 +111,7 @@ xe_result_t __xecall
 ///
 /// @hash {21bfb74deb4252e3cf32a9e1e5f568735c627ee629f2dc0dca1e6cfe95438e67}
 ///
-xe_result_t __xecall
+__xedllexport xe_result_t __xecall
   xeDeviceEvictMemory(
     xe_device_handle_t hDevice,                     ///< [in] handle of the device
     void* ptr,                                      ///< [in] pointer to memory to evict
@@ -124,17 +123,15 @@ xe_result_t __xecall
         //if( XE_DRIVER_PARAMETER_VALIDATION_LEVEL >= 0 )
         {
             // if( nullptr == driver ) return XE_RESULT_ERROR_UNINITIALIZED;
-
             // Check parameters
             if( nullptr == hDevice ) return XE_RESULT_ERROR_INVALID_PARAMETER;
             if( nullptr == ptr ) return XE_RESULT_ERROR_INVALID_PARAMETER;
         }
         /// @begin
 
-        // @todo: insert <code> here
+        return xe::Device::fromHandle(hDevice)->evictMemory(ptr, size);
 
         /// @end
-        return XE_RESULT_SUCCESS;
     }
     catch(xe_result_t& result)
     {
@@ -171,7 +168,7 @@ xe_result_t __xecall
 ///
 /// @hash {fc41bb8b8835280e6d296c03595e6226c18c9a02e00d6e373c9a41740819f857}
 ///
-xe_result_t __xecall
+__xedllexport xe_result_t __xecall
   xeDeviceMakeImageResident(
     xe_device_handle_t hDevice,                     ///< [in] handle of the device
     xe_image_handle_t hImage                        ///< [in] handle of image to make resident
@@ -182,17 +179,15 @@ xe_result_t __xecall
         //if( XE_DRIVER_PARAMETER_VALIDATION_LEVEL >= 0 )
         {
             // if( nullptr == driver ) return XE_RESULT_ERROR_UNINITIALIZED;
-
             // Check parameters
             if( nullptr == hDevice ) return XE_RESULT_ERROR_INVALID_PARAMETER;
             if( nullptr == hImage ) return XE_RESULT_ERROR_INVALID_PARAMETER;
         }
         /// @begin
 
-        // @todo: insert <code> here
+        return xe::Device::fromHandle(hDevice)->makeImageResident(hImage);
 
         /// @end
-        return XE_RESULT_SUCCESS;
     }
     catch(xe_result_t& result)
     {
@@ -231,7 +226,7 @@ xe_result_t __xecall
 ///
 /// @hash {4bad08b1b95d1cf75250b5f9ea3fe3291e897b17c95b705bdd5c36b03ba43c1d}
 ///
-xe_result_t __xecall
+__xedllexport xe_result_t __xecall
   xeDeviceEvictImage(
     xe_device_handle_t hDevice,                     ///< [in] handle of the device
     xe_image_handle_t hImage                        ///< [in] handle of image to make evict
@@ -242,17 +237,15 @@ xe_result_t __xecall
         //if( XE_DRIVER_PARAMETER_VALIDATION_LEVEL >= 0 )
         {
             // if( nullptr == driver ) return XE_RESULT_ERROR_UNINITIALIZED;
-
             // Check parameters
             if( nullptr == hDevice ) return XE_RESULT_ERROR_INVALID_PARAMETER;
             if( nullptr == hImage ) return XE_RESULT_ERROR_INVALID_PARAMETER;
         }
         /// @begin
 
-        // @todo: insert <code> here
+        return xe::Device::fromHandle(hDevice)->evictImage(hImage);
 
         /// @end
-        return XE_RESULT_SUCCESS;
     }
     catch(xe_result_t& result)
     {

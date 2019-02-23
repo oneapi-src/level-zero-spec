@@ -58,7 +58,7 @@ extern "C" {
 ///         + nullptr == hDevice
 ///         + nullptr == ptr
 ///     - ::XE_RESULT_ERROR_UNSUPPORTED
-xe_result_t __xecall
+__xedllport xe_result_t __xecall
   xeDeviceMakeMemoryResident(
     xe_device_handle_t hDevice,                     ///< [in] handle of the device
     void* ptr,                                      ///< [in] pointer to memory to make resident
@@ -83,7 +83,7 @@ xe_result_t __xecall
 ///         + nullptr == hDevice
 ///         + nullptr == ptr
 ///     - ::XE_RESULT_ERROR_UNSUPPORTED
-xe_result_t __xecall
+__xedllport xe_result_t __xecall
   xeDeviceEvictMemory(
     xe_device_handle_t hDevice,                     ///< [in] handle of the device
     void* ptr,                                      ///< [in] pointer to memory to evict
@@ -107,7 +107,7 @@ xe_result_t __xecall
 ///         + nullptr == hDevice
 ///         + nullptr == hImage
 ///     - ::XE_RESULT_ERROR_UNSUPPORTED
-xe_result_t __xecall
+__xedllport xe_result_t __xecall
   xeDeviceMakeImageResident(
     xe_device_handle_t hDevice,                     ///< [in] handle of the device
     xe_image_handle_t hImage                        ///< [in] handle of image to make resident
@@ -132,7 +132,7 @@ xe_result_t __xecall
 ///         + nullptr == hDevice
 ///         + nullptr == hImage
 ///     - ::XE_RESULT_ERROR_UNSUPPORTED
-xe_result_t __xecall
+__xedllport xe_result_t __xecall
   xeDeviceEvictImage(
     xe_device_handle_t hDevice,                     ///< [in] handle of the device
     xe_image_handle_t hImage                        ///< [in] handle of image to make evict

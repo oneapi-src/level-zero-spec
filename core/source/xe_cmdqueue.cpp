@@ -29,6 +29,7 @@
 *
 ******************************************************************************/
 #include "../include/xe_cmdqueue.h"
+#include "cmdqueue.h"
 
 #include <exception>    // @todo: move to common and/or precompiled header
 
@@ -54,13 +55,13 @@
 ///         + nullptr == desc
 ///         + nullptr == phCommandQueue
 ///     - ::XE_RESULT_ERROR_UNSUPPORTED
-///         + ::XE_COMMAND_QUEUE_DESC_VERSION <= desc->version
+///         + ::XE_COMMAND_QUEUE_DESC_VERSION < desc->version
 ///     - ::XE_RESULT_ERROR_OUT_OF_HOST_MEMORY
 ///     - ::XE_RESULT_ERROR_OUT_OF_DEVICE_MEMORY
 ///
 /// @hash {64cb11be0bd61d15890524c332cd41e37a7ff6c4b24ce3b3bdb3b0d19d687ad8}
 ///
-xe_result_t __xecall
+__xedllexport xe_result_t __xecall
   xeDeviceCreateCommandQueue(
     xe_device_handle_t hDevice,                     ///< [in] handle of the device object
     const xe_command_queue_desc_t* desc,            ///< [in] pointer to command queue descriptor
@@ -72,19 +73,17 @@ xe_result_t __xecall
         //if( XE_DRIVER_PARAMETER_VALIDATION_LEVEL >= 0 )
         {
             // if( nullptr == driver ) return XE_RESULT_ERROR_UNINITIALIZED;
-
             // Check parameters
             if( nullptr == hDevice ) return XE_RESULT_ERROR_INVALID_PARAMETER;
             if( nullptr == desc ) return XE_RESULT_ERROR_INVALID_PARAMETER;
             if( nullptr == phCommandQueue ) return XE_RESULT_ERROR_INVALID_PARAMETER;
-            if( XE_COMMAND_QUEUE_DESC_VERSION <= desc->version ) return XE_RESULT_ERROR_UNSUPPORTED;
+            if( XE_COMMAND_QUEUE_DESC_VERSION < desc->version ) return XE_RESULT_ERROR_UNSUPPORTED;
         }
         /// @begin
 
-        // @todo: insert <code> here
+        return xe::Device::fromHandle(hDevice)->createCommandQueue(desc, phCommandQueue);
 
         /// @end
-        return XE_RESULT_SUCCESS;
     }
     catch(xe_result_t& result)
     {
@@ -126,7 +125,7 @@ xe_result_t __xecall
 ///
 /// @hash {d2b4274520dcb902a966ba04f31f4c7e3976a1a6e0b6ad73d64713baa10785d4}
 ///
-xe_result_t __xecall
+__xedllexport xe_result_t __xecall
   xeCommandQueueDestroy(
     xe_command_queue_handle_t hCommandQueue         ///< [in] handle of command queue object to destroy
     )
@@ -136,16 +135,14 @@ xe_result_t __xecall
         //if( XE_DRIVER_PARAMETER_VALIDATION_LEVEL >= 0 )
         {
             // if( nullptr == driver ) return XE_RESULT_ERROR_UNINITIALIZED;
-
             // Check parameters
             if( nullptr == hCommandQueue ) return XE_RESULT_ERROR_INVALID_PARAMETER;
         }
         /// @begin
 
-        // @todo: insert <code> here
+        return xe::CommandQueue::fromHandle(hCommandQueue)->destroy();
 
         /// @end
-        return XE_RESULT_SUCCESS;
     }
     catch(xe_result_t& result)
     {
@@ -187,7 +184,7 @@ xe_result_t __xecall
 ///
 /// @hash {3d9d4e4b61d47939ee851c18dce4cb2d2e5d99585ca8349927a49a7ee1aaceab}
 ///
-xe_result_t __xecall
+__xedllexport xe_result_t __xecall
   xeCommandQueueEnqueueCommandLists(
     xe_command_queue_handle_t hCommandQueue,        ///< [in] handle of the command queue
     uint32_t numCommandLists,                       ///< [in] number of command lists to enqueue
@@ -200,17 +197,15 @@ xe_result_t __xecall
         //if( XE_DRIVER_PARAMETER_VALIDATION_LEVEL >= 0 )
         {
             // if( nullptr == driver ) return XE_RESULT_ERROR_UNINITIALIZED;
-
             // Check parameters
             if( nullptr == hCommandQueue ) return XE_RESULT_ERROR_INVALID_PARAMETER;
             if( nullptr == phCommandLists ) return XE_RESULT_ERROR_INVALID_PARAMETER;
         }
         /// @begin
 
-        // @todo: insert <code> here
+        return xe::CommandQueue::fromHandle(hCommandQueue)->enqueueCommandLists(numCommandLists, phCommandLists, hFence);
 
         /// @end
-        return XE_RESULT_SUCCESS;
     }
     catch(xe_result_t& result)
     {
@@ -246,7 +241,7 @@ xe_result_t __xecall
 ///
 /// @hash {643f20374b51ae704dcb5e1c4d9e883d481cec8ce0ab0ebe52eb12aa25a2956e}
 ///
-xe_result_t __xecall
+__xedllexport xe_result_t __xecall
   xeCommandQueueSynchronize(
     xe_command_queue_handle_t hCommandQueue,        ///< [in] handle of the command queue
     xe_synchronization_mode_t mode,                 ///< [in] synchronization mode
@@ -267,16 +262,14 @@ xe_result_t __xecall
         //if( XE_DRIVER_PARAMETER_VALIDATION_LEVEL >= 0 )
         {
             // if( nullptr == driver ) return XE_RESULT_ERROR_UNINITIALIZED;
-
             // Check parameters
             if( nullptr == hCommandQueue ) return XE_RESULT_ERROR_INVALID_PARAMETER;
         }
         /// @begin
 
-        // @todo: insert <code> here
+        return xe::CommandQueue::fromHandle(hCommandQueue)->synchronize(mode, delay, interval, timeout);
 
         /// @end
-        return XE_RESULT_SUCCESS;
     }
     catch(xe_result_t& result)
     {

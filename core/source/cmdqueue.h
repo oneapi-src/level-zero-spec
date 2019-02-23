@@ -1,11 +1,12 @@
 #pragma once
 #include "xe_common.h"
+#include "xe_fence.h"
+#include "device.h"
 
 struct _xe_command_queue_handle_t {
 };
 
 namespace xe {
-struct Device;
 
 struct CommandQueue : public _xe_command_queue_handle_t {
     template <typename Type>
@@ -15,10 +16,16 @@ struct CommandQueue : public _xe_command_queue_handle_t {
         }
     };
 
+    virtual xe_result_t createFence(const xe_fence_desc_t *desc,
+                                    xe_fence_handle_t *phFence) = 0;
     virtual xe_result_t destroy() = 0;
     virtual xe_result_t enqueueCommandLists(uint32_t numCommandLists,
                                             xe_command_list_handle_t *phCommandLists,
                                             xe_fence_handle_t hFence) = 0;
+    virtual xe_result_t synchronize(xe_synchronization_mode_t mode,
+                                    uint32_t delay,
+                                    uint32_t interval,
+                                    uint32_t timeout) = 0;
 
     static CommandQueue *create(uint32_t productFamily, Device *device, void *csrRT);
 

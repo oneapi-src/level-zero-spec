@@ -119,6 +119,11 @@ struct ModuleImp : public Module {
         return XE_RESULT_SUCCESS;
     }
 
+    xe_result_t getNativeBinary(uint32_t *pSize,
+                                char **pModuleNativeBinary) override {
+        return XE_RESULT_ERROR_UNSUPPORTED;
+    }
+
     Device *getDevice() const override {
         return device;
     }
@@ -176,6 +181,11 @@ struct FunctionImp : Function {
         return XE_RESULT_SUCCESS;
     }
 
+    xe_result_t queryAttribute(xe_function_attribute_t attr,
+                               uint32_t *pValue) override {
+        return XE_RESULT_ERROR_UNSUPPORTED;
+    }
+
     xe_result_t setGroupSize(uint32_t groupSizeX,
                              uint32_t groupSizeY,
                              uint32_t groupSizeZ) override {
@@ -210,6 +220,15 @@ struct FunctionImp : Function {
         }
 
         return XE_RESULT_SUCCESS;
+    }
+
+    xe_result_t suggestGroupSize(uint32_t globalSizeX,
+                                 uint32_t globalSizeY,
+                                 uint32_t globalSizeZ,
+                                 uint32_t *groupSizeX,
+                                 uint32_t *groupSizeY,
+                                 uint32_t *groupSizeZ) override {
+        return XE_RESULT_ERROR_UNSUPPORTED;
     }
 
     void getGroupSize(uint32_t &outGroupSizeX, uint32_t &outGroupSizeY, uint32_t &outGroupSizeZ) const override {
@@ -320,6 +339,11 @@ struct FunctionArgsImp : FunctionArgs {
     xe_result_t destroy() override {
         delete this;
         return XE_RESULT_SUCCESS;
+    }
+
+    xe_result_t setAttribute(xe_function_argument_attribute_t attr,
+                             uint32_t value) override {
+        return XE_RESULT_ERROR_UNSUPPORTED;
     }
 
     xe_result_t setValue(uint32_t argIndex, size_t argSize, const void *pArgValue) override {

@@ -7,6 +7,18 @@
 namespace xe {
 
 template <uint32_t gfxCoreFamily>
+xe_result_t CommandQueueHw<gfxCoreFamily>::createFence(const xe_fence_desc_t *desc,
+                                                       xe_fence_handle_t *phFence) {
+    return XE_RESULT_ERROR_UNSUPPORTED;
+}
+
+template <uint32_t gfxCoreFamily>
+xe_result_t CommandQueueHw<gfxCoreFamily>::destroy() {
+    delete this;
+    return XE_RESULT_SUCCESS;
+}
+
+template <uint32_t gfxCoreFamily>
 xe_result_t CommandQueueHw<gfxCoreFamily>::enqueueCommandLists(uint32_t numCommandLists,
                                                                xe_command_list_handle_t *phCommandLists,
                                                                xe_fence_handle_t hFence) {
@@ -26,7 +38,7 @@ xe_result_t CommandQueueHw<gfxCoreFamily>::enqueueCommandLists(uint32_t numComma
         auto buffer = commandStream->getSpace(sizeof(cmd));
         *(MI_BATCH_BUFFER_START *)buffer = cmd;
 
-        // Add each 
+        // Add each
         processResidency(commandList);
     }
 
@@ -41,6 +53,14 @@ xe_result_t CommandQueueHw<gfxCoreFamily>::enqueueCommandLists(uint32_t numComma
     submitBatchBuffer();
 
     return XE_RESULT_SUCCESS;
+}
+
+template <uint32_t gfxCoreFamily>
+xe_result_t CommandQueueHw<gfxCoreFamily>::synchronize(xe_synchronization_mode_t mode,
+                                                       uint32_t delay,
+                                                       uint32_t interval,
+                                                       uint32_t timeout) {
+    return XE_RESULT_ERROR_UNSUPPORTED;
 }
 
 } // namespace xe

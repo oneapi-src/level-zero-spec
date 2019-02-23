@@ -38,7 +38,11 @@
 xe_dispatch_table_t dispatchTable = {};
 bool dispatchTableInitialized = false;
 
-xe_result_t __xecall xeDriverInit(xe_init_flag_t flags){
+#if defined(__cplusplus)
+extern "C" {
+#endif
+
+__xedllport xe_result_t __xecall xeDriverInit(xe_init_flag_t flags){
     static std::mutex crit;
     {
         std::lock_guard<std::mutex> lockGuard{crit};
@@ -59,7 +63,7 @@ xe_result_t __xecall xeDriverInit(xe_init_flag_t flags){
     return dispatchTable.xeDriverInit(flags);
 }
 
-xe_result_t __xecall xeCommandListEncodeExecutionBarrier(
+__xedllport xe_result_t __xecall xeCommandListEncodeExecutionBarrier(
         xe_command_list_handle_t hCommandList
     ){
     if(dispatchTableInitialized == false){
@@ -67,7 +71,7 @@ xe_result_t __xecall xeCommandListEncodeExecutionBarrier(
     }
     return dispatchTable.xeCommandListEncodeExecutionBarrier(hCommandList);
 }
-xe_result_t __xecall xeDeviceRegisterCLMemory(
+__xedllport xe_result_t __xecall xeDeviceRegisterCLMemory(
         xe_device_handle_t hDevice,
         cl_context context,
         cl_mem mem,
@@ -78,7 +82,7 @@ xe_result_t __xecall xeDeviceRegisterCLMemory(
     }
     return dispatchTable.xeDeviceRegisterCLMemory(hDevice, context, mem, ptr);
 }
-xe_result_t __xecall xeDeviceRegisterCLProgram(
+__xedllport xe_result_t __xecall xeDeviceRegisterCLProgram(
         xe_device_handle_t hDevice,
         cl_context context,
         cl_program program,
@@ -89,7 +93,7 @@ xe_result_t __xecall xeDeviceRegisterCLProgram(
     }
     return dispatchTable.xeDeviceRegisterCLProgram(hDevice, context, program, phModule);
 }
-xe_result_t __xecall xeDeviceRegisterCLCommandQueue(
+__xedllport xe_result_t __xecall xeDeviceRegisterCLCommandQueue(
         xe_device_handle_t hDevice,
         cl_context context,
         cl_command_queue command_queue,
@@ -100,7 +104,7 @@ xe_result_t __xecall xeDeviceRegisterCLCommandQueue(
     }
     return dispatchTable.xeDeviceRegisterCLCommandQueue(hDevice, context, command_queue, phCommandQueue);
 }
-xe_result_t __xecall xeDeviceCreateCommandGraph(
+__xedllport xe_result_t __xecall xeDeviceCreateCommandGraph(
         xe_device_handle_t hDevice,
         const xe_command_graph_desc_t* desc,
         xe_command_graph_handle_t* phCommandGraph
@@ -110,7 +114,7 @@ xe_result_t __xecall xeDeviceCreateCommandGraph(
     }
     return dispatchTable.xeDeviceCreateCommandGraph(hDevice, desc, phCommandGraph);
 }
-xe_result_t __xecall xeCommandGraphDestroy(
+__xedllport xe_result_t __xecall xeCommandGraphDestroy(
         xe_command_graph_handle_t hCommandGraph
     ){
     if(dispatchTableInitialized == false){
@@ -118,7 +122,7 @@ xe_result_t __xecall xeCommandGraphDestroy(
     }
     return dispatchTable.xeCommandGraphDestroy(hCommandGraph);
 }
-xe_result_t __xecall xeCommandGraphClose(
+__xedllport xe_result_t __xecall xeCommandGraphClose(
         xe_command_graph_handle_t hCommandGraph
     ){
     if(dispatchTableInitialized == false){
@@ -126,7 +130,7 @@ xe_result_t __xecall xeCommandGraphClose(
     }
     return dispatchTable.xeCommandGraphClose(hCommandGraph);
 }
-xe_result_t __xecall xeCommandGraphReset(
+__xedllport xe_result_t __xecall xeCommandGraphReset(
         xe_command_graph_handle_t hCommandGraph
     ){
     if(dispatchTableInitialized == false){
@@ -134,7 +138,7 @@ xe_result_t __xecall xeCommandGraphReset(
     }
     return dispatchTable.xeCommandGraphReset(hCommandGraph);
 }
-xe_result_t __xecall xeDeviceCreateCommandList(
+__xedllport xe_result_t __xecall xeDeviceCreateCommandList(
         xe_device_handle_t hDevice,
         const xe_command_list_desc_t* desc,
         xe_command_list_handle_t* phCommandList
@@ -144,7 +148,7 @@ xe_result_t __xecall xeDeviceCreateCommandList(
     }
     return dispatchTable.xeDeviceCreateCommandList(hDevice, desc, phCommandList);
 }
-xe_result_t __xecall xeDeviceCopyCommandList(
+__xedllport xe_result_t __xecall xeDeviceCopyCommandList(
         xe_device_handle_t hDevice,
         xe_command_list_handle_t hCommandList,
         xe_command_list_handle_t* phCommandList
@@ -154,7 +158,7 @@ xe_result_t __xecall xeDeviceCopyCommandList(
     }
     return dispatchTable.xeDeviceCopyCommandList(hDevice, hCommandList, phCommandList);
 }
-xe_result_t __xecall xeCommandListDestroy(
+__xedllport xe_result_t __xecall xeCommandListDestroy(
         xe_command_list_handle_t hCommandList
     ){
     if(dispatchTableInitialized == false){
@@ -162,7 +166,7 @@ xe_result_t __xecall xeCommandListDestroy(
     }
     return dispatchTable.xeCommandListDestroy(hCommandList);
 }
-xe_result_t __xecall xeCommandListClose(
+__xedllport xe_result_t __xecall xeCommandListClose(
         xe_command_list_handle_t hCommandList
     ){
     if(dispatchTableInitialized == false){
@@ -170,7 +174,7 @@ xe_result_t __xecall xeCommandListClose(
     }
     return dispatchTable.xeCommandListClose(hCommandList);
 }
-xe_result_t __xecall xeCommandListReset(
+__xedllport xe_result_t __xecall xeCommandListReset(
         xe_command_list_handle_t hCommandList
     ){
     if(dispatchTableInitialized == false){
@@ -178,7 +182,7 @@ xe_result_t __xecall xeCommandListReset(
     }
     return dispatchTable.xeCommandListReset(hCommandList);
 }
-xe_result_t __xecall xeCommandListSetParameter(
+__xedllport xe_result_t __xecall xeCommandListSetParameter(
         xe_command_list_handle_t hCommandList,
         xe_command_list_parameter_t parameter,
         uint32_t value
@@ -188,7 +192,7 @@ xe_result_t __xecall xeCommandListSetParameter(
     }
     return dispatchTable.xeCommandListSetParameter(hCommandList, parameter, value);
 }
-xe_result_t __xecall xeCommandListGetParameter(
+__xedllport xe_result_t __xecall xeCommandListGetParameter(
         xe_command_list_handle_t hCommandList,
         xe_command_list_parameter_t parameter,
         uint32_t* value
@@ -198,7 +202,7 @@ xe_result_t __xecall xeCommandListGetParameter(
     }
     return dispatchTable.xeCommandListGetParameter(hCommandList, parameter, value);
 }
-xe_result_t __xecall xeCommandListResetParameters(
+__xedllport xe_result_t __xecall xeCommandListResetParameters(
         xe_command_list_handle_t hCommandList
     ){
     if(dispatchTableInitialized == false){
@@ -206,7 +210,7 @@ xe_result_t __xecall xeCommandListResetParameters(
     }
     return dispatchTable.xeCommandListResetParameters(hCommandList);
 }
-xe_result_t __xecall xeCommandListEncodeCommandLists(
+__xedllport xe_result_t __xecall xeCommandListEncodeCommandLists(
         xe_command_list_handle_t hCommandList,
         uint32_t numCommandLists,
         xe_command_list_handle_t* phCommandLists
@@ -216,7 +220,7 @@ xe_result_t __xecall xeCommandListEncodeCommandLists(
     }
     return dispatchTable.xeCommandListEncodeCommandLists(hCommandList, numCommandLists, phCommandLists);
 }
-xe_result_t __xecall xeCommandListEncodeCommands(
+__xedllport xe_result_t __xecall xeCommandListEncodeCommands(
         xe_command_list_handle_t hCommandList,
         xe_command_format_t format,
         size_t size,
@@ -227,7 +231,7 @@ xe_result_t __xecall xeCommandListEncodeCommands(
     }
     return dispatchTable.xeCommandListEncodeCommands(hCommandList, format, size, pBlob);
 }
-xe_result_t __xecall xeDeviceCreateCommandQueue(
+__xedllport xe_result_t __xecall xeDeviceCreateCommandQueue(
         xe_device_handle_t hDevice,
         const xe_command_queue_desc_t* desc,
         xe_command_queue_handle_t* phCommandQueue
@@ -237,7 +241,7 @@ xe_result_t __xecall xeDeviceCreateCommandQueue(
     }
     return dispatchTable.xeDeviceCreateCommandQueue(hDevice, desc, phCommandQueue);
 }
-xe_result_t __xecall xeCommandQueueDestroy(
+__xedllport xe_result_t __xecall xeCommandQueueDestroy(
         xe_command_queue_handle_t hCommandQueue
     ){
     if(dispatchTableInitialized == false){
@@ -245,7 +249,7 @@ xe_result_t __xecall xeCommandQueueDestroy(
     }
     return dispatchTable.xeCommandQueueDestroy(hCommandQueue);
 }
-xe_result_t __xecall xeCommandQueueEnqueueCommandLists(
+__xedllport xe_result_t __xecall xeCommandQueueEnqueueCommandLists(
         xe_command_queue_handle_t hCommandQueue,
         uint32_t numCommandLists,
         xe_command_list_handle_t* phCommandLists,
@@ -256,7 +260,7 @@ xe_result_t __xecall xeCommandQueueEnqueueCommandLists(
     }
     return dispatchTable.xeCommandQueueEnqueueCommandLists(hCommandQueue, numCommandLists, phCommandLists, hFence);
 }
-xe_result_t __xecall xeCommandQueueSynchronize(
+__xedllport xe_result_t __xecall xeCommandQueueSynchronize(
         xe_command_queue_handle_t hCommandQueue,
         xe_synchronization_mode_t mode,
         uint32_t delay,
@@ -268,7 +272,7 @@ xe_result_t __xecall xeCommandQueueSynchronize(
     }
     return dispatchTable.xeCommandQueueSynchronize(hCommandQueue, mode, delay, interval, timeout);
 }
-xe_result_t __xecall xeCommandListEncodeMemoryCopy(
+__xedllport xe_result_t __xecall xeCommandListEncodeMemoryCopy(
         xe_command_list_handle_t hCommandList,
         void* dstptr,
         const void* srcptr,
@@ -279,7 +283,7 @@ xe_result_t __xecall xeCommandListEncodeMemoryCopy(
     }
     return dispatchTable.xeCommandListEncodeMemoryCopy(hCommandList, dstptr, srcptr, size);
 }
-xe_result_t __xecall xeCommandListEncodeImageCopy(
+__xedllport xe_result_t __xecall xeCommandListEncodeImageCopy(
         xe_command_list_handle_t hCommandList,
         xe_image_handle_t hDstImage,
         xe_image_handle_t hSrcImage
@@ -289,7 +293,7 @@ xe_result_t __xecall xeCommandListEncodeImageCopy(
     }
     return dispatchTable.xeCommandListEncodeImageCopy(hCommandList, hDstImage, hSrcImage);
 }
-xe_result_t __xecall xeCommandListEncodeImageCopyRegion(
+__xedllport xe_result_t __xecall xeCommandListEncodeImageCopyRegion(
         xe_command_list_handle_t hCommandList,
         xe_image_handle_t hDstImage,
         xe_image_region_t* pDstRegion,
@@ -301,7 +305,7 @@ xe_result_t __xecall xeCommandListEncodeImageCopyRegion(
     }
     return dispatchTable.xeCommandListEncodeImageCopyRegion(hCommandList, hDstImage, pDstRegion, hSrcImage, pSrcRegion);
 }
-xe_result_t __xecall xeCommandListEncodeImageCopyToMemory(
+__xedllport xe_result_t __xecall xeCommandListEncodeImageCopyToMemory(
         xe_command_list_handle_t hCommandList,
         void* dstptr,
         xe_image_handle_t hSrcImage,
@@ -312,7 +316,7 @@ xe_result_t __xecall xeCommandListEncodeImageCopyToMemory(
     }
     return dispatchTable.xeCommandListEncodeImageCopyToMemory(hCommandList, dstptr, hSrcImage, pSrcRegion);
 }
-xe_result_t __xecall xeCommandListEncodeImageCopyFromMemory(
+__xedllport xe_result_t __xecall xeCommandListEncodeImageCopyFromMemory(
         xe_command_list_handle_t hCommandList,
         xe_image_handle_t hDstImage,
         xe_image_region_t* pDstRegion,
@@ -323,7 +327,7 @@ xe_result_t __xecall xeCommandListEncodeImageCopyFromMemory(
     }
     return dispatchTable.xeCommandListEncodeImageCopyFromMemory(hCommandList, hDstImage, pDstRegion, srcptr);
 }
-xe_result_t __xecall xeCommandListEncodeMemoryPrefetch(
+__xedllport xe_result_t __xecall xeCommandListEncodeMemoryPrefetch(
         xe_command_list_handle_t hCommandList,
         const void* ptr,
         size_t count
@@ -333,7 +337,7 @@ xe_result_t __xecall xeCommandListEncodeMemoryPrefetch(
     }
     return dispatchTable.xeCommandListEncodeMemoryPrefetch(hCommandList, ptr, count);
 }
-xe_result_t __xecall xeCommandListEncodeMemAdvise(
+__xedllport xe_result_t __xecall xeCommandListEncodeMemAdvise(
         xe_command_list_handle_t hCommandList,
         xe_device_handle_t hDevice,
         const void* ptr,
@@ -345,7 +349,7 @@ xe_result_t __xecall xeCommandListEncodeMemAdvise(
     }
     return dispatchTable.xeCommandListEncodeMemAdvise(hCommandList, hDevice, ptr, size, advice);
 }
-xe_result_t __xecall xeDriverGetDeviceCount(
+__xedllport xe_result_t __xecall xeDriverGetDeviceCount(
         uint32_t* count
     ){
     if(dispatchTableInitialized == false){
@@ -353,7 +357,7 @@ xe_result_t __xecall xeDriverGetDeviceCount(
     }
     return dispatchTable.xeDriverGetDeviceCount(count);
 }
-xe_result_t __xecall xeDriverGetDeviceUniqueIds(
+__xedllport xe_result_t __xecall xeDriverGetDeviceUniqueIds(
         uint32_t count,
         uint32_t* pUniqueIds
     ){
@@ -362,7 +366,7 @@ xe_result_t __xecall xeDriverGetDeviceUniqueIds(
     }
     return dispatchTable.xeDriverGetDeviceUniqueIds(count, pUniqueIds);
 }
-xe_result_t __xecall xeDriverGetDevice(
+__xedllport xe_result_t __xecall xeDriverGetDevice(
         uint32_t uniqueId,
         xe_device_handle_t* phDevice
     ){
@@ -371,7 +375,7 @@ xe_result_t __xecall xeDriverGetDevice(
     }
     return dispatchTable.xeDriverGetDevice(uniqueId, phDevice);
 }
-xe_result_t __xecall xeDeviceGetSubDevice(
+__xedllport xe_result_t __xecall xeDeviceGetSubDevice(
         xe_device_handle_t hDevice,
         uint32_t ordinal,
         xe_device_handle_t* phSubDevice
@@ -381,7 +385,7 @@ xe_result_t __xecall xeDeviceGetSubDevice(
     }
     return dispatchTable.xeDeviceGetSubDevice(hDevice, ordinal, phSubDevice);
 }
-xe_result_t __xecall xeDeviceGetApiVersion(
+__xedllport xe_result_t __xecall xeDeviceGetApiVersion(
         xe_device_handle_t hDevice,
         xe_api_version_t* version
     ){
@@ -390,7 +394,7 @@ xe_result_t __xecall xeDeviceGetApiVersion(
     }
     return dispatchTable.xeDeviceGetApiVersion(hDevice, version);
 }
-xe_result_t __xecall xeDeviceGetProperties(
+__xedllport xe_result_t __xecall xeDeviceGetProperties(
         xe_device_handle_t hDevice,
         xe_device_properties_t* pDeviceProperties
     ){
@@ -399,7 +403,7 @@ xe_result_t __xecall xeDeviceGetProperties(
     }
     return dispatchTable.xeDeviceGetProperties(hDevice, pDeviceProperties);
 }
-xe_result_t __xecall xeDeviceGetComputeProperties(
+__xedllport xe_result_t __xecall xeDeviceGetComputeProperties(
         xe_device_handle_t hDevice,
         xe_device_compute_properties_t* pComputeProperties
     ){
@@ -408,7 +412,7 @@ xe_result_t __xecall xeDeviceGetComputeProperties(
     }
     return dispatchTable.xeDeviceGetComputeProperties(hDevice, pComputeProperties);
 }
-xe_result_t __xecall xeDeviceGetMemoryProperties(
+__xedllport xe_result_t __xecall xeDeviceGetMemoryProperties(
         xe_device_handle_t hDevice,
         xe_device_memory_properties_t* pMemProperties
     ){
@@ -417,7 +421,7 @@ xe_result_t __xecall xeDeviceGetMemoryProperties(
     }
     return dispatchTable.xeDeviceGetMemoryProperties(hDevice, pMemProperties);
 }
-xe_result_t __xecall xeDeviceGetLinkProperties(
+__xedllport xe_result_t __xecall xeDeviceGetLinkProperties(
         uint32_t srcOrdinal,
         uint32_t dstOrdinal,
         xe_device_link_properties_t* pLinkProperties
@@ -427,7 +431,7 @@ xe_result_t __xecall xeDeviceGetLinkProperties(
     }
     return dispatchTable.xeDeviceGetLinkProperties(srcOrdinal, dstOrdinal, pLinkProperties);
 }
-xe_result_t __xecall xeDeviceCanAccessPeer(
+__xedllport xe_result_t __xecall xeDeviceCanAccessPeer(
         xe_device_handle_t hDevice,
         xe_device_handle_t hPeerDevice,
         bool* value
@@ -437,7 +441,7 @@ xe_result_t __xecall xeDeviceCanAccessPeer(
     }
     return dispatchTable.xeDeviceCanAccessPeer(hDevice, hPeerDevice, value);
 }
-xe_result_t __xecall xeDeviceSetIntermediateCacheConfig(
+__xedllport xe_result_t __xecall xeDeviceSetIntermediateCacheConfig(
         xe_device_handle_t hDevice,
         xe_cache_config_t CacheConfig
     ){
@@ -446,7 +450,7 @@ xe_result_t __xecall xeDeviceSetIntermediateCacheConfig(
     }
     return dispatchTable.xeDeviceSetIntermediateCacheConfig(hDevice, CacheConfig);
 }
-xe_result_t __xecall xeDeviceSetLastLevelCacheConfig(
+__xedllport xe_result_t __xecall xeDeviceSetLastLevelCacheConfig(
         xe_device_handle_t hDevice,
         xe_cache_config_t CacheConfig
     ){
@@ -455,7 +459,7 @@ xe_result_t __xecall xeDeviceSetLastLevelCacheConfig(
     }
     return dispatchTable.xeDeviceSetLastLevelCacheConfig(hDevice, CacheConfig);
 }
-xe_result_t __xecall xeDriverGetVersion(
+__xedllport xe_result_t __xecall xeDriverGetVersion(
         uint32_t* version
     ){
     if(dispatchTableInitialized == false){
@@ -463,7 +467,7 @@ xe_result_t __xecall xeDriverGetVersion(
     }
     return dispatchTable.xeDriverGetVersion(version);
 }
-xe_result_t __xecall xeDeviceCreateEvent(
+__xedllport xe_result_t __xecall xeDeviceCreateEvent(
         xe_device_handle_t hDevice,
         const xe_event_desc_t* desc,
         xe_event_handle_t* phEvent
@@ -473,7 +477,7 @@ xe_result_t __xecall xeDeviceCreateEvent(
     }
     return dispatchTable.xeDeviceCreateEvent(hDevice, desc, phEvent);
 }
-xe_result_t __xecall xeDevicePlaceEvent(
+__xedllport xe_result_t __xecall xeDevicePlaceEvent(
         xe_device_handle_t hDevice,
         const xe_event_desc_t* desc,
         void* ptr,
@@ -484,7 +488,7 @@ xe_result_t __xecall xeDevicePlaceEvent(
     }
     return dispatchTable.xeDevicePlaceEvent(hDevice, desc, ptr, phEvent);
 }
-xe_result_t __xecall xeEventDestroy(
+__xedllport xe_result_t __xecall xeEventDestroy(
         xe_event_handle_t hEvent
     ){
     if(dispatchTableInitialized == false){
@@ -492,7 +496,7 @@ xe_result_t __xecall xeEventDestroy(
     }
     return dispatchTable.xeEventDestroy(hEvent);
 }
-xe_result_t __xecall xeCommandListEncodeSignalEvent(
+__xedllport xe_result_t __xecall xeCommandListEncodeSignalEvent(
         xe_command_list_handle_t hCommandList,
         xe_event_handle_t hEvent
     ){
@@ -501,7 +505,7 @@ xe_result_t __xecall xeCommandListEncodeSignalEvent(
     }
     return dispatchTable.xeCommandListEncodeSignalEvent(hCommandList, hEvent);
 }
-xe_result_t __xecall xeCommandListEncodeWaitOnEvent(
+__xedllport xe_result_t __xecall xeCommandListEncodeWaitOnEvent(
         xe_command_list_handle_t hCommandList,
         xe_event_handle_t hEvent
     ){
@@ -510,7 +514,7 @@ xe_result_t __xecall xeCommandListEncodeWaitOnEvent(
     }
     return dispatchTable.xeCommandListEncodeWaitOnEvent(hCommandList, hEvent);
 }
-xe_result_t __xecall xeCommandListEncodeSignalMultipleEvents(
+__xedllport xe_result_t __xecall xeCommandListEncodeSignalMultipleEvents(
         xe_command_list_handle_t hCommandList,
         uint32_t numEvents,
         xe_event_handle_t* phEvents
@@ -520,7 +524,7 @@ xe_result_t __xecall xeCommandListEncodeSignalMultipleEvents(
     }
     return dispatchTable.xeCommandListEncodeSignalMultipleEvents(hCommandList, numEvents, phEvents);
 }
-xe_result_t __xecall xeCommandListEncodeWaitOnMultipleEvents(
+__xedllport xe_result_t __xecall xeCommandListEncodeWaitOnMultipleEvents(
         xe_command_list_handle_t hCommandList,
         uint32_t numEvents,
         xe_event_handle_t* phEvents
@@ -530,7 +534,7 @@ xe_result_t __xecall xeCommandListEncodeWaitOnMultipleEvents(
     }
     return dispatchTable.xeCommandListEncodeWaitOnMultipleEvents(hCommandList, numEvents, phEvents);
 }
-xe_result_t __xecall xeHostSignalEvent(
+__xedllport xe_result_t __xecall xeHostSignalEvent(
         xe_event_handle_t hEvent
     ){
     if(dispatchTableInitialized == false){
@@ -538,7 +542,7 @@ xe_result_t __xecall xeHostSignalEvent(
     }
     return dispatchTable.xeHostSignalEvent(hEvent);
 }
-xe_result_t __xecall xeHostWaitOnEvent(
+__xedllport xe_result_t __xecall xeHostWaitOnEvent(
         xe_event_handle_t hEvent,
         xe_synchronization_mode_t mode,
         uint32_t delay,
@@ -550,7 +554,7 @@ xe_result_t __xecall xeHostWaitOnEvent(
     }
     return dispatchTable.xeHostWaitOnEvent(hEvent, mode, delay, interval, timeout);
 }
-xe_result_t __xecall xeHostSignalMultipleEvents(
+__xedllport xe_result_t __xecall xeHostSignalMultipleEvents(
         uint32_t numEvents,
         xe_event_handle_t* phEvents
     ){
@@ -559,7 +563,7 @@ xe_result_t __xecall xeHostSignalMultipleEvents(
     }
     return dispatchTable.xeHostSignalMultipleEvents(numEvents, phEvents);
 }
-xe_result_t __xecall xeHostWaitOnMultipleEvents(
+__xedllport xe_result_t __xecall xeHostWaitOnMultipleEvents(
         uint32_t numEvents,
         xe_event_handle_t* phEvents,
         xe_synchronization_mode_t mode,
@@ -572,7 +576,7 @@ xe_result_t __xecall xeHostWaitOnMultipleEvents(
     }
     return dispatchTable.xeHostWaitOnMultipleEvents(numEvents, phEvents, mode, delay, interval, timeout);
 }
-xe_result_t __xecall xeEventQueryStatus(
+__xedllport xe_result_t __xecall xeEventQueryStatus(
         xe_event_handle_t hEvent
     ){
     if(dispatchTableInitialized == false){
@@ -580,7 +584,7 @@ xe_result_t __xecall xeEventQueryStatus(
     }
     return dispatchTable.xeEventQueryStatus(hEvent);
 }
-xe_result_t __xecall xeEventQueryElapsedTime(
+__xedllport xe_result_t __xecall xeEventQueryElapsedTime(
         xe_event_handle_t hEventStart,
         xe_event_handle_t hEventEnd,
         double_t* pTime
@@ -590,7 +594,7 @@ xe_result_t __xecall xeEventQueryElapsedTime(
     }
     return dispatchTable.xeEventQueryElapsedTime(hEventStart, hEventEnd, pTime);
 }
-xe_result_t __xecall xeEventQueryMetricsData(
+__xedllport xe_result_t __xecall xeEventQueryMetricsData(
         xe_event_handle_t hEventStart,
         xe_event_handle_t hEventEnd,
         size_t reportSize,
@@ -601,7 +605,7 @@ xe_result_t __xecall xeEventQueryMetricsData(
     }
     return dispatchTable.xeEventQueryMetricsData(hEventStart, hEventEnd, reportSize, pReportData);
 }
-xe_result_t __xecall xeCommandListEncodeEventReset(
+__xedllport xe_result_t __xecall xeCommandListEncodeEventReset(
         xe_command_list_handle_t hCommandList,
         xe_event_handle_t hEvent
     ){
@@ -610,7 +614,7 @@ xe_result_t __xecall xeCommandListEncodeEventReset(
     }
     return dispatchTable.xeCommandListEncodeEventReset(hCommandList, hEvent);
 }
-xe_result_t __xecall xeEventReset(
+__xedllport xe_result_t __xecall xeEventReset(
         xe_event_handle_t hEvent
     ){
     if(dispatchTableInitialized == false){
@@ -618,7 +622,7 @@ xe_result_t __xecall xeEventReset(
     }
     return dispatchTable.xeEventReset(hEvent);
 }
-xe_result_t __xecall xeCommandQueueCreateFence(
+__xedllport xe_result_t __xecall xeCommandQueueCreateFence(
         xe_command_queue_handle_t hCommandQueue,
         const xe_fence_desc_t* desc,
         xe_fence_handle_t* phFence
@@ -628,7 +632,7 @@ xe_result_t __xecall xeCommandQueueCreateFence(
     }
     return dispatchTable.xeCommandQueueCreateFence(hCommandQueue, desc, phFence);
 }
-xe_result_t __xecall xeFenceDestroy(
+__xedllport xe_result_t __xecall xeFenceDestroy(
         xe_fence_handle_t hFence
     ){
     if(dispatchTableInitialized == false){
@@ -636,7 +640,7 @@ xe_result_t __xecall xeFenceDestroy(
     }
     return dispatchTable.xeFenceDestroy(hFence);
 }
-xe_result_t __xecall xeHostWaitOnFence(
+__xedllport xe_result_t __xecall xeHostWaitOnFence(
         xe_fence_handle_t hFence,
         xe_synchronization_mode_t mode,
         uint32_t delay,
@@ -648,7 +652,7 @@ xe_result_t __xecall xeHostWaitOnFence(
     }
     return dispatchTable.xeHostWaitOnFence(hFence, mode, delay, interval, timeout);
 }
-xe_result_t __xecall xeHostWaitOnMultipleFences(
+__xedllport xe_result_t __xecall xeHostWaitOnMultipleFences(
         uint32_t numFences,
         xe_fence_handle_t* phFences,
         xe_synchronization_mode_t mode,
@@ -661,7 +665,7 @@ xe_result_t __xecall xeHostWaitOnMultipleFences(
     }
     return dispatchTable.xeHostWaitOnMultipleFences(numFences, phFences, mode, delay, interval, timeout);
 }
-xe_result_t __xecall xeFenceQueryStatus(
+__xedllport xe_result_t __xecall xeFenceQueryStatus(
         xe_fence_handle_t hFence
     ){
     if(dispatchTableInitialized == false){
@@ -669,7 +673,7 @@ xe_result_t __xecall xeFenceQueryStatus(
     }
     return dispatchTable.xeFenceQueryStatus(hFence);
 }
-xe_result_t __xecall xeFenceQueryElapsedTime(
+__xedllport xe_result_t __xecall xeFenceQueryElapsedTime(
         xe_fence_handle_t hFenceStart,
         xe_fence_handle_t hFenceEnd,
         double_t* pTime
@@ -679,7 +683,7 @@ xe_result_t __xecall xeFenceQueryElapsedTime(
     }
     return dispatchTable.xeFenceQueryElapsedTime(hFenceStart, hFenceEnd, pTime);
 }
-xe_result_t __xecall xeFenceReset(
+__xedllport xe_result_t __xecall xeFenceReset(
         xe_fence_handle_t hFence
     ){
     if(dispatchTableInitialized == false){
@@ -687,7 +691,7 @@ xe_result_t __xecall xeFenceReset(
     }
     return dispatchTable.xeFenceReset(hFence);
 }
-xe_result_t __xecall xeDeviceCreateImage(
+__xedllport xe_result_t __xecall xeDeviceCreateImage(
         xe_device_handle_t hDevice,
         const xe_image_desc_t* desc,
         xe_image_handle_t* phImage
@@ -697,7 +701,7 @@ xe_result_t __xecall xeDeviceCreateImage(
     }
     return dispatchTable.xeDeviceCreateImage(hDevice, desc, phImage);
 }
-xe_result_t __xecall xeImageDestroy(
+__xedllport xe_result_t __xecall xeImageDestroy(
         xe_image_handle_t hImage
     ){
     if(dispatchTableInitialized == false){
@@ -705,7 +709,7 @@ xe_result_t __xecall xeImageDestroy(
     }
     return dispatchTable.xeImageDestroy(hImage);
 }
-xe_result_t __xecall xeCreateMemAllocator(
+__xedllport xe_result_t __xecall xeCreateMemAllocator(
         xe_mem_allocator_handle_t* phMemAllocHandle
     ){
     if(dispatchTableInitialized == false){
@@ -713,7 +717,7 @@ xe_result_t __xecall xeCreateMemAllocator(
     }
     return dispatchTable.xeCreateMemAllocator(phMemAllocHandle);
 }
-xe_result_t __xecall xeMemAllocatorDestroy(
+__xedllport xe_result_t __xecall xeMemAllocatorDestroy(
         xe_mem_allocator_handle_t hMemAllocHandle
     ){
     if(dispatchTableInitialized == false){
@@ -721,7 +725,7 @@ xe_result_t __xecall xeMemAllocatorDestroy(
     }
     return dispatchTable.xeMemAllocatorDestroy(hMemAllocHandle);
 }
-xe_result_t __xecall xeSharedMemAlloc(
+__xedllport xe_result_t __xecall xeSharedMemAlloc(
         xe_mem_allocator_handle_t hMemAllocHandle,
         xe_device_handle_t hDevice,
         xe_device_mem_alloc_flag_t device_flags,
@@ -735,7 +739,7 @@ xe_result_t __xecall xeSharedMemAlloc(
     }
     return dispatchTable.xeSharedMemAlloc(hMemAllocHandle, hDevice, device_flags, host_flags, size, alignment, ptr);
 }
-xe_result_t __xecall xeMemAlloc(
+__xedllport xe_result_t __xecall xeMemAlloc(
         xe_mem_allocator_handle_t hMemAllocHandle,
         xe_device_handle_t hDevice,
         xe_device_mem_alloc_flag_t flags,
@@ -748,7 +752,7 @@ xe_result_t __xecall xeMemAlloc(
     }
     return dispatchTable.xeMemAlloc(hMemAllocHandle, hDevice, flags, size, alignment, ptr);
 }
-xe_result_t __xecall xeHostMemAlloc(
+__xedllport xe_result_t __xecall xeHostMemAlloc(
         xe_mem_allocator_handle_t hMemAllocHandle,
         xe_host_mem_alloc_flag_t flags,
         size_t size,
@@ -760,7 +764,7 @@ xe_result_t __xecall xeHostMemAlloc(
     }
     return dispatchTable.xeHostMemAlloc(hMemAllocHandle, flags, size, alignment, ptr);
 }
-xe_result_t __xecall xeMemFree(
+__xedllport xe_result_t __xecall xeMemFree(
         xe_mem_allocator_handle_t hMemAllocHandle,
         const void* ptr
     ){
@@ -769,7 +773,7 @@ xe_result_t __xecall xeMemFree(
     }
     return dispatchTable.xeMemFree(hMemAllocHandle, ptr);
 }
-xe_result_t __xecall xeMemGetProperty(
+__xedllport xe_result_t __xecall xeMemGetProperty(
         xe_mem_allocator_handle_t hMemAllocHandle,
         const void* ptr,
         xe_memory_property_t property,
@@ -780,7 +784,7 @@ xe_result_t __xecall xeMemGetProperty(
     }
     return dispatchTable.xeMemGetProperty(hMemAllocHandle, ptr, property, pValue);
 }
-xe_result_t __xecall xeMemGetAddressRange(
+__xedllport xe_result_t __xecall xeMemGetAddressRange(
         xe_mem_allocator_handle_t hMemAllocHandle,
         const void* ptr,
         void** pBase,
@@ -791,7 +795,7 @@ xe_result_t __xecall xeMemGetAddressRange(
     }
     return dispatchTable.xeMemGetAddressRange(hMemAllocHandle, ptr, pBase, pSize);
 }
-xe_result_t __xecall xeIpcGetMemHandle(
+__xedllport xe_result_t __xecall xeIpcGetMemHandle(
         xe_mem_allocator_handle_t hMemAllocHandle,
         const void* ptr,
         xe_ipc_mem_handle_t* pIpcHandle
@@ -801,7 +805,7 @@ xe_result_t __xecall xeIpcGetMemHandle(
     }
     return dispatchTable.xeIpcGetMemHandle(hMemAllocHandle, ptr, pIpcHandle);
 }
-xe_result_t __xecall xeIpcOpenMemHandle(
+__xedllport xe_result_t __xecall xeIpcOpenMemHandle(
         xe_mem_allocator_handle_t hMemAllocHandle,
         xe_device_handle_t hDevice,
         xe_ipc_mem_handle_t handle,
@@ -813,7 +817,7 @@ xe_result_t __xecall xeIpcOpenMemHandle(
     }
     return dispatchTable.xeIpcOpenMemHandle(hMemAllocHandle, hDevice, handle, flags, ptr);
 }
-xe_result_t __xecall xeIpcCloseMemHandle(
+__xedllport xe_result_t __xecall xeIpcCloseMemHandle(
         xe_mem_allocator_handle_t hMemAllocHandle,
         const void* ptr
     ){
@@ -822,7 +826,7 @@ xe_result_t __xecall xeIpcCloseMemHandle(
     }
     return dispatchTable.xeIpcCloseMemHandle(hMemAllocHandle, ptr);
 }
-xe_result_t __xecall xeDeviceCreateModule(
+__xedllport xe_result_t __xecall xeDeviceCreateModule(
         xe_device_handle_t hDevice,
         const xe_module_desc_t* desc,
         xe_module_handle_t* phModule,
@@ -833,7 +837,7 @@ xe_result_t __xecall xeDeviceCreateModule(
     }
     return dispatchTable.xeDeviceCreateModule(hDevice, desc, phModule, phBuildLog);
 }
-xe_result_t __xecall xeModuleDestroy(
+__xedllport xe_result_t __xecall xeModuleDestroy(
         xe_module_handle_t hModule
     ){
     if(dispatchTableInitialized == false){
@@ -841,7 +845,7 @@ xe_result_t __xecall xeModuleDestroy(
     }
     return dispatchTable.xeModuleDestroy(hModule);
 }
-xe_result_t __xecall xeModuleBuildLogDestroy(
+__xedllport xe_result_t __xecall xeModuleBuildLogDestroy(
         xe_module_build_log_handle_t hBuildLog
     ){
     if(dispatchTableInitialized == false){
@@ -849,7 +853,7 @@ xe_result_t __xecall xeModuleBuildLogDestroy(
     }
     return dispatchTable.xeModuleBuildLogDestroy(hBuildLog);
 }
-xe_result_t __xecall xeModuleBuildLogGetString(
+__xedllport xe_result_t __xecall xeModuleBuildLogGetString(
         xe_module_build_log_handle_t hBuildLog,
         uint32_t* pSize,
         char** pBuildLog
@@ -859,7 +863,7 @@ xe_result_t __xecall xeModuleBuildLogGetString(
     }
     return dispatchTable.xeModuleBuildLogGetString(hBuildLog, pSize, pBuildLog);
 }
-xe_result_t __xecall xeModuleGetNativeBinary(
+__xedllport xe_result_t __xecall xeModuleGetNativeBinary(
         xe_module_handle_t hModule,
         uint32_t* pSize,
         char** pModuleNativeBinary
@@ -869,7 +873,7 @@ xe_result_t __xecall xeModuleGetNativeBinary(
     }
     return dispatchTable.xeModuleGetNativeBinary(hModule, pSize, pModuleNativeBinary);
 }
-xe_result_t __xecall xeModuleCreateFunction(
+__xedllport xe_result_t __xecall xeModuleCreateFunction(
         xe_module_handle_t hModule,
         const xe_function_desc_t* desc,
         xe_function_handle_t* phFunction
@@ -879,7 +883,7 @@ xe_result_t __xecall xeModuleCreateFunction(
     }
     return dispatchTable.xeModuleCreateFunction(hModule, desc, phFunction);
 }
-xe_result_t __xecall xeFunctionDestroy(
+__xedllport xe_result_t __xecall xeFunctionDestroy(
         xe_function_handle_t hFunction
     ){
     if(dispatchTableInitialized == false){
@@ -887,7 +891,7 @@ xe_result_t __xecall xeFunctionDestroy(
     }
     return dispatchTable.xeFunctionDestroy(hFunction);
 }
-xe_result_t __xecall xeFunctionSetGroupSize(
+__xedllport xe_result_t __xecall xeFunctionSetGroupSize(
     xe_function_handle_t hFunction,
     uint32_t groupSizeX,
     uint32_t groupSizeY,
@@ -898,7 +902,7 @@ xe_result_t __xecall xeFunctionSetGroupSize(
     }
     return dispatchTable.xeFunctionSetGroupSize(hFunction, groupSizeX, groupSizeY, groupSizeZ);
 }
-xe_result_t __xecall xeFunctionCreateFunctionArgs(
+__xedllport xe_result_t __xecall xeFunctionCreateFunctionArgs(
         xe_function_handle_t hFunction,
         xe_function_args_handle_t* phFunctionArgs
     ){
@@ -907,7 +911,7 @@ xe_result_t __xecall xeFunctionCreateFunctionArgs(
     }
     return dispatchTable.xeFunctionCreateFunctionArgs(hFunction, phFunctionArgs);
 }
-xe_result_t __xecall xeFunctionArgsDestroy(
+__xedllport xe_result_t __xecall xeFunctionArgsDestroy(
         xe_function_args_handle_t hFunctionArgs
     ){
     if(dispatchTableInitialized == false){
@@ -915,7 +919,7 @@ xe_result_t __xecall xeFunctionArgsDestroy(
     }
     return dispatchTable.xeFunctionArgsDestroy(hFunctionArgs);
 }
-xe_result_t __xecall xeFunctionArgsSetValue(
+__xedllport xe_result_t __xecall xeFunctionArgsSetValue(
         xe_function_args_handle_t hFunctionArgs,
         uint32_t argIndex,
         size_t argSize,
@@ -926,7 +930,7 @@ xe_result_t __xecall xeFunctionArgsSetValue(
     }
     return dispatchTable.xeFunctionArgsSetValue(hFunctionArgs, argIndex, argSize, pArgValue);
 }
-xe_result_t __xecall xeFunctionArgsSetAttribute(
+__xedllport xe_result_t __xecall xeFunctionArgsSetAttribute(
         xe_function_args_handle_t hFunctionArgs,
         xe_function_argument_attribute_t attr,
         uint32_t value
@@ -936,7 +940,7 @@ xe_result_t __xecall xeFunctionArgsSetAttribute(
     }
     return dispatchTable.xeFunctionArgsSetAttribute(hFunctionArgs, attr, value);
 }
-xe_result_t __xecall xeFunctionQueryAttribute(
+__xedllport xe_result_t __xecall xeFunctionQueryAttribute(
         xe_function_handle_t hFunction,
         xe_function_attribute_t attr,
         uint32_t* pValue
@@ -946,7 +950,7 @@ xe_result_t __xecall xeFunctionQueryAttribute(
     }
     return dispatchTable.xeFunctionQueryAttribute(hFunction, attr, pValue);
 }
-xe_result_t __xecall xeCommandListEncodeDispatchFunction(
+__xedllport xe_result_t __xecall xeCommandListEncodeDispatchFunction(
         xe_command_list_handle_t hCommandList,
         xe_function_handle_t hFunction,
         xe_function_args_handle_t hFunctionArgs,
@@ -958,7 +962,7 @@ xe_result_t __xecall xeCommandListEncodeDispatchFunction(
     }
     return dispatchTable.xeCommandListEncodeDispatchFunction(hCommandList, hFunction, hFunctionArgs, pDispatchFuncArgs, hEvent);
 }
-xe_result_t __xecall xeCommandGraphEncodeDispatchFunction(
+__xedllport xe_result_t __xecall xeCommandGraphEncodeDispatchFunction(
         xe_command_graph_handle_t hCommandGraph,
         xe_function_handle_t hFunction,
         xe_function_args_handle_t hFunctionArgs,
@@ -970,7 +974,7 @@ xe_result_t __xecall xeCommandGraphEncodeDispatchFunction(
     }
     return dispatchTable.xeCommandGraphEncodeDispatchFunction(hCommandGraph, hFunction, hFunctionArgs, pDispatchFuncArgs, hEvent);
 }
-xe_result_t __xecall xeCommandListEncodeDispatchFunctionIndirect(
+__xedllport xe_result_t __xecall xeCommandListEncodeDispatchFunctionIndirect(
         xe_command_list_handle_t hCommandList,
         xe_function_handle_t hFunction,
         xe_function_args_handle_t hFunctionArgs,
@@ -982,7 +986,7 @@ xe_result_t __xecall xeCommandListEncodeDispatchFunctionIndirect(
     }
     return dispatchTable.xeCommandListEncodeDispatchFunctionIndirect(hCommandList, hFunction, hFunctionArgs, pDispatchArgumentsBuffer, hEvent);
 }
-xe_result_t __xecall xeCommandGraphEncodeDispatchFunctionIndirect(
+__xedllport xe_result_t __xecall xeCommandGraphEncodeDispatchFunctionIndirect(
         xe_command_graph_handle_t hCommandGraph,
         xe_function_handle_t hFunction,
         xe_function_args_handle_t hFunctionArgs,
@@ -994,7 +998,7 @@ xe_result_t __xecall xeCommandGraphEncodeDispatchFunctionIndirect(
     }
     return dispatchTable.xeCommandGraphEncodeDispatchFunctionIndirect(hCommandGraph, hFunction, hFunctionArgs, pDispatchArgumentsBuffer, hEvent);
 }
-xe_result_t __xecall xeFunctionSuggestGroupSize(
+__xedllport xe_result_t __xecall xeFunctionSuggestGroupSize(
         xe_function_handle_t hFunction,
         uint32_t globalSizeX,
         uint32_t globalSizeY,
@@ -1008,7 +1012,7 @@ xe_result_t __xecall xeFunctionSuggestGroupSize(
     }
     return dispatchTable.xeFunctionSuggestGroupSize(hFunction, globalSizeX, globalSizeY, globalSizeZ, groupSizeX, groupSizeY, groupSizeZ);
 }
-xe_result_t __xecall xeCommandListEncodeDispatchHostFunction(
+__xedllport xe_result_t __xecall xeCommandListEncodeDispatchHostFunction(
         xe_command_list_handle_t hCommandList,
         xe_host_pfn_t pfnHostFunc,
         void* pUserData
@@ -1018,7 +1022,7 @@ xe_result_t __xecall xeCommandListEncodeDispatchHostFunction(
     }
     return dispatchTable.xeCommandListEncodeDispatchHostFunction(hCommandList, pfnHostFunc, pUserData);
 }
-xe_result_t __xecall xeCommandGraphEncodeDispatchHostFunction(
+__xedllport xe_result_t __xecall xeCommandGraphEncodeDispatchHostFunction(
         xe_command_graph_handle_t hCommandGraph,
         xe_host_pfn_t pfnHostFunc,
         void* pUserData
@@ -1028,7 +1032,7 @@ xe_result_t __xecall xeCommandGraphEncodeDispatchHostFunction(
     }
     return dispatchTable.xeCommandGraphEncodeDispatchHostFunction(hCommandGraph, pfnHostFunc, pUserData);
 }
-xe_result_t __xecall xeDeviceMakeMemoryResident(
+__xedllport xe_result_t __xecall xeDeviceMakeMemoryResident(
         xe_device_handle_t hDevice,
         void* ptr,
         size_t size
@@ -1038,7 +1042,7 @@ xe_result_t __xecall xeDeviceMakeMemoryResident(
     }
     return dispatchTable.xeDeviceMakeMemoryResident(hDevice, ptr, size);
 }
-xe_result_t __xecall xeDeviceEvictMemory(
+__xedllport xe_result_t __xecall xeDeviceEvictMemory(
         xe_device_handle_t hDevice,
         void* ptr,
         size_t size
@@ -1048,7 +1052,7 @@ xe_result_t __xecall xeDeviceEvictMemory(
     }
     return dispatchTable.xeDeviceEvictMemory(hDevice, ptr, size);
 }
-xe_result_t __xecall xeDeviceMakeImageResident(
+__xedllport xe_result_t __xecall xeDeviceMakeImageResident(
         xe_device_handle_t hDevice,
         xe_image_handle_t hImage
     ){
@@ -1057,7 +1061,7 @@ xe_result_t __xecall xeDeviceMakeImageResident(
     }
     return dispatchTable.xeDeviceMakeImageResident(hDevice, hImage);
 }
-xe_result_t __xecall xeDeviceEvictImage(
+__xedllport xe_result_t __xecall xeDeviceEvictImage(
         xe_device_handle_t hDevice,
         xe_image_handle_t hImage
     ){
@@ -1066,7 +1070,7 @@ xe_result_t __xecall xeDeviceEvictImage(
     }
     return dispatchTable.xeDeviceEvictImage(hDevice, hImage);
 }
-xe_result_t __xecall xeDeviceCreateSemaphore(
+__xedllport xe_result_t __xecall xeDeviceCreateSemaphore(
         xe_device_handle_t hDevice,
         const xe_semaphore_desc_t* desc,
         xe_semaphore_handle_t* phSemaphore
@@ -1076,7 +1080,7 @@ xe_result_t __xecall xeDeviceCreateSemaphore(
     }
     return dispatchTable.xeDeviceCreateSemaphore(hDevice, desc, phSemaphore);
 }
-xe_result_t __xecall xeSemaphoreDestroy(
+__xedllport xe_result_t __xecall xeSemaphoreDestroy(
         xe_semaphore_handle_t hSemaphore
     ){
     if(dispatchTableInitialized == false){
@@ -1084,7 +1088,7 @@ xe_result_t __xecall xeSemaphoreDestroy(
     }
     return dispatchTable.xeSemaphoreDestroy(hSemaphore);
 }
-xe_result_t __xecall xeCommandListEncodeSemaphoreSignal(
+__xedllport xe_result_t __xecall xeCommandListEncodeSemaphoreSignal(
         xe_command_list_handle_t hCommandList,
         xe_semaphore_handle_t hSemaphore,
         xe_semaphore_value_t value
@@ -1094,7 +1098,7 @@ xe_result_t __xecall xeCommandListEncodeSemaphoreSignal(
     }
     return dispatchTable.xeCommandListEncodeSemaphoreSignal(hCommandList, hSemaphore, value);
 }
-xe_result_t __xecall xeCommandListEncodeSemaphoreWait(
+__xedllport xe_result_t __xecall xeCommandListEncodeSemaphoreWait(
         xe_command_list_handle_t hCommandList,
         xe_semaphore_handle_t hSemaphore,
         xe_semaphore_wait_operation_t operation,
@@ -1105,7 +1109,7 @@ xe_result_t __xecall xeCommandListEncodeSemaphoreWait(
     }
     return dispatchTable.xeCommandListEncodeSemaphoreWait(hCommandList, hSemaphore, operation, value);
 }
-xe_result_t __xecall xeSemaphoreQueryValue(
+__xedllport xe_result_t __xecall xeSemaphoreQueryValue(
         xe_semaphore_handle_t hSemaphore
     ){
     if(dispatchTableInitialized == false){
@@ -1113,7 +1117,7 @@ xe_result_t __xecall xeSemaphoreQueryValue(
     }
     return dispatchTable.xeSemaphoreQueryValue(hSemaphore);
 }
-xe_result_t __xecall xeSemaphoreReset(
+__xedllport xe_result_t __xecall xeSemaphoreReset(
         xe_semaphore_handle_t hSemaphore
     ){
     if(dispatchTableInitialized == false){
@@ -1122,3 +1126,6 @@ xe_result_t __xecall xeSemaphoreReset(
     return dispatchTable.xeSemaphoreReset(hSemaphore);
 }
 
+#if defined(__cplusplus)
+};
+#endif

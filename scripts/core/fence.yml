@@ -69,8 +69,8 @@ returns:
 --- #--------------------------------------------------------------------------
 type: function
 desc: "The current host thread waits on a fence to be signaled."
-class: $x
-name: HostWaitOnFence
+class: $xHost
+name: WaitOnFence
 analogue:
     - "**vkWaitForFences**"
 details:
@@ -104,8 +104,8 @@ returns:
 --- #--------------------------------------------------------------------------
 type: function
 desc: "The current host thread waits on a multiple fences to be signaled."
-class: $x
-name: HostWaitOnMultipleFences
+class: $xHost
+name: WaitOnMultipleFences
 analogue:
     - "**vkWaitForFences**"
 details:
@@ -162,8 +162,8 @@ returns:
 --- #--------------------------------------------------------------------------
 type: function
 desc: "Queries the elapsed time between two signaled fences."
-class: $xFence
-name: QueryElapsedTime
+class: $x
+name: FenceQueryElapsedTime
 details:
     - "The application may call this function from simultaneous threads."
     - "The implementation of this function should be lock-free."

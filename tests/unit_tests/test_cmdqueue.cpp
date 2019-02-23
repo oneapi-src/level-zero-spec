@@ -16,18 +16,10 @@ extern PRODUCT_FAMILY productFamily;
 namespace xe {
 namespace ult {
 
-TEST(xeDeviceCreateCommandQueue, returnsSuccess) {
-    Mock<Device> device;
-    xe_command_queue_handle_t commandQueue = {};
-    xe_command_queue_desc_t desc = {};
-    auto result = xe::xeDeviceCreateCommandQueue(device.toHandle(),
-                                                 &desc,
-                                                 &commandQueue);
-    EXPECT_EQ(XE_RESULT_SUCCESS, result);
-}
-
-TEST(xeCommandQueueDestroy, returnsSuccess) {
+TEST(xeCommandQueueDestroy, redirectsToObject) {
     Mock<CommandQueue> commandQueue;
+    EXPECT_CALL(commandQueue, destroy);
+
     auto result = xeCommandQueueDestroy(commandQueue.toHandle());
     EXPECT_EQ(XE_RESULT_SUCCESS, result);
 }
