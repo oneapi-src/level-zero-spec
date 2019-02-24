@@ -102,14 +102,24 @@ int main(){
     }
 
     SUCCESS_OR_TERMINATE(xeApi.xeCreateMemAllocator(&allocator));
+#if UNSUPPORTED
     SUCCESS_OR_TERMINATE(xeApi.xeMemAlloc(allocator, device0, XE_DEVICE_MEM_ALLOC_FLAG_DEFAULT, allocSize, 1, &srcBuffer));
     SUCCESS_OR_TERMINATE(xeApi.xeMemAlloc(allocator, device0, XE_DEVICE_MEM_ALLOC_FLAG_DEFAULT, allocSize, 1, &dstBuffer));
+#else
+    SUCCESS_OR_TERMINATE(xeApi.xeSharedMemAlloc(allocator, device0, XE_DEVICE_MEM_ALLOC_FLAG_DEFAULT, XE_HOST_MEM_ALLOC_FLAG_DEFAULT, allocSize, 1, &srcBuffer));
+    SUCCESS_OR_TERMINATE(xeApi.xeSharedMemAlloc(allocator, device0, XE_DEVICE_MEM_ALLOC_FLAG_DEFAULT, XE_HOST_MEM_ALLOC_FLAG_DEFAULT, allocSize, 1, &dstBuffer));
+#endif
     
 // 2. Encode initialize memory    
+#if UNSUPPORTED
     uint8_t initData[allocSize];
     memset(initData, 7, sizeof(initData));
     SUCCESS_OR_TERMINATE(xeApi.xeCommandListEncodeMemoryCopy(cmdList, srcBuffer, initData, sizeof(initData)));
     SUCCESS_OR_TERMINATE(xeApi.xeCommandListEncodeExecutionBarrier(cmdList)); // copying of data must finish before running the user function
+#else
+    memset(srcBuffer, 7u, allocSize);
+    memset(dstBuffer, 2u, allocSize);
+#endif
 
 // 3. Encode run user function
     SUCCESS_OR_TERMINATE(xeApi.xeFunctionArgsSetValue(functionArgs0, 0, sizeof(dstBuffer), &dstBuffer));
@@ -120,21 +130,28 @@ int main(){
         dispatchTraits.groupCountY = 1;
         dispatchTraits.groupCountZ = 1;
         SUCCESS_OR_TERMINATE_BOOL(dispatchTraits.groupCountX * groupSizeX == allocSize);
-        SUCCESS_OR_TERMINATE(xeApi.xeCommandListEncodeDispatchFunction(cmdList, function, functionArgs0, &dispatchTraits, xe_event_handle_t {}));
+        SUCCESS_OR_TERMINATE(xeApi.xeCommandListEncodeDispatchFunction(cmdList, function, functionArgs0, &dispatchTraits, nullptr));
     }
 
 // 4. Encode read back memory
+#if UNSUPPORTED
     uint8_t readBackData[allocSize];
     memset(readBackData, 2, sizeof(readBackData));
     SUCCESS_OR_TERMINATE(xeApi.xeCommandListEncodeExecutionBarrier(cmdList)); // user function must finish before we start copying data
     SUCCESS_OR_TERMINATE(xeApi.xeCommandListEncodeMemoryCopy(cmdList, readBackData, dstBuffer, sizeof(readBackData)));
+#endif
 
 // 5. Dispatch and wait
     SUCCESS_OR_TERMINATE(xeApi.xeCommandListClose(cmdList));
-    SUCCESS_OR_TERMINATE(xeApi.xeCommandQueueEnqueueCommandLists(cmdQueue, 1, &cmdList, xe_fence_handle_t{}));
+    SUCCESS_OR_TERMINATE(xeApi.xeCommandQueueEnqueueCommandLists(cmdQueue, 1, &cmdList, nullptr));
+#if UNSUPPORTED
     SUCCESS_OR_TERMINATE(xeApi.xeCommandQueueSynchronize(cmdQueue, XE_SYNCHRONIZATION_MODE_POLL, 0, 0, -1));
-// 6. Validate
-    SUCCESS_OR_TERMINATE(0 == memcmp(initData, readBackData, sizeof(readBackData)));
+#endif
+
+    // 6. Validate
+#if UNSUPPORTED
+    SUCCESS_OR_TERMINATE(0 == memcmp(srcBuffer, dstBuffer, allocSize));
+#endif
 
 // X. Cleanup
     SUCCESS_OR_TERMINATE(xeApi.xeMemFree(allocator, dstBuffer));
