@@ -5,6 +5,13 @@ set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/bin)
 set(CMAKE_LIBRARY_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/bin)
 set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/lib)
 
+#Define a path for custom commands to work around MSVC
+set(CUSTOM_COMMAND_BINARY_DIR ${CMAKE_RUNTIME_OUTPUT_DIRECTORY})
+if(MSVC)
+    #MSVC implicitly adds $<CONFIG> to the output path
+    set(CUSTOM_COMMAND_BINARY_DIR ${CUSTOM_COMMAND_BINARY_DIR}/$<CONFIG>)
+endif()
+
 #CXX compiler support
 if(NOT MSVC)
     include(CheckCXXCompilerFlag)
@@ -72,6 +79,17 @@ if(COMPUTE_RUNTIME_SUPPORT)
 
     include(compute_runtime.cmake)
 endif(COMPUTE_RUNTIME_SUPPORT)
+
+# Copy third_party_binaries to output BIN folder
+add_custom_target(copy_third_party_files)
+
+add_custom_command(
+    TARGET copy_third_party_files
+    POST_BUILD
+    COMMAND ${CMAKE_COMMAND} -E copy_directory "${IGC_DIR}/lib" "${CUSTOM_COMMAND_BINARY_DIR}/"
+    COMMAND ${CMAKE_COMMAND} -E copy_directory "${GMM_SOURCE_DIR}/lib" "${CUSTOM_COMMAND_BINARY_DIR}/"
+    DEPENDS "${IGC_DIR}/lib" "${GMM_SOURCE_DIR}/lib"
+)
 
 add_subdirectory(core)
 

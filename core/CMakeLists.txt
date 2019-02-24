@@ -6,6 +6,13 @@ add_library(${TARGET_NAME}
         ${CMAKE_CURRENT_SOURCE_DIR}/CMakeLists.txt
 )
 
+if(AUB_STREAM_SUPPORT)
+    target_sources(${TARGET_NAME}
+        PRIVATE
+            $<TARGET_OBJECTS:aub_stream_all_hw>
+    )
+endif()
+
 target_include_directories(${TARGET_NAME}
     PUBLIC
     ${CMAKE_CURRENT_SOURCE_DIR}/include

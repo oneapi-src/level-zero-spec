@@ -48,7 +48,16 @@ xe_result_t memAlloc(xe_mem_allocator_handle_t hMemAllocHandle,
                      size_t size,
                      size_t alignment,
                      void **ptr) {
-    return XE_RESULT_ERROR_UNSUPPORTED;
+    auto device = Device::fromHandle(hDevice);
+    assert(device);
+    auto memoryManager = device->getMemoryManager();
+    assert(memoryManager);
+
+    auto allocation = memoryManager->allocateManagedMemory(size, alignment);
+    assert(allocation);
+    *ptr = allocation->getHostAddress();
+
+    return XE_RESULT_SUCCESS;
 }
 
 xe_result_t memAllocatorDestroy(xe_mem_allocator_handle_t hMemAllocHandle) {

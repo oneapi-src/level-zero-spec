@@ -38,8 +38,6 @@ add_executable(${TARGET_NAME}
     test_shared_memalloc.cpp
     white_box.h
     ${HW_SOURCES_ULT}
-    ${COMPUTE_RUNTIME_HW_ENABLE}
-    ${COMPUTE_RUNTIME_HW_ENABLE_ULT}
     ${L0_RUNTIME_SOURCES}
 )
 
@@ -77,22 +75,6 @@ add_dependencies(${TARGET_NAME} mock_gmm)
     
 add_subdirectory(precompiled_function_mock_data)
     
-#get_target_property(ult_sources ${TARGET_NAME} SOURCES)
-#get_target_property(ult_includes ${TARGET_NAME} INCLUDE_DIRECTORIES)
-#get_target_property(ult_library_dependencies ${TARGET_NAME} LINK_LIBRARIES)
-
-#set(GENERATED_FILES_DIR "${XE_ROOT_DIR}/tests/generated/")
-#set(EXPORTS_FILENAME "${CMAKE_CURRENT_BINARY_DIR}/driver_exports.def")
-#set(MSVC_DEF_LIB_NAME "level_zero_dll")
-#configure_file("${GENERATED_FILES_DIR}/driver_exports.def" "${EXPORTS_FILENAME}")
-#add_library(level_zero_dll SHARED ${dll_sources} "${EXPORTS_FILENAME}" "${GENERATED_FILES_DIR}/driver_exports_switches.cpp")
-
-#target_include_directories(level_zero_dll PRIVATE ${ult_includes} ${COMPUTE_RUNTIME_INCLUDES})
-        
-#target_link_libraries(level_zero_dll ${dll_library_dependencies} compute_runtime_lib ${HW_LIBS})
-#target_compile_definitions(level_zero_dll PUBLIC RUNTIME_DLL ${COMPUTE_RUNTIME_DEFINITIONS} MOCKABLE_VIRTUAL=)
-#set_target_properties(level_zero_dll PROPERTIES OUTPUT_NAME level_zero)
-
 if(MSVC)
     set_target_properties(${TARGET_NAME}
         PROPERTIES
@@ -106,20 +88,14 @@ add_custom_target(copy_test_files)
 add_custom_command(
     TARGET copy_test_files
     POST_BUILD
-    COMMAND echo deleting and re-creating "${PROJECT_BINARY_DIR}/bin/$<CONFIG>/test_files" ...
-    COMMAND ${CMAKE_COMMAND} -E remove_directory "${PROJECT_BINARY_DIR}/bin/$<CONFIG>/test_files"
-    COMMAND ${CMAKE_COMMAND} -E make_directory "${PROJECT_BINARY_DIR}/bin/$<CONFIG>/test_files"
-    COMMAND ${CMAKE_COMMAND} -E copy_directory "${CMAKE_CURRENT_SOURCE_DIR}/test_files" "${PROJECT_BINARY_DIR}/bin/$<CONFIG>/test_files"
+    COMMAND echo deleting and re-creating "${CUSTOM_COMMAND_BINARY_DIR}/test_files" ...
+    COMMAND ${CMAKE_COMMAND} -E remove_directory "${CUSTOM_COMMAND_BINARY_DIR}/test_files"
+    COMMAND ${CMAKE_COMMAND} -E make_directory "${CUSTOM_COMMAND_BINARY_DIR}/test_files"
+    COMMAND ${CMAKE_COMMAND} -E copy_directory "${CMAKE_CURRENT_SOURCE_DIR}/test_files" "${CUSTOM_COMMAND_BINARY_DIR}/test_files"
     DEPENDS "${CMAKE_CURRENT_SOURCE_DIR}/test_files"
 )
 
-add_custom_command(
-    TARGET copy_test_files
-    POST_BUILD
-    COMMAND ${CMAKE_COMMAND} -E copy_directory "${IGC_DIR}/lib" "${PROJECT_BINARY_DIR}/bin/$<CONFIG>/"
-    DEPENDS "${IGC_DIR}/lib"
+add_dependencies(${TARGET_NAME} 
+    copy_test_files 
+    copy_third_party_files
 )
-
-add_dependencies(${TARGET_NAME} copy_test_files)
-
-

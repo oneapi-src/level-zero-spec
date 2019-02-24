@@ -92,14 +92,12 @@ endif()
 
 if(SUPPORT_GEN12LP)
     set(COMPUTE_RUNTIME_GEN12LP
-        ${COMPUTE_RUNTIME_HW_ENABLE}
         ${COMPUTE_RUNTIME_DIR}/runtime/gen12lp/enable_gen12lp.cpp
         ${COMPUTE_RUNTIME_DIR}/runtime/gen12lp/enable_family_full_gen12lp.cpp
         ${COMPUTE_RUNTIME_DIR}/runtime/gen12lp/enable_hw_info_config_gen12lp.cpp
     )
 
     set(COMPUTE_RUNTIME_ULT_GEN12LP
-        ${COMPUTE_RUNTIME_HW_ENABLE_ULT}
         ${COMPUTE_RUNTIME_DIR}/unit_tests/libult/gen12lp.cpp
         ${COMPUTE_RUNTIME_DIR}/unit_tests/gen12lp/cmd_parse_gen12lp.cpp
     )
@@ -107,14 +105,12 @@ endif()
 
 if(SUPPORT_GEN12HP)
     set(COMPUTE_RUNTIME_GEN12HP
-        ${COMPUTE_RUNTIME_HW_ENABLE}
         ${COMPUTE_RUNTIME_DIR}/runtime/gen12hp/enable_gen12hp.cpp
         ${COMPUTE_RUNTIME_DIR}/runtime/gen12hp/enable_family_full_gen12hp.cpp
         ${COMPUTE_RUNTIME_DIR}/runtime/gen12hp/enable_hw_info_config_gen12hp.cpp
     )
 
     set(COMPUTE_RUNTIME_ULT_GEN12HP
-        ${COMPUTE_RUNTIME_HW_ENABLE_ULT}
         ${COMPUTE_RUNTIME_DIR}/unit_tests/libult/gen12hp.cpp
         ${COMPUTE_RUNTIME_DIR}/unit_tests/gen12hp/cmd_parse_gen12hp.cpp
     )

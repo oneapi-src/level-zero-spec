@@ -779,6 +779,7 @@ bool load_xe(void *handle, void *(*funcAddressGetter)(void *handle, const char *
     outTable->xeModuleCreateFunction = (pfn_xeModuleCreateFunction)funcAddressGetter(handle, "xeModuleCreateFunction");
     outTable->xeFunctionDestroy = (pfn_xeFunctionDestroy)funcAddressGetter(handle, "xeFunctionDestroy");
     outTable->xeFunctionCreateFunctionArgs = (pfn_xeFunctionCreateFunctionArgs)funcAddressGetter(handle, "xeFunctionCreateFunctionArgs");
+    outTable->xeFunctionSetGroupSize = (pfn_xeFunctionSetGroupSize)funcAddressGetter(handle, "xeFunctionSetGroupSize");
     outTable->xeFunctionArgsDestroy = (pfn_xeFunctionArgsDestroy)funcAddressGetter(handle, "xeFunctionArgsDestroy");
     outTable->xeFunctionArgsSetValue = (pfn_xeFunctionArgsSetValue)funcAddressGetter(handle, "xeFunctionArgsSetValue");
     outTable->xeFunctionArgsSetAttribute = (pfn_xeFunctionArgsSetAttribute)funcAddressGetter(handle, "xeFunctionArgsSetAttribute");
