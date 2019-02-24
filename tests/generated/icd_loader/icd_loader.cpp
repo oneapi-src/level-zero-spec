@@ -71,6 +71,7 @@ __xedllport xe_result_t __xecall xeCommandListEncodeExecutionBarrier(
     }
     return dispatchTable.xeCommandListEncodeExecutionBarrier(hCommandList);
 }
+#if XE_ENABLE_OCL_INTEROP
 __xedllport xe_result_t __xecall xeDeviceRegisterCLMemory(
         xe_device_handle_t hDevice,
         cl_context context,
@@ -82,6 +83,8 @@ __xedllport xe_result_t __xecall xeDeviceRegisterCLMemory(
     }
     return dispatchTable.xeDeviceRegisterCLMemory(hDevice, context, mem, ptr);
 }
+#endif
+#if XE_ENABLE_OCL_INTEROP
 __xedllport xe_result_t __xecall xeDeviceRegisterCLProgram(
         xe_device_handle_t hDevice,
         cl_context context,
@@ -93,6 +96,8 @@ __xedllport xe_result_t __xecall xeDeviceRegisterCLProgram(
     }
     return dispatchTable.xeDeviceRegisterCLProgram(hDevice, context, program, phModule);
 }
+#endif
+#if XE_ENABLE_OCL_INTEROP
 __xedllport xe_result_t __xecall xeDeviceRegisterCLCommandQueue(
         xe_device_handle_t hDevice,
         cl_context context,
@@ -104,6 +109,7 @@ __xedllport xe_result_t __xecall xeDeviceRegisterCLCommandQueue(
     }
     return dispatchTable.xeDeviceRegisterCLCommandQueue(hDevice, context, command_queue, phCommandQueue);
 }
+#endif
 __xedllport xe_result_t __xecall xeDeviceCreateCommandGraph(
         xe_device_handle_t hDevice,
         const xe_command_graph_desc_t* desc,

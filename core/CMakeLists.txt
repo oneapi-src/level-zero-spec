@@ -22,6 +22,7 @@ target_include_directories(${TARGET_NAME}
 target_compile_definitions(${TARGET_NAME}
     PUBLIC
         XE_MAKEDLL
+        XE_ENABLE_OCL_INTEROP=0
 )
 
 target_compile_definitions(${TARGET_NAME}

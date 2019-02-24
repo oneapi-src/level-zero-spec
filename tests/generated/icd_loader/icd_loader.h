@@ -43,6 +43,7 @@ typedef struct _cl_program* cl_program;
 typedef xe_result_t (__xecall *pfn_xeCommandListEncodeExecutionBarrier)(
     xe_command_list_handle_t hCommandList
     );
+#if XE_ENABLE_OCL_INTEROP
 typedef xe_result_t (__xecall *pfn_xeDeviceRegisterCLMemory)(
     xe_device_handle_t hDevice,
     cl_context context,
@@ -61,6 +62,7 @@ typedef xe_result_t (__xecall *pfn_xeDeviceRegisterCLCommandQueue)(
     cl_command_queue command_queue,
     xe_command_queue_handle_t* phCommandQueue
     );
+#endif
 typedef xe_result_t (__xecall *pfn_xeDeviceCreateCommandGraph)(
     xe_device_handle_t hDevice,
     const xe_command_graph_desc_t* desc,
@@ -578,9 +580,15 @@ typedef xe_result_t (__xecall *pfn_xeSemaphoreReset)(
 typedef struct _xe_dispatch_table_t
 {
     pfn_xeCommandListEncodeExecutionBarrier xeCommandListEncodeExecutionBarrier;
+#if XE_ENABLE_OCL_INTEROP
     pfn_xeDeviceRegisterCLMemory xeDeviceRegisterCLMemory;
+#endif
+#if XE_ENABLE_OCL_INTEROP
     pfn_xeDeviceRegisterCLProgram xeDeviceRegisterCLProgram;
+#endif
+#if XE_ENABLE_OCL_INTEROP
     pfn_xeDeviceRegisterCLCommandQueue xeDeviceRegisterCLCommandQueue;
+#endif
     pfn_xeDeviceCreateCommandGraph xeDeviceCreateCommandGraph;
     pfn_xeCommandGraphDestroy xeCommandGraphDestroy;
     pfn_xeCommandGraphClose xeCommandGraphClose;
@@ -693,9 +701,11 @@ bool load_xe(void *handle, void *(*funcAddressGetter)(void *handle, const char *
         return false;
     }
     outTable->xeCommandListEncodeExecutionBarrier = (pfn_xeCommandListEncodeExecutionBarrier)funcAddressGetter(handle, "xeCommandListEncodeExecutionBarrier");
+#if XE_ENABLE_OCL_INTEROP
     outTable->xeDeviceRegisterCLMemory = (pfn_xeDeviceRegisterCLMemory)funcAddressGetter(handle, "xeDeviceRegisterCLMemory");
     outTable->xeDeviceRegisterCLProgram = (pfn_xeDeviceRegisterCLProgram)funcAddressGetter(handle, "xeDeviceRegisterCLProgram");
     outTable->xeDeviceRegisterCLCommandQueue = (pfn_xeDeviceRegisterCLCommandQueue)funcAddressGetter(handle, "xeDeviceRegisterCLCommandQueue");
+#endif
     outTable->xeDeviceCreateCommandGraph = (pfn_xeDeviceCreateCommandGraph)funcAddressGetter(handle, "xeDeviceCreateCommandGraph");
     outTable->xeCommandGraphDestroy = (pfn_xeCommandGraphDestroy)funcAddressGetter(handle, "xeCommandGraphDestroy");
     outTable->xeCommandGraphClose = (pfn_xeCommandGraphClose)funcAddressGetter(handle, "xeCommandGraphClose");
@@ -804,15 +814,21 @@ bool load_xe(void *handle, void *(*funcAddressGetter)(void *handle, const char *
     if(0 == outTable->xeCommandListEncodeExecutionBarrier){
         return false;
     }
+#if XE_ENABLE_OCL_INTEROP
     if(0 == outTable->xeDeviceRegisterCLMemory){
         return false;
     }
+#endif
+#if XE_ENABLE_OCL_INTEROP
     if(0 == outTable->xeDeviceRegisterCLProgram){
         return false;
     }
+#endif
+#if XE_ENABLE_OCL_INTEROP
     if(0 == outTable->xeDeviceRegisterCLCommandQueue){
         return false;
     }
+#endif
     if(0 == outTable->xeDeviceCreateCommandGraph){
         return false;
     }
