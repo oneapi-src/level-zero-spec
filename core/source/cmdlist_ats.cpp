@@ -145,7 +145,9 @@ xe_result_t CommandListHw<IGFX_GEN12_CORE>::encodeDispatchFunction(xe_function_h
     {
         auto &residencyContainer = functionArgs->getResidencyContainer();
         for (auto resource : residencyContainer) {
-            this->residencyContainer.push_back(resource->allocationRT);
+            if (resource) {
+                this->residencyContainer.push_back(resource->allocationRT);
+            }
         }
     }
 

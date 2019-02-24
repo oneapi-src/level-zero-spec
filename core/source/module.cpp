@@ -352,6 +352,18 @@ struct FunctionArgsImp : FunctionArgs {
         return XE_RESULT_SUCCESS;
     }
 
+    xe_result_t setArgImmediate(uint32_t argIndex, size_t argSize, const void *argVal) {
+        const auto &kernelArgInfo = static_cast<FunctionImp *>(function)->getKernelRT()->getKernelInfo().kernelArgInfo[argIndex];
+        auto patchLocation = ptrOffset(crossThreadData,
+                                       kernelArgInfo.kernelArgPatchInfoVector[0].crossthreadOffset);
+
+        patchWithRequiredSize(patchLocation, kernelArgInfo.kernelArgPatchInfoVector[0].size, *reinterpret_cast<const uintptr_t *>(argVal));
+
+        //oclInternals.storeKernelArg(argIndex, OCLRT::Kernel::BUFFER_OBJ, nullptr, argVal, argSize);
+
+        return XE_RESULT_SUCCESS;
+    }
+
     xe_result_t setArgBuffer(uint32_t argIndex, size_t argSize, const void *argVal) {
         const auto &kernelArgInfo = static_cast<FunctionImp *>(function)->getKernelRT()->getKernelInfo().kernelArgInfo[argIndex];
         // patchBufferOffset(kernelArgInfo, nullptr, nullptr); // stateless to stateful buffer offsets disabled
@@ -395,6 +407,8 @@ struct FunctionArgsImp : FunctionArgs {
         for (auto handleRT : kernelRT->kernelArgHandlers) {
             if (handleRT == &OCLRT::Kernel::setArgBuffer) {
                 this->oclInternals.kernelArgHandlers.push_back(&FunctionArgsImp::setArgBuffer);
+            } else if (handleRT == &OCLRT::Kernel::setArgImmediate) {
+                this->oclInternals.kernelArgHandlers.push_back(&FunctionArgsImp::setArgImmediate);
             } else {
                 assert(0); // only setArgBuffer for now
             }
@@ -482,8 +496,8 @@ xe_result_t moduleBuildLogDestroy(xe_module_build_log_handle_t hModuleBuildLog) 
 }
 
 xe_result_t moduleBuildLogGetString(xe_module_build_log_handle_t hModuleBuildLog,
-    uint32_t *pSize,
-    char **pBuildLog) {
+                                    uint32_t *pSize,
+                                    char **pBuildLog) {
     return XE_RESULT_ERROR_UNSUPPORTED;
 }
 
