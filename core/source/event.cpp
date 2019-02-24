@@ -72,4 +72,30 @@ xe_result_t eventQueryMetricsData(xe_event_handle_t hEventStart,
     return XE_RESULT_ERROR_UNSUPPORTED;
 }
 
+xe_result_t hostSignalEvent(xe_event_handle_t hEvent) {
+    return XE_RESULT_ERROR_UNSUPPORTED;
+}
+
+xe_result_t hostSignalMultipleEvents(uint32_t numEvents,
+                                       xe_event_handle_t *phEvents) {
+    return XE_RESULT_ERROR_UNSUPPORTED;
+}
+
+xe_result_t hostWaitOnEvent(xe_event_handle_t hEvent,
+                              xe_synchronization_mode_t mode,
+                              uint32_t delay,
+                              uint32_t interval,
+                              uint32_t timeout) {
+    return XE_RESULT_ERROR_UNSUPPORTED;
+}
+
+xe_result_t hostWaitOnMultipleEvents(uint32_t numEvents,
+                                       xe_event_handle_t *phEvents,
+                                       xe_synchronization_mode_t mode,
+                                       uint32_t delay,
+                                       uint32_t interval,
+                                       uint32_t timeout) {
+    return XE_RESULT_ERROR_UNSUPPORTED;
+}
+
 } // namespace xe

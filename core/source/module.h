@@ -15,26 +15,9 @@ struct _xe_function_handle_t {
 struct _xe_function_args_handle_t {
 };
 
-struct _xe_module_build_log_handle_t {
-};
-
 namespace xe {
 struct Device;
 struct GraphicsAllocation;
-
-struct ModuleBuildLog : public _xe_module_build_log_handle_t {
-    virtual xe_result_t destroy() = 0;
-    virtual xe_result_t getString(uint32_t *pSize,
-                                  char **pBuildLog) = 0;
-
-    static ModuleBuildLog *fromHandle(xe_module_build_log_handle_t handle) {
-        return static_cast<ModuleBuildLog *>(handle);
-    }
-
-    inline xe_module_build_log_handle_t toHandle() {
-        return this;
-    }
-};
 
 struct Module : public _xe_module_handle_t {
     static Module *create(Device *device, const xe_module_desc_t *desc, void *deiceRT);
@@ -131,5 +114,11 @@ struct FunctionArgs : public _xe_function_args_handle_t {
         return this;
     }
 };
+
+xe_result_t moduleBuildLogDestroy(xe_module_build_log_handle_t hModuleBuildLog);
+
+xe_result_t moduleBuildLogGetString(xe_module_build_log_handle_t hModuleBuildLog,
+                                    uint32_t *pSize,
+                                    char **pBuildLog);
 
 } // namespace xe

@@ -503,6 +503,64 @@ __xedllexport xe_result_t __xecall
 }
 
 ///////////////////////////////////////////////////////////////////////////////
+/// @brief Retrieves link properties between source and destination devices.
+/// 
+/// @details
+///     - The application may call this function from simultaneous threads.
+///     - The implementation of this function should be lock-free.
+/// 
+/// @remarks
+///   _Analogues_
+///     - **cudaDeviceGetP2PAttribute**
+/// 
+/// @returns
+///     - ::XE_RESULT_SUCCESS
+///     - ::XE_RESULT_ERROR_UNINITIALIZED
+///     - ::XE_RESULT_ERROR_DEVICE_LOST
+///     - ::XE_RESULT_ERROR_INVALID_PARAMETER
+///         + nullptr == pLinkProperties
+///         + invalid ordinal. Use ::xeDriverGetDeviceCount for valid range.
+///     - ::XE_RESULT_ERROR_UNSUPPORTED
+///
+/// @hash {f0819a9eb55a17ea507cf7a31187d172996280c893f41c6bcbd88e3e26e766b0}
+///
+__xedllexport xe_result_t __xecall
+  xeDeviceGetLinkProperties(
+    uint32_t srcOrdinal,                            ///< [in] source device ordinal
+    uint32_t dstOrdinal,                            ///< [in] destination device ordinal
+    xe_device_link_properties_t* pLinkProperties    ///< [out] link properties between source and destination devices
+    )
+{
+    try
+    {
+        //if( XE_DRIVER_PARAMETER_VALIDATION_LEVEL >= 0 )
+        {
+            // if( nullptr == driver ) return XE_RESULT_ERROR_UNINITIALIZED;
+            // Check parameters
+            if( nullptr == pLinkProperties ) return XE_RESULT_ERROR_INVALID_PARAMETER;
+        }
+        /// @begin
+
+        return xe::deviceGetLinkProperties(srcOrdinal, dstOrdinal, pLinkProperties);
+
+        /// @end
+    }
+    catch(xe_result_t& result)
+    {
+        return result;
+    }
+    catch(std::bad_alloc&)
+    {
+        return XE_RESULT_ERROR_OUT_OF_HOST_MEMORY;
+    }
+    catch(std::exception&)
+    {
+        // @todo: pfnOnException(e.what());
+        return XE_RESULT_ERROR_UNKNOWN;
+    }
+}
+
+///////////////////////////////////////////////////////////////////////////////
 /// @brief Queries if one device can directly access peer device allocations
 /// 
 /// @details

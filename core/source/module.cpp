@@ -477,65 +477,14 @@ FunctionArgs *FunctionArgs::create(Function *function) {
     return functionArgs;
 }
 
-xe_result_t __xecall
-xeModuleDestroy(
-    xe_module_handle_t hModule) {
-    auto module = Module::fromHandle(hModule);
-    return module->destroy();
+xe_result_t moduleBuildLogDestroy(xe_module_build_log_handle_t hModuleBuildLog) {
+    return XE_RESULT_ERROR_UNSUPPORTED;
 }
 
-xe_result_t __xecall
-xeModuleCreateFunction(
-    xe_module_handle_t hModule,
-    const xe_function_desc_t *desc,
-    xe_function_handle_t *phFunction) {
-    auto module = Module::fromHandle(hModule);
-    return module->createFunction(desc,
-                                  phFunction);
-}
-
-xe_result_t __xecall
-xeFunctionDestroy(
-    xe_function_handle_t phFunction) {
-    auto function = Function::fromHandle(phFunction);
-    return function->destroy();
-}
-
-xe_result_t __xecall
-xeFunctionCreateFunctionArgs(
-    xe_function_handle_t hFunction,
-    xe_function_args_handle_t *phFunctionArgs) {
-    auto function = Function::fromHandle(hFunction);
-    return function->createFunctionArgs(phFunctionArgs);
-}
-
-xe_result_t __xecall
-xeFunctionSetGroupSize(
-    xe_function_handle_t hFunction, ///< [in] handle of the function object
-    uint32_t groupSizeX,            ///< [in] group size for X dimension to use for this function.
-    uint32_t groupSizeY,            ///< [in] group size for Y dimension to use for this function.
-    uint32_t groupSizeZ             ///< [in] group size for Z dimension to use for this function.
-) {
-    return Function::fromHandle(hFunction)->setGroupSize(groupSizeX,
-                                                         groupSizeY,
-                                                         groupSizeZ);
-}
-
-xe_result_t __xecall
-xeFunctionArgsDestroy(
-    xe_function_args_handle_t hFunctionArgs) {
-    auto functionArgs = FunctionArgs::fromHandle(hFunctionArgs);
-    return functionArgs->destroy();
-}
-
-xe_result_t __xecall
-xeFunctionArgsSetValue(
-    xe_function_args_handle_t hFunctionArgs,
-    uint32_t argIndex,
-    size_t argSize,
-    const void *pArgValue) {
-    auto functionARgs = FunctionArgs::fromHandle(hFunctionArgs);
-    return functionARgs->setValue(argIndex, argSize, pArgValue);
+xe_result_t moduleBuildLogGetString(xe_module_build_log_handle_t hModuleBuildLog,
+    uint32_t *pSize,
+    char **pBuildLog) {
+    return XE_RESULT_ERROR_UNSUPPORTED;
 }
 
 } // namespace xe

@@ -1,6 +1,5 @@
 #pragma once
 #include "cmdqueue.h"
-#include "host.h"
 #include "xe_fence.h"
 
 struct _xe_fence_handle_t {
@@ -29,5 +28,18 @@ struct Fence : public _xe_fence_handle_t {
 xe_result_t fenceQueryElapsedTime(xe_fence_handle_t hFenceStart,
                                   xe_fence_handle_t hFenceEnd,
                                   double_t *pTime);
+
+xe_result_t hostWaitOnFence(xe_fence_handle_t hFence,
+                            xe_synchronization_mode_t mode,
+                            uint32_t delay,
+                            uint32_t interval,
+                            uint32_t timeout);
+
+xe_result_t hostWaitOnMultipleFences(uint32_t numFences,
+                                     xe_fence_handle_t *phFences,
+                                     xe_synchronization_mode_t mode,
+                                     uint32_t delay,
+                                     uint32_t interval,
+                                     uint32_t timeout);
 
 } // namespace xe

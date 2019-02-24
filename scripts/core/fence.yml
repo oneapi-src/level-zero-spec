@@ -69,8 +69,8 @@ returns:
 --- #--------------------------------------------------------------------------
 type: function
 desc: "The current host thread waits on a fence to be signaled."
-class: $xHost
-name: WaitOnFence
+class: $x
+name: HostWaitOnFence
 analogue:
     - "**vkWaitForFences**"
 details:
@@ -104,8 +104,8 @@ returns:
 --- #--------------------------------------------------------------------------
 type: function
 desc: "The current host thread waits on a multiple fences to be signaled."
-class: $xHost
-name: WaitOnMultipleFences
+class: $x
+name: HostWaitOnMultipleFences
 analogue:
     - "**vkWaitForFences**"
 details:

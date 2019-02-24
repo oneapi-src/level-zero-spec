@@ -179,8 +179,8 @@ params:
 --- #--------------------------------------------------------------------------
 type: function
 desc: "Signals a event from host."
-class: $xHost
-name: SignalEvent
+class: $x
+name: HostSignalEvent
 analogue:
     - clSetUserEventStatus
 details:
@@ -193,8 +193,8 @@ params:
 --- #--------------------------------------------------------------------------
 type: function
 desc: "The current host thread waits on an event from a device signal."
-class: $xHost
-name: WaitOnEvent
+class: $x
+name: HostWaitOnEvent
 analogue:
     - clWaitForEvents
     - cuEventSynchronize
@@ -227,8 +227,8 @@ returns:
 --- #--------------------------------------------------------------------------
 type: function
 desc: "Signals multiple events from host."
-class: $xHost
-name: SignalMultipleEvents
+class: $x
+name: HostSignalMultipleEvents
 details:
     - "The application may call this function from simultaneous threads."
     - "The implementation of this function should be lock-free."
@@ -242,8 +242,8 @@ params:
 --- #--------------------------------------------------------------------------
 type: function
 desc: "The current host thread waits on multiple events from a device signal."
-class: $xHost
-name: WaitOnMultipleEvents
+class: $x
+name: HostWaitOnMultipleEvents
 analogue:
     - clWaitForEvents
 details:

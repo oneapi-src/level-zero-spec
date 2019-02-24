@@ -28,12 +28,6 @@ struct DriverImp : public Driver {
         return XE_RESULT_SUCCESS;
     }
 
-    xe_result_t getDeviceLinkProperties(uint32_t srcOrdinal,
-                                        uint32_t dstOrdinal,
-                                        xe_device_link_properties_t *pLinkProperties) override {
-        return XE_RESULT_ERROR_UNSUPPORTED;
-    }
-
     xe_result_t getDeviceUniqueIds(uint32_t count,
                                    uint32_t *pUniqueIds) override {
         return XE_RESULT_ERROR_UNSUPPORTED;

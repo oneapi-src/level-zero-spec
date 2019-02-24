@@ -179,7 +179,7 @@ __xedllexport xe_result_t __xecall
 ///     - ::XE_RESULT_NOT_READY
 ///         + timeout expired
 ///
-/// @hash {2947c4fa79dabc2847bd21516d47a4b1d08ffbe54820a5ba175696a084a45e45}
+/// @hash {77f047fdfb94150f1b0cda9d8cdbbf224f6bbd82021c5595a03bf1a8be2a03b6}
 ///
 __xedllexport xe_result_t __xecall
   xeHostWaitOnFence(
@@ -207,7 +207,7 @@ __xedllexport xe_result_t __xecall
         }
         /// @begin
 
-        return xe::Host::get()->waitOnFence(hFence, mode, delay, interval, timeout);
+        return xe::hostWaitOnFence(hFence, mode, delay, interval, timeout);
 
         /// @end
     }
@@ -249,7 +249,7 @@ __xedllexport xe_result_t __xecall
 ///     - ::XE_RESULT_NOT_READY
 ///         + timeout expired
 ///
-/// @hash {9e3c22851b4255d968e88876f906994267a1220944eb13e2ded5550c4486620e}
+/// @hash {a5f76c9bd49faad0a8ae16401ccdd9cc6e8ae394eb876c8eca18dc6dd3cdae7d}
 ///
 __xedllexport xe_result_t __xecall
   xeHostWaitOnMultipleFences(
@@ -278,7 +278,7 @@ __xedllexport xe_result_t __xecall
         }
         /// @begin
 
-        return xe::Host::get()->waitOnMultipleFences(numFences, phFences, mode, delay, interval, timeout);
+        return xe::hostWaitOnMultipleFences(numFences, phFences, mode, delay, interval, timeout);
 
         /// @end
     }

@@ -473,7 +473,7 @@ __xedllexport xe_result_t __xecall
 ///         + nullptr == hEvent
 ///     - ::XE_RESULT_ERROR_UNSUPPORTED
 ///
-/// @hash {8fe37c68daaeb9874d9858ef3118f29bb121815b7f72123f14580e5ca4fd9994}
+/// @hash {809272a0febf2e56f09e04c5a53b8568b0c6905e5acd124c0e1e4151b542dab6}
 ///
 __xedllexport xe_result_t __xecall
   xeHostSignalEvent(
@@ -490,7 +490,7 @@ __xedllexport xe_result_t __xecall
         }
         /// @begin
 
-        return xe::Host::get()->signalEvent(hEvent);
+        return xe::hostSignalEvent(hEvent);
 
         /// @end
     }
@@ -531,7 +531,7 @@ __xedllexport xe_result_t __xecall
 ///     - ::XE_RESULT_NOT_READY
 ///         + timeout expired
 ///
-/// @hash {bd6edacacf3e5767a4f599f3cc9d0d2fd2ce8b8f66ad162170d6cba587941368}
+/// @hash {580d70d65f44535c9b2585408c20f2c0af086f6b54945445e7b09d31493403e0}
 ///
 __xedllexport xe_result_t __xecall
   xeHostWaitOnEvent(
@@ -559,7 +559,7 @@ __xedllexport xe_result_t __xecall
         }
         /// @begin
 
-        return xe::Host::get()->waitOnEvent(hEvent, mode, delay, interval, timeout);
+        return xe::hostWaitOnEvent(hEvent, mode, delay, interval, timeout);
 
         /// @end
     }
@@ -593,7 +593,7 @@ __xedllexport xe_result_t __xecall
 ///         + nullptr == phEvents
 ///     - ::XE_RESULT_ERROR_UNSUPPORTED
 ///
-/// @hash {9dc878996ddb4270ef16dd3116a25c67f4b0b0e458f06ff10375e79c3ab75194}
+/// @hash {6bfaa4edb5accb4ff4433b13b89b7371377931bb1eb613bb04878ef02ac4f666}
 ///
 __xedllexport xe_result_t __xecall
   xeHostSignalMultipleEvents(
@@ -611,7 +611,7 @@ __xedllexport xe_result_t __xecall
         }
         /// @begin
 
-        return xe::Host::get()->signalMultipleEvents(numEvents, phEvents);
+        return xe::hostSignalMultipleEvents(numEvents, phEvents);
 
         /// @end
     }
@@ -651,7 +651,7 @@ __xedllexport xe_result_t __xecall
 ///     - ::XE_RESULT_NOT_READY
 ///         + timeout expired
 ///
-/// @hash {fdc2d90a28f3f1e1ea5fe6cd7d65170d8ff373a0899394351a80b9c63039d051}
+/// @hash {e52ffd62217e9fcf9ed29e74f4453d0d1930803fe7e4289225b27f2526df83d0}
 ///
 __xedllexport xe_result_t __xecall
   xeHostWaitOnMultipleEvents(
@@ -680,7 +680,7 @@ __xedllexport xe_result_t __xecall
         }
         /// @begin
 
-        return xe::Host::get()->waitOnMultipleEvents(numEvents, phEvents, mode, delay, interval, timeout);
+        return xe::hostWaitOnMultipleEvents(numEvents, phEvents, mode, delay, interval, timeout);
 
         /// @end
     }

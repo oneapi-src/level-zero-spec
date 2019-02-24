@@ -2,7 +2,6 @@
 #include "xe_event.h"
 #include "cmdlist.h"
 #include "device.h"
-#include "host.h"
 
 struct _xe_event_handle_t {
 };
@@ -49,4 +48,21 @@ xe_result_t eventQueryMetricsData(xe_event_handle_t hEventStart,
                                   size_t reportSize,
                                   uint32_t *pReportData);
 
+xe_result_t hostSignalEvent(xe_event_handle_t hEvent);
+
+xe_result_t hostSignalMultipleEvents(uint32_t numEvents,
+                                     xe_event_handle_t *phEvents);
+
+xe_result_t hostWaitOnEvent(xe_event_handle_t hEvent,
+                            xe_synchronization_mode_t mode,
+                            uint32_t delay,
+                            uint32_t interval,
+                            uint32_t timeout);
+
+xe_result_t hostWaitOnMultipleEvents(uint32_t numEvents,
+                                     xe_event_handle_t *phEvents,
+                                     xe_synchronization_mode_t mode,
+                                     uint32_t delay,
+                                     uint32_t interval,
+                                     uint32_t timeout);
 } // namespace xe

@@ -266,28 +266,18 @@ def make_func_name(repl, obj, cls, cpp=False):
     returns the name of a function
 """
 def make_obj_accessor(repl, obj, cls):
-#    objectString = subx(repl, cls)
-#    matchString = subx(repl, "^$xDriver|^$xHost")
-#    matchString = subx(repl, "^$xDriver|")
-#    matchString += subx(repl, "")
-#    print(objectString)
-#    print(matchString)
     noobject = repl == subx(repl, cls)
-    singleton=re.match(subx(repl, "^$xDriver|^$xHost"), subx(repl, cls))
+    singleton=re.match(subx(repl, "^$xDriver"), subx(repl, cls))
+    method = obj['name'][0].lower() + obj['name'][1:] 
     if noobject:
-        method = obj['name'][0].lower() + obj['name'][1:] 
         str = subx("", "%s("%(method))
         str += make_param_call_str("", "", obj, "")
-        str += ");"
     elif singleton:
-        method = obj['name'][0].lower() + obj['name'][1:] 
         str = subx("", "%s::get()->%s("%(cls, method))
         str += make_param_call_str("", "", obj, "")
-        str += ");"
     else:
         params = obj['params']
         str = subx("", "%s::fromHandle("%cls)
-        method = obj['name'][0].lower() + obj['name'][1:] 
         argStr=""
         lastArg=""
         calledMethod=False
@@ -308,8 +298,7 @@ def make_obj_accessor(repl, obj, cls):
         if not calledMethod:
             str += ")->" + method + "("
         str += argStr
-        str += ");"
- 
+    str += ");"
     return str
 
 """

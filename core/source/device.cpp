@@ -138,47 +138,10 @@ Device *Device::create(void *ptr) {
     return device;
 }
 
-xe_result_t __xecall
-xeDeviceCreateCommandList(
-    xe_device_handle_t hDevice,
-    const xe_command_list_desc_t *desc,
-    xe_command_list_handle_t *phCommandList) {
-
-    auto device = Device::fromHandle(hDevice);
-    return device->createCommandList(desc,
-                                     phCommandList);
+xe_result_t deviceGetLinkProperties(uint32_t srcOrdinal,
+                                    uint32_t dstOrdinal,
+                                    xe_device_link_properties_t *pLinkProperties) {
+    return XE_RESULT_ERROR_UNSUPPORTED;
 }
 
-xe_result_t __xecall
-xeDeviceCreateCommandQueue(
-    xe_device_handle_t hDevice,
-    const xe_command_queue_desc_t *desc,
-    xe_command_queue_handle_t *phCommandQueue) {
-
-    auto device = Device::fromHandle(hDevice);
-    return device->createCommandQueue(desc,
-                                      phCommandQueue);
-}
-
-xe_result_t __xecall
-xeDeviceCreateEvent(
-    xe_device_handle_t hDevice,
-    const xe_event_desc_t *desc,
-    xe_event_handle_t *phEvent) {
-
-    auto device = Device::fromHandle(hDevice);
-    return device->createEvent(desc,
-                               phEvent);
-}
-
-xe_result_t __xecall
-xeDeviceCreateModule(
-    xe_device_handle_t hDevice,
-    const xe_module_desc_t *desc,
-    xe_module_handle_t *phModule,
-    xe_module_build_log_handle_t *phBuildLog) {
-
-    auto device = Device::fromHandle(hDevice);
-    return device->createModule(desc, phModule, phBuildLog);
-}
 } // namespace xe

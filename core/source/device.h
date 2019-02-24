@@ -51,8 +51,7 @@ struct Device : _xe_device_handle_t {
                                      xe_device_handle_t *phSubDevice) = 0;
     virtual xe_result_t makeImageResident(xe_image_handle_t hImage) = 0;
     virtual xe_result_t makeMemoryResident(void *ptr,
-                                           size_t size
-                                           ) = 0;
+                                           size_t size) = 0;
     virtual xe_result_t placeEvent(const xe_event_desc_t *desc,
                                    void *ptr,
                                    xe_event_handle_t *phEvent) = 0;
@@ -72,4 +71,7 @@ struct Device : _xe_device_handle_t {
     static Device *create(void *device);
 };
 
+xe_result_t deviceGetLinkProperties(uint32_t srcOrdinal,
+                                    uint32_t dstOrdinal,
+                                    xe_device_link_properties_t *pLinkProperties);
 } // namespace xe

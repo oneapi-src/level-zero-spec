@@ -97,8 +97,8 @@ params:
 --- #--------------------------------------------------------------------------
 type: function
 desc: "Destroys module build log object"
-class: $xModuleBuildLog
-name: Destroy
+class: $x
+name: ModuleBuildLogDestroy
 details:
     - "The application is responsible for making sure the GPU is not currently referencing the event before it is deleted"
     - "The implementation of this function will immediately free all Host and Device allocations associated with this object"
@@ -111,8 +111,8 @@ params:
 --- #--------------------------------------------------------------------------
 type: function
 desc: "Retrieves text string for build log."
-class: $xModuleBuildLog
-name: GetString
+class: $x
+name: ModuleBuildLogGetString
 details:
     - "This function may be called from simultaneous threads."
     - "The implementation of this function should be lock-free."

@@ -40,4 +40,21 @@ xe_result_t fenceQueryElapsedTime(xe_fence_handle_t hFenceStart,
     return XE_RESULT_ERROR_UNSUPPORTED;
 }
 
+xe_result_t hostWaitOnFence(xe_fence_handle_t hFence,
+                              xe_synchronization_mode_t mode,
+                              uint32_t delay,
+                              uint32_t interval,
+                              uint32_t timeout) {
+    return XE_RESULT_ERROR_UNSUPPORTED;
+}
+
+xe_result_t hostWaitOnMultipleFences(uint32_t numFences,
+                                       xe_fence_handle_t *phFences,
+                                       xe_synchronization_mode_t mode,
+                                       uint32_t delay,
+                                       uint32_t interval,
+                                       uint32_t timeout) {
+    return XE_RESULT_ERROR_UNSUPPORTED;
+}
+
 } // namespace xe

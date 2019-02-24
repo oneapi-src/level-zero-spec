@@ -197,7 +197,7 @@ __xedllexport xe_result_t __xecall
 ///         + nullptr == hModuleBuildLog
 ///     - ::XE_RESULT_ERROR_UNSUPPORTED
 ///
-/// @hash {9c101cf3fd365132a5537247d01f3cefa6f7b60ba9c15da3f2380f61a4f6fa5c}
+/// @hash {0bedc632ecc213e77ba94919752712349af7f81bc4fdc3cc22a678d179aad038}
 ///
 __xedllexport xe_result_t __xecall
   xeModuleBuildLogDestroy(
@@ -214,7 +214,7 @@ __xedllexport xe_result_t __xecall
         }
         /// @begin
 
-        return xe::ModuleBuildLog::fromHandle(hModuleBuildLog)->destroy();
+        return xe::moduleBuildLogDestroy(hModuleBuildLog);
 
         /// @end
     }
@@ -252,7 +252,7 @@ __xedllexport xe_result_t __xecall
 ///     - ::XE_RESULT_ERROR_OUT_OF_HOST_MEMORY
 ///     - ::XE_RESULT_ERROR_OUT_OF_DEVICE_MEMORY
 ///
-/// @hash {1511eabbbd7e6f36c9a31f1e94d1934d76bd762428186f352f5bf5cbcb863f67}
+/// @hash {a5068c9c111fd477f1c08adc30a94f570a37220901c66690a61592f3977924b7}
 ///
 __xedllexport xe_result_t __xecall
   xeModuleBuildLogGetString(
@@ -273,7 +273,7 @@ __xedllexport xe_result_t __xecall
         }
         /// @begin
 
-        return xe::ModuleBuildLog::fromHandle(hModuleBuildLog)->getString(pSize, pBuildLog);
+        return xe::moduleBuildLogGetString(hModuleBuildLog, pSize, pBuildLog);
 
         /// @end
     }
