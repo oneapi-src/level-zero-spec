@@ -303,6 +303,34 @@ __xedllport xe_result_t __xecall
     );
 
 ///////////////////////////////////////////////////////////////////////////////
+/// @brief Retrieve function pointer from Module by name
+/// 
+/// @details
+///     - This function may be called from simultaneous threads.
+///     - The implementation of this function should be lock-free.
+///     - Function pointer is only valid for the same Module. You can't use it
+///       with other Modules.
+///     - Function pointer is no longer valid if Module is destroyed.
+/// 
+/// @returns
+///     - ::XE_RESULT_SUCCESS
+///     - ::XE_RESULT_ERROR_UNINITIALIZED
+///     - ::XE_RESULT_ERROR_DEVICE_LOST
+///     - ::XE_RESULT_ERROR_INVALID_PARAMETER
+///         + nullptr == hModule
+///         + nullptr == pFunctionName
+///         + nullptr == pfnFunction
+///         + nullptr == pFunctionName
+///         + invalid value pFunctionName
+///     - ::XE_RESULT_ERROR_UNSUPPORTED
+__xedllport xe_result_t __xecall
+  xeModuleGetFunctionPointer(
+    xe_module_handle_t hModule,                     ///< [in] handle of the module
+    const char* pFunctionName,                      ///< [in] Name of function to retreieve function pointer for.
+    void** pfnFunction                              ///< [out] pointer to function.
+    );
+
+///////////////////////////////////////////////////////////////////////////////
 /// @brief Set group size for Function.
 /// 
 /// @details
