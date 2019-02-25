@@ -480,6 +480,68 @@ __xedllexport xe_result_t __xecall
 }
 
 ///////////////////////////////////////////////////////////////////////////////
+/// @brief Retrieve function pointer from Module by name
+/// 
+/// @details
+///     - This function may be called from simultaneous threads.
+///     - The implementation of this function should be lock-free.
+///     - Function pointer is only valid for the same Module. You can't use it
+///       with other Modules.
+///     - Function pointer is no longer valid if Module is destroyed.
+/// 
+/// @returns
+///     - ::XE_RESULT_SUCCESS
+///     - ::XE_RESULT_ERROR_UNINITIALIZED
+///     - ::XE_RESULT_ERROR_DEVICE_LOST
+///     - ::XE_RESULT_ERROR_INVALID_PARAMETER
+///         + nullptr == hModule
+///         + nullptr == pFunctionName
+///         + nullptr == pfnFunction
+///         + nullptr == pFunctionName
+///         + invalid value pFunctionName
+///     - ::XE_RESULT_ERROR_UNSUPPORTED
+///
+/// @hash {d316b47d5880386648c2751e90d316a28a7ae230f11cb4fa1375a9e332cc7c82}
+///
+__xedllexport xe_result_t __xecall
+  xeModuleGetFunctionPointer(
+    xe_module_handle_t hModule,                     ///< [in] handle of the module
+    const char* pFunctionName,                      ///< [in] Name of function to retreieve function pointer for.
+    void** pfnFunction                              ///< [out] pointer to function.
+    )
+{
+    try
+    {
+        //if( XE_DRIVER_PARAMETER_VALIDATION_LEVEL >= 0 )
+        {
+            // if( nullptr == driver ) return XE_RESULT_ERROR_UNINITIALIZED;
+            // Check parameters
+            if( nullptr == hModule ) return XE_RESULT_ERROR_INVALID_PARAMETER;
+            if( nullptr == pFunctionName ) return XE_RESULT_ERROR_INVALID_PARAMETER;
+            if( nullptr == pfnFunction ) return XE_RESULT_ERROR_INVALID_PARAMETER;
+        }
+        /// @begin
+
+        return xe::Module::fromHandle(hModule)->getFunctionPointer(pFunctionName, pfnFunction);
+
+        /// @end
+    }
+    catch(xe_result_t& result)
+    {
+        return result;
+    }
+    catch(std::bad_alloc&)
+    {
+        return XE_RESULT_ERROR_OUT_OF_HOST_MEMORY;
+    }
+    catch(std::exception&)
+    {
+        // @todo: pfnOnException(e.what());
+        return XE_RESULT_ERROR_UNKNOWN;
+    }
+}
+
+///////////////////////////////////////////////////////////////////////////////
 /// @brief Set group size for Function.
 /// 
 /// @details

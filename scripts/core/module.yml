@@ -221,7 +221,31 @@ details:
 params:
     - type: "$x_function_handle_t"
       name: hFunction
-      desc: "[in] handle of the function object"      
+      desc: "[in] handle of the function object"  
+--- #--------------------------------------------------------------------------
+type: function
+desc: "Retrieve function pointer from Module by name"
+class: $xModule
+name: GetFunctionPointer
+details:
+    - "This function may be called from simultaneous threads."
+    - "The implementation of this function should be lock-free."
+    - "Function pointer is only valid for the same Module. You can't use it with other Modules."
+    - "Function pointer is no longer valid if Module is destroyed."
+params:
+    - type: "$x_module_handle_t"
+      name: hModule
+      desc: "[in] handle of the module"
+    - type: "const char*"
+      name: pFunctionName
+      desc: "[in] Name of function to retreieve function pointer for."
+    - type: "void**"
+      name:  pfnFunction
+      desc: "[out] pointer to function."
+returns:
+    - $X_RESULT_ERROR_INVALID_PARAMETER:
+        - "nullptr == pFunctionName"
+        - "invalid value pFunctionName"
 --- #--------------------------------------------------------------------------
 type: function
 desc: "Set group size for Function."
