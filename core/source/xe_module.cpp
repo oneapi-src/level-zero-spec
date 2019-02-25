@@ -485,8 +485,6 @@ __xedllexport xe_result_t __xecall
 /// @details
 ///     - This function may be called from simultaneous threads.
 ///     - The implementation of this function should be lock-free.
-///     - Function pointer is only valid for the same Module. You can't use it
-///       with other Modules.
 ///     - Function pointer is no longer valid if Module is destroyed.
 /// 
 /// @returns
