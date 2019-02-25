@@ -84,7 +84,7 @@ def make_etor_lines(repl, obj, trim=False):
         if trim:
             prefix = re.sub(r"(\w+)_t", r"\1", subx(repl, obj['name'])).upper()
             name = re.sub(r"%s_(\w+)"%prefix, r"\1", subx(repl, item['name']))
-            name = re.sub(r"(\d+\w+)", r"_\1", name)
+            name = re.sub(r"^(\d+\w+)", r"_\1", name) #todo: .lower()
         else:
             name = subx(repl, item['name'])
 
@@ -102,7 +102,7 @@ def make_etor_lines(repl, obj, trim=False):
 """
     returns a list of strings for each member of a structure or class
 """
-def make_member_lines(repl, obj, init=False):
+def make_member_lines(repl, obj, init=False, meta=None):
     lines = []
     for item in obj['members']:
         name = subx(repl, item['name'])

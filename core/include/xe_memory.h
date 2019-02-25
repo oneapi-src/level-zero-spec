@@ -26,7 +26,7 @@
 * @brief Intel Xe Driver APIs for Memory
 *
 * @cond DEV
-* DO NOT EDIT: generated from /scripts/<type>/memory.yml
+* DO NOT EDIT: generated from /scripts/core/memory.yml
 * @endcond
 *
 ******************************************************************************/

@@ -26,7 +26,7 @@
 * @brief Intel Xe Driver APIs for Command List
 *
 * @cond DEV
-* DO NOT EDIT: generated from /scripts/<type>/cmdlist.yml
+* DO NOT EDIT: generated from /scripts/core/cmdlist.yml
 * @endcond
 *
 ******************************************************************************/

@@ -29,7 +29,7 @@ from templates import helper as th
 * @brief ${th.subx(x, header['desc'])}
 *
 * @cond DEV
-* DO NOT EDIT: generated from /scripts/<type>/${name}.yml
+* DO NOT EDIT: generated from /scripts/${type}/${name}.yml
 * @endcond
 *
 ******************************************************************************/

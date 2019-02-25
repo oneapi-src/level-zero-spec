@@ -26,7 +26,7 @@
 * @brief Intel Xe Driver APIs
 *
 * @cond DEV
-* DO NOT EDIT: generated from /scripts/<type>/driver.yml
+* DO NOT EDIT: generated from /scripts/core/driver.yml
 * @endcond
 *
 ******************************************************************************/

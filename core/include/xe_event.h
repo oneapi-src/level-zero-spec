@@ -26,7 +26,7 @@
 * @brief Intel Xe Driver APIs for Event
 *
 * @cond DEV
-* DO NOT EDIT: generated from /scripts/<type>/event.yml
+* DO NOT EDIT: generated from /scripts/core/event.yml
 * @endcond
 *
 ******************************************************************************/

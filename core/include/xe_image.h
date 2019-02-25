@@ -26,7 +26,7 @@
 * @brief Intel Xe Driver APIs for Images
 *
 * @cond DEV
-* DO NOT EDIT: generated from /scripts/<type>/image.yml
+* DO NOT EDIT: generated from /scripts/core/image.yml
 * @endcond
 *
 ******************************************************************************/

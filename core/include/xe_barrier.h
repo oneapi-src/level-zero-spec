@@ -26,7 +26,7 @@
 * @brief Intel Xe Driver APIs for Barrier
 *
 * @cond DEV
-* DO NOT EDIT: generated from /scripts/<type>/barrier.yml
+* DO NOT EDIT: generated from /scripts/core/barrier.yml
 * @endcond
 *
 ******************************************************************************/

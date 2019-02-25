@@ -26,7 +26,7 @@
 * @brief Intel Xe Driver APIs for Command Queue
 *
 * @cond DEV
-* DO NOT EDIT: generated from /scripts/<type>/cmdqueue.yml
+* DO NOT EDIT: generated from /scripts/core/cmdqueue.yml
 * @endcond
 *
 ******************************************************************************/

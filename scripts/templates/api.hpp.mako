@@ -29,7 +29,7 @@ from templates import helper as th
 * @brief C++ wrapper of ${th.subx(x, header['desc'])}
 *
 * @cond DEV
-* DO NOT EDIT: generated from /scripts/<type>/${name}.yml
+* DO NOT EDIT: generated from /scripts/${type}/${name}.yml
 * @endcond
 *
 ******************************************************************************/
@@ -91,20 +91,21 @@ namespace ${x}
     public:
         %for f in th.get_member_funcs(obj['name'], specs):
         ///////////////////////////////////////////////////////////////////////////////
+        /// @brief C++ wrapper for ::${th.make_func_name(x, f, obj['name'])}
         inline ${x}_result_t ${th.subx(None, f['name'])}(
             %for line in th.make_param_lines(None, f, 'this'):
             ${line}
             %endfor
             )
         {
-            ::${th.make_func_name(x, f, obj['name'])}( ${th.make_param_call_str("handle", None, f, 'this')} );
+            return ::${th.make_func_name(x, f, obj['name'])}( ${th.make_param_call_str("handle", None, f, 'this')} );
         }
 
         %endfor
     };
     ## HANDLE #####################################################################
     %elif re.match(r"handle", obj['type']):
-    using ${th.subx(None, obj['name'])} = ${th.subx(x, obj['name'])};
+    using ${th.subx(None, obj['name'])} = ::${th.subx(x, obj['name'])};
     %endif
     %if 'condition' in obj:
     #endif // ${th.subx(x,obj['condition'])}

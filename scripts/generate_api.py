@@ -16,7 +16,7 @@ def generate_cmake(path, namespace, files):
 """
     generic function for generating c/c++ files from the specification documents
 """
-def generate_code(path, namespace, specs, meta, type):
+def generate_code(path, root, namespace, specs, meta, type):
     loc = 0
     template = "api%s.mako"%type
     fin = os.path.join("templates", template)
@@ -36,6 +36,8 @@ def generate_code(path, namespace, specs, meta, type):
             name = s['name'],
             header = s['header'],
             objects = s['objects'],
+            type=root,
+            specs=specs,
             meta = meta)
     return loc, files
 
@@ -59,26 +61,20 @@ def generate_include_all(path, namespace, files, type):
 """
     generates c/c++ include files from the specification documents
 """
-def generate_h_include(path, namespace, specs, meta):
+def generate_cpp_include(path, namespace, specs, meta):
     cpp_path = os.path.join(path, "include")
     util.makePath(cpp_path)
-    util.removeFiles(path, "*.h")
+    util.removeFiles(cpp_path, "*.h")
+    util.removeFiles(cpp_path, "*.hpp")
 
-    loc, files = generate_code(cpp_path, namespace, specs, meta, ".h")
+    loc, files = generate_code(cpp_path, os.path.basename(path), namespace, specs, meta, ".h")
     loc += generate_include_all(cpp_path, namespace, files, ".h")
-#    generate_cmake(cpp_path, namespace, files)
-    return loc
 
-"""
-    generates c++ wrapper include files from the specification documents
-"""
-def generate_hpp_include(path, namespace, specs, meta):
-    cpp_path = os.path.join(path, "include")
-    util.makePath(cpp_path)
-    util.removeFiles(path, "*.hpp")
+    #other = generate_code(cpp_path, os.path.basename(path), namespace, specs, meta, ".hpp")
+    #loc += other[0]
+    #files.extend(other[1])
+    #loc += generate_include_all(cpp_path, namespace, files, ".hpp")
 
-    loc, files = generate_code(cpp_path, namespace, specs, meta, ".hpp")
-    loc += generate_include_all(cpp_path, namespace, files, ".hpp")
 #    generate_cmake(cpp_path, namespace, files)
     return loc
 
@@ -88,9 +84,9 @@ def generate_hpp_include(path, namespace, specs, meta):
 def generate_cpp_source(path, namespace, specs, meta):
     cpp_path = os.path.join(path, "source")
     util.makePath(cpp_path)
-    util.removeFiles(path, "*.cpp")
+    #util.removeFiles(cpp_path, "*.cpp")
 
-    loc, files = generate_code(cpp_path, namespace, specs, meta, ".cpp")
+    loc, files = generate_code(cpp_path, os.path.basename(path), namespace, specs, meta, ".cpp")
 #    generate_cmake(cpp_path, namespace, files)
     return loc
 
@@ -100,7 +96,6 @@ Entry-point:
 """
 def generate_cpp(path, namespace, specs, meta):
     loc = 0
-    loc += generate_h_include(path, namespace, specs, meta)
-    #loc += generate_hpp_include(path, namespace, specs, meta)
+    loc += generate_cpp_include(path, namespace, specs, meta)
     loc += generate_cpp_source(path, namespace, specs, meta)
     print("Generated %s lines of code.\n"%loc)

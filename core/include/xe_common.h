@@ -26,7 +26,7 @@
 * @brief Intel Xe Driver API common types
 *
 * @cond DEV
-* DO NOT EDIT: generated from /scripts/<type>/common.yml
+* DO NOT EDIT: generated from /scripts/core/common.yml
 * @endcond
 *
 ******************************************************************************/
