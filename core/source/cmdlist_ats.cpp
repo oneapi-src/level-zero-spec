@@ -95,6 +95,10 @@ xe_result_t CommandListHw<IGFX_GEN12_CORE>::encodeDispatchFunction(xe_function_h
     const auto functionArgs = FunctionArgs::fromHandle(hFunctionArgs);
     assert(functionArgs);
 
+    functionArgs->setGroupCount(pDispatchFuncArgs->groupCountX,
+                                pDispatchFuncArgs->groupCountY,
+                                pDispatchFuncArgs->groupCountZ);
+
     // Copy the threadData to the indirect heap
     {
         auto heap = indirectHeaps[OCLRT::IndirectHeap::GENERAL_STATE];

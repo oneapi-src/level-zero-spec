@@ -96,6 +96,7 @@ struct FunctionArgs : public _xe_function_args_handle_t {
                                      uint32_t value) = 0;
     virtual xe_result_t setValue(uint32_t argIndex, size_t argSize, const void *pArgValue) = 0;
 
+    virtual void setGroupCount(uint32_t groupCountX, uint32_t groupCountY, uint32_t groupCountZ) = 0;
     virtual const void *getCrossThreadDataHostMem() const = 0;
     virtual size_t getCrossThreadDataSize() const = 0;
     virtual const std::vector<GraphicsAllocation *> &getResidencyContainer() const = 0;

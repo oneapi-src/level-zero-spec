@@ -387,6 +387,18 @@ struct FunctionArgsImp : FunctionArgs {
         return XE_RESULT_SUCCESS;
     }
 
+    void setGroupCount(uint32_t groupCountX, uint32_t groupCountY, uint32_t groupCountZ) override {
+        uint32_t groupSizeX;
+        uint32_t groupSizeY;
+        uint32_t groupSizeZ;
+        function->getGroupSize(groupSizeX, groupSizeY, groupSizeZ);
+
+        const auto &kernelInfo = static_cast<FunctionImp *>(function)->getKernelRT()->getKernelInfo();
+        patchCrossThreadDataBasedOnKernelRT(kernelInfo.workloadInfo.globalWorkSizeOffsets[0], groupCountX * groupSizeX);
+        patchCrossThreadDataBasedOnKernelRT(kernelInfo.workloadInfo.globalWorkSizeOffsets[1], groupCountY * groupSizeY);
+        patchCrossThreadDataBasedOnKernelRT(kernelInfo.workloadInfo.globalWorkSizeOffsets[2], groupCountZ * groupSizeZ);
+    }
+
     const void *getCrossThreadDataHostMem() const override {
         return crossThreadData;
     }
