@@ -153,11 +153,11 @@ def make_param_call_str(prologue, repl, obj, filter):
     else:
         params = filter_items(obj['params'], 'class', filter)
 
-    str = prologue
-    if len(str) > 0:
-        str += ", "
-    str += ", ".join(extract_items(params, 'name'))
-    return str
+    names = []
+    if len(prologue) > 0:
+        names.append(prologue)
+    names.extend(extract_items(params, 'name'))
+    return ", ".join(names)
 
 """
     returns a list of strings for the description
