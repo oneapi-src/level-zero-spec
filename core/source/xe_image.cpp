@@ -32,6 +32,7 @@
 #include "image.h"
 
 #include <exception>    // @todo: move to common and/or precompiled header
+#include <new>
 
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Creates a image object on the device.

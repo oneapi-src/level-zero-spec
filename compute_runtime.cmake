@@ -30,10 +30,19 @@ get_property(COMPUTE_RUNTIME_INCLUDES
 set(COMPUTE_RUNTIME_DEFINITIONS
     ${COMPUTE_RUNTIME_DEFINITIONS}
     CL_TARGET_OPENCL_VERSION=210
-    GMM_OCL
+    CL_USE_DEPRECATED_OPENCL_1_1_APIS
+    CL_USE_DEPRECATED_OPENCL_1_2_APIS
+    CL_USE_DEPRECATED_OPENCL_2_0_APIS
     __INTEL_EMBARGO__
-    CONST_FROM_WDK_10_0_18328_0=
 )
+
+if(WIN32)
+    set(COMPUTE_RUNTIME_DEFINITIONS
+        ${COMPUTE_RUNTIME_DEFINITIONS}
+        CONST_FROM_WDK_10_0_18328_0=
+        GMM_OCL
+    )
+endif()
 
 configure_file(${COMPUTE_RUNTIME_DIR}/config.h.in ${CMAKE_BINARY_DIR}/config.h)
 
@@ -126,7 +135,6 @@ add_library(compute_runtime_lib_full
         ${COMPUTE_RUNTIME_DIR}/runtime/dll/create_tbx_sockets.cpp
         ${COMPUTE_RUNTIME_DIR}/runtime/dll/source_level_debugger.cpp
         ${COMPUTE_RUNTIME_DIR}/runtime/helpers/built_ins_helper.cpp
-        ${COMPUTE_RUNTIME_DIR}/runtime/gmm_helper/gmm_memory.cpp
         ${COMPUTE_RUNTIME_DIR}/runtime/gmm_helper/page_table_mngr.cpp
         ${COMPUTE_RUNTIME_DIR}/runtime/gmm_helper/resource_info.cpp
         ${COMPUTE_RUNTIME_DIR}/runtime/helpers/abort.cpp
@@ -147,6 +155,7 @@ if(WIN32)
     target_sources(compute_runtime_lib_full
         PRIVATE
             ${COMPUTE_RUNTIME_DIR}/runtime/gmm_helper/gmm_memory_base.cpp
+            ${COMPUTE_RUNTIME_DIR}/runtime/gmm_helper/gmm_memory.cpp
             ${COMPUTE_RUNTIME_DIR}/runtime/dll/windows/environment_variables.cpp
             ${COMPUTE_RUNTIME_DIR}/runtime/dll/windows/options.cpp
             ${COMPUTE_RUNTIME_DIR}/runtime/dll/windows/os_interface.cpp
@@ -202,13 +211,13 @@ set(COMPUTE_RUNTIME_MOCKABLE_DEFINITIONS
     CL_USE_DEPRECATED_OPENCL_1_2_APIS
     CL_USE_DEPRECATED_OPENCL_2_0_APIS
     __INTEL_EMBARGO__
-    CONST_FROM_WDK_10_0_18328_0=
 )
 
 if(WIN32)
     set(COMPUTE_RUNTIME_DEFINITIONS
         ${COMPUTE_RUNTIME_DEFINITIONS}
         WDDM_VERSION_NUMBER=23
+        CONST_FROM_WDK_10_0_18328_0=
     )
 
     set(COMPUTE_RUNTIME_MOCKABLE_DEFINITIONS

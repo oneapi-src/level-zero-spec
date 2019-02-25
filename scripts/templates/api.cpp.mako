@@ -35,6 +35,7 @@ from templates import helper as th
 #include "${name}.h"
 
 #include <exception>    // @todo: move to common and/or precompiled header
+#include <new>
 
 %for obj in objects:
 %if re.match(r"function", obj['type']):

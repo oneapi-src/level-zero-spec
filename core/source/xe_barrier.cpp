@@ -32,6 +32,7 @@
 #include "barrier.h"
 
 #include <exception>    // @todo: move to common and/or precompiled header
+#include <new>
 
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Encodes an execution barrier into a command list.

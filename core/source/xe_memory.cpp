@@ -32,6 +32,7 @@
 #include "memory.h"
 
 #include <exception>    // @todo: move to common and/or precompiled header
+#include <new>
 
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Creates an handle to a memory allocator

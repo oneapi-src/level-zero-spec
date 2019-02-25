@@ -32,6 +32,7 @@
 #include "copy.h"
 
 #include <exception>    // @todo: move to common and/or precompiled header
+#include <new>
 
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Copies host, device, or shared memory.
