@@ -66,6 +66,16 @@ def filter_items(lst, key, filter):
     return flst
 
 """
+    returns a list of items with key from a list of dict
+"""
+def extract_items(lst, key):
+    klst = []
+    for item in lst:
+        if key in item:
+            klst.append(item[key])
+    return klst
+
+"""
     returns a list of strings for each enumerator in an enumeration
 """
 def make_etor_lines(repl, obj, trim=False):
@@ -138,17 +148,15 @@ def make_param_lines(repl, obj, filter):
     returns a string of parameter names for passing to a function
 """
 def make_param_call_str(prologue, repl, obj, filter):
-    str = prologue
-
     if re.match(r"this", filter):
         params = filter_items(obj['params'][1:], 'class', filter)
     else:
         params = filter_items(obj['params'], 'class', filter)
 
-    for item in params:
-        if len(str) > 0:
-            str += ", "
-        str += subx(repl, item['name'])
+    str = prologue
+    if len(str) > 0:
+        str += ", "
+    str += ", ".join(extract_items(params, 'name'))
     return str
 
 """
@@ -263,7 +271,7 @@ def make_func_name(repl, obj, cls, cpp=False):
         return subx(repl, "%s%s"%(cls, obj['name']))
 
 """
-    returns the name of a function
+    returns a single-line driver function call
 """
 def make_obj_accessor(repl, obj, cls):
     noobject = repl == subx(repl, cls)
