@@ -238,14 +238,13 @@ params:
       desc: "[in] handle of the module"
     - type: "const char*"
       name: pFunctionName
-      desc: "[in] Name of function to retreieve function pointer for."
+      desc: "[in] Name of function to retrieve function pointer for."
     - type: "void**"
       name:  pfnFunction
       desc: "[out] pointer to function."
 returns:
     - $X_RESULT_ERROR_INVALID_PARAMETER:
-        - "nullptr == pFunctionName"
-        - "invalid value pFunctionName"
+        - "invalid value pFunctionName. Function name must exist in Module."
 --- #--------------------------------------------------------------------------
 type: function
 desc: "Set group size for Function."

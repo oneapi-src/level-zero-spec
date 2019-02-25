@@ -497,8 +497,7 @@ __xedllexport xe_result_t __xecall
 ///         + nullptr == hModule
 ///         + nullptr == pFunctionName
 ///         + nullptr == pfnFunction
-///         + nullptr == pFunctionName
-///         + invalid value pFunctionName
+///         + invalid value pFunctionName. Function name must exist in Module.
 ///     - ::XE_RESULT_ERROR_UNSUPPORTED
 ///
 /// @hash {d316b47d5880386648c2751e90d316a28a7ae230f11cb4fa1375a9e332cc7c82}
@@ -506,7 +505,7 @@ __xedllexport xe_result_t __xecall
 __xedllexport xe_result_t __xecall
   xeModuleGetFunctionPointer(
     xe_module_handle_t hModule,                     ///< [in] handle of the module
-    const char* pFunctionName,                      ///< [in] Name of function to retreieve function pointer for.
+    const char* pFunctionName,                      ///< [in] Name of function to retrieve function pointer for.
     void** pfnFunction                              ///< [out] pointer to function.
     )
 {
