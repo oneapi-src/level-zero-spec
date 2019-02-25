@@ -33,6 +33,15 @@ void CommandQueueImp::processResidency(CommandList *c) {
     commandStreamReceiver->processResidency(residencyContainer);
 }
 
+void CommandQueueImp::processCoherency(CommandList *c) {
+    auto commandList = static_cast<CommandListImp *>(c);
+    auto commandStreamReceiver = static_cast<OCLRT::CommandStreamReceiver *>(csrRT);
+    auto &residencyContainer = commandList->getResidencyContainer();
+    for (auto allocation : residencyContainer) {
+        commandStreamReceiver->makeCoherent(*allocation);
+    }
+}
+
 //FIXME: Remove direct access to taskCount.
 //Needed below
 struct CommandStreamReceiver : public OCLRT::CommandStreamReceiver {

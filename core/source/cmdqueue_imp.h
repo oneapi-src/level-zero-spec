@@ -23,6 +23,7 @@ struct CommandQueueImp : public CommandQueue {
 
   protected:
     void processResidency(CommandList *);
+    void processCoherency(CommandList *);
     void submitBatchBuffer();
     Device *device;
     void *csrRT;

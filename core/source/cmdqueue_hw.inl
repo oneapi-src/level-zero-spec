@@ -52,6 +52,12 @@ xe_result_t CommandQueueHw<gfxCoreFamily>::enqueueCommandLists(uint32_t numComma
     // Submit our batch buffer
     submitBatchBuffer();
 
+    // TODO: Enable unified memory.  For now, imply everything gets made consistent
+    for (auto i = 0u; i < numCommandLists; ++i) {
+        auto commandList = CommandList::fromHandle(phCommandLists[i]);
+        processCoherency(commandList);
+    }
+
     return XE_RESULT_SUCCESS;
 }
 
