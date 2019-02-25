@@ -17,8 +17,6 @@ set _PYTHON_EXE=python.exe
 set PYTHONOPTIMIZE=2
 set PYTHONHOME=%_PYDIR%
 set PYTHONPATH=%~dp0;%_PYDIR%\Lib
-:: set PYTHONPATH=%PYTHONPATH%;%_BUILDTOOLS%\python-site-packages
-:: set PYTHONPATH=%PYTHONPATH%;%_ROOTDIR%\build-tools\rasty\python-packages\Lib\site-packages
 set PYTHONSTARTUP=
 
 set EXITCODE=0

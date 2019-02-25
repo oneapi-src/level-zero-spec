@@ -1,14 +1,9 @@
 @echo off
 setlocal enabledelayedexpansion
 
-:: make directory for website
-echo mkdir .public
-mkdir .public
+:: setup environment
+call %~dp0setenv.cmd
 
-:: copy over generated content
-echo cp -r html/* .public
-cp -r html/* .public
-
-:: publish to GitLab "Page" folder
-echo mv .public public
-mv .public public
+:: run cmd
+echo %RUN_PY% ci.py --publish-html
+%RUN_PY% ci.py --publish-html

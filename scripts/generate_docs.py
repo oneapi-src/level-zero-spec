@@ -1,7 +1,5 @@
 import os
 import shutil
-import re
-import fileinput
 import util
 
 """
@@ -23,19 +21,6 @@ def generate_md(srcpath, dstpath, namespace):
 
 """
 Entry-point:
-    fixes markdown files by converting paths relative to repo instead of html tree  
-"""
-def fix_md_paths(dirs):
-    print("Fixing paths in markdown files...")
-    regex_pattern = re.compile(r'\.[\/|\\]images')
-    for dir in dirs:
-        print("Looking for markdown files in %s" % dir)
-        with fileinput.FileInput(files=(util.findFiles(dir, "*.md")), inplace=True) as f:
-            for line in f:
-                print(re.sub(regex_pattern, '../images', line), end='')
-
-"""
-Entry-point:
     generate HTML files using Doxygen template
 """
 def generate_html():
@@ -44,16 +29,6 @@ def generate_html():
     print("Generating HTML/LaTeX...")
     cmdline = "doxygen Doxyfile"
     os.system(cmdline)
-
-    # Copy over images
-    print("Copying images to html dir...")
-    src_dir = "../images"
-    dst_dir = "../html/images"
-    util.makePath(dst_dir)
-    for f in os.listdir(src_dir):
-        src = os.path.join(src_dir, f)
-        dst = os.path.join(dst_dir, f)
-        shutil.copyfile(src, dst)
 
 """
 Entry-point:
