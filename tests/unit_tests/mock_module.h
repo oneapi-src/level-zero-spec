@@ -71,6 +71,7 @@ struct Mock<FunctionArgs> : public FunctionArgs {
     MOCK_CONST_METHOD0(getCrossThreadDataHostMem, const void *());
     MOCK_CONST_METHOD0(getCrossThreadDataSize, size_t());
     MOCK_CONST_METHOD0(getResidencyContainer, const std::vector<GraphicsAllocation *> &());
+    MOCK_METHOD3(setGroupCount, void (uint32_t groupCountX, uint32_t groupCountY, uint32_t groupCountZ));
 };
 
 struct UserRealCompilerGuard {
