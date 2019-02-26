@@ -5,6 +5,8 @@ stages:
 generate_html:
   stage: build
   script: ci/gen_docs.cmd
+  only:
+    - master@one-api/level_zero
   artifacts:
     name: "%CI_JOB_NAME%"
     paths:
@@ -23,6 +25,8 @@ generate_html:
 pages:
   stage: deploy
   script: ci/publish_docs.cmd
+  only:
+    - master@one-api/level_zero
   artifacts:
     paths:
     - public
