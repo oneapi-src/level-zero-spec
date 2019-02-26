@@ -9,6 +9,7 @@ value: "$X_MAKE_VERSION( 1, 0 )"
 --- #--------------------------------------------------------------------------
 type: enum
 desc: "Supported fence creation flags"
+class: $xCommandQueue
 name: $x_fence_flag_t
 etors:
     - name: $X_FENCE_FLAG_NONE
@@ -17,14 +18,17 @@ etors:
 --- #--------------------------------------------------------------------------
 type: struct
 desc: "Fence descriptor"
+class: $xCommandQueue
 name: $x_fence_desc_t
 members:
     - type: uint32_t
       name: version
       desc: "[in] descriptor version"
+      init: $X_FENCE_DESC_VERSION
     - type: $x_fence_flag_t
       name: flags
       desc: "[in] creation flags"
+      init: $X_FENCE_FLAG_NONE
 --- #--------------------------------------------------------------------------
 type: function
 desc: "Creates a fence object on the device's command queue."

@@ -9,6 +9,7 @@ value: "$X_MAKE_VERSION( 1, 0 )"
 --- #--------------------------------------------------------------------------
 type: enum
 desc: "Supported image creation flags"
+class: $xDevice
 name: $x_image_flag_t
 etors:
     - name: $X_IMAGE_FLAG_PROGRAM_READ
@@ -26,6 +27,7 @@ etors:
 --- #--------------------------------------------------------------------------
 type: enum
 desc: "Supported image types"
+class: $xDevice
 name: $x_image_type_t
 etors:
     - name: $X_IMAGE_TYPE_1D
@@ -41,6 +43,7 @@ etors:
 --- #--------------------------------------------------------------------------
 type: enum
 desc: "Supported image formats"
+class: $xDevice
 name: $x_image_format_t
 etors:
     - name: $X_IMAGE_FORMAT_UINT8
@@ -62,11 +65,13 @@ etors:
 --- #--------------------------------------------------------------------------
 type: struct
 desc: "Image descriptor"
+class: $xDevice
 name: $x_image_desc_t
 members:
     - type: uint32_t
       name: version
       desc: "[in] $X_IMAGE_DESC_VERSION"
+      init: $X_IMAGE_DESC_VERSION
     - type: $x_image_flag_t
       name: flags
       desc: "[in] creation flags"
@@ -79,21 +84,27 @@ members:
     - type: uint32_t
       name: numChannels
       desc: "[in] number of channels per pixel [1,4]"
+      init: "1"
     - type: size_t
       name: width
       desc: "[in] width in pixels, see $x_device_memory_properties_t::maxImageDims1D/2D/3D"
+      init: "0"
     - type: size_t
       name: height
       desc: "[in] height in pixels (2D or 3D only), see $x_device_memory_properties_t::maxImageDims2D/3D"
+      init: "0"
     - type: size_t
       name: depth
       desc: "[in] depth in pixels (3D only), see $x_device_memory_properties_t::maxImageDims3D"
+      init: "0"
     - type: size_t
       name: arraylevels
       desc: "[in] array levels (array types only), see $x_device_memory_properties_t::maxImageArraySlices"
+      init: "1"
     - type: size_t
       name: miplevels
       desc: "[in] mipmap levels (must be 0)"
+      init: "0"
 --- #--------------------------------------------------------------------------
 type: function
 desc: "Creates a image object on the device."

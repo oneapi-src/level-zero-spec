@@ -9,6 +9,7 @@ value: "$X_MAKE_VERSION( 1, 0 )"
 --- #--------------------------------------------------------------------------
 type: enum
 desc: "Supported command queue flags"
+class: $xDevice
 name: $x_command_queue_flag_t
 etors:
     - name: $X_COMMAND_QUEUE_FLAG_NONE
@@ -23,6 +24,7 @@ etors:
 --- #--------------------------------------------------------------------------
 type: enum
 desc: "Supported command queue modes"
+class: $xDevice
 name: $x_command_queue_mode_t
 etors:
     - name: $X_COMMAND_QUEUE_MODE_DEFAULT
@@ -37,6 +39,7 @@ etors:
 --- #--------------------------------------------------------------------------
 type: enum
 desc: "Supported command queue priorities"
+class: $xDevice
 name: $x_command_queue_priority_t
 etors:
     - name: $X_COMMAND_QUEUE_PRIORITY_NORMAL
@@ -49,26 +52,32 @@ etors:
 --- #--------------------------------------------------------------------------
 type: struct
 desc: "Command Queue descriptor"
+class: $xDevice
 name: $x_command_queue_desc_t
 members:
     - type: uint32_t
       name: version
       desc: "[in] $X_COMMAND_QUEUE_DESC_VERSION"
+      init: $X_COMMAND_QUEUE_DESC_VERSION
     - type: $x_command_queue_flag_t
       name: flags
       desc: "[in] creation flags"
+      init: $X_COMMAND_QUEUE_FLAG_NONE
     - type: $x_command_queue_mode_t
       name: mode
       desc: "[in] operation mode"
+      init: $X_COMMAND_QUEUE_MODE_DEFAULT
     - type: $x_command_queue_priority_t
       name: priority
       desc: "[in] priority"
+      init: $X_COMMAND_QUEUE_PRIORITY_NORMAL
     - type: uint32_t
       name: ordinal
       desc: "[in] if logical-only flag is set, then must be 0;
             else-if copy-only flag is set, then must be less than $x_device_properties_t.numAsyncCopyEngines;
             otherwise must be less than $x_device_properties_t.numAsyncComputeEngines. When using sub-devices
             the $x_device_properties_t.numAsyncComputeEngines must be queried from the sub-device being used."
+      init: "0"
 --- #--------------------------------------------------------------------------
 type: function
 desc: "Creates a command queue on the device."

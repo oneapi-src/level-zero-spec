@@ -1,6 +1,10 @@
 <%!
 import re
 from templates import helper as th
+
+def declare_type(obj, cls, cli):
+    return re.match(r"none", cls) and not re.match(r"macro", obj['type']) and not re.match(r"function", obj['type'])
+
 %>/**************************************************************************//**
 * INTEL CONFIDENTIAL  
 * Copyright 2019  
@@ -40,14 +44,15 @@ from templates import helper as th
 %if re.match(r"common", name):
 #include "${x}_common.h"
 %else:
+#include "${x}_${name}.h"
 #include "${x}_common.hpp"
 %endif
 
 namespace ${x}
 {
 %for obj in objects:
-%for cls in obj['class']:
-%if not re.match(r"macro", obj['type']) and not re.match(r"function", obj['type']):
+%for cli, cls in enumerate(obj['class']):
+%if declare_type(obj, cls, cli):
     ///////////////////////////////////////////////////////////////////////////////
     %if 'condition' in obj:
     #if ${th.subx(x,obj['condition'])}
@@ -89,7 +94,31 @@ namespace ${x}
         %endfor
 
     public:
-        %for f in th.get_member_funcs(obj['name'], specs):
+        %for e in th.get_class_member_enums(obj['name'], specs):
+        ///////////////////////////////////////////////////////////////////////////////
+        /// @brief C++ version for ::${th.subx(x, e['name'])}
+        enum class ${th.subx(None, e['name'])}
+        {
+            %for line in th.make_etor_lines(None, e, True):
+            ${line}
+            %endfor
+
+        };
+
+        %endfor
+        %for s in th.get_class_member_structs(obj['name'], specs):
+        ///////////////////////////////////////////////////////////////////////////////
+        /// @brief C++ version for ::${th.subx(x, s['name'])}
+        struct ${th.subx(None, s['name'])}
+        {
+            %for line in th.make_member_lines(None, s, True):
+            ${line}
+            %endfor
+
+        };
+
+        %endfor
+        %for f in th.get_class_member_funcs(obj['name'], specs):
         ///////////////////////////////////////////////////////////////////////////////
         /// @brief C++ wrapper for ::${th.make_func_name(x, f, obj['name'])}
         inline ${x}_result_t ${th.subx(None, f['name'])}(

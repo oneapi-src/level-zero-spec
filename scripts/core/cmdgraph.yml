@@ -9,6 +9,7 @@ value: "$X_MAKE_VERSION( 1, 0 )"
 --- #--------------------------------------------------------------------------
 type: enum
 desc: "Supported command graph creation flags"
+class: $xDevice
 name: $x_command_graph_flag_t
 etors:
     - name: $X_COMMAND_GRAPH_FLAG_NONE
@@ -17,14 +18,17 @@ etors:
 --- #--------------------------------------------------------------------------
 type: struct
 desc: "CommandGraph descriptor"
+class: $xDevice
 name: $x_command_graph_desc_t
 members:
     - type: uint32_t
       name: version
       desc: "[in] $X_COMMAND_GRAPH_DESC_VERSION"
+      init: $X_COMMAND_GRAPH_DESC_VERSION
     - type: $x_command_graph_flag_t
       name: flags
       desc: "[in] creation flags"
+      init: $X_COMMAND_GRAPH_FLAG_NONE
 --- #--------------------------------------------------------------------------
 type: function
 desc: "Creates a command graph on the device for submitting commands to any command queue."

@@ -9,6 +9,7 @@ value: "$X_MAKE_VERSION( 1, 0 )"
 --- #--------------------------------------------------------------------------
 type: enum
 desc: "Supported command list creation flags"
+class: $xDevice
 name: $x_command_list_flag_t
 etors:
     - name: $X_COMMAND_LIST_FLAG_NONE
@@ -29,14 +30,17 @@ etors:
 --- #--------------------------------------------------------------------------
 type: struct
 desc: "Command List descriptor"
+class: $xDevice
 name: $x_command_list_desc_t
 members:
     - type: uint32_t
       name: version
       desc: "[in] $X_COMMAND_LIST_DESC_VERSION"
+      init: $X_COMMAND_LIST_DESC_VERSION
     - type: $x_command_list_flag_t
       name: flags
       desc: "[in] creation flags"
+      init: $X_COMMAND_LIST_FLAG_NONE
 --- #--------------------------------------------------------------------------
 type: function
 desc: "Creates a command list on the device for submitting commands to any command queue."
@@ -125,6 +129,7 @@ params:
 --- #--------------------------------------------------------------------------
 type: enum
 desc: "Supported command list parameters"
+class: $xCommandList
 name: $x_command_list_parameter_t
 etors:
     - name: $X_COMMAND_LIST_PARAMETER_TBD
@@ -217,6 +222,7 @@ returns:
 --- #--------------------------------------------------------------------------
 type: enum
 desc: "Support command formats"
+class: $xCommandList
 name: $x_command_format_t
 etors:
     - name: $X_COMMAND_FORMAT_NATIVE

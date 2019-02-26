@@ -60,7 +60,7 @@ def filter_items(lst, key, filter):
     flst = []
     for item in lst:
         if key in item:
-            if filter != item[key]:
+            if filter not in item[key]:
                 continue
         flst.append(item)
     return flst
@@ -74,6 +74,17 @@ def extract_items(lst, key):
         if key in item:
             klst.append(item[key])
     return klst
+
+"""
+    returns a list of all objects in all specs
+"""
+def extract_objs(specs, type):
+    objs = []
+    for s in specs:
+        for obj in s['objects']:
+            if re.match(type, obj['type']):
+                objs.append(obj)
+    return objs
 
 """
     returns a list of strings for each enumerator in an enumeration
@@ -102,14 +113,14 @@ def make_etor_lines(repl, obj, trim=False):
 """
     returns a list of strings for each member of a structure or class
 """
-def make_member_lines(repl, obj, init=False, meta=None):
+def make_member_lines(repl, obj, init=False):
     lines = []
     for item in obj['members']:
         name = subx(repl, item['name'])
         type = subx(repl, item['type'])
 
-        if init:
-            value = "0"
+        if init and 'init' in item:
+            value = subx(repl, item['init'])
             prologue = "%s %s = %s;"%(type, name, value)
         else:
             prologue = "%s %s;"%(type, name)
@@ -310,14 +321,22 @@ def make_obj_accessor(repl, obj, cls):
     return str
 
 """
+    returns a list of all enum objects that belong to the class
+"""
+def get_class_member_enums(cls, specs):
+    # find all the structs that belong to this class
+    return filter_items(extract_objs(specs, "enum"), 'class', cls)
+
+"""
+    returns a list of all struct objects that belong to the class
+"""
+def get_class_member_structs(cls, specs):
+    # find all the structs that belong to this class
+    return filter_items(extract_objs(specs, "struct"), 'class', cls)
+
+"""
     returns a list of all function objects that belong to the class
 """
-def get_member_funcs(cls, specs):
+def get_class_member_funcs(cls, specs):
     # find all the functions that belong to this class
-    funcs = []
-    for s in specs:
-        for obj in s['objects']:
-            if re.match(r"function", obj['type']):
-                if cls in obj['class']:
-                    funcs.append(obj)
-    return funcs
+    return filter_items(extract_objs(specs, "function"), 'class', cls)

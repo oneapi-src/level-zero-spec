@@ -78,14 +78,17 @@ params:
 --- #--------------------------------------------------------------------------
 type: struct
 desc: "Region descriptor"
+class: $xCommandList
 name: $x_image_region_t
 members:
     - type: size_t
       name: offset
       desc: "[in] offset in bytes from base"
+      init: "0"
     - type: size_t
       name: size
       desc: "[in] size in bytes from base+offset"
+      init: "0"
 --- #--------------------------------------------------------------------------
 type: function
 desc: "Copies a region of a image to another image."
@@ -189,6 +192,7 @@ params:
 --- #--------------------------------------------------------------------------
 type: enum
 desc: "Supported memory advice hints"
+class: $xCommandList
 name: $x_memory_advice_t
 etors:
     - name: $X_MEMORY_ADVICE_SET_READ_MOSTLY

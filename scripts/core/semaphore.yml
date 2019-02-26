@@ -9,6 +9,7 @@ value: "$X_MAKE_VERSION( 1, 0 )"
 --- #--------------------------------------------------------------------------
 type: enum
 desc: "Supported semaphore creation flags"
+class: $xDevice
 name: $x_semaphore_flag_t
 etors:
     - name: $X_SEMAPHORE_FLAG_NONE
@@ -22,14 +23,17 @@ value: uint64_t
 --- #--------------------------------------------------------------------------
 type: struct
 desc: "Semaphore descriptor"
+class: $xDevice
 name: $x_semaphore_desc_t
 members:
     - type: uint32_t
       name: version
       desc: "[in] $X_SEMAPHORE_DESC_VERSION"
+      init: $X_SEMAPHORE_DESC_VERSION
     - type: $x_semaphore_flag_t
       name: flags
       desc: "[in] creation flags"
+      init: $X_SEMAPHORE_FLAG_NONE
 --- #--------------------------------------------------------------------------
 type: function
 desc: "Creates an semaphore object on the device."
@@ -89,6 +93,7 @@ params:
 --- #--------------------------------------------------------------------------
 type: enum
 desc: "Supported semaphore wait operations"
+class: $xCommandList
 name: $x_semaphore_wait_operation_t
 etors:
     - name: $X_SEMAPHORE_WAIT_OPERATION_EQUAL_TO

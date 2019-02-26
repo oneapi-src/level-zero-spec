@@ -1,6 +1,14 @@
 <%!
 import re
 from templates import helper as th
+
+def declare_type(obj, cls, cli):
+    if re.match(r"class", obj['type']):
+        return False
+    if cli > 0 and (re.match(r"typedef", obj['type']) or re.match(r"enum", obj['type']) or re.match(r"struct", obj['type'])):
+        return False
+    return True
+
 %>/**************************************************************************//**
 * INTEL CONFIDENTIAL  
 * Copyright 2019  
@@ -50,8 +58,8 @@ extern "C" {
 #endif
 
 %for obj in objects:
-%for cls in obj['class']:
-%if not re.match(r"class", obj['type']):
+%for cli, cls in enumerate(obj['class']):
+%if declare_type(obj, cls, cli):
 ///////////////////////////////////////////////////////////////////////////////
 %if 'condition' in obj:
 #if ${th.subx(x,obj['condition'])}
