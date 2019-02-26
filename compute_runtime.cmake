@@ -169,6 +169,12 @@ if(WIN32)
         dxgi
         ws2_32
     )
+else()
+    target_sources(compute_runtime_lib_full
+    PRIVATE
+        ${COMPUTE_RUNTIME_DIR}/runtime/dll/linux/options.cpp
+        ${COMPUTE_RUNTIME_DIR}/runtime/dll/linux/os_interface.cpp
+    )
 endif()
 
 #Put all compute runtime items into the same folder
@@ -217,12 +223,12 @@ if(WIN32)
     set(COMPUTE_RUNTIME_DEFINITIONS
         ${COMPUTE_RUNTIME_DEFINITIONS}
         WDDM_VERSION_NUMBER=23
-        CONST_FROM_WDK_10_0_18328_0=
     )
 
     set(COMPUTE_RUNTIME_MOCKABLE_DEFINITIONS
         ${COMPUTE_RUNTIME_MOCKABLE_DEFINITIONS}
         WDDM_VERSION_NUMBER=23
+        CONST_FROM_WDK_10_0_18328_0=
     )
 endif()
 

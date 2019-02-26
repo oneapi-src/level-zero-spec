@@ -30,9 +30,16 @@ target_compile_definitions(${TARGET_NAME}
         ${COMPUTE_RUNTIME_DEFINITIONS}
 )
 
+if(UNIX)
+    set(OS_SPECIFIC_LIBS dl pthread)
+else()
+    set(OS_SPECIFIC_LIBS "")
+endif()
+
 target_link_libraries(${TARGET_NAME}
     compute_runtime_lib
     compute_runtime_lib_full
+    ${OS_SPECIFIC_LIBS}
 )
 
 add_subdirectory(include)

@@ -74,14 +74,6 @@ endif()
 add_dependencies(${TARGET_NAME} mock_gmm)
     
 add_subdirectory(precompiled_function_mock_data)
-    
-if(MSVC)
-    set_target_properties(${TARGET_NAME}
-        PROPERTIES
-            VS_DEBUGGER_COMMAND_ARGUMENTS "--gtest_filter=* --gtest_catch_exceptions=0"
-            VS_DEBUGGER_WORKING_DIRECTORY "$(OutDir)"
-    )
-endif()
 
 add_custom_target(copy_test_files)
 
@@ -98,4 +90,24 @@ add_custom_command(
 add_dependencies(${TARGET_NAME} 
     copy_test_files 
     copy_third_party_files
+)
+
+if(MSVC)
+    set_target_properties(${TARGET_NAME}
+        PROPERTIES
+            VS_DEBUGGER_COMMAND_ARGUMENTS "--gtest_filter=* --gtest_catch_exceptions=0"
+            VS_DEBUGGER_WORKING_DIRECTORY "$(OutDir)"
+    )
+    set(RUN_ULT_CMD $<TARGET_FILE:${TARGET_NAME}>)
+else()
+    set(RUN_ULT_CMD LD_LIBRARY_PATH=$<TARGET_FILE_DIR:${TARGET_NAME}> $<TARGET_FILE:${TARGET_NAME}>)
+endif()
+
+add_custom_target(run_${TARGET_NAME} ALL DEPENDS ${TARGET_NAME})
+add_custom_command(
+  TARGET run_${TARGET_NAME}
+  POST_BUILD
+  COMMAND WORKING_DIRECTORY ${CUSTOM_COMMAND_BINARY_DIR}
+  COMMAND echo Running \"${RUN_ULT_CMD}\" in \"${CUSTOM_COMMAND_BINARY_DIR}\"
+  COMMAND ${RUN_ULT_CMD} --gtest_filter=* --gtest_catch_exceptions=0
 )

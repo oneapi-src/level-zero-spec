@@ -2,7 +2,19 @@
 
 #include "xe_all.h"
 
-#include <Windows.h>
+#if defined(__linux__)
+#  include <dlfcn.h>
+#  define LOAD_DRIVER_LIBRARY() dlopen("liblevel_zero.so", RTLD_LAZY|RTLD_LOCAL)
+#  define CLOSE_LIBRARY(LIB) dlclose(LIB)
+#  define LOAD_FUNCTION_PTR(LIB, FUNC_NAME) dlsym(LIB, FUNC_NAME)
+#elif defined(_WIN32)
+#  include <Windows.h>
+#  define LOAD_DRIVER_LIBRARY() LoadLibraryA("level_zero.dll")
+#  define CLOSE_LIBRARY(LIB) FreeLibrary(LIB)
+#  define LOAD_FUNCTION_PTR(LIB, FUNC_NAME) GetProcAddress((HMODULE)LIB, FUNC_NAME)
+#else
+#  error "Unsupported OS"
+#endif
 
 #include <iostream>
 #include <fstream>
@@ -44,10 +56,14 @@ inline void successOrTerminate(ResulT result, const char *message){
 
 int main(){
 // 0. Load the driver 
-    auto driverLibrary = LoadLibraryA("level_zero.dll");
+    auto driverLibrary = LOAD_DRIVER_LIBRARY();
+    if(NULL == driverLibrary){
+        std::cerr << "Failed to load driver library\n";
+        return 1;
+    }
     xe_dispatch_table_t xeApi = {};
     load_xe(driverLibrary, 
-            [](void *library, const char *funcName)->void* { return GetProcAddress((HMODULE)library, funcName); }, 
+            [](void *library, const char *funcName)->void* { return LOAD_FUNCTION_PTR(library, funcName); }, 
             &xeApi);
 
 // 1. Set-up
@@ -166,5 +182,5 @@ int main(){
     SUCCESS_OR_TERMINATE(xeApi.xeFunctionDestroy(function));
     SUCCESS_OR_TERMINATE(xeApi.xeModuleDestroy(module));
     
-    FreeLibrary(driverLibrary);
+    CLOSE_LIBRARY(driverLibrary);
 }
