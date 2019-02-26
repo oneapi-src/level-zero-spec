@@ -32,6 +32,7 @@
 #include "residency.h"
 
 #include <exception>    // @todo: move to common and/or precompiled header
+#include <new>
 
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Makes memory resident for the device.

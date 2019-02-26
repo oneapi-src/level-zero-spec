@@ -32,6 +32,7 @@
 #include "fence.h"
 
 #include <exception>    // @todo: move to common and/or precompiled header
+#include <new>
 
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Creates a fence object on the device's command queue.

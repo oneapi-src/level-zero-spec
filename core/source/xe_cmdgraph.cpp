@@ -32,6 +32,7 @@
 #include "cmdgraph.h"
 
 #include <exception>    // @todo: move to common and/or precompiled header
+#include <new>
 
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Creates a command graph on the device for submitting commands to any

@@ -32,6 +32,7 @@
 #include "cl_interop.h"
 
 #include <exception>    // @todo: move to common and/or precompiled header
+#include <new>
 
 ///////////////////////////////////////////////////////////////////////////////
 #if XE_ENABLE_OCL_INTEROP

@@ -27,6 +27,8 @@ struct Module : public _xe_module_handle_t {
     virtual xe_result_t destroy() = 0;
     virtual xe_result_t getNativeBinary(uint32_t *pSize,
                                         char **pModuleNativeBinary) = 0;
+    virtual xe_result_t getFunctionPointer(const char *pFunctionName,
+                                           void **pfnFunction) = 0;
 
     Module() = default;
     Module(const Module &) = delete;
@@ -92,6 +94,7 @@ struct Function : public _xe_function_handle_t {
 struct FunctionArgs : public _xe_function_args_handle_t {
     static FunctionArgs *create(Function *function);
     virtual xe_result_t destroy() = 0;
+
     virtual xe_result_t setAttribute(xe_function_argument_attribute_t attr,
                                      uint32_t value) = 0;
     virtual xe_result_t setValue(uint32_t argIndex, size_t argSize, const void *pArgValue) = 0;

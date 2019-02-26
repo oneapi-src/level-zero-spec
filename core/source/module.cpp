@@ -124,6 +124,11 @@ struct ModuleImp : public Module {
         return XE_RESULT_ERROR_UNSUPPORTED;
     }
 
+    xe_result_t getFunctionPointer(const char *pFunctionName,
+                                   void **pfnFunction) override {
+        return XE_RESULT_ERROR_UNSUPPORTED;
+    }
+
     Device *getDevice() const override {
         return device;
     }

@@ -32,6 +32,7 @@
 #include "driver.h"
 
 #include <exception>    // @todo: move to common and/or precompiled header
+#include <new>
 
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Initialize the Xe Driver API and must be called before any other API

@@ -35,8 +35,17 @@ import extended_helper as th
 
 #include <mutex>
 
-// TODO : Add implementation for linux
-#include <Windows.h>
+#if defined(__linux__)
+#  include <dlfcn.h>
+#  define ICD_LOAD_DRIVER_LIBRARY() dlopen("liblevel_zero.so", RTLD_LAZY|RTLD_LOCAL)
+#  define ICD_LOAD_FUNCTION_PTR(LIB, FUNC_NAME) dlsym(LIB, FUNC_NAME)
+#elif defined(_WIN32)
+#  include <Windows.h>
+#  define ICD_LOAD_DRIVER_LIBRARY() LoadLibraryA("level_zero.dll")
+#  define ICD_LOAD_FUNCTION_PTR(LIB, FUNC_NAME) GetProcAddress((HMODULE)LIB, FUNC_NAME)
+#else
+#  error "Unsupported OS"
+#endif
 
 xe_dispatch_table_t dispatchTable = {};
 bool dispatchTableInitialized = false;
@@ -54,10 +63,10 @@ ${x}_result_t __xecall ${x}DriverInit(${x}_init_flag_t flags){
             return dispatchTable.${x}DriverInit(flags);
         }
         
-        auto driverLibrary = LoadLibraryA("level_zero.dll"); // persistent handle
+        auto driverLibrary = ICD_LOAD_DRIVER_LIBRARY(); // persistent handle
         dispatchTableInitialized = 
                 load_${x}(driverLibrary, 
-                          [](void *library, const char *funcName)->void* { return GetProcAddress((HMODULE)library, funcName); }, 
+                          [](void *library, const char *funcName)->void* { return ICD_LOAD_FUNCTION_PTR(library, funcName); }, 
                           &dispatchTable);
         if(false == dispatchTableInitialized){
             return ${X}_RESULT_ERROR_UNINITIALIZED;

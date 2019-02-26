@@ -32,6 +32,7 @@
 #include "semaphore.h"
 
 #include <exception>    // @todo: move to common and/or precompiled header
+#include <new>
 
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Creates an semaphore object on the device.

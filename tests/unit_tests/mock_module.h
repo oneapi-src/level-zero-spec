@@ -22,6 +22,8 @@ struct Mock<Module> : public Module {
 
     MOCK_METHOD2(createFunction, xe_result_t(const xe_function_desc_t *desc, xe_function_handle_t *phFunction));
     MOCK_METHOD0(destroy, xe_result_t());
+    MOCK_METHOD2(getFunctionPointer, xe_result_t(const char *pFunctionName,
+                                                 void **pfnFunction));
     MOCK_METHOD2(getNativeBinary, xe_result_t(uint32_t *pSize,
                                               char **pModuleNativeBinary));
 
@@ -71,7 +73,7 @@ struct Mock<FunctionArgs> : public FunctionArgs {
     MOCK_CONST_METHOD0(getCrossThreadDataHostMem, const void *());
     MOCK_CONST_METHOD0(getCrossThreadDataSize, size_t());
     MOCK_CONST_METHOD0(getResidencyContainer, const std::vector<GraphicsAllocation *> &());
-    MOCK_METHOD3(setGroupCount, void (uint32_t groupCountX, uint32_t groupCountY, uint32_t groupCountZ));
+    MOCK_METHOD3(setGroupCount, void(uint32_t groupCountX, uint32_t groupCountY, uint32_t groupCountZ));
 };
 
 struct UserRealCompilerGuard {
