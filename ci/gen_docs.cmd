@@ -8,5 +8,5 @@ call %~dp0setenv.cmd
 cd %SCRIPTS_DIR%
 
 :: run cmd
-echo %RUN_PY% run.py --filter docs
-%RUN_PY% run.py --filter docs
+echo %RUN_PY% run.py --html
+%RUN_PY% run.py --!core --!extended --!md
