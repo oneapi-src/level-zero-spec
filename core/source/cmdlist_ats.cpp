@@ -8,7 +8,7 @@
 namespace xe {
 
 template <>
-bool CommandListHw<IGFX_GEN12_CORE>::initialize() {
+bool CommandListCoreFamily<IGFX_GEN12_CORE>::initialize() {
     using GfxFamily = typename OCLRT::GfxFamilyMapper<static_cast<GFXCORE_FAMILY>(IGFX_GEN12_CORE)>::GfxFamily;
 
     if (!BaseClass::initialize()) {
@@ -52,10 +52,10 @@ bool CommandListHw<IGFX_GEN12_CORE>::initialize() {
 }
 
 template <>
-xe_result_t CommandListHw<IGFX_GEN12_CORE>::encodeDispatchFunction(xe_function_handle_t hFunction,
-                                                                   xe_function_args_handle_t hFunctionArgs,
-                                                                   const xe_dispatch_function_arguments_t *pDispatchFuncArgs,
-                                                                   xe_event_handle_t hEvent) {
+xe_result_t CommandListCoreFamily<IGFX_GEN12_CORE>::encodeDispatchFunction(xe_function_handle_t hFunction,
+                                                                           xe_function_args_handle_t hFunctionArgs,
+                                                                           const xe_dispatch_function_arguments_t *pDispatchFuncArgs,
+                                                                           xe_event_handle_t hEvent) {
     using GfxFamily = typename OCLRT::GfxFamilyMapper<IGFX_GEN12_CORE>::GfxFamily;
     using COMPUTE_WALKER = typename GfxFamily::COMPUTE_WALKER;
 
@@ -162,6 +162,6 @@ xe_result_t CommandListHw<IGFX_GEN12_CORE>::encodeDispatchFunction(xe_function_h
     return XE_RESULT_SUCCESS;
 }
 
-static CommandListPopulateFactory<IGFX_TIGERLAKE_HP, CommandListHw<IGFX_GEN12_CORE>> populateTGLHP;
+static CommandListPopulateFactory<IGFX_TIGERLAKE_HP, CommandListCoreFamily<IGFX_GEN12_CORE>> populateTGLHP;
 
 } // namespace xe

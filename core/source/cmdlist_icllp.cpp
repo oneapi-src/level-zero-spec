@@ -5,6 +5,6 @@
 
 namespace xe {
 
-static CommandListPopulateFactory<IGFX_ICELAKE_LP, CommandListHw<IGFX_GEN11_CORE>> populateICLLP;
+static CommandListPopulateFactory<IGFX_ICELAKE_LP, CommandListCoreFamily<IGFX_GEN11_CORE>> populateICLLP;
 
 } // namespace xe

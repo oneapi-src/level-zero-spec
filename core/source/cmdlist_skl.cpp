@@ -5,6 +5,6 @@
 
 namespace xe {
 
-static CommandListPopulateFactory<IGFX_SKYLAKE, CommandListHw<IGFX_GEN9_CORE>> populateSKL;
+static CommandListPopulateFactory<IGFX_SKYLAKE, CommandListCoreFamily<IGFX_GEN9_CORE>> populateSKL;
 
 } // namespace xe

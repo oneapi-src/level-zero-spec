@@ -6,10 +6,10 @@
 namespace xe {
 
 template <uint32_t gfxCoreFamily>
-struct CommandListHw : public CommandListImp {
+struct CommandListCoreFamily : public CommandListImp {
     using BaseClass = CommandListImp;
 
-    CommandListHw(Device *device) : CommandListImp(device) {
+    CommandListCoreFamily(Device *device) : CommandListImp(device) {
     }
 
     bool initialize() override;
