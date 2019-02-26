@@ -664,16 +664,11 @@ __xedllexport xe_result_t __xecall
 }
 
 ///////////////////////////////////////////////////////////////////////////////
-/// @brief Create Function arguments needed to pass arguments to a function.
+/// @brief Set function argument used for function dispatch.
 /// 
 /// @details
-///     - This function may be called from simultaneous threads.
+///     - This function may **not** be called from simultaneous threads.
 ///     - The implementation of this function should be lock-free.
-///     - FunctionArgs objects must be used with the Function object it was
-///       created for.
-///     - Use ::xeFunctionArgsSetValue to setup arguments for dispatch.
-///     - FunctionArgs can updated and used across multiple dispatches for the
-///       same function.
 /// 
 /// @returns
 ///     - ::XE_RESULT_SUCCESS
@@ -681,129 +676,16 @@ __xedllexport xe_result_t __xecall
 ///     - ::XE_RESULT_ERROR_DEVICE_LOST
 ///     - ::XE_RESULT_ERROR_INVALID_PARAMETER
 ///         + nullptr == hFunction
-///         + nullptr == phFunctionArgs
-///     - ::XE_RESULT_ERROR_UNSUPPORTED
-///
-/// @hash {d28a8e65c3c7b08efac12f45a3b9ec5fb16dbfe81f6c2d1fda1625887b62a478}
-///
-__xedllexport xe_result_t __xecall
-  xeFunctionCreateFunctionArgs(
-    xe_function_handle_t hFunction,                 ///< [in] handle of the function
-    xe_function_args_handle_t* phFunctionArgs       ///< [out] handle of the Function arguments object
-    )
-{
-    try
-    {
-        //if( XE_DRIVER_PARAMETER_VALIDATION_LEVEL >= 0 )
-        {
-            // if( nullptr == driver ) return XE_RESULT_ERROR_UNINITIALIZED;
-            // Check parameters
-            if( nullptr == hFunction ) return XE_RESULT_ERROR_INVALID_PARAMETER;
-            if( nullptr == phFunctionArgs ) return XE_RESULT_ERROR_INVALID_PARAMETER;
-        }
-        /// @begin
-
-        return xe::Function::fromHandle(hFunction)->createFunctionArgs(phFunctionArgs);
-
-        /// @end
-    }
-    catch(xe_result_t& result)
-    {
-        return result;
-    }
-    catch(std::bad_alloc&)
-    {
-        return XE_RESULT_ERROR_OUT_OF_HOST_MEMORY;
-    }
-    catch(std::exception&)
-    {
-        // @todo: pfnOnException(e.what());
-        return XE_RESULT_ERROR_UNKNOWN;
-    }
-}
-
-///////////////////////////////////////////////////////////////////////////////
-/// @brief Destroys Function arguments object
-/// 
-/// @details
-///     - The application is responsible for making sure the GPU is not
-///       currently referencing the event before it is deleted
-///     - The implementation of this function will immediately free all Host and
-///       Device allocations associated with this function args
-///     - The implementation of this function should be lock-free.
-/// 
-/// @returns
-///     - ::XE_RESULT_SUCCESS
-///     - ::XE_RESULT_ERROR_UNINITIALIZED
-///     - ::XE_RESULT_ERROR_DEVICE_LOST
-///     - ::XE_RESULT_ERROR_INVALID_PARAMETER
-///         + nullptr == hFunctionArgs
-///     - ::XE_RESULT_ERROR_UNSUPPORTED
-///
-/// @hash {188738a5c24e1cfdced709bf247351be2c54076aeb5641fd6618850d3ad6d050}
-///
-__xedllexport xe_result_t __xecall
-  xeFunctionArgsDestroy(
-    xe_function_args_handle_t hFunctionArgs         ///< [in] handle of the function arguments buffer object
-    )
-{
-    try
-    {
-        //if( XE_DRIVER_PARAMETER_VALIDATION_LEVEL >= 0 )
-        {
-            // if( nullptr == driver ) return XE_RESULT_ERROR_UNINITIALIZED;
-            // Check parameters
-            if( nullptr == hFunctionArgs ) return XE_RESULT_ERROR_INVALID_PARAMETER;
-        }
-        /// @begin
-
-        return xe::FunctionArgs::fromHandle(hFunctionArgs)->destroy();
-
-        /// @end
-    }
-    catch(xe_result_t& result)
-    {
-        return result;
-    }
-    catch(std::bad_alloc&)
-    {
-        return XE_RESULT_ERROR_OUT_OF_HOST_MEMORY;
-    }
-    catch(std::exception&)
-    {
-        // @todo: pfnOnException(e.what());
-        return XE_RESULT_ERROR_UNKNOWN;
-    }
-}
-
-///////////////////////////////////////////////////////////////////////////////
-/// @brief Set function arguments within arguments buffer.
-/// 
-/// @details
-///     - This function may **not** be called from simultaneous threads.
-///     - The implementation of this function should be lock-free.
-/// 
-/// @remarks
-///   _Analogues_
-///     - **cuCtxCreate**
-///     - cuCtxGetCurrent
-/// 
-/// @returns
-///     - ::XE_RESULT_SUCCESS
-///     - ::XE_RESULT_ERROR_UNINITIALIZED
-///     - ::XE_RESULT_ERROR_DEVICE_LOST
-///     - ::XE_RESULT_ERROR_INVALID_PARAMETER
-///         + nullptr == hFunctionArgs
 ///         + nullptr == pArgValue
 ///         + invalid argument index
 ///         + invalid size specified
 ///     - ::XE_RESULT_ERROR_UNSUPPORTED
 ///
-/// @hash {a996568e450c8eba49523b384b4ad4b08e476e3e527d9ce286766ccf7d2a05e9}
+/// @hash {a74e40177c1dc791c01894a81dff84e7d51e265d9efd5df6fde4bf97f8db56a8}
 ///
 __xedllexport xe_result_t __xecall
-  xeFunctionArgsSetValue(
-    xe_function_args_handle_t hFunctionArgs,        ///< [in/out] handle of the function args object.
+  xeFunctionSetArgumentValue(
+    xe_function_handle_t hFunction,                 ///< [in/out] handle of the function args object.
     uint32_t argIndex,                              ///< [in] argument index in range [0, num args - 1]
     size_t argSize,                                 ///< [in] size of argument type
     const void* pArgValue                           ///< [in] argument value represented as matching arg type
@@ -815,12 +697,12 @@ __xedllexport xe_result_t __xecall
         {
             // if( nullptr == driver ) return XE_RESULT_ERROR_UNINITIALIZED;
             // Check parameters
-            if( nullptr == hFunctionArgs ) return XE_RESULT_ERROR_INVALID_PARAMETER;
+            if( nullptr == hFunction ) return XE_RESULT_ERROR_INVALID_PARAMETER;
             if( nullptr == pArgValue ) return XE_RESULT_ERROR_INVALID_PARAMETER;
         }
         /// @begin
 
-        return xe::FunctionArgs::fromHandle(hFunctionArgs)->setValue(argIndex, argSize, pArgValue);
+        return xe::Function::fromHandle(hFunction)->setArgumentValue(argIndex, argSize, pArgValue);
 
         /// @end
     }
@@ -840,7 +722,7 @@ __xedllexport xe_result_t __xecall
 }
 
 ///////////////////////////////////////////////////////////////////////////////
-/// @brief Sets a function argument attribute
+/// @brief Sets a function attribute
 /// 
 /// @details
 ///     - This function may **not** be called from simultaneous threads.
@@ -855,17 +737,17 @@ __xedllexport xe_result_t __xecall
 ///     - ::XE_RESULT_ERROR_UNINITIALIZED
 ///     - ::XE_RESULT_ERROR_DEVICE_LOST
 ///     - ::XE_RESULT_ERROR_INVALID_PARAMETER
-///         + nullptr == hFunctionArgs
+///         + nullptr == hFunction
 ///         + invalid value for attr
 ///         + invalid value for value
 ///     - ::XE_RESULT_ERROR_UNSUPPORTED
 ///
-/// @hash {e8873190019647e8d9f6a5b6f325014dbea173082544527129680e4cc9451b04}
+/// @hash {1875fa152830f56fdaf8bbfc9afa2940ac606c5e33f8bbd39000f228e681498f}
 ///
 __xedllexport xe_result_t __xecall
-  xeFunctionArgsSetAttribute(
-    xe_function_args_handle_t hFunctionArgs,        ///< [in/out] handle of the function args object.
-    xe_function_argument_attribute_t attr,          ///< [in] attribute to set
+  xeFunctionSetAttribute(
+    xe_function_handle_t hFunction,                 ///< [in/out] handle of the function.
+    xe_function_set_attribute_t attr,               ///< [in] attribute to set
     uint32_t value                                  ///< [in] attribute value to set
     )
 {
@@ -875,11 +757,11 @@ __xedllexport xe_result_t __xecall
         {
             // if( nullptr == driver ) return XE_RESULT_ERROR_UNINITIALIZED;
             // Check parameters
-            if( nullptr == hFunctionArgs ) return XE_RESULT_ERROR_INVALID_PARAMETER;
+            if( nullptr == hFunction ) return XE_RESULT_ERROR_INVALID_PARAMETER;
         }
         /// @begin
 
-        return xe::FunctionArgs::fromHandle(hFunctionArgs)->setAttribute(attr, value);
+        return xe::Function::fromHandle(hFunction)->setAttribute(attr, value);
 
         /// @end
     }
@@ -919,12 +801,12 @@ __xedllexport xe_result_t __xecall
 ///         + invalid value for attr
 ///     - ::XE_RESULT_ERROR_UNSUPPORTED
 ///
-/// @hash {cd0ca73d29fe12490a3a61992e20a5d3aeac34c8260b038d069a8e380af49c0a}
+/// @hash {5dbebe56989f232199ae8bd64c849c2725f81a0dc791a6c21e553e9e6f122c5a}
 ///
 __xedllexport xe_result_t __xecall
-  xeFunctionQueryAttribute(
+  xeFunctionGetAttribute(
     xe_function_handle_t hFunction,                 ///< [in] handle of the function object
-    xe_function_attribute_t attr,                   ///< [in] attribute to query
+    xe_function_get_attribute_t attr,               ///< [in] attribute to query
     uint32_t* pValue                                ///< [out] returned attribute value
     )
 {
@@ -939,7 +821,7 @@ __xedllexport xe_result_t __xecall
         }
         /// @begin
 
-        return xe::Function::fromHandle(hFunction)->queryAttribute(attr, pValue);
+        return xe::Function::fromHandle(hFunction)->getAttribute(attr, pValue);
 
         /// @end
     }
@@ -976,19 +858,17 @@ __xedllexport xe_result_t __xecall
 ///     - ::XE_RESULT_ERROR_INVALID_PARAMETER
 ///         + nullptr == hCommandList
 ///         + nullptr == hFunction
-///         + nullptr == hFunctionArgs
 ///         + nullptr == pDispatchFuncArgs
 ///         + invalid group count range for dispatch
 ///         + invalid dispatch count range for dispatch
 ///     - ::XE_RESULT_ERROR_UNSUPPORTED
 ///
-/// @hash {de4ec8dc364024f41980b93d7021d402e874ac946ffb59ea3eb5aa9ab3301066}
+/// @hash {a97915a21657a27d07408efe7ab1b444448db3925a56e7b1892740f7d1dedf13}
 ///
 __xedllexport xe_result_t __xecall
   xeCommandListEncodeDispatchFunction(
     xe_command_list_handle_t hCommandList,          ///< [in] handle of the command list
     xe_function_handle_t hFunction,                 ///< [in] handle of the function object
-    xe_function_args_handle_t hFunctionArgs,        ///< [in] handle to function arguments buffer.
     const xe_dispatch_function_arguments_t* pDispatchFuncArgs,  ///< [in] dispatch function arguments.
     xe_event_handle_t hEvent                        ///< [in][optional] handle of the event to signal on completion
     )
@@ -1001,12 +881,11 @@ __xedllexport xe_result_t __xecall
             // Check parameters
             if( nullptr == hCommandList ) return XE_RESULT_ERROR_INVALID_PARAMETER;
             if( nullptr == hFunction ) return XE_RESULT_ERROR_INVALID_PARAMETER;
-            if( nullptr == hFunctionArgs ) return XE_RESULT_ERROR_INVALID_PARAMETER;
             if( nullptr == pDispatchFuncArgs ) return XE_RESULT_ERROR_INVALID_PARAMETER;
         }
         /// @begin
 
-        return xe::CommandList::fromHandle(hCommandList)->encodeDispatchFunction(hFunction, hFunctionArgs, pDispatchFuncArgs, hEvent);
+        return xe::CommandList::fromHandle(hCommandList)->encodeDispatchFunction(hFunction, pDispatchFuncArgs, hEvent);
 
         /// @end
     }
@@ -1043,19 +922,17 @@ __xedllexport xe_result_t __xecall
 ///     - ::XE_RESULT_ERROR_INVALID_PARAMETER
 ///         + nullptr == hCommandGraph
 ///         + nullptr == hFunction
-///         + nullptr == hFunctionArgs
 ///         + nullptr == pDispatchFuncArgs
 ///         + invalid group count range for dispatch
 ///         + invalid dispatch count range for dispatch
 ///     - ::XE_RESULT_ERROR_UNSUPPORTED
 ///
-/// @hash {87e742e574cd46be6071af89e21e2ded1f39f92798fdf538870a4187533af411}
+/// @hash {27d7bdca664c328f7a8a21d90adfb06a4311e0074bd6c67e659a000c68bd3978}
 ///
 __xedllexport xe_result_t __xecall
   xeCommandGraphEncodeDispatchFunction(
     xe_command_graph_handle_t hCommandGraph,        ///< [in] handle of the command graph
     xe_function_handle_t hFunction,                 ///< [in] handle of the function object
-    xe_function_args_handle_t hFunctionArgs,        ///< [in] handle to function arguments buffer.
     const xe_dispatch_function_arguments_t* pDispatchFuncArgs,  ///< [in] dispatch function arguments.
     xe_event_handle_t hEvent                        ///< [in][optional] handle of the event to signal on completion
     )
@@ -1068,12 +945,11 @@ __xedllexport xe_result_t __xecall
             // Check parameters
             if( nullptr == hCommandGraph ) return XE_RESULT_ERROR_INVALID_PARAMETER;
             if( nullptr == hFunction ) return XE_RESULT_ERROR_INVALID_PARAMETER;
-            if( nullptr == hFunctionArgs ) return XE_RESULT_ERROR_INVALID_PARAMETER;
             if( nullptr == pDispatchFuncArgs ) return XE_RESULT_ERROR_INVALID_PARAMETER;
         }
         /// @begin
 
-        return xe::CommandGraph::fromHandle(hCommandGraph)->encodeDispatchFunction(hFunction, hFunctionArgs, pDispatchFuncArgs, hEvent);
+        return xe::CommandGraph::fromHandle(hCommandGraph)->encodeDispatchFunction(hFunction, pDispatchFuncArgs, hEvent);
 
         /// @end
     }
@@ -1114,17 +990,15 @@ __xedllexport xe_result_t __xecall
 ///     - ::XE_RESULT_ERROR_INVALID_PARAMETER
 ///         + nullptr == hCommandList
 ///         + nullptr == hFunction
-///         + nullptr == hFunctionArgs
 ///         + nullptr == pDispatchArgumentsBuffer
 ///     - ::XE_RESULT_ERROR_UNSUPPORTED
 ///
-/// @hash {57fb8d85b4c8cc16e07ad3342db0be97e5c18c19b72c8ceb3dcbd20f88a98eea}
+/// @hash {95a2f6edd86ac229af4c3966cc6be2bc3702e4211715f45e2edf854987712304}
 ///
 __xedllexport xe_result_t __xecall
   xeCommandListEncodeDispatchFunctionIndirect(
     xe_command_list_handle_t hCommandList,          ///< [in] handle of the command list
     xe_function_handle_t hFunction,                 ///< [in] handle of the function object
-    xe_function_args_handle_t hFunctionArgs,        ///< [in] handle to function arguments buffer.
     const xe_dispatch_function_indirect_arguments_t* pDispatchArgumentsBuffer,  ///< [in] Pointer to buffer that will contain dispatch arguments.
     xe_event_handle_t hEvent                        ///< [in][optional] handle of the event to signal on completion
     )
@@ -1137,12 +1011,11 @@ __xedllexport xe_result_t __xecall
             // Check parameters
             if( nullptr == hCommandList ) return XE_RESULT_ERROR_INVALID_PARAMETER;
             if( nullptr == hFunction ) return XE_RESULT_ERROR_INVALID_PARAMETER;
-            if( nullptr == hFunctionArgs ) return XE_RESULT_ERROR_INVALID_PARAMETER;
             if( nullptr == pDispatchArgumentsBuffer ) return XE_RESULT_ERROR_INVALID_PARAMETER;
         }
         /// @begin
 
-        return xe::CommandList::fromHandle(hCommandList)->encodeDispatchFunctionIndirect(hFunction, hFunctionArgs, pDispatchArgumentsBuffer, hEvent);
+        return xe::CommandList::fromHandle(hCommandList)->encodeDispatchFunctionIndirect(hFunction, pDispatchArgumentsBuffer, hEvent);
 
         /// @end
     }
@@ -1183,17 +1056,15 @@ __xedllexport xe_result_t __xecall
 ///     - ::XE_RESULT_ERROR_INVALID_PARAMETER
 ///         + nullptr == hCommandGraph
 ///         + nullptr == hFunction
-///         + nullptr == hFunctionArgs
 ///         + nullptr == pDispatchArgumentsBuffer
 ///     - ::XE_RESULT_ERROR_UNSUPPORTED
 ///
-/// @hash {47643fb62b1afef97af02b4695028e484c973c06d358233559925f0353f8e845}
+/// @hash {4f7b967b8e23437121066d29f523494df4c07c8ddacb965758e9c5a13eeb1b79}
 ///
 __xedllexport xe_result_t __xecall
   xeCommandGraphEncodeDispatchFunctionIndirect(
     xe_command_graph_handle_t hCommandGraph,        ///< [in] handle of the command graph
     xe_function_handle_t hFunction,                 ///< [in] handle of the function object
-    xe_function_args_handle_t hFunctionArgs,        ///< [in] handle to function arguments buffer.
     const xe_dispatch_function_indirect_arguments_t* pDispatchArgumentsBuffer,  ///< [in] Pointer to buffer that will contain dispatch arguments.
     xe_event_handle_t hEvent                        ///< [in][optional] handle of the event to signal on completion
     )
@@ -1206,12 +1077,11 @@ __xedllexport xe_result_t __xecall
             // Check parameters
             if( nullptr == hCommandGraph ) return XE_RESULT_ERROR_INVALID_PARAMETER;
             if( nullptr == hFunction ) return XE_RESULT_ERROR_INVALID_PARAMETER;
-            if( nullptr == hFunctionArgs ) return XE_RESULT_ERROR_INVALID_PARAMETER;
             if( nullptr == pDispatchArgumentsBuffer ) return XE_RESULT_ERROR_INVALID_PARAMETER;
         }
         /// @begin
 
-        return xe::CommandGraph::fromHandle(hCommandGraph)->encodeDispatchFunctionIndirect(hFunction, hFunctionArgs, pDispatchArgumentsBuffer, hEvent);
+        return xe::CommandGraph::fromHandle(hCommandGraph)->encodeDispatchFunctionIndirect(hFunction, pDispatchArgumentsBuffer, hEvent);
 
         /// @end
     }

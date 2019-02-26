@@ -313,49 +313,15 @@ returns:
         - "invalid number of threads."
 --- #--------------------------------------------------------------------------
 type: function
-desc: "Create Function arguments needed to pass arguments to a function."
+desc: "Set function argument used for function dispatch."
 class: $xFunction
-name: CreateFunctionArgs
-details:
-    - "This function may be called from simultaneous threads."
-    - "The implementation of this function should be lock-free."
-    - "FunctionArgs objects must be used with the Function object it was created for."
-    - "Use $xFunctionArgsSetValue to setup arguments for dispatch."
-    - "FunctionArgs can updated and used across multiple dispatches for the same function."
-params:
-    - type: "$x_function_handle_t"
-      name: hFunction
-      desc: "[in] handle of the function"
-    - type: "$x_function_args_handle_t*"
-      name:  phFunctionArgs
-      desc: "[out] handle of the Function arguments object"
---- #--------------------------------------------------------------------------
-type: function
-desc: "Destroys Function arguments object"
-class: $xFunctionArgs
-name: Destroy
-details:
-    - "The application is responsible for making sure the GPU is not currently referencing the event before it is deleted"
-    - "The implementation of this function will immediately free all Host and Device allocations associated with this function args"
-    - "The implementation of this function should be lock-free."
-params:
-    - type: "$x_function_args_handle_t"
-      name: hFunctionArgs
-      desc: "[in] handle of the function arguments buffer object"
---- #--------------------------------------------------------------------------
-type: function
-desc: "Set function arguments within arguments buffer."
-class: $xFunctionArgs
-name: SetValue
-analogue:
-    - "**cuCtxCreate**"
-    - "cuCtxGetCurrent"
+name: SetArgumentValue
 details:
     - "This function may **not** be called from simultaneous threads."
     - "The implementation of this function should be lock-free."
 params:
-    - type: "$x_function_args_handle_t"
-      name: hFunctionArgs
+    - type: "$x_function_handle_t"
+      name: hFunction
       desc: "[in/out] handle of the function args object."
     - type: "uint32_t"
       name: argIndex
@@ -372,23 +338,23 @@ returns:
         - "invalid size specified"
 --- #--------------------------------------------------------------------------
 type: enum
-desc: "Function argument attributes"
-class: $xFunctionArgs
-name: $x_function_argument_attribute_t
+desc: "Function attributes"
+class: $xFunction
+name: $x_function_set_attribute_t
 analogue:
     - "**cl_kernel_exec_info**"
 etors:
-    - name: $X_FUNCTION_ARG_ATTR_INDIRECT_HOST_ACCESS
+    - name: $X_FUNCTION_SET_ATTR_INDIRECT_HOST_ACCESS
       value: "0"
       desc: "Indicates that the function accesses host allocations indirectly (default: false)"
-    - name: $X_FUNCTION_ARG_ATTR_INDIRECT_DEVICE_ACCESS
+    - name: $X_FUNCTION_SET_ATTR_INDIRECT_DEVICE_ACCESS
       desc: "Indicates that the function accesses device allocations indirectly (default: false)"
-    - name: $X_FUNCTION_ARG_ATTR_INDIRECT_SHARED_ACCESS
+    - name: $X_FUNCTION_SET_ATTR_INDIRECT_SHARED_ACCESS
       desc: "Indicates that the function accesses shared allocations indirectly (default: false)"
 --- #--------------------------------------------------------------------------
 type: function
-desc: "Sets a function argument attribute"
-class: $xFunctionArgs
+desc: "Sets a function attribute"
+class: $xFunction
 name: SetAttribute
 analogue:
     - "**clSetKernelExecInfo**"
@@ -396,10 +362,10 @@ details:
     - "This function may **not** be called from simultaneous threads."
     - "The implementation of this function should be lock-free."
 params:
-    - type: "$x_function_args_handle_t"
-      name: hFunctionArgs
-      desc: "[in/out] handle of the function args object."
-    - type: "$x_function_argument_attribute_t"
+    - type: "$x_function_handle_t"
+      name: hFunction
+      desc: "[in/out] handle of the function."
+    - type: "$x_function_set_attribute_t"
       name: attr
       desc: "[in] attribute to set"
     - type: "uint32_t"
@@ -413,28 +379,28 @@ returns:
 type: enum
 desc: "Function attributes"
 class: $xFunction
-name: $x_function_attribute_t
+name: $x_function_get_attribute_t
 analogue:
     - "**CUfunction_attribute**"
 etors:
-    - name: $X_FUNCTION_ATTRIBUTE_MAX_REGS_USED
+    - name: $X_FUNCTION_GET_ATTR_MAX_REGS_USED
       value: "0"
       desc: "Maximum device registers used for this function"
-    - name: $X_FUNCTION_ATTRIBUTE_NUM_THREAD_DIMENSIONS
+    - name: $X_FUNCTION_GET_ATTR_NUM_THREAD_DIMENSIONS
       desc: "Maximum dimensions for group for this function"
-    - name: $X_FUNCTION_ATTRIBUTE_MAX_SHARED_MEM_SIZE
+    - name: $X_FUNCTION_GET_ATTR_MAX_SHARED_MEM_SIZE
       desc: "Maximum shared memory required for this function"
-    - name: $X_FUNCTION_ATTRIBUTE_HAS_SPILL_FILL
+    - name: $X_FUNCTION_GET_ATTR_HAS_SPILL_FILL
       desc: "Function required spill/fills."
-    - name: $X_FUNCTION_ATTRIBUTE_HAS_BARRIERS
+    - name: $X_FUNCTION_GET_ATTR_HAS_BARRIERS
       desc: "Function contains barriers."
-    - name: $X_FUNCTION_ATTRIBUTE_HAS_DPAS
+    - name: $X_FUNCTION_GET_ATTR_HAS_DPAS
       desc: "Function contains DPAs."
 --- #--------------------------------------------------------------------------
 type: function
 desc: "Query a function attribute."
 class: $xFunction
-name: QueryAttribute
+name: GetAttribute
 analogue:
     - "**cuFuncGetAttribute**"
 details:
@@ -444,7 +410,7 @@ params:
     - type: "$x_function_handle_t"
       name: hFunction
       desc: "[in] handle of the function object"
-    - type: "$x_function_attribute_t"
+    - type: "$x_function_get_attribute_t"
       name: attr
       desc: "[in] attribute to query"
     - type: "uint32_t*"
@@ -502,9 +468,6 @@ params:
     - type: "$x_function_handle_t"
       name: hFunction
       desc: "[in] handle of the function object"
-    - type: "$x_function_args_handle_t"
-      name: hFunctionArgs
-      desc: "[in] handle to function arguments buffer."
     - type: "const $x_dispatch_function_arguments_t*"
       name: pDispatchFuncArgs
       desc: "[in] dispatch function arguments."
@@ -554,9 +517,6 @@ params:
     - type: "$x_function_handle_t"
       name: hFunction
       desc: "[in] handle of the function object"
-    - type: "$x_function_args_handle_t"
-      name: hFunctionArgs
-      desc: "[in] handle to function arguments buffer."
     - type: "const $x_dispatch_function_indirect_arguments_t*"
       name: pDispatchArgumentsBuffer
       desc: "[in] Pointer to buffer that will contain dispatch arguments."
@@ -623,11 +583,3 @@ members:
     - type: $x_function_desc_t
       name: desc
       desc: "descriptor of the function object"
---- #--------------------------------------------------------------------------
-type: class
-desc: "C++ wrapper for function arguments"
-name: $xFunctionArgs
-members:
-    - type: $x_function_args_handle_t
-      name: handle
-      desc: "handle of function arguments object"
