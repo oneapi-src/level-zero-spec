@@ -7,24 +7,27 @@ import generate_docs
 import time
 
 """
+    helper for adding mutually-exclusive boolean arguments "--name" and "--!name"
+"""
+def add_argument(parser, name, help, default=False):
+    group = parser.add_mutually_exclusive_group(required=False)
+    group.add_argument("--" + name, dest=name, help="Enable "+help, action="store_true")
+    group.add_argument("--!" + name, dest=name, help="Disable "+help, action="store_false")
+    parser.set_defaults(**{name:default})
+
+"""
+Main entry:
     Do everything...
 """
 def main():
     # define cmdline arguments
     parser = argparse.ArgumentParser()
-    parser.add_argument(
-        "--filter",
-        help="Specify a single subroutine to execute.",
-        default="all",
-        choices=["all","core","extended","docs"])
-    parser.add_argument(
-        "--compile",
-        help="Enable compilation of cpp files.",
-        action="store_true")
-    parser.add_argument(
-        "--pdf",
-        help="Enable generation of pdf file.",
-        action="store_true")
+    add_argument(parser, "core", "generation of C/C++ 'core' files.", True)
+    add_argument(parser, "extended", "generation of C/C++ 'extended' files.", True)
+    add_argument(parser, "md", "generation of MD files.", True)
+    add_argument(parser, "html", "generation of HTML files.", True)
+    add_argument(parser, "pdf", "generation of PDF file.")
+    add_argument(parser, "cl", "compilation of generated C/C++ files.")
     args = parser.parse_args()
 
     # parse cmdline arguments
@@ -32,33 +35,33 @@ def main():
 
     start = time.time()
     # generate 'core' APIs
-    if "all" == args.filter or "core" == args.filter:
+    if args.core:
         specs, meta = parse_specs.parse("./core")
         generate_api.generate_cpp(
             configParser.get('PATH','core'),
             configParser.get('NAMESPACE','core'),
             specs, meta)
-        if args.compile:
+        if args.cl:
             compile_api.compile_cpp_source(
                 configParser.get('PATH','core'),
                 configParser.get('NAMESPACE','core'),
                 specs)
 
     # generate 'extended' APIs
-    if "all" == args.filter or "extended" == args.filter:
+    if args.extended:
         specs, meta = parse_specs.parse("./extended")
         generate_api.generate_cpp(
             configParser.get('PATH','extended'),
             configParser.get('NAMESPACE','extended'),
             specs, meta)
-        if args.compile:
+        if args.cl:
             compile_api.compile_cpp_source(
                 configParser.get('PATH','extended'),
                 configParser.get('NAMESPACE','extended'),
                 specs)
 
     # generate documentation
-    if "all" == args.filter or "docs" == args.filter:
+    if args.md:
         generate_docs.generate_md(
             "./core",
             configParser.get('PATH','core'),
@@ -67,9 +70,12 @@ def main():
             "./extended",
             configParser.get('PATH','extended'),
             configParser.get('NAMESPACE','extended'))
+
+    if args.html:
         generate_docs.generate_html()
-        if args.pdf:
-            generate_docs.generate_pdf()
+
+    if args.pdf:
+        generate_docs.generate_pdf()
 
 
     print("\nCompleted in %.1f seconds!"%(time.time() - start))
