@@ -238,7 +238,7 @@ ATSTEST_F(CommandListEncodeDispatchFunction, copiesKernelIsaToInstructionHeap) {
     {
         auto cmd = genCmdCast<COMPUTE_WALKER *>(*itor);
         auto &idd = cmd->getInterfaceDescriptor();
-        uint64_t kernelOffset = idd.getKernelStartPointerHigh();
+        auto kernelOffset = idd.getKernelStartPointerHigh();
         kernelOffset <<= 32u;
         kernelOffset |= idd.getKernelStartPointerHigh();
 
