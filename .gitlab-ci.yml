@@ -9,6 +9,8 @@ generate_html:
     name: "%CI_JOB_NAME%"
     paths:
       - html/
+  tags:
+    - windows
 
 pages:
   stage: deploy
@@ -16,6 +18,8 @@ pages:
   artifacts:
     paths:
     - public
+  tags:
+    - windows
 
 linux:
   image: loki:latest
