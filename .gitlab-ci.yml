@@ -16,3 +16,23 @@ pages:
   artifacts:
     paths:
     - public
+
+linux:
+  image: loki:latest
+  stage: build
+  allow_failure: true
+  only:
+  - branches
+  - tags
+  - merge_requests
+  tags:
+    - Linux
+  script:
+    - pwd
+    - ls -l
+    - ~/irepo/irepo select -d . third_party/linux_embargo.yml
+    - ~/irepo/irepo sync
+    - mkdir build
+    - cd build
+    - cmake -GNinja .. -DCMAKE_BUILD_TYPE=Release
+    - cmake --build . --config Release --clean-first --target all
