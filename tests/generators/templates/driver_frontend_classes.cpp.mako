@@ -39,7 +39,7 @@ import extended_helper as th
 namespace ${x} {
 
 %for obj in objects:
-%for cls in th.get_class_list(obj):
+%for cli, cls in enumerate(obj['class']):
 %if re.match(r"function", obj['type']):
 %if name == th.class_to_actor_name(cls):
 ${x}_result_t __${x}call ${th.make_func_name(x, obj, cls)}(

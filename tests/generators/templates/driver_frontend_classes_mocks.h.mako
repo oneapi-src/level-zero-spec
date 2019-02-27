@@ -46,7 +46,7 @@ struct Mock<${th.make_driver_frontend_class_name(name)}> : public ${th.make_driv
     virtual ~Mock() = default;
     
 %for obj in objects:
-%for cls in th.get_class_list(obj):
+%for cli, cls in enumerate(obj['class']):
 %if name == th.class_to_actor_name(cls):
 %if re.match(r"function", obj['type']):
     MOCK_METHOD${th.get_num_params(obj, cls) - 1}(${th.make_driver_frontend_class_member_func_declaration_name(x, obj, cls)}, xe_result_t(${th.merge_into_single_line(th.make_param_lines_short_no_actor(x, obj, cls, handles))}));

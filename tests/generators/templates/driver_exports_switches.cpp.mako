@@ -44,7 +44,7 @@ import extended_helper as th
 %endif
 
 %for obj in objects:
-%for cls in th.get_class_list(obj):
+%for cli, cls in enumerate(obj['class']):
 %if re.match(r"function", obj['type']):
 #define ENABLE_${th.make_func_name(x, obj, cls)} 0
 %endif
@@ -57,7 +57,7 @@ typedef struct _cl_context* cl_context;
 typedef struct _cl_program* cl_program;
 
 %for obj in objects:
-%for cls in th.get_class_list(obj):
+%for cli, cls in enumerate(obj['class']):
 %if re.match(r"function", obj['type']):
 #if !(ENABLE_${th.make_func_name(x, obj, cls)})
 ${x}_result_t __${x}call ${th.make_func_name(x, obj, cls)}(

@@ -58,7 +58,7 @@ struct ${th.make_driver_frontend_class_name(name)} : public _${th.subx(x, handle
     static ${th.make_driver_frontend_class_name(name)} *create();
     
 %for obj in objects:
-%for cls in th.get_class_list(obj):
+%for cli, cls in enumerate(obj['class']):
 %if name == th.class_to_actor_name(cls):
 %if re.match(r"function", obj['type']):
     virtual ${x}_result_t ${th.make_driver_frontend_class_member_func_declaration_name(x, obj, cls)}(
@@ -82,7 +82,7 @@ struct ${th.make_driver_frontend_class_name(name)} : public _${th.subx(x, handle
 };
 
 %for obj in objects:
-%for cls in th.get_class_list(obj):
+%for cli, cls in enumerate(obj['class']):
 %if name == th.class_to_actor_name(cls):
 %if re.match(r"function", obj['type']):
 ${x}_result_t __${x}call ${th.make_func_name(x, obj, cls)}(

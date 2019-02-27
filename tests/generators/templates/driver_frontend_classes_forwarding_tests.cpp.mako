@@ -40,7 +40,7 @@ namespace xe {
 namespace ult {
 
 %for obj in objects:
-%for cls in th.get_class_list(obj):
+%for cli, cls in enumerate(obj['class']):
 %if re.match(r"function", obj['type']):
 %if name == th.class_to_actor_name(cls):
 TEST(${x}${th.make_driver_frontend_class_name(name)}${th.change_case_camel_to_pascal(th.make_driver_frontend_class_member_func_declaration_name(x, obj, cls))}, redirectsTo${th.change_case_camel_to_pascal(th.make_driver_frontend_class_name(name))}Object) {
