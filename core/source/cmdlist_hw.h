@@ -9,8 +9,7 @@ template <uint32_t gfxCoreFamily>
 struct CommandListCoreFamily : public CommandListImp {
     using BaseClass = CommandListImp;
 
-    CommandListCoreFamily(Device *device) : CommandListImp(device) {
-    }
+    using CommandListImp::CommandListImp;
 
     bool initialize() override;
 

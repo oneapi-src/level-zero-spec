@@ -5,8 +5,7 @@ namespace xe {
 
 template <uint32_t gfxCoreFamily>
 struct CommandQueueHw : public CommandQueueImp {
-    CommandQueueHw(Device *device, void *csrRT) : CommandQueueImp(device, csrRT) {
-    }
+    using CommandQueueImp::CommandQueueImp;
 
     xe_result_t createFence(const xe_fence_desc_t *desc,
                             xe_fence_handle_t *phFence) override;
