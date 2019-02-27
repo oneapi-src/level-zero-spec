@@ -72,309 +72,6 @@ xe_result_t __xecall xeDriverInit(xe_init_flag_t flags){
     return dispatchTable.xeDriverInit(flags);
 }
 
-xe_result_t __xecall xeCommandListEncodeExecutionBarrier(
-        xe_command_list_handle_t hCommandList
-    ){
-    if(dispatchTableInitialized == false){
-        return XE_RESULT_ERROR_UNINITIALIZED;
-    }
-    return dispatchTable.xeCommandListEncodeExecutionBarrier(hCommandList);
-}
-#if XE_ENABLE_OCL_INTEROP
-xe_result_t __xecall xeDeviceRegisterCLMemory(
-        xe_device_handle_t hDevice,
-        cl_context context,
-        cl_mem mem,
-        void** ptr
-    ){
-    if(dispatchTableInitialized == false){
-        return XE_RESULT_ERROR_UNINITIALIZED;
-    }
-    return dispatchTable.xeDeviceRegisterCLMemory(hDevice, context, mem, ptr);
-}
-#endif // XE_ENABLE_OCL_INTEROP
-#if XE_ENABLE_OCL_INTEROP
-xe_result_t __xecall xeDeviceRegisterCLProgram(
-        xe_device_handle_t hDevice,
-        cl_context context,
-        cl_program program,
-        xe_module_handle_t* phModule
-    ){
-    if(dispatchTableInitialized == false){
-        return XE_RESULT_ERROR_UNINITIALIZED;
-    }
-    return dispatchTable.xeDeviceRegisterCLProgram(hDevice, context, program, phModule);
-}
-#endif // XE_ENABLE_OCL_INTEROP
-#if XE_ENABLE_OCL_INTEROP
-xe_result_t __xecall xeDeviceRegisterCLCommandQueue(
-        xe_device_handle_t hDevice,
-        cl_context context,
-        cl_command_queue command_queue,
-        xe_command_queue_handle_t* phCommandQueue
-    ){
-    if(dispatchTableInitialized == false){
-        return XE_RESULT_ERROR_UNINITIALIZED;
-    }
-    return dispatchTable.xeDeviceRegisterCLCommandQueue(hDevice, context, command_queue, phCommandQueue);
-}
-#endif // XE_ENABLE_OCL_INTEROP
-xe_result_t __xecall xeDeviceCreateCommandGraph(
-        xe_device_handle_t hDevice,
-        const xe_command_graph_desc_t* desc,
-        xe_command_graph_handle_t* phCommandGraph
-    ){
-    if(dispatchTableInitialized == false){
-        return XE_RESULT_ERROR_UNINITIALIZED;
-    }
-    return dispatchTable.xeDeviceCreateCommandGraph(hDevice, desc, phCommandGraph);
-}
-xe_result_t __xecall xeCommandGraphDestroy(
-        xe_command_graph_handle_t hCommandGraph
-    ){
-    if(dispatchTableInitialized == false){
-        return XE_RESULT_ERROR_UNINITIALIZED;
-    }
-    return dispatchTable.xeCommandGraphDestroy(hCommandGraph);
-}
-xe_result_t __xecall xeCommandGraphClose(
-        xe_command_graph_handle_t hCommandGraph
-    ){
-    if(dispatchTableInitialized == false){
-        return XE_RESULT_ERROR_UNINITIALIZED;
-    }
-    return dispatchTable.xeCommandGraphClose(hCommandGraph);
-}
-xe_result_t __xecall xeCommandGraphReset(
-        xe_command_graph_handle_t hCommandGraph
-    ){
-    if(dispatchTableInitialized == false){
-        return XE_RESULT_ERROR_UNINITIALIZED;
-    }
-    return dispatchTable.xeCommandGraphReset(hCommandGraph);
-}
-xe_result_t __xecall xeDeviceCreateCommandList(
-        xe_device_handle_t hDevice,
-        const xe_command_list_desc_t* desc,
-        xe_command_list_handle_t* phCommandList
-    ){
-    if(dispatchTableInitialized == false){
-        return XE_RESULT_ERROR_UNINITIALIZED;
-    }
-    return dispatchTable.xeDeviceCreateCommandList(hDevice, desc, phCommandList);
-}
-xe_result_t __xecall xeDeviceCopyCommandList(
-        xe_device_handle_t hDevice,
-        xe_command_list_handle_t hCommandList,
-        xe_command_list_handle_t* phCommandList
-    ){
-    if(dispatchTableInitialized == false){
-        return XE_RESULT_ERROR_UNINITIALIZED;
-    }
-    return dispatchTable.xeDeviceCopyCommandList(hDevice, hCommandList, phCommandList);
-}
-xe_result_t __xecall xeCommandListDestroy(
-        xe_command_list_handle_t hCommandList
-    ){
-    if(dispatchTableInitialized == false){
-        return XE_RESULT_ERROR_UNINITIALIZED;
-    }
-    return dispatchTable.xeCommandListDestroy(hCommandList);
-}
-xe_result_t __xecall xeCommandListClose(
-        xe_command_list_handle_t hCommandList
-    ){
-    if(dispatchTableInitialized == false){
-        return XE_RESULT_ERROR_UNINITIALIZED;
-    }
-    return dispatchTable.xeCommandListClose(hCommandList);
-}
-xe_result_t __xecall xeCommandListReset(
-        xe_command_list_handle_t hCommandList
-    ){
-    if(dispatchTableInitialized == false){
-        return XE_RESULT_ERROR_UNINITIALIZED;
-    }
-    return dispatchTable.xeCommandListReset(hCommandList);
-}
-xe_result_t __xecall xeCommandListSetParameter(
-        xe_command_list_handle_t hCommandList,
-        xe_command_list_parameter_t parameter,
-        uint32_t value
-    ){
-    if(dispatchTableInitialized == false){
-        return XE_RESULT_ERROR_UNINITIALIZED;
-    }
-    return dispatchTable.xeCommandListSetParameter(hCommandList, parameter, value);
-}
-xe_result_t __xecall xeCommandListGetParameter(
-        xe_command_list_handle_t hCommandList,
-        xe_command_list_parameter_t parameter,
-        uint32_t* value
-    ){
-    if(dispatchTableInitialized == false){
-        return XE_RESULT_ERROR_UNINITIALIZED;
-    }
-    return dispatchTable.xeCommandListGetParameter(hCommandList, parameter, value);
-}
-xe_result_t __xecall xeCommandListResetParameters(
-        xe_command_list_handle_t hCommandList
-    ){
-    if(dispatchTableInitialized == false){
-        return XE_RESULT_ERROR_UNINITIALIZED;
-    }
-    return dispatchTable.xeCommandListResetParameters(hCommandList);
-}
-xe_result_t __xecall xeCommandListEncodeCommandLists(
-        xe_command_list_handle_t hCommandList,
-        uint32_t numCommandLists,
-        xe_command_list_handle_t* phCommandLists
-    ){
-    if(dispatchTableInitialized == false){
-        return XE_RESULT_ERROR_UNINITIALIZED;
-    }
-    return dispatchTable.xeCommandListEncodeCommandLists(hCommandList, numCommandLists, phCommandLists);
-}
-xe_result_t __xecall xeCommandListEncodeCommands(
-        xe_command_list_handle_t hCommandList,
-        xe_command_format_t format,
-        size_t size,
-        void* pBlob
-    ){
-    if(dispatchTableInitialized == false){
-        return XE_RESULT_ERROR_UNINITIALIZED;
-    }
-    return dispatchTable.xeCommandListEncodeCommands(hCommandList, format, size, pBlob);
-}
-xe_result_t __xecall xeDeviceCreateCommandQueue(
-        xe_device_handle_t hDevice,
-        const xe_command_queue_desc_t* desc,
-        xe_command_queue_handle_t* phCommandQueue
-    ){
-    if(dispatchTableInitialized == false){
-        return XE_RESULT_ERROR_UNINITIALIZED;
-    }
-    return dispatchTable.xeDeviceCreateCommandQueue(hDevice, desc, phCommandQueue);
-}
-xe_result_t __xecall xeCommandQueueDestroy(
-        xe_command_queue_handle_t hCommandQueue
-    ){
-    if(dispatchTableInitialized == false){
-        return XE_RESULT_ERROR_UNINITIALIZED;
-    }
-    return dispatchTable.xeCommandQueueDestroy(hCommandQueue);
-}
-xe_result_t __xecall xeCommandQueueEnqueueCommandLists(
-        xe_command_queue_handle_t hCommandQueue,
-        uint32_t numCommandLists,
-        xe_command_list_handle_t* phCommandLists,
-        xe_fence_handle_t hFence
-    ){
-    if(dispatchTableInitialized == false){
-        return XE_RESULT_ERROR_UNINITIALIZED;
-    }
-    return dispatchTable.xeCommandQueueEnqueueCommandLists(hCommandQueue, numCommandLists, phCommandLists, hFence);
-}
-xe_result_t __xecall xeCommandQueueSynchronize(
-        xe_command_queue_handle_t hCommandQueue,
-        xe_synchronization_mode_t mode,
-        uint32_t delay,
-        uint32_t interval,
-        uint32_t timeout
-    ){
-    if(dispatchTableInitialized == false){
-        return XE_RESULT_ERROR_UNINITIALIZED;
-    }
-    return dispatchTable.xeCommandQueueSynchronize(hCommandQueue, mode, delay, interval, timeout);
-}
-xe_result_t __xecall xeCommandListEncodeMemoryCopy(
-        xe_command_list_handle_t hCommandList,
-        void* dstptr,
-        const void* srcptr,
-        size_t size
-    ){
-    if(dispatchTableInitialized == false){
-        return XE_RESULT_ERROR_UNINITIALIZED;
-    }
-    return dispatchTable.xeCommandListEncodeMemoryCopy(hCommandList, dstptr, srcptr, size);
-}
-xe_result_t __xecall xeCommandListEncodeMemorySet(
-        xe_command_list_handle_t hCommandList,
-        void* ptr,
-        int value,
-        size_t size
-    ){
-    if(dispatchTableInitialized == false){
-        return XE_RESULT_ERROR_UNINITIALIZED;
-    }
-    return dispatchTable.xeCommandListEncodeMemorySet(hCommandList, ptr, value, size);
-}
-xe_result_t __xecall xeCommandListEncodeImageCopy(
-        xe_command_list_handle_t hCommandList,
-        xe_image_handle_t hDstImage,
-        xe_image_handle_t hSrcImage
-    ){
-    if(dispatchTableInitialized == false){
-        return XE_RESULT_ERROR_UNINITIALIZED;
-    }
-    return dispatchTable.xeCommandListEncodeImageCopy(hCommandList, hDstImage, hSrcImage);
-}
-xe_result_t __xecall xeCommandListEncodeImageCopyRegion(
-        xe_command_list_handle_t hCommandList,
-        xe_image_handle_t hDstImage,
-        xe_image_region_t* pDstRegion,
-        xe_image_handle_t hSrcImage,
-        xe_image_region_t* pSrcRegion
-    ){
-    if(dispatchTableInitialized == false){
-        return XE_RESULT_ERROR_UNINITIALIZED;
-    }
-    return dispatchTable.xeCommandListEncodeImageCopyRegion(hCommandList, hDstImage, pDstRegion, hSrcImage, pSrcRegion);
-}
-xe_result_t __xecall xeCommandListEncodeImageCopyToMemory(
-        xe_command_list_handle_t hCommandList,
-        void* dstptr,
-        xe_image_handle_t hSrcImage,
-        xe_image_region_t* pSrcRegion
-    ){
-    if(dispatchTableInitialized == false){
-        return XE_RESULT_ERROR_UNINITIALIZED;
-    }
-    return dispatchTable.xeCommandListEncodeImageCopyToMemory(hCommandList, dstptr, hSrcImage, pSrcRegion);
-}
-xe_result_t __xecall xeCommandListEncodeImageCopyFromMemory(
-        xe_command_list_handle_t hCommandList,
-        xe_image_handle_t hDstImage,
-        xe_image_region_t* pDstRegion,
-        void* srcptr
-    ){
-    if(dispatchTableInitialized == false){
-        return XE_RESULT_ERROR_UNINITIALIZED;
-    }
-    return dispatchTable.xeCommandListEncodeImageCopyFromMemory(hCommandList, hDstImage, pDstRegion, srcptr);
-}
-xe_result_t __xecall xeCommandListEncodeMemoryPrefetch(
-        xe_command_list_handle_t hCommandList,
-        const void* ptr,
-        size_t count
-    ){
-    if(dispatchTableInitialized == false){
-        return XE_RESULT_ERROR_UNINITIALIZED;
-    }
-    return dispatchTable.xeCommandListEncodeMemoryPrefetch(hCommandList, ptr, count);
-}
-xe_result_t __xecall xeCommandListEncodeMemAdvise(
-        xe_command_list_handle_t hCommandList,
-        xe_device_handle_t hDevice,
-        const void* ptr,
-        size_t size,
-        xe_memory_advice_t advice
-    ){
-    if(dispatchTableInitialized == false){
-        return XE_RESULT_ERROR_UNINITIALIZED;
-    }
-    return dispatchTable.xeCommandListEncodeMemAdvise(hCommandList, hDevice, ptr, size, advice);
-}
 xe_result_t __xecall xeDriverGetDeviceCount(
         uint32_t* count
     ){
@@ -485,6 +182,103 @@ xe_result_t __xecall xeDeviceSetLastLevelCacheConfig(
     }
     return dispatchTable.xeDeviceSetLastLevelCacheConfig(hDevice, CacheConfig);
 }
+xe_result_t __xecall xeDeviceCreateCommandGraph(
+        xe_device_handle_t hDevice,
+        const xe_command_graph_desc_t* desc,
+        xe_command_graph_handle_t* phCommandGraph
+    ){
+    if(dispatchTableInitialized == false){
+        return XE_RESULT_ERROR_UNINITIALIZED;
+    }
+    return dispatchTable.xeDeviceCreateCommandGraph(hDevice, desc, phCommandGraph);
+}
+xe_result_t __xecall xeCommandGraphDestroy(
+        xe_command_graph_handle_t hCommandGraph
+    ){
+    if(dispatchTableInitialized == false){
+        return XE_RESULT_ERROR_UNINITIALIZED;
+    }
+    return dispatchTable.xeCommandGraphDestroy(hCommandGraph);
+}
+xe_result_t __xecall xeCommandGraphClose(
+        xe_command_graph_handle_t hCommandGraph
+    ){
+    if(dispatchTableInitialized == false){
+        return XE_RESULT_ERROR_UNINITIALIZED;
+    }
+    return dispatchTable.xeCommandGraphClose(hCommandGraph);
+}
+xe_result_t __xecall xeCommandGraphReset(
+        xe_command_graph_handle_t hCommandGraph
+    ){
+    if(dispatchTableInitialized == false){
+        return XE_RESULT_ERROR_UNINITIALIZED;
+    }
+    return dispatchTable.xeCommandGraphReset(hCommandGraph);
+}
+xe_result_t __xecall xeCommandListEncodeExecutionBarrier(
+        xe_command_list_handle_t hCommandList
+    ){
+    if(dispatchTableInitialized == false){
+        return XE_RESULT_ERROR_UNINITIALIZED;
+    }
+    return dispatchTable.xeCommandListEncodeExecutionBarrier(hCommandList);
+}
+xe_result_t __xecall xeDeviceCreateSemaphore(
+        xe_device_handle_t hDevice,
+        const xe_semaphore_desc_t* desc,
+        xe_semaphore_handle_t* phSemaphore
+    ){
+    if(dispatchTableInitialized == false){
+        return XE_RESULT_ERROR_UNINITIALIZED;
+    }
+    return dispatchTable.xeDeviceCreateSemaphore(hDevice, desc, phSemaphore);
+}
+xe_result_t __xecall xeSemaphoreDestroy(
+        xe_semaphore_handle_t hSemaphore
+    ){
+    if(dispatchTableInitialized == false){
+        return XE_RESULT_ERROR_UNINITIALIZED;
+    }
+    return dispatchTable.xeSemaphoreDestroy(hSemaphore);
+}
+xe_result_t __xecall xeCommandListEncodeSemaphoreSignal(
+        xe_command_list_handle_t hCommandList,
+        xe_semaphore_handle_t hSemaphore,
+        xe_semaphore_value_t value
+    ){
+    if(dispatchTableInitialized == false){
+        return XE_RESULT_ERROR_UNINITIALIZED;
+    }
+    return dispatchTable.xeCommandListEncodeSemaphoreSignal(hCommandList, hSemaphore, value);
+}
+xe_result_t __xecall xeCommandListEncodeSemaphoreWait(
+        xe_command_list_handle_t hCommandList,
+        xe_semaphore_handle_t hSemaphore,
+        xe_semaphore_wait_operation_t operation,
+        xe_semaphore_value_t value
+    ){
+    if(dispatchTableInitialized == false){
+        return XE_RESULT_ERROR_UNINITIALIZED;
+    }
+    return dispatchTable.xeCommandListEncodeSemaphoreWait(hCommandList, hSemaphore, operation, value);
+}
+xe_result_t __xecall xeSemaphoreQueryValue(
+        xe_semaphore_handle_t hSemaphore
+    ){
+    if(dispatchTableInitialized == false){
+        return XE_RESULT_ERROR_UNINITIALIZED;
+    }
+    return dispatchTable.xeSemaphoreQueryValue(hSemaphore);
+}
+xe_result_t __xecall xeSemaphoreReset(
+        xe_semaphore_handle_t hSemaphore
+    ){
+    if(dispatchTableInitialized == false){
+        return XE_RESULT_ERROR_UNINITIALIZED;
+    }
+    return dispatchTable.xeSemaphoreReset(hSemaphore);
+}
 xe_result_t __xecall xeDriverGetVersion(
         uint32_t* version
     ){
@@ -492,6 +286,289 @@ xe_result_t __xecall xeDriverGetVersion(
         return XE_RESULT_ERROR_UNINITIALIZED;
     }
     return dispatchTable.xeDriverGetVersion(version);
+}
+xe_result_t __xecall xeCommandListEncodeMemoryCopy(
+        xe_command_list_handle_t hCommandList,
+        void* dstptr,
+        const void* srcptr,
+        size_t size
+    ){
+    if(dispatchTableInitialized == false){
+        return XE_RESULT_ERROR_UNINITIALIZED;
+    }
+    return dispatchTable.xeCommandListEncodeMemoryCopy(hCommandList, dstptr, srcptr, size);
+}
+xe_result_t __xecall xeCommandListEncodeMemorySet(
+        xe_command_list_handle_t hCommandList,
+        void* ptr,
+        int value,
+        size_t size
+    ){
+    if(dispatchTableInitialized == false){
+        return XE_RESULT_ERROR_UNINITIALIZED;
+    }
+    return dispatchTable.xeCommandListEncodeMemorySet(hCommandList, ptr, value, size);
+}
+xe_result_t __xecall xeCommandListEncodeImageCopy(
+        xe_command_list_handle_t hCommandList,
+        xe_image_handle_t hDstImage,
+        xe_image_handle_t hSrcImage
+    ){
+    if(dispatchTableInitialized == false){
+        return XE_RESULT_ERROR_UNINITIALIZED;
+    }
+    return dispatchTable.xeCommandListEncodeImageCopy(hCommandList, hDstImage, hSrcImage);
+}
+xe_result_t __xecall xeCommandListEncodeImageCopyRegion(
+        xe_command_list_handle_t hCommandList,
+        xe_image_handle_t hDstImage,
+        xe_image_region_t* pDstRegion,
+        xe_image_handle_t hSrcImage,
+        xe_image_region_t* pSrcRegion
+    ){
+    if(dispatchTableInitialized == false){
+        return XE_RESULT_ERROR_UNINITIALIZED;
+    }
+    return dispatchTable.xeCommandListEncodeImageCopyRegion(hCommandList, hDstImage, pDstRegion, hSrcImage, pSrcRegion);
+}
+xe_result_t __xecall xeCommandListEncodeImageCopyToMemory(
+        xe_command_list_handle_t hCommandList,
+        void* dstptr,
+        xe_image_handle_t hSrcImage,
+        xe_image_region_t* pSrcRegion
+    ){
+    if(dispatchTableInitialized == false){
+        return XE_RESULT_ERROR_UNINITIALIZED;
+    }
+    return dispatchTable.xeCommandListEncodeImageCopyToMemory(hCommandList, dstptr, hSrcImage, pSrcRegion);
+}
+xe_result_t __xecall xeCommandListEncodeImageCopyFromMemory(
+        xe_command_list_handle_t hCommandList,
+        xe_image_handle_t hDstImage,
+        xe_image_region_t* pDstRegion,
+        void* srcptr
+    ){
+    if(dispatchTableInitialized == false){
+        return XE_RESULT_ERROR_UNINITIALIZED;
+    }
+    return dispatchTable.xeCommandListEncodeImageCopyFromMemory(hCommandList, hDstImage, pDstRegion, srcptr);
+}
+xe_result_t __xecall xeCommandListEncodeMemoryPrefetch(
+        xe_command_list_handle_t hCommandList,
+        const void* ptr,
+        size_t count
+    ){
+    if(dispatchTableInitialized == false){
+        return XE_RESULT_ERROR_UNINITIALIZED;
+    }
+    return dispatchTable.xeCommandListEncodeMemoryPrefetch(hCommandList, ptr, count);
+}
+xe_result_t __xecall xeCommandListEncodeMemAdvise(
+        xe_command_list_handle_t hCommandList,
+        xe_device_handle_t hDevice,
+        const void* ptr,
+        size_t size,
+        xe_memory_advice_t advice
+    ){
+    if(dispatchTableInitialized == false){
+        return XE_RESULT_ERROR_UNINITIALIZED;
+    }
+    return dispatchTable.xeCommandListEncodeMemAdvise(hCommandList, hDevice, ptr, size, advice);
+}
+xe_result_t __xecall xeDeviceCreateModule(
+        xe_device_handle_t hDevice,
+        const xe_module_desc_t* desc,
+        xe_module_handle_t* phModule,
+        xe_module_build_log_handle_t* phBuildLog
+    ){
+    if(dispatchTableInitialized == false){
+        return XE_RESULT_ERROR_UNINITIALIZED;
+    }
+    return dispatchTable.xeDeviceCreateModule(hDevice, desc, phModule, phBuildLog);
+}
+xe_result_t __xecall xeModuleDestroy(
+        xe_module_handle_t hModule
+    ){
+    if(dispatchTableInitialized == false){
+        return XE_RESULT_ERROR_UNINITIALIZED;
+    }
+    return dispatchTable.xeModuleDestroy(hModule);
+}
+xe_result_t __xecall xeModuleBuildLogDestroy(
+        xe_module_build_log_handle_t hModuleBuildLog
+    ){
+    if(dispatchTableInitialized == false){
+        return XE_RESULT_ERROR_UNINITIALIZED;
+    }
+    return dispatchTable.xeModuleBuildLogDestroy(hModuleBuildLog);
+}
+xe_result_t __xecall xeModuleBuildLogGetString(
+        xe_module_build_log_handle_t hModuleBuildLog,
+        uint32_t* pSize,
+        char** pBuildLog
+    ){
+    if(dispatchTableInitialized == false){
+        return XE_RESULT_ERROR_UNINITIALIZED;
+    }
+    return dispatchTable.xeModuleBuildLogGetString(hModuleBuildLog, pSize, pBuildLog);
+}
+xe_result_t __xecall xeModuleGetNativeBinary(
+        xe_module_handle_t hModule,
+        uint32_t* pSize,
+        char** pModuleNativeBinary
+    ){
+    if(dispatchTableInitialized == false){
+        return XE_RESULT_ERROR_UNINITIALIZED;
+    }
+    return dispatchTable.xeModuleGetNativeBinary(hModule, pSize, pModuleNativeBinary);
+}
+xe_result_t __xecall xeModuleCreateFunction(
+        xe_module_handle_t hModule,
+        const xe_function_desc_t* desc,
+        xe_function_handle_t* phFunction
+    ){
+    if(dispatchTableInitialized == false){
+        return XE_RESULT_ERROR_UNINITIALIZED;
+    }
+    return dispatchTable.xeModuleCreateFunction(hModule, desc, phFunction);
+}
+xe_result_t __xecall xeFunctionDestroy(
+        xe_function_handle_t hFunction
+    ){
+    if(dispatchTableInitialized == false){
+        return XE_RESULT_ERROR_UNINITIALIZED;
+    }
+    return dispatchTable.xeFunctionDestroy(hFunction);
+}
+xe_result_t __xecall xeModuleGetFunctionPointer(
+        xe_module_handle_t hModule,
+        const char* pFunctionName,
+        void** pfnFunction
+    ){
+    if(dispatchTableInitialized == false){
+        return XE_RESULT_ERROR_UNINITIALIZED;
+    }
+    return dispatchTable.xeModuleGetFunctionPointer(hModule, pFunctionName, pfnFunction);
+}
+xe_result_t __xecall xeFunctionSetGroupSize(
+        xe_function_handle_t hFunction,
+        uint32_t groupSizeX,
+        uint32_t groupSizeY,
+        uint32_t groupSizeZ
+    ){
+    if(dispatchTableInitialized == false){
+        return XE_RESULT_ERROR_UNINITIALIZED;
+    }
+    return dispatchTable.xeFunctionSetGroupSize(hFunction, groupSizeX, groupSizeY, groupSizeZ);
+}
+xe_result_t __xecall xeFunctionSuggestGroupSize(
+        xe_function_handle_t hFunction,
+        uint32_t globalSizeX,
+        uint32_t globalSizeY,
+        uint32_t globalSizeZ,
+        uint32_t* groupSizeX,
+        uint32_t* groupSizeY,
+        uint32_t* groupSizeZ
+    ){
+    if(dispatchTableInitialized == false){
+        return XE_RESULT_ERROR_UNINITIALIZED;
+    }
+    return dispatchTable.xeFunctionSuggestGroupSize(hFunction, globalSizeX, globalSizeY, globalSizeZ, groupSizeX, groupSizeY, groupSizeZ);
+}
+xe_result_t __xecall xeFunctionSetArgumentValue(
+        xe_function_handle_t hFunction,
+        uint32_t argIndex,
+        size_t argSize,
+        const void* pArgValue
+    ){
+    if(dispatchTableInitialized == false){
+        return XE_RESULT_ERROR_UNINITIALIZED;
+    }
+    return dispatchTable.xeFunctionSetArgumentValue(hFunction, argIndex, argSize, pArgValue);
+}
+xe_result_t __xecall xeFunctionSetAttribute(
+        xe_function_handle_t hFunction,
+        xe_function_set_attribute_t attr,
+        uint32_t value
+    ){
+    if(dispatchTableInitialized == false){
+        return XE_RESULT_ERROR_UNINITIALIZED;
+    }
+    return dispatchTable.xeFunctionSetAttribute(hFunction, attr, value);
+}
+xe_result_t __xecall xeFunctionGetAttribute(
+        xe_function_handle_t hFunction,
+        xe_function_get_attribute_t attr,
+        uint32_t* pValue
+    ){
+    if(dispatchTableInitialized == false){
+        return XE_RESULT_ERROR_UNINITIALIZED;
+    }
+    return dispatchTable.xeFunctionGetAttribute(hFunction, attr, pValue);
+}
+xe_result_t __xecall xeCommandListEncodeDispatchFunction(
+        xe_command_list_handle_t hCommandList,
+        xe_function_handle_t hFunction,
+        const xe_dispatch_function_arguments_t* pDispatchFuncArgs,
+        xe_event_handle_t hEvent
+    ){
+    if(dispatchTableInitialized == false){
+        return XE_RESULT_ERROR_UNINITIALIZED;
+    }
+    return dispatchTable.xeCommandListEncodeDispatchFunction(hCommandList, hFunction, pDispatchFuncArgs, hEvent);
+}
+xe_result_t __xecall xeCommandGraphEncodeDispatchFunction(
+        xe_command_graph_handle_t hCommandGraph,
+        xe_function_handle_t hFunction,
+        const xe_dispatch_function_arguments_t* pDispatchFuncArgs,
+        xe_event_handle_t hEvent
+    ){
+    if(dispatchTableInitialized == false){
+        return XE_RESULT_ERROR_UNINITIALIZED;
+    }
+    return dispatchTable.xeCommandGraphEncodeDispatchFunction(hCommandGraph, hFunction, pDispatchFuncArgs, hEvent);
+}
+xe_result_t __xecall xeCommandListEncodeDispatchFunctionIndirect(
+        xe_command_list_handle_t hCommandList,
+        xe_function_handle_t hFunction,
+        const xe_dispatch_function_indirect_arguments_t* pDispatchArgumentsBuffer,
+        xe_event_handle_t hEvent
+    ){
+    if(dispatchTableInitialized == false){
+        return XE_RESULT_ERROR_UNINITIALIZED;
+    }
+    return dispatchTable.xeCommandListEncodeDispatchFunctionIndirect(hCommandList, hFunction, pDispatchArgumentsBuffer, hEvent);
+}
+xe_result_t __xecall xeCommandGraphEncodeDispatchFunctionIndirect(
+        xe_command_graph_handle_t hCommandGraph,
+        xe_function_handle_t hFunction,
+        const xe_dispatch_function_indirect_arguments_t* pDispatchArgumentsBuffer,
+        xe_event_handle_t hEvent
+    ){
+    if(dispatchTableInitialized == false){
+        return XE_RESULT_ERROR_UNINITIALIZED;
+    }
+    return dispatchTable.xeCommandGraphEncodeDispatchFunctionIndirect(hCommandGraph, hFunction, pDispatchArgumentsBuffer, hEvent);
+}
+xe_result_t __xecall xeCommandListEncodeDispatchHostFunction(
+        xe_command_list_handle_t hCommandList,
+        xe_host_pfn_t pfnHostFunc,
+        void* pUserData
+    ){
+    if(dispatchTableInitialized == false){
+        return XE_RESULT_ERROR_UNINITIALIZED;
+    }
+    return dispatchTable.xeCommandListEncodeDispatchHostFunction(hCommandList, pfnHostFunc, pUserData);
+}
+xe_result_t __xecall xeCommandGraphEncodeDispatchHostFunction(
+        xe_command_graph_handle_t hCommandGraph,
+        xe_host_pfn_t pfnHostFunc,
+        void* pUserData
+    ){
+    if(dispatchTableInitialized == false){
+        return XE_RESULT_ERROR_UNINITIALIZED;
+    }
+    return dispatchTable.xeCommandGraphEncodeDispatchHostFunction(hCommandGraph, pfnHostFunc, pUserData);
 }
 xe_result_t __xecall xeDeviceCreateEvent(
         xe_device_handle_t hDevice,
@@ -648,75 +725,45 @@ xe_result_t __xecall xeEventReset(
     }
     return dispatchTable.xeEventReset(hEvent);
 }
-xe_result_t __xecall xeCommandQueueCreateFence(
-        xe_command_queue_handle_t hCommandQueue,
-        const xe_fence_desc_t* desc,
-        xe_fence_handle_t* phFence
+#if XE_ENABLE_OCL_INTEROP
+xe_result_t __xecall xeDeviceRegisterCLMemory(
+        xe_device_handle_t hDevice,
+        cl_context context,
+        cl_mem mem,
+        void** ptr
     ){
     if(dispatchTableInitialized == false){
         return XE_RESULT_ERROR_UNINITIALIZED;
     }
-    return dispatchTable.xeCommandQueueCreateFence(hCommandQueue, desc, phFence);
+    return dispatchTable.xeDeviceRegisterCLMemory(hDevice, context, mem, ptr);
 }
-xe_result_t __xecall xeFenceDestroy(
-        xe_fence_handle_t hFence
+#endif // XE_ENABLE_OCL_INTEROP
+#if XE_ENABLE_OCL_INTEROP
+xe_result_t __xecall xeDeviceRegisterCLProgram(
+        xe_device_handle_t hDevice,
+        cl_context context,
+        cl_program program,
+        xe_module_handle_t* phModule
     ){
     if(dispatchTableInitialized == false){
         return XE_RESULT_ERROR_UNINITIALIZED;
     }
-    return dispatchTable.xeFenceDestroy(hFence);
+    return dispatchTable.xeDeviceRegisterCLProgram(hDevice, context, program, phModule);
 }
-xe_result_t __xecall xeHostWaitOnFence(
-        xe_fence_handle_t hFence,
-        xe_synchronization_mode_t mode,
-        uint32_t delay,
-        uint32_t interval,
-        uint32_t timeout
+#endif // XE_ENABLE_OCL_INTEROP
+#if XE_ENABLE_OCL_INTEROP
+xe_result_t __xecall xeDeviceRegisterCLCommandQueue(
+        xe_device_handle_t hDevice,
+        cl_context context,
+        cl_command_queue command_queue,
+        xe_command_queue_handle_t* phCommandQueue
     ){
     if(dispatchTableInitialized == false){
         return XE_RESULT_ERROR_UNINITIALIZED;
     }
-    return dispatchTable.xeHostWaitOnFence(hFence, mode, delay, interval, timeout);
+    return dispatchTable.xeDeviceRegisterCLCommandQueue(hDevice, context, command_queue, phCommandQueue);
 }
-xe_result_t __xecall xeHostWaitOnMultipleFences(
-        uint32_t numFences,
-        xe_fence_handle_t* phFences,
-        xe_synchronization_mode_t mode,
-        uint32_t delay,
-        uint32_t interval,
-        uint32_t timeout
-    ){
-    if(dispatchTableInitialized == false){
-        return XE_RESULT_ERROR_UNINITIALIZED;
-    }
-    return dispatchTable.xeHostWaitOnMultipleFences(numFences, phFences, mode, delay, interval, timeout);
-}
-xe_result_t __xecall xeFenceQueryStatus(
-        xe_fence_handle_t hFence
-    ){
-    if(dispatchTableInitialized == false){
-        return XE_RESULT_ERROR_UNINITIALIZED;
-    }
-    return dispatchTable.xeFenceQueryStatus(hFence);
-}
-xe_result_t __xecall xeFenceQueryElapsedTime(
-        xe_fence_handle_t hFenceStart,
-        xe_fence_handle_t hFenceEnd,
-        double_t* pTime
-    ){
-    if(dispatchTableInitialized == false){
-        return XE_RESULT_ERROR_UNINITIALIZED;
-    }
-    return dispatchTable.xeFenceQueryElapsedTime(hFenceStart, hFenceEnd, pTime);
-}
-xe_result_t __xecall xeFenceReset(
-        xe_fence_handle_t hFence
-    ){
-    if(dispatchTableInitialized == false){
-        return XE_RESULT_ERROR_UNINITIALIZED;
-    }
-    return dispatchTable.xeFenceReset(hFence);
-}
+#endif // XE_ENABLE_OCL_INTEROP
 xe_result_t __xecall xeDeviceCreateImage(
         xe_device_handle_t hDevice,
         const xe_image_desc_t* desc,
@@ -734,6 +781,47 @@ xe_result_t __xecall xeImageDestroy(
         return XE_RESULT_ERROR_UNINITIALIZED;
     }
     return dispatchTable.xeImageDestroy(hImage);
+}
+xe_result_t __xecall xeDeviceCreateCommandQueue(
+        xe_device_handle_t hDevice,
+        const xe_command_queue_desc_t* desc,
+        xe_command_queue_handle_t* phCommandQueue
+    ){
+    if(dispatchTableInitialized == false){
+        return XE_RESULT_ERROR_UNINITIALIZED;
+    }
+    return dispatchTable.xeDeviceCreateCommandQueue(hDevice, desc, phCommandQueue);
+}
+xe_result_t __xecall xeCommandQueueDestroy(
+        xe_command_queue_handle_t hCommandQueue
+    ){
+    if(dispatchTableInitialized == false){
+        return XE_RESULT_ERROR_UNINITIALIZED;
+    }
+    return dispatchTable.xeCommandQueueDestroy(hCommandQueue);
+}
+xe_result_t __xecall xeCommandQueueEnqueueCommandLists(
+        xe_command_queue_handle_t hCommandQueue,
+        uint32_t numCommandLists,
+        xe_command_list_handle_t* phCommandLists,
+        xe_fence_handle_t hFence
+    ){
+    if(dispatchTableInitialized == false){
+        return XE_RESULT_ERROR_UNINITIALIZED;
+    }
+    return dispatchTable.xeCommandQueueEnqueueCommandLists(hCommandQueue, numCommandLists, phCommandLists, hFence);
+}
+xe_result_t __xecall xeCommandQueueSynchronize(
+        xe_command_queue_handle_t hCommandQueue,
+        xe_synchronization_mode_t mode,
+        uint32_t delay,
+        uint32_t interval,
+        uint32_t timeout
+    ){
+    if(dispatchTableInitialized == false){
+        return XE_RESULT_ERROR_UNINITIALIZED;
+    }
+    return dispatchTable.xeCommandQueueSynchronize(hCommandQueue, mode, delay, interval, timeout);
 }
 xe_result_t __xecall xeCreateMemAllocator(
         xe_mem_allocator_handle_t* phMemAllocHandle
@@ -852,221 +940,74 @@ xe_result_t __xecall xeIpcCloseMemHandle(
     }
     return dispatchTable.xeIpcCloseMemHandle(hMemAllocHandle, ptr);
 }
-xe_result_t __xecall xeDeviceCreateModule(
-        xe_device_handle_t hDevice,
-        const xe_module_desc_t* desc,
-        xe_module_handle_t* phModule,
-        xe_module_build_log_handle_t* phBuildLog
+xe_result_t __xecall xeCommandQueueCreateFence(
+        xe_command_queue_handle_t hCommandQueue,
+        const xe_fence_desc_t* desc,
+        xe_fence_handle_t* phFence
     ){
     if(dispatchTableInitialized == false){
         return XE_RESULT_ERROR_UNINITIALIZED;
     }
-    return dispatchTable.xeDeviceCreateModule(hDevice, desc, phModule, phBuildLog);
+    return dispatchTable.xeCommandQueueCreateFence(hCommandQueue, desc, phFence);
 }
-xe_result_t __xecall xeModuleDestroy(
-        xe_module_handle_t hModule
+xe_result_t __xecall xeFenceDestroy(
+        xe_fence_handle_t hFence
     ){
     if(dispatchTableInitialized == false){
         return XE_RESULT_ERROR_UNINITIALIZED;
     }
-    return dispatchTable.xeModuleDestroy(hModule);
+    return dispatchTable.xeFenceDestroy(hFence);
 }
-xe_result_t __xecall xeModuleBuildLogDestroy(
-        xe_module_build_log_handle_t hModuleBuildLog
+xe_result_t __xecall xeHostWaitOnFence(
+        xe_fence_handle_t hFence,
+        xe_synchronization_mode_t mode,
+        uint32_t delay,
+        uint32_t interval,
+        uint32_t timeout
     ){
     if(dispatchTableInitialized == false){
         return XE_RESULT_ERROR_UNINITIALIZED;
     }
-    return dispatchTable.xeModuleBuildLogDestroy(hModuleBuildLog);
+    return dispatchTable.xeHostWaitOnFence(hFence, mode, delay, interval, timeout);
 }
-xe_result_t __xecall xeModuleBuildLogGetString(
-        xe_module_build_log_handle_t hModuleBuildLog,
-        uint32_t* pSize,
-        char** pBuildLog
+xe_result_t __xecall xeHostWaitOnMultipleFences(
+        uint32_t numFences,
+        xe_fence_handle_t* phFences,
+        xe_synchronization_mode_t mode,
+        uint32_t delay,
+        uint32_t interval,
+        uint32_t timeout
     ){
     if(dispatchTableInitialized == false){
         return XE_RESULT_ERROR_UNINITIALIZED;
     }
-    return dispatchTable.xeModuleBuildLogGetString(hModuleBuildLog, pSize, pBuildLog);
+    return dispatchTable.xeHostWaitOnMultipleFences(numFences, phFences, mode, delay, interval, timeout);
 }
-xe_result_t __xecall xeModuleGetNativeBinary(
-        xe_module_handle_t hModule,
-        uint32_t* pSize,
-        char** pModuleNativeBinary
+xe_result_t __xecall xeFenceQueryStatus(
+        xe_fence_handle_t hFence
     ){
     if(dispatchTableInitialized == false){
         return XE_RESULT_ERROR_UNINITIALIZED;
     }
-    return dispatchTable.xeModuleGetNativeBinary(hModule, pSize, pModuleNativeBinary);
+    return dispatchTable.xeFenceQueryStatus(hFence);
 }
-xe_result_t __xecall xeModuleCreateFunction(
-        xe_module_handle_t hModule,
-        const xe_function_desc_t* desc,
-        xe_function_handle_t* phFunction
+xe_result_t __xecall xeFenceQueryElapsedTime(
+        xe_fence_handle_t hFenceStart,
+        xe_fence_handle_t hFenceEnd,
+        double_t* pTime
     ){
     if(dispatchTableInitialized == false){
         return XE_RESULT_ERROR_UNINITIALIZED;
     }
-    return dispatchTable.xeModuleCreateFunction(hModule, desc, phFunction);
+    return dispatchTable.xeFenceQueryElapsedTime(hFenceStart, hFenceEnd, pTime);
 }
-xe_result_t __xecall xeFunctionDestroy(
-        xe_function_handle_t hFunction
+xe_result_t __xecall xeFenceReset(
+        xe_fence_handle_t hFence
     ){
     if(dispatchTableInitialized == false){
         return XE_RESULT_ERROR_UNINITIALIZED;
     }
-    return dispatchTable.xeFunctionDestroy(hFunction);
-}
-xe_result_t __xecall xeModuleGetFunctionPointer(
-        xe_module_handle_t hModule,
-        const char* pFunctionName,
-        void** pfnFunction
-    ){
-    if(dispatchTableInitialized == false){
-        return XE_RESULT_ERROR_UNINITIALIZED;
-    }
-    return dispatchTable.xeModuleGetFunctionPointer(hModule, pFunctionName, pfnFunction);
-}
-xe_result_t __xecall xeFunctionSetGroupSize(
-        xe_function_handle_t hFunction,
-        uint32_t groupSizeX,
-        uint32_t groupSizeY,
-        uint32_t groupSizeZ
-    ){
-    if(dispatchTableInitialized == false){
-        return XE_RESULT_ERROR_UNINITIALIZED;
-    }
-    return dispatchTable.xeFunctionSetGroupSize(hFunction, groupSizeX, groupSizeY, groupSizeZ);
-}
-xe_result_t __xecall xeFunctionSuggestGroupSize(
-        xe_function_handle_t hFunction,
-        uint32_t globalSizeX,
-        uint32_t globalSizeY,
-        uint32_t globalSizeZ,
-        uint32_t* groupSizeX,
-        uint32_t* groupSizeY,
-        uint32_t* groupSizeZ
-    ){
-    if(dispatchTableInitialized == false){
-        return XE_RESULT_ERROR_UNINITIALIZED;
-    }
-    return dispatchTable.xeFunctionSuggestGroupSize(hFunction, globalSizeX, globalSizeY, globalSizeZ, groupSizeX, groupSizeY, groupSizeZ);
-}
-xe_result_t __xecall xeFunctionCreateFunctionArgs(
-        xe_function_handle_t hFunction,
-        xe_function_args_handle_t* phFunctionArgs
-    ){
-    if(dispatchTableInitialized == false){
-        return XE_RESULT_ERROR_UNINITIALIZED;
-    }
-    return dispatchTable.xeFunctionCreateFunctionArgs(hFunction, phFunctionArgs);
-}
-xe_result_t __xecall xeFunctionArgsDestroy(
-        xe_function_args_handle_t hFunctionArgs
-    ){
-    if(dispatchTableInitialized == false){
-        return XE_RESULT_ERROR_UNINITIALIZED;
-    }
-    return dispatchTable.xeFunctionArgsDestroy(hFunctionArgs);
-}
-xe_result_t __xecall xeFunctionArgsSetValue(
-        xe_function_args_handle_t hFunctionArgs,
-        uint32_t argIndex,
-        size_t argSize,
-        const void* pArgValue
-    ){
-    if(dispatchTableInitialized == false){
-        return XE_RESULT_ERROR_UNINITIALIZED;
-    }
-    return dispatchTable.xeFunctionArgsSetValue(hFunctionArgs, argIndex, argSize, pArgValue);
-}
-xe_result_t __xecall xeFunctionArgsSetAttribute(
-        xe_function_args_handle_t hFunctionArgs,
-        xe_function_argument_attribute_t attr,
-        uint32_t value
-    ){
-    if(dispatchTableInitialized == false){
-        return XE_RESULT_ERROR_UNINITIALIZED;
-    }
-    return dispatchTable.xeFunctionArgsSetAttribute(hFunctionArgs, attr, value);
-}
-xe_result_t __xecall xeFunctionQueryAttribute(
-        xe_function_handle_t hFunction,
-        xe_function_attribute_t attr,
-        uint32_t* pValue
-    ){
-    if(dispatchTableInitialized == false){
-        return XE_RESULT_ERROR_UNINITIALIZED;
-    }
-    return dispatchTable.xeFunctionQueryAttribute(hFunction, attr, pValue);
-}
-xe_result_t __xecall xeCommandListEncodeDispatchFunction(
-        xe_command_list_handle_t hCommandList,
-        xe_function_handle_t hFunction,
-        xe_function_args_handle_t hFunctionArgs,
-        const xe_dispatch_function_arguments_t* pDispatchFuncArgs,
-        xe_event_handle_t hEvent
-    ){
-    if(dispatchTableInitialized == false){
-        return XE_RESULT_ERROR_UNINITIALIZED;
-    }
-    return dispatchTable.xeCommandListEncodeDispatchFunction(hCommandList, hFunction, hFunctionArgs, pDispatchFuncArgs, hEvent);
-}
-xe_result_t __xecall xeCommandGraphEncodeDispatchFunction(
-        xe_command_graph_handle_t hCommandGraph,
-        xe_function_handle_t hFunction,
-        xe_function_args_handle_t hFunctionArgs,
-        const xe_dispatch_function_arguments_t* pDispatchFuncArgs,
-        xe_event_handle_t hEvent
-    ){
-    if(dispatchTableInitialized == false){
-        return XE_RESULT_ERROR_UNINITIALIZED;
-    }
-    return dispatchTable.xeCommandGraphEncodeDispatchFunction(hCommandGraph, hFunction, hFunctionArgs, pDispatchFuncArgs, hEvent);
-}
-xe_result_t __xecall xeCommandListEncodeDispatchFunctionIndirect(
-        xe_command_list_handle_t hCommandList,
-        xe_function_handle_t hFunction,
-        xe_function_args_handle_t hFunctionArgs,
-        const xe_dispatch_function_indirect_arguments_t* pDispatchArgumentsBuffer,
-        xe_event_handle_t hEvent
-    ){
-    if(dispatchTableInitialized == false){
-        return XE_RESULT_ERROR_UNINITIALIZED;
-    }
-    return dispatchTable.xeCommandListEncodeDispatchFunctionIndirect(hCommandList, hFunction, hFunctionArgs, pDispatchArgumentsBuffer, hEvent);
-}
-xe_result_t __xecall xeCommandGraphEncodeDispatchFunctionIndirect(
-        xe_command_graph_handle_t hCommandGraph,
-        xe_function_handle_t hFunction,
-        xe_function_args_handle_t hFunctionArgs,
-        const xe_dispatch_function_indirect_arguments_t* pDispatchArgumentsBuffer,
-        xe_event_handle_t hEvent
-    ){
-    if(dispatchTableInitialized == false){
-        return XE_RESULT_ERROR_UNINITIALIZED;
-    }
-    return dispatchTable.xeCommandGraphEncodeDispatchFunctionIndirect(hCommandGraph, hFunction, hFunctionArgs, pDispatchArgumentsBuffer, hEvent);
-}
-xe_result_t __xecall xeCommandListEncodeDispatchHostFunction(
-        xe_command_list_handle_t hCommandList,
-        xe_host_pfn_t pfnHostFunc,
-        void* pUserData
-    ){
-    if(dispatchTableInitialized == false){
-        return XE_RESULT_ERROR_UNINITIALIZED;
-    }
-    return dispatchTable.xeCommandListEncodeDispatchHostFunction(hCommandList, pfnHostFunc, pUserData);
-}
-xe_result_t __xecall xeCommandGraphEncodeDispatchHostFunction(
-        xe_command_graph_handle_t hCommandGraph,
-        xe_host_pfn_t pfnHostFunc,
-        void* pUserData
-    ){
-    if(dispatchTableInitialized == false){
-        return XE_RESULT_ERROR_UNINITIALIZED;
-    }
-    return dispatchTable.xeCommandGraphEncodeDispatchHostFunction(hCommandGraph, pfnHostFunc, pUserData);
+    return dispatchTable.xeFenceReset(hFence);
 }
 xe_result_t __xecall xeDeviceMakeMemoryResident(
         xe_device_handle_t hDevice,
@@ -1106,60 +1047,98 @@ xe_result_t __xecall xeDeviceEvictImage(
     }
     return dispatchTable.xeDeviceEvictImage(hDevice, hImage);
 }
-xe_result_t __xecall xeDeviceCreateSemaphore(
+xe_result_t __xecall xeDeviceCreateCommandList(
         xe_device_handle_t hDevice,
-        const xe_semaphore_desc_t* desc,
-        xe_semaphore_handle_t* phSemaphore
+        const xe_command_list_desc_t* desc,
+        xe_command_list_handle_t* phCommandList
     ){
     if(dispatchTableInitialized == false){
         return XE_RESULT_ERROR_UNINITIALIZED;
     }
-    return dispatchTable.xeDeviceCreateSemaphore(hDevice, desc, phSemaphore);
+    return dispatchTable.xeDeviceCreateCommandList(hDevice, desc, phCommandList);
 }
-xe_result_t __xecall xeSemaphoreDestroy(
-        xe_semaphore_handle_t hSemaphore
-    ){
-    if(dispatchTableInitialized == false){
-        return XE_RESULT_ERROR_UNINITIALIZED;
-    }
-    return dispatchTable.xeSemaphoreDestroy(hSemaphore);
-}
-xe_result_t __xecall xeCommandListEncodeSemaphoreSignal(
+xe_result_t __xecall xeDeviceCopyCommandList(
+        xe_device_handle_t hDevice,
         xe_command_list_handle_t hCommandList,
-        xe_semaphore_handle_t hSemaphore,
-        xe_semaphore_value_t value
+        xe_command_list_handle_t* phCommandList
     ){
     if(dispatchTableInitialized == false){
         return XE_RESULT_ERROR_UNINITIALIZED;
     }
-    return dispatchTable.xeCommandListEncodeSemaphoreSignal(hCommandList, hSemaphore, value);
+    return dispatchTable.xeDeviceCopyCommandList(hDevice, hCommandList, phCommandList);
 }
-xe_result_t __xecall xeCommandListEncodeSemaphoreWait(
+xe_result_t __xecall xeCommandListDestroy(
+        xe_command_list_handle_t hCommandList
+    ){
+    if(dispatchTableInitialized == false){
+        return XE_RESULT_ERROR_UNINITIALIZED;
+    }
+    return dispatchTable.xeCommandListDestroy(hCommandList);
+}
+xe_result_t __xecall xeCommandListClose(
+        xe_command_list_handle_t hCommandList
+    ){
+    if(dispatchTableInitialized == false){
+        return XE_RESULT_ERROR_UNINITIALIZED;
+    }
+    return dispatchTable.xeCommandListClose(hCommandList);
+}
+xe_result_t __xecall xeCommandListReset(
+        xe_command_list_handle_t hCommandList
+    ){
+    if(dispatchTableInitialized == false){
+        return XE_RESULT_ERROR_UNINITIALIZED;
+    }
+    return dispatchTable.xeCommandListReset(hCommandList);
+}
+xe_result_t __xecall xeCommandListSetParameter(
         xe_command_list_handle_t hCommandList,
-        xe_semaphore_handle_t hSemaphore,
-        xe_semaphore_wait_operation_t operation,
-        xe_semaphore_value_t value
+        xe_command_list_parameter_t parameter,
+        uint32_t value
     ){
     if(dispatchTableInitialized == false){
         return XE_RESULT_ERROR_UNINITIALIZED;
     }
-    return dispatchTable.xeCommandListEncodeSemaphoreWait(hCommandList, hSemaphore, operation, value);
+    return dispatchTable.xeCommandListSetParameter(hCommandList, parameter, value);
 }
-xe_result_t __xecall xeSemaphoreQueryValue(
-        xe_semaphore_handle_t hSemaphore
+xe_result_t __xecall xeCommandListGetParameter(
+        xe_command_list_handle_t hCommandList,
+        xe_command_list_parameter_t parameter,
+        uint32_t* value
     ){
     if(dispatchTableInitialized == false){
         return XE_RESULT_ERROR_UNINITIALIZED;
     }
-    return dispatchTable.xeSemaphoreQueryValue(hSemaphore);
+    return dispatchTable.xeCommandListGetParameter(hCommandList, parameter, value);
 }
-xe_result_t __xecall xeSemaphoreReset(
-        xe_semaphore_handle_t hSemaphore
+xe_result_t __xecall xeCommandListResetParameters(
+        xe_command_list_handle_t hCommandList
     ){
     if(dispatchTableInitialized == false){
         return XE_RESULT_ERROR_UNINITIALIZED;
     }
-    return dispatchTable.xeSemaphoreReset(hSemaphore);
+    return dispatchTable.xeCommandListResetParameters(hCommandList);
+}
+xe_result_t __xecall xeCommandListEncodeCommandLists(
+        xe_command_list_handle_t hCommandList,
+        uint32_t numCommandLists,
+        xe_command_list_handle_t* phCommandLists
+    ){
+    if(dispatchTableInitialized == false){
+        return XE_RESULT_ERROR_UNINITIALIZED;
+    }
+    return dispatchTable.xeCommandListEncodeCommandLists(hCommandList, numCommandLists, phCommandLists);
+}
+xe_result_t __xecall xeCommandListEncodeCommands(
+        xe_command_list_handle_t hCommandList,
+        xe_command_format_t format,
+        size_t size,
+        void* pBlob
+    ){
+    if(dispatchTableInitialized == false){
+        return XE_RESULT_ERROR_UNINITIALIZED;
+    }
+    return dispatchTable.xeCommandListEncodeCommands(hCommandList, format, size, pBlob);
 }
 
 #if defined(__cplusplus)
