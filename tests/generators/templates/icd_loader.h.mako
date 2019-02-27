@@ -49,13 +49,19 @@ typedef struct _cl_context* cl_context;
 typedef struct _cl_program* cl_program;
 
 %for obj in objects:
-%for cls in th.get_class_list(obj):
+%for cli, cls in enumerate(obj['class']):
 %if re.match(r"function", obj['type']):
+%if 'condition' in obj:
+#if ${th.subx(x,obj['condition'])}
+%endif
 typedef ${x}_result_t (__${x}call *pfn_${th.make_func_name(x, obj, cls)})(
     %for line in th.make_param_lines_short(x, obj, cls):
     ${line}
     %endfor
     );
+%if 'condition' in obj:
+#endif // ${th.subx(x,obj['condition'])}
+%endif
 %endif
 %endfor
 %endfor
@@ -63,9 +69,15 @@ typedef ${x}_result_t (__${x}call *pfn_${th.make_func_name(x, obj, cls)})(
 typedef struct _${x}_dispatch_table_t
 {
 %for obj in objects:
-%for cls in th.get_class_list(obj):
+%for cli, cls in enumerate(obj['class']):
 %if re.match(r"function", obj['type']):
+%if 'condition' in obj:
+#if ${th.subx(x,obj['condition'])}
+%endif
     pfn_${th.make_func_name(x, obj, cls)} ${th.make_func_name(x, obj, cls)};
+%if 'condition' in obj:
+#endif // ${th.subx(x,obj['condition'])}
+%endif
 %endif
 %endfor
 %endfor
@@ -76,18 +88,30 @@ bool load_${x}(void *handle, void *(*funcAddressGetter)(void *handle, const char
         return false;
     }
 %for obj in objects:
-%for cls in th.get_class_list(obj):
+%for cli, cls in enumerate(obj['class']):
 %if re.match(r"function", obj['type']):
+%if 'condition' in obj:
+#if ${th.subx(x,obj['condition'])}
+%endif
     outTable->${th.make_func_name(x, obj, cls)} = (pfn_${th.make_func_name(x, obj, cls)})funcAddressGetter(handle, "${th.make_func_name(x, obj, cls)}");
+%if 'condition' in obj:
+#endif // ${th.subx(x,obj['condition'])}
+%endif
 %endif
 %endfor
 %endfor
 %for obj in objects:
-%for cls in th.get_class_list(obj):
+%for cli, cls in enumerate(obj['class']):
 %if re.match(r"function", obj['type']):
+%if 'condition' in obj:
+#if ${th.subx(x,obj['condition'])}
+%endif
     if(0 == outTable->${th.make_func_name(x, obj, cls)}){
         return false;
     }
+%if 'condition' in obj:
+#endif // ${th.subx(x,obj['condition'])}
+%endif
 %endif
 %endfor
 %endfor

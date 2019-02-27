@@ -70,6 +70,7 @@ def generate_driver_frontend(path, namespace, specs):
     driver_sources = []
     mock_headers = []
     test_sources = []
+    print(functionsByActors.keys())
     for actor in functionsByActors.keys():
         if(actor not in allHandlesDict.keys()):
             print("Skipping generation of %s.h/.cpp - no base handle for this actor"%actor)
@@ -78,11 +79,15 @@ def generate_driver_frontend(path, namespace, specs):
         spec = None
         for s in specs:
             for o in s['objects']:
-                if((o['type'] == "function") and ('class' in o.keys()) and (isinstance(o['class'], (str,))) and (actor == extended_helper.class_to_actor_name(o['class']))):
+                if((o['type'] == "function") and ('class' in o.keys()) and (len(o['class'])  == 1) and (actor == extended_helper.class_to_actor_name(o['class'][0]))):
                     spec = s
                     break
             if(spec != None):
                 break
+        
+        if(spec == None):
+            print(actor)
+            exit(1)
                 
         uniqueFunctionsDict = dict((f['name'], f) for f in functionsByActors[actor])
         uniqueFunctions = [uniqueFunctionsDict[f] for f in uniqueFunctionsDict.keys()]

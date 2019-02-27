@@ -54,7 +54,7 @@ bool dispatchTableInitialized = false;
 extern "C" {
 #endif
 
-${x}_result_t __xecall ${x}DriverInit(${x}_init_flag_t flags){
+${x}_result_t __${x}call ${x}DriverInit(${x}_init_flag_t flags){
     static std::mutex crit;
     {
         std::lock_guard<std::mutex> lockGuard{crit};
@@ -76,10 +76,13 @@ ${x}_result_t __xecall ${x}DriverInit(${x}_init_flag_t flags){
 }
 
 %for obj in objects:
-%for cls in th.get_class_list(obj):
+%for cli, cls in enumerate(obj['class']):
 %if re.match(r"function", obj['type']):
 %if not "DriverInit" in th.make_func_name(x, obj, cls):
-__${x}dllexport ${x}_result_t __${x}call ${th.make_func_name(x, obj, cls)}(
+%if 'condition' in obj:
+#if ${th.subx(x,obj['condition'])}
+%endif
+${x}_result_t __${x}call ${th.make_func_name(x, obj, cls)}(
         %for line in th.make_param_lines_short(x, obj, cls):
         ${line}
         %endfor
@@ -89,6 +92,9 @@ __${x}dllexport ${x}_result_t __${x}call ${th.make_func_name(x, obj, cls)}(
     }
     return dispatchTable.${th.make_func_name(x, obj, cls)}(${th.make_params_list_single_line(obj, cls)});
 }
+%if 'condition' in obj:
+#endif // ${th.subx(x,obj['condition'])}
+%endif
 %endif
 %endif
 %endfor
