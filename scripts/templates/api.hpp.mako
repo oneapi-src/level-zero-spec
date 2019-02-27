@@ -136,7 +136,8 @@ namespace ${x}
             %endfor
             )
         {
-            return ::${th.make_func_name(x, f, obj['name'])}( ${th.make_param_call_str("handle", None, f, 'this')} );
+            auto result = ::${th.make_func_name(x, f, obj['name'])}( ${th.make_param_call_str("handle", None, f, 'this')} );
+            // if( ::${X}_RESULT_SUCCESS != result ) throw exception(result, "${x}::${th.subx(None, obj['name'])}::${th.subx(None, f['name'])}");
         }
 
         %endfor
