@@ -50,6 +50,10 @@
 *.out
 *.app
 
+# Debug files
+scripts/core/*.json
+scripts/extended/*.json
+
 # Generated docs
 html/
 latex/

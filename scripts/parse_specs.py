@@ -108,7 +108,4 @@ def parse(path):
             'objects'   : objects
         })
 
-    # for debug purposes
-    #util.jsonWrite("specs.json", specs)
-    #util.jsonWrite("meta.json", meta)
     return specs, meta
