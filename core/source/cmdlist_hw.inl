@@ -6,7 +6,7 @@
 #include "runtime/indirect_heap/indirect_heap.h"
 #include <cassert>
 
-namespace xe {
+namespace L0 {
 
 template <uint32_t gfxCoreFamily>
 bool CommandListCoreFamily<gfxCoreFamily>::initialize() {
@@ -245,4 +245,4 @@ xe_result_t CommandListCoreFamily<gfxCoreFamily>::setParameter(xe_command_list_p
     return XE_RESULT_ERROR_UNSUPPORTED;
 }
 
-} // namespace xe
+} // namespace L0

@@ -80,7 +80,7 @@ __xedllexport xe_result_t __xecall
         }
         /// @begin
 
-        return xe::Device::fromHandle(hDevice)->createImage(desc, phImage);
+        return L0::Device::fromHandle(hDevice)->createImage(desc, phImage);
 
         /// @end
     }
@@ -134,7 +134,7 @@ __xedllexport xe_result_t __xecall
         }
         /// @begin
 
-        return xe::Image::fromHandle(hImage)->destroy();
+        return L0::Image::fromHandle(hImage)->destroy();
 
         /// @end
     }

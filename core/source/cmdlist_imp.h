@@ -14,7 +14,7 @@ class GraphicsAllocation;
 using ResidencyContainer = std::vector<GraphicsAllocation *>;
 }
 
-namespace xe {
+namespace L0 {
 
 struct CommandListImp : public CommandList {
     CommandListImp(Device *device)
@@ -46,4 +46,4 @@ struct CommandListImp : public CommandList {
     OCLRT::ResidencyContainer residencyContainer;
 };
 
-} // namespace xe
+} // namespace L0

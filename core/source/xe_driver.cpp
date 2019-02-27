@@ -74,7 +74,7 @@ __xedllexport xe_result_t __xecall
         }
         /// @begin
 
-        return xe::Driver::get()->init(flags);
+        return L0::Driver::get()->init(flags);
 
         /// @end
     }
@@ -130,7 +130,7 @@ __xedllexport xe_result_t __xecall
         }
         /// @begin
 
-        return xe::Driver::get()->getVersion(version);
+        return L0::Driver::get()->getVersion(version);
 
         /// @end
     }

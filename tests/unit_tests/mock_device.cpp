@@ -5,7 +5,7 @@
 #include "unit_tests/mocks/mock_csr.h"
 #include "gmock/gmock.h"
 
-namespace xe {
+namespace L0 {
 namespace ult {
 
 using ::testing::Return;
@@ -33,4 +33,4 @@ Mock<Device>::~Mock() {
 }
 
 } // namespace ult
-} // namespace xe
+} // namespace L0

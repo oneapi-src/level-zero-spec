@@ -72,7 +72,7 @@ __xedllexport xe_result_t __xecall
         }
         /// @begin
 
-        return xe::Device::fromHandle(hDevice)->makeMemoryResident(ptr, size);
+        return L0::Device::fromHandle(hDevice)->makeMemoryResident(ptr, size);
 
         /// @end
     }
@@ -130,7 +130,7 @@ __xedllexport xe_result_t __xecall
         }
         /// @begin
 
-        return xe::Device::fromHandle(hDevice)->evictMemory(ptr, size);
+        return L0::Device::fromHandle(hDevice)->evictMemory(ptr, size);
 
         /// @end
     }
@@ -186,7 +186,7 @@ __xedllexport xe_result_t __xecall
         }
         /// @begin
 
-        return xe::Device::fromHandle(hDevice)->makeImageResident(hImage);
+        return L0::Device::fromHandle(hDevice)->makeImageResident(hImage);
 
         /// @end
     }
@@ -244,7 +244,7 @@ __xedllexport xe_result_t __xecall
         }
         /// @begin
 
-        return xe::Device::fromHandle(hDevice)->evictImage(hImage);
+        return L0::Device::fromHandle(hDevice)->evictImage(hImage);
 
         /// @end
     }

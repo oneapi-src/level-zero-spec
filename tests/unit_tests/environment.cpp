@@ -13,7 +13,7 @@ extern bool overrideCommandStreamReceiverCreation;
 extern TestMode testMode;
 }
 
-namespace xe {
+namespace L0 {
 namespace ult {
 
 extern ::testing::Environment *environment;
@@ -60,4 +60,4 @@ struct InitializeEnvironment {
 static InitializeEnvironment initializeEnvironment;
 
 } // namespace ult
-} // namespace xe
+} // namespace L0

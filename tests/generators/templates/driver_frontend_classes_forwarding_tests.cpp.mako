@@ -36,7 +36,7 @@ import extended_helper as th
 
 using ::testing::Return;
 
-namespace xe {
+namespace L0 {
 namespace ult {
 
 %for obj in objects:

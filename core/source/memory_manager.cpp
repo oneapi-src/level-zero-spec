@@ -5,7 +5,7 @@
 
 #include <unordered_map> // temporary
 
-namespace xe {
+namespace L0 {
 
 struct MemoryManagerImp : public MemoryManager {
     GraphicsAllocation *allocateDeviceMemory(size_t size, size_t alignment) override {
@@ -47,11 +47,11 @@ struct MemoryManagerImp : public MemoryManager {
 
     OCLRT::MemoryManager *memoryManagerRT;
     OCLRT::SVMAllocsManager::MapBasedAllocationTracker knownAllocations;
-    std::unordered_map<OCLRT::GraphicsAllocation*, xe::GraphicsAllocation*> allocMap; // temporary
+    std::unordered_map<OCLRT::GraphicsAllocation*, L0::GraphicsAllocation*> allocMap; // temporary
 };
 
 MemoryManager *MemoryManager::create(void *memoryManagerRT) {
     return new MemoryManagerImp(memoryManagerRT);
 }
 
-} // namespace xe
+} // namespace L0

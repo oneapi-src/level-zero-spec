@@ -3,12 +3,12 @@
 #include "white_box.h"
 #include "mock.h"
 
-namespace xe {
+namespace L0 {
 namespace ult {
 
 template <>
-struct WhiteBox<::xe::CommandQueue> : public ::xe::CommandQueueImp {
-    using BaseClass = ::xe::CommandQueueImp;
+struct WhiteBox<::L0::CommandQueue> : public ::L0::CommandQueueImp {
+    using BaseClass = ::L0::CommandQueueImp;
     using BaseClass::allocation;
     using BaseClass::commandStream;
     using BaseClass::csrRT;
@@ -18,7 +18,7 @@ struct WhiteBox<::xe::CommandQueue> : public ::xe::CommandQueueImp {
     virtual ~WhiteBox();
 };
 
-using CommandQueue = WhiteBox<::xe::CommandQueue>;
+using CommandQueue = WhiteBox<::L0::CommandQueue>;
 
 template <>
 struct Mock<CommandQueue> : public CommandQueue {
@@ -38,4 +38,4 @@ struct Mock<CommandQueue> : public CommandQueue {
 };
 
 } // namespace ult
-} // namespace xe
+} // namespace L0

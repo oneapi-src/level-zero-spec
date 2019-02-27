@@ -5,14 +5,14 @@
 #include "white_box.h"
 #include "mock.h"
 
-namespace xe {
+namespace L0 {
 struct GraphicsAllocation;
 
 namespace ult {
 
 template <>
-struct WhiteBox<::xe::CommandList> : public ::xe::CommandListImp {
-    using BaseClass = ::xe::CommandListImp;
+struct WhiteBox<::L0::CommandList> : public ::L0::CommandListImp {
+    using BaseClass = ::L0::CommandListImp;
     using BaseClass::allocation;
     using BaseClass::allocationIndirectHeaps;
     using BaseClass::commandStream;
@@ -24,7 +24,7 @@ struct WhiteBox<::xe::CommandList> : public ::xe::CommandListImp {
     virtual ~WhiteBox();
 };
 
-using CommandList = WhiteBox<::xe::CommandList>;
+using CommandList = WhiteBox<::L0::CommandList>;
 
 template <>
 struct Mock<CommandList> : public CommandList {
@@ -96,4 +96,4 @@ struct Mock<CommandList> : public CommandList {
 };
 
 } // namespace ult
-} // namespace xe
+} // namespace L0

@@ -100,7 +100,7 @@ using namespace ::Math; // just to emphasize the origin (wich originally is not 
 using KernelArgInfo = ::KernelArgInfo;
 } // namespace OCLRT
 
-namespace xe {
+namespace L0 {
 
 struct ModuleImp : public Module {
     ModuleImp(Device *device, void *deviceRT) : device(device), progRT(OCLRT_temporary::LightweightOclProgram::create(deviceRT)) {}
@@ -518,4 +518,4 @@ xe_result_t moduleBuildLogGetString(xe_module_build_log_handle_t hModuleBuildLog
     return XE_RESULT_ERROR_UNSUPPORTED;
 }
 
-} // namespace xe
+} // namespace L0

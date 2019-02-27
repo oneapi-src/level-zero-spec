@@ -8,7 +8,7 @@
 #include "runtime/command_stream/linear_stream.h"
 #include "unit_tests/gen_common/gen_cmd_parse.h"
 
-namespace xe {
+namespace L0 {
 namespace ult {
 
 using ::testing::_;
@@ -82,4 +82,4 @@ HWTEST_F(CommandListEncodeSignalEvent, addsEventGraphicsAllocationToResidencyCon
 }
 
 } // namespace ult
-} // namespace xe
+} // namespace L0

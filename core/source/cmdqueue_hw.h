@@ -1,7 +1,7 @@
 #pragma once
 #include "cmdqueue_imp.h"
 
-namespace xe {
+namespace L0 {
 
 template <uint32_t gfxCoreFamily>
 struct CommandQueueHw : public CommandQueueImp {
@@ -19,4 +19,4 @@ struct CommandQueueHw : public CommandQueueImp {
                             uint32_t timeout) override;
 };
 
-} // namespace xe
+} // namespace L0

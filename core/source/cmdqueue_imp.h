@@ -5,7 +5,7 @@ namespace OCLRT {
 class LinearStream;
 }
 
-namespace xe {
+namespace L0 {
 struct CommandList;
 struct GraphicsAllocation;
 
@@ -31,4 +31,4 @@ struct CommandQueueImp : public CommandQueue {
     OCLRT::LinearStream *commandStream;
 };
 
-} // namespace xe
+} // namespace L0

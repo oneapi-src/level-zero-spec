@@ -3,7 +3,7 @@
 
 using ::testing::Return;
 
-namespace xe {
+namespace L0 {
 namespace ult {
 
 TEST(xeDriverInit, redirectsToObject) {
@@ -43,4 +43,4 @@ TEST(xeDriverGetDevice, returnsSuccess) {
 }
 
 } // namespace ult
-} // namespace xe
+} // namespace L0

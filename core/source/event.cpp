@@ -4,7 +4,7 @@
 #include "memory_manager.h"
 #include <cassert>
 
-namespace xe {
+namespace L0 {
 
 struct EventImp : public Event {
     EventImp(Device *device) : device(device) {}
@@ -98,4 +98,4 @@ xe_result_t hostWaitOnMultipleEvents(uint32_t numEvents,
     return XE_RESULT_ERROR_UNSUPPORTED;
 }
 
-} // namespace xe
+} // namespace L0

@@ -1,6 +1,6 @@
 #include "fence.h"
 
-namespace xe {
+namespace L0 {
 
 struct FenceImp : public Fence {
     xe_result_t destroy() override {
@@ -56,4 +56,4 @@ xe_result_t hostWaitOnMultipleFences(uint32_t numFences,
     return XE_RESULT_ERROR_UNSUPPORTED;
 }
 
-} // namespace xe
+} // namespace L0

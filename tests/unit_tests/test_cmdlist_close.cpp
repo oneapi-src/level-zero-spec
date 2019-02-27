@@ -9,7 +9,7 @@
 #include "unit_tests/gen_common/gen_cmd_parse.h"
 #include "gmock/gmock.h"
 
-namespace xe {
+namespace L0 {
 namespace ult {
 
 using ::testing::_;
@@ -50,4 +50,4 @@ HWTEST_F(CommandListClose, addsBatchBufferEndToCommandStream) {
 }
 
 } // namespace ult
-} // namespace xe
+} // namespace L0

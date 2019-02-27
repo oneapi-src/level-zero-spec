@@ -1,9 +1,9 @@
 // This is a generated file
-// Check xe::ult::ModuleCreate_onlineCompilationModuleTest_Test::TestBody for details
+// Check L0::ult::ModuleCreate_onlineCompilationModuleTest_Test::TestBody for details
 
 #include "tests/unit_tests/mock_module_precompiled.h"
 
-namespace xe {
+namespace L0 {
 namespace ult {
 
 static const uint32_t MemcpyBytes_SimdSize_Gen12HPcore = 32;
@@ -70,5 +70,5 @@ MemcpyBytes_BufferArgIndicesAndOffsets_Gen12HPcore, sizeof(MemcpyBytes_BufferArg
 
 RegisterPrecompiledFunctionMocksData Register_MemcpyBytes_Gen12HPcore{ & MemcpyBytes_Gen12HPcore, "MemcpyBytes", "Gen12HPcore" }; 
 
-} // namespace xe
+} // namespace L0
 } // namespace ult

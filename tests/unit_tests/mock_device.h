@@ -3,14 +3,14 @@
 #include "mock.h"
 #include "white_box.h"
 
-namespace xe {
+namespace L0 {
 namespace ult {
 
 template <>
-struct WhiteBox<::xe::Device> : public ::xe::Device {
+struct WhiteBox<::L0::Device> : public ::L0::Device {
 };
 
-using Device = WhiteBox<::xe::Device>;
+using Device = WhiteBox<::L0::Device>;
 
 template <>
 struct Mock<Device> : public Device {
@@ -67,4 +67,4 @@ struct Mock<Device> : public Device {
 };
 
 } // namespace ult
-} // namespace xe
+} // namespace L0

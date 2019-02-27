@@ -72,7 +72,7 @@ __xedllexport xe_result_t __xecall
         }
         /// @begin
 
-        return xe::CommandList::fromHandle(hCommandList)->encodeExecutionBarrier();
+        return L0::CommandList::fromHandle(hCommandList)->encodeExecutionBarrier();
 
         /// @end
     }

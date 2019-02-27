@@ -1,7 +1,7 @@
 #pragma once
 #include <cstddef>
 
-namespace xe {
+namespace L0 {
 struct GraphicsAllocation;
 
 struct MemoryManager {
@@ -13,4 +13,4 @@ struct MemoryManager {
     static MemoryManager *create(void *memoryManagerRT);
 };
 
-} // namespace xe
+} // namespace L0

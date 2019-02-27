@@ -2,7 +2,7 @@
 #include "runtime/memory_manager/graphics_allocation.h"
 #include "gmock/gmock.h"
 
-namespace xe {
+namespace L0 {
 
 TEST(GraphicsAllocation, ctor) {
     uint8_t buffer[1024];
@@ -19,4 +19,4 @@ TEST(GraphicsAllocation, ctorWrapper) {
     EXPECT_NE(nullptr, allocation.allocationRT);
 }
 
-} // namespace xe
+} // namespace L0

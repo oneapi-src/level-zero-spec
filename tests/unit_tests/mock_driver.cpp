@@ -1,6 +1,6 @@
 #include "mock_driver.h"
 
-namespace xe {
+namespace L0 {
 namespace ult {
 
 Mock<Driver>::Mock() {
@@ -15,4 +15,4 @@ Mock<Driver>::~Mock() {
 }
 
 } // namespace ult
-} // namespace xe
+} // namespace L0

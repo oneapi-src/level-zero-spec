@@ -2,7 +2,7 @@
 #include "xe_all.h"
 #include "driver.h"
 
-namespace xe {
+namespace L0 {
 
 xe_result_t createMemAllocator(xe_mem_allocator_handle_t *phMemAllocHandle);
 
@@ -55,4 +55,4 @@ xe_result_t sharedMemAlloc(xe_mem_allocator_handle_t hMemAllocHandle,
                            size_t alignment,
                            void **ptr);
 
-} // namespace xe
+} // namespace L0

@@ -1,6 +1,6 @@
 #pragma once
 
-namespace xe {
+namespace L0 {
 namespace ult {
 
 template <typename Type>
@@ -23,4 +23,4 @@ Type *blackbox_cast(WhiteBox<Type> *obj) {
 }
 
 } // namespace ult
-} // namespace xe
+} // namespace L0

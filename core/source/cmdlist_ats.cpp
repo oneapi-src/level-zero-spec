@@ -1,6 +1,6 @@
 #include "cmdlist_gen12hp.inl"
 
-namespace xe {
+namespace L0 {
 
 template <>
 struct CommandListProductFamily<IGFX_TIGERLAKE_HP> : public CommandListCoreFamily<IGFX_GEN12_CORE> {
@@ -9,4 +9,4 @@ struct CommandListProductFamily<IGFX_TIGERLAKE_HP> : public CommandListCoreFamil
 
 static CommandListPopulateFactory<IGFX_TIGERLAKE_HP, CommandListProductFamily<IGFX_TIGERLAKE_HP>> populateTGLHP;
 
-} // namespace xe
+} // namespace L0

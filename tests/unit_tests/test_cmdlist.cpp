@@ -9,7 +9,7 @@
 #include "test.h"
 #include "unit_tests/gen_common/gen_cmd_parse.h"
 
-namespace xe {
+namespace L0 {
 namespace ult {
 
 TEST(xeCommandListDestroy, redirectsToObject) {
@@ -149,4 +149,4 @@ ATSTEST_F(CommandListCreate, addsCfeStateToBatchBuffer) {
 }
 
 } // namespace ult
-} // namespace xe
+} // namespace L0

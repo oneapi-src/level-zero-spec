@@ -3,14 +3,14 @@
 #include "mock.h"
 #include "white_box.h"
 
-namespace xe {
+namespace L0 {
 namespace ult {
 
 template <>
-struct WhiteBox<::xe::Driver> : public ::xe::Driver {
+struct WhiteBox<::L0::Driver> : public ::L0::Driver {
 };
 
-using Driver = WhiteBox<::xe::Driver>;
+using Driver = WhiteBox<::L0::Driver>;
 
 template <>
 struct Mock<Driver> : public Driver {
@@ -32,4 +32,4 @@ struct Mock<Driver> : public Driver {
 };
 
 } // namespace ult
-} // namespace xe
+} // namespace L0

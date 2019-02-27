@@ -3,7 +3,7 @@
 #include "runtime/platform/platform.h"
 #include <cassert>
 
-namespace xe {
+namespace L0 {
 
 struct DriverImp : public Driver {
     xe_result_t init(xe_init_flag_t) override {
@@ -41,4 +41,4 @@ struct DriverImp : public Driver {
 static DriverImp driverImp;
 Driver *Driver::driver = &driverImp;
 
-} // namespace xe
+} // namespace L0

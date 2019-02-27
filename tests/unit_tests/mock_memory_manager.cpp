@@ -2,7 +2,7 @@
 #include "graphics_allocation.h"
 #include "runtime/helpers/aligned_memory.h"
 
-namespace xe {
+namespace L0 {
 namespace ult {
 
 using ::testing::AnyNumber;
@@ -20,7 +20,7 @@ static void freeGraphicsAllocation(GraphicsAllocation *allocation) {
 }
 
 Mock<MemoryManager>::Mock() {
-    using MockMemoryManager = Mock<::xe::MemoryManager>;
+    using MockMemoryManager = Mock<::L0::MemoryManager>;
     ON_CALL(*this, allocateDeviceMemory)
         .WillByDefault(Invoke(createGraphicsAllocation));
 
@@ -35,4 +35,4 @@ Mock<MemoryManager>::~Mock() {
 }
 
 } // namespace ult
-} // namespace xe
+} // namespace L0

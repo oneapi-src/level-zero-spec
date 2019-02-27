@@ -7,7 +7,7 @@ using ::testing::_;
 using ::testing::AnyNumber;
 using ::testing::Return;
 
-namespace xe {
+namespace L0 {
 namespace ult {
 
 TEST(sharedMemAlloc, returnsValidPtr) {
@@ -43,4 +43,4 @@ TEST(sharedMemAlloc, returnsValidPtr) {
 }
 
 } // namespace ult
-} // namespace xe
+} // namespace L0

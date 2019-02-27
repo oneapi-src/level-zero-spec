@@ -3,18 +3,18 @@
 #include "runtime/platform/platform.h"
 #include "unit_tests/mocks/mock_csr.h"
 
-namespace xe {
+namespace L0 {
 namespace ult {
 
-WhiteBox<::xe::CommandQueue>::WhiteBox(Device *device, void *csrRT)
-    : ::xe::CommandQueueImp(device, csrRT) {
+WhiteBox<::L0::CommandQueue>::WhiteBox(Device *device, void *csrRT)
+    : ::L0::CommandQueueImp(device, csrRT) {
 }
 
-WhiteBox<::xe::CommandQueue>::~WhiteBox() {
+WhiteBox<::L0::CommandQueue>::~WhiteBox() {
 }
 
 Mock<CommandQueue>::Mock(Device *device, void *csrRT)
-    : WhiteBox<::xe::CommandQueue>(device, csrRT) {
+    : WhiteBox<::L0::CommandQueue>(device, csrRT) {
     auto ordinal = 0u;
     auto platform = OCLRT::constructPlatform();
     auto deviceRT = platform->getDevice(ordinal);
@@ -28,4 +28,4 @@ Mock<CommandQueue>::~Mock() {
 }
 
 } // ult
-} // namespace xe
+} // namespace L0

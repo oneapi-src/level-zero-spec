@@ -1,6 +1,6 @@
 #include "mock_event.h"
 
-namespace xe {
+namespace L0 {
 namespace ult {
 
 Mock<Event>::Mock() : mockAllocation(&memory, sizeof(memory)) {
@@ -11,4 +11,4 @@ Mock<Event>::~Mock() {
 }
 
 } // namespace ult
-} // namespace xe
+} // namespace L0

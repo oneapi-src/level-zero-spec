@@ -5,7 +5,7 @@
 struct _xe_fence_handle_t {
 };
 
-namespace xe {
+namespace L0 {
 
 struct Fence : public _xe_fence_handle_t {
     virtual xe_result_t destroy() = 0;
@@ -42,4 +42,4 @@ xe_result_t hostWaitOnMultipleFences(uint32_t numFences,
                                      uint32_t interval,
                                      uint32_t timeout);
 
-} // namespace xe
+} // namespace L0

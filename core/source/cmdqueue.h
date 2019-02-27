@@ -6,7 +6,7 @@
 struct _xe_command_queue_handle_t {
 };
 
-namespace xe {
+namespace L0 {
 
 struct CommandQueue : public _xe_command_queue_handle_t {
     template <typename Type>
@@ -55,4 +55,4 @@ xeCommandQueueEnqueueCommandLists(
     xe_command_list_handle_t *phCommandLists,
     xe_fence_handle_t hFence);
 
-} // namespace xe
+} // namespace L0

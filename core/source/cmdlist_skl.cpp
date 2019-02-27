@@ -3,7 +3,7 @@
 #include "cmdlist_hw.inl"
 #include "igfxfmid.h"
 
-namespace xe {
+namespace L0 {
 
 template <>
 struct CommandListProductFamily<IGFX_SKYLAKE> : public CommandListCoreFamily<IGFX_GEN9_CORE> {
@@ -12,4 +12,4 @@ struct CommandListProductFamily<IGFX_SKYLAKE> : public CommandListCoreFamily<IGF
 
 static CommandListPopulateFactory<IGFX_SKYLAKE, CommandListProductFamily<IGFX_SKYLAKE>> populateSKL;
 
-} // namespace xe
+} // namespace L0

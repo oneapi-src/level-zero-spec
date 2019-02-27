@@ -3,7 +3,7 @@
 #include "cmdlist_hw.inl"
 #include "igfxfmid.h"
 
-namespace xe {
+namespace L0 {
 
 template <>
 struct CommandListProductFamily<IGFX_BROADWELL> : public CommandListCoreFamily<IGFX_GEN8_CORE> {
@@ -12,4 +12,4 @@ struct CommandListProductFamily<IGFX_BROADWELL> : public CommandListCoreFamily<I
 
 static CommandListPopulateFactory<IGFX_BROADWELL, CommandListProductFamily<IGFX_BROADWELL>> populateBDW;
 
-} // namespace xe
+} // namespace L0

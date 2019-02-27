@@ -6,7 +6,7 @@
 #include "module.h"
 #include "runtime/device/device.h"
 
-namespace xe {
+namespace L0 {
 
 struct DeviceImp : public Device {
     xe_result_t canAccessPeer(xe_device_handle_t hPeerDevice,
@@ -144,4 +144,4 @@ xe_result_t deviceGetLinkProperties(uint32_t srcOrdinal,
     return XE_RESULT_ERROR_UNSUPPORTED;
 }
 
-} // namespace xe
+} // namespace L0

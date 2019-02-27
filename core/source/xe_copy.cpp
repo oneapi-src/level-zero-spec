@@ -83,7 +83,7 @@ __xedllexport xe_result_t __xecall
         }
         /// @begin
 
-        return xe::CommandList::fromHandle(hCommandList)->encodeMemoryCopy(dstptr, srcptr, size);
+        return L0::CommandList::fromHandle(hCommandList)->encodeMemoryCopy(dstptr, srcptr, size);
 
         /// @end
     }
@@ -149,7 +149,7 @@ __xedllexport xe_result_t __xecall
         }
         /// @begin
 
-        return xe::CommandList::fromHandle(hCommandList)->encodeMemorySet(ptr, value, size);
+        return L0::CommandList::fromHandle(hCommandList)->encodeMemorySet(ptr, value, size);
 
         /// @end
     }
@@ -211,7 +211,7 @@ __xedllexport xe_result_t __xecall
         }
         /// @begin
 
-        return xe::CommandList::fromHandle(hCommandList)->encodeImageCopy(hDstImage, hSrcImage);
+        return L0::CommandList::fromHandle(hCommandList)->encodeImageCopy(hDstImage, hSrcImage);
 
         /// @end
     }
@@ -271,7 +271,7 @@ __xedllexport xe_result_t __xecall
         }
         /// @begin
 
-        return xe::CommandList::fromHandle(hCommandList)->encodeImageCopyRegion(hDstImage, pDstRegion, hSrcImage, pSrcRegion);
+        return L0::CommandList::fromHandle(hCommandList)->encodeImageCopyRegion(hDstImage, pDstRegion, hSrcImage, pSrcRegion);
 
         /// @end
     }
@@ -336,7 +336,7 @@ __xedllexport xe_result_t __xecall
         }
         /// @begin
 
-        return xe::CommandList::fromHandle(hCommandList)->encodeImageCopyToMemory(dstptr, hSrcImage, pSrcRegion);
+        return L0::CommandList::fromHandle(hCommandList)->encodeImageCopyToMemory(dstptr, hSrcImage, pSrcRegion);
 
         /// @end
     }
@@ -401,7 +401,7 @@ __xedllexport xe_result_t __xecall
         }
         /// @begin
 
-        return xe::CommandList::fromHandle(hCommandList)->encodeImageCopyFromMemory(hDstImage, pDstRegion, srcptr);
+        return L0::CommandList::fromHandle(hCommandList)->encodeImageCopyFromMemory(hDstImage, pDstRegion, srcptr);
 
         /// @end
     }
@@ -468,7 +468,7 @@ __xedllexport xe_result_t __xecall
         }
         /// @begin
 
-        return xe::CommandList::fromHandle(hCommandList)->encodeMemoryPrefetch(ptr, count);
+        return L0::CommandList::fromHandle(hCommandList)->encodeMemoryPrefetch(ptr, count);
 
         /// @end
     }
@@ -542,7 +542,7 @@ __xedllexport xe_result_t __xecall
         }
         /// @begin
 
-        return xe::CommandList::fromHandle(hCommandList)->encodeMemAdvise(hDevice, ptr, size, advice);
+        return L0::CommandList::fromHandle(hCommandList)->encodeMemAdvise(hDevice, ptr, size, advice);
 
         /// @end
     }

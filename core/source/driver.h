@@ -2,7 +2,7 @@
 #include "xe_device.h"
 #include "xe_driver.h"
 
-namespace xe {
+namespace L0 {
 
 struct Driver {
     virtual xe_result_t getDevice(uint32_t uniqueId,
@@ -21,4 +21,4 @@ struct Driver {
     static Driver *driver;
 };
 
-} // namespace xe
+} // namespace L0

@@ -3,8 +3,8 @@
 #include "cmdqueue_hw.inl"
 #include "igfxfmid.h"
 
-namespace xe {
+namespace L0 {
 
 static CommandQueuePopulateFactory<IGFX_ICELAKE_LP, CommandQueueHw<IGFX_GEN11_CORE>> populateICLLP;
 
-} // namespace xe
+} // namespace L0

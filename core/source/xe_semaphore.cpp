@@ -80,7 +80,7 @@ __xedllexport xe_result_t __xecall
         }
         /// @begin
 
-        return xe::Device::fromHandle(hDevice)->createSemaphore(desc, phSemaphore);
+        return L0::Device::fromHandle(hDevice)->createSemaphore(desc, phSemaphore);
 
         /// @end
     }
@@ -138,7 +138,7 @@ __xedllexport xe_result_t __xecall
         }
         /// @begin
 
-        return xe::Semaphore::fromHandle(hSemaphore)->destroy();
+        return L0::Semaphore::fromHandle(hSemaphore)->destroy();
 
         /// @end
     }
@@ -194,7 +194,7 @@ __xedllexport xe_result_t __xecall
         }
         /// @begin
 
-        return xe::CommandList::fromHandle(hCommandList)->encodeSemaphoreSignal(hSemaphore, value);
+        return L0::CommandList::fromHandle(hCommandList)->encodeSemaphoreSignal(hSemaphore, value);
 
         /// @end
     }
@@ -251,7 +251,7 @@ __xedllexport xe_result_t __xecall
         }
         /// @begin
 
-        return xe::CommandList::fromHandle(hCommandList)->encodeSemaphoreWait(hSemaphore, operation, value);
+        return L0::CommandList::fromHandle(hCommandList)->encodeSemaphoreWait(hSemaphore, operation, value);
 
         /// @end
     }
@@ -302,7 +302,7 @@ __xedllexport xe_result_t __xecall
         }
         /// @begin
 
-        return xe::Semaphore::fromHandle(hSemaphore)->queryValue();
+        return L0::Semaphore::fromHandle(hSemaphore)->queryValue();
 
         /// @end
     }
@@ -353,7 +353,7 @@ __xedllexport xe_result_t __xecall
         }
         /// @begin
 
-        return xe::Semaphore::fromHandle(hSemaphore)->reset();
+        return L0::Semaphore::fromHandle(hSemaphore)->reset();
 
         /// @end
     }

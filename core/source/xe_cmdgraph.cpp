@@ -77,7 +77,7 @@ __xedllexport xe_result_t __xecall
         }
         /// @begin
 
-        return xe::Device::fromHandle(hDevice)->createCommandGraph(desc, phCommandGraph);
+        return L0::Device::fromHandle(hDevice)->createCommandGraph(desc, phCommandGraph);
 
         /// @end
     }
@@ -129,7 +129,7 @@ __xedllexport xe_result_t __xecall
         }
         /// @begin
 
-        return xe::CommandGraph::fromHandle(hCommandGraph)->destroy();
+        return L0::CommandGraph::fromHandle(hCommandGraph)->destroy();
 
         /// @end
     }
@@ -184,7 +184,7 @@ __xedllexport xe_result_t __xecall
         }
         /// @begin
 
-        return xe::CommandGraph::fromHandle(hCommandGraph)->close();
+        return L0::CommandGraph::fromHandle(hCommandGraph)->close();
 
         /// @end
     }
@@ -237,7 +237,7 @@ __xedllexport xe_result_t __xecall
         }
         /// @begin
 
-        return xe::CommandGraph::fromHandle(hCommandGraph)->reset();
+        return L0::CommandGraph::fromHandle(hCommandGraph)->reset();
 
         /// @end
     }

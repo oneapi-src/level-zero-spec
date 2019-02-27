@@ -13,7 +13,7 @@ using ::testing::Return;
 
 extern PRODUCT_FAMILY productFamily;
 
-namespace xe {
+namespace L0 {
 namespace ult {
 
 TEST(xeCommandQueueDestroy, redirectsToObject) {
@@ -39,4 +39,4 @@ TEST(CommandQueueCreate, returnsCommandQueueOnSuccess) {
 }
 
 } // namespace ult
-} // namespace xe
+} // namespace L0

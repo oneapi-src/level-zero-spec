@@ -4,7 +4,7 @@
 #include "runtime/command_stream/linear_stream.h"
 #include "runtime/helpers/hw_info.h"
 
-namespace xe {
+namespace L0 {
 
 template <uint32_t gfxCoreFamily>
 xe_result_t CommandQueueHw<gfxCoreFamily>::createFence(const xe_fence_desc_t *desc,
@@ -69,4 +69,4 @@ xe_result_t CommandQueueHw<gfxCoreFamily>::synchronize(xe_synchronization_mode_t
     return XE_RESULT_ERROR_UNSUPPORTED;
 }
 
-} // namespace xe
+} // namespace L0

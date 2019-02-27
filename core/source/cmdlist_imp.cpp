@@ -9,7 +9,7 @@
 #include "runtime/indirect_heap/indirect_heap.h"
 #include <cassert>
 
-namespace xe {
+namespace L0 {
 
 CommandListAllocatorFn commandListFactory[IGFX_MAX_PRODUCT] = {};
 
@@ -83,4 +83,4 @@ CommandList *CommandList::create(uint32_t productFamily, Device *device) {
     return commandList;
 }
 
-} // namespace xe
+} // namespace L0

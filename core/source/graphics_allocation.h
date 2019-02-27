@@ -6,7 +6,7 @@ namespace OCLRT {
 class GraphicsAllocation;
 }
 
-namespace xe {
+namespace L0 {
 
 struct GraphicsAllocation {
     GraphicsAllocation(const GraphicsAllocation &) = delete;
@@ -22,4 +22,4 @@ struct GraphicsAllocation {
     OCLRT::GraphicsAllocation *allocationRT = nullptr;
 };
 
-} // namespace xe
+} // namespace L0

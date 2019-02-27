@@ -8,7 +8,7 @@
 struct _xe_mem_allocator_handle_t {
 };
 
-namespace xe {
+namespace L0 {
 
 xe_result_t createMemAllocator(xe_mem_allocator_handle_t *phMemAllocHandle) {
     *phMemAllocHandle = new _xe_mem_allocator_handle_t;
@@ -104,4 +104,4 @@ xe_result_t sharedMemAlloc(xe_mem_allocator_handle_t hMemAllocHandle,
     return XE_RESULT_SUCCESS;
 }
 
-} // namespace xe
+} // namespace L0

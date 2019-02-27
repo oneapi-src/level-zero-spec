@@ -3,7 +3,7 @@
 #include "cmdlist_imp.h"
 #undef CMD_LIST_INTERNAL
 
-namespace xe {
+namespace L0 {
 
 template <uint32_t gfxCoreFamily>
 struct CommandListCoreFamily : public CommandListImp {
@@ -76,4 +76,4 @@ struct CommandListCoreFamily : public CommandListImp {
 template <uint32_t gfxProductFamily>
 struct CommandListProductFamily;
 
-} // namespace xe
+} // namespace L0

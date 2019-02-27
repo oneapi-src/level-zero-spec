@@ -69,7 +69,7 @@ __xedllexport xe_result_t __xecall
         }
         /// @begin
 
-        return xe::Driver::get()->getDeviceCount(count);
+        return L0::Driver::get()->getDeviceCount(count);
 
         /// @end
     }
@@ -128,7 +128,7 @@ __xedllexport xe_result_t __xecall
         }
         /// @begin
 
-        return xe::Driver::get()->getDeviceUniqueIds(count, pUniqueIds);
+        return L0::Driver::get()->getDeviceUniqueIds(count, pUniqueIds);
 
         /// @end
     }
@@ -186,7 +186,7 @@ __xedllexport xe_result_t __xecall
         }
         /// @begin
 
-        return xe::Driver::get()->getDevice(uniqueId, phDevice);
+        return L0::Driver::get()->getDevice(uniqueId, phDevice);
 
         /// @end
     }
@@ -247,7 +247,7 @@ __xedllexport xe_result_t __xecall
         }
         /// @begin
 
-        return xe::Device::fromHandle(hDevice)->getSubDevice(ordinal, phSubDevice);
+        return L0::Device::fromHandle(hDevice)->getSubDevice(ordinal, phSubDevice);
 
         /// @end
     }
@@ -305,7 +305,7 @@ __xedllexport xe_result_t __xecall
         }
         /// @begin
 
-        return xe::Device::fromHandle(hDevice)->getApiVersion(version);
+        return L0::Device::fromHandle(hDevice)->getApiVersion(version);
 
         /// @end
     }
@@ -365,7 +365,7 @@ __xedllexport xe_result_t __xecall
         }
         /// @begin
 
-        return xe::Device::fromHandle(hDevice)->getProperties(pDeviceProperties);
+        return L0::Device::fromHandle(hDevice)->getProperties(pDeviceProperties);
 
         /// @end
     }
@@ -424,7 +424,7 @@ __xedllexport xe_result_t __xecall
         }
         /// @begin
 
-        return xe::Device::fromHandle(hDevice)->getComputeProperties(pComputeProperties);
+        return L0::Device::fromHandle(hDevice)->getComputeProperties(pComputeProperties);
 
         /// @end
     }
@@ -484,7 +484,7 @@ __xedllexport xe_result_t __xecall
         }
         /// @begin
 
-        return xe::Device::fromHandle(hDevice)->getMemoryProperties(pMemProperties);
+        return L0::Device::fromHandle(hDevice)->getMemoryProperties(pMemProperties);
 
         /// @end
     }
@@ -542,7 +542,7 @@ __xedllexport xe_result_t __xecall
         }
         /// @begin
 
-        return xe::deviceGetLinkProperties(srcOrdinal, dstOrdinal, pLinkProperties);
+        return L0::deviceGetLinkProperties(srcOrdinal, dstOrdinal, pLinkProperties);
 
         /// @end
     }
@@ -603,7 +603,7 @@ __xedllexport xe_result_t __xecall
         }
         /// @begin
 
-        return xe::Device::fromHandle(hDevice)->canAccessPeer(hPeerDevice, value);
+        return L0::Device::fromHandle(hDevice)->canAccessPeer(hPeerDevice, value);
 
         /// @end
     }
@@ -660,7 +660,7 @@ __xedllexport xe_result_t __xecall
         }
         /// @begin
 
-        return xe::Device::fromHandle(hDevice)->setIntermediateCacheConfig(CacheConfig);
+        return L0::Device::fromHandle(hDevice)->setIntermediateCacheConfig(CacheConfig);
 
         /// @end
     }
@@ -717,7 +717,7 @@ __xedllexport xe_result_t __xecall
         }
         /// @begin
 
-        return xe::Device::fromHandle(hDevice)->setLastLevelCacheConfig(CacheConfig);
+        return L0::Device::fromHandle(hDevice)->setLastLevelCacheConfig(CacheConfig);
 
         /// @end
     }

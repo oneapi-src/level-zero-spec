@@ -80,7 +80,7 @@ __xedllexport xe_result_t __xecall
         }
         /// @begin
 
-        return xe::CommandQueue::fromHandle(hCommandQueue)->createFence(desc, phFence);
+        return L0::CommandQueue::fromHandle(hCommandQueue)->createFence(desc, phFence);
 
         /// @end
     }
@@ -139,7 +139,7 @@ __xedllexport xe_result_t __xecall
         }
         /// @begin
 
-        return xe::Fence::fromHandle(hFence)->destroy();
+        return L0::Fence::fromHandle(hFence)->destroy();
 
         /// @end
     }
@@ -208,7 +208,7 @@ __xedllexport xe_result_t __xecall
         }
         /// @begin
 
-        return xe::hostWaitOnFence(hFence, mode, delay, interval, timeout);
+        return L0::hostWaitOnFence(hFence, mode, delay, interval, timeout);
 
         /// @end
     }
@@ -279,7 +279,7 @@ __xedllexport xe_result_t __xecall
         }
         /// @begin
 
-        return xe::hostWaitOnMultipleFences(numFences, phFences, mode, delay, interval, timeout);
+        return L0::hostWaitOnMultipleFences(numFences, phFences, mode, delay, interval, timeout);
 
         /// @end
     }
@@ -337,7 +337,7 @@ __xedllexport xe_result_t __xecall
         }
         /// @begin
 
-        return xe::Fence::fromHandle(hFence)->queryStatus();
+        return L0::Fence::fromHandle(hFence)->queryStatus();
 
         /// @end
     }
@@ -395,7 +395,7 @@ __xedllexport xe_result_t __xecall
         }
         /// @begin
 
-        return xe::fenceQueryElapsedTime(hFenceStart, hFenceEnd, pTime);
+        return L0::fenceQueryElapsedTime(hFenceStart, hFenceEnd, pTime);
 
         /// @end
     }
@@ -450,7 +450,7 @@ __xedllexport xe_result_t __xecall
         }
         /// @begin
 
-        return xe::Fence::fromHandle(hFence)->reset();
+        return L0::Fence::fromHandle(hFence)->reset();
 
         /// @end
     }

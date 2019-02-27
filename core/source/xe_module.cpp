@@ -101,7 +101,7 @@ __xedllexport xe_result_t __xecall
         }
         /// @begin
 
-        return xe::Device::fromHandle(hDevice)->createModule(desc, phModule, phBuildLog);
+        return L0::Device::fromHandle(hDevice)->createModule(desc, phModule, phBuildLog);
 
         /// @end
     }
@@ -159,7 +159,7 @@ __xedllexport xe_result_t __xecall
         }
         /// @begin
 
-        return xe::Module::fromHandle(hModule)->destroy();
+        return L0::Module::fromHandle(hModule)->destroy();
 
         /// @end
     }
@@ -215,7 +215,7 @@ __xedllexport xe_result_t __xecall
         }
         /// @begin
 
-        return xe::moduleBuildLogDestroy(hModuleBuildLog);
+        return L0::moduleBuildLogDestroy(hModuleBuildLog);
 
         /// @end
     }
@@ -274,7 +274,7 @@ __xedllexport xe_result_t __xecall
         }
         /// @begin
 
-        return xe::moduleBuildLogGetString(hModuleBuildLog, pSize, pBuildLog);
+        return L0::moduleBuildLogGetString(hModuleBuildLog, pSize, pBuildLog);
 
         /// @end
     }
@@ -341,7 +341,7 @@ __xedllexport xe_result_t __xecall
         }
         /// @begin
 
-        return xe::Module::fromHandle(hModule)->getNativeBinary(pSize, pModuleNativeBinary);
+        return L0::Module::fromHandle(hModule)->getNativeBinary(pSize, pModuleNativeBinary);
 
         /// @end
     }
@@ -407,7 +407,7 @@ __xedllexport xe_result_t __xecall
         }
         /// @begin
 
-        return xe::Module::fromHandle(hModule)->createFunction(desc, phFunction);
+        return L0::Module::fromHandle(hModule)->createFunction(desc, phFunction);
 
         /// @end
     }
@@ -461,7 +461,7 @@ __xedllexport xe_result_t __xecall
         }
         /// @begin
 
-        return xe::Function::fromHandle(hFunction)->destroy();
+        return L0::Function::fromHandle(hFunction)->destroy();
 
         /// @end
     }
@@ -520,7 +520,7 @@ __xedllexport xe_result_t __xecall
         }
         /// @begin
 
-        return xe::Module::fromHandle(hModule)->getFunctionPointer(pFunctionName, pfnFunction);
+        return L0::Module::fromHandle(hModule)->getFunctionPointer(pFunctionName, pfnFunction);
 
         /// @end
     }
@@ -577,7 +577,7 @@ __xedllexport xe_result_t __xecall
         }
         /// @begin
 
-        return xe::Function::fromHandle(hFunction)->setGroupSize(groupSizeX, groupSizeY, groupSizeZ);
+        return L0::Function::fromHandle(hFunction)->setGroupSize(groupSizeX, groupSizeY, groupSizeZ);
 
         /// @end
     }
@@ -644,7 +644,7 @@ __xedllexport xe_result_t __xecall
         }
         /// @begin
 
-        return xe::Function::fromHandle(hFunction)->suggestGroupSize(globalSizeX, globalSizeY, globalSizeZ, groupSizeX, groupSizeY, groupSizeZ);
+        return L0::Function::fromHandle(hFunction)->suggestGroupSize(globalSizeX, globalSizeY, globalSizeZ, groupSizeX, groupSizeY, groupSizeZ);
 
         /// @end
     }
@@ -703,7 +703,7 @@ __xedllexport xe_result_t __xecall
         }
         /// @begin
 
-        return xe::Function::fromHandle(hFunction)->createFunctionArgs(phFunctionArgs);
+        return L0::Function::fromHandle(hFunction)->createFunctionArgs(phFunctionArgs);
 
         /// @end
     }
@@ -757,7 +757,7 @@ __xedllexport xe_result_t __xecall
         }
         /// @begin
 
-        return xe::FunctionArgs::fromHandle(hFunctionArgs)->destroy();
+        return L0::FunctionArgs::fromHandle(hFunctionArgs)->destroy();
 
         /// @end
     }
@@ -820,7 +820,7 @@ __xedllexport xe_result_t __xecall
         }
         /// @begin
 
-        return xe::FunctionArgs::fromHandle(hFunctionArgs)->setValue(argIndex, argSize, pArgValue);
+        return L0::FunctionArgs::fromHandle(hFunctionArgs)->setValue(argIndex, argSize, pArgValue);
 
         /// @end
     }
@@ -879,7 +879,7 @@ __xedllexport xe_result_t __xecall
         }
         /// @begin
 
-        return xe::FunctionArgs::fromHandle(hFunctionArgs)->setAttribute(attr, value);
+        return L0::FunctionArgs::fromHandle(hFunctionArgs)->setAttribute(attr, value);
 
         /// @end
     }
@@ -939,7 +939,7 @@ __xedllexport xe_result_t __xecall
         }
         /// @begin
 
-        return xe::Function::fromHandle(hFunction)->queryAttribute(attr, pValue);
+        return L0::Function::fromHandle(hFunction)->queryAttribute(attr, pValue);
 
         /// @end
     }
@@ -1006,7 +1006,7 @@ __xedllexport xe_result_t __xecall
         }
         /// @begin
 
-        return xe::CommandList::fromHandle(hCommandList)->encodeDispatchFunction(hFunction, hFunctionArgs, pDispatchFuncArgs, hEvent);
+        return L0::CommandList::fromHandle(hCommandList)->encodeDispatchFunction(hFunction, hFunctionArgs, pDispatchFuncArgs, hEvent);
 
         /// @end
     }
@@ -1073,7 +1073,7 @@ __xedllexport xe_result_t __xecall
         }
         /// @begin
 
-        return xe::CommandGraph::fromHandle(hCommandGraph)->encodeDispatchFunction(hFunction, hFunctionArgs, pDispatchFuncArgs, hEvent);
+        return L0::CommandGraph::fromHandle(hCommandGraph)->encodeDispatchFunction(hFunction, hFunctionArgs, pDispatchFuncArgs, hEvent);
 
         /// @end
     }
@@ -1142,7 +1142,7 @@ __xedllexport xe_result_t __xecall
         }
         /// @begin
 
-        return xe::CommandList::fromHandle(hCommandList)->encodeDispatchFunctionIndirect(hFunction, hFunctionArgs, pDispatchArgumentsBuffer, hEvent);
+        return L0::CommandList::fromHandle(hCommandList)->encodeDispatchFunctionIndirect(hFunction, hFunctionArgs, pDispatchArgumentsBuffer, hEvent);
 
         /// @end
     }
@@ -1211,7 +1211,7 @@ __xedllexport xe_result_t __xecall
         }
         /// @begin
 
-        return xe::CommandGraph::fromHandle(hCommandGraph)->encodeDispatchFunctionIndirect(hFunction, hFunctionArgs, pDispatchArgumentsBuffer, hEvent);
+        return L0::CommandGraph::fromHandle(hCommandGraph)->encodeDispatchFunctionIndirect(hFunction, hFunctionArgs, pDispatchArgumentsBuffer, hEvent);
 
         /// @end
     }
@@ -1271,7 +1271,7 @@ __xedllexport xe_result_t __xecall
         }
         /// @begin
 
-        return xe::CommandList::fromHandle(hCommandList)->encodeDispatchHostFunction(pfnHostFunc, pUserData);
+        return L0::CommandList::fromHandle(hCommandList)->encodeDispatchHostFunction(pfnHostFunc, pUserData);
 
         /// @end
     }
@@ -1331,7 +1331,7 @@ __xedllexport xe_result_t __xecall
         }
         /// @begin
 
-        return xe::CommandGraph::fromHandle(hCommandGraph)->encodeDispatchHostFunction(pfnHostFunc, pUserData);
+        return L0::CommandGraph::fromHandle(hCommandGraph)->encodeDispatchHostFunction(pfnHostFunc, pUserData);
 
         /// @end
     }

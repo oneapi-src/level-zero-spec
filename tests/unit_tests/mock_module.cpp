@@ -2,7 +2,7 @@
 
 using ::testing::Return;
 
-namespace xe {
+namespace L0 {
 namespace ult {
 
 Mock<Function>::Mock() {
@@ -11,4 +11,4 @@ Mock<Function>::Mock() {
 }
 
 } // namespace ult
-} // namespace xe
+} // namespace L0

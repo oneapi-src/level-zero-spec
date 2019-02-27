@@ -82,7 +82,7 @@ __xedllexport xe_result_t __xecall
         }
         /// @begin
 
-        return xe::Device::fromHandle(hDevice)->createCommandQueue(desc, phCommandQueue);
+        return L0::Device::fromHandle(hDevice)->createCommandQueue(desc, phCommandQueue);
 
         /// @end
     }
@@ -141,7 +141,7 @@ __xedllexport xe_result_t __xecall
         }
         /// @begin
 
-        return xe::CommandQueue::fromHandle(hCommandQueue)->destroy();
+        return L0::CommandQueue::fromHandle(hCommandQueue)->destroy();
 
         /// @end
     }
@@ -204,7 +204,7 @@ __xedllexport xe_result_t __xecall
         }
         /// @begin
 
-        return xe::CommandQueue::fromHandle(hCommandQueue)->enqueueCommandLists(numCommandLists, phCommandLists, hFence);
+        return L0::CommandQueue::fromHandle(hCommandQueue)->enqueueCommandLists(numCommandLists, phCommandLists, hFence);
 
         /// @end
     }
@@ -268,7 +268,7 @@ __xedllexport xe_result_t __xecall
         }
         /// @begin
 
-        return xe::CommandQueue::fromHandle(hCommandQueue)->synchronize(mode, delay, interval, timeout);
+        return L0::CommandQueue::fromHandle(hCommandQueue)->synchronize(mode, delay, interval, timeout);
 
         /// @end
     }

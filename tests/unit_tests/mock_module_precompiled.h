@@ -10,7 +10,7 @@
 #include <unordered_map>
 #include <utility>
 
-namespace xe {
+namespace L0 {
 
 namespace ult {
 
@@ -84,7 +84,7 @@ struct PrecompiledFunctionMock : Mock<Function> {
 };
 
 struct PrecompiledFunctionArgsMock : Mock<FunctionArgs> {
-    PrecompiledFunctionArgsMock(PrecompiledFunctionMock *function, const std::vector<xe::GraphicsAllocation *> &allocationsForResidency)
+    PrecompiledFunctionArgsMock(PrecompiledFunctionMock *function, const std::vector<L0::GraphicsAllocation *> &allocationsForResidency)
         : function(function), allocationsForResidency(allocationsForResidency) { 
         auto crossThreadBaseBeg = reinterpret_cast<const uint8_t *>(function->precompiledFunctionMockData->crossThreadDataBase);
         crossThreadData.assign(crossThreadBaseBeg, crossThreadBaseBeg + function->precompiledFunctionMockData->crossThreadDataBaseSize);
@@ -113,7 +113,7 @@ struct PrecompiledFunctionArgsMock : Mock<FunctionArgs> {
     }
 
     PrecompiledFunctionMock *function;
-    std::vector<xe::GraphicsAllocation *> allocationsForResidency;
+    std::vector<L0::GraphicsAllocation *> allocationsForResidency;
     std::vector<uint8_t> crossThreadData;
 };
 
@@ -187,13 +187,13 @@ inline void writeAsCppArrayInitializer(const void *data, size_t dataSize, std::o
 }
 
 inline void writeMockData(const std::string sourceOrigin, std::string &mockName, 
-                          std::string deviceName, xe::Function *function, xe::FunctionArgs *functionArgs, const std::vector<std::pair<int, uintptr_t>> &bufferArgsIndices,
+                          std::string deviceName, L0::Function *function, L0::FunctionArgs *functionArgs, const std::vector<std::pair<int, uintptr_t>> &bufferArgsIndices,
                           std::ostream &out) {
     out << "// This is a generated file\n";
     out << "// Check " << sourceOrigin << " for details\n\n";
     out << "#include \"tests/unit_tests/mock_module_precompiled.h\"\n"
             "\n"
-            "namespace xe {\n"
+            "namespace L0 {\n"
             "namespace ult {\n\n";
 
     std::string globalNameSimdSize = mockName + "_SimdSize_" + deviceName;
@@ -246,9 +246,9 @@ inline void writeMockData(const std::string sourceOrigin, std::string &mockName,
     out << "RegisterPrecompiledFunctionMocksData Register_" << mockName << "_" << deviceName << "{ & " << globalNamePrecompiledFunctionMockData << ", \"" << mockName << "\", \"" << deviceName << "\" }; \n";
 
     out << "\n"
-           "} // namespace xe\n"
+           "} // namespace L0\n"
            "} // namespace ult\n";
 }
 
 } // namespace ult
-} // namespace xe
+} // namespace L0

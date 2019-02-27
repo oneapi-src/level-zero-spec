@@ -8,7 +8,7 @@
 struct _xe_command_list_handle_t {
 };
 
-namespace xe {
+namespace L0 {
 
 struct GraphicsAllocation;
 
@@ -120,4 +120,4 @@ struct CommandListPopulateFactory {
     }
 };
 
-} // namespace xe
+} // namespace L0

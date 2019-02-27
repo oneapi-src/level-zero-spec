@@ -2,7 +2,7 @@
 #include "runtime/memory_manager/graphics_allocation.h"
 #include <cassert>
 
-namespace xe {
+namespace L0 {
 
 GraphicsAllocation::GraphicsAllocation(OCLRT::GraphicsAllocation *allocationRT)
     : allocationRT(allocationRT) {
@@ -27,4 +27,4 @@ size_t GraphicsAllocation::getSize() const {
     return allocationRT->getUnderlyingBufferSize();
 }
 
-} // namespace xe
+} // namespace L0

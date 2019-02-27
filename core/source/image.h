@@ -5,7 +5,7 @@
 struct _xe_image_handle_t {
 };
 
-namespace xe {
+namespace L0 {
 
 struct Image : public _xe_image_handle_t {
     virtual xe_result_t destroy() = 0;
@@ -19,4 +19,4 @@ struct Image : public _xe_image_handle_t {
     }
 };
 
-} // namespace xe
+} // namespace L0

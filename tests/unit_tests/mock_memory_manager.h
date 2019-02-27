@@ -3,15 +3,15 @@
 #include "mock.h"
 #include "white_box.h"
 
-namespace xe {
+namespace L0 {
 namespace ult {
 
 template <>
-struct WhiteBox<::xe::MemoryManager> : public ::xe::MemoryManager {
-    using BaseClass = ::xe::MemoryManager;
+struct WhiteBox<::L0::MemoryManager> : public ::L0::MemoryManager {
+    using BaseClass = ::L0::MemoryManager;
 };
 
-using MemoryManager = WhiteBox<::xe::MemoryManager>;
+using MemoryManager = WhiteBox<::L0::MemoryManager>;
 
 template<>
 struct Mock<MemoryManager> : public MemoryManager {
@@ -25,4 +25,4 @@ struct Mock<MemoryManager> : public MemoryManager {
 };
 
 } // namespace ult
-} // namespace xe
+} // namespace L0

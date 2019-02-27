@@ -8,7 +8,7 @@
 #include "runtime/command_stream/command_stream_receiver.h"
 #include <cassert>
 
-namespace xe {
+namespace L0 {
 
 CommandQueueAllocatorFn commandQueueFactory[IGFX_MAX_PRODUCT] = {};
 
@@ -94,4 +94,4 @@ xeCommandQueueEnqueueCommandLists(xe_command_queue_handle_t hCommandQueue,
     return CommandQueue::fromHandle(hCommandQueue)->enqueueCommandLists(numCommandLists, phCommandLists, hFence);
 }
 
-} // namespace xe
+} // namespace L0

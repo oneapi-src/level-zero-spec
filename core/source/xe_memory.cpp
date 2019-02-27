@@ -67,7 +67,7 @@ __xedllexport xe_result_t __xecall
         }
         /// @begin
 
-        return xe::createMemAllocator(phMemAllocHandle);
+        return L0::createMemAllocator(phMemAllocHandle);
 
         /// @end
     }
@@ -122,7 +122,7 @@ __xedllexport xe_result_t __xecall
         }
         /// @begin
 
-        return xe::memAllocatorDestroy(hMemAllocHandle);
+        return L0::memAllocatorDestroy(hMemAllocHandle);
 
         /// @end
     }
@@ -194,7 +194,7 @@ __xedllexport xe_result_t __xecall
         }
         /// @begin
 
-        return xe::sharedMemAlloc(hMemAllocHandle, hDevice, device_flags, host_flags, size, alignment, ptr);
+        return L0::sharedMemAlloc(hMemAllocHandle, hDevice, device_flags, host_flags, size, alignment, ptr);
 
         /// @end
     }
@@ -265,7 +265,7 @@ __xedllexport xe_result_t __xecall
         }
         /// @begin
 
-        return xe::memAlloc(hMemAllocHandle, hDevice, flags, size, alignment, ptr);
+        return L0::memAlloc(hMemAllocHandle, hDevice, flags, size, alignment, ptr);
 
         /// @end
     }
@@ -334,7 +334,7 @@ __xedllexport xe_result_t __xecall
         }
         /// @begin
 
-        return xe::hostMemAlloc(hMemAllocHandle, flags, size, alignment, ptr);
+        return L0::hostMemAlloc(hMemAllocHandle, flags, size, alignment, ptr);
 
         /// @end
     }
@@ -396,7 +396,7 @@ __xedllexport xe_result_t __xecall
         }
         /// @begin
 
-        return xe::memFree(hMemAllocHandle, ptr);
+        return L0::memFree(hMemAllocHandle, ptr);
 
         /// @end
     }
@@ -459,7 +459,7 @@ __xedllexport xe_result_t __xecall
         }
         /// @begin
 
-        return xe::memGetProperty(hMemAllocHandle, ptr, property, pValue);
+        return L0::memGetProperty(hMemAllocHandle, ptr, property, pValue);
 
         /// @end
     }
@@ -523,7 +523,7 @@ __xedllexport xe_result_t __xecall
         }
         /// @begin
 
-        return xe::memGetAddressRange(hMemAllocHandle, ptr, pBase, pSize);
+        return L0::memGetAddressRange(hMemAllocHandle, ptr, pBase, pSize);
 
         /// @end
     }
@@ -587,7 +587,7 @@ __xedllexport xe_result_t __xecall
         }
         /// @begin
 
-        return xe::ipcGetMemHandle(hMemAllocHandle, ptr, pIpcHandle);
+        return L0::ipcGetMemHandle(hMemAllocHandle, ptr, pIpcHandle);
 
         /// @end
     }
@@ -658,7 +658,7 @@ __xedllexport xe_result_t __xecall
         }
         /// @begin
 
-        return xe::ipcOpenMemHandle(hMemAllocHandle, hDevice, handle, flags, ptr);
+        return L0::ipcOpenMemHandle(hMemAllocHandle, hDevice, handle, flags, ptr);
 
         /// @end
     }
@@ -718,7 +718,7 @@ __xedllexport xe_result_t __xecall
         }
         /// @begin
 
-        return xe::ipcCloseMemHandle(hMemAllocHandle, ptr);
+        return L0::ipcCloseMemHandle(hMemAllocHandle, ptr);
 
         /// @end
     }

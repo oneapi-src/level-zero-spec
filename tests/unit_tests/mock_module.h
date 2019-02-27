@@ -12,7 +12,7 @@ extern const char *frontEndDllName;
 extern const char *igcDllName;
 } // namespace Os
 
-namespace xe {
+namespace L0 {
 namespace ult {
 
 template <>
@@ -100,4 +100,4 @@ struct UserRealCompilerGuard {
 };
 
 } // namespace ult
-} // namespace xe
+} // namespace L0

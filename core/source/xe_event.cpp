@@ -82,7 +82,7 @@ __xedllexport xe_result_t __xecall
         }
         /// @begin
 
-        return xe::Device::fromHandle(hDevice)->createEvent(desc, phEvent);
+        return L0::Device::fromHandle(hDevice)->createEvent(desc, phEvent);
 
         /// @end
     }
@@ -147,7 +147,7 @@ __xedllexport xe_result_t __xecall
         }
         /// @begin
 
-        return xe::Device::fromHandle(hDevice)->placeEvent(desc, ptr, phEvent);
+        return L0::Device::fromHandle(hDevice)->placeEvent(desc, ptr, phEvent);
 
         /// @end
     }
@@ -207,7 +207,7 @@ __xedllexport xe_result_t __xecall
         }
         /// @begin
 
-        return xe::Event::fromHandle(hEvent)->destroy();
+        return L0::Event::fromHandle(hEvent)->destroy();
 
         /// @end
     }
@@ -268,7 +268,7 @@ __xedllexport xe_result_t __xecall
         }
         /// @begin
 
-        return xe::CommandList::fromHandle(hCommandList)->encodeSignalEvent(hEvent);
+        return L0::CommandList::fromHandle(hCommandList)->encodeSignalEvent(hEvent);
 
         /// @end
     }
@@ -323,7 +323,7 @@ __xedllexport xe_result_t __xecall
         }
         /// @begin
 
-        return xe::CommandList::fromHandle(hCommandList)->encodeWaitOnEvent(hEvent);
+        return L0::CommandList::fromHandle(hCommandList)->encodeWaitOnEvent(hEvent);
 
         /// @end
     }
@@ -379,7 +379,7 @@ __xedllexport xe_result_t __xecall
         }
         /// @begin
 
-        return xe::CommandList::fromHandle(hCommandList)->encodeSignalMultipleEvents(numEvents, phEvents);
+        return L0::CommandList::fromHandle(hCommandList)->encodeSignalMultipleEvents(numEvents, phEvents);
 
         /// @end
     }
@@ -436,7 +436,7 @@ __xedllexport xe_result_t __xecall
         }
         /// @begin
 
-        return xe::CommandList::fromHandle(hCommandList)->encodeWaitOnMultipleEvents(numEvents, phEvents);
+        return L0::CommandList::fromHandle(hCommandList)->encodeWaitOnMultipleEvents(numEvents, phEvents);
 
         /// @end
     }
@@ -491,7 +491,7 @@ __xedllexport xe_result_t __xecall
         }
         /// @begin
 
-        return xe::hostSignalEvent(hEvent);
+        return L0::hostSignalEvent(hEvent);
 
         /// @end
     }
@@ -560,7 +560,7 @@ __xedllexport xe_result_t __xecall
         }
         /// @begin
 
-        return xe::hostWaitOnEvent(hEvent, mode, delay, interval, timeout);
+        return L0::hostWaitOnEvent(hEvent, mode, delay, interval, timeout);
 
         /// @end
     }
@@ -612,7 +612,7 @@ __xedllexport xe_result_t __xecall
         }
         /// @begin
 
-        return xe::hostSignalMultipleEvents(numEvents, phEvents);
+        return L0::hostSignalMultipleEvents(numEvents, phEvents);
 
         /// @end
     }
@@ -681,7 +681,7 @@ __xedllexport xe_result_t __xecall
         }
         /// @begin
 
-        return xe::hostWaitOnMultipleEvents(numEvents, phEvents, mode, delay, interval, timeout);
+        return L0::hostWaitOnMultipleEvents(numEvents, phEvents, mode, delay, interval, timeout);
 
         /// @end
     }
@@ -740,7 +740,7 @@ __xedllexport xe_result_t __xecall
         }
         /// @begin
 
-        return xe::Event::fromHandle(hEvent)->queryStatus();
+        return L0::Event::fromHandle(hEvent)->queryStatus();
 
         /// @end
     }
@@ -803,7 +803,7 @@ __xedllexport xe_result_t __xecall
         }
         /// @begin
 
-        return xe::eventQueryElapsedTime(hEventStart, hEventEnd, pTime);
+        return L0::eventQueryElapsedTime(hEventStart, hEventEnd, pTime);
 
         /// @end
     }
@@ -864,7 +864,7 @@ __xedllexport xe_result_t __xecall
         }
         /// @begin
 
-        return xe::eventQueryMetricsData(hEventStart, hEventEnd, reportSize, pReportData);
+        return L0::eventQueryMetricsData(hEventStart, hEventEnd, reportSize, pReportData);
 
         /// @end
     }
@@ -923,7 +923,7 @@ __xedllexport xe_result_t __xecall
         }
         /// @begin
 
-        return xe::CommandList::fromHandle(hCommandList)->encodeEventReset(hEvent);
+        return L0::CommandList::fromHandle(hCommandList)->encodeEventReset(hEvent);
 
         /// @end
     }
@@ -978,7 +978,7 @@ __xedllexport xe_result_t __xecall
         }
         /// @begin
 
-        return xe::Event::fromHandle(hEvent)->reset();
+        return L0::Event::fromHandle(hEvent)->reset();
 
         /// @end
     }

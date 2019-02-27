@@ -4,16 +4,16 @@
 #include "mock.h"
 #include "white_box.h"
 
-namespace xe {
+namespace L0 {
 namespace ult {
 
 template <>
-struct WhiteBox<::xe::Event> : public ::xe::Event {
-    using BaseClass = ::xe::Event;
+struct WhiteBox<::L0::Event> : public ::L0::Event {
+    using BaseClass = ::L0::Event;
     using BaseClass::allocation;
 };
 
-using Event = WhiteBox<::xe::Event>;
+using Event = WhiteBox<::L0::Event>;
 
 template <>
 struct Mock<Event> : public Event {
@@ -37,4 +37,4 @@ struct Mock<Event> : public Event {
 };
 
 } // namespace ult
-} // namespace xe
+} // namespace L0

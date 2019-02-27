@@ -12,7 +12,7 @@
 struct _xe_device_handle_t {
 };
 
-namespace xe {
+namespace L0 {
 struct MemoryManager;
 
 struct Device : _xe_device_handle_t {
@@ -74,4 +74,4 @@ struct Device : _xe_device_handle_t {
 xe_result_t deviceGetLinkProperties(uint32_t srcOrdinal,
                                     uint32_t dstOrdinal,
                                     xe_device_link_properties_t *pLinkProperties);
-} // namespace xe
+} // namespace L0

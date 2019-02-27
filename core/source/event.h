@@ -6,7 +6,7 @@
 struct _xe_event_handle_t {
 };
 
-namespace xe {
+namespace L0 {
 struct GraphicsAllocation;
 
 struct Event : public _xe_event_handle_t {
@@ -65,4 +65,4 @@ xe_result_t hostWaitOnMultipleEvents(uint32_t numEvents,
                                      uint32_t delay,
                                      uint32_t interval,
                                      uint32_t timeout);
-} // namespace xe
+} // namespace L0

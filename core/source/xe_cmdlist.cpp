@@ -78,7 +78,7 @@ __xedllexport xe_result_t __xecall
         }
         /// @begin
 
-        return xe::Device::fromHandle(hDevice)->createCommandList(desc, phCommandList);
+        return L0::Device::fromHandle(hDevice)->createCommandList(desc, phCommandList);
 
         /// @end
     }
@@ -143,7 +143,7 @@ __xedllexport xe_result_t __xecall
         }
         /// @begin
 
-        return xe::Device::fromHandle(hDevice)->copyCommandList(hCommandList, phCommandList);
+        return L0::Device::fromHandle(hDevice)->copyCommandList(hCommandList, phCommandList);
 
         /// @end
     }
@@ -197,7 +197,7 @@ __xedllexport xe_result_t __xecall
         }
         /// @begin
 
-        return xe::CommandList::fromHandle(hCommandList)->destroy();
+        return L0::CommandList::fromHandle(hCommandList)->destroy();
 
         /// @end
     }
@@ -249,7 +249,7 @@ __xedllexport xe_result_t __xecall
         }
         /// @begin
 
-        return xe::CommandList::fromHandle(hCommandList)->close();
+        return L0::CommandList::fromHandle(hCommandList)->close();
 
         /// @end
     }
@@ -304,7 +304,7 @@ __xedllexport xe_result_t __xecall
         }
         /// @begin
 
-        return xe::CommandList::fromHandle(hCommandList)->reset();
+        return L0::CommandList::fromHandle(hCommandList)->reset();
 
         /// @end
     }
@@ -366,7 +366,7 @@ __xedllexport xe_result_t __xecall
         }
         /// @begin
 
-        return xe::CommandList::fromHandle(hCommandList)->setParameter(parameter, value);
+        return L0::CommandList::fromHandle(hCommandList)->setParameter(parameter, value);
 
         /// @end
     }
@@ -430,7 +430,7 @@ __xedllexport xe_result_t __xecall
         }
         /// @begin
 
-        return xe::CommandList::fromHandle(hCommandList)->getParameter(parameter, value);
+        return L0::CommandList::fromHandle(hCommandList)->getParameter(parameter, value);
 
         /// @end
     }
@@ -482,7 +482,7 @@ __xedllexport xe_result_t __xecall
         }
         /// @begin
 
-        return xe::CommandList::fromHandle(hCommandList)->resetParameters();
+        return L0::CommandList::fromHandle(hCommandList)->resetParameters();
 
         /// @end
     }
@@ -539,7 +539,7 @@ __xedllexport xe_result_t __xecall
         }
         /// @begin
 
-        return xe::CommandList::fromHandle(hCommandList)->encodeCommandLists(numCommandLists, phCommandLists);
+        return L0::CommandList::fromHandle(hCommandList)->encodeCommandLists(numCommandLists, phCommandLists);
 
         /// @end
     }
@@ -599,7 +599,7 @@ __xedllexport xe_result_t __xecall
         }
         /// @begin
 
-        return xe::CommandList::fromHandle(hCommandList)->encodeCommands(format, size, pBlob);
+        return L0::CommandList::fromHandle(hCommandList)->encodeCommands(format, size, pBlob);
 
         /// @end
     }

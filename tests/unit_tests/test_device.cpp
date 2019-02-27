@@ -7,7 +7,7 @@
 
 using ::testing::Return;
 
-namespace xe {
+namespace L0 {
 namespace ult {
 
 TEST(xeDeviceCreateCommandList, redirectsToObject) {
@@ -132,4 +132,4 @@ TEST(DeviceGetMemoryManager, returnsPointer) {
 }
 
 } // namespace ult
-} // namespace xe
+} // namespace L0

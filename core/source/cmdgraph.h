@@ -5,7 +5,7 @@
 struct _xe_command_graph_handle_t {
 };
 
-namespace xe {
+namespace L0 {
 
 struct CommandGraph : public _xe_command_graph_handle_t {
 
@@ -33,4 +33,4 @@ struct CommandGraph : public _xe_command_graph_handle_t {
     }
 };
 
-} // namespace xe
+} // namespace L0

@@ -5,7 +5,7 @@
 #include "module.h"
 #include "igfxfmid.h"
 
-namespace xe {
+namespace L0 {
 
 template <>
 bool CommandListCoreFamily<IGFX_GEN12_CORE>::initialize() {
@@ -162,4 +162,4 @@ xe_result_t CommandListCoreFamily<IGFX_GEN12_CORE>::encodeDispatchFunction(xe_fu
     return XE_RESULT_SUCCESS;
 }
 
-} // namespace xe
+} // namespace L0

@@ -70,7 +70,7 @@ __xedllexport xe_result_t __xecall
         }
         /// @begin
 
-        return xe::Device::fromHandle(hDevice)->registerCLMemory(context, mem, ptr);
+        return L0::Device::fromHandle(hDevice)->registerCLMemory(context, mem, ptr);
 
         /// @end
     }
@@ -126,7 +126,7 @@ __xedllexport xe_result_t __xecall
         }
         /// @begin
 
-        return xe::Device::fromHandle(hDevice)->registerCLProgram(context, program, phModule);
+        return L0::Device::fromHandle(hDevice)->registerCLProgram(context, program, phModule);
 
         /// @end
     }
@@ -182,7 +182,7 @@ __xedllexport xe_result_t __xecall
         }
         /// @begin
 
-        return xe::Device::fromHandle(hDevice)->registerCLCommandQueue(context, command_queue, phCommandQueue);
+        return L0::Device::fromHandle(hDevice)->registerCLCommandQueue(context, command_queue, phCommandQueue);
 
         /// @end
     }

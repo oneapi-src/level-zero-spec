@@ -2,7 +2,7 @@
 #include "mock_device.h"
 #include "gtest/gtest.h"
 
-namespace xe {
+namespace L0 {
 namespace ult {
 
 TEST(xeEventDestroy, redirectsToObject) {
@@ -25,4 +25,4 @@ TEST(Event_create, allocationContainsAtLeast64Bytes) {
 }
 
 } // namespace ult
-} // namespace xe
+} // namespace L0

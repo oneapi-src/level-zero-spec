@@ -1,6 +1,6 @@
 #include "cmdlist.h"
 
-namespace xe {
+namespace L0 {
 
 xe_result_t __xecall
 xeCommandListClose(xe_command_list_handle_t hCommandList) {
@@ -38,4 +38,4 @@ xeCommandListEncodeWaitOnEvent(xe_command_list_handle_t hCommandList,
                                xe_event_handle_t hEvent) {
     return CommandList::fromHandle(hCommandList)->encodeWaitOnEvent(hEvent);
 }
-} // namespace xe
+} // namespace L0

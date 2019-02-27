@@ -4,13 +4,13 @@ TEST(Should, pass) {
     EXPECT_TRUE(true);
 }
 
-namespace xe {
+namespace L0 {
 namespace ult {
 ::testing::Environment *environment = nullptr;
 }
 }
 
-using namespace xe::ult;
+using namespace L0::ult;
 
 int main(int argc, char **argv) {
     testing::InitGoogleMock(&argc, argv);

@@ -3,7 +3,7 @@
 #include "runtime/platform/platform.h"
 #include "gmock/gmock.h"
 
-namespace xe {
+namespace L0 {
 
 TEST(MemoryManagerallocateDeviceMemory, returnsGraphicsAllocation) {
     auto platform = OCLRT::constructPlatform();
@@ -23,4 +23,4 @@ TEST(MemoryManagerallocateDeviceMemory, returnsGraphicsAllocation) {
     delete device;
 }
 
-} // namespace xe
+} // namespace L0

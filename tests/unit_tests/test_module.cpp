@@ -13,7 +13,7 @@
 
 #include <fstream>
 
-namespace xe {
+namespace L0 {
 namespace ult {
 
 using ::testing::Return;
@@ -237,4 +237,4 @@ TEST(FunctionArgs_accessors, returnsCorrectThreadGroupParameters) {
 }
 
 } // namespace ult
-} // namespace xe
+} // namespace L0

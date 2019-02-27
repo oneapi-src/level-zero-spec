@@ -1,16 +1,16 @@
 #include "mock_cmdlist.h"
 #include "graphics_allocation.h"
 
-namespace xe {
+namespace L0 {
 namespace ult {
 
-WhiteBox<::xe::CommandList>::WhiteBox(Device *device) : CommandListImp(device) {
+WhiteBox<::L0::CommandList>::WhiteBox(Device *device) : CommandListImp(device) {
 }
 
-WhiteBox<::xe::CommandList>::~WhiteBox() {
+WhiteBox<::L0::CommandList>::~WhiteBox() {
 }
 
-Mock<CommandList>::Mock(Device *device) : WhiteBox<::xe::CommandList>(device) {
+Mock<CommandList>::Mock(Device *device) : WhiteBox<::L0::CommandList>(device) {
     size_t batchBufferSize = 65536u;
     batchBuffer = new uint8_t[batchBufferSize];
     mockAllocation = new GraphicsAllocation(batchBuffer, batchBufferSize);
@@ -24,4 +24,4 @@ Mock<CommandList>::~Mock() {
 }
 
 } // namespace ult
-} // namespace xe
+} // namespace L0

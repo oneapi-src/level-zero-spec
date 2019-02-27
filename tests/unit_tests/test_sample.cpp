@@ -8,7 +8,7 @@
 #include "mock_module.h"
 #include "gtest/gtest.h"
 
-namespace xe {
+namespace L0 {
 namespace ult {
 
 TEST(sample, waitOnEvent) {
@@ -208,4 +208,4 @@ TEST(sample, helloWorld) {
 }
 
 } // namespace ult
-} // namespace xe
+} // namespace L0

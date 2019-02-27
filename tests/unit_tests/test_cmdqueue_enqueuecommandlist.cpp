@@ -9,7 +9,7 @@
 #include "xe_all.h"
 #include "gtest/gtest.h"
 
-namespace xe {
+namespace L0 {
 namespace ult {
 
 using ::testing::_;
@@ -27,7 +27,7 @@ TEST(xeCommandQueueEnqueueCommandQueue, redirectsToObject) {
                                               hFence))
         .Times(1);
 
-    auto result = xe::xeCommandQueueEnqueueCommandLists(cmdQueue.toHandle(),
+    auto result = L0::xeCommandQueueEnqueueCommandLists(cmdQueue.toHandle(),
                                                         1,
                                                         &hCommandList,
                                                         hFence);
@@ -88,4 +88,4 @@ HWTEST_F(CommandQueueEnqueueCommandLists, addsASecondLevelBatchBufferPerCommandL
 }
 
 } // namespace ult
-} // namespace xe
+} // namespace L0

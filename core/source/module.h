@@ -15,7 +15,7 @@ struct _xe_function_handle_t {
 struct _xe_function_args_handle_t {
 };
 
-namespace xe {
+namespace L0 {
 struct Device;
 struct GraphicsAllocation;
 
@@ -125,4 +125,4 @@ xe_result_t moduleBuildLogGetString(xe_module_build_log_handle_t hModuleBuildLog
                                     uint32_t *pSize,
                                     char **pBuildLog);
 
-} // namespace xe
+} // namespace L0

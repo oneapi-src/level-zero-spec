@@ -13,7 +13,7 @@
 #include "unit_tests/gen_common/gen_cmd_parse.h"
 #include "gmock/gmock.h"
 
-namespace xe {
+namespace L0 {
 
 struct Function;
 struct FunctionArguments;
@@ -85,7 +85,7 @@ struct CommandListEncodeDispatchFunction : public ::testing::Test {
     }
 
     Mock<Device> device;
-    WhiteBox<::xe::CommandList> *commandList = nullptr;
+    WhiteBox<::L0::CommandList> *commandList = nullptr;
 
     PrecompiledFunctionMock *function = nullptr;
     PrecompiledFunctionArgsMock *functionArgs = nullptr;
@@ -250,4 +250,4 @@ ATSTEST_F(CommandListEncodeDispatchFunction, copiesKernelIsaToInstructionHeap) {
 }
 
 } // namespace ult
-} // namespace xe
+} // namespace L0

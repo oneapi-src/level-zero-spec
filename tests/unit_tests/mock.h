@@ -1,7 +1,7 @@
 #pragma once
 #include "gmock/gmock.h"
 
-namespace xe {
+namespace L0 {
 namespace ult {
 
 template <typename Type>
@@ -9,4 +9,4 @@ struct Mock : public Type {
 };
 
 } // namespace ult
-} // namespace xe
+} // namespace L0
