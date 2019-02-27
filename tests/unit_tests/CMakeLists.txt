@@ -107,7 +107,7 @@ add_custom_target(run_${TARGET_NAME} ALL DEPENDS ${TARGET_NAME})
 add_custom_command(
   TARGET run_${TARGET_NAME}
   POST_BUILD
-  COMMAND WORKING_DIRECTORY ${CUSTOM_COMMAND_BINARY_DIR}
+  # COMMAND WORKING_DIRECTORY \"${CUSTOM_COMMAND_BINARY_DIR}\"
   COMMAND echo Running \"${RUN_ULT_CMD}\" in \"${CUSTOM_COMMAND_BINARY_DIR}\"
-  COMMAND ${RUN_ULT_CMD} --gtest_filter=* --gtest_catch_exceptions=0
+  COMMAND ${CMAKE_COMMAND} -E chdir ${CUSTOM_COMMAND_BINARY_DIR}  ${CMAKE_COMMAND} -E env SetCommandStreamReceiver=1 ${RUN_ULT_CMD} --gtest_filter=* --gtest_catch_exceptions=0
 )
