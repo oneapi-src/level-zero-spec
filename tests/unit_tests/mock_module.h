@@ -35,10 +35,17 @@ struct Mock<Function> : public Function {
     Mock();
     virtual ~Mock() = default;
 
-    MOCK_METHOD1(createFunctionArgs, xe_result_t(xe_function_args_handle_t *phFunctionArgs));
     MOCK_METHOD0(destroy, xe_result_t());
-    MOCK_METHOD2(queryAttribute, xe_result_t(xe_function_attribute_t attr,
+    MOCK_METHOD2(setAttribute, xe_result_t(xe_function_set_attribute_t attr,
+                                             uint32_t pValue));
+    MOCK_METHOD2(getAttribute, xe_result_t(xe_function_get_attribute_t attr,
                                              uint32_t *pValue));
+    MOCK_METHOD3(setArgumentValue, xe_result_t(uint32_t argIndex,
+			                       size_t argSize,
+					       const void *pArgValue));
+    MOCK_METHOD3(setGroupCount, void(uint32_t groupCountX,
+                                     uint32_t groupCountY,
+                                     uint32_t groupCountZ));
     MOCK_METHOD3(setGroupSize, xe_result_t(uint32_t groupSizeX,
                                            uint32_t groupSizeY,
                                            uint32_t groupSizeZ));
@@ -58,22 +65,9 @@ struct Mock<Function> : public Function {
     MOCK_CONST_METHOD0(getSimdSize, uint32_t());
     MOCK_CONST_METHOD0(getThreadsPerThreadGroup, uint32_t());
     MOCK_CONST_METHOD0(getThreadExecutionMask, uint32_t());
-};
-
-template <>
-struct Mock<FunctionArgs> : public FunctionArgs {
-    Mock() = default;
-    virtual ~Mock() = default;
-
-    MOCK_METHOD0(destroy, xe_result_t());
-    MOCK_METHOD2(setAttribute, xe_result_t(xe_function_argument_attribute_t attr,
-                                           uint32_t value));
-    MOCK_METHOD3(setValue, xe_result_t(uint32_t argIndex, size_t argSize, const void *pArgValue));
-
     MOCK_CONST_METHOD0(getCrossThreadDataHostMem, const void *());
     MOCK_CONST_METHOD0(getCrossThreadDataSize, size_t());
     MOCK_CONST_METHOD0(getResidencyContainer, const std::vector<GraphicsAllocation *> &());
-    MOCK_METHOD3(setGroupCount, void(uint32_t groupCountX, uint32_t groupCountY, uint32_t groupCountZ));
 };
 
 struct UserRealCompilerGuard {

@@ -28,19 +28,16 @@ TEST(xeCommandListEncodeDispatchFunction, redirectsToObject) {
     Mock<CommandList> commandList;
     Mock<Event> event;
     Mock<Function> function;
-    Mock<FunctionArgs> functionArgs;
     xe_dispatch_function_arguments_t dispatchFunctionArguments;
 
     EXPECT_CALL(commandList, encodeDispatchFunction(
                                  function.toHandle(),
-                                 functionArgs.toHandle(),
                                  &dispatchFunctionArguments,
                                  event.toHandle()))
         .Times(1);
 
     auto result = xeCommandListEncodeDispatchFunction(commandList.toHandle(),
                                                       function.toHandle(),
-                                                      functionArgs.toHandle(),
                                                       &dispatchFunctionArguments,
                                                       event.toHandle());
     EXPECT_EQ(XE_RESULT_SUCCESS, result);
@@ -68,14 +65,12 @@ struct CommandListEncodeDispatchFunction : public ::testing::Test {
         dispatchFunctionArguments.groupCountZ = 3u;
 
         std::string deviceName = "Gen12HPcore";
-        function = new PrecompiledFunctionMock("MemcpyBytes", deviceName);
-        functionArgs = new PrecompiledFunctionArgsMock(function, {&buffer1, &buffer2});
+        function = new PrecompiledFunctionMock("MemcpyBytes", deviceName, {&buffer1, &buffer2});
 
         EXPECT_CALL(*function, getThreadExecutionMask()).Times(AnyNumber());
     }
 
     void TearDown() override {
-        delete functionArgs;
         delete function;
 
         auto memoryManager = device.getMemoryManager();
@@ -88,7 +83,6 @@ struct CommandListEncodeDispatchFunction : public ::testing::Test {
     WhiteBox<::xe::CommandList> *commandList = nullptr;
 
     PrecompiledFunctionMock *function = nullptr;
-    PrecompiledFunctionArgsMock *functionArgs = nullptr;
     xe_dispatch_function_arguments_t dispatchFunctionArguments;
 
     GraphicsAllocation *buffer1 = nullptr;
@@ -99,7 +93,6 @@ ATSTEST_F(CommandListEncodeDispatchFunction, addsWalkerToCommandStream) {
     auto usedSpaceBefore = commandList->commandStream->getUsed();
 
     auto result = commandList->encodeDispatchFunction(function->toHandle(),
-                                                      functionArgs->toHandle(),
                                                       &dispatchFunctionArguments,
                                                       nullptr);
     ASSERT_EQ(XE_RESULT_SUCCESS, result);
@@ -151,7 +144,6 @@ ATSTEST_F(CommandListEncodeDispatchFunction, withEventSetsPostSyncOp) {
     auto event = whitebox_cast(Event::create(&device));
 
     auto result = commandList->encodeDispatchFunction(function->toHandle(),
-                                                      functionArgs->toHandle(),
                                                       &dispatchFunctionArguments,
                                                       event->toHandle());
     ASSERT_EQ(XE_RESULT_SUCCESS, result);
@@ -180,7 +172,6 @@ ATSTEST_F(CommandListEncodeDispatchFunction, withEventSetsPostSyncOp) {
 
 ATSTEST_F(CommandListEncodeDispatchFunction, copiesThreadDataToGeneralStateHeap) {
     auto result = commandList->encodeDispatchFunction(function->toHandle(),
-                                                      functionArgs->toHandle(),
                                                       &dispatchFunctionArguments,
                                                       nullptr);
     ASSERT_EQ(XE_RESULT_SUCCESS, result);
@@ -201,7 +192,7 @@ ATSTEST_F(CommandListEncodeDispatchFunction, copiesThreadDataToGeneralStateHeap)
         auto cmd = genCmdCast<COMPUTE_WALKER *>(*itor);
 
         auto indirectDataLength = function->getPerThreadDataSize() +
-                                  functionArgs->getCrossThreadDataSize();
+                                  function->getCrossThreadDataSize();
         EXPECT_LE(cmd->getIndirectDataLength(), indirectDataLength);
 
         cmd->getIndirectDataLength();
@@ -209,8 +200,8 @@ ATSTEST_F(CommandListEncodeDispatchFunction, copiesThreadDataToGeneralStateHeap)
         auto heap = commandList->indirectHeaps[CommandList::GENERAL_STATE];
 
         auto ptrHeap = ptrOffset(heap->getCpuBase(), cmd->getIndirectDataStartAddress());
-        EXPECT_EQ(memcmp(ptrHeap, functionArgs->getCrossThreadDataHostMem(), functionArgs->getCrossThreadDataSize()), 0u);
-        ptrHeap = ptrOffset(ptrHeap, functionArgs->getCrossThreadDataSize());
+        EXPECT_EQ(memcmp(ptrHeap, function->getCrossThreadDataHostMem(), function->getCrossThreadDataSize()), 0u);
+        ptrHeap = ptrOffset(ptrHeap, function->getCrossThreadDataSize());
         EXPECT_EQ(memcmp(ptrHeap, function->getPerThreadDataHostMem(), function->getPerThreadDataSize()), 0u);
         ptrHeap = ptrOffset(ptrHeap, function->getPerThreadDataSize());
     }
@@ -218,7 +209,6 @@ ATSTEST_F(CommandListEncodeDispatchFunction, copiesThreadDataToGeneralStateHeap)
 
 ATSTEST_F(CommandListEncodeDispatchFunction, copiesKernelIsaToInstructionHeap) {
     auto result = commandList->encodeDispatchFunction(function->toHandle(),
-                                                      functionArgs->toHandle(),
                                                       &dispatchFunctionArguments,
                                                       nullptr);
     ASSERT_EQ(XE_RESULT_SUCCESS, result);

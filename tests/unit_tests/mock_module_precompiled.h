@@ -28,16 +28,32 @@ struct PrecompiledFunctionMockData {
 };
 
 struct PrecompiledFunctionMock : Mock<Function> {
-    PrecompiledFunctionMock(const std::string &precompiledFunctionMockName, const std::string &deviceName);
+
+    PrecompiledFunctionMock(const std::string &precompiledFunctionMockName, const std::string &deviceName, const std::vector<xe::GraphicsAllocation *> &allocationsForResidency);
+
+    PrecompiledFunctionMock(const std::string &precompiledFunctionMockName, const std::string &deviceName)
+                            : PrecompiledFunctionMock(precompiledFunctionMockName, deviceName, {})
+    {}
 
     PrecompiledFunctionMock(const PrecompiledFunctionMockData *precompiledFunctionMockData)
-                            : precompiledFunctionMockData(precompiledFunctionMockData){
+                            : precompiledFunctionMockData(precompiledFunctionMockData)
+    {
         auto bufferArgOffsetPairsIt = precompiledFunctionMockData->bufferArgIndicesAndOffsets;
         auto bufferArgOffsetPairsEnd = bufferArgOffsetPairsIt + precompiledFunctionMockData->bufferArgIndicesAndOffsetsCount;
         while(bufferArgOffsetPairsIt < bufferArgOffsetPairsEnd){
             bufferArgOffsetMap[bufferArgOffsetPairsIt->first] = bufferArgOffsetPairsIt->second;
             ++bufferArgOffsetPairsIt;
         }
+    }
+
+    xe_result_t setAttribute(xe_function_set_attribute_t attr,
+                             uint32_t value) override {
+        return XE_RESULT_ERROR_UNSUPPORTED;
+    }
+
+    xe_result_t getAttribute(xe_function_get_attribute_t attr,
+                               uint32_t *pValue) override {
+        return XE_RESULT_ERROR_UNSUPPORTED;
     }
 
     uint32_t getSimdSize() const override {
@@ -50,6 +66,16 @@ struct PrecompiledFunctionMock : Mock<Function> {
 
     size_t getIsaSize() const override {
         return precompiledFunctionMockData->isaSize;
+    }
+
+    xe_result_t setArgumentValue(uint32_t argIndex, size_t argSize, const void *pArgValue) override {
+        auto it = bufferArgOffsetMap.find(argIndex);
+        if(it == bufferArgOffsetMap.end()){
+            // not a buffer arg, just assume what's in crossthread data is good enough
+            return XE_RESULT_SUCCESS;
+        }
+        *reinterpret_cast<uintptr_t *>(&crossThreadData[it->second]) = *reinterpret_cast<const uintptr_t*>(pArgValue);
+        return XE_RESULT_SUCCESS;
     }
 
     void getGroupSize(uint32_t &outGroupSizeX, uint32_t &outGroupSizeY, uint32_t &outGroupSizeZ) const override {
@@ -79,40 +105,21 @@ struct PrecompiledFunctionMock : Mock<Function> {
         return 0xfffffffful;
     }
 
-    const PrecompiledFunctionMockData *precompiledFunctionMockData = nullptr;
-    std::unordered_map<int, int> bufferArgOffsetMap;
-};
-
-struct PrecompiledFunctionArgsMock : Mock<FunctionArgs> {
-    PrecompiledFunctionArgsMock(PrecompiledFunctionMock *function, const std::vector<xe::GraphicsAllocation *> &allocationsForResidency)
-        : function(function), allocationsForResidency(allocationsForResidency) { 
-        auto crossThreadBaseBeg = reinterpret_cast<const uint8_t *>(function->precompiledFunctionMockData->crossThreadDataBase);
-        crossThreadData.assign(crossThreadBaseBeg, crossThreadBaseBeg + function->precompiledFunctionMockData->crossThreadDataBaseSize);
-    }
-
-    xe_result_t setValue(uint32_t argIndex, size_t argSize, const void *pArgValue) override {
-        auto it = function->bufferArgOffsetMap.find(argIndex);
-        if(it == function->bufferArgOffsetMap.end()){
-            // not a buffer arg, just assume what's in crossthread data is good enough
-            return XE_RESULT_SUCCESS;
-        }
-        *reinterpret_cast<uintptr_t *>(&crossThreadData[it->second]) = *reinterpret_cast<const uintptr_t*>(pArgValue);
-        return XE_RESULT_SUCCESS;
-    }
-
     const void *getCrossThreadDataHostMem() const override {
         return crossThreadData.data();
     }
 
     size_t getCrossThreadDataSize() const override {
-        return function->precompiledFunctionMockData->crossThreadDataBaseSize;
+        return precompiledFunctionMockData->crossThreadDataBaseSize;
     }
 
     const std::vector<GraphicsAllocation *> &getResidencyContainer() const override {
         return allocationsForResidency;
     }
 
-    PrecompiledFunctionMock *function;
+    const PrecompiledFunctionMockData *precompiledFunctionMockData = nullptr;
+    std::unordered_map<int, int> bufferArgOffsetMap;
+
     std::vector<xe::GraphicsAllocation *> allocationsForResidency;
     std::vector<uint8_t> crossThreadData;
 };
@@ -150,8 +157,12 @@ struct RegisterPrecompiledFunctionMocksData {
     }
 };
 
-inline PrecompiledFunctionMock::PrecompiledFunctionMock(const std::string &precompiledFunctionMockName, const std::string &deviceName)
-    : PrecompiledFunctionMock(PrecompiledFunctionMocksDataRegistry::get().getDataFor(precompiledFunctionMockName, deviceName)){
+inline PrecompiledFunctionMock::PrecompiledFunctionMock(const std::string &precompiledFunctionMockName, const std::string &deviceName, const std::vector<xe::GraphicsAllocation *> &allocationsForResidency)
+    : PrecompiledFunctionMock(PrecompiledFunctionMocksDataRegistry::get().getDataFor(precompiledFunctionMockName, deviceName))
+{
+        this->allocationsForResidency = allocationsForResidency;
+        auto crossThreadBaseBeg = reinterpret_cast<const uint8_t *>(precompiledFunctionMockData->crossThreadDataBase);
+        crossThreadData.assign(crossThreadBaseBeg, crossThreadBaseBeg + precompiledFunctionMockData->crossThreadDataBaseSize);
 }
 
 inline void writeAsCppArrayInitializer(const void *data, size_t dataSize, std::ostream &out) { // function taken from cloc
@@ -187,7 +198,7 @@ inline void writeAsCppArrayInitializer(const void *data, size_t dataSize, std::o
 }
 
 inline void writeMockData(const std::string sourceOrigin, std::string &mockName, 
-                          std::string deviceName, xe::Function *function, xe::FunctionArgs *functionArgs, const std::vector<std::pair<int, uintptr_t>> &bufferArgsIndices,
+                          std::string deviceName, xe::Function *function, const std::vector<std::pair<int, uintptr_t>> &bufferArgsIndices,
                           std::ostream &out) {
     out << "// This is a generated file\n";
     out << "// Check " << sourceOrigin << " for details\n\n";
@@ -209,16 +220,16 @@ inline void writeMockData(const std::string sourceOrigin, std::string &mockName,
     writeAsCppArrayInitializer(function->getIsaHostMem(), function->getIsaSize(), out);
     out << "\n\n";
     out << "static const uint32_t " << globalNameCrossThreadData << "[] = \n";
-    writeAsCppArrayInitializer(functionArgs->getCrossThreadDataHostMem(), functionArgs->getCrossThreadDataSize(), out);
+    writeAsCppArrayInitializer(function->getCrossThreadDataHostMem(), function->getCrossThreadDataSize(), out);
     out << "\n\n";
     out << "static const uint32_t " << globalNamePerThreadData << "[] = \n";
     writeAsCppArrayInitializer(function->getPerThreadDataHostMem(), function->getPerThreadDataSize(), out);
     out << "\n\n";
 
     out << "static const std::pair<int, int> " << globalNameBufferArgIndices << "[] = { ";
-    const void *crossThreadData = functionArgs->getCrossThreadDataHostMem();
+    const void *crossThreadData = function->getCrossThreadDataHostMem();
     const uintptr_t *ctdSearchBeg = reinterpret_cast<const uintptr_t*>(crossThreadData);
-    const uintptr_t *ctdSearchEnd = ctdSearchBeg + functionArgs->getCrossThreadDataSize() / sizeof(uintptr_t);
+    const uintptr_t *ctdSearchEnd = ctdSearchBeg + function->getCrossThreadDataSize() / sizeof(uintptr_t);
     for(auto buffArgOffset : bufferArgsIndices){
         auto it = std::find(ctdSearchBeg, ctdSearchEnd, buffArgOffset.second);
         assert(it != ctdSearchEnd);

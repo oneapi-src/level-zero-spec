@@ -38,12 +38,10 @@ struct Mock<CommandList> : public CommandList {
     MOCK_METHOD3(encodeCommands, xe_result_t(xe_command_format_t format,
                                              size_t size,
                                              void *pBlob));
-    MOCK_METHOD4(encodeDispatchFunction, xe_result_t(xe_function_handle_t hFunction,
-                                                     xe_function_args_handle_t hFunctionArgs,
+    MOCK_METHOD3(encodeDispatchFunction, xe_result_t(xe_function_handle_t hFunction,
                                                      const xe_dispatch_function_arguments_t *pDispatchFuncArgs,
                                                      xe_event_handle_t hEvent));
-    MOCK_METHOD4(encodeDispatchFunctionIndirect, xe_result_t(xe_function_handle_t hFunction,
-                                                             xe_function_args_handle_t hFunctionArgs,
+    MOCK_METHOD3(encodeDispatchFunctionIndirect, xe_result_t(xe_function_handle_t hFunction,
                                                              const xe_dispatch_function_indirect_arguments_t *pDispatchArgumentsBuffer,
                                                              xe_event_handle_t hEvent));
     MOCK_METHOD2(encodeDispatchHostFunction, xe_result_t(xe_host_pfn_t pfnHostFunc,

@@ -16,10 +16,9 @@ xe_result_t __xecall
 xeCommandListEncodeDispatchFunction(
     xe_command_list_handle_t hCommandList,
     xe_function_handle_t hFunction,
-    xe_function_args_handle_t hFunctionArgs,
     xe_dispatch_function_arguments_t *pDispatchFuncArgs,
     xe_event_handle_t hEvent) {
-    return CommandList::fromHandle(hCommandList)->encodeDispatchFunction(hFunction, hFunctionArgs, pDispatchFuncArgs, hEvent);
+    return CommandList::fromHandle(hCommandList)->encodeDispatchFunction(hFunction, pDispatchFuncArgs, hEvent);
 }
 
 xe_result_t __xecall
