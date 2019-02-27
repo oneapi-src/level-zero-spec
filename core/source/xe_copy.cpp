@@ -28,8 +28,14 @@
 * DO NOT EDIT: generated from /scripts/<type>/copy.yml
 *
 ******************************************************************************/
+#if defined(XE_CPP)
+#include "../include/xe_copy.hpp"
+#else
 #include "../include/xe_copy.h"
+#endif
+#if !defined(XE_NULLDRV)
 #include "copy.h"
+#endif
 
 #include <exception>    // @todo: move to common and/or precompiled header
 #include <new>
@@ -83,7 +89,11 @@ __xedllexport xe_result_t __xecall
         }
         /// @begin
 
+#if defined(XE_NULLDRV)
+        return XE_RESULT_SUCCESS;
+#else
         return xe::CommandList::fromHandle(hCommandList)->encodeMemoryCopy(dstptr, srcptr, size);
+#endif
 
         /// @end
     }
@@ -149,7 +159,11 @@ __xedllexport xe_result_t __xecall
         }
         /// @begin
 
+#if defined(XE_NULLDRV)
+        return XE_RESULT_SUCCESS;
+#else
         return xe::CommandList::fromHandle(hCommandList)->encodeMemorySet(ptr, value, size);
+#endif
 
         /// @end
     }
@@ -211,7 +225,11 @@ __xedllexport xe_result_t __xecall
         }
         /// @begin
 
+#if defined(XE_NULLDRV)
+        return XE_RESULT_SUCCESS;
+#else
         return xe::CommandList::fromHandle(hCommandList)->encodeImageCopy(hDstImage, hSrcImage);
+#endif
 
         /// @end
     }
@@ -271,7 +289,11 @@ __xedllexport xe_result_t __xecall
         }
         /// @begin
 
+#if defined(XE_NULLDRV)
+        return XE_RESULT_SUCCESS;
+#else
         return xe::CommandList::fromHandle(hCommandList)->encodeImageCopyRegion(hDstImage, pDstRegion, hSrcImage, pSrcRegion);
+#endif
 
         /// @end
     }
@@ -336,7 +358,11 @@ __xedllexport xe_result_t __xecall
         }
         /// @begin
 
+#if defined(XE_NULLDRV)
+        return XE_RESULT_SUCCESS;
+#else
         return xe::CommandList::fromHandle(hCommandList)->encodeImageCopyToMemory(dstptr, hSrcImage, pSrcRegion);
+#endif
 
         /// @end
     }
@@ -401,7 +427,11 @@ __xedllexport xe_result_t __xecall
         }
         /// @begin
 
+#if defined(XE_NULLDRV)
+        return XE_RESULT_SUCCESS;
+#else
         return xe::CommandList::fromHandle(hCommandList)->encodeImageCopyFromMemory(hDstImage, pDstRegion, srcptr);
+#endif
 
         /// @end
     }
@@ -468,7 +498,11 @@ __xedllexport xe_result_t __xecall
         }
         /// @begin
 
+#if defined(XE_NULLDRV)
+        return XE_RESULT_SUCCESS;
+#else
         return xe::CommandList::fromHandle(hCommandList)->encodeMemoryPrefetch(ptr, count);
+#endif
 
         /// @end
     }
@@ -542,7 +576,11 @@ __xedllexport xe_result_t __xecall
         }
         /// @begin
 
+#if defined(XE_NULLDRV)
+        return XE_RESULT_SUCCESS;
+#else
         return xe::CommandList::fromHandle(hCommandList)->encodeMemAdvise(hDevice, ptr, size, advice);
+#endif
 
         /// @end
     }

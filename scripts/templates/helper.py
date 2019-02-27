@@ -87,20 +87,55 @@ def extract_objs(specs, type):
     return objs
 
 """
+    returns the type to which name belongs, if it is known
+    i.e. if the name is an etor, return the name of the enum
+"""
+def get_typename(name, meta, type):
+    if meta:
+        name = re.sub(r"(\w+)\(.*\)", r"\1", name) # removes '()' part of macros
+        if name in meta[type]:
+            return name
+        for entry in meta[type]:
+            if name in meta[type][entry]:
+                return entry
+    return None
+
+"""
+    returns proper name of etor
+"""
+def make_etor_name(repl, enum, etor, trim):
+    if trim:
+        prefix = re.sub(r"(\w+)_t", r"\1", subx(repl, enum)).upper()
+        name = re.sub(r"%s_(\w+)"%prefix, r"\1", subx(repl, etor))
+        name = re.sub(r"^(\d+\w+)", r"_\1", name) #todo: .lower()?
+    else:
+        name = subx(repl, etor)
+    return name
+
+"""
+    returns proper name of value
+"""
+def make_value_name(repl, altrepl, value, meta, trim):
+    macro = get_typename(value, meta, 'macro')
+    enum = get_typename(value, meta, 'enum')
+    if macro:
+        value = subx(altrepl, value)
+    elif enum:
+        value = make_etor_name(repl, enum, value, trim)
+    else:
+        value = subx(repl, value)
+    return value
+
+"""
     returns a list of strings for each enumerator in an enumeration
 """
-def make_etor_lines(repl, obj, trim=False):
+def make_etor_lines(repl, obj, cpp=False, altrepl="", meta=None):
     lines = []
     for item in obj['etors']:
-        if trim:
-            prefix = re.sub(r"(\w+)_t", r"\1", subx(repl, obj['name'])).upper()
-            name = re.sub(r"%s_(\w+)"%prefix, r"\1", subx(repl, item['name']))
-            name = re.sub(r"^(\d+\w+)", r"_\1", name) #todo: .lower()
-        else:
-            name = subx(repl, item['name'])
+        name = make_etor_name(repl, obj['name'], item['name'], cpp)
 
         if 'value' in item:
-            value = subx(repl, item['value'])
+            value = make_value_name(repl, altrepl, item['value'], meta, cpp)
             prologue = "%s = %s,"%(name, value)
         else:
             prologue = "%s,"%(name)
@@ -113,14 +148,14 @@ def make_etor_lines(repl, obj, trim=False):
 """
     returns a list of strings for each member of a structure or class
 """
-def make_member_lines(repl, obj, init=False):
+def make_member_lines(repl, obj, cpp=False, altrepl="", meta=None):
     lines = []
     for item in obj['members']:
         name = subx(repl, item['name'])
         type = subx(repl, item['type'])
 
-        if init and 'init' in item:
-            value = subx(repl, item['init'])
+        if cpp and 'init' in item:
+            value = make_value_name(repl, altrepl, item['init'], meta, True)
             prologue = "%s %s = %s;"%(type, name, value)
         else:
             prologue = "%s %s;"%(type, name)
@@ -319,24 +354,3 @@ def make_obj_accessor(repl, obj, cls):
         str += argStr
     str += ");"
     return str
-
-"""
-    returns a list of all enum objects that belong to the class
-"""
-def get_class_member_enums(cls, specs):
-    # find all the structs that belong to this class
-    return filter_items(extract_objs(specs, "enum"), 'class', cls)
-
-"""
-    returns a list of all struct objects that belong to the class
-"""
-def get_class_member_structs(cls, specs):
-    # find all the structs that belong to this class
-    return filter_items(extract_objs(specs, "struct"), 'class', cls)
-
-"""
-    returns a list of all function objects that belong to the class
-"""
-def get_class_member_funcs(cls, specs):
-    # find all the functions that belong to this class
-    return filter_items(extract_objs(specs, "function"), 'class', cls)

@@ -28,8 +28,14 @@
 * DO NOT EDIT: generated from /scripts/<type>/device.yml
 *
 ******************************************************************************/
+#if defined(XE_CPP)
+#include "../include/xe_device.hpp"
+#else
 #include "../include/xe_device.h"
+#endif
+#if !defined(XE_NULLDRV)
 #include "device.h"
+#endif
 
 #include <exception>    // @todo: move to common and/or precompiled header
 #include <new>
@@ -69,7 +75,11 @@ __xedllexport xe_result_t __xecall
         }
         /// @begin
 
+#if defined(XE_NULLDRV)
+        return XE_RESULT_SUCCESS;
+#else
         return xe::Driver::get()->getDeviceCount(count);
+#endif
 
         /// @end
     }
@@ -128,7 +138,11 @@ __xedllexport xe_result_t __xecall
         }
         /// @begin
 
+#if defined(XE_NULLDRV)
+        return XE_RESULT_SUCCESS;
+#else
         return xe::Driver::get()->getDeviceUniqueIds(count, pUniqueIds);
+#endif
 
         /// @end
     }
@@ -186,7 +200,11 @@ __xedllexport xe_result_t __xecall
         }
         /// @begin
 
+#if defined(XE_NULLDRV)
+        return XE_RESULT_SUCCESS;
+#else
         return xe::Driver::get()->getDevice(uniqueId, phDevice);
+#endif
 
         /// @end
     }
@@ -247,7 +265,11 @@ __xedllexport xe_result_t __xecall
         }
         /// @begin
 
+#if defined(XE_NULLDRV)
+        return XE_RESULT_SUCCESS;
+#else
         return xe::Device::fromHandle(hDevice)->getSubDevice(ordinal, phSubDevice);
+#endif
 
         /// @end
     }
@@ -305,7 +327,11 @@ __xedllexport xe_result_t __xecall
         }
         /// @begin
 
+#if defined(XE_NULLDRV)
+        return XE_RESULT_SUCCESS;
+#else
         return xe::Device::fromHandle(hDevice)->getApiVersion(version);
+#endif
 
         /// @end
     }
@@ -365,7 +391,11 @@ __xedllexport xe_result_t __xecall
         }
         /// @begin
 
+#if defined(XE_NULLDRV)
+        return XE_RESULT_SUCCESS;
+#else
         return xe::Device::fromHandle(hDevice)->getProperties(pDeviceProperties);
+#endif
 
         /// @end
     }
@@ -424,7 +454,11 @@ __xedllexport xe_result_t __xecall
         }
         /// @begin
 
+#if defined(XE_NULLDRV)
+        return XE_RESULT_SUCCESS;
+#else
         return xe::Device::fromHandle(hDevice)->getComputeProperties(pComputeProperties);
+#endif
 
         /// @end
     }
@@ -484,7 +518,11 @@ __xedllexport xe_result_t __xecall
         }
         /// @begin
 
+#if defined(XE_NULLDRV)
+        return XE_RESULT_SUCCESS;
+#else
         return xe::Device::fromHandle(hDevice)->getMemoryProperties(pMemProperties);
+#endif
 
         /// @end
     }
@@ -542,7 +580,11 @@ __xedllexport xe_result_t __xecall
         }
         /// @begin
 
+#if defined(XE_NULLDRV)
+        return XE_RESULT_SUCCESS;
+#else
         return xe::deviceGetLinkProperties(srcOrdinal, dstOrdinal, pLinkProperties);
+#endif
 
         /// @end
     }
@@ -603,7 +645,11 @@ __xedllexport xe_result_t __xecall
         }
         /// @begin
 
+#if defined(XE_NULLDRV)
+        return XE_RESULT_SUCCESS;
+#else
         return xe::Device::fromHandle(hDevice)->canAccessPeer(hPeerDevice, value);
+#endif
 
         /// @end
     }
@@ -660,7 +706,11 @@ __xedllexport xe_result_t __xecall
         }
         /// @begin
 
+#if defined(XE_NULLDRV)
+        return XE_RESULT_SUCCESS;
+#else
         return xe::Device::fromHandle(hDevice)->setIntermediateCacheConfig(CacheConfig);
+#endif
 
         /// @end
     }
@@ -717,7 +767,11 @@ __xedllexport xe_result_t __xecall
         }
         /// @begin
 
+#if defined(XE_NULLDRV)
+        return XE_RESULT_SUCCESS;
+#else
         return xe::Device::fromHandle(hDevice)->setLastLevelCacheConfig(CacheConfig);
+#endif
 
         /// @end
     }

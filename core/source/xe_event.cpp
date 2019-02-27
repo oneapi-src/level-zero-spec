@@ -28,8 +28,14 @@
 * DO NOT EDIT: generated from /scripts/<type>/event.yml
 *
 ******************************************************************************/
+#if defined(XE_CPP)
+#include "../include/xe_event.hpp"
+#else
 #include "../include/xe_event.h"
+#endif
+#if !defined(XE_NULLDRV)
 #include "event.h"
+#endif
 
 #include <exception>    // @todo: move to common and/or precompiled header
 #include <new>
@@ -82,7 +88,11 @@ __xedllexport xe_result_t __xecall
         }
         /// @begin
 
+#if defined(XE_NULLDRV)
+        return XE_RESULT_SUCCESS;
+#else
         return xe::Device::fromHandle(hDevice)->createEvent(desc, phEvent);
+#endif
 
         /// @end
     }
@@ -147,7 +157,11 @@ __xedllexport xe_result_t __xecall
         }
         /// @begin
 
+#if defined(XE_NULLDRV)
+        return XE_RESULT_SUCCESS;
+#else
         return xe::Device::fromHandle(hDevice)->placeEvent(desc, ptr, phEvent);
+#endif
 
         /// @end
     }
@@ -207,7 +221,11 @@ __xedllexport xe_result_t __xecall
         }
         /// @begin
 
+#if defined(XE_NULLDRV)
+        return XE_RESULT_SUCCESS;
+#else
         return xe::Event::fromHandle(hEvent)->destroy();
+#endif
 
         /// @end
     }
@@ -268,7 +286,11 @@ __xedllexport xe_result_t __xecall
         }
         /// @begin
 
+#if defined(XE_NULLDRV)
+        return XE_RESULT_SUCCESS;
+#else
         return xe::CommandList::fromHandle(hCommandList)->encodeSignalEvent(hEvent);
+#endif
 
         /// @end
     }
@@ -323,7 +345,11 @@ __xedllexport xe_result_t __xecall
         }
         /// @begin
 
+#if defined(XE_NULLDRV)
+        return XE_RESULT_SUCCESS;
+#else
         return xe::CommandList::fromHandle(hCommandList)->encodeWaitOnEvent(hEvent);
+#endif
 
         /// @end
     }
@@ -379,7 +405,11 @@ __xedllexport xe_result_t __xecall
         }
         /// @begin
 
+#if defined(XE_NULLDRV)
+        return XE_RESULT_SUCCESS;
+#else
         return xe::CommandList::fromHandle(hCommandList)->encodeSignalMultipleEvents(numEvents, phEvents);
+#endif
 
         /// @end
     }
@@ -436,7 +466,11 @@ __xedllexport xe_result_t __xecall
         }
         /// @begin
 
+#if defined(XE_NULLDRV)
+        return XE_RESULT_SUCCESS;
+#else
         return xe::CommandList::fromHandle(hCommandList)->encodeWaitOnMultipleEvents(numEvents, phEvents);
+#endif
 
         /// @end
     }
@@ -491,7 +525,11 @@ __xedllexport xe_result_t __xecall
         }
         /// @begin
 
+#if defined(XE_NULLDRV)
+        return XE_RESULT_SUCCESS;
+#else
         return xe::hostSignalEvent(hEvent);
+#endif
 
         /// @end
     }
@@ -560,7 +598,11 @@ __xedllexport xe_result_t __xecall
         }
         /// @begin
 
+#if defined(XE_NULLDRV)
+        return XE_RESULT_SUCCESS;
+#else
         return xe::hostWaitOnEvent(hEvent, mode, delay, interval, timeout);
+#endif
 
         /// @end
     }
@@ -612,7 +654,11 @@ __xedllexport xe_result_t __xecall
         }
         /// @begin
 
+#if defined(XE_NULLDRV)
+        return XE_RESULT_SUCCESS;
+#else
         return xe::hostSignalMultipleEvents(numEvents, phEvents);
+#endif
 
         /// @end
     }
@@ -681,7 +727,11 @@ __xedllexport xe_result_t __xecall
         }
         /// @begin
 
+#if defined(XE_NULLDRV)
+        return XE_RESULT_SUCCESS;
+#else
         return xe::hostWaitOnMultipleEvents(numEvents, phEvents, mode, delay, interval, timeout);
+#endif
 
         /// @end
     }
@@ -740,7 +790,11 @@ __xedllexport xe_result_t __xecall
         }
         /// @begin
 
+#if defined(XE_NULLDRV)
+        return XE_RESULT_SUCCESS;
+#else
         return xe::Event::fromHandle(hEvent)->queryStatus();
+#endif
 
         /// @end
     }
@@ -803,7 +857,11 @@ __xedllexport xe_result_t __xecall
         }
         /// @begin
 
+#if defined(XE_NULLDRV)
+        return XE_RESULT_SUCCESS;
+#else
         return xe::eventQueryElapsedTime(hEventStart, hEventEnd, pTime);
+#endif
 
         /// @end
     }
@@ -864,7 +922,11 @@ __xedllexport xe_result_t __xecall
         }
         /// @begin
 
+#if defined(XE_NULLDRV)
+        return XE_RESULT_SUCCESS;
+#else
         return xe::eventQueryMetricsData(hEventStart, hEventEnd, reportSize, pReportData);
+#endif
 
         /// @end
     }
@@ -923,7 +985,11 @@ __xedllexport xe_result_t __xecall
         }
         /// @begin
 
+#if defined(XE_NULLDRV)
+        return XE_RESULT_SUCCESS;
+#else
         return xe::CommandList::fromHandle(hCommandList)->encodeEventReset(hEvent);
+#endif
 
         /// @end
     }
@@ -978,7 +1044,11 @@ __xedllexport xe_result_t __xecall
         }
         /// @begin
 
+#if defined(XE_NULLDRV)
+        return XE_RESULT_SUCCESS;
+#else
         return xe::Event::fromHandle(hEvent)->reset();
+#endif
 
         /// @end
     }

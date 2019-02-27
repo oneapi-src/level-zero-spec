@@ -31,8 +31,14 @@ from templates import helper as th
 * DO NOT EDIT: generated from /scripts/<type>/${name}.yml
 *
 ******************************************************************************/
+#if defined(${X}_CPP)
+#include "../include/${x}_${name}.hpp"
+#else
 #include "../include/${x}_${name}.h"
+#endif
+#if !defined(${X}_NULLDRV)
 #include "${name}.h"
+#endif
 
 #include <exception>    // @todo: move to common and/or precompiled header
 #include <new>
@@ -80,7 +86,11 @@ __${x}dllexport ${x}_result_t __${x}call
         }
         /// @begin
 
+#if defined(${X}_NULLDRV)
+        return ${X}_RESULT_SUCCESS;
+#else
         return ${x}::${th.make_obj_accessor(x, obj, cls)}
+#endif
 
         /// @end
     }
@@ -90,7 +100,7 @@ __${x}dllexport ${x}_result_t __${x}call
     }
     catch(std::bad_alloc&)
     {
-        return XE_RESULT_ERROR_OUT_OF_HOST_MEMORY;
+        return ${X}_RESULT_ERROR_OUT_OF_HOST_MEMORY;
     }
     catch(std::exception&)
     {

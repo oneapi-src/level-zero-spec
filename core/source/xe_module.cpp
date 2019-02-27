@@ -28,8 +28,14 @@
 * DO NOT EDIT: generated from /scripts/<type>/module.yml
 *
 ******************************************************************************/
+#if defined(XE_CPP)
+#include "../include/xe_module.hpp"
+#else
 #include "../include/xe_module.h"
+#endif
+#if !defined(XE_NULLDRV)
 #include "module.h"
+#endif
 
 #include <exception>    // @todo: move to common and/or precompiled header
 #include <new>
@@ -101,7 +107,11 @@ __xedllexport xe_result_t __xecall
         }
         /// @begin
 
+#if defined(XE_NULLDRV)
+        return XE_RESULT_SUCCESS;
+#else
         return xe::Device::fromHandle(hDevice)->createModule(desc, phModule, phBuildLog);
+#endif
 
         /// @end
     }
@@ -159,7 +169,11 @@ __xedllexport xe_result_t __xecall
         }
         /// @begin
 
+#if defined(XE_NULLDRV)
+        return XE_RESULT_SUCCESS;
+#else
         return xe::Module::fromHandle(hModule)->destroy();
+#endif
 
         /// @end
     }
@@ -215,7 +229,11 @@ __xedllexport xe_result_t __xecall
         }
         /// @begin
 
+#if defined(XE_NULLDRV)
+        return XE_RESULT_SUCCESS;
+#else
         return xe::moduleBuildLogDestroy(hModuleBuildLog);
+#endif
 
         /// @end
     }
@@ -274,7 +292,11 @@ __xedllexport xe_result_t __xecall
         }
         /// @begin
 
+#if defined(XE_NULLDRV)
+        return XE_RESULT_SUCCESS;
+#else
         return xe::moduleBuildLogGetString(hModuleBuildLog, pSize, pBuildLog);
+#endif
 
         /// @end
     }
@@ -341,7 +363,11 @@ __xedllexport xe_result_t __xecall
         }
         /// @begin
 
+#if defined(XE_NULLDRV)
+        return XE_RESULT_SUCCESS;
+#else
         return xe::Module::fromHandle(hModule)->getNativeBinary(pSize, pModuleNativeBinary);
+#endif
 
         /// @end
     }
@@ -407,7 +433,11 @@ __xedllexport xe_result_t __xecall
         }
         /// @begin
 
+#if defined(XE_NULLDRV)
+        return XE_RESULT_SUCCESS;
+#else
         return xe::Module::fromHandle(hModule)->createFunction(desc, phFunction);
+#endif
 
         /// @end
     }
@@ -461,7 +491,11 @@ __xedllexport xe_result_t __xecall
         }
         /// @begin
 
+#if defined(XE_NULLDRV)
+        return XE_RESULT_SUCCESS;
+#else
         return xe::Function::fromHandle(hFunction)->destroy();
+#endif
 
         /// @end
     }
@@ -520,7 +554,11 @@ __xedllexport xe_result_t __xecall
         }
         /// @begin
 
+#if defined(XE_NULLDRV)
+        return XE_RESULT_SUCCESS;
+#else
         return xe::Module::fromHandle(hModule)->getFunctionPointer(pFunctionName, pfnFunction);
+#endif
 
         /// @end
     }
@@ -577,7 +615,11 @@ __xedllexport xe_result_t __xecall
         }
         /// @begin
 
+#if defined(XE_NULLDRV)
+        return XE_RESULT_SUCCESS;
+#else
         return xe::Function::fromHandle(hFunction)->setGroupSize(groupSizeX, groupSizeY, groupSizeZ);
+#endif
 
         /// @end
     }
@@ -644,7 +686,11 @@ __xedllexport xe_result_t __xecall
         }
         /// @begin
 
+#if defined(XE_NULLDRV)
+        return XE_RESULT_SUCCESS;
+#else
         return xe::Function::fromHandle(hFunction)->suggestGroupSize(globalSizeX, globalSizeY, globalSizeZ, groupSizeX, groupSizeY, groupSizeZ);
+#endif
 
         /// @end
     }
@@ -702,7 +748,11 @@ __xedllexport xe_result_t __xecall
         }
         /// @begin
 
+#if defined(XE_NULLDRV)
+        return XE_RESULT_SUCCESS;
+#else
         return xe::Function::fromHandle(hFunction)->setArgumentValue(argIndex, argSize, pArgValue);
+#endif
 
         /// @end
     }
@@ -761,7 +811,11 @@ __xedllexport xe_result_t __xecall
         }
         /// @begin
 
+#if defined(XE_NULLDRV)
+        return XE_RESULT_SUCCESS;
+#else
         return xe::Function::fromHandle(hFunction)->setAttribute(attr, value);
+#endif
 
         /// @end
     }
@@ -821,7 +875,11 @@ __xedllexport xe_result_t __xecall
         }
         /// @begin
 
+#if defined(XE_NULLDRV)
+        return XE_RESULT_SUCCESS;
+#else
         return xe::Function::fromHandle(hFunction)->getAttribute(attr, pValue);
+#endif
 
         /// @end
     }
@@ -885,7 +943,11 @@ __xedllexport xe_result_t __xecall
         }
         /// @begin
 
+#if defined(XE_NULLDRV)
+        return XE_RESULT_SUCCESS;
+#else
         return xe::CommandList::fromHandle(hCommandList)->encodeDispatchFunction(hFunction, pDispatchFuncArgs, hEvent);
+#endif
 
         /// @end
     }
@@ -949,7 +1011,11 @@ __xedllexport xe_result_t __xecall
         }
         /// @begin
 
+#if defined(XE_NULLDRV)
+        return XE_RESULT_SUCCESS;
+#else
         return xe::CommandGraph::fromHandle(hCommandGraph)->encodeDispatchFunction(hFunction, pDispatchFuncArgs, hEvent);
+#endif
 
         /// @end
     }
@@ -1015,7 +1081,11 @@ __xedllexport xe_result_t __xecall
         }
         /// @begin
 
+#if defined(XE_NULLDRV)
+        return XE_RESULT_SUCCESS;
+#else
         return xe::CommandList::fromHandle(hCommandList)->encodeDispatchFunctionIndirect(hFunction, pDispatchArgumentsBuffer, hEvent);
+#endif
 
         /// @end
     }
@@ -1081,7 +1151,11 @@ __xedllexport xe_result_t __xecall
         }
         /// @begin
 
+#if defined(XE_NULLDRV)
+        return XE_RESULT_SUCCESS;
+#else
         return xe::CommandGraph::fromHandle(hCommandGraph)->encodeDispatchFunctionIndirect(hFunction, pDispatchArgumentsBuffer, hEvent);
+#endif
 
         /// @end
     }
@@ -1141,7 +1215,11 @@ __xedllexport xe_result_t __xecall
         }
         /// @begin
 
+#if defined(XE_NULLDRV)
+        return XE_RESULT_SUCCESS;
+#else
         return xe::CommandList::fromHandle(hCommandList)->encodeDispatchHostFunction(pfnHostFunc, pUserData);
+#endif
 
         /// @end
     }
@@ -1201,7 +1279,11 @@ __xedllexport xe_result_t __xecall
         }
         /// @begin
 
+#if defined(XE_NULLDRV)
+        return XE_RESULT_SUCCESS;
+#else
         return xe::CommandGraph::fromHandle(hCommandGraph)->encodeDispatchHostFunction(pfnHostFunc, pUserData);
+#endif
 
         /// @end
     }

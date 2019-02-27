@@ -28,8 +28,14 @@
 * DO NOT EDIT: generated from /scripts/<type>/driver.yml
 *
 ******************************************************************************/
+#if defined(XE_CPP)
+#include "../include/xe_driver.hpp"
+#else
 #include "../include/xe_driver.h"
+#endif
+#if !defined(XE_NULLDRV)
 #include "driver.h"
+#endif
 
 #include <exception>    // @todo: move to common and/or precompiled header
 #include <new>
@@ -74,7 +80,11 @@ __xedllexport xe_result_t __xecall
         }
         /// @begin
 
+#if defined(XE_NULLDRV)
+        return XE_RESULT_SUCCESS;
+#else
         return xe::Driver::get()->init(flags);
+#endif
 
         /// @end
     }
@@ -130,7 +140,11 @@ __xedllexport xe_result_t __xecall
         }
         /// @begin
 
+#if defined(XE_NULLDRV)
+        return XE_RESULT_SUCCESS;
+#else
         return xe::Driver::get()->getVersion(version);
+#endif
 
         /// @end
     }

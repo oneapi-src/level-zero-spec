@@ -28,8 +28,14 @@
 * DO NOT EDIT: generated from /scripts/<type>/residency.yml
 *
 ******************************************************************************/
+#if defined(XE_CPP)
+#include "../include/xe_residency.hpp"
+#else
 #include "../include/xe_residency.h"
+#endif
+#if !defined(XE_NULLDRV)
 #include "residency.h"
+#endif
 
 #include <exception>    // @todo: move to common and/or precompiled header
 #include <new>
@@ -72,7 +78,11 @@ __xedllexport xe_result_t __xecall
         }
         /// @begin
 
+#if defined(XE_NULLDRV)
+        return XE_RESULT_SUCCESS;
+#else
         return xe::Device::fromHandle(hDevice)->makeMemoryResident(ptr, size);
+#endif
 
         /// @end
     }
@@ -130,7 +140,11 @@ __xedllexport xe_result_t __xecall
         }
         /// @begin
 
+#if defined(XE_NULLDRV)
+        return XE_RESULT_SUCCESS;
+#else
         return xe::Device::fromHandle(hDevice)->evictMemory(ptr, size);
+#endif
 
         /// @end
     }
@@ -186,7 +200,11 @@ __xedllexport xe_result_t __xecall
         }
         /// @begin
 
+#if defined(XE_NULLDRV)
+        return XE_RESULT_SUCCESS;
+#else
         return xe::Device::fromHandle(hDevice)->makeImageResident(hImage);
+#endif
 
         /// @end
     }
@@ -244,7 +262,11 @@ __xedllexport xe_result_t __xecall
         }
         /// @begin
 
+#if defined(XE_NULLDRV)
+        return XE_RESULT_SUCCESS;
+#else
         return xe::Device::fromHandle(hDevice)->evictImage(hImage);
+#endif
 
         /// @end
     }

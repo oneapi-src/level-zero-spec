@@ -28,8 +28,14 @@
 * DO NOT EDIT: generated from /scripts/<type>/fence.yml
 *
 ******************************************************************************/
+#if defined(XE_CPP)
+#include "../include/xe_fence.hpp"
+#else
 #include "../include/xe_fence.h"
+#endif
+#if !defined(XE_NULLDRV)
 #include "fence.h"
+#endif
 
 #include <exception>    // @todo: move to common and/or precompiled header
 #include <new>
@@ -80,7 +86,11 @@ __xedllexport xe_result_t __xecall
         }
         /// @begin
 
+#if defined(XE_NULLDRV)
+        return XE_RESULT_SUCCESS;
+#else
         return xe::CommandQueue::fromHandle(hCommandQueue)->createFence(desc, phFence);
+#endif
 
         /// @end
     }
@@ -139,7 +149,11 @@ __xedllexport xe_result_t __xecall
         }
         /// @begin
 
+#if defined(XE_NULLDRV)
+        return XE_RESULT_SUCCESS;
+#else
         return xe::Fence::fromHandle(hFence)->destroy();
+#endif
 
         /// @end
     }
@@ -208,7 +222,11 @@ __xedllexport xe_result_t __xecall
         }
         /// @begin
 
+#if defined(XE_NULLDRV)
+        return XE_RESULT_SUCCESS;
+#else
         return xe::hostWaitOnFence(hFence, mode, delay, interval, timeout);
+#endif
 
         /// @end
     }
@@ -279,7 +297,11 @@ __xedllexport xe_result_t __xecall
         }
         /// @begin
 
+#if defined(XE_NULLDRV)
+        return XE_RESULT_SUCCESS;
+#else
         return xe::hostWaitOnMultipleFences(numFences, phFences, mode, delay, interval, timeout);
+#endif
 
         /// @end
     }
@@ -337,7 +359,11 @@ __xedllexport xe_result_t __xecall
         }
         /// @begin
 
+#if defined(XE_NULLDRV)
+        return XE_RESULT_SUCCESS;
+#else
         return xe::Fence::fromHandle(hFence)->queryStatus();
+#endif
 
         /// @end
     }
@@ -395,7 +421,11 @@ __xedllexport xe_result_t __xecall
         }
         /// @begin
 
+#if defined(XE_NULLDRV)
+        return XE_RESULT_SUCCESS;
+#else
         return xe::fenceQueryElapsedTime(hFenceStart, hFenceEnd, pTime);
+#endif
 
         /// @end
     }
@@ -450,7 +480,11 @@ __xedllexport xe_result_t __xecall
         }
         /// @begin
 
+#if defined(XE_NULLDRV)
+        return XE_RESULT_SUCCESS;
+#else
         return xe::Fence::fromHandle(hFence)->reset();
+#endif
 
         /// @end
     }

@@ -28,8 +28,14 @@
 * DO NOT EDIT: generated from /scripts/<type>/cmdlist.yml
 *
 ******************************************************************************/
+#if defined(XE_CPP)
+#include "../include/xe_cmdlist.hpp"
+#else
 #include "../include/xe_cmdlist.h"
+#endif
+#if !defined(XE_NULLDRV)
 #include "cmdlist.h"
+#endif
 
 #include <exception>    // @todo: move to common and/or precompiled header
 #include <new>
@@ -78,7 +84,11 @@ __xedllexport xe_result_t __xecall
         }
         /// @begin
 
+#if defined(XE_NULLDRV)
+        return XE_RESULT_SUCCESS;
+#else
         return xe::Device::fromHandle(hDevice)->createCommandList(desc, phCommandList);
+#endif
 
         /// @end
     }
@@ -143,7 +153,11 @@ __xedllexport xe_result_t __xecall
         }
         /// @begin
 
+#if defined(XE_NULLDRV)
+        return XE_RESULT_SUCCESS;
+#else
         return xe::Device::fromHandle(hDevice)->copyCommandList(hCommandList, phCommandList);
+#endif
 
         /// @end
     }
@@ -197,7 +211,11 @@ __xedllexport xe_result_t __xecall
         }
         /// @begin
 
+#if defined(XE_NULLDRV)
+        return XE_RESULT_SUCCESS;
+#else
         return xe::CommandList::fromHandle(hCommandList)->destroy();
+#endif
 
         /// @end
     }
@@ -249,7 +267,11 @@ __xedllexport xe_result_t __xecall
         }
         /// @begin
 
+#if defined(XE_NULLDRV)
+        return XE_RESULT_SUCCESS;
+#else
         return xe::CommandList::fromHandle(hCommandList)->close();
+#endif
 
         /// @end
     }
@@ -304,7 +326,11 @@ __xedllexport xe_result_t __xecall
         }
         /// @begin
 
+#if defined(XE_NULLDRV)
+        return XE_RESULT_SUCCESS;
+#else
         return xe::CommandList::fromHandle(hCommandList)->reset();
+#endif
 
         /// @end
     }
@@ -366,7 +392,11 @@ __xedllexport xe_result_t __xecall
         }
         /// @begin
 
+#if defined(XE_NULLDRV)
+        return XE_RESULT_SUCCESS;
+#else
         return xe::CommandList::fromHandle(hCommandList)->setParameter(parameter, value);
+#endif
 
         /// @end
     }
@@ -430,7 +460,11 @@ __xedllexport xe_result_t __xecall
         }
         /// @begin
 
+#if defined(XE_NULLDRV)
+        return XE_RESULT_SUCCESS;
+#else
         return xe::CommandList::fromHandle(hCommandList)->getParameter(parameter, value);
+#endif
 
         /// @end
     }
@@ -482,7 +516,11 @@ __xedllexport xe_result_t __xecall
         }
         /// @begin
 
+#if defined(XE_NULLDRV)
+        return XE_RESULT_SUCCESS;
+#else
         return xe::CommandList::fromHandle(hCommandList)->resetParameters();
+#endif
 
         /// @end
     }
@@ -539,7 +577,11 @@ __xedllexport xe_result_t __xecall
         }
         /// @begin
 
+#if defined(XE_NULLDRV)
+        return XE_RESULT_SUCCESS;
+#else
         return xe::CommandList::fromHandle(hCommandList)->encodeCommandLists(numCommandLists, phCommandLists);
+#endif
 
         /// @end
     }
@@ -599,7 +641,11 @@ __xedllexport xe_result_t __xecall
         }
         /// @begin
 
+#if defined(XE_NULLDRV)
+        return XE_RESULT_SUCCESS;
+#else
         return xe::CommandList::fromHandle(hCommandList)->encodeCommands(format, size, pBlob);
+#endif
 
         /// @end
     }

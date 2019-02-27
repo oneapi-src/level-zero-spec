@@ -28,8 +28,14 @@
 * DO NOT EDIT: generated from /scripts/<type>/common.yml
 *
 ******************************************************************************/
+#if defined(XE_CPP)
+#include "../include/xe_common.hpp"
+#else
 #include "../include/xe_common.h"
+#endif
+#if !defined(XE_NULLDRV)
 #include "common.h"
+#endif
 
 #include <exception>    // @todo: move to common and/or precompiled header
 #include <new>

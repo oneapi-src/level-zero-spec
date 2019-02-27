@@ -28,8 +28,14 @@
 * DO NOT EDIT: generated from /scripts/<type>/cmdqueue.yml
 *
 ******************************************************************************/
+#if defined(XE_CPP)
+#include "../include/xe_cmdqueue.hpp"
+#else
 #include "../include/xe_cmdqueue.h"
+#endif
+#if !defined(XE_NULLDRV)
 #include "cmdqueue.h"
+#endif
 
 #include <exception>    // @todo: move to common and/or precompiled header
 #include <new>
@@ -82,7 +88,11 @@ __xedllexport xe_result_t __xecall
         }
         /// @begin
 
+#if defined(XE_NULLDRV)
+        return XE_RESULT_SUCCESS;
+#else
         return xe::Device::fromHandle(hDevice)->createCommandQueue(desc, phCommandQueue);
+#endif
 
         /// @end
     }
@@ -141,7 +151,11 @@ __xedllexport xe_result_t __xecall
         }
         /// @begin
 
+#if defined(XE_NULLDRV)
+        return XE_RESULT_SUCCESS;
+#else
         return xe::CommandQueue::fromHandle(hCommandQueue)->destroy();
+#endif
 
         /// @end
     }
@@ -204,7 +218,11 @@ __xedllexport xe_result_t __xecall
         }
         /// @begin
 
+#if defined(XE_NULLDRV)
+        return XE_RESULT_SUCCESS;
+#else
         return xe::CommandQueue::fromHandle(hCommandQueue)->enqueueCommandLists(numCommandLists, phCommandLists, hFence);
+#endif
 
         /// @end
     }
@@ -268,7 +286,11 @@ __xedllexport xe_result_t __xecall
         }
         /// @begin
 
+#if defined(XE_NULLDRV)
+        return XE_RESULT_SUCCESS;
+#else
         return xe::CommandQueue::fromHandle(hCommandQueue)->synchronize(mode, delay, interval, timeout);
+#endif
 
         /// @end
     }

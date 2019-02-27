@@ -36,7 +36,8 @@ def generate_hash(d):
 """
 def generate_meta(d, meta):
     type = d['type']
-    name = d['name']
+    name = re.sub(r"(\w+)\(.*\)", r"\1", d['name']) # removes '()' part of macros
+
     for c in d['class']:
         # create dict if class name is not already known...
         if c not in meta['class']:
@@ -52,6 +53,26 @@ def generate_meta(d, meta):
         else:
             print("Error - duplicate entries found!")
             raise
+
+    if 'enum' == type or 'macro' == type:
+        # create dict if typename is not already known...
+        if type not in meta:
+            meta[type] = {}
+
+        # create list if name is not already known for type...
+        if name not in meta[type]:
+            meta[type][name] = []
+
+        # add values to list
+        if 'etors' in d:
+            for etor in d['etors']:
+                meta[type][name].append(etor['name'])
+        else:   
+            if 'value' in d:
+                meta[type][name].append(d['value'])
+            if 'altvalue' in d:
+                meta[type][name].append(d['altvalue'])
+
     return meta
 
 """
@@ -86,4 +107,8 @@ def parse(path):
             'header'    : header,
             'objects'   : objects
         })
+
+    # for debug purposes
+    #util.jsonWrite("specs.json", specs)
+    #util.jsonWrite("meta.json", meta)
     return specs, meta

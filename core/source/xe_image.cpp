@@ -28,8 +28,14 @@
 * DO NOT EDIT: generated from /scripts/<type>/image.yml
 *
 ******************************************************************************/
+#if defined(XE_CPP)
+#include "../include/xe_image.hpp"
+#else
 #include "../include/xe_image.h"
+#endif
+#if !defined(XE_NULLDRV)
 #include "image.h"
+#endif
 
 #include <exception>    // @todo: move to common and/or precompiled header
 #include <new>
@@ -80,7 +86,11 @@ __xedllexport xe_result_t __xecall
         }
         /// @begin
 
+#if defined(XE_NULLDRV)
+        return XE_RESULT_SUCCESS;
+#else
         return xe::Device::fromHandle(hDevice)->createImage(desc, phImage);
+#endif
 
         /// @end
     }
@@ -134,7 +144,11 @@ __xedllexport xe_result_t __xecall
         }
         /// @begin
 
+#if defined(XE_NULLDRV)
+        return XE_RESULT_SUCCESS;
+#else
         return xe::Image::fromHandle(hImage)->destroy();
+#endif
 
         /// @end
     }

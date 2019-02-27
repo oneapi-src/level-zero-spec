@@ -28,8 +28,14 @@
 * DO NOT EDIT: generated from /scripts/<type>/memory.yml
 *
 ******************************************************************************/
+#if defined(XE_CPP)
+#include "../include/xe_memory.hpp"
+#else
 #include "../include/xe_memory.h"
+#endif
+#if !defined(XE_NULLDRV)
 #include "memory.h"
+#endif
 
 #include <exception>    // @todo: move to common and/or precompiled header
 #include <new>
@@ -67,7 +73,11 @@ __xedllexport xe_result_t __xecall
         }
         /// @begin
 
+#if defined(XE_NULLDRV)
+        return XE_RESULT_SUCCESS;
+#else
         return xe::createMemAllocator(phMemAllocHandle);
+#endif
 
         /// @end
     }
@@ -122,7 +132,11 @@ __xedllexport xe_result_t __xecall
         }
         /// @begin
 
+#if defined(XE_NULLDRV)
+        return XE_RESULT_SUCCESS;
+#else
         return xe::memAllocatorDestroy(hMemAllocHandle);
+#endif
 
         /// @end
     }
@@ -194,7 +208,11 @@ __xedllexport xe_result_t __xecall
         }
         /// @begin
 
+#if defined(XE_NULLDRV)
+        return XE_RESULT_SUCCESS;
+#else
         return xe::sharedMemAlloc(hMemAllocHandle, hDevice, device_flags, host_flags, size, alignment, ptr);
+#endif
 
         /// @end
     }
@@ -265,7 +283,11 @@ __xedllexport xe_result_t __xecall
         }
         /// @begin
 
+#if defined(XE_NULLDRV)
+        return XE_RESULT_SUCCESS;
+#else
         return xe::memAlloc(hMemAllocHandle, hDevice, flags, size, alignment, ptr);
+#endif
 
         /// @end
     }
@@ -334,7 +356,11 @@ __xedllexport xe_result_t __xecall
         }
         /// @begin
 
+#if defined(XE_NULLDRV)
+        return XE_RESULT_SUCCESS;
+#else
         return xe::hostMemAlloc(hMemAllocHandle, flags, size, alignment, ptr);
+#endif
 
         /// @end
     }
@@ -396,7 +422,11 @@ __xedllexport xe_result_t __xecall
         }
         /// @begin
 
+#if defined(XE_NULLDRV)
+        return XE_RESULT_SUCCESS;
+#else
         return xe::memFree(hMemAllocHandle, ptr);
+#endif
 
         /// @end
     }
@@ -459,7 +489,11 @@ __xedllexport xe_result_t __xecall
         }
         /// @begin
 
+#if defined(XE_NULLDRV)
+        return XE_RESULT_SUCCESS;
+#else
         return xe::memGetProperty(hMemAllocHandle, ptr, property, pValue);
+#endif
 
         /// @end
     }
@@ -523,7 +557,11 @@ __xedllexport xe_result_t __xecall
         }
         /// @begin
 
+#if defined(XE_NULLDRV)
+        return XE_RESULT_SUCCESS;
+#else
         return xe::memGetAddressRange(hMemAllocHandle, ptr, pBase, pSize);
+#endif
 
         /// @end
     }
@@ -587,7 +625,11 @@ __xedllexport xe_result_t __xecall
         }
         /// @begin
 
+#if defined(XE_NULLDRV)
+        return XE_RESULT_SUCCESS;
+#else
         return xe::ipcGetMemHandle(hMemAllocHandle, ptr, pIpcHandle);
+#endif
 
         /// @end
     }
@@ -658,7 +700,11 @@ __xedllexport xe_result_t __xecall
         }
         /// @begin
 
+#if defined(XE_NULLDRV)
+        return XE_RESULT_SUCCESS;
+#else
         return xe::ipcOpenMemHandle(hMemAllocHandle, hDevice, handle, flags, ptr);
+#endif
 
         /// @end
     }
@@ -718,7 +764,11 @@ __xedllexport xe_result_t __xecall
         }
         /// @begin
 
+#if defined(XE_NULLDRV)
+        return XE_RESULT_SUCCESS;
+#else
         return xe::ipcCloseMemHandle(hMemAllocHandle, ptr);
+#endif
 
         /// @end
     }

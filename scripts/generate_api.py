@@ -70,13 +70,12 @@ def generate_cpp_include(path, namespace, specs, meta):
     loc, files = generate_code(cpp_path, os.path.basename(path), namespace, specs, meta, ".h")
     loc += generate_include_all(cpp_path, namespace, files, ".h")
 
-    #other = generate_code(cpp_path, os.path.basename(path), namespace, specs, meta, ".hpp")
-    #loc += other[0]
-    #files.extend(other[1])
-    #loc += generate_include_all(cpp_path, namespace, files, ".hpp")
+    #loc1, files1 = generate_code(cpp_path, os.path.basename(path), namespace, specs, meta, ".hpp")
+    #loc1 += generate_include_all(cpp_path, namespace, files1, ".hpp")
 
-#    generate_cmake(cpp_path, namespace, files)
-    return loc
+    #files.extend(files1)
+    #generate_cmake(cpp_path, namespace, files)
+    return loc #+ loc1
 
 """
     generates c/c++ source files from the specification documents
@@ -87,7 +86,7 @@ def generate_cpp_source(path, namespace, specs, meta):
     #util.removeFiles(cpp_path, "*.cpp")
 
     loc, files = generate_code(cpp_path, os.path.basename(path), namespace, specs, meta, ".cpp")
-#    generate_cmake(cpp_path, namespace, files)
+    #generate_cmake(cpp_path, namespace, files)
     return loc
 
 """

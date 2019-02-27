@@ -28,8 +28,14 @@
 * DO NOT EDIT: generated from /scripts/<type>/semaphore.yml
 *
 ******************************************************************************/
+#if defined(XE_CPP)
+#include "../include/xe_semaphore.hpp"
+#else
 #include "../include/xe_semaphore.h"
+#endif
+#if !defined(XE_NULLDRV)
 #include "semaphore.h"
+#endif
 
 #include <exception>    // @todo: move to common and/or precompiled header
 #include <new>
@@ -80,7 +86,11 @@ __xedllexport xe_result_t __xecall
         }
         /// @begin
 
+#if defined(XE_NULLDRV)
+        return XE_RESULT_SUCCESS;
+#else
         return xe::Device::fromHandle(hDevice)->createSemaphore(desc, phSemaphore);
+#endif
 
         /// @end
     }
@@ -138,7 +148,11 @@ __xedllexport xe_result_t __xecall
         }
         /// @begin
 
+#if defined(XE_NULLDRV)
+        return XE_RESULT_SUCCESS;
+#else
         return xe::Semaphore::fromHandle(hSemaphore)->destroy();
+#endif
 
         /// @end
     }
@@ -194,7 +208,11 @@ __xedllexport xe_result_t __xecall
         }
         /// @begin
 
+#if defined(XE_NULLDRV)
+        return XE_RESULT_SUCCESS;
+#else
         return xe::CommandList::fromHandle(hCommandList)->encodeSemaphoreSignal(hSemaphore, value);
+#endif
 
         /// @end
     }
@@ -251,7 +269,11 @@ __xedllexport xe_result_t __xecall
         }
         /// @begin
 
+#if defined(XE_NULLDRV)
+        return XE_RESULT_SUCCESS;
+#else
         return xe::CommandList::fromHandle(hCommandList)->encodeSemaphoreWait(hSemaphore, operation, value);
+#endif
 
         /// @end
     }
@@ -302,7 +324,11 @@ __xedllexport xe_result_t __xecall
         }
         /// @begin
 
+#if defined(XE_NULLDRV)
+        return XE_RESULT_SUCCESS;
+#else
         return xe::Semaphore::fromHandle(hSemaphore)->queryValue();
+#endif
 
         /// @end
     }
@@ -353,7 +379,11 @@ __xedllexport xe_result_t __xecall
         }
         /// @begin
 
+#if defined(XE_NULLDRV)
+        return XE_RESULT_SUCCESS;
+#else
         return xe::Semaphore::fromHandle(hSemaphore)->reset();
+#endif
 
         /// @end
     }

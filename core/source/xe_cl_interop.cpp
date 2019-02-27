@@ -28,8 +28,14 @@
 * DO NOT EDIT: generated from /scripts/<type>/cl_interop.yml
 *
 ******************************************************************************/
+#if defined(XE_CPP)
+#include "../include/xe_cl_interop.hpp"
+#else
 #include "../include/xe_cl_interop.h"
+#endif
+#if !defined(XE_NULLDRV)
 #include "cl_interop.h"
+#endif
 
 #include <exception>    // @todo: move to common and/or precompiled header
 #include <new>
@@ -70,7 +76,11 @@ __xedllexport xe_result_t __xecall
         }
         /// @begin
 
+#if defined(XE_NULLDRV)
+        return XE_RESULT_SUCCESS;
+#else
         return xe::Device::fromHandle(hDevice)->registerCLMemory(context, mem, ptr);
+#endif
 
         /// @end
     }
@@ -126,7 +136,11 @@ __xedllexport xe_result_t __xecall
         }
         /// @begin
 
+#if defined(XE_NULLDRV)
+        return XE_RESULT_SUCCESS;
+#else
         return xe::Device::fromHandle(hDevice)->registerCLProgram(context, program, phModule);
+#endif
 
         /// @end
     }
@@ -182,7 +196,11 @@ __xedllexport xe_result_t __xecall
         }
         /// @begin
 
+#if defined(XE_NULLDRV)
+        return XE_RESULT_SUCCESS;
+#else
         return xe::Device::fromHandle(hDevice)->registerCLCommandQueue(context, command_queue, phCommandQueue);
+#endif
 
         /// @end
     }
