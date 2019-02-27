@@ -74,4 +74,7 @@ struct CommandListCoreFamily : public CommandListImp {
                              uint32_t value) override;
 };
 
+template <uint32_t gfxProductFamily>
+struct CommandListProductFamily;
+
 } // namespace xe

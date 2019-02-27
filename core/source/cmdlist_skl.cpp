@@ -5,6 +5,11 @@
 
 namespace xe {
 
-static CommandListPopulateFactory<IGFX_SKYLAKE, CommandListCoreFamily<IGFX_GEN9_CORE>> populateSKL;
+template <>
+struct CommandListProductFamily<IGFX_SKYLAKE> : public CommandListCoreFamily<IGFX_GEN9_CORE> {
+    using CommandListCoreFamily::CommandListCoreFamily;
+};
+
+static CommandListPopulateFactory<IGFX_SKYLAKE, CommandListProductFamily<IGFX_SKYLAKE>> populateSKL;
 
 } // namespace xe

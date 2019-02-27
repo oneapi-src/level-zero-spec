@@ -3,6 +3,7 @@ if(SUPPORT_GEN12HP)
         ${HW_SOURCES}
         ${COMPUTE_RUNTIME_GEN12HP}
         ${CMAKE_CURRENT_SOURCE_DIR}/cmdlist_ats.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/cmdlist_gen12hp.inl
         ${CMAKE_CURRENT_SOURCE_DIR}/cmdqueue_ats.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/gen12hp.cmake
     )
