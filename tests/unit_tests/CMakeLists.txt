@@ -34,6 +34,7 @@ add_executable(${TARGET_NAME}
     test_memory_manager.cpp
     test_module.cpp
     test_platform.cpp
+    test_ptr.cpp
     test_sample.cpp
     test_shared_memalloc.cpp
     white_box.h
