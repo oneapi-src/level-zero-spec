@@ -315,5 +315,45 @@ GEN9TEST_F(CommandListEncodeDispatchFunctionGEN9, addsWalkerToCommandStream) {
         EXPECT_NE(idd->getConstantIndirectUrbEntryReadLength(), 0u);
     }
 }
+
+GEN9TEST_F(CommandListEncodeDispatchFunctionGEN9, programsL3InBatchBuffer) {
+    Mock<Device> device;
+    EXPECT_CALL(device, getMemoryManager).Times(AnyNumber());
+
+    auto commandList = whitebox_cast(CommandList::create(productFamily, &device));
+    ASSERT_NE(nullptr, commandList->commandStream);
+    auto usedSpaceBefore = commandList->commandStream->getUsed();
+
+    auto result = commandList->encodeDispatchFunction(function->toHandle(),
+                                                      &dispatchFunctionArguments,
+                                                      nullptr);
+    ASSERT_EQ(XE_RESULT_SUCCESS, result);
+
+    auto usedSpaceAfter = commandList->commandStream->getUsed();
+    ASSERT_GT(usedSpaceAfter, usedSpaceBefore);
+
+    GenCmdList cmdList;
+    ASSERT_TRUE(FamilyType::PARSE::parseCommandBuffer(cmdList,
+                                                      ptrOffset(commandList->commandStream->getCpuBase(), 0),
+                                                      usedSpaceAfter));
+    using MI_LOAD_REGISTER_IMM = typename FamilyType::MI_LOAD_REGISTER_IMM;
+    using PIPE_CONTROL = typename FamilyType::PIPE_CONTROL;
+
+    auto itorPC = find<PIPE_CONTROL *>(cmdList.begin(), cmdList.end());
+    ASSERT_NE(itorPC, cmdList.end());
+    {
+        auto cmd = genCmdCast<PIPE_CONTROL *>(*itorPC);
+        EXPECT_TRUE(cmd->getCommandStreamerStallEnable());
+        EXPECT_TRUE(cmd->getDcFlushEnable());
+    }
+
+    auto itorLRI = find<MI_LOAD_REGISTER_IMM *>(itorPC, cmdList.end());
+    ASSERT_NE(itorLRI, cmdList.end());
+    {
+        auto cmd = genCmdCast<MI_LOAD_REGISTER_IMM *>(*itorLRI);
+        EXPECT_NE(cmd->getRegisterOffset(), 0u);
+    }
+}
+
 } // namespace ult
 } // namespace L0

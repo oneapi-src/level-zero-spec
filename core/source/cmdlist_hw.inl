@@ -58,6 +58,30 @@ xe_result_t CommandListCoreFamily<gfxCoreFamily>::close() {
 }
 
 template <uint32_t gfxCoreFamily>
+void CommandListCoreFamily<gfxCoreFamily>::programL3() {
+    using GfxFamily = typename OCLRT::GfxFamilyMapper<static_cast<GFXCORE_FAMILY>(gfxCoreFamily)>::GfxFamily;
+    {
+        using PIPE_CONTROL = typename GfxFamily::PIPE_CONTROL;
+        PIPE_CONTROL cmd = GfxFamily::cmdInitPipeControl;
+        cmd.setCommandStreamerStallEnable(true);
+        cmd.setDcFlushEnable(true);
+        auto buffer = commandStream->getSpace(sizeof(cmd));
+        *(PIPE_CONTROL *)buffer = cmd;
+    }
+
+    {
+        using MI_LOAD_REGISTER_IMM = typename GfxFamily::MI_LOAD_REGISTER_IMM;
+        MI_LOAD_REGISTER_IMM cmd = GfxFamily::cmdInitLoadRegisterImm;
+        uint32_t offsetL3CNTL = 0x7013u;
+        uint32_t dataL3CNTL = 0x80000140u;
+        cmd.setRegisterOffset(offsetL3CNTL);
+        cmd.setDataDword(dataL3CNTL);
+        auto buffer = commandStream->getSpace(sizeof(cmd));
+        *(MI_LOAD_REGISTER_IMM *)buffer = cmd;
+    }
+}
+
+template <uint32_t gfxCoreFamily>
 xe_result_t CommandListCoreFamily<gfxCoreFamily>::encodeCommandLists(uint32_t numCommandLists,
                                                                      xe_command_list_handle_t *phCommandLists) {
     return XE_RESULT_ERROR_UNSUPPORTED;
@@ -78,6 +102,9 @@ xe_result_t CommandListCoreFamily<gfxCoreFamily>::encodeDispatchFunction(xe_func
     using GPGPU_WALKER = typename GfxFamily::GPGPU_WALKER;
     using MEDIA_INTERFACE_DESCRIPTOR_LOAD = typename GfxFamily::MEDIA_INTERFACE_DESCRIPTOR_LOAD;
     using INTERFACE_DESCRIPTOR_DATA = typename GfxFamily::INTERFACE_DESCRIPTOR_DATA;
+
+    // For now program L3 here.
+    programL3();
 
     const auto function = Function::fromHandle(hFunction);
     assert(function);
@@ -162,7 +189,6 @@ xe_result_t CommandListCoreFamily<gfxCoreFamily>::encodeDispatchFunction(xe_func
         cmd.setIndirectDataStartAddress(static_cast<uint32_t>(offset));
     }
 
-
     // Set # of threadgroups in each dimension
     assert(pDispatchFuncArgs);
     assert(pDispatchFuncArgs->version == XE_DISPATCH_FUNCTION_ARGS_VERSION);
@@ -176,7 +202,7 @@ xe_result_t CommandListCoreFamily<gfxCoreFamily>::encodeDispatchFunction(xe_func
         GPGPU_WALKER::SIMD_SIZE_SIMD32 * (simdSize == 32) |
         GPGPU_WALKER::SIMD_SIZE_SIMD16 * (simdSize == 16) |
         GPGPU_WALKER::SIMD_SIZE_SIMD8 * (simdSize == 8);
-    cmd.setSimdSize(static_cast<typename GPGPU_WALKER::SIMD_SIZE>(simdSizeOp));
+    cmd.setSimdSize(static_cast<GPGPU_WALKER::SIMD_SIZE>(simdSizeOp));
     cmd.setRightExecutionMask(function->getThreadExecutionMask());
     cmd.setBottomExecutionMask(0xffffffff);
 

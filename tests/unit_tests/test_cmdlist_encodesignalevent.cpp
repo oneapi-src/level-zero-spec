@@ -47,20 +47,41 @@ HWTEST_F(CommandListEncodeSignalEvent, addsPipeControlToCommandStream) {
     ASSERT_TRUE(FamilyType::PARSE::parseCommandBuffer(cmdList,
                                                       ptrOffset(commandList->commandStream->getCpuBase(), 0),
                                                       usedSpaceAfter));
-    using PIPE_CONTROL = typename FamilyType::PIPE_CONTROL;
-    auto itor = find<PIPE_CONTROL *>(cmdList.begin(), cmdList.end());
-    ASSERT_NE(cmdList.end(), itor);
 
-    {
+    // Find a PC w/ a WriteImmediateData and CS stall
+    auto itor = cmdList.begin();
+    while (itor != cmdList.end()) {
+        using PIPE_CONTROL = typename FamilyType::PIPE_CONTROL;
+        itor = find<PIPE_CONTROL *>(itor, cmdList.end());
+        if (itor == cmdList.end())
+            break;
+
         auto cmd = genCmdCast<PIPE_CONTROL *>(*itor);
-        EXPECT_TRUE(cmd->getCommandStreamerStallEnable());
+        if (!cmd->getCommandStreamerStallEnable()) {
+            itor++;
+            continue;
+        }
 
         using POST_SYNC_OPERATION = typename PIPE_CONTROL::POST_SYNC_OPERATION;
-        EXPECT_EQ(cmd->getPostSyncOperation(), POST_SYNC_OPERATION::POST_SYNC_OPERATION_WRITE_IMMEDIATE_DATA);
-        EXPECT_EQ(cmd->getImmediateData(), 0u);
+        if (cmd->getPostSyncOperation() != POST_SYNC_OPERATION::POST_SYNC_OPERATION_WRITE_IMMEDIATE_DATA) {
+            itor++;
+            continue;
+        }
+
+        if (cmd->getImmediateData() != 0u) {
+            itor++;
+            continue;
+        }
+
         auto gpuAddress = (uint64_t(cmd->getAddressHigh()) << 32u) | cmd->getAddress();
-        EXPECT_EQ(gpuAddress, event.allocation->getGpuAddress());
+        if (gpuAddress != event.allocation->getGpuAddress()) {
+            itor++;
+            continue;
+        }
+
+        break;
     }
+    ASSERT_NE(itor, cmdList.end());
 }
 
 HWTEST_F(CommandListEncodeSignalEvent, addsEventGraphicsAllocationToResidencyContainer) {
