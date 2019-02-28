@@ -176,7 +176,7 @@ xe_result_t CommandListCoreFamily<gfxCoreFamily>::encodeDispatchFunction(xe_func
         GPGPU_WALKER::SIMD_SIZE_SIMD32 * (simdSize == 32) |
         GPGPU_WALKER::SIMD_SIZE_SIMD16 * (simdSize == 16) |
         GPGPU_WALKER::SIMD_SIZE_SIMD8 * (simdSize == 8);
-    cmd.setSimdSize(static_cast<GPGPU_WALKER::SIMD_SIZE>(simdSizeOp));
+    cmd.setSimdSize(static_cast<typename GPGPU_WALKER::SIMD_SIZE>(simdSizeOp));
     cmd.setRightExecutionMask(function->getThreadExecutionMask());
     cmd.setBottomExecutionMask(0xffffffff);
 
