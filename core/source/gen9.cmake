@@ -2,10 +2,10 @@ if(SUPPORT_GEN9)
     set(HW_SOURCES
         ${HW_SOURCES}
         ${COMPUTE_RUNTIME_GEN9}
-        ${CMAKE_CURRENT_SOURCE_DIR}/cmdlist_kbl.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/cmdqueue_kbl.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/cmdlist_skl.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/cmdqueue_skl.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/gen9/kbl/cmdlist_kbl.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/gen9/kbl/cmdqueue_kbl.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/gen9/skl/cmdlist_skl.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/gen9/skl/cmdqueue_skl.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/gen9.cmake
     )
 

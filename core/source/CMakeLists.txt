@@ -65,6 +65,11 @@ set(L0_RUNTIME_SOURCES
 # Make our source files visible to parent 
 set(L0_RUNTIME_SOURCES "${L0_RUNTIME_SOURCES}" CACHE FORCE "L0_RUNTIME_SOURCES")
 
+target_include_directories(${TARGET_NAME}
+    PUBLIC
+    ${CMAKE_CURRENT_SOURCE_DIR}/
+)
+
 target_sources(${TARGET_NAME}
     PRIVATE
         ${L0_RUNTIME_SOURCES}

@@ -2,8 +2,8 @@ if(SUPPORT_GEN8)
     set(HW_SOURCES
         ${HW_SOURCES}
         ${COMPUTE_RUNTIME_GEN8}
-        ${CMAKE_CURRENT_SOURCE_DIR}/cmdlist_bdw.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/cmdqueue_bdw.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/gen8/cmdlist_bdw.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/gen8/cmdqueue_bdw.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/gen8.cmake
     )
 

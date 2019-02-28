@@ -2,8 +2,8 @@ if(SUPPORT_GEN12LP)
     set(HW_SOURCES
         ${HW_SOURCES}
         ${COMPUTE_RUNTIME_GEN12LP}
-        ${CMAKE_CURRENT_SOURCE_DIR}/cmdlist_tgllp.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/cmdqueue_tgllp.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/gen12lp/cmdlist_tgllp.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/gen12lp/cmdqueue_tgllp.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/gen12lp.cmake
     )
 
