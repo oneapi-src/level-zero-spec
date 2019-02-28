@@ -98,14 +98,14 @@ typedef struct _xe_module_desc_t
 ///     - ::XE_RESULT_ERROR_DEVICE_LOST
 ///     - ::XE_RESULT_ERROR_INVALID_PARAMETER
 ///         + nullptr == hDevice
-///         + nullptr == desc
+///         + nullptr == pDesc
 ///         + nullptr == phModule
-///         + invalid desc->format
-///         + nullptr == desc->pInputModule
-///         + nullptr == desc->phModule
-///         + 0 == desc->inputSize
+///         + invalid pDesc->format
+///         + nullptr == pDesc->pInputModule
+///         + nullptr == pDesc->phModule
+///         + 0 == pDesc->inputSize
 ///     - ::XE_RESULT_ERROR_UNSUPPORTED
-///         + ::XE_MODULE_DESC_VERSION < desc->version
+///         + ::XE_MODULE_DESC_VERSION < pDesc->version
 ///     - ::XE_RESULT_ERROR_OUT_OF_HOST_MEMORY
 ///     - ::XE_RESULT_ERROR_OUT_OF_DEVICE_MEMORY
 ///     - ::XE_RESULT_ERROR_MODULE_BUILD_FAILURE
@@ -113,7 +113,7 @@ typedef struct _xe_module_desc_t
 __xedllport xe_result_t __xecall
   xeDeviceCreateModule(
     xe_device_handle_t hDevice,                     ///< [in] handle of the device
-    const xe_module_desc_t* desc,                   ///< [in] pointer to module descriptor
+    const xe_module_desc_t* pDesc,                  ///< [in] pointer to module descriptor
     xe_module_handle_t* phModule,                   ///< [out] pointer to handle of module object created
     xe_module_build_log_handle_t* phBuildLog        ///< [out][optional] pointer to handle of module's build log.
     );
@@ -267,16 +267,16 @@ typedef struct _xe_function_desc_t
 ///     - ::XE_RESULT_ERROR_DEVICE_LOST
 ///     - ::XE_RESULT_ERROR_INVALID_PARAMETER
 ///         + nullptr == hModule
-///         + nullptr == desc
+///         + nullptr == pDesc
 ///         + nullptr == phFunction
-///         + nullptr == desc->pFunctionName
-///         + invalid value for desc->pFunctionName
+///         + nullptr == pDesc->pFunctionName
+///         + invalid value for pDesc->pFunctionName
 ///     - ::XE_RESULT_ERROR_UNSUPPORTED
-///         + ::XE_FUNCTION_DESC_VERSION < desc->version
+///         + ::XE_FUNCTION_DESC_VERSION < pDesc->version
 __xedllport xe_result_t __xecall
   xeModuleCreateFunction(
     xe_module_handle_t hModule,                     ///< [in] handle of the module
-    const xe_function_desc_t* desc,                 ///< [in] pointer to function descriptor
+    const xe_function_desc_t* pDesc,                ///< [in] pointer to function descriptor
     xe_function_handle_t* phFunction                ///< [out] handle of the Function object
     );
 

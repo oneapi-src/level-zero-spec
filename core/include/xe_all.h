@@ -47,6 +47,7 @@
 #include "xe_memory.h"
 #include "xe_module.h"
 #include "xe_residency.h"
+#include "xe_sampler.h"
 #include "xe_semaphore.h"
 
 #endif // _XE_ALL_H
