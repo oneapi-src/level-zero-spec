@@ -55,7 +55,7 @@ TEST(${x}${th.make_driver_frontend_class_name(name)}${th.change_case_camel_to_pa
         .Times(1)
         .WillRepeatedly(Return(${X}_RESULT_SUCCESS));
         
-    auto result = ${x}::${th.make_func_name(x, obj, cls)}(asHandle ${th.make_params_list_single_line(obj, cls, 1, True)});
+    auto result = L0::${th.make_func_name(x, obj, cls)}(asHandle ${th.make_params_list_single_line(obj, cls, 1, True)});
         
     EXPECT_EQ(${X}_RESULT_SUCCESS, result);
 }
@@ -65,5 +65,5 @@ TEST(${x}${th.make_driver_frontend_class_name(name)}${th.change_case_camel_to_pa
 %endfor 
 
 } // namespace ult
-} // namespace ${x}
+} // namespace L0
 

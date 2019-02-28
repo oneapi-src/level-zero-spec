@@ -80,7 +80,7 @@ __${x}dllexport ${x}_result_t __${x}call
         }
         /// @begin
 
-        return ${x}::${th.make_obj_accessor(x, obj, cls)}
+        return L0::${th.make_obj_accessor(x, obj, cls)}
 
         /// @end
     }

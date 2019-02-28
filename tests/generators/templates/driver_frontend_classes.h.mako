@@ -46,7 +46,7 @@ struct _${th.subx(x, handles[name]['name'])} {
 };
 
 
-namespace ${x} {
+namespace L0 {
 
 struct ${th.make_driver_frontend_class_name(name)} : public _${th.subx(x, handles[name]['name'])} {
     ${th.make_driver_frontend_class_name(name)}() = default;
@@ -95,5 +95,5 @@ ${x}_result_t __${x}call ${th.make_func_name(x, obj, cls)}(
 %endif
 %endfor
 %endfor
-} // namespace ${x}
+} // namespace L0
 

@@ -37,7 +37,7 @@ import extended_helper as th
 #include "white_box.h"
 #include "mock.h"
 
-namespace ${x} {
+namespace L0 {
 namespace ult {
 
 template<>
@@ -57,5 +57,5 @@ struct Mock<${th.make_driver_frontend_class_name(name)}> : public ${th.make_driv
 };
 
 } // namespace ult
-} // namespace ${x}
+} // namespace L0
 

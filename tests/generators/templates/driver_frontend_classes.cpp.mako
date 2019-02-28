@@ -36,7 +36,7 @@ import extended_helper as th
 
 #include "${name}.h"
 
-namespace ${x} {
+namespace L0 {
 
 %for obj in objects:
 %for cli, cls in enumerate(obj['class']):
@@ -55,5 +55,5 @@ ${x}_result_t __${x}call ${th.make_func_name(x, obj, cls)}(
 %endif
 %endfor
 %endfor
-} // namespace ${x}
+} // namespace L0
 
