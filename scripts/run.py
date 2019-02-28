@@ -28,6 +28,7 @@ def main():
     add_argument(parser, "html", "generation of HTML files.", True)
     add_argument(parser, "pdf", "generation of PDF file.")
     add_argument(parser, "cl", "compilation of generated C/C++ files.")
+    add_argument(parser, "debug", "dump intermediate data to disk.")
     args = parser.parse_args()
 
     # parse cmdline arguments
@@ -35,8 +36,11 @@ def main():
 
     start = time.time()
     # generate 'core' APIs
-    if args.core:
+    if args.core and util.exists("./core"):
         specs, meta = parse_specs.parse("./core")
+        if args.debug:
+            util.jsonWrite("./core/specs.json", specs)
+            util.jsonWrite("./core/meta.json", meta)
         generate_api.generate_cpp(
             configParser.get('PATH','core'),
             configParser.get('NAMESPACE','core'),
@@ -48,8 +52,11 @@ def main():
                 specs)
 
     # generate 'extended' APIs
-    if args.extended:
+    if args.extended and util.exists("./extended"):
         specs, meta = parse_specs.parse("./extended")
+        if args.debug:
+            util.jsonWrite("./extended/specs.json", specs)
+            util.jsonWrite("./extended/meta.json", meta)
         generate_api.generate_cpp(
             configParser.get('PATH','extended'),
             configParser.get('NAMESPACE','extended'),

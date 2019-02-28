@@ -28,8 +28,14 @@
 * DO NOT EDIT: generated from /scripts/<type>/cmdgraph.yml
 *
 ******************************************************************************/
+#if defined(XE_CPP)
+#include "../include/xe_cmdgraph.hpp"
+#else
 #include "../include/xe_cmdgraph.h"
+#endif
+#if !defined(XE_NULLDRV)
 #include "cmdgraph.h"
+#endif
 
 #include <exception>    // @todo: move to common and/or precompiled header
 #include <new>

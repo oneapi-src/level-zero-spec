@@ -567,7 +567,7 @@ This can be done by inspecting API parameters, including function arguments.
 However, in cases where the devices does **not** support page-faulting _and_ the driver is incapable of determining whether an allocation will be accessed by the device,
 such as multiple levels of indirection, there are two methods available:
 1. the application may set the ::${X}_FUNCTION_FLAG_FORCE_RESIDENCY flag during program creation to force all device allocations to be resident during execution.
- + in addition, the application should indicate the type of allocations that will be indirectly accessed using ::${x}_function_argument_attribute_t
+ + in addition, the application should indicate the type of allocations that will be indirectly accessed using ::${x}_function_set_attribute_t
  + if the driver is unable to make all allocations resident, then the call to ::${x}CommandListEncodeDispatchFunction will return $X_RESULT_ERROR_OUT_OF_DEVICE_MEMORY
 2. explcit ::${x}DeviceMakeMemoryResident APIs are included for the application to dynamically change residency as needed. (Windows-only)
  + if the application over-commits device memory, then a call to ::${x}DeviceMakeMemoryResident will return ${X}_RESULT_ERROR_OUT_OF_DEVICE_MEMORY
@@ -629,7 +629,6 @@ ${"#"} <a name="mnf">Modules and Functions</a>
 There are multiple levels of constructs needed for executing functions on the device:
 1. A [**Module**](#mod) represents a single translation unit that consists of functions that have been compiled together.
 2. A [**Function**](#func) represents the function within the module that will be dispatched directly from a command list.
-3. A [**FunctionArgs**](#arg) represents an instance of arguments to be used by the function when dispatched.
 
 ${"##"} <a name="mod">Modules</a>
 Modules can be created from an IL or directly from native format using ::${x}DeviceCreateModule.
@@ -725,7 +724,8 @@ Built-in functions are not supported but can be implemented by an upper level ru
 interface.
 
 ${"##"} <a name="func">Functions</a>
-Functions are immutable references to functions within a module.
+A Function is a reference to a function within a module. The Function object supports both explicit and implicit function
+arguments along with data needed for dispatch.
 
 The following sample code demonstrates a sequence for creating a function from a module:
 ```c
@@ -738,20 +738,6 @@ The following sample code demonstrates a sequence for creating a function from a
     ${x}ModuleCreateFunction(hModule, &functionDesc, &hFunction);
     ...
 ```
-
-${"###"} Function Attributes
-Use ${x}FunctionQueryAttribute to query attributes from a function object.
-
-```c
-    ...
-    uint32_t numRegisters;
-
-    // Number of hardware registers used by function.
-    ${x}FunctionQueryAttribute(hFunction, ${X}_FUNCTION_ATTR_HAS_BARRIERS, &numRegisters);
-    ...
-```
-
-See ::${x}_function_attribute_t for more information on the attributes.
 
 ${"###"} Function Group Size
 The group size for a function can be set using ${x}FunctionSetGroupSize. If a group size is not
@@ -772,7 +758,7 @@ group size information when encoding the dispatch function into the command list
 
     // Encode dispatch command
     ${x}CommandListEncodeDispatchFunction(
-        hCommandList, hFunction, hFunctionArgs, &dispatchArgs, nullptr);
+        hCommandList, hFunction, &dispatchArgs, nullptr);
 
     ...
 ```
@@ -791,23 +777,19 @@ group size that was set on the function using ${x}FunctionSetGroupSize.
     ...
 ```
 
-${"##"} <a name="arg">FunctionArgs</a>
-FunctionArgs represent the inputs for a function.
-- FunctionArgs must be used with the Function object it was created for.
-- Use ${x}FunctionArgsSetValue to setup arguments for a function dispatch.
-- FunctionArgs can updated and used across multiple dispatches for the same function.
-  - The driver will snapshot the arguments when dispatched.
+${"###"} <a name="arg">Function Arguments</a>
+Function arguments represent only the explicit function arguments that are within "brackets" e.g. func(arg1, arg2, ...).
+- Use ${x}FunctionSetArgumentValue to setup arguments for a function dispatch.
+- The EncodeDispatchFunction command will make a copy the function arguments to send to the device.
+- Function arguments can be updated at anytime and used across multiple dispatches.
 
 The following sample code demonstrates a sequence for creating function args and dispatching the function:
 ```c
-    ${x}_function_args_handle_t hFunctionArgs;
-    ${x}FunctionCreateFunctionArgs(hFunction, &hFunctionArgs);
-
     // Bind arguments
-    ${x}FunctionArgsSetValue(hFuncArgs, 0, sizeof(${x}_image_handle_t), &src_image);
-    ${x}FunctionArgsSetValue(hFuncArgs, 1, sizeof(${x}_image_handle_t), &dest_image);
-    ${x}FunctionArgsSetValue(hFuncArgs, 2, sizeof(uint32_t), &width);
-    ${x}FunctionArgsSetValue(hFuncArgs, 3, sizeof(uint32_t), &height);
+    ${x}FunctionSetArgumentValue(hFunction, 0, sizeof(${x}_image_handle_t), &src_image);
+    ${x}FunctionSetArgumentValue(hFunction, 1, sizeof(${x}_image_handle_t), &dest_image);
+    ${x}FunctionSetArgumentValue(hFunction, 2, sizeof(uint32_t), &width);
+    ${x}FunctionSetArgumentValue(hFunction, 3, sizeof(uint32_t), &height);
 
     xe_dispatch_function_arguments_t dispatchArgs = {
         ${X}_DISPATCH_FUNCTION_ARGS_VERSION,
@@ -817,18 +799,41 @@ The following sample code demonstrates a sequence for creating function args and
 
     // Encode dispatch command
     ${x}CommandListEncodeDispatchFunction(
-        hCommandList, hFunction, hFunctionArgs, &dispatchArgs, nullptr );
+        hCommandList, hFunction, &dispatchArgs, nullptr );
 
     // Update image pointers to copy and scale next image.
-    ${x}FunctionArgsSetValue(hFuncArgs, 0, sizeof(${x}_image_handle_t), &src2_image);
-    ${x}FunctionArgsSetValue(hFuncArgs, 1, sizeof(${x}_image_handle_t), &dest2_image);
+    ${x}FunctionArgsSetValue(hFunction, 0, sizeof(${x}_image_handle_t), &src2_image);
+    ${x}FunctionArgsSetValue(hFunction, 1, sizeof(${x}_image_handle_t), &dest2_image);
 
     // Encode dispatch command
     ${x}CommandListEncodeDispatchFunction(
-        hCommandList, hFunction, hFunctionArgs, &dispatchArgs, nullptr );
+        hCommandList, hFunction, &dispatchArgs, nullptr );
 
     ...
 ```
+
+${"###"} Function Attributes
+Use ${x}FunctionGetAttribute to query attributes from a function object.
+
+```c
+    ...
+    uint32_t numRegisters;
+
+    // Number of hardware registers used by function.
+    ${x}FunctionGetAttribute(hFunction, ${X}_FUNCTION_GET_ATTR_MAX_REGS_USED, &numRegisters);
+    ...
+```
+See ::${x}_function_get_attribute_t for more information on the "get" attributes.
+
+Use ${x}FunctionSetAttributes to set attributes from a function object.
+
+```c
+    // Function performs indirect device access.
+    ${x}FunctionSetAttribute(hFunction, ${X}_FUNCTION_SET_ATTR_INDIRECT_DEVICE_ACCESS, true);
+    ...
+```
+
+See ::${x}_function_set_attribute_t for more information on the "set" attributes.
 
 ${"#"} <a name="oi">OpenCL Interoperability</a>
 Interoperability with OpenCL is currently only supported _from_ OpenCL _to_ ${Xx} for a subset of types.

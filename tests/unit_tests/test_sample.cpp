@@ -131,11 +131,6 @@ TEST(sample, helloWorld) {
                                     groupSizeZ);
     ASSERT_EQ(XE_RESULT_SUCCESS, result);
 
-    xe_function_args_handle_t functionArgs = {};
-    result = xeFunctionCreateFunctionArgs(function,
-                                          &functionArgs);
-    ASSERT_EQ(XE_RESULT_SUCCESS, result);
-
     xe_mem_allocator_handle_t hMemAllocHandle = {};
     result = xeCreateMemAllocator(&hMemAllocHandle);
     ASSERT_EQ(XE_RESULT_SUCCESS, result);
@@ -153,7 +148,7 @@ TEST(sample, helloWorld) {
                               &dest);
     ASSERT_EQ(XE_RESULT_SUCCESS, result);
 
-    result = xeFunctionArgsSetValue(functionArgs, 0, sizeof(dest), &dest);
+    result = xeFunctionSetArgumentValue(function, 0, sizeof(dest), &dest);
     ASSERT_EQ(XE_RESULT_SUCCESS, result);
 
     void *src = nullptr;
@@ -167,7 +162,7 @@ TEST(sample, helloWorld) {
     ASSERT_EQ(XE_RESULT_SUCCESS, result);
     memset(reinterpret_cast<void *>(src), 0xbf, bufferSize);
 
-    result = xeFunctionArgsSetValue(functionArgs, 1, sizeof(src), &src);
+    result = xeFunctionSetArgumentValue(function, 1, sizeof(src), &src);
     ASSERT_EQ(XE_RESULT_SUCCESS, result);
 
     xe_dispatch_function_arguments_t dispatchFunctionArgs = {};
@@ -177,7 +172,6 @@ TEST(sample, helloWorld) {
     dispatchFunctionArgs.groupCountZ = 1;
     result = xeCommandListEncodeDispatchFunction(commandList,
                                                  function,
-                                                 functionArgs,
                                                  &dispatchFunctionArgs,
                                                  nullptr);
     ASSERT_EQ(XE_RESULT_SUCCESS, result);

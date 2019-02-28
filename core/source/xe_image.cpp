@@ -28,8 +28,14 @@
 * DO NOT EDIT: generated from /scripts/<type>/image.yml
 *
 ******************************************************************************/
+#if defined(XE_CPP)
+#include "../include/xe_image.hpp"
+#else
 #include "../include/xe_image.h"
+#endif
+#if !defined(XE_NULLDRV)
 #include "image.h"
+#endif
 
 #include <exception>    // @todo: move to common and/or precompiled header
 #include <new>

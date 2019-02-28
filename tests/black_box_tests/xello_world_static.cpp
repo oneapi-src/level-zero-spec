@@ -47,7 +47,6 @@ int main(){
     xe_device_handle_t device0;
     xe_module_handle_t module;
     xe_function_handle_t function;
-    xe_function_args_handle_t functionArgs0;
     xe_command_queue_handle_t cmdQueue;
     xe_command_list_handle_t cmdList;
     xe_mem_allocator_handle_t allocator;
@@ -78,8 +77,6 @@ int main(){
     uint32_t groupSizeY = 1u;
     uint32_t groupSizeZ = 1u;
     SUCCESS_OR_TERMINATE(xeFunctionSetGroupSize(function, groupSizeX, groupSizeY, groupSizeZ));
-
-    SUCCESS_OR_TERMINATE(xeFunctionCreateFunctionArgs(function, &functionArgs0));
 
     {
         xe_command_queue_desc_t cmdQueueDesc = { XE_COMMAND_QUEUE_DESC_VERSION };
@@ -114,15 +111,15 @@ int main(){
 #endif
 
 // 3. Encode run user function
-    SUCCESS_OR_TERMINATE(xeFunctionArgsSetValue(functionArgs0, 0, sizeof(dstBuffer), &dstBuffer));
-    SUCCESS_OR_TERMINATE(xeFunctionArgsSetValue(functionArgs0, 1, sizeof(srcBuffer), &srcBuffer));
+    SUCCESS_OR_TERMINATE(xeFunctionSetArgumentValue(function, 0, sizeof(dstBuffer), &dstBuffer));
+    SUCCESS_OR_TERMINATE(xeFunctionSetArgumentValue(function, 1, sizeof(srcBuffer), &srcBuffer));
     {
         xe_dispatch_function_arguments_t dispatchTraits { XE_DISPATCH_FUNCTION_ARGS_VERSION };
         dispatchTraits.groupCountX = allocSize / groupSizeX;
         dispatchTraits.groupCountY = 1;
         dispatchTraits.groupCountZ = 1;
         SUCCESS_OR_TERMINATE_BOOL(dispatchTraits.groupCountX * groupSizeX == allocSize);
-        SUCCESS_OR_TERMINATE(xeCommandListEncodeDispatchFunction(cmdList, function, functionArgs0, &dispatchTraits, nullptr));
+        SUCCESS_OR_TERMINATE(xeCommandListEncodeDispatchFunction(cmdList, function, &dispatchTraits, nullptr));
     }
 
 // 4. Encode read back memory
@@ -154,7 +151,6 @@ int main(){
 
     SUCCESS_OR_TERMINATE(xeCommandQueueDestroy(cmdQueue));
 
-    SUCCESS_OR_TERMINATE(xeFunctionArgsDestroy(functionArgs0));
     SUCCESS_OR_TERMINATE(xeFunctionDestroy(function));
     SUCCESS_OR_TERMINATE(xeModuleDestroy(module));
 }

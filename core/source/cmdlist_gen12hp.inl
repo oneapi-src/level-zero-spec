@@ -53,7 +53,6 @@ bool CommandListCoreFamily<IGFX_GEN12_CORE>::initialize() {
 
 template <>
 xe_result_t CommandListCoreFamily<IGFX_GEN12_CORE>::encodeDispatchFunction(xe_function_handle_t hFunction,
-                                                                           xe_function_args_handle_t hFunctionArgs,
                                                                            const xe_dispatch_function_arguments_t *pDispatchFuncArgs,
                                                                            xe_event_handle_t hEvent) {
     using GfxFamily = typename OCLRT::GfxFamilyMapper<IGFX_GEN12_CORE>::GfxFamily;
@@ -92,10 +91,7 @@ xe_result_t CommandListCoreFamily<IGFX_GEN12_CORE>::encodeDispatchFunction(xe_fu
         postSync.setDestinationAddress(event->getGpuAddress());
     }
 
-    const auto functionArgs = FunctionArgs::fromHandle(hFunctionArgs);
-    assert(functionArgs);
-
-    functionArgs->setGroupCount(pDispatchFuncArgs->groupCountX,
+    function->setGroupCount(pDispatchFuncArgs->groupCountX,
                                 pDispatchFuncArgs->groupCountY,
                                 pDispatchFuncArgs->groupCountZ);
 
@@ -104,7 +100,7 @@ xe_result_t CommandListCoreFamily<IGFX_GEN12_CORE>::encodeDispatchFunction(xe_fu
         auto heap = indirectHeaps[OCLRT::IndirectHeap::GENERAL_STATE];
         assert(heap);
 
-        auto sizeCrossThreadData = static_cast<uint32_t>(functionArgs->getCrossThreadDataSize());
+        auto sizeCrossThreadData = static_cast<uint32_t>(function->getCrossThreadDataSize());
         auto sizePerThreadData = static_cast<uint32_t>(function->getPerThreadDataSize());
         auto sizeThreadData = sizePerThreadData + sizeCrossThreadData;
         auto ptr = heap->getSpace(sizeThreadData);
@@ -112,7 +108,7 @@ xe_result_t CommandListCoreFamily<IGFX_GEN12_CORE>::encodeDispatchFunction(xe_fu
         auto offset = ptrDiff(ptr, heap->getCpuBase());
         assert(offset + sizeThreadData <= heap->getMaxAvailableSpace());
 
-        memcpy(ptr, functionArgs->getCrossThreadDataHostMem(), sizeCrossThreadData);
+        memcpy(ptr, function->getCrossThreadDataHostMem(), sizeCrossThreadData);
         ptr = ptrOffset(ptr, sizeCrossThreadData);
         memcpy(ptr, function->getPerThreadDataHostMem(), sizePerThreadData);
         ptr = ptrOffset(ptr, sizePerThreadData);
@@ -147,7 +143,7 @@ xe_result_t CommandListCoreFamily<IGFX_GEN12_CORE>::encodeDispatchFunction(xe_fu
 
     // Attach Function residency to our CommandList residency
     {
-        auto &residencyContainer = functionArgs->getResidencyContainer();
+        auto &residencyContainer = function->getResidencyContainer();
         for (auto resource : residencyContainer) {
             if (resource) {
                 this->residencyContainer.push_back(resource->allocationRT);

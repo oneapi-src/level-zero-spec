@@ -28,8 +28,14 @@
 * DO NOT EDIT: generated from /scripts/<type>/residency.yml
 *
 ******************************************************************************/
+#if defined(XE_CPP)
+#include "../include/xe_residency.hpp"
+#else
 #include "../include/xe_residency.h"
+#endif
+#if !defined(XE_NULLDRV)
 #include "residency.h"
+#endif
 
 #include <exception>    // @todo: move to common and/or precompiled header
 #include <new>

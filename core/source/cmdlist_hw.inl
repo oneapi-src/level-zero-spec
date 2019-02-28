@@ -71,7 +71,6 @@ xe_result_t CommandListCoreFamily<gfxCoreFamily>::encodeCommands(xe_command_form
 
 template <uint32_t gfxCoreFamily>
 xe_result_t CommandListCoreFamily<gfxCoreFamily>::encodeDispatchFunction(xe_function_handle_t hFunction,
-                                                                         xe_function_args_handle_t hFunctionArgs,
                                                                          const xe_dispatch_function_arguments_t *pDispatchFuncArgs,
                                                                          xe_event_handle_t hEvent) {
     using GfxFamily = typename OCLRT::GfxFamilyMapper<static_cast<GFXCORE_FAMILY>(gfxCoreFamily)>::GfxFamily;
@@ -81,7 +80,6 @@ xe_result_t CommandListCoreFamily<gfxCoreFamily>::encodeDispatchFunction(xe_func
 
 template <uint32_t gfxCoreFamily>
 xe_result_t CommandListCoreFamily<gfxCoreFamily>::encodeDispatchFunctionIndirect(xe_function_handle_t hFunction,
-                                                                                 xe_function_args_handle_t hFunctionArgs,
                                                                                  const xe_dispatch_function_indirect_arguments_t *pDispatchArgumentsBuffer,
                                                                                  xe_event_handle_t hEvent) {
     return XE_RESULT_ERROR_UNSUPPORTED;

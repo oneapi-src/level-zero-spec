@@ -149,10 +149,6 @@ typedef struct _xe_module_build_log_handle_t *xe_module_build_log_handle_t;
 typedef struct _xe_function_handle_t *xe_function_handle_t;
 
 ///////////////////////////////////////////////////////////////////////////////
-/// @brief Handle of driver's function args object
-typedef struct _xe_function_args_handle_t *xe_function_args_handle_t;
-
-///////////////////////////////////////////////////////////////////////////////
 /// @brief IPC handle to a memory allocation
 typedef struct _xe_ipc_mem_handle_t *xe_ipc_mem_handle_t;
 

@@ -5,7 +5,9 @@ from templates import helper as th
 def declare_type(obj, cls, cli):
     if re.match(r"class", obj['type']):
         return False
-    if cli > 0 and (re.match(r"typedef", obj['type']) or re.match(r"enum", obj['type']) or re.match(r"struct", obj['type'])):
+    if cli > 0 and \
+        ( re.match(r"typedef", obj['type']) or \
+          re.match(r"enum", obj['type']) or re.match(r"struct", obj['type']) ):
         return False
     return True
 

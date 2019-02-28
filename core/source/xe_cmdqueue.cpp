@@ -28,8 +28,14 @@
 * DO NOT EDIT: generated from /scripts/<type>/cmdqueue.yml
 *
 ******************************************************************************/
+#if defined(XE_CPP)
+#include "../include/xe_cmdqueue.hpp"
+#else
 #include "../include/xe_cmdqueue.h"
+#endif
+#if !defined(XE_NULLDRV)
 #include "cmdqueue.h"
+#endif
 
 #include <exception>    // @todo: move to common and/or precompiled header
 #include <new>

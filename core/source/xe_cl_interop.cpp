@@ -28,8 +28,14 @@
 * DO NOT EDIT: generated from /scripts/<type>/cl_interop.yml
 *
 ******************************************************************************/
+#if defined(XE_CPP)
+#include "../include/xe_cl_interop.hpp"
+#else
 #include "../include/xe_cl_interop.h"
+#endif
+#if !defined(XE_NULLDRV)
 #include "cl_interop.h"
+#endif
 
 #include <exception>    // @todo: move to common and/or precompiled header
 #include <new>

@@ -28,8 +28,14 @@
 * DO NOT EDIT: generated from /scripts/<type>/copy.yml
 *
 ******************************************************************************/
+#if defined(XE_CPP)
+#include "../include/xe_copy.hpp"
+#else
 #include "../include/xe_copy.h"
+#endif
+#if !defined(XE_NULLDRV)
 #include "copy.h"
+#endif
 
 #include <exception>    // @todo: move to common and/or precompiled header
 #include <new>

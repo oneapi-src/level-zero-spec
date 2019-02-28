@@ -128,6 +128,7 @@ members:
     - type: uint32_t
       name: version
       desc: "[in] $X_DEVICE_PROPERTIES_VERSION"
+      init: $X_DEVICE_PROPERTIES_VERSION
     - type: uint32_t
       name: vendorId
       desc: "[out] vendor id from PCI configuration"
@@ -208,6 +209,7 @@ members:
     - type: uint32_t
       name: version
       desc: "[in] $X_DEVICE_COMPUTE_PROPERTIES_VERSION"
+      init: $X_DEVICE_COMPUTE_PROPERTIES_VERSION
     - type: uint32_t
       name: maxThreadsPerGroup
       desc: "[out] Maximum threads per compute group"
@@ -293,6 +295,7 @@ members:
     - type: uint32_t
       name: version
       desc: "[in] $X_DEVICE_MEMORY_PROPERTIES_VERSION"
+      init: $X_DEVICE_MEMORY_PROPERTIES_VERSION
     - type: bool
       name: unifiedMemory
       desc: "[out] Host and device share same physical memory."
@@ -371,6 +374,7 @@ members:
     - type: uint32_t
       name: version
       desc: "[in] $X_DEVICE_LINK_PROPERTIES_VERSION"
+      init: $X_DEVICE_LINK_PROPERTIES_VERSION
     - type: bool
       name: isP2PSupported
       desc: "[out] Is P2P access supported across link"

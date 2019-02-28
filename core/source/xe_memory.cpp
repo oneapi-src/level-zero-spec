@@ -28,8 +28,14 @@
 * DO NOT EDIT: generated from /scripts/<type>/memory.yml
 *
 ******************************************************************************/
+#if defined(XE_CPP)
+#include "../include/xe_memory.hpp"
+#else
 #include "../include/xe_memory.h"
+#endif
+#if !defined(XE_NULLDRV)
 #include "memory.h"
+#endif
 
 #include <exception>    // @todo: move to common and/or precompiled header
 #include <new>

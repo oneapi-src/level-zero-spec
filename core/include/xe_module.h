@@ -385,16 +385,11 @@ __xedllport xe_result_t __xecall
     );
 
 ///////////////////////////////////////////////////////////////////////////////
-/// @brief Create Function arguments needed to pass arguments to a function.
+/// @brief Set function argument used for function dispatch.
 /// 
 /// @details
-///     - This function may be called from simultaneous threads.
+///     - This function may **not** be called from simultaneous threads.
 ///     - The implementation of this function should be lock-free.
-///     - FunctionArgs objects must be used with the Function object it was
-///       created for.
-///     - Use ::xeFunctionArgsSetValue to setup arguments for dispatch.
-///     - FunctionArgs can updated and used across multiple dispatches for the
-///       same function.
 /// 
 /// @returns
 ///     - ::XE_RESULT_SUCCESS
@@ -402,85 +397,37 @@ __xedllport xe_result_t __xecall
 ///     - ::XE_RESULT_ERROR_DEVICE_LOST
 ///     - ::XE_RESULT_ERROR_INVALID_PARAMETER
 ///         + nullptr == hFunction
-///         + nullptr == phFunctionArgs
-///     - ::XE_RESULT_ERROR_UNSUPPORTED
-__xedllport xe_result_t __xecall
-  xeFunctionCreateFunctionArgs(
-    xe_function_handle_t hFunction,                 ///< [in] handle of the function
-    xe_function_args_handle_t* phFunctionArgs       ///< [out] handle of the Function arguments object
-    );
-
-///////////////////////////////////////////////////////////////////////////////
-/// @brief Destroys Function arguments object
-/// 
-/// @details
-///     - The application is responsible for making sure the GPU is not
-///       currently referencing the event before it is deleted
-///     - The implementation of this function will immediately free all Host and
-///       Device allocations associated with this function args
-///     - The implementation of this function should be lock-free.
-/// 
-/// @returns
-///     - ::XE_RESULT_SUCCESS
-///     - ::XE_RESULT_ERROR_UNINITIALIZED
-///     - ::XE_RESULT_ERROR_DEVICE_LOST
-///     - ::XE_RESULT_ERROR_INVALID_PARAMETER
-///         + nullptr == hFunctionArgs
-///     - ::XE_RESULT_ERROR_UNSUPPORTED
-__xedllport xe_result_t __xecall
-  xeFunctionArgsDestroy(
-    xe_function_args_handle_t hFunctionArgs         ///< [in] handle of the function arguments buffer object
-    );
-
-///////////////////////////////////////////////////////////////////////////////
-/// @brief Set function arguments within arguments buffer.
-/// 
-/// @details
-///     - This function may **not** be called from simultaneous threads.
-///     - The implementation of this function should be lock-free.
-/// 
-/// @remarks
-///   _Analogues_
-///     - **cuCtxCreate**
-///     - cuCtxGetCurrent
-/// 
-/// @returns
-///     - ::XE_RESULT_SUCCESS
-///     - ::XE_RESULT_ERROR_UNINITIALIZED
-///     - ::XE_RESULT_ERROR_DEVICE_LOST
-///     - ::XE_RESULT_ERROR_INVALID_PARAMETER
-///         + nullptr == hFunctionArgs
 ///         + nullptr == pArgValue
 ///         + invalid argument index
 ///         + invalid size specified
 ///     - ::XE_RESULT_ERROR_UNSUPPORTED
 __xedllport xe_result_t __xecall
-  xeFunctionArgsSetValue(
-    xe_function_args_handle_t hFunctionArgs,        ///< [in/out] handle of the function args object.
+  xeFunctionSetArgumentValue(
+    xe_function_handle_t hFunction,                 ///< [in/out] handle of the function args object.
     uint32_t argIndex,                              ///< [in] argument index in range [0, num args - 1]
     size_t argSize,                                 ///< [in] size of argument type
     const void* pArgValue                           ///< [in] argument value represented as matching arg type
     );
 
 ///////////////////////////////////////////////////////////////////////////////
-/// @brief Function argument attributes
+/// @brief Function attributes
 /// 
 /// @remarks
 ///   _Analogues_
 ///     - **cl_kernel_exec_info**
-typedef enum _xe_function_argument_attribute_t
+typedef enum _xe_function_set_attribute_t
 {
-    XE_FUNCTION_ARG_ATTR_INDIRECT_HOST_ACCESS = 0,  ///< Indicates that the function accesses host allocations indirectly
+    XE_FUNCTION_SET_ATTR_INDIRECT_HOST_ACCESS = 0,  ///< Indicates that the function accesses host allocations indirectly
                                                     ///< (default: false)
-    XE_FUNCTION_ARG_ATTR_INDIRECT_DEVICE_ACCESS,    ///< Indicates that the function accesses device allocations indirectly
+    XE_FUNCTION_SET_ATTR_INDIRECT_DEVICE_ACCESS,    ///< Indicates that the function accesses device allocations indirectly
                                                     ///< (default: false)
-    XE_FUNCTION_ARG_ATTR_INDIRECT_SHARED_ACCESS,    ///< Indicates that the function accesses shared allocations indirectly
+    XE_FUNCTION_SET_ATTR_INDIRECT_SHARED_ACCESS,    ///< Indicates that the function accesses shared allocations indirectly
                                                     ///< (default: false)
 
-} xe_function_argument_attribute_t;
+} xe_function_set_attribute_t;
 
 ///////////////////////////////////////////////////////////////////////////////
-/// @brief Sets a function argument attribute
+/// @brief Sets a function attribute
 /// 
 /// @details
 ///     - This function may **not** be called from simultaneous threads.
@@ -495,14 +442,14 @@ typedef enum _xe_function_argument_attribute_t
 ///     - ::XE_RESULT_ERROR_UNINITIALIZED
 ///     - ::XE_RESULT_ERROR_DEVICE_LOST
 ///     - ::XE_RESULT_ERROR_INVALID_PARAMETER
-///         + nullptr == hFunctionArgs
+///         + nullptr == hFunction
 ///         + invalid value for attr
 ///         + invalid value for value
 ///     - ::XE_RESULT_ERROR_UNSUPPORTED
 __xedllport xe_result_t __xecall
-  xeFunctionArgsSetAttribute(
-    xe_function_args_handle_t hFunctionArgs,        ///< [in/out] handle of the function args object.
-    xe_function_argument_attribute_t attr,          ///< [in] attribute to set
+  xeFunctionSetAttribute(
+    xe_function_handle_t hFunction,                 ///< [in/out] handle of the function.
+    xe_function_set_attribute_t attr,               ///< [in] attribute to set
     uint32_t value                                  ///< [in] attribute value to set
     );
 
@@ -512,16 +459,16 @@ __xedllport xe_result_t __xecall
 /// @remarks
 ///   _Analogues_
 ///     - **CUfunction_attribute**
-typedef enum _xe_function_attribute_t
+typedef enum _xe_function_get_attribute_t
 {
-    XE_FUNCTION_ATTRIBUTE_MAX_REGS_USED = 0,        ///< Maximum device registers used for this function
-    XE_FUNCTION_ATTRIBUTE_NUM_THREAD_DIMENSIONS,    ///< Maximum dimensions for group for this function
-    XE_FUNCTION_ATTRIBUTE_MAX_SHARED_MEM_SIZE,      ///< Maximum shared memory required for this function
-    XE_FUNCTION_ATTRIBUTE_HAS_SPILL_FILL,           ///< Function required spill/fills.
-    XE_FUNCTION_ATTRIBUTE_HAS_BARRIERS,             ///< Function contains barriers.
-    XE_FUNCTION_ATTRIBUTE_HAS_DPAS,                 ///< Function contains DPAs.
+    XE_FUNCTION_GET_ATTR_MAX_REGS_USED = 0,         ///< Maximum device registers used for this function
+    XE_FUNCTION_GET_ATTR_NUM_THREAD_DIMENSIONS,     ///< Maximum dimensions for group for this function
+    XE_FUNCTION_GET_ATTR_MAX_SHARED_MEM_SIZE,       ///< Maximum shared memory required for this function
+    XE_FUNCTION_GET_ATTR_HAS_SPILL_FILL,            ///< Function required spill/fills.
+    XE_FUNCTION_GET_ATTR_HAS_BARRIERS,              ///< Function contains barriers.
+    XE_FUNCTION_GET_ATTR_HAS_DPAS,                  ///< Function contains DPAs.
 
-} xe_function_attribute_t;
+} xe_function_get_attribute_t;
 
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Query a function attribute.
@@ -544,9 +491,9 @@ typedef enum _xe_function_attribute_t
 ///         + invalid value for attr
 ///     - ::XE_RESULT_ERROR_UNSUPPORTED
 __xedllport xe_result_t __xecall
-  xeFunctionQueryAttribute(
+  xeFunctionGetAttribute(
     xe_function_handle_t hFunction,                 ///< [in] handle of the function object
-    xe_function_attribute_t attr,                   ///< [in] attribute to query
+    xe_function_get_attribute_t attr,               ///< [in] attribute to query
     uint32_t* pValue                                ///< [out] returned attribute value
     );
 
@@ -583,7 +530,6 @@ typedef struct _xe_dispatch_function_arguments_t
 ///     - ::XE_RESULT_ERROR_INVALID_PARAMETER
 ///         + nullptr == hCommandList
 ///         + nullptr == hFunction
-///         + nullptr == hFunctionArgs
 ///         + nullptr == pDispatchFuncArgs
 ///         + invalid group count range for dispatch
 ///         + invalid dispatch count range for dispatch
@@ -592,7 +538,6 @@ __xedllport xe_result_t __xecall
   xeCommandListEncodeDispatchFunction(
     xe_command_list_handle_t hCommandList,          ///< [in] handle of the command list
     xe_function_handle_t hFunction,                 ///< [in] handle of the function object
-    xe_function_args_handle_t hFunctionArgs,        ///< [in] handle to function arguments buffer.
     const xe_dispatch_function_arguments_t* pDispatchFuncArgs,  ///< [in] dispatch function arguments.
     xe_event_handle_t hEvent                        ///< [in][optional] handle of the event to signal on completion
     );
@@ -615,7 +560,6 @@ __xedllport xe_result_t __xecall
 ///     - ::XE_RESULT_ERROR_INVALID_PARAMETER
 ///         + nullptr == hCommandGraph
 ///         + nullptr == hFunction
-///         + nullptr == hFunctionArgs
 ///         + nullptr == pDispatchFuncArgs
 ///         + invalid group count range for dispatch
 ///         + invalid dispatch count range for dispatch
@@ -624,7 +568,6 @@ __xedllport xe_result_t __xecall
   xeCommandGraphEncodeDispatchFunction(
     xe_command_graph_handle_t hCommandGraph,        ///< [in] handle of the command graph
     xe_function_handle_t hFunction,                 ///< [in] handle of the function object
-    xe_function_args_handle_t hFunctionArgs,        ///< [in] handle to function arguments buffer.
     const xe_dispatch_function_arguments_t* pDispatchFuncArgs,  ///< [in] dispatch function arguments.
     xe_event_handle_t hEvent                        ///< [in][optional] handle of the event to signal on completion
     );
@@ -661,14 +604,12 @@ typedef struct _xe_dispatch_function_indirect_arguments_t
 ///     - ::XE_RESULT_ERROR_INVALID_PARAMETER
 ///         + nullptr == hCommandList
 ///         + nullptr == hFunction
-///         + nullptr == hFunctionArgs
 ///         + nullptr == pDispatchArgumentsBuffer
 ///     - ::XE_RESULT_ERROR_UNSUPPORTED
 __xedllport xe_result_t __xecall
   xeCommandListEncodeDispatchFunctionIndirect(
     xe_command_list_handle_t hCommandList,          ///< [in] handle of the command list
     xe_function_handle_t hFunction,                 ///< [in] handle of the function object
-    xe_function_args_handle_t hFunctionArgs,        ///< [in] handle to function arguments buffer.
     const xe_dispatch_function_indirect_arguments_t* pDispatchArgumentsBuffer,  ///< [in] Pointer to buffer that will contain dispatch arguments.
     xe_event_handle_t hEvent                        ///< [in][optional] handle of the event to signal on completion
     );
@@ -695,14 +636,12 @@ __xedllport xe_result_t __xecall
 ///     - ::XE_RESULT_ERROR_INVALID_PARAMETER
 ///         + nullptr == hCommandGraph
 ///         + nullptr == hFunction
-///         + nullptr == hFunctionArgs
 ///         + nullptr == pDispatchArgumentsBuffer
 ///     - ::XE_RESULT_ERROR_UNSUPPORTED
 __xedllport xe_result_t __xecall
   xeCommandGraphEncodeDispatchFunctionIndirect(
     xe_command_graph_handle_t hCommandGraph,        ///< [in] handle of the command graph
     xe_function_handle_t hFunction,                 ///< [in] handle of the function object
-    xe_function_args_handle_t hFunctionArgs,        ///< [in] handle to function arguments buffer.
     const xe_dispatch_function_indirect_arguments_t* pDispatchArgumentsBuffer,  ///< [in] Pointer to buffer that will contain dispatch arguments.
     xe_event_handle_t hEvent                        ///< [in][optional] handle of the event to signal on completion
     );

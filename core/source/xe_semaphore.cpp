@@ -28,8 +28,14 @@
 * DO NOT EDIT: generated from /scripts/<type>/semaphore.yml
 *
 ******************************************************************************/
+#if defined(XE_CPP)
+#include "../include/xe_semaphore.hpp"
+#else
 #include "../include/xe_semaphore.h"
+#endif
+#if !defined(XE_NULLDRV)
 #include "semaphore.h"
+#endif
 
 #include <exception>    // @todo: move to common and/or precompiled header
 #include <new>

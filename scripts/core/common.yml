@@ -68,51 +68,58 @@ value: double
 --- #--------------------------------------------------------------------------
 type: handle
 desc: "Handle of driver's device object"
+class: $xDevice
 name: "$x_device_handle_t"
 --- #--------------------------------------------------------------------------
 type: handle
 desc: "Handle of driver's command queue object"
+class: $xCommandQueue
 name: "$x_command_queue_handle_t"
 --- #--------------------------------------------------------------------------
 type: handle
 desc: "Handle of driver's command list object"
+class: $xCommandList
 name: "$x_command_list_handle_t"
 --- #--------------------------------------------------------------------------
 type: handle
 desc: "Handle of driver's command graph object"
+class: $xCommandGraph
 name: $x_command_graph_handle_t
 --- #--------------------------------------------------------------------------
 type: handle
 desc: "Handle of driver's fence object"
+class: $xFence
 name: "$x_fence_handle_t"
 --- #--------------------------------------------------------------------------
 type: handle
 desc: "Handle of driver's semaphore object"
+class: $xSemaphore
 name: "$x_semaphore_handle_t"
 --- #--------------------------------------------------------------------------
 type: handle
 desc: "Handle of driver's event object"
+class: $xEvent
 name: "$x_event_handle_t"
 --- #--------------------------------------------------------------------------
 type: handle
 desc: "Handle of driver's image object"
+class: $xImage
 name: "$x_image_handle_t"
 --- #--------------------------------------------------------------------------
 type: handle
 desc: "Handle of driver's module object"
+class: $xModule
 name: "$x_module_handle_t"
 --- #--------------------------------------------------------------------------
 type: handle
 desc: "Handle of module's build log object"
+class: $xModuleBuildLog
 name: "$x_module_build_log_handle_t"
 --- #--------------------------------------------------------------------------
 type: handle
 desc: "Handle of driver's function object"
+class: $xFunction
 name: "$x_function_handle_t"
---- #--------------------------------------------------------------------------
-type: handle
-desc: "Handle of driver's function args object"
-name: "$x_function_args_handle_t"
 --- #--------------------------------------------------------------------------
 type: handle
 desc: "IPC handle to a memory allocation"

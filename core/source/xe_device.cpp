@@ -28,8 +28,14 @@
 * DO NOT EDIT: generated from /scripts/<type>/device.yml
 *
 ******************************************************************************/
+#if defined(XE_CPP)
+#include "../include/xe_device.hpp"
+#else
 #include "../include/xe_device.h"
+#endif
+#if !defined(XE_NULLDRV)
 #include "device.h"
+#endif
 
 #include <exception>    // @todo: move to common and/or precompiled header
 #include <new>

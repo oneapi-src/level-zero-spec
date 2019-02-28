@@ -28,8 +28,14 @@
 * DO NOT EDIT: generated from /scripts/<type>/event.yml
 *
 ******************************************************************************/
+#if defined(XE_CPP)
+#include "../include/xe_event.hpp"
+#else
 #include "../include/xe_event.h"
+#endif
+#if !defined(XE_NULLDRV)
 #include "event.h"
+#endif
 
 #include <exception>    // @todo: move to common and/or precompiled header
 #include <new>

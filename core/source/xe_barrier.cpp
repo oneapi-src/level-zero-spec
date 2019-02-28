@@ -28,8 +28,14 @@
 * DO NOT EDIT: generated from /scripts/<type>/barrier.yml
 *
 ******************************************************************************/
+#if defined(XE_CPP)
+#include "../include/xe_barrier.hpp"
+#else
 #include "../include/xe_barrier.h"
+#endif
+#if !defined(XE_NULLDRV)
 #include "barrier.h"
+#endif
 
 #include <exception>    // @todo: move to common and/or precompiled header
 #include <new>
