@@ -75,9 +75,11 @@ __xedllexport xe_result_t __xecall
             if( nullptr == ptr ) return XE_RESULT_ERROR_INVALID_PARAMETER;
         }
         /// @begin
-
+#if defined(XE_NULLDRV)
+        return XE_RESULT_SUCCESS;
+#else
         return L0::Device::fromHandle(hDevice)->registerCLMemory(context, mem, ptr);
-
+#endif
         /// @end
     }
     catch(xe_result_t& result)
@@ -131,9 +133,11 @@ __xedllexport xe_result_t __xecall
             if( nullptr == phModule ) return XE_RESULT_ERROR_INVALID_PARAMETER;
         }
         /// @begin
-
+#if defined(XE_NULLDRV)
+        return XE_RESULT_SUCCESS;
+#else
         return L0::Device::fromHandle(hDevice)->registerCLProgram(context, program, phModule);
-
+#endif
         /// @end
     }
     catch(xe_result_t& result)
@@ -187,9 +191,11 @@ __xedllexport xe_result_t __xecall
             if( nullptr == phCommandQueue ) return XE_RESULT_ERROR_INVALID_PARAMETER;
         }
         /// @begin
-
+#if defined(XE_NULLDRV)
+        return XE_RESULT_SUCCESS;
+#else
         return L0::Device::fromHandle(hDevice)->registerCLCommandQueue(context, command_queue, phCommandQueue);
-
+#endif
         /// @end
     }
     catch(xe_result_t& result)

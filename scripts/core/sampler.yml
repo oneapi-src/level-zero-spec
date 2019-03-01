@@ -53,7 +53,7 @@ members:
     - type: "bool"
       name: isNormalized
       desc: "[in] Are coordinates normalized [0, 1] or not."
-      init: true
+      init: "true"
 --- #--------------------------------------------------------------------------
 type: function
 desc: "Creates sampler object."

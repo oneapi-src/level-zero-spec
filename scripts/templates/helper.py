@@ -92,7 +92,8 @@ def extract_objs(specs, type):
 """
 def get_typename(name, meta, type):
     if meta:
-        name = re.sub(r"(\w+)\(.*\)", r"\1", name) # removes '()' part of macros
+        name = re.sub(r"(\$\w+)\(.*\)", r"\1", name) # removes '()' part of macros
+        name = re.sub(r"\w+\[(\$\w+)\]", r"\1", name) # extracts array size '[]' part of types
         if name in meta[type]:
             return name
         for entry in meta[type]:
@@ -115,13 +116,13 @@ def make_etor_name(repl, enum, etor, trim):
 """
     returns proper name of value
 """
-def make_value_name(repl, altrepl, value, meta, trim):
+def make_value_name(repl, altrepl, value, meta, trim=False):
     macro = get_typename(value, meta, 'macro')
     enum = get_typename(value, meta, 'enum')
     if macro:
         value = subx(altrepl, value)
     elif enum:
-        value = make_etor_name(repl, enum, value, trim)
+        value = "%s::%s"%(subx(repl, enum), make_etor_name(repl, enum, value, trim))
     else:
         value = subx(repl, value)
     return value
@@ -151,7 +152,10 @@ def make_etor_lines(repl, obj, cpp=False, altrepl="", meta=None):
 def make_member_lines(repl, obj, cpp=False, altrepl="", meta=None):
     lines = []
     for item in obj['members']:
-        name = subx(repl, item['name'])
+        if cpp:
+            name = make_value_name(repl, altrepl, item['name'], meta)
+        else:
+            name = subx(repl, item['name'])
         type = subx(repl, item['type'])
 
         if cpp and 'init' in item:
@@ -163,6 +167,16 @@ def make_member_lines(repl, obj, cpp=False, altrepl="", meta=None):
         for line in split_line(subx(repl, item['desc'], True), 70):
             lines.append("%s///< %s"%(append_ws(prologue, 48), line))
             prologue = ""
+    return lines
+
+"""
+    returns a list of strings for each member of a class
+"""
+def make_member_function_lines(repl, obj):
+    lines = []
+    for item in obj['members']:
+        name = subx(repl, item['name'])
+        lines.append("auto get%s( void ) const { return %s; }"%(name.title(), name))
     return lines
 
 """
@@ -202,7 +216,12 @@ def make_param_call_str(prologue, repl, obj, filter):
     names = []
     if len(prologue) > 0:
         names.append(prologue)
-    names.extend(extract_items(params, 'name'))
+    for item in params:
+        if re.match(r"\$\w+_handle_t", item['type']):
+            names.append("%s->getHandle()"%item['name'])
+        else:
+            names.append(item['name'])
+    #names.extend(extract_items(params, 'name'))
     return ", ".join(names)
 
 """

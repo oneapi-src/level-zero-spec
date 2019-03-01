@@ -72,9 +72,11 @@ __xedllexport xe_result_t __xecall
             if( nullptr == phMemAllocHandle ) return XE_RESULT_ERROR_INVALID_PARAMETER;
         }
         /// @begin
-
-        return L0::createMemAllocator(phMemAllocHandle);
-
+#if defined(XE_NULLDRV)
+        return XE_RESULT_SUCCESS;
+#else
+        return L0::createMemAllocator(phMemAllocHandle->getHandle());
+#endif
         /// @end
     }
     catch(xe_result_t& result)
@@ -127,9 +129,11 @@ __xedllexport xe_result_t __xecall
             if( nullptr == hMemAllocHandle ) return XE_RESULT_ERROR_INVALID_PARAMETER;
         }
         /// @begin
-
-        return L0::memAllocatorDestroy(hMemAllocHandle);
-
+#if defined(XE_NULLDRV)
+        return XE_RESULT_SUCCESS;
+#else
+        return L0::memAllocatorDestroy(hMemAllocHandle->getHandle());
+#endif
         /// @end
     }
     catch(xe_result_t& result)
@@ -199,9 +203,11 @@ __xedllexport xe_result_t __xecall
             if( nullptr == ptr ) return XE_RESULT_ERROR_INVALID_PARAMETER;
         }
         /// @begin
-
-        return L0::sharedMemAlloc(hMemAllocHandle, hDevice, device_flags, host_flags, size, alignment, ptr);
-
+#if defined(XE_NULLDRV)
+        return XE_RESULT_SUCCESS;
+#else
+        return L0::sharedMemAlloc(hMemAllocHandle->getHandle(), hDevice->getHandle(), device_flags, host_flags, size, alignment, ptr);
+#endif
         /// @end
     }
     catch(xe_result_t& result)
@@ -270,9 +276,11 @@ __xedllexport xe_result_t __xecall
             if( nullptr == ptr ) return XE_RESULT_ERROR_INVALID_PARAMETER;
         }
         /// @begin
-
-        return L0::memAlloc(hMemAllocHandle, hDevice, flags, size, alignment, ptr);
-
+#if defined(XE_NULLDRV)
+        return XE_RESULT_SUCCESS;
+#else
+        return L0::memAlloc(hMemAllocHandle->getHandle(), hDevice->getHandle(), flags, size, alignment, ptr);
+#endif
         /// @end
     }
     catch(xe_result_t& result)
@@ -339,9 +347,11 @@ __xedllexport xe_result_t __xecall
             if( nullptr == ptr ) return XE_RESULT_ERROR_INVALID_PARAMETER;
         }
         /// @begin
-
-        return L0::hostMemAlloc(hMemAllocHandle, flags, size, alignment, ptr);
-
+#if defined(XE_NULLDRV)
+        return XE_RESULT_SUCCESS;
+#else
+        return L0::hostMemAlloc(hMemAllocHandle->getHandle(), flags, size, alignment, ptr);
+#endif
         /// @end
     }
     catch(xe_result_t& result)
@@ -401,9 +411,11 @@ __xedllexport xe_result_t __xecall
             if( nullptr == ptr ) return XE_RESULT_ERROR_INVALID_PARAMETER;
         }
         /// @begin
-
-        return L0::memFree(hMemAllocHandle, ptr);
-
+#if defined(XE_NULLDRV)
+        return XE_RESULT_SUCCESS;
+#else
+        return L0::memFree(hMemAllocHandle->getHandle(), ptr);
+#endif
         /// @end
     }
     catch(xe_result_t& result)
@@ -464,9 +476,11 @@ __xedllexport xe_result_t __xecall
             if( nullptr == pValue ) return XE_RESULT_ERROR_INVALID_PARAMETER;
         }
         /// @begin
-
-        return L0::memGetProperty(hMemAllocHandle, ptr, property, pValue);
-
+#if defined(XE_NULLDRV)
+        return XE_RESULT_SUCCESS;
+#else
+        return L0::memGetProperty(hMemAllocHandle->getHandle(), ptr, property, pValue);
+#endif
         /// @end
     }
     catch(xe_result_t& result)
@@ -528,9 +542,11 @@ __xedllexport xe_result_t __xecall
             if( nullptr == pSize ) return XE_RESULT_ERROR_INVALID_PARAMETER;
         }
         /// @begin
-
-        return L0::memGetAddressRange(hMemAllocHandle, ptr, pBase, pSize);
-
+#if defined(XE_NULLDRV)
+        return XE_RESULT_SUCCESS;
+#else
+        return L0::memGetAddressRange(hMemAllocHandle->getHandle(), ptr, pBase, pSize);
+#endif
         /// @end
     }
     catch(xe_result_t& result)
@@ -592,9 +608,11 @@ __xedllexport xe_result_t __xecall
             if( nullptr == pIpcHandle ) return XE_RESULT_ERROR_INVALID_PARAMETER;
         }
         /// @begin
-
-        return L0::ipcGetMemHandle(hMemAllocHandle, ptr, pIpcHandle);
-
+#if defined(XE_NULLDRV)
+        return XE_RESULT_SUCCESS;
+#else
+        return L0::ipcGetMemHandle(hMemAllocHandle->getHandle(), ptr, pIpcHandle->getHandle());
+#endif
         /// @end
     }
     catch(xe_result_t& result)
@@ -663,9 +681,11 @@ __xedllexport xe_result_t __xecall
             if( nullptr == ptr ) return XE_RESULT_ERROR_INVALID_PARAMETER;
         }
         /// @begin
-
-        return L0::ipcOpenMemHandle(hMemAllocHandle, hDevice, handle, flags, ptr);
-
+#if defined(XE_NULLDRV)
+        return XE_RESULT_SUCCESS;
+#else
+        return L0::ipcOpenMemHandle(hMemAllocHandle->getHandle(), hDevice->getHandle(), handle->getHandle(), flags, ptr);
+#endif
         /// @end
     }
     catch(xe_result_t& result)
@@ -723,9 +743,11 @@ __xedllexport xe_result_t __xecall
             if( nullptr == ptr ) return XE_RESULT_ERROR_INVALID_PARAMETER;
         }
         /// @begin
-
-        return L0::ipcCloseMemHandle(hMemAllocHandle, ptr);
-
+#if defined(XE_NULLDRV)
+        return XE_RESULT_SUCCESS;
+#else
+        return L0::ipcCloseMemHandle(hMemAllocHandle->getHandle(), ptr);
+#endif
         /// @end
     }
     catch(xe_result_t& result)

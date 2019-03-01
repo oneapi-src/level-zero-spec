@@ -82,9 +82,11 @@ __xedllexport xe_result_t __xecall
             if( XE_COMMAND_GRAPH_DESC_VERSION < desc->version ) return XE_RESULT_ERROR_UNSUPPORTED;
         }
         /// @begin
-
+#if defined(XE_NULLDRV)
+        return XE_RESULT_SUCCESS;
+#else
         return L0::Device::fromHandle(hDevice)->createCommandGraph(desc, phCommandGraph);
-
+#endif
         /// @end
     }
     catch(xe_result_t& result)
@@ -134,9 +136,11 @@ __xedllexport xe_result_t __xecall
             if( nullptr == hCommandGraph ) return XE_RESULT_ERROR_INVALID_PARAMETER;
         }
         /// @begin
-
+#if defined(XE_NULLDRV)
+        return XE_RESULT_SUCCESS;
+#else
         return L0::CommandGraph::fromHandle(hCommandGraph)->destroy();
-
+#endif
         /// @end
     }
     catch(xe_result_t& result)
@@ -189,9 +193,11 @@ __xedllexport xe_result_t __xecall
             if( nullptr == hCommandGraph ) return XE_RESULT_ERROR_INVALID_PARAMETER;
         }
         /// @begin
-
+#if defined(XE_NULLDRV)
+        return XE_RESULT_SUCCESS;
+#else
         return L0::CommandGraph::fromHandle(hCommandGraph)->close();
-
+#endif
         /// @end
     }
     catch(xe_result_t& result)
@@ -242,9 +248,11 @@ __xedllexport xe_result_t __xecall
             if( nullptr == hCommandGraph ) return XE_RESULT_ERROR_INVALID_PARAMETER;
         }
         /// @begin
-
+#if defined(XE_NULLDRV)
+        return XE_RESULT_SUCCESS;
+#else
         return L0::CommandGraph::fromHandle(hCommandGraph)->reset();
-
+#endif
         /// @end
     }
     catch(xe_result_t& result)

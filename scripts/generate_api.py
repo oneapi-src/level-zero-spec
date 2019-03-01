@@ -66,16 +66,17 @@ def generate_cpp_include(path, namespace, specs, meta):
     util.makePath(cpp_path)
     util.removeFiles(cpp_path, "*.h")
     util.removeFiles(cpp_path, "*.hpp")
+    util.removeFiles(cpp_path, "*.inl")
 
-    loc, files = generate_code(cpp_path, os.path.basename(path), namespace, specs, meta, ".h")
-    loc += generate_include_all(cpp_path, namespace, files, ".h")
+    hloc, hfiles = generate_code(cpp_path, os.path.basename(path), namespace, specs, meta, ".h")
+    hpploc, hppfiles = generate_code(cpp_path, os.path.basename(path), namespace, specs, meta, ".hpp")
+    inlloc, inlfiles = generate_code(cpp_path, os.path.basename(path), namespace, specs, meta, ".inl")
 
-    #loc1, files1 = generate_code(cpp_path, os.path.basename(path), namespace, specs, meta, ".hpp")
-    #loc1 += generate_include_all(cpp_path, namespace, files1, ".hpp")
+    hloc += generate_include_all(cpp_path, namespace, hfiles, ".h")
+    hpploc += generate_include_all(cpp_path, namespace, hppfiles + inlfiles, ".hpp")
 
-    #files.extend(files1)
-    #generate_cmake(cpp_path, namespace, files)
-    return loc #+ loc1
+    #generate_cmake(cpp_path, namespace, hfiles + hppfiles + inlfiles)
+    return hloc + hpploc + inlloc
 
 """
     generates c/c++ source files from the specification documents

@@ -74,9 +74,11 @@ __xedllexport xe_result_t __xecall
             if( nullptr == count ) return XE_RESULT_ERROR_INVALID_PARAMETER;
         }
         /// @begin
-
+#if defined(XE_NULLDRV)
+        return XE_RESULT_SUCCESS;
+#else
         return L0::Driver::get()->getDeviceCount(count);
-
+#endif
         /// @end
     }
     catch(xe_result_t& result)
@@ -133,9 +135,11 @@ __xedllexport xe_result_t __xecall
             if( nullptr == pUniqueIds ) return XE_RESULT_ERROR_INVALID_PARAMETER;
         }
         /// @begin
-
+#if defined(XE_NULLDRV)
+        return XE_RESULT_SUCCESS;
+#else
         return L0::Driver::get()->getDeviceUniqueIds(count, pUniqueIds);
-
+#endif
         /// @end
     }
     catch(xe_result_t& result)
@@ -191,9 +195,11 @@ __xedllexport xe_result_t __xecall
             if( nullptr == phDevice ) return XE_RESULT_ERROR_INVALID_PARAMETER;
         }
         /// @begin
-
-        return L0::Driver::get()->getDevice(uniqueId, phDevice);
-
+#if defined(XE_NULLDRV)
+        return XE_RESULT_SUCCESS;
+#else
+        return L0::Driver::get()->getDevice(uniqueId, phDevice->getHandle());
+#endif
         /// @end
     }
     catch(xe_result_t& result)
@@ -252,9 +258,11 @@ __xedllexport xe_result_t __xecall
             if( nullptr == phSubDevice ) return XE_RESULT_ERROR_INVALID_PARAMETER;
         }
         /// @begin
-
+#if defined(XE_NULLDRV)
+        return XE_RESULT_SUCCESS;
+#else
         return L0::Device::fromHandle(hDevice)->getSubDevice(ordinal, phSubDevice);
-
+#endif
         /// @end
     }
     catch(xe_result_t& result)
@@ -310,9 +318,11 @@ __xedllexport xe_result_t __xecall
             if( nullptr == version ) return XE_RESULT_ERROR_INVALID_PARAMETER;
         }
         /// @begin
-
+#if defined(XE_NULLDRV)
+        return XE_RESULT_SUCCESS;
+#else
         return L0::Device::fromHandle(hDevice)->getApiVersion(version);
-
+#endif
         /// @end
     }
     catch(xe_result_t& result)
@@ -370,9 +380,11 @@ __xedllexport xe_result_t __xecall
             if( nullptr == pDeviceProperties ) return XE_RESULT_ERROR_INVALID_PARAMETER;
         }
         /// @begin
-
+#if defined(XE_NULLDRV)
+        return XE_RESULT_SUCCESS;
+#else
         return L0::Device::fromHandle(hDevice)->getProperties(pDeviceProperties);
-
+#endif
         /// @end
     }
     catch(xe_result_t& result)
@@ -429,9 +441,11 @@ __xedllexport xe_result_t __xecall
             if( nullptr == pComputeProperties ) return XE_RESULT_ERROR_INVALID_PARAMETER;
         }
         /// @begin
-
+#if defined(XE_NULLDRV)
+        return XE_RESULT_SUCCESS;
+#else
         return L0::Device::fromHandle(hDevice)->getComputeProperties(pComputeProperties);
-
+#endif
         /// @end
     }
     catch(xe_result_t& result)
@@ -489,9 +503,11 @@ __xedllexport xe_result_t __xecall
             if( nullptr == pMemProperties ) return XE_RESULT_ERROR_INVALID_PARAMETER;
         }
         /// @begin
-
+#if defined(XE_NULLDRV)
+        return XE_RESULT_SUCCESS;
+#else
         return L0::Device::fromHandle(hDevice)->getMemoryProperties(pMemProperties);
-
+#endif
         /// @end
     }
     catch(xe_result_t& result)
@@ -547,9 +563,11 @@ __xedllexport xe_result_t __xecall
             if( nullptr == pLinkProperties ) return XE_RESULT_ERROR_INVALID_PARAMETER;
         }
         /// @begin
-
+#if defined(XE_NULLDRV)
+        return XE_RESULT_SUCCESS;
+#else
         return L0::deviceGetLinkProperties(srcOrdinal, dstOrdinal, pLinkProperties);
-
+#endif
         /// @end
     }
     catch(xe_result_t& result)
@@ -608,9 +626,11 @@ __xedllexport xe_result_t __xecall
             if( nullptr == value ) return XE_RESULT_ERROR_INVALID_PARAMETER;
         }
         /// @begin
-
+#if defined(XE_NULLDRV)
+        return XE_RESULT_SUCCESS;
+#else
         return L0::Device::fromHandle(hDevice)->canAccessPeer(hPeerDevice, value);
-
+#endif
         /// @end
     }
     catch(xe_result_t& result)
@@ -665,9 +685,11 @@ __xedllexport xe_result_t __xecall
             if( nullptr == hDevice ) return XE_RESULT_ERROR_INVALID_PARAMETER;
         }
         /// @begin
-
+#if defined(XE_NULLDRV)
+        return XE_RESULT_SUCCESS;
+#else
         return L0::Device::fromHandle(hDevice)->setIntermediateCacheConfig(CacheConfig);
-
+#endif
         /// @end
     }
     catch(xe_result_t& result)
@@ -722,9 +744,11 @@ __xedllexport xe_result_t __xecall
             if( nullptr == hDevice ) return XE_RESULT_ERROR_INVALID_PARAMETER;
         }
         /// @begin
-
+#if defined(XE_NULLDRV)
+        return XE_RESULT_SUCCESS;
+#else
         return L0::Device::fromHandle(hDevice)->setLastLevelCacheConfig(CacheConfig);
-
+#endif
         /// @end
     }
     catch(xe_result_t& result)

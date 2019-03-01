@@ -87,9 +87,11 @@ __xedllexport xe_result_t __xecall
             if( XE_COMMAND_QUEUE_DESC_VERSION < desc->version ) return XE_RESULT_ERROR_UNSUPPORTED;
         }
         /// @begin
-
+#if defined(XE_NULLDRV)
+        return XE_RESULT_SUCCESS;
+#else
         return L0::Device::fromHandle(hDevice)->createCommandQueue(desc, phCommandQueue);
-
+#endif
         /// @end
     }
     catch(xe_result_t& result)
@@ -146,9 +148,11 @@ __xedllexport xe_result_t __xecall
             if( nullptr == hCommandQueue ) return XE_RESULT_ERROR_INVALID_PARAMETER;
         }
         /// @begin
-
+#if defined(XE_NULLDRV)
+        return XE_RESULT_SUCCESS;
+#else
         return L0::CommandQueue::fromHandle(hCommandQueue)->destroy();
-
+#endif
         /// @end
     }
     catch(xe_result_t& result)
@@ -209,9 +213,11 @@ __xedllexport xe_result_t __xecall
             if( nullptr == phCommandLists ) return XE_RESULT_ERROR_INVALID_PARAMETER;
         }
         /// @begin
-
+#if defined(XE_NULLDRV)
+        return XE_RESULT_SUCCESS;
+#else
         return L0::CommandQueue::fromHandle(hCommandQueue)->enqueueCommandLists(numCommandLists, phCommandLists, hFence);
-
+#endif
         /// @end
     }
     catch(xe_result_t& result)
@@ -273,9 +279,11 @@ __xedllexport xe_result_t __xecall
             if( nullptr == hCommandQueue ) return XE_RESULT_ERROR_INVALID_PARAMETER;
         }
         /// @begin
-
+#if defined(XE_NULLDRV)
+        return XE_RESULT_SUCCESS;
+#else
         return L0::CommandQueue::fromHandle(hCommandQueue)->synchronize(mode, delay, interval, timeout);
-
+#endif
         /// @end
     }
     catch(xe_result_t& result)

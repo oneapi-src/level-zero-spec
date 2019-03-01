@@ -86,9 +86,11 @@ __xedllexport xe_result_t __xecall
             if( XE_SAMPLER_DESC_VERSION < pDesc->version ) return XE_RESULT_ERROR_UNSUPPORTED;
         }
         /// @begin
-
+#if defined(XE_NULLDRV)
+        return XE_RESULT_SUCCESS;
+#else
         return L0::Device::fromHandle(hDevice)->createSampler(pDesc, phSampler);
-
+#endif
         /// @end
     }
     catch(xe_result_t& result)
@@ -144,9 +146,11 @@ __xedllexport xe_result_t __xecall
             if( nullptr == hSampler ) return XE_RESULT_ERROR_INVALID_PARAMETER;
         }
         /// @begin
-
+#if defined(XE_NULLDRV)
+        return XE_RESULT_SUCCESS;
+#else
         return L0::Sampler::fromHandle(hSampler)->destroy();
-
+#endif
         /// @end
     }
     catch(xe_result_t& result)

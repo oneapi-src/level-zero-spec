@@ -85,9 +85,11 @@ __xedllexport xe_result_t __xecall
             if( XE_SEMAPHORE_DESC_VERSION < desc->version ) return XE_RESULT_ERROR_UNSUPPORTED;
         }
         /// @begin
-
+#if defined(XE_NULLDRV)
+        return XE_RESULT_SUCCESS;
+#else
         return L0::Device::fromHandle(hDevice)->createSemaphore(desc, phSemaphore);
-
+#endif
         /// @end
     }
     catch(xe_result_t& result)
@@ -143,9 +145,11 @@ __xedllexport xe_result_t __xecall
             if( nullptr == hSemaphore ) return XE_RESULT_ERROR_INVALID_PARAMETER;
         }
         /// @begin
-
+#if defined(XE_NULLDRV)
+        return XE_RESULT_SUCCESS;
+#else
         return L0::Semaphore::fromHandle(hSemaphore)->destroy();
-
+#endif
         /// @end
     }
     catch(xe_result_t& result)
@@ -199,9 +203,11 @@ __xedllexport xe_result_t __xecall
             if( nullptr == hSemaphore ) return XE_RESULT_ERROR_INVALID_PARAMETER;
         }
         /// @begin
-
+#if defined(XE_NULLDRV)
+        return XE_RESULT_SUCCESS;
+#else
         return L0::CommandList::fromHandle(hCommandList)->encodeSemaphoreSignal(hSemaphore, value);
-
+#endif
         /// @end
     }
     catch(xe_result_t& result)
@@ -256,9 +262,11 @@ __xedllexport xe_result_t __xecall
             if( nullptr == hSemaphore ) return XE_RESULT_ERROR_INVALID_PARAMETER;
         }
         /// @begin
-
+#if defined(XE_NULLDRV)
+        return XE_RESULT_SUCCESS;
+#else
         return L0::CommandList::fromHandle(hCommandList)->encodeSemaphoreWait(hSemaphore, operation, value);
-
+#endif
         /// @end
     }
     catch(xe_result_t& result)
@@ -307,9 +315,11 @@ __xedllexport xe_result_t __xecall
             if( nullptr == hSemaphore ) return XE_RESULT_ERROR_INVALID_PARAMETER;
         }
         /// @begin
-
+#if defined(XE_NULLDRV)
+        return XE_RESULT_SUCCESS;
+#else
         return L0::Semaphore::fromHandle(hSemaphore)->queryValue();
-
+#endif
         /// @end
     }
     catch(xe_result_t& result)
@@ -358,9 +368,11 @@ __xedllexport xe_result_t __xecall
             if( nullptr == hSemaphore ) return XE_RESULT_ERROR_INVALID_PARAMETER;
         }
         /// @begin
-
+#if defined(XE_NULLDRV)
+        return XE_RESULT_SUCCESS;
+#else
         return L0::Semaphore::fromHandle(hSemaphore)->reset();
-
+#endif
         /// @end
     }
     catch(xe_result_t& result)

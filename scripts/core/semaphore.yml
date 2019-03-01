@@ -16,11 +16,6 @@ etors:
       value: "0"
       desc: "default behavior"
 --- #--------------------------------------------------------------------------
-type: typedef
-desc: "Semaphore value type"
-name: $x_semaphore_value_t
-value: uint64_t
---- #--------------------------------------------------------------------------
 type: struct
 desc: "Semaphore descriptor"
 class: $xDevice

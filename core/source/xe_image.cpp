@@ -85,9 +85,11 @@ __xedllexport xe_result_t __xecall
             if( XE_IMAGE_DESC_VERSION < desc->version ) return XE_RESULT_ERROR_UNSUPPORTED;
         }
         /// @begin
-
+#if defined(XE_NULLDRV)
+        return XE_RESULT_SUCCESS;
+#else
         return L0::Device::fromHandle(hDevice)->createImage(desc, phImage);
-
+#endif
         /// @end
     }
     catch(xe_result_t& result)
@@ -139,9 +141,11 @@ __xedllexport xe_result_t __xecall
             if( nullptr == hImage ) return XE_RESULT_ERROR_INVALID_PARAMETER;
         }
         /// @begin
-
+#if defined(XE_NULLDRV)
+        return XE_RESULT_SUCCESS;
+#else
         return L0::Image::fromHandle(hImage)->destroy();
-
+#endif
         /// @end
     }
     catch(xe_result_t& result)
