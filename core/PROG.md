@@ -568,7 +568,7 @@ However, in cases where the devices does **not** support page-faulting _and_ the
 such as multiple levels of indirection, there are two methods available:
 1. the application may set the ::XE_FUNCTION_FLAG_FORCE_RESIDENCY flag during program creation to force all device allocations to be resident during execution.
  + in addition, the application should indicate the type of allocations that will be indirectly accessed using ::xe_function_set_attribute_t
- + if the driver is unable to make all allocations resident, then the call to ::xeCommandListEncodeDispatchFunction will return $X_RESULT_ERROR_OUT_OF_DEVICE_MEMORY
+ + if the driver is unable to make all allocations resident, then the call to ::xeCommandQueueEnqueueCommandLists will return $X_RESULT_ERROR_OUT_OF_DEVICE_MEMORY
 2. explcit ::xeDeviceMakeMemoryResident APIs are included for the application to dynamically change residency as needed. (Windows-only)
  + if the application over-commits device memory, then a call to ::xeDeviceMakeMemoryResident will return XE_RESULT_ERROR_OUT_OF_DEVICE_MEMORY
 
