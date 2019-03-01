@@ -1,6 +1,6 @@
 <%!
 import re
-import extended_helper as th
+from templates import helper as th
 %>/**************************************************************************//**
 * INTEL CONFIDENTIAL  
 * Copyright 2019  
@@ -83,14 +83,14 @@ ${x}_result_t __${x}call ${x}DriverInit(${x}_init_flag_t flags){
 #if ${th.subx(x,obj['condition'])}
 %endif
 ${x}_result_t __${x}call ${th.make_func_name(x, obj, cls)}(
-        %for line in th.make_param_lines_short(x, obj, cls):
+        %for line in th.make_param_lines(x, obj, cls):
         ${line}
         %endfor
     ){
     if(dispatchTableInitialized == false){
         return ${X}_RESULT_ERROR_UNINITIALIZED;
     }
-    return dispatchTable.${th.make_func_name(x, obj, cls)}(${th.make_params_list_single_line(obj, cls)});
+    return dispatchTable.${th.make_func_name(x, obj, cls)}(${th.make_param_call_str("", x, obj, cls)});
 }
 %if 'condition' in obj:
 #endif // ${th.subx(x,obj['condition'])}

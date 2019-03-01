@@ -3,9 +3,9 @@ import re
 import util
 
 """
-    generates dynamic library loader .h for UMD driver
+    generates icd loader for level_zero driver
 """
-def generate_icd_loader(outPath, namespace, specs):
+def generate_icd_loader(outPath, namespace, specs, meta):
     loader_path = outPath
     util.makePath(loader_path)
     util.removeFiles(loader_path, "*.h")

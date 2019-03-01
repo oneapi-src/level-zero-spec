@@ -4,6 +4,7 @@ import parse_specs
 import generate_api
 import compile_api
 import generate_docs
+import generate_icd_loader
 import time
 
 """
@@ -29,6 +30,7 @@ def main():
     add_argument(parser, "pdf", "generation of PDF file.")
     add_argument(parser, "cl", "compilation of generated C/C++ files.")
     add_argument(parser, "debug", "dump intermediate data to disk.")
+    add_argument(parser, "icd_loader", "generation of C++ icd_loader files.", True)
     args = parser.parse_args()
 
     # parse cmdline arguments
@@ -84,6 +86,15 @@ def main():
     if args.pdf:
         generate_docs.generate_pdf()
 
+    if args.icd_loader:
+        specs, meta = parse_specs.parse("./core")
+        if args.debug:
+            util.jsonWrite("./core/specs.json", specs)
+            util.jsonWrite("./core/meta.json", meta)
+        generate_icd_loader.generate_icd_loader(
+            configParser.get('PATH','icd_loader'),
+            configParser.get('NAMESPACE','core'),
+            specs, meta)
 
     print("\nCompleted in %.1f seconds!"%(time.time() - start))
 

@@ -107,3 +107,5 @@ if (${PROJECT_NAME}_BUILD_TESTS)
             VS_STARTUP_PROJECT ${PROJECT_NAME}_unit_tests
     )
 endif()
+
+add_subdirectory(icd_loader)

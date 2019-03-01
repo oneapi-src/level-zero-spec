@@ -1,4 +1,4 @@
-#include "tests/generated/icd_loader/icd_loader.h"
+#include "icd_loader/icd_loader.h"
 
 #include "xe_all.h"
 

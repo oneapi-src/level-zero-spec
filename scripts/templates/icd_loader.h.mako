@@ -1,6 +1,6 @@
 <%!
 import re
-import extended_helper as th
+from templates import helper as th
 %>/**************************************************************************//**
 * INTEL CONFIDENTIAL  
 * Copyright 2019  
@@ -55,7 +55,7 @@ typedef struct _cl_program* cl_program;
 #if ${th.subx(x,obj['condition'])}
 %endif
 typedef ${x}_result_t (__${x}call *pfn_${th.make_func_name(x, obj, cls)})(
-    %for line in th.make_param_lines_short(x, obj, cls):
+    %for line in th.make_param_lines(x, obj, cls):
     ${line}
     %endfor
     );
@@ -83,7 +83,7 @@ typedef struct _${x}_dispatch_table_t
 %endfor
 } ${x}_dispatch_table_t;
 
-bool load_${x}(void *handle, void *(*funcAddressGetter)(void *handle, const char *funcName), ${x}_dispatch_table_t *outTable){
+inline bool load_${x}(void *handle, void *(*funcAddressGetter)(void *handle, const char *funcName), ${x}_dispatch_table_t *outTable){
     if((0 == funcAddressGetter) || (0 == outTable)){
         return false;
     }
