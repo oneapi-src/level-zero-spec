@@ -59,7 +59,7 @@
 ///         + nullptr == hDevice
 ///         + nullptr == pDesc
 ///         + nullptr == phSampler
-///         + invalid pDesc->addressingMode
+///         + invalid pDesc->addressMode
 ///         + invalid pDesc->filterMode
 ///     - ::XE_RESULT_ERROR_UNSUPPORTED
 ///         + ::XE_SAMPLER_DESC_VERSION < pDesc->version

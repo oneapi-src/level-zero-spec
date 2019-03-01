@@ -10,27 +10,27 @@ value: "$X_MAKE_VERSION( 1, 0 )"
 type: enum
 desc: "Sampler addressing modes"
 class: $xDevice
-name: $x_sampler_addressing_mode_t
+name: $x_sampler_address_mode_t
 etors:
-    - name: $X_SAMPLER_ADDRESS_NONE
+    - name: $X_SAMPLER_ADDRESS_MODE_NONE
       value: "0"
       desc: "No coordinate modifications for out-of-bounds image access."
-    - name: $X_SAMPLER_ADDRESS_REPEAT
+    - name: $X_SAMPLER_ADDRESS_MODE_REPEAT
       desc: "Out-of-bounds coordinates are wrapped back around."
-    - name: $X_SAMPLER_ADDRESS_CLAMP
+    - name: $X_SAMPLER_ADDRESS_MODE_CLAMP
       desc: "Out-of-bounds coordinates are clamped to edge."
-    - name: $X_SAMPLER_ADDRESS_MIRROR
+    - name: $X_SAMPLER_ADDRESS_MODE_MIRROR
       desc: "Out-of-bounds coordinates are mirrored starting from edge."
 --- #--------------------------------------------------------------------------
 type: enum
 desc: "Sampler filtering modes"
 class: $xDevice
-name: $x_sampler_filtering_mode_t
+name: $x_sampler_filter_mode_t
 etors:
-    - name: $X_SAMPLER_FILTER_NEAREST
+    - name: $X_SAMPLER_FILTER_MODE_NEAREST
       value: "0"
       desc: "No coordinate modifications for out of bounds image access."
-    - name: $X_SAMPLER_FILTER_LINEAR
+    - name: $X_SAMPLER_FILTER_MODE_LINEAR
       desc: "Out-of-bounds coordinates are wrapped back around."
 --- #--------------------------------------------------------------------------
 type: struct
@@ -42,14 +42,14 @@ members:
       name: version
       desc: "[in] $X_SAMPLER_DESC_VERSION"
       init: $X_SAMPLER_DESC_VERSION
-    - type: "$x_sampler_addressing_mode_t"
-      name: addressingMode
+    - type: "$x_sampler_address_mode_t"
+      name: addressMode
       desc: "[in] Sampler addressing mode to determine how out-of-bounds coordinates are handled."
-      init: "$X_SAMPLER_ADDRESS_NONE"
-    - type: "$x_sampler_filtering_mode_t"
+      init: "$X_SAMPLER_ADDRESS_MODE_NONE"
+    - type: "$x_sampler_filter_mode_t"
       name: filterMode
       desc: "[in] Sampler filter mode to determine how samples are filtered."
-      init: "$X_SAMPLER_FILTER_NEAREST"
+      init: "$X_SAMPLER_FILTER_MODE_NEAREST"
     - type: "bool"
       name: isNormalized
       desc: "[in] Are coordinates normalized [0, 1] or not."
@@ -76,7 +76,7 @@ params:
       desc: "[out] handle of the sampler"
 returns:
     - $X_RESULT_ERROR_INVALID_PARAMETER:
-        - "invalid pDesc->addressingMode"
+        - "invalid pDesc->addressMode"
         - "invalid pDesc->filterMode"
     - $X_RESULT_ERROR_OUT_OF_HOST_MEMORY
     

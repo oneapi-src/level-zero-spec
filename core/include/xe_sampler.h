@@ -47,32 +47,32 @@ extern "C" {
 
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Sampler addressing modes
-typedef enum _xe_sampler_addressing_mode_t
+typedef enum _xe_sampler_address_mode_t
 {
-    XE_SAMPLER_ADDRESS_NONE = 0,                    ///< No coordinate modifications for out-of-bounds image access.
-    XE_SAMPLER_ADDRESS_REPEAT,                      ///< Out-of-bounds coordinates are wrapped back around.
-    XE_SAMPLER_ADDRESS_CLAMP,                       ///< Out-of-bounds coordinates are clamped to edge.
-    XE_SAMPLER_ADDRESS_MIRROR,                      ///< Out-of-bounds coordinates are mirrored starting from edge.
+    XE_SAMPLER_ADDRESS_MODE_NONE = 0,               ///< No coordinate modifications for out-of-bounds image access.
+    XE_SAMPLER_ADDRESS_MODE_REPEAT,                 ///< Out-of-bounds coordinates are wrapped back around.
+    XE_SAMPLER_ADDRESS_MODE_CLAMP,                  ///< Out-of-bounds coordinates are clamped to edge.
+    XE_SAMPLER_ADDRESS_MODE_MIRROR,                 ///< Out-of-bounds coordinates are mirrored starting from edge.
 
-} xe_sampler_addressing_mode_t;
+} xe_sampler_address_mode_t;
 
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Sampler filtering modes
-typedef enum _xe_sampler_filtering_mode_t
+typedef enum _xe_sampler_filter_mode_t
 {
-    XE_SAMPLER_FILTER_NEAREST = 0,                  ///< No coordinate modifications for out of bounds image access.
-    XE_SAMPLER_FILTER_LINEAR,                       ///< Out-of-bounds coordinates are wrapped back around.
+    XE_SAMPLER_FILTER_MODE_NEAREST = 0,             ///< No coordinate modifications for out of bounds image access.
+    XE_SAMPLER_FILTER_MODE_LINEAR,                  ///< Out-of-bounds coordinates are wrapped back around.
 
-} xe_sampler_filtering_mode_t;
+} xe_sampler_filter_mode_t;
 
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Sampler descriptor
 typedef struct _xe_sampler_desc_t
 {
     uint32_t version;                               ///< [in] ::XE_SAMPLER_DESC_VERSION
-    xe_sampler_addressing_mode_t addressingMode;    ///< [in] Sampler addressing mode to determine how out-of-bounds
+    xe_sampler_address_mode_t addressMode;          ///< [in] Sampler addressing mode to determine how out-of-bounds
                                                     ///< coordinates are handled.
-    xe_sampler_filtering_mode_t filterMode;         ///< [in] Sampler filter mode to determine how samples are filtered.
+    xe_sampler_filter_mode_t filterMode;            ///< [in] Sampler filter mode to determine how samples are filtered.
     bool isNormalized;                              ///< [in] Are coordinates normalized [0, 1] or not.
 
 } xe_sampler_desc_t;
@@ -96,7 +96,7 @@ typedef struct _xe_sampler_desc_t
 ///         + nullptr == hDevice
 ///         + nullptr == pDesc
 ///         + nullptr == phSampler
-///         + invalid pDesc->addressingMode
+///         + invalid pDesc->addressMode
 ///         + invalid pDesc->filterMode
 ///     - ::XE_RESULT_ERROR_UNSUPPORTED
 ///         + ::XE_SAMPLER_DESC_VERSION < pDesc->version

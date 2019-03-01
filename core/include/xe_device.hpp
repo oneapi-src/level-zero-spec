@@ -194,22 +194,22 @@ namespace xe
         };
 
         ///////////////////////////////////////////////////////////////////////////////
-        /// @brief C++ version for ::xe_sampler_addressing_mode_t
-        enum class sampler_addressing_mode_t
+        /// @brief C++ version for ::xe_sampler_address_mode_t
+        enum class sampler_address_mode_t
         {
-            SAMPLER_ADDRESS_NONE = 0,                       ///< No coordinate modifications for out-of-bounds image access.
-            SAMPLER_ADDRESS_REPEAT,                         ///< Out-of-bounds coordinates are wrapped back around.
-            SAMPLER_ADDRESS_CLAMP,                          ///< Out-of-bounds coordinates are clamped to edge.
-            SAMPLER_ADDRESS_MIRROR,                         ///< Out-of-bounds coordinates are mirrored starting from edge.
+            NONE = 0,                                       ///< No coordinate modifications for out-of-bounds image access.
+            REPEAT,                                         ///< Out-of-bounds coordinates are wrapped back around.
+            CLAMP,                                          ///< Out-of-bounds coordinates are clamped to edge.
+            MIRROR,                                         ///< Out-of-bounds coordinates are mirrored starting from edge.
 
         };
 
         ///////////////////////////////////////////////////////////////////////////////
-        /// @brief C++ version for ::xe_sampler_filtering_mode_t
-        enum class sampler_filtering_mode_t
+        /// @brief C++ version for ::xe_sampler_filter_mode_t
+        enum class sampler_filter_mode_t
         {
-            SAMPLER_FILTER_NEAREST = 0,                     ///< No coordinate modifications for out of bounds image access.
-            SAMPLER_FILTER_LINEAR,                          ///< Out-of-bounds coordinates are wrapped back around.
+            NEAREST = 0,                                    ///< No coordinate modifications for out of bounds image access.
+            LINEAR,                                         ///< Out-of-bounds coordinates are wrapped back around.
 
         };
 
@@ -375,9 +375,9 @@ namespace xe
         struct sampler_desc_t
         {
             uint32_t version = XE_SAMPLER_DESC_VERSION;     ///< [in] ::SAMPLER_DESC_VERSION
-            sampler_addressing_mode_t addressingMode = sampler_addressing_mode_t::SAMPLER_ADDRESS_NONE; ///< [in] Sampler addressing mode to determine how out-of-bounds
+            sampler_address_mode_t addressMode = sampler_address_mode_t::NONE;  ///< [in] Sampler addressing mode to determine how out-of-bounds
                                                             ///< coordinates are handled.
-            sampler_filtering_mode_t filterMode = sampler_filtering_mode_t::SAMPLER_FILTER_NEAREST; ///< [in] Sampler filter mode to determine how samples are filtered.
+            sampler_filter_mode_t filterMode = sampler_filter_mode_t::NEAREST;  ///< [in] Sampler filter mode to determine how samples are filtered.
             bool isNormalized = true;                       ///< [in] Are coordinates normalized [0, 1] or not.
 
         };
