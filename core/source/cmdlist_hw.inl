@@ -264,7 +264,16 @@ xe_result_t CommandListCoreFamily<gfxCoreFamily>::encodeEventReset(xe_event_hand
 
 template <uint32_t gfxCoreFamily>
 xe_result_t CommandListCoreFamily<gfxCoreFamily>::encodeExecutionBarrier() {
-    return XE_RESULT_ERROR_UNSUPPORTED;
+
+    using GfxFamily = typename OCLRT::GfxFamilyMapper<static_cast<GFXCORE_FAMILY>(gfxCoreFamily)>::GfxFamily;
+    using PIPE_CONTROL = typename GfxFamily::PIPE_CONTROL;
+    PIPE_CONTROL cmd = GfxFamily::cmdInitPipeControl;
+    cmd.setCommandStreamerStallEnable(true);
+    cmd.setDcFlushEnable(true);
+    auto buffer = commandStream->getSpace(sizeof(cmd));
+    *(PIPE_CONTROL *)buffer = cmd;
+
+    return XE_RESULT_SUCCESS;
 }
 
 template <uint32_t gfxCoreFamily>

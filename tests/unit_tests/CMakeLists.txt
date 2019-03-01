@@ -24,6 +24,7 @@ add_executable(${TARGET_NAME}
     test_cmdlist_close.cpp
     test_cmdlist_encodedispatchfunction.cpp
     test_cmdlist_encodesignalevent.cpp
+    test_cmdlist_encodeexecutionbarrier.cpp
     test_cmdlist_encodewaitonevent.cpp
     test_cmdqueue.cpp
     test_cmdqueue_enqueuecommandlist.cpp
