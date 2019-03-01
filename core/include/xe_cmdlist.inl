@@ -193,7 +193,7 @@ namespace xe
     inline void CommandList::EncodeImageCopyFromMemory(
         image_handle_t hDstImage,                       ///< [in] handle of destination image to copy to
         image_region_t* pDstRegion,                     ///< [in][optional] destination region descriptor
-        void* srcptr                                    ///< [in] pointer to source memory to copy from
+        const void* srcptr                              ///< [in] pointer to source memory to copy from
         )
     {
         // auto result = ::xeCommandListEncodeImageCopyFromMemory( handle, hDstImage->getHandle(), pDstRegion, srcptr );

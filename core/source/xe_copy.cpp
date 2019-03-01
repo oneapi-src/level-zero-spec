@@ -395,14 +395,14 @@ __xedllexport xe_result_t __xecall
 ///         + nullptr == srcptr
 ///     - ::XE_RESULT_ERROR_UNSUPPORTED
 ///
-/// @hash {9c2889454d2b805cd41419469082ddba5fc930632d7ad1d19e5c05c2ee59e464}
+/// @hash {195ceffb1f1c2b99903e9aa05a90af3a3e68ddf554db9c072d495768d5effde9}
 ///
 __xedllexport xe_result_t __xecall
   xeCommandListEncodeImageCopyFromMemory(
     xe_command_list_handle_t hCommandList,          ///< [in] handle of command list
     xe_image_handle_t hDstImage,                    ///< [in] handle of destination image to copy to
     xe_image_region_t* pDstRegion,                  ///< [in][optional] destination region descriptor
-    void* srcptr                                    ///< [in] pointer to source memory to copy from
+    const void* srcptr                              ///< [in] pointer to source memory to copy from
     )
 {
     try
