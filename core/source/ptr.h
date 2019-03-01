@@ -88,7 +88,7 @@ struct PointerModeSelector<PointerMode::ZeroCost>::PointerOwnershipSelector<fals
         explicit Pointer() noexcept { // default constructor, Note : this->ptr is unitialized
         }
 
-        Pointer(nullptr_t) noexcept // nullptr constructor, note : this->ptr initialized to nullptr
+        Pointer(std::nullptr_t) noexcept // nullptr constructor, note : this->ptr initialized to nullptr
             : ptr(nullptr) {}
 
         explicit Pointer(T *ptr) noexcept // explicit, binding constructor
@@ -233,7 +233,7 @@ struct PointerModeSelector<PointerMode::ZeroCost>::PointerOwnershipSelector<true
         explicit Pointer() noexcept { // default constructor, note : this->ptr is unitialized
         }
 
-        Pointer(nullptr_t) noexcept // nullptr constructor, note : this->ptr initialized to nullptr
+        Pointer(std::nullptr_t) noexcept // nullptr constructor, note : this->ptr initialized to nullptr
             : ptr(nullptr) {}
 
         explicit Pointer(T *ptr) noexcept // explicit, binding constructor

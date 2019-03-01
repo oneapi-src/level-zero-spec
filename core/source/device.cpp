@@ -72,7 +72,7 @@ struct DeviceImp : public Device {
     }
 
     xe_result_t evictMemory(void *ptr,
-                            size_t size) {
+                            size_t size) override {
         return XE_RESULT_ERROR_UNSUPPORTED;
     }
 

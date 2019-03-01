@@ -13,6 +13,8 @@ using RefPointerTypes = testing::Types<ZeroCostPtr<false, TestStruct>>;
 using OwningPointerTypes = testing::Types<ZeroCostPtr<true, TestStruct>>;
 using SmartPointerTypes = testing::Types<ZeroCostPtr<true, TestStruct>,
                                          ZeroCostPtr<true, TestStruct>>;
+using ZeroCostPointerTypes = testing::Types<ZeroCostPtr<true, TestStruct>,
+                                            ZeroCostPtr<true, TestStruct>>;
 
 template <typename ClassT>
 class PtrTraits {
@@ -92,9 +94,13 @@ using RefPointerTest = SmartPointerTest<RefPointerT>;
 template <class OwningPointerT>
 using OwningPointerTest = SmartPointerTest<OwningPointerT>;
 
+template <class OwningPointerT>
+using ZeroCostPointerTest = SmartPointerTest<OwningPointerT>;
+
 TYPED_TEST_CASE(SmartPointerTest, SmartPointerTypes);
 TYPED_TEST_CASE(RefPointerTest, RefPointerTypes);
 TYPED_TEST_CASE(OwningPointerTest, OwningPointerTypes);
+TYPED_TEST_CASE(ZeroCostPointerTest, ZeroCostPointerTypes);
 
 TYPED_TEST(SmartPointerTest, IsTheSameSizeAsRawPointers) {
     using SmartPtrT = typename TestFixture::SmatrPtrT;
@@ -133,22 +139,23 @@ TYPED_TEST(RefPointerTest, HasExpectedInterface) {
     EXPECT_TRUE(PtrTraits<SmartPtrT>::hasOffsetByBytes) << "Allow pointer arithmetics of referencing (non-owning) pointers";
 }
 
-TYPED_TEST(SmartPointerTest, WhenDefaultConstructingDontInitializeMemoryWhenDestructingDontZeroOut) {
+TYPED_TEST(ZeroCostPointerTest, WhenDefaultConstructingDontInitializeMemoryWhenDestructingDontZeroOut) {
     using SmartPtrT = typename TestFixture::SmatrPtrT;
 
     TestStruct memory;
     SmartPtrT *x;
     x = new SmartPtrT(&memory);
+    EXPECT_EQ(reinterpret_cast<uintptr_t>(&memory), x->asUintptr());
     x->~SmartPtrT();     // destroy to see that that destructor doesn't set to nullptr
     new (x) SmartPtrT(); // placement new to see that default constructor doesn't null-initialize
-    EXPECT_EQ(&memory, x->weakRef().get());
+    EXPECT_EQ(reinterpret_cast<uintptr_t>(&memory), x->asUintptr());
     delete x;
 }
 
 TYPED_TEST(SmartPointerTest, WhenConstructingFromNullptrTInitializeToNullptr) {
     using SmartPtrT = typename TestFixture::SmatrPtrT;
 
-    nullptr_t null{};
+    std::nullptr_t null{};
     SmartPtrT x(null);
     EXPECT_EQ(nullptr, x.weakRef().get());
 }

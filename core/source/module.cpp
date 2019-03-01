@@ -187,7 +187,7 @@ struct FunctionImp : Function {
     }
 
     xe_result_t getAttribute(xe_function_get_attribute_t attr,
-                               uint32_t *pValue) override {
+                             uint32_t *pValue) override {
         return XE_RESULT_ERROR_UNSUPPORTED;
     }
 
@@ -260,7 +260,7 @@ struct FunctionImp : Function {
         return crossThreadData;
     }
 
-    size_t getCrossThreadDataSize() const {
+    size_t getCrossThreadDataSize() const override {
         return crossThreadDataSize;
     }
 
@@ -308,7 +308,6 @@ struct FunctionImp : Function {
 
         return XE_RESULT_SUCCESS;
     }
-
 
     bool initialize(const xe_function_desc_t *desc) {
         assert(desc->version == XE_API_HEADER_VERSION);
@@ -376,7 +375,7 @@ struct FunctionImp : Function {
         return perThreadDataSize;
     }
 
-    uint32_t getSimdSize() const {
+    uint32_t getSimdSize() const override {
         return kernelRT->kernelInfo.getMaxSimdSize();
     }
 
