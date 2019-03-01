@@ -140,8 +140,9 @@ namespace xe
             HOST_TO_DEVICE = XE_BIT(0),                     ///< signals from host, waits on device
             DEVICE_TO_HOST = XE_BIT(1),                     ///< signals from device, waits on host
             DEVICE_TO_DEVICE = XE_BIT(2),                   ///< signals from device, waits on another device
-            TIMESTAMP = XE_BIT(3),                          ///< supports time-based queries
-            PERFORMANCE_METRICS = XE_BIT(4),                ///< supports performance metrics (MDAPI)
+            IPC = XE_BIT(3),                                ///< signals and waits may occur across processes
+            TIMESTAMP = XE_BIT(4),                          ///< supports time-based queries
+            PERFORMANCE_METRICS = XE_BIT(5),                ///< supports performance metrics (MDAPI)
 
         };
 

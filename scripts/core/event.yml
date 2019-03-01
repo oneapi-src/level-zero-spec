@@ -24,11 +24,14 @@ etors:
     - name: $X_EVENT_FLAG_DEVICE_TO_DEVICE
       value: "$X_BIT(2)"
       desc: "signals from device, waits on another device"
-    - name: $X_EVENT_FLAG_TIMESTAMP
+    - name: $X_EVENT_FLAG_IPC
       value: "$X_BIT(3)"
+      desc: "signals and waits may occur across processes"
+    - name: $X_EVENT_FLAG_TIMESTAMP
+      value: "$X_BIT(4)"
       desc: "supports time-based queries"
     - name: $X_EVENT_FLAG_PERFORMANCE_METRICS
-      value: "$X_BIT(4)"
+      value: "$X_BIT(5)"
       desc: "supports performance metrics (MDAPI)"
 --- #--------------------------------------------------------------------------
 type: struct

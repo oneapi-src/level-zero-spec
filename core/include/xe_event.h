@@ -53,8 +53,9 @@ typedef enum _xe_event_flag_t
     XE_EVENT_FLAG_HOST_TO_DEVICE = XE_BIT(0),       ///< signals from host, waits on device
     XE_EVENT_FLAG_DEVICE_TO_HOST = XE_BIT(1),       ///< signals from device, waits on host
     XE_EVENT_FLAG_DEVICE_TO_DEVICE = XE_BIT(2),     ///< signals from device, waits on another device
-    XE_EVENT_FLAG_TIMESTAMP = XE_BIT(3),            ///< supports time-based queries
-    XE_EVENT_FLAG_PERFORMANCE_METRICS = XE_BIT(4),  ///< supports performance metrics (MDAPI)
+    XE_EVENT_FLAG_IPC = XE_BIT(3),                  ///< signals and waits may occur across processes
+    XE_EVENT_FLAG_TIMESTAMP = XE_BIT(4),            ///< supports time-based queries
+    XE_EVENT_FLAG_PERFORMANCE_METRICS = XE_BIT(5),  ///< supports performance metrics (MDAPI)
 
 } xe_event_flag_t;
 
