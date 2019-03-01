@@ -38,6 +38,7 @@ set(L0_RUNTIME_SOURCES
     ${CMAKE_CURRENT_SOURCE_DIR}/graphics_allocation.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/graphics_allocation.h
     ${CMAKE_CURRENT_SOURCE_DIR}/image.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/image.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/memory.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/memory.h
     ${CMAKE_CURRENT_SOURCE_DIR}/memory_manager.cpp

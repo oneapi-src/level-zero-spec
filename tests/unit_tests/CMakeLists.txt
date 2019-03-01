@@ -17,6 +17,8 @@ add_executable(${TARGET_NAME}
     mock_event.h
     mock_function.cpp
     mock_function.h
+    mock_image.cpp
+    mock_image.h
     mock_memory_manager.cpp
     mock_memory_manager.h
     mock_module.cpp

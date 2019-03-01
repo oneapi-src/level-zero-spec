@@ -4,6 +4,7 @@
 #include "event.h"
 #include "memory_manager.h"
 #include "module.h"
+#include "image.h"
 #include "runtime/device/device.h"
 
 namespace L0 {
@@ -52,7 +53,8 @@ struct DeviceImp : public Device {
 
     xe_result_t createImage(const xe_image_desc_t *desc,
                             xe_image_handle_t *phImage) override {
-        return XE_RESULT_ERROR_UNSUPPORTED;
+        *phImage = Image::create(desc);
+        return XE_RESULT_SUCCESS;
     }
 
     xe_result_t createModule(const xe_module_desc_t *desc,
