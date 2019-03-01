@@ -261,20 +261,6 @@ namespace xe
             );
 
         ///////////////////////////////////////////////////////////////////////////////
-        /// @brief C++ wrapper for ::xeCommandListEncodeSignalMultipleEvents
-        inline void EncodeSignalMultipleEvents(
-            uint32_t numEvents,                             ///< [in] number of events pointed to by phEvents
-            event_handle_t* phEvents                        ///< [in] pointer to array of handles of the events
-            );
-
-        ///////////////////////////////////////////////////////////////////////////////
-        /// @brief C++ wrapper for ::xeCommandListEncodeWaitOnMultipleEvents
-        inline void EncodeWaitOnMultipleEvents(
-            uint32_t numEvents,                             ///< [in] number of events pointed to by phEvents
-            event_handle_t* phEvents                        ///< [in] pointer to array of handles of the events
-            );
-
-        ///////////////////////////////////////////////////////////////////////////////
         /// @brief C++ wrapper for ::xeCommandListEncodeEventReset
         inline void EncodeEventReset(
             event_handle_t hEvent                           ///< [in] handle of the event

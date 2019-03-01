@@ -169,12 +169,3 @@ etors:
     - name: $X_RESULT_ERROR_UNKNOWN
       value: "0x7fffffff"
       desc: "unknown or internal error"
---- #--------------------------------------------------------------------------
-type: enum
-desc: "Supported synchronization modes"
-name: $x_synchronization_mode_t
-etors:
-    - name: $X_SYNCHRONIZATION_MODE_POLL
-      desc: "poll on Host until device signals; lowest latency (default)"
-    - name: $X_SYNCHRONIZATION_MODE_SLEEP
-      desc: "put Host thread to sleep until device signals"

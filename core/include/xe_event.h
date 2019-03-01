@@ -208,53 +208,6 @@ __xedllport xe_result_t __xecall
     );
 
 ///////////////////////////////////////////////////////////////////////////////
-/// @brief Encodes signals of multiple event from the device into a command list.
-/// 
-/// @details
-///     - The application may **not** call this function from simultaneous
-///       threads with the same command list handle.
-///     - The implementation of this function should be lock-free.
-/// 
-/// @returns
-///     - ::XE_RESULT_SUCCESS
-///     - ::XE_RESULT_ERROR_UNINITIALIZED
-///     - ::XE_RESULT_ERROR_DEVICE_LOST
-///     - ::XE_RESULT_ERROR_INVALID_PARAMETER
-///         + nullptr == hCommandList
-///         + nullptr == phEvents
-///     - ::XE_RESULT_ERROR_UNSUPPORTED
-__xedllport xe_result_t __xecall
-  xeCommandListEncodeSignalMultipleEvents(
-    xe_command_list_handle_t hCommandList,          ///< [in] handle of the command list
-    uint32_t numEvents,                             ///< [in] number of events pointed to by phEvents
-    xe_event_handle_t* phEvents                     ///< [in] pointer to array of handles of the events
-    );
-
-///////////////////////////////////////////////////////////////////////////////
-/// @brief Encodes waits on multiple event from a host signal into a command
-///        list.
-/// 
-/// @details
-///     - The application may **not** call this function from simultaneous
-///       threads with the same command list handle.
-///     - The implementation of this function should be lock-free.
-/// 
-/// @returns
-///     - ::XE_RESULT_SUCCESS
-///     - ::XE_RESULT_ERROR_UNINITIALIZED
-///     - ::XE_RESULT_ERROR_DEVICE_LOST
-///     - ::XE_RESULT_ERROR_INVALID_PARAMETER
-///         + nullptr == hCommandList
-///         + nullptr == phEvents
-///     - ::XE_RESULT_ERROR_UNSUPPORTED
-__xedllport xe_result_t __xecall
-  xeCommandListEncodeWaitOnMultipleEvents(
-    xe_command_list_handle_t hCommandList,          ///< [in] handle of the command list
-    uint32_t numEvents,                             ///< [in] number of events pointed to by phEvents
-    xe_event_handle_t* phEvents                     ///< [in] pointer to array of handles of the events
-    );
-
-///////////////////////////////////////////////////////////////////////////////
 /// @brief Signals a event from host.
 /// 
 /// @details
@@ -301,74 +254,10 @@ __xedllport xe_result_t __xecall
 __xedllport xe_result_t __xecall
   xeHostWaitOnEvent(
     xe_event_handle_t hEvent,                       ///< [in] handle of the event
-    xe_synchronization_mode_t mode,                 ///< [in] synchronization mode
-    uint32_t delay,                                 ///< [in] if ::XE_SYNCHRONIZATION_MODE_SLEEP == mode, then time (in
-                                                    ///< microseconds) to poll before putting Host thread to sleep; otherwise,
-                                                    ///< must be zero.
-    uint32_t interval,                              ///< [in] if ::XE_SYNCHRONIZATION_MODE_SLEEP == mode, then maximum time (in
-                                                    ///< microseconds) to put Host thread to sleep between polling; otherwise,
-                                                    ///< must be zero.
-    uint32_t timeout                                ///< [in] if non-zero, then indicates the maximum time to poll or sleep
-                                                    ///< before returning; if zero, then only a single status check is made
-                                                    ///< before immediately returning; if MAX_UINT32, then function will not
-                                                    ///< return until complete.
-    );
-
-///////////////////////////////////////////////////////////////////////////////
-/// @brief Signals multiple events from host.
-/// 
-/// @details
-///     - The application may call this function from simultaneous threads.
-///     - The implementation of this function should be lock-free.
-/// 
-/// @returns
-///     - ::XE_RESULT_SUCCESS
-///     - ::XE_RESULT_ERROR_UNINITIALIZED
-///     - ::XE_RESULT_ERROR_DEVICE_LOST
-///     - ::XE_RESULT_ERROR_INVALID_PARAMETER
-///         + nullptr == phEvents
-///     - ::XE_RESULT_ERROR_UNSUPPORTED
-__xedllport xe_result_t __xecall
-  xeHostSignalMultipleEvents(
-    uint32_t numEvents,                             ///< [in] number of events pointed to by phEvents
-    xe_event_handle_t* phEvents                     ///< [in] pointer to array of handles of the events
-    );
-
-///////////////////////////////////////////////////////////////////////////////
-/// @brief The current host thread waits on multiple events from a device signal.
-/// 
-/// @details
-///     - The application may call this function from simultaneous threads.
-///     - The implementation of this function should be lock-free.
-/// 
-/// @remarks
-///   _Analogues_
-///     - clWaitForEvents
-/// 
-/// @returns
-///     - ::XE_RESULT_SUCCESS
-///     - ::XE_RESULT_ERROR_UNINITIALIZED
-///     - ::XE_RESULT_ERROR_DEVICE_LOST
-///     - ::XE_RESULT_ERROR_INVALID_PARAMETER
-///         + nullptr == phEvents
-///     - ::XE_RESULT_ERROR_UNSUPPORTED
-///     - ::XE_RESULT_NOT_READY
-///         + timeout expired
-__xedllport xe_result_t __xecall
-  xeHostWaitOnMultipleEvents(
-    uint32_t numEvents,                             ///< [in] number of events pointed to by phEvents
-    xe_event_handle_t* phEvents,                    ///< [in] pointer to array of handles of the events
-    xe_synchronization_mode_t mode,                 ///< [in] synchronization mode
-    uint32_t delay,                                 ///< [in] if ::XE_SYNCHRONIZATION_MODE_SLEEP == mode, then time (in
-                                                    ///< microseconds) to poll before putting Host thread to sleep; otherwise,
-                                                    ///< must be zero.
-    uint32_t interval,                              ///< [in] if ::XE_SYNCHRONIZATION_MODE_SLEEP == mode, then maximum time (in
-                                                    ///< microseconds) to put Host thread to sleep between polling; otherwise,
-                                                    ///< must be zero.
-    uint32_t timeout                                ///< [in] if non-zero, then indicates the maximum time to poll or sleep
-                                                    ///< before returning; if zero, then only a single status check is made
-                                                    ///< before immediately returning; if MAX_UINT32, then function will not
-                                                    ///< return until complete.
+    uint32_t timeout                                ///< [in] if non-zero, then indicates the maximum time to yield before
+                                                    ///< returning ::XE_RESULT_SUCCESS or ::XE_RESULT_NOT_READY; if zero, then
+                                                    ///< operates exactly like ::xeEventQueryStatus; if MAX_UINT32, then
+                                                    ///< function will not return until complete or device is lost.
     );
 
 ///////////////////////////////////////////////////////////////////////////////

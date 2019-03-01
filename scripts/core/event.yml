@@ -149,42 +149,6 @@ params:
       desc: "[in] handle of the event"
 --- #--------------------------------------------------------------------------
 type: function
-desc: "Encodes signals of multiple event from the device into a command list."
-class: $xCommandList
-name: EncodeSignalMultipleEvents
-details:
-    - "The application may **not** call this function from simultaneous threads with the same command list handle."
-    - "The implementation of this function should be lock-free."
-params:
-    - type: $x_command_list_handle_t
-      name: hCommandList
-      desc: "[in] handle of the command list"
-    - type: uint32_t
-      name: numEvents
-      desc: "[in] number of events pointed to by phEvents"
-    - type: "$x_event_handle_t*"
-      name: phEvents
-      desc: "[in] pointer to array of handles of the events"
---- #--------------------------------------------------------------------------
-type: function
-desc: "Encodes waits on multiple event from a host signal into a command list."
-class: $xCommandList
-name: EncodeWaitOnMultipleEvents
-details:
-    - "The application may **not** call this function from simultaneous threads with the same command list handle."
-    - "The implementation of this function should be lock-free."
-params:
-    - type: $x_command_list_handle_t
-      name: hCommandList
-      desc: "[in] handle of the command list"
-    - type: uint32_t
-      name: numEvents
-      desc: "[in] number of events pointed to by phEvents"
-    - type: "$x_event_handle_t*"
-      name: phEvents
-      desc: "[in] pointer to array of handles of the events"
---- #--------------------------------------------------------------------------
-type: function
 desc: "Signals a event from host."
 class: $x
 name: HostSignalEvent
@@ -212,73 +176,11 @@ params:
     - type: $x_event_handle_t
       name: hEvent
       desc: "[in] handle of the event"
-    - type: $x_synchronization_mode_t
-      name: mode
-      desc: "[in] synchronization mode"
-    - type: uint32_t
-      name: delay
-      desc: "[in] if $X_SYNCHRONIZATION_MODE_SLEEP == mode, then time (in microseconds) to poll before putting Host thread to sleep; 
-            otherwise, must be zero."
-    - type: uint32_t
-      name: interval
-      desc: "[in] if $X_SYNCHRONIZATION_MODE_SLEEP == mode, then maximum time (in microseconds) to put Host thread to sleep between polling;
-            otherwise, must be zero."
     - type: uint32_t
       name: timeout
-      desc: "[in] if non-zero, then indicates the maximum time to poll or sleep before returning;
-            if zero, then only a single status check is made before immediately returning;
-            if MAX_UINT32, then function will not return until complete."
-returns:
-    - $X_RESULT_NOT_READY:
-       - "timeout expired"
---- #--------------------------------------------------------------------------
-type: function
-desc: "Signals multiple events from host."
-class: $x
-name: HostSignalMultipleEvents
-details:
-    - "The application may call this function from simultaneous threads."
-    - "The implementation of this function should be lock-free."
-params:
-    - type: uint32_t
-      name: numEvents
-      desc: "[in] number of events pointed to by phEvents"
-    - type: "$x_event_handle_t*"
-      name: phEvents
-      desc: "[in] pointer to array of handles of the events"
---- #--------------------------------------------------------------------------
-type: function
-desc: "The current host thread waits on multiple events from a device signal."
-class: $x
-name: HostWaitOnMultipleEvents
-analogue:
-    - clWaitForEvents
-details:
-    - "The application may call this function from simultaneous threads."
-    - "The implementation of this function should be lock-free."
-params:
-    - type: uint32_t
-      name: numEvents
-      desc: "[in] number of events pointed to by phEvents"
-    - type: "$x_event_handle_t*"
-      name: phEvents
-      desc: "[in] pointer to array of handles of the events"
-    - type: $x_synchronization_mode_t
-      name: mode
-      desc: "[in] synchronization mode"
-    - type: uint32_t
-      name: delay
-      desc: "[in] if $X_SYNCHRONIZATION_MODE_SLEEP == mode, then time (in microseconds) to poll before putting Host thread to sleep; 
-            otherwise, must be zero."
-    - type: uint32_t
-      name: interval
-      desc: "[in] if $X_SYNCHRONIZATION_MODE_SLEEP == mode, then maximum time (in microseconds) to put Host thread to sleep between polling;
-            otherwise, must be zero."
-    - type: uint32_t
-      name: timeout
-      desc: "[in] if non-zero, then indicates the maximum time to poll or sleep before returning;
-            if zero, then only a single status check is made before immediately returning;
-            if MAX_UINT32, then function will not return until complete."
+      desc: "[in] if non-zero, then indicates the maximum time to yield before returning $X_RESULT_SUCCESS or $X_RESULT_NOT_READY;
+            if zero, then operates exactly like $xEventQueryStatus;
+            if MAX_UINT32, then function will not return until complete or device is lost."
 returns:
     - $X_RESULT_NOT_READY:
        - "timeout expired"

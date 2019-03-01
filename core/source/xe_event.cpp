@@ -359,123 +359,6 @@ __xedllexport xe_result_t __xecall
 }
 
 ///////////////////////////////////////////////////////////////////////////////
-/// @brief Encodes signals of multiple event from the device into a command list.
-/// 
-/// @details
-///     - The application may **not** call this function from simultaneous
-///       threads with the same command list handle.
-///     - The implementation of this function should be lock-free.
-/// 
-/// @returns
-///     - ::XE_RESULT_SUCCESS
-///     - ::XE_RESULT_ERROR_UNINITIALIZED
-///     - ::XE_RESULT_ERROR_DEVICE_LOST
-///     - ::XE_RESULT_ERROR_INVALID_PARAMETER
-///         + nullptr == hCommandList
-///         + nullptr == phEvents
-///     - ::XE_RESULT_ERROR_UNSUPPORTED
-///
-/// @hash {b6c4b3102db77f8114696fb2f220387c48408770e4bed49fa83d44159b8af5f6}
-///
-__xedllexport xe_result_t __xecall
-  xeCommandListEncodeSignalMultipleEvents(
-    xe_command_list_handle_t hCommandList,          ///< [in] handle of the command list
-    uint32_t numEvents,                             ///< [in] number of events pointed to by phEvents
-    xe_event_handle_t* phEvents                     ///< [in] pointer to array of handles of the events
-    )
-{
-    try
-    {
-        //if( XE_DRIVER_PARAMETER_VALIDATION_LEVEL >= 0 )
-        {
-            // if( nullptr == driver ) return XE_RESULT_ERROR_UNINITIALIZED;
-            // Check parameters
-            if( nullptr == hCommandList ) return XE_RESULT_ERROR_INVALID_PARAMETER;
-            if( nullptr == phEvents ) return XE_RESULT_ERROR_INVALID_PARAMETER;
-        }
-        /// @begin
-#if defined(XE_NULLDRV)
-        return XE_RESULT_SUCCESS;
-#else
-        return L0::CommandList::fromHandle(hCommandList)->encodeSignalMultipleEvents(numEvents, phEvents);
-#endif
-        /// @end
-    }
-    catch(xe_result_t& result)
-    {
-        return result;
-    }
-    catch(std::bad_alloc&)
-    {
-        return XE_RESULT_ERROR_OUT_OF_HOST_MEMORY;
-    }
-    catch(std::exception&)
-    {
-        // @todo: pfnOnException(e.what());
-        return XE_RESULT_ERROR_UNKNOWN;
-    }
-}
-
-///////////////////////////////////////////////////////////////////////////////
-/// @brief Encodes waits on multiple event from a host signal into a command
-///        list.
-/// 
-/// @details
-///     - The application may **not** call this function from simultaneous
-///       threads with the same command list handle.
-///     - The implementation of this function should be lock-free.
-/// 
-/// @returns
-///     - ::XE_RESULT_SUCCESS
-///     - ::XE_RESULT_ERROR_UNINITIALIZED
-///     - ::XE_RESULT_ERROR_DEVICE_LOST
-///     - ::XE_RESULT_ERROR_INVALID_PARAMETER
-///         + nullptr == hCommandList
-///         + nullptr == phEvents
-///     - ::XE_RESULT_ERROR_UNSUPPORTED
-///
-/// @hash {9bc2eeadc113dfc5be97a3a4590743a2b7b4ee4e12237b86fc7be4f208da95d8}
-///
-__xedllexport xe_result_t __xecall
-  xeCommandListEncodeWaitOnMultipleEvents(
-    xe_command_list_handle_t hCommandList,          ///< [in] handle of the command list
-    uint32_t numEvents,                             ///< [in] number of events pointed to by phEvents
-    xe_event_handle_t* phEvents                     ///< [in] pointer to array of handles of the events
-    )
-{
-    try
-    {
-        //if( XE_DRIVER_PARAMETER_VALIDATION_LEVEL >= 0 )
-        {
-            // if( nullptr == driver ) return XE_RESULT_ERROR_UNINITIALIZED;
-            // Check parameters
-            if( nullptr == hCommandList ) return XE_RESULT_ERROR_INVALID_PARAMETER;
-            if( nullptr == phEvents ) return XE_RESULT_ERROR_INVALID_PARAMETER;
-        }
-        /// @begin
-#if defined(XE_NULLDRV)
-        return XE_RESULT_SUCCESS;
-#else
-        return L0::CommandList::fromHandle(hCommandList)->encodeWaitOnMultipleEvents(numEvents, phEvents);
-#endif
-        /// @end
-    }
-    catch(xe_result_t& result)
-    {
-        return result;
-    }
-    catch(std::bad_alloc&)
-    {
-        return XE_RESULT_ERROR_OUT_OF_HOST_MEMORY;
-    }
-    catch(std::exception&)
-    {
-        // @todo: pfnOnException(e.what());
-        return XE_RESULT_ERROR_UNKNOWN;
-    }
-}
-
-///////////////////////////////////////////////////////////////////////////////
 /// @brief Signals a event from host.
 /// 
 /// @details
@@ -554,22 +437,15 @@ __xedllexport xe_result_t __xecall
 ///     - ::XE_RESULT_NOT_READY
 ///         + timeout expired
 ///
-/// @hash {580d70d65f44535c9b2585408c20f2c0af086f6b54945445e7b09d31493403e0}
+/// @hash {da33eab69b5dbcc5545c6f10c94683160ba57be82416368b9b7adcd60e42e1ff}
 ///
 __xedllexport xe_result_t __xecall
   xeHostWaitOnEvent(
     xe_event_handle_t hEvent,                       ///< [in] handle of the event
-    xe_synchronization_mode_t mode,                 ///< [in] synchronization mode
-    uint32_t delay,                                 ///< [in] if ::XE_SYNCHRONIZATION_MODE_SLEEP == mode, then time (in
-                                                    ///< microseconds) to poll before putting Host thread to sleep; otherwise,
-                                                    ///< must be zero.
-    uint32_t interval,                              ///< [in] if ::XE_SYNCHRONIZATION_MODE_SLEEP == mode, then maximum time (in
-                                                    ///< microseconds) to put Host thread to sleep between polling; otherwise,
-                                                    ///< must be zero.
-    uint32_t timeout                                ///< [in] if non-zero, then indicates the maximum time to poll or sleep
-                                                    ///< before returning; if zero, then only a single status check is made
-                                                    ///< before immediately returning; if MAX_UINT32, then function will not
-                                                    ///< return until complete.
+    uint32_t timeout                                ///< [in] if non-zero, then indicates the maximum time to yield before
+                                                    ///< returning ::XE_RESULT_SUCCESS or ::XE_RESULT_NOT_READY; if zero, then
+                                                    ///< operates exactly like ::xeEventQueryStatus; if MAX_UINT32, then
+                                                    ///< function will not return until complete or device is lost.
     )
 {
     try
@@ -584,132 +460,7 @@ __xedllexport xe_result_t __xecall
 #if defined(XE_NULLDRV)
         return XE_RESULT_SUCCESS;
 #else
-        return L0::hostWaitOnEvent(hEvent->getHandle(), mode, delay, interval, timeout);
-#endif
-        /// @end
-    }
-    catch(xe_result_t& result)
-    {
-        return result;
-    }
-    catch(std::bad_alloc&)
-    {
-        return XE_RESULT_ERROR_OUT_OF_HOST_MEMORY;
-    }
-    catch(std::exception&)
-    {
-        // @todo: pfnOnException(e.what());
-        return XE_RESULT_ERROR_UNKNOWN;
-    }
-}
-
-///////////////////////////////////////////////////////////////////////////////
-/// @brief Signals multiple events from host.
-/// 
-/// @details
-///     - The application may call this function from simultaneous threads.
-///     - The implementation of this function should be lock-free.
-/// 
-/// @returns
-///     - ::XE_RESULT_SUCCESS
-///     - ::XE_RESULT_ERROR_UNINITIALIZED
-///     - ::XE_RESULT_ERROR_DEVICE_LOST
-///     - ::XE_RESULT_ERROR_INVALID_PARAMETER
-///         + nullptr == phEvents
-///     - ::XE_RESULT_ERROR_UNSUPPORTED
-///
-/// @hash {6bfaa4edb5accb4ff4433b13b89b7371377931bb1eb613bb04878ef02ac4f666}
-///
-__xedllexport xe_result_t __xecall
-  xeHostSignalMultipleEvents(
-    uint32_t numEvents,                             ///< [in] number of events pointed to by phEvents
-    xe_event_handle_t* phEvents                     ///< [in] pointer to array of handles of the events
-    )
-{
-    try
-    {
-        //if( XE_DRIVER_PARAMETER_VALIDATION_LEVEL >= 0 )
-        {
-            // if( nullptr == driver ) return XE_RESULT_ERROR_UNINITIALIZED;
-            // Check parameters
-            if( nullptr == phEvents ) return XE_RESULT_ERROR_INVALID_PARAMETER;
-        }
-        /// @begin
-#if defined(XE_NULLDRV)
-        return XE_RESULT_SUCCESS;
-#else
-        return L0::hostSignalMultipleEvents(numEvents, phEvents->getHandle());
-#endif
-        /// @end
-    }
-    catch(xe_result_t& result)
-    {
-        return result;
-    }
-    catch(std::bad_alloc&)
-    {
-        return XE_RESULT_ERROR_OUT_OF_HOST_MEMORY;
-    }
-    catch(std::exception&)
-    {
-        // @todo: pfnOnException(e.what());
-        return XE_RESULT_ERROR_UNKNOWN;
-    }
-}
-
-///////////////////////////////////////////////////////////////////////////////
-/// @brief The current host thread waits on multiple events from a device signal.
-/// 
-/// @details
-///     - The application may call this function from simultaneous threads.
-///     - The implementation of this function should be lock-free.
-/// 
-/// @remarks
-///   _Analogues_
-///     - clWaitForEvents
-/// 
-/// @returns
-///     - ::XE_RESULT_SUCCESS
-///     - ::XE_RESULT_ERROR_UNINITIALIZED
-///     - ::XE_RESULT_ERROR_DEVICE_LOST
-///     - ::XE_RESULT_ERROR_INVALID_PARAMETER
-///         + nullptr == phEvents
-///     - ::XE_RESULT_ERROR_UNSUPPORTED
-///     - ::XE_RESULT_NOT_READY
-///         + timeout expired
-///
-/// @hash {e52ffd62217e9fcf9ed29e74f4453d0d1930803fe7e4289225b27f2526df83d0}
-///
-__xedllexport xe_result_t __xecall
-  xeHostWaitOnMultipleEvents(
-    uint32_t numEvents,                             ///< [in] number of events pointed to by phEvents
-    xe_event_handle_t* phEvents,                    ///< [in] pointer to array of handles of the events
-    xe_synchronization_mode_t mode,                 ///< [in] synchronization mode
-    uint32_t delay,                                 ///< [in] if ::XE_SYNCHRONIZATION_MODE_SLEEP == mode, then time (in
-                                                    ///< microseconds) to poll before putting Host thread to sleep; otherwise,
-                                                    ///< must be zero.
-    uint32_t interval,                              ///< [in] if ::XE_SYNCHRONIZATION_MODE_SLEEP == mode, then maximum time (in
-                                                    ///< microseconds) to put Host thread to sleep between polling; otherwise,
-                                                    ///< must be zero.
-    uint32_t timeout                                ///< [in] if non-zero, then indicates the maximum time to poll or sleep
-                                                    ///< before returning; if zero, then only a single status check is made
-                                                    ///< before immediately returning; if MAX_UINT32, then function will not
-                                                    ///< return until complete.
-    )
-{
-    try
-    {
-        //if( XE_DRIVER_PARAMETER_VALIDATION_LEVEL >= 0 )
-        {
-            // if( nullptr == driver ) return XE_RESULT_ERROR_UNINITIALIZED;
-            // Check parameters
-            if( nullptr == phEvents ) return XE_RESULT_ERROR_INVALID_PARAMETER;
-        }
-        /// @begin
-#if defined(XE_NULLDRV)
-        return XE_RESULT_SUCCESS;
-#else
-        return L0::hostWaitOnMultipleEvents(numEvents, phEvents->getHandle(), mode, delay, interval, timeout);
+        return L0::hostWaitOnEvent(hEvent->getHandle(), timeout);
 #endif
         /// @end
     }

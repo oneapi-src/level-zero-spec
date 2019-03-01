@@ -135,15 +135,6 @@ namespace xe
 
     };
 
-    ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Supported synchronization modes
-    enum class synchronization_mode_t
-    {
-        POLL,                                           ///< poll on Host until device signals; lowest latency (default)
-        SLEEP,                                          ///< put Host thread to sleep until device signals
-
-    };
-
 } // namespace xe
 #endif // defined(__cplusplus)
 #endif // _XE_COMMON_HPP

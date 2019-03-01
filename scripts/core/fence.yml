@@ -84,66 +84,16 @@ params:
     - type: $x_fence_handle_t
       name: hFence
       desc: "[in] handle of the fence"
-    - type: $x_synchronization_mode_t
-      name: mode
-      desc: "[in] synchronization mode"
-    - type: uint32_t
-      name: delay
-      desc: "[in] if $X_SYNCHRONIZATION_MODE_SLEEP == mode, then time (in microseconds) to poll before putting Host thread to sleep; 
-            otherwise, must be zero."
-    - type: uint32_t
-      name: interval
-      desc: "[in] if $X_SYNCHRONIZATION_MODE_SLEEP == mode, then maximum time (in microseconds) to put Host thread to sleep between polling;
-            otherwise, must be zero."
     - type: uint32_t
       name: timeout
-      desc: "[in] if non-zero, then indicates the maximum time to poll or sleep before returning;
-            if zero, then only a single status check is made before immediately returning;
-            if MAX_UINT32, then function will not return until complete."
+      desc: "[in] if non-zero, then indicates the maximum time to yield before returning $X_RESULT_SUCCESS or $X_RESULT_NOT_READY;
+            if zero, then operates exactly like $xFenceQueryStatus;
+            if MAX_UINT32, then function will not return until complete or device is lost."
 returns:
     - $X_RESULT_NOT_READY:
        - "timeout expired"
     - $X_RESULT_ERROR_INVALID_PARAMETER:
         - "fence is not enqueued in a command queue"
---- #--------------------------------------------------------------------------
-type: function
-desc: "The current host thread waits on a multiple fences to be signaled."
-class: $x
-name: HostWaitOnMultipleFences
-analogue:
-    - "**vkWaitForFences**"
-details:
-    - "The application may call this function from simultaneous threads."
-    - "The implementation of this function should be lock-free."
-params:
-    - type: uint32_t
-      name: numFences
-      desc: "[in] number of fences in hFences"
-    - type: "$x_fence_handle_t*"
-      name: phFences
-      desc: "[in] pointer to array of handles of the fences"
-    - type: $x_synchronization_mode_t
-      name: mode
-      desc: "[in] synchronization mode"
-    - type: uint32_t
-      name: delay
-      desc: "[in] if $X_SYNCHRONIZATION_MODE_SLEEP == mode, then time (in microseconds) to poll before putting Host thread to sleep; 
-            otherwise, must be zero."
-    - type: uint32_t
-      name: interval
-      desc: "[in] if $X_SYNCHRONIZATION_MODE_SLEEP == mode, then maximum time (in microseconds) to put Host thread to sleep between polling;
-            otherwise, must be zero."
-    - type: uint32_t
-      name: timeout
-      desc: "[in] if non-zero, then indicates the maximum time to poll or sleep before returning;
-            if zero, then only a single status check is made before immediately returning;
-            if MAX_UINT32, then function will not return until complete."
-returns:
-    - $X_RESULT_NOT_READY:
-       - "timeout expired"
-    - $X_RESULT_ERROR_INVALID_PARAMETER:
-        - "nullptr == any handle in phFences"
-        - "any fence is not enqueued in a command queue"
 --- #--------------------------------------------------------------------------
 type: function
 desc: "Queries a fence object's status."

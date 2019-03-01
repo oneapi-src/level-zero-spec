@@ -245,28 +245,6 @@ namespace xe
     }
 
     ///////////////////////////////////////////////////////////////////////////////
-    /// @brief C++ wrapper for ::xeCommandListEncodeSignalMultipleEvents
-    inline void CommandList::EncodeSignalMultipleEvents(
-        uint32_t numEvents,                             ///< [in] number of events pointed to by phEvents
-        event_handle_t* phEvents                        ///< [in] pointer to array of handles of the events
-        )
-    {
-        // auto result = ::xeCommandListEncodeSignalMultipleEvents( handle, numEvents, phEvents->getHandle() );
-        // if( ::XE_RESULT_SUCCESS != result ) throw exception(result, "xe::CommandList::EncodeSignalMultipleEvents");
-    }
-
-    ///////////////////////////////////////////////////////////////////////////////
-    /// @brief C++ wrapper for ::xeCommandListEncodeWaitOnMultipleEvents
-    inline void CommandList::EncodeWaitOnMultipleEvents(
-        uint32_t numEvents,                             ///< [in] number of events pointed to by phEvents
-        event_handle_t* phEvents                        ///< [in] pointer to array of handles of the events
-        )
-    {
-        // auto result = ::xeCommandListEncodeWaitOnMultipleEvents( handle, numEvents, phEvents->getHandle() );
-        // if( ::XE_RESULT_SUCCESS != result ) throw exception(result, "xe::CommandList::EncodeWaitOnMultipleEvents");
-    }
-
-    ///////////////////////////////////////////////////////////////////////////////
     /// @brief C++ wrapper for ::xeCommandListEncodeEventReset
     inline void CommandList::EncodeEventReset(
         event_handle_t hEvent                           ///< [in] handle of the event

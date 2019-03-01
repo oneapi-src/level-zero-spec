@@ -83,17 +83,10 @@ namespace xe
         ///////////////////////////////////////////////////////////////////////////////
         /// @brief C++ wrapper for ::xeCommandQueueSynchronize
         inline void Synchronize(
-            synchronization_mode_t mode,                    ///< [in] synchronization mode
-            uint32_t delay,                                 ///< [in] if ::SYNCHRONIZATION_MODE_SLEEP == mode, then time (in
-                                                            ///< microseconds) to poll before putting Host thread to sleep; otherwise,
-                                                            ///< must be zero.
-            uint32_t interval,                              ///< [in] if ::SYNCHRONIZATION_MODE_SLEEP == mode, then maximum time (in
-                                                            ///< microseconds) to put Host thread to sleep between polling; otherwise,
-                                                            ///< must be zero.
-            uint32_t timeout                                ///< [in] if non-zero, then indicates the maximum time to poll or sleep
-                                                            ///< before returning; if zero, then only a single status check is made
-                                                            ///< before immediately returning; if MAX_UINT32, then function will not
-                                                            ///< return until complete.
+            uint32_t timeout                                ///< [in] if non-zero, then indicates the maximum time to yield before
+                                                            ///< returning ::RESULT_SUCCESS or ::RESULT_NOT_READY; if zero, then
+                                                            ///< operates exactly like ::FenceQueryStatus; if MAX_UINT32, then function
+                                                            ///< will not return until complete or device is lost.
             );
 
         ///////////////////////////////////////////////////////////////////////////////
