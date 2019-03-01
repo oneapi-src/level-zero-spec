@@ -160,7 +160,7 @@ params:
     - type: "$x_image_region_t*"
       name: pDstRegion
       desc: "[in][optional] destination region descriptor"
-    - type: "void*"
+    - type: "const void*"
       name: srcptr
       desc: "[in] pointer to source memory to copy from"
 --- #--------------------------------------------------------------------------

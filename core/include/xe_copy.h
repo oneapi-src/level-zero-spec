@@ -230,7 +230,7 @@ __xedllport xe_result_t __xecall
     xe_command_list_handle_t hCommandList,          ///< [in] handle of command list
     xe_image_handle_t hDstImage,                    ///< [in] handle of destination image to copy to
     xe_image_region_t* pDstRegion,                  ///< [in][optional] destination region descriptor
-    void* srcptr                                    ///< [in] pointer to source memory to copy from
+    const void* srcptr                              ///< [in] pointer to source memory to copy from
     );
 
 ///////////////////////////////////////////////////////////////////////////////
