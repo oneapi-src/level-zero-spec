@@ -145,6 +145,16 @@ GEN9TEST_F(CommandListCreate, addsVfeStateToBatchBuffer) {
 
     {
         auto cmd = genCmdCast<MEDIA_VFE_STATE *>(*itor);
+        EXPECT_EQ(cmd->getNumberOfUrbEntries(), 1u);
+        EXPECT_GT(cmd->getUrbEntryAllocationSize(), 0u);
+        EXPECT_GT(cmd->getMaximumNumberOfThreads(), 0u);
+
+        EXPECT_EQ(cmd->getPerThreadScratchSpace(), 0u);
+        EXPECT_EQ(cmd->getStackSize(), 0u);
+        uint64_t scratchAddress = cmd->getScratchSpaceBasePointerHigh();
+        scratchAddress <<= 32u;
+        scratchAddress |= cmd->getScratchSpaceBasePointer();
+        EXPECT_EQ(scratchAddress, 0u);
     }
 }
 

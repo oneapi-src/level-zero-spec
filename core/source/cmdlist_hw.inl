@@ -54,6 +54,11 @@ void CommandListCoreFamily<gfxCoreFamily>::programFrontEndState() {
 
     using MEDIA_VFE_STATE = typename GfxFamily::MEDIA_VFE_STATE;
     MEDIA_VFE_STATE cmd = GfxFamily::cmdInitMediaVfeState;
+    cmd.setNumberOfUrbEntries(1u);
+    uint32_t urbEntryAllocationSize = 0x782; //TODO:  Gen family specific
+    cmd.setUrbEntryAllocationSize(urbEntryAllocationSize);
+    uint32_t maxNumThreads = 16u; //TODO:  get this from HwInfo
+    cmd.setMaximumNumberOfThreads(maxNumThreads); 
 
     auto buffer = commandStream->getSpace(sizeof(cmd));
     *(MEDIA_VFE_STATE *)buffer = cmd;
