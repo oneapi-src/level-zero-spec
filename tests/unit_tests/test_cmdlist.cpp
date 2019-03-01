@@ -121,6 +121,33 @@ HWTEST_F(CommandListCreate, addsStateBaseAddressToBatchBuffer) {
     }
 }
 
+GEN9TEST_F(CommandListCreate, addsVfeStateToBatchBuffer) {
+    Mock<Device> device;
+    EXPECT_CALL(device, getMemoryManager).Times(AnyNumber());
+
+    auto commandList = whitebox_cast(CommandList::create(productFamily, &device));
+    ASSERT_NE(nullptr, commandList->commandStream);
+    auto usedSpaceBefore = commandList->commandStream->getUsed();
+
+    auto result = commandList->close();
+    ASSERT_EQ(XE_RESULT_SUCCESS, result);
+
+    auto usedSpaceAfter = commandList->commandStream->getUsed();
+    ASSERT_GT(usedSpaceAfter, usedSpaceBefore);
+
+    GenCmdList cmdList;
+    ASSERT_TRUE(FamilyType::PARSE::parseCommandBuffer(cmdList,
+                                                      ptrOffset(commandList->commandStream->getCpuBase(), 0),
+                                                      usedSpaceAfter));
+    using MEDIA_VFE_STATE = typename FamilyType::MEDIA_VFE_STATE;
+    auto itor = find<MEDIA_VFE_STATE *>(cmdList.begin(), cmdList.end());
+    ASSERT_NE(cmdList.end(), itor);
+
+    {
+        auto cmd = genCmdCast<MEDIA_VFE_STATE *>(*itor);
+    }
+}
+
 ATSTEST_F(CommandListCreate, addsCfeStateToBatchBuffer) {
     Mock<Device> device;
     EXPECT_CALL(device, getMemoryManager).Times(AnyNumber());

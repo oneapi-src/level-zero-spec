@@ -8,38 +8,8 @@
 namespace L0 {
 
 template <>
-bool CommandListCoreFamily<IGFX_GEN12_CORE>::initialize() {
-    using GfxFamily = typename OCLRT::GfxFamilyMapper<static_cast<GFXCORE_FAMILY>(IGFX_GEN12_CORE)>::GfxFamily;
-
-    if (!BaseClass::initialize()) {
-        return false;
-    }
-
-    {
-        using STATE_BASE_ADDRESS = typename GfxFamily::STATE_BASE_ADDRESS;
-        STATE_BASE_ADDRESS cmd = GfxFamily::cmdInitStateBaseAddress;
-
-        {
-            auto heap = this->indirectHeaps[INSTRUCTION];
-            assert(heap != nullptr);
-            cmd.setInstructionBaseAddressModifyEnable(true);
-            cmd.setInstructionBaseAddress(heap->getHeapGpuBase());
-            cmd.setInstructionBufferSizeModifyEnable(true);
-            cmd.setInstructionBufferSize(static_cast<uint32_t>(heap->getMaxAvailableSpace()));
-        }
-
-        {
-            auto heap = this->indirectHeaps[GENERAL_STATE];
-            assert(heap != nullptr);
-            cmd.setGeneralStateBaseAddressModifyEnable(true);
-            cmd.setGeneralStateBaseAddress(heap->getHeapGpuBase());
-            cmd.setGeneralStateBufferSizeModifyEnable(true);
-            cmd.setGeneralStateBufferSize(static_cast<uint32_t>(heap->getMaxAvailableSpace()));
-        }
-
-        auto buffer = commandStream->getSpace(sizeof(cmd));
-        *(STATE_BASE_ADDRESS *)buffer = cmd;
-    }
+void CommandListCoreFamily<IGFX_GEN12_CORE>::programFrontEndState() {
+    using GfxFamily = typename OCLRT::GfxFamilyMapper<IGFX_GEN12_CORE>::GfxFamily;
 
     {
         using CFE_STATE = typename GfxFamily::CFE_STATE;
@@ -47,8 +17,6 @@ bool CommandListCoreFamily<IGFX_GEN12_CORE>::initialize() {
         auto buffer = commandStream->getSpace(sizeof(cmd));
         *(CFE_STATE *)buffer = cmd;
     }
-
-    return true;
 }
 
 template <>
@@ -92,8 +60,8 @@ xe_result_t CommandListCoreFamily<IGFX_GEN12_CORE>::encodeDispatchFunction(xe_fu
     }
 
     function->setGroupCount(pDispatchFuncArgs->groupCountX,
-                                pDispatchFuncArgs->groupCountY,
-                                pDispatchFuncArgs->groupCountZ);
+                            pDispatchFuncArgs->groupCountY,
+                            pDispatchFuncArgs->groupCountZ);
 
     // Copy the threadData to the indirect heap
     {

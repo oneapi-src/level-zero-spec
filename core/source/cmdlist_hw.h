@@ -13,6 +13,7 @@ struct CommandListCoreFamily : public CommandListImp {
 
     bool initialize() override;
     void programL3();
+    void programFrontEndState();
 
     xe_result_t close() override;
     xe_result_t encodeCommandLists(uint32_t numCommandLists,

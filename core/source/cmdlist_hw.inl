@@ -43,7 +43,20 @@ bool CommandListCoreFamily<gfxCoreFamily>::initialize() {
         *(STATE_BASE_ADDRESS *)buffer = cmd;
     }
 
+    programFrontEndState();
+
     return true;
+}
+
+template <uint32_t gfxCoreFamily>
+void CommandListCoreFamily<gfxCoreFamily>::programFrontEndState() {
+    using GfxFamily = typename OCLRT::GfxFamilyMapper<static_cast<GFXCORE_FAMILY>(gfxCoreFamily)>::GfxFamily;
+
+    using MEDIA_VFE_STATE = typename GfxFamily::MEDIA_VFE_STATE;
+    MEDIA_VFE_STATE cmd = GfxFamily::cmdInitMediaVfeState;
+
+    auto buffer = commandStream->getSpace(sizeof(cmd));
+    *(MEDIA_VFE_STATE *)buffer = cmd;
 }
 
 template <uint32_t gfxCoreFamily>
