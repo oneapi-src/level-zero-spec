@@ -83,6 +83,39 @@ INSTANTIATE_TEST_CASE_P(,
                         CommandListCreateFail,
                         ::testing::ValuesIn(unsupportedProductFamilyTable));
 
+GEN9TEST_F(CommandListCreate, addsPipelineSelectBeforeVfeStateToBatchBuffer) {
+    Mock<Device> device;
+    EXPECT_CALL(device, getMemoryManager).Times(AnyNumber());
+
+    auto commandList = whitebox_cast(CommandList::create(productFamily, &device));
+    ASSERT_NE(nullptr, commandList->commandStream);
+    auto usedSpaceBefore = commandList->commandStream->getUsed();
+
+    auto result = commandList->close();
+    ASSERT_EQ(XE_RESULT_SUCCESS, result);
+
+    auto usedSpaceAfter = commandList->commandStream->getUsed();
+    ASSERT_GT(usedSpaceAfter, usedSpaceBefore);
+
+    GenCmdList cmdList;
+    ASSERT_TRUE(FamilyType::PARSE::parseCommandBuffer(cmdList,
+                                                      ptrOffset(commandList->commandStream->getCpuBase(), 0),
+                                                      usedSpaceAfter));
+    using MEDIA_VFE_STATE = typename FamilyType::MEDIA_VFE_STATE;
+    auto itorVFE = find<MEDIA_VFE_STATE *>(cmdList.begin(), cmdList.end());
+    ASSERT_NE(itorVFE, cmdList.end());
+
+    // Should have a PS before a VFE
+    using PIPELINE_SELECT = typename FamilyType::PIPELINE_SELECT;
+    auto itorPS = find<PIPELINE_SELECT *>(cmdList.begin(), itorVFE);
+    ASSERT_NE(itorPS, itorVFE);
+
+    {
+        auto cmd = genCmdCast<PIPELINE_SELECT *>(*itorPS);
+        //EXPECT_EQ()
+    }
+}
+
 HWTEST_F(CommandListCreate, addsStateBaseAddressToBatchBuffer) {
     Mock<Device> device;
     EXPECT_CALL(device, getMemoryManager).Times(AnyNumber());

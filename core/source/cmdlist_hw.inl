@@ -43,9 +43,22 @@ bool CommandListCoreFamily<gfxCoreFamily>::initialize() {
         *(STATE_BASE_ADDRESS *)buffer = cmd;
     }
 
+    enableGpgpu();
     programFrontEndState();
 
     return true;
+}
+
+template <uint32_t gfxCoreFamily>
+void CommandListCoreFamily<gfxCoreFamily>::enableGpgpu() {
+    using GfxFamily = typename OCLRT::GfxFamilyMapper<static_cast<GFXCORE_FAMILY>(gfxCoreFamily)>::GfxFamily;
+
+    using PIPELINE_SELECT = typename GfxFamily::PIPELINE_SELECT;
+    PIPELINE_SELECT cmd = GfxFamily::cmdInitPipelineSelect;
+    cmd.setPipelineSelection(PIPELINE_SELECT::PIPELINE_SELECTION_GPGPU);
+
+    auto buffer = commandStream->getSpace(sizeof(cmd));
+    *(PIPELINE_SELECT *)buffer = cmd;
 }
 
 template <uint32_t gfxCoreFamily>
@@ -58,7 +71,7 @@ void CommandListCoreFamily<gfxCoreFamily>::programFrontEndState() {
     uint32_t urbEntryAllocationSize = 0x782; //TODO:  Gen family specific
     cmd.setUrbEntryAllocationSize(urbEntryAllocationSize);
     uint32_t maxNumThreads = 16u; //TODO:  get this from HwInfo
-    cmd.setMaximumNumberOfThreads(maxNumThreads); 
+    cmd.setMaximumNumberOfThreads(maxNumThreads);
 
     auto buffer = commandStream->getSpace(sizeof(cmd));
     *(MEDIA_VFE_STATE *)buffer = cmd;
@@ -173,7 +186,7 @@ xe_result_t CommandListCoreFamily<gfxCoreFamily>::encodeDispatchFunction(xe_func
 
         memcpy(ptr, &idd, sizeof(idd));
 
-        MEDIA_INTERFACE_DESCRIPTOR_LOAD cmd = GfxFamily::cmdInitMediaInterfaceDescriptorLoad; 
+        MEDIA_INTERFACE_DESCRIPTOR_LOAD cmd = GfxFamily::cmdInitMediaInterfaceDescriptorLoad;
         cmd.setInterfaceDescriptorDataStartAddress(offsetIDD);
         cmd.setInterfaceDescriptorTotalLength(sizeof(INTERFACE_DESCRIPTOR_DATA));
 

@@ -13,6 +13,7 @@ struct CommandListCoreFamily : public CommandListImp {
 
     bool initialize() override;
     void programL3();
+    void enableGpgpu();
     void programFrontEndState();
 
     xe_result_t close() override;
