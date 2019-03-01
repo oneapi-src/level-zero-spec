@@ -85,9 +85,11 @@ __xedllexport xe_result_t __xecall
             if( XE_FENCE_DESC_VERSION < desc->version ) return XE_RESULT_ERROR_UNSUPPORTED;
         }
         /// @begin
-
+#if defined(XE_NULLDRV)
+        return XE_RESULT_SUCCESS;
+#else
         return L0::CommandQueue::fromHandle(hCommandQueue)->createFence(desc, phFence);
-
+#endif
         /// @end
     }
     catch(xe_result_t& result)
@@ -144,9 +146,11 @@ __xedllexport xe_result_t __xecall
             if( nullptr == hFence ) return XE_RESULT_ERROR_INVALID_PARAMETER;
         }
         /// @begin
-
+#if defined(XE_NULLDRV)
+        return XE_RESULT_SUCCESS;
+#else
         return L0::Fence::fromHandle(hFence)->destroy();
-
+#endif
         /// @end
     }
     catch(xe_result_t& result)
@@ -213,9 +217,11 @@ __xedllexport xe_result_t __xecall
             if( nullptr == hFence ) return XE_RESULT_ERROR_INVALID_PARAMETER;
         }
         /// @begin
-
-        return L0::hostWaitOnFence(hFence, mode, delay, interval, timeout);
-
+#if defined(XE_NULLDRV)
+        return XE_RESULT_SUCCESS;
+#else
+        return L0::hostWaitOnFence(hFence->getHandle(), mode, delay, interval, timeout);
+#endif
         /// @end
     }
     catch(xe_result_t& result)
@@ -284,9 +290,11 @@ __xedllexport xe_result_t __xecall
             if( nullptr == phFences ) return XE_RESULT_ERROR_INVALID_PARAMETER;
         }
         /// @begin
-
-        return L0::hostWaitOnMultipleFences(numFences, phFences, mode, delay, interval, timeout);
-
+#if defined(XE_NULLDRV)
+        return XE_RESULT_SUCCESS;
+#else
+        return L0::hostWaitOnMultipleFences(numFences, phFences->getHandle(), mode, delay, interval, timeout);
+#endif
         /// @end
     }
     catch(xe_result_t& result)
@@ -342,9 +350,11 @@ __xedllexport xe_result_t __xecall
             if( nullptr == hFence ) return XE_RESULT_ERROR_INVALID_PARAMETER;
         }
         /// @begin
-
+#if defined(XE_NULLDRV)
+        return XE_RESULT_SUCCESS;
+#else
         return L0::Fence::fromHandle(hFence)->queryStatus();
-
+#endif
         /// @end
     }
     catch(xe_result_t& result)
@@ -400,9 +410,11 @@ __xedllexport xe_result_t __xecall
             if( nullptr == pTime ) return XE_RESULT_ERROR_INVALID_PARAMETER;
         }
         /// @begin
-
-        return L0::fenceQueryElapsedTime(hFenceStart, hFenceEnd, pTime);
-
+#if defined(XE_NULLDRV)
+        return XE_RESULT_SUCCESS;
+#else
+        return L0::fenceQueryElapsedTime(hFenceStart->getHandle(), hFenceEnd->getHandle(), pTime);
+#endif
         /// @end
     }
     catch(xe_result_t& result)
@@ -455,9 +467,11 @@ __xedllexport xe_result_t __xecall
             if( nullptr == hFence ) return XE_RESULT_ERROR_INVALID_PARAMETER;
         }
         /// @begin
-
+#if defined(XE_NULLDRV)
+        return XE_RESULT_SUCCESS;
+#else
         return L0::Fence::fromHandle(hFence)->reset();
-
+#endif
         /// @end
     }
     catch(xe_result_t& result)

@@ -88,9 +88,11 @@ __xedllexport xe_result_t __xecall
             if( nullptr == srcptr ) return XE_RESULT_ERROR_INVALID_PARAMETER;
         }
         /// @begin
-
+#if defined(XE_NULLDRV)
+        return XE_RESULT_SUCCESS;
+#else
         return L0::CommandList::fromHandle(hCommandList)->encodeMemoryCopy(dstptr, srcptr, size);
-
+#endif
         /// @end
     }
     catch(xe_result_t& result)
@@ -154,9 +156,11 @@ __xedllexport xe_result_t __xecall
             if( nullptr == ptr ) return XE_RESULT_ERROR_INVALID_PARAMETER;
         }
         /// @begin
-
+#if defined(XE_NULLDRV)
+        return XE_RESULT_SUCCESS;
+#else
         return L0::CommandList::fromHandle(hCommandList)->encodeMemorySet(ptr, value, size);
-
+#endif
         /// @end
     }
     catch(xe_result_t& result)
@@ -216,9 +220,11 @@ __xedllexport xe_result_t __xecall
             if( nullptr == hSrcImage ) return XE_RESULT_ERROR_INVALID_PARAMETER;
         }
         /// @begin
-
+#if defined(XE_NULLDRV)
+        return XE_RESULT_SUCCESS;
+#else
         return L0::CommandList::fromHandle(hCommandList)->encodeImageCopy(hDstImage, hSrcImage);
-
+#endif
         /// @end
     }
     catch(xe_result_t& result)
@@ -276,9 +282,11 @@ __xedllexport xe_result_t __xecall
             if( nullptr == hSrcImage ) return XE_RESULT_ERROR_INVALID_PARAMETER;
         }
         /// @begin
-
+#if defined(XE_NULLDRV)
+        return XE_RESULT_SUCCESS;
+#else
         return L0::CommandList::fromHandle(hCommandList)->encodeImageCopyRegion(hDstImage, pDstRegion, hSrcImage, pSrcRegion);
-
+#endif
         /// @end
     }
     catch(xe_result_t& result)
@@ -341,9 +349,11 @@ __xedllexport xe_result_t __xecall
             if( nullptr == hSrcImage ) return XE_RESULT_ERROR_INVALID_PARAMETER;
         }
         /// @begin
-
+#if defined(XE_NULLDRV)
+        return XE_RESULT_SUCCESS;
+#else
         return L0::CommandList::fromHandle(hCommandList)->encodeImageCopyToMemory(dstptr, hSrcImage, pSrcRegion);
-
+#endif
         /// @end
     }
     catch(xe_result_t& result)
@@ -406,9 +416,11 @@ __xedllexport xe_result_t __xecall
             if( nullptr == srcptr ) return XE_RESULT_ERROR_INVALID_PARAMETER;
         }
         /// @begin
-
+#if defined(XE_NULLDRV)
+        return XE_RESULT_SUCCESS;
+#else
         return L0::CommandList::fromHandle(hCommandList)->encodeImageCopyFromMemory(hDstImage, pDstRegion, srcptr);
-
+#endif
         /// @end
     }
     catch(xe_result_t& result)
@@ -473,9 +485,11 @@ __xedllexport xe_result_t __xecall
             if( nullptr == ptr ) return XE_RESULT_ERROR_INVALID_PARAMETER;
         }
         /// @begin
-
+#if defined(XE_NULLDRV)
+        return XE_RESULT_SUCCESS;
+#else
         return L0::CommandList::fromHandle(hCommandList)->encodeMemoryPrefetch(ptr, count);
-
+#endif
         /// @end
     }
     catch(xe_result_t& result)
@@ -547,9 +561,11 @@ __xedllexport xe_result_t __xecall
             if( nullptr == ptr ) return XE_RESULT_ERROR_INVALID_PARAMETER;
         }
         /// @begin
-
+#if defined(XE_NULLDRV)
+        return XE_RESULT_SUCCESS;
+#else
         return L0::CommandList::fromHandle(hCommandList)->encodeMemAdvise(hDevice, ptr, size, advice);
-
+#endif
         /// @end
     }
     catch(xe_result_t& result)

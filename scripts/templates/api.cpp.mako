@@ -85,9 +85,11 @@ __${x}dllexport ${x}_result_t __${x}call
             %endfor
         }
         /// @begin
-
+#if defined(XE_NULLDRV)
+        return ${X}_RESULT_SUCCESS;
+#else
         return L0::${th.make_obj_accessor(x, obj, cls)}
-
+#endif
         /// @end
     }
     catch(${x}_result_t& result)

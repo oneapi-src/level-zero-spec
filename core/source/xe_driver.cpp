@@ -79,9 +79,11 @@ __xedllexport xe_result_t __xecall
             // Check parameters
         }
         /// @begin
-
+#if defined(XE_NULLDRV)
+        return XE_RESULT_SUCCESS;
+#else
         return L0::Driver::get()->init(flags);
-
+#endif
         /// @end
     }
     catch(xe_result_t& result)
@@ -135,9 +137,11 @@ __xedllexport xe_result_t __xecall
             if( nullptr == version ) return XE_RESULT_ERROR_INVALID_PARAMETER;
         }
         /// @begin
-
+#if defined(XE_NULLDRV)
+        return XE_RESULT_SUCCESS;
+#else
         return L0::Driver::get()->getVersion(version);
-
+#endif
         /// @end
     }
     catch(xe_result_t& result)

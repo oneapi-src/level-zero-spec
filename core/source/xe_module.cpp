@@ -106,9 +106,11 @@ __xedllexport xe_result_t __xecall
             if( XE_MODULE_DESC_VERSION < pDesc->version ) return XE_RESULT_ERROR_UNSUPPORTED;
         }
         /// @begin
-
+#if defined(XE_NULLDRV)
+        return XE_RESULT_SUCCESS;
+#else
         return L0::Device::fromHandle(hDevice)->createModule(pDesc, phModule, phBuildLog);
-
+#endif
         /// @end
     }
     catch(xe_result_t& result)
@@ -164,9 +166,11 @@ __xedllexport xe_result_t __xecall
             if( nullptr == hModule ) return XE_RESULT_ERROR_INVALID_PARAMETER;
         }
         /// @begin
-
+#if defined(XE_NULLDRV)
+        return XE_RESULT_SUCCESS;
+#else
         return L0::Module::fromHandle(hModule)->destroy();
-
+#endif
         /// @end
     }
     catch(xe_result_t& result)
@@ -220,9 +224,11 @@ __xedllexport xe_result_t __xecall
             if( nullptr == hModuleBuildLog ) return XE_RESULT_ERROR_INVALID_PARAMETER;
         }
         /// @begin
-
-        return L0::moduleBuildLogDestroy(hModuleBuildLog);
-
+#if defined(XE_NULLDRV)
+        return XE_RESULT_SUCCESS;
+#else
+        return L0::moduleBuildLogDestroy(hModuleBuildLog->getHandle());
+#endif
         /// @end
     }
     catch(xe_result_t& result)
@@ -279,9 +285,11 @@ __xedllexport xe_result_t __xecall
             if( nullptr == pBuildLog ) return XE_RESULT_ERROR_INVALID_PARAMETER;
         }
         /// @begin
-
-        return L0::moduleBuildLogGetString(hModuleBuildLog, pSize, pBuildLog);
-
+#if defined(XE_NULLDRV)
+        return XE_RESULT_SUCCESS;
+#else
+        return L0::moduleBuildLogGetString(hModuleBuildLog->getHandle(), pSize, pBuildLog);
+#endif
         /// @end
     }
     catch(xe_result_t& result)
@@ -346,9 +354,11 @@ __xedllexport xe_result_t __xecall
             if( nullptr == pModuleNativeBinary ) return XE_RESULT_ERROR_INVALID_PARAMETER;
         }
         /// @begin
-
+#if defined(XE_NULLDRV)
+        return XE_RESULT_SUCCESS;
+#else
         return L0::Module::fromHandle(hModule)->getNativeBinary(pSize, pModuleNativeBinary);
-
+#endif
         /// @end
     }
     catch(xe_result_t& result)
@@ -412,9 +422,11 @@ __xedllexport xe_result_t __xecall
             if( XE_FUNCTION_DESC_VERSION < pDesc->version ) return XE_RESULT_ERROR_UNSUPPORTED;
         }
         /// @begin
-
+#if defined(XE_NULLDRV)
+        return XE_RESULT_SUCCESS;
+#else
         return L0::Module::fromHandle(hModule)->createFunction(pDesc, phFunction);
-
+#endif
         /// @end
     }
     catch(xe_result_t& result)
@@ -466,9 +478,11 @@ __xedllexport xe_result_t __xecall
             if( nullptr == hFunction ) return XE_RESULT_ERROR_INVALID_PARAMETER;
         }
         /// @begin
-
+#if defined(XE_NULLDRV)
+        return XE_RESULT_SUCCESS;
+#else
         return L0::Function::fromHandle(hFunction)->destroy();
-
+#endif
         /// @end
     }
     catch(xe_result_t& result)
@@ -525,9 +539,11 @@ __xedllexport xe_result_t __xecall
             if( nullptr == pfnFunction ) return XE_RESULT_ERROR_INVALID_PARAMETER;
         }
         /// @begin
-
+#if defined(XE_NULLDRV)
+        return XE_RESULT_SUCCESS;
+#else
         return L0::Module::fromHandle(hModule)->getFunctionPointer(pFunctionName, pfnFunction);
-
+#endif
         /// @end
     }
     catch(xe_result_t& result)
@@ -582,9 +598,11 @@ __xedllexport xe_result_t __xecall
             if( nullptr == hFunction ) return XE_RESULT_ERROR_INVALID_PARAMETER;
         }
         /// @begin
-
+#if defined(XE_NULLDRV)
+        return XE_RESULT_SUCCESS;
+#else
         return L0::Function::fromHandle(hFunction)->setGroupSize(groupSizeX, groupSizeY, groupSizeZ);
-
+#endif
         /// @end
     }
     catch(xe_result_t& result)
@@ -649,9 +667,11 @@ __xedllexport xe_result_t __xecall
             if( nullptr == groupSizeZ ) return XE_RESULT_ERROR_INVALID_PARAMETER;
         }
         /// @begin
-
+#if defined(XE_NULLDRV)
+        return XE_RESULT_SUCCESS;
+#else
         return L0::Function::fromHandle(hFunction)->suggestGroupSize(globalSizeX, globalSizeY, globalSizeZ, groupSizeX, groupSizeY, groupSizeZ);
-
+#endif
         /// @end
     }
     catch(xe_result_t& result)
@@ -707,9 +727,11 @@ __xedllexport xe_result_t __xecall
             if( nullptr == pArgValue ) return XE_RESULT_ERROR_INVALID_PARAMETER;
         }
         /// @begin
-
+#if defined(XE_NULLDRV)
+        return XE_RESULT_SUCCESS;
+#else
         return L0::Function::fromHandle(hFunction)->setArgumentValue(argIndex, argSize, pArgValue);
-
+#endif
         /// @end
     }
     catch(xe_result_t& result)
@@ -766,9 +788,11 @@ __xedllexport xe_result_t __xecall
             if( nullptr == hFunction ) return XE_RESULT_ERROR_INVALID_PARAMETER;
         }
         /// @begin
-
+#if defined(XE_NULLDRV)
+        return XE_RESULT_SUCCESS;
+#else
         return L0::Function::fromHandle(hFunction)->setAttribute(attr, value);
-
+#endif
         /// @end
     }
     catch(xe_result_t& result)
@@ -826,9 +850,11 @@ __xedllexport xe_result_t __xecall
             if( nullptr == pValue ) return XE_RESULT_ERROR_INVALID_PARAMETER;
         }
         /// @begin
-
+#if defined(XE_NULLDRV)
+        return XE_RESULT_SUCCESS;
+#else
         return L0::Function::fromHandle(hFunction)->getAttribute(attr, pValue);
-
+#endif
         /// @end
     }
     catch(xe_result_t& result)
@@ -890,9 +916,11 @@ __xedllexport xe_result_t __xecall
             if( nullptr == pDispatchFuncArgs ) return XE_RESULT_ERROR_INVALID_PARAMETER;
         }
         /// @begin
-
+#if defined(XE_NULLDRV)
+        return XE_RESULT_SUCCESS;
+#else
         return L0::CommandList::fromHandle(hCommandList)->encodeDispatchFunction(hFunction, pDispatchFuncArgs, hEvent);
-
+#endif
         /// @end
     }
     catch(xe_result_t& result)
@@ -954,9 +982,11 @@ __xedllexport xe_result_t __xecall
             if( nullptr == pDispatchFuncArgs ) return XE_RESULT_ERROR_INVALID_PARAMETER;
         }
         /// @begin
-
+#if defined(XE_NULLDRV)
+        return XE_RESULT_SUCCESS;
+#else
         return L0::CommandGraph::fromHandle(hCommandGraph)->encodeDispatchFunction(hFunction, pDispatchFuncArgs, hEvent);
-
+#endif
         /// @end
     }
     catch(xe_result_t& result)
@@ -1020,9 +1050,11 @@ __xedllexport xe_result_t __xecall
             if( nullptr == pDispatchArgumentsBuffer ) return XE_RESULT_ERROR_INVALID_PARAMETER;
         }
         /// @begin
-
+#if defined(XE_NULLDRV)
+        return XE_RESULT_SUCCESS;
+#else
         return L0::CommandList::fromHandle(hCommandList)->encodeDispatchFunctionIndirect(hFunction, pDispatchArgumentsBuffer, hEvent);
-
+#endif
         /// @end
     }
     catch(xe_result_t& result)
@@ -1086,9 +1118,11 @@ __xedllexport xe_result_t __xecall
             if( nullptr == pDispatchArgumentsBuffer ) return XE_RESULT_ERROR_INVALID_PARAMETER;
         }
         /// @begin
-
+#if defined(XE_NULLDRV)
+        return XE_RESULT_SUCCESS;
+#else
         return L0::CommandGraph::fromHandle(hCommandGraph)->encodeDispatchFunctionIndirect(hFunction, pDispatchArgumentsBuffer, hEvent);
-
+#endif
         /// @end
     }
     catch(xe_result_t& result)
@@ -1146,9 +1180,11 @@ __xedllexport xe_result_t __xecall
             if( nullptr == pUserData ) return XE_RESULT_ERROR_INVALID_PARAMETER;
         }
         /// @begin
-
+#if defined(XE_NULLDRV)
+        return XE_RESULT_SUCCESS;
+#else
         return L0::CommandList::fromHandle(hCommandList)->encodeDispatchHostFunction(pfnHostFunc, pUserData);
-
+#endif
         /// @end
     }
     catch(xe_result_t& result)
@@ -1206,9 +1242,11 @@ __xedllexport xe_result_t __xecall
             if( nullptr == pUserData ) return XE_RESULT_ERROR_INVALID_PARAMETER;
         }
         /// @begin
-
+#if defined(XE_NULLDRV)
+        return XE_RESULT_SUCCESS;
+#else
         return L0::CommandGraph::fromHandle(hCommandGraph)->encodeDispatchHostFunction(pfnHostFunc, pUserData);
-
+#endif
         /// @end
     }
     catch(xe_result_t& result)

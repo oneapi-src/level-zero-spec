@@ -83,9 +83,11 @@ __xedllexport xe_result_t __xecall
             if( XE_COMMAND_LIST_DESC_VERSION < desc->version ) return XE_RESULT_ERROR_UNSUPPORTED;
         }
         /// @begin
-
+#if defined(XE_NULLDRV)
+        return XE_RESULT_SUCCESS;
+#else
         return L0::Device::fromHandle(hDevice)->createCommandList(desc, phCommandList);
-
+#endif
         /// @end
     }
     catch(xe_result_t& result)
@@ -148,9 +150,11 @@ __xedllexport xe_result_t __xecall
             if( nullptr == phCommandList ) return XE_RESULT_ERROR_INVALID_PARAMETER;
         }
         /// @begin
-
+#if defined(XE_NULLDRV)
+        return XE_RESULT_SUCCESS;
+#else
         return L0::Device::fromHandle(hDevice)->copyCommandList(hCommandList, phCommandList);
-
+#endif
         /// @end
     }
     catch(xe_result_t& result)
@@ -202,9 +206,11 @@ __xedllexport xe_result_t __xecall
             if( nullptr == hCommandList ) return XE_RESULT_ERROR_INVALID_PARAMETER;
         }
         /// @begin
-
+#if defined(XE_NULLDRV)
+        return XE_RESULT_SUCCESS;
+#else
         return L0::CommandList::fromHandle(hCommandList)->destroy();
-
+#endif
         /// @end
     }
     catch(xe_result_t& result)
@@ -254,9 +260,11 @@ __xedllexport xe_result_t __xecall
             if( nullptr == hCommandList ) return XE_RESULT_ERROR_INVALID_PARAMETER;
         }
         /// @begin
-
+#if defined(XE_NULLDRV)
+        return XE_RESULT_SUCCESS;
+#else
         return L0::CommandList::fromHandle(hCommandList)->close();
-
+#endif
         /// @end
     }
     catch(xe_result_t& result)
@@ -309,9 +317,11 @@ __xedllexport xe_result_t __xecall
             if( nullptr == hCommandList ) return XE_RESULT_ERROR_INVALID_PARAMETER;
         }
         /// @begin
-
+#if defined(XE_NULLDRV)
+        return XE_RESULT_SUCCESS;
+#else
         return L0::CommandList::fromHandle(hCommandList)->reset();
-
+#endif
         /// @end
     }
     catch(xe_result_t& result)
@@ -371,9 +381,11 @@ __xedllexport xe_result_t __xecall
             if( nullptr == hCommandList ) return XE_RESULT_ERROR_INVALID_PARAMETER;
         }
         /// @begin
-
+#if defined(XE_NULLDRV)
+        return XE_RESULT_SUCCESS;
+#else
         return L0::CommandList::fromHandle(hCommandList)->setParameter(parameter, value);
-
+#endif
         /// @end
     }
     catch(xe_result_t& result)
@@ -435,9 +447,11 @@ __xedllexport xe_result_t __xecall
             if( nullptr == value ) return XE_RESULT_ERROR_INVALID_PARAMETER;
         }
         /// @begin
-
+#if defined(XE_NULLDRV)
+        return XE_RESULT_SUCCESS;
+#else
         return L0::CommandList::fromHandle(hCommandList)->getParameter(parameter, value);
-
+#endif
         /// @end
     }
     catch(xe_result_t& result)
@@ -487,9 +501,11 @@ __xedllexport xe_result_t __xecall
             if( nullptr == hCommandList ) return XE_RESULT_ERROR_INVALID_PARAMETER;
         }
         /// @begin
-
+#if defined(XE_NULLDRV)
+        return XE_RESULT_SUCCESS;
+#else
         return L0::CommandList::fromHandle(hCommandList)->resetParameters();
-
+#endif
         /// @end
     }
     catch(xe_result_t& result)
@@ -544,9 +560,11 @@ __xedllexport xe_result_t __xecall
             if( nullptr == phCommandLists ) return XE_RESULT_ERROR_INVALID_PARAMETER;
         }
         /// @begin
-
+#if defined(XE_NULLDRV)
+        return XE_RESULT_SUCCESS;
+#else
         return L0::CommandList::fromHandle(hCommandList)->encodeCommandLists(numCommandLists, phCommandLists);
-
+#endif
         /// @end
     }
     catch(xe_result_t& result)
@@ -604,9 +622,11 @@ __xedllexport xe_result_t __xecall
             if( nullptr == pBlob ) return XE_RESULT_ERROR_INVALID_PARAMETER;
         }
         /// @begin
-
+#if defined(XE_NULLDRV)
+        return XE_RESULT_SUCCESS;
+#else
         return L0::CommandList::fromHandle(hCommandList)->encodeCommands(format, size, pBlob);
-
+#endif
         /// @end
     }
     catch(xe_result_t& result)

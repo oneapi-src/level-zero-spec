@@ -77,9 +77,11 @@ __xedllexport xe_result_t __xecall
             if( nullptr == ptr ) return XE_RESULT_ERROR_INVALID_PARAMETER;
         }
         /// @begin
-
+#if defined(XE_NULLDRV)
+        return XE_RESULT_SUCCESS;
+#else
         return L0::Device::fromHandle(hDevice)->makeMemoryResident(ptr, size);
-
+#endif
         /// @end
     }
     catch(xe_result_t& result)
@@ -135,9 +137,11 @@ __xedllexport xe_result_t __xecall
             if( nullptr == ptr ) return XE_RESULT_ERROR_INVALID_PARAMETER;
         }
         /// @begin
-
+#if defined(XE_NULLDRV)
+        return XE_RESULT_SUCCESS;
+#else
         return L0::Device::fromHandle(hDevice)->evictMemory(ptr, size);
-
+#endif
         /// @end
     }
     catch(xe_result_t& result)
@@ -191,9 +195,11 @@ __xedllexport xe_result_t __xecall
             if( nullptr == hImage ) return XE_RESULT_ERROR_INVALID_PARAMETER;
         }
         /// @begin
-
+#if defined(XE_NULLDRV)
+        return XE_RESULT_SUCCESS;
+#else
         return L0::Device::fromHandle(hDevice)->makeImageResident(hImage);
-
+#endif
         /// @end
     }
     catch(xe_result_t& result)
@@ -249,9 +255,11 @@ __xedllexport xe_result_t __xecall
             if( nullptr == hImage ) return XE_RESULT_ERROR_INVALID_PARAMETER;
         }
         /// @begin
-
+#if defined(XE_NULLDRV)
+        return XE_RESULT_SUCCESS;
+#else
         return L0::Device::fromHandle(hDevice)->evictImage(hImage);
-
+#endif
         /// @end
     }
     catch(xe_result_t& result)

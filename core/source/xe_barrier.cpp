@@ -77,9 +77,11 @@ __xedllexport xe_result_t __xecall
             if( nullptr == hCommandList ) return XE_RESULT_ERROR_INVALID_PARAMETER;
         }
         /// @begin
-
+#if defined(XE_NULLDRV)
+        return XE_RESULT_SUCCESS;
+#else
         return L0::CommandList::fromHandle(hCommandList)->encodeExecutionBarrier();
-
+#endif
         /// @end
     }
     catch(xe_result_t& result)

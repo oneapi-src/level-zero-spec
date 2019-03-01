@@ -87,9 +87,11 @@ __xedllexport xe_result_t __xecall
             if( XE_EVENT_DESC_VERSION < desc->version ) return XE_RESULT_ERROR_UNSUPPORTED;
         }
         /// @begin
-
+#if defined(XE_NULLDRV)
+        return XE_RESULT_SUCCESS;
+#else
         return L0::Device::fromHandle(hDevice)->createEvent(desc, phEvent);
-
+#endif
         /// @end
     }
     catch(xe_result_t& result)
@@ -152,9 +154,11 @@ __xedllexport xe_result_t __xecall
             if( XE_EVENT_DESC_VERSION < desc->version ) return XE_RESULT_ERROR_UNSUPPORTED;
         }
         /// @begin
-
+#if defined(XE_NULLDRV)
+        return XE_RESULT_SUCCESS;
+#else
         return L0::Device::fromHandle(hDevice)->placeEvent(desc, ptr, phEvent);
-
+#endif
         /// @end
     }
     catch(xe_result_t& result)
@@ -212,9 +216,11 @@ __xedllexport xe_result_t __xecall
             if( nullptr == hEvent ) return XE_RESULT_ERROR_INVALID_PARAMETER;
         }
         /// @begin
-
+#if defined(XE_NULLDRV)
+        return XE_RESULT_SUCCESS;
+#else
         return L0::Event::fromHandle(hEvent)->destroy();
-
+#endif
         /// @end
     }
     catch(xe_result_t& result)
@@ -273,9 +279,11 @@ __xedllexport xe_result_t __xecall
             if( nullptr == hEvent ) return XE_RESULT_ERROR_INVALID_PARAMETER;
         }
         /// @begin
-
+#if defined(XE_NULLDRV)
+        return XE_RESULT_SUCCESS;
+#else
         return L0::CommandList::fromHandle(hCommandList)->encodeSignalEvent(hEvent);
-
+#endif
         /// @end
     }
     catch(xe_result_t& result)
@@ -328,9 +336,11 @@ __xedllexport xe_result_t __xecall
             if( nullptr == hEvent ) return XE_RESULT_ERROR_INVALID_PARAMETER;
         }
         /// @begin
-
+#if defined(XE_NULLDRV)
+        return XE_RESULT_SUCCESS;
+#else
         return L0::CommandList::fromHandle(hCommandList)->encodeWaitOnEvent(hEvent);
-
+#endif
         /// @end
     }
     catch(xe_result_t& result)
@@ -384,9 +394,11 @@ __xedllexport xe_result_t __xecall
             if( nullptr == phEvents ) return XE_RESULT_ERROR_INVALID_PARAMETER;
         }
         /// @begin
-
+#if defined(XE_NULLDRV)
+        return XE_RESULT_SUCCESS;
+#else
         return L0::CommandList::fromHandle(hCommandList)->encodeSignalMultipleEvents(numEvents, phEvents);
-
+#endif
         /// @end
     }
     catch(xe_result_t& result)
@@ -441,9 +453,11 @@ __xedllexport xe_result_t __xecall
             if( nullptr == phEvents ) return XE_RESULT_ERROR_INVALID_PARAMETER;
         }
         /// @begin
-
+#if defined(XE_NULLDRV)
+        return XE_RESULT_SUCCESS;
+#else
         return L0::CommandList::fromHandle(hCommandList)->encodeWaitOnMultipleEvents(numEvents, phEvents);
-
+#endif
         /// @end
     }
     catch(xe_result_t& result)
@@ -496,9 +510,11 @@ __xedllexport xe_result_t __xecall
             if( nullptr == hEvent ) return XE_RESULT_ERROR_INVALID_PARAMETER;
         }
         /// @begin
-
-        return L0::hostSignalEvent(hEvent);
-
+#if defined(XE_NULLDRV)
+        return XE_RESULT_SUCCESS;
+#else
+        return L0::hostSignalEvent(hEvent->getHandle());
+#endif
         /// @end
     }
     catch(xe_result_t& result)
@@ -565,9 +581,11 @@ __xedllexport xe_result_t __xecall
             if( nullptr == hEvent ) return XE_RESULT_ERROR_INVALID_PARAMETER;
         }
         /// @begin
-
-        return L0::hostWaitOnEvent(hEvent, mode, delay, interval, timeout);
-
+#if defined(XE_NULLDRV)
+        return XE_RESULT_SUCCESS;
+#else
+        return L0::hostWaitOnEvent(hEvent->getHandle(), mode, delay, interval, timeout);
+#endif
         /// @end
     }
     catch(xe_result_t& result)
@@ -617,9 +635,11 @@ __xedllexport xe_result_t __xecall
             if( nullptr == phEvents ) return XE_RESULT_ERROR_INVALID_PARAMETER;
         }
         /// @begin
-
-        return L0::hostSignalMultipleEvents(numEvents, phEvents);
-
+#if defined(XE_NULLDRV)
+        return XE_RESULT_SUCCESS;
+#else
+        return L0::hostSignalMultipleEvents(numEvents, phEvents->getHandle());
+#endif
         /// @end
     }
     catch(xe_result_t& result)
@@ -686,9 +706,11 @@ __xedllexport xe_result_t __xecall
             if( nullptr == phEvents ) return XE_RESULT_ERROR_INVALID_PARAMETER;
         }
         /// @begin
-
-        return L0::hostWaitOnMultipleEvents(numEvents, phEvents, mode, delay, interval, timeout);
-
+#if defined(XE_NULLDRV)
+        return XE_RESULT_SUCCESS;
+#else
+        return L0::hostWaitOnMultipleEvents(numEvents, phEvents->getHandle(), mode, delay, interval, timeout);
+#endif
         /// @end
     }
     catch(xe_result_t& result)
@@ -745,9 +767,11 @@ __xedllexport xe_result_t __xecall
             if( nullptr == hEvent ) return XE_RESULT_ERROR_INVALID_PARAMETER;
         }
         /// @begin
-
+#if defined(XE_NULLDRV)
+        return XE_RESULT_SUCCESS;
+#else
         return L0::Event::fromHandle(hEvent)->queryStatus();
-
+#endif
         /// @end
     }
     catch(xe_result_t& result)
@@ -808,9 +832,11 @@ __xedllexport xe_result_t __xecall
             if( nullptr == pTime ) return XE_RESULT_ERROR_INVALID_PARAMETER;
         }
         /// @begin
-
-        return L0::eventQueryElapsedTime(hEventStart, hEventEnd, pTime);
-
+#if defined(XE_NULLDRV)
+        return XE_RESULT_SUCCESS;
+#else
+        return L0::eventQueryElapsedTime(hEventStart->getHandle(), hEventEnd->getHandle(), pTime);
+#endif
         /// @end
     }
     catch(xe_result_t& result)
@@ -869,9 +895,11 @@ __xedllexport xe_result_t __xecall
             if( nullptr == pReportData ) return XE_RESULT_ERROR_INVALID_PARAMETER;
         }
         /// @begin
-
-        return L0::eventQueryMetricsData(hEventStart, hEventEnd, reportSize, pReportData);
-
+#if defined(XE_NULLDRV)
+        return XE_RESULT_SUCCESS;
+#else
+        return L0::eventQueryMetricsData(hEventStart->getHandle(), hEventEnd->getHandle(), reportSize, pReportData);
+#endif
         /// @end
     }
     catch(xe_result_t& result)
@@ -928,9 +956,11 @@ __xedllexport xe_result_t __xecall
             if( nullptr == hEvent ) return XE_RESULT_ERROR_INVALID_PARAMETER;
         }
         /// @begin
-
+#if defined(XE_NULLDRV)
+        return XE_RESULT_SUCCESS;
+#else
         return L0::CommandList::fromHandle(hCommandList)->encodeEventReset(hEvent);
-
+#endif
         /// @end
     }
     catch(xe_result_t& result)
@@ -983,9 +1013,11 @@ __xedllexport xe_result_t __xecall
             if( nullptr == hEvent ) return XE_RESULT_ERROR_INVALID_PARAMETER;
         }
         /// @begin
-
+#if defined(XE_NULLDRV)
+        return XE_RESULT_SUCCESS;
+#else
         return L0::Event::fromHandle(hEvent)->reset();
-
+#endif
         /// @end
     }
     catch(xe_result_t& result)

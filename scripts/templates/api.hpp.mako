@@ -87,7 +87,7 @@ namespace ${x}
         %endfor
 
     };
-    ## CLASS ###################################################################
+    ## CLASS ######################################################################
     %elif re.match(r"class", obj['type']):
     class ${th.subx(None, obj['name'])}
     {
@@ -97,13 +97,26 @@ namespace ${x}
         %endfor
 
     public:
+        %for line in th.make_member_function_lines(x, obj):
+        ${line}
+        %endfor
+
         %for t in th.filter_items(th.extract_objs(specs, "typedef"), 'class', obj['name']):
+%if 'condition' in t:
+#if ${th.subx(x,t['condition'])}
+%endif
         ///////////////////////////////////////////////////////////////////////////////
         /// @brief C++ version for ::${th.subx(x, t['name'])}
         using ${th.subx(None, t['name'])} = ::${th.subx(x, t['name'])};
+%if 'condition' in t:
+#endif // ${th.subx(x,t['condition'])}
+%endif
 
         %endfor
         %for e in th.filter_items(th.extract_objs(specs, "enum"), 'class', obj['name']):
+%if 'condition' in e:
+#if ${th.subx(x,e['condition'])}
+%endif
         ///////////////////////////////////////////////////////////////////////////////
         /// @brief C++ version for ::${th.subx(x, e['name'])}
         enum class ${th.subx(None, e['name'])}
@@ -113,9 +126,15 @@ namespace ${x}
             %endfor
 
         };
+%if 'condition' in e:
+#endif // ${th.subx(x,e['condition'])}
+%endif
 
         %endfor
         %for s in th.filter_items(th.extract_objs(specs, "struct"), 'class', obj['name']):
+%if 'condition' in s:
+#if ${th.subx(x,s['condition'])}
+%endif
         ///////////////////////////////////////////////////////////////////////////////
         /// @brief C++ version for ::${th.subx(x, s['name'])}
         struct ${th.subx(None, s['name'])}
@@ -125,20 +144,25 @@ namespace ${x}
             %endfor
 
         };
+%if 'condition' in s:
+#endif // ${th.subx(x,s['condition'])}
+%endif
 
         %endfor
         %for f in th.filter_items(th.extract_objs(specs, "function"), 'class', obj['name']):
+%if 'condition' in f:
+#if ${th.subx(x,f['condition'])}
+%endif
         ///////////////////////////////////////////////////////////////////////////////
         /// @brief C++ wrapper for ::${th.make_func_name(x, f, obj['name'])}
         inline void ${th.subx(None, f['name'])}(
             %for line in th.make_param_lines(None, f, 'this'):
             ${line}
             %endfor
-            )
-        {
-            auto result = ::${th.make_func_name(x, f, obj['name'])}( ${th.make_param_call_str("handle", None, f, 'this')} );
-            // if( ::${X}_RESULT_SUCCESS != result ) throw exception(result, "${x}::${th.subx(None, obj['name'])}::${th.subx(None, f['name'])}");
-        }
+            );
+%if 'condition' in f:
+#endif // ${th.subx(x,f['condition'])}
+%endif
 
         %endfor
     };
