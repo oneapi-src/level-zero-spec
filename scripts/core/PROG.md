@@ -294,10 +294,9 @@ ${"##"} Memory Barriers
 - Memory barriers are implicitly added by the driver prior to synchronization primitives.
 
 ${"#"} <a name="sp">Synchronization Primitives</a>
-There are three types of synchronization primitives:
+There are two types of synchronization primitives:
 1. [**Fences**](#fnc) - used to communicate to the host that command queue execution has completed.
 2. [**Events**](#evnt) - used as fine-grain host-to-device, device-to-host or device-to-device waits and signals within a command list.
-3. [**Semaphores**](#sema) - used for fine-grain control of command lists execution across multiple, simultaneous command queues within a device.
 
 The following diagram illustrats the relationship of capabilities of these types of synchronization primitives:  
 ![Graph](../images/core_sync.png?raw=true)  
@@ -400,48 +399,6 @@ The following sample code demonstrates a sequence for creation and submission of
 
     // Signal the device
     ${x}HostSignalEvent(hEvent);
-    ...
-```
-
-${"##"} <a name="sema">Semaphores</a>
-A semaphore is used for fine-grain control of command lists execution across multiple, simultaneous command queues within a device.
-- A semaphore can only be signaled and waited upon from within a device's command lists.
-- A semaphore has a 64-bit value, initialized to zero and changed when signaled.
-- A semaphore wait can test its value for less-than, less-than-or-equal, equal, not-equal, greater-than-or-equal, or greater-than another value.
-- A semaphore can be encoded into any command list from the same device.
-- A semaphore can be signaled and waited upon in the same command list.
-- A semaphore can be encoded into multiple command lists simultaneously.
-- A semaphore cannot be shared across processes.
-- A semaphore imposes an implicit execution barrier; therefore should be used sparingly to avoid device underutilization.
-- There are no protections against semaphores causing deadlocks.
-
-The primary usage model(s) for semaphores is:
-- Low-latency device-side scheduling of programs executing concurrently across multiple command queues.
-
-The following diagram illustrates an example of semaphores:  
-![Semaphore](../images/core_semaphore.png?raw=true)  
-@image latex core_semaphore.png
-
-The following sample code demonstrates a sequence for creation and submission of a semaphore:
-```c
-    // Create semaphore
-    ${x}_semaphore_desc_t semaphoreDesc = {
-        ${X}_SEMAPHORE_DESC_VERSION,
-        ${X}_SEMAPHORE_FLAG_NONE
-    };
-    ${x}_semaphore_handle_t hSemaphore;
-    ${x}DeviceCreateSemaphore(hDevice, &semaphoreDesc, &hSemaphore);
-
-    // Encode a wait on an semaphore into a command list
-    ${x}CommandListEncodeSemaphoreWait(hCommandList0, hSemaphore,
-        ${X}_SEMAPHORE_WAIT_OPERATION_GREATER_OR_EQUAL_TO, 1);
-
-    // Encode a signal of a semaphore into another command list
-    ${x}CommandListEncodeSemaphoreSignal(hCommandList1, hSemaphore, 1);
-
-    // Enqueue the command lists into the parallel command queues
-    ${x}CommandQueueEnqueueCommandLists(hCommandQueue0, 1, &hCommandList0, nullptr);
-    ${x}CommandQueueEnqueueCommandLists(hCommandQueue1, 1, &hCommandList1, nullptr);
     ...
 ```
 

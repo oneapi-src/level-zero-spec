@@ -214,14 +214,6 @@ namespace xe
         };
 
         ///////////////////////////////////////////////////////////////////////////////
-        /// @brief C++ version for ::xe_semaphore_flag_t
-        enum class semaphore_flag_t
-        {
-            NONE = 0,                                       ///< default behavior
-
-        };
-
-        ///////////////////////////////////////////////////////////////////////////////
         /// @brief C++ version for ::xe_command_graph_desc_t
         struct command_graph_desc_t
         {
@@ -387,15 +379,6 @@ namespace xe
                                                             ///< coordinates are handled.
             sampler_filtering_mode_t filterMode = sampler_filtering_mode_t::SAMPLER_FILTER_NEAREST; ///< [in] Sampler filter mode to determine how samples are filtered.
             bool isNormalized = true;                       ///< [in] Are coordinates normalized [0, 1] or not.
-
-        };
-
-        ///////////////////////////////////////////////////////////////////////////////
-        /// @brief C++ version for ::xe_semaphore_desc_t
-        struct semaphore_desc_t
-        {
-            uint32_t version = XE_SEMAPHORE_DESC_VERSION;   ///< [in] ::SEMAPHORE_DESC_VERSION
-            semaphore_flag_t flags = semaphore_flag_t::NONE;///< [in] creation flags
 
         };
 
@@ -568,13 +551,6 @@ namespace xe
         inline void CreateSampler(
             const sampler_desc_t* pDesc,                    ///< [in] pointer to sampler descriptor
             sampler_handle_t* phSampler                     ///< [out] handle of the sampler
-            );
-
-        ///////////////////////////////////////////////////////////////////////////////
-        /// @brief C++ wrapper for ::xeDeviceCreateSemaphore
-        inline void CreateSemaphore(
-            const semaphore_desc_t* desc,                   ///< [in] pointer to semaphore descriptor
-            semaphore_handle_t* phSemaphore                 ///< [out] pointer to handle of semaphore object created
             );
 
     };

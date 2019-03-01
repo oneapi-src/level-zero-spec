@@ -305,17 +305,6 @@ namespace xe
         // if( ::XE_RESULT_SUCCESS != result ) throw exception(result, "xe::Device::CreateSampler");
     }
 
-    ///////////////////////////////////////////////////////////////////////////////
-    /// @brief C++ wrapper for ::xeDeviceCreateSemaphore
-    inline void Device::CreateSemaphore(
-        const semaphore_desc_t* desc,                   ///< [in] pointer to semaphore descriptor
-        semaphore_handle_t* phSemaphore                 ///< [out] pointer to handle of semaphore object created
-        )
-    {
-        // auto result = ::xeDeviceCreateSemaphore( handle, desc, phSemaphore->getHandle() );
-        // if( ::XE_RESULT_SUCCESS != result ) throw exception(result, "xe::Device::CreateSemaphore");
-    }
-
 } // namespace xe
 #endif // defined(__cplusplus)
 #endif // _XE_DEVICE_INL

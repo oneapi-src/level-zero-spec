@@ -289,29 +289,6 @@ namespace xe
         // if( ::XE_RESULT_SUCCESS != result ) throw exception(result, "xe::CommandList::EncodeDispatchHostFunction");
     }
 
-    ///////////////////////////////////////////////////////////////////////////////
-    /// @brief C++ wrapper for ::xeCommandListEncodeSemaphoreSignal
-    inline void CommandList::EncodeSemaphoreSignal(
-        semaphore_handle_t hSemaphore,                  ///< [in] handle of the semaphore
-        semaphore_value_t value                         ///< [in] the value to write on signal
-        )
-    {
-        // auto result = ::xeCommandListEncodeSemaphoreSignal( handle, hSemaphore->getHandle(), value );
-        // if( ::XE_RESULT_SUCCESS != result ) throw exception(result, "xe::CommandList::EncodeSemaphoreSignal");
-    }
-
-    ///////////////////////////////////////////////////////////////////////////////
-    /// @brief C++ wrapper for ::xeCommandListEncodeSemaphoreWait
-    inline void CommandList::EncodeSemaphoreWait(
-        semaphore_handle_t hSemaphore,                  ///< [in] handle of the semaphore
-        semaphore_wait_operation_t operation,           ///< [in] wait operation type
-        semaphore_value_t value                         ///< [in] the value to wait upon
-        )
-    {
-        // auto result = ::xeCommandListEncodeSemaphoreWait( handle, hSemaphore->getHandle(), operation, value );
-        // if( ::XE_RESULT_SUCCESS != result ) throw exception(result, "xe::CommandList::EncodeSemaphoreWait");
-    }
-
 } // namespace xe
 #endif // defined(__cplusplus)
 #endif // _XE_CMDLIST_INL

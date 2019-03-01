@@ -157,10 +157,6 @@ typedef struct _xe_sampler_handle_t *xe_sampler_handle_t;
 typedef struct _xe_ipc_mem_handle_t *xe_ipc_mem_handle_t;
 
 ///////////////////////////////////////////////////////////////////////////////
-/// @brief Semaphore value type
-typedef uint64_t xe_semaphore_value_t;
-
-///////////////////////////////////////////////////////////////////////////////
 /// @brief Generic macro for enumerator bit masks
 #define XE_BIT( _i )  ( 1 << _i )
 

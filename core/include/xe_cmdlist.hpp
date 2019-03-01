@@ -88,19 +88,6 @@ namespace xe
         };
 
         ///////////////////////////////////////////////////////////////////////////////
-        /// @brief C++ version for ::xe_semaphore_wait_operation_t
-        enum class semaphore_wait_operation_t
-        {
-            EQUAL_TO = 1,                                   ///< semaphore value == wait value
-            NOT_EQUAL_TO,                                   ///< semaphore value != wait value
-            GREATER_THAN,                                   ///< semaphore value > wait value
-            GREATER_OR_EQUAL_TO,                            ///< semaphore value >= wait value
-            LESS_THAN,                                      ///< semaphore value < wait value
-            LESS_OR_EQUAL_TO,                               ///< semaphore value <= wait value
-
-        };
-
-        ///////////////////////////////////////////////////////////////////////////////
         /// @brief C++ version for ::xe_image_region_t
         struct image_region_t
         {
@@ -287,21 +274,6 @@ namespace xe
         inline void EncodeDispatchHostFunction(
             host_pfn_t pfnHostFunc,                         ///< [in] pointer to host function.
             void* pUserData                                 ///< [in] pointer to user data to pass to host function.
-            );
-
-        ///////////////////////////////////////////////////////////////////////////////
-        /// @brief C++ wrapper for ::xeCommandListEncodeSemaphoreSignal
-        inline void EncodeSemaphoreSignal(
-            semaphore_handle_t hSemaphore,                  ///< [in] handle of the semaphore
-            semaphore_value_t value                         ///< [in] the value to write on signal
-            );
-
-        ///////////////////////////////////////////////////////////////////////////////
-        /// @brief C++ wrapper for ::xeCommandListEncodeSemaphoreWait
-        inline void EncodeSemaphoreWait(
-            semaphore_handle_t hSemaphore,                  ///< [in] handle of the semaphore
-            semaphore_wait_operation_t operation,           ///< [in] wait operation type
-            semaphore_value_t value                         ///< [in] the value to wait upon
             );
 
     };
