@@ -122,6 +122,11 @@ class: $xFunction
 name: "$x_function_handle_t"
 --- #--------------------------------------------------------------------------
 type: handle
+desc: "Handle of driver's sampler object"
+class: $xSampler
+name: "$x_sampler_handle_t"
+--- #--------------------------------------------------------------------------
+type: handle
 desc: "IPC handle to a memory allocation"
 name: "$x_ipc_mem_handle_t"
 --- #--------------------------------------------------------------------------

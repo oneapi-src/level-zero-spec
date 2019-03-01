@@ -71,14 +71,14 @@
 ///     - ::XE_RESULT_ERROR_DEVICE_LOST
 ///     - ::XE_RESULT_ERROR_INVALID_PARAMETER
 ///         + nullptr == hDevice
-///         + nullptr == desc
+///         + nullptr == pDesc
 ///         + nullptr == phModule
-///         + invalid desc->format
-///         + nullptr == desc->pInputModule
-///         + nullptr == desc->phModule
-///         + 0 == desc->inputSize
+///         + invalid pDesc->format
+///         + nullptr == pDesc->pInputModule
+///         + nullptr == pDesc->phModule
+///         + 0 == pDesc->inputSize
 ///     - ::XE_RESULT_ERROR_UNSUPPORTED
-///         + ::XE_MODULE_DESC_VERSION < desc->version
+///         + ::XE_MODULE_DESC_VERSION < pDesc->version
 ///     - ::XE_RESULT_ERROR_OUT_OF_HOST_MEMORY
 ///     - ::XE_RESULT_ERROR_OUT_OF_DEVICE_MEMORY
 ///     - ::XE_RESULT_ERROR_MODULE_BUILD_FAILURE
@@ -89,7 +89,7 @@
 __xedllexport xe_result_t __xecall
   xeDeviceCreateModule(
     xe_device_handle_t hDevice,                     ///< [in] handle of the device
-    const xe_module_desc_t* desc,                   ///< [in] pointer to module descriptor
+    const xe_module_desc_t* pDesc,                  ///< [in] pointer to module descriptor
     xe_module_handle_t* phModule,                   ///< [out] pointer to handle of module object created
     xe_module_build_log_handle_t* phBuildLog        ///< [out][optional] pointer to handle of module's build log.
     )
@@ -101,13 +101,13 @@ __xedllexport xe_result_t __xecall
             // if( nullptr == driver ) return XE_RESULT_ERROR_UNINITIALIZED;
             // Check parameters
             if( nullptr == hDevice ) return XE_RESULT_ERROR_INVALID_PARAMETER;
-            if( nullptr == desc ) return XE_RESULT_ERROR_INVALID_PARAMETER;
+            if( nullptr == pDesc ) return XE_RESULT_ERROR_INVALID_PARAMETER;
             if( nullptr == phModule ) return XE_RESULT_ERROR_INVALID_PARAMETER;
-            if( XE_MODULE_DESC_VERSION < desc->version ) return XE_RESULT_ERROR_UNSUPPORTED;
+            if( XE_MODULE_DESC_VERSION < pDesc->version ) return XE_RESULT_ERROR_UNSUPPORTED;
         }
         /// @begin
 
-        return L0::Device::fromHandle(hDevice)->createModule(desc, phModule, phBuildLog);
+        return L0::Device::fromHandle(hDevice)->createModule(pDesc, phModule, phBuildLog);
 
         /// @end
     }
@@ -384,19 +384,19 @@ __xedllexport xe_result_t __xecall
 ///     - ::XE_RESULT_ERROR_DEVICE_LOST
 ///     - ::XE_RESULT_ERROR_INVALID_PARAMETER
 ///         + nullptr == hModule
-///         + nullptr == desc
+///         + nullptr == pDesc
 ///         + nullptr == phFunction
-///         + nullptr == desc->pFunctionName
-///         + invalid value for desc->pFunctionName
+///         + nullptr == pDesc->pFunctionName
+///         + invalid value for pDesc->pFunctionName
 ///     - ::XE_RESULT_ERROR_UNSUPPORTED
-///         + ::XE_FUNCTION_DESC_VERSION < desc->version
+///         + ::XE_FUNCTION_DESC_VERSION < pDesc->version
 ///
 /// @hash {db1f3dd910ba87cc5f4943397310ef13073b227ef8aad92327a8183e14461837}
 ///
 __xedllexport xe_result_t __xecall
   xeModuleCreateFunction(
     xe_module_handle_t hModule,                     ///< [in] handle of the module
-    const xe_function_desc_t* desc,                 ///< [in] pointer to function descriptor
+    const xe_function_desc_t* pDesc,                ///< [in] pointer to function descriptor
     xe_function_handle_t* phFunction                ///< [out] handle of the Function object
     )
 {
@@ -407,13 +407,13 @@ __xedllexport xe_result_t __xecall
             // if( nullptr == driver ) return XE_RESULT_ERROR_UNINITIALIZED;
             // Check parameters
             if( nullptr == hModule ) return XE_RESULT_ERROR_INVALID_PARAMETER;
-            if( nullptr == desc ) return XE_RESULT_ERROR_INVALID_PARAMETER;
+            if( nullptr == pDesc ) return XE_RESULT_ERROR_INVALID_PARAMETER;
             if( nullptr == phFunction ) return XE_RESULT_ERROR_INVALID_PARAMETER;
-            if( XE_FUNCTION_DESC_VERSION < desc->version ) return XE_RESULT_ERROR_UNSUPPORTED;
+            if( XE_FUNCTION_DESC_VERSION < pDesc->version ) return XE_RESULT_ERROR_UNSUPPORTED;
         }
         /// @begin
 
-        return L0::Module::fromHandle(hModule)->createFunction(desc, phFunction);
+        return L0::Module::fromHandle(hModule)->createFunction(pDesc, phFunction);
 
         /// @end
     }
