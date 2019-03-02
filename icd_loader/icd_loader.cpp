@@ -24,7 +24,7 @@
 * @file icd_loader.cpp
 *
 * @cond DEV
-* DO NOT EDIT: generated from /scripts/<type>/*.yml
+* DO NOT EDIT: generated from /scripts/templates/icd_loader.cpp.mako
 * @endcond
 *
 ******************************************************************************/
