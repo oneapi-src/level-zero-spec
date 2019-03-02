@@ -112,7 +112,7 @@ namespace xe
         command_list_handle_t* phCommandLists           ///< [in] list of handles of the command lists to encode for execution
         )
     {
-        // auto result = ::xeCommandListEncodeCommandLists( handle, numCommandLists, phCommandLists->getHandle() );
+        // auto result = ::xeCommandListEncodeCommandLists( handle, numCommandLists, phCommandLists );
         // if( ::XE_RESULT_SUCCESS != result ) throw exception(result, "xe::CommandList::EncodeCommandLists");
     }
 
@@ -159,7 +159,7 @@ namespace xe
         image_handle_t hSrcImage                        ///< [in] handle of source image to copy from
         )
     {
-        // auto result = ::xeCommandListEncodeImageCopy( handle, hDstImage->getHandle(), hSrcImage->getHandle() );
+        // auto result = ::xeCommandListEncodeImageCopy( handle, hDstImage, hSrcImage );
         // if( ::XE_RESULT_SUCCESS != result ) throw exception(result, "xe::CommandList::EncodeImageCopy");
     }
 
@@ -172,7 +172,7 @@ namespace xe
         image_region_t* pSrcRegion                      ///< [in][optional] source region descriptor
         )
     {
-        // auto result = ::xeCommandListEncodeImageCopyRegion( handle, hDstImage->getHandle(), pDstRegion, hSrcImage->getHandle(), pSrcRegion );
+        // auto result = ::xeCommandListEncodeImageCopyRegion( handle, hDstImage, pDstRegion, hSrcImage, pSrcRegion );
         // if( ::XE_RESULT_SUCCESS != result ) throw exception(result, "xe::CommandList::EncodeImageCopyRegion");
     }
 
@@ -184,7 +184,7 @@ namespace xe
         image_region_t* pSrcRegion                      ///< [in][optional] source region descriptor
         )
     {
-        // auto result = ::xeCommandListEncodeImageCopyToMemory( handle, dstptr, hSrcImage->getHandle(), pSrcRegion );
+        // auto result = ::xeCommandListEncodeImageCopyToMemory( handle, dstptr, hSrcImage, pSrcRegion );
         // if( ::XE_RESULT_SUCCESS != result ) throw exception(result, "xe::CommandList::EncodeImageCopyToMemory");
     }
 
@@ -196,7 +196,7 @@ namespace xe
         const void* srcptr                              ///< [in] pointer to source memory to copy from
         )
     {
-        // auto result = ::xeCommandListEncodeImageCopyFromMemory( handle, hDstImage->getHandle(), pDstRegion, srcptr );
+        // auto result = ::xeCommandListEncodeImageCopyFromMemory( handle, hDstImage, pDstRegion, srcptr );
         // if( ::XE_RESULT_SUCCESS != result ) throw exception(result, "xe::CommandList::EncodeImageCopyFromMemory");
     }
 
@@ -220,7 +220,7 @@ namespace xe
         memory_advice_t advice                          ///< [in] Memory advice for the memory range
         )
     {
-        // auto result = ::xeCommandListEncodeMemAdvise( handle, hDevice->getHandle(), ptr, size, advice );
+        // auto result = ::xeCommandListEncodeMemAdvise( handle, hDevice, ptr, size, advice );
         // if( ::XE_RESULT_SUCCESS != result ) throw exception(result, "xe::CommandList::EncodeMemAdvise");
     }
 
@@ -230,7 +230,7 @@ namespace xe
         event_handle_t hEvent                           ///< [in] handle of the event
         )
     {
-        // auto result = ::xeCommandListEncodeSignalEvent( handle, hEvent->getHandle() );
+        // auto result = ::xeCommandListEncodeSignalEvent( handle, hEvent );
         // if( ::XE_RESULT_SUCCESS != result ) throw exception(result, "xe::CommandList::EncodeSignalEvent");
     }
 
@@ -240,7 +240,7 @@ namespace xe
         event_handle_t hEvent                           ///< [in] handle of the event
         )
     {
-        // auto result = ::xeCommandListEncodeWaitOnEvent( handle, hEvent->getHandle() );
+        // auto result = ::xeCommandListEncodeWaitOnEvent( handle, hEvent );
         // if( ::XE_RESULT_SUCCESS != result ) throw exception(result, "xe::CommandList::EncodeWaitOnEvent");
     }
 
@@ -251,7 +251,7 @@ namespace xe
         event_handle_t* phEvents                        ///< [in] pointer to array of handles of the events
         )
     {
-        // auto result = ::xeCommandListEncodeSignalMultipleEvents( handle, numEvents, phEvents->getHandle() );
+        // auto result = ::xeCommandListEncodeSignalMultipleEvents( handle, numEvents, phEvents );
         // if( ::XE_RESULT_SUCCESS != result ) throw exception(result, "xe::CommandList::EncodeSignalMultipleEvents");
     }
 
@@ -262,7 +262,7 @@ namespace xe
         event_handle_t* phEvents                        ///< [in] pointer to array of handles of the events
         )
     {
-        // auto result = ::xeCommandListEncodeWaitOnMultipleEvents( handle, numEvents, phEvents->getHandle() );
+        // auto result = ::xeCommandListEncodeWaitOnMultipleEvents( handle, numEvents, phEvents );
         // if( ::XE_RESULT_SUCCESS != result ) throw exception(result, "xe::CommandList::EncodeWaitOnMultipleEvents");
     }
 
@@ -272,7 +272,7 @@ namespace xe
         event_handle_t hEvent                           ///< [in] handle of the event
         )
     {
-        // auto result = ::xeCommandListEncodeEventReset( handle, hEvent->getHandle() );
+        // auto result = ::xeCommandListEncodeEventReset( handle, hEvent );
         // if( ::XE_RESULT_SUCCESS != result ) throw exception(result, "xe::CommandList::EncodeEventReset");
     }
 
@@ -284,7 +284,7 @@ namespace xe
         event_handle_t hEvent                           ///< [in][optional] handle of the event to signal on completion
         )
     {
-        // auto result = ::xeCommandListEncodeDispatchFunction( handle, hFunction->getHandle(), pDispatchFuncArgs, hEvent->getHandle() );
+        // auto result = ::xeCommandListEncodeDispatchFunction( handle, hFunction, pDispatchFuncArgs, hEvent );
         // if( ::XE_RESULT_SUCCESS != result ) throw exception(result, "xe::CommandList::EncodeDispatchFunction");
     }
 
@@ -296,7 +296,7 @@ namespace xe
         event_handle_t hEvent                           ///< [in][optional] handle of the event to signal on completion
         )
     {
-        // auto result = ::xeCommandListEncodeDispatchFunctionIndirect( handle, hFunction->getHandle(), pDispatchArgumentsBuffer, hEvent->getHandle() );
+        // auto result = ::xeCommandListEncodeDispatchFunctionIndirect( handle, hFunction, pDispatchArgumentsBuffer, hEvent );
         // if( ::XE_RESULT_SUCCESS != result ) throw exception(result, "xe::CommandList::EncodeDispatchFunctionIndirect");
     }
 
@@ -318,7 +318,7 @@ namespace xe
         semaphore_value_t value                         ///< [in] the value to write on signal
         )
     {
-        // auto result = ::xeCommandListEncodeSemaphoreSignal( handle, hSemaphore->getHandle(), value );
+        // auto result = ::xeCommandListEncodeSemaphoreSignal( handle, hSemaphore, value );
         // if( ::XE_RESULT_SUCCESS != result ) throw exception(result, "xe::CommandList::EncodeSemaphoreSignal");
     }
 
@@ -330,7 +330,7 @@ namespace xe
         semaphore_value_t value                         ///< [in] the value to wait upon
         )
     {
-        // auto result = ::xeCommandListEncodeSemaphoreWait( handle, hSemaphore->getHandle(), operation, value );
+        // auto result = ::xeCommandListEncodeSemaphoreWait( handle, hSemaphore, operation, value );
         // if( ::XE_RESULT_SUCCESS != result ) throw exception(result, "xe::CommandList::EncodeSemaphoreWait");
     }
 

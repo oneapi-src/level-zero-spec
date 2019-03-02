@@ -279,7 +279,7 @@ xe_result_t CommandListCoreFamily<gfxCoreFamily>::encodeExecutionBarrier() {
 template <uint32_t gfxCoreFamily>
 xe_result_t CommandListCoreFamily<gfxCoreFamily>::encodeImageCopyFromMemory(xe_image_handle_t hDstImage,
                                                                             xe_image_region_t *pDstRegion,
-                                                                            void *srcptr) {
+                                                                            const void *srcptr) {
     return XE_RESULT_ERROR_UNSUPPORTED;
 }
 

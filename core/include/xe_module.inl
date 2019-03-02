@@ -65,7 +65,7 @@ namespace xe
         function_handle_t* phFunction                   ///< [out] handle of the Function object
         )
     {
-        // auto result = ::xeModuleCreateFunction( handle, pDesc, phFunction->getHandle() );
+        // auto result = ::xeModuleCreateFunction( handle, pDesc, phFunction );
         // if( ::XE_RESULT_SUCCESS != result ) throw exception(result, "xe::Module::CreateFunction");
     }
 

@@ -75,7 +75,7 @@ __xedllexport xe_result_t __xecall
 #if defined(XE_NULLDRV)
         return XE_RESULT_SUCCESS;
 #else
-        return L0::createMemAllocator(phMemAllocHandle->getHandle());
+        return L0::createMemAllocator(phMemAllocHandle);
 #endif
         /// @end
     }
@@ -132,7 +132,7 @@ __xedllexport xe_result_t __xecall
 #if defined(XE_NULLDRV)
         return XE_RESULT_SUCCESS;
 #else
-        return L0::memAllocatorDestroy(hMemAllocHandle->getHandle());
+        return L0::memAllocatorDestroy(hMemAllocHandle);
 #endif
         /// @end
     }
@@ -169,6 +169,8 @@ __xedllexport xe_result_t __xecall
 ///     - ::XE_RESULT_SUCCESS
 ///     - ::XE_RESULT_ERROR_UNINITIALIZED
 ///     - ::XE_RESULT_ERROR_DEVICE_LOST
+///     - ::XE_RESULT_ERROR_OUT_OF_DEVICE_MEMORY
+///     - ::XE_RESULT_ERROR_OUT_OF_HOST_MEMORY
 ///     - ::XE_RESULT_ERROR_INVALID_PARAMETER
 ///         + nullptr == hMemAllocHandle
 ///         + nullptr == hDevice
@@ -176,8 +178,6 @@ __xedllexport xe_result_t __xecall
 ///         + unsupported allocation size
 ///         + unsupported alignment
 ///     - ::XE_RESULT_ERROR_UNSUPPORTED
-///     - ::XE_RESULT_ERROR_OUT_OF_HOST_MEMORY
-///     - ::XE_RESULT_ERROR_OUT_OF_DEVICE_MEMORY
 ///
 /// @hash {8e4c3077c3008f398c65e52226a9ed7ab31d689ef7666070143cd630c14449a8}
 ///
@@ -206,7 +206,7 @@ __xedllexport xe_result_t __xecall
 #if defined(XE_NULLDRV)
         return XE_RESULT_SUCCESS;
 #else
-        return L0::sharedMemAlloc(hMemAllocHandle->getHandle(), hDevice->getHandle(), device_flags, host_flags, size, alignment, ptr);
+        return L0::sharedMemAlloc(hMemAllocHandle, hDevice, device_flags, host_flags, size, alignment, ptr);
 #endif
         /// @end
     }
@@ -243,6 +243,8 @@ __xedllexport xe_result_t __xecall
 ///     - ::XE_RESULT_SUCCESS
 ///     - ::XE_RESULT_ERROR_UNINITIALIZED
 ///     - ::XE_RESULT_ERROR_DEVICE_LOST
+///     - ::XE_RESULT_ERROR_OUT_OF_DEVICE_MEMORY
+///     - ::XE_RESULT_ERROR_OUT_OF_HOST_MEMORY
 ///     - ::XE_RESULT_ERROR_INVALID_PARAMETER
 ///         + nullptr == hMemAllocHandle
 ///         + nullptr == hDevice
@@ -250,8 +252,6 @@ __xedllexport xe_result_t __xecall
 ///         + unsupported allocation size
 ///         + unsupported alignment
 ///     - ::XE_RESULT_ERROR_UNSUPPORTED
-///     - ::XE_RESULT_ERROR_OUT_OF_HOST_MEMORY
-///     - ::XE_RESULT_ERROR_OUT_OF_DEVICE_MEMORY
 ///
 /// @hash {0c3d522d0293cd5605447882683b2164912ede21c5b24b68e2b486f7a7a32bdc}
 ///
@@ -279,7 +279,7 @@ __xedllexport xe_result_t __xecall
 #if defined(XE_NULLDRV)
         return XE_RESULT_SUCCESS;
 #else
-        return L0::memAlloc(hMemAllocHandle->getHandle(), hDevice->getHandle(), flags, size, alignment, ptr);
+        return L0::memAlloc(hMemAllocHandle, hDevice, flags, size, alignment, ptr);
 #endif
         /// @end
     }
@@ -317,14 +317,14 @@ __xedllexport xe_result_t __xecall
 ///     - ::XE_RESULT_SUCCESS
 ///     - ::XE_RESULT_ERROR_UNINITIALIZED
 ///     - ::XE_RESULT_ERROR_DEVICE_LOST
+///     - ::XE_RESULT_ERROR_OUT_OF_DEVICE_MEMORY
+///     - ::XE_RESULT_ERROR_OUT_OF_HOST_MEMORY
 ///     - ::XE_RESULT_ERROR_INVALID_PARAMETER
 ///         + nullptr == hMemAllocHandle
 ///         + nullptr == ptr
 ///         + unsupported allocation size
 ///         + unsupported alignment
 ///     - ::XE_RESULT_ERROR_UNSUPPORTED
-///     - ::XE_RESULT_ERROR_OUT_OF_HOST_MEMORY
-///     - ::XE_RESULT_ERROR_OUT_OF_DEVICE_MEMORY
 ///
 /// @hash {f2ceab5a53b2c88ef4d17b001d09cf385937bfef71f155e4844751ac93f1bf4f}
 ///
@@ -350,7 +350,7 @@ __xedllexport xe_result_t __xecall
 #if defined(XE_NULLDRV)
         return XE_RESULT_SUCCESS;
 #else
-        return L0::hostMemAlloc(hMemAllocHandle->getHandle(), flags, size, alignment, ptr);
+        return L0::hostMemAlloc(hMemAllocHandle, flags, size, alignment, ptr);
 #endif
         /// @end
     }
@@ -414,7 +414,7 @@ __xedllexport xe_result_t __xecall
 #if defined(XE_NULLDRV)
         return XE_RESULT_SUCCESS;
 #else
-        return L0::memFree(hMemAllocHandle->getHandle(), ptr);
+        return L0::memFree(hMemAllocHandle, ptr);
 #endif
         /// @end
     }
@@ -479,7 +479,7 @@ __xedllexport xe_result_t __xecall
 #if defined(XE_NULLDRV)
         return XE_RESULT_SUCCESS;
 #else
-        return L0::memGetProperty(hMemAllocHandle->getHandle(), ptr, property, pValue);
+        return L0::memGetProperty(hMemAllocHandle, ptr, property, pValue);
 #endif
         /// @end
     }
@@ -545,7 +545,7 @@ __xedllexport xe_result_t __xecall
 #if defined(XE_NULLDRV)
         return XE_RESULT_SUCCESS;
 #else
-        return L0::memGetAddressRange(hMemAllocHandle->getHandle(), ptr, pBase, pSize);
+        return L0::memGetAddressRange(hMemAllocHandle, ptr, pBase, pSize);
 #endif
         /// @end
     }
@@ -611,7 +611,7 @@ __xedllexport xe_result_t __xecall
 #if defined(XE_NULLDRV)
         return XE_RESULT_SUCCESS;
 #else
-        return L0::ipcGetMemHandle(hMemAllocHandle->getHandle(), ptr, pIpcHandle->getHandle());
+        return L0::ipcGetMemHandle(hMemAllocHandle, ptr, pIpcHandle);
 #endif
         /// @end
     }
@@ -684,7 +684,7 @@ __xedllexport xe_result_t __xecall
 #if defined(XE_NULLDRV)
         return XE_RESULT_SUCCESS;
 #else
-        return L0::ipcOpenMemHandle(hMemAllocHandle->getHandle(), hDevice->getHandle(), handle->getHandle(), flags, ptr);
+        return L0::ipcOpenMemHandle(hMemAllocHandle, hDevice, handle, flags, ptr);
 #endif
         /// @end
     }
@@ -746,7 +746,7 @@ __xedllexport xe_result_t __xecall
 #if defined(XE_NULLDRV)
         return XE_RESULT_SUCCESS;
 #else
-        return L0::ipcCloseMemHandle(hMemAllocHandle->getHandle(), ptr);
+        return L0::ipcCloseMemHandle(hMemAllocHandle, ptr);
 #endif
         /// @end
     }

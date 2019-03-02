@@ -34,7 +34,7 @@ struct CommandListCoreFamily : public CommandListImp {
     xe_result_t encodeExecutionBarrier() override;
     xe_result_t encodeImageCopyFromMemory(xe_image_handle_t hDstImage,
                                           xe_image_region_t *pDstRegion,
-                                          void *srcptr) override;
+                                          const void *srcptr) override;
     xe_result_t encodeImageCopyToMemory(void *dstptr,
                                         xe_image_handle_t hSrcImage,
                                         xe_image_region_t *pSrcRegion) override;

@@ -90,7 +90,7 @@ ${x}_result_t __${x}call ${th.make_func_name(x, obj, cls)}(
     if(dispatchTableInitialized == false){
         return ${X}_RESULT_ERROR_UNINITIALIZED;
     }
-    return dispatchTable.${th.make_func_name(x, obj, cls)}(${th.make_param_call_str("", x, obj, cls)});
+    return dispatchTable.${th.make_func_name(x, obj, cls)}(${th.make_forwarding_param_call_str(x, obj, cls)});
 }
 %if 'condition' in obj:
 #endif // ${th.subx(x,obj['condition'])}

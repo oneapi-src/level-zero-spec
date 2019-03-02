@@ -73,7 +73,7 @@ namespace xe
         event_handle_t hEvent                           ///< [in][optional] handle of the event to signal on completion
         )
     {
-        // auto result = ::xeCommandGraphEncodeDispatchFunction( handle, hFunction->getHandle(), pDispatchFuncArgs, hEvent->getHandle() );
+        // auto result = ::xeCommandGraphEncodeDispatchFunction( handle, hFunction, pDispatchFuncArgs, hEvent );
         // if( ::XE_RESULT_SUCCESS != result ) throw exception(result, "xe::CommandGraph::EncodeDispatchFunction");
     }
 
@@ -85,7 +85,7 @@ namespace xe
         event_handle_t hEvent                           ///< [in][optional] handle of the event to signal on completion
         )
     {
-        // auto result = ::xeCommandGraphEncodeDispatchFunctionIndirect( handle, hFunction->getHandle(), pDispatchArgumentsBuffer, hEvent->getHandle() );
+        // auto result = ::xeCommandGraphEncodeDispatchFunctionIndirect( handle, hFunction, pDispatchArgumentsBuffer, hEvent );
         // if( ::XE_RESULT_SUCCESS != result ) throw exception(result, "xe::CommandGraph::EncodeDispatchFunctionIndirect");
     }
 

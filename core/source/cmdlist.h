@@ -48,7 +48,7 @@ struct CommandList : public _xe_command_list_handle_t {
     virtual xe_result_t encodeExecutionBarrier() = 0;
     virtual xe_result_t encodeImageCopyFromMemory(xe_image_handle_t hDstImage,
                                                   xe_image_region_t *pDstRegion,
-                                                  void *srcptr) = 0;
+                                                  const void *srcptr) = 0;
     virtual xe_result_t encodeImageCopyToMemory(void *dstptr,
                                                 xe_image_handle_t hSrcImage,
                                                 xe_image_region_t *pSrcRegion) = 0;

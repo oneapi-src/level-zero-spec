@@ -57,14 +57,14 @@
 ///     - ::XE_RESULT_SUCCESS
 ///     - ::XE_RESULT_ERROR_UNINITIALIZED
 ///     - ::XE_RESULT_ERROR_DEVICE_LOST
+///     - ::XE_RESULT_ERROR_OUT_OF_DEVICE_MEMORY
+///     - ::XE_RESULT_ERROR_OUT_OF_HOST_MEMORY
 ///     - ::XE_RESULT_ERROR_INVALID_PARAMETER
 ///         + nullptr == hDevice
 ///         + nullptr == desc
 ///         + nullptr == phEvent
 ///     - ::XE_RESULT_ERROR_UNSUPPORTED
 ///         + ::XE_EVENT_DESC_VERSION < desc->version
-///     - ::XE_RESULT_ERROR_OUT_OF_HOST_MEMORY
-///     - ::XE_RESULT_ERROR_OUT_OF_DEVICE_MEMORY
 ///
 /// @hash {2c5763b8ec9726ab95422bca4616275ec9ed4e3d4b7a42a8b4e7089c813350d6}
 ///
@@ -122,6 +122,7 @@ __xedllexport xe_result_t __xecall
 ///     - ::XE_RESULT_SUCCESS
 ///     - ::XE_RESULT_ERROR_UNINITIALIZED
 ///     - ::XE_RESULT_ERROR_DEVICE_LOST
+///     - ::XE_RESULT_ERROR_OUT_OF_HOST_MEMORY
 ///     - ::XE_RESULT_ERROR_INVALID_PARAMETER
 ///         + nullptr == hDevice
 ///         + nullptr == desc
@@ -129,7 +130,6 @@ __xedllexport xe_result_t __xecall
 ///         + nullptr == phEvent
 ///     - ::XE_RESULT_ERROR_UNSUPPORTED
 ///         + ::XE_EVENT_DESC_VERSION < desc->version
-///     - ::XE_RESULT_ERROR_OUT_OF_HOST_MEMORY
 ///
 /// @hash {ff2fcb0cf2905079d5fb305c78b9dc0d9f1c4e5ab7792007b01cd832e94bae5c}
 ///
@@ -513,7 +513,7 @@ __xedllexport xe_result_t __xecall
 #if defined(XE_NULLDRV)
         return XE_RESULT_SUCCESS;
 #else
-        return L0::hostSignalEvent(hEvent->getHandle());
+        return L0::hostSignalEvent(hEvent);
 #endif
         /// @end
     }
@@ -550,9 +550,9 @@ __xedllexport xe_result_t __xecall
 ///     - ::XE_RESULT_ERROR_DEVICE_LOST
 ///     - ::XE_RESULT_ERROR_INVALID_PARAMETER
 ///         + nullptr == hEvent
-///     - ::XE_RESULT_ERROR_UNSUPPORTED
 ///     - ::XE_RESULT_NOT_READY
 ///         + timeout expired
+///     - ::XE_RESULT_ERROR_UNSUPPORTED
 ///
 /// @hash {580d70d65f44535c9b2585408c20f2c0af086f6b54945445e7b09d31493403e0}
 ///
@@ -584,7 +584,7 @@ __xedllexport xe_result_t __xecall
 #if defined(XE_NULLDRV)
         return XE_RESULT_SUCCESS;
 #else
-        return L0::hostWaitOnEvent(hEvent->getHandle(), mode, delay, interval, timeout);
+        return L0::hostWaitOnEvent(hEvent, mode, delay, interval, timeout);
 #endif
         /// @end
     }
@@ -638,7 +638,7 @@ __xedllexport xe_result_t __xecall
 #if defined(XE_NULLDRV)
         return XE_RESULT_SUCCESS;
 #else
-        return L0::hostSignalMultipleEvents(numEvents, phEvents->getHandle());
+        return L0::hostSignalMultipleEvents(numEvents, phEvents);
 #endif
         /// @end
     }
@@ -674,9 +674,9 @@ __xedllexport xe_result_t __xecall
 ///     - ::XE_RESULT_ERROR_DEVICE_LOST
 ///     - ::XE_RESULT_ERROR_INVALID_PARAMETER
 ///         + nullptr == phEvents
-///     - ::XE_RESULT_ERROR_UNSUPPORTED
 ///     - ::XE_RESULT_NOT_READY
 ///         + timeout expired
+///     - ::XE_RESULT_ERROR_UNSUPPORTED
 ///
 /// @hash {e52ffd62217e9fcf9ed29e74f4453d0d1930803fe7e4289225b27f2526df83d0}
 ///
@@ -709,7 +709,7 @@ __xedllexport xe_result_t __xecall
 #if defined(XE_NULLDRV)
         return XE_RESULT_SUCCESS;
 #else
-        return L0::hostWaitOnMultipleEvents(numEvents, phEvents->getHandle(), mode, delay, interval, timeout);
+        return L0::hostWaitOnMultipleEvents(numEvents, phEvents, mode, delay, interval, timeout);
 #endif
         /// @end
     }
@@ -747,9 +747,9 @@ __xedllexport xe_result_t __xecall
 ///     - ::XE_RESULT_ERROR_DEVICE_LOST
 ///     - ::XE_RESULT_ERROR_INVALID_PARAMETER
 ///         + nullptr == hEvent
-///     - ::XE_RESULT_ERROR_UNSUPPORTED
 ///     - ::XE_RESULT_NOT_READY
 ///         + not signaled
+///     - ::XE_RESULT_ERROR_UNSUPPORTED
 ///
 /// @hash {1091660d20f5595dad7bbbf969b0a8e9238f218438ff4f2c908b93135147cfa6}
 ///
@@ -835,7 +835,7 @@ __xedllexport xe_result_t __xecall
 #if defined(XE_NULLDRV)
         return XE_RESULT_SUCCESS;
 #else
-        return L0::eventQueryElapsedTime(hEventStart->getHandle(), hEventEnd->getHandle(), pTime);
+        return L0::eventQueryElapsedTime(hEventStart, hEventEnd, pTime);
 #endif
         /// @end
     }
@@ -898,7 +898,7 @@ __xedllexport xe_result_t __xecall
 #if defined(XE_NULLDRV)
         return XE_RESULT_SUCCESS;
 #else
-        return L0::eventQueryMetricsData(hEventStart->getHandle(), hEventEnd->getHandle(), reportSize, pReportData);
+        return L0::eventQueryMetricsData(hEventStart, hEventEnd, reportSize, pReportData);
 #endif
         /// @end
     }

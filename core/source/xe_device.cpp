@@ -198,7 +198,7 @@ __xedllexport xe_result_t __xecall
 #if defined(XE_NULLDRV)
         return XE_RESULT_SUCCESS;
 #else
-        return L0::Driver::get()->getDevice(uniqueId, phDevice->getHandle());
+        return L0::Driver::get()->getDevice(uniqueId, phDevice);
 #endif
         /// @end
     }

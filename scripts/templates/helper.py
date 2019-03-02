@@ -217,12 +217,22 @@ def make_param_call_str(prologue, repl, obj, filter):
     if len(prologue) > 0:
         names.append(prologue)
     for item in params:
-        if re.match(r"\$\w+_handle_t", item['type']):
-            names.append("%s->getHandle()"%item['name'])
-        else:
+#        if re.match(r"\$\w+_handle_t", item['type']):
+#            cls = re.sub(r"\$x_", "", re.sub(r"_handle_t.*", "", item['type']))
+#            cls = re.sub(r"_.", lambda x : x.group(0)[1].upper(), cls)
+#            cls = cls[0].upper() + cls[1:]
+#            names.append("L0::%s::fromHandle(%s)"%(cls, item['name']))
+#        else:
             names.append(item['name'])
     #names.extend(extract_items(params, 'name'))
     return ", ".join(names)
+    
+"""
+    returns a string of parameter names for forwarding to a function
+"""
+def make_forwarding_param_call_str(repl, obj, filter):
+    params = filter_items(obj['params'], 'class', filter)
+    return ", ".join([item['name'] for item in params])
 
 """
     returns a list of strings for the description

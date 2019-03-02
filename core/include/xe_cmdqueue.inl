@@ -55,7 +55,7 @@ namespace xe
         fence_handle_t hFence                           ///< [in][optional] handle of the fence to signal on completion
         )
     {
-        // auto result = ::xeCommandQueueEnqueueCommandLists( handle, numCommandLists, phCommandLists->getHandle(), hFence->getHandle() );
+        // auto result = ::xeCommandQueueEnqueueCommandLists( handle, numCommandLists, phCommandLists, hFence );
         // if( ::XE_RESULT_SUCCESS != result ) throw exception(result, "xe::CommandQueue::EnqueueCommandLists");
     }
 
@@ -86,7 +86,7 @@ namespace xe
         fence_handle_t* phFence                         ///< [out] pointer to handle of fence object created
         )
     {
-        // auto result = ::xeCommandQueueCreateFence( handle, desc, phFence->getHandle() );
+        // auto result = ::xeCommandQueueCreateFence( handle, desc, phFence );
         // if( ::XE_RESULT_SUCCESS != result ) throw exception(result, "xe::CommandQueue::CreateFence");
     }
 

@@ -50,7 +50,7 @@ struct Mock<CommandList> : public CommandList {
     MOCK_METHOD0(encodeExecutionBarrier, xe_result_t());
     MOCK_METHOD3(encodeImageCopyFromMemory, xe_result_t(xe_image_handle_t hDstImage,
                                                         xe_image_region_t *pDstRegion,
-                                                        void *srcptr));
+                                                        const void *srcptr));
     MOCK_METHOD3(encodeImageCopyToMemory, xe_result_t(void *dstptr,
                                                       xe_image_handle_t hSrcImage,
                                                       xe_image_region_t *pSrcRegion));

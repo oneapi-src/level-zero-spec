@@ -186,7 +186,7 @@ typedef xe_result_t (__xecall *pfn_xeCommandListEncodeImageCopyFromMemory)(
     xe_command_list_handle_t hCommandList,          ///< [in] handle of command list
     xe_image_handle_t hDstImage,                    ///< [in] handle of destination image to copy to
     xe_image_region_t* pDstRegion,                  ///< [in][optional] destination region descriptor
-    void* srcptr                                    ///< [in] pointer to source memory to copy from
+    const void* srcptr                              ///< [in] pointer to source memory to copy from
     );
 typedef xe_result_t (__xecall *pfn_xeCommandListEncodeMemoryPrefetch)(
     xe_command_list_handle_t hCommandList,          ///< [in] handle of command list
@@ -468,7 +468,7 @@ typedef xe_result_t (__xecall *pfn_xeIpcCloseMemHandle)(
     );
 typedef xe_result_t (__xecall *pfn_xeDeviceCreateModule)(
     xe_device_handle_t hDevice,                     ///< [in] handle of the device
-    const xe_module_desc_t* desc,                   ///< [in] pointer to module descriptor
+    const xe_module_desc_t* pDesc,                  ///< [in] pointer to module descriptor
     xe_module_handle_t* phModule,                   ///< [out] pointer to handle of module object created
     xe_module_build_log_handle_t* phBuildLog        ///< [out][optional] pointer to handle of module's build log.
     );
@@ -490,7 +490,7 @@ typedef xe_result_t (__xecall *pfn_xeModuleGetNativeBinary)(
     );
 typedef xe_result_t (__xecall *pfn_xeModuleCreateFunction)(
     xe_module_handle_t hModule,                     ///< [in] handle of the module
-    const xe_function_desc_t* desc,                 ///< [in] pointer to function descriptor
+    const xe_function_desc_t* pDesc,                ///< [in] pointer to function descriptor
     xe_function_handle_t* phFunction                ///< [out] handle of the Function object
     );
 typedef xe_result_t (__xecall *pfn_xeFunctionDestroy)(
@@ -583,6 +583,14 @@ typedef xe_result_t (__xecall *pfn_xeDeviceMakeImageResident)(
 typedef xe_result_t (__xecall *pfn_xeDeviceEvictImage)(
     xe_device_handle_t hDevice,                     ///< [in] handle of the device
     xe_image_handle_t hImage                        ///< [in] handle of image to make evict
+    );
+typedef xe_result_t (__xecall *pfn_xeDeviceCreateSampler)(
+    xe_device_handle_t hDevice,                     ///< [in] handle of the device
+    const xe_sampler_desc_t* pDesc,                 ///< [in] pointer to sampler descriptor
+    xe_sampler_handle_t* phSampler                  ///< [out] handle of the sampler
+    );
+typedef xe_result_t (__xecall *pfn_xeSamplerDestroy)(
+    xe_sampler_handle_t hSampler                    ///< [in] handle of the sampler
     );
 typedef xe_result_t (__xecall *pfn_xeDeviceCreateSemaphore)(
     xe_device_handle_t hDevice,                     ///< [in] handle of the device
@@ -721,6 +729,8 @@ typedef struct _xe_dispatch_table_t
     pfn_xeDeviceEvictMemory xeDeviceEvictMemory;
     pfn_xeDeviceMakeImageResident xeDeviceMakeImageResident;
     pfn_xeDeviceEvictImage xeDeviceEvictImage;
+    pfn_xeDeviceCreateSampler xeDeviceCreateSampler;
+    pfn_xeSamplerDestroy xeSamplerDestroy;
     pfn_xeDeviceCreateSemaphore xeDeviceCreateSemaphore;
     pfn_xeSemaphoreDestroy xeSemaphoreDestroy;
     pfn_xeCommandListEncodeSemaphoreSignal xeCommandListEncodeSemaphoreSignal;
@@ -842,6 +852,8 @@ inline bool load_xe(void *handle, void *(*funcAddressGetter)(void *handle, const
     outTable->xeDeviceEvictMemory = (pfn_xeDeviceEvictMemory)funcAddressGetter(handle, "xeDeviceEvictMemory");
     outTable->xeDeviceMakeImageResident = (pfn_xeDeviceMakeImageResident)funcAddressGetter(handle, "xeDeviceMakeImageResident");
     outTable->xeDeviceEvictImage = (pfn_xeDeviceEvictImage)funcAddressGetter(handle, "xeDeviceEvictImage");
+    outTable->xeDeviceCreateSampler = (pfn_xeDeviceCreateSampler)funcAddressGetter(handle, "xeDeviceCreateSampler");
+    outTable->xeSamplerDestroy = (pfn_xeSamplerDestroy)funcAddressGetter(handle, "xeSamplerDestroy");
     outTable->xeDeviceCreateSemaphore = (pfn_xeDeviceCreateSemaphore)funcAddressGetter(handle, "xeDeviceCreateSemaphore");
     outTable->xeSemaphoreDestroy = (pfn_xeSemaphoreDestroy)funcAddressGetter(handle, "xeSemaphoreDestroy");
     outTable->xeCommandListEncodeSemaphoreSignal = (pfn_xeCommandListEncodeSemaphoreSignal)funcAddressGetter(handle, "xeCommandListEncodeSemaphoreSignal");

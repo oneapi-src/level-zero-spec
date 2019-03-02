@@ -61,7 +61,7 @@ namespace xe
         module_handle_t* phModule                       ///< [out] pointer to handle of module object created
         )
     {
-        // auto result = ::xeDeviceRegisterCLProgram( handle, context, program, phModule->getHandle() );
+        // auto result = ::xeDeviceRegisterCLProgram( handle, context, program, phModule );
         // if( ::XE_RESULT_SUCCESS != result ) throw exception(result, "xe::Device::RegisterCLProgram");
     }
 #endif // XE_ENABLE_OCL_INTEROP
@@ -75,7 +75,7 @@ namespace xe
         command_queue_handle_t* phCommandQueue          ///< [out] pointer to handle of command queue object created
         )
     {
-        // auto result = ::xeDeviceRegisterCLCommandQueue( handle, context, command_queue, phCommandQueue->getHandle() );
+        // auto result = ::xeDeviceRegisterCLCommandQueue( handle, context, command_queue, phCommandQueue );
         // if( ::XE_RESULT_SUCCESS != result ) throw exception(result, "xe::Device::RegisterCLCommandQueue");
     }
 #endif // XE_ENABLE_OCL_INTEROP
@@ -87,7 +87,7 @@ namespace xe
         command_graph_handle_t* phCommandGraph          ///< [out] pointer to handle of command graph object created
         )
     {
-        // auto result = ::xeDeviceCreateCommandGraph( handle, desc, phCommandGraph->getHandle() );
+        // auto result = ::xeDeviceCreateCommandGraph( handle, desc, phCommandGraph );
         // if( ::XE_RESULT_SUCCESS != result ) throw exception(result, "xe::Device::CreateCommandGraph");
     }
 
@@ -98,7 +98,7 @@ namespace xe
         command_list_handle_t* phCommandList            ///< [out] pointer to handle of command list object created
         )
     {
-        // auto result = ::xeDeviceCreateCommandList( handle, desc, phCommandList->getHandle() );
+        // auto result = ::xeDeviceCreateCommandList( handle, desc, phCommandList );
         // if( ::XE_RESULT_SUCCESS != result ) throw exception(result, "xe::Device::CreateCommandList");
     }
 
@@ -109,7 +109,7 @@ namespace xe
         command_list_handle_t* phCommandList            ///< [out] pointer to handle of command list object created
         )
     {
-        // auto result = ::xeDeviceCopyCommandList( handle, hCommandList->getHandle(), phCommandList->getHandle() );
+        // auto result = ::xeDeviceCopyCommandList( handle, hCommandList, phCommandList );
         // if( ::XE_RESULT_SUCCESS != result ) throw exception(result, "xe::Device::CopyCommandList");
     }
 
@@ -120,7 +120,7 @@ namespace xe
         command_queue_handle_t* phCommandQueue          ///< [out] pointer to handle of command queue object created
         )
     {
-        // auto result = ::xeDeviceCreateCommandQueue( handle, desc, phCommandQueue->getHandle() );
+        // auto result = ::xeDeviceCreateCommandQueue( handle, desc, phCommandQueue );
         // if( ::XE_RESULT_SUCCESS != result ) throw exception(result, "xe::Device::CreateCommandQueue");
     }
 
@@ -131,7 +131,7 @@ namespace xe
         device_handle_t* phSubDevice                    ///< [out] pointer to handle of sub-device object.
         )
     {
-        // auto result = ::xeDeviceGetSubDevice( handle, ordinal, phSubDevice->getHandle() );
+        // auto result = ::xeDeviceGetSubDevice( handle, ordinal, phSubDevice );
         // if( ::XE_RESULT_SUCCESS != result ) throw exception(result, "xe::Device::GetSubDevice");
     }
 
@@ -182,7 +182,7 @@ namespace xe
         bool* value                                     ///< [out] returned access capability
         )
     {
-        // auto result = ::xeDeviceCanAccessPeer( handle, hPeerDevice->getHandle(), value );
+        // auto result = ::xeDeviceCanAccessPeer( handle, hPeerDevice, value );
         // if( ::XE_RESULT_SUCCESS != result ) throw exception(result, "xe::Device::CanAccessPeer");
     }
 
@@ -213,7 +213,7 @@ namespace xe
         event_handle_t* phEvent                         ///< [out] pointer to handle of event object created
         )
     {
-        // auto result = ::xeDeviceCreateEvent( handle, desc, phEvent->getHandle() );
+        // auto result = ::xeDeviceCreateEvent( handle, desc, phEvent );
         // if( ::XE_RESULT_SUCCESS != result ) throw exception(result, "xe::Device::CreateEvent");
     }
 
@@ -225,7 +225,7 @@ namespace xe
         event_handle_t* phEvent                         ///< [out] pointer to handle of event object created
         )
     {
-        // auto result = ::xeDevicePlaceEvent( handle, desc, ptr, phEvent->getHandle() );
+        // auto result = ::xeDevicePlaceEvent( handle, desc, ptr, phEvent );
         // if( ::XE_RESULT_SUCCESS != result ) throw exception(result, "xe::Device::PlaceEvent");
     }
 
@@ -236,7 +236,7 @@ namespace xe
         image_handle_t* phImage                         ///< [out] pointer to handle of image object created
         )
     {
-        // auto result = ::xeDeviceCreateImage( handle, desc, phImage->getHandle() );
+        // auto result = ::xeDeviceCreateImage( handle, desc, phImage );
         // if( ::XE_RESULT_SUCCESS != result ) throw exception(result, "xe::Device::CreateImage");
     }
 
@@ -248,7 +248,7 @@ namespace xe
         module_build_log_handle_t* phBuildLog           ///< [out][optional] pointer to handle of module's build log.
         )
     {
-        // auto result = ::xeDeviceCreateModule( handle, pDesc, phModule->getHandle(), phBuildLog->getHandle() );
+        // auto result = ::xeDeviceCreateModule( handle, pDesc, phModule, phBuildLog );
         // if( ::XE_RESULT_SUCCESS != result ) throw exception(result, "xe::Device::CreateModule");
     }
 
@@ -280,7 +280,7 @@ namespace xe
         image_handle_t hImage                           ///< [in] handle of image to make resident
         )
     {
-        // auto result = ::xeDeviceMakeImageResident( handle, hImage->getHandle() );
+        // auto result = ::xeDeviceMakeImageResident( handle, hImage );
         // if( ::XE_RESULT_SUCCESS != result ) throw exception(result, "xe::Device::MakeImageResident");
     }
 
@@ -290,7 +290,7 @@ namespace xe
         image_handle_t hImage                           ///< [in] handle of image to make evict
         )
     {
-        // auto result = ::xeDeviceEvictImage( handle, hImage->getHandle() );
+        // auto result = ::xeDeviceEvictImage( handle, hImage );
         // if( ::XE_RESULT_SUCCESS != result ) throw exception(result, "xe::Device::EvictImage");
     }
 
@@ -301,7 +301,7 @@ namespace xe
         sampler_handle_t* phSampler                     ///< [out] handle of the sampler
         )
     {
-        // auto result = ::xeDeviceCreateSampler( handle, pDesc, phSampler->getHandle() );
+        // auto result = ::xeDeviceCreateSampler( handle, pDesc, phSampler );
         // if( ::XE_RESULT_SUCCESS != result ) throw exception(result, "xe::Device::CreateSampler");
     }
 
@@ -312,7 +312,7 @@ namespace xe
         semaphore_handle_t* phSemaphore                 ///< [out] pointer to handle of semaphore object created
         )
     {
-        // auto result = ::xeDeviceCreateSemaphore( handle, desc, phSemaphore->getHandle() );
+        // auto result = ::xeDeviceCreateSemaphore( handle, desc, phSemaphore );
         // if( ::XE_RESULT_SUCCESS != result ) throw exception(result, "xe::Device::CreateSemaphore");
     }
 
