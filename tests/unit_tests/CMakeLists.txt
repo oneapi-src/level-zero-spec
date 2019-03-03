@@ -1,7 +1,6 @@
 set(TARGET_NAME ${PROJECT_NAME}_unit_tests)
 
 add_executable(${TARGET_NAME}
-    ${L0_RUNTIME_SOURCES}            
     environment.cpp
     main.cpp
     mock.h

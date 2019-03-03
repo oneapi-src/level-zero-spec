@@ -1,6 +1,4 @@
 #pragma once
-#include "cmdgraph.h"
-#include "cmdlist.h"
 #include "xe_common.h"
 #include "xe_module.h"
 
@@ -19,10 +17,10 @@ struct Function : public _xe_function_handle_t {
     virtual xe_result_t setAttribute(xe_function_set_attribute_t attr,
                                      uint32_t value) = 0;
     virtual xe_result_t getAttribute(xe_function_get_attribute_t attr,
-                                       uint32_t *pValue) = 0;
+                                     uint32_t *pValue) = 0;
     virtual xe_result_t setArgumentValue(uint32_t argIndex,
-                                 size_t argSize,
-                                 const void *pArgValue) = 0;
+                                         size_t argSize,
+                                         const void *pArgValue) = 0;
     virtual void setGroupCount(uint32_t groupCountX,
                                uint32_t groupCountY,
                                uint32_t groupCountZ) = 0;
