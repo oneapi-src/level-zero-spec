@@ -30,7 +30,7 @@ inline void validate(ResulT result, const char *message) {
         return;
     }
 
-    std::cerr << message;
+    std::cerr << (TerminateOnFailure ? "ERROR : " : "WARNING : ") << message << " : " << result << std::endl;
     if (TerminateOnFailure) {
         std::terminate();
     }
@@ -139,15 +139,16 @@ int main() {
     // 5. Dispatch and wait
     SUCCESS_OR_TERMINATE(xeCommandListClose(cmdList));
     SUCCESS_OR_TERMINATE(xeCommandQueueEnqueueCommandLists(cmdQueue, 1, &cmdList, nullptr));
-    SUCCESS_OR_TERMINATE(xeCommandQueueSynchronize(cmdQueue, XE_SYNCHRONIZATION_MODE_POLL, 0, 0, 100));
+    auto synchronizationResult = xeCommandQueueSynchronize(cmdQueue, XE_SYNCHRONIZATION_MODE_POLL, 0, 0, 100);
+    SUCCESS_OR_WARNING(synchronizationResult);
 
 // 6. Validate
 #if SUPPORT_MEMORY_COPY
 #else
     memcpy(readBackData, dstBuffer, sizeof(readBackData));
 #endif
-    bool outputValidationPassed = (0 == memcmp(initDataSrc, readBackData, sizeof(readBackData)));
-    SUCCESS_OR_WARNING_BOOL(outputValidationPassed);
+    bool outputValidationFailed = (0 != memcmp(initDataSrc, readBackData, sizeof(readBackData)));
+    SUCCESS_OR_WARNING_BOOL(!outputValidationFailed);
 
     // X. Cleanup
     SUCCESS_OR_TERMINATE(xeMemFree(allocator, dstBuffer));
@@ -161,5 +162,7 @@ int main() {
     SUCCESS_OR_TERMINATE(xeFunctionDestroy(function));
     SUCCESS_OR_TERMINATE(xeModuleDestroy(module));
 
-    return outputValidationPassed ? 0 : 1;
+    bool aubMode = (XE_RESULT_NOT_READY == synchronizationResult);
+    int resultOnFailure = aubMode ? 0 : 1;
+    return outputValidationFailed ? resultOnFailure : 0;
 }

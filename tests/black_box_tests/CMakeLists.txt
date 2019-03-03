@@ -7,11 +7,13 @@ endif()
 #Dynamically thunking xelloWorld applicaton
 add_executable(xello_world xello_world.cpp)
 
-set_target_properties(xello_world
-    PROPERTIES
-        VS_DEBUGGER_COMMAND_ARGUMENTS "--gtest_filter=* --gtest_catch_exceptions=0"
-        VS_DEBUGGER_WORKING_DIRECTORY "$(OutDir)"
-)
+if(MSVC)
+    set_target_properties(xello_world
+        PROPERTIES
+            VS_DEBUGGER_COMMAND_ARGUMENTS ""
+            VS_DEBUGGER_WORKING_DIRECTORY "$(OutDir)"
+    )
+endif()
 
 add_dependencies(xello_world copy_third_party_files)
 target_link_libraries(xello_world ${OS_SPECIFIC_LIBS})
@@ -19,11 +21,34 @@ target_link_libraries(xello_world ${OS_SPECIFIC_LIBS})
 #ICD loader enabled xelloWorld applicaton
 add_executable(xello_world_static xello_world_static.cpp)
 
-set_target_properties(xello_world_static
-    PROPERTIES
-        VS_DEBUGGER_COMMAND_ARGUMENTS "--gtest_filter=* --gtest_catch_exceptions=0"
-        VS_DEBUGGER_WORKING_DIRECTORY "$(OutDir)"
-)
+if(MSVC)
+    set_target_properties(xello_world_static
+        PROPERTIES
+            VS_DEBUGGER_COMMAND_ARGUMENTS ""
+            VS_DEBUGGER_WORKING_DIRECTORY "$(OutDir)"
+    )
+endif()
 
 add_dependencies(xello_world_static copy_third_party_files)
 target_link_libraries(xello_world_static level_zero_icd_loader ${OS_SPECIFIC_LIBS})
+
+if(MSVC)
+    set(RUN_XELLO_WORLD_STATIC_AUB_CMD $<TARGET_FILE:xello_world_static>)
+else()
+    set(RUN_XELLO_WORLD_STATIC_AUB_CMD LD_LIBRARY_PATH=$<TARGET_FILE_DIR:xello_world_static> $<TARGET_FILE:xello_world_static>)
+endif()
+
+set(TEST_DIR ${CUSTOM_COMMAND_BINARY_DIR}/xello_world_static_aub_test)
+add_custom_target(run_xello_world_static_aub ALL DEPENDS xello_world_static copy_test_files level_zero)
+add_custom_command(
+  TARGET run_xello_world_static_aub
+  POST_BUILD
+  COMMAND echo deleting and re-creating ${TEST_DIR} directory...
+  COMMAND ${CMAKE_COMMAND} -E remove_directory ${TEST_DIR}
+  COMMAND ${CMAKE_COMMAND} -E make_directory ${TEST_DIR}
+  COMMAND ${CMAKE_COMMAND} -E echo "SetCommandStreamReceiver = 1" > ${TEST_DIR}/igdrcl.config
+  COMMAND ${CMAKE_COMMAND} -E copy_directory "${CUSTOM_COMMAND_BINARY_DIR}/test_files" "${TEST_DIR}/test_files"
+  # COMMAND WORKING_DIRECTORY \"${CUSTOM_COMMAND_BINARY_DIR}\"
+  COMMAND echo Running ${RUN_XELLO_WORLD_STATIC_AUB_CMD} in "${CUSTOM_COMMAND_BINARY_DIR}/xello_world_static_aub_test"
+  COMMAND ${CMAKE_COMMAND} -E chdir ${TEST_DIR} ${CMAKE_COMMAND} -E env SetCommandStreamReceiver=1 ${RUN_XELLO_WORLD_STATIC_AUB_CMD}
+)

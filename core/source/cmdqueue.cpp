@@ -103,7 +103,7 @@ xe_result_t CommandQueueImp::synchronizeByPollingForTaskCount(uint32_t delay,
     commandStreamReceiver->waitForCompletionWithTimeout(enableTimeout, timeout, this->taskCount);
 
     if (*commandStreamReceiver->getTagAddress() < taskCountToWait) {
-        XE_RESULT_NOT_READY;
+        return XE_RESULT_NOT_READY;
     }
 
     return XE_RESULT_SUCCESS;

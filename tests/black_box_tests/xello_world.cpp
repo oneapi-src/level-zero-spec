@@ -46,7 +46,7 @@ inline void validate(ResulT result, const char *message) {
         return;
     }
 
-    std::cerr << message;
+    std::cerr << message << " : " << result << std::endl;
     if (TerminateOnFailure) {
         std::terminate();
     }
@@ -164,7 +164,8 @@ int main() {
     // 5. Dispatch and wait
     SUCCESS_OR_TERMINATE(xeApi.xeCommandListClose(cmdList));
     SUCCESS_OR_TERMINATE(xeApi.xeCommandQueueEnqueueCommandLists(cmdQueue, 1, &cmdList, nullptr));
-    SUCCESS_OR_TERMINATE(xeApi.xeCommandQueueSynchronize(cmdQueue, XE_SYNCHRONIZATION_MODE_POLL, 0, 0, 100));
+    auto synchronizationResult = xeApi.xeCommandQueueSynchronize(cmdQueue, XE_SYNCHRONIZATION_MODE_POLL, 0, 0, 100);
+    SUCCESS_OR_TERMINATE_BOOL((XE_RESULT_SUCCESS == synchronizationResult) || (XE_RESULT_NOT_READY == synchronizationResult));
 
 // 6. Validate
 #if SUPPORT_MEMORY_COPY
