@@ -40,18 +40,22 @@ inline std::unique_ptr<char[]> readBinaryFile(const std::string &name, SizeT &ou
     return storage;
 }
 
-template <typename ResulT>
-inline void successOrTerminate(ResulT result, const char *message) {
+template <bool TerminateOnFailure, typename ResulT>
+inline void validate(ResulT result, const char *message) {
     if (result == 0) { // assumption 0 is success
         return;
     }
 
     std::cerr << message;
-    std::terminate();
+    if (TerminateOnFailure) {
+        std::terminate();
+    }
 }
 
-#define SUCCESS_OR_TERMINATE(CALL) successOrTerminate(CALL, #CALL)
-#define SUCCESS_OR_TERMINATE_BOOL(FLAG) successOrTerminate(!(FLAG), #FLAG)
+#define SUCCESS_OR_TERMINATE(CALL) validate<true>(CALL, #CALL)
+#define SUCCESS_OR_TERMINATE_BOOL(FLAG) validate<true>(!(FLAG), #FLAG)
+#define SUCCESS_OR_WARNING(CALL) validate<false>(CALL, #CALL)
+#define SUCCESS_OR_WARNING_BOOL(FLAG) validate<false>(!(FLAG), #FLAG)
 
 int main() {
     // 0. Load the driver
@@ -115,7 +119,7 @@ int main() {
     }
 
     SUCCESS_OR_TERMINATE(xeApi.xeCreateMemAllocator(&allocator));
-#if UNSUPPORTED
+#if SUPPORT_MEM_ALLOC
     SUCCESS_OR_TERMINATE(xeApi.xeMemAlloc(allocator, device0, XE_DEVICE_MEM_ALLOC_FLAG_DEFAULT, allocSize, 1, &srcBuffer));
     SUCCESS_OR_TERMINATE(xeApi.xeMemAlloc(allocator, device0, XE_DEVICE_MEM_ALLOC_FLAG_DEFAULT, allocSize, 1, &dstBuffer));
 #else
@@ -123,15 +127,18 @@ int main() {
     SUCCESS_OR_TERMINATE(xeApi.xeSharedMemAlloc(allocator, device0, XE_DEVICE_MEM_ALLOC_FLAG_DEFAULT, XE_HOST_MEM_ALLOC_FLAG_DEFAULT, allocSize, 1, &dstBuffer));
 #endif
 
-// 2. Encode initialize memory
-#if UNSUPPORTED
-    uint8_t initData[allocSize];
-    memset(initData, 7, sizeof(initData));
-    SUCCESS_OR_TERMINATE(xeApi.xeCommandListEncodeMemoryCopy(cmdList, srcBuffer, initData, sizeof(initData)));
+    // 2. Encode initialize memory
+    uint8_t initDataSrc[allocSize];
+    memset(initDataSrc, 7, sizeof(initDataSrc));
+    uint8_t initDataDst[allocSize];
+    memset(initDataDst, 3, sizeof(initDataDst));
+#if SUPPORT_MEMORY_COPY
+    SUCCESS_OR_TERMINATE(xeApi.xeCommandListEncodeMemoryCopy(cmdList, srcBuffer, initDataSrc, sizeof(initDataSrc)));
+    SUCCESS_OR_TERMINATE(xeApi.xeCommandListEncodeMemoryCopy(cmdList, dstBuffer, initDataDst, sizeof(initDataDst)));
     SUCCESS_OR_TERMINATE(xeApi.xeCommandListEncodeExecutionBarrier(cmdList)); // copying of data must finish before running the user function
 #else
-    memset(srcBuffer, 7u, allocSize);
-    memset(dstBuffer, 2u, allocSize);
+    memcpy(srcBuffer, initDataSrc, sizeof(initDataSrc));
+    memcpy(dstBuffer, initDataDst, sizeof(initDataDst));
 #endif
 
     // 3. Encode run user function
@@ -146,10 +153,10 @@ int main() {
         SUCCESS_OR_TERMINATE(xeApi.xeCommandListEncodeDispatchFunction(cmdList, function, &dispatchTraits, nullptr));
     }
 
-// 4. Encode read back memory
-#if UNSUPPORTED
+    // 4. Encode read back memory
     uint8_t readBackData[allocSize];
     memset(readBackData, 2, sizeof(readBackData));
+#if SUPPORT_MEMORY_COPY
     SUCCESS_OR_TERMINATE(xeApi.xeCommandListEncodeExecutionBarrier(cmdList)); // user function must finish before we start copying data
     SUCCESS_OR_TERMINATE(xeApi.xeCommandListEncodeMemoryCopy(cmdList, readBackData, dstBuffer, sizeof(readBackData)));
 #endif
@@ -157,14 +164,15 @@ int main() {
     // 5. Dispatch and wait
     SUCCESS_OR_TERMINATE(xeApi.xeCommandListClose(cmdList));
     SUCCESS_OR_TERMINATE(xeApi.xeCommandQueueEnqueueCommandLists(cmdQueue, 1, &cmdList, nullptr));
-#if UNSUPPORTED
-    SUCCESS_OR_TERMINATE(xeApi.xeCommandQueueSynchronize(cmdQueue, XE_SYNCHRONIZATION_MODE_POLL, 0, 0, -1));
-#endif
+    SUCCESS_OR_TERMINATE(xeApi.xeCommandQueueSynchronize(cmdQueue, XE_SYNCHRONIZATION_MODE_POLL, 0, 0, 100));
 
-    // 6. Validate
-#if UNSUPPORTED
-    SUCCESS_OR_TERMINATE(0 == memcmp(srcBuffer, dstBuffer, allocSize));
+// 6. Validate
+#if SUPPORT_MEMORY_COPY
+#else
+    memcpy(readBackData, dstBuffer, sizeof(readBackData));
 #endif
+    bool outputValidationPassed = (0 == memcmp(initDataSrc, readBackData, sizeof(readBackData)));
+    SUCCESS_OR_WARNING_BOOL(outputValidationPassed);
 
     // X. Cleanup
     SUCCESS_OR_TERMINATE(xeApi.xeMemFree(allocator, dstBuffer));
@@ -178,5 +186,5 @@ int main() {
     SUCCESS_OR_TERMINATE(xeApi.xeFunctionDestroy(function));
     SUCCESS_OR_TERMINATE(xeApi.xeModuleDestroy(module));
 
-    CLOSE_LIBRARY(driverLibrary);
+    return outputValidationPassed ? 0 : 1;
 }

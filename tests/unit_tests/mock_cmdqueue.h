@@ -35,6 +35,8 @@ struct Mock<CommandQueue> : public CommandQueue {
                                           uint32_t delay,
                                           uint32_t interval,
                                           uint32_t timeout));
+
+    MOCK_METHOD1(dispatchTaskCountWrite, void(bool flushDataCache));
 };
 
 } // namespace ult

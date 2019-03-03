@@ -55,4 +55,11 @@ xeCommandQueueEnqueueCommandLists(
     xe_command_list_handle_t *phCommandLists,
     xe_fence_handle_t hFence);
 
+xe_result_t __xecall
+xeCommandQueueSynchronize(xe_command_queue_handle_t hCommandQueue,
+                          xe_synchronization_mode_t mode,
+                          uint32_t delay,
+                          uint32_t interval,
+                          uint32_t timeout);
+
 } // namespace L0

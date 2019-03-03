@@ -4,6 +4,7 @@ set(TARGET_NAME level_zero)
 add_library(${TARGET_NAME}
     SHARED
         ${CMAKE_CURRENT_SOURCE_DIR}/CMakeLists.txt
+        ${COMPUTE_RUNTIME_DIR}/runtime/dll/options.cpp
 )
 
 if(AUB_STREAM_SUPPORT)

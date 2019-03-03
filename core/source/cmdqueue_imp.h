@@ -19,16 +19,26 @@ struct CommandQueueImp : public CommandQueue {
 
     xe_result_t destroy() override;
 
+    xe_result_t synchronize(xe_synchronization_mode_t mode,
+                            uint32_t delay,
+                            uint32_t interval,
+                            uint32_t timeout) override;
+
     void initialize();
 
   protected:
     void processResidency(CommandList *);
     void processCoherency(CommandList *);
     void submitBatchBuffer();
+
+    xe_result_t synchronizeByPollingForTaskCount(uint32_t delay, uint32_t interval, uint32_t timeout);
+    virtual void dispatchTaskCountWrite(bool flushDataCache) = 0;
+
     Device *device;
     void *csrRT;
     GraphicsAllocation *allocation;
     OCLRT::LinearStream *commandStream;
+    uint32_t taskCount = 0;
 };
 
 } // namespace L0

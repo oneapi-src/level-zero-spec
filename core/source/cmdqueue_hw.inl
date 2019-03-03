@@ -1,6 +1,7 @@
 #include "cmdlist.h"
 #include "cmdqueue_hw.h"
 #include "graphics_allocation.h"
+#include "runtime/command_stream/command_stream_receiver.h"
 #include "runtime/command_stream/linear_stream.h"
 #include "runtime/helpers/hw_info.h"
 
@@ -62,11 +63,56 @@ xe_result_t CommandQueueHw<gfxCoreFamily>::enqueueCommandLists(uint32_t numComma
 }
 
 template <uint32_t gfxCoreFamily>
-xe_result_t CommandQueueHw<gfxCoreFamily>::synchronize(xe_synchronization_mode_t mode,
-                                                       uint32_t delay,
-                                                       uint32_t interval,
-                                                       uint32_t timeout) {
-    return XE_RESULT_ERROR_UNSUPPORTED;
+void CommandQueueHw<gfxCoreFamily>::dispatchTaskCountWrite(bool flushDataCache) {
+    auto commandStreamReceiver = static_cast<OCLRT::CommandStreamReceiver *>(csrRT);
+    assert(commandStreamReceiver);
+    auto taskCountToWrite = commandStreamReceiver->peekTaskCount();
+
+    using GfxFamily = typename OCLRT::GfxFamilyMapper<static_cast<GFXCORE_FAMILY>(gfxCoreFamily)>::GfxFamily;
+
+    using PIPELINE_SELECT = typename GfxFamily::PIPELINE_SELECT;
+    using PIPE_CONTROL = typename GfxFamily::PIPE_CONTROL;
+    using POST_SYNC_OPERATION = typename PIPE_CONTROL::POST_SYNC_OPERATION;
+    using MI_BATCH_BUFFER_END = typename GfxFamily::MI_BATCH_BUFFER_END;
+
+    PIPELINE_SELECT ps = GfxFamily::cmdInitPipelineSelect;
+    ps.setPipelineSelection(PIPELINE_SELECT::PIPELINE_SELECTION_GPGPU);
+
+    PIPE_CONTROL pc = GfxFamily::cmdInitPipeControl;
+    pc.setPostSyncOperation(POST_SYNC_OPERATION::POST_SYNC_OPERATION_WRITE_IMMEDIATE_DATA);
+    pc.setImmediateData(taskCountToWrite);
+    pc.setCommandStreamerStallEnable(true);
+    pc.setDcFlushEnable(flushDataCache);
+    auto gpuAddress = static_cast<uint64_t>(commandStreamReceiver->getTagAllocation()->getGpuAddress());
+    pc.setAddressHigh(gpuAddress >> 32u);
+    pc.setAddress(uint32_t(gpuAddress));
+
+    MI_BATCH_BUFFER_END cmdEnd = GfxFamily::cmdInitBatchBufferEnd;
+
+    auto bufferBase = commandStream->getSpace(sizeof(ps) + sizeof(pc) + sizeof(cmdEnd));
+    auto cmd = bufferBase;
+
+    *(PIPELINE_SELECT *)cmd = ps;
+    cmd = ptrOffset(cmd, sizeof(ps));
+    *(PIPE_CONTROL *)cmd = pc;
+    cmd = ptrOffset(cmd, sizeof(pc));
+    *(MI_BATCH_BUFFER_END *)cmd = cmdEnd;
+
+    OCLRT::BatchBuffer batchBuffer(
+        allocation->allocationRT,
+        ptrDiff(bufferBase, commandStream->getCpuBase()),
+        0u,
+        nullptr,
+        false,
+        false,
+        OCLRT::QueueThrottle::HIGH,
+        commandStream->getUsed(),
+        commandStream);
+    OCLRT::ResidencyContainer residencyContainer;
+    residencyContainer.push_back(commandStreamReceiver->getTagAllocation());
+    commandStreamReceiver->flush(batchBuffer, residencyContainer);
+    commandStreamReceiver->makeCoherent(*commandStreamReceiver->getTagAllocation());
+    return;
 }
 
 } // namespace L0

@@ -13,6 +13,11 @@ xeCommandListDestroy(xe_command_list_handle_t hCommandList) {
 }
 
 xe_result_t __xecall
+xeCommandListEncodeExecutionBarrier(xe_command_list_handle_t hCommandList) {
+    return CommandList::fromHandle(hCommandList)->encodeExecutionBarrier();
+}
+
+xe_result_t __xecall
 xeCommandListEncodeDispatchFunction(
     xe_command_list_handle_t hCommandList,
     xe_function_handle_t hFunction,
