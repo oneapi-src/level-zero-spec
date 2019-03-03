@@ -9,12 +9,15 @@ add_executable(${TARGET_NAME}
     mock_cmdlist.h
     mock_cmdqueue.cpp
     mock_cmdqueue.h
+    mock_compiler.h
     mock_device.cpp
     mock_device.h
     mock_driver.cpp
     mock_driver.h
     mock_event.cpp
     mock_event.h
+    mock_function.cpp
+    mock_function.h
     mock_memory_manager.cpp
     mock_memory_manager.h
     mock_module.cpp

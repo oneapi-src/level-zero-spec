@@ -5,6 +5,7 @@
 #include "mock_cmdlist.h"
 #include "mock_device.h"
 #include "mock_event.h"
+#include "mock_function.h"
 #include "mock_memory_manager.h"
 #include "mock_module.h"
 #include "mock_module_precompiled.h"

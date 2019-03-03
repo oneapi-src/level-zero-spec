@@ -5,6 +5,7 @@
 #include "xe_event.h"
 #include "xe_memory.h"
 #include "xe_module.h"
+#include "mock_compiler.h"
 #include "mock_module.h"
 #include "gtest/gtest.h"
 

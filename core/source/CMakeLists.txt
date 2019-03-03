@@ -33,6 +33,7 @@ set(L0_RUNTIME_SOURCES
     ${CMAKE_CURRENT_SOURCE_DIR}/event.h
     ${CMAKE_CURRENT_SOURCE_DIR}/fence.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/fence.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/function.h
     ${CMAKE_CURRENT_SOURCE_DIR}/graphics_allocation.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/graphics_allocation.h
     ${CMAKE_CURRENT_SOURCE_DIR}/image.h
