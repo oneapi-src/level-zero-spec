@@ -56,7 +56,9 @@ struct DeviceImp : public Device {
 
     xe_result_t createImage(const xe_image_desc_t *desc,
                             xe_image_handle_t *phImage) override {
-        *phImage = Image::create(desc);
+        auto productFamily = deviceRT->getHardwareInfo().pPlatform->eProductFamily;
+        *phImage = Image::create(productFamily, desc);
+
         return XE_RESULT_SUCCESS;
     }
 

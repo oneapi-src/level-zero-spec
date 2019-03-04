@@ -39,6 +39,9 @@ set(L0_RUNTIME_SOURCES
     ${CMAKE_CURRENT_SOURCE_DIR}/graphics_allocation.h
     ${CMAKE_CURRENT_SOURCE_DIR}/image.h
     ${CMAKE_CURRENT_SOURCE_DIR}/image.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/image_hw.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/image_imp.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/image_imp.h
     ${CMAKE_CURRENT_SOURCE_DIR}/indirect_heap.h
     ${CMAKE_CURRENT_SOURCE_DIR}/indirect_heap.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/memory.cpp
