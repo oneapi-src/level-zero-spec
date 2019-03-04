@@ -293,8 +293,7 @@ GEN9TEST_F(CommandListEncodeDispatchFunctionGEN9, addsWalkerToCommandStream) {
         auto indirectDataLength = function->getPerThreadDataSize() +
                                   function->getCrossThreadDataSize();
         EXPECT_EQ(cmd->getIndirectDataLength() % GPGPU_WALKER::INDIRECTDATASTARTADDRESS_ALIGN_SIZE, 0u);
-        EXPECT_GE(cmd->getIndirectDataLength(), 0u);
-        EXPECT_LE(cmd->getIndirectDataLength(), indirectDataLength);
+        EXPECT_GE(cmd->getIndirectDataLength(), indirectDataLength);
 
         auto heap = commandList->indirectHeaps[CommandList::INDIRECT_OBJECT];
 
