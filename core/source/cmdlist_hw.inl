@@ -22,6 +22,15 @@ bool CommandListCoreFamily<gfxCoreFamily>::initialize() {
         STATE_BASE_ADDRESS cmd = GfxFamily::cmdInitStateBaseAddress;
 
         {
+            auto heap = this->indirectHeaps[DYNAMIC_STATE];
+            assert(heap != nullptr);
+            cmd.setDynamicStateBaseAddressModifyEnable(true);
+            cmd.setDynamicStateBaseAddress(heap->getHeapGpuBase());
+            cmd.setDynamicStateBufferSizeModifyEnable(true);
+            cmd.setDynamicStateBufferSize(static_cast<uint32_t>(heap->getMaxAvailableSpace()));
+        }
+
+        {
             auto heap = this->indirectHeaps[INSTRUCTION];
             assert(heap != nullptr);
             cmd.setInstructionBaseAddressModifyEnable(true);
@@ -37,6 +46,15 @@ bool CommandListCoreFamily<gfxCoreFamily>::initialize() {
             cmd.setGeneralStateBaseAddress(heap->getHeapGpuBase());
             cmd.setGeneralStateBufferSizeModifyEnable(true);
             cmd.setGeneralStateBufferSize(static_cast<uint32_t>(heap->getMaxAvailableSpace()));
+        }
+
+        {
+            auto heap = this->indirectHeaps[INDIRECT_OBJECT];
+            assert(heap != nullptr);
+            cmd.setIndirectObjectBaseAddressModifyEnable(true);
+            cmd.setIndirectObjectBaseAddress(heap->getHeapGpuBase());
+            cmd.setIndirectObjectBufferSizeModifyEnable(true);
+            cmd.setIndirectObjectBufferSize(static_cast<uint32_t>(heap->getMaxAvailableSpace()));
         }
 
         auto buffer = commandStream->getSpace(sizeof(cmd));

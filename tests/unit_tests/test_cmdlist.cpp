@@ -141,7 +141,14 @@ HWTEST_F(CommandListCreate, addsStateBaseAddressToBatchBuffer) {
 
     {
         auto cmd = genCmdCast<STATE_BASE_ADDRESS *>(*itor);
-        auto heap = commandList->indirectHeaps[CommandList::INSTRUCTION];
+
+        auto heap = commandList->indirectHeaps[CommandList::DYNAMIC_STATE];
+        EXPECT_TRUE(cmd->getDynamicStateBaseAddressModifyEnable());
+        EXPECT_EQ(cmd->getDynamicStateBaseAddress(), heap->getHeapGpuBase());
+        EXPECT_TRUE(cmd->getDynamicStateBufferSizeModifyEnable());
+        EXPECT_EQ(cmd->getDynamicStateBufferSize(), heap->getMaxAvailableSpace());
+
+        heap = commandList->indirectHeaps[CommandList::INSTRUCTION];
         EXPECT_TRUE(cmd->getInstructionBaseAddressModifyEnable());
         EXPECT_EQ(cmd->getInstructionBaseAddress(), heap->getHeapGpuBase());
         EXPECT_TRUE(cmd->getInstructionBufferSizeModifyEnable());
@@ -152,6 +159,12 @@ HWTEST_F(CommandListCreate, addsStateBaseAddressToBatchBuffer) {
         EXPECT_EQ(cmd->getGeneralStateBaseAddress(), heap->getHeapGpuBase());
         EXPECT_TRUE(cmd->getGeneralStateBufferSizeModifyEnable());
         EXPECT_EQ(cmd->getGeneralStateBufferSize(), heap->getMaxAvailableSpace());
+
+        heap = commandList->indirectHeaps[CommandList::INDIRECT_OBJECT];
+        EXPECT_TRUE(cmd->getIndirectObjectBaseAddressModifyEnable());
+        EXPECT_EQ(cmd->getIndirectObjectBaseAddress(), heap->getHeapGpuBase());
+        EXPECT_TRUE(cmd->getIndirectObjectBufferSizeModifyEnable());
+        EXPECT_EQ(cmd->getIndirectObjectBufferSize(), heap->getMaxAvailableSpace());
     }
 }
 
