@@ -256,6 +256,16 @@ xe_result_t CommandListCoreFamily<gfxCoreFamily>::encodeDispatchFunction(xe_func
     cmd.setRightExecutionMask(function->getThreadExecutionMask());
     cmd.setBottomExecutionMask(0xffffffff);
 
+    // Attach Function residency to our CommandList residency
+    {
+        auto &residencyContainer = function->getResidencyContainer();
+        for (auto resource : residencyContainer) {
+            if (resource) {
+                this->residencyContainer.push_back(resource->allocationRT);
+            }
+        }
+    }
+
     // Commit our command to the commandStream
     auto buffer = commandStream->getSpace(sizeof(cmd));
     *(decltype(cmd) *)buffer = cmd;
