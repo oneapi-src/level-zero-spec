@@ -24,7 +24,6 @@ pages:
 linux:
   image: loki:latest
   stage: build
-  allow_failure: true
   only:
   - branches
   - tags
@@ -43,7 +42,6 @@ linux:
 
 windows:
   stage: build
-  allow_failure: true
   only:
   - branches
   - tags
