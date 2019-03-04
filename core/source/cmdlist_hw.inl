@@ -202,6 +202,7 @@ xe_result_t CommandListCoreFamily<gfxCoreFamily>::encodeDispatchFunction(xe_func
         auto numGrfPerThreadData = static_cast<uint32_t>(sizePerThreadData / sizeof(float[8]));
         assert(numGrfPerThreadData > 0u);
         idd.setConstantIndirectUrbEntryReadLength(numGrfPerThreadData);
+        idd.setBarrierEnable(function->getHasBarriers());
 
         memcpy(ptr, &idd, sizeof(idd));
 

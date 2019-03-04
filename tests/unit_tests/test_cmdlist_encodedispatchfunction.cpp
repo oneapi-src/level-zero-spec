@@ -64,11 +64,6 @@ struct CommandListEncodeDispatchFunction : public ::testing::Test {
         dispatchFunctionArguments.groupCountX = 1u;
         dispatchFunctionArguments.groupCountY = 2u;
         dispatchFunctionArguments.groupCountZ = 3u;
-
-        std::string deviceName = "Gen12HPcore";
-        function = new PrecompiledFunctionMock("MemcpyBytes", deviceName, {&buffer1, &buffer2});
-
-        EXPECT_CALL(*function, getThreadExecutionMask()).Times(AnyNumber());
     }
 
     void TearDown() override {
@@ -78,6 +73,13 @@ struct CommandListEncodeDispatchFunction : public ::testing::Test {
         ASSERT_NE(memoryManager, nullptr);
         memoryManager->freeMemory(buffer1);
         memoryManager->freeMemory(buffer2);
+    }
+
+    void createFunction(const std::string &functionName) {
+        std::string deviceName = "Gen12HPcore";
+        function = new PrecompiledFunctionMock(functionName, deviceName, {&buffer1, &buffer2});
+
+        EXPECT_CALL(*function, getThreadExecutionMask()).Times(AnyNumber());
     }
 
     Mock<Device> device;
@@ -91,6 +93,8 @@ struct CommandListEncodeDispatchFunction : public ::testing::Test {
 };
 
 ATSTEST_F(CommandListEncodeDispatchFunction, addsWalkerToCommandStream) {
+    createFunction("MemcpyBytes");
+
     auto usedSpaceBefore = commandList->commandStream->getUsed();
 
     auto result = commandList->encodeDispatchFunction(function->toHandle(),
@@ -140,7 +144,35 @@ ATSTEST_F(CommandListEncodeDispatchFunction, addsWalkerToCommandStream) {
     }
 }
 
+ATSTEST_F(CommandListEncodeDispatchFunction, withBarrierSetsIDDBarrierEnable) {
+    createFunction("SlmBarrier");
+    auto result = commandList->encodeDispatchFunction(function->toHandle(),
+                                                      &dispatchFunctionArguments,
+                                                      nullptr);
+    ASSERT_EQ(XE_RESULT_SUCCESS, result);
+
+    auto usedSpaceAfter = commandList->commandStream->getUsed();
+
+    GenCmdList cmdList;
+    ASSERT_TRUE(FamilyType::PARSE::parseCommandBuffer(cmdList,
+                                                      ptrOffset(commandList->commandStream->getCpuBase(), 0),
+                                                      usedSpaceAfter));
+    using COMPUTE_WALKER = typename FamilyType::COMPUTE_WALKER;
+    using INTERFACE_DESCRIPTOR_DATA = typename FamilyType::INTERFACE_DESCRIPTOR_DATA;
+
+    auto itor = find<COMPUTE_WALKER *>(cmdList.begin(), cmdList.end());
+    ASSERT_NE(cmdList.end(), itor);
+
+    {
+        auto cmd = genCmdCast<COMPUTE_WALKER *>(*itor);
+        auto &idd = cmd->getInterfaceDescriptor();
+        EXPECT_EQ(idd.getBarrierEnable(), 1u);
+    }
+}
+
 ATSTEST_F(CommandListEncodeDispatchFunction, withEventSetsPostSyncOp) {
+    createFunction("MemcpyBytes");
+
     auto usedSpaceBefore = commandList->commandStream->getUsed();
     auto event = whitebox_cast(Event::create(&device));
 
@@ -172,6 +204,7 @@ ATSTEST_F(CommandListEncodeDispatchFunction, withEventSetsPostSyncOp) {
 }
 
 ATSTEST_F(CommandListEncodeDispatchFunction, copiesThreadDataToGeneralStateHeap) {
+    createFunction("MemcpyBytes");
     auto result = commandList->encodeDispatchFunction(function->toHandle(),
                                                       &dispatchFunctionArguments,
                                                       nullptr);
@@ -208,6 +241,7 @@ ATSTEST_F(CommandListEncodeDispatchFunction, copiesThreadDataToGeneralStateHeap)
 }
 
 ATSTEST_F(CommandListEncodeDispatchFunction, copiesKernelIsaToInstructionHeap) {
+    createFunction("MemcpyBytes");
     auto result = commandList->encodeDispatchFunction(function->toHandle(),
                                                       &dispatchFunctionArguments,
                                                       nullptr);
@@ -241,6 +275,7 @@ ATSTEST_F(CommandListEncodeDispatchFunction, copiesKernelIsaToInstructionHeap) {
 
 using CommandListEncodeDispatchFunctionGEN9 = CommandListEncodeDispatchFunction;
 GEN9TEST_F(CommandListEncodeDispatchFunctionGEN9, addsWalkerToCommandStream) {
+    createFunction("MemcpyBytes");
     auto usedSpaceBefore = commandList->commandStream->getUsed();
 
     auto result = commandList->encodeDispatchFunction(function->toHandle(),
@@ -317,6 +352,8 @@ GEN9TEST_F(CommandListEncodeDispatchFunctionGEN9, addsWalkerToCommandStream) {
 }
 
 GEN9TEST_F(CommandListEncodeDispatchFunctionGEN9, programsL3InBatchBuffer) {
+    createFunction("MemcpyBytes");
+
     Mock<Device> device;
     EXPECT_CALL(device, getMemoryManager).Times(AnyNumber());
 
@@ -353,6 +390,43 @@ GEN9TEST_F(CommandListEncodeDispatchFunctionGEN9, programsL3InBatchBuffer) {
         auto cmd = genCmdCast<MI_LOAD_REGISTER_IMM *>(*itorLRI);
         EXPECT_NE(cmd->getRegisterOffset(), 0u);
     }
+}
+
+GEN9TEST_F(CommandListEncodeDispatchFunctionGEN9, withBarrierSetsIDDBarrierEnable) {
+    createFunction("SlmBarrier");
+
+    auto result = commandList->encodeDispatchFunction(function->toHandle(),
+                                                      &dispatchFunctionArguments,
+                                                      nullptr);
+    ASSERT_EQ(XE_RESULT_SUCCESS, result);
+
+    auto usedSpaceAfter = commandList->commandStream->getUsed();
+
+    GenCmdList cmdList;
+    ASSERT_TRUE(FamilyType::PARSE::parseCommandBuffer(cmdList,
+                                                      ptrOffset(commandList->commandStream->getCpuBase(), 0),
+                                                      usedSpaceAfter));
+    using GPGPU_WALKER = typename FamilyType::GPGPU_WALKER;
+    using INTERFACE_DESCRIPTOR_DATA = typename FamilyType::INTERFACE_DESCRIPTOR_DATA;
+    using MEDIA_INTERFACE_DESCRIPTOR_LOAD = typename FamilyType::MEDIA_INTERFACE_DESCRIPTOR_LOAD;
+
+    auto itorWalker = find<GPGPU_WALKER *>(cmdList.begin(), cmdList.end());
+    ASSERT_NE(cmdList.end(), itorWalker);
+
+    auto itorMIDL = find<MEDIA_INTERFACE_DESCRIPTOR_LOAD *>(cmdList.begin(), itorWalker);
+    ASSERT_NE(itorMIDL, itorWalker);
+    INTERFACE_DESCRIPTOR_DATA *idd = nullptr;
+    {
+        auto cmd = genCmdCast<MEDIA_INTERFACE_DESCRIPTOR_LOAD *>(*itorMIDL);
+        ASSERT_NE(cmd, nullptr);
+
+        EXPECT_EQ(cmd->getInterfaceDescriptorTotalLength(), sizeof(INTERFACE_DESCRIPTOR_DATA));
+        auto dsh = commandList->indirectHeaps[CommandList::DYNAMIC_STATE];
+        EXPECT_LE(cmd->getInterfaceDescriptorDataStartAddress() + cmd->getInterfaceDescriptorTotalLength(), dsh->getUsed());
+        idd = static_cast<INTERFACE_DESCRIPTOR_DATA *>(ptrOffset(dsh->getCpuBase(), cmd->getInterfaceDescriptorDataStartAddress()));
+    }
+
+    EXPECT_EQ(idd->getBarrierEnable(), 1u);
 }
 
 } // namespace ult

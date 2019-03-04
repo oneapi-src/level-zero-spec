@@ -90,6 +90,7 @@ xe_result_t CommandListCoreFamily<IGFX_GEN12_CORE>::encodeDispatchFunction(xe_fu
     // Set number of threads per thead group.
     auto &idd = cmd.getInterfaceDescriptor();
     idd.setNumberOfThreadsInGpgpuThreadGroup(function->getThreadsPerThreadGroup());
+    idd.setBarrierEnable(function->getHasBarriers());
 
     // Copy the kernel to indirect heap
     // TODO: Allocate kernel in graphics memory to avoid the CPU copy

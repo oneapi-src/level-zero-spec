@@ -272,6 +272,10 @@ struct FunctionImp : Function {
         return threadExecutionMask;
     }
 
+    bool getHasBarriers() const override {
+        return kernelRT->getKernelInfo().patchInfo.executionEnvironment->HasBarriers;
+    }
+
   protected:
     template <typename T>
     void patchCrossThreadDataBasedOnKernelRT(uint32_t location, const T &value) {

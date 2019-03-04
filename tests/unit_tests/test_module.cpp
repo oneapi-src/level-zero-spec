@@ -12,7 +12,7 @@
 #include "runtime/platform/platform.h"
 
 #include "gtest/gtest.h"
-
+#include "test.h"
 #include <fstream>
 
 namespace L0 {
@@ -54,8 +54,16 @@ std::unique_ptr<char[]> readBinaryTestFile(const std::string &name, size_t &outS
     return storage;
 }
 
-TEST(ModuleCreate, onlineCompilationModuleTest) {
+using ModuleCreate = ::testing::TestWithParam<std::tuple<std::string, std::string, std::string>>;
+
+TEST_P(ModuleCreate, onlineCompilationModuleTest) {
     UserRealCompilerGuard realCompilerGuard; // just for now
+
+    std::string filename;
+    std::string functionName;
+    std::string moduleName;
+
+    std::tie(filename, functionName, moduleName) = GetParam();
 
     auto platform = OCLRT::constructPlatform();
     auto success = platform->initialize();
@@ -66,7 +74,7 @@ TEST(ModuleCreate, onlineCompilationModuleTest) {
     auto device = Device::create(deviceRT);
 
     size_t spvModuleSize = 0;
-    auto spvModule = readBinaryTestFile("test_files/spv_modules/cstring_module.spv", spvModuleSize);
+    auto spvModule = readBinaryTestFile(filename, spvModuleSize);
     ASSERT_NE(0U, spvModuleSize);
 
     xe_module_desc_t modDesc = {};
@@ -80,7 +88,7 @@ TEST(ModuleCreate, onlineCompilationModuleTest) {
 
     xe_function_desc_t funDesc = {};
     funDesc.version = XE_API_HEADER_VERSION;
-    funDesc.pFunctionName = "memcpy_bytes";
+    funDesc.pFunctionName = functionName.c_str();
     auto function = whitebox_cast(Function::create(module, &funDesc));
     ASSERT_NE(nullptr, function);
 
@@ -123,7 +131,6 @@ TEST(ModuleCreate, onlineCompilationModuleTest) {
     bool generateMockData = false;
     if (generateMockData) {
         auto deviceName = deviceRT->getFamilyNameWithType();
-        std::string moduleName = std::string("MemcpyBytes");
         std::stringstream mockDataStream;
         std::vector<std::pair<int, uintptr_t>> bufferArgsIndices{std::make_pair(0, dstAddress), std::make_pair(1, srcAddress)};
         writeMockData(__FUNCTION__, moduleName, deviceName, function, bufferArgsIndices, mockDataStream);
@@ -136,7 +143,13 @@ TEST(ModuleCreate, onlineCompilationModuleTest) {
     module->destroy();
 }
 
-TEST(ModuleCreate, mockedModuleTest) {
+static std::tuple<std::string, std::string, std::string> paramsForCreateModule[] = {
+    std::make_tuple<std::string, std::string, std::string>("test_files/spv_modules/cstring_module.spv", "memcpy_bytes", "MemcpyBytes"),
+    std::make_tuple<std::string, std::string, std::string>("test_files/spv_modules/slm_barrier_kernel.spv", "slmBarrierSum", "SlmBarrier")};
+
+INSTANTIATE_TEST_CASE_P(, ModuleCreate, ::testing::ValuesIn(paramsForCreateModule));
+
+TEST(ModuleCreateSimple, mockedModuleTest) {
     Mock<Device> device;
     OCLRT::Device *deviceRT = reinterpret_cast<OCLRT::Device *>(device.deviceRT);
     const PrecompiledFunctionMockData *expectedData = PrecompiledFunctionMocksDataRegistry::get().getDataFor("MemcpyBytes", deviceRT->getFamilyNameWithType());
@@ -188,6 +201,17 @@ TEST(ModuleCreate, mockedModuleTest) {
     EXPECT_EQ(expectedData->groupSizeInPerThreadDataBase[0], groupSizeX);
     EXPECT_EQ(expectedData->groupSizeInPerThreadDataBase[1], groupSizeY);
     EXPECT_EQ(expectedData->groupSizeInPerThreadDataBase[2], groupSizeZ);
+}
+
+TEST(ModuleCreateSimple, moduleWithSLMandBarriers) {
+    Mock<Device> device;
+    OCLRT::Device *deviceRT = reinterpret_cast<OCLRT::Device *>(device.deviceRT);
+    const PrecompiledFunctionMockData *expectedData = PrecompiledFunctionMocksDataRegistry::get().getDataFor("SlmBarrier", deviceRT->getFamilyNameWithType());
+    ASSERT_NE(nullptr, expectedData);
+
+    PrecompiledFunctionMock function("SlmBarrier", deviceRT->getFamilyNameWithType(), {});
+
+    EXPECT_TRUE(function.getHasBarriers());
 }
 
 TEST(FunctionArgs_accessors, returnsCorrectThreadGroupParameters) {
