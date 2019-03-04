@@ -112,7 +112,8 @@ GEN9TEST_F(CommandListCreate, addsPipelineSelectBeforeVfeStateToBatchBuffer) {
 
     {
         auto cmd = genCmdCast<PIPELINE_SELECT *>(*itorPS);
-        //EXPECT_EQ()
+        EXPECT_EQ(cmd->getMaskBits() & 3u, 3u);
+        EXPECT_EQ(cmd->getPipelineSelection(), PIPELINE_SELECT::PIPELINE_SELECTION_GPGPU);
     }
 }
 

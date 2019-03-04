@@ -56,6 +56,7 @@ void CommandListCoreFamily<gfxCoreFamily>::enableGpgpu() {
     using PIPELINE_SELECT = typename GfxFamily::PIPELINE_SELECT;
     PIPELINE_SELECT cmd = GfxFamily::cmdInitPipelineSelect;
     cmd.setPipelineSelection(PIPELINE_SELECT::PIPELINE_SELECTION_GPGPU);
+    cmd.setMaskBits(3u); //TODO:  Add support for DOP clock gating
 
     auto buffer = commandStream->getSpace(sizeof(cmd));
     *(PIPELINE_SELECT *)buffer = cmd;
