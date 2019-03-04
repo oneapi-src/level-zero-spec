@@ -32,6 +32,10 @@ target_compile_definitions(${TARGET_NAME}
 )
 
 if(UNIX)
+    target_sources(${TARGET_NAME}
+        PRIVATE
+            ${COMPUTE_RUNTIME_DIR}/runtime/dll/linux/drm_neo_create.cpp
+    )
     set(OS_SPECIFIC_LIBS dl pthread)
 else()
     set(OS_SPECIFIC_LIBS "")

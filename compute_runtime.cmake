@@ -175,9 +175,13 @@ if(WIN32)
 else()
     target_sources(compute_runtime_lib_full
     PRIVATE
+        ${COMPUTE_RUNTIME_DIR}/runtime/dll/linux/allocator_helper.cpp
+        ${COMPUTE_RUNTIME_DIR}/runtime/dll/linux/devices/${BRANCH_DIR_SUFFIX}/devices.inl
+        ${COMPUTE_RUNTIME_DIR}/runtime/dll/linux/devices/devices_base.inl      
         ${COMPUTE_RUNTIME_DIR}/runtime/dll/linux/options.cpp
         ${COMPUTE_RUNTIME_DIR}/runtime/dll/linux/os_interface.cpp
     )
+    target_include_directories(compute_runtime_lib_full PUBLIC ${COMPUTE_RUNTIME_DIR}/runtime/dll/linux/devices${BRANCH_DIR_SUFFIX})
 endif()
 
 #Put all compute runtime items into the same folder

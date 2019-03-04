@@ -40,13 +40,18 @@ inline std::unique_ptr<char[]> readBinaryFile(const std::string &name, SizeT &ou
     return storage;
 }
 
+bool verbose = false;
+
 template <bool TerminateOnFailure, typename ResulT>
 inline void validate(ResulT result, const char *message) {
     if (result == 0) { // assumption 0 is success
+        if (verbose) {
+            std::cerr << " SUCCESS : " << message << std::endl;
+        }
         return;
     }
 
-    std::cerr << message << " : " << result << std::endl;
+    std::cerr << (TerminateOnFailure ? "ERROR : " : "WARNING : ") << message << " : " << result << std::endl;
     if (TerminateOnFailure) {
         std::terminate();
     }
@@ -57,7 +62,14 @@ inline void validate(ResulT result, const char *message) {
 #define SUCCESS_OR_WARNING(CALL) validate<false>(CALL, #CALL)
 #define SUCCESS_OR_WARNING_BOOL(FLAG) validate<false>(!(FLAG), #FLAG)
 
-int main() {
+int main(int argc, char *argv[]) {
+    if ((argc >= 2) && ((0 == strcmp(argv[1], "-v")) || (0 == strcmp(argv[1], "--verbose")))) {
+        verbose = true;
+    }
+
+    if (verbose) {
+        std::cerr << "VERBOSE MODE ENABLED" << std::endl;
+    }
     // 0. Load the driver
     auto driverLibrary = LOAD_DRIVER_LIBRARY();
     if (NULL == driverLibrary) {
@@ -164,16 +176,16 @@ int main() {
     // 5. Dispatch and wait
     SUCCESS_OR_TERMINATE(xeApi.xeCommandListClose(cmdList));
     SUCCESS_OR_TERMINATE(xeApi.xeCommandQueueEnqueueCommandLists(cmdQueue, 1, &cmdList, nullptr));
-    auto synchronizationResult = xeApi.xeCommandQueueSynchronize(cmdQueue, XE_SYNCHRONIZATION_MODE_POLL, 0, 0, 100);
-    SUCCESS_OR_TERMINATE_BOOL((XE_RESULT_SUCCESS == synchronizationResult) || (XE_RESULT_NOT_READY == synchronizationResult));
+    auto synchronizationResult = xeApi.xeCommandQueueSynchronize(cmdQueue, XE_SYNCHRONIZATION_MODE_POLL, 0, 0, 1000);
+    SUCCESS_OR_WARNING(synchronizationResult);
 
 // 6. Validate
 #if SUPPORT_MEMORY_COPY
 #else
     memcpy(readBackData, dstBuffer, sizeof(readBackData));
 #endif
-    bool outputValidationPassed = (0 == memcmp(initDataSrc, readBackData, sizeof(readBackData)));
-    SUCCESS_OR_WARNING_BOOL(outputValidationPassed);
+    bool outputValidationFailed = (0 != memcmp(initDataSrc, readBackData, sizeof(readBackData)));
+    SUCCESS_OR_WARNING_BOOL(!outputValidationFailed);
 
     // X. Cleanup
     SUCCESS_OR_TERMINATE(xeApi.xeMemFree(allocator, dstBuffer));
@@ -187,5 +199,10 @@ int main() {
     SUCCESS_OR_TERMINATE(xeApi.xeFunctionDestroy(function));
     SUCCESS_OR_TERMINATE(xeApi.xeModuleDestroy(module));
 
-    return outputValidationPassed ? 0 : 1;
+    bool aubMode = (XE_RESULT_NOT_READY == synchronizationResult);
+    if (aubMode == false) {
+        std::cerr << "\nResults validation " << (outputValidationFailed ? "FAILED" : "PASSED");
+    }
+    int resultOnFailure = aubMode ? 0 : 1;
+    return outputValidationFailed ? resultOnFailure : 0;
 }

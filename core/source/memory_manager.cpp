@@ -12,7 +12,7 @@ struct MemoryManagerImp : public MemoryManager {
         OCLRT::AllocationProperties properties(size, OCLRT::GraphicsAllocation::AllocationType::UNDECIDED);
         properties.alignment = alignment;
 
-        auto allocation = new GraphicsAllocation(memoryManagerRT->allocateGraphicsMemory(properties, nullptr));
+        auto allocation = new GraphicsAllocation(memoryManagerRT->allocateGraphicsMemoryWithProperties(properties));
         knownAllocations.insert(*allocation->allocationRT); // temporary
         allocMap[allocation->allocationRT] = allocation; // temporary
 
@@ -23,7 +23,7 @@ struct MemoryManagerImp : public MemoryManager {
         OCLRT::AllocationProperties properties(size, OCLRT::GraphicsAllocation::AllocationType::UNDECIDED);
         properties.alignment = alignment;
 
-        auto allocation = new GraphicsAllocation(memoryManagerRT->allocateGraphicsMemory(properties, nullptr));
+        auto allocation = new GraphicsAllocation(memoryManagerRT->allocateGraphicsMemoryWithProperties(properties));
         knownAllocations.insert(*allocation->allocationRT); // temporary
         allocMap[allocation->allocationRT] = allocation; // temporary
 
