@@ -1,3 +1,6 @@
+set(DISABLED_GTPIN_SUPPORT TRUE)
+add_subdirectory(${COMPUTE_RUNTIME_DIR} ${PROJECT_BINARY_DIR}/compute-runtime EXCLUDE_FROM_ALL)
+
 ##
 ## Core library settings
 ##

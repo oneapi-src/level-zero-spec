@@ -64,10 +64,8 @@ if(NOT DEFINED COMPUTE_RUNTIME_DIR)
     endif()
 endif()
 
-set(COMPUTE_RUNTIME_SUPPORT TRUE)
 if(NOT EXISTS ${COMPUTE_RUNTIME_DIR}/runtime/command_stream)
-    set(COMPUTE_RUNTIME_SUPPORT FALSE)
-    set(COMPUTE_RUNTIME_DIR "Not found!")
+    message(FATAL_ERROR "COMPUTE_RUNTIME_DIR = Not found!")
 endif() 
 message(STATUS "COMPUTE_RUNTIME_DIR = ${COMPUTE_RUNTIME_DIR}")
 
@@ -76,12 +74,8 @@ option(${PROJECT_NAME}_BUILD_TESTS "Build unit tests." ON)
 
 add_subdirectory(${THIRD_PARTY_DIR})
 
-if(COMPUTE_RUNTIME_SUPPORT)
-    set(DISABLED_GTPIN_SUPPORT TRUE)
-    add_subdirectory(${COMPUTE_RUNTIME_DIR} ${PROJECT_BINARY_DIR}/compute-runtime EXCLUDE_FROM_ALL)
-
-    include(compute_runtime.cmake)
-endif(COMPUTE_RUNTIME_SUPPORT)
+#enable compute_runtime
+include(compute_runtime.cmake)
 
 # Copy third_party_binaries to output BIN folder
 add_custom_target(copy_third_party_files)
