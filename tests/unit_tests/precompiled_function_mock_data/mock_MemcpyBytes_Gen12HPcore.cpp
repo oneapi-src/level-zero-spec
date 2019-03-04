@@ -40,7 +40,7 @@ static const uint32_t MemcpyBytes_ISA_Gen12HPcore[] =
 static const uint32_t MemcpyBytes_CrossThreadDataBase_Gen12HPcore[] = 
 {
     0x00000000, 0x00000000, 0x00000000, 0x00000020, 0x00000001, 0x00000001, 0x00000000, 0x00000000, 
-    0x191cd000, 0x0000024e, 0x1930a000, 0x0000024e, 0x00000020, 0x00000001, 0x00000001, 0x00000000
+    0xd7c35000, 0x000002b6, 0xd85bd000, 0x000002b6, 0x00000020, 0x00000001, 0x00000001, 0x00000000
 };
 
 
@@ -55,6 +55,10 @@ static const uint32_t MemcpyBytes_PerThreadDataBase_Gen12HPcore[] =
 };
 
 
+static const bool MemcpyBytes_HasBarriers_Gen12HPcore = 0;
+
+static const uint32_t MemcpyBytes_SlmSize_Gen12HPcore = 0x0;
+
 static const std::pair<int, int> MemcpyBytes_BufferArgIndicesAndOffsets_Gen12HPcore[] = { {0x0, 0x20}, {0x1, 0x28},  };
 
 static const uint32_t MemcpyBytes_GroupSizeInPerThreadData_Gen12HPcore[] = { 0x20, 0x1, 0x1 };
@@ -65,7 +69,9 @@ MemcpyBytes_ISA_Gen12HPcore, sizeof(MemcpyBytes_ISA_Gen12HPcore),
 MemcpyBytes_CrossThreadDataBase_Gen12HPcore, sizeof(MemcpyBytes_CrossThreadDataBase_Gen12HPcore),
 MemcpyBytes_PerThreadDataBase_Gen12HPcore, sizeof(MemcpyBytes_PerThreadDataBase_Gen12HPcore),
 MemcpyBytes_GroupSizeInPerThreadData_Gen12HPcore,
-MemcpyBytes_BufferArgIndicesAndOffsets_Gen12HPcore, sizeof(MemcpyBytes_BufferArgIndicesAndOffsets_Gen12HPcore) / sizeof(MemcpyBytes_BufferArgIndicesAndOffsets_Gen12HPcore[0])
+MemcpyBytes_BufferArgIndicesAndOffsets_Gen12HPcore, sizeof(MemcpyBytes_BufferArgIndicesAndOffsets_Gen12HPcore) / sizeof(MemcpyBytes_BufferArgIndicesAndOffsets_Gen12HPcore[0]),
+MemcpyBytes_HasBarriers_Gen12HPcore,
+MemcpyBytes_SlmSize_Gen12HPcore
 };
 
 RegisterPrecompiledFunctionMocksData Register_MemcpyBytes_Gen12HPcore{ & MemcpyBytes_Gen12HPcore, "MemcpyBytes", "Gen12HPcore" }; 

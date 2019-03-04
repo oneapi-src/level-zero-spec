@@ -26,6 +26,7 @@ struct PrecompiledFunctionMockData {
     const std::pair<int, int> *bufferArgIndicesAndOffsets;
     const size_t bufferArgIndicesAndOffsetsCount;
     const bool hasBarriers;
+    const uint32_t slmSize;
 };
 
 struct PrecompiledFunctionMock : Mock<Function> {
@@ -118,6 +119,10 @@ struct PrecompiledFunctionMock : Mock<Function> {
 
     bool getHasBarriers() const override {
         return precompiledFunctionMockData->hasBarriers;
+    }
+
+    uint32_t getSlmSize() const override {
+        return precompiledFunctionMockData->slmSize;
     }
 
     const PrecompiledFunctionMockData *precompiledFunctionMockData = nullptr;
@@ -217,8 +222,10 @@ inline void writeMockData(const std::string sourceOrigin, std::string &mockName,
     std::string globalNameGroupSize = mockName + "_GroupSizeInPerThreadData_" + deviceName;
     std::string globalNamePrecompiledFunctionMockData = mockName + "_" + deviceName;
     std::string globalNameHasBarriers = mockName + "_HasBarriers_" + deviceName;
+    std::string globalNameSlmSize = mockName + "_SlmSize_" + deviceName;
 
     out << "static const uint32_t " << globalNameSimdSize << " = " << function->getSimdSize() << ";\n\n";
+
     out << "static const uint32_t " << globalNameIsa << "[] = \n";
     writeAsCppArrayInitializer(function->getIsaHostMem(), function->getIsaSize(), out);
     out << "\n\n";
@@ -228,7 +235,9 @@ inline void writeMockData(const std::string sourceOrigin, std::string &mockName,
     out << "static const uint32_t " << globalNamePerThreadData << "[] = \n";
     writeAsCppArrayInitializer(function->getPerThreadDataHostMem(), function->getPerThreadDataSize(), out);
     out << "\n\n";
+
     out << "static const bool " << globalNameHasBarriers << " = " << function->getHasBarriers() << ";\n\n";
+    out << "static const uint32_t " << globalNameSlmSize << " = 0x" << function->getSlmSize() << ";\n\n";
 
     out << "static const std::pair<int, int> " << globalNameBufferArgIndices << "[] = { ";
     const void *crossThreadData = function->getCrossThreadDataHostMem();
@@ -258,8 +267,9 @@ inline void writeMockData(const std::string sourceOrigin, std::string &mockName,
         << globalNamePerThreadData << ", sizeof(" << globalNamePerThreadData << "),\n"
         << globalNameGroupSize << ",\n"
         << globalNameBufferArgIndices << ", sizeof(" << globalNameBufferArgIndices << ") / sizeof(" << globalNameBufferArgIndices << "[0]),\n"
-        << globalNameHasBarriers << "\n"
-                                    "};\n\n";
+        << globalNameHasBarriers << ",\n"
+        << globalNameSlmSize << "\n"
+                                "};\n\n";
 
     out << "RegisterPrecompiledFunctionMocksData Register_" << mockName << "_" << deviceName << "{ & " << globalNamePrecompiledFunctionMockData << ", \"" << mockName << "\", \"" << deviceName << "\" }; \n";
 

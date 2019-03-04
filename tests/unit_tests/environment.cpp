@@ -11,7 +11,7 @@ GFXCORE_FAMILY renderCoreFamily;
 namespace OCLRT {
 extern bool overrideCommandStreamReceiverCreation;
 extern TestMode testMode;
-}
+} // namespace OCLRT
 
 namespace L0 {
 namespace ult {
@@ -26,7 +26,7 @@ struct Environment : public ::testing::Environment {
     void SetUp() override {
         if (OCLRT::DebugManager.flags.SetCommandStreamReceiver.get()) {
             OCLRT::overrideCommandStreamReceiverCreation = true;
-            OCLRT::testMode = OCLRT::TestMode::AubTestsWithTbx;        
+            OCLRT::testMode = OCLRT::TestMode::AubTestsWithTbx;
         }
 
         // Clone default device information

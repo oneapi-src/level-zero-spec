@@ -64,7 +64,7 @@ static const uint32_t SlmBarrier_ISA_Gen12HPcore[] =
 static const uint32_t SlmBarrier_CrossThreadDataBase_Gen12HPcore[] = 
 {
     0x00000000, 0x00000000, 0x00000000, 0x00000020, 0x00000001, 0x00000001, 0x00000000, 0x00000000, 
-    0x5ef2e000, 0x0000022c, 0x5e4f0000, 0x0000022c, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 
+    0xd7c54000, 0x000002b6, 0xd811d000, 0x000002b6, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 
     0x00000020, 0x00000001, 0x00000001, 0x00000020, 0x00000001, 0x00000001, 0x00000000, 0x00000000
 };
 
@@ -82,6 +82,8 @@ static const uint32_t SlmBarrier_PerThreadDataBase_Gen12HPcore[] =
 
 static const bool SlmBarrier_HasBarriers_Gen12HPcore = 1;
 
+static const uint32_t SlmBarrier_SlmSize_Gen12HPcore = 0x40;
+
 static const std::pair<int, int> SlmBarrier_BufferArgIndicesAndOffsets_Gen12HPcore[] = { {0x0, 0x20}, {0x1, 0x28},  };
 
 static const uint32_t SlmBarrier_GroupSizeInPerThreadData_Gen12HPcore[] = { 0x20, 0x1, 0x1 };
@@ -93,7 +95,8 @@ SlmBarrier_CrossThreadDataBase_Gen12HPcore, sizeof(SlmBarrier_CrossThreadDataBas
 SlmBarrier_PerThreadDataBase_Gen12HPcore, sizeof(SlmBarrier_PerThreadDataBase_Gen12HPcore),
 SlmBarrier_GroupSizeInPerThreadData_Gen12HPcore,
 SlmBarrier_BufferArgIndicesAndOffsets_Gen12HPcore, sizeof(SlmBarrier_BufferArgIndicesAndOffsets_Gen12HPcore) / sizeof(SlmBarrier_BufferArgIndicesAndOffsets_Gen12HPcore[0]),
-SlmBarrier_HasBarriers_Gen12HPcore
+SlmBarrier_HasBarriers_Gen12HPcore,
+SlmBarrier_SlmSize_Gen12HPcore
 };
 
 RegisterPrecompiledFunctionMocksData Register_SlmBarrier_Gen12HPcore{ & SlmBarrier_Gen12HPcore, "SlmBarrier", "Gen12HPcore" }; 

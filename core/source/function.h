@@ -51,6 +51,7 @@ struct Function : public _xe_function_handle_t {
     virtual uint32_t getThreadsPerThreadGroup() const = 0;
     virtual uint32_t getThreadExecutionMask() const = 0;
     virtual bool getHasBarriers() const = 0;
+    virtual uint32_t getSlmSize() const = 0;
 
     Function() = default;
     Function(const Function &) = delete;

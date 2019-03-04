@@ -276,6 +276,13 @@ struct FunctionImp : Function {
         return kernelRT->getKernelInfo().patchInfo.executionEnvironment->HasBarriers;
     }
 
+    uint32_t getSlmSize() const override {
+        if (kernelRT->getKernelInfo().patchInfo.localsurface) {
+            return kernelRT->getKernelInfo().patchInfo.localsurface->TotalInlineLocalMemorySize;
+        }
+        return 0;
+    }
+
   protected:
     template <typename T>
     void patchCrossThreadDataBasedOnKernelRT(uint32_t location, const T &value) {

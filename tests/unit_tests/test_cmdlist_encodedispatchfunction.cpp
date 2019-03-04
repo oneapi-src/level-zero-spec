@@ -144,7 +144,7 @@ ATSTEST_F(CommandListEncodeDispatchFunction, addsWalkerToCommandStream) {
     }
 }
 
-ATSTEST_F(CommandListEncodeDispatchFunction, withBarrierSetsIDDBarrierEnable) {
+ATSTEST_F(CommandListEncodeDispatchFunction, withBarrierAndSLMSetsIDDBarrierEnableAndSLMSize) {
     createFunction("SlmBarrier");
     auto result = commandList->encodeDispatchFunction(function->toHandle(),
                                                       &dispatchFunctionArguments,
@@ -167,6 +167,7 @@ ATSTEST_F(CommandListEncodeDispatchFunction, withBarrierSetsIDDBarrierEnable) {
         auto cmd = genCmdCast<COMPUTE_WALKER *>(*itor);
         auto &idd = cmd->getInterfaceDescriptor();
         EXPECT_EQ(idd.getBarrierEnable(), 1u);
+        EXPECT_EQ(INTERFACE_DESCRIPTOR_DATA::SHARED_LOCAL_MEMORY_SIZE_ENCODES_64K, idd.getSharedLocalMemorySize());
     }
 }
 
@@ -392,7 +393,7 @@ GEN9TEST_F(CommandListEncodeDispatchFunctionGEN9, programsL3InBatchBuffer) {
     }
 }
 
-GEN9TEST_F(CommandListEncodeDispatchFunctionGEN9, withBarrierSetsIDDBarrierEnable) {
+GEN9TEST_F(CommandListEncodeDispatchFunctionGEN9, withBarrierAndSLMSetsIDDBarrierEnable) {
     createFunction("SlmBarrier");
 
     auto result = commandList->encodeDispatchFunction(function->toHandle(),
@@ -427,6 +428,8 @@ GEN9TEST_F(CommandListEncodeDispatchFunctionGEN9, withBarrierSetsIDDBarrierEnabl
     }
 
     EXPECT_EQ(idd->getBarrierEnable(), 1u);
+    // Do not set SLM size for now - it requires proper L3 programming
+    EXPECT_EQ(INTERFACE_DESCRIPTOR_DATA::SHARED_LOCAL_MEMORY_SIZE_ENCODES_0K, idd->getSharedLocalMemorySize());
 }
 
 } // namespace ult

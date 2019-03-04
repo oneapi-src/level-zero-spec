@@ -46,6 +46,7 @@ struct Mock<Function> : public Function {
     MOCK_CONST_METHOD0(getCrossThreadDataSize, size_t());
     MOCK_CONST_METHOD0(getResidencyContainer, const std::vector<GraphicsAllocation *> &());
     MOCK_CONST_METHOD0(getHasBarriers, bool());
+    MOCK_CONST_METHOD0(getSlmSize, uint32_t());
 };
 
 } // namespace ult

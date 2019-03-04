@@ -212,6 +212,7 @@ TEST(ModuleCreateSimple, moduleWithSLMandBarriers) {
     PrecompiledFunctionMock function("SlmBarrier", deviceRT->getFamilyNameWithType(), {});
 
     EXPECT_TRUE(function.getHasBarriers());
+    EXPECT_EQ(64u, function.getSlmSize());
 }
 
 TEST(FunctionArgs_accessors, returnsCorrectThreadGroupParameters) {

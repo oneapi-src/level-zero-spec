@@ -25,6 +25,7 @@ xe_result_t CommandListCoreFamily<IGFX_GEN12_CORE>::encodeDispatchFunction(xe_fu
                                                                            xe_event_handle_t hEvent) {
     using GfxFamily = typename OCLRT::GfxFamilyMapper<IGFX_GEN12_CORE>::GfxFamily;
     using COMPUTE_WALKER = typename GfxFamily::COMPUTE_WALKER;
+    using INTERFACE_DESCRIPTOR_DATA = typename GfxFamily::INTERFACE_DESCRIPTOR_DATA;
 
     // Set # of threadgroups in each dimension
     assert(pDispatchFuncArgs);
@@ -91,6 +92,9 @@ xe_result_t CommandListCoreFamily<IGFX_GEN12_CORE>::encodeDispatchFunction(xe_fu
     auto &idd = cmd.getInterfaceDescriptor();
     idd.setNumberOfThreadsInGpgpuThreadGroup(function->getThreadsPerThreadGroup());
     idd.setBarrierEnable(function->getHasBarriers());
+    idd.setSharedLocalMemorySize(function->getSlmSize() > 0
+                                     ? INTERFACE_DESCRIPTOR_DATA::SHARED_LOCAL_MEMORY_SIZE_ENCODES_64K
+                                     : INTERFACE_DESCRIPTOR_DATA::SHARED_LOCAL_MEMORY_SIZE_ENCODES_0K);
 
     // Copy the kernel to indirect heap
     // TODO: Allocate kernel in graphics memory to avoid the CPU copy

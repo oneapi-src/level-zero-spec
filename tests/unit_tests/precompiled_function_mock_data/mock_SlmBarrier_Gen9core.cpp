@@ -56,7 +56,7 @@ static const uint32_t SlmBarrier_ISA_Gen9core[] =
 static const uint32_t SlmBarrier_CrossThreadDataBase_Gen9core[] = 
 {
     0x00000000, 0x00000000, 0x00000000, 0x00000020, 0x00000001, 0x00000001, 0x00000000, 0x00000000, 
-    0x7cef7000, 0x0000029a, 0x7d014000, 0x0000029a, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 
+    0x6edbb000, 0x000002b1, 0x6fc44000, 0x000002b1, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 
     0x00000020, 0x00000001, 0x00000001, 0x00000020, 0x00000001, 0x00000001, 0x00000000, 0x00000000
 };
 
@@ -74,6 +74,8 @@ static const uint32_t SlmBarrier_PerThreadDataBase_Gen9core[] =
 
 static const bool SlmBarrier_HasBarriers_Gen9core = 1;
 
+static const uint32_t SlmBarrier_SlmSize_Gen9core = 0x40;
+
 static const std::pair<int, int> SlmBarrier_BufferArgIndicesAndOffsets_Gen9core[] = { {0x0, 0x20}, {0x1, 0x28},  };
 
 static const uint32_t SlmBarrier_GroupSizeInPerThreadData_Gen9core[] = { 0x20, 0x1, 0x1 };
@@ -85,7 +87,8 @@ SlmBarrier_CrossThreadDataBase_Gen9core, sizeof(SlmBarrier_CrossThreadDataBase_G
 SlmBarrier_PerThreadDataBase_Gen9core, sizeof(SlmBarrier_PerThreadDataBase_Gen9core),
 SlmBarrier_GroupSizeInPerThreadData_Gen9core,
 SlmBarrier_BufferArgIndicesAndOffsets_Gen9core, sizeof(SlmBarrier_BufferArgIndicesAndOffsets_Gen9core) / sizeof(SlmBarrier_BufferArgIndicesAndOffsets_Gen9core[0]),
-SlmBarrier_HasBarriers_Gen9core
+SlmBarrier_HasBarriers_Gen9core,
+SlmBarrier_SlmSize_Gen9core
 };
 
 RegisterPrecompiledFunctionMocksData Register_SlmBarrier_Gen9core{ & SlmBarrier_Gen9core, "SlmBarrier", "Gen9core" }; 

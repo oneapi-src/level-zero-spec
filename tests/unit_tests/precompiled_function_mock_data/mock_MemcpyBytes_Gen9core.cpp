@@ -31,8 +31,8 @@ static const uint32_t MemcpyBytes_ISA_Gen9core[] =
 
 static const uint32_t MemcpyBytes_CrossThreadDataBase_Gen9core[] = 
 {
-    0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 
-    0x5b635000, 0x00000221, 0x5b659000, 0x00000221, 0x00000000, 0x00000000, 0x00000000, 0x00000000
+    0x00000000, 0x00000000, 0x00000000, 0x00000020, 0x00000001, 0x00000001, 0x00000000, 0x00000000, 
+    0x6edc3000, 0x000002b1, 0x6ee0f000, 0x000002b1, 0x00000020, 0x00000001, 0x00000001, 0x00000000
 };
 
 
@@ -47,6 +47,10 @@ static const uint32_t MemcpyBytes_PerThreadDataBase_Gen9core[] =
 };
 
 
+static const bool MemcpyBytes_HasBarriers_Gen9core = 0;
+
+static const uint32_t MemcpyBytes_SlmSize_Gen9core = 0x0;
+
 static const std::pair<int, int> MemcpyBytes_BufferArgIndicesAndOffsets_Gen9core[] = { {0x0, 0x20}, {0x1, 0x28},  };
 
 static const uint32_t MemcpyBytes_GroupSizeInPerThreadData_Gen9core[] = { 0x20, 0x1, 0x1 };
@@ -57,7 +61,9 @@ MemcpyBytes_ISA_Gen9core, sizeof(MemcpyBytes_ISA_Gen9core),
 MemcpyBytes_CrossThreadDataBase_Gen9core, sizeof(MemcpyBytes_CrossThreadDataBase_Gen9core),
 MemcpyBytes_PerThreadDataBase_Gen9core, sizeof(MemcpyBytes_PerThreadDataBase_Gen9core),
 MemcpyBytes_GroupSizeInPerThreadData_Gen9core,
-MemcpyBytes_BufferArgIndicesAndOffsets_Gen9core, sizeof(MemcpyBytes_BufferArgIndicesAndOffsets_Gen9core) / sizeof(MemcpyBytes_BufferArgIndicesAndOffsets_Gen9core[0])
+MemcpyBytes_BufferArgIndicesAndOffsets_Gen9core, sizeof(MemcpyBytes_BufferArgIndicesAndOffsets_Gen9core) / sizeof(MemcpyBytes_BufferArgIndicesAndOffsets_Gen9core[0]),
+MemcpyBytes_HasBarriers_Gen9core,
+MemcpyBytes_SlmSize_Gen9core
 };
 
 RegisterPrecompiledFunctionMocksData Register_MemcpyBytes_Gen9core{ & MemcpyBytes_Gen9core, "MemcpyBytes", "Gen9core" }; 
