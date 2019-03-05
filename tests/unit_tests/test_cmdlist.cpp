@@ -165,6 +165,10 @@ HWTEST_F(CommandListCreate, addsStateBaseAddressToBatchBuffer) {
         EXPECT_EQ(cmd->getIndirectObjectBaseAddress(), heap->getHeapGpuBase());
         EXPECT_TRUE(cmd->getIndirectObjectBufferSizeModifyEnable());
         EXPECT_EQ(cmd->getIndirectObjectBufferSize(), heap->getMaxAvailableSpace());
+
+        heap = commandList->indirectHeaps[CommandList::SURFACE_STATE];
+        EXPECT_TRUE(cmd->getSurfaceStateBaseAddressModifyEnable());
+        EXPECT_EQ(cmd->getSurfaceStateBaseAddress(), heap->getHeapGpuBase());
     }
 }
 

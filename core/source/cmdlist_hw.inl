@@ -57,6 +57,13 @@ bool CommandListCoreFamily<gfxCoreFamily>::initialize() {
             cmd.setIndirectObjectBufferSize(static_cast<uint32_t>(heap->getMaxAvailableSpace()));
         }
 
+        {
+            auto heap = this->indirectHeaps[SURFACE_STATE];
+            assert(heap != nullptr);
+            cmd.setSurfaceStateBaseAddressModifyEnable(true);
+            cmd.setSurfaceStateBaseAddress(heap->getHeapGpuBase());
+        }
+
         auto buffer = commandStream->getSpace(sizeof(cmd));
         *(STATE_BASE_ADDRESS *)buffer = cmd;
     }
@@ -64,7 +71,7 @@ bool CommandListCoreFamily<gfxCoreFamily>::initialize() {
     enableGpgpu();
     programFrontEndState();
 
-    return true;
+    return XE_RESULT_SUCCESS;
 }
 
 template <uint32_t gfxCoreFamily>
