@@ -4,6 +4,7 @@ if(SUPPORT_GEN11)
         ${COMPUTE_RUNTIME_GEN11}
         ${CMAKE_CURRENT_SOURCE_DIR}/gen11/cmdlist_icllp.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/gen11/cmdqueue_icllp.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/gen11/image_icllp.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/gen11.cmake
     )
 

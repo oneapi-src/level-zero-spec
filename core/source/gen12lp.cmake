@@ -4,6 +4,7 @@ if(SUPPORT_GEN12LP)
         ${COMPUTE_RUNTIME_GEN12LP}
         ${CMAKE_CURRENT_SOURCE_DIR}/gen12lp/cmdlist_tgllp.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/gen12lp/cmdqueue_tgllp.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/gen12lp/image_tgllp.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/gen12lp.cmake
     )
 

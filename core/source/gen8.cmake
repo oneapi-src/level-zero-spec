@@ -4,6 +4,7 @@ if(SUPPORT_GEN8)
         ${COMPUTE_RUNTIME_GEN8}
         ${CMAKE_CURRENT_SOURCE_DIR}/gen8/cmdlist_bdw.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/gen8/cmdqueue_bdw.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/gen8/image_bdw.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/gen8.cmake
     )
 
