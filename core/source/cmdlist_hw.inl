@@ -187,7 +187,7 @@ xe_result_t CommandListCoreFamily<gfxCoreFamily>::encodeDispatchFunction(xe_func
     auto sizeCrossThreadData = static_cast<uint32_t>(function->getCrossThreadDataSize());
     auto sizePerThreadData = static_cast<uint32_t>(function->getPerThreadDataSize());
     {
-        auto heap = indirectHeaps[DYNAMIC_STATE];
+        auto heap = indirectHeaps[OCLRT::IndirectHeap::DYNAMIC_STATE];
         assert(heap);
 
         auto sizeIDD = sizeof(INTERFACE_DESCRIPTOR_DATA);
