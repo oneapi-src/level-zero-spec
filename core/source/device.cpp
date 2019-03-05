@@ -6,6 +6,9 @@
 #include "module.h"
 #include "image.h"
 #include "runtime/device/device.h"
+#include "runtime/helpers/hw_helper.h"
+#include "runtime/helpers/string.h"
+#include "runtime/os_interface/debug_settings_manager.h"
 
 namespace L0 {
 
@@ -91,7 +94,30 @@ struct DeviceImp : public Device {
     }
 
     xe_result_t getProperties(xe_device_properties_t *pDeviceProperties) override {
-        return XE_RESULT_ERROR_UNSUPPORTED;
+        assert(pDeviceProperties != nullptr);
+        assert(pDeviceProperties->version == XE_DEVICE_PROPERTIES_VERSION);
+        const auto &deviceInfo = this->deviceRT->getDeviceInfo();
+        const auto &hardwareInfo = this->deviceRT->getHardwareInfo();
+        auto &hwHelper = OCLRT::HwHelper::get(hardwareInfo.pPlatform->eRenderCoreFamily);
+        auto enableLocalMemory = hwHelper.getEnableLocalMemory(hardwareInfo);
+
+        memcpy_s(pDeviceProperties->device_name, sizeof(pDeviceProperties->device_name),
+                 deviceInfo.name, strlen(deviceInfo.name) + 1);
+        pDeviceProperties->coreClockRate = deviceInfo.maxClockFrequency;
+        pDeviceProperties->vendorId = deviceInfo.vendorId;
+        //pDeviceProperties->deviceId;                              ///< [out] device id from PCI configuration
+        pDeviceProperties->subdeviceId = isSubdevice ? this->deviceRT->getDeviceIndex() : 0;
+        pDeviceProperties->isSubdevice = isSubdevice;
+        pDeviceProperties->numSubDevices = isSubdevice ? 0 : deviceInfo.partitionMaxSubDevices;
+        pDeviceProperties->coreClockRate = deviceInfo.maxClockFrequency;
+        //pDeviceProperties->memClockRate;                          ///< [out] Clock rate for device global memory
+        //pDeviceProperties->memGlobalBusWidth;                     ///< [out] Bus width between core and memory.
+        pDeviceProperties->totalLocalMemSize = enableLocalMemory ? OCLRT::DebugManager.flags.HBMSizePerTileInGigabytes.get() * MemoryConstants::gigaByte : 0;
+        pDeviceProperties->numAsyncComputeEngines = static_cast<uint32_t>(hwHelper.getGpgpuEngineInstances().size());
+        pDeviceProperties->numAsyncCopyEngines = 1; //  hwHelper.getCopyEngineInstances().size(); // NEO refactor
+        pDeviceProperties->numComputeCores = deviceInfo.maxComputUnits;
+        pDeviceProperties->maxCommandQueuePriority = 0; // map to cl_khr_priority_hints ?
+        return XE_RESULT_SUCCESS;
     }
 
     xe_result_t getSubDevice(uint32_t ordinal,
@@ -128,6 +154,7 @@ struct DeviceImp : public Device {
 
     OCLRT::Device *deviceRT = nullptr;
     MemoryManager *memoryManager = nullptr;
+    bool isSubdevice = false;
 };
 
 Device *Device::create(void *ptr) {

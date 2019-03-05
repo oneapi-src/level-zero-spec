@@ -46,13 +46,15 @@ inline void validate(ResulT result, const char *message) {
 #define SUCCESS_OR_WARNING(CALL) validate<false>(CALL, #CALL)
 #define SUCCESS_OR_WARNING_BOOL(FLAG) validate<false>(!(FLAG), #FLAG)
 
+void printDeviceProperties(const xe_device_properties_t &props);
+
 int main(int argc, char *argv[]) {
     if ((argc >= 2) && ((0 == strcmp(argv[1], "-v")) || (0 == strcmp(argv[1], "--verbose")))) {
         verbose = true;
     }
 
     if (verbose) {
-        std::cerr << "VERBOSE MODE ENABLED" << std::endl;
+        std::cout << "VERBOSE MODE ENABLED" << std::endl;
     }
     // 0. Load the driver
     // Using icd loader linked statically into this executable
@@ -60,6 +62,7 @@ int main(int argc, char *argv[]) {
     // 1. Set-up
     constexpr size_t allocSize = 4096;
     xe_device_handle_t device0;
+    xe_device_properties_t device0Properties = {XE_DEVICE_PROPERTIES_VERSION};
     xe_module_handle_t module;
     xe_function_handle_t function;
     xe_command_queue_handle_t cmdQueue;
@@ -70,6 +73,13 @@ int main(int argc, char *argv[]) {
 
     SUCCESS_OR_TERMINATE(xeDriverInit(XE_INIT_FLAG_NONE));
     SUCCESS_OR_TERMINATE(xeDriverGetDevice(0, &device0));
+    SUCCESS_OR_TERMINATE(xeDeviceGetProperties(device0, &device0Properties));
+    if (verbose) {
+        printDeviceProperties(device0Properties);
+    } else {
+        std::cout << device0Properties.device_name << std::endl;
+    }
+
     {
         uint32_t spirvSize = 0;
         auto spirvModule = readBinaryFile("test_files/spv_modules/cstring_module.spv", spirvSize);
@@ -151,7 +161,7 @@ int main(int argc, char *argv[]) {
     // 5. Dispatch and wait
     SUCCESS_OR_TERMINATE(xeCommandListClose(cmdList));
     SUCCESS_OR_TERMINATE(xeCommandQueueEnqueueCommandLists(cmdQueue, 1, &cmdList, nullptr));
-    auto synchronizationResult = xeCommandQueueSynchronize(cmdQueue, XE_SYNCHRONIZATION_MODE_POLL, 0, 0, 5000);
+    auto synchronizationResult = xeCommandQueueSynchronize(cmdQueue, XE_SYNCHRONIZATION_MODE_POLL, 0, 0, 1000 * 1000 /*1s*/);
     SUCCESS_OR_WARNING(synchronizationResult);
 
 // 6. Validate
@@ -159,8 +169,8 @@ int main(int argc, char *argv[]) {
 #else
     memcpy(readBackData, dstBuffer, sizeof(readBackData));
 #endif
-    bool outputValidationFailed = (0 != memcmp(initDataSrc, readBackData, sizeof(readBackData)));
-    SUCCESS_OR_WARNING_BOOL(!outputValidationFailed);
+    bool outputValidationSuccessful = (0 == memcmp(initDataSrc, readBackData, sizeof(readBackData)));
+    SUCCESS_OR_WARNING_BOOL(outputValidationSuccessful);
 
     // X. Cleanup
     SUCCESS_OR_TERMINATE(xeMemFree(allocator, dstBuffer));
@@ -176,8 +186,27 @@ int main(int argc, char *argv[]) {
 
     bool aubMode = (XE_RESULT_NOT_READY == synchronizationResult);
     if (aubMode == false) {
-        std::cerr << "\nResults validation " << (outputValidationFailed ? "FAILED" : "PASSED");
+        std::cout << "\nResults validation " << (outputValidationSuccessful ? "PASSED" : "FAILED") << std::endl;
     }
     int resultOnFailure = aubMode ? 0 : 1;
-    return outputValidationFailed ? resultOnFailure : 0;
+    return outputValidationSuccessful ? 0 : resultOnFailure;
+}
+
+void printDeviceProperties(const xe_device_properties_t &props) {
+    std::cout << "Device : "
+              << "\n"
+              << " * name : " << props.device_name << "\n"
+              << " * vendorId : " << props.vendorId << "\n"
+              << " * deviceId : " << props.deviceId << "\n"
+              << " * subdeviceId : " << props.subdeviceId << "\n"
+              << " * isSubdevice : " << (props.isSubdevice ? "TRUE" : "FALSE") << "\n"
+              << " * numSubDevices : " << props.numSubDevices << "\n"
+              << " * coreClockRate : " << props.coreClockRate << "\n"
+              << " * memClockRate : " << props.memClockRate << "\n"
+              << " * memGlobalBusWidth : " << props.memGlobalBusWidth << "\n"
+              << " * totalLocalMemSize : " << props.totalLocalMemSize << "\n"
+              << " * numAsyncComputeEngines : " << props.numAsyncComputeEngines << "\n"
+              << " * numAsyncCopyEngines  : " << props.numAsyncCopyEngines << "\n"
+              << " * numComputeCores : " << props.numComputeCores << "\n"
+              << " * maxCommandQueuePriority : " << props.maxCommandQueuePriority << std::endl;
 }
