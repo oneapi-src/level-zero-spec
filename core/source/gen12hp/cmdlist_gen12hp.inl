@@ -66,7 +66,7 @@ xe_result_t CommandListCoreFamily<IGFX_GEN12_CORE>::encodeDispatchFunction(xe_fu
 
     // Copy the threadData to the indirect heap
     {
-        auto heap = indirectHeaps[OCLRT::IndirectHeap::GENERAL_STATE];
+        auto heap = this->indirectHeaps[GENERAL_STATE];
         assert(heap);
 
         auto sizeCrossThreadData = static_cast<uint32_t>(function->getCrossThreadDataSize());
