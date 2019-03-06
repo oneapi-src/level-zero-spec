@@ -21,7 +21,7 @@ desc: "Fence descriptor"
 class: $xCommandQueue
 name: $x_fence_desc_t
 members:
-    - type: $x_uint32_t
+    - type: uint32_t
       name: version
       desc: "[in] descriptor version"
       init: $X_FENCE_DESC_VERSION
@@ -84,7 +84,7 @@ params:
     - type: $x_fence_handle_t
       name: hFence
       desc: "[in] handle of the fence"
-    - type: $x_uint32_t
+    - type: uint32_t
       name: timeout
       desc: "[in] if non-zero, then indicates the maximum time to yield before returning $X_RESULT_SUCCESS or $X_RESULT_NOT_READY;
             if zero, then operates exactly like $xFenceQueryStatus;
@@ -128,7 +128,7 @@ params:
     - type: $x_fence_handle_t
       name: hFenceEnd
       desc: "[in] handle of the fence"
-    - type: "$x_double_t*"
+    - type: "double*"
       name: pTime
       desc: "[out] time in milliseconds"
 returns:

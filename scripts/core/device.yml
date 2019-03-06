@@ -12,7 +12,7 @@ details:
     - "The application may call this function from simultaneous threads."
     - "The implementation of this function should be lock-free."
 params:
-    - type: "$x_uint32_t*"
+    - type: "uint32_t*"
       name: count
       desc: "[out] number of devices available"
 --- #--------------------------------------------------------------------------
@@ -27,10 +27,10 @@ details:
     - "The application may call this function from simultaneous threads."
     - "The implementation of this function should be lock-free."
 params:
-    - type: $x_uint32_t
+    - type: uint32_t
       name: count
       desc: "[in] size of device unique ids array. Typically, this will be ${x}DeviceGetCount."
-    - type: "$x_uint32_t*"
+    - type: "uint32_t*"
       name: pUniqueIds
       desc: "[out] pointer to an array of unique ids for devices. Caller must supply array."
 returns:
@@ -48,7 +48,7 @@ details:
     - "The application may call this function from simultaneous threads."
     - "The implementation of this function should be lock-free."
 params:
-    - type: $x_uint32_t
+    - type: uint32_t
       name: uniqueId
       desc: "[in] unique id of device to retrieve. Use ${x}DriverGetDeviceUniqueIds to obtain a unique Id."
     - type: "$x_device_handle_t*"
@@ -72,7 +72,7 @@ params:
     - type: $x_device_handle_t
       name: hDevice
       desc: "[in] handle of the device object"
-    - type: $x_uint32_t
+    - type: uint32_t
       name: ordinal
       desc: "[in] ordinal of sub-device to retrieve"
     - type: "$x_device_handle_t*"
@@ -125,50 +125,50 @@ desc: "Device properties queried using $xDeviceGetProperties"
 class: $xDevice
 name: $x_device_properties_t
 members:
-    - type: $x_uint32_t
+    - type: uint32_t
       name: version
       desc: "[in] $X_DEVICE_PROPERTIES_VERSION"
       init: $X_DEVICE_PROPERTIES_VERSION
-    - type: $x_uint32_t
+    - type: uint32_t
       name: vendorId
       desc: "[out] vendor id from PCI configuration"
-    - type: $x_uint32_t
+    - type: uint32_t
       name: deviceId
       desc: "[out] device id from PCI configuration"
-    - type: $x_uint32_t
+    - type: uint32_t
       name: subdeviceId
       desc: "[out] Subdevice id. Only valid if isSubdevice is true."
     - type: $x_bool_t
       name: isSubdevice
       desc: "[out] Is this a subdevice."
-    - type: $x_uint32_t
+    - type: uint32_t
       name: numSubDevices
       desc: "[out] Number of sub-devices."
-    - type: $x_uint32_t
+    - type: uint32_t
       name: coreClockRate
       desc: "[out] Clock rate for device core."
-    - type: $x_uint32_t
+    - type: uint32_t
       name: memClockRate
       desc: "[out] Clock rate for device global memory"
-    - type: $x_uint32_t
+    - type: uint32_t
       name: memGlobalBusWidth
       desc: "[out] Bus width between core and memory."
     - type: uint64_t
       name: totalLocalMemSize
       desc: "[out] Total memory size in bytes."
-    - type: $x_uint32_t
+    - type: uint32_t
       name: numAsyncComputeEngines
       desc: "[out] Number of asynchronous compute engines"
-    - type: $x_uint32_t
+    - type: uint32_t
       name: numAsyncCopyEngines
       desc: "[out] Number of asynchronous copy engines"
-    - type: $x_uint32_t
+    - type: uint32_t
       name: numComputeCores
       desc: "[out] Number of compute cores"
-    - type: $x_uint32_t
+    - type: uint32_t
       name: maxCommandQueuePriority
       desc: "[out] Maximum priority for command queues. Higher value is higher priority."
-    - type: $x_char_t
+    - type: char
       name: "device_name[$X_MAX_DEVICE_NAME]"
       desc: "[out] Device name"
 --- #--------------------------------------------------------------------------
@@ -206,41 +206,41 @@ desc: "Device compute properties queried using $xDeviceGetComputeProperties"
 class: $xDevice
 name: $x_device_compute_properties_t
 members:
-    - type: $x_uint32_t
+    - type: uint32_t
       name: version
       desc: "[in] $X_DEVICE_COMPUTE_PROPERTIES_VERSION"
       init: $X_DEVICE_COMPUTE_PROPERTIES_VERSION
-    - type: $x_uint32_t
+    - type: uint32_t
       name: maxThreadsPerGroup
       desc: "[out] Maximum threads per compute group"
-    - type: $x_uint32_t
+    - type: uint32_t
       name: maxGroupSizeX
       desc: "[out] Maximum items for X dimension in group"
-    - type: $x_uint32_t
+    - type: uint32_t
       name: maxGroupSizeY
       desc: "[out] Maximum items for Y dimension in group"
-    - type: $x_uint32_t
+    - type: uint32_t
       name: maxGroupSizeZ
       desc: "[out] Maximum items for Z dimension in group"
-    - type: $x_uint32_t
+    - type: uint32_t
       name: maxGroupCountX
       desc: "[out] Maximum groups that can be dispatched for x dimension"
-    - type: $x_uint32_t
+    - type: uint32_t
       name: maxGroupCountY
       desc: "[out] Maximum groups that can be dispatched for y dimension"
-    - type: $x_uint32_t
+    - type: uint32_t
       name: maxGroupCountZ
       desc: "[out] Maximum groups that can be dispatched for z dimension"
-    - type: $x_uint32_t
+    - type: uint32_t
       name: maxSharedLocalMemory
       desc: "[out] Maximum shared local memory per group."
-    - type: $x_uint32_t
+    - type: uint32_t
       name: maxGroupRegisters
       desc: "[out] Maximum physical registers available per group"
-    - type: $x_uint32_t
+    - type: uint32_t
       name: numSubGroupSizes
       desc: "[out] Number of subgroup sizes supported. This indicates number of entries in subGroupSizes."
-    - type: $x_uint32_t
+    - type: uint32_t
       name: subGroupSizes[$X_SUBGROUPSIZE_COUNT]
       desc: "[out] Size group sizes supported."
 --- #--------------------------------------------------------------------------
@@ -292,7 +292,7 @@ desc: "Device memory properties queried using $xDeviceGetMemoryProperties"
 class: $xDevice
 name: $x_device_memory_properties_t
 members:
-    - type: $x_uint32_t
+    - type: uint32_t
       name: version
       desc: "[in] $X_DEVICE_MEMORY_PROPERTIES_VERSION"
       init: $X_DEVICE_MEMORY_PROPERTIES_VERSION
@@ -302,16 +302,16 @@ members:
     - type: $x_bool_t
       name: onDemandPageFaults
       desc: "[out] Device supports on-demand page-faulting."
-    - type: $x_uint32_t
+    - type: uint32_t
       name: maxImageDims1D
       desc: "[out] Maximum image dimensions for 1D resources."
-    - type: $x_uint32_t
+    - type: uint32_t
       name: maxImageDims2D
       desc: "[out] Maximum image dimensions for 2D resources."
-    - type: $x_uint32_t
+    - type: uint32_t
       name: maxImageDims3D
       desc: "[out] Maximum image dimensions for 3D resources."
-    - type: $x_uint32_t
+    - type: uint32_t
       name: maxImageArraySlices
       desc: "[out] Maximum image array slices"
     - type: $x_memory_access_capabilities_t
@@ -329,13 +329,13 @@ members:
     - type: $x_memory_access_capabilities_t
       name: sharedSystemDeviceAllocCapabilities
       desc: "[out] Bitfield describing shared (system) memory capabilities"
-    - type: $x_uint32_t
+    - type: uint32_t
       name: IntermediateCacheSize
       desc: "[out] Device Intermediate Cache(L1/L2) size"
     - type: $x_bool_t
       name: IntermediateCacheControl
       desc: "[out] Support User control on Intermediate Cache(i.e. Resize SLM section vs Generic Cache)."
-    - type: $x_uint32_t
+    - type: uint32_t
       name: LastLevelCacheSize
       desc: "[out] Device LastLevelCacheSize(L3) size"
     - type: $x_bool_t
@@ -371,7 +371,7 @@ desc: "Device properties queried using $xDeviceGetLinkProperties"
 class: $xDevice
 name: $x_device_link_properties_t
 members:
-    - type: $x_uint32_t
+    - type: uint32_t
       name: version
       desc: "[in] $X_DEVICE_LINK_PROPERTIES_VERSION"
       init: $X_DEVICE_LINK_PROPERTIES_VERSION
@@ -381,7 +381,7 @@ members:
     - type: $x_bool_t
       name: isAtomicsSupported
       desc: "[out] Are atomics supported across link"
-    - type: $x_uint32_t
+    - type: uint32_t
       name: performanceRank
       desc: "[out] Relative performance rank of link."
 --- #--------------------------------------------------------------------------
@@ -395,10 +395,10 @@ details:
     - "The application may call this function from simultaneous threads."
     - "The implementation of this function should be lock-free."
 params:
-    - type: $x_uint32_t
+    - type: uint32_t
       name: srcOrdinal
       desc: "[in] source device ordinal"
-    - type: $x_uint32_t
+    - type: uint32_t
       name: dstOrdinal
       desc: "[in] destination device ordinal"
     - type: "$x_device_link_properties_t*"

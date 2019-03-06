@@ -50,7 +50,7 @@ The following sample code demonstrates a basic initialization sequence:
     xeDriverInit(XE_INIT_FLAG_NONE);
 
     // Get number of devices supporting Xe
-    xe_uint32_t deviceCount = 0;
+    uint32_t deviceCount = 0;
     xeDriverGetDeviceCount(&deviceCount);
     if(0 == deviceCount)
     {
@@ -58,12 +58,12 @@ The following sample code demonstrates a basic initialization sequence:
         return;
     }
 
-    xe_uint32_t* uniqueIds = (xe_uint32_t*)malloc(deviceCount * sizeof(xe_uint32_t));
+    uint32_t* uniqueIds = (uint32_t*)malloc(deviceCount * sizeof(uint32_t));
     xeDriverGetDeviceUniqueIds(deviceCount, uniqueIds);
 
     // Get the handle for device that supports required API version
     xe_device_handle_t hDevice;
-    for(xe_uint32_t i = 0; i < deviceCount; ++i)
+    for(uint32_t i = 0; i < deviceCount; ++i)
     {
         xeDriverGetDevice(uniqueIds[i], &hDevice);
         
@@ -112,7 +112,7 @@ See ::xe_command_queue_desc_t for more details.
     assert(deviceProps.numSubDevices == 4);
 
     // Desire is to allocate and dispatch work to sub-device 2.
-    xe_uint32_t subdeviceId = 2;
+    uint32_t subdeviceId = 2;
     xeDeviceGetSubDevice(device, subdeviceId, &subdevice);
 
     // Query sub-device properties.
@@ -124,7 +124,7 @@ See ::xe_command_queue_desc_t for more details.
 
     ...
     void* pMemForSubDevice2;
-    xeMemAlloc(subDevice, XE_DEVICE_MEM_ALLOC_DEFAULT, memSize, sizeof(xe_uint32_t), &pMemForSubDevice2);
+    xeMemAlloc(subDevice, XE_DEVICE_MEM_ALLOC_DEFAULT, memSize, sizeof(uint32_t), &pMemForSubDevice2);
     ...
 
     ...
@@ -643,7 +643,7 @@ The ::xeDeviceCreateModule function can optionally generate a build log object :
     // Only save build logs for module creation errors.
     if (result != XE_RESULT_SUCESS)
     {
-        xe_uint32_t buildlogSize;
+        uint32_t buildlogSize;
         xe_char_t* pBuildLogString;
         result = xeModuleBuildLogGetString(buildlog, &buildlogSize, &pBuildLogString);
 
@@ -665,7 +665,7 @@ responsibility of the application to implement this using ::xeModuleGetNativeBin
 
     if (cacheUpdateNeeded)
     {
-        xe_uint32_t size;
+        uint32_t size;
         xe_char_t* pNativeBinary;  // Pointer to native binary.
         xeModuleGetNativeBinary(hModule, &size, &pNativeBinary);
 
@@ -705,8 +705,8 @@ group size information when encoding the dispatch function into the command list
 ```c
     xeFunctionSetGroupSize(function, groupSizeX, groupSizeY, 1);
 
-    xe_uint32_t numGroupsX = imageWidth / groupSizeX;
-    xe_uint32_t numGroupsY = imageHeight / groupSizeY;
+    uint32_t numGroupsX = imageWidth / groupSizeX;
+    uint32_t numGroupsY = imageHeight / groupSizeY;
 
     xe_dispatch_function_arguments_t dispatchArgs = {
         XE_DISPATCH_FUNCTION_ARGS_VERSION,
@@ -725,8 +725,8 @@ group size that was set on the function using xeFunctionSetGroupSize.
 
 ```c
     // Find suggested group size for processing image.
-    xe_uint32_t groupSizeX;
-    xe_uint32_t groupSizeY;
+    uint32_t groupSizeX;
+    uint32_t groupSizeY;
     xeFunctionSuggestGroupSize(function, imageWidth, imageHeight, 1, &groupSizeX, &groupSizeY, nullptr);
 
     xeFunctionSetGroupSize(function, groupSizeX, groupSizeY, 1);
@@ -745,8 +745,8 @@ The following sample code demonstrates a sequence for creating function args and
     // Bind arguments
     xeFunctionSetArgumentValue(hFunction, 0, sizeof(xe_image_handle_t), &src_image);
     xeFunctionSetArgumentValue(hFunction, 1, sizeof(xe_image_handle_t), &dest_image);
-    xeFunctionSetArgumentValue(hFunction, 2, sizeof(xe_uint32_t), &width);
-    xeFunctionSetArgumentValue(hFunction, 3, sizeof(xe_uint32_t), &height);
+    xeFunctionSetArgumentValue(hFunction, 2, sizeof(uint32_t), &width);
+    xeFunctionSetArgumentValue(hFunction, 3, sizeof(uint32_t), &height);
 
     xe_dispatch_function_arguments_t dispatchArgs = {
         XE_DISPATCH_FUNCTION_ARGS_VERSION,
@@ -774,7 +774,7 @@ Use xeFunctionGetAttribute to query attributes from a function object.
 
 ```c
     ...
-    xe_uint32_t numRegisters;
+    uint32_t numRegisters;
 
     // Number of hardware registers used by function.
     xeFunctionGetAttribute(hFunction, XE_FUNCTION_GET_ATTR_MAX_REGS_USED, &numRegisters);

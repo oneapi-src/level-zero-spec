@@ -39,7 +39,7 @@ desc: "Event descriptor"
 class: $xDevice
 name: $x_event_desc_t
 members:
-    - type: $x_uint32_t
+    - type: uint32_t
       name: version
       desc: "[in] $X_EVENT_DESC_VERSION"
       init: $X_EVENT_DESC_VERSION
@@ -176,7 +176,7 @@ params:
     - type: $x_event_handle_t
       name: hEvent
       desc: "[in] handle of the event"
-    - type: $x_uint32_t
+    - type: uint32_t
       name: timeout
       desc: "[in] if non-zero, then indicates the maximum time to yield before returning $X_RESULT_SUCCESS or $X_RESULT_NOT_READY;
             if zero, then operates exactly like $xEventQueryStatus;
@@ -220,7 +220,7 @@ params:
     - type: $x_event_handle_t
       name: hEventEnd
       desc: "[in] handle of the end event"
-    - type: "$x_double_t*"
+    - type: "double*"
       name: pTime
       desc: "[out] time in milliseconds"
 returns:
@@ -245,7 +245,7 @@ params:
     - type: size_t
       name: reportSize
       desc: "[in] size of the report data buffer in bytes"
-    - type: "$x_uint32_t*"
+    - type: "uint32_t*"
       name: pReportData
       desc: "[out] report data buffer"
 returns:

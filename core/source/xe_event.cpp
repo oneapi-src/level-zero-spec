@@ -437,12 +437,12 @@ __xedllexport xe_result_t __xecall
 ///     - ::XE_RESULT_NOT_READY
 ///         + timeout expired
 ///
-/// @hash {81feb3cebbb1a97e1316cfb5a068f6848b5a09c5ff7aa81da360744f081154c5}
+/// @hash {da33eab69b5dbcc5545c6f10c94683160ba57be82416368b9b7adcd60e42e1ff}
 ///
 __xedllexport xe_result_t __xecall
   xeHostWaitOnEvent(
     xe_event_handle_t hEvent,                       ///< [in] handle of the event
-    xe_uint32_t timeout                             ///< [in] if non-zero, then indicates the maximum time to yield before
+    uint32_t timeout                                ///< [in] if non-zero, then indicates the maximum time to yield before
                                                     ///< returning ::XE_RESULT_SUCCESS or ::XE_RESULT_NOT_READY; if zero, then
                                                     ///< operates exactly like ::xeEventQueryStatus; if MAX_UINT32, then
                                                     ///< function will not return until complete or device is lost.
@@ -563,13 +563,13 @@ __xedllexport xe_result_t __xecall
 ///         + either event not created with ::XE_EVENT_FLAG_TIMESTAMP
 ///     - ::XE_RESULT_ERROR_UNSUPPORTED
 ///
-/// @hash {652ae68671f9145c3526f3db7b85a8d383eaeff15f9355d6e9f6c161b47eab66}
+/// @hash {676bec7fe434fefb73561b6b3fbee9a99e732a3af1a57d5fc9219a650620e806}
 ///
 __xedllexport xe_result_t __xecall
   xeEventQueryElapsedTime(
     xe_event_handle_t hEventStart,                  ///< [in] handle of the start event
     xe_event_handle_t hEventEnd,                    ///< [in] handle of the end event
-    xe_double_t* pTime                              ///< [out] time in milliseconds
+    double* pTime                                   ///< [out] time in milliseconds
     )
 {
     try
@@ -625,14 +625,14 @@ __xedllexport xe_result_t __xecall
 ///         + report size too small
 ///     - ::XE_RESULT_ERROR_UNSUPPORTED
 ///
-/// @hash {b0c3c39f2d56d13d3627afa8ce57286bb3016123af6ee5b0460fa14f579aa7b0}
+/// @hash {86bf02b143940d38911ff1c385a99d93c8aa0d6aef16ee9e18cddb4e1c51dfa5}
 ///
 __xedllexport xe_result_t __xecall
   xeEventQueryMetricsData(
     xe_event_handle_t hEventStart,                  ///< [in] handle of the start event
     xe_event_handle_t hEventEnd,                    ///< [in] handle of the end event
     size_t reportSize,                              ///< [in] size of the report data buffer in bytes
-    xe_uint32_t* pReportData                        ///< [out] report data buffer
+    uint32_t* pReportData                           ///< [out] report data buffer
     )
 {
     try

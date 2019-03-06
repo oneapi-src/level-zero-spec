@@ -65,7 +65,7 @@ namespace xe
         {
             uint32_t version = XE_FUNCTION_DESC_VERSION;    ///< [in] ::FUNCTION_DESC_VERSION
             function_flag_t flags = function_flag_t::NONE;  ///< [in] creation flags
-            const char_t* pFunctionName = nullptr;          ///< [in] null-terminated name of function in Module
+            const char* pFunctionName = nullptr;            ///< [in] null-terminated name of function in Module
 
         };
 
@@ -78,7 +78,7 @@ namespace xe
         /// @brief C++ wrapper for ::xeModuleGetNativeBinary
         inline void GetNativeBinary(
             uint32_t* pSize,                                ///< [out] size of native binary.
-            char_t** pModuleNativeBinary                    ///< [out] pointer to native binary
+            char** pModuleNativeBinary                      ///< [out] pointer to native binary
             );
 
         ///////////////////////////////////////////////////////////////////////////////
@@ -91,7 +91,7 @@ namespace xe
         ///////////////////////////////////////////////////////////////////////////////
         /// @brief C++ wrapper for ::xeModuleGetFunctionPointer
         inline void GetFunctionPointer(
-            const char_t* pFunctionName,                    ///< [in] Name of function to retrieve function pointer for.
+            const char* pFunctionName,                      ///< [in] Name of function to retrieve function pointer for.
             void** pfnFunction                              ///< [out] pointer to function.
             );
 

@@ -43,6 +43,6 @@ details:
 analogue:
     - "**cuDriverGetVersion**"
 params:
-    - type: "$x_uint32_t*"
+    - type: "uint32_t*"
       name: version
       desc: "[out] driver version"

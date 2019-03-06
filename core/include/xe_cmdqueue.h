@@ -82,11 +82,11 @@ typedef enum _xe_command_queue_priority_t
 /// @brief Command Queue descriptor
 typedef struct _xe_command_queue_desc_t
 {
-    xe_uint32_t version;                            ///< [in] ::XE_COMMAND_QUEUE_DESC_VERSION
+    uint32_t version;                               ///< [in] ::XE_COMMAND_QUEUE_DESC_VERSION
     xe_command_queue_flag_t flags;                  ///< [in] creation flags
     xe_command_queue_mode_t mode;                   ///< [in] operation mode
     xe_command_queue_priority_t priority;           ///< [in] priority
-    xe_uint32_t ordinal;                            ///< [in] if logical-only flag is set, then must be 0; else-if copy-only
+    uint32_t ordinal;                               ///< [in] if logical-only flag is set, then must be 0; else-if copy-only
                                                     ///< flag is set, then must be less than
                                                     ///< ::xe_device_properties_t.numAsyncCopyEngines; otherwise must be less
                                                     ///< than ::xe_device_properties_t.numAsyncComputeEngines. When using
@@ -179,7 +179,7 @@ __xedllport xe_result_t __xecall
 __xedllport xe_result_t __xecall
   xeCommandQueueEnqueueCommandLists(
     xe_command_queue_handle_t hCommandQueue,        ///< [in] handle of the command queue
-    xe_uint32_t numCommandLists,                    ///< [in] number of command lists to enqueue
+    uint32_t numCommandLists,                       ///< [in] number of command lists to enqueue
     xe_command_list_handle_t* phCommandLists,       ///< [in] list of handles of the command lists to enqueue for execution
     xe_fence_handle_t hFence                        ///< [in][optional] handle of the fence to signal on completion
     );
@@ -203,7 +203,7 @@ __xedllport xe_result_t __xecall
 __xedllport xe_result_t __xecall
   xeCommandQueueSynchronize(
     xe_command_queue_handle_t hCommandQueue,        ///< [in] handle of the command queue
-    xe_uint32_t timeout                             ///< [in] if non-zero, then indicates the maximum time to yield before
+    uint32_t timeout                                ///< [in] if non-zero, then indicates the maximum time to yield before
                                                     ///< returning ::XE_RESULT_SUCCESS or ::XE_RESULT_NOT_READY; if zero, then
                                                     ///< operates exactly like ::xeFenceQueryStatus; if MAX_UINT32, then
                                                     ///< function will not return until complete or device is lost.

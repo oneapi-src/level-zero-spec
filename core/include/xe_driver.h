@@ -100,7 +100,7 @@ __xedllport xe_result_t __xecall
 ///     - ::XE_RESULT_ERROR_UNSUPPORTED
 __xedllport xe_result_t __xecall
   xeDriverGetVersion(
-    xe_uint32_t* version                            ///< [out] driver version
+    uint32_t* version                               ///< [out] driver version
     );
 
 #if defined(__cplusplus)

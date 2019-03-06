@@ -69,7 +69,7 @@ typedef enum _xe_sampler_filter_mode_t
 /// @brief Sampler descriptor
 typedef struct _xe_sampler_desc_t
 {
-    xe_uint32_t version;                            ///< [in] ::XE_SAMPLER_DESC_VERSION
+    uint32_t version;                               ///< [in] ::XE_SAMPLER_DESC_VERSION
     xe_sampler_address_mode_t addressMode;          ///< [in] Sampler addressing mode to determine how out-of-bounds
                                                     ///< coordinates are handled.
     xe_sampler_filter_mode_t filterMode;            ///< [in] Sampler filter mode to determine how samples are filtered.

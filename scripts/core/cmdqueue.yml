@@ -55,7 +55,7 @@ desc: "Command Queue descriptor"
 class: $xDevice
 name: $x_command_queue_desc_t
 members:
-    - type: $x_uint32_t
+    - type: uint32_t
       name: version
       desc: "[in] $X_COMMAND_QUEUE_DESC_VERSION"
       init: $X_COMMAND_QUEUE_DESC_VERSION
@@ -71,7 +71,7 @@ members:
       name: priority
       desc: "[in] priority"
       init: $X_COMMAND_QUEUE_PRIORITY_NORMAL
-    - type: $x_uint32_t
+    - type: uint32_t
       name: ordinal
       desc: "[in] if logical-only flag is set, then must be 0;
             else-if copy-only flag is set, then must be less than $x_device_properties_t.numAsyncCopyEngines;
@@ -133,7 +133,7 @@ params:
     - type: $x_command_queue_handle_t
       name: hCommandQueue
       desc: "[in] handle of the command queue"
-    - type: $x_uint32_t
+    - type: uint32_t
       name: numCommandLists
       desc: "[in] number of command lists to enqueue"
     - type: "$x_command_list_handle_t*"
@@ -159,7 +159,7 @@ params:
     - type: $x_command_queue_handle_t
       name: hCommandQueue
       desc: "[in] handle of the command queue"
-    - type: $x_uint32_t
+    - type: uint32_t
       name: timeout
       desc: "[in] if non-zero, then indicates the maximum time to yield before returning $X_RESULT_SUCCESS or $X_RESULT_NOT_READY;
             if zero, then operates exactly like $xFenceQueryStatus;

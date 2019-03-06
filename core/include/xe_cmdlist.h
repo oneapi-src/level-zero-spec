@@ -63,7 +63,7 @@ typedef enum _xe_command_list_flag_t
 /// @brief Command List descriptor
 typedef struct _xe_command_list_desc_t
 {
-    xe_uint32_t version;                            ///< [in] ::XE_COMMAND_LIST_DESC_VERSION
+    uint32_t version;                               ///< [in] ::XE_COMMAND_LIST_DESC_VERSION
     xe_command_list_flag_t flags;                   ///< [in] creation flags
 
 } xe_command_list_desc_t;
@@ -227,7 +227,7 @@ __xedllport xe_result_t __xecall
   xeCommandListSetParameter(
     xe_command_list_handle_t hCommandList,          ///< [in] handle of command list
     xe_command_list_parameter_t parameter,          ///< [in] parameter to change
-    xe_uint32_t value                               ///< [in] value of attribute
+    uint32_t value                                  ///< [in] value of attribute
     );
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -258,7 +258,7 @@ __xedllport xe_result_t __xecall
   xeCommandListGetParameter(
     xe_command_list_handle_t hCommandList,          ///< [in] handle of command list
     xe_command_list_parameter_t parameter,          ///< [in] parameter to retrieve
-    xe_uint32_t* value                              ///< [out] value of attribute
+    uint32_t* value                                 ///< [out] value of attribute
     );
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -301,7 +301,7 @@ __xedllport xe_result_t __xecall
 __xedllport xe_result_t __xecall
   xeCommandListEncodeCommandLists(
     xe_command_list_handle_t hCommandList,          ///< [in] handle of the command list
-    xe_uint32_t numCommandLists,                    ///< [in] number of command lists to encode
+    uint32_t numCommandLists,                       ///< [in] number of command lists to encode
     xe_command_list_handle_t* phCommandLists        ///< [in] list of handles of the command lists to encode for execution
     );
 

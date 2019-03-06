@@ -87,11 +87,11 @@ typedef enum _xe_image_format_t
 /// @brief Image descriptor
 typedef struct _xe_image_desc_t
 {
-    xe_uint32_t version;                            ///< [in] ::XE_IMAGE_DESC_VERSION
+    uint32_t version;                               ///< [in] ::XE_IMAGE_DESC_VERSION
     xe_image_flag_t flags;                          ///< [in] creation flags
     xe_image_type_t type;                           ///< [in] image type
     xe_image_format_t format;                       ///< [in] image channel format
-    xe_uint32_t numChannels;                        ///< [in] number of channels per pixel [1,4]
+    uint32_t numChannels;                           ///< [in] number of channels per pixel [1,4]
     size_t width;                                   ///< [in] width in pixels, see
                                                     ///< ::xe_device_memory_properties_t::maxImageDims1D/2D/3D
     size_t height;                                  ///< [in] height in pixels (2D or 3D only), see

@@ -33,7 +33,7 @@ desc: "Command List descriptor"
 class: $xDevice
 name: $x_command_list_desc_t
 members:
-    - type: $x_uint32_t
+    - type: uint32_t
       name: version
       desc: "[in] $X_COMMAND_LIST_DESC_VERSION"
       init: $X_COMMAND_LIST_DESC_VERSION
@@ -153,7 +153,7 @@ params:
     - type: $x_command_list_parameter_t
       name: parameter
       desc: "[in] parameter to change"
-    - type: $x_uint32_t
+    - type: uint32_t
       name: value
       desc: "[in] value of attribute"
 returns:
@@ -180,7 +180,7 @@ params:
     - type: $x_command_list_parameter_t
       name: parameter
       desc: "[in] parameter to retrieve"
-    - type: "$x_uint32_t*"
+    - type: "uint32_t*"
       name: value
       desc: "[out] value of attribute"
 returns:
@@ -210,7 +210,7 @@ params:
     - type: $x_command_list_handle_t
       name: hCommandList
       desc: "[in] handle of the command list"
-    - type: $x_uint32_t
+    - type: uint32_t
       name: numCommandLists
       desc: "[in] number of command lists to encode"
     - type: "$x_command_list_handle_t*"
