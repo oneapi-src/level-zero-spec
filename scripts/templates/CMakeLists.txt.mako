@@ -51,6 +51,8 @@ set(L0_RUNTIME_SOURCES
     ${"${CMAKE_CURRENT_SOURCE_DIR}"}/memory.h
     ${"${CMAKE_CURRENT_SOURCE_DIR}"}/memory_manager.cpp
     ${"${CMAKE_CURRENT_SOURCE_DIR}"}/memory_manager.h
+    ${"${CMAKE_CURRENT_SOURCE_DIR}"}/module_build_log.cpp
+    ${"${CMAKE_CURRENT_SOURCE_DIR}"}/module_build_log.h
     ${"${CMAKE_CURRENT_SOURCE_DIR}"}/module_imp.cpp
     ${"${CMAKE_CURRENT_SOURCE_DIR}"}/module_imp.h
     ${"${CMAKE_CURRENT_SOURCE_DIR}"}/module.cpp

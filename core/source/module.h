@@ -2,6 +2,7 @@
 #include "cmdgraph.h"
 #include "cmdlist.h"
 #include "function.h"
+#include "module_build_log.h"
 #include "xe_common.h"
 #include "xe_module.h"
 
@@ -39,11 +40,5 @@ struct Module : public _xe_module_handle_t {
         return this;
     }
 };
-
-xe_result_t moduleBuildLogDestroy(xe_module_build_log_handle_t hModuleBuildLog);
-
-xe_result_t moduleBuildLogGetString(xe_module_build_log_handle_t hModuleBuildLog,
-                                    uint32_t *pSize,
-                                    char **pBuildLog);
 
 } // namespace L0

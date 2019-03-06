@@ -21,6 +21,8 @@ add_executable(${TARGET_NAME}
     mock_image.h
     mock_memory_manager.cpp
     mock_memory_manager.h
+    mock_module_buildlog.cpp
+    mock_module_buildlog.h
     mock_module.cpp
     mock_module.h
     mock_module_precompiled.h

@@ -227,7 +227,7 @@ __xedllexport xe_result_t __xecall
 #if defined(XE_NULLDRV)
         return XE_RESULT_SUCCESS;
 #else
-        return L0::moduleBuildLogDestroy(hModuleBuildLog);
+        return L0::ModuleBuildLog::fromHandle(hModuleBuildLog)->destroy();
 #endif
         /// @end
     }
@@ -288,7 +288,7 @@ __xedllexport xe_result_t __xecall
 #if defined(XE_NULLDRV)
         return XE_RESULT_SUCCESS;
 #else
-        return L0::moduleBuildLogGetString(hModuleBuildLog, pSize, pBuildLog);
+        return L0::ModuleBuildLog::fromHandle(hModuleBuildLog)->getString(pSize, pBuildLog);
 #endif
         /// @end
     }
