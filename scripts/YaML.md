@@ -86,6 +86,7 @@ etors:
 * A struct may take the following optional scalar or sequence of scalar fields: "class"
 * A struct requires the following sequence of scalars: "members"
 * A member requires the following scalar fields: "type", "name" and "desc"
+* A member may take the following optional scalar fields: "init"
 * The scripts only support simple 'struct' definitions: no bitfields, no functions, no constructors, no overloaded operators, etc.
 
 ```yml
