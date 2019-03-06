@@ -2,10 +2,13 @@
 Black box tests are stored in this folder.   They are meant to demonstrate usage in a basic way. These samples exist as a proof point of integration and more realistic workloads.  Changing configuration settings as demonstrated below allows the application to drive a live simulator via TBX or generate an AUB file for offline analysis and testing.
 
 # xello_world
+This example demonstrates loading the runtime directly. It invokes a simple function to copy memory from one buffer to another.
+
+# xello_world_icd
 This example leverages the ICD loader to load the runtime dynamically. It invokes a simple function to copy memory from one buffer to another.
 
-# xello_world_static
-This example demonstrates loading the runtime directly. It invokes a simple function to copy memory from one buffer to another.
+# xello_world_icd_clang
+This example leverages the ICD loader to load the runtime dynamically. It invokes a simple function to copy memory from one buffer to another. It uses ocloc_shared library to compile OCL C to spirV at runtime.
 
 # Generating ATS AUB files
 **AUB file generation during execution is currently the only supported path of driver execution**.  Setting the following compute runtime configuration prior to running the applications will generate an ATS AUB file. Currently only ATS is confirmed as executing on the Fulsim simulator.

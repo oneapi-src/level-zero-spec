@@ -49,3 +49,15 @@ target_link_libraries(${TARGET_NAME}
 
 add_subdirectory(include)
 add_subdirectory(source)
+
+# Recreate ocloc as shared lib
+get_target_property(OCLOC_SOURCES ocloc SOURCES)
+get_target_property(OCLOC_INCLUDES ocloc INCLUDE_DIRECTORIES)
+get_target_property(OCLOC_LIBRARY_DEPENDENCIES ocloc LINK_LIBRARIES)
+get_target_property(OCLOC_COMPILE_DEFINITIONS ocloc COMPILE_DEFINITIONS)
+
+add_library(ocloc_shared SHARED ${OCLOC_SOURCES} ${CMAKE_CURRENT_SOURCE_DIR}/source/ocloc_shared.cpp)
+target_include_directories(ocloc_shared PRIVATE ${OCLOC_INCLUDES} ${CMAKE_CURRENT_SOURCE_DIR}/include)
+target_link_libraries(ocloc_shared ${OCLOC_LIBRARY_DEPENDENCIES})
+target_compile_definitions(ocloc_shared PRIVATE ${OCLOC_COMPILE_DEFINITIONS} -DMOCKABLE_VIRTUAL=)
+

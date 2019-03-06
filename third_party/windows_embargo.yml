@@ -17,7 +17,7 @@ components:
   igc:
     asset_name: igc
     asset_path: gfx-sandbox-igk/neo/build/mainline
-    asset_version: dbf7f8fe3cf36e9d945d258d2e3f531fffe91246-1185
+    asset_version: dbf7f8fe3cf36e9d945d258d2e3f531fffe91246-1213
     clean_on_sync: true
     dest_dir: third_party/igc
     root_url: https://gfx-assets.igk.intel.com/artifactory
