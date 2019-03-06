@@ -59,7 +59,6 @@ set(L0_RUNTIME_SOURCES
     ${CMAKE_CURRENT_SOURCE_DIR}/xe_memory.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/xe_module.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/xe_residency.cpp
-    ${CMAKE_CURRENT_SOURCE_DIR}/xe_semaphore.cpp
 )
 
 # Make our source files visible to parent 

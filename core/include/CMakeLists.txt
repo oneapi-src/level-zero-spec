@@ -17,5 +17,4 @@ target_sources(${TARGET_NAME}
     ${CMAKE_CURRENT_SOURCE_DIR}/xe_memory.h
     ${CMAKE_CURRENT_SOURCE_DIR}/xe_module.h
     ${CMAKE_CURRENT_SOURCE_DIR}/xe_residency.h
-    ${CMAKE_CURRENT_SOURCE_DIR}/xe_semaphore.h
 )
