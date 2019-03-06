@@ -122,11 +122,11 @@ __xedllexport xe_result_t __xecall
 ///         + nullptr == version
 ///     - ::XE_RESULT_ERROR_UNSUPPORTED
 ///
-/// @hash {6ae964da2310ff18a63fe79a8fabcfaa071a342064d2f092042eb2b830d7c54f}
+/// @hash {94c148c75f9b5bf442b9ff287834595ea91b9e7cdd07dede609a6de83e489565}
 ///
 __xedllexport xe_result_t __xecall
   xeDriverGetVersion(
-    uint32_t* version                               ///< [out] driver version
+    xe_uint32_t* version                            ///< [out] driver version
     )
 {
     try

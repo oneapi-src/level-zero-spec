@@ -59,11 +59,11 @@
 ///         + nullptr == count
 ///     - ::XE_RESULT_ERROR_UNSUPPORTED
 ///
-/// @hash {5c7c465fde2ab4523bf907a3b46343641d9b73a17c0e20334834e54d19ef5103}
+/// @hash {5632d35626dbb7b574435e2fa0963e632579df70628ebf302dd807eea2da0f53}
 ///
 __xedllexport xe_result_t __xecall
   xeDriverGetDeviceCount(
-    uint32_t* count                                 ///< [out] number of devices available
+    xe_uint32_t* count                              ///< [out] number of devices available
     )
 {
     try
@@ -117,13 +117,13 @@ __xedllexport xe_result_t __xecall
 ///         + invalid unique id.
 ///     - ::XE_RESULT_ERROR_UNSUPPORTED
 ///
-/// @hash {c26ed99dfec278253de324f242d61516b146acd882d0894d8208cfed698fd1d1}
+/// @hash {41a4af622677d22c3d4ca5d3dc7fb8a45bf6c081be429ae277388d9bf6d92caf}
 ///
 __xedllexport xe_result_t __xecall
   xeDriverGetDeviceUniqueIds(
-    uint32_t count,                                 ///< [in] size of device unique ids array. Typically, this will be
+    xe_uint32_t count,                              ///< [in] size of device unique ids array. Typically, this will be
                                                     ///< ${x}DeviceGetCount.
-    uint32_t* pUniqueIds                            ///< [out] pointer to an array of unique ids for devices. Caller must
+    xe_uint32_t* pUniqueIds                         ///< [out] pointer to an array of unique ids for devices. Caller must
                                                     ///< supply array.
     )
 {
@@ -178,11 +178,11 @@ __xedllexport xe_result_t __xecall
 ///         + ordinal is out of range reported by ::xeDriverGetDeviceCount
 ///     - ::XE_RESULT_ERROR_UNSUPPORTED
 ///
-/// @hash {0fcaea081072b19126b15d5ddf6bf62c8c5a75b8647a0176af861cfb0adb1697}
+/// @hash {0996a272453e6f63e9bc9ea305d59da22dbf0e07def7604d9ab6eb1094139308}
 ///
 __xedllexport xe_result_t __xecall
   xeDriverGetDevice(
-    uint32_t uniqueId,                              ///< [in] unique id of device to retrieve. Use ${x}DriverGetDeviceUniqueIds
+    xe_uint32_t uniqueId,                           ///< [in] unique id of device to retrieve. Use ${x}DriverGetDeviceUniqueIds
                                                     ///< to obtain a unique Id.
     xe_device_handle_t* phDevice                    ///< [out] pointer to handle of device object created
     )
@@ -239,12 +239,12 @@ __xedllexport xe_result_t __xecall
 ///         + ordinal is out of range reported by device properties.
 ///     - ::XE_RESULT_ERROR_UNSUPPORTED
 ///
-/// @hash {17a42ce94be984870ef7258c30474c488c4cdd342ac215c9c027a55dcd8613ff}
+/// @hash {a56d2965d727ac8868f9491450592457861bff473cbfe492dd5079d32128fef7}
 ///
 __xedllexport xe_result_t __xecall
   xeDeviceGetSubDevice(
     xe_device_handle_t hDevice,                     ///< [in] handle of the device object
-    uint32_t ordinal,                               ///< [in] ordinal of sub-device to retrieve
+    xe_uint32_t ordinal,                            ///< [in] ordinal of sub-device to retrieve
     xe_device_handle_t* phSubDevice                 ///< [out] pointer to handle of sub-device object.
     )
 {
@@ -545,12 +545,12 @@ __xedllexport xe_result_t __xecall
 ///         + invalid ordinal. Use ::xeDriverGetDeviceCount for valid range.
 ///     - ::XE_RESULT_ERROR_UNSUPPORTED
 ///
-/// @hash {f0819a9eb55a17ea507cf7a31187d172996280c893f41c6bcbd88e3e26e766b0}
+/// @hash {9fb25148df63392c085e52227ecdcdc319be257295cee44cf2f25a0c3d73ea5b}
 ///
 __xedllexport xe_result_t __xecall
   xeDeviceGetLinkProperties(
-    uint32_t srcOrdinal,                            ///< [in] source device ordinal
-    uint32_t dstOrdinal,                            ///< [in] destination device ordinal
+    xe_uint32_t srcOrdinal,                         ///< [in] source device ordinal
+    xe_uint32_t dstOrdinal,                         ///< [in] destination device ordinal
     xe_device_link_properties_t* pLinkProperties    ///< [out] link properties between source and destination devices
     )
 {
@@ -606,13 +606,13 @@ __xedllexport xe_result_t __xecall
 ///         + nullptr == value
 ///     - ::XE_RESULT_ERROR_UNSUPPORTED
 ///
-/// @hash {e77d453d30dc6017ed8b9d0d0d5dd6597a4ca30fa37cac35a99658310d7bba4e}
+/// @hash {c0efe8786ca9d0204583c7af454d4d27a3c5bff533ae3c4a002d017c0f444943}
 ///
 __xedllexport xe_result_t __xecall
   xeDeviceCanAccessPeer(
     xe_device_handle_t hDevice,                     ///< [in] handle of the device performing the access
     xe_device_handle_t hPeerDevice,                 ///< [in] handle of the peer device with the allocation
-    bool* value                                     ///< [out] returned access capability
+    xe_bool_t* value                                ///< [out] returned access capability
     )
 {
     try

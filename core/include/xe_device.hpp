@@ -256,7 +256,7 @@ namespace xe
             uint32_t vendorId;                              ///< [out] vendor id from PCI configuration
             uint32_t deviceId;                              ///< [out] device id from PCI configuration
             uint32_t subdeviceId;                           ///< [out] Subdevice id. Only valid if isSubdevice is true.
-            bool isSubdevice;                               ///< [out] Is this a subdevice.
+            bool_t isSubdevice;                             ///< [out] Is this a subdevice.
             uint32_t numSubDevices;                         ///< [out] Number of sub-devices.
             uint32_t coreClockRate;                         ///< [out] Clock rate for device core.
             uint32_t memClockRate;                          ///< [out] Clock rate for device global memory
@@ -267,7 +267,7 @@ namespace xe
             uint32_t numComputeCores;                       ///< [out] Number of compute cores
             uint32_t maxCommandQueuePriority;               ///< [out] Maximum priority for command queues. Higher value is higher
                                                             ///< priority.
-            char device_name[XE_MAX_DEVICE_NAME];           ///< [out] Device name
+            char_t device_name[XE_MAX_DEVICE_NAME];         ///< [out] Device name
 
         };
 
@@ -296,8 +296,8 @@ namespace xe
         struct device_memory_properties_t
         {
             uint32_t version = XE_DEVICE_MEMORY_PROPERTIES_VERSION; ///< [in] ::DEVICE_MEMORY_PROPERTIES_VERSION
-            bool unifiedMemory;                             ///< [out] Host and device share same physical memory.
-            bool onDemandPageFaults;                        ///< [out] Device supports on-demand page-faulting.
+            bool_t unifiedMemory;                           ///< [out] Host and device share same physical memory.
+            bool_t onDemandPageFaults;                      ///< [out] Device supports on-demand page-faulting.
             uint32_t maxImageDims1D;                        ///< [out] Maximum image dimensions for 1D resources.
             uint32_t maxImageDims2D;                        ///< [out] Maximum image dimensions for 2D resources.
             uint32_t maxImageDims3D;                        ///< [out] Maximum image dimensions for 3D resources.
@@ -308,10 +308,10 @@ namespace xe
             memory_access_capabilities_t sharedCrossDeviceAllocCapabilities;///< [out] Bitfield describing shared (cross-device) memory capabilities
             memory_access_capabilities_t sharedSystemDeviceAllocCapabilities;   ///< [out] Bitfield describing shared (system) memory capabilities
             uint32_t IntermediateCacheSize;                 ///< [out] Device Intermediate Cache(L1/L2) size
-            bool IntermediateCacheControl;                  ///< [out] Support User control on Intermediate Cache(i.e. Resize SLM
+            bool_t IntermediateCacheControl;                ///< [out] Support User control on Intermediate Cache(i.e. Resize SLM
                                                             ///< section vs Generic Cache).
             uint32_t LastLevelCacheSize;                    ///< [out] Device LastLevelCacheSize(L3) size
-            bool LastLevelCacheSizeControl;                 ///< [out] Support User control on LastLevelCacheSize Cache(i.e. Resize SLM
+            bool_t LastLevelCacheSizeControl;               ///< [out] Support User control on LastLevelCacheSize Cache(i.e. Resize SLM
                                                             ///< section vs Generic Cache).
 
         };
@@ -321,8 +321,8 @@ namespace xe
         struct device_link_properties_t
         {
             uint32_t version = XE_DEVICE_LINK_PROPERTIES_VERSION;   ///< [in] ::DEVICE_LINK_PROPERTIES_VERSION
-            bool isP2PSupported;                            ///< [out] Is P2P access supported across link
-            bool isAtomicsSupported;                        ///< [out] Are atomics supported across link
+            bool_t isP2PSupported;                          ///< [out] Is P2P access supported across link
+            bool_t isAtomicsSupported;                      ///< [out] Are atomics supported across link
             uint32_t performanceRank;                       ///< [out] Relative performance rank of link.
 
         };
@@ -364,8 +364,8 @@ namespace xe
             uint32_t version = XE_MODULE_DESC_VERSION;      ///< [in] ::MODULE_DESC_VERSION
             module_format_t format;                         ///< [in] Module format passed in with pInputModule
             uint32_t inputSize = 0;                         ///< [in] size of input IL or ISA from pInputModule.
-            const char* pInputModule = nullptr;             ///< [in] pointer to IL or ISA
-            const char* pBuildFlags = nullptr;              ///< [in] string containing compiler flags. See documentation for build
+            const char_t* pInputModule = nullptr;           ///< [in] pointer to IL or ISA
+            const char_t* pBuildFlags = nullptr;            ///< [in] string containing compiler flags. See documentation for build
                                                             ///< flags.
 
         };
@@ -378,7 +378,7 @@ namespace xe
             sampler_address_mode_t addressMode = sampler_address_mode_t::NONE;  ///< [in] Sampler addressing mode to determine how out-of-bounds
                                                             ///< coordinates are handled.
             sampler_filter_mode_t filterMode = sampler_filter_mode_t::NEAREST;  ///< [in] Sampler filter mode to determine how samples are filtered.
-            bool isNormalized = true;                       ///< [in] Are coordinates normalized [0, 1] or not.
+            bool_t isNormalized = true;                     ///< [in] Are coordinates normalized [0, 1] or not.
 
         };
 
@@ -475,7 +475,7 @@ namespace xe
         /// @brief C++ wrapper for ::xeDeviceCanAccessPeer
         inline void CanAccessPeer(
             device_handle_t hPeerDevice,                    ///< [in] handle of the peer device with the allocation
-            bool* value                                     ///< [out] returned access capability
+            bool_t* value                                   ///< [out] returned access capability
             );
 
         ///////////////////////////////////////////////////////////////////////////////

@@ -50,7 +50,7 @@ The following sample code demonstrates a basic initialization sequence:
     ${x}DriverInit(${X}_INIT_FLAG_NONE);
 
     // Get number of devices supporting ${Xx}
-    uint32_t deviceCount = 0;
+    ${x}_uint32_t deviceCount = 0;
     ${x}DriverGetDeviceCount(&deviceCount);
     if(0 == deviceCount)
     {
@@ -58,12 +58,12 @@ The following sample code demonstrates a basic initialization sequence:
         return;
     }
 
-    uint32_t* uniqueIds = (uint32_t*)malloc(deviceCount * sizeof(uint32_t));
+    ${x}_uint32_t* uniqueIds = (${x}_uint32_t*)malloc(deviceCount * sizeof(${x}_uint32_t));
     ${x}DriverGetDeviceUniqueIds(deviceCount, uniqueIds);
 
     // Get the handle for device that supports required API version
     ${x}_device_handle_t hDevice;
-    for(uint32_t i = 0; i < deviceCount; ++i)
+    for(${x}_uint32_t i = 0; i < deviceCount; ++i)
     {
         ${x}DriverGetDevice(uniqueIds[i], &hDevice);
         
@@ -112,7 +112,7 @@ See ::${x}_command_queue_desc_t for more details.
     assert(deviceProps.numSubDevices == 4);
 
     // Desire is to allocate and dispatch work to sub-device 2.
-    uint32_t subdeviceId = 2;
+    ${x}_uint32_t subdeviceId = 2;
     ${x}DeviceGetSubDevice(device, subdeviceId, &subdevice);
 
     // Query sub-device properties.
@@ -124,7 +124,7 @@ See ::${x}_command_queue_desc_t for more details.
 
     ...
     void* pMemForSubDevice2;
-    ${x}MemAlloc(subDevice, ${X}_DEVICE_MEM_ALLOC_DEFAULT, memSize, sizeof(uint32_t), &pMemForSubDevice2);
+    ${x}MemAlloc(subDevice, ${X}_DEVICE_MEM_ALLOC_DEFAULT, memSize, sizeof(${x}_uint32_t), &pMemForSubDevice2);
     ...
 
     ...
@@ -643,8 +643,8 @@ The ::${x}DeviceCreateModule function can optionally generate a build log object
     // Only save build logs for module creation errors.
     if (result != ${X}_RESULT_SUCESS)
     {
-        uint32_t buildlogSize;
-        char* pBuildLogString;
+        ${x}_uint32_t buildlogSize;
+        ${x}_char_t* pBuildLogString;
         result = ${x}ModuleBuildLogGetString(buildlog, &buildlogSize, &pBuildLogString);
 
         // Save log to disk.
@@ -665,8 +665,8 @@ responsibility of the application to implement this using ::${x}ModuleGetNativeB
 
     if (cacheUpdateNeeded)
     {
-        uint32_t size;
-        char* pNativeBinary;  // Pointer to native binary.
+        ${x}_uint32_t size;
+        ${x}_char_t* pNativeBinary;  // Pointer to native binary.
         ${x}ModuleGetNativeBinary(hModule, &size, &pNativeBinary);
 
         // cache pNativeBinary for corresponding IL
@@ -705,8 +705,8 @@ group size information when encoding the dispatch function into the command list
 ```c
     ${x}FunctionSetGroupSize(function, groupSizeX, groupSizeY, 1);
 
-    uint32_t numGroupsX = imageWidth / groupSizeX;
-    uint32_t numGroupsY = imageHeight / groupSizeY;
+    ${x}_uint32_t numGroupsX = imageWidth / groupSizeX;
+    ${x}_uint32_t numGroupsY = imageHeight / groupSizeY;
 
     ${x}_dispatch_function_arguments_t dispatchArgs = {
         ${X}_DISPATCH_FUNCTION_ARGS_VERSION,
@@ -725,8 +725,8 @@ group size that was set on the function using ${x}FunctionSetGroupSize.
 
 ```c
     // Find suggested group size for processing image.
-    uint32_t groupSizeX;
-    uint32_t groupSizeY;
+    ${x}_uint32_t groupSizeX;
+    ${x}_uint32_t groupSizeY;
     ${x}FunctionSuggestGroupSize(function, imageWidth, imageHeight, 1, &groupSizeX, &groupSizeY, nullptr);
 
     ${x}FunctionSetGroupSize(function, groupSizeX, groupSizeY, 1);
@@ -745,8 +745,8 @@ The following sample code demonstrates a sequence for creating function args and
     // Bind arguments
     ${x}FunctionSetArgumentValue(hFunction, 0, sizeof(${x}_image_handle_t), &src_image);
     ${x}FunctionSetArgumentValue(hFunction, 1, sizeof(${x}_image_handle_t), &dest_image);
-    ${x}FunctionSetArgumentValue(hFunction, 2, sizeof(uint32_t), &width);
-    ${x}FunctionSetArgumentValue(hFunction, 3, sizeof(uint32_t), &height);
+    ${x}FunctionSetArgumentValue(hFunction, 2, sizeof(${x}_uint32_t), &width);
+    ${x}FunctionSetArgumentValue(hFunction, 3, sizeof(${x}_uint32_t), &height);
 
     xe_dispatch_function_arguments_t dispatchArgs = {
         ${X}_DISPATCH_FUNCTION_ARGS_VERSION,
@@ -774,7 +774,7 @@ Use ${x}FunctionGetAttribute to query attributes from a function object.
 
 ```c
     ...
-    uint32_t numRegisters;
+    ${x}_uint32_t numRegisters;
 
     // Number of hardware registers used by function.
     ${x}FunctionGetAttribute(hFunction, ${X}_FUNCTION_GET_ATTR_MAX_REGS_USED, &numRegisters);

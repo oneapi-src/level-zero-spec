@@ -68,7 +68,7 @@ desc: "Image descriptor"
 class: $xDevice
 name: $x_image_desc_t
 members:
-    - type: uint32_t
+    - type: $x_uint32_t
       name: version
       desc: "[in] $X_IMAGE_DESC_VERSION"
       init: $X_IMAGE_DESC_VERSION
@@ -81,7 +81,7 @@ members:
     - type: $x_image_format_t
       name: format
       desc: "[in] image channel format"
-    - type: uint32_t
+    - type: $x_uint32_t
       name: numChannels
       desc: "[in] number of channels per pixel [1,4]"
       init: "1"

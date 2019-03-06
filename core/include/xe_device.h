@@ -61,7 +61,7 @@ extern "C" {
 ///     - ::XE_RESULT_ERROR_UNSUPPORTED
 __xedllport xe_result_t __xecall
   xeDriverGetDeviceCount(
-    uint32_t* count                                 ///< [out] number of devices available
+    xe_uint32_t* count                              ///< [out] number of devices available
     );
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -86,9 +86,9 @@ __xedllport xe_result_t __xecall
 ///     - ::XE_RESULT_ERROR_UNSUPPORTED
 __xedllport xe_result_t __xecall
   xeDriverGetDeviceUniqueIds(
-    uint32_t count,                                 ///< [in] size of device unique ids array. Typically, this will be
+    xe_uint32_t count,                              ///< [in] size of device unique ids array. Typically, this will be
                                                     ///< ${x}DeviceGetCount.
-    uint32_t* pUniqueIds                            ///< [out] pointer to an array of unique ids for devices. Caller must
+    xe_uint32_t* pUniqueIds                         ///< [out] pointer to an array of unique ids for devices. Caller must
                                                     ///< supply array.
     );
 
@@ -114,7 +114,7 @@ __xedllport xe_result_t __xecall
 ///     - ::XE_RESULT_ERROR_UNSUPPORTED
 __xedllport xe_result_t __xecall
   xeDriverGetDevice(
-    uint32_t uniqueId,                              ///< [in] unique id of device to retrieve. Use ${x}DriverGetDeviceUniqueIds
+    xe_uint32_t uniqueId,                           ///< [in] unique id of device to retrieve. Use ${x}DriverGetDeviceUniqueIds
                                                     ///< to obtain a unique Id.
     xe_device_handle_t* phDevice                    ///< [out] pointer to handle of device object created
     );
@@ -143,7 +143,7 @@ __xedllport xe_result_t __xecall
 __xedllport xe_result_t __xecall
   xeDeviceGetSubDevice(
     xe_device_handle_t hDevice,                     ///< [in] handle of the device object
-    uint32_t ordinal,                               ///< [in] ordinal of sub-device to retrieve
+    xe_uint32_t ordinal,                            ///< [in] ordinal of sub-device to retrieve
     xe_device_handle_t* phSubDevice                 ///< [out] pointer to handle of sub-device object.
     );
 
@@ -196,22 +196,22 @@ __xedllport xe_result_t __xecall
 /// @brief Device properties queried using ::xeDeviceGetProperties
 typedef struct _xe_device_properties_t
 {
-    uint32_t version;                               ///< [in] ::XE_DEVICE_PROPERTIES_VERSION
-    uint32_t vendorId;                              ///< [out] vendor id from PCI configuration
-    uint32_t deviceId;                              ///< [out] device id from PCI configuration
-    uint32_t subdeviceId;                           ///< [out] Subdevice id. Only valid if isSubdevice is true.
-    bool isSubdevice;                               ///< [out] Is this a subdevice.
-    uint32_t numSubDevices;                         ///< [out] Number of sub-devices.
-    uint32_t coreClockRate;                         ///< [out] Clock rate for device core.
-    uint32_t memClockRate;                          ///< [out] Clock rate for device global memory
-    uint32_t memGlobalBusWidth;                     ///< [out] Bus width between core and memory.
+    xe_uint32_t version;                            ///< [in] ::XE_DEVICE_PROPERTIES_VERSION
+    xe_uint32_t vendorId;                           ///< [out] vendor id from PCI configuration
+    xe_uint32_t deviceId;                           ///< [out] device id from PCI configuration
+    xe_uint32_t subdeviceId;                        ///< [out] Subdevice id. Only valid if isSubdevice is true.
+    xe_bool_t isSubdevice;                          ///< [out] Is this a subdevice.
+    xe_uint32_t numSubDevices;                      ///< [out] Number of sub-devices.
+    xe_uint32_t coreClockRate;                      ///< [out] Clock rate for device core.
+    xe_uint32_t memClockRate;                       ///< [out] Clock rate for device global memory
+    xe_uint32_t memGlobalBusWidth;                  ///< [out] Bus width between core and memory.
     uint64_t totalLocalMemSize;                     ///< [out] Total memory size in bytes.
-    uint32_t numAsyncComputeEngines;                ///< [out] Number of asynchronous compute engines
-    uint32_t numAsyncCopyEngines;                   ///< [out] Number of asynchronous copy engines
-    uint32_t numComputeCores;                       ///< [out] Number of compute cores
-    uint32_t maxCommandQueuePriority;               ///< [out] Maximum priority for command queues. Higher value is higher
+    xe_uint32_t numAsyncComputeEngines;             ///< [out] Number of asynchronous compute engines
+    xe_uint32_t numAsyncCopyEngines;                ///< [out] Number of asynchronous copy engines
+    xe_uint32_t numComputeCores;                    ///< [out] Number of compute cores
+    xe_uint32_t maxCommandQueuePriority;            ///< [out] Maximum priority for command queues. Higher value is higher
                                                     ///< priority.
-    char device_name[XE_MAX_DEVICE_NAME];           ///< [out] Device name
+    xe_char_t device_name[XE_MAX_DEVICE_NAME];      ///< [out] Device name
 
 } xe_device_properties_t;
 
@@ -254,19 +254,19 @@ __xedllport xe_result_t __xecall
 /// @brief Device compute properties queried using ::xeDeviceGetComputeProperties
 typedef struct _xe_device_compute_properties_t
 {
-    uint32_t version;                               ///< [in] ::XE_DEVICE_COMPUTE_PROPERTIES_VERSION
-    uint32_t maxThreadsPerGroup;                    ///< [out] Maximum threads per compute group
-    uint32_t maxGroupSizeX;                         ///< [out] Maximum items for X dimension in group
-    uint32_t maxGroupSizeY;                         ///< [out] Maximum items for Y dimension in group
-    uint32_t maxGroupSizeZ;                         ///< [out] Maximum items for Z dimension in group
-    uint32_t maxGroupCountX;                        ///< [out] Maximum groups that can be dispatched for x dimension
-    uint32_t maxGroupCountY;                        ///< [out] Maximum groups that can be dispatched for y dimension
-    uint32_t maxGroupCountZ;                        ///< [out] Maximum groups that can be dispatched for z dimension
-    uint32_t maxSharedLocalMemory;                  ///< [out] Maximum shared local memory per group.
-    uint32_t maxGroupRegisters;                     ///< [out] Maximum physical registers available per group
-    uint32_t numSubGroupSizes;                      ///< [out] Number of subgroup sizes supported. This indicates number of
+    xe_uint32_t version;                            ///< [in] ::XE_DEVICE_COMPUTE_PROPERTIES_VERSION
+    xe_uint32_t maxThreadsPerGroup;                 ///< [out] Maximum threads per compute group
+    xe_uint32_t maxGroupSizeX;                      ///< [out] Maximum items for X dimension in group
+    xe_uint32_t maxGroupSizeY;                      ///< [out] Maximum items for Y dimension in group
+    xe_uint32_t maxGroupSizeZ;                      ///< [out] Maximum items for Z dimension in group
+    xe_uint32_t maxGroupCountX;                     ///< [out] Maximum groups that can be dispatched for x dimension
+    xe_uint32_t maxGroupCountY;                     ///< [out] Maximum groups that can be dispatched for y dimension
+    xe_uint32_t maxGroupCountZ;                     ///< [out] Maximum groups that can be dispatched for z dimension
+    xe_uint32_t maxSharedLocalMemory;               ///< [out] Maximum shared local memory per group.
+    xe_uint32_t maxGroupRegisters;                  ///< [out] Maximum physical registers available per group
+    xe_uint32_t numSubGroupSizes;                   ///< [out] Number of subgroup sizes supported. This indicates number of
                                                     ///< entries in subGroupSizes.
-    uint32_t subGroupSizes[XE_SUBGROUPSIZE_COUNT];  ///< [out] Size group sizes supported.
+    xe_uint32_t subGroupSizes[XE_SUBGROUPSIZE_COUNT];   ///< [out] Size group sizes supported.
 
 } xe_device_compute_properties_t;
 
@@ -319,23 +319,23 @@ typedef enum _xe_memory_access_capabilities_t
 /// @brief Device memory properties queried using ::xeDeviceGetMemoryProperties
 typedef struct _xe_device_memory_properties_t
 {
-    uint32_t version;                               ///< [in] ::XE_DEVICE_MEMORY_PROPERTIES_VERSION
-    bool unifiedMemory;                             ///< [out] Host and device share same physical memory.
-    bool onDemandPageFaults;                        ///< [out] Device supports on-demand page-faulting.
-    uint32_t maxImageDims1D;                        ///< [out] Maximum image dimensions for 1D resources.
-    uint32_t maxImageDims2D;                        ///< [out] Maximum image dimensions for 2D resources.
-    uint32_t maxImageDims3D;                        ///< [out] Maximum image dimensions for 3D resources.
-    uint32_t maxImageArraySlices;                   ///< [out] Maximum image array slices
+    xe_uint32_t version;                            ///< [in] ::XE_DEVICE_MEMORY_PROPERTIES_VERSION
+    xe_bool_t unifiedMemory;                        ///< [out] Host and device share same physical memory.
+    xe_bool_t onDemandPageFaults;                   ///< [out] Device supports on-demand page-faulting.
+    xe_uint32_t maxImageDims1D;                     ///< [out] Maximum image dimensions for 1D resources.
+    xe_uint32_t maxImageDims2D;                     ///< [out] Maximum image dimensions for 2D resources.
+    xe_uint32_t maxImageDims3D;                     ///< [out] Maximum image dimensions for 3D resources.
+    xe_uint32_t maxImageArraySlices;                ///< [out] Maximum image array slices
     xe_memory_access_capabilities_t hostAllocCapabilities;  ///< [out] Bitfield describing host memory capabilities
     xe_memory_access_capabilities_t deviceAllocCapabilities;///< [out] Bitfield describing device memory capabilities
     xe_memory_access_capabilities_t sharedAllocCapabilities;///< [out] Bitfield describing shared memory capabilities
     xe_memory_access_capabilities_t sharedCrossDeviceAllocCapabilities; ///< [out] Bitfield describing shared (cross-device) memory capabilities
     xe_memory_access_capabilities_t sharedSystemDeviceAllocCapabilities;///< [out] Bitfield describing shared (system) memory capabilities
-    uint32_t IntermediateCacheSize;                 ///< [out] Device Intermediate Cache(L1/L2) size
-    bool IntermediateCacheControl;                  ///< [out] Support User control on Intermediate Cache(i.e. Resize SLM
+    xe_uint32_t IntermediateCacheSize;              ///< [out] Device Intermediate Cache(L1/L2) size
+    xe_bool_t IntermediateCacheControl;             ///< [out] Support User control on Intermediate Cache(i.e. Resize SLM
                                                     ///< section vs Generic Cache).
-    uint32_t LastLevelCacheSize;                    ///< [out] Device LastLevelCacheSize(L3) size
-    bool LastLevelCacheSizeControl;                 ///< [out] Support User control on LastLevelCacheSize Cache(i.e. Resize SLM
+    xe_uint32_t LastLevelCacheSize;                 ///< [out] Device LastLevelCacheSize(L3) size
+    xe_bool_t LastLevelCacheSizeControl;            ///< [out] Support User control on LastLevelCacheSize Cache(i.e. Resize SLM
                                                     ///< section vs Generic Cache).
 
 } xe_device_memory_properties_t;
@@ -375,10 +375,10 @@ __xedllport xe_result_t __xecall
 /// @brief Device properties queried using ::xeDeviceGetLinkProperties
 typedef struct _xe_device_link_properties_t
 {
-    uint32_t version;                               ///< [in] ::XE_DEVICE_LINK_PROPERTIES_VERSION
-    bool isP2PSupported;                            ///< [out] Is P2P access supported across link
-    bool isAtomicsSupported;                        ///< [out] Are atomics supported across link
-    uint32_t performanceRank;                       ///< [out] Relative performance rank of link.
+    xe_uint32_t version;                            ///< [in] ::XE_DEVICE_LINK_PROPERTIES_VERSION
+    xe_bool_t isP2PSupported;                       ///< [out] Is P2P access supported across link
+    xe_bool_t isAtomicsSupported;                   ///< [out] Are atomics supported across link
+    xe_uint32_t performanceRank;                    ///< [out] Relative performance rank of link.
 
 } xe_device_link_properties_t;
 
@@ -403,8 +403,8 @@ typedef struct _xe_device_link_properties_t
 ///     - ::XE_RESULT_ERROR_UNSUPPORTED
 __xedllport xe_result_t __xecall
   xeDeviceGetLinkProperties(
-    uint32_t srcOrdinal,                            ///< [in] source device ordinal
-    uint32_t dstOrdinal,                            ///< [in] destination device ordinal
+    xe_uint32_t srcOrdinal,                         ///< [in] source device ordinal
+    xe_uint32_t dstOrdinal,                         ///< [in] destination device ordinal
     xe_device_link_properties_t* pLinkProperties    ///< [out] link properties between source and destination devices
     );
 
@@ -432,7 +432,7 @@ __xedllport xe_result_t __xecall
   xeDeviceCanAccessPeer(
     xe_device_handle_t hDevice,                     ///< [in] handle of the device performing the access
     xe_device_handle_t hPeerDevice,                 ///< [in] handle of the peer device with the allocation
-    bool* value                                     ///< [out] returned access capability
+    xe_bool_t* value                                ///< [out] returned access capability
     );
 
 ///////////////////////////////////////////////////////////////////////////////

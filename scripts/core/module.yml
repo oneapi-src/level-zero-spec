@@ -23,22 +23,22 @@ desc: "Module descriptor"
 class: $xDevice
 name: $x_module_desc_t
 members:
-    - type: uint32_t
+    - type: $x_uint32_t
       name: version
       desc: "[in] $X_MODULE_DESC_VERSION"
       init: $X_MODULE_DESC_VERSION
     - type: "$x_module_format_t"
       name: format
       desc: "[in] Module format passed in with pInputModule"
-    - type: "uint32_t"
+    - type: "$x_uint32_t"
       name: inputSize
       desc: "[in] size of input IL or ISA from pInputModule."
       init: "0"
-    - type: "const char*"
+    - type: "const $x_char_t*"
       name: pInputModule
       desc: "[in] pointer to IL or ISA"
       init: nullptr
-    - type: "const char*"
+    - type: "const $x_char_t*"
       name: pBuildFlags
       desc: "[in] string containing compiler flags. See documentation for build flags."
       init: nullptr
@@ -126,10 +126,10 @@ params:
     - type: $x_module_build_log_handle_t
       name: hModuleBuildLog
       desc: "[in] handle of the module build log object."
-    - type: "uint32_t*"
+    - type: "$x_uint32_t*"
       name: pSize
       desc: "[out] size of build log string."
-    - type: "char**"
+    - type: "$x_char_t**"
       name: pBuildLog
       desc: "[out] pointer to null-terminated string of the log."
 returns:
@@ -150,10 +150,10 @@ params:
     - type: $x_module_handle_t
       name: hModule
       desc: "[in] handle of the device"
-    - type: "uint32_t*"
+    - type: "$x_uint32_t*"
       name: pSize
       desc: "[out] size of native binary."
-    - type: "char**"
+    - type: "$x_char_t**"
       name: pModuleNativeBinary
       desc: "[out] pointer to native binary"
 returns:
@@ -183,7 +183,7 @@ desc: "Function descriptor"
 class: $xModule
 name: $x_function_desc_t
 members:
-    - type: uint32_t
+    - type: $x_uint32_t
       name: version
       desc: "[in] $X_FUNCTION_DESC_VERSION"
       init: $X_FUNCTION_DESC_VERSION
@@ -191,7 +191,7 @@ members:
       name: flags
       desc: "[in] creation flags"
       init: $X_FUNCTION_FLAG_NONE
-    - type: "const char*"
+    - type: "const $x_char_t*"
       name: pFunctionName
       desc: "[in] null-terminated name of function in Module"
       init: nullptr
@@ -246,7 +246,7 @@ params:
     - type: "$x_module_handle_t"
       name: hModule
       desc: "[in] handle of the module"
-    - type: "const char*"
+    - type: "const $x_char_t*"
       name: pFunctionName
       desc: "[in] Name of function to retrieve function pointer for."
     - type: "void**"
@@ -268,13 +268,13 @@ params:
     - type: "$x_function_handle_t"
       name: hFunction
       desc: "[in] handle of the function object" 
-    - type: "uint32_t"
+    - type: "$x_uint32_t"
       name: groupSizeX
       desc: "[in] group size for X dimension to use for this function."
-    - type: "uint32_t"
+    - type: "$x_uint32_t"
       name: groupSizeY
       desc: "[in] group size for Y dimension to use for this function."
-    - type: "uint32_t"
+    - type: "$x_uint32_t"
       name: groupSizeZ
       desc: "[in] group size for Z dimension to use for this function."
 --- #--------------------------------------------------------------------------
@@ -290,22 +290,22 @@ params:
     - type: "$x_function_handle_t"
       name: hFunction
       desc: "[in] handle of the function object" 
-    - type: "uint32_t"
+    - type: "$x_uint32_t"
       name: globalSizeX
       desc: "[in] global width for X dimension."
-    - type: "uint32_t"
+    - type: "$x_uint32_t"
       name: globalSizeY
       desc: "[in] global width for Y dimension."
-    - type: "uint32_t"
+    - type: "$x_uint32_t"
       name: globalSizeZ
       desc: "[in] global width for Z dimension."
-    - type: "uint32_t*"
+    - type: "$x_uint32_t*"
       name: groupSizeX
       desc: "[out] recommended size of group for X dimension."
-    - type: "uint32_t*"
+    - type: "$x_uint32_t*"
       name: groupSizeY
       desc: "[out] recommended size of group for Y dimension."
-    - type: "uint32_t*"
+    - type: "$x_uint32_t*"
       name: groupSizeZ
       desc: "[out] recommended size of group for Z dimension."
 returns:
@@ -323,7 +323,7 @@ params:
     - type: "$x_function_handle_t"
       name: hFunction
       desc: "[in/out] handle of the function args object."
-    - type: "uint32_t"
+    - type: "$x_uint32_t"
       name: argIndex
       desc: "[in] argument index in range [0, num args - 1]"
     - type: "size_t"
@@ -368,7 +368,7 @@ params:
     - type: "$x_function_set_attribute_t"
       name: attr
       desc: "[in] attribute to set"
-    - type: "uint32_t"
+    - type: "$x_uint32_t"
       name: value
       desc: "[in] attribute value to set"
 returns:
@@ -413,7 +413,7 @@ params:
     - type: "$x_function_get_attribute_t"
       name: attr
       desc: "[in] attribute to query"
-    - type: "uint32_t*"
+    - type: "$x_uint32_t*"
       name: pValue
       desc: "[out] returned attribute value"
 returns:
@@ -430,19 +430,19 @@ desc: "Dispatch function arguments."
 class: [ $xCommandList, $xCommandGraph ]
 name: $x_dispatch_function_arguments_t
 members:
-    - type: "uint32_t"
+    - type: "$x_uint32_t"
       name: version
       desc: "[in] $X_DISPATCH_FUNCTION_ARGS_VERSION"
       init: $X_DISPATCH_FUNCTION_ARGS_VERSION
-    - type: "uint32_t"
+    - type: "$x_uint32_t"
       name: groupCountX
       desc: "[in] width of dispatches in X dimension"
       init: "0"
-    - type: "uint32_t"
+    - type: "$x_uint32_t"
       name: groupCountY
       desc: "[in] width of dispatches in Y dimension"
       init: "0"
-    - type: "uint32_t"
+    - type: "$x_uint32_t"
       name: groupCountZ
       desc: "[in] width of dispatches in Z dimension"
       init: "0"
@@ -484,13 +484,13 @@ desc: "Indirect function arguments. These arguments are device visible."
 class: [ $xCommandList, $xCommandGraph ]
 name: $x_dispatch_function_indirect_arguments_t
 members:
-    - type: "uint32_t"
+    - type: "$x_uint32_t"
       name: groupCountX
       desc: "[in] width of dispatches in X dimension"
-    - type: "uint32_t"
+    - type: "$x_uint32_t"
       name: groupCountY
       desc: "[in] width of dispatches in Y dimension"
-    - type: "uint32_t"
+    - type: "$x_uint32_t"
       name: groupCountZ
       desc: "[in] width of dispatches in Z dimension"
 --- #--------------------------------------------------------------------------

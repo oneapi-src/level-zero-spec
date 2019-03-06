@@ -58,12 +58,22 @@ value: "0"
 --- #--------------------------------------------------------------------------
 type: typedef
 desc: "naming consistency"
-name: float_t
-value: float
+name: $x_uint32_t
+value: unsigned long
 --- #--------------------------------------------------------------------------
 type: typedef
 desc: "naming consistency"
-name: double_t
+name: $x_bool_t
+value: unsigned long
+--- #--------------------------------------------------------------------------
+type: typedef
+desc: "naming consistency"
+name: $x_char_t
+value: unsigned char
+--- #--------------------------------------------------------------------------
+type: typedef
+desc: "naming consistency"
+name: $x_double_t
 value: double
 --- #--------------------------------------------------------------------------
 type: handle

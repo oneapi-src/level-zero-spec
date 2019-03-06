@@ -21,7 +21,7 @@ desc: "CommandGraph descriptor"
 class: $xDevice
 name: $x_command_graph_desc_t
 members:
-    - type: uint32_t
+    - type: $x_uint32_t
       name: version
       desc: "[in] $X_COMMAND_GRAPH_DESC_VERSION"
       init: $X_COMMAND_GRAPH_DESC_VERSION

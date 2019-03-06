@@ -363,13 +363,13 @@ __xedllexport xe_result_t __xecall
 ///         + invalid value for value
 ///     - ::XE_RESULT_ERROR_UNSUPPORTED
 ///
-/// @hash {d9caf889451be1ea8e3cc168591fd03c2dca3f8b5650b0bc13252abbcd50c3f3}
+/// @hash {3652f13def34799ec39f1b586bca5ffd4cc682becab79fa16d49bfbaded8c8de}
 ///
 __xedllexport xe_result_t __xecall
   xeCommandListSetParameter(
     xe_command_list_handle_t hCommandList,          ///< [in] handle of command list
     xe_command_list_parameter_t parameter,          ///< [in] parameter to change
-    uint32_t value                                  ///< [in] value of attribute
+    xe_uint32_t value                               ///< [in] value of attribute
     )
 {
     try
@@ -428,13 +428,13 @@ __xedllexport xe_result_t __xecall
 ///         + invalid value for attribute
 ///     - ::XE_RESULT_ERROR_UNSUPPORTED
 ///
-/// @hash {777661badc06e83cb81081081ac71fb368cdd3cc235e1d188eeeaae409158e59}
+/// @hash {40e190a05a62054462579a6006fe4fc1a97c311236a0114c77cc86afca67f63b}
 ///
 __xedllexport xe_result_t __xecall
   xeCommandListGetParameter(
     xe_command_list_handle_t hCommandList,          ///< [in] handle of command list
     xe_command_list_parameter_t parameter,          ///< [in] parameter to retrieve
-    uint32_t* value                                 ///< [out] value of attribute
+    xe_uint32_t* value                              ///< [out] value of attribute
     )
 {
     try
@@ -541,12 +541,12 @@ __xedllexport xe_result_t __xecall
 ///         + 0 for numCommandLists
 ///     - ::XE_RESULT_ERROR_UNSUPPORTED
 ///
-/// @hash {596df05be8f869f5f8e50121263d6be6d062370e8ebddec124125948e8b8f644}
+/// @hash {f7224b63e671252da87ed552ee16f31f7b465b963479027b6e6d6ba857d06f43}
 ///
 __xedllexport xe_result_t __xecall
   xeCommandListEncodeCommandLists(
     xe_command_list_handle_t hCommandList,          ///< [in] handle of the command list
-    uint32_t numCommandLists,                       ///< [in] number of command lists to encode
+    xe_uint32_t numCommandLists,                    ///< [in] number of command lists to encode
     xe_command_list_handle_t* phCommandLists        ///< [in] list of handles of the command lists to encode for execution
     )
 {

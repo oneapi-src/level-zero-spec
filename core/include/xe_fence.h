@@ -57,7 +57,7 @@ typedef enum _xe_fence_flag_t
 /// @brief Fence descriptor
 typedef struct _xe_fence_desc_t
 {
-    uint32_t version;                               ///< [in] descriptor version
+    xe_uint32_t version;                            ///< [in] descriptor version
     xe_fence_flag_t flags;                          ///< [in] creation flags
 
 } xe_fence_desc_t;
@@ -143,7 +143,7 @@ __xedllport xe_result_t __xecall
 __xedllport xe_result_t __xecall
   xeHostWaitOnFence(
     xe_fence_handle_t hFence,                       ///< [in] handle of the fence
-    uint32_t timeout                                ///< [in] if non-zero, then indicates the maximum time to yield before
+    xe_uint32_t timeout                             ///< [in] if non-zero, then indicates the maximum time to yield before
                                                     ///< returning ::XE_RESULT_SUCCESS or ::XE_RESULT_NOT_READY; if zero, then
                                                     ///< operates exactly like ::xeFenceQueryStatus; if MAX_UINT32, then
                                                     ///< function will not return until complete or device is lost.
@@ -196,7 +196,7 @@ __xedllport xe_result_t __xecall
   xeFenceQueryElapsedTime(
     xe_fence_handle_t hFenceStart,                  ///< [in] handle of the fence
     xe_fence_handle_t hFenceEnd,                    ///< [in] handle of the fence
-    double_t* pTime                                 ///< [out] time in milliseconds
+    xe_double_t* pTime                              ///< [out] time in milliseconds
     );
 
 ///////////////////////////////////////////////////////////////////////////////

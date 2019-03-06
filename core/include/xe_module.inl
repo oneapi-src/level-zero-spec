@@ -51,7 +51,7 @@ namespace xe
     /// @brief C++ wrapper for ::xeModuleGetNativeBinary
     inline void Module::GetNativeBinary(
         uint32_t* pSize,                                ///< [out] size of native binary.
-        char** pModuleNativeBinary                      ///< [out] pointer to native binary
+        char_t** pModuleNativeBinary                    ///< [out] pointer to native binary
         )
     {
         // auto result = ::xeModuleGetNativeBinary( handle, pSize, pModuleNativeBinary );
@@ -72,7 +72,7 @@ namespace xe
     ///////////////////////////////////////////////////////////////////////////////
     /// @brief C++ wrapper for ::xeModuleGetFunctionPointer
     inline void Module::GetFunctionPointer(
-        const char* pFunctionName,                      ///< [in] Name of function to retrieve function pointer for.
+        const char_t* pFunctionName,                    ///< [in] Name of function to retrieve function pointer for.
         void** pfnFunction                              ///< [out] pointer to function.
         )
     {

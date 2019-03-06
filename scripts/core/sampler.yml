@@ -38,7 +38,7 @@ desc: "Sampler descriptor"
 class: $xDevice
 name: $x_sampler_desc_t
 members:
-    - type: uint32_t
+    - type: $x_uint32_t
       name: version
       desc: "[in] $X_SAMPLER_DESC_VERSION"
       init: $X_SAMPLER_DESC_VERSION
@@ -50,7 +50,7 @@ members:
       name: filterMode
       desc: "[in] Sampler filter mode to determine how samples are filtered."
       init: "$X_SAMPLER_FILTER_MODE_NEAREST"
-    - type: "bool"
+    - type: "$x_bool_t"
       name: isNormalized
       desc: "[in] Are coordinates normalized [0, 1] or not."
       init: "true"

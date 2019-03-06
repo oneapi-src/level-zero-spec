@@ -179,7 +179,7 @@ namespace xe
     /// @brief C++ wrapper for ::xeDeviceCanAccessPeer
     inline void Device::CanAccessPeer(
         device_handle_t hPeerDevice,                    ///< [in] handle of the peer device with the allocation
-        bool* value                                     ///< [out] returned access capability
+        bool_t* value                                   ///< [out] returned access capability
         )
     {
         // auto result = ::xeDeviceCanAccessPeer( handle, hPeerDevice->getHandle(), value );

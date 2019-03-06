@@ -63,7 +63,7 @@ typedef enum _xe_event_flag_t
 /// @brief Event descriptor
 typedef struct _xe_event_desc_t
 {
-    uint32_t version;                               ///< [in] ::XE_EVENT_DESC_VERSION
+    xe_uint32_t version;                            ///< [in] ::XE_EVENT_DESC_VERSION
     xe_event_flag_t flags;                          ///< [in] creation flags
 
 } xe_event_desc_t;
@@ -254,7 +254,7 @@ __xedllport xe_result_t __xecall
 __xedllport xe_result_t __xecall
   xeHostWaitOnEvent(
     xe_event_handle_t hEvent,                       ///< [in] handle of the event
-    uint32_t timeout                                ///< [in] if non-zero, then indicates the maximum time to yield before
+    xe_uint32_t timeout                             ///< [in] if non-zero, then indicates the maximum time to yield before
                                                     ///< returning ::XE_RESULT_SUCCESS or ::XE_RESULT_NOT_READY; if zero, then
                                                     ///< operates exactly like ::xeEventQueryStatus; if MAX_UINT32, then
                                                     ///< function will not return until complete or device is lost.
@@ -313,7 +313,7 @@ __xedllport xe_result_t __xecall
   xeEventQueryElapsedTime(
     xe_event_handle_t hEventStart,                  ///< [in] handle of the start event
     xe_event_handle_t hEventEnd,                    ///< [in] handle of the end event
-    double_t* pTime                                 ///< [out] time in milliseconds
+    xe_double_t* pTime                              ///< [out] time in milliseconds
     );
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -340,7 +340,7 @@ __xedllport xe_result_t __xecall
     xe_event_handle_t hEventStart,                  ///< [in] handle of the start event
     xe_event_handle_t hEventEnd,                    ///< [in] handle of the end event
     size_t reportSize,                              ///< [in] size of the report data buffer in bytes
-    uint32_t* pReportData                           ///< [out] report data buffer
+    xe_uint32_t* pReportData                        ///< [out] report data buffer
     );
 
 ///////////////////////////////////////////////////////////////////////////////

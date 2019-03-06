@@ -190,12 +190,12 @@ __xedllexport xe_result_t __xecall
 ///     - ::XE_RESULT_NOT_READY
 ///         + timeout expired
 ///
-/// @hash {5e198f18344f81afecf317d50762b0371f9f1f54514cce33ec0d8e1ed9fccca9}
+/// @hash {452749cf1be594d03b67d14c73080542259ba0fb425f717c80955222e3bbd2b2}
 ///
 __xedllexport xe_result_t __xecall
   xeHostWaitOnFence(
     xe_fence_handle_t hFence,                       ///< [in] handle of the fence
-    uint32_t timeout                                ///< [in] if non-zero, then indicates the maximum time to yield before
+    xe_uint32_t timeout                             ///< [in] if non-zero, then indicates the maximum time to yield before
                                                     ///< returning ::XE_RESULT_SUCCESS or ::XE_RESULT_NOT_READY; if zero, then
                                                     ///< operates exactly like ::xeFenceQueryStatus; if MAX_UINT32, then
                                                     ///< function will not return until complete or device is lost.
@@ -310,13 +310,13 @@ __xedllexport xe_result_t __xecall
 ///         + either fence not enqueued
 ///     - ::XE_RESULT_ERROR_UNSUPPORTED
 ///
-/// @hash {b3b7bb4cc8f2ac5185ab3106ede415703871d469c0d2e5f98f210a7de393078d}
+/// @hash {ea764501c131f864b6e7c6b20a333f9f1c350172439f0fabf46555fe94a3ee39}
 ///
 __xedllexport xe_result_t __xecall
   xeFenceQueryElapsedTime(
     xe_fence_handle_t hFenceStart,                  ///< [in] handle of the fence
     xe_fence_handle_t hFenceEnd,                    ///< [in] handle of the fence
-    double_t* pTime                                 ///< [out] time in milliseconds
+    xe_double_t* pTime                              ///< [out] time in milliseconds
     )
 {
     try

@@ -265,13 +265,13 @@ __xedllexport xe_result_t __xecall
 ///     - ::XE_RESULT_ERROR_OUT_OF_HOST_MEMORY
 ///     - ::XE_RESULT_ERROR_OUT_OF_DEVICE_MEMORY
 ///
-/// @hash {a5068c9c111fd477f1c08adc30a94f570a37220901c66690a61592f3977924b7}
+/// @hash {6c45ce72d6a143b276159faf6d6727fe8676407df494c88c70ad7576fe083b74}
 ///
 __xedllexport xe_result_t __xecall
   xeModuleBuildLogGetString(
     xe_module_build_log_handle_t hModuleBuildLog,   ///< [in] handle of the module build log object.
-    uint32_t* pSize,                                ///< [out] size of build log string.
-    char** pBuildLog                                ///< [out] pointer to null-terminated string of the log.
+    xe_uint32_t* pSize,                             ///< [out] size of build log string.
+    xe_char_t** pBuildLog                           ///< [out] pointer to null-terminated string of the log.
     )
 {
     try
@@ -334,13 +334,13 @@ __xedllexport xe_result_t __xecall
 ///     - ::XE_RESULT_ERROR_OUT_OF_HOST_MEMORY
 ///     - ::XE_RESULT_ERROR_OUT_OF_DEVICE_MEMORY
 ///
-/// @hash {f86dcf1e7e87d03f26bddcbff99420a8d159e89f57619beaaeebfee453cfd62e}
+/// @hash {e349698fab7ca518a9c4ee45faa1740c3808a4057daeda705a9067aef5445396}
 ///
 __xedllexport xe_result_t __xecall
   xeModuleGetNativeBinary(
     xe_module_handle_t hModule,                     ///< [in] handle of the device
-    uint32_t* pSize,                                ///< [out] size of native binary.
-    char** pModuleNativeBinary                      ///< [out] pointer to native binary
+    xe_uint32_t* pSize,                             ///< [out] size of native binary.
+    xe_char_t** pModuleNativeBinary                 ///< [out] pointer to native binary
     )
 {
     try
@@ -519,12 +519,12 @@ __xedllexport xe_result_t __xecall
 ///         + invalid value pFunctionName. Function name must exist in Module.
 ///     - ::XE_RESULT_ERROR_UNSUPPORTED
 ///
-/// @hash {d316b47d5880386648c2751e90d316a28a7ae230f11cb4fa1375a9e332cc7c82}
+/// @hash {083a9ab3c9336080a393656c70facaa39ad466ad478713bb3acbff700d62448c}
 ///
 __xedllexport xe_result_t __xecall
   xeModuleGetFunctionPointer(
     xe_module_handle_t hModule,                     ///< [in] handle of the module
-    const char* pFunctionName,                      ///< [in] Name of function to retrieve function pointer for.
+    const xe_char_t* pFunctionName,                 ///< [in] Name of function to retrieve function pointer for.
     void** pfnFunction                              ///< [out] pointer to function.
     )
 {
@@ -579,14 +579,14 @@ __xedllexport xe_result_t __xecall
 ///         + nullptr == hFunction
 ///     - ::XE_RESULT_ERROR_UNSUPPORTED
 ///
-/// @hash {0d524eae1de0503fef62776d38c10480c3399fe9307e8349c32f24d255a1d971}
+/// @hash {223e5114ff9f9ada4ad1f85c996be4f5d52d8aa6051e0bb0b85b88b9a7d1593f}
 ///
 __xedllexport xe_result_t __xecall
   xeFunctionSetGroupSize(
     xe_function_handle_t hFunction,                 ///< [in] handle of the function object
-    uint32_t groupSizeX,                            ///< [in] group size for X dimension to use for this function.
-    uint32_t groupSizeY,                            ///< [in] group size for Y dimension to use for this function.
-    uint32_t groupSizeZ                             ///< [in] group size for Z dimension to use for this function.
+    xe_uint32_t groupSizeX,                         ///< [in] group size for X dimension to use for this function.
+    xe_uint32_t groupSizeY,                         ///< [in] group size for Y dimension to use for this function.
+    xe_uint32_t groupSizeZ                          ///< [in] group size for Z dimension to use for this function.
     )
 {
     try
@@ -642,17 +642,17 @@ __xedllexport xe_result_t __xecall
 ///         + invalid number of threads.
 ///     - ::XE_RESULT_ERROR_UNSUPPORTED
 ///
-/// @hash {f3c0ffef33c7e902e382ada2d1fac7966afd96c3c9989bf29a9917e4ae2856d2}
+/// @hash {fdd68fbc1db09dc9dc5d2aa2820334cc86c252b2e8e4ad37df9b6575a0361351}
 ///
 __xedllexport xe_result_t __xecall
   xeFunctionSuggestGroupSize(
     xe_function_handle_t hFunction,                 ///< [in] handle of the function object
-    uint32_t globalSizeX,                           ///< [in] global width for X dimension.
-    uint32_t globalSizeY,                           ///< [in] global width for Y dimension.
-    uint32_t globalSizeZ,                           ///< [in] global width for Z dimension.
-    uint32_t* groupSizeX,                           ///< [out] recommended size of group for X dimension.
-    uint32_t* groupSizeY,                           ///< [out] recommended size of group for Y dimension.
-    uint32_t* groupSizeZ                            ///< [out] recommended size of group for Z dimension.
+    xe_uint32_t globalSizeX,                        ///< [in] global width for X dimension.
+    xe_uint32_t globalSizeY,                        ///< [in] global width for Y dimension.
+    xe_uint32_t globalSizeZ,                        ///< [in] global width for Z dimension.
+    xe_uint32_t* groupSizeX,                        ///< [out] recommended size of group for X dimension.
+    xe_uint32_t* groupSizeY,                        ///< [out] recommended size of group for Y dimension.
+    xe_uint32_t* groupSizeZ                         ///< [out] recommended size of group for Z dimension.
     )
 {
     try
@@ -707,12 +707,12 @@ __xedllexport xe_result_t __xecall
 ///         + invalid size specified
 ///     - ::XE_RESULT_ERROR_UNSUPPORTED
 ///
-/// @hash {a74e40177c1dc791c01894a81dff84e7d51e265d9efd5df6fde4bf97f8db56a8}
+/// @hash {e0a797712b7c1d52bdc06dc45129a787b16a160ee7de0e99454d2c9d6f0f59bc}
 ///
 __xedllexport xe_result_t __xecall
   xeFunctionSetArgumentValue(
     xe_function_handle_t hFunction,                 ///< [in/out] handle of the function args object.
-    uint32_t argIndex,                              ///< [in] argument index in range [0, num args - 1]
+    xe_uint32_t argIndex,                           ///< [in] argument index in range [0, num args - 1]
     size_t argSize,                                 ///< [in] size of argument type
     const void* pArgValue                           ///< [in] argument value represented as matching arg type
     )
@@ -770,13 +770,13 @@ __xedllexport xe_result_t __xecall
 ///         + invalid value for value
 ///     - ::XE_RESULT_ERROR_UNSUPPORTED
 ///
-/// @hash {1875fa152830f56fdaf8bbfc9afa2940ac606c5e33f8bbd39000f228e681498f}
+/// @hash {1a5f31322ecd4d49e045768e4fc62091701e9d3dc42dd03cd7b8274e46b4afba}
 ///
 __xedllexport xe_result_t __xecall
   xeFunctionSetAttribute(
     xe_function_handle_t hFunction,                 ///< [in/out] handle of the function.
     xe_function_set_attribute_t attr,               ///< [in] attribute to set
-    uint32_t value                                  ///< [in] attribute value to set
+    xe_uint32_t value                               ///< [in] attribute value to set
     )
 {
     try
@@ -831,13 +831,13 @@ __xedllexport xe_result_t __xecall
 ///         + invalid value for attr
 ///     - ::XE_RESULT_ERROR_UNSUPPORTED
 ///
-/// @hash {5dbebe56989f232199ae8bd64c849c2725f81a0dc791a6c21e553e9e6f122c5a}
+/// @hash {359c4c9b0e69fd5c7338ae2dbe59b7612dafcd92b7fbd3ba0842fab54c1989d9}
 ///
 __xedllexport xe_result_t __xecall
   xeFunctionGetAttribute(
     xe_function_handle_t hFunction,                 ///< [in] handle of the function object
     xe_function_get_attribute_t attr,               ///< [in] attribute to query
-    uint32_t* pValue                                ///< [out] returned attribute value
+    xe_uint32_t* pValue                             ///< [out] returned attribute value
     )
 {
     try

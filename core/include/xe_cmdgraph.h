@@ -57,7 +57,7 @@ typedef enum _xe_command_graph_flag_t
 /// @brief CommandGraph descriptor
 typedef struct _xe_command_graph_desc_t
 {
-    uint32_t version;                               ///< [in] ::XE_COMMAND_GRAPH_DESC_VERSION
+    xe_uint32_t version;                            ///< [in] ::XE_COMMAND_GRAPH_DESC_VERSION
     xe_command_graph_flag_t flags;                  ///< [in] creation flags
 
 } xe_command_graph_desc_t;

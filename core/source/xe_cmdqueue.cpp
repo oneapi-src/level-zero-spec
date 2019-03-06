@@ -193,12 +193,12 @@ __xedllexport xe_result_t __xecall
 ///         + hFence is enqueued in another command queue
 ///     - ::XE_RESULT_ERROR_UNSUPPORTED
 ///
-/// @hash {3d9d4e4b61d47939ee851c18dce4cb2d2e5d99585ca8349927a49a7ee1aaceab}
+/// @hash {7d1db42ee2fcad91293fef89e7d6907d66f5058e3be511c218efe7d931b2e512}
 ///
 __xedllexport xe_result_t __xecall
   xeCommandQueueEnqueueCommandLists(
     xe_command_queue_handle_t hCommandQueue,        ///< [in] handle of the command queue
-    uint32_t numCommandLists,                       ///< [in] number of command lists to enqueue
+    xe_uint32_t numCommandLists,                    ///< [in] number of command lists to enqueue
     xe_command_list_handle_t* phCommandLists,       ///< [in] list of handles of the command lists to enqueue for execution
     xe_fence_handle_t hFence                        ///< [in][optional] handle of the fence to signal on completion
     )
@@ -252,12 +252,12 @@ __xedllexport xe_result_t __xecall
 ///     - ::XE_RESULT_NOT_READY
 ///         + timeout expired
 ///
-/// @hash {d3c6d6fa48cf90ca129fa97f9cc4496aec796497805202ef97d76a61a36faf55}
+/// @hash {be40b35cd35e9a8d57bb3269f0f9271b662447bbaeca77e0e817eb81bd4ab30d}
 ///
 __xedllexport xe_result_t __xecall
   xeCommandQueueSynchronize(
     xe_command_queue_handle_t hCommandQueue,        ///< [in] handle of the command queue
-    uint32_t timeout                                ///< [in] if non-zero, then indicates the maximum time to yield before
+    xe_uint32_t timeout                             ///< [in] if non-zero, then indicates the maximum time to yield before
                                                     ///< returning ::XE_RESULT_SUCCESS or ::XE_RESULT_NOT_READY; if zero, then
                                                     ///< operates exactly like ::xeFenceQueryStatus; if MAX_UINT32, then
                                                     ///< function will not return until complete or device is lost.

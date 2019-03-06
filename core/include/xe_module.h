@@ -58,11 +58,11 @@ typedef enum _xe_module_format_t
 /// @brief Module descriptor
 typedef struct _xe_module_desc_t
 {
-    uint32_t version;                               ///< [in] ::XE_MODULE_DESC_VERSION
+    xe_uint32_t version;                            ///< [in] ::XE_MODULE_DESC_VERSION
     xe_module_format_t format;                      ///< [in] Module format passed in with pInputModule
-    uint32_t inputSize;                             ///< [in] size of input IL or ISA from pInputModule.
-    const char* pInputModule;                       ///< [in] pointer to IL or ISA
-    const char* pBuildFlags;                        ///< [in] string containing compiler flags. See documentation for build
+    xe_uint32_t inputSize;                          ///< [in] size of input IL or ISA from pInputModule.
+    const xe_char_t* pInputModule;                  ///< [in] pointer to IL or ISA
+    const xe_char_t* pBuildFlags;                   ///< [in] string containing compiler flags. See documentation for build
                                                     ///< flags.
 
 } xe_module_desc_t;
@@ -189,8 +189,8 @@ __xedllport xe_result_t __xecall
 __xedllport xe_result_t __xecall
   xeModuleBuildLogGetString(
     xe_module_build_log_handle_t hModuleBuildLog,   ///< [in] handle of the module build log object.
-    uint32_t* pSize,                                ///< [out] size of build log string.
-    char** pBuildLog                                ///< [out] pointer to null-terminated string of the log.
+    xe_uint32_t* pSize,                             ///< [out] size of build log string.
+    xe_char_t** pBuildLog                           ///< [out] pointer to null-terminated string of the log.
     );
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -222,8 +222,8 @@ __xedllport xe_result_t __xecall
 __xedllport xe_result_t __xecall
   xeModuleGetNativeBinary(
     xe_module_handle_t hModule,                     ///< [in] handle of the device
-    uint32_t* pSize,                                ///< [out] size of native binary.
-    char** pModuleNativeBinary                      ///< [out] pointer to native binary
+    xe_uint32_t* pSize,                             ///< [out] size of native binary.
+    xe_char_t** pModuleNativeBinary                 ///< [out] pointer to native binary
     );
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -243,9 +243,9 @@ typedef enum _xe_function_flag_t
 /// @brief Function descriptor
 typedef struct _xe_function_desc_t
 {
-    uint32_t version;                               ///< [in] ::XE_FUNCTION_DESC_VERSION
+    xe_uint32_t version;                            ///< [in] ::XE_FUNCTION_DESC_VERSION
     xe_function_flag_t flags;                       ///< [in] creation flags
-    const char* pFunctionName;                      ///< [in] null-terminated name of function in Module
+    const xe_char_t* pFunctionName;                 ///< [in] null-terminated name of function in Module
 
 } xe_function_desc_t;
 
@@ -323,7 +323,7 @@ __xedllport xe_result_t __xecall
 __xedllport xe_result_t __xecall
   xeModuleGetFunctionPointer(
     xe_module_handle_t hModule,                     ///< [in] handle of the module
-    const char* pFunctionName,                      ///< [in] Name of function to retrieve function pointer for.
+    const xe_char_t* pFunctionName,                 ///< [in] Name of function to retrieve function pointer for.
     void** pfnFunction                              ///< [out] pointer to function.
     );
 
@@ -347,9 +347,9 @@ __xedllport xe_result_t __xecall
 __xedllport xe_result_t __xecall
   xeFunctionSetGroupSize(
     xe_function_handle_t hFunction,                 ///< [in] handle of the function object
-    uint32_t groupSizeX,                            ///< [in] group size for X dimension to use for this function.
-    uint32_t groupSizeY,                            ///< [in] group size for Y dimension to use for this function.
-    uint32_t groupSizeZ                             ///< [in] group size for Z dimension to use for this function.
+    xe_uint32_t groupSizeX,                         ///< [in] group size for X dimension to use for this function.
+    xe_uint32_t groupSizeY,                         ///< [in] group size for Y dimension to use for this function.
+    xe_uint32_t groupSizeZ                          ///< [in] group size for Z dimension to use for this function.
     );
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -376,12 +376,12 @@ __xedllport xe_result_t __xecall
 __xedllport xe_result_t __xecall
   xeFunctionSuggestGroupSize(
     xe_function_handle_t hFunction,                 ///< [in] handle of the function object
-    uint32_t globalSizeX,                           ///< [in] global width for X dimension.
-    uint32_t globalSizeY,                           ///< [in] global width for Y dimension.
-    uint32_t globalSizeZ,                           ///< [in] global width for Z dimension.
-    uint32_t* groupSizeX,                           ///< [out] recommended size of group for X dimension.
-    uint32_t* groupSizeY,                           ///< [out] recommended size of group for Y dimension.
-    uint32_t* groupSizeZ                            ///< [out] recommended size of group for Z dimension.
+    xe_uint32_t globalSizeX,                        ///< [in] global width for X dimension.
+    xe_uint32_t globalSizeY,                        ///< [in] global width for Y dimension.
+    xe_uint32_t globalSizeZ,                        ///< [in] global width for Z dimension.
+    xe_uint32_t* groupSizeX,                        ///< [out] recommended size of group for X dimension.
+    xe_uint32_t* groupSizeY,                        ///< [out] recommended size of group for Y dimension.
+    xe_uint32_t* groupSizeZ                         ///< [out] recommended size of group for Z dimension.
     );
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -404,7 +404,7 @@ __xedllport xe_result_t __xecall
 __xedllport xe_result_t __xecall
   xeFunctionSetArgumentValue(
     xe_function_handle_t hFunction,                 ///< [in/out] handle of the function args object.
-    uint32_t argIndex,                              ///< [in] argument index in range [0, num args - 1]
+    xe_uint32_t argIndex,                           ///< [in] argument index in range [0, num args - 1]
     size_t argSize,                                 ///< [in] size of argument type
     const void* pArgValue                           ///< [in] argument value represented as matching arg type
     );
@@ -450,7 +450,7 @@ __xedllport xe_result_t __xecall
   xeFunctionSetAttribute(
     xe_function_handle_t hFunction,                 ///< [in/out] handle of the function.
     xe_function_set_attribute_t attr,               ///< [in] attribute to set
-    uint32_t value                                  ///< [in] attribute value to set
+    xe_uint32_t value                               ///< [in] attribute value to set
     );
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -494,7 +494,7 @@ __xedllport xe_result_t __xecall
   xeFunctionGetAttribute(
     xe_function_handle_t hFunction,                 ///< [in] handle of the function object
     xe_function_get_attribute_t attr,               ///< [in] attribute to query
-    uint32_t* pValue                                ///< [out] returned attribute value
+    xe_uint32_t* pValue                             ///< [out] returned attribute value
     );
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -505,10 +505,10 @@ __xedllport xe_result_t __xecall
 /// @brief Dispatch function arguments.
 typedef struct _xe_dispatch_function_arguments_t
 {
-    uint32_t version;                               ///< [in] ::XE_DISPATCH_FUNCTION_ARGS_VERSION
-    uint32_t groupCountX;                           ///< [in] width of dispatches in X dimension
-    uint32_t groupCountY;                           ///< [in] width of dispatches in Y dimension
-    uint32_t groupCountZ;                           ///< [in] width of dispatches in Z dimension
+    xe_uint32_t version;                            ///< [in] ::XE_DISPATCH_FUNCTION_ARGS_VERSION
+    xe_uint32_t groupCountX;                        ///< [in] width of dispatches in X dimension
+    xe_uint32_t groupCountY;                        ///< [in] width of dispatches in Y dimension
+    xe_uint32_t groupCountZ;                        ///< [in] width of dispatches in Z dimension
 
 } xe_dispatch_function_arguments_t;
 
@@ -576,9 +576,9 @@ __xedllport xe_result_t __xecall
 /// @brief Indirect function arguments. These arguments are device visible.
 typedef struct _xe_dispatch_function_indirect_arguments_t
 {
-    uint32_t groupCountX;                           ///< [in] width of dispatches in X dimension
-    uint32_t groupCountY;                           ///< [in] width of dispatches in Y dimension
-    uint32_t groupCountZ;                           ///< [in] width of dispatches in Z dimension
+    xe_uint32_t groupCountX;                        ///< [in] width of dispatches in X dimension
+    xe_uint32_t groupCountY;                        ///< [in] width of dispatches in Y dimension
+    xe_uint32_t groupCountZ;                        ///< [in] width of dispatches in Z dimension
 
 } xe_dispatch_function_indirect_arguments_t;
 
