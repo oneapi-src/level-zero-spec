@@ -1,4 +1,5 @@
 set(DISABLED_GTPIN_SUPPORT TRUE)
+set(SUPPORT_GEN8 FALSE CACHE STRING "Gen8 support" FORCE)
 add_subdirectory(${COMPUTE_RUNTIME_DIR} ${PROJECT_BINARY_DIR}/compute-runtime EXCLUDE_FROM_ALL)
 
 ##
@@ -50,19 +51,6 @@ endif()
 configure_file(${COMPUTE_RUNTIME_DIR}/config.h.in ${CMAKE_BINARY_DIR}/config.h)
 
 # These need to be added to a project to enable platform support in ULTs
-if(SUPPORT_GEN8)
-    set(COMPUTE_RUNTIME_GEN8
-        ${COMPUTE_RUNTIME_DIR}/runtime/gen8/enable_gen8.cpp
-        ${COMPUTE_RUNTIME_DIR}/runtime/gen8/enable_family_full_gen8.cpp
-        ${COMPUTE_RUNTIME_DIR}/runtime/gen8/enable_hw_info_config_gen8.cpp
-    )
-
-    set(COMPUTE_RUNTIME_ULT_GEN8
-        ${COMPUTE_RUNTIME_DIR}/unit_tests/libult/gen8.cpp
-        ${COMPUTE_RUNTIME_DIR}/unit_tests/gen8/cmd_parse_gen8.cpp
-    )
-endif()
-
 if(SUPPORT_GEN9)
     set(COMPUTE_RUNTIME_GEN9
         ${COMPUTE_RUNTIME_DIR}/runtime/gen9/enable_gen9.cpp

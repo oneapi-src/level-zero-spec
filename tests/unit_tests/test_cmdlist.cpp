@@ -56,7 +56,6 @@ TEST_P(CommandListCreate, returnsCommandListOnSuccess) {
 }
 
 static uint32_t supportedProductFamilyTable[] = {
-    IGFX_BROADWELL,
     IGFX_KABYLAKE,
     IGFX_SKYLAKE,
 };

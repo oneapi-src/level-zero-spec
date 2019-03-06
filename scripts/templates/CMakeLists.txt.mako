@@ -1,5 +1,4 @@
 # DO NOT EDIT: Generated from "scripts/templates/CMakeLists.txt.mako"
-include(gen8.cmake)
 include(gen9.cmake)
 include(gen10.cmake)
 include(gen11.cmake)
@@ -8,7 +7,6 @@ include(gen12hp.cmake)
 
 set(L0_RUNTIME_SOURCES 
     ${"${CMAKE_CURRENT_SOURCE_DIR}"}/CMakeLists.txt
-    ${"${CMAKE_CURRENT_SOURCE_DIR}"}/gen8.cmake
     ${"${CMAKE_CURRENT_SOURCE_DIR}"}/gen9.cmake
     ${"${CMAKE_CURRENT_SOURCE_DIR}"}/gen10.cmake
     ${"${CMAKE_CURRENT_SOURCE_DIR}"}/gen11.cmake
