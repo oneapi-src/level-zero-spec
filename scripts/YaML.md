@@ -38,6 +38,7 @@ value: "0"
 #### typedef
 * A typedef initiates the creation of a c/c++ 'typedef' statement in the source code
 * A typedef requires the following scalar fields: "desc", "name" and "value"
+* A typedef may take the following optional scalar or sequence of scalar fields: "class"
 
 ```yml
 type: typedef
@@ -46,9 +47,23 @@ name: pointer_t
 value: "void*"
 ```
 
+#### const
+* A const initiates the creation of a c/c++ 'static const' statement in the source code
+* A const requires the following scalar fields: "desc", "name", "typename" and "value"
+* A typedef may take the following optional scalar or sequence of scalar fields: "class"
+
+```yml
+type: const
+desc: "A brief description..."
+name: foo
+typename: "uint32_t"
+value: "0"
+```
+
 #### enum
 * An enum initiates the creation of a c/c++ 'enum' definition in the source code
 * An enum requires the following scalar fields: "desc" and "name"
+* An enum may take the following optional scalar or sequence of scalar fields: "class"
 * An enum requires the following sequence of scalars: "etors"
 * An etor requires the following scalar fields: "name" and "desc"
 * An etor may take the following optional scalar field: "value"
@@ -68,6 +83,7 @@ etors:
 #### struct
 * A struct initiates the creation of a c/c++ 'struct' definition in the source code
 * A struct requires the following scalar fields: "desc" and "name"
+* A struct may take the following optional scalar or sequence of scalar fields: "class"
 * A struct requires the following sequence of scalars: "members"
 * A member requires the following scalar fields: "type", "name" and "desc"
 * The scripts only support simple 'struct' definitions: no bitfields, no functions, no constructors, no overloaded operators, etc.
@@ -89,18 +105,21 @@ members:
 * A handle initiates the creation of a c/c++ 'struct' definition in the source code
 * A handle is a special-case structure for strongly-typed handles
 * A handle requires the following scalar fields: "desc" and "name"
+* A handle may take the following optional scalar fields: "class"
 
 ```yml
 type: handle
 desc: "A brief description..."
-name: handle_t
+name: foo_handle_t
+class: Foo
 ```
 
 #### function
 * A function initiates the creation of a c/c++ function declaration in the source code
 * A function requires the following scalar fields: "desc" and "name"
 * A function requires the following sequence of scalars: "params"
-* A function may take the following optional scalar fields: "class", "decl"
+* A function may take the following optional scalar or sequence of scalar fields: "class"
+* A function may take the following optional scalar fields: "decl"
 * A function may take the following optional sequence of sequences: "details", "returns" and "analogue"
 * A param requires the following scalars: "type", "name" and "desc"
 * A detail may be a scalar or sequence
@@ -124,3 +143,20 @@ params:
       name: value
       desc: "brief description"
 ```
+
+#### class
+* A class initiates the creation of a c++ class declaration in the source code
+* A class requires the following scalar fields: "desc" and "name"
+* A class requires the following sequence of scalars: "members"
+* A member requires the following scalar fields: "type", "name" and "desc"
+
+```yml
+type: class
+desc: "A brief description..."
+name: spam_t
+members:
+    - type: handle_t
+      name: handle
+      desc: "brief description"
+```
+
