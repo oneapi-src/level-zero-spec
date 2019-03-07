@@ -344,6 +344,31 @@ __xedllport xe_result_t __xecall
     void* pBlob                                     ///< [in] pointer to blob of commands to encode into the command list
     );
 
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Reserve a section of contiguous command buffer space within the
+///        command list.
+/// 
+/// @details
+///     - The application may **not** call this function from simultaneous
+///       threads with the same command list handle.
+///     - The implementation of this function should be lock-free.
+/// 
+/// @returns
+///     - ::XE_RESULT_SUCCESS
+///     - ::XE_RESULT_ERROR_UNINITIALIZED
+///     - ::XE_RESULT_ERROR_DEVICE_LOST
+///     - ::XE_RESULT_ERROR_INVALID_PARAMETER
+///         + nullptr == hCommandList
+///         + nullptr == ptr
+///         + 0 for size
+///     - ::XE_RESULT_ERROR_UNSUPPORTED
+__xedllport xe_result_t __xecall
+  xeCommandListReserveSpace(
+    xe_command_list_handle_t hCommandList,          ///< [in] handle of the command list
+    size_t size,                                    ///< [in] size (in bytes) to reserve
+    void** ptr                                      ///< [out] pointer to command buffer space reserved
+    );
+
 #if defined(__cplusplus)
 } // extern "C"
 #endif

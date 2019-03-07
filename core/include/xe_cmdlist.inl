@@ -129,6 +129,17 @@ namespace xe
     }
 
     ///////////////////////////////////////////////////////////////////////////////
+    /// @brief C++ wrapper for ::xeCommandListReserveSpace
+    inline void CommandList::ReserveSpace(
+        size_t size,                                    ///< [in] size (in bytes) to reserve
+        void** ptr                                      ///< [out] pointer to command buffer space reserved
+        )
+    {
+        // auto result = ::xeCommandListReserveSpace( handle, size, ptr );
+        // if( ::XE_RESULT_SUCCESS != result ) throw exception(result, "xe::CommandList::ReserveSpace");
+    }
+
+    ///////////////////////////////////////////////////////////////////////////////
     /// @brief C++ wrapper for ::xeCommandListEncodeMemoryCopy
     inline void CommandList::EncodeMemoryCopy(
         void* dstptr,                                   ///< [in] pointer to destination memory to copy to

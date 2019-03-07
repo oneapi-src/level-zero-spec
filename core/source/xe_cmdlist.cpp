@@ -644,3 +644,63 @@ __xedllexport xe_result_t __xecall
     }
 }
 
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Reserve a section of contiguous command buffer space within the
+///        command list.
+/// 
+/// @details
+///     - The application may **not** call this function from simultaneous
+///       threads with the same command list handle.
+///     - The implementation of this function should be lock-free.
+/// 
+/// @returns
+///     - ::XE_RESULT_SUCCESS
+///     - ::XE_RESULT_ERROR_UNINITIALIZED
+///     - ::XE_RESULT_ERROR_DEVICE_LOST
+///     - ::XE_RESULT_ERROR_INVALID_PARAMETER
+///         + nullptr == hCommandList
+///         + nullptr == ptr
+///         + 0 for size
+///     - ::XE_RESULT_ERROR_UNSUPPORTED
+///
+/// @hash {761ce13c72759ff0166ff4c1e3dd2d68023e83574c3b51b6d90708bd0692fa23}
+///
+__xedllexport xe_result_t __xecall
+  xeCommandListReserveSpace(
+    xe_command_list_handle_t hCommandList,          ///< [in] handle of the command list
+    size_t size,                                    ///< [in] size (in bytes) to reserve
+    void** ptr                                      ///< [out] pointer to command buffer space reserved
+    )
+{
+    try
+    {
+        //if( XE_DRIVER_PARAMETER_VALIDATION_LEVEL >= 0 )
+        {
+            // if( nullptr == driver ) return XE_RESULT_ERROR_UNINITIALIZED;
+            // Check parameters
+            if( nullptr == hCommandList ) return XE_RESULT_ERROR_INVALID_PARAMETER;
+            if( nullptr == ptr ) return XE_RESULT_ERROR_INVALID_PARAMETER;
+        }
+        /// @begin
+#if defined(XE_NULLDRV)
+        return XE_RESULT_SUCCESS;
+#else
+        return L0::CommandList::fromHandle(hCommandList)->reserveSpace(size, ptr);
+#endif
+        /// @end
+    }
+    catch(xe_result_t& result)
+    {
+        return result;
+    }
+    catch(std::bad_alloc&)
+    {
+        return XE_RESULT_ERROR_OUT_OF_HOST_MEMORY;
+    }
+    catch(std::exception&)
+    {
+        // @todo: pfnOnException(e.what());
+        return XE_RESULT_ERROR_UNKNOWN;
+    }
+}
+

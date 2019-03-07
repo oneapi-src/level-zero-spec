@@ -180,6 +180,13 @@ namespace xe
             );
 
         ///////////////////////////////////////////////////////////////////////////////
+        /// @brief C++ wrapper for ::xeCommandListReserveSpace
+        inline void ReserveSpace(
+            size_t size,                                    ///< [in] size (in bytes) to reserve
+            void** ptr                                      ///< [out] pointer to command buffer space reserved
+            );
+
+        ///////////////////////////////////////////////////////////////////////////////
         /// @brief C++ wrapper for ::xeCommandListEncodeMemoryCopy
         inline void EncodeMemoryCopy(
             void* dstptr,                                   ///< [in] pointer to destination memory to copy to
