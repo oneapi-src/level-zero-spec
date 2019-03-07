@@ -15,9 +15,10 @@ generate_html:
       - master
       - staging_ci
   tags:
-    - windows
+    - win
     - python
     - doxygen
+    - bt
 
 pages:
   stage: deploy
@@ -30,8 +31,9 @@ pages:
       - master
       - staging_ci
   tags:
-    - windows
+    - win
     - python
+    - bt
 
 linux:
   image: loki:latest
