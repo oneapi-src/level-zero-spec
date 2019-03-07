@@ -288,7 +288,7 @@ def make_param_checks(repl, obj, filter, tag=False):
                 checks[eip].append("nullptr == %s"%subx(repl, item['name'], tag))
 
             if re.match(r".*desc_t.*", item['type']): # descriptor-type
-                checks[eus].append("%s < %s->version"%(re.sub(r"\w*\s*(.*)_t.*", r"\1_VERSION", subx(repl, item['type'], tag)).upper(), item['name']))
+                checks[eus].append("%s < %s->version"%(re.sub(r"\w*\s*(.*)_t.*", r"\1_VERSION_CURRENT", subx(repl, item['type'], tag)).upper(), item['name']))
     return checks
 
 """

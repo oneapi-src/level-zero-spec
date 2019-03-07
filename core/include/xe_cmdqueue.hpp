@@ -51,6 +51,14 @@ namespace xe
         auto getDesc( void ) const { return desc; }
 
         ///////////////////////////////////////////////////////////////////////////////
+        /// @brief C++ version for ::xe_fence_desc_version_t
+        enum class fence_desc_version_t
+        {
+            CURRENT = XE_MAKE_VERSION( 1, 0 ),              ///< version 1.0
+
+        };
+
+        ///////////////////////////////////////////////////////////////////////////////
         /// @brief C++ version for ::xe_fence_flag_t
         enum class fence_flag_t
         {
@@ -62,7 +70,7 @@ namespace xe
         /// @brief C++ version for ::xe_fence_desc_t
         struct fence_desc_t
         {
-            uint32_t version = XE_FENCE_DESC_VERSION;       ///< [in] descriptor version
+            fence_desc_version_t version = fence_desc_version_t::CURRENT;   ///< [in] ::FENCE_DESC_VERSION_CURRENT
             fence_flag_t flags = fence_flag_t::NONE;        ///< [in] creation flags
 
         };

@@ -78,7 +78,7 @@
 ///         + nullptr == pDesc->phModule
 ///         + 0 == pDesc->inputSize
 ///     - ::XE_RESULT_ERROR_UNSUPPORTED
-///         + ::XE_MODULE_DESC_VERSION < pDesc->version
+///         + ::XE_MODULE_DESC_VERSION_CURRENT < pDesc->version
 ///     - ::XE_RESULT_ERROR_OUT_OF_HOST_MEMORY
 ///     - ::XE_RESULT_ERROR_OUT_OF_DEVICE_MEMORY
 ///     - ::XE_RESULT_ERROR_MODULE_BUILD_FAILURE
@@ -103,7 +103,7 @@ __xedllexport xe_result_t __xecall
             if( nullptr == hDevice ) return XE_RESULT_ERROR_INVALID_PARAMETER;
             if( nullptr == pDesc ) return XE_RESULT_ERROR_INVALID_PARAMETER;
             if( nullptr == phModule ) return XE_RESULT_ERROR_INVALID_PARAMETER;
-            if( XE_MODULE_DESC_VERSION < pDesc->version ) return XE_RESULT_ERROR_UNSUPPORTED;
+            if( XE_MODULE_DESC_VERSION_CURRENT < pDesc->version ) return XE_RESULT_ERROR_UNSUPPORTED;
         }
         /// @begin
 #if defined(XE_NULLDRV)
@@ -399,7 +399,7 @@ __xedllexport xe_result_t __xecall
 ///         + nullptr == pDesc->pFunctionName
 ///         + invalid value for pDesc->pFunctionName
 ///     - ::XE_RESULT_ERROR_UNSUPPORTED
-///         + ::XE_FUNCTION_DESC_VERSION < pDesc->version
+///         + ::XE_FUNCTION_DESC_VERSION_CURRENT < pDesc->version
 ///
 /// @hash {db1f3dd910ba87cc5f4943397310ef13073b227ef8aad92327a8183e14461837}
 ///
@@ -419,7 +419,7 @@ __xedllexport xe_result_t __xecall
             if( nullptr == hModule ) return XE_RESULT_ERROR_INVALID_PARAMETER;
             if( nullptr == pDesc ) return XE_RESULT_ERROR_INVALID_PARAMETER;
             if( nullptr == phFunction ) return XE_RESULT_ERROR_INVALID_PARAMETER;
-            if( XE_FUNCTION_DESC_VERSION < pDesc->version ) return XE_RESULT_ERROR_UNSUPPORTED;
+            if( XE_FUNCTION_DESC_VERSION_CURRENT < pDesc->version ) return XE_RESULT_ERROR_UNSUPPORTED;
         }
         /// @begin
 #if defined(XE_NULLDRV)

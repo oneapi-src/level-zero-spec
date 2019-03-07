@@ -2,10 +2,14 @@
 type: header
 desc: "Intel $Xx Driver APIs for Command Queue"
 --- #--------------------------------------------------------------------------
-type: macro
+type: enum
 desc: API version of $x_command_queue_desc_t
-name: $X_COMMAND_QUEUE_DESC_VERSION
-value: "$X_MAKE_VERSION( 1, 0 )"
+class: $xDevice
+name: $x_command_queue_desc_version_t
+etors:
+    - name: $X_COMMAND_QUEUE_DESC_VERSION_CURRENT
+      value: "$X_MAKE_VERSION( 1, 0 )"
+      desc: "version 1.0"
 --- #--------------------------------------------------------------------------
 type: enum
 desc: "Supported command queue flags"
@@ -58,10 +62,10 @@ desc: "Command Queue descriptor"
 class: $xDevice
 name: $x_command_queue_desc_t
 members:
-    - type: uint32_t
+    - type: $x_command_queue_desc_version_t
       name: version
-      desc: "[in] $X_COMMAND_QUEUE_DESC_VERSION"
-      init: $X_COMMAND_QUEUE_DESC_VERSION
+      desc: "[in] $X_COMMAND_QUEUE_DESC_VERSION_CURRENT"
+      init: $X_COMMAND_QUEUE_DESC_VERSION_CURRENT
     - type: $x_command_queue_flag_t
       name: flags
       desc: "[in] creation flags"

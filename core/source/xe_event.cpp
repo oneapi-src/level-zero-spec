@@ -62,7 +62,7 @@
 ///         + nullptr == desc
 ///         + nullptr == phEvent
 ///     - ::XE_RESULT_ERROR_UNSUPPORTED
-///         + ::XE_EVENT_DESC_VERSION < desc->version
+///         + ::XE_EVENT_DESC_VERSION_CURRENT < desc->version
 ///     - ::XE_RESULT_ERROR_OUT_OF_HOST_MEMORY
 ///     - ::XE_RESULT_ERROR_OUT_OF_DEVICE_MEMORY
 ///
@@ -84,7 +84,7 @@ __xedllexport xe_result_t __xecall
             if( nullptr == hDevice ) return XE_RESULT_ERROR_INVALID_PARAMETER;
             if( nullptr == desc ) return XE_RESULT_ERROR_INVALID_PARAMETER;
             if( nullptr == phEvent ) return XE_RESULT_ERROR_INVALID_PARAMETER;
-            if( XE_EVENT_DESC_VERSION < desc->version ) return XE_RESULT_ERROR_UNSUPPORTED;
+            if( XE_EVENT_DESC_VERSION_CURRENT < desc->version ) return XE_RESULT_ERROR_UNSUPPORTED;
         }
         /// @begin
 #if defined(XE_NULLDRV)
@@ -128,7 +128,7 @@ __xedllexport xe_result_t __xecall
 ///         + nullptr == ptr
 ///         + nullptr == phEvent
 ///     - ::XE_RESULT_ERROR_UNSUPPORTED
-///         + ::XE_EVENT_DESC_VERSION < desc->version
+///         + ::XE_EVENT_DESC_VERSION_CURRENT < desc->version
 ///     - ::XE_RESULT_ERROR_OUT_OF_HOST_MEMORY
 ///
 /// @hash {ff2fcb0cf2905079d5fb305c78b9dc0d9f1c4e5ab7792007b01cd832e94bae5c}
@@ -151,7 +151,7 @@ __xedllexport xe_result_t __xecall
             if( nullptr == desc ) return XE_RESULT_ERROR_INVALID_PARAMETER;
             if( nullptr == ptr ) return XE_RESULT_ERROR_INVALID_PARAMETER;
             if( nullptr == phEvent ) return XE_RESULT_ERROR_INVALID_PARAMETER;
-            if( XE_EVENT_DESC_VERSION < desc->version ) return XE_RESULT_ERROR_UNSUPPORTED;
+            if( XE_EVENT_DESC_VERSION_CURRENT < desc->version ) return XE_RESULT_ERROR_UNSUPPORTED;
         }
         /// @begin
 #if defined(XE_NULLDRV)

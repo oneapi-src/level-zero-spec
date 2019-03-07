@@ -51,6 +51,14 @@ namespace xe
         auto getDesc( void ) const { return desc; }
 
         ///////////////////////////////////////////////////////////////////////////////
+        /// @brief C++ version for ::xe_function_desc_version_t
+        enum class function_desc_version_t
+        {
+            CURRENT = XE_MAKE_VERSION( 1, 0 ),              ///< version 1.0
+
+        };
+
+        ///////////////////////////////////////////////////////////////////////////////
         /// @brief C++ version for ::xe_function_flag_t
         enum class function_flag_t
         {
@@ -63,7 +71,7 @@ namespace xe
         /// @brief C++ version for ::xe_function_desc_t
         struct function_desc_t
         {
-            uint32_t version = XE_FUNCTION_DESC_VERSION;    ///< [in] ::FUNCTION_DESC_VERSION
+            function_desc_version_t version = function_desc_version_t::CURRENT; ///< [in] ::FUNCTION_DESC_VERSION_CURRENT
             function_flag_t flags = function_flag_t::NONE;  ///< [in] creation flags
             const char* pFunctionName = nullptr;            ///< [in] null-terminated name of function in Module
 

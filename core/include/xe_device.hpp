@@ -49,10 +49,26 @@ namespace xe
         auto getHandle( void ) const { return handle; }
 
         ///////////////////////////////////////////////////////////////////////////////
+        /// @brief C++ version for ::xe_command_graph_desc_version_t
+        enum class command_graph_desc_version_t
+        {
+            CURRENT = XE_MAKE_VERSION( 1, 0 ),              ///< version 1.0
+
+        };
+
+        ///////////////////////////////////////////////////////////////////////////////
         /// @brief C++ version for ::xe_command_graph_flag_t
         enum class command_graph_flag_t
         {
             NONE = 0,                                       ///< default behavior
+
+        };
+
+        ///////////////////////////////////////////////////////////////////////////////
+        /// @brief C++ version for ::xe_command_list_desc_version_t
+        enum class command_list_desc_version_t
+        {
+            CURRENT = XE_MAKE_VERSION( 1, 0 ),              ///< version 1.0
 
         };
 
@@ -67,6 +83,14 @@ namespace xe
                                                             ///< synchronization primitives
             LOW_LATENCY = XE_BIT(2),                        ///< driver should optimize for immediate submission to a command queue
             CROSS_DEVICE = XE_BIT(3),                       ///< command list can be shared with another device
+
+        };
+
+        ///////////////////////////////////////////////////////////////////////////////
+        /// @brief C++ version for ::xe_command_queue_desc_version_t
+        enum class command_queue_desc_version_t
+        {
+            CURRENT = XE_MAKE_VERSION( 1, 0 ),              ///< version 1.0
 
         };
 
@@ -114,6 +138,30 @@ namespace xe
         };
 
         ///////////////////////////////////////////////////////////////////////////////
+        /// @brief C++ version for ::xe_device_properties_version_t
+        enum class device_properties_version_t
+        {
+            CURRENT = XE_MAKE_VERSION( 1, 0 ),              ///< version 1.0
+
+        };
+
+        ///////////////////////////////////////////////////////////////////////////////
+        /// @brief C++ version for ::xe_device_compute_properties_version_t
+        enum class device_compute_properties_version_t
+        {
+            CURRENT = XE_MAKE_VERSION( 1, 0 ),              ///< version 1.0
+
+        };
+
+        ///////////////////////////////////////////////////////////////////////////////
+        /// @brief C++ version for ::xe_device_memory_properties_version_t
+        enum class device_memory_properties_version_t
+        {
+            CURRENT = XE_MAKE_VERSION( 1, 0 ),              ///< version 1.0
+
+        };
+
+        ///////////////////////////////////////////////////////////////////////////////
         /// @brief C++ version for ::xe_memory_access_capabilities_t
         enum class memory_access_capabilities_t
         {
@@ -121,6 +169,14 @@ namespace xe
             MEMORY_ATOMIC_ACCESS = XE_BIT( 1 ),             ///< Supports atomic access
             MEMORY_CONCURRENT_ACCESS = XE_BIT( 2 ),         ///< Supports concurrent access
             MEMORY_CONCURRENT_ATOMIC_ACCESS = XE_BIT( 3 ),  ///< Supports concurrent atomic access
+
+        };
+
+        ///////////////////////////////////////////////////////////////////////////////
+        /// @brief C++ version for ::xe_device_link_properties_version_t
+        enum class device_link_properties_version_t
+        {
+            CURRENT = XE_MAKE_VERSION( 1, 0 ),              ///< version 1.0
 
         };
 
@@ -135,6 +191,14 @@ namespace xe
         };
 
         ///////////////////////////////////////////////////////////////////////////////
+        /// @brief C++ version for ::xe_event_desc_version_t
+        enum class event_desc_version_t
+        {
+            CURRENT = XE_MAKE_VERSION( 1, 0 ),              ///< version 1.0
+
+        };
+
+        ///////////////////////////////////////////////////////////////////////////////
         /// @brief C++ version for ::xe_event_flag_t
         enum class event_flag_t
         {
@@ -145,6 +209,14 @@ namespace xe
             IPC = XE_BIT(3),                                ///< signals and waits may occur across processes
             TIMESTAMP = XE_BIT(4),                          ///< supports time-based queries
             PERFORMANCE_METRICS = XE_BIT(5),                ///< supports performance metrics (MDAPI)
+
+        };
+
+        ///////////////////////////////////////////////////////////////////////////////
+        /// @brief C++ version for ::xe_image_desc_version_t
+        enum class image_desc_version_t
+        {
+            CURRENT = XE_MAKE_VERSION( 1, 0 ),              ///< version 1.0
 
         };
 
@@ -187,11 +259,27 @@ namespace xe
         };
 
         ///////////////////////////////////////////////////////////////////////////////
+        /// @brief C++ version for ::xe_module_desc_version_t
+        enum class module_desc_version_t
+        {
+            CURRENT = XE_MAKE_VERSION( 1, 0 ),              ///< version 1.0
+
+        };
+
+        ///////////////////////////////////////////////////////////////////////////////
         /// @brief C++ version for ::xe_module_format_t
         enum class module_format_t
         {
             IL_SPIRV = 0,                                   ///< Format is SPIRV IL format
             NATIVE,                                         ///< Format is device native format
+
+        };
+
+        ///////////////////////////////////////////////////////////////////////////////
+        /// @brief C++ version for ::xe_sampler_desc_version_t
+        enum class sampler_desc_version_t
+        {
+            CURRENT = XE_MAKE_VERSION( 1, 0 ),              ///< version 1.0
 
         };
 
@@ -219,7 +307,7 @@ namespace xe
         /// @brief C++ version for ::xe_command_graph_desc_t
         struct command_graph_desc_t
         {
-            uint32_t version = XE_COMMAND_GRAPH_DESC_VERSION;   ///< [in] ::COMMAND_GRAPH_DESC_VERSION
+            command_graph_desc_version_t version = command_graph_desc_version_t::CURRENT;   ///< [in] ::COMMAND_GRAPH_DESC_VERSION_CURRENT
             command_graph_flag_t flags = command_graph_flag_t::NONE;///< [in] creation flags
 
         };
@@ -228,7 +316,7 @@ namespace xe
         /// @brief C++ version for ::xe_command_list_desc_t
         struct command_list_desc_t
         {
-            uint32_t version = XE_COMMAND_LIST_DESC_VERSION;///< [in] ::COMMAND_LIST_DESC_VERSION
+            command_list_desc_version_t version = command_list_desc_version_t::CURRENT; ///< [in] ::COMMAND_LIST_DESC_VERSION_CURRENT
             command_list_flag_t flags = command_list_flag_t::NONE;  ///< [in] creation flags
 
         };
@@ -237,7 +325,7 @@ namespace xe
         /// @brief C++ version for ::xe_command_queue_desc_t
         struct command_queue_desc_t
         {
-            uint32_t version = XE_COMMAND_QUEUE_DESC_VERSION;   ///< [in] ::COMMAND_QUEUE_DESC_VERSION
+            command_queue_desc_version_t version = command_queue_desc_version_t::CURRENT;   ///< [in] ::COMMAND_QUEUE_DESC_VERSION_CURRENT
             command_queue_flag_t flags = command_queue_flag_t::NONE;///< [in] creation flags
             command_queue_mode_t mode = command_queue_mode_t::DEFAULT;  ///< [in] operation mode
             command_queue_priority_t priority = command_queue_priority_t::NORMAL;   ///< [in] priority
@@ -254,7 +342,7 @@ namespace xe
         /// @brief C++ version for ::xe_device_properties_t
         struct device_properties_t
         {
-            uint32_t version = XE_DEVICE_PROPERTIES_VERSION;///< [in] ::DEVICE_PROPERTIES_VERSION
+            device_properties_version_t version = device_properties_version_t::CURRENT; ///< [in] ::DEVICE_PROPERTIES_VERSION_CURRENT
             uint32_t vendorId;                              ///< [out] vendor id from PCI configuration
             uint32_t deviceId;                              ///< [out] device id from PCI configuration
             uint32_t subdeviceId;                           ///< [out] Subdevice id. Only valid if isSubdevice is true.
@@ -277,7 +365,7 @@ namespace xe
         /// @brief C++ version for ::xe_device_compute_properties_t
         struct device_compute_properties_t
         {
-            uint32_t version = XE_DEVICE_COMPUTE_PROPERTIES_VERSION;///< [in] ::DEVICE_COMPUTE_PROPERTIES_VERSION
+            device_compute_properties_version_t version = device_compute_properties_version_t::CURRENT; ///< [in] ::DEVICE_COMPUTE_PROPERTIES_VERSION_CURRENT
             uint32_t maxThreadsPerGroup;                    ///< [out] Maximum threads per compute group
             uint32_t maxGroupSizeX;                         ///< [out] Maximum items for X dimension in group
             uint32_t maxGroupSizeY;                         ///< [out] Maximum items for Y dimension in group
@@ -297,7 +385,7 @@ namespace xe
         /// @brief C++ version for ::xe_device_memory_properties_t
         struct device_memory_properties_t
         {
-            uint32_t version = XE_DEVICE_MEMORY_PROPERTIES_VERSION; ///< [in] ::DEVICE_MEMORY_PROPERTIES_VERSION
+            device_memory_properties_version_t version = device_memory_properties_version_t::CURRENT;   ///< [in] ::DEVICE_MEMORY_PROPERTIES_VERSION_CURRENT
             bool_t unifiedMemory;                           ///< [out] Host and device share same physical memory.
             bool_t onDemandPageFaults;                      ///< [out] Device supports on-demand page-faulting.
             uint32_t maxImageDims1D;                        ///< [out] Maximum image dimensions for 1D resources.
@@ -322,7 +410,7 @@ namespace xe
         /// @brief C++ version for ::xe_device_link_properties_t
         struct device_link_properties_t
         {
-            uint32_t version = XE_DEVICE_LINK_PROPERTIES_VERSION;   ///< [in] ::DEVICE_LINK_PROPERTIES_VERSION
+            device_link_properties_version_t version = device_link_properties_version_t::CURRENT;   ///< [in] ::DEVICE_LINK_PROPERTIES_VERSION_CURRENT
             bool_t isP2PSupported;                          ///< [out] Is P2P access supported across link
             bool_t isAtomicsSupported;                      ///< [out] Are atomics supported across link
             uint32_t performanceRank;                       ///< [out] Relative performance rank of link.
@@ -333,7 +421,7 @@ namespace xe
         /// @brief C++ version for ::xe_event_desc_t
         struct event_desc_t
         {
-            uint32_t version = XE_EVENT_DESC_VERSION;       ///< [in] ::EVENT_DESC_VERSION
+            event_desc_version_t version = event_desc_version_t::CURRENT;   ///< [in] ::EVENT_DESC_VERSION_CURRENT
             event_flag_t flags = event_flag_t::NONE;        ///< [in] creation flags
 
         };
@@ -342,7 +430,7 @@ namespace xe
         /// @brief C++ version for ::xe_image_desc_t
         struct image_desc_t
         {
-            uint32_t version = XE_IMAGE_DESC_VERSION;       ///< [in] ::IMAGE_DESC_VERSION
+            image_desc_version_t version = image_desc_version_t::CURRENT;   ///< [in] ::IMAGE_DESC_VERSION_CURRENT
             image_flag_t flags;                             ///< [in] creation flags
             image_type_t type;                              ///< [in] image type
             image_format_t format;                          ///< [in] image channel format
@@ -363,9 +451,9 @@ namespace xe
         /// @brief C++ version for ::xe_module_desc_t
         struct module_desc_t
         {
-            uint32_t version = XE_MODULE_DESC_VERSION;      ///< [in] ::MODULE_DESC_VERSION
+            module_desc_version_t version = module_desc_version_t::CURRENT; ///< [in] ::MODULE_DESC_VERSION_CURRENT
             module_format_t format;                         ///< [in] Module format passed in with pInputModule
-            uint32_t inputSize = 0;                         ///< [in] size of input IL or ISA from pInputModule.
+            size_t inputSize = 0;                           ///< [in] size of input IL or ISA from pInputModule.
             const char* pInputModule = nullptr;             ///< [in] pointer to IL or ISA
             const char* pBuildFlags = nullptr;              ///< [in] string containing compiler flags. See documentation for build
                                                             ///< flags.
@@ -376,7 +464,7 @@ namespace xe
         /// @brief C++ version for ::xe_sampler_desc_t
         struct sampler_desc_t
         {
-            uint32_t version = XE_SAMPLER_DESC_VERSION;     ///< [in] ::SAMPLER_DESC_VERSION
+            sampler_desc_version_t version = sampler_desc_version_t::CURRENT;   ///< [in] ::SAMPLER_DESC_VERSION_CURRENT
             sampler_address_mode_t addressMode = sampler_address_mode_t::NONE;  ///< [in] Sampler addressing mode to determine how out-of-bounds
                                                             ///< coordinates are handled.
             sampler_filter_mode_t filterMode = sampler_filter_mode_t::NEAREST;  ///< [in] Sampler filter mode to determine how samples are filtered.

@@ -186,7 +186,11 @@ __xedllport xe_result_t __xecall
 
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief API version of ::xe_device_properties_t
-#define XE_DEVICE_PROPERTIES_VERSION  XE_MAKE_VERSION( 1, 0 )
+typedef enum _xe_device_properties_version_t
+{
+    XE_DEVICE_PROPERTIES_VERSION_CURRENT = XE_MAKE_VERSION( 1, 0 ), ///< version 1.0
+
+} xe_device_properties_version_t;
 
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Maximum device name string size
@@ -196,7 +200,7 @@ __xedllport xe_result_t __xecall
 /// @brief Device properties queried using ::xeDeviceGetProperties
 typedef struct _xe_device_properties_t
 {
-    uint32_t version;                               ///< [in] ::XE_DEVICE_PROPERTIES_VERSION
+    xe_device_properties_version_t version;         ///< [in] ::XE_DEVICE_PROPERTIES_VERSION_CURRENT
     uint32_t vendorId;                              ///< [out] vendor id from PCI configuration
     uint32_t deviceId;                              ///< [out] device id from PCI configuration
     uint32_t subdeviceId;                           ///< [out] Subdevice id. Only valid if isSubdevice is true.
@@ -244,7 +248,11 @@ __xedllport xe_result_t __xecall
 
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief API version of ::xe_device_compute_properties_t
-#define XE_DEVICE_COMPUTE_PROPERTIES_VERSION  XE_MAKE_VERSION( 1, 0 )
+typedef enum _xe_device_compute_properties_version_t
+{
+    XE_DEVICE_COMPUTE_PROPERTIES_VERSION_CURRENT = XE_MAKE_VERSION( 1, 0 ), ///< version 1.0
+
+} xe_device_compute_properties_version_t;
 
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Maximum number of subgroup sizes supported.
@@ -254,7 +262,7 @@ __xedllport xe_result_t __xecall
 /// @brief Device compute properties queried using ::xeDeviceGetComputeProperties
 typedef struct _xe_device_compute_properties_t
 {
-    uint32_t version;                               ///< [in] ::XE_DEVICE_COMPUTE_PROPERTIES_VERSION
+    xe_device_compute_properties_version_t version; ///< [in] ::XE_DEVICE_COMPUTE_PROPERTIES_VERSION_CURRENT
     uint32_t maxThreadsPerGroup;                    ///< [out] Maximum threads per compute group
     uint32_t maxGroupSizeX;                         ///< [out] Maximum items for X dimension in group
     uint32_t maxGroupSizeY;                         ///< [out] Maximum items for Y dimension in group
@@ -298,7 +306,11 @@ __xedllport xe_result_t __xecall
 
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief API version of ::xe_device_memory_properties_t
-#define XE_DEVICE_MEMORY_PROPERTIES_VERSION  XE_MAKE_VERSION( 1, 0 )
+typedef enum _xe_device_memory_properties_version_t
+{
+    XE_DEVICE_MEMORY_PROPERTIES_VERSION_CURRENT = XE_MAKE_VERSION( 1, 0 ),  ///< version 1.0
+
+} xe_device_memory_properties_version_t;
 
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Memory access capabilities
@@ -319,7 +331,7 @@ typedef enum _xe_memory_access_capabilities_t
 /// @brief Device memory properties queried using ::xeDeviceGetMemoryProperties
 typedef struct _xe_device_memory_properties_t
 {
-    uint32_t version;                               ///< [in] ::XE_DEVICE_MEMORY_PROPERTIES_VERSION
+    xe_device_memory_properties_version_t version;  ///< [in] ::XE_DEVICE_MEMORY_PROPERTIES_VERSION_CURRENT
     xe_bool_t unifiedMemory;                        ///< [out] Host and device share same physical memory.
     xe_bool_t onDemandPageFaults;                   ///< [out] Device supports on-demand page-faulting.
     uint32_t maxImageDims1D;                        ///< [out] Maximum image dimensions for 1D resources.
@@ -369,13 +381,17 @@ __xedllport xe_result_t __xecall
 
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief API version of ::xe_device_link_properties_t
-#define XE_DEVICE_LINK_PROPERTIES_VERSION  XE_MAKE_VERSION( 1, 0 )
+typedef enum _xe_device_link_properties_version_t
+{
+    XE_DEVICE_LINK_PROPERTIES_VERSION_CURRENT = XE_MAKE_VERSION( 1, 0 ),///< version 1.0
+
+} xe_device_link_properties_version_t;
 
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Device properties queried using ::xeDeviceGetLinkProperties
 typedef struct _xe_device_link_properties_t
 {
-    uint32_t version;                               ///< [in] ::XE_DEVICE_LINK_PROPERTIES_VERSION
+    xe_device_link_properties_version_t version;    ///< [in] ::XE_DEVICE_LINK_PROPERTIES_VERSION_CURRENT
     xe_bool_t isP2PSupported;                       ///< [out] Is P2P access supported across link
     xe_bool_t isAtomicsSupported;                   ///< [out] Are atomics supported across link
     uint32_t performanceRank;                       ///< [out] Relative performance rank of link.

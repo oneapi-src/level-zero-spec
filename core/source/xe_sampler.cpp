@@ -62,7 +62,7 @@
 ///         + invalid pDesc->addressMode
 ///         + invalid pDesc->filterMode
 ///     - ::XE_RESULT_ERROR_UNSUPPORTED
-///         + ::XE_SAMPLER_DESC_VERSION < pDesc->version
+///         + ::XE_SAMPLER_DESC_VERSION_CURRENT < pDesc->version
 ///     - ::XE_RESULT_ERROR_OUT_OF_HOST_MEMORY
 ///
 /// @hash {d6e17778345dc3a543e1add74375d5b50c06e8a5678e82e59353e25f9eabf95f}
@@ -83,7 +83,7 @@ __xedllexport xe_result_t __xecall
             if( nullptr == hDevice ) return XE_RESULT_ERROR_INVALID_PARAMETER;
             if( nullptr == pDesc ) return XE_RESULT_ERROR_INVALID_PARAMETER;
             if( nullptr == phSampler ) return XE_RESULT_ERROR_INVALID_PARAMETER;
-            if( XE_SAMPLER_DESC_VERSION < pDesc->version ) return XE_RESULT_ERROR_UNSUPPORTED;
+            if( XE_SAMPLER_DESC_VERSION_CURRENT < pDesc->version ) return XE_RESULT_ERROR_UNSUPPORTED;
         }
         /// @begin
 #if defined(XE_NULLDRV)

@@ -2,10 +2,14 @@
 type: header
 desc: "Intel $Xx Driver APIs for Event"
 --- #--------------------------------------------------------------------------
-type: macro
+type: enum
 desc: "API version of $x_event_desc_t"
-name: $X_EVENT_DESC_VERSION
-value: "$X_MAKE_VERSION( 1, 0 )"
+class: $xDevice
+name: $x_event_desc_version_t
+etors:
+    - name: $X_EVENT_DESC_VERSION_CURRENT
+      value: "$X_MAKE_VERSION( 1, 0 )"
+      desc: "version 1.0"
 --- #--------------------------------------------------------------------------
 type: enum
 desc: "Supported event creation flags"
@@ -39,10 +43,10 @@ desc: "Event descriptor"
 class: $xDevice
 name: $x_event_desc_t
 members:
-    - type: uint32_t
+    - type: $x_event_desc_version_t
       name: version
-      desc: "[in] $X_EVENT_DESC_VERSION"
-      init: $X_EVENT_DESC_VERSION
+      desc: "[in] $X_EVENT_DESC_VERSION_CURRENT"
+      init: $X_EVENT_DESC_VERSION_CURRENT
     - type: $x_event_flag_t
       name: flags
       desc: "[in] creation flags"

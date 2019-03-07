@@ -43,7 +43,11 @@ extern "C" {
 
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief API version of ::xe_sampler_desc_t
-#define XE_SAMPLER_DESC_VERSION  XE_MAKE_VERSION( 1, 0 )
+typedef enum _xe_sampler_desc_version_t
+{
+    XE_SAMPLER_DESC_VERSION_CURRENT = XE_MAKE_VERSION( 1, 0 ),  ///< version 1.0
+
+} xe_sampler_desc_version_t;
 
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Sampler addressing modes
@@ -69,7 +73,7 @@ typedef enum _xe_sampler_filter_mode_t
 /// @brief Sampler descriptor
 typedef struct _xe_sampler_desc_t
 {
-    uint32_t version;                               ///< [in] ::XE_SAMPLER_DESC_VERSION
+    xe_sampler_desc_version_t version;              ///< [in] ::XE_SAMPLER_DESC_VERSION_CURRENT
     xe_sampler_address_mode_t addressMode;          ///< [in] Sampler addressing mode to determine how out-of-bounds
                                                     ///< coordinates are handled.
     xe_sampler_filter_mode_t filterMode;            ///< [in] Sampler filter mode to determine how samples are filtered.
@@ -99,7 +103,7 @@ typedef struct _xe_sampler_desc_t
 ///         + invalid pDesc->addressMode
 ///         + invalid pDesc->filterMode
 ///     - ::XE_RESULT_ERROR_UNSUPPORTED
-///         + ::XE_SAMPLER_DESC_VERSION < pDesc->version
+///         + ::XE_SAMPLER_DESC_VERSION_CURRENT < pDesc->version
 ///     - ::XE_RESULT_ERROR_OUT_OF_HOST_MEMORY
 __xedllport xe_result_t __xecall
   xeDeviceCreateSampler(

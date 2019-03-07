@@ -110,10 +110,14 @@ params:
       name: version
       desc: "[out] api version"
 --- #--------------------------------------------------------------------------
-type: macro
+type: enum
 desc: "API version of $x_device_properties_t"
-name: $X_DEVICE_PROPERTIES_VERSION
-value: "$X_MAKE_VERSION( 1, 0 )"
+class: $xDevice
+name: $x_device_properties_version_t
+etors:
+    - name: $X_DEVICE_PROPERTIES_VERSION_CURRENT
+      value: "$X_MAKE_VERSION( 1, 0 )"
+      desc: "version 1.0"
 --- #--------------------------------------------------------------------------
 type: macro
 desc: "Maximum device name string size"
@@ -125,10 +129,10 @@ desc: "Device properties queried using $xDeviceGetProperties"
 class: $xDevice
 name: $x_device_properties_t
 members:
-    - type: uint32_t
+    - type: $x_device_properties_version_t
       name: version
-      desc: "[in] $X_DEVICE_PROPERTIES_VERSION"
-      init: $X_DEVICE_PROPERTIES_VERSION
+      desc: "[in] $X_DEVICE_PROPERTIES_VERSION_CURRENT"
+      init: $X_DEVICE_PROPERTIES_VERSION_CURRENT
     - type: uint32_t
       name: vendorId
       desc: "[out] vendor id from PCI configuration"
@@ -191,10 +195,14 @@ params:
       name: pDeviceProperties
       desc: "[out] query result for device properties"
 --- #--------------------------------------------------------------------------
-type: macro
+type: enum
 desc: "API version of $x_device_compute_properties_t"
-name: $X_DEVICE_COMPUTE_PROPERTIES_VERSION
-value: "$X_MAKE_VERSION( 1, 0 )"
+class: $xDevice
+name: $x_device_compute_properties_version_t
+etors:
+    - name: $X_DEVICE_COMPUTE_PROPERTIES_VERSION_CURRENT
+      value: "$X_MAKE_VERSION( 1, 0 )"
+      desc: "version 1.0"
 --- #--------------------------------------------------------------------------
 type: macro
 desc: "Maximum number of subgroup sizes supported."
@@ -206,10 +214,10 @@ desc: "Device compute properties queried using $xDeviceGetComputeProperties"
 class: $xDevice
 name: $x_device_compute_properties_t
 members:
-    - type: uint32_t
+    - type: $x_device_compute_properties_version_t
       name: version
-      desc: "[in] $X_DEVICE_COMPUTE_PROPERTIES_VERSION"
-      init: $X_DEVICE_COMPUTE_PROPERTIES_VERSION
+      desc: "[in] $X_DEVICE_COMPUTE_PROPERTIES_VERSION_CURRENT"
+      init: $X_DEVICE_COMPUTE_PROPERTIES_VERSION_CURRENT
     - type: uint32_t
       name: maxThreadsPerGroup
       desc: "[out] Maximum threads per compute group"
@@ -262,10 +270,14 @@ params:
       name: pComputeProperties
       desc: "[out] query result for compute properties"
 --- #--------------------------------------------------------------------------
-type: macro
+type: enum
 desc: "API version of $x_device_memory_properties_t"
-name: $X_DEVICE_MEMORY_PROPERTIES_VERSION
-value: "$X_MAKE_VERSION( 1, 0 )"
+class: $xDevice
+name: $x_device_memory_properties_version_t
+etors:
+    - name: $X_DEVICE_MEMORY_PROPERTIES_VERSION_CURRENT
+      value: "$X_MAKE_VERSION( 1, 0 )"
+      desc: "version 1.0"
 --- #--------------------------------------------------------------------------
 type: enum
 desc: "Memory access capabilities"
@@ -292,10 +304,10 @@ desc: "Device memory properties queried using $xDeviceGetMemoryProperties"
 class: $xDevice
 name: $x_device_memory_properties_t
 members:
-    - type: uint32_t
+    - type: $x_device_memory_properties_version_t
       name: version
-      desc: "[in] $X_DEVICE_MEMORY_PROPERTIES_VERSION"
-      init: $X_DEVICE_MEMORY_PROPERTIES_VERSION
+      desc: "[in] $X_DEVICE_MEMORY_PROPERTIES_VERSION_CURRENT"
+      init: $X_DEVICE_MEMORY_PROPERTIES_VERSION_CURRENT
     - type: $x_bool_t
       name: unifiedMemory
       desc: "[out] Host and device share same physical memory."
@@ -361,20 +373,24 @@ params:
       name: pMemProperties
       desc: "[out] query result for compute properties"
 --- #--------------------------------------------------------------------------
-type: macro
+type: enum
 desc: "API version of $x_device_link_properties_t"
-name: $X_DEVICE_LINK_PROPERTIES_VERSION
-value: "$X_MAKE_VERSION( 1, 0 )"
+class: $xDevice
+name: $x_device_link_properties_version_t
+etors:
+    - name: $X_DEVICE_LINK_PROPERTIES_VERSION_CURRENT
+      value: "$X_MAKE_VERSION( 1, 0 )"
+      desc: "version 1.0"
 --- #--------------------------------------------------------------------------
 type: struct
 desc: "Device properties queried using $xDeviceGetLinkProperties"
 class: $xDevice
 name: $x_device_link_properties_t
 members:
-    - type: uint32_t
+    - type: $x_device_link_properties_version_t
       name: version
-      desc: "[in] $X_DEVICE_LINK_PROPERTIES_VERSION"
-      init: $X_DEVICE_LINK_PROPERTIES_VERSION
+      desc: "[in] $X_DEVICE_LINK_PROPERTIES_VERSION_CURRENT"
+      init: $X_DEVICE_LINK_PROPERTIES_VERSION_CURRENT
     - type: $x_bool_t
       name: isP2PSupported
       desc: "[out] Is P2P access supported across link"

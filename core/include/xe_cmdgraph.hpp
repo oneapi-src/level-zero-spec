@@ -55,10 +55,18 @@ namespace xe
         using host_pfn_t = ::xe_host_pfn_t;
 
         ///////////////////////////////////////////////////////////////////////////////
+        /// @brief C++ version for ::xe_dispatch_function_arguments_version_t
+        enum class dispatch_function_arguments_version_t
+        {
+            CURRENT = XE_MAKE_VERSION( 1, 0 ),              ///< version 1.0
+
+        };
+
+        ///////////////////////////////////////////////////////////////////////////////
         /// @brief C++ version for ::xe_dispatch_function_arguments_t
         struct dispatch_function_arguments_t
         {
-            uint32_t version = XE_DISPATCH_FUNCTION_ARGS_VERSION;   ///< [in] ::DISPATCH_FUNCTION_ARGS_VERSION
+            dispatch_function_arguments_version_t version = dispatch_function_arguments_version_t::CURRENT; ///< [in] ::DISPATCH_FUNCTION_ARGUMENTS_VERSION_CURRENT
             uint32_t groupCountX = 0;                       ///< [in] width of dispatches in X dimension
             uint32_t groupCountY = 0;                       ///< [in] width of dispatches in Y dimension
             uint32_t groupCountZ = 0;                       ///< [in] width of dispatches in Z dimension

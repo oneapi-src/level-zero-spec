@@ -57,7 +57,7 @@
 ///         + nullptr == desc
 ///         + nullptr == phCommandGraph
 ///     - ::XE_RESULT_ERROR_UNSUPPORTED
-///         + ::XE_COMMAND_GRAPH_DESC_VERSION < desc->version
+///         + ::XE_COMMAND_GRAPH_DESC_VERSION_CURRENT < desc->version
 ///     - ::XE_RESULT_ERROR_OUT_OF_HOST_MEMORY
 ///     - ::XE_RESULT_ERROR_OUT_OF_DEVICE_MEMORY
 ///
@@ -79,7 +79,7 @@ __xedllexport xe_result_t __xecall
             if( nullptr == hDevice ) return XE_RESULT_ERROR_INVALID_PARAMETER;
             if( nullptr == desc ) return XE_RESULT_ERROR_INVALID_PARAMETER;
             if( nullptr == phCommandGraph ) return XE_RESULT_ERROR_INVALID_PARAMETER;
-            if( XE_COMMAND_GRAPH_DESC_VERSION < desc->version ) return XE_RESULT_ERROR_UNSUPPORTED;
+            if( XE_COMMAND_GRAPH_DESC_VERSION_CURRENT < desc->version ) return XE_RESULT_ERROR_UNSUPPORTED;
         }
         /// @begin
 #if defined(XE_NULLDRV)

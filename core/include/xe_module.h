@@ -43,7 +43,11 @@ extern "C" {
 
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief API version of ::xe_module_desc_t
-#define XE_MODULE_DESC_VERSION  XE_MAKE_VERSION( 1, 0 )
+typedef enum _xe_module_desc_version_t
+{
+    XE_MODULE_DESC_VERSION_CURRENT = XE_MAKE_VERSION( 1, 0 ),   ///< version 1.0
+
+} xe_module_desc_version_t;
 
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Supported module creation input formats
@@ -58,9 +62,9 @@ typedef enum _xe_module_format_t
 /// @brief Module descriptor
 typedef struct _xe_module_desc_t
 {
-    uint32_t version;                               ///< [in] ::XE_MODULE_DESC_VERSION
+    xe_module_desc_version_t version;               ///< [in] ::XE_MODULE_DESC_VERSION_CURRENT
     xe_module_format_t format;                      ///< [in] Module format passed in with pInputModule
-    uint32_t inputSize;                             ///< [in] size of input IL or ISA from pInputModule.
+    size_t inputSize;                               ///< [in] size of input IL or ISA from pInputModule.
     const char* pInputModule;                       ///< [in] pointer to IL or ISA
     const char* pBuildFlags;                        ///< [in] string containing compiler flags. See documentation for build
                                                     ///< flags.
@@ -105,7 +109,7 @@ typedef struct _xe_module_desc_t
 ///         + nullptr == pDesc->phModule
 ///         + 0 == pDesc->inputSize
 ///     - ::XE_RESULT_ERROR_UNSUPPORTED
-///         + ::XE_MODULE_DESC_VERSION < pDesc->version
+///         + ::XE_MODULE_DESC_VERSION_CURRENT < pDesc->version
 ///     - ::XE_RESULT_ERROR_OUT_OF_HOST_MEMORY
 ///     - ::XE_RESULT_ERROR_OUT_OF_DEVICE_MEMORY
 ///     - ::XE_RESULT_ERROR_MODULE_BUILD_FAILURE
@@ -228,7 +232,11 @@ __xedllport xe_result_t __xecall
 
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief API version of ::xe_function_desc_t
-#define XE_FUNCTION_DESC_VERSION  XE_MAKE_VERSION( 1, 0 )
+typedef enum _xe_function_desc_version_t
+{
+    XE_FUNCTION_DESC_VERSION_CURRENT = XE_MAKE_VERSION( 1, 0 ), ///< version 1.0
+
+} xe_function_desc_version_t;
 
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Supported function creation flags
@@ -243,7 +251,7 @@ typedef enum _xe_function_flag_t
 /// @brief Function descriptor
 typedef struct _xe_function_desc_t
 {
-    uint32_t version;                               ///< [in] ::XE_FUNCTION_DESC_VERSION
+    xe_function_desc_version_t version;             ///< [in] ::XE_FUNCTION_DESC_VERSION_CURRENT
     xe_function_flag_t flags;                       ///< [in] creation flags
     const char* pFunctionName;                      ///< [in] null-terminated name of function in Module
 
@@ -272,7 +280,7 @@ typedef struct _xe_function_desc_t
 ///         + nullptr == pDesc->pFunctionName
 ///         + invalid value for pDesc->pFunctionName
 ///     - ::XE_RESULT_ERROR_UNSUPPORTED
-///         + ::XE_FUNCTION_DESC_VERSION < pDesc->version
+///         + ::XE_FUNCTION_DESC_VERSION_CURRENT < pDesc->version
 __xedllport xe_result_t __xecall
   xeModuleCreateFunction(
     xe_module_handle_t hModule,                     ///< [in] handle of the module
@@ -498,14 +506,18 @@ __xedllport xe_result_t __xecall
     );
 
 ///////////////////////////////////////////////////////////////////////////////
-/// @brief API version of ::xe_function_desc_t
-#define XE_DISPATCH_FUNCTION_ARGS_VERSION  XE_MAKE_VERSION( 1, 0 )
+/// @brief API version of ::xe_dispatch_function_arguments_t
+typedef enum _xe_dispatch_function_arguments_version_t
+{
+    XE_DISPATCH_FUNCTION_ARGUMENTS_VERSION_CURRENT = XE_MAKE_VERSION( 1, 0 ),   ///< version 1.0
+
+} xe_dispatch_function_arguments_version_t;
 
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Dispatch function arguments.
 typedef struct _xe_dispatch_function_arguments_t
 {
-    uint32_t version;                               ///< [in] ::XE_DISPATCH_FUNCTION_ARGS_VERSION
+    xe_dispatch_function_arguments_version_t version;   ///< [in] ::XE_DISPATCH_FUNCTION_ARGUMENTS_VERSION_CURRENT
     uint32_t groupCountX;                           ///< [in] width of dispatches in X dimension
     uint32_t groupCountY;                           ///< [in] width of dispatches in Y dimension
     uint32_t groupCountZ;                           ///< [in] width of dispatches in Z dimension

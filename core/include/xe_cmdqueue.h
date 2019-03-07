@@ -43,7 +43,11 @@ extern "C" {
 
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief API version of ::xe_command_queue_desc_t
-#define XE_COMMAND_QUEUE_DESC_VERSION  XE_MAKE_VERSION( 1, 0 )
+typedef enum _xe_command_queue_desc_version_t
+{
+    XE_COMMAND_QUEUE_DESC_VERSION_CURRENT = XE_MAKE_VERSION( 1, 0 ),///< version 1.0
+
+} xe_command_queue_desc_version_t;
 
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Supported command queue flags
@@ -84,7 +88,7 @@ typedef enum _xe_command_queue_priority_t
 /// @brief Command Queue descriptor
 typedef struct _xe_command_queue_desc_t
 {
-    uint32_t version;                               ///< [in] ::XE_COMMAND_QUEUE_DESC_VERSION
+    xe_command_queue_desc_version_t version;        ///< [in] ::XE_COMMAND_QUEUE_DESC_VERSION_CURRENT
     xe_command_queue_flag_t flags;                  ///< [in] creation flags
     xe_command_queue_mode_t mode;                   ///< [in] operation mode
     xe_command_queue_priority_t priority;           ///< [in] priority
@@ -119,7 +123,7 @@ typedef struct _xe_command_queue_desc_t
 ///         + nullptr == desc
 ///         + nullptr == phCommandQueue
 ///     - ::XE_RESULT_ERROR_UNSUPPORTED
-///         + ::XE_COMMAND_QUEUE_DESC_VERSION < desc->version
+///         + ::XE_COMMAND_QUEUE_DESC_VERSION_CURRENT < desc->version
 ///     - ::XE_RESULT_ERROR_OUT_OF_HOST_MEMORY
 ///     - ::XE_RESULT_ERROR_OUT_OF_DEVICE_MEMORY
 __xedllport xe_result_t __xecall

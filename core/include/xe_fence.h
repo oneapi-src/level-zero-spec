@@ -43,7 +43,11 @@ extern "C" {
 
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief API version of ::xe_fence_desc_t
-#define XE_FENCE_DESC_VERSION  XE_MAKE_VERSION( 1, 0 )
+typedef enum _xe_fence_desc_version_t
+{
+    XE_FENCE_DESC_VERSION_CURRENT = XE_MAKE_VERSION( 1, 0 ),///< version 1.0
+
+} xe_fence_desc_version_t;
 
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Supported fence creation flags
@@ -57,7 +61,7 @@ typedef enum _xe_fence_flag_t
 /// @brief Fence descriptor
 typedef struct _xe_fence_desc_t
 {
-    uint32_t version;                               ///< [in] descriptor version
+    xe_fence_desc_version_t version;                ///< [in] ::XE_FENCE_DESC_VERSION_CURRENT
     xe_fence_flag_t flags;                          ///< [in] creation flags
 
 } xe_fence_desc_t;
@@ -82,7 +86,7 @@ typedef struct _xe_fence_desc_t
 ///         + nullptr == desc
 ///         + nullptr == phFence
 ///     - ::XE_RESULT_ERROR_UNSUPPORTED
-///         + ::XE_FENCE_DESC_VERSION < desc->version
+///         + ::XE_FENCE_DESC_VERSION_CURRENT < desc->version
 ///     - ::XE_RESULT_ERROR_OUT_OF_HOST_MEMORY
 ///     - ::XE_RESULT_ERROR_OUT_OF_DEVICE_MEMORY
 __xedllport xe_result_t __xecall
