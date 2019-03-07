@@ -38,6 +38,7 @@ add_executable(${TARGET_NAME}
     test_driver.cpp
     test_event.cpp
     test_graphics_allocation.cpp
+    test_image.cpp
     test_memory_manager.cpp
     test_module.cpp
     test_platform.cpp
