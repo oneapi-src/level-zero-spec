@@ -78,6 +78,8 @@ namespace xe
             COPY_ONLY = XE_BIT(0),                          ///< command queue only supports enqueing copy-only command lists
             LOGICAL_ONLY = XE_BIT(1),                       ///< command queue is not tied to a physical command queue; driver may
                                                             ///< dynamically assign based on usage
+            SINGLE_SLICE_ONLY = XE_BIT(2),                  ///< command queue reserves and cannot comsume more than a single slice'
+                                                            ///< 'slice' size is device-specific.  cannot be combined with COPY_ONLY.
 
         };
 

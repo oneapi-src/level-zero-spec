@@ -21,6 +21,9 @@ etors:
     - name: $X_COMMAND_QUEUE_FLAG_LOGICAL_ONLY
       value: "$X_BIT(1)"
       desc: "command queue is not tied to a physical command queue; driver may dynamically assign based on usage"
+    - name: $X_COMMAND_QUEUE_FLAG_SINGLE_SLICE_ONLY
+      value: "$X_BIT(2)"
+      desc: "command queue reserves and cannot comsume more than a single slice' 'slice' size is device-specific.  cannot be combined with COPY_ONLY."
 --- #--------------------------------------------------------------------------
 type: enum
 desc: "Supported command queue modes"
