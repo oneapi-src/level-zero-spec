@@ -584,7 +584,7 @@ __xedllexport xe_result_t __xecall
 #if defined(XE_NULLDRV)
         return XE_RESULT_SUCCESS;
 #else
-        return L0::hostWaitOnEvent(hEvent, mode, delay, interval, timeout);
+        return L0::Event::fromHandle(hEvent)->hostWaitOnEvent(hEvent, timeout);
 #endif
         /// @end
     }

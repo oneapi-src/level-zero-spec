@@ -2,6 +2,9 @@
 #include "event.h"
 #include "graphics_allocation.h"
 #include "memory_manager.h"
+#include "runtime/os_interface/linux/drm_neo.h"
+#include "drm/i915_drm.h"
+
 #include <cassert>
 
 namespace L0 {
@@ -59,6 +62,10 @@ xe_result_t Event::destroy() {
     return XE_RESULT_SUCCESS;
 }
 
+xe_result_t Event::hostWaitOnEvent(xe_event_handle_t hEvent, uint32_t timeout) {
+    return XE_RESULT_SUCCESS;
+}
+
 xe_result_t eventQueryElapsedTime(xe_event_handle_t hEventStart,
                                   xe_event_handle_t hEventEnd,
                                   double_t *pTime) {
@@ -78,14 +85,6 @@ xe_result_t hostSignalEvent(xe_event_handle_t hEvent) {
 
 xe_result_t hostSignalMultipleEvents(uint32_t numEvents,
                                        xe_event_handle_t *phEvents) {
-    return XE_RESULT_ERROR_UNSUPPORTED;
-}
-
-xe_result_t hostWaitOnEvent(xe_event_handle_t hEvent,
-                              xe_synchronization_mode_t mode,
-                              uint32_t delay,
-                              uint32_t interval,
-                              uint32_t timeout) {
     return XE_RESULT_ERROR_UNSUPPORTED;
 }
 

@@ -23,6 +23,8 @@ struct Mock<Event> : public Event {
     MOCK_METHOD0(destroy, xe_result_t());
     MOCK_METHOD2(queryElapsedTime, xe_result_t(xe_event_handle_t hEventEnd,
                                                double_t *pTime));
+    MOCK_METHOD2(hostWaitOnEvent, xe_result_t(xe_event_handle_t hEvent,
+                                              uint32_t timeout));
     MOCK_METHOD3(queryMetricsData, xe_result_t(xe_event_handle_t hEventEnd,
                                                size_t reportSize,
                                                uint32_t *pReportData));

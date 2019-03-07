@@ -19,6 +19,8 @@ struct Event : public _xe_event_handle_t {
     virtual xe_result_t queryStatus() = 0;
     virtual xe_result_t reset() = 0;
 
+    virtual xe_result_t hostWaitOnEvent(xe_event_handle_t hEvent, uint32_t timeout);
+
     static Event *create(Device *device);
 
     static Event *fromHandle(xe_event_handle_t handle) {
@@ -37,6 +39,7 @@ struct Event : public _xe_event_handle_t {
 
   protected:
     GraphicsAllocation *allocation = nullptr;
+    int handle; //handle for i915 wait ioctl
 };
 
 xe_result_t eventQueryElapsedTime(xe_event_handle_t hEventStart,
@@ -52,12 +55,6 @@ xe_result_t hostSignalEvent(xe_event_handle_t hEvent);
 
 xe_result_t hostSignalMultipleEvents(uint32_t numEvents,
                                      xe_event_handle_t *phEvents);
-
-xe_result_t hostWaitOnEvent(xe_event_handle_t hEvent,
-                            xe_synchronization_mode_t mode,
-                            uint32_t delay,
-                            uint32_t interval,
-                            uint32_t timeout);
 
 xe_result_t hostWaitOnMultipleEvents(uint32_t numEvents,
                                      xe_event_handle_t *phEvents,
