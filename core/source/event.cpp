@@ -2,8 +2,6 @@
 #include "event.h"
 #include "graphics_allocation.h"
 #include "memory_manager.h"
-#include "runtime/os_interface/linux/drm_neo.h"
-#include "drm/i915_drm.h"
 
 #include <cassert>
 

@@ -39,7 +39,6 @@ struct Event : public _xe_event_handle_t {
 
   protected:
     GraphicsAllocation *allocation = nullptr;
-    int handle; //handle for i915 wait ioctl
 };
 
 xe_result_t eventQueryElapsedTime(xe_event_handle_t hEventStart,
