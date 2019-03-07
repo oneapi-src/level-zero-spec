@@ -792,6 +792,38 @@ Use xeFunctionSetAttributes to set attributes from a function object.
 
 See ::xe_function_set_attribute_t for more information on the "set" attributes.
 
+### <a name="arg">Sampler</a>
+The API supports Sampler objects that represent state needed for sampling images from within
+Module functions.  The xeDeviceCreateSampler function takes a sampler descriptor (xe_sampler_desc_t):
+
+| Sampler Field    | Description                                           |
+| :--              | :--                                                   |
+| Address Mode     | Determines how out-of-bounds accessse are handled. See xe_sampler_address_mode_t. |
+| Filter Mode      | Specifies which filtering mode to use. See xe_sampler_filter_mode_t               |
+| Normalized       | Specifies whether coordinates for addressing image are normalized [0,1] or not.     |
+
+The following is sample for code creating a sampler object and passing it as a Function argument.
+
+```c
+    // Setup sampler for linear filtering and clamp out of bounds accesses to edge.
+    xe_sampler_desc_t desc = {
+        XE_SAMPLER_DESC_VERSION,
+        XE_SAMPLER_ADDRESS_MODE_CLAMP,
+        XE_SAMPLER_FILTER_MODE_LINEAR,
+        false
+        };
+    xe_sampler_handle_t sampler;
+    xeDeviceCreateSampler(hDevice, &desc, &sampler);
+    ...
+    
+    // The sampler can be passed as a function argument.
+    xeFunctionArgsSetValue(hFunction, 0, sizeof(xe_sampler_handle_t), &sampler);
+
+    // Encode dispatch command
+    xeCommandListEncodeDispatchFunction(
+        hCommandList, hFunction, &dispatchArgs, nullptr );
+```
+
 # <a name="oi">OpenCL Interoperability</a>
 Interoperability with OpenCL is currently only supported _from_ OpenCL _to_ Xe for a subset of types.
 The APIs are designed to be OS agnostics and allow implementations to optimize for unified device drivers;
