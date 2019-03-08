@@ -74,7 +74,6 @@ TEST_P(CommandListCreateFail, returnsNullPointerOnFailure) {
 
 static uint32_t unsupportedProductFamilyTable[] = {
     IGFX_HASWELL,
-    IGFX_CANNONLAKE,
     IGFX_MAX_PRODUCT,
 };
 
