@@ -40,6 +40,7 @@
 #elif defined(_WIN32)
 #include <Windows.h>
 #undef max
+#undef min
 #define LOAD_OCLOC_LIBRARY() LoadLibraryA("ocloc_shared.dll")
 #define LOAD_OCLOC_FUNCTION_PTR(LIB, FUNC_NAME) GetProcAddress((HMODULE)LIB, FUNC_NAME)
 #else
@@ -213,6 +214,14 @@ struct OclocWrapper {
 
     static Output compileClToSpirV(const char *src) {
         return compileClToSpirV(src, nullptr, nullptr);
+    }
+
+    static Output compileCl12ToSpirV(const char *src) {
+        return compileClToSpirV(src, "-cl-std=CL1.2", nullptr);
+    }
+
+    static Output compileCl20ToSpirV(const char *src) {
+        return compileClToSpirV(src, "-cl-std=CL2.0", nullptr);
     }
 
   protected:

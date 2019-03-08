@@ -48,7 +48,7 @@ int main(int argc, char *argv[]) {
     }
 
     // X. Prepare spirV
-    auto spirVCompilerOutput = ocloc::OclocWrapper::compileClToSpirV(clProgram);
+    auto spirVCompilerOutput = ocloc::OclocWrapper::compileCl12ToSpirV(clProgram);
     if (spirVCompilerOutput.getBuildLogSize() > 0) {
         std::cerr << "CL->spirV comilation log : " << spirVCompilerOutput.getBuildLog() << std::endl;
     }
