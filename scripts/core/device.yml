@@ -357,17 +357,17 @@ members:
       name: sharedSystemDeviceAllocCapabilities
       desc: "[out] Bitfield describing shared (system) memory capabilities"
     - type: uint32_t
-      name: IntermediateCacheSize
-      desc: "[out] Device Intermediate Cache(L1/L2) size"
+      name: intermediateCacheSize
+      desc: "[out] Per-cache Intermediate Cache (L1/L2) size, in bytes"
     - type: $x_bool_t
-      name: IntermediateCacheControl
-      desc: "[out] Support User control on Intermediate Cache(i.e. Resize SLM section vs Generic Cache)."
+      name: intermediateCacheControl
+      desc: "[out] Support User control on Intermediate Cache (i.e. Resize SLM section vs Generic Cache)"
     - type: uint32_t
-      name: LastLevelCacheSize
-      desc: "[out] Device LastLevelCacheSize(L3) size"
+      name: lastLevelCacheSize
+      desc: "[out] Per-cache Last Level Cache (L3) size, in bytes"
     - type: $x_bool_t
-      name: LastLevelCacheSizeControl
-      desc: "[out] Support User control on LastLevelCacheSize Cache(i.e. Resize SLM section vs Generic Cache)."
+      name: lastLevelCacheSizeControl
+      desc: "[out] Support User control on Last Level Cache (i.e. Resize SLM section vs Generic Cache)."
 --- #--------------------------------------------------------------------------
 type: function
 desc: "Retrieves memory attributes of the device"

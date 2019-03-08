@@ -402,11 +402,11 @@ namespace xe
             memory_access_capabilities_t sharedAllocCapabilities;   ///< [out] Bitfield describing shared memory capabilities
             memory_access_capabilities_t sharedCrossDeviceAllocCapabilities;///< [out] Bitfield describing shared (cross-device) memory capabilities
             memory_access_capabilities_t sharedSystemDeviceAllocCapabilities;   ///< [out] Bitfield describing shared (system) memory capabilities
-            uint32_t IntermediateCacheSize;                 ///< [out] Device Intermediate Cache(L1/L2) size
-            bool_t IntermediateCacheControl;                ///< [out] Support User control on Intermediate Cache(i.e. Resize SLM
-                                                            ///< section vs Generic Cache).
-            uint32_t LastLevelCacheSize;                    ///< [out] Device LastLevelCacheSize(L3) size
-            bool_t LastLevelCacheSizeControl;               ///< [out] Support User control on LastLevelCacheSize Cache(i.e. Resize SLM
+            uint32_t intermediateCacheSize;                 ///< [out] Per-cache Intermediate Cache (L1/L2) size, in bytes
+            bool_t intermediateCacheControl;                ///< [out] Support User control on Intermediate Cache (i.e. Resize SLM
+                                                            ///< section vs Generic Cache)
+            uint32_t lastLevelCacheSize;                    ///< [out] Per-cache Last Level Cache (L3) size, in bytes
+            bool_t lastLevelCacheSizeControl;               ///< [out] Support User control on Last Level Cache (i.e. Resize SLM
                                                             ///< section vs Generic Cache).
 
         };
