@@ -206,19 +206,23 @@ ATSTEST_F(CommandListEncodeDispatchFunction, withEventSetsPostSyncOp) {
 
 ATSTEST_F(CommandListEncodeDispatchFunction, copiesThreadDataToGeneralStateHeap) {
     createFunction("MemcpyBytes");
+
+    using COMPUTE_WALKER = typename FamilyType::COMPUTE_WALKER;
+    using INTERFACE_DESCRIPTOR_DATA = typename FamilyType::INTERFACE_DESCRIPTOR_DATA;
+
+    auto heap = commandList->indirectHeaps[CommandList::GENERAL_STATE];
+    heap->getSpace(COMPUTE_WALKER::INDIRECTDATASTARTADDRESS_ALIGN_SIZE - 1); // this will check if cmdlist takes care of heap allignment
+
     auto result = commandList->encodeDispatchFunction(function->toHandle(),
                                                       &dispatchFunctionArguments,
                                                       nullptr);
     ASSERT_EQ(XE_RESULT_SUCCESS, result);
 
     auto usedSpaceAfter = commandList->commandStream->getUsed();
-
     GenCmdList cmdList;
     ASSERT_TRUE(FamilyType::PARSE::parseCommandBuffer(cmdList,
                                                       ptrOffset(commandList->commandStream->getCpuBase(), 0),
                                                       usedSpaceAfter));
-    using COMPUTE_WALKER = typename FamilyType::COMPUTE_WALKER;
-    using INTERFACE_DESCRIPTOR_DATA = typename FamilyType::INTERFACE_DESCRIPTOR_DATA;
 
     auto itor = find<COMPUTE_WALKER *>(cmdList.begin(), cmdList.end());
     ASSERT_NE(cmdList.end(), itor);
@@ -230,8 +234,6 @@ ATSTEST_F(CommandListEncodeDispatchFunction, copiesThreadDataToGeneralStateHeap)
                                   function->getCrossThreadDataSize();
         EXPECT_GE(cmd->getIndirectDataLength(), 0u);
         EXPECT_LE(cmd->getIndirectDataLength(), indirectDataLength);
-
-        auto heap = commandList->indirectHeaps[CommandList::GENERAL_STATE];
 
         auto ptrHeap = ptrOffset(heap->getCpuBase(), cmd->getIndirectDataStartAddress());
         EXPECT_EQ(memcmp(ptrHeap, function->getCrossThreadDataHostMem(), function->getCrossThreadDataSize()), 0u);
