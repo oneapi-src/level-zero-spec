@@ -12,13 +12,6 @@
 extern PRODUCT_FAMILY productFamily;
 extern GFXCORE_FAMILY renderCoreFamily;
 
-#ifdef TESTS_GEN8
-#define BDW_TYPED_TEST_BODY testBodyHw<typename OCLRT::GfxFamilyMapper<IGFX_GEN8_CORE>::GfxFamily>();
-#define BDW_TYPED_CMDTEST_BODY runCmdTestHwIfSupported<typename OCLRT::GfxFamilyMapper<IGFX_GEN8_CORE>::GfxFamily>();
-#else
-#define BDW_TYPED_TEST_BODY
-#define BDW_TYPED_CMDTEST_BODY
-#endif
 #ifdef TESTS_GEN9
 #define SKL_TYPED_TEST_BODY testBodyHw<typename OCLRT::GfxFamilyMapper<IGFX_GEN9_CORE>::GfxFamily>();
 #define SKL_TYPED_CMDTEST_BODY runCmdTestHwIfSupported<typename OCLRT::GfxFamilyMapper<IGFX_GEN9_CORE>::GfxFamily>();
@@ -70,9 +63,6 @@ extern GFXCORE_FAMILY renderCoreFamily;
                                                                                      \
         void TestBody() override {                                                   \
             switch (::renderCoreFamily) {                                            \
-            case IGFX_GEN8_CORE:                                                     \
-                BDW_TYPED_TEST_BODY                                                  \
-                break;                                                               \
             case IGFX_GEN9_CORE:                                                     \
                 SKL_TYPED_TEST_BODY                                                  \
                 break;                                                               \
@@ -141,9 +131,6 @@ extern GFXCORE_FAMILY renderCoreFamily;
                                                                                                           \
         void TestBody() override {                                                                        \
             switch (::renderCoreFamily) {                                                                 \
-            case IGFX_GEN8_CORE:                                                                          \
-                BDW_TYPED_CMDTEST_BODY                                                                    \
-                break;                                                                                    \
             case IGFX_GEN9_CORE:                                                                          \
                 SKL_TYPED_CMDTEST_BODY                                                                    \
                 break;                                                                                    \
@@ -246,9 +233,6 @@ extern GFXCORE_FAMILY renderCoreFamily;
                                                                                                                          \
         virtual void TestBody() {                                                                                        \
             switch (::renderCoreFamily) {                                                                                \
-            case IGFX_GEN8_CORE:                                                                                         \
-                BDW_TYPED_TEST_BODY                                                                                      \
-                break;                                                                                                   \
             case IGFX_GEN9_CORE:                                                                                         \
                 SKL_TYPED_TEST_BODY                                                                                      \
                 break;                                                                                                   \
@@ -311,9 +295,6 @@ extern GFXCORE_FAMILY renderCoreFamily;
                                                                                                                          \
         virtual void TestBody() {                                                                                        \
             switch (::renderCoreFamily) {                                                                                \
-            case IGFX_GEN8_CORE:                                                                                         \
-                BDW_TYPED_CMDTEST_BODY                                                                                   \
-                break;                                                                                                   \
             case IGFX_GEN9_CORE:                                                                                         \
                 SKL_TYPED_CMDTEST_BODY                                                                                   \
                 break;                                                                                                   \
@@ -396,16 +377,6 @@ extern GFXCORE_FAMILY renderCoreFamily;
     template <typename FamilyType>                                                                                       \
     void GTEST_TEST_CLASS_NAME_(test_suite_name, test_name)::testBodyHw()
 
-#ifdef TESTS_GEN8
-#define GEN8TEST_F(test_fixture, test_name)                          \
-    FAMILYTEST_TEST_(test_fixture, test_name, test_fixture,          \
-                     ::testing::internal::GetTypeId<test_fixture>(), \
-                     IGFX_GEN8_CORE, IGFX_MAX_PRODUCT)
-#define GEN8TEST_P(test_suite_name, test_name)    \
-    FAMILYTEST_TEST_P(test_suite_name, test_name, \
-                      IGFX_GEN8_CORE,             \
-                      IGFX_MAX_PRODUCT)
-#endif
 #ifdef TESTS_GEN9
 #define GEN9TEST_F(test_fixture, test_name)                          \
     FAMILYTEST_TEST_(test_fixture, test_name, test_fixture,          \
@@ -425,16 +396,6 @@ extern GFXCORE_FAMILY renderCoreFamily;
     FAMILYTEST_TEST_P(test_suite_name, test_name, \
                       IGFX_GEN10_CORE,            \
                       IGFX_MAX_PRODUCT)
-#endif
-#ifdef TESTS_GEN8
-#define BDWTEST_F(test_fixture, test_name)                           \
-    FAMILYTEST_TEST_(test_fixture, test_name, test_fixture,          \
-                     ::testing::internal::GetTypeId<test_fixture>(), \
-                     IGFX_GEN8_CORE, IGFX_BROADWELL)
-#define BDWTEST_P(test_suite_name, test_name)     \
-    FAMILYTEST_TEST_P(test_suite_name, test_name, \
-                      IGFX_GEN8_CORE,             \
-                      IGFX_BROADWELL)
 #endif
 #ifdef TESTS_SKL
 #define SKLTEST_F(test_fixture, test_name)                           \
@@ -577,9 +538,6 @@ extern GFXCORE_FAMILY renderCoreFamily;
                                                                                            \
         void TestBody() override {                                                         \
             switch (::renderCoreFamily) {                                                  \
-            case IGFX_GEN8_CORE:                                                           \
-                BDW_TYPED_TEST_BODY                                                        \
-                break;                                                                     \
             case IGFX_GEN9_CORE:                                                           \
                 SKL_TYPED_TEST_BODY                                                        \
                 break;                                                                     \
