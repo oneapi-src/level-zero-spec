@@ -32,9 +32,9 @@ inline void validate(ResulT result, const char *message) {
 void printDeviceProperties(const xe_device_properties_t &props);
 
 const char *clProgram = R"==(
-__kernel void memcpy_bytes(__global char *dst, const __global char *src) {
+__kernel void memcpy_bytes(__global uchar *dst, const __global uchar *src) {
     unsigned int gid = get_global_id(0);
-    dst[gid] = get_global_size(0);//src[gid];
+    dst[gid] = (uchar)(src[gid] + gid);
 }
 )==";
 
@@ -167,7 +167,10 @@ int main(int argc, char *argv[]) {
 #else
     memcpy(readBackData, dstBuffer, sizeof(readBackData));
 #endif
-    bool outputValidationSuccessful = (0 == memcmp(initDataSrc, readBackData, sizeof(readBackData)));
+    bool outputValidationSuccessful = true;
+    for (int i = 0; i < allocSize; ++i) {
+        outputValidationSuccessful &= ((unsigned char)(initDataSrc[i] + i) == (unsigned char)readBackData[i]);
+    }
     SUCCESS_OR_WARNING_BOOL(outputValidationSuccessful);
 
     // X. Cleanup
