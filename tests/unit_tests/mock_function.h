@@ -1,11 +1,31 @@
 #pragma once
-#include "function.h"
+#define FUNCTION_INTERNAL
+#include "function_imp.h"
+#undef FUNCTION_INTERNAL
 
 #include "white_box.h"
 #include "mock.h"
 
+#include <type_traits>
+
 namespace L0 {
 namespace ult {
+
+template <>
+struct WhiteBox<::L0::Function> : public ::L0::FunctionImp {
+    using BaseClass = ::L0::FunctionImp;
+    using ::L0::FunctionImp::crossThreadData;
+    using ::L0::FunctionImp::crossThreadDataSize;
+    using ::L0::FunctionImp::groupSizeX;
+    using ::L0::FunctionImp::groupSizeY;
+    using ::L0::FunctionImp::groupSizeZ;
+    using ::L0::FunctionImp::kernelInfo;
+
+    WhiteBox() : ::L0::FunctionImp(nullptr) {}
+    virtual ~WhiteBox() = default;
+};
+
+using Function = WhiteBox<::L0::Function>;
 
 template <>
 struct Mock<Function> : public Function {
@@ -47,6 +67,11 @@ struct Mock<Function> : public Function {
     MOCK_CONST_METHOD0(getResidencyContainer, const std::vector<GraphicsAllocation *> &());
     MOCK_CONST_METHOD0(getHasBarriers, bool());
     MOCK_CONST_METHOD0(getSlmSize, uint32_t());
+
+    // TODO : automate generation of such forwarders (e.g. extend GMOCK macros)
+    void mock_forwardToBase_getGroupSize(uint32_t &outGroupSizeX, uint32_t &outGroupSizeY, uint32_t &outGroupSizeZ) {
+        this->BaseClass::getGroupSize(outGroupSizeX, outGroupSizeY, outGroupSizeZ);
+    }
 };
 
 } // namespace ult

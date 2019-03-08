@@ -1,4 +1,4 @@
-#include "module_imp.h"
+#include "module.h"
 
 #include <cassert>
 #include <memory>

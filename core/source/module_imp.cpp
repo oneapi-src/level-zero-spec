@@ -1,4 +1,6 @@
+#define MODULE_INTERNAL
 #include "module_imp.h"
+#undef MODULE_INTERNAL
 
 #include "device.h"
 #include "function.h"

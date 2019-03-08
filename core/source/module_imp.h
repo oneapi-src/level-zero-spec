@@ -1,3 +1,8 @@
+#pragma once
+#ifndef MODULE_INTERNAL
+#error "Don't #include this file directly."
+#endif //MODULE_INTERNAL
+
 #include "module.h"
 
 #include "device.h"
