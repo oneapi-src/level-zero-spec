@@ -109,7 +109,7 @@ struct FunctionImp : Function {
 
   protected:
     template <typename T>
-    void patchCrossThreadDataBasedOnKernelRT(uint32_t location, const T &value);
+    void patchCrossThreadData(uint32_t location, const T &value);
 
     void patchWorkgroupSizeInCrossThreadData(uint32_t x, uint32_t y, uint32_t z);
 

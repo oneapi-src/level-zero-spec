@@ -339,8 +339,8 @@ TYPED_TEST(SmartPointerTest, AsUintReturnsItengerRepresentationOfRawPointer) {
     using SmartPtrT = typename TestFixture::SmatrPtrT;
 
     uint64_t ptr64 = 0x0123456789ABCDEF;
-    uintptr_t ptrActual = static_cast<uintptr_t>(ptr64);   // deliberately reducing hi to 0 for 32-bit
-    uint32_t hi = static_cast<uint32_t>(ptrActual >> 32U); //
+    uintptr_t ptrActual = static_cast<uintptr_t>(ptr64);                          // deliberately reducing hi to 0 for 32-bit
+    uint32_t hi = static_cast<uint32_t>(static_cast<uint64_t>(ptrActual) >> 32U); //
     uint32_t lo = static_cast<uint32_t>(ptrActual);
 
     SmartPtrT x{reinterpret_cast<typename SmartPtrT::PointeeT *>(ptrActual)};

@@ -319,7 +319,7 @@ struct PointerModeSelector<PointerMode::ZeroCost>::PointerOwnershipSelector<true
         }
 
         uint32_t asUintHi() const noexcept { // reintepret_cast to uintptr_t slice of hi part
-            return static_cast<uint32_t>((asUintptr() >> 32));
+            return static_cast<uint32_t>((static_cast<uint64_t>(asUintptr()) >> 32));
         }
 
         uint32_t asUintLo() const noexcept { // reintepret_cast to uintptr_t slice of hi part

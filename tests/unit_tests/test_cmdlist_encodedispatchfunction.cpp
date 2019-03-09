@@ -271,7 +271,7 @@ ATSTEST_F(CommandListEncodeDispatchFunction, copiesKernelIsaToInstructionHeap) {
 
         auto heap = commandList->indirectHeaps[CommandList::INSTRUCTION];
 
-        auto ptrHeap = ptrOffset(heap->getCpuBase(), kernelOffset);
+        auto ptrHeap = ptrOffset(heap->getCpuBase(), static_cast<size_t>(kernelOffset));
         EXPECT_EQ(memcmp(ptrHeap, function->getIsaHostMem(), function->getIsaSize()), 0u);
     }
 }
