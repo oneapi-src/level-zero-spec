@@ -77,6 +77,18 @@ class IsComplete {
     enum { value = testIsComplete<T>(0) };
 };
 
+template <typename From, typename To>
+struct AssertCanStaticCast {
+    static_assert(std::is_base_of<From, To>::value || std::is_base_of<To, From>::value, "Cannot convert between given types, use weakRefReinterpret for reinterpret_cast");
+    enum { value = 0 };
+};
+
+template <typename T>
+struct AssertIsComplete {
+    static_assert(IsComplete<T>::value, "Cannot convert between given types, use weakRefReinterpret for reinterpret_cast");
+    enum { value = 0 };
+};
+
 template <PointerMode PointerMode>
 struct PointerModeSelector;
 
@@ -160,6 +172,7 @@ struct PointerModeSelector<PointerMode::ZeroCost>::PointerOwnershipSelector<fals
 
         template <typename T2>
         PointerWeakRefT<T2> weakRef() const noexcept { // create weak reference of different type (static_cast)
+            AssertCanStaticCast<T, T2>::value;
             return PointerWeakRefT<T>(static_cast<T *>(this->ptr));
         }
 
@@ -190,13 +203,13 @@ struct PointerModeSelector<PointerMode::ZeroCost>::PointerOwnershipSelector<fals
 
         template <typename TestType = T>
         auto operator*() const noexcept -> std::enable_if_t<!std::is_void<TestType>::value, T> & { // if not void, allow derefence operator
-            static_assert(IsComplete<PointeeT>::value, "Can't dereference incomplete type (forward declaration) - look for missing includes");
+            AssertIsComplete<PointeeT>::value;
             return *this->ptr;
         }
 
         template <typename TestType = T>
         auto operator-> () const noexcept -> std::enable_if_t<std::is_class<TestType>::value, T> * { // if class, allow member dereference operator
-            static_assert(IsComplete<PointeeT>::value, "Can't dereference incomplete type (forward declaration) - look for missing includes");
+            AssertIsComplete<PointeeT>::value;
             return this->ptr;
         }
 
@@ -315,6 +328,7 @@ struct PointerModeSelector<PointerMode::ZeroCost>::PointerOwnershipSelector<true
 
         template <typename T2>
         PointerWeakRefT<T2> weakRef() const noexcept { // create weak reference of different type (static_cast)
+            AssertCanStaticCast<T, T2>::value;
             return PointerWeakRefT<T2>(static_cast<T2 *>(this->ptr));
         }
 
@@ -345,13 +359,13 @@ struct PointerModeSelector<PointerMode::ZeroCost>::PointerOwnershipSelector<true
 
         template <typename TestType = T>
         auto operator*() const noexcept -> std::enable_if_t<!std::is_void<TestType>::value, T> & { // if not void, allow derefence operator
-            static_assert(IsComplete<PointeeT>::value, "Can't dereference incomplete type (forward declaration) - look for missing includes");
+            AssertIsComplete<PointeeT>::value;
             return *this->ptr;
         }
 
         template <typename TestType = T>
         auto operator-> () const noexcept -> std::enable_if_t<std::is_class<TestType>::value, T> * { // if class, allow member dereference operator
-            static_assert(IsComplete<PointeeT>::value, "Can't dereference incomplete type (forward declaration) - look for missing includes");
+            AssertIsComplete<PointeeT>::value;
             return this->ptr;
         }
 
@@ -361,13 +375,13 @@ struct PointerModeSelector<PointerMode::ZeroCost>::PointerOwnershipSelector<true
       protected:
         template <typename TestType = T>
         auto doDeleteOwned() noexcept -> std::enable_if_t<std::is_array<TestType>::value, void> { // delete []ptr
-            static_assert(IsComplete<PointeeT>::value, "Can't delete incomplete type (forward declaration) - look for missing includes");
+            AssertIsComplete<PointeeT>::value;
             delete[] this->ptr;
         }
 
         template <typename TestType = T>
         auto doDeleteOwned() noexcept -> std::enable_if_t<!std::is_array<TestType>::value, void> { // delete ptr
-            static_assert(IsComplete<PointeeT>::value, "Can't delete incomplete type (forward declaration) - look for missing includes");
+            AssertIsComplete<PointeeT>::value;
             delete ptr;
         }
 
@@ -438,6 +452,9 @@ using PtrOwn = typename pointer_impl::PointerModeSelector<pointer_impl::PointerM
 
 template <typename T>
 using PtrRef = typename pointer_impl::PointerModeSelector<pointer_impl::PointerMode::GLOBAL_POINTER_MODE>::template PointerOwnershipSelector<false>::template Pointer<T>;
+
+// const char *
+using CStringRef = PtrRef<const char>;
 
 template <typename T>
 PtrRef<T> bindPtrRef(T *ptr) { // helper for type deduction

@@ -479,6 +479,15 @@ TEST(SmartPointer, BindPtrRefUsesTypeDeduction) {
     EXPECT_TRUE(typesMatched);
 }
 
+TEST(SmartPointer, CStringRefWrapsAroundCStrings) {
+    const char *txt = "AAAAA";
+    bool typesMatched = std::is_same<const char, CStringRef::PointeeT>::value;
+    EXPECT_TRUE(typesMatched);
+    CStringRef cstring{txt};
+    std::string string{cstring.get()};
+    EXPECT_EQ(txt, string);
+}
+
 namespace example {
 struct BNode {
     BNode(L0::PtrRef<BNode> parent, float value) : parent(parent), value(value) {
