@@ -25,7 +25,6 @@ struct CommandList : public _xe_command_list_handle_t {
         GENERAL_STATE,
         INDIRECT_OBJECT,
         SURFACE_STATE,
-        INSTRUCTION,
         NUM_HEAPS
     };
 

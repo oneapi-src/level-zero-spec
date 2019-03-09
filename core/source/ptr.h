@@ -85,7 +85,7 @@ struct AssertCanStaticCast {
 
 template <typename T>
 struct AssertIsComplete {
-    static_assert(IsComplete<T>::value, "Cannot convert between given types, use weakRefReinterpret for reinterpret_cast");
+    static_assert(IsComplete<T>::value, "Could not interpret incomplete type (forward reference), verify that you include required headers");
     enum { value = 0 };
 };
 

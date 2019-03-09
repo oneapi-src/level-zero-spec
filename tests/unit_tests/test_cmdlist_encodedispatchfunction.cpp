@@ -243,7 +243,7 @@ ATSTEST_F(CommandListEncodeDispatchFunction, copiesThreadDataToGeneralStateHeap)
     }
 }
 
-ATSTEST_F(CommandListEncodeDispatchFunction, copiesKernelIsaToInstructionHeap) {
+ATSTEST_F(CommandListEncodeDispatchFunction, usesIsaFromInstructionHeap) {
     createFunction("MemcpyBytes");
     auto result = commandList->encodeDispatchFunction(function->toHandle(),
                                                       &dispatchFunctionArguments,
@@ -259,20 +259,17 @@ ATSTEST_F(CommandListEncodeDispatchFunction, copiesKernelIsaToInstructionHeap) {
     using COMPUTE_WALKER = typename FamilyType::COMPUTE_WALKER;
     using INTERFACE_DESCRIPTOR_DATA = typename FamilyType::INTERFACE_DESCRIPTOR_DATA;
 
+    COMPUTE_WALKER addressValidator{};
+    addressValidator.getInterfaceDescriptor().setKernelStartPointer(function->getIsaGraphicsAllocation()->getGpuAddressOffsetFromHeapBase());
+
     auto itor = find<COMPUTE_WALKER *>(cmdList.begin(), cmdList.end());
     ASSERT_NE(cmdList.end(), itor);
 
     {
         auto cmd = genCmdCast<COMPUTE_WALKER *>(*itor);
         auto &idd = cmd->getInterfaceDescriptor();
-        uint64_t kernelOffset = idd.getKernelStartPointerHigh();
-        kernelOffset <<= 32u;
-        kernelOffset |= idd.getKernelStartPointer();
 
-        auto heap = commandList->indirectHeaps[CommandList::INSTRUCTION];
-
-        auto ptrHeap = ptrOffset(heap->getCpuBase(), static_cast<size_t>(kernelOffset));
-        EXPECT_EQ(memcmp(ptrHeap, function->getIsaHostMem(), function->getIsaSize()), 0u);
+        EXPECT_EQ(addressValidator.getInterfaceDescriptor().getKernelStartPointer(), idd.getKernelStartPointer());
     }
 }
 

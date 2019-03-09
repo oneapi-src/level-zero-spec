@@ -147,11 +147,10 @@ HWTEST_F(CommandListCreate, addsStateBaseAddressToBatchBuffer) {
         EXPECT_TRUE(cmd->getDynamicStateBufferSizeModifyEnable());
         EXPECT_EQ(cmd->getDynamicStateBufferSize(), heap->getMaxAvailableSpace());
 
-        heap = commandList->indirectHeaps[CommandList::INSTRUCTION];
         EXPECT_TRUE(cmd->getInstructionBaseAddressModifyEnable());
-        EXPECT_EQ(cmd->getInstructionBaseAddress(), heap->getHeapGpuBase());
+        EXPECT_EQ(cmd->getInstructionBaseAddress(), device.getMemoryManager()->getIsaHeapGpuAddress());
         EXPECT_TRUE(cmd->getInstructionBufferSizeModifyEnable());
-        EXPECT_EQ(cmd->getInstructionBufferSize(), heap->getMaxAvailableSpace());
+        EXPECT_EQ(cmd->getInstructionBufferSize(), MemoryConstants::sizeOf4GBinPageEntities);
 
         heap = commandList->indirectHeaps[CommandList::GENERAL_STATE];
         EXPECT_TRUE(cmd->getGeneralStateBaseAddressModifyEnable());

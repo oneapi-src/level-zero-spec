@@ -12,6 +12,18 @@ namespace L0 {
 struct GraphicsAllocation;
 struct Module;
 
+struct ImmutableFunctionInfo {
+    ~ImmutableFunctionInfo();
+
+    ImmutableFunctionInfo(const ImmutableFunctionInfo &) = delete;
+    ImmutableFunctionInfo &operator=(const ImmutableFunctionInfo &) = delete;
+    ImmutableFunctionInfo(ImmutableFunctionInfo &&) = delete;
+    ImmutableFunctionInfo &operator=(const ImmutableFunctionInfo &&) = delete;
+
+    void *kernelInfoRT = nullptr;
+    GraphicsAllocation *isaGraphicsAllocation = nullptr;
+};
+
 struct Function : public _xe_function_handle_t {
     virtual xe_result_t destroy() = 0;
     virtual xe_result_t setAttribute(xe_function_set_attribute_t attr,
@@ -45,6 +57,7 @@ struct Function : public _xe_function_handle_t {
                               uint32_t &outGroupSizeZ) const = 0;
     virtual const void *getIsaHostMem() const = 0;
     virtual size_t getIsaSize() const = 0;
+    virtual GraphicsAllocation *getIsaGraphicsAllocation() const = 0;
     virtual const void *getPerThreadDataHostMem() const = 0;
     virtual size_t getPerThreadDataSize() const = 0;
     virtual uint32_t getSimdSize() const = 0;

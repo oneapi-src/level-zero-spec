@@ -18,6 +18,7 @@ struct Mock<Module> : public Module {
                                                  void **pfnFunction));
     MOCK_METHOD2(getNativeBinary, xe_result_t(uint32_t *pSize,
                                               char **pModuleNativeBinary));
+    MOCK_CONST_METHOD1(getImmutableFunctionInfo, ImmutableFunctionInfo *(const char *functionName));
 
     MOCK_CONST_METHOD0(getDevice, Device *());
 };

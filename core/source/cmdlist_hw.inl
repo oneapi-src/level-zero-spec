@@ -1,6 +1,7 @@
 #include "cmdlist_hw.h"
 #include "event.h"
 #include "graphics_allocation.h"
+#include "memory_manager.h"
 #include "module.h"
 #include "runtime/command_stream/linear_stream.h"
 #include "runtime/helpers/hw_info.h"
@@ -31,12 +32,11 @@ bool CommandListCoreFamily<gfxCoreFamily>::initialize() {
         }
 
         {
-            auto heap = this->indirectHeaps[INSTRUCTION];
-            assert(heap != nullptr);
+            // note : this doesn't change
             cmd.setInstructionBaseAddressModifyEnable(true);
-            cmd.setInstructionBaseAddress(heap->getHeapGpuBase());
+            cmd.setInstructionBaseAddress(this->device->getMemoryManager()->getIsaHeapGpuAddress());
             cmd.setInstructionBufferSizeModifyEnable(true);
-            cmd.setInstructionBufferSize(static_cast<uint32_t>(heap->getMaxAvailableSpace()));
+            cmd.setInstructionBufferSize(MemoryConstants::sizeOf4GBinPageEntities); // no bounds checking
         }
 
         {
@@ -166,23 +166,6 @@ xe_result_t CommandListCoreFamily<gfxCoreFamily>::encodeDispatchFunction(xe_func
     const auto function = Function::fromHandle(hFunction);
     assert(function);
 
-    // Copy the kernel to indirect heap
-    // TODO: Allocate kernel in graphics memory to avoid the CPU copy
-    uint64_t kernelStartPointer = 0u;
-    {
-        auto sizeISA = function->getIsaSize();
-        auto ptrISA = function->getIsaHostMem();
-
-        auto heap = this->indirectHeaps[INSTRUCTION];
-        assert(heap);
-
-        auto ptr = heap->getSpace(sizeISA);
-        assert(ptr);
-        memcpy(ptr, ptrISA, sizeISA);
-
-        kernelStartPointer = ptrDiff(ptr, heap->getHeapGpuBase());
-    }
-
     uint32_t offsetIDD = 0u;
     auto sizeCrossThreadData = static_cast<uint32_t>(function->getCrossThreadDataSize());
     auto sizePerThreadData = static_cast<uint32_t>(function->getPerThreadDataSize());
@@ -198,8 +181,14 @@ xe_result_t CommandListCoreFamily<gfxCoreFamily>::encodeDispatchFunction(xe_func
 
         INTERFACE_DESCRIPTOR_DATA idd = GfxFamily::cmdInitInterfaceDescriptorData;
 
-        idd.setKernelStartPointerHigh(static_cast<uint32_t>(kernelStartPointer >> 32u));
-        idd.setKernelStartPointer(static_cast<uint32_t>(kernelStartPointer));
+        // Point kernel start pointer to the proper offset of instruction heap
+        {
+            auto alloc = function->getIsaGraphicsAllocation();
+            assert(nullptr != alloc);
+            auto offset = alloc->getGpuAddressOffsetFromHeapBase();
+            idd.setKernelStartPointer(offset);
+            idd.setKernelStartPointerHigh(0u);
+        }
         idd.setNumberOfThreadsInGpgpuThreadGroup(function->getThreadsPerThreadGroup());
 
         auto numGrfCrossThreadData = static_cast<uint32_t>(sizeCrossThreadData / sizeof(float[8]));
@@ -266,6 +255,7 @@ xe_result_t CommandListCoreFamily<gfxCoreFamily>::encodeDispatchFunction(xe_func
 
     // Attach Function residency to our CommandList residency
     {
+        this->residencyContainer.push_back(function->getIsaGraphicsAllocation()->allocationRT);
         auto &residencyContainer = function->getResidencyContainer();
         for (auto resource : residencyContainer) {
             if (resource) {

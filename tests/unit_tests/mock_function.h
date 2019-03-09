@@ -19,7 +19,7 @@ struct WhiteBox<::L0::Function> : public ::L0::FunctionImp {
     using ::L0::FunctionImp::groupSizeX;
     using ::L0::FunctionImp::groupSizeY;
     using ::L0::FunctionImp::groupSizeZ;
-    using ::L0::FunctionImp::kernelInfo;
+    using ::L0::FunctionImp::immFuncInfo;
 
     WhiteBox() : ::L0::FunctionImp(nullptr) {}
     virtual ~WhiteBox() = default;
@@ -56,6 +56,7 @@ struct Mock<Function> : public Function {
     MOCK_CONST_METHOD3(getGroupSize, void(uint32_t &outGroupSizeX, uint32_t &outGroupSizeY, uint32_t &outGroupSizeZ));
     MOCK_CONST_METHOD0(getIsaHostMem, const void *());
     MOCK_CONST_METHOD0(getIsaSize, size_t());
+    MOCK_CONST_METHOD0(getIsaGraphicsAllocation, GraphicsAllocation *());
     MOCK_CONST_METHOD0(getModule, Module *());
     MOCK_CONST_METHOD0(getPerThreadDataHostMem, const void *());
     MOCK_CONST_METHOD0(getPerThreadDataSize, size_t());

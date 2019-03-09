@@ -16,6 +16,7 @@ struct GraphicsAllocation {
     GraphicsAllocation(void *buffer, size_t size);
 
     uint64_t getGpuAddress() const;
+    uint64_t getGpuAddressOffsetFromHeapBase() const;
     void *getHostAddress() const;
     size_t getSize() const;
 

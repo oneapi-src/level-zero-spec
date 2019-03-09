@@ -15,16 +15,18 @@ using ::testing::Return;
 TEST(FunctionImp, crossThreadDataIsCorrectlyPatchedWithGlobalWorkSizeAndGroupCount) {
     uint32_t *crossThreadData = reinterpret_cast<uint32_t *>(alignedMalloc(sizeof(uint32_t[6]), 32));
 
-    OCLRT::KernelInfo *kernelInfo = new OCLRT::KernelInfo{};
+    OCLRT::KernelInfo *kernelInfo{new OCLRT::KernelInfo{}};
     kernelInfo->workloadInfo.globalWorkSizeOffsets[0] = 0 * sizeof(uint32_t);
     kernelInfo->workloadInfo.globalWorkSizeOffsets[1] = 1 * sizeof(uint32_t);
     kernelInfo->workloadInfo.globalWorkSizeOffsets[2] = 2 * sizeof(uint32_t);
     kernelInfo->workloadInfo.numWorkGroupsOffset[0] = 3 * sizeof(uint32_t);
     kernelInfo->workloadInfo.numWorkGroupsOffset[1] = 4 * sizeof(uint32_t);
     kernelInfo->workloadInfo.numWorkGroupsOffset[2] = 5 * sizeof(uint32_t);
+    ImmutableFunctionInfo funcInfo = {};
+    funcInfo.kernelInfoRT = reinterpret_cast<void *>(kernelInfo);
 
     Mock<Function> function;
-    function.kernelInfo = kernelInfo;
+    function.immFuncInfo = &funcInfo;
     function.crossThreadData = reinterpret_cast<char *>(crossThreadData);
     ON_CALL(function, getGroupSize(_, _, _))
         .WillByDefault(Invoke(&function, &Mock<Function>::mock_forwardToBase_getGroupSize));
@@ -44,6 +46,8 @@ TEST(FunctionImp, crossThreadDataIsCorrectlyPatchedWithGlobalWorkSizeAndGroupCou
     EXPECT_EQ(7U, numGroups[0]);
     EXPECT_EQ(11U, numGroups[1]);
     EXPECT_EQ(13U, numGroups[2]);
+
+    delete kernelInfo;
 }
 
 } // namespace ult

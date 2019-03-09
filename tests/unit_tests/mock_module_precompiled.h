@@ -1,7 +1,8 @@
 #pragma once
+#include "graphics_allocation.h"
 #include "module.h"
 #include "mock_device.h"
-#include "mock_module.h"
+#include "mock_function.h"
 
 #include <algorithm>
 #include <cstdint>
@@ -32,6 +33,9 @@ struct PrecompiledFunctionMockData {
 struct PrecompiledFunctionMock : Mock<Function> {
 
     PrecompiledFunctionMock(const std::string &precompiledFunctionMockName, const std::string &deviceName, const std::vector<L0::GraphicsAllocation *> &allocationsForResidency);
+    ~PrecompiledFunctionMock() override {
+        delete mockIsaGraphicsAllocation;
+    }
 
     PrecompiledFunctionMock(const std::string &precompiledFunctionMockName, const std::string &deviceName)
         : PrecompiledFunctionMock(precompiledFunctionMockName, deviceName, {}) {}
@@ -44,6 +48,7 @@ struct PrecompiledFunctionMock : Mock<Function> {
             bufferArgOffsetMap[bufferArgOffsetPairsIt->first] = bufferArgOffsetPairsIt->second;
             ++bufferArgOffsetPairsIt;
         }
+        mockIsaGraphicsAllocation = new GraphicsAllocation(&mockIsaGraphicsAllocationMemory, sizeof(mockIsaGraphicsAllocationMemory)); // TODO : get a better allocation for mock here
     }
 
     xe_result_t setAttribute(xe_function_set_attribute_t attr,
@@ -66,6 +71,10 @@ struct PrecompiledFunctionMock : Mock<Function> {
 
     size_t getIsaSize() const override {
         return precompiledFunctionMockData->isaSize;
+    }
+
+    GraphicsAllocation *getIsaGraphicsAllocation() const override {
+        return mockIsaGraphicsAllocation;
     }
 
     xe_result_t setArgumentValue(uint32_t argIndex, size_t argSize, const void *pArgValue) override {
@@ -130,6 +139,10 @@ struct PrecompiledFunctionMock : Mock<Function> {
 
     std::vector<L0::GraphicsAllocation *> allocationsForResidency;
     std::vector<uint8_t> crossThreadData;
+
+    // Fake an allocation for ISA
+    alignas(16) uint32_t mockIsaGraphicsAllocationMemory = -1;
+    GraphicsAllocation *mockIsaGraphicsAllocation = nullptr;
 };
 
 struct PrecompiledFunctionMocksDataRegistry {

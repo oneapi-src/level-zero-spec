@@ -114,22 +114,22 @@ void FunctionImp::setGroupCount(uint32_t groupCountX, uint32_t groupCountY, uint
     uint32_t groupSizeZ;
     getGroupSize(groupSizeX, groupSizeY, groupSizeZ);
 
-    patchCrossThreadData(kernelInfo->workloadInfo.globalWorkSizeOffsets[0], groupCountX * groupSizeX);
-    patchCrossThreadData(kernelInfo->workloadInfo.globalWorkSizeOffsets[1], groupCountY * groupSizeY);
-    patchCrossThreadData(kernelInfo->workloadInfo.globalWorkSizeOffsets[2], groupCountZ * groupSizeZ);
+    patchCrossThreadData(getKernelInfo()->workloadInfo.globalWorkSizeOffsets[0], groupCountX * groupSizeX);
+    patchCrossThreadData(getKernelInfo()->workloadInfo.globalWorkSizeOffsets[1], groupCountY * groupSizeY);
+    patchCrossThreadData(getKernelInfo()->workloadInfo.globalWorkSizeOffsets[2], groupCountZ * groupSizeZ);
 
-    patchCrossThreadData(kernelInfo->workloadInfo.numWorkGroupsOffset[0], groupCountX);
-    patchCrossThreadData(kernelInfo->workloadInfo.numWorkGroupsOffset[1], groupCountY);
-    patchCrossThreadData(kernelInfo->workloadInfo.numWorkGroupsOffset[2], groupCountZ);
+    patchCrossThreadData(getKernelInfo()->workloadInfo.numWorkGroupsOffset[0], groupCountX);
+    patchCrossThreadData(getKernelInfo()->workloadInfo.numWorkGroupsOffset[1], groupCountY);
+    patchCrossThreadData(getKernelInfo()->workloadInfo.numWorkGroupsOffset[2], groupCountZ);
 }
 
 xe_result_t FunctionImp::setGroupSize(uint32_t groupSizeX,
                                       uint32_t groupSizeY,
                                       uint32_t groupSizeZ) {
-    auto numChannels = OCLRT::PerThreadDataHelper::getNumLocalIdChannels(*kernelInfo->patchInfo.threadPayload);
+    auto numChannels = OCLRT::PerThreadDataHelper::getNumLocalIdChannels(*getKernelInfo()->patchInfo.threadPayload);
     Vec3<size_t> groupSize{groupSizeX, groupSizeY, groupSizeZ};
     auto itemsInGroup = OCLRT::Math::computeTotalElementsCount(groupSize);
-    size_t perThreadDataSizeNeeded = OCLRT::PerThreadDataHelper::getPerThreadDataSizeTotal(kernelInfo->getMaxSimdSize(), numChannels, itemsInGroup);
+    size_t perThreadDataSizeNeeded = OCLRT::PerThreadDataHelper::getPerThreadDataSizeTotal(getKernelInfo()->getMaxSimdSize(), numChannels, itemsInGroup);
     if (perThreadDataSizeNeeded > perThreadDataSize) {
         alignedFree(perThreadData);
         perThreadData = alignedMalloc(perThreadDataSizeNeeded, 32); // alignment for vector instructions
@@ -145,7 +145,7 @@ xe_result_t FunctionImp::setGroupSize(uint32_t groupSizeX,
     this->groupSizeY = groupSizeY;
     this->groupSizeZ = groupSizeZ;
 
-    auto simdSize = kernelInfo->getMaxSimdSize();
+    auto simdSize = getKernelInfo()->getMaxSimdSize();
     this->threadsPerThreadGroup = static_cast<uint32_t>((itemsInGroup + simdSize - 1u) / simdSize);
     patchWorkgroupSizeInCrossThreadData(groupSizeX, groupSizeY, groupSizeZ);
 
@@ -160,7 +160,7 @@ xe_result_t FunctionImp::setGroupSize(uint32_t groupSizeX,
 }
 
 xe_result_t FunctionImp::setArgImmediate(uint32_t argIndex, size_t argSize, const void *argVal) {
-    const auto &kernelArgInfo = kernelInfo->kernelArgInfo[argIndex];
+    const auto &kernelArgInfo = getKernelInfo()->kernelArgInfo[argIndex];
     auto patchLocation = ptrOffset(crossThreadData,
                                    kernelArgInfo.kernelArgPatchInfoVector[0].crossthreadOffset);
 
@@ -172,7 +172,7 @@ xe_result_t FunctionImp::setArgImmediate(uint32_t argIndex, size_t argSize, cons
 }
 
 xe_result_t FunctionImp::setArgBuffer(uint32_t argIndex, size_t argSize, const void *argVal) {
-    const auto &kernelArgInfo = kernelInfo->kernelArgInfo[argIndex];
+    const auto &kernelArgInfo = getKernelInfo()->kernelArgInfo[argIndex];
     // patchBufferOffset(kernelArgInfo, nullptr, nullptr); // stateless to stateful buffer offsets disabled
 
     auto patchLocation = ptrOffset(crossThreadData,
@@ -198,11 +198,12 @@ bool FunctionImp::initialize(const xe_function_desc_t *desc) {
     assert(desc->version == XE_API_HEADER_VERSION);
     assert(desc->flags == 0);
 
-    const OCLRT::KernelInfo *kernelInfoRT = static_cast<const OCLRT::KernelInfo *>(static_cast<ModuleImp *>(module)->getKernelInfoRT(desc->pFunctionName));
+    this->immFuncInfo = module->getImmutableFunctionInfo(desc->pFunctionName);
+    assert(this->immFuncInfo != nullptr);
+    OCLRT::KernelInfo *kernelInfoRT = static_cast<OCLRT::KernelInfo *>(immFuncInfo->kernelInfoRT);
     assert(kernelInfoRT != nullptr);
     kernelRT = new OCLRT_temporary::LightweightOclKernel(static_cast<OCLRT::Program *>(static_cast<ModuleImp *>(module)->getProgramRT()), *kernelInfoRT);
     kernelRT->initialize();
-    this->kernelInfo = &kernelRT->getKernelInfo();
 
     // clone muttables from kernel object - note some may be immutable - fix this later
     this->oclInternals->kernelArguments = kernelRT->kernelArguments;
@@ -258,12 +259,12 @@ uint32_t FunctionImp::getSimdSize() const {
 }
 
 bool FunctionImp::getHasBarriers() const {
-    return kernelInfo->patchInfo.executionEnvironment->HasBarriers;
+    return getKernelInfo()->patchInfo.executionEnvironment->HasBarriers;
 }
 
 uint32_t FunctionImp::getSlmSize() const {
-    if (kernelInfo->patchInfo.localsurface) {
-        return kernelInfo->patchInfo.localsurface->TotalInlineLocalMemorySize;
+    if (getKernelInfo()->patchInfo.localsurface) {
+        return getKernelInfo()->patchInfo.localsurface->TotalInlineLocalMemorySize;
     }
     return 0;
 }
@@ -277,17 +278,17 @@ void FunctionImp::patchCrossThreadData(uint32_t location, const T &value) {
 }
 
 void FunctionImp::patchWorkgroupSizeInCrossThreadData(uint32_t x, uint32_t y, uint32_t z) {
-    patchCrossThreadData(kernelInfo->workloadInfo.localWorkSizeOffsets[0], x);
-    patchCrossThreadData(kernelInfo->workloadInfo.localWorkSizeOffsets[1], y);
-    patchCrossThreadData(kernelInfo->workloadInfo.localWorkSizeOffsets[2], z);
+    patchCrossThreadData(getKernelInfo()->workloadInfo.localWorkSizeOffsets[0], x);
+    patchCrossThreadData(getKernelInfo()->workloadInfo.localWorkSizeOffsets[1], y);
+    patchCrossThreadData(getKernelInfo()->workloadInfo.localWorkSizeOffsets[2], z);
 
-    patchCrossThreadData(kernelInfo->workloadInfo.localWorkSizeOffsets2[0], x); // not sure why we have second set of those
-    patchCrossThreadData(kernelInfo->workloadInfo.localWorkSizeOffsets2[1], y);
-    patchCrossThreadData(kernelInfo->workloadInfo.localWorkSizeOffsets2[2], z);
+    patchCrossThreadData(getKernelInfo()->workloadInfo.localWorkSizeOffsets2[0], x); // not sure why we have second set of those
+    patchCrossThreadData(getKernelInfo()->workloadInfo.localWorkSizeOffsets2[1], y);
+    patchCrossThreadData(getKernelInfo()->workloadInfo.localWorkSizeOffsets2[2], z);
 
-    patchCrossThreadData(kernelInfo->workloadInfo.enqueuedLocalWorkSizeOffsets[0], x);
-    patchCrossThreadData(kernelInfo->workloadInfo.enqueuedLocalWorkSizeOffsets[1], y);
-    patchCrossThreadData(kernelInfo->workloadInfo.enqueuedLocalWorkSizeOffsets[2], z);
+    patchCrossThreadData(getKernelInfo()->workloadInfo.enqueuedLocalWorkSizeOffsets[0], x);
+    patchCrossThreadData(getKernelInfo()->workloadInfo.enqueuedLocalWorkSizeOffsets[1], y);
+    patchCrossThreadData(getKernelInfo()->workloadInfo.enqueuedLocalWorkSizeOffsets[2], z);
 }
 
 Function *Function::create(Module *module, const xe_function_desc_t *desc) {

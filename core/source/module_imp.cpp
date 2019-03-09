@@ -4,6 +4,7 @@
 
 #include "device.h"
 #include "function.h"
+#include "graphics_allocation.h"
 #include "memory_manager.h"
 
 #include "runtime/compiler_interface/compiler_interface.h"
@@ -59,6 +60,7 @@ struct LightweightOclProgram : public OCLRT::Program { // NEO refactor needed : 
     }
 
     OCLRT::Device *deviceRT;
+    using OCLRT::Program::kernelInfoArray;
 };
 
 } // namespace OCLRT_temporary
@@ -69,10 +71,9 @@ ModuleImp::ModuleImp(Device *device, void *deviceRT) : device(device), progRT(OC
 
 ModuleImp::~ModuleImp() {
     progRT->release();
-}
-
-const void *ModuleImp::getKernelInfoRT(const char *name) const {
-    return progRT->getKernelInfo(name);
+    for (auto &immFuncInfo : immFuncInfos) {
+        delete immFuncInfo;
+    }
 }
 
 bool ModuleImp::initialize(const xe_module_desc_t *desc) {
@@ -86,8 +87,28 @@ bool ModuleImp::initialize(const xe_module_desc_t *desc) {
 
     cl_int errorCode = 0;
     this->progRT->buildSpirV(desc->pInputModule, desc->inputSize);
+    // allocate graphics memory for ISA upfront to avoid critical sections at function create time
+    auto memoryManager = this->device->getMemoryManager();
+    immFuncInfos.reserve(this->progRT->kernelInfoArray.size());
+    for (auto &ki : this->progRT->kernelInfoArray) {
+        auto kernelIsaSize = ki->heapInfo.pKernelHeader->KernelHeapSize;
+        auto alloc = memoryManager->allocateGraphicsMemoryForIsa(ki->heapInfo.pKernelHeap, kernelIsaSize);
+        assert(ki->kernelAllocation != nullptr);
+        ImmutableFunctionInfo *immFuncInfo{new ImmutableFunctionInfo{reinterpret_cast<void *>(ki), alloc}};
+        immFuncInfos.push_back(std::move(immFuncInfo));
+    }
 
     return true;
+}
+
+ImmutableFunctionInfo *ModuleImp::getImmutableFunctionInfo(const char *functionName) const {
+    for (auto &immFuncInfo : immFuncInfos) {
+        auto kernelInfoRT = reinterpret_cast<OCLRT::KernelInfo *>(immFuncInfo->kernelInfoRT);
+        if (kernelInfoRT->name == functionName) {
+            return immFuncInfo;
+        }
+    }
+    return nullptr;
 }
 
 xe_result_t ModuleImp::createFunction(const xe_function_desc_t *desc, xe_function_handle_t *phFunction) {

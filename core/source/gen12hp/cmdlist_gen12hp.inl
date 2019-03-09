@@ -97,26 +97,18 @@ xe_result_t CommandListCoreFamily<IGFX_GEN12_CORE>::encodeDispatchFunction(xe_fu
                                      ? INTERFACE_DESCRIPTOR_DATA::SHARED_LOCAL_MEMORY_SIZE_ENCODES_64K
                                      : INTERFACE_DESCRIPTOR_DATA::SHARED_LOCAL_MEMORY_SIZE_ENCODES_0K);
 
-    // Copy the kernel to indirect heap
-    // TODO: Allocate kernel in graphics memory to avoid the CPU copy
+    // Point kernel start pointer to the proper offset of instruction heap
     {
-        auto sizeISA = function->getIsaSize();
-        auto ptrISA = function->getIsaHostMem();
-
-        auto heap = this->indirectHeaps[INSTRUCTION];
-        assert(heap);
-
-        auto ptr = heap->getSpace(sizeISA);
-        assert(ptr);
-        memcpy(ptr, ptrISA, sizeISA);
-
-        auto offset = static_cast<uint32_t>(ptrDiff(ptr, heap->getHeapGpuBase()));
+        auto alloc = function->getIsaGraphicsAllocation();
+        assert(nullptr != alloc);
+        auto offset = alloc->getGpuAddressOffsetFromHeapBase();
         idd.setKernelStartPointer(offset);
         idd.setKernelStartPointerHigh(0u);
     }
 
     // Attach Function residency to our CommandList residency
     {
+        this->residencyContainer.push_back(function->getIsaGraphicsAllocation()->allocationRT);
         auto &residencyContainer = function->getResidencyContainer();
         for (auto resource : residencyContainer) {
             if (resource) {

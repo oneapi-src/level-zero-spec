@@ -26,6 +26,8 @@ struct Module : public _xe_module_handle_t {
     virtual xe_result_t getFunctionPointer(const char *pFunctionName,
                                            void **pfnFunction) = 0;
 
+    virtual ImmutableFunctionInfo *getImmutableFunctionInfo(const char *functionName) const = 0;
+
     Module() = default;
     Module(const Module &) = delete;
     Module(Module &&) = delete;

@@ -17,6 +17,11 @@ uint64_t GraphicsAllocation::getGpuAddress() const {
     return allocationRT->getGpuAddress();
 }
 
+uint64_t GraphicsAllocation::getGpuAddressOffsetFromHeapBase() const {
+    assert(allocationRT);
+    return allocationRT->getGpuAddressToPatch();
+}
+
 void *GraphicsAllocation::getHostAddress() const {
     assert(allocationRT);
     return allocationRT->getUnderlyingBuffer();

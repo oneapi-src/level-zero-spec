@@ -85,6 +85,14 @@ struct FunctionImp : Function {
 
     size_t getIsaSize() const override;
 
+    GraphicsAllocation *getIsaGraphicsAllocation() const override {
+        return immFuncInfo->isaGraphicsAllocation;
+    }
+
+    OCLRT::KernelInfo *getKernelInfo() const {
+        return static_cast<OCLRT::KernelInfo *>(immFuncInfo->kernelInfoRT);
+    }
+
     const void *getPerThreadDataHostMem() const override {
         return perThreadData;
     }
@@ -119,7 +127,7 @@ struct FunctionImp : Function {
     OCLInternal *oclInternals = nullptr;
 
     OCLRT_temporary::LightweightOclKernel *kernelRT = nullptr;
-    const OCLRT::KernelInfo *kernelInfo = nullptr;
+    ImmutableFunctionInfo *immFuncInfo;
     Module *module = nullptr;
 
     std::vector<GraphicsAllocation *> residencyContainer;
