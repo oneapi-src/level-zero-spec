@@ -83,6 +83,10 @@ struct TestStruct {
     float f;
 };
 
+struct IncompleteTestStruct;
+static_assert(L0::pointer_impl::IsComplete<TestStruct>::value, "");
+static_assert(!L0::pointer_impl::IsComplete<IncompleteTestStruct>::value, "");
+
 template <class SmartPointerT>
 struct SmartPointerTest : public testing::Test {
     using SmatrPtrT = SmartPointerT;
@@ -424,6 +428,55 @@ TYPED_TEST(RefPointerTest, OffsetByBytesReturnsNonOwningPointerOffsetedByGivenAm
 
     EXPECT_EQ((&memory) + 1, y.get());
     EXPECT_EQ(&x, &y);
+}
+
+TYPED_TEST(SmartPointerTest, ComparisonOperators) {
+    using SmartPtrT = typename TestFixture::SmatrPtrT;
+
+    TestStruct memory1;
+    TestStruct memory2;
+    SmartPtrT x(&memory1);
+    SmartPtrT y(&memory2);
+
+    EXPECT_TRUE(x == x);
+    EXPECT_TRUE(y == y);
+    EXPECT_FALSE(x != x);
+    EXPECT_FALSE(y != y);
+
+    EXPECT_TRUE(x != y);
+    EXPECT_FALSE(x == y);
+
+    auto weakY = y.weakRef();
+    EXPECT_TRUE(x != y);
+    EXPECT_TRUE(y != x);
+    EXPECT_FALSE(x == y);
+    EXPECT_FALSE(y == x);
+
+    SmartPtrT smartNull{nullptr};
+    std::nullptr_t null{};
+    EXPECT_FALSE(x == null);
+    EXPECT_FALSE(null == x);
+    EXPECT_TRUE(x != null);
+    EXPECT_TRUE(null != x);
+
+    EXPECT_TRUE(smartNull == null);
+    EXPECT_TRUE(null == smartNull);
+    EXPECT_FALSE(smartNull != null);
+    EXPECT_FALSE(null != smartNull);
+}
+
+TEST(SmartPointer, BindPtrRefUsesTypeDeduction) {
+    int i{};
+    float f{};
+    auto iPtrRef = L0::bindPtrRef(&i);
+    auto fPtrRef = L0::bindPtrRef(&f);
+    EXPECT_EQ(&i, iPtrRef.get());
+    EXPECT_EQ(&f, fPtrRef.get());
+
+    bool typesMatched = std::is_same<decltype(iPtrRef), L0::PtrRef<int>>::value;
+    EXPECT_TRUE(typesMatched);
+    typesMatched = std::is_same<decltype(fPtrRef), L0::PtrRef<float>>::value;
+    EXPECT_TRUE(typesMatched);
 }
 
 namespace example {

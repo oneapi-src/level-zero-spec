@@ -66,6 +66,17 @@ enum class PointerMode {
     //                         reduce repro
 };
 
+template <typename T>
+class IsComplete {
+    template <typename TestT, int S = sizeof(TestT)>
+    static constexpr bool testIsComplete(int) { return true; }
+    template <typename TestT>
+    static constexpr bool testIsComplete(...) { return false; }
+
+  public:
+    enum { value = testIsComplete<T>(0) };
+};
+
 template <PointerMode PointerMode>
 struct PointerModeSelector;
 
@@ -179,11 +190,13 @@ struct PointerModeSelector<PointerMode::ZeroCost>::PointerOwnershipSelector<fals
 
         template <typename TestType = T>
         auto operator*() const noexcept -> std::enable_if_t<!std::is_void<TestType>::value, T> & { // if not void, allow derefence operator
+            static_assert(IsComplete<PointeeT>::value, "Can't dereference incomplete type (forward declaration) - look for missing includes");
             return *this->ptr;
         }
 
         template <typename TestType = T>
         auto operator-> () const noexcept -> std::enable_if_t<std::is_class<TestType>::value, T> * { // if class, allow member dereference operator
+            static_assert(IsComplete<PointeeT>::value, "Can't dereference incomplete type (forward declaration) - look for missing includes");
             return this->ptr;
         }
 
@@ -332,26 +345,29 @@ struct PointerModeSelector<PointerMode::ZeroCost>::PointerOwnershipSelector<true
 
         template <typename TestType = T>
         auto operator*() const noexcept -> std::enable_if_t<!std::is_void<TestType>::value, T> & { // if not void, allow derefence operator
+            static_assert(IsComplete<PointeeT>::value, "Can't dereference incomplete type (forward declaration) - look for missing includes");
             return *this->ptr;
         }
 
         template <typename TestType = T>
         auto operator-> () const noexcept -> std::enable_if_t<std::is_class<TestType>::value, T> * { // if class, allow member dereference operator
+            static_assert(IsComplete<PointeeT>::value, "Can't dereference incomplete type (forward declaration) - look for missing includes");
             return this->ptr;
         }
 
         // Forced limitations vs ptr_ref :
         // * no direct access to raw ptr (aka no T* get()) in ptr_own - only allowed in ptr_ref, however as_uinptr available
         // * no pointer arithmetic in ptr_own - only allowed ptr_ref
-
       protected:
         template <typename TestType = T>
         auto doDeleteOwned() noexcept -> std::enable_if_t<std::is_array<TestType>::value, void> { // delete []ptr
+            static_assert(IsComplete<PointeeT>::value, "Can't delete incomplete type (forward declaration) - look for missing includes");
             delete[] this->ptr;
         }
 
         template <typename TestType = T>
         auto doDeleteOwned() noexcept -> std::enable_if_t<!std::is_array<TestType>::value, void> { // delete ptr
+            static_assert(IsComplete<PointeeT>::value, "Can't delete incomplete type (forward declaration) - look for missing includes");
             delete ptr;
         }
 
@@ -359,19 +375,73 @@ struct PointerModeSelector<PointerMode::ZeroCost>::PointerOwnershipSelector<true
     };
 };
 
-// TODO : non memeber operators
-// * comparison between pointers
-// * comparsion to nullptr
-
-static_assert(sizeof(void *) == sizeof(typename PointerModeSelector<PointerMode::ZeroCost>::template PointerOwnershipSelector<true>::template Pointer<void>), "");
-static_assert(sizeof(void *) == sizeof(typename PointerModeSelector<PointerMode::ZeroCost>::template PointerOwnershipSelector<false>::template Pointer<void>), "");
+static_assert(sizeof(void *) == sizeof(typename pointer_impl::PointerModeSelector<PointerMode::ZeroCost>::template PointerOwnershipSelector<true>::template Pointer<void>), "");
+static_assert(sizeof(void *) == sizeof(typename pointer_impl::PointerModeSelector<PointerMode::ZeroCost>::template PointerOwnershipSelector<false>::template Pointer<void>), "");
 
 } // namespace pointer_impl
+
+// compare 2 non-owning pointers
+template <typename LhsT, typename RhsT, bool Specialized = true>
+inline bool operator==(const typename pointer_impl::PointerModeSelector<pointer_impl::PointerMode::ZeroCost>::template PointerOwnershipSelector<false>::template Pointer<LhsT> &lhs,
+                       const typename pointer_impl::PointerModeSelector<pointer_impl::PointerMode::ZeroCost>::template PointerOwnershipSelector<false>::template Pointer<RhsT> &rhs) {
+    return lhs.asUintptr() == rhs.asUintptr();
+}
+
+// compare owning with non-owning
+template <typename LhsT, typename RhsT, bool Specialized = true>
+inline bool operator==(const typename pointer_impl::PointerModeSelector<pointer_impl::PointerMode::ZeroCost>::template PointerOwnershipSelector<true>::template Pointer<LhsT> &lhs,
+                       const typename pointer_impl::PointerModeSelector<pointer_impl::PointerMode::ZeroCost>::template PointerOwnershipSelector<false>::template Pointer<RhsT> &rhs) {
+    return lhs.asUintptr() == rhs.asUintptr();
+}
+
+// compare owning with owning - doesn't make much sense
+template <typename LhsT, typename RhsT, bool Specialized = true>
+inline bool operator==(const typename pointer_impl::PointerModeSelector<pointer_impl::PointerMode::ZeroCost>::template PointerOwnershipSelector<true>::template Pointer<LhsT> &lhs,
+                       const typename pointer_impl::PointerModeSelector<pointer_impl::PointerMode::ZeroCost>::template PointerOwnershipSelector<true>::template Pointer<RhsT> &rhs) {
+    return lhs.asUintptr() == rhs.asUintptr();
+}
+
+// compare with nullptr
+template <typename LhsT>
+inline bool operator==(const pointer_impl::PointerModeSelector<pointer_impl::PointerMode::ZeroCost>::template PointerOwnershipSelector<true>::template Pointer<LhsT> &lhs, std::nullptr_t) {
+    return lhs.asUintptr() == 0;
+}
+
+template <typename RhsT>
+inline bool operator==(std::nullptr_t, const pointer_impl::PointerModeSelector<pointer_impl::PointerMode::ZeroCost>::template PointerOwnershipSelector<true>::template Pointer<RhsT> &rhs) {
+    return rhs.asUintptr() == 0;
+}
+
+template <typename LhsT>
+inline bool operator==(const pointer_impl::PointerModeSelector<pointer_impl::PointerMode::ZeroCost>::template PointerOwnershipSelector<false>::template Pointer<LhsT> &lhs, std::nullptr_t) {
+    return lhs.asUintptr() == 0;
+}
+
+template <typename RhsT>
+inline bool operator==(std::nullptr_t, const pointer_impl::PointerModeSelector<pointer_impl::PointerMode::ZeroCost>::template PointerOwnershipSelector<false>::template Pointer<RhsT> &rhs) {
+    return rhs.asUintptr() == 0;
+}
+
+// last resort - try swap lhs and rhs, but only if specialized implementation exists to prevent endless ping-pong recursion
+template <typename LhsT, typename RhsT>
+auto operator==(const LhsT &lhs, const RhsT &rhs) -> decltype(operator==<RhsT, LhsT, true>(rhs, lhs)) {
+    return operator==<RhsT, LhsT, true>(rhs, lhs);
+}
+
+template <typename LhsT, typename RhsT>
+bool operator!=(const LhsT &lhs, const RhsT &rhs) {
+    return false == (lhs == rhs);
+}
 
 template <typename T>
 using PtrOwn = typename pointer_impl::PointerModeSelector<pointer_impl::PointerMode::GLOBAL_POINTER_MODE>::template PointerOwnershipSelector<true>::template Pointer<T>;
 
 template <typename T>
 using PtrRef = typename pointer_impl::PointerModeSelector<pointer_impl::PointerMode::GLOBAL_POINTER_MODE>::template PointerOwnershipSelector<false>::template Pointer<T>;
+
+template <typename T>
+PtrRef<T> bindPtrRef(T *ptr) { // helper for type deduction
+    return PtrRef<T>{ptr};
+}
 
 } // namespace L0
