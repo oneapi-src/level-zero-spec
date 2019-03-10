@@ -216,11 +216,9 @@ xe_result_t CommandListCoreFamily<gfxCoreFamily>::encodeDispatchFunction(xe_func
     {
         auto heap = indirectHeaps[INDIRECT_OBJECT];
         assert(heap);
+        heap->align(GPGPU_WALKER::INDIRECTDATASTARTADDRESS_ALIGN_SIZE);
 
         auto sizeThreadData = sizePerThreadData + sizeCrossThreadData;
-        assert((sizeCrossThreadData % GPGPU_WALKER::INDIRECTDATASTARTADDRESS_ALIGN_SIZE) == 0u);
-        assert((sizePerThreadData % GPGPU_WALKER::INDIRECTDATASTARTADDRESS_ALIGN_SIZE) == 0u);
-        assert((sizeThreadData % GPGPU_WALKER::INDIRECTDATASTARTADDRESS_ALIGN_SIZE) == 0u);
 
         auto ptr = heap->getSpace(sizeThreadData);
         assert(ptr);

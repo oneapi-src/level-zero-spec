@@ -243,6 +243,46 @@ ATSTEST_F(CommandListEncodeDispatchFunction, copiesThreadDataToGeneralStateHeap)
     }
 }
 
+using CommandListEncodeDispatchFunctionGEN9 = CommandListEncodeDispatchFunction;
+SKLTEST_F(CommandListEncodeDispatchFunctionGEN9, copiesThreadDataToIndirectStateHeap) {
+    createFunction("MemcpyBytes");
+
+    using GPGPU_WALKER = typename FamilyType::GPGPU_WALKER;
+    using INTERFACE_DESCRIPTOR_DATA = typename FamilyType::INTERFACE_DESCRIPTOR_DATA;
+
+    auto heap = commandList->indirectHeaps[CommandList::INDIRECT_OBJECT];
+    heap->getSpace(GPGPU_WALKER::INDIRECTDATASTARTADDRESS_ALIGN_SIZE - 1); // this will check if cmdlist takes care of heap allignment
+
+    auto result = commandList->encodeDispatchFunction(function->toHandle(),
+                                                      &dispatchFunctionArguments,
+                                                      nullptr);
+    ASSERT_EQ(XE_RESULT_SUCCESS, result);
+
+    auto usedSpaceAfter = commandList->commandStream->getUsed();
+    GenCmdList cmdList;
+    ASSERT_TRUE(FamilyType::PARSE::parseCommandBuffer(cmdList,
+                                                      ptrOffset(commandList->commandStream->getCpuBase(), 0),
+                                                      usedSpaceAfter));
+
+    auto itor = find<GPGPU_WALKER *>(cmdList.begin(), cmdList.end());
+    ASSERT_NE(cmdList.end(), itor);
+
+    {
+        auto cmd = genCmdCast<GPGPU_WALKER *>(*itor);
+
+        auto indirectDataLength = function->getPerThreadDataSize() +
+                                  function->getCrossThreadDataSize();
+        EXPECT_GE(cmd->getIndirectDataLength(), 0u);
+        EXPECT_LE(cmd->getIndirectDataLength(), indirectDataLength);
+
+        auto ptrHeap = ptrOffset(heap->getCpuBase(), cmd->getIndirectDataStartAddress());
+        EXPECT_EQ(memcmp(ptrHeap, function->getCrossThreadDataHostMem(), function->getCrossThreadDataSize()), 0u);
+        ptrHeap = ptrOffset(ptrHeap, function->getCrossThreadDataSize());
+        EXPECT_EQ(memcmp(ptrHeap, function->getPerThreadDataHostMem(), function->getPerThreadDataSize()), 0u);
+        ptrHeap = ptrOffset(ptrHeap, function->getPerThreadDataSize());
+    }
+}
+
 ATSTEST_F(CommandListEncodeDispatchFunction, usesIsaFromInstructionHeap) {
     createFunction("MemcpyBytes");
     auto result = commandList->encodeDispatchFunction(function->toHandle(),
@@ -273,7 +313,6 @@ ATSTEST_F(CommandListEncodeDispatchFunction, usesIsaFromInstructionHeap) {
     }
 }
 
-using CommandListEncodeDispatchFunctionGEN9 = CommandListEncodeDispatchFunction;
 GEN9TEST_F(CommandListEncodeDispatchFunctionGEN9, addsWalkerToCommandStream) {
     createFunction("MemcpyBytes");
     auto usedSpaceBefore = commandList->commandStream->getUsed();
