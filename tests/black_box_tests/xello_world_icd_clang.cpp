@@ -34,6 +34,7 @@ void printDeviceProperties(const xe_device_properties_t &props);
 const char *clProgram = R"==(
 __kernel void memcpy_bytes(__global uchar *dst, const __global uchar *src) {
     unsigned int gid = get_global_id(0);
+    unsigned int of = get_num_groups(0);
     dst[gid] = (uchar)(src[gid] + gid);
 }
 )==";

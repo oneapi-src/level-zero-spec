@@ -113,11 +113,20 @@ else()
     set(RUN_ULT_CMD LD_LIBRARY_PATH=$<TARGET_FILE_DIR:${TARGET_NAME}> $<TARGET_FILE:${TARGET_NAME}>)
 endif()
 
-add_custom_target(run_${TARGET_NAME} ALL DEPENDS ${TARGET_NAME})
+add_custom_target(run_${TARGET_NAME}_ats ALL DEPENDS ${TARGET_NAME})
 add_custom_command(
-  TARGET run_${TARGET_NAME}
+  TARGET run_${TARGET_NAME}_ats
   POST_BUILD
   # COMMAND WORKING_DIRECTORY \"${CUSTOM_COMMAND_BINARY_DIR}\"
-  COMMAND echo Running \"${RUN_ULT_CMD}\" in \"${CUSTOM_COMMAND_BINARY_DIR}\"
-  COMMAND ${CMAKE_COMMAND} -E chdir ${CUSTOM_COMMAND_BINARY_DIR}  ${CMAKE_COMMAND} -E env SetCommandStreamReceiver=1 ${RUN_ULT_CMD} --gtest_filter=* --gtest_catch_exceptions=0
+  COMMAND echo Running \"${RUN_ULT_CMD}\" for ATS in \"${CUSTOM_COMMAND_BINARY_DIR}\"
+  COMMAND ${CMAKE_COMMAND} -E chdir ${CUSTOM_COMMAND_BINARY_DIR}  ${CMAKE_COMMAND} -E env SetCommandStreamReceiver=1 ${RUN_ULT_CMD} --gtest_filter=* --gtest_catch_exceptions=0 --product ats
+)
+
+add_custom_target(run_${TARGET_NAME}_skl ALL DEPENDS ${TARGET_NAME})
+add_custom_command(
+  TARGET run_${TARGET_NAME}_skl
+  POST_BUILD
+  # COMMAND WORKING_DIRECTORY \"${CUSTOM_COMMAND_BINARY_DIR}\"
+  COMMAND echo Running \"${RUN_ULT_CMD}\" for SKL in \"${CUSTOM_COMMAND_BINARY_DIR}\"
+  COMMAND ${CMAKE_COMMAND} -E chdir ${CUSTOM_COMMAND_BINARY_DIR}  ${CMAKE_COMMAND} -E env SetCommandStreamReceiver=1 ${RUN_ULT_CMD} --gtest_filter=* --gtest_catch_exceptions=0 --product skl
 )
