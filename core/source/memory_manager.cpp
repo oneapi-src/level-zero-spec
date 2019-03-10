@@ -34,14 +34,14 @@ struct MemoryManagerImp : public MemoryManager {
         return allocation;
     }
 
-    GraphicsAllocation *allocateGraphicsMemoryForIsa(const void *isaHostMem, size_t size) override {
+    PtrOwn<GraphicsAllocation> allocateGraphicsMemoryForIsa(PtrRef<const void> isaHostMem, size_t size) override {
         assert(size > 0);
         auto alloc = this->memoryManagerRT->allocateGraphicsMemoryWithProperties({size, OCLRT::GraphicsAllocation::AllocationType::KERNEL_ISA});
         if (isaHostMem != nullptr) {
             // this->memoryManagerRT->copyMemoryToAllocation(alloc, isaHostMem, size);                    // TODO : reusue NEO's copyMemoryToAllocation once manifest gets updated
-            memcpy_s(alloc->getUnderlyingBuffer(), alloc->getUnderlyingBufferSize(), isaHostMem, size); //
+            memcpy_s(alloc->getUnderlyingBuffer(), alloc->getUnderlyingBufferSize(), isaHostMem.get(), size); //
         }
-        return new GraphicsAllocation(alloc);
+        return PtrOwn<GraphicsAllocation>{new GraphicsAllocation(alloc)};
     }
 
     uint64_t getIsaHeapGpuAddress() const override {

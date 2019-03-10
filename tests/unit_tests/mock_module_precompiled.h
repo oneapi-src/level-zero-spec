@@ -34,7 +34,7 @@ struct PrecompiledFunctionMock : Mock<Function> {
 
     PrecompiledFunctionMock(const std::string &precompiledFunctionMockName, const std::string &deviceName, const std::vector<L0::GraphicsAllocation *> &allocationsForResidency);
     ~PrecompiledFunctionMock() override {
-        delete mockIsaGraphicsAllocation;
+        mockIsaGraphicsAllocation.deleteOwned();
     }
 
     PrecompiledFunctionMock(const std::string &precompiledFunctionMockName, const std::string &deviceName)
@@ -48,7 +48,7 @@ struct PrecompiledFunctionMock : Mock<Function> {
             bufferArgOffsetMap[bufferArgOffsetPairsIt->first] = bufferArgOffsetPairsIt->second;
             ++bufferArgOffsetPairsIt;
         }
-        mockIsaGraphicsAllocation = new GraphicsAllocation(&mockIsaGraphicsAllocationMemory, sizeof(mockIsaGraphicsAllocationMemory)); // TODO : get a better allocation for mock here
+        mockIsaGraphicsAllocation.rebind(new GraphicsAllocation(&mockIsaGraphicsAllocationMemory, sizeof(mockIsaGraphicsAllocationMemory))); // TODO : get a better allocation for mock here
     }
 
     xe_result_t setAttribute(xe_function_set_attribute_t attr,
@@ -73,8 +73,8 @@ struct PrecompiledFunctionMock : Mock<Function> {
         return precompiledFunctionMockData->isaSize;
     }
 
-    GraphicsAllocation *getIsaGraphicsAllocation() const override {
-        return mockIsaGraphicsAllocation;
+    PtrRef<GraphicsAllocation> getIsaGraphicsAllocation() const override {
+        return mockIsaGraphicsAllocation.weakRef();
     }
 
     xe_result_t setArgumentValue(uint32_t argIndex, size_t argSize, const void *pArgValue) override {
@@ -142,7 +142,7 @@ struct PrecompiledFunctionMock : Mock<Function> {
 
     // Fake an allocation for ISA
     alignas(16) uint32_t mockIsaGraphicsAllocationMemory = -1;
-    GraphicsAllocation *mockIsaGraphicsAllocation = nullptr;
+    PtrOwn<GraphicsAllocation> mockIsaGraphicsAllocation = nullptr;
 };
 
 struct PrecompiledFunctionMocksDataRegistry {

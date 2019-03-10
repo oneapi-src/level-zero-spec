@@ -3,6 +3,8 @@
 #include "cmdlist.h"
 #include "function.h"
 #include "module_build_log.h"
+#include "ptr.h"
+
 #include "xe_common.h"
 #include "xe_module.h"
 
@@ -26,7 +28,7 @@ struct Module : public _xe_module_handle_t {
     virtual xe_result_t getFunctionPointer(const char *pFunctionName,
                                            void **pfnFunction) = 0;
 
-    virtual ImmutableFunctionInfo *getImmutableFunctionInfo(const char *functionName) const = 0;
+    virtual PtrRef<ImmutableFunctionInfo> getImmutableFunctionInfo(CStringRef functionName) const = 0;
 
     Module() = default;
     Module(const Module &) = delete;

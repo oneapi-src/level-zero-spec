@@ -38,7 +38,7 @@ struct ModuleImp : public Module {
         return XE_RESULT_ERROR_UNSUPPORTED;
     }
 
-    ImmutableFunctionInfo *getImmutableFunctionInfo(const char *functionName) const override;
+    PtrRef<ImmutableFunctionInfo> getImmutableFunctionInfo(CStringRef functionName) const override;
 
     Device *getDevice() const override {
         return device;
@@ -53,7 +53,7 @@ struct ModuleImp : public Module {
   protected:
     Device *device = nullptr;
     OCLRT_temporary::LightweightOclProgram *progRT = nullptr;
-    std::vector<ImmutableFunctionInfo *> immFuncInfos;
+    std::vector<PtrOwn<ImmutableFunctionInfo>> immFuncInfos;
 };
 
 } // namespace L0

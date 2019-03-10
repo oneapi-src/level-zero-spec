@@ -20,7 +20,7 @@ struct Mock<MemoryManager> : public MemoryManager {
 
     MOCK_METHOD2(allocateDeviceMemory, GraphicsAllocation *(size_t size, size_t alignment));
     MOCK_METHOD2(allocateManagedMemory, GraphicsAllocation *(size_t size, size_t alignment));
-    MOCK_METHOD2(allocateGraphicsMemoryForIsa, GraphicsAllocation *(const void *isaHostMem, size_t size));
+    MOCK_METHOD2(allocateGraphicsMemoryForIsa, PtrOwn<GraphicsAllocation>(PtrRef<const void> isaHostMem, size_t size));
     MOCK_CONST_METHOD0(getIsaHeapGpuAddress, uint64_t());
     MOCK_METHOD1(freeMemory, void(GraphicsAllocation *allocation));
     MOCK_METHOD1(findAllocation, GraphicsAllocation *(const void *ptr));

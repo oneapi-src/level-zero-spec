@@ -71,9 +71,7 @@ ModuleImp::ModuleImp(Device *device, void *deviceRT) : device(device), progRT(OC
 
 ModuleImp::~ModuleImp() {
     progRT->release();
-    for (auto &immFuncInfo : immFuncInfos) {
-        delete immFuncInfo;
-    }
+    deleteAllOwned(immFuncInfos);
 }
 
 bool ModuleImp::initialize(const xe_module_desc_t *desc) {
@@ -92,20 +90,20 @@ bool ModuleImp::initialize(const xe_module_desc_t *desc) {
     immFuncInfos.reserve(this->progRT->kernelInfoArray.size());
     for (auto &ki : this->progRT->kernelInfoArray) {
         auto kernelIsaSize = ki->heapInfo.pKernelHeader->KernelHeapSize;
-        auto alloc = memoryManager->allocateGraphicsMemoryForIsa(ki->heapInfo.pKernelHeap, kernelIsaSize);
+        auto alloc = memoryManager->allocateGraphicsMemoryForIsa(bindPtrRef(ki->heapInfo.pKernelHeap), kernelIsaSize);
         assert(ki->kernelAllocation != nullptr);
-        ImmutableFunctionInfo *immFuncInfo{new ImmutableFunctionInfo{reinterpret_cast<void *>(ki), alloc}};
+        PtrOwn<ImmutableFunctionInfo> immFuncInfo{new ImmutableFunctionInfo{bindPtrRef(ki).weakRefReinterpret<void>(), std::move(alloc)}};
         immFuncInfos.push_back(std::move(immFuncInfo));
     }
 
     return true;
 }
 
-ImmutableFunctionInfo *ModuleImp::getImmutableFunctionInfo(const char *functionName) const {
+PtrRef<ImmutableFunctionInfo> ModuleImp::getImmutableFunctionInfo(CStringRef functionName) const {
     for (auto &immFuncInfo : immFuncInfos) {
-        auto kernelInfoRT = reinterpret_cast<OCLRT::KernelInfo *>(immFuncInfo->kernelInfoRT);
-        if (kernelInfoRT->name == functionName) {
-            return immFuncInfo;
+        auto kernelInfoRT = immFuncInfo->kernelInfoRT.weakRefReinterpret<OCLRT::KernelInfo>();
+        if (kernelInfoRT->name == functionName.get()) {
+            return immFuncInfo.weakRef();
         }
     }
     return nullptr;

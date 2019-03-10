@@ -56,7 +56,7 @@ struct Mock<Function> : public Function {
     MOCK_CONST_METHOD3(getGroupSize, void(uint32_t &outGroupSizeX, uint32_t &outGroupSizeY, uint32_t &outGroupSizeZ));
     MOCK_CONST_METHOD0(getIsaHostMem, const void *());
     MOCK_CONST_METHOD0(getIsaSize, size_t());
-    MOCK_CONST_METHOD0(getIsaGraphicsAllocation, GraphicsAllocation *());
+    MOCK_CONST_METHOD0(getIsaGraphicsAllocation, PtrRef<GraphicsAllocation>());
     MOCK_CONST_METHOD0(getModule, Module *());
     MOCK_CONST_METHOD0(getPerThreadDataHostMem, const void *());
     MOCK_CONST_METHOD0(getPerThreadDataSize, size_t());

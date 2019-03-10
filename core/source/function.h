@@ -2,6 +2,8 @@
 #include "xe_common.h"
 #include "xe_module.h"
 
+#include "ptr.h"
+
 #include <vector>
 
 struct _xe_function_handle_t {
@@ -14,14 +16,8 @@ struct Module;
 
 struct ImmutableFunctionInfo {
     ~ImmutableFunctionInfo();
-
-    ImmutableFunctionInfo(const ImmutableFunctionInfo &) = delete;
-    ImmutableFunctionInfo &operator=(const ImmutableFunctionInfo &) = delete;
-    ImmutableFunctionInfo(ImmutableFunctionInfo &&) = delete;
-    ImmutableFunctionInfo &operator=(const ImmutableFunctionInfo &&) = delete;
-
-    void *kernelInfoRT = nullptr;
-    GraphicsAllocation *isaGraphicsAllocation = nullptr;
+    PtrRef<void> kernelInfoRT = nullptr;
+    PtrOwn<GraphicsAllocation> isaGraphicsAllocation = nullptr;
 };
 
 struct Function : public _xe_function_handle_t {
@@ -57,7 +53,7 @@ struct Function : public _xe_function_handle_t {
                               uint32_t &outGroupSizeZ) const = 0;
     virtual const void *getIsaHostMem() const = 0;
     virtual size_t getIsaSize() const = 0;
-    virtual GraphicsAllocation *getIsaGraphicsAllocation() const = 0;
+    virtual PtrRef<GraphicsAllocation> getIsaGraphicsAllocation() const = 0;
     virtual const void *getPerThreadDataHostMem() const = 0;
     virtual size_t getPerThreadDataSize() const = 0;
     virtual uint32_t getSimdSize() const = 0;

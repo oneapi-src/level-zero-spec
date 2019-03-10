@@ -461,4 +461,11 @@ PtrRef<T> bindPtrRef(T *ptr) { // helper for type deduction
     return PtrRef<T>{ptr};
 }
 
+template <typename ContainerT>
+void deleteAllOwned(ContainerT &container) {
+    for (auto &ptr : container) {
+        ptr.deleteOwned();
+    }
+}
+
 } // namespace L0

@@ -488,6 +488,22 @@ TEST(SmartPointer, CStringRefWrapsAroundCStrings) {
     EXPECT_EQ(txt, string);
 }
 
+TEST(DeleteAllOwned, CallsDeleteOnwedOnAllPointersInTheContainer) {
+    bool d0 = false, d1 = false, d2 = false;
+    std::vector<PtrOwn<TestStruct>> owningPointers;
+    owningPointers.push_back(PtrOwn<TestStruct>{new TestStruct{&d0}});
+    owningPointers.push_back(PtrOwn<TestStruct>{new TestStruct{&d1}});
+    owningPointers.push_back(PtrOwn<TestStruct>{new TestStruct{&d2}});
+
+    EXPECT_FALSE(d0 || d1 || d2);
+    owningPointers[1].rebindDeleteOld(nullptr);
+    EXPECT_TRUE(d1);
+    EXPECT_FALSE(d0 || d2);
+    deleteAllOwned(owningPointers);
+    EXPECT_TRUE(d0 && d1 && d2);
+    EXPECT_EQ(3U, owningPointers.size()) << "deleteAllOwned calls deleteOwned on pointers in container, but it does not clean the container";
+}
+
 namespace example {
 struct BNode {
     BNode(L0::PtrRef<BNode> parent, float value) : parent(parent), value(value) {

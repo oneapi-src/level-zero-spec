@@ -198,9 +198,9 @@ bool FunctionImp::initialize(const xe_function_desc_t *desc) {
     assert(desc->version == XE_API_HEADER_VERSION);
     assert(desc->flags == 0);
 
-    this->immFuncInfo = module->getImmutableFunctionInfo(desc->pFunctionName);
+    this->immFuncInfo = module->getImmutableFunctionInfo(CStringRef(desc->pFunctionName));
     assert(this->immFuncInfo != nullptr);
-    OCLRT::KernelInfo *kernelInfoRT = static_cast<OCLRT::KernelInfo *>(immFuncInfo->kernelInfoRT);
+    PtrRef<OCLRT::KernelInfo> kernelInfoRT = immFuncInfo->kernelInfoRT.weakRefReinterpret<OCLRT::KernelInfo>();
     assert(kernelInfoRT != nullptr);
     kernelRT = new OCLRT_temporary::LightweightOclKernel(static_cast<OCLRT::Program *>(static_cast<ModuleImp *>(module)->getProgramRT()), *kernelInfoRT);
     kernelRT->initialize();

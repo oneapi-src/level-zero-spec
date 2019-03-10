@@ -4,6 +4,6 @@
 
 namespace L0 {
 ImmutableFunctionInfo::~ImmutableFunctionInfo() {
-    delete isaGraphicsAllocation;
+    isaGraphicsAllocation.deleteOwned();
 }
 } // namespace L0
