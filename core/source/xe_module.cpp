@@ -1029,13 +1029,13 @@ __xedllexport xe_result_t __xecall
 ///         + nullptr == pDispatchArgumentsBuffer
 ///     - ::XE_RESULT_ERROR_UNSUPPORTED
 ///
-/// @hash {95a2f6edd86ac229af4c3966cc6be2bc3702e4211715f45e2edf854987712304}
+/// @hash {451e8fa72be7b91a1e24afdb4e6585f646cb93b0248cfa2f75119111c8c5147d}
 ///
 __xedllexport xe_result_t __xecall
   xeCommandListEncodeDispatchFunctionIndirect(
     xe_command_list_handle_t hCommandList,          ///< [in] handle of the command list
     xe_function_handle_t hFunction,                 ///< [in] handle of the function object
-    const xe_dispatch_function_indirect_arguments_t* pDispatchArgumentsBuffer,  ///< [in] Pointer to buffer that will contain dispatch arguments.
+    const xe_dispatch_function_arguments_t* pDispatchArgumentsBuffer,   ///< [in] Pointer to buffer that will contain dispatch arguments.
     xe_event_handle_t hEvent                        ///< [in][optional] handle of the event to signal on completion
     )
 {
@@ -1097,13 +1097,13 @@ __xedllexport xe_result_t __xecall
 ///         + nullptr == pDispatchArgumentsBuffer
 ///     - ::XE_RESULT_ERROR_UNSUPPORTED
 ///
-/// @hash {4f7b967b8e23437121066d29f523494df4c07c8ddacb965758e9c5a13eeb1b79}
+/// @hash {a0a84808139b61002fd9f9b685077690fc607cf7df6a5d4dc858704ae4712c98}
 ///
 __xedllexport xe_result_t __xecall
   xeCommandGraphEncodeDispatchFunctionIndirect(
     xe_command_graph_handle_t hCommandGraph,        ///< [in] handle of the command graph
     xe_function_handle_t hFunction,                 ///< [in] handle of the function object
-    const xe_dispatch_function_indirect_arguments_t* pDispatchArgumentsBuffer,  ///< [in] Pointer to buffer that will contain dispatch arguments.
+    const xe_dispatch_function_arguments_t* pDispatchArgumentsBuffer,   ///< [in] Pointer to buffer that will contain dispatch arguments.
     xe_event_handle_t hEvent                        ///< [in][optional] handle of the event to signal on completion
     )
 {

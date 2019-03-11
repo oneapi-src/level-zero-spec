@@ -81,7 +81,7 @@ namespace xe
     /// @brief C++ wrapper for ::xeCommandGraphEncodeDispatchFunctionIndirect
     inline void CommandGraph::EncodeDispatchFunctionIndirect(
         function_handle_t hFunction,                    ///< [in] handle of the function object
-        const dispatch_function_indirect_arguments_t* pDispatchArgumentsBuffer, ///< [in] Pointer to buffer that will contain dispatch arguments.
+        const dispatch_function_arguments_t* pDispatchArgumentsBuffer,  ///< [in] Pointer to buffer that will contain dispatch arguments.
         event_handle_t hEvent                           ///< [in][optional] handle of the event to signal on completion
         )
     {

@@ -88,14 +88,6 @@ namespace xe
         };
 
         ///////////////////////////////////////////////////////////////////////////////
-        /// @brief C++ version for ::xe_dispatch_function_arguments_version_t
-        enum class dispatch_function_arguments_version_t
-        {
-            CURRENT = XE_MAKE_VERSION( 1, 0 ),              ///< version 1.0
-
-        };
-
-        ///////////////////////////////////////////////////////////////////////////////
         /// @brief C++ version for ::xe_image_region_t
         struct image_region_t
         {
@@ -108,20 +100,9 @@ namespace xe
         /// @brief C++ version for ::xe_dispatch_function_arguments_t
         struct dispatch_function_arguments_t
         {
-            dispatch_function_arguments_version_t version = dispatch_function_arguments_version_t::CURRENT; ///< [in] ::DISPATCH_FUNCTION_ARGUMENTS_VERSION_CURRENT
             uint32_t groupCountX = 0;                       ///< [in] width of dispatches in X dimension
             uint32_t groupCountY = 0;                       ///< [in] width of dispatches in Y dimension
             uint32_t groupCountZ = 0;                       ///< [in] width of dispatches in Z dimension
-
-        };
-
-        ///////////////////////////////////////////////////////////////////////////////
-        /// @brief C++ version for ::xe_dispatch_function_indirect_arguments_t
-        struct dispatch_function_indirect_arguments_t
-        {
-            uint32_t groupCountX;                           ///< [in] width of dispatches in X dimension
-            uint32_t groupCountY;                           ///< [in] width of dispatches in Y dimension
-            uint32_t groupCountZ;                           ///< [in] width of dispatches in Z dimension
 
         };
 
@@ -280,7 +261,7 @@ namespace xe
         /// @brief C++ wrapper for ::xeCommandListEncodeDispatchFunctionIndirect
         inline void EncodeDispatchFunctionIndirect(
             function_handle_t hFunction,                    ///< [in] handle of the function object
-            const dispatch_function_indirect_arguments_t* pDispatchArgumentsBuffer, ///< [in] Pointer to buffer that will contain dispatch arguments.
+            const dispatch_function_arguments_t* pDispatchArgumentsBuffer,  ///< [in] Pointer to buffer that will contain dispatch arguments.
             event_handle_t hEvent                           ///< [in][optional] handle of the event to signal on completion
             );
 

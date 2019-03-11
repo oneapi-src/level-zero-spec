@@ -506,18 +506,9 @@ __xedllport xe_result_t __xecall
     );
 
 ///////////////////////////////////////////////////////////////////////////////
-/// @brief API version of ::xe_dispatch_function_arguments_t
-typedef enum _xe_dispatch_function_arguments_version_t
-{
-    XE_DISPATCH_FUNCTION_ARGUMENTS_VERSION_CURRENT = XE_MAKE_VERSION( 1, 0 ),   ///< version 1.0
-
-} xe_dispatch_function_arguments_version_t;
-
-///////////////////////////////////////////////////////////////////////////////
 /// @brief Dispatch function arguments.
 typedef struct _xe_dispatch_function_arguments_t
 {
-    xe_dispatch_function_arguments_version_t version;   ///< [in] ::XE_DISPATCH_FUNCTION_ARGUMENTS_VERSION_CURRENT
     uint32_t groupCountX;                           ///< [in] width of dispatches in X dimension
     uint32_t groupCountY;                           ///< [in] width of dispatches in Y dimension
     uint32_t groupCountZ;                           ///< [in] width of dispatches in Z dimension
@@ -585,16 +576,6 @@ __xedllport xe_result_t __xecall
     );
 
 ///////////////////////////////////////////////////////////////////////////////
-/// @brief Indirect function arguments. These arguments are device visible.
-typedef struct _xe_dispatch_function_indirect_arguments_t
-{
-    uint32_t groupCountX;                           ///< [in] width of dispatches in X dimension
-    uint32_t groupCountY;                           ///< [in] width of dispatches in Y dimension
-    uint32_t groupCountZ;                           ///< [in] width of dispatches in Z dimension
-
-} xe_dispatch_function_indirect_arguments_t;
-
-///////////////////////////////////////////////////////////////////////////////
 /// @brief Dispatch command over one or more work groups using indirect dispatch
 ///        arguments.
 /// 
@@ -622,7 +603,7 @@ __xedllport xe_result_t __xecall
   xeCommandListEncodeDispatchFunctionIndirect(
     xe_command_list_handle_t hCommandList,          ///< [in] handle of the command list
     xe_function_handle_t hFunction,                 ///< [in] handle of the function object
-    const xe_dispatch_function_indirect_arguments_t* pDispatchArgumentsBuffer,  ///< [in] Pointer to buffer that will contain dispatch arguments.
+    const xe_dispatch_function_arguments_t* pDispatchArgumentsBuffer,   ///< [in] Pointer to buffer that will contain dispatch arguments.
     xe_event_handle_t hEvent                        ///< [in][optional] handle of the event to signal on completion
     );
 
@@ -654,7 +635,7 @@ __xedllport xe_result_t __xecall
   xeCommandGraphEncodeDispatchFunctionIndirect(
     xe_command_graph_handle_t hCommandGraph,        ///< [in] handle of the command graph
     xe_function_handle_t hFunction,                 ///< [in] handle of the function object
-    const xe_dispatch_function_indirect_arguments_t* pDispatchArgumentsBuffer,  ///< [in] Pointer to buffer that will contain dispatch arguments.
+    const xe_dispatch_function_arguments_t* pDispatchArgumentsBuffer,   ///< [in] Pointer to buffer that will contain dispatch arguments.
     xe_event_handle_t hEvent                        ///< [in][optional] handle of the event to signal on completion
     );
 
