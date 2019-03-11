@@ -447,7 +447,7 @@ members:
       init: "0"
 --- #--------------------------------------------------------------------------
 type: function
-desc: "Dispatch command over one or more work groups."
+desc: "Dispatch function over one or more work groups."
 class: [ $xCommandList, $xCommandGraph ]
 name: EncodeDispatchFunction
 analogue:
@@ -479,16 +479,16 @@ returns:
         - "invalid dispatch count range for dispatch"
 --- #--------------------------------------------------------------------------
 type: function
-desc: "Dispatch command over one or more work groups using indirect dispatch arguments."
+desc: "Dispatch function over one or more work groups using indirect dispatch arguments."
 class: [ $xCommandList, $xCommandGraph ]
 name: EncodeDispatchFunctionIndirect
 analogue:
     - "**cuLaunchKernel**"
 details:
-    - "This function may **not** be called from simultaneous threads."
-    - "The implementation of this function should be lock-free."
     - "The dispatch arguments need to be device visible."
     - "The dispatch arguments buffer may not be reusued until dispatch has completed on the device."
+    - "This function may **not** be called from simultaneous threads."
+    - "The implementation of this function should be lock-free."
 params:
     - type: "$x_command_list_handle_t"
       name: hCommandList
@@ -503,7 +503,43 @@ params:
       desc: "[in] handle of the function object"
     - type: "const $x_dispatch_function_arguments_t*"
       name: pDispatchArgumentsBuffer
-      desc: "[in] Pointer to buffer that will contain dispatch arguments."
+      desc: "[in] pointer to device buffer that will contain dispatch arguments"
+    - type: $x_event_handle_t
+      name: hEvent
+      desc: "[in][optional] handle of the event to signal on completion"
+--- #--------------------------------------------------------------------------
+type: function
+desc: "Dispatch multiple functions over one or more work groups using an array of indirect dispatch arguments."
+class: [ $xCommandList, $xCommandGraph ]
+name: EncodeDispatchMultipleFunctionsIndirect
+analogue:
+    - "**cuLaunchKernel**"
+details:
+    - "The array of dispatch arguments need to be device visible."
+    - "The array of dispatch arguments buffer may not be reusued until dispatch has completed on the device."
+    - "This function may **not** be called from simultaneous threads."
+    - "The implementation of this function should be lock-free."
+params:
+    - type: "$x_command_list_handle_t"
+      name: hCommandList
+      desc: "[in] handle of the command list"
+      class: $xCommandList
+    - type: $x_command_graph_handle_t
+      name: hCommandGraph
+      desc: "[in] handle of the command graph"
+      class: $xCommandGraph
+    - type: uint32_t
+      name: numFunctions
+      desc: "[in] maximum number of functions to dispatch"
+    - type: "const $x_function_handle_t*"
+      name: phFunctions
+      desc: "[in] handles of the function objects"
+    - type: "const size_t*"
+      name: pNumDispatchArguments
+      desc: "[in] pointer to device memory location that will contain the actual number of dispatch arguments; must be less-than or equal-to numFunctions"
+    - type: "const $x_dispatch_function_arguments_t*"
+      name: pDispatchArgumentsBuffer
+      desc: "[in] pointer to device buffer that will contain a contiguous array of dispatch arguments"
     - type: $x_event_handle_t
       name: hEvent
       desc: "[in][optional] handle of the event to signal on completion"

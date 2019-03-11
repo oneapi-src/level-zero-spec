@@ -281,12 +281,29 @@ namespace xe
     /// @brief C++ wrapper for ::xeCommandListEncodeDispatchFunctionIndirect
     inline void CommandList::EncodeDispatchFunctionIndirect(
         function_handle_t hFunction,                    ///< [in] handle of the function object
-        const dispatch_function_arguments_t* pDispatchArgumentsBuffer,  ///< [in] Pointer to buffer that will contain dispatch arguments.
+        const dispatch_function_arguments_t* pDispatchArgumentsBuffer,  ///< [in] pointer to device buffer that will contain dispatch arguments
         event_handle_t hEvent                           ///< [in][optional] handle of the event to signal on completion
         )
     {
         // auto result = ::xeCommandListEncodeDispatchFunctionIndirect( handle, hFunction->getHandle(), pDispatchArgumentsBuffer, hEvent->getHandle() );
         // if( ::XE_RESULT_SUCCESS != result ) throw exception(result, "xe::CommandList::EncodeDispatchFunctionIndirect");
+    }
+
+    ///////////////////////////////////////////////////////////////////////////////
+    /// @brief C++ wrapper for ::xeCommandListEncodeDispatchMultipleFunctionsIndirect
+    inline void CommandList::EncodeDispatchMultipleFunctionsIndirect(
+        uint32_t numFunctions,                          ///< [in] maximum number of functions to dispatch
+        const function_handle_t* phFunctions,           ///< [in] handles of the function objects
+        const size_t* pNumDispatchArguments,            ///< [in] pointer to device memory location that will contain the actual
+                                                        ///< number of dispatch arguments; must be less-than or equal-to
+                                                        ///< numFunctions
+        const dispatch_function_arguments_t* pDispatchArgumentsBuffer,  ///< [in] pointer to device buffer that will contain a contiguous array of
+                                                        ///< dispatch arguments
+        event_handle_t hEvent                           ///< [in][optional] handle of the event to signal on completion
+        )
+    {
+        // auto result = ::xeCommandListEncodeDispatchMultipleFunctionsIndirect( handle, numFunctions, phFunctions, pNumDispatchArguments, pDispatchArgumentsBuffer, hEvent->getHandle() );
+        // if( ::XE_RESULT_SUCCESS != result ) throw exception(result, "xe::CommandList::EncodeDispatchMultipleFunctionsIndirect");
     }
 
     ///////////////////////////////////////////////////////////////////////////////
