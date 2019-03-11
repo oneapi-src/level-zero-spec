@@ -62,6 +62,9 @@ void descMatchesSurfaceInner() {
     xe_image_desc_t desc = {};
 
     desc.type = XE_IMAGE_TYPE_3D;
+    desc.width = 11;
+    desc.height = 13;
+    desc.depth = 17;
 
     auto imageCore = new ImageCoreFamily<gfxCoreFamily>();
     bool ret = imageCore->initialize(&desc);
@@ -70,6 +73,9 @@ void descMatchesSurfaceInner() {
     auto surfaceState = imageCore->getSurfaceState();
 
     ASSERT_EQ(surfaceState->getSurfaceType(), RENDER_SURFACE_STATE::SURFACE_TYPE_SURFTYPE_3D);
+    ASSERT_EQ(surfaceState->getWidth(), 11);
+    ASSERT_EQ(surfaceState->getHeight(), 13);
+    ASSERT_EQ(surfaceState->getDepth(), 17);
 }
 
 GEN9TEST_F(ImageCreate, descMatchesSurfaceGEN9) {

@@ -24,6 +24,19 @@ bool ImageCoreFamily<gfxCoreFamily>::initialize(const xe_image_desc_t *desc) {
     default:
         return false;
     }
+
+	switch (desc->type) {
+    case XE_IMAGE_TYPE_3D:
+        surfaceState.setDepth(static_cast<uint32_t>(desc->depth));
+		//Fall through on purpose
+    case XE_IMAGE_TYPE_2D:
+    case XE_IMAGE_TYPE_2DARRAY:
+        surfaceState.setHeight(static_cast<uint32_t>(desc->height));
+		//Fall through on purpose
+    default: // 1D
+        surfaceState.setWidth(static_cast<uint32_t>(desc->width));
+	}
+
     return true;
 }
 } //namespace L0
