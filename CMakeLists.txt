@@ -106,3 +106,14 @@ if (${PROJECT_NAME}_BUILD_TESTS)
 endif()
 
 add_subdirectory(icd_loader)
+
+if(UNIX)
+    set(CPACK_GENERATOR "DEB")
+    set(CPACK_PACKAGE_CONTACT "Intel Corporation")
+	set(CPACK_DEB_COMPONENT_INSTALL ON)
+	set(CPACK_RPM_COMPONENT_INSTALL ON)
+	set(CPACK_ARCHIVE_COMPONENT_INSTALL ON)
+	set(CPACK_COMPONENTS_ALL l0-core l0-icd)
+
+    include(CPack)
+endif()
