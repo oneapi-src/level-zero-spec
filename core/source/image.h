@@ -10,8 +10,8 @@ namespace L0 {
 struct Image : public _xe_image_handle_t {
     template <typename Type>
     struct Allocator {
-        static Image *allocate(const xe_image_desc_t *desc) {
-            return new Type(desc);
+        static Image *allocate() {
+            return new Type();
         }
     };
 
@@ -28,7 +28,7 @@ struct Image : public _xe_image_handle_t {
     }
 };
 
-using ImageAllocatorFn = Image *(*)(const xe_image_desc_t *);
+using ImageAllocatorFn = Image *(*)();
 extern ImageAllocatorFn imageFactory[];
 
 template <uint32_t productFamily, typename ImageType>

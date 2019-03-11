@@ -21,14 +21,16 @@ Image *Image::create(uint32_t productFamily, const xe_image_desc_t *desc) {
 
     ImageImp *image = nullptr;
     if (allocator) {
-        image = static_cast<ImageImp *>((*allocator)(desc));
-        image->initialize();
+        image = static_cast<ImageImp *>((*allocator)());
+        image->initialize(desc);
     }
 
     return image;
 }
 
-bool ImageImp::initialize() {
+bool ImageImp::initialize(const xe_image_desc_t *desc) {
+    if (desc)
+        imageDesc = *desc;
     return true;
 }
 

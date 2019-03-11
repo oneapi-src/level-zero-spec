@@ -11,19 +11,14 @@ namespace L0 {
 template <uint32_t gfxCoreFamily>
 struct ImageCoreFamily : public ImageImp {
     using GfxFamily = typename OCLRT::GfxFamilyMapper<static_cast<GFXCORE_FAMILY>(gfxCoreFamily)>::GfxFamily;
+    using RENDER_SURFACE_STATE = typename GfxFamily::RENDER_SURFACE_STATE;
     using BaseClass = ImageImp;
     using ImageImp::ImageImp;
 
-    ImageCoreFamily() {
-        surfaceState = GfxFamily::cmdInitRenderSurfaceState;
-    }
+    bool initialize(const xe_image_desc_t *desc) override;
 
-    bool initialize() override;
-
-protected:
-    using RENDER_SURFACE_STATE = typename GfxFamily::RENDER_SURFACE_STATE;
+  protected:
     RENDER_SURFACE_STATE surfaceState;
-
 };
 
 template <uint32_t gfxProductFamily>
