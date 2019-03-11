@@ -1,6 +1,5 @@
 # DO NOT EDIT: Generated from "scripts/templates/CMakeLists.txt.mako"
 include(gen9.cmake)
-include(gen10.cmake)
 include(gen11.cmake)
 include(gen12lp.cmake)
 include(gen12hp.cmake)
@@ -87,7 +86,6 @@ target_sources(${TARGET_NAME}
         ${HW_SOURCES}
         ${CMAKE_CURRENT_SOURCE_DIR}/CMakeLists.txt
         ${CMAKE_CURRENT_SOURCE_DIR}/gen9.cmake
-        ${CMAKE_CURRENT_SOURCE_DIR}/gen10.cmake
         ${CMAKE_CURRENT_SOURCE_DIR}/gen11.cmake
         ${CMAKE_CURRENT_SOURCE_DIR}/gen12hp.cmake
         ${CMAKE_CURRENT_SOURCE_DIR}/gen12lp.cmake

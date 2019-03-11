@@ -1,5 +1,6 @@
 set(DISABLED_GTPIN_SUPPORT TRUE)
 set(SUPPORT_GEN8 FALSE CACHE STRING "Gen8 support" FORCE)
+set(SUPPORT_GEN10 FALSE CACHE STRING "Gen10 support" FORCE)
 add_subdirectory(${COMPUTE_RUNTIME_DIR} ${PROJECT_BINARY_DIR}/compute-runtime EXCLUDE_FROM_ALL)
 
 ##
@@ -61,19 +62,6 @@ if(SUPPORT_GEN9)
     set(COMPUTE_RUNTIME_ULT_GEN9
         ${COMPUTE_RUNTIME_DIR}/unit_tests/libult/gen9.cpp
         ${COMPUTE_RUNTIME_DIR}/unit_tests/gen9/cmd_parse_gen9.cpp
-    )
-endif()
-
-if(SUPPORT_GEN10)
-    set(COMPUTE_RUNTIME_GEN10
-        ${COMPUTE_RUNTIME_DIR}/runtime/gen10/enable_gen10.cpp
-        ${COMPUTE_RUNTIME_DIR}/runtime/gen10/enable_family_full_gen10.cpp
-        ${COMPUTE_RUNTIME_DIR}/runtime/gen10/enable_hw_info_config_gen10.cpp
-    )
-
-    set(COMPUTE_RUNTIME_ULT_GEN10
-        ${COMPUTE_RUNTIME_DIR}/unit_tests/libult/gen10.cpp
-        ${COMPUTE_RUNTIME_DIR}/unit_tests/gen10/cmd_parse_gen10.cpp
     )
 endif()
 

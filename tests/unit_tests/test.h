@@ -19,13 +19,6 @@ extern GFXCORE_FAMILY renderCoreFamily;
 #define SKL_TYPED_TEST_BODY
 #define SKL_TYPED_CMDTEST_BODY
 #endif
-#ifdef TESTS_GEN10
-#define CNL_TYPED_TEST_BODY testBodyHw<typename OCLRT::GfxFamilyMapper<IGFX_GEN10_CORE>::GfxFamily>();
-#define CNL_TYPED_CMDTEST_BODY runCmdTestHwIfSupported<typename OCLRT::GfxFamilyMapper<IGFX_GEN10_CORE>::GfxFamily>();
-#else
-#define CNL_TYPED_TEST_BODY
-#define CNL_TYPED_CMDTEST_BODY
-#endif
 #ifdef TESTS_GEN11
 #define ICL_TYPED_TEST_BODY testBodyHw<typename OCLRT::GfxFamilyMapper<IGFX_GEN11_CORE>::GfxFamily>();
 #define ICL_TYPED_CMDTEST_BODY runCmdTestHwIfSupported<typename OCLRT::GfxFamilyMapper<IGFX_GEN11_CORE>::GfxFamily>();
@@ -65,9 +58,6 @@ extern GFXCORE_FAMILY renderCoreFamily;
             switch (::renderCoreFamily) {                                            \
             case IGFX_GEN9_CORE:                                                     \
                 SKL_TYPED_TEST_BODY                                                  \
-                break;                                                               \
-            case IGFX_GEN10_CORE:                                                    \
-                CNL_TYPED_TEST_BODY                                                  \
                 break;                                                               \
             case IGFX_GEN11_CORE:                                                    \
                 ICL_TYPED_TEST_BODY                                                  \
@@ -133,9 +123,6 @@ extern GFXCORE_FAMILY renderCoreFamily;
             switch (::renderCoreFamily) {                                                                 \
             case IGFX_GEN9_CORE:                                                                          \
                 SKL_TYPED_CMDTEST_BODY                                                                    \
-                break;                                                                                    \
-            case IGFX_GEN10_CORE:                                                                         \
-                CNL_TYPED_CMDTEST_BODY                                                                    \
                 break;                                                                                    \
             case IGFX_GEN11_CORE:                                                                         \
                 ICL_TYPED_CMDTEST_BODY                                                                    \
@@ -236,9 +223,6 @@ extern GFXCORE_FAMILY renderCoreFamily;
             case IGFX_GEN9_CORE:                                                                                         \
                 SKL_TYPED_TEST_BODY                                                                                      \
                 break;                                                                                                   \
-            case IGFX_GEN10_CORE:                                                                                        \
-                CNL_TYPED_TEST_BODY                                                                                      \
-                break;                                                                                                   \
             case IGFX_GEN11_CORE:                                                                                        \
                 ICL_TYPED_TEST_BODY                                                                                      \
                 break;                                                                                                   \
@@ -297,9 +281,6 @@ extern GFXCORE_FAMILY renderCoreFamily;
             switch (::renderCoreFamily) {                                                                                \
             case IGFX_GEN9_CORE:                                                                                         \
                 SKL_TYPED_CMDTEST_BODY                                                                                   \
-                break;                                                                                                   \
-            case IGFX_GEN10_CORE:                                                                                        \
-                CNL_TYPED_CMDTEST_BODY                                                                                   \
                 break;                                                                                                   \
             case IGFX_GEN11_CORE:                                                                                        \
                 ICL_TYPED_CMDTEST_BODY                                                                                   \
@@ -387,16 +368,6 @@ extern GFXCORE_FAMILY renderCoreFamily;
                       IGFX_GEN9_CORE,             \
                       IGFX_MAX_PRODUCT)
 #endif
-#ifdef TESTS_GEN10
-#define GEN10TEST_F(test_fixture, test_name)                         \
-    FAMILYTEST_TEST_(test_fixture, test_name, test_fixture,          \
-                     ::testing::internal::GetTypeId<test_fixture>(), \
-                     IGFX_GEN10_CORE, IGFX_MAX_PRODUCT)
-#define GEN10TEST_P(test_suite_name, test_name)   \
-    FAMILYTEST_TEST_P(test_suite_name, test_name, \
-                      IGFX_GEN10_CORE,            \
-                      IGFX_MAX_PRODUCT)
-#endif
 #ifdef TESTS_SKL
 #define SKLTEST_F(test_fixture, test_name)                           \
     FAMILYTEST_TEST_(test_fixture, test_name, test_fixture,          \
@@ -446,16 +417,6 @@ extern GFXCORE_FAMILY renderCoreFamily;
     FAMILYTEST_TEST_P(test_suite_name, test_name, \
                       IGFX_GEN9_CORE,             \
                       IGFX_COFFEELAKE)
-#endif
-#ifdef TESTS_GEN10
-#define CNLTEST_F(test_fixture, test_name)                           \
-    FAMILYTEST_TEST_(test_fixture, test_name, test_fixture,          \
-                     ::testing::internal::GetTypeId<test_fixture>(), \
-                     IGFX_GEN10_CORE, IGFX_CANNONLAKE)
-#define CNLTEST_P(test_suite_name, test_name)     \
-    FAMILYTEST_TEST_P(test_suite_name, test_name, \
-                      IGFX_GEN10_CORE,            \
-                      IGFX_CANNONLAKE)
 #endif
 #ifdef TESTS_GEN11
 #define ICLLPTEST_F(test_fixture, test_name)                         \
@@ -540,9 +501,6 @@ extern GFXCORE_FAMILY renderCoreFamily;
             switch (::renderCoreFamily) {                                                  \
             case IGFX_GEN9_CORE:                                                           \
                 SKL_TYPED_TEST_BODY                                                        \
-                break;                                                                     \
-            case IGFX_GEN10_CORE:                                                          \
-                CNL_TYPED_TEST_BODY                                                        \
                 break;                                                                     \
             case IGFX_GEN11_CORE:                                                          \
                 ICL_TYPED_TEST_BODY                                                        \
