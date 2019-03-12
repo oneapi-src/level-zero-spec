@@ -12,3 +12,6 @@ target_compile_definitions(level_zero_icd_loader
         XE_MAKEDLL
 )
 
+if(MSVC)
+    add_subdirectory(config_md)
+endif(MSVC)
