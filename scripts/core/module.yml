@@ -44,7 +44,7 @@ members:
       init: nullptr
     - type: "const char*"
       name: pBuildFlags
-      desc: "[in] string containing compiler flags. See documentation for build flags."
+      desc: "[in] string containing compiler flags. See programming guide for build flags."
       init: nullptr
 --- #--------------------------------------------------------------------------
 type: function

@@ -460,7 +460,7 @@ namespace xe
             module_format_t format;                         ///< [in] Module format passed in with pInputModule
             size_t inputSize = 0;                           ///< [in] size of input IL or ISA from pInputModule.
             const char* pInputModule = nullptr;             ///< [in] pointer to IL or ISA
-            const char* pBuildFlags = nullptr;              ///< [in] string containing compiler flags. See documentation for build
+            const char* pBuildFlags = nullptr;              ///< [in] string containing compiler flags. See programming guide for build
                                                             ///< flags.
 
         };

@@ -744,6 +744,31 @@ The following sample code demonstrates a sequence for creating a function from a
     ...
 ```
 
+${"###"} Function Attributes
+Use ${x}FunctionGetAttribute to query attributes from a function object.
+
+```c
+    ...
+    uint32_t numRegisters;
+
+    // Number of hardware registers used by function.
+    ${x}FunctionGetAttribute(hFunction, ${X}_FUNCTION_GET_ATTR_MAX_REGS_USED, &numRegisters);
+    ...
+```
+See ::${x}_function_get_attribute_t for more information on the "get" attributes.
+
+Use ${x}FunctionSetAttributes to set attributes from a function object.
+
+```c
+    // Function performs indirect device access.
+    ${x}FunctionSetAttribute(hFunction, ${X}_FUNCTION_SET_ATTR_INDIRECT_DEVICE_ACCESS, true);
+    ...
+```
+
+See ::${x}_function_set_attribute_t for more information on the "set" attributes.
+
+${"##"} Execution
+
 ${"###"} Function Group Size
 The group size for a function can be set using ${x}FunctionSetGroupSize. If a group size is not
 set prior to encoding a dispatch function into a command list then a default will be chosen.
@@ -752,16 +777,6 @@ group size information when encoding the dispatch function into the command list
 
 ```c
     ${x}FunctionSetGroupSize(function, groupSizeX, groupSizeY, 1);
-
-    uint32_t numGroupsX = imageWidth / groupSizeX;
-    uint32_t numGroupsY = imageHeight / groupSizeY;
-
-    ${x}_dispatch_function_arguments_t dispatchArgs = {
-        numGroupsX, numGroupsY, 1
-        };
-
-    // Encode dispatch command
-    ${x}CommandListEncodeDispatchFunction(hCommandList, hFunction, &dispatchArgs, nullptr);
 
     ...
 ```
@@ -812,30 +827,41 @@ The following sample code demonstrates a sequence for creating function args and
     ...
 ```
 
-${"###"} Function Attributes
-Use ${x}FunctionGetAttribute to query attributes from a function object.
+${"###"} <a name="arg">Function Dispatch</a>
+In order to invoke a function on the device you must call one of the CommandListEncodeDispatch* functions for
+a command list. The most basic version of these is ${x}CommandListEncodeDispatchFunction which takes a
+command list, function, dispatch arguments, and an optional synchronization event used to signal completion.
+The dispatch arguments contain group dispatch dimensions.
 
 ```c
-    ...
-    uint32_t numRegisters;
+    // compute number of groups to dispatch based on image size and function group size.
+    uint32_t numGroupsX = imageWidth / groupSizeX;
+    uint32_t numGroupsY = imageHeight / groupSizeY;
 
-    // Number of hardware registers used by function.
-    ${x}FunctionGetAttribute(hFunction, ${X}_FUNCTION_GET_ATTR_MAX_REGS_USED, &numRegisters);
-    ...
+    ${x}_dispatch_function_arguments_t dispatchArgs = { numGroupsX, numGroupsY, 1 };
+
+    // Encode dispatch command
+    ${x}CommandListEncodeDispatchFunction(
+        hCommandList, hFunction, &dispatchArgs, nullptr);
 ```
-See ::${x}_function_get_attribute_t for more information on the "get" attributes.
 
-Use ${x}FunctionSetAttributes to set attributes from a function object.
+${x}CommandListEncodeDispatchFunctionIndirect allows the dispatch parameters to be supplied indirectly in a
+buffer that the device reads instead of the command itself. This allows for the previous operations on the
+device to generate the parameters.
 
 ```c
-    // Function performs indirect device access.
-    ${x}FunctionSetAttribute(hFunction, ${X}_FUNCTION_SET_ATTR_INDIRECT_DEVICE_ACCESS, true);
+    ${x}_dispatch_function_arguments_t* pDispatchArgs;
+    
     ...
+    ${x}MemAlloc(hMemAlloc, hDevice, flags,
+        sizeof(${x}_dispatch_function_arguments_t), sizeof(uint32_t), &pDispatchArgs);
+
+    // Encode dispatch command
+    ${x}CommandListEncodeDispatchFunctionIndirect(
+        hCommandList, hFunction, &pDispatchArgs, nullptr);
 ```
 
-See ::${x}_function_set_attribute_t for more information on the "set" attributes.
-
-${"###"} <a name="arg">Sampler</a>
+${"##"} <a name="arg">Sampler</a>
 The API supports Sampler objects that represent state needed for sampling images from within
 Module functions.  The ${x}DeviceCreateSampler function takes a sampler descriptor (${x}_sampler_desc_t):
 

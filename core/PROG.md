@@ -744,6 +744,31 @@ The following sample code demonstrates a sequence for creating a function from a
     ...
 ```
 
+### Function Attributes
+Use xeFunctionGetAttribute to query attributes from a function object.
+
+```c
+    ...
+    uint32_t numRegisters;
+
+    // Number of hardware registers used by function.
+    xeFunctionGetAttribute(hFunction, XE_FUNCTION_GET_ATTR_MAX_REGS_USED, &numRegisters);
+    ...
+```
+See ::xe_function_get_attribute_t for more information on the "get" attributes.
+
+Use xeFunctionSetAttributes to set attributes from a function object.
+
+```c
+    // Function performs indirect device access.
+    xeFunctionSetAttribute(hFunction, XE_FUNCTION_SET_ATTR_INDIRECT_DEVICE_ACCESS, true);
+    ...
+```
+
+See ::xe_function_set_attribute_t for more information on the "set" attributes.
+
+## Execution
+
 ### Function Group Size
 The group size for a function can be set using xeFunctionSetGroupSize. If a group size is not
 set prior to encoding a dispatch function into a command list then a default will be chosen.
@@ -752,16 +777,6 @@ group size information when encoding the dispatch function into the command list
 
 ```c
     xeFunctionSetGroupSize(function, groupSizeX, groupSizeY, 1);
-
-    uint32_t numGroupsX = imageWidth / groupSizeX;
-    uint32_t numGroupsY = imageHeight / groupSizeY;
-
-    xe_dispatch_function_arguments_t dispatchArgs = {
-        numGroupsX, numGroupsY, 1
-        };
-
-    // Encode dispatch command
-    xeCommandListEncodeDispatchFunction(hCommandList, hFunction, &dispatchArgs, nullptr);
 
     ...
 ```
@@ -812,30 +827,41 @@ The following sample code demonstrates a sequence for creating function args and
     ...
 ```
 
-### Function Attributes
-Use xeFunctionGetAttribute to query attributes from a function object.
+### <a name="arg">Function Dispatch</a>
+In order to invoke a function on the device you must call one of the CommandListEncodeDispatch* functions for
+a command list. The most basic version of these is xeCommandListEncodeDispatchFunction which takes a
+command list, function, dispatch arguments, and an optional synchronization event used to signal completion.
+The dispatch arguments contain group dispatch dimensions.
 
 ```c
-    ...
-    uint32_t numRegisters;
+    // compute number of groups to dispatch based on image size and function group size.
+    uint32_t numGroupsX = imageWidth / groupSizeX;
+    uint32_t numGroupsY = imageHeight / groupSizeY;
 
-    // Number of hardware registers used by function.
-    xeFunctionGetAttribute(hFunction, XE_FUNCTION_GET_ATTR_MAX_REGS_USED, &numRegisters);
-    ...
+    xe_dispatch_function_arguments_t dispatchArgs = { numGroupsX, numGroupsY, 1 };
+
+    // Encode dispatch command
+    xeCommandListEncodeDispatchFunction(
+        hCommandList, hFunction, &dispatchArgs, nullptr);
 ```
-See ::xe_function_get_attribute_t for more information on the "get" attributes.
 
-Use xeFunctionSetAttributes to set attributes from a function object.
+xeCommandListEncodeDispatchFunctionIndirect allows the dispatch parameters to be supplied indirectly in a
+buffer that the device reads instead of the command itself. This allows for the previous operations on the
+device to generate the parameters.
 
 ```c
-    // Function performs indirect device access.
-    xeFunctionSetAttribute(hFunction, XE_FUNCTION_SET_ATTR_INDIRECT_DEVICE_ACCESS, true);
+    xe_dispatch_function_arguments_t* pDispatchArgs;
+    
     ...
+    xeMemAlloc(hMemAlloc, hDevice, flags,
+        sizeof(xe_dispatch_function_arguments_t), sizeof(uint32_t), &pDispatchArgs);
+
+    // Encode dispatch command
+    xeCommandListEncodeDispatchFunctionIndirect(
+        hCommandList, hFunction, &pDispatchArgs, nullptr);
 ```
 
-See ::xe_function_set_attribute_t for more information on the "set" attributes.
-
-### <a name="arg">Sampler</a>
+## <a name="arg">Sampler</a>
 The API supports Sampler objects that represent state needed for sampling images from within
 Module functions.  The xeDeviceCreateSampler function takes a sampler descriptor (xe_sampler_desc_t):
 
