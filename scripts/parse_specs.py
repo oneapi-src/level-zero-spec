@@ -54,7 +54,7 @@ def generate_meta(d, meta):
             print("Error - duplicate entries found!")
             raise
 
-    if 'enum' == type or 'macro' == type:
+    if 'class' != type:
         # create dict if typename is not already known...
         if type not in meta:
             meta[type] = {}
@@ -64,14 +64,16 @@ def generate_meta(d, meta):
             meta[type][name] = []
 
         # add values to list
-        if 'etors' in d:
+        if 'enum' == type:
             for etor in d['etors']:
                 meta[type][name].append(etor['name'])
-        else:   
+        elif 'macro' == type:   
             if 'value' in d:
                 meta[type][name].append(d['value'])
             if 'altvalue' in d:
                 meta[type][name].append(d['altvalue'])
+        else:
+            meta[type][name].extend(d['class'])
 
     return meta
 
@@ -108,4 +110,10 @@ def parse(path):
             'objects'   : objects
         })
 
+    print("Parsed %s files and found:"%len(specs))
+    print(" - %s classes"%len(meta['class']))
+    print(" - %s functions"%len(meta['function']))
+    print(" - %s structs"%len(meta['struct']))
+    print(" - %s enums"%len(meta['enum']))
+    print(" - %s macros\n"%len(meta['macro']))
     return specs, meta
