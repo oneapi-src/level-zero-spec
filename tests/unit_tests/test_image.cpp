@@ -62,6 +62,8 @@ void descMatchesSurfaceInner() {
     xe_image_desc_t desc = {};
 
     desc.type = XE_IMAGE_TYPE_3D;
+    desc.numChannels = 4;
+    desc.format = XE_IMAGE_FORMAT_UINT8;
     desc.width = 11;
     desc.height = 13;
     desc.depth = 17;
@@ -73,6 +75,7 @@ void descMatchesSurfaceInner() {
     auto surfaceState = imageCore->getSurfaceState();
 
     ASSERT_EQ(surfaceState->getSurfaceType(), RENDER_SURFACE_STATE::SURFACE_TYPE_SURFTYPE_3D);
+    ASSERT_EQ(surfaceState->getSurfaceFormat(), RENDER_SURFACE_STATE::SURFACE_FORMAT_R8G8B8A8_UINT);
     ASSERT_EQ(surfaceState->getWidth(), 11);
     ASSERT_EQ(surfaceState->getHeight(), 13);
     ASSERT_EQ(surfaceState->getDepth(), 17);
@@ -87,24 +90,48 @@ ATSTEST_F(ImageCreate, descMatchesSurfaceATS) {
 }
 
 template <uint32_t gfxCoreFamily>
-void DescBadTypeFails() {
+void descBadParamsFailInner() {
     using GfxFamily = typename OCLRT::GfxFamilyMapper<static_cast<GFXCORE_FAMILY>(gfxCoreFamily)>::GfxFamily;
     using RENDER_SURFACE_STATE = typename GfxFamily::RENDER_SURFACE_STATE;
-    xe_image_desc_t desc = {};
-
-    desc.type = XE_IMAGE_TYPE_3D + 100;
 
     auto imageCore = new ImageCoreFamily<gfxCoreFamily>();
-    bool ret = imageCore->initialize(&desc);
+    xe_image_desc_t desc, default_desc;
+    bool ret;
+
+    default_desc.type = XE_IMAGE_TYPE_2D;
+    default_desc.numChannels = 1;
+    default_desc.format = XE_IMAGE_FORMAT_UINT32;
+    default_desc.width = 10;
+    default_desc.height = 10;
+    default_desc.depth = 1;
+    default_desc.arraylevels = 1;
+    default_desc.miplevels = 1;
+
+	desc = default_desc;
+	desc.type = static_cast<xe_image_type_t>(XE_IMAGE_TYPE_3D + 100);
+
+	ret = imageCore->initialize(&desc);
+	ASSERT_FALSE(ret);
+
+	desc = default_desc;
+    desc.numChannels = 0;
+    ASSERT_FALSE(ret);
+
+	desc = default_desc;
+    desc.numChannels = 100;
+    ASSERT_FALSE(ret);
+
+	desc = default_desc;
+    desc.format = static_cast<xe_image_format_t>(XE_IMAGE_FORMAT_FLOAT32 + 100);
     ASSERT_FALSE(ret);
 }
 
-GEN9TEST_F(ImageCreate, descBadTypeFailsGEN9) {
-    descMatchesSurfaceInner<IGFX_GEN9_CORE>();
+GEN9TEST_F(ImageCreate, descBadParamsFailGEN9) {
+    descBadParamsFailInner<IGFX_GEN9_CORE>();
 }
 
-ATSTEST_F(ImageCreate, descBadTypeFailsATS) {
-    descMatchesSurfaceInner<IGFX_GEN12_CORE>();
+ATSTEST_F(ImageCreate, descBadParamsFailATS) {
+    descBadParamsFailInner<IGFX_GEN12_CORE>();
 }
 
 } // namespace ult

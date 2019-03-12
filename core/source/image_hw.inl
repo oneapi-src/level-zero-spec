@@ -37,6 +37,16 @@ bool ImageCoreFamily<gfxCoreFamily>::initialize(const xe_image_desc_t *desc) {
         surfaceState.setWidth(static_cast<uint32_t>(desc->width));
 	}
 
+	if (desc->numChannels < XE_NUMCHANNELS_MIN || desc->numChannels > XE_NUMCHANNELS_MAX) {
+        return false;
+	}
+
+	if (desc->format > XE_IMAGE_FORMAT_MAX) {
+        return false;
+	}
+
+	surfaceState.setSurfaceFormat(format_table[desc->format][desc->numChannels - XE_NUMCHANNELS_MIN]);
+
     return true;
 }
 } //namespace L0
