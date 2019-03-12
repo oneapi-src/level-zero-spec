@@ -556,7 +556,7 @@ __xedllexport xe_result_t __xecall
 ///     - ::XE_RESULT_ERROR_UNINITIALIZED
 ///     - ::XE_RESULT_ERROR_DEVICE_LOST
 ///     - ::XE_RESULT_ERROR_INVALID_PARAMETER
-///         + nullptr == hEventStart
+///         + nullptr == hEventBegin
 ///         + nullptr == hEventEnd
 ///         + nullptr == pTime
 ///         + either event not signaled by device
@@ -567,7 +567,7 @@ __xedllexport xe_result_t __xecall
 ///
 __xedllexport xe_result_t __xecall
   xeEventQueryElapsedTime(
-    xe_event_handle_t hEventStart,                  ///< [in] handle of the start event
+    xe_event_handle_t hEventBegin,                  ///< [in] handle of the begin event
     xe_event_handle_t hEventEnd,                    ///< [in] handle of the end event
     double* pTime                                   ///< [out] time in milliseconds
     )
@@ -578,7 +578,7 @@ __xedllexport xe_result_t __xecall
         {
             // if( nullptr == driver ) return XE_RESULT_ERROR_UNINITIALIZED;
             // Check parameters
-            if( nullptr == hEventStart ) return XE_RESULT_ERROR_INVALID_PARAMETER;
+            if( nullptr == hEventBegin ) return XE_RESULT_ERROR_INVALID_PARAMETER;
             if( nullptr == hEventEnd ) return XE_RESULT_ERROR_INVALID_PARAMETER;
             if( nullptr == pTime ) return XE_RESULT_ERROR_INVALID_PARAMETER;
         }
@@ -586,7 +586,7 @@ __xedllexport xe_result_t __xecall
 #if defined(XE_NULLDRV)
         return XE_RESULT_SUCCESS;
 #else
-        return L0::eventQueryElapsedTime(hEventStart->getHandle(), hEventEnd->getHandle(), pTime);
+        return L0::eventQueryElapsedTime(hEventBegin->getHandle(), hEventEnd->getHandle(), pTime);
 #endif
         /// @end
     }

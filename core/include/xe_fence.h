@@ -180,30 +180,6 @@ __xedllport xe_result_t __xecall
     );
 
 ///////////////////////////////////////////////////////////////////////////////
-/// @brief Queries the elapsed time between two signaled fences.
-/// 
-/// @details
-///     - The application may call this function from simultaneous threads.
-///     - The implementation of this function should be lock-free.
-/// 
-/// @returns
-///     - ::XE_RESULT_SUCCESS
-///     - ::XE_RESULT_ERROR_UNINITIALIZED
-///     - ::XE_RESULT_ERROR_DEVICE_LOST
-///     - ::XE_RESULT_ERROR_INVALID_PARAMETER
-///         + nullptr == hFenceStart
-///         + nullptr == hFenceEnd
-///         + nullptr == pTime
-///         + either fence not enqueued
-///     - ::XE_RESULT_ERROR_UNSUPPORTED
-__xedllport xe_result_t __xecall
-  xeFenceQueryElapsedTime(
-    xe_fence_handle_t hFenceStart,                  ///< [in] handle of the fence
-    xe_fence_handle_t hFenceEnd,                    ///< [in] handle of the fence
-    double* pTime                                   ///< [out] time in milliseconds
-    );
-
-///////////////////////////////////////////////////////////////////////////////
 /// @brief Reset a fence back to the not signaled state.
 /// 
 /// @details

@@ -306,8 +306,7 @@ The following are the motivations for seperating the different types of synchron
 - Allows device-specific optimizations for certain types of primitives:
     + fences may share device memory with all other fences for the queue or device.
     + events may be implemented using pipelined operations as part of the program execution.
-    + semaphores may be implemented without device memory.
-    + fences and events implicitly cause execution and memory barriers, while semaphores may only cause execution barriers.
+    + fences and events implicitly cause execution and memory barriers.
 - Allows distinction on which type of primitive may be shared across devices.
 
 ${"##"} <a name="fnc">Fences</a>
@@ -318,7 +317,6 @@ A fence is a lightweight synchronization primitive used to communicate to the ho
 - A fence only has two states: not signaled and signaled.
 - A fence can only be reset from the Host.
 - A fence cannot be shared across processes.
-- An application can use ::${x}FenceQueryElapsedTime to calculate the time (in milliseconds) between two fences' signals.
 
 The primary usage model(s) for fences are to notify the Host when a command list has finished execution to allow:
 - Recycling of memory and images
@@ -344,11 +342,7 @@ The following sample code demonstrates a sequence for creation, submission and q
     ${x}CommandQueueEnqueueCommandLists(hCommandQueue, 1, &hCommandList, hFence);
 
     // Wait for fence to be signaled
-    if(${X}_RESULT_SUCCESS != ${x}FenceQueryStatus(hFence))
-    {
-        ${x}HostWaitOnFence(hFence, ${X}_SYNCHRONIZATION_MODE_POLL, 0, 0, -1);
-    }
-
+    ${x}HostWaitOnFence(hFence, MAX_UINT32);
     ${x}FenceReset(hFence);
     ...
 ```
@@ -370,7 +364,6 @@ An event is used as fine-grain host-to-device, device-to-host or device-to-devic
 - An event intended to be signaled by the host, another command queue or another device after command list submission to a command queue may prevent 
   subsequent forward progress within the command queue itself.
   + This can create create bubbles in the pipeline or deadlock situations if not correctly scheduled.
-- An application can use ::${x}EventQueryElapsedTime to calculate the time (in milliseconds) between two events signalled by the same device.
 
 Events are generic synchronization primitives that can be used across many different usage-models, includes those of fences and semaphores.
 However, this generality comes with some cost in efficiency.
@@ -399,6 +392,59 @@ The following sample code demonstrates a sequence for creation and submission of
 
     // Signal the device
     ${x}HostSignalEvent(hEvent);
+    ...
+```
+
+${"##"} Performance Metrics
+Events can be used to provide different types of device performance metrics:
+1. Timestamps - records the value of the device timer at the completion of the event.
+2. Counters - records a collection of device-specific counters at the completion of the event.
+
+${"###"} Timestamps
+Timestamps are used to measure the time between two events signalled by the same device.
+- An application can use ::${x}EventQueryElapsedTime to calculate the time (in milliseconds) between two events.
+- Both events must be created with ::${X}_EVENT_FLAG_TIMESTAMP
+- Both events must be signalled
+
+The following sample code demonstrates a sequence for measuring time between events:
+```c
+    // Encode the function call to measure
+    ${x}CommandListEncodeSignalEvent(hCommandList, hEventBegin);
+    ${x}CommandListEncodeDispatchFunction(hCommandList, hFunction, &dispatchArgs, hEventEnd);
+
+    // Enqueue the command list into a command queue
+    ${x}CommandQueueEnqueueCommandLists(hCommandQueue, 1, &hCommandList, nullptr);
+
+    // Wait for the last event to complete
+    ${x}HostWaitOnEvent(hEventEnd, MAX_UINT32);
+
+    // calculate the delta time
+    double time = 0.f;
+    ${x}EventQueryElapsedTime(hEventBegin, hEventEnd, &time);
+    ...
+```
+
+${"###"} Counters
+Counters are used to collect various device-specific values between two events signalled by the same device.
+- An application can use ::${x}EventQueryMetricsData to calculate the time (in milliseconds) between two events.
+- Both events must be created with ::${X}_EVENT_FLAG_PERFORMANCE_METRICS
+- Both events must be signalled
+
+The following sample code demonstrates a sequence for collecting counters between events:
+```c
+    // Encode the function call to measure
+    ${x}CommandListEncodeSignalEvent(hCommandList, hEventBegin);
+    ${x}CommandListEncodeDispatchFunction(hCommandList, hFunction, &dispatchArgs, hEventEnd);
+
+    // Enqueue the command list into a command queue
+    ${x}CommandQueueEnqueueCommandLists(hCommandQueue, 1, &hCommandList, nullptr);
+
+    // Wait for the last event to complete
+    ${x}HostWaitOnEvent(hEventEnd, MAX_UINT32);
+
+    // calculate the delta counter values
+    uint32_t counters[64] = {};
+    ${x}EventQueryMetricsData(hEventBegin, hEventEnd, sizeof(counters), &counters);
     ...
 ```
 
@@ -542,9 +588,9 @@ The following sample code demonstrate a sequence for using coarse-grain residenc
     ${x}HostMemAlloc(${X}_HOST_MEM_ALLOC_DEFAULT, sizeof(node), 1, &begin->next->next);
 
     // 'begin' is passed as function argument and encoded into command list
-    ${x}FunctionArgsSetAttribute(hFuncArgs, ${X}_FUNCTION_ARG_ATTR_INDIRECT_HOST_ACCESS, 1);
-    ${x}FunctionArgsSetValue(hFuncArgs, 0, sizeof(node*), &begin);
-    ${x}CommandListEncodeDispatchFunction(hCommandList, hFunction, hFunctionArgs, ...);
+    ${x}FunctionSetAttribute(hFuncArgs, ${X}_FUNCTION_ARG_ATTR_INDIRECT_HOST_ACCESS, TRUE);
+    ${x}FunctionSetArgumentValue(hFunction, 0, sizeof(node*), &begin);
+    ${x}CommandListEncodeDispatchFunction(hCommandList, hFunction, &dispatchArgs, nullptr);
     ...
 
     ${x}CommandQueueEnqueueCommandLists(hCommandQueue, 1, &hCommandList, nullptr);
@@ -562,8 +608,8 @@ The following sample code demonstrate a sequence for using fine-grain residency 
     ${x}HostMemAlloc(${X}_HOST_MEM_ALLOC_DEFAULT, sizeof(node), 1, &begin->next->next);
 
     // 'begin' is passed as function argument and encoded into command list
-    ${x}FunctionArgsSetValue(hFuncArgs, 0, sizeof(node*), &begin);
-    ${x}CommandListEncodeDispatchFunction(hCommandList, hFunction, hFunctionArgs, ...);
+    ${x}FunctionSetArgumentValue(hFunction, 0, sizeof(node*), &begin);
+    ${x}CommandListEncodeDispatchFunction(hCommandList, hFunction, &dispatchArgs, nullptr);
     ...
 
     // Make indirect allocations resident before enqueuing
@@ -713,8 +759,7 @@ group size information when encoding the dispatch function into the command list
         };
 
     // Encode dispatch command
-    ${x}CommandListEncodeDispatchFunction(
-        hCommandList, hFunction, &dispatchArgs, nullptr);
+    ${x}CommandListEncodeDispatchFunction(hCommandList, hFunction, &dispatchArgs, nullptr);
 
     ...
 ```
@@ -753,16 +798,14 @@ The following sample code demonstrates a sequence for creating function args and
         };
 
     // Encode dispatch command
-    ${x}CommandListEncodeDispatchFunction(
-        hCommandList, hFunction, &dispatchArgs, nullptr );
+    ${x}CommandListEncodeDispatchFunction(hCommandList, hFunction, &dispatchArgs, nullptr);
 
     // Update image pointers to copy and scale next image.
     ${x}FunctionArgsSetValue(hFunction, 0, sizeof(${x}_image_handle_t), &src2_image);
     ${x}FunctionArgsSetValue(hFunction, 1, sizeof(${x}_image_handle_t), &dest2_image);
 
     // Encode dispatch command
-    ${x}CommandListEncodeDispatchFunction(
-        hCommandList, hFunction, &dispatchArgs, nullptr );
+    ${x}CommandListEncodeDispatchFunction(hCommandList, hFunction, &dispatchArgs, nullptr);
 
     ...
 ```
@@ -818,8 +861,7 @@ The following is sample for code creating a sampler object and passing it as a F
     ${x}FunctionArgsSetValue(hFunction, 0, sizeof(${x}_sampler_handle_t), &sampler);
 
     // Encode dispatch command
-    ${x}CommandListEncodeDispatchFunction(
-        hCommandList, hFunction, &dispatchArgs, nullptr );
+    ${x}CommandListEncodeDispatchFunctionhCommandList, hFunction, &dispatchArgs, nullptr);
 ```
 
 ${"#"} <a name="oi">OpenCL Interoperability</a>

@@ -293,66 +293,6 @@ __xedllexport xe_result_t __xecall
 }
 
 ///////////////////////////////////////////////////////////////////////////////
-/// @brief Queries the elapsed time between two signaled fences.
-/// 
-/// @details
-///     - The application may call this function from simultaneous threads.
-///     - The implementation of this function should be lock-free.
-/// 
-/// @returns
-///     - ::XE_RESULT_SUCCESS
-///     - ::XE_RESULT_ERROR_UNINITIALIZED
-///     - ::XE_RESULT_ERROR_DEVICE_LOST
-///     - ::XE_RESULT_ERROR_INVALID_PARAMETER
-///         + nullptr == hFenceStart
-///         + nullptr == hFenceEnd
-///         + nullptr == pTime
-///         + either fence not enqueued
-///     - ::XE_RESULT_ERROR_UNSUPPORTED
-///
-/// @hash {1c2693314fbeecedd7f83b4ef7d6f1e833736e26dd7bbee9d637da4a773a4caa}
-///
-__xedllexport xe_result_t __xecall
-  xeFenceQueryElapsedTime(
-    xe_fence_handle_t hFenceStart,                  ///< [in] handle of the fence
-    xe_fence_handle_t hFenceEnd,                    ///< [in] handle of the fence
-    double* pTime                                   ///< [out] time in milliseconds
-    )
-{
-    try
-    {
-        //if( XE_DRIVER_PARAMETER_VALIDATION_LEVEL >= 0 )
-        {
-            // if( nullptr == driver ) return XE_RESULT_ERROR_UNINITIALIZED;
-            // Check parameters
-            if( nullptr == hFenceStart ) return XE_RESULT_ERROR_INVALID_PARAMETER;
-            if( nullptr == hFenceEnd ) return XE_RESULT_ERROR_INVALID_PARAMETER;
-            if( nullptr == pTime ) return XE_RESULT_ERROR_INVALID_PARAMETER;
-        }
-        /// @begin
-#if defined(XE_NULLDRV)
-        return XE_RESULT_SUCCESS;
-#else
-        return L0::fenceQueryElapsedTime(hFenceStart->getHandle(), hFenceEnd->getHandle(), pTime);
-#endif
-        /// @end
-    }
-    catch(xe_result_t& result)
-    {
-        return result;
-    }
-    catch(std::bad_alloc&)
-    {
-        return XE_RESULT_ERROR_OUT_OF_HOST_MEMORY;
-    }
-    catch(std::exception&)
-    {
-        // @todo: pfnOnException(e.what());
-        return XE_RESULT_ERROR_UNKNOWN;
-    }
-}
-
-///////////////////////////////////////////////////////////////////////////////
 /// @brief Reset a fence back to the not signaled state.
 /// 
 /// @details

@@ -219,8 +219,8 @@ details:
     - "The implementation of this function should be lock-free."
 params:
     - type: $x_event_handle_t
-      name: hEventStart
-      desc: "[in] handle of the start event"
+      name: hEventBegin
+      desc: "[in] handle of the begin event"
     - type: $x_event_handle_t
       name: hEventEnd
       desc: "[in] handle of the end event"
