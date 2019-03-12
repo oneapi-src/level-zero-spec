@@ -18,7 +18,8 @@ using ::testing::Return;
 
 TEST(xeCommandListClose, redirectsToObject) {
     Mock<CommandList> cmdList;
-    EXPECT_CALL(cmdList, close()).Times(1);
+    EXPECT_CALL(cmdList, close())
+        .Times(1);
 
     auto result = xeCommandListClose(cmdList.toHandle());
     EXPECT_EQ(XE_RESULT_SUCCESS, result);
@@ -26,9 +27,10 @@ TEST(xeCommandListClose, redirectsToObject) {
 
 using CommandListClose = ::testing::Test;
 
-HWTEST_F(CommandListClose, addsBatchBufferEndToCommandStream) {
+HWTEST2_F(CommandListClose, addsBatchBufferEndToCommandStream, MatchAny) {
     Mock<Device> device;
-    EXPECT_CALL(device, getMemoryManager).Times(AnyNumber());
+    EXPECT_CALL(device, getMemoryManager)
+        .Times(AnyNumber());
 
     auto commandList = whitebox_cast(CommandList::create(productFamily, &device));
     ASSERT_NE(nullptr, commandList->commandStream);
