@@ -310,45 +310,11 @@ __xedllport xe_result_t __xecall
     );
 
 ///////////////////////////////////////////////////////////////////////////////
-/// @brief Support command formats
-typedef enum _xe_command_format_t
-{
-    XE_COMMAND_FORMAT_NATIVE,                       ///< The commands are native device-specific format
-
-} xe_command_format_t;
-
-///////////////////////////////////////////////////////////////////////////////
-/// @brief Encode a pre-formatted blob of commands into the comamnd list.
-/// 
-/// @details
-///     - The commands are gaurenteed to be contiguous in the command buffer
-///     - The application may **not** call this function from simultaneous
-///       threads with the same command list handle.
-///     - The implementation of this function should be lock-free.
-/// 
-/// @returns
-///     - ::XE_RESULT_SUCCESS
-///     - ::XE_RESULT_ERROR_UNINITIALIZED
-///     - ::XE_RESULT_ERROR_DEVICE_LOST
-///     - ::XE_RESULT_ERROR_INVALID_PARAMETER
-///         + nullptr == hCommandList
-///         + nullptr == pBlob
-///         + invalid value for format
-///         + 0 for size
-///     - ::XE_RESULT_ERROR_UNSUPPORTED
-__xedllport xe_result_t __xecall
-  xeCommandListEncodeCommands(
-    xe_command_list_handle_t hCommandList,          ///< [in] handle of the command list
-    xe_command_format_t format,                     ///< [in] format of the command blob
-    size_t size,                                    ///< [in] size (in bytes) of the command blob
-    void* pBlob                                     ///< [in] pointer to blob of commands to encode into the command list
-    );
-
-///////////////////////////////////////////////////////////////////////////////
 /// @brief Reserve a section of contiguous command buffer space within the
 ///        command list.
 /// 
 /// @details
+///     - The pointer returned is valid for both Host and device access.
 ///     - The application may **not** call this function from simultaneous
 ///       threads with the same command list handle.
 ///     - The implementation of this function should be lock-free.

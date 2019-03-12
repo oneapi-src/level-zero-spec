@@ -63,14 +63,6 @@ namespace xe
         };
 
         ///////////////////////////////////////////////////////////////////////////////
-        /// @brief C++ version for ::xe_command_format_t
-        enum class command_format_t
-        {
-            NATIVE,                                         ///< The commands are native device-specific format
-
-        };
-
-        ///////////////////////////////////////////////////////////////////////////////
         /// @brief C++ version for ::xe_memory_advice_t
         enum class memory_advice_t
         {
@@ -150,14 +142,6 @@ namespace xe
         inline void EncodeCommandLists(
             uint32_t numCommandLists,                       ///< [in] number of command lists to encode
             command_list_handle_t* phCommandLists           ///< [in] list of handles of the command lists to encode for execution
-            );
-
-        ///////////////////////////////////////////////////////////////////////////////
-        /// @brief C++ wrapper for ::xeCommandListEncodeCommands
-        inline void EncodeCommands(
-            command_format_t format,                        ///< [in] format of the command blob
-            size_t size,                                    ///< [in] size (in bytes) of the command blob
-            void* pBlob                                     ///< [in] pointer to blob of commands to encode into the command list
             );
 
         ///////////////////////////////////////////////////////////////////////////////

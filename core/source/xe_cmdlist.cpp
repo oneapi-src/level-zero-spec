@@ -583,72 +583,11 @@ __xedllexport xe_result_t __xecall
 }
 
 ///////////////////////////////////////////////////////////////////////////////
-/// @brief Encode a pre-formatted blob of commands into the comamnd list.
-/// 
-/// @details
-///     - The commands are gaurenteed to be contiguous in the command buffer
-///     - The application may **not** call this function from simultaneous
-///       threads with the same command list handle.
-///     - The implementation of this function should be lock-free.
-/// 
-/// @returns
-///     - ::XE_RESULT_SUCCESS
-///     - ::XE_RESULT_ERROR_UNINITIALIZED
-///     - ::XE_RESULT_ERROR_DEVICE_LOST
-///     - ::XE_RESULT_ERROR_INVALID_PARAMETER
-///         + nullptr == hCommandList
-///         + nullptr == pBlob
-///         + invalid value for format
-///         + 0 for size
-///     - ::XE_RESULT_ERROR_UNSUPPORTED
-///
-/// @hash {4ee4c7f667ccfeddde2cf709cea446468d2e5a3703c9233d89defae89ed61118}
-///
-__xedllexport xe_result_t __xecall
-  xeCommandListEncodeCommands(
-    xe_command_list_handle_t hCommandList,          ///< [in] handle of the command list
-    xe_command_format_t format,                     ///< [in] format of the command blob
-    size_t size,                                    ///< [in] size (in bytes) of the command blob
-    void* pBlob                                     ///< [in] pointer to blob of commands to encode into the command list
-    )
-{
-    try
-    {
-        //if( XE_DRIVER_PARAMETER_VALIDATION_LEVEL >= 0 )
-        {
-            // if( nullptr == driver ) return XE_RESULT_ERROR_UNINITIALIZED;
-            // Check parameters
-            if( nullptr == hCommandList ) return XE_RESULT_ERROR_INVALID_PARAMETER;
-            if( nullptr == pBlob ) return XE_RESULT_ERROR_INVALID_PARAMETER;
-        }
-        /// @begin
-#if defined(XE_NULLDRV)
-        return XE_RESULT_SUCCESS;
-#else
-        return L0::CommandList::fromHandle(hCommandList)->encodeCommands(format, size, pBlob);
-#endif
-        /// @end
-    }
-    catch(xe_result_t& result)
-    {
-        return result;
-    }
-    catch(std::bad_alloc&)
-    {
-        return XE_RESULT_ERROR_OUT_OF_HOST_MEMORY;
-    }
-    catch(std::exception&)
-    {
-        // @todo: pfnOnException(e.what());
-        return XE_RESULT_ERROR_UNKNOWN;
-    }
-}
-
-///////////////////////////////////////////////////////////////////////////////
 /// @brief Reserve a section of contiguous command buffer space within the
 ///        command list.
 /// 
 /// @details
+///     - The pointer returned is valid for both Host and device access.
 ///     - The application may **not** call this function from simultaneous
 ///       threads with the same command list handle.
 ///     - The implementation of this function should be lock-free.

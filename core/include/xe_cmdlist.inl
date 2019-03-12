@@ -117,18 +117,6 @@ namespace xe
     }
 
     ///////////////////////////////////////////////////////////////////////////////
-    /// @brief C++ wrapper for ::xeCommandListEncodeCommands
-    inline void CommandList::EncodeCommands(
-        command_format_t format,                        ///< [in] format of the command blob
-        size_t size,                                    ///< [in] size (in bytes) of the command blob
-        void* pBlob                                     ///< [in] pointer to blob of commands to encode into the command list
-        )
-    {
-        // auto result = ::xeCommandListEncodeCommands( handle, format, size, pBlob );
-        // if( ::XE_RESULT_SUCCESS != result ) throw exception(result, "xe::CommandList::EncodeCommands");
-    }
-
-    ///////////////////////////////////////////////////////////////////////////////
     /// @brief C++ wrapper for ::xeCommandListReserveSpace
     inline void CommandList::ReserveSpace(
         size_t size,                                    ///< [in] size (in bytes) to reserve

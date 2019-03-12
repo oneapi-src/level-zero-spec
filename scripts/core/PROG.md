@@ -15,6 +15,8 @@ ${"##"} Table of Contents
 * [Modules and Functions](#mnf)
 * [OpenCL Interoperability](#oi)
 * [Inter-Process Communication](#ipc)
+* [Experimental](#exp)
+* [Debug and Instrumentation Layers](#dbg)
 * [Future](#fut)
 
 ${"#"} <a name="dnd">Driver and Device</a>
@@ -946,6 +948,22 @@ Note, there is no guaranteed address equivalence for the values of `dptr` in eac
     ${x}MemFree(dptr);
 ```
 
+${"#"} <a name="exp">Experimental</a>
+The following experimental features are provided only for the development and refinement of future APIs.
+These APIs are **not** supported by production drivers without explicit end-user opt-in.
+
+${"##"} Device-Specific Commands
+$xCommandListReserveSpace provides direct access to the command list's command buffers in order to allow unrestricted access the device's capabilities.
+The application is solely responsible for ensuring the commands are valid and correct for the specific device.
+
+```c
+    void* ptr = nullptr;
+    ${x}CommandListReserveSpace(hCommandList, sizeof(blob), &ptr);
+    ::memcpy(ptr, blob, sizeof(blob));
+```
+
+${"#"} <a name="dbg">Debug and Instrumentation Layers</a>
+
 ${"#"} <a name="fut">Future</a>
 The following is a list a features that are still being defined for inclusion:
 - **Command Graphs**
@@ -956,8 +974,6 @@ The following is a list a features that are still being defined for inclusion:
     + ability to cull program execution within a command list, based on device-generated value(s)
 - **Execution Flow-Control**
     + ability to describe loops and if-else-then type program execution within a command list, based on device-generated value(s)
-- **Timestamps and Metrics**
-    + ability to retrieve device-specific counters for performance analysis, tuning and tooling
 - **Execute Indirect**
     + ability for the device to generate and enqueue more work (better version of device-side enqueue)
 - **C++ Interfaces**
