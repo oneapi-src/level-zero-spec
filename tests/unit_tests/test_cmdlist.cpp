@@ -23,13 +23,13 @@ TEST(xeCommandListDestroy, redirectsToObject) {
 using ::testing::_;
 using ::testing::AnyNumber;
 using ::testing::Return;
-using CommandListCreate = ::testing::TestWithParam<uint32_t>;
+using CommandListCreate = ::testing::Test;
 
-TEST_P(CommandListCreate, returnsCommandListOnSuccess) {
+TEST(CommandListCreate, returnsCommandListOnSuccess) {
     Mock<Device> device;
     EXPECT_CALL(device, getMemoryManager).Times(AnyNumber());
 
-    auto commandList = whitebox_cast(CommandList::create(GetParam(), &device));
+    auto commandList = whitebox_cast(CommandList::create(productFamily, &device));
     ASSERT_NE(nullptr, commandList);
 
     EXPECT_EQ(&device, commandList->device);
@@ -55,31 +55,11 @@ TEST_P(CommandListCreate, returnsCommandListOnSuccess) {
     commandList->destroy();
 }
 
-static uint32_t supportedProductFamilyTable[] = {
-    IGFX_KABYLAKE,
-    IGFX_SKYLAKE,
-};
-
-INSTANTIATE_TEST_CASE_P(,
-                        CommandListCreate,
-                        ::testing::ValuesIn(supportedProductFamilyTable));
-
-using CommandListCreateFail = ::testing::TestWithParam<uint32_t>;
-
-TEST_P(CommandListCreateFail, returnsNullPointerOnFailure) {
+TEST_F(CommandListCreate, givenInvalidProductFamilyReturnsNullPointer) {
     Mock<Device> device;
-    auto commandList = CommandList::create(GetParam(), &device);
+    auto commandList = CommandList::create(IGFX_UNKNOWN, &device);
     EXPECT_EQ(nullptr, commandList);
 }
-
-static uint32_t unsupportedProductFamilyTable[] = {
-    IGFX_HASWELL,
-    IGFX_MAX_PRODUCT,
-};
-
-INSTANTIATE_TEST_CASE_P(,
-                        CommandListCreateFail,
-                        ::testing::ValuesIn(unsupportedProductFamilyTable));
 
 GEN9TEST_F(CommandListCreate, addsPipelineSelectBeforeVfeStateToBatchBuffer) {
     Mock<Device> device;
