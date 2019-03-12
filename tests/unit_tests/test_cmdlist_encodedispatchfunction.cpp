@@ -10,6 +10,7 @@
 #include "mock_module.h"
 #include "mock_module_precompiled.h"
 #include "runtime/command_stream/linear_stream.h"
+#include "runtime/helpers/string.h"
 #include "runtime/indirect_heap/indirect_heap.h"
 #include "unit_tests/gen_common/gen_cmd_parse.h"
 #include "gmock/gmock.h"
@@ -241,6 +242,52 @@ ATSTEST_F(CommandListEncodeDispatchFunction, copiesThreadDataToGeneralStateHeap)
         EXPECT_EQ(memcmp(ptrHeap, function->getPerThreadDataHostMem(), function->getPerThreadDataSize()), 0u);
         ptrHeap = ptrOffset(ptrHeap, function->getPerThreadDataSize());
     }
+}
+
+ATSTEST_F(CommandListEncodeDispatchFunction, growsGeneralStateHeapIfNeededAndPreservesOldContents) {
+    createFunction("MemcpyBytes");
+
+    using COMPUTE_WALKER = typename FamilyType::COMPUTE_WALKER;
+    using INTERFACE_DESCRIPTOR_DATA = typename FamilyType::INTERFACE_DESCRIPTOR_DATA;
+
+    auto heap = commandList->indirectHeaps[CommandList::GENERAL_STATE];
+    ASSERT_EQ(0U, heap->getUsed());
+    heap->overrideMaxSize(COMPUTE_WALKER::INDIRECTDATASTARTADDRESS_ALIGN_SIZE);
+    auto preocupiedMemSize = heap->getAvailableSpace() - 1;
+    void *preocupiedMem = heap->getSpace(preocupiedMemSize);
+    std::vector<char> precopiedMemPattern(preocupiedMemSize, 7);
+    memcpy_s(preocupiedMem, preocupiedMemSize, precopiedMemPattern.data(), precopiedMemPattern.size());
+
+    auto result = commandList->encodeDispatchFunction(function->toHandle(),
+                                                      &dispatchFunctionArguments,
+                                                      nullptr);
+    ASSERT_EQ(XE_RESULT_SUCCESS, result);
+
+    auto usedSpaceAfter = commandList->commandStream->getUsed();
+    GenCmdList cmdList;
+    ASSERT_TRUE(FamilyType::PARSE::parseCommandBuffer(cmdList,
+                                                      ptrOffset(commandList->commandStream->getCpuBase(), 0),
+                                                      usedSpaceAfter));
+
+    auto itor = find<COMPUTE_WALKER *>(cmdList.begin(), cmdList.end());
+    ASSERT_NE(cmdList.end(), itor);
+
+    {
+        auto cmd = genCmdCast<COMPUTE_WALKER *>(*itor);
+
+        auto indirectDataLength = function->getPerThreadDataSize() +
+                                  function->getCrossThreadDataSize();
+        EXPECT_GE(cmd->getIndirectDataLength(), 0u);
+        EXPECT_LE(cmd->getIndirectDataLength(), indirectDataLength);
+
+        auto ptrHeap = ptrOffset(heap->getCpuBase(), cmd->getIndirectDataStartAddress());
+        EXPECT_EQ(memcmp(ptrHeap, function->getCrossThreadDataHostMem(), function->getCrossThreadDataSize()), 0u);
+        ptrHeap = ptrOffset(ptrHeap, function->getCrossThreadDataSize());
+        EXPECT_EQ(memcmp(ptrHeap, function->getPerThreadDataHostMem(), function->getPerThreadDataSize()), 0u);
+        ptrHeap = ptrOffset(ptrHeap, function->getPerThreadDataSize());
+    }
+
+    EXPECT_EQ(0U, memcmp(precopiedMemPattern.data(), heap->getCpuBase(), precopiedMemPattern.size()));
 }
 
 using CommandListEncodeDispatchFunctionGEN9 = CommandListEncodeDispatchFunction;

@@ -5,10 +5,84 @@
 #include "module.h"
 #include "runtime/command_stream/linear_stream.h"
 #include "runtime/helpers/hw_info.h"
+#include "runtime/helpers/string.h"
 #include "runtime/indirect_heap/indirect_heap.h"
 #include <cassert>
 
 namespace L0 {
+
+template <CommandList::Type HeapType>
+struct StateBaseAddressHeap {
+    template <uint32_t gfxCoreFamily>
+    static void set(void *sbaAddress, OCLRT::IndirectHeap &heap);
+};
+
+template <>
+template <uint32_t gfxCoreFamily>
+inline void StateBaseAddressHeap<CommandList::DYNAMIC_STATE>::set(void *sbaAddress, OCLRT::IndirectHeap &heap) {
+    using GfxFamily = typename OCLRT::GfxFamilyMapper<static_cast<GFXCORE_FAMILY>(gfxCoreFamily)>::GfxFamily;
+    using STATE_BASE_ADDRESS = typename GfxFamily::STATE_BASE_ADDRESS;
+    STATE_BASE_ADDRESS *cmd = static_cast<STATE_BASE_ADDRESS *>(sbaAddress);
+    cmd->setDynamicStateBaseAddressModifyEnable(true);
+    cmd->setDynamicStateBaseAddress(heap.getHeapGpuBase());
+    cmd->setDynamicStateBufferSizeModifyEnable(true);
+    cmd->setDynamicStateBufferSize(static_cast<uint32_t>(heap.getMaxAvailableSpace()));
+}
+
+template <>
+template <uint32_t gfxCoreFamily>
+inline void StateBaseAddressHeap<CommandList::GENERAL_STATE>::set(void *sbaAddress, OCLRT::IndirectHeap &heap) {
+    using GfxFamily = typename OCLRT::GfxFamilyMapper<static_cast<GFXCORE_FAMILY>(gfxCoreFamily)>::GfxFamily;
+    using STATE_BASE_ADDRESS = typename GfxFamily::STATE_BASE_ADDRESS;
+    STATE_BASE_ADDRESS *cmd = static_cast<STATE_BASE_ADDRESS *>(sbaAddress);
+    cmd->setGeneralStateBaseAddressModifyEnable(true);
+    cmd->setGeneralStateBaseAddress(heap.getHeapGpuBase());
+    cmd->setGeneralStateBufferSizeModifyEnable(true);
+    cmd->setGeneralStateBufferSize(static_cast<uint32_t>(heap.getMaxAvailableSpace()));
+}
+
+template <>
+template <uint32_t gfxCoreFamily>
+inline void StateBaseAddressHeap<CommandList::INDIRECT_OBJECT>::set(void *sbaAddress, OCLRT::IndirectHeap &heap) {
+    using GfxFamily = typename OCLRT::GfxFamilyMapper<static_cast<GFXCORE_FAMILY>(gfxCoreFamily)>::GfxFamily;
+    using STATE_BASE_ADDRESS = typename GfxFamily::STATE_BASE_ADDRESS;
+    STATE_BASE_ADDRESS *cmd = static_cast<STATE_BASE_ADDRESS *>(sbaAddress);
+    cmd->setIndirectObjectBaseAddressModifyEnable(true);
+    cmd->setIndirectObjectBaseAddress(heap.getHeapGpuBase());
+    cmd->setIndirectObjectBufferSizeModifyEnable(true);
+    cmd->setIndirectObjectBufferSize(static_cast<uint32_t>(heap.getMaxAvailableSpace()));
+}
+
+template <>
+template <uint32_t gfxCoreFamily>
+inline void StateBaseAddressHeap<CommandList::SURFACE_STATE>::set(void *sbaAddress, OCLRT::IndirectHeap &heap) {
+    using GfxFamily = typename OCLRT::GfxFamilyMapper<static_cast<GFXCORE_FAMILY>(gfxCoreFamily)>::GfxFamily;
+    using STATE_BASE_ADDRESS = typename GfxFamily::STATE_BASE_ADDRESS;
+    STATE_BASE_ADDRESS *cmd = static_cast<STATE_BASE_ADDRESS *>(sbaAddress);
+    cmd->setSurfaceStateBaseAddressModifyEnable(true);
+    cmd->setSurfaceStateBaseAddress(heap.getHeapGpuBase());
+}
+
+template <uint32_t gfxCoreFamily>
+void setHeap(void *sbaAddress, CommandList::Type heapType, OCLRT::IndirectHeap &heap) {
+    switch (heapType) {
+    default:
+        assert(0);
+        break;
+    case CommandList::DYNAMIC_STATE:
+        StateBaseAddressHeap<CommandList::DYNAMIC_STATE>::set<gfxCoreFamily>(sbaAddress, heap);
+        break;
+    case CommandList::GENERAL_STATE:
+        StateBaseAddressHeap<CommandList::GENERAL_STATE>::set<gfxCoreFamily>(sbaAddress, heap);
+        break;
+    case CommandList::INDIRECT_OBJECT:
+        StateBaseAddressHeap<CommandList::INDIRECT_OBJECT>::set<gfxCoreFamily>(sbaAddress, heap);
+        break;
+    case CommandList::SURFACE_STATE:
+        StateBaseAddressHeap<CommandList::SURFACE_STATE>::set<gfxCoreFamily>(sbaAddress, heap);
+        break;
+    }
+}
 
 template <uint32_t gfxCoreFamily>
 bool CommandListCoreFamily<gfxCoreFamily>::initialize() {
@@ -25,10 +99,7 @@ bool CommandListCoreFamily<gfxCoreFamily>::initialize() {
         {
             auto heap = this->indirectHeaps[DYNAMIC_STATE];
             assert(heap != nullptr);
-            cmd.setDynamicStateBaseAddressModifyEnable(true);
-            cmd.setDynamicStateBaseAddress(heap->getHeapGpuBase());
-            cmd.setDynamicStateBufferSizeModifyEnable(true);
-            cmd.setDynamicStateBufferSize(static_cast<uint32_t>(heap->getMaxAvailableSpace()));
+            StateBaseAddressHeap<DYNAMIC_STATE>::set<gfxCoreFamily>(&cmd, *heap);
         }
 
         {
@@ -42,36 +113,61 @@ bool CommandListCoreFamily<gfxCoreFamily>::initialize() {
         {
             auto heap = this->indirectHeaps[GENERAL_STATE];
             assert(heap != nullptr);
-            cmd.setGeneralStateBaseAddressModifyEnable(true);
-            cmd.setGeneralStateBaseAddress(heap->getHeapGpuBase());
-            cmd.setGeneralStateBufferSizeModifyEnable(true);
-            cmd.setGeneralStateBufferSize(static_cast<uint32_t>(heap->getMaxAvailableSpace()));
+            StateBaseAddressHeap<GENERAL_STATE>::set<gfxCoreFamily>(&cmd, *heap);
         }
 
         {
             auto heap = this->indirectHeaps[INDIRECT_OBJECT];
             assert(heap != nullptr);
-            cmd.setIndirectObjectBaseAddressModifyEnable(true);
-            cmd.setIndirectObjectBaseAddress(heap->getHeapGpuBase());
-            cmd.setIndirectObjectBufferSizeModifyEnable(true);
-            cmd.setIndirectObjectBufferSize(static_cast<uint32_t>(heap->getMaxAvailableSpace()));
+            StateBaseAddressHeap<INDIRECT_OBJECT>::set<gfxCoreFamily>(&cmd, *heap);
         }
 
         {
             auto heap = this->indirectHeaps[SURFACE_STATE];
             assert(heap != nullptr);
-            cmd.setSurfaceStateBaseAddressModifyEnable(true);
-            cmd.setSurfaceStateBaseAddress(heap->getHeapGpuBase());
+            StateBaseAddressHeap<SURFACE_STATE>::set<gfxCoreFamily>(&cmd, *heap);
         }
 
         auto buffer = commandStream->getSpace(sizeof(cmd));
         *(STATE_BASE_ADDRESS *)buffer = cmd;
+        this->sba = buffer;
     }
 
     enableGpgpu();
     programFrontEndState();
 
     return XE_RESULT_SUCCESS;
+}
+
+template <uint32_t gfxCoreFamily>
+void *CommandListCoreFamily<gfxCoreFamily>::getHeapSpaceAllowGrow(OCLRT::IndirectHeap &indirectHeap, size_t size) {
+    if (indirectHeap.getAvailableSpace() < size) {
+        // grow
+        auto memoryManager = device->getMemoryManager();
+
+        size_t newSize = indirectHeap.getUsed() + indirectHeap.getAvailableSpace();
+        newSize *= 2; // grow by factor of 2
+        newSize = std::max(newSize, indirectHeap.getAvailableSpace() + size);
+        newSize = alignUp(newSize, 4096U);
+        auto oldAlloc = indirectHeap.getGraphicsAllocation();
+        auto newAlloc = memoryManager->allocateDeviceMemory(newSize, 4096u);
+        assert(oldAlloc);
+        assert(newAlloc);
+        auto alreadyUsedSize = indirectHeap.getUsed();
+        indirectHeap.replaceGraphicsAllocation(newAlloc->allocationRT);
+        indirectHeap.replaceBuffer(newAlloc->allocationRT->getUnderlyingBuffer(), newAlloc->allocationRT->getUnderlyingBufferSize());
+        memcpy_s(indirectHeap.getSpace(alreadyUsedSize), alreadyUsedSize, oldAlloc->getUnderlyingBuffer(), alreadyUsedSize);
+        *std::find(residencyContainer.begin(), residencyContainer.end(), oldAlloc) = newAlloc->allocationRT;
+        for (uint32_t heapType = 0; heapType < NUM_HEAPS; ++heapType) {
+            if (this->allocationIndirectHeaps[heapType]->allocationRT == oldAlloc) {
+                allocationIndirectHeaps[heapType] = newAlloc;
+                setHeap<gfxCoreFamily>(this->sba, static_cast<Type>(heapType), *indirectHeaps[heapType]);
+                break;
+            }
+        }
+        delete oldAlloc;
+    }
+    return indirectHeap.getSpace(size);
 }
 
 template <uint32_t gfxCoreFamily>
@@ -174,7 +270,7 @@ xe_result_t CommandListCoreFamily<gfxCoreFamily>::encodeDispatchFunction(xe_func
         assert(heap);
 
         auto sizeIDD = sizeof(INTERFACE_DESCRIPTOR_DATA);
-        auto ptr = heap->getSpace(sizeIDD);
+        auto ptr = getHeapSpaceAllowGrow(*heap, sizeIDD);
         assert(ptr);
         auto offset = ptrDiff(ptr, heap->getCpuBase());
         assert(offset + sizeIDD <= heap->getMaxAvailableSpace());
@@ -220,7 +316,7 @@ xe_result_t CommandListCoreFamily<gfxCoreFamily>::encodeDispatchFunction(xe_func
 
         auto sizeThreadData = sizePerThreadData + sizeCrossThreadData;
 
-        auto ptr = heap->getSpace(sizeThreadData);
+        auto ptr = getHeapSpaceAllowGrow(*heap, sizeThreadData);
         assert(ptr);
         auto offset = ptrDiff(ptr, heap->getCpuBase());
         assert(offset + sizeThreadData <= heap->getMaxAvailableSpace());

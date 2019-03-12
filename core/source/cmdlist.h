@@ -20,7 +20,7 @@ struct CommandList : public _xe_command_list_handle_t {
         }
     };
 
-    enum Type : uint32_t {
+    enum Type : uint32_t { // TODO: Remove - after moving ISA to 4GB heap - this is a duplicate of NEO's counterpart
         DYNAMIC_STATE = 0u,
         GENERAL_STATE,
         INDIRECT_OBJECT,

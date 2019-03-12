@@ -73,7 +73,7 @@ xe_result_t CommandListCoreFamily<IGFX_GEN12_CORE>::encodeDispatchFunction(xe_fu
         auto sizeCrossThreadData = static_cast<uint32_t>(function->getCrossThreadDataSize());
         auto sizePerThreadData = static_cast<uint32_t>(function->getPerThreadDataSize());
         auto sizeThreadData = sizePerThreadData + sizeCrossThreadData;
-        auto ptr = heap->getSpace(sizeThreadData);
+        auto ptr = getHeapSpaceAllowGrow(*heap, sizeThreadData);
         assert(ptr);
         auto offset = ptrDiff(ptr, heap->getCpuBase());
         assert(offset + sizeThreadData <= heap->getMaxAvailableSpace());

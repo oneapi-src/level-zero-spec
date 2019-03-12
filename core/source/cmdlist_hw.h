@@ -15,6 +15,7 @@ struct CommandListCoreFamily : public CommandListImp {
     void programL3();
     void enableGpgpu();
     void programFrontEndState();
+    void *getHeapSpaceAllowGrow(OCLRT::IndirectHeap &indirectHeap, size_t size);
 
     xe_result_t close() override;
     xe_result_t encodeCommandLists(uint32_t numCommandLists,
@@ -72,6 +73,9 @@ struct CommandListCoreFamily : public CommandListImp {
     xe_result_t resetParameters() override;
     xe_result_t setParameter(xe_command_list_parameter_t parameter,
                              uint32_t value) override;
+
+  protected:
+    void *sba = nullptr;
 };
 
 template <uint32_t gfxProductFamily>

@@ -53,7 +53,7 @@ bool CommandListImp::initialize() {
 
     // Allocate memory for each of our indirect state heaps
     for (auto &allocationIndirectHeap : allocationIndirectHeaps) {
-        allocationIndirectHeap = memoryManager->allocateDeviceMemory(16384u, 4096u); 
+        allocationIndirectHeap = memoryManager->allocateDeviceMemory(16384u, 4096u);
         residencyContainer.push_back(allocationIndirectHeap->allocationRT);
     }
 
