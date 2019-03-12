@@ -31,12 +31,9 @@ struct SupportedProductFamilyContainer<productFamily, args...> : SupportedProduc
 
     template <unsigned int ordinal>
     static constexpr PRODUCT_FAMILY get() {
-        return BaseClass::get<ordinal - 1>();
-    }
-
-    template <>
-    static constexpr PRODUCT_FAMILY get<0>() {
-        return productFamily;
+        return ordinal > 0 
+            ? BaseClass::get<ordinal - 1>()
+            : productFamily;
     }
 };
 
