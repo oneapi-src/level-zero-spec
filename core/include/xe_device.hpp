@@ -339,6 +339,14 @@ namespace xe
         };
 
         ///////////////////////////////////////////////////////////////////////////////
+        /// @brief C++ version for ::xe_device_uuid_t
+        struct device_uuid_t
+        {
+            uint8_t id[XE_MAX_UUID_SIZE];                   ///< [out] device universal unique id
+
+        };
+
+        ///////////////////////////////////////////////////////////////////////////////
         /// @brief C++ version for ::xe_device_properties_t
         struct device_properties_t
         {

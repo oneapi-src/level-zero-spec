@@ -60,14 +60,14 @@ The following sample code demonstrates a basic initialization sequence:
         return;
     }
 
-    uint32_t* uniqueIds = (uint32_t*)malloc(deviceCount * sizeof(uint32_t));
-    xeDriverGetDeviceUniqueIds(deviceCount, uniqueIds);
+    xe_device_uuid_t* pUUIDs = (uint32_t*)malloc(deviceCount * sizeof(xe_device_uuid_t));
+    xeDriverGetDeviceUniqueIds(deviceCount, pUUIDs);
 
     // Get the handle for device that supports required API version
     xe_device_handle_t hDevice;
     for(uint32_t i = 0; i < deviceCount; ++i)
     {
-        xeDriverGetDevice(uniqueIds[i], &hDevice);
+        xeDriverGetDevice(pUUIDs[i], &hDevice);
         
         xe_api_version_t version;
         xeDeviceGetApiVersion(hDevice, &version);

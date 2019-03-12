@@ -16,6 +16,20 @@ params:
       name: count
       desc: "[out] number of devices available"
 --- #--------------------------------------------------------------------------
+type: macro
+desc: "Maximum device uuid size in bytes"
+name: $X_MAX_UUID_SIZE
+value: "16"
+--- #--------------------------------------------------------------------------
+type: struct
+desc: "Device universal unique id (UUID)"
+class: $xDevice
+name: $x_device_uuid_t
+members:
+    - type: uint8_t
+      name: id[$X_MAX_UUID_SIZE]
+      desc: "[out] device universal unique id"
+--- #--------------------------------------------------------------------------
 type: function
 desc: "Retrieve "
 class: $xDriver
@@ -30,7 +44,7 @@ params:
     - type: uint32_t
       name: count
       desc: "[in] size of device unique ids array. Typically, this will be ${x}DeviceGetCount."
-    - type: "uint32_t*"
+    - type: "$x_device_uuid_t*"
       name: pUniqueIds
       desc: "[out] pointer to an array of unique ids for devices. Caller must supply array."
 returns:
@@ -48,8 +62,8 @@ details:
     - "The application may call this function from simultaneous threads."
     - "The implementation of this function should be lock-free."
 params:
-    - type: uint32_t
-      name: uniqueId
+    - type: $x_device_uuid_t*
+      name: pUUID
       desc: "[in] unique id of device to retrieve. Use ${x}DriverGetDeviceUniqueIds to obtain a unique Id."
     - type: "$x_device_handle_t*"
       name: phDevice

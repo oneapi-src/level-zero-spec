@@ -117,13 +117,13 @@ __xedllexport xe_result_t __xecall
 ///         + invalid unique id.
 ///     - ::XE_RESULT_ERROR_UNSUPPORTED
 ///
-/// @hash {c26ed99dfec278253de324f242d61516b146acd882d0894d8208cfed698fd1d1}
+/// @hash {24e74b8964d6a14365f1dad2176f01a73114e0331ab5c1bdf0b0826d2d0ea10f}
 ///
 __xedllexport xe_result_t __xecall
   xeDriverGetDeviceUniqueIds(
     uint32_t count,                                 ///< [in] size of device unique ids array. Typically, this will be
                                                     ///< ${x}DeviceGetCount.
-    uint32_t* pUniqueIds                            ///< [out] pointer to an array of unique ids for devices. Caller must
+    xe_device_uuid_t* pUniqueIds                    ///< [out] pointer to an array of unique ids for devices. Caller must
                                                     ///< supply array.
     )
 {
@@ -174,15 +174,16 @@ __xedllexport xe_result_t __xecall
 ///     - ::XE_RESULT_ERROR_UNINITIALIZED
 ///     - ::XE_RESULT_ERROR_DEVICE_LOST
 ///     - ::XE_RESULT_ERROR_INVALID_PARAMETER
+///         + nullptr == pUUID
 ///         + nullptr == phDevice
 ///         + ordinal is out of range reported by ::xeDriverGetDeviceCount
 ///     - ::XE_RESULT_ERROR_UNSUPPORTED
 ///
-/// @hash {0fcaea081072b19126b15d5ddf6bf62c8c5a75b8647a0176af861cfb0adb1697}
+/// @hash {4fc8772e02ce62737b676e08228559feb60212243a7756fdf6b40d6d96c92e24}
 ///
 __xedllexport xe_result_t __xecall
   xeDriverGetDevice(
-    uint32_t uniqueId,                              ///< [in] unique id of device to retrieve. Use ${x}DriverGetDeviceUniqueIds
+    xe_device_uuid_t* pUUID,                        ///< [in] unique id of device to retrieve. Use ${x}DriverGetDeviceUniqueIds
                                                     ///< to obtain a unique Id.
     xe_device_handle_t* phDevice                    ///< [out] pointer to handle of device object created
     )
@@ -192,13 +193,14 @@ __xedllexport xe_result_t __xecall
         //if( XE_DRIVER_PARAMETER_VALIDATION_LEVEL >= 0 )
         {
             // Check parameters
+            if( nullptr == pUUID ) return XE_RESULT_ERROR_INVALID_PARAMETER;
             if( nullptr == phDevice ) return XE_RESULT_ERROR_INVALID_PARAMETER;
         }
         /// @begin
 #if defined(XE_NULLDRV)
         return XE_RESULT_SUCCESS;
 #else
-        return L0::Driver::get()->getDevice(uniqueId, phDevice->getHandle());
+        return L0::Driver::get()->getDevice(pUUID, phDevice->getHandle());
 #endif
         /// @end
     }

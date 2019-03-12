@@ -60,14 +60,14 @@ The following sample code demonstrates a basic initialization sequence:
         return;
     }
 
-    uint32_t* uniqueIds = (uint32_t*)malloc(deviceCount * sizeof(uint32_t));
-    ${x}DriverGetDeviceUniqueIds(deviceCount, uniqueIds);
+    ${x}_device_uuid_t* pUUIDs = (uint32_t*)malloc(deviceCount * sizeof(${x}_device_uuid_t));
+    ${x}DriverGetDeviceUniqueIds(deviceCount, pUUIDs);
 
     // Get the handle for device that supports required API version
     ${x}_device_handle_t hDevice;
     for(uint32_t i = 0; i < deviceCount; ++i)
     {
-        ${x}DriverGetDevice(uniqueIds[i], &hDevice);
+        ${x}DriverGetDevice(pUUIDs[i], &hDevice);
         
         ${x}_api_version_t version;
         ${x}DeviceGetApiVersion(hDevice, &version);

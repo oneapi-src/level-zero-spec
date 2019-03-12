@@ -65,6 +65,18 @@ __xedllport xe_result_t __xecall
     );
 
 ///////////////////////////////////////////////////////////////////////////////
+/// @brief Maximum device uuid size in bytes
+#define XE_MAX_UUID_SIZE  16
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Device universal unique id (UUID)
+typedef struct _xe_device_uuid_t
+{
+    uint8_t id[XE_MAX_UUID_SIZE];                   ///< [out] device universal unique id
+
+} xe_device_uuid_t;
+
+///////////////////////////////////////////////////////////////////////////////
 /// @brief Retrieve 
 /// 
 /// @details
@@ -88,7 +100,7 @@ __xedllport xe_result_t __xecall
   xeDriverGetDeviceUniqueIds(
     uint32_t count,                                 ///< [in] size of device unique ids array. Typically, this will be
                                                     ///< ${x}DeviceGetCount.
-    uint32_t* pUniqueIds                            ///< [out] pointer to an array of unique ids for devices. Caller must
+    xe_device_uuid_t* pUniqueIds                    ///< [out] pointer to an array of unique ids for devices. Caller must
                                                     ///< supply array.
     );
 
@@ -109,12 +121,13 @@ __xedllport xe_result_t __xecall
 ///     - ::XE_RESULT_ERROR_UNINITIALIZED
 ///     - ::XE_RESULT_ERROR_DEVICE_LOST
 ///     - ::XE_RESULT_ERROR_INVALID_PARAMETER
+///         + nullptr == pUUID
 ///         + nullptr == phDevice
 ///         + ordinal is out of range reported by ::xeDriverGetDeviceCount
 ///     - ::XE_RESULT_ERROR_UNSUPPORTED
 __xedllport xe_result_t __xecall
   xeDriverGetDevice(
-    uint32_t uniqueId,                              ///< [in] unique id of device to retrieve. Use ${x}DriverGetDeviceUniqueIds
+    xe_device_uuid_t* pUUID,                        ///< [in] unique id of device to retrieve. Use ${x}DriverGetDeviceUniqueIds
                                                     ///< to obtain a unique Id.
     xe_device_handle_t* phDevice                    ///< [out] pointer to handle of device object created
     );
