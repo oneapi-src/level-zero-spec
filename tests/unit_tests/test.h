@@ -12,192 +12,6 @@
 extern PRODUCT_FAMILY productFamily;
 extern GFXCORE_FAMILY renderCoreFamily;
 
-namespace L0 {
-namespace ult {
-
-template <PRODUCT_FAMILY... args>
-struct SupportedProductFamilyContainer {
-    template <unsigned int ordinal>
-    static constexpr PRODUCT_FAMILY get() {
-        return IGFX_UNKNOWN;
-    }
-};
-
-template <PRODUCT_FAMILY productFamily, PRODUCT_FAMILY... args>
-struct SupportedProductFamilyContainer<productFamily, args...> : SupportedProductFamilyContainer<args...> {
-    using BaseClass = SupportedProductFamilyContainer<args...>;
-
-    static const std::size_t size = sizeof...(args) + 1;
-
-    template <unsigned int ordinal>
-    static constexpr PRODUCT_FAMILY get() {
-        return ordinal > 0 
-            ? BaseClass::get<ordinal - 1>()
-            : productFamily;
-    }
-};
-
-using SupportedProductFamilies = SupportedProductFamilyContainer<IGFX_SKYLAKE, IGFX_TIGERLAKE_LP, IGFX_TIGERLAKE_HP>;
-
-template <PRODUCT_FAMILY productFamily>
-struct ToGfxCoreFamily {
-    static constexpr GFXCORE_FAMILY get() {
-        return static_cast<GFXCORE_FAMILY>(OCLRT::HwMapper<productFamily>::gfxFamily);
-    }
-};
-
-template <GFXCORE_FAMILY gfxCoreFamily>
-struct IsGfxCore {
-    template <PRODUCT_FAMILY productFamily>
-    static constexpr bool isMatched() {
-        return ToGfxCoreFamily<productFamily>::get() == gfxCoreFamily;
-    }
-};
-
-template <PRODUCT_FAMILY product>
-struct IsProduct {
-    template <PRODUCT_FAMILY productFamily>
-    static constexpr bool isMatched() {
-        return productFamily == product;
-    }
-};
-
-template <PRODUCT_FAMILY productFamilyMax>
-struct IsAtMostProduct {
-    template <PRODUCT_FAMILY productFamily>
-    static constexpr bool isMatched() {
-        return productFamily <= productFamilyMax;
-    }
-};
-
-template <PRODUCT_FAMILY productFamilyMin>
-struct IsAtLeastProduct {
-    template <PRODUCT_FAMILY productFamily>
-    static constexpr bool isMatched() {
-        return productFamily >= productFamilyMin;
-    }
-};
-
-template <PRODUCT_FAMILY productFamilyMin, PRODUCT_FAMILY productFamilyMax>
-struct IsWithinProducts {
-    template <PRODUCT_FAMILY productFamily>
-    static constexpr bool isMatched() {
-        return productFamily >= productFamilyMin && productFamily <= productFamilyMax;
-    }
-};
-
-struct MatchAny {
-    template <PRODUCT_FAMILY productFamily>
-    static constexpr bool isMatched() {
-        return true;
-    }
-};
-
-using IsGen9 = IsGfxCore<IGFX_GEN9_CORE>;
-using IsGen11HP = IsGfxCore<IGFX_GEN11_CORE>;
-using IsGen11LP = IsGfxCore<IGFX_GEN11LP_CORE>;
-using IsGen12HP = IsGfxCore<IGFX_GEN12_CORE>;
-using IsGen12LP = IsGfxCore<IGFX_GEN12LP_CORE>;
-
-using IsATS = IsProduct<IGFX_TIGERLAKE_HP>;
-using IsBXT = IsProduct<IGFX_BROXTON>;
-using IsCFL = IsProduct<IGFX_COFFEELAKE>;
-using IsDG1 = IsProduct<IGFX_DG1>;
-using IsEHL = IsProduct<IGFX_JASPERLAKE>;
-using IsGLK = IsProduct<IGFX_GEMINILAKE>;
-using IsICLLP = IsProduct<IGFX_ICELAKE_LP>;
-using IsKBL = IsProduct<IGFX_KABYLAKE>;
-using IsLKF = IsProduct<IGFX_LAKEFIELD>;
-using IsRKL = IsProduct<IGFX_ROCKETLAKE>;
-using IsRYF = IsProduct<IGFX_RYEFIELD>;
-using IsSKL = IsProduct<IGFX_SKYLAKE>;
-using IsTGLLP = IsProduct<IGFX_TIGERLAKE_LP>;
-
-} // namespace ult
-} // namespace L0
-
-// Macros to provide template based testing.
-// Test can use FamilyType in the test -- equivalent to SKLFamily
-#define HWTEST2_TEST_(test_suite_name, test_name, parent_class, parent_id, test_matcher)                                                  \
-    class GTEST_TEST_CLASS_NAME_(test_suite_name, test_name) : public parent_class {                                                      \
-                                                                                                                                          \
-      public:                                                                                                                             \
-        GTEST_TEST_CLASS_NAME_(test_suite_name, test_name)                                                                                \
-        () {}                                                                                                                             \
-                                                                                                                                          \
-      private:                                                                                                                            \
-        using ContainerType = SupportedProductFamilies;                                                                                   \
-        using MatcherType = test_matcher;                                                                                                 \
-                                                                                                                                          \
-        template <PRODUCT_FAMILY productFamily, GFXCORE_FAMILY gfxCoreFamily, typename FamilyType>                                        \
-        void matched();                                                                                                                   \
-                                                                                                                                          \
-        struct MatcherFalse {                                                                                                             \
-            template <PRODUCT_FAMILY productFamily, GFXCORE_FAMILY gfxCoreFamily, typename FamilyType>                                    \
-            static void matched() {                                                                                                       \
-            }                                                                                                                             \
-        };                                                                                                                                \
-                                                                                                                                          \
-        template <unsigned int matcherOrdinal>                                                                                            \
-        void executeProduct(PRODUCT_FAMILY matchProduct) {                                                                                \
-            const PRODUCT_FAMILY productFamily = ContainerType::get<matcherOrdinal>();                                                    \
-            const GFXCORE_FAMILY gfxCoreFamily = static_cast<GFXCORE_FAMILY>(OCLRT::HwMapper<productFamily>::gfxFamily);                  \
-            using FamilyType = typename OCLRT::GfxFamilyMapper<gfxCoreFamily>::GfxFamily;                                                 \
-                                                                                                                                          \
-            const bool isMatched = MatcherType::isMatched<productFamily>();                                                               \
-            using Matcher = typename std::conditional<isMatched, GTEST_TEST_CLASS_NAME_(test_suite_name, test_name), MatcherFalse>::type; \
-                                                                                                                                          \
-            if (matchProduct == productFamily) {                                                                                          \
-                Matcher::template matched<productFamily, gfxCoreFamily, FamilyType>();                                                    \
-            } else {                                                                                                                      \
-                executeProduct<matcherOrdinal - 1u>(matchProduct);                                                                        \
-            }                                                                                                                             \
-        }                                                                                                                                 \
-                                                                                                                                          \
-        template <>                                                                                                                       \
-        void executeProduct<0u>(PRODUCT_FAMILY matchProduct) {                                                                            \
-            const unsigned int matcherOrdinal = 0u;                                                                                       \
-            const PRODUCT_FAMILY productFamily = ContainerType::get<matcherOrdinal>();                                                    \
-            const GFXCORE_FAMILY gfxCoreFamily = static_cast<GFXCORE_FAMILY>(OCLRT::HwMapper<productFamily>::gfxFamily);                  \
-            using FamilyType = typename OCLRT::GfxFamilyMapper<gfxCoreFamily>::GfxFamily;                                                 \
-                                                                                                                                          \
-            const bool isMatched = MatcherType::isMatched<productFamily>();                                                               \
-            using Matcher = typename std::conditional<isMatched, GTEST_TEST_CLASS_NAME_(test_suite_name, test_name), MatcherFalse>::type; \
-                                                                                                                                          \
-            if (matchProduct == productFamily) {                                                                                          \
-                Matcher::template matched<productFamily, gfxCoreFamily, FamilyType>();                                                    \
-            }                                                                                                                             \
-        }                                                                                                                                 \
-                                                                                                                                          \
-        void execute(PRODUCT_FAMILY matchProduct) {                                                                                       \
-            executeProduct<SupportedProductFamilies::size - 1u>(matchProduct);                                                            \
-        }                                                                                                                                 \
-        void TestBody() override {                                                                                                        \
-            execute(::productFamily);                                                                                                     \
-        }                                                                                                                                 \
-        static ::testing::TestInfo *const test_info_ GTEST_ATTRIBUTE_UNUSED_;                                                             \
-        GTEST_DISALLOW_COPY_AND_ASSIGN_(                                                                                                  \
-            GTEST_TEST_CLASS_NAME_(test_suite_name, test_name));                                                                          \
-    };                                                                                                                                    \
-                                                                                                                                          \
-    ::testing::TestInfo *const GTEST_TEST_CLASS_NAME_(test_suite_name,                                                                    \
-                                                      test_name)::test_info_ =                                                            \
-        ::testing::internal::MakeAndRegisterTestInfo(                                                                                     \
-            #test_suite_name, #test_name, nullptr, nullptr,                                                                               \
-            ::testing::internal::CodeLocation(__FILE__, __LINE__), (parent_id),                                                           \
-            ::testing::internal::SuiteApiResolver<                                                                                        \
-                parent_class>::GetSetUpCaseOrSuite(),                                                                                     \
-            ::testing::internal::SuiteApiResolver<                                                                                        \
-                parent_class>::GetTearDownCaseOrSuite(),                                                                                  \
-            new ::testing::internal::TestFactoryImpl<GTEST_TEST_CLASS_NAME_(                                                              \
-                test_suite_name, test_name)>);                                                                                            \
-    template <PRODUCT_FAMILY productFamily, GFXCORE_FAMILY gfxCoreFamily, typename FamilyType>                                            \
-    void GTEST_TEST_CLASS_NAME_(test_suite_name, test_name)::matched()
-
-#define HWTEST2_F(test_fixture, test_name, test_matcher) \
-    HWTEST2_TEST_(test_fixture, test_name, test_fixture, \
-                  ::testing::internal::GetTypeId<test_fixture>(), test_matcher)
-
 #ifdef TESTS_GEN9
 #define SKL_TYPED_TEST_BODY testBodyHw<typename OCLRT::GfxFamilyMapper<IGFX_GEN9_CORE>::GfxFamily>();
 #define SKL_TYPED_CMDTEST_BODY runCmdTestHwIfSupported<typename OCLRT::GfxFamilyMapper<IGFX_GEN9_CORE>::GfxFamily>();
@@ -545,102 +359,130 @@ using IsTGLLP = IsProduct<IGFX_TIGERLAKE_LP>;
     void GTEST_TEST_CLASS_NAME_(test_suite_name, test_name)::testBodyHw()
 
 #ifdef TESTS_GEN9
-#define GEN9TEST_F(test_fixture, test_name) \
-    HWTEST2_F(test_fixture, test_name, IsGen9)
+#define GEN9TEST_F(test_fixture, test_name)                          \
+    FAMILYTEST_TEST_(test_fixture, test_name, test_fixture,          \
+                     ::testing::internal::GetTypeId<test_fixture>(), \
+                     IGFX_GEN9_CORE, IGFX_MAX_PRODUCT)
 #define GEN9TEST_P(test_suite_name, test_name)    \
     FAMILYTEST_TEST_P(test_suite_name, test_name, \
                       IGFX_GEN9_CORE,             \
                       IGFX_MAX_PRODUCT)
 #endif
 #ifdef TESTS_SKL
-#define SKLTEST_F(test_fixture, test_name) \
-    HWTEST2_F(test_fixture, test_name, IsSKL)
+#define SKLTEST_F(test_fixture, test_name)                           \
+    FAMILYTEST_TEST_(test_fixture, test_name, test_fixture,          \
+                     ::testing::internal::GetTypeId<test_fixture>(), \
+                     IGFX_GEN9_CORE, IGFX_SKYLAKE)
 #define SKLTEST_P(test_suite_name, test_name)     \
     FAMILYTEST_TEST_P(test_suite_name, test_name, \
                       IGFX_GEN9_CORE,             \
                       IGFX_SKYLAKE)
 #endif
 #ifdef TESTS_KBL
-#define KBLTEST_F(test_fixture, test_name) \
-    HWTEST2_F(test_fixture, test_name, IsKBL)
+#define KBLTEST_F(test_fixture, test_name)                           \
+    FAMILYTEST_TEST_(test_fixture, test_name, test_fixture,          \
+                     ::testing::internal::GetTypeId<test_fixture>(), \
+                     IGFX_GEN9_CORE, IGFX_KABYLAKE)
 #define KBLTEST_P(test_suite_name, test_name)     \
     FAMILYTEST_TEST_P(test_suite_name, test_name, \
                       IGFX_GEN9_CORE,             \
                       IGFX_KABYLAKE)
 #endif
 #ifdef TESTS_GLK
-#define GLKTEST_F(test_fixture, test_name) \
-    HWTEST2_F(test_fixture, test_name, IsGLK)
+#define GLKTEST_F(test_fixture, test_name)                           \
+    FAMILYTEST_TEST_(test_fixture, test_name, test_fixture,          \
+                     ::testing::internal::GetTypeId<test_fixture>(), \
+                     IGFX_GEN9_CORE, IGFX_GEMINILAKE)
 #define GLKTEST_P(test_suite_name, test_name)     \
     FAMILYTEST_TEST_P(test_suite_name, test_name, \
                       IGFX_GEN9_CORE,             \
                       IGFX_GEMINILAKE)
 #endif
 #ifdef TESTS_BXT
-#define BXTTEST_F(test_fixture, test_name) \
-    HWTEST2_F(test_fixture, test_name, IsBXT)
+#define BXTTEST_F(test_fixture, test_name)                           \
+    FAMILYTEST_TEST_(test_fixture, test_name, test_fixture,          \
+                     ::testing::internal::GetTypeId<test_fixture>(), \
+                     IGFX_GEN9_CORE, IGFX_BROXTON)
 #define BXTTEST_P(test_suite_name, test_name)     \
     FAMILYTEST_TEST_P(test_suite_name, test_name, \
                       IGFX_GEN9_CORE,             \
                       IGFX_BROXTON)
 #endif
 #ifdef TESTS_CFL
-#define CFLTEST_F(test_fixture, test_name) \
-    HWTEST2_F(test_fixture, test_name, IsCFL)
+#define CFLTEST_F(test_fixture, test_name)                           \
+    FAMILYTEST_TEST_(test_fixture, test_name, test_fixture,          \
+                     ::testing::internal::GetTypeId<test_fixture>(), \
+                     IGFX_GEN9_CORE, IGFX_COFFEELAKE)
 #define CFLTEST_P(test_suite_name, test_name)     \
     FAMILYTEST_TEST_P(test_suite_name, test_name, \
                       IGFX_GEN9_CORE,             \
                       IGFX_COFFEELAKE)
 #endif
 #ifdef TESTS_GEN11
-#define ICLLPTEST_F(test_fixture, test_name) \
-    HWTEST2_F(test_fixture, test_name, IsICLLP)
+#define ICLLPTEST_F(test_fixture, test_name)                         \
+    FAMILYTEST_TEST_(test_fixture, test_name, test_fixture,          \
+                     ::testing::internal::GetTypeId<test_fixture>(), \
+                     IGFX_GEN11_CORE, IGFX_ICELAKE_LP)
 #define ICLLPTEST_P(test_case_name, test_name)   \
     FAMILYTEST_TEST_P(test_case_name, test_name, \
                       IGFX_GEN11_CORE,           \
                       IGFX_ICELAKE_LP)
-#define LKFTEST_F(test_fixture, test_name) \
-    HWTEST2_F(test_fixture, test_name, IsLKF)
+#define LKFTEST_F(test_fixture, test_name)                           \
+    FAMILYTEST_TEST_(test_fixture, test_name, test_fixture,          \
+                     ::testing::internal::GetTypeId<test_fixture>(), \
+                     IGFX_GEN11_CORE, IGFX_LAKEFIELD)
 #define LKFTEST_P(test_case_name, test_name)     \
     FAMILYTEST_TEST_P(test_case_name, test_name, \
                       IGFX_GEN11_CORE,           \
                       IGFX_LAKEFIELD)
-#define EHLTEST_F(test_fixture, test_name) \
-    HWTEST2_F(test_fixture, test_name, IsEHL)
+#define EHLTEST_F(test_fixture, test_name)                           \
+    FAMILYTEST_TEST_(test_fixture, test_name, test_fixture,          \
+                     ::testing::internal::GetTypeId<test_fixture>(), \
+                     IGFX_GEN11_CORE, IGFX_JASPERLAKE)
 #define EHLTEST_P(test_case_name, test_name)     \
     FAMILYTEST_TEST_P(test_case_name, test_name, \
                       IGFX_GEN11_CORE,           \
                       IGFX_JASPERLAKE)
 #endif
 #ifdef TESTS_GEN12HP
-#define ATSTEST_F(test_fixture, test_name) \
-    HWTEST2_F(test_fixture, test_name, IsATS)
+#define ATSTEST_F(test_fixture, test_name)                           \
+    FAMILYTEST_TEST_(test_fixture, test_name, test_fixture,          \
+                     ::testing::internal::GetTypeId<test_fixture>(), \
+                     IGFX_GEN12_CORE, IGFX_TIGERLAKE_HP)
 #define ATSTEST_P(test_case_name, test_name)     \
     FAMILYTEST_TEST_P(test_case_name, test_name, \
                       IGFX_GEN12_CORE,           \
                       IGFX_TIGERLAKE_HP)
 #endif
 #ifdef TESTS_GEN12LP
-#define TGLLPTEST_F(test_fixture, test_name) \
-    HWTEST2_F(test_fixture, test_name, IsTGLLP)
+#define TGLLPTEST_F(test_fixture, test_name)                         \
+    FAMILYTEST_TEST_(test_fixture, test_name, test_fixture,          \
+                     ::testing::internal::GetTypeId<test_fixture>(), \
+                     IGFX_GEN12LP_CORE, IGFX_TIGERLAKE_LP)
 #define TGLLPTEST_P(test_case_name, test_name)   \
     FAMILYTEST_TEST_P(test_case_name, test_name, \
                       IGFX_GEN12LP_CORE,         \
                       IGFX_TIGERLAKE_LP)
-#define RYFTEST_F(test_fixture, test_name) \
-    HWTEST2_F(test_fixture, test_name, IsRYF)
+#define RYFTEST_F(test_fixture, test_name)                           \
+    FAMILYTEST_TEST_(test_fixture, test_name, test_fixture,          \
+                     ::testing::internal::GetTypeId<test_fixture>(), \
+                     IGFX_GEN12LP_CORE, IGFX_RYEFIELD)
 #define RYFTEST_P(test_case_name, test_name)     \
     FAMILYTEST_TEST_P(test_case_name, test_name, \
                       IGFX_GEN12LP_CORE,         \
                       IGFX_RYEFIELD)
-#define DG1TEST_F(test_fixture, test_name) \
-    HWTEST2_F(test_fixture, test_name, IsDG1)
+#define DG1TEST_F(test_fixture, test_name)                           \
+    FAMILYTEST_TEST_(test_fixture, test_name, test_fixture,          \
+                     ::testing::internal::GetTypeId<test_fixture>(), \
+                     IGFX_GEN12LP_CORE, IGFX_DG1)
 #define DG1TEST_P(test_case_name, test_name)     \
     FAMILYTEST_TEST_P(test_case_name, test_name, \
                       IGFX_GEN12LP_CORE,         \
                       IGFX_DG1)
-#define RKLTEST_F(test_fixture, test_name) \
-    HWTEST2_F(test_fixture, test_name, IsRKL)
+#define RKLTEST_F(test_fixture, test_name)                           \
+    FAMILYTEST_TEST_(test_fixture, test_name, test_fixture,          \
+                     ::testing::internal::GetTypeId<test_fixture>(), \
+                     IGFX_GEN12LP_CORE, IGFX_ROCKETLAKE)
 #define RKLTEST_P(test_case_name, test_name)     \
     FAMILYTEST_TEST_P(test_case_name, test_name, \
                       IGFX_GEN12LP_CORE,         \
