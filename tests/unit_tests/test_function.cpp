@@ -1,4 +1,5 @@
 #include "mock_function.h"
+#include "mock_module.h"
 
 #include "runtime/helpers/aligned_memory.h"
 
@@ -48,6 +49,93 @@ TEST(FunctionImp, crossThreadDataIsCorrectlyPatchedWithGlobalWorkSizeAndGroupCou
     EXPECT_EQ(13U, numGroups[2]);
 
     kernelInfo.deleteOwned();
+}
+
+TEST(FunctionImp, suggestGroupSizeClampsToMaxGroupSize) {
+    OCLRT::SPatchExecutionEnvironment execEnv = {};
+    PtrOwn<OCLRT::KernelInfo> kernelInfo{new OCLRT::KernelInfo{}};
+    kernelInfo->patchInfo.executionEnvironment = &execEnv;
+    ImmutableFunctionInfo funcInfo = {};
+    funcInfo.kernelInfoRT = kernelInfo.weakRefReinterpret<void>();
+    execEnv.LargestCompiledSIMDSize = 16;
+
+    Mock<Module> module;
+    ON_CALL(module, getMaxGroupSize)
+        .WillByDefault(Return(8));
+
+    Mock<Function> function;
+    function.immFuncInfo.rebind(&funcInfo);
+    function.module = &module;
+    uint32_t groupSize[3];
+    function.FunctionImp::suggestGroupSize(256, 1, 1, groupSize, groupSize + 1, groupSize + 2);
+    EXPECT_EQ(8U, groupSize[0]);
+    EXPECT_EQ(1U, groupSize[1]);
+    EXPECT_EQ(1U, groupSize[2]);
+}
+
+using FunctionImpSuggestGroupSize = ::testing::TestWithParam<uint32_t>;
+
+INSTANTIATE_TEST_CASE_P(,
+                        FunctionImpSuggestGroupSize,
+                        ::testing::Values(4, 7, 8, 16, 32, 192, 1024, 4097, 16000));
+
+TEST_P(FunctionImpSuggestGroupSize, suggestGroupChoosesProperGroupSize) {
+    OCLRT::SPatchExecutionEnvironment execEnv = {};
+    PtrOwn<OCLRT::KernelInfo> kernelInfo{new OCLRT::KernelInfo{}};
+    kernelInfo->patchInfo.executionEnvironment = &execEnv;
+    ImmutableFunctionInfo funcInfo = {};
+    funcInfo.kernelInfoRT = kernelInfo.weakRefReinterpret<void>();
+    execEnv.LargestCompiledSIMDSize = 16;
+
+    Mock<Module> module;
+    ON_CALL(module, getMaxGroupSize)
+        .WillByDefault(Return(256));
+
+    uint32_t size = GetParam();
+
+    Mock<Function> function;
+    function.immFuncInfo.rebind(&funcInfo);
+    function.module = &module;
+    uint32_t groupSize[3];
+    function.FunctionImp::suggestGroupSize(size, 1, 1, groupSize, groupSize + 1, groupSize + 2);
+    EXPECT_EQ(0U, size % groupSize[0]);
+    EXPECT_EQ(0U, size % groupSize[1]);
+    EXPECT_EQ(0U, size % groupSize[2]);
+
+    function.FunctionImp::suggestGroupSize(size, size, 1, groupSize, groupSize + 1, groupSize + 2);
+    EXPECT_EQ(0U, size % groupSize[0]);
+    EXPECT_EQ(0U, size % groupSize[1]);
+    EXPECT_EQ(0U, size % groupSize[2]);
+
+    function.FunctionImp::suggestGroupSize(size, size, size, groupSize, groupSize + 1, groupSize + 2);
+    EXPECT_EQ(0U, size % groupSize[0]);
+    EXPECT_EQ(0U, size % groupSize[1]);
+    EXPECT_EQ(0U, size % groupSize[2]);
+
+    function.FunctionImp::suggestGroupSize(size, 1, 1, groupSize, groupSize + 1, groupSize + 2);
+    EXPECT_EQ(0U, size % groupSize[0]);
+    EXPECT_EQ(0U, size % groupSize[1]);
+    EXPECT_EQ(0U, size % groupSize[2]);
+
+    function.FunctionImp::suggestGroupSize(1, size, 1, groupSize, groupSize + 1, groupSize + 2);
+    EXPECT_EQ(0U, size % groupSize[0]);
+    EXPECT_EQ(0U, size % groupSize[1]);
+    EXPECT_EQ(0U, size % groupSize[2]);
+
+    function.FunctionImp::suggestGroupSize(1, 1, size, groupSize, groupSize + 1, groupSize + 2);
+    EXPECT_EQ(0U, size % groupSize[0]);
+    EXPECT_EQ(0U, size % groupSize[1]);
+    EXPECT_EQ(0U, size % groupSize[2]);
+
+    function.FunctionImp::suggestGroupSize(1, size, size, groupSize, groupSize + 1, groupSize + 2);
+    EXPECT_EQ(0U, size % groupSize[0]);
+    EXPECT_EQ(0U, size % groupSize[1]);
+    EXPECT_EQ(0U, size % groupSize[2]);
+
+    function.FunctionImp::suggestGroupSize(size, 1, size, groupSize, groupSize + 1, groupSize + 2);
+    EXPECT_EQ(0U, size % groupSize[0]);
+    EXPECT_EQ(0U, size % groupSize[1]);
+    EXPECT_EQ(0U, size % groupSize[2]);
 }
 
 } // namespace ult

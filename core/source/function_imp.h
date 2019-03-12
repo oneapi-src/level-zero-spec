@@ -8,6 +8,7 @@
 #include "memory_manager.h"
 
 #include "runtime/program/kernel_info.h"
+#include "runtime/command_queue/gpgpu_walker.h"
 
 #include <cassert>
 #include <memory>
@@ -53,9 +54,7 @@ struct FunctionImp : Function {
                                  uint32_t globalSizeZ,
                                  uint32_t *groupSizeX,
                                  uint32_t *groupSizeY,
-                                 uint32_t *groupSizeZ) override {
-        return XE_RESULT_ERROR_UNSUPPORTED;
-    }
+                                 uint32_t *groupSizeZ) override;
 
     const void *getCrossThreadDataHostMem() const override {
         return crossThreadData;

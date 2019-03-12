@@ -99,6 +99,7 @@ bool ModuleImp::initialize(const xe_module_desc_t *desc) {
         PtrOwn<ImmutableFunctionInfo> immFuncInfo{new ImmutableFunctionInfo{bindPtrRef(ki).weakRefReinterpret<void>(), std::move(alloc)}};
         immFuncInfos.push_back(std::move(immFuncInfo));
     }
+    this->maxGroupSize = static_cast<uint32_t>(this->progRT->getDevice(0).getDeviceInfo().maxWorkGroupSize);
 
     return true;
 }
@@ -116,7 +117,7 @@ PtrRef<ImmutableFunctionInfo> ModuleImp::getImmutableFunctionInfo(CStringRef fun
 void ModuleImp::updateBuildLog(void *deviceRT) {
     const char *buildLog = this->progRT->getBuildLog(static_cast<OCLRT::Device *>(deviceRT));
     if (this->moduleBuildLog && buildLog)
-       moduleBuildLog->appendString(buildLog, strlen(buildLog));
+        moduleBuildLog->appendString(buildLog, strlen(buildLog));
 }
 
 xe_result_t ModuleImp::createFunction(const xe_function_desc_t *desc, xe_function_handle_t *phFunction) {

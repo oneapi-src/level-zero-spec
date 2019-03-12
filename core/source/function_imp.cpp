@@ -159,6 +159,46 @@ xe_result_t FunctionImp::setGroupSize(uint32_t groupSizeX,
     return XE_RESULT_SUCCESS;
 }
 
+xe_result_t FunctionImp::suggestGroupSize(uint32_t globalSizeX,
+                                          uint32_t globalSizeY,
+                                          uint32_t globalSizeZ,
+                                          uint32_t *groupSizeX,
+                                          uint32_t *groupSizeY,
+                                          uint32_t *groupSizeZ) {
+    assert(0 != globalSizeX);
+    assert(0 != globalSizeY);
+    assert(0 != globalSizeZ);
+    assert(nullptr != groupSizeX);
+    assert(nullptr != groupSizeY);
+    assert(nullptr != groupSizeZ);
+    // TODO : unify this with NEO's computeWorkgroupSize
+    // TODO : evaluate DebugManager.flags.EnableComputeWorkSizeND
+    size_t retGroupSize[3] = {};
+    auto maxWorkGroupSize = module->getMaxGroupSize();
+    auto simd = getKernelInfo()->getMaxSimdSize();
+    size_t workItems[3] = {globalSizeX, globalSizeY, globalSizeZ};
+    uint32_t dim = 1U;
+    if (globalSizeY > 1U) {
+        dim = 2U;
+    }
+    if (globalSizeZ > 1U) {
+        dim = 3U;
+    }
+    if (1U == dim) {
+        OCLRT::computeWorkgroupSize1D(maxWorkGroupSize, retGroupSize, workItems, simd);
+    } else if (OCLRT::DebugManager.flags.EnableComputeWorkSizeSquared.get() && (2U == dim)) {
+        OCLRT::computeWorkgroupSizeSquared(maxWorkGroupSize, retGroupSize, workItems, simd, dim);
+    } else {
+        OCLRT::computeWorkgroupSize2D(maxWorkGroupSize, retGroupSize, workItems, simd);
+    }
+
+    *groupSizeX = static_cast<uint32_t>(retGroupSize[0]);
+    *groupSizeY = static_cast<uint32_t>(retGroupSize[1]);
+    *groupSizeZ = static_cast<uint32_t>(retGroupSize[2]);
+
+    return XE_RESULT_SUCCESS;
+}
+
 xe_result_t FunctionImp::setArgImmediate(uint32_t argIndex, size_t argSize, const void *argVal) {
     const auto &kernelArgInfo = getKernelInfo()->kernelArgInfo[argIndex];
     auto patchLocation = ptrOffset(crossThreadData,

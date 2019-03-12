@@ -86,7 +86,10 @@ int main(int argc, char *argv[]) {
 
     // 1. Set-up
     constexpr size_t allocSize = 4096;
+    constexpr size_t bytesPerThread = sizeof(char);
+    constexpr size_t numThreads = allocSize / bytesPerThread;
     xe_device_handle_t device0;
+    xe_device_properties_t device0Properties = {XE_DEVICE_PROPERTIES_VERSION};
     xe_module_handle_t module;
     xe_function_handle_t function;
     xe_command_queue_handle_t cmdQueue;
@@ -97,6 +100,12 @@ int main(int argc, char *argv[]) {
 
     SUCCESS_OR_TERMINATE(xeApi.xeDriverInit(XE_INIT_FLAG_NONE));
     SUCCESS_OR_TERMINATE(xeApi.xeDriverGetDevice(0, &device0));
+    SUCCESS_OR_TERMINATE(xeApi.xeDeviceGetProperties(device0, &device0Properties));
+    if (verbose) {
+        printDeviceProperties(device0Properties);
+    } else {
+        std::cout << device0Properties.device_name << std::endl;
+    }
     {
         uint32_t spirvSize = 0;
         auto spirvModule = readBinaryFile("test_files/spv_modules/cstring_module.spv", spirvSize);
@@ -118,6 +127,10 @@ int main(int argc, char *argv[]) {
     uint32_t groupSizeX = 32u;
     uint32_t groupSizeY = 1u;
     uint32_t groupSizeZ = 1u;
+    //SUCCESS_OR_TERMINATE(xeApi.xeFunctionSuggestGroupSize(function, numThreads, 1U, 1U, &groupSizeX, &groupSizeY, &groupSizeZ));
+    if (verbose) {
+        std::cout << "Group size : (" << groupSizeX << ", " << groupSizeY << ", " << groupSizeZ << ")" << std::endl;
+    }
     SUCCESS_OR_TERMINATE(xeApi.xeFunctionSetGroupSize(function, groupSizeX, groupSizeY, groupSizeZ));
 
     {
@@ -149,20 +162,23 @@ int main(int argc, char *argv[]) {
 #if SUPPORT_MEMORY_COPY
     SUCCESS_OR_TERMINATE(xeApi.xeCommandListEncodeMemoryCopy(cmdList, srcBuffer, initDataSrc, sizeof(initDataSrc)));
     SUCCESS_OR_TERMINATE(xeApi.xeCommandListEncodeMemoryCopy(cmdList, dstBuffer, initDataDst, sizeof(initDataDst)));
-    SUCCESS_OR_TERMINATE(xeApi.xeCommandListEncodeExecutionBarrier(cmdList)); // copying of data must finish before running the user function
 #else
     memcpy(srcBuffer, initDataSrc, sizeof(initDataSrc));
     memcpy(dstBuffer, initDataDst, sizeof(initDataDst));
 #endif
+    SUCCESS_OR_TERMINATE(xeApi.xeCommandListEncodeExecutionBarrier(cmdList)); // copying of data must finish before running the user function
 
     // 3. Encode run user function
     SUCCESS_OR_TERMINATE(xeApi.xeFunctionSetArgumentValue(function, 0, sizeof(dstBuffer), &dstBuffer));
     SUCCESS_OR_TERMINATE(xeApi.xeFunctionSetArgumentValue(function, 1, sizeof(srcBuffer), &srcBuffer));
     {
         xe_dispatch_function_arguments_t dispatchTraits{XE_DISPATCH_FUNCTION_ARGS_VERSION};
-        dispatchTraits.groupCountX = allocSize / groupSizeX;
+        dispatchTraits.groupCountX = numThreads / groupSizeX;
         dispatchTraits.groupCountY = 1;
         dispatchTraits.groupCountZ = 1;
+        if (verbose) {
+            std::cerr << "Number of groups : (" << dispatchTraits.groupCountX << ", " << dispatchTraits.groupCountY << ", " << dispatchTraits.groupCountZ << ")" << std::endl;
+        }
         SUCCESS_OR_TERMINATE_BOOL(dispatchTraits.groupCountX * groupSizeX == allocSize);
         SUCCESS_OR_TERMINATE(xeApi.xeCommandListEncodeDispatchFunction(cmdList, function, &dispatchTraits, nullptr));
     }
@@ -170,8 +186,8 @@ int main(int argc, char *argv[]) {
     // 4. Encode read back memory
     uint8_t readBackData[allocSize];
     memset(readBackData, 2, sizeof(readBackData));
-#if SUPPORT_MEMORY_COPY
     SUCCESS_OR_TERMINATE(xeApi.xeCommandListEncodeExecutionBarrier(cmdList)); // user function must finish before we start copying data
+#if SUPPORT_MEMORY_COPY
     SUCCESS_OR_TERMINATE(xeApi.xeCommandListEncodeMemoryCopy(cmdList, readBackData, dstBuffer, sizeof(readBackData)));
 #endif
 

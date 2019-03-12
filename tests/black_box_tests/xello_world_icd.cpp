@@ -54,13 +54,15 @@ int main(int argc, char *argv[]) {
     }
 
     if (verbose) {
-        std::cout << "VERBOSE MODE ENABLED" << std::endl;
+        std::cerr << "VERBOSE MODE ENABLED" << std::endl;
     }
     // 0. Load the driver
     // Using icd loader linked statically into this executable
 
     // 1. Set-up
     constexpr size_t allocSize = 4096;
+    constexpr size_t bytesPerThread = sizeof(char);
+    constexpr size_t numThreads = allocSize / bytesPerThread;
     xe_device_handle_t device0;
     xe_device_properties_t device0Properties = {XE_DEVICE_PROPERTIES_VERSION};
     xe_module_handle_t module;
@@ -101,6 +103,10 @@ int main(int argc, char *argv[]) {
     uint32_t groupSizeX = 32u;
     uint32_t groupSizeY = 1u;
     uint32_t groupSizeZ = 1u;
+    //SUCCESS_OR_TERMINATE(xeFunctionSuggestGroupSize(function, numThreads, 1U, 1U, &groupSizeX, &groupSizeY, &groupSizeZ));
+    if (verbose) {
+        std::cout << "Group size : (" << groupSizeX << ", " << groupSizeY << ", " << groupSizeZ << ")" << std::endl;
+    }
     SUCCESS_OR_TERMINATE(xeFunctionSetGroupSize(function, groupSizeX, groupSizeY, groupSizeZ));
 
     {
@@ -132,20 +138,23 @@ int main(int argc, char *argv[]) {
 #if SUPPORT_MEMORY_COPY
     SUCCESS_OR_TERMINATE(xeCommandListEncodeMemoryCopy(cmdList, srcBuffer, initDataSrc, sizeof(initDataSrc)));
     SUCCESS_OR_TERMINATE(xeCommandListEncodeMemoryCopy(cmdList, dstBuffer, initDataDst, sizeof(initDataDst)));
-    SUCCESS_OR_TERMINATE(xeCommandListEncodeExecutionBarrier(cmdList)); // copying of data must finish before running the user function
 #else
     memcpy(srcBuffer, initDataSrc, sizeof(initDataSrc));
     memcpy(dstBuffer, initDataDst, sizeof(initDataDst));
 #endif
+    SUCCESS_OR_TERMINATE(xeCommandListEncodeExecutionBarrier(cmdList)); // copying of data must finish before running the user function
 
     // 3. Encode run user function
     SUCCESS_OR_TERMINATE(xeFunctionSetArgumentValue(function, 0, sizeof(dstBuffer), &dstBuffer));
     SUCCESS_OR_TERMINATE(xeFunctionSetArgumentValue(function, 1, sizeof(srcBuffer), &srcBuffer));
     {
         xe_dispatch_function_arguments_t dispatchTraits{XE_DISPATCH_FUNCTION_ARGS_VERSION};
-        dispatchTraits.groupCountX = allocSize / groupSizeX;
+        dispatchTraits.groupCountX = numThreads / groupSizeX;
         dispatchTraits.groupCountY = 1;
         dispatchTraits.groupCountZ = 1;
+        if (verbose) {
+            std::cerr << "Number of groups : (" << dispatchTraits.groupCountX << ", " << dispatchTraits.groupCountY << ", " << dispatchTraits.groupCountZ << ")" << std::endl;
+        }
         SUCCESS_OR_TERMINATE_BOOL(dispatchTraits.groupCountX * groupSizeX == allocSize);
         SUCCESS_OR_TERMINATE(xeCommandListEncodeDispatchFunction(cmdList, function, &dispatchTraits, nullptr));
     }
@@ -153,8 +162,8 @@ int main(int argc, char *argv[]) {
     // 4. Encode read back memory
     uint8_t readBackData[allocSize];
     memset(readBackData, 2, sizeof(readBackData));
-#if SUPPORT_MEMORY_COPY
     SUCCESS_OR_TERMINATE(xeCommandListEncodeExecutionBarrier(cmdList)); // user function must finish before we start copying data
+#if SUPPORT_MEMORY_COPY
     SUCCESS_OR_TERMINATE(xeCommandListEncodeMemoryCopy(cmdList, readBackData, dstBuffer, sizeof(readBackData)));
 #endif
 

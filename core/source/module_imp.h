@@ -39,6 +39,9 @@ struct ModuleImp : public Module {
     }
 
     PtrRef<ImmutableFunctionInfo> getImmutableFunctionInfo(CStringRef functionName) const override;
+    uint32_t getMaxGroupSize() const override {
+        return maxGroupSize;
+    }
 
     void updateBuildLog(void *deviceRT);
 
@@ -56,6 +59,7 @@ struct ModuleImp : public Module {
     Device *device = nullptr;
     ModuleBuildLog *moduleBuildLog = nullptr;
     OCLRT_temporary::LightweightOclProgram *progRT = nullptr;
+    uint32_t maxGroupSize = 0U;
     std::vector<PtrOwn<ImmutableFunctionInfo>> immFuncInfos;
 };
 
