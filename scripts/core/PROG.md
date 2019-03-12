@@ -170,7 +170,7 @@ The following sample code demonstrates a basic sequence for creation of command 
 ```c
     // Create a command queue
     ${x}_command_queue_desc_t commandQueueDesc = {
-        ${X}_COMMAND_QUEUE_DESC_VERSION,
+        ${X}_COMMAND_QUEUE_DESC_VERSION_CURRENT,
         ${X}_COMMAND_QUEUE_FLAG_NONE,
         ${X}_COMMAND_QUEUE_MODE_DEFAULT,
         ${X}_COMMAND_QUEUE_PRIORITY_NORMAL,
@@ -222,7 +222,7 @@ The following sample code demonstrates a basic sequence for creation of command 
 ```c
     // Create a command list
     ${x}_command_list_desc_t commandListDesc = {
-        ${X}_COMMAND_LIST_DESC_VERSION,
+        ${X}_COMMAND_LIST_DESC_VERSION_CURRENT,
         ${X}_COMMAND_LIST_FLAG_NONE
     };
     ${x}_command_list_handle_t hCommandList;
@@ -334,7 +334,7 @@ The following sample code demonstrates a sequence for creation, submission and q
 ```c
     // Create fence
     ${x}_fence_desc_t fenceDesc = {
-        ${X}_FENCE_DESC_VERSION,
+        ${X}_FENCE_DESC_VERSION_CURRENT,
         ${X}_FENCE_FLAG_NONE
     };
     ${x}_fence_handle_t hFence;
@@ -385,7 +385,7 @@ The following sample code demonstrates a sequence for creation and submission of
 ```c
     // Create event
     ${x}_event_desc_t eventDesc = {
-        ${X}_EVENT_DESC_VERSION,
+        ${X}_EVENT_DESC_VERSION_CURRENT,
         ${X}_EVENT_FLAG_NONE
     };
     ${x}_event_handle_t hEvent;
@@ -485,7 +485,7 @@ and avoids exposing these details in the API in a backwards compatible fashion.
 
 ```c
     ${x}_image_desc_t imageDesc = {
-        ${X}_IMAGE_DESC_VERSION,
+        ${X}_IMAGE_DESC_VERSION_CURRENT,
         ${X}_IMAGE_FLAG_KERNEL_READ,
         ${X}_IMAGE_TYPE_2D,
         ${X}_IMAGE_FORMAT_FLOAT32, 1,
@@ -612,7 +612,7 @@ The following sample code demonstrates a sequence for creating a module from an 
 ```c
     // OpenCL C function has been compiled to SPIRV IL (pImageScalingIL)
     ${x}_module_desc_t moduleDesc = {
-        ${X}_MODULE_DESC_VERSION
+        ${X}_MODULE_DESC_VERSION_CURRENT,
         ${X}_MODULE_IL_SPIRV,
         ilSize,
         pImageScalingIL,
@@ -687,7 +687,7 @@ arguments along with data needed for dispatch.
 The following sample code demonstrates a sequence for creating a function from a module:
 ```c
     ${x}_function_desc_t functionDesc = {
-        ${X}_FUNCTION_DESC_VERSION,
+        ${X}_FUNCTION_DESC_VERSION_CURRENT,
         ${X}_FUNCTION_FLAG_NONE,
         "image_scaling"
     };
@@ -709,7 +709,6 @@ group size information when encoding the dispatch function into the command list
     uint32_t numGroupsY = imageHeight / groupSizeY;
 
     ${x}_dispatch_function_arguments_t dispatchArgs = {
-        ${X}_DISPATCH_FUNCTION_ARGS_VERSION,
         numGroupsX, numGroupsY, 1
         };
 
@@ -749,7 +748,6 @@ The following sample code demonstrates a sequence for creating function args and
     ${x}FunctionSetArgumentValue(hFunction, 3, sizeof(uint32_t), &height);
 
     xe_dispatch_function_arguments_t dispatchArgs = {
-        ${X}_DISPATCH_FUNCTION_ARGS_VERSION,
         pixelRegionWidth, pixelRegionHeight, 1,
         numRegionsX, numRegionsY, 1
         };
@@ -807,7 +805,7 @@ The following is sample for code creating a sampler object and passing it as a F
 ```c
     // Setup sampler for linear filtering and clamp out of bounds accesses to edge.
     ${x}_sampler_desc_t desc = {
-        ${X}_SAMPLER_DESC_VERSION,
+        ${X}_SAMPLER_DESC_VERSION_CURRENT,
         XE_SAMPLER_ADDRESS_MODE_CLAMP,
         XE_SAMPLER_FILTER_MODE_LINEAR,
         false

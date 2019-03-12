@@ -170,7 +170,7 @@ The following sample code demonstrates a basic sequence for creation of command 
 ```c
     // Create a command queue
     xe_command_queue_desc_t commandQueueDesc = {
-        XE_COMMAND_QUEUE_DESC_VERSION,
+        XE_COMMAND_QUEUE_DESC_VERSION_CURRENT,
         XE_COMMAND_QUEUE_FLAG_NONE,
         XE_COMMAND_QUEUE_MODE_DEFAULT,
         XE_COMMAND_QUEUE_PRIORITY_NORMAL,
@@ -222,7 +222,7 @@ The following sample code demonstrates a basic sequence for creation of command 
 ```c
     // Create a command list
     xe_command_list_desc_t commandListDesc = {
-        XE_COMMAND_LIST_DESC_VERSION,
+        XE_COMMAND_LIST_DESC_VERSION_CURRENT,
         XE_COMMAND_LIST_FLAG_NONE
     };
     xe_command_list_handle_t hCommandList;
@@ -334,7 +334,7 @@ The following sample code demonstrates a sequence for creation, submission and q
 ```c
     // Create fence
     xe_fence_desc_t fenceDesc = {
-        XE_FENCE_DESC_VERSION,
+        XE_FENCE_DESC_VERSION_CURRENT,
         XE_FENCE_FLAG_NONE
     };
     xe_fence_handle_t hFence;
@@ -385,7 +385,7 @@ The following sample code demonstrates a sequence for creation and submission of
 ```c
     // Create event
     xe_event_desc_t eventDesc = {
-        XE_EVENT_DESC_VERSION,
+        XE_EVENT_DESC_VERSION_CURRENT,
         XE_EVENT_FLAG_NONE
     };
     xe_event_handle_t hEvent;
@@ -485,7 +485,7 @@ and avoids exposing these details in the API in a backwards compatible fashion.
 
 ```c
     xe_image_desc_t imageDesc = {
-        XE_IMAGE_DESC_VERSION,
+        XE_IMAGE_DESC_VERSION_CURRENT,
         XE_IMAGE_FLAG_KERNEL_READ,
         XE_IMAGE_TYPE_2D,
         XE_IMAGE_FORMAT_FLOAT32, 1,
@@ -612,7 +612,7 @@ The following sample code demonstrates a sequence for creating a module from an 
 ```c
     // OpenCL C function has been compiled to SPIRV IL (pImageScalingIL)
     xe_module_desc_t moduleDesc = {
-        XE_MODULE_DESC_VERSION
+        XE_MODULE_DESC_VERSION_CURRENT,
         XE_MODULE_IL_SPIRV,
         ilSize,
         pImageScalingIL,
@@ -687,7 +687,7 @@ arguments along with data needed for dispatch.
 The following sample code demonstrates a sequence for creating a function from a module:
 ```c
     xe_function_desc_t functionDesc = {
-        XE_FUNCTION_DESC_VERSION,
+        XE_FUNCTION_DESC_VERSION_CURRENT,
         XE_FUNCTION_FLAG_NONE,
         "image_scaling"
     };
@@ -709,7 +709,6 @@ group size information when encoding the dispatch function into the command list
     uint32_t numGroupsY = imageHeight / groupSizeY;
 
     xe_dispatch_function_arguments_t dispatchArgs = {
-        XE_DISPATCH_FUNCTION_ARGS_VERSION,
         numGroupsX, numGroupsY, 1
         };
 
@@ -749,7 +748,6 @@ The following sample code demonstrates a sequence for creating function args and
     xeFunctionSetArgumentValue(hFunction, 3, sizeof(uint32_t), &height);
 
     xe_dispatch_function_arguments_t dispatchArgs = {
-        XE_DISPATCH_FUNCTION_ARGS_VERSION,
         pixelRegionWidth, pixelRegionHeight, 1,
         numRegionsX, numRegionsY, 1
         };
@@ -807,7 +805,7 @@ The following is sample for code creating a sampler object and passing it as a F
 ```c
     // Setup sampler for linear filtering and clamp out of bounds accesses to edge.
     xe_sampler_desc_t desc = {
-        XE_SAMPLER_DESC_VERSION,
+        XE_SAMPLER_DESC_VERSION_CURRENT,
         XE_SAMPLER_ADDRESS_MODE_CLAMP,
         XE_SAMPLER_FILTER_MODE_LINEAR,
         false
