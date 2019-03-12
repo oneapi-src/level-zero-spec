@@ -20,6 +20,53 @@ namespace ult {
 
 using ::testing::Return;
 
+TEST(ModuleBuildLog, createModuleBuildLog) {
+    auto moduleBuildLog = ModuleBuildLog::create();
+    ASSERT_NE(nullptr, moduleBuildLog);
+
+    delete moduleBuildLog;
+}
+
+TEST(ModuleBuildLog, destroyModuleBuildLog) {
+    auto moduleBuildLog = ModuleBuildLog::create();
+    ASSERT_NE(nullptr, moduleBuildLog);
+
+    auto result = moduleBuildLog->destroy();
+    EXPECT_EQ(XE_RESULT_SUCCESS, result);
+}
+
+TEST(ModuleBuildLog, stringModuleBuildLog) {
+    uint32_t buildLogSize;
+    const char *buildLog = nullptr;
+    const char *error_log = "Error Log";
+    const char *warn_log = "Warn Log";
+
+    auto moduleBuildLog = ModuleBuildLog::create();
+    ASSERT_NE(nullptr, moduleBuildLog);
+
+    auto result = moduleBuildLog->getString(&buildLogSize, &buildLog);
+    EXPECT_EQ(XE_RESULT_SUCCESS, result);
+    EXPECT_EQ(1, buildLogSize);
+    EXPECT_STREQ("", buildLog);
+
+    moduleBuildLog->appendString(error_log, strlen(error_log));
+
+    result = moduleBuildLog->getString(&buildLogSize, &buildLog);
+    EXPECT_EQ(XE_RESULT_SUCCESS, result);
+    EXPECT_EQ((strlen(error_log) + 1), buildLogSize);
+    EXPECT_STREQ("Error Log", buildLog);
+
+    moduleBuildLog->appendString(warn_log, strlen(warn_log));
+
+    result = moduleBuildLog->getString(&buildLogSize, &buildLog);
+    EXPECT_EQ(XE_RESULT_SUCCESS, result);
+    EXPECT_EQ((strlen(error_log) + strlen("\n") + strlen(warn_log) + 1), buildLogSize);
+    EXPECT_STREQ("Error Log\nWarn Log", buildLog);
+
+    result = moduleBuildLog->destroy();
+    EXPECT_EQ(XE_RESULT_SUCCESS, result);
+}
+
 TEST(xeModuleCreateFunction, redirectsToObject) {
     Mock<Module> module;
     xe_function_desc_t desc = {};
@@ -83,7 +130,7 @@ TEST_P(ModuleCreate, onlineCompilationModuleTest) {
     modDesc.inputSize = static_cast<uint32_t>(spvModuleSize);
     modDesc.pInputModule = spvModule.get();
 
-    auto module = whitebox_cast(Module::create(device, &modDesc, deviceRT));
+    auto module = whitebox_cast(Module::create(device, &modDesc, deviceRT, nullptr));
     ASSERT_NE(nullptr, module);
 
     xe_function_desc_t funDesc = {};
@@ -236,7 +283,7 @@ TEST(FunctionArgs_accessors, returnsCorrectThreadGroupParameters) {
     modDesc.inputSize = static_cast<uint32_t>(spvModuleSize);
     modDesc.pInputModule = spvModule.get();
 
-    auto module = whitebox_cast(Module::create(device, &modDesc, deviceRT));
+    auto module = whitebox_cast(Module::create(device, &modDesc, deviceRT, nullptr));
     ASSERT_NE(nullptr, module);
 
     xe_function_desc_t funDesc = {};

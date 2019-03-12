@@ -129,7 +129,7 @@ params:
     - type: "uint32_t*"
       name: pSize
       desc: "[out] size of build log string."
-    - type: "char**"
+    - type: "const char**"
       name: pBuildLog
       desc: "[out] pointer to null-terminated string of the log."
 returns:

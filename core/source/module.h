@@ -18,7 +18,8 @@ struct Device;
 struct GraphicsAllocation;
 
 struct Module : public _xe_module_handle_t {
-    static Module *create(Device *device, const xe_module_desc_t *desc, void *deiceRT);
+    static Module *create(Device *device, const xe_module_desc_t *desc,
+                          void *deviceRT, ModuleBuildLog *moduleBuildLog);
     virtual Device *getDevice() const = 0;
 
     virtual xe_result_t createFunction(const xe_function_desc_t *desc, xe_function_handle_t *phFunction) = 0;

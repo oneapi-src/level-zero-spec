@@ -17,7 +17,7 @@ struct LightweightOclProgram;
 namespace L0 {
 
 struct ModuleImp : public Module {
-    ModuleImp(Device *device, void *deviceRT);
+    ModuleImp(Device *device, void *deviceRT, ModuleBuildLog *moduleBuildLog);
 
     virtual ~ModuleImp();
 
@@ -40,6 +40,8 @@ struct ModuleImp : public Module {
 
     PtrRef<ImmutableFunctionInfo> getImmutableFunctionInfo(CStringRef functionName) const override;
 
+    void updateBuildLog(void *deviceRT);
+
     Device *getDevice() const override {
         return device;
     }
@@ -52,6 +54,7 @@ struct ModuleImp : public Module {
 
   protected:
     Device *device = nullptr;
+    ModuleBuildLog *moduleBuildLog = nullptr;
     OCLRT_temporary::LightweightOclProgram *progRT = nullptr;
     std::vector<PtrOwn<ImmutableFunctionInfo>> immFuncInfos;
 };

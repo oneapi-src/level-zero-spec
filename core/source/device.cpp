@@ -65,7 +65,14 @@ struct DeviceImp : public Device {
     xe_result_t createModule(const xe_module_desc_t *desc,
                              xe_module_handle_t *module,
                              xe_module_build_log_handle_t *buildLog) override {
-        *module = Module::create(this, desc, deviceRT);
+        ModuleBuildLog *moduleBuildLog = nullptr;
+
+        if (buildLog) {
+            moduleBuildLog = ModuleBuildLog::create();
+            *buildLog = moduleBuildLog->toHandle();
+        }
+        *module = Module::create(this, desc, deviceRT, moduleBuildLog);
+
         return XE_RESULT_SUCCESS;
     }
 

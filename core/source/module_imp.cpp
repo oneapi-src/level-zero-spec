@@ -5,6 +5,7 @@
 #include "device.h"
 #include "function.h"
 #include "graphics_allocation.h"
+#include "module_build_log.h"
 #include "memory_manager.h"
 
 #include "runtime/compiler_interface/compiler_interface.h"
@@ -67,7 +68,10 @@ struct LightweightOclProgram : public OCLRT::Program { // NEO refactor needed : 
 
 namespace L0 {
 
-ModuleImp::ModuleImp(Device *device, void *deviceRT) : device(device), progRT(OCLRT_temporary::LightweightOclProgram::create(deviceRT)) {}
+ModuleImp::ModuleImp(Device *device, void *deviceRT, ModuleBuildLog *moduleBuildLog)
+    : device(device),
+      progRT(OCLRT_temporary::LightweightOclProgram::create(deviceRT)),
+      moduleBuildLog(moduleBuildLog) {}
 
 ModuleImp::~ModuleImp() {
     progRT->release();
@@ -109,15 +113,24 @@ PtrRef<ImmutableFunctionInfo> ModuleImp::getImmutableFunctionInfo(CStringRef fun
     return nullptr;
 }
 
+void ModuleImp::updateBuildLog(void *deviceRT) {
+    const char *buildLog = this->progRT->getBuildLog(static_cast<OCLRT::Device *>(deviceRT));
+    if (this->moduleBuildLog && buildLog)
+       moduleBuildLog->appendString(buildLog, strlen(buildLog));
+}
+
 xe_result_t ModuleImp::createFunction(const xe_function_desc_t *desc, xe_function_handle_t *phFunction) {
     *phFunction = Function::create(this, desc)->toHandle();
     return XE_RESULT_SUCCESS;
 }
 
-Module *Module::create(Device *device, const xe_module_desc_t *desc, void *deviceRT) {
-    auto module = new ModuleImp(device, deviceRT);
+Module *Module::create(Device *device, const xe_module_desc_t *desc,
+                       void *deviceRT, ModuleBuildLog *moduleBuildLog) {
+    auto module = new ModuleImp(device, deviceRT, moduleBuildLog);
 
     module->initialize(desc);
+    module->updateBuildLog(deviceRT);
+
     return module;
 }
 

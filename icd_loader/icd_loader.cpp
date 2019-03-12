@@ -920,7 +920,7 @@ xe_result_t __xecall xeModuleBuildLogDestroy(
 xe_result_t __xecall xeModuleBuildLogGetString(
         xe_module_build_log_handle_t hModuleBuildLog,   ///< [in] handle of the module build log object.
         uint32_t* pSize,                                ///< [out] size of build log string.
-        char** pBuildLog                                ///< [out] pointer to null-terminated string of the log.
+        const char** pBuildLog                          ///< [out] pointer to null-terminated string of the log.
     ){
     if(dispatchTableInitialized == false){
         return XE_RESULT_ERROR_UNINITIALIZED;
