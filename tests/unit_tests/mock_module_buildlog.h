@@ -13,10 +13,10 @@ struct Mock<ModuleBuildLog> : public ModuleBuildLog {
     virtual ~Mock() = default;
 
     MOCK_METHOD0(destroy, xe_result_t());
-    MOCK_METHOD2(getString, xe_result_t(uint32_t *pSize,
+    MOCK_METHOD2(getString, xe_result_t(size_t *pSize,
                                         char **pBuildLog));
     MOCK_METHOD2(appendString, void(const char *pBuildLog,
-                                    uint32_t size));
+                                    size_t size));
 };
 
 } // namespace ult

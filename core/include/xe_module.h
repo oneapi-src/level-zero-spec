@@ -189,7 +189,7 @@ __xedllport xe_result_t __xecall
 __xedllport xe_result_t __xecall
   xeModuleBuildLogGetString(
     xe_module_build_log_handle_t hModuleBuildLog,   ///< [in] handle of the module build log object.
-    uint32_t* pSize,                                ///< [out] size of build log string.
+    size_t* pSize,                                  ///< [out] size of build log string.
     const char** pBuildLog                          ///< [out] pointer to null-terminated string of the log.
     );
 

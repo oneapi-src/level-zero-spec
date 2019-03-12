@@ -13,10 +13,10 @@ struct ModuleBuildLog : public _xe_module_build_log_handle_t {
     static ModuleBuildLog *create();
 
     virtual xe_result_t destroy() = 0;
-    virtual xe_result_t getString(uint32_t *pSize,
+    virtual xe_result_t getString(size_t *pSize,
                                   const char **pBuildLog) = 0;
     virtual void appendString(const char *pBuildLog,
-                              uint32_t size) = 0;
+                              size_t size) = 0;
 
     ModuleBuildLog() = default;
     ModuleBuildLog(const ModuleBuildLog &) = delete;

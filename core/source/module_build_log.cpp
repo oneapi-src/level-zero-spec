@@ -15,7 +15,7 @@ struct ModuleBuildLogImp : public ModuleBuildLog {
         return XE_RESULT_SUCCESS;
     }
 
-    xe_result_t getString(uint32_t *pSize, const char **pBuildLog) override {
+    xe_result_t getString(size_t *pSize, const char **pBuildLog) override {
         const char *buildLog = this->buildLog.c_str();
 
         if (buildLog != nullptr) {
@@ -28,7 +28,7 @@ struct ModuleBuildLogImp : public ModuleBuildLog {
         return XE_RESULT_SUCCESS;
     }
 
-    void appendString(const char *pBuildLog, uint32_t size) override {
+    void appendString(const char *pBuildLog, size_t size) override {
         if ((pBuildLog == nullptr) || (size == 0) || (pBuildLog[0] == '\0'))
             return;
 

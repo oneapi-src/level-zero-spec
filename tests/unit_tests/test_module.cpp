@@ -36,7 +36,7 @@ TEST(ModuleBuildLog, destroyModuleBuildLog) {
 }
 
 TEST(ModuleBuildLog, stringModuleBuildLog) {
-    uint32_t buildLogSize;
+    size_t buildLogSize;
     const char *buildLog = nullptr;
     const char *error_log = "Error Log";
     const char *warn_log = "Warn Log";
