@@ -1,4 +1,5 @@
 #include "cmdlist.h"
+#include "image.h"
 #include "mock_device.h"
 #include "xe_cmdlist.h"
 #include "xe_event.h"
@@ -53,6 +54,27 @@ TEST(xeDeviceCreateEvent, redirectsToObject) {
                                       &desc,
                                       &event);
     ASSERT_EQ(XE_RESULT_SUCCESS, result);
+}
+
+TEST(DeviceCreateImage, returnsSuccess) {
+    auto platform = OCLRT::constructPlatform();
+    auto success = platform->initialize();
+    ASSERT_TRUE(success);
+
+    auto deviceRT = platform->getDevice(0);
+    ASSERT_NE(nullptr, deviceRT);
+    auto device = Device::create(deviceRT);
+
+    xe_image_handle_t image = {};
+    xe_image_desc_t desc = {};
+
+    auto result = device->createImage(&desc,
+                                      &image);
+    EXPECT_EQ(XE_RESULT_SUCCESS, result);
+    EXPECT_NE(nullptr, image);
+
+    Image::fromHandle(image)->destroy();
+    delete device;
 }
 
 TEST(DeviceCreateCommandList, returnsSuccess) {

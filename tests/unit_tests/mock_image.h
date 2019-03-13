@@ -19,20 +19,19 @@ struct WhiteBox<::L0::ImageCoreFamily<gfxCoreFamily>> : public ::L0::ImageCoreFa
     virtual ~WhiteBox() {
     }
 
-	RENDER_SURFACE_STATE *getSurfaceState() {
-        return &this->surfaceState;
-    }
+    using ::L0::ImageCoreFamily<gfxCoreFamily>::surfaceState;
 };
 
 template <GFXCORE_FAMILY gfxCoreFamily>
 using ImageCoreFamily = WhiteBox<::L0::ImageCoreFamily<gfxCoreFamily>>;
 
 template <>
-struct WhiteBox<::L0::Image> : public ::L0::Image {
+struct WhiteBox<::L0::Image> : public ::L0::ImageImp {
     WhiteBox();
     virtual ~WhiteBox();
 
     xe_image_desc_t imageDesc;
+    using ::L0::ImageImp::allocation;
 };
 
 using Image = WhiteBox<::L0::Image>;

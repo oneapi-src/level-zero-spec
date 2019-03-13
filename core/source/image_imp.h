@@ -4,6 +4,7 @@
 #endif //CMD_LIST_INTERNAL
 
 #include "image.h"
+#include "graphics_allocation.h"
 #include "memory_manager.h"
 
 namespace L0 {

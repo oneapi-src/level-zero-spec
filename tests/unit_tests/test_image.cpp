@@ -6,6 +6,7 @@
 #include "runtime/command_stream/linear_stream.h"
 #include "runtime/helpers/hw_info.h"
 #include "runtime/indirect_heap/indirect_heap.h"
+#include "runtime/platform/platform.h"
 
 namespace L0 {
 namespace ult {
@@ -24,6 +25,8 @@ using ImageCreate = ::testing::Test;
 
 TEST_F(ImageCreate, returnsImageOnSuccess) {
     Mock<Device> device;
+    EXPECT_CALL(device, getMemoryManager).Times(AnyNumber());
+
     xe_image_desc_t desc = {};
 
     auto image = whitebox_cast(Image::create(productFamily, &device, &desc));
@@ -38,6 +41,34 @@ TEST_F(ImageCreate, givenInvalidProductFamilyReturnsNullPointer) {
 
     auto image = whitebox_cast(Image::create(IGFX_UNKNOWN, &device, &desc));
     ASSERT_EQ(nullptr, image);
+}
+
+TEST_F(ImageCreate, descMatchesAllocation) {
+    auto platform = OCLRT::constructPlatform();
+    auto success = platform->initialize();
+    ASSERT_TRUE(success);
+
+    auto deviceRT = platform->getDevice(0);
+    ASSERT_NE(nullptr, deviceRT);
+    auto device = Device::create(deviceRT);
+
+    xe_image_desc_t desc = {};
+
+    desc.type = XE_IMAGE_TYPE_3D;
+    desc.numChannels = 4;
+    desc.format = XE_IMAGE_FORMAT_UINT8;
+    desc.width = 10;
+    desc.height = 10;
+    desc.depth = 10;
+
+    auto image = whitebox_cast(Image::create(productFamily, device, &desc));
+    ASSERT_NE(nullptr, image);
+    ASSERT_NE(nullptr, image->allocation);
+
+    ASSERT_EQ(image->allocation->getSize(),
+            desc.numChannels * desc.width * desc.height * desc.depth * sizeof(uint8_t));
+
+    delete device;
 }
 
 HWTEST2_F(ImageCreate, descMatchesSurface, MatchAny) {
@@ -57,7 +88,7 @@ HWTEST2_F(ImageCreate, descMatchesSurface, MatchAny) {
     bool ret = imageCore->initialize(&device, &desc);
     ASSERT_TRUE(ret);
 
-    auto surfaceState = imageCore->getSurfaceState();
+    auto surfaceState = &imageCore->surfaceState;
 
     ASSERT_EQ(surfaceState->getSurfaceType(), RENDER_SURFACE_STATE::SURFACE_TYPE_SURFTYPE_3D);
     ASSERT_EQ(surfaceState->getSurfaceFormat(), RENDER_SURFACE_STATE::SURFACE_FORMAT_R8G8B8A8_UINT);
