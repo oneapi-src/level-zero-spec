@@ -546,36 +546,6 @@ __xedllport xe_result_t __xecall
     );
 
 ///////////////////////////////////////////////////////////////////////////////
-/// @brief Dispatch function over one or more work groups.
-/// 
-/// @details
-///     - This function may **not** be called from simultaneous threads.
-///     - The implementation of this function should be lock-free.
-/// 
-/// @remarks
-///   _Analogues_
-///     - **cuLaunchKernel**
-/// 
-/// @returns
-///     - ::XE_RESULT_SUCCESS
-///     - ::XE_RESULT_ERROR_UNINITIALIZED
-///     - ::XE_RESULT_ERROR_DEVICE_LOST
-///     - ::XE_RESULT_ERROR_INVALID_PARAMETER
-///         + nullptr == hCommandGraph
-///         + nullptr == hFunction
-///         + nullptr == pDispatchFuncArgs
-///         + invalid group count range for dispatch
-///         + invalid dispatch count range for dispatch
-///     - ::XE_RESULT_ERROR_UNSUPPORTED
-__xedllport xe_result_t __xecall
-  xeCommandGraphEncodeDispatchFunction(
-    xe_command_graph_handle_t hCommandGraph,        ///< [in] handle of the command graph
-    xe_function_handle_t hFunction,                 ///< [in] handle of the function object
-    const xe_dispatch_function_arguments_t* pDispatchFuncArgs,  ///< [in] dispatch function arguments.
-    xe_event_handle_t hEvent                        ///< [in][optional] handle of the event to signal on completion
-    );
-
-///////////////////////////////////////////////////////////////////////////////
 /// @brief Dispatch function over one or more work groups using indirect dispatch
 ///        arguments.
 /// 
@@ -602,38 +572,6 @@ __xedllport xe_result_t __xecall
 __xedllport xe_result_t __xecall
   xeCommandListEncodeDispatchFunctionIndirect(
     xe_command_list_handle_t hCommandList,          ///< [in] handle of the command list
-    xe_function_handle_t hFunction,                 ///< [in] handle of the function object
-    const xe_dispatch_function_arguments_t* pDispatchArgumentsBuffer,   ///< [in] pointer to device buffer that will contain dispatch arguments
-    xe_event_handle_t hEvent                        ///< [in][optional] handle of the event to signal on completion
-    );
-
-///////////////////////////////////////////////////////////////////////////////
-/// @brief Dispatch function over one or more work groups using indirect dispatch
-///        arguments.
-/// 
-/// @details
-///     - The dispatch arguments need to be device visible.
-///     - The dispatch arguments buffer may not be reusued until dispatch has
-///       completed on the device.
-///     - This function may **not** be called from simultaneous threads.
-///     - The implementation of this function should be lock-free.
-/// 
-/// @remarks
-///   _Analogues_
-///     - **cuLaunchKernel**
-/// 
-/// @returns
-///     - ::XE_RESULT_SUCCESS
-///     - ::XE_RESULT_ERROR_UNINITIALIZED
-///     - ::XE_RESULT_ERROR_DEVICE_LOST
-///     - ::XE_RESULT_ERROR_INVALID_PARAMETER
-///         + nullptr == hCommandGraph
-///         + nullptr == hFunction
-///         + nullptr == pDispatchArgumentsBuffer
-///     - ::XE_RESULT_ERROR_UNSUPPORTED
-__xedllport xe_result_t __xecall
-  xeCommandGraphEncodeDispatchFunctionIndirect(
-    xe_command_graph_handle_t hCommandGraph,        ///< [in] handle of the command graph
     xe_function_handle_t hFunction,                 ///< [in] handle of the function object
     const xe_dispatch_function_arguments_t* pDispatchArgumentsBuffer,   ///< [in] pointer to device buffer that will contain dispatch arguments
     xe_event_handle_t hEvent                        ///< [in][optional] handle of the event to signal on completion
@@ -678,44 +616,6 @@ __xedllport xe_result_t __xecall
     );
 
 ///////////////////////////////////////////////////////////////////////////////
-/// @brief Dispatch multiple functions over one or more work groups using an
-///        array of indirect dispatch arguments.
-/// 
-/// @details
-///     - The array of dispatch arguments need to be device visible.
-///     - The array of dispatch arguments buffer may not be reusued until
-///       dispatch has completed on the device.
-///     - This function may **not** be called from simultaneous threads.
-///     - The implementation of this function should be lock-free.
-/// 
-/// @remarks
-///   _Analogues_
-///     - **cuLaunchKernel**
-/// 
-/// @returns
-///     - ::XE_RESULT_SUCCESS
-///     - ::XE_RESULT_ERROR_UNINITIALIZED
-///     - ::XE_RESULT_ERROR_DEVICE_LOST
-///     - ::XE_RESULT_ERROR_INVALID_PARAMETER
-///         + nullptr == hCommandGraph
-///         + nullptr == phFunctions
-///         + nullptr == pNumDispatchArguments
-///         + nullptr == pDispatchArgumentsBuffer
-///     - ::XE_RESULT_ERROR_UNSUPPORTED
-__xedllport xe_result_t __xecall
-  xeCommandGraphEncodeDispatchMultipleFunctionsIndirect(
-    xe_command_graph_handle_t hCommandGraph,        ///< [in] handle of the command graph
-    uint32_t numFunctions,                          ///< [in] maximum number of functions to dispatch
-    const xe_function_handle_t* phFunctions,        ///< [in] handles of the function objects
-    const size_t* pNumDispatchArguments,            ///< [in] pointer to device memory location that will contain the actual
-                                                    ///< number of dispatch arguments; must be less-than or equal-to
-                                                    ///< numFunctions
-    const xe_dispatch_function_arguments_t* pDispatchArgumentsBuffer,   ///< [in] pointer to device buffer that will contain a contiguous array of
-                                                    ///< dispatch arguments
-    xe_event_handle_t hEvent                        ///< [in][optional] handle of the event to signal on completion
-    );
-
-///////////////////////////////////////////////////////////////////////////////
 /// @brief type definition for host function pointers used with
 ///        ::xeCommandListEncodeDispatchHostFunction
 /// 
@@ -749,33 +649,6 @@ typedef void(__xecall *xe_host_pfn_t)(
 __xedllport xe_result_t __xecall
   xeCommandListEncodeDispatchHostFunction(
     xe_command_list_handle_t hCommandList,          ///< [in] handle of the command list
-    xe_host_pfn_t pfnHostFunc,                      ///< [in] pointer to host function.
-    void* pUserData                                 ///< [in] pointer to user data to pass to host function.
-    );
-
-///////////////////////////////////////////////////////////////////////////////
-/// @brief Dispatch host function. All work after this command in the command
-///        list will block until host function completes.
-/// 
-/// @details
-///     - This function may **not** be called from simultaneous threads.
-///     - The implementation of this function should be lock-free.
-/// 
-/// @remarks
-///   _Analogues_
-///     - **cuLaunchHostFunc**
-/// 
-/// @returns
-///     - ::XE_RESULT_SUCCESS
-///     - ::XE_RESULT_ERROR_UNINITIALIZED
-///     - ::XE_RESULT_ERROR_DEVICE_LOST
-///     - ::XE_RESULT_ERROR_INVALID_PARAMETER
-///         + nullptr == hCommandGraph
-///         + nullptr == pUserData
-///     - ::XE_RESULT_ERROR_UNSUPPORTED
-__xedllport xe_result_t __xecall
-  xeCommandGraphEncodeDispatchHostFunction(
-    xe_command_graph_handle_t hCommandGraph,        ///< [in] handle of the command graph
     xe_host_pfn_t pfnHostFunc,                      ///< [in] pointer to host function.
     void* pUserData                                 ///< [in] pointer to user data to pass to host function.
     );

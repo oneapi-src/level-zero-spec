@@ -430,7 +430,7 @@ returns:
 --- #--------------------------------------------------------------------------
 type: struct
 desc: "Dispatch function arguments."
-class: [ $xCommandList, $xCommandGraph ]
+class: $xCommandList
 name: $x_dispatch_function_arguments_t
 members:
     - type: "uint32_t"
@@ -448,7 +448,7 @@ members:
 --- #--------------------------------------------------------------------------
 type: function
 desc: "Dispatch function over one or more work groups."
-class: [ $xCommandList, $xCommandGraph ]
+class: $xCommandList
 name: EncodeDispatchFunction
 analogue:
     - "**cuLaunchKernel**"
@@ -459,11 +459,6 @@ params:
     - type: "$x_command_list_handle_t"
       name: hCommandList
       desc: "[in] handle of the command list"
-      class: $xCommandList
-    - type: $x_command_graph_handle_t
-      name: hCommandGraph
-      desc: "[in] handle of the command graph"
-      class: $xCommandGraph
     - type: "$x_function_handle_t"
       name: hFunction
       desc: "[in] handle of the function object"
@@ -480,7 +475,7 @@ returns:
 --- #--------------------------------------------------------------------------
 type: function
 desc: "Dispatch function over one or more work groups using indirect dispatch arguments."
-class: [ $xCommandList, $xCommandGraph ]
+class: $xCommandList
 name: EncodeDispatchFunctionIndirect
 analogue:
     - "**cuLaunchKernel**"
@@ -493,11 +488,6 @@ params:
     - type: "$x_command_list_handle_t"
       name: hCommandList
       desc: "[in] handle of the command list"
-      class: $xCommandList
-    - type: $x_command_graph_handle_t
-      name: hCommandGraph
-      desc: "[in] handle of the command graph"
-      class: $xCommandGraph
     - type: "$x_function_handle_t"
       name: hFunction
       desc: "[in] handle of the function object"
@@ -510,7 +500,7 @@ params:
 --- #--------------------------------------------------------------------------
 type: function
 desc: "Dispatch multiple functions over one or more work groups using an array of indirect dispatch arguments."
-class: [ $xCommandList, $xCommandGraph ]
+class: $xCommandList
 name: EncodeDispatchMultipleFunctionsIndirect
 analogue:
     - "**cuLaunchKernel**"
@@ -523,11 +513,6 @@ params:
     - type: "$x_command_list_handle_t"
       name: hCommandList
       desc: "[in] handle of the command list"
-      class: $xCommandList
-    - type: $x_command_graph_handle_t
-      name: hCommandGraph
-      desc: "[in] handle of the command graph"
-      class: $xCommandGraph
     - type: uint32_t
       name: numFunctions
       desc: "[in] maximum number of functions to dispatch"
@@ -546,7 +531,7 @@ params:
 --- #--------------------------------------------------------------------------
 type: typedef
 desc: "type definition for host function pointers used with $xCommandListEncodeDispatchHostFunction"
-class: [ $xCommandList, $xCommandGraph ]
+class: $xCommandList
 name: $x_host_pfn_t
 returns: void
 details:
@@ -559,7 +544,7 @@ params:
 --- #--------------------------------------------------------------------------
 type: function
 desc: "Dispatch host function. All work after this command in the command list will block until host function completes."
-class: [ $xCommandList, $xCommandGraph ]
+class: $xCommandList
 name: EncodeDispatchHostFunction
 analogue:
     - "**cuLaunchHostFunc**"
@@ -570,11 +555,6 @@ params:
     - type: "$x_command_list_handle_t"
       name: hCommandList
       desc: "[in] handle of the command list"
-      class: $xCommandList
-    - type: $x_command_graph_handle_t
-      name: hCommandGraph
-      desc: "[in] handle of the command graph"
-      class: $xCommandGraph
     - type: "$x_host_pfn_t"
       name: pfnHostFunc
       desc: "[in] pointer to host function."

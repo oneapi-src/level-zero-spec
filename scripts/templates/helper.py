@@ -60,9 +60,8 @@ def filter_items(lst, key, filter):
     flst = []
     for item in lst:
         if key in item:
-            if filter not in item[key]:
-                continue
-        flst.append(item)
+            if filter in item[key]:
+                flst.append(item)
     return flst
 
 """
@@ -182,13 +181,13 @@ def make_member_function_lines(repl, obj):
 """
     returns a list of strings for each parameter of a function
 """
-def make_param_lines(repl, obj, filter):
+def make_param_lines(repl, obj, this=False):
     lines = []
 
-    if re.match(r"this", filter):
-        params = filter_items(obj['params'][1:], 'class', filter)
+    if this:
+        params = obj['params'][1:]
     else:
-        params = filter_items(obj['params'], 'class', filter)
+        params = obj['params']
 
     for i, item in enumerate(params):
         name = subx(repl, item['name'])
@@ -207,11 +206,11 @@ def make_param_lines(repl, obj, filter):
 """
     returns a string of parameter names for passing to a function
 """
-def make_param_call_str(prologue, repl, obj, filter):
-    if re.match(r"this", filter):
-        params = filter_items(obj['params'][1:], 'class', filter)
+def make_param_call_str(prologue, repl, obj, this=False):
+    if this:
+        params = obj['params'][1:]
     else:
-        params = filter_items(obj['params'], 'class', filter)
+        params = obj['params']
 
     names = []
     if len(prologue) > 0:
@@ -221,7 +220,6 @@ def make_param_call_str(prologue, repl, obj, filter):
             names.append("%s->getHandle()"%item['name'])
         else:
             names.append(item['name'])
-    #names.extend(extract_items(params, 'name'))
     return ", ".join(names)
 
 """
@@ -272,15 +270,14 @@ def make_details_lines(repl, obj):
 """
     returns a dict of auto-generated parameter validation checks
 """
-def make_param_checks(repl, obj, filter, tag=False):
+def make_param_checks(repl, obj, tag=False):
     checks = {}
     eip = subx(repl, "$X_RESULT_ERROR_INVALID_PARAMETER", tag)
     eus = subx(repl, "$X_RESULT_ERROR_UNSUPPORTED", tag)
     checks[eip] = []
     checks[eus] = []
 
-    params = filter_items(obj['params'], 'class', filter)
-    for item in params:
+    for item in obj['params']:
         if not re.match(r".*\[optional\].*", item['desc']): #skip optional params
             if re.match(r".*\w+\*+", item['type']): # pointer-type
                 checks[eip].append("nullptr == %s"%subx(repl, item['name'], tag))
@@ -294,7 +291,7 @@ def make_param_checks(repl, obj, filter, tag=False):
 """
     returns a list of strings for possible return values
 """
-def make_return_lines(repl, obj, filter):
+def make_return_lines(repl, obj):
     lines = []
     lines.append("@returns")
     lines.append("    - %s"%subx(repl, "$X_RESULT_SUCCESS", True))
@@ -302,7 +299,7 @@ def make_return_lines(repl, obj, filter):
     lines.append("    - %s"%subx(repl, "$X_RESULT_ERROR_DEVICE_LOST", True))
 
     # generate default checks
-    gen = make_param_checks(repl, obj, filter, True)
+    gen = make_param_checks(repl, obj, True)
 
     # merge user-specified values
     if 'returns' in obj:
@@ -329,7 +326,11 @@ def make_return_lines(repl, obj, filter):
 """
     returns the name of a function
 """
-def make_func_name(repl, obj, cls, cpp=False):
+def make_func_name(repl, obj, cpp=False):
+    if 'class' in obj:
+        cls = obj['class']
+    else:
+        cls = ""
     if cpp:
         return subx(repl, "%s::%s"%(cls, obj['name']))
     else:
@@ -338,16 +339,20 @@ def make_func_name(repl, obj, cls, cpp=False):
 """
     returns a single-line driver function call
 """
-def make_obj_accessor(repl, obj, cls):
+def make_obj_accessor(repl, obj):
+    if 'class' in obj:
+        cls = obj['class']
+    else:
+        cls = ""
     noobject = repl == subx(repl, cls)
     singleton=re.match(subx(repl, "^$xDriver"), subx(repl, cls))
     method = obj['name'][0].lower() + obj['name'][1:] 
     if noobject:
         str = subx("", "%s("%(method))
-        str += make_param_call_str("", "", obj, "")
+        str += make_param_call_str("", "", obj)
     elif singleton:
         str = subx("", "%s::get()->%s("%(cls, method))
-        str += make_param_call_str("", "", obj, "")
+        str += make_param_call_str("", "", obj)
     else:
         params = obj['params']
         str = subx("", "%s::fromHandle("%cls)

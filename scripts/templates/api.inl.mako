@@ -2,7 +2,7 @@
 import re
 from templates import helper as th
 
-def declare_type(obj, cls, cli):
+def declare_type(obj):
     return re.match(r"class", obj['type'])
 
 %>/**************************************************************************//**
@@ -50,22 +50,21 @@ def declare_type(obj, cls, cli):
 namespace ${x}
 {
 %for obj in objects:
-%for cli, cls in enumerate(obj['class']):
-%if declare_type(obj, cls, cli):
+%if declare_type(obj):
     ## CLASS FUNCTION #############################################################
     %for f in th.filter_items(th.extract_objs(specs, "function"), 'class', obj['name']):
 %if 'condition' in f:
 #if ${th.subx(x,f['condition'])}
 %endif
     ///////////////////////////////////////////////////////////////////////////////
-    /// @brief C++ wrapper for ::${th.make_func_name(x, f, obj['name'])}
+    /// @brief C++ wrapper for ::${th.make_func_name(x, f)}
     inline void ${th.subx(None, obj['name'])}::${th.subx(None, f['name'])}(
-        %for line in th.make_param_lines(None, f, 'this'):
+        %for line in th.make_param_lines(None, f, True):
         ${line}
         %endfor
         )
     {
-        // auto result = ::${th.make_func_name(x, f, obj['name'])}( ${th.make_param_call_str("handle", None, f, 'this')} );
+        // auto result = ::${th.make_func_name(x, f)}( ${th.make_param_call_str("handle", None, f, True)} );
         // if( ::${X}_RESULT_SUCCESS != result ) throw exception(result, "${x}::${th.subx(None, obj['name'])}::${th.subx(None, f['name'])}");
     }
 %if 'condition' in f:
@@ -74,7 +73,6 @@ namespace ${x}
 
     %endfor
 %endif
-%endfor
 %endfor
 } // namespace ${x}
 #endif // defined(__cplusplus)

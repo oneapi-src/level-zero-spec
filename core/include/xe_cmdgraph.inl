@@ -56,67 +56,6 @@ namespace xe
         // if( ::XE_RESULT_SUCCESS != result ) throw exception(result, "xe::CommandGraph::Close");
     }
 
-    ///////////////////////////////////////////////////////////////////////////////
-    /// @brief C++ wrapper for ::xeCommandGraphReset
-    inline void CommandGraph::Reset(
-        )
-    {
-        // auto result = ::xeCommandGraphReset( handle );
-        // if( ::XE_RESULT_SUCCESS != result ) throw exception(result, "xe::CommandGraph::Reset");
-    }
-
-    ///////////////////////////////////////////////////////////////////////////////
-    /// @brief C++ wrapper for ::xeCommandGraphEncodeDispatchFunction
-    inline void CommandGraph::EncodeDispatchFunction(
-        function_handle_t hFunction,                    ///< [in] handle of the function object
-        const dispatch_function_arguments_t* pDispatchFuncArgs, ///< [in] dispatch function arguments.
-        event_handle_t hEvent                           ///< [in][optional] handle of the event to signal on completion
-        )
-    {
-        // auto result = ::xeCommandGraphEncodeDispatchFunction( handle, hFunction->getHandle(), pDispatchFuncArgs, hEvent->getHandle() );
-        // if( ::XE_RESULT_SUCCESS != result ) throw exception(result, "xe::CommandGraph::EncodeDispatchFunction");
-    }
-
-    ///////////////////////////////////////////////////////////////////////////////
-    /// @brief C++ wrapper for ::xeCommandGraphEncodeDispatchFunctionIndirect
-    inline void CommandGraph::EncodeDispatchFunctionIndirect(
-        function_handle_t hFunction,                    ///< [in] handle of the function object
-        const dispatch_function_arguments_t* pDispatchArgumentsBuffer,  ///< [in] pointer to device buffer that will contain dispatch arguments
-        event_handle_t hEvent                           ///< [in][optional] handle of the event to signal on completion
-        )
-    {
-        // auto result = ::xeCommandGraphEncodeDispatchFunctionIndirect( handle, hFunction->getHandle(), pDispatchArgumentsBuffer, hEvent->getHandle() );
-        // if( ::XE_RESULT_SUCCESS != result ) throw exception(result, "xe::CommandGraph::EncodeDispatchFunctionIndirect");
-    }
-
-    ///////////////////////////////////////////////////////////////////////////////
-    /// @brief C++ wrapper for ::xeCommandGraphEncodeDispatchMultipleFunctionsIndirect
-    inline void CommandGraph::EncodeDispatchMultipleFunctionsIndirect(
-        uint32_t numFunctions,                          ///< [in] maximum number of functions to dispatch
-        const function_handle_t* phFunctions,           ///< [in] handles of the function objects
-        const size_t* pNumDispatchArguments,            ///< [in] pointer to device memory location that will contain the actual
-                                                        ///< number of dispatch arguments; must be less-than or equal-to
-                                                        ///< numFunctions
-        const dispatch_function_arguments_t* pDispatchArgumentsBuffer,  ///< [in] pointer to device buffer that will contain a contiguous array of
-                                                        ///< dispatch arguments
-        event_handle_t hEvent                           ///< [in][optional] handle of the event to signal on completion
-        )
-    {
-        // auto result = ::xeCommandGraphEncodeDispatchMultipleFunctionsIndirect( handle, numFunctions, phFunctions, pNumDispatchArguments, pDispatchArgumentsBuffer, hEvent->getHandle() );
-        // if( ::XE_RESULT_SUCCESS != result ) throw exception(result, "xe::CommandGraph::EncodeDispatchMultipleFunctionsIndirect");
-    }
-
-    ///////////////////////////////////////////////////////////////////////////////
-    /// @brief C++ wrapper for ::xeCommandGraphEncodeDispatchHostFunction
-    inline void CommandGraph::EncodeDispatchHostFunction(
-        host_pfn_t pfnHostFunc,                         ///< [in] pointer to host function.
-        void* pUserData                                 ///< [in] pointer to user data to pass to host function.
-        )
-    {
-        // auto result = ::xeCommandGraphEncodeDispatchHostFunction( handle, pfnHostFunc, pUserData );
-        // if( ::XE_RESULT_SUCCESS != result ) throw exception(result, "xe::CommandGraph::EncodeDispatchHostFunction");
-    }
-
 } // namespace xe
 #endif // defined(__cplusplus)
 #endif // _XE_CMDGRAPH_INL

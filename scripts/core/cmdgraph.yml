@@ -81,18 +81,6 @@ params:
       name: hCommandGraph
       desc: "[in] handle of command graph object to close"
 --- #--------------------------------------------------------------------------
-type: function
-desc: "Reset a command graph to initial (empty) state; ready for adding command lists."
-class: $xCommandGraph
-name: Reset
-details:
-    - "The application may **not** call this function from simultaneous threads with the same command graph handle."
-    - "The implementation of this function should be lock-free."
-params:
-    - type: $x_command_graph_handle_t
-      name: hCommandGraph
-      desc: "[in] handle of command graph object to reset"
---- #--------------------------------------------------------------------------
 type: class
 desc: "C++ wrapper for command graph"
 name: $xCommandGraph

@@ -2,12 +2,12 @@
 import re
 from templates import helper as th
 
-def declare_type(obj, cls, cli):
-    if re.match(r"none", cls) and \
+def declare_type(obj):
+    if 'class' not in obj and \
         not re.match(r"macro", obj['type']) and \
         not re.match(r"function", obj['type']):
         return True
-    return re.match(r"handle", obj['type'])
+    return re.match(r"handle", obj['type']) or re.match(r"class", obj['type'])
 
 %>/**************************************************************************//**
 * INTEL CONFIDENTIAL  
@@ -54,8 +54,7 @@ def declare_type(obj, cls, cli):
 namespace ${x}
 {
 %for obj in objects:
-%for cli, cls in enumerate(obj['class']):
-%if declare_type(obj, cls, cli):
+%if declare_type(obj):
     ///////////////////////////////////////////////////////////////////////////////
     %if 'condition' in obj:
     #if ${th.subx(x,obj['condition'])}
@@ -154,9 +153,9 @@ namespace ${x}
 #if ${th.subx(x,f['condition'])}
 %endif
         ///////////////////////////////////////////////////////////////////////////////
-        /// @brief C++ wrapper for ::${th.make_func_name(x, f, obj['name'])}
+        /// @brief C++ wrapper for ::${th.make_func_name(x, f)}
         inline void ${th.subx(None, f['name'])}(
-            %for line in th.make_param_lines(None, f, 'this'):
+            %for line in th.make_param_lines(None, f, True):
             ${line}
             %endfor
             );
@@ -168,9 +167,9 @@ namespace ${x}
     };
     ## HANDLE #####################################################################
     %elif re.match(r"handle", obj['type']):
-    %if 'none' != cls:
-    class ${th.subx(None, cls)};
-    using ${th.subx(None, obj['name'])} = ${th.subx(None, cls)}*;
+    %if 'class' in obj:
+    class ${th.subx(None, obj['class'])};
+    using ${th.subx(None, obj['name'])} = ${th.subx(None, obj['class'])}*;
     %else:
     using ${th.subx(None, obj['name'])} = ::${th.subx(x, obj['name'])};
     %endif
@@ -180,7 +179,6 @@ namespace ${x}
     %endif
 
 %endif
-%endfor
 %endfor
 } // namespace ${x}
 #endif // defined(__cplusplus)

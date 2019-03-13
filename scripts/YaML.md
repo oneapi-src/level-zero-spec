@@ -38,7 +38,7 @@ value: "0"
 #### typedef
 * A typedef initiates the creation of a c/c++ 'typedef' statement in the source code
 * A typedef requires the following scalar fields: "desc", "name" and "value"
-* A typedef may take the following optional scalar or sequence of scalar fields: "class"
+* A typedef may take the following optional scalar fields: "class"
 
 ```yml
 type: typedef
@@ -50,7 +50,7 @@ value: "void*"
 #### const
 * A const initiates the creation of a c/c++ 'static const' statement in the source code
 * A const requires the following scalar fields: "desc", "name", "typename" and "value"
-* A typedef may take the following optional scalar or sequence of scalar fields: "class"
+* A typedef may take the following optional scalar fields: "class"
 
 ```yml
 type: const
@@ -63,7 +63,7 @@ value: "0"
 #### enum
 * An enum initiates the creation of a c/c++ 'enum' definition in the source code
 * An enum requires the following scalar fields: "desc" and "name"
-* An enum may take the following optional scalar or sequence of scalar fields: "class"
+* An enum may take the following optional scalar fields: "class"
 * An enum requires the following sequence of scalars: "etors"
 * An etor requires the following scalar fields: "name" and "desc"
 * An etor may take the following optional scalar field: "value"
@@ -83,7 +83,7 @@ etors:
 #### struct
 * A struct initiates the creation of a c/c++ 'struct' definition in the source code
 * A struct requires the following scalar fields: "desc" and "name"
-* A struct may take the following optional scalar or sequence of scalar fields: "class"
+* A struct may take the following optional scalar fields: "class"
 * A struct requires the following sequence of scalars: "members"
 * A member requires the following scalar fields: "type", "name" and "desc"
 * A member may take the following optional scalar fields: "init"
@@ -119,7 +119,7 @@ class: Foo
 * A function initiates the creation of a c/c++ function declaration in the source code
 * A function requires the following scalar fields: "desc" and "name"
 * A function requires the following sequence of scalars: "params"
-* A function may take the following optional scalar or sequence of scalar fields: "class"
+* A function may take the following optional scalar fields: "class"
 * A function may take the following optional scalar fields: "decl"
 * A function may take the following optional sequence of sequences: "details", "returns" and "analogue"
 * A param requires the following scalars: "type", "name" and "desc"

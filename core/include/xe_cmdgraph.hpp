@@ -51,20 +51,6 @@ namespace xe
         auto getDesc( void ) const { return desc; }
 
         ///////////////////////////////////////////////////////////////////////////////
-        /// @brief C++ version for ::xe_host_pfn_t
-        using host_pfn_t = ::xe_host_pfn_t;
-
-        ///////////////////////////////////////////////////////////////////////////////
-        /// @brief C++ version for ::xe_dispatch_function_arguments_t
-        struct dispatch_function_arguments_t
-        {
-            uint32_t groupCountX = 0;                       ///< [in] width of dispatches in X dimension
-            uint32_t groupCountY = 0;                       ///< [in] width of dispatches in Y dimension
-            uint32_t groupCountZ = 0;                       ///< [in] width of dispatches in Z dimension
-
-        };
-
-        ///////////////////////////////////////////////////////////////////////////////
         /// @brief C++ wrapper for ::xeCommandGraphDestroy
         inline void Destroy(
             );
@@ -72,47 +58,6 @@ namespace xe
         ///////////////////////////////////////////////////////////////////////////////
         /// @brief C++ wrapper for ::xeCommandGraphClose
         inline void Close(
-            );
-
-        ///////////////////////////////////////////////////////////////////////////////
-        /// @brief C++ wrapper for ::xeCommandGraphReset
-        inline void Reset(
-            );
-
-        ///////////////////////////////////////////////////////////////////////////////
-        /// @brief C++ wrapper for ::xeCommandGraphEncodeDispatchFunction
-        inline void EncodeDispatchFunction(
-            function_handle_t hFunction,                    ///< [in] handle of the function object
-            const dispatch_function_arguments_t* pDispatchFuncArgs, ///< [in] dispatch function arguments.
-            event_handle_t hEvent                           ///< [in][optional] handle of the event to signal on completion
-            );
-
-        ///////////////////////////////////////////////////////////////////////////////
-        /// @brief C++ wrapper for ::xeCommandGraphEncodeDispatchFunctionIndirect
-        inline void EncodeDispatchFunctionIndirect(
-            function_handle_t hFunction,                    ///< [in] handle of the function object
-            const dispatch_function_arguments_t* pDispatchArgumentsBuffer,  ///< [in] pointer to device buffer that will contain dispatch arguments
-            event_handle_t hEvent                           ///< [in][optional] handle of the event to signal on completion
-            );
-
-        ///////////////////////////////////////////////////////////////////////////////
-        /// @brief C++ wrapper for ::xeCommandGraphEncodeDispatchMultipleFunctionsIndirect
-        inline void EncodeDispatchMultipleFunctionsIndirect(
-            uint32_t numFunctions,                          ///< [in] maximum number of functions to dispatch
-            const function_handle_t* phFunctions,           ///< [in] handles of the function objects
-            const size_t* pNumDispatchArguments,            ///< [in] pointer to device memory location that will contain the actual
-                                                            ///< number of dispatch arguments; must be less-than or equal-to
-                                                            ///< numFunctions
-            const dispatch_function_arguments_t* pDispatchArgumentsBuffer,  ///< [in] pointer to device buffer that will contain a contiguous array of
-                                                            ///< dispatch arguments
-            event_handle_t hEvent                           ///< [in][optional] handle of the event to signal on completion
-            );
-
-        ///////////////////////////////////////////////////////////////////////////////
-        /// @brief C++ wrapper for ::xeCommandGraphEncodeDispatchHostFunction
-        inline void EncodeDispatchHostFunction(
-            host_pfn_t pfnHostFunc,                         ///< [in] pointer to host function.
-            void* pUserData                                 ///< [in] pointer to user data to pass to host function.
             );
 
     };

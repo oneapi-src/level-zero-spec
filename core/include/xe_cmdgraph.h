@@ -136,27 +136,6 @@ __xedllport xe_result_t __xecall
     xe_command_graph_handle_t hCommandGraph         ///< [in] handle of command graph object to close
     );
 
-///////////////////////////////////////////////////////////////////////////////
-/// @brief Reset a command graph to initial (empty) state; ready for adding
-///        command lists.
-/// 
-/// @details
-///     - The application may **not** call this function from simultaneous
-///       threads with the same command graph handle.
-///     - The implementation of this function should be lock-free.
-/// 
-/// @returns
-///     - ::XE_RESULT_SUCCESS
-///     - ::XE_RESULT_ERROR_UNINITIALIZED
-///     - ::XE_RESULT_ERROR_DEVICE_LOST
-///     - ::XE_RESULT_ERROR_INVALID_PARAMETER
-///         + nullptr == hCommandGraph
-///     - ::XE_RESULT_ERROR_UNSUPPORTED
-__xedllport xe_result_t __xecall
-  xeCommandGraphReset(
-    xe_command_graph_handle_t hCommandGraph         ///< [in] handle of command graph object to reset
-    );
-
 #if defined(__cplusplus)
 } // extern "C"
 #endif

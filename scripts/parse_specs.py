@@ -4,19 +4,10 @@ import re
 import hashlib
 
 """
-    generate a list of classes this object belongs to
-"""
-def get_class_list(d):
-    if 'class' in d:
-        return d['class'] if isinstance(d['class'], list) else [d['class']]
-    else:
-        return ['none']
-
-"""
     generates SHA512 string for the given object
 """
 def generate_hash(d):
-    hl = []
+    h = None
     # functions-only (for now)...
     if re.match(r"function", d['type']):
         fh = hashlib.sha256()
@@ -24,12 +15,12 @@ def generate_hash(d):
         fh.update(d['name'].encode())
         for p in d['params']:
             fh.update(p['type'].encode())
-        # hashcode per-class...
-        for c in d['class']:
-            ch = fh
-            ch.update(c.encode())
-            hl.append(ch.hexdigest())
-    return hl
+        # hashcode of class
+        if 'class' in d:
+            fh.update(d['class'].encode())
+        # digest into string
+        h = fh.hexdigest()
+    return h
 
 """
     generates meta-data on all objects
@@ -38,7 +29,8 @@ def generate_meta(d, meta):
     type = d['type']
     name = re.sub(r"(\w+)\(.*\)", r"\1", d['name']) # removes '()' part of macros
 
-    for c in d['class']:
+    if 'class' in d:
+        c = d['class']
         # create dict if class name is not already known...
         if c not in meta['class']:
             meta['class'][c] = {}
@@ -72,8 +64,8 @@ def generate_meta(d, meta):
                 meta[type][name].append(d['value'])
             if 'altvalue' in d:
                 meta[type][name].append(d['altvalue'])
-        else:
-            meta[type][name].extend(d['class'])
+        elif 'class' in d:
+            meta[type][name].append(d['class'])
 
     return meta
 
@@ -99,7 +91,6 @@ def parse(path):
             if re.match(r"header", d['type']):
                 header = d
             else:
-                d['class'] = get_class_list(d)
                 d['hash'] = generate_hash(d)
                 objects.append(d)
                 meta = generate_meta(d, meta)

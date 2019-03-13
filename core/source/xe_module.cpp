@@ -895,7 +895,7 @@ __xedllexport xe_result_t __xecall
 ///         + invalid dispatch count range for dispatch
 ///     - ::XE_RESULT_ERROR_UNSUPPORTED
 ///
-/// @hash {a97915a21657a27d07408efe7ab1b444448db3925a56e7b1892740f7d1dedf13}
+/// @hash {96b874529667a3e920d6d40c8011400e436ae8197ce31acaff293345e377e730}
 ///
 __xedllexport xe_result_t __xecall
   xeCommandListEncodeDispatchFunction(
@@ -939,72 +939,6 @@ __xedllexport xe_result_t __xecall
 }
 
 ///////////////////////////////////////////////////////////////////////////////
-/// @brief Dispatch function over one or more work groups.
-/// 
-/// @details
-///     - This function may **not** be called from simultaneous threads.
-///     - The implementation of this function should be lock-free.
-/// 
-/// @remarks
-///   _Analogues_
-///     - **cuLaunchKernel**
-/// 
-/// @returns
-///     - ::XE_RESULT_SUCCESS
-///     - ::XE_RESULT_ERROR_UNINITIALIZED
-///     - ::XE_RESULT_ERROR_DEVICE_LOST
-///     - ::XE_RESULT_ERROR_INVALID_PARAMETER
-///         + nullptr == hCommandGraph
-///         + nullptr == hFunction
-///         + nullptr == pDispatchFuncArgs
-///         + invalid group count range for dispatch
-///         + invalid dispatch count range for dispatch
-///     - ::XE_RESULT_ERROR_UNSUPPORTED
-///
-/// @hash {27d7bdca664c328f7a8a21d90adfb06a4311e0074bd6c67e659a000c68bd3978}
-///
-__xedllexport xe_result_t __xecall
-  xeCommandGraphEncodeDispatchFunction(
-    xe_command_graph_handle_t hCommandGraph,        ///< [in] handle of the command graph
-    xe_function_handle_t hFunction,                 ///< [in] handle of the function object
-    const xe_dispatch_function_arguments_t* pDispatchFuncArgs,  ///< [in] dispatch function arguments.
-    xe_event_handle_t hEvent                        ///< [in][optional] handle of the event to signal on completion
-    )
-{
-    try
-    {
-        //if( XE_DRIVER_PARAMETER_VALIDATION_LEVEL >= 0 )
-        {
-            // if( nullptr == driver ) return XE_RESULT_ERROR_UNINITIALIZED;
-            // Check parameters
-            if( nullptr == hCommandGraph ) return XE_RESULT_ERROR_INVALID_PARAMETER;
-            if( nullptr == hFunction ) return XE_RESULT_ERROR_INVALID_PARAMETER;
-            if( nullptr == pDispatchFuncArgs ) return XE_RESULT_ERROR_INVALID_PARAMETER;
-        }
-        /// @begin
-#if defined(XE_NULLDRV)
-        return XE_RESULT_SUCCESS;
-#else
-        return L0::CommandGraph::fromHandle(hCommandGraph)->encodeDispatchFunction(hFunction, pDispatchFuncArgs, hEvent);
-#endif
-        /// @end
-    }
-    catch(xe_result_t& result)
-    {
-        return result;
-    }
-    catch(std::bad_alloc&)
-    {
-        return XE_RESULT_ERROR_OUT_OF_HOST_MEMORY;
-    }
-    catch(std::exception&)
-    {
-        // @todo: pfnOnException(e.what());
-        return XE_RESULT_ERROR_UNKNOWN;
-    }
-}
-
-///////////////////////////////////////////////////////////////////////////////
 /// @brief Dispatch function over one or more work groups using indirect dispatch
 ///        arguments.
 /// 
@@ -1029,7 +963,7 @@ __xedllexport xe_result_t __xecall
 ///         + nullptr == pDispatchArgumentsBuffer
 ///     - ::XE_RESULT_ERROR_UNSUPPORTED
 ///
-/// @hash {451e8fa72be7b91a1e24afdb4e6585f646cb93b0248cfa2f75119111c8c5147d}
+/// @hash {cfc23fcde14181c3db9ea6ce3d52e31011fceb83c31e47f9e09599906991da43}
 ///
 __xedllexport xe_result_t __xecall
   xeCommandListEncodeDispatchFunctionIndirect(
@@ -1054,74 +988,6 @@ __xedllexport xe_result_t __xecall
         return XE_RESULT_SUCCESS;
 #else
         return L0::CommandList::fromHandle(hCommandList)->encodeDispatchFunctionIndirect(hFunction, pDispatchArgumentsBuffer, hEvent);
-#endif
-        /// @end
-    }
-    catch(xe_result_t& result)
-    {
-        return result;
-    }
-    catch(std::bad_alloc&)
-    {
-        return XE_RESULT_ERROR_OUT_OF_HOST_MEMORY;
-    }
-    catch(std::exception&)
-    {
-        // @todo: pfnOnException(e.what());
-        return XE_RESULT_ERROR_UNKNOWN;
-    }
-}
-
-///////////////////////////////////////////////////////////////////////////////
-/// @brief Dispatch function over one or more work groups using indirect dispatch
-///        arguments.
-/// 
-/// @details
-///     - The dispatch arguments need to be device visible.
-///     - The dispatch arguments buffer may not be reusued until dispatch has
-///       completed on the device.
-///     - This function may **not** be called from simultaneous threads.
-///     - The implementation of this function should be lock-free.
-/// 
-/// @remarks
-///   _Analogues_
-///     - **cuLaunchKernel**
-/// 
-/// @returns
-///     - ::XE_RESULT_SUCCESS
-///     - ::XE_RESULT_ERROR_UNINITIALIZED
-///     - ::XE_RESULT_ERROR_DEVICE_LOST
-///     - ::XE_RESULT_ERROR_INVALID_PARAMETER
-///         + nullptr == hCommandGraph
-///         + nullptr == hFunction
-///         + nullptr == pDispatchArgumentsBuffer
-///     - ::XE_RESULT_ERROR_UNSUPPORTED
-///
-/// @hash {a0a84808139b61002fd9f9b685077690fc607cf7df6a5d4dc858704ae4712c98}
-///
-__xedllexport xe_result_t __xecall
-  xeCommandGraphEncodeDispatchFunctionIndirect(
-    xe_command_graph_handle_t hCommandGraph,        ///< [in] handle of the command graph
-    xe_function_handle_t hFunction,                 ///< [in] handle of the function object
-    const xe_dispatch_function_arguments_t* pDispatchArgumentsBuffer,   ///< [in] pointer to device buffer that will contain dispatch arguments
-    xe_event_handle_t hEvent                        ///< [in][optional] handle of the event to signal on completion
-    )
-{
-    try
-    {
-        //if( XE_DRIVER_PARAMETER_VALIDATION_LEVEL >= 0 )
-        {
-            // if( nullptr == driver ) return XE_RESULT_ERROR_UNINITIALIZED;
-            // Check parameters
-            if( nullptr == hCommandGraph ) return XE_RESULT_ERROR_INVALID_PARAMETER;
-            if( nullptr == hFunction ) return XE_RESULT_ERROR_INVALID_PARAMETER;
-            if( nullptr == pDispatchArgumentsBuffer ) return XE_RESULT_ERROR_INVALID_PARAMETER;
-        }
-        /// @begin
-#if defined(XE_NULLDRV)
-        return XE_RESULT_SUCCESS;
-#else
-        return L0::CommandGraph::fromHandle(hCommandGraph)->encodeDispatchFunctionIndirect(hFunction, pDispatchArgumentsBuffer, hEvent);
 #endif
         /// @end
     }
@@ -1166,7 +1032,7 @@ __xedllexport xe_result_t __xecall
 ///         + nullptr == pDispatchArgumentsBuffer
 ///     - ::XE_RESULT_ERROR_UNSUPPORTED
 ///
-/// @hash {fc36f090e6b3598b615e1c1796b7ab5bafc02d9d0356228b6a3d1a82b928eb7b}
+/// @hash {6d27e99f59f199ff7b8518a5f19c177fed937aca1d44f3e7ed2105f34d01b18b}
 ///
 __xedllexport xe_result_t __xecall
   xeCommandListEncodeDispatchMultipleFunctionsIndirect(
@@ -1216,81 +1082,6 @@ __xedllexport xe_result_t __xecall
 }
 
 ///////////////////////////////////////////////////////////////////////////////
-/// @brief Dispatch multiple functions over one or more work groups using an
-///        array of indirect dispatch arguments.
-/// 
-/// @details
-///     - The array of dispatch arguments need to be device visible.
-///     - The array of dispatch arguments buffer may not be reusued until
-///       dispatch has completed on the device.
-///     - This function may **not** be called from simultaneous threads.
-///     - The implementation of this function should be lock-free.
-/// 
-/// @remarks
-///   _Analogues_
-///     - **cuLaunchKernel**
-/// 
-/// @returns
-///     - ::XE_RESULT_SUCCESS
-///     - ::XE_RESULT_ERROR_UNINITIALIZED
-///     - ::XE_RESULT_ERROR_DEVICE_LOST
-///     - ::XE_RESULT_ERROR_INVALID_PARAMETER
-///         + nullptr == hCommandGraph
-///         + nullptr == phFunctions
-///         + nullptr == pNumDispatchArguments
-///         + nullptr == pDispatchArgumentsBuffer
-///     - ::XE_RESULT_ERROR_UNSUPPORTED
-///
-/// @hash {48aba7205c0a835b5b169f00145adfed229767f08123667fe835967d20abe30a}
-///
-__xedllexport xe_result_t __xecall
-  xeCommandGraphEncodeDispatchMultipleFunctionsIndirect(
-    xe_command_graph_handle_t hCommandGraph,        ///< [in] handle of the command graph
-    uint32_t numFunctions,                          ///< [in] maximum number of functions to dispatch
-    const xe_function_handle_t* phFunctions,        ///< [in] handles of the function objects
-    const size_t* pNumDispatchArguments,            ///< [in] pointer to device memory location that will contain the actual
-                                                    ///< number of dispatch arguments; must be less-than or equal-to
-                                                    ///< numFunctions
-    const xe_dispatch_function_arguments_t* pDispatchArgumentsBuffer,   ///< [in] pointer to device buffer that will contain a contiguous array of
-                                                    ///< dispatch arguments
-    xe_event_handle_t hEvent                        ///< [in][optional] handle of the event to signal on completion
-    )
-{
-    try
-    {
-        //if( XE_DRIVER_PARAMETER_VALIDATION_LEVEL >= 0 )
-        {
-            // if( nullptr == driver ) return XE_RESULT_ERROR_UNINITIALIZED;
-            // Check parameters
-            if( nullptr == hCommandGraph ) return XE_RESULT_ERROR_INVALID_PARAMETER;
-            if( nullptr == phFunctions ) return XE_RESULT_ERROR_INVALID_PARAMETER;
-            if( nullptr == pNumDispatchArguments ) return XE_RESULT_ERROR_INVALID_PARAMETER;
-            if( nullptr == pDispatchArgumentsBuffer ) return XE_RESULT_ERROR_INVALID_PARAMETER;
-        }
-        /// @begin
-#if defined(XE_NULLDRV)
-        return XE_RESULT_SUCCESS;
-#else
-        return L0::CommandGraph::fromHandle(hCommandGraph)->encodeDispatchMultipleFunctionsIndirect(numFunctions, phFunctions, pNumDispatchArguments, pDispatchArgumentsBuffer, hEvent);
-#endif
-        /// @end
-    }
-    catch(xe_result_t& result)
-    {
-        return result;
-    }
-    catch(std::bad_alloc&)
-    {
-        return XE_RESULT_ERROR_OUT_OF_HOST_MEMORY;
-    }
-    catch(std::exception&)
-    {
-        // @todo: pfnOnException(e.what());
-        return XE_RESULT_ERROR_UNKNOWN;
-    }
-}
-
-///////////////////////////////////////////////////////////////////////////////
 /// @brief Dispatch host function. All work after this command in the command
 ///        list will block until host function completes.
 /// 
@@ -1311,7 +1102,7 @@ __xedllexport xe_result_t __xecall
 ///         + nullptr == pUserData
 ///     - ::XE_RESULT_ERROR_UNSUPPORTED
 ///
-/// @hash {63f4382ff32ea764dd175c3c286a9799cd23b3e32aa90c1b948a6b1e0405b4ba}
+/// @hash {8ddd72df6076aceb0a6d679304fad310ca0ffea356bd56ad8f0f4f0208daa2dc}
 ///
 __xedllexport xe_result_t __xecall
   xeCommandListEncodeDispatchHostFunction(
@@ -1334,68 +1125,6 @@ __xedllexport xe_result_t __xecall
         return XE_RESULT_SUCCESS;
 #else
         return L0::CommandList::fromHandle(hCommandList)->encodeDispatchHostFunction(pfnHostFunc, pUserData);
-#endif
-        /// @end
-    }
-    catch(xe_result_t& result)
-    {
-        return result;
-    }
-    catch(std::bad_alloc&)
-    {
-        return XE_RESULT_ERROR_OUT_OF_HOST_MEMORY;
-    }
-    catch(std::exception&)
-    {
-        // @todo: pfnOnException(e.what());
-        return XE_RESULT_ERROR_UNKNOWN;
-    }
-}
-
-///////////////////////////////////////////////////////////////////////////////
-/// @brief Dispatch host function. All work after this command in the command
-///        list will block until host function completes.
-/// 
-/// @details
-///     - This function may **not** be called from simultaneous threads.
-///     - The implementation of this function should be lock-free.
-/// 
-/// @remarks
-///   _Analogues_
-///     - **cuLaunchHostFunc**
-/// 
-/// @returns
-///     - ::XE_RESULT_SUCCESS
-///     - ::XE_RESULT_ERROR_UNINITIALIZED
-///     - ::XE_RESULT_ERROR_DEVICE_LOST
-///     - ::XE_RESULT_ERROR_INVALID_PARAMETER
-///         + nullptr == hCommandGraph
-///         + nullptr == pUserData
-///     - ::XE_RESULT_ERROR_UNSUPPORTED
-///
-/// @hash {25ee33b5152b0dcbfaa702a00fef20f87383ad225fa62703b0344b6bd4569eee}
-///
-__xedllexport xe_result_t __xecall
-  xeCommandGraphEncodeDispatchHostFunction(
-    xe_command_graph_handle_t hCommandGraph,        ///< [in] handle of the command graph
-    xe_host_pfn_t pfnHostFunc,                      ///< [in] pointer to host function.
-    void* pUserData                                 ///< [in] pointer to user data to pass to host function.
-    )
-{
-    try
-    {
-        //if( XE_DRIVER_PARAMETER_VALIDATION_LEVEL >= 0 )
-        {
-            // if( nullptr == driver ) return XE_RESULT_ERROR_UNINITIALIZED;
-            // Check parameters
-            if( nullptr == hCommandGraph ) return XE_RESULT_ERROR_INVALID_PARAMETER;
-            if( nullptr == pUserData ) return XE_RESULT_ERROR_INVALID_PARAMETER;
-        }
-        /// @begin
-#if defined(XE_NULLDRV)
-        return XE_RESULT_SUCCESS;
-#else
-        return L0::CommandGraph::fromHandle(hCommandGraph)->encodeDispatchHostFunction(pfnHostFunc, pUserData);
 #endif
         /// @end
     }
