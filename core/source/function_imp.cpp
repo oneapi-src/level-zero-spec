@@ -234,6 +234,31 @@ xe_result_t FunctionImp::setArgBuffer(uint32_t argIndex, size_t argSize, const v
     return XE_RESULT_SUCCESS;
 }
 
+xe_result_t FunctionImp::setArgImage(uint32_t argIndex, size_t argSize, const void *argVal) {
+
+    const auto &kernelArgInfo = getKernelInfo()->kernelArgInfo[argIndex];
+    // patchBufferOffset(kernelArgInfo, nullptr, nullptr); // stateless to stateful buffer offsets disabled
+
+    auto patchLocation = ptrOffset(crossThreadData,
+                                   kernelArgInfo.kernelArgPatchInfoVector[0].crossthreadOffset);
+
+    patchWithRequiredSize(patchLocation, kernelArgInfo.kernelArgPatchInfoVector[0].size, *reinterpret_cast<const uintptr_t *>(argVal));
+
+    oclInternals->storeKernelArg(argIndex, OCLRT::Kernel::IMAGE_OBJ, nullptr, argVal, argSize);
+
+    //TODO AWF - do something for images here?
+    //if (requiresSshForBuffers()) {
+    //    auto surfaceState = ptrOffset(getSurfaceStateHeap(), kernelArgInfo.offsetHeap);
+    //    Buffer::setSurfaceState(&getDevice(), surfaceState, 0, nullptr);
+    //} // no SSH for buffers for now - stateless to stateful disabled
+
+    GraphicsAllocation *alloc = module->getDevice()->getMemoryManager()->findAllocation(*reinterpret_cast<void *const *>(argVal));
+    assert(alloc != nullptr);
+    residencyContainer[argIndex] = alloc;
+
+    return XE_RESULT_SUCCESS;
+}
+
 bool FunctionImp::initialize(const xe_function_desc_t *desc) {
     assert(desc->version == XE_API_HEADER_VERSION);
     assert(desc->flags == 0);
@@ -250,10 +275,12 @@ bool FunctionImp::initialize(const xe_function_desc_t *desc) {
     for (auto handleRT : kernelRT->kernelArgHandlers) {
         if (handleRT == &OCLRT::Kernel::setArgBuffer) {
             this->oclInternals->kernelArgHandlers.push_back(&FunctionImp::setArgBuffer);
+        } else if (handleRT == &OCLRT::Kernel::setArgImage) {
+            this->oclInternals->kernelArgHandlers.push_back(&FunctionImp::setArgImage);
         } else if (handleRT == &OCLRT::Kernel::setArgImmediate) {
             this->oclInternals->kernelArgHandlers.push_back(&FunctionImp::setArgImmediate);
         } else {
-            assert(0); // only setArgBuffer for now
+            assert(0);
         }
     }
 

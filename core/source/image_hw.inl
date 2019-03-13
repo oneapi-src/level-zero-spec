@@ -2,8 +2,8 @@
 
 namespace L0 {
 template <uint32_t gfxCoreFamily>
-bool ImageCoreFamily<gfxCoreFamily>::initialize(const xe_image_desc_t *desc) {
-    if (!BaseClass::initialize(desc)) {
+bool ImageCoreFamily<gfxCoreFamily>::initialize(Device *device, const xe_image_desc_t *desc) {
+    if (!BaseClass::initialize(device, desc)) {
         return false;
     }
 

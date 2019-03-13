@@ -6,9 +6,6 @@
 #include "runtime/helpers/hw_info.h"
 #include "runtime/indirect_heap/indirect_heap.h"
 
-const int XE_IMAGE_FORMAT_MAX = XE_IMAGE_FORMAT_FLOAT32;
-const int XE_NUMCHANNELS_MAX = 4;
-const int XE_NUMCHANNELS_MIN = 1;
 namespace L0 {
 
 template <uint32_t gfxCoreFamily>
@@ -19,19 +16,17 @@ struct ImageCoreFamily : public ImageImp {
     using BaseClass = ImageImp;
     using ImageImp::ImageImp;
 
-	const SURFACE_FORMAT undefined = static_cast<SURFACE_FORMAT>(0);
-
 	//XE_NUMCHANNELS is subtracted off to eliminate an unused channel in every row.
     const SURFACE_FORMAT format_table[XE_IMAGE_FORMAT_MAX + 1][XE_NUMCHANNELS_MAX + 1 - XE_NUMCHANNELS_MIN] = {
-        {RENDER_SURFACE_STATE::SURFACE_FORMAT_R8_UINT,				//XE_IMAGE_FORMAT_UINT8
+        {RENDER_SURFACE_STATE::SURFACE_FORMAT_R8_UINT,	//XE_IMAGE_FORMAT_UINT8
             RENDER_SURFACE_STATE::SURFACE_FORMAT_R8G8_UINT,
             RENDER_SURFACE_STATE::SURFACE_FORMAT_R8G8B8_UINT,
             RENDER_SURFACE_STATE::SURFACE_FORMAT_R8G8B8A8_UINT},
-        {RENDER_SURFACE_STATE::SURFACE_FORMAT_R16_UINT,				//XE_IMAGE_FORMAT_UINT16
+        {RENDER_SURFACE_STATE::SURFACE_FORMAT_R16_UINT,	//XE_IMAGE_FORMAT_UINT16
             RENDER_SURFACE_STATE::SURFACE_FORMAT_R16G16_UINT,
             RENDER_SURFACE_STATE::SURFACE_FORMAT_R16G16B16_UINT,
             RENDER_SURFACE_STATE::SURFACE_FORMAT_R16G16B16A16_UINT},
-        {RENDER_SURFACE_STATE::SURFACE_FORMAT_R32_UINT,				//XE_IMAGE_FORMAT_UINT32
+        {RENDER_SURFACE_STATE::SURFACE_FORMAT_R32_UINT,	//XE_IMAGE_FORMAT_UINT32
             RENDER_SURFACE_STATE::SURFACE_FORMAT_R32G32_UINT,
             RENDER_SURFACE_STATE::SURFACE_FORMAT_R32G32B32_UINT,
             RENDER_SURFACE_STATE::SURFACE_FORMAT_R32G32B32A32_UINT},
@@ -57,7 +52,7 @@ struct ImageCoreFamily : public ImageImp {
             RENDER_SURFACE_STATE::SURFACE_FORMAT_R32G32B32A32_FLOAT},
     };
 
-    bool initialize(const xe_image_desc_t *desc) override;
+    bool initialize(Device *device, const xe_image_desc_t *desc) override;
 
   protected:
     RENDER_SURFACE_STATE surfaceState;

@@ -1,4 +1,5 @@
 #include "mock_image.h"
+#include "mock_device.h"
 #include "igfxfmid.h"
 #include "test.h"
 #include "unit_tests/gen_common/gen_cmd_parse.h"
@@ -8,6 +9,8 @@
 
 namespace L0 {
 namespace ult {
+
+using ::testing::AnyNumber;
 
 TEST(xeImageDestroy, redirectsToObject) {
     Mock<Image> image;
@@ -20,24 +23,28 @@ TEST(xeImageDestroy, redirectsToObject) {
 using ImageCreate = ::testing::Test;
 
 TEST_F(ImageCreate, returnsImageOnSuccess) {
+    Mock<Device> device;
     xe_image_desc_t desc = {};
 
-    auto image = whitebox_cast(Image::create(productFamily, &desc));
+    auto image = whitebox_cast(Image::create(productFamily, &device, &desc));
     ASSERT_NE(nullptr, image);
 
     image->destroy();
 }
 
-
 TEST_F(ImageCreate, givenInvalidProductFamilyReturnsNullPointer) {
+    Mock<Device> device;
     xe_image_desc_t desc = {};
 
-    auto image = whitebox_cast(Image::create(IGFX_UNKNOWN, &desc));
+    auto image = whitebox_cast(Image::create(IGFX_UNKNOWN, &device, &desc));
     ASSERT_EQ(nullptr, image);
 }
 
 HWTEST2_F(ImageCreate, descMatchesSurface, MatchAny) {
     using RENDER_SURFACE_STATE = typename FamilyType::RENDER_SURFACE_STATE;
+    Mock<Device> device;
+    EXPECT_CALL(device, getMemoryManager).Times(AnyNumber());
+
     xe_image_desc_t desc = {};
 
     desc.type = XE_IMAGE_TYPE_3D;
@@ -48,7 +55,7 @@ HWTEST2_F(ImageCreate, descMatchesSurface, MatchAny) {
     desc.depth = 17;
 
     auto imageCore = new ImageCoreFamily<gfxCoreFamily>();
-    bool ret = imageCore->initialize(&desc);
+    bool ret = imageCore->initialize(&device, &desc);
     ASSERT_TRUE(ret);
 
     auto surfaceState = imageCore->getSurfaceState();
@@ -63,7 +70,11 @@ HWTEST2_F(ImageCreate, descMatchesSurface, MatchAny) {
 HWTEST2_F(ImageCreate, descBadParamsFail, MatchAny) {
     using RENDER_SURFACE_STATE = typename FamilyType::RENDER_SURFACE_STATE;
 
+    Mock<Device> device;
+    EXPECT_CALL(device, getMemoryManager).Times(AnyNumber());
+
     auto imageCore = new ImageCoreFamily<gfxCoreFamily>();
+
     xe_image_desc_t desc, default_desc;
     bool ret;
 
@@ -76,22 +87,25 @@ HWTEST2_F(ImageCreate, descBadParamsFail, MatchAny) {
     default_desc.arraylevels = 1;
     default_desc.miplevels = 1;
 
-	desc = default_desc;
-	desc.type = static_cast<xe_image_type_t>(XE_IMAGE_TYPE_3D + 100);
+    desc = default_desc;
+    desc.type = static_cast<xe_image_type_t>(XE_IMAGE_TYPE_3D + 100);
 
-	ret = imageCore->initialize(&desc);
-	ASSERT_FALSE(ret);
+    ret = imageCore->initialize(&device, &desc);
+    ASSERT_FALSE(ret);
 
-	desc = default_desc;
+    desc = default_desc;
     desc.numChannels = 0;
+    ret = imageCore->initialize(&device, &desc);
     ASSERT_FALSE(ret);
 
-	desc = default_desc;
+    desc = default_desc;
     desc.numChannels = 100;
+    ret = imageCore->initialize(&device, &desc);
     ASSERT_FALSE(ret);
 
-	desc = default_desc;
+    desc = default_desc;
     desc.format = static_cast<xe_image_format_t>(XE_IMAGE_FORMAT_FLOAT32 + 100);
+    ret = imageCore->initialize(&device, &desc);
     ASSERT_FALSE(ret);
 }
 

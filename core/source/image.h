@@ -17,7 +17,7 @@ struct Image : public _xe_image_handle_t {
 
     virtual xe_result_t destroy() = 0;
 
-    static Image *create(uint32_t productFamily, const xe_image_desc_t *desc);
+    static Image *create(uint32_t productFamily, Device *device, const xe_image_desc_t *desc);
 
     static Image *fromHandle(xe_image_handle_t handle) {
         return static_cast<Image *>(handle);

@@ -78,6 +78,8 @@ struct FunctionImp : Function {
 
     xe_result_t setArgBuffer(uint32_t argIndex, size_t argSize, const void *argVal);
 
+	xe_result_t setArgImage(uint32_t argIndex, size_t argSize, const void *argVal);
+
     bool initialize(const xe_function_desc_t *desc);
 
     const void *getIsaHostMem() const override;
