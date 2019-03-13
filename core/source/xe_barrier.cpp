@@ -64,7 +64,7 @@
 /// @hash {2d1eb476632e411da06d0ff92b64149da43b825416bdaa382c88c04187b02159}
 ///
 __xedllexport xe_result_t __xecall
-  xeCommandListEncodeExecutionBarrier(
+xeCommandListEncodeExecutionBarrier(
     xe_command_list_handle_t hCommandList           ///< [in] handle of the command list
     )
 {

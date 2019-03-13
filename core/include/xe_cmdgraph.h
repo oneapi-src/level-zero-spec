@@ -87,7 +87,7 @@ typedef struct _xe_command_graph_desc_t
 ///     - ::XE_RESULT_ERROR_OUT_OF_HOST_MEMORY
 ///     - ::XE_RESULT_ERROR_OUT_OF_DEVICE_MEMORY
 __xedllport xe_result_t __xecall
-  xeDeviceCreateCommandGraph(
+xeDeviceCreateCommandGraph(
     xe_device_handle_t hDevice,                     ///< [in] handle of the device object
     const xe_command_graph_desc_t* desc,            ///< [in] pointer to command graph descriptor
     xe_command_graph_handle_t* phCommandGraph       ///< [out] pointer to handle of command graph object created
@@ -109,7 +109,7 @@ __xedllport xe_result_t __xecall
 ///         + nullptr == hCommandGraph
 ///     - ::XE_RESULT_ERROR_UNSUPPORTED
 __xedllport xe_result_t __xecall
-  xeCommandGraphDestroy(
+xeCommandGraphDestroy(
     xe_command_graph_handle_t hCommandGraph         ///< [in] handle of command graph object to destroy
     );
 
@@ -132,7 +132,7 @@ __xedllport xe_result_t __xecall
 ///         + nullptr == hCommandGraph
 ///     - ::XE_RESULT_ERROR_UNSUPPORTED
 __xedllport xe_result_t __xecall
-  xeCommandGraphClose(
+xeCommandGraphClose(
     xe_command_graph_handle_t hCommandGraph         ///< [in] handle of command graph object to close
     );
 

@@ -60,7 +60,7 @@ extern "C" {
 ///         + nullptr == count
 ///     - ::XE_RESULT_ERROR_UNSUPPORTED
 __xedllport xe_result_t __xecall
-  xeDriverGetDeviceCount(
+xeDriverGetDeviceCount(
     uint32_t* count                                 ///< [out] number of devices available
     );
 
@@ -97,7 +97,7 @@ typedef struct _xe_device_uuid_t
 ///         + invalid unique id.
 ///     - ::XE_RESULT_ERROR_UNSUPPORTED
 __xedllport xe_result_t __xecall
-  xeDriverGetDeviceUniqueIds(
+xeDriverGetDeviceUniqueIds(
     uint32_t count,                                 ///< [in] size of device unique ids array. Typically, this will be
                                                     ///< ${x}DeviceGetCount.
     xe_device_uuid_t* pUniqueIds                    ///< [out] pointer to an array of unique ids for devices. Caller must
@@ -126,7 +126,7 @@ __xedllport xe_result_t __xecall
 ///         + ordinal is out of range reported by ::xeDriverGetDeviceCount
 ///     - ::XE_RESULT_ERROR_UNSUPPORTED
 __xedllport xe_result_t __xecall
-  xeDriverGetDevice(
+xeDriverGetDevice(
     xe_device_uuid_t* pUUID,                        ///< [in] unique id of device to retrieve. Use ${x}DriverGetDeviceUniqueIds
                                                     ///< to obtain a unique Id.
     xe_device_handle_t* phDevice                    ///< [out] pointer to handle of device object created
@@ -154,7 +154,7 @@ __xedllport xe_result_t __xecall
 ///         + ordinal is out of range reported by device properties.
 ///     - ::XE_RESULT_ERROR_UNSUPPORTED
 __xedllport xe_result_t __xecall
-  xeDeviceGetSubDevice(
+xeDeviceGetSubDevice(
     xe_device_handle_t hDevice,                     ///< [in] handle of the device object
     uint32_t ordinal,                               ///< [in] ordinal of sub-device to retrieve
     xe_device_handle_t* phSubDevice                 ///< [out] pointer to handle of sub-device object.
@@ -192,7 +192,7 @@ typedef enum _xe_api_version_t
 ///         + nullptr == version
 ///     - ::XE_RESULT_ERROR_UNSUPPORTED
 __xedllport xe_result_t __xecall
-  xeDeviceGetApiVersion(
+xeDeviceGetApiVersion(
     xe_device_handle_t hDevice,                     ///< [in] handle of the device object
     xe_api_version_t* version                       ///< [out] api version
     );
@@ -259,7 +259,7 @@ typedef struct _xe_device_properties_t
 ///         + nullptr == pDeviceProperties
 ///     - ::XE_RESULT_ERROR_UNSUPPORTED
 __xedllport xe_result_t __xecall
-  xeDeviceGetProperties(
+xeDeviceGetProperties(
     xe_device_handle_t hDevice,                     ///< [in] handle of the device object
     xe_device_properties_t* pDeviceProperties       ///< [out] query result for device properties
     );
@@ -317,7 +317,7 @@ typedef struct _xe_device_compute_properties_t
 ///         + nullptr == pComputeProperties
 ///     - ::XE_RESULT_ERROR_UNSUPPORTED
 __xedllport xe_result_t __xecall
-  xeDeviceGetComputeProperties(
+xeDeviceGetComputeProperties(
     xe_device_handle_t hDevice,                     ///< [in] handle of the device object
     xe_device_compute_properties_t* pComputeProperties  ///< [out] query result for compute properties
     );
@@ -392,7 +392,7 @@ typedef struct _xe_device_memory_properties_t
 ///         + nullptr == pMemProperties
 ///     - ::XE_RESULT_ERROR_UNSUPPORTED
 __xedllport xe_result_t __xecall
-  xeDeviceGetMemoryProperties(
+xeDeviceGetMemoryProperties(
     xe_device_handle_t hDevice,                     ///< [in] handle of the device object
     xe_device_memory_properties_t* pMemProperties   ///< [out] query result for compute properties
     );
@@ -436,7 +436,7 @@ typedef struct _xe_device_link_properties_t
 ///         + invalid ordinal. Use ::xeDriverGetDeviceCount for valid range.
 ///     - ::XE_RESULT_ERROR_UNSUPPORTED
 __xedllport xe_result_t __xecall
-  xeDeviceGetLinkProperties(
+xeDeviceGetLinkProperties(
     uint32_t srcOrdinal,                            ///< [in] source device ordinal
     uint32_t dstOrdinal,                            ///< [in] destination device ordinal
     xe_device_link_properties_t* pLinkProperties    ///< [out] link properties between source and destination devices
@@ -463,7 +463,7 @@ __xedllport xe_result_t __xecall
 ///         + nullptr == value
 ///     - ::XE_RESULT_ERROR_UNSUPPORTED
 __xedllport xe_result_t __xecall
-  xeDeviceCanAccessPeer(
+xeDeviceCanAccessPeer(
     xe_device_handle_t hDevice,                     ///< [in] handle of the device performing the access
     xe_device_handle_t hPeerDevice,                 ///< [in] handle of the peer device with the allocation
     xe_bool_t* value                                ///< [out] returned access capability
@@ -502,7 +502,7 @@ typedef enum _xe_cache_config_t
 ///         + devices do not support CacheConfig
 ///     - ::XE_RESULT_ERROR_UNSUPPORTED
 __xedllport xe_result_t __xecall
-  xeDeviceSetIntermediateCacheConfig(
+xeDeviceSetIntermediateCacheConfig(
     xe_device_handle_t hDevice,                     ///< [in] handle of the device 
     xe_cache_config_t CacheConfig                   ///< [in] CacheConfig
     );
@@ -527,7 +527,7 @@ __xedllport xe_result_t __xecall
 ///         + devices do not support CacheConfig
 ///     - ::XE_RESULT_ERROR_UNSUPPORTED
 __xedllport xe_result_t __xecall
-  xeDeviceSetLastLevelCacheConfig(
+xeDeviceSetLastLevelCacheConfig(
     xe_device_handle_t hDevice,                     ///< [in] handle of the device 
     xe_cache_config_t CacheConfig                   ///< [in] CacheConfig
     );

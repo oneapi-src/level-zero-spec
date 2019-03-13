@@ -1,14 +1,6 @@
 <%!
 import re
 from templates import helper as th
-
-def declare_type(obj):
-    if 'class' not in obj and \
-        not re.match(r"macro", obj['type']) and \
-        not re.match(r"function", obj['type']):
-        return True
-    return re.match(r"handle", obj['type']) or re.match(r"class", obj['type'])
-
 %>/**************************************************************************//**
 * INTEL CONFIDENTIAL  
 * Copyright 2019  
@@ -55,7 +47,7 @@ def declare_type(obj):
 namespace ${x}
 {
 %for obj in objects:
-%if declare_type(obj):
+%if not re.match(r"macro", obj['type']) and ('class' not in obj or re.match(r"\$x$", obj['class']) or re.match(r"handle", obj['type'])):
     ///////////////////////////////////////////////////////////////////////////////
     %if 'condition' in obj:
     #if ${th.subx(x,obj['condition'])}
@@ -87,6 +79,18 @@ namespace ${x}
         %endfor
 
     };
+    ## FUNCTION ###################################################################
+    %elif re.match(r"function", obj['type']):
+    /// 
+    %for line in th.make_returns_lines(None, obj, True):
+    /// ${line}
+    %endfor
+    inline ${th.make_return_value(None, obj)}
+    ${th.make_func_name(None, obj, True)}(
+        %for line in th.make_param_lines(None, obj, True):
+        ${line}
+        %endfor
+        );
     ## CLASS ######################################################################
     %elif re.match(r"class", obj['type']):
     class ${th.subx(None, obj['name'])}
@@ -158,7 +162,8 @@ namespace ${x}
         %for line in th.make_returns_lines(None, f, True):
         /// ${line}
         %endfor
-        inline ${th.make_return_value(None, f)} ${th.subx(None, f['name'])}(
+        inline ${th.make_return_value(None, f, True)}
+        ${th.make_func_name(None, f, True)}(
             %for line in th.make_param_lines(None, f, True):
             ${line}
             %endfor

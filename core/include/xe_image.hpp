@@ -53,7 +53,9 @@ namespace xe
         ///////////////////////////////////////////////////////////////////////////////
         /// @brief C++ wrapper for ::xeImageDestroy
         /// @throws result_t
-        inline void Destroy(
+        inline void
+        Destroy(
+            void
             );
 
     };

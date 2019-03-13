@@ -38,15 +38,16 @@
 
 namespace xe
 {
-#if XE_ENABLE_OCL_INTEROP
     ///////////////////////////////////////////////////////////////////////////////
+#if XE_ENABLE_OCL_INTEROP
     /// @brief C++ wrapper for ::xeDeviceRegisterCLMemory
     /// 
     /// @returns
     ///     - void*: pointer to device allocation
     /// 
     /// @throws result_t
-    inline void* Device::RegisterCLMemory(
+    inline void* 
+    Device::RegisterCLMemory(
         cl_context context,                             ///< [in] the OpenCL context that created the memory
         cl_mem mem                                      ///< [in] the OpenCL memory to register
         )
@@ -56,15 +57,16 @@ namespace xe
     }
 #endif // XE_ENABLE_OCL_INTEROP
 
-#if XE_ENABLE_OCL_INTEROP
     ///////////////////////////////////////////////////////////////////////////////
+#if XE_ENABLE_OCL_INTEROP
     /// @brief C++ wrapper for ::xeDeviceRegisterCLProgram
     /// 
     /// @returns
     ///     - module_handle_t: pointer to handle of module object created
     /// 
     /// @throws result_t
-    inline module_handle_t Device::RegisterCLProgram(
+    inline module_handle_t 
+    Device::RegisterCLProgram(
         cl_context context,                             ///< [in] the OpenCL context that created the program
         cl_program program                              ///< [in] the OpenCL program to register
         )
@@ -74,15 +76,16 @@ namespace xe
     }
 #endif // XE_ENABLE_OCL_INTEROP
 
-#if XE_ENABLE_OCL_INTEROP
     ///////////////////////////////////////////////////////////////////////////////
+#if XE_ENABLE_OCL_INTEROP
     /// @brief C++ wrapper for ::xeDeviceRegisterCLCommandQueue
     /// 
     /// @returns
     ///     - command_queue_handle_t: pointer to handle of command queue object created
     /// 
     /// @throws result_t
-    inline command_queue_handle_t Device::RegisterCLCommandQueue(
+    inline command_queue_handle_t 
+    Device::RegisterCLCommandQueue(
         cl_context context,                             ///< [in] the OpenCL context that created the command queue
         cl_command_queue command_queue                  ///< [in] the OpenCL command queue to register
         )
@@ -103,7 +106,8 @@ namespace xe
     ///     - command_graph_handle_t: pointer to handle of command graph object created
     /// 
     /// @throws result_t
-    inline command_graph_handle_t Device::CreateCommandGraph(
+    inline command_graph_handle_t 
+    Device::CreateCommandGraph(
         const command_graph_desc_t* desc                ///< [in] pointer to command graph descriptor
         )
     {
@@ -123,7 +127,8 @@ namespace xe
     ///     - command_list_handle_t: pointer to handle of command list object created
     /// 
     /// @throws result_t
-    inline command_list_handle_t Device::CreateCommandList(
+    inline command_list_handle_t 
+    Device::CreateCommandList(
         const command_list_desc_t* desc                 ///< [in] pointer to command list descriptor
         )
     {
@@ -147,7 +152,8 @@ namespace xe
     ///     - command_list_handle_t: pointer to handle of command list object created
     /// 
     /// @throws result_t
-    inline command_list_handle_t Device::CopyCommandList(
+    inline command_list_handle_t 
+    Device::CopyCommandList(
         command_list_handle_t hCommandList              ///< [in] handle to command list to copy
         )
     {
@@ -172,7 +178,8 @@ namespace xe
     ///     - command_queue_handle_t: pointer to handle of command queue object created
     /// 
     /// @throws result_t
-    inline command_queue_handle_t Device::CreateCommandQueue(
+    inline command_queue_handle_t 
+    Device::CreateCommandQueue(
         const command_queue_desc_t* desc                ///< [in] pointer to command queue descriptor
         )
     {
@@ -196,7 +203,8 @@ namespace xe
     ///     - device_handle_t: pointer to handle of sub-device object.
     /// 
     /// @throws result_t
-    inline device_handle_t Device::GetSubDevice(
+    inline device_handle_t 
+    Device::GetSubDevice(
         uint32_t ordinal                                ///< [in] ordinal of sub-device to retrieve
         )
     {
@@ -219,7 +227,9 @@ namespace xe
     ///     - api_version_t: api version
     /// 
     /// @throws result_t
-    inline api_version_t Device::GetApiVersion(
+    inline api_version_t 
+    Device::GetApiVersion(
+        void
         )
     {
         // auto result = ::xeDeviceGetApiVersion( handle );
@@ -243,7 +253,9 @@ namespace xe
     ///     - device_properties_t: query result for device properties
     /// 
     /// @throws result_t
-    inline device_properties_t Device::GetProperties(
+    inline device_properties_t 
+    Device::GetProperties(
+        void
         )
     {
         // auto result = ::xeDeviceGetProperties( handle );
@@ -266,7 +278,9 @@ namespace xe
     ///     - device_compute_properties_t: query result for compute properties
     /// 
     /// @throws result_t
-    inline device_compute_properties_t Device::GetComputeProperties(
+    inline device_compute_properties_t 
+    Device::GetComputeProperties(
+        void
         )
     {
         // auto result = ::xeDeviceGetComputeProperties( handle );
@@ -290,11 +304,38 @@ namespace xe
     ///     - device_memory_properties_t: query result for compute properties
     /// 
     /// @throws result_t
-    inline device_memory_properties_t Device::GetMemoryProperties(
+    inline device_memory_properties_t 
+    Device::GetMemoryProperties(
+        void
         )
     {
         // auto result = ::xeDeviceGetMemoryProperties( handle );
         // if( ::XE_RESULT_SUCCESS != result ) throw exception(result, "xe::Device::GetMemoryProperties");
+    }
+
+    ///////////////////////////////////////////////////////////////////////////////
+    /// @brief C++ wrapper for ::xeDeviceGetLinkProperties
+    /// 
+    /// @details
+    ///     - The application may call this function from simultaneous threads.
+    ///     - The implementation of this function should be lock-free.
+    /// 
+    /// @remarks
+    ///   _Analogues_
+    ///     - **cudaDeviceGetP2PAttribute**
+    /// 
+    /// @returns
+    ///     - device_link_properties_t: link properties between source and destination devices
+    /// 
+    /// @throws result_t
+    inline device_link_properties_t 
+    Device::GetLinkProperties(
+        uint32_t srcOrdinal,                            ///< [in] source device ordinal
+        uint32_t dstOrdinal                             ///< [in] destination device ordinal
+        )
+    {
+        // auto result = ::xeDeviceGetLinkProperties( handle, srcOrdinal, dstOrdinal );
+        // if( ::XE_RESULT_SUCCESS != result ) throw exception(result, "xe::Device::GetLinkProperties");
     }
 
     ///////////////////////////////////////////////////////////////////////////////
@@ -312,7 +353,8 @@ namespace xe
     ///     - bool_t: returned access capability
     /// 
     /// @throws result_t
-    inline bool_t Device::CanAccessPeer(
+    inline bool_t 
+    Device::CanAccessPeer(
         device_handle_t hPeerDevice                     ///< [in] handle of the peer device with the allocation
         )
     {
@@ -332,7 +374,8 @@ namespace xe
     ///     - **cudaFuncSetCacheConfig **
     /// 
     /// @throws result_t
-    inline void Device::SetIntermediateCacheConfig(
+    inline void 
+    Device::SetIntermediateCacheConfig(
         cache_config_t CacheConfig                      ///< [in] CacheConfig
         )
     {
@@ -352,7 +395,8 @@ namespace xe
     ///     - **cudaFuncSetCacheConfig **
     /// 
     /// @throws result_t
-    inline void Device::SetLastLevelCacheConfig(
+    inline void 
+    Device::SetLastLevelCacheConfig(
         cache_config_t CacheConfig                      ///< [in] CacheConfig
         )
     {
@@ -377,7 +421,8 @@ namespace xe
     ///     - event_handle_t: pointer to handle of event object created
     /// 
     /// @throws result_t
-    inline event_handle_t Device::CreateEvent(
+    inline event_handle_t 
+    Device::CreateEvent(
         const event_desc_t* desc                        ///< [in] pointer to event descriptor
         )
     {
@@ -398,7 +443,8 @@ namespace xe
     ///     - event_handle_t: pointer to handle of event object created
     /// 
     /// @throws result_t
-    inline event_handle_t Device::PlaceEvent(
+    inline event_handle_t 
+    Device::PlaceEvent(
         const event_desc_t* desc,                       ///< [in] pointer to event descriptor
         void* ptr                                       ///< [in] pointer to the device pointer where the event should be placed
         )
@@ -422,7 +468,8 @@ namespace xe
     ///     - image_handle_t: pointer to handle of image object created
     /// 
     /// @throws result_t
-    inline image_handle_t Device::CreateImage(
+    inline image_handle_t 
+    Device::CreateImage(
         const image_desc_t* desc                        ///< [in] pointer to image descriptor
         )
     {
@@ -460,7 +507,8 @@ namespace xe
     ///     - module_build_log_handle_t: pointer to handle of module's build log.
     /// 
     /// @throws result_t
-    inline std::tuple<module_handle_t, module_build_log_handle_t> Device::CreateModule(
+    inline std::tuple<module_handle_t, module_build_log_handle_t> 
+    Device::CreateModule(
         const module_desc_t* pDesc                      ///< [in] pointer to module descriptor
         )
     {
@@ -478,7 +526,8 @@ namespace xe
     ///     - The implementation of this function should be lock-free.
     /// 
     /// @throws result_t
-    inline void Device::MakeMemoryResident(
+    inline void 
+    Device::MakeMemoryResident(
         void* ptr,                                      ///< [in] pointer to memory to make resident
         size_t size                                     ///< [in] size in bytes to make resident
         )
@@ -498,7 +547,8 @@ namespace xe
     ///     - The implementation of this function should be lock-free.
     /// 
     /// @throws result_t
-    inline void Device::EvictMemory(
+    inline void 
+    Device::EvictMemory(
         void* ptr,                                      ///< [in] pointer to memory to evict
         size_t size                                     ///< [in] size in bytes to evict
         )
@@ -517,7 +567,8 @@ namespace xe
     ///     - The implementation of this function should be lock-free.
     /// 
     /// @throws result_t
-    inline void Device::MakeImageResident(
+    inline void 
+    Device::MakeImageResident(
         image_handle_t hImage                           ///< [in] handle of image to make resident
         )
     {
@@ -537,7 +588,8 @@ namespace xe
     ///     - The implementation of this function should be lock-free.
     /// 
     /// @throws result_t
-    inline void Device::EvictImage(
+    inline void 
+    Device::EvictImage(
         image_handle_t hImage                           ///< [in] handle of image to make evict
         )
     {
@@ -560,7 +612,8 @@ namespace xe
     ///     - sampler_handle_t: handle of the sampler
     /// 
     /// @throws result_t
-    inline sampler_handle_t Device::CreateSampler(
+    inline sampler_handle_t 
+    Device::CreateSampler(
         const sampler_desc_t* pDesc                     ///< [in] pointer to sampler descriptor
         )
     {

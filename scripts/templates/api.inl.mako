@@ -1,10 +1,6 @@
 <%!
 import re
 from templates import helper as th
-
-def declare_type(obj):
-    return re.match(r"class", obj['type'])
-
 %>/**************************************************************************//**
 * INTEL CONFIDENTIAL  
 * Copyright 2019  
@@ -50,13 +46,42 @@ def declare_type(obj):
 namespace ${x}
 {
 %for obj in objects:
-%if declare_type(obj):
+%if re.match(r"class", obj['type']) or (re.match(r"function", obj['type']) and ('class' not in obj or re.match(r"\$x$", obj['class']))):
+%if re.match(r"function", obj['type']):
+    ## FUNCTION ###################################################################
+    ///////////////////////////////////////////////////////////////////////////////
+%if 'condition' in obj:
+#if ${th.subx(x, obj['condition'])}
+%endif
+    /// @brief C++ wrapper for ::${th.make_func_name(x, obj)}
+    %for line in th.make_details_lines(None, obj):
+    /// ${line}
+    %endfor
+    /// 
+    %for line in th.make_returns_lines(None, obj, True):
+    /// ${line}
+    %endfor
+    inline ${th.make_return_value(None, obj)} 
+    ${th.make_func_name(None, obj, True)}(
+        %for line in th.make_param_lines(None, obj, True):
+        ${line}
+        %endfor
+        )
+    {
+        // auto result = ::${th.make_func_name(x, obj)}( ${th.make_param_call_str("handle", None, obj, True)} );
+        // if( ::${X}_RESULT_SUCCESS != result ) throw exception(result, "${x}::${th.subx(None, obj['name'])}::${th.subx(None, obj['name'])}");
+    }
+%if 'condition' in obj:
+#endif // ${th.subx(x, obj['condition'])}
+%endif
+
+%elif re.match(r"class", obj['type']):
     ## CLASS FUNCTION #############################################################
     %for f in th.filter_items(th.extract_objs(specs, "function"), 'class', obj['name']):
-%if 'condition' in f:
-#if ${th.subx(x,f['condition'])}
-%endif
     ///////////////////////////////////////////////////////////////////////////////
+%if 'condition' in f:
+#if ${th.subx(x, f['condition'])}
+%endif
     /// @brief C++ wrapper for ::${th.make_func_name(x, f)}
     %for line in th.make_details_lines(None, f):
     /// ${line}
@@ -65,7 +90,8 @@ namespace ${x}
     %for line in th.make_returns_lines(None, f, True):
     /// ${line}
     %endfor
-    inline ${th.make_return_value(None, f)} ${th.subx(None, obj['name'])}::${th.subx(None, f['name'])}(
+    inline ${th.make_return_value(None, f)} 
+    ${th.subx(None, obj['name'])}::${th.make_func_name(None, f, True)}(
         %for line in th.make_param_lines(None, f, True):
         ${line}
         %endfor
@@ -75,10 +101,11 @@ namespace ${x}
         // if( ::${X}_RESULT_SUCCESS != result ) throw exception(result, "${x}::${th.subx(None, obj['name'])}::${th.subx(None, f['name'])}");
     }
 %if 'condition' in f:
-#endif // ${th.subx(x,f['condition'])}
+#endif // ${th.subx(x, f['condition'])}
 %endif
 
     %endfor
+%endif
 %endif
 %endfor
 } // namespace ${x}

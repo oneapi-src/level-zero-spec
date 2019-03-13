@@ -47,7 +47,9 @@ namespace xe
     ///     - The implementation of this function should be lock-free.
     /// 
     /// @throws result_t
-    inline void CommandGraph::Destroy(
+    inline void 
+    CommandGraph::Destroy(
+        void
         )
     {
         // auto result = ::xeCommandGraphDestroy( handle );
@@ -66,7 +68,9 @@ namespace xe
     ///     - The implementation of this function should be lock-free.
     /// 
     /// @throws result_t
-    inline void CommandGraph::Close(
+    inline void 
+    CommandGraph::Close(
+        void
         )
     {
         // auto result = ::xeCommandGraphClose( handle );

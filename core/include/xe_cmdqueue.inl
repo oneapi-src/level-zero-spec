@@ -54,7 +54,9 @@ namespace xe
     ///     - cuCtxDestroy
     /// 
     /// @throws result_t
-    inline void CommandQueue::Destroy(
+    inline void 
+    CommandQueue::Destroy(
+        void
         )
     {
         // auto result = ::xeCommandQueueDestroy( handle );
@@ -73,7 +75,8 @@ namespace xe
     ///     - vkQueueSubmit
     /// 
     /// @throws result_t
-    inline void CommandQueue::EnqueueCommandLists(
+    inline void 
+    CommandQueue::EnqueueCommandLists(
         uint32_t numCommandLists,                       ///< [in] number of command lists to enqueue
         command_list_handle_t* phCommandLists,          ///< [in] list of handles of the command lists to enqueue for execution
         fence_handle_t hFence                           ///< [in][optional] handle of the fence to signal on completion
@@ -91,7 +94,8 @@ namespace xe
     ///     - The implementation of this function should be lock-free.
     /// 
     /// @throws result_t
-    inline void CommandQueue::Synchronize(
+    inline void 
+    CommandQueue::Synchronize(
         uint32_t timeout                                ///< [in] if non-zero, then indicates the maximum time to yield before
                                                         ///< returning ::RESULT_SUCCESS or ::RESULT_NOT_READY; if zero, then
                                                         ///< operates exactly like ::FenceQueryStatus; if MAX_UINT32, then function
@@ -117,7 +121,8 @@ namespace xe
     ///     - fence_handle_t: pointer to handle of fence object created
     /// 
     /// @throws result_t
-    inline fence_handle_t CommandQueue::CreateFence(
+    inline fence_handle_t 
+    CommandQueue::CreateFence(
         const fence_desc_t* desc                        ///< [in] pointer to fence descriptor
         )
     {

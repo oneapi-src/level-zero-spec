@@ -61,7 +61,7 @@
 /// @hash {c375436f97e741749fea829e663fe0e5a1d79ee64addfdf2ee289dc4a85e9e79}
 ///
 __xedllexport xe_result_t __xecall
-  xeDeviceMakeMemoryResident(
+xeDeviceMakeMemoryResident(
     xe_device_handle_t hDevice,                     ///< [in] handle of the device
     void* ptr,                                      ///< [in] pointer to memory to make resident
     size_t size                                     ///< [in] size in bytes to make resident
@@ -121,7 +121,7 @@ __xedllexport xe_result_t __xecall
 /// @hash {21bfb74deb4252e3cf32a9e1e5f568735c627ee629f2dc0dca1e6cfe95438e67}
 ///
 __xedllexport xe_result_t __xecall
-  xeDeviceEvictMemory(
+xeDeviceEvictMemory(
     xe_device_handle_t hDevice,                     ///< [in] handle of the device
     void* ptr,                                      ///< [in] pointer to memory to evict
     size_t size                                     ///< [in] size in bytes to evict
@@ -180,7 +180,7 @@ __xedllexport xe_result_t __xecall
 /// @hash {fc41bb8b8835280e6d296c03595e6226c18c9a02e00d6e373c9a41740819f857}
 ///
 __xedllexport xe_result_t __xecall
-  xeDeviceMakeImageResident(
+xeDeviceMakeImageResident(
     xe_device_handle_t hDevice,                     ///< [in] handle of the device
     xe_image_handle_t hImage                        ///< [in] handle of image to make resident
     )
@@ -240,7 +240,7 @@ __xedllexport xe_result_t __xecall
 /// @hash {4bad08b1b95d1cf75250b5f9ea3fe3291e897b17c95b705bdd5c36b03ba43c1d}
 ///
 __xedllexport xe_result_t __xecall
-  xeDeviceEvictImage(
+xeDeviceEvictImage(
     xe_device_handle_t hDevice,                     ///< [in] handle of the device
     xe_image_handle_t hImage                        ///< [in] handle of image to make evict
     )

@@ -150,6 +150,9 @@ def make_etor_lines(repl, obj, cpp=False, altrepl="", meta=None):
 """
 def make_member_lines(repl, obj, cpp=False, altrepl="", meta=None):
     lines = []
+    if 'members' not in obj:
+        return lines
+
     for item in obj['members']:
         if cpp:
             name = make_value_name(repl, altrepl, item['name'], meta)
@@ -173,6 +176,9 @@ def make_member_lines(repl, obj, cpp=False, altrepl="", meta=None):
 """
 def make_member_function_lines(repl, obj):
     lines = []
+    if 'members' not in obj:
+        return lines
+
     for item in obj['members']:
         name = subx(repl, item['name'])
         lines.append("auto get%s( void ) const { return %s; }"%(name.title(), name))
@@ -197,7 +203,11 @@ def make_param_lines(repl, obj, cpp=False):
     lines = []
 
     if cpp:
-        params = filter_param_list(obj['params'][1:], "in")
+        if ('decl' in obj and re.match(r"static", obj['decl'])) or \
+           ('class' in obj and re.match(r"\$x$", obj['class'])):
+            params = filter_param_list(obj['params'], "in")
+        else:
+            params = filter_param_list(obj['params'][1:], "in")
     else:
         params = obj['params']
 
@@ -213,14 +223,21 @@ def make_param_lines(repl, obj, cpp=False):
         for line in split_line(subx(repl, item['desc'], True), 70):
             lines.append("%s///< %s"%(append_ws(prologue, 48), line))
             prologue = ""
-    return lines
+
+    if len(lines) > 0:
+        return lines
+    else:
+        return ["void"]
 
 """
     returns a string of parameter names for passing to a function
 """
 def make_param_call_str(prologue, repl, obj, cpp=False):
     if cpp:
-        params = filter_param_list(obj['params'][1:], "in")
+        if 'decl' in obj and re.match(r"static", obj['decl']):
+            params = filter_param_list(obj['params'], "in")
+        else:
+            params = filter_param_list(obj['params'][1:], "in")
     else:
         params = obj['params']
 
@@ -306,7 +323,7 @@ def make_param_checks(repl, obj, tag=False):
 def make_returns_lines(repl, obj, cpp=False):
     lines = []
     if cpp:
-        params = filter_param_list(obj['params'][1:], "out")
+        params = filter_param_list(obj['params'], "out")
         if len(params) > 0:
             lines.append("@returns")
             for p in params:
@@ -347,32 +364,34 @@ def make_returns_lines(repl, obj, cpp=False):
 
 """
 """
-def make_return_value(repl, obj):
-    params = filter_param_list(obj['params'][1:], "out")
+def make_return_value(repl, obj, cpp=False):
+    if cpp and 'decl' in obj:
+        decl = "%s "%obj['decl']
+    else:
+        decl = ""
+
+    params = filter_param_list(obj['params'], "out")
     if len(params) == 0:
-        return "void"
+        return decl+"void"
 
     types = []
     for p in params:
         types.append(subx(repl, re.sub(r"(.*)\*", r"\1", p['type'])))
 
     if len(types) > 1:
-        return "std::tuple<%s>"%", ".join(types)
+        return decl+"std::tuple<%s>"%", ".join(types)
     else:
-        return types[0]
+        return decl+types[0]
 
 """
     returns the name of a function
 """
 def make_func_name(repl, obj, cpp=False):
-    if 'class' in obj:
+    if not cpp and 'class' in obj:
         cls = obj['class']
     else:
         cls = ""
-    if cpp:
-        return subx(repl, "%s::%s"%(cls, obj['name']))
-    else:
-        return subx(repl, "%s%s"%(cls, obj['name']))
+    return subx(repl, "%s%s"%(cls, obj['name']))
 
 """
     returns a single-line driver function call

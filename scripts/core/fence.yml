@@ -77,8 +77,9 @@ returns:
 --- #--------------------------------------------------------------------------
 type: function
 desc: "The current host thread waits on a fence to be signaled."
-class: $x
-name: HostWaitOnFence
+class: $xFence
+name: HostSynchronize
+decl: static
 analogue:
     - "**vkWaitForFences**"
 details:

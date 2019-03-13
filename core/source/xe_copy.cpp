@@ -70,7 +70,7 @@
 /// @hash {10322d2f80ab2c4d1de8c74ebd5dcd44b30666c7d93497a0525875fe05511385}
 ///
 __xedllexport xe_result_t __xecall
-  xeCommandListEncodeMemoryCopy(
+xeCommandListEncodeMemoryCopy(
     xe_command_list_handle_t hCommandList,          ///< [in] handle of command list
     void* dstptr,                                   ///< [in] pointer to destination memory to copy to
     const void* srcptr,                             ///< [in] pointer to source memory to copy from
@@ -139,7 +139,7 @@ __xedllexport xe_result_t __xecall
 /// @hash {06d09263da59d527bcc056dd1270ecbd1e6a536c4e0535f9b036d4d638a7cd4a}
 ///
 __xedllexport xe_result_t __xecall
-  xeCommandListEncodeMemorySet(
+xeCommandListEncodeMemorySet(
     xe_command_list_handle_t hCommandList,          ///< [in] handle of command list
     void* ptr,                                      ///< [in] pointer to memory to initialize
     int value,                                      ///< [in] value to initialize memory to
@@ -203,7 +203,7 @@ __xedllexport xe_result_t __xecall
 /// @hash {243c2116a4f9a00f96b590eaf48bbc87a5ed95083afa49768bd94c9994d4c5e1}
 ///
 __xedllexport xe_result_t __xecall
-  xeCommandListEncodeImageCopy(
+xeCommandListEncodeImageCopy(
     xe_command_list_handle_t hCommandList,          ///< [in] handle of command list
     xe_image_handle_t hDstImage,                    ///< [in] handle of destination image to copy to
     xe_image_handle_t hSrcImage                     ///< [in] handle of source image to copy from
@@ -263,7 +263,7 @@ __xedllexport xe_result_t __xecall
 /// @hash {ec5a7f583e0bfc8d5a755587f411c7bc145e5f9e004527daa436297696035d30}
 ///
 __xedllexport xe_result_t __xecall
-  xeCommandListEncodeImageCopyRegion(
+xeCommandListEncodeImageCopyRegion(
     xe_command_list_handle_t hCommandList,          ///< [in] handle of command list
     xe_image_handle_t hDstImage,                    ///< [in] handle of destination image to copy to
     xe_image_region_t* pDstRegion,                  ///< [in][optional] destination region descriptor
@@ -331,7 +331,7 @@ __xedllexport xe_result_t __xecall
 /// @hash {69f20a6c73958cc782ea516378e1c353ce2f5620b69c8da457e9fe385274ae41}
 ///
 __xedllexport xe_result_t __xecall
-  xeCommandListEncodeImageCopyToMemory(
+xeCommandListEncodeImageCopyToMemory(
     xe_command_list_handle_t hCommandList,          ///< [in] handle of command list
     void* dstptr,                                   ///< [in] pointer to destination memory to copy to
     xe_image_handle_t hSrcImage,                    ///< [in] handle of source image to copy from
@@ -398,7 +398,7 @@ __xedllexport xe_result_t __xecall
 /// @hash {195ceffb1f1c2b99903e9aa05a90af3a3e68ddf554db9c072d495768d5effde9}
 ///
 __xedllexport xe_result_t __xecall
-  xeCommandListEncodeImageCopyFromMemory(
+xeCommandListEncodeImageCopyFromMemory(
     xe_command_list_handle_t hCommandList,          ///< [in] handle of command list
     xe_image_handle_t hDstImage,                    ///< [in] handle of destination image to copy to
     xe_image_region_t* pDstRegion,                  ///< [in][optional] destination region descriptor
@@ -469,7 +469,7 @@ __xedllexport xe_result_t __xecall
 /// @hash {2d3f1674f77d6735fb9987fcab395bce6dc9726c938772ca747fb9494e4a9c23}
 ///
 __xedllexport xe_result_t __xecall
-  xeCommandListEncodeMemoryPrefetch(
+xeCommandListEncodeMemoryPrefetch(
     xe_command_list_handle_t hCommandList,          ///< [in] handle of command list
     const void* ptr,                                ///< [in] pointer to start of the memory region to prefetch
     size_t count                                    ///< [in] size in bytes of the memory region to prefetch
@@ -542,7 +542,7 @@ __xedllexport xe_result_t __xecall
 /// @hash {2c1eaf9d7e8276047aecaeba08566fcadb26720fa7c263446f0445cbe91bf1c6}
 ///
 __xedllexport xe_result_t __xecall
-  xeCommandListEncodeMemAdvise(
+xeCommandListEncodeMemAdvise(
     xe_command_list_handle_t hCommandList,          ///< [in] handle of command list
     xe_device_handle_t hDevice,                     ///< [in] device associated with the memory advice
     const void* ptr,                                ///< [in] Pointer to the start of the memory range

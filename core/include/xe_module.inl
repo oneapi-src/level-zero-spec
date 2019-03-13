@@ -53,11 +53,56 @@ namespace xe
     ///     - **cuModuleUnload**
     /// 
     /// @throws result_t
-    inline void Module::Destroy(
+    inline void 
+    Module::Destroy(
+        void
         )
     {
         // auto result = ::xeModuleDestroy( handle );
         // if( ::XE_RESULT_SUCCESS != result ) throw exception(result, "xe::Module::Destroy");
+    }
+
+    ///////////////////////////////////////////////////////////////////////////////
+    /// @brief C++ wrapper for ::xeModuleBuildLogDestroy
+    /// 
+    /// @details
+    ///     - The application is responsible for making sure the GPU is not
+    ///       currently referencing the event before it is deleted
+    ///     - The implementation of this function will immediately free all Host and
+    ///       Device allocations associated with this object
+    ///     - The implementation of this function should be lock-free.
+    ///     - This function can be called before or after ::ModuleDestroy for the
+    ///       associated module.
+    /// 
+    /// @throws result_t
+    inline void 
+    Module::BuildLogDestroy(
+        module_build_log_handle_t hModuleBuildLog       ///< [in] handle of the module build log object.
+        )
+    {
+        // auto result = ::xeModuleBuildLogDestroy( handle, hModuleBuildLog->getHandle() );
+        // if( ::XE_RESULT_SUCCESS != result ) throw exception(result, "xe::Module::BuildLogDestroy");
+    }
+
+    ///////////////////////////////////////////////////////////////////////////////
+    /// @brief C++ wrapper for ::xeModuleBuildLogGetString
+    /// 
+    /// @details
+    ///     - This function may be called from simultaneous threads.
+    ///     - The implementation of this function should be lock-free.
+    /// 
+    /// @returns
+    ///     - uint32_t: size of build log string.
+    ///     - char*: pointer to null-terminated string of the log.
+    /// 
+    /// @throws result_t
+    inline std::tuple<uint32_t, char*> 
+    Module::BuildLogGetString(
+        module_build_log_handle_t hModuleBuildLog       ///< [in] handle of the module build log object.
+        )
+    {
+        // auto result = ::xeModuleBuildLogGetString( handle, hModuleBuildLog->getHandle() );
+        // if( ::XE_RESULT_SUCCESS != result ) throw exception(result, "xe::Module::BuildLogGetString");
     }
 
     ///////////////////////////////////////////////////////////////////////////////
@@ -79,7 +124,9 @@ namespace xe
     ///     - char*: pointer to native binary
     /// 
     /// @throws result_t
-    inline std::tuple<uint32_t, char*> Module::GetNativeBinary(
+    inline std::tuple<uint32_t, char*> 
+    Module::GetNativeBinary(
+        void
         )
     {
         // auto result = ::xeModuleGetNativeBinary( handle );
@@ -102,7 +149,8 @@ namespace xe
     ///     - function_handle_t: handle of the Function object
     /// 
     /// @throws result_t
-    inline function_handle_t Module::CreateFunction(
+    inline function_handle_t 
+    Module::CreateFunction(
         const function_desc_t* pDesc                    ///< [in] pointer to function descriptor
         )
     {
@@ -122,7 +170,8 @@ namespace xe
     ///     - void*: pointer to function.
     /// 
     /// @throws result_t
-    inline void* Module::GetFunctionPointer(
+    inline void* 
+    Module::GetFunctionPointer(
         const char* pFunctionName                       ///< [in] Name of function to retrieve function pointer for.
         )
     {
@@ -141,7 +190,9 @@ namespace xe
     ///     - The implementation of this function should be lock-free.
     /// 
     /// @throws result_t
-    inline void Function::Destroy(
+    inline void 
+    Function::Destroy(
+        void
         )
     {
         // auto result = ::xeFunctionDestroy( handle );
@@ -159,7 +210,8 @@ namespace xe
     ///       information when encoding dispatch functions into a command list.
     /// 
     /// @throws result_t
-    inline void Function::SetGroupSize(
+    inline void 
+    Function::SetGroupSize(
         uint32_t groupSizeX,                            ///< [in] group size for X dimension to use for this function.
         uint32_t groupSizeY,                            ///< [in] group size for Y dimension to use for this function.
         uint32_t groupSizeZ                             ///< [in] group size for Z dimension to use for this function.
@@ -184,7 +236,8 @@ namespace xe
     ///     - uint32_t: recommended size of group for Z dimension.
     /// 
     /// @throws result_t
-    inline std::tuple<uint32_t, uint32_t, uint32_t> Function::SuggestGroupSize(
+    inline std::tuple<uint32_t, uint32_t, uint32_t> 
+    Function::SuggestGroupSize(
         uint32_t globalSizeX,                           ///< [in] global width for X dimension.
         uint32_t globalSizeY,                           ///< [in] global width for Y dimension.
         uint32_t globalSizeZ                            ///< [in] global width for Z dimension.
@@ -202,7 +255,8 @@ namespace xe
     ///     - The implementation of this function should be lock-free.
     /// 
     /// @throws result_t
-    inline void Function::SetArgumentValue(
+    inline void 
+    Function::SetArgumentValue(
         uint32_t argIndex,                              ///< [in] argument index in range [0, num args - 1]
         size_t argSize,                                 ///< [in] size of argument type
         const void* pArgValue                           ///< [in] argument value represented as matching arg type
@@ -224,7 +278,8 @@ namespace xe
     ///     - **clSetKernelExecInfo**
     /// 
     /// @throws result_t
-    inline void Function::SetAttribute(
+    inline void 
+    Function::SetAttribute(
         function_set_attribute_t attr,                  ///< [in] attribute to set
         uint32_t value                                  ///< [in] attribute value to set
         )
@@ -248,7 +303,8 @@ namespace xe
     ///     - uint32_t: returned attribute value
     /// 
     /// @throws result_t
-    inline uint32_t Function::GetAttribute(
+    inline uint32_t 
+    Function::GetAttribute(
         function_get_attribute_t attr                   ///< [in] attribute to query
         )
     {

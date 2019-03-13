@@ -1,12 +1,6 @@
 <%!
 import re
 from templates import helper as th
-
-def declare_type(obj):
-    if re.match(r"class", obj['type']):
-        return False
-    return True
-
 %>/**************************************************************************//**
 * INTEL CONFIDENTIAL  
 * Copyright 2019  
@@ -56,7 +50,7 @@ extern "C" {
 #endif
 
 %for obj in objects:
-%if declare_type(obj):
+%if not re.match(r"class", obj['type']):
 ///////////////////////////////////////////////////////////////////////////////
 %if 'condition' in obj:
 #if ${th.subx(x,obj['condition'])}
@@ -110,7 +104,7 @@ typedef struct _${th.subx(x, obj['name'])}
 /// ${line}
 %endfor
 __${x}dllport ${x}_result_t __${x}call
-  ${th.make_func_name(x, obj)}(
+${th.make_func_name(x, obj)}(
     %for line in th.make_param_lines(x, obj):
     ${line}
     %endfor

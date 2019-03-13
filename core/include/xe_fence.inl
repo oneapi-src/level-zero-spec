@@ -53,11 +53,38 @@ namespace xe
     ///     - **vkDestroyFence**
     /// 
     /// @throws result_t
-    inline void Fence::Destroy(
+    inline void 
+    Fence::Destroy(
+        void
         )
     {
         // auto result = ::xeFenceDestroy( handle );
         // if( ::XE_RESULT_SUCCESS != result ) throw exception(result, "xe::Fence::Destroy");
+    }
+
+    ///////////////////////////////////////////////////////////////////////////////
+    /// @brief C++ wrapper for ::xeFenceHostSynchronize
+    /// 
+    /// @details
+    ///     - The application may call this function from simultaneous threads.
+    ///     - The implementation of this function should be lock-free.
+    /// 
+    /// @remarks
+    ///   _Analogues_
+    ///     - **vkWaitForFences**
+    /// 
+    /// @throws result_t
+    inline void 
+    Fence::HostSynchronize(
+        fence_handle_t hFence,                          ///< [in] handle of the fence
+        uint32_t timeout                                ///< [in] if non-zero, then indicates the maximum time to yield before
+                                                        ///< returning ::RESULT_SUCCESS or ::RESULT_NOT_READY; if zero, then
+                                                        ///< operates exactly like ::FenceQueryStatus; if MAX_UINT32, then function
+                                                        ///< will not return until complete or device is lost.
+        )
+    {
+        // auto result = ::xeFenceHostSynchronize( handle, hFence->getHandle(), timeout );
+        // if( ::XE_RESULT_SUCCESS != result ) throw exception(result, "xe::Fence::HostSynchronize");
     }
 
     ///////////////////////////////////////////////////////////////////////////////
@@ -72,7 +99,9 @@ namespace xe
     ///     - **vkGetFenceStatus**
     /// 
     /// @throws result_t
-    inline void Fence::QueryStatus(
+    inline void 
+    Fence::QueryStatus(
+        void
         )
     {
         // auto result = ::xeFenceQueryStatus( handle );
@@ -91,7 +120,9 @@ namespace xe
     ///     - **vkResetFences**
     /// 
     /// @throws result_t
-    inline void Fence::Reset(
+    inline void 
+    Fence::Reset(
+        void
         )
     {
         // auto result = ::xeFenceReset( handle );

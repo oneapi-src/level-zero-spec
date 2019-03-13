@@ -59,7 +59,7 @@
 /// @hash {9f40961e245036a4f5bae21b30b0fe1eff983d3e3a2c375fa0e5c2ab9e9139f8}
 ///
 __xedllexport xe_result_t __xecall
-  xeCreateMemAllocator(
+xeCreateMemAllocator(
     xe_mem_allocator_handle_t* phMemAllocHandle     ///< [out] Returned memory allocator handle
     )
 {
@@ -116,7 +116,7 @@ __xedllexport xe_result_t __xecall
 /// @hash {a2eb24e400146e03f62a0c76e948d2746c332fa8aa4fa3d9927bce3e413a5c84}
 ///
 __xedllexport xe_result_t __xecall
-  xeMemAllocatorDestroy(
+xeMemAllocatorDestroy(
     xe_mem_allocator_handle_t hMemAllocHandle       ///< [in] handle of memory allocator to destroy
     )
 {
@@ -182,7 +182,7 @@ __xedllexport xe_result_t __xecall
 /// @hash {8e4c3077c3008f398c65e52226a9ed7ab31d689ef7666070143cd630c14449a8}
 ///
 __xedllexport xe_result_t __xecall
-  xeSharedMemAlloc(
+xeSharedMemAlloc(
     xe_mem_allocator_handle_t hMemAllocHandle,      ///< [in] handle of memory allocator for this allocation
     xe_device_handle_t hDevice,                     ///< [in] handle of the device
     xe_device_mem_alloc_flag_t device_flags,        ///< [in] flags specifying additional device allocation controls
@@ -256,7 +256,7 @@ __xedllexport xe_result_t __xecall
 /// @hash {0c3d522d0293cd5605447882683b2164912ede21c5b24b68e2b486f7a7a32bdc}
 ///
 __xedllexport xe_result_t __xecall
-  xeMemAlloc(
+xeMemAlloc(
     xe_mem_allocator_handle_t hMemAllocHandle,      ///< [in] handle of memory allocator for this allocation
     xe_device_handle_t hDevice,                     ///< [in] handle of the device
     xe_device_mem_alloc_flag_t flags,               ///< [in] flags specifying additional allocation controls
@@ -329,7 +329,7 @@ __xedllexport xe_result_t __xecall
 /// @hash {f2ceab5a53b2c88ef4d17b001d09cf385937bfef71f155e4844751ac93f1bf4f}
 ///
 __xedllexport xe_result_t __xecall
-  xeHostMemAlloc(
+xeHostMemAlloc(
     xe_mem_allocator_handle_t hMemAllocHandle,      ///< [in] handle of memory allocator for this allocation
     xe_host_mem_alloc_flag_t flags,                 ///< [in] flags specifying additional allocation controls
     size_t size,                                    ///< [in] size in bytes to allocate
@@ -396,7 +396,7 @@ __xedllexport xe_result_t __xecall
 /// @hash {6995e132992157fdad5d71e539141cbc0908cfd0a01322624ba3e9d1ffd763fd}
 ///
 __xedllexport xe_result_t __xecall
-  xeMemFree(
+xeMemFree(
     xe_mem_allocator_handle_t hMemAllocHandle,      ///< [in] handle of memory allocator for this allocation
     const void* ptr                                 ///< [in] pointer to memory to free
     )
@@ -458,7 +458,7 @@ __xedllexport xe_result_t __xecall
 /// @hash {ca0bc083b4f2907561e61a65f87ffa3527cf21e340760ef655b0905f766be102}
 ///
 __xedllexport xe_result_t __xecall
-  xeMemGetProperty(
+xeMemGetProperty(
     xe_mem_allocator_handle_t hMemAllocHandle,      ///< [in] handle of memory allocator for this allocation
     const void* ptr,                                ///< [in] Pointer to query
     xe_memory_property_t property,                  ///< [in] Property of the allocation to query
@@ -523,7 +523,7 @@ __xedllexport xe_result_t __xecall
 /// @hash {674ca4659d3c7a33527c6aa498eabdf2a8532d1ecc1707e9374ecf5ebf5219ef}
 ///
 __xedllexport xe_result_t __xecall
-  xeMemGetAddressRange(
+xeMemGetAddressRange(
     xe_mem_allocator_handle_t hMemAllocHandle,      ///< [in] handle of memory allocator for this allocation
     const void* ptr,                                ///< [in] Pointer to query
     void** pBase,                                   ///< [out] Returned base address of the allocation (optional)
@@ -591,7 +591,7 @@ __xedllexport xe_result_t __xecall
 /// @hash {b05b49f5ce22e128e73ca066bf16b7d9b0d6d5c7c360c9041811c0db939aeaba}
 ///
 __xedllexport xe_result_t __xecall
-  xeIpcGetMemHandle(
+xeIpcGetMemHandle(
     xe_mem_allocator_handle_t hMemAllocHandle,      ///< [in] handle of memory allocator for this allocation
     const void* ptr,                                ///< [in] Pointer to the device memory allocation
     xe_ipc_mem_handle_t* pIpcHandle                 ///< [out] Returned IPC memory handle
@@ -661,7 +661,7 @@ __xedllexport xe_result_t __xecall
 /// @hash {b81880e4766e54a7ec95bc1c35670d6197d46e5ac553160316faad314f7a59ba}
 ///
 __xedllexport xe_result_t __xecall
-  xeIpcOpenMemHandle(
+xeIpcOpenMemHandle(
     xe_mem_allocator_handle_t hMemAllocHandle,      ///< [in] handle of memory allocator for this allocation
     xe_device_handle_t hDevice,                     ///< [in] handle of the device to associate with the IPC memory handle
     xe_ipc_mem_handle_t handle,                     ///< [in] IPC memory handle
@@ -728,7 +728,7 @@ __xedllexport xe_result_t __xecall
 /// @hash {393624ba03af311b28cec458da8b4789d05f7d3754dcf393c3c6dc9bb063bd45}
 ///
 __xedllexport xe_result_t __xecall
-  xeIpcCloseMemHandle(
+xeIpcCloseMemHandle(
     xe_mem_allocator_handle_t hMemAllocHandle,      ///< [in] handle of memory allocator for this allocation
     const void* ptr                                 ///< [in] pointer to device allocation in this process
     )

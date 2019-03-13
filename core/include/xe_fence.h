@@ -90,7 +90,7 @@ typedef struct _xe_fence_desc_t
 ///     - ::XE_RESULT_ERROR_OUT_OF_HOST_MEMORY
 ///     - ::XE_RESULT_ERROR_OUT_OF_DEVICE_MEMORY
 __xedllport xe_result_t __xecall
-  xeCommandQueueCreateFence(
+xeCommandQueueCreateFence(
     xe_command_queue_handle_t hCommandQueue,        ///< [in] handle of command queue
     const xe_fence_desc_t* desc,                    ///< [in] pointer to fence descriptor
     xe_fence_handle_t* phFence                      ///< [out] pointer to handle of fence object created
@@ -119,7 +119,7 @@ __xedllport xe_result_t __xecall
 ///         + fence is enqueued in a command queue
 ///     - ::XE_RESULT_ERROR_UNSUPPORTED
 __xedllport xe_result_t __xecall
-  xeFenceDestroy(
+xeFenceDestroy(
     xe_fence_handle_t hFence                        ///< [in] handle of fence object to destroy
     );
 
@@ -145,7 +145,7 @@ __xedllport xe_result_t __xecall
 ///     - ::XE_RESULT_NOT_READY
 ///         + timeout expired
 __xedllport xe_result_t __xecall
-  xeHostWaitOnFence(
+xeFenceHostSynchronize(
     xe_fence_handle_t hFence,                       ///< [in] handle of the fence
     uint32_t timeout                                ///< [in] if non-zero, then indicates the maximum time to yield before
                                                     ///< returning ::XE_RESULT_SUCCESS or ::XE_RESULT_NOT_READY; if zero, then
@@ -175,7 +175,7 @@ __xedllport xe_result_t __xecall
 ///     - ::XE_RESULT_NOT_READY
 ///         + not signaled
 __xedllport xe_result_t __xecall
-  xeFenceQueryStatus(
+xeFenceQueryStatus(
     xe_fence_handle_t hFence                        ///< [in] handle of the fence
     );
 
@@ -198,7 +198,7 @@ __xedllport xe_result_t __xecall
 ///         + nullptr == hFence
 ///     - ::XE_RESULT_ERROR_UNSUPPORTED
 __xedllport xe_result_t __xecall
-  xeFenceReset(
+xeFenceReset(
     xe_fence_handle_t hFence                        ///< [in] handle of the fence
     );
 

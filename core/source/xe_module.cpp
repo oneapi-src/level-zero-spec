@@ -87,7 +87,7 @@
 /// @hash {9eb829c1441842e279f9be96688eeb91e18798a1c6f1c8383d0a3ac86bfd4809}
 ///
 __xedllexport xe_result_t __xecall
-  xeDeviceCreateModule(
+xeDeviceCreateModule(
     xe_device_handle_t hDevice,                     ///< [in] handle of the device
     const xe_module_desc_t* pDesc,                  ///< [in] pointer to module descriptor
     xe_module_handle_t* phModule,                   ///< [out] pointer to handle of module object created
@@ -153,7 +153,7 @@ __xedllexport xe_result_t __xecall
 /// @hash {349b769d72d44bcbeb8306573eb07e65478f28d404576327cdd45381da9e8b96}
 ///
 __xedllexport xe_result_t __xecall
-  xeModuleDestroy(
+xeModuleDestroy(
     xe_module_handle_t hModule                      ///< [in] handle of the module
     )
 {
@@ -208,10 +208,10 @@ __xedllexport xe_result_t __xecall
 ///         + nullptr == hModuleBuildLog
 ///     - ::XE_RESULT_ERROR_UNSUPPORTED
 ///
-/// @hash {0bedc632ecc213e77ba94919752712349af7f81bc4fdc3cc22a678d179aad038}
+/// @hash {f3094b9ab0cf409ea4c6bc63c2ec39ad88091a8ee9fe684c984e877f61548d00}
 ///
 __xedllexport xe_result_t __xecall
-  xeModuleBuildLogDestroy(
+xeModuleBuildLogDestroy(
     xe_module_build_log_handle_t hModuleBuildLog    ///< [in] handle of the module build log object.
     )
 {
@@ -227,7 +227,7 @@ __xedllexport xe_result_t __xecall
 #if defined(XE_NULLDRV)
         return XE_RESULT_SUCCESS;
 #else
-        return L0::moduleBuildLogDestroy(hModuleBuildLog->getHandle());
+        return L0::Module::fromHandle()->buildLogDestroy(hModuleBuildLog);
 #endif
         /// @end
     }
@@ -265,10 +265,10 @@ __xedllexport xe_result_t __xecall
 ///     - ::XE_RESULT_ERROR_OUT_OF_HOST_MEMORY
 ///     - ::XE_RESULT_ERROR_OUT_OF_DEVICE_MEMORY
 ///
-/// @hash {a5068c9c111fd477f1c08adc30a94f570a37220901c66690a61592f3977924b7}
+/// @hash {dd35e7a2beba7be9b599e677ac04880f6512aa776568772d8cd128b65b7839d4}
 ///
 __xedllexport xe_result_t __xecall
-  xeModuleBuildLogGetString(
+xeModuleBuildLogGetString(
     xe_module_build_log_handle_t hModuleBuildLog,   ///< [in] handle of the module build log object.
     uint32_t* pSize,                                ///< [out] size of build log string.
     char** pBuildLog                                ///< [out] pointer to null-terminated string of the log.
@@ -288,7 +288,7 @@ __xedllexport xe_result_t __xecall
 #if defined(XE_NULLDRV)
         return XE_RESULT_SUCCESS;
 #else
-        return L0::moduleBuildLogGetString(hModuleBuildLog->getHandle(), pSize, pBuildLog);
+        return L0::Module::fromHandle()->buildLogGetString(hModuleBuildLog, pSize, pBuildLog);
 #endif
         /// @end
     }
@@ -337,7 +337,7 @@ __xedllexport xe_result_t __xecall
 /// @hash {f86dcf1e7e87d03f26bddcbff99420a8d159e89f57619beaaeebfee453cfd62e}
 ///
 __xedllexport xe_result_t __xecall
-  xeModuleGetNativeBinary(
+xeModuleGetNativeBinary(
     xe_module_handle_t hModule,                     ///< [in] handle of the device
     uint32_t* pSize,                                ///< [out] size of native binary.
     char** pModuleNativeBinary                      ///< [out] pointer to native binary
@@ -404,7 +404,7 @@ __xedllexport xe_result_t __xecall
 /// @hash {db1f3dd910ba87cc5f4943397310ef13073b227ef8aad92327a8183e14461837}
 ///
 __xedllexport xe_result_t __xecall
-  xeModuleCreateFunction(
+xeModuleCreateFunction(
     xe_module_handle_t hModule,                     ///< [in] handle of the module
     const xe_function_desc_t* pDesc,                ///< [in] pointer to function descriptor
     xe_function_handle_t* phFunction                ///< [out] handle of the Function object
@@ -465,7 +465,7 @@ __xedllexport xe_result_t __xecall
 /// @hash {81a8e4126290acff1c7d8a2abbac4698476a5f69abd668a5098199163cfb01c7}
 ///
 __xedllexport xe_result_t __xecall
-  xeFunctionDestroy(
+xeFunctionDestroy(
     xe_function_handle_t hFunction                  ///< [in] handle of the function object
     )
 {
@@ -522,7 +522,7 @@ __xedllexport xe_result_t __xecall
 /// @hash {d316b47d5880386648c2751e90d316a28a7ae230f11cb4fa1375a9e332cc7c82}
 ///
 __xedllexport xe_result_t __xecall
-  xeModuleGetFunctionPointer(
+xeModuleGetFunctionPointer(
     xe_module_handle_t hModule,                     ///< [in] handle of the module
     const char* pFunctionName,                      ///< [in] Name of function to retrieve function pointer for.
     void** pfnFunction                              ///< [out] pointer to function.
@@ -582,7 +582,7 @@ __xedllexport xe_result_t __xecall
 /// @hash {0d524eae1de0503fef62776d38c10480c3399fe9307e8349c32f24d255a1d971}
 ///
 __xedllexport xe_result_t __xecall
-  xeFunctionSetGroupSize(
+xeFunctionSetGroupSize(
     xe_function_handle_t hFunction,                 ///< [in] handle of the function object
     uint32_t groupSizeX,                            ///< [in] group size for X dimension to use for this function.
     uint32_t groupSizeY,                            ///< [in] group size for Y dimension to use for this function.
@@ -645,7 +645,7 @@ __xedllexport xe_result_t __xecall
 /// @hash {f3c0ffef33c7e902e382ada2d1fac7966afd96c3c9989bf29a9917e4ae2856d2}
 ///
 __xedllexport xe_result_t __xecall
-  xeFunctionSuggestGroupSize(
+xeFunctionSuggestGroupSize(
     xe_function_handle_t hFunction,                 ///< [in] handle of the function object
     uint32_t globalSizeX,                           ///< [in] global width for X dimension.
     uint32_t globalSizeY,                           ///< [in] global width for Y dimension.
@@ -710,7 +710,7 @@ __xedllexport xe_result_t __xecall
 /// @hash {a74e40177c1dc791c01894a81dff84e7d51e265d9efd5df6fde4bf97f8db56a8}
 ///
 __xedllexport xe_result_t __xecall
-  xeFunctionSetArgumentValue(
+xeFunctionSetArgumentValue(
     xe_function_handle_t hFunction,                 ///< [in/out] handle of the function args object.
     uint32_t argIndex,                              ///< [in] argument index in range [0, num args - 1]
     size_t argSize,                                 ///< [in] size of argument type
@@ -773,7 +773,7 @@ __xedllexport xe_result_t __xecall
 /// @hash {1875fa152830f56fdaf8bbfc9afa2940ac606c5e33f8bbd39000f228e681498f}
 ///
 __xedllexport xe_result_t __xecall
-  xeFunctionSetAttribute(
+xeFunctionSetAttribute(
     xe_function_handle_t hFunction,                 ///< [in/out] handle of the function.
     xe_function_set_attribute_t attr,               ///< [in] attribute to set
     uint32_t value                                  ///< [in] attribute value to set
@@ -834,7 +834,7 @@ __xedllexport xe_result_t __xecall
 /// @hash {5dbebe56989f232199ae8bd64c849c2725f81a0dc791a6c21e553e9e6f122c5a}
 ///
 __xedllexport xe_result_t __xecall
-  xeFunctionGetAttribute(
+xeFunctionGetAttribute(
     xe_function_handle_t hFunction,                 ///< [in] handle of the function object
     xe_function_get_attribute_t attr,               ///< [in] attribute to query
     uint32_t* pValue                                ///< [out] returned attribute value
@@ -898,7 +898,7 @@ __xedllexport xe_result_t __xecall
 /// @hash {96b874529667a3e920d6d40c8011400e436ae8197ce31acaff293345e377e730}
 ///
 __xedllexport xe_result_t __xecall
-  xeCommandListEncodeDispatchFunction(
+xeCommandListEncodeDispatchFunction(
     xe_command_list_handle_t hCommandList,          ///< [in] handle of the command list
     xe_function_handle_t hFunction,                 ///< [in] handle of the function object
     const xe_dispatch_function_arguments_t* pDispatchFuncArgs,  ///< [in] dispatch function arguments.
@@ -966,7 +966,7 @@ __xedllexport xe_result_t __xecall
 /// @hash {cfc23fcde14181c3db9ea6ce3d52e31011fceb83c31e47f9e09599906991da43}
 ///
 __xedllexport xe_result_t __xecall
-  xeCommandListEncodeDispatchFunctionIndirect(
+xeCommandListEncodeDispatchFunctionIndirect(
     xe_command_list_handle_t hCommandList,          ///< [in] handle of the command list
     xe_function_handle_t hFunction,                 ///< [in] handle of the function object
     const xe_dispatch_function_arguments_t* pDispatchArgumentsBuffer,   ///< [in] pointer to device buffer that will contain dispatch arguments
@@ -1035,7 +1035,7 @@ __xedllexport xe_result_t __xecall
 /// @hash {6d27e99f59f199ff7b8518a5f19c177fed937aca1d44f3e7ed2105f34d01b18b}
 ///
 __xedllexport xe_result_t __xecall
-  xeCommandListEncodeDispatchMultipleFunctionsIndirect(
+xeCommandListEncodeDispatchMultipleFunctionsIndirect(
     xe_command_list_handle_t hCommandList,          ///< [in] handle of the command list
     uint32_t numFunctions,                          ///< [in] maximum number of functions to dispatch
     const xe_function_handle_t* phFunctions,        ///< [in] handles of the function objects
@@ -1105,7 +1105,7 @@ __xedllexport xe_result_t __xecall
 /// @hash {8ddd72df6076aceb0a6d679304fad310ca0ffea356bd56ad8f0f4f0208daa2dc}
 ///
 __xedllexport xe_result_t __xecall
-  xeCommandListEncodeDispatchHostFunction(
+xeCommandListEncodeDispatchHostFunction(
     xe_command_list_handle_t hCommandList,          ///< [in] handle of the command list
     xe_host_pfn_t pfnHostFunc,                      ///< [in] pointer to host function.
     void* pUserData                                 ///< [in] pointer to user data to pass to host function.

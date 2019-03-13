@@ -53,13 +53,17 @@ namespace xe
         ///////////////////////////////////////////////////////////////////////////////
         /// @brief C++ wrapper for ::xeCommandGraphDestroy
         /// @throws result_t
-        inline void Destroy(
+        inline void
+        Destroy(
+            void
             );
 
         ///////////////////////////////////////////////////////////////////////////////
         /// @brief C++ wrapper for ::xeCommandGraphClose
         /// @throws result_t
-        inline void Close(
+        inline void
+        Close(
+            void
             );
 
     };

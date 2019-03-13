@@ -69,7 +69,7 @@
 /// @hash {2c5763b8ec9726ab95422bca4616275ec9ed4e3d4b7a42a8b4e7089c813350d6}
 ///
 __xedllexport xe_result_t __xecall
-  xeDeviceCreateEvent(
+xeDeviceCreateEvent(
     xe_device_handle_t hDevice,                     ///< [in] handle of the device
     const xe_event_desc_t* desc,                    ///< [in] pointer to event descriptor
     xe_event_handle_t* phEvent                      ///< [out] pointer to handle of event object created
@@ -134,7 +134,7 @@ __xedllexport xe_result_t __xecall
 /// @hash {ff2fcb0cf2905079d5fb305c78b9dc0d9f1c4e5ab7792007b01cd832e94bae5c}
 ///
 __xedllexport xe_result_t __xecall
-  xeDevicePlaceEvent(
+xeDevicePlaceEvent(
     xe_device_handle_t hDevice,                     ///< [in] handle of the device
     const xe_event_desc_t* desc,                    ///< [in] pointer to event descriptor
     void* ptr,                                      ///< [in] pointer to the device pointer where the event should be placed
@@ -203,7 +203,7 @@ __xedllexport xe_result_t __xecall
 /// @hash {0e82f51d7da70ece36da3299c7607c0ce273c15a6401a026d89b8a6e24b52985}
 ///
 __xedllexport xe_result_t __xecall
-  xeEventDestroy(
+xeEventDestroy(
     xe_event_handle_t hEvent                        ///< [in] handle of event object to destroy
     )
 {
@@ -264,7 +264,7 @@ __xedllexport xe_result_t __xecall
 /// @hash {f66119ce56a773182ebed031c151a8faf6280e74d7b56718b71177f01141bc97}
 ///
 __xedllexport xe_result_t __xecall
-  xeCommandListEncodeSignalEvent(
+xeCommandListEncodeSignalEvent(
     xe_command_list_handle_t hCommandList,          ///< [in] handle of the command list
     xe_event_handle_t hEvent                        ///< [in] handle of the event
     )
@@ -321,7 +321,7 @@ __xedllexport xe_result_t __xecall
 /// @hash {b8409ab2ea47c3520b0faabc15232c79b1b0494defcc29b08c09a95b5b4e97df}
 ///
 __xedllexport xe_result_t __xecall
-  xeCommandListEncodeWaitOnEvent(
+xeCommandListEncodeWaitOnEvent(
     xe_command_list_handle_t hCommandList,          ///< [in] handle of the command list
     xe_event_handle_t hEvent                        ///< [in] handle of the event
     )
@@ -377,10 +377,10 @@ __xedllexport xe_result_t __xecall
 ///         + nullptr == hEvent
 ///     - ::XE_RESULT_ERROR_UNSUPPORTED
 ///
-/// @hash {809272a0febf2e56f09e04c5a53b8568b0c6905e5acd124c0e1e4151b542dab6}
+/// @hash {069d419381dc35e214bcc3c367f3db0a6fd811f4843e17fb2da82d90f0a1b2d3}
 ///
 __xedllexport xe_result_t __xecall
-  xeHostSignalEvent(
+xeEventHostSignal(
     xe_event_handle_t hEvent                        ///< [in] handle of the event
     )
 {
@@ -396,7 +396,7 @@ __xedllexport xe_result_t __xecall
 #if defined(XE_NULLDRV)
         return XE_RESULT_SUCCESS;
 #else
-        return L0::hostSignalEvent(hEvent->getHandle());
+        return L0::Event::fromHandle(hEvent)->hostSignal();
 #endif
         /// @end
     }
@@ -437,10 +437,10 @@ __xedllexport xe_result_t __xecall
 ///     - ::XE_RESULT_NOT_READY
 ///         + timeout expired
 ///
-/// @hash {da33eab69b5dbcc5545c6f10c94683160ba57be82416368b9b7adcd60e42e1ff}
+/// @hash {0ab031b6bca15f1790579b9304d17adfdfbaaa5ca9164de02eeddf8df48dcdc4}
 ///
 __xedllexport xe_result_t __xecall
-  xeHostWaitOnEvent(
+xeEventHostSynchronize(
     xe_event_handle_t hEvent,                       ///< [in] handle of the event
     uint32_t timeout                                ///< [in] if non-zero, then indicates the maximum time to yield before
                                                     ///< returning ::XE_RESULT_SUCCESS or ::XE_RESULT_NOT_READY; if zero, then
@@ -460,7 +460,7 @@ __xedllexport xe_result_t __xecall
 #if defined(XE_NULLDRV)
         return XE_RESULT_SUCCESS;
 #else
-        return L0::hostWaitOnEvent(hEvent->getHandle(), timeout);
+        return L0::Event::fromHandle(hEvent)->hostSynchronize(timeout);
 #endif
         /// @end
     }
@@ -505,7 +505,7 @@ __xedllexport xe_result_t __xecall
 /// @hash {1091660d20f5595dad7bbbf969b0a8e9238f218438ff4f2c908b93135147cfa6}
 ///
 __xedllexport xe_result_t __xecall
-  xeEventQueryStatus(
+xeEventQueryStatus(
     xe_event_handle_t hEvent                        ///< [in] handle of the event
     )
 {
@@ -563,10 +563,10 @@ __xedllexport xe_result_t __xecall
 ///         + either event not created with ::XE_EVENT_FLAG_TIMESTAMP
 ///     - ::XE_RESULT_ERROR_UNSUPPORTED
 ///
-/// @hash {676bec7fe434fefb73561b6b3fbee9a99e732a3af1a57d5fc9219a650620e806}
+/// @hash {000cf8bcf96b698cc26dd8e792ec1c1a4120a4829d617e0f33323e241e258ec4}
 ///
 __xedllexport xe_result_t __xecall
-  xeEventQueryElapsedTime(
+xeEventQueryElapsedTime(
     xe_event_handle_t hEventBegin,                  ///< [in] handle of the begin event
     xe_event_handle_t hEventEnd,                    ///< [in] handle of the end event
     double* pTime                                   ///< [out] time in milliseconds
@@ -586,7 +586,7 @@ __xedllexport xe_result_t __xecall
 #if defined(XE_NULLDRV)
         return XE_RESULT_SUCCESS;
 #else
-        return L0::eventQueryElapsedTime(hEventBegin->getHandle(), hEventEnd->getHandle(), pTime);
+        return L0::Event::fromHandle()->queryElapsedTime(hEventBegin, hEventEnd, pTime);
 #endif
         /// @end
     }
@@ -625,10 +625,10 @@ __xedllexport xe_result_t __xecall
 ///         + report size too small
 ///     - ::XE_RESULT_ERROR_UNSUPPORTED
 ///
-/// @hash {86bf02b143940d38911ff1c385a99d93c8aa0d6aef16ee9e18cddb4e1c51dfa5}
+/// @hash {2aadae68763b475a5f8ea4f780f115829c192fe6ab8fdff1c744906cf1cb832e}
 ///
 __xedllexport xe_result_t __xecall
-  xeEventQueryMetricsData(
+xeEventQueryMetricsData(
     xe_event_handle_t hEventStart,                  ///< [in] handle of the start event
     xe_event_handle_t hEventEnd,                    ///< [in] handle of the end event
     size_t reportSize,                              ///< [in] size of the report data buffer in bytes
@@ -649,7 +649,7 @@ __xedllexport xe_result_t __xecall
 #if defined(XE_NULLDRV)
         return XE_RESULT_SUCCESS;
 #else
-        return L0::eventQueryMetricsData(hEventStart->getHandle(), hEventEnd->getHandle(), reportSize, pReportData);
+        return L0::Event::fromHandle()->queryMetricsData(hEventStart, hEventEnd, reportSize, pReportData);
 #endif
         /// @end
     }
@@ -692,7 +692,7 @@ __xedllexport xe_result_t __xecall
 /// @hash {06205f20ab4babe3494b5f61b9e94ba192b5f0f68c0f27e75651983ccc6f0b3e}
 ///
 __xedllexport xe_result_t __xecall
-  xeCommandListEncodeEventReset(
+xeCommandListEncodeEventReset(
     xe_command_list_handle_t hCommandList,          ///< [in] handle of the command list
     xe_event_handle_t hEvent                        ///< [in] handle of the event
     )
@@ -751,7 +751,7 @@ __xedllexport xe_result_t __xecall
 /// @hash {8bd5a629cd3d5cdbf21ba95b68945eb87003476ae6e65e32a1da5666b9851719}
 ///
 __xedllexport xe_result_t __xecall
-  xeEventReset(
+xeEventReset(
     xe_event_handle_t hEvent                        ///< [in] handle of the event
     )
 {

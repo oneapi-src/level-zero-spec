@@ -47,7 +47,7 @@ from templates import helper as th
 %if re.match(r"function", obj['type']):
 ///////////////////////////////////////////////////////////////////////////////
 %if 'condition' in obj:
-#if ${th.subx(x,obj['condition'])}
+#if ${th.subx(x, obj['condition'])}
 %endif
 %for line in th.make_desc_lines(x, obj):
 /// ${line}
@@ -63,7 +63,7 @@ from templates import helper as th
 /// @hash {${obj['hash']}}
 ///
 __${x}dllexport ${x}_result_t __${x}call
-  ${th.make_func_name(x, obj)}(
+${th.make_func_name(x, obj)}(
     %for line in th.make_param_lines(x, obj):
     ${line}
     %endfor
@@ -106,7 +106,7 @@ __${x}dllexport ${x}_result_t __${x}call
     }
 }
 %if 'condition' in obj:
-#endif // ${th.subx(x,obj['condition'])}
+#endif // ${th.subx(x, obj['condition'])}
 %endif
 
 %endif

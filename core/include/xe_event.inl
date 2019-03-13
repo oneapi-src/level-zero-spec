@@ -55,11 +55,60 @@ namespace xe
     ///     - cuEventDestroy
     /// 
     /// @throws result_t
-    inline void Event::Destroy(
+    inline void 
+    Event::Destroy(
+        void
         )
     {
         // auto result = ::xeEventDestroy( handle );
         // if( ::XE_RESULT_SUCCESS != result ) throw exception(result, "xe::Event::Destroy");
+    }
+
+    ///////////////////////////////////////////////////////////////////////////////
+    /// @brief C++ wrapper for ::xeEventHostSignal
+    /// 
+    /// @details
+    ///     - The application may call this function from simultaneous threads.
+    ///     - The implementation of this function should be lock-free.
+    /// 
+    /// @remarks
+    ///   _Analogues_
+    ///     - clSetUserEventStatus
+    /// 
+    /// @throws result_t
+    inline void 
+    Event::HostSignal(
+        event_handle_t hEvent                           ///< [in] handle of the event
+        )
+    {
+        // auto result = ::xeEventHostSignal( handle, hEvent->getHandle() );
+        // if( ::XE_RESULT_SUCCESS != result ) throw exception(result, "xe::Event::HostSignal");
+    }
+
+    ///////////////////////////////////////////////////////////////////////////////
+    /// @brief C++ wrapper for ::xeEventHostSynchronize
+    /// 
+    /// @details
+    ///     - The application may call this function from simultaneous threads.
+    ///     - The implementation of this function should be lock-free.
+    /// 
+    /// @remarks
+    ///   _Analogues_
+    ///     - clWaitForEvents
+    ///     - cuEventSynchronize
+    /// 
+    /// @throws result_t
+    inline void 
+    Event::HostSynchronize(
+        event_handle_t hEvent,                          ///< [in] handle of the event
+        uint32_t timeout                                ///< [in] if non-zero, then indicates the maximum time to yield before
+                                                        ///< returning ::RESULT_SUCCESS or ::RESULT_NOT_READY; if zero, then
+                                                        ///< operates exactly like ::EventQueryStatus; if MAX_UINT32, then function
+                                                        ///< will not return until complete or device is lost.
+        )
+    {
+        // auto result = ::xeEventHostSynchronize( handle, hEvent->getHandle(), timeout );
+        // if( ::XE_RESULT_SUCCESS != result ) throw exception(result, "xe::Event::HostSynchronize");
     }
 
     ///////////////////////////////////////////////////////////////////////////////
@@ -76,11 +125,60 @@ namespace xe
     ///     - cuEventQuery
     /// 
     /// @throws result_t
-    inline void Event::QueryStatus(
+    inline void 
+    Event::QueryStatus(
+        void
         )
     {
         // auto result = ::xeEventQueryStatus( handle );
         // if( ::XE_RESULT_SUCCESS != result ) throw exception(result, "xe::Event::QueryStatus");
+    }
+
+    ///////////////////////////////////////////////////////////////////////////////
+    /// @brief C++ wrapper for ::xeEventQueryElapsedTime
+    /// 
+    /// @details
+    ///     - The application may call this function from simultaneous threads.
+    ///     - The implementation of this function should be lock-free.
+    /// 
+    /// @remarks
+    ///   _Analogues_
+    ///     - **cuEventElapsedTime**
+    /// 
+    /// @returns
+    ///     - double: time in milliseconds
+    /// 
+    /// @throws result_t
+    inline double 
+    Event::QueryElapsedTime(
+        event_handle_t hEventBegin,                     ///< [in] handle of the begin event
+        event_handle_t hEventEnd                        ///< [in] handle of the end event
+        )
+    {
+        // auto result = ::xeEventQueryElapsedTime( handle, hEventBegin->getHandle(), hEventEnd->getHandle() );
+        // if( ::XE_RESULT_SUCCESS != result ) throw exception(result, "xe::Event::QueryElapsedTime");
+    }
+
+    ///////////////////////////////////////////////////////////////////////////////
+    /// @brief C++ wrapper for ::xeEventQueryMetricsData
+    /// 
+    /// @details
+    ///     - The application may call this function from simultaneous threads.
+    ///     - The implementation of this function should be lock-free.
+    /// 
+    /// @returns
+    ///     - uint32_t: report data buffer
+    /// 
+    /// @throws result_t
+    inline uint32_t 
+    Event::QueryMetricsData(
+        event_handle_t hEventStart,                     ///< [in] handle of the start event
+        event_handle_t hEventEnd,                       ///< [in] handle of the end event
+        size_t reportSize                               ///< [in] size of the report data buffer in bytes
+        )
+    {
+        // auto result = ::xeEventQueryMetricsData( handle, hEventStart->getHandle(), hEventEnd->getHandle(), reportSize );
+        // if( ::XE_RESULT_SUCCESS != result ) throw exception(result, "xe::Event::QueryMetricsData");
     }
 
     ///////////////////////////////////////////////////////////////////////////////
@@ -95,7 +193,9 @@ namespace xe
     ///     - vkResetEvent
     /// 
     /// @throws result_t
-    inline void Event::Reset(
+    inline void 
+    Event::Reset(
+        void
         )
     {
         // auto result = ::xeEventReset( handle );

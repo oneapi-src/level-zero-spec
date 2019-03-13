@@ -52,7 +52,9 @@ namespace xe
     ///     - clEnqueueBarrierWithWaitList
     /// 
     /// @throws result_t
-    inline void CommandList::EncodeExecutionBarrier(
+    inline void 
+    CommandList::EncodeExecutionBarrier(
+        void
         )
     {
         // auto result = ::xeCommandListEncodeExecutionBarrier( handle );
@@ -70,7 +72,9 @@ namespace xe
     ///     - The implementation of this function should be lock-free.
     /// 
     /// @throws result_t
-    inline void CommandList::Destroy(
+    inline void 
+    CommandList::Destroy(
+        void
         )
     {
         // auto result = ::xeCommandListDestroy( handle );
@@ -86,7 +90,9 @@ namespace xe
     ///     - The implementation of this function should be lock-free.
     /// 
     /// @throws result_t
-    inline void CommandList::Close(
+    inline void 
+    CommandList::Close(
+        void
         )
     {
         // auto result = ::xeCommandListClose( handle );
@@ -104,7 +110,9 @@ namespace xe
     ///     - The implementation of this function should be lock-free.
     /// 
     /// @throws result_t
-    inline void CommandList::Reset(
+    inline void 
+    CommandList::Reset(
+        void
         )
     {
         // auto result = ::xeCommandListReset( handle );
@@ -126,7 +134,8 @@ namespace xe
     ///     - cuCtxSetSharedMemConfig
     /// 
     /// @throws result_t
-    inline void CommandList::SetParameter(
+    inline void 
+    CommandList::SetParameter(
         command_list_parameter_t parameter,             ///< [in] parameter to change
         uint32_t value                                  ///< [in] value of attribute
         )
@@ -154,7 +163,8 @@ namespace xe
     ///     - uint32_t: value of attribute
     /// 
     /// @throws result_t
-    inline uint32_t CommandList::GetParameter(
+    inline uint32_t 
+    CommandList::GetParameter(
         command_list_parameter_t parameter              ///< [in] parameter to retrieve
         )
     {
@@ -171,7 +181,9 @@ namespace xe
     ///     - The implementation of this function should be lock-free.
     /// 
     /// @throws result_t
-    inline void CommandList::ResetParameters(
+    inline void 
+    CommandList::ResetParameters(
+        void
         )
     {
         // auto result = ::xeCommandListResetParameters( handle );
@@ -187,7 +199,8 @@ namespace xe
     ///     - The implementation of this function should be lock-free.
     /// 
     /// @throws result_t
-    inline void CommandList::EncodeCommandLists(
+    inline void 
+    CommandList::EncodeCommandLists(
         uint32_t numCommandLists,                       ///< [in] number of command lists to encode
         command_list_handle_t* phCommandLists           ///< [in] list of handles of the command lists to encode for execution
         )
@@ -209,7 +222,8 @@ namespace xe
     ///     - void*: pointer to command buffer space reserved
     /// 
     /// @throws result_t
-    inline void* CommandList::ReserveSpace(
+    inline void* 
+    CommandList::ReserveSpace(
         size_t size                                     ///< [in] size (in bytes) to reserve
         )
     {
@@ -235,7 +249,8 @@ namespace xe
     ///     - **clEnqueueSVMMemcpy**
     /// 
     /// @throws result_t
-    inline void CommandList::EncodeMemoryCopy(
+    inline void 
+    CommandList::EncodeMemoryCopy(
         void* dstptr,                                   ///< [in] pointer to destination memory to copy to
         const void* srcptr,                             ///< [in] pointer to source memory to copy from
         size_t size                                     ///< [in] size in bytes to copy
@@ -263,7 +278,8 @@ namespace xe
     ///     - **clEnqueueSVMMemFill**
     /// 
     /// @throws result_t
-    inline void CommandList::EncodeMemorySet(
+    inline void 
+    CommandList::EncodeMemorySet(
         void* ptr,                                      ///< [in] pointer to memory to initialize
         int value,                                      ///< [in] value to initialize memory to
         size_t size                                     ///< [in] size in bytes to initailize
@@ -286,7 +302,8 @@ namespace xe
     ///     - **clEnqueueCopyImage**
     /// 
     /// @throws result_t
-    inline void CommandList::EncodeImageCopy(
+    inline void 
+    CommandList::EncodeImageCopy(
         image_handle_t hDstImage,                       ///< [in] handle of destination image to copy to
         image_handle_t hSrcImage                        ///< [in] handle of source image to copy from
         )
@@ -304,7 +321,8 @@ namespace xe
     ///     - The implementation of this function should be lock-free.
     /// 
     /// @throws result_t
-    inline void CommandList::EncodeImageCopyRegion(
+    inline void 
+    CommandList::EncodeImageCopyRegion(
         image_handle_t hDstImage,                       ///< [in] handle of destination image to copy to
         image_region_t* pDstRegion,                     ///< [in][optional] destination region descriptor
         image_handle_t hSrcImage,                       ///< [in] handle of source image to copy from
@@ -330,7 +348,8 @@ namespace xe
     ///     - clEnqueueReadImage
     /// 
     /// @throws result_t
-    inline void CommandList::EncodeImageCopyToMemory(
+    inline void 
+    CommandList::EncodeImageCopyToMemory(
         void* dstptr,                                   ///< [in] pointer to destination memory to copy to
         image_handle_t hSrcImage,                       ///< [in] handle of source image to copy from
         image_region_t* pSrcRegion                      ///< [in][optional] source region descriptor
@@ -355,7 +374,8 @@ namespace xe
     ///     - clEnqueueWriteImage
     /// 
     /// @throws result_t
-    inline void CommandList::EncodeImageCopyFromMemory(
+    inline void 
+    CommandList::EncodeImageCopyFromMemory(
         image_handle_t hDstImage,                       ///< [in] handle of destination image to copy to
         image_region_t* pDstRegion,                     ///< [in][optional] destination region descriptor
         const void* srcptr                              ///< [in] pointer to source memory to copy from
@@ -384,7 +404,8 @@ namespace xe
     ///     - clEnqueueSVMMigrateMem
     /// 
     /// @throws result_t
-    inline void CommandList::EncodeMemoryPrefetch(
+    inline void 
+    CommandList::EncodeMemoryPrefetch(
         const void* ptr,                                ///< [in] pointer to start of the memory region to prefetch
         size_t count                                    ///< [in] size in bytes of the memory region to prefetch
         )
@@ -415,7 +436,8 @@ namespace xe
     ///     - **cudaMemAdvise**
     /// 
     /// @throws result_t
-    inline void CommandList::EncodeMemAdvise(
+    inline void 
+    CommandList::EncodeMemAdvise(
         device_handle_t hDevice,                        ///< [in] device associated with the memory advice
         const void* ptr,                                ///< [in] Pointer to the start of the memory range
         size_t size,                                    ///< [in] Size in bytes of the memory range
@@ -441,7 +463,8 @@ namespace xe
     ///     - vkCmdSetEvent
     /// 
     /// @throws result_t
-    inline void CommandList::EncodeSignalEvent(
+    inline void 
+    CommandList::EncodeSignalEvent(
         event_handle_t hEvent                           ///< [in] handle of the event
         )
     {
@@ -458,7 +481,8 @@ namespace xe
     ///     - The implementation of this function should be lock-free.
     /// 
     /// @throws result_t
-    inline void CommandList::EncodeWaitOnEvent(
+    inline void 
+    CommandList::EncodeWaitOnEvent(
         event_handle_t hEvent                           ///< [in] handle of the event
         )
     {
@@ -479,7 +503,8 @@ namespace xe
     ///     - vkResetEvent
     /// 
     /// @throws result_t
-    inline void CommandList::EncodeEventReset(
+    inline void 
+    CommandList::EncodeEventReset(
         event_handle_t hEvent                           ///< [in] handle of the event
         )
     {
@@ -499,7 +524,8 @@ namespace xe
     ///     - **cuLaunchKernel**
     /// 
     /// @throws result_t
-    inline void CommandList::EncodeDispatchFunction(
+    inline void 
+    CommandList::EncodeDispatchFunction(
         function_handle_t hFunction,                    ///< [in] handle of the function object
         const dispatch_function_arguments_t* pDispatchFuncArgs, ///< [in] dispatch function arguments.
         event_handle_t hEvent                           ///< [in][optional] handle of the event to signal on completion
@@ -524,7 +550,8 @@ namespace xe
     ///     - **cuLaunchKernel**
     /// 
     /// @throws result_t
-    inline void CommandList::EncodeDispatchFunctionIndirect(
+    inline void 
+    CommandList::EncodeDispatchFunctionIndirect(
         function_handle_t hFunction,                    ///< [in] handle of the function object
         const dispatch_function_arguments_t* pDispatchArgumentsBuffer,  ///< [in] pointer to device buffer that will contain dispatch arguments
         event_handle_t hEvent                           ///< [in][optional] handle of the event to signal on completion
@@ -549,7 +576,8 @@ namespace xe
     ///     - **cuLaunchKernel**
     /// 
     /// @throws result_t
-    inline void CommandList::EncodeDispatchMultipleFunctionsIndirect(
+    inline void 
+    CommandList::EncodeDispatchMultipleFunctionsIndirect(
         uint32_t numFunctions,                          ///< [in] maximum number of functions to dispatch
         const function_handle_t* phFunctions,           ///< [in] handles of the function objects
         const size_t* pNumDispatchArguments,            ///< [in] pointer to device memory location that will contain the actual
@@ -576,7 +604,8 @@ namespace xe
     ///     - **cuLaunchHostFunc**
     /// 
     /// @throws result_t
-    inline void CommandList::EncodeDispatchHostFunction(
+    inline void 
+    CommandList::EncodeDispatchHostFunction(
         host_pfn_t pfnHostFunc,                         ///< [in] pointer to host function.
         void* pUserData                                 ///< [in] pointer to user data to pass to host function.
         )

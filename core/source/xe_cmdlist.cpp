@@ -65,7 +65,7 @@
 /// @hash {30179944405dd754aa51afa884ab3ef58a0b94bbdda27c2776a05c23c12678dc}
 ///
 __xedllexport xe_result_t __xecall
-  xeDeviceCreateCommandList(
+xeDeviceCreateCommandList(
     xe_device_handle_t hDevice,                     ///< [in] handle of the device object
     const xe_command_list_desc_t* desc,             ///< [in] pointer to command list descriptor
     xe_command_list_handle_t* phCommandList         ///< [out] pointer to handle of command list object created
@@ -133,7 +133,7 @@ __xedllexport xe_result_t __xecall
 /// @hash {cb04dd0733e58a851c0572d742124358b24254aa21c3320c9473cb8aa20a5a7f}
 ///
 __xedllexport xe_result_t __xecall
-  xeDeviceCopyCommandList(
+xeDeviceCopyCommandList(
     xe_device_handle_t hDevice,                     ///< [in] handle of the device object
     xe_command_list_handle_t hCommandList,          ///< [in] handle to command list to copy
     xe_command_list_handle_t* phCommandList         ///< [out] pointer to handle of command list object created
@@ -193,7 +193,7 @@ __xedllexport xe_result_t __xecall
 /// @hash {bda478b6a2926bea888c8c1b4c9a333a3a13205d3fc16d3ae0972b97335fc4ff}
 ///
 __xedllexport xe_result_t __xecall
-  xeCommandListDestroy(
+xeCommandListDestroy(
     xe_command_list_handle_t hCommandList           ///< [in] handle of command list object to destroy
     )
 {
@@ -247,7 +247,7 @@ __xedllexport xe_result_t __xecall
 /// @hash {90afb0f4260abf7f09ed295975efc80087058f86a66e73983dd9c9b30f8b2a48}
 ///
 __xedllexport xe_result_t __xecall
-  xeCommandListClose(
+xeCommandListClose(
     xe_command_list_handle_t hCommandList           ///< [in] handle of command list object to close
     )
 {
@@ -304,7 +304,7 @@ __xedllexport xe_result_t __xecall
 /// @hash {66bc9e2b7766eb06b0315ded3a6c40ea09ad7181fb12b2ad53d2c3d801085382}
 ///
 __xedllexport xe_result_t __xecall
-  xeCommandListReset(
+xeCommandListReset(
     xe_command_list_handle_t hCommandList           ///< [in] handle of command list object to reset
     )
 {
@@ -366,7 +366,7 @@ __xedllexport xe_result_t __xecall
 /// @hash {d9caf889451be1ea8e3cc168591fd03c2dca3f8b5650b0bc13252abbcd50c3f3}
 ///
 __xedllexport xe_result_t __xecall
-  xeCommandListSetParameter(
+xeCommandListSetParameter(
     xe_command_list_handle_t hCommandList,          ///< [in] handle of command list
     xe_command_list_parameter_t parameter,          ///< [in] parameter to change
     uint32_t value                                  ///< [in] value of attribute
@@ -431,7 +431,7 @@ __xedllexport xe_result_t __xecall
 /// @hash {777661badc06e83cb81081081ac71fb368cdd3cc235e1d188eeeaae409158e59}
 ///
 __xedllexport xe_result_t __xecall
-  xeCommandListGetParameter(
+xeCommandListGetParameter(
     xe_command_list_handle_t hCommandList,          ///< [in] handle of command list
     xe_command_list_parameter_t parameter,          ///< [in] parameter to retrieve
     uint32_t* value                                 ///< [out] value of attribute
@@ -488,7 +488,7 @@ __xedllexport xe_result_t __xecall
 /// @hash {395c8a05f90f7eeaba849d437320a99b66722039d7cb081a256ed4c16d408edf}
 ///
 __xedllexport xe_result_t __xecall
-  xeCommandListResetParameters(
+xeCommandListResetParameters(
     xe_command_list_handle_t hCommandList           ///< [in] handle of the command list
     )
 {
@@ -544,7 +544,7 @@ __xedllexport xe_result_t __xecall
 /// @hash {596df05be8f869f5f8e50121263d6be6d062370e8ebddec124125948e8b8f644}
 ///
 __xedllexport xe_result_t __xecall
-  xeCommandListEncodeCommandLists(
+xeCommandListEncodeCommandLists(
     xe_command_list_handle_t hCommandList,          ///< [in] handle of the command list
     uint32_t numCommandLists,                       ///< [in] number of command lists to encode
     xe_command_list_handle_t* phCommandLists        ///< [in] list of handles of the command lists to encode for execution
@@ -605,7 +605,7 @@ __xedllexport xe_result_t __xecall
 /// @hash {761ce13c72759ff0166ff4c1e3dd2d68023e83574c3b51b6d90708bd0692fa23}
 ///
 __xedllexport xe_result_t __xecall
-  xeCommandListReserveSpace(
+xeCommandListReserveSpace(
     xe_command_list_handle_t hCommandList,          ///< [in] handle of the command list
     size_t size,                                    ///< [in] size (in bytes) to reserve
     void** ptr                                      ///< [out] pointer to command buffer space reserved

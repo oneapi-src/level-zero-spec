@@ -38,6 +38,133 @@
 
 namespace xe
 {
+    ///////////////////////////////////////////////////////////////////////////////
+    /// @brief C++ wrapper for ::xeDriverGetDeviceCount
+    /// 
+    /// @details
+    ///     - The application may call this function from simultaneous threads.
+    ///     - The implementation of this function should be lock-free.
+    /// 
+    /// @remarks
+    ///   _Analogues_
+    ///     - **cuDeviceGetCount**
+    /// 
+    /// @returns
+    ///     - uint32_t: number of devices available
+    /// 
+    /// @throws result_t
+    inline uint32_t 
+    Driver::GetDeviceCount(
+        void
+        )
+    {
+        // auto result = ::xeDriverGetDeviceCount( handle );
+        // if( ::XE_RESULT_SUCCESS != result ) throw exception(result, "xe::Driver::GetDeviceCount");
+    }
+
+    ///////////////////////////////////////////////////////////////////////////////
+    /// @brief C++ wrapper for ::xeDriverGetDeviceUniqueIds
+    /// 
+    /// @details
+    ///     - The application may call this function from simultaneous threads.
+    ///     - The implementation of this function should be lock-free.
+    /// 
+    /// @remarks
+    ///   _Analogues_
+    ///     - **cuDeviceGet**
+    ///     - clGetDeviceIDs
+    /// 
+    /// @returns
+    ///     - device_uuid_t: pointer to an array of unique ids for devices. Caller must supply array.
+    /// 
+    /// @throws result_t
+    inline device_uuid_t 
+    Driver::GetDeviceUniqueIds(
+        uint32_t count                                  ///< [in] size of device unique ids array. Typically, this will be
+                                                        ///< ${x}DeviceGetCount.
+        )
+    {
+        // auto result = ::xeDriverGetDeviceUniqueIds( handle, count );
+        // if( ::XE_RESULT_SUCCESS != result ) throw exception(result, "xe::Driver::GetDeviceUniqueIds");
+    }
+
+    ///////////////////////////////////////////////////////////////////////////////
+    /// @brief C++ wrapper for ::xeDriverGetDevice
+    /// 
+    /// @details
+    ///     - The application may call this function from simultaneous threads.
+    ///     - The implementation of this function should be lock-free.
+    /// 
+    /// @remarks
+    ///   _Analogues_
+    ///     - **cuDeviceGet**
+    ///     - clGetDeviceIDs
+    /// 
+    /// @returns
+    ///     - device_handle_t: pointer to handle of device object created
+    /// 
+    /// @throws result_t
+    inline device_handle_t 
+    Driver::GetDevice(
+        device_uuid_t* pUUID                            ///< [in] unique id of device to retrieve. Use ${x}DriverGetDeviceUniqueIds
+                                                        ///< to obtain a unique Id.
+        )
+    {
+        // auto result = ::xeDriverGetDevice( handle, pUUID );
+        // if( ::XE_RESULT_SUCCESS != result ) throw exception(result, "xe::Driver::GetDevice");
+    }
+
+    ///////////////////////////////////////////////////////////////////////////////
+    /// @brief C++ wrapper for ::xeDriverInit
+    /// 
+    /// @details
+    ///     - Only one instance of a driver per process can be loaded.
+    ///     - There is no reference tracking if multiple drivers are initialized.
+    ///     - If this function is not called then all other functions will return
+    ///       ::RESULT_ERROR_UNINITIALIZED.
+    ///     - This function is thread-safe for scenarios where multiple libraries
+    ///       may initialize the driver simultaneously.
+    /// 
+    /// @remarks
+    ///   _Analogues_
+    ///     - **cuInit**
+    /// 
+    /// @throws result_t
+    inline void 
+    Driver::Init(
+        init_flag_t flags                               ///< [in] initialization flags
+        )
+    {
+        // auto result = ::xeDriverInit( handle, flags );
+        // if( ::XE_RESULT_SUCCESS != result ) throw exception(result, "xe::Driver::Init");
+    }
+
+    ///////////////////////////////////////////////////////////////////////////////
+    /// @brief C++ wrapper for ::xeDriverGetVersion
+    /// 
+    /// @details
+    ///     - The driver version is a non-zero, monotonically increasing value where
+    ///       higher values always indicate a more recent version.
+    ///     - The application may call this function from simultaneous threads.
+    ///     - The implementation of this function should be lock-free.
+    /// 
+    /// @remarks
+    ///   _Analogues_
+    ///     - **cuDriverGetVersion**
+    /// 
+    /// @returns
+    ///     - uint32_t: driver version
+    /// 
+    /// @throws result_t
+    inline uint32_t 
+    Driver::GetVersion(
+        void
+        )
+    {
+        // auto result = ::xeDriverGetVersion( handle );
+        // if( ::XE_RESULT_SUCCESS != result ) throw exception(result, "xe::Driver::GetVersion");
+    }
+
 } // namespace xe
 #endif // defined(__cplusplus)
 #endif // _XE_DRIVER_INL

@@ -49,7 +49,9 @@ namespace xe
     ///     - The implementation of this function should be lock-free.
     /// 
     /// @throws result_t
-    inline void Image::Destroy(
+    inline void 
+    Image::Destroy(
+        void
         )
     {
         // auto result = ::xeImageDestroy( handle );

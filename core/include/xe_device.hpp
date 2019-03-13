@@ -492,7 +492,8 @@ namespace xe
         ///     - void*: pointer to device allocation
         /// 
         /// @throws result_t
-        inline void* RegisterCLMemory(
+        inline void*
+        RegisterCLMemory(
             cl_context context,                             ///< [in] the OpenCL context that created the memory
             cl_mem mem                                      ///< [in] the OpenCL memory to register
             );
@@ -505,7 +506,8 @@ namespace xe
         ///     - module_handle_t: pointer to handle of module object created
         /// 
         /// @throws result_t
-        inline module_handle_t RegisterCLProgram(
+        inline module_handle_t
+        RegisterCLProgram(
             cl_context context,                             ///< [in] the OpenCL context that created the program
             cl_program program                              ///< [in] the OpenCL program to register
             );
@@ -518,7 +520,8 @@ namespace xe
         ///     - command_queue_handle_t: pointer to handle of command queue object created
         /// 
         /// @throws result_t
-        inline command_queue_handle_t RegisterCLCommandQueue(
+        inline command_queue_handle_t
+        RegisterCLCommandQueue(
             cl_context context,                             ///< [in] the OpenCL context that created the command queue
             cl_command_queue command_queue                  ///< [in] the OpenCL command queue to register
             );
@@ -530,7 +533,8 @@ namespace xe
         ///     - command_graph_handle_t: pointer to handle of command graph object created
         /// 
         /// @throws result_t
-        inline command_graph_handle_t CreateCommandGraph(
+        inline command_graph_handle_t
+        CreateCommandGraph(
             const command_graph_desc_t* desc                ///< [in] pointer to command graph descriptor
             );
 
@@ -540,7 +544,8 @@ namespace xe
         ///     - command_list_handle_t: pointer to handle of command list object created
         /// 
         /// @throws result_t
-        inline command_list_handle_t CreateCommandList(
+        inline command_list_handle_t
+        CreateCommandList(
             const command_list_desc_t* desc                 ///< [in] pointer to command list descriptor
             );
 
@@ -550,7 +555,8 @@ namespace xe
         ///     - command_list_handle_t: pointer to handle of command list object created
         /// 
         /// @throws result_t
-        inline command_list_handle_t CopyCommandList(
+        inline command_list_handle_t
+        CopyCommandList(
             command_list_handle_t hCommandList              ///< [in] handle to command list to copy
             );
 
@@ -560,7 +566,8 @@ namespace xe
         ///     - command_queue_handle_t: pointer to handle of command queue object created
         /// 
         /// @throws result_t
-        inline command_queue_handle_t CreateCommandQueue(
+        inline command_queue_handle_t
+        CreateCommandQueue(
             const command_queue_desc_t* desc                ///< [in] pointer to command queue descriptor
             );
 
@@ -570,7 +577,8 @@ namespace xe
         ///     - device_handle_t: pointer to handle of sub-device object.
         /// 
         /// @throws result_t
-        inline device_handle_t GetSubDevice(
+        inline device_handle_t
+        GetSubDevice(
             uint32_t ordinal                                ///< [in] ordinal of sub-device to retrieve
             );
 
@@ -580,7 +588,9 @@ namespace xe
         ///     - api_version_t: api version
         /// 
         /// @throws result_t
-        inline api_version_t GetApiVersion(
+        inline api_version_t
+        GetApiVersion(
+            void
             );
 
         ///////////////////////////////////////////////////////////////////////////////
@@ -589,7 +599,9 @@ namespace xe
         ///     - device_properties_t: query result for device properties
         /// 
         /// @throws result_t
-        inline device_properties_t GetProperties(
+        inline device_properties_t
+        GetProperties(
+            void
             );
 
         ///////////////////////////////////////////////////////////////////////////////
@@ -598,7 +610,9 @@ namespace xe
         ///     - device_compute_properties_t: query result for compute properties
         /// 
         /// @throws result_t
-        inline device_compute_properties_t GetComputeProperties(
+        inline device_compute_properties_t
+        GetComputeProperties(
+            void
             );
 
         ///////////////////////////////////////////////////////////////////////////////
@@ -607,7 +621,21 @@ namespace xe
         ///     - device_memory_properties_t: query result for compute properties
         /// 
         /// @throws result_t
-        inline device_memory_properties_t GetMemoryProperties(
+        inline device_memory_properties_t
+        GetMemoryProperties(
+            void
+            );
+
+        ///////////////////////////////////////////////////////////////////////////////
+        /// @brief C++ wrapper for ::xeDeviceGetLinkProperties
+        /// @returns
+        ///     - device_link_properties_t: link properties between source and destination devices
+        /// 
+        /// @throws result_t
+        inline static device_link_properties_t
+        GetLinkProperties(
+            uint32_t srcOrdinal,                            ///< [in] source device ordinal
+            uint32_t dstOrdinal                             ///< [in] destination device ordinal
             );
 
         ///////////////////////////////////////////////////////////////////////////////
@@ -616,21 +644,24 @@ namespace xe
         ///     - bool_t: returned access capability
         /// 
         /// @throws result_t
-        inline bool_t CanAccessPeer(
+        inline bool_t
+        CanAccessPeer(
             device_handle_t hPeerDevice                     ///< [in] handle of the peer device with the allocation
             );
 
         ///////////////////////////////////////////////////////////////////////////////
         /// @brief C++ wrapper for ::xeDeviceSetIntermediateCacheConfig
         /// @throws result_t
-        inline void SetIntermediateCacheConfig(
+        inline void
+        SetIntermediateCacheConfig(
             cache_config_t CacheConfig                      ///< [in] CacheConfig
             );
 
         ///////////////////////////////////////////////////////////////////////////////
         /// @brief C++ wrapper for ::xeDeviceSetLastLevelCacheConfig
         /// @throws result_t
-        inline void SetLastLevelCacheConfig(
+        inline void
+        SetLastLevelCacheConfig(
             cache_config_t CacheConfig                      ///< [in] CacheConfig
             );
 
@@ -640,7 +671,8 @@ namespace xe
         ///     - event_handle_t: pointer to handle of event object created
         /// 
         /// @throws result_t
-        inline event_handle_t CreateEvent(
+        inline event_handle_t
+        CreateEvent(
             const event_desc_t* desc                        ///< [in] pointer to event descriptor
             );
 
@@ -650,7 +682,8 @@ namespace xe
         ///     - event_handle_t: pointer to handle of event object created
         /// 
         /// @throws result_t
-        inline event_handle_t PlaceEvent(
+        inline event_handle_t
+        PlaceEvent(
             const event_desc_t* desc,                       ///< [in] pointer to event descriptor
             void* ptr                                       ///< [in] pointer to the device pointer where the event should be placed
             );
@@ -661,7 +694,8 @@ namespace xe
         ///     - image_handle_t: pointer to handle of image object created
         /// 
         /// @throws result_t
-        inline image_handle_t CreateImage(
+        inline image_handle_t
+        CreateImage(
             const image_desc_t* desc                        ///< [in] pointer to image descriptor
             );
 
@@ -672,14 +706,16 @@ namespace xe
         ///     - module_build_log_handle_t: pointer to handle of module's build log.
         /// 
         /// @throws result_t
-        inline std::tuple<module_handle_t, module_build_log_handle_t> CreateModule(
+        inline std::tuple<module_handle_t, module_build_log_handle_t>
+        CreateModule(
             const module_desc_t* pDesc                      ///< [in] pointer to module descriptor
             );
 
         ///////////////////////////////////////////////////////////////////////////////
         /// @brief C++ wrapper for ::xeDeviceMakeMemoryResident
         /// @throws result_t
-        inline void MakeMemoryResident(
+        inline void
+        MakeMemoryResident(
             void* ptr,                                      ///< [in] pointer to memory to make resident
             size_t size                                     ///< [in] size in bytes to make resident
             );
@@ -687,7 +723,8 @@ namespace xe
         ///////////////////////////////////////////////////////////////////////////////
         /// @brief C++ wrapper for ::xeDeviceEvictMemory
         /// @throws result_t
-        inline void EvictMemory(
+        inline void
+        EvictMemory(
             void* ptr,                                      ///< [in] pointer to memory to evict
             size_t size                                     ///< [in] size in bytes to evict
             );
@@ -695,14 +732,16 @@ namespace xe
         ///////////////////////////////////////////////////////////////////////////////
         /// @brief C++ wrapper for ::xeDeviceMakeImageResident
         /// @throws result_t
-        inline void MakeImageResident(
+        inline void
+        MakeImageResident(
             image_handle_t hImage                           ///< [in] handle of image to make resident
             );
 
         ///////////////////////////////////////////////////////////////////////////////
         /// @brief C++ wrapper for ::xeDeviceEvictImage
         /// @throws result_t
-        inline void EvictImage(
+        inline void
+        EvictImage(
             image_handle_t hImage                           ///< [in] handle of image to make evict
             );
 
@@ -712,7 +751,8 @@ namespace xe
         ///     - sampler_handle_t: handle of the sampler
         /// 
         /// @throws result_t
-        inline sampler_handle_t CreateSampler(
+        inline sampler_handle_t
+        CreateSampler(
             const sampler_desc_t* pDesc                     ///< [in] pointer to sampler descriptor
             );
 

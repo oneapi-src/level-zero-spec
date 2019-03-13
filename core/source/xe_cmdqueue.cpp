@@ -69,7 +69,7 @@
 /// @hash {64cb11be0bd61d15890524c332cd41e37a7ff6c4b24ce3b3bdb3b0d19d687ad8}
 ///
 __xedllexport xe_result_t __xecall
-  xeDeviceCreateCommandQueue(
+xeDeviceCreateCommandQueue(
     xe_device_handle_t hDevice,                     ///< [in] handle of the device object
     const xe_command_queue_desc_t* desc,            ///< [in] pointer to command queue descriptor
     xe_command_queue_handle_t* phCommandQueue       ///< [out] pointer to handle of command queue object created
@@ -135,7 +135,7 @@ __xedllexport xe_result_t __xecall
 /// @hash {d2b4274520dcb902a966ba04f31f4c7e3976a1a6e0b6ad73d64713baa10785d4}
 ///
 __xedllexport xe_result_t __xecall
-  xeCommandQueueDestroy(
+xeCommandQueueDestroy(
     xe_command_queue_handle_t hCommandQueue         ///< [in] handle of command queue object to destroy
     )
 {
@@ -196,7 +196,7 @@ __xedllexport xe_result_t __xecall
 /// @hash {3d9d4e4b61d47939ee851c18dce4cb2d2e5d99585ca8349927a49a7ee1aaceab}
 ///
 __xedllexport xe_result_t __xecall
-  xeCommandQueueEnqueueCommandLists(
+xeCommandQueueEnqueueCommandLists(
     xe_command_queue_handle_t hCommandQueue,        ///< [in] handle of the command queue
     uint32_t numCommandLists,                       ///< [in] number of command lists to enqueue
     xe_command_list_handle_t* phCommandLists,       ///< [in] list of handles of the command lists to enqueue for execution
@@ -255,7 +255,7 @@ __xedllexport xe_result_t __xecall
 /// @hash {d3c6d6fa48cf90ca129fa97f9cc4496aec796497805202ef97d76a61a36faf55}
 ///
 __xedllexport xe_result_t __xecall
-  xeCommandQueueSynchronize(
+xeCommandQueueSynchronize(
     xe_command_queue_handle_t hCommandQueue,        ///< [in] handle of the command queue
     uint32_t timeout                                ///< [in] if non-zero, then indicates the maximum time to yield before
                                                     ///< returning ::XE_RESULT_SUCCESS or ::XE_RESULT_NOT_READY; if zero, then

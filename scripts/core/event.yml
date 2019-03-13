@@ -154,8 +154,9 @@ params:
 --- #--------------------------------------------------------------------------
 type: function
 desc: "Signals a event from host."
-class: $x
-name: HostSignalEvent
+class: $xEvent
+name: HostSignal
+decl: static
 analogue:
     - clSetUserEventStatus
 details:
@@ -168,8 +169,9 @@ params:
 --- #--------------------------------------------------------------------------
 type: function
 desc: "The current host thread waits on an event from a device signal."
-class: $x
-name: HostWaitOnEvent
+class: $xEvent
+name: HostSynchronize
+decl: static
 analogue:
     - clWaitForEvents
     - cuEventSynchronize
@@ -210,8 +212,9 @@ returns:
 --- #--------------------------------------------------------------------------
 type: function
 desc: "Queries the elapsed time between two device-signaled events."
-class: $x
-name: EventQueryElapsedTime
+class: $xEvent
+name: QueryElapsedTime
+decl: static
 analogue:
     - "**cuEventElapsedTime**"
 details:
@@ -234,8 +237,9 @@ returns:
 --- #--------------------------------------------------------------------------
 type: function
 desc: "Queries performance metrics between two device-signaled events."
-class: $x
-name: EventQueryMetricsData
+class: $xEvent
+name: QueryMetricsData
+decl: static
 details:
     - "The application may call this function from simultaneous threads."
     - "The implementation of this function should be lock-free."

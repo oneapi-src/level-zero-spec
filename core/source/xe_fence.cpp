@@ -67,7 +67,7 @@
 /// @hash {d42e38d25d111753f5f120d80296f494f658063005c79d78865c2e62e1ef1803}
 ///
 __xedllexport xe_result_t __xecall
-  xeCommandQueueCreateFence(
+xeCommandQueueCreateFence(
     xe_command_queue_handle_t hCommandQueue,        ///< [in] handle of command queue
     const xe_fence_desc_t* desc,                    ///< [in] pointer to fence descriptor
     xe_fence_handle_t* phFence                      ///< [out] pointer to handle of fence object created
@@ -133,7 +133,7 @@ __xedllexport xe_result_t __xecall
 /// @hash {422e69b1e222a70a59ec747e63eeaa1f7ea8d690dd3d4cefa6940ea6841f901c}
 ///
 __xedllexport xe_result_t __xecall
-  xeFenceDestroy(
+xeFenceDestroy(
     xe_fence_handle_t hFence                        ///< [in] handle of fence object to destroy
     )
 {
@@ -190,10 +190,10 @@ __xedllexport xe_result_t __xecall
 ///     - ::XE_RESULT_NOT_READY
 ///         + timeout expired
 ///
-/// @hash {5e198f18344f81afecf317d50762b0371f9f1f54514cce33ec0d8e1ed9fccca9}
+/// @hash {e3b9d009d9b3a0d2824c80ac90c1119b383c02ba48736d768c17470fd09e77d2}
 ///
 __xedllexport xe_result_t __xecall
-  xeHostWaitOnFence(
+xeFenceHostSynchronize(
     xe_fence_handle_t hFence,                       ///< [in] handle of the fence
     uint32_t timeout                                ///< [in] if non-zero, then indicates the maximum time to yield before
                                                     ///< returning ::XE_RESULT_SUCCESS or ::XE_RESULT_NOT_READY; if zero, then
@@ -213,7 +213,7 @@ __xedllexport xe_result_t __xecall
 #if defined(XE_NULLDRV)
         return XE_RESULT_SUCCESS;
 #else
-        return L0::hostWaitOnFence(hFence->getHandle(), timeout);
+        return L0::Fence::fromHandle(hFence)->hostSynchronize(timeout);
 #endif
         /// @end
     }
@@ -257,7 +257,7 @@ __xedllexport xe_result_t __xecall
 /// @hash {54d115edc2a41acd09d4b8170e56d9826a2b5706f11c6104736eb5860d23c5bc}
 ///
 __xedllexport xe_result_t __xecall
-  xeFenceQueryStatus(
+xeFenceQueryStatus(
     xe_fence_handle_t hFence                        ///< [in] handle of the fence
     )
 {
@@ -314,7 +314,7 @@ __xedllexport xe_result_t __xecall
 /// @hash {7d06912d2e703c85cf1c3bb4e5b71884212ddfcc87d33f46c5463b83293ed855}
 ///
 __xedllexport xe_result_t __xecall
-  xeFenceReset(
+xeFenceReset(
     xe_fence_handle_t hFence                        ///< [in] handle of the fence
     )
 {

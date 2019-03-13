@@ -6,6 +6,7 @@ type: function
 desc: "Reports the number of devices"
 class: $xDriver
 name: GetDeviceCount
+decl: static
 analogue:
     - "**cuDeviceGetCount**"
 details:
@@ -34,6 +35,7 @@ type: function
 desc: "Retrieve "
 class: $xDriver
 name: GetDeviceUniqueIds
+decl: static
 analogue:
     - "**cuDeviceGet**"
     - clGetDeviceIDs
@@ -55,6 +57,7 @@ type: function
 desc: "Returns a handle to the device object"
 class: $xDriver
 name: GetDevice
+decl: static
 analogue:
     - "**cuDeviceGet**"
     - clGetDeviceIDs
@@ -432,8 +435,9 @@ members:
 --- #--------------------------------------------------------------------------
 type: function
 desc: "Retrieves link properties between source and destination devices."
-class: $x
-name: DeviceGetLinkProperties
+class: $xDevice
+name: GetLinkProperties
+decl: static
 analogue:
     - "**cudaDeviceGetP2PAttribute**"
 details:

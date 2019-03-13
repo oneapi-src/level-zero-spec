@@ -94,7 +94,7 @@ typedef struct _xe_command_list_desc_t
 ///     - ::XE_RESULT_ERROR_OUT_OF_HOST_MEMORY
 ///     - ::XE_RESULT_ERROR_OUT_OF_DEVICE_MEMORY
 __xedllport xe_result_t __xecall
-  xeDeviceCreateCommandList(
+xeDeviceCreateCommandList(
     xe_device_handle_t hDevice,                     ///< [in] handle of the device object
     const xe_command_list_desc_t* desc,             ///< [in] pointer to command list descriptor
     xe_command_list_handle_t* phCommandList         ///< [out] pointer to handle of command list object created
@@ -125,7 +125,7 @@ __xedllport xe_result_t __xecall
 ///     - ::XE_RESULT_ERROR_OUT_OF_HOST_MEMORY
 ///     - ::XE_RESULT_ERROR_OUT_OF_DEVICE_MEMORY
 __xedllport xe_result_t __xecall
-  xeDeviceCopyCommandList(
+xeDeviceCopyCommandList(
     xe_device_handle_t hDevice,                     ///< [in] handle of the device object
     xe_command_list_handle_t hCommandList,          ///< [in] handle to command list to copy
     xe_command_list_handle_t* phCommandList         ///< [out] pointer to handle of command list object created
@@ -149,7 +149,7 @@ __xedllport xe_result_t __xecall
 ///         + nullptr == hCommandList
 ///     - ::XE_RESULT_ERROR_UNSUPPORTED
 __xedllport xe_result_t __xecall
-  xeCommandListDestroy(
+xeCommandListDestroy(
     xe_command_list_handle_t hCommandList           ///< [in] handle of command list object to destroy
     );
 
@@ -169,7 +169,7 @@ __xedllport xe_result_t __xecall
 ///         + nullptr == hCommandList
 ///     - ::XE_RESULT_ERROR_UNSUPPORTED
 __xedllport xe_result_t __xecall
-  xeCommandListClose(
+xeCommandListClose(
     xe_command_list_handle_t hCommandList           ///< [in] handle of command list object to close
     );
 
@@ -192,7 +192,7 @@ __xedllport xe_result_t __xecall
 ///         + nullptr == hCommandList
 ///     - ::XE_RESULT_ERROR_UNSUPPORTED
 __xedllport xe_result_t __xecall
-  xeCommandListReset(
+xeCommandListReset(
     xe_command_list_handle_t hCommandList           ///< [in] handle of command list object to reset
     );
 
@@ -228,7 +228,7 @@ typedef enum _xe_command_list_parameter_t
 ///         + invalid value for value
 ///     - ::XE_RESULT_ERROR_UNSUPPORTED
 __xedllport xe_result_t __xecall
-  xeCommandListSetParameter(
+xeCommandListSetParameter(
     xe_command_list_handle_t hCommandList,          ///< [in] handle of command list
     xe_command_list_parameter_t parameter,          ///< [in] parameter to change
     uint32_t value                                  ///< [in] value of attribute
@@ -259,7 +259,7 @@ __xedllport xe_result_t __xecall
 ///         + invalid value for attribute
 ///     - ::XE_RESULT_ERROR_UNSUPPORTED
 __xedllport xe_result_t __xecall
-  xeCommandListGetParameter(
+xeCommandListGetParameter(
     xe_command_list_handle_t hCommandList,          ///< [in] handle of command list
     xe_command_list_parameter_t parameter,          ///< [in] parameter to retrieve
     uint32_t* value                                 ///< [out] value of attribute
@@ -281,7 +281,7 @@ __xedllport xe_result_t __xecall
 ///         + nullptr == hCommandList
 ///     - ::XE_RESULT_ERROR_UNSUPPORTED
 __xedllport xe_result_t __xecall
-  xeCommandListResetParameters(
+xeCommandListResetParameters(
     xe_command_list_handle_t hCommandList           ///< [in] handle of the command list
     );
 
@@ -303,7 +303,7 @@ __xedllport xe_result_t __xecall
 ///         + 0 for numCommandLists
 ///     - ::XE_RESULT_ERROR_UNSUPPORTED
 __xedllport xe_result_t __xecall
-  xeCommandListEncodeCommandLists(
+xeCommandListEncodeCommandLists(
     xe_command_list_handle_t hCommandList,          ///< [in] handle of the command list
     uint32_t numCommandLists,                       ///< [in] number of command lists to encode
     xe_command_list_handle_t* phCommandLists        ///< [in] list of handles of the command lists to encode for execution
@@ -329,7 +329,7 @@ __xedllport xe_result_t __xecall
 ///         + 0 for size
 ///     - ::XE_RESULT_ERROR_UNSUPPORTED
 __xedllport xe_result_t __xecall
-  xeCommandListReserveSpace(
+xeCommandListReserveSpace(
     xe_command_list_handle_t hCommandList,          ///< [in] handle of the command list
     size_t size,                                    ///< [in] size (in bytes) to reserve
     void** ptr                                      ///< [out] pointer to command buffer space reserved

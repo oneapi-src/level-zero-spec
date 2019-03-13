@@ -53,19 +53,37 @@ namespace xe
         ///////////////////////////////////////////////////////////////////////////////
         /// @brief C++ wrapper for ::xeFenceDestroy
         /// @throws result_t
-        inline void Destroy(
+        inline void
+        Destroy(
+            void
+            );
+
+        ///////////////////////////////////////////////////////////////////////////////
+        /// @brief C++ wrapper for ::xeFenceHostSynchronize
+        /// @throws result_t
+        inline static void
+        HostSynchronize(
+            fence_handle_t hFence,                          ///< [in] handle of the fence
+            uint32_t timeout                                ///< [in] if non-zero, then indicates the maximum time to yield before
+                                                            ///< returning ::RESULT_SUCCESS or ::RESULT_NOT_READY; if zero, then
+                                                            ///< operates exactly like ::FenceQueryStatus; if MAX_UINT32, then function
+                                                            ///< will not return until complete or device is lost.
             );
 
         ///////////////////////////////////////////////////////////////////////////////
         /// @brief C++ wrapper for ::xeFenceQueryStatus
         /// @throws result_t
-        inline void QueryStatus(
+        inline void
+        QueryStatus(
+            void
             );
 
         ///////////////////////////////////////////////////////////////////////////////
         /// @brief C++ wrapper for ::xeFenceReset
         /// @throws result_t
-        inline void Reset(
+        inline void
+        Reset(
+            void
             );
 
     };

@@ -67,7 +67,7 @@
 /// @hash {27a0a4bcd9c866877aa1fb52838284ccdaae12a2dfd92d87b2b862a4ab19218a}
 ///
 __xedllexport xe_result_t __xecall
-  xeDeviceCreateImage(
+xeDeviceCreateImage(
     xe_device_handle_t hDevice,                     ///< [in] handle of the device
     const xe_image_desc_t* desc,                    ///< [in] pointer to image descriptor
     xe_image_handle_t* phImage                      ///< [out] pointer to handle of image object created
@@ -128,7 +128,7 @@ __xedllexport xe_result_t __xecall
 /// @hash {fd023d402207b0213a1e9c7aeaf42f03639cc86e3a20b6267eb86975e7996b94}
 ///
 __xedllexport xe_result_t __xecall
-  xeImageDestroy(
+xeImageDestroy(
     xe_image_handle_t hImage                        ///< [in] handle of image object to destroy
     )
 {

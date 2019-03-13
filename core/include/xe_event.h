@@ -98,7 +98,7 @@ typedef struct _xe_event_desc_t
 ///     - ::XE_RESULT_ERROR_OUT_OF_HOST_MEMORY
 ///     - ::XE_RESULT_ERROR_OUT_OF_DEVICE_MEMORY
 __xedllport xe_result_t __xecall
-  xeDeviceCreateEvent(
+xeDeviceCreateEvent(
     xe_device_handle_t hDevice,                     ///< [in] handle of the device
     const xe_event_desc_t* desc,                    ///< [in] pointer to event descriptor
     xe_event_handle_t* phEvent                      ///< [out] pointer to handle of event object created
@@ -126,7 +126,7 @@ __xedllport xe_result_t __xecall
 ///         + ::XE_EVENT_DESC_VERSION_CURRENT < desc->version
 ///     - ::XE_RESULT_ERROR_OUT_OF_HOST_MEMORY
 __xedllport xe_result_t __xecall
-  xeDevicePlaceEvent(
+xeDevicePlaceEvent(
     xe_device_handle_t hDevice,                     ///< [in] handle of the device
     const xe_event_desc_t* desc,                    ///< [in] pointer to event descriptor
     void* ptr,                                      ///< [in] pointer to the device pointer where the event should be placed
@@ -157,7 +157,7 @@ __xedllport xe_result_t __xecall
 ///         + nullptr == hEvent
 ///     - ::XE_RESULT_ERROR_UNSUPPORTED
 __xedllport xe_result_t __xecall
-  xeEventDestroy(
+xeEventDestroy(
     xe_event_handle_t hEvent                        ///< [in] handle of event object to destroy
     );
 
@@ -184,7 +184,7 @@ __xedllport xe_result_t __xecall
 ///         + nullptr == hEvent
 ///     - ::XE_RESULT_ERROR_UNSUPPORTED
 __xedllport xe_result_t __xecall
-  xeCommandListEncodeSignalEvent(
+xeCommandListEncodeSignalEvent(
     xe_command_list_handle_t hCommandList,          ///< [in] handle of the command list
     xe_event_handle_t hEvent                        ///< [in] handle of the event
     );
@@ -206,7 +206,7 @@ __xedllport xe_result_t __xecall
 ///         + nullptr == hEvent
 ///     - ::XE_RESULT_ERROR_UNSUPPORTED
 __xedllport xe_result_t __xecall
-  xeCommandListEncodeWaitOnEvent(
+xeCommandListEncodeWaitOnEvent(
     xe_command_list_handle_t hCommandList,          ///< [in] handle of the command list
     xe_event_handle_t hEvent                        ///< [in] handle of the event
     );
@@ -230,7 +230,7 @@ __xedllport xe_result_t __xecall
 ///         + nullptr == hEvent
 ///     - ::XE_RESULT_ERROR_UNSUPPORTED
 __xedllport xe_result_t __xecall
-  xeHostSignalEvent(
+xeEventHostSignal(
     xe_event_handle_t hEvent                        ///< [in] handle of the event
     );
 
@@ -256,7 +256,7 @@ __xedllport xe_result_t __xecall
 ///     - ::XE_RESULT_NOT_READY
 ///         + timeout expired
 __xedllport xe_result_t __xecall
-  xeHostWaitOnEvent(
+xeEventHostSynchronize(
     xe_event_handle_t hEvent,                       ///< [in] handle of the event
     uint32_t timeout                                ///< [in] if non-zero, then indicates the maximum time to yield before
                                                     ///< returning ::XE_RESULT_SUCCESS or ::XE_RESULT_NOT_READY; if zero, then
@@ -287,7 +287,7 @@ __xedllport xe_result_t __xecall
 ///     - ::XE_RESULT_NOT_READY
 ///         + not signaled
 __xedllport xe_result_t __xecall
-  xeEventQueryStatus(
+xeEventQueryStatus(
     xe_event_handle_t hEvent                        ///< [in] handle of the event
     );
 
@@ -314,7 +314,7 @@ __xedllport xe_result_t __xecall
 ///         + either event not created with ::XE_EVENT_FLAG_TIMESTAMP
 ///     - ::XE_RESULT_ERROR_UNSUPPORTED
 __xedllport xe_result_t __xecall
-  xeEventQueryElapsedTime(
+xeEventQueryElapsedTime(
     xe_event_handle_t hEventBegin,                  ///< [in] handle of the begin event
     xe_event_handle_t hEventEnd,                    ///< [in] handle of the end event
     double* pTime                                   ///< [out] time in milliseconds
@@ -340,7 +340,7 @@ __xedllport xe_result_t __xecall
 ///         + report size too small
 ///     - ::XE_RESULT_ERROR_UNSUPPORTED
 __xedllport xe_result_t __xecall
-  xeEventQueryMetricsData(
+xeEventQueryMetricsData(
     xe_event_handle_t hEventStart,                  ///< [in] handle of the start event
     xe_event_handle_t hEventEnd,                    ///< [in] handle of the end event
     size_t reportSize,                              ///< [in] size of the report data buffer in bytes
@@ -368,7 +368,7 @@ __xedllport xe_result_t __xecall
 ///         + nullptr == hEvent
 ///     - ::XE_RESULT_ERROR_UNSUPPORTED
 __xedllport xe_result_t __xecall
-  xeCommandListEncodeEventReset(
+xeCommandListEncodeEventReset(
     xe_command_list_handle_t hCommandList,          ///< [in] handle of the command list
     xe_event_handle_t hEvent                        ///< [in] handle of the event
     );
@@ -392,7 +392,7 @@ __xedllport xe_result_t __xecall
 ///         + nullptr == hEvent
 ///     - ::XE_RESULT_ERROR_UNSUPPORTED
 __xedllport xe_result_t __xecall
-  xeEventReset(
+xeEventReset(
     xe_event_handle_t hEvent                        ///< [in] handle of the event
     );
 

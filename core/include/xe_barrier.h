@@ -62,7 +62,7 @@ extern "C" {
 ///         + nullptr == hCommandList
 ///     - ::XE_RESULT_ERROR_UNSUPPORTED
 __xedllport xe_result_t __xecall
-  xeCommandListEncodeExecutionBarrier(
+xeCommandListEncodeExecutionBarrier(
     xe_command_list_handle_t hCommandList           ///< [in] handle of the command list
     );
 
