@@ -99,13 +99,13 @@ TEST_P(FunctionImpSuggestGroupSize, suggestGroupChoosesProperGroupSize) {
     uint32_t groupSize[3];
     function.FunctionImp::suggestGroupSize(size, 1, 1, groupSize, groupSize + 1, groupSize + 2);
     EXPECT_EQ(0U, size % groupSize[0]);
-    EXPECT_EQ(0U, size % groupSize[1]);
-    EXPECT_EQ(0U, size % groupSize[2]);
+    EXPECT_EQ(0U, 1U % groupSize[1]);
+    EXPECT_EQ(0U, 1U % groupSize[2]);
 
     function.FunctionImp::suggestGroupSize(size, size, 1, groupSize, groupSize + 1, groupSize + 2);
     EXPECT_EQ(0U, size % groupSize[0]);
     EXPECT_EQ(0U, size % groupSize[1]);
-    EXPECT_EQ(0U, size % groupSize[2]);
+    EXPECT_EQ(0U, 1U % groupSize[2]);
 
     function.FunctionImp::suggestGroupSize(size, size, size, groupSize, groupSize + 1, groupSize + 2);
     EXPECT_EQ(0U, size % groupSize[0]);
@@ -114,27 +114,27 @@ TEST_P(FunctionImpSuggestGroupSize, suggestGroupChoosesProperGroupSize) {
 
     function.FunctionImp::suggestGroupSize(size, 1, 1, groupSize, groupSize + 1, groupSize + 2);
     EXPECT_EQ(0U, size % groupSize[0]);
-    EXPECT_EQ(0U, size % groupSize[1]);
-    EXPECT_EQ(0U, size % groupSize[2]);
+    EXPECT_EQ(0U, 1U % groupSize[1]);
+    EXPECT_EQ(0U, 1U % groupSize[2]);
 
     function.FunctionImp::suggestGroupSize(1, size, 1, groupSize, groupSize + 1, groupSize + 2);
-    EXPECT_EQ(0U, size % groupSize[0]);
+    EXPECT_EQ(0U, 1U % groupSize[0]);
     EXPECT_EQ(0U, size % groupSize[1]);
-    EXPECT_EQ(0U, size % groupSize[2]);
+    EXPECT_EQ(0U, 1U % groupSize[2]);
 
     function.FunctionImp::suggestGroupSize(1, 1, size, groupSize, groupSize + 1, groupSize + 2);
-    EXPECT_EQ(0U, size % groupSize[0]);
-    EXPECT_EQ(0U, size % groupSize[1]);
+    EXPECT_EQ(0U, 1U % groupSize[0]);
+    EXPECT_EQ(0U, 1U % groupSize[1]);
     EXPECT_EQ(0U, size % groupSize[2]);
 
     function.FunctionImp::suggestGroupSize(1, size, size, groupSize, groupSize + 1, groupSize + 2);
-    EXPECT_EQ(0U, size % groupSize[0]);
+    EXPECT_EQ(0U, 1U % groupSize[0]);
     EXPECT_EQ(0U, size % groupSize[1]);
     EXPECT_EQ(0U, size % groupSize[2]);
 
     function.FunctionImp::suggestGroupSize(size, 1, size, groupSize, groupSize + 1, groupSize + 2);
     EXPECT_EQ(0U, size % groupSize[0]);
-    EXPECT_EQ(0U, size % groupSize[1]);
+    EXPECT_EQ(0U, 1U % groupSize[1]);
     EXPECT_EQ(0U, size % groupSize[2]);
 }
 
