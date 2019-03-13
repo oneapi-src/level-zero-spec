@@ -336,6 +336,10 @@ uint32_t FunctionImp::getSlmSize() const {
     return 0;
 }
 
+bool FunctionImp::hasPrintfOutput() const {
+    return getKernelInfo()->patchInfo.pAllocateStatelessPrintfSurface != nullptr;
+}
+
 template <typename T>
 void FunctionImp::patchCrossThreadData(uint32_t location, const T &value) {
     if (OCLRT::KernelArgInfo::undefinedOffset == location) {

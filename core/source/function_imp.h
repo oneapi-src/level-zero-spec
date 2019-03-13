@@ -116,6 +116,8 @@ struct FunctionImp : Function {
 
     uint32_t getSlmSize() const override;
 
+    bool hasPrintfOutput() const override;
+
   protected:
     template <typename T>
     void patchCrossThreadData(uint32_t location, const T &value);

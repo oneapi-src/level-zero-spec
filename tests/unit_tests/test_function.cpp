@@ -73,6 +73,35 @@ TEST(FunctionImp, suggestGroupSizeClampsToMaxGroupSize) {
     EXPECT_EQ(1U, groupSize[2]);
 }
 
+TEST(FunctionImp, hasPrintfOutputReturnsTrueWhenPrintfIsUsed) {
+    OCLRT::SPatchAllocateStatelessPrintfSurface printfSurfaceToken;
+    PtrOwn<OCLRT::KernelInfo> kernelInfo{new OCLRT::KernelInfo{}};
+
+    kernelInfo->patchInfo.pAllocateStatelessPrintfSurface = &printfSurfaceToken;
+    ImmutableFunctionInfo funcInfo = {};
+    funcInfo.kernelInfoRT = kernelInfo.weakRefReinterpret<void>();
+
+    Mock<Function> function;
+    function.immFuncInfo.rebind(&funcInfo);
+
+    EXPECT_TRUE(function.hasPrintfOutput());
+    kernelInfo.deleteOwned();
+}
+
+TEST(FunctionImp, hasPrintfOutputReturnsFalseWhenPrintfNotUsed) {
+    PtrOwn<OCLRT::KernelInfo> kernelInfo{new OCLRT::KernelInfo{}};
+
+    kernelInfo->patchInfo.pAllocateStatelessPrintfSurface = nullptr;
+    ImmutableFunctionInfo funcInfo = {};
+    funcInfo.kernelInfoRT = kernelInfo.weakRefReinterpret<void>();
+
+    Mock<Function> function;
+    function.immFuncInfo.rebind(&funcInfo);
+
+    EXPECT_FALSE(function.hasPrintfOutput());
+    kernelInfo.deleteOwned();
+}
+
 using FunctionImpSuggestGroupSize = ::testing::TestWithParam<uint32_t>;
 
 INSTANTIATE_TEST_CASE_P(,
