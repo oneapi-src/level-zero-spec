@@ -40,6 +40,19 @@ namespace xe
 {
     ///////////////////////////////////////////////////////////////////////////////
     /// @brief C++ wrapper for ::xeModuleDestroy
+    /// 
+    /// @details
+    ///     - The application is responsible for making sure the GPU is not
+    ///       currently referencing the event before it is deleted
+    ///     - The implementation of this function will immediately free all Host and
+    ///       Device allocations associated with this module
+    ///     - The implementation of this function should be lock-free.
+    /// 
+    /// @remarks
+    ///   _Analogues_
+    ///     - **cuModuleUnload**
+    /// 
+    /// @throws result_t
     inline void Module::Destroy(
         )
     {
@@ -49,39 +62,85 @@ namespace xe
 
     ///////////////////////////////////////////////////////////////////////////////
     /// @brief C++ wrapper for ::xeModuleGetNativeBinary
-    inline void Module::GetNativeBinary(
-        uint32_t* pSize,                                ///< [out] size of native binary.
-        char** pModuleNativeBinary                      ///< [out] pointer to native binary
+    /// 
+    /// @details
+    ///     - This function may be called from simultaneous threads.
+    ///     - The implementation of this function should be lock-free.
+    ///     - The memory for the native binary output is associated with the module.
+    ///       The output pointer should not be accessed after a module has been
+    ///       destroyed.
+    ///     - The native binary output can be cached to disk and new modules can be
+    ///       later constructed from the cached copy.
+    ///     - The native binary will retain debugging information that is associated
+    ///       with a module.
+    /// 
+    /// @returns
+    ///     - uint32_t: size of native binary.
+    ///     - char*: pointer to native binary
+    /// 
+    /// @throws result_t
+    inline std::tuple<uint32_t, char*> Module::GetNativeBinary(
         )
     {
-        // auto result = ::xeModuleGetNativeBinary( handle, pSize, pModuleNativeBinary );
+        // auto result = ::xeModuleGetNativeBinary( handle );
         // if( ::XE_RESULT_SUCCESS != result ) throw exception(result, "xe::Module::GetNativeBinary");
     }
 
     ///////////////////////////////////////////////////////////////////////////////
     /// @brief C++ wrapper for ::xeModuleCreateFunction
-    inline void Module::CreateFunction(
-        const function_desc_t* pDesc,                   ///< [in] pointer to function descriptor
-        function_handle_t* phFunction                   ///< [out] handle of the Function object
+    /// 
+    /// @details
+    ///     - This function may be called from simultaneous threads.
+    ///     - The implementation of this function should be lock-free.
+    ///     - Function objects should be destroyed before the Module is destroyed.
+    /// 
+    /// @remarks
+    ///   _Analogues_
+    ///     - **cuModuleGetFunction**
+    /// 
+    /// @returns
+    ///     - function_handle_t: handle of the Function object
+    /// 
+    /// @throws result_t
+    inline function_handle_t Module::CreateFunction(
+        const function_desc_t* pDesc                    ///< [in] pointer to function descriptor
         )
     {
-        // auto result = ::xeModuleCreateFunction( handle, pDesc, phFunction->getHandle() );
+        // auto result = ::xeModuleCreateFunction( handle, pDesc );
         // if( ::XE_RESULT_SUCCESS != result ) throw exception(result, "xe::Module::CreateFunction");
     }
 
     ///////////////////////////////////////////////////////////////////////////////
     /// @brief C++ wrapper for ::xeModuleGetFunctionPointer
-    inline void Module::GetFunctionPointer(
-        const char* pFunctionName,                      ///< [in] Name of function to retrieve function pointer for.
-        void** pfnFunction                              ///< [out] pointer to function.
+    /// 
+    /// @details
+    ///     - This function may be called from simultaneous threads.
+    ///     - The implementation of this function should be lock-free.
+    ///     - Function pointer is no longer valid if Module is destroyed.
+    /// 
+    /// @returns
+    ///     - void*: pointer to function.
+    /// 
+    /// @throws result_t
+    inline void* Module::GetFunctionPointer(
+        const char* pFunctionName                       ///< [in] Name of function to retrieve function pointer for.
         )
     {
-        // auto result = ::xeModuleGetFunctionPointer( handle, pFunctionName, pfnFunction );
+        // auto result = ::xeModuleGetFunctionPointer( handle, pFunctionName );
         // if( ::XE_RESULT_SUCCESS != result ) throw exception(result, "xe::Module::GetFunctionPointer");
     }
 
     ///////////////////////////////////////////////////////////////////////////////
     /// @brief C++ wrapper for ::xeFunctionDestroy
+    /// 
+    /// @details
+    ///     - The application is responsible for making sure the GPU is not
+    ///       currently referencing the event before it is deleted
+    ///     - The implementation of this function will immediately free all Host and
+    ///       Device allocations associated with this function
+    ///     - The implementation of this function should be lock-free.
+    /// 
+    /// @throws result_t
     inline void Function::Destroy(
         )
     {
@@ -91,6 +150,15 @@ namespace xe
 
     ///////////////////////////////////////////////////////////////////////////////
     /// @brief C++ wrapper for ::xeFunctionSetGroupSize
+    /// 
+    /// @details
+    ///     - The implementation of this function will immediately free all Host and
+    ///       Device allocations associated with this function
+    ///     - The implementation of this function should be lock-free.
+    ///     - This can be called multiple times. The driver copies the group size
+    ///       information when encoding dispatch functions into a command list.
+    /// 
+    /// @throws result_t
     inline void Function::SetGroupSize(
         uint32_t groupSizeX,                            ///< [in] group size for X dimension to use for this function.
         uint32_t groupSizeY,                            ///< [in] group size for Y dimension to use for this function.
@@ -103,21 +171,37 @@ namespace xe
 
     ///////////////////////////////////////////////////////////////////////////////
     /// @brief C++ wrapper for ::xeFunctionSuggestGroupSize
-    inline void Function::SuggestGroupSize(
+    /// 
+    /// @details
+    ///     - This function may be called from simultaneous threads.
+    ///     - The implementation of this function should be lock-free.
+    ///     - This function ignores the group size that is set using
+    ///       ::FunctionSetGroupSize.
+    /// 
+    /// @returns
+    ///     - uint32_t: recommended size of group for X dimension.
+    ///     - uint32_t: recommended size of group for Y dimension.
+    ///     - uint32_t: recommended size of group for Z dimension.
+    /// 
+    /// @throws result_t
+    inline std::tuple<uint32_t, uint32_t, uint32_t> Function::SuggestGroupSize(
         uint32_t globalSizeX,                           ///< [in] global width for X dimension.
         uint32_t globalSizeY,                           ///< [in] global width for Y dimension.
-        uint32_t globalSizeZ,                           ///< [in] global width for Z dimension.
-        uint32_t* groupSizeX,                           ///< [out] recommended size of group for X dimension.
-        uint32_t* groupSizeY,                           ///< [out] recommended size of group for Y dimension.
-        uint32_t* groupSizeZ                            ///< [out] recommended size of group for Z dimension.
+        uint32_t globalSizeZ                            ///< [in] global width for Z dimension.
         )
     {
-        // auto result = ::xeFunctionSuggestGroupSize( handle, globalSizeX, globalSizeY, globalSizeZ, groupSizeX, groupSizeY, groupSizeZ );
+        // auto result = ::xeFunctionSuggestGroupSize( handle, globalSizeX, globalSizeY, globalSizeZ );
         // if( ::XE_RESULT_SUCCESS != result ) throw exception(result, "xe::Function::SuggestGroupSize");
     }
 
     ///////////////////////////////////////////////////////////////////////////////
     /// @brief C++ wrapper for ::xeFunctionSetArgumentValue
+    /// 
+    /// @details
+    ///     - This function may **not** be called from simultaneous threads.
+    ///     - The implementation of this function should be lock-free.
+    /// 
+    /// @throws result_t
     inline void Function::SetArgumentValue(
         uint32_t argIndex,                              ///< [in] argument index in range [0, num args - 1]
         size_t argSize,                                 ///< [in] size of argument type
@@ -130,6 +214,16 @@ namespace xe
 
     ///////////////////////////////////////////////////////////////////////////////
     /// @brief C++ wrapper for ::xeFunctionSetAttribute
+    /// 
+    /// @details
+    ///     - This function may **not** be called from simultaneous threads.
+    ///     - The implementation of this function should be lock-free.
+    /// 
+    /// @remarks
+    ///   _Analogues_
+    ///     - **clSetKernelExecInfo**
+    /// 
+    /// @throws result_t
     inline void Function::SetAttribute(
         function_set_attribute_t attr,                  ///< [in] attribute to set
         uint32_t value                                  ///< [in] attribute value to set
@@ -141,12 +235,24 @@ namespace xe
 
     ///////////////////////////////////////////////////////////////////////////////
     /// @brief C++ wrapper for ::xeFunctionGetAttribute
-    inline void Function::GetAttribute(
-        function_get_attribute_t attr,                  ///< [in] attribute to query
-        uint32_t* pValue                                ///< [out] returned attribute value
+    /// 
+    /// @details
+    ///     - This function may be called from simultaneous threads.
+    ///     - The implementation of this function should be lock-free.
+    /// 
+    /// @remarks
+    ///   _Analogues_
+    ///     - **cuFuncGetAttribute**
+    /// 
+    /// @returns
+    ///     - uint32_t: returned attribute value
+    /// 
+    /// @throws result_t
+    inline uint32_t Function::GetAttribute(
+        function_get_attribute_t attr                   ///< [in] attribute to query
         )
     {
-        // auto result = ::xeFunctionGetAttribute( handle, attr, pValue );
+        // auto result = ::xeFunctionGetAttribute( handle, attr );
         // if( ::XE_RESULT_SUCCESS != result ) throw exception(result, "xe::Function::GetAttribute");
     }
 

@@ -40,6 +40,15 @@ namespace xe
 {
     ///////////////////////////////////////////////////////////////////////////////
     /// @brief C++ wrapper for ::xeImageDestroy
+    /// 
+    /// @details
+    ///     - The application is responsible for making sure the GPU is not
+    ///       currently referencing the image before it is deleted
+    ///     - The implementation of this function will immediately free all Host and
+    ///       Device allocations associated with this image
+    ///     - The implementation of this function should be lock-free.
+    /// 
+    /// @throws result_t
     inline void Image::Destroy(
         )
     {

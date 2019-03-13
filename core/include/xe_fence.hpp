@@ -52,16 +52,19 @@ namespace xe
 
         ///////////////////////////////////////////////////////////////////////////////
         /// @brief C++ wrapper for ::xeFenceDestroy
+        /// @throws result_t
         inline void Destroy(
             );
 
         ///////////////////////////////////////////////////////////////////////////////
         /// @brief C++ wrapper for ::xeFenceQueryStatus
+        /// @throws result_t
         inline void QueryStatus(
             );
 
         ///////////////////////////////////////////////////////////////////////////////
         /// @brief C++ wrapper for ::xeFenceReset
+        /// @throws result_t
         inline void Reset(
             );
 

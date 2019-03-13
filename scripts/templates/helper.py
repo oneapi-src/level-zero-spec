@@ -179,13 +179,25 @@ def make_member_function_lines(repl, obj):
     return lines
 
 """
+    returns the list of parameters, filtering either inputs or outputs
+"""
+def filter_param_list(params, in_or_out):
+    lst = []
+    for p in params:
+        if "in" == in_or_out and re.match(r"\[\s*in.*", p['desc']):
+            lst.append(p)
+        elif "out" == in_or_out and re.match(r"\[\s*out.*", p['desc']):
+            lst.append(p)
+    return lst
+
+"""
     returns a list of strings for each parameter of a function
 """
-def make_param_lines(repl, obj, this=False):
+def make_param_lines(repl, obj, cpp=False):
     lines = []
 
-    if this:
-        params = obj['params'][1:]
+    if cpp:
+        params = filter_param_list(obj['params'][1:], "in")
     else:
         params = obj['params']
 
@@ -206,9 +218,9 @@ def make_param_lines(repl, obj, this=False):
 """
     returns a string of parameter names for passing to a function
 """
-def make_param_call_str(prologue, repl, obj, this=False):
-    if this:
-        params = obj['params'][1:]
+def make_param_call_str(prologue, repl, obj, cpp=False):
+    if cpp:
+        params = filter_param_list(obj['params'][1:], "in")
     else:
         params = obj['params']
 
@@ -291,8 +303,18 @@ def make_param_checks(repl, obj, tag=False):
 """
     returns a list of strings for possible return values
 """
-def make_return_lines(repl, obj):
+def make_returns_lines(repl, obj, cpp=False):
     lines = []
+    if cpp:
+        params = filter_param_list(obj['params'][1:], "out")
+        if len(params) > 0:
+            lines.append("@returns")
+            for p in params:
+                lines.append("    - %s"%subx(repl, re.sub(r"(.*)\*", r"\1:%s"%re.sub(r"\[.*\](.*)", r"\1", p['desc']), p['type'])))
+            lines.append("")
+        lines.append("@throws result_t")
+        return lines
+
     lines.append("@returns")
     lines.append("    - %s"%subx(repl, "$X_RESULT_SUCCESS", True))
     lines.append("    - %s"%subx(repl, "$X_RESULT_ERROR_UNINITIALIZED", True))
@@ -322,6 +344,22 @@ def make_return_lines(repl, obj):
         for val in values:
             lines.append("        + %s"%val)
     return lines
+
+"""
+"""
+def make_return_value(repl, obj):
+    params = filter_param_list(obj['params'][1:], "out")
+    if len(params) == 0:
+        return "void"
+
+    types = []
+    for p in params:
+        types.append(subx(repl, re.sub(r"(.*)\*", r"\1", p['type'])))
+
+    if len(types) > 1:
+        return "std::tuple<%s>"%", ".join(types)
+    else:
+        return types[0]
 
 """
     returns the name of a function

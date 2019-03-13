@@ -40,6 +40,18 @@ namespace xe
 {
     ///////////////////////////////////////////////////////////////////////////////
     /// @brief C++ wrapper for ::xeCommandListEncodeExecutionBarrier
+    /// 
+    /// @details
+    ///     - The application may **not** call this function from simultaneous
+    ///       threads with the same command list handle.
+    ///     - The implementation of this function should be lock-free.
+    /// 
+    /// @remarks
+    ///   _Analogues_
+    ///     - **vkCmdPipelineBarrier**
+    ///     - clEnqueueBarrierWithWaitList
+    /// 
+    /// @throws result_t
     inline void CommandList::EncodeExecutionBarrier(
         )
     {
@@ -49,6 +61,15 @@ namespace xe
 
     ///////////////////////////////////////////////////////////////////////////////
     /// @brief C++ wrapper for ::xeCommandListDestroy
+    /// 
+    /// @details
+    ///     - The application is responsible for making sure the GPU is not
+    ///       currently referencing the command list before it is deleted
+    ///     - The implementation of this function will immediately free all Host and
+    ///       Device allocations associated with this command list.
+    ///     - The implementation of this function should be lock-free.
+    /// 
+    /// @throws result_t
     inline void CommandList::Destroy(
         )
     {
@@ -58,6 +79,13 @@ namespace xe
 
     ///////////////////////////////////////////////////////////////////////////////
     /// @brief C++ wrapper for ::xeCommandListClose
+    /// 
+    /// @details
+    ///     - The application may **not** call this function from simultaneous
+    ///       threads with the same command list handle.
+    ///     - The implementation of this function should be lock-free.
+    /// 
+    /// @throws result_t
     inline void CommandList::Close(
         )
     {
@@ -67,6 +95,15 @@ namespace xe
 
     ///////////////////////////////////////////////////////////////////////////////
     /// @brief C++ wrapper for ::xeCommandListReset
+    /// 
+    /// @details
+    ///     - The application is responsible for making sure the GPU is not
+    ///       currently referencing the command list before it is reset
+    ///     - The application may **not** call this function from simultaneous
+    ///       threads with the same command list handle.
+    ///     - The implementation of this function should be lock-free.
+    /// 
+    /// @throws result_t
     inline void CommandList::Reset(
         )
     {
@@ -76,6 +113,19 @@ namespace xe
 
     ///////////////////////////////////////////////////////////////////////////////
     /// @brief C++ wrapper for ::xeCommandListSetParameter
+    /// 
+    /// @details
+    ///     - The application may **not** call this function from simultaneous
+    ///       threads with the same command list handle.
+    ///     - The implementation of this function should be lock-free.
+    /// 
+    /// @remarks
+    ///   _Analogues_
+    ///     - cuCtxSetCacheConfig
+    ///     - cuCtxSetLimit
+    ///     - cuCtxSetSharedMemConfig
+    /// 
+    /// @throws result_t
     inline void CommandList::SetParameter(
         command_list_parameter_t parameter,             ///< [in] parameter to change
         uint32_t value                                  ///< [in] value of attribute
@@ -87,17 +137,40 @@ namespace xe
 
     ///////////////////////////////////////////////////////////////////////////////
     /// @brief C++ wrapper for ::xeCommandListGetParameter
-    inline void CommandList::GetParameter(
-        command_list_parameter_t parameter,             ///< [in] parameter to retrieve
-        uint32_t* value                                 ///< [out] value of attribute
+    /// 
+    /// @details
+    ///     - The application may **not** call this function from simultaneous
+    ///       threads with the same command list handle.
+    ///     - The implementation of this function should be lock-free.
+    /// 
+    /// @remarks
+    ///   _Analogues_
+    ///     - cuCtxGetCacheConfig
+    ///     - cuCtxGetLimit
+    ///     - cuCtxGetSharedMemConfig
+    ///     - cuCtxGetStreamPriorityRange
+    /// 
+    /// @returns
+    ///     - uint32_t: value of attribute
+    /// 
+    /// @throws result_t
+    inline uint32_t CommandList::GetParameter(
+        command_list_parameter_t parameter              ///< [in] parameter to retrieve
         )
     {
-        // auto result = ::xeCommandListGetParameter( handle, parameter, value );
+        // auto result = ::xeCommandListGetParameter( handle, parameter );
         // if( ::XE_RESULT_SUCCESS != result ) throw exception(result, "xe::CommandList::GetParameter");
     }
 
     ///////////////////////////////////////////////////////////////////////////////
     /// @brief C++ wrapper for ::xeCommandListResetParameters
+    /// 
+    /// @details
+    ///     - The application may **not** call this function from simultaneous
+    ///       threads with the same command list handle.
+    ///     - The implementation of this function should be lock-free.
+    /// 
+    /// @throws result_t
     inline void CommandList::ResetParameters(
         )
     {
@@ -107,6 +180,13 @@ namespace xe
 
     ///////////////////////////////////////////////////////////////////////////////
     /// @brief C++ wrapper for ::xeCommandListEncodeCommandLists
+    /// 
+    /// @details
+    ///     - The application may **not** call this function from simultaneous
+    ///       threads with the same command list handle.
+    ///     - The implementation of this function should be lock-free.
+    /// 
+    /// @throws result_t
     inline void CommandList::EncodeCommandLists(
         uint32_t numCommandLists,                       ///< [in] number of command lists to encode
         command_list_handle_t* phCommandLists           ///< [in] list of handles of the command lists to encode for execution
@@ -118,17 +198,43 @@ namespace xe
 
     ///////////////////////////////////////////////////////////////////////////////
     /// @brief C++ wrapper for ::xeCommandListReserveSpace
-    inline void CommandList::ReserveSpace(
-        size_t size,                                    ///< [in] size (in bytes) to reserve
-        void** ptr                                      ///< [out] pointer to command buffer space reserved
+    /// 
+    /// @details
+    ///     - The pointer returned is valid for both Host and device access.
+    ///     - The application may **not** call this function from simultaneous
+    ///       threads with the same command list handle.
+    ///     - The implementation of this function should be lock-free.
+    /// 
+    /// @returns
+    ///     - void*: pointer to command buffer space reserved
+    /// 
+    /// @throws result_t
+    inline void* CommandList::ReserveSpace(
+        size_t size                                     ///< [in] size (in bytes) to reserve
         )
     {
-        // auto result = ::xeCommandListReserveSpace( handle, size, ptr );
+        // auto result = ::xeCommandListReserveSpace( handle, size );
         // if( ::XE_RESULT_SUCCESS != result ) throw exception(result, "xe::CommandList::ReserveSpace");
     }
 
     ///////////////////////////////////////////////////////////////////////////////
     /// @brief C++ wrapper for ::xeCommandListEncodeMemoryCopy
+    /// 
+    /// @details
+    ///     - The memory pointed to by both srcptr and dstptr must be accessible by
+    ///       the device on which the command list is created.
+    ///     - The application may **not** call this function from simultaneous
+    ///       threads with the same command list handle.
+    ///     - The implementation of this function should be lock-free.
+    /// 
+    /// @remarks
+    ///   _Analogues_
+    ///     - **clEnqueueCopyBuffer**
+    ///     - **clEnqueueReadBuffer**
+    ///     - **clEnqueueWriteBuffer**
+    ///     - **clEnqueueSVMMemcpy**
+    /// 
+    /// @throws result_t
     inline void CommandList::EncodeMemoryCopy(
         void* dstptr,                                   ///< [in] pointer to destination memory to copy to
         const void* srcptr,                             ///< [in] pointer to source memory to copy from
@@ -141,6 +247,22 @@ namespace xe
 
     ///////////////////////////////////////////////////////////////////////////////
     /// @brief C++ wrapper for ::xeCommandListEncodeMemorySet
+    /// 
+    /// @details
+    ///     - The memory pointed to by dstptr must be accessible by the device on
+    ///       which the command list is created.
+    ///     - The value to initialize memory to is interpreted as an 8-bit unsigned
+    ///       char; the upper 24-bits are ignored.
+    ///     - The application may **not** call this function from simultaneous
+    ///       threads with the same command list handle.
+    ///     - The implementation of this function should be lock-free.
+    /// 
+    /// @remarks
+    ///   _Analogues_
+    ///     - **clEnqueueFillBuffer**
+    ///     - **clEnqueueSVMMemFill**
+    /// 
+    /// @throws result_t
     inline void CommandList::EncodeMemorySet(
         void* ptr,                                      ///< [in] pointer to memory to initialize
         int value,                                      ///< [in] value to initialize memory to
@@ -153,6 +275,17 @@ namespace xe
 
     ///////////////////////////////////////////////////////////////////////////////
     /// @brief C++ wrapper for ::xeCommandListEncodeImageCopy
+    /// 
+    /// @details
+    ///     - The application may **not** call this function from simultaneous
+    ///       threads with the same command list handle.
+    ///     - The implementation of this function should be lock-free.
+    /// 
+    /// @remarks
+    ///   _Analogues_
+    ///     - **clEnqueueCopyImage**
+    /// 
+    /// @throws result_t
     inline void CommandList::EncodeImageCopy(
         image_handle_t hDstImage,                       ///< [in] handle of destination image to copy to
         image_handle_t hSrcImage                        ///< [in] handle of source image to copy from
@@ -164,6 +297,13 @@ namespace xe
 
     ///////////////////////////////////////////////////////////////////////////////
     /// @brief C++ wrapper for ::xeCommandListEncodeImageCopyRegion
+    /// 
+    /// @details
+    ///     - The application may **not** call this function from simultaneous
+    ///       threads with the same command list handle.
+    ///     - The implementation of this function should be lock-free.
+    /// 
+    /// @throws result_t
     inline void CommandList::EncodeImageCopyRegion(
         image_handle_t hDstImage,                       ///< [in] handle of destination image to copy to
         image_region_t* pDstRegion,                     ///< [in][optional] destination region descriptor
@@ -177,6 +317,19 @@ namespace xe
 
     ///////////////////////////////////////////////////////////////////////////////
     /// @brief C++ wrapper for ::xeCommandListEncodeImageCopyToMemory
+    /// 
+    /// @details
+    ///     - The memory pointed to by dstptr must be accessible by the device on
+    ///       which the command list is created.
+    ///     - The application may **not** call this function from simultaneous
+    ///       threads with the same command list handle.
+    ///     - The implementation of this function should be lock-free.
+    /// 
+    /// @remarks
+    ///   _Analogues_
+    ///     - clEnqueueReadImage
+    /// 
+    /// @throws result_t
     inline void CommandList::EncodeImageCopyToMemory(
         void* dstptr,                                   ///< [in] pointer to destination memory to copy to
         image_handle_t hSrcImage,                       ///< [in] handle of source image to copy from
@@ -189,6 +342,19 @@ namespace xe
 
     ///////////////////////////////////////////////////////////////////////////////
     /// @brief C++ wrapper for ::xeCommandListEncodeImageCopyFromMemory
+    /// 
+    /// @details
+    ///     - The memory pointed to by srcptr must be accessible by the device on
+    ///       which the command list is created.
+    ///     - The application may **not** call this function from simultaneous
+    ///       threads with the same command list handle.
+    ///     - The implementation of this function should be lock-free.
+    /// 
+    /// @remarks
+    ///   _Analogues_
+    ///     - clEnqueueWriteImage
+    /// 
+    /// @throws result_t
     inline void CommandList::EncodeImageCopyFromMemory(
         image_handle_t hDstImage,                       ///< [in] handle of destination image to copy to
         image_region_t* pDstRegion,                     ///< [in][optional] destination region descriptor
@@ -201,6 +367,23 @@ namespace xe
 
     ///////////////////////////////////////////////////////////////////////////////
     /// @brief C++ wrapper for ::xeCommandListEncodeMemoryPrefetch
+    /// 
+    /// @details
+    ///     - This is a hint to improve performance only and is not required for
+    ///       correctness.
+    ///     - The application may call this function from simultaneous threads.
+    ///     - The implementation of this function should be lock-free.
+    ///     - Prefetch to Host and Peer Device are not supported.
+    ///     - The application may **not** call this function from simultaneous
+    ///       threads with the same command list handle.
+    ///     - The implementation of this function should be lock-free.
+    /// 
+    /// @remarks
+    ///   _Analogues_
+    ///     - cudaMemPrefetchAsync
+    ///     - clEnqueueSVMMigrateMem
+    /// 
+    /// @throws result_t
     inline void CommandList::EncodeMemoryPrefetch(
         const void* ptr,                                ///< [in] pointer to start of the memory region to prefetch
         size_t count                                    ///< [in] size in bytes of the memory region to prefetch
@@ -212,6 +395,26 @@ namespace xe
 
     ///////////////////////////////////////////////////////////////////////////////
     /// @brief C++ wrapper for ::xeCommandListEncodeMemAdvise
+    /// 
+    /// @details
+    ///     - Memory advice is a performance hint only; applications are not
+    ///       required to use this for functionality.
+    ///     - Memory advice can be used to override driver heuristics to explicitly
+    ///       control shared memory behavior.
+    ///     - Not all memory advice may be supported by all devices.
+    ///     - Memory advice may only be supported at a device-specific granularity,
+    ///       such as at a page boundary. In this case, the memory range may be
+    ///       expanded such that the start and end of the range satisfy granularity
+    ///       requirements.
+    ///     - The application may **not** call this function from simultaneous
+    ///       threads with the same command list handle.
+    ///     - The implementation of this function should be lock-free.
+    /// 
+    /// @remarks
+    ///   _Analogues_
+    ///     - **cudaMemAdvise**
+    /// 
+    /// @throws result_t
     inline void CommandList::EncodeMemAdvise(
         device_handle_t hDevice,                        ///< [in] device associated with the memory advice
         const void* ptr,                                ///< [in] Pointer to the start of the memory range
@@ -225,6 +428,19 @@ namespace xe
 
     ///////////////////////////////////////////////////////////////////////////////
     /// @brief C++ wrapper for ::xeCommandListEncodeSignalEvent
+    /// 
+    /// @details
+    ///     - The application may **not** call this function from simultaneous
+    ///       threads with the same command list handle.
+    ///     - The implementation of this function should be lock-free.
+    /// 
+    /// @remarks
+    ///   _Analogues_
+    ///     - **clSetUserEventStatus**
+    ///     - cuEventRecord
+    ///     - vkCmdSetEvent
+    /// 
+    /// @throws result_t
     inline void CommandList::EncodeSignalEvent(
         event_handle_t hEvent                           ///< [in] handle of the event
         )
@@ -235,6 +451,13 @@ namespace xe
 
     ///////////////////////////////////////////////////////////////////////////////
     /// @brief C++ wrapper for ::xeCommandListEncodeWaitOnEvent
+    /// 
+    /// @details
+    ///     - The application may **not** call this function from simultaneous
+    ///       threads with the same command list handle.
+    ///     - The implementation of this function should be lock-free.
+    /// 
+    /// @throws result_t
     inline void CommandList::EncodeWaitOnEvent(
         event_handle_t hEvent                           ///< [in] handle of the event
         )
@@ -245,6 +468,17 @@ namespace xe
 
     ///////////////////////////////////////////////////////////////////////////////
     /// @brief C++ wrapper for ::xeCommandListEncodeEventReset
+    /// 
+    /// @details
+    ///     - The application may **not** call this function from simultaneous
+    ///       threads.
+    ///     - The implementation of this function should be lock-free.
+    /// 
+    /// @remarks
+    ///   _Analogues_
+    ///     - vkResetEvent
+    /// 
+    /// @throws result_t
     inline void CommandList::EncodeEventReset(
         event_handle_t hEvent                           ///< [in] handle of the event
         )
@@ -255,6 +489,16 @@ namespace xe
 
     ///////////////////////////////////////////////////////////////////////////////
     /// @brief C++ wrapper for ::xeCommandListEncodeDispatchFunction
+    /// 
+    /// @details
+    ///     - This function may **not** be called from simultaneous threads.
+    ///     - The implementation of this function should be lock-free.
+    /// 
+    /// @remarks
+    ///   _Analogues_
+    ///     - **cuLaunchKernel**
+    /// 
+    /// @throws result_t
     inline void CommandList::EncodeDispatchFunction(
         function_handle_t hFunction,                    ///< [in] handle of the function object
         const dispatch_function_arguments_t* pDispatchFuncArgs, ///< [in] dispatch function arguments.
@@ -267,6 +511,19 @@ namespace xe
 
     ///////////////////////////////////////////////////////////////////////////////
     /// @brief C++ wrapper for ::xeCommandListEncodeDispatchFunctionIndirect
+    /// 
+    /// @details
+    ///     - The dispatch arguments need to be device visible.
+    ///     - The dispatch arguments buffer may not be reusued until dispatch has
+    ///       completed on the device.
+    ///     - This function may **not** be called from simultaneous threads.
+    ///     - The implementation of this function should be lock-free.
+    /// 
+    /// @remarks
+    ///   _Analogues_
+    ///     - **cuLaunchKernel**
+    /// 
+    /// @throws result_t
     inline void CommandList::EncodeDispatchFunctionIndirect(
         function_handle_t hFunction,                    ///< [in] handle of the function object
         const dispatch_function_arguments_t* pDispatchArgumentsBuffer,  ///< [in] pointer to device buffer that will contain dispatch arguments
@@ -279,6 +536,19 @@ namespace xe
 
     ///////////////////////////////////////////////////////////////////////////////
     /// @brief C++ wrapper for ::xeCommandListEncodeDispatchMultipleFunctionsIndirect
+    /// 
+    /// @details
+    ///     - The array of dispatch arguments need to be device visible.
+    ///     - The array of dispatch arguments buffer may not be reusued until
+    ///       dispatch has completed on the device.
+    ///     - This function may **not** be called from simultaneous threads.
+    ///     - The implementation of this function should be lock-free.
+    /// 
+    /// @remarks
+    ///   _Analogues_
+    ///     - **cuLaunchKernel**
+    /// 
+    /// @throws result_t
     inline void CommandList::EncodeDispatchMultipleFunctionsIndirect(
         uint32_t numFunctions,                          ///< [in] maximum number of functions to dispatch
         const function_handle_t* phFunctions,           ///< [in] handles of the function objects
@@ -296,6 +566,16 @@ namespace xe
 
     ///////////////////////////////////////////////////////////////////////////////
     /// @brief C++ wrapper for ::xeCommandListEncodeDispatchHostFunction
+    /// 
+    /// @details
+    ///     - This function may **not** be called from simultaneous threads.
+    ///     - The implementation of this function should be lock-free.
+    /// 
+    /// @remarks
+    ///   _Analogues_
+    ///     - **cuLaunchHostFunc**
+    /// 
+    /// @throws result_t
     inline void CommandList::EncodeDispatchHostFunction(
         host_pfn_t pfnHostFunc,                         ///< [in] pointer to host function.
         void* pUserData                                 ///< [in] pointer to user data to pass to host function.

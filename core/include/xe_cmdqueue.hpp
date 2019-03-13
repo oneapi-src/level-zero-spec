@@ -77,11 +77,13 @@ namespace xe
 
         ///////////////////////////////////////////////////////////////////////////////
         /// @brief C++ wrapper for ::xeCommandQueueDestroy
+        /// @throws result_t
         inline void Destroy(
             );
 
         ///////////////////////////////////////////////////////////////////////////////
         /// @brief C++ wrapper for ::xeCommandQueueEnqueueCommandLists
+        /// @throws result_t
         inline void EnqueueCommandLists(
             uint32_t numCommandLists,                       ///< [in] number of command lists to enqueue
             command_list_handle_t* phCommandLists,          ///< [in] list of handles of the command lists to enqueue for execution
@@ -90,6 +92,7 @@ namespace xe
 
         ///////////////////////////////////////////////////////////////////////////////
         /// @brief C++ wrapper for ::xeCommandQueueSynchronize
+        /// @throws result_t
         inline void Synchronize(
             uint32_t timeout                                ///< [in] if non-zero, then indicates the maximum time to yield before
                                                             ///< returning ::RESULT_SUCCESS or ::RESULT_NOT_READY; if zero, then
@@ -99,9 +102,12 @@ namespace xe
 
         ///////////////////////////////////////////////////////////////////////////////
         /// @brief C++ wrapper for ::xeCommandQueueCreateFence
-        inline void CreateFence(
-            const fence_desc_t* desc,                       ///< [in] pointer to fence descriptor
-            fence_handle_t* phFence                         ///< [out] pointer to handle of fence object created
+        /// @returns
+        ///     - fence_handle_t: pointer to handle of fence object created
+        /// 
+        /// @throws result_t
+        inline fence_handle_t CreateFence(
+            const fence_desc_t* desc                        ///< [in] pointer to fence descriptor
             );
 
     };

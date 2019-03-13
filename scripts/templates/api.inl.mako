@@ -58,7 +58,14 @@ namespace ${x}
 %endif
     ///////////////////////////////////////////////////////////////////////////////
     /// @brief C++ wrapper for ::${th.make_func_name(x, f)}
-    inline void ${th.subx(None, obj['name'])}::${th.subx(None, f['name'])}(
+    %for line in th.make_details_lines(None, f):
+    /// ${line}
+    %endfor
+    /// 
+    %for line in th.make_returns_lines(None, f, True):
+    /// ${line}
+    %endfor
+    inline ${th.make_return_value(None, f)} ${th.subx(None, obj['name'])}::${th.subx(None, f['name'])}(
         %for line in th.make_param_lines(None, f, True):
         ${line}
         %endfor

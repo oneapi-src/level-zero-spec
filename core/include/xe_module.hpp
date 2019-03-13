@@ -79,28 +79,38 @@ namespace xe
 
         ///////////////////////////////////////////////////////////////////////////////
         /// @brief C++ wrapper for ::xeModuleDestroy
+        /// @throws result_t
         inline void Destroy(
             );
 
         ///////////////////////////////////////////////////////////////////////////////
         /// @brief C++ wrapper for ::xeModuleGetNativeBinary
-        inline void GetNativeBinary(
-            uint32_t* pSize,                                ///< [out] size of native binary.
-            char** pModuleNativeBinary                      ///< [out] pointer to native binary
+        /// @returns
+        ///     - uint32_t: size of native binary.
+        ///     - char*: pointer to native binary
+        /// 
+        /// @throws result_t
+        inline std::tuple<uint32_t, char*> GetNativeBinary(
             );
 
         ///////////////////////////////////////////////////////////////////////////////
         /// @brief C++ wrapper for ::xeModuleCreateFunction
-        inline void CreateFunction(
-            const function_desc_t* pDesc,                   ///< [in] pointer to function descriptor
-            function_handle_t* phFunction                   ///< [out] handle of the Function object
+        /// @returns
+        ///     - function_handle_t: handle of the Function object
+        /// 
+        /// @throws result_t
+        inline function_handle_t CreateFunction(
+            const function_desc_t* pDesc                    ///< [in] pointer to function descriptor
             );
 
         ///////////////////////////////////////////////////////////////////////////////
         /// @brief C++ wrapper for ::xeModuleGetFunctionPointer
-        inline void GetFunctionPointer(
-            const char* pFunctionName,                      ///< [in] Name of function to retrieve function pointer for.
-            void** pfnFunction                              ///< [out] pointer to function.
+        /// @returns
+        ///     - void*: pointer to function.
+        /// 
+        /// @throws result_t
+        inline void* GetFunctionPointer(
+            const char* pFunctionName                       ///< [in] Name of function to retrieve function pointer for.
             );
 
     };
@@ -145,11 +155,13 @@ namespace xe
 
         ///////////////////////////////////////////////////////////////////////////////
         /// @brief C++ wrapper for ::xeFunctionDestroy
+        /// @throws result_t
         inline void Destroy(
             );
 
         ///////////////////////////////////////////////////////////////////////////////
         /// @brief C++ wrapper for ::xeFunctionSetGroupSize
+        /// @throws result_t
         inline void SetGroupSize(
             uint32_t groupSizeX,                            ///< [in] group size for X dimension to use for this function.
             uint32_t groupSizeY,                            ///< [in] group size for Y dimension to use for this function.
@@ -158,17 +170,21 @@ namespace xe
 
         ///////////////////////////////////////////////////////////////////////////////
         /// @brief C++ wrapper for ::xeFunctionSuggestGroupSize
-        inline void SuggestGroupSize(
+        /// @returns
+        ///     - uint32_t: recommended size of group for X dimension.
+        ///     - uint32_t: recommended size of group for Y dimension.
+        ///     - uint32_t: recommended size of group for Z dimension.
+        /// 
+        /// @throws result_t
+        inline std::tuple<uint32_t, uint32_t, uint32_t> SuggestGroupSize(
             uint32_t globalSizeX,                           ///< [in] global width for X dimension.
             uint32_t globalSizeY,                           ///< [in] global width for Y dimension.
-            uint32_t globalSizeZ,                           ///< [in] global width for Z dimension.
-            uint32_t* groupSizeX,                           ///< [out] recommended size of group for X dimension.
-            uint32_t* groupSizeY,                           ///< [out] recommended size of group for Y dimension.
-            uint32_t* groupSizeZ                            ///< [out] recommended size of group for Z dimension.
+            uint32_t globalSizeZ                            ///< [in] global width for Z dimension.
             );
 
         ///////////////////////////////////////////////////////////////////////////////
         /// @brief C++ wrapper for ::xeFunctionSetArgumentValue
+        /// @throws result_t
         inline void SetArgumentValue(
             uint32_t argIndex,                              ///< [in] argument index in range [0, num args - 1]
             size_t argSize,                                 ///< [in] size of argument type
@@ -177,6 +193,7 @@ namespace xe
 
         ///////////////////////////////////////////////////////////////////////////////
         /// @brief C++ wrapper for ::xeFunctionSetAttribute
+        /// @throws result_t
         inline void SetAttribute(
             function_set_attribute_t attr,                  ///< [in] attribute to set
             uint32_t value                                  ///< [in] attribute value to set
@@ -184,9 +201,12 @@ namespace xe
 
         ///////////////////////////////////////////////////////////////////////////////
         /// @brief C++ wrapper for ::xeFunctionGetAttribute
-        inline void GetAttribute(
-            function_get_attribute_t attr,                  ///< [in] attribute to query
-            uint32_t* pValue                                ///< [out] returned attribute value
+        /// @returns
+        ///     - uint32_t: returned attribute value
+        /// 
+        /// @throws result_t
+        inline uint32_t GetAttribute(
+            function_get_attribute_t attr                   ///< [in] attribute to query
             );
 
     };

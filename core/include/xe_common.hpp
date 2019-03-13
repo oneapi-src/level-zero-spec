@@ -35,6 +35,7 @@
 #if defined(__cplusplus)
 #pragma once
 #include "xe_all.h"
+#include <tuple>
 
 namespace xe
 {

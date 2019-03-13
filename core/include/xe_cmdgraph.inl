@@ -40,6 +40,13 @@ namespace xe
 {
     ///////////////////////////////////////////////////////////////////////////////
     /// @brief C++ wrapper for ::xeCommandGraphDestroy
+    /// 
+    /// @details
+    ///     - The implementation of this function will immediately free all Host
+    ///       allocations associated with this command graph.
+    ///     - The implementation of this function should be lock-free.
+    /// 
+    /// @throws result_t
     inline void CommandGraph::Destroy(
         )
     {
@@ -49,6 +56,16 @@ namespace xe
 
     ///////////////////////////////////////////////////////////////////////////////
     /// @brief C++ wrapper for ::xeCommandGraphClose
+    /// 
+    /// @details
+    ///     - The command graph will optimize the execution order of the command
+    ///       lists.
+    ///     - A command list may **not** be reset after the command graph is closed.
+    ///     - The application may **not** call this function from simultaneous
+    ///       threads with the same command graph handle.
+    ///     - The implementation of this function should be lock-free.
+    /// 
+    /// @throws result_t
     inline void CommandGraph::Close(
         )
     {

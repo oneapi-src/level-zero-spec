@@ -488,143 +488,197 @@ namespace xe
 #if XE_ENABLE_OCL_INTEROP
         ///////////////////////////////////////////////////////////////////////////////
         /// @brief C++ wrapper for ::xeDeviceRegisterCLMemory
-        inline void RegisterCLMemory(
+        /// @returns
+        ///     - void*: pointer to device allocation
+        /// 
+        /// @throws result_t
+        inline void* RegisterCLMemory(
             cl_context context,                             ///< [in] the OpenCL context that created the memory
-            cl_mem mem,                                     ///< [in] the OpenCL memory to register
-            void** ptr                                      ///< [out] pointer to device allocation
+            cl_mem mem                                      ///< [in] the OpenCL memory to register
             );
 #endif // XE_ENABLE_OCL_INTEROP
 
 #if XE_ENABLE_OCL_INTEROP
         ///////////////////////////////////////////////////////////////////////////////
         /// @brief C++ wrapper for ::xeDeviceRegisterCLProgram
-        inline void RegisterCLProgram(
+        /// @returns
+        ///     - module_handle_t: pointer to handle of module object created
+        /// 
+        /// @throws result_t
+        inline module_handle_t RegisterCLProgram(
             cl_context context,                             ///< [in] the OpenCL context that created the program
-            cl_program program,                             ///< [in] the OpenCL program to register
-            module_handle_t* phModule                       ///< [out] pointer to handle of module object created
+            cl_program program                              ///< [in] the OpenCL program to register
             );
 #endif // XE_ENABLE_OCL_INTEROP
 
 #if XE_ENABLE_OCL_INTEROP
         ///////////////////////////////////////////////////////////////////////////////
         /// @brief C++ wrapper for ::xeDeviceRegisterCLCommandQueue
-        inline void RegisterCLCommandQueue(
+        /// @returns
+        ///     - command_queue_handle_t: pointer to handle of command queue object created
+        /// 
+        /// @throws result_t
+        inline command_queue_handle_t RegisterCLCommandQueue(
             cl_context context,                             ///< [in] the OpenCL context that created the command queue
-            cl_command_queue command_queue,                 ///< [in] the OpenCL command queue to register
-            command_queue_handle_t* phCommandQueue          ///< [out] pointer to handle of command queue object created
+            cl_command_queue command_queue                  ///< [in] the OpenCL command queue to register
             );
 #endif // XE_ENABLE_OCL_INTEROP
 
         ///////////////////////////////////////////////////////////////////////////////
         /// @brief C++ wrapper for ::xeDeviceCreateCommandGraph
-        inline void CreateCommandGraph(
-            const command_graph_desc_t* desc,               ///< [in] pointer to command graph descriptor
-            command_graph_handle_t* phCommandGraph          ///< [out] pointer to handle of command graph object created
+        /// @returns
+        ///     - command_graph_handle_t: pointer to handle of command graph object created
+        /// 
+        /// @throws result_t
+        inline command_graph_handle_t CreateCommandGraph(
+            const command_graph_desc_t* desc                ///< [in] pointer to command graph descriptor
             );
 
         ///////////////////////////////////////////////////////////////////////////////
         /// @brief C++ wrapper for ::xeDeviceCreateCommandList
-        inline void CreateCommandList(
-            const command_list_desc_t* desc,                ///< [in] pointer to command list descriptor
-            command_list_handle_t* phCommandList            ///< [out] pointer to handle of command list object created
+        /// @returns
+        ///     - command_list_handle_t: pointer to handle of command list object created
+        /// 
+        /// @throws result_t
+        inline command_list_handle_t CreateCommandList(
+            const command_list_desc_t* desc                 ///< [in] pointer to command list descriptor
             );
 
         ///////////////////////////////////////////////////////////////////////////////
         /// @brief C++ wrapper for ::xeDeviceCopyCommandList
-        inline void CopyCommandList(
-            command_list_handle_t hCommandList,             ///< [in] handle to command list to copy
-            command_list_handle_t* phCommandList            ///< [out] pointer to handle of command list object created
+        /// @returns
+        ///     - command_list_handle_t: pointer to handle of command list object created
+        /// 
+        /// @throws result_t
+        inline command_list_handle_t CopyCommandList(
+            command_list_handle_t hCommandList              ///< [in] handle to command list to copy
             );
 
         ///////////////////////////////////////////////////////////////////////////////
         /// @brief C++ wrapper for ::xeDeviceCreateCommandQueue
-        inline void CreateCommandQueue(
-            const command_queue_desc_t* desc,               ///< [in] pointer to command queue descriptor
-            command_queue_handle_t* phCommandQueue          ///< [out] pointer to handle of command queue object created
+        /// @returns
+        ///     - command_queue_handle_t: pointer to handle of command queue object created
+        /// 
+        /// @throws result_t
+        inline command_queue_handle_t CreateCommandQueue(
+            const command_queue_desc_t* desc                ///< [in] pointer to command queue descriptor
             );
 
         ///////////////////////////////////////////////////////////////////////////////
         /// @brief C++ wrapper for ::xeDeviceGetSubDevice
-        inline void GetSubDevice(
-            uint32_t ordinal,                               ///< [in] ordinal of sub-device to retrieve
-            device_handle_t* phSubDevice                    ///< [out] pointer to handle of sub-device object.
+        /// @returns
+        ///     - device_handle_t: pointer to handle of sub-device object.
+        /// 
+        /// @throws result_t
+        inline device_handle_t GetSubDevice(
+            uint32_t ordinal                                ///< [in] ordinal of sub-device to retrieve
             );
 
         ///////////////////////////////////////////////////////////////////////////////
         /// @brief C++ wrapper for ::xeDeviceGetApiVersion
-        inline void GetApiVersion(
-            api_version_t* version                          ///< [out] api version
+        /// @returns
+        ///     - api_version_t: api version
+        /// 
+        /// @throws result_t
+        inline api_version_t GetApiVersion(
             );
 
         ///////////////////////////////////////////////////////////////////////////////
         /// @brief C++ wrapper for ::xeDeviceGetProperties
-        inline void GetProperties(
-            device_properties_t* pDeviceProperties          ///< [out] query result for device properties
+        /// @returns
+        ///     - device_properties_t: query result for device properties
+        /// 
+        /// @throws result_t
+        inline device_properties_t GetProperties(
             );
 
         ///////////////////////////////////////////////////////////////////////////////
         /// @brief C++ wrapper for ::xeDeviceGetComputeProperties
-        inline void GetComputeProperties(
-            device_compute_properties_t* pComputeProperties ///< [out] query result for compute properties
+        /// @returns
+        ///     - device_compute_properties_t: query result for compute properties
+        /// 
+        /// @throws result_t
+        inline device_compute_properties_t GetComputeProperties(
             );
 
         ///////////////////////////////////////////////////////////////////////////////
         /// @brief C++ wrapper for ::xeDeviceGetMemoryProperties
-        inline void GetMemoryProperties(
-            device_memory_properties_t* pMemProperties      ///< [out] query result for compute properties
+        /// @returns
+        ///     - device_memory_properties_t: query result for compute properties
+        /// 
+        /// @throws result_t
+        inline device_memory_properties_t GetMemoryProperties(
             );
 
         ///////////////////////////////////////////////////////////////////////////////
         /// @brief C++ wrapper for ::xeDeviceCanAccessPeer
-        inline void CanAccessPeer(
-            device_handle_t hPeerDevice,                    ///< [in] handle of the peer device with the allocation
-            bool_t* value                                   ///< [out] returned access capability
+        /// @returns
+        ///     - bool_t: returned access capability
+        /// 
+        /// @throws result_t
+        inline bool_t CanAccessPeer(
+            device_handle_t hPeerDevice                     ///< [in] handle of the peer device with the allocation
             );
 
         ///////////////////////////////////////////////////////////////////////////////
         /// @brief C++ wrapper for ::xeDeviceSetIntermediateCacheConfig
+        /// @throws result_t
         inline void SetIntermediateCacheConfig(
             cache_config_t CacheConfig                      ///< [in] CacheConfig
             );
 
         ///////////////////////////////////////////////////////////////////////////////
         /// @brief C++ wrapper for ::xeDeviceSetLastLevelCacheConfig
+        /// @throws result_t
         inline void SetLastLevelCacheConfig(
             cache_config_t CacheConfig                      ///< [in] CacheConfig
             );
 
         ///////////////////////////////////////////////////////////////////////////////
         /// @brief C++ wrapper for ::xeDeviceCreateEvent
-        inline void CreateEvent(
-            const event_desc_t* desc,                       ///< [in] pointer to event descriptor
-            event_handle_t* phEvent                         ///< [out] pointer to handle of event object created
+        /// @returns
+        ///     - event_handle_t: pointer to handle of event object created
+        /// 
+        /// @throws result_t
+        inline event_handle_t CreateEvent(
+            const event_desc_t* desc                        ///< [in] pointer to event descriptor
             );
 
         ///////////////////////////////////////////////////////////////////////////////
         /// @brief C++ wrapper for ::xeDevicePlaceEvent
-        inline void PlaceEvent(
+        /// @returns
+        ///     - event_handle_t: pointer to handle of event object created
+        /// 
+        /// @throws result_t
+        inline event_handle_t PlaceEvent(
             const event_desc_t* desc,                       ///< [in] pointer to event descriptor
-            void* ptr,                                      ///< [in] pointer to the device pointer where the event should be placed
-            event_handle_t* phEvent                         ///< [out] pointer to handle of event object created
+            void* ptr                                       ///< [in] pointer to the device pointer where the event should be placed
             );
 
         ///////////////////////////////////////////////////////////////////////////////
         /// @brief C++ wrapper for ::xeDeviceCreateImage
-        inline void CreateImage(
-            const image_desc_t* desc,                       ///< [in] pointer to image descriptor
-            image_handle_t* phImage                         ///< [out] pointer to handle of image object created
+        /// @returns
+        ///     - image_handle_t: pointer to handle of image object created
+        /// 
+        /// @throws result_t
+        inline image_handle_t CreateImage(
+            const image_desc_t* desc                        ///< [in] pointer to image descriptor
             );
 
         ///////////////////////////////////////////////////////////////////////////////
         /// @brief C++ wrapper for ::xeDeviceCreateModule
-        inline void CreateModule(
-            const module_desc_t* pDesc,                     ///< [in] pointer to module descriptor
-            module_handle_t* phModule,                      ///< [out] pointer to handle of module object created
-            module_build_log_handle_t* phBuildLog           ///< [out][optional] pointer to handle of module's build log.
+        /// @returns
+        ///     - module_handle_t: pointer to handle of module object created
+        ///     - module_build_log_handle_t: pointer to handle of module's build log.
+        /// 
+        /// @throws result_t
+        inline std::tuple<module_handle_t, module_build_log_handle_t> CreateModule(
+            const module_desc_t* pDesc                      ///< [in] pointer to module descriptor
             );
 
         ///////////////////////////////////////////////////////////////////////////////
         /// @brief C++ wrapper for ::xeDeviceMakeMemoryResident
+        /// @throws result_t
         inline void MakeMemoryResident(
             void* ptr,                                      ///< [in] pointer to memory to make resident
             size_t size                                     ///< [in] size in bytes to make resident
@@ -632,6 +686,7 @@ namespace xe
 
         ///////////////////////////////////////////////////////////////////////////////
         /// @brief C++ wrapper for ::xeDeviceEvictMemory
+        /// @throws result_t
         inline void EvictMemory(
             void* ptr,                                      ///< [in] pointer to memory to evict
             size_t size                                     ///< [in] size in bytes to evict
@@ -639,21 +694,26 @@ namespace xe
 
         ///////////////////////////////////////////////////////////////////////////////
         /// @brief C++ wrapper for ::xeDeviceMakeImageResident
+        /// @throws result_t
         inline void MakeImageResident(
             image_handle_t hImage                           ///< [in] handle of image to make resident
             );
 
         ///////////////////////////////////////////////////////////////////////////////
         /// @brief C++ wrapper for ::xeDeviceEvictImage
+        /// @throws result_t
         inline void EvictImage(
             image_handle_t hImage                           ///< [in] handle of image to make evict
             );
 
         ///////////////////////////////////////////////////////////////////////////////
         /// @brief C++ wrapper for ::xeDeviceCreateSampler
-        inline void CreateSampler(
-            const sampler_desc_t* pDesc,                    ///< [in] pointer to sampler descriptor
-            sampler_handle_t* phSampler                     ///< [out] handle of the sampler
+        /// @returns
+        ///     - sampler_handle_t: handle of the sampler
+        /// 
+        /// @throws result_t
+        inline sampler_handle_t CreateSampler(
+            const sampler_desc_t* pDesc                     ///< [in] pointer to sampler descriptor
             );
 
     };

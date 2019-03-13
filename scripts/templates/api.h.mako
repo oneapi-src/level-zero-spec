@@ -106,7 +106,7 @@ typedef struct _${th.subx(x, obj['name'])}
 ## FUNCTION ###################################################################
 %elif re.match(r"function", obj['type']):
 /// 
-%for line in th.make_return_lines(x, obj):
+%for line in th.make_returns_lines(x, obj):
 /// ${line}
 %endfor
 __${x}dllport ${x}_result_t __${x}call

@@ -56,7 +56,7 @@ from templates import helper as th
 /// ${line}
 %endfor
 /// 
-%for line in th.make_return_lines(x, obj):
+%for line in th.make_returns_lines(x, obj):
 /// ${line}
 %endfor
 ///

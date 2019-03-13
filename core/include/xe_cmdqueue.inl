@@ -40,6 +40,20 @@ namespace xe
 {
     ///////////////////////////////////////////////////////////////////////////////
     /// @brief C++ wrapper for ::xeCommandQueueDestroy
+    /// 
+    /// @details
+    ///     - The application is responsible for making sure the GPU is not
+    ///       currently referencing the command queue before it is deleted
+    ///     - The implementation of this function will immediately free all Host and
+    ///       Device allocations associated with this command queue
+    ///     - The implementation of this function should be lock-free.
+    /// 
+    /// @remarks
+    ///   _Analogues_
+    ///     - **clReleaseCommandQueue**
+    ///     - cuCtxDestroy
+    /// 
+    /// @throws result_t
     inline void CommandQueue::Destroy(
         )
     {
@@ -49,6 +63,16 @@ namespace xe
 
     ///////////////////////////////////////////////////////////////////////////////
     /// @brief C++ wrapper for ::xeCommandQueueEnqueueCommandLists
+    /// 
+    /// @details
+    ///     - The application may call this function from simultaneous threads.
+    ///     - The implementation of this function should be lock-free.
+    /// 
+    /// @remarks
+    ///   _Analogues_
+    ///     - vkQueueSubmit
+    /// 
+    /// @throws result_t
     inline void CommandQueue::EnqueueCommandLists(
         uint32_t numCommandLists,                       ///< [in] number of command lists to enqueue
         command_list_handle_t* phCommandLists,          ///< [in] list of handles of the command lists to enqueue for execution
@@ -61,6 +85,12 @@ namespace xe
 
     ///////////////////////////////////////////////////////////////////////////////
     /// @brief C++ wrapper for ::xeCommandQueueSynchronize
+    /// 
+    /// @details
+    ///     - The application may call this function from simultaneous threads.
+    ///     - The implementation of this function should be lock-free.
+    /// 
+    /// @throws result_t
     inline void CommandQueue::Synchronize(
         uint32_t timeout                                ///< [in] if non-zero, then indicates the maximum time to yield before
                                                         ///< returning ::RESULT_SUCCESS or ::RESULT_NOT_READY; if zero, then
@@ -74,12 +104,24 @@ namespace xe
 
     ///////////////////////////////////////////////////////////////////////////////
     /// @brief C++ wrapper for ::xeCommandQueueCreateFence
-    inline void CommandQueue::CreateFence(
-        const fence_desc_t* desc,                       ///< [in] pointer to fence descriptor
-        fence_handle_t* phFence                         ///< [out] pointer to handle of fence object created
+    /// 
+    /// @details
+    ///     - The application may call this function from simultaneous threads.
+    ///     - The implementation of this function should be lock-free.
+    /// 
+    /// @remarks
+    ///   _Analogues_
+    ///     - **vkCreateFence**
+    /// 
+    /// @returns
+    ///     - fence_handle_t: pointer to handle of fence object created
+    /// 
+    /// @throws result_t
+    inline fence_handle_t CommandQueue::CreateFence(
+        const fence_desc_t* desc                        ///< [in] pointer to fence descriptor
         )
     {
-        // auto result = ::xeCommandQueueCreateFence( handle, desc, phFence->getHandle() );
+        // auto result = ::xeCommandQueueCreateFence( handle, desc );
         // if( ::XE_RESULT_SUCCESS != result ) throw exception(result, "xe::CommandQueue::CreateFence");
     }
 

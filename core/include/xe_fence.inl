@@ -40,6 +40,19 @@ namespace xe
 {
     ///////////////////////////////////////////////////////////////////////////////
     /// @brief C++ wrapper for ::xeFenceDestroy
+    /// 
+    /// @details
+    ///     - The application is responsible for making sure the GPU is not
+    ///       currently referencing the fence before it is deleted
+    ///     - The implementation of this function will immediately free all Host and
+    ///       Device allocations associated with this fence
+    ///     - The implementation of this function should be lock-free.
+    /// 
+    /// @remarks
+    ///   _Analogues_
+    ///     - **vkDestroyFence**
+    /// 
+    /// @throws result_t
     inline void Fence::Destroy(
         )
     {
@@ -49,6 +62,16 @@ namespace xe
 
     ///////////////////////////////////////////////////////////////////////////////
     /// @brief C++ wrapper for ::xeFenceQueryStatus
+    /// 
+    /// @details
+    ///     - The application may call this function from simultaneous threads.
+    ///     - The implementation of this function should be lock-free.
+    /// 
+    /// @remarks
+    ///   _Analogues_
+    ///     - **vkGetFenceStatus**
+    /// 
+    /// @throws result_t
     inline void Fence::QueryStatus(
         )
     {
@@ -58,6 +81,16 @@ namespace xe
 
     ///////////////////////////////////////////////////////////////////////////////
     /// @brief C++ wrapper for ::xeFenceReset
+    /// 
+    /// @details
+    ///     - The application may call this function from simultaneous threads.
+    ///     - The implementation of this function should be lock-free.
+    /// 
+    /// @remarks
+    ///   _Analogues_
+    ///     - **vkResetFences**
+    /// 
+    /// @throws result_t
     inline void Fence::Reset(
         )
     {

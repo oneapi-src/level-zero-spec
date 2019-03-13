@@ -31,7 +31,6 @@
 #define _XE_ALL_HPP
 #if defined(__cplusplus)
 #pragma once
-#endif
 
 #include "xe_barrier.hpp"
 #include "xe_cl_interop.hpp"
@@ -64,4 +63,5 @@
 #include "xe_residency.inl"
 #include "xe_sampler.inl"
 
+#endif // defined(__cplusplus)
 #endif // _XE_ALL_HPP

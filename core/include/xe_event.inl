@@ -40,6 +40,21 @@ namespace xe
 {
     ///////////////////////////////////////////////////////////////////////////////
     /// @brief C++ wrapper for ::xeEventDestroy
+    /// 
+    /// @details
+    ///     - The application is responsible for making sure the GPU is not
+    ///       currently referencing the event before it is deleted
+    ///     - The implementation of this function will immediately free all Host and
+    ///       Device allocations associated with this event
+    ///     - The implementation of this function should be lock-free.
+    /// 
+    /// @remarks
+    ///   _Analogues_
+    ///     - **clReleaseEvent**
+    ///     - vkDestroyEvent
+    ///     - cuEventDestroy
+    /// 
+    /// @throws result_t
     inline void Event::Destroy(
         )
     {
@@ -49,6 +64,18 @@ namespace xe
 
     ///////////////////////////////////////////////////////////////////////////////
     /// @brief C++ wrapper for ::xeEventQueryStatus
+    /// 
+    /// @details
+    ///     - The application may call this function from simultaneous threads.
+    ///     - The implementation of this function should be lock-free.
+    /// 
+    /// @remarks
+    ///   _Analogues_
+    ///     - **clGetEventInfo**
+    ///     - vkGetEventStatus
+    ///     - cuEventQuery
+    /// 
+    /// @throws result_t
     inline void Event::QueryStatus(
         )
     {
@@ -58,6 +85,16 @@ namespace xe
 
     ///////////////////////////////////////////////////////////////////////////////
     /// @brief C++ wrapper for ::xeEventReset
+    /// 
+    /// @details
+    ///     - The application may call this function from simultaneous threads.
+    ///     - The implementation of this function should be lock-free.
+    /// 
+    /// @remarks
+    ///   _Analogues_
+    ///     - vkResetEvent
+    /// 
+    /// @throws result_t
     inline void Event::Reset(
         )
     {
