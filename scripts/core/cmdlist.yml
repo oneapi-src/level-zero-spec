@@ -204,9 +204,9 @@ params:
       desc: "[in] handle of the command list"
 --- #--------------------------------------------------------------------------
 type: function
-desc: "Encode a command list into another command list."
+desc: "Append a command list into another command list."
 class: $xCommandList
-name: EncodeCommandLists
+name: AppendCommandLists
 details:
     - "The application may **not** call this function from simultaneous threads with the same command list handle."
     - "The implementation of this function should be lock-free."
@@ -216,10 +216,10 @@ params:
       desc: "[in] handle of the command list"
     - type: uint32_t
       name: numCommandLists
-      desc: "[in] number of command lists to encode"
+      desc: "[in] number of command lists to append"
     - type: "$x_command_list_handle_t*"
       name: phCommandLists
-      desc: "[in] list of handles of the command lists to encode for execution"
+      desc: "[in] list of handles of the command lists to append for execution"
 returns:
     - $X_RESULT_ERROR_INVALID_PARAMETER:
        - "0 for numCommandLists"

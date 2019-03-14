@@ -524,7 +524,7 @@ xeCommandListResetParameters(
 }
 
 ///////////////////////////////////////////////////////////////////////////////
-/// @brief Encode a command list into another command list.
+/// @brief Append a command list into another command list.
 /// 
 /// @details
 ///     - The application may **not** call this function from simultaneous
@@ -541,13 +541,13 @@ xeCommandListResetParameters(
 ///         + 0 for numCommandLists
 ///     - ::XE_RESULT_ERROR_UNSUPPORTED
 ///
-/// @hash {596df05be8f869f5f8e50121263d6be6d062370e8ebddec124125948e8b8f644}
+/// @hash {6af4a62bc12195fc24ebc912fa2094083d41e42d978fbdf1485c0f4bbba64beb}
 ///
 __xedllexport xe_result_t __xecall
-xeCommandListEncodeCommandLists(
+xeCommandListAppendCommandLists(
     xe_command_list_handle_t hCommandList,          ///< [in] handle of the command list
-    uint32_t numCommandLists,                       ///< [in] number of command lists to encode
-    xe_command_list_handle_t* phCommandLists        ///< [in] list of handles of the command lists to encode for execution
+    uint32_t numCommandLists,                       ///< [in] number of command lists to append
+    xe_command_list_handle_t* phCommandLists        ///< [in] list of handles of the command lists to append for execution
     )
 {
     try
@@ -563,7 +563,7 @@ xeCommandListEncodeCommandLists(
 #if defined(XE_NULLDRV)
         return XE_RESULT_SUCCESS;
 #else
-        return L0::CommandList::fromHandle(hCommandList)->encodeCommandLists(numCommandLists, phCommandLists);
+        return L0::CommandList::fromHandle(hCommandList)->appendCommandLists(numCommandLists, phCommandLists);
 #endif
         /// @end
     }

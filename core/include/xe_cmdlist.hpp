@@ -99,10 +99,10 @@ namespace xe
         };
 
         ///////////////////////////////////////////////////////////////////////////////
-        /// @brief C++ wrapper for ::xeCommandListEncodeExecutionBarrier
+        /// @brief C++ wrapper for ::xeCommandListAppendExecutionBarrier
         /// @throws result_t
         inline void
-        EncodeExecutionBarrier(
+        AppendExecutionBarrier(
             void
             );
 
@@ -159,12 +159,12 @@ namespace xe
             );
 
         ///////////////////////////////////////////////////////////////////////////////
-        /// @brief C++ wrapper for ::xeCommandListEncodeCommandLists
+        /// @brief C++ wrapper for ::xeCommandListAppendCommandLists
         /// @throws result_t
         inline void
-        EncodeCommandLists(
-            uint32_t numCommandLists,                       ///< [in] number of command lists to encode
-            command_list_handle_t* phCommandLists           ///< [in] list of handles of the command lists to encode for execution
+        AppendCommandLists(
+            uint32_t numCommandLists,                       ///< [in] number of command lists to append
+            command_list_handle_t* phCommandLists           ///< [in] list of handles of the command lists to append for execution
             );
 
         ///////////////////////////////////////////////////////////////////////////////
@@ -179,39 +179,39 @@ namespace xe
             );
 
         ///////////////////////////////////////////////////////////////////////////////
-        /// @brief C++ wrapper for ::xeCommandListEncodeMemoryCopy
+        /// @brief C++ wrapper for ::xeCommandListAppendMemoryCopy
         /// @throws result_t
         inline void
-        EncodeMemoryCopy(
+        AppendMemoryCopy(
             void* dstptr,                                   ///< [in] pointer to destination memory to copy to
             const void* srcptr,                             ///< [in] pointer to source memory to copy from
             size_t size                                     ///< [in] size in bytes to copy
             );
 
         ///////////////////////////////////////////////////////////////////////////////
-        /// @brief C++ wrapper for ::xeCommandListEncodeMemorySet
+        /// @brief C++ wrapper for ::xeCommandListAppendMemorySet
         /// @throws result_t
         inline void
-        EncodeMemorySet(
+        AppendMemorySet(
             void* ptr,                                      ///< [in] pointer to memory to initialize
             int value,                                      ///< [in] value to initialize memory to
             size_t size                                     ///< [in] size in bytes to initailize
             );
 
         ///////////////////////////////////////////////////////////////////////////////
-        /// @brief C++ wrapper for ::xeCommandListEncodeImageCopy
+        /// @brief C++ wrapper for ::xeCommandListAppendImageCopy
         /// @throws result_t
         inline void
-        EncodeImageCopy(
+        AppendImageCopy(
             image_handle_t hDstImage,                       ///< [in] handle of destination image to copy to
             image_handle_t hSrcImage                        ///< [in] handle of source image to copy from
             );
 
         ///////////////////////////////////////////////////////////////////////////////
-        /// @brief C++ wrapper for ::xeCommandListEncodeImageCopyRegion
+        /// @brief C++ wrapper for ::xeCommandListAppendImageCopyRegion
         /// @throws result_t
         inline void
-        EncodeImageCopyRegion(
+        AppendImageCopyRegion(
             image_handle_t hDstImage,                       ///< [in] handle of destination image to copy to
             image_region_t* pDstRegion,                     ///< [in][optional] destination region descriptor
             image_handle_t hSrcImage,                       ///< [in] handle of source image to copy from
@@ -219,39 +219,39 @@ namespace xe
             );
 
         ///////////////////////////////////////////////////////////////////////////////
-        /// @brief C++ wrapper for ::xeCommandListEncodeImageCopyToMemory
+        /// @brief C++ wrapper for ::xeCommandListAppendImageCopyToMemory
         /// @throws result_t
         inline void
-        EncodeImageCopyToMemory(
+        AppendImageCopyToMemory(
             void* dstptr,                                   ///< [in] pointer to destination memory to copy to
             image_handle_t hSrcImage,                       ///< [in] handle of source image to copy from
             image_region_t* pSrcRegion                      ///< [in][optional] source region descriptor
             );
 
         ///////////////////////////////////////////////////////////////////////////////
-        /// @brief C++ wrapper for ::xeCommandListEncodeImageCopyFromMemory
+        /// @brief C++ wrapper for ::xeCommandListAppendImageCopyFromMemory
         /// @throws result_t
         inline void
-        EncodeImageCopyFromMemory(
+        AppendImageCopyFromMemory(
             image_handle_t hDstImage,                       ///< [in] handle of destination image to copy to
             image_region_t* pDstRegion,                     ///< [in][optional] destination region descriptor
             const void* srcptr                              ///< [in] pointer to source memory to copy from
             );
 
         ///////////////////////////////////////////////////////////////////////////////
-        /// @brief C++ wrapper for ::xeCommandListEncodeMemoryPrefetch
+        /// @brief C++ wrapper for ::xeCommandListAppendMemoryPrefetch
         /// @throws result_t
         inline void
-        EncodeMemoryPrefetch(
+        AppendMemoryPrefetch(
             const void* ptr,                                ///< [in] pointer to start of the memory region to prefetch
             size_t count                                    ///< [in] size in bytes of the memory region to prefetch
             );
 
         ///////////////////////////////////////////////////////////////////////////////
-        /// @brief C++ wrapper for ::xeCommandListEncodeMemAdvise
+        /// @brief C++ wrapper for ::xeCommandListAppendMemAdvise
         /// @throws result_t
         inline void
-        EncodeMemAdvise(
+        AppendMemAdvise(
             device_handle_t hDevice,                        ///< [in] device associated with the memory advice
             const void* ptr,                                ///< [in] Pointer to the start of the memory range
             size_t size,                                    ///< [in] Size in bytes of the memory range
@@ -259,54 +259,54 @@ namespace xe
             );
 
         ///////////////////////////////////////////////////////////////////////////////
-        /// @brief C++ wrapper for ::xeCommandListEncodeSignalEvent
+        /// @brief C++ wrapper for ::xeCommandListAppendSignalEvent
         /// @throws result_t
         inline void
-        EncodeSignalEvent(
+        AppendSignalEvent(
             event_handle_t hEvent                           ///< [in] handle of the event
             );
 
         ///////////////////////////////////////////////////////////////////////////////
-        /// @brief C++ wrapper for ::xeCommandListEncodeWaitOnEvent
+        /// @brief C++ wrapper for ::xeCommandListAppendWaitOnEvent
         /// @throws result_t
         inline void
-        EncodeWaitOnEvent(
+        AppendWaitOnEvent(
             event_handle_t hEvent                           ///< [in] handle of the event
             );
 
         ///////////////////////////////////////////////////////////////////////////////
-        /// @brief C++ wrapper for ::xeCommandListEncodeEventReset
+        /// @brief C++ wrapper for ::xeCommandListAppendEventReset
         /// @throws result_t
         inline void
-        EncodeEventReset(
+        AppendEventReset(
             event_handle_t hEvent                           ///< [in] handle of the event
             );
 
         ///////////////////////////////////////////////////////////////////////////////
-        /// @brief C++ wrapper for ::xeCommandListEncodeDispatchFunction
+        /// @brief C++ wrapper for ::xeCommandListAppendDispatchFunction
         /// @throws result_t
         inline void
-        EncodeDispatchFunction(
+        AppendDispatchFunction(
             function_handle_t hFunction,                    ///< [in] handle of the function object
             const dispatch_function_arguments_t* pDispatchFuncArgs, ///< [in] dispatch function arguments.
             event_handle_t hEvent                           ///< [in][optional] handle of the event to signal on completion
             );
 
         ///////////////////////////////////////////////////////////////////////////////
-        /// @brief C++ wrapper for ::xeCommandListEncodeDispatchFunctionIndirect
+        /// @brief C++ wrapper for ::xeCommandListAppendDispatchFunctionIndirect
         /// @throws result_t
         inline void
-        EncodeDispatchFunctionIndirect(
+        AppendDispatchFunctionIndirect(
             function_handle_t hFunction,                    ///< [in] handle of the function object
             const dispatch_function_arguments_t* pDispatchArgumentsBuffer,  ///< [in] pointer to device buffer that will contain dispatch arguments
             event_handle_t hEvent                           ///< [in][optional] handle of the event to signal on completion
             );
 
         ///////////////////////////////////////////////////////////////////////////////
-        /// @brief C++ wrapper for ::xeCommandListEncodeDispatchMultipleFunctionsIndirect
+        /// @brief C++ wrapper for ::xeCommandListAppendDispatchMultipleFunctionsIndirect
         /// @throws result_t
         inline void
-        EncodeDispatchMultipleFunctionsIndirect(
+        AppendDispatchMultipleFunctionsIndirect(
             uint32_t numFunctions,                          ///< [in] maximum number of functions to dispatch
             const function_handle_t* phFunctions,           ///< [in] handles of the function objects
             const size_t* pNumDispatchArguments,            ///< [in] pointer to device memory location that will contain the actual
@@ -318,10 +318,10 @@ namespace xe
             );
 
         ///////////////////////////////////////////////////////////////////////////////
-        /// @brief C++ wrapper for ::xeCommandListEncodeDispatchHostFunction
+        /// @brief C++ wrapper for ::xeCommandListAppendDispatchHostFunction
         /// @throws result_t
         inline void
-        EncodeDispatchHostFunction(
+        AppendDispatchHostFunction(
             host_pfn_t pfnHostFunc,                         ///< [in] pointer to host function.
             void* pUserData                                 ///< [in] pointer to user data to pass to host function.
             );

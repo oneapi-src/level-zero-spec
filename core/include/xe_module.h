@@ -538,7 +538,7 @@ typedef struct _xe_dispatch_function_arguments_t
 ///         + invalid dispatch count range for dispatch
 ///     - ::XE_RESULT_ERROR_UNSUPPORTED
 __xedllport xe_result_t __xecall
-xeCommandListEncodeDispatchFunction(
+xeCommandListAppendDispatchFunction(
     xe_command_list_handle_t hCommandList,          ///< [in] handle of the command list
     xe_function_handle_t hFunction,                 ///< [in] handle of the function object
     const xe_dispatch_function_arguments_t* pDispatchFuncArgs,  ///< [in] dispatch function arguments.
@@ -570,7 +570,7 @@ xeCommandListEncodeDispatchFunction(
 ///         + nullptr == pDispatchArgumentsBuffer
 ///     - ::XE_RESULT_ERROR_UNSUPPORTED
 __xedllport xe_result_t __xecall
-xeCommandListEncodeDispatchFunctionIndirect(
+xeCommandListAppendDispatchFunctionIndirect(
     xe_command_list_handle_t hCommandList,          ///< [in] handle of the command list
     xe_function_handle_t hFunction,                 ///< [in] handle of the function object
     const xe_dispatch_function_arguments_t* pDispatchArgumentsBuffer,   ///< [in] pointer to device buffer that will contain dispatch arguments
@@ -603,7 +603,7 @@ xeCommandListEncodeDispatchFunctionIndirect(
 ///         + nullptr == pDispatchArgumentsBuffer
 ///     - ::XE_RESULT_ERROR_UNSUPPORTED
 __xedllport xe_result_t __xecall
-xeCommandListEncodeDispatchMultipleFunctionsIndirect(
+xeCommandListAppendDispatchMultipleFunctionsIndirect(
     xe_command_list_handle_t hCommandList,          ///< [in] handle of the command list
     uint32_t numFunctions,                          ///< [in] maximum number of functions to dispatch
     const xe_function_handle_t* phFunctions,        ///< [in] handles of the function objects
@@ -617,7 +617,7 @@ xeCommandListEncodeDispatchMultipleFunctionsIndirect(
 
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief type definition for host function pointers used with
-///        ::xeCommandListEncodeDispatchHostFunction
+///        ::xeCommandListAppendDispatchHostFunction
 /// 
 /// @details
 ///     - This function may be called from simultaneous threads.
@@ -647,7 +647,7 @@ typedef void(__xecall *xe_host_pfn_t)(
 ///         + nullptr == pUserData
 ///     - ::XE_RESULT_ERROR_UNSUPPORTED
 __xedllport xe_result_t __xecall
-xeCommandListEncodeDispatchHostFunction(
+xeCommandListAppendDispatchHostFunction(
     xe_command_list_handle_t hCommandList,          ///< [in] handle of the command list
     xe_host_pfn_t pfnHostFunc,                      ///< [in] pointer to host function.
     void* pUserData                                 ///< [in] pointer to user data to pass to host function.

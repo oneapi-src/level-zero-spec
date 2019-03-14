@@ -162,7 +162,7 @@ xeEventDestroy(
     );
 
 ///////////////////////////////////////////////////////////////////////////////
-/// @brief Encodes a signal of the event from the device into a command list.
+/// @brief Appends a signal of the event from the device into a command list.
 /// 
 /// @details
 ///     - The application may **not** call this function from simultaneous
@@ -184,13 +184,13 @@ xeEventDestroy(
 ///         + nullptr == hEvent
 ///     - ::XE_RESULT_ERROR_UNSUPPORTED
 __xedllport xe_result_t __xecall
-xeCommandListEncodeSignalEvent(
+xeCommandListAppendSignalEvent(
     xe_command_list_handle_t hCommandList,          ///< [in] handle of the command list
     xe_event_handle_t hEvent                        ///< [in] handle of the event
     );
 
 ///////////////////////////////////////////////////////////////////////////////
-/// @brief Encodes a wait on event from a host signal into a command list.
+/// @brief Appends a wait on event from a host signal into a command list.
 /// 
 /// @details
 ///     - The application may **not** call this function from simultaneous
@@ -206,7 +206,7 @@ xeCommandListEncodeSignalEvent(
 ///         + nullptr == hEvent
 ///     - ::XE_RESULT_ERROR_UNSUPPORTED
 __xedllport xe_result_t __xecall
-xeCommandListEncodeWaitOnEvent(
+xeCommandListAppendWaitOnEvent(
     xe_command_list_handle_t hCommandList,          ///< [in] handle of the command list
     xe_event_handle_t hEvent                        ///< [in] handle of the event
     );
@@ -368,7 +368,7 @@ xeEventQueryMetricsData(
 ///         + nullptr == hEvent
 ///     - ::XE_RESULT_ERROR_UNSUPPORTED
 __xedllport xe_result_t __xecall
-xeCommandListEncodeEventReset(
+xeCommandListAppendEventReset(
     xe_command_list_handle_t hCommandList,          ///< [in] handle of the command list
     xe_event_handle_t hEvent                        ///< [in] handle of the event
     );

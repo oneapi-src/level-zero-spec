@@ -41,7 +41,7 @@
 #include <new>
 
 ///////////////////////////////////////////////////////////////////////////////
-/// @brief Encodes an execution barrier into a command list.
+/// @brief Appends an execution barrier into a command list.
 /// 
 /// @details
 ///     - The application may **not** call this function from simultaneous
@@ -61,10 +61,10 @@
 ///         + nullptr == hCommandList
 ///     - ::XE_RESULT_ERROR_UNSUPPORTED
 ///
-/// @hash {2d1eb476632e411da06d0ff92b64149da43b825416bdaa382c88c04187b02159}
+/// @hash {b7f3f20a5e54174f765a7560d254515c25d90ace7add120975c8136f78e62775}
 ///
 __xedllexport xe_result_t __xecall
-xeCommandListEncodeExecutionBarrier(
+xeCommandListAppendExecutionBarrier(
     xe_command_list_handle_t hCommandList           ///< [in] handle of the command list
     )
 {
@@ -80,7 +80,7 @@ xeCommandListEncodeExecutionBarrier(
 #if defined(XE_NULLDRV)
         return XE_RESULT_SUCCESS;
 #else
-        return L0::CommandList::fromHandle(hCommandList)->encodeExecutionBarrier();
+        return L0::CommandList::fromHandle(hCommandList)->appendExecutionBarrier();
 #endif
         /// @end
     }

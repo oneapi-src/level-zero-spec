@@ -67,10 +67,10 @@
 ///         + nullptr == srcptr
 ///     - ::XE_RESULT_ERROR_UNSUPPORTED
 ///
-/// @hash {10322d2f80ab2c4d1de8c74ebd5dcd44b30666c7d93497a0525875fe05511385}
+/// @hash {aee137c1c38f572fa184e9317faedaa220775dd9cbd3f7b554b099042566fee0}
 ///
 __xedllexport xe_result_t __xecall
-xeCommandListEncodeMemoryCopy(
+xeCommandListAppendMemoryCopy(
     xe_command_list_handle_t hCommandList,          ///< [in] handle of command list
     void* dstptr,                                   ///< [in] pointer to destination memory to copy to
     const void* srcptr,                             ///< [in] pointer to source memory to copy from
@@ -91,7 +91,7 @@ xeCommandListEncodeMemoryCopy(
 #if defined(XE_NULLDRV)
         return XE_RESULT_SUCCESS;
 #else
-        return L0::CommandList::fromHandle(hCommandList)->encodeMemoryCopy(dstptr, srcptr, size);
+        return L0::CommandList::fromHandle(hCommandList)->appendMemoryCopy(dstptr, srcptr, size);
 #endif
         /// @end
     }
@@ -136,10 +136,10 @@ xeCommandListEncodeMemoryCopy(
 ///         + nullptr == ptr
 ///     - ::XE_RESULT_ERROR_UNSUPPORTED
 ///
-/// @hash {06d09263da59d527bcc056dd1270ecbd1e6a536c4e0535f9b036d4d638a7cd4a}
+/// @hash {6444c5cdc44efccb5e5c18fb9e6dba51cbed0eb648f35a8c67877146ce0c4594}
 ///
 __xedllexport xe_result_t __xecall
-xeCommandListEncodeMemorySet(
+xeCommandListAppendMemorySet(
     xe_command_list_handle_t hCommandList,          ///< [in] handle of command list
     void* ptr,                                      ///< [in] pointer to memory to initialize
     int value,                                      ///< [in] value to initialize memory to
@@ -159,7 +159,7 @@ xeCommandListEncodeMemorySet(
 #if defined(XE_NULLDRV)
         return XE_RESULT_SUCCESS;
 #else
-        return L0::CommandList::fromHandle(hCommandList)->encodeMemorySet(ptr, value, size);
+        return L0::CommandList::fromHandle(hCommandList)->appendMemorySet(ptr, value, size);
 #endif
         /// @end
     }
@@ -200,10 +200,10 @@ xeCommandListEncodeMemorySet(
 ///         + nullptr == hSrcImage
 ///     - ::XE_RESULT_ERROR_UNSUPPORTED
 ///
-/// @hash {243c2116a4f9a00f96b590eaf48bbc87a5ed95083afa49768bd94c9994d4c5e1}
+/// @hash {b7ea3cc5d9eb525df5d18f82e16829703d98f67c36c7add824e2a1ddd410ed0d}
 ///
 __xedllexport xe_result_t __xecall
-xeCommandListEncodeImageCopy(
+xeCommandListAppendImageCopy(
     xe_command_list_handle_t hCommandList,          ///< [in] handle of command list
     xe_image_handle_t hDstImage,                    ///< [in] handle of destination image to copy to
     xe_image_handle_t hSrcImage                     ///< [in] handle of source image to copy from
@@ -223,7 +223,7 @@ xeCommandListEncodeImageCopy(
 #if defined(XE_NULLDRV)
         return XE_RESULT_SUCCESS;
 #else
-        return L0::CommandList::fromHandle(hCommandList)->encodeImageCopy(hDstImage, hSrcImage);
+        return L0::CommandList::fromHandle(hCommandList)->appendImageCopy(hDstImage, hSrcImage);
 #endif
         /// @end
     }
@@ -260,10 +260,10 @@ xeCommandListEncodeImageCopy(
 ///         + nullptr == hSrcImage
 ///     - ::XE_RESULT_ERROR_UNSUPPORTED
 ///
-/// @hash {ec5a7f583e0bfc8d5a755587f411c7bc145e5f9e004527daa436297696035d30}
+/// @hash {19c542b99a298d38925bae0a4945706dff9dc2d969da9445e3aee7999b47fe65}
 ///
 __xedllexport xe_result_t __xecall
-xeCommandListEncodeImageCopyRegion(
+xeCommandListAppendImageCopyRegion(
     xe_command_list_handle_t hCommandList,          ///< [in] handle of command list
     xe_image_handle_t hDstImage,                    ///< [in] handle of destination image to copy to
     xe_image_region_t* pDstRegion,                  ///< [in][optional] destination region descriptor
@@ -285,7 +285,7 @@ xeCommandListEncodeImageCopyRegion(
 #if defined(XE_NULLDRV)
         return XE_RESULT_SUCCESS;
 #else
-        return L0::CommandList::fromHandle(hCommandList)->encodeImageCopyRegion(hDstImage, pDstRegion, hSrcImage, pSrcRegion);
+        return L0::CommandList::fromHandle(hCommandList)->appendImageCopyRegion(hDstImage, pDstRegion, hSrcImage, pSrcRegion);
 #endif
         /// @end
     }
@@ -328,10 +328,10 @@ xeCommandListEncodeImageCopyRegion(
 ///         + nullptr == hSrcImage
 ///     - ::XE_RESULT_ERROR_UNSUPPORTED
 ///
-/// @hash {69f20a6c73958cc782ea516378e1c353ce2f5620b69c8da457e9fe385274ae41}
+/// @hash {52b5d0a7b06b118eafdd12ff148951c0057edd9ded2b9572f1eba77e8b9d700e}
 ///
 __xedllexport xe_result_t __xecall
-xeCommandListEncodeImageCopyToMemory(
+xeCommandListAppendImageCopyToMemory(
     xe_command_list_handle_t hCommandList,          ///< [in] handle of command list
     void* dstptr,                                   ///< [in] pointer to destination memory to copy to
     xe_image_handle_t hSrcImage,                    ///< [in] handle of source image to copy from
@@ -352,7 +352,7 @@ xeCommandListEncodeImageCopyToMemory(
 #if defined(XE_NULLDRV)
         return XE_RESULT_SUCCESS;
 #else
-        return L0::CommandList::fromHandle(hCommandList)->encodeImageCopyToMemory(dstptr, hSrcImage, pSrcRegion);
+        return L0::CommandList::fromHandle(hCommandList)->appendImageCopyToMemory(dstptr, hSrcImage, pSrcRegion);
 #endif
         /// @end
     }
@@ -395,10 +395,10 @@ xeCommandListEncodeImageCopyToMemory(
 ///         + nullptr == srcptr
 ///     - ::XE_RESULT_ERROR_UNSUPPORTED
 ///
-/// @hash {195ceffb1f1c2b99903e9aa05a90af3a3e68ddf554db9c072d495768d5effde9}
+/// @hash {c7f1bc2a19769501bdffac018ac12def5a0c1207309ed88aa401e9f997176411}
 ///
 __xedllexport xe_result_t __xecall
-xeCommandListEncodeImageCopyFromMemory(
+xeCommandListAppendImageCopyFromMemory(
     xe_command_list_handle_t hCommandList,          ///< [in] handle of command list
     xe_image_handle_t hDstImage,                    ///< [in] handle of destination image to copy to
     xe_image_region_t* pDstRegion,                  ///< [in][optional] destination region descriptor
@@ -419,7 +419,7 @@ xeCommandListEncodeImageCopyFromMemory(
 #if defined(XE_NULLDRV)
         return XE_RESULT_SUCCESS;
 #else
-        return L0::CommandList::fromHandle(hCommandList)->encodeImageCopyFromMemory(hDstImage, pDstRegion, srcptr);
+        return L0::CommandList::fromHandle(hCommandList)->appendImageCopyFromMemory(hDstImage, pDstRegion, srcptr);
 #endif
         /// @end
     }
@@ -466,10 +466,10 @@ xeCommandListEncodeImageCopyFromMemory(
 ///         + nullptr == ptr
 ///     - ::XE_RESULT_ERROR_UNSUPPORTED
 ///
-/// @hash {2d3f1674f77d6735fb9987fcab395bce6dc9726c938772ca747fb9494e4a9c23}
+/// @hash {1fb509b4db2cea1d6ae38f5b63e959b39668825e1cb46d868ec6343758967c46}
 ///
 __xedllexport xe_result_t __xecall
-xeCommandListEncodeMemoryPrefetch(
+xeCommandListAppendMemoryPrefetch(
     xe_command_list_handle_t hCommandList,          ///< [in] handle of command list
     const void* ptr,                                ///< [in] pointer to start of the memory region to prefetch
     size_t count                                    ///< [in] size in bytes of the memory region to prefetch
@@ -488,7 +488,7 @@ xeCommandListEncodeMemoryPrefetch(
 #if defined(XE_NULLDRV)
         return XE_RESULT_SUCCESS;
 #else
-        return L0::CommandList::fromHandle(hCommandList)->encodeMemoryPrefetch(ptr, count);
+        return L0::CommandList::fromHandle(hCommandList)->appendMemoryPrefetch(ptr, count);
 #endif
         /// @end
     }
@@ -539,10 +539,10 @@ xeCommandListEncodeMemoryPrefetch(
 ///         + invalid value for advice
 ///     - ::XE_RESULT_ERROR_UNSUPPORTED
 ///
-/// @hash {2c1eaf9d7e8276047aecaeba08566fcadb26720fa7c263446f0445cbe91bf1c6}
+/// @hash {284b6017b356f12150bfd94c56b8eaae692b7502a585c5ad79087a09f1ae1ed6}
 ///
 __xedllexport xe_result_t __xecall
-xeCommandListEncodeMemAdvise(
+xeCommandListAppendMemAdvise(
     xe_command_list_handle_t hCommandList,          ///< [in] handle of command list
     xe_device_handle_t hDevice,                     ///< [in] device associated with the memory advice
     const void* ptr,                                ///< [in] Pointer to the start of the memory range
@@ -564,7 +564,7 @@ xeCommandListEncodeMemAdvise(
 #if defined(XE_NULLDRV)
         return XE_RESULT_SUCCESS;
 #else
-        return L0::CommandList::fromHandle(hCommandList)->encodeMemAdvise(hDevice, ptr, size, advice);
+        return L0::CommandList::fromHandle(hCommandList)->appendMemAdvise(hDevice, ptr, size, advice);
 #endif
         /// @end
     }

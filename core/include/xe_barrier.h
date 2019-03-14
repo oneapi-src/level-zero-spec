@@ -42,7 +42,7 @@ extern "C" {
 #endif
 
 ///////////////////////////////////////////////////////////////////////////////
-/// @brief Encodes an execution barrier into a command list.
+/// @brief Appends an execution barrier into a command list.
 /// 
 /// @details
 ///     - The application may **not** call this function from simultaneous
@@ -62,7 +62,7 @@ extern "C" {
 ///         + nullptr == hCommandList
 ///     - ::XE_RESULT_ERROR_UNSUPPORTED
 __xedllport xe_result_t __xecall
-xeCommandListEncodeExecutionBarrier(
+xeCommandListAppendExecutionBarrier(
     xe_command_list_handle_t hCommandList           ///< [in] handle of the command list
     );
 

@@ -119,9 +119,9 @@ params:
       desc: "[in] handle of event object to destroy"
 --- #--------------------------------------------------------------------------
 type: function
-desc: "Encodes a signal of the event from the device into a command list."
+desc: "Appends a signal of the event from the device into a command list."
 class: $xCommandList
-name: EncodeSignalEvent
+name: AppendSignalEvent
 analogue:
     - "**clSetUserEventStatus**"
     - cuEventRecord
@@ -138,9 +138,9 @@ params:
       desc: "[in] handle of the event"
 --- #--------------------------------------------------------------------------
 type: function
-desc: "Encodes a wait on event from a host signal into a command list."
+desc: "Appends a wait on event from a host signal into a command list."
 class: $xCommandList
-name: EncodeWaitOnEvent
+name: AppendWaitOnEvent
 details:
     - "The application may **not** call this function from simultaneous threads with the same command list handle."
     - "The implementation of this function should be lock-free."
@@ -265,7 +265,7 @@ returns:
 type: function
 desc: "Reset an event back to not signaled state"
 class: $xCommandList
-name: EncodeEventReset
+name: AppendEventReset
 analogue:
     - vkResetEvent
 details:

@@ -147,7 +147,7 @@ The following are the motivations for seperating a command queue from a command 
   such as the number of input streams.
 - Command queues provide (near) zero-latency access to the device.
 - Command lists are mostly associated with Host threads for simultaneous construction.
-- Command list encodeing can occur independently of command queue submission.
+- Command list appending can occur independently of command queue submission.
 - Command list submission can occur to more than one command queue.
 
 The following diagram illustrates the hierarchy of command lists and command queues to the device:  
@@ -209,12 +209,12 @@ ${"###"} Creation
 - A command list can be copied to create another command list. The application may use this
   to copy a command list for use on a different device.
 
-${"###"} Encoding
+${"###"} Appending
 - There is no implicit binding of command lists to Host threads. Therefore, an 
   application may share a command list handle across multiple Host threads. However,
   the application is responsible for ensuring that multiple Host threads do not access
   the same command list simultaneously.
-- By default, commands are executed in the same order in which they are submitted.
+- By default, commands are executed in the same order in which they are appended.
   However, an application may allow the driver to optimize the ordering by using
   ::${X}_COMMAND_LIST_FLAG_RELAXED_ORDERING.  Reordering is guarenteed to be only occur
   between barriers and synchronization primitives.
@@ -285,12 +285,12 @@ ${"##"} Execution Barriers
 
 The following sample code demonstrates a sequence for submission of an execution barrier:
 ```c
-    ${x}CommandListEncodeDispatchFunction(hCommandList, hFunction, &dispatchArgs, nullptr);
+    ${x}CommandListAppendDispatchFunction(hCommandList, hFunction, &dispatchArgs, nullptr);
 
-    // Encode a barrier into a command list to ensure hFunctionFunction1 completes before hFunction2 begins
-    ${x}CommandListEncodeExecutionBarrier(hCommandList);
+    // Append a barrier into a command list to ensure hFunctionFunction1 completes before hFunction2 begins
+    ${x}CommandListAppendExecutionBarrier(hCommandList);
 
-    ${x}CommandListEncodeDispatchFunction(hCommandList, hFunction, &dispatchArgs, nullptr);
+    ${x}CommandListAppendDispatchFunction(hCommandList, hFunction, &dispatchArgs, nullptr);
     ...
 ```
 
@@ -359,9 +359,9 @@ An event is used as fine-grain host-to-device, device-to-host or device-to-devic
   + signaled from the host, and waited upon from within a device's command list.
 - An event only has two states: not signaled and signaled.
 - An event can be reset from the Host or device.
-- An event can be encoded into any command list from the same device.
+- An event can be appended into any command list from the same device.
 - An event cannot be signaled and waited upon in the same command list or command queue.
-- An event can be encoded into multiple command lists simultaneously.
+- An event can be appended into multiple command lists simultaneously.
 - An event can be shared across processes.
 - An event imposes an implicit execution and memory barrier; therefore should be used sparingly to avoid device underutilization.
 - There are no protections against events causing deadlocks, such as circular waits scenarios. 
@@ -389,8 +389,8 @@ The following sample code demonstrates a sequence for creation and submission of
     ${x}_event_handle_t hEvent;
     ${x}DeviceCreateEvent(hDevice, &eventDesc, &hEvent);
 
-    // Encode a wait on an event into a command list
-    ${x}CommandListEncodeWaitOnEvent(hCommandList, hEvent);
+    // Append a wait on an event into a command list
+    ${x}CommandListAppendWaitOnEvent(hCommandList, hEvent);
 
     // Enqueue wait via the command list into a command queue
     ${x}CommandQueueEnqueueCommandLists(hCommandQueue, 1, &hCommandList, nullptr);
@@ -413,9 +413,9 @@ Timestamps are used to measure the time between two events signalled by the same
 
 The following sample code demonstrates a sequence for measuring time between events:
 ```c
-    // Encode the function call to measure
-    ${x}CommandListEncodeSignalEvent(hCommandList, hEventBegin);
-    ${x}CommandListEncodeDispatchFunction(hCommandList, hFunction, &dispatchArgs, hEventEnd);
+    // Append the function call to measure
+    ${x}CommandListAppendSignalEvent(hCommandList, hEventBegin);
+    ${x}CommandListAppendDispatchFunction(hCommandList, hFunction, &dispatchArgs, hEventEnd);
 
     // Enqueue the command list into a command queue
     ${x}CommandQueueEnqueueCommandLists(hCommandQueue, 1, &hCommandList, nullptr);
@@ -437,9 +437,9 @@ Counters are used to collect various device-specific values between two events s
 
 The following sample code demonstrates a sequence for collecting counters between events:
 ```c
-    // Encode the function call to measure
-    ${x}CommandListEncodeSignalEvent(hCommandList, hEventBegin);
-    ${x}CommandListEncodeDispatchFunction(hCommandList, hFunction, &dispatchArgs, hEventEnd);
+    // Append the function call to measure
+    ${x}CommandListAppendSignalEvent(hCommandList, hEventBegin);
+    ${x}CommandListAppendDispatchFunction(hCommandList, hFunction, &dispatchArgs, hEventEnd);
 
     // Enqueue the command list into a command queue
     ${x}CommandQueueEnqueueCommandLists(hCommandQueue, 1, &hCommandList, nullptr);
@@ -519,13 +519,13 @@ The required matrix of capabilities are:
 ${"###"} Cache Hints, Prefetch, and Memory Advice
 Cacheability hints may be provided via separate host and device allocation flags when memory is allocated.
 
-**Shared** allocations may be prefetched to a supporting device via the ::${x}CommandListEncodeMemoryPrefetch API.
+**Shared** allocations may be prefetched to a supporting device via the ::${x}CommandListAppendMemoryPrefetch API.
 Prefetching may allow memory transfers to be scheduled concurrently with other computations and may improve performance.
 
-Additionally, an application may provide memory advice for a **shared** allocation via the ::${x}CommandListEncodeMemAdvise API, to override driver heuristics or migration policies.
+Additionally, an application may provide memory advice for a **shared** allocation via the ::${x}CommandListAppendMemAdvise API, to override driver heuristics or migration policies.
 Memory advice may avoid unnecessary or unprofitable memory transfers and may improve performance.
 
-Both prefetch and memory advice are asynchronous operations that are encoded into command lists.
+Both prefetch and memory advice are asynchronous operations that are appended into command lists.
 
 ${"##"} Images
 An image is used to store multi-dimensional and format-defined memory for optimal device access.
@@ -546,7 +546,7 @@ and avoids exposing these details in the API in a backwards compatible fashion.
     ${x}DeviceCreateImage(hDevice, &imageDesc, &hImage);
 
     // upload contents from host pointer
-    ${x}CommandListEncodeImageCopyFromMemory(hCommandList, hImage, nullptr, pImageData);
+    ${x}CommandListAppendImageCopyFromMemory(hCommandList, hImage, nullptr, pImageData);
     ...
 ```
 
@@ -592,10 +592,10 @@ The following sample code demonstrate a sequence for using coarse-grain residenc
     ${x}HostMemAlloc(hAllocator, ${X}_HOST_MEM_ALLOC_FLAG_DEFAULT, sizeof(node), 1, &begin->next);
     ${x}HostMemAlloc(hAllocator, ${X}_HOST_MEM_ALLOC_FLAG_DEFAULT, sizeof(node), 1, &begin->next->next);
 
-    // 'begin' is passed as function argument and encoded into command list
+    // 'begin' is passed as function argument and appended into command list
     ${x}FunctionSetAttribute(hFuncArgs, ${X}_FUNCTION_SET_ATTR_INDIRECT_HOST_ACCESS, TRUE);
     ${x}FunctionSetArgumentValue(hFunction, 0, sizeof(node*), &begin);
-    ${x}CommandListEncodeDispatchFunction(hCommandList, hFunction, &dispatchArgs, nullptr);
+    ${x}CommandListAppendDispatchFunction(hCommandList, hFunction, &dispatchArgs, nullptr);
     ...
 
     ${x}CommandQueueEnqueueCommandLists(hCommandQueue, 1, &hCommandList, nullptr);
@@ -612,9 +612,9 @@ The following sample code demonstrate a sequence for using fine-grain residency 
     ${x}HostMemAlloc(hAllocator, ${X}_HOST_MEM_ALLOC_FLAG_DEFAULT, sizeof(node), 1, &begin->next);
     ${x}HostMemAlloc(hAllocator, ${X}_HOST_MEM_ALLOC_FLAG_DEFAULT, sizeof(node), 1, &begin->next->next);
 
-    // 'begin' is passed as function argument and encoded into command list
+    // 'begin' is passed as function argument and appended into command list
     ${x}FunctionSetArgumentValue(hFunction, 0, sizeof(node*), &begin);
-    ${x}CommandListEncodeDispatchFunction(hCommandList, hFunction, &dispatchArgs, nullptr);
+    ${x}CommandListAppendDispatchFunction(hCommandList, hFunction, &dispatchArgs, nullptr);
     ...
 
     // Make indirect allocations resident before enqueuing
@@ -774,7 +774,7 @@ ${"##"} Execution
 ${"###"} Function Group Size
 The group size for a function can be set using ::${x}FunctionSetGroupSize. If a group size is not
 set prior to encoding a dispatch function into a command list then a default will be chosen.
-The group size can updated over a series of encode dispatch operations. The driver will copy the
+The group size can updated over a series of append dispatch operations. The driver will copy the
 group size information when encoding the dispatch function into the command list.
 
 ```c
@@ -800,7 +800,7 @@ group size that was set on the function using ::${x}FunctionSetGroupSize.
 ${"###"} <a name="arg">Function Arguments</a>
 Function arguments represent only the explicit function arguments that are within "brackets" e.g. func(arg1, arg2, ...).
 - Use ::${x}FunctionSetArgumentValue to setup arguments for a function dispatch.
-- The EncodeDispatchFunction command will make a copy the function arguments to send to the device.
+- The AppendDispatchFunction command will make a copy the function arguments to send to the device.
 - Function arguments can be updated at anytime and used across multiple dispatches.
 
 The following sample code demonstrates a sequence for creating function args and dispatching the function:
@@ -816,22 +816,22 @@ The following sample code demonstrates a sequence for creating function args and
         numRegionsX, numRegionsY, 1
         };
 
-    // Encode dispatch command
-    ${x}CommandListEncodeDispatchFunction(hCommandList, hFunction, &dispatchArgs, nullptr);
+    // Append dispatch command
+    ${x}CommandListAppendDispatchFunction(hCommandList, hFunction, &dispatchArgs, nullptr);
 
     // Update image pointers to copy and scale next image.
     ${x}FunctionSetArgumentValue(hFunction, 0, sizeof(${x}_image_handle_t), &src2_image);
     ${x}FunctionSetArgumentValue(hFunction, 1, sizeof(${x}_image_handle_t), &dest2_image);
 
-    // Encode dispatch command
-    ${x}CommandListEncodeDispatchFunction(hCommandList, hFunction, &dispatchArgs, nullptr);
+    // Append dispatch command
+    ${x}CommandListAppendDispatchFunction(hCommandList, hFunction, &dispatchArgs, nullptr);
 
     ...
 ```
 
 ${"###"} <a name="arg">Function Dispatch</a>
-In order to invoke a function on the device you must call one of the CommandListEncodeDispatch* functions for
-a command list. The most basic version of these is ::${x}CommandListEncodeDispatchFunction which takes a
+In order to invoke a function on the device you must call one of the CommandListAppendDispatch* functions for
+a command list. The most basic version of these is ::${x}CommandListAppendDispatchFunction which takes a
 command list, function, dispatch arguments, and an optional synchronization event used to signal completion.
 The dispatch arguments contain group dispatch dimensions.
 
@@ -842,11 +842,11 @@ The dispatch arguments contain group dispatch dimensions.
 
     ${x}_dispatch_function_arguments_t dispatchArgs = { numGroupsX, numGroupsY, 1 };
 
-    // Encode dispatch command
-    ${x}CommandListEncodeDispatchFunction(hCommandList, hFunction, &dispatchArgs, nullptr);
+    // Append dispatch command
+    ${x}CommandListAppendDispatchFunction(hCommandList, hFunction, &dispatchArgs, nullptr);
 ```
 
-::${x}CommandListEncodeDispatchFunctionIndirect allows the dispatch parameters to be supplied indirectly in a
+::${x}CommandListAppendDispatchFunctionIndirect allows the dispatch parameters to be supplied indirectly in a
 buffer that the device reads instead of the command itself. This allows for the previous operations on the
 device to generate the parameters.
 
@@ -856,8 +856,8 @@ device to generate the parameters.
     ...
     ${x}MemAlloc(hMemAlloc, hDevice, flags, sizeof(${x}_dispatch_function_arguments_t), sizeof(uint32_t), &pDispatchArgs);
 
-    // Encode dispatch command
-    ${x}CommandListEncodeDispatchFunctionIndirect(hCommandList, hFunction, &pDispatchArgs, nullptr);
+    // Append dispatch command
+    ${x}CommandListAppendDispatchFunctionIndirect(hCommandList, hFunction, &pDispatchArgs, nullptr);
 ```
 
 ${"##"} <a name="arg">Sampler</a>
@@ -887,8 +887,8 @@ The following is sample for code creating a sampler object and passing it as a F
     // The sampler can be passed as a function argument.
     ${x}FunctionSetArgumentValue(hFunction, 0, sizeof(${x}_sampler_handle_t), &sampler);
 
-    // Encode dispatch command
-    ${x}CommandListEncodeDispatchFunction(hCommandList, hFunction, &dispatchArgs, nullptr);
+    // Append dispatch command
+    ${x}CommandListAppendDispatchFunction(hCommandList, hFunction, &dispatchArgs, nullptr);
 ```
 
 ${"#"} <a name="oi">OpenCL Interoperability</a>

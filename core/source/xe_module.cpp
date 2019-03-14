@@ -895,10 +895,10 @@ xeFunctionGetAttribute(
 ///         + invalid dispatch count range for dispatch
 ///     - ::XE_RESULT_ERROR_UNSUPPORTED
 ///
-/// @hash {96b874529667a3e920d6d40c8011400e436ae8197ce31acaff293345e377e730}
+/// @hash {9bcf4b87c43a49d8c243a2f3cb1e6f70ae1f6bec87cd94505f4b2ef3ac7d7bf5}
 ///
 __xedllexport xe_result_t __xecall
-xeCommandListEncodeDispatchFunction(
+xeCommandListAppendDispatchFunction(
     xe_command_list_handle_t hCommandList,          ///< [in] handle of the command list
     xe_function_handle_t hFunction,                 ///< [in] handle of the function object
     const xe_dispatch_function_arguments_t* pDispatchFuncArgs,  ///< [in] dispatch function arguments.
@@ -919,7 +919,7 @@ xeCommandListEncodeDispatchFunction(
 #if defined(XE_NULLDRV)
         return XE_RESULT_SUCCESS;
 #else
-        return L0::CommandList::fromHandle(hCommandList)->encodeDispatchFunction(hFunction, pDispatchFuncArgs, hEvent);
+        return L0::CommandList::fromHandle(hCommandList)->appendDispatchFunction(hFunction, pDispatchFuncArgs, hEvent);
 #endif
         /// @end
     }
@@ -963,10 +963,10 @@ xeCommandListEncodeDispatchFunction(
 ///         + nullptr == pDispatchArgumentsBuffer
 ///     - ::XE_RESULT_ERROR_UNSUPPORTED
 ///
-/// @hash {cfc23fcde14181c3db9ea6ce3d52e31011fceb83c31e47f9e09599906991da43}
+/// @hash {200f93f491a8a50d9a72f6b09819db2cf0498468ab084408de06eb57164e7c3b}
 ///
 __xedllexport xe_result_t __xecall
-xeCommandListEncodeDispatchFunctionIndirect(
+xeCommandListAppendDispatchFunctionIndirect(
     xe_command_list_handle_t hCommandList,          ///< [in] handle of the command list
     xe_function_handle_t hFunction,                 ///< [in] handle of the function object
     const xe_dispatch_function_arguments_t* pDispatchArgumentsBuffer,   ///< [in] pointer to device buffer that will contain dispatch arguments
@@ -987,7 +987,7 @@ xeCommandListEncodeDispatchFunctionIndirect(
 #if defined(XE_NULLDRV)
         return XE_RESULT_SUCCESS;
 #else
-        return L0::CommandList::fromHandle(hCommandList)->encodeDispatchFunctionIndirect(hFunction, pDispatchArgumentsBuffer, hEvent);
+        return L0::CommandList::fromHandle(hCommandList)->appendDispatchFunctionIndirect(hFunction, pDispatchArgumentsBuffer, hEvent);
 #endif
         /// @end
     }
@@ -1032,10 +1032,10 @@ xeCommandListEncodeDispatchFunctionIndirect(
 ///         + nullptr == pDispatchArgumentsBuffer
 ///     - ::XE_RESULT_ERROR_UNSUPPORTED
 ///
-/// @hash {6d27e99f59f199ff7b8518a5f19c177fed937aca1d44f3e7ed2105f34d01b18b}
+/// @hash {dfa34c73608a2134801a4562c35e9c56052dc24b04c691644bf1809e105835fc}
 ///
 __xedllexport xe_result_t __xecall
-xeCommandListEncodeDispatchMultipleFunctionsIndirect(
+xeCommandListAppendDispatchMultipleFunctionsIndirect(
     xe_command_list_handle_t hCommandList,          ///< [in] handle of the command list
     uint32_t numFunctions,                          ///< [in] maximum number of functions to dispatch
     const xe_function_handle_t* phFunctions,        ///< [in] handles of the function objects
@@ -1062,7 +1062,7 @@ xeCommandListEncodeDispatchMultipleFunctionsIndirect(
 #if defined(XE_NULLDRV)
         return XE_RESULT_SUCCESS;
 #else
-        return L0::CommandList::fromHandle(hCommandList)->encodeDispatchMultipleFunctionsIndirect(numFunctions, phFunctions, pNumDispatchArguments, pDispatchArgumentsBuffer, hEvent);
+        return L0::CommandList::fromHandle(hCommandList)->appendDispatchMultipleFunctionsIndirect(numFunctions, phFunctions, pNumDispatchArguments, pDispatchArgumentsBuffer, hEvent);
 #endif
         /// @end
     }
@@ -1102,10 +1102,10 @@ xeCommandListEncodeDispatchMultipleFunctionsIndirect(
 ///         + nullptr == pUserData
 ///     - ::XE_RESULT_ERROR_UNSUPPORTED
 ///
-/// @hash {8ddd72df6076aceb0a6d679304fad310ca0ffea356bd56ad8f0f4f0208daa2dc}
+/// @hash {4788cfcb56f16d9df12bda8047f9086878b9fa3a5a6d6d8b650782725ee59c6b}
 ///
 __xedllexport xe_result_t __xecall
-xeCommandListEncodeDispatchHostFunction(
+xeCommandListAppendDispatchHostFunction(
     xe_command_list_handle_t hCommandList,          ///< [in] handle of the command list
     xe_host_pfn_t pfnHostFunc,                      ///< [in] pointer to host function.
     void* pUserData                                 ///< [in] pointer to user data to pass to host function.
@@ -1124,7 +1124,7 @@ xeCommandListEncodeDispatchHostFunction(
 #if defined(XE_NULLDRV)
         return XE_RESULT_SUCCESS;
 #else
-        return L0::CommandList::fromHandle(hCommandList)->encodeDispatchHostFunction(pfnHostFunc, pUserData);
+        return L0::CommandList::fromHandle(hCommandList)->appendDispatchHostFunction(pfnHostFunc, pUserData);
 #endif
         /// @end
     }

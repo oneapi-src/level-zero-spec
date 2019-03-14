@@ -286,7 +286,7 @@ xeCommandListResetParameters(
     );
 
 ///////////////////////////////////////////////////////////////////////////////
-/// @brief Encode a command list into another command list.
+/// @brief Append a command list into another command list.
 /// 
 /// @details
 ///     - The application may **not** call this function from simultaneous
@@ -303,10 +303,10 @@ xeCommandListResetParameters(
 ///         + 0 for numCommandLists
 ///     - ::XE_RESULT_ERROR_UNSUPPORTED
 __xedllport xe_result_t __xecall
-xeCommandListEncodeCommandLists(
+xeCommandListAppendCommandLists(
     xe_command_list_handle_t hCommandList,          ///< [in] handle of the command list
-    uint32_t numCommandLists,                       ///< [in] number of command lists to encode
-    xe_command_list_handle_t* phCommandLists        ///< [in] list of handles of the command lists to encode for execution
+    uint32_t numCommandLists,                       ///< [in] number of command lists to append
+    xe_command_list_handle_t* phCommandLists        ///< [in] list of handles of the command lists to append for execution
     );
 
 ///////////////////////////////////////////////////////////////////////////////

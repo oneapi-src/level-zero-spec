@@ -143,7 +143,7 @@ Each API function must document details on the multithreading requirements for t
 The primary usage-model enabled by these rules is:
 - work submission occurs exclusively by enqueing command lists into a command queue
 - work submission into a command queue is free-threaded
-- multiple, simulateneous threads may encode multiple command lists independently
+- multiple, simulateneous threads may append multiple command lists independently
 
 ${"#"} <a name="drv">Drivers</a>
 ${"##"} Installation

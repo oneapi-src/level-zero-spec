@@ -39,7 +39,7 @@
 namespace xe
 {
     ///////////////////////////////////////////////////////////////////////////////
-    /// @brief C++ wrapper for ::xeCommandListEncodeExecutionBarrier
+    /// @brief C++ wrapper for ::xeCommandListAppendExecutionBarrier
     /// 
     /// @details
     ///     - The application may **not** call this function from simultaneous
@@ -53,12 +53,12 @@ namespace xe
     /// 
     /// @throws result_t
     inline void 
-    CommandList::EncodeExecutionBarrier(
+    CommandList::AppendExecutionBarrier(
         void
         )
     {
-        // auto result = ::xeCommandListEncodeExecutionBarrier( handle );
-        // if( ::XE_RESULT_SUCCESS != result ) throw exception(result, "xe::CommandList::EncodeExecutionBarrier");
+        // auto result = ::xeCommandListAppendExecutionBarrier( handle );
+        // if( ::XE_RESULT_SUCCESS != result ) throw exception(result, "xe::CommandList::AppendExecutionBarrier");
     }
 
     ///////////////////////////////////////////////////////////////////////////////
@@ -191,7 +191,7 @@ namespace xe
     }
 
     ///////////////////////////////////////////////////////////////////////////////
-    /// @brief C++ wrapper for ::xeCommandListEncodeCommandLists
+    /// @brief C++ wrapper for ::xeCommandListAppendCommandLists
     /// 
     /// @details
     ///     - The application may **not** call this function from simultaneous
@@ -200,13 +200,13 @@ namespace xe
     /// 
     /// @throws result_t
     inline void 
-    CommandList::EncodeCommandLists(
-        uint32_t numCommandLists,                       ///< [in] number of command lists to encode
-        command_list_handle_t* phCommandLists           ///< [in] list of handles of the command lists to encode for execution
+    CommandList::AppendCommandLists(
+        uint32_t numCommandLists,                       ///< [in] number of command lists to append
+        command_list_handle_t* phCommandLists           ///< [in] list of handles of the command lists to append for execution
         )
     {
-        // auto result = ::xeCommandListEncodeCommandLists( handle, numCommandLists, phCommandLists->getHandle() );
-        // if( ::XE_RESULT_SUCCESS != result ) throw exception(result, "xe::CommandList::EncodeCommandLists");
+        // auto result = ::xeCommandListAppendCommandLists( handle, numCommandLists, phCommandLists->getHandle() );
+        // if( ::XE_RESULT_SUCCESS != result ) throw exception(result, "xe::CommandList::AppendCommandLists");
     }
 
     ///////////////////////////////////////////////////////////////////////////////
@@ -232,7 +232,7 @@ namespace xe
     }
 
     ///////////////////////////////////////////////////////////////////////////////
-    /// @brief C++ wrapper for ::xeCommandListEncodeMemoryCopy
+    /// @brief C++ wrapper for ::xeCommandListAppendMemoryCopy
     /// 
     /// @details
     ///     - The memory pointed to by both srcptr and dstptr must be accessible by
@@ -250,18 +250,18 @@ namespace xe
     /// 
     /// @throws result_t
     inline void 
-    CommandList::EncodeMemoryCopy(
+    CommandList::AppendMemoryCopy(
         void* dstptr,                                   ///< [in] pointer to destination memory to copy to
         const void* srcptr,                             ///< [in] pointer to source memory to copy from
         size_t size                                     ///< [in] size in bytes to copy
         )
     {
-        // auto result = ::xeCommandListEncodeMemoryCopy( handle, dstptr, srcptr, size );
-        // if( ::XE_RESULT_SUCCESS != result ) throw exception(result, "xe::CommandList::EncodeMemoryCopy");
+        // auto result = ::xeCommandListAppendMemoryCopy( handle, dstptr, srcptr, size );
+        // if( ::XE_RESULT_SUCCESS != result ) throw exception(result, "xe::CommandList::AppendMemoryCopy");
     }
 
     ///////////////////////////////////////////////////////////////////////////////
-    /// @brief C++ wrapper for ::xeCommandListEncodeMemorySet
+    /// @brief C++ wrapper for ::xeCommandListAppendMemorySet
     /// 
     /// @details
     ///     - The memory pointed to by dstptr must be accessible by the device on
@@ -279,18 +279,18 @@ namespace xe
     /// 
     /// @throws result_t
     inline void 
-    CommandList::EncodeMemorySet(
+    CommandList::AppendMemorySet(
         void* ptr,                                      ///< [in] pointer to memory to initialize
         int value,                                      ///< [in] value to initialize memory to
         size_t size                                     ///< [in] size in bytes to initailize
         )
     {
-        // auto result = ::xeCommandListEncodeMemorySet( handle, ptr, value, size );
-        // if( ::XE_RESULT_SUCCESS != result ) throw exception(result, "xe::CommandList::EncodeMemorySet");
+        // auto result = ::xeCommandListAppendMemorySet( handle, ptr, value, size );
+        // if( ::XE_RESULT_SUCCESS != result ) throw exception(result, "xe::CommandList::AppendMemorySet");
     }
 
     ///////////////////////////////////////////////////////////////////////////////
-    /// @brief C++ wrapper for ::xeCommandListEncodeImageCopy
+    /// @brief C++ wrapper for ::xeCommandListAppendImageCopy
     /// 
     /// @details
     ///     - The application may **not** call this function from simultaneous
@@ -303,17 +303,17 @@ namespace xe
     /// 
     /// @throws result_t
     inline void 
-    CommandList::EncodeImageCopy(
+    CommandList::AppendImageCopy(
         image_handle_t hDstImage,                       ///< [in] handle of destination image to copy to
         image_handle_t hSrcImage                        ///< [in] handle of source image to copy from
         )
     {
-        // auto result = ::xeCommandListEncodeImageCopy( handle, hDstImage->getHandle(), hSrcImage->getHandle() );
-        // if( ::XE_RESULT_SUCCESS != result ) throw exception(result, "xe::CommandList::EncodeImageCopy");
+        // auto result = ::xeCommandListAppendImageCopy( handle, hDstImage->getHandle(), hSrcImage->getHandle() );
+        // if( ::XE_RESULT_SUCCESS != result ) throw exception(result, "xe::CommandList::AppendImageCopy");
     }
 
     ///////////////////////////////////////////////////////////////////////////////
-    /// @brief C++ wrapper for ::xeCommandListEncodeImageCopyRegion
+    /// @brief C++ wrapper for ::xeCommandListAppendImageCopyRegion
     /// 
     /// @details
     ///     - The application may **not** call this function from simultaneous
@@ -322,19 +322,19 @@ namespace xe
     /// 
     /// @throws result_t
     inline void 
-    CommandList::EncodeImageCopyRegion(
+    CommandList::AppendImageCopyRegion(
         image_handle_t hDstImage,                       ///< [in] handle of destination image to copy to
         image_region_t* pDstRegion,                     ///< [in][optional] destination region descriptor
         image_handle_t hSrcImage,                       ///< [in] handle of source image to copy from
         image_region_t* pSrcRegion                      ///< [in][optional] source region descriptor
         )
     {
-        // auto result = ::xeCommandListEncodeImageCopyRegion( handle, hDstImage->getHandle(), pDstRegion, hSrcImage->getHandle(), pSrcRegion );
-        // if( ::XE_RESULT_SUCCESS != result ) throw exception(result, "xe::CommandList::EncodeImageCopyRegion");
+        // auto result = ::xeCommandListAppendImageCopyRegion( handle, hDstImage->getHandle(), pDstRegion, hSrcImage->getHandle(), pSrcRegion );
+        // if( ::XE_RESULT_SUCCESS != result ) throw exception(result, "xe::CommandList::AppendImageCopyRegion");
     }
 
     ///////////////////////////////////////////////////////////////////////////////
-    /// @brief C++ wrapper for ::xeCommandListEncodeImageCopyToMemory
+    /// @brief C++ wrapper for ::xeCommandListAppendImageCopyToMemory
     /// 
     /// @details
     ///     - The memory pointed to by dstptr must be accessible by the device on
@@ -349,18 +349,18 @@ namespace xe
     /// 
     /// @throws result_t
     inline void 
-    CommandList::EncodeImageCopyToMemory(
+    CommandList::AppendImageCopyToMemory(
         void* dstptr,                                   ///< [in] pointer to destination memory to copy to
         image_handle_t hSrcImage,                       ///< [in] handle of source image to copy from
         image_region_t* pSrcRegion                      ///< [in][optional] source region descriptor
         )
     {
-        // auto result = ::xeCommandListEncodeImageCopyToMemory( handle, dstptr, hSrcImage->getHandle(), pSrcRegion );
-        // if( ::XE_RESULT_SUCCESS != result ) throw exception(result, "xe::CommandList::EncodeImageCopyToMemory");
+        // auto result = ::xeCommandListAppendImageCopyToMemory( handle, dstptr, hSrcImage->getHandle(), pSrcRegion );
+        // if( ::XE_RESULT_SUCCESS != result ) throw exception(result, "xe::CommandList::AppendImageCopyToMemory");
     }
 
     ///////////////////////////////////////////////////////////////////////////////
-    /// @brief C++ wrapper for ::xeCommandListEncodeImageCopyFromMemory
+    /// @brief C++ wrapper for ::xeCommandListAppendImageCopyFromMemory
     /// 
     /// @details
     ///     - The memory pointed to by srcptr must be accessible by the device on
@@ -375,18 +375,18 @@ namespace xe
     /// 
     /// @throws result_t
     inline void 
-    CommandList::EncodeImageCopyFromMemory(
+    CommandList::AppendImageCopyFromMemory(
         image_handle_t hDstImage,                       ///< [in] handle of destination image to copy to
         image_region_t* pDstRegion,                     ///< [in][optional] destination region descriptor
         const void* srcptr                              ///< [in] pointer to source memory to copy from
         )
     {
-        // auto result = ::xeCommandListEncodeImageCopyFromMemory( handle, hDstImage->getHandle(), pDstRegion, srcptr );
-        // if( ::XE_RESULT_SUCCESS != result ) throw exception(result, "xe::CommandList::EncodeImageCopyFromMemory");
+        // auto result = ::xeCommandListAppendImageCopyFromMemory( handle, hDstImage->getHandle(), pDstRegion, srcptr );
+        // if( ::XE_RESULT_SUCCESS != result ) throw exception(result, "xe::CommandList::AppendImageCopyFromMemory");
     }
 
     ///////////////////////////////////////////////////////////////////////////////
-    /// @brief C++ wrapper for ::xeCommandListEncodeMemoryPrefetch
+    /// @brief C++ wrapper for ::xeCommandListAppendMemoryPrefetch
     /// 
     /// @details
     ///     - This is a hint to improve performance only and is not required for
@@ -405,17 +405,17 @@ namespace xe
     /// 
     /// @throws result_t
     inline void 
-    CommandList::EncodeMemoryPrefetch(
+    CommandList::AppendMemoryPrefetch(
         const void* ptr,                                ///< [in] pointer to start of the memory region to prefetch
         size_t count                                    ///< [in] size in bytes of the memory region to prefetch
         )
     {
-        // auto result = ::xeCommandListEncodeMemoryPrefetch( handle, ptr, count );
-        // if( ::XE_RESULT_SUCCESS != result ) throw exception(result, "xe::CommandList::EncodeMemoryPrefetch");
+        // auto result = ::xeCommandListAppendMemoryPrefetch( handle, ptr, count );
+        // if( ::XE_RESULT_SUCCESS != result ) throw exception(result, "xe::CommandList::AppendMemoryPrefetch");
     }
 
     ///////////////////////////////////////////////////////////////////////////////
-    /// @brief C++ wrapper for ::xeCommandListEncodeMemAdvise
+    /// @brief C++ wrapper for ::xeCommandListAppendMemAdvise
     /// 
     /// @details
     ///     - Memory advice is a performance hint only; applications are not
@@ -437,19 +437,19 @@ namespace xe
     /// 
     /// @throws result_t
     inline void 
-    CommandList::EncodeMemAdvise(
+    CommandList::AppendMemAdvise(
         device_handle_t hDevice,                        ///< [in] device associated with the memory advice
         const void* ptr,                                ///< [in] Pointer to the start of the memory range
         size_t size,                                    ///< [in] Size in bytes of the memory range
         memory_advice_t advice                          ///< [in] Memory advice for the memory range
         )
     {
-        // auto result = ::xeCommandListEncodeMemAdvise( handle, hDevice->getHandle(), ptr, size, advice );
-        // if( ::XE_RESULT_SUCCESS != result ) throw exception(result, "xe::CommandList::EncodeMemAdvise");
+        // auto result = ::xeCommandListAppendMemAdvise( handle, hDevice->getHandle(), ptr, size, advice );
+        // if( ::XE_RESULT_SUCCESS != result ) throw exception(result, "xe::CommandList::AppendMemAdvise");
     }
 
     ///////////////////////////////////////////////////////////////////////////////
-    /// @brief C++ wrapper for ::xeCommandListEncodeSignalEvent
+    /// @brief C++ wrapper for ::xeCommandListAppendSignalEvent
     /// 
     /// @details
     ///     - The application may **not** call this function from simultaneous
@@ -464,16 +464,16 @@ namespace xe
     /// 
     /// @throws result_t
     inline void 
-    CommandList::EncodeSignalEvent(
+    CommandList::AppendSignalEvent(
         event_handle_t hEvent                           ///< [in] handle of the event
         )
     {
-        // auto result = ::xeCommandListEncodeSignalEvent( handle, hEvent->getHandle() );
-        // if( ::XE_RESULT_SUCCESS != result ) throw exception(result, "xe::CommandList::EncodeSignalEvent");
+        // auto result = ::xeCommandListAppendSignalEvent( handle, hEvent->getHandle() );
+        // if( ::XE_RESULT_SUCCESS != result ) throw exception(result, "xe::CommandList::AppendSignalEvent");
     }
 
     ///////////////////////////////////////////////////////////////////////////////
-    /// @brief C++ wrapper for ::xeCommandListEncodeWaitOnEvent
+    /// @brief C++ wrapper for ::xeCommandListAppendWaitOnEvent
     /// 
     /// @details
     ///     - The application may **not** call this function from simultaneous
@@ -482,16 +482,16 @@ namespace xe
     /// 
     /// @throws result_t
     inline void 
-    CommandList::EncodeWaitOnEvent(
+    CommandList::AppendWaitOnEvent(
         event_handle_t hEvent                           ///< [in] handle of the event
         )
     {
-        // auto result = ::xeCommandListEncodeWaitOnEvent( handle, hEvent->getHandle() );
-        // if( ::XE_RESULT_SUCCESS != result ) throw exception(result, "xe::CommandList::EncodeWaitOnEvent");
+        // auto result = ::xeCommandListAppendWaitOnEvent( handle, hEvent->getHandle() );
+        // if( ::XE_RESULT_SUCCESS != result ) throw exception(result, "xe::CommandList::AppendWaitOnEvent");
     }
 
     ///////////////////////////////////////////////////////////////////////////////
-    /// @brief C++ wrapper for ::xeCommandListEncodeEventReset
+    /// @brief C++ wrapper for ::xeCommandListAppendEventReset
     /// 
     /// @details
     ///     - The application may **not** call this function from simultaneous
@@ -504,16 +504,16 @@ namespace xe
     /// 
     /// @throws result_t
     inline void 
-    CommandList::EncodeEventReset(
+    CommandList::AppendEventReset(
         event_handle_t hEvent                           ///< [in] handle of the event
         )
     {
-        // auto result = ::xeCommandListEncodeEventReset( handle, hEvent->getHandle() );
-        // if( ::XE_RESULT_SUCCESS != result ) throw exception(result, "xe::CommandList::EncodeEventReset");
+        // auto result = ::xeCommandListAppendEventReset( handle, hEvent->getHandle() );
+        // if( ::XE_RESULT_SUCCESS != result ) throw exception(result, "xe::CommandList::AppendEventReset");
     }
 
     ///////////////////////////////////////////////////////////////////////////////
-    /// @brief C++ wrapper for ::xeCommandListEncodeDispatchFunction
+    /// @brief C++ wrapper for ::xeCommandListAppendDispatchFunction
     /// 
     /// @details
     ///     - This function may **not** be called from simultaneous threads.
@@ -525,18 +525,18 @@ namespace xe
     /// 
     /// @throws result_t
     inline void 
-    CommandList::EncodeDispatchFunction(
+    CommandList::AppendDispatchFunction(
         function_handle_t hFunction,                    ///< [in] handle of the function object
         const dispatch_function_arguments_t* pDispatchFuncArgs, ///< [in] dispatch function arguments.
         event_handle_t hEvent                           ///< [in][optional] handle of the event to signal on completion
         )
     {
-        // auto result = ::xeCommandListEncodeDispatchFunction( handle, hFunction->getHandle(), pDispatchFuncArgs, hEvent->getHandle() );
-        // if( ::XE_RESULT_SUCCESS != result ) throw exception(result, "xe::CommandList::EncodeDispatchFunction");
+        // auto result = ::xeCommandListAppendDispatchFunction( handle, hFunction->getHandle(), pDispatchFuncArgs, hEvent->getHandle() );
+        // if( ::XE_RESULT_SUCCESS != result ) throw exception(result, "xe::CommandList::AppendDispatchFunction");
     }
 
     ///////////////////////////////////////////////////////////////////////////////
-    /// @brief C++ wrapper for ::xeCommandListEncodeDispatchFunctionIndirect
+    /// @brief C++ wrapper for ::xeCommandListAppendDispatchFunctionIndirect
     /// 
     /// @details
     ///     - The dispatch arguments need to be device visible.
@@ -551,18 +551,18 @@ namespace xe
     /// 
     /// @throws result_t
     inline void 
-    CommandList::EncodeDispatchFunctionIndirect(
+    CommandList::AppendDispatchFunctionIndirect(
         function_handle_t hFunction,                    ///< [in] handle of the function object
         const dispatch_function_arguments_t* pDispatchArgumentsBuffer,  ///< [in] pointer to device buffer that will contain dispatch arguments
         event_handle_t hEvent                           ///< [in][optional] handle of the event to signal on completion
         )
     {
-        // auto result = ::xeCommandListEncodeDispatchFunctionIndirect( handle, hFunction->getHandle(), pDispatchArgumentsBuffer, hEvent->getHandle() );
-        // if( ::XE_RESULT_SUCCESS != result ) throw exception(result, "xe::CommandList::EncodeDispatchFunctionIndirect");
+        // auto result = ::xeCommandListAppendDispatchFunctionIndirect( handle, hFunction->getHandle(), pDispatchArgumentsBuffer, hEvent->getHandle() );
+        // if( ::XE_RESULT_SUCCESS != result ) throw exception(result, "xe::CommandList::AppendDispatchFunctionIndirect");
     }
 
     ///////////////////////////////////////////////////////////////////////////////
-    /// @brief C++ wrapper for ::xeCommandListEncodeDispatchMultipleFunctionsIndirect
+    /// @brief C++ wrapper for ::xeCommandListAppendDispatchMultipleFunctionsIndirect
     /// 
     /// @details
     ///     - The array of dispatch arguments need to be device visible.
@@ -577,7 +577,7 @@ namespace xe
     /// 
     /// @throws result_t
     inline void 
-    CommandList::EncodeDispatchMultipleFunctionsIndirect(
+    CommandList::AppendDispatchMultipleFunctionsIndirect(
         uint32_t numFunctions,                          ///< [in] maximum number of functions to dispatch
         const function_handle_t* phFunctions,           ///< [in] handles of the function objects
         const size_t* pNumDispatchArguments,            ///< [in] pointer to device memory location that will contain the actual
@@ -588,12 +588,12 @@ namespace xe
         event_handle_t hEvent                           ///< [in][optional] handle of the event to signal on completion
         )
     {
-        // auto result = ::xeCommandListEncodeDispatchMultipleFunctionsIndirect( handle, numFunctions, phFunctions, pNumDispatchArguments, pDispatchArgumentsBuffer, hEvent->getHandle() );
-        // if( ::XE_RESULT_SUCCESS != result ) throw exception(result, "xe::CommandList::EncodeDispatchMultipleFunctionsIndirect");
+        // auto result = ::xeCommandListAppendDispatchMultipleFunctionsIndirect( handle, numFunctions, phFunctions, pNumDispatchArguments, pDispatchArgumentsBuffer, hEvent->getHandle() );
+        // if( ::XE_RESULT_SUCCESS != result ) throw exception(result, "xe::CommandList::AppendDispatchMultipleFunctionsIndirect");
     }
 
     ///////////////////////////////////////////////////////////////////////////////
-    /// @brief C++ wrapper for ::xeCommandListEncodeDispatchHostFunction
+    /// @brief C++ wrapper for ::xeCommandListAppendDispatchHostFunction
     /// 
     /// @details
     ///     - This function may **not** be called from simultaneous threads.
@@ -605,13 +605,13 @@ namespace xe
     /// 
     /// @throws result_t
     inline void 
-    CommandList::EncodeDispatchHostFunction(
+    CommandList::AppendDispatchHostFunction(
         host_pfn_t pfnHostFunc,                         ///< [in] pointer to host function.
         void* pUserData                                 ///< [in] pointer to user data to pass to host function.
         )
     {
-        // auto result = ::xeCommandListEncodeDispatchHostFunction( handle, pfnHostFunc, pUserData );
-        // if( ::XE_RESULT_SUCCESS != result ) throw exception(result, "xe::CommandList::EncodeDispatchHostFunction");
+        // auto result = ::xeCommandListAppendDispatchHostFunction( handle, pfnHostFunc, pUserData );
+        // if( ::XE_RESULT_SUCCESS != result ) throw exception(result, "xe::CommandList::AppendDispatchHostFunction");
     }
 
 } // namespace xe

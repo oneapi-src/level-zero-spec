@@ -5,7 +5,7 @@ desc: "Intel $Xx Driver APIs for Copies"
 type: function
 desc: "Copies host, device, or shared memory."
 class: $xCommandList
-name: EncodeMemoryCopy
+name: AppendMemoryCopy
 details:
     - "The memory pointed to by both srcptr and dstptr must be accessible by
       the device on which the command list is created."
@@ -33,7 +33,7 @@ params:
 type: function
 desc: "Initializes host, device, or shared memory."
 class: $xCommandList
-name: EncodeMemorySet
+name: AppendMemorySet
 details:
     - "The memory pointed to by dstptr must be accessible by the device on which the command list is created."
     - "The value to initialize memory to is interpreted as an 8-bit unsigned char; the upper 24-bits are ignored."
@@ -59,7 +59,7 @@ params:
 type: function
 desc: "Copies a image."
 class: $xCommandList
-name: EncodeImageCopy
+name: AppendImageCopy
 analogue:
     - "**clEnqueueCopyImage**"
 details:
@@ -93,7 +93,7 @@ members:
 type: function
 desc: "Copies a region of a image to another image."
 class: $xCommandList
-name: EncodeImageCopyRegion
+name: AppendImageCopyRegion
 details:
     - "The application may **not** call this function from simultaneous threads with the same command list handle."
     - "The implementation of this function should be lock-free."
@@ -117,7 +117,7 @@ params:
 type: function
 desc: "Copies from a image to device or shared memory."
 class: $xCommandList
-name: EncodeImageCopyToMemory
+name: AppendImageCopyToMemory
 analogue:
     - clEnqueueReadImage
 details:
@@ -142,7 +142,7 @@ params:
 type: function
 desc: "Copies to a image from device or shared memory."
 class: $xCommandList
-name: EncodeImageCopyFromMemory
+name: AppendImageCopyFromMemory
 analogue:
     - clEnqueueWriteImage
 details:
@@ -168,7 +168,7 @@ type: function
 desc: "Asynchronously prefetches shared memory to the device associated with
       the specified command list"
 class: $xCommandList
-name: EncodeMemoryPrefetch
+name: AppendMemoryPrefetch
 details:
     - "This is a hint to improve performance only and is not required for correctness."
     - "The application may call this function from simultaneous threads."
@@ -220,7 +220,7 @@ etors:
 type: function
 desc: "Provides advice about the use of a shared memory range"
 class: $xCommandList
-name: EncodeMemAdvise
+name: AppendMemAdvise
 analogue:
     - "**cudaMemAdvise**"
 details:

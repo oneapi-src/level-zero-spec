@@ -451,7 +451,7 @@ members:
 type: function
 desc: "Dispatch function over one or more work groups."
 class: $xCommandList
-name: EncodeDispatchFunction
+name: AppendDispatchFunction
 analogue:
     - "**cuLaunchKernel**"
 details:
@@ -478,7 +478,7 @@ returns:
 type: function
 desc: "Dispatch function over one or more work groups using indirect dispatch arguments."
 class: $xCommandList
-name: EncodeDispatchFunctionIndirect
+name: AppendDispatchFunctionIndirect
 analogue:
     - "**cuLaunchKernel**"
 details:
@@ -503,7 +503,7 @@ params:
 type: function
 desc: "Dispatch multiple functions over one or more work groups using an array of indirect dispatch arguments."
 class: $xCommandList
-name: EncodeDispatchMultipleFunctionsIndirect
+name: AppendDispatchMultipleFunctionsIndirect
 analogue:
     - "**cuLaunchKernel**"
 details:
@@ -532,7 +532,7 @@ params:
       desc: "[in][optional] handle of the event to signal on completion"
 --- #--------------------------------------------------------------------------
 type: typedef
-desc: "type definition for host function pointers used with $xCommandListEncodeDispatchHostFunction"
+desc: "type definition for host function pointers used with $xCommandListAppendDispatchHostFunction"
 class: $xCommandList
 name: $x_host_pfn_t
 returns: void
@@ -547,7 +547,7 @@ params:
 type: function
 desc: "Dispatch host function. All work after this command in the command list will block until host function completes."
 class: $xCommandList
-name: EncodeDispatchHostFunction
+name: AppendDispatchHostFunction
 analogue:
     - "**cuLaunchHostFunc**"
 details:

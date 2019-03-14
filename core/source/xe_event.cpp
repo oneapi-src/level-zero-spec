@@ -239,7 +239,7 @@ xeEventDestroy(
 }
 
 ///////////////////////////////////////////////////////////////////////////////
-/// @brief Encodes a signal of the event from the device into a command list.
+/// @brief Appends a signal of the event from the device into a command list.
 /// 
 /// @details
 ///     - The application may **not** call this function from simultaneous
@@ -261,10 +261,10 @@ xeEventDestroy(
 ///         + nullptr == hEvent
 ///     - ::XE_RESULT_ERROR_UNSUPPORTED
 ///
-/// @hash {f66119ce56a773182ebed031c151a8faf6280e74d7b56718b71177f01141bc97}
+/// @hash {ef0d28011f775d958ceb555be2b1461cc174bf0b645a7086af4617a238d567d1}
 ///
 __xedllexport xe_result_t __xecall
-xeCommandListEncodeSignalEvent(
+xeCommandListAppendSignalEvent(
     xe_command_list_handle_t hCommandList,          ///< [in] handle of the command list
     xe_event_handle_t hEvent                        ///< [in] handle of the event
     )
@@ -282,7 +282,7 @@ xeCommandListEncodeSignalEvent(
 #if defined(XE_NULLDRV)
         return XE_RESULT_SUCCESS;
 #else
-        return L0::CommandList::fromHandle(hCommandList)->encodeSignalEvent(hEvent);
+        return L0::CommandList::fromHandle(hCommandList)->appendSignalEvent(hEvent);
 #endif
         /// @end
     }
@@ -302,7 +302,7 @@ xeCommandListEncodeSignalEvent(
 }
 
 ///////////////////////////////////////////////////////////////////////////////
-/// @brief Encodes a wait on event from a host signal into a command list.
+/// @brief Appends a wait on event from a host signal into a command list.
 /// 
 /// @details
 ///     - The application may **not** call this function from simultaneous
@@ -318,10 +318,10 @@ xeCommandListEncodeSignalEvent(
 ///         + nullptr == hEvent
 ///     - ::XE_RESULT_ERROR_UNSUPPORTED
 ///
-/// @hash {b8409ab2ea47c3520b0faabc15232c79b1b0494defcc29b08c09a95b5b4e97df}
+/// @hash {dda8072af72d89bb301747e4ac4ec6e12129883832ebcbdbd6a5acd47d4179ef}
 ///
 __xedllexport xe_result_t __xecall
-xeCommandListEncodeWaitOnEvent(
+xeCommandListAppendWaitOnEvent(
     xe_command_list_handle_t hCommandList,          ///< [in] handle of the command list
     xe_event_handle_t hEvent                        ///< [in] handle of the event
     )
@@ -339,7 +339,7 @@ xeCommandListEncodeWaitOnEvent(
 #if defined(XE_NULLDRV)
         return XE_RESULT_SUCCESS;
 #else
-        return L0::CommandList::fromHandle(hCommandList)->encodeWaitOnEvent(hEvent);
+        return L0::CommandList::fromHandle(hCommandList)->appendWaitOnEvent(hEvent);
 #endif
         /// @end
     }
@@ -689,10 +689,10 @@ xeEventQueryMetricsData(
 ///         + nullptr == hEvent
 ///     - ::XE_RESULT_ERROR_UNSUPPORTED
 ///
-/// @hash {06205f20ab4babe3494b5f61b9e94ba192b5f0f68c0f27e75651983ccc6f0b3e}
+/// @hash {fd917b07e15d242dc28ee8d79b2e3827e834a35da1af31c0f46d031b02255c25}
 ///
 __xedllexport xe_result_t __xecall
-xeCommandListEncodeEventReset(
+xeCommandListAppendEventReset(
     xe_command_list_handle_t hCommandList,          ///< [in] handle of the command list
     xe_event_handle_t hEvent                        ///< [in] handle of the event
     )
@@ -710,7 +710,7 @@ xeCommandListEncodeEventReset(
 #if defined(XE_NULLDRV)
         return XE_RESULT_SUCCESS;
 #else
-        return L0::CommandList::fromHandle(hCommandList)->encodeEventReset(hEvent);
+        return L0::CommandList::fromHandle(hCommandList)->appendEventReset(hEvent);
 #endif
         /// @end
     }
