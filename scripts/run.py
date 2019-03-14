@@ -4,6 +4,7 @@ import parse_specs
 import generate_api
 import compile_api
 import generate_docs
+import os
 import time
 
 """
@@ -20,70 +21,47 @@ Main entry:
     Do everything...
 """
 def main():
-    # define cmdline arguments
-    parser = argparse.ArgumentParser()
-    add_argument(parser, "core", "generation of C/C++ 'core' files.", True)
-    add_argument(parser, "extended", "generation of C/C++ 'extended' files.", True)
-    add_argument(parser, "md", "generation of MD files.", True)
-    add_argument(parser, "html", "generation of HTML files.", True)
-    add_argument(parser, "pdf", "generation of PDF file.")
-    add_argument(parser, "cl", "compilation of generated C/C++ files.")
-    add_argument(parser, "debug", "dump intermediate data to disk.")
-    args = parser.parse_args()
-
     # parse cmdline arguments
     configParser = util.configRead("config.ini")
 
-    start = time.time()
-    # generate 'core' APIs
-    if args.core and util.exists("./core"):
-        specs, meta = parse_specs.parse("./core")
-        if args.debug:
-            util.jsonWrite("./core/specs.json", specs)
-            util.jsonWrite("./core/meta.json", meta)
-        generate_api.generate_cpp(
-            configParser.get('PATH','core'),
-            configParser.get('NAMESPACE','core'),
-            specs, meta)
-        if args.cl:
-            compile_api.compile_cpp_source(
-                configParser.get('PATH','core'),
-                configParser.get('NAMESPACE','core'),
-                specs)
-        if args.md:
-            generate_docs.generate_md(
-                "./core",
-                configParser.get('PATH','core'),
-                configParser.get('NAMESPACE','core'),
-                meta)
+    # define cmdline arguments
+    parser = argparse.ArgumentParser()
+    for section in configParser.sections():
+        add_argument(parser, section, "generation of C/C++ '%s' files."%section, True)
+    add_argument(parser, "debug", "dump intermediate data to disk.")
+    add_argument(parser, "md", "generation of markdown files.", True)
+    add_argument(parser, "html", "generation of HTML files.", True)
+    add_argument(parser, "pdf", "generation of PDF file.")
+    add_argument(parser, "cl", "compilation of generated C/C++ files.")
+    args = vars(parser.parse_args())
 
-    # generate 'extended' APIs
-    if args.extended and util.exists("./extended"):
-        specs, meta = parse_specs.parse("./extended")
-        if args.debug:
-            util.jsonWrite("./extended/specs.json", specs)
-            util.jsonWrite("./extended/meta.json", meta)
-        generate_api.generate_cpp(
-            configParser.get('PATH','extended'),
-            configParser.get('NAMESPACE','extended'),
-            specs, meta)
-        if args.cl:
-            compile_api.compile_cpp_source(
-                configParser.get('PATH','extended'),
-                configParser.get('NAMESPACE','extended'),
-                specs)
-        if args.md:
-            generate_docs.generate_md(
-                "./extended",
-                configParser.get('PATH','extended'),
-                configParser.get('NAMESPACE','extended'),
-                meta)
+    start = time.time()
+
+    for section in configParser.sections():
+        dstpath = configParser.get(section,'dstpath')
+        namespace = configParser.get(section,'namespace')
+        srcpath = os.path.join("./", section)
+
+        if args[section] and util.exists(srcpath):
+            specs, meta = parse_specs.parse(srcpath)
+
+            if args['debug']:
+                util.jsonWrite(os.path.join(srcpath, "specs.json"), specs)
+                util.jsonWrite(os.path.join(srcpath, "meta.json"), meta)
+
+            generate_api.generate_cpp(dstpath, namespace, specs, meta)
+
+            if args['cl']:
+                compile_api.compile_cpp_source(dstpath, namespace, specs)
+
+            if args['md']:
+                generate_docs.generate_md(srcpath, dstpath, namespace, meta)
 
     # generate documentation
-    if args.html:
+    if args['html']:
         generate_docs.generate_html()
 
-    if args.pdf:
+    if args['pdf']:
         generate_docs.generate_pdf()
 
 
