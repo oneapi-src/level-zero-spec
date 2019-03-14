@@ -107,7 +107,7 @@ namespace ocloc {
 
 struct Output {
     Output(int status,
-           void *output, unsigned int outputSize,
+           char *output, unsigned int outputSize,
            char *buildLog, unsigned int buildLogSize) noexcept
         : status(status), output(output), outputSize(outputSize), buildLog(buildLog), buildLogSize(buildLogSize) {
     }
@@ -187,7 +187,7 @@ struct Output {
 
   protected:
     int status = -1;
-    void *output = nullptr;
+    char *output = nullptr;
     unsigned int outputSize = 0;
     char *buildLog = nullptr;
     unsigned int buildLogSize = 0;
@@ -196,7 +196,7 @@ struct Output {
 struct OclocWrapper {
   public:
     static Output compileClToSpirV(const char *src, const char *clOptions, const char *internalOptions) {
-        void *spirV;
+        char *spirV;
         unsigned int spirVSize;
         char *buildLog;
         unsigned int buildLogSize;
@@ -204,7 +204,7 @@ struct OclocWrapper {
         int result = func(src, static_cast<unsigned int>(strlen(src)),
                           clOptions, internalOptions,
                           nullptr, &allocate,
-                          &spirV, &spirVSize, &buildLog, &buildLogSize);
+                          reinterpret_cast<void **>(&spirV), &spirVSize, &buildLog, &buildLogSize);
         return Output{result, spirV, spirVSize, buildLog, buildLogSize};
     }
 
