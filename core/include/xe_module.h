@@ -225,7 +225,7 @@ __xedllport xe_result_t __xecall
 xeModuleGetNativeBinary(
     xe_module_handle_t hModule,                     ///< [in] handle of the device
     size_t* pSize,                                  ///< [in,out] size of native binary.
-    const char** pModuleNativeBinary                ///< [in,out][optional] pointer to native binary
+    const void** pModuleNativeBinary                ///< [in,out][optional] pointer to native binary
     );
 
 ///////////////////////////////////////////////////////////////////////////////

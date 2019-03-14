@@ -693,12 +693,16 @@ The ::${x}DeviceCreateModule function can optionally generate a build log object
     // Only save build logs for module creation errors.
     if (result != ${X}_RESULT_SUCCESS)
     {
-        uint32_t buildlogSize;
-        char_t* pBuildLogString;
-        result = ${x}ModuleBuildLogGetString(buildlog, &buildlogSize, &pBuildLogString);
+        size_t szLog = 0;
+        ${x}ModuleBuildLogGetString(buildlog, &szLog, nullptr);
+        
+        char_t* strLog = (char_t*)malloc(szLog);
+        ${x}ModuleBuildLogGetString(buildlog, &szLog, &strLog);
 
         // Save log to disk.
         ...
+
+        free(strLog);
     }
 
     ${x}ModuleBuildLogDestroy(buildlog);
@@ -715,12 +719,16 @@ responsibility of the application to implement this using ::${x}ModuleGetNativeB
 
     if (cacheUpdateNeeded)
     {
-        uint32_t size;
-        char_t* pNativeBinary;  // Pointer to native binary.
-        ${x}ModuleGetNativeBinary(hModule, &size, &pNativeBinary);
+        size_t szBinary = 0;
+        ${x}ModuleGetNativeBinary(hModule, &szBinary, nullptr);
+
+        void* pBinary = malloc(szBinary);
+        ${x}ModuleGetNativeBinary(hModule, &szBinary, &pBinary);
 
         // cache pNativeBinary for corresponding IL
         ...
+
+        free(pBinary);
     }
 ```
 Also, note that the native binary will retain all debug information that is associated with the module. This allows debug

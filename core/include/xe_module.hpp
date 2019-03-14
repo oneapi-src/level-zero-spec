@@ -109,7 +109,7 @@ namespace xe
         inline void
         GetNativeBinary(
             size_t* pSize,                                  ///< [in,out] size of native binary.
-            const char** pModuleNativeBinary                ///< [in,out][optional] pointer to native binary
+            const void** pModuleNativeBinary                ///< [in,out][optional] pointer to native binary
             );
 
         ///////////////////////////////////////////////////////////////////////////////

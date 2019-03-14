@@ -331,13 +331,13 @@ xeModuleBuildLogGetString(
 ///     - ::XE_RESULT_ERROR_OUT_OF_HOST_MEMORY
 ///     - ::XE_RESULT_ERROR_OUT_OF_DEVICE_MEMORY
 ///
-/// @hash {8ab9d18bd47f0352e84513942b7159319521d03c44f60f2c699543fdceebe766}
+/// @hash {8604102d4a48bb8fc4a2c43ccdcf560ec828eea2ae3a7fda0c1c2bb37a057719}
 ///
 __xedllexport xe_result_t __xecall
 xeModuleGetNativeBinary(
     xe_module_handle_t hModule,                     ///< [in] handle of the device
     size_t* pSize,                                  ///< [in,out] size of native binary.
-    const char** pModuleNativeBinary                ///< [in,out][optional] pointer to native binary
+    const void** pModuleNativeBinary                ///< [in,out][optional] pointer to native binary
     )
 {
     try

@@ -693,12 +693,16 @@ The ::xeDeviceCreateModule function can optionally generate a build log object :
     // Only save build logs for module creation errors.
     if (result != XE_RESULT_SUCCESS)
     {
-        uint32_t buildlogSize;
-        char_t* pBuildLogString;
-        result = xeModuleBuildLogGetString(buildlog, &buildlogSize, &pBuildLogString);
+        size_t szLog = 0;
+        xeModuleBuildLogGetString(buildlog, &szLog, nullptr);
+        
+        char_t* strLog = (char_t*)malloc(szLog);
+        xeModuleBuildLogGetString(buildlog, &szLog, &strLog);
 
         // Save log to disk.
         ...
+
+        free(strLog);
     }
 
     xeModuleBuildLogDestroy(buildlog);
@@ -715,12 +719,16 @@ responsibility of the application to implement this using ::xeModuleGetNativeBin
 
     if (cacheUpdateNeeded)
     {
-        uint32_t size;
-        char_t* pNativeBinary;  // Pointer to native binary.
-        xeModuleGetNativeBinary(hModule, &size, &pNativeBinary);
+        size_t szBinary = 0;
+        xeModuleGetNativeBinary(hModule, &szBinary, nullptr);
+
+        void* pBinary = malloc(szBinary);
+        xeModuleGetNativeBinary(hModule, &szBinary, &pBinary);
 
         // cache pNativeBinary for corresponding IL
         ...
+
+        free(pBinary);
     }
 ```
 Also, note that the native binary will retain all debug information that is associated with the module. This allows debug
