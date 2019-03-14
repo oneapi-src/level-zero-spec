@@ -62,7 +62,7 @@ The cross-tile memory is stacked within package allowing applications to access 
 
 The API represents tiles as sub-devices and there are functions to query and obtain a sub-device. 
 Outside of these functions there are no distinction between sub-devices and devices. 
-For example, a sub-device can be used with memory allocation and tasks dispatch functions and allow placement and dispatch to a specific sub-device.
+For example, a sub-device can be used with memory allocation and tasks and allow placement and submission to a specific sub-device.
 
 ${"##"} Peer-to-Peer Communication
 Peer to Peer API's provide capabilities to marshall data across Host to Device, Device to Host and Device to Device. 

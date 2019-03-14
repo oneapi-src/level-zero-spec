@@ -205,16 +205,16 @@ The following sample code demonstrates a basic sequence for creation of command 
 A command list represents a sequence of commands for execution on a command queue.
 
 ### Creation
-- A command list is created for a device to allow device-specific encoding of commands.
+- A command list is created for a device to allow device-specific appending of commands.
 - A command list can be copied to create another command list. The application may use this
   to copy a command list for use on a different device.
 
-### Encoding
+### Appending
 - There is no implicit binding of command lists to Host threads. Therefore, an 
   application may share a command list handle across multiple Host threads. However,
   the application is responsible for ensuring that multiple Host threads do not access
   the same command list simultaneously.
-- By default, commands are executed in the same order in which they are submitted.
+- By default, commands are executed in the same order in which they are appended.
   However, an application may allow the driver to optimize the ordering by using
   ::XE_COMMAND_LIST_FLAG_RELAXED_ORDERING.  Reordering is guarenteed to be only occur
   between barriers and synchronization primitives.
@@ -247,7 +247,7 @@ The following sample code demonstrates a basic sequence for creation of command 
 The following sample code demonstrates submission of commands to a command queue, via a command list:
 ```c
     ...
-    // finished encoding commands (typically done on another thread)
+    // finished appending commands (typically done on another thread)
     xeCommandListClose(hCommandList);
 
     // Enqueue command list execution into command queue
@@ -285,12 +285,12 @@ There are two types of barriers:
 
 The following sample code demonstrates a sequence for submission of an execution barrier:
 ```c
-    xeCommandListAppendDispatchFunction(hCommandList, hFunction, &dispatchArgs, nullptr);
+    xeCommandListAppendLaunchFunction(hCommandList, hFunction, &launchArgs, nullptr);
 
     // Append a barrier into a command list to ensure hFunctionFunction1 completes before hFunction2 begins
     xeCommandListAppendExecutionBarrier(hCommandList);
 
-    xeCommandListAppendDispatchFunction(hCommandList, hFunction, &dispatchArgs, nullptr);
+    xeCommandListAppendLaunchFunction(hCommandList, hFunction, &launchArgs, nullptr);
     ...
 ```
 
@@ -415,7 +415,7 @@ The following sample code demonstrates a sequence for measuring time between eve
 ```c
     // Append the function call to measure
     xeCommandListAppendSignalEvent(hCommandList, hEventBegin);
-    xeCommandListAppendDispatchFunction(hCommandList, hFunction, &dispatchArgs, hEventEnd);
+    xeCommandListAppendLaunchFunction(hCommandList, hFunction, &launchArgs, hEventEnd);
 
     // Enqueue the command list into a command queue
     xeCommandQueueEnqueueCommandLists(hCommandQueue, 1, &hCommandList, nullptr);
@@ -439,7 +439,7 @@ The following sample code demonstrates a sequence for collecting counters betwee
 ```c
     // Append the function call to measure
     xeCommandListAppendSignalEvent(hCommandList, hEventBegin);
-    xeCommandListAppendDispatchFunction(hCommandList, hFunction, &dispatchArgs, hEventEnd);
+    xeCommandListAppendLaunchFunction(hCommandList, hFunction, &launchArgs, hEventEnd);
 
     // Enqueue the command list into a command queue
     xeCommandQueueEnqueueCommandLists(hCommandQueue, 1, &hCommandList, nullptr);
@@ -595,7 +595,7 @@ The following sample code demonstrate a sequence for using coarse-grain residenc
     // 'begin' is passed as function argument and appended into command list
     xeFunctionSetAttribute(hFuncArgs, XE_FUNCTION_SET_ATTR_INDIRECT_HOST_ACCESS, TRUE);
     xeFunctionSetArgumentValue(hFunction, 0, sizeof(node*), &begin);
-    xeCommandListAppendDispatchFunction(hCommandList, hFunction, &dispatchArgs, nullptr);
+    xeCommandListAppendLaunchFunction(hCommandList, hFunction, &launchArgs, nullptr);
     ...
 
     xeCommandQueueEnqueueCommandLists(hCommandQueue, 1, &hCommandList, nullptr);
@@ -614,7 +614,7 @@ The following sample code demonstrate a sequence for using fine-grain residency 
 
     // 'begin' is passed as function argument and appended into command list
     xeFunctionSetArgumentValue(hFunction, 0, sizeof(node*), &begin);
-    xeCommandListAppendDispatchFunction(hCommandList, hFunction, &dispatchArgs, nullptr);
+    xeCommandListAppendLaunchFunction(hCommandList, hFunction, &launchArgs, nullptr);
     ...
 
     // Make indirect allocations resident before enqueuing
@@ -635,7 +635,7 @@ The following sample code demonstrate a sequence for using fine-grain residency 
 # <a name="mnf">Modules and Functions</a>
 There are multiple levels of constructs needed for executing functions on the device:
 1. A [**Module**](#mod) represents a single translation unit that consists of functions that have been compiled together.
-2. A [**Function**](#func) represents the function within the module that will be dispatched directly from a command list.
+2. A [**Function**](#func) represents the function within the module that will be launched directly from a command list.
 
 ## <a name="mod">Modules</a>
 Modules can be created from an IL or directly from native format using ::xeDeviceCreateModule.
@@ -732,7 +732,7 @@ interface.
 
 ## <a name="func">Functions</a>
 A Function is a reference to a function within a module. The Function object supports both explicit and implicit function
-arguments along with data needed for dispatch.
+arguments along with data needed for launch.
 
 The following sample code demonstrates a sequence for creating a function from a module:
 ```c
@@ -773,9 +773,9 @@ See ::xe_function_set_attribute_t for more information on the "set" attributes.
 
 ### Function Group Size
 The group size for a function can be set using ::xeFunctionSetGroupSize. If a group size is not
-set prior to encoding a dispatch function into a command list then a default will be chosen.
-The group size can updated over a series of append dispatch operations. The driver will copy the
-group size information when encoding the dispatch function into the command list.
+set prior to appending a function into a command list then a default will be chosen.
+The group size can updated over a series of append operations. The driver will copy the
+group size information when appending the function into the command list.
 
 ```c
     xeFunctionSetGroupSize(function, groupSizeX, groupSizeY, 1);
@@ -799,11 +799,11 @@ group size that was set on the function using ::xeFunctionSetGroupSize.
 
 ### <a name="arg">Function Arguments</a>
 Function arguments represent only the explicit function arguments that are within "brackets" e.g. func(arg1, arg2, ...).
-- Use ::xeFunctionSetArgumentValue to setup arguments for a function dispatch.
-- The AppendDispatchFunction command will make a copy the function arguments to send to the device.
-- Function arguments can be updated at anytime and used across multiple dispatches.
+- Use ::xeFunctionSetArgumentValue to setup arguments for a function launch.
+- The AppendLaunchFunction command will make a copy the function arguments to send to the device.
+- Function arguments can be updated at anytime and used across multiple append calls.
 
-The following sample code demonstrates a sequence for creating function args and dispatching the function:
+The following sample code demonstrates a sequence for creating function args and launching the function:
 ```c
     // Bind arguments
     xeFunctionSetArgumentValue(hFunction, 0, sizeof(xe_image_handle_t), &src_image);
@@ -811,53 +811,50 @@ The following sample code demonstrates a sequence for creating function args and
     xeFunctionSetArgumentValue(hFunction, 2, sizeof(uint32_t), &width);
     xeFunctionSetArgumentValue(hFunction, 3, sizeof(uint32_t), &height);
 
-    xe_dispatch_function_arguments_t dispatchArgs = {
-        pixelRegionWidth, pixelRegionHeight, 1,
-        numRegionsX, numRegionsY, 1
-        };
+    xe_thread_group_dimensions_t launchArgs = { numGroupsX, numGroupsY, 1 };
 
-    // Append dispatch command
-    xeCommandListAppendDispatchFunction(hCommandList, hFunction, &dispatchArgs, nullptr);
+    // Append function
+    xeCommandListAppendLaunchFunction(hCommandList, hFunction, &launchArgs, nullptr);
 
     // Update image pointers to copy and scale next image.
     xeFunctionSetArgumentValue(hFunction, 0, sizeof(xe_image_handle_t), &src2_image);
     xeFunctionSetArgumentValue(hFunction, 1, sizeof(xe_image_handle_t), &dest2_image);
 
-    // Append dispatch command
-    xeCommandListAppendDispatchFunction(hCommandList, hFunction, &dispatchArgs, nullptr);
+    // Append function
+    xeCommandListAppendLaunchFunction(hCommandList, hFunction, &launchArgs, nullptr);
 
     ...
 ```
 
-### <a name="arg">Function Dispatch</a>
-In order to invoke a function on the device you must call one of the CommandListAppendDispatch* functions for
-a command list. The most basic version of these is ::xeCommandListAppendDispatchFunction which takes a
-command list, function, dispatch arguments, and an optional synchronization event used to signal completion.
-The dispatch arguments contain group dispatch dimensions.
+### <a name="arg">Function Launch</a>
+In order to invoke a function on the device you must call one of the CommandListAppendLaunch* functions for
+a command list. The most basic version of these is ::xeCommandListAppendLaunchFunction which takes a
+command list, function, launch arguments, and an optional synchronization event used to signal completion.
+The launch arguments contain thread group dimensions.
 
 ```c
-    // compute number of groups to dispatch based on image size and function group size.
+    // compute number of groups to launch based on image size and function group size.
     uint32_t numGroupsX = imageWidth / groupSizeX;
     uint32_t numGroupsY = imageHeight / groupSizeY;
 
-    xe_dispatch_function_arguments_t dispatchArgs = { numGroupsX, numGroupsY, 1 };
+    xe_thread_group_dimensions_t launchArgs = { numGroupsX, numGroupsY, 1 };
 
-    // Append dispatch command
-    xeCommandListAppendDispatchFunction(hCommandList, hFunction, &dispatchArgs, nullptr);
+    // Append function
+    xeCommandListAppendLaunchFunction(hCommandList, hFunction, &launchArgs, nullptr);
 ```
 
-::xeCommandListAppendDispatchFunctionIndirect allows the dispatch parameters to be supplied indirectly in a
+::xeCommandListAppendLaunchFunctionIndirect allows the launch parameters to be supplied indirectly in a
 buffer that the device reads instead of the command itself. This allows for the previous operations on the
 device to generate the parameters.
 
 ```c
-    xe_dispatch_function_arguments_t* pDispatchArgs;
+    xe_thread_group_dimensions_t* pIndirectArgs;
     
     ...
-    xeMemAlloc(hMemAlloc, hDevice, flags, sizeof(xe_dispatch_function_arguments_t), sizeof(uint32_t), &pDispatchArgs);
+    xeMemAlloc(hMemAlloc, hDevice, flags, sizeof(xe_thread_group_dimensions_t), sizeof(uint32_t), &pIndirectArgs);
 
-    // Append dispatch command
-    xeCommandListAppendDispatchFunctionIndirect(hCommandList, hFunction, &pDispatchArgs, nullptr);
+    // Append function
+    xeCommandListAppendLaunchFunctionIndirect(hCommandList, hFunction, &pIndirectArgs, nullptr);
 ```
 
 ## <a name="arg">Sampler</a>
@@ -887,8 +884,8 @@ The following is sample for code creating a sampler object and passing it as a F
     // The sampler can be passed as a function argument.
     xeFunctionSetArgumentValue(hFunction, 0, sizeof(xe_sampler_handle_t), &sampler);
 
-    // Append dispatch command
-    xeCommandListAppendDispatchFunction(hCommandList, hFunction, &dispatchArgs, nullptr);
+    // Append function
+    xeCommandListAppendLaunchFunction(hCommandList, hFunction, &launchArgs, nullptr);
 ```
 
 # <a name="oi">OpenCL Interoperability</a>
@@ -919,11 +916,11 @@ a cl_program the caller must ensure the cl_program is compiled and linked.
 ## cl_command_queue
 Sharing OpenCL command queues provide opportunities to minimize transition costs when submitting work from
 an OpenCL queue followed by submitting work to Xe command queue and vice-versa.  Enqueuing Xe command lists
-to Xe command queues are immediately dispatched to the device.  OpenCL implementations, however, may not
-necessarily dispatch tasks to the device unless forced by explicit OpenCL API such as clFlush or clFinish.
-To minimize overhead between sharing command queues, applications must explicitly dispatch OpenCL command 
-queues using clFlush, clFinish or similar dispatch operations prior to enqueuing an Xe command list.
-Failing to explicitly dispatch device work may result in undefined behavior.  
+to Xe command queues are immediately submitted to the device.  OpenCL implementations, however, may not
+necessarily submit tasks to the device unless forced by explicit OpenCL API such as clFlush or clFinish.
+To minimize overhead between sharing command queues, applications must explicitly submit OpenCL command 
+queues using clFlush, clFinish or similar operations prior to enqueuing an Xe command list.
+Failing to explicitly submit device work may result in undefined behavior.  
 
 Sharing an OpenCL command queue doesn't alter the lifetime of the API object.  It provides knowledge for the
 driver to potentially reuse some internal resources which may have noticeable overhead when switching the resources.

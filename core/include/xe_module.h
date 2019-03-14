@@ -343,7 +343,7 @@ xeModuleGetFunctionPointer(
 ///       Device allocations associated with this function
 ///     - The implementation of this function should be lock-free.
 ///     - This can be called multiple times. The driver copies the group size
-///       information when encoding dispatch functions into a command list.
+///       information when appending functions into a command list.
 /// 
 /// @returns
 ///     - ::XE_RESULT_SUCCESS
@@ -393,7 +393,7 @@ xeFunctionSuggestGroupSize(
     );
 
 ///////////////////////////////////////////////////////////////////////////////
-/// @brief Set function argument used for function dispatch.
+/// @brief Set function argument used on function launch.
 /// 
 /// @details
 ///     - This function may **not** be called from simultaneous threads.
@@ -506,17 +506,17 @@ xeFunctionGetAttribute(
     );
 
 ///////////////////////////////////////////////////////////////////////////////
-/// @brief Dispatch function arguments.
-typedef struct _xe_dispatch_function_arguments_t
+/// @brief Function thread group dimensions.
+typedef struct _xe_thread_group_dimensions_t
 {
-    uint32_t groupCountX;                           ///< [in] width of dispatches in X dimension
-    uint32_t groupCountY;                           ///< [in] width of dispatches in Y dimension
-    uint32_t groupCountZ;                           ///< [in] width of dispatches in Z dimension
+    uint32_t groupCountX;                           ///< [in] size of thread group in X dimension
+    uint32_t groupCountY;                           ///< [in] size of thread group in Y dimension
+    uint32_t groupCountZ;                           ///< [in] size of thread group in Z dimension
 
-} xe_dispatch_function_arguments_t;
+} xe_thread_group_dimensions_t;
 
 ///////////////////////////////////////////////////////////////////////////////
-/// @brief Dispatch function over one or more work groups.
+/// @brief Launch function over one or more work groups.
 /// 
 /// @details
 ///     - This function may **not** be called from simultaneous threads.
@@ -533,25 +533,22 @@ typedef struct _xe_dispatch_function_arguments_t
 ///     - ::XE_RESULT_ERROR_INVALID_PARAMETER
 ///         + nullptr == hCommandList
 ///         + nullptr == hFunction
-///         + nullptr == pDispatchFuncArgs
-///         + invalid group count range for dispatch
-///         + invalid dispatch count range for dispatch
+///         + nullptr == pLaunchFuncArgs
 ///     - ::XE_RESULT_ERROR_UNSUPPORTED
 __xedllport xe_result_t __xecall
-xeCommandListAppendDispatchFunction(
+xeCommandListAppendLaunchFunction(
     xe_command_list_handle_t hCommandList,          ///< [in] handle of the command list
     xe_function_handle_t hFunction,                 ///< [in] handle of the function object
-    const xe_dispatch_function_arguments_t* pDispatchFuncArgs,  ///< [in] dispatch function arguments.
+    const xe_thread_group_dimensions_t* pLaunchFuncArgs,///< [in] launch function arguments.
     xe_event_handle_t hEvent                        ///< [in][optional] handle of the event to signal on completion
     );
 
 ///////////////////////////////////////////////////////////////////////////////
-/// @brief Dispatch function over one or more work groups using indirect dispatch
-///        arguments.
+/// @brief Launch function over one or more work groups using indirect arguments.
 /// 
 /// @details
-///     - The dispatch arguments need to be device visible.
-///     - The dispatch arguments buffer may not be reusued until dispatch has
+///     - The launch arguments need to be device visible.
+///     - The launch arguments buffer may not be reusued until the function has
 ///       completed on the device.
 ///     - This function may **not** be called from simultaneous threads.
 ///     - The implementation of this function should be lock-free.
@@ -567,24 +564,24 @@ xeCommandListAppendDispatchFunction(
 ///     - ::XE_RESULT_ERROR_INVALID_PARAMETER
 ///         + nullptr == hCommandList
 ///         + nullptr == hFunction
-///         + nullptr == pDispatchArgumentsBuffer
+///         + nullptr == pLaunchArgumentsBuffer
 ///     - ::XE_RESULT_ERROR_UNSUPPORTED
 __xedllport xe_result_t __xecall
-xeCommandListAppendDispatchFunctionIndirect(
+xeCommandListAppendLaunchFunctionIndirect(
     xe_command_list_handle_t hCommandList,          ///< [in] handle of the command list
     xe_function_handle_t hFunction,                 ///< [in] handle of the function object
-    const xe_dispatch_function_arguments_t* pDispatchArgumentsBuffer,   ///< [in] pointer to device buffer that will contain dispatch arguments
+    const xe_thread_group_dimensions_t* pLaunchArgumentsBuffer, ///< [in] pointer to device buffer that will contain launch arguments
     xe_event_handle_t hEvent                        ///< [in][optional] handle of the event to signal on completion
     );
 
 ///////////////////////////////////////////////////////////////////////////////
-/// @brief Dispatch multiple functions over one or more work groups using an
-///        array of indirect dispatch arguments.
+/// @brief Launch multiple functions over one or more work groups using an array
+///        of indirect arguments.
 /// 
 /// @details
-///     - The array of dispatch arguments need to be device visible.
-///     - The array of dispatch arguments buffer may not be reusued until
-///       dispatch has completed on the device.
+///     - The array of launch arguments need to be device visible.
+///     - The array of launch arguments buffer may not be reusued until the
+///       function has completed on the device.
 ///     - This function may **not** be called from simultaneous threads.
 ///     - The implementation of this function should be lock-free.
 /// 
@@ -599,25 +596,24 @@ xeCommandListAppendDispatchFunctionIndirect(
 ///     - ::XE_RESULT_ERROR_INVALID_PARAMETER
 ///         + nullptr == hCommandList
 ///         + nullptr == phFunctions
-///         + nullptr == pNumDispatchArguments
-///         + nullptr == pDispatchArgumentsBuffer
+///         + nullptr == pNumLaunchArguments
+///         + nullptr == pLaunchArgumentsBuffer
 ///     - ::XE_RESULT_ERROR_UNSUPPORTED
 __xedllport xe_result_t __xecall
-xeCommandListAppendDispatchMultipleFunctionsIndirect(
+xeCommandListAppendLaunchMultipleFunctionsIndirect(
     xe_command_list_handle_t hCommandList,          ///< [in] handle of the command list
-    uint32_t numFunctions,                          ///< [in] maximum number of functions to dispatch
+    uint32_t numFunctions,                          ///< [in] maximum number of functions to launch
     const xe_function_handle_t* phFunctions,        ///< [in] handles of the function objects
-    const size_t* pNumDispatchArguments,            ///< [in] pointer to device memory location that will contain the actual
-                                                    ///< number of dispatch arguments; must be less-than or equal-to
-                                                    ///< numFunctions
-    const xe_dispatch_function_arguments_t* pDispatchArgumentsBuffer,   ///< [in] pointer to device buffer that will contain a contiguous array of
-                                                    ///< dispatch arguments
+    const size_t* pNumLaunchArguments,              ///< [in] pointer to device memory location that will contain the actual
+                                                    ///< number of launch arguments; must be less-than or equal-to numFunctions
+    const xe_thread_group_dimensions_t* pLaunchArgumentsBuffer, ///< [in] pointer to device buffer that will contain a contiguous array of
+                                                    ///< launch arguments
     xe_event_handle_t hEvent                        ///< [in][optional] handle of the event to signal on completion
     );
 
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief type definition for host function pointers used with
-///        ::xeCommandListAppendDispatchHostFunction
+///        ::xeCommandListAppendLaunchHostFunction
 /// 
 /// @details
 ///     - This function may be called from simultaneous threads.
@@ -627,8 +623,8 @@ typedef void(__xecall *xe_host_pfn_t)(
   );
 
 ///////////////////////////////////////////////////////////////////////////////
-/// @brief Dispatch host function. All work after this command in the command
-///        list will block until host function completes.
+/// @brief Launch host function. All work after this command in the command list
+///        will block until host function completes.
 /// 
 /// @details
 ///     - This function may **not** be called from simultaneous threads.
@@ -647,7 +643,7 @@ typedef void(__xecall *xe_host_pfn_t)(
 ///         + nullptr == pUserData
 ///     - ::XE_RESULT_ERROR_UNSUPPORTED
 __xedllport xe_result_t __xecall
-xeCommandListAppendDispatchHostFunction(
+xeCommandListAppendLaunchHostFunction(
     xe_command_list_handle_t hCommandList,          ///< [in] handle of the command list
     xe_host_pfn_t pfnHostFunc,                      ///< [in] pointer to host function.
     void* pUserData                                 ///< [in] pointer to user data to pass to host function.

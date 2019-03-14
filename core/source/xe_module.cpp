@@ -569,7 +569,7 @@ xeModuleGetFunctionPointer(
 ///       Device allocations associated with this function
 ///     - The implementation of this function should be lock-free.
 ///     - This can be called multiple times. The driver copies the group size
-///       information when encoding dispatch functions into a command list.
+///       information when appending functions into a command list.
 /// 
 /// @returns
 ///     - ::XE_RESULT_SUCCESS
@@ -690,7 +690,7 @@ xeFunctionSuggestGroupSize(
 }
 
 ///////////////////////////////////////////////////////////////////////////////
-/// @brief Set function argument used for function dispatch.
+/// @brief Set function argument used on function launch.
 /// 
 /// @details
 ///     - This function may **not** be called from simultaneous threads.
@@ -873,7 +873,7 @@ xeFunctionGetAttribute(
 }
 
 ///////////////////////////////////////////////////////////////////////////////
-/// @brief Dispatch function over one or more work groups.
+/// @brief Launch function over one or more work groups.
 /// 
 /// @details
 ///     - This function may **not** be called from simultaneous threads.
@@ -890,18 +890,16 @@ xeFunctionGetAttribute(
 ///     - ::XE_RESULT_ERROR_INVALID_PARAMETER
 ///         + nullptr == hCommandList
 ///         + nullptr == hFunction
-///         + nullptr == pDispatchFuncArgs
-///         + invalid group count range for dispatch
-///         + invalid dispatch count range for dispatch
+///         + nullptr == pLaunchFuncArgs
 ///     - ::XE_RESULT_ERROR_UNSUPPORTED
 ///
-/// @hash {9bcf4b87c43a49d8c243a2f3cb1e6f70ae1f6bec87cd94505f4b2ef3ac7d7bf5}
+/// @hash {266d96cac288055a97632576afa737b41087a1099ccf11da0681fbaf5b96c572}
 ///
 __xedllexport xe_result_t __xecall
-xeCommandListAppendDispatchFunction(
+xeCommandListAppendLaunchFunction(
     xe_command_list_handle_t hCommandList,          ///< [in] handle of the command list
     xe_function_handle_t hFunction,                 ///< [in] handle of the function object
-    const xe_dispatch_function_arguments_t* pDispatchFuncArgs,  ///< [in] dispatch function arguments.
+    const xe_thread_group_dimensions_t* pLaunchFuncArgs,///< [in] launch function arguments.
     xe_event_handle_t hEvent                        ///< [in][optional] handle of the event to signal on completion
     )
 {
@@ -913,13 +911,13 @@ xeCommandListAppendDispatchFunction(
             // Check parameters
             if( nullptr == hCommandList ) return XE_RESULT_ERROR_INVALID_PARAMETER;
             if( nullptr == hFunction ) return XE_RESULT_ERROR_INVALID_PARAMETER;
-            if( nullptr == pDispatchFuncArgs ) return XE_RESULT_ERROR_INVALID_PARAMETER;
+            if( nullptr == pLaunchFuncArgs ) return XE_RESULT_ERROR_INVALID_PARAMETER;
         }
         /// @begin
 #if defined(XE_NULLDRV)
         return XE_RESULT_SUCCESS;
 #else
-        return L0::CommandList::fromHandle(hCommandList)->appendDispatchFunction(hFunction, pDispatchFuncArgs, hEvent);
+        return L0::CommandList::fromHandle(hCommandList)->appendLaunchFunction(hFunction, pLaunchFuncArgs, hEvent);
 #endif
         /// @end
     }
@@ -939,12 +937,11 @@ xeCommandListAppendDispatchFunction(
 }
 
 ///////////////////////////////////////////////////////////////////////////////
-/// @brief Dispatch function over one or more work groups using indirect dispatch
-///        arguments.
+/// @brief Launch function over one or more work groups using indirect arguments.
 /// 
 /// @details
-///     - The dispatch arguments need to be device visible.
-///     - The dispatch arguments buffer may not be reusued until dispatch has
+///     - The launch arguments need to be device visible.
+///     - The launch arguments buffer may not be reusued until the function has
 ///       completed on the device.
 ///     - This function may **not** be called from simultaneous threads.
 ///     - The implementation of this function should be lock-free.
@@ -960,16 +957,16 @@ xeCommandListAppendDispatchFunction(
 ///     - ::XE_RESULT_ERROR_INVALID_PARAMETER
 ///         + nullptr == hCommandList
 ///         + nullptr == hFunction
-///         + nullptr == pDispatchArgumentsBuffer
+///         + nullptr == pLaunchArgumentsBuffer
 ///     - ::XE_RESULT_ERROR_UNSUPPORTED
 ///
-/// @hash {200f93f491a8a50d9a72f6b09819db2cf0498468ab084408de06eb57164e7c3b}
+/// @hash {94f95d0b88ad0b8f094b439520d37d3b542fb6a07456e3d9b91e1908264d95d9}
 ///
 __xedllexport xe_result_t __xecall
-xeCommandListAppendDispatchFunctionIndirect(
+xeCommandListAppendLaunchFunctionIndirect(
     xe_command_list_handle_t hCommandList,          ///< [in] handle of the command list
     xe_function_handle_t hFunction,                 ///< [in] handle of the function object
-    const xe_dispatch_function_arguments_t* pDispatchArgumentsBuffer,   ///< [in] pointer to device buffer that will contain dispatch arguments
+    const xe_thread_group_dimensions_t* pLaunchArgumentsBuffer, ///< [in] pointer to device buffer that will contain launch arguments
     xe_event_handle_t hEvent                        ///< [in][optional] handle of the event to signal on completion
     )
 {
@@ -981,13 +978,13 @@ xeCommandListAppendDispatchFunctionIndirect(
             // Check parameters
             if( nullptr == hCommandList ) return XE_RESULT_ERROR_INVALID_PARAMETER;
             if( nullptr == hFunction ) return XE_RESULT_ERROR_INVALID_PARAMETER;
-            if( nullptr == pDispatchArgumentsBuffer ) return XE_RESULT_ERROR_INVALID_PARAMETER;
+            if( nullptr == pLaunchArgumentsBuffer ) return XE_RESULT_ERROR_INVALID_PARAMETER;
         }
         /// @begin
 #if defined(XE_NULLDRV)
         return XE_RESULT_SUCCESS;
 #else
-        return L0::CommandList::fromHandle(hCommandList)->appendDispatchFunctionIndirect(hFunction, pDispatchArgumentsBuffer, hEvent);
+        return L0::CommandList::fromHandle(hCommandList)->appendLaunchFunctionIndirect(hFunction, pLaunchArgumentsBuffer, hEvent);
 #endif
         /// @end
     }
@@ -1007,13 +1004,13 @@ xeCommandListAppendDispatchFunctionIndirect(
 }
 
 ///////////////////////////////////////////////////////////////////////////////
-/// @brief Dispatch multiple functions over one or more work groups using an
-///        array of indirect dispatch arguments.
+/// @brief Launch multiple functions over one or more work groups using an array
+///        of indirect arguments.
 /// 
 /// @details
-///     - The array of dispatch arguments need to be device visible.
-///     - The array of dispatch arguments buffer may not be reusued until
-///       dispatch has completed on the device.
+///     - The array of launch arguments need to be device visible.
+///     - The array of launch arguments buffer may not be reusued until the
+///       function has completed on the device.
 ///     - This function may **not** be called from simultaneous threads.
 ///     - The implementation of this function should be lock-free.
 /// 
@@ -1028,22 +1025,21 @@ xeCommandListAppendDispatchFunctionIndirect(
 ///     - ::XE_RESULT_ERROR_INVALID_PARAMETER
 ///         + nullptr == hCommandList
 ///         + nullptr == phFunctions
-///         + nullptr == pNumDispatchArguments
-///         + nullptr == pDispatchArgumentsBuffer
+///         + nullptr == pNumLaunchArguments
+///         + nullptr == pLaunchArgumentsBuffer
 ///     - ::XE_RESULT_ERROR_UNSUPPORTED
 ///
-/// @hash {dfa34c73608a2134801a4562c35e9c56052dc24b04c691644bf1809e105835fc}
+/// @hash {299af49d4365e1dc7472f8f575098b9af5d9218fe80f52c4aa9fa2cb4e6b6311}
 ///
 __xedllexport xe_result_t __xecall
-xeCommandListAppendDispatchMultipleFunctionsIndirect(
+xeCommandListAppendLaunchMultipleFunctionsIndirect(
     xe_command_list_handle_t hCommandList,          ///< [in] handle of the command list
-    uint32_t numFunctions,                          ///< [in] maximum number of functions to dispatch
+    uint32_t numFunctions,                          ///< [in] maximum number of functions to launch
     const xe_function_handle_t* phFunctions,        ///< [in] handles of the function objects
-    const size_t* pNumDispatchArguments,            ///< [in] pointer to device memory location that will contain the actual
-                                                    ///< number of dispatch arguments; must be less-than or equal-to
-                                                    ///< numFunctions
-    const xe_dispatch_function_arguments_t* pDispatchArgumentsBuffer,   ///< [in] pointer to device buffer that will contain a contiguous array of
-                                                    ///< dispatch arguments
+    const size_t* pNumLaunchArguments,              ///< [in] pointer to device memory location that will contain the actual
+                                                    ///< number of launch arguments; must be less-than or equal-to numFunctions
+    const xe_thread_group_dimensions_t* pLaunchArgumentsBuffer, ///< [in] pointer to device buffer that will contain a contiguous array of
+                                                    ///< launch arguments
     xe_event_handle_t hEvent                        ///< [in][optional] handle of the event to signal on completion
     )
 {
@@ -1055,14 +1051,14 @@ xeCommandListAppendDispatchMultipleFunctionsIndirect(
             // Check parameters
             if( nullptr == hCommandList ) return XE_RESULT_ERROR_INVALID_PARAMETER;
             if( nullptr == phFunctions ) return XE_RESULT_ERROR_INVALID_PARAMETER;
-            if( nullptr == pNumDispatchArguments ) return XE_RESULT_ERROR_INVALID_PARAMETER;
-            if( nullptr == pDispatchArgumentsBuffer ) return XE_RESULT_ERROR_INVALID_PARAMETER;
+            if( nullptr == pNumLaunchArguments ) return XE_RESULT_ERROR_INVALID_PARAMETER;
+            if( nullptr == pLaunchArgumentsBuffer ) return XE_RESULT_ERROR_INVALID_PARAMETER;
         }
         /// @begin
 #if defined(XE_NULLDRV)
         return XE_RESULT_SUCCESS;
 #else
-        return L0::CommandList::fromHandle(hCommandList)->appendDispatchMultipleFunctionsIndirect(numFunctions, phFunctions, pNumDispatchArguments, pDispatchArgumentsBuffer, hEvent);
+        return L0::CommandList::fromHandle(hCommandList)->appendLaunchMultipleFunctionsIndirect(numFunctions, phFunctions, pNumLaunchArguments, pLaunchArgumentsBuffer, hEvent);
 #endif
         /// @end
     }
@@ -1082,8 +1078,8 @@ xeCommandListAppendDispatchMultipleFunctionsIndirect(
 }
 
 ///////////////////////////////////////////////////////////////////////////////
-/// @brief Dispatch host function. All work after this command in the command
-///        list will block until host function completes.
+/// @brief Launch host function. All work after this command in the command list
+///        will block until host function completes.
 /// 
 /// @details
 ///     - This function may **not** be called from simultaneous threads.
@@ -1102,10 +1098,10 @@ xeCommandListAppendDispatchMultipleFunctionsIndirect(
 ///         + nullptr == pUserData
 ///     - ::XE_RESULT_ERROR_UNSUPPORTED
 ///
-/// @hash {4788cfcb56f16d9df12bda8047f9086878b9fa3a5a6d6d8b650782725ee59c6b}
+/// @hash {15f93ac009dc6864a4834f4dd47e8540f35196beb78ca462712382f0676791cd}
 ///
 __xedllexport xe_result_t __xecall
-xeCommandListAppendDispatchHostFunction(
+xeCommandListAppendLaunchHostFunction(
     xe_command_list_handle_t hCommandList,          ///< [in] handle of the command list
     xe_host_pfn_t pfnHostFunc,                      ///< [in] pointer to host function.
     void* pUserData                                 ///< [in] pointer to user data to pass to host function.
@@ -1124,7 +1120,7 @@ xeCommandListAppendDispatchHostFunction(
 #if defined(XE_NULLDRV)
         return XE_RESULT_SUCCESS;
 #else
-        return L0::CommandList::fromHandle(hCommandList)->appendDispatchHostFunction(pfnHostFunc, pUserData);
+        return L0::CommandList::fromHandle(hCommandList)->appendLaunchHostFunction(pfnHostFunc, pUserData);
 #endif
         /// @end
     }

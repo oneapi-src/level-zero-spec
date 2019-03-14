@@ -207,7 +207,7 @@ namespace xe
     ///       Device allocations associated with this function
     ///     - The implementation of this function should be lock-free.
     ///     - This can be called multiple times. The driver copies the group size
-    ///       information when encoding dispatch functions into a command list.
+    ///       information when appending functions into a command list.
     /// 
     /// @throws result_t
     inline void 

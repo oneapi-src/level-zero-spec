@@ -264,13 +264,13 @@ members:
       desc: "[out] Maximum items for Z dimension in group"
     - type: uint32_t
       name: maxGroupCountX
-      desc: "[out] Maximum groups that can be dispatched for x dimension"
+      desc: "[out] Maximum groups that can be launched for x dimension"
     - type: uint32_t
       name: maxGroupCountY
-      desc: "[out] Maximum groups that can be dispatched for y dimension"
+      desc: "[out] Maximum groups that can be launched for y dimension"
     - type: uint32_t
       name: maxGroupCountZ
-      desc: "[out] Maximum groups that can be dispatched for z dimension"
+      desc: "[out] Maximum groups that can be launched for z dimension"
     - type: uint32_t
       name: maxSharedLocalMemory
       desc: "[out] Maximum shared local memory per group."

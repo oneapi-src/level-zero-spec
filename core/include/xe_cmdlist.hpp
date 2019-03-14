@@ -89,12 +89,12 @@ namespace xe
         };
 
         ///////////////////////////////////////////////////////////////////////////////
-        /// @brief C++ version for ::xe_dispatch_function_arguments_t
-        struct dispatch_function_arguments_t
+        /// @brief C++ version for ::xe_thread_group_dimensions_t
+        struct thread_group_dimensions_t
         {
-            uint32_t groupCountX = 0;                       ///< [in] width of dispatches in X dimension
-            uint32_t groupCountY = 0;                       ///< [in] width of dispatches in Y dimension
-            uint32_t groupCountZ = 0;                       ///< [in] width of dispatches in Z dimension
+            uint32_t groupCountX = 0;                       ///< [in] size of thread group in X dimension
+            uint32_t groupCountY = 0;                       ///< [in] size of thread group in Y dimension
+            uint32_t groupCountZ = 0;                       ///< [in] size of thread group in Z dimension
 
         };
 
@@ -283,45 +283,44 @@ namespace xe
             );
 
         ///////////////////////////////////////////////////////////////////////////////
-        /// @brief C++ wrapper for ::xeCommandListAppendDispatchFunction
+        /// @brief C++ wrapper for ::xeCommandListAppendLaunchFunction
         /// @throws result_t
         inline void
-        AppendDispatchFunction(
+        AppendLaunchFunction(
             function_handle_t hFunction,                    ///< [in] handle of the function object
-            const dispatch_function_arguments_t* pDispatchFuncArgs, ///< [in] dispatch function arguments.
+            const thread_group_dimensions_t* pLaunchFuncArgs,   ///< [in] launch function arguments.
             event_handle_t hEvent                           ///< [in][optional] handle of the event to signal on completion
             );
 
         ///////////////////////////////////////////////////////////////////////////////
-        /// @brief C++ wrapper for ::xeCommandListAppendDispatchFunctionIndirect
+        /// @brief C++ wrapper for ::xeCommandListAppendLaunchFunctionIndirect
         /// @throws result_t
         inline void
-        AppendDispatchFunctionIndirect(
+        AppendLaunchFunctionIndirect(
             function_handle_t hFunction,                    ///< [in] handle of the function object
-            const dispatch_function_arguments_t* pDispatchArgumentsBuffer,  ///< [in] pointer to device buffer that will contain dispatch arguments
+            const thread_group_dimensions_t* pLaunchArgumentsBuffer,///< [in] pointer to device buffer that will contain launch arguments
             event_handle_t hEvent                           ///< [in][optional] handle of the event to signal on completion
             );
 
         ///////////////////////////////////////////////////////////////////////////////
-        /// @brief C++ wrapper for ::xeCommandListAppendDispatchMultipleFunctionsIndirect
+        /// @brief C++ wrapper for ::xeCommandListAppendLaunchMultipleFunctionsIndirect
         /// @throws result_t
         inline void
-        AppendDispatchMultipleFunctionsIndirect(
-            uint32_t numFunctions,                          ///< [in] maximum number of functions to dispatch
+        AppendLaunchMultipleFunctionsIndirect(
+            uint32_t numFunctions,                          ///< [in] maximum number of functions to launch
             const function_handle_t* phFunctions,           ///< [in] handles of the function objects
-            const size_t* pNumDispatchArguments,            ///< [in] pointer to device memory location that will contain the actual
-                                                            ///< number of dispatch arguments; must be less-than or equal-to
-                                                            ///< numFunctions
-            const dispatch_function_arguments_t* pDispatchArgumentsBuffer,  ///< [in] pointer to device buffer that will contain a contiguous array of
-                                                            ///< dispatch arguments
+            const size_t* pNumLaunchArguments,              ///< [in] pointer to device memory location that will contain the actual
+                                                            ///< number of launch arguments; must be less-than or equal-to numFunctions
+            const thread_group_dimensions_t* pLaunchArgumentsBuffer,///< [in] pointer to device buffer that will contain a contiguous array of
+                                                            ///< launch arguments
             event_handle_t hEvent                           ///< [in][optional] handle of the event to signal on completion
             );
 
         ///////////////////////////////////////////////////////////////////////////////
-        /// @brief C++ wrapper for ::xeCommandListAppendDispatchHostFunction
+        /// @brief C++ wrapper for ::xeCommandListAppendLaunchHostFunction
         /// @throws result_t
         inline void
-        AppendDispatchHostFunction(
+        AppendLaunchHostFunction(
             host_pfn_t pfnHostFunc,                         ///< [in] pointer to host function.
             void* pUserData                                 ///< [in] pointer to user data to pass to host function.
             );

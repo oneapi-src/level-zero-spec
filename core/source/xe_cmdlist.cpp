@@ -283,7 +283,7 @@ xeCommandListClose(
 }
 
 ///////////////////////////////////////////////////////////////////////////////
-/// @brief Reset a command list to initial (empty) state; ready for encoding
+/// @brief Reset a command list to initial (empty) state; ready for appending
 ///        commands.
 /// 
 /// @details

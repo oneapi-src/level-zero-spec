@@ -513,7 +513,7 @@ namespace xe
     }
 
     ///////////////////////////////////////////////////////////////////////////////
-    /// @brief C++ wrapper for ::xeCommandListAppendDispatchFunction
+    /// @brief C++ wrapper for ::xeCommandListAppendLaunchFunction
     /// 
     /// @details
     ///     - This function may **not** be called from simultaneous threads.
@@ -525,22 +525,22 @@ namespace xe
     /// 
     /// @throws result_t
     inline void 
-    CommandList::AppendDispatchFunction(
+    CommandList::AppendLaunchFunction(
         function_handle_t hFunction,                    ///< [in] handle of the function object
-        const dispatch_function_arguments_t* pDispatchFuncArgs, ///< [in] dispatch function arguments.
+        const thread_group_dimensions_t* pLaunchFuncArgs,   ///< [in] launch function arguments.
         event_handle_t hEvent                           ///< [in][optional] handle of the event to signal on completion
         )
     {
-        // auto result = ::xeCommandListAppendDispatchFunction( handle, hFunction->getHandle(), pDispatchFuncArgs, hEvent->getHandle() );
-        // if( ::XE_RESULT_SUCCESS != result ) throw exception(result, "xe::CommandList::AppendDispatchFunction");
+        // auto result = ::xeCommandListAppendLaunchFunction( handle, hFunction->getHandle(), pLaunchFuncArgs, hEvent->getHandle() );
+        // if( ::XE_RESULT_SUCCESS != result ) throw exception(result, "xe::CommandList::AppendLaunchFunction");
     }
 
     ///////////////////////////////////////////////////////////////////////////////
-    /// @brief C++ wrapper for ::xeCommandListAppendDispatchFunctionIndirect
+    /// @brief C++ wrapper for ::xeCommandListAppendLaunchFunctionIndirect
     /// 
     /// @details
-    ///     - The dispatch arguments need to be device visible.
-    ///     - The dispatch arguments buffer may not be reusued until dispatch has
+    ///     - The launch arguments need to be device visible.
+    ///     - The launch arguments buffer may not be reusued until the function has
     ///       completed on the device.
     ///     - This function may **not** be called from simultaneous threads.
     ///     - The implementation of this function should be lock-free.
@@ -551,23 +551,23 @@ namespace xe
     /// 
     /// @throws result_t
     inline void 
-    CommandList::AppendDispatchFunctionIndirect(
+    CommandList::AppendLaunchFunctionIndirect(
         function_handle_t hFunction,                    ///< [in] handle of the function object
-        const dispatch_function_arguments_t* pDispatchArgumentsBuffer,  ///< [in] pointer to device buffer that will contain dispatch arguments
+        const thread_group_dimensions_t* pLaunchArgumentsBuffer,///< [in] pointer to device buffer that will contain launch arguments
         event_handle_t hEvent                           ///< [in][optional] handle of the event to signal on completion
         )
     {
-        // auto result = ::xeCommandListAppendDispatchFunctionIndirect( handle, hFunction->getHandle(), pDispatchArgumentsBuffer, hEvent->getHandle() );
-        // if( ::XE_RESULT_SUCCESS != result ) throw exception(result, "xe::CommandList::AppendDispatchFunctionIndirect");
+        // auto result = ::xeCommandListAppendLaunchFunctionIndirect( handle, hFunction->getHandle(), pLaunchArgumentsBuffer, hEvent->getHandle() );
+        // if( ::XE_RESULT_SUCCESS != result ) throw exception(result, "xe::CommandList::AppendLaunchFunctionIndirect");
     }
 
     ///////////////////////////////////////////////////////////////////////////////
-    /// @brief C++ wrapper for ::xeCommandListAppendDispatchMultipleFunctionsIndirect
+    /// @brief C++ wrapper for ::xeCommandListAppendLaunchMultipleFunctionsIndirect
     /// 
     /// @details
-    ///     - The array of dispatch arguments need to be device visible.
-    ///     - The array of dispatch arguments buffer may not be reusued until
-    ///       dispatch has completed on the device.
+    ///     - The array of launch arguments need to be device visible.
+    ///     - The array of launch arguments buffer may not be reusued until the
+    ///       function has completed on the device.
     ///     - This function may **not** be called from simultaneous threads.
     ///     - The implementation of this function should be lock-free.
     /// 
@@ -577,23 +577,22 @@ namespace xe
     /// 
     /// @throws result_t
     inline void 
-    CommandList::AppendDispatchMultipleFunctionsIndirect(
-        uint32_t numFunctions,                          ///< [in] maximum number of functions to dispatch
+    CommandList::AppendLaunchMultipleFunctionsIndirect(
+        uint32_t numFunctions,                          ///< [in] maximum number of functions to launch
         const function_handle_t* phFunctions,           ///< [in] handles of the function objects
-        const size_t* pNumDispatchArguments,            ///< [in] pointer to device memory location that will contain the actual
-                                                        ///< number of dispatch arguments; must be less-than or equal-to
-                                                        ///< numFunctions
-        const dispatch_function_arguments_t* pDispatchArgumentsBuffer,  ///< [in] pointer to device buffer that will contain a contiguous array of
-                                                        ///< dispatch arguments
+        const size_t* pNumLaunchArguments,              ///< [in] pointer to device memory location that will contain the actual
+                                                        ///< number of launch arguments; must be less-than or equal-to numFunctions
+        const thread_group_dimensions_t* pLaunchArgumentsBuffer,///< [in] pointer to device buffer that will contain a contiguous array of
+                                                        ///< launch arguments
         event_handle_t hEvent                           ///< [in][optional] handle of the event to signal on completion
         )
     {
-        // auto result = ::xeCommandListAppendDispatchMultipleFunctionsIndirect( handle, numFunctions, phFunctions, pNumDispatchArguments, pDispatchArgumentsBuffer, hEvent->getHandle() );
-        // if( ::XE_RESULT_SUCCESS != result ) throw exception(result, "xe::CommandList::AppendDispatchMultipleFunctionsIndirect");
+        // auto result = ::xeCommandListAppendLaunchMultipleFunctionsIndirect( handle, numFunctions, phFunctions, pNumLaunchArguments, pLaunchArgumentsBuffer, hEvent->getHandle() );
+        // if( ::XE_RESULT_SUCCESS != result ) throw exception(result, "xe::CommandList::AppendLaunchMultipleFunctionsIndirect");
     }
 
     ///////////////////////////////////////////////////////////////////////////////
-    /// @brief C++ wrapper for ::xeCommandListAppendDispatchHostFunction
+    /// @brief C++ wrapper for ::xeCommandListAppendLaunchHostFunction
     /// 
     /// @details
     ///     - This function may **not** be called from simultaneous threads.
@@ -605,13 +604,13 @@ namespace xe
     /// 
     /// @throws result_t
     inline void 
-    CommandList::AppendDispatchHostFunction(
+    CommandList::AppendLaunchHostFunction(
         host_pfn_t pfnHostFunc,                         ///< [in] pointer to host function.
         void* pUserData                                 ///< [in] pointer to user data to pass to host function.
         )
     {
-        // auto result = ::xeCommandListAppendDispatchHostFunction( handle, pfnHostFunc, pUserData );
-        // if( ::XE_RESULT_SUCCESS != result ) throw exception(result, "xe::CommandList::AppendDispatchHostFunction");
+        // auto result = ::xeCommandListAppendLaunchHostFunction( handle, pfnHostFunc, pUserData );
+        // if( ::XE_RESULT_SUCCESS != result ) throw exception(result, "xe::CommandList::AppendLaunchHostFunction");
     }
 
 } // namespace xe

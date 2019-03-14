@@ -119,7 +119,7 @@ params:
       desc: "[in] handle of command list object to close"
 --- #--------------------------------------------------------------------------
 type: function
-desc: "Reset a command list to initial (empty) state; ready for encoding commands."
+desc: "Reset a command list to initial (empty) state; ready for appending commands."
 class: $xCommandList
 name: Reset
 details:

@@ -273,7 +273,7 @@ name: SetGroupSize
 details:
     - "The implementation of this function will immediately free all Host and Device allocations associated with this function"
     - "The implementation of this function should be lock-free."
-    - "This can be called multiple times. The driver copies the group size information when encoding dispatch functions into a command list."
+    - "This can be called multiple times. The driver copies the group size information when appending functions into a command list."
 params:
     - type: "$x_function_handle_t"
       name: hFunction
@@ -323,7 +323,7 @@ returns:
         - "invalid number of threads."
 --- #--------------------------------------------------------------------------
 type: function
-desc: "Set function argument used for function dispatch."
+desc: "Set function argument used on function launch."
 class: $xFunction
 name: SetArgumentValue
 details:
@@ -431,27 +431,27 @@ returns:
         - "invalid value for attr"
 --- #--------------------------------------------------------------------------
 type: struct
-desc: "Dispatch function arguments."
+desc: "Function thread group dimensions."
 class: $xCommandList
-name: $x_dispatch_function_arguments_t
+name: $x_thread_group_dimensions_t
 members:
     - type: "uint32_t"
       name: groupCountX
-      desc: "[in] width of dispatches in X dimension"
+      desc: "[in] size of thread group in X dimension"
       init: "0"
     - type: "uint32_t"
       name: groupCountY
-      desc: "[in] width of dispatches in Y dimension"
+      desc: "[in] size of thread group in Y dimension"
       init: "0"
     - type: "uint32_t"
       name: groupCountZ
-      desc: "[in] width of dispatches in Z dimension"
+      desc: "[in] size of thread group in Z dimension"
       init: "0"
 --- #--------------------------------------------------------------------------
 type: function
-desc: "Dispatch function over one or more work groups."
+desc: "Launch function over one or more work groups."
 class: $xCommandList
-name: AppendDispatchFunction
+name: AppendLaunchFunction
 analogue:
     - "**cuLaunchKernel**"
 details:
@@ -464,26 +464,22 @@ params:
     - type: "$x_function_handle_t"
       name: hFunction
       desc: "[in] handle of the function object"
-    - type: "const $x_dispatch_function_arguments_t*"
-      name: pDispatchFuncArgs
-      desc: "[in] dispatch function arguments."
+    - type: "const $x_thread_group_dimensions_t*"
+      name: pLaunchFuncArgs
+      desc: "[in] launch function arguments."
     - type: $x_event_handle_t
       name: hEvent
       desc: "[in][optional] handle of the event to signal on completion"
-returns:
-    - $X_RESULT_ERROR_INVALID_PARAMETER:
-        - "invalid group count range for dispatch"
-        - "invalid dispatch count range for dispatch"
 --- #--------------------------------------------------------------------------
 type: function
-desc: "Dispatch function over one or more work groups using indirect dispatch arguments."
+desc: "Launch function over one or more work groups using indirect arguments."
 class: $xCommandList
-name: AppendDispatchFunctionIndirect
+name: AppendLaunchFunctionIndirect
 analogue:
     - "**cuLaunchKernel**"
 details:
-    - "The dispatch arguments need to be device visible."
-    - "The dispatch arguments buffer may not be reusued until dispatch has completed on the device."
+    - "The launch arguments need to be device visible."
+    - "The launch arguments buffer may not be reusued until the function has completed on the device."
     - "This function may **not** be called from simultaneous threads."
     - "The implementation of this function should be lock-free."
 params:
@@ -493,22 +489,22 @@ params:
     - type: "$x_function_handle_t"
       name: hFunction
       desc: "[in] handle of the function object"
-    - type: "const $x_dispatch_function_arguments_t*"
-      name: pDispatchArgumentsBuffer
-      desc: "[in] pointer to device buffer that will contain dispatch arguments"
+    - type: "const $x_thread_group_dimensions_t*"
+      name: pLaunchArgumentsBuffer
+      desc: "[in] pointer to device buffer that will contain launch arguments"
     - type: $x_event_handle_t
       name: hEvent
       desc: "[in][optional] handle of the event to signal on completion"
 --- #--------------------------------------------------------------------------
 type: function
-desc: "Dispatch multiple functions over one or more work groups using an array of indirect dispatch arguments."
+desc: "Launch multiple functions over one or more work groups using an array of indirect arguments."
 class: $xCommandList
-name: AppendDispatchMultipleFunctionsIndirect
+name: AppendLaunchMultipleFunctionsIndirect
 analogue:
     - "**cuLaunchKernel**"
 details:
-    - "The array of dispatch arguments need to be device visible."
-    - "The array of dispatch arguments buffer may not be reusued until dispatch has completed on the device."
+    - "The array of launch arguments need to be device visible."
+    - "The array of launch arguments buffer may not be reusued until the function has completed on the device."
     - "This function may **not** be called from simultaneous threads."
     - "The implementation of this function should be lock-free."
 params:
@@ -517,22 +513,22 @@ params:
       desc: "[in] handle of the command list"
     - type: uint32_t
       name: numFunctions
-      desc: "[in] maximum number of functions to dispatch"
+      desc: "[in] maximum number of functions to launch"
     - type: "const $x_function_handle_t*"
       name: phFunctions
       desc: "[in] handles of the function objects"
     - type: "const size_t*"
-      name: pNumDispatchArguments
-      desc: "[in] pointer to device memory location that will contain the actual number of dispatch arguments; must be less-than or equal-to numFunctions"
-    - type: "const $x_dispatch_function_arguments_t*"
-      name: pDispatchArgumentsBuffer
-      desc: "[in] pointer to device buffer that will contain a contiguous array of dispatch arguments"
+      name: pNumLaunchArguments
+      desc: "[in] pointer to device memory location that will contain the actual number of launch arguments; must be less-than or equal-to numFunctions"
+    - type: "const $x_thread_group_dimensions_t*"
+      name: pLaunchArgumentsBuffer
+      desc: "[in] pointer to device buffer that will contain a contiguous array of launch arguments"
     - type: $x_event_handle_t
       name: hEvent
       desc: "[in][optional] handle of the event to signal on completion"
 --- #--------------------------------------------------------------------------
 type: typedef
-desc: "type definition for host function pointers used with $xCommandListAppendDispatchHostFunction"
+desc: "type definition for host function pointers used with $xCommandListAppendLaunchHostFunction"
 class: $xCommandList
 name: $x_host_pfn_t
 returns: void
@@ -545,9 +541,9 @@ params:
       desc: "[in] Pointer to user data to pass to host function."
 --- #--------------------------------------------------------------------------
 type: function
-desc: "Dispatch host function. All work after this command in the command list will block until host function completes."
+desc: "Launch host function. All work after this command in the command list will block until host function completes."
 class: $xCommandList
-name: AppendDispatchHostFunction
+name: AppendLaunchHostFunction
 analogue:
     - "**cuLaunchHostFunc**"
 details:

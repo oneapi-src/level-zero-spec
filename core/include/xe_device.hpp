@@ -383,9 +383,9 @@ namespace xe
             uint32_t maxGroupSizeX;                         ///< [out] Maximum items for X dimension in group
             uint32_t maxGroupSizeY;                         ///< [out] Maximum items for Y dimension in group
             uint32_t maxGroupSizeZ;                         ///< [out] Maximum items for Z dimension in group
-            uint32_t maxGroupCountX;                        ///< [out] Maximum groups that can be dispatched for x dimension
-            uint32_t maxGroupCountY;                        ///< [out] Maximum groups that can be dispatched for y dimension
-            uint32_t maxGroupCountZ;                        ///< [out] Maximum groups that can be dispatched for z dimension
+            uint32_t maxGroupCountX;                        ///< [out] Maximum groups that can be launched for x dimension
+            uint32_t maxGroupCountY;                        ///< [out] Maximum groups that can be launched for y dimension
+            uint32_t maxGroupCountZ;                        ///< [out] Maximum groups that can be launched for z dimension
             uint32_t maxSharedLocalMemory;                  ///< [out] Maximum shared local memory per group.
             uint32_t maxGroupRegisters;                     ///< [out] Maximum physical registers available per group
             uint32_t numSubGroupSizes;                      ///< [out] Number of subgroup sizes supported. This indicates number of
