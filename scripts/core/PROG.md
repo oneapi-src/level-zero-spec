@@ -125,8 +125,11 @@ See ::${x}_command_queue_desc_t for more details.
     assert(subdeviceProps.subdeviceId == 2);    // Ensure that we have a handle to the sub-device we asked for.
 
     ...
+    ${x}_mem_allocator_handle_t hAllocator;
+    ${x}CreateMemAllocator(hAllocator);
+
     void* pMemForSubDevice2;
-    ${x}MemAlloc(subDevice, ${X}_DEVICE_MEM_ALLOC_DEFAULT, memSize, sizeof(uint32_t), &pMemForSubDevice2);
+    ${x}MemAlloc(hAllocator, subDevice, ${X}_DEVICE_MEM_ALLOC_FLAG_DEFAULT, memSize, sizeof(uint32_t), &pMemForSubDevice2);
     ...
 
     ...
@@ -251,7 +254,7 @@ The following sample code demonstrates submission of commands to a command queue
     ${x}CommandQueueEnqueueCommandLists(hCommandQueue, 1, &hCommandList, nullptr);
 
     // synchronize host and device
-    ${x}CommandQueueSynchronize(hCommandQueue, ${X}_SYNCHRONIZATION_MODE_POLL, 0, 0, -1);
+    ${x}CommandQueueSynchronize(hCommandQueue, MAX_UINT32);
 
     // Reset (recycle) command list for new commands
     ${x}CommandListReset(hCommandList);
@@ -282,12 +285,12 @@ ${"##"} Execution Barriers
 
 The following sample code demonstrates a sequence for submission of an execution barrier:
 ```c
-    ${x}CommandListEncodeDispatchFunction(hCommandList, hFunction1, ...);
+    ${x}CommandListEncodeDispatchFunction(hCommandList, hFunction, &dispatchArgs, nullptr);
 
     // Encode a barrier into a command list to ensure hFunctionFunction1 completes before hFunction2 begins
     ${x}CommandListEncodeExecutionBarrier(hCommandList);
 
-    ${x}CommandListEncodeDispatchFunction(hCommandList, hFunction2, ...);
+    ${x}CommandListEncodeDispatchFunction(hCommandList, hFunction, &dispatchArgs, nullptr);
     ...
 ```
 
@@ -344,7 +347,7 @@ The following sample code demonstrates a sequence for creation, submission and q
     ${x}CommandQueueEnqueueCommandLists(hCommandQueue, 1, &hCommandList, hFence);
 
     // Wait for fence to be signaled
-    ${x}HostWaitOnFence(hFence, MAX_UINT32);
+    ${x}FenceHostSynchronize(hFence, MAX_UINT32);
     ${x}FenceReset(hFence);
     ...
 ```
@@ -393,7 +396,7 @@ The following sample code demonstrates a sequence for creation and submission of
     ${x}CommandQueueEnqueueCommandLists(hCommandQueue, 1, &hCommandList, nullptr);
 
     // Signal the device
-    ${x}HostSignalEvent(hEvent);
+    ${x}EventHostSignal(hEvent);
     ...
 ```
 
@@ -418,7 +421,7 @@ The following sample code demonstrates a sequence for measuring time between eve
     ${x}CommandQueueEnqueueCommandLists(hCommandQueue, 1, &hCommandList, nullptr);
 
     // Wait for the last event to complete
-    ${x}HostWaitOnEvent(hEventEnd, MAX_UINT32);
+    ${x}EventHostSynchronize(hEventEnd, MAX_UINT32);
 
     // calculate the delta time
     double time = 0.f;
@@ -442,7 +445,7 @@ The following sample code demonstrates a sequence for collecting counters betwee
     ${x}CommandQueueEnqueueCommandLists(hCommandQueue, 1, &hCommandList, nullptr);
 
     // Wait for the last event to complete
-    ${x}HostWaitOnEvent(hEventEnd, MAX_UINT32);
+    ${x}EventHostSynchronize(hEventEnd, MAX_UINT32);
 
     // calculate the delta counter values
     uint32_t counters[64] = {};
@@ -534,7 +537,7 @@ and avoids exposing these details in the API in a backwards compatible fashion.
 ```c
     ${x}_image_desc_t imageDesc = {
         ${X}_IMAGE_DESC_VERSION_CURRENT,
-        ${X}_IMAGE_FLAG_KERNEL_READ,
+        ${X}_IMAGE_FLAG_PROGRAM_READ,
         ${X}_IMAGE_TYPE_2D,
         ${X}_IMAGE_FORMAT_FLOAT32, 1,
         128, 128, 0, 0, 0
@@ -573,7 +576,7 @@ However, in cases where the devices does **not** support page-faulting _and_ the
 such as multiple levels of indirection, there are two methods available:
 1. the application may set the ::${X}_FUNCTION_FLAG_FORCE_RESIDENCY flag during program creation to force all device allocations to be resident during execution.
  + in addition, the application should indicate the type of allocations that will be indirectly accessed using ::${x}_function_set_attribute_t
- + if the driver is unable to make all allocations resident, then the call to ::${x}CommandQueueEnqueueCommandLists will return $X_RESULT_ERROR_OUT_OF_DEVICE_MEMORY
+ + if the driver is unable to make all allocations resident, then the call to ::${x}CommandQueueEnqueueCommandLists will return ${X}_RESULT_ERROR_OUT_OF_DEVICE_MEMORY
 2. explcit ::${x}DeviceMakeMemoryResident APIs are included for the application to dynamically change residency as needed. (Windows-only)
  + if the application over-commits device memory, then a call to ::${x}DeviceMakeMemoryResident will return ${X}_RESULT_ERROR_OUT_OF_DEVICE_MEMORY
 
@@ -585,12 +588,12 @@ The following sample code demonstrate a sequence for using coarse-grain residenc
         node* next;
     };
     node* begin = nullptr;
-    ${x}HostMemAlloc(${X}_HOST_MEM_ALLOC_DEFAULT, sizeof(node), 1, &begin);
-    ${x}HostMemAlloc(${X}_HOST_MEM_ALLOC_DEFAULT, sizeof(node), 1, &begin->next);
-    ${x}HostMemAlloc(${X}_HOST_MEM_ALLOC_DEFAULT, sizeof(node), 1, &begin->next->next);
+    ${x}HostMemAlloc(hAllocator, ${X}_HOST_MEM_ALLOC_FLAG_DEFAULT, sizeof(node), 1, &begin);
+    ${x}HostMemAlloc(hAllocator, ${X}_HOST_MEM_ALLOC_FLAG_DEFAULT, sizeof(node), 1, &begin->next);
+    ${x}HostMemAlloc(hAllocator, ${X}_HOST_MEM_ALLOC_FLAG_DEFAULT, sizeof(node), 1, &begin->next->next);
 
     // 'begin' is passed as function argument and encoded into command list
-    ${x}FunctionSetAttribute(hFuncArgs, ${X}_FUNCTION_ARG_ATTR_INDIRECT_HOST_ACCESS, TRUE);
+    ${x}FunctionSetAttribute(hFuncArgs, ${X}_FUNCTION_SET_ATTR_INDIRECT_HOST_ACCESS, TRUE);
     ${x}FunctionSetArgumentValue(hFunction, 0, sizeof(node*), &begin);
     ${x}CommandListEncodeDispatchFunction(hCommandList, hFunction, &dispatchArgs, nullptr);
     ...
@@ -605,9 +608,9 @@ The following sample code demonstrate a sequence for using fine-grain residency 
         node* next;
     };
     node* begin = nullptr;
-    ${x}HostMemAlloc(${X}_HOST_MEM_ALLOC_DEFAULT, sizeof(node), 1, &begin);
-    ${x}HostMemAlloc(${X}_HOST_MEM_ALLOC_DEFAULT, sizeof(node), 1, &begin->next);
-    ${x}HostMemAlloc(${X}_HOST_MEM_ALLOC_DEFAULT, sizeof(node), 1, &begin->next->next);
+    ${x}HostMemAlloc(hAllocator, ${X}_HOST_MEM_ALLOC_FLAG_DEFAULT, sizeof(node), 1, &begin);
+    ${x}HostMemAlloc(hAllocator, ${X}_HOST_MEM_ALLOC_FLAG_DEFAULT, sizeof(node), 1, &begin->next);
+    ${x}HostMemAlloc(hAllocator, ${X}_HOST_MEM_ALLOC_FLAG_DEFAULT, sizeof(node), 1, &begin->next->next);
 
     // 'begin' is passed as function argument and encoded into command list
     ${x}FunctionSetArgumentValue(hFunction, 0, sizeof(node*), &begin);
@@ -618,11 +621,10 @@ The following sample code demonstrate a sequence for using fine-grain residency 
     ${x}DeviceMakeMemoryResident(hDevice, begin->next, sizeof(node));
     ${x}DeviceMakeMemoryResident(hDevice, begin->next->next, sizeof(node));
 
-    ${x}CommandQueueEnqueueCommandLists(hCommandQueue, 1, &hCommandList, nullptr);
+    ${x}CommandQueueEnqueueCommandLists(hCommandQueue, 1, &hCommandList, hFence);
 
     // wait until complete
-    ${x}FenceEnqueueSignal(hFence);
-    ${x}HostWaitOnFence(hFence, ${X}_SYNCHRONIZATION_MODE_SLEEP, 1, 1, -1);
+    ${x}FenceHostSynchronize(hFence, MAX_UINT32);
 
     // Finally, evict to free device resources
     ${x}DeviceEvictMemory(hDevice, begin->next, sizeof(node));
@@ -661,7 +663,7 @@ The following sample code demonstrates a sequence for creating a module from an 
     // OpenCL C function has been compiled to SPIRV IL (pImageScalingIL)
     ${x}_module_desc_t moduleDesc = {
         ${X}_MODULE_DESC_VERSION_CURRENT,
-        ${X}_MODULE_IL_SPIRV,
+        ${X}_MODULE_FORMAT_IL_SPIRV,
         ilSize,
         pImageScalingIL,
         nullptr
@@ -689,10 +691,10 @@ The ::${x}DeviceCreateModule function can optionally generate a build log object
     ${x}_result_t result = ${x}DeviceCreateModule(hDevice, &desc, &module, &buildlog);
 
     // Only save build logs for module creation errors.
-    if (result != ${X}_RESULT_SUCESS)
+    if (result != ${X}_RESULT_SUCCESS)
     {
         uint32_t buildlogSize;
-        ${x}_char_t* pBuildLogString;
+        char_t* pBuildLogString;
         result = ${x}ModuleBuildLogGetString(buildlog, &buildlogSize, &pBuildLogString);
 
         // Save log to disk.
@@ -714,7 +716,7 @@ responsibility of the application to implement this using ::${x}ModuleGetNativeB
     if (cacheUpdateNeeded)
     {
         uint32_t size;
-        ${x}_char_t* pNativeBinary;  // Pointer to native binary.
+        char_t* pNativeBinary;  // Pointer to native binary.
         ${x}ModuleGetNativeBinary(hModule, &size, &pNativeBinary);
 
         // cache pNativeBinary for corresponding IL
@@ -745,7 +747,7 @@ The following sample code demonstrates a sequence for creating a function from a
 ```
 
 ${"###"} Function Attributes
-Use ${x}FunctionGetAttribute to query attributes from a function object.
+Use ::${x}FunctionGetAttribute to query attributes from a function object.
 
 ```c
     ...
@@ -757,7 +759,7 @@ Use ${x}FunctionGetAttribute to query attributes from a function object.
 ```
 See ::${x}_function_get_attribute_t for more information on the "get" attributes.
 
-Use ${x}FunctionSetAttributes to set attributes from a function object.
+Use ::${x}FunctionSetAttribute to set attributes from a function object.
 
 ```c
     // Function performs indirect device access.
@@ -770,7 +772,7 @@ See ::${x}_function_set_attribute_t for more information on the "set" attributes
 ${"##"} Execution
 
 ${"###"} Function Group Size
-The group size for a function can be set using ${x}FunctionSetGroupSize. If a group size is not
+The group size for a function can be set using ::${x}FunctionSetGroupSize. If a group size is not
 set prior to encoding a dispatch function into a command list then a default will be chosen.
 The group size can updated over a series of encode dispatch operations. The driver will copy the
 group size information when encoding the dispatch function into the command list.
@@ -782,7 +784,7 @@ group size information when encoding the dispatch function into the command list
 ```
 
 The API supports a query for suggested group size when providing the global size. This function ignores the
-group size that was set on the function using ${x}FunctionSetGroupSize.
+group size that was set on the function using ::${x}FunctionSetGroupSize.
 
 ```c
     // Find suggested group size for processing image.
@@ -797,7 +799,7 @@ group size that was set on the function using ${x}FunctionSetGroupSize.
 
 ${"###"} <a name="arg">Function Arguments</a>
 Function arguments represent only the explicit function arguments that are within "brackets" e.g. func(arg1, arg2, ...).
-- Use ${x}FunctionSetArgumentValue to setup arguments for a function dispatch.
+- Use ::${x}FunctionSetArgumentValue to setup arguments for a function dispatch.
 - The EncodeDispatchFunction command will make a copy the function arguments to send to the device.
 - Function arguments can be updated at anytime and used across multiple dispatches.
 
@@ -818,8 +820,8 @@ The following sample code demonstrates a sequence for creating function args and
     ${x}CommandListEncodeDispatchFunction(hCommandList, hFunction, &dispatchArgs, nullptr);
 
     // Update image pointers to copy and scale next image.
-    ${x}FunctionArgsSetValue(hFunction, 0, sizeof(${x}_image_handle_t), &src2_image);
-    ${x}FunctionArgsSetValue(hFunction, 1, sizeof(${x}_image_handle_t), &dest2_image);
+    ${x}FunctionSetArgumentValue(hFunction, 0, sizeof(${x}_image_handle_t), &src2_image);
+    ${x}FunctionSetArgumentValue(hFunction, 1, sizeof(${x}_image_handle_t), &dest2_image);
 
     // Encode dispatch command
     ${x}CommandListEncodeDispatchFunction(hCommandList, hFunction, &dispatchArgs, nullptr);
@@ -829,7 +831,7 @@ The following sample code demonstrates a sequence for creating function args and
 
 ${"###"} <a name="arg">Function Dispatch</a>
 In order to invoke a function on the device you must call one of the CommandListEncodeDispatch* functions for
-a command list. The most basic version of these is ${x}CommandListEncodeDispatchFunction which takes a
+a command list. The most basic version of these is ::${x}CommandListEncodeDispatchFunction which takes a
 command list, function, dispatch arguments, and an optional synchronization event used to signal completion.
 The dispatch arguments contain group dispatch dimensions.
 
@@ -841,11 +843,10 @@ The dispatch arguments contain group dispatch dimensions.
     ${x}_dispatch_function_arguments_t dispatchArgs = { numGroupsX, numGroupsY, 1 };
 
     // Encode dispatch command
-    ${x}CommandListEncodeDispatchFunction(
-        hCommandList, hFunction, &dispatchArgs, nullptr);
+    ${x}CommandListEncodeDispatchFunction(hCommandList, hFunction, &dispatchArgs, nullptr);
 ```
 
-${x}CommandListEncodeDispatchFunctionIndirect allows the dispatch parameters to be supplied indirectly in a
+::${x}CommandListEncodeDispatchFunctionIndirect allows the dispatch parameters to be supplied indirectly in a
 buffer that the device reads instead of the command itself. This allows for the previous operations on the
 device to generate the parameters.
 
@@ -853,23 +854,21 @@ device to generate the parameters.
     ${x}_dispatch_function_arguments_t* pDispatchArgs;
     
     ...
-    ${x}MemAlloc(hMemAlloc, hDevice, flags,
-        sizeof(${x}_dispatch_function_arguments_t), sizeof(uint32_t), &pDispatchArgs);
+    ${x}MemAlloc(hMemAlloc, hDevice, flags, sizeof(${x}_dispatch_function_arguments_t), sizeof(uint32_t), &pDispatchArgs);
 
     // Encode dispatch command
-    ${x}CommandListEncodeDispatchFunctionIndirect(
-        hCommandList, hFunction, &pDispatchArgs, nullptr);
+    ${x}CommandListEncodeDispatchFunctionIndirect(hCommandList, hFunction, &pDispatchArgs, nullptr);
 ```
 
 ${"##"} <a name="arg">Sampler</a>
 The API supports Sampler objects that represent state needed for sampling images from within
-Module functions.  The ${x}DeviceCreateSampler function takes a sampler descriptor (${x}_sampler_desc_t):
+Module functions.  The ::${x}DeviceCreateSampler function takes a sampler descriptor (::${x}_sampler_desc_t):
 
 | Sampler Field    | Description                                           |
 | :--              | :--                                                   |
-| Address Mode     | Determines how out-of-bounds accessse are handled. See ${x}_sampler_address_mode_t. |
-| Filter Mode      | Specifies which filtering mode to use. See ${x}_sampler_filter_mode_t               |
-| Normalized       | Specifies whether coordinates for addressing image are normalized [0,1] or not.     |
+| Address Mode     | Determines how out-of-bounds accessse are handled. See ::${x}_sampler_address_mode_t. |
+| Filter Mode      | Specifies which filtering mode to use. See ::${x}_sampler_filter_mode_t               |
+| Normalized       | Specifies whether coordinates for addressing image are normalized [0,1] or not.       |
 
 The following is sample for code creating a sampler object and passing it as a Function argument.
 
@@ -886,10 +885,10 @@ The following is sample for code creating a sampler object and passing it as a F
     ...
     
     // The sampler can be passed as a function argument.
-    ${x}FunctionArgsSetValue(hFunction, 0, sizeof(${x}_sampler_handle_t), &sampler);
+    ${x}FunctionSetArgumentValue(hFunction, 0, sizeof(${x}_sampler_handle_t), &sampler);
 
     // Encode dispatch command
-    ${x}CommandListEncodeDispatchFunctionhCommandList, hFunction, &dispatchArgs, nullptr);
+    ${x}CommandListEncodeDispatchFunction(hCommandList, hFunction, &dispatchArgs, nullptr);
 ```
 
 ${"#"} <a name="oi">OpenCL Interoperability</a>
@@ -933,7 +932,7 @@ Memory contents as reflected by any caching schemes will be consistent such that
 in an OpenCL command queue can be read by a subsequent ${Xx} command list without any special application action. 
 The cost to ensure memory consistency may be implementation dependent.  The performance of sharing command queues
 will be no worse than an application submitting work to OpenCL, calling clFinish followed by submitting an
-${x} command list.  In most cases, command queue sharing may be much more efficient. 
+::${x} command list.  In most cases, command queue sharing may be much more efficient. 
 
 ${"#"} <a name="ipc">Inter-Process Communication</a>
 The ${Xx} Inter-Process Communication (IPC) APIs allow device memory allocations to be used across processes.
@@ -942,10 +941,10 @@ The following code examples demonstrate how to use the IPC APIs:
 1. First, the allocation is made, packaged, and sent on the sending process:
 ```c
     void* dptr = nullptr;
-    ${x}MemAlloc(..., &dptr);
+    ${x}MemAlloc(hMemAlloc, hDevice, flags, size, alignment, &dptr);
 
     ${x}_ipc_mem_handle_t hIPC;
-    ${x}IpcGetMemHandle(dptr, &hIPC);
+    ${x}IpcGetMemHandle(hMemAlloc, dptr, &hIPC);
 
     // Method of sending to receiving process is not defined by ${Xx}:
     send_to_receiving_process(hIPC);
@@ -958,7 +957,7 @@ The following code examples demonstrate how to use the IPC APIs:
     hIPC = receive_from_sending_process();
 
     void* dptr = nullptr;
-    ${x}IpcOpenMemHandle(..., hIPC, &dptr);
+    ${x}IpcOpenMemHandle(hMemAlloc, hDevice, hIPC, ${X}_IPC_MEMORY_FLAG_NONE, &dptr);
 ```
 
 3. Each process may now refer to the same device memory allocation via its `dptr`.
@@ -966,12 +965,12 @@ Note, there is no guaranteed address equivalence for the values of `dptr` in eac
 
 4. To cleanup, first close the handle in the receiving process:
 ```c
-    ${x}IpcCloseMemHandle(..., dptr);
+    ${x}IpcCloseMemHandle(hMemAlloc, dptr);
 ```
 
 5. Finally, free the device pointer in the sending process:
 ```c
-    ${x}MemFree(dptr);
+    ${x}MemFree(hMemAlloc, dptr);
 ```
 
 ${"#"} <a name="exp">Experimental</a>
@@ -979,7 +978,7 @@ The following experimental features are provided only for the development and re
 These APIs are **not** supported by production drivers without explicit end-user opt-in.
 
 ${"##"} Device-Specific Commands
-$xCommandListReserveSpace provides direct access to the command list's command buffers in order to allow unrestricted access the device's capabilities.
+::${x}CommandListReserveSpace provides direct access to the command list's command buffers in order to allow unrestricted access the device's capabilities.
 The application is solely responsible for ensuring the commands are valid and correct for the specific device.
 
 ```c

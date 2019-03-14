@@ -52,6 +52,9 @@ def generate_meta(d, meta):
             meta[type] = {}
 
         # create list if name is not already known for type...
+        if 'function' == type and 'class' in d:
+            name = d['class']+name
+
         if name not in meta[type]:
             meta[type][name] = []
 
@@ -64,6 +67,12 @@ def generate_meta(d, meta):
                 meta[type][name].append(d['value'])
             if 'altvalue' in d:
                 meta[type][name].append(d['altvalue'])
+        elif 'function' == type:
+            for p in d['params']:
+                meta[type][name].append(p['type'])
+        elif 'struct' == type:
+            for m in d['members']:
+                meta[type][name].append(m['type'])
         elif 'class' in d:
             meta[type][name].append(d['class'])
 

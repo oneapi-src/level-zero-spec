@@ -50,6 +50,12 @@ def main():
                 configParser.get('PATH','core'),
                 configParser.get('NAMESPACE','core'),
                 specs)
+        if args.md:
+            generate_docs.generate_md(
+                "./core",
+                configParser.get('PATH','core'),
+                configParser.get('NAMESPACE','core'),
+                meta)
 
     # generate 'extended' APIs
     if args.extended and util.exists("./extended"):
@@ -66,18 +72,14 @@ def main():
                 configParser.get('PATH','extended'),
                 configParser.get('NAMESPACE','extended'),
                 specs)
+        if args.md:
+            generate_docs.generate_md(
+                "./extended",
+                configParser.get('PATH','extended'),
+                configParser.get('NAMESPACE','extended'),
+                meta)
 
     # generate documentation
-    if args.md:
-        generate_docs.generate_md(
-            "./core",
-            configParser.get('PATH','core'),
-            configParser.get('NAMESPACE','core'))
-        generate_docs.generate_md(
-            "./extended",
-            configParser.get('PATH','extended'),
-            configParser.get('NAMESPACE','extended'))
-
     if args.html:
         generate_docs.generate_html()
 

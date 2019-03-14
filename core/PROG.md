@@ -125,8 +125,11 @@ See ::xe_command_queue_desc_t for more details.
     assert(subdeviceProps.subdeviceId == 2);    // Ensure that we have a handle to the sub-device we asked for.
 
     ...
+    xe_mem_allocator_handle_t hAllocator;
+    xeCreateMemAllocator(hAllocator);
+
     void* pMemForSubDevice2;
-    xeMemAlloc(subDevice, XE_DEVICE_MEM_ALLOC_DEFAULT, memSize, sizeof(uint32_t), &pMemForSubDevice2);
+    xeMemAlloc(hAllocator, subDevice, XE_DEVICE_MEM_ALLOC_FLAG_DEFAULT, memSize, sizeof(uint32_t), &pMemForSubDevice2);
     ...
 
     ...
@@ -251,7 +254,7 @@ The following sample code demonstrates submission of commands to a command queue
     xeCommandQueueEnqueueCommandLists(hCommandQueue, 1, &hCommandList, nullptr);
 
     // synchronize host and device
-    xeCommandQueueSynchronize(hCommandQueue, XE_SYNCHRONIZATION_MODE_POLL, 0, 0, -1);
+    xeCommandQueueSynchronize(hCommandQueue, MAX_UINT32);
 
     // Reset (recycle) command list for new commands
     xeCommandListReset(hCommandList);
@@ -282,12 +285,12 @@ There are two types of barriers:
 
 The following sample code demonstrates a sequence for submission of an execution barrier:
 ```c
-    xeCommandListEncodeDispatchFunction(hCommandList, hFunction1, ...);
+    xeCommandListEncodeDispatchFunction(hCommandList, hFunction, &dispatchArgs, nullptr);
 
     // Encode a barrier into a command list to ensure hFunctionFunction1 completes before hFunction2 begins
     xeCommandListEncodeExecutionBarrier(hCommandList);
 
-    xeCommandListEncodeDispatchFunction(hCommandList, hFunction2, ...);
+    xeCommandListEncodeDispatchFunction(hCommandList, hFunction, &dispatchArgs, nullptr);
     ...
 ```
 
@@ -344,7 +347,7 @@ The following sample code demonstrates a sequence for creation, submission and q
     xeCommandQueueEnqueueCommandLists(hCommandQueue, 1, &hCommandList, hFence);
 
     // Wait for fence to be signaled
-    xeHostWaitOnFence(hFence, MAX_UINT32);
+    xeFenceHostSynchronize(hFence, MAX_UINT32);
     xeFenceReset(hFence);
     ...
 ```
@@ -393,7 +396,7 @@ The following sample code demonstrates a sequence for creation and submission of
     xeCommandQueueEnqueueCommandLists(hCommandQueue, 1, &hCommandList, nullptr);
 
     // Signal the device
-    xeHostSignalEvent(hEvent);
+    xeEventHostSignal(hEvent);
     ...
 ```
 
@@ -418,7 +421,7 @@ The following sample code demonstrates a sequence for measuring time between eve
     xeCommandQueueEnqueueCommandLists(hCommandQueue, 1, &hCommandList, nullptr);
 
     // Wait for the last event to complete
-    xeHostWaitOnEvent(hEventEnd, MAX_UINT32);
+    xeEventHostSynchronize(hEventEnd, MAX_UINT32);
 
     // calculate the delta time
     double time = 0.f;
@@ -442,7 +445,7 @@ The following sample code demonstrates a sequence for collecting counters betwee
     xeCommandQueueEnqueueCommandLists(hCommandQueue, 1, &hCommandList, nullptr);
 
     // Wait for the last event to complete
-    xeHostWaitOnEvent(hEventEnd, MAX_UINT32);
+    xeEventHostSynchronize(hEventEnd, MAX_UINT32);
 
     // calculate the delta counter values
     uint32_t counters[64] = {};
@@ -534,7 +537,7 @@ and avoids exposing these details in the API in a backwards compatible fashion.
 ```c
     xe_image_desc_t imageDesc = {
         XE_IMAGE_DESC_VERSION_CURRENT,
-        XE_IMAGE_FLAG_KERNEL_READ,
+        XE_IMAGE_FLAG_PROGRAM_READ,
         XE_IMAGE_TYPE_2D,
         XE_IMAGE_FORMAT_FLOAT32, 1,
         128, 128, 0, 0, 0
@@ -573,7 +576,7 @@ However, in cases where the devices does **not** support page-faulting _and_ the
 such as multiple levels of indirection, there are two methods available:
 1. the application may set the ::XE_FUNCTION_FLAG_FORCE_RESIDENCY flag during program creation to force all device allocations to be resident during execution.
  + in addition, the application should indicate the type of allocations that will be indirectly accessed using ::xe_function_set_attribute_t
- + if the driver is unable to make all allocations resident, then the call to ::xeCommandQueueEnqueueCommandLists will return $X_RESULT_ERROR_OUT_OF_DEVICE_MEMORY
+ + if the driver is unable to make all allocations resident, then the call to ::xeCommandQueueEnqueueCommandLists will return XE_RESULT_ERROR_OUT_OF_DEVICE_MEMORY
 2. explcit ::xeDeviceMakeMemoryResident APIs are included for the application to dynamically change residency as needed. (Windows-only)
  + if the application over-commits device memory, then a call to ::xeDeviceMakeMemoryResident will return XE_RESULT_ERROR_OUT_OF_DEVICE_MEMORY
 
@@ -585,12 +588,12 @@ The following sample code demonstrate a sequence for using coarse-grain residenc
         node* next;
     };
     node* begin = nullptr;
-    xeHostMemAlloc(XE_HOST_MEM_ALLOC_DEFAULT, sizeof(node), 1, &begin);
-    xeHostMemAlloc(XE_HOST_MEM_ALLOC_DEFAULT, sizeof(node), 1, &begin->next);
-    xeHostMemAlloc(XE_HOST_MEM_ALLOC_DEFAULT, sizeof(node), 1, &begin->next->next);
+    xeHostMemAlloc(hAllocator, XE_HOST_MEM_ALLOC_FLAG_DEFAULT, sizeof(node), 1, &begin);
+    xeHostMemAlloc(hAllocator, XE_HOST_MEM_ALLOC_FLAG_DEFAULT, sizeof(node), 1, &begin->next);
+    xeHostMemAlloc(hAllocator, XE_HOST_MEM_ALLOC_FLAG_DEFAULT, sizeof(node), 1, &begin->next->next);
 
     // 'begin' is passed as function argument and encoded into command list
-    xeFunctionSetAttribute(hFuncArgs, XE_FUNCTION_ARG_ATTR_INDIRECT_HOST_ACCESS, TRUE);
+    xeFunctionSetAttribute(hFuncArgs, XE_FUNCTION_SET_ATTR_INDIRECT_HOST_ACCESS, TRUE);
     xeFunctionSetArgumentValue(hFunction, 0, sizeof(node*), &begin);
     xeCommandListEncodeDispatchFunction(hCommandList, hFunction, &dispatchArgs, nullptr);
     ...
@@ -605,9 +608,9 @@ The following sample code demonstrate a sequence for using fine-grain residency 
         node* next;
     };
     node* begin = nullptr;
-    xeHostMemAlloc(XE_HOST_MEM_ALLOC_DEFAULT, sizeof(node), 1, &begin);
-    xeHostMemAlloc(XE_HOST_MEM_ALLOC_DEFAULT, sizeof(node), 1, &begin->next);
-    xeHostMemAlloc(XE_HOST_MEM_ALLOC_DEFAULT, sizeof(node), 1, &begin->next->next);
+    xeHostMemAlloc(hAllocator, XE_HOST_MEM_ALLOC_FLAG_DEFAULT, sizeof(node), 1, &begin);
+    xeHostMemAlloc(hAllocator, XE_HOST_MEM_ALLOC_FLAG_DEFAULT, sizeof(node), 1, &begin->next);
+    xeHostMemAlloc(hAllocator, XE_HOST_MEM_ALLOC_FLAG_DEFAULT, sizeof(node), 1, &begin->next->next);
 
     // 'begin' is passed as function argument and encoded into command list
     xeFunctionSetArgumentValue(hFunction, 0, sizeof(node*), &begin);
@@ -618,11 +621,10 @@ The following sample code demonstrate a sequence for using fine-grain residency 
     xeDeviceMakeMemoryResident(hDevice, begin->next, sizeof(node));
     xeDeviceMakeMemoryResident(hDevice, begin->next->next, sizeof(node));
 
-    xeCommandQueueEnqueueCommandLists(hCommandQueue, 1, &hCommandList, nullptr);
+    xeCommandQueueEnqueueCommandLists(hCommandQueue, 1, &hCommandList, hFence);
 
     // wait until complete
-    xeFenceEnqueueSignal(hFence);
-    xeHostWaitOnFence(hFence, XE_SYNCHRONIZATION_MODE_SLEEP, 1, 1, -1);
+    xeFenceHostSynchronize(hFence, MAX_UINT32);
 
     // Finally, evict to free device resources
     xeDeviceEvictMemory(hDevice, begin->next, sizeof(node));
@@ -661,7 +663,7 @@ The following sample code demonstrates a sequence for creating a module from an 
     // OpenCL C function has been compiled to SPIRV IL (pImageScalingIL)
     xe_module_desc_t moduleDesc = {
         XE_MODULE_DESC_VERSION_CURRENT,
-        XE_MODULE_IL_SPIRV,
+        XE_MODULE_FORMAT_IL_SPIRV,
         ilSize,
         pImageScalingIL,
         nullptr
@@ -689,10 +691,10 @@ The ::xeDeviceCreateModule function can optionally generate a build log object :
     xe_result_t result = xeDeviceCreateModule(hDevice, &desc, &module, &buildlog);
 
     // Only save build logs for module creation errors.
-    if (result != XE_RESULT_SUCESS)
+    if (result != XE_RESULT_SUCCESS)
     {
         uint32_t buildlogSize;
-        xe_char_t* pBuildLogString;
+        char_t* pBuildLogString;
         result = xeModuleBuildLogGetString(buildlog, &buildlogSize, &pBuildLogString);
 
         // Save log to disk.
@@ -714,7 +716,7 @@ responsibility of the application to implement this using ::xeModuleGetNativeBin
     if (cacheUpdateNeeded)
     {
         uint32_t size;
-        xe_char_t* pNativeBinary;  // Pointer to native binary.
+        char_t* pNativeBinary;  // Pointer to native binary.
         xeModuleGetNativeBinary(hModule, &size, &pNativeBinary);
 
         // cache pNativeBinary for corresponding IL
@@ -745,7 +747,7 @@ The following sample code demonstrates a sequence for creating a function from a
 ```
 
 ### Function Attributes
-Use xeFunctionGetAttribute to query attributes from a function object.
+Use ::xeFunctionGetAttribute to query attributes from a function object.
 
 ```c
     ...
@@ -757,7 +759,7 @@ Use xeFunctionGetAttribute to query attributes from a function object.
 ```
 See ::xe_function_get_attribute_t for more information on the "get" attributes.
 
-Use xeFunctionSetAttributes to set attributes from a function object.
+Use ::xeFunctionSetAttribute to set attributes from a function object.
 
 ```c
     // Function performs indirect device access.
@@ -770,7 +772,7 @@ See ::xe_function_set_attribute_t for more information on the "set" attributes.
 ## Execution
 
 ### Function Group Size
-The group size for a function can be set using xeFunctionSetGroupSize. If a group size is not
+The group size for a function can be set using ::xeFunctionSetGroupSize. If a group size is not
 set prior to encoding a dispatch function into a command list then a default will be chosen.
 The group size can updated over a series of encode dispatch operations. The driver will copy the
 group size information when encoding the dispatch function into the command list.
@@ -782,7 +784,7 @@ group size information when encoding the dispatch function into the command list
 ```
 
 The API supports a query for suggested group size when providing the global size. This function ignores the
-group size that was set on the function using xeFunctionSetGroupSize.
+group size that was set on the function using ::xeFunctionSetGroupSize.
 
 ```c
     // Find suggested group size for processing image.
@@ -797,7 +799,7 @@ group size that was set on the function using xeFunctionSetGroupSize.
 
 ### <a name="arg">Function Arguments</a>
 Function arguments represent only the explicit function arguments that are within "brackets" e.g. func(arg1, arg2, ...).
-- Use xeFunctionSetArgumentValue to setup arguments for a function dispatch.
+- Use ::xeFunctionSetArgumentValue to setup arguments for a function dispatch.
 - The EncodeDispatchFunction command will make a copy the function arguments to send to the device.
 - Function arguments can be updated at anytime and used across multiple dispatches.
 
@@ -818,8 +820,8 @@ The following sample code demonstrates a sequence for creating function args and
     xeCommandListEncodeDispatchFunction(hCommandList, hFunction, &dispatchArgs, nullptr);
 
     // Update image pointers to copy and scale next image.
-    xeFunctionArgsSetValue(hFunction, 0, sizeof(xe_image_handle_t), &src2_image);
-    xeFunctionArgsSetValue(hFunction, 1, sizeof(xe_image_handle_t), &dest2_image);
+    xeFunctionSetArgumentValue(hFunction, 0, sizeof(xe_image_handle_t), &src2_image);
+    xeFunctionSetArgumentValue(hFunction, 1, sizeof(xe_image_handle_t), &dest2_image);
 
     // Encode dispatch command
     xeCommandListEncodeDispatchFunction(hCommandList, hFunction, &dispatchArgs, nullptr);
@@ -829,7 +831,7 @@ The following sample code demonstrates a sequence for creating function args and
 
 ### <a name="arg">Function Dispatch</a>
 In order to invoke a function on the device you must call one of the CommandListEncodeDispatch* functions for
-a command list. The most basic version of these is xeCommandListEncodeDispatchFunction which takes a
+a command list. The most basic version of these is ::xeCommandListEncodeDispatchFunction which takes a
 command list, function, dispatch arguments, and an optional synchronization event used to signal completion.
 The dispatch arguments contain group dispatch dimensions.
 
@@ -841,11 +843,10 @@ The dispatch arguments contain group dispatch dimensions.
     xe_dispatch_function_arguments_t dispatchArgs = { numGroupsX, numGroupsY, 1 };
 
     // Encode dispatch command
-    xeCommandListEncodeDispatchFunction(
-        hCommandList, hFunction, &dispatchArgs, nullptr);
+    xeCommandListEncodeDispatchFunction(hCommandList, hFunction, &dispatchArgs, nullptr);
 ```
 
-xeCommandListEncodeDispatchFunctionIndirect allows the dispatch parameters to be supplied indirectly in a
+::xeCommandListEncodeDispatchFunctionIndirect allows the dispatch parameters to be supplied indirectly in a
 buffer that the device reads instead of the command itself. This allows for the previous operations on the
 device to generate the parameters.
 
@@ -853,23 +854,21 @@ device to generate the parameters.
     xe_dispatch_function_arguments_t* pDispatchArgs;
     
     ...
-    xeMemAlloc(hMemAlloc, hDevice, flags,
-        sizeof(xe_dispatch_function_arguments_t), sizeof(uint32_t), &pDispatchArgs);
+    xeMemAlloc(hMemAlloc, hDevice, flags, sizeof(xe_dispatch_function_arguments_t), sizeof(uint32_t), &pDispatchArgs);
 
     // Encode dispatch command
-    xeCommandListEncodeDispatchFunctionIndirect(
-        hCommandList, hFunction, &pDispatchArgs, nullptr);
+    xeCommandListEncodeDispatchFunctionIndirect(hCommandList, hFunction, &pDispatchArgs, nullptr);
 ```
 
 ## <a name="arg">Sampler</a>
 The API supports Sampler objects that represent state needed for sampling images from within
-Module functions.  The xeDeviceCreateSampler function takes a sampler descriptor (xe_sampler_desc_t):
+Module functions.  The ::xeDeviceCreateSampler function takes a sampler descriptor (::xe_sampler_desc_t):
 
 | Sampler Field    | Description                                           |
 | :--              | :--                                                   |
-| Address Mode     | Determines how out-of-bounds accessse are handled. See xe_sampler_address_mode_t. |
-| Filter Mode      | Specifies which filtering mode to use. See xe_sampler_filter_mode_t               |
-| Normalized       | Specifies whether coordinates for addressing image are normalized [0,1] or not.     |
+| Address Mode     | Determines how out-of-bounds accessse are handled. See ::xe_sampler_address_mode_t. |
+| Filter Mode      | Specifies which filtering mode to use. See ::xe_sampler_filter_mode_t               |
+| Normalized       | Specifies whether coordinates for addressing image are normalized [0,1] or not.       |
 
 The following is sample for code creating a sampler object and passing it as a Function argument.
 
@@ -886,10 +885,10 @@ The following is sample for code creating a sampler object and passing it as a F
     ...
     
     // The sampler can be passed as a function argument.
-    xeFunctionArgsSetValue(hFunction, 0, sizeof(xe_sampler_handle_t), &sampler);
+    xeFunctionSetArgumentValue(hFunction, 0, sizeof(xe_sampler_handle_t), &sampler);
 
     // Encode dispatch command
-    xeCommandListEncodeDispatchFunctionhCommandList, hFunction, &dispatchArgs, nullptr);
+    xeCommandListEncodeDispatchFunction(hCommandList, hFunction, &dispatchArgs, nullptr);
 ```
 
 # <a name="oi">OpenCL Interoperability</a>
@@ -933,7 +932,7 @@ Memory contents as reflected by any caching schemes will be consistent such that
 in an OpenCL command queue can be read by a subsequent Xe command list without any special application action. 
 The cost to ensure memory consistency may be implementation dependent.  The performance of sharing command queues
 will be no worse than an application submitting work to OpenCL, calling clFinish followed by submitting an
-xe command list.  In most cases, command queue sharing may be much more efficient. 
+::xe command list.  In most cases, command queue sharing may be much more efficient. 
 
 # <a name="ipc">Inter-Process Communication</a>
 The Xe Inter-Process Communication (IPC) APIs allow device memory allocations to be used across processes.
@@ -942,10 +941,10 @@ The following code examples demonstrate how to use the IPC APIs:
 1. First, the allocation is made, packaged, and sent on the sending process:
 ```c
     void* dptr = nullptr;
-    xeMemAlloc(..., &dptr);
+    xeMemAlloc(hMemAlloc, hDevice, flags, size, alignment, &dptr);
 
     xe_ipc_mem_handle_t hIPC;
-    xeIpcGetMemHandle(dptr, &hIPC);
+    xeIpcGetMemHandle(hMemAlloc, dptr, &hIPC);
 
     // Method of sending to receiving process is not defined by Xe:
     send_to_receiving_process(hIPC);
@@ -958,7 +957,7 @@ The following code examples demonstrate how to use the IPC APIs:
     hIPC = receive_from_sending_process();
 
     void* dptr = nullptr;
-    xeIpcOpenMemHandle(..., hIPC, &dptr);
+    xeIpcOpenMemHandle(hMemAlloc, hDevice, hIPC, XE_IPC_MEMORY_FLAG_NONE, &dptr);
 ```
 
 3. Each process may now refer to the same device memory allocation via its `dptr`.
@@ -966,12 +965,12 @@ Note, there is no guaranteed address equivalence for the values of `dptr` in eac
 
 4. To cleanup, first close the handle in the receiving process:
 ```c
-    xeIpcCloseMemHandle(..., dptr);
+    xeIpcCloseMemHandle(hMemAlloc, dptr);
 ```
 
 5. Finally, free the device pointer in the sending process:
 ```c
-    xeMemFree(dptr);
+    xeMemFree(hMemAlloc, dptr);
 ```
 
 # <a name="exp">Experimental</a>
@@ -979,7 +978,7 @@ The following experimental features are provided only for the development and re
 These APIs are **not** supported by production drivers without explicit end-user opt-in.
 
 ## Device-Specific Commands
-$xCommandListReserveSpace provides direct access to the command list's command buffers in order to allow unrestricted access the device's capabilities.
+::xeCommandListReserveSpace provides direct access to the command list's command buffers in order to allow unrestricted access the device's capabilities.
 The application is solely responsible for ensuring the commands are valid and correct for the specific device.
 
 ```c
