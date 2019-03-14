@@ -42,6 +42,8 @@ namespace xe
     /// @brief C++ wrapper for ::xeCommandListAppendExecutionBarrier
     /// 
     /// @details
+    ///     - This may **not** be called for a command list created with
+    ///       ::COMMAND_LIST_FLAG_COPY_ONLY.
     ///     - The application may **not** call this function from simultaneous
     ///       threads with the same command list handle.
     ///     - The implementation of this function should be lock-free.
@@ -194,6 +196,8 @@ namespace xe
     /// @brief C++ wrapper for ::xeCommandListAppendCommandLists
     /// 
     /// @details
+    ///     - All command lists appended must have been created with compatible
+    ///       ::command_list_flag_t values.
     ///     - The application may **not** call this function from simultaneous
     ///       threads with the same command list handle.
     ///     - The implementation of this function should be lock-free.
@@ -516,6 +520,8 @@ namespace xe
     /// @brief C++ wrapper for ::xeCommandListAppendLaunchFunction
     /// 
     /// @details
+    ///     - This may **not** be called for a command list created with
+    ///       ::COMMAND_LIST_FLAG_COPY_ONLY.
     ///     - This function may **not** be called from simultaneous threads.
     ///     - The implementation of this function should be lock-free.
     /// 
@@ -542,6 +548,8 @@ namespace xe
     ///     - The launch arguments need to be device visible.
     ///     - The launch arguments buffer may not be reusued until the function has
     ///       completed on the device.
+    ///     - This may **not** be called for a command list created with
+    ///       ::COMMAND_LIST_FLAG_COPY_ONLY.
     ///     - This function may **not** be called from simultaneous threads.
     ///     - The implementation of this function should be lock-free.
     /// 
@@ -568,6 +576,8 @@ namespace xe
     ///     - The array of launch arguments need to be device visible.
     ///     - The array of launch arguments buffer may not be reusued until the
     ///       function has completed on the device.
+    ///     - This may **not** be called for a command list created with
+    ///       ::COMMAND_LIST_FLAG_COPY_ONLY.
     ///     - This function may **not** be called from simultaneous threads.
     ///     - The implementation of this function should be lock-free.
     /// 
@@ -595,6 +605,8 @@ namespace xe
     /// @brief C++ wrapper for ::xeCommandListAppendLaunchHostFunction
     /// 
     /// @details
+    ///     - This may **not** be called for a command list created with
+    ///       ::COMMAND_LIST_FLAG_COPY_ONLY.
     ///     - This function may **not** be called from simultaneous threads.
     ///     - The implementation of this function should be lock-free.
     /// 

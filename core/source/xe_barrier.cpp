@@ -44,6 +44,8 @@
 /// @brief Appends an execution barrier into a command list.
 /// 
 /// @details
+///     - This may **not** be called for a command list created with
+///       ::XE_COMMAND_LIST_FLAG_COPY_ONLY.
 ///     - The application may **not** call this function from simultaneous
 ///       threads with the same command list handle.
 ///     - The implementation of this function should be lock-free.

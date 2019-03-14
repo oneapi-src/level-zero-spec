@@ -527,6 +527,8 @@ xeCommandListResetParameters(
 /// @brief Append a command list into another command list.
 /// 
 /// @details
+///     - All command lists appended must have been created with compatible
+///       ::xe_command_list_flag_t values.
 ///     - The application may **not** call this function from simultaneous
 ///       threads with the same command list handle.
 ///     - The implementation of this function should be lock-free.

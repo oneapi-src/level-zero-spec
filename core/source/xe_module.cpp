@@ -872,6 +872,8 @@ xeFunctionGetAttribute(
 /// @brief Launch function over one or more work groups.
 /// 
 /// @details
+///     - This may **not** be called for a command list created with
+///       ::XE_COMMAND_LIST_FLAG_COPY_ONLY.
 ///     - This function may **not** be called from simultaneous threads.
 ///     - The implementation of this function should be lock-free.
 /// 
@@ -939,6 +941,8 @@ xeCommandListAppendLaunchFunction(
 ///     - The launch arguments need to be device visible.
 ///     - The launch arguments buffer may not be reusued until the function has
 ///       completed on the device.
+///     - This may **not** be called for a command list created with
+///       ::XE_COMMAND_LIST_FLAG_COPY_ONLY.
 ///     - This function may **not** be called from simultaneous threads.
 ///     - The implementation of this function should be lock-free.
 /// 
@@ -1007,6 +1011,8 @@ xeCommandListAppendLaunchFunctionIndirect(
 ///     - The array of launch arguments need to be device visible.
 ///     - The array of launch arguments buffer may not be reusued until the
 ///       function has completed on the device.
+///     - This may **not** be called for a command list created with
+///       ::XE_COMMAND_LIST_FLAG_COPY_ONLY.
 ///     - This function may **not** be called from simultaneous threads.
 ///     - The implementation of this function should be lock-free.
 /// 
@@ -1078,6 +1084,8 @@ xeCommandListAppendLaunchMultipleFunctionsIndirect(
 ///        will block until host function completes.
 /// 
 /// @details
+///     - This may **not** be called for a command list created with
+///       ::XE_COMMAND_LIST_FLAG_COPY_ONLY.
 ///     - This function may **not** be called from simultaneous threads.
 ///     - The implementation of this function should be lock-free.
 /// 

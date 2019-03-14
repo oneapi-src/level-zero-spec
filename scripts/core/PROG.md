@@ -170,6 +170,9 @@ ${"###"} Creation
   ::${x}_device_properties_t.numAsyncComputeEngines.
 - The number of simultaneous copy command queues per device is queried from 
   ::${x}_device_properties_t.numAsyncCopyEngines.
+- All command lists executed on a command queue are gaurenteed to only execute on its 
+  single, physical input stream; e.g., copy commands in a compute command list / queue will
+  execute via the compute engine, not the copy engine.
 
 The following sample code demonstrates a basic sequence for creation of command queues:
 ```c
