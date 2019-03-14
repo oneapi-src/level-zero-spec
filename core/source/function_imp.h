@@ -78,7 +78,7 @@ struct FunctionImp : Function {
 
     xe_result_t setArgBuffer(uint32_t argIndex, size_t argSize, const void *argVal);
 
-	xe_result_t setArgImage(uint32_t argIndex, size_t argSize, const void *argVal);
+    xe_result_t setArgImage(uint32_t argIndex, size_t argSize, const void *argVal);
 
     bool initialize(const xe_function_desc_t *desc);
 
@@ -118,11 +118,17 @@ struct FunctionImp : Function {
 
     bool hasPrintfOutput() const override;
 
+    PrintfHandler *getPrintfHandler() override {
+        return this->printfHandler;
+    }
+
   protected:
     template <typename T>
     void patchCrossThreadData(uint32_t location, const T &value);
 
     void patchWorkgroupSizeInCrossThreadData(uint32_t x, uint32_t y, uint32_t z);
+
+    void createPrintfHandler();
 
     typedef xe_result_t (FunctionImp::*FunctionArgHandler)(uint32_t argIndex, size_t argSize, const void *argVal);
 
@@ -134,6 +140,7 @@ struct FunctionImp : Function {
     Module *module = nullptr;
 
     std::vector<GraphicsAllocation *> residencyContainer;
+    PrintfHandler *printfHandler = nullptr;
 
     uint32_t groupSizeX = 0u;
     uint32_t groupSizeY = 0u;

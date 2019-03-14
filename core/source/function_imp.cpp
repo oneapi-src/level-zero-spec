@@ -9,6 +9,7 @@
 #include "device.h"
 #include "memory_manager.h"
 #include "module.h"
+#include "printf_handler.h"
 
 #include "runtime/context/context.h"
 #include "runtime/helpers/basic_math.h"
@@ -96,6 +97,9 @@ FunctionImp::~FunctionImp() {
     }
     if (kernelRT) {
         kernelRT->release();
+    }
+    if (printfHandler) {
+        delete printfHandler;
     }
     delete oclInternals;
 }
@@ -303,6 +307,8 @@ bool FunctionImp::initialize(const xe_function_desc_t *desc) {
 
     setGroupSize(getSimdSize(), 1, 1); // until apps sets-up something smarter
 
+    this->createPrintfHandler();
+
     this->oclInternals->usingSharedObjArgs = kernelRT->usingSharedObjArgs;
     this->oclInternals->usingImagesOnly = kernelRT->usingImagesOnly;
     this->oclInternals->auxTranslationRequired = kernelRT->auxTranslationRequired;
@@ -338,6 +344,12 @@ uint32_t FunctionImp::getSlmSize() const {
 
 bool FunctionImp::hasPrintfOutput() const {
     return getKernelInfo()->patchInfo.pAllocateStatelessPrintfSurface != nullptr;
+}
+
+void FunctionImp::createPrintfHandler() {
+    if (this->hasPrintfOutput()) {
+        printfHandler = new PrintfHandler(this->module->getDevice());
+    }
 }
 
 template <typename T>

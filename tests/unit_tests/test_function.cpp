@@ -13,6 +13,24 @@ using ::testing::_;
 using ::testing::Invoke;
 using ::testing::Return;
 
+class FunctionPrintfTest : public ::testing::Test {
+  public:
+    void SetUp() override {
+        kernelInfo.rebind(new OCLRT::KernelInfo{});
+        funcInfo.kernelInfoRT = kernelInfo.weakRefReinterpret<void>();
+        function.immFuncInfo.rebind(&funcInfo);
+    }
+
+    void TearDown() override {
+        kernelInfo.deleteOwned();
+    }
+
+    OCLRT::SPatchAllocateStatelessPrintfSurface printfSurfaceToken;
+    PtrOwn<OCLRT::KernelInfo> kernelInfo = nullptr;
+    ImmutableFunctionInfo funcInfo = {};
+    Mock<Function> function;
+};
+
 TEST(FunctionImp, crossThreadDataIsCorrectlyPatchedWithGlobalWorkSizeAndGroupCount) {
     uint32_t *crossThreadData = reinterpret_cast<uint32_t *>(alignedMalloc(sizeof(uint32_t[6]), 32));
 
@@ -73,33 +91,47 @@ TEST(FunctionImp, suggestGroupSizeClampsToMaxGroupSize) {
     EXPECT_EQ(1U, groupSize[2]);
 }
 
-TEST(FunctionImp, hasPrintfOutputReturnsTrueWhenPrintfIsUsed) {
-    OCLRT::SPatchAllocateStatelessPrintfSurface printfSurfaceToken;
-    PtrOwn<OCLRT::KernelInfo> kernelInfo{new OCLRT::KernelInfo{}};
-
+TEST_F(FunctionPrintfTest, hasPrintfOutputReturnsTrueWhenPrintfIsUsed) {
     kernelInfo->patchInfo.pAllocateStatelessPrintfSurface = &printfSurfaceToken;
-    ImmutableFunctionInfo funcInfo = {};
-    funcInfo.kernelInfoRT = kernelInfo.weakRefReinterpret<void>();
-
-    Mock<Function> function;
-    function.immFuncInfo.rebind(&funcInfo);
-
     EXPECT_TRUE(function.hasPrintfOutput());
-    kernelInfo.deleteOwned();
 }
 
-TEST(FunctionImp, hasPrintfOutputReturnsFalseWhenPrintfNotUsed) {
-    PtrOwn<OCLRT::KernelInfo> kernelInfo{new OCLRT::KernelInfo{}};
-
+TEST_F(FunctionPrintfTest, hasPrintfOutputReturnsFalseWhenPrintfNotUsed) {
     kernelInfo->patchInfo.pAllocateStatelessPrintfSurface = nullptr;
-    ImmutableFunctionInfo funcInfo = {};
-    funcInfo.kernelInfoRT = kernelInfo.weakRefReinterpret<void>();
+    EXPECT_FALSE(function.hasPrintfOutput());
+}
 
-    Mock<Function> function;
-    function.immFuncInfo.rebind(&funcInfo);
+TEST_F(FunctionPrintfTest, createPrintfHandlerCreatesOnlyWhenUsingPrintf) {
+    kernelInfo->patchInfo.pAllocateStatelessPrintfSurface = &printfSurfaceToken;
+
+    EXPECT_TRUE(function.hasPrintfOutput());
+    Mock<Module> module;
+    function.module = &module;
+
+    xe_function_desc_t funDesc = {};
+    funDesc.version = XE_API_HEADER_VERSION;
+    funDesc.pFunctionName = "mock";
+
+    function.createPrintfHandler();
+
+    EXPECT_NE(nullptr, function.getPrintfHandler());
+}
+
+TEST_F(FunctionPrintfTest, createPrintfHandlerDoesNotCreateWhenNotUsingPrintf) {
+    kernelInfo->patchInfo.pAllocateStatelessPrintfSurface = nullptr;
 
     EXPECT_FALSE(function.hasPrintfOutput());
-    kernelInfo.deleteOwned();
+
+    Mock<Module> module;
+    function.module = &module;
+
+    xe_function_desc_t funDesc = {};
+    funDesc.version = XE_API_HEADER_VERSION;
+    funDesc.pFunctionName = "mock";
+
+    function.createPrintfHandler();
+
+    EXPECT_EQ(nullptr, function.getPrintfHandler());
 }
 
 using FunctionImpSuggestGroupSize = ::testing::TestWithParam<uint32_t>;
