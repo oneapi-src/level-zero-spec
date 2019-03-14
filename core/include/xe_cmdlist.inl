@@ -395,9 +395,16 @@ namespace xe
     /// @details
     ///     - This is a hint to improve performance only and is not required for
     ///       correctness.
-    ///     - The application may call this function from simultaneous threads.
-    ///     - The implementation of this function should be lock-free.
-    ///     - Prefetch to Host and Peer Device are not supported.
+    ///     - Only prefetching to the device associated with the specified command
+    ///       list is supported. Prefetching to the host or to a peer device is not
+    ///       supported.
+    ///     - Prefetching may not be supported for all allocation types for all
+    ///       devices. If memory prefetching is not supported for the specified
+    ///       memory range the prefetch hint may be ignored.
+    ///     - Prefetching may only be supported at a device-specific granularity,
+    ///       such as at a page boundary. In this case, the memory range may be
+    ///       expanded such that the start and end of the range satisfy granularity
+    ///       requirements.
     ///     - The application may **not** call this function from simultaneous
     ///       threads with the same command list handle.
     ///     - The implementation of this function should be lock-free.
@@ -410,8 +417,8 @@ namespace xe
     /// @throws result_t
     inline void 
     CommandList::AppendMemoryPrefetch(
-        const void* ptr,                                ///< [in] pointer to start of the memory region to prefetch
-        size_t count                                    ///< [in] size in bytes of the memory region to prefetch
+        const void* ptr,                                ///< [in] pointer to start of the memory range to prefetch
+        size_t count                                    ///< [in] size in bytes of the memory range to prefetch
         )
     {
         // auto result = ::xeCommandListAppendMemoryPrefetch( handle, ptr, count );
@@ -422,11 +429,13 @@ namespace xe
     /// @brief C++ wrapper for ::xeCommandListAppendMemAdvise
     /// 
     /// @details
-    ///     - Memory advice is a performance hint only; applications are not
-    ///       required to use this for functionality.
+    ///     - Memory advice is a performance hint only and is not required for
+    ///       functional correctness.
     ///     - Memory advice can be used to override driver heuristics to explicitly
     ///       control shared memory behavior.
-    ///     - Not all memory advice may be supported by all devices.
+    ///     - Not all memory advice hints may be supported for all allocation types
+    ///       for all devices. If a memory advice hint is not supported by the
+    ///       device it will be ignored.
     ///     - Memory advice may only be supported at a device-specific granularity,
     ///       such as at a page boundary. In this case, the memory range may be
     ///       expanded such that the start and end of the range satisfy granularity
