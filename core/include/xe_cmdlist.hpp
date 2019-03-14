@@ -243,8 +243,8 @@ namespace xe
         /// @throws result_t
         inline void
         AppendMemoryPrefetch(
-            const void* ptr,                                ///< [in] pointer to start of the memory region to prefetch
-            size_t count                                    ///< [in] size in bytes of the memory region to prefetch
+            const void* ptr,                                ///< [in] pointer to start of the memory range to prefetch
+            size_t count                                    ///< [in] size in bytes of the memory range to prefetch
             );
 
         ///////////////////////////////////////////////////////////////////////////////
