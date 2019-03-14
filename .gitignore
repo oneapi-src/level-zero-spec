@@ -70,3 +70,6 @@ public/
 
 # ci exceptions
 !ci/deps/getparentproc/*.exe
+
+# VS CMake settings
+/CMakeSettings.json
