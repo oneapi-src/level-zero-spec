@@ -234,7 +234,7 @@ params:
     - type: $x_memory_property_t
       name: property
       desc: "[in] Property of the allocation to query"
-    - type: "void*"
+    - type: "uint32_t*"
       name: pValue
       desc: "[out] Value of the queried property"
 returns:
@@ -259,10 +259,10 @@ params:
       desc: "[in] Pointer to query"
     - type: "void**"
       name: pBase
-      desc: "[out] Returned base address of the allocation (optional)"
+      desc: "[in,out][optional] base address of the allocation"
     - type: size_t*
       name: pSize
-      desc: "[out] Returned size of the allocation (optional)"
+      desc: "[in,out][optional] size of the allocation"
 --- #--------------------------------------------------------------------------
 type: function
 desc: "Creates an IPC memory handle for the specified allocation in the sending process"

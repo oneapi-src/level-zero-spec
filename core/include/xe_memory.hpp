@@ -232,10 +232,10 @@ namespace xe
     ///     - **cuPointerGetAttribute**
     /// 
     /// @returns
-    ///     - void: Value of the queried property
+    ///     - uint32_t: Value of the queried property
     /// 
     /// @throws result_t
-    inline void
+    inline uint32_t
     MemGetProperty(
         mem_allocator_handle_t hMemAllocHandle,         ///< [in] handle of memory allocator for this allocation
         const void* ptr,                                ///< [in] Pointer to query
@@ -253,15 +253,13 @@ namespace xe
     ///   _Analogues_
     ///     - **cuMemGetAddressRange**
     /// 
-    /// @returns
-    ///     - void*: Returned base address of the allocation (optional)
-    ///     - size_t: Returned size of the allocation (optional)
-    /// 
     /// @throws result_t
-    inline std::tuple<void*, size_t>
+    inline void
     MemGetAddressRange(
         mem_allocator_handle_t hMemAllocHandle,         ///< [in] handle of memory allocator for this allocation
-        const void* ptr                                 ///< [in] Pointer to query
+        const void* ptr,                                ///< [in] Pointer to query
+        void** pBase,                                   ///< [in,out][optional] base address of the allocation
+        size_t* pSize                                   ///< [in,out][optional] size of the allocation
         );
 
     ///////////////////////////////////////////////////////////////////////////////

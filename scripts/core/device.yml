@@ -48,7 +48,7 @@ params:
       desc: "[in] size of device unique ids array. Typically, this will be ${x}DeviceGetCount."
     - type: "$x_device_uuid_t*"
       name: pUniqueIds
-      desc: "[out] pointer to an array of unique ids for devices. Caller must supply array."
+      desc: "[in,out] pointer to an array of unique ids for devices. Caller must supply array."
 returns:
     - $X_RESULT_ERROR_INVALID_PARAMETER:
         - "invalid unique id."

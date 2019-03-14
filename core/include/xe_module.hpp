@@ -95,26 +95,21 @@ namespace xe
 
         ///////////////////////////////////////////////////////////////////////////////
         /// @brief C++ wrapper for ::xeModuleBuildLogGetString
-        /// @returns
-        ///     - uint32_t: size of build log string.
-        ///     - char*: pointer to null-terminated string of the log.
-        /// 
         /// @throws result_t
-        inline static std::tuple<uint32_t, char*>
+        inline static void
         BuildLogGetString(
-            module_build_log_handle_t hModuleBuildLog       ///< [in] handle of the module build log object.
+            module_build_log_handle_t hModuleBuildLog,      ///< [in] handle of the module build log object.
+            size_t* pSize,                                  ///< [in,out] size of build log string.
+            const char** pBuildLog                          ///< [in,out][optional] pointer to null-terminated string of the log.
             );
 
         ///////////////////////////////////////////////////////////////////////////////
         /// @brief C++ wrapper for ::xeModuleGetNativeBinary
-        /// @returns
-        ///     - uint32_t: size of native binary.
-        ///     - char*: pointer to native binary
-        /// 
         /// @throws result_t
-        inline std::tuple<uint32_t, char*>
+        inline void
         GetNativeBinary(
-            void
+            size_t* pSize,                                  ///< [in,out] size of native binary.
+            const char** pModuleNativeBinary                ///< [in,out][optional] pointer to native binary
             );
 
         ///////////////////////////////////////////////////////////////////////////////

@@ -455,14 +455,14 @@ xeMemFree(
 ///         + invalid property
 ///     - ::XE_RESULT_ERROR_UNSUPPORTED
 ///
-/// @hash {ca0bc083b4f2907561e61a65f87ffa3527cf21e340760ef655b0905f766be102}
+/// @hash {475a4652d2fbecab68e2ac9b52c4b6580e8c9d1e48a866b759bfa8a50050e45d}
 ///
 __xedllexport xe_result_t __xecall
 xeMemGetProperty(
     xe_mem_allocator_handle_t hMemAllocHandle,      ///< [in] handle of memory allocator for this allocation
     const void* ptr,                                ///< [in] Pointer to query
     xe_memory_property_t property,                  ///< [in] Property of the allocation to query
-    void* pValue                                    ///< [out] Value of the queried property
+    uint32_t* pValue                                ///< [out] Value of the queried property
     )
 {
     try
@@ -516,8 +516,6 @@ xeMemGetProperty(
 ///     - ::XE_RESULT_ERROR_INVALID_PARAMETER
 ///         + nullptr == hMemAllocHandle
 ///         + nullptr == ptr
-///         + nullptr == pBase
-///         + nullptr == pSize
 ///     - ::XE_RESULT_ERROR_UNSUPPORTED
 ///
 /// @hash {674ca4659d3c7a33527c6aa498eabdf2a8532d1ecc1707e9374ecf5ebf5219ef}
@@ -526,8 +524,8 @@ __xedllexport xe_result_t __xecall
 xeMemGetAddressRange(
     xe_mem_allocator_handle_t hMemAllocHandle,      ///< [in] handle of memory allocator for this allocation
     const void* ptr,                                ///< [in] Pointer to query
-    void** pBase,                                   ///< [out] Returned base address of the allocation (optional)
-    size_t* pSize                                   ///< [out] Returned size of the allocation (optional)
+    void** pBase,                                   ///< [in,out][optional] base address of the allocation
+    size_t* pSize                                   ///< [in,out][optional] size of the allocation
     )
 {
     try
@@ -538,8 +536,6 @@ xeMemGetAddressRange(
             // Check parameters
             if( nullptr == hMemAllocHandle ) return XE_RESULT_ERROR_INVALID_PARAMETER;
             if( nullptr == ptr ) return XE_RESULT_ERROR_INVALID_PARAMETER;
-            if( nullptr == pBase ) return XE_RESULT_ERROR_INVALID_PARAMETER;
-            if( nullptr == pSize ) return XE_RESULT_ERROR_INVALID_PARAMETER;
         }
         /// @begin
 #if defined(XE_NULLDRV)

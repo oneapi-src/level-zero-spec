@@ -91,17 +91,15 @@ namespace xe
     ///     - This function may be called from simultaneous threads.
     ///     - The implementation of this function should be lock-free.
     /// 
-    /// @returns
-    ///     - uint32_t: size of build log string.
-    ///     - char*: pointer to null-terminated string of the log.
-    /// 
     /// @throws result_t
-    inline std::tuple<uint32_t, char*> 
+    inline void 
     Module::BuildLogGetString(
-        module_build_log_handle_t hModuleBuildLog       ///< [in] handle of the module build log object.
+        module_build_log_handle_t hModuleBuildLog,      ///< [in] handle of the module build log object.
+        size_t* pSize,                                  ///< [in,out] size of build log string.
+        const char** pBuildLog                          ///< [in,out][optional] pointer to null-terminated string of the log.
         )
     {
-        // auto result = ::xeModuleBuildLogGetString( handle, hModuleBuildLog->getHandle() );
+        // auto result = ::xeModuleBuildLogGetString( handle, hModuleBuildLog->getHandle(), pSize, pBuildLog );
         // if( ::XE_RESULT_SUCCESS != result ) throw exception(result, "xe::Module::BuildLogGetString");
     }
 
@@ -119,17 +117,14 @@ namespace xe
     ///     - The native binary will retain debugging information that is associated
     ///       with a module.
     /// 
-    /// @returns
-    ///     - uint32_t: size of native binary.
-    ///     - char*: pointer to native binary
-    /// 
     /// @throws result_t
-    inline std::tuple<uint32_t, char*> 
+    inline void 
     Module::GetNativeBinary(
-        void
+        size_t* pSize,                                  ///< [in,out] size of native binary.
+        const char** pModuleNativeBinary                ///< [in,out][optional] pointer to native binary
         )
     {
-        // auto result = ::xeModuleGetNativeBinary( handle );
+        // auto result = ::xeModuleGetNativeBinary( handle, pSize, pModuleNativeBinary );
         // if( ::XE_RESULT_SUCCESS != result ) throw exception(result, "xe::Module::GetNativeBinary");
     }
 

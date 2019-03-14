@@ -132,12 +132,12 @@ params:
     - type: $x_module_build_log_handle_t
       name: hModuleBuildLog
       desc: "[in] handle of the module build log object."
-    - type: "uint32_t*"
+    - type: "size_t*"
       name: pSize
-      desc: "[out] size of build log string."
-    - type: "char**"
+      desc: "[in,out] size of build log string."
+    - type: "const char**"
       name: pBuildLog
-      desc: "[out] pointer to null-terminated string of the log."
+      desc: "[in,out][optional] pointer to null-terminated string of the log."
 returns:
     - $X_RESULT_ERROR_OUT_OF_HOST_MEMORY
     - $X_RESULT_ERROR_OUT_OF_DEVICE_MEMORY
@@ -156,12 +156,12 @@ params:
     - type: $x_module_handle_t
       name: hModule
       desc: "[in] handle of the device"
-    - type: "uint32_t*"
+    - type: "size_t*"
       name: pSize
-      desc: "[out] size of native binary."
-    - type: "char**"
+      desc: "[in,out] size of native binary."
+    - type: "const char**"
       name: pModuleNativeBinary
-      desc: "[out] pointer to native binary"
+      desc: "[in,out][optional] pointer to native binary"
 returns:
     - $X_RESULT_ERROR_INVALID_PARAMETER:
         - "invalid format"

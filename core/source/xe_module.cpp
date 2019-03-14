@@ -260,18 +260,17 @@ xeModuleBuildLogDestroy(
 ///     - ::XE_RESULT_ERROR_INVALID_PARAMETER
 ///         + nullptr == hModuleBuildLog
 ///         + nullptr == pSize
-///         + nullptr == pBuildLog
 ///     - ::XE_RESULT_ERROR_UNSUPPORTED
 ///     - ::XE_RESULT_ERROR_OUT_OF_HOST_MEMORY
 ///     - ::XE_RESULT_ERROR_OUT_OF_DEVICE_MEMORY
 ///
-/// @hash {dd35e7a2beba7be9b599e677ac04880f6512aa776568772d8cd128b65b7839d4}
+/// @hash {2bbcb590108f76bc30824a2940a73a398fd81bab223129c6ff8c8bc1d4b590f6}
 ///
 __xedllexport xe_result_t __xecall
 xeModuleBuildLogGetString(
     xe_module_build_log_handle_t hModuleBuildLog,   ///< [in] handle of the module build log object.
-    uint32_t* pSize,                                ///< [out] size of build log string.
-    char** pBuildLog                                ///< [out] pointer to null-terminated string of the log.
+    size_t* pSize,                                  ///< [in,out] size of build log string.
+    const char** pBuildLog                          ///< [in,out][optional] pointer to null-terminated string of the log.
     )
 {
     try
@@ -282,7 +281,6 @@ xeModuleBuildLogGetString(
             // Check parameters
             if( nullptr == hModuleBuildLog ) return XE_RESULT_ERROR_INVALID_PARAMETER;
             if( nullptr == pSize ) return XE_RESULT_ERROR_INVALID_PARAMETER;
-            if( nullptr == pBuildLog ) return XE_RESULT_ERROR_INVALID_PARAMETER;
         }
         /// @begin
 #if defined(XE_NULLDRV)
@@ -328,19 +326,18 @@ xeModuleBuildLogGetString(
 ///     - ::XE_RESULT_ERROR_INVALID_PARAMETER
 ///         + nullptr == hModule
 ///         + nullptr == pSize
-///         + nullptr == pModuleNativeBinary
 ///         + invalid format
 ///     - ::XE_RESULT_ERROR_UNSUPPORTED
 ///     - ::XE_RESULT_ERROR_OUT_OF_HOST_MEMORY
 ///     - ::XE_RESULT_ERROR_OUT_OF_DEVICE_MEMORY
 ///
-/// @hash {f86dcf1e7e87d03f26bddcbff99420a8d159e89f57619beaaeebfee453cfd62e}
+/// @hash {8ab9d18bd47f0352e84513942b7159319521d03c44f60f2c699543fdceebe766}
 ///
 __xedllexport xe_result_t __xecall
 xeModuleGetNativeBinary(
     xe_module_handle_t hModule,                     ///< [in] handle of the device
-    uint32_t* pSize,                                ///< [out] size of native binary.
-    char** pModuleNativeBinary                      ///< [out] pointer to native binary
+    size_t* pSize,                                  ///< [in,out] size of native binary.
+    const char** pModuleNativeBinary                ///< [in,out][optional] pointer to native binary
     )
 {
     try
@@ -351,7 +348,6 @@ xeModuleGetNativeBinary(
             // Check parameters
             if( nullptr == hModule ) return XE_RESULT_ERROR_INVALID_PARAMETER;
             if( nullptr == pSize ) return XE_RESULT_ERROR_INVALID_PARAMETER;
-            if( nullptr == pModuleNativeBinary ) return XE_RESULT_ERROR_INVALID_PARAMETER;
         }
         /// @begin
 #if defined(XE_NULLDRV)

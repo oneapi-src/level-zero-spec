@@ -294,7 +294,7 @@ xeMemGetProperty(
     xe_mem_allocator_handle_t hMemAllocHandle,      ///< [in] handle of memory allocator for this allocation
     const void* ptr,                                ///< [in] Pointer to query
     xe_memory_property_t property,                  ///< [in] Property of the allocation to query
-    void* pValue                                    ///< [out] Value of the queried property
+    uint32_t* pValue                                ///< [out] Value of the queried property
     );
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -315,15 +315,13 @@ xeMemGetProperty(
 ///     - ::XE_RESULT_ERROR_INVALID_PARAMETER
 ///         + nullptr == hMemAllocHandle
 ///         + nullptr == ptr
-///         + nullptr == pBase
-///         + nullptr == pSize
 ///     - ::XE_RESULT_ERROR_UNSUPPORTED
 __xedllport xe_result_t __xecall
 xeMemGetAddressRange(
     xe_mem_allocator_handle_t hMemAllocHandle,      ///< [in] handle of memory allocator for this allocation
     const void* ptr,                                ///< [in] Pointer to query
-    void** pBase,                                   ///< [out] Returned base address of the allocation (optional)
-    size_t* pSize                                   ///< [out] Returned size of the allocation (optional)
+    void** pBase,                                   ///< [in,out][optional] base address of the allocation
+    size_t* pSize                                   ///< [in,out][optional] size of the allocation
     );
 
 ///////////////////////////////////////////////////////////////////////////////

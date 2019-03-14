@@ -74,17 +74,16 @@ namespace xe
     ///     - **cuDeviceGet**
     ///     - clGetDeviceIDs
     /// 
-    /// @returns
-    ///     - device_uuid_t: pointer to an array of unique ids for devices. Caller must supply array.
-    /// 
     /// @throws result_t
-    inline device_uuid_t 
+    inline void 
     Driver::GetDeviceUniqueIds(
-        uint32_t count                                  ///< [in] size of device unique ids array. Typically, this will be
+        uint32_t count,                                 ///< [in] size of device unique ids array. Typically, this will be
                                                         ///< ${x}DeviceGetCount.
+        device_uuid_t* pUniqueIds                       ///< [in,out] pointer to an array of unique ids for devices. Caller must
+                                                        ///< supply array.
         )
     {
-        // auto result = ::xeDriverGetDeviceUniqueIds( handle, count );
+        // auto result = ::xeDriverGetDeviceUniqueIds( handle, count, pUniqueIds );
         // if( ::XE_RESULT_SUCCESS != result ) throw exception(result, "xe::Driver::GetDeviceUniqueIds");
     }
 

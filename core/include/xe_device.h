@@ -100,7 +100,7 @@ __xedllport xe_result_t __xecall
 xeDriverGetDeviceUniqueIds(
     uint32_t count,                                 ///< [in] size of device unique ids array. Typically, this will be
                                                     ///< ${x}DeviceGetCount.
-    xe_device_uuid_t* pUniqueIds                    ///< [out] pointer to an array of unique ids for devices. Caller must
+    xe_device_uuid_t* pUniqueIds                    ///< [in,out] pointer to an array of unique ids for devices. Caller must
                                                     ///< supply array.
     );
 

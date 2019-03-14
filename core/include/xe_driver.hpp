@@ -67,14 +67,13 @@ namespace xe
 
         ///////////////////////////////////////////////////////////////////////////////
         /// @brief C++ wrapper for ::xeDriverGetDeviceUniqueIds
-        /// @returns
-        ///     - device_uuid_t: pointer to an array of unique ids for devices. Caller must supply array.
-        /// 
         /// @throws result_t
-        inline static device_uuid_t
+        inline static void
         GetDeviceUniqueIds(
-            uint32_t count                                  ///< [in] size of device unique ids array. Typically, this will be
+            uint32_t count,                                 ///< [in] size of device unique ids array. Typically, this will be
                                                             ///< ${x}DeviceGetCount.
+            device_uuid_t* pUniqueIds                       ///< [in,out] pointer to an array of unique ids for devices. Caller must
+                                                            ///< supply array.
             );
 
         ///////////////////////////////////////////////////////////////////////////////
