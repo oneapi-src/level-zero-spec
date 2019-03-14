@@ -114,7 +114,7 @@ xeCommandGraphDestroy(
     );
 
 ///////////////////////////////////////////////////////////////////////////////
-/// @brief Closes a command graph; ready to be enqueued into a command queue.
+/// @brief Closes a command graph; ready to be executed by a command queue.
 /// 
 /// @details
 ///     - The command graph will optimize the execution order of the command

@@ -84,12 +84,12 @@ namespace xe
             );
 
         ///////////////////////////////////////////////////////////////////////////////
-        /// @brief C++ wrapper for ::xeCommandQueueEnqueueCommandLists
+        /// @brief C++ wrapper for ::xeCommandQueueExecuteCommandLists
         /// @throws result_t
         inline void
-        EnqueueCommandLists(
-            uint32_t numCommandLists,                       ///< [in] number of command lists to enqueue
-            command_list_handle_t* phCommandLists,          ///< [in] list of handles of the command lists to enqueue for execution
+        ExecuteCommandLists(
+            uint32_t numCommandLists,                       ///< [in] number of command lists to execute
+            command_list_handle_t* phCommandLists,          ///< [in] list of handles of the command lists to execute
             fence_handle_t hFence                           ///< [in][optional] handle of the fence to signal on completion
             );
 

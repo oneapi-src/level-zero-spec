@@ -112,7 +112,7 @@ namespace xe
         enum class command_queue_mode_t
         {
             DEFAULT = 0,                                    ///< implicit default behavior; uses driver-based heuristics
-            SYNCHRONOUS,                                    ///< GPU execution always completes immediately on enqueue; CPU thread is
+            SYNCHRONOUS,                                    ///< GPU execution always completes immediately on execute; CPU thread is
                                                             ///< blocked using wait on implicit synchronization object
             ASYNCHRONOUS,                                   ///< GPU execution is scheduled and will complete in future; explicit
                                                             ///< synchronization object must be used to determine completeness

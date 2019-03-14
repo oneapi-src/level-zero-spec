@@ -154,7 +154,7 @@ xeCommandListDestroy(
     );
 
 ///////////////////////////////////////////////////////////////////////////////
-/// @brief Closes a command list; ready to be enqueued into a command queue.
+/// @brief Closes a command list; ready to be executed by a command queue.
 /// 
 /// @details
 ///     - The application may **not** call this function from simultaneous

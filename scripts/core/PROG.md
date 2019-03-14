@@ -250,8 +250,8 @@ The following sample code demonstrates submission of commands to a command queue
     // finished appending commands (typically done on another thread)
     ${x}CommandListClose(hCommandList);
 
-    // Enqueue command list execution into command queue
-    ${x}CommandQueueEnqueueCommandLists(hCommandQueue, 1, &hCommandList, nullptr);
+    // Execute command list in command queue
+    ${x}CommandQueueExecuteCommandLists(hCommandQueue, 1, &hCommandList, nullptr);
 
     // synchronize host and device
     ${x}CommandQueueSynchronize(hCommandQueue, MAX_UINT32);
@@ -343,8 +343,8 @@ The following sample code demonstrates a sequence for creation, submission and q
     ${x}_fence_handle_t hFence;
     ${x}CommandQueueCreateFence(hCommandQueue, &fenceDesc, &hFence);
 
-    // Enqueue a signal of the fence into the command queue
-    ${x}CommandQueueEnqueueCommandLists(hCommandQueue, 1, &hCommandList, hFence);
+    // Execute a command list with a signal of the fence
+    ${x}CommandQueueExecuteCommandLists(hCommandQueue, 1, &hCommandList, hFence);
 
     // Wait for fence to be signaled
     ${x}FenceHostSynchronize(hFence, MAX_UINT32);
@@ -392,8 +392,8 @@ The following sample code demonstrates a sequence for creation and submission of
     // Append a wait on an event into a command list
     ${x}CommandListAppendWaitOnEvent(hCommandList, hEvent);
 
-    // Enqueue wait via the command list into a command queue
-    ${x}CommandQueueEnqueueCommandLists(hCommandQueue, 1, &hCommandList, nullptr);
+    // Execute the command list with the wait
+    ${x}CommandQueueExecuteCommandLists(hCommandQueue, 1, &hCommandList, nullptr);
 
     // Signal the device
     ${x}EventHostSignal(hEvent);
@@ -417,8 +417,8 @@ The following sample code demonstrates a sequence for measuring time between eve
     ${x}CommandListAppendSignalEvent(hCommandList, hEventBegin);
     ${x}CommandListAppendLaunchFunction(hCommandList, hFunction, &launchArgs, hEventEnd);
 
-    // Enqueue the command list into a command queue
-    ${x}CommandQueueEnqueueCommandLists(hCommandQueue, 1, &hCommandList, nullptr);
+    // Execute the command list
+    ${x}CommandQueueExecuteCommandLists(hCommandQueue, 1, &hCommandList, nullptr);
 
     // Wait for the last event to complete
     ${x}EventHostSynchronize(hEventEnd, MAX_UINT32);
@@ -441,8 +441,8 @@ The following sample code demonstrates a sequence for collecting counters betwee
     ${x}CommandListAppendSignalEvent(hCommandList, hEventBegin);
     ${x}CommandListAppendLaunchFunction(hCommandList, hFunction, &launchArgs, hEventEnd);
 
-    // Enqueue the command list into a command queue
-    ${x}CommandQueueEnqueueCommandLists(hCommandQueue, 1, &hCommandList, nullptr);
+    // Execute the command list
+    ${x}CommandQueueExecuteCommandLists(hCommandQueue, 1, &hCommandList, nullptr);
 
     // Wait for the last event to complete
     ${x}EventHostSynchronize(hEventEnd, MAX_UINT32);
@@ -576,7 +576,7 @@ However, in cases where the devices does **not** support page-faulting _and_ the
 such as multiple levels of indirection, there are two methods available:
 1. the application may set the ::${X}_FUNCTION_FLAG_FORCE_RESIDENCY flag during program creation to force all device allocations to be resident during execution.
  + in addition, the application should indicate the type of allocations that will be indirectly accessed using ::${x}_function_set_attribute_t
- + if the driver is unable to make all allocations resident, then the call to ::${x}CommandQueueEnqueueCommandLists will return ${X}_RESULT_ERROR_OUT_OF_DEVICE_MEMORY
+ + if the driver is unable to make all allocations resident, then the call to ::${x}CommandQueueExecuteCommandLists will return ${X}_RESULT_ERROR_OUT_OF_DEVICE_MEMORY
 2. explcit ::${x}DeviceMakeMemoryResident APIs are included for the application to dynamically change residency as needed. (Windows-only)
  + if the application over-commits device memory, then a call to ::${x}DeviceMakeMemoryResident will return ${X}_RESULT_ERROR_OUT_OF_DEVICE_MEMORY
 
@@ -598,7 +598,7 @@ The following sample code demonstrate a sequence for using coarse-grain residenc
     ${x}CommandListAppendLaunchFunction(hCommandList, hFunction, &launchArgs, nullptr);
     ...
 
-    ${x}CommandQueueEnqueueCommandLists(hCommandQueue, 1, &hCommandList, nullptr);
+    ${x}CommandQueueExecuteCommandLists(hCommandQueue, 1, &hCommandList, nullptr);
     ...
 ```
 
@@ -621,7 +621,7 @@ The following sample code demonstrate a sequence for using fine-grain residency 
     ${x}DeviceMakeMemoryResident(hDevice, begin->next, sizeof(node));
     ${x}DeviceMakeMemoryResident(hDevice, begin->next->next, sizeof(node));
 
-    ${x}CommandQueueEnqueueCommandLists(hCommandQueue, 1, &hCommandList, hFence);
+    ${x}CommandQueueExecuteCommandLists(hCommandQueue, 1, &hCommandList, hFence);
 
     // wait until complete
     ${x}FenceHostSynchronize(hFence, MAX_UINT32);
@@ -996,7 +996,5 @@ The following is a list a features that are still being defined for inclusion:
     + ability to cull program execution within a command list, based on device-generated value(s)
 - **Execution Flow-Control**
     + ability to describe loops and if-else-then type program execution within a command list, based on device-generated value(s)
-- **Execute Indirect**
-    + ability for the device to generate and enqueue more work (better version of device-side enqueue)
 - **C++ Interfaces**
     + ability to choose between C and C++ interfaces (e.g., by wrapping C++ interfaces with C interfaces)

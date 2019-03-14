@@ -68,7 +68,7 @@ params:
       desc: "[in] handle of command graph object to destroy"
 --- #--------------------------------------------------------------------------
 type: function
-desc: "Closes a command graph; ready to be enqueued into a command queue."
+desc: "Closes a command graph; ready to be executed by a command queue."
 class: $xCommandGraph
 name: Close
 details:

@@ -38,7 +38,7 @@ etors:
       value: "0"
       desc: "implicit default behavior; uses driver-based heuristics"
     - name: $X_COMMAND_QUEUE_MODE_SYNCHRONOUS
-      desc: "GPU execution always completes immediately on enqueue;
+      desc: "GPU execution always completes immediately on execute;
             CPU thread is blocked using wait on implicit synchronization object"
     - name: $X_COMMAND_QUEUE_MODE_ASYNCHRONOUS
       desc: "GPU execution is scheduled and will complete in future;
@@ -128,9 +128,9 @@ params:
       desc: "[in] handle of command queue object to destroy"
 --- #--------------------------------------------------------------------------
 type: function
-desc: "Enqueues a command list into a command queue for immediate execution."
+desc: "Executes a command list in a command queue."
 class: $xCommandQueue
-name: EnqueueCommandLists
+name: ExecuteCommandLists
 analogue:
     - vkQueueSubmit
 details:
@@ -142,10 +142,10 @@ params:
       desc: "[in] handle of the command queue"
     - type: uint32_t
       name: numCommandLists
-      desc: "[in] number of command lists to enqueue"
+      desc: "[in] number of command lists to execute"
     - type: "$x_command_list_handle_t*"
       name: phCommandLists
-      desc: "[in] list of handles of the command lists to enqueue for execution"
+      desc: "[in] list of handles of the command lists to execute"
     - type: $x_fence_handle_t
       name: hFence
       desc: "[in][optional] handle of the fence to signal on completion"
@@ -153,7 +153,6 @@ returns:
     - $X_RESULT_ERROR_INVALID_PARAMETER:
        - "0 for numCommandLists"
        - "hFence is in signaled state"
-       - "hFence is enqueued in another command queue"
 --- #--------------------------------------------------------------------------
 type: function
 desc: "Synchronizes a command queue by waiting on the host."

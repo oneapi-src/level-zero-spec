@@ -171,7 +171,7 @@ xeCommandQueueDestroy(
 }
 
 ///////////////////////////////////////////////////////////////////////////////
-/// @brief Enqueues a command list into a command queue for immediate execution.
+/// @brief Executes a command list in a command queue.
 /// 
 /// @details
 ///     - The application may call this function from simultaneous threads.
@@ -190,16 +190,15 @@ xeCommandQueueDestroy(
 ///         + nullptr == phCommandLists
 ///         + 0 for numCommandLists
 ///         + hFence is in signaled state
-///         + hFence is enqueued in another command queue
 ///     - ::XE_RESULT_ERROR_UNSUPPORTED
 ///
-/// @hash {3d9d4e4b61d47939ee851c18dce4cb2d2e5d99585ca8349927a49a7ee1aaceab}
+/// @hash {38c40fa4b4a7b503a5f43b59ef659ef84d37e12cc3ea04d378c665a7de3b6c4c}
 ///
 __xedllexport xe_result_t __xecall
-xeCommandQueueEnqueueCommandLists(
+xeCommandQueueExecuteCommandLists(
     xe_command_queue_handle_t hCommandQueue,        ///< [in] handle of the command queue
-    uint32_t numCommandLists,                       ///< [in] number of command lists to enqueue
-    xe_command_list_handle_t* phCommandLists,       ///< [in] list of handles of the command lists to enqueue for execution
+    uint32_t numCommandLists,                       ///< [in] number of command lists to execute
+    xe_command_list_handle_t* phCommandLists,       ///< [in] list of handles of the command lists to execute
     xe_fence_handle_t hFence                        ///< [in][optional] handle of the fence to signal on completion
     )
 {
@@ -216,7 +215,7 @@ xeCommandQueueEnqueueCommandLists(
 #if defined(XE_NULLDRV)
         return XE_RESULT_SUCCESS;
 #else
-        return L0::CommandQueue::fromHandle(hCommandQueue)->enqueueCommandLists(numCommandLists, phCommandLists, hFence);
+        return L0::CommandQueue::fromHandle(hCommandQueue)->executeCommandLists(numCommandLists, phCommandLists, hFence);
 #endif
         /// @end
     }

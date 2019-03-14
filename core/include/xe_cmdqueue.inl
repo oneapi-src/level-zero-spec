@@ -64,7 +64,7 @@ namespace xe
     }
 
     ///////////////////////////////////////////////////////////////////////////////
-    /// @brief C++ wrapper for ::xeCommandQueueEnqueueCommandLists
+    /// @brief C++ wrapper for ::xeCommandQueueExecuteCommandLists
     /// 
     /// @details
     ///     - The application may call this function from simultaneous threads.
@@ -76,14 +76,14 @@ namespace xe
     /// 
     /// @throws result_t
     inline void 
-    CommandQueue::EnqueueCommandLists(
-        uint32_t numCommandLists,                       ///< [in] number of command lists to enqueue
-        command_list_handle_t* phCommandLists,          ///< [in] list of handles of the command lists to enqueue for execution
+    CommandQueue::ExecuteCommandLists(
+        uint32_t numCommandLists,                       ///< [in] number of command lists to execute
+        command_list_handle_t* phCommandLists,          ///< [in] list of handles of the command lists to execute
         fence_handle_t hFence                           ///< [in][optional] handle of the fence to signal on completion
         )
     {
-        // auto result = ::xeCommandQueueEnqueueCommandLists( handle, numCommandLists, phCommandLists->getHandle(), hFence->getHandle() );
-        // if( ::XE_RESULT_SUCCESS != result ) throw exception(result, "xe::CommandQueue::EnqueueCommandLists");
+        // auto result = ::xeCommandQueueExecuteCommandLists( handle, numCommandLists, phCommandLists->getHandle(), hFence->getHandle() );
+        // if( ::XE_RESULT_SUCCESS != result ) throw exception(result, "xe::CommandQueue::ExecuteCommandLists");
     }
 
     ///////////////////////////////////////////////////////////////////////////////

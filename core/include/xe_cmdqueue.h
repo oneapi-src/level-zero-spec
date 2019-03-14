@@ -67,7 +67,7 @@ typedef enum _xe_command_queue_flag_t
 typedef enum _xe_command_queue_mode_t
 {
     XE_COMMAND_QUEUE_MODE_DEFAULT = 0,              ///< implicit default behavior; uses driver-based heuristics
-    XE_COMMAND_QUEUE_MODE_SYNCHRONOUS,              ///< GPU execution always completes immediately on enqueue; CPU thread is
+    XE_COMMAND_QUEUE_MODE_SYNCHRONOUS,              ///< GPU execution always completes immediately on execute; CPU thread is
                                                     ///< blocked using wait on implicit synchronization object
     XE_COMMAND_QUEUE_MODE_ASYNCHRONOUS,             ///< GPU execution is scheduled and will complete in future; explicit
                                                     ///< synchronization object must be used to determine completeness
@@ -161,7 +161,7 @@ xeCommandQueueDestroy(
     );
 
 ///////////////////////////////////////////////////////////////////////////////
-/// @brief Enqueues a command list into a command queue for immediate execution.
+/// @brief Executes a command list in a command queue.
 /// 
 /// @details
 ///     - The application may call this function from simultaneous threads.
@@ -180,13 +180,12 @@ xeCommandQueueDestroy(
 ///         + nullptr == phCommandLists
 ///         + 0 for numCommandLists
 ///         + hFence is in signaled state
-///         + hFence is enqueued in another command queue
 ///     - ::XE_RESULT_ERROR_UNSUPPORTED
 __xedllport xe_result_t __xecall
-xeCommandQueueEnqueueCommandLists(
+xeCommandQueueExecuteCommandLists(
     xe_command_queue_handle_t hCommandQueue,        ///< [in] handle of the command queue
-    uint32_t numCommandLists,                       ///< [in] number of command lists to enqueue
-    xe_command_list_handle_t* phCommandLists,       ///< [in] list of handles of the command lists to enqueue for execution
+    uint32_t numCommandLists,                       ///< [in] number of command lists to execute
+    xe_command_list_handle_t* phCommandLists,       ///< [in] list of handles of the command lists to execute
     xe_fence_handle_t hFence                        ///< [in][optional] handle of the fence to signal on completion
     );
 
