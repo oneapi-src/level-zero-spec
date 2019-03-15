@@ -434,7 +434,7 @@ members:
       desc: "[out] Relative performance rank of link."
 --- #--------------------------------------------------------------------------
 type: function
-desc: "Retrieves link properties between source and destination devices."
+desc: "Retrieves link properties between one device and a peer devices"
 class: $xDevice
 name: GetLinkProperties
 decl: static
@@ -444,12 +444,12 @@ details:
     - "The application may call this function from simultaneous threads."
     - "The implementation of this function should be lock-free."
 params:
-    - type: uint32_t
-      name: srcOrdinal
-      desc: "[in] source device ordinal"
-    - type: uint32_t
-      name: dstOrdinal
-      desc: "[in] destination device ordinal"
+    - type: "$x_device_handle_t"
+      name: hDevice
+      desc: "[in] handle of the device performing the access"
+    - type: "$x_device_handle_t"
+      name: hPeerDevice
+      desc: "[in] handle of the peer device with the allocation"
     - type: "$x_device_link_properties_t*"
       name: pLinkProperties
       desc: "[out] link properties between source and destination devices"

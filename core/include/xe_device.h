@@ -417,7 +417,7 @@ typedef struct _xe_device_link_properties_t
 } xe_device_link_properties_t;
 
 ///////////////////////////////////////////////////////////////////////////////
-/// @brief Retrieves link properties between source and destination devices.
+/// @brief Retrieves link properties between one device and a peer devices
 /// 
 /// @details
 ///     - The application may call this function from simultaneous threads.
@@ -432,13 +432,15 @@ typedef struct _xe_device_link_properties_t
 ///     - ::XE_RESULT_ERROR_UNINITIALIZED
 ///     - ::XE_RESULT_ERROR_DEVICE_LOST
 ///     - ::XE_RESULT_ERROR_INVALID_PARAMETER
+///         + nullptr == hDevice
+///         + nullptr == hPeerDevice
 ///         + nullptr == pLinkProperties
 ///         + invalid ordinal. Use ::xeDriverGetDeviceCount for valid range.
 ///     - ::XE_RESULT_ERROR_UNSUPPORTED
 __xedllport xe_result_t __xecall
 xeDeviceGetLinkProperties(
-    uint32_t srcOrdinal,                            ///< [in] source device ordinal
-    uint32_t dstOrdinal,                            ///< [in] destination device ordinal
+    xe_device_handle_t hDevice,                     ///< [in] handle of the device performing the access
+    xe_device_handle_t hPeerDevice,                 ///< [in] handle of the peer device with the allocation
     xe_device_link_properties_t* pLinkProperties    ///< [out] link properties between source and destination devices
     );
 

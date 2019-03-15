@@ -330,11 +330,11 @@ namespace xe
     /// @throws result_t
     inline device_link_properties_t 
     Device::GetLinkProperties(
-        uint32_t srcOrdinal,                            ///< [in] source device ordinal
-        uint32_t dstOrdinal                             ///< [in] destination device ordinal
+        device_handle_t hDevice,                        ///< [in] handle of the device performing the access
+        device_handle_t hPeerDevice                     ///< [in] handle of the peer device with the allocation
         )
     {
-        // auto result = ::xeDeviceGetLinkProperties( handle, srcOrdinal, dstOrdinal );
+        // auto result = ::xeDeviceGetLinkProperties( handle, hDevice->getHandle(), hPeerDevice->getHandle() );
         // if( ::XE_RESULT_SUCCESS != result ) throw exception(result, "xe::Device::GetLinkProperties");
     }
 

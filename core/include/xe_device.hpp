@@ -634,8 +634,8 @@ namespace xe
         /// @throws result_t
         inline static device_link_properties_t
         GetLinkProperties(
-            uint32_t srcOrdinal,                            ///< [in] source device ordinal
-            uint32_t dstOrdinal                             ///< [in] destination device ordinal
+            device_handle_t hDevice,                        ///< [in] handle of the device performing the access
+            device_handle_t hPeerDevice                     ///< [in] handle of the peer device with the allocation
             );
 
         ///////////////////////////////////////////////////////////////////////////////

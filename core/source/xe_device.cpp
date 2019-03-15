@@ -528,7 +528,7 @@ xeDeviceGetMemoryProperties(
 }
 
 ///////////////////////////////////////////////////////////////////////////////
-/// @brief Retrieves link properties between source and destination devices.
+/// @brief Retrieves link properties between one device and a peer devices
 /// 
 /// @details
 ///     - The application may call this function from simultaneous threads.
@@ -543,16 +543,18 @@ xeDeviceGetMemoryProperties(
 ///     - ::XE_RESULT_ERROR_UNINITIALIZED
 ///     - ::XE_RESULT_ERROR_DEVICE_LOST
 ///     - ::XE_RESULT_ERROR_INVALID_PARAMETER
+///         + nullptr == hDevice
+///         + nullptr == hPeerDevice
 ///         + nullptr == pLinkProperties
 ///         + invalid ordinal. Use ::xeDriverGetDeviceCount for valid range.
 ///     - ::XE_RESULT_ERROR_UNSUPPORTED
 ///
-/// @hash {ec34167e970021b312559839b8f4105aaa14c088f77586203eb745f4b6784d1b}
+/// @hash {f87da0c4b4faf80e73e9f40633b32da141016c47a8b47b4f51f277de390a2151}
 ///
 __xedllexport xe_result_t __xecall
 xeDeviceGetLinkProperties(
-    uint32_t srcOrdinal,                            ///< [in] source device ordinal
-    uint32_t dstOrdinal,                            ///< [in] destination device ordinal
+    xe_device_handle_t hDevice,                     ///< [in] handle of the device performing the access
+    xe_device_handle_t hPeerDevice,                 ///< [in] handle of the peer device with the allocation
     xe_device_link_properties_t* pLinkProperties    ///< [out] link properties between source and destination devices
     )
 {
@@ -562,13 +564,15 @@ xeDeviceGetLinkProperties(
         {
             // if( nullptr == driver ) return XE_RESULT_ERROR_UNINITIALIZED;
             // Check parameters
+            if( nullptr == hDevice ) return XE_RESULT_ERROR_INVALID_PARAMETER;
+            if( nullptr == hPeerDevice ) return XE_RESULT_ERROR_INVALID_PARAMETER;
             if( nullptr == pLinkProperties ) return XE_RESULT_ERROR_INVALID_PARAMETER;
         }
         /// @begin
 #if defined(XE_NULLDRV)
         return XE_RESULT_SUCCESS;
 #else
-        return L0::Device::fromHandle()->getLinkProperties(srcOrdinal, dstOrdinal, pLinkProperties);
+        return L0::Device::fromHandle(hDevice)->getLinkProperties(hPeerDevice, pLinkProperties);
 #endif
         /// @end
     }
