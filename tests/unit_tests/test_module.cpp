@@ -8,6 +8,7 @@
 #include "module.h"
 
 #include "runtime/device/device.h"
+#include "runtime/gmm_helper/gmm_helper.h"
 #include "runtime/helpers/aligned_memory.h"
 #include "runtime/platform/platform.h"
 
@@ -120,6 +121,9 @@ TEST_P(ModuleCreate, onlineCompilationModuleTest) {
     ASSERT_NE(nullptr, deviceRT);
     auto device = Device::create(deviceRT);
 
+    // do not call GMM cachePolicyGetMemoryObject, gmm is not loaded
+    deviceRT->getExecutionEnvironment()->getGmmHelper()->setSimplifiedMocsTableUsage(true);
+
     size_t spvModuleSize = 0;
     auto spvModule = readBinaryTestFile(filename, spvModuleSize);
     ASSERT_NE(0U, spvModuleSize);
@@ -192,7 +196,8 @@ TEST_P(ModuleCreate, onlineCompilationModuleTest) {
 
 static std::tuple<std::string, std::string, std::string> paramsForCreateModule[] = {
     std::make_tuple<std::string, std::string, std::string>("test_files/spv_modules/cstring_module.spv", "memcpy_bytes", "MemcpyBytes"),
-    std::make_tuple<std::string, std::string, std::string>("test_files/spv_modules/slm_barrier_kernel.spv", "slmBarrierSum", "SlmBarrier")};
+    std::make_tuple<std::string, std::string, std::string>("test_files/spv_modules/slm_barrier_kernel.spv", "slmBarrierSum", "SlmBarrier"),
+    std::make_tuple<std::string, std::string, std::string>("test_files/spv_modules/printf_kernel.spv", "test_printf", "Printf")};
 
 INSTANTIATE_TEST_CASE_P(, ModuleCreate, ::testing::ValuesIn(paramsForCreateModule));
 

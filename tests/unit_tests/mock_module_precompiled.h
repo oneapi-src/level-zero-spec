@@ -28,6 +28,7 @@ struct PrecompiledFunctionMockData {
     const size_t bufferArgIndicesAndOffsetsCount;
     const bool hasBarriers;
     const uint32_t slmSize;
+    const bool hasPrintfOutput;
 };
 
 struct PrecompiledFunctionMock : Mock<Function> {
@@ -134,6 +135,10 @@ struct PrecompiledFunctionMock : Mock<Function> {
         return precompiledFunctionMockData->slmSize;
     }
 
+    bool hasPrintfOutput() const override {
+        return precompiledFunctionMockData->hasPrintfOutput;
+    }
+
     const PrecompiledFunctionMockData *precompiledFunctionMockData = nullptr;
     std::unordered_map<int, int> bufferArgOffsetMap;
 
@@ -236,6 +241,7 @@ inline void writeMockData(const std::string sourceOrigin, std::string &mockName,
     std::string globalNamePrecompiledFunctionMockData = mockName + "_" + deviceName;
     std::string globalNameHasBarriers = mockName + "_HasBarriers_" + deviceName;
     std::string globalNameSlmSize = mockName + "_SlmSize_" + deviceName;
+    std::string globalNameHasPrintfOutput = mockName + "_HasPrintfOutput_" + deviceName;
 
     out << "static const uint32_t " << globalNameSimdSize << " = " << function->getSimdSize() << ";\n\n";
 
@@ -251,6 +257,7 @@ inline void writeMockData(const std::string sourceOrigin, std::string &mockName,
 
     out << "static const bool " << globalNameHasBarriers << " = " << function->getHasBarriers() << ";\n\n";
     out << "static const uint32_t " << globalNameSlmSize << " = 0x" << function->getSlmSize() << ";\n\n";
+    out << "static const bool " << globalNameHasPrintfOutput << " = " << function->hasPrintfOutput() << ";\n\n";
 
     out << "static const std::pair<int, int> " << globalNameBufferArgIndices << "[] = { ";
     const void *crossThreadData = function->getCrossThreadDataHostMem();
@@ -281,8 +288,9 @@ inline void writeMockData(const std::string sourceOrigin, std::string &mockName,
         << globalNameGroupSize << ",\n"
         << globalNameBufferArgIndices << ", sizeof(" << globalNameBufferArgIndices << ") / sizeof(" << globalNameBufferArgIndices << "[0]),\n"
         << globalNameHasBarriers << ",\n"
-        << globalNameSlmSize << "\n"
-                                "};\n\n";
+        << globalNameSlmSize << ",\n"
+        << globalNameHasPrintfOutput << "\n"
+                                        "};\n\n";
 
     out << "RegisterPrecompiledFunctionMocksData Register_" << mockName << "_" << deviceName << "{ & " << globalNamePrecompiledFunctionMockData << ", \"" << mockName << "\", \"" << deviceName << "\" }; \n";
 
