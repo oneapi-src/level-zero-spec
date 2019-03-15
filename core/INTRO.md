@@ -155,9 +155,7 @@ their own device abstraction layer and communicate directly with the device-driv
 
 ## Environment Variables
 The following table documents the supported knobs for overriding default driver behavior.
-
 | Category            | Name                                    | Values                 | Description                                           |
 |---------------------|-----------------------------------------|------------------------|-------------------------------------------------------|
 | Memory              | XE_SHARED_FORCE_DEVICE_ALLOC          | {**0**, 1}             | Forces all shared allocations into device memory      |
 | Validation          | XE_DRIVER_PARAMETER_VALIDATION_LEVEL  | {0, **1**, 2}          | Controls the validation level used by the driver for parameters.<br>0 = disabled, no checks<br>1 = pointer and overflow checks only [default]<br>2 = values and states<br> |
-

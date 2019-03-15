@@ -32,6 +32,10 @@ def find_symbol_type(name, meta):
     validate the markdown file
 """
 def validate_md(fpath, meta):
+    RE_ENABLE   = r"^\#\#\s*\-\-validate\s*\=\s*on$"
+    RE_DISABLE  = r"^\#\#\s*\-\-validate\s*\=\s*off$"
+    enable = True
+
     RE_INVALID_TAG  = r".*\$x.*"
     RE_ANY_TAG      = r".*\$\{x\}.*"
     RE_DOXY_LINK    = r".*\:\:\$\{x\}.*"
@@ -44,11 +48,21 @@ def validate_md(fpath, meta):
     RE_EXTRACT_PARAMS   = r"\w+\((.*)\)\;"
 
     for iline, line in enumerate(util.textRead(fpath)):
+        if re.match(RE_ENABLE, line):
+            enable = True
+            continue
+        elif re.match(RE_DISABLE, line):
+            enable = False
+            continue
+
         if re.match(RE_CODE_BLOCK_BEGIN, line):
             code_block = True
             continue
         elif re.match(RE_CODE_BLOCK_END, line):
             code_block = False
+            continue
+
+        if not enable:
             continue
 
         if re.match(RE_INVALID_TAG, line.lower()):

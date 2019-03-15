@@ -678,12 +678,13 @@ The following sample code demonstrates a sequence for creating a module from an 
 
 ${"###"} Module Build Options
 Build options can be passed with ::${x}_module_desc_t as a string.
-
+## --validate=off
 | Build Option                                  | Description                                           | Default  |
 | :--                                           | :--                                                   | :--      |
 | -${x}-opt-disable                             | Disable optimizations.                                | Disabled |
 | -${x}-opt-greater-than-4GB-buffer-required    | Use 64-bit offset calculations for buffers.           | Disabled |
 | -${x}-opt-large-register-file                 | Increase number of registers available to threads.    | Disabled |
+## --validate=on
 
 ${"###"} Module Build Log
 The ::${x}DeviceCreateModule function can optionally generate a build log object ::${x}_module_build_log_handle_t.

@@ -88,6 +88,7 @@ Note: currently all APIs are defined as part of the "Core" specification until t
 
 ${"##"} Naming Convention
 The following naming convention is followed in order to avoid conflicts within the API, or with other APIs and libraries:
+## --validate=off
 - all driver entry points are prefixed with ${x}
 - all types follow **${x}_\<name\>_t** convention
 - all macros and enumerator values use all caps **${X}_\<SCOPE\>_\<NAME\>** convention
@@ -96,6 +97,7 @@ The following naming convention is followed in order to avoid conflicts within t
 - all function input parameters precede output parameters
 
 Note: "${Xx}" is a placeholder until One-API branding is decided.
+## --validate=on
 
 ${"##"} Terminology
 This specification uses key words based on [RFC2119](https://www.ietf.org/rfc/rfc2119.txt) to indicate requirement level. 
@@ -147,17 +149,19 @@ The primary usage-model enabled by these rules is:
 
 ${"#"} <a name="drv">Drivers</a>
 ${"##"} Installation
+## --validate=off
 The Level-Zero API is implemented within a _${x}_vendor_device.dll_ (windows) / _${x}_vendor_device.so_ (linux), which is copied on the system during installation of the device driver;
 where _vendor_ and _device_ are names chosen by the device vendor.  For Intel GPUs, the name would be "${x}_intc_gpu".
+## --validate=on
 
 This API does not define an Installable Client Driver (ICD), as it is expected that users of this API would prefer to implement
 their own device abstraction layer and communicate directly with the device-driver.
 
 ${"##"} Environment Variables
 The following table documents the supported knobs for overriding default driver behavior.
-
+## --validate=off
 | Category            | Name                                    | Values                 | Description                                           |
 |---------------------|-----------------------------------------|------------------------|-------------------------------------------------------|
 | Memory              | ${X}_SHARED_FORCE_DEVICE_ALLOC          | {**0**, 1}             | Forces all shared allocations into device memory      |
 | Validation          | ${X}_DRIVER_PARAMETER_VALIDATION_LEVEL  | {0, **1**, 2}          | Controls the validation level used by the driver for parameters.<br>0 = disabled, no checks<br>1 = pointer and overflow checks only [default]<br>2 = values and states<br> |
-
+## --validate=on

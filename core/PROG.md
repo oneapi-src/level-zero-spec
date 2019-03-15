@@ -678,7 +678,6 @@ The following sample code demonstrates a sequence for creating a module from an 
 
 ### Module Build Options
 Build options can be passed with ::xe_module_desc_t as a string.
-
 | Build Option                                  | Description                                           | Default  |
 | :--                                           | :--                                                   | :--      |
 | -xe-opt-disable                             | Disable optimizations.                                | Disabled |
