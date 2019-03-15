@@ -42,8 +42,21 @@ HWTEST2_F(EncodeL3State, givenNoSLMSetCorrectMMIO, IsGen9) {
     EXPECT_EQ(cmd->getDataDword(), 0x80000140u);
 }
 
+HWTEST2_F(EncodeL3State, givenSLMSetCorrectMMIO, IsGen9) {
+    ::L0::EncodeL3State<productFamily>::encode(*commandList, true);
+
+    parseCommandBuffer<FamilyType>();
+
+    using MI_LOAD_REGISTER_IMM = typename FamilyType::MI_LOAD_REGISTER_IMM;
+    auto itorLRI = find<MI_LOAD_REGISTER_IMM *>(commands.begin(), commands.end());
+    ASSERT_NE(itorLRI, commands.end());
+    auto cmd = genCmdCast<MI_LOAD_REGISTER_IMM *>(*itorLRI);
+    EXPECT_EQ(cmd->getRegisterOffset(), 0x7034);
+    EXPECT_EQ(cmd->getDataDword(), 0x60000121u);
+}
+
 using IsAtLeastGen12LP = IsAtLeastProduct<IGFX_TIGERLAKE_LP>;
-HWTEST2_F(EncodeL3State, givenNoSLMSetCorrectMMIO, IsAtLeastGen12LP) {
+HWTEST2_F(EncodeL3State, setCorrectMMIO, IsAtLeastGen12LP) {
     ::L0::EncodeL3State<productFamily>::encode(*commandList, false);
 
     parseCommandBuffer<FamilyType>();

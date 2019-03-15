@@ -19,7 +19,9 @@ struct EncodeL3State : ToGfxCoreFamily<productFamily> {
 
     static void encode(CommandContainer &container, bool enableSLM) {
         EncodeFlush<gfxCoreFamily>::encode(container);
-        EncodeSetMMIO<gfxCoreFamily>::encode(container, offset, data);
+        EncodeSetMMIO<gfxCoreFamily>::encode(container,
+                                             offset,
+                                             enableSLM ? dataSLM : data);
     }
 };
 
