@@ -92,6 +92,36 @@ struct CommandListEncodeDispatchFunction : public ::testing::Test {
     GraphicsAllocation *buffer2 = nullptr;
 };
 
+TEST_F(CommandListEncodeDispatchFunction, storesPrintfBufferWhenPrintfUsedByFunction) {
+    createFunction("Printf");
+
+    auto result = commandList->encodeDispatchFunction(function->toHandle(),
+                                                      &dispatchFunctionArguments,
+                                                      nullptr);
+
+    EXPECT_EQ(1u, commandList->printfBufferContainer.size());
+    EXPECT_EQ(function->getPrintfBufferAllocation(), commandList->printfBufferContainer[0]);
+    EXPECT_EQ(XE_RESULT_SUCCESS, result);
+}
+
+TEST_F(CommandListEncodeDispatchFunction, storesPrintfBufferOnceWhenEncodingFunctionMultipleTimes) {
+    createFunction("Printf");
+
+    auto result = commandList->encodeDispatchFunction(function->toHandle(),
+                                                      &dispatchFunctionArguments,
+                                                      nullptr);
+
+    EXPECT_EQ(1u, commandList->printfBufferContainer.size());
+    EXPECT_EQ(function->getPrintfBufferAllocation(), commandList->printfBufferContainer[0]);
+    EXPECT_EQ(XE_RESULT_SUCCESS, result);
+
+    result = commandList->encodeDispatchFunction(function->toHandle(),
+                                                 &dispatchFunctionArguments,
+                                                 nullptr);
+
+    EXPECT_EQ(1u, commandList->printfBufferContainer.size());
+}
+
 ATSTEST_F(CommandListEncodeDispatchFunction, addsWalkerToCommandStream) {
     createFunction("MemcpyBytes");
 

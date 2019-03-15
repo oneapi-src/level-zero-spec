@@ -358,6 +358,13 @@ xe_result_t CommandListCoreFamily<gfxCoreFamily>::encodeDispatchFunction(xe_func
         }
     }
 
+    // Store PrintfBuffer from a function
+    {
+        if (function->hasPrintfOutput()) {
+            this->storePrintfBuffer(function->getPrintfBufferAllocation());
+        }
+    }
+
     // Commit our command to the commandStream
     auto buffer = commandStream->getSpace(sizeof(cmd));
     *(decltype(cmd) *)buffer = cmd;

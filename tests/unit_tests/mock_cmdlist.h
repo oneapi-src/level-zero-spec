@@ -18,6 +18,7 @@ struct WhiteBox<::L0::CommandList> : public ::L0::CommandListImp {
     using BaseClass::commandStream;
     using BaseClass::device;
     using BaseClass::indirectHeaps;
+    using BaseClass::printfBufferContainer;
     using BaseClass::residencyContainer;
 
     WhiteBox(Device *device);

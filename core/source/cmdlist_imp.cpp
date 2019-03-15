@@ -7,6 +7,8 @@
 #include "memory_manager.h"
 #include "runtime/command_stream/linear_stream.h"
 #include "runtime/indirect_heap/indirect_heap.h"
+
+#include <algorithm>
 #include <cassert>
 
 namespace L0 {
@@ -69,6 +71,13 @@ bool CommandContainer::initialize(Device *device) {
     commandStream = new OCLRT::LinearStream(allocation->allocationRT);
 
     return true;
+}
+
+void CommandContainer::storePrintfBuffer(GraphicsAllocation *printfBuffer) {
+    auto it = std::find(this->printfBufferContainer.begin(), this->printfBufferContainer.end(), printfBuffer);
+    if (it == this->printfBufferContainer.end()) {
+        this->printfBufferContainer.push_back(printfBuffer);
+    }
 }
 
 CommandList *CommandList::create(uint32_t productFamily, Device *device) {

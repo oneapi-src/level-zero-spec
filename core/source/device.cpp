@@ -77,7 +77,7 @@ struct DeviceImp : public Device {
     }
 
     xe_result_t createSampler(const xe_sampler_desc_t *pDesc,
-        xe_sampler_handle_t *phSampler) override {
+                              xe_sampler_handle_t *phSampler) override {
         return XE_RESULT_ERROR_UNSUPPORTED;
     }
 
