@@ -60,7 +60,7 @@ xe_result_t Event::destroy() {
     return XE_RESULT_SUCCESS;
 }
 
-xe_result_t Event::hostWaitOnEvent(xe_event_handle_t hEvent, uint32_t timeout) {
+xe_result_t hostWaitOnEvent(xe_event_handle_t hEvent, uint32_t timeout) {
     return XE_RESULT_SUCCESS;
 }
 

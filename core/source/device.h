@@ -6,6 +6,7 @@
 #include "xe_event.h"
 #include "xe_image.h"
 #include "xe_module.h"
+#include "xe_sampler.h"
 #include "xe_semaphore.h"
 #include "driver.h"
 
@@ -38,6 +39,8 @@ struct Device : _xe_device_handle_t {
     virtual xe_result_t createModule(const xe_module_desc_t *desc,
                                      xe_module_handle_t *module,
                                      xe_module_build_log_handle_t *buildLog) = 0;
+    virtual xe_result_t createSampler(const xe_sampler_desc_t *pDesc,
+                                      xe_sampler_handle_t *phSampler) = 0;
     virtual xe_result_t createSemaphore(const xe_semaphore_desc_t *desc,
                                         xe_semaphore_handle_t *phSemaphore) = 0;
     virtual xe_result_t evictImage(xe_image_handle_t hImage) = 0;

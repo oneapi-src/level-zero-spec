@@ -296,13 +296,6 @@ typedef xe_result_t (__xecall *pfn_xeHostSignalEvent)(
     );
 typedef xe_result_t (__xecall *pfn_xeHostWaitOnEvent)(
     xe_event_handle_t hEvent,                       ///< [in] handle of the event
-    xe_synchronization_mode_t mode,                 ///< [in] synchronization mode
-    uint32_t delay,                                 ///< [in] if ::XE_SYNCHRONIZATION_MODE_SLEEP == mode, then time (in
-                                                    ///< microseconds) to poll before putting Host thread to sleep; otherwise,
-                                                    ///< must be zero.
-    uint32_t interval,                              ///< [in] if ::XE_SYNCHRONIZATION_MODE_SLEEP == mode, then maximum time (in
-                                                    ///< microseconds) to put Host thread to sleep between polling; otherwise,
-                                                    ///< must be zero.
     uint32_t timeout                                ///< [in] if non-zero, then indicates the maximum time to poll or sleep
                                                     ///< before returning; if zero, then only a single status check is made
                                                     ///< before immediately returning; if MAX_UINT32, then function will not
@@ -1173,6 +1166,12 @@ inline bool load_xe(void *handle, void *(*funcAddressGetter)(void *handle, const
         return false;
     }
     if(0 == outTable->xeDeviceEvictImage){
+        return false;
+    }
+    if(0 == outTable->xeDeviceCreateSampler){
+        return false;
+    }
+    if(0 == outTable->xeSamplerDestroy){
         return false;
     }
     if(0 == outTable->xeDeviceCreateSemaphore){

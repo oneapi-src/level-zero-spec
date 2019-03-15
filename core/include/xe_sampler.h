@@ -92,7 +92,6 @@ typedef struct _xe_sampler_desc_t
 ///     - ::XE_RESULT_SUCCESS
 ///     - ::XE_RESULT_ERROR_UNINITIALIZED
 ///     - ::XE_RESULT_ERROR_DEVICE_LOST
-///     - ::XE_RESULT_ERROR_OUT_OF_HOST_MEMORY
 ///     - ::XE_RESULT_ERROR_INVALID_PARAMETER
 ///         + nullptr == hDevice
 ///         + nullptr == pDesc
@@ -101,6 +100,7 @@ typedef struct _xe_sampler_desc_t
 ///         + invalid pDesc->filterMode
 ///     - ::XE_RESULT_ERROR_UNSUPPORTED
 ///         + ::XE_SAMPLER_DESC_VERSION < pDesc->version
+///     - ::XE_RESULT_ERROR_OUT_OF_HOST_MEMORY
 __xedllport xe_result_t __xecall
   xeDeviceCreateSampler(
     xe_device_handle_t hDevice,                     ///< [in] handle of the device

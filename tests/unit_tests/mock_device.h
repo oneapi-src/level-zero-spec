@@ -39,6 +39,8 @@ struct Mock<Device> : public Device {
     MOCK_METHOD3(createModule, xe_result_t(const xe_module_desc_t *desc,
                                            xe_module_handle_t *module,
                                            xe_module_build_log_handle_t *buildLog));
+    MOCK_METHOD2(createSampler, xe_result_t(const xe_sampler_desc_t *pDesc,
+                                            xe_sampler_handle_t *phSampler));
     MOCK_METHOD2(createSemaphore, xe_result_t(const xe_semaphore_desc_t *desc,
                                               xe_semaphore_handle_t *phSemaphore));
     MOCK_METHOD1(evictImage, xe_result_t(xe_image_handle_t hImage));

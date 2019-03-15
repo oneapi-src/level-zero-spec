@@ -76,6 +76,11 @@ struct DeviceImp : public Device {
         return XE_RESULT_SUCCESS;
     }
 
+    xe_result_t createSampler(const xe_sampler_desc_t *pDesc,
+        xe_sampler_handle_t *phSampler) override {
+        return XE_RESULT_ERROR_UNSUPPORTED;
+    }
+
     xe_result_t createSemaphore(const xe_semaphore_desc_t *desc,
                                 xe_semaphore_handle_t *phSemaphore) override {
         return XE_RESULT_ERROR_UNSUPPORTED;

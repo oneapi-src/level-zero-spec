@@ -212,17 +212,6 @@ params:
     - type: $x_event_handle_t
       name: hEvent
       desc: "[in] handle of the event"
-    - type: $x_synchronization_mode_t
-      name: mode
-      desc: "[in] synchronization mode"
-    - type: uint32_t
-      name: delay
-      desc: "[in] if $X_SYNCHRONIZATION_MODE_SLEEP == mode, then time (in microseconds) to poll before putting Host thread to sleep; 
-            otherwise, must be zero."
-    - type: uint32_t
-      name: interval
-      desc: "[in] if $X_SYNCHRONIZATION_MODE_SLEEP == mode, then maximum time (in microseconds) to put Host thread to sleep between polling;
-            otherwise, must be zero."
     - type: uint32_t
       name: timeout
       desc: "[in] if non-zero, then indicates the maximum time to poll or sleep before returning;

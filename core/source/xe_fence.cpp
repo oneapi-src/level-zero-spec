@@ -55,14 +55,14 @@
 ///     - ::XE_RESULT_SUCCESS
 ///     - ::XE_RESULT_ERROR_UNINITIALIZED
 ///     - ::XE_RESULT_ERROR_DEVICE_LOST
-///     - ::XE_RESULT_ERROR_OUT_OF_DEVICE_MEMORY
-///     - ::XE_RESULT_ERROR_OUT_OF_HOST_MEMORY
 ///     - ::XE_RESULT_ERROR_INVALID_PARAMETER
 ///         + nullptr == hCommandQueue
 ///         + nullptr == desc
 ///         + nullptr == phFence
 ///     - ::XE_RESULT_ERROR_UNSUPPORTED
 ///         + ::XE_FENCE_DESC_VERSION < desc->version
+///     - ::XE_RESULT_ERROR_OUT_OF_HOST_MEMORY
+///     - ::XE_RESULT_ERROR_OUT_OF_DEVICE_MEMORY
 ///
 /// @hash {d42e38d25d111753f5f120d80296f494f658063005c79d78865c2e62e1ef1803}
 ///
@@ -186,9 +186,9 @@ __xedllexport xe_result_t __xecall
 ///     - ::XE_RESULT_ERROR_INVALID_PARAMETER
 ///         + nullptr == hFence
 ///         + fence is not enqueued in a command queue
+///     - ::XE_RESULT_ERROR_UNSUPPORTED
 ///     - ::XE_RESULT_NOT_READY
 ///         + timeout expired
-///     - ::XE_RESULT_ERROR_UNSUPPORTED
 ///
 /// @hash {77f047fdfb94150f1b0cda9d8cdbbf224f6bbd82021c5595a03bf1a8be2a03b6}
 ///
@@ -258,9 +258,9 @@ __xedllexport xe_result_t __xecall
 ///         + nullptr == phFences
 ///         + nullptr == any handle in phFences
 ///         + any fence is not enqueued in a command queue
+///     - ::XE_RESULT_ERROR_UNSUPPORTED
 ///     - ::XE_RESULT_NOT_READY
 ///         + timeout expired
-///     - ::XE_RESULT_ERROR_UNSUPPORTED
 ///
 /// @hash {a5f76c9bd49faad0a8ae16401ccdd9cc6e8ae394eb876c8eca18dc6dd3cdae7d}
 ///
@@ -330,9 +330,9 @@ __xedllexport xe_result_t __xecall
 ///     - ::XE_RESULT_ERROR_INVALID_PARAMETER
 ///         + nullptr == hFence
 ///         + fence is not enqueued in a command queue
+///     - ::XE_RESULT_ERROR_UNSUPPORTED
 ///     - ::XE_RESULT_NOT_READY
 ///         + not signaled
-///     - ::XE_RESULT_ERROR_UNSUPPORTED
 ///
 /// @hash {54d115edc2a41acd09d4b8170e56d9826a2b5706f11c6104736eb5860d23c5bc}
 ///
