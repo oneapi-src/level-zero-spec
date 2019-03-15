@@ -181,8 +181,8 @@ extern GFXCORE_FAMILY renderCoreFamily;
     template <PRODUCT_FAMILY productFamily, GFXCORE_FAMILY gfxCoreFamily, typename FamilyType>                           \
     void GTEST_TEST_CLASS_NAME_(test_suite_name, test_name)::matchBody()
 
-#define HWTEST2_F(test_fixture, test_name, test_matcher) \
-    HWTEST2_TEST_(test_fixture, test_name, test_fixture, \
+#define HWTEST2_F(test_fixture, test_name, test_matcher)                  \
+    HWTEST2_TEST_(test_fixture, test_name##_##test_matcher, test_fixture, \
                   ::testing::internal::GetTypeId<test_fixture>(), test_matcher)
 
 // Macros to provide template based testing.
@@ -665,8 +665,9 @@ struct At<Container, 0> {
 // Utility conversion
 template <PRODUCT_FAMILY productFamily>
 struct ToGfxCoreFamily {
+    static const GFXCORE_FAMILY gfxCoreFamily = static_cast<GFXCORE_FAMILY>(OCLRT::HwMapper<productFamily>::gfxFamily);
     static constexpr GFXCORE_FAMILY get() {
-        return static_cast<GFXCORE_FAMILY>(OCLRT::HwMapper<productFamily>::gfxFamily);
+        return gfxCoreFamily;
     }
 };
 
