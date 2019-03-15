@@ -214,7 +214,8 @@ namespace xe
         SetArgumentValue(
             uint32_t argIndex,                              ///< [in] argument index in range [0, num args - 1]
             size_t argSize,                                 ///< [in] size of argument type
-            const void* pArgValue                           ///< [in] argument value represented as matching arg type
+            const void* pArgValue                           ///< [in][optional] argument value represented as matching arg type. If
+                                                            ///< null then argument value is considered null.
             );
 
         ///////////////////////////////////////////////////////////////////////////////

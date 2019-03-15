@@ -341,7 +341,7 @@ params:
       desc: "[in] size of argument type"
     - type: "const void*"
       name: pArgValue
-      desc: "[in] argument value represented as matching arg type"
+      desc: "[in][optional] argument value represented as matching arg type. If null then argument value is considered null."
 returns:
     - $X_RESULT_ERROR_INVALID_PARAMETER:
         - "invalid argument index"

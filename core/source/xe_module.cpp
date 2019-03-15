@@ -698,7 +698,6 @@ xeFunctionSuggestGroupSize(
 ///     - ::XE_RESULT_ERROR_DEVICE_LOST
 ///     - ::XE_RESULT_ERROR_INVALID_PARAMETER
 ///         + nullptr == hFunction
-///         + nullptr == pArgValue
 ///         + invalid argument index
 ///         + invalid size specified
 ///     - ::XE_RESULT_ERROR_UNSUPPORTED
@@ -710,7 +709,8 @@ xeFunctionSetArgumentValue(
     xe_function_handle_t hFunction,                 ///< [in/out] handle of the function args object.
     uint32_t argIndex,                              ///< [in] argument index in range [0, num args - 1]
     size_t argSize,                                 ///< [in] size of argument type
-    const void* pArgValue                           ///< [in] argument value represented as matching arg type
+    const void* pArgValue                           ///< [in][optional] argument value represented as matching arg type. If
+                                                    ///< null then argument value is considered null.
     )
 {
     try
@@ -720,7 +720,6 @@ xeFunctionSetArgumentValue(
             // if( nullptr == driver ) return XE_RESULT_ERROR_UNINITIALIZED;
             // Check parameters
             if( nullptr == hFunction ) return XE_RESULT_ERROR_INVALID_PARAMETER;
-            if( nullptr == pArgValue ) return XE_RESULT_ERROR_INVALID_PARAMETER;
         }
         /// @begin
 #if defined(XE_NULLDRV)
