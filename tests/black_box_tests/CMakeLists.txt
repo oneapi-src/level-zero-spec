@@ -63,6 +63,7 @@ add_custom_command(
   COMMAND ${CMAKE_COMMAND} -E echo "SetCommandStreamReceiver = 1" > ${TEST_DIR}/igdrcl.config
   COMMAND ${CMAKE_COMMAND} -E echo "ProductFamilyOverride = ats" >> ${TEST_DIR}/igdrcl.config
   COMMAND ${CMAKE_COMMAND} -E copy_directory "${CUSTOM_COMMAND_BINARY_DIR}/test_files" "${TEST_DIR}/test_files"
+  COMMAND ${CMAKE_COMMAND} -E copy_directory "${CUSTOM_COMMAND_BINARY_DIR}/kernels" "${TEST_DIR}/kernels"
   # COMMAND WORKING_DIRECTORY \"${CUSTOM_COMMAND_BINARY_DIR}\"
   COMMAND echo Running ${RUN_XELLO_WORLD_ICD_AUB_CMD} for ATS in "${CUSTOM_COMMAND_BINARY_DIR}/xello_world_icd_aub_test"
   COMMAND ${CMAKE_COMMAND} -E chdir ${TEST_DIR} ${CMAKE_COMMAND} -E env SetCommandStreamReceiver=1 ${RUN_XELLO_WORLD_ICD_AUB_CMD}
@@ -79,6 +80,7 @@ add_custom_command(
   COMMAND ${CMAKE_COMMAND} -E echo "SetCommandStreamReceiver = 1" > ${TEST_DIR}/igdrcl.config
   COMMAND ${CMAKE_COMMAND} -E echo "ProductFamilyOverride = skl" >> ${TEST_DIR}/igdrcl.config
   COMMAND ${CMAKE_COMMAND} -E copy_directory "${CUSTOM_COMMAND_BINARY_DIR}/test_files" "${TEST_DIR}/test_files"
+  COMMAND ${CMAKE_COMMAND} -E copy_directory "${CUSTOM_COMMAND_BINARY_DIR}/kernels" "${TEST_DIR}/kernels"
   # COMMAND WORKING_DIRECTORY \"${CUSTOM_COMMAND_BINARY_DIR}\"
   COMMAND echo Running ${RUN_XELLO_WORLD_ICD_AUB_CMD} for SKL in "${CUSTOM_COMMAND_BINARY_DIR}/xello_world_icd_aub_test"
   COMMAND ${CMAKE_COMMAND} -E chdir ${TEST_DIR} ${CMAKE_COMMAND} -E env SetCommandStreamReceiver=1 ${RUN_XELLO_WORLD_ICD_AUB_CMD}

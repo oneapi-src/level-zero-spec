@@ -3,6 +3,7 @@
 #include "graphics_allocation.h"
 #include "memory_manager.h"
 #include "module.h"
+#include "builtins.h"
 #include "runtime/command_stream/linear_stream.h"
 #include "runtime/helpers/hw_info.h"
 #include "runtime/helpers/string.h"
@@ -448,7 +449,42 @@ template <GFXCORE_FAMILY gfxCoreFamily>
 xe_result_t CommandListCoreFamily<gfxCoreFamily>::encodeMemoryCopy(void *dstptr,
                                                                    const void *srcptr,
                                                                    size_t size) {
-    return XE_RESULT_ERROR_UNSUPPORTED;
+    xe_module_handle_t module;
+    xe_function_handle_t function;
+    xe_command_queue_handle_t cmdQueue;
+
+    xe_module_desc_t moduleDesc = {XE_MODULE_DESC_VERSION};
+    moduleDesc.format = XE_MODULE_FORMAT_IL_SPIRV;
+    moduleDesc.pInputModule = compileCopyBufferToBufferBin.getModule();
+    moduleDesc.inputSize = compileCopyBufferToBufferBin.getSize();
+    if (xeDeviceCreateModule(this->device, &moduleDesc, &module, nullptr))
+        return XE_RESULT_ERROR_UNKNOWN;
+
+    xe_function_desc_t functionDesc = {XE_FUNCTION_DESC_VERSION};
+    functionDesc.pFunctionName = compileCopyBufferToBufferBin.getFunctionName();
+    if(xeModuleCreateFunction(module, &functionDesc, &function))
+        return XE_RESULT_ERROR_UNKNOWN;
+
+    /* Using defaults for now. We need to change this */
+    uint32_t groupSizeX = 32u;
+    uint32_t groupSizeY = 1u;
+    uint32_t groupSizeZ = 1u;
+    if (xeFunctionSetGroupSize(function, groupSizeX, groupSizeY, groupSizeZ))
+        return XE_RESULT_ERROR_UNKNOWN;
+
+    xe_command_queue_desc_t cmdQueueDesc = {XE_COMMAND_QUEUE_DESC_VERSION};
+    cmdQueueDesc.ordinal = 0;
+    cmdQueueDesc.mode = XE_COMMAND_QUEUE_MODE_ASYNCHRONOUS;
+    if(xeDeviceCreateCommandQueue(this->device, &cmdQueueDesc, &cmdQueue))
+        return XE_RESULT_ERROR_UNKNOWN;
+
+    xeFunctionSetArgumentValue(function, 0, sizeof(dstptr), &dstptr);
+    xeFunctionSetArgumentValue(function, 1, sizeof(srcptr), &srcptr);
+
+    xe_dispatch_function_arguments_t dispatchFuncArgs{XE_DISPATCH_FUNCTION_ARGS_VERSION,
+            (uint32_t)(size / sizeof(char) / groupSizeX), 1, 1};
+
+    return this->encodeDispatchFunction(function, &dispatchFuncArgs, nullptr);
 }
 
 template <GFXCORE_FAMILY gfxCoreFamily>

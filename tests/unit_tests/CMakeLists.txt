@@ -103,6 +103,16 @@ add_custom_command(
     DEPENDS "${CMAKE_CURRENT_SOURCE_DIR}/test_files"
 )
 
+add_custom_command(
+    TARGET copy_test_files
+    POST_BUILD
+    COMMAND echo deleting and re-creating "${CUSTOM_COMMAND_BINARY_DIR}/kernels" ...
+    COMMAND ${CMAKE_COMMAND} -E remove_directory "${CUSTOM_COMMAND_BINARY_DIR}/kernels"
+    COMMAND ${CMAKE_COMMAND} -E make_directory "${CUSTOM_COMMAND_BINARY_DIR}/kernels"
+    COMMAND ${CMAKE_COMMAND} -E copy_directory "${CMAKE_SOURCE_DIR}/core/source/kernels" "${CUSTOM_COMMAND_BINARY_DIR}/kernels"
+    DEPENDS "${CMAKE_CURRENT_SOURCE_DIR}/kernels"
+)
+
 add_dependencies(${TARGET_NAME} 
     copy_test_files 
     copy_third_party_files
