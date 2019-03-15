@@ -4,6 +4,7 @@
 #include "runtime/command_stream/command_stream_receiver.h"
 #include "runtime/command_stream/linear_stream.h"
 #include "runtime/helpers/hw_info.h"
+#include <cassert>
 
 namespace L0 {
 

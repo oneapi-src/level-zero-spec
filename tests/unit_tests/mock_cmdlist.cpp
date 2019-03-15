@@ -4,7 +4,7 @@
 namespace L0 {
 namespace ult {
 
-WhiteBox<::L0::CommandList>::WhiteBox(Device *device) : CommandListImp(device) {
+WhiteBox<::L0::CommandList>::WhiteBox(Device *device) {
 }
 
 WhiteBox<::L0::CommandList>::~WhiteBox() {

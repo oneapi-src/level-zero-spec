@@ -11,7 +11,7 @@
 
 namespace L0 {
 
-template <CommandList::Type HeapType>
+template <CommandContainer::HeapType HeapType>
 struct StateBaseAddressHeap {
     template <uint32_t gfxCoreFamily>
     static void set(void *sbaAddress, OCLRT::IndirectHeap &heap);
@@ -19,7 +19,7 @@ struct StateBaseAddressHeap {
 
 template <>
 template <uint32_t gfxCoreFamily>
-inline void StateBaseAddressHeap<CommandList::DYNAMIC_STATE>::set(void *sbaAddress, OCLRT::IndirectHeap &heap) {
+inline void StateBaseAddressHeap<CommandContainer::DYNAMIC_STATE>::set(void *sbaAddress, OCLRT::IndirectHeap &heap) {
     using GfxFamily = typename OCLRT::GfxFamilyMapper<static_cast<GFXCORE_FAMILY>(gfxCoreFamily)>::GfxFamily;
     using STATE_BASE_ADDRESS = typename GfxFamily::STATE_BASE_ADDRESS;
     STATE_BASE_ADDRESS *cmd = static_cast<STATE_BASE_ADDRESS *>(sbaAddress);
@@ -31,7 +31,7 @@ inline void StateBaseAddressHeap<CommandList::DYNAMIC_STATE>::set(void *sbaAddre
 
 template <>
 template <uint32_t gfxCoreFamily>
-inline void StateBaseAddressHeap<CommandList::GENERAL_STATE>::set(void *sbaAddress, OCLRT::IndirectHeap &heap) {
+inline void StateBaseAddressHeap<CommandContainer::GENERAL_STATE>::set(void *sbaAddress, OCLRT::IndirectHeap &heap) {
     using GfxFamily = typename OCLRT::GfxFamilyMapper<static_cast<GFXCORE_FAMILY>(gfxCoreFamily)>::GfxFamily;
     using STATE_BASE_ADDRESS = typename GfxFamily::STATE_BASE_ADDRESS;
     STATE_BASE_ADDRESS *cmd = static_cast<STATE_BASE_ADDRESS *>(sbaAddress);
@@ -43,7 +43,7 @@ inline void StateBaseAddressHeap<CommandList::GENERAL_STATE>::set(void *sbaAddre
 
 template <>
 template <uint32_t gfxCoreFamily>
-inline void StateBaseAddressHeap<CommandList::INDIRECT_OBJECT>::set(void *sbaAddress, OCLRT::IndirectHeap &heap) {
+inline void StateBaseAddressHeap<CommandContainer::INDIRECT_OBJECT>::set(void *sbaAddress, OCLRT::IndirectHeap &heap) {
     using GfxFamily = typename OCLRT::GfxFamilyMapper<static_cast<GFXCORE_FAMILY>(gfxCoreFamily)>::GfxFamily;
     using STATE_BASE_ADDRESS = typename GfxFamily::STATE_BASE_ADDRESS;
     STATE_BASE_ADDRESS *cmd = static_cast<STATE_BASE_ADDRESS *>(sbaAddress);
@@ -55,7 +55,7 @@ inline void StateBaseAddressHeap<CommandList::INDIRECT_OBJECT>::set(void *sbaAdd
 
 template <>
 template <uint32_t gfxCoreFamily>
-inline void StateBaseAddressHeap<CommandList::SURFACE_STATE>::set(void *sbaAddress, OCLRT::IndirectHeap &heap) {
+inline void StateBaseAddressHeap<CommandContainer::SURFACE_STATE>::set(void *sbaAddress, OCLRT::IndirectHeap &heap) {
     using GfxFamily = typename OCLRT::GfxFamilyMapper<static_cast<GFXCORE_FAMILY>(gfxCoreFamily)>::GfxFamily;
     using STATE_BASE_ADDRESS = typename GfxFamily::STATE_BASE_ADDRESS;
     STATE_BASE_ADDRESS *cmd = static_cast<STATE_BASE_ADDRESS *>(sbaAddress);
@@ -64,7 +64,7 @@ inline void StateBaseAddressHeap<CommandList::SURFACE_STATE>::set(void *sbaAddre
 }
 
 template <uint32_t gfxCoreFamily>
-void setHeap(void *sbaAddress, CommandList::Type heapType, OCLRT::IndirectHeap &heap) {
+void setHeap(void *sbaAddress, CommandList::HeapType heapType, OCLRT::IndirectHeap &heap) {
     switch (heapType) {
     default:
         assert(0);
@@ -85,10 +85,10 @@ void setHeap(void *sbaAddress, CommandList::Type heapType, OCLRT::IndirectHeap &
 }
 
 template <uint32_t gfxCoreFamily>
-bool CommandListCoreFamily<gfxCoreFamily>::initialize() {
+bool CommandListCoreFamily<gfxCoreFamily>::initialize(Device *device) {
     using GfxFamily = typename OCLRT::GfxFamilyMapper<static_cast<GFXCORE_FAMILY>(gfxCoreFamily)>::GfxFamily;
 
-    if (!BaseClass::initialize()) {
+    if (!BaseClass::initialize(device)) {
         return false;
     }
 
@@ -161,7 +161,7 @@ void *CommandListCoreFamily<gfxCoreFamily>::getHeapSpaceAllowGrow(OCLRT::Indirec
         for (uint32_t heapType = 0; heapType < NUM_HEAPS; ++heapType) {
             if (this->allocationIndirectHeaps[heapType]->allocationRT == oldAlloc) {
                 allocationIndirectHeaps[heapType] = newAlloc;
-                setHeap<gfxCoreFamily>(this->sba, static_cast<Type>(heapType), *indirectHeaps[heapType]);
+                setHeap<gfxCoreFamily>(this->sba, static_cast<HeapType>(heapType), *indirectHeaps[heapType]);
                 break;
             }
         }

@@ -13,7 +13,7 @@ namespace L0 {
 
 CommandListAllocatorFn commandListFactory[IGFX_MAX_PRODUCT] = {};
 
-CommandListImp::~CommandListImp() {
+CommandContainer::~CommandContainer() {
     auto memoryManager = device
                              ? device->getMemoryManager()
                              : nullptr;
@@ -38,7 +38,10 @@ xe_result_t CommandListImp::destroy() {
     return XE_RESULT_SUCCESS;
 }
 
-bool CommandListImp::initialize() {
+bool CommandContainer::initialize(Device *device) {
+    assert(device);
+    this->device = device;
+
     auto memoryManager = device->getMemoryManager();
     assert(memoryManager);
 
@@ -76,9 +79,9 @@ CommandList *CommandList::create(uint32_t productFamily, Device *device) {
 
     CommandListImp *commandList = nullptr;
     if (allocator) {
-        commandList = static_cast<CommandListImp *>((*allocator)(device));
+        commandList = static_cast<CommandListImp *>((*allocator)());
 
-        commandList->initialize();
+        commandList->initialize(device);
     }
     return commandList;
 }

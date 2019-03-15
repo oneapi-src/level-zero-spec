@@ -5,6 +5,7 @@ if(SUPPORT_GEN12HP)
         ${CMAKE_CURRENT_SOURCE_DIR}/gen12hp/cmdlist_ats.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/gen12hp/cmdlist_gen12hp.inl
         ${CMAKE_CURRENT_SOURCE_DIR}/gen12hp/cmdqueue_ats.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/gen12hp/encode_ats.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/gen12hp/image_gen12hp.inl
         ${CMAKE_CURRENT_SOURCE_DIR}/gen12hp/image_ats.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/gen12hp.cmake
