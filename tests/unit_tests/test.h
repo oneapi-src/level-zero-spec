@@ -6,9 +6,8 @@
  */
 //TODO: !!! MIGRATE ME BACK TO NEO !!!
 #pragma once
-#include "igfxfmid.h"
 #include "gtest/gtest.h"
-#include "runtime/helpers/hw_info.h"
+#include "hw_info.h"
 
 extern PRODUCT_FAMILY productFamily;
 extern GFXCORE_FAMILY renderCoreFamily;
@@ -660,15 +659,6 @@ struct At {
 template <typename Container>
 struct At<Container, 0> {
     static const PRODUCT_FAMILY productFamily = Container::productFamily;
-};
-
-// Utility conversion
-template <PRODUCT_FAMILY productFamily>
-struct ToGfxCoreFamily {
-    static const GFXCORE_FAMILY gfxCoreFamily = static_cast<GFXCORE_FAMILY>(OCLRT::HwMapper<productFamily>::gfxFamily);
-    static constexpr GFXCORE_FAMILY get() {
-        return gfxCoreFamily;
-    }
 };
 
 // HWTEST2_F matchers

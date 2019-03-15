@@ -2,6 +2,7 @@ set(TARGET_NAME ${PROJECT_NAME}_unit_tests)
 
 add_executable(${TARGET_NAME}
     environment.cpp
+    fixture_cmd_parse.h
     main.cpp
     mock.h
     mock_cmdlist.cpp
@@ -26,6 +27,7 @@ add_executable(${TARGET_NAME}
     mock_module.cpp
     mock_module.h
     mock_module_precompiled.h
+    test.h
     test_cmdlist.cpp
     test_cmdlist_close.cpp
     test_cmdlist_encodedispatchfunction.cpp
