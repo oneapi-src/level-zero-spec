@@ -25,7 +25,7 @@
 *
 * @brief Intel Xe Driver APIs for Images
 *
-* DO NOT EDIT: generated from /scripts/<type>/image.yml
+* DO NOT EDIT: generated from /scripts/core/image.yml
 *
 ******************************************************************************/
 #if defined(XE_CPP)

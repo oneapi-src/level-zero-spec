@@ -25,7 +25,7 @@
 *
 * @brief Intel Xe Driver APIs for OpenCL Interopability
 *
-* DO NOT EDIT: generated from /scripts/<type>/cl_interop.yml
+* DO NOT EDIT: generated from /scripts/core/cl_interop.yml
 *
 ******************************************************************************/
 #if defined(XE_CPP)

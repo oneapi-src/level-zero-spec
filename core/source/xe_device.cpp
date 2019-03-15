@@ -25,7 +25,7 @@
 *
 * @brief Intel Xe Driver APIs for Device
 *
-* DO NOT EDIT: generated from /scripts/<type>/device.yml
+* DO NOT EDIT: generated from /scripts/core/device.yml
 *
 ******************************************************************************/
 #if defined(XE_CPP)

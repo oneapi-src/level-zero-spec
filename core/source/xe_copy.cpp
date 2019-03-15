@@ -25,7 +25,7 @@
 *
 * @brief Intel Xe Driver APIs for Copies
 *
-* DO NOT EDIT: generated from /scripts/<type>/copy.yml
+* DO NOT EDIT: generated from /scripts/core/copy.yml
 *
 ******************************************************************************/
 #if defined(XE_CPP)

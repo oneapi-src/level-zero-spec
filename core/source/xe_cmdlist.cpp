@@ -25,7 +25,7 @@
 *
 * @brief Intel Xe Driver APIs for Command List
 *
-* DO NOT EDIT: generated from /scripts/<type>/cmdlist.yml
+* DO NOT EDIT: generated from /scripts/core/cmdlist.yml
 *
 ******************************************************************************/
 #if defined(XE_CPP)

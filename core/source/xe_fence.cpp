@@ -25,7 +25,7 @@
 *
 * @brief Intel Xe Driver APIs for Fence
 *
-* DO NOT EDIT: generated from /scripts/<type>/fence.yml
+* DO NOT EDIT: generated from /scripts/core/fence.yml
 *
 ******************************************************************************/
 #if defined(XE_CPP)

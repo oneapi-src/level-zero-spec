@@ -25,7 +25,7 @@
 *
 * @brief Intel Xe Driver APIs for Module
 *
-* DO NOT EDIT: generated from /scripts/<type>/module.yml
+* DO NOT EDIT: generated from /scripts/core/module.yml
 *
 ******************************************************************************/
 #if defined(XE_CPP)

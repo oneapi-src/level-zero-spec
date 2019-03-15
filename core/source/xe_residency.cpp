@@ -25,7 +25,7 @@
 *
 * @brief Intel Xe Driver APIs for Memory
 *
-* DO NOT EDIT: generated from /scripts/<type>/residency.yml
+* DO NOT EDIT: generated from /scripts/core/residency.yml
 *
 ******************************************************************************/
 #if defined(XE_CPP)

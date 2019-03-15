@@ -25,7 +25,7 @@
 *
 * @brief Intel Xe Driver APIs for CommandGraph
 *
-* DO NOT EDIT: generated from /scripts/<type>/cmdgraph.yml
+* DO NOT EDIT: generated from /scripts/core/cmdgraph.yml
 *
 ******************************************************************************/
 #if defined(XE_CPP)

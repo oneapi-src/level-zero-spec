@@ -28,7 +28,7 @@ from templates import helper as th
 *
 * @brief ${th.subx(x, header['desc'])}
 *
-* DO NOT EDIT: generated from /scripts/<type>/${name}.yml
+* DO NOT EDIT: generated from /scripts/${section}/${name}.yml
 *
 ******************************************************************************/
 #if defined(${X}_CPP)

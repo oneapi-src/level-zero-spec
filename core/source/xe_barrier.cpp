@@ -25,7 +25,7 @@
 *
 * @brief Intel Xe Driver APIs for Barrier
 *
-* DO NOT EDIT: generated from /scripts/<type>/barrier.yml
+* DO NOT EDIT: generated from /scripts/core/barrier.yml
 *
 ******************************************************************************/
 #if defined(XE_CPP)

@@ -25,7 +25,7 @@
 *
 * @brief Intel Xe Driver APIs for Sampler
 *
-* DO NOT EDIT: generated from /scripts/<type>/sampler.yml
+* DO NOT EDIT: generated from /scripts/core/sampler.yml
 *
 ******************************************************************************/
 #if defined(XE_CPP)
