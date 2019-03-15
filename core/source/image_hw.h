@@ -8,9 +8,9 @@
 
 namespace L0 {
 
-template <uint32_t gfxCoreFamily>
+template <GFXCORE_FAMILY gfxCoreFamily>
 struct ImageCoreFamily : public ImageImp {
-    using GfxFamily = typename OCLRT::GfxFamilyMapper<static_cast<GFXCORE_FAMILY>(gfxCoreFamily)>::GfxFamily;
+    using GfxFamily = typename OCLRT::GfxFamilyMapper<gfxCoreFamily>::GfxFamily;
     using RENDER_SURFACE_STATE = typename GfxFamily::RENDER_SURFACE_STATE;
     using SURFACE_FORMAT = typename RENDER_SURFACE_STATE::SURFACE_FORMAT;
     using BaseClass = ImageImp;

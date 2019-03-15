@@ -3,7 +3,7 @@
 
 namespace L0 {
 
-template <uint32_t gfxCoreFamily>
+template <GFXCORE_FAMILY gfxCoreFamily>
 struct CommandQueueHw : public CommandQueueImp {
     using CommandQueueImp::CommandQueueImp;
 

@@ -8,23 +8,23 @@
 
 namespace L0 {
 
-template <uint32_t gfxCoreFamily>
+template <GFXCORE_FAMILY gfxCoreFamily>
 xe_result_t CommandQueueHw<gfxCoreFamily>::createFence(const xe_fence_desc_t *desc,
                                                        xe_fence_handle_t *phFence) {
     return XE_RESULT_ERROR_UNSUPPORTED;
 }
 
-template <uint32_t gfxCoreFamily>
+template <GFXCORE_FAMILY gfxCoreFamily>
 xe_result_t CommandQueueHw<gfxCoreFamily>::destroy() {
     delete this;
     return XE_RESULT_SUCCESS;
 }
 
-template <uint32_t gfxCoreFamily>
+template <GFXCORE_FAMILY gfxCoreFamily>
 xe_result_t CommandQueueHw<gfxCoreFamily>::enqueueCommandLists(uint32_t numCommandLists,
                                                                xe_command_list_handle_t *phCommandLists,
                                                                xe_fence_handle_t hFence) {
-    using GfxFamily = typename OCLRT::GfxFamilyMapper<static_cast<GFXCORE_FAMILY>(gfxCoreFamily)>::GfxFamily;
+    using GfxFamily = typename OCLRT::GfxFamilyMapper<gfxCoreFamily>::GfxFamily;
     using MI_BATCH_BUFFER_START = typename GfxFamily::MI_BATCH_BUFFER_START;
     using MI_BATCH_BUFFER_END = typename GfxFamily::MI_BATCH_BUFFER_END;
 
@@ -63,13 +63,13 @@ xe_result_t CommandQueueHw<gfxCoreFamily>::enqueueCommandLists(uint32_t numComma
     return XE_RESULT_SUCCESS;
 }
 
-template <uint32_t gfxCoreFamily>
+template <GFXCORE_FAMILY gfxCoreFamily>
 void CommandQueueHw<gfxCoreFamily>::dispatchTaskCountWrite(bool flushDataCache) {
     auto commandStreamReceiver = static_cast<OCLRT::CommandStreamReceiver *>(csrRT);
     assert(commandStreamReceiver);
     auto taskCountToWrite = commandStreamReceiver->peekTaskCount();
 
-    using GfxFamily = typename OCLRT::GfxFamilyMapper<static_cast<GFXCORE_FAMILY>(gfxCoreFamily)>::GfxFamily;
+    using GfxFamily = typename OCLRT::GfxFamilyMapper<gfxCoreFamily>::GfxFamily;
 
     using PIPELINE_SELECT = typename GfxFamily::PIPELINE_SELECT;
     using PIPE_CONTROL = typename GfxFamily::PIPE_CONTROL;

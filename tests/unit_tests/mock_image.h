@@ -8,9 +8,9 @@ namespace L0 {
 
 namespace ult {
 
-template <uint32_t gfxCoreFamily>
+template <GFXCORE_FAMILY gfxCoreFamily>
 struct WhiteBox<::L0::ImageCoreFamily<gfxCoreFamily>> : public ::L0::ImageCoreFamily<gfxCoreFamily> {
-    using GfxFamily = typename OCLRT::GfxFamilyMapper<static_cast<GFXCORE_FAMILY>(gfxCoreFamily)>::GfxFamily;
+    using GfxFamily = typename OCLRT::GfxFamilyMapper<gfxCoreFamily>::GfxFamily;
     using RENDER_SURFACE_STATE = typename GfxFamily::RENDER_SURFACE_STATE;
 
     WhiteBox() : ::L0::ImageCoreFamily<gfxCoreFamily>() {
@@ -24,7 +24,7 @@ struct WhiteBox<::L0::ImageCoreFamily<gfxCoreFamily>> : public ::L0::ImageCoreFa
     }
 };
 
-template <uint32_t gfxCoreFamily>
+template <GFXCORE_FAMILY gfxCoreFamily>
 using ImageCoreFamily = WhiteBox<::L0::ImageCoreFamily<gfxCoreFamily>>;
 
 template <>

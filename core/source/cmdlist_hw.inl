@@ -13,14 +13,14 @@ namespace L0 {
 
 template <CommandContainer::HeapType HeapType>
 struct StateBaseAddressHeap {
-    template <uint32_t gfxCoreFamily>
+    template <GFXCORE_FAMILY gfxCoreFamily>
     static void set(void *sbaAddress, OCLRT::IndirectHeap &heap);
 };
 
 template <>
-template <uint32_t gfxCoreFamily>
+template <GFXCORE_FAMILY gfxCoreFamily>
 inline void StateBaseAddressHeap<CommandContainer::DYNAMIC_STATE>::set(void *sbaAddress, OCLRT::IndirectHeap &heap) {
-    using GfxFamily = typename OCLRT::GfxFamilyMapper<static_cast<GFXCORE_FAMILY>(gfxCoreFamily)>::GfxFamily;
+    using GfxFamily = typename OCLRT::GfxFamilyMapper<gfxCoreFamily>::GfxFamily;
     using STATE_BASE_ADDRESS = typename GfxFamily::STATE_BASE_ADDRESS;
     STATE_BASE_ADDRESS *cmd = static_cast<STATE_BASE_ADDRESS *>(sbaAddress);
     cmd->setDynamicStateBaseAddressModifyEnable(true);
@@ -30,9 +30,9 @@ inline void StateBaseAddressHeap<CommandContainer::DYNAMIC_STATE>::set(void *sba
 }
 
 template <>
-template <uint32_t gfxCoreFamily>
+template <GFXCORE_FAMILY gfxCoreFamily>
 inline void StateBaseAddressHeap<CommandContainer::GENERAL_STATE>::set(void *sbaAddress, OCLRT::IndirectHeap &heap) {
-    using GfxFamily = typename OCLRT::GfxFamilyMapper<static_cast<GFXCORE_FAMILY>(gfxCoreFamily)>::GfxFamily;
+    using GfxFamily = typename OCLRT::GfxFamilyMapper<gfxCoreFamily>::GfxFamily;
     using STATE_BASE_ADDRESS = typename GfxFamily::STATE_BASE_ADDRESS;
     STATE_BASE_ADDRESS *cmd = static_cast<STATE_BASE_ADDRESS *>(sbaAddress);
     cmd->setGeneralStateBaseAddressModifyEnable(true);
@@ -42,9 +42,9 @@ inline void StateBaseAddressHeap<CommandContainer::GENERAL_STATE>::set(void *sba
 }
 
 template <>
-template <uint32_t gfxCoreFamily>
+template <GFXCORE_FAMILY gfxCoreFamily>
 inline void StateBaseAddressHeap<CommandContainer::INDIRECT_OBJECT>::set(void *sbaAddress, OCLRT::IndirectHeap &heap) {
-    using GfxFamily = typename OCLRT::GfxFamilyMapper<static_cast<GFXCORE_FAMILY>(gfxCoreFamily)>::GfxFamily;
+    using GfxFamily = typename OCLRT::GfxFamilyMapper<gfxCoreFamily>::GfxFamily;
     using STATE_BASE_ADDRESS = typename GfxFamily::STATE_BASE_ADDRESS;
     STATE_BASE_ADDRESS *cmd = static_cast<STATE_BASE_ADDRESS *>(sbaAddress);
     cmd->setIndirectObjectBaseAddressModifyEnable(true);
@@ -54,16 +54,16 @@ inline void StateBaseAddressHeap<CommandContainer::INDIRECT_OBJECT>::set(void *s
 }
 
 template <>
-template <uint32_t gfxCoreFamily>
+template <GFXCORE_FAMILY gfxCoreFamily>
 inline void StateBaseAddressHeap<CommandContainer::SURFACE_STATE>::set(void *sbaAddress, OCLRT::IndirectHeap &heap) {
-    using GfxFamily = typename OCLRT::GfxFamilyMapper<static_cast<GFXCORE_FAMILY>(gfxCoreFamily)>::GfxFamily;
+    using GfxFamily = typename OCLRT::GfxFamilyMapper<gfxCoreFamily>::GfxFamily;
     using STATE_BASE_ADDRESS = typename GfxFamily::STATE_BASE_ADDRESS;
     STATE_BASE_ADDRESS *cmd = static_cast<STATE_BASE_ADDRESS *>(sbaAddress);
     cmd->setSurfaceStateBaseAddressModifyEnable(true);
     cmd->setSurfaceStateBaseAddress(heap.getHeapGpuBase());
 }
 
-template <uint32_t gfxCoreFamily>
+template <GFXCORE_FAMILY gfxCoreFamily>
 void setHeap(void *sbaAddress, CommandList::HeapType heapType, OCLRT::IndirectHeap &heap) {
     switch (heapType) {
     default:
@@ -84,9 +84,9 @@ void setHeap(void *sbaAddress, CommandList::HeapType heapType, OCLRT::IndirectHe
     }
 }
 
-template <uint32_t gfxCoreFamily>
+template <GFXCORE_FAMILY gfxCoreFamily>
 bool CommandListCoreFamily<gfxCoreFamily>::initialize(Device *device) {
-    using GfxFamily = typename OCLRT::GfxFamilyMapper<static_cast<GFXCORE_FAMILY>(gfxCoreFamily)>::GfxFamily;
+    using GfxFamily = typename OCLRT::GfxFamilyMapper<gfxCoreFamily>::GfxFamily;
 
     if (!BaseClass::initialize(device)) {
         return false;
@@ -139,7 +139,7 @@ bool CommandListCoreFamily<gfxCoreFamily>::initialize(Device *device) {
     return XE_RESULT_SUCCESS;
 }
 
-template <uint32_t gfxCoreFamily>
+template <GFXCORE_FAMILY gfxCoreFamily>
 void *CommandListCoreFamily<gfxCoreFamily>::getHeapSpaceAllowGrow(OCLRT::IndirectHeap &indirectHeap, size_t size) {
     if (indirectHeap.getAvailableSpace() < size) {
         // grow
@@ -170,9 +170,9 @@ void *CommandListCoreFamily<gfxCoreFamily>::getHeapSpaceAllowGrow(OCLRT::Indirec
     return indirectHeap.getSpace(size);
 }
 
-template <uint32_t gfxCoreFamily>
+template <GFXCORE_FAMILY gfxCoreFamily>
 void CommandListCoreFamily<gfxCoreFamily>::enableGpgpu() {
-    using GfxFamily = typename OCLRT::GfxFamilyMapper<static_cast<GFXCORE_FAMILY>(gfxCoreFamily)>::GfxFamily;
+    using GfxFamily = typename OCLRT::GfxFamilyMapper<gfxCoreFamily>::GfxFamily;
 
     using PIPELINE_SELECT = typename GfxFamily::PIPELINE_SELECT;
     PIPELINE_SELECT cmd = GfxFamily::cmdInitPipelineSelect;
@@ -183,9 +183,9 @@ void CommandListCoreFamily<gfxCoreFamily>::enableGpgpu() {
     *(PIPELINE_SELECT *)buffer = cmd;
 }
 
-template <uint32_t gfxCoreFamily>
+template <GFXCORE_FAMILY gfxCoreFamily>
 void CommandListCoreFamily<gfxCoreFamily>::programFrontEndState() {
-    using GfxFamily = typename OCLRT::GfxFamilyMapper<static_cast<GFXCORE_FAMILY>(gfxCoreFamily)>::GfxFamily;
+    using GfxFamily = typename OCLRT::GfxFamilyMapper<gfxCoreFamily>::GfxFamily;
 
     using MEDIA_VFE_STATE = typename GfxFamily::MEDIA_VFE_STATE;
     MEDIA_VFE_STATE cmd = GfxFamily::cmdInitMediaVfeState;
@@ -199,9 +199,9 @@ void CommandListCoreFamily<gfxCoreFamily>::programFrontEndState() {
     *(MEDIA_VFE_STATE *)buffer = cmd;
 }
 
-template <uint32_t gfxCoreFamily>
+template <GFXCORE_FAMILY gfxCoreFamily>
 xe_result_t CommandListCoreFamily<gfxCoreFamily>::close() {
-    using GfxFamily = typename OCLRT::GfxFamilyMapper<static_cast<GFXCORE_FAMILY>(gfxCoreFamily)>::GfxFamily;
+    using GfxFamily = typename OCLRT::GfxFamilyMapper<gfxCoreFamily>::GfxFamily;
     using MI_BATCH_BUFFER_END = typename GfxFamily::MI_BATCH_BUFFER_END;
     MI_BATCH_BUFFER_END cmd = GfxFamily::cmdInitBatchBufferEnd;
     auto buffer = commandStream->getSpace(sizeof(cmd));
@@ -210,9 +210,9 @@ xe_result_t CommandListCoreFamily<gfxCoreFamily>::close() {
     return XE_RESULT_SUCCESS;
 }
 
-template <uint32_t gfxCoreFamily>
+template <GFXCORE_FAMILY gfxCoreFamily>
 void CommandListCoreFamily<gfxCoreFamily>::programL3() {
-    using GfxFamily = typename OCLRT::GfxFamilyMapper<static_cast<GFXCORE_FAMILY>(gfxCoreFamily)>::GfxFamily;
+    using GfxFamily = typename OCLRT::GfxFamilyMapper<gfxCoreFamily>::GfxFamily;
     {
         using PIPE_CONTROL = typename GfxFamily::PIPE_CONTROL;
         PIPE_CONTROL cmd = GfxFamily::cmdInitPipeControl;
@@ -234,24 +234,24 @@ void CommandListCoreFamily<gfxCoreFamily>::programL3() {
     }
 }
 
-template <uint32_t gfxCoreFamily>
+template <GFXCORE_FAMILY gfxCoreFamily>
 xe_result_t CommandListCoreFamily<gfxCoreFamily>::encodeCommandLists(uint32_t numCommandLists,
                                                                      xe_command_list_handle_t *phCommandLists) {
     return XE_RESULT_ERROR_UNSUPPORTED;
 }
 
-template <uint32_t gfxCoreFamily>
+template <GFXCORE_FAMILY gfxCoreFamily>
 xe_result_t CommandListCoreFamily<gfxCoreFamily>::encodeCommands(xe_command_format_t format,
                                                                  size_t size,
                                                                  void *pBlob) {
     return XE_RESULT_ERROR_UNSUPPORTED;
 }
 
-template <uint32_t gfxCoreFamily>
+template <GFXCORE_FAMILY gfxCoreFamily>
 xe_result_t CommandListCoreFamily<gfxCoreFamily>::encodeDispatchFunction(xe_function_handle_t hFunction,
                                                                          const xe_dispatch_function_arguments_t *pDispatchFuncArgs,
                                                                          xe_event_handle_t hEvent) {
-    using GfxFamily = typename OCLRT::GfxFamilyMapper<static_cast<GFXCORE_FAMILY>(gfxCoreFamily)>::GfxFamily;
+    using GfxFamily = typename OCLRT::GfxFamilyMapper<gfxCoreFamily>::GfxFamily;
     using GPGPU_WALKER = typename GfxFamily::GPGPU_WALKER;
     using MEDIA_INTERFACE_DESCRIPTOR_LOAD = typename GfxFamily::MEDIA_INTERFACE_DESCRIPTOR_LOAD;
     using INTERFACE_DESCRIPTOR_DATA = typename GfxFamily::INTERFACE_DESCRIPTOR_DATA;
@@ -365,28 +365,28 @@ xe_result_t CommandListCoreFamily<gfxCoreFamily>::encodeDispatchFunction(xe_func
     return XE_RESULT_SUCCESS;
 }
 
-template <uint32_t gfxCoreFamily>
+template <GFXCORE_FAMILY gfxCoreFamily>
 xe_result_t CommandListCoreFamily<gfxCoreFamily>::encodeDispatchFunctionIndirect(xe_function_handle_t hFunction,
                                                                                  const xe_dispatch_function_indirect_arguments_t *pDispatchArgumentsBuffer,
                                                                                  xe_event_handle_t hEvent) {
     return XE_RESULT_ERROR_UNSUPPORTED;
 }
 
-template <uint32_t gfxCoreFamily>
+template <GFXCORE_FAMILY gfxCoreFamily>
 xe_result_t CommandListCoreFamily<gfxCoreFamily>::encodeDispatchHostFunction(xe_host_pfn_t pfnHostFunc,
                                                                              void *pUserData) {
     return XE_RESULT_ERROR_UNSUPPORTED;
 }
 
-template <uint32_t gfxCoreFamily>
+template <GFXCORE_FAMILY gfxCoreFamily>
 xe_result_t CommandListCoreFamily<gfxCoreFamily>::encodeEventReset(xe_event_handle_t hEvent) {
     return XE_RESULT_ERROR_UNSUPPORTED;
 }
 
-template <uint32_t gfxCoreFamily>
+template <GFXCORE_FAMILY gfxCoreFamily>
 xe_result_t CommandListCoreFamily<gfxCoreFamily>::encodeExecutionBarrier() {
 
-    using GfxFamily = typename OCLRT::GfxFamilyMapper<static_cast<GFXCORE_FAMILY>(gfxCoreFamily)>::GfxFamily;
+    using GfxFamily = typename OCLRT::GfxFamilyMapper<gfxCoreFamily>::GfxFamily;
     using PIPE_CONTROL = typename GfxFamily::PIPE_CONTROL;
     PIPE_CONTROL cmd = GfxFamily::cmdInitPipeControl;
     cmd.setCommandStreamerStallEnable(true);
@@ -397,21 +397,21 @@ xe_result_t CommandListCoreFamily<gfxCoreFamily>::encodeExecutionBarrier() {
     return XE_RESULT_SUCCESS;
 }
 
-template <uint32_t gfxCoreFamily>
+template <GFXCORE_FAMILY gfxCoreFamily>
 xe_result_t CommandListCoreFamily<gfxCoreFamily>::encodeImageCopyFromMemory(xe_image_handle_t hDstImage,
                                                                             xe_image_region_t *pDstRegion,
                                                                             const void *srcptr) {
     return XE_RESULT_ERROR_UNSUPPORTED;
 }
 
-template <uint32_t gfxCoreFamily>
+template <GFXCORE_FAMILY gfxCoreFamily>
 xe_result_t CommandListCoreFamily<gfxCoreFamily>::encodeImageCopyToMemory(void *dstptr,
                                                                           xe_image_handle_t hSrcImage,
                                                                           xe_image_region_t *pSrcRegion) {
     return XE_RESULT_ERROR_UNSUPPORTED;
 }
 
-template <uint32_t gfxCoreFamily>
+template <GFXCORE_FAMILY gfxCoreFamily>
 xe_result_t CommandListCoreFamily<gfxCoreFamily>::encodeImageCopyRegion(xe_image_handle_t hDstImage,
                                                                         xe_image_region_t *pDstRegion,
                                                                         xe_image_handle_t hSrcImage,
@@ -419,13 +419,13 @@ xe_result_t CommandListCoreFamily<gfxCoreFamily>::encodeImageCopyRegion(xe_image
     return XE_RESULT_ERROR_UNSUPPORTED;
 }
 
-template <uint32_t gfxCoreFamily>
+template <GFXCORE_FAMILY gfxCoreFamily>
 xe_result_t CommandListCoreFamily<gfxCoreFamily>::encodeImageCopy(xe_image_handle_t hDstImage,
                                                                   xe_image_handle_t hSrcImage) {
     return XE_RESULT_ERROR_UNSUPPORTED;
 }
 
-template <uint32_t gfxCoreFamily>
+template <GFXCORE_FAMILY gfxCoreFamily>
 xe_result_t CommandListCoreFamily<gfxCoreFamily>::encodeMemAdvise(xe_device_handle_t hDevice,
                                                                   const void *ptr,
                                                                   size_t size,
@@ -433,46 +433,46 @@ xe_result_t CommandListCoreFamily<gfxCoreFamily>::encodeMemAdvise(xe_device_hand
     return XE_RESULT_ERROR_UNSUPPORTED;
 }
 
-template <uint32_t gfxCoreFamily>
+template <GFXCORE_FAMILY gfxCoreFamily>
 xe_result_t CommandListCoreFamily<gfxCoreFamily>::encodeMemoryCopy(void *dstptr,
                                                                    const void *srcptr,
                                                                    size_t size) {
     return XE_RESULT_ERROR_UNSUPPORTED;
 }
 
-template <uint32_t gfxCoreFamily>
+template <GFXCORE_FAMILY gfxCoreFamily>
 xe_result_t CommandListCoreFamily<gfxCoreFamily>::encodeMemoryPrefetch(const void *ptr,
                                                                        size_t count) {
     return XE_RESULT_ERROR_UNSUPPORTED;
 }
 
-template <uint32_t gfxCoreFamily>
+template <GFXCORE_FAMILY gfxCoreFamily>
 xe_result_t CommandListCoreFamily<gfxCoreFamily>::encodeMemorySet(void *ptr,
                                                                   int value,
                                                                   size_t size) {
     return XE_RESULT_ERROR_UNSUPPORTED;
 }
 
-template <uint32_t gfxCoreFamily>
+template <GFXCORE_FAMILY gfxCoreFamily>
 xe_result_t CommandListCoreFamily<gfxCoreFamily>::encodeSemaphoreSignal(xe_semaphore_handle_t hSemaphore,
                                                                         xe_semaphore_value_t value) {
     return XE_RESULT_ERROR_UNSUPPORTED;
 }
 
-template <uint32_t gfxCoreFamily>
+template <GFXCORE_FAMILY gfxCoreFamily>
 xe_result_t CommandListCoreFamily<gfxCoreFamily>::encodeSemaphoreWait(xe_semaphore_handle_t hSemaphore,
                                                                       xe_semaphore_wait_operation_t operation,
                                                                       xe_semaphore_value_t value) {
     return XE_RESULT_ERROR_UNSUPPORTED;
 }
 
-template <uint32_t gfxCoreFamily>
+template <GFXCORE_FAMILY gfxCoreFamily>
 xe_result_t CommandListCoreFamily<gfxCoreFamily>::encodeSignalEvent(xe_event_handle_t hEvent) {
     auto event = Event::fromHandle(hEvent);
     assert(event);
     residencyContainer.push_back(event->getAllocation().allocationRT);
 
-    using GfxFamily = typename OCLRT::GfxFamilyMapper<static_cast<GFXCORE_FAMILY>(gfxCoreFamily)>::GfxFamily;
+    using GfxFamily = typename OCLRT::GfxFamilyMapper<gfxCoreFamily>::GfxFamily;
     using PIPE_CONTROL = typename GfxFamily::PIPE_CONTROL;
     using POST_SYNC_OPERATION = typename PIPE_CONTROL::POST_SYNC_OPERATION;
     PIPE_CONTROL cmd = GfxFamily::cmdInitPipeControl;
@@ -488,15 +488,15 @@ xe_result_t CommandListCoreFamily<gfxCoreFamily>::encodeSignalEvent(xe_event_han
     return XE_RESULT_SUCCESS;
 }
 
-template <uint32_t gfxCoreFamily>
+template <GFXCORE_FAMILY gfxCoreFamily>
 xe_result_t CommandListCoreFamily<gfxCoreFamily>::encodeSignalMultipleEvents(uint32_t numEvents,
                                                                              xe_event_handle_t *phEvents) {
     return XE_RESULT_ERROR_UNSUPPORTED;
 }
 
-template <uint32_t gfxCoreFamily>
+template <GFXCORE_FAMILY gfxCoreFamily>
 xe_result_t CommandListCoreFamily<gfxCoreFamily>::encodeWaitOnEvent(xe_event_handle_t hEvent) {
-    using GfxFamily = typename OCLRT::GfxFamilyMapper<static_cast<GFXCORE_FAMILY>(gfxCoreFamily)>::GfxFamily;
+    using GfxFamily = typename OCLRT::GfxFamilyMapper<gfxCoreFamily>::GfxFamily;
     using MI_SEMAPHORE_WAIT = typename GfxFamily::MI_SEMAPHORE_WAIT;
     MI_SEMAPHORE_WAIT cmd = GfxFamily::cmdInitMiSemaphoreWait;
     auto event = Event::fromHandle(hEvent);
@@ -512,28 +512,28 @@ xe_result_t CommandListCoreFamily<gfxCoreFamily>::encodeWaitOnEvent(xe_event_han
     return XE_RESULT_SUCCESS;
 }
 
-template <uint32_t gfxCoreFamily>
+template <GFXCORE_FAMILY gfxCoreFamily>
 xe_result_t CommandListCoreFamily<gfxCoreFamily>::encodeWaitOnMultipleEvents(uint32_t numEvents,
                                                                              xe_event_handle_t *phEvents) {
     return XE_RESULT_ERROR_UNSUPPORTED;
 }
 
-template <uint32_t gfxCoreFamily>
+template <GFXCORE_FAMILY gfxCoreFamily>
 xe_result_t CommandListCoreFamily<gfxCoreFamily>::getParameter(xe_command_list_parameter_t parameter, uint32_t *value) {
     return XE_RESULT_ERROR_UNSUPPORTED;
 }
 
-template <uint32_t gfxCoreFamily>
+template <GFXCORE_FAMILY gfxCoreFamily>
 xe_result_t CommandListCoreFamily<gfxCoreFamily>::reset() {
     return XE_RESULT_ERROR_UNSUPPORTED;
 }
 
-template <uint32_t gfxCoreFamily>
+template <GFXCORE_FAMILY gfxCoreFamily>
 xe_result_t CommandListCoreFamily<gfxCoreFamily>::resetParameters() {
     return XE_RESULT_ERROR_UNSUPPORTED;
 }
 
-template <uint32_t gfxCoreFamily>
+template <GFXCORE_FAMILY gfxCoreFamily>
 xe_result_t CommandListCoreFamily<gfxCoreFamily>::setParameter(xe_command_list_parameter_t parameter,
                                                                uint32_t value) {
     return XE_RESULT_ERROR_UNSUPPORTED;

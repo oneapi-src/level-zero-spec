@@ -1,7 +1,7 @@
 #include "image_hw.h"
 
 namespace L0 {
-template <uint32_t gfxCoreFamily>
+template <GFXCORE_FAMILY gfxCoreFamily>
 bool ImageCoreFamily<gfxCoreFamily>::initialize(Device *device, const xe_image_desc_t *desc) {
 
     if (desc->numChannels < XE_NUMCHANNELS_MIN || desc->numChannels > XE_NUMCHANNELS_MAX) {

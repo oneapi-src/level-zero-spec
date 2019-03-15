@@ -2,10 +2,11 @@
 #define CMD_LIST_INTERNAL
 #include "cmdlist_imp.h"
 #undef CMD_LIST_INTERNAL
+#include "igfxfmid.h"
 
 namespace L0 {
 
-template <uint32_t gfxCoreFamily>
+template <GFXCORE_FAMILY gfxCoreFamily>
 struct CommandListCoreFamily : public CommandListImp {
     using BaseClass = CommandListImp;
 
