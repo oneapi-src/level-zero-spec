@@ -12,7 +12,6 @@ namespace ult {
 
 TEST(sharedMemAlloc, returnsValidPtr) {
     Mock<Device> device;
-    EXPECT_CALL(device, getMemoryManager).Times(AnyNumber());
 
     xe_mem_allocator_handle_t hMemAllocHandle = {};
     auto result = xeCreateMemAllocator(&hMemAllocHandle);

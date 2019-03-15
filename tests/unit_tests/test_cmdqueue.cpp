@@ -26,7 +26,6 @@ TEST(xeCommandQueueDestroy, redirectsToObject) {
 
 TEST(CommandQueueCreate, returnsCommandQueueOnSuccess) {
     Mock<Device> device;
-    EXPECT_CALL(device, getMemoryManager).Times(AnyNumber());
 
     auto commandQueue = whitebox_cast(CommandQueue::create(productFamily, &device, device.csrRT));
     ASSERT_NE(commandQueue, nullptr);

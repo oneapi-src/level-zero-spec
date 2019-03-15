@@ -28,7 +28,6 @@ using CommandListEncodeExecutionBarrier = ::testing::Test;
 
 HWTEST_F(CommandListEncodeExecutionBarrier, addPipeControlToCommandStream) {
     Mock<Device> device;
-    EXPECT_CALL(device, getMemoryManager).Times(AnyNumber());
 
     auto commandList = whitebox_cast(CommandList::create(productFamily, &device));
     ASSERT_NE(nullptr, commandList->commandStream);

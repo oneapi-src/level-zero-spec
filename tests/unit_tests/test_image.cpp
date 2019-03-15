@@ -43,7 +43,6 @@ TEST_F(ImageCreate, givenInvalidProductFamilyReturnsNullPointer) {
 HWTEST2_F(ImageCreate, descMatchesSurface, MatchAny) {
     using RENDER_SURFACE_STATE = typename FamilyType::RENDER_SURFACE_STATE;
     Mock<Device> device;
-    EXPECT_CALL(device, getMemoryManager).Times(AnyNumber());
 
     xe_image_desc_t desc = {};
 
@@ -71,7 +70,6 @@ HWTEST2_F(ImageCreate, descBadParamsFail, MatchAny) {
     using RENDER_SURFACE_STATE = typename FamilyType::RENDER_SURFACE_STATE;
 
     Mock<Device> device;
-    EXPECT_CALL(device, getMemoryManager).Times(AnyNumber());
 
     auto imageCore = new ImageCoreFamily<gfxCoreFamily>();
 

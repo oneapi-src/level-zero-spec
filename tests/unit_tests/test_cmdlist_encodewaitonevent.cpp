@@ -32,7 +32,6 @@ using CommandListEncodeWaitOnEvent = ::testing::Test;
 
 HWTEST_F(CommandListEncodeWaitOnEvent, addsSemaphoreToCommandStream) {
     Mock<Device> device;
-    EXPECT_CALL(device, getMemoryManager).Times(AnyNumber());
 
     auto commandList = whitebox_cast(CommandList::create(productFamily, &device));
     ASSERT_NE(nullptr, commandList->commandStream);
@@ -63,7 +62,6 @@ HWTEST_F(CommandListEncodeWaitOnEvent, addsSemaphoreToCommandStream) {
 
 HWTEST_F(CommandListEncodeWaitOnEvent, addsEventGraphicsAllocationToResidencyContainer) {
     Mock<Device> device;
-    EXPECT_CALL(device, getMemoryManager).Times(AnyNumber());
 
     auto commandList = whitebox_cast(CommandList::create(productFamily, &device));
     ASSERT_NE(nullptr, commandList->commandStream);

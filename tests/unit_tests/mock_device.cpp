@@ -24,8 +24,8 @@ Mock<Device>::Mock() {
     csrRT = new MockCommandStreamReceiver(*executionEnvironment);
 
     static ::testing::NiceMock<Mock<MemoryManager>> memoryManager;
-    ON_CALL(*this, getMemoryManager)
-        .WillByDefault(Return(&memoryManager));
+    EXPECT_CALL(*this, getMemoryManager)
+        .WillRepeatedly(Return(&memoryManager));
 }
 
 Mock<Device>::~Mock() {

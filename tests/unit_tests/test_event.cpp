@@ -29,7 +29,6 @@ TEST(xeHostWaitOnEvent, redirectsToObject) {
 
 TEST(Event_create, allocationContainsAtLeast64Bytes) {
     Mock<Device> device;
-    EXPECT_CALL(device, getMemoryManager);
 
     auto event = whitebox_cast(Event::create(&device));
     ASSERT_NE(event, nullptr);

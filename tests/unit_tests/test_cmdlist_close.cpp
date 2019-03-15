@@ -29,8 +29,6 @@ using CommandListClose = ::testing::Test;
 
 HWTEST2_F(CommandListClose, addsBatchBufferEndToCommandStream, MatchAny) {
     Mock<Device> device;
-    EXPECT_CALL(device, getMemoryManager)
-        .Times(AnyNumber());
 
     auto commandList = whitebox_cast(CommandList::create(productFamily, &device));
     ASSERT_NE(nullptr, commandList->commandStream);

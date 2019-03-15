@@ -27,7 +27,6 @@ using CommandListCreate = ::testing::Test;
 
 TEST(CommandListCreate, returnsCommandListOnSuccess) {
     Mock<Device> device;
-    EXPECT_CALL(device, getMemoryManager).Times(AnyNumber());
 
     auto commandList = whitebox_cast(CommandList::create(productFamily, &device));
     ASSERT_NE(nullptr, commandList);
@@ -63,7 +62,6 @@ TEST_F(CommandListCreate, givenInvalidProductFamilyReturnsNullPointer) {
 
 GEN9TEST_F(CommandListCreate, addsPipelineSelectBeforeVfeStateToBatchBuffer) {
     Mock<Device> device;
-    EXPECT_CALL(device, getMemoryManager).Times(AnyNumber());
 
     auto commandList = whitebox_cast(CommandList::create(productFamily, &device));
     ASSERT_NE(nullptr, commandList->commandStream);
@@ -97,7 +95,6 @@ GEN9TEST_F(CommandListCreate, addsPipelineSelectBeforeVfeStateToBatchBuffer) {
 
 HWTEST_F(CommandListCreate, addsStateBaseAddressToBatchBuffer) {
     Mock<Device> device;
-    EXPECT_CALL(device, getMemoryManager).Times(AnyNumber());
 
     auto commandList = whitebox_cast(CommandList::create(productFamily, &device));
     ASSERT_NE(nullptr, commandList->commandStream);
@@ -151,7 +148,6 @@ HWTEST_F(CommandListCreate, addsStateBaseAddressToBatchBuffer) {
 
 GEN9TEST_F(CommandListCreate, addsVfeStateToBatchBuffer) {
     Mock<Device> device;
-    EXPECT_CALL(device, getMemoryManager).Times(AnyNumber());
 
     auto commandList = whitebox_cast(CommandList::create(productFamily, &device));
     ASSERT_NE(nullptr, commandList->commandStream);
@@ -188,7 +184,6 @@ GEN9TEST_F(CommandListCreate, addsVfeStateToBatchBuffer) {
 
 ATSTEST_F(CommandListCreate, addsCfeStateToBatchBuffer) {
     Mock<Device> device;
-    EXPECT_CALL(device, getMemoryManager).Times(AnyNumber());
 
     auto commandList = whitebox_cast(CommandList::create(productFamily, &device));
     ASSERT_NE(nullptr, commandList->commandStream);

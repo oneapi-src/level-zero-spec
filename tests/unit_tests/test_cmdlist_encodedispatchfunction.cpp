@@ -51,8 +51,6 @@ struct CommandListEncodeDispatchFunction : public ::testing::Test {
     }
 
     void SetUp() override {
-        EXPECT_CALL(device, getMemoryManager).Times(AnyNumber());
-
         auto memoryManager = device.getMemoryManager();
         ASSERT_NE(memoryManager, nullptr);
         buffer1 = memoryManager->allocateDeviceMemory(16384u, 4096u);
@@ -81,6 +79,7 @@ struct CommandListEncodeDispatchFunction : public ::testing::Test {
         function = new PrecompiledFunctionMock(functionName, deviceName, {&buffer1, &buffer2});
 
         EXPECT_CALL(*function, getThreadExecutionMask()).Times(AnyNumber());
+        EXPECT_CALL(*function, setGroupCount(_, _, _)).Times(AnyNumber());
     }
 
     Mock<Device> device;
@@ -441,7 +440,6 @@ GEN9TEST_F(CommandListEncodeDispatchFunctionGEN9, programsL3InBatchBuffer) {
     createFunction("MemcpyBytes");
 
     Mock<Device> device;
-    EXPECT_CALL(device, getMemoryManager).Times(AnyNumber());
 
     auto commandList = whitebox_cast(CommandList::create(productFamily, &device));
     ASSERT_NE(nullptr, commandList->commandStream);

@@ -30,7 +30,6 @@ using CommandListEncodeSignalEvent = ::testing::Test;
 
 HWTEST_F(CommandListEncodeSignalEvent, addsPipeControlToCommandStream) {
     Mock<Device> device;
-    EXPECT_CALL(device, getMemoryManager).Times(AnyNumber());
 
     auto commandList = whitebox_cast(CommandList::create(productFamily, &device));
     ASSERT_NE(nullptr, commandList->commandStream);
@@ -86,7 +85,6 @@ HWTEST_F(CommandListEncodeSignalEvent, addsPipeControlToCommandStream) {
 
 HWTEST_F(CommandListEncodeSignalEvent, addsEventGraphicsAllocationToResidencyContainer) {
     Mock<Device> device;
-    EXPECT_CALL(device, getMemoryManager).Times(AnyNumber());
 
     auto commandList = whitebox_cast(CommandList::create(productFamily, &device));
     ASSERT_NE(nullptr, commandList->commandStream);

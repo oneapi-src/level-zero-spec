@@ -9,7 +9,7 @@ namespace ult {
 
 template <>
 struct Mock<Module> : public Module {
-    Mock() = default;
+    Mock();
     virtual ~Mock() = default;
 
     MOCK_METHOD2(createFunction, xe_result_t(const xe_function_desc_t *desc, xe_function_handle_t *phFunction));

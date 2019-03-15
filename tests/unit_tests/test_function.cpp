@@ -1,3 +1,4 @@
+#include "mock_device.h"
 #include "mock_function.h"
 #include "mock_module.h"
 
@@ -47,8 +48,8 @@ TEST(FunctionImp, crossThreadDataIsCorrectlyPatchedWithGlobalWorkSizeAndGroupCou
     Mock<Function> function;
     function.immFuncInfo.rebind(&funcInfo);
     function.crossThreadData = reinterpret_cast<char *>(crossThreadData);
-    ON_CALL(function, getGroupSize(_, _, _))
-        .WillByDefault(Invoke(&function, &Mock<Function>::mock_forwardToBase_getGroupSize));
+    EXPECT_CALL(function, getGroupSize(_, _, _))
+        .WillRepeatedly(Invoke(&function, &Mock<Function>::mock_forwardToBase_getGroupSize));
     function.groupSizeX = 2;
     function.groupSizeY = 3;
     function.groupSizeZ = 5;
@@ -78,8 +79,8 @@ TEST(FunctionImp, suggestGroupSizeClampsToMaxGroupSize) {
     execEnv.LargestCompiledSIMDSize = 16;
 
     Mock<Module> module;
-    ON_CALL(module, getMaxGroupSize)
-        .WillByDefault(Return(8));
+    EXPECT_CALL(module, getMaxGroupSize)
+        .WillRepeatedly(Return(8));
 
     Mock<Function> function;
     function.immFuncInfo.rebind(&funcInfo);
@@ -105,7 +106,10 @@ TEST_F(FunctionPrintfTest, createPrintfHandlerCreatesOnlyWhenUsingPrintf) {
     kernelInfo->patchInfo.pAllocateStatelessPrintfSurface = &printfSurfaceToken;
 
     EXPECT_TRUE(function.hasPrintfOutput());
+    Mock<Device> device;
     Mock<Module> module;
+    EXPECT_CALL(module, getDevice).WillRepeatedly(Return(&device));
+
     function.module = &module;
 
     xe_function_desc_t funDesc = {};
@@ -149,8 +153,8 @@ TEST_P(FunctionImpSuggestGroupSize, suggestGroupChoosesProperGroupSize) {
     execEnv.LargestCompiledSIMDSize = 16;
 
     Mock<Module> module;
-    ON_CALL(module, getMaxGroupSize)
-        .WillByDefault(Return(256));
+    EXPECT_CALL(module, getMaxGroupSize)
+        .WillRepeatedly(Return(256));
 
     uint32_t size = GetParam();
 
