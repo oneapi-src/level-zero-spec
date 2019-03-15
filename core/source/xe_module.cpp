@@ -264,13 +264,13 @@ xeModuleBuildLogDestroy(
 ///     - ::XE_RESULT_ERROR_OUT_OF_HOST_MEMORY
 ///     - ::XE_RESULT_ERROR_OUT_OF_DEVICE_MEMORY
 ///
-/// @hash {2bbcb590108f76bc30824a2940a73a398fd81bab223129c6ff8c8bc1d4b590f6}
+/// @hash {6c0c7292baec1c1783b34745f4b8211f1f84a6d70a94ae0b63e4a2908f19697c}
 ///
 __xedllexport xe_result_t __xecall
 xeModuleBuildLogGetString(
     xe_module_build_log_handle_t hModuleBuildLog,   ///< [in] handle of the module build log object.
     size_t* pSize,                                  ///< [in,out] size of build log string.
-    const char** pBuildLog                          ///< [in,out][optional] pointer to null-terminated string of the log.
+    char** pBuildLog                                ///< [in,out][optional] pointer to null-terminated string of the log.
     )
 {
     try
@@ -331,13 +331,13 @@ xeModuleBuildLogGetString(
 ///     - ::XE_RESULT_ERROR_OUT_OF_HOST_MEMORY
 ///     - ::XE_RESULT_ERROR_OUT_OF_DEVICE_MEMORY
 ///
-/// @hash {8604102d4a48bb8fc4a2c43ccdcf560ec828eea2ae3a7fda0c1c2bb37a057719}
+/// @hash {db408381a1c426959036f23be0372c976d248bb936ef45224baec75d38062dae}
 ///
 __xedllexport xe_result_t __xecall
 xeModuleGetNativeBinary(
     xe_module_handle_t hModule,                     ///< [in] handle of the device
     size_t* pSize,                                  ///< [in,out] size of native binary.
-    const void** pModuleNativeBinary                ///< [in,out][optional] pointer to native binary
+    void** pModuleNativeBinary                      ///< [in,out][optional] pointer to native binary
     )
 {
     try

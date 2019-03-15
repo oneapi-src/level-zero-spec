@@ -135,7 +135,7 @@ params:
     - type: "size_t*"
       name: pSize
       desc: "[in,out] size of build log string."
-    - type: "const char**"
+    - type: "char**"
       name: pBuildLog
       desc: "[in,out][optional] pointer to null-terminated string of the log."
 returns:
@@ -159,7 +159,7 @@ params:
     - type: "size_t*"
       name: pSize
       desc: "[in,out] size of native binary."
-    - type: "const void**"
+    - type: "void**"
       name: pModuleNativeBinary
       desc: "[in,out][optional] pointer to native binary"
 returns:

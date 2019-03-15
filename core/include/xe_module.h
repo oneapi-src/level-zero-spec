@@ -193,7 +193,7 @@ __xedllport xe_result_t __xecall
 xeModuleBuildLogGetString(
     xe_module_build_log_handle_t hModuleBuildLog,   ///< [in] handle of the module build log object.
     size_t* pSize,                                  ///< [in,out] size of build log string.
-    const char** pBuildLog                          ///< [in,out][optional] pointer to null-terminated string of the log.
+    char** pBuildLog                                ///< [in,out][optional] pointer to null-terminated string of the log.
     );
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -225,7 +225,7 @@ __xedllport xe_result_t __xecall
 xeModuleGetNativeBinary(
     xe_module_handle_t hModule,                     ///< [in] handle of the device
     size_t* pSize,                                  ///< [in,out] size of native binary.
-    const void** pModuleNativeBinary                ///< [in,out][optional] pointer to native binary
+    void** pModuleNativeBinary                      ///< [in,out][optional] pointer to native binary
     );
 
 ///////////////////////////////////////////////////////////////////////////////

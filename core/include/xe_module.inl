@@ -96,7 +96,7 @@ namespace xe
     Module::BuildLogGetString(
         module_build_log_handle_t hModuleBuildLog,      ///< [in] handle of the module build log object.
         size_t* pSize,                                  ///< [in,out] size of build log string.
-        const char** pBuildLog                          ///< [in,out][optional] pointer to null-terminated string of the log.
+        char** pBuildLog                                ///< [in,out][optional] pointer to null-terminated string of the log.
         )
     {
         // auto result = ::xeModuleBuildLogGetString( handle, hModuleBuildLog->getHandle(), pSize, pBuildLog );
@@ -121,7 +121,7 @@ namespace xe
     inline void 
     Module::GetNativeBinary(
         size_t* pSize,                                  ///< [in,out] size of native binary.
-        const void** pModuleNativeBinary                ///< [in,out][optional] pointer to native binary
+        void** pModuleNativeBinary                      ///< [in,out][optional] pointer to native binary
         )
     {
         // auto result = ::xeModuleGetNativeBinary( handle, pSize, pModuleNativeBinary );
