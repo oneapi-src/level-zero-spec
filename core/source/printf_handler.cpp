@@ -6,7 +6,9 @@
 namespace L0 {
 
 GraphicsAllocation *PrintfHandler::createPrintfBuffer(Device *device) {
-    return device->getMemoryManager()->allocateManagedMemory(PrintfHandler::printfBufferSize, MemoryConstants::pageSize64k);
+    auto allocation = device->getMemoryManager()->allocateManagedMemory(PrintfHandler::printfBufferSize, MemoryConstants::pageSize64k);
+    *reinterpret_cast<uint32_t *>(allocation->getHostAddress()) = PrintfHandler::printfSurfaceInitialDataSize;
+    return allocation;
 }
 
 } // namespace L0

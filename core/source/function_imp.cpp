@@ -7,6 +7,7 @@
 #undef MODULE_INTERNAL
 
 #include "device.h"
+#include "graphics_allocation.h"
 #include "memory_manager.h"
 #include "module.h"
 #include "printf_handler.h"
@@ -350,6 +351,8 @@ void FunctionImp::createPrintfBuffer() {
     if (this->hasPrintfOutput()) {
         this->printfBuffer = PrintfHandler::createPrintfBuffer(this->module->getDevice());
         this->residencyContainer.push_back(printfBuffer);
+        this->patchCrossThreadData(this->getKernelInfo()->patchInfo.pAllocateStatelessPrintfSurface->DataParamOffset,
+                                   static_cast<uintptr_t>(this->printfBuffer->getGpuAddressOffsetFromHeapBase()));
     }
 }
 

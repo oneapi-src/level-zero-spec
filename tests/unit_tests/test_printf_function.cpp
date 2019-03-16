@@ -1,3 +1,5 @@
+#include "graphics_allocation.h"
+
 #include "mock_device.h"
 #include "mock_function.h"
 #include "mock_module.h"
@@ -26,6 +28,8 @@ class FunctionPrintfTest : public ::testing::Test {
         function->module = module.get();
 
         function->immFuncInfo.rebind(&funcInfo);
+        printfSurfaceToken.DataParamOffset = -1;
+        printfSurfaceToken.DataParamSize = 0;
     }
 
     void TearDown() override {
@@ -97,6 +101,30 @@ TEST_F(FunctionPrintfTest, createPrintfBufferDoesNotCreateWhenNotUsingPrintf) {
     function->createPrintfBuffer();
 
     EXPECT_EQ(nullptr, function->getPrintfBufferAllocation());
+}
+
+TEST_F(FunctionPrintfTest, createPrintfBufferPatchesCrossThreadData) {
+    ON_CALL(*module, getDevice).WillByDefault(Return(device.get()));
+
+    uint32_t *crossThreadData = new uint32_t[4];
+    printfSurfaceToken.DataParamOffset = 0;
+    printfSurfaceToken.DataParamSize = sizeof(uintptr_t);
+    kernelInfo->patchInfo.pAllocateStatelessPrintfSurface = &printfSurfaceToken;
+
+    function->crossThreadData = reinterpret_cast<char *>(crossThreadData);
+
+    function->createPrintfBuffer();
+
+    auto printfBufferAllocation = function->getPrintfBufferAllocation();
+    EXPECT_NE(nullptr, printfBufferAllocation);
+
+    auto printfBufferAddressPatched = *reinterpret_cast<uintptr_t *>(crossThreadData);
+    auto printfBufferGpuAddressOffset = static_cast<uintptr_t>(printfBufferAllocation->getGpuAddressOffsetFromHeapBase());
+
+    EXPECT_EQ(printfBufferGpuAddressOffset, printfBufferAddressPatched);
+
+    function->crossThreadData = nullptr;
+    delete crossThreadData;
 }
 
 } // namespace ult
