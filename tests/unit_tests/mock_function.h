@@ -22,6 +22,7 @@ struct WhiteBox<::L0::Function> : public ::L0::FunctionImp {
     using ::L0::FunctionImp::groupSizeZ;
     using ::L0::FunctionImp::immFuncInfo;
     using ::L0::FunctionImp::module;
+    using ::L0::FunctionImp::residencyContainer;
 
     WhiteBox() : ::L0::FunctionImp(nullptr) {}
     virtual ~WhiteBox() = default;

@@ -348,7 +348,8 @@ bool FunctionImp::hasPrintfOutput() const {
 
 void FunctionImp::createPrintfBuffer() {
     if (this->hasPrintfOutput()) {
-        printfBuffer = PrintfHandler::createPrintfBuffer(this->module->getDevice());
+        this->printfBuffer = PrintfHandler::createPrintfBuffer(this->module->getDevice());
+        this->residencyContainer.push_back(printfBuffer);
     }
 }
 

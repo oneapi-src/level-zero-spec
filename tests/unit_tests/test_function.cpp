@@ -14,33 +14,6 @@ using ::testing::_;
 using ::testing::Invoke;
 using ::testing::Return;
 
-class FunctionPrintfTest : public ::testing::Test {
-  public:
-    void SetUp() override {
-        device.reset(new Mock<Device>);
-        module.reset(new Mock<Module>);
-        kernelInfo.rebind(new OCLRT::KernelInfo{});
-        funcInfo.kernelInfoRT = kernelInfo.weakRefReinterpret<void>();
-
-        function.reset(new Mock<Function>);
-        function->module = module.get();
-
-        function->immFuncInfo.rebind(&funcInfo);
-    }
-
-    void TearDown() override {
-        delete function.release();
-        kernelInfo.deleteOwned();
-    }
-
-    OCLRT::SPatchAllocateStatelessPrintfSurface printfSurfaceToken;
-    PtrOwn<OCLRT::KernelInfo> kernelInfo = nullptr;
-    ImmutableFunctionInfo funcInfo = {};
-    std::unique_ptr<Mock<Function>> function;
-    std::unique_ptr<Mock<Module>> module;
-    std::unique_ptr<Mock<Device>> device;
-};
-
 TEST(FunctionImp, crossThreadDataIsCorrectlyPatchedWithGlobalWorkSizeAndGroupCount) {
     uint32_t *crossThreadData = reinterpret_cast<uint32_t *>(alignedMalloc(sizeof(uint32_t[6]), 32));
 
@@ -99,45 +72,6 @@ TEST(FunctionImp, suggestGroupSizeClampsToMaxGroupSize) {
     EXPECT_EQ(8U, groupSize[0]);
     EXPECT_EQ(1U, groupSize[1]);
     EXPECT_EQ(1U, groupSize[2]);
-}
-
-TEST_F(FunctionPrintfTest, hasPrintfOutputReturnsTrueWhenPrintfIsUsed) {
-    kernelInfo->patchInfo.pAllocateStatelessPrintfSurface = &printfSurfaceToken;
-    EXPECT_TRUE(function->hasPrintfOutput());
-}
-
-TEST_F(FunctionPrintfTest, hasPrintfOutputReturnsFalseWhenPrintfNotUsed) {
-    kernelInfo->patchInfo.pAllocateStatelessPrintfSurface = nullptr;
-    EXPECT_FALSE(function->hasPrintfOutput());
-}
-
-TEST_F(FunctionPrintfTest, createPrintfBufferCreatesOnlyWhenUsingPrintf) {
-    kernelInfo->patchInfo.pAllocateStatelessPrintfSurface = &printfSurfaceToken;
-
-    EXPECT_TRUE(function->hasPrintfOutput());
-    EXPECT_CALL(*module, getDevice).WillRepeatedly(Return(device.get()));
-
-    xe_function_desc_t funDesc = {};
-    funDesc.version = XE_API_HEADER_VERSION;
-    funDesc.pFunctionName = "mock";
-
-    function->createPrintfBuffer();
-
-    EXPECT_NE(nullptr, function->getPrintfBufferAllocation());
-}
-
-TEST_F(FunctionPrintfTest, createPrintfBufferDoesNotCreateWhenNotUsingPrintf) {
-    kernelInfo->patchInfo.pAllocateStatelessPrintfSurface = nullptr;
-
-    EXPECT_FALSE(function->hasPrintfOutput());
-
-    xe_function_desc_t funDesc = {};
-    funDesc.version = XE_API_HEADER_VERSION;
-    funDesc.pFunctionName = "mock";
-
-    function->createPrintfBuffer();
-
-    EXPECT_EQ(nullptr, function->getPrintfBufferAllocation());
 }
 
 using FunctionImpSuggestGroupSize = ::testing::TestWithParam<uint32_t>;
