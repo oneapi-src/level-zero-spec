@@ -56,6 +56,8 @@ set(L0_RUNTIME_SOURCES
     ${CMAKE_CURRENT_SOURCE_DIR}/module_imp.h
     ${CMAKE_CURRENT_SOURCE_DIR}/module.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/module.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/printf_handler.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/printf_handler.h
     ${CMAKE_CURRENT_SOURCE_DIR}/residency.h
     ${CMAKE_CURRENT_SOURCE_DIR}/sampler.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/sampler.h

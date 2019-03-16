@@ -98,8 +98,8 @@ FunctionImp::~FunctionImp() {
     if (kernelRT) {
         kernelRT->release();
     }
-    if (printfHandler) {
-        delete printfHandler;
+    if (printfBuffer) {
+        module->getDevice()->getMemoryManager()->freeMemory(printfBuffer);
     }
     delete oclInternals;
 }
@@ -307,7 +307,7 @@ bool FunctionImp::initialize(const xe_function_desc_t *desc) {
 
     setGroupSize(getSimdSize(), 1, 1); // until apps sets-up something smarter
 
-    this->createPrintfHandler();
+    this->createPrintfBuffer();
 
     this->oclInternals->usingSharedObjArgs = kernelRT->usingSharedObjArgs;
     this->oclInternals->usingImagesOnly = kernelRT->usingImagesOnly;
@@ -346,9 +346,9 @@ bool FunctionImp::hasPrintfOutput() const {
     return getKernelInfo()->patchInfo.pAllocateStatelessPrintfSurface != nullptr;
 }
 
-void FunctionImp::createPrintfHandler() {
+void FunctionImp::createPrintfBuffer() {
     if (this->hasPrintfOutput()) {
-        printfHandler = new PrintfHandler(this->module->getDevice());
+        printfBuffer = PrintfHandler::createPrintfBuffer(this->module->getDevice());
     }
 }
 

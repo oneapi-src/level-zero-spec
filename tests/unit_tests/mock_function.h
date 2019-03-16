@@ -14,7 +14,7 @@ namespace ult {
 template <>
 struct WhiteBox<::L0::Function> : public ::L0::FunctionImp {
     using BaseClass = ::L0::FunctionImp;
-    using ::L0::FunctionImp::createPrintfHandler;
+    using ::L0::FunctionImp::createPrintfBuffer;
     using ::L0::FunctionImp::crossThreadData;
     using ::L0::FunctionImp::crossThreadDataSize;
     using ::L0::FunctionImp::groupSizeX;

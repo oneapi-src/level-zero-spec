@@ -10,7 +10,6 @@ struct _xe_function_handle_t {
 };
 
 namespace L0 {
-class PrintfHandler;
 struct GraphicsAllocation;
 struct Module;
 
@@ -63,7 +62,7 @@ struct Function : public _xe_function_handle_t {
     virtual uint32_t getSlmSize() const = 0;
     virtual bool hasPrintfOutput() const = 0;
 
-    virtual PrintfHandler *getPrintfHandler() = 0;
+    virtual GraphicsAllocation *getPrintfBufferAllocation() = 0;
 
     Function() = default;
     Function(const Function &) = delete;

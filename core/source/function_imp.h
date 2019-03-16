@@ -118,8 +118,8 @@ struct FunctionImp : Function {
 
     bool hasPrintfOutput() const override;
 
-    PrintfHandler *getPrintfHandler() override {
-        return this->printfHandler;
+    GraphicsAllocation *getPrintfBufferAllocation() override {
+        return this->printfBuffer;
     }
 
   protected:
@@ -128,7 +128,7 @@ struct FunctionImp : Function {
 
     void patchWorkgroupSizeInCrossThreadData(uint32_t x, uint32_t y, uint32_t z);
 
-    void createPrintfHandler();
+    void createPrintfBuffer();
 
     typedef xe_result_t (FunctionImp::*FunctionArgHandler)(uint32_t argIndex, size_t argSize, const void *argVal);
 
@@ -140,7 +140,7 @@ struct FunctionImp : Function {
     Module *module = nullptr;
 
     std::vector<GraphicsAllocation *> residencyContainer;
-    PrintfHandler *printfHandler = nullptr;
+    GraphicsAllocation *printfBuffer = nullptr;
 
     uint32_t groupSizeX = 0u;
     uint32_t groupSizeY = 0u;
