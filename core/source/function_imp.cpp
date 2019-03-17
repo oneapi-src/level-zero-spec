@@ -236,7 +236,7 @@ xe_result_t FunctionImp::setArgBuffer(uint32_t argIndex, size_t argSize, const v
 
     GraphicsAllocation *alloc = module->getDevice()->getMemoryManager()->findAllocation(*reinterpret_cast<void *const *>(argVal));
     assert(alloc != nullptr);
-    residencyContainer.push_back(alloc);
+    residencyContainer[argIndex] = alloc;
 
     return XE_RESULT_SUCCESS;
 }
@@ -261,7 +261,7 @@ xe_result_t FunctionImp::setArgImage(uint32_t argIndex, size_t argSize, const vo
 
     GraphicsAllocation *alloc = module->getDevice()->getMemoryManager()->findAllocation(*reinterpret_cast<void *const *>(argVal));
     assert(alloc != nullptr);
-    residencyContainer.push_back(alloc);
+    residencyContainer[argIndex] = alloc;
 
     return XE_RESULT_SUCCESS;
 }
@@ -310,11 +310,6 @@ bool FunctionImp::initialize(const xe_function_desc_t *desc) {
 
     setGroupSize(getSimdSize(), 1, 1); // until apps sets-up something smarter
 
-    size_t residencySize = this->oclInternals->kernelArgHandlers.size() +
-                           (this->hasPrintfOutput() ? 1 : 0);
-
-    residencyContainer.resize(residencySize, nullptr); // todo : handle implicit surfaces - private/constant
-
     this->createPrintfBuffer();
 
     this->oclInternals->usingSharedObjArgs = kernelRT->usingSharedObjArgs;
@@ -322,6 +317,7 @@ bool FunctionImp::initialize(const xe_function_desc_t *desc) {
     this->oclInternals->auxTranslationRequired = kernelRT->auxTranslationRequired;
     this->oclInternals->patchedArgumentsNum = kernelRT->patchedArgumentsNum;
     this->oclInternals->startOffset = kernelRT->startOffset;
+    residencyContainer.resize(this->oclInternals->kernelArgHandlers.size(), nullptr); // todo : handle implicit surfaces - printf/private/constant
 
     return true;
 }
