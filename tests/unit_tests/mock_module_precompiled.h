@@ -20,9 +20,9 @@ struct PrecompiledFunctionMockData {
     const uint32_t *isa;
     const size_t isaSize;
     const uint32_t *crossThreadDataBase;
-    const size_t crossThreadDataBaseSize;
+    const uint32_t crossThreadDataBaseSize;
     const uint32_t *perThreadDataBase;
-    const size_t perThreadDataBaseSize;
+    const uint32_t perThreadDataBaseSize;
     const uint32_t *groupSizeInPerThreadDataBase;
     const std::pair<int, int> *bufferArgIndicesAndOffsets;
     const size_t bufferArgIndicesAndOffsetsCount;
@@ -107,7 +107,7 @@ struct PrecompiledFunctionMock : Mock<Function> {
         return precompiledFunctionMockData->perThreadDataBase;
     }
 
-    size_t getPerThreadDataSize() const override {
+    uint32_t getPerThreadDataSizeForWholeThreadGroup() const override {
         return precompiledFunctionMockData->perThreadDataBaseSize;
     }
 
@@ -119,7 +119,7 @@ struct PrecompiledFunctionMock : Mock<Function> {
         return crossThreadData.data();
     }
 
-    size_t getCrossThreadDataSize() const override {
+    uint32_t getCrossThreadDataSize() const override {
         return precompiledFunctionMockData->crossThreadDataBaseSize;
     }
 
@@ -252,7 +252,7 @@ inline void writeMockData(const std::string sourceOrigin, std::string &mockName,
     writeAsCppArrayInitializer(function->getCrossThreadDataHostMem(), function->getCrossThreadDataSize(), out);
     out << "\n\n";
     out << "static const uint32_t " << globalNamePerThreadData << "[] = \n";
-    writeAsCppArrayInitializer(function->getPerThreadDataHostMem(), function->getPerThreadDataSize(), out);
+    writeAsCppArrayInitializer(function->getPerThreadDataHostMem(), function->getPerThreadDataSizeForWholeThreadGroup(), out);
     out << "\n\n";
 
     out << "static const bool " << globalNameHasBarriers << " = " << function->getHasBarriers() << ";\n\n";

@@ -260,7 +260,7 @@ ATSTEST_F(CommandListEncodeDispatchFunction, copiesThreadDataToGeneralStateHeap)
     {
         auto cmd = genCmdCast<COMPUTE_WALKER *>(*itor);
 
-        auto indirectDataLength = function->getPerThreadDataSize() +
+        auto indirectDataLength = function->getPerThreadDataSizeForWholeThreadGroup() +
                                   function->getCrossThreadDataSize();
         EXPECT_GE(cmd->getIndirectDataLength(), 0u);
         EXPECT_LE(cmd->getIndirectDataLength(), indirectDataLength);
@@ -268,8 +268,8 @@ ATSTEST_F(CommandListEncodeDispatchFunction, copiesThreadDataToGeneralStateHeap)
         auto ptrHeap = ptrOffset(heap->getCpuBase(), cmd->getIndirectDataStartAddress());
         EXPECT_EQ(memcmp(ptrHeap, function->getCrossThreadDataHostMem(), function->getCrossThreadDataSize()), 0u);
         ptrHeap = ptrOffset(ptrHeap, function->getCrossThreadDataSize());
-        EXPECT_EQ(memcmp(ptrHeap, function->getPerThreadDataHostMem(), function->getPerThreadDataSize()), 0u);
-        ptrHeap = ptrOffset(ptrHeap, function->getPerThreadDataSize());
+        EXPECT_EQ(memcmp(ptrHeap, function->getPerThreadDataHostMem(), function->getPerThreadDataSizeForWholeThreadGroup()), 0u);
+        ptrHeap = ptrOffset(ptrHeap, function->getPerThreadDataSizeForWholeThreadGroup());
     }
 }
 
@@ -304,7 +304,7 @@ ATSTEST_F(CommandListEncodeDispatchFunction, growsGeneralStateHeapIfNeededAndPre
     {
         auto cmd = genCmdCast<COMPUTE_WALKER *>(*itor);
 
-        auto indirectDataLength = function->getPerThreadDataSize() +
+        auto indirectDataLength = function->getPerThreadDataSizeForWholeThreadGroup() +
                                   function->getCrossThreadDataSize();
         EXPECT_GE(cmd->getIndirectDataLength(), 0u);
         EXPECT_LE(cmd->getIndirectDataLength(), indirectDataLength);
@@ -312,8 +312,8 @@ ATSTEST_F(CommandListEncodeDispatchFunction, growsGeneralStateHeapIfNeededAndPre
         auto ptrHeap = ptrOffset(heap->getCpuBase(), cmd->getIndirectDataStartAddress());
         EXPECT_EQ(memcmp(ptrHeap, function->getCrossThreadDataHostMem(), function->getCrossThreadDataSize()), 0u);
         ptrHeap = ptrOffset(ptrHeap, function->getCrossThreadDataSize());
-        EXPECT_EQ(memcmp(ptrHeap, function->getPerThreadDataHostMem(), function->getPerThreadDataSize()), 0u);
-        ptrHeap = ptrOffset(ptrHeap, function->getPerThreadDataSize());
+        EXPECT_EQ(memcmp(ptrHeap, function->getPerThreadDataHostMem(), function->getPerThreadDataSizeForWholeThreadGroup()), 0u);
+        ptrHeap = ptrOffset(ptrHeap, function->getPerThreadDataSizeForWholeThreadGroup());
     }
 
     EXPECT_EQ(0U, memcmp(precopiedMemPattern.data(), heap->getCpuBase(), precopiedMemPattern.size()));
@@ -346,7 +346,7 @@ SKLTEST_F(CommandListEncodeDispatchFunctionGEN9, copiesThreadDataToIndirectState
     {
         auto cmd = genCmdCast<GPGPU_WALKER *>(*itor);
 
-        auto indirectDataLength = function->getPerThreadDataSize() +
+        auto indirectDataLength = function->getPerThreadDataSizeForWholeThreadGroup() +
                                   function->getCrossThreadDataSize();
         EXPECT_GE(cmd->getIndirectDataLength(), 0u);
         EXPECT_LE(cmd->getIndirectDataLength(), indirectDataLength);
@@ -354,8 +354,8 @@ SKLTEST_F(CommandListEncodeDispatchFunctionGEN9, copiesThreadDataToIndirectState
         auto ptrHeap = ptrOffset(heap->getCpuBase(), cmd->getIndirectDataStartAddress());
         EXPECT_EQ(memcmp(ptrHeap, function->getCrossThreadDataHostMem(), function->getCrossThreadDataSize()), 0u);
         ptrHeap = ptrOffset(ptrHeap, function->getCrossThreadDataSize());
-        EXPECT_EQ(memcmp(ptrHeap, function->getPerThreadDataHostMem(), function->getPerThreadDataSize()), 0u);
-        ptrHeap = ptrOffset(ptrHeap, function->getPerThreadDataSize());
+        EXPECT_EQ(memcmp(ptrHeap, function->getPerThreadDataHostMem(), function->getPerThreadDataSizeForWholeThreadGroup()), 0u);
+        ptrHeap = ptrOffset(ptrHeap, function->getPerThreadDataSizeForWholeThreadGroup());
     }
 }
 
@@ -429,18 +429,22 @@ GEN9TEST_F(CommandListEncodeDispatchFunctionGEN9, addsWalkerToCommandStream) {
         auto cmd = genCmdCast<GPGPU_WALKER *>(*itorWalker);
         ASSERT_NE(cmd, nullptr);
 
-        EXPECT_EQ(cmd->getThreadGroupIdXDimension(), dispatchFunctionArguments.groupCountX);
-        EXPECT_EQ(cmd->getThreadGroupIdYDimension(), dispatchFunctionArguments.groupCountY);
-        EXPECT_EQ(cmd->getThreadGroupIdZDimension(), dispatchFunctionArguments.groupCountZ);
-        EXPECT_NE(cmd->getRightExecutionMask(), 0u);
-        EXPECT_EQ(cmd->getBottomExecutionMask(), 0xffffffffu);
-        EXPECT_EQ(cmd->getSimdSize(), GPGPU_WALKER::SIMD_SIZE_SIMD32);
+        EXPECT_EQ(function->getThreadsPerThreadGroup(), cmd->getThreadWidthCounterMaximum());
+        EXPECT_EQ(1U, cmd->getThreadHeightCounterMaximum());
+        EXPECT_EQ(0U, cmd->getThreadDepthCounterMaximum());
+
+        EXPECT_EQ(dispatchFunctionArguments.groupCountX, cmd->getThreadGroupIdXDimension());
+        EXPECT_EQ(dispatchFunctionArguments.groupCountY, cmd->getThreadGroupIdYDimension());
+        EXPECT_EQ(dispatchFunctionArguments.groupCountZ, cmd->getThreadGroupIdZDimension());
+        EXPECT_NE(0u, cmd->getRightExecutionMask());
+        EXPECT_EQ(0xffffffffu, cmd->getBottomExecutionMask());
+        EXPECT_EQ(GPGPU_WALKER::SIMD_SIZE_SIMD32, cmd->getSimdSize());
 
         // Index into MIDL table.  Should always be 0
-        EXPECT_EQ(cmd->getInterfaceDescriptorOffset(), 0u);
+        EXPECT_EQ(0u, cmd->getInterfaceDescriptorOffset());
 
         // Relative to IndirectObjectBaseAddress
-        auto indirectDataLength = function->getPerThreadDataSize() +
+        auto indirectDataLength = function->getPerThreadDataSizeForWholeThreadGroup() +
                                   function->getCrossThreadDataSize();
         EXPECT_EQ(cmd->getIndirectDataLength() % GPGPU_WALKER::INDIRECTDATASTARTADDRESS_ALIGN_SIZE, 0u);
         EXPECT_GE(cmd->getIndirectDataLength(), indirectDataLength);
@@ -450,19 +454,19 @@ GEN9TEST_F(CommandListEncodeDispatchFunctionGEN9, addsWalkerToCommandStream) {
         auto ptrHeap = ptrOffset(heap->getCpuBase(), cmd->getIndirectDataStartAddress());
         EXPECT_EQ(memcmp(ptrHeap, function->getCrossThreadDataHostMem(), function->getCrossThreadDataSize()), 0u);
         ptrHeap = ptrOffset(ptrHeap, function->getCrossThreadDataSize());
-        EXPECT_EQ(memcmp(ptrHeap, function->getPerThreadDataHostMem(), function->getPerThreadDataSize()), 0u);
-        ptrHeap = ptrOffset(ptrHeap, function->getPerThreadDataSize());
+        EXPECT_EQ(memcmp(ptrHeap, function->getPerThreadDataHostMem(), function->getPerThreadDataSizeForWholeThreadGroup()), 0u);
+        ptrHeap = ptrOffset(ptrHeap, function->getPerThreadDataSizeForWholeThreadGroup());
 
-        EXPECT_EQ(idd->getSamplerCount(), INTERFACE_DESCRIPTOR_DATA::SAMPLER_COUNT_NO_SAMPLERS_USED);
-        EXPECT_EQ(idd->getSamplerStatePointer(), 0u);
-        EXPECT_EQ(idd->getBindingTableEntryCount(), 0u);
-        EXPECT_EQ(idd->getBindingTablePointer(), 0u);
-        EXPECT_NE(idd->getNumberOfThreadsInGpgpuThreadGroup(), 0u);
-        EXPECT_EQ(idd->getSharedLocalMemorySize(), INTERFACE_DESCRIPTOR_DATA::SHARED_LOCAL_MEMORY_SIZE_ENCODES_0K);
-        EXPECT_EQ(idd->getBarrierEnable(), 0u);
+        EXPECT_EQ(INTERFACE_DESCRIPTOR_DATA::SAMPLER_COUNT_NO_SAMPLERS_USED, idd->getSamplerCount());
+        EXPECT_EQ(0u, idd->getSamplerStatePointer());
+        EXPECT_EQ(0u, idd->getBindingTableEntryCount());
+        EXPECT_EQ(0u, idd->getBindingTablePointer());
+        EXPECT_EQ(function->getThreadsPerThreadGroup(), idd->getNumberOfThreadsInGpgpuThreadGroup());
+        EXPECT_EQ(INTERFACE_DESCRIPTOR_DATA::SHARED_LOCAL_MEMORY_SIZE_ENCODES_0K, idd->getSharedLocalMemorySize());
+        EXPECT_EQ(0u, idd->getBarrierEnable());
 
-        EXPECT_NE(idd->getCrossThreadConstantDataReadLength(), 0u);
-        EXPECT_NE(idd->getConstantIndirectUrbEntryReadLength(), 0u);
+        EXPECT_EQ(function->getCrossThreadDataSize() / sizeof(float[8]), idd->getCrossThreadConstantDataReadLength());
+        EXPECT_EQ(function->getPerThreadDataSize() / sizeof(float[8]), idd->getConstantIndirectUrbEntryReadLength());
     }
 }
 

@@ -63,12 +63,13 @@ struct Mock<Function> : public Function {
     MOCK_CONST_METHOD0(getIsaGraphicsAllocation, PtrRef<GraphicsAllocation>());
     MOCK_CONST_METHOD0(getModule, Module *());
     MOCK_CONST_METHOD0(getPerThreadDataHostMem, const void *());
-    MOCK_CONST_METHOD0(getPerThreadDataSize, size_t());
+    MOCK_CONST_METHOD0(getPerThreadDataSizeForWholeThreadGroup, uint32_t());
+    MOCK_CONST_METHOD0(getPerThreadDataSize, uint32_t());
     MOCK_CONST_METHOD0(getSimdSize, uint32_t());
     MOCK_CONST_METHOD0(getThreadsPerThreadGroup, uint32_t());
     MOCK_CONST_METHOD0(getThreadExecutionMask, uint32_t());
     MOCK_CONST_METHOD0(getCrossThreadDataHostMem, const void *());
-    MOCK_CONST_METHOD0(getCrossThreadDataSize, size_t());
+    MOCK_CONST_METHOD0(getCrossThreadDataSize, uint32_t());
     MOCK_CONST_METHOD0(getResidencyContainer, const std::vector<GraphicsAllocation *> &());
     MOCK_CONST_METHOD0(getHasBarriers, bool());
     MOCK_CONST_METHOD0(getSlmSize, uint32_t());

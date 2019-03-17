@@ -60,7 +60,7 @@ struct FunctionImp : Function {
         return crossThreadData;
     }
 
-    size_t getCrossThreadDataSize() const override {
+    uint32_t getCrossThreadDataSize() const override {
         return crossThreadDataSize;
     }
 
@@ -98,7 +98,11 @@ struct FunctionImp : Function {
         return perThreadData;
     }
 
-    size_t getPerThreadDataSize() const override {
+    uint32_t getPerThreadDataSizeForWholeThreadGroup() const override {
+        return perThreadDataSizeForWholeThreadGroup;
+    }
+
+    uint32_t getPerThreadDataSize() const override {
         return perThreadDataSize;
     }
 
@@ -150,7 +154,8 @@ struct FunctionImp : Function {
     uint32_t crossThreadDataSize = 0;
 
     void *perThreadData = nullptr;
-    size_t perThreadDataSize = 0u;
+    uint32_t perThreadDataSizeForWholeThreadGroup = 0u;
+    uint32_t perThreadDataSize = 0u;
 
     uint32_t threadsPerThreadGroup = 0u;
     uint32_t threadExecutionMask = 0u;

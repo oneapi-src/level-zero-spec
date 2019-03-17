@@ -102,7 +102,8 @@ int main(int argc, char *argv[]) {
     uint32_t groupSizeX = 32u;
     uint32_t groupSizeY = 1u;
     uint32_t groupSizeZ = 1u;
-    //SUCCESS_OR_TERMINATE(xeFunctionSuggestGroupSize(function, numThreads, 1U, 1U, &groupSizeX, &groupSizeY, &groupSizeZ));
+    SUCCESS_OR_TERMINATE(xeFunctionSuggestGroupSize(function, numThreads, 1U, 1U, &groupSizeX, &groupSizeY, &groupSizeZ));
+    SUCCESS_OR_TERMINATE_BOOL(numThreads % groupSizeX == 0);
     if (verbose) {
         std::cout << "Group size : (" << groupSizeX << ", " << groupSizeY << ", " << groupSizeZ << ")" << std::endl;
     }
@@ -149,8 +150,8 @@ int main(int argc, char *argv[]) {
     {
         xe_dispatch_function_arguments_t dispatchTraits{XE_DISPATCH_FUNCTION_ARGS_VERSION};
         dispatchTraits.groupCountX = numThreads / groupSizeX;
-        dispatchTraits.groupCountY = 1;
-        dispatchTraits.groupCountZ = 1;
+        dispatchTraits.groupCountY = 1u;
+        dispatchTraits.groupCountZ = 1u;
         if (verbose) {
             std::cerr << "Number of groups : (" << dispatchTraits.groupCountX << ", " << dispatchTraits.groupCountY << ", " << dispatchTraits.groupCountZ << ")" << std::endl;
         }

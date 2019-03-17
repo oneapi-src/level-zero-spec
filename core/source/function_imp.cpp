@@ -134,11 +134,12 @@ xe_result_t FunctionImp::setGroupSize(uint32_t groupSizeX,
     auto numChannels = OCLRT::PerThreadDataHelper::getNumLocalIdChannels(*getKernelInfo()->patchInfo.threadPayload);
     Vec3<size_t> groupSize{groupSizeX, groupSizeY, groupSizeZ};
     auto itemsInGroup = OCLRT::Math::computeTotalElementsCount(groupSize);
-    size_t perThreadDataSizeNeeded = OCLRT::PerThreadDataHelper::getPerThreadDataSizeTotal(getKernelInfo()->getMaxSimdSize(), numChannels, itemsInGroup);
-    if (perThreadDataSizeNeeded > perThreadDataSize) {
+    uint32_t perThreadDataSizeNeeded = static_cast<uint32_t>(OCLRT::PerThreadDataHelper::getPerThreadDataSizeTotal(getKernelInfo()->getMaxSimdSize(),
+                                                                                                                   numChannels, itemsInGroup));
+    if (perThreadDataSizeNeeded > perThreadDataSizeForWholeThreadGroup) {
         alignedFree(perThreadData);
         perThreadData = alignedMalloc(perThreadDataSizeNeeded, 32); // alignment for vector instructions
-        perThreadDataSize = perThreadDataSizeNeeded;
+        perThreadDataSizeForWholeThreadGroup = perThreadDataSizeNeeded;
     }
 
     OCLRT::generateLocalIDs(perThreadData, static_cast<uint16_t>(getSimdSize()),
@@ -152,6 +153,7 @@ xe_result_t FunctionImp::setGroupSize(uint32_t groupSizeX,
 
     auto simdSize = getKernelInfo()->getMaxSimdSize();
     this->threadsPerThreadGroup = static_cast<uint32_t>((itemsInGroup + simdSize - 1u) / simdSize);
+    this->perThreadDataSize = perThreadDataSizeForWholeThreadGroup / threadsPerThreadGroup;
     patchWorkgroupSizeInCrossThreadData(groupSizeX, groupSizeY, groupSizeZ);
 
     // threadExecutionMask - which SIMD lines are active in last thread of group

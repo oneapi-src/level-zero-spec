@@ -42,7 +42,7 @@ struct Function : public _xe_function_handle_t {
                                          uint32_t *groupSizeZ) = 0;
 
     virtual const void *getCrossThreadDataHostMem() const = 0;
-    virtual size_t getCrossThreadDataSize() const = 0;
+    virtual uint32_t getCrossThreadDataSize() const = 0;
     virtual const std::vector<GraphicsAllocation *> &getResidencyContainer() const = 0;
 
     static Function *create(Module *module, const xe_function_desc_t *desc);
@@ -54,7 +54,8 @@ struct Function : public _xe_function_handle_t {
     virtual size_t getIsaSize() const = 0;
     virtual PtrRef<GraphicsAllocation> getIsaGraphicsAllocation() const = 0;
     virtual const void *getPerThreadDataHostMem() const = 0;
-    virtual size_t getPerThreadDataSize() const = 0;
+    virtual uint32_t getPerThreadDataSizeForWholeThreadGroup() const = 0;
+    virtual uint32_t getPerThreadDataSize() const = 0;
     virtual uint32_t getSimdSize() const = 0;
     virtual uint32_t getThreadsPerThreadGroup() const = 0;
     virtual uint32_t getThreadExecutionMask() const = 0;

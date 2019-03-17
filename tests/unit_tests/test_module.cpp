@@ -171,7 +171,7 @@ TEST_P(ModuleCreate, onlineCompilationModuleTest) {
     ASSERT_NE(nullptr, function->getPerThreadDataHostMem());
     EXPECT_TRUE(isAligned<32>(function->getPerThreadDataHostMem())) << "Per thread data not properly aligned for vector instructions"; // todo : make a real test out of this
     uint32_t numChannels = 3;
-    EXPECT_EQ(numChannels * function->getSimdSize() * sizeof(uint16_t), function->getPerThreadDataSize());
+    EXPECT_EQ(numChannels * function->getSimdSize() * sizeof(uint16_t), function->getPerThreadDataSizeForWholeThreadGroup());
 
     uint32_t groupSizeX, groupSizeY, groupSizeZ;
     function->getGroupSize(groupSizeX, groupSizeY, groupSizeZ);
@@ -217,7 +217,7 @@ TEST(ModuleCreateSimple, mockedModuleTest) {
     EXPECT_EQ(expectedData->crossThreadDataBaseSize, function.getCrossThreadDataSize());
     EXPECT_EQ(0, memcmp(expectedData->crossThreadDataBase, function.getCrossThreadDataHostMem(), expectedData->crossThreadDataBaseSize));
 
-    EXPECT_EQ(expectedData->perThreadDataBaseSize, function.getPerThreadDataSize());
+    EXPECT_EQ(expectedData->perThreadDataBaseSize, function.getPerThreadDataSizeForWholeThreadGroup());
     EXPECT_EQ(0, memcmp(expectedData->perThreadDataBase, function.getPerThreadDataHostMem(), expectedData->perThreadDataBaseSize));
 
     const auto &residencyFromArgs = function.getResidencyContainer();

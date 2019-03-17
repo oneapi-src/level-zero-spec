@@ -262,9 +262,12 @@ xe_result_t CommandListCoreFamily<gfxCoreFamily>::encodeDispatchFunction(xe_func
     const auto function = Function::fromHandle(hFunction);
     assert(function);
 
+    auto threadsPerThreadGroup = function->getThreadsPerThreadGroup();
+
     uint32_t offsetIDD = 0u;
-    auto sizeCrossThreadData = static_cast<uint32_t>(function->getCrossThreadDataSize());
-    auto sizePerThreadData = static_cast<uint32_t>(function->getPerThreadDataSize());
+    auto sizeCrossThreadData = function->getCrossThreadDataSize();
+    auto sizePerThreadData = function->getPerThreadDataSize();
+    auto sizePerThreadDataForWholeGroup = function->getPerThreadDataSizeForWholeThreadGroup();
     {
         auto heap = indirectHeaps[OCLRT::IndirectHeap::DYNAMIC_STATE];
         assert(heap);
@@ -285,7 +288,7 @@ xe_result_t CommandListCoreFamily<gfxCoreFamily>::encodeDispatchFunction(xe_func
             idd.setKernelStartPointer(offset);
             idd.setKernelStartPointerHigh(0u);
         }
-        idd.setNumberOfThreadsInGpgpuThreadGroup(function->getThreadsPerThreadGroup());
+        idd.setNumberOfThreadsInGpgpuThreadGroup(threadsPerThreadGroup);
 
         auto numGrfCrossThreadData = static_cast<uint32_t>(sizeCrossThreadData / sizeof(float[8]));
         assert(numGrfCrossThreadData > 0u);
@@ -314,7 +317,7 @@ xe_result_t CommandListCoreFamily<gfxCoreFamily>::encodeDispatchFunction(xe_func
         assert(heap);
         heap->align(GPGPU_WALKER::INDIRECTDATASTARTADDRESS_ALIGN_SIZE);
 
-        auto sizeThreadData = sizePerThreadData + sizeCrossThreadData;
+        auto sizeThreadData = sizePerThreadDataForWholeGroup + sizeCrossThreadData;
 
         auto ptr = getHeapSpaceAllowGrow(*heap, sizeThreadData);
         assert(ptr);
@@ -323,8 +326,8 @@ xe_result_t CommandListCoreFamily<gfxCoreFamily>::encodeDispatchFunction(xe_func
 
         memcpy(ptr, function->getCrossThreadDataHostMem(), sizeCrossThreadData);
         ptr = ptrOffset(ptr, sizeCrossThreadData);
-        memcpy(ptr, function->getPerThreadDataHostMem(), sizePerThreadData);
-        ptr = ptrOffset(ptr, sizePerThreadData);
+        memcpy(ptr, function->getPerThreadDataHostMem(), sizePerThreadDataForWholeGroup);
+        ptr = ptrOffset(ptr, sizePerThreadDataForWholeGroup);
 
         cmd.setIndirectDataLength(sizeThreadData);
         cmd.setIndirectDataStartAddress(static_cast<uint32_t>(offset));
@@ -333,6 +336,7 @@ xe_result_t CommandListCoreFamily<gfxCoreFamily>::encodeDispatchFunction(xe_func
     // Set # of threadgroups in each dimension
     assert(pDispatchFuncArgs);
     assert(pDispatchFuncArgs->version == XE_DISPATCH_FUNCTION_ARGS_VERSION);
+    cmd.setThreadWidthCounterMaximum(threadsPerThreadGroup);
     cmd.setThreadGroupIdXDimension(pDispatchFuncArgs->groupCountX);
     cmd.setThreadGroupIdYDimension(pDispatchFuncArgs->groupCountY);
     cmd.setThreadGroupIdZDimension(pDispatchFuncArgs->groupCountZ);

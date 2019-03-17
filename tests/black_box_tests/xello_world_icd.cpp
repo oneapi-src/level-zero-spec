@@ -47,6 +47,7 @@ inline void validate(ResulT result, const char *message) {
 #define SUCCESS_OR_WARNING_BOOL(FLAG) validate<false>(!(FLAG), #FLAG)
 
 void printDeviceProperties(const xe_device_properties_t &props);
+void printVerboseValidationError(const void *expected, const void *tested, size_t len);
 
 int main(int argc, char *argv[]) {
     if ((argc >= 2) && ((0 == strcmp(argv[1], "-v")) || (0 == strcmp(argv[1], "--verbose")))) {
@@ -103,7 +104,8 @@ int main(int argc, char *argv[]) {
     uint32_t groupSizeX = 32u;
     uint32_t groupSizeY = 1u;
     uint32_t groupSizeZ = 1u;
-    //SUCCESS_OR_TERMINATE(xeFunctionSuggestGroupSize(function, numThreads, 1U, 1U, &groupSizeX, &groupSizeY, &groupSizeZ));
+    SUCCESS_OR_TERMINATE(xeFunctionSuggestGroupSize(function, numThreads, 1U, 1U, &groupSizeX, &groupSizeY, &groupSizeZ));
+    SUCCESS_OR_TERMINATE_BOOL(numThreads % groupSizeX == 0);
     if (verbose) {
         std::cout << "Group size : (" << groupSizeX << ", " << groupSizeY << ", " << groupSizeZ << ")" << std::endl;
     }
@@ -150,8 +152,8 @@ int main(int argc, char *argv[]) {
     {
         xe_dispatch_function_arguments_t dispatchTraits{XE_DISPATCH_FUNCTION_ARGS_VERSION};
         dispatchTraits.groupCountX = numThreads / groupSizeX;
-        dispatchTraits.groupCountY = 1;
-        dispatchTraits.groupCountZ = 1;
+        dispatchTraits.groupCountY = 1u;
+        dispatchTraits.groupCountZ = 1u;
         if (verbose) {
             std::cerr << "Number of groups : (" << dispatchTraits.groupCountX << ", " << dispatchTraits.groupCountY << ", " << dispatchTraits.groupCountZ << ")" << std::endl;
         }
@@ -179,6 +181,9 @@ int main(int argc, char *argv[]) {
     memcpy(readBackData, dstBuffer, sizeof(readBackData));
 #endif
     bool outputValidationSuccessful = (0 == memcmp(initDataSrc, readBackData, sizeof(readBackData)));
+    if (verbose && (false == outputValidationSuccessful)) {
+        printVerboseValidationError(initDataSrc, readBackData, sizeof(readBackData));
+    }
     SUCCESS_OR_WARNING_BOOL(outputValidationSuccessful);
 
     // X. Cleanup
@@ -218,4 +223,25 @@ void printDeviceProperties(const xe_device_properties_t &props) {
               << " * numAsyncCopyEngines  : " << props.numAsyncCopyEngines << "\n"
               << " * numComputeCores : " << props.numComputeCores << "\n"
               << " * maxCommandQueuePriority : " << props.maxCommandQueuePriority << std::endl;
+}
+
+void printVerboseValidationError(const void *expected, const void *tested, size_t len) {
+    size_t offset = 0;
+
+    const uint8_t *expectedU8 = reinterpret_cast<const uint8_t *>(expected);
+    const uint8_t *testedU8 = reinterpret_cast<const uint8_t *>(tested);
+    uint32_t errorsCount = 0;
+    constexpr uint32_t errorsMax = 20;
+    while (offset < len) {
+        if (expectedU8[offset] != testedU8[offset]) {
+            std::cerr << "Data mismatch expectedU8[" << offset << "] != testedU8[" << offset << "]   ->    "
+                      << +expectedU8[offset] << " != " << +testedU8[offset] << std::endl;
+            ++errorsCount;
+            if (errorsCount >= errorsMax) {
+                std::cerr << "Found " << errorsCount << " data mismatches - skipping further comparison " << std::endl;
+                break;
+            }
+        }
+        ++offset;
+    }
 }

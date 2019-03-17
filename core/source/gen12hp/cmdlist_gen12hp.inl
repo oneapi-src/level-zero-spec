@@ -71,7 +71,7 @@ xe_result_t CommandListCoreFamily<IGFX_GEN12_CORE>::encodeDispatchFunction(xe_fu
         heap->align(COMPUTE_WALKER::INDIRECTDATASTARTADDRESS_ALIGN_SIZE);
 
         auto sizeCrossThreadData = static_cast<uint32_t>(function->getCrossThreadDataSize());
-        auto sizePerThreadData = static_cast<uint32_t>(function->getPerThreadDataSize());
+        auto sizePerThreadData = static_cast<uint32_t>(function->getPerThreadDataSizeForWholeThreadGroup());
         auto sizeThreadData = sizePerThreadData + sizeCrossThreadData;
         auto ptr = getHeapSpaceAllowGrow(*heap, sizeThreadData);
         assert(ptr);
