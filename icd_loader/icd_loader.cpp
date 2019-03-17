@@ -30,15 +30,78 @@
 ******************************************************************************/
 #include "icd_loader.h"
 
+#include <cassert>
 #include <mutex>
 
 #if defined(__linux__)
 #  include <dlfcn.h>
+// On Linux, use LD_LIBRARY_PATH to point to directory with liblevel_zero.so and resto of driver
+// TODO: Add file-based level_zero drivers registry
 #  define ICD_LOAD_DRIVER_LIBRARY() dlopen("liblevel_zero.so", RTLD_LAZY|RTLD_LOCAL)
 #  define ICD_LOAD_FUNCTION_PTR(LIB, FUNC_NAME) dlsym(LIB, FUNC_NAME)
 #elif defined(_WIN32)
 #  include <Windows.h>
-#  define ICD_LOAD_DRIVER_LIBRARY() LoadLibraryA("level_zero.dll")
+// On Windows, use SOFTWARE\\Intel\\L0\\Drivers\\PATH_TO_LEVEL_ZERO_DLL (DWORD:0/1)
+//             (where 0 = use this library, 1 = skip this library) or use level_zero.dll from 
+//             process directory
+// TODO : Add support for HKR keys
+// TODO : Add support for 32-bit
+HMODULE ICD_LOAD_DRIVER_LIBRARY() {
+    auto lib = LoadLibraryA("level_zero.dll");
+    if(lib != NULL){
+        return lib;
+    }
+
+    HKEY driversKey = 0;
+    const char* l0regPath = "SOFTWARE\\Intel\\IGFX\\L0\\Drivers";
+    auto result = RegOpenKeyExA(HKEY_LOCAL_MACHINE, l0regPath, 0, KEY_READ, &driversKey);
+    if (ERROR_SUCCESS != result){
+        return NULL;
+    }
+
+    DWORD it = 0;
+    lib = NULL;
+    while(true){
+        char driverPath[4096] = { 0 };
+        DWORD driverPathMaxSize = sizeof(driverPath);
+        DWORD driverPathRegType = 0;
+        DWORD skipDriverValue = 0;
+        DWORD skipDriverValueMaxSize = sizeof(skipDriverValueMaxSize);
+
+        result = RegEnumValueA(driversKey, it,
+                               driverPath, &driverPathMaxSize,
+                               NULL, &driverPathRegType,
+                               (LPBYTE)&skipDriverValue, &skipDriverValueMaxSize);
+        if (ERROR_SUCCESS != result)
+        {
+            break; // no more keys
+        }
+
+        if (REG_DWORD != driverPathRegType)
+        {
+            assert(0);
+            continue;
+        }
+
+        if (skipDriverValue)
+        {
+            // 0 indicates - use this driver, 1 indicates - skip
+            continue;
+        }
+
+        lib = LoadLibraryA(driverPath);
+        if(lib != NULL){
+            // TODO : Add support for multiplexing
+            //        Currently, return first that was loaded succesfully
+            break;
+        }
+
+        ++it;
+    }
+    result = RegCloseKey(driversKey);
+    assert(ERROR_SUCCESS == result);
+    return lib;
+}
 #  define ICD_LOAD_FUNCTION_PTR(LIB, FUNC_NAME) GetProcAddress((HMODULE)LIB, FUNC_NAME)
 #else
 #  error "Unsupported OS"
