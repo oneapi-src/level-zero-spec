@@ -310,6 +310,8 @@ bool FunctionImp::initialize(const xe_function_desc_t *desc) {
 
     setGroupSize(getSimdSize(), 1, 1); // until apps sets-up something smarter
 
+    residencyContainer.resize(this->oclInternals->kernelArgHandlers.size(), nullptr); // todo : handle implicit surfaces - printf/private/constant
+
     this->createPrintfBuffer();
 
     this->oclInternals->usingSharedObjArgs = kernelRT->usingSharedObjArgs;
@@ -317,7 +319,6 @@ bool FunctionImp::initialize(const xe_function_desc_t *desc) {
     this->oclInternals->auxTranslationRequired = kernelRT->auxTranslationRequired;
     this->oclInternals->patchedArgumentsNum = kernelRT->patchedArgumentsNum;
     this->oclInternals->startOffset = kernelRT->startOffset;
-    residencyContainer.resize(this->oclInternals->kernelArgHandlers.size(), nullptr); // todo : handle implicit surfaces - printf/private/constant
 
     return true;
 }

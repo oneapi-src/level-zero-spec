@@ -1,13 +1,21 @@
+#include "device.h"
 #include "graphics_allocation.h"
 
+#include "mock_compiler.h"
 #include "mock_device.h"
 #include "mock_function.h"
 #include "mock_module.h"
 
+#include "runtime/device/device.h"
+#include "runtime/gmm_helper/gmm_helper.h"
 #include "runtime/helpers/aligned_memory.h"
+#include "runtime/helpers/file_io.h"
+#include "runtime/platform/platform.h"
 
 #include "gtest/gtest.h"
 #include "test.h"
+
+#include <fstream>
 
 namespace L0 {
 namespace ult {
@@ -43,6 +51,56 @@ class FunctionPrintfTest : public ::testing::Test {
     std::unique_ptr<Mock<Function>> function;
     std::unique_ptr<Mock<Module>> module;
     std::unique_ptr<Mock<Device>> device;
+};
+
+class FunctionPrintfFromSpirvTest : public ::testing::Test {
+  public:
+    void SetUp() override {
+        platform = OCLRT::constructPlatform();
+        auto success = platform->initialize();
+        ASSERT_TRUE(success);
+
+        auto deviceRT = platform->getDevice(0);
+
+        // do not call GMM cachePolicyGetMemoryObject, gmm is not loaded
+        deviceRT->getExecutionEnvironment()->getGmmHelper()->setSimplifiedMocsTableUsage(true);
+
+        ASSERT_NE(nullptr, deviceRT);
+        device.reset(Device::create(deviceRT));
+
+        void *spirvData = nullptr;
+
+        size_t spvModuleSize = loadDataFromFile(
+            "test_files/spv_modules/printf_kernel.spv",
+            spirvData);
+
+        ASSERT_NE(0U, spvModuleSize);
+
+        xe_module_desc_t modDesc = {};
+        modDesc.version = XE_MODULE_DESC_VERSION_CURRENT;
+        modDesc.format = XE_MODULE_FORMAT_IL_SPIRV;
+        modDesc.inputSize = static_cast<uint32_t>(spvModuleSize);
+        modDesc.pInputModule = reinterpret_cast<char *>(spirvData);
+
+        UserRealCompilerGuard realCompilerGuard;
+
+        module.reset(whitebox_cast(Module::create(device.get(), &modDesc, deviceRT, nullptr)));
+        ASSERT_NE(nullptr, module);
+
+        deleteDataReadFromFile(spirvData);
+        spirvData = nullptr;
+
+        funDesc.version = XE_FUNCTION_DESC_VERSION_CURRENT;
+        funDesc.pFunctionName = "test_printf";
+    }
+
+    void TearDown() override {
+    }
+
+    xe_function_desc_t funDesc = {};
+    OCLRT::Platform *platform = nullptr;
+    std::unique_ptr<Module> module;
+    std::unique_ptr<L0::Device> device;
 };
 
 TEST_F(FunctionPrintfTest, hasPrintfOutputReturnsTrueWhenPrintfIsUsed) {
@@ -125,6 +183,16 @@ TEST_F(FunctionPrintfTest, createPrintfBufferPatchesCrossThreadData) {
 
     function->crossThreadData = nullptr;
     delete crossThreadData;
+}
+
+TEST_F(FunctionPrintfFromSpirvTest, initializePutsPrintfBufferAllocationAfterArgsInResidencyContainer) {
+    auto function = std::make_unique<::testing::NiceMock<Mock<Function>>>();
+    ASSERT_NE(nullptr, function);
+    function->module = module.get();
+    function->initialize(&funDesc);
+
+    ASSERT_EQ(3u, function->residencyContainer.size());
+    EXPECT_EQ(function->residencyContainer[2], function->getPrintfBufferAllocation());
 }
 
 } // namespace ult
