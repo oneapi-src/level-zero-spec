@@ -29,7 +29,7 @@ int main(int argc, char *argv[]) {
 
     size_t allocSize = 4096;
     xe_device_handle_t device0;
-    xe_device_properties_t device0Properties = {XE_DEVICE_PROPERTIES_VERSION};
+    xe_device_properties_t device0Properties = {XE_DEVICE_PROPERTIES_VERSION_CURRENT};
     xe_command_queue_handle_t cmdQueue;
     xe_command_list_handle_t cmdList;
     xe_mem_allocator_handle_t allocator;
@@ -47,23 +47,23 @@ int main(int argc, char *argv[]) {
     SUCCESS_OR_TERMINATE(xeDeviceGetProperties(device0, &device0Properties));
     std::cout << device0Properties.device_name << std::endl;
 
-    xe_command_queue_desc_t cmdQueueDesc = {XE_COMMAND_QUEUE_DESC_VERSION};
+    xe_command_queue_desc_t cmdQueueDesc = {XE_COMMAND_QUEUE_DESC_VERSION_CURRENT};
     cmdQueueDesc.ordinal = 0;
     cmdQueueDesc.mode = XE_COMMAND_QUEUE_MODE_ASYNCHRONOUS;
     SUCCESS_OR_TERMINATE(xeDeviceCreateCommandQueue(device0, &cmdQueueDesc, &cmdQueue));
 
-    xe_command_list_desc_t cmdListDesc = {XE_COMMAND_LIST_DESC_VERSION};
+    xe_command_list_desc_t cmdListDesc = {XE_COMMAND_LIST_DESC_VERSION_CURRENT};
     SUCCESS_OR_TERMINATE(xeDeviceCreateCommandList(device0, &cmdListDesc, &cmdList));
 
     /* Allocate and initialize memory */
     SUCCESS_OR_TERMINATE(xeCreateMemAllocator(&allocator));
 
     SUCCESS_OR_TERMINATE(xeSharedMemAlloc(allocator, device0,
-            XE_DEVICE_MEM_ALLOC_FLAG_DEFAULT, XE_HOST_MEM_ALLOC_FLAG_DEFAULT,
-            allocSize, 1, &srcBuffer));
+                                          XE_DEVICE_MEM_ALLOC_FLAG_DEFAULT, XE_HOST_MEM_ALLOC_FLAG_DEFAULT,
+                                          allocSize, 1, &srcBuffer));
     SUCCESS_OR_TERMINATE(xeSharedMemAlloc(allocator, device0,
-            XE_DEVICE_MEM_ALLOC_FLAG_DEFAULT, XE_HOST_MEM_ALLOC_FLAG_DEFAULT,
-            allocSize, 1, &dstBuffer));
+                                          XE_DEVICE_MEM_ALLOC_FLAG_DEFAULT, XE_HOST_MEM_ALLOC_FLAG_DEFAULT,
+                                          allocSize, 1, &dstBuffer));
 
     unsigned char *srcBufferChar = (unsigned char *)srcBuffer;
     unsigned char *dstBufferChar = (unsigned char *)dstBuffer;
@@ -73,18 +73,18 @@ int main(int argc, char *argv[]) {
     }
 
     /* Perform the copy and sync */
-    SUCCESS_OR_TERMINATE(xeCommandListEncodeMemoryCopy(cmdList, dstBuffer, srcBuffer, allocSize));
+    SUCCESS_OR_TERMINATE(xeCommandListAppendMemoryCopy(cmdList, dstBuffer, srcBuffer, allocSize));
 
     SUCCESS_OR_TERMINATE(xeCommandListClose(cmdList));
-    SUCCESS_OR_TERMINATE(xeCommandQueueEnqueueCommandLists(cmdQueue, 1, &cmdList, nullptr));
-    auto synchronizationResult = xeCommandQueueSynchronize(cmdQueue, XE_SYNCHRONIZATION_MODE_POLL, 0, 0, 1000 * 1000 /*1s*/);
+    SUCCESS_OR_TERMINATE(xeCommandQueueExecuteCommandLists(cmdQueue, 1, &cmdList, nullptr));
+    auto synchronizationResult = xeCommandQueueSynchronize(cmdQueue, 1000 * 1000 /*1s*/);
     SUCCESS_OR_WARNING(synchronizationResult);
 
     /* Validate */
     bool outputValidationSuccessful = true;
     for (int i = 0; i < allocSize; ++i) {
         if (verbose)
-            std::cout << "srcBuffer[" << i << "] = " << (unsigned int)srcBufferChar[i] << ","\
+            std::cout << "srcBuffer[" << i << "] = " << (unsigned int)srcBufferChar[i] << ","
                       << "dstBuffer[" << i << "] = " << (unsigned int)dstBufferChar[i] << "\n";
 
         outputValidationSuccessful &= (srcBufferChar[i] == dstBufferChar[i]);

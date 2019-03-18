@@ -23,8 +23,8 @@ struct ModuleBuildLogImp : public ModuleBuildLog {
             *pBuildLog = buildLog;
             *pSize = strlen(buildLog) + 1;
         } else {
-            *pBuildLog = "";
-            *pSize = 1;
+            *pBuildLog = nullptr;
+            *pSize = 0;
         }
         return XE_RESULT_SUCCESS;
     }
