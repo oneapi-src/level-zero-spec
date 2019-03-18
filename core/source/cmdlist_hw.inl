@@ -358,7 +358,7 @@ xe_result_t CommandListCoreFamily<gfxCoreFamily>::appendLaunchFunction(xe_functi
     // Store PrintfBuffer from a function
     {
         if (function->hasPrintfOutput()) {
-            this->storePrintfBuffer(function->getPrintfBufferAllocation());
+            this->storePrintfFunction(function);
         }
     }
 

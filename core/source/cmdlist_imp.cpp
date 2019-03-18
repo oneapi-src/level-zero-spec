@@ -73,10 +73,11 @@ bool CommandContainer::initialize(Device *device) {
     return true;
 }
 
-void CommandContainer::storePrintfBuffer(GraphicsAllocation *printfBuffer) {
-    auto it = std::find(this->printfBufferContainer.begin(), this->printfBufferContainer.end(), printfBuffer);
-    if (it == this->printfBufferContainer.end()) {
-        this->printfBufferContainer.push_back(printfBuffer);
+void CommandContainer::storePrintfFunction(Function *function) {
+    auto it = std::find(this->printfFunctionContainer.begin(), this->printfFunctionContainer.end(), function);
+
+    if (it == this->printfFunctionContainer.end()) {
+        this->printfFunctionContainer.push_back(function);
     }
 }
 

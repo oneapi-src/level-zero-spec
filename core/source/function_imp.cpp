@@ -359,6 +359,10 @@ void FunctionImp::createPrintfBuffer() {
     }
 }
 
+void FunctionImp::printPrintfOutput() {
+    PrintfHandler::printOutput(this->kernelRT, this->printfBuffer);
+}
+
 template <typename T>
 void FunctionImp::patchCrossThreadData(uint32_t location, const T &value) {
     if (OCLRT::KernelArgInfo::undefinedOffset == location) {

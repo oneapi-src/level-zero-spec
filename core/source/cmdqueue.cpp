@@ -92,6 +92,9 @@ xe_result_t CommandQueueImp::synchronizeByPollingForTaskCount(uint32_t timeout) 
         return XE_RESULT_NOT_READY;
     }
 
+    if (this->printfFunctionContainer.size()) {
+        this->printfFunctionContainer[0]->printPrintfOutput();
+    }
     return XE_RESULT_SUCCESS;
 }
 

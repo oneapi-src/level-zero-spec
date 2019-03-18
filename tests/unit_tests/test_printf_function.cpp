@@ -32,12 +32,14 @@ class FunctionPrintfTest : public ::testing::Test {
         kernelInfo.rebind(new OCLRT::KernelInfo{});
         funcInfo.kernelInfoRT = kernelInfo.weakRefReinterpret<void>();
 
-        function.reset(new Mock<Function>);
+        function.reset(new ::testing::NiceMock<Mock<Function>>);
         function->module = module.get();
 
         function->immFuncInfo.rebind(&funcInfo);
         printfSurfaceToken.DataParamOffset = -1;
         printfSurfaceToken.DataParamSize = 0;
+
+        ON_CALL(*function, hasPrintfOutput).WillByDefault(Invoke(function.get(), &Mock<Function>::mock_forwardToBase_hasPrintfOutput));
     }
 
     void TearDown() override {
@@ -163,6 +165,7 @@ TEST_F(FunctionPrintfTest, createPrintfBufferDoesNotCreateWhenNotUsingPrintf) {
 
 TEST_F(FunctionPrintfTest, createPrintfBufferPatchesCrossThreadData) {
     ON_CALL(*module, getDevice).WillByDefault(Return(device.get()));
+    EXPECT_CALL(*module, getDevice).Times(2);
 
     uint32_t *crossThreadData = new uint32_t[4];
     printfSurfaceToken.DataParamOffset = 0;
@@ -188,6 +191,9 @@ TEST_F(FunctionPrintfTest, createPrintfBufferPatchesCrossThreadData) {
 TEST_F(FunctionPrintfFromSpirvTest, initializePutsPrintfBufferAllocationAfterArgsInResidencyContainer) {
     auto function = std::make_unique<::testing::NiceMock<Mock<Function>>>();
     ASSERT_NE(nullptr, function);
+
+    ON_CALL(*function, hasPrintfOutput).WillByDefault(Invoke(function.get(), &Mock<Function>::mock_forwardToBase_hasPrintfOutput));
+
     function->module = module.get();
     function->initialize(&funDesc);
 

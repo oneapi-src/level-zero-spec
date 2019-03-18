@@ -64,6 +64,7 @@ struct Function : public _xe_function_handle_t {
     virtual bool hasPrintfOutput() const = 0;
 
     virtual GraphicsAllocation *getPrintfBufferAllocation() = 0;
+    virtual void printPrintfOutput() = 0;
 
     Function() = default;
     Function(const Function &) = delete;

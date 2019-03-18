@@ -119,7 +119,7 @@ xe_result_t CommandListCoreFamily<IGFX_GEN12_CORE>::appendLaunchFunction(xe_func
     // Store PrintfBuffer from a function
     {
         if (function->hasPrintfOutput()) {
-            this->storePrintfBuffer(function->getPrintfBufferAllocation());
+            this->storePrintfFunction(function);
         }
     }
 

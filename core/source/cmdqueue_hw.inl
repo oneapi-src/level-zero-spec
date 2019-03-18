@@ -42,6 +42,7 @@ xe_result_t CommandQueueHw<gfxCoreFamily>::executeCommandLists(uint32_t numComma
 
         // Add each
         processResidency(commandList);
+        printfFunctionContainer.insert(printfFunctionContainer.end(), commandList->getPrintfFunctionContainer().begin(), commandList->getPrintfFunctionContainer().end());
     }
 
     {

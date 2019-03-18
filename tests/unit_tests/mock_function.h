@@ -73,10 +73,15 @@ struct Mock<Function> : public Function {
     MOCK_CONST_METHOD0(getResidencyContainer, const std::vector<GraphicsAllocation *> &());
     MOCK_CONST_METHOD0(getHasBarriers, bool());
     MOCK_CONST_METHOD0(getSlmSize, uint32_t());
+    MOCK_CONST_METHOD0(hasPrintfOutput, bool());
 
     // TODO : automate generation of such forwarders (e.g. extend GMOCK macros)
     void mock_forwardToBase_getGroupSize(uint32_t &outGroupSizeX, uint32_t &outGroupSizeY, uint32_t &outGroupSizeZ) {
         this->BaseClass::getGroupSize(outGroupSizeX, outGroupSizeY, outGroupSizeZ);
+    }
+
+    bool mock_forwardToBase_hasPrintfOutput() {
+        return this->BaseClass::hasPrintfOutput();
     }
 };
 

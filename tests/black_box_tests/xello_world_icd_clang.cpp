@@ -36,6 +36,7 @@ __kernel void memcpy_bytes(__global uchar *dst, const __global uchar *src) {
     unsigned int gid = get_global_id(0);
     unsigned int of = get_num_groups(0);
     dst[gid] = (uchar)(src[gid] + gid);
+    printf("gid =  %d\n", gid);
 }
 )==";
 

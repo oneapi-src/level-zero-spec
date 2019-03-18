@@ -3,6 +3,7 @@
 #include "xe_copy.h"
 #include "xe_module.h"
 #include "device.h"
+#include "function.h"
 #include <vector>
 
 struct _xe_command_list_handle_t {
@@ -51,12 +52,16 @@ struct CommandContainer : public _xe_command_list_handle_t {
         return *commandStream;
     }
 
+    std::vector<Function *> &getPrintfFunctionContainer() {
+        return this->printfFunctionContainer;
+    }
+
     virtual bool initialize(Device *device);
 
     virtual ~CommandContainer();
 
   protected:
-    void storePrintfBuffer(GraphicsAllocation *printfBuffer);
+    void storePrintfFunction(Function *function);
     Device *device = nullptr;
 
     GraphicsAllocation *allocation = nullptr;
@@ -65,7 +70,7 @@ struct CommandContainer : public _xe_command_list_handle_t {
     OCLRT::LinearStream *commandStream = nullptr;
     OCLRT::IndirectHeap *indirectHeaps[NUM_HEAPS];
     OCLRT::ResidencyContainer residencyContainer;
-    std::vector<GraphicsAllocation *> printfBufferContainer;
+    std::vector<Function *> printfFunctionContainer;
 };
 
 struct CommandList : public CommandContainer {

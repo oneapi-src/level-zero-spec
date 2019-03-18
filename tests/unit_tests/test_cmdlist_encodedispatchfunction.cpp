@@ -91,34 +91,34 @@ struct CommandListAppendLaunchFunction : public ::testing::Test {
     GraphicsAllocation *buffer2 = nullptr;
 };
 
-TEST_F(CommandListAppendLaunchFunction, storesPrintfBufferWhenPrintfUsedByFunction) {
+TEST_F(CommandListAppendLaunchFunction, storesFunctionWhenPrintfUsedByFunction) {
     createFunction("Printf");
 
     auto result = commandList->appendLaunchFunction(function->toHandle(),
                                                       &dispatchFunctionArguments,
                                                       nullptr);
 
-    EXPECT_EQ(1u, commandList->printfBufferContainer.size());
-    EXPECT_EQ(function->getPrintfBufferAllocation(), commandList->printfBufferContainer[0]);
+    EXPECT_EQ(1u, commandList->printfFunctionContainer.size());
+    EXPECT_EQ(function, commandList->printfFunctionContainer[0]);
     EXPECT_EQ(XE_RESULT_SUCCESS, result);
 }
 
-TEST_F(CommandListAppendLaunchFunction, storesPrintfBufferOnceWhenAppendingFunctionMultipleTimes) {
+TEST_F(CommandListAppendLaunchFunction, storesFunctionOnceWhenAppendingFunctionMultipleTimes) {
     createFunction("Printf");
 
     auto result = commandList->appendLaunchFunction(function->toHandle(),
                                                       &dispatchFunctionArguments,
                                                       nullptr);
 
-    EXPECT_EQ(1u, commandList->printfBufferContainer.size());
-    EXPECT_EQ(function->getPrintfBufferAllocation(), commandList->printfBufferContainer[0]);
+    EXPECT_EQ(1u, commandList->printfFunctionContainer.size());
+    EXPECT_EQ(function, commandList->printfFunctionContainer[0]);
     EXPECT_EQ(XE_RESULT_SUCCESS, result);
 
     result = commandList->appendLaunchFunction(function->toHandle(),
                                                  &dispatchFunctionArguments,
                                                  nullptr);
 
-    EXPECT_EQ(1u, commandList->printfBufferContainer.size());
+    EXPECT_EQ(1u, commandList->printfFunctionContainer.size());
 }
 
 ATSTEST_F(CommandListAppendLaunchFunction, addsWalkerToCommandStream) {

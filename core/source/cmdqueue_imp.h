@@ -1,5 +1,6 @@
 #pragma once
 #include "cmdqueue.h"
+#include <vector>
 
 namespace OCLRT {
 class LinearStream;
@@ -7,6 +8,7 @@ class LinearStream;
 
 namespace L0 {
 struct CommandList;
+struct Function;
 struct GraphicsAllocation;
 
 struct CommandQueueImp : public CommandQueue {
@@ -36,6 +38,7 @@ struct CommandQueueImp : public CommandQueue {
     GraphicsAllocation *allocation;
     OCLRT::LinearStream *commandStream;
     uint32_t taskCount = 0;
+    std::vector<Function *> printfFunctionContainer;
 };
 
 } // namespace L0

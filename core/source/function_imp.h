@@ -126,6 +126,8 @@ struct FunctionImp : Function {
         return this->printfBuffer;
     }
 
+    void printPrintfOutput() override;
+
   protected:
     template <typename T>
     void patchCrossThreadData(uint32_t location, const T &value);
