@@ -1,10 +1,6 @@
 <%!
 import re
 from templates import helper as th
-
-def declare_type(obj, cls, cli):
-    return re.match(r"class", obj['type'])
-
 %>/**************************************************************************//**
 * INTEL CONFIDENTIAL  
 * Copyright 2019  
@@ -33,7 +29,7 @@ def declare_type(obj, cls, cli):
 * @brief C++ wrapper of ${th.subx(x, header['desc'])}
 *
 * @cond DEV
-* DO NOT EDIT: generated from /scripts/${type}/${name}.yml
+* DO NOT EDIT: generated from /scripts/${section}/${name}.yml
 * @endcond
 *
 ******************************************************************************/
@@ -50,31 +46,67 @@ def declare_type(obj, cls, cli):
 namespace ${x}
 {
 %for obj in objects:
-%for cli, cls in enumerate(obj['class']):
-%if declare_type(obj, cls, cli):
-    ## CLASS FUNCTION #############################################################
-    %for f in th.filter_items(th.extract_objs(specs, "function"), 'class', obj['name']):
-%if 'condition' in f:
-#if ${th.subx(x,f['condition'])}
-%endif
+%if re.match(r"class", obj['type']) or (re.match(r"function", obj['type']) and ('class' not in obj or re.match(r"\$x$", obj['class']))):
+%if re.match(r"function", obj['type']):
+    ## FUNCTION ###################################################################
     ///////////////////////////////////////////////////////////////////////////////
-    /// @brief C++ wrapper for ::${th.make_func_name(x, f, obj['name'])}
-    inline void ${th.subx(None, obj['name'])}::${th.subx(None, f['name'])}(
-        %for line in th.make_param_lines(None, f, 'this'):
+%if 'condition' in obj:
+#if ${th.subx(x, obj['condition'])}
+%endif
+    /// @brief C++ wrapper for ::${th.make_func_name(x, obj)}
+    %for line in th.make_details_lines(None, obj):
+    /// ${line}
+    %endfor
+    /// 
+    %for line in th.make_returns_lines(None, obj, True):
+    /// ${line}
+    %endfor
+    inline ${th.make_return_value(None, obj)} 
+    ${th.make_func_name(None, obj, True)}(
+        %for line in th.make_param_lines(None, obj, True):
         ${line}
         %endfor
         )
     {
-        // auto result = ::${th.make_func_name(x, f, obj['name'])}( ${th.make_param_call_str("handle", None, f, 'this')} );
+        // auto result = ::${th.make_func_name(x, obj)}( ${th.make_param_call_str("handle", None, obj, True)} );
+        // if( ::${X}_RESULT_SUCCESS != result ) throw exception(result, "${x}::${th.subx(None, obj['name'])}::${th.subx(None, obj['name'])}");
+    }
+%if 'condition' in obj:
+#endif // ${th.subx(x, obj['condition'])}
+%endif
+
+%elif re.match(r"class", obj['type']):
+    ## CLASS FUNCTION #############################################################
+    %for f in th.filter_items(th.extract_objs(specs, "function"), 'class', obj['name']):
+    ///////////////////////////////////////////////////////////////////////////////
+%if 'condition' in f:
+#if ${th.subx(x, f['condition'])}
+%endif
+    /// @brief C++ wrapper for ::${th.make_func_name(x, f)}
+    %for line in th.make_details_lines(None, f):
+    /// ${line}
+    %endfor
+    /// 
+    %for line in th.make_returns_lines(None, f, True):
+    /// ${line}
+    %endfor
+    inline ${th.make_return_value(None, f)} 
+    ${th.subx(None, obj['name'])}::${th.make_func_name(None, f, True)}(
+        %for line in th.make_param_lines(None, f, True):
+        ${line}
+        %endfor
+        )
+    {
+        // auto result = ::${th.make_func_name(x, f)}( ${th.make_param_call_str("handle", None, f, True)} );
         // if( ::${X}_RESULT_SUCCESS != result ) throw exception(result, "${x}::${th.subx(None, obj['name'])}::${th.subx(None, f['name'])}");
     }
 %if 'condition' in f:
-#endif // ${th.subx(x,f['condition'])}
+#endif // ${th.subx(x, f['condition'])}
 %endif
 
     %endfor
 %endif
-%endfor
+%endif
 %endfor
 } // namespace ${x}
 #endif // defined(__cplusplus)

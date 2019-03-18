@@ -1,16 +1,6 @@
 <%!
 import re
 from templates import helper as th
-
-def declare_type(obj, cls, cli):
-    if re.match(r"class", obj['type']):
-        return False
-    if cli > 0 and \
-        ( re.match(r"typedef", obj['type']) or \
-          re.match(r"enum", obj['type']) or re.match(r"struct", obj['type']) ):
-        return False
-    return True
-
 %>/**************************************************************************//**
 * INTEL CONFIDENTIAL  
 * Copyright 2019  
@@ -39,7 +29,7 @@ def declare_type(obj, cls, cli):
 * @brief ${th.subx(x, header['desc'])}
 *
 * @cond DEV
-* DO NOT EDIT: generated from /scripts/${type}/${name}.yml
+* DO NOT EDIT: generated from /scripts/${section}/${name}.yml
 * @endcond
 *
 ******************************************************************************/
@@ -60,8 +50,7 @@ extern "C" {
 #endif
 
 %for obj in objects:
-%for cli, cls in enumerate(obj['class']):
-%if declare_type(obj, cls, cli):
+%if not re.match(r"class", obj['type']):
 ///////////////////////////////////////////////////////////////////////////////
 %if 'condition' in obj:
 #if ${th.subx(x,obj['condition'])}
@@ -83,7 +72,7 @@ extern "C" {
 %elif re.match(r"typedef", obj['type']):
 %if 'params' in obj:
 typedef ${obj['returns']}(__${x}call *${th.subx(x, obj['name'])})(
-  %for line in th.make_param_lines(x, obj, cls):
+  %for line in th.make_param_lines(x, obj):
   ${line}
   %endfor
   );
@@ -111,12 +100,12 @@ typedef struct _${th.subx(x, obj['name'])}
 ## FUNCTION ###################################################################
 %elif re.match(r"function", obj['type']):
 /// 
-%for line in th.make_return_lines(x, obj, cls):
+%for line in th.make_returns_lines(x, obj):
 /// ${line}
 %endfor
 __${x}dllport ${x}_result_t __${x}call
-  ${th.make_func_name(x, obj, cls)}(
-    %for line in th.make_param_lines(x, obj, cls):
+${th.make_func_name(x, obj)}(
+    %for line in th.make_param_lines(x, obj):
     ${line}
     %endfor
     );
@@ -129,7 +118,6 @@ typedef struct _${th.subx(x, obj['name'])} *${th.subx(x, obj['name'])};
 %endif
 
 %endif
-%endfor
 %endfor
 #if defined(__cplusplus)
 } // extern "C"

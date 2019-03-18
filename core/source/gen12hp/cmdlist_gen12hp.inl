@@ -20,8 +20,8 @@ void CommandListCoreFamily<IGFX_GEN12_CORE>::programFrontEndState() {
 }
 
 template <>
-xe_result_t CommandListCoreFamily<IGFX_GEN12_CORE>::encodeDispatchFunction(xe_function_handle_t hFunction,
-                                                                           const xe_dispatch_function_arguments_t *pDispatchFuncArgs,
+xe_result_t CommandListCoreFamily<IGFX_GEN12_CORE>::appendLaunchFunction(xe_function_handle_t hFunction,
+                                                                           const xe_thread_group_dimensions_t *pDispatchFuncArgs,
                                                                            xe_event_handle_t hEvent) {
     using GfxFamily = typename OCLRT::GfxFamilyMapper<IGFX_GEN12_CORE>::GfxFamily;
     using COMPUTE_WALKER = typename GfxFamily::COMPUTE_WALKER;
@@ -29,7 +29,6 @@ xe_result_t CommandListCoreFamily<IGFX_GEN12_CORE>::encodeDispatchFunction(xe_fu
 
     // Set # of threadgroups in each dimension
     assert(pDispatchFuncArgs);
-    assert(pDispatchFuncArgs->version == XE_DISPATCH_FUNCTION_ARGS_VERSION);
     COMPUTE_WALKER cmd = GfxFamily::cmdInitGpgpuWalker;
     cmd.setThreadGroupIdXDimension(pDispatchFuncArgs->groupCountX);
     cmd.setThreadGroupIdYDimension(pDispatchFuncArgs->groupCountY);

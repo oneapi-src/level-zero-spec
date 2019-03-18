@@ -25,7 +25,7 @@
 *
 * @brief Intel Xe Driver APIs for Sampler
 *
-* DO NOT EDIT: generated from /scripts/<type>/sampler.yml
+* DO NOT EDIT: generated from /scripts/core/sampler.yml
 *
 ******************************************************************************/
 #if defined(XE_CPP)
@@ -59,16 +59,16 @@
 ///         + nullptr == hDevice
 ///         + nullptr == pDesc
 ///         + nullptr == phSampler
-///         + invalid pDesc->addressingMode
+///         + invalid pDesc->addressMode
 ///         + invalid pDesc->filterMode
 ///     - ::XE_RESULT_ERROR_UNSUPPORTED
-///         + ::XE_SAMPLER_DESC_VERSION < pDesc->version
+///         + ::XE_SAMPLER_DESC_VERSION_CURRENT < pDesc->version
 ///     - ::XE_RESULT_ERROR_OUT_OF_HOST_MEMORY
 ///
 /// @hash {d6e17778345dc3a543e1add74375d5b50c06e8a5678e82e59353e25f9eabf95f}
 ///
 __xedllexport xe_result_t __xecall
-  xeDeviceCreateSampler(
+xeDeviceCreateSampler(
     xe_device_handle_t hDevice,                     ///< [in] handle of the device
     const xe_sampler_desc_t* pDesc,                 ///< [in] pointer to sampler descriptor
     xe_sampler_handle_t* phSampler                  ///< [out] handle of the sampler
@@ -83,7 +83,7 @@ __xedllexport xe_result_t __xecall
             if( nullptr == hDevice ) return XE_RESULT_ERROR_INVALID_PARAMETER;
             if( nullptr == pDesc ) return XE_RESULT_ERROR_INVALID_PARAMETER;
             if( nullptr == phSampler ) return XE_RESULT_ERROR_INVALID_PARAMETER;
-            if( XE_SAMPLER_DESC_VERSION < pDesc->version ) return XE_RESULT_ERROR_UNSUPPORTED;
+            if( XE_SAMPLER_DESC_VERSION_CURRENT < pDesc->version ) return XE_RESULT_ERROR_UNSUPPORTED;
         }
         /// @begin
 #if defined(XE_NULLDRV)
@@ -133,7 +133,7 @@ __xedllexport xe_result_t __xecall
 /// @hash {d7fa8a6bd2aa22fb9d7517a0588c9dfac772618e2475bbb7258b1cfcf08d6b1b}
 ///
 __xedllexport xe_result_t __xecall
-  xeSamplerDestroy(
+xeSamplerDestroy(
     xe_sampler_handle_t hSampler                    ///< [in] handle of the sampler
     )
 {

@@ -17,20 +17,20 @@ using ::testing::_;
 using ::testing::AnyNumber;
 using ::testing::Return;
 
-TEST(xeCommandListEncodeWaitOnEvent, redirectsToObject) {
+TEST(xeCommandListAppendWaitOnEvent, redirectsToObject) {
     Mock<CommandList> commandList;
     Mock<Event> event;
 
-    EXPECT_CALL(commandList, encodeWaitOnEvent(event.toHandle())).Times(1);
+    EXPECT_CALL(commandList, appendWaitOnEvent(event.toHandle())).Times(1);
 
-    auto result = xeCommandListEncodeWaitOnEvent(commandList.toHandle(),
+    auto result = xeCommandListAppendWaitOnEvent(commandList.toHandle(),
                                                  event.toHandle());
     EXPECT_EQ(XE_RESULT_SUCCESS, result);
 }
 
-using CommandListEncodeWaitOnEvent = ::testing::Test;
+using CommandListAppendWaitOnEvent = ::testing::Test;
 
-HWTEST_F(CommandListEncodeWaitOnEvent, addsSemaphoreToCommandStream) {
+HWTEST_F(CommandListAppendWaitOnEvent, addsSemaphoreToCommandStream) {
     Mock<Device> device;
 
     auto commandList = whitebox_cast(CommandList::create(productFamily, &device));
@@ -38,7 +38,7 @@ HWTEST_F(CommandListEncodeWaitOnEvent, addsSemaphoreToCommandStream) {
     auto usedSpaceBefore = commandList->commandStream->getUsed();
 
     Mock<Event> event;
-    auto result = commandList->encodeWaitOnEvent(event.toHandle());
+    auto result = commandList->appendWaitOnEvent(event.toHandle());
     ASSERT_EQ(XE_RESULT_SUCCESS, result);
 
     auto usedSpaceAfter = commandList->commandStream->getUsed();
@@ -60,7 +60,7 @@ HWTEST_F(CommandListEncodeWaitOnEvent, addsSemaphoreToCommandStream) {
     }
 }
 
-HWTEST_F(CommandListEncodeWaitOnEvent, addsEventGraphicsAllocationToResidencyContainer) {
+HWTEST_F(CommandListAppendWaitOnEvent, addsEventGraphicsAllocationToResidencyContainer) {
     Mock<Device> device;
 
     auto commandList = whitebox_cast(CommandList::create(productFamily, &device));
@@ -68,7 +68,7 @@ HWTEST_F(CommandListEncodeWaitOnEvent, addsEventGraphicsAllocationToResidencyCon
     auto usedSpaceBefore = commandList->commandStream->getUsed();
 
     Mock<Event> event;
-    auto result = commandList->encodeWaitOnEvent(event.toHandle());
+    auto result = commandList->appendWaitOnEvent(event.toHandle());
     ASSERT_EQ(XE_RESULT_SUCCESS, result);
 
     auto &residencyContainer = commandList->residencyContainer;

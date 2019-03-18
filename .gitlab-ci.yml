@@ -11,8 +11,16 @@ generate_html:
     name: "%CI_JOB_NAME%"
     paths:
       - html/
+    expire_in: 1 week
+  only:
+    refs:
+      - master
+      - staging_ci
   tags:
-    - windows
+    - win
+    - python
+    - doxygen
+    - bt
 
 pages:
   stage: deploy
@@ -22,8 +30,14 @@ pages:
   artifacts:
     paths:
     - public
+  only:
+    refs:
+      - master
+      - staging_ci
   tags:
-    - windows
+    - win
+    - python
+    - bt
 
 linux:
   image: loki:latest

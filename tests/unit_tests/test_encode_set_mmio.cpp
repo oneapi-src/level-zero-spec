@@ -5,8 +5,8 @@ namespace L0 {
 namespace ult {
 
 using EncodeSetMMIO = CmdParseFixture;
-HWTEST2_F(EncodeSetMMIO, encodesAMI_LOAD_REGISTER_IMM, MatchAny) {
-    ::L0::EncodeSetMMIO<gfxCoreFamily>::encode(*commandList, 0xf00, 0xbaa);
+HWTEST2_F(EncodeSetMMIO, appendsAMI_LOAD_REGISTER_IMM, MatchAny) {
+    ::L0::EncodeSetMMIO<gfxCoreFamily>::append(*commandList, 0xf00, 0xbaa);
 
     parseCommandBuffer<FamilyType>();
 

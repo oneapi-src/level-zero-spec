@@ -43,7 +43,11 @@ extern "C" {
 
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief API version of ::xe_image_desc_t
-#define XE_IMAGE_DESC_VERSION  XE_MAKE_VERSION( 1, 0 )
+typedef enum _xe_image_desc_version_t
+{
+    XE_IMAGE_DESC_VERSION_CURRENT = XE_MAKE_VERSION( 1, 0 ),///< version 1.0
+
+} xe_image_desc_version_t;
 
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Supported image creation flags
@@ -87,7 +91,7 @@ typedef enum _xe_image_format_t
 /// @brief Image descriptor
 typedef struct _xe_image_desc_t
 {
-    uint32_t version;                               ///< [in] ::XE_IMAGE_DESC_VERSION
+    xe_image_desc_version_t version;                ///< [in] ::XE_IMAGE_DESC_VERSION_CURRENT
     xe_image_flag_t flags;                          ///< [in] creation flags
     xe_image_type_t type;                           ///< [in] image type
     xe_image_format_t format;                       ///< [in] image channel format
@@ -124,11 +128,11 @@ typedef struct _xe_image_desc_t
 ///         + nullptr == desc
 ///         + nullptr == phImage
 ///     - ::XE_RESULT_ERROR_UNSUPPORTED
-///         + ::XE_IMAGE_DESC_VERSION < desc->version
+///         + ::XE_IMAGE_DESC_VERSION_CURRENT < desc->version
 ///     - ::XE_RESULT_ERROR_OUT_OF_HOST_MEMORY
 ///     - ::XE_RESULT_ERROR_OUT_OF_DEVICE_MEMORY
 __xedllport xe_result_t __xecall
-  xeDeviceCreateImage(
+xeDeviceCreateImage(
     xe_device_handle_t hDevice,                     ///< [in] handle of the device
     const xe_image_desc_t* desc,                    ///< [in] pointer to image descriptor
     xe_image_handle_t* phImage                      ///< [out] pointer to handle of image object created
@@ -152,7 +156,7 @@ __xedllport xe_result_t __xecall
 ///         + nullptr == hImage
 ///     - ::XE_RESULT_ERROR_UNSUPPORTED
 __xedllport xe_result_t __xecall
-  xeImageDestroy(
+xeImageDestroy(
     xe_image_handle_t hImage                        ///< [in] handle of image object to destroy
     );
 

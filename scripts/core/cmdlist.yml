@@ -2,10 +2,14 @@
 type: header
 desc: "Intel $Xx Driver APIs for Command List"
 --- #--------------------------------------------------------------------------
-type: macro
+type: enum
 desc: "API version of $x_command_list_desc_t"
-name: $X_COMMAND_LIST_DESC_VERSION
-value: "$X_MAKE_VERSION( 1, 0 )"
+class: $xDevice
+name: $x_command_list_desc_version_t
+etors:
+    - name: $X_COMMAND_LIST_DESC_VERSION_CURRENT
+      value: "$X_MAKE_VERSION( 1, 0 )"
+      desc: "version 1.0"
 --- #--------------------------------------------------------------------------
 type: enum
 desc: "Supported command list creation flags"
@@ -33,10 +37,10 @@ desc: "Command List descriptor"
 class: $xDevice
 name: $x_command_list_desc_t
 members:
-    - type: uint32_t
+    - type: $x_command_list_desc_version_t
       name: version
-      desc: "[in] $X_COMMAND_LIST_DESC_VERSION"
-      init: $X_COMMAND_LIST_DESC_VERSION
+      desc: "[in] $X_COMMAND_LIST_DESC_VERSION_CURRENT"
+      init: $X_COMMAND_LIST_DESC_VERSION_CURRENT
     - type: $x_command_list_flag_t
       name: flags
       desc: "[in] creation flags"
@@ -103,7 +107,7 @@ params:
       desc: "[in] handle of command list object to destroy"
 --- #--------------------------------------------------------------------------
 type: function
-desc: "Closes a command list; ready to be enqueued into a command queue."
+desc: "Closes a command list; ready to be executed by a command queue."
 class: $xCommandList
 name: Close
 details:
@@ -115,7 +119,7 @@ params:
       desc: "[in] handle of command list object to close"
 --- #--------------------------------------------------------------------------
 type: function
-desc: "Reset a command list to initial (empty) state; ready for encoding commands."
+desc: "Reset a command list to initial (empty) state; ready for appending commands."
 class: $xCommandList
 name: Reset
 details:
@@ -200,10 +204,11 @@ params:
       desc: "[in] handle of the command list"
 --- #--------------------------------------------------------------------------
 type: function
-desc: "Encode a command list into another command list."
+desc: "Append a command list into another command list."
 class: $xCommandList
-name: EncodeCommandLists
+name: AppendCommandLists
 details:
+    - "All command lists appended must have been created with compatible $x_command_list_flag_t values."
     - "The application may **not** call this function from simultaneous threads with the same command list handle."
     - "The implementation of this function should be lock-free."
 params:
@@ -212,46 +217,34 @@ params:
       desc: "[in] handle of the command list"
     - type: uint32_t
       name: numCommandLists
-      desc: "[in] number of command lists to encode"
+      desc: "[in] number of command lists to append"
     - type: "$x_command_list_handle_t*"
       name: phCommandLists
-      desc: "[in] list of handles of the command lists to encode for execution"
+      desc: "[in] list of handles of the command lists to append for execution"
 returns:
     - $X_RESULT_ERROR_INVALID_PARAMETER:
        - "0 for numCommandLists"
 --- #--------------------------------------------------------------------------
-type: enum
-desc: "Support command formats"
-class: $xCommandList
-name: $x_command_format_t
-etors:
-    - name: $X_COMMAND_FORMAT_NATIVE
-      desc: "The commands are native device-specific format"
---- #--------------------------------------------------------------------------
 type: function
-desc: "Encode a pre-formatted blob of commands into the comamnd list."
+desc: "Reserve a section of contiguous command buffer space within the command list."
 class: $xCommandList
-name: EncodeCommands
+name: ReserveSpace
 details:
-    - "The commands are gaurenteed to be contiguous in the command buffer"
+    - "The pointer returned is valid for both Host and device access."
     - "The application may **not** call this function from simultaneous threads with the same command list handle."
     - "The implementation of this function should be lock-free."
 params:
     - type: $x_command_list_handle_t
       name: hCommandList
       desc: "[in] handle of the command list"
-    - type: $x_command_format_t
-      name: format
-      desc: "[in] format of the command blob"
     - type: size_t
       name: size
-      desc: "[in] size (in bytes) of the command blob"
-    - type: void*
-      name: pBlob
-      desc: "[in] pointer to blob of commands to encode into the command list"
+      desc: "[in] size (in bytes) to reserve"
+    - type: void**
+      name: ptr
+      desc: "[out] pointer to command buffer space reserved"
 returns:
     - $X_RESULT_ERROR_INVALID_PARAMETER:
-       - "invalid value for format"
        - "0 for size"
 --- #--------------------------------------------------------------------------
 type: class

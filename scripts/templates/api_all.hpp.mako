@@ -33,7 +33,6 @@ import re
 #define _${X}_ALL_HPP
 #if defined(__cplusplus)
 #pragma once
-#endif
 
 %for f in files:
 %if not re.match(r"\w+_common", f):
@@ -41,4 +40,5 @@ import re
 %endif
 %endfor
 
+#endif // defined(__cplusplus)
 #endif // _${X}_ALL_HPP

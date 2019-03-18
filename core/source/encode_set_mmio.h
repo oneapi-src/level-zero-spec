@@ -12,7 +12,7 @@ struct EncodeSetMMIO {
 
     static const size_t size = sizeof(MI_LOAD_REGISTER_IMM);
 
-    static void encode(CommandContainer &container, uint32_t offset, uint32_t data) {
+    static void append(CommandContainer &container, uint32_t offset, uint32_t data) {
         MI_LOAD_REGISTER_IMM cmd = GfxFamily::cmdInitLoadRegisterImm;
         cmd.setRegisterOffset(offset);
         cmd.setDataDword(data);

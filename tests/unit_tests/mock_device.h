@@ -18,7 +18,7 @@ struct Mock<Device> : public Device {
     virtual ~Mock();
 
     MOCK_METHOD2(canAccessPeer, xe_result_t(xe_device_handle_t hPeerDevice,
-                                            bool *value));
+                                            xe_bool_t *value));
     MOCK_METHOD2(copyCommandList, xe_result_t(xe_command_list_handle_t hCommandList,
                                               xe_command_list_handle_t *phCommandList));
 
@@ -41,13 +41,13 @@ struct Mock<Device> : public Device {
                                            xe_module_build_log_handle_t *buildLog));
     MOCK_METHOD2(createSampler, xe_result_t(const xe_sampler_desc_t *pDesc,
                                             xe_sampler_handle_t *phSampler));
-    MOCK_METHOD2(createSemaphore, xe_result_t(const xe_semaphore_desc_t *desc,
-                                              xe_semaphore_handle_t *phSemaphore));
     MOCK_METHOD1(evictImage, xe_result_t(xe_image_handle_t hImage));
     MOCK_METHOD2(evictMemory, xe_result_t(void *ptr,
                                           size_t size));
     MOCK_METHOD1(getApiVersion, xe_result_t(xe_api_version_t *version));
     MOCK_METHOD1(getComputeProperties, xe_result_t(xe_device_compute_properties_t *pComputeProperties));
+    MOCK_METHOD2(getLinkProperties, xe_result_t(xe_device_handle_t hPeerDevice,
+                                                xe_device_link_properties_t *pLinkProperties));
     MOCK_METHOD1(getMemoryProperties, xe_result_t(xe_device_memory_properties_t *pMemProperties));
     MOCK_METHOD1(getProperties, xe_result_t(xe_device_properties_t *pDeviceProperties));
     MOCK_METHOD2(getSubDevice, xe_result_t(uint32_t ordinal,

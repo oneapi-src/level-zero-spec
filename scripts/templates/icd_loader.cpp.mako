@@ -76,28 +76,26 @@ ${x}_result_t __${x}call ${x}DriverInit(${x}_init_flag_t flags){
 }
 
 %for obj in objects:
-%for cli, cls in enumerate(obj['class']):
 %if re.match(r"function", obj['type']):
-%if not "DriverInit" in th.make_func_name(x, obj, cls):
+%if not "DriverInit" in th.make_func_name(x, obj):
 %if 'condition' in obj:
 #if ${th.subx(x,obj['condition'])}
 %endif
-${x}_result_t __${x}call ${th.make_func_name(x, obj, cls)}(
-        %for line in th.make_param_lines(x, obj, cls):
+${x}_result_t __${x}call ${th.make_func_name(x, obj)}(
+        %for line in th.make_param_lines(x, obj):
         ${line}
         %endfor
     ){
     if(dispatchTableInitialized == false){
         return ${X}_RESULT_ERROR_UNINITIALIZED;
     }
-    return dispatchTable.${th.make_func_name(x, obj, cls)}(${th.make_forwarding_param_call_str(x, obj, cls)});
+    return dispatchTable.${th.make_func_name(x, obj)}(${th.make_forwarding_param_call_str(x, obj)});
 }
 %if 'condition' in obj:
 #endif // ${th.subx(x,obj['condition'])}
 %endif
 %endif
 %endif
-%endfor
 %endfor
 
 #if defined(__cplusplus)

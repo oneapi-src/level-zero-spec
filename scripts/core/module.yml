@@ -2,10 +2,14 @@
 type: header
 desc: "Intel $Xx Driver APIs for Module"
 --- #--------------------------------------------------------------------------
-type: macro
+type: enum
 desc: API version of $x_module_desc_t
-name: $X_MODULE_DESC_VERSION
-value: "$X_MAKE_VERSION( 1, 0 )"
+class: $xDevice
+name: $x_module_desc_version_t
+etors:
+    - name: $X_MODULE_DESC_VERSION_CURRENT
+      value: "$X_MAKE_VERSION( 1, 0 )"
+      desc: "version 1.0"
 --- #--------------------------------------------------------------------------
 type: enum
 desc: "Supported module creation input formats"
@@ -23,14 +27,14 @@ desc: "Module descriptor"
 class: $xDevice
 name: $x_module_desc_t
 members:
-    - type: uint32_t
+    - type: $x_module_desc_version_t
       name: version
-      desc: "[in] $X_MODULE_DESC_VERSION"
-      init: $X_MODULE_DESC_VERSION
+      desc: "[in] $X_MODULE_DESC_VERSION_CURRENT"
+      init: $X_MODULE_DESC_VERSION_CURRENT
     - type: "$x_module_format_t"
       name: format
       desc: "[in] Module format passed in with pInputModule"
-    - type: "uint32_t"
+    - type: "size_t"
       name: inputSize
       desc: "[in] size of input IL or ISA from pInputModule."
       init: "0"
@@ -40,7 +44,7 @@ members:
       init: nullptr
     - type: "const char*"
       name: pBuildFlags
-      desc: "[in] string containing compiler flags. See documentation for build flags."
+      desc: "[in] string containing compiler flags. See programming guide for build flags."
       init: nullptr
 --- #--------------------------------------------------------------------------
 type: function
@@ -128,10 +132,10 @@ params:
       desc: "[in] handle of the module build log object."
     - type: "size_t*"
       name: pSize
-      desc: "[out] size of build log string."
-    - type: "const char**"
+      desc: "[in,out] size of build log string."
+    - type: "char**"
       name: pBuildLog
-      desc: "[out] pointer to null-terminated string of the log."
+      desc: "[in,out][optional] pointer to null-terminated string of the log."
 returns:
     - $X_RESULT_ERROR_OUT_OF_HOST_MEMORY
     - $X_RESULT_ERROR_OUT_OF_DEVICE_MEMORY
@@ -150,22 +154,26 @@ params:
     - type: $x_module_handle_t
       name: hModule
       desc: "[in] handle of the device"
-    - type: "uint32_t*"
+    - type: "size_t*"
       name: pSize
-      desc: "[out] size of native binary."
-    - type: "char**"
+      desc: "[in,out] size of native binary."
+    - type: "void**"
       name: pModuleNativeBinary
-      desc: "[out] pointer to native binary"
+      desc: "[in,out][optional] pointer to native binary"
 returns:
     - $X_RESULT_ERROR_INVALID_PARAMETER:
         - "invalid format"
     - $X_RESULT_ERROR_OUT_OF_HOST_MEMORY
     - $X_RESULT_ERROR_OUT_OF_DEVICE_MEMORY
 --- #--------------------------------------------------------------------------
-type: macro
+type: enum
 desc: API version of $x_function_desc_t
-name: $X_FUNCTION_DESC_VERSION
-value: "$X_MAKE_VERSION( 1, 0 )"
+class: $xModule
+name: $x_function_desc_version_t
+etors:
+    - name: $X_FUNCTION_DESC_VERSION_CURRENT
+      value: "$X_MAKE_VERSION( 1, 0 )"
+      desc: "version 1.0"
 --- #--------------------------------------------------------------------------
 type: enum
 desc: "Supported function creation flags"
@@ -183,10 +191,10 @@ desc: "Function descriptor"
 class: $xModule
 name: $x_function_desc_t
 members:
-    - type: uint32_t
+    - type: $x_function_desc_version_t
       name: version
-      desc: "[in] $X_FUNCTION_DESC_VERSION"
-      init: $X_FUNCTION_DESC_VERSION
+      desc: "[in] $X_FUNCTION_DESC_VERSION_CURRENT"
+      init: $X_FUNCTION_DESC_VERSION_CURRENT
     - type: "$x_function_flag_t"
       name: flags
       desc: "[in] creation flags"
@@ -263,7 +271,7 @@ name: SetGroupSize
 details:
     - "The implementation of this function will immediately free all Host and Device allocations associated with this function"
     - "The implementation of this function should be lock-free."
-    - "This can be called multiple times. The driver copies the group size information when encoding dispatch functions into a command list."
+    - "This can be called multiple times. The driver copies the group size information when appending functions into a command list."
 params:
     - type: "$x_function_handle_t"
       name: hFunction
@@ -313,7 +321,7 @@ returns:
         - "invalid number of threads."
 --- #--------------------------------------------------------------------------
 type: function
-desc: "Set function argument used for function dispatch."
+desc: "Set function argument used on function launch."
 class: $xFunction
 name: SetArgumentValue
 details:
@@ -331,7 +339,7 @@ params:
       desc: "[in] size of argument type"
     - type: "const void*"
       name: pArgValue
-      desc: "[in] argument value represented as matching arg type"
+      desc: "[in][optional] argument value represented as matching arg type. If null then argument value is considered null."
 returns:
     - $X_RESULT_ERROR_INVALID_PARAMETER:
         - "invalid argument index"
@@ -420,113 +428,109 @@ returns:
     - $X_RESULT_ERROR_INVALID_PARAMETER:
         - "invalid value for attr"
 --- #--------------------------------------------------------------------------
-type: macro
-desc: API version of $x_function_desc_t
-name: $X_DISPATCH_FUNCTION_ARGS_VERSION
-value: "$X_MAKE_VERSION( 1, 0 )"
---- #--------------------------------------------------------------------------
 type: struct
-desc: "Dispatch function arguments."
-class: [ $xCommandList, $xCommandGraph ]
-name: $x_dispatch_function_arguments_t
+desc: "Function thread group dimensions."
+class: $xCommandList
+name: $x_thread_group_dimensions_t
 members:
     - type: "uint32_t"
-      name: version
-      desc: "[in] $X_DISPATCH_FUNCTION_ARGS_VERSION"
-      init: $X_DISPATCH_FUNCTION_ARGS_VERSION
-    - type: "uint32_t"
       name: groupCountX
-      desc: "[in] width of dispatches in X dimension"
+      desc: "[in] size of thread group in X dimension"
       init: "0"
     - type: "uint32_t"
       name: groupCountY
-      desc: "[in] width of dispatches in Y dimension"
+      desc: "[in] size of thread group in Y dimension"
       init: "0"
     - type: "uint32_t"
       name: groupCountZ
-      desc: "[in] width of dispatches in Z dimension"
+      desc: "[in] size of thread group in Z dimension"
       init: "0"
 --- #--------------------------------------------------------------------------
 type: function
-desc: "Dispatch command over one or more work groups."
-class: [ $xCommandList, $xCommandGraph ]
-name: EncodeDispatchFunction
+desc: "Launch function over one or more work groups."
+class: $xCommandList
+name: AppendLaunchFunction
 analogue:
     - "**cuLaunchKernel**"
 details:
+    - "This may **not** be called for a command list created with $X_COMMAND_LIST_FLAG_COPY_ONLY."
     - "This function may **not** be called from simultaneous threads."
     - "The implementation of this function should be lock-free."
 params:
     - type: "$x_command_list_handle_t"
       name: hCommandList
       desc: "[in] handle of the command list"
-      class: $xCommandList
-    - type: $x_command_graph_handle_t
-      name: hCommandGraph
-      desc: "[in] handle of the command graph"
-      class: $xCommandGraph
     - type: "$x_function_handle_t"
       name: hFunction
       desc: "[in] handle of the function object"
-    - type: "const $x_dispatch_function_arguments_t*"
-      name: pDispatchFuncArgs
-      desc: "[in] dispatch function arguments."
+    - type: "const $x_thread_group_dimensions_t*"
+      name: pLaunchFuncArgs
+      desc: "[in] launch function arguments."
     - type: $x_event_handle_t
       name: hEvent
       desc: "[in][optional] handle of the event to signal on completion"
-returns:
-    - $X_RESULT_ERROR_INVALID_PARAMETER:
-        - "invalid group count range for dispatch"
-        - "invalid dispatch count range for dispatch"
---- #--------------------------------------------------------------------------
-type: struct
-desc: "Indirect function arguments. These arguments are device visible."
-class: [ $xCommandList, $xCommandGraph ]
-name: $x_dispatch_function_indirect_arguments_t
-members:
-    - type: "uint32_t"
-      name: groupCountX
-      desc: "[in] width of dispatches in X dimension"
-    - type: "uint32_t"
-      name: groupCountY
-      desc: "[in] width of dispatches in Y dimension"
-    - type: "uint32_t"
-      name: groupCountZ
-      desc: "[in] width of dispatches in Z dimension"
 --- #--------------------------------------------------------------------------
 type: function
-desc: "Dispatch command over one or more work groups using indirect dispatch arguments."
-class: [ $xCommandList, $xCommandGraph ]
-name: EncodeDispatchFunctionIndirect
+desc: "Launch function over one or more work groups using indirect arguments."
+class: $xCommandList
+name: AppendLaunchFunctionIndirect
 analogue:
     - "**cuLaunchKernel**"
 details:
+    - "The launch arguments need to be device visible."
+    - "The launch arguments buffer may not be reusued until the function has completed on the device."
+    - "This may **not** be called for a command list created with $X_COMMAND_LIST_FLAG_COPY_ONLY."
     - "This function may **not** be called from simultaneous threads."
     - "The implementation of this function should be lock-free."
-    - "The dispatch arguments need to be device visible."
-    - "The dispatch arguments buffer may not be reusued until dispatch has completed on the device."
 params:
     - type: "$x_command_list_handle_t"
       name: hCommandList
       desc: "[in] handle of the command list"
-      class: $xCommandList
-    - type: $x_command_graph_handle_t
-      name: hCommandGraph
-      desc: "[in] handle of the command graph"
-      class: $xCommandGraph
     - type: "$x_function_handle_t"
       name: hFunction
       desc: "[in] handle of the function object"
-    - type: "const $x_dispatch_function_indirect_arguments_t*"
-      name: pDispatchArgumentsBuffer
-      desc: "[in] Pointer to buffer that will contain dispatch arguments."
+    - type: "const $x_thread_group_dimensions_t*"
+      name: pLaunchArgumentsBuffer
+      desc: "[in] pointer to device buffer that will contain launch arguments"
+    - type: $x_event_handle_t
+      name: hEvent
+      desc: "[in][optional] handle of the event to signal on completion"
+--- #--------------------------------------------------------------------------
+type: function
+desc: "Launch multiple functions over one or more work groups using an array of indirect arguments."
+class: $xCommandList
+name: AppendLaunchMultipleFunctionsIndirect
+analogue:
+    - "**cuLaunchKernel**"
+details:
+    - "The array of launch arguments need to be device visible."
+    - "The array of launch arguments buffer may not be reusued until the function has completed on the device."
+    - "This may **not** be called for a command list created with $X_COMMAND_LIST_FLAG_COPY_ONLY."
+    - "This function may **not** be called from simultaneous threads."
+    - "The implementation of this function should be lock-free."
+params:
+    - type: "$x_command_list_handle_t"
+      name: hCommandList
+      desc: "[in] handle of the command list"
+    - type: uint32_t
+      name: numFunctions
+      desc: "[in] maximum number of functions to launch"
+    - type: "const $x_function_handle_t*"
+      name: phFunctions
+      desc: "[in] handles of the function objects"
+    - type: "const size_t*"
+      name: pNumLaunchArguments
+      desc: "[in] pointer to device memory location that will contain the actual number of launch arguments; must be less-than or equal-to numFunctions"
+    - type: "const $x_thread_group_dimensions_t*"
+      name: pLaunchArgumentsBuffer
+      desc: "[in] pointer to device buffer that will contain a contiguous array of launch arguments"
     - type: $x_event_handle_t
       name: hEvent
       desc: "[in][optional] handle of the event to signal on completion"
 --- #--------------------------------------------------------------------------
 type: typedef
-desc: "type definition for host function pointers used with $xCommandListEncodeDispatchHostFunction"
-class: [ $xCommandList, $xCommandGraph ]
+desc: "type definition for host function pointers used with $xCommandListAppendLaunchHostFunction"
+class: $xCommandList
 name: $x_host_pfn_t
 returns: void
 details:
@@ -538,23 +542,19 @@ params:
       desc: "[in] Pointer to user data to pass to host function."
 --- #--------------------------------------------------------------------------
 type: function
-desc: "Dispatch host function. All work after this command in the command list will block until host function completes."
-class: [ $xCommandList, $xCommandGraph ]
-name: EncodeDispatchHostFunction
+desc: "Launch host function. All work after this command in the command list will block until host function completes."
+class: $xCommandList
+name: AppendLaunchHostFunction
 analogue:
     - "**cuLaunchHostFunc**"
 details:
+    - "This may **not** be called for a command list created with $X_COMMAND_LIST_FLAG_COPY_ONLY."
     - "This function may **not** be called from simultaneous threads."
     - "The implementation of this function should be lock-free."
 params:
     - type: "$x_command_list_handle_t"
       name: hCommandList
       desc: "[in] handle of the command list"
-      class: $xCommandList
-    - type: $x_command_graph_handle_t
-      name: hCommandGraph
-      desc: "[in] handle of the command graph"
-      class: $xCommandGraph
     - type: "$x_host_pfn_t"
       name: pfnHostFunc
       desc: "[in] pointer to host function."

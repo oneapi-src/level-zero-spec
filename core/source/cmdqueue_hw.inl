@@ -21,7 +21,7 @@ xe_result_t CommandQueueHw<gfxCoreFamily>::destroy() {
 }
 
 template <GFXCORE_FAMILY gfxCoreFamily>
-xe_result_t CommandQueueHw<gfxCoreFamily>::enqueueCommandLists(uint32_t numCommandLists,
+xe_result_t CommandQueueHw<gfxCoreFamily>::executeCommandLists(uint32_t numCommandLists,
                                                                xe_command_list_handle_t *phCommandLists,
                                                                xe_fence_handle_t hFence) {
     using GfxFamily = typename OCLRT::GfxFamilyMapper<gfxCoreFamily>::GfxFamily;

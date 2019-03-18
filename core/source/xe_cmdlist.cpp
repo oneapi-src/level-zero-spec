@@ -25,7 +25,7 @@
 *
 * @brief Intel Xe Driver APIs for Command List
 *
-* DO NOT EDIT: generated from /scripts/<type>/cmdlist.yml
+* DO NOT EDIT: generated from /scripts/core/cmdlist.yml
 *
 ******************************************************************************/
 #if defined(XE_CPP)
@@ -58,14 +58,14 @@
 ///         + nullptr == desc
 ///         + nullptr == phCommandList
 ///     - ::XE_RESULT_ERROR_UNSUPPORTED
-///         + ::XE_COMMAND_LIST_DESC_VERSION < desc->version
+///         + ::XE_COMMAND_LIST_DESC_VERSION_CURRENT < desc->version
 ///     - ::XE_RESULT_ERROR_OUT_OF_HOST_MEMORY
 ///     - ::XE_RESULT_ERROR_OUT_OF_DEVICE_MEMORY
 ///
 /// @hash {30179944405dd754aa51afa884ab3ef58a0b94bbdda27c2776a05c23c12678dc}
 ///
 __xedllexport xe_result_t __xecall
-  xeDeviceCreateCommandList(
+xeDeviceCreateCommandList(
     xe_device_handle_t hDevice,                     ///< [in] handle of the device object
     const xe_command_list_desc_t* desc,             ///< [in] pointer to command list descriptor
     xe_command_list_handle_t* phCommandList         ///< [out] pointer to handle of command list object created
@@ -80,7 +80,7 @@ __xedllexport xe_result_t __xecall
             if( nullptr == hDevice ) return XE_RESULT_ERROR_INVALID_PARAMETER;
             if( nullptr == desc ) return XE_RESULT_ERROR_INVALID_PARAMETER;
             if( nullptr == phCommandList ) return XE_RESULT_ERROR_INVALID_PARAMETER;
-            if( XE_COMMAND_LIST_DESC_VERSION < desc->version ) return XE_RESULT_ERROR_UNSUPPORTED;
+            if( XE_COMMAND_LIST_DESC_VERSION_CURRENT < desc->version ) return XE_RESULT_ERROR_UNSUPPORTED;
         }
         /// @begin
 #if defined(XE_NULLDRV)
@@ -133,7 +133,7 @@ __xedllexport xe_result_t __xecall
 /// @hash {cb04dd0733e58a851c0572d742124358b24254aa21c3320c9473cb8aa20a5a7f}
 ///
 __xedllexport xe_result_t __xecall
-  xeDeviceCopyCommandList(
+xeDeviceCopyCommandList(
     xe_device_handle_t hDevice,                     ///< [in] handle of the device object
     xe_command_list_handle_t hCommandList,          ///< [in] handle to command list to copy
     xe_command_list_handle_t* phCommandList         ///< [out] pointer to handle of command list object created
@@ -193,7 +193,7 @@ __xedllexport xe_result_t __xecall
 /// @hash {bda478b6a2926bea888c8c1b4c9a333a3a13205d3fc16d3ae0972b97335fc4ff}
 ///
 __xedllexport xe_result_t __xecall
-  xeCommandListDestroy(
+xeCommandListDestroy(
     xe_command_list_handle_t hCommandList           ///< [in] handle of command list object to destroy
     )
 {
@@ -229,7 +229,7 @@ __xedllexport xe_result_t __xecall
 }
 
 ///////////////////////////////////////////////////////////////////////////////
-/// @brief Closes a command list; ready to be enqueued into a command queue.
+/// @brief Closes a command list; ready to be executed by a command queue.
 /// 
 /// @details
 ///     - The application may **not** call this function from simultaneous
@@ -247,7 +247,7 @@ __xedllexport xe_result_t __xecall
 /// @hash {90afb0f4260abf7f09ed295975efc80087058f86a66e73983dd9c9b30f8b2a48}
 ///
 __xedllexport xe_result_t __xecall
-  xeCommandListClose(
+xeCommandListClose(
     xe_command_list_handle_t hCommandList           ///< [in] handle of command list object to close
     )
 {
@@ -283,7 +283,7 @@ __xedllexport xe_result_t __xecall
 }
 
 ///////////////////////////////////////////////////////////////////////////////
-/// @brief Reset a command list to initial (empty) state; ready for encoding
+/// @brief Reset a command list to initial (empty) state; ready for appending
 ///        commands.
 /// 
 /// @details
@@ -304,7 +304,7 @@ __xedllexport xe_result_t __xecall
 /// @hash {66bc9e2b7766eb06b0315ded3a6c40ea09ad7181fb12b2ad53d2c3d801085382}
 ///
 __xedllexport xe_result_t __xecall
-  xeCommandListReset(
+xeCommandListReset(
     xe_command_list_handle_t hCommandList           ///< [in] handle of command list object to reset
     )
 {
@@ -366,7 +366,7 @@ __xedllexport xe_result_t __xecall
 /// @hash {d9caf889451be1ea8e3cc168591fd03c2dca3f8b5650b0bc13252abbcd50c3f3}
 ///
 __xedllexport xe_result_t __xecall
-  xeCommandListSetParameter(
+xeCommandListSetParameter(
     xe_command_list_handle_t hCommandList,          ///< [in] handle of command list
     xe_command_list_parameter_t parameter,          ///< [in] parameter to change
     uint32_t value                                  ///< [in] value of attribute
@@ -431,7 +431,7 @@ __xedllexport xe_result_t __xecall
 /// @hash {777661badc06e83cb81081081ac71fb368cdd3cc235e1d188eeeaae409158e59}
 ///
 __xedllexport xe_result_t __xecall
-  xeCommandListGetParameter(
+xeCommandListGetParameter(
     xe_command_list_handle_t hCommandList,          ///< [in] handle of command list
     xe_command_list_parameter_t parameter,          ///< [in] parameter to retrieve
     uint32_t* value                                 ///< [out] value of attribute
@@ -488,7 +488,7 @@ __xedllexport xe_result_t __xecall
 /// @hash {395c8a05f90f7eeaba849d437320a99b66722039d7cb081a256ed4c16d408edf}
 ///
 __xedllexport xe_result_t __xecall
-  xeCommandListResetParameters(
+xeCommandListResetParameters(
     xe_command_list_handle_t hCommandList           ///< [in] handle of the command list
     )
 {
@@ -524,9 +524,11 @@ __xedllexport xe_result_t __xecall
 }
 
 ///////////////////////////////////////////////////////////////////////////////
-/// @brief Encode a command list into another command list.
+/// @brief Append a command list into another command list.
 /// 
 /// @details
+///     - All command lists appended must have been created with compatible
+///       ::xe_command_list_flag_t values.
 ///     - The application may **not** call this function from simultaneous
 ///       threads with the same command list handle.
 ///     - The implementation of this function should be lock-free.
@@ -541,13 +543,13 @@ __xedllexport xe_result_t __xecall
 ///         + 0 for numCommandLists
 ///     - ::XE_RESULT_ERROR_UNSUPPORTED
 ///
-/// @hash {596df05be8f869f5f8e50121263d6be6d062370e8ebddec124125948e8b8f644}
+/// @hash {6af4a62bc12195fc24ebc912fa2094083d41e42d978fbdf1485c0f4bbba64beb}
 ///
 __xedllexport xe_result_t __xecall
-  xeCommandListEncodeCommandLists(
+xeCommandListAppendCommandLists(
     xe_command_list_handle_t hCommandList,          ///< [in] handle of the command list
-    uint32_t numCommandLists,                       ///< [in] number of command lists to encode
-    xe_command_list_handle_t* phCommandLists        ///< [in] list of handles of the command lists to encode for execution
+    uint32_t numCommandLists,                       ///< [in] number of command lists to append
+    xe_command_list_handle_t* phCommandLists        ///< [in] list of handles of the command lists to append for execution
     )
 {
     try
@@ -563,7 +565,7 @@ __xedllexport xe_result_t __xecall
 #if defined(XE_NULLDRV)
         return XE_RESULT_SUCCESS;
 #else
-        return L0::CommandList::fromHandle(hCommandList)->encodeCommandLists(numCommandLists, phCommandLists);
+        return L0::CommandList::fromHandle(hCommandList)->appendCommandLists(numCommandLists, phCommandLists);
 #endif
         /// @end
     }
@@ -583,10 +585,11 @@ __xedllexport xe_result_t __xecall
 }
 
 ///////////////////////////////////////////////////////////////////////////////
-/// @brief Encode a pre-formatted blob of commands into the comamnd list.
+/// @brief Reserve a section of contiguous command buffer space within the
+///        command list.
 /// 
 /// @details
-///     - The commands are gaurenteed to be contiguous in the command buffer
+///     - The pointer returned is valid for both Host and device access.
 ///     - The application may **not** call this function from simultaneous
 ///       threads with the same command list handle.
 ///     - The implementation of this function should be lock-free.
@@ -597,19 +600,17 @@ __xedllexport xe_result_t __xecall
 ///     - ::XE_RESULT_ERROR_DEVICE_LOST
 ///     - ::XE_RESULT_ERROR_INVALID_PARAMETER
 ///         + nullptr == hCommandList
-///         + nullptr == pBlob
-///         + invalid value for format
+///         + nullptr == ptr
 ///         + 0 for size
 ///     - ::XE_RESULT_ERROR_UNSUPPORTED
 ///
-/// @hash {4ee4c7f667ccfeddde2cf709cea446468d2e5a3703c9233d89defae89ed61118}
+/// @hash {761ce13c72759ff0166ff4c1e3dd2d68023e83574c3b51b6d90708bd0692fa23}
 ///
 __xedllexport xe_result_t __xecall
-  xeCommandListEncodeCommands(
+xeCommandListReserveSpace(
     xe_command_list_handle_t hCommandList,          ///< [in] handle of the command list
-    xe_command_format_t format,                     ///< [in] format of the command blob
-    size_t size,                                    ///< [in] size (in bytes) of the command blob
-    void* pBlob                                     ///< [in] pointer to blob of commands to encode into the command list
+    size_t size,                                    ///< [in] size (in bytes) to reserve
+    void** ptr                                      ///< [out] pointer to command buffer space reserved
     )
 {
     try
@@ -619,13 +620,13 @@ __xedllexport xe_result_t __xecall
             // if( nullptr == driver ) return XE_RESULT_ERROR_UNINITIALIZED;
             // Check parameters
             if( nullptr == hCommandList ) return XE_RESULT_ERROR_INVALID_PARAMETER;
-            if( nullptr == pBlob ) return XE_RESULT_ERROR_INVALID_PARAMETER;
+            if( nullptr == ptr ) return XE_RESULT_ERROR_INVALID_PARAMETER;
         }
         /// @begin
 #if defined(XE_NULLDRV)
         return XE_RESULT_SUCCESS;
 #else
-        return L0::CommandList::fromHandle(hCommandList)->encodeCommands(format, size, pBlob);
+        return L0::CommandList::fromHandle(hCommandList)->reserveSpace(size, ptr);
 #endif
         /// @end
     }

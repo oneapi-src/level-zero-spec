@@ -35,16 +35,13 @@
 #if defined(__cplusplus)
 #pragma once
 #include "xe_all.h"
+#include <tuple>
 
 namespace xe
 {
     ///////////////////////////////////////////////////////////////////////////////
-    /// @brief naming consistency
-    using float_t = ::float_t;
-
-    ///////////////////////////////////////////////////////////////////////////////
-    /// @brief naming consistency
-    using double_t = ::double_t;
+    /// @brief compiler-independent type
+    using bool_t = ::xe_bool_t;
 
     ///////////////////////////////////////////////////////////////////////////////
     /// @brief Handle of driver's device object
@@ -132,15 +129,6 @@ namespace xe
         ERROR_OUT_OF_DEVICE_MEMORY,                     ///< insufficient device memory to satisfy call
         ERROR_MODULE_BUILD_FAILURE,                     ///< error in building module
         ERROR_UNKNOWN = 0x7fffffff,                     ///< unknown or internal error
-
-    };
-
-    ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Supported synchronization modes
-    enum class synchronization_mode_t
-    {
-        POLL,                                           ///< poll on Host until device signals; lowest latency (default)
-        SLEEP,                                          ///< put Host thread to sleep until device signals
 
     };
 

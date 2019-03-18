@@ -2,10 +2,14 @@
 type: header
 desc: "Intel $Xx Driver APIs for Command Queue"
 --- #--------------------------------------------------------------------------
-type: macro
+type: enum
 desc: API version of $x_command_queue_desc_t
-name: $X_COMMAND_QUEUE_DESC_VERSION
-value: "$X_MAKE_VERSION( 1, 0 )"
+class: $xDevice
+name: $x_command_queue_desc_version_t
+etors:
+    - name: $X_COMMAND_QUEUE_DESC_VERSION_CURRENT
+      value: "$X_MAKE_VERSION( 1, 0 )"
+      desc: "version 1.0"
 --- #--------------------------------------------------------------------------
 type: enum
 desc: "Supported command queue flags"
@@ -21,6 +25,9 @@ etors:
     - name: $X_COMMAND_QUEUE_FLAG_LOGICAL_ONLY
       value: "$X_BIT(1)"
       desc: "command queue is not tied to a physical command queue; driver may dynamically assign based on usage"
+    - name: $X_COMMAND_QUEUE_FLAG_SINGLE_SLICE_ONLY
+      value: "$X_BIT(2)"
+      desc: "command queue reserves and cannot comsume more than a single slice' 'slice' size is device-specific.  cannot be combined with COPY_ONLY."
 --- #--------------------------------------------------------------------------
 type: enum
 desc: "Supported command queue modes"
@@ -31,7 +38,7 @@ etors:
       value: "0"
       desc: "implicit default behavior; uses driver-based heuristics"
     - name: $X_COMMAND_QUEUE_MODE_SYNCHRONOUS
-      desc: "GPU execution always completes immediately on enqueue;
+      desc: "GPU execution always completes immediately on execute;
             CPU thread is blocked using wait on implicit synchronization object"
     - name: $X_COMMAND_QUEUE_MODE_ASYNCHRONOUS
       desc: "GPU execution is scheduled and will complete in future;
@@ -55,10 +62,10 @@ desc: "Command Queue descriptor"
 class: $xDevice
 name: $x_command_queue_desc_t
 members:
-    - type: uint32_t
+    - type: $x_command_queue_desc_version_t
       name: version
-      desc: "[in] $X_COMMAND_QUEUE_DESC_VERSION"
-      init: $X_COMMAND_QUEUE_DESC_VERSION
+      desc: "[in] $X_COMMAND_QUEUE_DESC_VERSION_CURRENT"
+      init: $X_COMMAND_QUEUE_DESC_VERSION_CURRENT
     - type: $x_command_queue_flag_t
       name: flags
       desc: "[in] creation flags"
@@ -121,9 +128,9 @@ params:
       desc: "[in] handle of command queue object to destroy"
 --- #--------------------------------------------------------------------------
 type: function
-desc: "Enqueues a command list into a command queue for immediate execution."
+desc: "Executes a command list in a command queue."
 class: $xCommandQueue
-name: EnqueueCommandLists
+name: ExecuteCommandLists
 analogue:
     - vkQueueSubmit
 details:
@@ -135,10 +142,10 @@ params:
       desc: "[in] handle of the command queue"
     - type: uint32_t
       name: numCommandLists
-      desc: "[in] number of command lists to enqueue"
+      desc: "[in] number of command lists to execute"
     - type: "$x_command_list_handle_t*"
       name: phCommandLists
-      desc: "[in] list of handles of the command lists to enqueue for execution"
+      desc: "[in] list of handles of the command lists to execute"
     - type: $x_fence_handle_t
       name: hFence
       desc: "[in][optional] handle of the fence to signal on completion"
@@ -146,7 +153,6 @@ returns:
     - $X_RESULT_ERROR_INVALID_PARAMETER:
        - "0 for numCommandLists"
        - "hFence is in signaled state"
-       - "hFence is enqueued in another command queue"
 --- #--------------------------------------------------------------------------
 type: function
 desc: "Synchronizes a command queue by waiting on the host."
@@ -159,22 +165,11 @@ params:
     - type: $x_command_queue_handle_t
       name: hCommandQueue
       desc: "[in] handle of the command queue"
-    - type: $x_synchronization_mode_t
-      name: mode
-      desc: "[in] synchronization mode"
-    - type: uint32_t
-      name: delay
-      desc: "[in] if $X_SYNCHRONIZATION_MODE_SLEEP == mode, then time (in microseconds) to poll before putting Host thread to sleep; 
-            otherwise, must be zero."
-    - type: uint32_t
-      name: interval
-      desc: "[in] if $X_SYNCHRONIZATION_MODE_SLEEP == mode, then maximum time (in microseconds) to put Host thread to sleep between polling;
-            otherwise, must be zero."
     - type: uint32_t
       name: timeout
-      desc: "[in] if non-zero, then indicates the maximum time to poll or sleep before returning;
-            if zero, then only a single status check is made before immediately returning;
-            if MAX_UINT32, then function will not return until complete."
+      desc: "[in] if non-zero, then indicates the maximum time to yield before returning $X_RESULT_SUCCESS or $X_RESULT_NOT_READY;
+            if zero, then operates exactly like $xFenceQueryStatus;
+            if MAX_UINT32, then function will not return until complete or device is lost."
 returns:
     - $X_RESULT_NOT_READY:
        - "timeout expired"

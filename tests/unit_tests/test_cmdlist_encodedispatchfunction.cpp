@@ -26,28 +26,28 @@ using ::testing::_;
 using ::testing::AnyNumber;
 using ::testing::Return;
 
-TEST(xeCommandListEncodeDispatchFunction, redirectsToObject) {
+TEST(xeCommandListAppendLaunchFunction, redirectsToObject) {
     Mock<CommandList> commandList;
     Mock<Event> event;
     Mock<Function> function;
-    xe_dispatch_function_arguments_t dispatchFunctionArguments;
+    xe_thread_group_dimensions_t dispatchFunctionArguments;
 
-    EXPECT_CALL(commandList, encodeDispatchFunction(
+    EXPECT_CALL(commandList, appendLaunchFunction(
                                  function.toHandle(),
                                  &dispatchFunctionArguments,
                                  event.toHandle()))
         .Times(1);
 
-    auto result = xeCommandListEncodeDispatchFunction(commandList.toHandle(),
+    auto result = xeCommandListAppendLaunchFunction(commandList.toHandle(),
                                                       function.toHandle(),
                                                       &dispatchFunctionArguments,
                                                       event.toHandle());
     EXPECT_EQ(XE_RESULT_SUCCESS, result);
 }
 
-struct CommandListEncodeDispatchFunction : public ::testing::Test {
+struct CommandListAppendLaunchFunction : public ::testing::Test {
 
-    CommandListEncodeDispatchFunction() {
+    CommandListAppendLaunchFunction() {
     }
 
     void SetUp() override {
@@ -59,7 +59,6 @@ struct CommandListEncodeDispatchFunction : public ::testing::Test {
         commandList = whitebox_cast(CommandList::create(productFamily, &device));
         ASSERT_NE(commandList->commandStream, nullptr);
 
-        dispatchFunctionArguments.version = XE_DISPATCH_FUNCTION_ARGS_VERSION;
         dispatchFunctionArguments.groupCountX = 1u;
         dispatchFunctionArguments.groupCountY = 2u;
         dispatchFunctionArguments.groupCountZ = 3u;
@@ -86,18 +85,18 @@ struct CommandListEncodeDispatchFunction : public ::testing::Test {
     WhiteBox<::L0::CommandList> *commandList = nullptr;
 
     PrecompiledFunctionMock *function = nullptr;
-    xe_dispatch_function_arguments_t dispatchFunctionArguments;
+    xe_thread_group_dimensions_t dispatchFunctionArguments;
 
     GraphicsAllocation *buffer1 = nullptr;
     GraphicsAllocation *buffer2 = nullptr;
 };
 
-ATSTEST_F(CommandListEncodeDispatchFunction, addsWalkerToCommandStream) {
+ATSTEST_F(CommandListAppendLaunchFunction, addsWalkerToCommandStream) {
     createFunction("MemcpyBytes");
 
     auto usedSpaceBefore = commandList->commandStream->getUsed();
 
-    auto result = commandList->encodeDispatchFunction(function->toHandle(),
+    auto result = commandList->appendLaunchFunction(function->toHandle(),
                                                       &dispatchFunctionArguments,
                                                       nullptr);
     ASSERT_EQ(XE_RESULT_SUCCESS, result);
@@ -144,9 +143,9 @@ ATSTEST_F(CommandListEncodeDispatchFunction, addsWalkerToCommandStream) {
     }
 }
 
-ATSTEST_F(CommandListEncodeDispatchFunction, withBarrierAndSLMSetsIDDBarrierEnableAndSLMSize) {
+ATSTEST_F(CommandListAppendLaunchFunction, withBarrierAndSLMSetsIDDBarrierEnableAndSLMSize) {
     createFunction("SlmBarrier");
-    auto result = commandList->encodeDispatchFunction(function->toHandle(),
+    auto result = commandList->appendLaunchFunction(function->toHandle(),
                                                       &dispatchFunctionArguments,
                                                       nullptr);
     ASSERT_EQ(XE_RESULT_SUCCESS, result);
@@ -171,13 +170,13 @@ ATSTEST_F(CommandListEncodeDispatchFunction, withBarrierAndSLMSetsIDDBarrierEnab
     }
 }
 
-ATSTEST_F(CommandListEncodeDispatchFunction, withEventSetsPostSyncOp) {
+ATSTEST_F(CommandListAppendLaunchFunction, withEventSetsPostSyncOp) {
     createFunction("MemcpyBytes");
 
     auto usedSpaceBefore = commandList->commandStream->getUsed();
     auto event = whitebox_cast(Event::create(&device));
 
-    auto result = commandList->encodeDispatchFunction(function->toHandle(),
+    auto result = commandList->appendLaunchFunction(function->toHandle(),
                                                       &dispatchFunctionArguments,
                                                       event->toHandle());
     ASSERT_EQ(XE_RESULT_SUCCESS, result);
@@ -204,7 +203,7 @@ ATSTEST_F(CommandListEncodeDispatchFunction, withEventSetsPostSyncOp) {
     }
 }
 
-ATSTEST_F(CommandListEncodeDispatchFunction, copiesThreadDataToGeneralStateHeap) {
+ATSTEST_F(CommandListAppendLaunchFunction, copiesThreadDataToGeneralStateHeap) {
     createFunction("MemcpyBytes");
 
     using COMPUTE_WALKER = typename FamilyType::COMPUTE_WALKER;
@@ -213,7 +212,7 @@ ATSTEST_F(CommandListEncodeDispatchFunction, copiesThreadDataToGeneralStateHeap)
     auto heap = commandList->indirectHeaps[CommandList::GENERAL_STATE];
     heap->getSpace(COMPUTE_WALKER::INDIRECTDATASTARTADDRESS_ALIGN_SIZE - 1); // this will check if cmdlist takes care of heap allignment
 
-    auto result = commandList->encodeDispatchFunction(function->toHandle(),
+    auto result = commandList->appendLaunchFunction(function->toHandle(),
                                                       &dispatchFunctionArguments,
                                                       nullptr);
     ASSERT_EQ(XE_RESULT_SUCCESS, result);
@@ -243,7 +242,7 @@ ATSTEST_F(CommandListEncodeDispatchFunction, copiesThreadDataToGeneralStateHeap)
     }
 }
 
-ATSTEST_F(CommandListEncodeDispatchFunction, growsGeneralStateHeapIfNeededAndPreservesOldContents) {
+ATSTEST_F(CommandListAppendLaunchFunction, growsGeneralStateHeapIfNeededAndPreservesOldContents) {
     createFunction("MemcpyBytes");
 
     using COMPUTE_WALKER = typename FamilyType::COMPUTE_WALKER;
@@ -257,7 +256,7 @@ ATSTEST_F(CommandListEncodeDispatchFunction, growsGeneralStateHeapIfNeededAndPre
     std::vector<char> precopiedMemPattern(preocupiedMemSize, 7);
     memcpy_s(preocupiedMem, preocupiedMemSize, precopiedMemPattern.data(), precopiedMemPattern.size());
 
-    auto result = commandList->encodeDispatchFunction(function->toHandle(),
+    auto result = commandList->appendLaunchFunction(function->toHandle(),
                                                       &dispatchFunctionArguments,
                                                       nullptr);
     ASSERT_EQ(XE_RESULT_SUCCESS, result);
@@ -289,8 +288,8 @@ ATSTEST_F(CommandListEncodeDispatchFunction, growsGeneralStateHeapIfNeededAndPre
     EXPECT_EQ(0U, memcmp(precopiedMemPattern.data(), heap->getCpuBase(), precopiedMemPattern.size()));
 }
 
-using CommandListEncodeDispatchFunctionGEN9 = CommandListEncodeDispatchFunction;
-SKLTEST_F(CommandListEncodeDispatchFunctionGEN9, copiesThreadDataToIndirectStateHeap) {
+using CommandListAppendLaunchFunctionGEN9 = CommandListAppendLaunchFunction;
+SKLTEST_F(CommandListAppendLaunchFunctionGEN9, copiesThreadDataToIndirectStateHeap) {
     createFunction("MemcpyBytes");
 
     using GPGPU_WALKER = typename FamilyType::GPGPU_WALKER;
@@ -299,7 +298,7 @@ SKLTEST_F(CommandListEncodeDispatchFunctionGEN9, copiesThreadDataToIndirectState
     auto heap = commandList->indirectHeaps[CommandList::INDIRECT_OBJECT];
     heap->getSpace(GPGPU_WALKER::INDIRECTDATASTARTADDRESS_ALIGN_SIZE - 1); // this will check if cmdlist takes care of heap allignment
 
-    auto result = commandList->encodeDispatchFunction(function->toHandle(),
+    auto result = commandList->appendLaunchFunction(function->toHandle(),
                                                       &dispatchFunctionArguments,
                                                       nullptr);
     ASSERT_EQ(XE_RESULT_SUCCESS, result);
@@ -329,9 +328,9 @@ SKLTEST_F(CommandListEncodeDispatchFunctionGEN9, copiesThreadDataToIndirectState
     }
 }
 
-ATSTEST_F(CommandListEncodeDispatchFunction, usesIsaFromInstructionHeap) {
+ATSTEST_F(CommandListAppendLaunchFunction, usesIsaFromInstructionHeap) {
     createFunction("MemcpyBytes");
-    auto result = commandList->encodeDispatchFunction(function->toHandle(),
+    auto result = commandList->appendLaunchFunction(function->toHandle(),
                                                       &dispatchFunctionArguments,
                                                       nullptr);
     ASSERT_EQ(XE_RESULT_SUCCESS, result);
@@ -359,11 +358,11 @@ ATSTEST_F(CommandListEncodeDispatchFunction, usesIsaFromInstructionHeap) {
     }
 }
 
-GEN9TEST_F(CommandListEncodeDispatchFunctionGEN9, addsWalkerToCommandStream) {
+GEN9TEST_F(CommandListAppendLaunchFunctionGEN9, addsWalkerToCommandStream) {
     createFunction("MemcpyBytes");
     auto usedSpaceBefore = commandList->commandStream->getUsed();
 
-    auto result = commandList->encodeDispatchFunction(function->toHandle(),
+    auto result = commandList->appendLaunchFunction(function->toHandle(),
                                                       &dispatchFunctionArguments,
                                                       nullptr);
     ASSERT_EQ(XE_RESULT_SUCCESS, result);
@@ -436,7 +435,7 @@ GEN9TEST_F(CommandListEncodeDispatchFunctionGEN9, addsWalkerToCommandStream) {
     }
 }
 
-GEN9TEST_F(CommandListEncodeDispatchFunctionGEN9, programsL3InBatchBuffer) {
+GEN9TEST_F(CommandListAppendLaunchFunctionGEN9, programsL3InBatchBuffer) {
     createFunction("MemcpyBytes");
 
     Mock<Device> device;
@@ -445,7 +444,7 @@ GEN9TEST_F(CommandListEncodeDispatchFunctionGEN9, programsL3InBatchBuffer) {
     ASSERT_NE(nullptr, commandList->commandStream);
     auto usedSpaceBefore = commandList->commandStream->getUsed();
 
-    auto result = commandList->encodeDispatchFunction(function->toHandle(),
+    auto result = commandList->appendLaunchFunction(function->toHandle(),
                                                       &dispatchFunctionArguments,
                                                       nullptr);
     ASSERT_EQ(XE_RESULT_SUCCESS, result);
@@ -476,10 +475,10 @@ GEN9TEST_F(CommandListEncodeDispatchFunctionGEN9, programsL3InBatchBuffer) {
     }
 }
 
-GEN9TEST_F(CommandListEncodeDispatchFunctionGEN9, withBarrierAndSLMSetsIDDBarrierEnable) {
+GEN9TEST_F(CommandListAppendLaunchFunctionGEN9, withBarrierAndSLMSetsIDDBarrierEnable) {
     createFunction("SlmBarrier");
 
-    auto result = commandList->encodeDispatchFunction(function->toHandle(),
+    auto result = commandList->appendLaunchFunction(function->toHandle(),
                                                       &dispatchFunctionArguments,
                                                       nullptr);
     ASSERT_EQ(XE_RESULT_SUCCESS, result);

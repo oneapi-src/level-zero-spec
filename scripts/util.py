@@ -50,6 +50,16 @@ def removeFiles(path, pattern):
         os.remove(f)
 
 """
+    reads from text file, returns list of lines
+"""
+def textRead(path):
+    if exists(path):
+        with open(path, "r") as fin:
+            return fin.readlines()
+    else:
+        return None
+
+"""
     read from ini file, returns config obj
 """
 def configRead(path):

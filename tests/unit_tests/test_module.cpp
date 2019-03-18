@@ -38,7 +38,7 @@ TEST(ModuleBuildLog, destroyModuleBuildLog) {
 
 TEST(ModuleBuildLog, stringModuleBuildLog) {
     size_t buildLogSize;
-    const char *buildLog = nullptr;
+    char *buildLog = nullptr;
     const char *error_log = "Error Log";
     const char *warn_log = "Warn Log";
 
@@ -129,7 +129,7 @@ TEST_P(ModuleCreate, onlineCompilationModuleTest) {
     ASSERT_NE(0U, spvModuleSize);
 
     xe_module_desc_t modDesc = {};
-    modDesc.version = XE_API_HEADER_VERSION;
+    modDesc.version = XE_MODULE_DESC_VERSION_CURRENT;
     modDesc.format = XE_MODULE_FORMAT_IL_SPIRV;
     modDesc.inputSize = static_cast<uint32_t>(spvModuleSize);
     modDesc.pInputModule = spvModule.get();
@@ -138,7 +138,7 @@ TEST_P(ModuleCreate, onlineCompilationModuleTest) {
     ASSERT_NE(nullptr, module);
 
     xe_function_desc_t funDesc = {};
-    funDesc.version = XE_API_HEADER_VERSION;
+    funDesc.version = XE_FUNCTION_DESC_VERSION_CURRENT;
     funDesc.pFunctionName = functionName.c_str();
     auto function = whitebox_cast(Function::create(module, &funDesc));
     ASSERT_NE(nullptr, function);
@@ -283,7 +283,7 @@ TEST(FunctionArgs_accessors, returnsCorrectThreadGroupParameters) {
     ASSERT_NE(0U, spvModuleSize);
 
     xe_module_desc_t modDesc = {};
-    modDesc.version = XE_API_HEADER_VERSION;
+    modDesc.version = XE_MODULE_DESC_VERSION_CURRENT;
     modDesc.format = XE_MODULE_FORMAT_IL_SPIRV;
     modDesc.inputSize = static_cast<uint32_t>(spvModuleSize);
     modDesc.pInputModule = spvModule.get();
@@ -292,7 +292,7 @@ TEST(FunctionArgs_accessors, returnsCorrectThreadGroupParameters) {
     ASSERT_NE(nullptr, module);
 
     xe_function_desc_t funDesc = {};
-    funDesc.version = XE_API_HEADER_VERSION;
+    funDesc.version = XE_FUNCTION_DESC_VERSION_CURRENT;
     funDesc.pFunctionName = "memcpy_bytes";
     auto function = whitebox_cast(Function::create(module, &funDesc));
     ASSERT_NE(nullptr, function);

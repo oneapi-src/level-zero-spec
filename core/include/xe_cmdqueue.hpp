@@ -51,6 +51,14 @@ namespace xe
         auto getDesc( void ) const { return desc; }
 
         ///////////////////////////////////////////////////////////////////////////////
+        /// @brief C++ version for ::xe_fence_desc_version_t
+        enum class fence_desc_version_t
+        {
+            CURRENT = XE_MAKE_VERSION( 1, 0 ),              ///< version 1.0
+
+        };
+
+        ///////////////////////////////////////////////////////////////////////////////
         /// @brief C++ version for ::xe_fence_flag_t
         enum class fence_flag_t
         {
@@ -62,45 +70,49 @@ namespace xe
         /// @brief C++ version for ::xe_fence_desc_t
         struct fence_desc_t
         {
-            uint32_t version = XE_FENCE_DESC_VERSION;       ///< [in] descriptor version
+            fence_desc_version_t version = fence_desc_version_t::CURRENT;   ///< [in] ::FENCE_DESC_VERSION_CURRENT
             fence_flag_t flags = fence_flag_t::NONE;        ///< [in] creation flags
 
         };
 
         ///////////////////////////////////////////////////////////////////////////////
         /// @brief C++ wrapper for ::xeCommandQueueDestroy
-        inline void Destroy(
+        /// @throws result_t
+        inline void
+        Destroy(
+            void
             );
 
         ///////////////////////////////////////////////////////////////////////////////
-        /// @brief C++ wrapper for ::xeCommandQueueEnqueueCommandLists
-        inline void EnqueueCommandLists(
-            uint32_t numCommandLists,                       ///< [in] number of command lists to enqueue
-            command_list_handle_t* phCommandLists,          ///< [in] list of handles of the command lists to enqueue for execution
+        /// @brief C++ wrapper for ::xeCommandQueueExecuteCommandLists
+        /// @throws result_t
+        inline void
+        ExecuteCommandLists(
+            uint32_t numCommandLists,                       ///< [in] number of command lists to execute
+            command_list_handle_t* phCommandLists,          ///< [in] list of handles of the command lists to execute
             fence_handle_t hFence                           ///< [in][optional] handle of the fence to signal on completion
             );
 
         ///////////////////////////////////////////////////////////////////////////////
         /// @brief C++ wrapper for ::xeCommandQueueSynchronize
-        inline void Synchronize(
-            synchronization_mode_t mode,                    ///< [in] synchronization mode
-            uint32_t delay,                                 ///< [in] if ::SYNCHRONIZATION_MODE_SLEEP == mode, then time (in
-                                                            ///< microseconds) to poll before putting Host thread to sleep; otherwise,
-                                                            ///< must be zero.
-            uint32_t interval,                              ///< [in] if ::SYNCHRONIZATION_MODE_SLEEP == mode, then maximum time (in
-                                                            ///< microseconds) to put Host thread to sleep between polling; otherwise,
-                                                            ///< must be zero.
-            uint32_t timeout                                ///< [in] if non-zero, then indicates the maximum time to poll or sleep
-                                                            ///< before returning; if zero, then only a single status check is made
-                                                            ///< before immediately returning; if MAX_UINT32, then function will not
-                                                            ///< return until complete.
+        /// @throws result_t
+        inline void
+        Synchronize(
+            uint32_t timeout                                ///< [in] if non-zero, then indicates the maximum time to yield before
+                                                            ///< returning ::RESULT_SUCCESS or ::RESULT_NOT_READY; if zero, then
+                                                            ///< operates exactly like ::FenceQueryStatus; if MAX_UINT32, then function
+                                                            ///< will not return until complete or device is lost.
             );
 
         ///////////////////////////////////////////////////////////////////////////////
         /// @brief C++ wrapper for ::xeCommandQueueCreateFence
-        inline void CreateFence(
-            const fence_desc_t* desc,                       ///< [in] pointer to fence descriptor
-            fence_handle_t* phFence                         ///< [out] pointer to handle of fence object created
+        /// @returns
+        ///     - fence_handle_t: pointer to handle of fence object created
+        /// 
+        /// @throws result_t
+        inline fence_handle_t
+        CreateFence(
+            const fence_desc_t* desc                        ///< [in] pointer to fence descriptor
             );
 
     };

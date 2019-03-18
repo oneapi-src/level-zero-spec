@@ -88,7 +88,7 @@ bool ModuleImp::initialize(const xe_module_desc_t *desc) {
     assert(desc->pBuildFlags == nullptr);
 
     cl_int errorCode = 0;
-    this->progRT->buildSpirV(desc->pInputModule, desc->inputSize);
+    this->progRT->buildSpirV(desc->pInputModule, static_cast<uint32_t>(desc->inputSize));
     // allocate graphics memory for ISA upfront to avoid critical sections at function create time
     auto memoryManager = this->device->getMemoryManager();
     immFuncInfos.reserve(this->progRT->kernelInfoArray.size());

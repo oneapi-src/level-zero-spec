@@ -15,6 +15,8 @@ NOTE: This is a **PRELIMINARY** specification, provided for review and feedback.
 * [Modules and Functions](#mnf)
 * [OpenCL Interoperability](#oi)
 * [Inter-Process Communication](#ipc)
+* [Experimental](#exp)
+* [Debug and Instrumentation Layers](#dbg)
 * [Future](#fut)
 
 # <a name="dnd">Driver and Device</a>
@@ -58,14 +60,14 @@ The following sample code demonstrates a basic initialization sequence:
         return;
     }
 
-    uint32_t* uniqueIds = (uint32_t*)malloc(deviceCount * sizeof(uint32_t));
-    xeDriverGetDeviceUniqueIds(deviceCount, uniqueIds);
+    xe_device_uuid_t* pUUIDs = (uint32_t*)malloc(deviceCount * sizeof(xe_device_uuid_t));
+    xeDriverGetDeviceUniqueIds(deviceCount, pUUIDs);
 
     // Get the handle for device that supports required API version
     xe_device_handle_t hDevice;
     for(uint32_t i = 0; i < deviceCount; ++i)
     {
-        xeDriverGetDevice(uniqueIds[i], &hDevice);
+        xeDriverGetDevice(pUUIDs[i], &hDevice);
         
         xe_api_version_t version;
         xeDeviceGetApiVersion(hDevice, &version);
@@ -123,8 +125,11 @@ See ::xe_command_queue_desc_t for more details.
     assert(subdeviceProps.subdeviceId == 2);    // Ensure that we have a handle to the sub-device we asked for.
 
     ...
+    xe_mem_allocator_handle_t hAllocator;
+    xeCreateMemAllocator(hAllocator);
+
     void* pMemForSubDevice2;
-    xeMemAlloc(subDevice, XE_DEVICE_MEM_ALLOC_DEFAULT, memSize, sizeof(uint32_t), &pMemForSubDevice2);
+    xeMemAlloc(hAllocator, subDevice, XE_DEVICE_MEM_ALLOC_FLAG_DEFAULT, memSize, sizeof(uint32_t), &pMemForSubDevice2);
     ...
 
     ...
@@ -142,7 +147,7 @@ The following are the motivations for seperating a command queue from a command 
   such as the number of input streams.
 - Command queues provide (near) zero-latency access to the device.
 - Command lists are mostly associated with Host threads for simultaneous construction.
-- Command list encodeing can occur independently of command queue submission.
+- Command list appending can occur independently of command queue submission.
 - Command list submission can occur to more than one command queue.
 
 The following diagram illustrates the hierarchy of command lists and command queues to the device:  
@@ -165,12 +170,15 @@ stream via an ordinal at creation time.
   ::xe_device_properties_t.numAsyncComputeEngines.
 - The number of simultaneous copy command queues per device is queried from 
   ::xe_device_properties_t.numAsyncCopyEngines.
+- All command lists executed on a command queue are gaurenteed to only execute on its 
+  single, physical input stream; e.g., copy commands in a compute command list / queue will
+  execute via the compute engine, not the copy engine.
 
 The following sample code demonstrates a basic sequence for creation of command queues:
 ```c
     // Create a command queue
     xe_command_queue_desc_t commandQueueDesc = {
-        XE_COMMAND_QUEUE_DESC_VERSION,
+        XE_COMMAND_QUEUE_DESC_VERSION_CURRENT,
         XE_COMMAND_QUEUE_FLAG_NONE,
         XE_COMMAND_QUEUE_MODE_DEFAULT,
         XE_COMMAND_QUEUE_PRIORITY_NORMAL,
@@ -200,16 +208,16 @@ The following sample code demonstrates a basic sequence for creation of command 
 A command list represents a sequence of commands for execution on a command queue.
 
 ### Creation
-- A command list is created for a device to allow device-specific encoding of commands.
+- A command list is created for a device to allow device-specific appending of commands.
 - A command list can be copied to create another command list. The application may use this
   to copy a command list for use on a different device.
 
-### Encoding
+### Appending
 - There is no implicit binding of command lists to Host threads. Therefore, an 
   application may share a command list handle across multiple Host threads. However,
   the application is responsible for ensuring that multiple Host threads do not access
   the same command list simultaneously.
-- By default, commands are executed in the same order in which they are submitted.
+- By default, commands are executed in the same order in which they are appended.
   However, an application may allow the driver to optimize the ordering by using
   ::XE_COMMAND_LIST_FLAG_RELAXED_ORDERING.  Reordering is guarenteed to be only occur
   between barriers and synchronization primitives.
@@ -222,7 +230,7 @@ The following sample code demonstrates a basic sequence for creation of command 
 ```c
     // Create a command list
     xe_command_list_desc_t commandListDesc = {
-        XE_COMMAND_LIST_DESC_VERSION,
+        XE_COMMAND_LIST_DESC_VERSION_CURRENT,
         XE_COMMAND_LIST_FLAG_NONE
     };
     xe_command_list_handle_t hCommandList;
@@ -242,14 +250,14 @@ The following sample code demonstrates a basic sequence for creation of command 
 The following sample code demonstrates submission of commands to a command queue, via a command list:
 ```c
     ...
-    // finished encoding commands (typically done on another thread)
+    // finished appending commands (typically done on another thread)
     xeCommandListClose(hCommandList);
 
-    // Enqueue command list execution into command queue
-    xeCommandQueueEnqueueCommandLists(hCommandQueue, 1, &hCommandList, nullptr);
+    // Execute command list in command queue
+    xeCommandQueueExecuteCommandLists(hCommandQueue, 1, &hCommandList, nullptr);
 
     // synchronize host and device
-    xeCommandQueueSynchronize(hCommandQueue, XE_SYNCHRONIZATION_MODE_POLL, 0, 0, -1);
+    xeCommandQueueSynchronize(hCommandQueue, MAX_UINT32);
 
     // Reset (recycle) command list for new commands
     xeCommandListReset(hCommandList);
@@ -280,12 +288,12 @@ There are two types of barriers:
 
 The following sample code demonstrates a sequence for submission of an execution barrier:
 ```c
-    xeCommandListEncodeDispatchFunction(hCommandList, hFunction1, ...);
+    xeCommandListAppendLaunchFunction(hCommandList, hFunction, &launchArgs, nullptr);
 
-    // Encode a barrier into a command list to ensure hFunctionFunction1 completes before hFunction2 begins
-    xeCommandListEncodeExecutionBarrier(hCommandList);
+    // Append a barrier into a command list to ensure hFunctionFunction1 completes before hFunction2 begins
+    xeCommandListAppendExecutionBarrier(hCommandList);
 
-    xeCommandListEncodeDispatchFunction(hCommandList, hFunction2, ...);
+    xeCommandListAppendLaunchFunction(hCommandList, hFunction, &launchArgs, nullptr);
     ...
 ```
 
@@ -294,10 +302,9 @@ The following sample code demonstrates a sequence for submission of an execution
 - Memory barriers are implicitly added by the driver prior to synchronization primitives.
 
 # <a name="sp">Synchronization Primitives</a>
-There are three types of synchronization primitives:
+There are two types of synchronization primitives:
 1. [**Fences**](#fnc) - used to communicate to the host that command queue execution has completed.
 2. [**Events**](#evnt) - used as fine-grain host-to-device, device-to-host or device-to-device waits and signals within a command list.
-3. [**Semaphores**](#sema) - used for fine-grain control of command lists execution across multiple, simultaneous command queues within a device.
 
 The following diagram illustrats the relationship of capabilities of these types of synchronization primitives:  
 ![Graph](../images/core_sync.png?raw=true)  
@@ -307,8 +314,7 @@ The following are the motivations for seperating the different types of synchron
 - Allows device-specific optimizations for certain types of primitives:
     + fences may share device memory with all other fences for the queue or device.
     + events may be implemented using pipelined operations as part of the program execution.
-    + semaphores may be implemented without device memory.
-    + fences and events implicitly cause execution and memory barriers, while semaphores may only cause execution barriers.
+    + fences and events implicitly cause execution and memory barriers.
 - Allows distinction on which type of primitive may be shared across devices.
 
 ## <a name="fnc">Fences</a>
@@ -319,7 +325,6 @@ A fence is a lightweight synchronization primitive used to communicate to the ho
 - A fence only has two states: not signaled and signaled.
 - A fence can only be reset from the Host.
 - A fence cannot be shared across processes.
-- An application can use ::xeFenceQueryElapsedTime to calculate the time (in milliseconds) between two fences' signals.
 
 The primary usage model(s) for fences are to notify the Host when a command list has finished execution to allow:
 - Recycling of memory and images
@@ -335,21 +340,17 @@ The following sample code demonstrates a sequence for creation, submission and q
 ```c
     // Create fence
     xe_fence_desc_t fenceDesc = {
-        XE_FENCE_DESC_VERSION,
+        XE_FENCE_DESC_VERSION_CURRENT,
         XE_FENCE_FLAG_NONE
     };
     xe_fence_handle_t hFence;
     xeCommandQueueCreateFence(hCommandQueue, &fenceDesc, &hFence);
 
-    // Enqueue a signal of the fence into the command queue
-    xeCommandQueueEnqueueCommandLists(hCommandQueue, 1, &hCommandList, hFence);
+    // Execute a command list with a signal of the fence
+    xeCommandQueueExecuteCommandLists(hCommandQueue, 1, &hCommandList, hFence);
 
     // Wait for fence to be signaled
-    if(XE_RESULT_SUCCESS != xeFenceQueryStatus(hFence))
-    {
-        xeHostWaitOnFence(hFence, XE_SYNCHRONIZATION_MODE_POLL, 0, 0, -1);
-    }
-
+    xeFenceHostSynchronize(hFence, MAX_UINT32);
     xeFenceReset(hFence);
     ...
 ```
@@ -361,9 +362,9 @@ An event is used as fine-grain host-to-device, device-to-host or device-to-devic
   + signaled from the host, and waited upon from within a device's command list.
 - An event only has two states: not signaled and signaled.
 - An event can be reset from the Host or device.
-- An event can be encoded into any command list from the same device.
+- An event can be appended into any command list from the same device.
 - An event cannot be signaled and waited upon in the same command list or command queue.
-- An event can be encoded into multiple command lists simultaneously.
+- An event can be appended into multiple command lists simultaneously.
 - An event can be shared across processes.
 - An event imposes an implicit execution and memory barrier; therefore should be used sparingly to avoid device underutilization.
 - There are no protections against events causing deadlocks, such as circular waits scenarios. 
@@ -371,7 +372,6 @@ An event is used as fine-grain host-to-device, device-to-host or device-to-devic
 - An event intended to be signaled by the host, another command queue or another device after command list submission to a command queue may prevent 
   subsequent forward progress within the command queue itself.
   + This can create create bubbles in the pipeline or deadlock situations if not correctly scheduled.
-- An application can use ::xeEventQueryElapsedTime to calculate the time (in milliseconds) between two events signalled by the same device.
 
 Events are generic synchronization primitives that can be used across many different usage-models, includes those of fences and semaphores.
 However, this generality comes with some cost in efficiency.
@@ -386,62 +386,73 @@ The following sample code demonstrates a sequence for creation and submission of
 ```c
     // Create event
     xe_event_desc_t eventDesc = {
-        XE_EVENT_DESC_VERSION,
+        XE_EVENT_DESC_VERSION_CURRENT,
         XE_EVENT_FLAG_NONE
     };
     xe_event_handle_t hEvent;
     xeDeviceCreateEvent(hDevice, &eventDesc, &hEvent);
 
-    // Encode a wait on an event into a command list
-    xeCommandListEncodeWaitOnEvent(hCommandList, hEvent);
+    // Append a wait on an event into a command list
+    xeCommandListAppendWaitOnEvent(hCommandList, hEvent);
 
-    // Enqueue wait via the command list into a command queue
-    xeCommandQueueEnqueueCommandLists(hCommandQueue, 1, &hCommandList, nullptr);
+    // Execute the command list with the wait
+    xeCommandQueueExecuteCommandLists(hCommandQueue, 1, &hCommandList, nullptr);
 
     // Signal the device
-    xeHostSignalEvent(hEvent);
+    xeEventHostSignal(hEvent);
     ...
 ```
 
-## <a name="sema">Semaphores</a>
-A semaphore is used for fine-grain control of command lists execution across multiple, simultaneous command queues within a device.
-- A semaphore can only be signaled and waited upon from within a device's command lists.
-- A semaphore has a 64-bit value, initialized to zero and changed when signaled.
-- A semaphore wait can test its value for less-than, less-than-or-equal, equal, not-equal, greater-than-or-equal, or greater-than another value.
-- A semaphore can be encoded into any command list from the same device.
-- A semaphore can be signaled and waited upon in the same command list.
-- A semaphore can be encoded into multiple command lists simultaneously.
-- A semaphore cannot be shared across processes.
-- A semaphore imposes an implicit execution barrier; therefore should be used sparingly to avoid device underutilization.
-- There are no protections against semaphores causing deadlocks.
+## Performance Metrics
+Events can be used to provide different types of device performance metrics:
+1. Timestamps - records the value of the device timer at the completion of the event.
+2. Counters - records a collection of device-specific counters at the completion of the event.
 
-The primary usage model(s) for semaphores is:
-- Low-latency device-side scheduling of programs executing concurrently across multiple command queues.
+### Timestamps
+Timestamps are used to measure the time between two events signalled by the same device.
+- An application can use ::xeEventQueryElapsedTime to calculate the time (in milliseconds) between two events.
+- Both events must be created with ::XE_EVENT_FLAG_TIMESTAMP
+- Both events must be signalled
 
-The following diagram illustrates an example of semaphores:  
-![Semaphore](../images/core_semaphore.png?raw=true)  
-@image latex core_semaphore.png
-
-The following sample code demonstrates a sequence for creation and submission of a semaphore:
+The following sample code demonstrates a sequence for measuring time between events:
 ```c
-    // Create semaphore
-    xe_semaphore_desc_t semaphoreDesc = {
-        XE_SEMAPHORE_DESC_VERSION,
-        XE_SEMAPHORE_FLAG_NONE
-    };
-    xe_semaphore_handle_t hSemaphore;
-    xeDeviceCreateSemaphore(hDevice, &semaphoreDesc, &hSemaphore);
+    // Append the function call to measure
+    xeCommandListAppendSignalEvent(hCommandList, hEventBegin);
+    xeCommandListAppendLaunchFunction(hCommandList, hFunction, &launchArgs, hEventEnd);
 
-    // Encode a wait on an semaphore into a command list
-    xeCommandListEncodeSemaphoreWait(hCommandList0, hSemaphore,
-        XE_SEMAPHORE_WAIT_OPERATION_GREATER_OR_EQUAL_TO, 1);
+    // Execute the command list
+    xeCommandQueueExecuteCommandLists(hCommandQueue, 1, &hCommandList, nullptr);
 
-    // Encode a signal of a semaphore into another command list
-    xeCommandListEncodeSemaphoreSignal(hCommandList1, hSemaphore, 1);
+    // Wait for the last event to complete
+    xeEventHostSynchronize(hEventEnd, MAX_UINT32);
 
-    // Enqueue the command lists into the parallel command queues
-    xeCommandQueueEnqueueCommandLists(hCommandQueue0, 1, &hCommandList0, nullptr);
-    xeCommandQueueEnqueueCommandLists(hCommandQueue1, 1, &hCommandList1, nullptr);
+    // calculate the delta time
+    double time = 0.f;
+    xeEventQueryElapsedTime(hEventBegin, hEventEnd, &time);
+    ...
+```
+
+### Counters
+Counters are used to collect various device-specific values between two events signalled by the same device.
+- An application can use ::xeEventQueryMetricsData to calculate the time (in milliseconds) between two events.
+- Both events must be created with ::XE_EVENT_FLAG_PERFORMANCE_METRICS
+- Both events must be signalled
+
+The following sample code demonstrates a sequence for collecting counters between events:
+```c
+    // Append the function call to measure
+    xeCommandListAppendSignalEvent(hCommandList, hEventBegin);
+    xeCommandListAppendLaunchFunction(hCommandList, hFunction, &launchArgs, hEventEnd);
+
+    // Execute the command list
+    xeCommandQueueExecuteCommandLists(hCommandQueue, 1, &hCommandList, nullptr);
+
+    // Wait for the last event to complete
+    xeEventHostSynchronize(hEventEnd, MAX_UINT32);
+
+    // calculate the delta counter values
+    uint32_t counters[64] = {};
+    xeEventQueryMetricsData(hEventBegin, hEventEnd, sizeof(counters), &counters);
     ...
 ```
 
@@ -511,13 +522,13 @@ The required matrix of capabilities are:
 ### Cache Hints, Prefetch, and Memory Advice
 Cacheability hints may be provided via separate host and device allocation flags when memory is allocated.
 
-**Shared** allocations may be prefetched to a supporting device via the ::xeCommandListEncodeMemoryPrefetch API.
+**Shared** allocations may be prefetched to a supporting device via the ::xeCommandListAppendMemoryPrefetch API.
 Prefetching may allow memory transfers to be scheduled concurrently with other computations and may improve performance.
 
-Additionally, an application may provide memory advice for a **shared** allocation via the ::xeCommandListEncodeMemAdvise API, to override driver heuristics or migration policies.
+Additionally, an application may provide memory advice for a **shared** allocation via the ::xeCommandListAppendMemAdvise API, to override driver heuristics or migration policies.
 Memory advice may avoid unnecessary or unprofitable memory transfers and may improve performance.
 
-Both prefetch and memory advice are asynchronous operations that are encoded into command lists.
+Both prefetch and memory advice are asynchronous operations that are appended into command lists.
 
 ## Images
 An image is used to store multi-dimensional and format-defined memory for optimal device access.
@@ -528,8 +539,8 @@ and avoids exposing these details in the API in a backwards compatible fashion.
 
 ```c
     xe_image_desc_t imageDesc = {
-        XE_IMAGE_DESC_VERSION,
-        XE_IMAGE_FLAG_KERNEL_READ,
+        XE_IMAGE_DESC_VERSION_CURRENT,
+        XE_IMAGE_FLAG_PROGRAM_READ,
         XE_IMAGE_TYPE_2D,
         XE_IMAGE_FORMAT_FLOAT32, 1,
         128, 128, 0, 0, 0
@@ -538,7 +549,7 @@ and avoids exposing these details in the API in a backwards compatible fashion.
     xeDeviceCreateImage(hDevice, &imageDesc, &hImage);
 
     // upload contents from host pointer
-    xeCommandListEncodeImageCopyFromMemory(hCommandList, hImage, nullptr, pImageData);
+    xeCommandListAppendImageCopyFromMemory(hCommandList, hImage, nullptr, pImageData);
     ...
 ```
 
@@ -568,7 +579,7 @@ However, in cases where the devices does **not** support page-faulting _and_ the
 such as multiple levels of indirection, there are two methods available:
 1. the application may set the ::XE_FUNCTION_FLAG_FORCE_RESIDENCY flag during program creation to force all device allocations to be resident during execution.
  + in addition, the application should indicate the type of allocations that will be indirectly accessed using ::xe_function_set_attribute_t
- + if the driver is unable to make all allocations resident, then the call to ::xeCommandListEncodeDispatchFunction will return $X_RESULT_ERROR_OUT_OF_DEVICE_MEMORY
+ + if the driver is unable to make all allocations resident, then the call to ::xeCommandQueueExecuteCommandLists will return XE_RESULT_ERROR_OUT_OF_DEVICE_MEMORY
 2. explcit ::xeDeviceMakeMemoryResident APIs are included for the application to dynamically change residency as needed. (Windows-only)
  + if the application over-commits device memory, then a call to ::xeDeviceMakeMemoryResident will return XE_RESULT_ERROR_OUT_OF_DEVICE_MEMORY
 
@@ -580,17 +591,17 @@ The following sample code demonstrate a sequence for using coarse-grain residenc
         node* next;
     };
     node* begin = nullptr;
-    xeHostMemAlloc(XE_HOST_MEM_ALLOC_DEFAULT, sizeof(node), 1, &begin);
-    xeHostMemAlloc(XE_HOST_MEM_ALLOC_DEFAULT, sizeof(node), 1, &begin->next);
-    xeHostMemAlloc(XE_HOST_MEM_ALLOC_DEFAULT, sizeof(node), 1, &begin->next->next);
+    xeHostMemAlloc(hAllocator, XE_HOST_MEM_ALLOC_FLAG_DEFAULT, sizeof(node), 1, &begin);
+    xeHostMemAlloc(hAllocator, XE_HOST_MEM_ALLOC_FLAG_DEFAULT, sizeof(node), 1, &begin->next);
+    xeHostMemAlloc(hAllocator, XE_HOST_MEM_ALLOC_FLAG_DEFAULT, sizeof(node), 1, &begin->next->next);
 
-    // 'begin' is passed as function argument and encoded into command list
-    xeFunctionArgsSetAttribute(hFuncArgs, XE_FUNCTION_ARG_ATTR_INDIRECT_HOST_ACCESS, 1);
-    xeFunctionArgsSetValue(hFuncArgs, 0, sizeof(node*), &begin);
-    xeCommandListEncodeDispatchFunction(hCommandList, hFunction, hFunctionArgs, ...);
+    // 'begin' is passed as function argument and appended into command list
+    xeFunctionSetAttribute(hFuncArgs, XE_FUNCTION_SET_ATTR_INDIRECT_HOST_ACCESS, TRUE);
+    xeFunctionSetArgumentValue(hFunction, 0, sizeof(node*), &begin);
+    xeCommandListAppendLaunchFunction(hCommandList, hFunction, &launchArgs, nullptr);
     ...
 
-    xeCommandQueueEnqueueCommandLists(hCommandQueue, 1, &hCommandList, nullptr);
+    xeCommandQueueExecuteCommandLists(hCommandQueue, 1, &hCommandList, nullptr);
     ...
 ```
 
@@ -600,24 +611,23 @@ The following sample code demonstrate a sequence for using fine-grain residency 
         node* next;
     };
     node* begin = nullptr;
-    xeHostMemAlloc(XE_HOST_MEM_ALLOC_DEFAULT, sizeof(node), 1, &begin);
-    xeHostMemAlloc(XE_HOST_MEM_ALLOC_DEFAULT, sizeof(node), 1, &begin->next);
-    xeHostMemAlloc(XE_HOST_MEM_ALLOC_DEFAULT, sizeof(node), 1, &begin->next->next);
+    xeHostMemAlloc(hAllocator, XE_HOST_MEM_ALLOC_FLAG_DEFAULT, sizeof(node), 1, &begin);
+    xeHostMemAlloc(hAllocator, XE_HOST_MEM_ALLOC_FLAG_DEFAULT, sizeof(node), 1, &begin->next);
+    xeHostMemAlloc(hAllocator, XE_HOST_MEM_ALLOC_FLAG_DEFAULT, sizeof(node), 1, &begin->next->next);
 
-    // 'begin' is passed as function argument and encoded into command list
-    xeFunctionArgsSetValue(hFuncArgs, 0, sizeof(node*), &begin);
-    xeCommandListEncodeDispatchFunction(hCommandList, hFunction, hFunctionArgs, ...);
+    // 'begin' is passed as function argument and appended into command list
+    xeFunctionSetArgumentValue(hFunction, 0, sizeof(node*), &begin);
+    xeCommandListAppendLaunchFunction(hCommandList, hFunction, &launchArgs, nullptr);
     ...
 
     // Make indirect allocations resident before enqueuing
     xeDeviceMakeMemoryResident(hDevice, begin->next, sizeof(node));
     xeDeviceMakeMemoryResident(hDevice, begin->next->next, sizeof(node));
 
-    xeCommandQueueEnqueueCommandLists(hCommandQueue, 1, &hCommandList, nullptr);
+    xeCommandQueueExecuteCommandLists(hCommandQueue, 1, &hCommandList, hFence);
 
     // wait until complete
-    xeFenceEnqueueSignal(hFence);
-    xeHostWaitOnFence(hFence, XE_SYNCHRONIZATION_MODE_SLEEP, 1, 1, -1);
+    xeFenceHostSynchronize(hFence, MAX_UINT32);
 
     // Finally, evict to free device resources
     xeDeviceEvictMemory(hDevice, begin->next, sizeof(node));
@@ -628,7 +638,7 @@ The following sample code demonstrate a sequence for using fine-grain residency 
 # <a name="mnf">Modules and Functions</a>
 There are multiple levels of constructs needed for executing functions on the device:
 1. A [**Module**](#mod) represents a single translation unit that consists of functions that have been compiled together.
-2. A [**Function**](#func) represents the function within the module that will be dispatched directly from a command list.
+2. A [**Function**](#func) represents the function within the module that will be launched directly from a command list.
 
 ## <a name="mod">Modules</a>
 Modules can be created from an IL or directly from native format using ::xeDeviceCreateModule.
@@ -655,8 +665,8 @@ The following sample code demonstrates a sequence for creating a module from an 
 ```c
     // OpenCL C function has been compiled to SPIRV IL (pImageScalingIL)
     xe_module_desc_t moduleDesc = {
-        XE_MODULE_DESC_VERSION
-        XE_MODULE_IL_SPIRV,
+        XE_MODULE_DESC_VERSION_CURRENT,
+        XE_MODULE_FORMAT_IL_SPIRV,
         ilSize,
         pImageScalingIL,
         nullptr
@@ -668,7 +678,6 @@ The following sample code demonstrates a sequence for creating a module from an 
 
 ### Module Build Options
 Build options can be passed with ::xe_module_desc_t as a string.
-
 | Build Option                                  | Description                                           | Default  |
 | :--                                           | :--                                                   | :--      |
 | -xe-opt-disable                             | Disable optimizations.                                | Disabled |
@@ -684,14 +693,18 @@ The ::xeDeviceCreateModule function can optionally generate a build log object :
     xe_result_t result = xeDeviceCreateModule(hDevice, &desc, &module, &buildlog);
 
     // Only save build logs for module creation errors.
-    if (result != XE_RESULT_SUCESS)
+    if (result != XE_RESULT_SUCCESS)
     {
-        uint32_t buildlogSize;
-        char* pBuildLogString;
-        result = xeModuleBuildLogGetString(buildlog, &buildlogSize, &pBuildLogString);
+        size_t szLog = 0;
+        xeModuleBuildLogGetString(buildlog, &szLog, nullptr);
+        
+        char_t* strLog = (char_t*)malloc(szLog);
+        xeModuleBuildLogGetString(buildlog, &szLog, &strLog);
 
         // Save log to disk.
         ...
+
+        free(strLog);
     }
 
     xeModuleBuildLogDestroy(buildlog);
@@ -708,12 +721,16 @@ responsibility of the application to implement this using ::xeModuleGetNativeBin
 
     if (cacheUpdateNeeded)
     {
-        uint32_t size;
-        char* pNativeBinary;  // Pointer to native binary.
-        xeModuleGetNativeBinary(hModule, &size, &pNativeBinary);
+        size_t szBinary = 0;
+        xeModuleGetNativeBinary(hModule, &szBinary, nullptr);
+
+        void* pBinary = malloc(szBinary);
+        xeModuleGetNativeBinary(hModule, &szBinary, &pBinary);
 
         // cache pNativeBinary for corresponding IL
         ...
+
+        free(pBinary);
     }
 ```
 Also, note that the native binary will retain all debug information that is associated with the module. This allows debug
@@ -725,12 +742,12 @@ interface.
 
 ## <a name="func">Functions</a>
 A Function is a reference to a function within a module. The Function object supports both explicit and implicit function
-arguments along with data needed for dispatch.
+arguments along with data needed for launch.
 
 The following sample code demonstrates a sequence for creating a function from a module:
 ```c
     xe_function_desc_t functionDesc = {
-        XE_FUNCTION_DESC_VERSION,
+        XE_FUNCTION_DESC_VERSION_CURRENT,
         XE_FUNCTION_FLAG_NONE,
         "image_scaling"
     };
@@ -739,32 +756,45 @@ The following sample code demonstrates a sequence for creating a function from a
     ...
 ```
 
+### Function Attributes
+Use ::xeFunctionGetAttribute to query attributes from a function object.
+
+```c
+    ...
+    uint32_t numRegisters;
+
+    // Number of hardware registers used by function.
+    xeFunctionGetAttribute(hFunction, XE_FUNCTION_GET_ATTR_MAX_REGS_USED, &numRegisters);
+    ...
+```
+See ::xe_function_get_attribute_t for more information on the "get" attributes.
+
+Use ::xeFunctionSetAttribute to set attributes from a function object.
+
+```c
+    // Function performs indirect device access.
+    xeFunctionSetAttribute(hFunction, XE_FUNCTION_SET_ATTR_INDIRECT_DEVICE_ACCESS, true);
+    ...
+```
+
+See ::xe_function_set_attribute_t for more information on the "set" attributes.
+
+## Execution
+
 ### Function Group Size
-The group size for a function can be set using xeFunctionSetGroupSize. If a group size is not
-set prior to encoding a dispatch function into a command list then a default will be chosen.
-The group size can updated over a series of encode dispatch operations. The driver will copy the
-group size information when encoding the dispatch function into the command list.
+The group size for a function can be set using ::xeFunctionSetGroupSize. If a group size is not
+set prior to appending a function into a command list then a default will be chosen.
+The group size can updated over a series of append operations. The driver will copy the
+group size information when appending the function into the command list.
 
 ```c
     xeFunctionSetGroupSize(function, groupSizeX, groupSizeY, 1);
-
-    uint32_t numGroupsX = imageWidth / groupSizeX;
-    uint32_t numGroupsY = imageHeight / groupSizeY;
-
-    xe_dispatch_function_arguments_t dispatchArgs = {
-        XE_DISPATCH_FUNCTION_ARGS_VERSION,
-        numGroupsX, numGroupsY, 1
-        };
-
-    // Encode dispatch command
-    xeCommandListEncodeDispatchFunction(
-        hCommandList, hFunction, &dispatchArgs, nullptr);
 
     ...
 ```
 
 The API supports a query for suggested group size when providing the global size. This function ignores the
-group size that was set on the function using xeFunctionSetGroupSize.
+group size that was set on the function using ::xeFunctionSetGroupSize.
 
 ```c
     // Find suggested group size for processing image.
@@ -779,11 +809,11 @@ group size that was set on the function using xeFunctionSetGroupSize.
 
 ### <a name="arg">Function Arguments</a>
 Function arguments represent only the explicit function arguments that are within "brackets" e.g. func(arg1, arg2, ...).
-- Use xeFunctionSetArgumentValue to setup arguments for a function dispatch.
-- The EncodeDispatchFunction command will make a copy the function arguments to send to the device.
-- Function arguments can be updated at anytime and used across multiple dispatches.
+- Use ::xeFunctionSetArgumentValue to setup arguments for a function launch.
+- The AppendLaunchFunction command will make a copy the function arguments to send to the device.
+- Function arguments can be updated at anytime and used across multiple append calls.
 
-The following sample code demonstrates a sequence for creating function args and dispatching the function:
+The following sample code demonstrates a sequence for creating function args and launching the function:
 ```c
     // Bind arguments
     xeFunctionSetArgumentValue(hFunction, 0, sizeof(xe_image_handle_t), &src_image);
@@ -791,49 +821,82 @@ The following sample code demonstrates a sequence for creating function args and
     xeFunctionSetArgumentValue(hFunction, 2, sizeof(uint32_t), &width);
     xeFunctionSetArgumentValue(hFunction, 3, sizeof(uint32_t), &height);
 
-    xe_dispatch_function_arguments_t dispatchArgs = {
-        XE_DISPATCH_FUNCTION_ARGS_VERSION,
-        pixelRegionWidth, pixelRegionHeight, 1,
-        numRegionsX, numRegionsY, 1
-        };
+    xe_thread_group_dimensions_t launchArgs = { numGroupsX, numGroupsY, 1 };
 
-    // Encode dispatch command
-    xeCommandListEncodeDispatchFunction(
-        hCommandList, hFunction, &dispatchArgs, nullptr );
+    // Append function
+    xeCommandListAppendLaunchFunction(hCommandList, hFunction, &launchArgs, nullptr);
 
     // Update image pointers to copy and scale next image.
-    xeFunctionArgsSetValue(hFunction, 0, sizeof(xe_image_handle_t), &src2_image);
-    xeFunctionArgsSetValue(hFunction, 1, sizeof(xe_image_handle_t), &dest2_image);
+    xeFunctionSetArgumentValue(hFunction, 0, sizeof(xe_image_handle_t), &src2_image);
+    xeFunctionSetArgumentValue(hFunction, 1, sizeof(xe_image_handle_t), &dest2_image);
 
-    // Encode dispatch command
-    xeCommandListEncodeDispatchFunction(
-        hCommandList, hFunction, &dispatchArgs, nullptr );
+    // Append function
+    xeCommandListAppendLaunchFunction(hCommandList, hFunction, &launchArgs, nullptr);
 
     ...
 ```
 
-### Function Attributes
-Use xeFunctionGetAttribute to query attributes from a function object.
+### <a name="arg">Function Launch</a>
+In order to invoke a function on the device you must call one of the CommandListAppendLaunch* functions for
+a command list. The most basic version of these is ::xeCommandListAppendLaunchFunction which takes a
+command list, function, launch arguments, and an optional synchronization event used to signal completion.
+The launch arguments contain thread group dimensions.
 
 ```c
-    ...
-    uint32_t numRegisters;
+    // compute number of groups to launch based on image size and function group size.
+    uint32_t numGroupsX = imageWidth / groupSizeX;
+    uint32_t numGroupsY = imageHeight / groupSizeY;
 
-    // Number of hardware registers used by function.
-    xeFunctionGetAttribute(hFunction, XE_FUNCTION_GET_ATTR_MAX_REGS_USED, &numRegisters);
-    ...
+    xe_thread_group_dimensions_t launchArgs = { numGroupsX, numGroupsY, 1 };
+
+    // Append function
+    xeCommandListAppendLaunchFunction(hCommandList, hFunction, &launchArgs, nullptr);
 ```
-See ::xe_function_get_attribute_t for more information on the "get" attributes.
 
-Use xeFunctionSetAttributes to set attributes from a function object.
+::xeCommandListAppendLaunchFunctionIndirect allows the launch parameters to be supplied indirectly in a
+buffer that the device reads instead of the command itself. This allows for the previous operations on the
+device to generate the parameters.
 
 ```c
-    // Function performs indirect device access.
-    xeFunctionSetAttribute(hFunction, XE_FUNCTION_SET_ATTR_INDIRECT_DEVICE_ACCESS, true);
+    xe_thread_group_dimensions_t* pIndirectArgs;
+    
     ...
+    xeMemAlloc(hMemAlloc, hDevice, flags, sizeof(xe_thread_group_dimensions_t), sizeof(uint32_t), &pIndirectArgs);
+
+    // Append function
+    xeCommandListAppendLaunchFunctionIndirect(hCommandList, hFunction, &pIndirectArgs, nullptr);
 ```
 
-See ::xe_function_set_attribute_t for more information on the "set" attributes.
+## <a name="arg">Sampler</a>
+The API supports Sampler objects that represent state needed for sampling images from within
+Module functions.  The ::xeDeviceCreateSampler function takes a sampler descriptor (::xe_sampler_desc_t):
+
+| Sampler Field    | Description                                           |
+| :--              | :--                                                   |
+| Address Mode     | Determines how out-of-bounds accessse are handled. See ::xe_sampler_address_mode_t. |
+| Filter Mode      | Specifies which filtering mode to use. See ::xe_sampler_filter_mode_t               |
+| Normalized       | Specifies whether coordinates for addressing image are normalized [0,1] or not.       |
+
+The following is sample for code creating a sampler object and passing it as a Function argument.
+
+```c
+    // Setup sampler for linear filtering and clamp out of bounds accesses to edge.
+    xe_sampler_desc_t desc = {
+        XE_SAMPLER_DESC_VERSION_CURRENT,
+        XE_SAMPLER_ADDRESS_MODE_CLAMP,
+        XE_SAMPLER_FILTER_MODE_LINEAR,
+        false
+        };
+    xe_sampler_handle_t sampler;
+    xeDeviceCreateSampler(hDevice, &desc, &sampler);
+    ...
+    
+    // The sampler can be passed as a function argument.
+    xeFunctionSetArgumentValue(hFunction, 0, sizeof(xe_sampler_handle_t), &sampler);
+
+    // Append function
+    xeCommandListAppendLaunchFunction(hCommandList, hFunction, &launchArgs, nullptr);
+```
 
 # <a name="oi">OpenCL Interoperability</a>
 Interoperability with OpenCL is currently only supported _from_ OpenCL _to_ Xe for a subset of types.
@@ -863,11 +926,11 @@ a cl_program the caller must ensure the cl_program is compiled and linked.
 ## cl_command_queue
 Sharing OpenCL command queues provide opportunities to minimize transition costs when submitting work from
 an OpenCL queue followed by submitting work to Xe command queue and vice-versa.  Enqueuing Xe command lists
-to Xe command queues are immediately dispatched to the device.  OpenCL implementations, however, may not
-necessarily dispatch tasks to the device unless forced by explicit OpenCL API such as clFlush or clFinish.
-To minimize overhead between sharing command queues, applications must explicitly dispatch OpenCL command 
-queues using clFlush, clFinish or similar dispatch operations prior to enqueuing an Xe command list.
-Failing to explicitly dispatch device work may result in undefined behavior.  
+to Xe command queues are immediately submitted to the device.  OpenCL implementations, however, may not
+necessarily submit tasks to the device unless forced by explicit OpenCL API such as clFlush or clFinish.
+To minimize overhead between sharing command queues, applications must explicitly submit OpenCL command 
+queues using clFlush, clFinish or similar operations prior to enqueuing an Xe command list.
+Failing to explicitly submit device work may result in undefined behavior.  
 
 Sharing an OpenCL command queue doesn't alter the lifetime of the API object.  It provides knowledge for the
 driver to potentially reuse some internal resources which may have noticeable overhead when switching the resources.
@@ -876,7 +939,7 @@ Memory contents as reflected by any caching schemes will be consistent such that
 in an OpenCL command queue can be read by a subsequent Xe command list without any special application action. 
 The cost to ensure memory consistency may be implementation dependent.  The performance of sharing command queues
 will be no worse than an application submitting work to OpenCL, calling clFinish followed by submitting an
-xe command list.  In most cases, command queue sharing may be much more efficient. 
+::xe command list.  In most cases, command queue sharing may be much more efficient. 
 
 # <a name="ipc">Inter-Process Communication</a>
 The Xe Inter-Process Communication (IPC) APIs allow device memory allocations to be used across processes.
@@ -885,10 +948,10 @@ The following code examples demonstrate how to use the IPC APIs:
 1. First, the allocation is made, packaged, and sent on the sending process:
 ```c
     void* dptr = nullptr;
-    xeMemAlloc(..., &dptr);
+    xeMemAlloc(hMemAlloc, hDevice, flags, size, alignment, &dptr);
 
     xe_ipc_mem_handle_t hIPC;
-    xeIpcGetMemHandle(dptr, &hIPC);
+    xeIpcGetMemHandle(hMemAlloc, dptr, &hIPC);
 
     // Method of sending to receiving process is not defined by Xe:
     send_to_receiving_process(hIPC);
@@ -901,7 +964,7 @@ The following code examples demonstrate how to use the IPC APIs:
     hIPC = receive_from_sending_process();
 
     void* dptr = nullptr;
-    xeIpcOpenMemHandle(..., hIPC, &dptr);
+    xeIpcOpenMemHandle(hMemAlloc, hDevice, hIPC, XE_IPC_MEMORY_FLAG_NONE, &dptr);
 ```
 
 3. Each process may now refer to the same device memory allocation via its `dptr`.
@@ -909,13 +972,29 @@ Note, there is no guaranteed address equivalence for the values of `dptr` in eac
 
 4. To cleanup, first close the handle in the receiving process:
 ```c
-    xeIpcCloseMemHandle(..., dptr);
+    xeIpcCloseMemHandle(hMemAlloc, dptr);
 ```
 
 5. Finally, free the device pointer in the sending process:
 ```c
-    xeMemFree(dptr);
+    xeMemFree(hMemAlloc, dptr);
 ```
+
+# <a name="exp">Experimental</a>
+The following experimental features are provided only for the development and refinement of future APIs.
+These APIs are **not** supported by production drivers without explicit end-user opt-in.
+
+## Device-Specific Commands
+::xeCommandListReserveSpace provides direct access to the command list's command buffers in order to allow unrestricted access the device's capabilities.
+The application is solely responsible for ensuring the commands are valid and correct for the specific device.
+
+```c
+    void* ptr = nullptr;
+    xeCommandListReserveSpace(hCommandList, sizeof(blob), &ptr);
+    ::memcpy(ptr, blob, sizeof(blob));
+```
+
+# <a name="dbg">Debug and Instrumentation Layers</a>
 
 # <a name="fut">Future</a>
 The following is a list a features that are still being defined for inclusion:
@@ -927,9 +1006,5 @@ The following is a list a features that are still being defined for inclusion:
     + ability to cull program execution within a command list, based on device-generated value(s)
 - **Execution Flow-Control**
     + ability to describe loops and if-else-then type program execution within a command list, based on device-generated value(s)
-- **Timestamps and Metrics**
-    + ability to retrieve device-specific counters for performance analysis, tuning and tooling
-- **Execute Indirect**
-    + ability for the device to generate and enqueue more work (better version of device-side enqueue)
 - **C++ Interfaces**
     + ability to choose between C and C++ interfaces (e.g., by wrapping C++ interfaces with C interfaces)

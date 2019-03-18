@@ -5,8 +5,8 @@ namespace L0 {
 namespace ult {
 
 using EncodeFlush = CmdParseFixture;
-HWTEST2_F(EncodeFlush, encodesAPIPE_CONTROL, MatchAny) {
-    ::L0::EncodeFlush<gfxCoreFamily>::encode(*commandList);
+HWTEST2_F(EncodeFlush, appendsAPIPE_CONTROL, MatchAny) {
+    ::L0::EncodeFlush<gfxCoreFamily>::append(*commandList);
 
     parseCommandBuffer<FamilyType>();
 

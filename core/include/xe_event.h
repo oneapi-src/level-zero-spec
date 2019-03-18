@@ -43,7 +43,11 @@ extern "C" {
 
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief API version of ::xe_event_desc_t
-#define XE_EVENT_DESC_VERSION  XE_MAKE_VERSION( 1, 0 )
+typedef enum _xe_event_desc_version_t
+{
+    XE_EVENT_DESC_VERSION_CURRENT = XE_MAKE_VERSION( 1, 0 ),///< version 1.0
+
+} xe_event_desc_version_t;
 
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Supported event creation flags
@@ -63,7 +67,7 @@ typedef enum _xe_event_flag_t
 /// @brief Event descriptor
 typedef struct _xe_event_desc_t
 {
-    uint32_t version;                               ///< [in] ::XE_EVENT_DESC_VERSION
+    xe_event_desc_version_t version;                ///< [in] ::XE_EVENT_DESC_VERSION_CURRENT
     xe_event_flag_t flags;                          ///< [in] creation flags
 
 } xe_event_desc_t;
@@ -90,11 +94,11 @@ typedef struct _xe_event_desc_t
 ///         + nullptr == desc
 ///         + nullptr == phEvent
 ///     - ::XE_RESULT_ERROR_UNSUPPORTED
-///         + ::XE_EVENT_DESC_VERSION < desc->version
+///         + ::XE_EVENT_DESC_VERSION_CURRENT < desc->version
 ///     - ::XE_RESULT_ERROR_OUT_OF_HOST_MEMORY
 ///     - ::XE_RESULT_ERROR_OUT_OF_DEVICE_MEMORY
 __xedllport xe_result_t __xecall
-  xeDeviceCreateEvent(
+xeDeviceCreateEvent(
     xe_device_handle_t hDevice,                     ///< [in] handle of the device
     const xe_event_desc_t* desc,                    ///< [in] pointer to event descriptor
     xe_event_handle_t* phEvent                      ///< [out] pointer to handle of event object created
@@ -119,10 +123,10 @@ __xedllport xe_result_t __xecall
 ///         + nullptr == ptr
 ///         + nullptr == phEvent
 ///     - ::XE_RESULT_ERROR_UNSUPPORTED
-///         + ::XE_EVENT_DESC_VERSION < desc->version
+///         + ::XE_EVENT_DESC_VERSION_CURRENT < desc->version
 ///     - ::XE_RESULT_ERROR_OUT_OF_HOST_MEMORY
 __xedllport xe_result_t __xecall
-  xeDevicePlaceEvent(
+xeDevicePlaceEvent(
     xe_device_handle_t hDevice,                     ///< [in] handle of the device
     const xe_event_desc_t* desc,                    ///< [in] pointer to event descriptor
     void* ptr,                                      ///< [in] pointer to the device pointer where the event should be placed
@@ -153,12 +157,12 @@ __xedllport xe_result_t __xecall
 ///         + nullptr == hEvent
 ///     - ::XE_RESULT_ERROR_UNSUPPORTED
 __xedllport xe_result_t __xecall
-  xeEventDestroy(
+xeEventDestroy(
     xe_event_handle_t hEvent                        ///< [in] handle of event object to destroy
     );
 
 ///////////////////////////////////////////////////////////////////////////////
-/// @brief Encodes a signal of the event from the device into a command list.
+/// @brief Appends a signal of the event from the device into a command list.
 /// 
 /// @details
 ///     - The application may **not** call this function from simultaneous
@@ -180,13 +184,13 @@ __xedllport xe_result_t __xecall
 ///         + nullptr == hEvent
 ///     - ::XE_RESULT_ERROR_UNSUPPORTED
 __xedllport xe_result_t __xecall
-  xeCommandListEncodeSignalEvent(
+xeCommandListAppendSignalEvent(
     xe_command_list_handle_t hCommandList,          ///< [in] handle of the command list
     xe_event_handle_t hEvent                        ///< [in] handle of the event
     );
 
 ///////////////////////////////////////////////////////////////////////////////
-/// @brief Encodes a wait on event from a host signal into a command list.
+/// @brief Appends a wait on event from a host signal into a command list.
 /// 
 /// @details
 ///     - The application may **not** call this function from simultaneous
@@ -202,56 +206,9 @@ __xedllport xe_result_t __xecall
 ///         + nullptr == hEvent
 ///     - ::XE_RESULT_ERROR_UNSUPPORTED
 __xedllport xe_result_t __xecall
-  xeCommandListEncodeWaitOnEvent(
+xeCommandListAppendWaitOnEvent(
     xe_command_list_handle_t hCommandList,          ///< [in] handle of the command list
     xe_event_handle_t hEvent                        ///< [in] handle of the event
-    );
-
-///////////////////////////////////////////////////////////////////////////////
-/// @brief Encodes signals of multiple event from the device into a command list.
-/// 
-/// @details
-///     - The application may **not** call this function from simultaneous
-///       threads with the same command list handle.
-///     - The implementation of this function should be lock-free.
-/// 
-/// @returns
-///     - ::XE_RESULT_SUCCESS
-///     - ::XE_RESULT_ERROR_UNINITIALIZED
-///     - ::XE_RESULT_ERROR_DEVICE_LOST
-///     - ::XE_RESULT_ERROR_INVALID_PARAMETER
-///         + nullptr == hCommandList
-///         + nullptr == phEvents
-///     - ::XE_RESULT_ERROR_UNSUPPORTED
-__xedllport xe_result_t __xecall
-  xeCommandListEncodeSignalMultipleEvents(
-    xe_command_list_handle_t hCommandList,          ///< [in] handle of the command list
-    uint32_t numEvents,                             ///< [in] number of events pointed to by phEvents
-    xe_event_handle_t* phEvents                     ///< [in] pointer to array of handles of the events
-    );
-
-///////////////////////////////////////////////////////////////////////////////
-/// @brief Encodes waits on multiple event from a host signal into a command
-///        list.
-/// 
-/// @details
-///     - The application may **not** call this function from simultaneous
-///       threads with the same command list handle.
-///     - The implementation of this function should be lock-free.
-/// 
-/// @returns
-///     - ::XE_RESULT_SUCCESS
-///     - ::XE_RESULT_ERROR_UNINITIALIZED
-///     - ::XE_RESULT_ERROR_DEVICE_LOST
-///     - ::XE_RESULT_ERROR_INVALID_PARAMETER
-///         + nullptr == hCommandList
-///         + nullptr == phEvents
-///     - ::XE_RESULT_ERROR_UNSUPPORTED
-__xedllport xe_result_t __xecall
-  xeCommandListEncodeWaitOnMultipleEvents(
-    xe_command_list_handle_t hCommandList,          ///< [in] handle of the command list
-    uint32_t numEvents,                             ///< [in] number of events pointed to by phEvents
-    xe_event_handle_t* phEvents                     ///< [in] pointer to array of handles of the events
     );
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -273,7 +230,7 @@ __xedllport xe_result_t __xecall
 ///         + nullptr == hEvent
 ///     - ::XE_RESULT_ERROR_UNSUPPORTED
 __xedllport xe_result_t __xecall
-  xeHostSignalEvent(
+xeEventHostSignal(
     xe_event_handle_t hEvent                        ///< [in] handle of the event
     );
 
@@ -299,69 +256,12 @@ __xedllport xe_result_t __xecall
 ///     - ::XE_RESULT_NOT_READY
 ///         + timeout expired
 __xedllport xe_result_t __xecall
-  xeHostWaitOnEvent(
+xeEventHostSynchronize(
     xe_event_handle_t hEvent,                       ///< [in] handle of the event
-    uint32_t timeout                                ///< [in] if non-zero, then indicates the maximum time to poll or sleep
-                                                    ///< before returning; if zero, then only a single status check is made
-                                                    ///< before immediately returning; if MAX_UINT32, then function will not
-                                                    ///< return until complete.
-    );
-
-///////////////////////////////////////////////////////////////////////////////
-/// @brief Signals multiple events from host.
-/// 
-/// @details
-///     - The application may call this function from simultaneous threads.
-///     - The implementation of this function should be lock-free.
-/// 
-/// @returns
-///     - ::XE_RESULT_SUCCESS
-///     - ::XE_RESULT_ERROR_UNINITIALIZED
-///     - ::XE_RESULT_ERROR_DEVICE_LOST
-///     - ::XE_RESULT_ERROR_INVALID_PARAMETER
-///         + nullptr == phEvents
-///     - ::XE_RESULT_ERROR_UNSUPPORTED
-__xedllport xe_result_t __xecall
-  xeHostSignalMultipleEvents(
-    uint32_t numEvents,                             ///< [in] number of events pointed to by phEvents
-    xe_event_handle_t* phEvents                     ///< [in] pointer to array of handles of the events
-    );
-
-///////////////////////////////////////////////////////////////////////////////
-/// @brief The current host thread waits on multiple events from a device signal.
-/// 
-/// @details
-///     - The application may call this function from simultaneous threads.
-///     - The implementation of this function should be lock-free.
-/// 
-/// @remarks
-///   _Analogues_
-///     - clWaitForEvents
-/// 
-/// @returns
-///     - ::XE_RESULT_SUCCESS
-///     - ::XE_RESULT_ERROR_UNINITIALIZED
-///     - ::XE_RESULT_ERROR_DEVICE_LOST
-///     - ::XE_RESULT_ERROR_INVALID_PARAMETER
-///         + nullptr == phEvents
-///     - ::XE_RESULT_ERROR_UNSUPPORTED
-///     - ::XE_RESULT_NOT_READY
-///         + timeout expired
-__xedllport xe_result_t __xecall
-  xeHostWaitOnMultipleEvents(
-    uint32_t numEvents,                             ///< [in] number of events pointed to by phEvents
-    xe_event_handle_t* phEvents,                    ///< [in] pointer to array of handles of the events
-    xe_synchronization_mode_t mode,                 ///< [in] synchronization mode
-    uint32_t delay,                                 ///< [in] if ::XE_SYNCHRONIZATION_MODE_SLEEP == mode, then time (in
-                                                    ///< microseconds) to poll before putting Host thread to sleep; otherwise,
-                                                    ///< must be zero.
-    uint32_t interval,                              ///< [in] if ::XE_SYNCHRONIZATION_MODE_SLEEP == mode, then maximum time (in
-                                                    ///< microseconds) to put Host thread to sleep between polling; otherwise,
-                                                    ///< must be zero.
-    uint32_t timeout                                ///< [in] if non-zero, then indicates the maximum time to poll or sleep
-                                                    ///< before returning; if zero, then only a single status check is made
-                                                    ///< before immediately returning; if MAX_UINT32, then function will not
-                                                    ///< return until complete.
+    uint32_t timeout                                ///< [in] if non-zero, then indicates the maximum time to yield before
+                                                    ///< returning ::XE_RESULT_SUCCESS or ::XE_RESULT_NOT_READY; if zero, then
+                                                    ///< operates exactly like ::xeEventQueryStatus; if MAX_UINT32, then
+                                                    ///< function will not return until complete or device is lost.
     );
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -387,7 +287,7 @@ __xedllport xe_result_t __xecall
 ///     - ::XE_RESULT_NOT_READY
 ///         + not signaled
 __xedllport xe_result_t __xecall
-  xeEventQueryStatus(
+xeEventQueryStatus(
     xe_event_handle_t hEvent                        ///< [in] handle of the event
     );
 
@@ -407,17 +307,17 @@ __xedllport xe_result_t __xecall
 ///     - ::XE_RESULT_ERROR_UNINITIALIZED
 ///     - ::XE_RESULT_ERROR_DEVICE_LOST
 ///     - ::XE_RESULT_ERROR_INVALID_PARAMETER
-///         + nullptr == hEventStart
+///         + nullptr == hEventBegin
 ///         + nullptr == hEventEnd
 ///         + nullptr == pTime
 ///         + either event not signaled by device
 ///         + either event not created with ::XE_EVENT_FLAG_TIMESTAMP
 ///     - ::XE_RESULT_ERROR_UNSUPPORTED
 __xedllport xe_result_t __xecall
-  xeEventQueryElapsedTime(
-    xe_event_handle_t hEventStart,                  ///< [in] handle of the start event
+xeEventQueryElapsedTime(
+    xe_event_handle_t hEventBegin,                  ///< [in] handle of the begin event
     xe_event_handle_t hEventEnd,                    ///< [in] handle of the end event
-    double_t* pTime                                 ///< [out] time in milliseconds
+    double* pTime                                   ///< [out] time in milliseconds
     );
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -440,7 +340,7 @@ __xedllport xe_result_t __xecall
 ///         + report size too small
 ///     - ::XE_RESULT_ERROR_UNSUPPORTED
 __xedllport xe_result_t __xecall
-  xeEventQueryMetricsData(
+xeEventQueryMetricsData(
     xe_event_handle_t hEventStart,                  ///< [in] handle of the start event
     xe_event_handle_t hEventEnd,                    ///< [in] handle of the end event
     size_t reportSize,                              ///< [in] size of the report data buffer in bytes
@@ -468,7 +368,7 @@ __xedllport xe_result_t __xecall
 ///         + nullptr == hEvent
 ///     - ::XE_RESULT_ERROR_UNSUPPORTED
 __xedllport xe_result_t __xecall
-  xeCommandListEncodeEventReset(
+xeCommandListAppendEventReset(
     xe_command_list_handle_t hCommandList,          ///< [in] handle of the command list
     xe_event_handle_t hEvent                        ///< [in] handle of the event
     );
@@ -492,7 +392,7 @@ __xedllport xe_result_t __xecall
 ///         + nullptr == hEvent
 ///     - ::XE_RESULT_ERROR_UNSUPPORTED
 __xedllport xe_result_t __xecall
-  xeEventReset(
+xeEventReset(
     xe_event_handle_t hEvent                        ///< [in] handle of the event
     );
 

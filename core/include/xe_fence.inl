@@ -40,7 +40,22 @@ namespace xe
 {
     ///////////////////////////////////////////////////////////////////////////////
     /// @brief C++ wrapper for ::xeFenceDestroy
-    inline void Fence::Destroy(
+    /// 
+    /// @details
+    ///     - The application is responsible for making sure the GPU is not
+    ///       currently referencing the fence before it is deleted
+    ///     - The implementation of this function will immediately free all Host and
+    ///       Device allocations associated with this fence
+    ///     - The implementation of this function should be lock-free.
+    /// 
+    /// @remarks
+    ///   _Analogues_
+    ///     - **vkDestroyFence**
+    /// 
+    /// @throws result_t
+    inline void 
+    Fence::Destroy(
+        void
         )
     {
         // auto result = ::xeFenceDestroy( handle );
@@ -48,8 +63,44 @@ namespace xe
     }
 
     ///////////////////////////////////////////////////////////////////////////////
+    /// @brief C++ wrapper for ::xeFenceHostSynchronize
+    /// 
+    /// @details
+    ///     - The application may call this function from simultaneous threads.
+    ///     - The implementation of this function should be lock-free.
+    /// 
+    /// @remarks
+    ///   _Analogues_
+    ///     - **vkWaitForFences**
+    /// 
+    /// @throws result_t
+    inline void 
+    Fence::HostSynchronize(
+        uint32_t timeout                                ///< [in] if non-zero, then indicates the maximum time to yield before
+                                                        ///< returning ::RESULT_SUCCESS or ::RESULT_NOT_READY; if zero, then
+                                                        ///< operates exactly like ::FenceQueryStatus; if MAX_UINT32, then function
+                                                        ///< will not return until complete or device is lost.
+        )
+    {
+        // auto result = ::xeFenceHostSynchronize( handle, timeout );
+        // if( ::XE_RESULT_SUCCESS != result ) throw exception(result, "xe::Fence::HostSynchronize");
+    }
+
+    ///////////////////////////////////////////////////////////////////////////////
     /// @brief C++ wrapper for ::xeFenceQueryStatus
-    inline void Fence::QueryStatus(
+    /// 
+    /// @details
+    ///     - The application may call this function from simultaneous threads.
+    ///     - The implementation of this function should be lock-free.
+    /// 
+    /// @remarks
+    ///   _Analogues_
+    ///     - **vkGetFenceStatus**
+    /// 
+    /// @throws result_t
+    inline void 
+    Fence::QueryStatus(
+        void
         )
     {
         // auto result = ::xeFenceQueryStatus( handle );
@@ -58,7 +109,19 @@ namespace xe
 
     ///////////////////////////////////////////////////////////////////////////////
     /// @brief C++ wrapper for ::xeFenceReset
-    inline void Fence::Reset(
+    /// 
+    /// @details
+    ///     - The application may call this function from simultaneous threads.
+    ///     - The implementation of this function should be lock-free.
+    /// 
+    /// @remarks
+    ///   _Analogues_
+    ///     - **vkResetFences**
+    /// 
+    /// @throws result_t
+    inline void 
+    Fence::Reset(
+        void
         )
     {
         // auto result = ::xeFenceReset( handle );

@@ -7,7 +7,6 @@
 #include "xe_image.h"
 #include "xe_module.h"
 #include "xe_sampler.h"
-#include "xe_semaphore.h"
 #include "driver.h"
 
 struct _xe_device_handle_t {
@@ -18,7 +17,7 @@ struct MemoryManager;
 
 struct Device : _xe_device_handle_t {
     virtual xe_result_t canAccessPeer(xe_device_handle_t hPeerDevice,
-                                      bool *value) = 0;
+                                      xe_bool_t *value) = 0;
     virtual xe_result_t copyCommandList(xe_command_list_handle_t hCommandList,
                                         xe_command_list_handle_t *phCommandList) = 0;
 
@@ -41,13 +40,13 @@ struct Device : _xe_device_handle_t {
                                      xe_module_build_log_handle_t *buildLog) = 0;
     virtual xe_result_t createSampler(const xe_sampler_desc_t *pDesc,
                                       xe_sampler_handle_t *phSampler) = 0;
-    virtual xe_result_t createSemaphore(const xe_semaphore_desc_t *desc,
-                                        xe_semaphore_handle_t *phSemaphore) = 0;
     virtual xe_result_t evictImage(xe_image_handle_t hImage) = 0;
     virtual xe_result_t evictMemory(void *ptr,
                                     size_t size) = 0;
     virtual xe_result_t getApiVersion(xe_api_version_t *version) = 0;
     virtual xe_result_t getComputeProperties(xe_device_compute_properties_t *pComputeProperties) = 0;
+    virtual xe_result_t getLinkProperties(xe_device_handle_t hPeerDevice,
+                                          xe_device_link_properties_t *pLinkProperties) = 0;
     virtual xe_result_t getMemoryProperties(xe_device_memory_properties_t *pMemProperties) = 0;
     virtual xe_result_t getProperties(xe_device_properties_t *pDeviceProperties) = 0;
     virtual xe_result_t getSubDevice(uint32_t ordinal,

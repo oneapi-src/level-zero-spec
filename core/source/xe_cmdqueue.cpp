@@ -25,7 +25,7 @@
 *
 * @brief Intel Xe Driver APIs for Command Queue
 *
-* DO NOT EDIT: generated from /scripts/<type>/cmdqueue.yml
+* DO NOT EDIT: generated from /scripts/core/cmdqueue.yml
 *
 ******************************************************************************/
 #if defined(XE_CPP)
@@ -62,14 +62,14 @@
 ///         + nullptr == desc
 ///         + nullptr == phCommandQueue
 ///     - ::XE_RESULT_ERROR_UNSUPPORTED
-///         + ::XE_COMMAND_QUEUE_DESC_VERSION < desc->version
+///         + ::XE_COMMAND_QUEUE_DESC_VERSION_CURRENT < desc->version
 ///     - ::XE_RESULT_ERROR_OUT_OF_HOST_MEMORY
 ///     - ::XE_RESULT_ERROR_OUT_OF_DEVICE_MEMORY
 ///
 /// @hash {64cb11be0bd61d15890524c332cd41e37a7ff6c4b24ce3b3bdb3b0d19d687ad8}
 ///
 __xedllexport xe_result_t __xecall
-  xeDeviceCreateCommandQueue(
+xeDeviceCreateCommandQueue(
     xe_device_handle_t hDevice,                     ///< [in] handle of the device object
     const xe_command_queue_desc_t* desc,            ///< [in] pointer to command queue descriptor
     xe_command_queue_handle_t* phCommandQueue       ///< [out] pointer to handle of command queue object created
@@ -84,7 +84,7 @@ __xedllexport xe_result_t __xecall
             if( nullptr == hDevice ) return XE_RESULT_ERROR_INVALID_PARAMETER;
             if( nullptr == desc ) return XE_RESULT_ERROR_INVALID_PARAMETER;
             if( nullptr == phCommandQueue ) return XE_RESULT_ERROR_INVALID_PARAMETER;
-            if( XE_COMMAND_QUEUE_DESC_VERSION < desc->version ) return XE_RESULT_ERROR_UNSUPPORTED;
+            if( XE_COMMAND_QUEUE_DESC_VERSION_CURRENT < desc->version ) return XE_RESULT_ERROR_UNSUPPORTED;
         }
         /// @begin
 #if defined(XE_NULLDRV)
@@ -135,7 +135,7 @@ __xedllexport xe_result_t __xecall
 /// @hash {d2b4274520dcb902a966ba04f31f4c7e3976a1a6e0b6ad73d64713baa10785d4}
 ///
 __xedllexport xe_result_t __xecall
-  xeCommandQueueDestroy(
+xeCommandQueueDestroy(
     xe_command_queue_handle_t hCommandQueue         ///< [in] handle of command queue object to destroy
     )
 {
@@ -171,7 +171,7 @@ __xedllexport xe_result_t __xecall
 }
 
 ///////////////////////////////////////////////////////////////////////////////
-/// @brief Enqueues a command list into a command queue for immediate execution.
+/// @brief Executes a command list in a command queue.
 /// 
 /// @details
 ///     - The application may call this function from simultaneous threads.
@@ -190,16 +190,15 @@ __xedllexport xe_result_t __xecall
 ///         + nullptr == phCommandLists
 ///         + 0 for numCommandLists
 ///         + hFence is in signaled state
-///         + hFence is enqueued in another command queue
 ///     - ::XE_RESULT_ERROR_UNSUPPORTED
 ///
-/// @hash {3d9d4e4b61d47939ee851c18dce4cb2d2e5d99585ca8349927a49a7ee1aaceab}
+/// @hash {38c40fa4b4a7b503a5f43b59ef659ef84d37e12cc3ea04d378c665a7de3b6c4c}
 ///
 __xedllexport xe_result_t __xecall
-  xeCommandQueueEnqueueCommandLists(
+xeCommandQueueExecuteCommandLists(
     xe_command_queue_handle_t hCommandQueue,        ///< [in] handle of the command queue
-    uint32_t numCommandLists,                       ///< [in] number of command lists to enqueue
-    xe_command_list_handle_t* phCommandLists,       ///< [in] list of handles of the command lists to enqueue for execution
+    uint32_t numCommandLists,                       ///< [in] number of command lists to execute
+    xe_command_list_handle_t* phCommandLists,       ///< [in] list of handles of the command lists to execute
     xe_fence_handle_t hFence                        ///< [in][optional] handle of the fence to signal on completion
     )
 {
@@ -216,7 +215,7 @@ __xedllexport xe_result_t __xecall
 #if defined(XE_NULLDRV)
         return XE_RESULT_SUCCESS;
 #else
-        return L0::CommandQueue::fromHandle(hCommandQueue)->enqueueCommandLists(numCommandLists, phCommandLists, hFence);
+        return L0::CommandQueue::fromHandle(hCommandQueue)->executeCommandLists(numCommandLists, phCommandLists, hFence);
 #endif
         /// @end
     }
@@ -252,22 +251,15 @@ __xedllexport xe_result_t __xecall
 ///     - ::XE_RESULT_NOT_READY
 ///         + timeout expired
 ///
-/// @hash {643f20374b51ae704dcb5e1c4d9e883d481cec8ce0ab0ebe52eb12aa25a2956e}
+/// @hash {d3c6d6fa48cf90ca129fa97f9cc4496aec796497805202ef97d76a61a36faf55}
 ///
 __xedllexport xe_result_t __xecall
-  xeCommandQueueSynchronize(
+xeCommandQueueSynchronize(
     xe_command_queue_handle_t hCommandQueue,        ///< [in] handle of the command queue
-    xe_synchronization_mode_t mode,                 ///< [in] synchronization mode
-    uint32_t delay,                                 ///< [in] if ::XE_SYNCHRONIZATION_MODE_SLEEP == mode, then time (in
-                                                    ///< microseconds) to poll before putting Host thread to sleep; otherwise,
-                                                    ///< must be zero.
-    uint32_t interval,                              ///< [in] if ::XE_SYNCHRONIZATION_MODE_SLEEP == mode, then maximum time (in
-                                                    ///< microseconds) to put Host thread to sleep between polling; otherwise,
-                                                    ///< must be zero.
-    uint32_t timeout                                ///< [in] if non-zero, then indicates the maximum time to poll or sleep
-                                                    ///< before returning; if zero, then only a single status check is made
-                                                    ///< before immediately returning; if MAX_UINT32, then function will not
-                                                    ///< return until complete.
+    uint32_t timeout                                ///< [in] if non-zero, then indicates the maximum time to yield before
+                                                    ///< returning ::XE_RESULT_SUCCESS or ::XE_RESULT_NOT_READY; if zero, then
+                                                    ///< operates exactly like ::xeFenceQueryStatus; if MAX_UINT32, then
+                                                    ///< function will not return until complete or device is lost.
     )
 {
     try
@@ -282,7 +274,7 @@ __xedllexport xe_result_t __xecall
 #if defined(XE_NULLDRV)
         return XE_RESULT_SUCCESS;
 #else
-        return L0::CommandQueue::fromHandle(hCommandQueue)->synchronize(mode, delay, interval, timeout);
+        return L0::CommandQueue::fromHandle(hCommandQueue)->synchronize(timeout);
 #endif
         /// @end
     }

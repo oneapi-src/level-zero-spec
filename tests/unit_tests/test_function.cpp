@@ -113,7 +113,7 @@ TEST_F(FunctionPrintfTest, createPrintfHandlerCreatesOnlyWhenUsingPrintf) {
     function.module = &module;
 
     xe_function_desc_t funDesc = {};
-    funDesc.version = XE_API_HEADER_VERSION;
+    funDesc.version = XE_FUNCTION_DESC_VERSION_CURRENT;
     funDesc.pFunctionName = "mock";
 
     function.createPrintfHandler();
@@ -130,7 +130,7 @@ TEST_F(FunctionPrintfTest, createPrintfHandlerDoesNotCreateWhenNotUsingPrintf) {
     function.module = &module;
 
     xe_function_desc_t funDesc = {};
-    funDesc.version = XE_API_HEADER_VERSION;
+    funDesc.version = XE_FUNCTION_DESC_VERSION_CURRENT;
     funDesc.pFunctionName = "mock";
 
     function.createPrintfHandler();

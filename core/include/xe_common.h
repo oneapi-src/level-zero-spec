@@ -97,12 +97,8 @@ extern "C" {
 #endif // !defined(XE_ENABLE_OCL_INTEROP)
 
 ///////////////////////////////////////////////////////////////////////////////
-/// @brief naming consistency
-typedef float float_t;
-
-///////////////////////////////////////////////////////////////////////////////
-/// @brief naming consistency
-typedef double double_t;
+/// @brief compiler-independent type
+typedef uint8_t xe_bool_t;
 
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Handle of driver's device object
@@ -184,15 +180,6 @@ typedef enum _xe_result_t
     XE_RESULT_ERROR_UNKNOWN = 0x7fffffff,           ///< unknown or internal error
 
 } xe_result_t;
-
-///////////////////////////////////////////////////////////////////////////////
-/// @brief Supported synchronization modes
-typedef enum _xe_synchronization_mode_t
-{
-    XE_SYNCHRONIZATION_MODE_POLL,                   ///< poll on Host until device signals; lowest latency (default)
-    XE_SYNCHRONIZATION_MODE_SLEEP,                  ///< put Host thread to sleep until device signals
-
-} xe_synchronization_mode_t;
 
 #if defined(__cplusplus)
 } // extern "C"

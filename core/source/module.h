@@ -24,8 +24,8 @@ struct Module : public _xe_module_handle_t {
 
     virtual xe_result_t createFunction(const xe_function_desc_t *desc, xe_function_handle_t *phFunction) = 0;
     virtual xe_result_t destroy() = 0;
-    virtual xe_result_t getNativeBinary(uint32_t *pSize,
-                                        char **pModuleNativeBinary) = 0;
+    virtual xe_result_t getNativeBinary(size_t *pSize,
+                                        void **pModuleNativeBinary) = 0;
     virtual xe_result_t getFunctionPointer(const char *pFunctionName,
                                            void **pfnFunction) = 0;
 

@@ -15,18 +15,18 @@ using ::testing::_;
 using ::testing::AnyNumber;
 using ::testing::Return;
 
-TEST(xeCommandListEncodeExecutionBarrier, redirectsToObject) {
+TEST(xeCommandListAppendExecutionBarrier, redirectsToObject) {
     Mock<CommandList> commandList;
 
-    EXPECT_CALL(commandList, encodeExecutionBarrier()).Times(1);
+    EXPECT_CALL(commandList, appendExecutionBarrier()).Times(1);
 
-    auto result = xeCommandListEncodeExecutionBarrier(commandList.toHandle());
+    auto result = xeCommandListAppendExecutionBarrier(commandList.toHandle());
     EXPECT_EQ(XE_RESULT_SUCCESS, result);
 }
 
-using CommandListEncodeExecutionBarrier = ::testing::Test;
+using CommandListAppendExecutionBarrier = ::testing::Test;
 
-HWTEST_F(CommandListEncodeExecutionBarrier, addPipeControlToCommandStream) {
+HWTEST_F(CommandListAppendExecutionBarrier, addPipeControlToCommandStream) {
     Mock<Device> device;
 
     auto commandList = whitebox_cast(CommandList::create(productFamily, &device));
@@ -34,7 +34,7 @@ HWTEST_F(CommandListEncodeExecutionBarrier, addPipeControlToCommandStream) {
     auto usedSpaceBefore = commandList->commandStream->getUsed();
 
     Mock<Event> event;
-    auto result = commandList->encodeExecutionBarrier();
+    auto result = commandList->appendExecutionBarrier();
     ASSERT_EQ(XE_RESULT_SUCCESS, result);
 
     auto usedSpaceAfter = commandList->commandStream->getUsed();

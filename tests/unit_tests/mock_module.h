@@ -16,8 +16,8 @@ struct Mock<Module> : public Module {
     MOCK_METHOD0(destroy, xe_result_t());
     MOCK_METHOD2(getFunctionPointer, xe_result_t(const char *pFunctionName,
                                                  void **pfnFunction));
-    MOCK_METHOD2(getNativeBinary, xe_result_t(uint32_t *pSize,
-                                              char **pModuleNativeBinary));
+    MOCK_METHOD2(getNativeBinary, xe_result_t(size_t *pSize,
+                                              void **pModuleNativeBinary));
     MOCK_CONST_METHOD1(getImmutableFunctionInfo, PtrRef<ImmutableFunctionInfo>(CStringRef functionName));
     MOCK_CONST_METHOD0(getMaxGroupSize, uint32_t());
 

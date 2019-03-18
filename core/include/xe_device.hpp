@@ -49,10 +49,26 @@ namespace xe
         auto getHandle( void ) const { return handle; }
 
         ///////////////////////////////////////////////////////////////////////////////
+        /// @brief C++ version for ::xe_command_graph_desc_version_t
+        enum class command_graph_desc_version_t
+        {
+            CURRENT = XE_MAKE_VERSION( 1, 0 ),              ///< version 1.0
+
+        };
+
+        ///////////////////////////////////////////////////////////////////////////////
         /// @brief C++ version for ::xe_command_graph_flag_t
         enum class command_graph_flag_t
         {
             NONE = 0,                                       ///< default behavior
+
+        };
+
+        ///////////////////////////////////////////////////////////////////////////////
+        /// @brief C++ version for ::xe_command_list_desc_version_t
+        enum class command_list_desc_version_t
+        {
+            CURRENT = XE_MAKE_VERSION( 1, 0 ),              ///< version 1.0
 
         };
 
@@ -71,6 +87,14 @@ namespace xe
         };
 
         ///////////////////////////////////////////////////////////////////////////////
+        /// @brief C++ version for ::xe_command_queue_desc_version_t
+        enum class command_queue_desc_version_t
+        {
+            CURRENT = XE_MAKE_VERSION( 1, 0 ),              ///< version 1.0
+
+        };
+
+        ///////////////////////////////////////////////////////////////////////////////
         /// @brief C++ version for ::xe_command_queue_flag_t
         enum class command_queue_flag_t
         {
@@ -78,6 +102,8 @@ namespace xe
             COPY_ONLY = XE_BIT(0),                          ///< command queue only supports enqueing copy-only command lists
             LOGICAL_ONLY = XE_BIT(1),                       ///< command queue is not tied to a physical command queue; driver may
                                                             ///< dynamically assign based on usage
+            SINGLE_SLICE_ONLY = XE_BIT(2),                  ///< command queue reserves and cannot comsume more than a single slice'
+                                                            ///< 'slice' size is device-specific.  cannot be combined with COPY_ONLY.
 
         };
 
@@ -86,7 +112,7 @@ namespace xe
         enum class command_queue_mode_t
         {
             DEFAULT = 0,                                    ///< implicit default behavior; uses driver-based heuristics
-            SYNCHRONOUS,                                    ///< GPU execution always completes immediately on enqueue; CPU thread is
+            SYNCHRONOUS,                                    ///< GPU execution always completes immediately on execute; CPU thread is
                                                             ///< blocked using wait on implicit synchronization object
             ASYNCHRONOUS,                                   ///< GPU execution is scheduled and will complete in future; explicit
                                                             ///< synchronization object must be used to determine completeness
@@ -112,6 +138,30 @@ namespace xe
         };
 
         ///////////////////////////////////////////////////////////////////////////////
+        /// @brief C++ version for ::xe_device_properties_version_t
+        enum class device_properties_version_t
+        {
+            CURRENT = XE_MAKE_VERSION( 1, 0 ),              ///< version 1.0
+
+        };
+
+        ///////////////////////////////////////////////////////////////////////////////
+        /// @brief C++ version for ::xe_device_compute_properties_version_t
+        enum class device_compute_properties_version_t
+        {
+            CURRENT = XE_MAKE_VERSION( 1, 0 ),              ///< version 1.0
+
+        };
+
+        ///////////////////////////////////////////////////////////////////////////////
+        /// @brief C++ version for ::xe_device_memory_properties_version_t
+        enum class device_memory_properties_version_t
+        {
+            CURRENT = XE_MAKE_VERSION( 1, 0 ),              ///< version 1.0
+
+        };
+
+        ///////////////////////////////////////////////////////////////////////////////
         /// @brief C++ version for ::xe_memory_access_capabilities_t
         enum class memory_access_capabilities_t
         {
@@ -119,6 +169,14 @@ namespace xe
             MEMORY_ATOMIC_ACCESS = XE_BIT( 1 ),             ///< Supports atomic access
             MEMORY_CONCURRENT_ACCESS = XE_BIT( 2 ),         ///< Supports concurrent access
             MEMORY_CONCURRENT_ATOMIC_ACCESS = XE_BIT( 3 ),  ///< Supports concurrent atomic access
+
+        };
+
+        ///////////////////////////////////////////////////////////////////////////////
+        /// @brief C++ version for ::xe_device_link_properties_version_t
+        enum class device_link_properties_version_t
+        {
+            CURRENT = XE_MAKE_VERSION( 1, 0 ),              ///< version 1.0
 
         };
 
@@ -133,6 +191,14 @@ namespace xe
         };
 
         ///////////////////////////////////////////////////////////////////////////////
+        /// @brief C++ version for ::xe_event_desc_version_t
+        enum class event_desc_version_t
+        {
+            CURRENT = XE_MAKE_VERSION( 1, 0 ),              ///< version 1.0
+
+        };
+
+        ///////////////////////////////////////////////////////////////////////////////
         /// @brief C++ version for ::xe_event_flag_t
         enum class event_flag_t
         {
@@ -143,6 +209,14 @@ namespace xe
             IPC = XE_BIT(3),                                ///< signals and waits may occur across processes
             TIMESTAMP = XE_BIT(4),                          ///< supports time-based queries
             PERFORMANCE_METRICS = XE_BIT(5),                ///< supports performance metrics (MDAPI)
+
+        };
+
+        ///////////////////////////////////////////////////////////////////////////////
+        /// @brief C++ version for ::xe_image_desc_version_t
+        enum class image_desc_version_t
+        {
+            CURRENT = XE_MAKE_VERSION( 1, 0 ),              ///< version 1.0
 
         };
 
@@ -185,6 +259,14 @@ namespace xe
         };
 
         ///////////////////////////////////////////////////////////////////////////////
+        /// @brief C++ version for ::xe_module_desc_version_t
+        enum class module_desc_version_t
+        {
+            CURRENT = XE_MAKE_VERSION( 1, 0 ),              ///< version 1.0
+
+        };
+
+        ///////////////////////////////////////////////////////////////////////////////
         /// @brief C++ version for ::xe_module_format_t
         enum class module_format_t
         {
@@ -194,30 +276,30 @@ namespace xe
         };
 
         ///////////////////////////////////////////////////////////////////////////////
-        /// @brief C++ version for ::xe_sampler_addressing_mode_t
-        enum class sampler_addressing_mode_t
+        /// @brief C++ version for ::xe_sampler_desc_version_t
+        enum class sampler_desc_version_t
         {
-            SAMPLER_ADDRESS_NONE = 0,                       ///< No coordinate modifications for out-of-bounds image access.
-            SAMPLER_ADDRESS_REPEAT,                         ///< Out-of-bounds coordinates are wrapped back around.
-            SAMPLER_ADDRESS_CLAMP,                          ///< Out-of-bounds coordinates are clamped to edge.
-            SAMPLER_ADDRESS_MIRROR,                         ///< Out-of-bounds coordinates are mirrored starting from edge.
+            CURRENT = XE_MAKE_VERSION( 1, 0 ),              ///< version 1.0
 
         };
 
         ///////////////////////////////////////////////////////////////////////////////
-        /// @brief C++ version for ::xe_sampler_filtering_mode_t
-        enum class sampler_filtering_mode_t
+        /// @brief C++ version for ::xe_sampler_address_mode_t
+        enum class sampler_address_mode_t
         {
-            SAMPLER_FILTER_NEAREST = 0,                     ///< No coordinate modifications for out of bounds image access.
-            SAMPLER_FILTER_LINEAR,                          ///< Out-of-bounds coordinates are wrapped back around.
+            NONE = 0,                                       ///< No coordinate modifications for out-of-bounds image access.
+            REPEAT,                                         ///< Out-of-bounds coordinates are wrapped back around.
+            CLAMP,                                          ///< Out-of-bounds coordinates are clamped to edge.
+            MIRROR,                                         ///< Out-of-bounds coordinates are mirrored starting from edge.
 
         };
 
         ///////////////////////////////////////////////////////////////////////////////
-        /// @brief C++ version for ::xe_semaphore_flag_t
-        enum class semaphore_flag_t
+        /// @brief C++ version for ::xe_sampler_filter_mode_t
+        enum class sampler_filter_mode_t
         {
-            NONE = 0,                                       ///< default behavior
+            NEAREST = 0,                                    ///< No coordinate modifications for out of bounds image access.
+            LINEAR,                                         ///< Out-of-bounds coordinates are wrapped back around.
 
         };
 
@@ -225,7 +307,7 @@ namespace xe
         /// @brief C++ version for ::xe_command_graph_desc_t
         struct command_graph_desc_t
         {
-            uint32_t version = XE_COMMAND_GRAPH_DESC_VERSION;   ///< [in] ::COMMAND_GRAPH_DESC_VERSION
+            command_graph_desc_version_t version = command_graph_desc_version_t::CURRENT;   ///< [in] ::COMMAND_GRAPH_DESC_VERSION_CURRENT
             command_graph_flag_t flags = command_graph_flag_t::NONE;///< [in] creation flags
 
         };
@@ -234,7 +316,7 @@ namespace xe
         /// @brief C++ version for ::xe_command_list_desc_t
         struct command_list_desc_t
         {
-            uint32_t version = XE_COMMAND_LIST_DESC_VERSION;///< [in] ::COMMAND_LIST_DESC_VERSION
+            command_list_desc_version_t version = command_list_desc_version_t::CURRENT; ///< [in] ::COMMAND_LIST_DESC_VERSION_CURRENT
             command_list_flag_t flags = command_list_flag_t::NONE;  ///< [in] creation flags
 
         };
@@ -243,7 +325,7 @@ namespace xe
         /// @brief C++ version for ::xe_command_queue_desc_t
         struct command_queue_desc_t
         {
-            uint32_t version = XE_COMMAND_QUEUE_DESC_VERSION;   ///< [in] ::COMMAND_QUEUE_DESC_VERSION
+            command_queue_desc_version_t version = command_queue_desc_version_t::CURRENT;   ///< [in] ::COMMAND_QUEUE_DESC_VERSION_CURRENT
             command_queue_flag_t flags = command_queue_flag_t::NONE;///< [in] creation flags
             command_queue_mode_t mode = command_queue_mode_t::DEFAULT;  ///< [in] operation mode
             command_queue_priority_t priority = command_queue_priority_t::NORMAL;   ///< [in] priority
@@ -257,14 +339,22 @@ namespace xe
         };
 
         ///////////////////////////////////////////////////////////////////////////////
+        /// @brief C++ version for ::xe_device_uuid_t
+        struct device_uuid_t
+        {
+            uint8_t id[XE_MAX_UUID_SIZE];                   ///< [out] device universal unique id
+
+        };
+
+        ///////////////////////////////////////////////////////////////////////////////
         /// @brief C++ version for ::xe_device_properties_t
         struct device_properties_t
         {
-            uint32_t version = XE_DEVICE_PROPERTIES_VERSION;///< [in] ::DEVICE_PROPERTIES_VERSION
+            device_properties_version_t version = device_properties_version_t::CURRENT; ///< [in] ::DEVICE_PROPERTIES_VERSION_CURRENT
             uint32_t vendorId;                              ///< [out] vendor id from PCI configuration
             uint32_t deviceId;                              ///< [out] device id from PCI configuration
             uint32_t subdeviceId;                           ///< [out] Subdevice id. Only valid if isSubdevice is true.
-            bool isSubdevice;                               ///< [out] Is this a subdevice.
+            bool_t isSubdevice;                             ///< [out] Is this a subdevice.
             uint32_t numSubDevices;                         ///< [out] Number of sub-devices.
             uint32_t coreClockRate;                         ///< [out] Clock rate for device core.
             uint32_t memClockRate;                          ///< [out] Clock rate for device global memory
@@ -275,6 +365,11 @@ namespace xe
             uint32_t numComputeCores;                       ///< [out] Number of compute cores
             uint32_t maxCommandQueuePriority;               ///< [out] Maximum priority for command queues. Higher value is higher
                                                             ///< priority.
+            uint32_t numThreadsPerEU;                       ///< [out] Number of threads per EU.
+            uint32_t numEUsPerDSS;                          ///< [out] Number of EUs per dual sub-slice.
+            uint32_t numDSSPerSlice;                        ///< [out] Number of dual sub-slices per slice.
+            uint32_t numSlicesPerTile;                      ///< [out] Number of slices per tile.
+            uint32_t numTiles;                              ///< [out] Number of tiles for this device.
             char device_name[XE_MAX_DEVICE_NAME];           ///< [out] Device name
 
         };
@@ -283,14 +378,14 @@ namespace xe
         /// @brief C++ version for ::xe_device_compute_properties_t
         struct device_compute_properties_t
         {
-            uint32_t version = XE_DEVICE_COMPUTE_PROPERTIES_VERSION;///< [in] ::DEVICE_COMPUTE_PROPERTIES_VERSION
+            device_compute_properties_version_t version = device_compute_properties_version_t::CURRENT; ///< [in] ::DEVICE_COMPUTE_PROPERTIES_VERSION_CURRENT
             uint32_t maxThreadsPerGroup;                    ///< [out] Maximum threads per compute group
             uint32_t maxGroupSizeX;                         ///< [out] Maximum items for X dimension in group
             uint32_t maxGroupSizeY;                         ///< [out] Maximum items for Y dimension in group
             uint32_t maxGroupSizeZ;                         ///< [out] Maximum items for Z dimension in group
-            uint32_t maxGroupCountX;                        ///< [out] Maximum groups that can be dispatched for x dimension
-            uint32_t maxGroupCountY;                        ///< [out] Maximum groups that can be dispatched for y dimension
-            uint32_t maxGroupCountZ;                        ///< [out] Maximum groups that can be dispatched for z dimension
+            uint32_t maxGroupCountX;                        ///< [out] Maximum groups that can be launched for x dimension
+            uint32_t maxGroupCountY;                        ///< [out] Maximum groups that can be launched for y dimension
+            uint32_t maxGroupCountZ;                        ///< [out] Maximum groups that can be launched for z dimension
             uint32_t maxSharedLocalMemory;                  ///< [out] Maximum shared local memory per group.
             uint32_t maxGroupRegisters;                     ///< [out] Maximum physical registers available per group
             uint32_t numSubGroupSizes;                      ///< [out] Number of subgroup sizes supported. This indicates number of
@@ -303,9 +398,9 @@ namespace xe
         /// @brief C++ version for ::xe_device_memory_properties_t
         struct device_memory_properties_t
         {
-            uint32_t version = XE_DEVICE_MEMORY_PROPERTIES_VERSION; ///< [in] ::DEVICE_MEMORY_PROPERTIES_VERSION
-            bool unifiedMemory;                             ///< [out] Host and device share same physical memory.
-            bool onDemandPageFaults;                        ///< [out] Device supports on-demand page-faulting.
+            device_memory_properties_version_t version = device_memory_properties_version_t::CURRENT;   ///< [in] ::DEVICE_MEMORY_PROPERTIES_VERSION_CURRENT
+            bool_t unifiedMemory;                           ///< [out] Host and device share same physical memory.
+            bool_t onDemandPageFaults;                      ///< [out] Device supports on-demand page-faulting.
             uint32_t maxImageDims1D;                        ///< [out] Maximum image dimensions for 1D resources.
             uint32_t maxImageDims2D;                        ///< [out] Maximum image dimensions for 2D resources.
             uint32_t maxImageDims3D;                        ///< [out] Maximum image dimensions for 3D resources.
@@ -315,11 +410,11 @@ namespace xe
             memory_access_capabilities_t sharedAllocCapabilities;   ///< [out] Bitfield describing shared memory capabilities
             memory_access_capabilities_t sharedCrossDeviceAllocCapabilities;///< [out] Bitfield describing shared (cross-device) memory capabilities
             memory_access_capabilities_t sharedSystemDeviceAllocCapabilities;   ///< [out] Bitfield describing shared (system) memory capabilities
-            uint32_t IntermediateCacheSize;                 ///< [out] Device Intermediate Cache(L1/L2) size
-            bool IntermediateCacheControl;                  ///< [out] Support User control on Intermediate Cache(i.e. Resize SLM
-                                                            ///< section vs Generic Cache).
-            uint32_t LastLevelCacheSize;                    ///< [out] Device LastLevelCacheSize(L3) size
-            bool LastLevelCacheSizeControl;                 ///< [out] Support User control on LastLevelCacheSize Cache(i.e. Resize SLM
+            uint32_t intermediateCacheSize;                 ///< [out] Per-cache Intermediate Cache (L1/L2) size, in bytes
+            bool_t intermediateCacheControl;                ///< [out] Support User control on Intermediate Cache (i.e. Resize SLM
+                                                            ///< section vs Generic Cache)
+            uint32_t lastLevelCacheSize;                    ///< [out] Per-cache Last Level Cache (L3) size, in bytes
+            bool_t lastLevelCacheSizeControl;               ///< [out] Support User control on Last Level Cache (i.e. Resize SLM
                                                             ///< section vs Generic Cache).
 
         };
@@ -328,9 +423,9 @@ namespace xe
         /// @brief C++ version for ::xe_device_link_properties_t
         struct device_link_properties_t
         {
-            uint32_t version = XE_DEVICE_LINK_PROPERTIES_VERSION;   ///< [in] ::DEVICE_LINK_PROPERTIES_VERSION
-            bool isP2PSupported;                            ///< [out] Is P2P access supported across link
-            bool isAtomicsSupported;                        ///< [out] Are atomics supported across link
+            device_link_properties_version_t version = device_link_properties_version_t::CURRENT;   ///< [in] ::DEVICE_LINK_PROPERTIES_VERSION_CURRENT
+            bool_t isP2PSupported;                          ///< [out] Is P2P access supported across link
+            bool_t isAtomicsSupported;                      ///< [out] Are atomics supported across link
             uint32_t performanceRank;                       ///< [out] Relative performance rank of link.
 
         };
@@ -339,7 +434,7 @@ namespace xe
         /// @brief C++ version for ::xe_event_desc_t
         struct event_desc_t
         {
-            uint32_t version = XE_EVENT_DESC_VERSION;       ///< [in] ::EVENT_DESC_VERSION
+            event_desc_version_t version = event_desc_version_t::CURRENT;   ///< [in] ::EVENT_DESC_VERSION_CURRENT
             event_flag_t flags = event_flag_t::NONE;        ///< [in] creation flags
 
         };
@@ -348,7 +443,7 @@ namespace xe
         /// @brief C++ version for ::xe_image_desc_t
         struct image_desc_t
         {
-            uint32_t version = XE_IMAGE_DESC_VERSION;       ///< [in] ::IMAGE_DESC_VERSION
+            image_desc_version_t version = image_desc_version_t::CURRENT;   ///< [in] ::IMAGE_DESC_VERSION_CURRENT
             image_flag_t flags;                             ///< [in] creation flags
             image_type_t type;                              ///< [in] image type
             image_format_t format;                          ///< [in] image channel format
@@ -369,11 +464,11 @@ namespace xe
         /// @brief C++ version for ::xe_module_desc_t
         struct module_desc_t
         {
-            uint32_t version = XE_MODULE_DESC_VERSION;      ///< [in] ::MODULE_DESC_VERSION
+            module_desc_version_t version = module_desc_version_t::CURRENT; ///< [in] ::MODULE_DESC_VERSION_CURRENT
             module_format_t format;                         ///< [in] Module format passed in with pInputModule
-            uint32_t inputSize = 0;                         ///< [in] size of input IL or ISA from pInputModule.
+            size_t inputSize = 0;                           ///< [in] size of input IL or ISA from pInputModule.
             const char* pInputModule = nullptr;             ///< [in] pointer to IL or ISA
-            const char* pBuildFlags = nullptr;              ///< [in] string containing compiler flags. See documentation for build
+            const char* pBuildFlags = nullptr;              ///< [in] string containing compiler flags. See programming guide for build
                                                             ///< flags.
 
         };
@@ -382,199 +477,282 @@ namespace xe
         /// @brief C++ version for ::xe_sampler_desc_t
         struct sampler_desc_t
         {
-            uint32_t version = XE_SAMPLER_DESC_VERSION;     ///< [in] ::SAMPLER_DESC_VERSION
-            sampler_addressing_mode_t addressingMode = sampler_addressing_mode_t::SAMPLER_ADDRESS_NONE; ///< [in] Sampler addressing mode to determine how out-of-bounds
+            sampler_desc_version_t version = sampler_desc_version_t::CURRENT;   ///< [in] ::SAMPLER_DESC_VERSION_CURRENT
+            sampler_address_mode_t addressMode = sampler_address_mode_t::NONE;  ///< [in] Sampler addressing mode to determine how out-of-bounds
                                                             ///< coordinates are handled.
-            sampler_filtering_mode_t filterMode = sampler_filtering_mode_t::SAMPLER_FILTER_NEAREST; ///< [in] Sampler filter mode to determine how samples are filtered.
-            bool isNormalized = true;                       ///< [in] Are coordinates normalized [0, 1] or not.
-
-        };
-
-        ///////////////////////////////////////////////////////////////////////////////
-        /// @brief C++ version for ::xe_semaphore_desc_t
-        struct semaphore_desc_t
-        {
-            uint32_t version = XE_SEMAPHORE_DESC_VERSION;   ///< [in] ::SEMAPHORE_DESC_VERSION
-            semaphore_flag_t flags = semaphore_flag_t::NONE;///< [in] creation flags
+            sampler_filter_mode_t filterMode = sampler_filter_mode_t::NEAREST;  ///< [in] Sampler filter mode to determine how samples are filtered.
+            bool_t isNormalized = true;                     ///< [in] Are coordinates normalized [0, 1] or not.
 
         };
 
 #if XE_ENABLE_OCL_INTEROP
         ///////////////////////////////////////////////////////////////////////////////
         /// @brief C++ wrapper for ::xeDeviceRegisterCLMemory
-        inline void RegisterCLMemory(
+        /// @returns
+        ///     - void*: pointer to device allocation
+        /// 
+        /// @throws result_t
+        inline void*
+        RegisterCLMemory(
             cl_context context,                             ///< [in] the OpenCL context that created the memory
-            cl_mem mem,                                     ///< [in] the OpenCL memory to register
-            void** ptr                                      ///< [out] pointer to device allocation
+            cl_mem mem                                      ///< [in] the OpenCL memory to register
             );
 #endif // XE_ENABLE_OCL_INTEROP
 
 #if XE_ENABLE_OCL_INTEROP
         ///////////////////////////////////////////////////////////////////////////////
         /// @brief C++ wrapper for ::xeDeviceRegisterCLProgram
-        inline void RegisterCLProgram(
+        /// @returns
+        ///     - module_handle_t: pointer to handle of module object created
+        /// 
+        /// @throws result_t
+        inline module_handle_t
+        RegisterCLProgram(
             cl_context context,                             ///< [in] the OpenCL context that created the program
-            cl_program program,                             ///< [in] the OpenCL program to register
-            module_handle_t* phModule                       ///< [out] pointer to handle of module object created
+            cl_program program                              ///< [in] the OpenCL program to register
             );
 #endif // XE_ENABLE_OCL_INTEROP
 
 #if XE_ENABLE_OCL_INTEROP
         ///////////////////////////////////////////////////////////////////////////////
         /// @brief C++ wrapper for ::xeDeviceRegisterCLCommandQueue
-        inline void RegisterCLCommandQueue(
+        /// @returns
+        ///     - command_queue_handle_t: pointer to handle of command queue object created
+        /// 
+        /// @throws result_t
+        inline command_queue_handle_t
+        RegisterCLCommandQueue(
             cl_context context,                             ///< [in] the OpenCL context that created the command queue
-            cl_command_queue command_queue,                 ///< [in] the OpenCL command queue to register
-            command_queue_handle_t* phCommandQueue          ///< [out] pointer to handle of command queue object created
+            cl_command_queue command_queue                  ///< [in] the OpenCL command queue to register
             );
 #endif // XE_ENABLE_OCL_INTEROP
 
         ///////////////////////////////////////////////////////////////////////////////
         /// @brief C++ wrapper for ::xeDeviceCreateCommandGraph
-        inline void CreateCommandGraph(
-            const command_graph_desc_t* desc,               ///< [in] pointer to command graph descriptor
-            command_graph_handle_t* phCommandGraph          ///< [out] pointer to handle of command graph object created
+        /// @returns
+        ///     - command_graph_handle_t: pointer to handle of command graph object created
+        /// 
+        /// @throws result_t
+        inline command_graph_handle_t
+        CreateCommandGraph(
+            const command_graph_desc_t* desc                ///< [in] pointer to command graph descriptor
             );
 
         ///////////////////////////////////////////////////////////////////////////////
         /// @brief C++ wrapper for ::xeDeviceCreateCommandList
-        inline void CreateCommandList(
-            const command_list_desc_t* desc,                ///< [in] pointer to command list descriptor
-            command_list_handle_t* phCommandList            ///< [out] pointer to handle of command list object created
+        /// @returns
+        ///     - command_list_handle_t: pointer to handle of command list object created
+        /// 
+        /// @throws result_t
+        inline command_list_handle_t
+        CreateCommandList(
+            const command_list_desc_t* desc                 ///< [in] pointer to command list descriptor
             );
 
         ///////////////////////////////////////////////////////////////////////////////
         /// @brief C++ wrapper for ::xeDeviceCopyCommandList
-        inline void CopyCommandList(
-            command_list_handle_t hCommandList,             ///< [in] handle to command list to copy
-            command_list_handle_t* phCommandList            ///< [out] pointer to handle of command list object created
+        /// @returns
+        ///     - command_list_handle_t: pointer to handle of command list object created
+        /// 
+        /// @throws result_t
+        inline command_list_handle_t
+        CopyCommandList(
+            command_list_handle_t hCommandList              ///< [in] handle to command list to copy
             );
 
         ///////////////////////////////////////////////////////////////////////////////
         /// @brief C++ wrapper for ::xeDeviceCreateCommandQueue
-        inline void CreateCommandQueue(
-            const command_queue_desc_t* desc,               ///< [in] pointer to command queue descriptor
-            command_queue_handle_t* phCommandQueue          ///< [out] pointer to handle of command queue object created
+        /// @returns
+        ///     - command_queue_handle_t: pointer to handle of command queue object created
+        /// 
+        /// @throws result_t
+        inline command_queue_handle_t
+        CreateCommandQueue(
+            const command_queue_desc_t* desc                ///< [in] pointer to command queue descriptor
             );
 
         ///////////////////////////////////////////////////////////////////////////////
         /// @brief C++ wrapper for ::xeDeviceGetSubDevice
-        inline void GetSubDevice(
-            uint32_t ordinal,                               ///< [in] ordinal of sub-device to retrieve
-            device_handle_t* phSubDevice                    ///< [out] pointer to handle of sub-device object.
+        /// @returns
+        ///     - device_handle_t: pointer to handle of sub-device object.
+        /// 
+        /// @throws result_t
+        inline device_handle_t
+        GetSubDevice(
+            uint32_t ordinal                                ///< [in] ordinal of sub-device to retrieve
             );
 
         ///////////////////////////////////////////////////////////////////////////////
         /// @brief C++ wrapper for ::xeDeviceGetApiVersion
-        inline void GetApiVersion(
-            api_version_t* version                          ///< [out] api version
+        /// @returns
+        ///     - api_version_t: api version
+        /// 
+        /// @throws result_t
+        inline api_version_t
+        GetApiVersion(
+            void
             );
 
         ///////////////////////////////////////////////////////////////////////////////
         /// @brief C++ wrapper for ::xeDeviceGetProperties
-        inline void GetProperties(
-            device_properties_t* pDeviceProperties          ///< [out] query result for device properties
+        /// @returns
+        ///     - device_properties_t: query result for device properties
+        /// 
+        /// @throws result_t
+        inline device_properties_t
+        GetProperties(
+            void
             );
 
         ///////////////////////////////////////////////////////////////////////////////
         /// @brief C++ wrapper for ::xeDeviceGetComputeProperties
-        inline void GetComputeProperties(
-            device_compute_properties_t* pComputeProperties ///< [out] query result for compute properties
+        /// @returns
+        ///     - device_compute_properties_t: query result for compute properties
+        /// 
+        /// @throws result_t
+        inline device_compute_properties_t
+        GetComputeProperties(
+            void
             );
 
         ///////////////////////////////////////////////////////////////////////////////
         /// @brief C++ wrapper for ::xeDeviceGetMemoryProperties
-        inline void GetMemoryProperties(
-            device_memory_properties_t* pMemProperties      ///< [out] query result for compute properties
+        /// @returns
+        ///     - device_memory_properties_t: query result for compute properties
+        /// 
+        /// @throws result_t
+        inline device_memory_properties_t
+        GetMemoryProperties(
+            void
+            );
+
+        ///////////////////////////////////////////////////////////////////////////////
+        /// @brief C++ wrapper for ::xeDeviceGetLinkProperties
+        /// @returns
+        ///     - device_link_properties_t: link properties between source and destination devices
+        /// 
+        /// @throws result_t
+        inline device_link_properties_t
+        GetLinkProperties(
+            device_handle_t hPeerDevice                     ///< [in] handle of the peer device with the allocation
             );
 
         ///////////////////////////////////////////////////////////////////////////////
         /// @brief C++ wrapper for ::xeDeviceCanAccessPeer
-        inline void CanAccessPeer(
-            device_handle_t hPeerDevice,                    ///< [in] handle of the peer device with the allocation
-            bool* value                                     ///< [out] returned access capability
+        /// @returns
+        ///     - bool_t: returned access capability
+        /// 
+        /// @throws result_t
+        inline bool_t
+        CanAccessPeer(
+            device_handle_t hPeerDevice                     ///< [in] handle of the peer device with the allocation
             );
 
         ///////////////////////////////////////////////////////////////////////////////
         /// @brief C++ wrapper for ::xeDeviceSetIntermediateCacheConfig
-        inline void SetIntermediateCacheConfig(
+        /// @throws result_t
+        inline void
+        SetIntermediateCacheConfig(
             cache_config_t CacheConfig                      ///< [in] CacheConfig
             );
 
         ///////////////////////////////////////////////////////////////////////////////
         /// @brief C++ wrapper for ::xeDeviceSetLastLevelCacheConfig
-        inline void SetLastLevelCacheConfig(
+        /// @throws result_t
+        inline void
+        SetLastLevelCacheConfig(
             cache_config_t CacheConfig                      ///< [in] CacheConfig
             );
 
         ///////////////////////////////////////////////////////////////////////////////
         /// @brief C++ wrapper for ::xeDeviceCreateEvent
-        inline void CreateEvent(
-            const event_desc_t* desc,                       ///< [in] pointer to event descriptor
-            event_handle_t* phEvent                         ///< [out] pointer to handle of event object created
+        /// @returns
+        ///     - event_handle_t: pointer to handle of event object created
+        /// 
+        /// @throws result_t
+        inline event_handle_t
+        CreateEvent(
+            const event_desc_t* desc                        ///< [in] pointer to event descriptor
             );
 
         ///////////////////////////////////////////////////////////////////////////////
         /// @brief C++ wrapper for ::xeDevicePlaceEvent
-        inline void PlaceEvent(
+        /// @returns
+        ///     - event_handle_t: pointer to handle of event object created
+        /// 
+        /// @throws result_t
+        inline event_handle_t
+        PlaceEvent(
             const event_desc_t* desc,                       ///< [in] pointer to event descriptor
-            void* ptr,                                      ///< [in] pointer to the device pointer where the event should be placed
-            event_handle_t* phEvent                         ///< [out] pointer to handle of event object created
+            void* ptr                                       ///< [in] pointer to the device pointer where the event should be placed
             );
 
         ///////////////////////////////////////////////////////////////////////////////
         /// @brief C++ wrapper for ::xeDeviceCreateImage
-        inline void CreateImage(
-            const image_desc_t* desc,                       ///< [in] pointer to image descriptor
-            image_handle_t* phImage                         ///< [out] pointer to handle of image object created
+        /// @returns
+        ///     - image_handle_t: pointer to handle of image object created
+        /// 
+        /// @throws result_t
+        inline image_handle_t
+        CreateImage(
+            const image_desc_t* desc                        ///< [in] pointer to image descriptor
             );
 
         ///////////////////////////////////////////////////////////////////////////////
         /// @brief C++ wrapper for ::xeDeviceCreateModule
-        inline void CreateModule(
-            const module_desc_t* pDesc,                     ///< [in] pointer to module descriptor
-            module_handle_t* phModule,                      ///< [out] pointer to handle of module object created
-            module_build_log_handle_t* phBuildLog           ///< [out][optional] pointer to handle of module's build log.
+        /// @returns
+        ///     - module_handle_t: pointer to handle of module object created
+        ///     - module_build_log_handle_t: pointer to handle of module's build log.
+        /// 
+        /// @throws result_t
+        inline std::tuple<module_handle_t, module_build_log_handle_t>
+        CreateModule(
+            const module_desc_t* pDesc                      ///< [in] pointer to module descriptor
             );
 
         ///////////////////////////////////////////////////////////////////////////////
         /// @brief C++ wrapper for ::xeDeviceMakeMemoryResident
-        inline void MakeMemoryResident(
+        /// @throws result_t
+        inline void
+        MakeMemoryResident(
             void* ptr,                                      ///< [in] pointer to memory to make resident
             size_t size                                     ///< [in] size in bytes to make resident
             );
 
         ///////////////////////////////////////////////////////////////////////////////
         /// @brief C++ wrapper for ::xeDeviceEvictMemory
-        inline void EvictMemory(
+        /// @throws result_t
+        inline void
+        EvictMemory(
             void* ptr,                                      ///< [in] pointer to memory to evict
             size_t size                                     ///< [in] size in bytes to evict
             );
 
         ///////////////////////////////////////////////////////////////////////////////
         /// @brief C++ wrapper for ::xeDeviceMakeImageResident
-        inline void MakeImageResident(
+        /// @throws result_t
+        inline void
+        MakeImageResident(
             image_handle_t hImage                           ///< [in] handle of image to make resident
             );
 
         ///////////////////////////////////////////////////////////////////////////////
         /// @brief C++ wrapper for ::xeDeviceEvictImage
-        inline void EvictImage(
+        /// @throws result_t
+        inline void
+        EvictImage(
             image_handle_t hImage                           ///< [in] handle of image to make evict
             );
 
         ///////////////////////////////////////////////////////////////////////////////
         /// @brief C++ wrapper for ::xeDeviceCreateSampler
-        inline void CreateSampler(
-            const sampler_desc_t* pDesc,                    ///< [in] pointer to sampler descriptor
-            sampler_handle_t* phSampler                     ///< [out] handle of the sampler
-            );
-
-        ///////////////////////////////////////////////////////////////////////////////
-        /// @brief C++ wrapper for ::xeDeviceCreateSemaphore
-        inline void CreateSemaphore(
-            const semaphore_desc_t* desc,                   ///< [in] pointer to semaphore descriptor
-            semaphore_handle_t* phSemaphore                 ///< [out] pointer to handle of semaphore object created
+        /// @returns
+        ///     - sampler_handle_t: handle of the sampler
+        /// 
+        /// @throws result_t
+        inline sampler_handle_t
+        CreateSampler(
+            const sampler_desc_t* pDesc                     ///< [in] pointer to sampler descriptor
             );
 
     };

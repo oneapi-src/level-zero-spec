@@ -14,7 +14,7 @@ struct ModuleBuildLog : public _xe_module_build_log_handle_t {
 
     virtual xe_result_t destroy() = 0;
     virtual xe_result_t getString(size_t *pSize,
-                                  const char **pBuildLog) = 0;
+                                  char **pBuildLog) = 0;
     virtual void appendString(const char *pBuildLog,
                               size_t size) = 0;
 

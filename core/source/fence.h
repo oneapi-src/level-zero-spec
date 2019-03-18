@@ -9,9 +9,9 @@ namespace L0 {
 
 struct Fence : public _xe_fence_handle_t {
     virtual xe_result_t destroy() = 0;
-
+    virtual xe_result_t hostSynchronize(uint32_t timeout) = 0;
     virtual xe_result_t queryElapsedTime(xe_fence_handle_t hFenceEnd,
-                                         double_t *pTime) = 0;
+                                         double *pTime) = 0;
     virtual xe_result_t queryStatus() = 0;
     virtual xe_result_t queryValue() = 0;
     virtual xe_result_t reset() = 0;
@@ -27,19 +27,6 @@ struct Fence : public _xe_fence_handle_t {
 
 xe_result_t fenceQueryElapsedTime(xe_fence_handle_t hFenceStart,
                                   xe_fence_handle_t hFenceEnd,
-                                  double_t *pTime);
-
-xe_result_t hostWaitOnFence(xe_fence_handle_t hFence,
-                            xe_synchronization_mode_t mode,
-                            uint32_t delay,
-                            uint32_t interval,
-                            uint32_t timeout);
-
-xe_result_t hostWaitOnMultipleFences(uint32_t numFences,
-                                     xe_fence_handle_t *phFences,
-                                     xe_synchronization_mode_t mode,
-                                     uint32_t delay,
-                                     uint32_t interval,
-                                     uint32_t timeout);
+                                  double *pTime);
 
 } // namespace L0

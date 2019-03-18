@@ -16,7 +16,7 @@ def generate_cmake(path, namespace, files):
 """
     generic function for generating c/c++ files from the specification documents
 """
-def generate_code(path, root, namespace, specs, meta, type):
+def generate_code(path, section, namespace, specs, meta, type):
     loc = 0
     template = "api%s.mako"%type
     fin = os.path.join("templates", template)
@@ -36,7 +36,7 @@ def generate_code(path, root, namespace, specs, meta, type):
             name = s['name'],
             header = s['header'],
             objects = s['objects'],
-            type=root,
+            section=section,
             specs=specs,
             meta = meta)
     return loc, files

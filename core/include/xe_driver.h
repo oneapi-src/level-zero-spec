@@ -74,7 +74,7 @@ typedef enum _xe_init_flag_t
 ///     - ::XE_RESULT_ERROR_UNSUPPORTED
 ///     - ::XE_RESULT_ERROR_OUT_OF_HOST_MEMORY
 __xedllport xe_result_t __xecall
-  xeDriverInit(
+xeDriverInit(
     xe_init_flag_t flags                            ///< [in] initialization flags
     );
 
@@ -99,7 +99,7 @@ __xedllport xe_result_t __xecall
 ///         + nullptr == version
 ///     - ::XE_RESULT_ERROR_UNSUPPORTED
 __xedllport xe_result_t __xecall
-  xeDriverGetVersion(
+xeDriverGetVersion(
     uint32_t* version                               ///< [out] driver version
     );
 

@@ -19,10 +19,7 @@ struct CommandQueueImp : public CommandQueue {
 
     xe_result_t destroy() override;
 
-    xe_result_t synchronize(xe_synchronization_mode_t mode,
-                            uint32_t delay,
-                            uint32_t interval,
-                            uint32_t timeout) override;
+    xe_result_t synchronize(uint32_t timeout) override;
 
     void initialize();
 
@@ -31,7 +28,7 @@ struct CommandQueueImp : public CommandQueue {
     void processCoherency(CommandList *);
     void submitBatchBuffer();
 
-    xe_result_t synchronizeByPollingForTaskCount(uint32_t delay, uint32_t interval, uint32_t timeout);
+    xe_result_t synchronizeByPollingForTaskCount(uint32_t timeout);
     virtual void dispatchTaskCountWrite(bool flushDataCache) = 0;
 
     Device *device;

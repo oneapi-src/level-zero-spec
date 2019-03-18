@@ -51,6 +51,14 @@ namespace xe
         auto getDesc( void ) const { return desc; }
 
         ///////////////////////////////////////////////////////////////////////////////
+        /// @brief C++ version for ::xe_function_desc_version_t
+        enum class function_desc_version_t
+        {
+            CURRENT = XE_MAKE_VERSION( 1, 0 ),              ///< version 1.0
+
+        };
+
+        ///////////////////////////////////////////////////////////////////////////////
         /// @brief C++ version for ::xe_function_flag_t
         enum class function_flag_t
         {
@@ -63,7 +71,7 @@ namespace xe
         /// @brief C++ version for ::xe_function_desc_t
         struct function_desc_t
         {
-            uint32_t version = XE_FUNCTION_DESC_VERSION;    ///< [in] ::FUNCTION_DESC_VERSION
+            function_desc_version_t version = function_desc_version_t::CURRENT; ///< [in] ::FUNCTION_DESC_VERSION_CURRENT
             function_flag_t flags = function_flag_t::NONE;  ///< [in] creation flags
             const char* pFunctionName = nullptr;            ///< [in] null-terminated name of function in Module
 
@@ -71,28 +79,58 @@ namespace xe
 
         ///////////////////////////////////////////////////////////////////////////////
         /// @brief C++ wrapper for ::xeModuleDestroy
-        inline void Destroy(
+        /// @throws result_t
+        inline void
+        Destroy(
+            void
+            );
+
+        ///////////////////////////////////////////////////////////////////////////////
+        /// @brief C++ wrapper for ::xeModuleBuildLogDestroy
+        /// @throws result_t
+        inline void
+        Destroy(
+            void
+            );
+
+        ///////////////////////////////////////////////////////////////////////////////
+        /// @brief C++ wrapper for ::xeModuleBuildLogGetString
+        /// @throws result_t
+        inline void
+        GetString(
+            size_t* pSize,                                  ///< [in,out] size of build log string.
+            char** pBuildLog                                ///< [in,out][optional] pointer to null-terminated string of the log.
             );
 
         ///////////////////////////////////////////////////////////////////////////////
         /// @brief C++ wrapper for ::xeModuleGetNativeBinary
-        inline void GetNativeBinary(
-            uint32_t* pSize,                                ///< [out] size of native binary.
-            char** pModuleNativeBinary                      ///< [out] pointer to native binary
+        /// @throws result_t
+        inline void
+        GetNativeBinary(
+            size_t* pSize,                                  ///< [in,out] size of native binary.
+            void** pModuleNativeBinary                      ///< [in,out][optional] pointer to native binary
             );
 
         ///////////////////////////////////////////////////////////////////////////////
         /// @brief C++ wrapper for ::xeModuleCreateFunction
-        inline void CreateFunction(
-            const function_desc_t* pDesc,                   ///< [in] pointer to function descriptor
-            function_handle_t* phFunction                   ///< [out] handle of the Function object
+        /// @returns
+        ///     - function_handle_t: handle of the Function object
+        /// 
+        /// @throws result_t
+        inline function_handle_t
+        CreateFunction(
+            const function_desc_t* pDesc                    ///< [in] pointer to function descriptor
             );
 
         ///////////////////////////////////////////////////////////////////////////////
         /// @brief C++ wrapper for ::xeModuleGetFunctionPointer
-        inline void GetFunctionPointer(
-            const char* pFunctionName,                      ///< [in] Name of function to retrieve function pointer for.
-            void** pfnFunction                              ///< [out] pointer to function.
+        /// @returns
+        ///     - void*: pointer to function.
+        /// 
+        /// @throws result_t
+        inline void*
+        GetFunctionPointer(
+            const char* pFunctionName                       ///< [in] Name of function to retrieve function pointer for.
             );
 
     };
@@ -137,12 +175,17 @@ namespace xe
 
         ///////////////////////////////////////////////////////////////////////////////
         /// @brief C++ wrapper for ::xeFunctionDestroy
-        inline void Destroy(
+        /// @throws result_t
+        inline void
+        Destroy(
+            void
             );
 
         ///////////////////////////////////////////////////////////////////////////////
         /// @brief C++ wrapper for ::xeFunctionSetGroupSize
-        inline void SetGroupSize(
+        /// @throws result_t
+        inline void
+        SetGroupSize(
             uint32_t groupSizeX,                            ///< [in] group size for X dimension to use for this function.
             uint32_t groupSizeY,                            ///< [in] group size for Y dimension to use for this function.
             uint32_t groupSizeZ                             ///< [in] group size for Z dimension to use for this function.
@@ -150,35 +193,48 @@ namespace xe
 
         ///////////////////////////////////////////////////////////////////////////////
         /// @brief C++ wrapper for ::xeFunctionSuggestGroupSize
-        inline void SuggestGroupSize(
+        /// @returns
+        ///     - uint32_t: recommended size of group for X dimension.
+        ///     - uint32_t: recommended size of group for Y dimension.
+        ///     - uint32_t: recommended size of group for Z dimension.
+        /// 
+        /// @throws result_t
+        inline std::tuple<uint32_t, uint32_t, uint32_t>
+        SuggestGroupSize(
             uint32_t globalSizeX,                           ///< [in] global width for X dimension.
             uint32_t globalSizeY,                           ///< [in] global width for Y dimension.
-            uint32_t globalSizeZ,                           ///< [in] global width for Z dimension.
-            uint32_t* groupSizeX,                           ///< [out] recommended size of group for X dimension.
-            uint32_t* groupSizeY,                           ///< [out] recommended size of group for Y dimension.
-            uint32_t* groupSizeZ                            ///< [out] recommended size of group for Z dimension.
+            uint32_t globalSizeZ                            ///< [in] global width for Z dimension.
             );
 
         ///////////////////////////////////////////////////////////////////////////////
         /// @brief C++ wrapper for ::xeFunctionSetArgumentValue
-        inline void SetArgumentValue(
+        /// @throws result_t
+        inline void
+        SetArgumentValue(
             uint32_t argIndex,                              ///< [in] argument index in range [0, num args - 1]
             size_t argSize,                                 ///< [in] size of argument type
-            const void* pArgValue                           ///< [in] argument value represented as matching arg type
+            const void* pArgValue                           ///< [in][optional] argument value represented as matching arg type. If
+                                                            ///< null then argument value is considered null.
             );
 
         ///////////////////////////////////////////////////////////////////////////////
         /// @brief C++ wrapper for ::xeFunctionSetAttribute
-        inline void SetAttribute(
+        /// @throws result_t
+        inline void
+        SetAttribute(
             function_set_attribute_t attr,                  ///< [in] attribute to set
             uint32_t value                                  ///< [in] attribute value to set
             );
 
         ///////////////////////////////////////////////////////////////////////////////
         /// @brief C++ wrapper for ::xeFunctionGetAttribute
-        inline void GetAttribute(
-            function_get_attribute_t attr,                  ///< [in] attribute to query
-            uint32_t* pValue                                ///< [out] returned attribute value
+        /// @returns
+        ///     - uint32_t: returned attribute value
+        /// 
+        /// @throws result_t
+        inline uint32_t
+        GetAttribute(
+            function_get_attribute_t attr                   ///< [in] attribute to query
             );
 
     };

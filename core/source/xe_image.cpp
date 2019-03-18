@@ -25,7 +25,7 @@
 *
 * @brief Intel Xe Driver APIs for Images
 *
-* DO NOT EDIT: generated from /scripts/<type>/image.yml
+* DO NOT EDIT: generated from /scripts/core/image.yml
 *
 ******************************************************************************/
 #if defined(XE_CPP)
@@ -60,14 +60,14 @@
 ///         + nullptr == desc
 ///         + nullptr == phImage
 ///     - ::XE_RESULT_ERROR_UNSUPPORTED
-///         + ::XE_IMAGE_DESC_VERSION < desc->version
+///         + ::XE_IMAGE_DESC_VERSION_CURRENT < desc->version
 ///     - ::XE_RESULT_ERROR_OUT_OF_HOST_MEMORY
 ///     - ::XE_RESULT_ERROR_OUT_OF_DEVICE_MEMORY
 ///
 /// @hash {27a0a4bcd9c866877aa1fb52838284ccdaae12a2dfd92d87b2b862a4ab19218a}
 ///
 __xedllexport xe_result_t __xecall
-  xeDeviceCreateImage(
+xeDeviceCreateImage(
     xe_device_handle_t hDevice,                     ///< [in] handle of the device
     const xe_image_desc_t* desc,                    ///< [in] pointer to image descriptor
     xe_image_handle_t* phImage                      ///< [out] pointer to handle of image object created
@@ -82,7 +82,7 @@ __xedllexport xe_result_t __xecall
             if( nullptr == hDevice ) return XE_RESULT_ERROR_INVALID_PARAMETER;
             if( nullptr == desc ) return XE_RESULT_ERROR_INVALID_PARAMETER;
             if( nullptr == phImage ) return XE_RESULT_ERROR_INVALID_PARAMETER;
-            if( XE_IMAGE_DESC_VERSION < desc->version ) return XE_RESULT_ERROR_UNSUPPORTED;
+            if( XE_IMAGE_DESC_VERSION_CURRENT < desc->version ) return XE_RESULT_ERROR_UNSUPPORTED;
         }
         /// @begin
 #if defined(XE_NULLDRV)
@@ -128,7 +128,7 @@ __xedllexport xe_result_t __xecall
 /// @hash {fd023d402207b0213a1e9c7aeaf42f03639cc86e3a20b6267eb86975e7996b94}
 ///
 __xedllexport xe_result_t __xecall
-  xeImageDestroy(
+xeImageDestroy(
     xe_image_handle_t hImage                        ///< [in] handle of image object to destroy
     )
 {

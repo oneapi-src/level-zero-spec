@@ -4,19 +4,10 @@ import re
 import hashlib
 
 """
-    generate a list of classes this object belongs to
-"""
-def get_class_list(d):
-    if 'class' in d:
-        return d['class'] if isinstance(d['class'], list) else [d['class']]
-    else:
-        return ['none']
-
-"""
     generates SHA512 string for the given object
 """
 def generate_hash(d):
-    hl = []
+    h = None
     # functions-only (for now)...
     if re.match(r"function", d['type']):
         fh = hashlib.sha256()
@@ -24,12 +15,12 @@ def generate_hash(d):
         fh.update(d['name'].encode())
         for p in d['params']:
             fh.update(p['type'].encode())
-        # hashcode per-class...
-        for c in d['class']:
-            ch = fh
-            ch.update(c.encode())
-            hl.append(ch.hexdigest())
-    return hl
+        # hashcode of class
+        if 'class' in d:
+            fh.update(d['class'].encode())
+        # digest into string
+        h = fh.hexdigest()
+    return h
 
 """
     generates meta-data on all objects
@@ -38,7 +29,8 @@ def generate_meta(d, meta):
     type = d['type']
     name = re.sub(r"(\w+)\(.*\)", r"\1", d['name']) # removes '()' part of macros
 
-    for c in d['class']:
+    if 'class' in d:
+        c = d['class']
         # create dict if class name is not already known...
         if c not in meta['class']:
             meta['class'][c] = {}
@@ -54,24 +46,35 @@ def generate_meta(d, meta):
             print("Error - duplicate entries found!")
             raise
 
-    if 'enum' == type or 'macro' == type:
+    if 'class' != type:
         # create dict if typename is not already known...
         if type not in meta:
             meta[type] = {}
 
         # create list if name is not already known for type...
+        if 'function' == type and 'class' in d:
+            name = d['class']+name
+
         if name not in meta[type]:
             meta[type][name] = []
 
         # add values to list
-        if 'etors' in d:
+        if 'enum' == type:
             for etor in d['etors']:
                 meta[type][name].append(etor['name'])
-        else:   
+        elif 'macro' == type:   
             if 'value' in d:
                 meta[type][name].append(d['value'])
             if 'altvalue' in d:
                 meta[type][name].append(d['altvalue'])
+        elif 'function' == type:
+            for p in d['params']:
+                meta[type][name].append(p['type'])
+        elif 'struct' == type:
+            for m in d['members']:
+                meta[type][name].append(m['type'])
+        elif 'class' in d:
+            meta[type][name].append(d['class'])
 
     return meta
 
@@ -97,7 +100,6 @@ def parse(path):
             if re.match(r"header", d['type']):
                 header = d
             else:
-                d['class'] = get_class_list(d)
                 d['hash'] = generate_hash(d)
                 objects.append(d)
                 meta = generate_meta(d, meta)
@@ -108,4 +110,10 @@ def parse(path):
             'objects'   : objects
         })
 
+    print("Parsed %s files and found:"%len(specs))
+    print(" - %s classes"%len(meta['class']))
+    print(" - %s functions"%len(meta['function']))
+    print(" - %s structs"%len(meta['struct']))
+    print(" - %s enums"%len(meta['enum']))
+    print(" - %s macros\n"%len(meta['macro']))
     return specs, meta

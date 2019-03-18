@@ -64,7 +64,7 @@ int main(int argc, char *argv[]) {
     constexpr size_t bytesPerThread = sizeof(char);
     constexpr size_t numThreads = allocSize / bytesPerThread;
     xe_device_handle_t device0;
-    xe_device_properties_t device0Properties = {XE_DEVICE_PROPERTIES_VERSION};
+    xe_device_properties_t device0Properties = {XE_DEVICE_PROPERTIES_VERSION_CURRENT};
     xe_module_handle_t module;
     xe_function_handle_t function;
     xe_command_queue_handle_t cmdQueue;
@@ -74,7 +74,8 @@ int main(int argc, char *argv[]) {
     void *dstBuffer = nullptr;
 
     SUCCESS_OR_TERMINATE(xeDriverInit(XE_INIT_FLAG_NONE));
-    SUCCESS_OR_TERMINATE(xeDriverGetDevice(0, &device0));
+    xe_device_uuid_t deviceUniqueID = {};
+    SUCCESS_OR_TERMINATE(xeDriverGetDevice(&deviceUniqueID, &device0));
     SUCCESS_OR_TERMINATE(xeDeviceGetProperties(device0, &device0Properties));
     if (verbose) {
         printDeviceProperties(device0Properties);
@@ -87,7 +88,7 @@ int main(int argc, char *argv[]) {
         auto spirvModule = readBinaryFile("test_files/spv_modules/cstring_module.spv", spirvSize);
         SUCCESS_OR_TERMINATE_BOOL(spirvSize != 0);
 
-        xe_module_desc_t moduleDesc = {XE_MODULE_DESC_VERSION};
+        xe_module_desc_t moduleDesc = {XE_MODULE_DESC_VERSION_CURRENT};
         moduleDesc.format = XE_MODULE_FORMAT_IL_SPIRV;
         moduleDesc.pInputModule = spirvModule.get();
         moduleDesc.inputSize = spirvSize;
@@ -95,7 +96,7 @@ int main(int argc, char *argv[]) {
     }
 
     {
-        xe_function_desc_t functionDesc = {XE_FUNCTION_DESC_VERSION};
+        xe_function_desc_t functionDesc = {XE_FUNCTION_DESC_VERSION_CURRENT};
         functionDesc.pFunctionName = "memcpy_bytes";
         SUCCESS_OR_TERMINATE(xeModuleCreateFunction(module, &functionDesc, &function));
     }
@@ -110,14 +111,14 @@ int main(int argc, char *argv[]) {
     SUCCESS_OR_TERMINATE(xeFunctionSetGroupSize(function, groupSizeX, groupSizeY, groupSizeZ));
 
     {
-        xe_command_queue_desc_t cmdQueueDesc = {XE_COMMAND_QUEUE_DESC_VERSION};
+        xe_command_queue_desc_t cmdQueueDesc = {XE_COMMAND_QUEUE_DESC_VERSION_CURRENT};
         cmdQueueDesc.ordinal = 0;
         cmdQueueDesc.mode = XE_COMMAND_QUEUE_MODE_ASYNCHRONOUS;
         SUCCESS_OR_TERMINATE(xeDeviceCreateCommandQueue(device0, &cmdQueueDesc, &cmdQueue));
     }
 
     {
-        xe_command_list_desc_t cmdListDesc = {XE_COMMAND_LIST_DESC_VERSION};
+        xe_command_list_desc_t cmdListDesc = {XE_COMMAND_LIST_DESC_VERSION_CURRENT};
         SUCCESS_OR_TERMINATE(xeDeviceCreateCommandList(device0, &cmdListDesc, &cmdList));
     }
 
@@ -136,19 +137,19 @@ int main(int argc, char *argv[]) {
     uint8_t initDataDst[allocSize];
     memset(initDataDst, 3, sizeof(initDataDst));
 #if SUPPORT_MEMORY_COPY
-    SUCCESS_OR_TERMINATE(xeCommandListEncodeMemoryCopy(cmdList, srcBuffer, initDataSrc, sizeof(initDataSrc)));
-    SUCCESS_OR_TERMINATE(xeCommandListEncodeMemoryCopy(cmdList, dstBuffer, initDataDst, sizeof(initDataDst)));
+    SUCCESS_OR_TERMINATE(xeCommandListAppendMemoryCopy(cmdList, srcBuffer, initDataSrc, sizeof(initDataSrc)));
+    SUCCESS_OR_TERMINATE(xeCommandListAppendMemoryCopy(cmdList, dstBuffer, initDataDst, sizeof(initDataDst)));
 #else
     memcpy(srcBuffer, initDataSrc, sizeof(initDataSrc));
     memcpy(dstBuffer, initDataDst, sizeof(initDataDst));
 #endif
-    SUCCESS_OR_TERMINATE(xeCommandListEncodeExecutionBarrier(cmdList)); // copying of data must finish before running the user function
+    SUCCESS_OR_TERMINATE(xeCommandListAppendExecutionBarrier(cmdList)); // copying of data must finish before running the user function
 
     // 3. Encode run user function
     SUCCESS_OR_TERMINATE(xeFunctionSetArgumentValue(function, 0, sizeof(dstBuffer), &dstBuffer));
     SUCCESS_OR_TERMINATE(xeFunctionSetArgumentValue(function, 1, sizeof(srcBuffer), &srcBuffer));
     {
-        xe_dispatch_function_arguments_t dispatchTraits{XE_DISPATCH_FUNCTION_ARGS_VERSION};
+        xe_thread_group_dimensions_t dispatchTraits;
         dispatchTraits.groupCountX = numThreads / groupSizeX;
         dispatchTraits.groupCountY = 1;
         dispatchTraits.groupCountZ = 1;
@@ -156,21 +157,21 @@ int main(int argc, char *argv[]) {
             std::cerr << "Number of groups : (" << dispatchTraits.groupCountX << ", " << dispatchTraits.groupCountY << ", " << dispatchTraits.groupCountZ << ")" << std::endl;
         }
         SUCCESS_OR_TERMINATE_BOOL(dispatchTraits.groupCountX * groupSizeX == allocSize);
-        SUCCESS_OR_TERMINATE(xeCommandListEncodeDispatchFunction(cmdList, function, &dispatchTraits, nullptr));
+        SUCCESS_OR_TERMINATE(xeCommandListAppendLaunchFunction(cmdList, function, &dispatchTraits, nullptr));
     }
 
     // 4. Encode read back memory
     uint8_t readBackData[allocSize];
     memset(readBackData, 2, sizeof(readBackData));
-    SUCCESS_OR_TERMINATE(xeCommandListEncodeExecutionBarrier(cmdList)); // user function must finish before we start copying data
+    SUCCESS_OR_TERMINATE(xeCommandListAppendExecutionBarrier(cmdList)); // user function must finish before we start copying data
 #if SUPPORT_MEMORY_COPY
-    SUCCESS_OR_TERMINATE(xeCommandListEncodeMemoryCopy(cmdList, readBackData, dstBuffer, sizeof(readBackData)));
+    SUCCESS_OR_TERMINATE(xeCommandListAppendMemoryCopy(cmdList, readBackData, dstBuffer, sizeof(readBackData)));
 #endif
 
     // 5. Dispatch and wait
     SUCCESS_OR_TERMINATE(xeCommandListClose(cmdList));
-    SUCCESS_OR_TERMINATE(xeCommandQueueEnqueueCommandLists(cmdQueue, 1, &cmdList, nullptr));
-    auto synchronizationResult = xeCommandQueueSynchronize(cmdQueue, XE_SYNCHRONIZATION_MODE_POLL, 0, 0, 1000 * 1000 /*1s*/);
+    SUCCESS_OR_TERMINATE(xeCommandQueueExecuteCommandLists(cmdQueue, 1, &cmdList, nullptr));
+    auto synchronizationResult = xeCommandQueueSynchronize(cmdQueue, 1000 * 1000 /*1s*/);
     SUCCESS_OR_WARNING(synchronizationResult);
 
 // 6. Validate

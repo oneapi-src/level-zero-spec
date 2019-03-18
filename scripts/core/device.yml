@@ -6,6 +6,7 @@ type: function
 desc: "Reports the number of devices"
 class: $xDriver
 name: GetDeviceCount
+decl: singleton
 analogue:
     - "**cuDeviceGetCount**"
 details:
@@ -16,10 +17,25 @@ params:
       name: count
       desc: "[out] number of devices available"
 --- #--------------------------------------------------------------------------
+type: macro
+desc: "Maximum device uuid size in bytes"
+name: $X_MAX_UUID_SIZE
+value: "16"
+--- #--------------------------------------------------------------------------
+type: struct
+desc: "Device universal unique id (UUID)"
+class: $xDevice
+name: $x_device_uuid_t
+members:
+    - type: uint8_t
+      name: id[$X_MAX_UUID_SIZE]
+      desc: "[out] device universal unique id"
+--- #--------------------------------------------------------------------------
 type: function
 desc: "Retrieve "
 class: $xDriver
 name: GetDeviceUniqueIds
+decl: singleton
 analogue:
     - "**cuDeviceGet**"
     - clGetDeviceIDs
@@ -30,9 +46,9 @@ params:
     - type: uint32_t
       name: count
       desc: "[in] size of device unique ids array. Typically, this will be ${x}DeviceGetCount."
-    - type: "uint32_t*"
+    - type: "$x_device_uuid_t*"
       name: pUniqueIds
-      desc: "[out] pointer to an array of unique ids for devices. Caller must supply array."
+      desc: "[in,out] pointer to an array of unique ids for devices. Caller must supply array."
 returns:
     - $X_RESULT_ERROR_INVALID_PARAMETER:
         - "invalid unique id."
@@ -41,6 +57,7 @@ type: function
 desc: "Returns a handle to the device object"
 class: $xDriver
 name: GetDevice
+decl: singleton
 analogue:
     - "**cuDeviceGet**"
     - clGetDeviceIDs
@@ -48,8 +65,8 @@ details:
     - "The application may call this function from simultaneous threads."
     - "The implementation of this function should be lock-free."
 params:
-    - type: uint32_t
-      name: uniqueId
+    - type: $x_device_uuid_t*
+      name: pUUID
       desc: "[in] unique id of device to retrieve. Use ${x}DriverGetDeviceUniqueIds to obtain a unique Id."
     - type: "$x_device_handle_t*"
       name: phDevice
@@ -110,10 +127,14 @@ params:
       name: version
       desc: "[out] api version"
 --- #--------------------------------------------------------------------------
-type: macro
+type: enum
 desc: "API version of $x_device_properties_t"
-name: $X_DEVICE_PROPERTIES_VERSION
-value: "$X_MAKE_VERSION( 1, 0 )"
+class: $xDevice
+name: $x_device_properties_version_t
+etors:
+    - name: $X_DEVICE_PROPERTIES_VERSION_CURRENT
+      value: "$X_MAKE_VERSION( 1, 0 )"
+      desc: "version 1.0"
 --- #--------------------------------------------------------------------------
 type: macro
 desc: "Maximum device name string size"
@@ -125,10 +146,10 @@ desc: "Device properties queried using $xDeviceGetProperties"
 class: $xDevice
 name: $x_device_properties_t
 members:
-    - type: uint32_t
+    - type: $x_device_properties_version_t
       name: version
-      desc: "[in] $X_DEVICE_PROPERTIES_VERSION"
-      init: $X_DEVICE_PROPERTIES_VERSION
+      desc: "[in] $X_DEVICE_PROPERTIES_VERSION_CURRENT"
+      init: $X_DEVICE_PROPERTIES_VERSION_CURRENT
     - type: uint32_t
       name: vendorId
       desc: "[out] vendor id from PCI configuration"
@@ -138,7 +159,7 @@ members:
     - type: uint32_t
       name: subdeviceId
       desc: "[out] Subdevice id. Only valid if isSubdevice is true."
-    - type: bool
+    - type: $x_bool_t
       name: isSubdevice
       desc: "[out] Is this a subdevice."
     - type: uint32_t
@@ -168,6 +189,21 @@ members:
     - type: uint32_t
       name: maxCommandQueuePriority
       desc: "[out] Maximum priority for command queues. Higher value is higher priority."
+    - type: uint32_t
+      name: numThreadsPerEU
+      desc: "[out] Number of threads per EU."
+    - type: uint32_t
+      name: numEUsPerDSS
+      desc: "[out] Number of EUs per dual sub-slice."
+    - type: uint32_t
+      name: numDSSPerSlice
+      desc: "[out] Number of dual sub-slices per slice."
+    - type: uint32_t
+      name: numSlicesPerTile
+      desc: "[out] Number of slices per tile."
+    - type: uint32_t
+      name: numTiles
+      desc: "[out] Number of tiles for this device."
     - type: char
       name: "device_name[$X_MAX_DEVICE_NAME]"
       desc: "[out] Device name"
@@ -191,10 +227,14 @@ params:
       name: pDeviceProperties
       desc: "[out] query result for device properties"
 --- #--------------------------------------------------------------------------
-type: macro
+type: enum
 desc: "API version of $x_device_compute_properties_t"
-name: $X_DEVICE_COMPUTE_PROPERTIES_VERSION
-value: "$X_MAKE_VERSION( 1, 0 )"
+class: $xDevice
+name: $x_device_compute_properties_version_t
+etors:
+    - name: $X_DEVICE_COMPUTE_PROPERTIES_VERSION_CURRENT
+      value: "$X_MAKE_VERSION( 1, 0 )"
+      desc: "version 1.0"
 --- #--------------------------------------------------------------------------
 type: macro
 desc: "Maximum number of subgroup sizes supported."
@@ -206,10 +246,10 @@ desc: "Device compute properties queried using $xDeviceGetComputeProperties"
 class: $xDevice
 name: $x_device_compute_properties_t
 members:
-    - type: uint32_t
+    - type: $x_device_compute_properties_version_t
       name: version
-      desc: "[in] $X_DEVICE_COMPUTE_PROPERTIES_VERSION"
-      init: $X_DEVICE_COMPUTE_PROPERTIES_VERSION
+      desc: "[in] $X_DEVICE_COMPUTE_PROPERTIES_VERSION_CURRENT"
+      init: $X_DEVICE_COMPUTE_PROPERTIES_VERSION_CURRENT
     - type: uint32_t
       name: maxThreadsPerGroup
       desc: "[out] Maximum threads per compute group"
@@ -224,13 +264,13 @@ members:
       desc: "[out] Maximum items for Z dimension in group"
     - type: uint32_t
       name: maxGroupCountX
-      desc: "[out] Maximum groups that can be dispatched for x dimension"
+      desc: "[out] Maximum groups that can be launched for x dimension"
     - type: uint32_t
       name: maxGroupCountY
-      desc: "[out] Maximum groups that can be dispatched for y dimension"
+      desc: "[out] Maximum groups that can be launched for y dimension"
     - type: uint32_t
       name: maxGroupCountZ
-      desc: "[out] Maximum groups that can be dispatched for z dimension"
+      desc: "[out] Maximum groups that can be launched for z dimension"
     - type: uint32_t
       name: maxSharedLocalMemory
       desc: "[out] Maximum shared local memory per group."
@@ -262,10 +302,14 @@ params:
       name: pComputeProperties
       desc: "[out] query result for compute properties"
 --- #--------------------------------------------------------------------------
-type: macro
+type: enum
 desc: "API version of $x_device_memory_properties_t"
-name: $X_DEVICE_MEMORY_PROPERTIES_VERSION
-value: "$X_MAKE_VERSION( 1, 0 )"
+class: $xDevice
+name: $x_device_memory_properties_version_t
+etors:
+    - name: $X_DEVICE_MEMORY_PROPERTIES_VERSION_CURRENT
+      value: "$X_MAKE_VERSION( 1, 0 )"
+      desc: "version 1.0"
 --- #--------------------------------------------------------------------------
 type: enum
 desc: "Memory access capabilities"
@@ -292,14 +336,14 @@ desc: "Device memory properties queried using $xDeviceGetMemoryProperties"
 class: $xDevice
 name: $x_device_memory_properties_t
 members:
-    - type: uint32_t
+    - type: $x_device_memory_properties_version_t
       name: version
-      desc: "[in] $X_DEVICE_MEMORY_PROPERTIES_VERSION"
-      init: $X_DEVICE_MEMORY_PROPERTIES_VERSION
-    - type: bool
+      desc: "[in] $X_DEVICE_MEMORY_PROPERTIES_VERSION_CURRENT"
+      init: $X_DEVICE_MEMORY_PROPERTIES_VERSION_CURRENT
+    - type: $x_bool_t
       name: unifiedMemory
       desc: "[out] Host and device share same physical memory."
-    - type: bool
+    - type: $x_bool_t
       name: onDemandPageFaults
       desc: "[out] Device supports on-demand page-faulting."
     - type: uint32_t
@@ -330,17 +374,17 @@ members:
       name: sharedSystemDeviceAllocCapabilities
       desc: "[out] Bitfield describing shared (system) memory capabilities"
     - type: uint32_t
-      name: IntermediateCacheSize
-      desc: "[out] Device Intermediate Cache(L1/L2) size"
-    - type: bool
-      name: IntermediateCacheControl
-      desc: "[out] Support User control on Intermediate Cache(i.e. Resize SLM section vs Generic Cache)."
+      name: intermediateCacheSize
+      desc: "[out] Per-cache Intermediate Cache (L1/L2) size, in bytes"
+    - type: $x_bool_t
+      name: intermediateCacheControl
+      desc: "[out] Support User control on Intermediate Cache (i.e. Resize SLM section vs Generic Cache)"
     - type: uint32_t
-      name: LastLevelCacheSize
-      desc: "[out] Device LastLevelCacheSize(L3) size"
-    - type: bool
-      name: LastLevelCacheSizeControl
-      desc: "[out] Support User control on LastLevelCacheSize Cache(i.e. Resize SLM section vs Generic Cache)."
+      name: lastLevelCacheSize
+      desc: "[out] Per-cache Last Level Cache (L3) size, in bytes"
+    - type: $x_bool_t
+      name: lastLevelCacheSizeControl
+      desc: "[out] Support User control on Last Level Cache (i.e. Resize SLM section vs Generic Cache)."
 --- #--------------------------------------------------------------------------
 type: function
 desc: "Retrieves memory attributes of the device"
@@ -361,24 +405,28 @@ params:
       name: pMemProperties
       desc: "[out] query result for compute properties"
 --- #--------------------------------------------------------------------------
-type: macro
+type: enum
 desc: "API version of $x_device_link_properties_t"
-name: $X_DEVICE_LINK_PROPERTIES_VERSION
-value: "$X_MAKE_VERSION( 1, 0 )"
+class: $xDevice
+name: $x_device_link_properties_version_t
+etors:
+    - name: $X_DEVICE_LINK_PROPERTIES_VERSION_CURRENT
+      value: "$X_MAKE_VERSION( 1, 0 )"
+      desc: "version 1.0"
 --- #--------------------------------------------------------------------------
 type: struct
 desc: "Device properties queried using $xDeviceGetLinkProperties"
 class: $xDevice
 name: $x_device_link_properties_t
 members:
-    - type: uint32_t
+    - type: $x_device_link_properties_version_t
       name: version
-      desc: "[in] $X_DEVICE_LINK_PROPERTIES_VERSION"
-      init: $X_DEVICE_LINK_PROPERTIES_VERSION
-    - type: bool
+      desc: "[in] $X_DEVICE_LINK_PROPERTIES_VERSION_CURRENT"
+      init: $X_DEVICE_LINK_PROPERTIES_VERSION_CURRENT
+    - type: $x_bool_t
       name: isP2PSupported
       desc: "[out] Is P2P access supported across link"
-    - type: bool
+    - type: $x_bool_t
       name: isAtomicsSupported
       desc: "[out] Are atomics supported across link"
     - type: uint32_t
@@ -386,21 +434,21 @@ members:
       desc: "[out] Relative performance rank of link."
 --- #--------------------------------------------------------------------------
 type: function
-desc: "Retrieves link properties between source and destination devices."
-class: $x
-name: DeviceGetLinkProperties
+desc: "Retrieves link properties between one device and a peer devices"
+class: $xDevice
+name: GetLinkProperties
 analogue:
     - "**cudaDeviceGetP2PAttribute**"
 details:
     - "The application may call this function from simultaneous threads."
     - "The implementation of this function should be lock-free."
 params:
-    - type: uint32_t
-      name: srcOrdinal
-      desc: "[in] source device ordinal"
-    - type: uint32_t
-      name: dstOrdinal
-      desc: "[in] destination device ordinal"
+    - type: "$x_device_handle_t"
+      name: hDevice
+      desc: "[in] handle of the device performing the access"
+    - type: "$x_device_handle_t"
+      name: hPeerDevice
+      desc: "[in] handle of the peer device with the allocation"
     - type: "$x_device_link_properties_t*"
       name: pLinkProperties
       desc: "[out] link properties between source and destination devices"
@@ -424,7 +472,7 @@ params:
     - type: "$x_device_handle_t"
       name: hPeerDevice
       desc: "[in] handle of the peer device with the allocation"
-    - type: "bool*"
+    - type: "$x_bool_t*"
       name: value
       desc: "[out] returned access capability"
 --- #--------------------------------------------------------------------------

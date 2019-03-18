@@ -25,7 +25,7 @@
 *
 * @brief Intel Xe Driver APIs for Fence
 *
-* DO NOT EDIT: generated from /scripts/<type>/fence.yml
+* DO NOT EDIT: generated from /scripts/core/fence.yml
 *
 ******************************************************************************/
 #if defined(XE_CPP)
@@ -60,14 +60,14 @@
 ///         + nullptr == desc
 ///         + nullptr == phFence
 ///     - ::XE_RESULT_ERROR_UNSUPPORTED
-///         + ::XE_FENCE_DESC_VERSION < desc->version
+///         + ::XE_FENCE_DESC_VERSION_CURRENT < desc->version
 ///     - ::XE_RESULT_ERROR_OUT_OF_HOST_MEMORY
 ///     - ::XE_RESULT_ERROR_OUT_OF_DEVICE_MEMORY
 ///
 /// @hash {d42e38d25d111753f5f120d80296f494f658063005c79d78865c2e62e1ef1803}
 ///
 __xedllexport xe_result_t __xecall
-  xeCommandQueueCreateFence(
+xeCommandQueueCreateFence(
     xe_command_queue_handle_t hCommandQueue,        ///< [in] handle of command queue
     const xe_fence_desc_t* desc,                    ///< [in] pointer to fence descriptor
     xe_fence_handle_t* phFence                      ///< [out] pointer to handle of fence object created
@@ -82,7 +82,7 @@ __xedllexport xe_result_t __xecall
             if( nullptr == hCommandQueue ) return XE_RESULT_ERROR_INVALID_PARAMETER;
             if( nullptr == desc ) return XE_RESULT_ERROR_INVALID_PARAMETER;
             if( nullptr == phFence ) return XE_RESULT_ERROR_INVALID_PARAMETER;
-            if( XE_FENCE_DESC_VERSION < desc->version ) return XE_RESULT_ERROR_UNSUPPORTED;
+            if( XE_FENCE_DESC_VERSION_CURRENT < desc->version ) return XE_RESULT_ERROR_UNSUPPORTED;
         }
         /// @begin
 #if defined(XE_NULLDRV)
@@ -133,7 +133,7 @@ __xedllexport xe_result_t __xecall
 /// @hash {422e69b1e222a70a59ec747e63eeaa1f7ea8d690dd3d4cefa6940ea6841f901c}
 ///
 __xedllexport xe_result_t __xecall
-  xeFenceDestroy(
+xeFenceDestroy(
     xe_fence_handle_t hFence                        ///< [in] handle of fence object to destroy
     )
 {
@@ -190,22 +190,15 @@ __xedllexport xe_result_t __xecall
 ///     - ::XE_RESULT_NOT_READY
 ///         + timeout expired
 ///
-/// @hash {77f047fdfb94150f1b0cda9d8cdbbf224f6bbd82021c5595a03bf1a8be2a03b6}
+/// @hash {e3b9d009d9b3a0d2824c80ac90c1119b383c02ba48736d768c17470fd09e77d2}
 ///
 __xedllexport xe_result_t __xecall
-  xeHostWaitOnFence(
+xeFenceHostSynchronize(
     xe_fence_handle_t hFence,                       ///< [in] handle of the fence
-    xe_synchronization_mode_t mode,                 ///< [in] synchronization mode
-    uint32_t delay,                                 ///< [in] if ::XE_SYNCHRONIZATION_MODE_SLEEP == mode, then time (in
-                                                    ///< microseconds) to poll before putting Host thread to sleep; otherwise,
-                                                    ///< must be zero.
-    uint32_t interval,                              ///< [in] if ::XE_SYNCHRONIZATION_MODE_SLEEP == mode, then maximum time (in
-                                                    ///< microseconds) to put Host thread to sleep between polling; otherwise,
-                                                    ///< must be zero.
-    uint32_t timeout                                ///< [in] if non-zero, then indicates the maximum time to poll or sleep
-                                                    ///< before returning; if zero, then only a single status check is made
-                                                    ///< before immediately returning; if MAX_UINT32, then function will not
-                                                    ///< return until complete.
+    uint32_t timeout                                ///< [in] if non-zero, then indicates the maximum time to yield before
+                                                    ///< returning ::XE_RESULT_SUCCESS or ::XE_RESULT_NOT_READY; if zero, then
+                                                    ///< operates exactly like ::xeFenceQueryStatus; if MAX_UINT32, then
+                                                    ///< function will not return until complete or device is lost.
     )
 {
     try
@@ -220,80 +213,7 @@ __xedllexport xe_result_t __xecall
 #if defined(XE_NULLDRV)
         return XE_RESULT_SUCCESS;
 #else
-        return L0::hostWaitOnFence(hFence, mode, delay, interval, timeout);
-#endif
-        /// @end
-    }
-    catch(xe_result_t& result)
-    {
-        return result;
-    }
-    catch(std::bad_alloc&)
-    {
-        return XE_RESULT_ERROR_OUT_OF_HOST_MEMORY;
-    }
-    catch(std::exception&)
-    {
-        // @todo: pfnOnException(e.what());
-        return XE_RESULT_ERROR_UNKNOWN;
-    }
-}
-
-///////////////////////////////////////////////////////////////////////////////
-/// @brief The current host thread waits on a multiple fences to be signaled.
-/// 
-/// @details
-///     - The application may call this function from simultaneous threads.
-///     - The implementation of this function should be lock-free.
-/// 
-/// @remarks
-///   _Analogues_
-///     - **vkWaitForFences**
-/// 
-/// @returns
-///     - ::XE_RESULT_SUCCESS
-///     - ::XE_RESULT_ERROR_UNINITIALIZED
-///     - ::XE_RESULT_ERROR_DEVICE_LOST
-///     - ::XE_RESULT_ERROR_INVALID_PARAMETER
-///         + nullptr == phFences
-///         + nullptr == any handle in phFences
-///         + any fence is not enqueued in a command queue
-///     - ::XE_RESULT_ERROR_UNSUPPORTED
-///     - ::XE_RESULT_NOT_READY
-///         + timeout expired
-///
-/// @hash {a5f76c9bd49faad0a8ae16401ccdd9cc6e8ae394eb876c8eca18dc6dd3cdae7d}
-///
-__xedllexport xe_result_t __xecall
-  xeHostWaitOnMultipleFences(
-    uint32_t numFences,                             ///< [in] number of fences in hFences
-    xe_fence_handle_t* phFences,                    ///< [in] pointer to array of handles of the fences
-    xe_synchronization_mode_t mode,                 ///< [in] synchronization mode
-    uint32_t delay,                                 ///< [in] if ::XE_SYNCHRONIZATION_MODE_SLEEP == mode, then time (in
-                                                    ///< microseconds) to poll before putting Host thread to sleep; otherwise,
-                                                    ///< must be zero.
-    uint32_t interval,                              ///< [in] if ::XE_SYNCHRONIZATION_MODE_SLEEP == mode, then maximum time (in
-                                                    ///< microseconds) to put Host thread to sleep between polling; otherwise,
-                                                    ///< must be zero.
-    uint32_t timeout                                ///< [in] if non-zero, then indicates the maximum time to poll or sleep
-                                                    ///< before returning; if zero, then only a single status check is made
-                                                    ///< before immediately returning; if MAX_UINT32, then function will not
-                                                    ///< return until complete.
-    )
-{
-    try
-    {
-        //if( XE_DRIVER_PARAMETER_VALIDATION_LEVEL >= 0 )
-        {
-            // if( nullptr == driver ) return XE_RESULT_ERROR_UNINITIALIZED;
-            // Check parameters
-            if( nullptr == phFences ) return XE_RESULT_ERROR_INVALID_PARAMETER;
-        }
-        /// @begin
-#if defined(XE_NULLDRV)
-        return XE_RESULT_SUCCESS;
-#else
-        return L0::hostWaitOnMultipleFences(numFences, phFences, mode, delay, interval, timeout);
+        return L0::Fence::fromHandle(hFence)->hostSynchronize(timeout);
 #endif
         /// @end
     }
@@ -337,7 +257,7 @@ __xedllexport xe_result_t __xecall
 /// @hash {54d115edc2a41acd09d4b8170e56d9826a2b5706f11c6104736eb5860d23c5bc}
 ///
 __xedllexport xe_result_t __xecall
-  xeFenceQueryStatus(
+xeFenceQueryStatus(
     xe_fence_handle_t hFence                        ///< [in] handle of the fence
     )
 {
@@ -354,66 +274,6 @@ __xedllexport xe_result_t __xecall
         return XE_RESULT_SUCCESS;
 #else
         return L0::Fence::fromHandle(hFence)->queryStatus();
-#endif
-        /// @end
-    }
-    catch(xe_result_t& result)
-    {
-        return result;
-    }
-    catch(std::bad_alloc&)
-    {
-        return XE_RESULT_ERROR_OUT_OF_HOST_MEMORY;
-    }
-    catch(std::exception&)
-    {
-        // @todo: pfnOnException(e.what());
-        return XE_RESULT_ERROR_UNKNOWN;
-    }
-}
-
-///////////////////////////////////////////////////////////////////////////////
-/// @brief Queries the elapsed time between two signaled fences.
-/// 
-/// @details
-///     - The application may call this function from simultaneous threads.
-///     - The implementation of this function should be lock-free.
-/// 
-/// @returns
-///     - ::XE_RESULT_SUCCESS
-///     - ::XE_RESULT_ERROR_UNINITIALIZED
-///     - ::XE_RESULT_ERROR_DEVICE_LOST
-///     - ::XE_RESULT_ERROR_INVALID_PARAMETER
-///         + nullptr == hFenceStart
-///         + nullptr == hFenceEnd
-///         + nullptr == pTime
-///         + either fence not enqueued
-///     - ::XE_RESULT_ERROR_UNSUPPORTED
-///
-/// @hash {b3b7bb4cc8f2ac5185ab3106ede415703871d469c0d2e5f98f210a7de393078d}
-///
-__xedllexport xe_result_t __xecall
-  xeFenceQueryElapsedTime(
-    xe_fence_handle_t hFenceStart,                  ///< [in] handle of the fence
-    xe_fence_handle_t hFenceEnd,                    ///< [in] handle of the fence
-    double_t* pTime                                 ///< [out] time in milliseconds
-    )
-{
-    try
-    {
-        //if( XE_DRIVER_PARAMETER_VALIDATION_LEVEL >= 0 )
-        {
-            // if( nullptr == driver ) return XE_RESULT_ERROR_UNINITIALIZED;
-            // Check parameters
-            if( nullptr == hFenceStart ) return XE_RESULT_ERROR_INVALID_PARAMETER;
-            if( nullptr == hFenceEnd ) return XE_RESULT_ERROR_INVALID_PARAMETER;
-            if( nullptr == pTime ) return XE_RESULT_ERROR_INVALID_PARAMETER;
-        }
-        /// @begin
-#if defined(XE_NULLDRV)
-        return XE_RESULT_SUCCESS;
-#else
-        return L0::fenceQueryElapsedTime(hFenceStart, hFenceEnd, pTime);
 #endif
         /// @end
     }
@@ -454,7 +314,7 @@ __xedllexport xe_result_t __xecall
 /// @hash {7d06912d2e703c85cf1c3bb4e5b71884212ddfcc87d33f46c5463b83293ed855}
 ///
 __xedllexport xe_result_t __xecall
-  xeFenceReset(
+xeFenceReset(
     xe_fence_handle_t hFence                        ///< [in] handle of the fence
     )
 {
