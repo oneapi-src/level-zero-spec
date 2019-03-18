@@ -18,18 +18,17 @@ struct ImageImp : public Image {
 
     virtual bool initialize(Device *device, const xe_image_desc_t *desc);
 
-	//Sizes of xe_image_format_t image formats
+    //Sizes of xe_image_format_t image formats
     size_t format_size[XE_IMAGE_FORMAT_MAX + 1] = {
-			sizeof(uint8_t), sizeof(uint16_t), sizeof(uint32_t),
-            sizeof(int8_t), sizeof(int16_t), sizeof(int32_t),
-            sizeof(uint16_t), sizeof(float) };
-    ImageImp() : imageDesc({0}), allocation(nullptr) {
-
+        sizeof(uint8_t), sizeof(uint16_t), sizeof(uint32_t),
+        sizeof(int8_t), sizeof(int16_t), sizeof(int32_t),
+        sizeof(uint16_t), sizeof(float)};
+    ImageImp() : allocation(nullptr) {
     }
 
-protected:
+  protected:
     xe_image_desc_t imageDesc;
-	GraphicsAllocation *allocation;
+    GraphicsAllocation *allocation;
 };
 
 } //namespace L0
