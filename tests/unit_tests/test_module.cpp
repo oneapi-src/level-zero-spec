@@ -2,6 +2,7 @@
 #include "mock_compiler.h"
 #include "mock_device.h"
 #include "mock_function.h"
+#include "mock_image.h"
 #include "mock_memory_manager.h"
 #include "mock_module.h"
 #include "mock_module_precompiled.h"
@@ -158,9 +159,9 @@ TEST(xeModuleCreateFunction, redirectsToObject) {
     EXPECT_EQ(XE_RESULT_SUCCESS, result);
 }
 
-using ModuleCreate = ::testing::TestWithParam<std::tuple<std::string, std::string, std::string>>;
+using ModuleCreateBufArg = ::testing::TestWithParam<std::tuple<std::string, std::string, std::string>>;
 
-TEST_P(ModuleCreate, onlineCompilationModuleTest) {
+TEST_P(ModuleCreateBufArg, onlineCompilationModuleTest) {
     UserRealCompilerGuard realCompilerGuard; // just for now
 
     std::string filename;
@@ -250,12 +251,129 @@ TEST_P(ModuleCreate, onlineCompilationModuleTest) {
     module->destroy();
 }
 
-static std::tuple<std::string, std::string, std::string> paramsForCreateModule[] = {
+static std::tuple<std::string, std::string, std::string> paramsForCreateModuleBufArg[] = {
     std::make_tuple<std::string, std::string, std::string>("test_files/spv_modules/cstring_module.spv", "memcpy_bytes", "MemcpyBytes"),
     std::make_tuple<std::string, std::string, std::string>("test_files/spv_modules/slm_barrier_kernel.spv", "slmBarrierSum", "SlmBarrier"),
     std::make_tuple<std::string, std::string, std::string>("test_files/spv_modules/printf_kernel.spv", "test_printf", "Printf")};
 
-INSTANTIATE_TEST_CASE_P(, ModuleCreate, ::testing::ValuesIn(paramsForCreateModule));
+INSTANTIATE_TEST_CASE_P(, ModuleCreateBufArg, ::testing::ValuesIn(paramsForCreateModuleBufArg));
+
+using ModuleCreateImageArg = ::testing::TestWithParam<std::tuple<std::string, std::string, std::string>>;
+
+TEST_P(ModuleCreateImageArg, onlineCompilationModuleTest) {
+    UserRealCompilerGuard realCompilerGuard; // just for now
+
+    std::string filename;
+    std::string functionName;
+    std::string moduleName;
+
+    std::tie(filename, functionName, moduleName) = GetParam();
+
+    auto platform = OCLRT::constructPlatform();
+    auto success = platform->initialize();
+    ASSERT_TRUE(success);
+
+    auto deviceRT = platform->getDevice(0);
+    ASSERT_NE(nullptr, deviceRT);
+    auto device = Device::create(deviceRT);
+
+    // do not call GMM cachePolicyGetMemoryObject, gmm is not loaded
+    deviceRT->getExecutionEnvironment()->getGmmHelper()->setSimplifiedMocsTableUsage(true);
+
+    size_t spvModuleSize = 0;
+    auto spvModule = readBinaryTestFile(filename, spvModuleSize);
+    ASSERT_NE(0U, spvModuleSize);
+
+    xe_module_desc_t modDesc = {};
+    modDesc.version = XE_MODULE_DESC_VERSION_CURRENT;
+    modDesc.format = XE_MODULE_FORMAT_IL_SPIRV;
+    modDesc.inputSize = static_cast<uint32_t>(spvModuleSize);
+    modDesc.pInputModule = spvModule.get();
+
+    auto module = whitebox_cast(Module::create(device, &modDesc, deviceRT, nullptr));
+    ASSERT_NE(nullptr, module);
+
+    xe_function_desc_t funDesc = {};
+    funDesc.version = XE_FUNCTION_DESC_VERSION_CURRENT;
+    funDesc.pFunctionName = functionName.c_str();
+    auto function = whitebox_cast(Function::create(module, &funDesc));
+    ASSERT_NE(nullptr, function);
+
+    xe_image_desc_t imgDesc = {};
+    imgDesc.type = XE_IMAGE_TYPE_2D;
+    imgDesc.numChannels = 1;
+    imgDesc.format = XE_IMAGE_FORMAT_UINT32;
+    imgDesc.width = 10;
+    imgDesc.height = 10;
+
+    auto srcImage = whitebox_cast(Image::create(productFamily, device, &imgDesc));
+    ASSERT_NE(nullptr, srcImage);
+    auto dstImage = whitebox_cast(Image::create(productFamily, device, &imgDesc));
+    ASSERT_NE(nullptr, dstImage);
+
+    xe_image_handle_t srcHandle = srcImage->toHandle();
+    xe_image_handle_t dstHandle = dstImage->toHandle();
+    function->setArgumentValue(0, sizeof(xe_image_handle_t), &srcHandle);
+    function->setArgumentValue(1, sizeof(xe_image_handle_t), &dstHandle);
+
+    EXPECT_EQ(2, function->getBindingTableStateCount());
+    EXPECT_EQ(128, function->getBindingTableOffset());
+    EXPECT_NE(nullptr, function->getIsaHostMem());
+    EXPECT_NE(0U, function->getIsaSize());
+    EXPECT_NE(0U, function->getSimdSize());
+
+    auto sshSize = function->getSurfaceStateHeapSize();
+    auto ssh = function->getSurfaceStateHeap();
+    EXPECT_NE(0U, sshSize);
+    EXPECT_NE(nullptr, ssh);
+
+    EXPECT_EQ(function->kernelArgBindingTableIndex[0], 0);
+    EXPECT_EQ(function->kernelArgBindingTableIndex[1], 1);
+
+    //TODO test for SSH update
+    //I could inspect kernelArgInfo[argindex].offsetHeap, then look at that place in the function's SSH
+    // Look for some specific values to be set?  Anything I do to that affect will be arch-specific.
+
+    auto capturedAllocsForResidency = function->getResidencyContainer();
+    EXPECT_NE(capturedAllocsForResidency.end(),
+            std::find(capturedAllocsForResidency.begin(), capturedAllocsForResidency.end(), dstImage->getAllocation()));
+    EXPECT_NE(capturedAllocsForResidency.end(),
+            std::find(capturedAllocsForResidency.begin(), capturedAllocsForResidency.end(), srcImage->getAllocation()));
+
+    ASSERT_NE(nullptr, function->getPerThreadDataHostMem());
+    EXPECT_TRUE(isAligned<32>(function->getPerThreadDataHostMem())) << "Per thread data not properly aligned for vector instructions"; // todo : make a real test out of this
+    uint32_t numChannels = 3;
+    EXPECT_EQ(numChannels * function->getSimdSize() * sizeof(uint16_t), function->getPerThreadDataSizeForWholeThreadGroup());
+
+    uint32_t groupSizeX, groupSizeY, groupSizeZ;
+    function->getGroupSize(groupSizeX, groupSizeY, groupSizeZ);
+    EXPECT_EQ(function->getSimdSize(), groupSizeX);
+    EXPECT_EQ(1U, groupSizeY);
+    EXPECT_EQ(1U, groupSizeZ);
+
+    bool generateMockData = false;
+    if (generateMockData) {
+        auto deviceName = deviceRT->getFamilyNameWithType();
+        std::stringstream mockDataStream;
+
+        //Image arguments are not passed/set in crossthread data, bufferArgsIndicies is empty.
+        std::vector<std::pair<int, uintptr_t>> bufferArgsIndices{std::make_pair(0, 0)};
+
+        writeMockData(__FUNCTION__, moduleName, deviceName, function, bufferArgsIndices, mockDataStream);
+        std::string mockData = mockDataStream.str();
+        std::string fileName = "mock_" + moduleName + "_" + deviceName + ".cpp";
+        std::ofstream(fileName, std::ios::binary).write(mockData.data(), mockData.size());
+    }
+
+    function->destroy();
+    module->destroy();
+}
+
+static std::tuple<std::string, std::string, std::string> paramsForCreateModuleImageArg[] = {
+    std::make_tuple<std::string, std::string, std::string>("test_files/spv_modules/xe_image_scaling.spv", "xe_image_scaling", "ImageScaling")};
+
+INSTANTIATE_TEST_CASE_P(, ModuleCreateImageArg, ::testing::ValuesIn(paramsForCreateModuleImageArg));
+
 
 TEST(ModuleCreateSimple, mockedModuleTest) {
     Mock<Device> device;

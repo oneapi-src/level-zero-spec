@@ -55,4 +55,21 @@ bool ImageCoreFamily<gfxCoreFamily>::initialize(Device *device, const xe_image_d
 
     return true;
 }
+
+template <GFXCORE_FAMILY gfxCoreFamily>
+void ImageCoreFamily<gfxCoreFamily>::copySurfaceStateToSSH(void *surfaceStateHeap, const uint32_t surfaceStateOffset,
+        const uint32_t bindingTableOffset, const uint32_t bindingTableIndex) {
+    using GfxFamily = typename OCLRT::GfxFamilyMapper<gfxCoreFamily>::GfxFamily;
+    using RENDER_SURFACE_STATE = typename GfxFamily::RENDER_SURFACE_STATE;
+    using BINDING_TABLE_STATE = typename GfxFamily::BINDING_TABLE_STATE;
+
+    //Copy the image's surface state into position in the provided surface state heap
+    auto destSurfaceState = ptrOffset(surfaceStateHeap, surfaceStateOffset);
+    memcpy(destSurfaceState, &surfaceState, sizeof(RENDER_SURFACE_STATE));
+
+    //Update the binding table state to point to the copied surface state
+    auto bindingTableState = static_cast<BINDING_TABLE_STATE *>(ptrOffset(surfaceStateHeap, bindingTableOffset));
+    bindingTableState[bindingTableIndex].setSurfaceStatePointer(surfaceStateOffset);
+}
+
 } //namespace L0

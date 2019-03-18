@@ -1,5 +1,6 @@
 #include "mock_image.h"
 #include "mock_device.h"
+#include "mock_module_precompiled.h"
 #include "igfxfmid.h"
 #include "test.h"
 #include "unit_tests/gen_common/gen_cmd_parse.h"
@@ -63,42 +64,16 @@ TEST_F(ImageCreate, descMatchesAllocation) {
 
     auto image = whitebox_cast(Image::create(productFamily, device, &desc));
     ASSERT_NE(nullptr, image);
-    ASSERT_NE(nullptr, image->allocation);
+    auto alloc = image->getAllocation();
+    ASSERT_NE(nullptr, alloc);
 
-    ASSERT_EQ(image->allocation->getSize(),
+    ASSERT_EQ(alloc->getSize(),
             desc.numChannels * desc.width * desc.height * desc.depth * sizeof(uint8_t));
 
     delete device;
 }
 
-HWTEST2_F(ImageCreate, descMatchesSurface, MatchAny) {
-    using RENDER_SURFACE_STATE = typename FamilyType::RENDER_SURFACE_STATE;
-    Mock<Device> device;
-
-    xe_image_desc_t desc = {};
-
-    desc.type = XE_IMAGE_TYPE_3D;
-    desc.numChannels = 4;
-    desc.format = XE_IMAGE_FORMAT_UINT8;
-    desc.width = 11;
-    desc.height = 13;
-    desc.depth = 17;
-
-    auto imageCore = new ImageCoreFamily<gfxCoreFamily>();
-    bool ret = imageCore->initialize(&device, &desc);
-    ASSERT_TRUE(ret);
-
-    auto surfaceState = &imageCore->surfaceState;
-
-    ASSERT_EQ(surfaceState->getSurfaceType(), RENDER_SURFACE_STATE::SURFACE_TYPE_SURFTYPE_3D);
-    ASSERT_EQ(surfaceState->getSurfaceFormat(), RENDER_SURFACE_STATE::SURFACE_FORMAT_R8G8B8A8_UINT);
-    ASSERT_EQ(surfaceState->getWidth(), 11);
-    ASSERT_EQ(surfaceState->getHeight(), 13);
-    ASSERT_EQ(surfaceState->getDepth(), 17);
-}
-
-HWTEST2_F(ImageCreate, descBadParamsFail, MatchAny) {
-    using RENDER_SURFACE_STATE = typename FamilyType::RENDER_SURFACE_STATE;
+HWTEST2_F(ImageCreate, descBadParamsFail, MatchAny) { using RENDER_SURFACE_STATE = typename FamilyType::RENDER_SURFACE_STATE;
 
     Mock<Device> device;
 
@@ -136,6 +111,81 @@ HWTEST2_F(ImageCreate, descBadParamsFail, MatchAny) {
     desc.format = static_cast<xe_image_format_t>(XE_IMAGE_FORMAT_FLOAT32 + 100);
     ret = imageCore->initialize(&device, &desc);
     ASSERT_FALSE(ret);
+}
+
+using ImageSurfaceState = ::testing::Test;
+
+HWTEST2_F(ImageSurfaceState, descMatchesSurface, MatchAny) {
+    using RENDER_SURFACE_STATE = typename FamilyType::RENDER_SURFACE_STATE;
+    Mock<Device> device;
+
+    xe_image_desc_t desc = {};
+
+    desc.type = XE_IMAGE_TYPE_3D;
+    desc.numChannels = 4;
+    desc.format = XE_IMAGE_FORMAT_UINT8;
+    desc.width = 11;
+    desc.height = 13;
+    desc.depth = 17;
+
+    auto imageCore = new ImageCoreFamily<gfxCoreFamily>();
+    bool ret = imageCore->initialize(&device, &desc);
+    ASSERT_TRUE(ret);
+
+    auto surfaceState = &imageCore->surfaceState;
+
+    ASSERT_EQ(surfaceState->getSurfaceType(), RENDER_SURFACE_STATE::SURFACE_TYPE_SURFTYPE_3D);
+    ASSERT_EQ(surfaceState->getSurfaceFormat(), RENDER_SURFACE_STATE::SURFACE_FORMAT_R8G8B8A8_UINT);
+    ASSERT_EQ(surfaceState->getWidth(), 11);
+    ASSERT_EQ(surfaceState->getHeight(), 13);
+    ASSERT_EQ(surfaceState->getDepth(), 17);
+}
+
+HWTEST2_F(ImageSurfaceState, copyToSSH, MatchAny) {
+    using RENDER_SURFACE_STATE = typename FamilyType::RENDER_SURFACE_STATE;
+    using BINDING_TABLE_STATE = typename FamilyType::BINDING_TABLE_STATE;
+    Mock<Device> device;
+    uint8_t mockSSH[sizeof(RENDER_SURFACE_STATE) * 4] = {0};
+    const uint32_t bindingTableOffset = sizeof(RENDER_SURFACE_STATE) * 2;
+    auto mockBTS = reinterpret_cast<BINDING_TABLE_STATE *>(ptrOffset(mockSSH, bindingTableOffset));
+
+    xe_image_desc_t desc = {};
+
+    desc.type = XE_IMAGE_TYPE_2D;
+    desc.numChannels = 4;
+    desc.format = XE_IMAGE_FORMAT_UINT8;
+    desc.width = 11;
+    desc.height = 13;
+
+    auto imageA = new ImageCoreFamily<gfxCoreFamily>();
+    bool ret = imageA->initialize(&device, &desc);
+    ASSERT_TRUE(ret);
+
+    desc.numChannels = 2;
+    desc.format = XE_IMAGE_FORMAT_UINT32;
+    desc.width = 10;
+    desc.height = 10;
+
+    auto imageB = new ImageCoreFamily<gfxCoreFamily>();
+    ret = imageB->initialize(&device, &desc);
+    ASSERT_TRUE(ret);
+
+    imageA->copySurfaceStateToSSH(mockSSH, 0, bindingTableOffset, 0);
+    imageB->copySurfaceStateToSSH(mockSSH, sizeof(RENDER_SURFACE_STATE), bindingTableOffset, 1);
+
+    auto surfaceStateA = reinterpret_cast<RENDER_SURFACE_STATE *>(mockSSH);
+    ASSERT_EQ(surfaceStateA->getSurfaceType(), RENDER_SURFACE_STATE::SURFACE_TYPE_SURFTYPE_2D);
+    ASSERT_EQ(surfaceStateA->getSurfaceFormat(), RENDER_SURFACE_STATE::SURFACE_FORMAT_R8G8B8A8_UINT);
+    ASSERT_EQ(surfaceStateA->getWidth(), 11);
+    ASSERT_EQ(surfaceStateA->getHeight(), 13);
+    ASSERT_EQ(mockBTS[0].getSurfaceStatePointer(), 0);
+
+    auto surfaceStateB = reinterpret_cast<RENDER_SURFACE_STATE *>(ptrOffset(mockSSH, sizeof(RENDER_SURFACE_STATE)));
+    ASSERT_EQ(surfaceStateB->getSurfaceType(), RENDER_SURFACE_STATE::SURFACE_TYPE_SURFTYPE_2D);
+    ASSERT_EQ(surfaceStateB->getSurfaceFormat(), RENDER_SURFACE_STATE::SURFACE_FORMAT_R32G32_UINT);
+    ASSERT_EQ(surfaceStateB->getWidth(), 10);
+    ASSERT_EQ(surfaceStateB->getHeight(), 10);
+    ASSERT_EQ(mockBTS[1].getSurfaceStatePointer(), sizeof(RENDER_SURFACE_STATE));
 }
 
 } // namespace ult

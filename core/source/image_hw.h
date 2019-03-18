@@ -54,6 +54,9 @@ struct ImageCoreFamily : public ImageImp {
 
     bool initialize(Device *device, const xe_image_desc_t *desc) override;
 
+    void copySurfaceStateToSSH(void *surfaceStateHeap, const uint32_t surfaceStateOffset,
+            const uint32_t bindingTableOffset, const uint32_t bindingTableIndex) override;
+
   protected:
     RENDER_SURFACE_STATE surfaceState;
 };

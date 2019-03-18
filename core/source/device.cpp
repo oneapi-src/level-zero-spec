@@ -225,6 +225,11 @@ struct DeviceImp : public Device {
         return execEnvironment;
     }
 
+    OCLRT::HwHelper &getHwHelper() override {
+        const auto &hardwareInfo = deviceRT->getHardwareInfo();
+        return OCLRT::HwHelper::get(hardwareInfo.pPlatform->eRenderCoreFamily);
+    }
+
     OCLRT::Device *deviceRT = nullptr;
     MemoryManager *memoryManager = nullptr;
     bool isSubdevice = false;

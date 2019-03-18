@@ -30,8 +30,7 @@ struct WhiteBox<::L0::Image> : public ::L0::ImageImp {
     WhiteBox();
     virtual ~WhiteBox();
 
-    xe_image_desc_t imageDesc;
-    using ::L0::ImageImp::allocation;
+    using ::L0::ImageImp::imageDesc;
 };
 
 using Image = WhiteBox<::L0::Image>;
@@ -42,6 +41,9 @@ struct Mock<Image> : public Image {
     virtual ~Mock();
 
     MOCK_METHOD0(destroy, xe_result_t());
+    MOCK_METHOD0(getAllocation, GraphicsAllocation *());
+    MOCK_METHOD4(copySurfaceStateToSSH, void(void *surfaceStateHeap, const uint32_t surfaceStateOffset,
+            const uint32_t bindingTableOffset, const uint32_t bindingTableIndex));
 };
 
 } // namespace ult

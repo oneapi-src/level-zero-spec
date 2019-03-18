@@ -242,6 +242,56 @@ xe_result_t CommandListCoreFamily<gfxCoreFamily>::appendCommandLists(uint32_t nu
     return XE_RESULT_ERROR_UNSUPPORTED;
 }
 
+// Returned binding table pointer is relative to given heap (which is assumed to be the Surface state base addess)
+// as required by the INTERFACE_DESCRIPTOR_DATA.
+template <GFXCORE_FAMILY gfxCoreFamily>
+uint32_t CommandListCoreFamily<gfxCoreFamily>::copyBindingTableAndSurfaceStates(OCLRT::IndirectHeap *ssh,
+                                                                         const void *srcSsh, uint32_t srcSshSize,
+                                                                         uint32_t numberOfBindingTableStates, uint32_t offsetOfBindingTable) {
+    using GfxFamily = typename OCLRT::GfxFamilyMapper<gfxCoreFamily>::GfxFamily;
+    using BINDING_TABLE_STATE = typename GfxFamily::BINDING_TABLE_STATE;
+    using INTERFACE_DESCRIPTOR_DATA = typename GfxFamily::INTERFACE_DESCRIPTOR_DATA;
+
+    assert(ssh);
+    assert(srcSsh);
+
+    // Align the heap and allocate space for new ssh data
+    ssh->align(BINDING_TABLE_STATE::SURFACESTATEPOINTER_ALIGN_SIZE);
+    auto dstSurfaceState = ssh->getSpace(srcSshSize);
+
+    // Compiler sends BTI table that is already populated with surface state pointers relative to local SSH.
+    // We may need to patch these pointers so that they are relative to surface state base address
+    if (dstSurfaceState == ssh->getCpuBase()) {
+        // nothing to patch, we're at the start of heap (which is assumed to be the surface state base address)
+        // we need to simply copy the ssh (including BTIs from compiler)
+        memcpy_s(dstSurfaceState, srcSshSize, srcSsh, srcSshSize);
+        return offsetOfBindingTable;
+    }
+
+    // We can copy-over the surface states, but BTIs will need to be patched
+    memcpy_s(dstSurfaceState, srcSshSize, srcSsh, offsetOfBindingTable);
+
+    uint32_t surfaceStatesOffset = static_cast<uint32_t>(ptrDiff(dstSurfaceState, ssh->getCpuBase()));
+
+    // march over BTIs and offset the pointers based on surface state base address
+    auto *dstBindingTable = reinterpret_cast<BINDING_TABLE_STATE *>(ptrOffset(dstSurfaceState, offsetOfBindingTable));
+    assert(reinterpret_cast<uintptr_t>(dstBindingTable) % INTERFACE_DESCRIPTOR_DATA::BINDINGTABLEPOINTER_ALIGN_SIZE == 0);
+
+    auto *srcBindingTable = reinterpret_cast<const BINDING_TABLE_STATE *>(ptrOffset(srcSsh, offsetOfBindingTable));
+    BINDING_TABLE_STATE bts = GfxFamily::cmdInitBindingTableState;
+
+    for (uint32_t i = 0; i < numberOfBindingTableStates; ++i) {
+        uint32_t localSurfaceStateOffset = srcBindingTable[i].getSurfaceStatePointer();
+        uint32_t offsetedSurfaceStateOffset = localSurfaceStateOffset + surfaceStatesOffset;
+
+        bts.setSurfaceStatePointer(offsetedSurfaceStateOffset);
+        dstBindingTable[i] = bts;
+        assert(bts.getRawData(0) % sizeof(BINDING_TABLE_STATE::SURFACESTATEPOINTER_ALIGN_SIZE) == 0);
+    }
+
+    return static_cast<uint32_t>(ptrDiff(dstBindingTable, ssh->getCpuBase()));
+}
+
 template <GFXCORE_FAMILY gfxCoreFamily>
 xe_result_t CommandListCoreFamily<gfxCoreFamily>::appendLaunchFunction(xe_function_handle_t hFunction,
                                                                        const xe_thread_group_dimensions_t *pThreadGroupDimensions,
@@ -251,6 +301,7 @@ xe_result_t CommandListCoreFamily<gfxCoreFamily>::appendLaunchFunction(xe_functi
     using MEDIA_STATE_FLUSH = typename GfxFamily::MEDIA_STATE_FLUSH;
     using MEDIA_INTERFACE_DESCRIPTOR_LOAD = typename GfxFamily::MEDIA_INTERFACE_DESCRIPTOR_LOAD;
     using INTERFACE_DESCRIPTOR_DATA = typename GfxFamily::INTERFACE_DESCRIPTOR_DATA;
+    using STATE_BASE_ADDRESS = typename GfxFamily::STATE_BASE_ADDRESS;
 
     // For now program L3 here.
     programL3();
@@ -296,6 +347,31 @@ xe_result_t CommandListCoreFamily<gfxCoreFamily>::appendLaunchFunction(xe_functi
         assert(numGrfPerThreadData > 0u);
         idd.setConstantIndirectUrbEntryReadLength(numGrfPerThreadData);
         idd.setBarrierEnable(function->getHasBarriers());
+
+        // Set up binding table and surface states
+        {
+            auto bindingTableStateCount = std::min(31u, static_cast<uint32_t>(function->getBindingTableStateCount()));
+            auto ssh = indirectHeaps[OCLRT::IndirectHeap::SURFACE_STATE];
+            assert(ssh);
+
+            uint32_t bindingTablePointer = 0;
+
+            if (bindingTableStateCount > 0) {
+                bindingTablePointer = copyBindingTableAndSurfaceStates(ssh,
+                                                                    function->getSurfaceStateHeap(),
+                                                                    function->getSurfaceStateHeapSize(),
+                                                                    function->getBindingTableStateCount(),
+                                                                    function->getBindingTableOffset());
+            }
+
+            idd.setBindingTablePointer(static_cast<uint32_t>(bindingTablePointer));
+            idd.setBindingTableEntryCount(bindingTableStateCount);
+
+            STATE_BASE_ADDRESS *stateBaseAddress = static_cast<STATE_BASE_ADDRESS *>(sba);
+            assert(stateBaseAddress);
+            stateBaseAddress->setSurfaceStateBaseAddressModifyEnable(true);
+            stateBaseAddress->setSurfaceStateBaseAddress(indirectHeaps[OCLRT::IndirectHeap::SURFACE_STATE]->getHeapGpuBase());
+        }
 
         memcpy(ptr, &idd, sizeof(idd));
 

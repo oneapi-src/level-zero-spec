@@ -26,6 +26,7 @@ xe_result_t CommandListCoreFamily<IGFX_GEN12_CORE>::appendLaunchFunction(xe_func
     using GfxFamily = typename OCLRT::GfxFamilyMapper<IGFX_GEN12_CORE>::GfxFamily;
     using COMPUTE_WALKER = typename GfxFamily::COMPUTE_WALKER;
     using INTERFACE_DESCRIPTOR_DATA = typename GfxFamily::INTERFACE_DESCRIPTOR_DATA;
+    using STATE_BASE_ADDRESS = typename GfxFamily::STATE_BASE_ADDRESS;
 
     // Set # of threadgroups in each dimension
     assert(pThreadGroupDimensions);
@@ -121,6 +122,31 @@ xe_result_t CommandListCoreFamily<IGFX_GEN12_CORE>::appendLaunchFunction(xe_func
         if (function->hasPrintfOutput()) {
             this->storePrintfFunction(function);
         }
+    }
+
+    // Set up binding table and surface states
+    {
+        auto bindingTableStateCount = std::min(31u, static_cast<uint32_t>(function->getBindingTableStateCount()));
+        auto ssh = indirectHeaps[OCLRT::IndirectHeap::SURFACE_STATE];
+        assert(ssh);
+
+        uint32_t bindingTablePointer = 0;
+
+        if (bindingTableStateCount > 0) {
+            bindingTablePointer = copyBindingTableAndSurfaceStates(ssh,
+                                                                   function->getSurfaceStateHeap(),
+                                                                   function->getSurfaceStateHeapSize(),
+                                                                   function->getBindingTableStateCount(),
+                                                                   function->getBindingTableOffset());
+        }
+
+        idd.setBindingTablePointer(static_cast<uint32_t>(bindingTablePointer));
+        idd.setBindingTableEntryCount(bindingTableStateCount);
+
+        STATE_BASE_ADDRESS *stateBaseAddress = static_cast<STATE_BASE_ADDRESS *>(sba);
+        assert(stateBaseAddress);
+        stateBaseAddress->setSurfaceStateBaseAddressModifyEnable(true);
+        stateBaseAddress->setSurfaceStateBaseAddress(indirectHeaps[OCLRT::IndirectHeap::SURFACE_STATE]->getHeapGpuBase());
     }
 
     // Commit our command to the commandStream

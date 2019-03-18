@@ -128,6 +128,11 @@ struct FunctionImp : Function {
 
     void printPrintfOutput() override;
 
+    void *getSurfaceStateHeap() const override;
+    uint32_t getSurfaceStateHeapSize() const override;
+    uint32_t getBindingTableStateCount() const override;
+    uint32_t getBindingTableOffset() const override;
+
   protected:
     template <typename T>
     void patchCrossThreadData(uint32_t location, const T &value);
@@ -148,6 +153,7 @@ struct FunctionImp : Function {
     std::vector<GraphicsAllocation *> residencyContainer;
     GraphicsAllocation *printfBuffer = nullptr;
     PtrOwn<GraphicsAllocation> privateMemAllocation = nullptr; // TODO : move to ImmutableFunctionInfo along with kernelRT
+    uint32_t *kernelArgBindingTableIndex = nullptr;
 
     uint32_t groupSizeX = 0u;
     uint32_t groupSizeY = 0u;

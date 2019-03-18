@@ -4,7 +4,6 @@
 #endif //CMD_LIST_INTERNAL
 
 #include "image.h"
-#include "graphics_allocation.h"
 #include "memory_manager.h"
 
 namespace L0 {
@@ -25,6 +24,10 @@ struct ImageImp : public Image {
         sizeof(int8_t), sizeof(int16_t), sizeof(int32_t),
         sizeof(uint16_t), sizeof(float)};
     ImageImp() : allocation(nullptr) {
+    }
+
+    GraphicsAllocation *getAllocation() override {
+        return allocation;
     }
 
   protected:

@@ -79,6 +79,7 @@ struct CommandListAppendLaunchFunction : public ::testing::Test {
 
         EXPECT_CALL(*function, getThreadExecutionMask()).Times(AnyNumber());
         EXPECT_CALL(*function, setGroupCount(_, _, _)).Times(AnyNumber());
+        EXPECT_CALL(*function, getBindingTableStateCount()).Times(AnyNumber());
     }
 
     Mock<Device> device;

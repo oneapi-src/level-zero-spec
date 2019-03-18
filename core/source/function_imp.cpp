@@ -10,6 +10,7 @@
 #include "graphics_allocation.h"
 #include "memory_manager.h"
 #include "module.h"
+#include "image.h"
 #include "printf_handler.h"
 
 #include "runtime/context/context.h"
@@ -104,6 +105,7 @@ FunctionImp::~FunctionImp() {
     }
     privateMemAllocation.deleteOwned();
     delete oclInternals;
+    delete kernelArgBindingTableIndex;
 }
 
 xe_result_t FunctionImp::setArgumentValue(uint32_t argIndex,
@@ -250,25 +252,21 @@ xe_result_t FunctionImp::setArgBuffer(uint32_t argIndex, size_t argSize, const v
 }
 
 xe_result_t FunctionImp::setArgImage(uint32_t argIndex, size_t argSize, const void *argVal) {
-
+    const auto image = Image::fromHandle(*static_cast<const xe_image_handle_t *>(argVal));
     const auto &kernelArgInfo = getKernelInfo()->kernelArgInfo[argIndex];
-    // patchBufferOffset(kernelArgInfo, nullptr, nullptr); // stateless to stateful buffer offsets disabled
 
-    auto patchLocation = ptrOffset(crossThreadData,
-                                   kernelArgInfo.kernelArgPatchInfoVector[0].crossthreadOffset);
+    oclInternals->storeKernelArg(argIndex, OCLRT::Kernel::IMAGE_OBJ, image, argVal, argSize);
 
-    patchWithRequiredSize(patchLocation, kernelArgInfo.kernelArgPatchInfoVector[0].size, *reinterpret_cast<const uintptr_t *>(argVal));
+    auto ssh = getSurfaceStateHeap();
+    assert(ssh);
 
-    oclInternals->storeKernelArg(argIndex, OCLRT::Kernel::IMAGE_OBJ, nullptr, argVal, argSize);
+    //Optimization?  Rather than setting up and copying into a function's SSH, save references to the
+    // arguments' surface states, then do all the copying and BTS updating once in appendLaunchFunction
+    image->copySurfaceStateToSSH(ssh, kernelArgInfo.offsetHeap,
+            static_cast<uint32_t>(oclInternals->localBindingTableOffset), kernelArgBindingTableIndex[argIndex]);
 
-    //TODO AWF - do something for images here?
-    //if (requiresSshForBuffers()) {
-    //    auto surfaceState = ptrOffset(getSurfaceStateHeap(), kernelArgInfo.offsetHeap);
-    //    Buffer::setSurfaceState(&getDevice(), surfaceState, 0, nullptr);
-    //} // no SSH for buffers for now - stateless to stateful disabled
-
-    GraphicsAllocation *alloc = module->getDevice()->getMemoryManager()->findAllocation(*reinterpret_cast<void *const *>(argVal));
-    assert(alloc != nullptr);
+    GraphicsAllocation *alloc = image->getAllocation();
+    assert(alloc);
     residencyContainer[argIndex] = alloc;
 
     return XE_RESULT_SUCCESS;
@@ -311,6 +309,31 @@ bool FunctionImp::initialize(const xe_function_desc_t *desc) {
         this->oclInternals->pSshLocal = std::make_unique<char[]>(kernelRT->sshLocalSize);
         memcpy(this->oclInternals->pSshLocal.get(), kernelRT->pSshLocal.get(), kernelRT->sshLocalSize);
         this->oclInternals->sshLocalSize = kernelRT->sshLocalSize;
+
+        //Precompute an array of kernel argument BTIs.
+        auto &hwHelper = module->getDevice()->getHwHelper();
+
+        uint32_t numArgs = static_cast<uint32_t>(kernelInfoRT->kernelArgInfo.size());
+        kernelArgBindingTableIndex = new uint32_t[numArgs];
+
+        //For some reason this doesn't work through mock:
+        //void * ssh = this->getSurfaceStateHeap();
+        //uint32_t bindingTableOffset = this->getBindingTableOffset();
+        void * ssh = this->oclInternals->pSshLocal.get();
+        uint32_t bindingTableOffset = static_cast<uint32_t>(this->oclInternals->localBindingTableOffset);
+        void * bindingTable = ptrOffset(ssh, bindingTableOffset);
+
+        for (uint32_t i = 0; i < this->oclInternals->numberOfBindingTableStates; i++) {
+            //auto bts = ptrOffset(bindingTable, getBindingTableStateSize() * i);
+            auto ssPointer = hwHelper.getBindingTableStateSurfaceStatePointer(bindingTable, i);
+            for (uint32_t j = 0; j < numArgs; j++) {
+                if (kernelInfoRT->kernelArgInfo[j].offsetHeap == ssPointer) {
+                    //Optimization: just store the BTS offset here?
+                    kernelArgBindingTableIndex[j] = i;
+                    //Don't break here:  multiple args may use the same BTI?
+                }
+            }
+        }
     }
 
     if (kernelRT->crossThreadDataSize != 0) {
@@ -376,6 +399,23 @@ void FunctionImp::createPrintfBuffer() {
 
 void FunctionImp::printPrintfOutput() {
     PrintfHandler::printOutput(this->kernelRT, this->printfBuffer);
+}
+
+//TODO for performance, make sure this is inlined
+void *FunctionImp::getSurfaceStateHeap() const {
+    return this->oclInternals->pSshLocal.get();
+}
+
+uint32_t FunctionImp::getSurfaceStateHeapSize() const {
+    return this->oclInternals->sshLocalSize;
+}
+
+uint32_t FunctionImp::getBindingTableStateCount() const {
+    return static_cast<uint32_t>(this->oclInternals->numberOfBindingTableStates);
+}
+
+uint32_t FunctionImp::getBindingTableOffset() const {
+    return static_cast<uint32_t>(this->oclInternals->localBindingTableOffset);
 }
 
 template <typename T>

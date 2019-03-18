@@ -9,6 +9,8 @@
 #include "xe_sampler.h"
 #include "driver.h"
 
+#include "runtime/helpers/hw_helper.h"
+
 struct _xe_device_handle_t {
 };
 
@@ -63,6 +65,8 @@ struct Device : _xe_device_handle_t {
 
     virtual MemoryManager *getMemoryManager() = 0;
     virtual void* getExecEnvironment() = 0;
+
+    virtual OCLRT::HwHelper &getHwHelper() = 0;
 
     static Device *fromHandle(xe_device_handle_t handle) {
         return static_cast<Device *>(handle);

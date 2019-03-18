@@ -62,6 +62,10 @@ struct Function : public _xe_function_handle_t {
     virtual bool getHasBarriers() const = 0;
     virtual uint32_t getSlmSize() const = 0;
     virtual bool hasPrintfOutput() const = 0;
+    virtual void *getSurfaceStateHeap() const = 0;
+    virtual uint32_t getSurfaceStateHeapSize() const = 0;
+    virtual uint32_t getBindingTableStateCount() const = 0;
+    virtual uint32_t getBindingTableOffset() const = 0;
 
     virtual GraphicsAllocation *getPrintfBufferAllocation() = 0;
     virtual void printPrintfOutput() = 0;

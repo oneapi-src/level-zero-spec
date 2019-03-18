@@ -1,5 +1,6 @@
 #pragma once
 #include "device.h"
+#include "graphics_allocation.h"
 #include "xe_image.h"
 
 struct _xe_image_handle_t {
@@ -18,6 +19,10 @@ struct Image : public _xe_image_handle_t {
     virtual xe_result_t destroy() = 0;
 
     static Image *create(uint32_t productFamily, Device *device, const xe_image_desc_t *desc);
+
+    virtual GraphicsAllocation *getAllocation() = 0;
+    virtual void copySurfaceStateToSSH(void *surfaceStateHeap, const uint32_t surfaceStateOffset,
+            const uint32_t bindingTableOffset, const uint32_t bindingTableIndex) = 0;
 
     static Image *fromHandle(xe_image_handle_t handle) {
         return static_cast<Image *>(handle);
