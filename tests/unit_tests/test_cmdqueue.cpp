@@ -1,9 +1,11 @@
 #include "igfxfmid.h"
 #include "mock_cmdqueue.h"
 #include "mock_device.h"
+#include "mock_function.h"
 #include "mock_memory_manager.h"
 #include "graphics_allocation.h"
 #include "runtime/command_stream/linear_stream.h"
+#include "unit_tests/mocks/mock_csr.h"
 #include "xe_cmdqueue.h"
 #include "gtest/gtest.h"
 
@@ -35,6 +37,25 @@ TEST(CommandQueueCreate, returnsCommandQueueOnSuccess) {
     ASSERT_NE(commandQueue->commandStream, nullptr);
     EXPECT_LT(0u, commandQueue->commandStream->getAvailableSpace());
     commandQueue->destroy();
+}
+
+TEST(CommandQueue, synchronizeByPollingCallsPrintOutputOnPrintfFunctionsStoredAndClearsFunctionContainer) {
+    Mock<CommandQueue> commandQueue;
+
+    uint32_t tag = 0;
+    static_cast<MockCommandStreamReceiver *>(commandQueue.csrRT)->tagAddress = &tag;
+
+    Mock<Function> function1, function2;
+
+    EXPECT_CALL(function1, printPrintfOutput).Times(1);
+    EXPECT_CALL(function2, printPrintfOutput).Times(1);
+
+    commandQueue.printfFunctionContainer.push_back(&function1);
+    commandQueue.printfFunctionContainer.push_back(&function2);
+
+    commandQueue.synchronizeByPollingForTaskCount(0);
+
+    EXPECT_EQ(0u, commandQueue.printfFunctionContainer.size());
 }
 
 } // namespace ult

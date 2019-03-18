@@ -92,10 +92,19 @@ xe_result_t CommandQueueImp::synchronizeByPollingForTaskCount(uint32_t timeout) 
         return XE_RESULT_NOT_READY;
     }
 
-    if (this->printfFunctionContainer.size()) {
-        this->printfFunctionContainer[0]->printPrintfOutput();
-    }
+    printFunctionsPrintfOutput();
+
     return XE_RESULT_SUCCESS;
+}
+
+void CommandQueueImp::printFunctionsPrintfOutput() {
+    size_t size = this->printfFunctionContainer.size();
+    if (size) {
+        for (size_t i = 0; i < size; i++) {
+            this->printfFunctionContainer[i]->printPrintfOutput();
+        }
+        this->printfFunctionContainer.clear();
+    }
 }
 
 CommandQueue *CommandQueue::create(uint32_t productFamily, Device *device, void *csrRT) {

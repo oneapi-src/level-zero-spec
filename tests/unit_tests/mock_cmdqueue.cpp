@@ -20,12 +20,12 @@ Mock<CommandQueue>::Mock(Device *device, void *csrRT)
     auto deviceRT = platform->getDevice(ordinal);
     auto executionEnvironment = deviceRT->getExecutionEnvironment();
 
-    csrRT = new MockCommandStreamReceiver(*executionEnvironment);
+    this->csrRT = new MockCommandStreamReceiver(*executionEnvironment);
 }
 
 Mock<CommandQueue>::~Mock() {
     delete static_cast<MockCommandStreamReceiver *>(csrRT);
 }
 
-} // ult
+} // namespace ult
 } // namespace L0

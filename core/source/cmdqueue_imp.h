@@ -33,6 +33,8 @@ struct CommandQueueImp : public CommandQueue {
     xe_result_t synchronizeByPollingForTaskCount(uint32_t timeout);
     virtual void dispatchTaskCountWrite(bool flushDataCache) = 0;
 
+    void printFunctionsPrintfOutput();
+
     Device *device;
     void *csrRT;
     GraphicsAllocation *allocation;

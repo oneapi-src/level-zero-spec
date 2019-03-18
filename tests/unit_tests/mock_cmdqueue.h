@@ -13,6 +13,8 @@ struct WhiteBox<::L0::CommandQueue> : public ::L0::CommandQueueImp {
     using BaseClass::commandStream;
     using BaseClass::csrRT;
     using BaseClass::device;
+    using BaseClass::printfFunctionContainer;
+    using BaseClass::synchronizeByPollingForTaskCount;
 
     WhiteBox(Device *device, void *csrRT);
     virtual ~WhiteBox();
