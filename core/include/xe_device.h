@@ -434,7 +434,6 @@ typedef struct _xe_device_link_properties_t
 ///         + nullptr == hDevice
 ///         + nullptr == hPeerDevice
 ///         + nullptr == pLinkProperties
-///         + invalid ordinal. Use ::xeDriverGetDeviceCount for valid range.
 ///     - ::XE_RESULT_ERROR_UNSUPPORTED
 __xedllport xe_result_t __xecall
 xeDeviceGetLinkProperties(

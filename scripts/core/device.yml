@@ -450,9 +450,6 @@ params:
     - type: "$x_device_link_properties_t*"
       name: pLinkProperties
       desc: "[out] link properties between source and destination devices"
-returns:
-    - $X_RESULT_ERROR_INVALID_PARAMETER:
-        - "invalid ordinal. Use $xDriverGetDeviceCount for valid range."
 --- #--------------------------------------------------------------------------
 type: function
 desc: "Queries if one device can directly access peer device allocations"

@@ -546,7 +546,6 @@ xeDeviceGetMemoryProperties(
 ///         + nullptr == hDevice
 ///         + nullptr == hPeerDevice
 ///         + nullptr == pLinkProperties
-///         + invalid ordinal. Use ::xeDriverGetDeviceCount for valid range.
 ///     - ::XE_RESULT_ERROR_UNSUPPORTED
 ///
 /// @hash {f87da0c4b4faf80e73e9f40633b32da141016c47a8b47b4f51f277de390a2151}
