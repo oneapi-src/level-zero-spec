@@ -17,6 +17,9 @@ GraphicsAllocation *PrintfHandler::createPrintfBuffer(Device *device) {
 void PrintfHandler::printOutput(OCLRT::Kernel *kernel, GraphicsAllocation *printfBuffer) {
     OCLRT::PrintFormatter printFormatter(*kernel, *printfBuffer->allocationRT);
     printFormatter.printKernelOutput();
+
+    // reset to initial state after printing
+    *reinterpret_cast<uint32_t *>(printfBuffer->getHostAddress()) = PrintfHandler::printfSurfaceInitialDataSize;
 }
 
 } // namespace L0
