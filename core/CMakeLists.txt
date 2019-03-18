@@ -61,3 +61,8 @@ target_include_directories(ocloc_shared PRIVATE ${OCLOC_INCLUDES} ${CMAKE_CURREN
 target_link_libraries(ocloc_shared ${OCLOC_LIBRARY_DEPENDENCIES})
 target_compile_definitions(ocloc_shared PRIVATE ${OCLOC_COMPILE_DEFINITIONS} -DMOCKABLE_VIRTUAL=)
 
+if(UNIX)
+    install(TARGETS ${TARGET_NAME}
+        DESTINATION lib
+        COMPONENT l0-core)
+endif()

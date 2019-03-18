@@ -56,7 +56,12 @@ linux:
     - mkdir build
     - cd build
     - cmake -GNinja .. -DCMAKE_BUILD_TYPE=Release
-    - cmake --build . --config Release --clean-first --target all
+    - cmake --build . --config Release --clean-first --target package
+  artifacts:
+    paths:
+    - build/*.deb
+    expire_in: 1 week
+
 
 windows:
   stage: build
