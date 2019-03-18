@@ -138,9 +138,5 @@ HWTEST2_F(ImageCreate, descBadParamsFail, MatchAny) {
     ASSERT_FALSE(ret);
 }
 
-//TEST(ImageAsFunctionArg, simpleImageArgument) {
-//
-//}
-
 } // namespace ult
 } // namespace L0
