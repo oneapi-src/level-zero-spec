@@ -72,6 +72,13 @@ if(NOT EXISTS ${COMPUTE_RUNTIME_DIR}/runtime/command_stream)
 endif() 
 message(STATUS "COMPUTE_RUNTIME_DIR = ${COMPUTE_RUNTIME_DIR}")
 
+#Add I915 include dir
+if (UNIX)
+    if (NOT DEFINED I915_INCLUDES_DIR)
+        get_filename_component(I915_INCLUDES_DIR
+            "${COMPUTE_RUNTIME_DIR}/third_party/uapi" ABSOLUTE)
+    endif()
+endif()
 # Option to disable tests
 option(${PROJECT_NAME}_BUILD_TESTS "Build unit tests." ON)
 
@@ -94,6 +101,7 @@ add_custom_command(
 add_subdirectory(core)
 
 include_directories(${CMAKE_CURRENT_SOURCE_DIR}/core/include)
+include_directories(${CMAKE_CURRENT_SOURCE_DIR}/core/source)
 include_directories("${CMAKE_CURRENT_SOURCE_DIR}")
 
 if (${PROJECT_NAME}_BUILD_TESTS)

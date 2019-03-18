@@ -89,6 +89,8 @@ target_include_directories(${TARGET_NAME}
     ${CMAKE_CURRENT_SOURCE_DIR}/
 )
 
+include_directories(${CMAKE_CURRENT_SOURCE_DIR})
+
 target_sources(${TARGET_NAME}
     PRIVATE
         ${L0_RUNTIME_SOURCES}
@@ -99,3 +101,5 @@ target_sources(${TARGET_NAME}
         ${CMAKE_CURRENT_SOURCE_DIR}/gen12hp.cmake
         ${CMAKE_CURRENT_SOURCE_DIR}/gen12lp.cmake
 )
+
+add_subdirectory(os_interface)

@@ -55,6 +55,9 @@ add_executable(${TARGET_NAME}
     white_box.h
     ${HW_SOURCES_ULT}
     ${L0_RUNTIME_SOURCES}
+    ${L0_SRCS_OS_INTERFACE_BASE}
+    ${L0_SRCS_OS_INTERFACE_LINUX}
+    ${L0_SRCS_OS_INTERFACE_WINDOWS}
 )
 
 target_compile_definitions(${TARGET_NAME}
@@ -67,7 +70,22 @@ target_include_directories(${TARGET_NAME}
     BEFORE
     PRIVATE
         $<TARGET_PROPERTY:${PROJECT_NAME},SOURCE_DIR>/source
+        $<TARGET_PROPERTY:${PROJECT_NAME},SOURCE_DIR>/source/os_interface
 )
+
+if (UNIX)
+    target_include_directories(${TARGET_NAME}
+        BEFORE
+        PRIVATE
+            $<TARGET_PROPERTY:${PROJECT_NAME},SOURCE_DIR>/source/os_interface/linux
+    )
+else()
+    target_include_directories(${TARGET_NAME}
+        BEFORE
+        PRIVATE
+            $<TARGET_PROPERTY:${PROJECT_NAME},SOURCE_DIR>/source/os_interface/windows
+    )
+endif()
 
 target_link_libraries(${TARGET_NAME} 
     compute_runtime_mockable

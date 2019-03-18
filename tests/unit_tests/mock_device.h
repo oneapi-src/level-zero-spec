@@ -63,6 +63,7 @@ struct Mock<Device> : public Device {
 
     // Runtime internal methods
     MOCK_METHOD0(getMemoryManager, MemoryManager *());
+    MOCK_METHOD0(getExecEnvironment, void *());
 
     void *deviceRT;
     void *csrRT;

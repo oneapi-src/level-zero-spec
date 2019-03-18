@@ -37,8 +37,15 @@ if(UNIX)
             ${COMPUTE_RUNTIME_DIR}/runtime/dll/linux/drm_neo_create.cpp
     )
     set(OS_SPECIFIC_LIBS dl pthread)
+    target_include_directories(${TARGET_NAME} PUBLIC
+        ${CMAKE_CURRENT_SOURCE_DIR}/source/os_interface/linux
+        ${I915_INCLUDES_DIR}
+    )
 else()
     set(OS_SPECIFIC_LIBS "")
+    target_include_directories(${TARGET_NAME} PUBLIC
+        ${CMAKE_CURRENT_SOURCE_DIR}/source/os_interface/windows
+    )
 endif()
 
 target_link_libraries(${TARGET_NAME}
@@ -60,6 +67,8 @@ add_library(ocloc_shared SHARED ${OCLOC_SOURCES} ${CMAKE_CURRENT_SOURCE_DIR}/sou
 target_include_directories(ocloc_shared PRIVATE ${OCLOC_INCLUDES} ${CMAKE_CURRENT_SOURCE_DIR}/include)
 target_link_libraries(ocloc_shared ${OCLOC_LIBRARY_DEPENDENCIES})
 target_compile_definitions(ocloc_shared PRIVATE ${OCLOC_COMPILE_DEFINITIONS} -DMOCKABLE_VIRTUAL=)
+
+set(OS_SPECIFIC_LIBS ${OS_SPECIFIC_LIBS} PARENT_SCOPE)
 
 if(UNIX)
     install(TARGETS ${TARGET_NAME}

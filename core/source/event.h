@@ -8,18 +8,31 @@ struct _xe_event_handle_t {
 
 namespace L0 {
 struct GraphicsAllocation;
+typedef uint64_t FlushStamp;
 
 struct Event : public _xe_event_handle_t {
     virtual xe_result_t destroy();
-    virtual xe_result_t hostSignal() = 0;
-    virtual xe_result_t hostSynchronize(uint32_t timeout) = 0;
+    virtual xe_result_t hostSignal() {
+        return XE_RESULT_ERROR_UNSUPPORTED;
+    }
+    virtual xe_result_t hostSynchronize(uint32_t timeout) {
+        return XE_RESULT_ERROR_UNSUPPORTED;
+    }
     virtual xe_result_t queryElapsedTime(xe_event_handle_t hEventEnd,
-                                         double *pTime) = 0;
+                                         double *pTime) {
+        return XE_RESULT_ERROR_UNSUPPORTED;
+    }
     virtual xe_result_t queryMetricsData(xe_event_handle_t hEventEnd,
                                          size_t reportSize,
-                                         uint32_t *pReportData) = 0;
-    virtual xe_result_t queryStatus() = 0;
-    virtual xe_result_t reset() = 0;
+                                         uint32_t *pReportData) {
+        return XE_RESULT_ERROR_UNSUPPORTED;
+    }
+    virtual xe_result_t queryStatus() {
+        return XE_RESULT_ERROR_UNSUPPORTED;
+    }
+    virtual xe_result_t reset() {
+        return XE_RESULT_ERROR_UNSUPPORTED;
+    }
 
     static Event *create(Device *device);
 
@@ -36,6 +49,9 @@ struct Event : public _xe_event_handle_t {
     }
 
     uint64_t getGpuAddress();
+
+    FlushStamp flushStampToWait;
+    virtual bool waitForFlushStamp(FlushStamp &flushStamp) { return true; }
 
   protected:
     GraphicsAllocation *allocation = nullptr;

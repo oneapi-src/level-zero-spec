@@ -23,5 +23,25 @@ TEST(Event_create, allocationContainsAtLeast64Bytes) {
     delete event;
 }
 
+TEST(Wait, waitWithMaxTimeout) {
+    Mock<Device> device;
+
+    auto event = whitebox_cast(Event::create(&device));
+    ASSERT_NE(event, nullptr);
+
+    auto result = event->hostSynchronize(std::numeric_limits<uint32_t>::max());
+    EXPECT_EQ(XE_RESULT_SUCCESS, result);
+}
+
+TEST(Wait, waitWithFiniteTimeout) {
+    Mock<Device> device;
+
+    auto event = whitebox_cast(Event::create(&device));
+    ASSERT_NE(event, nullptr);
+
+    auto result = event->hostSynchronize(40);
+    EXPECT_EQ(XE_RESULT_ERROR_INVALID_PARAMETER, result);
+}
+
 } // namespace ult
 } // namespace L0

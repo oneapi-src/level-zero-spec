@@ -9,6 +9,7 @@
 #include "runtime/helpers/hw_helper.h"
 #include "runtime/helpers/string.h"
 #include "runtime/os_interface/debug_settings_manager.h"
+#include "runtime/execution_environment/execution_environment.h"
 
 namespace L0 {
 
@@ -166,9 +167,14 @@ struct DeviceImp : public Device {
         return memoryManager;
     }
 
+    void *getExecEnvironment() override {
+        return execEnvironment;
+    }
+
     OCLRT::Device *deviceRT = nullptr;
     MemoryManager *memoryManager = nullptr;
     bool isSubdevice = false;
+    void *execEnvironment = nullptr;
 };
 
 Device *Device::create(void *ptr) {
@@ -177,6 +183,7 @@ Device *Device::create(void *ptr) {
     auto deviceRT = static_cast<OCLRT::Device *>(ptr);
     device->deviceRT = deviceRT;
     device->memoryManager = MemoryManager::create(deviceRT->getMemoryManager());
+    device->execEnvironment = (void *) deviceRT->getExecutionEnvironment();
 
     return device;
 }

@@ -2,6 +2,9 @@
 #include "event.h"
 #include "graphics_allocation.h"
 #include "memory_manager.h"
+#include "os_interface/os_context.h"
+#include "runtime/device/device.h"
+#include "runtime/execution_environment/execution_environment.h"
 
 #include <cassert>
 
@@ -14,9 +17,7 @@ struct EventImp : public Event {
         return XE_RESULT_ERROR_UNSUPPORTED;
     }
 
-    xe_result_t hostSynchronize(uint32_t timeout) override {
-        return XE_RESULT_ERROR_UNSUPPORTED;
-    }
+    xe_result_t hostSynchronize(uint32_t timeout) override;
 
     xe_result_t queryElapsedTime(xe_event_handle_t hEventEnd,
                                  double *pTime) override {
@@ -65,6 +66,25 @@ bool EventImp::initialize() {
 
 xe_result_t Event::destroy() {
     delete this;
+    return XE_RESULT_SUCCESS;
+}
+
+xe_result_t EventImp::hostSynchronize(uint32_t timeout) {
+    if (timeout != std::numeric_limits<uint32_t>::max()) {
+        return XE_RESULT_ERROR_INVALID_PARAMETER;
+    }
+
+    auto execEnvironment = static_cast<OCLRT::ExecutionEnvironment *>(device->getExecEnvironment());
+    auto osContext = OsContext::create(execEnvironment);
+
+    // Fake Flush Stamp value for now
+    flushStampToWait = 1;
+    bool ret = waitForFlushStamp(flushStampToWait);
+
+    if (!ret) {
+        return XE_RESULT_NOT_READY;
+    }
+
     return XE_RESULT_SUCCESS;
 }
 
