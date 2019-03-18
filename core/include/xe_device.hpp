@@ -426,7 +426,6 @@ namespace xe
             device_link_properties_version_t version = device_link_properties_version_t::CURRENT;   ///< [in] ::DEVICE_LINK_PROPERTIES_VERSION_CURRENT
             bool_t isP2PSupported;                          ///< [out] Is P2P access supported across link
             bool_t isAtomicsSupported;                      ///< [out] Are atomics supported across link
-            uint32_t performanceRank;                       ///< [out] Relative performance rank of link.
 
         };
 

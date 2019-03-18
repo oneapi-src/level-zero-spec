@@ -429,9 +429,7 @@ members:
     - type: $x_bool_t
       name: isAtomicsSupported
       desc: "[out] Are atomics supported across link"
-    - type: uint32_t
-      name: performanceRank
-      desc: "[out] Relative performance rank of link."
+ 
 --- #--------------------------------------------------------------------------
 type: function
 desc: "Retrieves link properties between one device and a peer devices"
