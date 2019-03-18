@@ -62,7 +62,7 @@ The cross-tile memory is stacked within package allowing applications to access 
 
 The API represents tiles as sub-devices and there are functions to query and obtain a sub-device. 
 Outside of these functions there are no distinction between sub-devices and devices. 
-For example, a sub-device can be used with memory allocation and tasks dispatch functions and allow placement and dispatch to a specific sub-device.
+For example, a sub-device can be used with memory allocation and tasks and allow placement and submission to a specific sub-device.
 
 ## Peer-to-Peer Communication
 Peer to Peer API's provide capabilities to marshall data across Host to Device, Device to Host and Device to Device. 
@@ -143,7 +143,7 @@ Each API function must document details on the multithreading requirements for t
 The primary usage-model enabled by these rules is:
 - work submission occurs exclusively by enqueing command lists into a command queue
 - work submission into a command queue is free-threaded
-- multiple, simulateneous threads may encode multiple command lists independently
+- multiple, simulateneous threads may append multiple command lists independently
 
 # <a name="drv">Drivers</a>
 ## Installation
@@ -155,9 +155,7 @@ their own device abstraction layer and communicate directly with the device-driv
 
 ## Environment Variables
 The following table documents the supported knobs for overriding default driver behavior.
-
 | Category            | Name                                    | Values                 | Description                                           |
 |---------------------|-----------------------------------------|------------------------|-------------------------------------------------------|
 | Memory              | XE_SHARED_FORCE_DEVICE_ALLOC          | {**0**, 1}             | Forces all shared allocations into device memory      |
 | Validation          | XE_DRIVER_PARAMETER_VALIDATION_LEVEL  | {0, **1**, 2}          | Controls the validation level used by the driver for parameters.<br>0 = disabled, no checks<br>1 = pointer and overflow checks only [default]<br>2 = values and states<br> |
-

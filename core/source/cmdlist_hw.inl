@@ -236,22 +236,15 @@ void CommandListCoreFamily<gfxCoreFamily>::programL3() {
 }
 
 template <GFXCORE_FAMILY gfxCoreFamily>
-xe_result_t CommandListCoreFamily<gfxCoreFamily>::encodeCommandLists(uint32_t numCommandLists,
+xe_result_t CommandListCoreFamily<gfxCoreFamily>::appendCommandLists(uint32_t numCommandLists,
                                                                      xe_command_list_handle_t *phCommandLists) {
     return XE_RESULT_ERROR_UNSUPPORTED;
 }
 
 template <GFXCORE_FAMILY gfxCoreFamily>
-xe_result_t CommandListCoreFamily<gfxCoreFamily>::encodeCommands(xe_command_format_t format,
-                                                                 size_t size,
-                                                                 void *pBlob) {
-    return XE_RESULT_ERROR_UNSUPPORTED;
-}
-
-template <GFXCORE_FAMILY gfxCoreFamily>
-xe_result_t CommandListCoreFamily<gfxCoreFamily>::encodeDispatchFunction(xe_function_handle_t hFunction,
-                                                                         const xe_dispatch_function_arguments_t *pDispatchFuncArgs,
-                                                                         xe_event_handle_t hEvent) {
+xe_result_t CommandListCoreFamily<gfxCoreFamily>::appendLaunchFunction(xe_function_handle_t hFunction,
+                                                                       const xe_thread_group_dimensions_t *pDispatchFuncArgs,
+                                                                       xe_event_handle_t hEvent) {
     using GfxFamily = typename OCLRT::GfxFamilyMapper<gfxCoreFamily>::GfxFamily;
     using GPGPU_WALKER = typename GfxFamily::GPGPU_WALKER;
     using MEDIA_INTERFACE_DESCRIPTOR_LOAD = typename GfxFamily::MEDIA_INTERFACE_DESCRIPTOR_LOAD;
@@ -336,7 +329,6 @@ xe_result_t CommandListCoreFamily<gfxCoreFamily>::encodeDispatchFunction(xe_func
 
     // Set # of threadgroups in each dimension
     assert(pDispatchFuncArgs);
-    assert(pDispatchFuncArgs->version == XE_DISPATCH_FUNCTION_ARGS_VERSION);
     cmd.setThreadWidthCounterMaximum(threadsPerThreadGroup);
     cmd.setThreadGroupIdXDimension(pDispatchFuncArgs->groupCountX);
     cmd.setThreadGroupIdYDimension(pDispatchFuncArgs->groupCountY);
@@ -378,25 +370,34 @@ xe_result_t CommandListCoreFamily<gfxCoreFamily>::encodeDispatchFunction(xe_func
 }
 
 template <GFXCORE_FAMILY gfxCoreFamily>
-xe_result_t CommandListCoreFamily<gfxCoreFamily>::encodeDispatchFunctionIndirect(xe_function_handle_t hFunction,
-                                                                                 const xe_dispatch_function_indirect_arguments_t *pDispatchArgumentsBuffer,
-                                                                                 xe_event_handle_t hEvent) {
+xe_result_t CommandListCoreFamily<gfxCoreFamily>::appendLaunchFunctionIndirect(xe_function_handle_t hFunction,
+                                                                               const xe_thread_group_dimensions_t *pDispatchArgumentsBuffer,
+                                                                               xe_event_handle_t hEvent) {
     return XE_RESULT_ERROR_UNSUPPORTED;
 }
 
 template <GFXCORE_FAMILY gfxCoreFamily>
-xe_result_t CommandListCoreFamily<gfxCoreFamily>::encodeDispatchHostFunction(xe_host_pfn_t pfnHostFunc,
-                                                                             void *pUserData) {
+xe_result_t CommandListCoreFamily<gfxCoreFamily>::appendLaunchHostFunction(xe_host_pfn_t pfnHostFunc,
+                                                                           void *pUserData) {
     return XE_RESULT_ERROR_UNSUPPORTED;
 }
 
 template <GFXCORE_FAMILY gfxCoreFamily>
-xe_result_t CommandListCoreFamily<gfxCoreFamily>::encodeEventReset(xe_event_handle_t hEvent) {
+xe_result_t CommandListCoreFamily<gfxCoreFamily>::appendLaunchMultipleFunctionsIndirect(uint32_t numFunctions,
+                                                                                        const xe_function_handle_t *phFunctions,
+                                                                                        const size_t *pNumLaunchArguments,
+                                                                                        const xe_thread_group_dimensions_t *pLaunchArgumentsBuffer,
+                                                                                        xe_event_handle_t hEvent) {
     return XE_RESULT_ERROR_UNSUPPORTED;
 }
 
 template <GFXCORE_FAMILY gfxCoreFamily>
-xe_result_t CommandListCoreFamily<gfxCoreFamily>::encodeExecutionBarrier() {
+xe_result_t CommandListCoreFamily<gfxCoreFamily>::appendEventReset(xe_event_handle_t hEvent) {
+    return XE_RESULT_ERROR_UNSUPPORTED;
+}
+
+template <GFXCORE_FAMILY gfxCoreFamily>
+xe_result_t CommandListCoreFamily<gfxCoreFamily>::appendExecutionBarrier() {
 
     using GfxFamily = typename OCLRT::GfxFamilyMapper<gfxCoreFamily>::GfxFamily;
     using PIPE_CONTROL = typename GfxFamily::PIPE_CONTROL;
@@ -410,21 +411,21 @@ xe_result_t CommandListCoreFamily<gfxCoreFamily>::encodeExecutionBarrier() {
 }
 
 template <GFXCORE_FAMILY gfxCoreFamily>
-xe_result_t CommandListCoreFamily<gfxCoreFamily>::encodeImageCopyFromMemory(xe_image_handle_t hDstImage,
+xe_result_t CommandListCoreFamily<gfxCoreFamily>::appendImageCopyFromMemory(xe_image_handle_t hDstImage,
                                                                             xe_image_region_t *pDstRegion,
                                                                             const void *srcptr) {
     return XE_RESULT_ERROR_UNSUPPORTED;
 }
 
 template <GFXCORE_FAMILY gfxCoreFamily>
-xe_result_t CommandListCoreFamily<gfxCoreFamily>::encodeImageCopyToMemory(void *dstptr,
+xe_result_t CommandListCoreFamily<gfxCoreFamily>::appendImageCopyToMemory(void *dstptr,
                                                                           xe_image_handle_t hSrcImage,
                                                                           xe_image_region_t *pSrcRegion) {
     return XE_RESULT_ERROR_UNSUPPORTED;
 }
 
 template <GFXCORE_FAMILY gfxCoreFamily>
-xe_result_t CommandListCoreFamily<gfxCoreFamily>::encodeImageCopyRegion(xe_image_handle_t hDstImage,
+xe_result_t CommandListCoreFamily<gfxCoreFamily>::appendImageCopyRegion(xe_image_handle_t hDstImage,
                                                                         xe_image_region_t *pDstRegion,
                                                                         xe_image_handle_t hSrcImage,
                                                                         xe_image_region_t *pSrcRegion) {
@@ -432,13 +433,13 @@ xe_result_t CommandListCoreFamily<gfxCoreFamily>::encodeImageCopyRegion(xe_image
 }
 
 template <GFXCORE_FAMILY gfxCoreFamily>
-xe_result_t CommandListCoreFamily<gfxCoreFamily>::encodeImageCopy(xe_image_handle_t hDstImage,
+xe_result_t CommandListCoreFamily<gfxCoreFamily>::appendImageCopy(xe_image_handle_t hDstImage,
                                                                   xe_image_handle_t hSrcImage) {
     return XE_RESULT_ERROR_UNSUPPORTED;
 }
 
 template <GFXCORE_FAMILY gfxCoreFamily>
-xe_result_t CommandListCoreFamily<gfxCoreFamily>::encodeMemAdvise(xe_device_handle_t hDevice,
+xe_result_t CommandListCoreFamily<gfxCoreFamily>::appendMemAdvise(xe_device_handle_t hDevice,
                                                                   const void *ptr,
                                                                   size_t size,
                                                                   xe_memory_advice_t advice) {
@@ -446,23 +447,22 @@ xe_result_t CommandListCoreFamily<gfxCoreFamily>::encodeMemAdvise(xe_device_hand
 }
 
 template <GFXCORE_FAMILY gfxCoreFamily>
-xe_result_t CommandListCoreFamily<gfxCoreFamily>::encodeMemoryCopy(void *dstptr,
+xe_result_t CommandListCoreFamily<gfxCoreFamily>::appendMemoryCopy(void *dstptr,
                                                                    const void *srcptr,
                                                                    size_t size) {
     xe_module_handle_t module;
     xe_function_handle_t function;
-    xe_command_queue_handle_t cmdQueue;
 
-    xe_module_desc_t moduleDesc = {XE_MODULE_DESC_VERSION};
+    xe_module_desc_t moduleDesc = {XE_MODULE_DESC_VERSION_CURRENT};
     moduleDesc.format = XE_MODULE_FORMAT_IL_SPIRV;
     moduleDesc.pInputModule = compileCopyBufferToBufferBin.getModule();
     moduleDesc.inputSize = compileCopyBufferToBufferBin.getSize();
     if (xeDeviceCreateModule(this->device, &moduleDesc, &module, nullptr))
         return XE_RESULT_ERROR_UNKNOWN;
 
-    xe_function_desc_t functionDesc = {XE_FUNCTION_DESC_VERSION};
+    xe_function_desc_t functionDesc = {XE_FUNCTION_DESC_VERSION_CURRENT};
     functionDesc.pFunctionName = compileCopyBufferToBufferBin.getFunctionName();
-    if(xeModuleCreateFunction(module, &functionDesc, &function))
+    if (xeModuleCreateFunction(module, &functionDesc, &function))
         return XE_RESULT_ERROR_UNKNOWN;
 
     /* Using defaults for now. We need to change this */
@@ -472,49 +472,32 @@ xe_result_t CommandListCoreFamily<gfxCoreFamily>::encodeMemoryCopy(void *dstptr,
     if (xeFunctionSetGroupSize(function, groupSizeX, groupSizeY, groupSizeZ))
         return XE_RESULT_ERROR_UNKNOWN;
 
-    xe_command_queue_desc_t cmdQueueDesc = {XE_COMMAND_QUEUE_DESC_VERSION};
-    cmdQueueDesc.ordinal = 0;
-    cmdQueueDesc.mode = XE_COMMAND_QUEUE_MODE_ASYNCHRONOUS;
-    if(xeDeviceCreateCommandQueue(this->device, &cmdQueueDesc, &cmdQueue))
-        return XE_RESULT_ERROR_UNKNOWN;
-
     xeFunctionSetArgumentValue(function, 0, sizeof(dstptr), &dstptr);
     xeFunctionSetArgumentValue(function, 1, sizeof(srcptr), &srcptr);
 
-    xe_dispatch_function_arguments_t dispatchFuncArgs{XE_DISPATCH_FUNCTION_ARGS_VERSION,
-            (uint32_t)(size / sizeof(char) / groupSizeX), 1, 1};
+    xe_thread_group_dimensions_t dispatchFuncArgs{
+        (uint32_t)(size / sizeof(char) / groupSizeX),
+        1u,
+        1u};
 
-    return this->encodeDispatchFunction(function, &dispatchFuncArgs, nullptr);
+    return this->appendLaunchFunction(function, &dispatchFuncArgs, nullptr);
 }
 
 template <GFXCORE_FAMILY gfxCoreFamily>
-xe_result_t CommandListCoreFamily<gfxCoreFamily>::encodeMemoryPrefetch(const void *ptr,
+xe_result_t CommandListCoreFamily<gfxCoreFamily>::appendMemoryPrefetch(const void *ptr,
                                                                        size_t count) {
     return XE_RESULT_ERROR_UNSUPPORTED;
 }
 
 template <GFXCORE_FAMILY gfxCoreFamily>
-xe_result_t CommandListCoreFamily<gfxCoreFamily>::encodeMemorySet(void *ptr,
+xe_result_t CommandListCoreFamily<gfxCoreFamily>::appendMemorySet(void *ptr,
                                                                   int value,
                                                                   size_t size) {
     return XE_RESULT_ERROR_UNSUPPORTED;
 }
 
 template <GFXCORE_FAMILY gfxCoreFamily>
-xe_result_t CommandListCoreFamily<gfxCoreFamily>::encodeSemaphoreSignal(xe_semaphore_handle_t hSemaphore,
-                                                                        xe_semaphore_value_t value) {
-    return XE_RESULT_ERROR_UNSUPPORTED;
-}
-
-template <GFXCORE_FAMILY gfxCoreFamily>
-xe_result_t CommandListCoreFamily<gfxCoreFamily>::encodeSemaphoreWait(xe_semaphore_handle_t hSemaphore,
-                                                                      xe_semaphore_wait_operation_t operation,
-                                                                      xe_semaphore_value_t value) {
-    return XE_RESULT_ERROR_UNSUPPORTED;
-}
-
-template <GFXCORE_FAMILY gfxCoreFamily>
-xe_result_t CommandListCoreFamily<gfxCoreFamily>::encodeSignalEvent(xe_event_handle_t hEvent) {
+xe_result_t CommandListCoreFamily<gfxCoreFamily>::appendSignalEvent(xe_event_handle_t hEvent) {
     auto event = Event::fromHandle(hEvent);
     assert(event);
     residencyContainer.push_back(event->getAllocation().allocationRT);
@@ -536,13 +519,7 @@ xe_result_t CommandListCoreFamily<gfxCoreFamily>::encodeSignalEvent(xe_event_han
 }
 
 template <GFXCORE_FAMILY gfxCoreFamily>
-xe_result_t CommandListCoreFamily<gfxCoreFamily>::encodeSignalMultipleEvents(uint32_t numEvents,
-                                                                             xe_event_handle_t *phEvents) {
-    return XE_RESULT_ERROR_UNSUPPORTED;
-}
-
-template <GFXCORE_FAMILY gfxCoreFamily>
-xe_result_t CommandListCoreFamily<gfxCoreFamily>::encodeWaitOnEvent(xe_event_handle_t hEvent) {
+xe_result_t CommandListCoreFamily<gfxCoreFamily>::appendWaitOnEvent(xe_event_handle_t hEvent) {
     using GfxFamily = typename OCLRT::GfxFamilyMapper<gfxCoreFamily>::GfxFamily;
     using MI_SEMAPHORE_WAIT = typename GfxFamily::MI_SEMAPHORE_WAIT;
     MI_SEMAPHORE_WAIT cmd = GfxFamily::cmdInitMiSemaphoreWait;
@@ -560,13 +537,13 @@ xe_result_t CommandListCoreFamily<gfxCoreFamily>::encodeWaitOnEvent(xe_event_han
 }
 
 template <GFXCORE_FAMILY gfxCoreFamily>
-xe_result_t CommandListCoreFamily<gfxCoreFamily>::encodeWaitOnMultipleEvents(uint32_t numEvents,
-                                                                             xe_event_handle_t *phEvents) {
+xe_result_t CommandListCoreFamily<gfxCoreFamily>::getParameter(xe_command_list_parameter_t parameter, uint32_t *value) {
     return XE_RESULT_ERROR_UNSUPPORTED;
 }
 
 template <GFXCORE_FAMILY gfxCoreFamily>
-xe_result_t CommandListCoreFamily<gfxCoreFamily>::getParameter(xe_command_list_parameter_t parameter, uint32_t *value) {
+xe_result_t CommandListCoreFamily<gfxCoreFamily>::reserveSpace(size_t size,
+                                                               void **ptr) {
     return XE_RESULT_ERROR_UNSUPPORTED;
 }
 

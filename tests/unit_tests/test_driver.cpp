@@ -22,21 +22,21 @@ TEST(xeDriverInit, returnsSucess) {
 TEST(xeDriverGetDevice, redirectsToObject) {
     Mock<Driver> driver;
     xe_device_handle_t deviceHandle = {};
-    uint32_t ordinal = 0;
+    xe_device_uuid_t uniqueId = {};
 
-    EXPECT_CALL(driver, getDevice(ordinal, &deviceHandle))
+    EXPECT_CALL(driver, getDevice(&uniqueId, &deviceHandle))
         .Times(1)
         .WillRepeatedly(Return(XE_RESULT_SUCCESS));
 
-    auto result = xeDriverGetDevice(ordinal,
+    auto result = xeDriverGetDevice(&uniqueId,
                                     &deviceHandle);
     EXPECT_EQ(XE_RESULT_SUCCESS, result);
 }
 
 TEST(xeDriverGetDevice, returnsSuccess) {
     xe_device_handle_t deviceHandle = {};
-    uint32_t ordinal = 0;
-    auto result = xeDriverGetDevice(ordinal,
+    xe_device_uuid_t uniqueId = {};
+    auto result = xeDriverGetDevice(&uniqueId,
                                     &deviceHandle);
     EXPECT_EQ(XE_RESULT_SUCCESS, result);
     EXPECT_NE(nullptr, deviceHandle);

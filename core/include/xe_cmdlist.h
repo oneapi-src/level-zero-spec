@@ -43,7 +43,11 @@ extern "C" {
 
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief API version of ::xe_command_list_desc_t
-#define XE_COMMAND_LIST_DESC_VERSION  XE_MAKE_VERSION( 1, 0 )
+typedef enum _xe_command_list_desc_version_t
+{
+    XE_COMMAND_LIST_DESC_VERSION_CURRENT = XE_MAKE_VERSION( 1, 0 ), ///< version 1.0
+
+} xe_command_list_desc_version_t;
 
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Supported command list creation flags
@@ -63,7 +67,7 @@ typedef enum _xe_command_list_flag_t
 /// @brief Command List descriptor
 typedef struct _xe_command_list_desc_t
 {
-    uint32_t version;                               ///< [in] ::XE_COMMAND_LIST_DESC_VERSION
+    xe_command_list_desc_version_t version;         ///< [in] ::XE_COMMAND_LIST_DESC_VERSION_CURRENT
     xe_command_list_flag_t flags;                   ///< [in] creation flags
 
 } xe_command_list_desc_t;
@@ -86,11 +90,11 @@ typedef struct _xe_command_list_desc_t
 ///         + nullptr == desc
 ///         + nullptr == phCommandList
 ///     - ::XE_RESULT_ERROR_UNSUPPORTED
-///         + ::XE_COMMAND_LIST_DESC_VERSION < desc->version
+///         + ::XE_COMMAND_LIST_DESC_VERSION_CURRENT < desc->version
 ///     - ::XE_RESULT_ERROR_OUT_OF_HOST_MEMORY
 ///     - ::XE_RESULT_ERROR_OUT_OF_DEVICE_MEMORY
 __xedllport xe_result_t __xecall
-  xeDeviceCreateCommandList(
+xeDeviceCreateCommandList(
     xe_device_handle_t hDevice,                     ///< [in] handle of the device object
     const xe_command_list_desc_t* desc,             ///< [in] pointer to command list descriptor
     xe_command_list_handle_t* phCommandList         ///< [out] pointer to handle of command list object created
@@ -121,7 +125,7 @@ __xedllport xe_result_t __xecall
 ///     - ::XE_RESULT_ERROR_OUT_OF_HOST_MEMORY
 ///     - ::XE_RESULT_ERROR_OUT_OF_DEVICE_MEMORY
 __xedllport xe_result_t __xecall
-  xeDeviceCopyCommandList(
+xeDeviceCopyCommandList(
     xe_device_handle_t hDevice,                     ///< [in] handle of the device object
     xe_command_list_handle_t hCommandList,          ///< [in] handle to command list to copy
     xe_command_list_handle_t* phCommandList         ///< [out] pointer to handle of command list object created
@@ -145,12 +149,12 @@ __xedllport xe_result_t __xecall
 ///         + nullptr == hCommandList
 ///     - ::XE_RESULT_ERROR_UNSUPPORTED
 __xedllport xe_result_t __xecall
-  xeCommandListDestroy(
+xeCommandListDestroy(
     xe_command_list_handle_t hCommandList           ///< [in] handle of command list object to destroy
     );
 
 ///////////////////////////////////////////////////////////////////////////////
-/// @brief Closes a command list; ready to be enqueued into a command queue.
+/// @brief Closes a command list; ready to be executed by a command queue.
 /// 
 /// @details
 ///     - The application may **not** call this function from simultaneous
@@ -165,12 +169,12 @@ __xedllport xe_result_t __xecall
 ///         + nullptr == hCommandList
 ///     - ::XE_RESULT_ERROR_UNSUPPORTED
 __xedllport xe_result_t __xecall
-  xeCommandListClose(
+xeCommandListClose(
     xe_command_list_handle_t hCommandList           ///< [in] handle of command list object to close
     );
 
 ///////////////////////////////////////////////////////////////////////////////
-/// @brief Reset a command list to initial (empty) state; ready for encoding
+/// @brief Reset a command list to initial (empty) state; ready for appending
 ///        commands.
 /// 
 /// @details
@@ -188,7 +192,7 @@ __xedllport xe_result_t __xecall
 ///         + nullptr == hCommandList
 ///     - ::XE_RESULT_ERROR_UNSUPPORTED
 __xedllport xe_result_t __xecall
-  xeCommandListReset(
+xeCommandListReset(
     xe_command_list_handle_t hCommandList           ///< [in] handle of command list object to reset
     );
 
@@ -224,7 +228,7 @@ typedef enum _xe_command_list_parameter_t
 ///         + invalid value for value
 ///     - ::XE_RESULT_ERROR_UNSUPPORTED
 __xedllport xe_result_t __xecall
-  xeCommandListSetParameter(
+xeCommandListSetParameter(
     xe_command_list_handle_t hCommandList,          ///< [in] handle of command list
     xe_command_list_parameter_t parameter,          ///< [in] parameter to change
     uint32_t value                                  ///< [in] value of attribute
@@ -255,7 +259,7 @@ __xedllport xe_result_t __xecall
 ///         + invalid value for attribute
 ///     - ::XE_RESULT_ERROR_UNSUPPORTED
 __xedllport xe_result_t __xecall
-  xeCommandListGetParameter(
+xeCommandListGetParameter(
     xe_command_list_handle_t hCommandList,          ///< [in] handle of command list
     xe_command_list_parameter_t parameter,          ///< [in] parameter to retrieve
     uint32_t* value                                 ///< [out] value of attribute
@@ -277,14 +281,16 @@ __xedllport xe_result_t __xecall
 ///         + nullptr == hCommandList
 ///     - ::XE_RESULT_ERROR_UNSUPPORTED
 __xedllport xe_result_t __xecall
-  xeCommandListResetParameters(
+xeCommandListResetParameters(
     xe_command_list_handle_t hCommandList           ///< [in] handle of the command list
     );
 
 ///////////////////////////////////////////////////////////////////////////////
-/// @brief Encode a command list into another command list.
+/// @brief Append a command list into another command list.
 /// 
 /// @details
+///     - All command lists appended must have been created with compatible
+///       ::xe_command_list_flag_t values.
 ///     - The application may **not** call this function from simultaneous
 ///       threads with the same command list handle.
 ///     - The implementation of this function should be lock-free.
@@ -299,25 +305,18 @@ __xedllport xe_result_t __xecall
 ///         + 0 for numCommandLists
 ///     - ::XE_RESULT_ERROR_UNSUPPORTED
 __xedllport xe_result_t __xecall
-  xeCommandListEncodeCommandLists(
+xeCommandListAppendCommandLists(
     xe_command_list_handle_t hCommandList,          ///< [in] handle of the command list
-    uint32_t numCommandLists,                       ///< [in] number of command lists to encode
-    xe_command_list_handle_t* phCommandLists        ///< [in] list of handles of the command lists to encode for execution
+    uint32_t numCommandLists,                       ///< [in] number of command lists to append
+    xe_command_list_handle_t* phCommandLists        ///< [in] list of handles of the command lists to append for execution
     );
 
 ///////////////////////////////////////////////////////////////////////////////
-/// @brief Support command formats
-typedef enum _xe_command_format_t
-{
-    XE_COMMAND_FORMAT_NATIVE,                       ///< The commands are native device-specific format
-
-} xe_command_format_t;
-
-///////////////////////////////////////////////////////////////////////////////
-/// @brief Encode a pre-formatted blob of commands into the comamnd list.
+/// @brief Reserve a section of contiguous command buffer space within the
+///        command list.
 /// 
 /// @details
-///     - The commands are gaurenteed to be contiguous in the command buffer
+///     - The pointer returned is valid for both Host and device access.
 ///     - The application may **not** call this function from simultaneous
 ///       threads with the same command list handle.
 ///     - The implementation of this function should be lock-free.
@@ -328,16 +327,14 @@ typedef enum _xe_command_format_t
 ///     - ::XE_RESULT_ERROR_DEVICE_LOST
 ///     - ::XE_RESULT_ERROR_INVALID_PARAMETER
 ///         + nullptr == hCommandList
-///         + nullptr == pBlob
-///         + invalid value for format
+///         + nullptr == ptr
 ///         + 0 for size
 ///     - ::XE_RESULT_ERROR_UNSUPPORTED
 __xedllport xe_result_t __xecall
-  xeCommandListEncodeCommands(
+xeCommandListReserveSpace(
     xe_command_list_handle_t hCommandList,          ///< [in] handle of the command list
-    xe_command_format_t format,                     ///< [in] format of the command blob
-    size_t size,                                    ///< [in] size (in bytes) of the command blob
-    void* pBlob                                     ///< [in] pointer to blob of commands to encode into the command list
+    size_t size,                                    ///< [in] size (in bytes) to reserve
+    void** ptr                                      ///< [out] pointer to command buffer space reserved
     );
 
 #if defined(__cplusplus)

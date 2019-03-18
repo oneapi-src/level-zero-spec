@@ -28,7 +28,7 @@ from templates import helper as th
 *
 * @brief ${th.subx(x, header['desc'])}
 *
-* DO NOT EDIT: generated from /scripts/<type>/${name}.yml
+* DO NOT EDIT: generated from /scripts/${section}/${name}.yml
 *
 ******************************************************************************/
 #if defined(${X}_CPP)
@@ -45,10 +45,9 @@ from templates import helper as th
 
 %for obj in objects:
 %if re.match(r"function", obj['type']):
-%for cli, cls in enumerate(obj['class']):
 ///////////////////////////////////////////////////////////////////////////////
 %if 'condition' in obj:
-#if ${th.subx(x,obj['condition'])}
+#if ${th.subx(x, obj['condition'])}
 %endif
 %for line in th.make_desc_lines(x, obj):
 /// ${line}
@@ -57,15 +56,15 @@ from templates import helper as th
 /// ${line}
 %endfor
 /// 
-%for line in th.make_return_lines(x, obj, cls):
+%for line in th.make_returns_lines(x, obj):
 /// ${line}
 %endfor
 ///
-/// @hash {${obj['hash'][cli]}}
+/// @hash {${obj['hash']}}
 ///
 __${x}dllexport ${x}_result_t __${x}call
-  ${th.make_func_name(x, obj, cls)}(
-    %for line in th.make_param_lines(x, obj, cls):
+${th.make_func_name(x, obj)}(
+    %for line in th.make_param_lines(x, obj):
     ${line}
     %endfor
     )
@@ -74,11 +73,11 @@ __${x}dllexport ${x}_result_t __${x}call
     {
         //if( ${X}_DRIVER_PARAMETER_VALIDATION_LEVEL >= 0 )
         {
-            %if not re.match(r".*Driver", th.make_func_name(x, obj, cls)):
+            %if not re.match(r".*Driver", th.make_func_name(x, obj)):
             // if( nullptr == driver ) return ${X}_RESULT_ERROR_UNINITIALIZED;
             %endif
             // Check parameters
-            %for key, values in th.make_param_checks(x, obj, cls).items():
+            %for key, values in th.make_param_checks(x, obj).items():
             %for val in values:
             if( ${val} ) return ${key};
             %endfor
@@ -88,7 +87,7 @@ __${x}dllexport ${x}_result_t __${x}call
 #if defined(XE_NULLDRV)
         return ${X}_RESULT_SUCCESS;
 #else
-        return L0::${th.make_obj_accessor(x, obj, cls)}
+        return L0::${th.make_obj_accessor(x, obj)}
 #endif
         /// @end
     }
@@ -107,9 +106,8 @@ __${x}dllexport ${x}_result_t __${x}call
     }
 }
 %if 'condition' in obj:
-#endif // ${th.subx(x,obj['condition'])}
+#endif // ${th.subx(x, obj['condition'])}
 %endif
 
-%endfor
 %endif
 %endfor

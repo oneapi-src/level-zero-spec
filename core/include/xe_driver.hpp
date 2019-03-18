@@ -38,6 +38,74 @@
 
 namespace xe
 {
+    ///////////////////////////////////////////////////////////////////////////////
+    /// @brief C++ wrapper for driver
+    class Driver
+    {
+    protected:
+
+    public:
+
+        ///////////////////////////////////////////////////////////////////////////////
+        /// @brief C++ version for ::xe_init_flag_t
+        enum class init_flag_t
+        {
+            NONE = 0,                                       ///< default behavior
+
+        };
+
+        ///////////////////////////////////////////////////////////////////////////////
+        /// @brief C++ wrapper for ::xeDriverGetDeviceCount
+        /// @returns
+        ///     - uint32_t: number of devices available
+        /// 
+        /// @throws result_t
+        inline singleton uint32_t
+        GetDeviceCount(
+            void
+            );
+
+        ///////////////////////////////////////////////////////////////////////////////
+        /// @brief C++ wrapper for ::xeDriverGetDeviceUniqueIds
+        /// @throws result_t
+        inline singleton void
+        GetDeviceUniqueIds(
+            device_uuid_t* pUniqueIds                       ///< [in,out] pointer to an array of unique ids for devices. Caller must
+                                                            ///< supply array.
+            );
+
+        ///////////////////////////////////////////////////////////////////////////////
+        /// @brief C++ wrapper for ::xeDriverGetDevice
+        /// @returns
+        ///     - device_handle_t: pointer to handle of device object created
+        /// 
+        /// @throws result_t
+        inline singleton device_handle_t
+        GetDevice(
+            void
+            );
+
+        ///////////////////////////////////////////////////////////////////////////////
+        /// @brief C++ wrapper for ::xeDriverInit
+        /// @throws result_t
+        inline singleton void
+        Init(
+            void
+            );
+
+        ///////////////////////////////////////////////////////////////////////////////
+        /// @brief C++ wrapper for ::xeDriverGetVersion
+        /// @returns
+        ///     - uint32_t: driver version
+        /// 
+        /// @throws result_t
+        inline singleton uint32_t
+        GetVersion(
+            void
+            );
+
+    };
+
 } // namespace xe
 #endif // defined(__cplusplus)
 #endif // _XE_DRIVER_HPP

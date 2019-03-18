@@ -38,157 +38,343 @@
 
 namespace xe
 {
-#if XE_ENABLE_OCL_INTEROP
     ///////////////////////////////////////////////////////////////////////////////
+#if XE_ENABLE_OCL_INTEROP
     /// @brief C++ wrapper for ::xeDeviceRegisterCLMemory
-    inline void Device::RegisterCLMemory(
+    /// 
+    /// @returns
+    ///     - void*: pointer to device allocation
+    /// 
+    /// @throws result_t
+    inline void* 
+    Device::RegisterCLMemory(
         cl_context context,                             ///< [in] the OpenCL context that created the memory
-        cl_mem mem,                                     ///< [in] the OpenCL memory to register
-        void** ptr                                      ///< [out] pointer to device allocation
+        cl_mem mem                                      ///< [in] the OpenCL memory to register
         )
     {
-        // auto result = ::xeDeviceRegisterCLMemory( handle, context, mem, ptr );
+        // auto result = ::xeDeviceRegisterCLMemory( handle, context, mem );
         // if( ::XE_RESULT_SUCCESS != result ) throw exception(result, "xe::Device::RegisterCLMemory");
     }
 #endif // XE_ENABLE_OCL_INTEROP
 
-#if XE_ENABLE_OCL_INTEROP
     ///////////////////////////////////////////////////////////////////////////////
+#if XE_ENABLE_OCL_INTEROP
     /// @brief C++ wrapper for ::xeDeviceRegisterCLProgram
-    inline void Device::RegisterCLProgram(
+    /// 
+    /// @returns
+    ///     - module_handle_t: pointer to handle of module object created
+    /// 
+    /// @throws result_t
+    inline module_handle_t 
+    Device::RegisterCLProgram(
         cl_context context,                             ///< [in] the OpenCL context that created the program
-        cl_program program,                             ///< [in] the OpenCL program to register
-        module_handle_t* phModule                       ///< [out] pointer to handle of module object created
+        cl_program program                              ///< [in] the OpenCL program to register
         )
     {
-        // auto result = ::xeDeviceRegisterCLProgram( handle, context, program, phModule );
+        // auto result = ::xeDeviceRegisterCLProgram( handle, context, program );
         // if( ::XE_RESULT_SUCCESS != result ) throw exception(result, "xe::Device::RegisterCLProgram");
     }
 #endif // XE_ENABLE_OCL_INTEROP
 
-#if XE_ENABLE_OCL_INTEROP
     ///////////////////////////////////////////////////////////////////////////////
+#if XE_ENABLE_OCL_INTEROP
     /// @brief C++ wrapper for ::xeDeviceRegisterCLCommandQueue
-    inline void Device::RegisterCLCommandQueue(
+    /// 
+    /// @returns
+    ///     - command_queue_handle_t: pointer to handle of command queue object created
+    /// 
+    /// @throws result_t
+    inline command_queue_handle_t 
+    Device::RegisterCLCommandQueue(
         cl_context context,                             ///< [in] the OpenCL context that created the command queue
-        cl_command_queue command_queue,                 ///< [in] the OpenCL command queue to register
-        command_queue_handle_t* phCommandQueue          ///< [out] pointer to handle of command queue object created
+        cl_command_queue command_queue                  ///< [in] the OpenCL command queue to register
         )
     {
-        // auto result = ::xeDeviceRegisterCLCommandQueue( handle, context, command_queue, phCommandQueue );
+        // auto result = ::xeDeviceRegisterCLCommandQueue( handle, context, command_queue );
         // if( ::XE_RESULT_SUCCESS != result ) throw exception(result, "xe::Device::RegisterCLCommandQueue");
     }
 #endif // XE_ENABLE_OCL_INTEROP
 
     ///////////////////////////////////////////////////////////////////////////////
     /// @brief C++ wrapper for ::xeDeviceCreateCommandGraph
-    inline void Device::CreateCommandGraph(
-        const command_graph_desc_t* desc,               ///< [in] pointer to command graph descriptor
-        command_graph_handle_t* phCommandGraph          ///< [out] pointer to handle of command graph object created
+    /// 
+    /// @details
+    ///     - This function may be called from simultaneous threads.
+    ///     - The implementation of this function should be lock-free.
+    /// 
+    /// @returns
+    ///     - command_graph_handle_t: pointer to handle of command graph object created
+    /// 
+    /// @throws result_t
+    inline command_graph_handle_t 
+    Device::CreateCommandGraph(
+        const command_graph_desc_t* desc                ///< [in] pointer to command graph descriptor
         )
     {
-        // auto result = ::xeDeviceCreateCommandGraph( handle, desc, phCommandGraph );
+        // auto result = ::xeDeviceCreateCommandGraph( handle, desc );
         // if( ::XE_RESULT_SUCCESS != result ) throw exception(result, "xe::Device::CreateCommandGraph");
     }
 
     ///////////////////////////////////////////////////////////////////////////////
     /// @brief C++ wrapper for ::xeDeviceCreateCommandList
-    inline void Device::CreateCommandList(
-        const command_list_desc_t* desc,                ///< [in] pointer to command list descriptor
-        command_list_handle_t* phCommandList            ///< [out] pointer to handle of command list object created
+    /// 
+    /// @details
+    ///     - The command list is created in the 'open' state.
+    ///     - This function may be called from simultaneous threads.
+    ///     - The implementation of this function should be lock-free.
+    /// 
+    /// @returns
+    ///     - command_list_handle_t: pointer to handle of command list object created
+    /// 
+    /// @throws result_t
+    inline command_list_handle_t 
+    Device::CreateCommandList(
+        const command_list_desc_t* desc                 ///< [in] pointer to command list descriptor
         )
     {
-        // auto result = ::xeDeviceCreateCommandList( handle, desc, phCommandList );
+        // auto result = ::xeDeviceCreateCommandList( handle, desc );
         // if( ::XE_RESULT_SUCCESS != result ) throw exception(result, "xe::Device::CreateCommandList");
     }
 
     ///////////////////////////////////////////////////////////////////////////////
     /// @brief C++ wrapper for ::xeDeviceCopyCommandList
-    inline void Device::CopyCommandList(
-        command_list_handle_t hCommandList,             ///< [in] handle to command list to copy
-        command_list_handle_t* phCommandList            ///< [out] pointer to handle of command list object created
+    /// 
+    /// @details
+    ///     - The command list to be copied must be closed.
+    ///     - The command list created will be in the 'open' state.
+    ///     - If the device is a different than the one used to create the source
+    ///       command list, then it must have been created using the
+    ///       ::COMMAND_LIST_FLAG_CROSS_DEVICE flag.
+    ///     - This function may be called from simultaneous threads.
+    ///     - The implementation of this function should be lock-free.
+    /// 
+    /// @returns
+    ///     - command_list_handle_t: pointer to handle of command list object created
+    /// 
+    /// @throws result_t
+    inline command_list_handle_t 
+    Device::CopyCommandList(
+        command_list_handle_t hCommandList              ///< [in] handle to command list to copy
         )
     {
-        // auto result = ::xeDeviceCopyCommandList( handle, hCommandList, phCommandList );
+        // auto result = ::xeDeviceCopyCommandList( handle, hCommandList );
         // if( ::XE_RESULT_SUCCESS != result ) throw exception(result, "xe::Device::CopyCommandList");
     }
 
     ///////////////////////////////////////////////////////////////////////////////
     /// @brief C++ wrapper for ::xeDeviceCreateCommandQueue
-    inline void Device::CreateCommandQueue(
-        const command_queue_desc_t* desc,               ///< [in] pointer to command queue descriptor
-        command_queue_handle_t* phCommandQueue          ///< [out] pointer to handle of command queue object created
+    /// 
+    /// @details
+    ///     - This function may be called from simultaneous threads.
+    ///     - The implementation of this function should be lock-free.
+    /// 
+    /// @remarks
+    ///   _Analogues_
+    ///     - **clCreateCommandQueue**
+    ///     - cuCtxCreate
+    ///     - cuCtxGetCurrent
+    /// 
+    /// @returns
+    ///     - command_queue_handle_t: pointer to handle of command queue object created
+    /// 
+    /// @throws result_t
+    inline command_queue_handle_t 
+    Device::CreateCommandQueue(
+        const command_queue_desc_t* desc                ///< [in] pointer to command queue descriptor
         )
     {
-        // auto result = ::xeDeviceCreateCommandQueue( handle, desc, phCommandQueue );
+        // auto result = ::xeDeviceCreateCommandQueue( handle, desc );
         // if( ::XE_RESULT_SUCCESS != result ) throw exception(result, "xe::Device::CreateCommandQueue");
     }
 
     ///////////////////////////////////////////////////////////////////////////////
     /// @brief C++ wrapper for ::xeDeviceGetSubDevice
-    inline void Device::GetSubDevice(
-        uint32_t ordinal,                               ///< [in] ordinal of sub-device to retrieve
-        device_handle_t* phSubDevice                    ///< [out] pointer to handle of sub-device object.
+    /// 
+    /// @details
+    ///     - The application may call this function from simultaneous threads.
+    ///     - The implementation of this function should be lock-free.
+    /// 
+    /// @remarks
+    ///   _Analogues_
+    ///     - **cuDeviceGet**
+    ///     - clGetDeviceIDs
+    /// 
+    /// @returns
+    ///     - device_handle_t: pointer to handle of sub-device object.
+    /// 
+    /// @throws result_t
+    inline device_handle_t 
+    Device::GetSubDevice(
+        uint32_t ordinal                                ///< [in] ordinal of sub-device to retrieve
         )
     {
-        // auto result = ::xeDeviceGetSubDevice( handle, ordinal, phSubDevice );
+        // auto result = ::xeDeviceGetSubDevice( handle, ordinal );
         // if( ::XE_RESULT_SUCCESS != result ) throw exception(result, "xe::Device::GetSubDevice");
     }
 
     ///////////////////////////////////////////////////////////////////////////////
     /// @brief C++ wrapper for ::xeDeviceGetApiVersion
-    inline void Device::GetApiVersion(
-        api_version_t* version                          ///< [out] api version
+    /// 
+    /// @details
+    ///     - The application may call this function from simultaneous threads.
+    ///     - The implementation of this function should be lock-free.
+    /// 
+    /// @remarks
+    ///   _Analogues_
+    ///     - **cuCtxGetApiVersion**
+    /// 
+    /// @returns
+    ///     - api_version_t: api version
+    /// 
+    /// @throws result_t
+    inline api_version_t 
+    Device::GetApiVersion(
+        void
         )
     {
-        // auto result = ::xeDeviceGetApiVersion( handle, version );
+        // auto result = ::xeDeviceGetApiVersion( handle );
         // if( ::XE_RESULT_SUCCESS != result ) throw exception(result, "xe::Device::GetApiVersion");
     }
 
     ///////////////////////////////////////////////////////////////////////////////
     /// @brief C++ wrapper for ::xeDeviceGetProperties
-    inline void Device::GetProperties(
-        device_properties_t* pDeviceProperties          ///< [out] query result for device properties
+    /// 
+    /// @details
+    ///     - The application may call this function from simultaneous threads.
+    ///     - The implementation of this function should be lock-free.
+    /// 
+    /// @remarks
+    ///   _Analogues_
+    ///     - **cuDeviceGetAttribute**
+    ///     - cuDeviceGetName
+    ///     - clGetDeviceInfo
+    /// 
+    /// @returns
+    ///     - device_properties_t: query result for device properties
+    /// 
+    /// @throws result_t
+    inline device_properties_t 
+    Device::GetProperties(
+        void
         )
     {
-        // auto result = ::xeDeviceGetProperties( handle, pDeviceProperties );
+        // auto result = ::xeDeviceGetProperties( handle );
         // if( ::XE_RESULT_SUCCESS != result ) throw exception(result, "xe::Device::GetProperties");
     }
 
     ///////////////////////////////////////////////////////////////////////////////
     /// @brief C++ wrapper for ::xeDeviceGetComputeProperties
-    inline void Device::GetComputeProperties(
-        device_compute_properties_t* pComputeProperties ///< [out] query result for compute properties
+    /// 
+    /// @details
+    ///     - The application may call this function from simultaneous threads.
+    ///     - The implementation of this function should be lock-free.
+    /// 
+    /// @remarks
+    ///   _Analogues_
+    ///     - **cuDeviceGetAttribute**
+    ///     - clGetDeviceInfo
+    /// 
+    /// @returns
+    ///     - device_compute_properties_t: query result for compute properties
+    /// 
+    /// @throws result_t
+    inline device_compute_properties_t 
+    Device::GetComputeProperties(
+        void
         )
     {
-        // auto result = ::xeDeviceGetComputeProperties( handle, pComputeProperties );
+        // auto result = ::xeDeviceGetComputeProperties( handle );
         // if( ::XE_RESULT_SUCCESS != result ) throw exception(result, "xe::Device::GetComputeProperties");
     }
 
     ///////////////////////////////////////////////////////////////////////////////
     /// @brief C++ wrapper for ::xeDeviceGetMemoryProperties
-    inline void Device::GetMemoryProperties(
-        device_memory_properties_t* pMemProperties      ///< [out] query result for compute properties
+    /// 
+    /// @details
+    ///     - The application may call this function from simultaneous threads.
+    ///     - The implementation of this function should be lock-free.
+    /// 
+    /// @remarks
+    ///   _Analogues_
+    ///     - **cuDeviceGetAttribute**
+    ///     - cuDeviceTotalMem
+    ///     - clGetDeviceInfo
+    /// 
+    /// @returns
+    ///     - device_memory_properties_t: query result for compute properties
+    /// 
+    /// @throws result_t
+    inline device_memory_properties_t 
+    Device::GetMemoryProperties(
+        void
         )
     {
-        // auto result = ::xeDeviceGetMemoryProperties( handle, pMemProperties );
+        // auto result = ::xeDeviceGetMemoryProperties( handle );
         // if( ::XE_RESULT_SUCCESS != result ) throw exception(result, "xe::Device::GetMemoryProperties");
     }
 
     ///////////////////////////////////////////////////////////////////////////////
-    /// @brief C++ wrapper for ::xeDeviceCanAccessPeer
-    inline void Device::CanAccessPeer(
-        device_handle_t hPeerDevice,                    ///< [in] handle of the peer device with the allocation
-        bool* value                                     ///< [out] returned access capability
+    /// @brief C++ wrapper for ::xeDeviceGetLinkProperties
+    /// 
+    /// @details
+    ///     - The application may call this function from simultaneous threads.
+    ///     - The implementation of this function should be lock-free.
+    /// 
+    /// @remarks
+    ///   _Analogues_
+    ///     - **cudaDeviceGetP2PAttribute**
+    /// 
+    /// @returns
+    ///     - device_link_properties_t: link properties between source and destination devices
+    /// 
+    /// @throws result_t
+    inline device_link_properties_t 
+    Device::GetLinkProperties(
+        device_handle_t hPeerDevice                     ///< [in] handle of the peer device with the allocation
         )
     {
-        // auto result = ::xeDeviceCanAccessPeer( handle, hPeerDevice, value );
+        // auto result = ::xeDeviceGetLinkProperties( handle, hPeerDevice );
+        // if( ::XE_RESULT_SUCCESS != result ) throw exception(result, "xe::Device::GetLinkProperties");
+    }
+
+    ///////////////////////////////////////////////////////////////////////////////
+    /// @brief C++ wrapper for ::xeDeviceCanAccessPeer
+    /// 
+    /// @details
+    ///     - The application may call this function from simultaneous threads.
+    ///     - The implementation of this function should be lock-free.
+    /// 
+    /// @remarks
+    ///   _Analogues_
+    ///     - **cudaDeviceCanAccessPeer**
+    /// 
+    /// @returns
+    ///     - bool_t: returned access capability
+    /// 
+    /// @throws result_t
+    inline bool_t 
+    Device::CanAccessPeer(
+        device_handle_t hPeerDevice                     ///< [in] handle of the peer device with the allocation
+        )
+    {
+        // auto result = ::xeDeviceCanAccessPeer( handle, hPeerDevice );
         // if( ::XE_RESULT_SUCCESS != result ) throw exception(result, "xe::Device::CanAccessPeer");
     }
 
     ///////////////////////////////////////////////////////////////////////////////
     /// @brief C++ wrapper for ::xeDeviceSetIntermediateCacheConfig
-    inline void Device::SetIntermediateCacheConfig(
+    /// 
+    /// @details
+    ///     - The application may **not** call this function from simultaneous
+    ///       threads with the same device handle.
+    /// 
+    /// @remarks
+    ///   _Analogues_
+    ///     - **cudaFuncSetCacheConfig **
+    /// 
+    /// @throws result_t
+    inline void 
+    Device::SetIntermediateCacheConfig(
         cache_config_t CacheConfig                      ///< [in] CacheConfig
         )
     {
@@ -198,7 +384,18 @@ namespace xe
 
     ///////////////////////////////////////////////////////////////////////////////
     /// @brief C++ wrapper for ::xeDeviceSetLastLevelCacheConfig
-    inline void Device::SetLastLevelCacheConfig(
+    /// 
+    /// @details
+    ///     - The application may **not** call this function from simultaneous
+    ///       threads with the same device handle.
+    /// 
+    /// @remarks
+    ///   _Analogues_
+    ///     - **cudaFuncSetCacheConfig **
+    /// 
+    /// @throws result_t
+    inline void 
+    Device::SetLastLevelCacheConfig(
         cache_config_t CacheConfig                      ///< [in] CacheConfig
         )
     {
@@ -208,53 +405,128 @@ namespace xe
 
     ///////////////////////////////////////////////////////////////////////////////
     /// @brief C++ wrapper for ::xeDeviceCreateEvent
-    inline void Device::CreateEvent(
-        const event_desc_t* desc,                       ///< [in] pointer to event descriptor
-        event_handle_t* phEvent                         ///< [out] pointer to handle of event object created
+    /// 
+    /// @details
+    ///     - This function may be called from simultaneous threads.
+    ///     - The implementation of this function should be lock-free.
+    /// 
+    /// @remarks
+    ///   _Analogues_
+    ///     - **clCreateUserEvent**
+    ///     - vkCreateEvent
+    ///     - cuEventCreate
+    /// 
+    /// @returns
+    ///     - event_handle_t: pointer to handle of event object created
+    /// 
+    /// @throws result_t
+    inline event_handle_t 
+    Device::CreateEvent(
+        const event_desc_t* desc                        ///< [in] pointer to event descriptor
         )
     {
-        // auto result = ::xeDeviceCreateEvent( handle, desc, phEvent );
+        // auto result = ::xeDeviceCreateEvent( handle, desc );
         // if( ::XE_RESULT_SUCCESS != result ) throw exception(result, "xe::Device::CreateEvent");
     }
 
     ///////////////////////////////////////////////////////////////////////////////
     /// @brief C++ wrapper for ::xeDevicePlaceEvent
-    inline void Device::PlaceEvent(
+    /// 
+    /// @details
+    ///     - This function is intended for sharing fences with peer devices or
+    ///       across processes
+    ///     - This function may be called from simultaneous threads.
+    ///     - The implementation of this function should be lock-free.
+    /// 
+    /// @returns
+    ///     - event_handle_t: pointer to handle of event object created
+    /// 
+    /// @throws result_t
+    inline event_handle_t 
+    Device::PlaceEvent(
         const event_desc_t* desc,                       ///< [in] pointer to event descriptor
-        void* ptr,                                      ///< [in] pointer to the device pointer where the event should be placed
-        event_handle_t* phEvent                         ///< [out] pointer to handle of event object created
+        void* ptr                                       ///< [in] pointer to the device pointer where the event should be placed
         )
     {
-        // auto result = ::xeDevicePlaceEvent( handle, desc, ptr, phEvent );
+        // auto result = ::xeDevicePlaceEvent( handle, desc, ptr );
         // if( ::XE_RESULT_SUCCESS != result ) throw exception(result, "xe::Device::PlaceEvent");
     }
 
     ///////////////////////////////////////////////////////////////////////////////
     /// @brief C++ wrapper for ::xeDeviceCreateImage
-    inline void Device::CreateImage(
-        const image_desc_t* desc,                       ///< [in] pointer to image descriptor
-        image_handle_t* phImage                         ///< [out] pointer to handle of image object created
+    /// 
+    /// @details
+    ///     - The application may call this function from simultaneous threads.
+    ///     - The implementation of this function should be lock-free.
+    /// 
+    /// @remarks
+    ///   _Analogues_
+    ///     - clCreateImage
+    /// 
+    /// @returns
+    ///     - image_handle_t: pointer to handle of image object created
+    /// 
+    /// @throws result_t
+    inline image_handle_t 
+    Device::CreateImage(
+        const image_desc_t* desc                        ///< [in] pointer to image descriptor
         )
     {
-        // auto result = ::xeDeviceCreateImage( handle, desc, phImage );
+        // auto result = ::xeDeviceCreateImage( handle, desc );
         // if( ::XE_RESULT_SUCCESS != result ) throw exception(result, "xe::Device::CreateImage");
     }
 
     ///////////////////////////////////////////////////////////////////////////////
     /// @brief C++ wrapper for ::xeDeviceCreateModule
-    inline void Device::CreateModule(
-        const module_desc_t* pDesc,                     ///< [in] pointer to module descriptor
-        module_handle_t* phModule,                      ///< [out] pointer to handle of module object created
-        module_build_log_handle_t* phBuildLog           ///< [out][optional] pointer to handle of module's build log.
+    /// 
+    /// @details
+    ///     - This function may be called from simultaneous threads.
+    ///     - The implementation of this function should be lock-free.
+    ///     - This function will create and compile the module object.
+    ///     - A build log can optionally be returned to the caller. Caller is
+    ///       responsible for destroying build log using ::ModuleBuildLogDestroy
+    ///     - Device memory will be allocated for module during creation.
+    ///     - A module can be created directly from native binary format.
+    ///     - A native binary object can be retrieved from a module using
+    ///       ::ModuleGetNativeBinary. This can be cached to disk and to create new
+    ///       modules.
+    ///     - The following build options are supported:
+    ///         + "--opt-disable" - Disable optimizations
+    ///         + "--opt-greater-than-4GB-buffer-required" - Use 64-bit offset
+    ///           calculations for buffers.
+    ///         + "--opt-large-register-file" - Increase number of registers
+    ///           available to threads.
+    /// 
+    /// @remarks
+    ///   _Analogues_
+    ///     - **cuModuleLoad**
+    /// 
+    /// @returns
+    ///     - module_handle_t: pointer to handle of module object created
+    ///     - module_build_log_handle_t: pointer to handle of module's build log.
+    /// 
+    /// @throws result_t
+    inline std::tuple<module_handle_t, module_build_log_handle_t> 
+    Device::CreateModule(
+        const module_desc_t* pDesc                      ///< [in] pointer to module descriptor
         )
     {
-        // auto result = ::xeDeviceCreateModule( handle, pDesc, phModule, phBuildLog );
+        // auto result = ::xeDeviceCreateModule( handle, pDesc );
         // if( ::XE_RESULT_SUCCESS != result ) throw exception(result, "xe::Device::CreateModule");
     }
 
     ///////////////////////////////////////////////////////////////////////////////
     /// @brief C++ wrapper for ::xeDeviceMakeMemoryResident
-    inline void Device::MakeMemoryResident(
+    /// 
+    /// @details
+    ///     - If the application does not properly manage residency then the device
+    ///       may experience unrecoverable page-faults.
+    ///     - The application may call this function from simultaneous threads.
+    ///     - The implementation of this function should be lock-free.
+    /// 
+    /// @throws result_t
+    inline void 
+    Device::MakeMemoryResident(
         void* ptr,                                      ///< [in] pointer to memory to make resident
         size_t size                                     ///< [in] size in bytes to make resident
         )
@@ -265,7 +537,17 @@ namespace xe
 
     ///////////////////////////////////////////////////////////////////////////////
     /// @brief C++ wrapper for ::xeDeviceEvictMemory
-    inline void Device::EvictMemory(
+    /// 
+    /// @details
+    ///     - The application is responsible for making sure the GPU is not
+    ///       currently referencing the memory before it is evicted
+    ///     - Memory is always implicitly evicted if it is resident when freed.
+    ///     - The application may call this function from simultaneous threads.
+    ///     - The implementation of this function should be lock-free.
+    /// 
+    /// @throws result_t
+    inline void 
+    Device::EvictMemory(
         void* ptr,                                      ///< [in] pointer to memory to evict
         size_t size                                     ///< [in] size in bytes to evict
         )
@@ -276,7 +558,16 @@ namespace xe
 
     ///////////////////////////////////////////////////////////////////////////////
     /// @brief C++ wrapper for ::xeDeviceMakeImageResident
-    inline void Device::MakeImageResident(
+    /// 
+    /// @details
+    ///     - If the application does not properly manage residency then the device
+    ///       may experience unrecoverable page-faults.
+    ///     - The application may call this function from simultaneous threads.
+    ///     - The implementation of this function should be lock-free.
+    /// 
+    /// @throws result_t
+    inline void 
+    Device::MakeImageResident(
         image_handle_t hImage                           ///< [in] handle of image to make resident
         )
     {
@@ -286,7 +577,18 @@ namespace xe
 
     ///////////////////////////////////////////////////////////////////////////////
     /// @brief C++ wrapper for ::xeDeviceEvictImage
-    inline void Device::EvictImage(
+    /// 
+    /// @details
+    ///     - The application is responsible for making sure the GPU is not
+    ///       currently referencing the memory before it is evicted
+    ///     - An image is always implicitly evicted if it is resident when
+    ///       destroyed.
+    ///     - The application may call this function from simultaneous threads.
+    ///     - The implementation of this function should be lock-free.
+    /// 
+    /// @throws result_t
+    inline void 
+    Device::EvictImage(
         image_handle_t hImage                           ///< [in] handle of image to make evict
         )
     {
@@ -296,24 +598,26 @@ namespace xe
 
     ///////////////////////////////////////////////////////////////////////////////
     /// @brief C++ wrapper for ::xeDeviceCreateSampler
-    inline void Device::CreateSampler(
-        const sampler_desc_t* pDesc,                    ///< [in] pointer to sampler descriptor
-        sampler_handle_t* phSampler                     ///< [out] handle of the sampler
+    /// 
+    /// @details
+    ///     - This function may be called from simultaneous threads.
+    ///     - The implementation of this function should be lock-free.
+    /// 
+    /// @remarks
+    ///   _Analogues_
+    ///     - **cuTexObjectCreate**
+    /// 
+    /// @returns
+    ///     - sampler_handle_t: handle of the sampler
+    /// 
+    /// @throws result_t
+    inline sampler_handle_t 
+    Device::CreateSampler(
+        const sampler_desc_t* pDesc                     ///< [in] pointer to sampler descriptor
         )
     {
-        // auto result = ::xeDeviceCreateSampler( handle, pDesc, phSampler );
+        // auto result = ::xeDeviceCreateSampler( handle, pDesc );
         // if( ::XE_RESULT_SUCCESS != result ) throw exception(result, "xe::Device::CreateSampler");
-    }
-
-    ///////////////////////////////////////////////////////////////////////////////
-    /// @brief C++ wrapper for ::xeDeviceCreateSemaphore
-    inline void Device::CreateSemaphore(
-        const semaphore_desc_t* desc,                   ///< [in] pointer to semaphore descriptor
-        semaphore_handle_t* phSemaphore                 ///< [out] pointer to handle of semaphore object created
-        )
-    {
-        // auto result = ::xeDeviceCreateSemaphore( handle, desc, phSemaphore );
-        // if( ::XE_RESULT_SUCCESS != result ) throw exception(result, "xe::Device::CreateSemaphore");
     }
 
 } // namespace xe

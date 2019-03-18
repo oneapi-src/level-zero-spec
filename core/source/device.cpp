@@ -14,7 +14,7 @@ namespace L0 {
 
 struct DeviceImp : public Device {
     xe_result_t canAccessPeer(xe_device_handle_t hPeerDevice,
-                              bool *value) override {
+                              xe_bool_t *value) override {
         return XE_RESULT_ERROR_UNSUPPORTED;
     }
 
@@ -81,11 +81,6 @@ struct DeviceImp : public Device {
         return XE_RESULT_ERROR_UNSUPPORTED;
     }
 
-    xe_result_t createSemaphore(const xe_semaphore_desc_t *desc,
-                                xe_semaphore_handle_t *phSemaphore) override {
-        return XE_RESULT_ERROR_UNSUPPORTED;
-    }
-
     xe_result_t evictImage(xe_image_handle_t hImage) override {
         return XE_RESULT_ERROR_UNSUPPORTED;
     }
@@ -103,13 +98,18 @@ struct DeviceImp : public Device {
         return XE_RESULT_ERROR_UNSUPPORTED;
     }
 
+    xe_result_t getLinkProperties(xe_device_handle_t hPeerDevice,
+                                  xe_device_link_properties_t *pLinkProperties) override {
+        return XE_RESULT_ERROR_UNSUPPORTED;
+    }
+
     xe_result_t getMemoryProperties(xe_device_memory_properties_t *pMemProperties) override {
         return XE_RESULT_ERROR_UNSUPPORTED;
     }
 
     xe_result_t getProperties(xe_device_properties_t *pDeviceProperties) override {
         assert(pDeviceProperties != nullptr);
-        assert(pDeviceProperties->version == XE_DEVICE_PROPERTIES_VERSION);
+        assert(pDeviceProperties->version == XE_DEVICE_PROPERTIES_VERSION_CURRENT);
         const auto &deviceInfo = this->deviceRT->getDeviceInfo();
         const auto &hardwareInfo = this->deviceRT->getHardwareInfo();
         auto &hwHelper = OCLRT::HwHelper::get(hardwareInfo.pPlatform->eRenderCoreFamily);

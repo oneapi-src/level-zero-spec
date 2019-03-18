@@ -1,14 +1,6 @@
 <%!
 import re
 from templates import helper as th
-
-def declare_type(obj, cls, cli):
-    if re.match(r"none", cls) and \
-        not re.match(r"macro", obj['type']) and \
-        not re.match(r"function", obj['type']):
-        return True
-    return re.match(r"handle", obj['type'])
-
 %>/**************************************************************************//**
 * INTEL CONFIDENTIAL  
 * Copyright 2019  
@@ -37,7 +29,7 @@ def declare_type(obj, cls, cli):
 * @brief C++ wrapper of ${th.subx(x, header['desc'])}
 *
 * @cond DEV
-* DO NOT EDIT: generated from /scripts/${type}/${name}.yml
+* DO NOT EDIT: generated from /scripts/${section}/${name}.yml
 * @endcond
 *
 ******************************************************************************/
@@ -47,6 +39,7 @@ def declare_type(obj, cls, cli):
 #pragma once
 %if re.match(r"common", name):
 #include "${x}_all.h"
+#include <tuple>
 %else:
 #include "${x}_common.hpp"
 %endif
@@ -54,8 +47,7 @@ def declare_type(obj, cls, cli):
 namespace ${x}
 {
 %for obj in objects:
-%for cli, cls in enumerate(obj['class']):
-%if declare_type(obj, cls, cli):
+%if not re.match(r"macro", obj['type']) and ('class' not in obj or re.match(r"\$x$", obj['class']) or re.match(r"handle", obj['type'])):
     ///////////////////////////////////////////////////////////////////////////////
     %if 'condition' in obj:
     #if ${th.subx(x,obj['condition'])}
@@ -87,6 +79,18 @@ namespace ${x}
         %endfor
 
     };
+    ## FUNCTION ###################################################################
+    %elif re.match(r"function", obj['type']):
+    /// 
+    %for line in th.make_returns_lines(None, obj, True):
+    /// ${line}
+    %endfor
+    inline ${th.make_return_value(None, obj)}
+    ${th.make_func_name(None, obj, True)}(
+        %for line in th.make_param_lines(None, obj, True):
+        ${line}
+        %endfor
+        );
     ## CLASS ######################################################################
     %elif re.match(r"class", obj['type']):
     class ${th.subx(None, obj['name'])}
@@ -154,9 +158,13 @@ namespace ${x}
 #if ${th.subx(x,f['condition'])}
 %endif
         ///////////////////////////////////////////////////////////////////////////////
-        /// @brief C++ wrapper for ::${th.make_func_name(x, f, obj['name'])}
-        inline void ${th.subx(None, f['name'])}(
-            %for line in th.make_param_lines(None, f, 'this'):
+        /// @brief C++ wrapper for ::${th.make_func_name(x, f)}
+        %for line in th.make_returns_lines(None, f, True):
+        /// ${line}
+        %endfor
+        inline ${th.make_return_value(None, f, True)}
+        ${th.make_func_name(None, f, True)}(
+            %for line in th.make_param_lines(None, f, True):
             ${line}
             %endfor
             );
@@ -168,9 +176,9 @@ namespace ${x}
     };
     ## HANDLE #####################################################################
     %elif re.match(r"handle", obj['type']):
-    %if 'none' != cls:
-    class ${th.subx(None, cls)};
-    using ${th.subx(None, obj['name'])} = ${th.subx(None, cls)}*;
+    %if 'class' in obj:
+    class ${th.subx(None, obj['class'])};
+    using ${th.subx(None, obj['name'])} = ${th.subx(None, obj['class'])}*;
     %else:
     using ${th.subx(None, obj['name'])} = ::${th.subx(x, obj['name'])};
     %endif
@@ -180,7 +188,6 @@ namespace ${x}
     %endif
 
 %endif
-%endfor
 %endfor
 } // namespace ${x}
 #endif // defined(__cplusplus)

@@ -22,21 +22,21 @@ TEST(xeCommandQueueEnqueueCommandQueue, redirectsToObject) {
     Mock<CommandQueue> cmdQueue;
     xe_fence_handle_t hFence = {};
 
-    EXPECT_CALL(cmdQueue, enqueueCommandLists(1,
+    EXPECT_CALL(cmdQueue, executeCommandLists(1,
                                               &hCommandList,
                                               hFence))
         .Times(1);
 
-    auto result = L0::xeCommandQueueEnqueueCommandLists(cmdQueue.toHandle(),
+    auto result = L0::xeCommandQueueExecuteCommandLists(cmdQueue.toHandle(),
                                                         1,
                                                         &hCommandList,
                                                         hFence);
     EXPECT_EQ(XE_RESULT_SUCCESS, result);
 }
 
-using CommandQueueEnqueueCommandLists = ::testing::Test;
+using CommandQueueExecuteCommandLists = ::testing::Test;
 
-HWTEST_F(CommandQueueEnqueueCommandLists, addsASecondLevelBatchBufferPerCommandList) {
+HWTEST_F(CommandQueueExecuteCommandLists, addsASecondLevelBatchBufferPerCommandList) {
     Mock<Device> device;
 
     auto commandQueue = whitebox_cast(CommandQueue::create(productFamily, &device, device.csrRT));
@@ -47,7 +47,7 @@ HWTEST_F(CommandQueueEnqueueCommandLists, addsASecondLevelBatchBufferPerCommandL
         CommandList::create(productFamily, &device)->toHandle(),
         CommandList::create(productFamily, &device)->toHandle()};
     uint32_t numCommandLists = sizeof(commandLists) / sizeof(commandLists[0]);
-    auto result = commandQueue->enqueueCommandLists(numCommandLists,
+    auto result = commandQueue->executeCommandLists(numCommandLists,
                                                     commandLists,
                                                     nullptr);
 

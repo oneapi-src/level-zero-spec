@@ -25,7 +25,7 @@
 *
 * @brief Intel Xe Driver APIs for OpenCL Interopability
 *
-* DO NOT EDIT: generated from /scripts/<type>/cl_interop.yml
+* DO NOT EDIT: generated from /scripts/core/cl_interop.yml
 *
 ******************************************************************************/
 #if defined(XE_CPP)
@@ -58,7 +58,7 @@
 /// @hash {5bb3f735cfaa528879ea54f178f75b593388afab07e406a824a1c31599889982}
 ///
 __xedllexport xe_result_t __xecall
-  xeDeviceRegisterCLMemory(
+xeDeviceRegisterCLMemory(
     xe_device_handle_t hDevice,                     ///< [in] handle to the device
     cl_context context,                             ///< [in] the OpenCL context that created the memory
     cl_mem mem,                                     ///< [in] the OpenCL memory to register
@@ -116,7 +116,7 @@ __xedllexport xe_result_t __xecall
 /// @hash {131233a9acfaad50c2b1855120dd31f244b3b394adefa6cb337f162b19d562fd}
 ///
 __xedllexport xe_result_t __xecall
-  xeDeviceRegisterCLProgram(
+xeDeviceRegisterCLProgram(
     xe_device_handle_t hDevice,                     ///< [in] handle to the device
     cl_context context,                             ///< [in] the OpenCL context that created the program
     cl_program program,                             ///< [in] the OpenCL program to register
@@ -174,7 +174,7 @@ __xedllexport xe_result_t __xecall
 /// @hash {4b0d65edbd0514e51b2ab1f197ad0fb7af084f7c4f2b947c771b1d46cac4e83b}
 ///
 __xedllexport xe_result_t __xecall
-  xeDeviceRegisterCLCommandQueue(
+xeDeviceRegisterCLCommandQueue(
     xe_device_handle_t hDevice,                     ///< [in] handle to the device
     cl_context context,                             ///< [in] the OpenCL context that created the command queue
     cl_command_queue command_queue,                 ///< [in] the OpenCL command queue to register

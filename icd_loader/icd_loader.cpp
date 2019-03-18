@@ -72,13 +72,13 @@ xe_result_t __xecall xeDriverInit(xe_init_flag_t flags){
     return dispatchTable.xeDriverInit(flags);
 }
 
-xe_result_t __xecall xeCommandListEncodeExecutionBarrier(
+xe_result_t __xecall xeCommandListAppendExecutionBarrier(
         xe_command_list_handle_t hCommandList           ///< [in] handle of the command list
     ){
     if(dispatchTableInitialized == false){
         return XE_RESULT_ERROR_UNINITIALIZED;
     }
-    return dispatchTable.xeCommandListEncodeExecutionBarrier(hCommandList);
+    return dispatchTable.xeCommandListAppendExecutionBarrier(hCommandList);
 }
 #if XE_ENABLE_OCL_INTEROP
 xe_result_t __xecall xeDeviceRegisterCLMemory(
@@ -144,14 +144,6 @@ xe_result_t __xecall xeCommandGraphClose(
         return XE_RESULT_ERROR_UNINITIALIZED;
     }
     return dispatchTable.xeCommandGraphClose(hCommandGraph);
-}
-xe_result_t __xecall xeCommandGraphReset(
-        xe_command_graph_handle_t hCommandGraph         ///< [in] handle of command graph object to reset
-    ){
-    if(dispatchTableInitialized == false){
-        return XE_RESULT_ERROR_UNINITIALIZED;
-    }
-    return dispatchTable.xeCommandGraphReset(hCommandGraph);
 }
 xe_result_t __xecall xeDeviceCreateCommandList(
         xe_device_handle_t hDevice,                     ///< [in] handle of the device object
@@ -225,26 +217,25 @@ xe_result_t __xecall xeCommandListResetParameters(
     }
     return dispatchTable.xeCommandListResetParameters(hCommandList);
 }
-xe_result_t __xecall xeCommandListEncodeCommandLists(
+xe_result_t __xecall xeCommandListAppendCommandLists(
         xe_command_list_handle_t hCommandList,          ///< [in] handle of the command list
-        uint32_t numCommandLists,                       ///< [in] number of command lists to encode
-        xe_command_list_handle_t* phCommandLists        ///< [in] list of handles of the command lists to encode for execution
+        uint32_t numCommandLists,                       ///< [in] number of command lists to append
+        xe_command_list_handle_t* phCommandLists        ///< [in] list of handles of the command lists to append for execution
     ){
     if(dispatchTableInitialized == false){
         return XE_RESULT_ERROR_UNINITIALIZED;
     }
-    return dispatchTable.xeCommandListEncodeCommandLists(hCommandList, numCommandLists, phCommandLists);
+    return dispatchTable.xeCommandListAppendCommandLists(hCommandList, numCommandLists, phCommandLists);
 }
-xe_result_t __xecall xeCommandListEncodeCommands(
+xe_result_t __xecall xeCommandListReserveSpace(
         xe_command_list_handle_t hCommandList,          ///< [in] handle of the command list
-        xe_command_format_t format,                     ///< [in] format of the command blob
-        size_t size,                                    ///< [in] size (in bytes) of the command blob
-        void* pBlob                                     ///< [in] pointer to blob of commands to encode into the command list
+        size_t size,                                    ///< [in] size (in bytes) to reserve
+        void** ptr                                      ///< [out] pointer to command buffer space reserved
     ){
     if(dispatchTableInitialized == false){
         return XE_RESULT_ERROR_UNINITIALIZED;
     }
-    return dispatchTable.xeCommandListEncodeCommands(hCommandList, format, size, pBlob);
+    return dispatchTable.xeCommandListReserveSpace(hCommandList, size, ptr);
 }
 xe_result_t __xecall xeDeviceCreateCommandQueue(
         xe_device_handle_t hDevice,                     ///< [in] handle of the device object
@@ -264,37 +255,30 @@ xe_result_t __xecall xeCommandQueueDestroy(
     }
     return dispatchTable.xeCommandQueueDestroy(hCommandQueue);
 }
-xe_result_t __xecall xeCommandQueueEnqueueCommandLists(
+xe_result_t __xecall xeCommandQueueExecuteCommandLists(
         xe_command_queue_handle_t hCommandQueue,        ///< [in] handle of the command queue
-        uint32_t numCommandLists,                       ///< [in] number of command lists to enqueue
-        xe_command_list_handle_t* phCommandLists,       ///< [in] list of handles of the command lists to enqueue for execution
+        uint32_t numCommandLists,                       ///< [in] number of command lists to execute
+        xe_command_list_handle_t* phCommandLists,       ///< [in] list of handles of the command lists to execute
         xe_fence_handle_t hFence                        ///< [in][optional] handle of the fence to signal on completion
     ){
     if(dispatchTableInitialized == false){
         return XE_RESULT_ERROR_UNINITIALIZED;
     }
-    return dispatchTable.xeCommandQueueEnqueueCommandLists(hCommandQueue, numCommandLists, phCommandLists, hFence);
+    return dispatchTable.xeCommandQueueExecuteCommandLists(hCommandQueue, numCommandLists, phCommandLists, hFence);
 }
 xe_result_t __xecall xeCommandQueueSynchronize(
         xe_command_queue_handle_t hCommandQueue,        ///< [in] handle of the command queue
-        xe_synchronization_mode_t mode,                 ///< [in] synchronization mode
-        uint32_t delay,                                 ///< [in] if ::XE_SYNCHRONIZATION_MODE_SLEEP == mode, then time (in
-                                                        ///< microseconds) to poll before putting Host thread to sleep; otherwise,
-                                                        ///< must be zero.
-        uint32_t interval,                              ///< [in] if ::XE_SYNCHRONIZATION_MODE_SLEEP == mode, then maximum time (in
-                                                        ///< microseconds) to put Host thread to sleep between polling; otherwise,
-                                                        ///< must be zero.
-        uint32_t timeout                                ///< [in] if non-zero, then indicates the maximum time to poll or sleep
-                                                        ///< before returning; if zero, then only a single status check is made
-                                                        ///< before immediately returning; if MAX_UINT32, then function will not
-                                                        ///< return until complete.
+        uint32_t timeout                                ///< [in] if non-zero, then indicates the maximum time to yield before
+                                                        ///< returning ::XE_RESULT_SUCCESS or ::XE_RESULT_NOT_READY; if zero, then
+                                                        ///< operates exactly like ::xeFenceQueryStatus; if MAX_UINT32, then
+                                                        ///< function will not return until complete or device is lost.
     ){
     if(dispatchTableInitialized == false){
         return XE_RESULT_ERROR_UNINITIALIZED;
     }
-    return dispatchTable.xeCommandQueueSynchronize(hCommandQueue, mode, delay, interval, timeout);
+    return dispatchTable.xeCommandQueueSynchronize(hCommandQueue, timeout);
 }
-xe_result_t __xecall xeCommandListEncodeMemoryCopy(
+xe_result_t __xecall xeCommandListAppendMemoryCopy(
         xe_command_list_handle_t hCommandList,          ///< [in] handle of command list
         void* dstptr,                                   ///< [in] pointer to destination memory to copy to
         const void* srcptr,                             ///< [in] pointer to source memory to copy from
@@ -303,9 +287,9 @@ xe_result_t __xecall xeCommandListEncodeMemoryCopy(
     if(dispatchTableInitialized == false){
         return XE_RESULT_ERROR_UNINITIALIZED;
     }
-    return dispatchTable.xeCommandListEncodeMemoryCopy(hCommandList, dstptr, srcptr, size);
+    return dispatchTable.xeCommandListAppendMemoryCopy(hCommandList, dstptr, srcptr, size);
 }
-xe_result_t __xecall xeCommandListEncodeMemorySet(
+xe_result_t __xecall xeCommandListAppendMemorySet(
         xe_command_list_handle_t hCommandList,          ///< [in] handle of command list
         void* ptr,                                      ///< [in] pointer to memory to initialize
         int value,                                      ///< [in] value to initialize memory to
@@ -314,9 +298,9 @@ xe_result_t __xecall xeCommandListEncodeMemorySet(
     if(dispatchTableInitialized == false){
         return XE_RESULT_ERROR_UNINITIALIZED;
     }
-    return dispatchTable.xeCommandListEncodeMemorySet(hCommandList, ptr, value, size);
+    return dispatchTable.xeCommandListAppendMemorySet(hCommandList, ptr, value, size);
 }
-xe_result_t __xecall xeCommandListEncodeImageCopy(
+xe_result_t __xecall xeCommandListAppendImageCopy(
         xe_command_list_handle_t hCommandList,          ///< [in] handle of command list
         xe_image_handle_t hDstImage,                    ///< [in] handle of destination image to copy to
         xe_image_handle_t hSrcImage                     ///< [in] handle of source image to copy from
@@ -324,9 +308,9 @@ xe_result_t __xecall xeCommandListEncodeImageCopy(
     if(dispatchTableInitialized == false){
         return XE_RESULT_ERROR_UNINITIALIZED;
     }
-    return dispatchTable.xeCommandListEncodeImageCopy(hCommandList, hDstImage, hSrcImage);
+    return dispatchTable.xeCommandListAppendImageCopy(hCommandList, hDstImage, hSrcImage);
 }
-xe_result_t __xecall xeCommandListEncodeImageCopyRegion(
+xe_result_t __xecall xeCommandListAppendImageCopyRegion(
         xe_command_list_handle_t hCommandList,          ///< [in] handle of command list
         xe_image_handle_t hDstImage,                    ///< [in] handle of destination image to copy to
         xe_image_region_t* pDstRegion,                  ///< [in][optional] destination region descriptor
@@ -336,9 +320,9 @@ xe_result_t __xecall xeCommandListEncodeImageCopyRegion(
     if(dispatchTableInitialized == false){
         return XE_RESULT_ERROR_UNINITIALIZED;
     }
-    return dispatchTable.xeCommandListEncodeImageCopyRegion(hCommandList, hDstImage, pDstRegion, hSrcImage, pSrcRegion);
+    return dispatchTable.xeCommandListAppendImageCopyRegion(hCommandList, hDstImage, pDstRegion, hSrcImage, pSrcRegion);
 }
-xe_result_t __xecall xeCommandListEncodeImageCopyToMemory(
+xe_result_t __xecall xeCommandListAppendImageCopyToMemory(
         xe_command_list_handle_t hCommandList,          ///< [in] handle of command list
         void* dstptr,                                   ///< [in] pointer to destination memory to copy to
         xe_image_handle_t hSrcImage,                    ///< [in] handle of source image to copy from
@@ -347,9 +331,9 @@ xe_result_t __xecall xeCommandListEncodeImageCopyToMemory(
     if(dispatchTableInitialized == false){
         return XE_RESULT_ERROR_UNINITIALIZED;
     }
-    return dispatchTable.xeCommandListEncodeImageCopyToMemory(hCommandList, dstptr, hSrcImage, pSrcRegion);
+    return dispatchTable.xeCommandListAppendImageCopyToMemory(hCommandList, dstptr, hSrcImage, pSrcRegion);
 }
-xe_result_t __xecall xeCommandListEncodeImageCopyFromMemory(
+xe_result_t __xecall xeCommandListAppendImageCopyFromMemory(
         xe_command_list_handle_t hCommandList,          ///< [in] handle of command list
         xe_image_handle_t hDstImage,                    ///< [in] handle of destination image to copy to
         xe_image_region_t* pDstRegion,                  ///< [in][optional] destination region descriptor
@@ -358,19 +342,19 @@ xe_result_t __xecall xeCommandListEncodeImageCopyFromMemory(
     if(dispatchTableInitialized == false){
         return XE_RESULT_ERROR_UNINITIALIZED;
     }
-    return dispatchTable.xeCommandListEncodeImageCopyFromMemory(hCommandList, hDstImage, pDstRegion, srcptr);
+    return dispatchTable.xeCommandListAppendImageCopyFromMemory(hCommandList, hDstImage, pDstRegion, srcptr);
 }
-xe_result_t __xecall xeCommandListEncodeMemoryPrefetch(
+xe_result_t __xecall xeCommandListAppendMemoryPrefetch(
         xe_command_list_handle_t hCommandList,          ///< [in] handle of command list
-        const void* ptr,                                ///< [in] pointer to start of the memory region to prefetch
-        size_t count                                    ///< [in] size in bytes of the memory region to prefetch
+        const void* ptr,                                ///< [in] pointer to start of the memory range to prefetch
+        size_t count                                    ///< [in] size in bytes of the memory range to prefetch
     ){
     if(dispatchTableInitialized == false){
         return XE_RESULT_ERROR_UNINITIALIZED;
     }
-    return dispatchTable.xeCommandListEncodeMemoryPrefetch(hCommandList, ptr, count);
+    return dispatchTable.xeCommandListAppendMemoryPrefetch(hCommandList, ptr, count);
 }
-xe_result_t __xecall xeCommandListEncodeMemAdvise(
+xe_result_t __xecall xeCommandListAppendMemAdvise(
         xe_command_list_handle_t hCommandList,          ///< [in] handle of command list
         xe_device_handle_t hDevice,                     ///< [in] device associated with the memory advice
         const void* ptr,                                ///< [in] Pointer to the start of the memory range
@@ -380,7 +364,7 @@ xe_result_t __xecall xeCommandListEncodeMemAdvise(
     if(dispatchTableInitialized == false){
         return XE_RESULT_ERROR_UNINITIALIZED;
     }
-    return dispatchTable.xeCommandListEncodeMemAdvise(hCommandList, hDevice, ptr, size, advice);
+    return dispatchTable.xeCommandListAppendMemAdvise(hCommandList, hDevice, ptr, size, advice);
 }
 xe_result_t __xecall xeDriverGetDeviceCount(
         uint32_t* count                                 ///< [out] number of devices available
@@ -393,7 +377,7 @@ xe_result_t __xecall xeDriverGetDeviceCount(
 xe_result_t __xecall xeDriverGetDeviceUniqueIds(
         uint32_t count,                                 ///< [in] size of device unique ids array. Typically, this will be
                                                         ///< ${x}DeviceGetCount.
-        uint32_t* pUniqueIds                            ///< [out] pointer to an array of unique ids for devices. Caller must
+        xe_device_uuid_t* pUniqueIds                    ///< [in,out] pointer to an array of unique ids for devices. Caller must
                                                         ///< supply array.
     ){
     if(dispatchTableInitialized == false){
@@ -402,14 +386,14 @@ xe_result_t __xecall xeDriverGetDeviceUniqueIds(
     return dispatchTable.xeDriverGetDeviceUniqueIds(count, pUniqueIds);
 }
 xe_result_t __xecall xeDriverGetDevice(
-        uint32_t uniqueId,                              ///< [in] unique id of device to retrieve. Use ${x}DriverGetDeviceUniqueIds
+        xe_device_uuid_t* pUUID,                        ///< [in] unique id of device to retrieve. Use ${x}DriverGetDeviceUniqueIds
                                                         ///< to obtain a unique Id.
         xe_device_handle_t* phDevice                    ///< [out] pointer to handle of device object created
     ){
     if(dispatchTableInitialized == false){
         return XE_RESULT_ERROR_UNINITIALIZED;
     }
-    return dispatchTable.xeDriverGetDevice(uniqueId, phDevice);
+    return dispatchTable.xeDriverGetDevice(pUUID, phDevice);
 }
 xe_result_t __xecall xeDeviceGetSubDevice(
         xe_device_handle_t hDevice,                     ///< [in] handle of the device object
@@ -458,19 +442,19 @@ xe_result_t __xecall xeDeviceGetMemoryProperties(
     return dispatchTable.xeDeviceGetMemoryProperties(hDevice, pMemProperties);
 }
 xe_result_t __xecall xeDeviceGetLinkProperties(
-        uint32_t srcOrdinal,                            ///< [in] source device ordinal
-        uint32_t dstOrdinal,                            ///< [in] destination device ordinal
+        xe_device_handle_t hDevice,                     ///< [in] handle of the device performing the access
+        xe_device_handle_t hPeerDevice,                 ///< [in] handle of the peer device with the allocation
         xe_device_link_properties_t* pLinkProperties    ///< [out] link properties between source and destination devices
     ){
     if(dispatchTableInitialized == false){
         return XE_RESULT_ERROR_UNINITIALIZED;
     }
-    return dispatchTable.xeDeviceGetLinkProperties(srcOrdinal, dstOrdinal, pLinkProperties);
+    return dispatchTable.xeDeviceGetLinkProperties(hDevice, hPeerDevice, pLinkProperties);
 }
 xe_result_t __xecall xeDeviceCanAccessPeer(
         xe_device_handle_t hDevice,                     ///< [in] handle of the device performing the access
         xe_device_handle_t hPeerDevice,                 ///< [in] handle of the peer device with the allocation
-        bool* value                                     ///< [out] returned access capability
+        xe_bool_t* value                                ///< [out] returned access capability
     ){
     if(dispatchTableInitialized == false){
         return XE_RESULT_ERROR_UNINITIALIZED;
@@ -532,92 +516,43 @@ xe_result_t __xecall xeEventDestroy(
     }
     return dispatchTable.xeEventDestroy(hEvent);
 }
-xe_result_t __xecall xeCommandListEncodeSignalEvent(
+xe_result_t __xecall xeCommandListAppendSignalEvent(
         xe_command_list_handle_t hCommandList,          ///< [in] handle of the command list
         xe_event_handle_t hEvent                        ///< [in] handle of the event
     ){
     if(dispatchTableInitialized == false){
         return XE_RESULT_ERROR_UNINITIALIZED;
     }
-    return dispatchTable.xeCommandListEncodeSignalEvent(hCommandList, hEvent);
+    return dispatchTable.xeCommandListAppendSignalEvent(hCommandList, hEvent);
 }
-xe_result_t __xecall xeCommandListEncodeWaitOnEvent(
+xe_result_t __xecall xeCommandListAppendWaitOnEvent(
         xe_command_list_handle_t hCommandList,          ///< [in] handle of the command list
         xe_event_handle_t hEvent                        ///< [in] handle of the event
     ){
     if(dispatchTableInitialized == false){
         return XE_RESULT_ERROR_UNINITIALIZED;
     }
-    return dispatchTable.xeCommandListEncodeWaitOnEvent(hCommandList, hEvent);
+    return dispatchTable.xeCommandListAppendWaitOnEvent(hCommandList, hEvent);
 }
-xe_result_t __xecall xeCommandListEncodeSignalMultipleEvents(
-        xe_command_list_handle_t hCommandList,          ///< [in] handle of the command list
-        uint32_t numEvents,                             ///< [in] number of events pointed to by phEvents
-        xe_event_handle_t* phEvents                     ///< [in] pointer to array of handles of the events
-    ){
-    if(dispatchTableInitialized == false){
-        return XE_RESULT_ERROR_UNINITIALIZED;
-    }
-    return dispatchTable.xeCommandListEncodeSignalMultipleEvents(hCommandList, numEvents, phEvents);
-}
-xe_result_t __xecall xeCommandListEncodeWaitOnMultipleEvents(
-        xe_command_list_handle_t hCommandList,          ///< [in] handle of the command list
-        uint32_t numEvents,                             ///< [in] number of events pointed to by phEvents
-        xe_event_handle_t* phEvents                     ///< [in] pointer to array of handles of the events
-    ){
-    if(dispatchTableInitialized == false){
-        return XE_RESULT_ERROR_UNINITIALIZED;
-    }
-    return dispatchTable.xeCommandListEncodeWaitOnMultipleEvents(hCommandList, numEvents, phEvents);
-}
-xe_result_t __xecall xeHostSignalEvent(
+xe_result_t __xecall xeEventHostSignal(
         xe_event_handle_t hEvent                        ///< [in] handle of the event
     ){
     if(dispatchTableInitialized == false){
         return XE_RESULT_ERROR_UNINITIALIZED;
     }
-    return dispatchTable.xeHostSignalEvent(hEvent);
+    return dispatchTable.xeEventHostSignal(hEvent);
 }
-xe_result_t __xecall xeHostWaitOnEvent(
+xe_result_t __xecall xeEventHostSynchronize(
         xe_event_handle_t hEvent,                       ///< [in] handle of the event
-        uint32_t timeout                                ///< [in] if non-zero, then indicates the maximum time to poll or sleep
-                                                        ///< before returning; if zero, then only a single status check is made
-                                                        ///< before immediately returning; if MAX_UINT32, then function will not
-                                                        ///< return until complete.
+        uint32_t timeout                                ///< [in] if non-zero, then indicates the maximum time to yield before
+                                                        ///< returning ::XE_RESULT_SUCCESS or ::XE_RESULT_NOT_READY; if zero, then
+                                                        ///< operates exactly like ::xeEventQueryStatus; if MAX_UINT32, then
+                                                        ///< function will not return until complete or device is lost.
     ){
     if(dispatchTableInitialized == false){
         return XE_RESULT_ERROR_UNINITIALIZED;
     }
-    return dispatchTable.xeHostWaitOnEvent(hEvent, timeout);
-}
-xe_result_t __xecall xeHostSignalMultipleEvents(
-        uint32_t numEvents,                             ///< [in] number of events pointed to by phEvents
-        xe_event_handle_t* phEvents                     ///< [in] pointer to array of handles of the events
-    ){
-    if(dispatchTableInitialized == false){
-        return XE_RESULT_ERROR_UNINITIALIZED;
-    }
-    return dispatchTable.xeHostSignalMultipleEvents(numEvents, phEvents);
-}
-xe_result_t __xecall xeHostWaitOnMultipleEvents(
-        uint32_t numEvents,                             ///< [in] number of events pointed to by phEvents
-        xe_event_handle_t* phEvents,                    ///< [in] pointer to array of handles of the events
-        xe_synchronization_mode_t mode,                 ///< [in] synchronization mode
-        uint32_t delay,                                 ///< [in] if ::XE_SYNCHRONIZATION_MODE_SLEEP == mode, then time (in
-                                                        ///< microseconds) to poll before putting Host thread to sleep; otherwise,
-                                                        ///< must be zero.
-        uint32_t interval,                              ///< [in] if ::XE_SYNCHRONIZATION_MODE_SLEEP == mode, then maximum time (in
-                                                        ///< microseconds) to put Host thread to sleep between polling; otherwise,
-                                                        ///< must be zero.
-        uint32_t timeout                                ///< [in] if non-zero, then indicates the maximum time to poll or sleep
-                                                        ///< before returning; if zero, then only a single status check is made
-                                                        ///< before immediately returning; if MAX_UINT32, then function will not
-                                                        ///< return until complete.
-    ){
-    if(dispatchTableInitialized == false){
-        return XE_RESULT_ERROR_UNINITIALIZED;
-    }
-    return dispatchTable.xeHostWaitOnMultipleEvents(numEvents, phEvents, mode, delay, interval, timeout);
+    return dispatchTable.xeEventHostSynchronize(hEvent, timeout);
 }
 xe_result_t __xecall xeEventQueryStatus(
         xe_event_handle_t hEvent                        ///< [in] handle of the event
@@ -628,14 +563,14 @@ xe_result_t __xecall xeEventQueryStatus(
     return dispatchTable.xeEventQueryStatus(hEvent);
 }
 xe_result_t __xecall xeEventQueryElapsedTime(
-        xe_event_handle_t hEventStart,                  ///< [in] handle of the start event
+        xe_event_handle_t hEventBegin,                  ///< [in] handle of the begin event
         xe_event_handle_t hEventEnd,                    ///< [in] handle of the end event
-        double_t* pTime                                 ///< [out] time in milliseconds
+        double* pTime                                   ///< [out] time in milliseconds
     ){
     if(dispatchTableInitialized == false){
         return XE_RESULT_ERROR_UNINITIALIZED;
     }
-    return dispatchTable.xeEventQueryElapsedTime(hEventStart, hEventEnd, pTime);
+    return dispatchTable.xeEventQueryElapsedTime(hEventBegin, hEventEnd, pTime);
 }
 xe_result_t __xecall xeEventQueryMetricsData(
         xe_event_handle_t hEventStart,                  ///< [in] handle of the start event
@@ -648,14 +583,14 @@ xe_result_t __xecall xeEventQueryMetricsData(
     }
     return dispatchTable.xeEventQueryMetricsData(hEventStart, hEventEnd, reportSize, pReportData);
 }
-xe_result_t __xecall xeCommandListEncodeEventReset(
+xe_result_t __xecall xeCommandListAppendEventReset(
         xe_command_list_handle_t hCommandList,          ///< [in] handle of the command list
         xe_event_handle_t hEvent                        ///< [in] handle of the event
     ){
     if(dispatchTableInitialized == false){
         return XE_RESULT_ERROR_UNINITIALIZED;
     }
-    return dispatchTable.xeCommandListEncodeEventReset(hCommandList, hEvent);
+    return dispatchTable.xeCommandListAppendEventReset(hCommandList, hEvent);
 }
 xe_result_t __xecall xeEventReset(
         xe_event_handle_t hEvent                        ///< [in] handle of the event
@@ -683,44 +618,17 @@ xe_result_t __xecall xeFenceDestroy(
     }
     return dispatchTable.xeFenceDestroy(hFence);
 }
-xe_result_t __xecall xeHostWaitOnFence(
+xe_result_t __xecall xeFenceHostSynchronize(
         xe_fence_handle_t hFence,                       ///< [in] handle of the fence
-        xe_synchronization_mode_t mode,                 ///< [in] synchronization mode
-        uint32_t delay,                                 ///< [in] if ::XE_SYNCHRONIZATION_MODE_SLEEP == mode, then time (in
-                                                        ///< microseconds) to poll before putting Host thread to sleep; otherwise,
-                                                        ///< must be zero.
-        uint32_t interval,                              ///< [in] if ::XE_SYNCHRONIZATION_MODE_SLEEP == mode, then maximum time (in
-                                                        ///< microseconds) to put Host thread to sleep between polling; otherwise,
-                                                        ///< must be zero.
-        uint32_t timeout                                ///< [in] if non-zero, then indicates the maximum time to poll or sleep
-                                                        ///< before returning; if zero, then only a single status check is made
-                                                        ///< before immediately returning; if MAX_UINT32, then function will not
-                                                        ///< return until complete.
+        uint32_t timeout                                ///< [in] if non-zero, then indicates the maximum time to yield before
+                                                        ///< returning ::XE_RESULT_SUCCESS or ::XE_RESULT_NOT_READY; if zero, then
+                                                        ///< operates exactly like ::xeFenceQueryStatus; if MAX_UINT32, then
+                                                        ///< function will not return until complete or device is lost.
     ){
     if(dispatchTableInitialized == false){
         return XE_RESULT_ERROR_UNINITIALIZED;
     }
-    return dispatchTable.xeHostWaitOnFence(hFence, mode, delay, interval, timeout);
-}
-xe_result_t __xecall xeHostWaitOnMultipleFences(
-        uint32_t numFences,                             ///< [in] number of fences in hFences
-        xe_fence_handle_t* phFences,                    ///< [in] pointer to array of handles of the fences
-        xe_synchronization_mode_t mode,                 ///< [in] synchronization mode
-        uint32_t delay,                                 ///< [in] if ::XE_SYNCHRONIZATION_MODE_SLEEP == mode, then time (in
-                                                        ///< microseconds) to poll before putting Host thread to sleep; otherwise,
-                                                        ///< must be zero.
-        uint32_t interval,                              ///< [in] if ::XE_SYNCHRONIZATION_MODE_SLEEP == mode, then maximum time (in
-                                                        ///< microseconds) to put Host thread to sleep between polling; otherwise,
-                                                        ///< must be zero.
-        uint32_t timeout                                ///< [in] if non-zero, then indicates the maximum time to poll or sleep
-                                                        ///< before returning; if zero, then only a single status check is made
-                                                        ///< before immediately returning; if MAX_UINT32, then function will not
-                                                        ///< return until complete.
-    ){
-    if(dispatchTableInitialized == false){
-        return XE_RESULT_ERROR_UNINITIALIZED;
-    }
-    return dispatchTable.xeHostWaitOnMultipleFences(numFences, phFences, mode, delay, interval, timeout);
+    return dispatchTable.xeFenceHostSynchronize(hFence, timeout);
 }
 xe_result_t __xecall xeFenceQueryStatus(
         xe_fence_handle_t hFence                        ///< [in] handle of the fence
@@ -729,16 +637,6 @@ xe_result_t __xecall xeFenceQueryStatus(
         return XE_RESULT_ERROR_UNINITIALIZED;
     }
     return dispatchTable.xeFenceQueryStatus(hFence);
-}
-xe_result_t __xecall xeFenceQueryElapsedTime(
-        xe_fence_handle_t hFenceStart,                  ///< [in] handle of the fence
-        xe_fence_handle_t hFenceEnd,                    ///< [in] handle of the fence
-        double_t* pTime                                 ///< [out] time in milliseconds
-    ){
-    if(dispatchTableInitialized == false){
-        return XE_RESULT_ERROR_UNINITIALIZED;
-    }
-    return dispatchTable.xeFenceQueryElapsedTime(hFenceStart, hFenceEnd, pTime);
 }
 xe_result_t __xecall xeFenceReset(
         xe_fence_handle_t hFence                        ///< [in] handle of the fence
@@ -834,7 +732,7 @@ xe_result_t __xecall xeMemGetProperty(
         xe_mem_allocator_handle_t hMemAllocHandle,      ///< [in] handle of memory allocator for this allocation
         const void* ptr,                                ///< [in] Pointer to query
         xe_memory_property_t property,                  ///< [in] Property of the allocation to query
-        void* pValue                                    ///< [out] Value of the queried property
+        uint32_t* pValue                                ///< [out] Value of the queried property
     ){
     if(dispatchTableInitialized == false){
         return XE_RESULT_ERROR_UNINITIALIZED;
@@ -844,8 +742,8 @@ xe_result_t __xecall xeMemGetProperty(
 xe_result_t __xecall xeMemGetAddressRange(
         xe_mem_allocator_handle_t hMemAllocHandle,      ///< [in] handle of memory allocator for this allocation
         const void* ptr,                                ///< [in] Pointer to query
-        void** pBase,                                   ///< [out] Returned base address of the allocation (optional)
-        size_t* pSize                                   ///< [out] Returned size of the allocation (optional)
+        void** pBase,                                   ///< [in,out][optional] base address of the allocation
+        size_t* pSize                                   ///< [in,out][optional] size of the allocation
     ){
     if(dispatchTableInitialized == false){
         return XE_RESULT_ERROR_UNINITIALIZED;
@@ -912,8 +810,8 @@ xe_result_t __xecall xeModuleBuildLogDestroy(
 }
 xe_result_t __xecall xeModuleBuildLogGetString(
         xe_module_build_log_handle_t hModuleBuildLog,   ///< [in] handle of the module build log object.
-        size_t* pSize,                                  ///< [out] size of build log string.
-        const char** pBuildLog                          ///< [out] pointer to null-terminated string of the log.
+        size_t* pSize,                                  ///< [in,out] size of build log string.
+        char** pBuildLog                                ///< [in,out][optional] pointer to null-terminated string of the log.
     ){
     if(dispatchTableInitialized == false){
         return XE_RESULT_ERROR_UNINITIALIZED;
@@ -922,8 +820,8 @@ xe_result_t __xecall xeModuleBuildLogGetString(
 }
 xe_result_t __xecall xeModuleGetNativeBinary(
         xe_module_handle_t hModule,                     ///< [in] handle of the device
-        uint32_t* pSize,                                ///< [out] size of native binary.
-        char** pModuleNativeBinary                      ///< [out] pointer to native binary
+        size_t* pSize,                                  ///< [in,out] size of native binary.
+        void** pModuleNativeBinary                      ///< [in,out][optional] pointer to native binary
     ){
     if(dispatchTableInitialized == false){
         return XE_RESULT_ERROR_UNINITIALIZED;
@@ -987,7 +885,8 @@ xe_result_t __xecall xeFunctionSetArgumentValue(
         xe_function_handle_t hFunction,                 ///< [in/out] handle of the function args object.
         uint32_t argIndex,                              ///< [in] argument index in range [0, num args - 1]
         size_t argSize,                                 ///< [in] size of argument type
-        const void* pArgValue                           ///< [in] argument value represented as matching arg type
+        const void* pArgValue                           ///< [in][optional] argument value represented as matching arg type. If
+                                                        ///< null then argument value is considered null.
     ){
     if(dispatchTableInitialized == false){
         return XE_RESULT_ERROR_UNINITIALIZED;
@@ -1014,51 +913,44 @@ xe_result_t __xecall xeFunctionGetAttribute(
     }
     return dispatchTable.xeFunctionGetAttribute(hFunction, attr, pValue);
 }
-xe_result_t __xecall xeCommandListEncodeDispatchFunction(
+xe_result_t __xecall xeCommandListAppendLaunchFunction(
         xe_command_list_handle_t hCommandList,          ///< [in] handle of the command list
         xe_function_handle_t hFunction,                 ///< [in] handle of the function object
-        const xe_dispatch_function_arguments_t* pDispatchFuncArgs,  ///< [in] dispatch function arguments.
+        const xe_thread_group_dimensions_t* pLaunchFuncArgs,///< [in] launch function arguments.
         xe_event_handle_t hEvent                        ///< [in][optional] handle of the event to signal on completion
     ){
     if(dispatchTableInitialized == false){
         return XE_RESULT_ERROR_UNINITIALIZED;
     }
-    return dispatchTable.xeCommandListEncodeDispatchFunction(hCommandList, hFunction, pDispatchFuncArgs, hEvent);
+    return dispatchTable.xeCommandListAppendLaunchFunction(hCommandList, hFunction, pLaunchFuncArgs, hEvent);
 }
-xe_result_t __xecall xeCommandGraphEncodeDispatchFunction(
-        xe_command_graph_handle_t hCommandGraph,        ///< [in] handle of the command graph
-        xe_function_handle_t hFunction,                 ///< [in] handle of the function object
-        const xe_dispatch_function_arguments_t* pDispatchFuncArgs,  ///< [in] dispatch function arguments.
-        xe_event_handle_t hEvent                        ///< [in][optional] handle of the event to signal on completion
-    ){
-    if(dispatchTableInitialized == false){
-        return XE_RESULT_ERROR_UNINITIALIZED;
-    }
-    return dispatchTable.xeCommandGraphEncodeDispatchFunction(hCommandGraph, hFunction, pDispatchFuncArgs, hEvent);
-}
-xe_result_t __xecall xeCommandListEncodeDispatchFunctionIndirect(
+xe_result_t __xecall xeCommandListAppendLaunchFunctionIndirect(
         xe_command_list_handle_t hCommandList,          ///< [in] handle of the command list
         xe_function_handle_t hFunction,                 ///< [in] handle of the function object
-        const xe_dispatch_function_indirect_arguments_t* pDispatchArgumentsBuffer,  ///< [in] Pointer to buffer that will contain dispatch arguments.
+        const xe_thread_group_dimensions_t* pLaunchArgumentsBuffer, ///< [in] pointer to device buffer that will contain launch arguments
         xe_event_handle_t hEvent                        ///< [in][optional] handle of the event to signal on completion
     ){
     if(dispatchTableInitialized == false){
         return XE_RESULT_ERROR_UNINITIALIZED;
     }
-    return dispatchTable.xeCommandListEncodeDispatchFunctionIndirect(hCommandList, hFunction, pDispatchArgumentsBuffer, hEvent);
+    return dispatchTable.xeCommandListAppendLaunchFunctionIndirect(hCommandList, hFunction, pLaunchArgumentsBuffer, hEvent);
 }
-xe_result_t __xecall xeCommandGraphEncodeDispatchFunctionIndirect(
-        xe_command_graph_handle_t hCommandGraph,        ///< [in] handle of the command graph
-        xe_function_handle_t hFunction,                 ///< [in] handle of the function object
-        const xe_dispatch_function_indirect_arguments_t* pDispatchArgumentsBuffer,  ///< [in] Pointer to buffer that will contain dispatch arguments.
+xe_result_t __xecall xeCommandListAppendLaunchMultipleFunctionsIndirect(
+        xe_command_list_handle_t hCommandList,          ///< [in] handle of the command list
+        uint32_t numFunctions,                          ///< [in] maximum number of functions to launch
+        const xe_function_handle_t* phFunctions,        ///< [in] handles of the function objects
+        const size_t* pNumLaunchArguments,              ///< [in] pointer to device memory location that will contain the actual
+                                                        ///< number of launch arguments; must be less-than or equal-to numFunctions
+        const xe_thread_group_dimensions_t* pLaunchArgumentsBuffer, ///< [in] pointer to device buffer that will contain a contiguous array of
+                                                        ///< launch arguments
         xe_event_handle_t hEvent                        ///< [in][optional] handle of the event to signal on completion
     ){
     if(dispatchTableInitialized == false){
         return XE_RESULT_ERROR_UNINITIALIZED;
     }
-    return dispatchTable.xeCommandGraphEncodeDispatchFunctionIndirect(hCommandGraph, hFunction, pDispatchArgumentsBuffer, hEvent);
+    return dispatchTable.xeCommandListAppendLaunchMultipleFunctionsIndirect(hCommandList, numFunctions, phFunctions, pNumLaunchArguments, pLaunchArgumentsBuffer, hEvent);
 }
-xe_result_t __xecall xeCommandListEncodeDispatchHostFunction(
+xe_result_t __xecall xeCommandListAppendLaunchHostFunction(
         xe_command_list_handle_t hCommandList,          ///< [in] handle of the command list
         xe_host_pfn_t pfnHostFunc,                      ///< [in] pointer to host function.
         void* pUserData                                 ///< [in] pointer to user data to pass to host function.
@@ -1066,17 +958,7 @@ xe_result_t __xecall xeCommandListEncodeDispatchHostFunction(
     if(dispatchTableInitialized == false){
         return XE_RESULT_ERROR_UNINITIALIZED;
     }
-    return dispatchTable.xeCommandListEncodeDispatchHostFunction(hCommandList, pfnHostFunc, pUserData);
-}
-xe_result_t __xecall xeCommandGraphEncodeDispatchHostFunction(
-        xe_command_graph_handle_t hCommandGraph,        ///< [in] handle of the command graph
-        xe_host_pfn_t pfnHostFunc,                      ///< [in] pointer to host function.
-        void* pUserData                                 ///< [in] pointer to user data to pass to host function.
-    ){
-    if(dispatchTableInitialized == false){
-        return XE_RESULT_ERROR_UNINITIALIZED;
-    }
-    return dispatchTable.xeCommandGraphEncodeDispatchHostFunction(hCommandGraph, pfnHostFunc, pUserData);
+    return dispatchTable.xeCommandListAppendLaunchHostFunction(hCommandList, pfnHostFunc, pUserData);
 }
 xe_result_t __xecall xeDeviceMakeMemoryResident(
         xe_device_handle_t hDevice,                     ///< [in] handle of the device
@@ -1133,61 +1015,6 @@ xe_result_t __xecall xeSamplerDestroy(
         return XE_RESULT_ERROR_UNINITIALIZED;
     }
     return dispatchTable.xeSamplerDestroy(hSampler);
-}
-xe_result_t __xecall xeDeviceCreateSemaphore(
-        xe_device_handle_t hDevice,                     ///< [in] handle of the device
-        const xe_semaphore_desc_t* desc,                ///< [in] pointer to semaphore descriptor
-        xe_semaphore_handle_t* phSemaphore              ///< [out] pointer to handle of semaphore object created
-    ){
-    if(dispatchTableInitialized == false){
-        return XE_RESULT_ERROR_UNINITIALIZED;
-    }
-    return dispatchTable.xeDeviceCreateSemaphore(hDevice, desc, phSemaphore);
-}
-xe_result_t __xecall xeSemaphoreDestroy(
-        xe_semaphore_handle_t hSemaphore                ///< [in] handle of semaphore object to destroy
-    ){
-    if(dispatchTableInitialized == false){
-        return XE_RESULT_ERROR_UNINITIALIZED;
-    }
-    return dispatchTable.xeSemaphoreDestroy(hSemaphore);
-}
-xe_result_t __xecall xeCommandListEncodeSemaphoreSignal(
-        xe_command_list_handle_t hCommandList,          ///< [in] handle of the command list
-        xe_semaphore_handle_t hSemaphore,               ///< [in] handle of the semaphore
-        xe_semaphore_value_t value                      ///< [in] the value to write on signal
-    ){
-    if(dispatchTableInitialized == false){
-        return XE_RESULT_ERROR_UNINITIALIZED;
-    }
-    return dispatchTable.xeCommandListEncodeSemaphoreSignal(hCommandList, hSemaphore, value);
-}
-xe_result_t __xecall xeCommandListEncodeSemaphoreWait(
-        xe_command_list_handle_t hCommandList,          ///< [in] handle of the command list
-        xe_semaphore_handle_t hSemaphore,               ///< [in] handle of the semaphore
-        xe_semaphore_wait_operation_t operation,        ///< [in] wait operation type
-        xe_semaphore_value_t value                      ///< [in] the value to wait upon
-    ){
-    if(dispatchTableInitialized == false){
-        return XE_RESULT_ERROR_UNINITIALIZED;
-    }
-    return dispatchTable.xeCommandListEncodeSemaphoreWait(hCommandList, hSemaphore, operation, value);
-}
-xe_result_t __xecall xeSemaphoreQueryValue(
-        xe_semaphore_handle_t hSemaphore                ///< [in] handle of the semaphore
-    ){
-    if(dispatchTableInitialized == false){
-        return XE_RESULT_ERROR_UNINITIALIZED;
-    }
-    return dispatchTable.xeSemaphoreQueryValue(hSemaphore);
-}
-xe_result_t __xecall xeSemaphoreReset(
-        xe_semaphore_handle_t hSemaphore                ///< [in] handle of the semaphore
-    ){
-    if(dispatchTableInitialized == false){
-        return XE_RESULT_ERROR_UNINITIALIZED;
-    }
-    return dispatchTable.xeSemaphoreReset(hSemaphore);
 }
 
 #if defined(__cplusplus)

@@ -43,7 +43,11 @@ extern "C" {
 
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief API version of ::xe_command_queue_desc_t
-#define XE_COMMAND_QUEUE_DESC_VERSION  XE_MAKE_VERSION( 1, 0 )
+typedef enum _xe_command_queue_desc_version_t
+{
+    XE_COMMAND_QUEUE_DESC_VERSION_CURRENT = XE_MAKE_VERSION( 1, 0 ),///< version 1.0
+
+} xe_command_queue_desc_version_t;
 
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Supported command queue flags
@@ -53,6 +57,8 @@ typedef enum _xe_command_queue_flag_t
     XE_COMMAND_QUEUE_FLAG_COPY_ONLY = XE_BIT(0),    ///< command queue only supports enqueing copy-only command lists
     XE_COMMAND_QUEUE_FLAG_LOGICAL_ONLY = XE_BIT(1), ///< command queue is not tied to a physical command queue; driver may
                                                     ///< dynamically assign based on usage
+    XE_COMMAND_QUEUE_FLAG_SINGLE_SLICE_ONLY = XE_BIT(2),///< command queue reserves and cannot comsume more than a single slice'
+                                                    ///< 'slice' size is device-specific.  cannot be combined with COPY_ONLY.
 
 } xe_command_queue_flag_t;
 
@@ -61,7 +67,7 @@ typedef enum _xe_command_queue_flag_t
 typedef enum _xe_command_queue_mode_t
 {
     XE_COMMAND_QUEUE_MODE_DEFAULT = 0,              ///< implicit default behavior; uses driver-based heuristics
-    XE_COMMAND_QUEUE_MODE_SYNCHRONOUS,              ///< GPU execution always completes immediately on enqueue; CPU thread is
+    XE_COMMAND_QUEUE_MODE_SYNCHRONOUS,              ///< GPU execution always completes immediately on execute; CPU thread is
                                                     ///< blocked using wait on implicit synchronization object
     XE_COMMAND_QUEUE_MODE_ASYNCHRONOUS,             ///< GPU execution is scheduled and will complete in future; explicit
                                                     ///< synchronization object must be used to determine completeness
@@ -82,7 +88,7 @@ typedef enum _xe_command_queue_priority_t
 /// @brief Command Queue descriptor
 typedef struct _xe_command_queue_desc_t
 {
-    uint32_t version;                               ///< [in] ::XE_COMMAND_QUEUE_DESC_VERSION
+    xe_command_queue_desc_version_t version;        ///< [in] ::XE_COMMAND_QUEUE_DESC_VERSION_CURRENT
     xe_command_queue_flag_t flags;                  ///< [in] creation flags
     xe_command_queue_mode_t mode;                   ///< [in] operation mode
     xe_command_queue_priority_t priority;           ///< [in] priority
@@ -117,11 +123,11 @@ typedef struct _xe_command_queue_desc_t
 ///         + nullptr == desc
 ///         + nullptr == phCommandQueue
 ///     - ::XE_RESULT_ERROR_UNSUPPORTED
-///         + ::XE_COMMAND_QUEUE_DESC_VERSION < desc->version
+///         + ::XE_COMMAND_QUEUE_DESC_VERSION_CURRENT < desc->version
 ///     - ::XE_RESULT_ERROR_OUT_OF_HOST_MEMORY
 ///     - ::XE_RESULT_ERROR_OUT_OF_DEVICE_MEMORY
 __xedllport xe_result_t __xecall
-  xeDeviceCreateCommandQueue(
+xeDeviceCreateCommandQueue(
     xe_device_handle_t hDevice,                     ///< [in] handle of the device object
     const xe_command_queue_desc_t* desc,            ///< [in] pointer to command queue descriptor
     xe_command_queue_handle_t* phCommandQueue       ///< [out] pointer to handle of command queue object created
@@ -150,12 +156,12 @@ __xedllport xe_result_t __xecall
 ///         + nullptr == hCommandQueue
 ///     - ::XE_RESULT_ERROR_UNSUPPORTED
 __xedllport xe_result_t __xecall
-  xeCommandQueueDestroy(
+xeCommandQueueDestroy(
     xe_command_queue_handle_t hCommandQueue         ///< [in] handle of command queue object to destroy
     );
 
 ///////////////////////////////////////////////////////////////////////////////
-/// @brief Enqueues a command list into a command queue for immediate execution.
+/// @brief Executes a command list in a command queue.
 /// 
 /// @details
 ///     - The application may call this function from simultaneous threads.
@@ -174,13 +180,12 @@ __xedllport xe_result_t __xecall
 ///         + nullptr == phCommandLists
 ///         + 0 for numCommandLists
 ///         + hFence is in signaled state
-///         + hFence is enqueued in another command queue
 ///     - ::XE_RESULT_ERROR_UNSUPPORTED
 __xedllport xe_result_t __xecall
-  xeCommandQueueEnqueueCommandLists(
+xeCommandQueueExecuteCommandLists(
     xe_command_queue_handle_t hCommandQueue,        ///< [in] handle of the command queue
-    uint32_t numCommandLists,                       ///< [in] number of command lists to enqueue
-    xe_command_list_handle_t* phCommandLists,       ///< [in] list of handles of the command lists to enqueue for execution
+    uint32_t numCommandLists,                       ///< [in] number of command lists to execute
+    xe_command_list_handle_t* phCommandLists,       ///< [in] list of handles of the command lists to execute
     xe_fence_handle_t hFence                        ///< [in][optional] handle of the fence to signal on completion
     );
 
@@ -201,19 +206,12 @@ __xedllport xe_result_t __xecall
 ///     - ::XE_RESULT_NOT_READY
 ///         + timeout expired
 __xedllport xe_result_t __xecall
-  xeCommandQueueSynchronize(
+xeCommandQueueSynchronize(
     xe_command_queue_handle_t hCommandQueue,        ///< [in] handle of the command queue
-    xe_synchronization_mode_t mode,                 ///< [in] synchronization mode
-    uint32_t delay,                                 ///< [in] if ::XE_SYNCHRONIZATION_MODE_SLEEP == mode, then time (in
-                                                    ///< microseconds) to poll before putting Host thread to sleep; otherwise,
-                                                    ///< must be zero.
-    uint32_t interval,                              ///< [in] if ::XE_SYNCHRONIZATION_MODE_SLEEP == mode, then maximum time (in
-                                                    ///< microseconds) to put Host thread to sleep between polling; otherwise,
-                                                    ///< must be zero.
-    uint32_t timeout                                ///< [in] if non-zero, then indicates the maximum time to poll or sleep
-                                                    ///< before returning; if zero, then only a single status check is made
-                                                    ///< before immediately returning; if MAX_UINT32, then function will not
-                                                    ///< return until complete.
+    uint32_t timeout                                ///< [in] if non-zero, then indicates the maximum time to yield before
+                                                    ///< returning ::XE_RESULT_SUCCESS or ::XE_RESULT_NOT_READY; if zero, then
+                                                    ///< operates exactly like ::xeFenceQueryStatus; if MAX_UINT32, then
+                                                    ///< function will not return until complete or device is lost.
     );
 
 #if defined(__cplusplus)

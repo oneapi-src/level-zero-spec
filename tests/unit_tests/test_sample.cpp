@@ -17,7 +17,8 @@ TEST(sample, waitOnEvent) {
     ASSERT_EQ(XE_RESULT_SUCCESS, result);
 
     xe_device_handle_t device = {};
-    result = xeDriverGetDevice(0,
+    xe_device_uuid_t deviceUniqueID = {};
+    result = xeDriverGetDevice(&deviceUniqueID,
                                &device);
     ASSERT_EQ(XE_RESULT_SUCCESS, result);
 
@@ -42,11 +43,11 @@ TEST(sample, waitOnEvent) {
                                  &hEvent);
     ASSERT_EQ(XE_RESULT_SUCCESS, result);
 
-    result = xeCommandListEncodeSignalEvent(hCommandList,
+    result = xeCommandListAppendSignalEvent(hCommandList,
                                             hEvent);
     ASSERT_EQ(XE_RESULT_SUCCESS, result);
 
-    result = xeCommandListEncodeWaitOnEvent(hCommandList,
+    result = xeCommandListAppendWaitOnEvent(hCommandList,
                                             hEvent);
     ASSERT_EQ(XE_RESULT_SUCCESS, result);
 
@@ -54,7 +55,7 @@ TEST(sample, waitOnEvent) {
     ASSERT_EQ(XE_RESULT_SUCCESS, result);
 
     xe_fence_handle_t hFence = {};
-    result = xeCommandQueueEnqueueCommandLists(hCommandQueue,
+    result = xeCommandQueueExecuteCommandLists(hCommandQueue,
                                                1,
                                                &hCommandList,
                                                (xe_fence_handle_t)0);
@@ -79,7 +80,8 @@ TEST(sample, helloWorld) {
     ASSERT_EQ(XE_RESULT_SUCCESS, result);
 
     xe_device_handle_t hDevice = {};
-    result = xeDriverGetDevice(0,
+    xe_device_uuid_t deviceUniqueID = {};
+    result = xeDriverGetDevice(&deviceUniqueID,
                                &hDevice);
     ASSERT_EQ(XE_RESULT_SUCCESS, result);
 
@@ -103,7 +105,7 @@ TEST(sample, helloWorld) {
 
     xe_module_desc_t descModule = {};
     xe_module_handle_t module = {};
-    descModule.version = XE_MODULE_DESC_VERSION;
+    descModule.version = XE_MODULE_DESC_VERSION_CURRENT;
     descModule.pInputModule = inputModule.get();
     descModule.inputSize = static_cast<uint32_t>(moduleSize);
     descModule.format = XE_MODULE_FORMAT_IL_SPIRV;
@@ -115,7 +117,7 @@ TEST(sample, helloWorld) {
 
     xe_function_desc_t descFunction = {};
     xe_function_handle_t function = {};
-    descFunction.version = XE_API_HEADER_VERSION;
+    descFunction.version = XE_FUNCTION_DESC_VERSION_CURRENT;
     descFunction.flags = XE_FUNCTION_FLAG_NONE;
     descFunction.pFunctionName = "memcpy_bytes";
     result = xeModuleCreateFunction(module,
@@ -166,21 +168,20 @@ TEST(sample, helloWorld) {
     result = xeFunctionSetArgumentValue(function, 1, sizeof(src), &src);
     ASSERT_EQ(XE_RESULT_SUCCESS, result);
 
-    xe_dispatch_function_arguments_t dispatchFunctionArgs = {};
-    dispatchFunctionArgs.version = XE_DISPATCH_FUNCTION_ARGS_VERSION;
+    xe_thread_group_dimensions_t dispatchFunctionArgs = {};
     dispatchFunctionArgs.groupCountX = 2;
     dispatchFunctionArgs.groupCountY = 1;
     dispatchFunctionArgs.groupCountZ = 1;
-    result = xeCommandListEncodeDispatchFunction(commandList,
-                                                 function,
-                                                 &dispatchFunctionArgs,
-                                                 nullptr);
+    result = xeCommandListAppendLaunchFunction(commandList,
+                                               function,
+                                               &dispatchFunctionArgs,
+                                               nullptr);
     ASSERT_EQ(XE_RESULT_SUCCESS, result);
 
     result = xeCommandListClose(commandList);
     ASSERT_EQ(XE_RESULT_SUCCESS, result);
 
-    result = xeCommandQueueEnqueueCommandLists(commandQueue,
+    result = xeCommandQueueExecuteCommandLists(commandQueue,
                                                1,
                                                &commandList,
                                                (xe_fence_handle_t)0);

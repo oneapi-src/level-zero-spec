@@ -63,7 +63,6 @@ set(L0_RUNTIME_SOURCES
     ${CMAKE_CURRENT_SOURCE_DIR}/residency.h
     ${CMAKE_CURRENT_SOURCE_DIR}/sampler.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/sampler.h
-    ${CMAKE_CURRENT_SOURCE_DIR}/semaphore.h
     ${CMAKE_CURRENT_SOURCE_DIR}/xe_barrier.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/xe_cl_interop.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/xe_cmdgraph.cpp
@@ -80,7 +79,6 @@ set(L0_RUNTIME_SOURCES
     ${CMAKE_CURRENT_SOURCE_DIR}/xe_module.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/xe_residency.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/xe_sampler.cpp
-    ${CMAKE_CURRENT_SOURCE_DIR}/xe_semaphore.cpp
 )
 
 # Make our source files visible to parent 

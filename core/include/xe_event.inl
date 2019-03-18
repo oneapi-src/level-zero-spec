@@ -40,7 +40,24 @@ namespace xe
 {
     ///////////////////////////////////////////////////////////////////////////////
     /// @brief C++ wrapper for ::xeEventDestroy
-    inline void Event::Destroy(
+    /// 
+    /// @details
+    ///     - The application is responsible for making sure the GPU is not
+    ///       currently referencing the event before it is deleted
+    ///     - The implementation of this function will immediately free all Host and
+    ///       Device allocations associated with this event
+    ///     - The implementation of this function should be lock-free.
+    /// 
+    /// @remarks
+    ///   _Analogues_
+    ///     - **clReleaseEvent**
+    ///     - vkDestroyEvent
+    ///     - cuEventDestroy
+    /// 
+    /// @throws result_t
+    inline void 
+    Event::Destroy(
+        void
         )
     {
         // auto result = ::xeEventDestroy( handle );
@@ -48,8 +65,68 @@ namespace xe
     }
 
     ///////////////////////////////////////////////////////////////////////////////
+    /// @brief C++ wrapper for ::xeEventHostSignal
+    /// 
+    /// @details
+    ///     - The application may call this function from simultaneous threads.
+    ///     - The implementation of this function should be lock-free.
+    /// 
+    /// @remarks
+    ///   _Analogues_
+    ///     - clSetUserEventStatus
+    /// 
+    /// @throws result_t
+    inline void 
+    Event::HostSignal(
+        void
+        )
+    {
+        // auto result = ::xeEventHostSignal( handle );
+        // if( ::XE_RESULT_SUCCESS != result ) throw exception(result, "xe::Event::HostSignal");
+    }
+
+    ///////////////////////////////////////////////////////////////////////////////
+    /// @brief C++ wrapper for ::xeEventHostSynchronize
+    /// 
+    /// @details
+    ///     - The application may call this function from simultaneous threads.
+    ///     - The implementation of this function should be lock-free.
+    /// 
+    /// @remarks
+    ///   _Analogues_
+    ///     - clWaitForEvents
+    ///     - cuEventSynchronize
+    /// 
+    /// @throws result_t
+    inline void 
+    Event::HostSynchronize(
+        uint32_t timeout                                ///< [in] if non-zero, then indicates the maximum time to yield before
+                                                        ///< returning ::RESULT_SUCCESS or ::RESULT_NOT_READY; if zero, then
+                                                        ///< operates exactly like ::EventQueryStatus; if MAX_UINT32, then function
+                                                        ///< will not return until complete or device is lost.
+        )
+    {
+        // auto result = ::xeEventHostSynchronize( handle, timeout );
+        // if( ::XE_RESULT_SUCCESS != result ) throw exception(result, "xe::Event::HostSynchronize");
+    }
+
+    ///////////////////////////////////////////////////////////////////////////////
     /// @brief C++ wrapper for ::xeEventQueryStatus
-    inline void Event::QueryStatus(
+    /// 
+    /// @details
+    ///     - The application may call this function from simultaneous threads.
+    ///     - The implementation of this function should be lock-free.
+    /// 
+    /// @remarks
+    ///   _Analogues_
+    ///     - **clGetEventInfo**
+    ///     - vkGetEventStatus
+    ///     - cuEventQuery
+    /// 
+    /// @throws result_t
+    inline void 
+    Event::QueryStatus(
+        void
         )
     {
         // auto result = ::xeEventQueryStatus( handle );
@@ -57,8 +134,67 @@ namespace xe
     }
 
     ///////////////////////////////////////////////////////////////////////////////
+    /// @brief C++ wrapper for ::xeEventQueryElapsedTime
+    /// 
+    /// @details
+    ///     - The application may call this function from simultaneous threads.
+    ///     - The implementation of this function should be lock-free.
+    /// 
+    /// @remarks
+    ///   _Analogues_
+    ///     - **cuEventElapsedTime**
+    /// 
+    /// @returns
+    ///     - double: time in milliseconds
+    /// 
+    /// @throws result_t
+    inline double 
+    Event::QueryElapsedTime(
+        event_handle_t hEventBegin,                     ///< [in] handle of the begin event
+        event_handle_t hEventEnd                        ///< [in] handle of the end event
+        )
+    {
+        // auto result = ::xeEventQueryElapsedTime( handle, hEventBegin, hEventEnd );
+        // if( ::XE_RESULT_SUCCESS != result ) throw exception(result, "xe::Event::QueryElapsedTime");
+    }
+
+    ///////////////////////////////////////////////////////////////////////////////
+    /// @brief C++ wrapper for ::xeEventQueryMetricsData
+    /// 
+    /// @details
+    ///     - The application may call this function from simultaneous threads.
+    ///     - The implementation of this function should be lock-free.
+    /// 
+    /// @returns
+    ///     - uint32_t: report data buffer
+    /// 
+    /// @throws result_t
+    inline uint32_t 
+    Event::QueryMetricsData(
+        event_handle_t hEventStart,                     ///< [in] handle of the start event
+        event_handle_t hEventEnd,                       ///< [in] handle of the end event
+        size_t reportSize                               ///< [in] size of the report data buffer in bytes
+        )
+    {
+        // auto result = ::xeEventQueryMetricsData( handle, hEventStart, hEventEnd, reportSize );
+        // if( ::XE_RESULT_SUCCESS != result ) throw exception(result, "xe::Event::QueryMetricsData");
+    }
+
+    ///////////////////////////////////////////////////////////////////////////////
     /// @brief C++ wrapper for ::xeEventReset
-    inline void Event::Reset(
+    /// 
+    /// @details
+    ///     - The application may call this function from simultaneous threads.
+    ///     - The implementation of this function should be lock-free.
+    /// 
+    /// @remarks
+    ///   _Analogues_
+    ///     - vkResetEvent
+    /// 
+    /// @throws result_t
+    inline void 
+    Event::Reset(
+        void
         )
     {
         // auto result = ::xeEventReset( handle );

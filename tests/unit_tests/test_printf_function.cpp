@@ -62,7 +62,7 @@ TEST_F(FunctionPrintfTest, createPrintfBufferCreatesOnlyWhenUsingPrintf) {
     EXPECT_CALL(*module, getDevice).WillRepeatedly(Return(device.get()));
 
     xe_function_desc_t funDesc = {};
-    funDesc.version = XE_API_HEADER_VERSION;
+    funDesc.version = XE_FUNCTION_DESC_VERSION_CURRENT;
     funDesc.pFunctionName = "mock";
 
     function->createPrintfBuffer();
@@ -77,7 +77,7 @@ TEST_F(FunctionPrintfTest, createPrintfBufferAddsAllocationToResidencyContainer)
     EXPECT_CALL(*module, getDevice).WillRepeatedly(Return(device.get()));
 
     xe_function_desc_t funDesc = {};
-    funDesc.version = XE_API_HEADER_VERSION;
+    funDesc.version = XE_FUNCTION_DESC_VERSION_CURRENT;
     funDesc.pFunctionName = "mock";
 
     function->createPrintfBuffer();
@@ -95,7 +95,7 @@ TEST_F(FunctionPrintfTest, createPrintfBufferDoesNotCreateWhenNotUsingPrintf) {
     EXPECT_FALSE(function->hasPrintfOutput());
 
     xe_function_desc_t funDesc = {};
-    funDesc.version = XE_API_HEADER_VERSION;
+    funDesc.version = XE_FUNCTION_DESC_VERSION_CURRENT;
     funDesc.pFunctionName = "mock";
 
     function->createPrintfBuffer();

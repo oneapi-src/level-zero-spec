@@ -68,7 +68,7 @@ extern "C" {
 ///         + nullptr == srcptr
 ///     - ::XE_RESULT_ERROR_UNSUPPORTED
 __xedllport xe_result_t __xecall
-  xeCommandListEncodeMemoryCopy(
+xeCommandListAppendMemoryCopy(
     xe_command_list_handle_t hCommandList,          ///< [in] handle of command list
     void* dstptr,                                   ///< [in] pointer to destination memory to copy to
     const void* srcptr,                             ///< [in] pointer to source memory to copy from
@@ -101,7 +101,7 @@ __xedllport xe_result_t __xecall
 ///         + nullptr == ptr
 ///     - ::XE_RESULT_ERROR_UNSUPPORTED
 __xedllport xe_result_t __xecall
-  xeCommandListEncodeMemorySet(
+xeCommandListAppendMemorySet(
     xe_command_list_handle_t hCommandList,          ///< [in] handle of command list
     void* ptr,                                      ///< [in] pointer to memory to initialize
     int value,                                      ///< [in] value to initialize memory to
@@ -130,7 +130,7 @@ __xedllport xe_result_t __xecall
 ///         + nullptr == hSrcImage
 ///     - ::XE_RESULT_ERROR_UNSUPPORTED
 __xedllport xe_result_t __xecall
-  xeCommandListEncodeImageCopy(
+xeCommandListAppendImageCopy(
     xe_command_list_handle_t hCommandList,          ///< [in] handle of command list
     xe_image_handle_t hDstImage,                    ///< [in] handle of destination image to copy to
     xe_image_handle_t hSrcImage                     ///< [in] handle of source image to copy from
@@ -163,7 +163,7 @@ typedef struct _xe_image_region_t
 ///         + nullptr == hSrcImage
 ///     - ::XE_RESULT_ERROR_UNSUPPORTED
 __xedllport xe_result_t __xecall
-  xeCommandListEncodeImageCopyRegion(
+xeCommandListAppendImageCopyRegion(
     xe_command_list_handle_t hCommandList,          ///< [in] handle of command list
     xe_image_handle_t hDstImage,                    ///< [in] handle of destination image to copy to
     xe_image_region_t* pDstRegion,                  ///< [in][optional] destination region descriptor
@@ -195,7 +195,7 @@ __xedllport xe_result_t __xecall
 ///         + nullptr == hSrcImage
 ///     - ::XE_RESULT_ERROR_UNSUPPORTED
 __xedllport xe_result_t __xecall
-  xeCommandListEncodeImageCopyToMemory(
+xeCommandListAppendImageCopyToMemory(
     xe_command_list_handle_t hCommandList,          ///< [in] handle of command list
     void* dstptr,                                   ///< [in] pointer to destination memory to copy to
     xe_image_handle_t hSrcImage,                    ///< [in] handle of source image to copy from
@@ -226,7 +226,7 @@ __xedllport xe_result_t __xecall
 ///         + nullptr == srcptr
 ///     - ::XE_RESULT_ERROR_UNSUPPORTED
 __xedllport xe_result_t __xecall
-  xeCommandListEncodeImageCopyFromMemory(
+xeCommandListAppendImageCopyFromMemory(
     xe_command_list_handle_t hCommandList,          ///< [in] handle of command list
     xe_image_handle_t hDstImage,                    ///< [in] handle of destination image to copy to
     xe_image_region_t* pDstRegion,                  ///< [in][optional] destination region descriptor
@@ -240,9 +240,16 @@ __xedllport xe_result_t __xecall
 /// @details
 ///     - This is a hint to improve performance only and is not required for
 ///       correctness.
-///     - The application may call this function from simultaneous threads.
-///     - The implementation of this function should be lock-free.
-///     - Prefetch to Host and Peer Device are not supported.
+///     - Only prefetching to the device associated with the specified command
+///       list is supported. Prefetching to the host or to a peer device is not
+///       supported.
+///     - Prefetching may not be supported for all allocation types for all
+///       devices. If memory prefetching is not supported for the specified
+///       memory range the prefetch hint may be ignored.
+///     - Prefetching may only be supported at a device-specific granularity,
+///       such as at a page boundary. In this case, the memory range may be
+///       expanded such that the start and end of the range satisfy granularity
+///       requirements.
 ///     - The application may **not** call this function from simultaneous
 ///       threads with the same command list handle.
 ///     - The implementation of this function should be lock-free.
@@ -261,10 +268,10 @@ __xedllport xe_result_t __xecall
 ///         + nullptr == ptr
 ///     - ::XE_RESULT_ERROR_UNSUPPORTED
 __xedllport xe_result_t __xecall
-  xeCommandListEncodeMemoryPrefetch(
+xeCommandListAppendMemoryPrefetch(
     xe_command_list_handle_t hCommandList,          ///< [in] handle of command list
-    const void* ptr,                                ///< [in] pointer to start of the memory region to prefetch
-    size_t count                                    ///< [in] size in bytes of the memory region to prefetch
+    const void* ptr,                                ///< [in] pointer to start of the memory range to prefetch
+    size_t count                                    ///< [in] size in bytes of the memory range to prefetch
     );
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -288,11 +295,13 @@ typedef enum _xe_memory_advice_t
 /// @brief Provides advice about the use of a shared memory range
 /// 
 /// @details
-///     - Memory advice is a performance hint only; applications are not
-///       required to use this for functionality.
+///     - Memory advice is a performance hint only and is not required for
+///       functional correctness.
 ///     - Memory advice can be used to override driver heuristics to explicitly
 ///       control shared memory behavior.
-///     - Not all memory advice may be supported by all devices.
+///     - Not all memory advice hints may be supported for all allocation types
+///       for all devices. If a memory advice hint is not supported by the
+///       device it will be ignored.
 ///     - Memory advice may only be supported at a device-specific granularity,
 ///       such as at a page boundary. In this case, the memory range may be
 ///       expanded such that the start and end of the range satisfy granularity
@@ -316,7 +325,7 @@ typedef enum _xe_memory_advice_t
 ///         + invalid value for advice
 ///     - ::XE_RESULT_ERROR_UNSUPPORTED
 __xedllport xe_result_t __xecall
-  xeCommandListEncodeMemAdvise(
+xeCommandListAppendMemAdvise(
     xe_command_list_handle_t hCommandList,          ///< [in] handle of command list
     xe_device_handle_t hDevice,                     ///< [in] device associated with the memory advice
     const void* ptr,                                ///< [in] Pointer to the start of the memory range

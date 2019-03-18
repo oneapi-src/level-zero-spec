@@ -2,10 +2,14 @@
 type: header
 desc: "Intel $Xx Driver APIs for Event"
 --- #--------------------------------------------------------------------------
-type: macro
+type: enum
 desc: "API version of $x_event_desc_t"
-name: $X_EVENT_DESC_VERSION
-value: "$X_MAKE_VERSION( 1, 0 )"
+class: $xDevice
+name: $x_event_desc_version_t
+etors:
+    - name: $X_EVENT_DESC_VERSION_CURRENT
+      value: "$X_MAKE_VERSION( 1, 0 )"
+      desc: "version 1.0"
 --- #--------------------------------------------------------------------------
 type: enum
 desc: "Supported event creation flags"
@@ -39,10 +43,10 @@ desc: "Event descriptor"
 class: $xDevice
 name: $x_event_desc_t
 members:
-    - type: uint32_t
+    - type: $x_event_desc_version_t
       name: version
-      desc: "[in] $X_EVENT_DESC_VERSION"
-      init: $X_EVENT_DESC_VERSION
+      desc: "[in] $X_EVENT_DESC_VERSION_CURRENT"
+      init: $X_EVENT_DESC_VERSION_CURRENT
     - type: $x_event_flag_t
       name: flags
       desc: "[in] creation flags"
@@ -115,9 +119,9 @@ params:
       desc: "[in] handle of event object to destroy"
 --- #--------------------------------------------------------------------------
 type: function
-desc: "Encodes a signal of the event from the device into a command list."
+desc: "Appends a signal of the event from the device into a command list."
 class: $xCommandList
-name: EncodeSignalEvent
+name: AppendSignalEvent
 analogue:
     - "**clSetUserEventStatus**"
     - cuEventRecord
@@ -134,9 +138,9 @@ params:
       desc: "[in] handle of the event"
 --- #--------------------------------------------------------------------------
 type: function
-desc: "Encodes a wait on event from a host signal into a command list."
+desc: "Appends a wait on event from a host signal into a command list."
 class: $xCommandList
-name: EncodeWaitOnEvent
+name: AppendWaitOnEvent
 details:
     - "The application may **not** call this function from simultaneous threads with the same command list handle."
     - "The implementation of this function should be lock-free."
@@ -149,45 +153,9 @@ params:
       desc: "[in] handle of the event"
 --- #--------------------------------------------------------------------------
 type: function
-desc: "Encodes signals of multiple event from the device into a command list."
-class: $xCommandList
-name: EncodeSignalMultipleEvents
-details:
-    - "The application may **not** call this function from simultaneous threads with the same command list handle."
-    - "The implementation of this function should be lock-free."
-params:
-    - type: $x_command_list_handle_t
-      name: hCommandList
-      desc: "[in] handle of the command list"
-    - type: uint32_t
-      name: numEvents
-      desc: "[in] number of events pointed to by phEvents"
-    - type: "$x_event_handle_t*"
-      name: phEvents
-      desc: "[in] pointer to array of handles of the events"
---- #--------------------------------------------------------------------------
-type: function
-desc: "Encodes waits on multiple event from a host signal into a command list."
-class: $xCommandList
-name: EncodeWaitOnMultipleEvents
-details:
-    - "The application may **not** call this function from simultaneous threads with the same command list handle."
-    - "The implementation of this function should be lock-free."
-params:
-    - type: $x_command_list_handle_t
-      name: hCommandList
-      desc: "[in] handle of the command list"
-    - type: uint32_t
-      name: numEvents
-      desc: "[in] number of events pointed to by phEvents"
-    - type: "$x_event_handle_t*"
-      name: phEvents
-      desc: "[in] pointer to array of handles of the events"
---- #--------------------------------------------------------------------------
-type: function
 desc: "Signals a event from host."
-class: $x
-name: HostSignalEvent
+class: $xEvent
+name: HostSignal
 analogue:
     - clSetUserEventStatus
 details:
@@ -200,8 +168,8 @@ params:
 --- #--------------------------------------------------------------------------
 type: function
 desc: "The current host thread waits on an event from a device signal."
-class: $x
-name: HostWaitOnEvent
+class: $xEvent
+name: HostSynchronize
 analogue:
     - clWaitForEvents
     - cuEventSynchronize
@@ -212,62 +180,11 @@ params:
     - type: $x_event_handle_t
       name: hEvent
       desc: "[in] handle of the event"
-    - type: uint32_t
+    - type: "uint32_t"
       name: timeout
-      desc: "[in] if non-zero, then indicates the maximum time to poll or sleep before returning;
-            if zero, then only a single status check is made before immediately returning;
-            if MAX_UINT32, then function will not return until complete."
-returns:
-    - $X_RESULT_NOT_READY:
-       - "timeout expired"
---- #--------------------------------------------------------------------------
-type: function
-desc: "Signals multiple events from host."
-class: $x
-name: HostSignalMultipleEvents
-details:
-    - "The application may call this function from simultaneous threads."
-    - "The implementation of this function should be lock-free."
-params:
-    - type: uint32_t
-      name: numEvents
-      desc: "[in] number of events pointed to by phEvents"
-    - type: "$x_event_handle_t*"
-      name: phEvents
-      desc: "[in] pointer to array of handles of the events"
---- #--------------------------------------------------------------------------
-type: function
-desc: "The current host thread waits on multiple events from a device signal."
-class: $x
-name: HostWaitOnMultipleEvents
-analogue:
-    - clWaitForEvents
-details:
-    - "The application may call this function from simultaneous threads."
-    - "The implementation of this function should be lock-free."
-params:
-    - type: uint32_t
-      name: numEvents
-      desc: "[in] number of events pointed to by phEvents"
-    - type: "$x_event_handle_t*"
-      name: phEvents
-      desc: "[in] pointer to array of handles of the events"
-    - type: $x_synchronization_mode_t
-      name: mode
-      desc: "[in] synchronization mode"
-    - type: uint32_t
-      name: delay
-      desc: "[in] if $X_SYNCHRONIZATION_MODE_SLEEP == mode, then time (in microseconds) to poll before putting Host thread to sleep; 
-            otherwise, must be zero."
-    - type: uint32_t
-      name: interval
-      desc: "[in] if $X_SYNCHRONIZATION_MODE_SLEEP == mode, then maximum time (in microseconds) to put Host thread to sleep between polling;
-            otherwise, must be zero."
-    - type: uint32_t
-      name: timeout
-      desc: "[in] if non-zero, then indicates the maximum time to poll or sleep before returning;
-            if zero, then only a single status check is made before immediately returning;
-            if MAX_UINT32, then function will not return until complete."
+      desc: "[in] if non-zero, then indicates the maximum time to yield before returning $X_RESULT_SUCCESS or $X_RESULT_NOT_READY;
+            if zero, then operates exactly like $xEventQueryStatus;
+            if MAX_UINT32, then function will not return until complete or device is lost."
 returns:
     - $X_RESULT_NOT_READY:
        - "timeout expired"
@@ -293,8 +210,9 @@ returns:
 --- #--------------------------------------------------------------------------
 type: function
 desc: "Queries the elapsed time between two device-signaled events."
-class: $x
-name: EventQueryElapsedTime
+class: $xEvent
+name: QueryElapsedTime
+decl: static
 analogue:
     - "**cuEventElapsedTime**"
 details:
@@ -302,12 +220,12 @@ details:
     - "The implementation of this function should be lock-free."
 params:
     - type: $x_event_handle_t
-      name: hEventStart
-      desc: "[in] handle of the start event"
+      name: hEventBegin
+      desc: "[in] handle of the begin event"
     - type: $x_event_handle_t
       name: hEventEnd
       desc: "[in] handle of the end event"
-    - type: "double_t*"
+    - type: "double*"
       name: pTime
       desc: "[out] time in milliseconds"
 returns:
@@ -317,8 +235,9 @@ returns:
 --- #--------------------------------------------------------------------------
 type: function
 desc: "Queries performance metrics between two device-signaled events."
-class: $x
-name: EventQueryMetricsData
+class: $xEvent
+name: QueryMetricsData
+decl: static
 details:
     - "The application may call this function from simultaneous threads."
     - "The implementation of this function should be lock-free."
@@ -344,7 +263,7 @@ returns:
 type: function
 desc: "Reset an event back to not signaled state"
 class: $xCommandList
-name: EncodeEventReset
+name: AppendEventReset
 analogue:
     - vkResetEvent
 details:

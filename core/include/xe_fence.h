@@ -43,7 +43,11 @@ extern "C" {
 
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief API version of ::xe_fence_desc_t
-#define XE_FENCE_DESC_VERSION  XE_MAKE_VERSION( 1, 0 )
+typedef enum _xe_fence_desc_version_t
+{
+    XE_FENCE_DESC_VERSION_CURRENT = XE_MAKE_VERSION( 1, 0 ),///< version 1.0
+
+} xe_fence_desc_version_t;
 
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Supported fence creation flags
@@ -57,7 +61,7 @@ typedef enum _xe_fence_flag_t
 /// @brief Fence descriptor
 typedef struct _xe_fence_desc_t
 {
-    uint32_t version;                               ///< [in] descriptor version
+    xe_fence_desc_version_t version;                ///< [in] ::XE_FENCE_DESC_VERSION_CURRENT
     xe_fence_flag_t flags;                          ///< [in] creation flags
 
 } xe_fence_desc_t;
@@ -82,11 +86,11 @@ typedef struct _xe_fence_desc_t
 ///         + nullptr == desc
 ///         + nullptr == phFence
 ///     - ::XE_RESULT_ERROR_UNSUPPORTED
-///         + ::XE_FENCE_DESC_VERSION < desc->version
+///         + ::XE_FENCE_DESC_VERSION_CURRENT < desc->version
 ///     - ::XE_RESULT_ERROR_OUT_OF_HOST_MEMORY
 ///     - ::XE_RESULT_ERROR_OUT_OF_DEVICE_MEMORY
 __xedllport xe_result_t __xecall
-  xeCommandQueueCreateFence(
+xeCommandQueueCreateFence(
     xe_command_queue_handle_t hCommandQueue,        ///< [in] handle of command queue
     const xe_fence_desc_t* desc,                    ///< [in] pointer to fence descriptor
     xe_fence_handle_t* phFence                      ///< [out] pointer to handle of fence object created
@@ -115,7 +119,7 @@ __xedllport xe_result_t __xecall
 ///         + fence is enqueued in a command queue
 ///     - ::XE_RESULT_ERROR_UNSUPPORTED
 __xedllport xe_result_t __xecall
-  xeFenceDestroy(
+xeFenceDestroy(
     xe_fence_handle_t hFence                        ///< [in] handle of fence object to destroy
     );
 
@@ -141,58 +145,12 @@ __xedllport xe_result_t __xecall
 ///     - ::XE_RESULT_NOT_READY
 ///         + timeout expired
 __xedllport xe_result_t __xecall
-  xeHostWaitOnFence(
+xeFenceHostSynchronize(
     xe_fence_handle_t hFence,                       ///< [in] handle of the fence
-    xe_synchronization_mode_t mode,                 ///< [in] synchronization mode
-    uint32_t delay,                                 ///< [in] if ::XE_SYNCHRONIZATION_MODE_SLEEP == mode, then time (in
-                                                    ///< microseconds) to poll before putting Host thread to sleep; otherwise,
-                                                    ///< must be zero.
-    uint32_t interval,                              ///< [in] if ::XE_SYNCHRONIZATION_MODE_SLEEP == mode, then maximum time (in
-                                                    ///< microseconds) to put Host thread to sleep between polling; otherwise,
-                                                    ///< must be zero.
-    uint32_t timeout                                ///< [in] if non-zero, then indicates the maximum time to poll or sleep
-                                                    ///< before returning; if zero, then only a single status check is made
-                                                    ///< before immediately returning; if MAX_UINT32, then function will not
-                                                    ///< return until complete.
-    );
-
-///////////////////////////////////////////////////////////////////////////////
-/// @brief The current host thread waits on a multiple fences to be signaled.
-/// 
-/// @details
-///     - The application may call this function from simultaneous threads.
-///     - The implementation of this function should be lock-free.
-/// 
-/// @remarks
-///   _Analogues_
-///     - **vkWaitForFences**
-/// 
-/// @returns
-///     - ::XE_RESULT_SUCCESS
-///     - ::XE_RESULT_ERROR_UNINITIALIZED
-///     - ::XE_RESULT_ERROR_DEVICE_LOST
-///     - ::XE_RESULT_ERROR_INVALID_PARAMETER
-///         + nullptr == phFences
-///         + nullptr == any handle in phFences
-///         + any fence is not enqueued in a command queue
-///     - ::XE_RESULT_ERROR_UNSUPPORTED
-///     - ::XE_RESULT_NOT_READY
-///         + timeout expired
-__xedllport xe_result_t __xecall
-  xeHostWaitOnMultipleFences(
-    uint32_t numFences,                             ///< [in] number of fences in hFences
-    xe_fence_handle_t* phFences,                    ///< [in] pointer to array of handles of the fences
-    xe_synchronization_mode_t mode,                 ///< [in] synchronization mode
-    uint32_t delay,                                 ///< [in] if ::XE_SYNCHRONIZATION_MODE_SLEEP == mode, then time (in
-                                                    ///< microseconds) to poll before putting Host thread to sleep; otherwise,
-                                                    ///< must be zero.
-    uint32_t interval,                              ///< [in] if ::XE_SYNCHRONIZATION_MODE_SLEEP == mode, then maximum time (in
-                                                    ///< microseconds) to put Host thread to sleep between polling; otherwise,
-                                                    ///< must be zero.
-    uint32_t timeout                                ///< [in] if non-zero, then indicates the maximum time to poll or sleep
-                                                    ///< before returning; if zero, then only a single status check is made
-                                                    ///< before immediately returning; if MAX_UINT32, then function will not
-                                                    ///< return until complete.
+    uint32_t timeout                                ///< [in] if non-zero, then indicates the maximum time to yield before
+                                                    ///< returning ::XE_RESULT_SUCCESS or ::XE_RESULT_NOT_READY; if zero, then
+                                                    ///< operates exactly like ::xeFenceQueryStatus; if MAX_UINT32, then
+                                                    ///< function will not return until complete or device is lost.
     );
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -217,32 +175,8 @@ __xedllport xe_result_t __xecall
 ///     - ::XE_RESULT_NOT_READY
 ///         + not signaled
 __xedllport xe_result_t __xecall
-  xeFenceQueryStatus(
+xeFenceQueryStatus(
     xe_fence_handle_t hFence                        ///< [in] handle of the fence
-    );
-
-///////////////////////////////////////////////////////////////////////////////
-/// @brief Queries the elapsed time between two signaled fences.
-/// 
-/// @details
-///     - The application may call this function from simultaneous threads.
-///     - The implementation of this function should be lock-free.
-/// 
-/// @returns
-///     - ::XE_RESULT_SUCCESS
-///     - ::XE_RESULT_ERROR_UNINITIALIZED
-///     - ::XE_RESULT_ERROR_DEVICE_LOST
-///     - ::XE_RESULT_ERROR_INVALID_PARAMETER
-///         + nullptr == hFenceStart
-///         + nullptr == hFenceEnd
-///         + nullptr == pTime
-///         + either fence not enqueued
-///     - ::XE_RESULT_ERROR_UNSUPPORTED
-__xedllport xe_result_t __xecall
-  xeFenceQueryElapsedTime(
-    xe_fence_handle_t hFenceStart,                  ///< [in] handle of the fence
-    xe_fence_handle_t hFenceEnd,                    ///< [in] handle of the fence
-    double_t* pTime                                 ///< [out] time in milliseconds
     );
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -264,7 +198,7 @@ __xedllport xe_result_t __xecall
 ///         + nullptr == hFence
 ///     - ::XE_RESULT_ERROR_UNSUPPORTED
 __xedllport xe_result_t __xecall
-  xeFenceReset(
+xeFenceReset(
     xe_fence_handle_t hFence                        ///< [in] handle of the fence
     );
 

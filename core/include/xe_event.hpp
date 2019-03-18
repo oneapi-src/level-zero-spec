@@ -52,17 +52,70 @@ namespace xe
 
         ///////////////////////////////////////////////////////////////////////////////
         /// @brief C++ wrapper for ::xeEventDestroy
-        inline void Destroy(
+        /// @throws result_t
+        inline void
+        Destroy(
+            void
+            );
+
+        ///////////////////////////////////////////////////////////////////////////////
+        /// @brief C++ wrapper for ::xeEventHostSignal
+        /// @throws result_t
+        inline void
+        HostSignal(
+            void
+            );
+
+        ///////////////////////////////////////////////////////////////////////////////
+        /// @brief C++ wrapper for ::xeEventHostSynchronize
+        /// @throws result_t
+        inline void
+        HostSynchronize(
+            uint32_t timeout                                ///< [in] if non-zero, then indicates the maximum time to yield before
+                                                            ///< returning ::RESULT_SUCCESS or ::RESULT_NOT_READY; if zero, then
+                                                            ///< operates exactly like ::EventQueryStatus; if MAX_UINT32, then function
+                                                            ///< will not return until complete or device is lost.
             );
 
         ///////////////////////////////////////////////////////////////////////////////
         /// @brief C++ wrapper for ::xeEventQueryStatus
-        inline void QueryStatus(
+        /// @throws result_t
+        inline void
+        QueryStatus(
+            void
+            );
+
+        ///////////////////////////////////////////////////////////////////////////////
+        /// @brief C++ wrapper for ::xeEventQueryElapsedTime
+        /// @returns
+        ///     - double: time in milliseconds
+        /// 
+        /// @throws result_t
+        inline static double
+        QueryElapsedTime(
+            event_handle_t hEventBegin,                     ///< [in] handle of the begin event
+            event_handle_t hEventEnd                        ///< [in] handle of the end event
+            );
+
+        ///////////////////////////////////////////////////////////////////////////////
+        /// @brief C++ wrapper for ::xeEventQueryMetricsData
+        /// @returns
+        ///     - uint32_t: report data buffer
+        /// 
+        /// @throws result_t
+        inline static uint32_t
+        QueryMetricsData(
+            event_handle_t hEventStart,                     ///< [in] handle of the start event
+            event_handle_t hEventEnd,                       ///< [in] handle of the end event
+            size_t reportSize                               ///< [in] size of the report data buffer in bytes
             );
 
         ///////////////////////////////////////////////////////////////////////////////
         /// @brief C++ wrapper for ::xeEventReset
-        inline void Reset(
+        /// @throws result_t
+        inline void
+        Reset(
+            void
             );
 
     };

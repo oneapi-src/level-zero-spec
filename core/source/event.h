@@ -11,8 +11,10 @@ struct GraphicsAllocation;
 
 struct Event : public _xe_event_handle_t {
     virtual xe_result_t destroy();
+    virtual xe_result_t hostSignal() = 0;
+    virtual xe_result_t hostSynchronize(uint32_t timeout) = 0;
     virtual xe_result_t queryElapsedTime(xe_event_handle_t hEventEnd,
-                                         double_t *pTime) = 0;
+                                         double *pTime) = 0;
     virtual xe_result_t queryMetricsData(xe_event_handle_t hEventEnd,
                                          size_t reportSize,
                                          uint32_t *pReportData) = 0;
@@ -41,24 +43,15 @@ struct Event : public _xe_event_handle_t {
 
 xe_result_t eventQueryElapsedTime(xe_event_handle_t hEventStart,
                                   xe_event_handle_t hEventEnd,
-                                  double_t *pTime);
+                                  double *pTime);
 
 xe_result_t eventQueryMetricsData(xe_event_handle_t hEventStart,
                                   xe_event_handle_t hEventEnd,
                                   size_t reportSize,
                                   uint32_t *pReportData);
 
-xe_result_t hostSignalEvent(xe_event_handle_t hEvent);
+xe_result_t eventHostSignal(xe_event_handle_t hEvent);
 
-xe_result_t hostSignalMultipleEvents(uint32_t numEvents,
-                                     xe_event_handle_t *phEvents);
+xe_result_t eventHostSynchronize(xe_event_handle_t hEvent, uint32_t timeout);
 
-xe_result_t hostWaitOnEvent(xe_event_handle_t hEvent, uint32_t timeout);
-
-xe_result_t hostWaitOnMultipleEvents(uint32_t numEvents,
-                                     xe_event_handle_t *phEvents,
-                                     xe_synchronization_mode_t mode,
-                                     uint32_t delay,
-                                     uint32_t interval,
-                                     uint32_t timeout);
 } // namespace L0

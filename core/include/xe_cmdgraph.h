@@ -43,7 +43,11 @@ extern "C" {
 
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief API version of ::xe_command_graph_desc_t
-#define XE_COMMAND_GRAPH_DESC_VERSION  XE_MAKE_VERSION( 1, 0 )
+typedef enum _xe_command_graph_desc_version_t
+{
+    XE_COMMAND_GRAPH_DESC_VERSION_CURRENT = XE_MAKE_VERSION( 1, 0 ),///< version 1.0
+
+} xe_command_graph_desc_version_t;
 
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Supported command graph creation flags
@@ -57,7 +61,7 @@ typedef enum _xe_command_graph_flag_t
 /// @brief CommandGraph descriptor
 typedef struct _xe_command_graph_desc_t
 {
-    uint32_t version;                               ///< [in] ::XE_COMMAND_GRAPH_DESC_VERSION
+    xe_command_graph_desc_version_t version;        ///< [in] ::XE_COMMAND_GRAPH_DESC_VERSION_CURRENT
     xe_command_graph_flag_t flags;                  ///< [in] creation flags
 
 } xe_command_graph_desc_t;
@@ -79,11 +83,11 @@ typedef struct _xe_command_graph_desc_t
 ///         + nullptr == desc
 ///         + nullptr == phCommandGraph
 ///     - ::XE_RESULT_ERROR_UNSUPPORTED
-///         + ::XE_COMMAND_GRAPH_DESC_VERSION < desc->version
+///         + ::XE_COMMAND_GRAPH_DESC_VERSION_CURRENT < desc->version
 ///     - ::XE_RESULT_ERROR_OUT_OF_HOST_MEMORY
 ///     - ::XE_RESULT_ERROR_OUT_OF_DEVICE_MEMORY
 __xedllport xe_result_t __xecall
-  xeDeviceCreateCommandGraph(
+xeDeviceCreateCommandGraph(
     xe_device_handle_t hDevice,                     ///< [in] handle of the device object
     const xe_command_graph_desc_t* desc,            ///< [in] pointer to command graph descriptor
     xe_command_graph_handle_t* phCommandGraph       ///< [out] pointer to handle of command graph object created
@@ -105,12 +109,12 @@ __xedllport xe_result_t __xecall
 ///         + nullptr == hCommandGraph
 ///     - ::XE_RESULT_ERROR_UNSUPPORTED
 __xedllport xe_result_t __xecall
-  xeCommandGraphDestroy(
+xeCommandGraphDestroy(
     xe_command_graph_handle_t hCommandGraph         ///< [in] handle of command graph object to destroy
     );
 
 ///////////////////////////////////////////////////////////////////////////////
-/// @brief Closes a command graph; ready to be enqueued into a command queue.
+/// @brief Closes a command graph; ready to be executed by a command queue.
 /// 
 /// @details
 ///     - The command graph will optimize the execution order of the command
@@ -128,29 +132,8 @@ __xedllport xe_result_t __xecall
 ///         + nullptr == hCommandGraph
 ///     - ::XE_RESULT_ERROR_UNSUPPORTED
 __xedllport xe_result_t __xecall
-  xeCommandGraphClose(
+xeCommandGraphClose(
     xe_command_graph_handle_t hCommandGraph         ///< [in] handle of command graph object to close
-    );
-
-///////////////////////////////////////////////////////////////////////////////
-/// @brief Reset a command graph to initial (empty) state; ready for adding
-///        command lists.
-/// 
-/// @details
-///     - The application may **not** call this function from simultaneous
-///       threads with the same command graph handle.
-///     - The implementation of this function should be lock-free.
-/// 
-/// @returns
-///     - ::XE_RESULT_SUCCESS
-///     - ::XE_RESULT_ERROR_UNINITIALIZED
-///     - ::XE_RESULT_ERROR_DEVICE_LOST
-///     - ::XE_RESULT_ERROR_INVALID_PARAMETER
-///         + nullptr == hCommandGraph
-///     - ::XE_RESULT_ERROR_UNSUPPORTED
-__xedllport xe_result_t __xecall
-  xeCommandGraphReset(
-    xe_command_graph_handle_t hCommandGraph         ///< [in] handle of command graph object to reset
     );
 
 #if defined(__cplusplus)

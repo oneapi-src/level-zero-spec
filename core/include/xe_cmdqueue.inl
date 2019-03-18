@@ -40,7 +40,23 @@ namespace xe
 {
     ///////////////////////////////////////////////////////////////////////////////
     /// @brief C++ wrapper for ::xeCommandQueueDestroy
-    inline void CommandQueue::Destroy(
+    /// 
+    /// @details
+    ///     - The application is responsible for making sure the GPU is not
+    ///       currently referencing the command queue before it is deleted
+    ///     - The implementation of this function will immediately free all Host and
+    ///       Device allocations associated with this command queue
+    ///     - The implementation of this function should be lock-free.
+    /// 
+    /// @remarks
+    ///   _Analogues_
+    ///     - **clReleaseCommandQueue**
+    ///     - cuCtxDestroy
+    /// 
+    /// @throws result_t
+    inline void 
+    CommandQueue::Destroy(
+        void
         )
     {
         // auto result = ::xeCommandQueueDestroy( handle );
@@ -48,45 +64,69 @@ namespace xe
     }
 
     ///////////////////////////////////////////////////////////////////////////////
-    /// @brief C++ wrapper for ::xeCommandQueueEnqueueCommandLists
-    inline void CommandQueue::EnqueueCommandLists(
-        uint32_t numCommandLists,                       ///< [in] number of command lists to enqueue
-        command_list_handle_t* phCommandLists,          ///< [in] list of handles of the command lists to enqueue for execution
+    /// @brief C++ wrapper for ::xeCommandQueueExecuteCommandLists
+    /// 
+    /// @details
+    ///     - The application may call this function from simultaneous threads.
+    ///     - The implementation of this function should be lock-free.
+    /// 
+    /// @remarks
+    ///   _Analogues_
+    ///     - vkQueueSubmit
+    /// 
+    /// @throws result_t
+    inline void 
+    CommandQueue::ExecuteCommandLists(
+        uint32_t numCommandLists,                       ///< [in] number of command lists to execute
+        command_list_handle_t* phCommandLists,          ///< [in] list of handles of the command lists to execute
         fence_handle_t hFence                           ///< [in][optional] handle of the fence to signal on completion
         )
     {
-        // auto result = ::xeCommandQueueEnqueueCommandLists( handle, numCommandLists, phCommandLists, hFence );
-        // if( ::XE_RESULT_SUCCESS != result ) throw exception(result, "xe::CommandQueue::EnqueueCommandLists");
+        // auto result = ::xeCommandQueueExecuteCommandLists( handle, numCommandLists, phCommandLists, hFence );
+        // if( ::XE_RESULT_SUCCESS != result ) throw exception(result, "xe::CommandQueue::ExecuteCommandLists");
     }
 
     ///////////////////////////////////////////////////////////////////////////////
     /// @brief C++ wrapper for ::xeCommandQueueSynchronize
-    inline void CommandQueue::Synchronize(
-        synchronization_mode_t mode,                    ///< [in] synchronization mode
-        uint32_t delay,                                 ///< [in] if ::SYNCHRONIZATION_MODE_SLEEP == mode, then time (in
-                                                        ///< microseconds) to poll before putting Host thread to sleep; otherwise,
-                                                        ///< must be zero.
-        uint32_t interval,                              ///< [in] if ::SYNCHRONIZATION_MODE_SLEEP == mode, then maximum time (in
-                                                        ///< microseconds) to put Host thread to sleep between polling; otherwise,
-                                                        ///< must be zero.
-        uint32_t timeout                                ///< [in] if non-zero, then indicates the maximum time to poll or sleep
-                                                        ///< before returning; if zero, then only a single status check is made
-                                                        ///< before immediately returning; if MAX_UINT32, then function will not
-                                                        ///< return until complete.
+    /// 
+    /// @details
+    ///     - The application may call this function from simultaneous threads.
+    ///     - The implementation of this function should be lock-free.
+    /// 
+    /// @throws result_t
+    inline void 
+    CommandQueue::Synchronize(
+        uint32_t timeout                                ///< [in] if non-zero, then indicates the maximum time to yield before
+                                                        ///< returning ::RESULT_SUCCESS or ::RESULT_NOT_READY; if zero, then
+                                                        ///< operates exactly like ::FenceQueryStatus; if MAX_UINT32, then function
+                                                        ///< will not return until complete or device is lost.
         )
     {
-        // auto result = ::xeCommandQueueSynchronize( handle, mode, delay, interval, timeout );
+        // auto result = ::xeCommandQueueSynchronize( handle, timeout );
         // if( ::XE_RESULT_SUCCESS != result ) throw exception(result, "xe::CommandQueue::Synchronize");
     }
 
     ///////////////////////////////////////////////////////////////////////////////
     /// @brief C++ wrapper for ::xeCommandQueueCreateFence
-    inline void CommandQueue::CreateFence(
-        const fence_desc_t* desc,                       ///< [in] pointer to fence descriptor
-        fence_handle_t* phFence                         ///< [out] pointer to handle of fence object created
+    /// 
+    /// @details
+    ///     - The application may call this function from simultaneous threads.
+    ///     - The implementation of this function should be lock-free.
+    /// 
+    /// @remarks
+    ///   _Analogues_
+    ///     - **vkCreateFence**
+    /// 
+    /// @returns
+    ///     - fence_handle_t: pointer to handle of fence object created
+    /// 
+    /// @throws result_t
+    inline fence_handle_t 
+    CommandQueue::CreateFence(
+        const fence_desc_t* desc                        ///< [in] pointer to fence descriptor
         )
     {
-        // auto result = ::xeCommandQueueCreateFence( handle, desc, phFence );
+        // auto result = ::xeCommandQueueCreateFence( handle, desc );
         // if( ::XE_RESULT_SUCCESS != result ) throw exception(result, "xe::CommandQueue::CreateFence");
     }
 

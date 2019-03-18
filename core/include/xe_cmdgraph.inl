@@ -40,7 +40,16 @@ namespace xe
 {
     ///////////////////////////////////////////////////////////////////////////////
     /// @brief C++ wrapper for ::xeCommandGraphDestroy
-    inline void CommandGraph::Destroy(
+    /// 
+    /// @details
+    ///     - The implementation of this function will immediately free all Host
+    ///       allocations associated with this command graph.
+    ///     - The implementation of this function should be lock-free.
+    /// 
+    /// @throws result_t
+    inline void 
+    CommandGraph::Destroy(
+        void
         )
     {
         // auto result = ::xeCommandGraphDestroy( handle );
@@ -49,55 +58,23 @@ namespace xe
 
     ///////////////////////////////////////////////////////////////////////////////
     /// @brief C++ wrapper for ::xeCommandGraphClose
-    inline void CommandGraph::Close(
+    /// 
+    /// @details
+    ///     - The command graph will optimize the execution order of the command
+    ///       lists.
+    ///     - A command list may **not** be reset after the command graph is closed.
+    ///     - The application may **not** call this function from simultaneous
+    ///       threads with the same command graph handle.
+    ///     - The implementation of this function should be lock-free.
+    /// 
+    /// @throws result_t
+    inline void 
+    CommandGraph::Close(
+        void
         )
     {
         // auto result = ::xeCommandGraphClose( handle );
         // if( ::XE_RESULT_SUCCESS != result ) throw exception(result, "xe::CommandGraph::Close");
-    }
-
-    ///////////////////////////////////////////////////////////////////////////////
-    /// @brief C++ wrapper for ::xeCommandGraphReset
-    inline void CommandGraph::Reset(
-        )
-    {
-        // auto result = ::xeCommandGraphReset( handle );
-        // if( ::XE_RESULT_SUCCESS != result ) throw exception(result, "xe::CommandGraph::Reset");
-    }
-
-    ///////////////////////////////////////////////////////////////////////////////
-    /// @brief C++ wrapper for ::xeCommandGraphEncodeDispatchFunction
-    inline void CommandGraph::EncodeDispatchFunction(
-        function_handle_t hFunction,                    ///< [in] handle of the function object
-        const dispatch_function_arguments_t* pDispatchFuncArgs, ///< [in] dispatch function arguments.
-        event_handle_t hEvent                           ///< [in][optional] handle of the event to signal on completion
-        )
-    {
-        // auto result = ::xeCommandGraphEncodeDispatchFunction( handle, hFunction, pDispatchFuncArgs, hEvent );
-        // if( ::XE_RESULT_SUCCESS != result ) throw exception(result, "xe::CommandGraph::EncodeDispatchFunction");
-    }
-
-    ///////////////////////////////////////////////////////////////////////////////
-    /// @brief C++ wrapper for ::xeCommandGraphEncodeDispatchFunctionIndirect
-    inline void CommandGraph::EncodeDispatchFunctionIndirect(
-        function_handle_t hFunction,                    ///< [in] handle of the function object
-        const dispatch_function_indirect_arguments_t* pDispatchArgumentsBuffer, ///< [in] Pointer to buffer that will contain dispatch arguments.
-        event_handle_t hEvent                           ///< [in][optional] handle of the event to signal on completion
-        )
-    {
-        // auto result = ::xeCommandGraphEncodeDispatchFunctionIndirect( handle, hFunction, pDispatchArgumentsBuffer, hEvent );
-        // if( ::XE_RESULT_SUCCESS != result ) throw exception(result, "xe::CommandGraph::EncodeDispatchFunctionIndirect");
-    }
-
-    ///////////////////////////////////////////////////////////////////////////////
-    /// @brief C++ wrapper for ::xeCommandGraphEncodeDispatchHostFunction
-    inline void CommandGraph::EncodeDispatchHostFunction(
-        host_pfn_t pfnHostFunc,                         ///< [in] pointer to host function.
-        void* pUserData                                 ///< [in] pointer to user data to pass to host function.
-        )
-    {
-        // auto result = ::xeCommandGraphEncodeDispatchHostFunction( handle, pfnHostFunc, pUserData );
-        // if( ::XE_RESULT_SUCCESS != result ) throw exception(result, "xe::CommandGraph::EncodeDispatchHostFunction");
     }
 
 } // namespace xe

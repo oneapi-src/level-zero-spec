@@ -43,7 +43,11 @@ extern "C" {
 
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief API version of ::xe_module_desc_t
-#define XE_MODULE_DESC_VERSION  XE_MAKE_VERSION( 1, 0 )
+typedef enum _xe_module_desc_version_t
+{
+    XE_MODULE_DESC_VERSION_CURRENT = XE_MAKE_VERSION( 1, 0 ),   ///< version 1.0
+
+} xe_module_desc_version_t;
 
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Supported module creation input formats
@@ -58,11 +62,11 @@ typedef enum _xe_module_format_t
 /// @brief Module descriptor
 typedef struct _xe_module_desc_t
 {
-    uint32_t version;                               ///< [in] ::XE_MODULE_DESC_VERSION
+    xe_module_desc_version_t version;               ///< [in] ::XE_MODULE_DESC_VERSION_CURRENT
     xe_module_format_t format;                      ///< [in] Module format passed in with pInputModule
-    uint32_t inputSize;                             ///< [in] size of input IL or ISA from pInputModule.
+    size_t inputSize;                               ///< [in] size of input IL or ISA from pInputModule.
     const char* pInputModule;                       ///< [in] pointer to IL or ISA
-    const char* pBuildFlags;                        ///< [in] string containing compiler flags. See documentation for build
+    const char* pBuildFlags;                        ///< [in] string containing compiler flags. See programming guide for build
                                                     ///< flags.
 
 } xe_module_desc_t;
@@ -105,13 +109,13 @@ typedef struct _xe_module_desc_t
 ///         + nullptr == pDesc->phModule
 ///         + 0 == pDesc->inputSize
 ///     - ::XE_RESULT_ERROR_UNSUPPORTED
-///         + ::XE_MODULE_DESC_VERSION < pDesc->version
+///         + ::XE_MODULE_DESC_VERSION_CURRENT < pDesc->version
 ///     - ::XE_RESULT_ERROR_OUT_OF_HOST_MEMORY
 ///     - ::XE_RESULT_ERROR_OUT_OF_DEVICE_MEMORY
 ///     - ::XE_RESULT_ERROR_MODULE_BUILD_FAILURE
 ///         + Failure to build module. See build log for more details.
 __xedllport xe_result_t __xecall
-  xeDeviceCreateModule(
+xeDeviceCreateModule(
     xe_device_handle_t hDevice,                     ///< [in] handle of the device
     const xe_module_desc_t* pDesc,                  ///< [in] pointer to module descriptor
     xe_module_handle_t* phModule,                   ///< [out] pointer to handle of module object created
@@ -140,7 +144,7 @@ __xedllport xe_result_t __xecall
 ///         + nullptr == hModule
 ///     - ::XE_RESULT_ERROR_UNSUPPORTED
 __xedllport xe_result_t __xecall
-  xeModuleDestroy(
+xeModuleDestroy(
     xe_module_handle_t hModule                      ///< [in] handle of the module
     );
 
@@ -164,7 +168,7 @@ __xedllport xe_result_t __xecall
 ///         + nullptr == hModuleBuildLog
 ///     - ::XE_RESULT_ERROR_UNSUPPORTED
 __xedllport xe_result_t __xecall
-  xeModuleBuildLogDestroy(
+xeModuleBuildLogDestroy(
     xe_module_build_log_handle_t hModuleBuildLog    ///< [in] handle of the module build log object.
     );
 
@@ -182,15 +186,14 @@ __xedllport xe_result_t __xecall
 ///     - ::XE_RESULT_ERROR_INVALID_PARAMETER
 ///         + nullptr == hModuleBuildLog
 ///         + nullptr == pSize
-///         + nullptr == pBuildLog
 ///     - ::XE_RESULT_ERROR_UNSUPPORTED
 ///     - ::XE_RESULT_ERROR_OUT_OF_HOST_MEMORY
 ///     - ::XE_RESULT_ERROR_OUT_OF_DEVICE_MEMORY
 __xedllport xe_result_t __xecall
-  xeModuleBuildLogGetString(
+xeModuleBuildLogGetString(
     xe_module_build_log_handle_t hModuleBuildLog,   ///< [in] handle of the module build log object.
-    size_t* pSize,                                  ///< [out] size of build log string.
-    const char** pBuildLog                          ///< [out] pointer to null-terminated string of the log.
+    size_t* pSize,                                  ///< [in,out] size of build log string.
+    char** pBuildLog                                ///< [in,out][optional] pointer to null-terminated string of the log.
     );
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -214,21 +217,24 @@ __xedllport xe_result_t __xecall
 ///     - ::XE_RESULT_ERROR_INVALID_PARAMETER
 ///         + nullptr == hModule
 ///         + nullptr == pSize
-///         + nullptr == pModuleNativeBinary
 ///         + invalid format
 ///     - ::XE_RESULT_ERROR_UNSUPPORTED
 ///     - ::XE_RESULT_ERROR_OUT_OF_HOST_MEMORY
 ///     - ::XE_RESULT_ERROR_OUT_OF_DEVICE_MEMORY
 __xedllport xe_result_t __xecall
-  xeModuleGetNativeBinary(
+xeModuleGetNativeBinary(
     xe_module_handle_t hModule,                     ///< [in] handle of the device
-    uint32_t* pSize,                                ///< [out] size of native binary.
-    char** pModuleNativeBinary                      ///< [out] pointer to native binary
+    size_t* pSize,                                  ///< [in,out] size of native binary.
+    void** pModuleNativeBinary                      ///< [in,out][optional] pointer to native binary
     );
 
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief API version of ::xe_function_desc_t
-#define XE_FUNCTION_DESC_VERSION  XE_MAKE_VERSION( 1, 0 )
+typedef enum _xe_function_desc_version_t
+{
+    XE_FUNCTION_DESC_VERSION_CURRENT = XE_MAKE_VERSION( 1, 0 ), ///< version 1.0
+
+} xe_function_desc_version_t;
 
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Supported function creation flags
@@ -243,7 +249,7 @@ typedef enum _xe_function_flag_t
 /// @brief Function descriptor
 typedef struct _xe_function_desc_t
 {
-    uint32_t version;                               ///< [in] ::XE_FUNCTION_DESC_VERSION
+    xe_function_desc_version_t version;             ///< [in] ::XE_FUNCTION_DESC_VERSION_CURRENT
     xe_function_flag_t flags;                       ///< [in] creation flags
     const char* pFunctionName;                      ///< [in] null-terminated name of function in Module
 
@@ -272,9 +278,9 @@ typedef struct _xe_function_desc_t
 ///         + nullptr == pDesc->pFunctionName
 ///         + invalid value for pDesc->pFunctionName
 ///     - ::XE_RESULT_ERROR_UNSUPPORTED
-///         + ::XE_FUNCTION_DESC_VERSION < pDesc->version
+///         + ::XE_FUNCTION_DESC_VERSION_CURRENT < pDesc->version
 __xedllport xe_result_t __xecall
-  xeModuleCreateFunction(
+xeModuleCreateFunction(
     xe_module_handle_t hModule,                     ///< [in] handle of the module
     const xe_function_desc_t* pDesc,                ///< [in] pointer to function descriptor
     xe_function_handle_t* phFunction                ///< [out] handle of the Function object
@@ -298,7 +304,7 @@ __xedllport xe_result_t __xecall
 ///         + nullptr == hFunction
 ///     - ::XE_RESULT_ERROR_UNSUPPORTED
 __xedllport xe_result_t __xecall
-  xeFunctionDestroy(
+xeFunctionDestroy(
     xe_function_handle_t hFunction                  ///< [in] handle of the function object
     );
 
@@ -321,7 +327,7 @@ __xedllport xe_result_t __xecall
 ///         + invalid value pFunctionName. Function name must exist in Module.
 ///     - ::XE_RESULT_ERROR_UNSUPPORTED
 __xedllport xe_result_t __xecall
-  xeModuleGetFunctionPointer(
+xeModuleGetFunctionPointer(
     xe_module_handle_t hModule,                     ///< [in] handle of the module
     const char* pFunctionName,                      ///< [in] Name of function to retrieve function pointer for.
     void** pfnFunction                              ///< [out] pointer to function.
@@ -335,7 +341,7 @@ __xedllport xe_result_t __xecall
 ///       Device allocations associated with this function
 ///     - The implementation of this function should be lock-free.
 ///     - This can be called multiple times. The driver copies the group size
-///       information when encoding dispatch functions into a command list.
+///       information when appending functions into a command list.
 /// 
 /// @returns
 ///     - ::XE_RESULT_SUCCESS
@@ -345,7 +351,7 @@ __xedllport xe_result_t __xecall
 ///         + nullptr == hFunction
 ///     - ::XE_RESULT_ERROR_UNSUPPORTED
 __xedllport xe_result_t __xecall
-  xeFunctionSetGroupSize(
+xeFunctionSetGroupSize(
     xe_function_handle_t hFunction,                 ///< [in] handle of the function object
     uint32_t groupSizeX,                            ///< [in] group size for X dimension to use for this function.
     uint32_t groupSizeY,                            ///< [in] group size for Y dimension to use for this function.
@@ -374,7 +380,7 @@ __xedllport xe_result_t __xecall
 ///         + invalid number of threads.
 ///     - ::XE_RESULT_ERROR_UNSUPPORTED
 __xedllport xe_result_t __xecall
-  xeFunctionSuggestGroupSize(
+xeFunctionSuggestGroupSize(
     xe_function_handle_t hFunction,                 ///< [in] handle of the function object
     uint32_t globalSizeX,                           ///< [in] global width for X dimension.
     uint32_t globalSizeY,                           ///< [in] global width for Y dimension.
@@ -385,7 +391,7 @@ __xedllport xe_result_t __xecall
     );
 
 ///////////////////////////////////////////////////////////////////////////////
-/// @brief Set function argument used for function dispatch.
+/// @brief Set function argument used on function launch.
 /// 
 /// @details
 ///     - This function may **not** be called from simultaneous threads.
@@ -397,16 +403,16 @@ __xedllport xe_result_t __xecall
 ///     - ::XE_RESULT_ERROR_DEVICE_LOST
 ///     - ::XE_RESULT_ERROR_INVALID_PARAMETER
 ///         + nullptr == hFunction
-///         + nullptr == pArgValue
 ///         + invalid argument index
 ///         + invalid size specified
 ///     - ::XE_RESULT_ERROR_UNSUPPORTED
 __xedllport xe_result_t __xecall
-  xeFunctionSetArgumentValue(
+xeFunctionSetArgumentValue(
     xe_function_handle_t hFunction,                 ///< [in/out] handle of the function args object.
     uint32_t argIndex,                              ///< [in] argument index in range [0, num args - 1]
     size_t argSize,                                 ///< [in] size of argument type
-    const void* pArgValue                           ///< [in] argument value represented as matching arg type
+    const void* pArgValue                           ///< [in][optional] argument value represented as matching arg type. If
+                                                    ///< null then argument value is considered null.
     );
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -447,7 +453,7 @@ typedef enum _xe_function_set_attribute_t
 ///         + invalid value for value
 ///     - ::XE_RESULT_ERROR_UNSUPPORTED
 __xedllport xe_result_t __xecall
-  xeFunctionSetAttribute(
+xeFunctionSetAttribute(
     xe_function_handle_t hFunction,                 ///< [in/out] handle of the function.
     xe_function_set_attribute_t attr,               ///< [in] attribute to set
     uint32_t value                                  ///< [in] attribute value to set
@@ -491,31 +497,28 @@ typedef enum _xe_function_get_attribute_t
 ///         + invalid value for attr
 ///     - ::XE_RESULT_ERROR_UNSUPPORTED
 __xedllport xe_result_t __xecall
-  xeFunctionGetAttribute(
+xeFunctionGetAttribute(
     xe_function_handle_t hFunction,                 ///< [in] handle of the function object
     xe_function_get_attribute_t attr,               ///< [in] attribute to query
     uint32_t* pValue                                ///< [out] returned attribute value
     );
 
 ///////////////////////////////////////////////////////////////////////////////
-/// @brief API version of ::xe_function_desc_t
-#define XE_DISPATCH_FUNCTION_ARGS_VERSION  XE_MAKE_VERSION( 1, 0 )
-
-///////////////////////////////////////////////////////////////////////////////
-/// @brief Dispatch function arguments.
-typedef struct _xe_dispatch_function_arguments_t
+/// @brief Function thread group dimensions.
+typedef struct _xe_thread_group_dimensions_t
 {
-    uint32_t version;                               ///< [in] ::XE_DISPATCH_FUNCTION_ARGS_VERSION
-    uint32_t groupCountX;                           ///< [in] width of dispatches in X dimension
-    uint32_t groupCountY;                           ///< [in] width of dispatches in Y dimension
-    uint32_t groupCountZ;                           ///< [in] width of dispatches in Z dimension
+    uint32_t groupCountX;                           ///< [in] size of thread group in X dimension
+    uint32_t groupCountY;                           ///< [in] size of thread group in Y dimension
+    uint32_t groupCountZ;                           ///< [in] size of thread group in Z dimension
 
-} xe_dispatch_function_arguments_t;
+} xe_thread_group_dimensions_t;
 
 ///////////////////////////////////////////////////////////////////////////////
-/// @brief Dispatch command over one or more work groups.
+/// @brief Launch function over one or more work groups.
 /// 
 /// @details
+///     - This may **not** be called for a command list created with
+///       ::XE_COMMAND_LIST_FLAG_COPY_ONLY.
 ///     - This function may **not** be called from simultaneous threads.
 ///     - The implementation of this function should be lock-free.
 /// 
@@ -530,68 +533,27 @@ typedef struct _xe_dispatch_function_arguments_t
 ///     - ::XE_RESULT_ERROR_INVALID_PARAMETER
 ///         + nullptr == hCommandList
 ///         + nullptr == hFunction
-///         + nullptr == pDispatchFuncArgs
-///         + invalid group count range for dispatch
-///         + invalid dispatch count range for dispatch
+///         + nullptr == pLaunchFuncArgs
 ///     - ::XE_RESULT_ERROR_UNSUPPORTED
 __xedllport xe_result_t __xecall
-  xeCommandListEncodeDispatchFunction(
+xeCommandListAppendLaunchFunction(
     xe_command_list_handle_t hCommandList,          ///< [in] handle of the command list
     xe_function_handle_t hFunction,                 ///< [in] handle of the function object
-    const xe_dispatch_function_arguments_t* pDispatchFuncArgs,  ///< [in] dispatch function arguments.
+    const xe_thread_group_dimensions_t* pLaunchFuncArgs,///< [in] launch function arguments.
     xe_event_handle_t hEvent                        ///< [in][optional] handle of the event to signal on completion
     );
 
 ///////////////////////////////////////////////////////////////////////////////
-/// @brief Dispatch command over one or more work groups.
+/// @brief Launch function over one or more work groups using indirect arguments.
 /// 
 /// @details
-///     - This function may **not** be called from simultaneous threads.
-///     - The implementation of this function should be lock-free.
-/// 
-/// @remarks
-///   _Analogues_
-///     - **cuLaunchKernel**
-/// 
-/// @returns
-///     - ::XE_RESULT_SUCCESS
-///     - ::XE_RESULT_ERROR_UNINITIALIZED
-///     - ::XE_RESULT_ERROR_DEVICE_LOST
-///     - ::XE_RESULT_ERROR_INVALID_PARAMETER
-///         + nullptr == hCommandGraph
-///         + nullptr == hFunction
-///         + nullptr == pDispatchFuncArgs
-///         + invalid group count range for dispatch
-///         + invalid dispatch count range for dispatch
-///     - ::XE_RESULT_ERROR_UNSUPPORTED
-__xedllport xe_result_t __xecall
-  xeCommandGraphEncodeDispatchFunction(
-    xe_command_graph_handle_t hCommandGraph,        ///< [in] handle of the command graph
-    xe_function_handle_t hFunction,                 ///< [in] handle of the function object
-    const xe_dispatch_function_arguments_t* pDispatchFuncArgs,  ///< [in] dispatch function arguments.
-    xe_event_handle_t hEvent                        ///< [in][optional] handle of the event to signal on completion
-    );
-
-///////////////////////////////////////////////////////////////////////////////
-/// @brief Indirect function arguments. These arguments are device visible.
-typedef struct _xe_dispatch_function_indirect_arguments_t
-{
-    uint32_t groupCountX;                           ///< [in] width of dispatches in X dimension
-    uint32_t groupCountY;                           ///< [in] width of dispatches in Y dimension
-    uint32_t groupCountZ;                           ///< [in] width of dispatches in Z dimension
-
-} xe_dispatch_function_indirect_arguments_t;
-
-///////////////////////////////////////////////////////////////////////////////
-/// @brief Dispatch command over one or more work groups using indirect dispatch
-///        arguments.
-/// 
-/// @details
-///     - This function may **not** be called from simultaneous threads.
-///     - The implementation of this function should be lock-free.
-///     - The dispatch arguments need to be device visible.
-///     - The dispatch arguments buffer may not be reusued until dispatch has
+///     - The launch arguments need to be device visible.
+///     - The launch arguments buffer may not be reusued until the function has
 ///       completed on the device.
+///     - This may **not** be called for a command list created with
+///       ::XE_COMMAND_LIST_FLAG_COPY_ONLY.
+///     - This function may **not** be called from simultaneous threads.
+///     - The implementation of this function should be lock-free.
 /// 
 /// @remarks
 ///   _Analogues_
@@ -604,26 +566,28 @@ typedef struct _xe_dispatch_function_indirect_arguments_t
 ///     - ::XE_RESULT_ERROR_INVALID_PARAMETER
 ///         + nullptr == hCommandList
 ///         + nullptr == hFunction
-///         + nullptr == pDispatchArgumentsBuffer
+///         + nullptr == pLaunchArgumentsBuffer
 ///     - ::XE_RESULT_ERROR_UNSUPPORTED
 __xedllport xe_result_t __xecall
-  xeCommandListEncodeDispatchFunctionIndirect(
+xeCommandListAppendLaunchFunctionIndirect(
     xe_command_list_handle_t hCommandList,          ///< [in] handle of the command list
     xe_function_handle_t hFunction,                 ///< [in] handle of the function object
-    const xe_dispatch_function_indirect_arguments_t* pDispatchArgumentsBuffer,  ///< [in] Pointer to buffer that will contain dispatch arguments.
+    const xe_thread_group_dimensions_t* pLaunchArgumentsBuffer, ///< [in] pointer to device buffer that will contain launch arguments
     xe_event_handle_t hEvent                        ///< [in][optional] handle of the event to signal on completion
     );
 
 ///////////////////////////////////////////////////////////////////////////////
-/// @brief Dispatch command over one or more work groups using indirect dispatch
-///        arguments.
+/// @brief Launch multiple functions over one or more work groups using an array
+///        of indirect arguments.
 /// 
 /// @details
+///     - The array of launch arguments need to be device visible.
+///     - The array of launch arguments buffer may not be reusued until the
+///       function has completed on the device.
+///     - This may **not** be called for a command list created with
+///       ::XE_COMMAND_LIST_FLAG_COPY_ONLY.
 ///     - This function may **not** be called from simultaneous threads.
 ///     - The implementation of this function should be lock-free.
-///     - The dispatch arguments need to be device visible.
-///     - The dispatch arguments buffer may not be reusued until dispatch has
-///       completed on the device.
 /// 
 /// @remarks
 ///   _Analogues_
@@ -634,21 +598,26 @@ __xedllport xe_result_t __xecall
 ///     - ::XE_RESULT_ERROR_UNINITIALIZED
 ///     - ::XE_RESULT_ERROR_DEVICE_LOST
 ///     - ::XE_RESULT_ERROR_INVALID_PARAMETER
-///         + nullptr == hCommandGraph
-///         + nullptr == hFunction
-///         + nullptr == pDispatchArgumentsBuffer
+///         + nullptr == hCommandList
+///         + nullptr == phFunctions
+///         + nullptr == pNumLaunchArguments
+///         + nullptr == pLaunchArgumentsBuffer
 ///     - ::XE_RESULT_ERROR_UNSUPPORTED
 __xedllport xe_result_t __xecall
-  xeCommandGraphEncodeDispatchFunctionIndirect(
-    xe_command_graph_handle_t hCommandGraph,        ///< [in] handle of the command graph
-    xe_function_handle_t hFunction,                 ///< [in] handle of the function object
-    const xe_dispatch_function_indirect_arguments_t* pDispatchArgumentsBuffer,  ///< [in] Pointer to buffer that will contain dispatch arguments.
+xeCommandListAppendLaunchMultipleFunctionsIndirect(
+    xe_command_list_handle_t hCommandList,          ///< [in] handle of the command list
+    uint32_t numFunctions,                          ///< [in] maximum number of functions to launch
+    const xe_function_handle_t* phFunctions,        ///< [in] handles of the function objects
+    const size_t* pNumLaunchArguments,              ///< [in] pointer to device memory location that will contain the actual
+                                                    ///< number of launch arguments; must be less-than or equal-to numFunctions
+    const xe_thread_group_dimensions_t* pLaunchArgumentsBuffer, ///< [in] pointer to device buffer that will contain a contiguous array of
+                                                    ///< launch arguments
     xe_event_handle_t hEvent                        ///< [in][optional] handle of the event to signal on completion
     );
 
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief type definition for host function pointers used with
-///        ::xeCommandListEncodeDispatchHostFunction
+///        ::xeCommandListAppendLaunchHostFunction
 /// 
 /// @details
 ///     - This function may be called from simultaneous threads.
@@ -658,10 +627,12 @@ typedef void(__xecall *xe_host_pfn_t)(
   );
 
 ///////////////////////////////////////////////////////////////////////////////
-/// @brief Dispatch host function. All work after this command in the command
-///        list will block until host function completes.
+/// @brief Launch host function. All work after this command in the command list
+///        will block until host function completes.
 /// 
 /// @details
+///     - This may **not** be called for a command list created with
+///       ::XE_COMMAND_LIST_FLAG_COPY_ONLY.
 ///     - This function may **not** be called from simultaneous threads.
 ///     - The implementation of this function should be lock-free.
 /// 
@@ -678,35 +649,8 @@ typedef void(__xecall *xe_host_pfn_t)(
 ///         + nullptr == pUserData
 ///     - ::XE_RESULT_ERROR_UNSUPPORTED
 __xedllport xe_result_t __xecall
-  xeCommandListEncodeDispatchHostFunction(
+xeCommandListAppendLaunchHostFunction(
     xe_command_list_handle_t hCommandList,          ///< [in] handle of the command list
-    xe_host_pfn_t pfnHostFunc,                      ///< [in] pointer to host function.
-    void* pUserData                                 ///< [in] pointer to user data to pass to host function.
-    );
-
-///////////////////////////////////////////////////////////////////////////////
-/// @brief Dispatch host function. All work after this command in the command
-///        list will block until host function completes.
-/// 
-/// @details
-///     - This function may **not** be called from simultaneous threads.
-///     - The implementation of this function should be lock-free.
-/// 
-/// @remarks
-///   _Analogues_
-///     - **cuLaunchHostFunc**
-/// 
-/// @returns
-///     - ::XE_RESULT_SUCCESS
-///     - ::XE_RESULT_ERROR_UNINITIALIZED
-///     - ::XE_RESULT_ERROR_DEVICE_LOST
-///     - ::XE_RESULT_ERROR_INVALID_PARAMETER
-///         + nullptr == hCommandGraph
-///         + nullptr == pUserData
-///     - ::XE_RESULT_ERROR_UNSUPPORTED
-__xedllport xe_result_t __xecall
-  xeCommandGraphEncodeDispatchHostFunction(
-    xe_command_graph_handle_t hCommandGraph,        ///< [in] handle of the command graph
     xe_host_pfn_t pfnHostFunc,                      ///< [in] pointer to host function.
     void* pUserData                                 ///< [in] pointer to user data to pass to host function.
     );

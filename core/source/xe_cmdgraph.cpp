@@ -25,7 +25,7 @@
 *
 * @brief Intel Xe Driver APIs for CommandGraph
 *
-* DO NOT EDIT: generated from /scripts/<type>/cmdgraph.yml
+* DO NOT EDIT: generated from /scripts/core/cmdgraph.yml
 *
 ******************************************************************************/
 #if defined(XE_CPP)
@@ -57,14 +57,14 @@
 ///         + nullptr == desc
 ///         + nullptr == phCommandGraph
 ///     - ::XE_RESULT_ERROR_UNSUPPORTED
-///         + ::XE_COMMAND_GRAPH_DESC_VERSION < desc->version
+///         + ::XE_COMMAND_GRAPH_DESC_VERSION_CURRENT < desc->version
 ///     - ::XE_RESULT_ERROR_OUT_OF_HOST_MEMORY
 ///     - ::XE_RESULT_ERROR_OUT_OF_DEVICE_MEMORY
 ///
 /// @hash {3b85e08ac6895a0dec2d64fbfb9c2e5ff0dc065fc10cfdf4e13e2903a6f626ca}
 ///
 __xedllexport xe_result_t __xecall
-  xeDeviceCreateCommandGraph(
+xeDeviceCreateCommandGraph(
     xe_device_handle_t hDevice,                     ///< [in] handle of the device object
     const xe_command_graph_desc_t* desc,            ///< [in] pointer to command graph descriptor
     xe_command_graph_handle_t* phCommandGraph       ///< [out] pointer to handle of command graph object created
@@ -79,7 +79,7 @@ __xedllexport xe_result_t __xecall
             if( nullptr == hDevice ) return XE_RESULT_ERROR_INVALID_PARAMETER;
             if( nullptr == desc ) return XE_RESULT_ERROR_INVALID_PARAMETER;
             if( nullptr == phCommandGraph ) return XE_RESULT_ERROR_INVALID_PARAMETER;
-            if( XE_COMMAND_GRAPH_DESC_VERSION < desc->version ) return XE_RESULT_ERROR_UNSUPPORTED;
+            if( XE_COMMAND_GRAPH_DESC_VERSION_CURRENT < desc->version ) return XE_RESULT_ERROR_UNSUPPORTED;
         }
         /// @begin
 #if defined(XE_NULLDRV)
@@ -123,7 +123,7 @@ __xedllexport xe_result_t __xecall
 /// @hash {ca29e107ea24beb8541932fc6be7c98805f20ced8106a62fc76cfa3381110226}
 ///
 __xedllexport xe_result_t __xecall
-  xeCommandGraphDestroy(
+xeCommandGraphDestroy(
     xe_command_graph_handle_t hCommandGraph         ///< [in] handle of command graph object to destroy
     )
 {
@@ -159,7 +159,7 @@ __xedllexport xe_result_t __xecall
 }
 
 ///////////////////////////////////////////////////////////////////////////////
-/// @brief Closes a command graph; ready to be enqueued into a command queue.
+/// @brief Closes a command graph; ready to be executed by a command queue.
 /// 
 /// @details
 ///     - The command graph will optimize the execution order of the command
@@ -180,7 +180,7 @@ __xedllexport xe_result_t __xecall
 /// @hash {85412d12c54a9c3632a9e390efce8ad3ad8fbccc1401d7970387baa3b197c3da}
 ///
 __xedllexport xe_result_t __xecall
-  xeCommandGraphClose(
+xeCommandGraphClose(
     xe_command_graph_handle_t hCommandGraph         ///< [in] handle of command graph object to close
     )
 {
@@ -197,61 +197,6 @@ __xedllexport xe_result_t __xecall
         return XE_RESULT_SUCCESS;
 #else
         return L0::CommandGraph::fromHandle(hCommandGraph)->close();
-#endif
-        /// @end
-    }
-    catch(xe_result_t& result)
-    {
-        return result;
-    }
-    catch(std::bad_alloc&)
-    {
-        return XE_RESULT_ERROR_OUT_OF_HOST_MEMORY;
-    }
-    catch(std::exception&)
-    {
-        // @todo: pfnOnException(e.what());
-        return XE_RESULT_ERROR_UNKNOWN;
-    }
-}
-
-///////////////////////////////////////////////////////////////////////////////
-/// @brief Reset a command graph to initial (empty) state; ready for adding
-///        command lists.
-/// 
-/// @details
-///     - The application may **not** call this function from simultaneous
-///       threads with the same command graph handle.
-///     - The implementation of this function should be lock-free.
-/// 
-/// @returns
-///     - ::XE_RESULT_SUCCESS
-///     - ::XE_RESULT_ERROR_UNINITIALIZED
-///     - ::XE_RESULT_ERROR_DEVICE_LOST
-///     - ::XE_RESULT_ERROR_INVALID_PARAMETER
-///         + nullptr == hCommandGraph
-///     - ::XE_RESULT_ERROR_UNSUPPORTED
-///
-/// @hash {528e83125c070c5e70c5fd5f376cb08b0feb42d3b1b83e7fc7eb656c2277e709}
-///
-__xedllexport xe_result_t __xecall
-  xeCommandGraphReset(
-    xe_command_graph_handle_t hCommandGraph         ///< [in] handle of command graph object to reset
-    )
-{
-    try
-    {
-        //if( XE_DRIVER_PARAMETER_VALIDATION_LEVEL >= 0 )
-        {
-            // if( nullptr == driver ) return XE_RESULT_ERROR_UNINITIALIZED;
-            // Check parameters
-            if( nullptr == hCommandGraph ) return XE_RESULT_ERROR_INVALID_PARAMETER;
-        }
-        /// @begin
-#if defined(XE_NULLDRV)
-        return XE_RESULT_SUCCESS;
-#else
-        return L0::CommandGraph::fromHandle(hCommandGraph)->reset();
 #endif
         /// @end
     }

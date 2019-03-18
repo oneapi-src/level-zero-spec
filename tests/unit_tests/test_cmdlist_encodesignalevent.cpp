@@ -15,20 +15,20 @@ using ::testing::_;
 using ::testing::AnyNumber;
 using ::testing::Return;
 
-TEST(xeCommandListEncodeSignalEvent, redirectsToObject) {
+TEST(xeCommandListAppendSignalEvent, redirectsToObject) {
     Mock<CommandList> commandList;
     Mock<Event> event;
 
-    EXPECT_CALL(commandList, encodeSignalEvent(event.toHandle())).Times(1);
+    EXPECT_CALL(commandList, appendSignalEvent(event.toHandle())).Times(1);
 
-    auto result = xeCommandListEncodeSignalEvent(commandList.toHandle(),
+    auto result = xeCommandListAppendSignalEvent(commandList.toHandle(),
                                                  event.toHandle());
     EXPECT_EQ(XE_RESULT_SUCCESS, result);
 }
 
-using CommandListEncodeSignalEvent = ::testing::Test;
+using CommandListAppendSignalEvent = ::testing::Test;
 
-HWTEST_F(CommandListEncodeSignalEvent, addsPipeControlToCommandStream) {
+HWTEST_F(CommandListAppendSignalEvent, addsPipeControlToCommandStream) {
     Mock<Device> device;
 
     auto commandList = whitebox_cast(CommandList::create(productFamily, &device));
@@ -36,7 +36,7 @@ HWTEST_F(CommandListEncodeSignalEvent, addsPipeControlToCommandStream) {
     auto usedSpaceBefore = commandList->commandStream->getUsed();
 
     Mock<Event> event;
-    auto result = commandList->encodeSignalEvent(event.toHandle());
+    auto result = commandList->appendSignalEvent(event.toHandle());
     ASSERT_EQ(XE_RESULT_SUCCESS, result);
 
     auto usedSpaceAfter = commandList->commandStream->getUsed();
@@ -83,7 +83,7 @@ HWTEST_F(CommandListEncodeSignalEvent, addsPipeControlToCommandStream) {
     ASSERT_NE(itor, cmdList.end());
 }
 
-HWTEST_F(CommandListEncodeSignalEvent, addsEventGraphicsAllocationToResidencyContainer) {
+HWTEST_F(CommandListAppendSignalEvent, addsEventGraphicsAllocationToResidencyContainer) {
     Mock<Device> device;
 
     auto commandList = whitebox_cast(CommandList::create(productFamily, &device));
@@ -91,7 +91,7 @@ HWTEST_F(CommandListEncodeSignalEvent, addsEventGraphicsAllocationToResidencyCon
     auto usedSpaceBefore = commandList->commandStream->getUsed();
 
     Mock<Event> event;
-    auto result = commandList->encodeSignalEvent(event.toHandle());
+    auto result = commandList->appendSignalEvent(event.toHandle());
     ASSERT_EQ(XE_RESULT_SUCCESS, result);
 
     auto &residencyContainer = commandList->residencyContainer;

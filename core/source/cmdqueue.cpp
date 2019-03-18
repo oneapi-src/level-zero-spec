@@ -72,25 +72,11 @@ void CommandQueueImp::submitBatchBuffer() {
     commandStreamReceiver->waitForTaskCountWithKmdNotifyFallback(0u, 0u, false, false);
 }
 
-xe_result_t CommandQueueImp::synchronize(xe_synchronization_mode_t mode,
-                                         uint32_t delay,
-                                         uint32_t interval,
-                                         uint32_t timeout) {
-    switch (mode) {
-    default:
-        return XE_RESULT_ERROR_UNSUPPORTED;
-    case XE_SYNCHRONIZATION_MODE_POLL:
-        return synchronizeByPollingForTaskCount(delay, interval, timeout);
-    }
+xe_result_t CommandQueueImp::synchronize(uint32_t timeout) {
+    return synchronizeByPollingForTaskCount(timeout);
 }
 
-xe_result_t CommandQueueImp::synchronizeByPollingForTaskCount(uint32_t delay,
-                                                              uint32_t interval,
-                                                              uint32_t timeout) {
-    if ((delay != 0) || (interval != 0)) {
-        return XE_RESULT_ERROR_INVALID_PARAMETER;
-    }
-
+xe_result_t CommandQueueImp::synchronizeByPollingForTaskCount(uint32_t timeout) {
     auto commandStreamReceiver = static_cast<CommandStreamReceiver *>(csrRT);
     assert(commandStreamReceiver);
 
@@ -125,20 +111,17 @@ CommandQueue *CommandQueue::create(uint32_t productFamily, Device *device, void 
 }
 
 xe_result_t __xecall
-xeCommandQueueEnqueueCommandLists(xe_command_queue_handle_t hCommandQueue,
+xeCommandQueueExecuteCommandLists(xe_command_queue_handle_t hCommandQueue,
                                   uint32_t numCommandLists,
                                   xe_command_list_handle_t *phCommandLists,
                                   xe_fence_handle_t hFence) {
-    return CommandQueue::fromHandle(hCommandQueue)->enqueueCommandLists(numCommandLists, phCommandLists, hFence);
+    return CommandQueue::fromHandle(hCommandQueue)->executeCommandLists(numCommandLists, phCommandLists, hFence);
 }
 
 xe_result_t __xecall
 xeCommandQueueSynchronize(xe_command_queue_handle_t hCommandQueue,
-                          xe_synchronization_mode_t mode,
-                          uint32_t delay,
-                          uint32_t interval,
                           uint32_t timeout) {
-    return CommandQueue::fromHandle(hCommandQueue)->synchronize(mode, delay, interval, timeout);
+    return CommandQueue::fromHandle(hCommandQueue)->synchronize(timeout);
 }
 
 } // namespace L0

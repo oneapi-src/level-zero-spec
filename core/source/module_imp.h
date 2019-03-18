@@ -28,8 +28,8 @@ struct ModuleImp : public Module {
 
     xe_result_t createFunction(const xe_function_desc_t *desc, xe_function_handle_t *phFunction) override;
 
-    xe_result_t getNativeBinary(uint32_t *pSize,
-                                char **pModuleNativeBinary) override {
+    xe_result_t getNativeBinary(size_t *pSize,
+                                void **pModuleNativeBinary) override {
         return XE_RESULT_ERROR_UNSUPPORTED;
     }
 
