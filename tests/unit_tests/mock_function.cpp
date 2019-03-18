@@ -9,8 +9,8 @@ namespace ult {
 Mock<Function>::Mock() {
     ON_CALL(*this, getThreadExecutionMask)
         .WillByDefault(Return(0xfffffffful));
-    ON_CALL(*this, getPerThreadDataSize)
-        .WillByDefault(Invoke([this]() { return getPerThreadDataSizeForWholeThreadGroup() / getThreadsPerThreadGroup(); }));
+    EXPECT_CALL(*this, getPerThreadDataSize)
+        .WillRepeatedly(Invoke([this]() { return getPerThreadDataSizeForWholeThreadGroup() / getThreadsPerThreadGroup(); }));
 }
 
 } // namespace ult
