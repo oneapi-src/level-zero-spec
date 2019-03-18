@@ -234,8 +234,8 @@ xe_result_t FunctionImp::setArgBuffer(uint32_t argIndex, size_t argSize, const v
     //    Buffer::setSurfaceState(&getDevice(), surfaceState, 0, nullptr);
     //} // no SSH for buffers for now - stateless to stateful disabled
 
-    GraphicsAllocation *alloc = module->getDevice()->getMemoryManager()->findAllocation(*reinterpret_cast<void *const *>(argVal));
-    assert(alloc != nullptr);
+    //GraphicsAllocation *alloc = module->getDevice()->getMemoryManager()->findAllocation(*reinterpret_cast<void *const *>(argVal));
+    //assert(alloc != nullptr);
     residencyContainer[argIndex] = alloc;
 
     return XE_RESULT_SUCCESS;
@@ -258,7 +258,16 @@ xe_result_t FunctionImp::setArgImage(uint32_t argIndex, size_t argSize, const vo
     //    auto surfaceState = ptrOffset(getSurfaceStateHeap(), kernelArgInfo.offsetHeap);
     //    Buffer::setSurfaceState(&getDevice(), surfaceState, 0, nullptr);
     //} // no SSH for buffers for now - stateless to stateful disabled
+    auto ssh = getSurfaceStateHeap();
+    assert(ssh);
+    auto destSurfaceState = ptrOffset(ssh, kernelArgInfo.offsetHeap);
 
+    //TODO AWF copy image's surface state here
+    // Need the Image object.. is that argVal?
+
+
+    //TODO AWF i should hook in the SSH item, not the image data itself?
+    //Do i really need to use findAllocation if I already have an ImagE?
     GraphicsAllocation *alloc = module->getDevice()->getMemoryManager()->findAllocation(*reinterpret_cast<void *const *>(argVal));
     assert(alloc != nullptr);
     residencyContainer[argIndex] = alloc;

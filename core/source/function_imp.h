@@ -138,6 +138,10 @@ struct FunctionImp : Function {
 
     typedef xe_result_t (FunctionImp::*FunctionArgHandler)(uint32_t argIndex, size_t argSize, const void *argVal);
 
+    const void *getSurfaceStateHeap() const {
+        return oclInternals->pSshLocal.get();
+    }
+
     struct OCLInternal;
     OCLInternal *oclInternals = nullptr;
 
