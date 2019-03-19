@@ -11,7 +11,7 @@ struct EncodeFlush {
     using PIPE_CONTROL = typename GfxFamily::PIPE_CONTROL;
 
     static const size_t size = sizeof(PIPE_CONTROL);
-    static void append(CommandContainer &container) {
+    static void encode(CommandContainer &container) {
         PIPE_CONTROL cmd = GfxFamily::cmdInitPipeControl;
         cmd.setCommandStreamerStallEnable(true);
         cmd.setDcFlushEnable(true);

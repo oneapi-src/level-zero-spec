@@ -6,7 +6,7 @@ namespace ult {
 
 using EncodeL3State = CmdParseFixture;
 HWTEST2_F(EncodeL3State, appendsASetMMIO, MatchAny) {
-    ::L0::EncodeL3State<productFamily>::append(*commandList, false);
+    ::L0::EncodeL3State<productFamily>::encode(*commandList, false);
 
     parseCommandBuffer<FamilyType>();
 
@@ -16,7 +16,7 @@ HWTEST2_F(EncodeL3State, appendsASetMMIO, MatchAny) {
 }
 
 HWTEST2_F(EncodeL3State, appendsAFlushBeforeSetMMIO, MatchAny) {
-    ::L0::EncodeL3State<productFamily>::append(*commandList, false);
+    ::L0::EncodeL3State<productFamily>::encode(*commandList, false);
 
     parseCommandBuffer<FamilyType>();
 
@@ -30,7 +30,7 @@ HWTEST2_F(EncodeL3State, appendsAFlushBeforeSetMMIO, MatchAny) {
 }
 
 HWTEST2_F(EncodeL3State, givenNoSLMSetCorrectMMIO, IsGen9) {
-    ::L0::EncodeL3State<productFamily>::append(*commandList, false);
+    ::L0::EncodeL3State<productFamily>::encode(*commandList, false);
 
     parseCommandBuffer<FamilyType>();
 
@@ -43,7 +43,7 @@ HWTEST2_F(EncodeL3State, givenNoSLMSetCorrectMMIO, IsGen9) {
 }
 
 HWTEST2_F(EncodeL3State, givenSLMSetCorrectMMIO, IsGen9) {
-    ::L0::EncodeL3State<productFamily>::append(*commandList, true);
+    ::L0::EncodeL3State<productFamily>::encode(*commandList, true);
 
     parseCommandBuffer<FamilyType>();
 
@@ -57,7 +57,7 @@ HWTEST2_F(EncodeL3State, givenSLMSetCorrectMMIO, IsGen9) {
 
 using IsAtLeastGen12LP = IsAtLeastProduct<IGFX_TIGERLAKE_LP>;
 HWTEST2_F(EncodeL3State, setCorrectMMIO, IsAtLeastGen12LP) {
-    ::L0::EncodeL3State<productFamily>::append(*commandList, false);
+    ::L0::EncodeL3State<productFamily>::encode(*commandList, false);
 
     parseCommandBuffer<FamilyType>();
 
