@@ -50,35 +50,32 @@ struct PrecompiledFunctionMock : Mock<Function> {
             ++bufferArgOffsetPairsIt;
         }
         mockIsaGraphicsAllocation.rebind(new GraphicsAllocation(&mockIsaGraphicsAllocationMemory, sizeof(mockIsaGraphicsAllocationMemory))); // TODO : get a better allocation for mock here
+
+        ON_CALL(*this, setAttribute).WillByDefault(::testing::Return(XE_RESULT_ERROR_UNSUPPORTED));
+        ON_CALL(*this, getAttribute).WillByDefault(::testing::Return(XE_RESULT_ERROR_UNSUPPORTED));
+        ON_CALL(*this, getSimdSize).WillByDefault(::testing::Return(precompiledFunctionMockData->simdSize));
+        ON_CALL(*this, getIsaHostMem).WillByDefault(::testing::Return(precompiledFunctionMockData->isa));
+        ON_CALL(*this, getIsaSize).WillByDefault(::testing::Return(precompiledFunctionMockData->isaSize));
+        ON_CALL(*this, getIsaGraphicsAllocation).WillByDefault(::testing::Invoke([this]() { return mockIsaGraphicsAllocation.weakRef(); }));
+        ON_CALL(*this, getPerThreadDataHostMem).WillByDefault(::testing::Return(precompiledFunctionMockData->perThreadDataBase));
+        ON_CALL(*this, getPerThreadDataSizeForWholeThreadGroup).WillByDefault(::testing::Return(precompiledFunctionMockData->perThreadDataBaseSize));
+        ON_CALL(*this, getThreadExecutionMask).WillByDefault(::testing::Return(0xfffffffful));
+        ON_CALL(*this, getCrossThreadDataHostMem).WillByDefault(::testing::Invoke([this]() { return crossThreadData.data(); }));
+        ON_CALL(*this, getCrossThreadDataSize).WillByDefault(::testing::Return(precompiledFunctionMockData->crossThreadDataBaseSize));
+        ON_CALL(*this, getResidencyContainer).WillByDefault(::testing::ReturnRef(allocationsForResidency));
+        ON_CALL(*this, getHasBarriers).WillByDefault(::testing::Return(precompiledFunctionMockData->hasBarriers));
+        ON_CALL(*this, getSlmSize).WillByDefault(::testing::Return(precompiledFunctionMockData->slmSize));
+        ON_CALL(*this, hasPrintfOutput).WillByDefault(::testing::Return(precompiledFunctionMockData->hasPrintfOutput));
+
+        ON_CALL(*this, setArgumentValue)
+            .WillByDefault(::testing::Invoke([this](uint32_t argIndex, size_t argSize, const void *pArgValue) { return this->setArgumentValueImpl(argIndex, argSize, pArgValue); }));
+        ON_CALL(*this, getGroupSize)
+            .WillByDefault(::testing::Invoke([this](uint32_t &outGroupSizeX, uint32_t &outGroupSizeY, uint32_t &outGroupSizeZ) { this->getGroupSizeImpl(outGroupSizeX, outGroupSizeY, outGroupSizeZ); }));
+        ON_CALL(*this, getThreadsPerThreadGroup)
+            .WillByDefault(::testing::Invoke([this]() { return this->getThreadsPerThreadGroupImpl(); }));
     }
 
-    xe_result_t setAttribute(xe_function_set_attribute_t attr,
-                             uint32_t value) override {
-        return XE_RESULT_ERROR_UNSUPPORTED;
-    }
-
-    xe_result_t getAttribute(xe_function_get_attribute_t attr,
-                             uint32_t *pValue) override {
-        return XE_RESULT_ERROR_UNSUPPORTED;
-    }
-
-    uint32_t getSimdSize() const override {
-        return precompiledFunctionMockData->simdSize;
-    }
-
-    const void *getIsaHostMem() const override {
-        return precompiledFunctionMockData->isa;
-    }
-
-    size_t getIsaSize() const override {
-        return precompiledFunctionMockData->isaSize;
-    }
-
-    PtrRef<GraphicsAllocation> getIsaGraphicsAllocation() const override {
-        return mockIsaGraphicsAllocation.weakRef();
-    }
-
-    xe_result_t setArgumentValue(uint32_t argIndex, size_t argSize, const void *pArgValue) override {
+    xe_result_t setArgumentValueImpl(uint32_t argIndex, size_t argSize, const void *pArgValue) {
         auto it = bufferArgOffsetMap.find(argIndex);
         if (it == bufferArgOffsetMap.end()) {
             // not a buffer arg, just assume what's in crossthread data is good enough
@@ -88,55 +85,19 @@ struct PrecompiledFunctionMock : Mock<Function> {
         return XE_RESULT_SUCCESS;
     }
 
-    void getGroupSize(uint32_t &outGroupSizeX, uint32_t &outGroupSizeY, uint32_t &outGroupSizeZ) const override {
+    void getGroupSizeImpl(uint32_t &outGroupSizeX, uint32_t &outGroupSizeY, uint32_t &outGroupSizeZ) const {
         outGroupSizeX = precompiledFunctionMockData->groupSizeInPerThreadDataBase[0];
         outGroupSizeY = precompiledFunctionMockData->groupSizeInPerThreadDataBase[1];
         outGroupSizeZ = precompiledFunctionMockData->groupSizeInPerThreadDataBase[2];
     }
 
-    uint32_t getThreadsPerThreadGroup() const override {
+    uint32_t getThreadsPerThreadGroupImpl() const {
         uint32_t lwsX, lwsY, lwsZ;
         this->getGroupSize(lwsX, lwsY, lwsZ);
         auto lws = lwsX * lwsY * lwsZ;
         auto simd = getSimdSize();
 
         return (lws + simd - 1) / simd;
-    }
-
-    const void *getPerThreadDataHostMem() const override {
-        return precompiledFunctionMockData->perThreadDataBase;
-    }
-
-    uint32_t getPerThreadDataSizeForWholeThreadGroup() const override {
-        return precompiledFunctionMockData->perThreadDataBaseSize;
-    }
-
-    uint32_t getThreadExecutionMask() const override {
-        return 0xfffffffful;
-    }
-
-    const void *getCrossThreadDataHostMem() const override {
-        return crossThreadData.data();
-    }
-
-    uint32_t getCrossThreadDataSize() const override {
-        return precompiledFunctionMockData->crossThreadDataBaseSize;
-    }
-
-    const std::vector<GraphicsAllocation *> &getResidencyContainer() const override {
-        return allocationsForResidency;
-    }
-
-    bool getHasBarriers() const override {
-        return precompiledFunctionMockData->hasBarriers;
-    }
-
-    uint32_t getSlmSize() const override {
-        return precompiledFunctionMockData->slmSize;
-    }
-
-    bool hasPrintfOutput() const override {
-        return precompiledFunctionMockData->hasPrintfOutput;
     }
 
     const PrecompiledFunctionMockData *precompiledFunctionMockData = nullptr;
