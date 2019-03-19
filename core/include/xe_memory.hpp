@@ -202,6 +202,14 @@ namespace xe
         );
 
     ///////////////////////////////////////////////////////////////////////////////
+    /// @brief API version of ::memory_allocation_properties_t
+    enum class memory_allocation_properties_version_t
+    {
+        DEVICE_MEMORY_PROPERTIES_VERSION_CURRENT = XE_MAKE_VERSION( 1, 0 ), ///< version 1.0
+
+    };
+
+    ///////////////////////////////////////////////////////////////////////////////
     /// @brief Memory allocation type
     enum class memory_type_t
     {
@@ -213,16 +221,17 @@ namespace xe
     };
 
     ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Supported memory allocation query properties
-    enum class memory_property_t
+    /// @brief Memory allocation properties queried using ::MemGetProperties
+    struct memory_allocation_properties_t
     {
-        TYPE = 0,                                       ///< returns the type of allocated memory, see ::memory_type_t
-        BUFFER_ID = 1,                                  ///< returns a unique bufferID associated with the memory allocation
+        memory_allocation_properties_version_t version = device_memory_properties_version_t::CURRENT;   ///< [in] ::DEVICE_MEMORY_PROPERTIES_VERSION_CURRENT
+        memory_type_t type;                             ///< [out] Type of allocated memory
+        uint64_t id;                                    ///< [out] Identifier for this allocation
 
     };
 
     ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Retrieves a property of an allocation
+    /// @brief Retrieves attributes of a memory allocation
     /// 
     /// @details
     ///     - The application may call this function from simultaneous threads.
@@ -233,14 +242,13 @@ namespace xe
     ///     - **cuPointerGetAttribute**
     /// 
     /// @returns
-    ///     - uint64_t: Value of the queried property
+    ///     - memory_allocation_properties_t: Query result for memory allocation properties
     /// 
     /// @throws result_t
-    inline uint64_t
-    MemGetProperty(
+    inline memory_allocation_properties_t
+    MemGetProperties(
         mem_allocator_handle_t hMemAllocHandle,         ///< [in] handle of memory allocator for this allocation
-        const void* ptr,                                ///< [in] Pointer to query
-        memory_property_t property                      ///< [in] Property of the allocation to query
+        const void* ptr                                 ///< [in] Pointer to query
         );
 
     ///////////////////////////////////////////////////////////////////////////////

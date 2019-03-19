@@ -250,6 +250,14 @@ xeMemFree(
     );
 
 ///////////////////////////////////////////////////////////////////////////////
+/// @brief API version of ::xe_memory_allocation_properties_t
+typedef enum _xe_memory_allocation_properties_version_t
+{
+    XE_DEVICE_MEMORY_PROPERTIES_VERSION_CURRENT = XE_MAKE_VERSION( 1, 0 ),  ///< version 1.0
+
+} xe_memory_allocation_properties_version_t;
+
+///////////////////////////////////////////////////////////////////////////////
 /// @brief Memory allocation type
 typedef enum _xe_memory_type_t
 {
@@ -261,16 +269,17 @@ typedef enum _xe_memory_type_t
 } xe_memory_type_t;
 
 ///////////////////////////////////////////////////////////////////////////////
-/// @brief Supported memory allocation query properties
-typedef enum _xe_memory_property_t
+/// @brief Memory allocation properties queried using ::xeMemGetProperties
+typedef struct _xe_memory_allocation_properties_t
 {
-    XE_MEMORY_PROPERTY_TYPE = 0,                    ///< returns the type of allocated memory, see ::xe_memory_type_t
-    XE_MEMORY_PROPERTY_BUFFER_ID = 1,               ///< returns a unique bufferID associated with the memory allocation
+    xe_memory_allocation_properties_version_t version;  ///< [in] ::XE_DEVICE_MEMORY_PROPERTIES_VERSION_CURRENT
+    xe_memory_type_t type;                          ///< [out] Type of allocated memory
+    uint64_t id;                                    ///< [out] Identifier for this allocation
 
-} xe_memory_property_t;
+} xe_memory_allocation_properties_t;
 
 ///////////////////////////////////////////////////////////////////////////////
-/// @brief Retrieves a property of an allocation
+/// @brief Retrieves attributes of a memory allocation
 /// 
 /// @details
 ///     - The application may call this function from simultaneous threads.
@@ -287,15 +296,13 @@ typedef enum _xe_memory_property_t
 ///     - ::XE_RESULT_ERROR_INVALID_PARAMETER
 ///         + nullptr == hMemAllocHandle
 ///         + nullptr == ptr
-///         + nullptr == pValue
-///         + invalid property
+///         + nullptr == pMemProperties
 ///     - ::XE_RESULT_ERROR_UNSUPPORTED
 __xedllport xe_result_t __xecall
-xeMemGetProperty(
+xeMemGetProperties(
     xe_mem_allocator_handle_t hMemAllocHandle,      ///< [in] handle of memory allocator for this allocation
     const void* ptr,                                ///< [in] Pointer to query
-    xe_memory_property_t property,                  ///< [in] Property of the allocation to query
-    uint64_t* pValue                                ///< [out] Value of the queried property
+    xe_memory_allocation_properties_t* pMemProperties   ///< [out] Query result for memory allocation properties
     );
 
 ///////////////////////////////////////////////////////////////////////////////

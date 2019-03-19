@@ -1,6 +1,10 @@
 <%!
 import re
 from templates import helper as th
+%><%
+    x=context['ns'][0]
+    X=context['ns'][0].upper()
+    Xx=context['ns'][0].title()
 %>/**************************************************************************//**
 * INTEL CONFIDENTIAL  
 * Copyright 2019  
@@ -26,7 +30,7 @@ from templates import helper as th
 *
 * @file ${x}_${name}.hpp
 *
-* @brief C++ wrapper of ${th.subx(x, header['desc'])}
+* @brief C++ wrapper of ${th.sub(ns, header['desc'])}
 *
 * @cond DEV
 * DO NOT EDIT: generated from /scripts/${section}/${name}.yml
@@ -50,7 +54,7 @@ namespace ${x}
 %if not re.match(r"macro", obj['type']) and ('class' not in obj or re.match(r"\$x$", obj['class']) or re.match(r"handle", obj['type'])):
     ///////////////////////////////////////////////////////////////////////////////
     %if 'condition' in obj:
-    #if ${th.subx(x,obj['condition'])}
+    #if ${th.sub(ns,obj['condition'])}
     %endif
     %for line in th.make_desc_lines(None, obj):
     /// ${line}
@@ -60,21 +64,21 @@ namespace ${x}
     %endfor
     ## TYPEDEF ####################################################################
     %if re.match(r"typedef", obj['type']):
-    using ${th.subx(None, obj['name'])} = ::${th.subx(x, obj['name'])};
+    using ${th.sub(None, obj['name'])} = ::${th.sub(ns, obj['name'])};
     ## ENUM #######################################################################
     %elif re.match(r"enum", obj['type']):
-    enum class ${th.subx(None, obj['name'])}
+    enum class ${th.sub(None, obj['name'])}
     {
-        %for line in th.make_etor_lines(None, obj, True, x, meta):
+        %for line in th.make_etor_lines(None, obj, True, ns, meta):
         ${line}
         %endfor
 
     };
     ## STRUCT #####################################################################
     %elif re.match(r"struct", obj['type']):
-    struct ${th.subx(None, obj['name'])}
+    struct ${th.sub(None, obj['name'])}
     {
-        %for line in th.make_member_lines(None, obj, True, x, meta):
+        %for line in th.make_member_lines(None, obj, True, ns, meta):
         ${line}
         %endfor
 
@@ -93,72 +97,72 @@ namespace ${x}
         );
     ## CLASS ######################################################################
     %elif re.match(r"class", obj['type']):
-    class ${th.subx(None, obj['name'])}
+    class ${th.sub(None, obj['name'])}
     {
     protected:
-        %for line in th.make_member_lines(x, obj):
+        %for line in th.make_member_lines(ns, obj):
         ::${line}
         %endfor
 
     public:
-        %for line in th.make_member_function_lines(x, obj):
+        %for line in th.make_member_function_lines(ns, obj):
         ${line}
         %endfor
 
         %for t in th.filter_items(th.extract_objs(specs, "typedef"), 'class', obj['name']):
 %if 'condition' in t:
-#if ${th.subx(x,t['condition'])}
+#if ${th.sub(ns,t['condition'])}
 %endif
         ///////////////////////////////////////////////////////////////////////////////
-        /// @brief C++ version for ::${th.subx(x, t['name'])}
-        using ${th.subx(None, t['name'])} = ::${th.subx(x, t['name'])};
+        /// @brief C++ version for ::${th.sub(ns, t['name'])}
+        using ${th.sub(None, t['name'])} = ::${th.sub(ns, t['name'])};
 %if 'condition' in t:
-#endif // ${th.subx(x,t['condition'])}
+#endif // ${th.sub(ns,t['condition'])}
 %endif
 
         %endfor
         %for e in th.filter_items(th.extract_objs(specs, "enum"), 'class', obj['name']):
 %if 'condition' in e:
-#if ${th.subx(x,e['condition'])}
+#if ${th.sub(ns,e['condition'])}
 %endif
         ///////////////////////////////////////////////////////////////////////////////
-        /// @brief C++ version for ::${th.subx(x, e['name'])}
-        enum class ${th.subx(None, e['name'])}
+        /// @brief C++ version for ::${th.sub(ns, e['name'])}
+        enum class ${th.sub(None, e['name'])}
         {
-            %for line in th.make_etor_lines(None, e, True, x, meta):
+            %for line in th.make_etor_lines(None, e, True, ns, meta):
             ${line}
             %endfor
 
         };
 %if 'condition' in e:
-#endif // ${th.subx(x,e['condition'])}
+#endif // ${th.sub(ns,e['condition'])}
 %endif
 
         %endfor
         %for s in th.filter_items(th.extract_objs(specs, "struct"), 'class', obj['name']):
 %if 'condition' in s:
-#if ${th.subx(x,s['condition'])}
+#if ${th.sub(ns,s['condition'])}
 %endif
         ///////////////////////////////////////////////////////////////////////////////
-        /// @brief C++ version for ::${th.subx(x, s['name'])}
-        struct ${th.subx(None, s['name'])}
+        /// @brief C++ version for ::${th.sub(ns, s['name'])}
+        struct ${th.sub(None, s['name'])}
         {
-            %for line in th.make_member_lines(None, s, True, x, meta):
+            %for line in th.make_member_lines(None, s, True, ns, meta):
             ${line}
             %endfor
 
         };
 %if 'condition' in s:
-#endif // ${th.subx(x,s['condition'])}
+#endif // ${th.sub(ns,s['condition'])}
 %endif
 
         %endfor
         %for f in th.filter_items(th.extract_objs(specs, "function"), 'class', obj['name']):
 %if 'condition' in f:
-#if ${th.subx(x,f['condition'])}
+#if ${th.sub(ns,f['condition'])}
 %endif
         ///////////////////////////////////////////////////////////////////////////////
-        /// @brief C++ wrapper for ::${th.make_func_name(x, f)}
+        /// @brief C++ wrapper for ::${th.make_func_name(ns, f)}
         %for line in th.make_returns_lines(None, f, True):
         /// ${line}
         %endfor
@@ -169,7 +173,7 @@ namespace ${x}
             %endfor
             );
 %if 'condition' in f:
-#endif // ${th.subx(x,f['condition'])}
+#endif // ${th.sub(ns,f['condition'])}
 %endif
 
         %endfor
@@ -177,14 +181,14 @@ namespace ${x}
     ## HANDLE #####################################################################
     %elif re.match(r"handle", obj['type']):
     %if 'class' in obj:
-    class ${th.subx(None, obj['class'])};
-    using ${th.subx(None, obj['name'])} = ${th.subx(None, obj['class'])}*;
+    class ${th.sub(None, obj['class'])};
+    using ${th.sub(None, obj['name'])} = ${th.sub(None, obj['class'])}*;
     %else:
-    using ${th.subx(None, obj['name'])} = ::${th.subx(x, obj['name'])};
+    using ${th.sub(None, obj['name'])} = ::${th.sub(ns, obj['name'])};
     %endif
     %endif
     %if 'condition' in obj:
-    #endif // ${th.subx(x,obj['condition'])}
+    #endif // ${th.sub(ns,obj['condition'])}
     %endif
 
 %endif

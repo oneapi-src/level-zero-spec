@@ -1,6 +1,10 @@
 <%!
 import re
 from templates import helper as th
+%><%
+    x=context['ns'][0]
+    X=context['ns'][0].upper()
+    Xx=context['ns'][0].title()
 %>/**************************************************************************//**
 * INTEL CONFIDENTIAL  
 * Copyright 2019  
@@ -26,7 +30,7 @@ from templates import helper as th
 *
 * @file ${x}_${name}.inl
 *
-* @brief C++ wrapper of ${th.subx(x, header['desc'])}
+* @brief C++ wrapper of ${th.sub(ns, header['desc'])}
 *
 * @cond DEV
 * DO NOT EDIT: generated from /scripts/${section}/${name}.yml
@@ -51,9 +55,9 @@ namespace ${x}
     ## FUNCTION ###################################################################
     ///////////////////////////////////////////////////////////////////////////////
 %if 'condition' in obj:
-#if ${th.subx(x, obj['condition'])}
+#if ${th.sub(ns, obj['condition'])}
 %endif
-    /// @brief C++ wrapper for ::${th.make_func_name(x, obj)}
+    /// @brief C++ wrapper for ::${th.make_func_name(ns, obj)}
     %for line in th.make_details_lines(None, obj):
     /// ${line}
     %endfor
@@ -68,11 +72,11 @@ namespace ${x}
         %endfor
         )
     {
-        // auto result = ::${th.make_func_name(x, obj)}( ${th.make_param_call_str("handle", None, obj, True)} );
-        // if( ::${X}_RESULT_SUCCESS != result ) throw exception(result, "${x}::${th.subx(None, obj['name'])}::${th.subx(None, obj['name'])}");
+        // auto result = ::${th.make_func_name(ns, obj)}( ${th.make_param_call_str("handle", None, obj, True)} );
+        // if( ::${X}_RESULT_SUCCESS != result ) throw exception(result, "${x}::${th.sub(None, obj['name'])}::${th.sub(None, obj['name'])}");
     }
 %if 'condition' in obj:
-#endif // ${th.subx(x, obj['condition'])}
+#endif // ${th.sub(ns, obj['condition'])}
 %endif
 
 %elif re.match(r"class", obj['type']):
@@ -80,9 +84,9 @@ namespace ${x}
     %for f in th.filter_items(th.extract_objs(specs, "function"), 'class', obj['name']):
     ///////////////////////////////////////////////////////////////////////////////
 %if 'condition' in f:
-#if ${th.subx(x, f['condition'])}
+#if ${th.sub(ns, f['condition'])}
 %endif
-    /// @brief C++ wrapper for ::${th.make_func_name(x, f)}
+    /// @brief C++ wrapper for ::${th.make_func_name(ns, f)}
     %for line in th.make_details_lines(None, f):
     /// ${line}
     %endfor
@@ -91,17 +95,17 @@ namespace ${x}
     /// ${line}
     %endfor
     inline ${th.make_return_value(None, f)} 
-    ${th.subx(None, obj['name'])}::${th.make_func_name(None, f, True)}(
+    ${th.sub(None, obj['name'])}::${th.make_func_name(None, f, True)}(
         %for line in th.make_param_lines(None, f, True):
         ${line}
         %endfor
         )
     {
-        // auto result = ::${th.make_func_name(x, f)}( ${th.make_param_call_str("handle", None, f, True)} );
-        // if( ::${X}_RESULT_SUCCESS != result ) throw exception(result, "${x}::${th.subx(None, obj['name'])}::${th.subx(None, f['name'])}");
+        // auto result = ::${th.make_func_name(ns, f)}( ${th.make_param_call_str("handle", None, f, True)} );
+        // if( ::${X}_RESULT_SUCCESS != result ) throw exception(result, "${x}::${th.sub(None, obj['name'])}::${th.sub(None, f['name'])}");
     }
 %if 'condition' in f:
-#endif // ${th.subx(x, f['condition'])}
+#endif // ${th.sub(ns, f['condition'])}
 %endif
 
     %endfor

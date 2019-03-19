@@ -65,7 +65,7 @@ details:
     - "The application may call this function from simultaneous threads."
     - "The implementation of this function should be lock-free."
 params:
-    - type: $x_device_uuid_t*
+    - type: const $x_device_uuid_t*
       name: pUUID
       desc: "[in] unique id of device to retrieve. Use ${x}DriverGetDeviceUniqueIds to obtain a unique Id."
     - type: "$x_device_handle_t*"
