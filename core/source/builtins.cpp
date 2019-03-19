@@ -6,11 +6,9 @@
 
 namespace L0 {
 
-preCompiledBins::preCompiledBins(const std::string &functionName):
-    functionName(functionName)
-{
+preCompiledBins::preCompiledBins(const std::string &functionName) : functionName(functionName) {
     spirvSize = size_copyBufferToBufferBytes_Gen12HPcore;
-    spirvModule =  new char[spirvSize]();
+    spirvModule = new char[spirvSize]();
     memcpy(spirvModule, spirv_copyBufferToBufferBytes_Gen12HPcore, spirvSize);
 }
 

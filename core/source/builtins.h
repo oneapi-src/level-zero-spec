@@ -6,7 +6,7 @@
 
 namespace L0 {
 class preCompiledBins {
-public:
+  public:
     preCompiledBins(const std::string &functionName);
 
     ~preCompiledBins() {
@@ -18,17 +18,17 @@ public:
     }
 
     char *getFunctionName() {
-        return (char*)functionName.c_str();
+        return (char *)functionName.c_str();
     }
 
     char *getModule() {
         return spirvModule;
     }
 
-private:
+  private:
     std::string functionName;
-    uint32_t    spirvSize;
-    char        *spirvModule;
+    uint32_t spirvSize;
+    char *spirvModule;
 };
 extern preCompiledBins compileCopyBufferToBufferBin;
 } // namespace L0
