@@ -305,9 +305,9 @@ xe_result_t CommandListCoreFamily<gfxCoreFamily>::appendLaunchFunction(xe_functi
 
     GPGPU_WALKER cmd = GfxFamily::cmdInitGpgpuWalker;
 
-    function->setGroupCount(pDispatchFuncArgs->groupCountX,
-                            pDispatchFuncArgs->groupCountY,
-                            pDispatchFuncArgs->groupCountZ);
+    function->setGroupCount(pThreadGroupDimensions->groupCountX,
+                            pThreadGroupDimensions->groupCountY,
+                            pThreadGroupDimensions->groupCountZ);
     // Copy the threadData to the indirect heap
     {
         auto heap = indirectHeaps[INDIRECT_OBJECT];
