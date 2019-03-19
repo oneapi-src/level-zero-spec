@@ -92,7 +92,9 @@ struct DeviceImp : public Device {
     }
 
     xe_result_t getApiVersion(xe_api_version_t *version) override {
-        return XE_RESULT_ERROR_UNSUPPORTED;
+        assert(version != nullptr);
+        *version = XE_API_VERSION_1_0;
+        return XE_RESULT_SUCCESS;
     }
 
     xe_result_t getComputeProperties(xe_device_compute_properties_t *pComputeProperties) override {
@@ -183,7 +185,7 @@ Device *Device::create(void *ptr) {
     auto deviceRT = static_cast<OCLRT::Device *>(ptr);
     device->deviceRT = deviceRT;
     device->memoryManager = MemoryManager::create(deviceRT->getMemoryManager());
-    device->execEnvironment = (void *) deviceRT->getExecutionEnvironment();
+    device->execEnvironment = (void *)deviceRT->getExecutionEnvironment();
 
     return device;
 }
