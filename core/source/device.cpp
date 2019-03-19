@@ -112,8 +112,8 @@ struct DeviceImp : public Device {
         pComputeProperties->maxGroupCountZ = static_cast<uint32_t>(deviceInfo.maxWorkItemSizes[2]);  // assuming x x y 1
         pComputeProperties->maxSharedLocalMemory = static_cast<uint32_t>(deviceInfo.localMemSize);
         pComputeProperties->maxGroupRegisters = GrfConfig::DefaultGrfNumber; // registers per group or subgroup?! Need clarification
-        pComputeProperties->numSubGroupSizes = deviceInfo.maxNumOfSubGroups;
-        for (uint32_t i = 0; i < deviceInfo.maxNumOfSubGroups; ++i) {
+        pComputeProperties->numSubGroupSizes = sizeof(deviceInfo.maxSubGroups) / sizeof(deviceInfo.maxSubGroups[0]);
+        for (uint32_t i = 0; i < pComputeProperties->numSubGroupSizes; ++i) {
             pComputeProperties->subGroupSizes[i] = static_cast<uint32_t>(deviceInfo.maxSubGroups[i]);
         }
 
@@ -181,6 +181,11 @@ struct DeviceImp : public Device {
         pDeviceProperties->numAsyncCopyEngines = 1; //  hwHelper.getCopyEngineInstances().size(); // NEO refactor
         pDeviceProperties->numComputeCores = deviceInfo.maxComputUnits;
         pDeviceProperties->maxCommandQueuePriority = 0; // map to cl_khr_priority_hints ?
+        pDeviceProperties->numThreadsPerEU = deviceInfo.numThreadsPerEU;
+        pDeviceProperties->numEUsPerDSS = hardwareInfo.pSysInfo->MaxEuPerSubSlice * 2; // need clarification - does this make sense pre GEN11?
+        pDeviceProperties->numDSSPerSlice = hardwareInfo.pSysInfo->MaxDualSubSlicesSupported / hardwareInfo.pSysInfo->MaxSlicesSupported;
+        pDeviceProperties->numSlicesPerTile = hardwareInfo.pSysInfo->MaxSlicesSupported;
+        //pDeviceProperties->numTiles;                              ///< [out] Number of tiles for this device. TODO : Add support
         return XE_RESULT_SUCCESS;
     }
 
