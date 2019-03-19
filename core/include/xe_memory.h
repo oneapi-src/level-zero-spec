@@ -190,7 +190,7 @@ xeMemAlloc(
 /// @details
 ///     - A host allocation is owned by the host process.
 ///     - Host allocations are accessible by the host and all devices.
-///     - Host allocations are frequently used a staging areas to transfer data
+///     - Host allocations are frequently used as staging areas to transfer data
 ///       to or from devices.
 ///     - The application may call this function from simultaneous threads.
 ///     - The implementation of this function should be lock-free.
