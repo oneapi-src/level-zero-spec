@@ -8,6 +8,7 @@
 #include "runtime/device/device.h"
 #include "runtime/helpers/hw_helper.h"
 #include "runtime/helpers/string.h"
+#include "runtime/kernel/grf_config.h"
 #include "runtime/os_interface/debug_settings_manager.h"
 #include "runtime/execution_environment/execution_environment.h"
 
@@ -98,7 +99,25 @@ struct DeviceImp : public Device {
     }
 
     xe_result_t getComputeProperties(xe_device_compute_properties_t *pComputeProperties) override {
-        return XE_RESULT_ERROR_UNSUPPORTED;
+        assert(pComputeProperties != nullptr);
+        assert(pComputeProperties->version == XE_DEVICE_COMPUTE_PROPERTIES_VERSION_CURRENT);
+        const auto &deviceInfo = this->deviceRT->getDeviceInfo();
+
+        pComputeProperties->maxThreadsPerGroup = static_cast<uint32_t>(deviceInfo.maxWorkGroupSize); // threads per group or items per group?! Clarify naming vs maxGroupSizeX/Y/Z
+        pComputeProperties->maxGroupSizeX = pComputeProperties->maxThreadsPerGroup;                  // Note : it doesn't mean that it can be max x max x max
+        pComputeProperties->maxGroupSizeY = pComputeProperties->maxThreadsPerGroup;                  //        rather max x 1 x 1
+        pComputeProperties->maxGroupSizeZ = pComputeProperties->maxThreadsPerGroup;                  //
+        pComputeProperties->maxGroupCountX = static_cast<uint32_t>(deviceInfo.maxWorkItemSizes[0]);  // assuming 1 x y z  // need clarification on the intent
+        pComputeProperties->maxGroupCountY = static_cast<uint32_t>(deviceInfo.maxWorkItemSizes[1]);  // assuming x x 1 z
+        pComputeProperties->maxGroupCountZ = static_cast<uint32_t>(deviceInfo.maxWorkItemSizes[2]);  // assuming x x y 1
+        pComputeProperties->maxSharedLocalMemory = static_cast<uint32_t>(deviceInfo.localMemSize);
+        pComputeProperties->maxGroupRegisters = GrfConfig::DefaultGrfNumber; // registers per group or subgroup?! Need clarification
+        pComputeProperties->numSubGroupSizes = deviceInfo.maxNumOfSubGroups;
+        for (uint32_t i = 0; i < deviceInfo.maxNumOfSubGroups; ++i) {
+            pComputeProperties->subGroupSizes[i] = static_cast<uint32_t>(deviceInfo.maxSubGroups[i]);
+        }
+
+        return XE_RESULT_SUCCESS;
     }
 
     xe_result_t getLinkProperties(xe_device_handle_t hPeerDevice,
