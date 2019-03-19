@@ -179,11 +179,11 @@ xeDriverGetDeviceUniqueIds(
 ///         + ordinal is out of range reported by ::xeDriverGetDeviceCount
 ///     - ::XE_RESULT_ERROR_UNSUPPORTED
 ///
-/// @hash {4fc8772e02ce62737b676e08228559feb60212243a7756fdf6b40d6d96c92e24}
+/// @hash {976b41d647d0c95fec5464a3a8e84a8b4b5617c1b6eecb0665c3feabd1582fa1}
 ///
 __xedllexport xe_result_t __xecall
 xeDriverGetDevice(
-    xe_device_uuid_t* pUUID,                        ///< [in] unique id of device to retrieve. Use ${x}DriverGetDeviceUniqueIds
+    const xe_device_uuid_t* pUUID,                  ///< [in] unique id of device to retrieve. Use ${x}DriverGetDeviceUniqueIds
                                                     ///< to obtain a unique Id.
     xe_device_handle_t* phDevice                    ///< [out] pointer to handle of device object created
     )

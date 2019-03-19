@@ -199,7 +199,7 @@ typedef xe_result_t (__xecall *pfn_xeDriverGetDeviceUniqueIds)(
                                                     ///< supply array.
     );
 typedef xe_result_t (__xecall *pfn_xeDriverGetDevice)(
-    xe_device_uuid_t* pUUID,                        ///< [in] unique id of device to retrieve. Use ${x}DriverGetDeviceUniqueIds
+    const xe_device_uuid_t* pUUID,                  ///< [in] unique id of device to retrieve. Use ${x}DriverGetDeviceUniqueIds
                                                     ///< to obtain a unique Id.
     xe_device_handle_t* phDevice                    ///< [out] pointer to handle of device object created
     );
