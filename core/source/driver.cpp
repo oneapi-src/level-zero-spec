@@ -43,7 +43,9 @@ struct DriverImp : public Driver {
     }
 
     xe_result_t getVersion(uint32_t *version) override {
-        return XE_RESULT_ERROR_UNSUPPORTED;
+        assert(version != nullptr);
+        *version = 0U; // TODO : Take this from build system once one is in place
+        return XE_RESULT_SUCCESS;
     }
 };
 
