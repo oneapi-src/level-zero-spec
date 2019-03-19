@@ -45,8 +45,8 @@ struct Device : _xe_device_handle_t {
                                     size_t size) = 0;
     virtual xe_result_t getApiVersion(xe_api_version_t *version) = 0;
     virtual xe_result_t getComputeProperties(xe_device_compute_properties_t *pComputeProperties) = 0;
-    virtual xe_result_t getLinkProperties(xe_device_handle_t hPeerDevice,
-                                          xe_device_link_properties_t *pLinkProperties) = 0;
+    virtual xe_result_t getP2PProperties(xe_device_handle_t hPeerDevice,
+                                          xe_device_p2p_properties_t *pP2PProperties) = 0;
     virtual xe_result_t getMemoryProperties(xe_device_memory_properties_t *pMemProperties) = 0;
     virtual xe_result_t getProperties(xe_device_properties_t *pDeviceProperties) = 0;
     virtual xe_result_t getSubDevice(uint32_t ordinal,
@@ -73,7 +73,7 @@ struct Device : _xe_device_handle_t {
     static Device *create(void *device);
 };
 
-xe_result_t deviceGetLinkProperties(uint32_t srcOrdinal,
+xe_result_t deviceGetP2PProperties(uint32_t srcOrdinal,
                                     uint32_t dstOrdinal,
-                                    xe_device_link_properties_t *pLinkProperties);
+                                    xe_device_p2p_properties_t *pP2PProperties);
 } // namespace L0

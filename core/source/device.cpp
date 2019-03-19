@@ -98,8 +98,8 @@ struct DeviceImp : public Device {
         return XE_RESULT_ERROR_UNSUPPORTED;
     }
 
-    xe_result_t getLinkProperties(xe_device_handle_t hPeerDevice,
-                                  xe_device_link_properties_t *pLinkProperties) override {
+    xe_result_t getP2PProperties(xe_device_handle_t hPeerDevice,
+                                  xe_device_p2p_properties_t *pP2PProperties) override {
         return XE_RESULT_ERROR_UNSUPPORTED;
     }
 
@@ -181,9 +181,9 @@ Device *Device::create(void *ptr) {
     return device;
 }
 
-xe_result_t deviceGetLinkProperties(uint32_t srcOrdinal,
+xe_result_t deviceGetP2PProperties(uint32_t srcOrdinal,
                                     uint32_t dstOrdinal,
-                                    xe_device_link_properties_t *pLinkProperties) {
+                                    xe_device_p2p_properties_t *pP2PProperties) {
     return XE_RESULT_ERROR_UNSUPPORTED;
 }
 
