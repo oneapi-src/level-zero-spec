@@ -200,7 +200,7 @@ namespace xe
     }
 
     ///////////////////////////////////////////////////////////////////////////////
-    /// @brief C++ wrapper for ::xeMemGetProperty
+    /// @brief C++ wrapper for ::xeMemGetProperties
     /// 
     /// @details
     ///     - The application may call this function from simultaneous threads.
@@ -211,18 +211,17 @@ namespace xe
     ///     - **cuPointerGetAttribute**
     /// 
     /// @returns
-    ///     - uint64_t: Value of the queried property
+    ///     - memory_allocation_properties_t: Query result for memory allocation properties
     /// 
     /// @throws result_t
-    inline uint64_t 
-    MemGetProperty(
+    inline memory_allocation_properties_t 
+    MemGetProperties(
         mem_allocator_handle_t hMemAllocHandle,         ///< [in] handle of memory allocator for this allocation
-        const void* ptr,                                ///< [in] Pointer to query
-        memory_property_t property                      ///< [in] Property of the allocation to query
+        const void* ptr                                 ///< [in] Pointer to query
         )
     {
-        // auto result = ::xeMemGetProperty( handle, hMemAllocHandle, ptr, property );
-        // if( ::XE_RESULT_SUCCESS != result ) throw exception(result, "xe::MemGetProperty::MemGetProperty");
+        // auto result = ::xeMemGetProperties( handle, hMemAllocHandle, ptr );
+        // if( ::XE_RESULT_SUCCESS != result ) throw exception(result, "xe::MemGetProperties::MemGetProperties");
     }
 
     ///////////////////////////////////////////////////////////////////////////////

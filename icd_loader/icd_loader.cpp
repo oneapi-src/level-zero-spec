@@ -728,16 +728,15 @@ xe_result_t __xecall xeMemFree(
     }
     return dispatchTable.xeMemFree(hMemAllocHandle, ptr);
 }
-xe_result_t __xecall xeMemGetProperty(
+xe_result_t __xecall xeMemGetProperties(
         xe_mem_allocator_handle_t hMemAllocHandle,      ///< [in] handle of memory allocator for this allocation
         const void* ptr,                                ///< [in] Pointer to query
-        xe_memory_property_t property,                  ///< [in] Property of the allocation to query
-        uint64_t* pValue                                ///< [out] Value of the queried property
+        xe_memory_allocation_properties_t* pMemProperties   ///< [out] Query result for memory allocation properties
     ){
     if(dispatchTableInitialized == false){
         return XE_RESULT_ERROR_UNINITIALIZED;
     }
-    return dispatchTable.xeMemGetProperty(hMemAllocHandle, ptr, property, pValue);
+    return dispatchTable.xeMemGetProperties(hMemAllocHandle, ptr, pMemProperties);
 }
 xe_result_t __xecall xeMemGetAddressRange(
         xe_mem_allocator_handle_t hMemAllocHandle,      ///< [in] handle of memory allocator for this allocation

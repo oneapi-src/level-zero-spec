@@ -364,11 +364,10 @@ typedef xe_result_t (__xecall *pfn_xeMemFree)(
     xe_mem_allocator_handle_t hMemAllocHandle,      ///< [in] handle of memory allocator for this allocation
     const void* ptr                                 ///< [in] pointer to memory to free
     );
-typedef xe_result_t (__xecall *pfn_xeMemGetProperty)(
+typedef xe_result_t (__xecall *pfn_xeMemGetProperties)(
     xe_mem_allocator_handle_t hMemAllocHandle,      ///< [in] handle of memory allocator for this allocation
     const void* ptr,                                ///< [in] Pointer to query
-    xe_memory_property_t property,                  ///< [in] Property of the allocation to query
-    uint64_t* pValue                                ///< [out] Value of the queried property
+    xe_memory_allocation_properties_t* pMemProperties   ///< [out] Query result for memory allocation properties
     );
 typedef xe_result_t (__xecall *pfn_xeMemGetAddressRange)(
     xe_mem_allocator_handle_t hMemAllocHandle,      ///< [in] handle of memory allocator for this allocation
@@ -589,7 +588,7 @@ typedef struct _xe_dispatch_table_t
     pfn_xeMemAlloc xeMemAlloc;
     pfn_xeHostMemAlloc xeHostMemAlloc;
     pfn_xeMemFree xeMemFree;
-    pfn_xeMemGetProperty xeMemGetProperty;
+    pfn_xeMemGetProperties xeMemGetProperties;
     pfn_xeMemGetAddressRange xeMemGetAddressRange;
     pfn_xeIpcGetMemHandle xeIpcGetMemHandle;
     pfn_xeIpcOpenMemHandle xeIpcOpenMemHandle;
@@ -697,7 +696,7 @@ inline bool load_xe(void *handle, void *(*funcAddressGetter)(void *handle, const
     outTable->xeMemAlloc = (pfn_xeMemAlloc)funcAddressGetter(handle, "xeMemAlloc");
     outTable->xeHostMemAlloc = (pfn_xeHostMemAlloc)funcAddressGetter(handle, "xeHostMemAlloc");
     outTable->xeMemFree = (pfn_xeMemFree)funcAddressGetter(handle, "xeMemFree");
-    outTable->xeMemGetProperty = (pfn_xeMemGetProperty)funcAddressGetter(handle, "xeMemGetProperty");
+    outTable->xeMemGetProperties = (pfn_xeMemGetProperties)funcAddressGetter(handle, "xeMemGetProperties");
     outTable->xeMemGetAddressRange = (pfn_xeMemGetAddressRange)funcAddressGetter(handle, "xeMemGetAddressRange");
     outTable->xeIpcGetMemHandle = (pfn_xeIpcGetMemHandle)funcAddressGetter(handle, "xeIpcGetMemHandle");
     outTable->xeIpcOpenMemHandle = (pfn_xeIpcOpenMemHandle)funcAddressGetter(handle, "xeIpcOpenMemHandle");
@@ -935,7 +934,7 @@ inline bool load_xe(void *handle, void *(*funcAddressGetter)(void *handle, const
     if(0 == outTable->xeMemFree){
         return false;
     }
-    if(0 == outTable->xeMemGetProperty){
+    if(0 == outTable->xeMemGetProperties){
         return false;
     }
     if(0 == outTable->xeMemGetAddressRange){

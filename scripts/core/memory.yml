@@ -200,6 +200,14 @@ params:
       desc: "[in] pointer to memory to free"
 --- #--------------------------------------------------------------------------
 type: enum
+desc: "API version of $x_memory_allocation_properties_t"
+name: $x_memory_allocation_properties_version_t
+etors:
+    - name: $X_DEVICE_MEMORY_PROPERTIES_VERSION_CURRENT
+      value: "$X_MAKE_VERSION( 1, 0 )"
+      desc: "version 1.0"
+--- #--------------------------------------------------------------------------
+type: enum
 desc: "Memory allocation type"
 name: $x_memory_type_t
 etors:
@@ -213,21 +221,25 @@ etors:
     - name: $X_MEMORY_TYPE_SHARED
       desc: "the memory pointed to is a shared ownership allocation"
 --- #--------------------------------------------------------------------------
-type: enum
-desc: "Supported memory allocation query properties"
-name: $x_memory_property_t
-etors:
-    - name: $X_MEMORY_PROPERTY_TYPE
-      value: "0"
-      desc: "returns the type of allocated memory, see $x_memory_type_t"
-    - name: $X_MEMORY_PROPERTY_BUFFER_ID
-      value: "1"
-      desc: "returns a unique bufferID associated with the memory allocation"
+type: struct
+desc: "Memory allocation properties queried using $xMemGetProperties"
+name: $x_memory_allocation_properties_t
+members:
+    - type: $x_memory_allocation_properties_version_t
+      name: version
+      desc: "[in] $X_DEVICE_MEMORY_PROPERTIES_VERSION_CURRENT"
+      init: "$X_DEVICE_MEMORY_PROPERTIES_VERSION_CURRENT"
+    - type: $x_memory_type_t
+      name: type
+      desc: "[out] Type of allocated memory"
+    - type: uint64_t
+      name: id
+      desc: "[out] Identifier for this allocation"
 --- #--------------------------------------------------------------------------
 type: function
-desc: "Retrieves a property of an allocation"
+desc: "Retrieves attributes of a memory allocation"
 class: $x
-name: MemGetProperty
+name: MemGetProperties
 decl: static
 analogue:
     - "**cuPointerGetAttribute**"
@@ -241,15 +253,9 @@ params:
     - type: "const void*"
       name: ptr
       desc: "[in] Pointer to query"
-    - type: $x_memory_property_t
-      name: property
-      desc: "[in] Property of the allocation to query"
-    - type: "uint64_t*"
-      name: pValue
-      desc: "[out] Value of the queried property"
-returns:
-    - $X_RESULT_ERROR_INVALID_PARAMETER:
-        - "invalid property"
+    - type: "$x_memory_allocation_properties_t*"
+      name: pMemProperties
+      desc: "[out] Query result for memory allocation properties"
 --- #--------------------------------------------------------------------------
 type: function
 desc: "Retrieves the base address and/or size of an allocation"
