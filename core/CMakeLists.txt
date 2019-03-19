@@ -74,4 +74,12 @@ if(UNIX)
     install(TARGETS ${TARGET_NAME}
         DESTINATION lib
         COMPONENT l0-core)
+
+    file(GLOB_RECURSE HEADER_FILES "include/*")
+    list(REMOVE_ITEM HEADER_FILES "CMakeLists.txt")
+    message(STATUS "files: ${HEADER_FILES}")
+    install(FILES ${HEADER_FILES}
+        DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}
+        COMPONENT l0-headers
+    )
 endif()

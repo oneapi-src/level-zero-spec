@@ -121,7 +121,7 @@ if(UNIX)
 	set(CPACK_DEB_COMPONENT_INSTALL ON)
 	set(CPACK_RPM_COMPONENT_INSTALL ON)
 	set(CPACK_ARCHIVE_COMPONENT_INSTALL ON)
-	set(CPACK_COMPONENTS_ALL l0-core l0-icd)
+	set(CPACK_COMPONENTS_ALL l0-core l0-icd l0-headers)
 
     include(CPack)
 endif()
