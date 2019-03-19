@@ -131,6 +131,10 @@ void FunctionImp::setGroupCount(uint32_t groupCountX, uint32_t groupCountY, uint
 xe_result_t FunctionImp::setGroupSize(uint32_t groupSizeX,
                                       uint32_t groupSizeY,
                                       uint32_t groupSizeZ) {
+    if ((0 == groupSizeX) || (0 == groupSizeY) || (0 == groupSizeZ)) {
+        return XE_RESULT_ERROR_INVALID_PARAMETER; // needs clarification in the spec
+    }
+
     auto numChannels = OCLRT::PerThreadDataHelper::getNumLocalIdChannels(*getKernelInfo()->patchInfo.threadPayload);
     Vec3<size_t> groupSize{groupSizeX, groupSizeY, groupSizeZ};
     auto itemsInGroup = OCLRT::Math::computeTotalElementsCount(groupSize);

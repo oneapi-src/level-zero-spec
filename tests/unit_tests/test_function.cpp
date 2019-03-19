@@ -139,5 +139,12 @@ TEST_P(FunctionImpSuggestGroupSize, suggestGroupChoosesProperGroupSize) {
     EXPECT_EQ(0U, size % groupSize[2]);
 }
 
+TEST(FunctionImp, setGroupSizeGuardsAgainst0SizeDispatch) {
+    Mock<Function> function;
+    EXPECT_EQ(XE_RESULT_ERROR_INVALID_PARAMETER, function.FunctionImp::setGroupSize(0U, 1U, 1U));
+    EXPECT_EQ(XE_RESULT_ERROR_INVALID_PARAMETER, function.FunctionImp::setGroupSize(1U, 0U, 1U));
+    EXPECT_EQ(XE_RESULT_ERROR_INVALID_PARAMETER, function.FunctionImp::setGroupSize(1U, 1U, 0U));
+}
+
 } // namespace ult
 } // namespace L0
