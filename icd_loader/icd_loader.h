@@ -368,7 +368,7 @@ typedef xe_result_t (__xecall *pfn_xeMemGetProperty)(
     xe_mem_allocator_handle_t hMemAllocHandle,      ///< [in] handle of memory allocator for this allocation
     const void* ptr,                                ///< [in] Pointer to query
     xe_memory_property_t property,                  ///< [in] Property of the allocation to query
-    uint32_t* pValue                                ///< [out] Value of the queried property
+    uint64_t* pValue                                ///< [out] Value of the queried property
     );
 typedef xe_result_t (__xecall *pfn_xeMemGetAddressRange)(
     xe_mem_allocator_handle_t hMemAllocHandle,      ///< [in] handle of memory allocator for this allocation

@@ -265,6 +265,7 @@ typedef enum _xe_memory_type_t
 typedef enum _xe_memory_property_t
 {
     XE_MEMORY_PROPERTY_TYPE = 0,                    ///< returns the type of allocated memory, see ::xe_memory_type_t
+    XE_MEMORY_PROPERTY_BUFFER_ID = 1,               ///< returns a unique bufferID associated with the memory allocation
 
 } xe_memory_property_t;
 
@@ -294,7 +295,7 @@ xeMemGetProperty(
     xe_mem_allocator_handle_t hMemAllocHandle,      ///< [in] handle of memory allocator for this allocation
     const void* ptr,                                ///< [in] Pointer to query
     xe_memory_property_t property,                  ///< [in] Property of the allocation to query
-    uint32_t* pValue                                ///< [out] Value of the queried property
+    uint64_t* pValue                                ///< [out] Value of the queried property
     );
 
 ///////////////////////////////////////////////////////////////////////////////

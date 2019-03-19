@@ -455,14 +455,14 @@ xeMemFree(
 ///         + invalid property
 ///     - ::XE_RESULT_ERROR_UNSUPPORTED
 ///
-/// @hash {475a4652d2fbecab68e2ac9b52c4b6580e8c9d1e48a866b759bfa8a50050e45d}
+/// @hash {c2aa3e2c11f9bf118339f4138c393015f9c045ff5030097b0de22ba5fd169701}
 ///
 __xedllexport xe_result_t __xecall
 xeMemGetProperty(
     xe_mem_allocator_handle_t hMemAllocHandle,      ///< [in] handle of memory allocator for this allocation
     const void* ptr,                                ///< [in] Pointer to query
     xe_memory_property_t property,                  ///< [in] Property of the allocation to query
-    uint32_t* pValue                                ///< [out] Value of the queried property
+    uint64_t* pValue                                ///< [out] Value of the queried property
     )
 {
     try

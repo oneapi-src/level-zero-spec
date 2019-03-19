@@ -220,6 +220,9 @@ etors:
     - name: $X_MEMORY_PROPERTY_TYPE
       value: "0"
       desc: "returns the type of allocated memory, see $x_memory_type_t"
+    - name: $X_MEMORY_PROPERTY_BUFFER_ID
+      value: "1"
+      desc: "returns a unique bufferID associated with the memory allocation"
 --- #--------------------------------------------------------------------------
 type: function
 desc: "Retrieves a property of an allocation"
@@ -241,7 +244,7 @@ params:
     - type: $x_memory_property_t
       name: property
       desc: "[in] Property of the allocation to query"
-    - type: "uint32_t*"
+    - type: "uint64_t*"
       name: pValue
       desc: "[out] Value of the queried property"
 returns:

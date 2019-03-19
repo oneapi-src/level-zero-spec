@@ -217,6 +217,7 @@ namespace xe
     enum class memory_property_t
     {
         TYPE = 0,                                       ///< returns the type of allocated memory, see ::memory_type_t
+        BUFFER_ID = 1,                                  ///< returns a unique bufferID associated with the memory allocation
 
     };
 
@@ -232,10 +233,10 @@ namespace xe
     ///     - **cuPointerGetAttribute**
     /// 
     /// @returns
-    ///     - uint32_t: Value of the queried property
+    ///     - uint64_t: Value of the queried property
     /// 
     /// @throws result_t
-    inline uint32_t
+    inline uint64_t
     MemGetProperty(
         mem_allocator_handle_t hMemAllocHandle,         ///< [in] handle of memory allocator for this allocation
         const void* ptr,                                ///< [in] Pointer to query
