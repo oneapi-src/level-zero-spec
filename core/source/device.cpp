@@ -126,7 +126,35 @@ struct DeviceImp : public Device {
     }
 
     xe_result_t getMemoryProperties(xe_device_memory_properties_t *pMemProperties) override {
-        return XE_RESULT_ERROR_UNSUPPORTED;
+        assert(pMemProperties != nullptr);
+        assert(pMemProperties->version == XE_DEVICE_MEMORY_PROPERTIES_VERSION_CURRENT);
+        const auto &deviceInfo = this->deviceRT->getDeviceInfo();
+        const auto &hardwareInfo = this->deviceRT->getHardwareInfo();
+        auto &hwHelper = OCLRT::HwHelper::get(hardwareInfo.pPlatform->eRenderCoreFamily);
+        auto enableLocalMemory = hwHelper.getEnableLocalMemory(hardwareInfo);
+
+        pMemProperties->unifiedMemory = true;                         // need clarification - "Host and device share same physical memory."
+                                                                      //                      i.e. all physical memory?
+        pMemProperties->onDemandPageFaults = false;                   // TODO : Add support
+        pMemProperties->maxImageDims1D = deviceInfo.image2DMaxWidth;  //
+        pMemProperties->maxImageDims2D = deviceInfo.image2DMaxHeight; // need clarification : assumes max is square
+        pMemProperties->maxImageDims3D = deviceInfo.image3DMaxDepth;  // need clarification : assumes max is a cube
+        pMemProperties->maxImageArraySlices = deviceInfo.imageMaxArraySize;
+        // Need clarification on XE_MEMORY_CONCURRENT_ACCESS and XE_MEMORY_CONCURRENT_ATOMIC_ACCESS
+        pMemProperties->hostAllocCapabilities = xe_memory_access_capabilities_t{}; // system level SVM? need clarification
+        pMemProperties->deviceAllocCapabilities = static_cast<xe_memory_access_capabilities_t>(XE_MEMORY_ACCESS | XE_MEMORY_ATOMIC_ACCESS);
+        pMemProperties->sharedAllocCapabilities = XE_MEMORY_ACCESS;
+        if (false == enableLocalMemory) {
+            pMemProperties->sharedAllocCapabilities = static_cast<xe_memory_access_capabilities_t>(XE_MEMORY_ACCESS | XE_MEMORY_ATOMIC_ACCESS);
+        }
+        pMemProperties->sharedCrossDeviceAllocCapabilities = xe_memory_access_capabilities_t{};  // need clarification
+        pMemProperties->sharedSystemDeviceAllocCapabilities = xe_memory_access_capabilities_t{}; // need clarification
+        pMemProperties->intermediateCacheSize = 0;                                               // TODO : does old L1$ count, or only PVC+? need clarification
+        pMemProperties->intermediateCacheControl = false;
+        pMemProperties->lastLevelCacheSize = deviceInfo.globalMemCacheSize;
+        pMemProperties->lastLevelCacheSizeControl = true; // TODO : Not true for ATS+
+                                                          // Need clarification : No stuff like cacheline size or (preferred) memory alignments
+        return XE_RESULT_SUCCESS;
     }
 
     xe_result_t getProperties(xe_device_properties_t *pDeviceProperties) override {
