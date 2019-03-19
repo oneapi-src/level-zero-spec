@@ -36,7 +36,7 @@ struct CommandListCoreFamily : public CommandListImp {
     xe_result_t appendImageCopy(xe_image_handle_t hDstImage,
                                 xe_image_handle_t hSrcImage) override;
     xe_result_t appendLaunchFunction(xe_function_handle_t hFunction,
-                                     const xe_thread_group_dimensions_t *pDispatchFuncArgs,
+                                     const xe_thread_group_dimensions_t *pThreadGroupDimensions,
                                      xe_event_handle_t hEvent) override;
     xe_result_t appendLaunchFunctionIndirect(xe_function_handle_t hFunction,
                                              const xe_thread_group_dimensions_t *pDispatchArgumentsBuffer,

@@ -21,18 +21,18 @@ void CommandListCoreFamily<IGFX_GEN12_CORE>::programFrontEndState() {
 
 template <>
 xe_result_t CommandListCoreFamily<IGFX_GEN12_CORE>::appendLaunchFunction(xe_function_handle_t hFunction,
-                                                                           const xe_thread_group_dimensions_t *pDispatchFuncArgs,
+                                                                           const xe_thread_group_dimensions_t *pThreadGroupDimensions,
                                                                            xe_event_handle_t hEvent) {
     using GfxFamily = typename OCLRT::GfxFamilyMapper<IGFX_GEN12_CORE>::GfxFamily;
     using COMPUTE_WALKER = typename GfxFamily::COMPUTE_WALKER;
     using INTERFACE_DESCRIPTOR_DATA = typename GfxFamily::INTERFACE_DESCRIPTOR_DATA;
 
     // Set # of threadgroups in each dimension
-    assert(pDispatchFuncArgs);
+    assert(pThreadGroupDimensions);
     COMPUTE_WALKER cmd = GfxFamily::cmdInitGpgpuWalker;
-    cmd.setThreadGroupIdXDimension(pDispatchFuncArgs->groupCountX);
-    cmd.setThreadGroupIdYDimension(pDispatchFuncArgs->groupCountY);
-    cmd.setThreadGroupIdZDimension(pDispatchFuncArgs->groupCountZ);
+    cmd.setThreadGroupIdXDimension(pThreadGroupDimensions->groupCountX);
+    cmd.setThreadGroupIdYDimension(pThreadGroupDimensions->groupCountY);
+    cmd.setThreadGroupIdZDimension(pThreadGroupDimensions->groupCountZ);
 
     // Set simd size
     const auto function = Function::fromHandle(hFunction);
@@ -59,9 +59,9 @@ xe_result_t CommandListCoreFamily<IGFX_GEN12_CORE>::appendLaunchFunction(xe_func
         postSync.setDestinationAddress(event->getGpuAddress());
     }
 
-    function->setGroupCount(pDispatchFuncArgs->groupCountX,
-                            pDispatchFuncArgs->groupCountY,
-                            pDispatchFuncArgs->groupCountZ);
+    function->setGroupCount(pThreadGroupDimensions->groupCountX,
+                            pThreadGroupDimensions->groupCountY,
+                            pThreadGroupDimensions->groupCountZ);
 
     // Copy the threadData to the indirect heap
     {

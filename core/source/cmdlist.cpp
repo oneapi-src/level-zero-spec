@@ -21,9 +21,9 @@ xe_result_t __xecall
 xeCommandListAppendLaunchFunction(
     xe_command_list_handle_t hCommandList,
     xe_function_handle_t hFunction,
-    xe_thread_group_dimensions_t *pDispatchFuncArgs,
+    xe_thread_group_dimensions_t *pThreadGroupDimensions,
     xe_event_handle_t hEvent) {
-    return CommandList::fromHandle(hCommandList)->appendLaunchFunction(hFunction, pDispatchFuncArgs, hEvent);
+    return CommandList::fromHandle(hCommandList)->appendLaunchFunction(hFunction, pThreadGroupDimensions, hEvent);
 }
 
 xe_result_t __xecall

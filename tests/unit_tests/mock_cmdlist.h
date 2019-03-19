@@ -37,7 +37,7 @@ struct Mock<CommandList> : public CommandList {
     MOCK_METHOD2(appendCommandLists, xe_result_t(uint32_t numCommandLists,
                                                  xe_command_list_handle_t *phCommandLists));
     MOCK_METHOD3(appendLaunchFunction, xe_result_t(xe_function_handle_t hFunction,
-                                                   const xe_thread_group_dimensions_t *pDispatchFuncArgs,
+                                                   const xe_thread_group_dimensions_t *pThreadGroupDimensions,
                                                    xe_event_handle_t hEvent));
     MOCK_METHOD3(appendLaunchFunctionIndirect, xe_result_t(xe_function_handle_t hFunction,
                                                            const xe_thread_group_dimensions_t *pDispatchArgumentsBuffer,

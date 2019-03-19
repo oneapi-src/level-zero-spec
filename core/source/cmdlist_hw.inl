@@ -243,7 +243,7 @@ xe_result_t CommandListCoreFamily<gfxCoreFamily>::appendCommandLists(uint32_t nu
 
 template <GFXCORE_FAMILY gfxCoreFamily>
 xe_result_t CommandListCoreFamily<gfxCoreFamily>::appendLaunchFunction(xe_function_handle_t hFunction,
-                                                                       const xe_thread_group_dimensions_t *pDispatchFuncArgs,
+                                                                       const xe_thread_group_dimensions_t *pThreadGroupDimensions,
                                                                        xe_event_handle_t hEvent) {
     using GfxFamily = typename OCLRT::GfxFamilyMapper<gfxCoreFamily>::GfxFamily;
     using GPGPU_WALKER = typename GfxFamily::GPGPU_WALKER;
@@ -328,11 +328,11 @@ xe_result_t CommandListCoreFamily<gfxCoreFamily>::appendLaunchFunction(xe_functi
     }
 
     // Set # of threadgroups in each dimension
-    assert(pDispatchFuncArgs);
+    assert(pThreadGroupDimensions);
     cmd.setThreadWidthCounterMaximum(threadsPerThreadGroup);
-    cmd.setThreadGroupIdXDimension(pDispatchFuncArgs->groupCountX);
-    cmd.setThreadGroupIdYDimension(pDispatchFuncArgs->groupCountY);
-    cmd.setThreadGroupIdZDimension(pDispatchFuncArgs->groupCountZ);
+    cmd.setThreadGroupIdXDimension(pThreadGroupDimensions->groupCountX);
+    cmd.setThreadGroupIdYDimension(pThreadGroupDimensions->groupCountY);
+    cmd.setThreadGroupIdZDimension(pThreadGroupDimensions->groupCountZ);
 
     // Set simd size
     auto simdSize = function->getSimdSize();
