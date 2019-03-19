@@ -528,7 +528,8 @@ xeDeviceGetMemoryProperties(
 }
 
 ///////////////////////////////////////////////////////////////////////////////
-/// @brief Retrieves link properties between one device and a peer devices
+/// @brief Retrieves Peer-to-Peer properties between one device and a peer
+///        devices
 /// 
 /// @details
 ///     - The application may call this function from simultaneous threads.
@@ -545,16 +546,16 @@ xeDeviceGetMemoryProperties(
 ///     - ::XE_RESULT_ERROR_INVALID_PARAMETER
 ///         + nullptr == hDevice
 ///         + nullptr == hPeerDevice
-///         + nullptr == pLinkProperties
+///         + nullptr == pP2PProperties
 ///     - ::XE_RESULT_ERROR_UNSUPPORTED
 ///
-/// @hash {f87da0c4b4faf80e73e9f40633b32da141016c47a8b47b4f51f277de390a2151}
+/// @hash {3c9fd37471b51c83bbd77b22c8ded7aa056bcf0badc076f48796a83f2cd0635e}
 ///
 __xedllexport xe_result_t __xecall
-xeDeviceGetLinkProperties(
+xeDeviceGetP2PProperties(
     xe_device_handle_t hDevice,                     ///< [in] handle of the device performing the access
     xe_device_handle_t hPeerDevice,                 ///< [in] handle of the peer device with the allocation
-    xe_device_link_properties_t* pLinkProperties    ///< [out] link properties between source and destination devices
+    xe_device_p2p_properties_t* pP2PProperties      ///< [out] Peer-to-Peer properties between source and peer device
     )
 {
     try
@@ -565,13 +566,13 @@ xeDeviceGetLinkProperties(
             // Check parameters
             if( nullptr == hDevice ) return XE_RESULT_ERROR_INVALID_PARAMETER;
             if( nullptr == hPeerDevice ) return XE_RESULT_ERROR_INVALID_PARAMETER;
-            if( nullptr == pLinkProperties ) return XE_RESULT_ERROR_INVALID_PARAMETER;
+            if( nullptr == pP2PProperties ) return XE_RESULT_ERROR_INVALID_PARAMETER;
         }
         /// @begin
 #if defined(XE_NULLDRV)
         return XE_RESULT_SUCCESS;
 #else
-        return L0::Device::fromHandle(hDevice)->getLinkProperties(hPeerDevice, pLinkProperties);
+        return L0::Device::fromHandle(hDevice)->getP2PProperties(hPeerDevice, pP2PProperties);
 #endif
         /// @end
     }

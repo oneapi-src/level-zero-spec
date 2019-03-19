@@ -441,15 +441,15 @@ xe_result_t __xecall xeDeviceGetMemoryProperties(
     }
     return dispatchTable.xeDeviceGetMemoryProperties(hDevice, pMemProperties);
 }
-xe_result_t __xecall xeDeviceGetLinkProperties(
+xe_result_t __xecall xeDeviceGetP2PProperties(
         xe_device_handle_t hDevice,                     ///< [in] handle of the device performing the access
         xe_device_handle_t hPeerDevice,                 ///< [in] handle of the peer device with the allocation
-        xe_device_link_properties_t* pLinkProperties    ///< [out] link properties between source and destination devices
+        xe_device_p2p_properties_t* pP2PProperties      ///< [out] Peer-to-Peer properties between source and peer device
     ){
     if(dispatchTableInitialized == false){
         return XE_RESULT_ERROR_UNINITIALIZED;
     }
-    return dispatchTable.xeDeviceGetLinkProperties(hDevice, hPeerDevice, pLinkProperties);
+    return dispatchTable.xeDeviceGetP2PProperties(hDevice, hPeerDevice, pP2PProperties);
 }
 xe_result_t __xecall xeDeviceCanAccessPeer(
         xe_device_handle_t hDevice,                     ///< [in] handle of the device performing the access

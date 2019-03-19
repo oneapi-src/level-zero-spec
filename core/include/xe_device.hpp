@@ -173,8 +173,8 @@ namespace xe
         };
 
         ///////////////////////////////////////////////////////////////////////////////
-        /// @brief C++ version for ::xe_device_link_properties_version_t
-        enum class device_link_properties_version_t
+        /// @brief C++ version for ::xe_device_p2p_properties_version_t
+        enum class device_p2p_properties_version_t
         {
             CURRENT = XE_MAKE_VERSION( 1, 0 ),              ///< version 1.0
 
@@ -420,12 +420,12 @@ namespace xe
         };
 
         ///////////////////////////////////////////////////////////////////////////////
-        /// @brief C++ version for ::xe_device_link_properties_t
-        struct device_link_properties_t
+        /// @brief C++ version for ::xe_device_p2p_properties_t
+        struct device_p2p_properties_t
         {
-            device_link_properties_version_t version = device_link_properties_version_t::CURRENT;   ///< [in] ::DEVICE_LINK_PROPERTIES_VERSION_CURRENT
-            bool_t isP2PSupported;                          ///< [out] Is P2P access supported across link
-            bool_t isAtomicsSupported;                      ///< [out] Are atomics supported across link
+            device_p2p_properties_version_t version = device_p2p_properties_version_t::CURRENT; ///< [in] ::DEVICE_P2P_PROPERTIES_VERSION_CURRENT
+            bool_t isP2PSupported;                          ///< [out] Is P2P access supported between two devices
+            bool_t isAtomicsSupported;                      ///< [out] Are atomics supported between two devices
 
         };
 
@@ -626,13 +626,13 @@ namespace xe
             );
 
         ///////////////////////////////////////////////////////////////////////////////
-        /// @brief C++ wrapper for ::xeDeviceGetLinkProperties
+        /// @brief C++ wrapper for ::xeDeviceGetP2PProperties
         /// @returns
-        ///     - device_link_properties_t: link properties between source and destination devices
+        ///     - device_p2p_properties_t: Peer-to-Peer properties between source and peer device
         /// 
         /// @throws result_t
-        inline device_link_properties_t
-        GetLinkProperties(
+        inline device_p2p_properties_t
+        GetP2PProperties(
             device_handle_t hPeerDevice                     ///< [in] handle of the peer device with the allocation
             );
 

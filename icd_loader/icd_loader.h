@@ -224,10 +224,10 @@ typedef xe_result_t (__xecall *pfn_xeDeviceGetMemoryProperties)(
     xe_device_handle_t hDevice,                     ///< [in] handle of the device object
     xe_device_memory_properties_t* pMemProperties   ///< [out] query result for compute properties
     );
-typedef xe_result_t (__xecall *pfn_xeDeviceGetLinkProperties)(
+typedef xe_result_t (__xecall *pfn_xeDeviceGetP2PProperties)(
     xe_device_handle_t hDevice,                     ///< [in] handle of the device performing the access
     xe_device_handle_t hPeerDevice,                 ///< [in] handle of the peer device with the allocation
-    xe_device_link_properties_t* pLinkProperties    ///< [out] link properties between source and destination devices
+    xe_device_p2p_properties_t* pP2PProperties      ///< [out] Peer-to-Peer properties between source and peer device
     );
 typedef xe_result_t (__xecall *pfn_xeDeviceCanAccessPeer)(
     xe_device_handle_t hDevice,                     ///< [in] handle of the device performing the access
@@ -558,7 +558,7 @@ typedef struct _xe_dispatch_table_t
     pfn_xeDeviceGetProperties xeDeviceGetProperties;
     pfn_xeDeviceGetComputeProperties xeDeviceGetComputeProperties;
     pfn_xeDeviceGetMemoryProperties xeDeviceGetMemoryProperties;
-    pfn_xeDeviceGetLinkProperties xeDeviceGetLinkProperties;
+    pfn_xeDeviceGetP2PProperties xeDeviceGetP2PProperties;
     pfn_xeDeviceCanAccessPeer xeDeviceCanAccessPeer;
     pfn_xeDeviceSetIntermediateCacheConfig xeDeviceSetIntermediateCacheConfig;
     pfn_xeDeviceSetLastLevelCacheConfig xeDeviceSetLastLevelCacheConfig;
@@ -666,7 +666,7 @@ inline bool load_xe(void *handle, void *(*funcAddressGetter)(void *handle, const
     outTable->xeDeviceGetProperties = (pfn_xeDeviceGetProperties)funcAddressGetter(handle, "xeDeviceGetProperties");
     outTable->xeDeviceGetComputeProperties = (pfn_xeDeviceGetComputeProperties)funcAddressGetter(handle, "xeDeviceGetComputeProperties");
     outTable->xeDeviceGetMemoryProperties = (pfn_xeDeviceGetMemoryProperties)funcAddressGetter(handle, "xeDeviceGetMemoryProperties");
-    outTable->xeDeviceGetLinkProperties = (pfn_xeDeviceGetLinkProperties)funcAddressGetter(handle, "xeDeviceGetLinkProperties");
+    outTable->xeDeviceGetP2PProperties = (pfn_xeDeviceGetP2PProperties)funcAddressGetter(handle, "xeDeviceGetP2PProperties");
     outTable->xeDeviceCanAccessPeer = (pfn_xeDeviceCanAccessPeer)funcAddressGetter(handle, "xeDeviceCanAccessPeer");
     outTable->xeDeviceSetIntermediateCacheConfig = (pfn_xeDeviceSetIntermediateCacheConfig)funcAddressGetter(handle, "xeDeviceSetIntermediateCacheConfig");
     outTable->xeDeviceSetLastLevelCacheConfig = (pfn_xeDeviceSetLastLevelCacheConfig)funcAddressGetter(handle, "xeDeviceSetLastLevelCacheConfig");
@@ -842,7 +842,7 @@ inline bool load_xe(void *handle, void *(*funcAddressGetter)(void *handle, const
     if(0 == outTable->xeDeviceGetMemoryProperties){
         return false;
     }
-    if(0 == outTable->xeDeviceGetLinkProperties){
+    if(0 == outTable->xeDeviceGetP2PProperties){
         return false;
     }
     if(0 == outTable->xeDeviceCanAccessPeer){
