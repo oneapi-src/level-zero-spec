@@ -13,9 +13,7 @@ namespace L0 {
 struct EventImp : public Event {
     EventImp(Device *device) : device(device) {}
 
-    xe_result_t hostSignal() override {
-        return XE_RESULT_ERROR_UNSUPPORTED;
-    }
+    xe_result_t hostSignal() override;
 
     xe_result_t hostSynchronize(uint32_t timeout) override;
 
@@ -66,6 +64,20 @@ bool EventImp::initialize() {
 
 xe_result_t Event::destroy() {
     delete this;
+    return XE_RESULT_SUCCESS;
+}
+
+xe_result_t EventImp::hostSignal() {
+    void *hostAddress = allocation->getHostAddress();
+    uint32_t value = *(static_cast<uint32_t *> (hostAddress));
+
+    //  Clear bit 0 of host memory address to signal event
+    uint32_t signal = !(value & 1);
+    value |= signal;
+
+    // Flush cache line at all levels containing the value
+    _mm_clflush(hostAddress);
+
     return XE_RESULT_SUCCESS;
 }
 
