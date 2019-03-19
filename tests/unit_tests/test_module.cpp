@@ -45,24 +45,44 @@ TEST(ModuleBuildLog, stringModuleBuildLog) {
     auto moduleBuildLog = ModuleBuildLog::create();
     ASSERT_NE(nullptr, moduleBuildLog);
 
-    auto result = moduleBuildLog->getString(&buildLogSize, &buildLog);
+    auto result = moduleBuildLog->getString(&buildLogSize, nullptr);
     EXPECT_EQ(XE_RESULT_SUCCESS, result);
     EXPECT_EQ(1, buildLogSize);
-    EXPECT_STREQ("", buildLog);
+
+    buildLog = (char *)malloc(buildLogSize);
+    result = moduleBuildLog->getString(&buildLogSize, &buildLog);
+    EXPECT_EQ(XE_RESULT_SUCCESS, result);
+    EXPECT_EQ(1, buildLogSize);
+
+    free(buildLog);
 
     moduleBuildLog->appendString(error_log, strlen(error_log));
 
+    result = moduleBuildLog->getString(&buildLogSize, nullptr);
+    EXPECT_EQ(XE_RESULT_SUCCESS, result);
+    EXPECT_EQ((strlen(error_log) + 1), buildLogSize);
+
+    buildLog = (char *)malloc(buildLogSize);
     result = moduleBuildLog->getString(&buildLogSize, &buildLog);
     EXPECT_EQ(XE_RESULT_SUCCESS, result);
     EXPECT_EQ((strlen(error_log) + 1), buildLogSize);
     EXPECT_STREQ("Error Log", buildLog);
 
+    free(buildLog);
+
     moduleBuildLog->appendString(warn_log, strlen(warn_log));
 
+    result = moduleBuildLog->getString(&buildLogSize, nullptr);
+    EXPECT_EQ(XE_RESULT_SUCCESS, result);
+    EXPECT_EQ((strlen(error_log) + strlen("\n") + strlen(warn_log) + 1), buildLogSize);
+
+    buildLog = (char *)malloc(buildLogSize);
     result = moduleBuildLog->getString(&buildLogSize, &buildLog);
     EXPECT_EQ(XE_RESULT_SUCCESS, result);
     EXPECT_EQ((strlen(error_log) + strlen("\n") + strlen(warn_log) + 1), buildLogSize);
     EXPECT_STREQ("Error Log\nWarn Log", buildLog);
+
+    free(buildLog);
 
     result = moduleBuildLog->destroy();
     EXPECT_EQ(XE_RESULT_SUCCESS, result);

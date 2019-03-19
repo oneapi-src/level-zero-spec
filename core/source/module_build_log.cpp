@@ -16,14 +16,17 @@ struct ModuleBuildLogImp : public ModuleBuildLog {
     }
 
     xe_result_t getString(size_t *pSize, char **pBuildLog) override {
-        // FIX_ME: const_cast shouldnt be here.
-        char *buildLog = const_cast<char *>(this->buildLog.c_str());
+        const char *buildLog = this->buildLog.c_str();
+        size_t szLog;
 
         if (buildLog != nullptr) {
-            *pBuildLog = buildLog;
-            *pSize = strlen(buildLog) + 1;
+            szLog = strlen(buildLog) + 1;
+
+            if (pBuildLog)
+                memcpy(*pBuildLog, buildLog, szLog);
+
+            *pSize = szLog;
         } else {
-            *pBuildLog = nullptr;
             *pSize = 0;
         }
         return XE_RESULT_SUCCESS;
