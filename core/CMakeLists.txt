@@ -66,7 +66,9 @@ get_target_property(OCLOC_COMPILE_DEFINITIONS ocloc COMPILE_DEFINITIONS)
 add_library(ocloc_shared SHARED ${OCLOC_SOURCES} ${CMAKE_CURRENT_SOURCE_DIR}/source/ocloc_shared.cpp)
 target_include_directories(ocloc_shared PRIVATE ${OCLOC_INCLUDES} ${CMAKE_CURRENT_SOURCE_DIR}/include)
 target_link_libraries(ocloc_shared ${OCLOC_LIBRARY_DEPENDENCIES})
-target_compile_definitions(ocloc_shared PRIVATE ${OCLOC_COMPILE_DEFINITIONS} -DMOCKABLE_VIRTUAL=)
+target_compile_definitions(ocloc_shared PRIVATE ${OCLOC_COMPILE_DEFINITIONS} -DMOCKABLE_VIRTUAL= CL_USE_DEPRECATED_OPENCL_1_1_APIS CL_USE_DEPRECATED_OPENCL_1_2_APIS CL_USE_DEPRECATED_OPENCL_2_0_APIS CL_TARGET_OPENCL_VERSION=210)
+
+
 
 set(OS_SPECIFIC_LIBS ${OS_SPECIFIC_LIBS} PARENT_SCOPE)
 
@@ -77,7 +79,6 @@ if(UNIX)
 
     file(GLOB_RECURSE HEADER_FILES "include/*")
     list(REMOVE_ITEM HEADER_FILES "CMakeLists.txt")
-    message(STATUS "files: ${HEADER_FILES}")
     install(FILES ${HEADER_FILES}
         DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}
         COMPONENT l0-headers
