@@ -72,6 +72,8 @@ TEST(FunctionImp, suggestGroupSizeClampsToMaxGroupSize) {
     EXPECT_EQ(8U, groupSize[0]);
     EXPECT_EQ(1U, groupSize[1]);
     EXPECT_EQ(1U, groupSize[2]);
+
+    kernelInfo.deleteOwned();
 }
 
 using FunctionImpSuggestGroupSize = ::testing::TestWithParam<uint32_t>;
@@ -137,6 +139,8 @@ TEST_P(FunctionImpSuggestGroupSize, suggestGroupChoosesProperGroupSize) {
     EXPECT_EQ(0U, size % groupSize[0]);
     EXPECT_EQ(0U, 1U % groupSize[1]);
     EXPECT_EQ(0U, size % groupSize[2]);
+
+    kernelInfo.deleteOwned();
 }
 
 TEST(FunctionImp, setGroupSizeGuardsAgainst0SizeDispatch) {
@@ -144,6 +148,39 @@ TEST(FunctionImp, setGroupSizeGuardsAgainst0SizeDispatch) {
     EXPECT_EQ(XE_RESULT_ERROR_INVALID_PARAMETER, function.FunctionImp::setGroupSize(0U, 1U, 1U));
     EXPECT_EQ(XE_RESULT_ERROR_INVALID_PARAMETER, function.FunctionImp::setGroupSize(1U, 0U, 1U));
     EXPECT_EQ(XE_RESULT_ERROR_INVALID_PARAMETER, function.FunctionImp::setGroupSize(1U, 1U, 0U));
+}
+
+TEST(FunctionImp, setGroupSizeDoesNotGenerateLocalIdsIfNumChannelsIs0) {
+    iOpenCL::SPatchThreadPayload payload{};
+    OCLRT::SPatchExecutionEnvironment execEnv = {};
+    PtrOwn<OCLRT::KernelInfo> kernelInfo{new OCLRT::KernelInfo{}};
+    kernelInfo->patchInfo.executionEnvironment = &execEnv;
+    kernelInfo->patchInfo.threadPayload = &payload;
+    ImmutableFunctionInfo funcInfo = {};
+    funcInfo.kernelInfoRT = kernelInfo.weakRefReinterpret<void>();
+    execEnv.LargestCompiledSIMDSize = 32;
+
+    Mock<Module> module;
+    Mock<Function> function;
+    function.immFuncInfo.rebind(&funcInfo);
+    function.module = &module;
+
+    function.FunctionImp::setGroupSize(16U, 16U, 1U);
+    std::vector<char> memBefore;
+    {
+        auto perThreadData = reinterpret_cast<const char *>(function.FunctionImp::getPerThreadDataHostMem());
+        memBefore.assign(perThreadData, perThreadData + function.FunctionImp::getPerThreadDataSize());
+    }
+
+    function.FunctionImp::setGroupSize(8U, 32U, 1U);
+    std::vector<char> memAfter;
+    {
+        auto perThreadData = reinterpret_cast<const char *>(function.FunctionImp::getPerThreadDataHostMem());
+        memAfter.assign(perThreadData, perThreadData + function.FunctionImp::getPerThreadDataSize());
+    }
+
+    EXPECT_EQ(memAfter, memBefore);
+    kernelInfo.deleteOwned();
 }
 
 } // namespace ult

@@ -95,7 +95,7 @@ struct FunctionImp : Function {
     }
 
     const void *getPerThreadDataHostMem() const override {
-        return perThreadData;
+        return perThreadDataForWholeThreadGroup;
     }
 
     uint32_t getPerThreadDataSizeForWholeThreadGroup() const override {
@@ -155,8 +155,9 @@ struct FunctionImp : Function {
     char *crossThreadData = 0;
     uint32_t crossThreadDataSize = 0;
 
-    void *perThreadData = nullptr;
-    uint32_t perThreadDataSizeForWholeThreadGroup = 0u;
+    void *perThreadDataForWholeThreadGroup = nullptr;
+    uint32_t perThreadDataSizeForWholeThreadGroupAllocated = 0; // length of underlying buffer behind perThreadDataForWholeThreadGroup
+    uint32_t perThreadDataSizeForWholeThreadGroup = 0u;         // part of perThreadDataForWholeThreadGroup used by current group size
     uint32_t perThreadDataSize = 0u;
 
     uint32_t threadsPerThreadGroup = 0u;

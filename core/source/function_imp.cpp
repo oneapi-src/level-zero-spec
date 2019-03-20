@@ -93,8 +93,8 @@ struct FunctionImp::OCLInternal { // cloned from OCLRT::Kernel - keeping types/n
 FunctionImp::FunctionImp(Module *module) : module(module), oclInternals(new OCLInternal) {}
 
 FunctionImp::~FunctionImp() {
-    if (perThreadData) {
-        alignedFree(perThreadData);
+    if (perThreadDataForWholeThreadGroup) {
+        alignedFree(perThreadDataForWholeThreadGroup);
     }
     if (kernelRT) {
         kernelRT->release();
@@ -138,18 +138,23 @@ xe_result_t FunctionImp::setGroupSize(uint32_t groupSizeX,
     auto numChannels = OCLRT::PerThreadDataHelper::getNumLocalIdChannels(*getKernelInfo()->patchInfo.threadPayload);
     Vec3<size_t> groupSize{groupSizeX, groupSizeY, groupSizeZ};
     auto itemsInGroup = OCLRT::Math::computeTotalElementsCount(groupSize);
-    uint32_t perThreadDataSizeNeeded = static_cast<uint32_t>(OCLRT::PerThreadDataHelper::getPerThreadDataSizeTotal(getKernelInfo()->getMaxSimdSize(),
-                                                                                                                   numChannels, itemsInGroup));
-    if (perThreadDataSizeNeeded > perThreadDataSizeForWholeThreadGroup) {
-        alignedFree(perThreadData);
-        perThreadData = alignedMalloc(perThreadDataSizeNeeded, 32); // alignment for vector instructions
-        perThreadDataSizeForWholeThreadGroup = perThreadDataSizeNeeded;
+    uint32_t perThreadDataSizeForWholeThreadGroupNeeded = static_cast<uint32_t>(OCLRT::PerThreadDataHelper::getPerThreadDataSizeTotal(getKernelInfo()->getMaxSimdSize(),
+                                                                                                                                      numChannels, itemsInGroup));
+    if (perThreadDataSizeForWholeThreadGroupNeeded > perThreadDataSizeForWholeThreadGroupAllocated) {
+        alignedFree(perThreadDataForWholeThreadGroup);
+        perThreadDataForWholeThreadGroup = alignedMalloc(perThreadDataSizeForWholeThreadGroupNeeded, 32); // alignment for vector instructions
+        perThreadDataSizeForWholeThreadGroupAllocated = perThreadDataSizeForWholeThreadGroupNeeded;
     }
+    perThreadDataSizeForWholeThreadGroup = perThreadDataSizeForWholeThreadGroupNeeded;
 
-    OCLRT::generateLocalIDs(perThreadData, static_cast<uint16_t>(getSimdSize()),
-                            std::array<uint16_t, 3>{{static_cast<uint16_t>(groupSizeX), static_cast<uint16_t>(groupSizeY), static_cast<uint16_t>(groupSizeZ)}},
-                            std::array<uint8_t, 3>{{0, 1, 2}}, // to do : add support for non-default walk order
-                            false);
+    if (numChannels > 0) {
+        // don't generate local IDs if not needed
+        assert(3 == numChannels); // if we do need local ids, we support only all 3 channels
+        OCLRT::generateLocalIDs(perThreadDataForWholeThreadGroup, static_cast<uint16_t>(getSimdSize()),
+                                std::array<uint16_t, 3>{{static_cast<uint16_t>(groupSizeX), static_cast<uint16_t>(groupSizeY), static_cast<uint16_t>(groupSizeZ)}},
+                                std::array<uint8_t, 3>{{0, 1, 2}}, // to do : add support for non-default walk order
+                                false);
+    }
 
     this->groupSizeX = groupSizeX;
     this->groupSizeY = groupSizeY;
