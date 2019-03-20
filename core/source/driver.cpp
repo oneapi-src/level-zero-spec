@@ -13,7 +13,7 @@ struct DriverImp : public Driver {
         return XE_RESULT_SUCCESS;
     }
 
-    xe_result_t getDevice(xe_device_uuid_t *uniqueId,
+    xe_result_t getDevice(const xe_device_uuid_t *uniqueId,
                           xe_device_handle_t *phDevice) override {
         auto platform = OCLRT::constructPlatform();
         //TODO: map uniqueId -> deviceOrdinal
@@ -30,7 +30,7 @@ struct DriverImp : public Driver {
     }
 
     xe_result_t getDeviceUniqueIds(uint32_t count,
-                                   xe_device_uuid_t* pUniqueIds) override {
+                                   xe_device_uuid_t *pUniqueIds) override {
         return XE_RESULT_ERROR_UNSUPPORTED;
     }
 

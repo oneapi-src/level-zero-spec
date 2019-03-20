@@ -205,7 +205,7 @@ namespace xe
     /// @brief API version of ::memory_allocation_properties_t
     enum class memory_allocation_properties_version_t
     {
-        DEVICE_MEMORY_PROPERTIES_VERSION_CURRENT = XE_MAKE_VERSION( 1, 0 ), ///< version 1.0
+        CURRENT = XE_MAKE_VERSION( 1, 0 ),              ///< version 1.0
 
     };
 
@@ -224,7 +224,7 @@ namespace xe
     /// @brief Memory allocation properties queried using ::MemGetProperties
     struct memory_allocation_properties_t
     {
-        memory_allocation_properties_version_t version = device_memory_properties_version_t::CURRENT;   ///< [in] ::DEVICE_MEMORY_PROPERTIES_VERSION_CURRENT
+        memory_allocation_properties_version_t version = memory_allocation_properties_version_t::CURRENT;   ///< [in] ::MEMORY_ALLOCATION_PROPERTIES_VERSION_CURRENT
         memory_type_t type;                             ///< [out] Type of allocated memory
         uint64_t id;                                    ///< [out] Identifier for this allocation
 

@@ -253,7 +253,7 @@ xeMemFree(
 /// @brief API version of ::xe_memory_allocation_properties_t
 typedef enum _xe_memory_allocation_properties_version_t
 {
-    XE_DEVICE_MEMORY_PROPERTIES_VERSION_CURRENT = XE_MAKE_VERSION( 1, 0 ),  ///< version 1.0
+    XE_MEMORY_ALLOCATION_PROPERTIES_VERSION_CURRENT = XE_MAKE_VERSION( 1, 0 ),  ///< version 1.0
 
 } xe_memory_allocation_properties_version_t;
 
@@ -272,7 +272,7 @@ typedef enum _xe_memory_type_t
 /// @brief Memory allocation properties queried using ::xeMemGetProperties
 typedef struct _xe_memory_allocation_properties_t
 {
-    xe_memory_allocation_properties_version_t version;  ///< [in] ::XE_DEVICE_MEMORY_PROPERTIES_VERSION_CURRENT
+    xe_memory_allocation_properties_version_t version;  ///< [in] ::XE_MEMORY_ALLOCATION_PROPERTIES_VERSION_CURRENT
     xe_memory_type_t type;                          ///< [out] Type of allocated memory
     uint64_t id;                                    ///< [out] Identifier for this allocation
 

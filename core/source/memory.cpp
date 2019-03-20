@@ -78,10 +78,9 @@ xe_result_t memGetAddressRange(xe_mem_allocator_handle_t hMemAllocHandle,
     return XE_RESULT_ERROR_UNSUPPORTED;
 }
 
-xe_result_t memGetProperty(xe_mem_allocator_handle_t hMemAllocHandle,
-                           const void *ptr,
-                           xe_memory_property_t property,
-                           void *pValue) {
+xe_result_t memGetProperties(xe_mem_allocator_handle_t hMemAllocHandle,
+                             const void *ptr,
+                             xe_memory_allocation_properties_t *pMemProperties) {
     return XE_RESULT_ERROR_UNSUPPORTED;
 }
 
