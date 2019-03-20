@@ -11,6 +11,7 @@ struct GraphicsAllocation;
 struct MemoryManager {
     virtual GraphicsAllocation *allocateDeviceMemory(size_t size, size_t alignment) = 0;
     virtual GraphicsAllocation *allocateManagedMemory(size_t size, size_t alignment) = 0;
+    virtual GraphicsAllocation *allocateManagedMemoryFromFault(void *buffer, size_t size) = 0;
     virtual PtrOwn<GraphicsAllocation> allocateGraphicsMemoryForIsa(PtrRef<const void> isaHostMem, size_t size) = 0;
     virtual uint64_t getIsaHeapGpuAddress() const = 0;
     virtual GraphicsAllocation *findAllocation(const void *ptr) = 0;

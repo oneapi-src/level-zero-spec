@@ -19,7 +19,15 @@ struct GraphicsAllocation {
     uint64_t getGpuAddressOffsetFromHeapBase() const;
     void *getHostAddress() const;
     size_t getSize() const;
+    void setAllocatedFromFault(bool val) {
+        this->allocatedFromFault = val;
+    }
 
+    bool getAllocatedFromFault(){
+        return this->allocatedFromFault;
+    }
+
+    bool allocatedFromFault = false;
     OCLRT::GraphicsAllocation *allocationRT = nullptr;
 };
 

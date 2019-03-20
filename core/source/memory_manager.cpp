@@ -34,6 +34,15 @@ struct MemoryManagerImp : public MemoryManager {
         return allocation;
     }
 
+    GraphicsAllocation *allocateManagedMemoryFromFault(void *buffer, size_t size) override {
+        auto allocation = new GraphicsAllocation(buffer, size);
+        allocation->setAllocatedFromFault(true);
+        knownAllocations.insert(*allocation->allocationRT); // temporary
+        allocMap[allocation->allocationRT] = allocation;    // temporary
+
+        return allocation;
+    }
+
     PtrOwn<GraphicsAllocation> allocateGraphicsMemoryForIsa(PtrRef<const void> isaHostMem, size_t size) override {
         assert(size > 0);
         auto alloc = this->memoryManagerRT->allocateGraphicsMemoryWithProperties({size, OCLRT::GraphicsAllocation::AllocationType::KERNEL_ISA});

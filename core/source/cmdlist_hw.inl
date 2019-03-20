@@ -475,7 +475,18 @@ xe_result_t CommandListCoreFamily<gfxCoreFamily>::appendMemoryCopy(void *dstptr,
     if (xeFunctionSetGroupSize(function, groupSizeX, groupSizeY, groupSizeZ))
         return XE_RESULT_ERROR_UNKNOWN;
 
+    GraphicsAllocation *alloc = this->device->getMemoryManager()->findAllocation(dstptr);
+    if (alloc == nullptr) {
+        // Trying to access non-driver memallocated for dstptr: Allocate managed memory using the host's buffer
+        auto allocation = this->device->getMemoryManager()->allocateManagedMemoryFromFault(dstptr, size);
+    }
     xeFunctionSetArgumentValue(function, 0, sizeof(dstptr), &dstptr);
+
+    alloc = this->device->getMemoryManager()->findAllocation(srcptr);
+    if (alloc == nullptr) {
+        // Trying to access non-driver memallocated for dstptr: Allocate managed memory using the host's buffer
+        auto allocation = this->device->getMemoryManager()->allocateManagedMemoryFromFault(const_cast<void *>(srcptr), size);
+    }
     xeFunctionSetArgumentValue(function, 1, sizeof(srcptr), &srcptr);
 
     xe_thread_group_dimensions_t dispatchFuncArgs{
