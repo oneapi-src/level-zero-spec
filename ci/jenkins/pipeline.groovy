@@ -48,7 +48,7 @@ node("loki-controller") {
 		lokiStage("checkout") {
 			checkout changelog: false, poll: false,
 				scm: [$class: 'GitSCM',
-					branches: [[name: "${gerritLocalBranch}"]],
+					branches: [[name: "${GERRIT_PATCHSET_REVISION}"]],
 					doGenerateSubmoduleConfigurations: false,
 					extensions: [
 						[$class: 'CleanCheckout'],
