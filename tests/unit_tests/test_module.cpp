@@ -37,7 +37,7 @@ TEST(ModuleBuildLog, destroyModuleBuildLog) {
 }
 
 TEST(ModuleBuildLog, stringModuleBuildLog) {
-    size_t buildLogSize;
+    size_t buildLogSize = 0;
     char *buildLog = nullptr;
     const char *error_log = "Error Log";
     const char *warn_log = "Warn Log";
@@ -58,6 +58,7 @@ TEST(ModuleBuildLog, stringModuleBuildLog) {
 
     moduleBuildLog->appendString(error_log, strlen(error_log));
 
+    buildLogSize = 0;
     result = moduleBuildLog->getString(&buildLogSize, nullptr);
     EXPECT_EQ(XE_RESULT_SUCCESS, result);
     EXPECT_EQ((strlen(error_log) + 1), buildLogSize);
@@ -72,6 +73,7 @@ TEST(ModuleBuildLog, stringModuleBuildLog) {
 
     moduleBuildLog->appendString(warn_log, strlen(warn_log));
 
+    buildLogSize = 0;
     result = moduleBuildLog->getString(&buildLogSize, nullptr);
     EXPECT_EQ(XE_RESULT_SUCCESS, result);
     EXPECT_EQ((strlen(error_log) + strlen("\n") + strlen(warn_log) + 1), buildLogSize);
