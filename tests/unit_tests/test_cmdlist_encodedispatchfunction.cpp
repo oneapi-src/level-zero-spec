@@ -494,7 +494,7 @@ GEN9TEST_F(CommandListAppendLaunchFunction, usesProperInterfaceDescriptorOffsets
     ASSERT_NE(cmdList.end(), itor);
     {
         auto cmd = genCmdCast<GPGPU_WALKER *>(*itor);
-        EXPECT_EQ(expectedIDDOffset, cmd->getInterfaceDescriptorOffset());
+        EXPECT_EQ(0U, cmd->getInterfaceDescriptorOffset()); // single IDD per MEDIA_INTERFACE_DESCRIPTOR_LOAD for now
     }
 
     itor = find<MEDIA_INTERFACE_DESCRIPTOR_LOAD *>(cmdList.begin(), cmdList.end());

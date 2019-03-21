@@ -258,7 +258,7 @@ xe_result_t CommandListCoreFamily<gfxCoreFamily>::appendLaunchFunction(xe_functi
 
     auto threadsPerThreadGroup = function->getThreadsPerThreadGroup();
 
-    uint32_t offsetIDD = 0u;
+    uint32_t numIDD = 0u;
     auto sizeCrossThreadData = function->getCrossThreadDataSize();
     auto sizePerThreadData = function->getPerThreadDataSize();
     auto sizePerThreadDataForWholeGroup = function->getPerThreadDataSizeForWholeThreadGroup();
@@ -269,10 +269,9 @@ xe_result_t CommandListCoreFamily<gfxCoreFamily>::appendLaunchFunction(xe_functi
         auto sizeIDD = sizeof(INTERFACE_DESCRIPTOR_DATA);
         auto ptr = getHeapSpaceAllowGrow(*heap, sizeIDD);
         assert(ptr);
-        auto offset = ptrDiff(ptr, heap->getCpuBase());
-        assert(offset + sizeIDD <= heap->getMaxAvailableSpace());
-        assert(0 == offset % sizeof(INTERFACE_DESCRIPTOR_DATA));
-        offsetIDD = static_cast<uint32_t>(offset / sizeof(INTERFACE_DESCRIPTOR_DATA));
+        auto offsetIDD = ptrDiff(ptr, heap->getCpuBase());
+        assert(offsetIDD + sizeIDD <= heap->getMaxAvailableSpace());
+        assert(0 == offsetIDD % sizeof(INTERFACE_DESCRIPTOR_DATA));
 
         INTERFACE_DESCRIPTOR_DATA idd = GfxFamily::cmdInitInterfaceDescriptorData;
 
@@ -298,15 +297,16 @@ xe_result_t CommandListCoreFamily<gfxCoreFamily>::appendLaunchFunction(xe_functi
         memcpy(ptr, &idd, sizeof(idd));
 
         MEDIA_INTERFACE_DESCRIPTOR_LOAD cmd = GfxFamily::cmdInitMediaInterfaceDescriptorLoad;
-        cmd.setInterfaceDescriptorDataStartAddress(static_cast<uint32_t>(offset));
+        cmd.setInterfaceDescriptorDataStartAddress(static_cast<uint32_t>(offsetIDD));
         cmd.setInterfaceDescriptorTotalLength(sizeof(INTERFACE_DESCRIPTOR_DATA));
+        numIDD = 0U; // change to IDD within MEDIA_INTERFACE_DESCRIPTOR_LOAD once we start grouping IDDs
 
         auto buffer = commandStream->getSpace(sizeof(cmd));
         *(decltype(cmd) *)buffer = cmd;
     }
 
     GPGPU_WALKER cmd = GfxFamily::cmdInitGpgpuWalker;
-    cmd.setInterfaceDescriptorOffset(offsetIDD);
+    cmd.setInterfaceDescriptorOffset(numIDD);
 
     function->setGroupCount(pThreadGroupDimensions->groupCountX,
                             pThreadGroupDimensions->groupCountY,
