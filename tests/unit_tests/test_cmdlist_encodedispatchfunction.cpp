@@ -477,7 +477,8 @@ GEN9TEST_F(CommandListAppendLaunchFunction, usesProperInterfaceDescriptorOffsets
     using GPGPU_WALKER = typename FamilyType::GPGPU_WALKER;
 
     constexpr uint32_t expectedIDDOffset = 4;
-    commandList->indirectHeaps[CommandList::DYNAMIC_STATE]->getSpace(expectedIDDOffset * sizeof(INTERFACE_DESCRIPTOR_DATA));
+    // -1 to check that driver does the required 64-byte alignment (note : sizeof(IDD) is just 32-bytes)
+    commandList->indirectHeaps[CommandList::DYNAMIC_STATE]->getSpace((expectedIDDOffset - 1) * sizeof(INTERFACE_DESCRIPTOR_DATA));
 
     auto result = commandList->appendLaunchFunction(function->toHandle(),
                                                     &dispatchFunctionArguments,

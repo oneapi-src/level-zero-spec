@@ -6,6 +6,7 @@
 #include "builtins.h"
 #include "runtime/command_stream/linear_stream.h"
 #include "runtime/helpers/hw_info.h"
+#include "runtime/helpers/kernel_commands.h"
 #include "runtime/helpers/string.h"
 #include "runtime/indirect_heap/indirect_heap.h"
 #include <cassert>
@@ -265,6 +266,7 @@ xe_result_t CommandListCoreFamily<gfxCoreFamily>::appendLaunchFunction(xe_functi
     {
         auto heap = indirectHeaps[OCLRT::IndirectHeap::DYNAMIC_STATE];
         assert(heap);
+        heap->align(OCLRT::KernelCommandsHelper<GfxFamily>::alignInterfaceDescriptorData);
 
         auto sizeIDD = sizeof(INTERFACE_DESCRIPTOR_DATA);
         auto ptr = getHeapSpaceAllowGrow(*heap, sizeIDD);
