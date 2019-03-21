@@ -12,6 +12,11 @@ if(MSVC)
     set(CUSTOM_COMMAND_BINARY_DIR ${CUSTOM_COMMAND_BINARY_DIR}/$<CONFIG>)
 endif()
 
+if(LINUX)
+    # Load GNUInstallDirs to determine install targets for Linux packages
+    include(GNUInstallDirs)
+endif()
+
 #CXX compiler support
 if(NOT MSVC)
     include(CheckCXXCompilerFlag)
@@ -172,7 +177,7 @@ if(UNIX)
     # set(CPACK_RPM_POST_INSTALL_SCRIPT_FILE "${IGDRCL_BINARY_DIR}/postinst")
     # set(CPACK_RPM_POST_UNINSTALL_SCRIPT_FILE "${IGDRCL_BINARY_DIR}/postrm")
 
-    set(CPACK_COMPONENTS_ALL l0-core l0-icd l0-headers)
+    set(CPACK_COMPONENTS_ALL l0-core l0-icd l0-headers l0-tools)
 
     set(CPACK_DEBIAN_L0-CORE_PACKAGE_DEPENDS "intel-gmmlib, intel-igc-opencl")
     set(CPACK_RPM_L0-CORE_PACKAGE_REQUIRES "intel-gmmlib, intel-igc-opencl")

@@ -74,7 +74,7 @@ set(OS_SPECIFIC_LIBS ${OS_SPECIFIC_LIBS} PARENT_SCOPE)
 
 if(UNIX)
     install(TARGETS ${TARGET_NAME}
-        DESTINATION lib
+        DESTINATION ${CMAKE_INSTALL_LIBDIR}
         COMPONENT l0-core)
 
     file(GLOB_RECURSE HEADER_FILES "include/*")
@@ -83,4 +83,11 @@ if(UNIX)
         DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}
         COMPONENT l0-headers
     )
+
+    install(FILES source/ocloc_shared.h
+        DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}
+        COMPONENT l0-tools)
+    install(TARGETS ocloc_shared
+        DESTINATION ${CMAKE_INSTALL_LIBDIR}
+        COMPONENT l0-tools)
 endif()
