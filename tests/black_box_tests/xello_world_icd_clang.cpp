@@ -137,13 +137,10 @@ int main(int argc, char *argv[]) {
     memset(initDataSrc, 7, sizeof(initDataSrc));
     uint8_t initDataDst[allocSize];
     memset(initDataDst, 3, sizeof(initDataDst));
-#if SUPPORT_MEMORY_COPY
+
     SUCCESS_OR_TERMINATE(xeCommandListAppendMemoryCopy(cmdList, srcBuffer, initDataSrc, sizeof(initDataSrc)));
     SUCCESS_OR_TERMINATE(xeCommandListAppendMemoryCopy(cmdList, dstBuffer, initDataDst, sizeof(initDataDst)));
-#else
-    memcpy(srcBuffer, initDataSrc, sizeof(initDataSrc));
-    memcpy(dstBuffer, initDataDst, sizeof(initDataDst));
-#endif
+
     SUCCESS_OR_TERMINATE(xeCommandListAppendExecutionBarrier(cmdList)); // copying of data must finish before running the user function
 
     // 3. Encode run user function
@@ -165,9 +162,8 @@ int main(int argc, char *argv[]) {
     uint8_t readBackData[allocSize];
     memset(readBackData, 2, sizeof(readBackData));
     SUCCESS_OR_TERMINATE(xeCommandListAppendExecutionBarrier(cmdList)); // user function must finish before we start copying data
-#if SUPPORT_MEMORY_COPY
+
     SUCCESS_OR_TERMINATE(xeCommandListAppendMemoryCopy(cmdList, readBackData, dstBuffer, sizeof(readBackData)));
-#endif
 
     // 5. Dispatch and wait
     SUCCESS_OR_TERMINATE(xeCommandListClose(cmdList));
@@ -176,10 +172,6 @@ int main(int argc, char *argv[]) {
     SUCCESS_OR_WARNING(synchronizationResult);
 
 // 6. Validate
-#if SUPPORT_MEMORY_COPY
-#else
-    memcpy(readBackData, dstBuffer, sizeof(readBackData));
-#endif
     bool outputValidationSuccessful = true;
     for (int i = 0; i < allocSize; ++i) {
         outputValidationSuccessful &= ((unsigned char)(initDataSrc[i] + i) == (unsigned char)readBackData[i]);
