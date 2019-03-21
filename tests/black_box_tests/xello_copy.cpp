@@ -25,22 +25,31 @@ inline void validate(ResulT result, const char *message) {
 #define SUCCESS_OR_WARNING(CALL) validate<false>(CALL, #CALL)
 #define SUCCESS_OR_WARNING_BOOL(FLAG) validate<false>(!(FLAG), #FLAG)
 
-int main(int argc, char *argv[]) {
+inline bool validateBuffers(void *dstBuffer, void *srcBuffer, size_t allocSize) {
+    unsigned char *dstBufferChar = (unsigned char *)dstBuffer;
+    unsigned char *srcBufferChar = (unsigned char *)srcBuffer;
+    bool outputValidationSuccessful = true;
+    for (int i = 0; i < allocSize; ++i) {
+        if (verbose)
+            std::cout << "srcBuffer[" << i << "] = " << (unsigned int)srcBufferChar[i] << ","
+                      << "dstBuffer[" << i << "] = " << (unsigned int)dstBufferChar[i] << "\n";
 
-    size_t allocSize = 4096;
+        outputValidationSuccessful &= (srcBufferChar[i] == dstBufferChar[i]);
+    }
+    return outputValidationSuccessful;
+}
+
+int main(int argc, char *argv[]) {
+    const size_t allocSize = 4096;
     xe_device_handle_t device0;
     xe_device_properties_t device0Properties = {XE_DEVICE_PROPERTIES_VERSION_CURRENT};
     xe_command_queue_handle_t cmdQueue;
     xe_command_list_handle_t cmdList;
     xe_mem_allocator_handle_t allocator;
-    void *srcBuffer = nullptr;
-    void *dstBuffer = nullptr;
 
-    if (argc >= 2)
-        allocSize = atoi(argv[1]);
-
-    if ((argc >= 3) && ((0 == strcmp(argv[2], "-v")) || (0 == strcmp(argv[2], "--verbose"))))
+    if ((argc >= 2) && ((0 == strcmp(argv[1], "-v")) || (0 == strcmp(argv[1], "--verbose")))) {
         verbose = true;
+    }
 
     SUCCESS_OR_TERMINATE(xeDriverInit(XE_INIT_FLAG_NONE));
     xe_device_uuid_t deviceUniqueID = {};
@@ -56,49 +65,44 @@ int main(int argc, char *argv[]) {
     xe_command_list_desc_t cmdListDesc = {XE_COMMAND_LIST_DESC_VERSION_CURRENT};
     SUCCESS_OR_TERMINATE(xeDeviceCreateCommandList(device0, &cmdListDesc, &cmdList));
 
-    /* Allocate and initialize memory */
     SUCCESS_OR_TERMINATE(xeCreateMemAllocator(&allocator));
 
-    SUCCESS_OR_TERMINATE(xeSharedMemAlloc(allocator, device0,
-                                          XE_DEVICE_MEM_ALLOC_FLAG_DEFAULT, XE_HOST_MEM_ALLOC_FLAG_DEFAULT,
-                                          allocSize, 1, &srcBuffer));
-    SUCCESS_OR_TERMINATE(xeSharedMemAlloc(allocator, device0,
-                                          XE_DEVICE_MEM_ALLOC_FLAG_DEFAULT, XE_HOST_MEM_ALLOC_FLAG_DEFAULT,
-                                          allocSize, 1, &dstBuffer));
+    char *heapBuffer = new char[allocSize];
+    void *xeBuffer = nullptr;
+    char stackBuffer[allocSize];
 
-    unsigned char *srcBufferChar = (unsigned char *)srcBuffer;
-    unsigned char *dstBufferChar = (unsigned char *)dstBuffer;
+    SUCCESS_OR_TERMINATE(xeSharedMemAlloc(allocator, device0,
+                                          XE_DEVICE_MEM_ALLOC_FLAG_DEFAULT, XE_HOST_MEM_ALLOC_FLAG_DEFAULT,
+                                          allocSize, 1, &xeBuffer));
+
+    unsigned char *xeBufferChar = (unsigned char *)xeBuffer;
     for (int i = 0; i < allocSize; ++i) {
-        srcBufferChar[i] = i + 1;
-        dstBufferChar[i] = 0;
+        heapBuffer[i] = i + 1;
+        xeBufferChar[i] = 0;
     }
+    memset(stackBuffer, 0, allocSize);
 
-    /* Perform the copy and sync */
-    SUCCESS_OR_TERMINATE(xeCommandListAppendMemoryCopy(cmdList, dstBuffer, srcBuffer, allocSize));
+    // Copy from heap to device-allocated memory
+    SUCCESS_OR_TERMINATE(xeCommandListAppendMemoryCopy(cmdList, xeBuffer, heapBuffer, allocSize));
+
+    SUCCESS_OR_TERMINATE(xeCommandListAppendExecutionBarrier(cmdList));
+
+    // Copy from device-allocated memory to stack
+    SUCCESS_OR_TERMINATE(xeCommandListAppendMemoryCopy(cmdList, stackBuffer, xeBuffer, allocSize));
 
     SUCCESS_OR_TERMINATE(xeCommandListClose(cmdList));
     SUCCESS_OR_TERMINATE(xeCommandQueueExecuteCommandLists(cmdQueue, 1, &cmdList, nullptr));
     auto synchronizationResult = xeCommandQueueSynchronize(cmdQueue, 1000 * 1000 /*1s*/);
     SUCCESS_OR_WARNING(synchronizationResult);
 
-    /* Validate */
-    bool outputValidationSuccessful = true;
-    for (int i = 0; i < allocSize; ++i) {
-        if (verbose)
-            std::cout << "srcBuffer[" << i << "] = " << (unsigned int)srcBufferChar[i] << ","
-                      << "dstBuffer[" << i << "] = " << (unsigned int)dstBufferChar[i] << "\n";
+    // Validate stack and xe buffers have the original data from heapBuffer
+    bool outputValidationSuccessful = validateBuffers(xeBufferChar, heapBuffer, allocSize) & validateBuffers(stackBuffer, heapBuffer, allocSize);
 
-        outputValidationSuccessful &= (srcBufferChar[i] == dstBufferChar[i]);
-    }
-    SUCCESS_OR_WARNING_BOOL(outputValidationSuccessful);
+    delete[] heapBuffer;
+    SUCCESS_OR_TERMINATE(xeMemFree(allocator, xeBuffer));
 
-    /* Cleanup */
-    SUCCESS_OR_TERMINATE(xeMemFree(allocator, dstBuffer));
-    SUCCESS_OR_TERMINATE(xeMemFree(allocator, srcBuffer));
     SUCCESS_OR_TERMINATE(xeMemAllocatorDestroy(allocator));
-
     SUCCESS_OR_TERMINATE(xeCommandListDestroy(cmdList));
-
     SUCCESS_OR_TERMINATE(xeCommandQueueDestroy(cmdQueue));
 
     bool aubMode = (XE_RESULT_NOT_READY == synchronizationResult);
