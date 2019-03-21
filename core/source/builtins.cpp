@@ -1,15 +1,17 @@
 #include "builtins.h"
+
+#include "kernels/copy_bufer_to_buffer_bytes.h"
+
 #include <fstream>
 #include <sstream>
 #include <stdio.h>
-#include "kernels/copyBufferToBufferBytes_Gen12HPcore.hpp"
 
 namespace L0 {
 
 preCompiledBins::preCompiledBins(const std::string &functionName) : functionName(functionName) {
-    spirvSize = size_copyBufferToBufferBytes_Gen12HPcore;
+    spirvSize = sizeof(spirv_copyBufferToBufferBytes);
     spirvModule = new char[spirvSize]();
-    memcpy(spirvModule, spirv_copyBufferToBufferBytes_Gen12HPcore, spirvSize);
+    memcpy(spirvModule, spirv_copyBufferToBufferBytes, spirvSize);
 }
 
 preCompiledBins compileCopyBufferToBufferBin("copyBufferToBufferBytes");
