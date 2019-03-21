@@ -83,11 +83,15 @@ node("loki-controller") {
 			lokiBuild('linux') {
 				def image = docker.image("${env.DOCKER_REGISTRY}/neo-build-gcc5:9")
 				def workDir = sh script: "(cd .. && pwd)", returnStdout: true
+				def buildId = "${env.BUILD_NUMBER}"
+				if(params.containsKey("COMMON_BUILD_ID")) {
+					buildId = "${COMMON_BUILD_ID}"
+				}
 				image.inside("-v /ccache:/ccache -e CCACHE_DIR=/ccache -e CCACHE_TEMPDIR=/tmp/ccache -e CCACHE_BASEDIR=${workDir}") {
 					sh """\
 mkdir build
 cd build
-cmake -GNinja .. -DCMAKE_BUILD_TYPE=Release -DLOKI_VERSION_BUILD=${env.BUILD_NUMBER}
+cmake -GNinja .. -DCMAKE_BUILD_TYPE=Release -DLOKI_VERSION_BUILD=${buildId}
 cmake --build . --config Release --clean-first --target package
 """
 				}
