@@ -1,4 +1,4 @@
-# DO NOT EDIT: Generated from "scripts/templates/CMakeLists.txt.mako"
+# DO NOT EDIT: Generated from "scripts/templates/CMakeLists.cpp.mako"
 include(gen9.cmake)
 include(gen11.cmake)
 include(gen12lp.cmake)
@@ -8,8 +8,9 @@ SET(DEFAULT_PRODUCT_FAMILY  "${DEFAULT_PRODUCT_FAMILY}" CACHE STRING "DEFAULT_PR
 set(HW_SOURCES_ULT "${HW_SOURCES_ULT}" CACHE STRING "HW_SOURCES_ULT" FORCE)
 
 set(L0_RUNTIME_SOURCES
-    ${CMAKE_CURRENT_SOURCE_DIR}/builtins.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/barrier.h
     ${CMAKE_CURRENT_SOURCE_DIR}/builtins.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/builtins.h
     ${CMAKE_CURRENT_SOURCE_DIR}/cl_interop.h
     ${CMAKE_CURRENT_SOURCE_DIR}/cmdgraph.h
     ${CMAKE_CURRENT_SOURCE_DIR}/cmdlist.cpp
@@ -36,30 +37,34 @@ set(L0_RUNTIME_SOURCES
     ${CMAKE_CURRENT_SOURCE_DIR}/event.h
     ${CMAKE_CURRENT_SOURCE_DIR}/fence.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/fence.h
-    ${CMAKE_CURRENT_SOURCE_DIR}/function_imp.cpp
-    ${CMAKE_CURRENT_SOURCE_DIR}/function_imp.h
     ${CMAKE_CURRENT_SOURCE_DIR}/function.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/function.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/function_imp.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/function_imp.h
     ${CMAKE_CURRENT_SOURCE_DIR}/graphics_allocation.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/graphics_allocation.h
     ${CMAKE_CURRENT_SOURCE_DIR}/hw_info.h
-    ${CMAKE_CURRENT_SOURCE_DIR}/image.h
     ${CMAKE_CURRENT_SOURCE_DIR}/image.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/image.h
     ${CMAKE_CURRENT_SOURCE_DIR}/image_hw.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/image_hw.inl
     ${CMAKE_CURRENT_SOURCE_DIR}/image_imp.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/image_imp.h
     ${CMAKE_CURRENT_SOURCE_DIR}/memory.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/memory.h
     ${CMAKE_CURRENT_SOURCE_DIR}/memory_manager.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/memory_manager.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/module.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/module.h
     ${CMAKE_CURRENT_SOURCE_DIR}/module_build_log.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/module_build_log.h
     ${CMAKE_CURRENT_SOURCE_DIR}/module_imp.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/module_imp.h
-    ${CMAKE_CURRENT_SOURCE_DIR}/module.cpp
-    ${CMAKE_CURRENT_SOURCE_DIR}/module.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/ocloc_shared.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/ocloc_shared.h
     ${CMAKE_CURRENT_SOURCE_DIR}/printf_handler.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/printf_handler.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/ptr.h
     ${CMAKE_CURRENT_SOURCE_DIR}/residency.h
     ${CMAKE_CURRENT_SOURCE_DIR}/sampler.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/sampler.h
