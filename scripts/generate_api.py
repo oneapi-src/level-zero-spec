@@ -75,7 +75,7 @@ def generate_cpp_include(path, namespace, specs, meta):
     hloc += generate_include_all(cpp_path, namespace, hfiles, ".h")
     hpploc += generate_include_all(cpp_path, namespace, hppfiles + inlfiles, ".hpp")
 
-    #generate_cmake(cpp_path, hfiles + hppfiles + inlfiles)
+    generate_cmake(cpp_path, ".h")
     return hloc + hpploc + inlloc
 
 """
