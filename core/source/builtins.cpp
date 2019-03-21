@@ -1,10 +1,9 @@
 #include "builtins.h"
 
-#include "kernels/copy_bufer_to_buffer_bytes.h"
+#include "kernels/copy_buffer_to_buffer_bytes.h"
 
 #include <fstream>
 #include <sstream>
-#include <stdio.h>
 
 namespace L0 {
 

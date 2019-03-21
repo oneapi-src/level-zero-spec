@@ -1,25 +1,21 @@
 import os
 import sys
 import binascii
+import re
 
-archs = ['skl', 'ats']
-suffixes = ['_Gen9core', '_Gen12HPcore']
-kernels = ['copyBufferToBufferBytes']
+copyKernelNames = ['copyBufferToBufferBytes']
+copyKernelFiles = ['copy_buffer_to_buffer_bytes']
 kernelsLoc = "../core/source/kernels/"
 
 def create_kernels():
-    for k in kernels:
-        for a in archs:
-            kernelCL = kernelsLoc + k + ".cl"
-
-            kernelArchName = ""
-            if a == 'skl':
-                kernelArchName = k + "_Gen9core"
-            if a == 'ats':
-                kernelArchName = k + "_Gen12HPcore"
-
-            kernelSPV = kernelsLoc + kernelArchName + ".spv"
-            kernelTXT = kernelsLoc + kernelArchName + ".hpp"
+    for k in range(len(copyKernelNames)):
+            kernelName = copyKernelNames[k]
+            kernelFileName = copyKernelFiles[k]
+            kernelCL = kernelsLoc + kernelFileName + ".cl"
+            kernelSPV = kernelsLoc + kernelFileName + "_Gen12HPcore.spv"
+            kernelBIN = kernelsLoc + kernelFileName + "_Gen12HPcore.bin"
+            kernelGEN = kernelsLoc + kernelFileName + "_Gen12HPcore.gen"
+            kernelTXT = kernelsLoc + kernelFileName + ".h"
 
             #Compile OpenCL kernel into SPIR-V
             try:
@@ -28,7 +24,11 @@ def create_kernels():
                 print("No OpenCL found\n");
                 raise
 
-            os.system("ocloc -device %s -file %s -out_dir %s" %(a, kernelCL, kernelsLoc))
+            os.system("ocloc -device ats -file %s -out_dir %s" %(kernelCL, kernelsLoc))
+            if os.path.exists(kernelBIN):
+                    os.remove(kernelBIN)
+            if os.path.exists(kernelGEN):
+                    os.remove(kernelGEN)
 
             #Read SPIR-V file
             try:
@@ -47,12 +47,11 @@ def create_kernels():
                 else:
 
                     # Create an HPP file with the SPIR-V file's content
-                    spirvTxtFile.write("#ifndef _%s_\n"% (kernelArchName));
-                    spirvTxtFile.write("#define _%s_\n"% (kernelArchName));
+                    spirvTxtFile.write("#pragma once\n\n");
                     spirvFileSize=os.fstat(spirvFile.fileno()).st_size
 
                     i = 0
-                    spirvTxtFile.write("unsigned char spirv_%s [] = {" % (kernelArchName));
+                    spirvTxtFile.write("unsigned char spirv_%s[] = {" % (kernelName));
                     c = spirvFile.read(1)
                     while c:
                         s = "%x" % ord(c)
@@ -60,23 +59,20 @@ def create_kernels():
                         if i == 0:
                             spirvTxtFile.write("0x");
                         elif i < spirvFileSize - 1:
-                            spirvTxtFile.write(",0x");
+                            spirvTxtFile.write(", 0x");
 
                         spirvTxtFile.write(s)
-
-                        if i % 16 == 0:
-                            spirvTxtFile.write("\n");
 
                         c = spirvFile.read(1)
 
                         i = i + 1
 
                     spirvTxtFile.write("};\n")
-                    spirvTxtFile.write("uint32_t size_%s = %d;\n" % (kernelArchName, spirvFileSize));
-                    spirvTxtFile.write("#endif\n");
-
+                    spirvTxtFile.write("uint32_t size_%s = %d;\n" % (kernelName, spirvFileSize));
                     spirvTxtFile.close()
                     spirvFile.close()
+
+                    os.remove(kernelSPV)
 
 def main():
     create_kernels()
