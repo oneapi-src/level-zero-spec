@@ -1,46 +1,39 @@
 import re
 
 """
-    substitues $x variations with namespace in string
-    if namespace is None, then remove $x and any following '_'
-    if tag = True, then insert doxygen '::' tags at beginning (for autogen links)
+    substitues $tag variations with repl in string
+    if repl is None, then remove $tag and any following '_'
+    if doxy = True, then insert doxygen '::' notation at beginning (for autogen links)
 """
-def _subx(repl, string, tag):
+def _sub(tag, repl, string, doxy):
     if repl:
-        string = re.sub(r"\$Xx", repl.title(), string)
-        string = re.sub(r"\-\$x", "-"+repl, string) #hack
-        repl = "::"+repl if tag else repl
-        string = re.sub(r"\$x", repl, string)
-        string = re.sub(r"\$X", repl.upper(), string)
+        string = re.sub(r"\$%s%s"%(tag.upper(), tag), repl.title(), string)
+        string = re.sub(r"\-\$%s"%tag, "-"+repl, string) #hack
+        repl = "::"+repl if doxy else repl
+        string = re.sub(r"\$%s"%tag, repl, string)
+        string = re.sub(r"\$%s"%tag.upper(), repl.upper(), string)
     else:
-        string = re.sub(r"\-\$x_?", "-", string) #hack
-        repl = "::" if tag else ""
-        string = re.sub(r"\$x_?", repl, string)
-        string = re.sub(r"\$X_", repl.upper(), string)
+        string = re.sub(r"\-\$%s_?"%tag, "-", string) #hack
+        repl = "::" if doxy else ""
+        string = re.sub(r"\$%s_?"%tag, repl, string)
+        string = re.sub(r"\$%s_"%tag.upper(), repl.upper(), string)
     return string
-def _suby(repl, string, tag):
-    if repl:
-        string = re.sub(r"\$Yy", repl.title(), string)
-        string = re.sub(r"\-\$y", "-"+repl, string) #hack
-        repl = "::"+repl if tag else repl
-        string = re.sub(r"\$y", repl, string)
-        string = re.sub(r"\$Y", repl.upper(), string)
-    else:
-        string = re.sub(r"\-\$y_?", "-", string) #hack
-        repl = "::" if tag else ""
-        string = re.sub(r"\$y_?", repl, string)
-        string = re.sub(r"\$Y_", repl.upper(), string)
-    return string
-def sub(namespace, string, tag=False):
+
+"""
+    substitues $tag variations with namespace in string
+    if namespace is None, then remove $tag and any following '_'
+    if doxy = True, then insert doxygen '::' notation at beginning (for autogen links)
+"""
+def sub(namespace, string, doxy=False):
     if namespace:
-        string = _subx(namespace[0], string, tag)
+        string = _sub("x", namespace[0], string, doxy)
     else:
-        string = _subx(None, string, tag)
+        string = _sub("x", None, string, doxy)
 
     if namespace and len(namespace) > 1:
-        string = _suby(namespace[1], string, tag)
+        string = _sub("y", namespace[1], string, doxy)
     else:
-        string = _suby(None, string, tag)
+        string = _sub("y", None, string, doxy)
     return string
 
 """
@@ -329,22 +322,22 @@ def make_details_lines(namespace, obj):
 """
     returns a dict of auto-generated parameter validation checks
 """
-def make_param_checks(namespace, obj, tag=False):
+def make_param_checks(namespace, obj, doxy=False):
     checks = {}
-    eip = sub(namespace, "$X_RESULT_ERROR_INVALID_PARAMETER", tag)
-    eus = sub(namespace, "$X_RESULT_ERROR_UNSUPPORTED", tag)
+    eip = sub(namespace, "$X_RESULT_ERROR_INVALID_PARAMETER", doxy)
+    eus = sub(namespace, "$X_RESULT_ERROR_UNSUPPORTED", doxy)
     checks[eip] = []
     checks[eus] = []
 
     for item in obj['params']:
         if not re.match(r".*\[optional\].*", item['desc']): #skip optional params
             if re.match(r".*\w+\*+", item['type']): # pointer-type
-                checks[eip].append("nullptr == %s"%sub(namespace, item['name'], tag))
+                checks[eip].append("nullptr == %s"%sub(namespace, item['name'], doxy))
             elif re.match(r".*handle_t.*", item['type']): # handle-type
-                checks[eip].append("nullptr == %s"%sub(namespace, item['name'], tag))
+                checks[eip].append("nullptr == %s"%sub(namespace, item['name'], doxy))
 
             if re.match(r".*desc_t.*", item['type']): # descriptor-type
-                checks[eus].append("%s < %s->version"%(re.sub(r"\w*\s*(.*)_t.*", r"\1_VERSION_CURRENT", sub(namespace, item['type'], tag)).upper(), item['name']))
+                checks[eus].append("%s < %s->version"%(re.sub(r"\w*\s*(.*)_t.*", r"\1_VERSION_CURRENT", sub(namespace, item['type'], doxy)).upper(), item['name']))
     return checks
 
 """
@@ -393,6 +386,7 @@ def make_returns_lines(namespace, obj, cpp=False):
     return lines
 
 """
+    returns string for declaring function return type
 """
 def make_return_value(namespace, obj, cpp=False):
     if cpp and 'decl' in obj:
