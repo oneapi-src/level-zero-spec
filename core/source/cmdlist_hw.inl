@@ -271,6 +271,8 @@ xe_result_t CommandListCoreFamily<gfxCoreFamily>::appendLaunchFunction(xe_functi
         assert(ptr);
         auto offset = ptrDiff(ptr, heap->getCpuBase());
         assert(offset + sizeIDD <= heap->getMaxAvailableSpace());
+        assert(0 == offset % sizeof(INTERFACE_DESCRIPTOR_DATA));
+        offsetIDD = static_cast<uint32_t>(offset / sizeof(INTERFACE_DESCRIPTOR_DATA));
 
         INTERFACE_DESCRIPTOR_DATA idd = GfxFamily::cmdInitInterfaceDescriptorData;
 
@@ -296,7 +298,7 @@ xe_result_t CommandListCoreFamily<gfxCoreFamily>::appendLaunchFunction(xe_functi
         memcpy(ptr, &idd, sizeof(idd));
 
         MEDIA_INTERFACE_DESCRIPTOR_LOAD cmd = GfxFamily::cmdInitMediaInterfaceDescriptorLoad;
-        cmd.setInterfaceDescriptorDataStartAddress(offsetIDD);
+        cmd.setInterfaceDescriptorDataStartAddress(static_cast<uint32_t>(offset));
         cmd.setInterfaceDescriptorTotalLength(sizeof(INTERFACE_DESCRIPTOR_DATA));
 
         auto buffer = commandStream->getSpace(sizeof(cmd));
@@ -304,6 +306,7 @@ xe_result_t CommandListCoreFamily<gfxCoreFamily>::appendLaunchFunction(xe_functi
     }
 
     GPGPU_WALKER cmd = GfxFamily::cmdInitGpgpuWalker;
+    cmd.setInterfaceDescriptorOffset(offsetIDD);
 
     function->setGroupCount(pThreadGroupDimensions->groupCountX,
                             pThreadGroupDimensions->groupCountY,

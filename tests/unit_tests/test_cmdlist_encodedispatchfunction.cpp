@@ -469,6 +469,42 @@ GEN9TEST_F(CommandListAppendLaunchFunctionGEN9, addsWalkerToCommandStream) {
     }
 }
 
+GEN9TEST_F(CommandListAppendLaunchFunction, usesProperInterfaceDescriptorOffsets) {
+    createFunction("MemcpyBytes");
+
+    using INTERFACE_DESCRIPTOR_DATA = typename FamilyType::INTERFACE_DESCRIPTOR_DATA;
+    using MEDIA_INTERFACE_DESCRIPTOR_LOAD = typename FamilyType::MEDIA_INTERFACE_DESCRIPTOR_LOAD;
+    using GPGPU_WALKER = typename FamilyType::GPGPU_WALKER;
+
+    constexpr uint32_t expectedIDDOffset = 4;
+    commandList->indirectHeaps[CommandList::DYNAMIC_STATE]->getSpace(expectedIDDOffset * sizeof(INTERFACE_DESCRIPTOR_DATA));
+
+    auto result = commandList->appendLaunchFunction(function->toHandle(),
+                                                    &dispatchFunctionArguments,
+                                                    nullptr);
+    ASSERT_EQ(XE_RESULT_SUCCESS, result);
+    auto usedSpaceAfter = commandList->commandStream->getUsed();
+
+    GenCmdList cmdList;
+    ASSERT_TRUE(FamilyType::PARSE::parseCommandBuffer(cmdList,
+                                                      ptrOffset(commandList->commandStream->getCpuBase(), 0),
+                                                      usedSpaceAfter));
+
+    auto itor = find<GPGPU_WALKER *>(cmdList.begin(), cmdList.end());
+    ASSERT_NE(cmdList.end(), itor);
+    {
+        auto cmd = genCmdCast<GPGPU_WALKER *>(*itor);
+        EXPECT_EQ(expectedIDDOffset, cmd->getInterfaceDescriptorOffset());
+    }
+
+    itor = find<MEDIA_INTERFACE_DESCRIPTOR_LOAD *>(cmdList.begin(), cmdList.end());
+    ASSERT_NE(cmdList.end(), itor);
+    {
+        auto cmd = genCmdCast<MEDIA_INTERFACE_DESCRIPTOR_LOAD *>(*itor);
+        EXPECT_EQ(expectedIDDOffset * sizeof(INTERFACE_DESCRIPTOR_DATA), cmd->getInterfaceDescriptorDataStartAddress());
+    }
+}
+
 GEN9TEST_F(CommandListAppendLaunchFunctionGEN9, programsL3InBatchBuffer) {
     createFunction("MemcpyBytes");
 
