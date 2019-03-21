@@ -81,7 +81,7 @@ node("loki-controller") {
 
 		lokiStage('build') {
 			lokiBuild('linux') {
-				def image = docker.image("${env.DOCKER_REGISTRY}/neo-build-gcc5:9")
+				def image = docker.image("${env.DOCKER_REGISTRY}/neo-build-ubuntu18:2")
 				def workDir = sh script: "(cd .. && pwd)", returnStdout: true
 				def buildId = "${env.BUILD_NUMBER}"
 				if(params.containsKey("COMMON_BUILD_ID")) {

@@ -40,7 +40,7 @@ pages:
     - bt
 
 linux:
-  image: loki:latest
+  image: loki18.04:latest
   stage: build
   only:
   - branches
