@@ -21,6 +21,59 @@ namespace ult {
 
 using ::testing::Return;
 
+std::unique_ptr<char[]> readBinaryTestFile(const std::string &name, size_t &outSize) {
+    std::ifstream file(name, std::ios_base::binary);
+    if (false == file.good()) {
+        outSize = 0;
+        return nullptr;
+    }
+
+    size_t length;
+    file.seekg(0, file.end);
+    length = static_cast<size_t>(file.tellg());
+    file.seekg(0, file.beg);
+
+    auto storage = std::make_unique<char[]>(length);
+    file.read(storage.get(), length);
+
+    outSize = length;
+    return storage;
+}
+
+class ModuleOnlineCompiled : public testing::Test {
+  public:
+    void SetUp() override {
+        UserRealCompilerGuard realCompilerGuard;
+
+        auto platform = OCLRT::constructPlatform();
+        auto success = platform->initialize();
+        ASSERT_TRUE(success);
+
+        auto deviceRT = platform->getDevice(0);
+        ASSERT_NE(nullptr, deviceRT);
+        device.reset(Device::create(deviceRT));
+
+        size_t spvModuleSize = 0;
+        auto spvModule = readBinaryTestFile("test_files/spv_modules/cstring_module.spv", spvModuleSize);
+        ASSERT_NE(0U, spvModuleSize);
+
+        xe_module_desc_t modDesc = {};
+        modDesc.version = XE_MODULE_DESC_VERSION_CURRENT;
+        modDesc.format = XE_MODULE_FORMAT_IL_SPIRV;
+        modDesc.inputSize = static_cast<uint32_t>(spvModuleSize);
+        modDesc.pInputModule = spvModule.get();
+
+        module.reset(whitebox_cast(Module::create(device.get(), &modDesc, deviceRT, nullptr)));
+        ASSERT_NE(nullptr, module);
+    }
+
+    void TearDown() override {
+    }
+
+    std::unique_ptr<WhiteBox<L0::Module>> module;
+    std::unique_ptr<L0::Device> device;
+};
+
 TEST(ModuleBuildLog, createModuleBuildLog) {
     auto moduleBuildLog = ModuleBuildLog::create();
     ASSERT_NE(nullptr, moduleBuildLog);
@@ -103,25 +156,6 @@ TEST(xeModuleCreateFunction, redirectsToObject) {
                                          &desc,
                                          &function);
     EXPECT_EQ(XE_RESULT_SUCCESS, result);
-}
-
-std::unique_ptr<char[]> readBinaryTestFile(const std::string &name, size_t &outSize) {
-    std::ifstream file(name, std::ios_base::binary);
-    if (false == file.good()) {
-        outSize = 0;
-        return nullptr;
-    }
-
-    size_t length;
-    file.seekg(0, file.end);
-    length = static_cast<size_t>(file.tellg());
-    file.seekg(0, file.beg);
-
-    auto storage = std::make_unique<char[]>(length);
-    file.read(storage.get(), length);
-
-    outSize = length;
-    return storage;
 }
 
 using ModuleCreate = ::testing::TestWithParam<std::tuple<std::string, std::string, std::string>>;
@@ -289,43 +323,32 @@ TEST(ModuleCreateSimple, moduleWithSLMandBarriers) {
     EXPECT_EQ(64u, function.getSlmSize());
 }
 
-TEST(FunctionArgs_accessors, returnsCorrectThreadGroupParameters) {
-    UserRealCompilerGuard realCompilerGuard;
+TEST_F(ModuleOnlineCompiled, getNativeBinaryReturnsGenBinary) {
+    size_t binarySize = 0;
+    void *binary = nullptr;
+    auto result = xeModuleGetNativeBinary(module->toHandle(), &binarySize, nullptr);
 
-    auto platform = OCLRT::constructPlatform();
-    auto success = platform->initialize();
-    ASSERT_TRUE(success);
+    EXPECT_EQ(XE_RESULT_SUCCESS, result);
+    EXPECT_NE(0u, binarySize);
 
-    auto deviceRT = platform->getDevice(0);
-    ASSERT_NE(nullptr, deviceRT);
-    auto device = Device::create(deviceRT);
+    auto storage = std::make_unique<char[]>(binarySize);
+    binary = storage.get();
+    result = xeModuleGetNativeBinary(module->toHandle(), &binarySize, &binary);
+    EXPECT_EQ(XE_RESULT_SUCCESS, result);
+    EXPECT_EQ(0u, memcmp(binary, "CTNI", 4));
+}
 
-    size_t spvModuleSize = 0;
-    auto spvModule = readBinaryTestFile("test_files/spv_modules/cstring_module.spv", spvModuleSize);
-    ASSERT_NE(0U, spvModuleSize);
-
-    xe_module_desc_t modDesc = {};
-    modDesc.version = XE_MODULE_DESC_VERSION_CURRENT;
-    modDesc.format = XE_MODULE_FORMAT_IL_SPIRV;
-    modDesc.inputSize = static_cast<uint32_t>(spvModuleSize);
-    modDesc.pInputModule = spvModule.get();
-
-    auto module = whitebox_cast(Module::create(device, &modDesc, deviceRT, nullptr));
-    ASSERT_NE(nullptr, module);
-
+TEST_F(ModuleOnlineCompiled, functionReturnsCorrectThreadGroupParameters) {
     xe_function_desc_t funDesc = {};
     funDesc.version = XE_FUNCTION_DESC_VERSION_CURRENT;
     funDesc.pFunctionName = "memcpy_bytes";
-    auto function = whitebox_cast(Function::create(module, &funDesc));
+
+    auto function = std::unique_ptr<Function>(whitebox_cast(Function::create(module.get(), &funDesc)));
     ASSERT_NE(nullptr, function);
 
     function->setGroupSize(5u, 7u, 13u);
     EXPECT_EQ(function->getThreadExecutionMask(), 0x7f);
     EXPECT_EQ(function->getThreadsPerThreadGroup(), 15u);
-
-    delete function;
-    delete module;
-    delete device;
 }
 
 } // namespace ult

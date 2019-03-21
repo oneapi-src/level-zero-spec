@@ -125,6 +125,17 @@ xe_result_t ModuleImp::createFunction(const xe_function_desc_t *desc, xe_functio
     return XE_RESULT_SUCCESS;
 }
 
+xe_result_t ModuleImp::getNativeBinary(size_t *pSize, void **pModuleNativeBinary) {
+    size_t genBinarySize = 0;
+    char *genBinary = this->progRT->getGenBinary(genBinarySize);
+
+    *pSize = genBinarySize;
+    if (pModuleNativeBinary != nullptr && *pModuleNativeBinary != nullptr) {
+        memcpy(*pModuleNativeBinary, genBinary, genBinarySize);
+    }
+    return XE_RESULT_SUCCESS;
+}
+
 Module *Module::create(Device *device, const xe_module_desc_t *desc,
                        void *deviceRT, ModuleBuildLog *moduleBuildLog) {
     auto module = new ModuleImp(device, deviceRT, moduleBuildLog);
