@@ -102,6 +102,7 @@ FunctionImp::~FunctionImp() {
     if (printfBuffer) {
         module->getDevice()->getMemoryManager()->freeMemory(printfBuffer);
     }
+    privateMemAllocation.deleteOwned();
     delete oclInternals;
 }
 
@@ -222,8 +223,6 @@ xe_result_t FunctionImp::setArgImmediate(uint32_t argIndex, size_t argSize, cons
 
     patchWithRequiredSize(patchLocation, kernelArgInfo.kernelArgPatchInfoVector[0].size, *reinterpret_cast<const uintptr_t *>(argVal));
 
-    //oclInternals.storeKernelArg(argIndex, OCLRT::Kernel::BUFFER_OBJ, nullptr, argVal, argSize);
-
     return XE_RESULT_SUCCESS;
 }
 
@@ -283,6 +282,10 @@ bool FunctionImp::initialize(const xe_function_desc_t *desc) {
     assert(this->immFuncInfo != nullptr);
     PtrRef<OCLRT::KernelInfo> kernelInfoRT = immFuncInfo->kernelInfoRT.weakRefReinterpret<OCLRT::KernelInfo>();
     assert(kernelInfoRT != nullptr);
+
+    // TODO : move immutable kernelRT to ImmutableFunctionInfo
+    // kernelRT is currently part of Function because in early stages of API, Function objects were immutable/singleton (thanks to separation from FunctionArgs)
+    // right now Function is greatly mutable and mutli-instanced, that's why immutable resources should be moved to ImmutableFunctionInfo
     kernelRT = new OCLRT_temporary::LightweightOclKernel(static_cast<OCLRT::Program *>(static_cast<ModuleImp *>(module)->getProgramRT()), *kernelInfoRT);
     kernelRT->initialize();
 
@@ -300,7 +303,6 @@ bool FunctionImp::initialize(const xe_function_desc_t *desc) {
         }
     }
 
-    //Are these oclInternals.foo variables necessary? use kernelRT->foo instead.
     this->oclInternals->kernelSvmGfxAllocations = kernelRT->kernelSvmGfxAllocations;
 
     this->oclInternals->numberOfBindingTableStates = kernelRT->numberOfBindingTableStates;
@@ -322,6 +324,10 @@ bool FunctionImp::initialize(const xe_function_desc_t *desc) {
     residencyContainer.resize(this->oclInternals->kernelArgHandlers.size(), nullptr); // todo : handle implicit surfaces - printf/private/constant
 
     this->createPrintfBuffer();
+    if (kernelRT->privateSurface != nullptr) {
+        privateMemAllocation.rebind(new GraphicsAllocation(kernelRT->privateSurface));
+        residencyContainer.push_back(privateMemAllocation.weakRef().get());
+    }
 
     this->oclInternals->usingSharedObjArgs = kernelRT->usingSharedObjArgs;
     this->oclInternals->usingImagesOnly = kernelRT->usingImagesOnly;
