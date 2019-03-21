@@ -87,7 +87,7 @@ node("loki-controller") {
 					sh """\
 mkdir build
 cd build
-cmake -GNinja .. -DCMAKE_BUILD_TYPE=Release
+cmake -GNinja .. -DCMAKE_BUILD_TYPE=Release -DLOKI_VERSION_BUILD=${env.BUILD_NUMBER}
 cmake --build . --config Release --clean-first --target package
 """
 				}

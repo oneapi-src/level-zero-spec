@@ -49,13 +49,11 @@ linux:
   tags:
     - Linux
   script:
-    - pwd
-    - ls -l
     - ~/irepo/irepo select -d . third_party/linux_embargo.yml
     - ~/irepo/irepo sync
     - mkdir build
     - cd build
-    - cmake -GNinja .. -DCMAKE_BUILD_TYPE=Release
+    - 'cmake -GNinja .. -DCMAKE_BUILD_TYPE=Release -DLOKI_VERSION_BUILD=$CI_PIPELINE_ID'
     - cmake --build . --config Release --clean-first --target package
   artifacts:
     paths:

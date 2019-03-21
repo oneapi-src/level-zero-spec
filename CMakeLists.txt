@@ -69,7 +69,7 @@ endif()
 
 if(NOT EXISTS ${COMPUTE_RUNTIME_DIR}/runtime/command_stream)
     message(FATAL_ERROR "COMPUTE_RUNTIME_DIR = Not found!")
-endif() 
+endif()
 message(STATUS "COMPUTE_RUNTIME_DIR = ${COMPUTE_RUNTIME_DIR}")
 
 #Add I915 include dir
@@ -116,12 +116,69 @@ endif()
 add_subdirectory(icd_loader)
 
 if(UNIX)
-    set(CPACK_GENERATOR "DEB")
+    if(DEFINED LOKI_CPACK_GENERATOR)
+        set(CPACK_GENERATOR ${LOKI_CPACK_GENERATOR})
+    else()
+        # If generators list was not define build native package for current distro
+        if(EXISTS "/etc/debian_version")
+            set(CPACK_GENERATOR "DEB")
+
+            set(file_path "/etc/lsb-release")
+            if(EXISTS "${file_path}")
+                file(STRINGS "${file_path}" data_list REGEX "^(DISTRIB_ID|DISTRIB_CODENAME)=")
+
+                # Look for lines like "DISTRIB_ID="..." and DISTRIB_CODENAME="..."
+                foreach(_var ${data_list})
+                    if("${_var}" MATCHES "^(DISTRIB_ID)=(.*)$")
+                        set(DEB_DISTRIB_ID "${CMAKE_MATCH_2}")
+                    elseif("${_var}" MATCHES "^(DISTRIB_CODENAME)=(.*)$")
+                        set(DEB_DISTRIB_CODENAME "${CMAKE_MATCH_2}")
+                    endif()
+                endforeach()
+            endif()
+
+        elseif(EXISTS "/etc/redhat-release")
+          set(CPACK_GENERATOR "RPM")
+        else()
+          set(CPACK_GENERATOR "TXZ")
+        endif()
+    endif()
     set(CPACK_PACKAGE_CONTACT "Intel Corporation")
-	set(CPACK_DEB_COMPONENT_INSTALL ON)
-	set(CPACK_RPM_COMPONENT_INSTALL ON)
-	set(CPACK_ARCHIVE_COMPONENT_INSTALL ON)
-	set(CPACK_COMPONENTS_ALL l0-core l0-icd l0-headers)
+    set(CPACK_PACKAGE_VERSION_MAJOR 0)
+    set(CPACK_PACKAGE_VERSION_MINOR 0)
+    if(NOT DEFINED LOKI_VERSION_BUILD)
+      set(CPACK_PACKAGE_VERSION_PATCH 0)
+    else()
+        set(CPACK_PACKAGE_VERSION_PATCH ${LOKI_VERSION_BUILD})
+    endif()
+
+    set(CPACK_DEB_COMPONENT_INSTALL ON)
+    set(CPACK_RPM_COMPONENT_INSTALL ON)
+    set(CPACK_ARCHIVE_COMPONENT_INSTALL ON)
+
+    set(CPACK_DEBIAN_PACKAGE_ARCHITECTURE "amd64")
+    # set(CPACK_DEBIAN_PACKAGE_CONTROL_EXTRA "postinst;postrm")
+    # set(CPACK_DEBIAN_PACKAGE_HOMEPAGE "http://01.org/compute-runtime")
+    set(CPACK_DEBIAN_PACKAGE_SHLIBDEPS ON)
+
+    set(CPACK_RPM_COMPRESSION_TYPE "xz")
+    set(CPACK_RPM_PACKAGE_ARCHITECTURE "x86_64")
+    set(CPACK_RPM_PACKAGE_AUTOREQ OFF)
+    set(CPACK_RPM_PACKAGE_GROUP "System Environment/Libraries")
+    set(CPACK_RPM_PACKAGE_LICENSE "Intel Confidential")
+    set(CPACK_RPM_PACKAGE_RELEASE 1)
+    set(CPACK_RPM_PACKAGE_RELEASE_DIST ON)
+    # set(CPACK_RPM_PACKAGE_URL "http://01.org/compute-runtime")
+    # set(CPACK_RPM_POST_INSTALL_SCRIPT_FILE "${IGDRCL_BINARY_DIR}/postinst")
+    # set(CPACK_RPM_POST_UNINSTALL_SCRIPT_FILE "${IGDRCL_BINARY_DIR}/postrm")
+
+    set(CPACK_COMPONENTS_ALL l0-core l0-icd l0-headers)
+
+    set(CPACK_DEBIAN_L0-CORE_PACKAGE_DEPENDS "intel-gmmlib intel-igc-opencl")
+    set(CPACK_RPM_L0-CORE_PACKAGE_REQUIRES "intel-gmmlib intel-igc-opencl")
+
+    set(CPACK_DEBIAN_L0-CORE_FILE_NAME "intel-loki-core-${CPACK_PACKAGE_VERSION_MAJOR}.${CPACK_PACKAGE_VERSION_MINOR}.${CPACK_PACKAGE_VERSION_PATCH}-1~${DEB_DISTRIB_CODENAME}_${CPACK_DEBIAN_PACKAGE_ARCHITECTURE}.deb")
+    set(CPACK_RPM_L0-CORE_FILE_NAME "intel-loki-core-${CPACK_PACKAGE_VERSION_MAJOR}.${CPACK_PACKAGE_VERSION_MINOR}.${CPACK_PACKAGE_VERSION_PATCH}-${CPACK_RPM_PACKAGE_RELEASE}%{?dist}.${CPACK_RPM_PACKAGE_ARCHITECTURE}.rpm")
 
     include(CPack)
 endif()
