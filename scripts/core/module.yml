@@ -170,6 +170,28 @@ returns:
     - $X_RESULT_ERROR_OUT_OF_HOST_MEMORY
     - $X_RESULT_ERROR_OUT_OF_DEVICE_MEMORY
 --- #--------------------------------------------------------------------------
+type: function
+desc: "Retrieve global variable pointer from Module."
+class: $xModule
+name: GetGlobalPointer
+details:
+    - "This function may be called from simultaneous threads."
+    - "The implementation of this function should be lock-free."
+params:
+    - type: $x_module_handle_t
+      name: hModule
+      desc: "[in] handle of the device"
+    - type: "const char*"
+      name: pGlobalName
+      desc: "[in] name of function in global"
+    - type: "void**"
+      name: pPtr
+      desc: "[out] device visible pointer"
+returns:
+    - $X_RESULT_ERROR_INVALID_PARAMETER:
+        - "invalid name"
+    - $X_RESULT_ERROR_UNSUPPORTED
+--- #--------------------------------------------------------------------------
 type: enum
 desc: API version of $x_function_desc_t
 class: $xModule

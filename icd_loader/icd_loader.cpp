@@ -827,6 +827,16 @@ xe_result_t __xecall xeModuleGetNativeBinary(
     }
     return dispatchTable.xeModuleGetNativeBinary(hModule, pSize, pModuleNativeBinary);
 }
+xe_result_t __xecall xeModuleGetGlobalPointer(
+        xe_module_handle_t hModule,                     ///< [in] handle of the device
+        const char* pGlobalName,                        ///< [in] name of function in global
+        void** pPtr                                     ///< [out] device visible pointer
+    ){
+    if(dispatchTableInitialized == false){
+        return XE_RESULT_ERROR_UNINITIALIZED;
+    }
+    return dispatchTable.xeModuleGetGlobalPointer(hModule, pGlobalName, pPtr);
+}
 xe_result_t __xecall xeModuleCreateFunction(
         xe_module_handle_t hModule,                     ///< [in] handle of the module
         const xe_function_desc_t* pDesc,                ///< [in] pointer to function descriptor

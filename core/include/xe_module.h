@@ -233,6 +233,30 @@ xeModuleGetNativeBinary(
     );
 
 ///////////////////////////////////////////////////////////////////////////////
+/// @brief Retrieve global variable pointer from Module.
+/// 
+/// @details
+///     - This function may be called from simultaneous threads.
+///     - The implementation of this function should be lock-free.
+/// 
+/// @returns
+///     - ::XE_RESULT_SUCCESS
+///     - ::XE_RESULT_ERROR_UNINITIALIZED
+///     - ::XE_RESULT_ERROR_DEVICE_LOST
+///     - ::XE_RESULT_ERROR_INVALID_PARAMETER
+///         + nullptr == hModule
+///         + nullptr == pGlobalName
+///         + nullptr == pPtr
+///         + invalid name
+///     - ::XE_RESULT_ERROR_UNSUPPORTED
+__xedllport xe_result_t __xecall
+xeModuleGetGlobalPointer(
+    xe_module_handle_t hModule,                     ///< [in] handle of the device
+    const char* pGlobalName,                        ///< [in] name of function in global
+    void** pPtr                                     ///< [out] device visible pointer
+    );
+
+///////////////////////////////////////////////////////////////////////////////
 /// @brief API version of ::xe_function_desc_t
 typedef enum _xe_function_desc_version_t
 {

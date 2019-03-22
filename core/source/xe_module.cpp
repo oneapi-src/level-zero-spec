@@ -377,6 +377,66 @@ xeModuleGetNativeBinary(
 }
 
 ///////////////////////////////////////////////////////////////////////////////
+/// @brief Retrieve global variable pointer from Module.
+/// 
+/// @details
+///     - This function may be called from simultaneous threads.
+///     - The implementation of this function should be lock-free.
+/// 
+/// @returns
+///     - ::XE_RESULT_SUCCESS
+///     - ::XE_RESULT_ERROR_UNINITIALIZED
+///     - ::XE_RESULT_ERROR_DEVICE_LOST
+///     - ::XE_RESULT_ERROR_INVALID_PARAMETER
+///         + nullptr == hModule
+///         + nullptr == pGlobalName
+///         + nullptr == pPtr
+///         + invalid name
+///     - ::XE_RESULT_ERROR_UNSUPPORTED
+///
+/// @hash {e05f860299fb0f797989dc47c5111fff00b7397f5948c3c803ce0ca0e261e0eb}
+///
+__xedllexport xe_result_t __xecall
+xeModuleGetGlobalPointer(
+    xe_module_handle_t hModule,                     ///< [in] handle of the device
+    const char* pGlobalName,                        ///< [in] name of function in global
+    void** pPtr                                     ///< [out] device visible pointer
+    )
+{
+    try
+    {
+        //if( XE_DRIVER_PARAMETER_VALIDATION_LEVEL >= 0 )
+        {
+            // if( nullptr == driver ) return XE_RESULT_ERROR_UNINITIALIZED;
+            // Check parameters
+            if( nullptr == hModule ) return XE_RESULT_ERROR_INVALID_PARAMETER;
+            if( nullptr == pGlobalName ) return XE_RESULT_ERROR_INVALID_PARAMETER;
+            if( nullptr == pPtr ) return XE_RESULT_ERROR_INVALID_PARAMETER;
+        }
+        /// @begin
+#if defined(XE_NULLDRV)
+        return XE_RESULT_SUCCESS;
+#else
+        return L0::Module::fromHandle(hModule)->getGlobalPointer(pGlobalName, pPtr);
+#endif
+        /// @end
+    }
+    catch(xe_result_t& result)
+    {
+        return result;
+    }
+    catch(std::bad_alloc&)
+    {
+        return XE_RESULT_ERROR_OUT_OF_HOST_MEMORY;
+    }
+    catch(std::exception&)
+    {
+        // @todo: pfnOnException(e.what());
+        return XE_RESULT_ERROR_UNKNOWN;
+    }
+}
+
+///////////////////////////////////////////////////////////////////////////////
 /// @brief Create Function object from Module by name
 /// 
 /// @details

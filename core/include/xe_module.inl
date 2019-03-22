@@ -132,6 +132,26 @@ namespace xe
     }
 
     ///////////////////////////////////////////////////////////////////////////////
+    /// @brief C++ wrapper for ::xeModuleGetGlobalPointer
+    /// 
+    /// @details
+    ///     - This function may be called from simultaneous threads.
+    ///     - The implementation of this function should be lock-free.
+    /// 
+    /// @returns
+    ///     - void*: device visible pointer
+    /// 
+    /// @throws result_t
+    inline void* 
+    Module::GetGlobalPointer(
+        const char* pGlobalName                         ///< [in] name of function in global
+        )
+    {
+        // auto result = ::xeModuleGetGlobalPointer( handle, pGlobalName );
+        // if( ::XE_RESULT_SUCCESS != result ) throw exception(result, "xe::Module::GetGlobalPointer");
+    }
+
+    ///////////////////////////////////////////////////////////////////////////////
     /// @brief C++ wrapper for ::xeModuleCreateFunction
     /// 
     /// @details

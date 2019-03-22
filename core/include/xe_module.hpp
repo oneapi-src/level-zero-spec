@@ -112,6 +112,17 @@ namespace xe
             );
 
         ///////////////////////////////////////////////////////////////////////////////
+        /// @brief C++ wrapper for ::xeModuleGetGlobalPointer
+        /// @returns
+        ///     - void*: device visible pointer
+        /// 
+        /// @throws result_t
+        inline void*
+        GetGlobalPointer(
+            const char* pGlobalName                         ///< [in] name of function in global
+            );
+
+        ///////////////////////////////////////////////////////////////////////////////
         /// @brief C++ wrapper for ::xeModuleCreateFunction
         /// @returns
         ///     - function_handle_t: handle of the Function object
