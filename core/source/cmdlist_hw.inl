@@ -248,6 +248,7 @@ xe_result_t CommandListCoreFamily<gfxCoreFamily>::appendLaunchFunction(xe_functi
                                                                        xe_event_handle_t hEvent) {
     using GfxFamily = typename OCLRT::GfxFamilyMapper<gfxCoreFamily>::GfxFamily;
     using GPGPU_WALKER = typename GfxFamily::GPGPU_WALKER;
+    using MEDIA_STATE_FLUSH = typename GfxFamily::MEDIA_STATE_FLUSH;
     using MEDIA_INTERFACE_DESCRIPTOR_LOAD = typename GfxFamily::MEDIA_INTERFACE_DESCRIPTOR_LOAD;
     using INTERFACE_DESCRIPTOR_DATA = typename GfxFamily::INTERFACE_DESCRIPTOR_DATA;
 
@@ -297,6 +298,11 @@ xe_result_t CommandListCoreFamily<gfxCoreFamily>::appendLaunchFunction(xe_functi
         idd.setBarrierEnable(function->getHasBarriers());
 
         memcpy(ptr, &idd, sizeof(idd));
+
+        // A Media_State_Flush should be used before MEDIA_INTERFACE_DESCRIPTOR_LOAD to ensure that
+        // the temporary Interface Descriptor storage is cleared.
+        auto mediaStateFlush = commandStream->getSpace(sizeof(MEDIA_STATE_FLUSH));
+        *reinterpret_cast<MEDIA_STATE_FLUSH *>(mediaStateFlush) = GfxFamily::cmdInitMediaStateFlush;
 
         MEDIA_INTERFACE_DESCRIPTOR_LOAD cmd = GfxFamily::cmdInitMediaInterfaceDescriptorLoad;
         cmd.setInterfaceDescriptorDataStartAddress(static_cast<uint32_t>(offsetIDD));
@@ -373,6 +379,12 @@ xe_result_t CommandListCoreFamily<gfxCoreFamily>::appendLaunchFunction(xe_functi
     // Commit our command to the commandStream
     auto buffer = commandStream->getSpace(sizeof(cmd));
     *(decltype(cmd) *)buffer = cmd;
+
+    {
+        // A MEDIA_STATE_FLUSH with no options must be added after a GPGPU_WALKER command which doesn't use either SLM or barriers.
+        auto mediaStateFlush = commandStream->getSpace(sizeof(MEDIA_STATE_FLUSH));
+        *reinterpret_cast<MEDIA_STATE_FLUSH *>(mediaStateFlush) = GfxFamily::cmdInitMediaStateFlush;
+    }
 
     return XE_RESULT_SUCCESS;
 }

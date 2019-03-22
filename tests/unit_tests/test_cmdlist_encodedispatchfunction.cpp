@@ -474,6 +474,7 @@ GEN9TEST_F(CommandListAppendLaunchFunction, usesProperInterfaceDescriptorOffsets
 
     using INTERFACE_DESCRIPTOR_DATA = typename FamilyType::INTERFACE_DESCRIPTOR_DATA;
     using MEDIA_INTERFACE_DESCRIPTOR_LOAD = typename FamilyType::MEDIA_INTERFACE_DESCRIPTOR_LOAD;
+    using MEDIA_STATE_FLUSH = typename FamilyType::MEDIA_STATE_FLUSH;
     using GPGPU_WALKER = typename FamilyType::GPGPU_WALKER;
 
     constexpr uint32_t expectedIDDOffset = 4;
@@ -491,19 +492,25 @@ GEN9TEST_F(CommandListAppendLaunchFunction, usesProperInterfaceDescriptorOffsets
                                                       ptrOffset(commandList->commandStream->getCpuBase(), 0),
                                                       usedSpaceAfter));
 
-    auto itor = find<GPGPU_WALKER *>(cmdList.begin(), cmdList.end());
-    ASSERT_NE(cmdList.end(), itor);
+    auto itorMIDL = find<MEDIA_INTERFACE_DESCRIPTOR_LOAD *>(cmdList.begin(), cmdList.end());
+    ASSERT_NE(cmdList.end(), itorMIDL);
     {
-        auto cmd = genCmdCast<GPGPU_WALKER *>(*itor);
+        auto cmd = genCmdCast<MEDIA_INTERFACE_DESCRIPTOR_LOAD *>(*itorMIDL);
+        EXPECT_EQ(expectedIDDOffset * sizeof(INTERFACE_DESCRIPTOR_DATA), cmd->getInterfaceDescriptorDataStartAddress());
+    }
+
+    auto itorMSF = find<MEDIA_STATE_FLUSH *>(cmdList.begin(), itorMIDL); // expected before MIDL
+    EXPECT_NE(itorMIDL, itorMSF);
+
+    auto itorWalker = find<GPGPU_WALKER *>(itorMIDL, cmdList.end());
+    ASSERT_NE(cmdList.end(), itorWalker);
+    {
+        auto cmd = genCmdCast<GPGPU_WALKER *>(*itorWalker);
         EXPECT_EQ(0U, cmd->getInterfaceDescriptorOffset()); // single IDD per MEDIA_INTERFACE_DESCRIPTOR_LOAD for now
     }
 
-    itor = find<MEDIA_INTERFACE_DESCRIPTOR_LOAD *>(cmdList.begin(), cmdList.end());
-    ASSERT_NE(cmdList.end(), itor);
-    {
-        auto cmd = genCmdCast<MEDIA_INTERFACE_DESCRIPTOR_LOAD *>(*itor);
-        EXPECT_EQ(expectedIDDOffset * sizeof(INTERFACE_DESCRIPTOR_DATA), cmd->getInterfaceDescriptorDataStartAddress());
-    }
+    itorMSF = find<MEDIA_STATE_FLUSH *>(itorWalker, cmdList.end()); // expected after Walker
+    EXPECT_NE(cmdList.end(), itorMSF);
 }
 
 GEN9TEST_F(CommandListAppendLaunchFunctionGEN9, programsL3InBatchBuffer) {
