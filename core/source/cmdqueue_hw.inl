@@ -85,7 +85,7 @@ void CommandQueueHw<gfxCoreFamily>::dispatchTaskCountWrite(bool flushDataCache) 
         // Add a PIPE_CONTROL w/ CS_stall per Bspec, require prior to any PostSync Operation
         // without this PipeControl may leave to early and cause too early resource destruction which may lead to BSODs
         // Note : this is SKL-specific
-        auto pc0 = commandStream->getSpaceForCmd<GfxFamily::PIPE_CONTROL>();
+        auto pc0 = commandStream->getSpaceForCmd<typename GfxFamily::PIPE_CONTROL>();
         *pc0 = GfxFamily::cmdInitPipeControl;
         pc0->setDcFlushEnable(flushDataCache);
         pc0->setCommandStreamerStallEnable(true);
