@@ -2,6 +2,10 @@
 import groovy.json.JsonOutput
 
 { ->
+def gerritCreds = "0f565f2a-f10f-421d-ac50-3b169adf5f06"
+
+def plus2Allowed = (env.JOB_BASE_NAME == "ocl-loki-verification")
+def reportBuildStatus = (env.JOB_BASE_NAME == "ocl-loki-verification")
 
 gerritLocalBranch="change"
 def buildData = [:]
@@ -58,7 +62,7 @@ node("loki-controller") {
 					submoduleCfg: [],
 					userRemoteConfigs: [[
 						credentialsId: '0f565f2a-f10f-421d-ac50-3b169adf5f06',
-						url: "${GERRIT_SCHEME}://${GERRIT_HOST}:${GERRIT_PORT}/${GERRIT_PROJECT}",
+						url: "${gerritUrl}",
 						refspec: "+${GERRIT_REFSPEC}:${gerritLocalBranch}"
 					]]]
 		}
@@ -100,6 +104,30 @@ cmake --build . --config Release --clean-first --target package
 
 		lokiStage('publish') {
 			archiveArtifacts "build/*.deb"
+
+			if(reportBuildStatus) {
+				lock('loki-gerrit') {
+					node('master') {
+						timeout(3) {
+							def gerritOpts
+
+							// if(neoBuild.change.masterIDs.size()<1 && neoBuild.plus2Allowed)
+							if(plus2Allowed) {
+								gerritOpts = "--code-review=+2 --verified=+1"
+							} else {
+								gerritOpts = "--verified=+1"
+							}
+
+							withCredentials([sshUserPrivateKey(credentialsId: "${gerritCreds}", keyFileVariable: 'KEY', usernameVariable: 'K_USER')]) {
+								def sshCommand = "ssh -i $KEY -l $K_USER -p ${GERRIT_PORT} ${GERRIT_HOST}"
+								def gerritCommentCommand = "\"gerrit review ${GERRIT_CHANGE_NUMBER},${GERRIT_PATCHSET_NUMBER} -m '${env.BUILD_URL}' ${gerritOpts}\""
+								//Add Verified and CodeRevied
+								sh "${sshCommand} ${gerritCommentCommand}"
+							}
+						}
+					}
+				}
+			}
 		}
 	} finally {
 		dir("tmp") {
