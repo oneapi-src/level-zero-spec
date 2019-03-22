@@ -93,6 +93,39 @@ GEN9TEST_F(CommandListCreate, addsPipelineSelectBeforeVfeStateToBatchBuffer) {
     }
 }
 
+GEN9TEST_F(CommandListCreate, programsThreadGroupPreemption) {
+    Mock<Device> device;
+
+    auto commandList = whitebox_cast(CommandList::create(productFamily, &device));
+    ASSERT_NE(nullptr, commandList->commandStream);
+    auto usedSpaceBefore = commandList->commandStream->getUsed();
+
+    auto result = commandList->close();
+    ASSERT_EQ(XE_RESULT_SUCCESS, result);
+
+    auto usedSpaceAfter = commandList->commandStream->getUsed();
+    ASSERT_GT(usedSpaceAfter, usedSpaceBefore);
+
+    GenCmdList cmdList;
+    ASSERT_TRUE(FamilyType::PARSE::parseCommandBuffer(cmdList,
+                                                      ptrOffset(commandList->commandStream->getCpuBase(), 0),
+                                                      usedSpaceAfter));
+
+    using MI_LOAD_REGISTER_IMM = typename FamilyType::MI_LOAD_REGISTER_IMM;
+    auto itor = find<MI_LOAD_REGISTER_IMM *>(cmdList.begin(), cmdList.end());
+    ASSERT_NE(itor, cmdList.end());
+
+    constexpr uint32_t mmioAddress = 0x2580;
+    constexpr uint32_t maskVal = (1 << 1) | (1 << 2);
+    constexpr uint32_t maskShift = 16;
+    constexpr uint32_t mask = maskVal << maskShift;
+    constexpr uint32_t threadGroupVal = (1 << 1);
+    constexpr uint32_t regVal = threadGroupVal | mask;
+    auto lri = genCmdCast<MI_LOAD_REGISTER_IMM *>(*itor);
+    EXPECT_EQ(mmioAddress, lri->getRegisterOffset());
+    EXPECT_EQ(regVal, lri->getDataDword());
+}
+
 HWTEST_F(CommandListCreate, addsStateBaseAddressToBatchBuffer) {
     Mock<Device> device;
 

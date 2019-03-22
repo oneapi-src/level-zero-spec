@@ -5,8 +5,10 @@
 #include "module.h"
 #include "builtins.h"
 #include "runtime/command_stream/linear_stream.h"
+#include "runtime/command_stream/preemption.h"
 #include "runtime/helpers/hw_info.h"
 #include "runtime/helpers/kernel_commands.h"
+#include "runtime/helpers/hw_helper.h"
 #include "runtime/helpers/string.h"
 #include "runtime/indirect_heap/indirect_heap.h"
 #include <cassert>
@@ -137,6 +139,7 @@ bool CommandListCoreFamily<gfxCoreFamily>::initialize(Device *device) {
 
     enableGpgpu();
     programFrontEndState();
+    programPreemption();
 
     return XE_RESULT_SUCCESS;
 }
@@ -199,6 +202,20 @@ void CommandListCoreFamily<gfxCoreFamily>::programFrontEndState() {
 
     auto buffer = commandStream->getSpace(sizeof(cmd));
     *(MEDIA_VFE_STATE *)buffer = cmd;
+}
+
+template <GFXCORE_FAMILY gfxCoreFamily>
+void CommandListCoreFamily<gfxCoreFamily>::programPreemption() {
+    // TODO : Add support for midthread preemption
+    // TODO : Reuse NEO's PreemptionHelper (requires refactoring because of linker problems)
+    constexpr uint32_t mmioAddress = 0x2580;
+    constexpr uint32_t maskVal = (1 << 1) | (1 << 2);
+    constexpr uint32_t maskShift = 16;
+    constexpr uint32_t mask = maskVal << maskShift;
+    constexpr uint32_t threadGroupVal = (1 << 1);
+    constexpr uint32_t regVal = threadGroupVal | mask;
+    using GfxFamily = typename OCLRT::GfxFamilyMapper<gfxCoreFamily>::GfxFamily;
+    OCLRT::LriHelper<GfxFamily>::program(commandStream, mmioAddress, regVal);
 }
 
 template <GFXCORE_FAMILY gfxCoreFamily>

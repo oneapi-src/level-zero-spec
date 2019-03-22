@@ -20,9 +20,14 @@ void CommandListCoreFamily<IGFX_GEN12_CORE>::programFrontEndState() {
 }
 
 template <>
+void CommandListCoreFamily<IGFX_GEN12_CORE>::programPreemption() {
+    // TODO : Reuse NEO's PreemptionHelper (requires refactoring because of linker problems)
+}
+
+template <>
 xe_result_t CommandListCoreFamily<IGFX_GEN12_CORE>::appendLaunchFunction(xe_function_handle_t hFunction,
-                                                                           const xe_thread_group_dimensions_t *pThreadGroupDimensions,
-                                                                           xe_event_handle_t hEvent) {
+                                                                         const xe_thread_group_dimensions_t *pThreadGroupDimensions,
+                                                                         xe_event_handle_t hEvent) {
     using GfxFamily = typename OCLRT::GfxFamilyMapper<IGFX_GEN12_CORE>::GfxFamily;
     using COMPUTE_WALKER = typename GfxFamily::COMPUTE_WALKER;
     using INTERFACE_DESCRIPTOR_DATA = typename GfxFamily::INTERFACE_DESCRIPTOR_DATA;
