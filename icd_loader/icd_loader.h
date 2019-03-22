@@ -406,12 +406,12 @@ typedef xe_result_t (__xecall *pfn_xeModuleBuildLogDestroy)(
 typedef xe_result_t (__xecall *pfn_xeModuleBuildLogGetString)(
     xe_module_build_log_handle_t hModuleBuildLog,   ///< [in] handle of the module build log object.
     size_t* pSize,                                  ///< [in,out] size of build log string.
-    char** pBuildLog                                ///< [in,out][optional] pointer to null-terminated string of the log.
+    char* pBuildLog                                 ///< [in,out][optional] pointer to null-terminated string of the log.
     );
 typedef xe_result_t (__xecall *pfn_xeModuleGetNativeBinary)(
     xe_module_handle_t hModule,                     ///< [in] handle of the device
-    size_t* pSize,                                  ///< [in,out] size of native binary.
-    void** pModuleNativeBinary                      ///< [in,out][optional] pointer to native binary
+    size_t* pSize,                                  ///< [in,out] size of native binary in bytes.
+    uint8_t* pModuleNativeBinary                    ///< [in,out][optional] byte pointer to native binary
     );
 typedef xe_result_t (__xecall *pfn_xeModuleCreateFunction)(
     xe_module_handle_t hModule,                     ///< [in] handle of the module

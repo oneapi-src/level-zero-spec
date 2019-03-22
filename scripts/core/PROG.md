@@ -707,7 +707,7 @@ The ::${x}DeviceCreateModule function can optionally generate a build log object
         ${x}ModuleBuildLogGetString(buildlog, &szLog, nullptr);
         
         char_t* strLog = (char_t*)malloc(szLog);
-        ${x}ModuleBuildLogGetString(buildlog, &szLog, &strLog);
+        ${x}ModuleBuildLogGetString(buildlog, &szLog, strLog);
 
         // Save log to disk.
         ...
@@ -732,10 +732,10 @@ responsibility of the application to implement this using ::${x}ModuleGetNativeB
         size_t szBinary = 0;
         ${x}ModuleGetNativeBinary(hModule, &szBinary, nullptr);
 
-        void* pBinary = malloc(szBinary);
-        ${x}ModuleGetNativeBinary(hModule, &szBinary, &pBinary);
+        uint8_t* pBinary = malloc(szBinary);
+        ${x}ModuleGetNativeBinary(hModule, &szBinary, pBinary);
 
-        // cache pNativeBinary for corresponding IL
+        // cache pBinary for corresponding IL
         ...
 
         free(pBinary);

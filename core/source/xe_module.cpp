@@ -252,6 +252,8 @@ xeModuleBuildLogDestroy(
 /// @details
 ///     - This function may be called from simultaneous threads.
 ///     - The implementation of this function should be lock-free.
+///     - The caller must provide memory for build log.
+///     - The caller can pass nullptr for pBuildLog when querying only for size.
 /// 
 /// @returns
 ///     - ::XE_RESULT_SUCCESS
@@ -264,13 +266,13 @@ xeModuleBuildLogDestroy(
 ///     - ::XE_RESULT_ERROR_OUT_OF_HOST_MEMORY
 ///     - ::XE_RESULT_ERROR_OUT_OF_DEVICE_MEMORY
 ///
-/// @hash {69beb50cd0324a2c1af69da8f1c78f9b47febaf1fce53e419ceb52881ecac09c}
+/// @hash {2e8534b4dfea4cf845efe49987825ea8f684cf88eb1011b027e2081c50bf786b}
 ///
 __xedllexport xe_result_t __xecall
 xeModuleBuildLogGetString(
     xe_module_build_log_handle_t hModuleBuildLog,   ///< [in] handle of the module build log object.
     size_t* pSize,                                  ///< [in,out] size of build log string.
-    char** pBuildLog                                ///< [in,out][optional] pointer to null-terminated string of the log.
+    char* pBuildLog                                 ///< [in,out][optional] pointer to null-terminated string of the log.
     )
 {
     try
@@ -311,9 +313,11 @@ xeModuleBuildLogGetString(
 /// @details
 ///     - This function may be called from simultaneous threads.
 ///     - The implementation of this function should be lock-free.
+///     - The caller can pass nullptr for pModuleNativeBinary when querying only
+///       for size.
+///     - The implementation will copy the native binary into a buffer supplied
+///       by the caller.
 ///     - The memory for the native binary output is associated with the module.
-///       The output pointer should not be accessed after a module has been
-///       destroyed.
 ///     - The native binary output can be cached to disk and new modules can be
 ///       later constructed from the cached copy.
 ///     - The native binary will retain debugging information that is associated
@@ -331,13 +335,13 @@ xeModuleBuildLogGetString(
 ///     - ::XE_RESULT_ERROR_OUT_OF_HOST_MEMORY
 ///     - ::XE_RESULT_ERROR_OUT_OF_DEVICE_MEMORY
 ///
-/// @hash {db408381a1c426959036f23be0372c976d248bb936ef45224baec75d38062dae}
+/// @hash {043affb5d74a5738f6f15766b94cb19bb925ed422b5fde9a86bd8be47b341aca}
 ///
 __xedllexport xe_result_t __xecall
 xeModuleGetNativeBinary(
     xe_module_handle_t hModule,                     ///< [in] handle of the device
-    size_t* pSize,                                  ///< [in,out] size of native binary.
-    void** pModuleNativeBinary                      ///< [in,out][optional] pointer to native binary
+    size_t* pSize,                                  ///< [in,out] size of native binary in bytes.
+    uint8_t* pModuleNativeBinary                    ///< [in,out][optional] byte pointer to native binary
     )
 {
     try

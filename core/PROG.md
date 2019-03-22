@@ -705,7 +705,7 @@ The ::xeDeviceCreateModule function can optionally generate a build log object :
         xeModuleBuildLogGetString(buildlog, &szLog, nullptr);
         
         char_t* strLog = (char_t*)malloc(szLog);
-        xeModuleBuildLogGetString(buildlog, &szLog, &strLog);
+        xeModuleBuildLogGetString(buildlog, &szLog, strLog);
 
         // Save log to disk.
         ...
@@ -730,10 +730,10 @@ responsibility of the application to implement this using ::xeModuleGetNativeBin
         size_t szBinary = 0;
         xeModuleGetNativeBinary(hModule, &szBinary, nullptr);
 
-        void* pBinary = malloc(szBinary);
-        xeModuleGetNativeBinary(hModule, &szBinary, &pBinary);
+        uint8_t* pBinary = malloc(szBinary);
+        xeModuleGetNativeBinary(hModule, &szBinary, pBinary);
 
-        // cache pNativeBinary for corresponding IL
+        // cache pBinary for corresponding IL
         ...
 
         free(pBinary);
