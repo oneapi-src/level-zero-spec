@@ -79,6 +79,17 @@ void CommandQueueHw<gfxCoreFamily>::dispatchTaskCountWrite(bool flushDataCache) 
 
     PIPELINE_SELECT ps = GfxFamily::cmdInitPipelineSelect;
     ps.setPipelineSelection(PIPELINE_SELECT::PIPELINE_SELECTION_GPGPU);
+    ps.setMaskBits(3u); //TODO:  Add support for DOP clock gating
+
+    {
+        // Add a PIPE_CONTROL w/ CS_stall per Bspec, require prior to any PostSync Operation
+        // without this PipeControl may leave to early and cause too early resource destruction which may lead to BSODs
+        // Note : this is SKL-specific
+        auto pc0 = commandStream->getSpaceForCmd<GfxFamily::PIPE_CONTROL>();
+        *pc0 = GfxFamily::cmdInitPipeControl;
+        pc0->setDcFlushEnable(flushDataCache);
+        pc0->setCommandStreamerStallEnable(true);
+    }
 
     PIPE_CONTROL pc = GfxFamily::cmdInitPipeControl;
     pc.setPostSyncOperation(POST_SYNC_OPERATION::POST_SYNC_OPERATION_WRITE_IMMEDIATE_DATA);

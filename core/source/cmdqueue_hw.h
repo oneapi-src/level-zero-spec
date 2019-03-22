@@ -1,5 +1,6 @@
 #pragma once
 #include "cmdqueue_imp.h"
+#include "igfxfmid.h"
 
 namespace L0 {
 

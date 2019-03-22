@@ -1,7 +1,4 @@
-#include "runtime/gen12hp/hw_cmds.h"
-#include "runtime/gen12hp/hw_info.h"
-#include "cmdqueue_hw.inl"
-#include "igfxfmid.h"
+#include "cmdqueue_gen12hp.inl"
 
 namespace L0 {
 
