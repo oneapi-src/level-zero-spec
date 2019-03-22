@@ -38,6 +38,11 @@ struct ModuleImp : public Module {
         return XE_RESULT_ERROR_UNSUPPORTED;
     }
 
+    virtual xe_result_t getGlobalPointer(const char *pGlobalName, void **pPtr)
+    {
+        return XE_RESULT_ERROR_UNSUPPORTED;
+    }
+
     PtrRef<ImmutableFunctionInfo> getImmutableFunctionInfo(CStringRef functionName) const override;
     uint32_t getMaxGroupSize() const override {
         return maxGroupSize;

@@ -28,6 +28,7 @@ struct Module : public _xe_module_handle_t {
                                         uint8_t *pModuleNativeBinary) = 0;
     virtual xe_result_t getFunctionPointer(const char *pFunctionName,
                                            void **pfnFunction) = 0;
+    virtual xe_result_t getGlobalPointer(const char *pGlobalName, void **pPtr) = 0;
 
     virtual PtrRef<ImmutableFunctionInfo> getImmutableFunctionInfo(CStringRef functionName) const = 0;
     virtual uint32_t getMaxGroupSize() const = 0;
