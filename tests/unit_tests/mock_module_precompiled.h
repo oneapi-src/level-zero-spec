@@ -75,6 +75,31 @@ struct PrecompiledFunctionMock : Mock<Function> {
             .WillByDefault(::testing::Invoke([this]() { return this->getThreadsPerThreadGroupImpl(); }));
     }
 
+    // Note : test needs to intentionally opt-in to this
+    void expectAnyMockFunctionCall() {
+        const auto &_ = ::testing::_;
+        EXPECT_CALL(*this, setAttribute(_, _)).Times(::testing::AnyNumber());
+        EXPECT_CALL(*this, getAttribute(_, _)).Times(::testing::AnyNumber());
+        EXPECT_CALL(*this, getSimdSize()).Times(::testing::AnyNumber());
+        EXPECT_CALL(*this, getIsaHostMem()).Times(::testing::AnyNumber());
+        EXPECT_CALL(*this, getIsaSize()).Times(::testing::AnyNumber());
+        EXPECT_CALL(*this, getIsaGraphicsAllocation()).Times(::testing::AnyNumber());
+        EXPECT_CALL(*this, getPerThreadDataHostMem()).Times(::testing::AnyNumber());
+        EXPECT_CALL(*this, getPerThreadDataSizeForWholeThreadGroup()).Times(::testing::AnyNumber());
+        EXPECT_CALL(*this, getThreadExecutionMask()).Times(::testing::AnyNumber());
+        EXPECT_CALL(*this, getCrossThreadDataHostMem()).Times(::testing::AnyNumber());
+        EXPECT_CALL(*this, getCrossThreadDataSize()).Times(::testing::AnyNumber());
+        EXPECT_CALL(*this, getResidencyContainer()).Times(::testing::AnyNumber());
+        EXPECT_CALL(*this, getHasBarriers()).Times(::testing::AnyNumber());
+        EXPECT_CALL(*this, getSlmSize()).Times(::testing::AnyNumber());
+        EXPECT_CALL(*this, hasPrintfOutput()).Times(::testing::AnyNumber());
+        EXPECT_CALL(*this, setArgumentValue(_, _, _)).Times(::testing::AnyNumber());
+        EXPECT_CALL(*this, getGroupSize(_, _, _)).Times(::testing::AnyNumber());
+        EXPECT_CALL(*this, getThreadsPerThreadGroup()).Times(::testing::AnyNumber());
+        EXPECT_CALL(*this, setGroupCount(_, _, _)).Times(::testing::AnyNumber());
+        EXPECT_CALL(*this, getBindingTableStateCount()).Times(::testing::AnyNumber());
+    }
+
     xe_result_t setArgumentValueImpl(uint32_t argIndex, size_t argSize, const void *pArgValue) {
         auto it = bufferArgOffsetMap.find(argIndex);
         if (it == bufferArgOffsetMap.end()) {

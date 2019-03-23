@@ -76,10 +76,7 @@ struct CommandListAppendLaunchFunction : public ::testing::Test {
     void createFunction(const std::string &functionName) {
         std::string deviceName = "Gen12HPcore";
         function = new PrecompiledFunctionMock(functionName, deviceName, {&buffer1, &buffer2});
-
-        EXPECT_CALL(*function, getThreadExecutionMask()).Times(AnyNumber());
-        EXPECT_CALL(*function, setGroupCount(_, _, _)).Times(AnyNumber());
-        EXPECT_CALL(*function, getBindingTableStateCount()).Times(AnyNumber());
+        function->expectAnyMockFunctionCall();
     }
 
     Mock<Device> device;

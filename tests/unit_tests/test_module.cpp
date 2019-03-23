@@ -336,9 +336,9 @@ TEST_P(ModuleCreateImageArg, onlineCompilationModuleTest) {
 
     auto capturedAllocsForResidency = function->getResidencyContainer();
     EXPECT_NE(capturedAllocsForResidency.end(),
-            std::find(capturedAllocsForResidency.begin(), capturedAllocsForResidency.end(), dstImage->getAllocation()));
+              std::find(capturedAllocsForResidency.begin(), capturedAllocsForResidency.end(), dstImage->getAllocation()));
     EXPECT_NE(capturedAllocsForResidency.end(),
-            std::find(capturedAllocsForResidency.begin(), capturedAllocsForResidency.end(), srcImage->getAllocation()));
+              std::find(capturedAllocsForResidency.begin(), capturedAllocsForResidency.end(), srcImage->getAllocation()));
 
     ASSERT_NE(nullptr, function->getPerThreadDataHostMem());
     EXPECT_TRUE(isAligned<32>(function->getPerThreadDataHostMem())) << "Per thread data not properly aligned for vector instructions"; // todo : make a real test out of this
@@ -374,7 +374,6 @@ static std::tuple<std::string, std::string, std::string> paramsForCreateModuleIm
 
 INSTANTIATE_TEST_CASE_P(, ModuleCreateImageArg, ::testing::ValuesIn(paramsForCreateModuleImageArg));
 
-
 TEST(ModuleCreateSimple, mockedModuleTest) {
     Mock<Device> device;
     OCLRT::Device *deviceRT = reinterpret_cast<OCLRT::Device *>(device.deviceRT);
@@ -383,6 +382,7 @@ TEST(ModuleCreateSimple, mockedModuleTest) {
     GraphicsAllocation mockAlloc1{nullptr, 0}, mockAlloc2{nullptr, 0};
 
     PrecompiledFunctionMock function("MemcpyBytes", deviceRT->getFamilyNameWithType(), {&mockAlloc1, &mockAlloc2});
+    function.expectAnyMockFunctionCall();
 
     EXPECT_EQ(expectedData->simdSize, function.getSimdSize());
     EXPECT_EQ(expectedData->isa, function.getIsaHostMem());
