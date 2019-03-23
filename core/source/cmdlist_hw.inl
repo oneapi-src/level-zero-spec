@@ -263,8 +263,8 @@ xe_result_t CommandListCoreFamily<gfxCoreFamily>::appendCommandLists(uint32_t nu
 // as required by the INTERFACE_DESCRIPTOR_DATA.
 template <GFXCORE_FAMILY gfxCoreFamily>
 uint32_t CommandListCoreFamily<gfxCoreFamily>::copyBindingTableAndSurfaceStates(OCLRT::IndirectHeap *ssh,
-                                                                         const void *srcSsh, uint32_t srcSshSize,
-                                                                         uint32_t numberOfBindingTableStates, uint32_t offsetOfBindingTable) {
+                                                                                const void *srcSsh, uint32_t srcSshSize,
+                                                                                uint32_t numberOfBindingTableStates, uint32_t offsetOfBindingTable) {
     using GfxFamily = typename OCLRT::GfxFamilyMapper<gfxCoreFamily>::GfxFamily;
     using BINDING_TABLE_STATE = typename GfxFamily::BINDING_TABLE_STATE;
     using INTERFACE_DESCRIPTOR_DATA = typename GfxFamily::INTERFACE_DESCRIPTOR_DATA;
@@ -375,10 +375,10 @@ xe_result_t CommandListCoreFamily<gfxCoreFamily>::appendLaunchFunction(xe_functi
 
             if (bindingTableStateCount > 0) {
                 bindingTablePointer = copyBindingTableAndSurfaceStates(ssh,
-                                                                    function->getSurfaceStateHeap(),
-                                                                    function->getSurfaceStateHeapSize(),
-                                                                    function->getBindingTableStateCount(),
-                                                                    function->getBindingTableOffset());
+                                                                       function->getSurfaceStateHeap(),
+                                                                       function->getSurfaceStateHeapSize(),
+                                                                       function->getBindingTableStateCount(),
+                                                                       function->getBindingTableOffset());
             }
 
             idd.setBindingTablePointer(static_cast<uint32_t>(bindingTablePointer));
@@ -453,12 +453,10 @@ xe_result_t CommandListCoreFamily<gfxCoreFamily>::appendLaunchFunction(xe_functi
 
     // Attach Function residency to our CommandList residency
     {
-        this->residencyContainer.push_back(function->getIsaGraphicsAllocation()->allocationRT);
+        addToResidencyContainer(function->getIsaGraphicsAllocation().get());
         auto &residencyContainer = function->getResidencyContainer();
         for (auto resource : residencyContainer) {
-            if (resource) {
-                this->residencyContainer.push_back(resource->allocationRT);
-            }
+            addToResidencyContainer(resource);
         }
     }
 
@@ -624,7 +622,7 @@ template <GFXCORE_FAMILY gfxCoreFamily>
 xe_result_t CommandListCoreFamily<gfxCoreFamily>::appendSignalEvent(xe_event_handle_t hEvent) {
     auto event = Event::fromHandle(hEvent);
     assert(event);
-    residencyContainer.push_back(event->getAllocation().allocationRT);
+    addToResidencyContainer(&event->getAllocation());
 
     using GfxFamily = typename OCLRT::GfxFamilyMapper<gfxCoreFamily>::GfxFamily;
     using PIPE_CONTROL = typename GfxFamily::PIPE_CONTROL;
@@ -649,7 +647,7 @@ xe_result_t CommandListCoreFamily<gfxCoreFamily>::appendWaitOnEvent(xe_event_han
     MI_SEMAPHORE_WAIT cmd = GfxFamily::cmdInitMiSemaphoreWait;
     auto event = Event::fromHandle(hEvent);
     assert(event);
-    residencyContainer.push_back(event->getAllocation().allocationRT);
+    addToResidencyContainer(&event->getAllocation());
 
     cmd.setSemaphoreGraphicsAddress(event->getGpuAddress());
     cmd.setSemaphoreDataDword(1u);

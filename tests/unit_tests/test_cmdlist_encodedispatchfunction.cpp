@@ -610,5 +610,30 @@ HWTEST_F(CommandListAppendLaunchFunction, setsGroupCountBeforeAccessingCrossThre
     EXPECT_EQ(2, res);
 }
 
+HWTEST_F(CommandListAppendLaunchFunction, residencyContainerDoesNotContainDuplicates) {
+    createFunction("MemcpyBytes");
+
+    Mock<Device> device;
+
+    auto commandList = whitebox_cast(CommandList::create(productFamily, &device));
+
+    for (int i = 0; i < 4; ++i) {
+        auto result = commandList->appendLaunchFunction(function->toHandle(),
+                                                        &dispatchFunctionArguments,
+                                                        nullptr);
+        ASSERT_EQ(XE_RESULT_SUCCESS, result);
+    }
+
+    uint32_t it = 0;
+    const auto &residencyCont = commandList->residencyContainer;
+    for (auto alloc : residencyCont) {
+        auto occurences = std::count(residencyCont.begin(), residencyCont.end(), alloc);
+        EXPECT_EQ(1U, static_cast<uint32_t>(occurences)) << it;
+        ++it;
+    }
+
+    delete commandList;
+}
+
 } // namespace ult
 } // namespace L0

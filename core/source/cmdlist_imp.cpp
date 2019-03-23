@@ -73,6 +73,20 @@ bool CommandContainer::initialize(Device *device) {
     return true;
 }
 
+void CommandContainer::addToResidencyContainer(GraphicsAllocation *alloc) {
+    if (alloc == nullptr) {
+        return;
+    }
+    assert(alloc->allocationRT != nullptr);
+    auto end = this->residencyContainer.end();
+    bool isUnique = (end == std::find(this->residencyContainer.begin(), end, alloc->allocationRT));
+    if (isUnique == false) {
+        return;
+    }
+
+    this->residencyContainer.push_back(alloc->allocationRT);
+}
+
 void CommandContainer::storePrintfFunction(Function *function) {
     auto it = std::find(this->printfFunctionContainer.begin(), this->printfFunctionContainer.end(), function);
 

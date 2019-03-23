@@ -48,6 +48,8 @@ struct CommandContainer : public _xe_command_list_handle_t {
         return residencyContainer;
     }
 
+    void addToResidencyContainer(GraphicsAllocation *alloc);
+
     OCLRT::LinearStream &getCommandStream() {
         return *commandStream;
     }

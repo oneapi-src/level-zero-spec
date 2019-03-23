@@ -113,12 +113,10 @@ xe_result_t CommandListCoreFamily<IGFX_GEN12_CORE>::appendLaunchFunction(xe_func
 
     // Attach Function residency to our CommandList residency
     {
-        this->residencyContainer.push_back(function->getIsaGraphicsAllocation()->allocationRT);
+        addToResidencyContainer(function->getIsaGraphicsAllocation().get());
         auto &residencyContainer = function->getResidencyContainer();
         for (auto resource : residencyContainer) {
-            if (resource) {
-                this->residencyContainer.push_back(resource->allocationRT);
-            }
+            addToResidencyContainer(resource);
         }
     }
 
