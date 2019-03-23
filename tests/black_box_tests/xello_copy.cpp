@@ -25,20 +25,6 @@ inline void validate(ResulT result, const char *message) {
 #define SUCCESS_OR_WARNING(CALL) validate<false>(CALL, #CALL)
 #define SUCCESS_OR_WARNING_BOOL(FLAG) validate<false>(!(FLAG), #FLAG)
 
-inline bool validateBuffers(void *dstBuffer, void *srcBuffer, size_t allocSize) {
-    unsigned char *dstBufferChar = (unsigned char *)dstBuffer;
-    unsigned char *srcBufferChar = (unsigned char *)srcBuffer;
-    bool outputValidationSuccessful = true;
-    for (int i = 0; i < allocSize; ++i) {
-        if (verbose)
-            std::cout << "srcBuffer[" << i << "] = " << (unsigned int)srcBufferChar[i] << ","
-                      << "dstBuffer[" << i << "] = " << (unsigned int)dstBufferChar[i] << "\n";
-
-        outputValidationSuccessful &= (srcBufferChar[i] == dstBufferChar[i]);
-    }
-    return outputValidationSuccessful;
-}
-
 int main(int argc, char *argv[]) {
     const size_t allocSize = 4096;
     xe_device_handle_t device0;
@@ -71,14 +57,12 @@ int main(int argc, char *argv[]) {
     void *xeBuffer = nullptr;
     char stackBuffer[allocSize];
 
-    SUCCESS_OR_TERMINATE(xeSharedMemAlloc(allocator, device0,
-                                          XE_DEVICE_MEM_ALLOC_FLAG_DEFAULT, XE_HOST_MEM_ALLOC_FLAG_DEFAULT,
-                                          allocSize, 1, &xeBuffer));
+    SUCCESS_OR_TERMINATE(xeMemAlloc(allocator, device0,
+                                    XE_DEVICE_MEM_ALLOC_FLAG_DEFAULT,
+                                    allocSize, 4096, &xeBuffer));
 
-    unsigned char *xeBufferChar = (unsigned char *)xeBuffer;
     for (int i = 0; i < allocSize; ++i) {
         heapBuffer[i] = i + 1;
-        xeBufferChar[i] = 0;
     }
     memset(stackBuffer, 0, allocSize);
 
@@ -96,7 +80,7 @@ int main(int argc, char *argv[]) {
     SUCCESS_OR_WARNING(synchronizationResult);
 
     // Validate stack and xe buffers have the original data from heapBuffer
-    bool outputValidationSuccessful = validateBuffers(xeBufferChar, heapBuffer, allocSize) & validateBuffers(stackBuffer, heapBuffer, allocSize);
+    bool outputValidationSuccessful = (0 == memcmp(heapBuffer, stackBuffer, sizeof(stackBuffer)));
 
     delete[] heapBuffer;
     SUCCESS_OR_TERMINATE(xeMemFree(allocator, xeBuffer));
