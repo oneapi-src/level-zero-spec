@@ -13,7 +13,7 @@ struct CommandListCoreFamily : public CommandListImp {
     using CommandListImp::CommandListImp;
 
     bool initialize(Device *device) override;
-    void programL3();
+    virtual void programL3(bool isSLMused);
     void enableGpgpu();
     void programFrontEndState();
     void programPreemption();

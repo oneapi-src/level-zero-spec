@@ -230,7 +230,7 @@ xe_result_t CommandListCoreFamily<gfxCoreFamily>::close() {
 }
 
 template <GFXCORE_FAMILY gfxCoreFamily>
-void CommandListCoreFamily<gfxCoreFamily>::programL3() {
+void CommandListCoreFamily<gfxCoreFamily>::programL3(bool isSLMused) {
     using GfxFamily = typename OCLRT::GfxFamilyMapper<gfxCoreFamily>::GfxFamily;
     {
         using PIPE_CONTROL = typename GfxFamily::PIPE_CONTROL;
@@ -320,11 +320,12 @@ xe_result_t CommandListCoreFamily<gfxCoreFamily>::appendLaunchFunction(xe_functi
     using INTERFACE_DESCRIPTOR_DATA = typename GfxFamily::INTERFACE_DESCRIPTOR_DATA;
     using STATE_BASE_ADDRESS = typename GfxFamily::STATE_BASE_ADDRESS;
 
-    // For now program L3 here.
-    programL3();
-
     const auto function = Function::fromHandle(hFunction);
     assert(function);
+
+    // For now program L3 here.
+    bool slmUsage = function->getSlmSize() > 0;
+    programL3(slmUsage);
 
     auto threadsPerThreadGroup = function->getThreadsPerThreadGroup();
 

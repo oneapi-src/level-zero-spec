@@ -1,5 +1,6 @@
 #include "test.h"
 #include "xe_all.h"
+#include "encode_l3state.h"
 #include "graphics_allocation.h"
 #include "igfxfmid.h"
 #include "mock_cmdlist.h"
@@ -354,6 +355,37 @@ SKLTEST_F(CommandListAppendLaunchFunctionGEN9, copiesThreadDataToIndirectStateHe
         EXPECT_EQ(memcmp(ptrHeap, function->getPerThreadDataHostMem(), function->getPerThreadDataSizeForWholeThreadGroup()), 0u);
         ptrHeap = ptrOffset(ptrHeap, function->getPerThreadDataSizeForWholeThreadGroup());
     }
+}
+
+HWTEST2_F(CommandListAppendLaunchFunctionGEN9, withSLMProgramsL3WithSLMValue, IsSKL) {
+    createFunction("SlmBarrier");
+    auto result = commandList->appendLaunchFunction(function->toHandle(),
+                                                    &dispatchFunctionArguments,
+                                                    nullptr);
+    ASSERT_EQ(XE_RESULT_SUCCESS, result);
+
+    auto usedSpaceAfter = commandList->commandStream->getUsed();
+
+    GenCmdList cmdList;
+    ASSERT_TRUE(FamilyType::PARSE::parseCommandBuffer(cmdList,
+                                                      ptrOffset(commandList->commandStream->getCpuBase(), 0),
+                                                      usedSpaceAfter));
+    using MI_LOAD_REGISTER_IMM = typename FamilyType::MI_LOAD_REGISTER_IMM;
+
+    bool foundL3 = false;
+    for (auto it = cmdList.begin(); it != cmdList.end(); it++) {
+        auto lri = genCmdCast<MI_LOAD_REGISTER_IMM *>(*it);
+        if (lri) {
+            if (lri->getRegisterOffset() == EncodeL3State<productFamily>::offset) {
+                auto value = lri->getDataDword();
+                EXPECT_EQ(EncodeL3State<productFamily>::dataSLM, value);
+                foundL3 = true;
+                break;
+            }
+        }
+    }
+
+    EXPECT_TRUE(foundL3);
 }
 
 ATSTEST_F(CommandListAppendLaunchFunction, usesIsaFromInstructionHeap) {
