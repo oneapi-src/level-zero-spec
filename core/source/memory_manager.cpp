@@ -35,11 +35,11 @@ struct MemoryManagerImp : public MemoryManager {
     }
 
     GraphicsAllocation *allocateManagedMemoryFromFault(void *buffer, size_t size) override {
-        // TODO : 
+        // TODO :
         //        * How are allocations removed from this list?
         //        * What if we encouter the same allocation multiple times but with different sizes (note : it's a valid and very probable scenario)
         //        * How are handle fragmented allocations handled (aka tripple allocations) ?
-        auto allocation = new GraphicsAllocation(buffer, size);
+        auto allocation = new GraphicsAllocation(memoryManagerRT->allocateGraphicsMemoryForHostPtr(size, buffer, true, false));
         allocation->setAllocatedFromFault(true);
         knownAllocations.insert(*allocation->allocationRT); // temporary
         allocMap[allocation->allocationRT] = allocation;    // temporary

@@ -564,7 +564,9 @@ xe_result_t CommandListCoreFamily<gfxCoreFamily>::appendMemoryCopy(void *dstptr,
                                                                    size_t size) {
     xe_module_handle_t module;
     xe_function_handle_t function;
-
+    // TODO : Make these persisten
+    //        * can't do compilations at each appendMemoryCopy
+    //        * who is responsible for freeing module/function?
     xe_module_desc_t moduleDesc = {XE_MODULE_DESC_VERSION_CURRENT};
     moduleDesc.format = XE_MODULE_FORMAT_IL_SPIRV;
     moduleDesc.pInputModule = compileCopyBufferToBufferBin.getModule();
