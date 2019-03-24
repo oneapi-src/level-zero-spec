@@ -38,9 +38,51 @@ from templates import helper as th
 
 #if defined(__linux__)
 #  include <dlfcn.h>
-// On Linux, use LD_LIBRARY_PATH to point to directory with liblevel_zero.so and resto of driver
-// TODO: Add file-based level_zero drivers registry
-#  define ICD_LOAD_DRIVER_LIBRARY() dlopen("liblevel_zero.so", RTLD_LAZY|RTLD_LOCAL)
+#  include <dirent.h>
+#  include <sys/types.h>
+#  include <string>
+#  include <fstream>
+// On Linux, use /etc/intel/level_zero/icd.d file entries (each file in this directory should 
+//             have a single line of text. This line of text should point to the driver's main .so
+void* ICD_LOAD_DRIVER_LIBRARY() {
+    auto lib = dlopen("liblevel_zero.so", RTLD_LAZY|RTLD_LOCAL);
+    if(lib != NULL){
+        return lib;
+    }
+
+    std::string l0IcdsPath = "/etc/intel/level_zero/icd.d";
+    DIR *l0DriversDir = opendir(l0IcdsPath.c_str());
+    if (NULL == l0DriversDir){
+        return NULL;
+    }
+
+    lib = NULL;
+    struct dirent *driverEntry = readdir(l0DriversDir);
+    for(;driverEntry != NULL; driverEntry = readdir(l0DriversDir)){
+        if(DT_REG != driverEntry->d_type){
+            continue;
+        }
+        std::string driverPath;
+        std::ifstream(l0IcdsPath + "/" + driverEntry->d_name) >> driverPath;
+        if(driverPath.empty()){
+            continue;
+        }
+
+        if(*driverPath.rbegin() == '\n'){
+            driverPath = driverPath.substr(driverPath.size() - 1);
+        }
+
+        lib = dlopen(driverPath.c_str(), RTLD_LAZY|RTLD_LOCAL);
+        if(lib != NULL){
+            // TODO : Add support for multiplexing
+            //        Currently, return first that was loaded succesfully
+            break;
+        }
+        closedir(l0DriversDir);
+    }
+    
+    return lib;
+}
 #  define ICD_LOAD_FUNCTION_PTR(LIB, FUNC_NAME) dlsym(LIB, FUNC_NAME)
 #elif defined(_WIN32)
 #  include <Windows.h>

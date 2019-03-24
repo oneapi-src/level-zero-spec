@@ -80,7 +80,7 @@ typedef struct _${x}_dispatch_table_t
 } ${x}_dispatch_table_t;
 
 inline bool load_${x}(void *handle, void *(*funcAddressGetter)(void *handle, const char *funcName), ${x}_dispatch_table_t *outTable){
-    if((0 == funcAddressGetter) || (0 == outTable)){
+    if((0 == funcAddressGetter) || (0 == outTable) || (NULL == handle)){
         return false;
     }
 %for obj in objects:

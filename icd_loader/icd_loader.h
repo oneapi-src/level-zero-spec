@@ -620,7 +620,7 @@ typedef struct _xe_dispatch_table_t
 } xe_dispatch_table_t;
 
 inline bool load_xe(void *handle, void *(*funcAddressGetter)(void *handle, const char *funcName), xe_dispatch_table_t *outTable){
-    if((0 == funcAddressGetter) || (0 == outTable)){
+    if((0 == funcAddressGetter) || (0 == outTable) || (NULL == handle)){
         return false;
     }
     outTable->xeCommandListAppendExecutionBarrier = (pfn_xeCommandListAppendExecutionBarrier)funcAddressGetter(handle, "xeCommandListAppendExecutionBarrier");
