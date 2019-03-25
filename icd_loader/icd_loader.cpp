@@ -119,32 +119,6 @@ xe_result_t __xecall xeDeviceRegisterCLCommandQueue(
     return dispatchTable.xeDeviceRegisterCLCommandQueue(hDevice, context, command_queue, phCommandQueue);
 }
 #endif // XE_ENABLE_OCL_INTEROP
-xe_result_t __xecall xeDeviceCreateCommandGraph(
-        xe_device_handle_t hDevice,                     ///< [in] handle of the device object
-        const xe_command_graph_desc_t* desc,            ///< [in] pointer to command graph descriptor
-        xe_command_graph_handle_t* phCommandGraph       ///< [out] pointer to handle of command graph object created
-    ){
-    if(dispatchTableInitialized == false){
-        return XE_RESULT_ERROR_UNINITIALIZED;
-    }
-    return dispatchTable.xeDeviceCreateCommandGraph(hDevice, desc, phCommandGraph);
-}
-xe_result_t __xecall xeCommandGraphDestroy(
-        xe_command_graph_handle_t hCommandGraph         ///< [in] handle of command graph object to destroy
-    ){
-    if(dispatchTableInitialized == false){
-        return XE_RESULT_ERROR_UNINITIALIZED;
-    }
-    return dispatchTable.xeCommandGraphDestroy(hCommandGraph);
-}
-xe_result_t __xecall xeCommandGraphClose(
-        xe_command_graph_handle_t hCommandGraph         ///< [in] handle of command graph object to close
-    ){
-    if(dispatchTableInitialized == false){
-        return XE_RESULT_ERROR_UNINITIALIZED;
-    }
-    return dispatchTable.xeCommandGraphClose(hCommandGraph);
-}
 xe_result_t __xecall xeDeviceCreateCommandList(
         xe_device_handle_t hDevice,                     ///< [in] handle of the device object
         const xe_command_list_desc_t* desc,             ///< [in] pointer to command list descriptor

@@ -23,7 +23,7 @@
 *
 * @file xe_fence.hpp
 *
-* @brief C++ wrapper of Intel Xe Driver APIs for Fence
+* @brief C++ wrapper of Intel Xe Level-Zero APIs for Fence
 *
 * @cond DEV
 * DO NOT EDIT: generated from /scripts/core/fence.yml

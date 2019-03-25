@@ -21,43 +21,62 @@
 * express and approved by Intel in writing.  
 * @endcond
 *
-* @file xe_image.inl
+* @file xex_cmdgraph.inl
 *
-* @brief C++ wrapper of Intel Xe Level-Zero APIs for Images
+* @brief C++ wrapper of Intel Xe Level-Zero Extended APIs for CommandGraph
 *
 * @cond DEV
-* DO NOT EDIT: generated from /scripts/core/image.yml
+* DO NOT EDIT: generated from /scripts/extended/cmdgraph.yml
 * @endcond
 *
 ******************************************************************************/
-#ifndef _XE_IMAGE_INL
-#define _XE_IMAGE_INL
+#ifndef _XEX_CMDGRAPH_INL
+#define _XEX_CMDGRAPH_INL
 #if defined(__cplusplus)
 #pragma once
-#include "xe_image.hpp"
+#include "xex_cmdgraph.hpp"
 
-namespace xe
+namespace xex
 {
     ///////////////////////////////////////////////////////////////////////////////
-    /// @brief C++ wrapper for ::xeImageDestroy
+    /// @brief C++ wrapper for ::xexCommandGraphDestroy
     /// 
     /// @details
-    ///     - The application is responsible for making sure the GPU is not
-    ///       currently referencing the image before it is deleted
-    ///     - The implementation of this function will immediately free all Host and
-    ///       Device allocations associated with this image
+    ///     - The implementation of this function will immediately free all Host
+    ///       allocations associated with this command graph.
     ///     - The implementation of this function should be lock-free.
     /// 
     /// @throws result_t
     inline void 
-    Image::Destroy(
+    CommandGraph::Destroy(
         void
         )
     {
-        // auto result = ::xeImageDestroy( handle );
-        // if( ::XE_RESULT_SUCCESS != result ) throw exception(result, "xe::Image::Destroy");
+        // auto result = ::xexCommandGraphDestroy( handle );
+        // if( ::XE_RESULT_SUCCESS != result ) throw exception(result, "xex::CommandGraph::Destroy");
     }
 
-} // namespace xe
+    ///////////////////////////////////////////////////////////////////////////////
+    /// @brief C++ wrapper for ::xexCommandGraphClose
+    /// 
+    /// @details
+    ///     - The command graph will optimize the execution order of the command
+    ///       lists.
+    ///     - A command list may **not** be reset after the command graph is closed.
+    ///     - The application may **not** call this function from simultaneous
+    ///       threads with the same command graph handle.
+    ///     - The implementation of this function should be lock-free.
+    /// 
+    /// @throws result_t
+    inline void 
+    CommandGraph::Close(
+        void
+        )
+    {
+        // auto result = ::xexCommandGraphClose( handle );
+        // if( ::XE_RESULT_SUCCESS != result ) throw exception(result, "xex::CommandGraph::Close");
+    }
+
+} // namespace xex
 #endif // defined(__cplusplus)
-#endif // _XE_IMAGE_INL
+#endif // _XEX_CMDGRAPH_INL

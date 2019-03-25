@@ -21,91 +21,71 @@
 * express and approved by Intel in writing.  
 * @endcond
 *
-* @file xe_driver.hpp
+* @file xex_device.hpp
 *
-* @brief C++ wrapper of Intel Xe Level-Zero APIs
+* @brief C++ wrapper of Intel Xe Level-Zero Extended APIs for Device
 *
 * @cond DEV
-* DO NOT EDIT: generated from /scripts/core/driver.yml
+* DO NOT EDIT: generated from /scripts/extended/device.yml
 * @endcond
 *
 ******************************************************************************/
-#ifndef _XE_DRIVER_HPP
-#define _XE_DRIVER_HPP
+#ifndef _XEX_DEVICE_HPP
+#define _XEX_DEVICE_HPP
 #if defined(__cplusplus)
 #pragma once
-#include "xe_common.hpp"
+#include "xex_common.hpp"
 
-namespace xe
+namespace xex
 {
     ///////////////////////////////////////////////////////////////////////////////
-    /// @brief C++ wrapper for driver
-    class Driver
+    /// @brief C++ wrapper for device
+    class Device : public xe::Device
     {
     protected:
+        ::xe_device_handle_t handle;                      ///< handle of device object
 
     public:
+        auto getHandle( void ) const { return handle; }
 
         ///////////////////////////////////////////////////////////////////////////////
-        /// @brief C++ version for ::xe_init_flag_t
-        enum class init_flag_t
+        /// @brief C++ version for ::xex_command_graph_desc_version_t
+        enum class command_graph_desc_version_t
+        {
+            CURRENT = XE_MAKE_VERSION( 1, 0 ),              ///< version 1.0
+
+        };
+
+        ///////////////////////////////////////////////////////////////////////////////
+        /// @brief C++ version for ::xex_command_graph_flag_t
+        enum class command_graph_flag_t
         {
             NONE = 0,                                       ///< default behavior
 
         };
 
         ///////////////////////////////////////////////////////////////////////////////
-        /// @brief C++ wrapper for ::xeDriverGetDeviceCount
+        /// @brief C++ version for ::xex_command_graph_desc_t
+        struct command_graph_desc_t
+        {
+            command_graph_desc_version_t version = command_graph_desc_version_t::CURRENT;   ///< [in] ::COMMAND_GRAPH_DESC_VERSION_CURRENT
+            command_graph_flag_t flags = command_graph_flag_t::NONE;///< [in] creation flags
+
+        };
+
+        ///////////////////////////////////////////////////////////////////////////////
+        /// @brief C++ wrapper for ::xexDeviceCreateCommandGraph
         /// @returns
-        ///     - uint32_t: number of devices available
+        ///     - ::command_graph_handle_t: pointer to handle of command graph object created
         /// 
         /// @throws result_t
-        inline static uint32_t
-        GetDeviceCount(
-            void
-            );
-
-        ///////////////////////////////////////////////////////////////////////////////
-        /// @brief C++ wrapper for ::xeDriverGetDeviceUniqueIds
-        /// @throws result_t
-        inline static void
-        GetDeviceUniqueIds(
-            device_uuid_t* pUniqueIds                       ///< [in,out] pointer to an array of unique ids for devices. Caller must
-                                                            ///< supply array.
-            );
-
-        ///////////////////////////////////////////////////////////////////////////////
-        /// @brief C++ wrapper for ::xeDriverGetDevice
-        /// @returns
-        ///     - ::device_handle_t: pointer to handle of device object created
-        /// 
-        /// @throws result_t
-        inline static device_handle_t
-        GetDevice(
-            void
-            );
-
-        ///////////////////////////////////////////////////////////////////////////////
-        /// @brief C++ wrapper for ::xeDriverInit
-        /// @throws result_t
-        inline static void
-        Init(
-            void
-            );
-
-        ///////////////////////////////////////////////////////////////////////////////
-        /// @brief C++ wrapper for ::xeDriverGetVersion
-        /// @returns
-        ///     - uint32_t: driver version
-        /// 
-        /// @throws result_t
-        inline static uint32_t
-        GetVersion(
-            void
+        inline command_graph_handle_t
+        CreateCommandGraph(
+            const command_graph_desc_t* desc                ///< [in] pointer to command graph descriptor
             );
 
     };
 
-} // namespace xe
+} // namespace xex
 #endif // defined(__cplusplus)
-#endif // _XE_DRIVER_HPP
+#endif // _XEX_DEVICE_HPP

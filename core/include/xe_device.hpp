@@ -23,7 +23,7 @@
 *
 * @file xe_device.hpp
 *
-* @brief C++ wrapper of Intel Xe Driver APIs for Device
+* @brief C++ wrapper of Intel Xe Level-Zero APIs for Device
 *
 * @cond DEV
 * DO NOT EDIT: generated from /scripts/core/device.yml
@@ -47,22 +47,6 @@ namespace xe
 
     public:
         auto getHandle( void ) const { return handle; }
-
-        ///////////////////////////////////////////////////////////////////////////////
-        /// @brief C++ version for ::xe_command_graph_desc_version_t
-        enum class command_graph_desc_version_t
-        {
-            CURRENT = XE_MAKE_VERSION( 1, 0 ),              ///< version 1.0
-
-        };
-
-        ///////////////////////////////////////////////////////////////////////////////
-        /// @brief C++ version for ::xe_command_graph_flag_t
-        enum class command_graph_flag_t
-        {
-            NONE = 0,                                       ///< default behavior
-
-        };
 
         ///////////////////////////////////////////////////////////////////////////////
         /// @brief C++ version for ::xe_command_list_desc_version_t
@@ -102,7 +86,7 @@ namespace xe
             COPY_ONLY = XE_BIT(0),                          ///< command queue only supports enqueing copy-only command lists
             LOGICAL_ONLY = XE_BIT(1),                       ///< command queue is not tied to a physical command queue; driver may
                                                             ///< dynamically assign based on usage
-            SINGLE_SLICE_ONLY = XE_BIT(2),                  ///< command queue reserves and cannot comsume more than a single slice'
+            SINGLE_SLICE_ONLY = XE_BIT(2),                  ///< command queue reserves and cannot comsume more than a single slice.
                                                             ///< 'slice' size is device-specific.  cannot be combined with COPY_ONLY.
 
         };
@@ -304,15 +288,6 @@ namespace xe
         };
 
         ///////////////////////////////////////////////////////////////////////////////
-        /// @brief C++ version for ::xe_command_graph_desc_t
-        struct command_graph_desc_t
-        {
-            command_graph_desc_version_t version = command_graph_desc_version_t::CURRENT;   ///< [in] ::COMMAND_GRAPH_DESC_VERSION_CURRENT
-            command_graph_flag_t flags = command_graph_flag_t::NONE;///< [in] creation flags
-
-        };
-
-        ///////////////////////////////////////////////////////////////////////////////
         /// @brief C++ version for ::xe_command_list_desc_t
         struct command_list_desc_t
         {
@@ -502,7 +477,7 @@ namespace xe
         ///////////////////////////////////////////////////////////////////////////////
         /// @brief C++ wrapper for ::xeDeviceRegisterCLProgram
         /// @returns
-        ///     - module_handle_t: pointer to handle of module object created
+        ///     - ::module_handle_t: pointer to handle of module object created
         /// 
         /// @throws result_t
         inline module_handle_t
@@ -516,7 +491,7 @@ namespace xe
         ///////////////////////////////////////////////////////////////////////////////
         /// @brief C++ wrapper for ::xeDeviceRegisterCLCommandQueue
         /// @returns
-        ///     - command_queue_handle_t: pointer to handle of command queue object created
+        ///     - ::command_queue_handle_t: pointer to handle of command queue object created
         /// 
         /// @throws result_t
         inline command_queue_handle_t
@@ -527,20 +502,9 @@ namespace xe
 #endif // XE_ENABLE_OCL_INTEROP
 
         ///////////////////////////////////////////////////////////////////////////////
-        /// @brief C++ wrapper for ::xeDeviceCreateCommandGraph
-        /// @returns
-        ///     - command_graph_handle_t: pointer to handle of command graph object created
-        /// 
-        /// @throws result_t
-        inline command_graph_handle_t
-        CreateCommandGraph(
-            const command_graph_desc_t* desc                ///< [in] pointer to command graph descriptor
-            );
-
-        ///////////////////////////////////////////////////////////////////////////////
         /// @brief C++ wrapper for ::xeDeviceCreateCommandList
         /// @returns
-        ///     - command_list_handle_t: pointer to handle of command list object created
+        ///     - ::command_list_handle_t: pointer to handle of command list object created
         /// 
         /// @throws result_t
         inline command_list_handle_t
@@ -551,7 +515,7 @@ namespace xe
         ///////////////////////////////////////////////////////////////////////////////
         /// @brief C++ wrapper for ::xeDeviceCopyCommandList
         /// @returns
-        ///     - command_list_handle_t: pointer to handle of command list object created
+        ///     - ::command_list_handle_t: pointer to handle of command list object created
         /// 
         /// @throws result_t
         inline command_list_handle_t
@@ -562,7 +526,7 @@ namespace xe
         ///////////////////////////////////////////////////////////////////////////////
         /// @brief C++ wrapper for ::xeDeviceCreateCommandQueue
         /// @returns
-        ///     - command_queue_handle_t: pointer to handle of command queue object created
+        ///     - ::command_queue_handle_t: pointer to handle of command queue object created
         /// 
         /// @throws result_t
         inline command_queue_handle_t
@@ -573,7 +537,7 @@ namespace xe
         ///////////////////////////////////////////////////////////////////////////////
         /// @brief C++ wrapper for ::xeDeviceGetSubDevice
         /// @returns
-        ///     - device_handle_t: pointer to handle of sub-device object.
+        ///     - ::device_handle_t: pointer to handle of sub-device object.
         /// 
         /// @throws result_t
         inline device_handle_t
@@ -584,7 +548,7 @@ namespace xe
         ///////////////////////////////////////////////////////////////////////////////
         /// @brief C++ wrapper for ::xeDeviceGetApiVersion
         /// @returns
-        ///     - api_version_t: api version
+        ///     - ::api_version_t: api version
         /// 
         /// @throws result_t
         inline api_version_t
@@ -595,7 +559,7 @@ namespace xe
         ///////////////////////////////////////////////////////////////////////////////
         /// @brief C++ wrapper for ::xeDeviceGetProperties
         /// @returns
-        ///     - device_properties_t: query result for device properties
+        ///     - ::device_properties_t: query result for device properties
         /// 
         /// @throws result_t
         inline device_properties_t
@@ -606,7 +570,7 @@ namespace xe
         ///////////////////////////////////////////////////////////////////////////////
         /// @brief C++ wrapper for ::xeDeviceGetComputeProperties
         /// @returns
-        ///     - device_compute_properties_t: query result for compute properties
+        ///     - ::device_compute_properties_t: query result for compute properties
         /// 
         /// @throws result_t
         inline device_compute_properties_t
@@ -617,7 +581,7 @@ namespace xe
         ///////////////////////////////////////////////////////////////////////////////
         /// @brief C++ wrapper for ::xeDeviceGetMemoryProperties
         /// @returns
-        ///     - device_memory_properties_t: query result for compute properties
+        ///     - ::device_memory_properties_t: query result for compute properties
         /// 
         /// @throws result_t
         inline device_memory_properties_t
@@ -628,7 +592,7 @@ namespace xe
         ///////////////////////////////////////////////////////////////////////////////
         /// @brief C++ wrapper for ::xeDeviceGetP2PProperties
         /// @returns
-        ///     - device_p2p_properties_t: Peer-to-Peer properties between source and peer device
+        ///     - ::device_p2p_properties_t: Peer-to-Peer properties between source and peer device
         /// 
         /// @throws result_t
         inline device_p2p_properties_t
@@ -639,7 +603,7 @@ namespace xe
         ///////////////////////////////////////////////////////////////////////////////
         /// @brief C++ wrapper for ::xeDeviceCanAccessPeer
         /// @returns
-        ///     - bool_t: returned access capability
+        ///     - ::bool_t: returned access capability
         /// 
         /// @throws result_t
         inline bool_t
@@ -666,7 +630,7 @@ namespace xe
         ///////////////////////////////////////////////////////////////////////////////
         /// @brief C++ wrapper for ::xeDeviceCreateEvent
         /// @returns
-        ///     - event_handle_t: pointer to handle of event object created
+        ///     - ::event_handle_t: pointer to handle of event object created
         /// 
         /// @throws result_t
         inline event_handle_t
@@ -677,7 +641,7 @@ namespace xe
         ///////////////////////////////////////////////////////////////////////////////
         /// @brief C++ wrapper for ::xeDevicePlaceEvent
         /// @returns
-        ///     - event_handle_t: pointer to handle of event object created
+        ///     - ::event_handle_t: pointer to handle of event object created
         /// 
         /// @throws result_t
         inline event_handle_t
@@ -689,7 +653,7 @@ namespace xe
         ///////////////////////////////////////////////////////////////////////////////
         /// @brief C++ wrapper for ::xeDeviceCreateImage
         /// @returns
-        ///     - image_handle_t: pointer to handle of image object created
+        ///     - ::image_handle_t: pointer to handle of image object created
         /// 
         /// @throws result_t
         inline image_handle_t
@@ -700,8 +664,8 @@ namespace xe
         ///////////////////////////////////////////////////////////////////////////////
         /// @brief C++ wrapper for ::xeDeviceCreateModule
         /// @returns
-        ///     - module_handle_t: pointer to handle of module object created
-        ///     - module_build_log_handle_t: pointer to handle of module's build log.
+        ///     - ::module_handle_t: pointer to handle of module object created
+        ///     - ::module_build_log_handle_t: pointer to handle of module's build log.
         /// 
         /// @throws result_t
         inline std::tuple<module_handle_t, module_build_log_handle_t>
@@ -746,7 +710,7 @@ namespace xe
         ///////////////////////////////////////////////////////////////////////////////
         /// @brief C++ wrapper for ::xeDeviceCreateSampler
         /// @returns
-        ///     - sampler_handle_t: handle of the sampler
+        ///     - ::sampler_handle_t: handle of the sampler
         /// 
         /// @throws result_t
         inline sampler_handle_t

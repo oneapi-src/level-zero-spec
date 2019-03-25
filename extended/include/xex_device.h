@@ -21,23 +21,28 @@
 * express and approved by Intel in writing.  
 * @endcond
 *
-* @file xe_copy.inl
+* @file xex_device.h
 *
-* @brief C++ wrapper of Intel Xe Level-Zero APIs for Copies
+* @brief Intel Xe Level-Zero Extended APIs for Device
 *
 * @cond DEV
-* DO NOT EDIT: generated from /scripts/core/copy.yml
+* DO NOT EDIT: generated from /scripts/extended/device.yml
 * @endcond
 *
 ******************************************************************************/
-#ifndef _XE_COPY_INL
-#define _XE_COPY_INL
+#ifndef _XEX_DEVICE_H
+#define _XEX_DEVICE_H
 #if defined(__cplusplus)
 #pragma once
-#include "xe_copy.hpp"
+#endif
+#include "xex_common.h"
 
-namespace xe
-{
-} // namespace xe
-#endif // defined(__cplusplus)
-#endif // _XE_COPY_INL
+#if defined(__cplusplus)
+extern "C" {
+#endif
+
+#if defined(__cplusplus)
+} // extern "C"
+#endif
+
+#endif // _XEX_DEVICE_H

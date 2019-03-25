@@ -23,7 +23,7 @@
 *
 * @file xe_device.h
 *
-* @brief Intel Xe Driver APIs for Device
+* @brief Intel Xe Level-Zero APIs for Device
 *
 * @cond DEV
 * DO NOT EDIT: generated from /scripts/core/device.yml

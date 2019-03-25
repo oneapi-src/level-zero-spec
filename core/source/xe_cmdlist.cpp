@@ -23,7 +23,7 @@
 *
 * @file xe_cmdlist.cpp
 *
-* @brief Intel Xe Driver APIs for Command List
+* @brief Intel Xe Level-Zero APIs for Command List
 *
 * DO NOT EDIT: generated from /scripts/core/cmdlist.yml
 *

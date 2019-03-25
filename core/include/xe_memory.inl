@@ -23,7 +23,7 @@
 *
 * @file xe_memory.inl
 *
-* @brief C++ wrapper of Intel Xe Driver APIs for Memory
+* @brief C++ wrapper of Intel Xe Level-Zero APIs for Memory
 *
 * @cond DEV
 * DO NOT EDIT: generated from /scripts/core/memory.yml
@@ -47,7 +47,7 @@ namespace xe
     ///     - The implementation of this function should be lock-free.
     /// 
     /// @returns
-    ///     - mem_allocator_handle_t: Returned memory allocator handle
+    ///     - ::mem_allocator_handle_t: Returned memory allocator handle
     /// 
     /// @throws result_t
     inline mem_allocator_handle_t 
@@ -56,7 +56,7 @@ namespace xe
         )
     {
         // auto result = ::xeCreateMemAllocator( handle );
-        // if( ::XE_RESULT_SUCCESS != result ) throw exception(result, "xe::CreateMemAllocator::CreateMemAllocator");
+        // if( ::XE_RESULT_SUCCESS != result ) throw exception(result, "CreateMemAllocator");
     }
 
     ///////////////////////////////////////////////////////////////////////////////
@@ -77,7 +77,7 @@ namespace xe
         )
     {
         // auto result = ::xeMemAllocatorDestroy( handle, hMemAllocHandle );
-        // if( ::XE_RESULT_SUCCESS != result ) throw exception(result, "xe::MemAllocatorDestroy::MemAllocatorDestroy");
+        // if( ::XE_RESULT_SUCCESS != result ) throw exception(result, "MemAllocatorDestroy");
     }
 
     ///////////////////////////////////////////////////////////////////////////////
@@ -108,7 +108,7 @@ namespace xe
         )
     {
         // auto result = ::xeSharedMemAlloc( handle, hMemAllocHandle, hDevice, device_flags, host_flags, size, alignment );
-        // if( ::XE_RESULT_SUCCESS != result ) throw exception(result, "xe::SharedMemAlloc::SharedMemAlloc");
+        // if( ::XE_RESULT_SUCCESS != result ) throw exception(result, "SharedMemAlloc");
     }
 
     ///////////////////////////////////////////////////////////////////////////////
@@ -139,7 +139,7 @@ namespace xe
         )
     {
         // auto result = ::xeMemAlloc( handle, hMemAllocHandle, hDevice, flags, size, alignment );
-        // if( ::XE_RESULT_SUCCESS != result ) throw exception(result, "xe::MemAlloc::MemAlloc");
+        // if( ::XE_RESULT_SUCCESS != result ) throw exception(result, "MemAlloc");
     }
 
     ///////////////////////////////////////////////////////////////////////////////
@@ -170,7 +170,7 @@ namespace xe
         )
     {
         // auto result = ::xeHostMemAlloc( handle, hMemAllocHandle, flags, size, alignment );
-        // if( ::XE_RESULT_SUCCESS != result ) throw exception(result, "xe::HostMemAlloc::HostMemAlloc");
+        // if( ::XE_RESULT_SUCCESS != result ) throw exception(result, "HostMemAlloc");
     }
 
     ///////////////////////////////////////////////////////////////////////////////
@@ -196,7 +196,7 @@ namespace xe
         )
     {
         // auto result = ::xeMemFree( handle, hMemAllocHandle, ptr );
-        // if( ::XE_RESULT_SUCCESS != result ) throw exception(result, "xe::MemFree::MemFree");
+        // if( ::XE_RESULT_SUCCESS != result ) throw exception(result, "MemFree");
     }
 
     ///////////////////////////////////////////////////////////////////////////////
@@ -211,7 +211,7 @@ namespace xe
     ///     - **cuPointerGetAttribute**
     /// 
     /// @returns
-    ///     - memory_allocation_properties_t: Query result for memory allocation properties
+    ///     - ::memory_allocation_properties_t: Query result for memory allocation properties
     /// 
     /// @throws result_t
     inline memory_allocation_properties_t 
@@ -221,7 +221,7 @@ namespace xe
         )
     {
         // auto result = ::xeMemGetProperties( handle, hMemAllocHandle, ptr );
-        // if( ::XE_RESULT_SUCCESS != result ) throw exception(result, "xe::MemGetProperties::MemGetProperties");
+        // if( ::XE_RESULT_SUCCESS != result ) throw exception(result, "MemGetProperties");
     }
 
     ///////////////////////////////////////////////////////////////////////////////
@@ -245,7 +245,7 @@ namespace xe
         )
     {
         // auto result = ::xeMemGetAddressRange( handle, hMemAllocHandle, ptr, pBase, pSize );
-        // if( ::XE_RESULT_SUCCESS != result ) throw exception(result, "xe::MemGetAddressRange::MemGetAddressRange");
+        // if( ::XE_RESULT_SUCCESS != result ) throw exception(result, "MemGetAddressRange");
     }
 
     ///////////////////////////////////////////////////////////////////////////////
@@ -262,7 +262,7 @@ namespace xe
     ///     - **cuIpcGetMemHandle**
     /// 
     /// @returns
-    ///     - ipc_mem_handle_t: Returned IPC memory handle
+    ///     - ::ipc_mem_handle_t: Returned IPC memory handle
     /// 
     /// @throws result_t
     inline ipc_mem_handle_t 
@@ -272,7 +272,7 @@ namespace xe
         )
     {
         // auto result = ::xeIpcGetMemHandle( handle, hMemAllocHandle, ptr );
-        // if( ::XE_RESULT_SUCCESS != result ) throw exception(result, "xe::IpcGetMemHandle::IpcGetMemHandle");
+        // if( ::XE_RESULT_SUCCESS != result ) throw exception(result, "IpcGetMemHandle");
     }
 
     ///////////////////////////////////////////////////////////////////////////////
@@ -303,7 +303,7 @@ namespace xe
         )
     {
         // auto result = ::xeIpcOpenMemHandle( handle, hMemAllocHandle, hDevice, handle, flags );
-        // if( ::XE_RESULT_SUCCESS != result ) throw exception(result, "xe::IpcOpenMemHandle::IpcOpenMemHandle");
+        // if( ::XE_RESULT_SUCCESS != result ) throw exception(result, "IpcOpenMemHandle");
     }
 
     ///////////////////////////////////////////////////////////////////////////////
@@ -327,7 +327,7 @@ namespace xe
         )
     {
         // auto result = ::xeIpcCloseMemHandle( handle, hMemAllocHandle, ptr );
-        // if( ::XE_RESULT_SUCCESS != result ) throw exception(result, "xe::IpcCloseMemHandle::IpcCloseMemHandle");
+        // if( ::XE_RESULT_SUCCESS != result ) throw exception(result, "IpcCloseMemHandle");
     }
 
 } // namespace xe

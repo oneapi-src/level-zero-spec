@@ -23,7 +23,7 @@
 *
 * @file xe_memory.h
 *
-* @brief Intel Xe Driver APIs for Memory
+* @brief Intel Xe Level-Zero APIs for Memory
 *
 * @cond DEV
 * DO NOT EDIT: generated from /scripts/core/memory.yml
@@ -261,7 +261,7 @@ typedef enum _xe_memory_allocation_properties_version_t
 /// @brief Memory allocation type
 typedef enum _xe_memory_type_t
 {
-    XE_MEMORY_TYPE_UNKNOWN = 0,                     ///< the memory pointed to was not allocated by Xe
+    XE_MEMORY_TYPE_UNKNOWN = 0,                     ///< the memory pointed to was not allocated by allocator
     XE_MEMORY_TYPE_HOST,                            ///< the memory pointed to is a host allocation
     XE_MEMORY_TYPE_DEVICE,                          ///< the memory pointed to is a device allocation
     XE_MEMORY_TYPE_SHARED,                          ///< the memory pointed to is a shared ownership allocation

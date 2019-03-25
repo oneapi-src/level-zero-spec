@@ -23,7 +23,7 @@
 *
 * @file xe_memory.cpp
 *
-* @brief Intel Xe Driver APIs for Memory
+* @brief Intel Xe Level-Zero APIs for Memory
 *
 * DO NOT EDIT: generated from /scripts/core/memory.yml
 *

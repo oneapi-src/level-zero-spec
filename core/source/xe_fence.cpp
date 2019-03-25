@@ -23,7 +23,7 @@
 *
 * @file xe_fence.cpp
 *
-* @brief Intel Xe Driver APIs for Fence
+* @brief Intel Xe Level-Zero APIs for Fence
 *
 * DO NOT EDIT: generated from /scripts/core/fence.yml
 *

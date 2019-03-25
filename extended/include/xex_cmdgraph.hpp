@@ -21,37 +21,37 @@
 * express and approved by Intel in writing.  
 * @endcond
 *
-* @file xe_cmdgraph.hpp
+* @file xex_cmdgraph.hpp
 *
-* @brief C++ wrapper of Intel Xe Driver APIs for CommandGraph
+* @brief C++ wrapper of Intel Xe Level-Zero Extended APIs for CommandGraph
 *
 * @cond DEV
-* DO NOT EDIT: generated from /scripts/core/cmdgraph.yml
+* DO NOT EDIT: generated from /scripts/extended/cmdgraph.yml
 * @endcond
 *
 ******************************************************************************/
-#ifndef _XE_CMDGRAPH_HPP
-#define _XE_CMDGRAPH_HPP
+#ifndef _XEX_CMDGRAPH_HPP
+#define _XEX_CMDGRAPH_HPP
 #if defined(__cplusplus)
 #pragma once
-#include "xe_common.hpp"
+#include "xex_common.hpp"
 
-namespace xe
+namespace xex
 {
     ///////////////////////////////////////////////////////////////////////////////
     /// @brief C++ wrapper for command graph
     class CommandGraph
     {
     protected:
-        ::xe_command_graph_handle_t handle;               ///< handle of command graph object
-        ::xe_command_graph_desc_t desc;                   ///< descriptor of the command graph object
+        ::xex_command_graph_handle_t handle;              ///< handle of command graph object
+        ::xex_command_graph_desc_t desc;                  ///< descriptor of the command graph object
 
     public:
         auto getHandle( void ) const { return handle; }
         auto getDesc( void ) const { return desc; }
 
         ///////////////////////////////////////////////////////////////////////////////
-        /// @brief C++ wrapper for ::xeCommandGraphDestroy
+        /// @brief C++ wrapper for ::xexCommandGraphDestroy
         /// @throws result_t
         inline void
         Destroy(
@@ -59,7 +59,7 @@ namespace xe
             );
 
         ///////////////////////////////////////////////////////////////////////////////
-        /// @brief C++ wrapper for ::xeCommandGraphClose
+        /// @brief C++ wrapper for ::xexCommandGraphClose
         /// @throws result_t
         inline void
         Close(
@@ -68,6 +68,6 @@ namespace xe
 
     };
 
-} // namespace xe
+} // namespace xex
 #endif // defined(__cplusplus)
-#endif // _XE_CMDGRAPH_HPP
+#endif // _XEX_CMDGRAPH_HPP

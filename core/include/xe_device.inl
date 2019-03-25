@@ -23,7 +23,7 @@
 *
 * @file xe_device.inl
 *
-* @brief C++ wrapper of Intel Xe Driver APIs for Device
+* @brief C++ wrapper of Intel Xe Level-Zero APIs for Device
 *
 * @cond DEV
 * DO NOT EDIT: generated from /scripts/core/device.yml
@@ -62,7 +62,7 @@ namespace xe
     /// @brief C++ wrapper for ::xeDeviceRegisterCLProgram
     /// 
     /// @returns
-    ///     - module_handle_t: pointer to handle of module object created
+    ///     - ::module_handle_t: pointer to handle of module object created
     /// 
     /// @throws result_t
     inline module_handle_t 
@@ -81,7 +81,7 @@ namespace xe
     /// @brief C++ wrapper for ::xeDeviceRegisterCLCommandQueue
     /// 
     /// @returns
-    ///     - command_queue_handle_t: pointer to handle of command queue object created
+    ///     - ::command_queue_handle_t: pointer to handle of command queue object created
     /// 
     /// @throws result_t
     inline command_queue_handle_t 
@@ -96,26 +96,6 @@ namespace xe
 #endif // XE_ENABLE_OCL_INTEROP
 
     ///////////////////////////////////////////////////////////////////////////////
-    /// @brief C++ wrapper for ::xeDeviceCreateCommandGraph
-    /// 
-    /// @details
-    ///     - This function may be called from simultaneous threads.
-    ///     - The implementation of this function should be lock-free.
-    /// 
-    /// @returns
-    ///     - command_graph_handle_t: pointer to handle of command graph object created
-    /// 
-    /// @throws result_t
-    inline command_graph_handle_t 
-    Device::CreateCommandGraph(
-        const command_graph_desc_t* desc                ///< [in] pointer to command graph descriptor
-        )
-    {
-        // auto result = ::xeDeviceCreateCommandGraph( handle, desc );
-        // if( ::XE_RESULT_SUCCESS != result ) throw exception(result, "xe::Device::CreateCommandGraph");
-    }
-
-    ///////////////////////////////////////////////////////////////////////////////
     /// @brief C++ wrapper for ::xeDeviceCreateCommandList
     /// 
     /// @details
@@ -124,7 +104,7 @@ namespace xe
     ///     - The implementation of this function should be lock-free.
     /// 
     /// @returns
-    ///     - command_list_handle_t: pointer to handle of command list object created
+    ///     - ::command_list_handle_t: pointer to handle of command list object created
     /// 
     /// @throws result_t
     inline command_list_handle_t 
@@ -149,7 +129,7 @@ namespace xe
     ///     - The implementation of this function should be lock-free.
     /// 
     /// @returns
-    ///     - command_list_handle_t: pointer to handle of command list object created
+    ///     - ::command_list_handle_t: pointer to handle of command list object created
     /// 
     /// @throws result_t
     inline command_list_handle_t 
@@ -175,7 +155,7 @@ namespace xe
     ///     - cuCtxGetCurrent
     /// 
     /// @returns
-    ///     - command_queue_handle_t: pointer to handle of command queue object created
+    ///     - ::command_queue_handle_t: pointer to handle of command queue object created
     /// 
     /// @throws result_t
     inline command_queue_handle_t 
@@ -200,7 +180,7 @@ namespace xe
     ///     - clGetDeviceIDs
     /// 
     /// @returns
-    ///     - device_handle_t: pointer to handle of sub-device object.
+    ///     - ::device_handle_t: pointer to handle of sub-device object.
     /// 
     /// @throws result_t
     inline device_handle_t 
@@ -224,7 +204,7 @@ namespace xe
     ///     - **cuCtxGetApiVersion**
     /// 
     /// @returns
-    ///     - api_version_t: api version
+    ///     - ::api_version_t: api version
     /// 
     /// @throws result_t
     inline api_version_t 
@@ -250,7 +230,7 @@ namespace xe
     ///     - clGetDeviceInfo
     /// 
     /// @returns
-    ///     - device_properties_t: query result for device properties
+    ///     - ::device_properties_t: query result for device properties
     /// 
     /// @throws result_t
     inline device_properties_t 
@@ -275,7 +255,7 @@ namespace xe
     ///     - clGetDeviceInfo
     /// 
     /// @returns
-    ///     - device_compute_properties_t: query result for compute properties
+    ///     - ::device_compute_properties_t: query result for compute properties
     /// 
     /// @throws result_t
     inline device_compute_properties_t 
@@ -301,7 +281,7 @@ namespace xe
     ///     - clGetDeviceInfo
     /// 
     /// @returns
-    ///     - device_memory_properties_t: query result for compute properties
+    ///     - ::device_memory_properties_t: query result for compute properties
     /// 
     /// @throws result_t
     inline device_memory_properties_t 
@@ -325,7 +305,7 @@ namespace xe
     ///     - **cudaDeviceGetP2PAttribute**
     /// 
     /// @returns
-    ///     - device_p2p_properties_t: Peer-to-Peer properties between source and peer device
+    ///     - ::device_p2p_properties_t: Peer-to-Peer properties between source and peer device
     /// 
     /// @throws result_t
     inline device_p2p_properties_t 
@@ -349,7 +329,7 @@ namespace xe
     ///     - **cudaDeviceCanAccessPeer**
     /// 
     /// @returns
-    ///     - bool_t: returned access capability
+    ///     - ::bool_t: returned access capability
     /// 
     /// @throws result_t
     inline bool_t 
@@ -417,7 +397,7 @@ namespace xe
     ///     - cuEventCreate
     /// 
     /// @returns
-    ///     - event_handle_t: pointer to handle of event object created
+    ///     - ::event_handle_t: pointer to handle of event object created
     /// 
     /// @throws result_t
     inline event_handle_t 
@@ -439,7 +419,7 @@ namespace xe
     ///     - The implementation of this function should be lock-free.
     /// 
     /// @returns
-    ///     - event_handle_t: pointer to handle of event object created
+    ///     - ::event_handle_t: pointer to handle of event object created
     /// 
     /// @throws result_t
     inline event_handle_t 
@@ -464,7 +444,7 @@ namespace xe
     ///     - clCreateImage
     /// 
     /// @returns
-    ///     - image_handle_t: pointer to handle of image object created
+    ///     - ::image_handle_t: pointer to handle of image object created
     /// 
     /// @throws result_t
     inline image_handle_t 
@@ -502,8 +482,8 @@ namespace xe
     ///     - **cuModuleLoad**
     /// 
     /// @returns
-    ///     - module_handle_t: pointer to handle of module object created
-    ///     - module_build_log_handle_t: pointer to handle of module's build log.
+    ///     - ::module_handle_t: pointer to handle of module object created
+    ///     - ::module_build_log_handle_t: pointer to handle of module's build log.
     /// 
     /// @throws result_t
     inline std::tuple<module_handle_t, module_build_log_handle_t> 
@@ -608,7 +588,7 @@ namespace xe
     ///     - **cuTexObjectCreate**
     /// 
     /// @returns
-    ///     - sampler_handle_t: handle of the sampler
+    ///     - ::sampler_handle_t: handle of the sampler
     /// 
     /// @throws result_t
     inline sampler_handle_t 

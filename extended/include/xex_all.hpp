@@ -20,32 +20,22 @@
 * or otherwise. Any license under such intellectual property rights must be
 * express and approved by Intel in writing.
 *
-* @file xe_all.h
+* @file xex_all.hpp
 *
 * @cond DEV
-* DO NOT EDIT: generated from /scripts/templates/api_all.h.mako
+* DO NOT EDIT: generated from /scripts/templates/api_all.hpp.mako
 * @endcond
 *
 ******************************************************************************/
-#ifndef _XE_ALL_H
-#define _XE_ALL_H
+#ifndef _XEX_ALL_HPP
+#define _XEX_ALL_HPP
 #if defined(__cplusplus)
 #pragma once
-#endif
 
-#include "xe_barrier.h"
-#include "xe_cl_interop.h"
-#include "xe_cmdlist.h"
-#include "xe_cmdqueue.h"
-#include "xe_copy.h"
-#include "xe_device.h"
-#include "xe_driver.h"
-#include "xe_event.h"
-#include "xe_fence.h"
-#include "xe_image.h"
-#include "xe_memory.h"
-#include "xe_module.h"
-#include "xe_residency.h"
-#include "xe_sampler.h"
+#include "xex_cmdgraph.hpp"
+#include "xex_device.hpp"
+#include "xex_cmdgraph.inl"
+#include "xex_device.inl"
 
-#endif // _XE_ALL_H
+#endif // defined(__cplusplus)
+#endif // _XEX_ALL_HPP

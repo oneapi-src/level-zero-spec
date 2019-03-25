@@ -23,7 +23,7 @@
 *
 * @file xe_residency.hpp
 *
-* @brief C++ wrapper of Intel Xe Driver APIs for Memory
+* @brief C++ wrapper of Intel Xe Level-Zero APIs for Memory Residency
 *
 * @cond DEV
 * DO NOT EDIT: generated from /scripts/core/residency.yml

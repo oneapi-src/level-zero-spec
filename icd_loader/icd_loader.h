@@ -67,17 +67,6 @@ typedef xe_result_t (__xecall *pfn_xeDeviceRegisterCLCommandQueue)(
     xe_command_queue_handle_t* phCommandQueue       ///< [out] pointer to handle of command queue object created
     );
 #endif // XE_ENABLE_OCL_INTEROP
-typedef xe_result_t (__xecall *pfn_xeDeviceCreateCommandGraph)(
-    xe_device_handle_t hDevice,                     ///< [in] handle of the device object
-    const xe_command_graph_desc_t* desc,            ///< [in] pointer to command graph descriptor
-    xe_command_graph_handle_t* phCommandGraph       ///< [out] pointer to handle of command graph object created
-    );
-typedef xe_result_t (__xecall *pfn_xeCommandGraphDestroy)(
-    xe_command_graph_handle_t hCommandGraph         ///< [in] handle of command graph object to destroy
-    );
-typedef xe_result_t (__xecall *pfn_xeCommandGraphClose)(
-    xe_command_graph_handle_t hCommandGraph         ///< [in] handle of command graph object to close
-    );
 typedef xe_result_t (__xecall *pfn_xeDeviceCreateCommandList)(
     xe_device_handle_t hDevice,                     ///< [in] handle of the device object
     const xe_command_list_desc_t* desc,             ///< [in] pointer to command list descriptor
@@ -529,9 +518,6 @@ typedef struct _xe_dispatch_table_t
 #if XE_ENABLE_OCL_INTEROP
     pfn_xeDeviceRegisterCLCommandQueue xeDeviceRegisterCLCommandQueue;
 #endif // XE_ENABLE_OCL_INTEROP
-    pfn_xeDeviceCreateCommandGraph xeDeviceCreateCommandGraph;
-    pfn_xeCommandGraphDestroy xeCommandGraphDestroy;
-    pfn_xeCommandGraphClose xeCommandGraphClose;
     pfn_xeDeviceCreateCommandList xeDeviceCreateCommandList;
     pfn_xeDeviceCopyCommandList xeDeviceCopyCommandList;
     pfn_xeCommandListDestroy xeCommandListDestroy;
@@ -638,9 +624,6 @@ inline bool load_xe(void *handle, void *(*funcAddressGetter)(void *handle, const
 #if XE_ENABLE_OCL_INTEROP
     outTable->xeDeviceRegisterCLCommandQueue = (pfn_xeDeviceRegisterCLCommandQueue)funcAddressGetter(handle, "xeDeviceRegisterCLCommandQueue");
 #endif // XE_ENABLE_OCL_INTEROP
-    outTable->xeDeviceCreateCommandGraph = (pfn_xeDeviceCreateCommandGraph)funcAddressGetter(handle, "xeDeviceCreateCommandGraph");
-    outTable->xeCommandGraphDestroy = (pfn_xeCommandGraphDestroy)funcAddressGetter(handle, "xeCommandGraphDestroy");
-    outTable->xeCommandGraphClose = (pfn_xeCommandGraphClose)funcAddressGetter(handle, "xeCommandGraphClose");
     outTable->xeDeviceCreateCommandList = (pfn_xeDeviceCreateCommandList)funcAddressGetter(handle, "xeDeviceCreateCommandList");
     outTable->xeDeviceCopyCommandList = (pfn_xeDeviceCopyCommandList)funcAddressGetter(handle, "xeDeviceCopyCommandList");
     outTable->xeCommandListDestroy = (pfn_xeCommandListDestroy)funcAddressGetter(handle, "xeCommandListDestroy");
@@ -749,15 +732,6 @@ inline bool load_xe(void *handle, void *(*funcAddressGetter)(void *handle, const
         return false;
     }
 #endif // XE_ENABLE_OCL_INTEROP
-    if(0 == outTable->xeDeviceCreateCommandGraph){
-        return false;
-    }
-    if(0 == outTable->xeCommandGraphDestroy){
-        return false;
-    }
-    if(0 == outTable->xeCommandGraphClose){
-        return false;
-    }
     if(0 == outTable->xeDeviceCreateCommandList){
         return false;
     }

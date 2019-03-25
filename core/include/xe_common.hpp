@@ -23,7 +23,7 @@
 *
 * @file xe_common.hpp
 *
-* @brief C++ wrapper of Intel Xe Driver API common types
+* @brief C++ wrapper of Intel Xe Level-Zero API common types
 *
 * @cond DEV
 * DO NOT EDIT: generated from /scripts/core/common.yml
@@ -57,11 +57,6 @@ namespace xe
     /// @brief Handle of driver's command list object
     class CommandList;
     using command_list_handle_t = CommandList*;
-
-    ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Handle of driver's command graph object
-    class CommandGraph;
-    using command_graph_handle_t = CommandGraph*;
 
     ///////////////////////////////////////////////////////////////////////////////
     /// @brief Handle of driver's fence object

@@ -23,7 +23,7 @@
 *
 * @file xe_image.hpp
 *
-* @brief C++ wrapper of Intel Xe Driver APIs for Images
+* @brief C++ wrapper of Intel Xe Level-Zero APIs for Images
 *
 * @cond DEV
 * DO NOT EDIT: generated from /scripts/core/image.yml

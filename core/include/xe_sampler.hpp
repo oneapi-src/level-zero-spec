@@ -23,7 +23,7 @@
 *
 * @file xe_sampler.hpp
 *
-* @brief C++ wrapper of Intel Xe Driver APIs for Sampler
+* @brief C++ wrapper of Intel Xe Level-Zero APIs for Sampler
 *
 * @cond DEV
 * DO NOT EDIT: generated from /scripts/core/sampler.yml

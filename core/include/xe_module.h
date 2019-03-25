@@ -23,7 +23,7 @@
 *
 * @file xe_module.h
 *
-* @brief Intel Xe Driver APIs for Module
+* @brief Intel Xe Level-Zero APIs for Module
 *
 * @cond DEV
 * DO NOT EDIT: generated from /scripts/core/module.yml

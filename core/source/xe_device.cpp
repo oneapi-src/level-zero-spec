@@ -23,7 +23,7 @@
 *
 * @file xe_device.cpp
 *
-* @brief Intel Xe Driver APIs for Device
+* @brief Intel Xe Level-Zero APIs for Device
 *
 * DO NOT EDIT: generated from /scripts/core/device.yml
 *

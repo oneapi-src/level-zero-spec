@@ -23,7 +23,7 @@
 *
 * @file xe_copy.cpp
 *
-* @brief Intel Xe Driver APIs for Copies
+* @brief Intel Xe Level-Zero APIs for Copies
 *
 * DO NOT EDIT: generated from /scripts/core/copy.yml
 *

@@ -23,7 +23,7 @@
 *
 * @file xe_common.inl
 *
-* @brief C++ wrapper of Intel Xe Driver API common types
+* @brief C++ wrapper of Intel Xe Level-Zero API common types
 *
 * @cond DEV
 * DO NOT EDIT: generated from /scripts/core/common.yml

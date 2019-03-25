@@ -23,7 +23,7 @@
 *
 * @file xe_copy.h
 *
-* @brief Intel Xe Driver APIs for Copies
+* @brief Intel Xe Level-Zero APIs for Copies
 *
 * @cond DEV
 * DO NOT EDIT: generated from /scripts/core/copy.yml

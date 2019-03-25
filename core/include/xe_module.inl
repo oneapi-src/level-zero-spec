@@ -23,7 +23,7 @@
 *
 * @file xe_module.inl
 *
-* @brief C++ wrapper of Intel Xe Driver APIs for Module
+* @brief C++ wrapper of Intel Xe Level-Zero APIs for Module
 *
 * @cond DEV
 * DO NOT EDIT: generated from /scripts/core/module.yml
@@ -164,7 +164,7 @@ namespace xe
     ///     - **cuModuleGetFunction**
     /// 
     /// @returns
-    ///     - function_handle_t: handle of the Function object
+    ///     - ::function_handle_t: handle of the Function object
     /// 
     /// @throws result_t
     inline function_handle_t 

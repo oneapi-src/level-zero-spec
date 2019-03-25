@@ -23,7 +23,7 @@
 *
 * @file xe_cl_interop.cpp
 *
-* @brief Intel Xe Driver APIs for OpenCL Interopability
+* @brief Intel Xe Level-Zero APIs for OpenCL Interopability
 *
 * DO NOT EDIT: generated from /scripts/core/cl_interop.yml
 *

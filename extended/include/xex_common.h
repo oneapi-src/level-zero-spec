@@ -21,23 +21,33 @@
 * express and approved by Intel in writing.  
 * @endcond
 *
-* @file xe_copy.inl
+* @file xex_common.h
 *
-* @brief C++ wrapper of Intel Xe Level-Zero APIs for Copies
+* @brief Intel Xe Level-Zero Extended API common types
 *
 * @cond DEV
-* DO NOT EDIT: generated from /scripts/core/copy.yml
+* DO NOT EDIT: generated from /scripts/extended/common.yml
 * @endcond
 *
 ******************************************************************************/
-#ifndef _XE_COPY_INL
-#define _XE_COPY_INL
+#ifndef _XEX_COMMON_H
+#define _XEX_COMMON_H
 #if defined(__cplusplus)
 #pragma once
-#include "xe_copy.hpp"
+#endif
+#include <stdint.h>
+#include <string.h>
 
-namespace xe
-{
-} // namespace xe
-#endif // defined(__cplusplus)
-#endif // _XE_COPY_INL
+#if defined(__cplusplus)
+extern "C" {
+#endif
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Handle of driver's command graph object
+typedef struct _xex_command_graph_handle_t *xex_command_graph_handle_t;
+
+#if defined(__cplusplus)
+} // extern "C"
+#endif
+
+#endif // _XEX_COMMON_H

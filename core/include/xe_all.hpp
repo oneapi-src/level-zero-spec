@@ -34,7 +34,6 @@
 
 #include "xe_barrier.hpp"
 #include "xe_cl_interop.hpp"
-#include "xe_cmdgraph.hpp"
 #include "xe_cmdlist.hpp"
 #include "xe_cmdqueue.hpp"
 #include "xe_copy.hpp"
@@ -49,7 +48,6 @@
 #include "xe_sampler.hpp"
 #include "xe_barrier.inl"
 #include "xe_cl_interop.inl"
-#include "xe_cmdgraph.inl"
 #include "xe_cmdlist.inl"
 #include "xe_cmdqueue.inl"
 #include "xe_copy.inl"

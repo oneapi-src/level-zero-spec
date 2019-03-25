@@ -23,7 +23,7 @@
 *
 * @file xe_image.cpp
 *
-* @brief Intel Xe Driver APIs for Images
+* @brief Intel Xe Level-Zero APIs for Images
 *
 * DO NOT EDIT: generated from /scripts/core/image.yml
 *

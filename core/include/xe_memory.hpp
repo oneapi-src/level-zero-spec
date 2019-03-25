@@ -23,7 +23,7 @@
 *
 * @file xe_memory.hpp
 *
-* @brief C++ wrapper of Intel Xe Driver APIs for Memory
+* @brief C++ wrapper of Intel Xe Level-Zero APIs for Memory
 *
 * @cond DEV
 * DO NOT EDIT: generated from /scripts/core/memory.yml
@@ -51,7 +51,7 @@ namespace xe
     ///     - The implementation of this function should be lock-free.
     /// 
     /// @returns
-    ///     - mem_allocator_handle_t: Returned memory allocator handle
+    ///     - ::mem_allocator_handle_t: Returned memory allocator handle
     /// 
     /// @throws result_t
     inline mem_allocator_handle_t
@@ -213,7 +213,7 @@ namespace xe
     /// @brief Memory allocation type
     enum class memory_type_t
     {
-        UNKNOWN = 0,                                    ///< the memory pointed to was not allocated by $Xx
+        UNKNOWN = 0,                                    ///< the memory pointed to was not allocated by allocator
         HOST,                                           ///< the memory pointed to is a host allocation
         DEVICE,                                         ///< the memory pointed to is a device allocation
         SHARED,                                         ///< the memory pointed to is a shared ownership allocation
@@ -242,7 +242,7 @@ namespace xe
     ///     - **cuPointerGetAttribute**
     /// 
     /// @returns
-    ///     - memory_allocation_properties_t: Query result for memory allocation properties
+    ///     - ::memory_allocation_properties_t: Query result for memory allocation properties
     /// 
     /// @throws result_t
     inline memory_allocation_properties_t
@@ -286,7 +286,7 @@ namespace xe
     ///     - **cuIpcGetMemHandle**
     /// 
     /// @returns
-    ///     - ipc_mem_handle_t: Returned IPC memory handle
+    ///     - ::ipc_mem_handle_t: Returned IPC memory handle
     /// 
     /// @throws result_t
     inline ipc_mem_handle_t

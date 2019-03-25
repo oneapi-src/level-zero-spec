@@ -21,23 +21,22 @@
 * express and approved by Intel in writing.  
 * @endcond
 *
-* @file xe_copy.inl
+* @file xex_common.cpp
 *
-* @brief C++ wrapper of Intel Xe Level-Zero APIs for Copies
+* @brief Intel Xe Level-Zero Extended API common types
 *
-* @cond DEV
-* DO NOT EDIT: generated from /scripts/core/copy.yml
-* @endcond
+* DO NOT EDIT: generated from /scripts/extended/common.yml
 *
 ******************************************************************************/
-#ifndef _XE_COPY_INL
-#define _XE_COPY_INL
-#if defined(__cplusplus)
-#pragma once
-#include "xe_copy.hpp"
+#if defined(XEX_CPP)
+#include "../include/xex_common.hpp"
+#else
+#include "../include/xex_common.h"
+#endif
+#if !defined(XEX_NULLDRV)
+#include "common.h"
+#endif
 
-namespace xe
-{
-} // namespace xe
-#endif // defined(__cplusplus)
-#endif // _XE_COPY_INL
+#include <exception>    // @todo: move to common and/or precompiled header
+#include <new>
+

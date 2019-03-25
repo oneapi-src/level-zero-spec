@@ -23,7 +23,7 @@
 *
 * @file xe_driver.cpp
 *
-* @brief Intel Xe Driver APIs
+* @brief Intel Xe Level-Zero APIs
 *
 * DO NOT EDIT: generated from /scripts/core/driver.yml
 *
@@ -41,7 +41,7 @@
 #include <new>
 
 ///////////////////////////////////////////////////////////////////////////////
-/// @brief Initialize the Xe Driver API and must be called before any other API
+/// @brief Initialize the Xe driver and must be called before any other API
 ///        function.
 /// 
 /// @details

@@ -23,7 +23,7 @@
 *
 * @file xe_cmdlist.inl
 *
-* @brief C++ wrapper of Intel Xe Driver APIs for Command List
+* @brief C++ wrapper of Intel Xe Level-Zero APIs for Command List
 *
 * @cond DEV
 * DO NOT EDIT: generated from /scripts/core/cmdlist.yml

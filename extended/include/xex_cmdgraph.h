@@ -21,50 +21,50 @@
 * express and approved by Intel in writing.  
 * @endcond
 *
-* @file xe_cmdgraph.h
+* @file xex_cmdgraph.h
 *
-* @brief Intel Xe Driver APIs for CommandGraph
+* @brief Intel Xe Level-Zero Extended APIs for CommandGraph
 *
 * @cond DEV
-* DO NOT EDIT: generated from /scripts/core/cmdgraph.yml
+* DO NOT EDIT: generated from /scripts/extended/cmdgraph.yml
 * @endcond
 *
 ******************************************************************************/
-#ifndef _XE_CMDGRAPH_H
-#define _XE_CMDGRAPH_H
+#ifndef _XEX_CMDGRAPH_H
+#define _XEX_CMDGRAPH_H
 #if defined(__cplusplus)
 #pragma once
 #endif
-#include "xe_common.h"
+#include "xex_common.h"
 
 #if defined(__cplusplus)
 extern "C" {
 #endif
 
 ///////////////////////////////////////////////////////////////////////////////
-/// @brief API version of ::xe_command_graph_desc_t
-typedef enum _xe_command_graph_desc_version_t
+/// @brief API version of ::xex_command_graph_desc_t
+typedef enum _xex_command_graph_desc_version_t
 {
-    XE_COMMAND_GRAPH_DESC_VERSION_CURRENT = XE_MAKE_VERSION( 1, 0 ),///< version 1.0
+    XEX_COMMAND_GRAPH_DESC_VERSION_CURRENT = XE_MAKE_VERSION( 1, 0 ),   ///< version 1.0
 
-} xe_command_graph_desc_version_t;
+} xex_command_graph_desc_version_t;
 
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Supported command graph creation flags
-typedef enum _xe_command_graph_flag_t
+typedef enum _xex_command_graph_flag_t
 {
-    XE_COMMAND_GRAPH_FLAG_NONE = 0,                 ///< default behavior
+    XEX_COMMAND_GRAPH_FLAG_NONE = 0,                ///< default behavior
 
-} xe_command_graph_flag_t;
+} xex_command_graph_flag_t;
 
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief CommandGraph descriptor
-typedef struct _xe_command_graph_desc_t
+typedef struct _xex_command_graph_desc_t
 {
-    xe_command_graph_desc_version_t version;        ///< [in] ::XE_COMMAND_GRAPH_DESC_VERSION_CURRENT
-    xe_command_graph_flag_t flags;                  ///< [in] creation flags
+    xex_command_graph_desc_version_t version;       ///< [in] ::XEX_COMMAND_GRAPH_DESC_VERSION_CURRENT
+    xex_command_graph_flag_t flags;                 ///< [in] creation flags
 
-} xe_command_graph_desc_t;
+} xex_command_graph_desc_t;
 
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Creates a command graph on the device for submitting commands to any
@@ -83,14 +83,14 @@ typedef struct _xe_command_graph_desc_t
 ///         + nullptr == desc
 ///         + nullptr == phCommandGraph
 ///     - ::XE_RESULT_ERROR_UNSUPPORTED
-///         + ::XE_COMMAND_GRAPH_DESC_VERSION_CURRENT < desc->version
+///         + ::XEX_COMMAND_GRAPH_DESC_VERSION_CURRENT < desc->version
 ///     - ::XE_RESULT_ERROR_OUT_OF_HOST_MEMORY
 ///     - ::XE_RESULT_ERROR_OUT_OF_DEVICE_MEMORY
 __xedllport xe_result_t __xecall
-xeDeviceCreateCommandGraph(
+xexDeviceCreateCommandGraph(
     xe_device_handle_t hDevice,                     ///< [in] handle of the device object
-    const xe_command_graph_desc_t* desc,            ///< [in] pointer to command graph descriptor
-    xe_command_graph_handle_t* phCommandGraph       ///< [out] pointer to handle of command graph object created
+    const xex_command_graph_desc_t* desc,           ///< [in] pointer to command graph descriptor
+    xex_command_graph_handle_t* phCommandGraph      ///< [out] pointer to handle of command graph object created
     );
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -109,8 +109,8 @@ xeDeviceCreateCommandGraph(
 ///         + nullptr == hCommandGraph
 ///     - ::XE_RESULT_ERROR_UNSUPPORTED
 __xedllport xe_result_t __xecall
-xeCommandGraphDestroy(
-    xe_command_graph_handle_t hCommandGraph         ///< [in] handle of command graph object to destroy
+xexCommandGraphDestroy(
+    xex_command_graph_handle_t hCommandGraph        ///< [in] handle of command graph object to destroy
     );
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -132,12 +132,12 @@ xeCommandGraphDestroy(
 ///         + nullptr == hCommandGraph
 ///     - ::XE_RESULT_ERROR_UNSUPPORTED
 __xedllport xe_result_t __xecall
-xeCommandGraphClose(
-    xe_command_graph_handle_t hCommandGraph         ///< [in] handle of command graph object to close
+xexCommandGraphClose(
+    xex_command_graph_handle_t hCommandGraph        ///< [in] handle of command graph object to close
     );
 
 #if defined(__cplusplus)
 } // extern "C"
 #endif
 
-#endif // _XE_CMDGRAPH_H
+#endif // _XEX_CMDGRAPH_H

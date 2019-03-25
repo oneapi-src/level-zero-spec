@@ -20,18 +20,20 @@
 * or otherwise. Any license under such intellectual property rights must be
 * express and approved by Intel in writing.
 *
-* @file xi_all.h
+* @file xex_all.h
 *
 * @cond DEV
 * DO NOT EDIT: generated from /scripts/templates/api_all.h.mako
 * @endcond
 *
 ******************************************************************************/
-#ifndef _XI_ALL_H
-#define _XI_ALL_H
+#ifndef _XEX_ALL_H
+#define _XEX_ALL_H
 #if defined(__cplusplus)
 #pragma once
 #endif
 
+#include "xex_cmdgraph.h"
+#include "xex_device.h"
 
-#endif // _XI_ALL_H
+#endif // _XEX_ALL_H

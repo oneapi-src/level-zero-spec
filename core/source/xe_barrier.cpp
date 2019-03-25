@@ -23,7 +23,7 @@
 *
 * @file xe_barrier.cpp
 *
-* @brief Intel Xe Driver APIs for Barrier
+* @brief Intel Xe Level-Zero APIs for Barrier
 *
 * DO NOT EDIT: generated from /scripts/core/barrier.yml
 *
