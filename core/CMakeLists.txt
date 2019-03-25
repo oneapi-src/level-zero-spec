@@ -81,7 +81,7 @@ if(UNIX)
     list(REMOVE_ITEM HEADER_FILES "CMakeLists.txt")
     install(FILES ${HEADER_FILES}
         DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}
-        COMPONENT l0-headers
+        COMPONENT l0-devel
     )
 
     install(FILES source/ocloc_shared.h
@@ -89,5 +89,5 @@ if(UNIX)
         COMPONENT l0-tools)
     install(TARGETS ocloc_shared
         DESTINATION ${CMAKE_INSTALL_LIBDIR}
-        COMPONENT l0-tools)
+        COMPONENT l0-devel)
 endif()

@@ -20,5 +20,5 @@ endif(MSVC)
 if(UNIX)
     install(TARGETS level_zero_icd_loader
         DESTINATION ${CMAKE_INSTALL_LIBDIR}
-        COMPONENT l0-icd)
+        COMPONENT l0-devel)
 endif()
