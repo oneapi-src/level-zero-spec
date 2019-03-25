@@ -190,7 +190,7 @@ cd build
 cmake -G "Visual Studio 15 2017 Win64" .. -DCMAKE_BUILD_TYPE=Release -DLOKI_VERSION_BUILD=${buildId} -DLOKI_CPACK_GENERATOR="ZIP"
 cmake --build . --config Release --clean-first --target ALL_BUILD
 """
-				archiveArtifacts "build/*.zip"
+				// archiveArtifacts "build/*.zip"
 			}()
 		}
 
