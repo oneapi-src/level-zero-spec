@@ -22,8 +22,8 @@ struct Mock<Device> : public Device {
     MOCK_METHOD2(copyCommandList, xe_result_t(xe_command_list_handle_t hCommandList,
                                               xe_command_list_handle_t *phCommandList));
 
-    MOCK_METHOD2(createCommandGraph, xe_result_t(const xe_command_graph_desc_t *desc,
-                                                 xe_command_graph_handle_t *phCommandGraph));
+    //MOCK_METHOD2(createCommandGraph, xe_result_t(const xe_command_graph_desc_t *desc,
+    //                                             xe_command_graph_handle_t *phCommandGraph));
 
     MOCK_METHOD2(createCommandList, xe_result_t(const xe_command_list_desc_t *desc,
                                                 xe_command_list_handle_t *commandList));

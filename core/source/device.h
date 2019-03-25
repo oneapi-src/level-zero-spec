@@ -1,5 +1,5 @@
 #pragma once
-#include "xe_cmdgraph.h"
+//#include "xe_cmdgraph.h"
 #include "xe_cmdlist.h"
 #include "xe_cmdqueue.h"
 #include "xe_device.h"
@@ -21,8 +21,8 @@ struct Device : _xe_device_handle_t {
     virtual xe_result_t copyCommandList(xe_command_list_handle_t hCommandList,
                                         xe_command_list_handle_t *phCommandList) = 0;
 
-    virtual xe_result_t createCommandGraph(const xe_command_graph_desc_t *desc,
-                                           xe_command_graph_handle_t *phCommandGraph) = 0;
+    //virtual xe_result_t createCommandGraph(const xe_command_graph_desc_t *desc,
+    //                                       xe_command_graph_handle_t *phCommandGraph) = 0;
 
     virtual xe_result_t createCommandList(const xe_command_list_desc_t *desc,
                                           xe_command_list_handle_t *commandList) = 0;

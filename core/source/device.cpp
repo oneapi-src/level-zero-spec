@@ -23,10 +23,10 @@ struct DeviceImp : public Device {
         return XE_RESULT_ERROR_UNSUPPORTED;
     }
 
-    xe_result_t createCommandGraph(const xe_command_graph_desc_t *desc,
-                                   xe_command_graph_handle_t *phCommandGraph) override {
-        return XE_RESULT_ERROR_UNSUPPORTED;
-    }
+    //xe_result_t createCommandGraph(const xe_command_graph_desc_t *desc,
+    //                               xe_command_graph_handle_t *phCommandGraph) override {
+    //    return XE_RESULT_ERROR_UNSUPPORTED;
+    //}
 
     xe_result_t createCommandList(const xe_command_list_desc_t *desc,
                                   xe_command_list_handle_t *commandList) override {
