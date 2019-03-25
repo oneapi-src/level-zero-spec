@@ -130,20 +130,20 @@ The following rules must be followed in order to maximize robustness and securit
 
 ## Multithreading and Concurrency
 The following design philosophies are adopted in order to maximize Host thread concurrency:
-- APIs are free-threaded when the "Actor" is different.
+- APIs are free-threaded when the driver object handle is different.
     + the driver should avoid thread-locks for these API calls
-- APIs are not thread-safe when the "Actor" is the same, except when explicitly noted.
-    + the application is responsible for ensuring multiple threads do not enter an API when the "Actor" is the same
-- APIs are not thread-safe with other APIs that use the same "Actor"
-    + the application is responsible for ensuring multiple threads do not enter these APIs when the "Actor" is the same
+- APIs are not thread-safe when the driver object handle is the same, except when explicitly noted.
+    + the application is responsible for ensuring multiple threads do not enter an API when the handle is the same
+- APIs are not thread-safe with other APIs that use the same driver object handle
+    + the application is responsible for ensuring multiple threads do not enter these APIs when the handle is the same
 - the application is responsible for freeing handles and memory, no implcit garabage collection is supported by the driver
 
 Each API function must document details on the multithreading requirements for that call.
 
-The primary usage-model enabled by these rules is:
-- work submission occurs exclusively by enqueing command lists into a command queue
-- work submission into a command queue is free-threaded
-- multiple, simulateneous threads may append multiple command lists independently
+The primary usage-models enabled by these rules is:
+- multiple, simultaneous threads may operate on independent driver objects with no implicit thread-locks
+- driver object handles may be passed between and used by multiple threads with no implicit thread-locks
+
 
 # <a name="drv">Drivers</a>
 ## Installation
