@@ -129,27 +129,23 @@ xe_result_t CommandListCoreFamily<IGFX_GEN12_CORE>::appendLaunchFunction(xe_func
 
     // Set up binding table and surface states
     {
-        auto bindingTableStateCount = std::min(31u, static_cast<uint32_t>(function->getBindingTableStateCount()));
-        auto ssh = indirectHeaps[OCLRT::IndirectHeap::SURFACE_STATE];
-        assert(ssh);
+        auto bindingTableStateCount = function->getBindingTableStateCount();
+        uint32_t bindingTablePointer = 0u;
 
-        uint32_t bindingTablePointer = 0;
-
-        if (bindingTableStateCount > 0) {
+        if (bindingTableStateCount > 0u) {
+            auto ssh = indirectHeaps[OCLRT::IndirectHeap::SURFACE_STATE];
+            assert(ssh);
             bindingTablePointer = copyBindingTableAndSurfaceStates(ssh,
                                                                    function->getSurfaceStateHeap(),
                                                                    function->getSurfaceStateHeapSize(),
-                                                                   function->getBindingTableStateCount(),
+                                                                   bindingTableStateCount,
                                                                    function->getBindingTableOffset());
         }
 
-        idd.setBindingTablePointer(static_cast<uint32_t>(bindingTablePointer));
-        idd.setBindingTableEntryCount(bindingTableStateCount);
+        idd.setBindingTablePointer(bindingTablePointer);
 
-        STATE_BASE_ADDRESS *stateBaseAddress = static_cast<STATE_BASE_ADDRESS *>(sba);
-        assert(stateBaseAddress);
-        stateBaseAddress->setSurfaceStateBaseAddressModifyEnable(true);
-        stateBaseAddress->setSurfaceStateBaseAddress(indirectHeaps[OCLRT::IndirectHeap::SURFACE_STATE]->getHeapGpuBase());
+        auto bindingTableStatePrefetchCount = std::min(31u, 0u); //TODO: bindingTableStateCount
+        idd.setBindingTableEntryCount(bindingTableStatePrefetchCount);
     }
 
     // Commit our command to the commandStream
