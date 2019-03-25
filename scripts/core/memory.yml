@@ -1,6 +1,6 @@
 --- #--------------------------------------------------------------------------
 type: header
-desc: "Intel $Xx Driver APIs for Memory"
+desc: "Intel $OneApi Level-Zero APIs for Memory"
 --- #--------------------------------------------------------------------------
 type: handle
 desc: "Handle to a memory allocator"
@@ -213,7 +213,7 @@ name: $x_memory_type_t
 etors:
     - name: $X_MEMORY_TYPE_UNKNOWN
       value: "0"
-      desc: "the memory pointed to was not allocated by $Xx"
+      desc: "the memory pointed to was not allocated by allocator"
     - name: $X_MEMORY_TYPE_HOST
       desc: "the memory pointed to is a host allocation"
     - name: $X_MEMORY_TYPE_DEVICE

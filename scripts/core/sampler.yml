@@ -1,6 +1,6 @@
 --- #--------------------------------------------------------------------------
 type: header
-desc: "Intel $Xx Driver APIs for Sampler"
+desc: "Intel $OneApi Level-Zero APIs for Sampler"
 --- #--------------------------------------------------------------------------
 type: enum
 desc: API version of $x_sampler_desc_t

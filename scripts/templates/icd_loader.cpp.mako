@@ -2,9 +2,8 @@
 import re
 from templates import helper as th
 %><%
-    x=context['ns'][0]
-    X=context['ns'][0].upper()
-    Xx=context['ns'][0].title()
+    x=tags['$x']
+    X=x.upper()
 %>/**************************************************************************//**
 * INTEL CONFIDENTIAL  
 * Copyright 2019  
@@ -81,22 +80,22 @@ ${x}_result_t __${x}call ${x}DriverInit(${x}_init_flag_t flags){
 
 %for obj in objects:
 %if re.match(r"function", obj['type']):
-%if not "DriverInit" in th.make_func_name(ns, obj):
+%if not "DriverInit" in th.make_func_name(n, tags, obj):
 %if 'condition' in obj:
-#if ${th.sub(ns,obj['condition'])}
+#if ${th.subt(n, tags, obj['condition'])}
 %endif
-${x}_result_t __${x}call ${th.make_func_name(ns, obj)}(
-        %for line in th.make_param_lines(ns, obj):
+${x}_result_t __${x}call ${th.make_func_name(n, tags, obj)}(
+        %for line in th.make_param_lines(n, tags, obj):
         ${line}
         %endfor
     ){
     if(dispatchTableInitialized == false){
         return ${X}_RESULT_ERROR_UNINITIALIZED;
     }
-    return dispatchTable.${th.make_func_name(ns, obj)}(${th.make_forwarding_param_call_str(ns, obj)});
+    return dispatchTable.${th.make_func_name(n, tags, obj)}(${th.make_param_call_str("", obj)});
 }
 %if 'condition' in obj:
-#endif // ${th.sub(ns,obj['condition'])}
+#endif // ${th.subt(n, tags, obj['condition'])}
 %endif
 %endif
 %endif

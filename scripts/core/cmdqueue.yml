@@ -1,6 +1,6 @@
 --- #--------------------------------------------------------------------------
 type: header
-desc: "Intel $Xx Driver APIs for Command Queue"
+desc: "Intel $OneApi Level-Zero APIs for Command Queue"
 --- #--------------------------------------------------------------------------
 type: enum
 desc: API version of $x_command_queue_desc_t
@@ -27,7 +27,7 @@ etors:
       desc: "command queue is not tied to a physical command queue; driver may dynamically assign based on usage"
     - name: $X_COMMAND_QUEUE_FLAG_SINGLE_SLICE_ONLY
       value: "$X_BIT(2)"
-      desc: "command queue reserves and cannot comsume more than a single slice' 'slice' size is device-specific.  cannot be combined with COPY_ONLY."
+      desc: "command queue reserves and cannot comsume more than a single slice. 'slice' size is device-specific.  cannot be combined with COPY_ONLY."
 --- #--------------------------------------------------------------------------
 type: enum
 desc: "Supported command queue modes"

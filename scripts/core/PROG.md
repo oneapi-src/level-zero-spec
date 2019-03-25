@@ -25,7 +25,7 @@ The following diagram illustrates the hierarchy of devices to the driver:
 @image latex core_driver.png
 
 ${"##"} Driver
-A driver represents an instance of a ${Xx} driver being loaded and initialized into the current process.
+A driver represents an instance of a ${OneApi} driver being loaded and initialized into the current process.
 - Only one instance of a driver per process can be loaded.
 - Multiple calls to ::${x}DriverInit are silently ignored.
 - A driver has minimal global state associated; only that which is sufficient for querying devices recognized by the driver.
@@ -33,7 +33,7 @@ A driver represents an instance of a ${Xx} driver being loaded and initialized i
 - Any global resources acquired during ::${x}DriverInit will be released during process detach.
 
 ${"##"} Device
-A device represents a physical device in the system that can support ${Xx}.
+A device represents a physical device in the system that can support ${OneApi}.
 - More than one device may be available in the system.
 - The driver will only report devices that are recognized by the driver.
 - The application is responsible for sharing memory and explicit submission and synchronization across multiple devices.
@@ -51,12 +51,12 @@ The following sample code demonstrates a basic initialization sequence:
     // Initialize the driver
     ${x}DriverInit(${X}_INIT_FLAG_NONE);
 
-    // Get number of devices supporting ${Xx}
+    // Get number of devices supporting ${OneApi}
     uint32_t deviceCount = 0;
     ${x}DriverGetDeviceCount(&deviceCount);
     if(0 == deviceCount)
     {
-        printf("There is no device supporting ${Xx}!\n");
+        printf("There is no device supporting ${OneApi}!\n");
         return;
     }
 
@@ -76,7 +76,7 @@ The following sample code demonstrates a basic initialization sequence:
 
         if(i == deviceCount)
         {
-            printf("There is no device that supporting ${Xx} version required!\n");
+            printf("There is no device that supporting ${OneApi} version required!\n");
             return;
         }
     }
@@ -907,7 +907,7 @@ The following is sample for code creating a sampler object and passing it as a F
 ```
 
 ${"#"} <a name="oi">OpenCL Interoperability</a>
-Interoperability with OpenCL is currently only supported _from_ OpenCL _to_ ${Xx} for a subset of types.
+Interoperability with OpenCL is currently only supported _from_ OpenCL _to_ ${OneApi} for a subset of types.
 The APIs are designed to be OS agnostics and allow implementations to optimize for unified device drivers;
 while allowing less-optimal interopability across different device types and/or vendors.
 
@@ -917,40 +917,40 @@ There are three OpenCL types that can be shared for interoperability:
 3. **cl_command_queue** - an OpenCL command queue object
 
 ${"##"} cl_mem
-OpenCL buffer objects may be registered for use as an ${Xx} device memory allocation.
-Registering an OpenCL buffer object with ${Xx} merely obtains a pointer to the underlying device memory
+OpenCL buffer objects may be registered for use as an ${OneApi} device memory allocation.
+Registering an OpenCL buffer object with ${OneApi} merely obtains a pointer to the underlying device memory
 allocation and does not alter the lifetime of the device memory underlying the OpenCL buffer object.
-Freeing the ${Xx} device memory allocation effectively "un-registers" the allocation from ${Xx}, 
+Freeing the ${OneApi} device memory allocation effectively "un-registers" the allocation from ${OneApi}, 
 and should be performed before the OpenCL buffer object is destroyed.
-Using the ${Xx} device memory allocation after destroying its associated OpenCL buffer object will
+Using the ${OneApi} device memory allocation after destroying its associated OpenCL buffer object will
 result in undefined behavior.
 
-Applications are responsible for enforcing memory consistency for shared buffer objects using existing OpenCL and/or ${Xx} APIs.
+Applications are responsible for enforcing memory consistency for shared buffer objects using existing OpenCL and/or ${OneApi} APIs.
 
 ${"##"} cl_program
-${Xx} modules are always in a compiled state and therefore prior to retrieving an ::${x}_module_handle_t from
+${OneApi} modules are always in a compiled state and therefore prior to retrieving an ::${x}_module_handle_t from
 a cl_program the caller must ensure the cl_program is compiled and linked.
 
 ${"##"} cl_command_queue
 Sharing OpenCL command queues provide opportunities to minimize transition costs when submitting work from
-an OpenCL queue followed by submitting work to ${Xx} command queue and vice-versa.  Enqueuing ${Xx} command lists
-to ${Xx} command queues are immediately submitted to the device.  OpenCL implementations, however, may not
+an OpenCL queue followed by submitting work to ${OneApi} command queue and vice-versa.  Enqueuing ${OneApi} command lists
+to ${OneApi} command queues are immediately submitted to the device.  OpenCL implementations, however, may not
 necessarily submit tasks to the device unless forced by explicit OpenCL API such as clFlush or clFinish.
 To minimize overhead between sharing command queues, applications must explicitly submit OpenCL command 
-queues using clFlush, clFinish or similar operations prior to enqueuing an ${Xx} command list.
+queues using clFlush, clFinish or similar operations prior to enqueuing an ${OneApi} command list.
 Failing to explicitly submit device work may result in undefined behavior.  
 
 Sharing an OpenCL command queue doesn't alter the lifetime of the API object.  It provides knowledge for the
 driver to potentially reuse some internal resources which may have noticeable overhead when switching the resources.
 
 Memory contents as reflected by any caching schemes will be consistent such that, for example, a memory write
-in an OpenCL command queue can be read by a subsequent ${Xx} command list without any special application action. 
+in an OpenCL command queue can be read by a subsequent ${OneApi} command list without any special application action. 
 The cost to ensure memory consistency may be implementation dependent.  The performance of sharing command queues
 will be no worse than an application submitting work to OpenCL, calling clFinish followed by submitting an
 ::${x} command list.  In most cases, command queue sharing may be much more efficient. 
 
 ${"#"} <a name="ipc">Inter-Process Communication</a>
-The ${Xx} Inter-Process Communication (IPC) APIs allow device memory allocations to be used across processes.
+The ${OneApi} Inter-Process Communication (IPC) APIs allow device memory allocations to be used across processes.
 The following code examples demonstrate how to use the IPC APIs:
 
 1. First, the allocation is made, packaged, and sent on the sending process:
@@ -961,13 +961,13 @@ The following code examples demonstrate how to use the IPC APIs:
     ${x}_ipc_mem_handle_t hIPC;
     ${x}IpcGetMemHandle(hMemAlloc, dptr, &hIPC);
 
-    // Method of sending to receiving process is not defined by ${Xx}:
+    // Method of sending to receiving process is not defined by ${OneApi}:
     send_to_receiving_process(hIPC);
 ```
 
 2. Next, the allocation is received and un-packaged on the receiving process:
 ```c
-    // Method of receiving from sending process is not defined by ${Xx}:
+    // Method of receiving from sending process is not defined by ${OneApi}:
     ${x}_ipc_mem_handle_t hIPC;
     hIPC = receive_from_sending_process();
 

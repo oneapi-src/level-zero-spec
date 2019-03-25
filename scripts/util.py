@@ -64,7 +64,7 @@ def textRead(path):
 """
 def configRead(path):
     if exists(path):
-        parser = configparser.ConfigParser()
+        parser = configparser.ConfigParser(interpolation=configparser.ExtendedInterpolation())
         parser.read(path)
         return parser
     else:

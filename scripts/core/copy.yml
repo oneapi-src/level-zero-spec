@@ -1,6 +1,6 @@
 --- #--------------------------------------------------------------------------
 type: header
-desc: "Intel $Xx Driver APIs for Copies"
+desc: "Intel $OneApi Level-Zero APIs for Copies"
 --- #--------------------------------------------------------------------------
 type: function
 desc: "Copies host, device, or shared memory."

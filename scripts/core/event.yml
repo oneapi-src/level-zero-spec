@@ -1,6 +1,6 @@
 --- #--------------------------------------------------------------------------
 type: header
-desc: "Intel $Xx Driver APIs for Event"
+desc: "Intel $OneApi Level-Zero APIs for Event"
 --- #--------------------------------------------------------------------------
 type: enum
 desc: "API version of $x_event_desc_t"

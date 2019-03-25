@@ -1,9 +1,8 @@
 <%
 import re
 %><%
-    x=context['ns'][0]
-    X=context['ns'][0].upper()
-    Xx=context['ns'][0].title()
+    n=namespace
+    N=n.upper()
 %>/**************************************************************************//**
 *
 * INTEL CONFIDENTIAL
@@ -26,15 +25,15 @@ import re
 * or otherwise. Any license under such intellectual property rights must be
 * express and approved by Intel in writing.
 *
-* @file ${x}_all.h
+* @file ${n}_all.h
 *
 * @cond DEV
 * DO NOT EDIT: generated from /scripts/templates/api_all.h.mako
 * @endcond
 *
 ******************************************************************************/
-#ifndef _${X}_ALL_H
-#define _${X}_ALL_H
+#ifndef _${N}_ALL_H
+#define _${N}_ALL_H
 #if defined(__cplusplus)
 #pragma once
 #endif
@@ -45,4 +44,4 @@ import re
 %endif
 %endfor
 
-#endif // _${X}_ALL_H
+#endif // _${N}_ALL_H

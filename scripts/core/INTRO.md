@@ -96,7 +96,7 @@ The following naming convention is followed in order to avoid conflicts within t
 - all structure members and function parameters use camel case convention
 - all function input parameters precede output parameters
 
-Note: "${Xx}" is a placeholder until One-API branding is decided.
+Note: "${OneApi}" is a placeholder until One-API branding is decided.
 ## --validate=on
 
 ${"##"} Terminology

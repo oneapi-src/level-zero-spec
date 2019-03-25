@@ -83,11 +83,8 @@ Entry-point:
     Reads each YML file and extracts data
     Returns list of data per file
 """
-def parse(path):
+def parse(path, meta = {'class':{}}):
     specs = []
-    meta = {
-        'class' : {}
-    }
     for f in util.findFiles(path, "*.yml"):
         print("Parsing %s..."%f)
         docs = util.yamlRead(f)
@@ -111,9 +108,6 @@ def parse(path):
         })
 
     print("Parsed %s files and found:"%len(specs))
-    print(" - %s classes"%len(meta['class']))
-    print(" - %s functions"%len(meta['function']))
-    print(" - %s structs"%len(meta['struct']))
-    print(" - %s enums"%len(meta['enum']))
-    print(" - %s macros\n"%len(meta['macro']))
+    for key in meta:
+        print(" - %s %s(s)"%(len(meta[key]),key))
     return specs, meta

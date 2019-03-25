@@ -1,6 +1,6 @@
 --- #--------------------------------------------------------------------------
 type: header
-desc: "Intel $Xx Driver APIs for Command List"
+desc: "Intel $OneApi Level-Zero APIs for Command List"
 --- #--------------------------------------------------------------------------
 type: enum
 desc: "API version of $x_command_list_desc_t"

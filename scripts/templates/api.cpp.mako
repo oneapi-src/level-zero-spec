@@ -2,9 +2,11 @@
 import re
 from templates import helper as th
 %><%
-    x=context['ns'][0]
-    X=context['ns'][0].upper()
-    Xx=context['ns'][0].title()
+    n=namespace
+    N=n.upper()
+
+    x=tags['$x']
+    X=x.upper()
 %>/**************************************************************************//**
 * INTEL CONFIDENTIAL  
 * Copyright 2019  
@@ -28,19 +30,19 @@ from templates import helper as th
 * express and approved by Intel in writing.  
 * @endcond
 *
-* @file ${x}_${name}.cpp
+* @file ${n}_${name}.cpp
 *
-* @brief ${th.sub(ns, header['desc'])}
+* @brief ${th.subt(n, tags, header['desc'])}
 *
 * DO NOT EDIT: generated from /scripts/${section}/${name}.yml
 *
 ******************************************************************************/
-#if defined(${X}_CPP)
-#include "../include/${x}_${name}.hpp"
+#if defined(${N}_CPP)
+#include "../include/${n}_${name}.hpp"
 #else
-#include "../include/${x}_${name}.h"
+#include "../include/${n}_${name}.h"
 #endif
-#if !defined(${X}_NULLDRV)
+#if !defined(${N}_NULLDRV)
 #include "${name}.h"
 #endif
 
@@ -51,24 +53,24 @@ from templates import helper as th
 %if re.match(r"function", obj['type']):
 ///////////////////////////////////////////////////////////////////////////////
 %if 'condition' in obj:
-#if ${th.sub(ns, obj['condition'])}
+#if ${th.subt(n, tags, obj['condition'])}
 %endif
-%for line in th.make_desc_lines(ns, obj):
+%for line in th.make_desc_lines(n, tags, obj):
 /// ${line}
 %endfor
-%for line in th.make_details_lines(ns, obj):
+%for line in th.make_details_lines(n, tags, obj):
 /// ${line}
 %endfor
 /// 
-%for line in th.make_returns_lines(ns, obj):
+%for line in th.make_returns_lines(n, tags, obj):
 /// ${line}
 %endfor
 ///
 /// @hash {${obj['hash']}}
 ///
 __${x}dllexport ${x}_result_t __${x}call
-${th.make_func_name(ns, obj)}(
-    %for line in th.make_param_lines(ns, obj):
+${th.make_func_name(n, tags, obj)}(
+    %for line in th.make_param_lines(n, tags, obj):
     ${line}
     %endfor
     )
@@ -77,11 +79,11 @@ ${th.make_func_name(ns, obj)}(
     {
         //if( ${X}_DRIVER_PARAMETER_VALIDATION_LEVEL >= 0 )
         {
-            %if not re.match(r".*Driver", th.make_func_name(ns, obj)):
+            %if not re.match(r".*Driver", th.make_func_name(n, tags, obj)):
             // if( nullptr == driver ) return ${X}_RESULT_ERROR_UNINITIALIZED;
             %endif
             // Check parameters
-            %for key, values in th.make_param_checks(ns, obj).items():
+            %for key, values in th.make_param_checks(n, tags, obj).items():
             %for val in values:
             if( ${val} ) return ${key};
             %endfor
@@ -91,7 +93,7 @@ ${th.make_func_name(ns, obj)}(
 #if defined(XE_NULLDRV)
         return ${X}_RESULT_SUCCESS;
 #else
-        return L0::${th.make_obj_accessor(ns, obj)}
+        return L0::${th.make_obj_accessor(tags, obj)}
 #endif
         /// @end
     }
@@ -110,7 +112,7 @@ ${th.make_func_name(ns, obj)}(
     }
 }
 %if 'condition' in obj:
-#endif // ${th.sub(ns, obj['condition'])}
+#endif // ${th.subt(n, tags, obj['condition'])}
 %endif
 
 %endif
