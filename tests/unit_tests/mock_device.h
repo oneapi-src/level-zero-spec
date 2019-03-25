@@ -46,8 +46,8 @@ struct Mock<Device> : public Device {
                                           size_t size));
     MOCK_METHOD1(getApiVersion, xe_result_t(xe_api_version_t *version));
     MOCK_METHOD1(getComputeProperties, xe_result_t(xe_device_compute_properties_t *pComputeProperties));
-    MOCK_METHOD2(getLinkProperties, xe_result_t(xe_device_handle_t hPeerDevice,
-                                                xe_device_link_properties_t *pLinkProperties));
+    MOCK_METHOD2(getP2PProperties, xe_result_t(xe_device_handle_t hPeerDevice,
+                                                xe_device_p2p_properties_t *pP2PProperties));
     MOCK_METHOD1(getMemoryProperties, xe_result_t(xe_device_memory_properties_t *pMemProperties));
     MOCK_METHOD1(getProperties, xe_result_t(xe_device_properties_t *pDeviceProperties));
     MOCK_METHOD2(getSubDevice, xe_result_t(uint32_t ordinal,

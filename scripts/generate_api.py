@@ -5,12 +5,16 @@ import util
 """
     generates the CMakeLists file for the list of files
 """
-def generate_cmake(path, namespace, files):
-    fin = os.path.join("templates", "CMakeLists.txt.mako")
+def generate_cmake(path, type):
+    fin = os.path.join("templates", "CMakeLists%s.mako"%type)
     fout = os.path.join(path, "CMakeLists.txt")
+    files=[]
+    files.extend([os.path.basename(f) for f in util.findFiles(path, "*.h")])
+    files.extend([os.path.basename(f) for f in util.findFiles(path, "*.inl")])
+    files.extend([os.path.basename(f) for f in util.findFiles(path, "*.cpp")])
+    files.sort()
     return util.makoWrite(
         fin, fout,
-        name=namespace,
         files=files)
 
 """
@@ -23,16 +27,14 @@ def generate_code(path, section, namespace, specs, meta, type):
 
     files = []
     for s in specs:
-        filename = "%s_%s%s"%(namespace, s['name'], type)
+        filename = "%s_%s%s"%(namespace[0], s['name'], type)
         files.append(filename)
         fout = os.path.join(path, filename)
 
         print("Generating %s..."%fout)
         loc += util.makoWrite(
             fin, fout,
-            x=namespace,
-            X=namespace.upper(),
-            Xx=namespace.title(),
+            ns=namespace,
             name = s['name'],
             header = s['header'],
             objects = s['objects'],
@@ -48,14 +50,12 @@ def generate_include_all(path, namespace, files, type):
     template = "api_all%s.mako"%type
     fin = os.path.join("templates", template)
 
-    filename = "%s_all%s"%(namespace,type)
+    filename = "%s_all%s"%(namespace[0],type)
     fout = os.path.join(path, filename)
 
     return util.makoWrite(
         fin, fout,
-        x=namespace,
-        X=namespace.upper(),
-        Xx=namespace.title(),
+        ns=namespace,
         files=files)
 
 """
@@ -75,7 +75,7 @@ def generate_cpp_include(path, namespace, specs, meta):
     hloc += generate_include_all(cpp_path, namespace, hfiles, ".h")
     hpploc += generate_include_all(cpp_path, namespace, hppfiles + inlfiles, ".hpp")
 
-    #generate_cmake(cpp_path, namespace, hfiles + hppfiles + inlfiles)
+    generate_cmake(cpp_path, ".h")
     return hloc + hpploc + inlloc
 
 """
@@ -84,10 +84,10 @@ def generate_cpp_include(path, namespace, specs, meta):
 def generate_cpp_source(path, namespace, specs, meta):
     cpp_path = os.path.join(path, "source")
     util.makePath(cpp_path)
-    #util.removeFiles(cpp_path, "*.cpp")
+    util.removeFiles(cpp_path, "%s_*.cpp"%namespace[0])
 
     loc, files = generate_code(cpp_path, os.path.basename(path), namespace, specs, meta, ".cpp")
-    #generate_cmake(cpp_path, namespace, files)
+    generate_cmake(cpp_path, ".cpp")
     return loc
 
 """

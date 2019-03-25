@@ -3,10 +3,11 @@ import re
 import util
 
 """
+Entry-point:
     generates icd loader for level_zero driver
 """
-def generate_icd_loader(outPath, namespace, specs, meta):
-    loader_path = outPath
+def generate(namespace, specs, meta):
+    loader_path = "../icd_loader"
     util.makePath(loader_path)
     util.removeFiles(loader_path, "*.h")
 
@@ -23,9 +24,7 @@ def generate_icd_loader(outPath, namespace, specs, meta):
     loc += util.makoWrite(
         os.path.join("templates", "icd_loader.h.mako"),
         os.path.join(loader_path, "icd_loader.h"),
-        x=namespace,
-        X=namespace.upper(),
-        Xx=namespace.title(),
+        ns=namespace,
         name = mergedSpec['name'],
         header = mergedSpec['header'],
         objects = mergedSpec['objects'])
@@ -34,9 +33,7 @@ def generate_icd_loader(outPath, namespace, specs, meta):
     loc += util.makoWrite(
         os.path.join("templates", "icd_loader.cpp.mako"),
         os.path.join(loader_path, "icd_loader.cpp"),
-        x=namespace,
-        X=namespace.upper(),
-        Xx=namespace.title(),
+        ns=namespace,
         name = mergedSpec['name'],
         header = mergedSpec['header'],
         objects = mergedSpec['objects'])

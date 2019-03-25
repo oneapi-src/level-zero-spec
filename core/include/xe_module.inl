@@ -90,12 +90,14 @@ namespace xe
     /// @details
     ///     - This function may be called from simultaneous threads.
     ///     - The implementation of this function should be lock-free.
+    ///     - The caller must provide memory for build log.
+    ///     - The caller can pass nullptr for pBuildLog when querying only for size.
     /// 
     /// @throws result_t
     inline void 
     Module::GetString(
         size_t* pSize,                                  ///< [in,out] size of build log string.
-        char** pBuildLog                                ///< [in,out][optional] pointer to null-terminated string of the log.
+        char* pBuildLog                                 ///< [in,out][optional] pointer to null-terminated string of the log.
         )
     {
         // auto result = ::xeModuleBuildLogGetString( handle, pSize, pBuildLog );
@@ -108,9 +110,11 @@ namespace xe
     /// @details
     ///     - This function may be called from simultaneous threads.
     ///     - The implementation of this function should be lock-free.
+    ///     - The caller can pass nullptr for pModuleNativeBinary when querying only
+    ///       for size.
+    ///     - The implementation will copy the native binary into a buffer supplied
+    ///       by the caller.
     ///     - The memory for the native binary output is associated with the module.
-    ///       The output pointer should not be accessed after a module has been
-    ///       destroyed.
     ///     - The native binary output can be cached to disk and new modules can be
     ///       later constructed from the cached copy.
     ///     - The native binary will retain debugging information that is associated
@@ -119,12 +123,32 @@ namespace xe
     /// @throws result_t
     inline void 
     Module::GetNativeBinary(
-        size_t* pSize,                                  ///< [in,out] size of native binary.
-        void** pModuleNativeBinary                      ///< [in,out][optional] pointer to native binary
+        size_t* pSize,                                  ///< [in,out] size of native binary in bytes.
+        uint8_t* pModuleNativeBinary                    ///< [in,out][optional] byte pointer to native binary
         )
     {
         // auto result = ::xeModuleGetNativeBinary( handle, pSize, pModuleNativeBinary );
         // if( ::XE_RESULT_SUCCESS != result ) throw exception(result, "xe::Module::GetNativeBinary");
+    }
+
+    ///////////////////////////////////////////////////////////////////////////////
+    /// @brief C++ wrapper for ::xeModuleGetGlobalPointer
+    /// 
+    /// @details
+    ///     - This function may be called from simultaneous threads.
+    ///     - The implementation of this function should be lock-free.
+    /// 
+    /// @returns
+    ///     - void*: device visible pointer
+    /// 
+    /// @throws result_t
+    inline void* 
+    Module::GetGlobalPointer(
+        const char* pGlobalName                         ///< [in] name of function in global
+        )
+    {
+        // auto result = ::xeModuleGetGlobalPointer( handle, pGlobalName );
+        // if( ::XE_RESULT_SUCCESS != result ) throw exception(result, "xe::Module::GetGlobalPointer");
     }
 
     ///////////////////////////////////////////////////////////////////////////////

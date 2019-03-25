@@ -5,7 +5,7 @@
 namespace L0 {
 
 struct Driver {
-    virtual xe_result_t getDevice(xe_device_uuid_t *uniqueId,
+    virtual xe_result_t getDevice(const xe_device_uuid_t *uniqueId,
                                   xe_device_handle_t *phDevice) = 0;
     virtual xe_result_t getDeviceCount(uint32_t *count) = 0;
     virtual xe_result_t getDeviceUniqueIds(uint32_t count,

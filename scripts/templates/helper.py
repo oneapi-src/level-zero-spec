@@ -1,22 +1,39 @@
 import re
 
 """
-    substitues $x variations with repl in string
-    if repl is None, then remove $x and any following '_'
-    if tag = True, then insert doxygen '::' tags at beginning (for autogen links)
+    substitues $tag variations with repl in string
+    if repl is None, then remove $tag and any following '_'
+    if doxy = True, then insert doxygen '::' notation at beginning (for autogen links)
 """
-def subx(repl, string, tag=False):
+def _sub(tag, repl, string, doxy):
     if repl:
-        string = re.sub(r"\$Xx", repl.title(), string)
-        string = re.sub(r"\-\$x", "-"+repl, string) #hack
-        repl = "::"+repl if tag else repl
-        string = re.sub(r"\$x", repl, string)
-        string = re.sub(r"\$X", repl.upper(), string)
+        string = re.sub(r"\$%s%s"%(tag.upper(), tag), repl.title(), string)
+        string = re.sub(r"\-\$%s"%tag, "-"+repl, string) #hack
+        repl = "::"+repl if doxy else repl
+        string = re.sub(r"\$%s"%tag, repl, string)
+        string = re.sub(r"\$%s"%tag.upper(), repl.upper(), string)
     else:
-        string = re.sub(r"\-\$x_?", "-", string) #hack
-        repl = "::" if tag else ""
-        string = re.sub(r"\$x_?", repl, string)
-        string = re.sub(r"\$X_", repl.upper(), string)
+        string = re.sub(r"\-\$%s_?"%tag, "-", string) #hack
+        repl = "::" if doxy else ""
+        string = re.sub(r"\$%s_?"%tag, repl, string)
+        string = re.sub(r"\$%s_"%tag.upper(), repl.upper(), string)
+    return string
+
+"""
+    substitues $tag variations with namespace in string
+    if namespace is None, then remove $tag and any following '_'
+    if doxy = True, then insert doxygen '::' notation at beginning (for autogen links)
+"""
+def sub(namespace, string, doxy=False):
+    if namespace:
+        string = _sub("x", namespace[0], string, doxy)
+    else:
+        string = _sub("x", None, string, doxy)
+
+    if namespace and len(namespace) > 1:
+        string = _sub("y", namespace[1], string, doxy)
+    else:
+        string = _sub("y", None, string, doxy)
     return string
 
 """
@@ -103,44 +120,44 @@ def get_typename(name, meta, type):
 """
     returns proper name of etor
 """
-def make_etor_name(repl, enum, etor, trim):
+def make_etor_name(namespace, enum, etor, trim):
     if trim:
-        prefix = re.sub(r"(\w+)_t", r"\1", subx(repl, enum)).upper()
-        name = re.sub(r"%s_(\w+)"%prefix, r"\1", subx(repl, etor))
+        prefix = re.sub(r"(\w+)_t", r"\1", sub(namespace, enum)).upper()
+        name = re.sub(r"%s_(\w+)"%prefix, r"\1", sub(namespace, etor))
         name = re.sub(r"^(\d+\w+)", r"_\1", name) #todo: .lower()?
     else:
-        name = subx(repl, etor)
+        name = sub(namespace, etor)
     return name
 
 """
     returns proper name of value
 """
-def make_value_name(repl, altrepl, value, meta, trim=False):
+def make_value_name(namespace, alt_namespace, value, meta, trim=False):
     macro = get_typename(value, meta, 'macro')
     enum = get_typename(value, meta, 'enum')
     if macro:
-        value = subx(altrepl, value)
+        value = sub(alt_namespace, value)
     elif enum:
-        value = "%s::%s"%(subx(repl, enum), make_etor_name(repl, enum, value, trim))
+        value = "%s::%s"%(sub(namespace, enum), make_etor_name(namespace, enum, value, trim))
     else:
-        value = subx(repl, value)
+        value = sub(namespace, value)
     return value
 
 """
     returns a list of strings for each enumerator in an enumeration
 """
-def make_etor_lines(repl, obj, cpp=False, altrepl="", meta=None):
+def make_etor_lines(namespace, obj, cpp=False, alt_namespace=[""], meta=None):
     lines = []
     for item in obj['etors']:
-        name = make_etor_name(repl, obj['name'], item['name'], cpp)
+        name = make_etor_name(namespace, obj['name'], item['name'], cpp)
 
         if 'value' in item:
-            value = make_value_name(repl, altrepl, item['value'], meta, cpp)
+            value = make_value_name(namespace, alt_namespace, item['value'], meta, cpp)
             prologue = "%s = %s,"%(name, value)
         else:
             prologue = "%s,"%(name)
 
-        for line in split_line(subx(repl, item['desc'], True), 70):
+        for line in split_line(sub(namespace, item['desc'], True), 70):
             lines.append("%s///< %s"%(append_ws(prologue, 48), line))
             prologue = ""
     return lines
@@ -148,25 +165,25 @@ def make_etor_lines(repl, obj, cpp=False, altrepl="", meta=None):
 """
     returns a list of strings for each member of a structure or class
 """
-def make_member_lines(repl, obj, cpp=False, altrepl="", meta=None):
+def make_member_lines(namespace, obj, cpp=False, alt_namespace=[""], meta=None):
     lines = []
     if 'members' not in obj:
         return lines
 
     for item in obj['members']:
         if cpp:
-            name = make_value_name(repl, altrepl, item['name'], meta)
+            name = make_value_name(namespace, alt_namespace, item['name'], meta)
         else:
-            name = subx(repl, item['name'])
-        type = subx(repl, item['type'])
+            name = sub(namespace, item['name'])
+        type = sub(namespace, item['type'])
 
         if cpp and 'init' in item:
-            value = make_value_name(repl, altrepl, item['init'], meta, True)
+            value = make_value_name(namespace, alt_namespace, item['init'], meta, True)
             prologue = "%s %s = %s;"%(type, name, value)
         else:
             prologue = "%s %s;"%(type, name)
 
-        for line in split_line(subx(repl, item['desc'], True), 70):
+        for line in split_line(sub(namespace, item['desc'], True), 70):
             lines.append("%s///< %s"%(append_ws(prologue, 48), line))
             prologue = ""
     return lines
@@ -174,13 +191,13 @@ def make_member_lines(repl, obj, cpp=False, altrepl="", meta=None):
 """
     returns a list of strings for each member of a class
 """
-def make_member_function_lines(repl, obj):
+def make_member_function_lines(namespace, obj):
     lines = []
     if 'members' not in obj:
         return lines
 
     for item in obj['members']:
-        name = subx(repl, item['name'])
+        name = sub(namespace, item['name'])
         lines.append("auto get%s( void ) const { return %s; }"%(name.title(), name))
     return lines
 
@@ -199,7 +216,7 @@ def filter_param_list(params, in_or_out):
 """
     returns a list of strings for each parameter of a function
 """
-def make_param_lines(repl, obj, cpp=False):
+def make_param_lines(namespace, obj, cpp=False):
     lines = []
 
     if cpp:
@@ -212,15 +229,15 @@ def make_param_lines(repl, obj, cpp=False):
         params = obj['params']
 
     for i, item in enumerate(params):
-        name = subx(repl, item['name'])
-        type = subx(repl, item['type'])
+        name = sub(namespace, item['name'])
+        type = sub(namespace, item['type'])
 
         if i < len(params)-1:
             prologue = "%s %s,"%(type, name)
         else:
             prologue = "%s %s"%(type, name)
 
-        for line in split_line(subx(repl, item['desc'], True), 70):
+        for line in split_line(sub(namespace, item['desc'], True), 70):
             lines.append("%s///< %s"%(append_ws(prologue, 48), line))
             prologue = ""
 
@@ -232,7 +249,7 @@ def make_param_lines(repl, obj, cpp=False):
 """
     returns a string of parameter names for passing to a function
 """
-def make_param_call_str(prologue, repl, obj, cpp=False):
+def make_param_call_str(prologue, namespace, obj, cpp=False):
     if cpp:
         if 'decl' in obj and re.match(r"static", obj['decl']):
             params = filter_param_list(obj['params'], "in")
@@ -254,16 +271,16 @@ def make_param_call_str(prologue, repl, obj, cpp=False):
 """
     returns a string of parameter names for forwarding to a function
 """
-def make_forwarding_param_call_str(repl, obj):
+def make_forwarding_param_call_str(namespace, obj):
     return ", ".join([item['name'] for item in obj['params']])
 
 """
     returns a list of strings for the description
 """
-def make_desc_lines(repl, obj):
+def make_desc_lines(namespace, obj):
     lines = []
     prologue = "@brief"
-    for line in split_line(subx(repl, obj['desc'], True), 70):
+    for line in split_line(sub(namespace, obj['desc'], True), 70):
         lines.append("%s %s"%(prologue, line))
         prologue = "      "
     return lines
@@ -271,7 +288,7 @@ def make_desc_lines(repl, obj):
 """
     returns a list of strings for the detailed description
 """
-def make_details_lines(repl, obj):
+def make_details_lines(namespace, obj):
     lines = []
     if 'details' in obj:
         lines.append("")
@@ -281,17 +298,17 @@ def make_details_lines(repl, obj):
             if isinstance(item, dict):
                 for key, values in item.items():
                     prologue = "    -"
-                    for line in split_line(subx(repl, key, True), 70):
+                    for line in split_line(sub(namespace, key, True), 70):
                         lines.append("%s %s"%(prologue, line))
                         prologue = "     "
                     for val in values:
                         prologue = "        +"
-                        for line in split_line(subx(repl, val, True), 66):
+                        for line in split_line(sub(namespace, val, True), 66):
                             lines.append("%s %s"%(prologue, line))
                             prologue = "         "
             else:
                 prologue = "    -"
-                for line in split_line(subx(repl, item, True), 70):
+                for line in split_line(sub(namespace, item, True), 70):
                         lines.append("%s %s"%(prologue, line))
                         prologue = "     "
     if 'analogue' in obj:
@@ -305,59 +322,59 @@ def make_details_lines(repl, obj):
 """
     returns a dict of auto-generated parameter validation checks
 """
-def make_param_checks(repl, obj, tag=False):
+def make_param_checks(namespace, obj, doxy=False):
     checks = {}
-    eip = subx(repl, "$X_RESULT_ERROR_INVALID_PARAMETER", tag)
-    eus = subx(repl, "$X_RESULT_ERROR_UNSUPPORTED", tag)
+    eip = sub(namespace, "$X_RESULT_ERROR_INVALID_PARAMETER", doxy)
+    eus = sub(namespace, "$X_RESULT_ERROR_UNSUPPORTED", doxy)
     checks[eip] = []
     checks[eus] = []
 
     for item in obj['params']:
         if not re.match(r".*\[optional\].*", item['desc']): #skip optional params
             if re.match(r".*\w+\*+", item['type']): # pointer-type
-                checks[eip].append("nullptr == %s"%subx(repl, item['name'], tag))
+                checks[eip].append("nullptr == %s"%sub(namespace, item['name'], doxy))
             elif re.match(r".*handle_t.*", item['type']): # handle-type
-                checks[eip].append("nullptr == %s"%subx(repl, item['name'], tag))
+                checks[eip].append("nullptr == %s"%sub(namespace, item['name'], doxy))
 
             if re.match(r".*desc_t.*", item['type']): # descriptor-type
-                checks[eus].append("%s < %s->version"%(re.sub(r"\w*\s*(.*)_t.*", r"\1_VERSION_CURRENT", subx(repl, item['type'], tag)).upper(), item['name']))
+                checks[eus].append("%s < %s->version"%(re.sub(r"\w*\s*(.*)_t.*", r"\1_VERSION_CURRENT", sub(namespace, item['type'], doxy)).upper(), item['name']))
     return checks
 
 """
     returns a list of strings for possible return values
 """
-def make_returns_lines(repl, obj, cpp=False):
+def make_returns_lines(namespace, obj, cpp=False):
     lines = []
     if cpp:
         params = filter_param_list(obj['params'], "out")
         if len(params) > 0:
             lines.append("@returns")
             for p in params:
-                lines.append("    - %s"%subx(repl, re.sub(r"(.*)\*", r"\1:%s"%re.sub(r"\[.*\](.*)", r"\1", p['desc']), p['type'])))
+                lines.append("    - %s"%sub(namespace, re.sub(r"(.*)\*", r"\1:%s"%re.sub(r"\[.*\](.*)", r"\1", p['desc']), p['type'])))
             lines.append("")
         lines.append("@throws result_t")
         return lines
 
     lines.append("@returns")
-    lines.append("    - %s"%subx(repl, "$X_RESULT_SUCCESS", True))
-    lines.append("    - %s"%subx(repl, "$X_RESULT_ERROR_UNINITIALIZED", True))
-    lines.append("    - %s"%subx(repl, "$X_RESULT_ERROR_DEVICE_LOST", True))
+    lines.append("    - %s"%sub(namespace, "$X_RESULT_SUCCESS", True))
+    lines.append("    - %s"%sub(namespace, "$X_RESULT_ERROR_UNINITIALIZED", True))
+    lines.append("    - %s"%sub(namespace, "$X_RESULT_ERROR_DEVICE_LOST", True))
 
     # generate default checks
-    gen = make_param_checks(repl, obj, True)
+    gen = make_param_checks(namespace, obj, True)
 
     # merge user-specified values
     if 'returns' in obj:
         for item in obj['returns']:
             if isinstance(item, dict):
                 for key, values in item.items():
-                    key = subx(repl, key, True)
+                    key = sub(namespace, key, True)
                     if key not in gen:
                         gen[key] = []
                     for val in values:
-                        gen[key].append(subx(repl, val, True))
+                        gen[key].append(sub(namespace, val, True))
             else:
-                key = subx(repl, item, True)
+                key = sub(namespace, item, True)
                 if key not in gen:
                     gen[key] = []
 
@@ -369,8 +386,9 @@ def make_returns_lines(repl, obj, cpp=False):
     return lines
 
 """
+    returns string for declaring function return type
 """
-def make_return_value(repl, obj, cpp=False):
+def make_return_value(namespace, obj, cpp=False):
     if cpp and 'decl' in obj:
         decl = "%s "%obj['decl']
     else:
@@ -382,7 +400,7 @@ def make_return_value(repl, obj, cpp=False):
 
     types = []
     for p in params:
-        types.append(subx(repl, re.sub(r"(.*)\*", r"\1", p['type'])))
+        types.append(sub(namespace, re.sub(r"(.*)\*", r"\1", p['type'])))
 
     if len(types) > 1:
         return decl+"std::tuple<%s>"%", ".join(types)
@@ -392,17 +410,17 @@ def make_return_value(repl, obj, cpp=False):
 """
     returns the name of a function
 """
-def make_func_name(repl, obj, cpp=False):
+def make_func_name(namespace, obj, cpp=False):
     if not cpp and 'class' in obj:
         cls = obj['class']
     else:
         cls = ""
-    return subx(repl, "%s%s"%(cls, obj['name']))
+    return sub(namespace, "%s%s"%(cls, obj['name']))
 
 """
     returns a single-line driver function call
 """
-def make_obj_accessor(repl, obj):
+def make_obj_accessor(namespace, obj):
     method = obj['name']
 
     if 'class' in obj:
@@ -417,26 +435,26 @@ def make_obj_accessor(repl, obj):
 
     noobject = decl_type == "static"
     if noobject:
-        method = subx("", cls) + method
+        method = sub([""], cls) + method
 
     singleton = decl_type == "singleton"
     method = method[0].lower() + method[1:]
     if noobject:
-        str = subx("", "%s("%(method))
+        str = sub([""], "%s("%(method))
         str += make_param_call_str("", "", obj)
     elif singleton:
-        str = subx("", "%s::get()->%s("%(cls, method))
+        str = sub([""], "%s::get()->%s("%(cls, method))
         str += make_param_call_str("", "", obj)
     else:
         params = obj['params']
-        str = subx("", "%s::fromHandle("%cls)
+        str = sub([""], "%s::fromHandle("%cls)
         argStr=""
         lastArg=""
         calledMethod=False
         for item in params:
             if len(lastArg) == 0:
                 #First must match class name
-                if item['name'] == subx("h",cls):
+                if item['name'] == sub(["h"],cls):
                     str += item['name'] + ")->" + method + "("
                     calledMethod=True
                 elif item.get('class',"") == "":

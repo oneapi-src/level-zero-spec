@@ -99,7 +99,13 @@ device is a sub-device and to query the id. This is useful when needing to pass 
 handle to another library.
 
 To allocate memory and dispatch tasks to a particular sub-device then obtain the sub-device
-handle and use this with memory and command queue/lists APIs. One thing to note is that the ordinal
+handle and use this with memory and command queue/lists APIs. Local memory allocation will be placed
+in the local memory that is attached to the sub-device. An out-of-memory error indicates
+that there is not enough local sub-device memory for the allocation. The driver will not try and spill
+sub-device allocations over to another sub-device's local memory. However, the application can retry using the
+parent device and the driver will decide where to place the allocation.
+
+One thing to note is that the ordinal
 that is used when creating a command queue is relative to the sub-device. This ordinal specifies which
 physical compute queue on the device or sub-device to map the logical queue to. You need to query
 ::${x}_device_properties_t.numAsyncComputeEngines from the sub-device to determine how to set this ordinal.
@@ -701,7 +707,7 @@ The ::${x}DeviceCreateModule function can optionally generate a build log object
         ${x}ModuleBuildLogGetString(buildlog, &szLog, nullptr);
         
         char_t* strLog = (char_t*)malloc(szLog);
-        ${x}ModuleBuildLogGetString(buildlog, &szLog, &strLog);
+        ${x}ModuleBuildLogGetString(buildlog, &szLog, strLog);
 
         // Save log to disk.
         ...
@@ -726,10 +732,10 @@ responsibility of the application to implement this using ::${x}ModuleGetNativeB
         size_t szBinary = 0;
         ${x}ModuleGetNativeBinary(hModule, &szBinary, nullptr);
 
-        void* pBinary = malloc(szBinary);
-        ${x}ModuleGetNativeBinary(hModule, &szBinary, &pBinary);
+        uint8_t* pBinary = malloc(szBinary);
+        ${x}ModuleGetNativeBinary(hModule, &szBinary, pBinary);
 
-        // cache pNativeBinary for corresponding IL
+        // cache pBinary for corresponding IL
         ...
 
         free(pBinary);

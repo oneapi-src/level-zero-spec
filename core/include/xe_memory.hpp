@@ -158,7 +158,7 @@ namespace xe
     /// @details
     ///     - A host allocation is owned by the host process.
     ///     - Host allocations are accessible by the host and all devices.
-    ///     - Host allocations are frequently used a staging areas to transfer data
+    ///     - Host allocations are frequently used as staging areas to transfer data
     ///       to or from devices.
     ///     - The application may call this function from simultaneous threads.
     ///     - The implementation of this function should be lock-free.
@@ -202,6 +202,14 @@ namespace xe
         );
 
     ///////////////////////////////////////////////////////////////////////////////
+    /// @brief API version of ::memory_allocation_properties_t
+    enum class memory_allocation_properties_version_t
+    {
+        CURRENT = XE_MAKE_VERSION( 1, 0 ),              ///< version 1.0
+
+    };
+
+    ///////////////////////////////////////////////////////////////////////////////
     /// @brief Memory allocation type
     enum class memory_type_t
     {
@@ -213,15 +221,17 @@ namespace xe
     };
 
     ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Supported memory allocation query properties
-    enum class memory_property_t
+    /// @brief Memory allocation properties queried using ::MemGetProperties
+    struct memory_allocation_properties_t
     {
-        TYPE = 0,                                       ///< returns the type of allocated memory, see ::memory_type_t
+        memory_allocation_properties_version_t version = memory_allocation_properties_version_t::CURRENT;   ///< [in] ::MEMORY_ALLOCATION_PROPERTIES_VERSION_CURRENT
+        memory_type_t type;                             ///< [out] Type of allocated memory
+        uint64_t id;                                    ///< [out] Identifier for this allocation
 
     };
 
     ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Retrieves a property of an allocation
+    /// @brief Retrieves attributes of a memory allocation
     /// 
     /// @details
     ///     - The application may call this function from simultaneous threads.
@@ -232,14 +242,13 @@ namespace xe
     ///     - **cuPointerGetAttribute**
     /// 
     /// @returns
-    ///     - uint32_t: Value of the queried property
+    ///     - memory_allocation_properties_t: Query result for memory allocation properties
     /// 
     /// @throws result_t
-    inline uint32_t
-    MemGetProperty(
+    inline memory_allocation_properties_t
+    MemGetProperties(
         mem_allocator_handle_t hMemAllocHandle,         ///< [in] handle of memory allocator for this allocation
-        const void* ptr,                                ///< [in] Pointer to query
-        memory_property_t property                      ///< [in] Property of the allocation to query
+        const void* ptr                                 ///< [in] Pointer to query
         );
 
     ///////////////////////////////////////////////////////////////////////////////

@@ -125,13 +125,13 @@ xe_result_t ModuleImp::createFunction(const xe_function_desc_t *desc, xe_functio
     return XE_RESULT_SUCCESS;
 }
 
-xe_result_t ModuleImp::getNativeBinary(size_t *pSize, void **pModuleNativeBinary) {
+xe_result_t ModuleImp::getNativeBinary(size_t *pSize, uint8_t *pModuleNativeBinary) {
     size_t genBinarySize = 0;
     char *genBinary = this->progRT->getGenBinary(genBinarySize);
 
     *pSize = genBinarySize;
-    if (pModuleNativeBinary != nullptr && *pModuleNativeBinary != nullptr) {
-        memcpy(*pModuleNativeBinary, genBinary, genBinarySize);
+    if (pModuleNativeBinary != nullptr) {
+        memcpy(pModuleNativeBinary, genBinary, genBinarySize);
     }
     return XE_RESULT_SUCCESS;
 }

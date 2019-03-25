@@ -1,20 +1,38 @@
-# DO NOT EDIT: Generated from "scripts/templates/CMakeLists.txt.mako"
+# DO NOT EDIT: Generated from "scripts/templates/CMakeLists.h.mako"
 target_sources(${TARGET_NAME}
     PRIVATE
     ${CMAKE_CURRENT_SOURCE_DIR}/CMakeLists.txt
+    ${CMAKE_CURRENT_SOURCE_DIR}/xe_all.h
     ${CMAKE_CURRENT_SOURCE_DIR}/xe_barrier.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/xe_barrier.inl
     ${CMAKE_CURRENT_SOURCE_DIR}/xe_cl_interop.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/xe_cl_interop.inl
     ${CMAKE_CURRENT_SOURCE_DIR}/xe_cmdgraph.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/xe_cmdgraph.inl
     ${CMAKE_CURRENT_SOURCE_DIR}/xe_cmdlist.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/xe_cmdlist.inl
     ${CMAKE_CURRENT_SOURCE_DIR}/xe_cmdqueue.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/xe_cmdqueue.inl
     ${CMAKE_CURRENT_SOURCE_DIR}/xe_common.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/xe_common.inl
     ${CMAKE_CURRENT_SOURCE_DIR}/xe_copy.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/xe_copy.inl
     ${CMAKE_CURRENT_SOURCE_DIR}/xe_device.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/xe_device.inl
     ${CMAKE_CURRENT_SOURCE_DIR}/xe_driver.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/xe_driver.inl
     ${CMAKE_CURRENT_SOURCE_DIR}/xe_event.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/xe_event.inl
     ${CMAKE_CURRENT_SOURCE_DIR}/xe_fence.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/xe_fence.inl
     ${CMAKE_CURRENT_SOURCE_DIR}/xe_image.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/xe_image.inl
     ${CMAKE_CURRENT_SOURCE_DIR}/xe_memory.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/xe_memory.inl
     ${CMAKE_CURRENT_SOURCE_DIR}/xe_module.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/xe_module.inl
     ${CMAKE_CURRENT_SOURCE_DIR}/xe_residency.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/xe_residency.inl
+    ${CMAKE_CURRENT_SOURCE_DIR}/xe_sampler.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/xe_sampler.inl
 )

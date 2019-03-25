@@ -178,6 +178,8 @@ xeModuleBuildLogDestroy(
 /// @details
 ///     - This function may be called from simultaneous threads.
 ///     - The implementation of this function should be lock-free.
+///     - The caller must provide memory for build log.
+///     - The caller can pass nullptr for pBuildLog when querying only for size.
 /// 
 /// @returns
 ///     - ::XE_RESULT_SUCCESS
@@ -193,7 +195,7 @@ __xedllport xe_result_t __xecall
 xeModuleBuildLogGetString(
     xe_module_build_log_handle_t hModuleBuildLog,   ///< [in] handle of the module build log object.
     size_t* pSize,                                  ///< [in,out] size of build log string.
-    char** pBuildLog                                ///< [in,out][optional] pointer to null-terminated string of the log.
+    char* pBuildLog                                 ///< [in,out][optional] pointer to null-terminated string of the log.
     );
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -202,9 +204,11 @@ xeModuleBuildLogGetString(
 /// @details
 ///     - This function may be called from simultaneous threads.
 ///     - The implementation of this function should be lock-free.
+///     - The caller can pass nullptr for pModuleNativeBinary when querying only
+///       for size.
+///     - The implementation will copy the native binary into a buffer supplied
+///       by the caller.
 ///     - The memory for the native binary output is associated with the module.
-///       The output pointer should not be accessed after a module has been
-///       destroyed.
 ///     - The native binary output can be cached to disk and new modules can be
 ///       later constructed from the cached copy.
 ///     - The native binary will retain debugging information that is associated
@@ -224,8 +228,32 @@ xeModuleBuildLogGetString(
 __xedllport xe_result_t __xecall
 xeModuleGetNativeBinary(
     xe_module_handle_t hModule,                     ///< [in] handle of the device
-    size_t* pSize,                                  ///< [in,out] size of native binary.
-    void** pModuleNativeBinary                      ///< [in,out][optional] pointer to native binary
+    size_t* pSize,                                  ///< [in,out] size of native binary in bytes.
+    uint8_t* pModuleNativeBinary                    ///< [in,out][optional] byte pointer to native binary
+    );
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Retrieve global variable pointer from Module.
+/// 
+/// @details
+///     - This function may be called from simultaneous threads.
+///     - The implementation of this function should be lock-free.
+/// 
+/// @returns
+///     - ::XE_RESULT_SUCCESS
+///     - ::XE_RESULT_ERROR_UNINITIALIZED
+///     - ::XE_RESULT_ERROR_DEVICE_LOST
+///     - ::XE_RESULT_ERROR_INVALID_PARAMETER
+///         + nullptr == hModule
+///         + nullptr == pGlobalName
+///         + nullptr == pPtr
+///         + invalid name
+///     - ::XE_RESULT_ERROR_UNSUPPORTED
+__xedllport xe_result_t __xecall
+xeModuleGetGlobalPointer(
+    xe_module_handle_t hModule,                     ///< [in] handle of the device
+    const char* pGlobalName,                        ///< [in] name of function in global
+    void** pPtr                                     ///< [out] device visible pointer
     );
 
 ///////////////////////////////////////////////////////////////////////////////

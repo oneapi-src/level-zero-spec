@@ -42,10 +42,9 @@ xe_result_t memGetAddressRange(xe_mem_allocator_handle_t hMemAllocHandle,
                                void **pBase,
                                size_t *pSize);
 
-xe_result_t memGetProperty(xe_mem_allocator_handle_t hMemAllocHandle,
-                           const void *ptr,
-                           xe_memory_property_t property,
-                           void *pValue);
+xe_result_t memGetProperties(xe_mem_allocator_handle_t hMemAllocHandle,
+                             const void *ptr,
+                             xe_memory_allocation_properties_t *pMemProperties);
 
 xe_result_t sharedMemAlloc(xe_mem_allocator_handle_t hMemAllocHandle,
                            xe_device_handle_t hDevice,

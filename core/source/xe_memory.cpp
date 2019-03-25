@@ -304,7 +304,7 @@ xeMemAlloc(
 /// @details
 ///     - A host allocation is owned by the host process.
 ///     - Host allocations are accessible by the host and all devices.
-///     - Host allocations are frequently used a staging areas to transfer data
+///     - Host allocations are frequently used as staging areas to transfer data
 ///       to or from devices.
 ///     - The application may call this function from simultaneous threads.
 ///     - The implementation of this function should be lock-free.
@@ -434,7 +434,7 @@ xeMemFree(
 }
 
 ///////////////////////////////////////////////////////////////////////////////
-/// @brief Retrieves a property of an allocation
+/// @brief Retrieves attributes of a memory allocation
 /// 
 /// @details
 ///     - The application may call this function from simultaneous threads.
@@ -451,18 +451,16 @@ xeMemFree(
 ///     - ::XE_RESULT_ERROR_INVALID_PARAMETER
 ///         + nullptr == hMemAllocHandle
 ///         + nullptr == ptr
-///         + nullptr == pValue
-///         + invalid property
+///         + nullptr == pMemProperties
 ///     - ::XE_RESULT_ERROR_UNSUPPORTED
 ///
-/// @hash {475a4652d2fbecab68e2ac9b52c4b6580e8c9d1e48a866b759bfa8a50050e45d}
+/// @hash {0c1705dc9d701a8acc9dcf5b03eb2e8ea26dc363a994c7892841e44a6c7e83a0}
 ///
 __xedllexport xe_result_t __xecall
-xeMemGetProperty(
+xeMemGetProperties(
     xe_mem_allocator_handle_t hMemAllocHandle,      ///< [in] handle of memory allocator for this allocation
     const void* ptr,                                ///< [in] Pointer to query
-    xe_memory_property_t property,                  ///< [in] Property of the allocation to query
-    uint32_t* pValue                                ///< [out] Value of the queried property
+    xe_memory_allocation_properties_t* pMemProperties   ///< [out] Query result for memory allocation properties
     )
 {
     try
@@ -473,13 +471,13 @@ xeMemGetProperty(
             // Check parameters
             if( nullptr == hMemAllocHandle ) return XE_RESULT_ERROR_INVALID_PARAMETER;
             if( nullptr == ptr ) return XE_RESULT_ERROR_INVALID_PARAMETER;
-            if( nullptr == pValue ) return XE_RESULT_ERROR_INVALID_PARAMETER;
+            if( nullptr == pMemProperties ) return XE_RESULT_ERROR_INVALID_PARAMETER;
         }
         /// @begin
 #if defined(XE_NULLDRV)
         return XE_RESULT_SUCCESS;
 #else
-        return L0::memGetProperty(hMemAllocHandle, ptr, property, pValue);
+        return L0::memGetProperties(hMemAllocHandle, ptr, pMemProperties);
 #endif
         /// @end
     }

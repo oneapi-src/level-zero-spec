@@ -148,7 +148,7 @@ namespace xe
     /// @details
     ///     - A host allocation is owned by the host process.
     ///     - Host allocations are accessible by the host and all devices.
-    ///     - Host allocations are frequently used a staging areas to transfer data
+    ///     - Host allocations are frequently used as staging areas to transfer data
     ///       to or from devices.
     ///     - The application may call this function from simultaneous threads.
     ///     - The implementation of this function should be lock-free.
@@ -200,7 +200,7 @@ namespace xe
     }
 
     ///////////////////////////////////////////////////////////////////////////////
-    /// @brief C++ wrapper for ::xeMemGetProperty
+    /// @brief C++ wrapper for ::xeMemGetProperties
     /// 
     /// @details
     ///     - The application may call this function from simultaneous threads.
@@ -211,18 +211,17 @@ namespace xe
     ///     - **cuPointerGetAttribute**
     /// 
     /// @returns
-    ///     - uint32_t: Value of the queried property
+    ///     - memory_allocation_properties_t: Query result for memory allocation properties
     /// 
     /// @throws result_t
-    inline uint32_t 
-    MemGetProperty(
+    inline memory_allocation_properties_t 
+    MemGetProperties(
         mem_allocator_handle_t hMemAllocHandle,         ///< [in] handle of memory allocator for this allocation
-        const void* ptr,                                ///< [in] Pointer to query
-        memory_property_t property                      ///< [in] Property of the allocation to query
+        const void* ptr                                 ///< [in] Pointer to query
         )
     {
-        // auto result = ::xeMemGetProperty( handle, hMemAllocHandle, ptr, property );
-        // if( ::XE_RESULT_SUCCESS != result ) throw exception(result, "xe::MemGetProperty::MemGetProperty");
+        // auto result = ::xeMemGetProperties( handle, hMemAllocHandle, ptr );
+        // if( ::XE_RESULT_SUCCESS != result ) throw exception(result, "xe::MemGetProperties::MemGetProperties");
     }
 
     ///////////////////////////////////////////////////////////////////////////////
