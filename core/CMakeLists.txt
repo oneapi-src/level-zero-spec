@@ -78,15 +78,15 @@ if(UNIX)
         COMPONENT l0-core)
 
     file(GLOB_RECURSE HEADER_FILES "include/*")
-    list(REMOVE_ITEM HEADER_FILES "CMakeLists.txt")
+    list(REMOVE_ITEM HEADER_FILES "${CMAKE_CURRENT_SOURCE_DIR}/include/CMakeLists.txt")
     install(FILES ${HEADER_FILES}
-        DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}
+        DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}/level_zero
         COMPONENT l0-devel
     )
 
     install(FILES source/ocloc_shared.h
         DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}
-        COMPONENT l0-tools)
+        COMPONENT l0-devel)
     install(TARGETS ocloc_shared
         DESTINATION ${CMAKE_INSTALL_LIBDIR}
         COMPONENT l0-devel)

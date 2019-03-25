@@ -132,3 +132,10 @@ add_custom_command(
   COMMAND echo Running ${RUN_XELLO_COPY_AUB_CMD} for SKL in "${CUSTOM_COMMAND_BINARY_DIR}/xello_copy_aub_test"
   COMMAND ${CMAKE_COMMAND} -E chdir ${TEST_DIR} ${CMAKE_COMMAND} -E env SetCommandStreamReceiver=1 ${RUN_XELLO_COPY_AUB_CMD}
 )
+
+if(UNIX)
+    install(TARGETS xello_world xello_world_icd xello_world_icd_clang xello_copy
+        DESTINATION ${CMAKE_INSTALL_BINDIR}
+        COMPONENT l0-samples
+    )
+endif()
