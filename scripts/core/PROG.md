@@ -471,6 +471,13 @@ ${"##"} Memory
 Linear, unformatted memory allocations are represented as pointers in the host application.
 A pointer on the host has the same size as a pointer on the device.
 
+${"###"} Allocators
+The concept of memory allocators is introduced in order to:
+- provide a device-independent memory allocation API
+- provide a free-threaded container for driver meta-data on allocations needed for APIs, such as ::MemGetAddressRange
+- provide a free-threaded container that can be leveraged for higher-level allocator containers, such as STL
+
+${"###"} Types
 Three types of allocations are supported.
 The type of allocation describes the _ownership_ of the allocation:
 1. **Host** allocations are owned by the host and are intended to be allocated out of system memory.
