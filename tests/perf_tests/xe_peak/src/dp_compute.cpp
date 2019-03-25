@@ -42,7 +42,7 @@ void XePeak::xe_peak_dp_compute(L0Context &context) {
     number_of_work_items = set_workgroups(context, number_of_work_items, &workgroup_info);
 
     void *device_input_value;
-    result = xeMemAlloc(context.allocator, context.device, XE_DEVICE_MEM_ALLOC_FLAG_DEFAULT,
+    result = xeMemAlloc(context.device, XE_DEVICE_MEM_ALLOC_FLAG_DEFAULT,
                         sizeof(double), 1, &device_input_value);
     if (result) {
         throw std::runtime_error("xeMemAlloc failed: " + result);
@@ -51,7 +51,7 @@ void XePeak::xe_peak_dp_compute(L0Context &context) {
         std::cout << "device input value allocated\n";
 
     void *device_output_buffer;
-    result = xeMemAlloc(context.allocator, context.device, XE_DEVICE_MEM_ALLOC_FLAG_DEFAULT,
+    result = xeMemAlloc(context.device, XE_DEVICE_MEM_ALLOC_FLAG_DEFAULT,
                         (number_of_work_items * sizeof(double)), 1, &device_output_buffer);
     if (result) {
         throw std::runtime_error("xeMemAlloc failed: " + result);
@@ -60,7 +60,7 @@ void XePeak::xe_peak_dp_compute(L0Context &context) {
         std::cout << "device output buffer allocated\n";
 
     result = xeCommandListAppendMemoryCopy(context.command_list, device_input_value, &input_value,
-                                           sizeof(double));
+                                           sizeof(double), nullptr);
     if (result) {
         throw std::runtime_error("xeCommandListAppendMemoryCopy failed: " + result);
     }
@@ -183,14 +183,14 @@ void XePeak::xe_peak_dp_compute(L0Context &context) {
     if (verbose)
         std::cout << "compute_dp_v16 Function Destroyed\n";
 
-    result = xeMemFree(context.allocator, device_input_value);
+    result = xeMemFree(device_input_value);
     if (result) {
         throw std::runtime_error("xeMemFree failed: " + result);
     }
     if (verbose)
         std::cout << "Input Buffer freed\n";
 
-    result = xeMemFree(context.allocator, device_output_buffer);
+    result = xeMemFree(device_output_buffer);
     if (result) {
         throw std::runtime_error("xeMemFree failed: " + result);
     }

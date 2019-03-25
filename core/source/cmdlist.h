@@ -25,16 +25,20 @@ struct CommandList : public CommandContainer {
     virtual xe_result_t appendExecutionBarrier() = 0;
     virtual xe_result_t appendImageCopyFromMemory(xe_image_handle_t hDstImage,
                                                   xe_image_region_t *pDstRegion,
-                                                  const void *srcptr) = 0;
+                                                  const void *srcptr,
+                                                  xe_event_handle_t hEvent) = 0;
     virtual xe_result_t appendImageCopyToMemory(void *dstptr,
                                                 xe_image_handle_t hSrcImage,
-                                                xe_image_region_t *pSrcRegion) = 0;
+                                                xe_image_region_t *pSrcRegion,
+                                                xe_event_handle_t hEvent) = 0;
     virtual xe_result_t appendImageCopyRegion(xe_image_handle_t hDstImage,
                                               xe_image_region_t *pDstRegion,
                                               xe_image_handle_t hSrcImage,
-                                              xe_image_region_t *pSrcRegion) = 0;
+                                              xe_image_region_t *pSrcRegion,
+                                              xe_event_handle_t hEvent) = 0;
     virtual xe_result_t appendImageCopy(xe_image_handle_t hDstImage,
-                                        xe_image_handle_t hSrcImage) = 0;
+                                        xe_image_handle_t hSrcImage,
+                                        xe_event_handle_t hEvent) = 0;
     virtual xe_result_t appendLaunchFunction(xe_function_handle_t hFunction,
                                              const xe_thread_group_dimensions_t *pThreadGroupDimensions,
                                              xe_event_handle_t hEvent) = 0;
@@ -54,10 +58,12 @@ struct CommandList : public CommandContainer {
                                         xe_memory_advice_t advice) = 0;
     virtual xe_result_t appendMemoryCopy(void *dstptr,
                                          const void *srcptr,
-                                         size_t size) = 0;
+                                         size_t size,
+                                         xe_event_handle_t hEvent) = 0;
     virtual xe_result_t appendMemorySet(void *ptr,
                                         int value,
-                                        size_t size) = 0;
+                                        size_t size,
+                                        xe_event_handle_t hEvent) = 0;
     virtual xe_result_t appendMemoryPrefetch(const void *ptr,
                                              size_t count) = 0;
     virtual xe_result_t appendSignalEvent(xe_event_handle_t hEvent) = 0;

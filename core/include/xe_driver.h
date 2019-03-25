@@ -23,7 +23,7 @@
 *
 * @file xe_driver.h
 *
-* @brief Intel Xe Driver APIs
+* @brief Intel Xe Level-Zero APIs
 *
 * @cond DEV
 * DO NOT EDIT: generated from /scripts/core/driver.yml
@@ -50,7 +50,7 @@ typedef enum _xe_init_flag_t
 } xe_init_flag_t;
 
 ///////////////////////////////////////////////////////////////////////////////
-/// @brief Initialize the Xe Driver API and must be called before any other API
+/// @brief Initialize the Xe driver and must be called before any other API
 ///        function.
 /// 
 /// @details

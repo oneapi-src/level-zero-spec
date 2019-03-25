@@ -22,8 +22,8 @@ struct Mock<Device> : public Device {
     MOCK_METHOD2(copyCommandList, xe_result_t(xe_command_list_handle_t hCommandList,
                                               xe_command_list_handle_t *phCommandList));
 
-    MOCK_METHOD2(createCommandGraph, xe_result_t(const xe_command_graph_desc_t *desc,
-                                                 xe_command_graph_handle_t *phCommandGraph));
+    //MOCK_METHOD2(createCommandGraph, xe_result_t(const xe_command_graph_desc_t *desc,
+    //                                             xe_command_graph_handle_t *phCommandGraph));
 
     MOCK_METHOD2(createCommandList, xe_result_t(const xe_command_list_desc_t *desc,
                                                 xe_command_list_handle_t *commandList));
@@ -60,6 +60,9 @@ struct Mock<Device> : public Device {
                                          xe_event_handle_t *phEvent));
     MOCK_METHOD1(setIntermediateCacheConfig, xe_result_t(xe_cache_config_t CacheConfig));
     MOCK_METHOD1(setLastLevelCacheConfig, xe_result_t(xe_cache_config_t CacheConfig));
+
+    MOCK_METHOD2(getImageProperties, xe_result_t(const xe_image_desc_t* desc,
+                                        xe_image_properties_t* pImageProperties));
 
     // Runtime internal methods
     MOCK_METHOD0(getMemoryManager, MemoryManager *());

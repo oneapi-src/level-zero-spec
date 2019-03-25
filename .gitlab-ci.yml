@@ -38,6 +38,7 @@ pages:
     - win
     - python
     - bt
+  when: always
 
 linux:
   image: loki18.04:latest

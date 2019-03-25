@@ -51,30 +51,36 @@ struct Mock<CommandList> : public CommandList {
                                                                     xe_event_handle_t hEvent));
     MOCK_METHOD1(appendEventReset, xe_result_t(xe_event_handle_t hEvent));
     MOCK_METHOD0(appendExecutionBarrier, xe_result_t());
-    MOCK_METHOD3(appendImageCopyFromMemory, xe_result_t(xe_image_handle_t hDstImage,
+    MOCK_METHOD4(appendImageCopyFromMemory, xe_result_t(xe_image_handle_t hDstImage,
                                                         xe_image_region_t *pDstRegion,
-                                                        const void *srcptr));
-    MOCK_METHOD3(appendImageCopyToMemory, xe_result_t(void *dstptr,
+                                                        const void *srcptr,
+                                                        xe_event_handle_t hEvent));
+    MOCK_METHOD4(appendImageCopyToMemory, xe_result_t(void *dstptr,
                                                       xe_image_handle_t hSrcImage,
-                                                      xe_image_region_t *pSrcRegion));
-    MOCK_METHOD4(appendImageCopyRegion, xe_result_t(xe_image_handle_t hDstImage,
+                                                      xe_image_region_t *pSrcRegion,
+                                                      xe_event_handle_t hEvent));
+    MOCK_METHOD5(appendImageCopyRegion, xe_result_t(xe_image_handle_t hDstImage,
                                                     xe_image_region_t *pDstRegion,
                                                     xe_image_handle_t hSrcImage,
-                                                    xe_image_region_t *pSrcRegion));
-    MOCK_METHOD2(appendImageCopy, xe_result_t(xe_image_handle_t hDstImage,
-                                              xe_image_handle_t hSrcImage));
+                                                    xe_image_region_t *pSrcRegion,
+                                                    xe_event_handle_t hEvent));
+    MOCK_METHOD3(appendImageCopy, xe_result_t(xe_image_handle_t hDstImage,
+                                              xe_image_handle_t hSrcImage,
+                                              xe_event_handle_t hEvent));
     MOCK_METHOD4(appendMemAdvise, xe_result_t(xe_device_handle_t hDevice,
                                               const void *ptr,
                                               size_t size,
                                               xe_memory_advice_t advice));
-    MOCK_METHOD3(appendMemoryCopy, xe_result_t(void *dstptr,
+    MOCK_METHOD4(appendMemoryCopy, xe_result_t(void *dstptr,
                                                const void *srcptr,
-                                               size_t size));
+                                               size_t size,
+                                               xe_event_handle_t hEvent));
     MOCK_METHOD2(appendMemoryPrefetch, xe_result_t(const void *ptr,
                                                    size_t count));
-    MOCK_METHOD3(appendMemorySet, xe_result_t(void *ptr,
+    MOCK_METHOD4(appendMemorySet, xe_result_t(void *ptr,
                                               int value,
-                                              size_t size));
+                                              size_t size,
+                                              xe_event_handle_t hEvent));
     MOCK_METHOD1(appendSignalEvent, xe_result_t(xe_event_handle_t hEvent));
     MOCK_METHOD1(appendWaitOnEvent, xe_result_t(xe_event_handle_t hEvent));
     MOCK_METHOD2(getParameter, xe_result_t(xe_command_list_parameter_t parameter, uint32_t *value));

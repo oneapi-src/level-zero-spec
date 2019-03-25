@@ -23,7 +23,7 @@
 *
 * @file xe_residency.h
 *
-* @brief Intel Xe Driver APIs for Memory
+* @brief Intel Xe Level-Zero APIs for Memory Residency
 *
 * @cond DEV
 * DO NOT EDIT: generated from /scripts/core/residency.yml

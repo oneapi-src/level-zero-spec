@@ -7,8 +7,6 @@ target_sources(${TARGET_NAME}
     ${CMAKE_CURRENT_SOURCE_DIR}/xe_barrier.inl
     ${CMAKE_CURRENT_SOURCE_DIR}/xe_cl_interop.h
     ${CMAKE_CURRENT_SOURCE_DIR}/xe_cl_interop.inl
-    ${CMAKE_CURRENT_SOURCE_DIR}/xe_cmdgraph.h
-    ${CMAKE_CURRENT_SOURCE_DIR}/xe_cmdgraph.inl
     ${CMAKE_CURRENT_SOURCE_DIR}/xe_cmdlist.h
     ${CMAKE_CURRENT_SOURCE_DIR}/xe_cmdlist.inl
     ${CMAKE_CURRENT_SOURCE_DIR}/xe_cmdqueue.h

@@ -334,7 +334,7 @@ attributes #2 = { nounwind }
 #define GPU_COPY
 
 void initializeLevelZero(xe_device_handle_t &device0, xe_device_properties_t &device0Properties,
-                         xe_command_queue_handle_t &cmdQueue, xe_command_list_handle_t &cmdList, xe_mem_allocator_handle_t &allocator,
+                         xe_command_queue_handle_t &cmdQueue, xe_command_list_handle_t &cmdList,
                          xe_module_handle_t &moduleGlobalVariables,
                          xe_module_handle_t &moduleFuncArray, xe_function_handle_t &functionFuncArray,
                          xe_module_handle_t &moduleFuncParam, xe_function_handle_t &functionFuncParam);
@@ -355,8 +355,7 @@ int main(int argc, char *argv[]) {
     xe_function_handle_t functionFuncParam;
     xe_command_queue_handle_t cmdQueue;
     xe_command_list_handle_t cmdList;
-    xe_mem_allocator_handle_t allocator;
-    initializeLevelZero(device0, device0Properties, cmdQueue, cmdList, allocator,
+    initializeLevelZero(device0, device0Properties, cmdQueue, cmdList,
                         moduleGlobalVariables,
                         moduleFuncArray, functionFuncArray,
                         moduleFuncParam, functionFuncParam);
@@ -375,8 +374,8 @@ int main(int argc, char *argv[]) {
     constexpr int operandA = 19;
     constexpr int operandB = 17;
     constexpr int opCodeAdd = 0;
-    constexpr int opCodeSub = 1;
-    constexpr int opCodeMul = 2;
+    // constexpr int opCodeSub = 1;
+    // constexpr int opCodeMul = 2;
 
     uint32_t groupSizeX = 32u, groupSizeY = 1u, groupSizeZ = 1u;
     SUCCESS_OR_TERMINATE(xeFunctionSuggestGroupSize(functionFuncArray, numSimtThreads, 1U, 1U, &groupSizeX, &groupSizeY, &groupSizeZ));
@@ -386,9 +385,9 @@ int main(int argc, char *argv[]) {
     }
     SUCCESS_OR_TERMINATE(xeFunctionSetGroupSize(functionFuncArray, groupSizeX, groupSizeY, groupSizeZ));
 
-    SUCCESS_OR_TERMINATE(xeSharedMemAlloc(allocator, device0, XE_DEVICE_MEM_ALLOC_FLAG_DEFAULT, XE_HOST_MEM_ALLOC_FLAG_DEFAULT, allocSize, 1, &dstBufferOpAdd));
-    SUCCESS_OR_TERMINATE(xeSharedMemAlloc(allocator, device0, XE_DEVICE_MEM_ALLOC_FLAG_DEFAULT, XE_HOST_MEM_ALLOC_FLAG_DEFAULT, allocSize, 1, &dstBufferOpMul));
-    SUCCESS_OR_TERMINATE(xeSharedMemAlloc(allocator, device0, XE_DEVICE_MEM_ALLOC_FLAG_DEFAULT, XE_HOST_MEM_ALLOC_FLAG_DEFAULT, allocSize, 1, &dstBufferOpSub));
+    SUCCESS_OR_TERMINATE(xeSharedMemAlloc(device0, XE_DEVICE_MEM_ALLOC_FLAG_DEFAULT, XE_HOST_MEM_ALLOC_FLAG_DEFAULT, allocSize, 1, &dstBufferOpAdd));
+    SUCCESS_OR_TERMINATE(xeSharedMemAlloc(device0, XE_DEVICE_MEM_ALLOC_FLAG_DEFAULT, XE_HOST_MEM_ALLOC_FLAG_DEFAULT, allocSize, 1, &dstBufferOpMul));
+    SUCCESS_OR_TERMINATE(xeSharedMemAlloc(device0, XE_DEVICE_MEM_ALLOC_FLAG_DEFAULT, XE_HOST_MEM_ALLOC_FLAG_DEFAULT, allocSize, 1, &dstBufferOpSub));
 
     void *fptrSub = nullptr;
     void *fptrAdd = nullptr;
@@ -411,9 +410,9 @@ int main(int argc, char *argv[]) {
     memset(initDataDst, 0xFF, sizeof(initDataDst));
 
 #ifdef GPU_COPY
-    SUCCESS_OR_TERMINATE(xeCommandListAppendMemoryCopy(cmdList, dstBufferOpAdd, initDataDst, sizeof(initDataDst)));
-    SUCCESS_OR_TERMINATE(xeCommandListAppendMemoryCopy(cmdList, dstBufferOpMul, initDataDst, sizeof(initDataDst)));
-    SUCCESS_OR_TERMINATE(xeCommandListAppendMemoryCopy(cmdList, dstBufferOpSub, initDataDst, sizeof(initDataDst)));
+    SUCCESS_OR_TERMINATE(xeCommandListAppendMemoryCopy(cmdList, dstBufferOpAdd, initDataDst, sizeof(initDataDst), nullptr));
+    SUCCESS_OR_TERMINATE(xeCommandListAppendMemoryCopy(cmdList, dstBufferOpMul, initDataDst, sizeof(initDataDst), nullptr));
+    SUCCESS_OR_TERMINATE(xeCommandListAppendMemoryCopy(cmdList, dstBufferOpSub, initDataDst, sizeof(initDataDst), nullptr));
 
     SUCCESS_OR_TERMINATE(xeCommandListAppendExecutionBarrier(cmdList)); // copying of data must finish before running the user function
 #else
@@ -450,9 +449,9 @@ int main(int argc, char *argv[]) {
 
 #ifdef GPU_COPY
     SUCCESS_OR_TERMINATE(xeCommandListAppendExecutionBarrier(cmdList)); // user function must finish before we start copying data
-    SUCCESS_OR_TERMINATE(xeCommandListAppendMemoryCopy(cmdList, readBackDataOpAdd, dstBufferOpAdd, sizeof(readBackDataOpAdd)));
-    SUCCESS_OR_TERMINATE(xeCommandListAppendMemoryCopy(cmdList, readBackDataOpSub, dstBufferOpSub, sizeof(readBackDataOpSub)));
-    SUCCESS_OR_TERMINATE(xeCommandListAppendMemoryCopy(cmdList, readBackDataOpMul, dstBufferOpMul, sizeof(readBackDataOpMul)));
+    SUCCESS_OR_TERMINATE(xeCommandListAppendMemoryCopy(cmdList, readBackDataOpAdd, dstBufferOpAdd, sizeof(readBackDataOpAdd), nullptr));
+    SUCCESS_OR_TERMINATE(xeCommandListAppendMemoryCopy(cmdList, readBackDataOpSub, dstBufferOpSub, sizeof(readBackDataOpSub), nullptr));
+    SUCCESS_OR_TERMINATE(xeCommandListAppendMemoryCopy(cmdList, readBackDataOpMul, dstBufferOpMul, sizeof(readBackDataOpMul), nullptr));
 #endif
 
     // 5. Execute and wait
@@ -475,10 +474,9 @@ int main(int argc, char *argv[]) {
     SUCCESS_OR_WARNING_BOOL(outputValidationSuccessful);
 
     // X. Cleanup
-    SUCCESS_OR_TERMINATE(xeMemFree(allocator, dstBufferOpAdd));
-    SUCCESS_OR_TERMINATE(xeMemFree(allocator, dstBufferOpSub));
-    SUCCESS_OR_TERMINATE(xeMemFree(allocator, dstBufferOpMul));
-    SUCCESS_OR_TERMINATE(xeMemAllocatorDestroy(allocator));
+    SUCCESS_OR_TERMINATE(xeMemFree(dstBufferOpAdd));
+    SUCCESS_OR_TERMINATE(xeMemFree(dstBufferOpSub));
+    SUCCESS_OR_TERMINATE(xeMemFree(dstBufferOpMul));
 
     SUCCESS_OR_TERMINATE(xeCommandListDestroy(cmdList));
 
@@ -496,7 +494,7 @@ int main(int argc, char *argv[]) {
 }
 
 void initializeLevelZero(xe_device_handle_t &device0, xe_device_properties_t &device0Properties,
-                         xe_command_queue_handle_t &cmdQueue, xe_command_list_handle_t &cmdList, xe_mem_allocator_handle_t &allocator,
+                         xe_command_queue_handle_t &cmdQueue, xe_command_list_handle_t &cmdList,
                          xe_module_handle_t &moduleGlobalVariables,
                          xe_module_handle_t &moduleFuncArray, xe_function_handle_t &functionFuncArray,
                          xe_module_handle_t &moduleFuncParam, xe_function_handle_t &functionFuncParam) {
@@ -509,7 +507,6 @@ void initializeLevelZero(xe_device_handle_t &device0, xe_device_properties_t &de
     functionFuncParam = {};
     cmdQueue = {};
     cmdList = {};
-    allocator = {};
 
     SUCCESS_OR_TERMINATE(xeDriverInit(XE_INIT_FLAG_NONE));
     xe_device_uuid_t deviceUniqueID = {};
@@ -518,7 +515,7 @@ void initializeLevelZero(xe_device_handle_t &device0, xe_device_properties_t &de
     if (verbose) {
         printDeviceProperties(device0Properties);
     } else {
-        std::cout << device0Properties.device_name << std::endl;
+        std::cout << device0Properties.name << std::endl;
     }
 
     {
@@ -568,6 +565,4 @@ void initializeLevelZero(xe_device_handle_t &device0, xe_device_properties_t &de
         xe_command_list_desc_t cmdListDesc = {XE_COMMAND_LIST_DESC_VERSION_CURRENT};
         SUCCESS_OR_TERMINATE(xeDeviceCreateCommandList(device0, &cmdListDesc, &cmdList));
     }
-
-    SUCCESS_OR_TERMINATE(xeCreateMemAllocator(&allocator));
 }

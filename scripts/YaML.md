@@ -10,10 +10,9 @@ The following describes the YaML format used by the scripts for the API specific
 * Every document must have a "type" scalar: {header, macro, typedef, enum, struct, handle, function}
 * The order of documents will determine the order in which they appear in the source code.
 * All scalars are assumed to be strings.
-* There are three tags types for API namespace replacement:
+* There are two tag variations for replacement:
     * "$x" : lower_case
     * "$X" : ALL_CAPS
-    * "$Xx": Camel_Case
 
 #### header
 * Every file is required to have a header

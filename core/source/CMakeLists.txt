@@ -82,7 +82,6 @@ set(L0_RUNTIME_SOURCES
     ${CMAKE_CURRENT_SOURCE_DIR}/substream.h
     ${CMAKE_CURRENT_SOURCE_DIR}/xe_barrier.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/xe_cl_interop.cpp
-    ${CMAKE_CURRENT_SOURCE_DIR}/xe_cmdgraph.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/xe_cmdlist.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/xe_cmdqueue.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/xe_common.cpp

@@ -39,7 +39,6 @@ int main(int argc, char *argv[]) {
     std::vector <xe_function_handle_t> function;
     std::vector <xe_command_queue_handle_t> cmdQueue;
     std::vector <xe_command_list_handle_t> cmdList;
-    xe_mem_allocator_handle_t allocator;
     void *srcBuffer;
     void *dstBuffer;
     uint32_t deviceCount;
@@ -62,9 +61,6 @@ int main(int argc, char *argv[]) {
 
         printDeviceProperties(deviceProperties);
     }
-
-    // Memory Allocator
-    SUCCESS_OR_TERMINATE(xeCreateMemAllocator(&allocator));
 
     module.resize(deviceCount);
     cmdQueue.resize(deviceCount);
@@ -122,16 +118,16 @@ int main(int argc, char *argv[]) {
         // Alloc buffers
         srcBuffer = nullptr;
         dstBuffer = nullptr;
-        SUCCESS_OR_TERMINATE(xeSharedMemAlloc(allocator, device[i], XE_DEVICE_MEM_ALLOC_FLAG_DEFAULT, XE_HOST_MEM_ALLOC_FLAG_DEFAULT, allocSize, 1, &srcBuffer));
-        SUCCESS_OR_TERMINATE(xeSharedMemAlloc(allocator, device[i], XE_DEVICE_MEM_ALLOC_FLAG_DEFAULT, XE_HOST_MEM_ALLOC_FLAG_DEFAULT, allocSize, 1, &dstBuffer));
+        SUCCESS_OR_TERMINATE(xeSharedMemAlloc(device[i], XE_DEVICE_MEM_ALLOC_FLAG_DEFAULT, XE_HOST_MEM_ALLOC_FLAG_DEFAULT, allocSize, 1, &srcBuffer));
+        SUCCESS_OR_TERMINATE(xeSharedMemAlloc(device[i], XE_DEVICE_MEM_ALLOC_FLAG_DEFAULT, XE_HOST_MEM_ALLOC_FLAG_DEFAULT, allocSize, 1, &dstBuffer));
 
         // Init data and copy to device
         uint8_t initDataSrc[allocSize];
         memset(initDataSrc, 7, sizeof(initDataSrc));
         uint8_t initDataDst[allocSize];
         memset(initDataDst, 3, sizeof(initDataDst));
-        SUCCESS_OR_TERMINATE(xeCommandListAppendMemoryCopy(cmdList[i], srcBuffer, initDataSrc, sizeof(initDataSrc)));
-        SUCCESS_OR_TERMINATE(xeCommandListAppendMemoryCopy(cmdList[i], dstBuffer, initDataDst, sizeof(initDataDst)));
+        SUCCESS_OR_TERMINATE(xeCommandListAppendMemoryCopy(cmdList[i], srcBuffer, initDataSrc, sizeof(initDataSrc), nullptr));
+        SUCCESS_OR_TERMINATE(xeCommandListAppendMemoryCopy(cmdList[i], dstBuffer, initDataDst, sizeof(initDataDst), nullptr));
 
         SUCCESS_OR_TERMINATE(xeCommandListAppendExecutionBarrier(cmdList[i])); // copying of data must finish before running the user function
 
@@ -155,7 +151,7 @@ int main(int argc, char *argv[]) {
         uint8_t readBackData[allocSize];
         memset(readBackData, 2, sizeof(readBackData));
         SUCCESS_OR_TERMINATE(xeCommandListAppendExecutionBarrier(cmdList[i]));
-        SUCCESS_OR_TERMINATE(xeCommandListAppendMemoryCopy(cmdList[i], readBackData, dstBuffer, sizeof(readBackData)));
+        SUCCESS_OR_TERMINATE(xeCommandListAppendMemoryCopy(cmdList[i], readBackData, dstBuffer, sizeof(readBackData), nullptr));
 
         // Dispatch and wait
         SUCCESS_OR_TERMINATE(xeCommandListClose(cmdList[i]));
@@ -171,8 +167,8 @@ int main(int argc, char *argv[]) {
         }
 
         // Release Mem
-        SUCCESS_OR_TERMINATE(xeMemFree(allocator, dstBuffer));
-        SUCCESS_OR_TERMINATE(xeMemFree(allocator, srcBuffer));
+        SUCCESS_OR_TERMINATE(xeMemFree(dstBuffer));
+        SUCCESS_OR_TERMINATE(xeMemFree(srcBuffer));
 
         SUCCESS_OR_TERMINATE(xeCommandListDestroy(cmdList[i]));
 
@@ -181,9 +177,6 @@ int main(int argc, char *argv[]) {
             break;
         }
     }
-
-    // Cleanup
-    SUCCESS_OR_TERMINATE(xeMemAllocatorDestroy(allocator));
 
     for (uint32_t i = 0; i < deviceCount; i++) {
         SUCCESS_OR_TERMINATE(xeCommandQueueDestroy(cmdQueue[i]));

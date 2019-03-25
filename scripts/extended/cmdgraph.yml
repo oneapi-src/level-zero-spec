@@ -1,42 +1,42 @@
 --- #--------------------------------------------------------------------------
 type: header
-desc: "Intel $Xx Driver APIs for CommandGraph"
+desc: "Intel $OneApi Level-Zero Extended APIs for CommandGraph"
 --- #--------------------------------------------------------------------------
 type: enum
-desc: "API version of $x_command_graph_desc_t"
-class: $xDevice
-name: $x_command_graph_desc_version_t
+desc: "API version of $e_command_graph_desc_t"
+class: $eDevice
+name: $e_command_graph_desc_version_t
 etors:
-    - name: $X_COMMAND_GRAPH_DESC_VERSION_CURRENT
+    - name: $E_COMMAND_GRAPH_DESC_VERSION_CURRENT
       value: "$X_MAKE_VERSION( 1, 0 )"
       desc: "version 1.0"
 --- #--------------------------------------------------------------------------
 type: enum
 desc: "Supported command graph creation flags"
-class: $xDevice
-name: $x_command_graph_flag_t
+class: $eDevice
+name: $e_command_graph_flag_t
 etors:
-    - name: $X_COMMAND_GRAPH_FLAG_NONE
+    - name: $E_COMMAND_GRAPH_FLAG_NONE
       value: "0"
       desc: "default behavior"
 --- #--------------------------------------------------------------------------
 type: struct
 desc: "CommandGraph descriptor"
-class: $xDevice
-name: $x_command_graph_desc_t
+class: $eDevice
+name: $e_command_graph_desc_t
 members:
-    - type: $x_command_graph_desc_version_t
+    - type: $e_command_graph_desc_version_t
       name: version
-      desc: "[in] $X_COMMAND_GRAPH_DESC_VERSION_CURRENT"
-      init: $X_COMMAND_GRAPH_DESC_VERSION_CURRENT
-    - type: $x_command_graph_flag_t
+      desc: "[in] $E_COMMAND_GRAPH_DESC_VERSION_CURRENT"
+      init: $E_COMMAND_GRAPH_DESC_VERSION_CURRENT
+    - type: $e_command_graph_flag_t
       name: flags
       desc: "[in] creation flags"
-      init: $X_COMMAND_GRAPH_FLAG_NONE
+      init: $E_COMMAND_GRAPH_FLAG_NONE
 --- #--------------------------------------------------------------------------
 type: function
 desc: "Creates a command graph on the device for submitting commands to any command queue."
-class: $xDevice
+class: $eDevice
 name: CreateCommandGraph
 details:
     - "This function may be called from simultaneous threads."
@@ -45,10 +45,10 @@ params:
     - type: $x_device_handle_t
       name: hDevice
       desc: "[in] handle of the device object"
-    - type: "const $x_command_graph_desc_t*"
+    - type: "const $e_command_graph_desc_t*"
       name: desc
       desc: "[in] pointer to command graph descriptor"
-    - type: $x_command_graph_handle_t*
+    - type: $e_command_graph_handle_t*
       name: phCommandGraph
       desc: "[out] pointer to handle of command graph object created"
 returns:
@@ -57,19 +57,19 @@ returns:
 --- #--------------------------------------------------------------------------
 type: function
 desc: "Destroys a command graph."
-class: $xCommandGraph
+class: $eCommandGraph
 name: Destroy
 details:
     - "The implementation of this function will immediately free all Host allocations associated with this command graph."
     - "The implementation of this function should be lock-free."
 params:
-    - type: $x_command_graph_handle_t
+    - type: $e_command_graph_handle_t
       name: hCommandGraph
       desc: "[in] handle of command graph object to destroy"
 --- #--------------------------------------------------------------------------
 type: function
 desc: "Closes a command graph; ready to be executed by a command queue."
-class: $xCommandGraph
+class: $eCommandGraph
 name: Close
 details:
     - "The command graph will optimize the execution order of the command lists."
@@ -77,17 +77,17 @@ details:
     - "The application may **not** call this function from simultaneous threads with the same command graph handle."
     - "The implementation of this function should be lock-free."
 params:
-    - type: $x_command_graph_handle_t
+    - type: $e_command_graph_handle_t
       name: hCommandGraph
       desc: "[in] handle of command graph object to close"
 --- #--------------------------------------------------------------------------
 type: class
 desc: "C++ wrapper for command graph"
-name: $xCommandGraph
+name: $eCommandGraph
 members:
-    - type: $x_command_graph_handle_t
+    - type: $e_command_graph_handle_t
       name: handle
       desc: "handle of command graph object"
-    - type: $x_command_graph_desc_t
+    - type: $e_command_graph_desc_t
       name: desc
       desc: "descriptor of the command graph object"

@@ -105,7 +105,7 @@ inline bool isAubMode(int argc, char *argv[]) {
 inline void printDeviceProperties(const xe_device_properties_t &props) {
     std::cout << "Device : "
               << "\n"
-              << " * name : " << props.device_name << "\n"
+              << " * name : " << props.name << "\n"
               << " * vendorId : " << props.vendorId << "\n"
               << " * deviceId : " << props.deviceId << "\n"
               << " * subdeviceId : " << props.subdeviceId << "\n"

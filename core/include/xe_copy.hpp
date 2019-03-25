@@ -23,7 +23,7 @@
 *
 * @file xe_copy.hpp
 *
-* @brief C++ wrapper of Intel Xe Driver APIs for Copies
+* @brief C++ wrapper of Intel Xe Level-Zero APIs for Copies
 *
 * @cond DEV
 * DO NOT EDIT: generated from /scripts/core/copy.yml

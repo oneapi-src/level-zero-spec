@@ -23,7 +23,7 @@
 *
 * @file xe_event.hpp
 *
-* @brief C++ wrapper of Intel Xe Driver APIs for Event
+* @brief C++ wrapper of Intel Xe Level-Zero APIs for Event
 *
 * @cond DEV
 * DO NOT EDIT: generated from /scripts/core/event.yml

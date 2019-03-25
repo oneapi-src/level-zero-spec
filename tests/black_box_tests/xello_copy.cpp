@@ -27,10 +27,7 @@ void testAppendMemoryCopy(xe_device_handle_t &device, bool &validRet) {
     xe_command_list_desc_t cmdListDesc = {XE_COMMAND_LIST_DESC_VERSION_CURRENT};
     SUCCESS_OR_TERMINATE(xeDeviceCreateCommandList(device, &cmdListDesc, &cmdList));
 
-    xe_mem_allocator_handle_t allocator;
-    SUCCESS_OR_TERMINATE(xeCreateMemAllocator(&allocator));
-
-    SUCCESS_OR_TERMINATE(xeMemAlloc(allocator, device,
+    SUCCESS_OR_TERMINATE(xeMemAlloc(device,
                                     XE_DEVICE_MEM_ALLOC_FLAG_DEFAULT,
                                     allocSize, allocSize, &xeBuffer));
 
@@ -40,12 +37,12 @@ void testAppendMemoryCopy(xe_device_handle_t &device, bool &validRet) {
     memset(stackBuffer, 0, allocSize);
 
     // Copy from heap to device-allocated memory
-    SUCCESS_OR_TERMINATE(xeCommandListAppendMemoryCopy(cmdList, xeBuffer, heapBuffer, allocSize));
+    SUCCESS_OR_TERMINATE(xeCommandListAppendMemoryCopy(cmdList, xeBuffer, heapBuffer, allocSize, nullptr));
 
     SUCCESS_OR_TERMINATE(xeCommandListAppendExecutionBarrier(cmdList));
 
     // Copy from device-allocated memory to stack
-    SUCCESS_OR_TERMINATE(xeCommandListAppendMemoryCopy(cmdList, stackBuffer, xeBuffer, allocSize));
+    SUCCESS_OR_TERMINATE(xeCommandListAppendMemoryCopy(cmdList, stackBuffer, xeBuffer, allocSize, nullptr));
 
     SUCCESS_OR_TERMINATE(xeCommandListClose(cmdList));
     SUCCESS_OR_TERMINATE(xeCommandQueueExecuteCommandLists(cmdQueue, 1, &cmdList, nullptr));
@@ -55,8 +52,7 @@ void testAppendMemoryCopy(xe_device_handle_t &device, bool &validRet) {
     validRet = (0 == memcmp(heapBuffer, stackBuffer, allocSize));
 
     delete[] heapBuffer;
-    SUCCESS_OR_TERMINATE(xeMemFree(allocator, xeBuffer));
-    SUCCESS_OR_TERMINATE(xeMemAllocatorDestroy(allocator));
+    SUCCESS_OR_TERMINATE(xeMemFree(xeBuffer));
     SUCCESS_OR_TERMINATE(xeCommandListDestroy(cmdList));
     SUCCESS_OR_TERMINATE(xeCommandQueueDestroy(cmdQueue));
 }
@@ -71,7 +67,7 @@ int main(int argc, char *argv[]) {
     xe_device_uuid_t deviceUniqueID = {};
     SUCCESS_OR_TERMINATE(xeDriverGetDevice(&deviceUniqueID, &device0));
     SUCCESS_OR_TERMINATE(xeDeviceGetProperties(device0, &device0Properties));
-    std::cout << device0Properties.device_name << std::endl;
+    std::cout << device0Properties.name << std::endl;
 
     bool outputValidationSuccessful;
     testAppendMemoryCopy(device0, outputValidationSuccessful);

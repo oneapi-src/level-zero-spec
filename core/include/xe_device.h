@@ -23,7 +23,7 @@
 *
 * @file xe_device.h
 *
-* @brief Intel Xe Driver APIs for Device
+* @brief Intel Xe Level-Zero APIs for Device
 *
 * @cond DEV
 * DO NOT EDIT: generated from /scripts/core/device.yml
@@ -233,7 +233,7 @@ typedef struct _xe_device_properties_t
     uint32_t numDSSPerSlice;                        ///< [out] Number of dual sub-slices per slice.
     uint32_t numSlicesPerTile;                      ///< [out] Number of slices per tile.
     uint32_t numTiles;                              ///< [out] Number of tiles for this device.
-    char device_name[XE_MAX_DEVICE_NAME];           ///< [out] Device name
+    char name[XE_MAX_DEVICE_NAME];                  ///< [out] Device name
 
 } xe_device_properties_t;
 

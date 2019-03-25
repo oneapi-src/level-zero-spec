@@ -22,13 +22,13 @@ struct CommandGraph : public _xe_command_graph_handle_t {
 
     virtual xe_result_t reset() = 0;
 
-    static CommandGraph *fromHandle(xe_command_graph_handle_t handle) {
-        return static_cast<CommandGraph *>(handle);
-    }
+    //static CommandGraph *fromHandle(xe_command_graph_handle_t handle) {
+    //    return static_cast<CommandGraph *>(handle);
+    //}
 
-    inline xe_command_graph_handle_t toHandle() {
-        return this;
-    }
+    //inline xe_command_graph_handle_t toHandle() {
+    //    return this;
+    //}
 };
 
 } // namespace L0

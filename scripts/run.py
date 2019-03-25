@@ -4,7 +4,7 @@ import parse_specs
 import generate_api
 import compile_api
 import generate_docs
-import generate_icd_loader
+import generate_icd
 import os
 import time
 
@@ -39,28 +39,35 @@ def main():
 
     start = time.time()
 
-    for section in configParser.sections():
+    for idx, section in enumerate(configParser.sections()):
         dstpath = configParser.get(section,'dstpath')
-        namespace = configParser.get(section,'namespace').split(",")
+        namespace = configParser.get(section,'namespace')
+        tags={}
+        for key in configParser.get(section,'tags').split(","):
+            tags['$'+key] = configParser.get(section,key)
+
         srcpath = os.path.join("./", section)
 
         if args[section] and util.exists(srcpath):
-            specs, meta = parse_specs.parse(srcpath)
+            if idx > 0:
+                specs, meta = parse_specs.parse(srcpath, meta)
+            else:
+                specs, meta = parse_specs.parse(srcpath)
 
             if args['debug']:
                 util.jsonWrite(os.path.join(srcpath, "specs.json"), specs)
                 util.jsonWrite(os.path.join(srcpath, "meta.json"), meta)
 
-            generate_api.generate_cpp(dstpath, namespace, specs, meta)
+            generate_api.generate_cpp(dstpath, namespace, tags, specs, meta)
 
-            if args['icd']:
-                generate_icd_loader.generate(namespace, specs, meta)
+            if args['icd'] and idx < 1: #todo: generate per-section icd loaders
+                generate_icd.generate(namespace, tags, specs, meta)
 
             if args['cl']:
-                compile_api.compile_cpp_source(dstpath, namespace[0], specs)
+                compile_api.compile_cpp_source(dstpath, namespace, specs)
 
             if args['md']:
-                generate_docs.generate_md(srcpath, dstpath, namespace[0], meta)
+                generate_docs.generate_md(srcpath, dstpath, tags, meta)
 
     # generate documentation
     if args['html']:

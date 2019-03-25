@@ -2,9 +2,10 @@
 import re
 from templates import helper as th
 %><%
-    x=context['ns'][0]
-    X=context['ns'][0].upper()
-    Xx=context['ns'][0].title()
+    n=namespace
+    N=n.upper()
+
+    x=tags['$x']
 %>/**************************************************************************//**
 * INTEL CONFIDENTIAL  
 * Copyright 2019  
@@ -28,17 +29,17 @@ from templates import helper as th
 * express and approved by Intel in writing.  
 * @endcond
 *
-* @file ${x}_${name}.h
+* @file ${n}_${name}.h
 *
-* @brief ${th.sub(ns, header['desc'])}
+* @brief ${th.subt(n, tags, header['desc'])}
 *
 * @cond DEV
 * DO NOT EDIT: generated from /scripts/${section}/${name}.yml
 * @endcond
 *
 ******************************************************************************/
-#ifndef _${X}_${name.upper()}_H
-#define _${X}_${name.upper()}_H
+#ifndef _${N}_${name.upper()}_H
+#define _${N}_${name.upper()}_H
 #if defined(__cplusplus)
 #pragma once
 #endif
@@ -46,7 +47,7 @@ from templates import helper as th
 #include <stdint.h>
 #include <string.h>
 %else:
-#include "${x}_common.h"
+#include "${n}_common.h"
 %endif
 
 #if defined(__cplusplus)
@@ -57,68 +58,68 @@ extern "C" {
 %if not re.match(r"class", obj['type']):
 ///////////////////////////////////////////////////////////////////////////////
 %if 'condition' in obj:
-#if ${th.sub(ns,obj['condition'])}
+#if ${th.subt(n, tags, obj['condition'])}
 %endif
-%for line in th.make_desc_lines(ns, obj):
+%for line in th.make_desc_lines(n, tags, obj):
 /// ${line}
 %endfor
-%for line in th.make_details_lines(ns, obj):
+%for line in th.make_details_lines(n, tags, obj):
 /// ${line}
 %endfor
 ## MACRO ######################################################################
 %if re.match(r"macro", obj['type']):
-#define ${th.sub(ns, obj['name'])}  ${th.sub(ns, obj['value'])}
+#define ${th.subt(n, tags, obj['name'])}  ${th.subt(n, tags, obj['value'])}
 %if 'altvalue' in obj:
 #else
-#define ${th.sub(ns, obj['name'])}  ${th.sub(ns, obj['altvalue'])}
+#define ${th.subt(n, tags, obj['name'])}  ${th.subt(n, tags, obj['altvalue'])}
 %endif
 ## TYPEDEF ####################################################################
 %elif re.match(r"typedef", obj['type']):
 %if 'params' in obj:
-typedef ${obj['returns']}(__${x}call *${th.sub(ns, obj['name'])})(
-  %for line in th.make_param_lines(ns, obj):
+typedef ${obj['returns']}(__${x}call *${th.subt(n, tags, obj['name'])})(
+  %for line in th.make_param_lines(n, tags, obj):
   ${line}
   %endfor
   );
 %else:
-typedef ${th.sub(ns, obj['value'])} ${th.sub(ns, obj['name'])};
+typedef ${th.subt(n, tags, obj['value'])} ${th.subt(n, tags, obj['name'])};
 %endif
 ## ENUM #######################################################################
 %elif re.match(r"enum", obj['type']):
-typedef enum _${th.sub(ns, obj['name'])}
+typedef enum _${th.subt(n, tags, obj['name'])}
 {
-    %for line in th.make_etor_lines(ns, obj):
+    %for line in th.make_etor_lines(n, tags, obj):
     ${line}
     %endfor
 
-} ${th.sub(ns, obj['name'])};
+} ${th.subt(n, tags, obj['name'])};
 ## STRUCT #####################################################################
 %elif re.match(r"struct", obj['type']):
-typedef struct _${th.sub(ns, obj['name'])}
+typedef struct _${th.subt(n, tags, obj['name'])}
 {
-    %for line in th.make_member_lines(ns, obj):
+    %for line in th.make_member_lines(n, tags, obj):
     ${line}
     %endfor
 
-} ${th.sub(ns, obj['name'])};
+} ${th.subt(n, tags, obj['name'])};
 ## FUNCTION ###################################################################
 %elif re.match(r"function", obj['type']):
 /// 
-%for line in th.make_returns_lines(ns, obj):
+%for line in th.make_returns_lines(n, tags, obj):
 /// ${line}
 %endfor
 __${x}dllport ${x}_result_t __${x}call
-${th.make_func_name(ns, obj)}(
-    %for line in th.make_param_lines(ns, obj):
+${th.make_func_name(n, tags, obj)}(
+    %for line in th.make_param_lines(n, tags, obj):
     ${line}
     %endfor
     );
 ## HANDLE #####################################################################
 %elif re.match(r"handle", obj['type']):
-typedef struct _${th.sub(ns, obj['name'])} *${th.sub(ns, obj['name'])};
+typedef struct _${th.subt(n, tags, obj['name'])} *${th.subt(n, tags, obj['name'])};
 %endif
 %if 'condition' in obj:
-#endif // ${th.sub(ns,obj['condition'])}
+#endif // ${th.subt(n, tags, obj['condition'])}
 %endif
 
 %endif
@@ -127,4 +128,4 @@ typedef struct _${th.sub(ns, obj['name'])} *${th.sub(ns, obj['name'])};
 } // extern "C"
 #endif
 
-#endif // _${X}_${name.upper()}_H
+#endif // _${N}_${name.upper()}_H

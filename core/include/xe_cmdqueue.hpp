@@ -23,7 +23,7 @@
 *
 * @file xe_cmdqueue.hpp
 *
-* @brief C++ wrapper of Intel Xe Driver APIs for Command Queue
+* @brief C++ wrapper of Intel Xe Level-Zero APIs for Command Queue
 *
 * @cond DEV
 * DO NOT EDIT: generated from /scripts/core/cmdqueue.yml
@@ -107,7 +107,7 @@ namespace xe
         ///////////////////////////////////////////////////////////////////////////////
         /// @brief C++ wrapper for ::xeCommandQueueCreateFence
         /// @returns
-        ///     - fence_handle_t: pointer to handle of fence object created
+        ///     - ::fence_handle_t: pointer to handle of fence object created
         /// 
         /// @throws result_t
         inline fence_handle_t

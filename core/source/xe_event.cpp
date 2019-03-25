@@ -23,7 +23,7 @@
 *
 * @file xe_event.cpp
 *
-* @brief Intel Xe Driver APIs for Event
+* @brief Intel Xe Level-Zero APIs for Event
 *
 * DO NOT EDIT: generated from /scripts/core/event.yml
 *

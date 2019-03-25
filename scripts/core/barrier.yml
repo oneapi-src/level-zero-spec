@@ -1,6 +1,6 @@
 --- #--------------------------------------------------------------------------
 type: header
-desc: "Intel $Xx Driver APIs for Barrier"
+desc: "Intel $OneApi Level-Zero APIs for Barrier"
 --- #--------------------------------------------------------------------------
 type: function
 desc: "Appends an execution barrier into a command list."

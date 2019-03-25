@@ -67,25 +67,9 @@ typedef xe_result_t (__xecall *pfn_xeDeviceRegisterCLCommandQueue)(
     xe_command_queue_handle_t* phCommandQueue       ///< [out] pointer to handle of command queue object created
     );
 #endif // XE_ENABLE_OCL_INTEROP
-typedef xe_result_t (__xecall *pfn_xeDeviceCreateCommandGraph)(
-    xe_device_handle_t hDevice,                     ///< [in] handle of the device object
-    const xe_command_graph_desc_t* desc,            ///< [in] pointer to command graph descriptor
-    xe_command_graph_handle_t* phCommandGraph       ///< [out] pointer to handle of command graph object created
-    );
-typedef xe_result_t (__xecall *pfn_xeCommandGraphDestroy)(
-    xe_command_graph_handle_t hCommandGraph         ///< [in] handle of command graph object to destroy
-    );
-typedef xe_result_t (__xecall *pfn_xeCommandGraphClose)(
-    xe_command_graph_handle_t hCommandGraph         ///< [in] handle of command graph object to close
-    );
 typedef xe_result_t (__xecall *pfn_xeDeviceCreateCommandList)(
     xe_device_handle_t hDevice,                     ///< [in] handle of the device object
     const xe_command_list_desc_t* desc,             ///< [in] pointer to command list descriptor
-    xe_command_list_handle_t* phCommandList         ///< [out] pointer to handle of command list object created
-    );
-typedef xe_result_t (__xecall *pfn_xeDeviceCopyCommandList)(
-    xe_device_handle_t hDevice,                     ///< [in] handle of the device object
-    xe_command_list_handle_t hCommandList,          ///< [in] handle to command list to copy
     xe_command_list_handle_t* phCommandList         ///< [out] pointer to handle of command list object created
     );
 typedef xe_result_t (__xecall *pfn_xeCommandListDestroy)(
@@ -109,11 +93,6 @@ typedef xe_result_t (__xecall *pfn_xeCommandListGetParameter)(
     );
 typedef xe_result_t (__xecall *pfn_xeCommandListResetParameters)(
     xe_command_list_handle_t hCommandList           ///< [in] handle of the command list
-    );
-typedef xe_result_t (__xecall *pfn_xeCommandListAppendCommandLists)(
-    xe_command_list_handle_t hCommandList,          ///< [in] handle of the command list
-    uint32_t numCommandLists,                       ///< [in] number of command lists to append
-    xe_command_list_handle_t* phCommandLists        ///< [in] list of handles of the command lists to append for execution
     );
 typedef xe_result_t (__xecall *pfn_xeCommandListReserveSpace)(
     xe_command_list_handle_t hCommandList,          ///< [in] handle of the command list
@@ -145,37 +124,43 @@ typedef xe_result_t (__xecall *pfn_xeCommandListAppendMemoryCopy)(
     xe_command_list_handle_t hCommandList,          ///< [in] handle of command list
     void* dstptr,                                   ///< [in] pointer to destination memory to copy to
     const void* srcptr,                             ///< [in] pointer to source memory to copy from
-    size_t size                                     ///< [in] size in bytes to copy
+    size_t size,                                    ///< [in] size in bytes to copy
+    xe_event_handle_t hEvent                        ///< [in][optional] handle of the event to signal on completion
     );
 typedef xe_result_t (__xecall *pfn_xeCommandListAppendMemorySet)(
     xe_command_list_handle_t hCommandList,          ///< [in] handle of command list
     void* ptr,                                      ///< [in] pointer to memory to initialize
     int value,                                      ///< [in] value to initialize memory to
-    size_t size                                     ///< [in] size in bytes to initailize
+    size_t size,                                    ///< [in] size in bytes to initailize
+    xe_event_handle_t hEvent                        ///< [in][optional] handle of the event to signal on completion
     );
 typedef xe_result_t (__xecall *pfn_xeCommandListAppendImageCopy)(
     xe_command_list_handle_t hCommandList,          ///< [in] handle of command list
     xe_image_handle_t hDstImage,                    ///< [in] handle of destination image to copy to
-    xe_image_handle_t hSrcImage                     ///< [in] handle of source image to copy from
+    xe_image_handle_t hSrcImage,                    ///< [in] handle of source image to copy from
+    xe_event_handle_t hEvent                        ///< [in][optional] handle of the event to signal on completion
     );
 typedef xe_result_t (__xecall *pfn_xeCommandListAppendImageCopyRegion)(
     xe_command_list_handle_t hCommandList,          ///< [in] handle of command list
     xe_image_handle_t hDstImage,                    ///< [in] handle of destination image to copy to
     xe_image_region_t* pDstRegion,                  ///< [in][optional] destination region descriptor
     xe_image_handle_t hSrcImage,                    ///< [in] handle of source image to copy from
-    xe_image_region_t* pSrcRegion                   ///< [in][optional] source region descriptor
+    xe_image_region_t* pSrcRegion,                  ///< [in][optional] source region descriptor
+    xe_event_handle_t hEvent                        ///< [in][optional] handle of the event to signal on completion
     );
 typedef xe_result_t (__xecall *pfn_xeCommandListAppendImageCopyToMemory)(
     xe_command_list_handle_t hCommandList,          ///< [in] handle of command list
     void* dstptr,                                   ///< [in] pointer to destination memory to copy to
     xe_image_handle_t hSrcImage,                    ///< [in] handle of source image to copy from
-    xe_image_region_t* pSrcRegion                   ///< [in][optional] source region descriptor
+    xe_image_region_t* pSrcRegion,                  ///< [in][optional] source region descriptor
+    xe_event_handle_t hEvent                        ///< [in][optional] handle of the event to signal on completion
     );
 typedef xe_result_t (__xecall *pfn_xeCommandListAppendImageCopyFromMemory)(
     xe_command_list_handle_t hCommandList,          ///< [in] handle of command list
     xe_image_handle_t hDstImage,                    ///< [in] handle of destination image to copy to
     xe_image_region_t* pDstRegion,                  ///< [in][optional] destination region descriptor
-    const void* srcptr                              ///< [in] pointer to source memory to copy from
+    const void* srcptr,                             ///< [in] pointer to source memory to copy from
+    xe_event_handle_t hEvent                        ///< [in][optional] handle of the event to signal on completion
     );
 typedef xe_result_t (__xecall *pfn_xeCommandListAppendMemoryPrefetch)(
     xe_command_list_handle_t hCommandList,          ///< [in] handle of command list
@@ -322,6 +307,11 @@ typedef xe_result_t (__xecall *pfn_xeFenceQueryStatus)(
 typedef xe_result_t (__xecall *pfn_xeFenceReset)(
     xe_fence_handle_t hFence                        ///< [in] handle of the fence
     );
+typedef xe_result_t (__xecall *pfn_xeDeviceGetImageProperties)(
+    xe_device_handle_t hDevice,                     ///< [in] handle of the device
+    const xe_image_desc_t* desc,                    ///< [in] pointer to image descriptor
+    xe_image_properties_t* pImageProperties         ///< [out] pointer to image properties
+    );
 typedef xe_result_t (__xecall *pfn_xeDeviceCreateImage)(
     xe_device_handle_t hDevice,                     ///< [in] handle of the device
     const xe_image_desc_t* desc,                    ///< [in] pointer to image descriptor
@@ -330,14 +320,7 @@ typedef xe_result_t (__xecall *pfn_xeDeviceCreateImage)(
 typedef xe_result_t (__xecall *pfn_xeImageDestroy)(
     xe_image_handle_t hImage                        ///< [in] handle of image object to destroy
     );
-typedef xe_result_t (__xecall *pfn_xeCreateMemAllocator)(
-    xe_mem_allocator_handle_t* phMemAllocHandle     ///< [out] Returned memory allocator handle
-    );
-typedef xe_result_t (__xecall *pfn_xeMemAllocatorDestroy)(
-    xe_mem_allocator_handle_t hMemAllocHandle       ///< [in] handle of memory allocator to destroy
-    );
 typedef xe_result_t (__xecall *pfn_xeSharedMemAlloc)(
-    xe_mem_allocator_handle_t hMemAllocHandle,      ///< [in] handle of memory allocator for this allocation
     xe_device_handle_t hDevice,                     ///< [in] handle of the device
     xe_device_mem_alloc_flag_t device_flags,        ///< [in] flags specifying additional device allocation controls
     xe_host_mem_alloc_flag_t host_flags,            ///< [in] flags specifying additional host allocation controls
@@ -346,7 +329,6 @@ typedef xe_result_t (__xecall *pfn_xeSharedMemAlloc)(
     void** ptr                                      ///< [out] pointer to shared allocation
     );
 typedef xe_result_t (__xecall *pfn_xeMemAlloc)(
-    xe_mem_allocator_handle_t hMemAllocHandle,      ///< [in] handle of memory allocator for this allocation
     xe_device_handle_t hDevice,                     ///< [in] handle of the device
     xe_device_mem_alloc_flag_t flags,               ///< [in] flags specifying additional allocation controls
     size_t size,                                    ///< [in] size in bytes to allocate
@@ -354,41 +336,34 @@ typedef xe_result_t (__xecall *pfn_xeMemAlloc)(
     void** ptr                                      ///< [out] pointer to device allocation
     );
 typedef xe_result_t (__xecall *pfn_xeHostMemAlloc)(
-    xe_mem_allocator_handle_t hMemAllocHandle,      ///< [in] handle of memory allocator for this allocation
     xe_host_mem_alloc_flag_t flags,                 ///< [in] flags specifying additional allocation controls
     size_t size,                                    ///< [in] size in bytes to allocate
     size_t alignment,                               ///< [in] minimum alignment in bytes for the allocation
     void** ptr                                      ///< [out] pointer to host allocation
     );
 typedef xe_result_t (__xecall *pfn_xeMemFree)(
-    xe_mem_allocator_handle_t hMemAllocHandle,      ///< [in] handle of memory allocator for this allocation
     const void* ptr                                 ///< [in] pointer to memory to free
     );
 typedef xe_result_t (__xecall *pfn_xeMemGetProperties)(
-    xe_mem_allocator_handle_t hMemAllocHandle,      ///< [in] handle of memory allocator for this allocation
     const void* ptr,                                ///< [in] Pointer to query
     xe_memory_allocation_properties_t* pMemProperties   ///< [out] Query result for memory allocation properties
     );
 typedef xe_result_t (__xecall *pfn_xeMemGetAddressRange)(
-    xe_mem_allocator_handle_t hMemAllocHandle,      ///< [in] handle of memory allocator for this allocation
     const void* ptr,                                ///< [in] Pointer to query
     void** pBase,                                   ///< [in,out][optional] base address of the allocation
     size_t* pSize                                   ///< [in,out][optional] size of the allocation
     );
 typedef xe_result_t (__xecall *pfn_xeIpcGetMemHandle)(
-    xe_mem_allocator_handle_t hMemAllocHandle,      ///< [in] handle of memory allocator for this allocation
     const void* ptr,                                ///< [in] Pointer to the device memory allocation
     xe_ipc_mem_handle_t* pIpcHandle                 ///< [out] Returned IPC memory handle
     );
 typedef xe_result_t (__xecall *pfn_xeIpcOpenMemHandle)(
-    xe_mem_allocator_handle_t hMemAllocHandle,      ///< [in] handle of memory allocator for this allocation
     xe_device_handle_t hDevice,                     ///< [in] handle of the device to associate with the IPC memory handle
     xe_ipc_mem_handle_t handle,                     ///< [in] IPC memory handle
     xe_ipc_memory_flag_t flags,                     ///< [in] flags controlling the operation
     void** ptr                                      ///< [out] pointer to device allocation in this process
     );
 typedef xe_result_t (__xecall *pfn_xeIpcCloseMemHandle)(
-    xe_mem_allocator_handle_t hMemAllocHandle,      ///< [in] handle of memory allocator for this allocation
     const void* ptr                                 ///< [in] pointer to device allocation in this process
     );
 typedef xe_result_t (__xecall *pfn_xeDeviceCreateModule)(
@@ -529,18 +504,13 @@ typedef struct _xe_dispatch_table_t
 #if XE_ENABLE_OCL_INTEROP
     pfn_xeDeviceRegisterCLCommandQueue xeDeviceRegisterCLCommandQueue;
 #endif // XE_ENABLE_OCL_INTEROP
-    pfn_xeDeviceCreateCommandGraph xeDeviceCreateCommandGraph;
-    pfn_xeCommandGraphDestroy xeCommandGraphDestroy;
-    pfn_xeCommandGraphClose xeCommandGraphClose;
     pfn_xeDeviceCreateCommandList xeDeviceCreateCommandList;
-    pfn_xeDeviceCopyCommandList xeDeviceCopyCommandList;
     pfn_xeCommandListDestroy xeCommandListDestroy;
     pfn_xeCommandListClose xeCommandListClose;
     pfn_xeCommandListReset xeCommandListReset;
     pfn_xeCommandListSetParameter xeCommandListSetParameter;
     pfn_xeCommandListGetParameter xeCommandListGetParameter;
     pfn_xeCommandListResetParameters xeCommandListResetParameters;
-    pfn_xeCommandListAppendCommandLists xeCommandListAppendCommandLists;
     pfn_xeCommandListReserveSpace xeCommandListReserveSpace;
     pfn_xeDeviceCreateCommandQueue xeDeviceCreateCommandQueue;
     pfn_xeCommandQueueDestroy xeCommandQueueDestroy;
@@ -585,10 +555,9 @@ typedef struct _xe_dispatch_table_t
     pfn_xeFenceHostSynchronize xeFenceHostSynchronize;
     pfn_xeFenceQueryStatus xeFenceQueryStatus;
     pfn_xeFenceReset xeFenceReset;
+    pfn_xeDeviceGetImageProperties xeDeviceGetImageProperties;
     pfn_xeDeviceCreateImage xeDeviceCreateImage;
     pfn_xeImageDestroy xeImageDestroy;
-    pfn_xeCreateMemAllocator xeCreateMemAllocator;
-    pfn_xeMemAllocatorDestroy xeMemAllocatorDestroy;
     pfn_xeSharedMemAlloc xeSharedMemAlloc;
     pfn_xeMemAlloc xeMemAlloc;
     pfn_xeHostMemAlloc xeHostMemAlloc;
@@ -638,18 +607,13 @@ inline bool load_xe(void *handle, void *(*funcAddressGetter)(void *handle, const
 #if XE_ENABLE_OCL_INTEROP
     outTable->xeDeviceRegisterCLCommandQueue = (pfn_xeDeviceRegisterCLCommandQueue)funcAddressGetter(handle, "xeDeviceRegisterCLCommandQueue");
 #endif // XE_ENABLE_OCL_INTEROP
-    outTable->xeDeviceCreateCommandGraph = (pfn_xeDeviceCreateCommandGraph)funcAddressGetter(handle, "xeDeviceCreateCommandGraph");
-    outTable->xeCommandGraphDestroy = (pfn_xeCommandGraphDestroy)funcAddressGetter(handle, "xeCommandGraphDestroy");
-    outTable->xeCommandGraphClose = (pfn_xeCommandGraphClose)funcAddressGetter(handle, "xeCommandGraphClose");
     outTable->xeDeviceCreateCommandList = (pfn_xeDeviceCreateCommandList)funcAddressGetter(handle, "xeDeviceCreateCommandList");
-    outTable->xeDeviceCopyCommandList = (pfn_xeDeviceCopyCommandList)funcAddressGetter(handle, "xeDeviceCopyCommandList");
     outTable->xeCommandListDestroy = (pfn_xeCommandListDestroy)funcAddressGetter(handle, "xeCommandListDestroy");
     outTable->xeCommandListClose = (pfn_xeCommandListClose)funcAddressGetter(handle, "xeCommandListClose");
     outTable->xeCommandListReset = (pfn_xeCommandListReset)funcAddressGetter(handle, "xeCommandListReset");
     outTable->xeCommandListSetParameter = (pfn_xeCommandListSetParameter)funcAddressGetter(handle, "xeCommandListSetParameter");
     outTable->xeCommandListGetParameter = (pfn_xeCommandListGetParameter)funcAddressGetter(handle, "xeCommandListGetParameter");
     outTable->xeCommandListResetParameters = (pfn_xeCommandListResetParameters)funcAddressGetter(handle, "xeCommandListResetParameters");
-    outTable->xeCommandListAppendCommandLists = (pfn_xeCommandListAppendCommandLists)funcAddressGetter(handle, "xeCommandListAppendCommandLists");
     outTable->xeCommandListReserveSpace = (pfn_xeCommandListReserveSpace)funcAddressGetter(handle, "xeCommandListReserveSpace");
     outTable->xeDeviceCreateCommandQueue = (pfn_xeDeviceCreateCommandQueue)funcAddressGetter(handle, "xeDeviceCreateCommandQueue");
     outTable->xeCommandQueueDestroy = (pfn_xeCommandQueueDestroy)funcAddressGetter(handle, "xeCommandQueueDestroy");
@@ -694,10 +658,9 @@ inline bool load_xe(void *handle, void *(*funcAddressGetter)(void *handle, const
     outTable->xeFenceHostSynchronize = (pfn_xeFenceHostSynchronize)funcAddressGetter(handle, "xeFenceHostSynchronize");
     outTable->xeFenceQueryStatus = (pfn_xeFenceQueryStatus)funcAddressGetter(handle, "xeFenceQueryStatus");
     outTable->xeFenceReset = (pfn_xeFenceReset)funcAddressGetter(handle, "xeFenceReset");
+    outTable->xeDeviceGetImageProperties = (pfn_xeDeviceGetImageProperties)funcAddressGetter(handle, "xeDeviceGetImageProperties");
     outTable->xeDeviceCreateImage = (pfn_xeDeviceCreateImage)funcAddressGetter(handle, "xeDeviceCreateImage");
     outTable->xeImageDestroy = (pfn_xeImageDestroy)funcAddressGetter(handle, "xeImageDestroy");
-    outTable->xeCreateMemAllocator = (pfn_xeCreateMemAllocator)funcAddressGetter(handle, "xeCreateMemAllocator");
-    outTable->xeMemAllocatorDestroy = (pfn_xeMemAllocatorDestroy)funcAddressGetter(handle, "xeMemAllocatorDestroy");
     outTable->xeSharedMemAlloc = (pfn_xeSharedMemAlloc)funcAddressGetter(handle, "xeSharedMemAlloc");
     outTable->xeMemAlloc = (pfn_xeMemAlloc)funcAddressGetter(handle, "xeMemAlloc");
     outTable->xeHostMemAlloc = (pfn_xeHostMemAlloc)funcAddressGetter(handle, "xeHostMemAlloc");
@@ -749,19 +712,7 @@ inline bool load_xe(void *handle, void *(*funcAddressGetter)(void *handle, const
         return false;
     }
 #endif // XE_ENABLE_OCL_INTEROP
-    if(0 == outTable->xeDeviceCreateCommandGraph){
-        return false;
-    }
-    if(0 == outTable->xeCommandGraphDestroy){
-        return false;
-    }
-    if(0 == outTable->xeCommandGraphClose){
-        return false;
-    }
     if(0 == outTable->xeDeviceCreateCommandList){
-        return false;
-    }
-    if(0 == outTable->xeDeviceCopyCommandList){
         return false;
     }
     if(0 == outTable->xeCommandListDestroy){
@@ -780,9 +731,6 @@ inline bool load_xe(void *handle, void *(*funcAddressGetter)(void *handle, const
         return false;
     }
     if(0 == outTable->xeCommandListResetParameters){
-        return false;
-    }
-    if(0 == outTable->xeCommandListAppendCommandLists){
         return false;
     }
     if(0 == outTable->xeCommandListReserveSpace){
@@ -917,16 +865,13 @@ inline bool load_xe(void *handle, void *(*funcAddressGetter)(void *handle, const
     if(0 == outTable->xeFenceReset){
         return false;
     }
+    if(0 == outTable->xeDeviceGetImageProperties){
+        return false;
+    }
     if(0 == outTable->xeDeviceCreateImage){
         return false;
     }
     if(0 == outTable->xeImageDestroy){
-        return false;
-    }
-    if(0 == outTable->xeCreateMemAllocator){
-        return false;
-    }
-    if(0 == outTable->xeMemAllocatorDestroy){
         return false;
     }
     if(0 == outTable->xeSharedMemAlloc){

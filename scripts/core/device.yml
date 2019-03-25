@@ -1,6 +1,6 @@
 --- #--------------------------------------------------------------------------
 type: header
-desc: "Intel $Xx Driver APIs for Device"
+desc: "Intel $OneApi Level-Zero APIs for Device"
 --- #--------------------------------------------------------------------------
 type: function
 desc: "Reports the number of devices"
@@ -28,7 +28,7 @@ class: $xDevice
 name: $x_device_uuid_t
 members:
     - type: uint8_t
-      name: id[$X_MAX_UUID_SIZE]
+      name: "id[$X_MAX_UUID_SIZE]"
       desc: "[out] device universal unique id"
 --- #--------------------------------------------------------------------------
 type: function
@@ -205,7 +205,7 @@ members:
       name: numTiles
       desc: "[out] Number of tiles for this device."
     - type: char
-      name: "device_name[$X_MAX_DEVICE_NAME]"
+      name: "name[$X_MAX_DEVICE_NAME]"
       desc: "[out] Device name"
 --- #--------------------------------------------------------------------------
 type: function

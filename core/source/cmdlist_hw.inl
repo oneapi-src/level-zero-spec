@@ -486,7 +486,8 @@ xe_result_t CommandListCoreFamily<gfxCoreFamily>::appendExecutionBarrier() {
 template <GFXCORE_FAMILY gfxCoreFamily>
 xe_result_t CommandListCoreFamily<gfxCoreFamily>::appendImageCopyFromMemory(xe_image_handle_t hDstImage,
                                                                             xe_image_region_t *pDstRegion,
-                                                                            const void *srcPtr) {
+                                                                            const void *srcPtr,
+                                                                            xe_event_handle_t hEvent) {
 
     // Use for now the AppendMemoryCopy, as images are internally allocated linearly
     auto dstImage = L0::Image::fromHandle(hDstImage);
@@ -504,13 +505,14 @@ xe_result_t CommandListCoreFamily<gfxCoreFamily>::appendImageCopyFromMemory(xe_i
     }
 
     return this->appendMemoryCopy(reinterpret_cast<void *>(dstPtr + offset),
-                                  srcPtr, size);
+                                  srcPtr, size, nullptr);
 }
 
 template <GFXCORE_FAMILY gfxCoreFamily>
 xe_result_t CommandListCoreFamily<gfxCoreFamily>::appendImageCopyToMemory(void *dstPtr,
                                                                           xe_image_handle_t hSrcImage,
-                                                                          xe_image_region_t *pSrcRegion) {
+                                                                          xe_image_region_t *pSrcRegion,
+                                                                          xe_event_handle_t hEvent) {
 
     // Use for now the AppendMemoryCopy, as images are internally allocated linearly
     auto srcImage = L0::Image::fromHandle(hSrcImage);
@@ -529,14 +531,15 @@ xe_result_t CommandListCoreFamily<gfxCoreFamily>::appendImageCopyToMemory(void *
 
     return this->appendMemoryCopy(dstPtr,
                                   reinterpret_cast<void *>(srcPtr + offset),
-                                  size);
+                                  size, hEvent);
 }
 
 template <GFXCORE_FAMILY gfxCoreFamily>
 xe_result_t CommandListCoreFamily<gfxCoreFamily>::appendImageCopyRegion(xe_image_handle_t hDstImage,
                                                                         xe_image_region_t *pDstRegion,
                                                                         xe_image_handle_t hSrcImage,
-                                                                        xe_image_region_t *pSrcRegion) {
+                                                                        xe_image_region_t *pSrcRegion,
+                                                                        xe_event_handle_t hEvent) {
 
     // Use for now the AppendMemoryCopy, as images are internally allocated linearly
     auto dstImage = L0::Image::fromHandle(hDstImage);
@@ -571,13 +574,14 @@ xe_result_t CommandListCoreFamily<gfxCoreFamily>::appendImageCopyRegion(xe_image
     return this->appendMemoryCopy(
         reinterpret_cast<void *>(dstPtr + dstOffset),
         reinterpret_cast<void *>(srcPtr + srcOffset),
-        size);
+        size, hEvent);
 }
 
 template <GFXCORE_FAMILY gfxCoreFamily>
 xe_result_t CommandListCoreFamily<gfxCoreFamily>::appendImageCopy(xe_image_handle_t hDstImage,
-                                                                  xe_image_handle_t hSrcImage) {
-    return this->appendImageCopyRegion(hDstImage, NULL, hSrcImage, NULL);
+                                                                  xe_image_handle_t hSrcImage,
+                                                                  xe_event_handle_t hEvent) {
+    return this->appendImageCopyRegion(hDstImage, NULL, hSrcImage, NULL, hEvent);
 }
 
 template <GFXCORE_FAMILY gfxCoreFamily>
@@ -591,7 +595,8 @@ xe_result_t CommandListCoreFamily<gfxCoreFamily>::appendMemAdvise(xe_device_hand
 template <GFXCORE_FAMILY gfxCoreFamily>
 xe_result_t CommandListCoreFamily<gfxCoreFamily>::appendMemoryCopy(void *dstptr,
                                                                    const void *srcptr,
-                                                                   size_t size) {
+                                                                   size_t size,
+                                                                   xe_event_handle_t hEvent) {
     auto builtinFunction = this->device->getBuiltinFunctionsLib()->getFunction(Builtin::CopyBufferBytes); // no thread safety!
 
     uint32_t groupSizeX = builtinFunction->getSimdSize(); // TODO : consider ATS fused threads
@@ -648,7 +653,8 @@ xe_result_t CommandListCoreFamily<gfxCoreFamily>::appendMemoryPrefetch(const voi
 template <GFXCORE_FAMILY gfxCoreFamily>
 xe_result_t CommandListCoreFamily<gfxCoreFamily>::appendMemorySet(void *ptr,
                                                                   int value,
-                                                                  size_t size) {
+                                                                  size_t size,
+                                                                  xe_event_handle_t hEvent) {
     return XE_RESULT_ERROR_UNSUPPORTED;
 }
 

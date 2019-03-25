@@ -23,7 +23,7 @@
 *
 * @file xe_driver.inl
 *
-* @brief C++ wrapper of Intel Xe Driver APIs
+* @brief C++ wrapper of Intel Xe Level-Zero APIs
 *
 * @cond DEV
 * DO NOT EDIT: generated from /scripts/core/driver.yml
@@ -98,7 +98,7 @@ namespace xe
     ///     - clGetDeviceIDs
     /// 
     /// @returns
-    ///     - device_handle_t: pointer to handle of device object created
+    ///     - ::device_handle_t: pointer to handle of device object created
     /// 
     /// @throws result_t
     inline device_handle_t 

@@ -21,19 +21,19 @@
 * express and approved by Intel in writing.  
 * @endcond
 *
-* @file xe_cmdgraph.cpp
+* @file xex_cmdgraph.cpp
 *
-* @brief Intel Xe Driver APIs for CommandGraph
+* @brief Intel Xe Level-Zero Extended APIs for CommandGraph
 *
-* DO NOT EDIT: generated from /scripts/core/cmdgraph.yml
+* DO NOT EDIT: generated from /scripts/extended/cmdgraph.yml
 *
 ******************************************************************************/
-#if defined(XE_CPP)
-#include "../include/xe_cmdgraph.hpp"
+#if defined(XEX_CPP)
+#include "../include/xex_cmdgraph.hpp"
 #else
-#include "../include/xe_cmdgraph.h"
+#include "../include/xex_cmdgraph.h"
 #endif
-#if !defined(XE_NULLDRV)
+#if !defined(XEX_NULLDRV)
 #include "cmdgraph.h"
 #endif
 
@@ -57,17 +57,17 @@
 ///         + nullptr == desc
 ///         + nullptr == phCommandGraph
 ///     - ::XE_RESULT_ERROR_UNSUPPORTED
-///         + ::XE_COMMAND_GRAPH_DESC_VERSION_CURRENT < desc->version
+///         + ::XEX_COMMAND_GRAPH_DESC_VERSION_CURRENT < desc->version
 ///     - ::XE_RESULT_ERROR_OUT_OF_HOST_MEMORY
 ///     - ::XE_RESULT_ERROR_OUT_OF_DEVICE_MEMORY
 ///
-/// @hash {3b85e08ac6895a0dec2d64fbfb9c2e5ff0dc065fc10cfdf4e13e2903a6f626ca}
+/// @hash {92696439973305f66e0dddb3093b14b0ae552b435babc2c4e4c9e3507865a8b8}
 ///
 __xedllexport xe_result_t __xecall
-xeDeviceCreateCommandGraph(
+xexDeviceCreateCommandGraph(
     xe_device_handle_t hDevice,                     ///< [in] handle of the device object
-    const xe_command_graph_desc_t* desc,            ///< [in] pointer to command graph descriptor
-    xe_command_graph_handle_t* phCommandGraph       ///< [out] pointer to handle of command graph object created
+    const xex_command_graph_desc_t* desc,           ///< [in] pointer to command graph descriptor
+    xex_command_graph_handle_t* phCommandGraph      ///< [out] pointer to handle of command graph object created
     )
 {
     try
@@ -79,7 +79,7 @@ xeDeviceCreateCommandGraph(
             if( nullptr == hDevice ) return XE_RESULT_ERROR_INVALID_PARAMETER;
             if( nullptr == desc ) return XE_RESULT_ERROR_INVALID_PARAMETER;
             if( nullptr == phCommandGraph ) return XE_RESULT_ERROR_INVALID_PARAMETER;
-            if( XE_COMMAND_GRAPH_DESC_VERSION_CURRENT < desc->version ) return XE_RESULT_ERROR_UNSUPPORTED;
+            if( XEX_COMMAND_GRAPH_DESC_VERSION_CURRENT < desc->version ) return XE_RESULT_ERROR_UNSUPPORTED;
         }
         /// @begin
 #if defined(XE_NULLDRV)
@@ -120,11 +120,11 @@ xeDeviceCreateCommandGraph(
 ///         + nullptr == hCommandGraph
 ///     - ::XE_RESULT_ERROR_UNSUPPORTED
 ///
-/// @hash {ca29e107ea24beb8541932fc6be7c98805f20ced8106a62fc76cfa3381110226}
+/// @hash {e0bea645a696833b7bd0c6309bc22c61924679e43b7c9fcb735ea933017a7e63}
 ///
 __xedllexport xe_result_t __xecall
-xeCommandGraphDestroy(
-    xe_command_graph_handle_t hCommandGraph         ///< [in] handle of command graph object to destroy
+xexCommandGraphDestroy(
+    xex_command_graph_handle_t hCommandGraph        ///< [in] handle of command graph object to destroy
     )
 {
     try
@@ -177,11 +177,11 @@ xeCommandGraphDestroy(
 ///         + nullptr == hCommandGraph
 ///     - ::XE_RESULT_ERROR_UNSUPPORTED
 ///
-/// @hash {85412d12c54a9c3632a9e390efce8ad3ad8fbccc1401d7970387baa3b197c3da}
+/// @hash {47dc8a80e55a6913d464b296d07a2776ef5511a63b1e29bd9532022febe693fe}
 ///
 __xedllexport xe_result_t __xecall
-xeCommandGraphClose(
-    xe_command_graph_handle_t hCommandGraph         ///< [in] handle of command graph object to close
+xexCommandGraphClose(
+    xex_command_graph_handle_t hCommandGraph        ///< [in] handle of command graph object to close
     )
 {
     try

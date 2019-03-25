@@ -28,10 +28,10 @@ struct DeviceImp : public Device {
         return XE_RESULT_ERROR_UNSUPPORTED;
     }
 
-    xe_result_t createCommandGraph(const xe_command_graph_desc_t *desc,
-                                   xe_command_graph_handle_t *phCommandGraph) override {
-        return XE_RESULT_ERROR_UNSUPPORTED;
-    }
+    //xe_result_t createCommandGraph(const xe_command_graph_desc_t *desc,
+    //                               xe_command_graph_handle_t *phCommandGraph) override {
+    //    return XE_RESULT_ERROR_UNSUPPORTED;
+    //}
 
     xe_result_t createCommandList(const xe_command_list_desc_t *desc,
                                   xe_command_list_handle_t *commandList) override {
@@ -168,7 +168,7 @@ struct DeviceImp : public Device {
         auto &hwHelper = NEO::HwHelper::get(hardwareInfo.pPlatform->eRenderCoreFamily);
         auto enableLocalMemory = hwHelper.getEnableLocalMemory(hardwareInfo);
 
-        memcpy_s(pDeviceProperties->device_name, sizeof(pDeviceProperties->device_name),
+        memcpy_s(pDeviceProperties->name, sizeof(pDeviceProperties->name),
                  deviceInfo.name, strlen(deviceInfo.name) + 1);
         pDeviceProperties->coreClockRate = deviceInfo.maxClockFrequency;
         pDeviceProperties->vendorId = deviceInfo.vendorId;
@@ -217,6 +217,11 @@ struct DeviceImp : public Device {
     }
 
     xe_result_t setLastLevelCacheConfig(xe_cache_config_t CacheConfig) override {
+        return XE_RESULT_ERROR_UNSUPPORTED;
+    }
+
+    xe_result_t getImageProperties(const xe_image_desc_t* desc,
+            xe_image_properties_t* pImageProperties) override {
         return XE_RESULT_ERROR_UNSUPPORTED;
     }
 

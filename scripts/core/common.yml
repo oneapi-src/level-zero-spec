@@ -1,19 +1,19 @@
 --- #--------------------------------------------------------------------------
 type: header
-desc: "Intel $Xx Driver API common types"
+desc: "Intel $OneApi Level-Zero API common types"
 --- #--------------------------------------------------------------------------
 type: macro
-desc: "Generates generic $Xx API versions"
+desc: "Generates generic $OneApi API versions"
 name: "$X_MAKE_VERSION( _major, _minor )"
 value: "(( _major << 16 )|( _minor & 0x0000ffff))"
 --- #--------------------------------------------------------------------------
 type: macro
-desc: "Extracts $Xx API major version"
+desc: "Extracts $OneApi API major version"
 name: "$X_MAJOR_VERSION( _ver )"
 value: "( _ver >> 16 )"
 --- #--------------------------------------------------------------------------
 type: macro
-desc: "Extracts $Xx API minor version"
+desc: "Extracts $OneApi API minor version"
 name: "$X_MINOR_VERSION( _ver )"
 value: "( _ver & 0x0000ffff )"
 --- #--------------------------------------------------------------------------
@@ -75,11 +75,6 @@ type: handle
 desc: "Handle of driver's command list object"
 class: $xCommandList
 name: "$x_command_list_handle_t"
---- #--------------------------------------------------------------------------
-type: handle
-desc: "Handle of driver's command graph object"
-class: $xCommandGraph
-name: $x_command_graph_handle_t
 --- #--------------------------------------------------------------------------
 type: handle
 desc: "Handle of driver's fence object"

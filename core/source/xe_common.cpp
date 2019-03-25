@@ -23,7 +23,7 @@
 *
 * @file xe_common.cpp
 *
-* @brief Intel Xe Driver API common types
+* @brief Intel Xe Level-Zero API common types
 *
 * DO NOT EDIT: generated from /scripts/core/common.yml
 *

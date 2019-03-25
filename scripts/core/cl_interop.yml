@@ -1,9 +1,9 @@
 --- #--------------------------------------------------------------------------
 type: header
-desc: "Intel $Xx Driver APIs for OpenCL Interopability"
+desc: "Intel $OneApi Level-Zero APIs for OpenCL Interopability"
 --- #--------------------------------------------------------------------------
 type: function
-desc: "Registers OpenCL memory with $Xx"
+desc: "Registers OpenCL memory with $OneApi"
 condition: "$X_ENABLE_OCL_INTEROP"
 class: $xDevice
 name: RegisterCLMemory
@@ -25,7 +25,7 @@ returns:
     - $X_RESULT_ERROR_OUT_OF_DEVICE_MEMORY
 --- #--------------------------------------------------------------------------
 type: function
-desc: "Registers OpenCL program with $Xx"
+desc: "Registers OpenCL program with $OneApi"
 condition: "$X_ENABLE_OCL_INTEROP"
 class: $xDevice
 name: RegisterCLProgram
@@ -47,7 +47,7 @@ returns:
     - $X_RESULT_ERROR_OUT_OF_DEVICE_MEMORY
 --- #--------------------------------------------------------------------------
 type: function
-desc: "Registers OpenCL command queue with $Xx"
+desc: "Registers OpenCL command queue with $OneApi"
 condition: "$X_ENABLE_OCL_INTEROP"
 class: $xDevice
 name: RegisterCLCommandQueue

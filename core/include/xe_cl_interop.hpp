@@ -23,7 +23,7 @@
 *
 * @file xe_cl_interop.hpp
 *
-* @brief C++ wrapper of Intel Xe Driver APIs for OpenCL Interopability
+* @brief C++ wrapper of Intel Xe Level-Zero APIs for OpenCL Interopability
 *
 * @cond DEV
 * DO NOT EDIT: generated from /scripts/core/cl_interop.yml

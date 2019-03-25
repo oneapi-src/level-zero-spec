@@ -37,7 +37,7 @@ void XePeak::xe_peak_kernel_latency(L0Context &context) {
     context.create_module(binary_file);
 
     void *inputBuf;
-    result = xeMemAlloc(context.allocator, context.device, XE_DEVICE_MEM_ALLOC_FLAG_DEFAULT,
+    result = xeMemAlloc(context.device, XE_DEVICE_MEM_ALLOC_FLAG_DEFAULT,
                         (num_items * sizeof(float)), 1, &inputBuf);
     if (result) {
         throw std::runtime_error("xeMemAlloc failed: " + result);
@@ -46,7 +46,7 @@ void XePeak::xe_peak_kernel_latency(L0Context &context) {
         std::cout << "inputBuf device buffer allocated\n";
 
     void *outputBuf;
-    result = xeMemAlloc(context.allocator, context.device, XE_DEVICE_MEM_ALLOC_FLAG_DEFAULT,
+    result = xeMemAlloc(context.device, XE_DEVICE_MEM_ALLOC_FLAG_DEFAULT,
                         (num_items * sizeof(float)), 1, &outputBuf);
     if (result) {
         throw std::runtime_error("xeMemAlloc failed: " + result);
@@ -79,14 +79,14 @@ void XePeak::xe_peak_kernel_latency(L0Context &context) {
     if (verbose)
         std::cout << "local_offset_v1 Function Destroyed\n";
 
-    result = xeMemFree(context.allocator, inputBuf);
+    result = xeMemFree(inputBuf);
     if (result) {
         throw std::runtime_error("xeMemFree failed: " + result);
     }
     if (verbose)
         std::cout << "Input Buffer freed\n";
 
-    result = xeMemFree(context.allocator, outputBuf);
+    result = xeMemFree(outputBuf);
     if (result) {
         throw std::runtime_error("xeMemFree failed: " + result);
     }

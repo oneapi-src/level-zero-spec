@@ -1,39 +1,22 @@
 import re
 
 """
-    substitues $tag variations with repl in string
-    if repl is None, then remove $tag and any following '_'
-    if doxy = True, then insert doxygen '::' notation at beginning (for autogen links)
+    substitues each tag['key'] with tag['value']
+    if cpp, then remove each tag['key'] if matches namespace
+    if comment, then insert doxygen '::' notation at beginning (for autogen links)
 """
-def _sub(tag, repl, string, doxy):
-    if repl:
-        string = re.sub(r"\$%s%s"%(tag.upper(), tag), repl.title(), string)
-        string = re.sub(r"\-\$%s"%tag, "-"+repl, string) #hack
-        repl = "::"+repl if doxy else repl
-        string = re.sub(r"\$%s"%tag, repl, string)
-        string = re.sub(r"\$%s"%tag.upper(), repl.upper(), string)
-    else:
-        string = re.sub(r"\-\$%s_?"%tag, "-", string) #hack
-        repl = "::" if doxy else ""
-        string = re.sub(r"\$%s_?"%tag, repl, string)
-        string = re.sub(r"\$%s_"%tag.upper(), repl.upper(), string)
-    return string
-
-"""
-    substitues $tag variations with namespace in string
-    if namespace is None, then remove $tag and any following '_'
-    if doxy = True, then insert doxygen '::' notation at beginning (for autogen links)
-"""
-def sub(namespace, string, doxy=False):
-    if namespace:
-        string = _sub("x", namespace[0], string, doxy)
-    else:
-        string = _sub("x", None, string, doxy)
-
-    if namespace and len(namespace) > 1:
-        string = _sub("y", namespace[1], string, doxy)
-    else:
-        string = _sub("y", None, string, doxy)
+def subt(namespace, tags, string, comment=False, cpp=False):
+    for key, value in tags.items():
+        if cpp and re.match(namespace, value):
+            string = re.sub(r"%s_?"%re.escape("-"+key), "-", string) #hack
+            repl = "::" if comment and "$OneApi" != key else ""
+            string = re.sub(r"%s_?"%re.escape(key), repl, string)
+            string = re.sub(r"%s_?"%re.escape(key.upper()), repl.upper(), string)
+        else:
+            string = re.sub(r"-%s"%re.escape(key), "-"+value, string) #hack
+            repl = "::"+value if comment and "$OneApi" != key else value+"::" if cpp else value
+            string = re.sub(re.escape(key), repl, string)
+            string = re.sub(re.escape(key.upper()), repl.upper(), string)
     return string
 
 """
@@ -120,44 +103,44 @@ def get_typename(name, meta, type):
 """
     returns proper name of etor
 """
-def make_etor_name(namespace, enum, etor, trim):
-    if trim:
-        prefix = re.sub(r"(\w+)_t", r"\1", sub(namespace, enum)).upper()
-        name = re.sub(r"%s_(\w+)"%prefix, r"\1", sub(namespace, etor))
+def make_etor_name(namespace, tags, enum, etor, cpp):
+    if cpp:
+        prefix = re.sub(r"(\w+)_t", r"\1", subt(namespace, tags, enum, cpp=cpp)).upper()
+        name = re.sub(r"%s_(\w+)"%prefix, r"\1", subt(namespace, tags, etor, cpp=cpp))
         name = re.sub(r"^(\d+\w+)", r"_\1", name) #todo: .lower()?
     else:
-        name = sub(namespace, etor)
+        name = subt(namespace, tags, etor)
     return name
 
 """
     returns proper name of value
 """
-def make_value_name(namespace, alt_namespace, value, meta, trim=False):
+def make_cpp_value_name(namespace, tags, value, cpp, meta):
     macro = get_typename(value, meta, 'macro')
     enum = get_typename(value, meta, 'enum')
     if macro:
-        value = sub(alt_namespace, value)
+        value = subt(namespace, tags, value)
     elif enum:
-        value = "%s::%s"%(sub(namespace, enum), make_etor_name(namespace, enum, value, trim))
+        value = "%s::%s"%(subt(namespace, tags, enum, cpp=cpp), make_etor_name(namespace, tags, enum, value, cpp))
     else:
-        value = sub(namespace, value)
+        value = subt(namespace, tags, value, cpp=cpp)
     return value
 
 """
     returns a list of strings for each enumerator in an enumeration
 """
-def make_etor_lines(namespace, obj, cpp=False, alt_namespace=[""], meta=None):
+def make_etor_lines(namespace, tags, obj, cpp=False, meta=None):
     lines = []
     for item in obj['etors']:
-        name = make_etor_name(namespace, obj['name'], item['name'], cpp)
+        name = make_etor_name(namespace, tags, obj['name'], item['name'], cpp)
 
         if 'value' in item:
-            value = make_value_name(namespace, alt_namespace, item['value'], meta, cpp)
+            value = make_cpp_value_name(namespace, tags, item['value'], cpp, meta)
             prologue = "%s = %s,"%(name, value)
         else:
             prologue = "%s,"%(name)
 
-        for line in split_line(sub(namespace, item['desc'], True), 70):
+        for line in split_line(subt(namespace, tags, item['desc'], True, cpp), 70):
             lines.append("%s///< %s"%(append_ws(prologue, 48), line))
             prologue = ""
     return lines
@@ -165,25 +148,25 @@ def make_etor_lines(namespace, obj, cpp=False, alt_namespace=[""], meta=None):
 """
     returns a list of strings for each member of a structure or class
 """
-def make_member_lines(namespace, obj, cpp=False, alt_namespace=[""], meta=None):
+def make_member_lines(namespace, tags, obj, cpp=False, meta=None):
     lines = []
     if 'members' not in obj:
         return lines
 
     for item in obj['members']:
         if cpp:
-            name = make_value_name(namespace, alt_namespace, item['name'], meta)
+            name = make_cpp_value_name(namespace, tags, item['name'], cpp, meta)
         else:
-            name = sub(namespace, item['name'])
-        type = sub(namespace, item['type'])
+            name = subt(namespace, tags, item['name'], cpp=cpp)
+        type = subt(namespace, tags, item['type'], cpp=cpp)
 
         if cpp and 'init' in item:
-            value = make_value_name(namespace, alt_namespace, item['init'], meta, True)
+            value = make_cpp_value_name(namespace, tags, item['init'], cpp, meta)
             prologue = "%s %s = %s;"%(type, name, value)
         else:
             prologue = "%s %s;"%(type, name)
 
-        for line in split_line(sub(namespace, item['desc'], True), 70):
+        for line in split_line(subt(namespace, tags, item['desc'], True, cpp), 70):
             lines.append("%s///< %s"%(append_ws(prologue, 48), line))
             prologue = ""
     return lines
@@ -191,13 +174,13 @@ def make_member_lines(namespace, obj, cpp=False, alt_namespace=[""], meta=None):
 """
     returns a list of strings for each member of a class
 """
-def make_member_function_lines(namespace, obj):
+def make_member_function_lines(namespace, tags, obj):
     lines = []
     if 'members' not in obj:
         return lines
 
     for item in obj['members']:
-        name = sub(namespace, item['name'])
+        name = subt(namespace, tags, item['name'], cpp=True)
         lines.append("auto get%s( void ) const { return %s; }"%(name.title(), name))
     return lines
 
@@ -216,7 +199,7 @@ def filter_param_list(params, in_or_out):
 """
     returns a list of strings for each parameter of a function
 """
-def make_param_lines(namespace, obj, cpp=False):
+def make_param_lines(namespace, tags, obj, cpp=False):
     lines = []
 
     if cpp:
@@ -229,15 +212,15 @@ def make_param_lines(namespace, obj, cpp=False):
         params = obj['params']
 
     for i, item in enumerate(params):
-        name = sub(namespace, item['name'])
-        type = sub(namespace, item['type'])
+        name = subt(namespace, tags, item['name'], cpp=cpp)
+        type = subt(namespace, tags, item['type'], cpp=cpp)
 
         if i < len(params)-1:
             prologue = "%s %s,"%(type, name)
         else:
             prologue = "%s %s"%(type, name)
 
-        for line in split_line(sub(namespace, item['desc'], True), 70):
+        for line in split_line(subt(namespace, tags, item['desc'], True, cpp), 70):
             lines.append("%s///< %s"%(append_ws(prologue, 48), line))
             prologue = ""
 
@@ -249,7 +232,7 @@ def make_param_lines(namespace, obj, cpp=False):
 """
     returns a string of parameter names for passing to a function
 """
-def make_param_call_str(prologue, namespace, obj, cpp=False):
+def make_param_call_str(prologue, obj, cpp=False):
     if cpp:
         if 'decl' in obj and re.match(r"static", obj['decl']):
             params = filter_param_list(obj['params'], "in")
@@ -269,18 +252,12 @@ def make_param_call_str(prologue, namespace, obj, cpp=False):
     return ", ".join(names)
     
 """
-    returns a string of parameter names for forwarding to a function
-"""
-def make_forwarding_param_call_str(namespace, obj):
-    return ", ".join([item['name'] for item in obj['params']])
-
-"""
     returns a list of strings for the description
 """
-def make_desc_lines(namespace, obj):
+def make_desc_lines(namespace, tags, obj, cpp=False):
     lines = []
     prologue = "@brief"
-    for line in split_line(sub(namespace, obj['desc'], True), 70):
+    for line in split_line(subt(namespace, tags, obj['desc'], True, cpp), 70):
         lines.append("%s %s"%(prologue, line))
         prologue = "      "
     return lines
@@ -288,7 +265,7 @@ def make_desc_lines(namespace, obj):
 """
     returns a list of strings for the detailed description
 """
-def make_details_lines(namespace, obj):
+def make_details_lines(namespace, tags, obj, cpp=False):
     lines = []
     if 'details' in obj:
         lines.append("")
@@ -298,17 +275,17 @@ def make_details_lines(namespace, obj):
             if isinstance(item, dict):
                 for key, values in item.items():
                     prologue = "    -"
-                    for line in split_line(sub(namespace, key, True), 70):
+                    for line in split_line(subt(namespace, tags, key, True, cpp), 70):
                         lines.append("%s %s"%(prologue, line))
                         prologue = "     "
                     for val in values:
                         prologue = "        +"
-                        for line in split_line(sub(namespace, val, True), 66):
+                        for line in split_line(subt(namespace, tags, val, True, cpp), 66):
                             lines.append("%s %s"%(prologue, line))
                             prologue = "         "
             else:
                 prologue = "    -"
-                for line in split_line(sub(namespace, item, True), 70):
+                for line in split_line(subt(namespace, tags, item, True, cpp), 70):
                         lines.append("%s %s"%(prologue, line))
                         prologue = "     "
     if 'analogue' in obj:
@@ -322,59 +299,59 @@ def make_details_lines(namespace, obj):
 """
     returns a dict of auto-generated parameter validation checks
 """
-def make_param_checks(namespace, obj, doxy=False):
+def make_param_checks(namespace, tags, obj, comment=False, cpp=False):
     checks = {}
-    eip = sub(namespace, "$X_RESULT_ERROR_INVALID_PARAMETER", doxy)
-    eus = sub(namespace, "$X_RESULT_ERROR_UNSUPPORTED", doxy)
+    eip = subt(namespace, tags, "$X_RESULT_ERROR_INVALID_PARAMETER", comment, cpp)
+    eus = subt(namespace, tags, "$X_RESULT_ERROR_UNSUPPORTED", comment, cpp)
     checks[eip] = []
     checks[eus] = []
 
     for item in obj['params']:
         if not re.match(r".*\[optional\].*", item['desc']): #skip optional params
             if re.match(r".*\w+\*+", item['type']): # pointer-type
-                checks[eip].append("nullptr == %s"%sub(namespace, item['name'], doxy))
+                checks[eip].append("nullptr == %s"%subt(namespace, tags, item['name'], comment, cpp))
             elif re.match(r".*handle_t.*", item['type']): # handle-type
-                checks[eip].append("nullptr == %s"%sub(namespace, item['name'], doxy))
+                checks[eip].append("nullptr == %s"%subt(namespace, tags, item['name'], comment, cpp))
 
             if re.match(r".*desc_t.*", item['type']): # descriptor-type
-                checks[eus].append("%s < %s->version"%(re.sub(r"\w*\s*(.*)_t.*", r"\1_VERSION_CURRENT", sub(namespace, item['type'], doxy)).upper(), item['name']))
+                checks[eus].append("%s < %s->version"%(re.sub(r"\w*\s*(.*)_t.*", r"\1_VERSION_CURRENT", subt(namespace, tags, item['type'], comment, cpp)).upper(), item['name']))
     return checks
 
 """
     returns a list of strings for possible return values
 """
-def make_returns_lines(namespace, obj, cpp=False):
+def make_returns_lines(namespace, tags, obj, cpp=False):
     lines = []
     if cpp:
         params = filter_param_list(obj['params'], "out")
         if len(params) > 0:
             lines.append("@returns")
             for p in params:
-                lines.append("    - %s"%sub(namespace, re.sub(r"(.*)\*", r"\1:%s"%re.sub(r"\[.*\](.*)", r"\1", p['desc']), p['type'])))
+                lines.append("    - %s"%subt(namespace, tags, re.sub(r"(.*)\*", r"\1:%s"%re.sub(r"\[.*\](.*)", r"\1", p['desc']), p['type']), True, cpp))
             lines.append("")
         lines.append("@throws result_t")
         return lines
 
     lines.append("@returns")
-    lines.append("    - %s"%sub(namespace, "$X_RESULT_SUCCESS", True))
-    lines.append("    - %s"%sub(namespace, "$X_RESULT_ERROR_UNINITIALIZED", True))
-    lines.append("    - %s"%sub(namespace, "$X_RESULT_ERROR_DEVICE_LOST", True))
+    lines.append("    - %s"%subt(namespace, tags, "$X_RESULT_SUCCESS", True, cpp))
+    lines.append("    - %s"%subt(namespace, tags, "$X_RESULT_ERROR_UNINITIALIZED", True, cpp))
+    lines.append("    - %s"%subt(namespace, tags, "$X_RESULT_ERROR_DEVICE_LOST", True, cpp))
 
     # generate default checks
-    gen = make_param_checks(namespace, obj, True)
+    gen = make_param_checks(namespace, tags, obj, True, cpp)
 
     # merge user-specified values
     if 'returns' in obj:
         for item in obj['returns']:
             if isinstance(item, dict):
                 for key, values in item.items():
-                    key = sub(namespace, key, True)
+                    key = subt(namespace, tags, key, True, cpp)
                     if key not in gen:
                         gen[key] = []
                     for val in values:
-                        gen[key].append(sub(namespace, val, True))
+                        gen[key].append(subt(namespace, tags, val, True, cpp))
             else:
-                key = sub(namespace, item, True)
+                key = subt(namespace, tags, item, True, cpp)
                 if key not in gen:
                     gen[key] = []
 
@@ -388,39 +365,52 @@ def make_returns_lines(namespace, obj, cpp=False):
 """
     returns string for declaring function return type
 """
-def make_return_value(namespace, obj, cpp=False):
-    if cpp and 'decl' in obj:
-        decl = "%s "%obj['decl']
+def make_return_value(namespace, tags, obj, cpp=False, decl=False):
+    if decl and 'decl' in obj:
+        prologue = "static " if re.match("singleton", obj['decl']) else "%s "%obj['decl']
     else:
-        decl = ""
+        prologue = ""
 
     params = filter_param_list(obj['params'], "out")
     if len(params) == 0:
-        return decl+"void"
+        return prologue+"void"
 
     types = []
     for p in params:
-        types.append(sub(namespace, re.sub(r"(.*)\*", r"\1", p['type'])))
+        types.append(subt(namespace, tags, re.sub(r"(.*)\*", r"\1", p['type']), cpp=cpp))
 
     if len(types) > 1:
-        return decl+"std::tuple<%s>"%", ".join(types)
+        return prologue+"std::tuple<%s>"%", ".join(types)
     else:
-        return decl+types[0]
+        return prologue+types[0]
 
 """
     returns the name of a function
 """
-def make_func_name(namespace, obj, cpp=False):
+def make_func_name(namespace, tags, obj, cpp=False):
     if not cpp and 'class' in obj:
         cls = obj['class']
     else:
         cls = ""
-    return sub(namespace, "%s%s"%(cls, obj['name']))
+    return subt(namespace, tags, "%s%s"%(cls, obj['name']), cpp=cpp)
+
+"""
+    returns the name of a class
+"""
+def make_class_name(namespace, tags, obj):
+    name = subt(namespace, tags, obj['name'], cpp=True)
+    if 'base' in obj:
+        name += " : public %s"%(subt(namespace, tags, obj['base'], cpp=True))
+    return name
 
 """
     returns a single-line driver function call
 """
-def make_obj_accessor(namespace, obj):
+def make_obj_accessor(tags, obj):
+    null_tags = {}
+    for key, value in tags.items():
+        null_tags[key] = ""
+
     method = obj['name']
 
     if 'class' in obj:
@@ -435,26 +425,26 @@ def make_obj_accessor(namespace, obj):
 
     noobject = decl_type == "static"
     if noobject:
-        method = sub([""], cls) + method
+        method = subt("", null_tags, cls) + method
 
     singleton = decl_type == "singleton"
     method = method[0].lower() + method[1:]
     if noobject:
-        str = sub([""], "%s("%(method))
-        str += make_param_call_str("", "", obj)
+        str = subt("", null_tags, "%s("%(method))
+        str += make_param_call_str("", obj)
     elif singleton:
-        str = sub([""], "%s::get()->%s("%(cls, method))
-        str += make_param_call_str("", "", obj)
+        str = subt("", null_tags, "%s::get()->%s("%(cls, method))
+        str += make_param_call_str("", obj)
     else:
         params = obj['params']
-        str = sub([""], "%s::fromHandle("%cls)
+        str = subt("", null_tags, "%s::fromHandle("%cls)
         argStr=""
         lastArg=""
         calledMethod=False
         for item in params:
             if len(lastArg) == 0:
                 #First must match class name
-                if item['name'] == sub(["h"],cls):
+                if item['name'][1:] == subt("", null_tags, cls):
                     str += item['name'] + ")->" + method + "("
                     calledMethod=True
                 elif item.get('class',"") == "":

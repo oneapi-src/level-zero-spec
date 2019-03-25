@@ -17,18 +17,13 @@ class SharedMemAllocTest: public GlobalFixtureTest {
 TEST_F(SharedMemAllocTest, returnsValidPtr) {
     Mock<Device> device;
 
-    xe_mem_allocator_handle_t hMemAllocHandle = {};
-    auto result = xeCreateMemAllocator(&hMemAllocHandle);
-    ASSERT_EQ(XE_RESULT_SUCCESS, result);
-
     xe_device_mem_alloc_flag_t flagsDevice = {};
     xe_host_mem_alloc_flag_t flagsHost = {};
     size_t size = 65536u;
     size_t alignment = 4096u;
     void *ptr = nullptr;
 
-    result = xeSharedMemAlloc(
-        hMemAllocHandle,
+    auto result = xeSharedMemAlloc(
         device.toHandle(),
         flagsDevice,
         flagsHost,
@@ -38,11 +33,8 @@ TEST_F(SharedMemAllocTest, returnsValidPtr) {
     ASSERT_EQ(result, XE_RESULT_SUCCESS);
     memset(ptr, 0xbf, size);
 
-    result = xeMemFree(hMemAllocHandle, const_cast<const void *>(ptr));
+    result = xeMemFree(const_cast<const void *>(ptr));
     ASSERT_EQ(result, XE_RESULT_SUCCESS);
-
-    result = xeMemAllocatorDestroy(hMemAllocHandle);
-    ASSERT_EQ(XE_RESULT_SUCCESS, result);
 }
 
 } // namespace ult

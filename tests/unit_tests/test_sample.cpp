@@ -133,16 +133,11 @@ TEST(sample, helloWorld) {
                                     groupSizeZ);
     ASSERT_EQ(XE_RESULT_SUCCESS, result);
 
-    xe_mem_allocator_handle_t hMemAllocHandle = {};
-    result = xeCreateMemAllocator(&hMemAllocHandle);
-    ASSERT_EQ(XE_RESULT_SUCCESS, result);
-
     xe_device_mem_alloc_flag_t deviceFlags = {};
     xe_host_mem_alloc_flag_t hostFlags = {};
     size_t bufferSize = 4096u;
     void *dest = nullptr;
-    result = xeSharedMemAlloc(hMemAllocHandle,
-                              hDevice,
+    result = xeSharedMemAlloc(hDevice,
                               deviceFlags,
                               hostFlags,
                               bufferSize,
@@ -154,8 +149,7 @@ TEST(sample, helloWorld) {
     ASSERT_EQ(XE_RESULT_SUCCESS, result);
 
     void *src = nullptr;
-    result = xeSharedMemAlloc(hMemAllocHandle,
-                              hDevice,
+    result = xeSharedMemAlloc(hDevice,
                               deviceFlags,
                               hostFlags,
                               bufferSize,
@@ -186,13 +180,10 @@ TEST(sample, helloWorld) {
                                                (xe_fence_handle_t)0);
     ASSERT_EQ(XE_RESULT_SUCCESS, result);
 
-    result = xeMemFree(hMemAllocHandle, src);
+    result = xeMemFree(src);
     ASSERT_EQ(XE_RESULT_SUCCESS, result);
 
-    result = xeMemFree(hMemAllocHandle, dest);
-    ASSERT_EQ(XE_RESULT_SUCCESS, result);
-
-    result = xeMemAllocatorDestroy(hMemAllocHandle);
+    result = xeMemFree(dest);
     ASSERT_EQ(XE_RESULT_SUCCESS, result);
 
     result = xeCommandListDestroy(commandList);

@@ -21,62 +21,43 @@
 * express and approved by Intel in writing.  
 * @endcond
 *
-* @file xe_cmdgraph.inl
+* @file xex_device.inl
 *
-* @brief C++ wrapper of Intel Xe Driver APIs for CommandGraph
+* @brief C++ wrapper of Intel Xe Level-Zero Extended APIs for Device
 *
 * @cond DEV
-* DO NOT EDIT: generated from /scripts/core/cmdgraph.yml
+* DO NOT EDIT: generated from /scripts/extended/device.yml
 * @endcond
 *
 ******************************************************************************/
-#ifndef _XE_CMDGRAPH_INL
-#define _XE_CMDGRAPH_INL
+#ifndef _XEX_DEVICE_INL
+#define _XEX_DEVICE_INL
 #if defined(__cplusplus)
 #pragma once
-#include "xe_cmdgraph.hpp"
+#include "xex_device.hpp"
 
-namespace xe
+namespace xex
 {
     ///////////////////////////////////////////////////////////////////////////////
-    /// @brief C++ wrapper for ::xeCommandGraphDestroy
+    /// @brief C++ wrapper for ::xexDeviceCreateCommandGraph
     /// 
     /// @details
-    ///     - The implementation of this function will immediately free all Host
-    ///       allocations associated with this command graph.
+    ///     - This function may be called from simultaneous threads.
     ///     - The implementation of this function should be lock-free.
     /// 
-    /// @throws result_t
-    inline void 
-    CommandGraph::Destroy(
-        void
-        )
-    {
-        // auto result = ::xeCommandGraphDestroy( handle );
-        // if( ::XE_RESULT_SUCCESS != result ) throw exception(result, "xe::CommandGraph::Destroy");
-    }
-
-    ///////////////////////////////////////////////////////////////////////////////
-    /// @brief C++ wrapper for ::xeCommandGraphClose
-    /// 
-    /// @details
-    ///     - The command graph will optimize the execution order of the command
-    ///       lists.
-    ///     - A command list may **not** be reset after the command graph is closed.
-    ///     - The application may **not** call this function from simultaneous
-    ///       threads with the same command graph handle.
-    ///     - The implementation of this function should be lock-free.
+    /// @returns
+    ///     - ::command_graph_handle_t: pointer to handle of command graph object created
     /// 
     /// @throws result_t
-    inline void 
-    CommandGraph::Close(
-        void
+    inline command_graph_handle_t 
+    Device::CreateCommandGraph(
+        const command_graph_desc_t* desc                ///< [in] pointer to command graph descriptor
         )
     {
-        // auto result = ::xeCommandGraphClose( handle );
-        // if( ::XE_RESULT_SUCCESS != result ) throw exception(result, "xe::CommandGraph::Close");
+        // auto result = ::xexDeviceCreateCommandGraph( handle, desc );
+        // if( ::XE_RESULT_SUCCESS != result ) throw exception(result, "xex::Device::CreateCommandGraph");
     }
 
-} // namespace xe
+} // namespace xex
 #endif // defined(__cplusplus)
-#endif // _XE_CMDGRAPH_INL
+#endif // _XEX_DEVICE_INL

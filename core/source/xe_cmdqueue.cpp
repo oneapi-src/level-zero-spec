@@ -23,7 +23,7 @@
 *
 * @file xe_cmdqueue.cpp
 *
-* @brief Intel Xe Driver APIs for Command Queue
+* @brief Intel Xe Level-Zero APIs for Command Queue
 *
 * DO NOT EDIT: generated from /scripts/core/cmdqueue.yml
 *

@@ -1,10 +1,20 @@
 <%!
 import re
 from templates import helper as th
+
+def declare_obj(obj, tags):
+    if re.match(r"class", obj['type']):
+        return True
+    if 'class' not in obj or obj['class'] in tags:
+        return re.match(r"function", obj['type'])
+    return False
+
 %><%
-    x=context['ns'][0]
-    X=context['ns'][0].upper()
-    Xx=context['ns'][0].title()
+    n=namespace
+    N=n.upper()
+
+    x=tags['$x']
+    X=x.upper()
 %>/**************************************************************************//**
 * INTEL CONFIDENTIAL  
 * Copyright 2019  
@@ -28,55 +38,55 @@ from templates import helper as th
 * express and approved by Intel in writing.  
 * @endcond
 *
-* @file ${x}_${name}.inl
+* @file ${n}_${name}.inl
 *
-* @brief C++ wrapper of ${th.sub(ns, header['desc'])}
+* @brief C++ wrapper of ${th.subt(n, tags, header['desc'])}
 *
 * @cond DEV
 * DO NOT EDIT: generated from /scripts/${section}/${name}.yml
 * @endcond
 *
 ******************************************************************************/
-#ifndef _${X}_${name.upper()}_INL
-#define _${X}_${name.upper()}_INL
+#ifndef _${N}_${name.upper()}_INL
+#define _${N}_${name.upper()}_INL
 #if defined(__cplusplus)
 #pragma once
 %if re.match(r"common", name):
-#include "${x}_all.h"
+#include "${n}_all.h"
 %else:
-#include "${x}_${name}.hpp"
+#include "${n}_${name}.hpp"
 %endif
 
-namespace ${x}
+namespace ${n}
 {
 %for obj in objects:
-%if re.match(r"class", obj['type']) or (re.match(r"function", obj['type']) and ('class' not in obj or re.match(r"\$x$", obj['class']))):
+%if declare_obj(obj, tags):
 %if re.match(r"function", obj['type']):
     ## FUNCTION ###################################################################
     ///////////////////////////////////////////////////////////////////////////////
 %if 'condition' in obj:
-#if ${th.sub(ns, obj['condition'])}
+#if ${th.subt(n, tags, obj['condition'])}
 %endif
-    /// @brief C++ wrapper for ::${th.make_func_name(ns, obj)}
-    %for line in th.make_details_lines(None, obj):
+    /// @brief C++ wrapper for ::${th.make_func_name(n, tags, obj)}
+    %for line in th.make_details_lines(n, tags, obj, cpp=True):
     /// ${line}
     %endfor
     /// 
-    %for line in th.make_returns_lines(None, obj, True):
+    %for line in th.make_returns_lines(n, tags, obj, cpp=True):
     /// ${line}
     %endfor
-    inline ${th.make_return_value(None, obj)} 
-    ${th.make_func_name(None, obj, True)}(
-        %for line in th.make_param_lines(None, obj, True):
+    inline ${th.make_return_value(n, tags, obj, cpp=True)} 
+    ${th.make_func_name(n, tags, obj, cpp=True)}(
+        %for line in th.make_param_lines(n, tags, obj, cpp=True):
         ${line}
         %endfor
         )
     {
-        // auto result = ::${th.make_func_name(ns, obj)}( ${th.make_param_call_str("handle", None, obj, True)} );
-        // if( ::${X}_RESULT_SUCCESS != result ) throw exception(result, "${x}::${th.sub(None, obj['name'])}::${th.sub(None, obj['name'])}");
+        // auto result = ::${th.make_func_name(n, tags, obj)}( ${th.make_param_call_str("handle", obj, True)} );
+        // if( ::${X}_RESULT_SUCCESS != result ) throw exception(result, "${th.subt(n, tags, obj['name'], cpp=True)}");
     }
 %if 'condition' in obj:
-#endif // ${th.sub(ns, obj['condition'])}
+#endif // ${th.subt(n, tags, obj['condition'])}
 %endif
 
 %elif re.match(r"class", obj['type']):
@@ -84,34 +94,34 @@ namespace ${x}
     %for f in th.filter_items(th.extract_objs(specs, "function"), 'class', obj['name']):
     ///////////////////////////////////////////////////////////////////////////////
 %if 'condition' in f:
-#if ${th.sub(ns, f['condition'])}
+#if ${th.subt(n, tags, f['condition'])}
 %endif
-    /// @brief C++ wrapper for ::${th.make_func_name(ns, f)}
-    %for line in th.make_details_lines(None, f):
+    /// @brief C++ wrapper for ::${th.make_func_name(n, tags, f)}
+    %for line in th.make_details_lines(n, tags, f, cpp=True):
     /// ${line}
     %endfor
     /// 
-    %for line in th.make_returns_lines(None, f, True):
+    %for line in th.make_returns_lines(n, tags, f, cpp=True):
     /// ${line}
     %endfor
-    inline ${th.make_return_value(None, f)} 
-    ${th.sub(None, obj['name'])}::${th.make_func_name(None, f, True)}(
-        %for line in th.make_param_lines(None, f, True):
+    inline ${th.make_return_value(n, tags, f, cpp=True)} 
+    ${th.subt(n, tags, obj['name'], cpp=True)}::${th.make_func_name(n, tags, f, cpp=True)}(
+        %for line in th.make_param_lines(n, tags, f, cpp=True):
         ${line}
         %endfor
         )
     {
-        // auto result = ::${th.make_func_name(ns, f)}( ${th.make_param_call_str("handle", None, f, True)} );
-        // if( ::${X}_RESULT_SUCCESS != result ) throw exception(result, "${x}::${th.sub(None, obj['name'])}::${th.sub(None, f['name'])}");
+        // auto result = ::${th.make_func_name(n, tags, f)}( ${th.make_param_call_str("handle", f, True)} );
+        // if( ::${X}_RESULT_SUCCESS != result ) throw exception(result, "${n}::${th.subt(n, tags, obj['name'], cpp=True)}::${th.subt(n, tags, f['name'], cpp=True)}");
     }
 %if 'condition' in f:
-#endif // ${th.sub(ns, f['condition'])}
+#endif // ${th.subt(n, tags, f['condition'])}
 %endif
 
     %endfor
 %endif
 %endif
 %endfor
-} // namespace ${x}
+} // namespace ${n}
 #endif // defined(__cplusplus)
-#endif // _${X}_${name.upper()}_INL
+#endif // _${N}_${name.upper()}_INL

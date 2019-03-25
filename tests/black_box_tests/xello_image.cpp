@@ -97,11 +97,11 @@ void testAppendImageFunction(xe_device_handle_t &device, bool &validRet) {
     SUCCESS_OR_TERMINATE(xeFunctionSetArgumentValue(function, 1, sizeof(dstImg), &dstImg));
 
     // Copy from srcBuffer->srcImg->dstImg->dstBuffer, so at the end dstBuffer = srcBuffer
-    SUCCESS_OR_TERMINATE(xeCommandListAppendImageCopyFromMemory(cmdList, srcImg, &srcRegion, srcBuffer));
+    SUCCESS_OR_TERMINATE(xeCommandListAppendImageCopyFromMemory(cmdList, srcImg, &srcRegion, srcBuffer, nullptr));
     SUCCESS_OR_TERMINATE(xeCommandListAppendExecutionBarrier(cmdList));
     SUCCESS_OR_TERMINATE(xeCommandListAppendLaunchFunction(cmdList, function, &dispatchTraits, nullptr));
     SUCCESS_OR_TERMINATE(xeCommandListAppendExecutionBarrier(cmdList));
-    SUCCESS_OR_TERMINATE(xeCommandListAppendImageCopyToMemory(cmdList, dstBuffer, dstImg, &dstRegion));
+    SUCCESS_OR_TERMINATE(xeCommandListAppendImageCopyToMemory(cmdList, dstBuffer, dstImg, &dstRegion, nullptr));
 
     SUCCESS_OR_TERMINATE(xeCommandListClose(cmdList));
     SUCCESS_OR_TERMINATE(xeCommandQueueExecuteCommandLists(cmdQueue, 1, &cmdList, nullptr));
@@ -141,7 +141,7 @@ int main(int argc, char *argv[]) {
     xe_device_uuid_t deviceUniqueID = {};
     SUCCESS_OR_TERMINATE(xeDriverGetDevice(&deviceUniqueID, &device0));
     SUCCESS_OR_TERMINATE(xeDeviceGetProperties(device0, &device0Properties));
-    std::cout << device0Properties.device_name << std::endl;
+    std::cout << device0Properties.name << std::endl;
 
     bool outputValidationSuccessful;
     testAppendImageFunction(device0, outputValidationSuccessful);

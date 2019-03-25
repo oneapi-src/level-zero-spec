@@ -23,7 +23,7 @@
 *
 * @file xe_barrier.hpp
 *
-* @brief C++ wrapper of Intel Xe Driver APIs for Barrier
+* @brief C++ wrapper of Intel Xe Level-Zero APIs for Barrier
 *
 * @cond DEV
 * DO NOT EDIT: generated from /scripts/core/barrier.yml

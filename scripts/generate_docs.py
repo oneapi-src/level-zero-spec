@@ -90,7 +90,7 @@ def validate_md(fpath, meta):
 Entry-point:
     generate markdown documents from templates
 """
-def generate_md(srcpath, dstpath, namespace, meta):
+def generate_md(srcpath, dstpath, tags, meta):
     loc = 0
     util.makePath(dstpath)
     util.removeFiles(dstpath, "*.md")
@@ -99,9 +99,9 @@ def generate_md(srcpath, dstpath, namespace, meta):
         print("Generating %s..."%fout)
         validate_md(fin, meta)
         loc += util.makoWrite(fin, fout,
-            x=namespace,
-            X=namespace.upper(),
-            Xx=namespace.title())
+            x=tags['$x'],
+            X=tags['$x'].upper(),
+            OneApi=tags['$OneApi'])
     print("Generated %s lines of markdown.\n"%loc)
 
 """

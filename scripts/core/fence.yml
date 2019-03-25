@@ -1,6 +1,6 @@
 --- #--------------------------------------------------------------------------
 type: header
-desc: "Intel $Xx Driver APIs for Fence"
+desc: "Intel $OneApi Level-Zero APIs for Fence"
 --- #--------------------------------------------------------------------------
 type: enum
 desc: "API version of $x_fence_desc_t"

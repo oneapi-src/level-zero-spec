@@ -1,0 +1,396 @@
+[
+    {
+        "header": {
+            "desc": "Intel $OneApi Level-Zero Tool API common types",
+            "type": "header"
+        },
+        "name": "common",
+        "objects": []
+    },
+    {
+        "header": {
+            "desc": "Intel $OneApi Level-Zero Tool APIs for Device",
+            "type": "header"
+        },
+        "name": "device",
+        "objects": [
+            {
+                "base": "$xDevice",
+                "desc": "C++ wrapper for device",
+                "hash": null,
+                "members": [
+                    {
+                        "desc": "handle of device object",
+                        "name": "handle",
+                        "type": "$x_device_handle_t"
+                    }
+                ],
+                "name": "$tDevice",
+                "type": "class"
+            }
+        ]
+    },
+    {
+        "header": {
+            "desc": "Intel $OneApi Level-Zero Tool APIs for GT-Pin",
+            "type": "header"
+        },
+        "name": "gtpin",
+        "objects": []
+    },
+    {
+        "header": {
+            "desc": "Intel $OneApi Level-Zero Tool APIs for Metrics",
+            "type": "header"
+        },
+        "name": "metrics",
+        "objects": [
+            {
+                "class": "$tDevice",
+                "desc": "",
+                "etors": [
+                    {
+                        "desc": "",
+                        "name": "$T_METRIC_GROUP_SAMPLING_TYPE_EVENT_BASED"
+                    },
+                    {
+                        "desc": "",
+                        "name": "$T_METRIC_GROUP_SAMPLING_TYPE_TIME_BASED"
+                    }
+                ],
+                "hash": null,
+                "name": "$t_metric_group_sampling_type",
+                "type": "enum"
+            },
+            {
+                "class": "$tDevice",
+                "decl": "singleton",
+                "desc": "",
+                "hash": "e9320c3c91d5fcc7f51082901ddab9866a2e866330d8d67f811978aad0ec812b",
+                "name": "GetMetricGroupCount",
+                "params": [
+                    {
+                        "desc": "[in] handle of the device object",
+                        "name": "hDevice",
+                        "type": "$x_device_handle_t"
+                    },
+                    {
+                        "desc": "[in] metric group sampling type",
+                        "name": "type",
+                        "type": "$t_metric_group_sampling_type"
+                    },
+                    {
+                        "desc": "[out] number of metric groups supported by the device",
+                        "name": "pCount",
+                        "type": "uint32_t*"
+                    }
+                ],
+                "type": "function"
+            },
+            {
+                "class": "$xDevice",
+                "desc": "Metric group universal unique id (UUID)",
+                "hash": null,
+                "members": [
+                    {
+                        "desc": "[out] metric group universal unique id",
+                        "name": "id[$X_MAX_UUID_SIZE]",
+                        "type": "uint8_t"
+                    }
+                ],
+                "name": "$x_metric_group_uuid_t",
+                "type": "struct"
+            },
+            {
+                "class": "$tDevice",
+                "decl": "singleton",
+                "desc": "",
+                "hash": "8ca3233d19c52dcd6162204ff86bff9b6ed56edc40132bfa8ad1468c3286557e",
+                "name": "GetMetricGroupUniqueIds",
+                "params": [
+                    {
+                        "desc": "[in] handle of the device object",
+                        "name": "hDevice",
+                        "type": "$x_device_handle_t"
+                    },
+                    {
+                        "desc": "[in] metric group sampling type",
+                        "name": "type",
+                        "type": "$t_metric_group_sampling_type"
+                    },
+                    {
+                        "desc": "[in] number of metric groups to retrieve uuids",
+                        "name": "count",
+                        "type": "uint32_t"
+                    },
+                    {
+                        "desc": "[in,out] pointer to an array of uuids for metric groups.",
+                        "name": "pUniqueIds",
+                        "type": "$x_metric_group_uuid_t*"
+                    }
+                ],
+                "type": "function"
+            },
+            {
+                "class": "$tDevice",
+                "desc": "API version of $t_metric_group_properties",
+                "etors": [
+                    {
+                        "desc": "version 1.0",
+                        "name": "$T_METRIC_GROUP_PROPERTIES_VERSION_CURRENT",
+                        "value": "$X_MAKE_VERSION( 1, 0 )"
+                    }
+                ],
+                "hash": null,
+                "name": "$t_metric_group_properties_version_t",
+                "type": "enum"
+            },
+            {
+                "desc": "Maximum metric group name string size",
+                "hash": null,
+                "name": "$T_MAX_METRIC_GROUP_NAME",
+                "type": "macro",
+                "value": "256"
+            },
+            {
+                "desc": "Maximum metric group description name string size",
+                "hash": null,
+                "name": "$T_MAX_METRIC_GROUP_DESCRIPTION",
+                "type": "macro",
+                "value": "256"
+            },
+            {
+                "class": "$tDevice",
+                "desc": "Device metric group properties queried using $tDeviceGetMetricGroupProperties",
+                "hash": null,
+                "members": [
+                    {
+                        "desc": "[in] $T_METRIC_GROUP_PROPERTIES_VERSION_CURRENT",
+                        "init": "$T_METRIC_GROUP_PROPERTIES_VERSION_CURRENT",
+                        "name": "version",
+                        "type": "$t_metric_group_properties_version_t"
+                    },
+                    {
+                        "desc": "[out] metric group name",
+                        "name": "name[$T_MAX_METRIC_GROUP_NAME]",
+                        "type": "char"
+                    },
+                    {
+                        "desc": "[out] metric group description",
+                        "name": "description[$T_MAX_METRIC_GROUP_DESCRIPTION]",
+                        "type": "char"
+                    },
+                    {
+                        "desc": "[out]",
+                        "name": "samplingType",
+                        "type": "$t_metric_group_sampling_type"
+                    },
+                    {
+                        "desc": "[out] cannot use simultaneous metric groups from different domains",
+                        "name": "domain",
+                        "type": "uint32_t"
+                    },
+                    {
+                        "desc": "[out] number of metrics in the group",
+                        "name": "numMetrics",
+                        "type": "uint32_t"
+                    },
+                    {
+                        "desc": "[out] size in bytes of the metrics in the group",
+                        "name": "sizeMetrics",
+                        "type": "size_t"
+                    }
+                ],
+                "name": "$t_metric_group_properties",
+                "type": "struct"
+            },
+            {
+                "class": "$tDevice",
+                "dec": "singleton",
+                "desc": "Retrieves properties of the metric group",
+                "hash": "6fbce01a836f4c72bd363dfcc3b45f91f4b8ed199758f7cb453c347f98eb832f",
+                "name": "GetMetricGroupProperties",
+                "params": [
+                    {
+                        "desc": "[in] handle of the device object",
+                        "name": "hDevice",
+                        "type": "$x_device_handle_t"
+                    },
+                    {
+                        "desc": "[in] metric group uuid",
+                        "name": "uuid",
+                        "type": "$x_metric_group_uuid_t"
+                    },
+                    {
+                        "desc": "[out] device properties",
+                        "name": "pMetricGroupProperties",
+                        "type": "$t_metric_group_properties*"
+                    }
+                ],
+                "type": "function"
+            },
+            {
+                "class": "$tDevice",
+                "desc": "API version of $t_metric_properties",
+                "etors": [
+                    {
+                        "desc": "version 1.0",
+                        "name": "$T_METRIC_PROPERTIES_VERSION_CURRENT",
+                        "value": "$X_MAKE_VERSION( 1, 0 )"
+                    }
+                ],
+                "hash": null,
+                "name": "$t_metric_properties_version_t",
+                "type": "enum"
+            },
+            {
+                "desc": "Maximum metric group name string size",
+                "hash": null,
+                "name": "$T_MAX_METRIC_NAME",
+                "type": "macro",
+                "value": "256"
+            },
+            {
+                "desc": "Maximum metric group description name string size",
+                "hash": null,
+                "name": "$T_MAX_METRIC_DESCRIPTION",
+                "type": "macro",
+                "value": "256"
+            },
+            {
+                "class": "$tDevice",
+                "desc": "",
+                "etors": [
+                    {
+                        "desc": "",
+                        "name": "$T_METRIC_RATIO"
+                    },
+                    {
+                        "desc": "",
+                        "name": "$T_METRIC_DURATION"
+                    },
+                    {
+                        "desc": "",
+                        "name": "$T_METRIC_EVEN"
+                    },
+                    {
+                        "desc": "",
+                        "name": "$T_METRIC_THROUGHPUT"
+                    },
+                    {
+                        "desc": "",
+                        "name": "$T_METRIC_TIMESTAMP"
+                    }
+                ],
+                "hash": null,
+                "name": "$t_metric_t",
+                "type": "enum"
+            },
+            {
+                "class": "$tDevice",
+                "desc": "",
+                "etors": [
+                    {
+                        "desc": "",
+                        "name": "$T_METRIC_VALUE_UINT32"
+                    },
+                    {
+                        "desc": "",
+                        "name": "$T_METRIC_VALUE_UINT64"
+                    },
+                    {
+                        "desc": "",
+                        "name": "$T_METRIC_VALUE_FLOAT32"
+                    },
+                    {
+                        "desc": "",
+                        "name": "$T_METRIC_VALUE_BOOL32"
+                    }
+                ],
+                "hash": null,
+                "name": "$t_metric_value_t",
+                "type": "enum"
+            },
+            {
+                "class": "$tDevice",
+                "desc": "Device metric group properties queried using $tDeviceGetMetricGroupProperties",
+                "hash": null,
+                "members": [
+                    {
+                        "desc": "[in] $T_METRIC_PROPERTIES_VERSION_CURRENT",
+                        "init": "$T_METRIC_PROPERTIES_VERSION_CURRENT",
+                        "name": "version",
+                        "type": "$t_metric_properties_version_t"
+                    },
+                    {
+                        "desc": "[out] metric name",
+                        "name": "name[$T_MAX_METRIC_NAME]",
+                        "type": "char"
+                    },
+                    {
+                        "desc": "metric description",
+                        "name": "description[$T_MAX_METRIC_DESCRIPTION]",
+                        "type": "char"
+                    },
+                    {
+                        "desc": "metric device component",
+                        "name": "component[$T_MAX_METRIC_NAME]",
+                        "type": "char"
+                    },
+                    {
+                        "desc": "",
+                        "name": "tierNumber",
+                        "type": "uint32_t"
+                    },
+                    {
+                        "desc": "",
+                        "name": "type",
+                        "type": "$t_metric_t"
+                    },
+                    {
+                        "desc": "",
+                        "name": "value",
+                        "type": "$t_metric_value_t"
+                    },
+                    {
+                        "desc": "",
+                        "name": "units[$T_MAX_METRIC_NAME]",
+                        "type": "char"
+                    }
+                ],
+                "name": "$t_metric_properties",
+                "type": "struct"
+            },
+            {
+                "class": "$tDevice",
+                "dec": "singleton",
+                "desc": "",
+                "hash": "f7a36bf11a68acfa537e3baf31be4d48e1525eaf285f3fd9a78bda0606b95f3a",
+                "name": "GetMetricGroupMetricProperties",
+                "params": [
+                    {
+                        "desc": "[in] handle of the device object",
+                        "name": "hDevice",
+                        "type": "$x_device_handle_t"
+                    },
+                    {
+                        "desc": "[in] metric group uuid",
+                        "name": "uuid",
+                        "type": "$x_metric_group_uuid_t"
+                    },
+                    {
+                        "desc": "[in] ordinal of the metric",
+                        "name": "ordinal",
+                        "type": "uint32_t"
+                    },
+                    {
+                        "desc": "[out] device properties",
+                        "name": "pMetricProperties",
+                        "type": "$t_metric_properties*"
+                    }
+                ],
+                "type": "function"
+            }
+        ]
+    }
+]

@@ -23,7 +23,7 @@
 *
 * @file xe_cmdlist.hpp
 *
-* @brief C++ wrapper of Intel Xe Driver APIs for Command List
+* @brief C++ wrapper of Intel Xe Level-Zero APIs for Command List
 *
 * @cond DEV
 * DO NOT EDIT: generated from /scripts/core/cmdlist.yml
@@ -159,15 +159,6 @@ namespace xe
             );
 
         ///////////////////////////////////////////////////////////////////////////////
-        /// @brief C++ wrapper for ::xeCommandListAppendCommandLists
-        /// @throws result_t
-        inline void
-        AppendCommandLists(
-            uint32_t numCommandLists,                       ///< [in] number of command lists to append
-            command_list_handle_t* phCommandLists           ///< [in] list of handles of the command lists to append for execution
-            );
-
-        ///////////////////////////////////////////////////////////////////////////////
         /// @brief C++ wrapper for ::xeCommandListReserveSpace
         /// @returns
         ///     - void*: pointer to command buffer space reserved
@@ -185,7 +176,8 @@ namespace xe
         AppendMemoryCopy(
             void* dstptr,                                   ///< [in] pointer to destination memory to copy to
             const void* srcptr,                             ///< [in] pointer to source memory to copy from
-            size_t size                                     ///< [in] size in bytes to copy
+            size_t size,                                    ///< [in] size in bytes to copy
+            event_handle_t hEvent                           ///< [in][optional] handle of the event to signal on completion
             );
 
         ///////////////////////////////////////////////////////////////////////////////
@@ -195,7 +187,8 @@ namespace xe
         AppendMemorySet(
             void* ptr,                                      ///< [in] pointer to memory to initialize
             int value,                                      ///< [in] value to initialize memory to
-            size_t size                                     ///< [in] size in bytes to initailize
+            size_t size,                                    ///< [in] size in bytes to initailize
+            event_handle_t hEvent                           ///< [in][optional] handle of the event to signal on completion
             );
 
         ///////////////////////////////////////////////////////////////////////////////
@@ -204,7 +197,8 @@ namespace xe
         inline void
         AppendImageCopy(
             image_handle_t hDstImage,                       ///< [in] handle of destination image to copy to
-            image_handle_t hSrcImage                        ///< [in] handle of source image to copy from
+            image_handle_t hSrcImage,                       ///< [in] handle of source image to copy from
+            event_handle_t hEvent                           ///< [in][optional] handle of the event to signal on completion
             );
 
         ///////////////////////////////////////////////////////////////////////////////
@@ -215,7 +209,8 @@ namespace xe
             image_handle_t hDstImage,                       ///< [in] handle of destination image to copy to
             image_region_t* pDstRegion,                     ///< [in][optional] destination region descriptor
             image_handle_t hSrcImage,                       ///< [in] handle of source image to copy from
-            image_region_t* pSrcRegion                      ///< [in][optional] source region descriptor
+            image_region_t* pSrcRegion,                     ///< [in][optional] source region descriptor
+            event_handle_t hEvent                           ///< [in][optional] handle of the event to signal on completion
             );
 
         ///////////////////////////////////////////////////////////////////////////////
@@ -225,7 +220,8 @@ namespace xe
         AppendImageCopyToMemory(
             void* dstptr,                                   ///< [in] pointer to destination memory to copy to
             image_handle_t hSrcImage,                       ///< [in] handle of source image to copy from
-            image_region_t* pSrcRegion                      ///< [in][optional] source region descriptor
+            image_region_t* pSrcRegion,                     ///< [in][optional] source region descriptor
+            event_handle_t hEvent                           ///< [in][optional] handle of the event to signal on completion
             );
 
         ///////////////////////////////////////////////////////////////////////////////
@@ -235,7 +231,8 @@ namespace xe
         AppendImageCopyFromMemory(
             image_handle_t hDstImage,                       ///< [in] handle of destination image to copy to
             image_region_t* pDstRegion,                     ///< [in][optional] destination region descriptor
-            const void* srcptr                              ///< [in] pointer to source memory to copy from
+            const void* srcptr,                             ///< [in] pointer to source memory to copy from
+            event_handle_t hEvent                           ///< [in][optional] handle of the event to signal on completion
             );
 
         ///////////////////////////////////////////////////////////////////////////////

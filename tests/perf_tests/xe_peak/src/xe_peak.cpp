@@ -102,7 +102,7 @@ void L0Context::create_module(std::vector<uint8_t> binary_file) {
 void L0Context::print_xe_device_properties(const xe_device_properties_t &props) {
     std::cout << "Device : "
               << "\n"
-              << " * name : " << props.device_name << "\n"
+              << " * name : " << props.name << "\n"
               << " * vendorId : " << props.vendorId << "\n"
               << " * deviceId : " << props.deviceId << "\n"
               << " * subdeviceId : " << props.subdeviceId << "\n"
@@ -170,13 +170,6 @@ void L0Context::init_xe() {
     if (verbose)
         std::cout << "Device Compute Properties retrieved\n";
 
-    result = xeCreateMemAllocator(&allocator);
-    if (result) {
-        throw std::runtime_error("xe_mem_allocator_handle_t failed: " + result);
-    }
-    if (verbose)
-        std::cout << "Allocator created\n";
-
     command_list_description.version = XE_COMMAND_LIST_DESC_VERSION_CURRENT;
 
     result = xeDeviceCreateCommandList(device, &command_list_description, &command_list);
@@ -214,13 +207,6 @@ void L0Context::clean_xe() {
     }
     if (verbose)
         std::cout << "command_list destroyed\n";
-
-    result = xeMemAllocatorDestroy(allocator);
-    if (result) {
-        throw std::runtime_error("xeMemAllocatorDestroy failed: " + result);
-    }
-    if (verbose)
-        std::cout << "Allocator destroyed\n";
 }
 
 void L0Context::execute_commandlist_and_sync() {

@@ -45,7 +45,7 @@ void XePeak::xe_peak_global_bw(L0Context &context) {
     }
 
     void *inputBuf;
-    result = xeMemAlloc(context.allocator, context.device, XE_DEVICE_MEM_ALLOC_FLAG_DEFAULT,
+    result = xeMemAlloc(context.device, XE_DEVICE_MEM_ALLOC_FLAG_DEFAULT,
                         (numItems * sizeof(float)), 1, &inputBuf);
     if (result) {
         throw std::runtime_error("xeMemAlloc failed: " + result);
@@ -54,7 +54,7 @@ void XePeak::xe_peak_global_bw(L0Context &context) {
         std::cout << "inputBuf device buffer allocated\n";
 
     void *outputBuf;
-    result = xeMemAlloc(context.allocator, context.device, XE_DEVICE_MEM_ALLOC_FLAG_DEFAULT,
+    result = xeMemAlloc(context.device, XE_DEVICE_MEM_ALLOC_FLAG_DEFAULT,
                         (numItems * sizeof(float)), 1, &outputBuf);
     if (result) {
         throw std::runtime_error("xeMemAlloc failed: " + result);
@@ -63,7 +63,7 @@ void XePeak::xe_peak_global_bw(L0Context &context) {
         std::cout << "outputBuf device buffer allocated\n";
 
     result = xeCommandListAppendMemoryCopy(context.command_list, inputBuf, arr.data(),
-                                           (arr.size() * sizeof(float)));
+                                           (arr.size() * sizeof(float)), nullptr);
     if (result) {
         throw std::runtime_error("xeCommandListAppendMemoryCopy failed: " + result);
     }
@@ -276,14 +276,14 @@ void XePeak::xe_peak_global_bw(L0Context &context) {
     if (verbose)
         std::cout << "global_offset_v16 Function Destroyed\n";
 
-    result = xeMemFree(context.allocator, inputBuf);
+    result = xeMemFree(inputBuf);
     if (result) {
         throw std::runtime_error("xeMemFree failed: " + result);
     }
     if (verbose)
         std::cout << "Input Buffer freed\n";
 
-    result = xeMemFree(context.allocator, outputBuf);
+    result = xeMemFree(outputBuf);
     if (result) {
         throw std::runtime_error("xeMemFree failed: " + result);
     }

@@ -23,7 +23,7 @@
 *
 * @file xe_common.h
 *
-* @brief Intel Xe Driver API common types
+* @brief Intel Xe Level-Zero API common types
 *
 * @cond DEV
 * DO NOT EDIT: generated from /scripts/core/common.yml
@@ -111,10 +111,6 @@ typedef struct _xe_command_queue_handle_t *xe_command_queue_handle_t;
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Handle of driver's command list object
 typedef struct _xe_command_list_handle_t *xe_command_list_handle_t;
-
-///////////////////////////////////////////////////////////////////////////////
-/// @brief Handle of driver's command graph object
-typedef struct _xe_command_graph_handle_t *xe_command_graph_handle_t;
 
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Handle of driver's fence object

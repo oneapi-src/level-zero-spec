@@ -67,7 +67,6 @@ struct L0Context {
   xe_command_queue_handle_t command_queue;
   xe_command_list_handle_t command_list;
   xe_module_handle_t module;
-  xe_mem_allocator_handle_t allocator;
   xe_device_handle_t device;
   uint32_t device_count = 0;
   const uint32_t default_device = 0;
