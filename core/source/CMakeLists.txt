@@ -11,6 +11,8 @@ set(L0_RUNTIME_SOURCES
     ${CMAKE_CURRENT_SOURCE_DIR}/builtins.h
     ${CMAKE_CURRENT_SOURCE_DIR}/builtins.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/cl_interop.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/cmdcontainer.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/cmdcontainer.h
     ${CMAKE_CURRENT_SOURCE_DIR}/cmdgraph.h
     ${CMAKE_CURRENT_SOURCE_DIR}/cmdlist.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/cmdlist.h
