@@ -559,7 +559,7 @@ xe_result_t CommandListCoreFamily<gfxCoreFamily>::appendMemoryCopy(void *dstptr,
                                                                    const void *srcptr,
                                                                    size_t size) {
     xe_module_handle_t module;
-    xe_function_handle_t function;
+    xe_function_handle_t functionHandle;
     // TODO : Make these persisten
     //        * can't do compilations at each appendMemoryCopy
     //        * who is responsible for freeing module/function?
@@ -572,14 +572,15 @@ xe_result_t CommandListCoreFamily<gfxCoreFamily>::appendMemoryCopy(void *dstptr,
 
     xe_function_desc_t functionDesc = {XE_FUNCTION_DESC_VERSION_CURRENT};
     functionDesc.pFunctionName = compileCopyBufferToBufferBin.getFunctionName();
-    if (xeModuleCreateFunction(module, &functionDesc, &function))
+    if (xeModuleCreateFunction(module, &functionDesc, &functionHandle))
         return XE_RESULT_ERROR_UNKNOWN;
 
     /* Using defaults for now. We need to change this */
-    uint32_t groupSizeX = 32u;
+    auto func = Function::fromHandle(functionHandle);
+    uint32_t groupSizeX = func->getSimdSize(); // TODO : consider ATS fused threads
     uint32_t groupSizeY = 1u;
     uint32_t groupSizeZ = 1u;
-    if (xeFunctionSetGroupSize(function, groupSizeX, groupSizeY, groupSizeZ))
+    if (func->setGroupSize(groupSizeX, groupSizeY, groupSizeZ))
         return XE_RESULT_ERROR_UNKNOWN;
 
     GraphicsAllocation *alloc = this->device->getMemoryManager()->findAllocation(dstptr);
@@ -587,21 +588,38 @@ xe_result_t CommandListCoreFamily<gfxCoreFamily>::appendMemoryCopy(void *dstptr,
         // Trying to access non-driver memallocated for dstptr: Allocate managed memory using the host's buffer
         auto allocation = this->device->getMemoryManager()->allocateManagedMemoryFromFault(dstptr, size);
     }
-    xeFunctionSetArgumentValue(function, 0, sizeof(dstptr), &dstptr);
+    func->setArgumentValue(0, sizeof(dstptr), &dstptr);
 
     alloc = this->device->getMemoryManager()->findAllocation(srcptr);
     if (alloc == nullptr) {
         // Trying to access non-driver memallocated for dstptr: Allocate managed memory using the host's buffer
         auto allocation = this->device->getMemoryManager()->allocateManagedMemoryFromFault(const_cast<void *>(srcptr), size);
     }
-    xeFunctionSetArgumentValue(function, 1, sizeof(srcptr), &srcptr);
+    func->setArgumentValue(1, sizeof(srcptr), &srcptr);
 
-    xe_thread_group_dimensions_t dispatchFuncArgs{
-        (uint32_t)(size / sizeof(char) / groupSizeX),
-        1u,
-        1u};
+    constexpr auto elementSize = sizeof(char);
+    assert(size / (groupSizeX * elementSize) < MemoryConstants::gigaByte);
+    uint32_t whole = static_cast<uint32_t>(size / (groupSizeX * elementSize));
+    uint32_t rest = static_cast<uint32_t>(size - whole * groupSizeX * elementSize);
+    xe_thread_group_dimensions_t dispatchFuncArgs{whole, 1u, 1u};
 
-    return this->appendLaunchFunction(function, &dispatchFuncArgs, nullptr);
+    auto ret = XE_RESULT_SUCCESS;
+    if (whole > 0) {
+        ret = this->appendLaunchFunction(functionHandle, &dispatchFuncArgs, nullptr);
+    }
+    if ((XE_RESULT_SUCCESS != ret) || (rest == 0)) {
+        return ret;
+    }
+    dstptr = ptrOffset(dstptr, whole * groupSizeX * elementSize);
+    srcptr = ptrOffset(srcptr, whole * groupSizeX * elementSize);
+    func->setArgumentValue(0, sizeof(dstptr), &dstptr);
+    func->setArgumentValue(1, sizeof(srcptr), &srcptr);
+    if (func->setGroupSize(rest, 1u, 1u)) {
+        return XE_RESULT_ERROR_UNKNOWN;
+    }
+    dispatchFuncArgs.groupCountX = 1;
+
+    return this->appendLaunchFunction(functionHandle, &dispatchFuncArgs, nullptr);
 }
 
 template <GFXCORE_FAMILY gfxCoreFamily>

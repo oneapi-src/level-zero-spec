@@ -26,7 +26,7 @@ inline void validate(ResulT result, const char *message) {
 #define SUCCESS_OR_WARNING_BOOL(FLAG) validate<false>(!(FLAG), #FLAG)
 
 int main(int argc, char *argv[]) {
-    const size_t allocSize = 4096;
+    const size_t allocSize = 4096 + 7; // +7 to brake alignment and make it harder
     xe_device_handle_t device0;
     xe_device_properties_t device0Properties = {XE_DEVICE_PROPERTIES_VERSION_CURRENT};
     xe_command_queue_handle_t cmdQueue;
@@ -59,7 +59,7 @@ int main(int argc, char *argv[]) {
 
     SUCCESS_OR_TERMINATE(xeMemAlloc(allocator, device0,
                                     XE_DEVICE_MEM_ALLOC_FLAG_DEFAULT,
-                                    allocSize, 4096, &xeBuffer));
+                                    allocSize, allocSize, &xeBuffer));
 
     for (int i = 0; i < allocSize; ++i) {
         heapBuffer[i] = i + 1;
