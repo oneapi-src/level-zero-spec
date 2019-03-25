@@ -406,12 +406,17 @@ typedef xe_result_t (__xecall *pfn_xeModuleBuildLogDestroy)(
 typedef xe_result_t (__xecall *pfn_xeModuleBuildLogGetString)(
     xe_module_build_log_handle_t hModuleBuildLog,   ///< [in] handle of the module build log object.
     size_t* pSize,                                  ///< [in,out] size of build log string.
-    char** pBuildLog                                ///< [in,out][optional] pointer to null-terminated string of the log.
+    char* pBuildLog                                 ///< [in,out][optional] pointer to null-terminated string of the log.
     );
 typedef xe_result_t (__xecall *pfn_xeModuleGetNativeBinary)(
     xe_module_handle_t hModule,                     ///< [in] handle of the device
-    size_t* pSize,                                  ///< [in,out] size of native binary.
-    void** pModuleNativeBinary                      ///< [in,out][optional] pointer to native binary
+    size_t* pSize,                                  ///< [in,out] size of native binary in bytes.
+    uint8_t* pModuleNativeBinary                    ///< [in,out][optional] byte pointer to native binary
+    );
+typedef xe_result_t (__xecall *pfn_xeModuleGetGlobalPointer)(
+    xe_module_handle_t hModule,                     ///< [in] handle of the device
+    const char* pGlobalName,                        ///< [in] name of function in global
+    void** pPtr                                     ///< [out] device visible pointer
     );
 typedef xe_result_t (__xecall *pfn_xeModuleCreateFunction)(
     xe_module_handle_t hModule,                     ///< [in] handle of the module
@@ -598,6 +603,7 @@ typedef struct _xe_dispatch_table_t
     pfn_xeModuleBuildLogDestroy xeModuleBuildLogDestroy;
     pfn_xeModuleBuildLogGetString xeModuleBuildLogGetString;
     pfn_xeModuleGetNativeBinary xeModuleGetNativeBinary;
+    pfn_xeModuleGetGlobalPointer xeModuleGetGlobalPointer;
     pfn_xeModuleCreateFunction xeModuleCreateFunction;
     pfn_xeFunctionDestroy xeFunctionDestroy;
     pfn_xeModuleGetFunctionPointer xeModuleGetFunctionPointer;
@@ -706,6 +712,7 @@ inline bool load_xe(void *handle, void *(*funcAddressGetter)(void *handle, const
     outTable->xeModuleBuildLogDestroy = (pfn_xeModuleBuildLogDestroy)funcAddressGetter(handle, "xeModuleBuildLogDestroy");
     outTable->xeModuleBuildLogGetString = (pfn_xeModuleBuildLogGetString)funcAddressGetter(handle, "xeModuleBuildLogGetString");
     outTable->xeModuleGetNativeBinary = (pfn_xeModuleGetNativeBinary)funcAddressGetter(handle, "xeModuleGetNativeBinary");
+    outTable->xeModuleGetGlobalPointer = (pfn_xeModuleGetGlobalPointer)funcAddressGetter(handle, "xeModuleGetGlobalPointer");
     outTable->xeModuleCreateFunction = (pfn_xeModuleCreateFunction)funcAddressGetter(handle, "xeModuleCreateFunction");
     outTable->xeFunctionDestroy = (pfn_xeFunctionDestroy)funcAddressGetter(handle, "xeFunctionDestroy");
     outTable->xeModuleGetFunctionPointer = (pfn_xeModuleGetFunctionPointer)funcAddressGetter(handle, "xeModuleGetFunctionPointer");
@@ -962,6 +969,9 @@ inline bool load_xe(void *handle, void *(*funcAddressGetter)(void *handle, const
         return false;
     }
     if(0 == outTable->xeModuleGetNativeBinary){
+        return false;
+    }
+    if(0 == outTable->xeModuleGetGlobalPointer){
         return false;
     }
     if(0 == outTable->xeModuleCreateFunction){

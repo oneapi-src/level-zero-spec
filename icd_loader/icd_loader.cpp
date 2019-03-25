@@ -810,7 +810,7 @@ xe_result_t __xecall xeModuleBuildLogDestroy(
 xe_result_t __xecall xeModuleBuildLogGetString(
         xe_module_build_log_handle_t hModuleBuildLog,   ///< [in] handle of the module build log object.
         size_t* pSize,                                  ///< [in,out] size of build log string.
-        char** pBuildLog                                ///< [in,out][optional] pointer to null-terminated string of the log.
+        char* pBuildLog                                 ///< [in,out][optional] pointer to null-terminated string of the log.
     ){
     if(dispatchTableInitialized == false){
         return XE_RESULT_ERROR_UNINITIALIZED;
@@ -819,13 +819,23 @@ xe_result_t __xecall xeModuleBuildLogGetString(
 }
 xe_result_t __xecall xeModuleGetNativeBinary(
         xe_module_handle_t hModule,                     ///< [in] handle of the device
-        size_t* pSize,                                  ///< [in,out] size of native binary.
-        void** pModuleNativeBinary                      ///< [in,out][optional] pointer to native binary
+        size_t* pSize,                                  ///< [in,out] size of native binary in bytes.
+        uint8_t* pModuleNativeBinary                    ///< [in,out][optional] byte pointer to native binary
     ){
     if(dispatchTableInitialized == false){
         return XE_RESULT_ERROR_UNINITIALIZED;
     }
     return dispatchTable.xeModuleGetNativeBinary(hModule, pSize, pModuleNativeBinary);
+}
+xe_result_t __xecall xeModuleGetGlobalPointer(
+        xe_module_handle_t hModule,                     ///< [in] handle of the device
+        const char* pGlobalName,                        ///< [in] name of function in global
+        void** pPtr                                     ///< [out] device visible pointer
+    ){
+    if(dispatchTableInitialized == false){
+        return XE_RESULT_ERROR_UNINITIALIZED;
+    }
+    return dispatchTable.xeModuleGetGlobalPointer(hModule, pGlobalName, pPtr);
 }
 xe_result_t __xecall xeModuleCreateFunction(
         xe_module_handle_t hModule,                     ///< [in] handle of the module

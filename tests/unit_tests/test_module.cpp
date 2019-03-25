@@ -45,21 +45,21 @@ TEST(ModuleBuildLog, stringModuleBuildLog) {
     auto moduleBuildLog = ModuleBuildLog::create();
     ASSERT_NE(nullptr, moduleBuildLog);
 
-    auto result = moduleBuildLog->getString(&buildLogSize, &buildLog);
+    auto result = moduleBuildLog->getString(&buildLogSize, buildLog);
     EXPECT_EQ(XE_RESULT_SUCCESS, result);
     EXPECT_EQ(1, buildLogSize);
     EXPECT_STREQ("", buildLog);
 
     moduleBuildLog->appendString(error_log, strlen(error_log));
 
-    result = moduleBuildLog->getString(&buildLogSize, &buildLog);
+    result = moduleBuildLog->getString(&buildLogSize, buildLog);
     EXPECT_EQ(XE_RESULT_SUCCESS, result);
     EXPECT_EQ((strlen(error_log) + 1), buildLogSize);
     EXPECT_STREQ("Error Log", buildLog);
 
     moduleBuildLog->appendString(warn_log, strlen(warn_log));
 
-    result = moduleBuildLog->getString(&buildLogSize, &buildLog);
+    result = moduleBuildLog->getString(&buildLogSize, buildLog);
     EXPECT_EQ(XE_RESULT_SUCCESS, result);
     EXPECT_EQ((strlen(error_log) + strlen("\n") + strlen(warn_log) + 1), buildLogSize);
     EXPECT_STREQ("Error Log\nWarn Log", buildLog);

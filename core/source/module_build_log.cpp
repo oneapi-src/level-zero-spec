@@ -15,10 +15,15 @@ struct ModuleBuildLogImp : public ModuleBuildLog {
         return XE_RESULT_SUCCESS;
     }
 
-    xe_result_t getString(size_t *pSize, char **pBuildLog) override {
+    xe_result_t getString(size_t *pSize, char *pBuildLog) override {
         // FIX_ME: const_cast shouldnt be here.
         char *buildLog = const_cast<char *>(this->buildLog.c_str());
 
+        // FIX_ME: API has changed where application will call getString twice. The flow:
+        //         1. getString(&szSize, nullptr)
+        //         2. pString = malloc(szSize)
+        //         3. getString(&szSize, pString)
+        /*
         if (buildLog != nullptr) {
             *pBuildLog = buildLog;
             *pSize = strlen(buildLog) + 1;
@@ -26,6 +31,7 @@ struct ModuleBuildLogImp : public ModuleBuildLog {
             *pBuildLog = nullptr;
             *pSize = 0;
         }
+        */
         return XE_RESULT_SUCCESS;
     }
 

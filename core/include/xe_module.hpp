@@ -99,7 +99,7 @@ namespace xe
         inline void
         GetString(
             size_t* pSize,                                  ///< [in,out] size of build log string.
-            char** pBuildLog                                ///< [in,out][optional] pointer to null-terminated string of the log.
+            char* pBuildLog                                 ///< [in,out][optional] pointer to null-terminated string of the log.
             );
 
         ///////////////////////////////////////////////////////////////////////////////
@@ -107,8 +107,19 @@ namespace xe
         /// @throws result_t
         inline void
         GetNativeBinary(
-            size_t* pSize,                                  ///< [in,out] size of native binary.
-            void** pModuleNativeBinary                      ///< [in,out][optional] pointer to native binary
+            size_t* pSize,                                  ///< [in,out] size of native binary in bytes.
+            uint8_t* pModuleNativeBinary                    ///< [in,out][optional] byte pointer to native binary
+            );
+
+        ///////////////////////////////////////////////////////////////////////////////
+        /// @brief C++ wrapper for ::xeModuleGetGlobalPointer
+        /// @returns
+        ///     - void*: device visible pointer
+        /// 
+        /// @throws result_t
+        inline void*
+        GetGlobalPointer(
+            const char* pGlobalName                         ///< [in] name of function in global
             );
 
         ///////////////////////////////////////////////////////////////////////////////

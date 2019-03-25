@@ -29,12 +29,17 @@ struct ModuleImp : public Module {
     xe_result_t createFunction(const xe_function_desc_t *desc, xe_function_handle_t *phFunction) override;
 
     xe_result_t getNativeBinary(size_t *pSize,
-                                void **pModuleNativeBinary) override {
+                                uint8_t *pModuleNativeBinary) override {
         return XE_RESULT_ERROR_UNSUPPORTED;
     }
 
     xe_result_t getFunctionPointer(const char *pFunctionName,
                                    void **pfnFunction) override {
+        return XE_RESULT_ERROR_UNSUPPORTED;
+    }
+
+    virtual xe_result_t getGlobalPointer(const char *pGlobalName, void **pPtr)
+    {
         return XE_RESULT_ERROR_UNSUPPORTED;
     }
 
