@@ -1,0 +1,158 @@
+--- #--------------------------------------------------------------------------
+type: header
+desc: "Intel $OneApi Level-Zero Tool APIs for Metrics"
+--- #--------------------------------------------------------------------------
+type: enum
+desc: ""
+class: $tDevice
+name: $t_metric_group_sampling_type
+etors:
+    - name: $T_METRIC_GROUP_SAMPLING_TYPE_EVENT_BASED
+      desc: ""
+    - name: $T_METRIC_GROUP_SAMPLING_TYPE_TIME_BASED
+      desc: ""
+--- #--------------------------------------------------------------------------
+type: function
+desc: ""
+class: $tDevice
+name: GetMetricGroupCount
+decl: singleton
+params:
+    - type: $x_device_handle_t
+      name: hDevice
+      desc: "[in] handle of the device object"
+    - type: $t_metric_group_sampling_type
+      name: type
+      desc: "[in] metric group sampling type"
+    - type: uint32_t*
+      name: pCount
+      desc: "[out] number of metric groups supported by the device"
+--- #--------------------------------------------------------------------------
+type: struct
+desc: "Metric group universal unique id (UUID)"
+class: $xDevice
+name: $x_metric_group_uuid_t
+members:
+    - type: uint8_t
+      name: "id[$X_MAX_UUID_SIZE]"
+      desc: "[out] metric group universal unique id"
+--- #--------------------------------------------------------------------------
+type: function
+desc: ""
+class: $tDevice
+name: GetMetricGroupUniqueIds
+decl: singleton
+params:
+    - type: $x_device_handle_t
+      name: hDevice
+      desc: "[in] handle of the device object"
+    - type: $t_metric_group_sampling_type
+      name: type
+      desc: "[in] metric group sampling type"
+    - type: uint32_t
+      name: count
+      desc: "[in] number of metric groups to retrieve uuids"
+    - type: $x_metric_group_uuid_t*
+      name: pUniqueIds
+      desc: "[in,out] pointer to an array of uuids for metric groups."
+--- #--------------------------------------------------------------------------
+type: enum
+desc: "API version of $t_metric_group_properties"
+class: $tDevice
+name: $t_metric_group_properties_version_t
+etors:
+    - name: $T_METRIC_GROUP_PROPERTIES_VERSION_CURRENT
+      value: "$X_MAKE_VERSION( 1, 0 )"
+      desc: "version 1.0"
+--- #--------------------------------------------------------------------------
+type: macro
+desc: "Maximum metric group name string size"
+name: $T_MAX_METRIC_GROUP_NAME
+value: "256"
+--- #--------------------------------------------------------------------------
+type: macro
+desc: "Maximum metric group description name string size"
+name: $T_MAX_METRIC_GROUP_DESCRIPTION
+value: "256"
+--- #--------------------------------------------------------------------------
+type: struct
+desc: "Device metric group properties queried using $tDeviceGetMetricGroupProperties"
+class: $tDevice
+name: $t_metric_group_properties
+members:
+    - type: $t_metric_group_properties_version_t
+      name: version
+      desc: "[in] $T_METRIC_GROUP_PROPERTIES_VERSION_CURRENT"
+      init: $T_METRIC_GROUP_PROPERTIES_VERSION_CURRENT
+    - type: $t_metric_group_sampling_type
+      name: samplingType
+      desc: "[out]"
+    - type: uint32_t
+      name: domain
+      desc: "[out] cannot use simultaneous metric groups from different domains"
+    - type: uint32_t
+      name: numMetrics
+      desc: "[out] number of metrics in the group"
+    - type: size_t
+      name: sizeMetrics
+      desc: "[out] size in bytes of the metrics in the group"
+    - type: char
+      name: "name[$T_MAX_METRIC_GROUP_NAME]"
+      desc: "[out] metric group name"
+    - type: char
+      name: "description[$T_MAX_METRIC_GROUP_DESCRIPTION]"
+      desc: "[out] metric group description"
+--- #--------------------------------------------------------------------------
+type: function
+desc: "Retrieves properties of the metric group"
+class: $tDevice
+name: GetMetricGroupProperties
+dec: singleton
+params:
+    - type: $x_device_handle_t
+      name: hDevice
+      desc: "[in] handle of the device object"
+    - type: $x_metric_group_uuid_t
+      name: uuid
+      desc: "[in] metric group uuid"
+    - type: $t_metric_group_properties*
+      name: pMetricGroupProperties
+      desc: "[out] device properties"
+--- #--------------------------------------------------------------------------
+type: enum
+desc: "API version of $t_metric_properties"
+class: $tDevice
+name: $t_metric_properties_version_t
+etors:
+    - name: $T_METRIC_PROPERTIES_VERSION_CURRENT
+      value: "$X_MAKE_VERSION( 1, 0 )"
+      desc: "version 1.0"
+--- #--------------------------------------------------------------------------
+type: struct
+desc: "Device metric group properties queried using $tDeviceGetMetricGroupProperties"
+class: $tDevice
+name: $t_metric_properties
+members:
+    - type: $t_metric_properties_version_t
+      name: version
+      desc: "[in] $T_METRIC_PROPERTIES_VERSION_CURRENT"
+      init: $T_METRIC_PROPERTIES_VERSION_CURRENT
+--- #--------------------------------------------------------------------------
+type: function
+desc: ""
+class: $tDevice
+name: GetMetricGroupMetricProperties
+dec: singleton
+params:
+    - type: $x_device_handle_t
+      name: hDevice
+      desc: "[in] handle of the device object"
+    - type: $x_metric_group_uuid_t
+      name: uuid
+      desc: "[in] metric group uuid"
+    - type: uint32_t
+      name: ordinal
+      desc: "[in] ordinal of the metric"
+    - type: $t_metric_properties*
+      name: pMetricProperties
+      desc: "[out] device properties"
