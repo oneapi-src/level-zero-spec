@@ -341,7 +341,7 @@ struct PointerModeSelector<PointerMode::ZeroCost>::PointerOwnershipSelector<true
             return PointerWeakRefT<const T>(const_cast<const T *>(this->ptr));
         }
 
-        uintptr_t asUintptr() const noexcept { // reintepret_cast to uintptr_t
+        uintptr_t asUintptr() const noexcept { // reinterpret_cast to uintptr_t
             return reinterpret_cast<uintptr_t>(this->ptr);
         }
 
