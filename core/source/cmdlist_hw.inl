@@ -120,18 +120,9 @@ template <GFXCORE_FAMILY gfxCoreFamily>
 void CommandListCoreFamily<gfxCoreFamily>::programL3(bool isSLMused) {
     using GfxFamily = typename OCLRT::GfxFamilyMapper<gfxCoreFamily>::GfxFamily;
     {
-        using PIPE_CONTROL = typename GfxFamily::PIPE_CONTROL;
-        PIPE_CONTROL cmd = GfxFamily::cmdInitPipeControl;
-        cmd.setCommandStreamerStallEnable(true);
-        cmd.setDcFlushEnable(true);
-        auto buffer = commandStream->getSpace(sizeof(cmd));
-        *(PIPE_CONTROL *)buffer = cmd;
-    }
-
-    {
         using MI_LOAD_REGISTER_IMM = typename GfxFamily::MI_LOAD_REGISTER_IMM;
         MI_LOAD_REGISTER_IMM cmd = GfxFamily::cmdInitLoadRegisterImm;
-        uint32_t offsetL3CNTL = 0x7013u;
+        uint32_t offsetL3CNTL = 0x7034u;
         uint32_t dataL3CNTL = 0x80000140u;
         cmd.setRegisterOffset(offsetL3CNTL);
         cmd.setDataDword(dataL3CNTL);
@@ -302,14 +293,23 @@ xe_result_t CommandListCoreFamily<gfxCoreFamily>::appendLaunchFunction(xe_functi
         memcpy(ptr, function->getPerThreadDataHostMem(), sizePerThreadDataForWholeGroup);
     }
 
-    // For now program L3 here.
-    bool slmUsage = function->getSlmSize() > 0;
-    programL3(slmUsage);
+    // Update any non-pipelined state if it changes
+    auto slmSizeNew = function->getSlmSize();
+    bool flush = this->slmSize != slmSizeNew ||
+                 this->dirtyHeaps;
 
-    if (this->dirtyHeaps) {
+    if (flush) {
         EncodeFlush<gfxCoreFamily>::encode(*this);
-        EncodeStateBaseAddress<gfxCoreFamily>::encode(*this);
-        this->dirtyHeaps = 0u;
+
+        if (this->slmSize != slmSizeNew) {
+            programL3(slmSizeNew != 0u);
+            this->slmSize = slmSizeNew;
+        }
+
+        if (this->dirtyHeaps) {
+            EncodeStateBaseAddress<gfxCoreFamily>::encode(*this);
+            this->dirtyHeaps = 0u;
+        }
     }
 
     {

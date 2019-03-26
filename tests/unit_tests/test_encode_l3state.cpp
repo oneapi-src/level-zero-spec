@@ -15,20 +15,6 @@ HWTEST2_F(EncodeL3State, appendsASetMMIO, MatchAny) {
     ASSERT_NE(itorLRI, commands.end());
 }
 
-HWTEST2_F(EncodeL3State, appendsAFlushBeforeSetMMIO, MatchAny) {
-    ::L0::EncodeL3State<productFamily>::encode(*commandList, false);
-
-    parseCommandBuffer<FamilyType>();
-
-    using PIPE_CONTROL = typename FamilyType::PIPE_CONTROL;
-    auto itorPC = find<PIPE_CONTROL *>(commands.begin(), commands.end());
-    ASSERT_NE(itorPC, commands.end());
-
-    using MI_LOAD_REGISTER_IMM = typename FamilyType::MI_LOAD_REGISTER_IMM;
-    auto itorLRI = find<MI_LOAD_REGISTER_IMM *>(itorPC, commands.end());
-    ASSERT_NE(itorLRI, commands.end());
-}
-
 HWTEST2_F(EncodeL3State, givenNoSLMSetCorrectMMIO, IsGen9) {
     ::L0::EncodeL3State<productFamily>::encode(*commandList, false);
 
