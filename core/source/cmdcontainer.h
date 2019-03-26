@@ -69,7 +69,6 @@ struct CommandContainer : public _xe_command_list_handle_t {
     virtual ~CommandContainer();
 
     uint32_t dirtyHeaps = static_cast<uint32_t>(-1);
-    void *sba = nullptr;
 
   protected:
     void storePrintfFunction(Function *function);

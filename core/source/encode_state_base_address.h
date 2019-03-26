@@ -55,7 +55,8 @@ struct EncodeStateBaseAddress {
                 cmd.setInstructionBufferSize(MemoryConstants::sizeOf4GBinPageEntities); // no bounds checking
             }
 
-            *(STATE_BASE_ADDRESS *)container.sba = cmd;
+            auto buffer = container.getCommandStream().getSpace(sizeof(cmd));
+            *(STATE_BASE_ADDRESS *)buffer = cmd;
 
             container.dirtyHeaps = 0u;
         }

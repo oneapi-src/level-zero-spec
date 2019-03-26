@@ -271,7 +271,7 @@ ATSTEST_F(CommandListAppendLaunchFunction, copiesThreadDataToGeneralStateHeap) {
     }
 }
 
-ATSTEST_F(CommandListAppendLaunchFunction, growsGeneralStateHeapIfNeededAndPreservesOldContents) {
+ATSTEST_F(CommandListAppendLaunchFunction, growsGeneralStateHeapIfNeeded) {
     createFunction("MemcpyBytes");
 
     using COMPUTE_WALKER = typename FamilyType::COMPUTE_WALKER;
@@ -280,10 +280,6 @@ ATSTEST_F(CommandListAppendLaunchFunction, growsGeneralStateHeapIfNeededAndPrese
     auto heap = commandList->indirectHeaps[CommandList::GENERAL_STATE];
     ASSERT_EQ(0U, heap->getUsed());
     heap->overrideMaxSize(COMPUTE_WALKER::INDIRECTDATASTARTADDRESS_ALIGN_SIZE);
-    auto preocupiedMemSize = heap->getAvailableSpace() - 1;
-    void *preocupiedMem = heap->getSpace(preocupiedMemSize);
-    std::vector<char> precopiedMemPattern(preocupiedMemSize, 7);
-    memcpy_s(preocupiedMem, preocupiedMemSize, precopiedMemPattern.data(), precopiedMemPattern.size());
 
     auto result = commandList->appendLaunchFunction(function->toHandle(),
                                                     &dispatchFunctionArguments,
@@ -313,8 +309,6 @@ ATSTEST_F(CommandListAppendLaunchFunction, growsGeneralStateHeapIfNeededAndPrese
         EXPECT_EQ(memcmp(ptrHeap, function->getPerThreadDataHostMem(), function->getPerThreadDataSizeForWholeThreadGroup()), 0u);
         ptrHeap = ptrOffset(ptrHeap, function->getPerThreadDataSizeForWholeThreadGroup());
     }
-
-    EXPECT_EQ(0U, memcmp(precopiedMemPattern.data(), heap->getCpuBase(), precopiedMemPattern.size()));
 }
 
 using CommandListAppendLaunchFunctionGEN9 = CommandListAppendLaunchFunction;

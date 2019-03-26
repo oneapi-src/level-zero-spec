@@ -24,13 +24,7 @@ bool CommandListCoreFamily<gfxCoreFamily>::initialize(Device *device) {
         return false;
     }
 
-    {
-        using STATE_BASE_ADDRESS = typename GfxFamily::STATE_BASE_ADDRESS;
-        auto buffer = commandStream->getSpace(sizeof(STATE_BASE_ADDRESS));
-        this->sba = buffer;
-
-        EncodeStateBaseAddress<gfxCoreFamily>::encode(*this);
-    }
+    EncodeStateBaseAddress<gfxCoreFamily>::encode(*this);
 
     enableGpgpu();
     programFrontEndState();
@@ -58,12 +52,10 @@ void *CommandListCoreFamily<gfxCoreFamily>::getHeapSpaceAllowGrow(CommandContain
         auto alreadyUsedSize = indirectHeap.getUsed();
         indirectHeap.replaceGraphicsAllocation(newAlloc->allocationRT);
         indirectHeap.replaceBuffer(newAlloc->allocationRT->getUnderlyingBuffer(), newAlloc->allocationRT->getUnderlyingBufferSize());
-        memcpy_s(indirectHeap.getSpace(alreadyUsedSize), alreadyUsedSize, oldAlloc->allocationRT->getUnderlyingBuffer(), alreadyUsedSize);
         this->residencyContainer.push_back(newAlloc->allocationRT);
         this->deallocationContainer.push_back(oldAlloc);
         allocationIndirectHeaps[heapType] = newAlloc;
         this->dirtyHeaps |= 1u << heapType;
-        EncodeStateBaseAddress<gfxCoreFamily>::encode(*this);
     }
     return indirectHeap.getSpace(size);
 }
@@ -356,6 +348,8 @@ xe_result_t CommandListCoreFamily<gfxCoreFamily>::appendLaunchFunction(xe_functi
             this->storePrintfFunction(function);
         }
     }
+
+    EncodeStateBaseAddress<gfxCoreFamily>::encode(*this);
 
     // Commit our command to the commandStream
     auto buffer = commandStream->getSpace(sizeof(cmd));
