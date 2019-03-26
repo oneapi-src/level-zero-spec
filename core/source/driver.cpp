@@ -2,12 +2,10 @@
 #include "driver.h"
 #include "runtime/helpers/string.h"
 #include "runtime/platform/platform.h"
+#include "runtime/os_interface/debug_settings_manager.h"
 #include <cassert>
 
 namespace L0 {
-
-constexpr xe_device_uuid_t singleDeviceId{"single_device"}; // replace with really unique ids
-                                                            // once multidevice support gets added
 
 struct DriverImp : public Driver {
     xe_result_t init(xe_init_flag_t) override {
@@ -20,8 +18,8 @@ struct DriverImp : public Driver {
     xe_result_t getDevice(const xe_device_uuid_t *uniqueId,
                           xe_device_handle_t *phDevice) override {
         auto platform = OCLRT::constructPlatform();
-        //TODO: map uniqueId -> deviceOrdinal
-        auto device = Device::create(platform->getDevice(0u));
+        // Assume for now xe_device_uuid_t id[0] contains ordinalID
+        auto device = Device::create(platform->getDevice(static_cast<size_t>(uniqueId->id[0])));
         *phDevice = device;
 
         return XE_RESULT_SUCCESS;
@@ -29,7 +27,7 @@ struct DriverImp : public Driver {
 
     xe_result_t getDeviceCount(uint32_t *count) override {
         assert(count);
-        *count = 1u;
+        *count = OCLRT::DebugManager.flags.CreateMultipleDevices.get();
         return XE_RESULT_SUCCESS;
     }
 
@@ -38,7 +36,11 @@ struct DriverImp : public Driver {
         if (count < 1) {
             return XE_RESULT_ERROR_INVALID_PARAMETER;
         }
-        memcpy_s(&pUniqueIds[0], sizeof(xe_device_uuid_t), &singleDeviceId, sizeof(singleDeviceId));
+
+        for (uint8_t i = 0; i < count; i++) {
+            // Assume for now xe_device_uuid_t id[0] contains ordinalID
+            pUniqueIds[i].id[0] = i;
+        }
         return XE_RESULT_SUCCESS;
     }
 

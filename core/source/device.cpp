@@ -169,7 +169,7 @@ struct DeviceImp : public Device {
                  deviceInfo.name, strlen(deviceInfo.name) + 1);
         pDeviceProperties->coreClockRate = deviceInfo.maxClockFrequency;
         pDeviceProperties->vendorId = deviceInfo.vendorId;
-        //pDeviceProperties->deviceId;                              ///< [out] device id from PCI configuration
+        pDeviceProperties->deviceId = this->deviceRT->getDeviceIndex();                              ///< [out] device id from PCI configuration
         pDeviceProperties->subdeviceId = isSubdevice ? this->deviceRT->getDeviceIndex() : 0;
         pDeviceProperties->isSubdevice = isSubdevice;
         pDeviceProperties->numSubDevices = isSubdevice ? 0 : deviceInfo.partitionMaxSubDevices;

@@ -32,6 +32,20 @@ endif()
 add_dependencies(xello_copy copy_third_party_files ocloc_shared)
 target_link_libraries(xello_copy level_zero_icd_loader ${OS_SPECIFIC_LIBS})
 
+#Basic example testing multidevice
+add_executable(xello_multidev xello_multidev.cpp)
+
+if(MSVC)
+    set_target_properties(xello_multidev
+        PROPERTIES
+            VS_DEBUGGER_COMMAND_ARGUMENTS ""
+            VS_DEBUGGER_WORKING_DIRECTORY "$(OutDir)"
+    )
+endif()
+
+add_dependencies(xello_multidev copy_third_party_files ocloc_shared)
+target_link_libraries(xello_multidev level_zero_icd_loader ${OS_SPECIFIC_LIBS})
+
 #ICD loader enabled xelloWorld applicaton
 add_executable(xello_world_icd xello_world_icd.cpp)
 

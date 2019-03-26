@@ -9,6 +9,7 @@ if(SUPPORT_GEN9)
         ${CMAKE_CURRENT_SOURCE_DIR}/gen9/skl/cmdqueue_skl.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/gen9/skl/encode_skl.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/gen9/skl/image_skl.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/gen9/skl/hw_helper_skl.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/gen9.cmake
     )
 
