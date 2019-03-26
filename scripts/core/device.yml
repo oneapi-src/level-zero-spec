@@ -205,7 +205,7 @@ members:
       name: numTiles
       desc: "[out] Number of tiles for this device."
     - type: char
-      name: "device_name[$X_MAX_DEVICE_NAME]"
+      name: "name[$X_MAX_DEVICE_NAME]"
       desc: "[out] Device name"
 --- #--------------------------------------------------------------------------
 type: function
