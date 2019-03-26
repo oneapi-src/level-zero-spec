@@ -11,6 +11,38 @@ gerritLocalBranch="change"
 def buildData = [:]
 def currentStage = null
 
+def gerritPostResult = { passed ->
+	if(reportBuildStatus) {
+		lock('loki-gerrit') {
+			node('master') {
+				timeout(3) {
+					def gerritOpts
+
+// [id:gfx%2Fcompute%2Floki~master~I40b496fcc84f8bb3296949af50e0a94db63701a5, project:gfx/compute/loki, branch:master, hashtags:[], change_id:I40b496fcc84f8bb3296949af50e0a94db63701a5, subject:CI: post Verified-1 on build failure, status:NEW, created:2019-03-26 13:07:01.000000000, updated:2019-03-26 14:39:12.000000000, submit_type:REBASE_IF_NECESSARY, mergeable:true, insertions:43, deletions:33, unresolved_comment_count:0, _number:533384, owner:[_account_id:9]]
+
+					// if(neoBuild.change.masterIDs.size()<1 && neoBuild.plus2Allowed)
+					if(passed) {
+						if(plus2Allowed) {
+							gerritOpts = "--code-review=+2 --label verified=+1"
+						} else {
+							gerritOpts = "--label verified=+1"
+						}
+					} else {
+						gerritOpts = "--label verified=-1"
+					}
+
+					withCredentials([sshUserPrivateKey(credentialsId: "${gerritCreds}", keyFileVariable: 'KEY', usernameVariable: 'K_USER')]) {
+						def sshCommand = "ssh -i $KEY -l $K_USER -p ${GERRIT_PORT} ${GERRIT_HOST}"
+						def gerritCommentCommand = "\"gerrit review ${GERRIT_CHANGE_NUMBER},${GERRIT_PATCHSET_NUMBER} -m '${env.BUILD_URL}' ${gerritOpts}\""
+						//Add Verified and CodeRevied
+						sh "${sshCommand} ${gerritCommentCommand}"
+					}
+				}
+			}
+		}
+	}
+}
+
 def lokiStage = { name, body ->
   currentStage = name
 	buildData[name] = [:]
@@ -197,39 +229,19 @@ cmake --build . --config Release --clean-first --target ALL_BUILD
 		parallel lokiBuilds
 	}
 
-		lokiStage('publish') {
-
-			if(reportBuildStatus) {
-				lock('loki-gerrit') {
-					node('master') {
-						timeout(3) {
-							def gerritOpts
-
-							// if(neoBuild.change.masterIDs.size()<1 && neoBuild.plus2Allowed)
-							if(plus2Allowed) {
-								gerritOpts = "--code-review=+2 --label verified=+1"
-							} else {
-								gerritOpts = "--label verified=+1"
-							}
-
-							withCredentials([sshUserPrivateKey(credentialsId: "${gerritCreds}", keyFileVariable: 'KEY', usernameVariable: 'K_USER')]) {
-								def sshCommand = "ssh -i $KEY -l $K_USER -p ${GERRIT_PORT} ${GERRIT_HOST}"
-								def gerritCommentCommand = "\"gerrit review ${GERRIT_CHANGE_NUMBER},${GERRIT_PATCHSET_NUMBER} -m '${env.BUILD_URL}' ${gerritOpts}\""
-								//Add Verified and CodeRevied
-								sh "${sshCommand} ${gerritCommentCommand}"
-							}
-						}
-					}
-				}
-			}
-		}
-	} finally {
-		node("loki-common") {
-			dir("tmp") {
-				writeFile file: 'build_data.json', text: JsonOutput.prettyPrint(JsonOutput.toJson(buildData))
-				archiveArtifacts "build_data.json"
-				deleteDir()
-			}
+	lokiStage('publish') {
+		gerritPostResult(true)
+	}
+} catch(Exception e) {
+	gerritPostResult(false)
+} finally {
+	node("loki-common") {
+		dir("tmp") {
+			writeFile file: 'build_data.json', text: JsonOutput.prettyPrint(JsonOutput.toJson(buildData))
+			archiveArtifacts "build_data.json"
+			deleteDir()
 		}
 	}
+}
+
 }
