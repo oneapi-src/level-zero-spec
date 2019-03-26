@@ -148,7 +148,11 @@ xe_result_t CommandListCoreFamily<IGFX_GEN12_CORE>::appendLaunchFunction(xe_func
         idd.setBindingTableEntryCount(bindingTableStatePrefetchCount);
     }
 
-    EncodeStateBaseAddress<IGFX_GEN12_CORE>::encode(*this);
+    if (this->dirtyHeaps) {
+        EncodeFlush<IGFX_GEN12_CORE>::encode(*this);
+        EncodeStateBaseAddress<IGFX_GEN12_CORE>::encode(*this);
+        this->dirtyHeaps = 0u;
+    }
 
     // Commit our command to the commandStream
     auto buffer = commandStream->getSpace(sizeof(cmd));

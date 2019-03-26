@@ -1,4 +1,5 @@
 #include "cmdlist_hw.h"
+#include "encode_flush.h"
 #include "encode_state_base_address.h"
 #include "event.h"
 #include "graphics_allocation.h"
@@ -25,6 +26,7 @@ bool CommandListCoreFamily<gfxCoreFamily>::initialize(Device *device) {
     }
 
     EncodeStateBaseAddress<gfxCoreFamily>::encode(*this);
+    this->dirtyHeaps = 0u;
 
     enableGpgpu();
     programFrontEndState();
@@ -349,7 +351,11 @@ xe_result_t CommandListCoreFamily<gfxCoreFamily>::appendLaunchFunction(xe_functi
         }
     }
 
-    EncodeStateBaseAddress<gfxCoreFamily>::encode(*this);
+    if (this->dirtyHeaps) {
+        EncodeFlush<gfxCoreFamily>::encode(*this);
+        EncodeStateBaseAddress<gfxCoreFamily>::encode(*this);
+        this->dirtyHeaps = 0u;
+    }
 
     // Commit our command to the commandStream
     auto buffer = commandStream->getSpace(sizeof(cmd));
