@@ -17,7 +17,7 @@ struct CommandListCoreFamily : public CommandListImp {
     void enableGpgpu();
     void programFrontEndState();
     void programPreemption();
-    void *getHeapSpaceAllowGrow(OCLRT::IndirectHeap &indirectHeap, size_t size);
+    void *getHeapSpaceAllowGrow(CommandContainer::HeapType heapType, size_t size);
 
     xe_result_t close() override;
     xe_result_t appendCommandLists(uint32_t numCommandLists,

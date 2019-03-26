@@ -145,7 +145,9 @@ bool CommandListCoreFamily<gfxCoreFamily>::initialize(Device *device) {
 }
 
 template <GFXCORE_FAMILY gfxCoreFamily>
-void *CommandListCoreFamily<gfxCoreFamily>::getHeapSpaceAllowGrow(OCLRT::IndirectHeap &indirectHeap, size_t size) {
+void *CommandListCoreFamily<gfxCoreFamily>::getHeapSpaceAllowGrow(CommandContainer::HeapType heapType, size_t size) {
+    auto &indirectHeap = *indirectHeaps[heapType];
+
     if (indirectHeap.getAvailableSpace() < size) {
         // grow
         auto memoryManager = device->getMemoryManager();
@@ -163,12 +165,9 @@ void *CommandListCoreFamily<gfxCoreFamily>::getHeapSpaceAllowGrow(OCLRT::Indirec
         indirectHeap.replaceBuffer(newAlloc->allocationRT->getUnderlyingBuffer(), newAlloc->allocationRT->getUnderlyingBufferSize());
         memcpy_s(indirectHeap.getSpace(alreadyUsedSize), alreadyUsedSize, oldAlloc->getUnderlyingBuffer(), alreadyUsedSize);
         *std::find(residencyContainer.begin(), residencyContainer.end(), oldAlloc) = newAlloc->allocationRT;
-        for (uint32_t heapType = 0; heapType < NUM_HEAPS; ++heapType) {
-            if (this->allocationIndirectHeaps[heapType]->allocationRT == oldAlloc) {
-                allocationIndirectHeaps[heapType] = newAlloc;
-                setHeap<gfxCoreFamily>(this->sba, static_cast<HeapType>(heapType), *indirectHeaps[heapType]);
-                break;
-            }
+        if (this->allocationIndirectHeaps[heapType]->allocationRT == oldAlloc) {
+            allocationIndirectHeaps[heapType] = newAlloc;
+            setHeap<gfxCoreFamily>(this->sba, heapType, indirectHeap);
         }
         delete oldAlloc;
     }
@@ -334,12 +333,12 @@ xe_result_t CommandListCoreFamily<gfxCoreFamily>::appendLaunchFunction(xe_functi
     auto sizePerThreadData = function->getPerThreadDataSize();
     auto sizePerThreadDataForWholeGroup = function->getPerThreadDataSizeForWholeThreadGroup();
     {
-        auto heap = indirectHeaps[OCLRT::IndirectHeap::DYNAMIC_STATE];
+        auto heap = indirectHeaps[DYNAMIC_STATE];
         assert(heap);
         heap->align(OCLRT::KernelCommandsHelper<GfxFamily>::alignInterfaceDescriptorData);
 
         auto sizeIDD = sizeof(INTERFACE_DESCRIPTOR_DATA);
-        auto ptr = getHeapSpaceAllowGrow(*heap, sizeIDD);
+        auto ptr = getHeapSpaceAllowGrow(DYNAMIC_STATE, sizeIDD);
         assert(ptr);
         auto offsetIDD = ptrDiff(ptr, heap->getCpuBase());
         assert(offsetIDD + sizeIDD <= heap->getMaxAvailableSpace());
@@ -372,7 +371,7 @@ xe_result_t CommandListCoreFamily<gfxCoreFamily>::appendLaunchFunction(xe_functi
             uint32_t bindingTablePointer = 0u;
 
             if (bindingTableStateCount > 0u) {
-                auto ssh = indirectHeaps[OCLRT::IndirectHeap::SURFACE_STATE];
+                auto ssh = indirectHeaps[SURFACE_STATE];
                 assert(ssh);
                 bindingTablePointer = copyBindingTableAndSurfaceStates(ssh,
                                                                        function->getSurfaceStateHeap(),
@@ -417,7 +416,7 @@ xe_result_t CommandListCoreFamily<gfxCoreFamily>::appendLaunchFunction(xe_functi
 
         auto sizeThreadData = sizePerThreadDataForWholeGroup + sizeCrossThreadData;
 
-        auto ptr = getHeapSpaceAllowGrow(*heap, sizeThreadData);
+        auto ptr = getHeapSpaceAllowGrow(INDIRECT_OBJECT, sizeThreadData);
         assert(ptr);
         auto offset = ptrDiff(ptr, heap->getCpuBase());
         assert(offset + sizeThreadData <= heap->getMaxAvailableSpace());

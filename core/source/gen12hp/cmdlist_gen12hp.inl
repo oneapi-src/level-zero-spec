@@ -71,14 +71,14 @@ xe_result_t CommandListCoreFamily<IGFX_GEN12_CORE>::appendLaunchFunction(xe_func
 
     // Copy the threadData to the indirect heap
     {
-        auto heap = indirectHeaps[OCLRT::IndirectHeap::GENERAL_STATE];
+        auto heap = indirectHeaps[GENERAL_STATE];
         assert(heap);
         heap->align(COMPUTE_WALKER::INDIRECTDATASTARTADDRESS_ALIGN_SIZE);
 
         auto sizeCrossThreadData = static_cast<uint32_t>(function->getCrossThreadDataSize());
         auto sizePerThreadData = static_cast<uint32_t>(function->getPerThreadDataSizeForWholeThreadGroup());
         auto sizeThreadData = sizePerThreadData + sizeCrossThreadData;
-        auto ptr = getHeapSpaceAllowGrow(*heap, sizeThreadData);
+        auto ptr = getHeapSpaceAllowGrow(GENERAL_STATE, sizeThreadData);
         assert(ptr);
         auto offset = ptrDiff(ptr, heap->getCpuBase());
         assert(offset + sizeThreadData <= heap->getMaxAvailableSpace());
