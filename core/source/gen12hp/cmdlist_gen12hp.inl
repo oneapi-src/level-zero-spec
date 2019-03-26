@@ -8,6 +8,73 @@
 namespace L0 {
 
 template <>
+struct EncodeStateBaseAddress<IGFX_GEN12_CORE> {
+    static const GFXCORE_FAMILY gfxCoreFamily = IGFX_GEN12_CORE;
+    using GfxFamily = typename OCLRT::GfxFamilyMapper<gfxCoreFamily>::GfxFamily;
+    using STATE_BASE_ADDRESS = typename GfxFamily::STATE_BASE_ADDRESS;
+    using _3DSTATE_BINDING_TABLE_POOL_ALLOC = typename GfxFamily::_3DSTATE_BINDING_TABLE_POOL_ALLOC;
+
+    static const size_t size = sizeof(STATE_BASE_ADDRESS) + sizeof(_3DSTATE_BINDING_TABLE_POOL_ALLOC);
+
+    static void encode(CommandContainer &container) {
+        STATE_BASE_ADDRESS cmd = GfxFamily::cmdInitStateBaseAddress;
+
+        if (container.dirtyHeaps & (1u << CommandContainer::DYNAMIC_STATE)) {
+            auto &heap = container.getIndirectHeap(CommandContainer::DYNAMIC_STATE);
+            cmd.setDynamicStateBaseAddressModifyEnable(true);
+            cmd.setDynamicStateBaseAddress(heap.getHeapGpuBase());
+            cmd.setDynamicStateBufferSizeModifyEnable(true);
+            cmd.setDynamicStateBufferSize(static_cast<uint32_t>(heap.getMaxAvailableSpace()));
+        }
+
+        if (container.dirtyHeaps & (1u << CommandContainer::GENERAL_STATE)) {
+            auto &heap = container.getIndirectHeap(CommandContainer::GENERAL_STATE);
+            cmd.setGeneralStateBaseAddressModifyEnable(true);
+            cmd.setGeneralStateBaseAddress(heap.getHeapGpuBase());
+            cmd.setGeneralStateBufferSizeModifyEnable(true);
+            cmd.setGeneralStateBufferSize(static_cast<uint32_t>(heap.getMaxAvailableSpace()));
+        }
+
+        if (container.dirtyHeaps & (1u << CommandContainer::INDIRECT_OBJECT)) {
+            auto &heap = container.getIndirectHeap(CommandContainer::INDIRECT_OBJECT);
+            cmd.setIndirectObjectBaseAddressModifyEnable(true);
+            cmd.setIndirectObjectBaseAddress(heap.getHeapGpuBase());
+            cmd.setIndirectObjectBufferSizeModifyEnable(true);
+            cmd.setIndirectObjectBufferSize(static_cast<uint32_t>(heap.getMaxAvailableSpace()));
+        }
+
+        if (container.dirtyHeaps & (1u << CommandContainer::SURFACE_STATE)) {
+            auto &heap = container.getIndirectHeap(CommandContainer::SURFACE_STATE);
+            cmd.setSurfaceStateBaseAddressModifyEnable(true);
+            cmd.setSurfaceStateBaseAddress(heap.getHeapGpuBase());
+        }
+
+        {
+            // note : this doesn't change
+            cmd.setInstructionBaseAddressModifyEnable(true);
+            cmd.setInstructionBaseAddress(container.getInstructionHeapBaseAddress());
+            cmd.setInstructionBufferSizeModifyEnable(true);
+            cmd.setInstructionBufferSize(MemoryConstants::sizeOf4GBinPageEntities); // no bounds checking
+        }
+
+        auto buffer = container.getCommandStream().getSpace(sizeof(cmd));
+        *(STATE_BASE_ADDRESS *)buffer = cmd;
+
+        // Have to program _3DSTATE_BINDING_TABLE_POOL_ALLOC to match STATE_BASE_ADDRESS for SSH
+        if (container.dirtyHeaps & (1u << CommandContainer::SURFACE_STATE)) {
+            auto &heap = container.getIndirectHeap(CommandContainer::SURFACE_STATE);
+            auto cmd = GfxFamily::cmdInitStateBindingTablePoolAlloc;
+            cmd.setBindingTablePoolBaseAddress(heap.getHeapGpuBase());
+            cmd.setBindingTablePoolBufferSize(heap.getHeapSizeInPages());
+            //TODO: cmd.setSurfaceObjectControlStateIndexToMocsTables(gmmHelper->getMOCS(GMM_RESOURCE_USAGE_OCL_STATE_HEAP_BUFFER));
+
+            auto buffer = container.getCommandStream().getSpace(sizeof(cmd));
+            *(_3DSTATE_BINDING_TABLE_POOL_ALLOC *)buffer = cmd;
+        }
+    }
+};
+
+template <>
 void CommandListCoreFamily<IGFX_GEN12_CORE>::programFrontEndState() {
     using GfxFamily = typename OCLRT::GfxFamilyMapper<IGFX_GEN12_CORE>::GfxFamily;
 

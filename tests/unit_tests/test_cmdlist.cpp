@@ -179,6 +179,36 @@ HWTEST_F(CommandListCreate, addsStateBaseAddressToBatchBuffer) {
     }
 }
 
+HWTEST2_F(CommandListCreate, addsBindingTablePoolAllocToBatchBuffer, IsGen12HP) {
+    Mock<Device> device;
+
+    auto commandList = whitebox_cast(CommandList::create(productFamily, &device));
+    ASSERT_NE(nullptr, commandList->commandStream);
+    auto usedSpaceBefore = commandList->commandStream->getUsed();
+
+    auto result = commandList->close();
+    ASSERT_EQ(XE_RESULT_SUCCESS, result);
+
+    auto usedSpaceAfter = commandList->commandStream->getUsed();
+    ASSERT_GT(usedSpaceAfter, usedSpaceBefore);
+
+    GenCmdList cmdList;
+    ASSERT_TRUE(FamilyType::PARSE::parseCommandBuffer(cmdList,
+                                                      ptrOffset(commandList->commandStream->getCpuBase(), 0),
+                                                      usedSpaceAfter));
+    using _3DSTATE_BINDING_TABLE_POOL_ALLOC = typename FamilyType::_3DSTATE_BINDING_TABLE_POOL_ALLOC;
+    auto itor = find<_3DSTATE_BINDING_TABLE_POOL_ALLOC *>(cmdList.begin(), cmdList.end());
+    ASSERT_NE(cmdList.end(), itor);
+
+    {
+        const auto &heap = commandList->getIndirectHeap(CommandContainer::SURFACE_STATE);
+
+        auto cmd = genCmdCast<_3DSTATE_BINDING_TABLE_POOL_ALLOC *>(*itor);
+        EXPECT_EQ(heap.getHeapGpuBase(), cmd->getBindingTablePoolBaseAddress());
+        EXPECT_EQ(heap.getHeapSizeInPages(), cmd->getBindingTablePoolBufferSize());
+    }
+}
+
 GEN9TEST_F(CommandListCreate, addsVfeStateToBatchBuffer) {
     Mock<Device> device;
 
