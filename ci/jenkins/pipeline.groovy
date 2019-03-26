@@ -3,6 +3,7 @@ import groovy.json.JsonOutput
 
 { ->
 def gerritCreds = "0f565f2a-f10f-421d-ac50-3b169adf5f06"
+def gerritGfxCreds = "696e4269-73bd-496c-8575-632dd078135c"
 
 def plus2Allowed = (env.JOB_BASE_NAME == "ocl-loki-verification")
 def reportBuildStatus = (env.JOB_BASE_NAME == "ocl-loki-verification")
@@ -18,14 +19,24 @@ def gerritPostResult = { passed ->
 				timeout(3) {
 					def gerritOpts
 
-// [id:gfx%2Fcompute%2Floki~master~I40b496fcc84f8bb3296949af50e0a94db63701a5, project:gfx/compute/loki, branch:master, hashtags:[], change_id:I40b496fcc84f8bb3296949af50e0a94db63701a5, subject:CI: post Verified-1 on build failure, status:NEW, created:2019-03-26 13:07:01.000000000, updated:2019-03-26 14:39:12.000000000, submit_type:REBASE_IF_NECESSARY, mergeable:true, insertions:43, deletions:33, unresolved_comment_count:0, _number:533384, owner:[_account_id:9]]
-
-					// if(neoBuild.change.masterIDs.size()<1 && neoBuild.plus2Allowed)
 					if(passed) {
-						if(plus2Allowed) {
-							gerritOpts = "--code-review=+2 --label verified=+1"
+						// get change data from gerrit
+						def resp = httpRequest authentication: "${gerritGfxCreds}", url: "https://${GERRIT_HOST}/a/changes/${gerritReview.id}/revisions/${GERRIT_PATCHSET_REVISION}/review"
+						assert resp.content.startsWith(')]}') == true
+
+						def s = resp.content
+						def tmpReview = readJSON text: s.substring(s.indexOf('\n')+1)
+
+						def isDraft = tmpReview.revisions["${GERRIT_PATCHSET_REVISION}"].draft
+
+						if(isDraft) {
+								gerritOpts = "--label verified=+1 --publish"
 						} else {
-							gerritOpts = "--label verified=+1"
+							if(plus2Allowed) {
+								gerritOpts = "--code-review=+2 --label verified=+1"
+							} else {
+								gerritOpts = "--label verified=+1"
+							}
 						}
 					} else {
 						gerritOpts = "--label verified=-1"
