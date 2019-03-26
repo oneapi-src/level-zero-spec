@@ -209,17 +209,62 @@ xe_result_t CommandListCoreFamily<gfxCoreFamily>::appendLaunchFunction(xe_functi
 
     const auto function = Function::fromHandle(hFunction);
     assert(function);
-
-    // For now program L3 here.
-    bool slmUsage = function->getSlmSize() > 0;
-    programL3(slmUsage);
-
-    auto threadsPerThreadGroup = function->getThreadsPerThreadGroup();
-
-    uint32_t numIDD = 0u;
     auto sizeCrossThreadData = function->getCrossThreadDataSize();
     auto sizePerThreadData = function->getPerThreadDataSize();
     auto sizePerThreadDataForWholeGroup = function->getPerThreadDataSizeForWholeThreadGroup();
+
+    GPGPU_WALKER cmd = GfxFamily::cmdInitGpgpuWalker;
+    auto idd = GfxFamily::cmdInitInterfaceDescriptorData;
+
+    // Point kernel start pointer to the proper offset of instruction heap
+    {
+        auto alloc = function->getIsaGraphicsAllocation();
+        assert(nullptr != alloc);
+        auto offset = alloc->getGpuAddressOffsetFromHeapBase();
+        idd.setKernelStartPointer(offset);
+        idd.setKernelStartPointerHigh(0u);
+    }
+
+    auto threadsPerThreadGroup = function->getThreadsPerThreadGroup();
+    idd.setNumberOfThreadsInGpgpuThreadGroup(threadsPerThreadGroup);
+
+    idd.setBarrierEnable(function->getHasBarriers());
+    idd.setSharedLocalMemorySize(function->getSlmSize() > 0
+                                     ? INTERFACE_DESCRIPTOR_DATA::SHARED_LOCAL_MEMORY_SIZE_ENCODES_64K
+                                     : INTERFACE_DESCRIPTOR_DATA::SHARED_LOCAL_MEMORY_SIZE_ENCODES_0K);
+
+    // Set up binding table and surface states
+    {
+        auto bindingTableStateCount = function->getBindingTableStateCount();
+        uint32_t bindingTablePointer = 0u;
+
+        if (bindingTableStateCount > 0u) {
+            auto ssh = indirectHeaps[SURFACE_STATE];
+            assert(ssh);
+            bindingTablePointer = copyBindingTableAndSurfaceStates(ssh,
+                                                                    function->getSurfaceStateHeap(),
+                                                                    function->getSurfaceStateHeapSize(),
+                                                                    bindingTableStateCount,
+                                                                    function->getBindingTableOffset());
+        }
+
+        idd.setBindingTablePointer(bindingTablePointer);
+
+        auto bindingTableStatePrefetchCount = std::min(31u, 0u); //TODO: bindingTableStateCount
+        idd.setBindingTableEntryCount(bindingTableStatePrefetchCount);
+    }
+
+    auto numGrfCrossThreadData = static_cast<uint32_t>(sizeCrossThreadData / sizeof(float[8]));
+    assert(numGrfCrossThreadData > 0u);
+    idd.setCrossThreadConstantDataReadLength(numGrfCrossThreadData);
+
+    auto numGrfPerThreadData = static_cast<uint32_t>(sizePerThreadData / sizeof(float[8]));
+    assert(numGrfPerThreadData > 0u);
+    idd.setConstantIndirectUrbEntryReadLength(numGrfPerThreadData);
+
+    // Copy the INTERFACE_DESCRIPTOR_DATA to indirect heap
+    uint32_t numIDD = 0u;
+    uint32_t offsetIDD = 0u;
     {
         auto heap = indirectHeaps[DYNAMIC_STATE];
         assert(heap);
@@ -228,61 +273,53 @@ xe_result_t CommandListCoreFamily<gfxCoreFamily>::appendLaunchFunction(xe_functi
         auto sizeIDD = sizeof(INTERFACE_DESCRIPTOR_DATA);
         auto ptr = getHeapSpaceAllowGrow(DYNAMIC_STATE, sizeIDD);
         assert(ptr);
-        auto offsetIDD = ptrDiff(ptr, heap->getCpuBase());
+        offsetIDD = static_cast<uint32_t>(ptrDiff(ptr, heap->getCpuBase()));
         assert(offsetIDD + sizeIDD <= heap->getMaxAvailableSpace());
         assert(0 == offsetIDD % sizeof(INTERFACE_DESCRIPTOR_DATA));
 
-        INTERFACE_DESCRIPTOR_DATA idd = GfxFamily::cmdInitInterfaceDescriptorData;
-
-        // Point kernel start pointer to the proper offset of instruction heap
-        {
-            auto alloc = function->getIsaGraphicsAllocation();
-            assert(nullptr != alloc);
-            auto offset = alloc->getGpuAddressOffsetFromHeapBase();
-            idd.setKernelStartPointer(offset);
-            idd.setKernelStartPointerHigh(0u);
-        }
-        idd.setNumberOfThreadsInGpgpuThreadGroup(threadsPerThreadGroup);
-
-        auto numGrfCrossThreadData = static_cast<uint32_t>(sizeCrossThreadData / sizeof(float[8]));
-        assert(numGrfCrossThreadData > 0u);
-        idd.setCrossThreadConstantDataReadLength(numGrfCrossThreadData);
-
-        auto numGrfPerThreadData = static_cast<uint32_t>(sizePerThreadData / sizeof(float[8]));
-        assert(numGrfPerThreadData > 0u);
-        idd.setConstantIndirectUrbEntryReadLength(numGrfPerThreadData);
-        idd.setBarrierEnable(function->getHasBarriers());
-
-        // Set up binding table and surface states
-        {
-            auto bindingTableStateCount = function->getBindingTableStateCount();
-            uint32_t bindingTablePointer = 0u;
-
-            if (bindingTableStateCount > 0u) {
-                auto ssh = indirectHeaps[SURFACE_STATE];
-                assert(ssh);
-                bindingTablePointer = copyBindingTableAndSurfaceStates(ssh,
-                                                                       function->getSurfaceStateHeap(),
-                                                                       function->getSurfaceStateHeapSize(),
-                                                                       bindingTableStateCount,
-                                                                       function->getBindingTableOffset());
-            }
-
-            idd.setBindingTablePointer(bindingTablePointer);
-
-            auto bindingTableStatePrefetchCount = std::min(31u, 0u); //TODO: bindingTableStateCount
-            idd.setBindingTableEntryCount(bindingTableStatePrefetchCount);
-        }
-
         memcpy(ptr, &idd, sizeof(idd));
+    }
 
+    // Copy the threadData to the indirect heap
+    uint32_t sizeThreadData = sizePerThreadDataForWholeGroup + sizeCrossThreadData;
+    uint32_t offsetThreadData = 0u;
+    {
+        function->setGroupCount(pThreadGroupDimensions->groupCountX,
+                                pThreadGroupDimensions->groupCountY,
+                                pThreadGroupDimensions->groupCountZ);
+
+        auto heap = indirectHeaps[INDIRECT_OBJECT];
+        assert(heap);
+        heap->align(GPGPU_WALKER::INDIRECTDATASTARTADDRESS_ALIGN_SIZE);
+
+        auto ptr = getHeapSpaceAllowGrow(INDIRECT_OBJECT, sizeThreadData);
+        assert(ptr);
+        offsetThreadData = static_cast<uint32_t>(ptrDiff(ptr, heap->getCpuBase()));
+        assert(offsetThreadData + sizeThreadData <= heap->getMaxAvailableSpace());
+
+        memcpy(ptr, function->getCrossThreadDataHostMem(), sizeCrossThreadData);
+        ptr = ptrOffset(ptr, sizeCrossThreadData);
+        memcpy(ptr, function->getPerThreadDataHostMem(), sizePerThreadDataForWholeGroup);
+    }
+
+    // For now program L3 here.
+    bool slmUsage = function->getSlmSize() > 0;
+    programL3(slmUsage);
+
+    if (this->dirtyHeaps) {
+        EncodeFlush<gfxCoreFamily>::encode(*this);
+        EncodeStateBaseAddress<gfxCoreFamily>::encode(*this);
+        this->dirtyHeaps = 0u;
+    }
+
+    {
         // A Media_State_Flush should be used before MEDIA_INTERFACE_DESCRIPTOR_LOAD to ensure that
         // the temporary Interface Descriptor storage is cleared.
         auto mediaStateFlush = commandStream->getSpace(sizeof(MEDIA_STATE_FLUSH));
         *reinterpret_cast<MEDIA_STATE_FLUSH *>(mediaStateFlush) = GfxFamily::cmdInitMediaStateFlush;
 
         MEDIA_INTERFACE_DESCRIPTOR_LOAD cmd = GfxFamily::cmdInitMediaInterfaceDescriptorLoad;
-        cmd.setInterfaceDescriptorDataStartAddress(static_cast<uint32_t>(offsetIDD));
+        cmd.setInterfaceDescriptorDataStartAddress(offsetIDD);
         cmd.setInterfaceDescriptorTotalLength(sizeof(INTERFACE_DESCRIPTOR_DATA));
         numIDD = 0U; // change to IDD within MEDIA_INTERFACE_DESCRIPTOR_LOAD once we start grouping IDDs
 
@@ -290,37 +327,12 @@ xe_result_t CommandListCoreFamily<gfxCoreFamily>::appendLaunchFunction(xe_functi
         *(decltype(cmd) *)buffer = cmd;
     }
 
-    GPGPU_WALKER cmd = GfxFamily::cmdInitGpgpuWalker;
+    cmd.setIndirectDataStartAddress(offsetThreadData);
+    cmd.setIndirectDataLength(sizeThreadData);
     cmd.setInterfaceDescriptorOffset(numIDD);
-
-    function->setGroupCount(pThreadGroupDimensions->groupCountX,
-                            pThreadGroupDimensions->groupCountY,
-                            pThreadGroupDimensions->groupCountZ);
-    // Copy the threadData to the indirect heap
-    {
-        auto heap = indirectHeaps[INDIRECT_OBJECT];
-        assert(heap);
-        heap->align(GPGPU_WALKER::INDIRECTDATASTARTADDRESS_ALIGN_SIZE);
-
-        auto sizeThreadData = sizePerThreadDataForWholeGroup + sizeCrossThreadData;
-
-        auto ptr = getHeapSpaceAllowGrow(INDIRECT_OBJECT, sizeThreadData);
-        assert(ptr);
-        auto offset = ptrDiff(ptr, heap->getCpuBase());
-        assert(offset + sizeThreadData <= heap->getMaxAvailableSpace());
-
-        memcpy(ptr, function->getCrossThreadDataHostMem(), sizeCrossThreadData);
-        ptr = ptrOffset(ptr, sizeCrossThreadData);
-        memcpy(ptr, function->getPerThreadDataHostMem(), sizePerThreadDataForWholeGroup);
-        ptr = ptrOffset(ptr, sizePerThreadDataForWholeGroup);
-
-        cmd.setIndirectDataLength(sizeThreadData);
-        cmd.setIndirectDataStartAddress(static_cast<uint32_t>(offset));
-    }
 
     // Set # of threadgroups in each dimension
     assert(pThreadGroupDimensions);
-    cmd.setThreadWidthCounterMaximum(threadsPerThreadGroup);
     cmd.setThreadGroupIdXDimension(pThreadGroupDimensions->groupCountX);
     cmd.setThreadGroupIdYDimension(pThreadGroupDimensions->groupCountY);
     cmd.setThreadGroupIdZDimension(pThreadGroupDimensions->groupCountZ);
@@ -332,8 +344,21 @@ xe_result_t CommandListCoreFamily<gfxCoreFamily>::appendLaunchFunction(xe_functi
         GPGPU_WALKER::SIMD_SIZE_SIMD16 * (simdSize == 16) |
         GPGPU_WALKER::SIMD_SIZE_SIMD8 * (simdSize == 8);
     cmd.setSimdSize(static_cast<typename GPGPU_WALKER::SIMD_SIZE>(simdSizeOp));
+
+    // Set the last thread execution mask
     cmd.setRightExecutionMask(function->getThreadExecutionMask());
     cmd.setBottomExecutionMask(0xffffffff);
+    cmd.setThreadWidthCounterMaximum(threadsPerThreadGroup);
+
+    // Commit our command to the commandStream
+    auto buffer = commandStream->getSpace(sizeof(cmd));
+    *(decltype(cmd) *)buffer = cmd;
+
+    {
+        // A MEDIA_STATE_FLUSH with no options must be added after a GPGPU_WALKER command which doesn't use either SLM or barriers.
+        auto mediaStateFlush = commandStream->getSpace(sizeof(MEDIA_STATE_FLUSH));
+        *reinterpret_cast<MEDIA_STATE_FLUSH *>(mediaStateFlush) = GfxFamily::cmdInitMediaStateFlush;
+    }
 
     // Attach Function residency to our CommandList residency
     {
@@ -349,22 +374,6 @@ xe_result_t CommandListCoreFamily<gfxCoreFamily>::appendLaunchFunction(xe_functi
         if (function->hasPrintfOutput()) {
             this->storePrintfFunction(function);
         }
-    }
-
-    if (this->dirtyHeaps) {
-        EncodeFlush<gfxCoreFamily>::encode(*this);
-        EncodeStateBaseAddress<gfxCoreFamily>::encode(*this);
-        this->dirtyHeaps = 0u;
-    }
-
-    // Commit our command to the commandStream
-    auto buffer = commandStream->getSpace(sizeof(cmd));
-    *(decltype(cmd) *)buffer = cmd;
-
-    {
-        // A MEDIA_STATE_FLUSH with no options must be added after a GPGPU_WALKER command which doesn't use either SLM or barriers.
-        auto mediaStateFlush = commandStream->getSpace(sizeof(MEDIA_STATE_FLUSH));
-        *reinterpret_cast<MEDIA_STATE_FLUSH *>(mediaStateFlush) = GfxFamily::cmdInitMediaStateFlush;
     }
 
     return XE_RESULT_SUCCESS;
