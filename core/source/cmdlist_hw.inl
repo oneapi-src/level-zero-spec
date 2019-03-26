@@ -59,7 +59,7 @@ void *CommandListCoreFamily<gfxCoreFamily>::getHeapSpaceAllowGrow(CommandContain
         indirectHeap.replaceGraphicsAllocation(newAlloc->allocationRT);
         indirectHeap.replaceBuffer(newAlloc->allocationRT->getUnderlyingBuffer(), newAlloc->allocationRT->getUnderlyingBufferSize());
         memcpy_s(indirectHeap.getSpace(alreadyUsedSize), alreadyUsedSize, oldAlloc->allocationRT->getUnderlyingBuffer(), alreadyUsedSize);
-        this->residencyContainer.push_back(newAlloc);
+        this->residencyContainer.push_back(newAlloc->allocationRT);
         this->deallocationContainer.push_back(oldAlloc);
         allocationIndirectHeaps[heapType] = newAlloc;
         this->dirtyHeaps |= 1u << heapType;
