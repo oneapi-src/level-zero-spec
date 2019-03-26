@@ -207,9 +207,9 @@ cmake --build . --config Release --clean-first --target ALL_BUILD
 
 							// if(neoBuild.change.masterIDs.size()<1 && neoBuild.plus2Allowed)
 							if(plus2Allowed) {
-								gerritOpts = "--code-review=+2 --verified=+1"
+								gerritOpts = "--code-review=+2 --label verified=+1"
 							} else {
-								gerritOpts = "--verified=+1"
+								gerritOpts = "--label verified=+1"
 							}
 
 							withCredentials([sshUserPrivateKey(credentialsId: "${gerritCreds}", keyFileVariable: 'KEY', usernameVariable: 'K_USER')]) {
