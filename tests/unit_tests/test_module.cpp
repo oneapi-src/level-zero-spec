@@ -104,7 +104,7 @@ TEST(ModuleBuildLog, stringModuleBuildLog) {
     EXPECT_EQ(1, buildLogSize);
 
     buildLog = (char *)malloc(buildLogSize);
-    result = moduleBuildLog->getString(&buildLogSize, &buildLog);
+    result = moduleBuildLog->getString(&buildLogSize, buildLog);
     EXPECT_EQ(XE_RESULT_SUCCESS, result);
     EXPECT_EQ(1, buildLogSize);
 
@@ -118,7 +118,7 @@ TEST(ModuleBuildLog, stringModuleBuildLog) {
     EXPECT_EQ((strlen(error_log) + 1), buildLogSize);
 
     buildLog = (char *)malloc(buildLogSize);
-    result = moduleBuildLog->getString(&buildLogSize, &buildLog);
+    result = moduleBuildLog->getString(&buildLogSize, buildLog);
     EXPECT_EQ(XE_RESULT_SUCCESS, result);
     EXPECT_EQ((strlen(error_log) + 1), buildLogSize);
     EXPECT_STREQ("Error Log", buildLog);
@@ -133,7 +133,7 @@ TEST(ModuleBuildLog, stringModuleBuildLog) {
     EXPECT_EQ((strlen(error_log) + strlen("\n") + strlen(warn_log) + 1), buildLogSize);
 
     buildLog = (char *)malloc(buildLogSize);
-    result = moduleBuildLog->getString(&buildLogSize, &buildLog);
+    result = moduleBuildLog->getString(&buildLogSize, buildLog);
     EXPECT_EQ(XE_RESULT_SUCCESS, result);
     EXPECT_EQ((strlen(error_log) + strlen("\n") + strlen(warn_log) + 1), buildLogSize);
     EXPECT_STREQ("Error Log\nWarn Log", buildLog);
@@ -443,15 +443,15 @@ TEST(ModuleCreateSimple, moduleWithSLMandBarriers) {
 
 TEST_F(ModuleOnlineCompiled, getNativeBinaryReturnsGenBinary) {
     size_t binarySize = 0;
-    void *binary = nullptr;
+    uint8_t *binary = nullptr;
     auto result = xeModuleGetNativeBinary(module->toHandle(), &binarySize, nullptr);
 
     EXPECT_EQ(XE_RESULT_SUCCESS, result);
     EXPECT_NE(0u, binarySize);
 
-    auto storage = std::make_unique<char[]>(binarySize);
+    auto storage = std::make_unique<uint8_t[]>(binarySize);
     binary = storage.get();
-    result = xeModuleGetNativeBinary(module->toHandle(), &binarySize, &binary);
+    result = xeModuleGetNativeBinary(module->toHandle(), &binarySize, binary);
     EXPECT_EQ(XE_RESULT_SUCCESS, result);
     EXPECT_EQ(0u, memcmp(binary, "CTNI", 4));
 }

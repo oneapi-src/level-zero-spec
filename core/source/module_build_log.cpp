@@ -15,17 +15,18 @@ struct ModuleBuildLogImp : public ModuleBuildLog {
         return XE_RESULT_SUCCESS;
     }
 
-    xe_result_t getString(size_t *pSize, char **pBuildLog) override {
+    xe_result_t getString(size_t *pSize, char *pBuildLog) override {
         const char *buildLog = this->buildLog.c_str();
-        size_t szLog;
 
         if (buildLog != nullptr) {
-            szLog = strlen(buildLog) + 1;
+            auto szLog = this->buildLog.size();
 
-            if (pBuildLog)
-                memcpy(*pBuildLog, buildLog, szLog);
+            if (pBuildLog) {
+                memcpy(pBuildLog, buildLog, szLog);
+                pBuildLog[szLog] = '\0';
+            }
 
-            *pSize = szLog;
+            *pSize = szLog + 1;
         } else {
             *pSize = 0;
         }

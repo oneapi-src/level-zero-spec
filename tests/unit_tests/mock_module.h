@@ -17,11 +17,13 @@ struct Mock<Module> : public Module {
     MOCK_METHOD2(getFunctionPointer, xe_result_t(const char *pFunctionName,
                                                  void **pfnFunction));
     MOCK_METHOD2(getNativeBinary, xe_result_t(size_t *pSize,
-                                              void **pModuleNativeBinary));
+                                              uint8_t *pModuleNativeBinary));
     MOCK_CONST_METHOD1(getImmutableFunctionInfo, PtrRef<ImmutableFunctionInfo>(CStringRef functionName));
     MOCK_CONST_METHOD0(getMaxGroupSize, uint32_t());
 
     MOCK_CONST_METHOD0(getDevice, Device *());
+
+    MOCK_METHOD2(getGlobalPointer, xe_result_t(const char *pGlobalName, void **pPtr));
 };
 
 } // namespace ult

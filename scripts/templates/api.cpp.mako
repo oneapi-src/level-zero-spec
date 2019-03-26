@@ -1,6 +1,10 @@
 <%!
 import re
 from templates import helper as th
+%><%
+    x=context['ns'][0]
+    X=context['ns'][0].upper()
+    Xx=context['ns'][0].title()
 %>/**************************************************************************//**
 * INTEL CONFIDENTIAL  
 * Copyright 2019  
@@ -26,7 +30,7 @@ from templates import helper as th
 *
 * @file ${x}_${name}.cpp
 *
-* @brief ${th.subx(x, header['desc'])}
+* @brief ${th.sub(ns, header['desc'])}
 *
 * DO NOT EDIT: generated from /scripts/${section}/${name}.yml
 *
@@ -47,24 +51,24 @@ from templates import helper as th
 %if re.match(r"function", obj['type']):
 ///////////////////////////////////////////////////////////////////////////////
 %if 'condition' in obj:
-#if ${th.subx(x, obj['condition'])}
+#if ${th.sub(ns, obj['condition'])}
 %endif
-%for line in th.make_desc_lines(x, obj):
+%for line in th.make_desc_lines(ns, obj):
 /// ${line}
 %endfor
-%for line in th.make_details_lines(x, obj):
+%for line in th.make_details_lines(ns, obj):
 /// ${line}
 %endfor
 /// 
-%for line in th.make_returns_lines(x, obj):
+%for line in th.make_returns_lines(ns, obj):
 /// ${line}
 %endfor
 ///
 /// @hash {${obj['hash']}}
 ///
 __${x}dllexport ${x}_result_t __${x}call
-${th.make_func_name(x, obj)}(
-    %for line in th.make_param_lines(x, obj):
+${th.make_func_name(ns, obj)}(
+    %for line in th.make_param_lines(ns, obj):
     ${line}
     %endfor
     )
@@ -73,11 +77,11 @@ ${th.make_func_name(x, obj)}(
     {
         //if( ${X}_DRIVER_PARAMETER_VALIDATION_LEVEL >= 0 )
         {
-            %if not re.match(r".*Driver", th.make_func_name(x, obj)):
+            %if not re.match(r".*Driver", th.make_func_name(ns, obj)):
             // if( nullptr == driver ) return ${X}_RESULT_ERROR_UNINITIALIZED;
             %endif
             // Check parameters
-            %for key, values in th.make_param_checks(x, obj).items():
+            %for key, values in th.make_param_checks(ns, obj).items():
             %for val in values:
             if( ${val} ) return ${key};
             %endfor
@@ -87,7 +91,7 @@ ${th.make_func_name(x, obj)}(
 #if defined(XE_NULLDRV)
         return ${X}_RESULT_SUCCESS;
 #else
-        return L0::${th.make_obj_accessor(x, obj)}
+        return L0::${th.make_obj_accessor(ns, obj)}
 #endif
         /// @end
     }
@@ -106,7 +110,7 @@ ${th.make_func_name(x, obj)}(
     }
 }
 %if 'condition' in obj:
-#endif // ${th.subx(x, obj['condition'])}
+#endif // ${th.sub(ns, obj['condition'])}
 %endif
 
 %endif

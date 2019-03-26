@@ -127,7 +127,7 @@ xeDriverGetDeviceUniqueIds(
 ///     - ::XE_RESULT_ERROR_UNSUPPORTED
 __xedllport xe_result_t __xecall
 xeDriverGetDevice(
-    xe_device_uuid_t* pUUID,                        ///< [in] unique id of device to retrieve. Use ${x}DriverGetDeviceUniqueIds
+    const xe_device_uuid_t* pUUID,                  ///< [in] unique id of device to retrieve. Use ${x}DriverGetDeviceUniqueIds
                                                     ///< to obtain a unique Id.
     xe_device_handle_t* phDevice                    ///< [out] pointer to handle of device object created
     );
@@ -398,26 +398,26 @@ xeDeviceGetMemoryProperties(
     );
 
 ///////////////////////////////////////////////////////////////////////////////
-/// @brief API version of ::xe_device_link_properties_t
-typedef enum _xe_device_link_properties_version_t
+/// @brief API version of ::xe_device_p2p_properties_t
+typedef enum _xe_device_p2p_properties_version_t
 {
-    XE_DEVICE_LINK_PROPERTIES_VERSION_CURRENT = XE_MAKE_VERSION( 1, 0 ),///< version 1.0
+    XE_DEVICE_P2P_PROPERTIES_VERSION_CURRENT = XE_MAKE_VERSION( 1, 0 ), ///< version 1.0
 
-} xe_device_link_properties_version_t;
+} xe_device_p2p_properties_version_t;
 
 ///////////////////////////////////////////////////////////////////////////////
-/// @brief Device properties queried using ::xeDeviceGetLinkProperties
-typedef struct _xe_device_link_properties_t
+/// @brief Device properties queried using ::xeDeviceGetP2PProperties
+typedef struct _xe_device_p2p_properties_t
 {
-    xe_device_link_properties_version_t version;    ///< [in] ::XE_DEVICE_LINK_PROPERTIES_VERSION_CURRENT
-    xe_bool_t isP2PSupported;                       ///< [out] Is P2P access supported across link
-    xe_bool_t isAtomicsSupported;                   ///< [out] Are atomics supported across link
-    uint32_t performanceRank;                       ///< [out] Relative performance rank of link.
+    xe_device_p2p_properties_version_t version;     ///< [in] ::XE_DEVICE_P2P_PROPERTIES_VERSION_CURRENT
+    xe_bool_t isP2PSupported;                       ///< [out] Is P2P access supported between two devices
+    xe_bool_t isAtomicsSupported;                   ///< [out] Are atomics supported between two devices
 
-} xe_device_link_properties_t;
+} xe_device_p2p_properties_t;
 
 ///////////////////////////////////////////////////////////////////////////////
-/// @brief Retrieves link properties between one device and a peer devices
+/// @brief Retrieves Peer-to-Peer properties between one device and a peer
+///        devices
 /// 
 /// @details
 ///     - The application may call this function from simultaneous threads.
@@ -434,14 +434,13 @@ typedef struct _xe_device_link_properties_t
 ///     - ::XE_RESULT_ERROR_INVALID_PARAMETER
 ///         + nullptr == hDevice
 ///         + nullptr == hPeerDevice
-///         + nullptr == pLinkProperties
-///         + invalid ordinal. Use ::xeDriverGetDeviceCount for valid range.
+///         + nullptr == pP2PProperties
 ///     - ::XE_RESULT_ERROR_UNSUPPORTED
 __xedllport xe_result_t __xecall
-xeDeviceGetLinkProperties(
+xeDeviceGetP2PProperties(
     xe_device_handle_t hDevice,                     ///< [in] handle of the device performing the access
     xe_device_handle_t hPeerDevice,                 ///< [in] handle of the peer device with the allocation
-    xe_device_link_properties_t* pLinkProperties    ///< [out] link properties between source and destination devices
+    xe_device_p2p_properties_t* pP2PProperties      ///< [out] Peer-to-Peer properties between source and peer device
     );
 
 ///////////////////////////////////////////////////////////////////////////////

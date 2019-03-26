@@ -491,7 +491,7 @@ xe_result_t __xecall xeDriverGetDeviceUniqueIds(
     return dispatchTable.xeDriverGetDeviceUniqueIds(count, pUniqueIds);
 }
 xe_result_t __xecall xeDriverGetDevice(
-        xe_device_uuid_t* pUUID,                        ///< [in] unique id of device to retrieve. Use ${x}DriverGetDeviceUniqueIds
+        const xe_device_uuid_t* pUUID,                  ///< [in] unique id of device to retrieve. Use ${x}DriverGetDeviceUniqueIds
                                                         ///< to obtain a unique Id.
         xe_device_handle_t* phDevice                    ///< [out] pointer to handle of device object created
     ){
@@ -546,15 +546,15 @@ xe_result_t __xecall xeDeviceGetMemoryProperties(
     }
     return dispatchTable.xeDeviceGetMemoryProperties(hDevice, pMemProperties);
 }
-xe_result_t __xecall xeDeviceGetLinkProperties(
+xe_result_t __xecall xeDeviceGetP2PProperties(
         xe_device_handle_t hDevice,                     ///< [in] handle of the device performing the access
         xe_device_handle_t hPeerDevice,                 ///< [in] handle of the peer device with the allocation
-        xe_device_link_properties_t* pLinkProperties    ///< [out] link properties between source and destination devices
+        xe_device_p2p_properties_t* pP2PProperties      ///< [out] Peer-to-Peer properties between source and peer device
     ){
     if(dispatchTableInitialized == false){
         return XE_RESULT_ERROR_UNINITIALIZED;
     }
-    return dispatchTable.xeDeviceGetLinkProperties(hDevice, hPeerDevice, pLinkProperties);
+    return dispatchTable.xeDeviceGetP2PProperties(hDevice, hPeerDevice, pP2PProperties);
 }
 xe_result_t __xecall xeDeviceCanAccessPeer(
         xe_device_handle_t hDevice,                     ///< [in] handle of the device performing the access
@@ -833,16 +833,15 @@ xe_result_t __xecall xeMemFree(
     }
     return dispatchTable.xeMemFree(hMemAllocHandle, ptr);
 }
-xe_result_t __xecall xeMemGetProperty(
+xe_result_t __xecall xeMemGetProperties(
         xe_mem_allocator_handle_t hMemAllocHandle,      ///< [in] handle of memory allocator for this allocation
         const void* ptr,                                ///< [in] Pointer to query
-        xe_memory_property_t property,                  ///< [in] Property of the allocation to query
-        uint32_t* pValue                                ///< [out] Value of the queried property
+        xe_memory_allocation_properties_t* pMemProperties   ///< [out] Query result for memory allocation properties
     ){
     if(dispatchTableInitialized == false){
         return XE_RESULT_ERROR_UNINITIALIZED;
     }
-    return dispatchTable.xeMemGetProperty(hMemAllocHandle, ptr, property, pValue);
+    return dispatchTable.xeMemGetProperties(hMemAllocHandle, ptr, pMemProperties);
 }
 xe_result_t __xecall xeMemGetAddressRange(
         xe_mem_allocator_handle_t hMemAllocHandle,      ///< [in] handle of memory allocator for this allocation
@@ -916,7 +915,7 @@ xe_result_t __xecall xeModuleBuildLogDestroy(
 xe_result_t __xecall xeModuleBuildLogGetString(
         xe_module_build_log_handle_t hModuleBuildLog,   ///< [in] handle of the module build log object.
         size_t* pSize,                                  ///< [in,out] size of build log string.
-        char** pBuildLog                                ///< [in,out][optional] pointer to null-terminated string of the log.
+        char* pBuildLog                                 ///< [in,out][optional] pointer to null-terminated string of the log.
     ){
     if(dispatchTableInitialized == false){
         return XE_RESULT_ERROR_UNINITIALIZED;
@@ -925,13 +924,23 @@ xe_result_t __xecall xeModuleBuildLogGetString(
 }
 xe_result_t __xecall xeModuleGetNativeBinary(
         xe_module_handle_t hModule,                     ///< [in] handle of the device
-        size_t* pSize,                                  ///< [in,out] size of native binary.
-        void** pModuleNativeBinary                      ///< [in,out][optional] pointer to native binary
+        size_t* pSize,                                  ///< [in,out] size of native binary in bytes.
+        uint8_t* pModuleNativeBinary                    ///< [in,out][optional] byte pointer to native binary
     ){
     if(dispatchTableInitialized == false){
         return XE_RESULT_ERROR_UNINITIALIZED;
     }
     return dispatchTable.xeModuleGetNativeBinary(hModule, pSize, pModuleNativeBinary);
+}
+xe_result_t __xecall xeModuleGetGlobalPointer(
+        xe_module_handle_t hModule,                     ///< [in] handle of the device
+        const char* pGlobalName,                        ///< [in] name of function in global
+        void** pPtr                                     ///< [out] device visible pointer
+    ){
+    if(dispatchTableInitialized == false){
+        return XE_RESULT_ERROR_UNINITIALIZED;
+    }
+    return dispatchTable.xeModuleGetGlobalPointer(hModule, pGlobalName, pPtr);
 }
 xe_result_t __xecall xeModuleCreateFunction(
         xe_module_handle_t hModule,                     ///< [in] handle of the module

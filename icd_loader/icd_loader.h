@@ -199,7 +199,7 @@ typedef xe_result_t (__xecall *pfn_xeDriverGetDeviceUniqueIds)(
                                                     ///< supply array.
     );
 typedef xe_result_t (__xecall *pfn_xeDriverGetDevice)(
-    xe_device_uuid_t* pUUID,                        ///< [in] unique id of device to retrieve. Use ${x}DriverGetDeviceUniqueIds
+    const xe_device_uuid_t* pUUID,                  ///< [in] unique id of device to retrieve. Use ${x}DriverGetDeviceUniqueIds
                                                     ///< to obtain a unique Id.
     xe_device_handle_t* phDevice                    ///< [out] pointer to handle of device object created
     );
@@ -224,10 +224,10 @@ typedef xe_result_t (__xecall *pfn_xeDeviceGetMemoryProperties)(
     xe_device_handle_t hDevice,                     ///< [in] handle of the device object
     xe_device_memory_properties_t* pMemProperties   ///< [out] query result for compute properties
     );
-typedef xe_result_t (__xecall *pfn_xeDeviceGetLinkProperties)(
+typedef xe_result_t (__xecall *pfn_xeDeviceGetP2PProperties)(
     xe_device_handle_t hDevice,                     ///< [in] handle of the device performing the access
     xe_device_handle_t hPeerDevice,                 ///< [in] handle of the peer device with the allocation
-    xe_device_link_properties_t* pLinkProperties    ///< [out] link properties between source and destination devices
+    xe_device_p2p_properties_t* pP2PProperties      ///< [out] Peer-to-Peer properties between source and peer device
     );
 typedef xe_result_t (__xecall *pfn_xeDeviceCanAccessPeer)(
     xe_device_handle_t hDevice,                     ///< [in] handle of the device performing the access
@@ -364,11 +364,10 @@ typedef xe_result_t (__xecall *pfn_xeMemFree)(
     xe_mem_allocator_handle_t hMemAllocHandle,      ///< [in] handle of memory allocator for this allocation
     const void* ptr                                 ///< [in] pointer to memory to free
     );
-typedef xe_result_t (__xecall *pfn_xeMemGetProperty)(
+typedef xe_result_t (__xecall *pfn_xeMemGetProperties)(
     xe_mem_allocator_handle_t hMemAllocHandle,      ///< [in] handle of memory allocator for this allocation
     const void* ptr,                                ///< [in] Pointer to query
-    xe_memory_property_t property,                  ///< [in] Property of the allocation to query
-    uint32_t* pValue                                ///< [out] Value of the queried property
+    xe_memory_allocation_properties_t* pMemProperties   ///< [out] Query result for memory allocation properties
     );
 typedef xe_result_t (__xecall *pfn_xeMemGetAddressRange)(
     xe_mem_allocator_handle_t hMemAllocHandle,      ///< [in] handle of memory allocator for this allocation
@@ -407,12 +406,17 @@ typedef xe_result_t (__xecall *pfn_xeModuleBuildLogDestroy)(
 typedef xe_result_t (__xecall *pfn_xeModuleBuildLogGetString)(
     xe_module_build_log_handle_t hModuleBuildLog,   ///< [in] handle of the module build log object.
     size_t* pSize,                                  ///< [in,out] size of build log string.
-    char** pBuildLog                                ///< [in,out][optional] pointer to null-terminated string of the log.
+    char* pBuildLog                                 ///< [in,out][optional] pointer to null-terminated string of the log.
     );
 typedef xe_result_t (__xecall *pfn_xeModuleGetNativeBinary)(
     xe_module_handle_t hModule,                     ///< [in] handle of the device
-    size_t* pSize,                                  ///< [in,out] size of native binary.
-    void** pModuleNativeBinary                      ///< [in,out][optional] pointer to native binary
+    size_t* pSize,                                  ///< [in,out] size of native binary in bytes.
+    uint8_t* pModuleNativeBinary                    ///< [in,out][optional] byte pointer to native binary
+    );
+typedef xe_result_t (__xecall *pfn_xeModuleGetGlobalPointer)(
+    xe_module_handle_t hModule,                     ///< [in] handle of the device
+    const char* pGlobalName,                        ///< [in] name of function in global
+    void** pPtr                                     ///< [out] device visible pointer
     );
 typedef xe_result_t (__xecall *pfn_xeModuleCreateFunction)(
     xe_module_handle_t hModule,                     ///< [in] handle of the module
@@ -558,7 +562,7 @@ typedef struct _xe_dispatch_table_t
     pfn_xeDeviceGetProperties xeDeviceGetProperties;
     pfn_xeDeviceGetComputeProperties xeDeviceGetComputeProperties;
     pfn_xeDeviceGetMemoryProperties xeDeviceGetMemoryProperties;
-    pfn_xeDeviceGetLinkProperties xeDeviceGetLinkProperties;
+    pfn_xeDeviceGetP2PProperties xeDeviceGetP2PProperties;
     pfn_xeDeviceCanAccessPeer xeDeviceCanAccessPeer;
     pfn_xeDeviceSetIntermediateCacheConfig xeDeviceSetIntermediateCacheConfig;
     pfn_xeDeviceSetLastLevelCacheConfig xeDeviceSetLastLevelCacheConfig;
@@ -589,7 +593,7 @@ typedef struct _xe_dispatch_table_t
     pfn_xeMemAlloc xeMemAlloc;
     pfn_xeHostMemAlloc xeHostMemAlloc;
     pfn_xeMemFree xeMemFree;
-    pfn_xeMemGetProperty xeMemGetProperty;
+    pfn_xeMemGetProperties xeMemGetProperties;
     pfn_xeMemGetAddressRange xeMemGetAddressRange;
     pfn_xeIpcGetMemHandle xeIpcGetMemHandle;
     pfn_xeIpcOpenMemHandle xeIpcOpenMemHandle;
@@ -599,6 +603,7 @@ typedef struct _xe_dispatch_table_t
     pfn_xeModuleBuildLogDestroy xeModuleBuildLogDestroy;
     pfn_xeModuleBuildLogGetString xeModuleBuildLogGetString;
     pfn_xeModuleGetNativeBinary xeModuleGetNativeBinary;
+    pfn_xeModuleGetGlobalPointer xeModuleGetGlobalPointer;
     pfn_xeModuleCreateFunction xeModuleCreateFunction;
     pfn_xeFunctionDestroy xeFunctionDestroy;
     pfn_xeModuleGetFunctionPointer xeModuleGetFunctionPointer;
@@ -666,7 +671,7 @@ inline bool load_xe(void *handle, void *(*funcAddressGetter)(void *handle, const
     outTable->xeDeviceGetProperties = (pfn_xeDeviceGetProperties)funcAddressGetter(handle, "xeDeviceGetProperties");
     outTable->xeDeviceGetComputeProperties = (pfn_xeDeviceGetComputeProperties)funcAddressGetter(handle, "xeDeviceGetComputeProperties");
     outTable->xeDeviceGetMemoryProperties = (pfn_xeDeviceGetMemoryProperties)funcAddressGetter(handle, "xeDeviceGetMemoryProperties");
-    outTable->xeDeviceGetLinkProperties = (pfn_xeDeviceGetLinkProperties)funcAddressGetter(handle, "xeDeviceGetLinkProperties");
+    outTable->xeDeviceGetP2PProperties = (pfn_xeDeviceGetP2PProperties)funcAddressGetter(handle, "xeDeviceGetP2PProperties");
     outTable->xeDeviceCanAccessPeer = (pfn_xeDeviceCanAccessPeer)funcAddressGetter(handle, "xeDeviceCanAccessPeer");
     outTable->xeDeviceSetIntermediateCacheConfig = (pfn_xeDeviceSetIntermediateCacheConfig)funcAddressGetter(handle, "xeDeviceSetIntermediateCacheConfig");
     outTable->xeDeviceSetLastLevelCacheConfig = (pfn_xeDeviceSetLastLevelCacheConfig)funcAddressGetter(handle, "xeDeviceSetLastLevelCacheConfig");
@@ -697,7 +702,7 @@ inline bool load_xe(void *handle, void *(*funcAddressGetter)(void *handle, const
     outTable->xeMemAlloc = (pfn_xeMemAlloc)funcAddressGetter(handle, "xeMemAlloc");
     outTable->xeHostMemAlloc = (pfn_xeHostMemAlloc)funcAddressGetter(handle, "xeHostMemAlloc");
     outTable->xeMemFree = (pfn_xeMemFree)funcAddressGetter(handle, "xeMemFree");
-    outTable->xeMemGetProperty = (pfn_xeMemGetProperty)funcAddressGetter(handle, "xeMemGetProperty");
+    outTable->xeMemGetProperties = (pfn_xeMemGetProperties)funcAddressGetter(handle, "xeMemGetProperties");
     outTable->xeMemGetAddressRange = (pfn_xeMemGetAddressRange)funcAddressGetter(handle, "xeMemGetAddressRange");
     outTable->xeIpcGetMemHandle = (pfn_xeIpcGetMemHandle)funcAddressGetter(handle, "xeIpcGetMemHandle");
     outTable->xeIpcOpenMemHandle = (pfn_xeIpcOpenMemHandle)funcAddressGetter(handle, "xeIpcOpenMemHandle");
@@ -707,6 +712,7 @@ inline bool load_xe(void *handle, void *(*funcAddressGetter)(void *handle, const
     outTable->xeModuleBuildLogDestroy = (pfn_xeModuleBuildLogDestroy)funcAddressGetter(handle, "xeModuleBuildLogDestroy");
     outTable->xeModuleBuildLogGetString = (pfn_xeModuleBuildLogGetString)funcAddressGetter(handle, "xeModuleBuildLogGetString");
     outTable->xeModuleGetNativeBinary = (pfn_xeModuleGetNativeBinary)funcAddressGetter(handle, "xeModuleGetNativeBinary");
+    outTable->xeModuleGetGlobalPointer = (pfn_xeModuleGetGlobalPointer)funcAddressGetter(handle, "xeModuleGetGlobalPointer");
     outTable->xeModuleCreateFunction = (pfn_xeModuleCreateFunction)funcAddressGetter(handle, "xeModuleCreateFunction");
     outTable->xeFunctionDestroy = (pfn_xeFunctionDestroy)funcAddressGetter(handle, "xeFunctionDestroy");
     outTable->xeModuleGetFunctionPointer = (pfn_xeModuleGetFunctionPointer)funcAddressGetter(handle, "xeModuleGetFunctionPointer");
@@ -842,7 +848,7 @@ inline bool load_xe(void *handle, void *(*funcAddressGetter)(void *handle, const
     if(0 == outTable->xeDeviceGetMemoryProperties){
         return false;
     }
-    if(0 == outTable->xeDeviceGetLinkProperties){
+    if(0 == outTable->xeDeviceGetP2PProperties){
         return false;
     }
     if(0 == outTable->xeDeviceCanAccessPeer){
@@ -935,7 +941,7 @@ inline bool load_xe(void *handle, void *(*funcAddressGetter)(void *handle, const
     if(0 == outTable->xeMemFree){
         return false;
     }
-    if(0 == outTable->xeMemGetProperty){
+    if(0 == outTable->xeMemGetProperties){
         return false;
     }
     if(0 == outTable->xeMemGetAddressRange){
@@ -963,6 +969,9 @@ inline bool load_xe(void *handle, void *(*funcAddressGetter)(void *handle, const
         return false;
     }
     if(0 == outTable->xeModuleGetNativeBinary){
+        return false;
+    }
+    if(0 == outTable->xeModuleGetGlobalPointer){
         return false;
     }
     if(0 == outTable->xeModuleCreateFunction){

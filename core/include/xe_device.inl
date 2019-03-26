@@ -314,7 +314,7 @@ namespace xe
     }
 
     ///////////////////////////////////////////////////////////////////////////////
-    /// @brief C++ wrapper for ::xeDeviceGetLinkProperties
+    /// @brief C++ wrapper for ::xeDeviceGetP2PProperties
     /// 
     /// @details
     ///     - The application may call this function from simultaneous threads.
@@ -325,16 +325,16 @@ namespace xe
     ///     - **cudaDeviceGetP2PAttribute**
     /// 
     /// @returns
-    ///     - device_link_properties_t: link properties between source and destination devices
+    ///     - device_p2p_properties_t: Peer-to-Peer properties between source and peer device
     /// 
     /// @throws result_t
-    inline device_link_properties_t 
-    Device::GetLinkProperties(
+    inline device_p2p_properties_t 
+    Device::GetP2PProperties(
         device_handle_t hPeerDevice                     ///< [in] handle of the peer device with the allocation
         )
     {
-        // auto result = ::xeDeviceGetLinkProperties( handle, hPeerDevice );
-        // if( ::XE_RESULT_SUCCESS != result ) throw exception(result, "xe::Device::GetLinkProperties");
+        // auto result = ::xeDeviceGetP2PProperties( handle, hPeerDevice );
+        // if( ::XE_RESULT_SUCCESS != result ) throw exception(result, "xe::Device::GetP2PProperties");
     }
 
     ///////////////////////////////////////////////////////////////////////////////

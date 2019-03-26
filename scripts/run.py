@@ -34,14 +34,14 @@ def main():
     add_argument(parser, "html", "generation of HTML files.", True)
     add_argument(parser, "pdf", "generation of PDF file.")
     add_argument(parser, "cl", "compilation of generated C/C++ files.")
-    add_argument(parser, "icd_loader", "generation of C++ icd_loader files.", True)
+    add_argument(parser, "icd", "generation of C++ icd_loader files.", True)
     args = vars(parser.parse_args())
 
     start = time.time()
 
     for section in configParser.sections():
         dstpath = configParser.get(section,'dstpath')
-        namespace = configParser.get(section,'namespace')
+        namespace = configParser.get(section,'namespace').split(",")
         srcpath = os.path.join("./", section)
 
         if args[section] and util.exists(srcpath):
@@ -53,11 +53,14 @@ def main():
 
             generate_api.generate_cpp(dstpath, namespace, specs, meta)
 
+            if args['icd']:
+                generate_icd_loader.generate(namespace, specs, meta)
+
             if args['cl']:
-                compile_api.compile_cpp_source(dstpath, namespace, specs)
+                compile_api.compile_cpp_source(dstpath, namespace[0], specs)
 
             if args['md']:
-                generate_docs.generate_md(srcpath, dstpath, namespace, meta)
+                generate_docs.generate_md(srcpath, dstpath, namespace[0], meta)
 
     # generate documentation
     if args['html']:
@@ -65,16 +68,6 @@ def main():
 
     if args['pdf']:
         generate_docs.generate_pdf()
-
-    if args['icd_loader']:
-        specs, meta = parse_specs.parse("./core")
-        if args['debug']:
-            util.jsonWrite("./core/specs.json", specs)
-            util.jsonWrite("./core/meta.json", meta)
-        generate_icd_loader.generate_icd_loader(
-            configParser.get('loader','dstpath'),
-            configParser.get('loader','namespace'),
-            specs, meta)
 
     print("\nCompleted in %.1f seconds!"%(time.time() - start))
 

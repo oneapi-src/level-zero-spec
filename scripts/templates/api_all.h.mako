@@ -1,5 +1,9 @@
 <%
 import re
+%><%
+    x=context['ns'][0]
+    X=context['ns'][0].upper()
+    Xx=context['ns'][0].title()
 %>/**************************************************************************//**
 *
 * INTEL CONFIDENTIAL

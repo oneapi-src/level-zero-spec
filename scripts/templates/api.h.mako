@@ -1,6 +1,10 @@
 <%!
 import re
 from templates import helper as th
+%><%
+    x=context['ns'][0]
+    X=context['ns'][0].upper()
+    Xx=context['ns'][0].title()
 %>/**************************************************************************//**
 * INTEL CONFIDENTIAL  
 * Copyright 2019  
@@ -26,7 +30,7 @@ from templates import helper as th
 *
 * @file ${x}_${name}.h
 *
-* @brief ${th.subx(x, header['desc'])}
+* @brief ${th.sub(ns, header['desc'])}
 *
 * @cond DEV
 * DO NOT EDIT: generated from /scripts/${section}/${name}.yml
@@ -53,68 +57,68 @@ extern "C" {
 %if not re.match(r"class", obj['type']):
 ///////////////////////////////////////////////////////////////////////////////
 %if 'condition' in obj:
-#if ${th.subx(x,obj['condition'])}
+#if ${th.sub(ns,obj['condition'])}
 %endif
-%for line in th.make_desc_lines(x, obj):
+%for line in th.make_desc_lines(ns, obj):
 /// ${line}
 %endfor
-%for line in th.make_details_lines(x, obj):
+%for line in th.make_details_lines(ns, obj):
 /// ${line}
 %endfor
 ## MACRO ######################################################################
 %if re.match(r"macro", obj['type']):
-#define ${th.subx(x, obj['name'])}  ${th.subx(x, obj['value'])}
+#define ${th.sub(ns, obj['name'])}  ${th.sub(ns, obj['value'])}
 %if 'altvalue' in obj:
 #else
-#define ${th.subx(x, obj['name'])}  ${th.subx(x, obj['altvalue'])}
+#define ${th.sub(ns, obj['name'])}  ${th.sub(ns, obj['altvalue'])}
 %endif
 ## TYPEDEF ####################################################################
 %elif re.match(r"typedef", obj['type']):
 %if 'params' in obj:
-typedef ${obj['returns']}(__${x}call *${th.subx(x, obj['name'])})(
-  %for line in th.make_param_lines(x, obj):
+typedef ${obj['returns']}(__${x}call *${th.sub(ns, obj['name'])})(
+  %for line in th.make_param_lines(ns, obj):
   ${line}
   %endfor
   );
 %else:
-typedef ${th.subx(x, obj['value'])} ${th.subx(x, obj['name'])};
+typedef ${th.sub(ns, obj['value'])} ${th.sub(ns, obj['name'])};
 %endif
 ## ENUM #######################################################################
 %elif re.match(r"enum", obj['type']):
-typedef enum _${th.subx(x, obj['name'])}
+typedef enum _${th.sub(ns, obj['name'])}
 {
-    %for line in th.make_etor_lines(x, obj):
+    %for line in th.make_etor_lines(ns, obj):
     ${line}
     %endfor
 
-} ${th.subx(x, obj['name'])};
+} ${th.sub(ns, obj['name'])};
 ## STRUCT #####################################################################
 %elif re.match(r"struct", obj['type']):
-typedef struct _${th.subx(x, obj['name'])}
+typedef struct _${th.sub(ns, obj['name'])}
 {
-    %for line in th.make_member_lines(x, obj):
+    %for line in th.make_member_lines(ns, obj):
     ${line}
     %endfor
 
-} ${th.subx(x, obj['name'])};
+} ${th.sub(ns, obj['name'])};
 ## FUNCTION ###################################################################
 %elif re.match(r"function", obj['type']):
 /// 
-%for line in th.make_returns_lines(x, obj):
+%for line in th.make_returns_lines(ns, obj):
 /// ${line}
 %endfor
 __${x}dllport ${x}_result_t __${x}call
-${th.make_func_name(x, obj)}(
-    %for line in th.make_param_lines(x, obj):
+${th.make_func_name(ns, obj)}(
+    %for line in th.make_param_lines(ns, obj):
     ${line}
     %endfor
     );
 ## HANDLE #####################################################################
 %elif re.match(r"handle", obj['type']):
-typedef struct _${th.subx(x, obj['name'])} *${th.subx(x, obj['name'])};
+typedef struct _${th.sub(ns, obj['name'])} *${th.sub(ns, obj['name'])};
 %endif
 %if 'condition' in obj:
-#endif // ${th.subx(x,obj['condition'])}
+#endif // ${th.sub(ns,obj['condition'])}
 %endif
 
 %endif
