@@ -60,6 +60,19 @@ struct LightweightOclProgram : public OCLRT::Program { // NEO refactor needed : 
         programBinaryType = CL_PROGRAM_BINARY_TYPE_EXECUTABLE;
     }
 
+    bool createWithNativeBinary(const char *input, size_t inputSize) {
+        cl_int retVal = CL_SUCCESS;
+
+        this->storeGenBinary(input, inputSize);
+        retVal = this->processGenBinary();
+        if (retVal == CL_SUCCESS) {
+            buildStatus = CL_BUILD_SUCCESS;
+            programBinaryType = CL_PROGRAM_BINARY_TYPE_EXECUTABLE;
+            return true;
+        }
+        return false;
+    }
+
     OCLRT::Device *deviceRT;
     using OCLRT::Program::kernelInfoArray;
 };
@@ -82,26 +95,33 @@ bool ModuleImp::initialize(const xe_module_desc_t *desc) {
     // current assumptions - to be relaxed when implementation proceeds further
     assert(desc != nullptr);
     assert(desc->version == XE_API_HEADER_VERSION);
-    assert(desc->format == XE_MODULE_FORMAT_IL_SPIRV);
     assert(desc->pInputModule != nullptr);
     assert(desc->inputSize != 0);
     assert(desc->pBuildFlags == nullptr);
+    bool success = true;
 
-    cl_int errorCode = 0;
-    this->progRT->buildSpirV(desc->pInputModule, static_cast<uint32_t>(desc->inputSize));
-    // allocate graphics memory for ISA upfront to avoid critical sections at function create time
-    auto memoryManager = this->device->getMemoryManager();
-    immFuncInfos.reserve(this->progRT->kernelInfoArray.size());
-    for (auto &ki : this->progRT->kernelInfoArray) {
-        auto kernelIsaSize = ki->heapInfo.pKernelHeader->KernelHeapSize;
-        auto alloc = memoryManager->allocateGraphicsMemoryForIsa(bindPtrRef(ki->heapInfo.pKernelHeap), kernelIsaSize);
-        assert(ki->kernelAllocation != nullptr);
-        PtrOwn<ImmutableFunctionInfo> immFuncInfo{new ImmutableFunctionInfo{bindPtrRef(ki).weakRefReinterpret<void>(), std::move(alloc)}};
-        immFuncInfos.push_back(std::move(immFuncInfo));
+    if (desc->format == XE_MODULE_FORMAT_NATIVE) {
+        success = this->progRT->createWithNativeBinary(desc->pInputModule, desc->inputSize);
+        assert(success == true);
+    } else {
+        assert(desc->format == XE_MODULE_FORMAT_IL_SPIRV);
+        this->progRT->buildSpirV(desc->pInputModule, static_cast<uint32_t>(desc->inputSize));
     }
-    this->maxGroupSize = static_cast<uint32_t>(this->progRT->getDevice(0).getDeviceInfo().maxWorkGroupSize);
 
-    return true;
+    if (success) {
+        // allocate graphics memory for ISA upfront to avoid critical sections at function create time
+        auto memoryManager = this->device->getMemoryManager();
+        immFuncInfos.reserve(this->progRT->kernelInfoArray.size());
+        for (auto &ki : this->progRT->kernelInfoArray) {
+            auto kernelIsaSize = ki->heapInfo.pKernelHeader->KernelHeapSize;
+            auto alloc = memoryManager->allocateGraphicsMemoryForIsa(bindPtrRef(ki->heapInfo.pKernelHeap), kernelIsaSize);
+            assert(ki->kernelAllocation != nullptr);
+            PtrOwn<ImmutableFunctionInfo> immFuncInfo{new ImmutableFunctionInfo{bindPtrRef(ki).weakRefReinterpret<void>(), std::move(alloc)}};
+            immFuncInfos.push_back(std::move(immFuncInfo));
+        }
+        this->maxGroupSize = static_cast<uint32_t>(this->progRT->getDevice(0).getDeviceInfo().maxWorkGroupSize);
+    }
+    return success;
 }
 
 PtrRef<ImmutableFunctionInfo> ModuleImp::getImmutableFunctionInfo(CStringRef functionName) const {

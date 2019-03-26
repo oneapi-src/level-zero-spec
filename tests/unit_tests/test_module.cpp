@@ -50,7 +50,7 @@ class ModuleOnlineCompiled : public testing::Test {
         auto success = platform->initialize();
         ASSERT_TRUE(success);
 
-        auto deviceRT = platform->getDevice(0);
+        deviceRT = platform->getDevice(0);
         ASSERT_NE(nullptr, deviceRT);
         device.reset(Device::create(deviceRT));
 
@@ -73,6 +73,7 @@ class ModuleOnlineCompiled : public testing::Test {
 
     std::unique_ptr<WhiteBox<L0::Module>> module;
     std::unique_ptr<L0::Device> device;
+    OCLRT::Device *deviceRT = nullptr;
 };
 
 TEST(ModuleBuildLog, createModuleBuildLog) {
@@ -454,6 +455,32 @@ TEST_F(ModuleOnlineCompiled, getNativeBinaryReturnsGenBinary) {
     result = xeModuleGetNativeBinary(module->toHandle(), &binarySize, binary);
     EXPECT_EQ(XE_RESULT_SUCCESS, result);
     EXPECT_EQ(0u, memcmp(binary, "CTNI", 4));
+}
+
+TEST_F(ModuleOnlineCompiled, createFromNativeBinary) {
+    size_t binarySize = 0;
+    uint8_t *binary = nullptr;
+    auto result = module->getNativeBinary(&binarySize, nullptr);
+
+    EXPECT_EQ(XE_RESULT_SUCCESS, result);
+    EXPECT_NE(0u, binarySize);
+
+    auto storage = std::make_unique<uint8_t[]>(binarySize);
+    binary = storage.get();
+    result = module->getNativeBinary(&binarySize, binary);
+    EXPECT_EQ(XE_RESULT_SUCCESS, result);
+    EXPECT_EQ(0u, memcmp(binary, "CTNI", 4));
+
+    xe_module_desc_t modDesc = {};
+    modDesc.version = XE_MODULE_DESC_VERSION_CURRENT;
+    modDesc.format = XE_MODULE_FORMAT_NATIVE;
+    modDesc.inputSize = binarySize;
+    modDesc.pInputModule = reinterpret_cast<char *>(storage.get());
+
+    Module *moduleFromNativeBinary = Module::create(device.get(), &modDesc, deviceRT, nullptr);
+    EXPECT_NE(nullptr, moduleFromNativeBinary);
+
+    delete moduleFromNativeBinary;
 }
 
 TEST_F(ModuleOnlineCompiled, functionReturnsCorrectThreadGroupParameters) {
