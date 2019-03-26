@@ -58,6 +58,8 @@ bool CommandContainer::initialize(Device *device) {
 
     commandStream = new OCLRT::LinearStream(allocation->allocationRT);
 
+    instructionHeapBaseAddress = memoryManager->getIsaHeapGpuAddress();
+
     return true;
 }
 

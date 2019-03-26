@@ -1,4 +1,5 @@
 #include "cmdlist_hw.h"
+#include "encode_state_base_address.h"
 #include "event.h"
 #include "graphics_allocation.h"
 #include "memory_manager.h"
@@ -15,79 +16,6 @@
 
 namespace L0 {
 
-template <CommandContainer::HeapType HeapType>
-struct StateBaseAddressHeap {
-    template <GFXCORE_FAMILY gfxCoreFamily>
-    static void set(void *sbaAddress, OCLRT::IndirectHeap &heap);
-};
-
-template <>
-template <GFXCORE_FAMILY gfxCoreFamily>
-inline void StateBaseAddressHeap<CommandContainer::DYNAMIC_STATE>::set(void *sbaAddress, OCLRT::IndirectHeap &heap) {
-    using GfxFamily = typename OCLRT::GfxFamilyMapper<gfxCoreFamily>::GfxFamily;
-    using STATE_BASE_ADDRESS = typename GfxFamily::STATE_BASE_ADDRESS;
-    STATE_BASE_ADDRESS *cmd = static_cast<STATE_BASE_ADDRESS *>(sbaAddress);
-    cmd->setDynamicStateBaseAddressModifyEnable(true);
-    cmd->setDynamicStateBaseAddress(heap.getHeapGpuBase());
-    cmd->setDynamicStateBufferSizeModifyEnable(true);
-    cmd->setDynamicStateBufferSize(static_cast<uint32_t>(heap.getMaxAvailableSpace()));
-}
-
-template <>
-template <GFXCORE_FAMILY gfxCoreFamily>
-inline void StateBaseAddressHeap<CommandContainer::GENERAL_STATE>::set(void *sbaAddress, OCLRT::IndirectHeap &heap) {
-    using GfxFamily = typename OCLRT::GfxFamilyMapper<gfxCoreFamily>::GfxFamily;
-    using STATE_BASE_ADDRESS = typename GfxFamily::STATE_BASE_ADDRESS;
-    STATE_BASE_ADDRESS *cmd = static_cast<STATE_BASE_ADDRESS *>(sbaAddress);
-    cmd->setGeneralStateBaseAddressModifyEnable(true);
-    cmd->setGeneralStateBaseAddress(heap.getHeapGpuBase());
-    cmd->setGeneralStateBufferSizeModifyEnable(true);
-    cmd->setGeneralStateBufferSize(static_cast<uint32_t>(heap.getMaxAvailableSpace()));
-}
-
-template <>
-template <GFXCORE_FAMILY gfxCoreFamily>
-inline void StateBaseAddressHeap<CommandContainer::INDIRECT_OBJECT>::set(void *sbaAddress, OCLRT::IndirectHeap &heap) {
-    using GfxFamily = typename OCLRT::GfxFamilyMapper<gfxCoreFamily>::GfxFamily;
-    using STATE_BASE_ADDRESS = typename GfxFamily::STATE_BASE_ADDRESS;
-    STATE_BASE_ADDRESS *cmd = static_cast<STATE_BASE_ADDRESS *>(sbaAddress);
-    cmd->setIndirectObjectBaseAddressModifyEnable(true);
-    cmd->setIndirectObjectBaseAddress(heap.getHeapGpuBase());
-    cmd->setIndirectObjectBufferSizeModifyEnable(true);
-    cmd->setIndirectObjectBufferSize(static_cast<uint32_t>(heap.getMaxAvailableSpace()));
-}
-
-template <>
-template <GFXCORE_FAMILY gfxCoreFamily>
-inline void StateBaseAddressHeap<CommandContainer::SURFACE_STATE>::set(void *sbaAddress, OCLRT::IndirectHeap &heap) {
-    using GfxFamily = typename OCLRT::GfxFamilyMapper<gfxCoreFamily>::GfxFamily;
-    using STATE_BASE_ADDRESS = typename GfxFamily::STATE_BASE_ADDRESS;
-    STATE_BASE_ADDRESS *cmd = static_cast<STATE_BASE_ADDRESS *>(sbaAddress);
-    cmd->setSurfaceStateBaseAddressModifyEnable(true);
-    cmd->setSurfaceStateBaseAddress(heap.getHeapGpuBase());
-}
-
-template <GFXCORE_FAMILY gfxCoreFamily>
-void setHeap(void *sbaAddress, CommandList::HeapType heapType, OCLRT::IndirectHeap &heap) {
-    switch (heapType) {
-    default:
-        assert(0);
-        break;
-    case CommandList::DYNAMIC_STATE:
-        StateBaseAddressHeap<CommandList::DYNAMIC_STATE>::set<gfxCoreFamily>(sbaAddress, heap);
-        break;
-    case CommandList::GENERAL_STATE:
-        StateBaseAddressHeap<CommandList::GENERAL_STATE>::set<gfxCoreFamily>(sbaAddress, heap);
-        break;
-    case CommandList::INDIRECT_OBJECT:
-        StateBaseAddressHeap<CommandList::INDIRECT_OBJECT>::set<gfxCoreFamily>(sbaAddress, heap);
-        break;
-    case CommandList::SURFACE_STATE:
-        StateBaseAddressHeap<CommandList::SURFACE_STATE>::set<gfxCoreFamily>(sbaAddress, heap);
-        break;
-    }
-}
-
 template <GFXCORE_FAMILY gfxCoreFamily>
 bool CommandListCoreFamily<gfxCoreFamily>::initialize(Device *device) {
     using GfxFamily = typename OCLRT::GfxFamilyMapper<gfxCoreFamily>::GfxFamily;
@@ -98,43 +26,10 @@ bool CommandListCoreFamily<gfxCoreFamily>::initialize(Device *device) {
 
     {
         using STATE_BASE_ADDRESS = typename GfxFamily::STATE_BASE_ADDRESS;
-        STATE_BASE_ADDRESS cmd = GfxFamily::cmdInitStateBaseAddress;
-
-        {
-            auto heap = this->indirectHeaps[DYNAMIC_STATE];
-            assert(heap != nullptr);
-            StateBaseAddressHeap<DYNAMIC_STATE>::set<gfxCoreFamily>(&cmd, *heap);
-        }
-
-        {
-            // note : this doesn't change
-            cmd.setInstructionBaseAddressModifyEnable(true);
-            cmd.setInstructionBaseAddress(this->device->getMemoryManager()->getIsaHeapGpuAddress());
-            cmd.setInstructionBufferSizeModifyEnable(true);
-            cmd.setInstructionBufferSize(MemoryConstants::sizeOf4GBinPageEntities); // no bounds checking
-        }
-
-        {
-            auto heap = this->indirectHeaps[GENERAL_STATE];
-            assert(heap != nullptr);
-            StateBaseAddressHeap<GENERAL_STATE>::set<gfxCoreFamily>(&cmd, *heap);
-        }
-
-        {
-            auto heap = this->indirectHeaps[INDIRECT_OBJECT];
-            assert(heap != nullptr);
-            StateBaseAddressHeap<INDIRECT_OBJECT>::set<gfxCoreFamily>(&cmd, *heap);
-        }
-
-        {
-            auto heap = this->indirectHeaps[SURFACE_STATE];
-            assert(heap != nullptr);
-            StateBaseAddressHeap<SURFACE_STATE>::set<gfxCoreFamily>(&cmd, *heap);
-        }
-
-        auto buffer = commandStream->getSpace(sizeof(cmd));
-        *(STATE_BASE_ADDRESS *)buffer = cmd;
+        auto buffer = commandStream->getSpace(sizeof(STATE_BASE_ADDRESS));
         this->sba = buffer;
+
+        EncodeStateBaseAddress<gfxCoreFamily>::encode(*this);
     }
 
     enableGpgpu();
@@ -167,7 +62,8 @@ void *CommandListCoreFamily<gfxCoreFamily>::getHeapSpaceAllowGrow(CommandContain
         *std::find(residencyContainer.begin(), residencyContainer.end(), oldAlloc) = newAlloc->allocationRT;
         if (this->allocationIndirectHeaps[heapType]->allocationRT == oldAlloc) {
             allocationIndirectHeaps[heapType] = newAlloc;
-            setHeap<gfxCoreFamily>(this->sba, heapType, indirectHeap);
+            this->dirtyHeaps |= 1u << heapType;
+            EncodeStateBaseAddress<gfxCoreFamily>::encode(*this);
         }
         delete oldAlloc;
     }

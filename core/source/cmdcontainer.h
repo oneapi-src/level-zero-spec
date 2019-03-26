@@ -52,13 +52,24 @@ struct CommandContainer : public _xe_command_list_handle_t {
         return *commandStream;
     }
 
+    OCLRT::IndirectHeap &getIndirectHeap(HeapType heapType) {
+        return *indirectHeaps[heapType];
+    }
+
     std::vector<Function *> &getPrintfFunctionContainer() {
         return this->printfFunctionContainer;
+    }
+
+    uint64_t getInstructionHeapBaseAddress() const {
+        return instructionHeapBaseAddress;
     }
 
     virtual bool initialize(Device *device);
 
     virtual ~CommandContainer();
+
+    uint32_t dirtyHeaps = static_cast<uint32_t>(-1);
+    void *sba = nullptr;
 
   protected:
     void storePrintfFunction(Function *function);
@@ -66,6 +77,8 @@ struct CommandContainer : public _xe_command_list_handle_t {
 
     GraphicsAllocation *allocation = nullptr;
     GraphicsAllocation *allocationIndirectHeaps[NUM_HEAPS];
+
+    uint64_t instructionHeapBaseAddress = 0u;
 
     OCLRT::LinearStream *commandStream = nullptr;
     OCLRT::IndirectHeap *indirectHeaps[NUM_HEAPS];

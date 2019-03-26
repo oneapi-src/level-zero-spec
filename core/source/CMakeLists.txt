@@ -34,6 +34,7 @@ set(L0_RUNTIME_SOURCES
     ${CMAKE_CURRENT_SOURCE_DIR}/encode_flush.h
     ${CMAKE_CURRENT_SOURCE_DIR}/encode_l3state.h
     ${CMAKE_CURRENT_SOURCE_DIR}/encode_set_mmio.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/encode_state_base_address.h
     ${CMAKE_CURRENT_SOURCE_DIR}/event.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/event.h
     ${CMAKE_CURRENT_SOURCE_DIR}/fence.cpp
