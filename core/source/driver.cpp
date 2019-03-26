@@ -27,7 +27,10 @@ struct DriverImp : public Driver {
 
     xe_result_t getDeviceCount(uint32_t *count) override {
         assert(count);
-        *count = OCLRT::DebugManager.flags.CreateMultipleDevices.get();
+        *count = 1U;
+        if (OCLRT::DebugManager.flags.CreateMultipleDevices.get() > 0) {
+            *count = static_cast<uint32_t>(OCLRT::DebugManager.flags.CreateMultipleDevices.get());
+        }
         return XE_RESULT_SUCCESS;
     }
 
