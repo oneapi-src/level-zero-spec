@@ -51,21 +51,19 @@ void *CommandListCoreFamily<gfxCoreFamily>::getHeapSpaceAllowGrow(CommandContain
         newSize *= 2; // grow by factor of 2
         newSize = std::max(newSize, indirectHeap.getAvailableSpace() + size);
         newSize = alignUp(newSize, 4096U);
-        auto oldAlloc = indirectHeap.getGraphicsAllocation();
+        auto oldAlloc = this->allocationIndirectHeaps[heapType];
         auto newAlloc = memoryManager->allocateDeviceMemory(newSize, 4096u);
         assert(oldAlloc);
         assert(newAlloc);
         auto alreadyUsedSize = indirectHeap.getUsed();
         indirectHeap.replaceGraphicsAllocation(newAlloc->allocationRT);
         indirectHeap.replaceBuffer(newAlloc->allocationRT->getUnderlyingBuffer(), newAlloc->allocationRT->getUnderlyingBufferSize());
-        memcpy_s(indirectHeap.getSpace(alreadyUsedSize), alreadyUsedSize, oldAlloc->getUnderlyingBuffer(), alreadyUsedSize);
-        *std::find(residencyContainer.begin(), residencyContainer.end(), oldAlloc) = newAlloc->allocationRT;
-        if (this->allocationIndirectHeaps[heapType]->allocationRT == oldAlloc) {
-            allocationIndirectHeaps[heapType] = newAlloc;
-            this->dirtyHeaps |= 1u << heapType;
-            EncodeStateBaseAddress<gfxCoreFamily>::encode(*this);
-        }
-        delete oldAlloc;
+        memcpy_s(indirectHeap.getSpace(alreadyUsedSize), alreadyUsedSize, oldAlloc->allocationRT->getUnderlyingBuffer(), alreadyUsedSize);
+        this->residencyContainer.push_back(newAlloc);
+        this->deallocationContainer.push_back(oldAlloc);
+        allocationIndirectHeaps[heapType] = newAlloc;
+        this->dirtyHeaps |= 1u << heapType;
+        EncodeStateBaseAddress<gfxCoreFamily>::encode(*this);
     }
     return indirectHeap.getSpace(size);
 }

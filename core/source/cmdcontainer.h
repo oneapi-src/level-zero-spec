@@ -83,6 +83,7 @@ struct CommandContainer : public _xe_command_list_handle_t {
     OCLRT::LinearStream *commandStream = nullptr;
     OCLRT::IndirectHeap *indirectHeaps[NUM_HEAPS];
     OCLRT::ResidencyContainer residencyContainer;
+    std::vector<GraphicsAllocation *> deallocationContainer;
     std::vector<Function *> printfFunctionContainer;
 };
 

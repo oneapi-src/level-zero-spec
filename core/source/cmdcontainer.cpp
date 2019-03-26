@@ -25,6 +25,12 @@ CommandContainer::~CommandContainer() {
         }
     }
 
+    for (auto deallocation : deallocationContainer) {
+        assert(deallocation);
+        assert(memoryManager);
+        memoryManager->freeMemory(deallocation);
+    }
+
     delete commandStream;
 }
 
