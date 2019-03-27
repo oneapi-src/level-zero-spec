@@ -115,7 +115,7 @@ struct DeviceImp : public Device {
         auto &hwHelper = OCLRT::HwHelper::get(hardwareInfo.pPlatform->eRenderCoreFamily);
         auto enableLocalMemory = hwHelper.getEnableLocalMemory(hardwareInfo);
 
-        memcpy_s(pDeviceProperties->device_name, sizeof(pDeviceProperties->device_name),
+        memcpy_s(pDeviceProperties->name, sizeof(pDeviceProperties->name),
                  deviceInfo.name, strlen(deviceInfo.name) + 1);
         pDeviceProperties->coreClockRate = deviceInfo.maxClockFrequency;
         pDeviceProperties->vendorId = deviceInfo.vendorId;
