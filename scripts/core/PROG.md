@@ -130,12 +130,8 @@ See ::${x}_command_queue_desc_t for more details.
     assert(subdeviceProps.isSubdevice == true); // Ensure that we have a handle to a sub-device.
     assert(subdeviceProps.subdeviceId == 2);    // Ensure that we have a handle to the sub-device we asked for.
 
-    ...
-    ${x}_mem_allocator_handle_t hAllocator;
-    ${x}CreateMemAllocator(hAllocator);
-
     void* pMemForSubDevice2;
-    ${x}MemAlloc(hAllocator, subDevice, ${X}_DEVICE_MEM_ALLOC_FLAG_DEFAULT, memSize, sizeof(uint32_t), &pMemForSubDevice2);
+    ${x}MemAlloc(subDevice, ${X}_DEVICE_MEM_ALLOC_FLAG_DEFAULT, memSize, sizeof(uint32_t), &pMemForSubDevice2);
     ...
 
     ...
@@ -471,12 +467,6 @@ ${"##"} Memory
 Linear, unformatted memory allocations are represented as pointers in the host application.
 A pointer on the host has the same size as a pointer on the device.
 
-${"###"} Allocators
-The concept of memory allocators is introduced in order to:
-- provide a device-independent memory allocation API
-- provide a free-threaded container for driver meta-data on allocations needed for APIs, such as ::MemGetAddressRange
-- provide a free-threaded container that can be leveraged for higher-level allocator containers, such as STL
-
 ${"###"} Types
 Three types of allocations are supported.
 The type of allocation describes the _ownership_ of the allocation:
@@ -604,9 +594,9 @@ The following sample code demonstrate a sequence for using coarse-grain residenc
         node* next;
     };
     node* begin = nullptr;
-    ${x}HostMemAlloc(hAllocator, ${X}_HOST_MEM_ALLOC_FLAG_DEFAULT, sizeof(node), 1, &begin);
-    ${x}HostMemAlloc(hAllocator, ${X}_HOST_MEM_ALLOC_FLAG_DEFAULT, sizeof(node), 1, &begin->next);
-    ${x}HostMemAlloc(hAllocator, ${X}_HOST_MEM_ALLOC_FLAG_DEFAULT, sizeof(node), 1, &begin->next->next);
+    ${x}HostMemAlloc(${X}_HOST_MEM_ALLOC_FLAG_DEFAULT, sizeof(node), 1, &begin);
+    ${x}HostMemAlloc(${X}_HOST_MEM_ALLOC_FLAG_DEFAULT, sizeof(node), 1, &begin->next);
+    ${x}HostMemAlloc(${X}_HOST_MEM_ALLOC_FLAG_DEFAULT, sizeof(node), 1, &begin->next->next);
 
     // 'begin' is passed as function argument and appended into command list
     ${x}FunctionSetAttribute(hFuncArgs, ${X}_FUNCTION_SET_ATTR_INDIRECT_HOST_ACCESS, TRUE);
@@ -624,9 +614,9 @@ The following sample code demonstrate a sequence for using fine-grain residency 
         node* next;
     };
     node* begin = nullptr;
-    ${x}HostMemAlloc(hAllocator, ${X}_HOST_MEM_ALLOC_FLAG_DEFAULT, sizeof(node), 1, &begin);
-    ${x}HostMemAlloc(hAllocator, ${X}_HOST_MEM_ALLOC_FLAG_DEFAULT, sizeof(node), 1, &begin->next);
-    ${x}HostMemAlloc(hAllocator, ${X}_HOST_MEM_ALLOC_FLAG_DEFAULT, sizeof(node), 1, &begin->next->next);
+    ${x}HostMemAlloc(${X}_HOST_MEM_ALLOC_FLAG_DEFAULT, sizeof(node), 1, &begin);
+    ${x}HostMemAlloc(${X}_HOST_MEM_ALLOC_FLAG_DEFAULT, sizeof(node), 1, &begin->next);
+    ${x}HostMemAlloc(${X}_HOST_MEM_ALLOC_FLAG_DEFAULT, sizeof(node), 1, &begin->next->next);
 
     // 'begin' is passed as function argument and appended into command list
     ${x}FunctionSetArgumentValue(hFunction, 0, sizeof(node*), &begin);
@@ -876,7 +866,7 @@ device to generate the parameters.
     ${x}_thread_group_dimensions_t* pIndirectArgs;
     
     ...
-    ${x}MemAlloc(hMemAlloc, hDevice, flags, sizeof(${x}_thread_group_dimensions_t), sizeof(uint32_t), &pIndirectArgs);
+    ${x}MemAlloc(hDevice, flags, sizeof(${x}_thread_group_dimensions_t), sizeof(uint32_t), &pIndirectArgs);
 
     // Append function
     ${x}CommandListAppendLaunchFunctionIndirect(hCommandList, hFunction, &pIndirectArgs, nullptr);
@@ -954,7 +944,7 @@ Memory contents as reflected by any caching schemes will be consistent such that
 in an OpenCL command queue can be read by a subsequent ${OneApi} command list without any special application action. 
 The cost to ensure memory consistency may be implementation dependent.  The performance of sharing command queues
 will be no worse than an application submitting work to OpenCL, calling clFinish followed by submitting an
-::${x} command list.  In most cases, command queue sharing may be much more efficient. 
+${OneApi} command list.  In most cases, command queue sharing may be much more efficient. 
 
 ${"#"} <a name="ipc">Inter-Process Communication</a>
 The ${OneApi} Inter-Process Communication (IPC) APIs allow device memory allocations to be used across processes.
@@ -963,10 +953,10 @@ The following code examples demonstrate how to use the IPC APIs:
 1. First, the allocation is made, packaged, and sent on the sending process:
 ```c
     void* dptr = nullptr;
-    ${x}MemAlloc(hMemAlloc, hDevice, flags, size, alignment, &dptr);
+    ${x}MemAlloc(hDevice, flags, size, alignment, &dptr);
 
     ${x}_ipc_mem_handle_t hIPC;
-    ${x}IpcGetMemHandle(hMemAlloc, dptr, &hIPC);
+    ${x}IpcGetMemHandle(dptr, &hIPC);
 
     // Method of sending to receiving process is not defined by ${OneApi}:
     send_to_receiving_process(hIPC);
@@ -979,7 +969,7 @@ The following code examples demonstrate how to use the IPC APIs:
     hIPC = receive_from_sending_process();
 
     void* dptr = nullptr;
-    ${x}IpcOpenMemHandle(hMemAlloc, hDevice, hIPC, ${X}_IPC_MEMORY_FLAG_NONE, &dptr);
+    ${x}IpcOpenMemHandle(hDevice, hIPC, ${X}_IPC_MEMORY_FLAG_NONE, &dptr);
 ```
 
 3. Each process may now refer to the same device memory allocation via its `dptr`.
@@ -987,12 +977,12 @@ Note, there is no guaranteed address equivalence for the values of `dptr` in eac
 
 4. To cleanup, first close the handle in the receiving process:
 ```c
-    ${x}IpcCloseMemHandle(hMemAlloc, dptr);
+    ${x}IpcCloseMemHandle(dptr);
 ```
 
 5. Finally, free the device pointer in the sending process:
 ```c
-    ${x}MemFree(hMemAlloc, dptr);
+    ${x}MemFree(dptr);
 ```
 
 ${"#"} <a name="exp">Experimental</a>

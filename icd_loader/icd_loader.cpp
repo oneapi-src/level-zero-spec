@@ -638,24 +638,7 @@ xe_result_t __xecall xeImageDestroy(
     }
     return dispatchTable.xeImageDestroy(hImage);
 }
-xe_result_t __xecall xeCreateMemAllocator(
-        xe_mem_allocator_handle_t* phMemAllocHandle     ///< [out] Returned memory allocator handle
-    ){
-    if(dispatchTableInitialized == false){
-        return XE_RESULT_ERROR_UNINITIALIZED;
-    }
-    return dispatchTable.xeCreateMemAllocator(phMemAllocHandle);
-}
-xe_result_t __xecall xeMemAllocatorDestroy(
-        xe_mem_allocator_handle_t hMemAllocHandle       ///< [in] handle of memory allocator to destroy
-    ){
-    if(dispatchTableInitialized == false){
-        return XE_RESULT_ERROR_UNINITIALIZED;
-    }
-    return dispatchTable.xeMemAllocatorDestroy(hMemAllocHandle);
-}
 xe_result_t __xecall xeSharedMemAlloc(
-        xe_mem_allocator_handle_t hMemAllocHandle,      ///< [in] handle of memory allocator for this allocation
         xe_device_handle_t hDevice,                     ///< [in] handle of the device
         xe_device_mem_alloc_flag_t device_flags,        ///< [in] flags specifying additional device allocation controls
         xe_host_mem_alloc_flag_t host_flags,            ///< [in] flags specifying additional host allocation controls
@@ -666,10 +649,9 @@ xe_result_t __xecall xeSharedMemAlloc(
     if(dispatchTableInitialized == false){
         return XE_RESULT_ERROR_UNINITIALIZED;
     }
-    return dispatchTable.xeSharedMemAlloc(hMemAllocHandle, hDevice, device_flags, host_flags, size, alignment, ptr);
+    return dispatchTable.xeSharedMemAlloc(hDevice, device_flags, host_flags, size, alignment, ptr);
 }
 xe_result_t __xecall xeMemAlloc(
-        xe_mem_allocator_handle_t hMemAllocHandle,      ///< [in] handle of memory allocator for this allocation
         xe_device_handle_t hDevice,                     ///< [in] handle of the device
         xe_device_mem_alloc_flag_t flags,               ///< [in] flags specifying additional allocation controls
         size_t size,                                    ///< [in] size in bytes to allocate
@@ -679,10 +661,9 @@ xe_result_t __xecall xeMemAlloc(
     if(dispatchTableInitialized == false){
         return XE_RESULT_ERROR_UNINITIALIZED;
     }
-    return dispatchTable.xeMemAlloc(hMemAllocHandle, hDevice, flags, size, alignment, ptr);
+    return dispatchTable.xeMemAlloc(hDevice, flags, size, alignment, ptr);
 }
 xe_result_t __xecall xeHostMemAlloc(
-        xe_mem_allocator_handle_t hMemAllocHandle,      ///< [in] handle of memory allocator for this allocation
         xe_host_mem_alloc_flag_t flags,                 ///< [in] flags specifying additional allocation controls
         size_t size,                                    ///< [in] size in bytes to allocate
         size_t alignment,                               ///< [in] minimum alignment in bytes for the allocation
@@ -691,29 +672,26 @@ xe_result_t __xecall xeHostMemAlloc(
     if(dispatchTableInitialized == false){
         return XE_RESULT_ERROR_UNINITIALIZED;
     }
-    return dispatchTable.xeHostMemAlloc(hMemAllocHandle, flags, size, alignment, ptr);
+    return dispatchTable.xeHostMemAlloc(flags, size, alignment, ptr);
 }
 xe_result_t __xecall xeMemFree(
-        xe_mem_allocator_handle_t hMemAllocHandle,      ///< [in] handle of memory allocator for this allocation
         const void* ptr                                 ///< [in] pointer to memory to free
     ){
     if(dispatchTableInitialized == false){
         return XE_RESULT_ERROR_UNINITIALIZED;
     }
-    return dispatchTable.xeMemFree(hMemAllocHandle, ptr);
+    return dispatchTable.xeMemFree(ptr);
 }
 xe_result_t __xecall xeMemGetProperties(
-        xe_mem_allocator_handle_t hMemAllocHandle,      ///< [in] handle of memory allocator for this allocation
         const void* ptr,                                ///< [in] Pointer to query
         xe_memory_allocation_properties_t* pMemProperties   ///< [out] Query result for memory allocation properties
     ){
     if(dispatchTableInitialized == false){
         return XE_RESULT_ERROR_UNINITIALIZED;
     }
-    return dispatchTable.xeMemGetProperties(hMemAllocHandle, ptr, pMemProperties);
+    return dispatchTable.xeMemGetProperties(ptr, pMemProperties);
 }
 xe_result_t __xecall xeMemGetAddressRange(
-        xe_mem_allocator_handle_t hMemAllocHandle,      ///< [in] handle of memory allocator for this allocation
         const void* ptr,                                ///< [in] Pointer to query
         void** pBase,                                   ///< [in,out][optional] base address of the allocation
         size_t* pSize                                   ///< [in,out][optional] size of the allocation
@@ -721,20 +699,18 @@ xe_result_t __xecall xeMemGetAddressRange(
     if(dispatchTableInitialized == false){
         return XE_RESULT_ERROR_UNINITIALIZED;
     }
-    return dispatchTable.xeMemGetAddressRange(hMemAllocHandle, ptr, pBase, pSize);
+    return dispatchTable.xeMemGetAddressRange(ptr, pBase, pSize);
 }
 xe_result_t __xecall xeIpcGetMemHandle(
-        xe_mem_allocator_handle_t hMemAllocHandle,      ///< [in] handle of memory allocator for this allocation
         const void* ptr,                                ///< [in] Pointer to the device memory allocation
         xe_ipc_mem_handle_t* pIpcHandle                 ///< [out] Returned IPC memory handle
     ){
     if(dispatchTableInitialized == false){
         return XE_RESULT_ERROR_UNINITIALIZED;
     }
-    return dispatchTable.xeIpcGetMemHandle(hMemAllocHandle, ptr, pIpcHandle);
+    return dispatchTable.xeIpcGetMemHandle(ptr, pIpcHandle);
 }
 xe_result_t __xecall xeIpcOpenMemHandle(
-        xe_mem_allocator_handle_t hMemAllocHandle,      ///< [in] handle of memory allocator for this allocation
         xe_device_handle_t hDevice,                     ///< [in] handle of the device to associate with the IPC memory handle
         xe_ipc_mem_handle_t handle,                     ///< [in] IPC memory handle
         xe_ipc_memory_flag_t flags,                     ///< [in] flags controlling the operation
@@ -743,16 +719,15 @@ xe_result_t __xecall xeIpcOpenMemHandle(
     if(dispatchTableInitialized == false){
         return XE_RESULT_ERROR_UNINITIALIZED;
     }
-    return dispatchTable.xeIpcOpenMemHandle(hMemAllocHandle, hDevice, handle, flags, ptr);
+    return dispatchTable.xeIpcOpenMemHandle(hDevice, handle, flags, ptr);
 }
 xe_result_t __xecall xeIpcCloseMemHandle(
-        xe_mem_allocator_handle_t hMemAllocHandle,      ///< [in] handle of memory allocator for this allocation
         const void* ptr                                 ///< [in] pointer to device allocation in this process
     ){
     if(dispatchTableInitialized == false){
         return XE_RESULT_ERROR_UNINITIALIZED;
     }
-    return dispatchTable.xeIpcCloseMemHandle(hMemAllocHandle, ptr);
+    return dispatchTable.xeIpcCloseMemHandle(ptr);
 }
 xe_result_t __xecall xeDeviceCreateModule(
         xe_device_handle_t hDevice,                     ///< [in] handle of the device

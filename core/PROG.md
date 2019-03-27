@@ -130,12 +130,8 @@ See ::xe_command_queue_desc_t for more details.
     assert(subdeviceProps.isSubdevice == true); // Ensure that we have a handle to a sub-device.
     assert(subdeviceProps.subdeviceId == 2);    // Ensure that we have a handle to the sub-device we asked for.
 
-    ...
-    xe_mem_allocator_handle_t hAllocator;
-    xeCreateMemAllocator(hAllocator);
-
     void* pMemForSubDevice2;
-    xeMemAlloc(hAllocator, subDevice, XE_DEVICE_MEM_ALLOC_FLAG_DEFAULT, memSize, sizeof(uint32_t), &pMemForSubDevice2);
+    xeMemAlloc(subDevice, XE_DEVICE_MEM_ALLOC_FLAG_DEFAULT, memSize, sizeof(uint32_t), &pMemForSubDevice2);
     ...
 
     ...
@@ -471,12 +467,6 @@ There are two types of allocations:
 Linear, unformatted memory allocations are represented as pointers in the host application.
 A pointer on the host has the same size as a pointer on the device.
 
-### Allocators
-The concept of memory allocators is introduced in order to:
-- provide a device-independent memory allocation API
-- provide a free-threaded container for driver meta-data on allocations needed for APIs, such as ::MemGetAddressRange
-- provide a free-threaded container that can be leveraged for higher-level allocator containers, such as STL
-
 ### Types
 Three types of allocations are supported.
 The type of allocation describes the _ownership_ of the allocation:
@@ -604,9 +594,9 @@ The following sample code demonstrate a sequence for using coarse-grain residenc
         node* next;
     };
     node* begin = nullptr;
-    xeHostMemAlloc(hAllocator, XE_HOST_MEM_ALLOC_FLAG_DEFAULT, sizeof(node), 1, &begin);
-    xeHostMemAlloc(hAllocator, XE_HOST_MEM_ALLOC_FLAG_DEFAULT, sizeof(node), 1, &begin->next);
-    xeHostMemAlloc(hAllocator, XE_HOST_MEM_ALLOC_FLAG_DEFAULT, sizeof(node), 1, &begin->next->next);
+    xeHostMemAlloc(XE_HOST_MEM_ALLOC_FLAG_DEFAULT, sizeof(node), 1, &begin);
+    xeHostMemAlloc(XE_HOST_MEM_ALLOC_FLAG_DEFAULT, sizeof(node), 1, &begin->next);
+    xeHostMemAlloc(XE_HOST_MEM_ALLOC_FLAG_DEFAULT, sizeof(node), 1, &begin->next->next);
 
     // 'begin' is passed as function argument and appended into command list
     xeFunctionSetAttribute(hFuncArgs, XE_FUNCTION_SET_ATTR_INDIRECT_HOST_ACCESS, TRUE);
@@ -624,9 +614,9 @@ The following sample code demonstrate a sequence for using fine-grain residency 
         node* next;
     };
     node* begin = nullptr;
-    xeHostMemAlloc(hAllocator, XE_HOST_MEM_ALLOC_FLAG_DEFAULT, sizeof(node), 1, &begin);
-    xeHostMemAlloc(hAllocator, XE_HOST_MEM_ALLOC_FLAG_DEFAULT, sizeof(node), 1, &begin->next);
-    xeHostMemAlloc(hAllocator, XE_HOST_MEM_ALLOC_FLAG_DEFAULT, sizeof(node), 1, &begin->next->next);
+    xeHostMemAlloc(XE_HOST_MEM_ALLOC_FLAG_DEFAULT, sizeof(node), 1, &begin);
+    xeHostMemAlloc(XE_HOST_MEM_ALLOC_FLAG_DEFAULT, sizeof(node), 1, &begin->next);
+    xeHostMemAlloc(XE_HOST_MEM_ALLOC_FLAG_DEFAULT, sizeof(node), 1, &begin->next->next);
 
     // 'begin' is passed as function argument and appended into command list
     xeFunctionSetArgumentValue(hFunction, 0, sizeof(node*), &begin);
@@ -874,7 +864,7 @@ device to generate the parameters.
     xe_thread_group_dimensions_t* pIndirectArgs;
     
     ...
-    xeMemAlloc(hMemAlloc, hDevice, flags, sizeof(xe_thread_group_dimensions_t), sizeof(uint32_t), &pIndirectArgs);
+    xeMemAlloc(hDevice, flags, sizeof(xe_thread_group_dimensions_t), sizeof(uint32_t), &pIndirectArgs);
 
     // Append function
     xeCommandListAppendLaunchFunctionIndirect(hCommandList, hFunction, &pIndirectArgs, nullptr);
@@ -952,7 +942,7 @@ Memory contents as reflected by any caching schemes will be consistent such that
 in an OpenCL command queue can be read by a subsequent Xe command list without any special application action. 
 The cost to ensure memory consistency may be implementation dependent.  The performance of sharing command queues
 will be no worse than an application submitting work to OpenCL, calling clFinish followed by submitting an
-::xe command list.  In most cases, command queue sharing may be much more efficient. 
+Xe command list.  In most cases, command queue sharing may be much more efficient. 
 
 # <a name="ipc">Inter-Process Communication</a>
 The Xe Inter-Process Communication (IPC) APIs allow device memory allocations to be used across processes.
@@ -961,10 +951,10 @@ The following code examples demonstrate how to use the IPC APIs:
 1. First, the allocation is made, packaged, and sent on the sending process:
 ```c
     void* dptr = nullptr;
-    xeMemAlloc(hMemAlloc, hDevice, flags, size, alignment, &dptr);
+    xeMemAlloc(hDevice, flags, size, alignment, &dptr);
 
     xe_ipc_mem_handle_t hIPC;
-    xeIpcGetMemHandle(hMemAlloc, dptr, &hIPC);
+    xeIpcGetMemHandle(dptr, &hIPC);
 
     // Method of sending to receiving process is not defined by Xe:
     send_to_receiving_process(hIPC);
@@ -977,7 +967,7 @@ The following code examples demonstrate how to use the IPC APIs:
     hIPC = receive_from_sending_process();
 
     void* dptr = nullptr;
-    xeIpcOpenMemHandle(hMemAlloc, hDevice, hIPC, XE_IPC_MEMORY_FLAG_NONE, &dptr);
+    xeIpcOpenMemHandle(hDevice, hIPC, XE_IPC_MEMORY_FLAG_NONE, &dptr);
 ```
 
 3. Each process may now refer to the same device memory allocation via its `dptr`.
@@ -985,12 +975,12 @@ Note, there is no guaranteed address equivalence for the values of `dptr` in eac
 
 4. To cleanup, first close the handle in the receiving process:
 ```c
-    xeIpcCloseMemHandle(hMemAlloc, dptr);
+    xeIpcCloseMemHandle(dptr);
 ```
 
 5. Finally, free the device pointer in the sending process:
 ```c
-    xeMemFree(hMemAlloc, dptr);
+    xeMemFree(dptr);
 ```
 
 # <a name="exp">Experimental</a>

@@ -319,14 +319,7 @@ typedef xe_result_t (__xecall *pfn_xeDeviceCreateImage)(
 typedef xe_result_t (__xecall *pfn_xeImageDestroy)(
     xe_image_handle_t hImage                        ///< [in] handle of image object to destroy
     );
-typedef xe_result_t (__xecall *pfn_xeCreateMemAllocator)(
-    xe_mem_allocator_handle_t* phMemAllocHandle     ///< [out] Returned memory allocator handle
-    );
-typedef xe_result_t (__xecall *pfn_xeMemAllocatorDestroy)(
-    xe_mem_allocator_handle_t hMemAllocHandle       ///< [in] handle of memory allocator to destroy
-    );
 typedef xe_result_t (__xecall *pfn_xeSharedMemAlloc)(
-    xe_mem_allocator_handle_t hMemAllocHandle,      ///< [in] handle of memory allocator for this allocation
     xe_device_handle_t hDevice,                     ///< [in] handle of the device
     xe_device_mem_alloc_flag_t device_flags,        ///< [in] flags specifying additional device allocation controls
     xe_host_mem_alloc_flag_t host_flags,            ///< [in] flags specifying additional host allocation controls
@@ -335,7 +328,6 @@ typedef xe_result_t (__xecall *pfn_xeSharedMemAlloc)(
     void** ptr                                      ///< [out] pointer to shared allocation
     );
 typedef xe_result_t (__xecall *pfn_xeMemAlloc)(
-    xe_mem_allocator_handle_t hMemAllocHandle,      ///< [in] handle of memory allocator for this allocation
     xe_device_handle_t hDevice,                     ///< [in] handle of the device
     xe_device_mem_alloc_flag_t flags,               ///< [in] flags specifying additional allocation controls
     size_t size,                                    ///< [in] size in bytes to allocate
@@ -343,41 +335,34 @@ typedef xe_result_t (__xecall *pfn_xeMemAlloc)(
     void** ptr                                      ///< [out] pointer to device allocation
     );
 typedef xe_result_t (__xecall *pfn_xeHostMemAlloc)(
-    xe_mem_allocator_handle_t hMemAllocHandle,      ///< [in] handle of memory allocator for this allocation
     xe_host_mem_alloc_flag_t flags,                 ///< [in] flags specifying additional allocation controls
     size_t size,                                    ///< [in] size in bytes to allocate
     size_t alignment,                               ///< [in] minimum alignment in bytes for the allocation
     void** ptr                                      ///< [out] pointer to host allocation
     );
 typedef xe_result_t (__xecall *pfn_xeMemFree)(
-    xe_mem_allocator_handle_t hMemAllocHandle,      ///< [in] handle of memory allocator for this allocation
     const void* ptr                                 ///< [in] pointer to memory to free
     );
 typedef xe_result_t (__xecall *pfn_xeMemGetProperties)(
-    xe_mem_allocator_handle_t hMemAllocHandle,      ///< [in] handle of memory allocator for this allocation
     const void* ptr,                                ///< [in] Pointer to query
     xe_memory_allocation_properties_t* pMemProperties   ///< [out] Query result for memory allocation properties
     );
 typedef xe_result_t (__xecall *pfn_xeMemGetAddressRange)(
-    xe_mem_allocator_handle_t hMemAllocHandle,      ///< [in] handle of memory allocator for this allocation
     const void* ptr,                                ///< [in] Pointer to query
     void** pBase,                                   ///< [in,out][optional] base address of the allocation
     size_t* pSize                                   ///< [in,out][optional] size of the allocation
     );
 typedef xe_result_t (__xecall *pfn_xeIpcGetMemHandle)(
-    xe_mem_allocator_handle_t hMemAllocHandle,      ///< [in] handle of memory allocator for this allocation
     const void* ptr,                                ///< [in] Pointer to the device memory allocation
     xe_ipc_mem_handle_t* pIpcHandle                 ///< [out] Returned IPC memory handle
     );
 typedef xe_result_t (__xecall *pfn_xeIpcOpenMemHandle)(
-    xe_mem_allocator_handle_t hMemAllocHandle,      ///< [in] handle of memory allocator for this allocation
     xe_device_handle_t hDevice,                     ///< [in] handle of the device to associate with the IPC memory handle
     xe_ipc_mem_handle_t handle,                     ///< [in] IPC memory handle
     xe_ipc_memory_flag_t flags,                     ///< [in] flags controlling the operation
     void** ptr                                      ///< [out] pointer to device allocation in this process
     );
 typedef xe_result_t (__xecall *pfn_xeIpcCloseMemHandle)(
-    xe_mem_allocator_handle_t hMemAllocHandle,      ///< [in] handle of memory allocator for this allocation
     const void* ptr                                 ///< [in] pointer to device allocation in this process
     );
 typedef xe_result_t (__xecall *pfn_xeDeviceCreateModule)(
@@ -573,8 +558,6 @@ typedef struct _xe_dispatch_table_t
     pfn_xeFenceReset xeFenceReset;
     pfn_xeDeviceCreateImage xeDeviceCreateImage;
     pfn_xeImageDestroy xeImageDestroy;
-    pfn_xeCreateMemAllocator xeCreateMemAllocator;
-    pfn_xeMemAllocatorDestroy xeMemAllocatorDestroy;
     pfn_xeSharedMemAlloc xeSharedMemAlloc;
     pfn_xeMemAlloc xeMemAlloc;
     pfn_xeHostMemAlloc xeHostMemAlloc;
@@ -679,8 +662,6 @@ inline bool load_xe(void *handle, void *(*funcAddressGetter)(void *handle, const
     outTable->xeFenceReset = (pfn_xeFenceReset)funcAddressGetter(handle, "xeFenceReset");
     outTable->xeDeviceCreateImage = (pfn_xeDeviceCreateImage)funcAddressGetter(handle, "xeDeviceCreateImage");
     outTable->xeImageDestroy = (pfn_xeImageDestroy)funcAddressGetter(handle, "xeImageDestroy");
-    outTable->xeCreateMemAllocator = (pfn_xeCreateMemAllocator)funcAddressGetter(handle, "xeCreateMemAllocator");
-    outTable->xeMemAllocatorDestroy = (pfn_xeMemAllocatorDestroy)funcAddressGetter(handle, "xeMemAllocatorDestroy");
     outTable->xeSharedMemAlloc = (pfn_xeSharedMemAlloc)funcAddressGetter(handle, "xeSharedMemAlloc");
     outTable->xeMemAlloc = (pfn_xeMemAlloc)funcAddressGetter(handle, "xeMemAlloc");
     outTable->xeHostMemAlloc = (pfn_xeHostMemAlloc)funcAddressGetter(handle, "xeHostMemAlloc");
@@ -895,12 +876,6 @@ inline bool load_xe(void *handle, void *(*funcAddressGetter)(void *handle, const
         return false;
     }
     if(0 == outTable->xeImageDestroy){
-        return false;
-    }
-    if(0 == outTable->xeCreateMemAllocator){
-        return false;
-    }
-    if(0 == outTable->xeMemAllocatorDestroy){
         return false;
     }
     if(0 == outTable->xeSharedMemAlloc){

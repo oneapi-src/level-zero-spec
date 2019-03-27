@@ -39,44 +39,6 @@
 namespace xe
 {
     ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Handle to a memory allocator
-    using mem_allocator_handle_t = ::xe_mem_allocator_handle_t;
-
-    ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Creates an handle to a memory allocator
-    /// 
-    /// @details
-    ///     - Memory allocators store information about allocations.
-    ///     - The application may call this function from simultaneous threads.
-    ///     - The implementation of this function should be lock-free.
-    /// 
-    /// @returns
-    ///     - ::mem_allocator_handle_t: Returned memory allocator handle
-    /// 
-    /// @throws result_t
-    inline mem_allocator_handle_t
-    CreateMemAllocator(
-        void
-        );
-
-    ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Deletes a memory allocator
-    /// 
-    /// @details
-    ///     - The application is responsible for making sure the GPU is not
-    ///       currently referencing any memory allocations associated with this
-    ///       allocator before it is deleted.
-    ///     - The implementation of this function will immediately free all memory
-    ///       allocations associated with this allocator.
-    ///     - The implementation of this function should be lock-free.
-    /// 
-    /// @throws result_t
-    inline void
-    MemAllocatorDestroy(
-        mem_allocator_handle_t hMemAllocHandle          ///< [in] handle of memory allocator to destroy
-        );
-
-    ///////////////////////////////////////////////////////////////////////////////
     /// @brief Supported device memory allocation flags
     enum class device_mem_alloc_flag_t
     {
@@ -105,7 +67,6 @@ namespace xe
     ///     - Shared allocations share ownership between the host and one or more
     ///       devices.
     ///     - The application may call this function from simultaneous threads.
-    ///     - The implementation of this function should be lock-free.
     /// 
     /// @remarks
     ///   _Analogues_
@@ -117,7 +78,6 @@ namespace xe
     /// @throws result_t
     inline void*
     SharedMemAlloc(
-        mem_allocator_handle_t hMemAllocHandle,         ///< [in] handle of memory allocator for this allocation
         device_handle_t hDevice,                        ///< [in] handle of the device
         device_mem_alloc_flag_t device_flags,           ///< [in] flags specifying additional device allocation controls
         host_mem_alloc_flag_t host_flags,               ///< [in] flags specifying additional host allocation controls
@@ -133,7 +93,6 @@ namespace xe
     ///     - In general, a device allocation may only be accessed by the device
     ///       that owns it.
     ///     - The application may call this function from simultaneous threads.
-    ///     - The implementation of this function should be lock-free.
     /// 
     /// @remarks
     ///   _Analogues_
@@ -145,7 +104,6 @@ namespace xe
     /// @throws result_t
     inline void*
     MemAlloc(
-        mem_allocator_handle_t hMemAllocHandle,         ///< [in] handle of memory allocator for this allocation
         device_handle_t hDevice,                        ///< [in] handle of the device
         device_mem_alloc_flag_t flags,                  ///< [in] flags specifying additional allocation controls
         size_t size,                                    ///< [in] size in bytes to allocate
@@ -161,7 +119,6 @@ namespace xe
     ///     - Host allocations are frequently used as staging areas to transfer data
     ///       to or from devices.
     ///     - The application may call this function from simultaneous threads.
-    ///     - The implementation of this function should be lock-free.
     /// 
     /// @remarks
     ///   _Analogues_
@@ -173,7 +130,6 @@ namespace xe
     /// @throws result_t
     inline void*
     HostMemAlloc(
-        mem_allocator_handle_t hMemAllocHandle,         ///< [in] handle of memory allocator for this allocation
         host_mem_alloc_flag_t flags,                    ///< [in] flags specifying additional allocation controls
         size_t size,                                    ///< [in] size in bytes to allocate
         size_t alignment                                ///< [in] minimum alignment in bytes for the allocation
@@ -187,7 +143,6 @@ namespace xe
     ///       currently referencing the memory before it is freed
     ///     - The implementation of this function will immediately free all Host and
     ///       Device allocations associated with this memory
-    ///     - The implementation of this function should be lock-free.
     /// 
     /// @remarks
     ///   _Analogues_
@@ -197,7 +152,6 @@ namespace xe
     /// @throws result_t
     inline void
     MemFree(
-        mem_allocator_handle_t hMemAllocHandle,         ///< [in] handle of memory allocator for this allocation
         const void* ptr                                 ///< [in] pointer to memory to free
         );
 
@@ -213,7 +167,7 @@ namespace xe
     /// @brief Memory allocation type
     enum class memory_type_t
     {
-        UNKNOWN = 0,                                    ///< the memory pointed to was not allocated by allocator
+        UNKNOWN = 0,                                    ///< the memory pointed to is of unknown type
         HOST,                                           ///< the memory pointed to is a host allocation
         DEVICE,                                         ///< the memory pointed to is a device allocation
         SHARED,                                         ///< the memory pointed to is a shared ownership allocation
@@ -226,6 +180,7 @@ namespace xe
     {
         memory_allocation_properties_version_t version = memory_allocation_properties_version_t::CURRENT;   ///< [in] ::MEMORY_ALLOCATION_PROPERTIES_VERSION_CURRENT
         memory_type_t type;                             ///< [out] Type of allocated memory
+        device_handle_t device;                         ///< [out] Device handle associated with this allocation (optional)
         uint64_t id;                                    ///< [out] Identifier for this allocation
 
     };
@@ -235,7 +190,6 @@ namespace xe
     /// 
     /// @details
     ///     - The application may call this function from simultaneous threads.
-    ///     - The implementation of this function should be lock-free.
     /// 
     /// @remarks
     ///   _Analogues_
@@ -247,7 +201,6 @@ namespace xe
     /// @throws result_t
     inline memory_allocation_properties_t
     MemGetProperties(
-        mem_allocator_handle_t hMemAllocHandle,         ///< [in] handle of memory allocator for this allocation
         const void* ptr                                 ///< [in] Pointer to query
         );
 
@@ -256,7 +209,6 @@ namespace xe
     /// 
     /// @details
     ///     - The application may call this function from simultaneous threads.
-    ///     - The implementation of this function should be lock-free.
     /// 
     /// @remarks
     ///   _Analogues_
@@ -265,7 +217,6 @@ namespace xe
     /// @throws result_t
     inline void
     MemGetAddressRange(
-        mem_allocator_handle_t hMemAllocHandle,         ///< [in] handle of memory allocator for this allocation
         const void* ptr,                                ///< [in] Pointer to query
         void** pBase,                                   ///< [in,out][optional] base address of the allocation
         size_t* pSize                                   ///< [in,out][optional] size of the allocation
@@ -279,7 +230,6 @@ namespace xe
     ///     - Takes a pointer to the base of a device memory allocation and exports
     ///       it for use in another process.
     ///     - The application may call this function from simultaneous threads.
-    ///     - The implementation of this function should be lock-free.
     /// 
     /// @remarks
     ///   _Analogues_
@@ -291,7 +241,6 @@ namespace xe
     /// @throws result_t
     inline ipc_mem_handle_t
     IpcGetMemHandle(
-        mem_allocator_handle_t hMemAllocHandle,         ///< [in] handle of memory allocator for this allocation
         const void* ptr                                 ///< [in] Pointer to the device memory allocation
         );
 
@@ -313,7 +262,6 @@ namespace xe
     ///     - The device pointer in this process should not be freed with ::MemFree,
     ///       but rather with ::IpcCloseMemHandle.
     ///     - The application may call this function from simultaneous threads.
-    ///     - The implementation of this function should be lock-free.
     /// 
     /// @remarks
     ///   _Analogues_
@@ -325,7 +273,6 @@ namespace xe
     /// @throws result_t
     inline void*
     IpcOpenMemHandle(
-        mem_allocator_handle_t hMemAllocHandle,         ///< [in] handle of memory allocator for this allocation
         device_handle_t hDevice,                        ///< [in] handle of the device to associate with the IPC memory handle
         ipc_mem_handle_t handle,                        ///< [in] IPC memory handle
         ipc_memory_flag_t flags                         ///< [in] flags controlling the operation
@@ -338,7 +285,6 @@ namespace xe
     ///     - Closes an IPC memory handle by unmapping memory that was opened in
     ///       this process using ::IpcOpenMemHandle.
     ///     - The application may call this function from simultaneous threads.
-    ///     - The implementation of this function should be lock-free.
     /// 
     /// @remarks
     ///   _Analogues_
@@ -347,7 +293,6 @@ namespace xe
     /// @throws result_t
     inline void
     IpcCloseMemHandle(
-        mem_allocator_handle_t hMemAllocHandle,         ///< [in] handle of memory allocator for this allocation
         const void* ptr                                 ///< [in] pointer to device allocation in this process
         );
 

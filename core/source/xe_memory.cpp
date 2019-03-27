@@ -41,117 +41,6 @@
 #include <new>
 
 ///////////////////////////////////////////////////////////////////////////////
-/// @brief Creates an handle to a memory allocator
-/// 
-/// @details
-///     - Memory allocators store information about allocations.
-///     - The application may call this function from simultaneous threads.
-///     - The implementation of this function should be lock-free.
-/// 
-/// @returns
-///     - ::XE_RESULT_SUCCESS
-///     - ::XE_RESULT_ERROR_UNINITIALIZED
-///     - ::XE_RESULT_ERROR_DEVICE_LOST
-///     - ::XE_RESULT_ERROR_INVALID_PARAMETER
-///         + nullptr == phMemAllocHandle
-///     - ::XE_RESULT_ERROR_UNSUPPORTED
-///
-/// @hash {9f40961e245036a4f5bae21b30b0fe1eff983d3e3a2c375fa0e5c2ab9e9139f8}
-///
-__xedllexport xe_result_t __xecall
-xeCreateMemAllocator(
-    xe_mem_allocator_handle_t* phMemAllocHandle     ///< [out] Returned memory allocator handle
-    )
-{
-    try
-    {
-        //if( XE_DRIVER_PARAMETER_VALIDATION_LEVEL >= 0 )
-        {
-            // if( nullptr == driver ) return XE_RESULT_ERROR_UNINITIALIZED;
-            // Check parameters
-            if( nullptr == phMemAllocHandle ) return XE_RESULT_ERROR_INVALID_PARAMETER;
-        }
-        /// @begin
-#if defined(XE_NULLDRV)
-        return XE_RESULT_SUCCESS;
-#else
-        return L0::createMemAllocator(phMemAllocHandle);
-#endif
-        /// @end
-    }
-    catch(xe_result_t& result)
-    {
-        return result;
-    }
-    catch(std::bad_alloc&)
-    {
-        return XE_RESULT_ERROR_OUT_OF_HOST_MEMORY;
-    }
-    catch(std::exception&)
-    {
-        // @todo: pfnOnException(e.what());
-        return XE_RESULT_ERROR_UNKNOWN;
-    }
-}
-
-///////////////////////////////////////////////////////////////////////////////
-/// @brief Deletes a memory allocator
-/// 
-/// @details
-///     - The application is responsible for making sure the GPU is not
-///       currently referencing any memory allocations associated with this
-///       allocator before it is deleted.
-///     - The implementation of this function will immediately free all memory
-///       allocations associated with this allocator.
-///     - The implementation of this function should be lock-free.
-/// 
-/// @returns
-///     - ::XE_RESULT_SUCCESS
-///     - ::XE_RESULT_ERROR_UNINITIALIZED
-///     - ::XE_RESULT_ERROR_DEVICE_LOST
-///     - ::XE_RESULT_ERROR_INVALID_PARAMETER
-///         + nullptr == hMemAllocHandle
-///     - ::XE_RESULT_ERROR_UNSUPPORTED
-///
-/// @hash {a2eb24e400146e03f62a0c76e948d2746c332fa8aa4fa3d9927bce3e413a5c84}
-///
-__xedllexport xe_result_t __xecall
-xeMemAllocatorDestroy(
-    xe_mem_allocator_handle_t hMemAllocHandle       ///< [in] handle of memory allocator to destroy
-    )
-{
-    try
-    {
-        //if( XE_DRIVER_PARAMETER_VALIDATION_LEVEL >= 0 )
-        {
-            // if( nullptr == driver ) return XE_RESULT_ERROR_UNINITIALIZED;
-            // Check parameters
-            if( nullptr == hMemAllocHandle ) return XE_RESULT_ERROR_INVALID_PARAMETER;
-        }
-        /// @begin
-#if defined(XE_NULLDRV)
-        return XE_RESULT_SUCCESS;
-#else
-        return L0::memAllocatorDestroy(hMemAllocHandle);
-#endif
-        /// @end
-    }
-    catch(xe_result_t& result)
-    {
-        return result;
-    }
-    catch(std::bad_alloc&)
-    {
-        return XE_RESULT_ERROR_OUT_OF_HOST_MEMORY;
-    }
-    catch(std::exception&)
-    {
-        // @todo: pfnOnException(e.what());
-        return XE_RESULT_ERROR_UNKNOWN;
-    }
-}
-
-///////////////////////////////////////////////////////////////////////////////
 /// @brief Allocates memory that is shared between the host and one or more
 ///        devices
 /// 
@@ -159,7 +48,6 @@ xeMemAllocatorDestroy(
 ///     - Shared allocations share ownership between the host and one or more
 ///       devices.
 ///     - The application may call this function from simultaneous threads.
-///     - The implementation of this function should be lock-free.
 /// 
 /// @remarks
 ///   _Analogues_
@@ -170,7 +58,6 @@ xeMemAllocatorDestroy(
 ///     - ::XE_RESULT_ERROR_UNINITIALIZED
 ///     - ::XE_RESULT_ERROR_DEVICE_LOST
 ///     - ::XE_RESULT_ERROR_INVALID_PARAMETER
-///         + nullptr == hMemAllocHandle
 ///         + nullptr == hDevice
 ///         + nullptr == ptr
 ///         + unsupported allocation size
@@ -179,11 +66,10 @@ xeMemAllocatorDestroy(
 ///     - ::XE_RESULT_ERROR_OUT_OF_HOST_MEMORY
 ///     - ::XE_RESULT_ERROR_OUT_OF_DEVICE_MEMORY
 ///
-/// @hash {8e4c3077c3008f398c65e52226a9ed7ab31d689ef7666070143cd630c14449a8}
+/// @hash {06027dab60bcf973738603e2570f5473a33c2470844fdf37848462286595f5bd}
 ///
 __xedllexport xe_result_t __xecall
 xeSharedMemAlloc(
-    xe_mem_allocator_handle_t hMemAllocHandle,      ///< [in] handle of memory allocator for this allocation
     xe_device_handle_t hDevice,                     ///< [in] handle of the device
     xe_device_mem_alloc_flag_t device_flags,        ///< [in] flags specifying additional device allocation controls
     xe_host_mem_alloc_flag_t host_flags,            ///< [in] flags specifying additional host allocation controls
@@ -198,7 +84,6 @@ xeSharedMemAlloc(
         {
             // if( nullptr == driver ) return XE_RESULT_ERROR_UNINITIALIZED;
             // Check parameters
-            if( nullptr == hMemAllocHandle ) return XE_RESULT_ERROR_INVALID_PARAMETER;
             if( nullptr == hDevice ) return XE_RESULT_ERROR_INVALID_PARAMETER;
             if( nullptr == ptr ) return XE_RESULT_ERROR_INVALID_PARAMETER;
         }
@@ -206,7 +91,7 @@ xeSharedMemAlloc(
 #if defined(XE_NULLDRV)
         return XE_RESULT_SUCCESS;
 #else
-        return L0::sharedMemAlloc(hMemAllocHandle, hDevice, device_flags, host_flags, size, alignment, ptr);
+        return L0::sharedMemAlloc(hDevice, device_flags, host_flags, size, alignment, ptr);
 #endif
         /// @end
     }
@@ -233,7 +118,6 @@ xeSharedMemAlloc(
 ///     - In general, a device allocation may only be accessed by the device
 ///       that owns it.
 ///     - The application may call this function from simultaneous threads.
-///     - The implementation of this function should be lock-free.
 /// 
 /// @remarks
 ///   _Analogues_
@@ -244,7 +128,6 @@ xeSharedMemAlloc(
 ///     - ::XE_RESULT_ERROR_UNINITIALIZED
 ///     - ::XE_RESULT_ERROR_DEVICE_LOST
 ///     - ::XE_RESULT_ERROR_INVALID_PARAMETER
-///         + nullptr == hMemAllocHandle
 ///         + nullptr == hDevice
 ///         + nullptr == ptr
 ///         + unsupported allocation size
@@ -253,11 +136,10 @@ xeSharedMemAlloc(
 ///     - ::XE_RESULT_ERROR_OUT_OF_HOST_MEMORY
 ///     - ::XE_RESULT_ERROR_OUT_OF_DEVICE_MEMORY
 ///
-/// @hash {0c3d522d0293cd5605447882683b2164912ede21c5b24b68e2b486f7a7a32bdc}
+/// @hash {00c7d568c1470ecc7b25b7bb8bfa87e9428b9a4023484c53ee46e6632e24d16d}
 ///
 __xedllexport xe_result_t __xecall
 xeMemAlloc(
-    xe_mem_allocator_handle_t hMemAllocHandle,      ///< [in] handle of memory allocator for this allocation
     xe_device_handle_t hDevice,                     ///< [in] handle of the device
     xe_device_mem_alloc_flag_t flags,               ///< [in] flags specifying additional allocation controls
     size_t size,                                    ///< [in] size in bytes to allocate
@@ -271,7 +153,6 @@ xeMemAlloc(
         {
             // if( nullptr == driver ) return XE_RESULT_ERROR_UNINITIALIZED;
             // Check parameters
-            if( nullptr == hMemAllocHandle ) return XE_RESULT_ERROR_INVALID_PARAMETER;
             if( nullptr == hDevice ) return XE_RESULT_ERROR_INVALID_PARAMETER;
             if( nullptr == ptr ) return XE_RESULT_ERROR_INVALID_PARAMETER;
         }
@@ -279,7 +160,7 @@ xeMemAlloc(
 #if defined(XE_NULLDRV)
         return XE_RESULT_SUCCESS;
 #else
-        return L0::memAlloc(hMemAllocHandle, hDevice, flags, size, alignment, ptr);
+        return L0::memAlloc(hDevice, flags, size, alignment, ptr);
 #endif
         /// @end
     }
@@ -307,7 +188,6 @@ xeMemAlloc(
 ///     - Host allocations are frequently used as staging areas to transfer data
 ///       to or from devices.
 ///     - The application may call this function from simultaneous threads.
-///     - The implementation of this function should be lock-free.
 /// 
 /// @remarks
 ///   _Analogues_
@@ -318,7 +198,6 @@ xeMemAlloc(
 ///     - ::XE_RESULT_ERROR_UNINITIALIZED
 ///     - ::XE_RESULT_ERROR_DEVICE_LOST
 ///     - ::XE_RESULT_ERROR_INVALID_PARAMETER
-///         + nullptr == hMemAllocHandle
 ///         + nullptr == ptr
 ///         + unsupported allocation size
 ///         + unsupported alignment
@@ -326,11 +205,10 @@ xeMemAlloc(
 ///     - ::XE_RESULT_ERROR_OUT_OF_HOST_MEMORY
 ///     - ::XE_RESULT_ERROR_OUT_OF_DEVICE_MEMORY
 ///
-/// @hash {f2ceab5a53b2c88ef4d17b001d09cf385937bfef71f155e4844751ac93f1bf4f}
+/// @hash {1d6e17bf2c1a28348c73f66fed634fa8611c4ba0a55d2bbd3b66cd0ccd43d135}
 ///
 __xedllexport xe_result_t __xecall
 xeHostMemAlloc(
-    xe_mem_allocator_handle_t hMemAllocHandle,      ///< [in] handle of memory allocator for this allocation
     xe_host_mem_alloc_flag_t flags,                 ///< [in] flags specifying additional allocation controls
     size_t size,                                    ///< [in] size in bytes to allocate
     size_t alignment,                               ///< [in] minimum alignment in bytes for the allocation
@@ -343,14 +221,13 @@ xeHostMemAlloc(
         {
             // if( nullptr == driver ) return XE_RESULT_ERROR_UNINITIALIZED;
             // Check parameters
-            if( nullptr == hMemAllocHandle ) return XE_RESULT_ERROR_INVALID_PARAMETER;
             if( nullptr == ptr ) return XE_RESULT_ERROR_INVALID_PARAMETER;
         }
         /// @begin
 #if defined(XE_NULLDRV)
         return XE_RESULT_SUCCESS;
 #else
-        return L0::hostMemAlloc(hMemAllocHandle, flags, size, alignment, ptr);
+        return L0::hostMemAlloc(flags, size, alignment, ptr);
 #endif
         /// @end
     }
@@ -377,7 +254,6 @@ xeHostMemAlloc(
 ///       currently referencing the memory before it is freed
 ///     - The implementation of this function will immediately free all Host and
 ///       Device allocations associated with this memory
-///     - The implementation of this function should be lock-free.
 /// 
 /// @remarks
 ///   _Analogues_
@@ -389,15 +265,13 @@ xeHostMemAlloc(
 ///     - ::XE_RESULT_ERROR_UNINITIALIZED
 ///     - ::XE_RESULT_ERROR_DEVICE_LOST
 ///     - ::XE_RESULT_ERROR_INVALID_PARAMETER
-///         + nullptr == hMemAllocHandle
 ///         + nullptr == ptr
 ///     - ::XE_RESULT_ERROR_UNSUPPORTED
 ///
-/// @hash {6995e132992157fdad5d71e539141cbc0908cfd0a01322624ba3e9d1ffd763fd}
+/// @hash {f31f2669e6b64c981d8d808f22b3861f67eeda5515d908b5ef3f68fa0b978a76}
 ///
 __xedllexport xe_result_t __xecall
 xeMemFree(
-    xe_mem_allocator_handle_t hMemAllocHandle,      ///< [in] handle of memory allocator for this allocation
     const void* ptr                                 ///< [in] pointer to memory to free
     )
 {
@@ -407,14 +281,13 @@ xeMemFree(
         {
             // if( nullptr == driver ) return XE_RESULT_ERROR_UNINITIALIZED;
             // Check parameters
-            if( nullptr == hMemAllocHandle ) return XE_RESULT_ERROR_INVALID_PARAMETER;
             if( nullptr == ptr ) return XE_RESULT_ERROR_INVALID_PARAMETER;
         }
         /// @begin
 #if defined(XE_NULLDRV)
         return XE_RESULT_SUCCESS;
 #else
-        return L0::memFree(hMemAllocHandle, ptr);
+        return L0::memFree(ptr);
 #endif
         /// @end
     }
@@ -438,7 +311,6 @@ xeMemFree(
 /// 
 /// @details
 ///     - The application may call this function from simultaneous threads.
-///     - The implementation of this function should be lock-free.
 /// 
 /// @remarks
 ///   _Analogues_
@@ -449,16 +321,14 @@ xeMemFree(
 ///     - ::XE_RESULT_ERROR_UNINITIALIZED
 ///     - ::XE_RESULT_ERROR_DEVICE_LOST
 ///     - ::XE_RESULT_ERROR_INVALID_PARAMETER
-///         + nullptr == hMemAllocHandle
 ///         + nullptr == ptr
 ///         + nullptr == pMemProperties
 ///     - ::XE_RESULT_ERROR_UNSUPPORTED
 ///
-/// @hash {0c1705dc9d701a8acc9dcf5b03eb2e8ea26dc363a994c7892841e44a6c7e83a0}
+/// @hash {84370f3c7760a2035de32f9afeb5b566ebb950ce455fe2ecdb99e5bcf7765280}
 ///
 __xedllexport xe_result_t __xecall
 xeMemGetProperties(
-    xe_mem_allocator_handle_t hMemAllocHandle,      ///< [in] handle of memory allocator for this allocation
     const void* ptr,                                ///< [in] Pointer to query
     xe_memory_allocation_properties_t* pMemProperties   ///< [out] Query result for memory allocation properties
     )
@@ -469,7 +339,6 @@ xeMemGetProperties(
         {
             // if( nullptr == driver ) return XE_RESULT_ERROR_UNINITIALIZED;
             // Check parameters
-            if( nullptr == hMemAllocHandle ) return XE_RESULT_ERROR_INVALID_PARAMETER;
             if( nullptr == ptr ) return XE_RESULT_ERROR_INVALID_PARAMETER;
             if( nullptr == pMemProperties ) return XE_RESULT_ERROR_INVALID_PARAMETER;
         }
@@ -477,7 +346,7 @@ xeMemGetProperties(
 #if defined(XE_NULLDRV)
         return XE_RESULT_SUCCESS;
 #else
-        return L0::memGetProperties(hMemAllocHandle, ptr, pMemProperties);
+        return L0::memGetProperties(ptr, pMemProperties);
 #endif
         /// @end
     }
@@ -501,7 +370,6 @@ xeMemGetProperties(
 /// 
 /// @details
 ///     - The application may call this function from simultaneous threads.
-///     - The implementation of this function should be lock-free.
 /// 
 /// @remarks
 ///   _Analogues_
@@ -512,15 +380,13 @@ xeMemGetProperties(
 ///     - ::XE_RESULT_ERROR_UNINITIALIZED
 ///     - ::XE_RESULT_ERROR_DEVICE_LOST
 ///     - ::XE_RESULT_ERROR_INVALID_PARAMETER
-///         + nullptr == hMemAllocHandle
 ///         + nullptr == ptr
 ///     - ::XE_RESULT_ERROR_UNSUPPORTED
 ///
-/// @hash {674ca4659d3c7a33527c6aa498eabdf2a8532d1ecc1707e9374ecf5ebf5219ef}
+/// @hash {fd71df4f1ab1c85ed6c2aa71d5f7610e183f911da4b91620e510db3afe3e8a7f}
 ///
 __xedllexport xe_result_t __xecall
 xeMemGetAddressRange(
-    xe_mem_allocator_handle_t hMemAllocHandle,      ///< [in] handle of memory allocator for this allocation
     const void* ptr,                                ///< [in] Pointer to query
     void** pBase,                                   ///< [in,out][optional] base address of the allocation
     size_t* pSize                                   ///< [in,out][optional] size of the allocation
@@ -532,14 +398,13 @@ xeMemGetAddressRange(
         {
             // if( nullptr == driver ) return XE_RESULT_ERROR_UNINITIALIZED;
             // Check parameters
-            if( nullptr == hMemAllocHandle ) return XE_RESULT_ERROR_INVALID_PARAMETER;
             if( nullptr == ptr ) return XE_RESULT_ERROR_INVALID_PARAMETER;
         }
         /// @begin
 #if defined(XE_NULLDRV)
         return XE_RESULT_SUCCESS;
 #else
-        return L0::memGetAddressRange(hMemAllocHandle, ptr, pBase, pSize);
+        return L0::memGetAddressRange(ptr, pBase, pSize);
 #endif
         /// @end
     }
@@ -566,7 +431,6 @@ xeMemGetAddressRange(
 ///     - Takes a pointer to the base of a device memory allocation and exports
 ///       it for use in another process.
 ///     - The application may call this function from simultaneous threads.
-///     - The implementation of this function should be lock-free.
 /// 
 /// @remarks
 ///   _Analogues_
@@ -577,16 +441,14 @@ xeMemGetAddressRange(
 ///     - ::XE_RESULT_ERROR_UNINITIALIZED
 ///     - ::XE_RESULT_ERROR_DEVICE_LOST
 ///     - ::XE_RESULT_ERROR_INVALID_PARAMETER
-///         + nullptr == hMemAllocHandle
 ///         + nullptr == ptr
 ///         + nullptr == pIpcHandle
 ///     - ::XE_RESULT_ERROR_UNSUPPORTED
 ///
-/// @hash {b05b49f5ce22e128e73ca066bf16b7d9b0d6d5c7c360c9041811c0db939aeaba}
+/// @hash {585dead12b324b42d61a826c27087bff3757fae42fc4330167bdf00f40ebdab3}
 ///
 __xedllexport xe_result_t __xecall
 xeIpcGetMemHandle(
-    xe_mem_allocator_handle_t hMemAllocHandle,      ///< [in] handle of memory allocator for this allocation
     const void* ptr,                                ///< [in] Pointer to the device memory allocation
     xe_ipc_mem_handle_t* pIpcHandle                 ///< [out] Returned IPC memory handle
     )
@@ -597,7 +459,6 @@ xeIpcGetMemHandle(
         {
             // if( nullptr == driver ) return XE_RESULT_ERROR_UNINITIALIZED;
             // Check parameters
-            if( nullptr == hMemAllocHandle ) return XE_RESULT_ERROR_INVALID_PARAMETER;
             if( nullptr == ptr ) return XE_RESULT_ERROR_INVALID_PARAMETER;
             if( nullptr == pIpcHandle ) return XE_RESULT_ERROR_INVALID_PARAMETER;
         }
@@ -605,7 +466,7 @@ xeIpcGetMemHandle(
 #if defined(XE_NULLDRV)
         return XE_RESULT_SUCCESS;
 #else
-        return L0::ipcGetMemHandle(hMemAllocHandle, ptr, pIpcHandle);
+        return L0::ipcGetMemHandle(ptr, pIpcHandle);
 #endif
         /// @end
     }
@@ -634,7 +495,6 @@ xeIpcGetMemHandle(
 ///     - The device pointer in this process should not be freed with
 ///       ::xeMemFree, but rather with ::xeIpcCloseMemHandle.
 ///     - The application may call this function from simultaneous threads.
-///     - The implementation of this function should be lock-free.
 /// 
 /// @remarks
 ///   _Analogues_
@@ -645,18 +505,16 @@ xeIpcGetMemHandle(
 ///     - ::XE_RESULT_ERROR_UNINITIALIZED
 ///     - ::XE_RESULT_ERROR_DEVICE_LOST
 ///     - ::XE_RESULT_ERROR_INVALID_PARAMETER
-///         + nullptr == hMemAllocHandle
 ///         + nullptr == hDevice
 ///         + nullptr == handle
 ///         + nullptr == ptr
 ///         + invalid flags
 ///     - ::XE_RESULT_ERROR_UNSUPPORTED
 ///
-/// @hash {b81880e4766e54a7ec95bc1c35670d6197d46e5ac553160316faad314f7a59ba}
+/// @hash {0e37c65a263c2417b2dd960fd35019700d1242246e4c1f1a2efb384c5f2dbf44}
 ///
 __xedllexport xe_result_t __xecall
 xeIpcOpenMemHandle(
-    xe_mem_allocator_handle_t hMemAllocHandle,      ///< [in] handle of memory allocator for this allocation
     xe_device_handle_t hDevice,                     ///< [in] handle of the device to associate with the IPC memory handle
     xe_ipc_mem_handle_t handle,                     ///< [in] IPC memory handle
     xe_ipc_memory_flag_t flags,                     ///< [in] flags controlling the operation
@@ -669,7 +527,6 @@ xeIpcOpenMemHandle(
         {
             // if( nullptr == driver ) return XE_RESULT_ERROR_UNINITIALIZED;
             // Check parameters
-            if( nullptr == hMemAllocHandle ) return XE_RESULT_ERROR_INVALID_PARAMETER;
             if( nullptr == hDevice ) return XE_RESULT_ERROR_INVALID_PARAMETER;
             if( nullptr == handle ) return XE_RESULT_ERROR_INVALID_PARAMETER;
             if( nullptr == ptr ) return XE_RESULT_ERROR_INVALID_PARAMETER;
@@ -678,7 +535,7 @@ xeIpcOpenMemHandle(
 #if defined(XE_NULLDRV)
         return XE_RESULT_SUCCESS;
 #else
-        return L0::ipcOpenMemHandle(hMemAllocHandle, hDevice, handle, flags, ptr);
+        return L0::ipcOpenMemHandle(hDevice, handle, flags, ptr);
 #endif
         /// @end
     }
@@ -704,7 +561,6 @@ xeIpcOpenMemHandle(
 ///     - Closes an IPC memory handle by unmapping memory that was opened in
 ///       this process using ::xeIpcOpenMemHandle.
 ///     - The application may call this function from simultaneous threads.
-///     - The implementation of this function should be lock-free.
 /// 
 /// @remarks
 ///   _Analogues_
@@ -715,15 +571,13 @@ xeIpcOpenMemHandle(
 ///     - ::XE_RESULT_ERROR_UNINITIALIZED
 ///     - ::XE_RESULT_ERROR_DEVICE_LOST
 ///     - ::XE_RESULT_ERROR_INVALID_PARAMETER
-///         + nullptr == hMemAllocHandle
 ///         + nullptr == ptr
 ///     - ::XE_RESULT_ERROR_UNSUPPORTED
 ///
-/// @hash {393624ba03af311b28cec458da8b4789d05f7d3754dcf393c3c6dc9bb063bd45}
+/// @hash {426a1b963393017daf05d12da2351f29b3e011d7c52ca1e498c3bc3222e9ceca}
 ///
 __xedllexport xe_result_t __xecall
 xeIpcCloseMemHandle(
-    xe_mem_allocator_handle_t hMemAllocHandle,      ///< [in] handle of memory allocator for this allocation
     const void* ptr                                 ///< [in] pointer to device allocation in this process
     )
 {
@@ -733,14 +587,13 @@ xeIpcCloseMemHandle(
         {
             // if( nullptr == driver ) return XE_RESULT_ERROR_UNINITIALIZED;
             // Check parameters
-            if( nullptr == hMemAllocHandle ) return XE_RESULT_ERROR_INVALID_PARAMETER;
             if( nullptr == ptr ) return XE_RESULT_ERROR_INVALID_PARAMETER;
         }
         /// @begin
 #if defined(XE_NULLDRV)
         return XE_RESULT_SUCCESS;
 #else
-        return L0::ipcCloseMemHandle(hMemAllocHandle, ptr);
+        return L0::ipcCloseMemHandle(ptr);
 #endif
         /// @end
     }

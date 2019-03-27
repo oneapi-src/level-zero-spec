@@ -2,38 +2,6 @@
 type: header
 desc: "Intel $OneApi Level-Zero APIs for Memory"
 --- #--------------------------------------------------------------------------
-type: handle
-desc: "Handle to a memory allocator"
-name: "$x_mem_allocator_handle_t"
---- #--------------------------------------------------------------------------
-type: function
-desc: "Creates an handle to a memory allocator"
-class: $x
-name: CreateMemAllocator
-decl: static
-details:
-    - "Memory allocators store information about allocations."
-    - "The application may call this function from simultaneous threads."
-    - "The implementation of this function should be lock-free."
-params:
-    - type: $x_mem_allocator_handle_t*
-      name: phMemAllocHandle
-      desc: "[out] Returned memory allocator handle"
---- #--------------------------------------------------------------------------
-type: function
-desc: "Deletes a memory allocator"
-class: $x
-name: MemAllocatorDestroy
-decl: static
-details:
-    - "The application is responsible for making sure the GPU is not currently referencing any memory allocations associated with this allocator before it is deleted."
-    - "The implementation of this function will immediately free all memory allocations associated with this allocator."
-    - "The implementation of this function should be lock-free."
-params:
-    - type: $x_mem_allocator_handle_t
-      name: hMemAllocHandle
-      desc: "[in] handle of memory allocator to destroy"
---- #--------------------------------------------------------------------------
 type: enum
 desc: "Supported device memory allocation flags"
 name: $x_device_mem_alloc_flag_t
@@ -75,11 +43,7 @@ analogue:
 details:
     - "Shared allocations share ownership between the host and one or more devices."
     - "The application may call this function from simultaneous threads."
-    - "The implementation of this function should be lock-free."
 params:
-    - type: $x_mem_allocator_handle_t
-      name: hMemAllocHandle
-      desc: "[in] handle of memory allocator for this allocation"
     - type: "$x_device_handle_t"
       name: hDevice
       desc: "[in] handle of the device"
@@ -116,11 +80,7 @@ details:
     - "A device allocation is owned by a specific device."
     - "In general, a device allocation may only be accessed by the device that owns it."
     - "The application may call this function from simultaneous threads."
-    - "The implementation of this function should be lock-free."
 params:
-    - type: $x_mem_allocator_handle_t
-      name: hMemAllocHandle
-      desc: "[in] handle of memory allocator for this allocation"
     - type: "$x_device_handle_t"
       name: hDevice
       desc: "[in] handle of the device"
@@ -155,11 +115,7 @@ details:
     - "Host allocations are accessible by the host and all devices."
     - "Host allocations are frequently used as staging areas to transfer data to or from devices."
     - "The application may call this function from simultaneous threads."
-    - "The implementation of this function should be lock-free."
 params:
-    - type: $x_mem_allocator_handle_t
-      name: hMemAllocHandle
-      desc: "[in] handle of memory allocator for this allocation"
     - type: "$x_host_mem_alloc_flag_t"
       name: flags
       desc: "[in] flags specifying additional allocation controls"
@@ -190,11 +146,7 @@ analogue:
 details:
     - "The application is responsible for making sure the GPU is not currently referencing the memory before it is freed"
     - "The implementation of this function will immediately free all Host and Device allocations associated with this memory"
-    - "The implementation of this function should be lock-free."
 params:
-    - type: $x_mem_allocator_handle_t
-      name: hMemAllocHandle
-      desc: "[in] handle of memory allocator for this allocation"
     - type: "const void*"
       name: ptr
       desc: "[in] pointer to memory to free"
@@ -213,7 +165,7 @@ name: $x_memory_type_t
 etors:
     - name: $X_MEMORY_TYPE_UNKNOWN
       value: "0"
-      desc: "the memory pointed to was not allocated by allocator"
+      desc: "the memory pointed to is of unknown type"
     - name: $X_MEMORY_TYPE_HOST
       desc: "the memory pointed to is a host allocation"
     - name: $X_MEMORY_TYPE_DEVICE
@@ -232,6 +184,9 @@ members:
     - type: $x_memory_type_t
       name: type
       desc: "[out] Type of allocated memory"
+    - type: $x_device_handle_t
+      name: device
+      desc: "[out] Device handle associated with this allocation (optional)"
     - type: uint64_t
       name: id
       desc: "[out] Identifier for this allocation"
@@ -245,11 +200,7 @@ analogue:
     - "**cuPointerGetAttribute**"
 details:
     - "The application may call this function from simultaneous threads."
-    - "The implementation of this function should be lock-free."
 params:
-    - type: $x_mem_allocator_handle_t
-      name: hMemAllocHandle
-      desc: "[in] handle of memory allocator for this allocation"
     - type: "const void*"
       name: ptr
       desc: "[in] Pointer to query"
@@ -266,11 +217,7 @@ analogue:
     - "**cuMemGetAddressRange**"
 details:
     - "The application may call this function from simultaneous threads."
-    - "The implementation of this function should be lock-free."
 params:
-    - type: $x_mem_allocator_handle_t
-      name: hMemAllocHandle
-      desc: "[in] handle of memory allocator for this allocation"
     - type: "const void*"
       name: ptr
       desc: "[in] Pointer to query"
@@ -291,11 +238,7 @@ analogue:
 details:
     - "Takes a pointer to the base of a device memory allocation and exports it for use in another process."
     - "The application may call this function from simultaneous threads."
-    - "The implementation of this function should be lock-free."
 params:
-    - type: $x_mem_allocator_handle_t
-      name: hMemAllocHandle
-      desc: "[in] handle of memory allocator for this allocation"
     - type: "const void*"
       name: ptr
       desc: "[in] Pointer to the device memory allocation"
@@ -322,11 +265,7 @@ details:
     - "Takes an IPC memory handle from a sending process and associates it with a device pointer usable in this process."
     - "The device pointer in this process should not be freed with $xMemFree, but rather with $xIpcCloseMemHandle."
     - "The application may call this function from simultaneous threads."
-    - "The implementation of this function should be lock-free."
 params:
-    - type: $x_mem_allocator_handle_t
-      name: hMemAllocHandle
-      desc: "[in] handle of memory allocator for this allocation"
     - type: "$x_device_handle_t"
       name: hDevice
       desc: "[in] handle of the device to associate with the IPC memory handle"
@@ -353,11 +292,7 @@ analogue:
 details:
     - "Closes an IPC memory handle by unmapping memory that was opened in this process using $xIpcOpenMemHandle."
     - "The application may call this function from simultaneous threads."
-    - "The implementation of this function should be lock-free."
 params:
-    - type: $x_mem_allocator_handle_t
-      name: hMemAllocHandle
-      desc: "[in] handle of memory allocator for this allocation"
     - type: "const void*"
       name: ptr
       desc: "[in] pointer to device allocation in this process"

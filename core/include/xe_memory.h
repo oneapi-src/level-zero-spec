@@ -42,53 +42,6 @@ extern "C" {
 #endif
 
 ///////////////////////////////////////////////////////////////////////////////
-/// @brief Handle to a memory allocator
-typedef struct _xe_mem_allocator_handle_t *xe_mem_allocator_handle_t;
-
-///////////////////////////////////////////////////////////////////////////////
-/// @brief Creates an handle to a memory allocator
-/// 
-/// @details
-///     - Memory allocators store information about allocations.
-///     - The application may call this function from simultaneous threads.
-///     - The implementation of this function should be lock-free.
-/// 
-/// @returns
-///     - ::XE_RESULT_SUCCESS
-///     - ::XE_RESULT_ERROR_UNINITIALIZED
-///     - ::XE_RESULT_ERROR_DEVICE_LOST
-///     - ::XE_RESULT_ERROR_INVALID_PARAMETER
-///         + nullptr == phMemAllocHandle
-///     - ::XE_RESULT_ERROR_UNSUPPORTED
-__xedllport xe_result_t __xecall
-xeCreateMemAllocator(
-    xe_mem_allocator_handle_t* phMemAllocHandle     ///< [out] Returned memory allocator handle
-    );
-
-///////////////////////////////////////////////////////////////////////////////
-/// @brief Deletes a memory allocator
-/// 
-/// @details
-///     - The application is responsible for making sure the GPU is not
-///       currently referencing any memory allocations associated with this
-///       allocator before it is deleted.
-///     - The implementation of this function will immediately free all memory
-///       allocations associated with this allocator.
-///     - The implementation of this function should be lock-free.
-/// 
-/// @returns
-///     - ::XE_RESULT_SUCCESS
-///     - ::XE_RESULT_ERROR_UNINITIALIZED
-///     - ::XE_RESULT_ERROR_DEVICE_LOST
-///     - ::XE_RESULT_ERROR_INVALID_PARAMETER
-///         + nullptr == hMemAllocHandle
-///     - ::XE_RESULT_ERROR_UNSUPPORTED
-__xedllport xe_result_t __xecall
-xeMemAllocatorDestroy(
-    xe_mem_allocator_handle_t hMemAllocHandle       ///< [in] handle of memory allocator to destroy
-    );
-
-///////////////////////////////////////////////////////////////////////////////
 /// @brief Supported device memory allocation flags
 typedef enum _xe_device_mem_alloc_flag_t
 {
@@ -117,7 +70,6 @@ typedef enum _xe_host_mem_alloc_flag_t
 ///     - Shared allocations share ownership between the host and one or more
 ///       devices.
 ///     - The application may call this function from simultaneous threads.
-///     - The implementation of this function should be lock-free.
 /// 
 /// @remarks
 ///   _Analogues_
@@ -128,7 +80,6 @@ typedef enum _xe_host_mem_alloc_flag_t
 ///     - ::XE_RESULT_ERROR_UNINITIALIZED
 ///     - ::XE_RESULT_ERROR_DEVICE_LOST
 ///     - ::XE_RESULT_ERROR_INVALID_PARAMETER
-///         + nullptr == hMemAllocHandle
 ///         + nullptr == hDevice
 ///         + nullptr == ptr
 ///         + unsupported allocation size
@@ -138,7 +89,6 @@ typedef enum _xe_host_mem_alloc_flag_t
 ///     - ::XE_RESULT_ERROR_OUT_OF_DEVICE_MEMORY
 __xedllport xe_result_t __xecall
 xeSharedMemAlloc(
-    xe_mem_allocator_handle_t hMemAllocHandle,      ///< [in] handle of memory allocator for this allocation
     xe_device_handle_t hDevice,                     ///< [in] handle of the device
     xe_device_mem_alloc_flag_t device_flags,        ///< [in] flags specifying additional device allocation controls
     xe_host_mem_alloc_flag_t host_flags,            ///< [in] flags specifying additional host allocation controls
@@ -155,7 +105,6 @@ xeSharedMemAlloc(
 ///     - In general, a device allocation may only be accessed by the device
 ///       that owns it.
 ///     - The application may call this function from simultaneous threads.
-///     - The implementation of this function should be lock-free.
 /// 
 /// @remarks
 ///   _Analogues_
@@ -166,7 +115,6 @@ xeSharedMemAlloc(
 ///     - ::XE_RESULT_ERROR_UNINITIALIZED
 ///     - ::XE_RESULT_ERROR_DEVICE_LOST
 ///     - ::XE_RESULT_ERROR_INVALID_PARAMETER
-///         + nullptr == hMemAllocHandle
 ///         + nullptr == hDevice
 ///         + nullptr == ptr
 ///         + unsupported allocation size
@@ -176,7 +124,6 @@ xeSharedMemAlloc(
 ///     - ::XE_RESULT_ERROR_OUT_OF_DEVICE_MEMORY
 __xedllport xe_result_t __xecall
 xeMemAlloc(
-    xe_mem_allocator_handle_t hMemAllocHandle,      ///< [in] handle of memory allocator for this allocation
     xe_device_handle_t hDevice,                     ///< [in] handle of the device
     xe_device_mem_alloc_flag_t flags,               ///< [in] flags specifying additional allocation controls
     size_t size,                                    ///< [in] size in bytes to allocate
@@ -193,7 +140,6 @@ xeMemAlloc(
 ///     - Host allocations are frequently used as staging areas to transfer data
 ///       to or from devices.
 ///     - The application may call this function from simultaneous threads.
-///     - The implementation of this function should be lock-free.
 /// 
 /// @remarks
 ///   _Analogues_
@@ -204,7 +150,6 @@ xeMemAlloc(
 ///     - ::XE_RESULT_ERROR_UNINITIALIZED
 ///     - ::XE_RESULT_ERROR_DEVICE_LOST
 ///     - ::XE_RESULT_ERROR_INVALID_PARAMETER
-///         + nullptr == hMemAllocHandle
 ///         + nullptr == ptr
 ///         + unsupported allocation size
 ///         + unsupported alignment
@@ -213,7 +158,6 @@ xeMemAlloc(
 ///     - ::XE_RESULT_ERROR_OUT_OF_DEVICE_MEMORY
 __xedllport xe_result_t __xecall
 xeHostMemAlloc(
-    xe_mem_allocator_handle_t hMemAllocHandle,      ///< [in] handle of memory allocator for this allocation
     xe_host_mem_alloc_flag_t flags,                 ///< [in] flags specifying additional allocation controls
     size_t size,                                    ///< [in] size in bytes to allocate
     size_t alignment,                               ///< [in] minimum alignment in bytes for the allocation
@@ -228,7 +172,6 @@ xeHostMemAlloc(
 ///       currently referencing the memory before it is freed
 ///     - The implementation of this function will immediately free all Host and
 ///       Device allocations associated with this memory
-///     - The implementation of this function should be lock-free.
 /// 
 /// @remarks
 ///   _Analogues_
@@ -240,12 +183,10 @@ xeHostMemAlloc(
 ///     - ::XE_RESULT_ERROR_UNINITIALIZED
 ///     - ::XE_RESULT_ERROR_DEVICE_LOST
 ///     - ::XE_RESULT_ERROR_INVALID_PARAMETER
-///         + nullptr == hMemAllocHandle
 ///         + nullptr == ptr
 ///     - ::XE_RESULT_ERROR_UNSUPPORTED
 __xedllport xe_result_t __xecall
 xeMemFree(
-    xe_mem_allocator_handle_t hMemAllocHandle,      ///< [in] handle of memory allocator for this allocation
     const void* ptr                                 ///< [in] pointer to memory to free
     );
 
@@ -261,7 +202,7 @@ typedef enum _xe_memory_allocation_properties_version_t
 /// @brief Memory allocation type
 typedef enum _xe_memory_type_t
 {
-    XE_MEMORY_TYPE_UNKNOWN = 0,                     ///< the memory pointed to was not allocated by allocator
+    XE_MEMORY_TYPE_UNKNOWN = 0,                     ///< the memory pointed to is of unknown type
     XE_MEMORY_TYPE_HOST,                            ///< the memory pointed to is a host allocation
     XE_MEMORY_TYPE_DEVICE,                          ///< the memory pointed to is a device allocation
     XE_MEMORY_TYPE_SHARED,                          ///< the memory pointed to is a shared ownership allocation
@@ -274,6 +215,7 @@ typedef struct _xe_memory_allocation_properties_t
 {
     xe_memory_allocation_properties_version_t version;  ///< [in] ::XE_MEMORY_ALLOCATION_PROPERTIES_VERSION_CURRENT
     xe_memory_type_t type;                          ///< [out] Type of allocated memory
+    xe_device_handle_t device;                      ///< [out] Device handle associated with this allocation (optional)
     uint64_t id;                                    ///< [out] Identifier for this allocation
 
 } xe_memory_allocation_properties_t;
@@ -283,7 +225,6 @@ typedef struct _xe_memory_allocation_properties_t
 /// 
 /// @details
 ///     - The application may call this function from simultaneous threads.
-///     - The implementation of this function should be lock-free.
 /// 
 /// @remarks
 ///   _Analogues_
@@ -294,13 +235,11 @@ typedef struct _xe_memory_allocation_properties_t
 ///     - ::XE_RESULT_ERROR_UNINITIALIZED
 ///     - ::XE_RESULT_ERROR_DEVICE_LOST
 ///     - ::XE_RESULT_ERROR_INVALID_PARAMETER
-///         + nullptr == hMemAllocHandle
 ///         + nullptr == ptr
 ///         + nullptr == pMemProperties
 ///     - ::XE_RESULT_ERROR_UNSUPPORTED
 __xedllport xe_result_t __xecall
 xeMemGetProperties(
-    xe_mem_allocator_handle_t hMemAllocHandle,      ///< [in] handle of memory allocator for this allocation
     const void* ptr,                                ///< [in] Pointer to query
     xe_memory_allocation_properties_t* pMemProperties   ///< [out] Query result for memory allocation properties
     );
@@ -310,7 +249,6 @@ xeMemGetProperties(
 /// 
 /// @details
 ///     - The application may call this function from simultaneous threads.
-///     - The implementation of this function should be lock-free.
 /// 
 /// @remarks
 ///   _Analogues_
@@ -321,12 +259,10 @@ xeMemGetProperties(
 ///     - ::XE_RESULT_ERROR_UNINITIALIZED
 ///     - ::XE_RESULT_ERROR_DEVICE_LOST
 ///     - ::XE_RESULT_ERROR_INVALID_PARAMETER
-///         + nullptr == hMemAllocHandle
 ///         + nullptr == ptr
 ///     - ::XE_RESULT_ERROR_UNSUPPORTED
 __xedllport xe_result_t __xecall
 xeMemGetAddressRange(
-    xe_mem_allocator_handle_t hMemAllocHandle,      ///< [in] handle of memory allocator for this allocation
     const void* ptr,                                ///< [in] Pointer to query
     void** pBase,                                   ///< [in,out][optional] base address of the allocation
     size_t* pSize                                   ///< [in,out][optional] size of the allocation
@@ -340,7 +276,6 @@ xeMemGetAddressRange(
 ///     - Takes a pointer to the base of a device memory allocation and exports
 ///       it for use in another process.
 ///     - The application may call this function from simultaneous threads.
-///     - The implementation of this function should be lock-free.
 /// 
 /// @remarks
 ///   _Analogues_
@@ -351,13 +286,11 @@ xeMemGetAddressRange(
 ///     - ::XE_RESULT_ERROR_UNINITIALIZED
 ///     - ::XE_RESULT_ERROR_DEVICE_LOST
 ///     - ::XE_RESULT_ERROR_INVALID_PARAMETER
-///         + nullptr == hMemAllocHandle
 ///         + nullptr == ptr
 ///         + nullptr == pIpcHandle
 ///     - ::XE_RESULT_ERROR_UNSUPPORTED
 __xedllport xe_result_t __xecall
 xeIpcGetMemHandle(
-    xe_mem_allocator_handle_t hMemAllocHandle,      ///< [in] handle of memory allocator for this allocation
     const void* ptr,                                ///< [in] Pointer to the device memory allocation
     xe_ipc_mem_handle_t* pIpcHandle                 ///< [out] Returned IPC memory handle
     );
@@ -380,7 +313,6 @@ typedef enum _xe_ipc_memory_flag_t
 ///     - The device pointer in this process should not be freed with
 ///       ::xeMemFree, but rather with ::xeIpcCloseMemHandle.
 ///     - The application may call this function from simultaneous threads.
-///     - The implementation of this function should be lock-free.
 /// 
 /// @remarks
 ///   _Analogues_
@@ -391,7 +323,6 @@ typedef enum _xe_ipc_memory_flag_t
 ///     - ::XE_RESULT_ERROR_UNINITIALIZED
 ///     - ::XE_RESULT_ERROR_DEVICE_LOST
 ///     - ::XE_RESULT_ERROR_INVALID_PARAMETER
-///         + nullptr == hMemAllocHandle
 ///         + nullptr == hDevice
 ///         + nullptr == handle
 ///         + nullptr == ptr
@@ -399,7 +330,6 @@ typedef enum _xe_ipc_memory_flag_t
 ///     - ::XE_RESULT_ERROR_UNSUPPORTED
 __xedllport xe_result_t __xecall
 xeIpcOpenMemHandle(
-    xe_mem_allocator_handle_t hMemAllocHandle,      ///< [in] handle of memory allocator for this allocation
     xe_device_handle_t hDevice,                     ///< [in] handle of the device to associate with the IPC memory handle
     xe_ipc_mem_handle_t handle,                     ///< [in] IPC memory handle
     xe_ipc_memory_flag_t flags,                     ///< [in] flags controlling the operation
@@ -413,7 +343,6 @@ xeIpcOpenMemHandle(
 ///     - Closes an IPC memory handle by unmapping memory that was opened in
 ///       this process using ::xeIpcOpenMemHandle.
 ///     - The application may call this function from simultaneous threads.
-///     - The implementation of this function should be lock-free.
 /// 
 /// @remarks
 ///   _Analogues_
@@ -424,12 +353,10 @@ xeIpcOpenMemHandle(
 ///     - ::XE_RESULT_ERROR_UNINITIALIZED
 ///     - ::XE_RESULT_ERROR_DEVICE_LOST
 ///     - ::XE_RESULT_ERROR_INVALID_PARAMETER
-///         + nullptr == hMemAllocHandle
 ///         + nullptr == ptr
 ///     - ::XE_RESULT_ERROR_UNSUPPORTED
 __xedllport xe_result_t __xecall
 xeIpcCloseMemHandle(
-    xe_mem_allocator_handle_t hMemAllocHandle,      ///< [in] handle of memory allocator for this allocation
     const void* ptr                                 ///< [in] pointer to device allocation in this process
     );
 
