@@ -79,7 +79,7 @@ int main(int argc, char *argv[]) {
     if (verbose) {
         printDeviceProperties(device0Properties);
     } else {
-        std::cout << device0Properties.device_name << std::endl;
+        std::cout << device0Properties.name << std::endl;
     }
 
     {
