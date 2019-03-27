@@ -72,11 +72,6 @@ typedef xe_result_t (__xecall *pfn_xeDeviceCreateCommandList)(
     const xe_command_list_desc_t* desc,             ///< [in] pointer to command list descriptor
     xe_command_list_handle_t* phCommandList         ///< [out] pointer to handle of command list object created
     );
-typedef xe_result_t (__xecall *pfn_xeDeviceCopyCommandList)(
-    xe_device_handle_t hDevice,                     ///< [in] handle of the device object
-    xe_command_list_handle_t hCommandList,          ///< [in] handle to command list to copy
-    xe_command_list_handle_t* phCommandList         ///< [out] pointer to handle of command list object created
-    );
 typedef xe_result_t (__xecall *pfn_xeCommandListDestroy)(
     xe_command_list_handle_t hCommandList           ///< [in] handle of command list object to destroy
     );
@@ -98,11 +93,6 @@ typedef xe_result_t (__xecall *pfn_xeCommandListGetParameter)(
     );
 typedef xe_result_t (__xecall *pfn_xeCommandListResetParameters)(
     xe_command_list_handle_t hCommandList           ///< [in] handle of the command list
-    );
-typedef xe_result_t (__xecall *pfn_xeCommandListAppendCommandLists)(
-    xe_command_list_handle_t hCommandList,          ///< [in] handle of the command list
-    uint32_t numCommandLists,                       ///< [in] number of command lists to append
-    xe_command_list_handle_t* phCommandLists        ///< [in] list of handles of the command lists to append for execution
     );
 typedef xe_result_t (__xecall *pfn_xeCommandListReserveSpace)(
     xe_command_list_handle_t hCommandList,          ///< [in] handle of the command list
@@ -510,14 +500,12 @@ typedef struct _xe_dispatch_table_t
     pfn_xeDeviceRegisterCLCommandQueue xeDeviceRegisterCLCommandQueue;
 #endif // XE_ENABLE_OCL_INTEROP
     pfn_xeDeviceCreateCommandList xeDeviceCreateCommandList;
-    pfn_xeDeviceCopyCommandList xeDeviceCopyCommandList;
     pfn_xeCommandListDestroy xeCommandListDestroy;
     pfn_xeCommandListClose xeCommandListClose;
     pfn_xeCommandListReset xeCommandListReset;
     pfn_xeCommandListSetParameter xeCommandListSetParameter;
     pfn_xeCommandListGetParameter xeCommandListGetParameter;
     pfn_xeCommandListResetParameters xeCommandListResetParameters;
-    pfn_xeCommandListAppendCommandLists xeCommandListAppendCommandLists;
     pfn_xeCommandListReserveSpace xeCommandListReserveSpace;
     pfn_xeDeviceCreateCommandQueue xeDeviceCreateCommandQueue;
     pfn_xeCommandQueueDestroy xeCommandQueueDestroy;
@@ -614,14 +602,12 @@ inline bool load_xe(void *handle, void *(*funcAddressGetter)(void *handle, const
     outTable->xeDeviceRegisterCLCommandQueue = (pfn_xeDeviceRegisterCLCommandQueue)funcAddressGetter(handle, "xeDeviceRegisterCLCommandQueue");
 #endif // XE_ENABLE_OCL_INTEROP
     outTable->xeDeviceCreateCommandList = (pfn_xeDeviceCreateCommandList)funcAddressGetter(handle, "xeDeviceCreateCommandList");
-    outTable->xeDeviceCopyCommandList = (pfn_xeDeviceCopyCommandList)funcAddressGetter(handle, "xeDeviceCopyCommandList");
     outTable->xeCommandListDestroy = (pfn_xeCommandListDestroy)funcAddressGetter(handle, "xeCommandListDestroy");
     outTable->xeCommandListClose = (pfn_xeCommandListClose)funcAddressGetter(handle, "xeCommandListClose");
     outTable->xeCommandListReset = (pfn_xeCommandListReset)funcAddressGetter(handle, "xeCommandListReset");
     outTable->xeCommandListSetParameter = (pfn_xeCommandListSetParameter)funcAddressGetter(handle, "xeCommandListSetParameter");
     outTable->xeCommandListGetParameter = (pfn_xeCommandListGetParameter)funcAddressGetter(handle, "xeCommandListGetParameter");
     outTable->xeCommandListResetParameters = (pfn_xeCommandListResetParameters)funcAddressGetter(handle, "xeCommandListResetParameters");
-    outTable->xeCommandListAppendCommandLists = (pfn_xeCommandListAppendCommandLists)funcAddressGetter(handle, "xeCommandListAppendCommandLists");
     outTable->xeCommandListReserveSpace = (pfn_xeCommandListReserveSpace)funcAddressGetter(handle, "xeCommandListReserveSpace");
     outTable->xeDeviceCreateCommandQueue = (pfn_xeDeviceCreateCommandQueue)funcAddressGetter(handle, "xeDeviceCreateCommandQueue");
     outTable->xeCommandQueueDestroy = (pfn_xeCommandQueueDestroy)funcAddressGetter(handle, "xeCommandQueueDestroy");
@@ -722,9 +708,6 @@ inline bool load_xe(void *handle, void *(*funcAddressGetter)(void *handle, const
     if(0 == outTable->xeDeviceCreateCommandList){
         return false;
     }
-    if(0 == outTable->xeDeviceCopyCommandList){
-        return false;
-    }
     if(0 == outTable->xeCommandListDestroy){
         return false;
     }
@@ -741,9 +724,6 @@ inline bool load_xe(void *handle, void *(*funcAddressGetter)(void *handle, const
         return false;
     }
     if(0 == outTable->xeCommandListResetParameters){
-        return false;
-    }
-    if(0 == outTable->xeCommandListAppendCommandLists){
         return false;
     }
     if(0 == outTable->xeCommandListReserveSpace){

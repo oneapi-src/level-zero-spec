@@ -101,37 +101,6 @@ xeDeviceCreateCommandList(
     );
 
 ///////////////////////////////////////////////////////////////////////////////
-/// @brief Copies a command list on the device for submitting commands to any
-///        command queue.
-/// 
-/// @details
-///     - The command list to be copied must be closed.
-///     - The command list created will be in the 'open' state.
-///     - If the device is a different than the one used to create the source
-///       command list, then it must have been created using the
-///       ::XE_COMMAND_LIST_FLAG_CROSS_DEVICE flag.
-///     - This function may be called from simultaneous threads.
-///     - The implementation of this function should be lock-free.
-/// 
-/// @returns
-///     - ::XE_RESULT_SUCCESS
-///     - ::XE_RESULT_ERROR_UNINITIALIZED
-///     - ::XE_RESULT_ERROR_DEVICE_LOST
-///     - ::XE_RESULT_ERROR_INVALID_PARAMETER
-///         + nullptr == hDevice
-///         + nullptr == hCommandList
-///         + nullptr == phCommandList
-///     - ::XE_RESULT_ERROR_UNSUPPORTED
-///     - ::XE_RESULT_ERROR_OUT_OF_HOST_MEMORY
-///     - ::XE_RESULT_ERROR_OUT_OF_DEVICE_MEMORY
-__xedllport xe_result_t __xecall
-xeDeviceCopyCommandList(
-    xe_device_handle_t hDevice,                     ///< [in] handle of the device object
-    xe_command_list_handle_t hCommandList,          ///< [in] handle to command list to copy
-    xe_command_list_handle_t* phCommandList         ///< [out] pointer to handle of command list object created
-    );
-
-///////////////////////////////////////////////////////////////////////////////
 /// @brief Destroys a command list.
 /// 
 /// @details
@@ -283,32 +252,6 @@ xeCommandListGetParameter(
 __xedllport xe_result_t __xecall
 xeCommandListResetParameters(
     xe_command_list_handle_t hCommandList           ///< [in] handle of the command list
-    );
-
-///////////////////////////////////////////////////////////////////////////////
-/// @brief Append a command list into another command list.
-/// 
-/// @details
-///     - All command lists appended must have been created with compatible
-///       ::xe_command_list_flag_t values.
-///     - The application may **not** call this function from simultaneous
-///       threads with the same command list handle.
-///     - The implementation of this function should be lock-free.
-/// 
-/// @returns
-///     - ::XE_RESULT_SUCCESS
-///     - ::XE_RESULT_ERROR_UNINITIALIZED
-///     - ::XE_RESULT_ERROR_DEVICE_LOST
-///     - ::XE_RESULT_ERROR_INVALID_PARAMETER
-///         + nullptr == hCommandList
-///         + nullptr == phCommandLists
-///         + 0 for numCommandLists
-///     - ::XE_RESULT_ERROR_UNSUPPORTED
-__xedllport xe_result_t __xecall
-xeCommandListAppendCommandLists(
-    xe_command_list_handle_t hCommandList,          ///< [in] handle of the command list
-    uint32_t numCommandLists,                       ///< [in] number of command lists to append
-    xe_command_list_handle_t* phCommandLists        ///< [in] list of handles of the command lists to append for execution
     );
 
 ///////////////////////////////////////////////////////////////////////////////

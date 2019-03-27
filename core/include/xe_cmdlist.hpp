@@ -159,15 +159,6 @@ namespace xe
             );
 
         ///////////////////////////////////////////////////////////////////////////////
-        /// @brief C++ wrapper for ::xeCommandListAppendCommandLists
-        /// @throws result_t
-        inline void
-        AppendCommandLists(
-            uint32_t numCommandLists,                       ///< [in] number of command lists to append
-            command_list_handle_t* phCommandLists           ///< [in] list of handles of the command lists to append for execution
-            );
-
-        ///////////////////////////////////////////////////////////////////////////////
         /// @brief C++ wrapper for ::xeCommandListReserveSpace
         /// @returns
         ///     - void*: pointer to command buffer space reserved

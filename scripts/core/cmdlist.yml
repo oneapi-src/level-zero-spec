@@ -69,31 +69,6 @@ returns:
     - $X_RESULT_ERROR_OUT_OF_DEVICE_MEMORY
 --- #--------------------------------------------------------------------------
 type: function
-desc: "Copies a command list on the device for submitting commands to any command queue."
-class: $xDevice
-name: CopyCommandList
-details:
-    - "The command list to be copied must be closed."
-    - "The command list created will be in the 'open' state."
-    - "If the device is a different than the one used to create the source command list,
-      then it must have been created using the $X_COMMAND_LIST_FLAG_CROSS_DEVICE flag."
-    - "This function may be called from simultaneous threads."
-    - "The implementation of this function should be lock-free."
-params:
-    - type: $x_device_handle_t
-      name: hDevice
-      desc: "[in] handle of the device object"
-    - type: $x_command_list_handle_t
-      name: hCommandList
-      desc: "[in] handle to command list to copy"
-    - type: "$x_command_list_handle_t*"
-      name: phCommandList
-      desc: "[out] pointer to handle of command list object created"
-returns:
-    - $X_RESULT_ERROR_OUT_OF_HOST_MEMORY
-    - $X_RESULT_ERROR_OUT_OF_DEVICE_MEMORY
---- #--------------------------------------------------------------------------
-type: function
 desc: "Destroys a command list."
 class: $xCommandList
 name: Destroy
@@ -202,28 +177,6 @@ params:
     - type: $x_command_list_handle_t
       name: hCommandList
       desc: "[in] handle of the command list"
---- #--------------------------------------------------------------------------
-type: function
-desc: "Append a command list into another command list."
-class: $xCommandList
-name: AppendCommandLists
-details:
-    - "All command lists appended must have been created with compatible $x_command_list_flag_t values."
-    - "The application may **not** call this function from simultaneous threads with the same command list handle."
-    - "The implementation of this function should be lock-free."
-params:
-    - type: $x_command_list_handle_t
-      name: hCommandList
-      desc: "[in] handle of the command list"
-    - type: uint32_t
-      name: numCommandLists
-      desc: "[in] number of command lists to append"
-    - type: "$x_command_list_handle_t*"
-      name: phCommandLists
-      desc: "[in] list of handles of the command lists to append for execution"
-returns:
-    - $X_RESULT_ERROR_INVALID_PARAMETER:
-       - "0 for numCommandLists"
 --- #--------------------------------------------------------------------------
 type: function
 desc: "Reserve a section of contiguous command buffer space within the command list."

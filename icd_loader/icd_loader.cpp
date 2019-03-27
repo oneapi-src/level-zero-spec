@@ -129,16 +129,6 @@ xe_result_t __xecall xeDeviceCreateCommandList(
     }
     return dispatchTable.xeDeviceCreateCommandList(hDevice, desc, phCommandList);
 }
-xe_result_t __xecall xeDeviceCopyCommandList(
-        xe_device_handle_t hDevice,                     ///< [in] handle of the device object
-        xe_command_list_handle_t hCommandList,          ///< [in] handle to command list to copy
-        xe_command_list_handle_t* phCommandList         ///< [out] pointer to handle of command list object created
-    ){
-    if(dispatchTableInitialized == false){
-        return XE_RESULT_ERROR_UNINITIALIZED;
-    }
-    return dispatchTable.xeDeviceCopyCommandList(hDevice, hCommandList, phCommandList);
-}
 xe_result_t __xecall xeCommandListDestroy(
         xe_command_list_handle_t hCommandList           ///< [in] handle of command list object to destroy
     ){
@@ -190,16 +180,6 @@ xe_result_t __xecall xeCommandListResetParameters(
         return XE_RESULT_ERROR_UNINITIALIZED;
     }
     return dispatchTable.xeCommandListResetParameters(hCommandList);
-}
-xe_result_t __xecall xeCommandListAppendCommandLists(
-        xe_command_list_handle_t hCommandList,          ///< [in] handle of the command list
-        uint32_t numCommandLists,                       ///< [in] number of command lists to append
-        xe_command_list_handle_t* phCommandLists        ///< [in] list of handles of the command lists to append for execution
-    ){
-    if(dispatchTableInitialized == false){
-        return XE_RESULT_ERROR_UNINITIALIZED;
-    }
-    return dispatchTable.xeCommandListAppendCommandLists(hCommandList, numCommandLists, phCommandLists);
 }
 xe_result_t __xecall xeCommandListReserveSpace(
         xe_command_list_handle_t hCommandList,          ///< [in] handle of the command list

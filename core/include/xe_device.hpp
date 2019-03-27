@@ -513,17 +513,6 @@ namespace xe
             );
 
         ///////////////////////////////////////////////////////////////////////////////
-        /// @brief C++ wrapper for ::xeDeviceCopyCommandList
-        /// @returns
-        ///     - ::command_list_handle_t: pointer to handle of command list object created
-        /// 
-        /// @throws result_t
-        inline command_list_handle_t
-        CopyCommandList(
-            command_list_handle_t hCommandList              ///< [in] handle to command list to copy
-            );
-
-        ///////////////////////////////////////////////////////////////////////////////
         /// @brief C++ wrapper for ::xeDeviceCreateCommandQueue
         /// @returns
         ///     - ::command_queue_handle_t: pointer to handle of command queue object created

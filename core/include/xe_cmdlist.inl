@@ -193,27 +193,6 @@ namespace xe
     }
 
     ///////////////////////////////////////////////////////////////////////////////
-    /// @brief C++ wrapper for ::xeCommandListAppendCommandLists
-    /// 
-    /// @details
-    ///     - All command lists appended must have been created with compatible
-    ///       ::command_list_flag_t values.
-    ///     - The application may **not** call this function from simultaneous
-    ///       threads with the same command list handle.
-    ///     - The implementation of this function should be lock-free.
-    /// 
-    /// @throws result_t
-    inline void 
-    CommandList::AppendCommandLists(
-        uint32_t numCommandLists,                       ///< [in] number of command lists to append
-        command_list_handle_t* phCommandLists           ///< [in] list of handles of the command lists to append for execution
-        )
-    {
-        // auto result = ::xeCommandListAppendCommandLists( handle, numCommandLists, phCommandLists );
-        // if( ::XE_RESULT_SUCCESS != result ) throw exception(result, "xe::CommandList::AppendCommandLists");
-    }
-
-    ///////////////////////////////////////////////////////////////////////////////
     /// @brief C++ wrapper for ::xeCommandListReserveSpace
     /// 
     /// @details

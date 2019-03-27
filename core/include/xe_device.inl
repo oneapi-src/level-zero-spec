@@ -117,31 +117,6 @@ namespace xe
     }
 
     ///////////////////////////////////////////////////////////////////////////////
-    /// @brief C++ wrapper for ::xeDeviceCopyCommandList
-    /// 
-    /// @details
-    ///     - The command list to be copied must be closed.
-    ///     - The command list created will be in the 'open' state.
-    ///     - If the device is a different than the one used to create the source
-    ///       command list, then it must have been created using the
-    ///       ::COMMAND_LIST_FLAG_CROSS_DEVICE flag.
-    ///     - This function may be called from simultaneous threads.
-    ///     - The implementation of this function should be lock-free.
-    /// 
-    /// @returns
-    ///     - ::command_list_handle_t: pointer to handle of command list object created
-    /// 
-    /// @throws result_t
-    inline command_list_handle_t 
-    Device::CopyCommandList(
-        command_list_handle_t hCommandList              ///< [in] handle to command list to copy
-        )
-    {
-        // auto result = ::xeDeviceCopyCommandList( handle, hCommandList );
-        // if( ::XE_RESULT_SUCCESS != result ) throw exception(result, "xe::Device::CopyCommandList");
-    }
-
-    ///////////////////////////////////////////////////////////////////////////////
     /// @brief C++ wrapper for ::xeDeviceCreateCommandQueue
     /// 
     /// @details
