@@ -80,7 +80,7 @@ members:
       init: $X_COMMAND_QUEUE_PRIORITY_NORMAL
     - type: uint32_t
       name: ordinal
-      desc: "[in] if logical-only flag is set, then must be 0;
+      desc: "[in] if logical-only flag is set, then will be ignored;
             else-if copy-only flag is set, then must be less than $x_device_properties_t.numAsyncCopyEngines;
             otherwise must be less than $x_device_properties_t.numAsyncComputeEngines. When using sub-devices
             the $x_device_properties_t.numAsyncComputeEngines must be queried from the sub-device being used."

@@ -304,8 +304,8 @@ namespace xe
             command_queue_flag_t flags = command_queue_flag_t::NONE;///< [in] creation flags
             command_queue_mode_t mode = command_queue_mode_t::DEFAULT;  ///< [in] operation mode
             command_queue_priority_t priority = command_queue_priority_t::NORMAL;   ///< [in] priority
-            uint32_t ordinal = 0;                           ///< [in] if logical-only flag is set, then must be 0; else-if copy-only
-                                                            ///< flag is set, then must be less than
+            uint32_t ordinal = 0;                           ///< [in] if logical-only flag is set, then will be ignored; else-if
+                                                            ///< copy-only flag is set, then must be less than
                                                             ///< ::device_properties_t.numAsyncCopyEngines; otherwise must be less than
                                                             ///< ::device_properties_t.numAsyncComputeEngines. When using sub-devices
                                                             ///< the ::device_properties_t.numAsyncComputeEngines must be queried from
