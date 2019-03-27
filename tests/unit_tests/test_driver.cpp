@@ -1,5 +1,6 @@
 #include "mock_driver.h"
 #include "gmock/gmock.h"
+#include "runtime/os_interface/debug_settings_manager.h"
 
 using ::testing::Return;
 
@@ -40,6 +41,28 @@ TEST(xeDriverGetDevice, returnsSuccess) {
                                     &deviceHandle);
     EXPECT_EQ(XE_RESULT_SUCCESS, result);
     EXPECT_NE(nullptr, deviceHandle);
+}
+
+TEST(xeDriverGetDeviceCount, DefaultDeviceCount) {
+    uint32_t count = 0;
+    auto ret = xeDriverGetDeviceCount(&count);
+
+    EXPECT_EQ(XE_RESULT_SUCCESS, ret);
+    EXPECT_EQ(1, count);
+}
+
+TEST(xeDriverGetDeviceUniqueIds, DefaultDeviceUniqueIds) {
+    uint32_t count = 0;
+    auto ret = xeDriverGetDeviceCount(&count);
+
+    EXPECT_EQ(XE_RESULT_SUCCESS, ret);
+    EXPECT_EQ(1, count);
+
+    xe_device_uuid_t *uniqueIds = new xe_device_uuid_t[count]();
+    xeDriverGetDeviceUniqueIds(count, uniqueIds);
+    for (int i = 0; i < count; i++) {
+        EXPECT_EQ(i, uniqueIds[i].id[0]);
+    }
 }
 
 } // namespace ult

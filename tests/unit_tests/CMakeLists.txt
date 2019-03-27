@@ -38,6 +38,7 @@ add_executable(${TARGET_NAME}
     test_cmdqueue_enqueuecommandlist.cpp
     test_device.cpp
     test_driver.cpp
+    test_multidev.cpp
     test_encode_flush.cpp
     test_encode_l3state.cpp
     test_encode_set_mmio.cpp
