@@ -112,12 +112,12 @@ typedef enum _xet_metric_group_properties_version_t
 typedef struct _xet_metric_group_properties
 {
     xet_metric_group_properties_version_t version;  ///< [in] ::XET_METRIC_GROUP_PROPERTIES_VERSION_CURRENT
+    char name[XET_MAX_METRIC_GROUP_NAME];           ///< [out] metric group name
+    char description[XET_MAX_METRIC_GROUP_DESCRIPTION]; ///< [out] metric group description
     xet_metric_group_sampling_type samplingType;    ///< [out]
     uint32_t domain;                                ///< [out] cannot use simultaneous metric groups from different domains
     uint32_t numMetrics;                            ///< [out] number of metrics in the group
     size_t sizeMetrics;                             ///< [out] size in bytes of the metrics in the group
-    char name[XET_MAX_METRIC_GROUP_NAME];           ///< [out] metric group name
-    char description[XET_MAX_METRIC_GROUP_DESCRIPTION]; ///< [out] metric group description
 
 } xet_metric_group_properties;
 
@@ -148,11 +148,34 @@ typedef enum _xet_metric_properties_version_t
 } xet_metric_properties_version_t;
 
 ///////////////////////////////////////////////////////////////////////////////
+/// @brief Maximum metric group name string size
+#define XET_MAX_METRIC_NAME  256
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Maximum metric group description name string size
+#define XET_MAX_METRIC_DESCRIPTION  256
+
+///////////////////////////////////////////////////////////////////////////////
+typedef enum _xet_metric_t
+{
+
+} xet_metric_t;
+
+///////////////////////////////////////////////////////////////////////////////
+typedef enum _xet_metric_value_t
+{
+
+} xet_metric_value_t;
+
+///////////////////////////////////////////////////////////////////////////////
 /// @brief Device metric group properties queried using
 ///        ::xetDeviceGetMetricGroupProperties
 typedef struct _xet_metric_properties
 {
     xet_metric_properties_version_t version;        ///< [in] ::XET_METRIC_PROPERTIES_VERSION_CURRENT
+    char name[XET_MAX_METRIC_NAME];                 ///< [out] metric name
+    char description[XET_MAX_METRIC_DESCRIPTION];   ///< metric description
+    char component[XET_MAX_METRIC_NAME];            ///< metric device component
 
 } xet_metric_properties;
 

@@ -72,16 +72,30 @@ namespace xet
         };
 
         ///////////////////////////////////////////////////////////////////////////////
+        /// @brief C++ version for ::xet_metric_t
+        enum class metric_t
+        {
+
+        };
+
+        ///////////////////////////////////////////////////////////////////////////////
+        /// @brief C++ version for ::xet_metric_value_t
+        enum class metric_value_t
+        {
+
+        };
+
+        ///////////////////////////////////////////////////////////////////////////////
         /// @brief C++ version for ::xet_metric_group_properties
         struct metric_group_properties
         {
             metric_group_properties_version_t version = metric_group_properties_version_t::CURRENT; ///< [in] ::METRIC_GROUP_PROPERTIES_VERSION_CURRENT
+            char name[XET_MAX_METRIC_GROUP_NAME];           ///< [out] metric group name
+            char description[XET_MAX_METRIC_GROUP_DESCRIPTION]; ///< [out] metric group description
             metric_group_sampling_type samplingType;        ///< [out]
             uint32_t domain;                                ///< [out] cannot use simultaneous metric groups from different domains
             uint32_t numMetrics;                            ///< [out] number of metrics in the group
             size_t sizeMetrics;                             ///< [out] size in bytes of the metrics in the group
-            char name[XET_MAX_METRIC_GROUP_NAME];           ///< [out] metric group name
-            char description[XET_MAX_METRIC_GROUP_DESCRIPTION]; ///< [out] metric group description
 
         };
 
@@ -90,6 +104,9 @@ namespace xet
         struct metric_properties
         {
             metric_properties_version_t version = metric_properties_version_t::CURRENT; ///< [in] ::METRIC_PROPERTIES_VERSION_CURRENT
+            char name[XET_MAX_METRIC_NAME];                 ///< [out] metric name
+            char description[XET_MAX_METRIC_DESCRIPTION];   ///< metric description
+            char component[XET_MAX_METRIC_NAME];            ///< metric device component
 
         };
 

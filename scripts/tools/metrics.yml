@@ -84,6 +84,12 @@ members:
       name: version
       desc: "[in] $T_METRIC_GROUP_PROPERTIES_VERSION_CURRENT"
       init: $T_METRIC_GROUP_PROPERTIES_VERSION_CURRENT
+    - type: char
+      name: "name[$T_MAX_METRIC_GROUP_NAME]"
+      desc: "[out] metric group name"
+    - type: char
+      name: "description[$T_MAX_METRIC_GROUP_DESCRIPTION]"
+      desc: "[out] metric group description"
     - type: $t_metric_group_sampling_type
       name: samplingType
       desc: "[out]"
@@ -96,12 +102,6 @@ members:
     - type: size_t
       name: sizeMetrics
       desc: "[out] size in bytes of the metrics in the group"
-    - type: char
-      name: "name[$T_MAX_METRIC_GROUP_NAME]"
-      desc: "[out] metric group name"
-    - type: char
-      name: "description[$T_MAX_METRIC_GROUP_DESCRIPTION]"
-      desc: "[out] metric group description"
 --- #--------------------------------------------------------------------------
 type: function
 desc: "Retrieves properties of the metric group"
@@ -128,6 +128,46 @@ etors:
       value: "$X_MAKE_VERSION( 1, 0 )"
       desc: "version 1.0"
 --- #--------------------------------------------------------------------------
+type: macro
+desc: "Maximum metric group name string size"
+name: $T_MAX_METRIC_NAME
+value: "256"
+--- #--------------------------------------------------------------------------
+type: macro
+desc: "Maximum metric group description name string size"
+name: $T_MAX_METRIC_DESCRIPTION
+value: "256"
+--- #--------------------------------------------------------------------------
+type: enum
+desc: ""
+class: $tDevice
+name: $t_metric_t
+etors:
+    - name: $T_METRIC_RATIO
+      desc: ""
+    - name: $T_METRIC_DURATION
+      desc: ""
+    - name: $T_METRIC_EVEN
+      desc: ""
+    - name: $T_METRIC_THROUGHPUT
+      desc: ""
+    - name: $T_METRIC_TIMESTAMP
+      desc: ""
+--- #--------------------------------------------------------------------------
+type: enum
+desc: ""
+class: $tDevice
+name: $t_metric_value_t
+etors:
+    - name: $T_METRIC_VALUE_UINT32
+      desc: ""
+    - name: $T_METRIC_VALUE_UINT64
+      desc: ""
+    - name: $T_METRIC_VALUE_FLOAT32
+      desc: ""
+    - name: $T_METRIC_VALUE_BOOL32
+      desc: ""
+--- #--------------------------------------------------------------------------
 type: struct
 desc: "Device metric group properties queried using $tDeviceGetMetricGroupProperties"
 class: $tDevice
@@ -137,6 +177,27 @@ members:
       name: version
       desc: "[in] $T_METRIC_PROPERTIES_VERSION_CURRENT"
       init: $T_METRIC_PROPERTIES_VERSION_CURRENT
+    - type: char
+      name: "name[$T_MAX_METRIC_NAME]"
+      desc: "[out] metric name"
+    - type: char
+      name: "description[$T_MAX_METRIC_DESCRIPTION]"
+      desc: "metric description"
+    - type: char
+      name: "component[$T_MAX_METRIC_NAME]"
+      desc: "metric device component"
+    - type: uint32_t
+      name: tierNumber
+      desc: ""
+    - type: $t_metric_t
+      name: type
+      desc: ""
+    - type: $t_metric_value_t
+      name: value
+      desc: ""
+    - type: char
+      name: "units[$T_MAX_METRIC_NAME]"
+      desc: ""
 --- #--------------------------------------------------------------------------
 type: function
 desc: ""

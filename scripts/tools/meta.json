@@ -25,7 +25,9 @@
             "enum": [
                 "$t_metric_group_sampling_type",
                 "$t_metric_group_properties_version_t",
-                "$t_metric_properties_version_t"
+                "$t_metric_properties_version_t",
+                "$t_metric_t",
+                "$t_metric_value_t"
             ],
             "function": [
                 "GetMetricGroupCount",
@@ -304,6 +306,19 @@
         ],
         "$t_metric_properties_version_t": [
             "$T_METRIC_PROPERTIES_VERSION_CURRENT"
+        ],
+        "$t_metric_t": [
+            "$T_METRIC_RATIO",
+            "$T_METRIC_DURATION",
+            "$T_METRIC_EVEN",
+            "$T_METRIC_THROUGHPUT",
+            "$T_METRIC_TIMESTAMP"
+        ],
+        "$t_metric_value_t": [
+            "$T_METRIC_VALUE_UINT32",
+            "$T_METRIC_VALUE_UINT64",
+            "$T_METRIC_VALUE_FLOAT32",
+            "$T_METRIC_VALUE_BOOL32"
         ],
         "$x_api_version_t": [
             "$X_API_VERSION_1_0"
@@ -1018,10 +1033,16 @@
         ]
     },
     "macro": {
+        "$T_MAX_METRIC_DESCRIPTION": [
+            "256"
+        ],
         "$T_MAX_METRIC_GROUP_DESCRIPTION": [
             "256"
         ],
         "$T_MAX_METRIC_GROUP_NAME": [
+            "256"
+        ],
+        "$T_MAX_METRIC_NAME": [
             "256"
         ],
         "$X_API_HEADER_VERSION": [
@@ -1075,15 +1096,22 @@
         ],
         "$t_metric_group_properties": [
             "$t_metric_group_properties_version_t",
+            "char",
+            "char",
             "$t_metric_group_sampling_type",
             "uint32_t",
             "uint32_t",
-            "size_t",
-            "char",
-            "char"
+            "size_t"
         ],
         "$t_metric_properties": [
-            "$t_metric_properties_version_t"
+            "$t_metric_properties_version_t",
+            "char",
+            "char",
+            "char",
+            "uint32_t",
+            "$t_metric_t",
+            "$t_metric_value_t",
+            "char"
         ],
         "$x_command_list_desc_t": [
             "$x_command_list_desc_version_t",

@@ -171,6 +171,16 @@
                         "type": "$t_metric_group_properties_version_t"
                     },
                     {
+                        "desc": "[out] metric group name",
+                        "name": "name[$T_MAX_METRIC_GROUP_NAME]",
+                        "type": "char"
+                    },
+                    {
+                        "desc": "[out] metric group description",
+                        "name": "description[$T_MAX_METRIC_GROUP_DESCRIPTION]",
+                        "type": "char"
+                    },
+                    {
                         "desc": "[out]",
                         "name": "samplingType",
                         "type": "$t_metric_group_sampling_type"
@@ -189,16 +199,6 @@
                         "desc": "[out] size in bytes of the metrics in the group",
                         "name": "sizeMetrics",
                         "type": "size_t"
-                    },
-                    {
-                        "desc": "[out] metric group name",
-                        "name": "name[$T_MAX_METRIC_GROUP_NAME]",
-                        "type": "char"
-                    },
-                    {
-                        "desc": "[out] metric group description",
-                        "name": "description[$T_MAX_METRIC_GROUP_DESCRIPTION]",
-                        "type": "char"
                     }
                 ],
                 "name": "$t_metric_group_properties",
@@ -244,6 +244,74 @@
                 "type": "enum"
             },
             {
+                "desc": "Maximum metric group name string size",
+                "hash": null,
+                "name": "$T_MAX_METRIC_NAME",
+                "type": "macro",
+                "value": "256"
+            },
+            {
+                "desc": "Maximum metric group description name string size",
+                "hash": null,
+                "name": "$T_MAX_METRIC_DESCRIPTION",
+                "type": "macro",
+                "value": "256"
+            },
+            {
+                "class": "$tDevice",
+                "desc": "",
+                "etors": [
+                    {
+                        "desc": "",
+                        "name": "$T_METRIC_RATIO"
+                    },
+                    {
+                        "desc": "",
+                        "name": "$T_METRIC_DURATION"
+                    },
+                    {
+                        "desc": "",
+                        "name": "$T_METRIC_EVEN"
+                    },
+                    {
+                        "desc": "",
+                        "name": "$T_METRIC_THROUGHPUT"
+                    },
+                    {
+                        "desc": "",
+                        "name": "$T_METRIC_TIMESTAMP"
+                    }
+                ],
+                "hash": null,
+                "name": "$t_metric_t",
+                "type": "enum"
+            },
+            {
+                "class": "$tDevice",
+                "desc": "",
+                "etors": [
+                    {
+                        "desc": "",
+                        "name": "$T_METRIC_VALUE_UINT32"
+                    },
+                    {
+                        "desc": "",
+                        "name": "$T_METRIC_VALUE_UINT64"
+                    },
+                    {
+                        "desc": "",
+                        "name": "$T_METRIC_VALUE_FLOAT32"
+                    },
+                    {
+                        "desc": "",
+                        "name": "$T_METRIC_VALUE_BOOL32"
+                    }
+                ],
+                "hash": null,
+                "name": "$t_metric_value_t",
+                "type": "enum"
+            },
+            {
                 "class": "$tDevice",
                 "desc": "Device metric group properties queried using $tDeviceGetMetricGroupProperties",
                 "hash": null,
@@ -253,6 +321,41 @@
                         "init": "$T_METRIC_PROPERTIES_VERSION_CURRENT",
                         "name": "version",
                         "type": "$t_metric_properties_version_t"
+                    },
+                    {
+                        "desc": "[out] metric name",
+                        "name": "name[$T_MAX_METRIC_NAME]",
+                        "type": "char"
+                    },
+                    {
+                        "desc": "metric description",
+                        "name": "description[$T_MAX_METRIC_DESCRIPTION]",
+                        "type": "char"
+                    },
+                    {
+                        "desc": "metric device component",
+                        "name": "component[$T_MAX_METRIC_NAME]",
+                        "type": "char"
+                    },
+                    {
+                        "desc": "",
+                        "name": "tierNumber",
+                        "type": "uint32_t"
+                    },
+                    {
+                        "desc": "",
+                        "name": "type",
+                        "type": "$t_metric_t"
+                    },
+                    {
+                        "desc": "",
+                        "name": "value",
+                        "type": "$t_metric_value_t"
+                    },
+                    {
+                        "desc": "",
+                        "name": "units[$T_MAX_METRIC_NAME]",
+                        "type": "char"
                     }
                 ],
                 "name": "$t_metric_properties",
