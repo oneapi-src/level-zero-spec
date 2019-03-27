@@ -138,7 +138,10 @@ The following design philosophies are adopted in order to maximize Host thread c
     + the application is responsible for ensuring multiple threads do not enter an API when the handle is the same
 - APIs are not thread-safe with other APIs that use the same driver object handle
     + the application is responsible for ensuring multiple threads do not enter these APIs when the handle is the same
-- the application is responsible for freeing handles and memory, no implcit garabage collection is supported by the driver
+- APIs do not support reference counting of handles.
+    + the application is responsible for tracking ownership and explicitly freeing handles and memory
+    + the application is responsible for ensuring that all driver objects and memory are no longer in-use by the device before freeing; otherwise the Host or device may fault
+    + no implcit garabage collection is supported by the driver
 
 Each API function must document details on the multithreading requirements for that call.
 
