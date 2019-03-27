@@ -60,7 +60,7 @@ TEST(xeDriverGetDeviceUniqueIds, DefaultDeviceUniqueIds) {
 
     xe_device_uuid_t *uniqueIds = new xe_device_uuid_t[count]();
     xeDriverGetDeviceUniqueIds(count, uniqueIds);
-    for (int i = 0; i < count; i++) {
+    for (uint32_t i = 0; i < count; i++) {
         EXPECT_EQ(i, uniqueIds[i].id[0]);
     }
 }
