@@ -1,4 +1,3 @@
-
 # Third-Party Tools
 **PRE-REQ**: Third party tools requires access to compute runtime repo.
 
@@ -22,13 +21,13 @@
 	**Windows**:
 	~~~~
 	cd {workspace root folder}
-	irepo.bat select third_party/windows.yml
+	irepo.bat select third_party/windows_embargo.yml
 	~~~~
 
 	**Linux**:
 	~~~~
 	cd {workspace root folder}
-	irepo select third_party/linux.yml
+	irepo select third_party/linux_embargo.yml
 	~~~~
 	
 
