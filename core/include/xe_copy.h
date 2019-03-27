@@ -72,7 +72,8 @@ xeCommandListAppendMemoryCopy(
     xe_command_list_handle_t hCommandList,          ///< [in] handle of command list
     void* dstptr,                                   ///< [in] pointer to destination memory to copy to
     const void* srcptr,                             ///< [in] pointer to source memory to copy from
-    size_t size                                     ///< [in] size in bytes to copy
+    size_t size,                                    ///< [in] size in bytes to copy
+    xe_event_handle_t hEvent                        ///< [in][optional] handle of the event to signal on completion
     );
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -105,7 +106,8 @@ xeCommandListAppendMemorySet(
     xe_command_list_handle_t hCommandList,          ///< [in] handle of command list
     void* ptr,                                      ///< [in] pointer to memory to initialize
     int value,                                      ///< [in] value to initialize memory to
-    size_t size                                     ///< [in] size in bytes to initailize
+    size_t size,                                    ///< [in] size in bytes to initailize
+    xe_event_handle_t hEvent                        ///< [in][optional] handle of the event to signal on completion
     );
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -133,7 +135,8 @@ __xedllport xe_result_t __xecall
 xeCommandListAppendImageCopy(
     xe_command_list_handle_t hCommandList,          ///< [in] handle of command list
     xe_image_handle_t hDstImage,                    ///< [in] handle of destination image to copy to
-    xe_image_handle_t hSrcImage                     ///< [in] handle of source image to copy from
+    xe_image_handle_t hSrcImage,                    ///< [in] handle of source image to copy from
+    xe_event_handle_t hEvent                        ///< [in][optional] handle of the event to signal on completion
     );
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -168,7 +171,8 @@ xeCommandListAppendImageCopyRegion(
     xe_image_handle_t hDstImage,                    ///< [in] handle of destination image to copy to
     xe_image_region_t* pDstRegion,                  ///< [in][optional] destination region descriptor
     xe_image_handle_t hSrcImage,                    ///< [in] handle of source image to copy from
-    xe_image_region_t* pSrcRegion                   ///< [in][optional] source region descriptor
+    xe_image_region_t* pSrcRegion,                  ///< [in][optional] source region descriptor
+    xe_event_handle_t hEvent                        ///< [in][optional] handle of the event to signal on completion
     );
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -199,7 +203,8 @@ xeCommandListAppendImageCopyToMemory(
     xe_command_list_handle_t hCommandList,          ///< [in] handle of command list
     void* dstptr,                                   ///< [in] pointer to destination memory to copy to
     xe_image_handle_t hSrcImage,                    ///< [in] handle of source image to copy from
-    xe_image_region_t* pSrcRegion                   ///< [in][optional] source region descriptor
+    xe_image_region_t* pSrcRegion,                  ///< [in][optional] source region descriptor
+    xe_event_handle_t hEvent                        ///< [in][optional] handle of the event to signal on completion
     );
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -230,7 +235,8 @@ xeCommandListAppendImageCopyFromMemory(
     xe_command_list_handle_t hCommandList,          ///< [in] handle of command list
     xe_image_handle_t hDstImage,                    ///< [in] handle of destination image to copy to
     xe_image_region_t* pDstRegion,                  ///< [in][optional] destination region descriptor
-    const void* srcptr                              ///< [in] pointer to source memory to copy from
+    const void* srcptr,                             ///< [in] pointer to source memory to copy from
+    xe_event_handle_t hEvent                        ///< [in][optional] handle of the event to signal on completion
     );
 
 ///////////////////////////////////////////////////////////////////////////////

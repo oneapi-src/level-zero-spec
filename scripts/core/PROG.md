@@ -552,7 +552,7 @@ and avoids exposing these details in the API in a backwards compatible fashion.
     ${x}DeviceCreateImage(hDevice, &imageDesc, &hImage);
 
     // upload contents from host pointer
-    ${x}CommandListAppendImageCopyFromMemory(hCommandList, hImage, nullptr, pImageData);
+    ${x}CommandListAppendImageCopyFromMemory(hCommandList, hImage, nullptr, pImageData, nullptr);
     ...
 ```
 

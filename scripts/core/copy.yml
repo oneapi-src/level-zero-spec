@@ -29,6 +29,9 @@ params:
     - type: size_t
       name: size
       desc: "[in] size in bytes to copy"
+    - type: $x_event_handle_t
+      name: hEvent
+      desc: "[in][optional] handle of the event to signal on completion"
 --- #--------------------------------------------------------------------------
 type: function
 desc: "Initializes host, device, or shared memory."
@@ -55,6 +58,9 @@ params:
     - type: size_t
       name: size
       desc: "[in] size in bytes to initailize"
+    - type: $x_event_handle_t
+      name: hEvent
+      desc: "[in][optional] handle of the event to signal on completion"
 --- #--------------------------------------------------------------------------
 type: function
 desc: "Copies a image."
@@ -75,6 +81,9 @@ params:
     - type: $x_image_handle_t
       name: hSrcImage
       desc: "[in] handle of source image to copy from"
+    - type: $x_event_handle_t
+      name: hEvent
+      desc: "[in][optional] handle of the event to signal on completion"
 --- #--------------------------------------------------------------------------
 type: struct
 desc: "Region descriptor"
@@ -113,6 +122,9 @@ params:
     - type: "$x_image_region_t*"
       name: pSrcRegion
       desc: "[in][optional] source region descriptor"
+    - type: $x_event_handle_t
+      name: hEvent
+      desc: "[in][optional] handle of the event to signal on completion"
 --- #--------------------------------------------------------------------------
 type: function
 desc: "Copies from a image to device or shared memory."
@@ -138,6 +150,9 @@ params:
     - type: "$x_image_region_t*"
       name: pSrcRegion
       desc: "[in][optional] source region descriptor"
+    - type: $x_event_handle_t
+      name: hEvent
+      desc: "[in][optional] handle of the event to signal on completion"
 --- #--------------------------------------------------------------------------
 type: function
 desc: "Copies to a image from device or shared memory."
@@ -163,6 +178,9 @@ params:
     - type: "const void*"
       name: srcptr
       desc: "[in] pointer to source memory to copy from"
+    - type: $x_event_handle_t
+      name: hEvent
+      desc: "[in][optional] handle of the event to signal on completion"
 --- #--------------------------------------------------------------------------
 type: function
 desc: "Asynchronously prefetches shared memory to the device associated with

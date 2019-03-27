@@ -257,10 +257,11 @@ namespace xe
     CommandList::AppendMemoryCopy(
         void* dstptr,                                   ///< [in] pointer to destination memory to copy to
         const void* srcptr,                             ///< [in] pointer to source memory to copy from
-        size_t size                                     ///< [in] size in bytes to copy
+        size_t size,                                    ///< [in] size in bytes to copy
+        event_handle_t hEvent                           ///< [in][optional] handle of the event to signal on completion
         )
     {
-        // auto result = ::xeCommandListAppendMemoryCopy( handle, dstptr, srcptr, size );
+        // auto result = ::xeCommandListAppendMemoryCopy( handle, dstptr, srcptr, size, hEvent );
         // if( ::XE_RESULT_SUCCESS != result ) throw exception(result, "xe::CommandList::AppendMemoryCopy");
     }
 
@@ -286,10 +287,11 @@ namespace xe
     CommandList::AppendMemorySet(
         void* ptr,                                      ///< [in] pointer to memory to initialize
         int value,                                      ///< [in] value to initialize memory to
-        size_t size                                     ///< [in] size in bytes to initailize
+        size_t size,                                    ///< [in] size in bytes to initailize
+        event_handle_t hEvent                           ///< [in][optional] handle of the event to signal on completion
         )
     {
-        // auto result = ::xeCommandListAppendMemorySet( handle, ptr, value, size );
+        // auto result = ::xeCommandListAppendMemorySet( handle, ptr, value, size, hEvent );
         // if( ::XE_RESULT_SUCCESS != result ) throw exception(result, "xe::CommandList::AppendMemorySet");
     }
 
@@ -309,10 +311,11 @@ namespace xe
     inline void 
     CommandList::AppendImageCopy(
         image_handle_t hDstImage,                       ///< [in] handle of destination image to copy to
-        image_handle_t hSrcImage                        ///< [in] handle of source image to copy from
+        image_handle_t hSrcImage,                       ///< [in] handle of source image to copy from
+        event_handle_t hEvent                           ///< [in][optional] handle of the event to signal on completion
         )
     {
-        // auto result = ::xeCommandListAppendImageCopy( handle, hDstImage, hSrcImage );
+        // auto result = ::xeCommandListAppendImageCopy( handle, hDstImage, hSrcImage, hEvent );
         // if( ::XE_RESULT_SUCCESS != result ) throw exception(result, "xe::CommandList::AppendImageCopy");
     }
 
@@ -330,10 +333,11 @@ namespace xe
         image_handle_t hDstImage,                       ///< [in] handle of destination image to copy to
         image_region_t* pDstRegion,                     ///< [in][optional] destination region descriptor
         image_handle_t hSrcImage,                       ///< [in] handle of source image to copy from
-        image_region_t* pSrcRegion                      ///< [in][optional] source region descriptor
+        image_region_t* pSrcRegion,                     ///< [in][optional] source region descriptor
+        event_handle_t hEvent                           ///< [in][optional] handle of the event to signal on completion
         )
     {
-        // auto result = ::xeCommandListAppendImageCopyRegion( handle, hDstImage, pDstRegion, hSrcImage, pSrcRegion );
+        // auto result = ::xeCommandListAppendImageCopyRegion( handle, hDstImage, pDstRegion, hSrcImage, pSrcRegion, hEvent );
         // if( ::XE_RESULT_SUCCESS != result ) throw exception(result, "xe::CommandList::AppendImageCopyRegion");
     }
 
@@ -356,10 +360,11 @@ namespace xe
     CommandList::AppendImageCopyToMemory(
         void* dstptr,                                   ///< [in] pointer to destination memory to copy to
         image_handle_t hSrcImage,                       ///< [in] handle of source image to copy from
-        image_region_t* pSrcRegion                      ///< [in][optional] source region descriptor
+        image_region_t* pSrcRegion,                     ///< [in][optional] source region descriptor
+        event_handle_t hEvent                           ///< [in][optional] handle of the event to signal on completion
         )
     {
-        // auto result = ::xeCommandListAppendImageCopyToMemory( handle, dstptr, hSrcImage, pSrcRegion );
+        // auto result = ::xeCommandListAppendImageCopyToMemory( handle, dstptr, hSrcImage, pSrcRegion, hEvent );
         // if( ::XE_RESULT_SUCCESS != result ) throw exception(result, "xe::CommandList::AppendImageCopyToMemory");
     }
 
@@ -382,10 +387,11 @@ namespace xe
     CommandList::AppendImageCopyFromMemory(
         image_handle_t hDstImage,                       ///< [in] handle of destination image to copy to
         image_region_t* pDstRegion,                     ///< [in][optional] destination region descriptor
-        const void* srcptr                              ///< [in] pointer to source memory to copy from
+        const void* srcptr,                             ///< [in] pointer to source memory to copy from
+        event_handle_t hEvent                           ///< [in][optional] handle of the event to signal on completion
         )
     {
-        // auto result = ::xeCommandListAppendImageCopyFromMemory( handle, hDstImage, pDstRegion, srcptr );
+        // auto result = ::xeCommandListAppendImageCopyFromMemory( handle, hDstImage, pDstRegion, srcptr, hEvent );
         // if( ::XE_RESULT_SUCCESS != result ) throw exception(result, "xe::CommandList::AppendImageCopyFromMemory");
     }
 

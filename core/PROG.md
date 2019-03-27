@@ -552,7 +552,7 @@ and avoids exposing these details in the API in a backwards compatible fashion.
     xeDeviceCreateImage(hDevice, &imageDesc, &hImage);
 
     // upload contents from host pointer
-    xeCommandListAppendImageCopyFromMemory(hCommandList, hImage, nullptr, pImageData);
+    xeCommandListAppendImageCopyFromMemory(hCommandList, hImage, nullptr, pImageData, nullptr);
     ...
 ```
 
