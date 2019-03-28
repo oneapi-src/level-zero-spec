@@ -67,7 +67,7 @@ HWTEST_F(CommandListAppendSignalEvent, addsPipeControlToCommandStream) {
             continue;
         }
 
-        if (cmd->getImmediateData() != 0u) {
+        if (cmd->getImmediateData() != Event::STATE_SIGNALED) {
             itor++;
             continue;
         }

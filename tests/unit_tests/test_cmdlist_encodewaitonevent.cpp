@@ -55,7 +55,7 @@ HWTEST_F(CommandListAppendWaitOnEvent, addsSemaphoreToCommandStream) {
     {
         auto cmd = genCmdCast<MI_SEMAPHORE_WAIT *>(*itor);
         EXPECT_EQ(cmd->getCompareOperation(), MI_SEMAPHORE_WAIT::COMPARE_OPERATION::COMPARE_OPERATION_SAD_NOT_EQUAL_SDD);
-        EXPECT_EQ(cmd->getSemaphoreDataDword(), 1u);
+        EXPECT_EQ(cmd->getSemaphoreDataDword(), Event::STATE_CLEARED);
         EXPECT_EQ(cmd->getSemaphoreGraphicsAddress(), event.allocation->getGpuAddress());
     }
 }

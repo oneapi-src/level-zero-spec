@@ -409,8 +409,8 @@ xe_result_t CommandListCoreFamily<gfxCoreFamily>::appendEventReset(xe_event_hand
     addToResidencyContainer(&event->getAllocation());
 
     EncodeFlush<gfxCoreFamily>::encodeWithQwordWrite(*this,
-                                      event->getGpuAddress(),
-                                      static_cast<uint64_t>(-1));
+                                                     event->getGpuAddress(),
+                                                     Event::STATE_CLEARED);
 
     return XE_RESULT_SUCCESS;
 }
@@ -579,8 +579,8 @@ xe_result_t CommandListCoreFamily<gfxCoreFamily>::appendSignalEvent(xe_event_han
     addToResidencyContainer(&event->getAllocation());
 
     EncodeFlush<gfxCoreFamily>::encodeWithQwordWrite(*this,
-                                      event->getGpuAddress(),
-                                      0u);
+                                                     event->getGpuAddress(),
+                                                     Event::STATE_SIGNALED);
 
     return XE_RESULT_SUCCESS;
 }
@@ -595,7 +595,7 @@ xe_result_t CommandListCoreFamily<gfxCoreFamily>::appendWaitOnEvent(xe_event_han
     addToResidencyContainer(&event->getAllocation());
 
     cmd.setSemaphoreGraphicsAddress(event->getGpuAddress());
-    cmd.setSemaphoreDataDword(1u);
+    cmd.setSemaphoreDataDword(Event::STATE_CLEARED);
     cmd.setCompareOperation(MI_SEMAPHORE_WAIT::COMPARE_OPERATION::COMPARE_OPERATION_SAD_NOT_EQUAL_SDD);
 
     auto buffer = commandStream->getSpace(sizeof(cmd));

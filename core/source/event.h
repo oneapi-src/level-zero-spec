@@ -34,6 +34,13 @@ struct Event : public _xe_event_handle_t {
         return XE_RESULT_ERROR_UNSUPPORTED;
     }
 
+    // NOTE: Only bit 0 determines signaled.
+    enum State : uint32_t {
+        STATE_SIGNALED = 0u,
+        STATE_CLEARED = static_cast<uint32_t>(-1),
+        STATE_INITIAL = STATE_CLEARED
+    };
+
     static Event *create(Device *device);
 
     static Event *fromHandle(xe_event_handle_t handle) {

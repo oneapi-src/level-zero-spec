@@ -67,7 +67,7 @@ HWTEST_F(CommandListAppendEventReset, addsPipeControlToCommandStream) {
             continue;
         }
 
-        if (cmd->getImmediateData() != static_cast<uint64_t>(-1)) {
+        if (cmd->getImmediateData() != Event::STATE_INITIAL) {
             itor++;
             continue;
         }

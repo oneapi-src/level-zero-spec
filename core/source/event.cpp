@@ -29,12 +29,14 @@ struct EventImp : public Event {
     }
 
     xe_result_t queryStatus() override {
-        return XE_RESULT_ERROR_UNSUPPORTED;
+        auto hostAddress = static_cast<uint64_t *>(allocation->getHostAddress());
+
+        return *hostAddress == Event::STATE_CLEARED
+            ? XE_RESULT_NOT_READY
+            : XE_RESULT_SUCCESS;
     }
 
-    xe_result_t reset() override {
-        return XE_RESULT_ERROR_UNSUPPORTED;
-    }
+    xe_result_t reset() override;
 
     bool initialize();
 
@@ -59,6 +61,8 @@ bool EventImp::initialize() {
     allocation = memoryManager->allocateDeviceMemory(64u, 64u);
     assert(allocation);
 
+    reset();
+
     return true;
 }
 
@@ -68,12 +72,8 @@ xe_result_t Event::destroy() {
 }
 
 xe_result_t EventImp::hostSignal() {
-    void *hostAddress = allocation->getHostAddress();
-    uint32_t value = *(static_cast<uint32_t *> (hostAddress));
-
-    //  Clear bit 0 of host memory address to signal event
-    uint32_t signal = !(value & 1);
-    value |= signal;
+    auto hostAddress = static_cast<uint64_t *>(allocation->getHostAddress());
+    *(hostAddress) = Event::STATE_SIGNALED;
 
     // Flush cache line at all levels containing the value
     _mm_clflush(hostAddress);
@@ -111,6 +111,16 @@ xe_result_t eventQueryMetricsData(xe_event_handle_t hEventStart,
                                   size_t reportSize,
                                   uint32_t *pReportData) {
     return XE_RESULT_ERROR_UNSUPPORTED;
+}
+
+xe_result_t EventImp::reset() {
+    auto hostAddress = static_cast<uint64_t *>(allocation->getHostAddress());
+    *(hostAddress) = Event::STATE_INITIAL;
+
+    // Flush cache line at all levels containing the value
+    _mm_clflush(hostAddress);
+
+    return XE_RESULT_SUCCESS;
 }
 
 } // namespace L0

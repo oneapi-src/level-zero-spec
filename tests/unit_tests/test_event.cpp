@@ -19,6 +19,7 @@ TEST(Event_create, allocationContainsAtLeast64Bytes) {
     auto event = whitebox_cast(Event::create(&device));
     ASSERT_NE(event, nullptr);
     EXPECT_GE(event->allocation->getSize(), 64u);
+    EXPECT_EQ(event->queryStatus(), XE_RESULT_NOT_READY);
     
     delete event;
 }
@@ -43,14 +44,35 @@ TEST(hostSynchronize, waitWithFiniteTimeout) {
     EXPECT_EQ(XE_RESULT_ERROR_INVALID_PARAMETER, result);
 }
 
-TEST(hostSignal, signalEvent) {
+TEST(Event_hostSignal, returnsSuccessFromQueryStatus) {
     Mock<Device> device;
 
     auto event = whitebox_cast(Event::create(&device));
     ASSERT_NE(event, nullptr);
 
     auto result = event->hostSignal();
-    EXPECT_EQ(XE_RESULT_SUCCESS, result);
+    ASSERT_EQ(XE_RESULT_SUCCESS, result);
+
+    EXPECT_EQ(event->queryStatus(), XE_RESULT_SUCCESS);
+
+    delete event;
+}
+
+TEST(Event_reset, returnsNotReadyFromQueryStatus) {
+    Mock<Device> device;
+
+    auto event = whitebox_cast(Event::create(&device));
+    ASSERT_NE(event, nullptr);
+
+    auto result = event->hostSignal();
+    ASSERT_EQ(XE_RESULT_SUCCESS, result);
+
+    result = event->reset();
+    ASSERT_EQ(XE_RESULT_SUCCESS, result);
+
+    EXPECT_EQ(event->queryStatus(), XE_RESULT_NOT_READY);
+
+    delete event;
 }
 
 } // namespace ult
