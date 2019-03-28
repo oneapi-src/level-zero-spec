@@ -125,6 +125,10 @@ struct PrecompiledFunctionMock : Mock<Function> {
         return (lws + simd - 1) / simd;
     }
 
+    const iOpenCL::SPatchSamplerStateArray *getSamplerStateArray() const {
+        return nullptr;
+    }
+
     const PrecompiledFunctionMockData *precompiledFunctionMockData = nullptr;
     std::unordered_map<int, int> bufferArgOffsetMap;
 

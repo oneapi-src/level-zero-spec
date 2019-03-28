@@ -139,6 +139,10 @@ HWTEST2_F(ImageSurfaceState, descMatchesSurface, MatchAny) {
     ASSERT_EQ(surfaceState->getWidth(), 11);
     ASSERT_EQ(surfaceState->getHeight(), 13);
     ASSERT_EQ(surfaceState->getDepth(), 17);
+    ASSERT_EQ(surfaceState->getShaderChannelSelectRed(), RENDER_SURFACE_STATE::SHADER_CHANNEL_SELECT_RED_RED);
+    ASSERT_EQ(surfaceState->getShaderChannelSelectGreen(), RENDER_SURFACE_STATE::SHADER_CHANNEL_SELECT_GREEN_GREEN);
+    ASSERT_EQ(surfaceState->getShaderChannelSelectBlue(), RENDER_SURFACE_STATE::SHADER_CHANNEL_SELECT_BLUE_BLUE);
+    ASSERT_EQ(surfaceState->getShaderChannelSelectAlpha(), RENDER_SURFACE_STATE::SHADER_CHANNEL_SELECT_ALPHA_ALPHA);
 }
 
 HWTEST2_F(ImageSurfaceState, copyToSSH, MatchAny) {

@@ -6,6 +6,10 @@
 
 #include <vector>
 
+namespace iOpenCL {
+struct SPatchSamplerStateArray;
+} // namespace iOpenCL
+
 struct _xe_function_handle_t {
 };
 
@@ -66,6 +70,9 @@ struct Function : public _xe_function_handle_t {
     virtual uint32_t getSurfaceStateHeapSize() const = 0;
     virtual uint32_t getBindingTableStateCount() const = 0;
     virtual uint32_t getBindingTableOffset() const = 0;
+
+    virtual const void *getDynamicStateHeap() const = 0;
+    virtual const iOpenCL::SPatchSamplerStateArray *getSamplerStateArray() const = 0;
 
     virtual GraphicsAllocation *getPrintfBufferAllocation() = 0;
     virtual void printPrintfOutput() = 0;

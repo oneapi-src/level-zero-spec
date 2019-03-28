@@ -75,6 +75,9 @@ struct CommandListCoreFamily : public CommandListImp {
     uint32_t copyBindingTableAndSurfaceStates(OCLRT::IndirectHeap *ssh,
                                               const void *srcKernelSsh, uint32_t srcKernelSshSize,
                                               uint32_t numberOfBindingTableStates, uint32_t offsetOfBindingTable);
+    void copySamplerState(OCLRT::IndirectHeap *dsh, Function *function);
+
+    static const uint32_t alignIndirectStatePointer = 64 * sizeof(uint8_t);
 };
 
 template <uint32_t gfxProductFamily>

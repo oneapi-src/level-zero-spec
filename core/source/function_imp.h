@@ -133,6 +133,9 @@ struct FunctionImp : Function {
     uint32_t getBindingTableStateCount() const override;
     uint32_t getBindingTableOffset() const override;
 
+    const void *getDynamicStateHeap() const override;
+    const iOpenCL::SPatchSamplerStateArray *getSamplerStateArray() const override;
+
   protected:
     template <typename T>
     void patchCrossThreadData(uint32_t location, const T &value);

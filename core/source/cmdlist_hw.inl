@@ -198,6 +198,7 @@ xe_result_t CommandListCoreFamily<gfxCoreFamily>::appendLaunchFunction(xe_functi
     using MEDIA_INTERFACE_DESCRIPTOR_LOAD = typename GfxFamily::MEDIA_INTERFACE_DESCRIPTOR_LOAD;
     using INTERFACE_DESCRIPTOR_DATA = typename GfxFamily::INTERFACE_DESCRIPTOR_DATA;
     using STATE_BASE_ADDRESS = typename GfxFamily::STATE_BASE_ADDRESS;
+    using SAMPLER_STATE = typename GfxFamily::SAMPLER_STATE;
 
     const auto function = Function::fromHandle(hFunction);
     assert(function);
@@ -246,6 +247,46 @@ xe_result_t CommandListCoreFamily<gfxCoreFamily>::appendLaunchFunction(xe_functi
         idd.setBindingTableEntryCount(bindingTableStatePrefetchCount);
     }
 
+    auto heap = indirectHeaps[DYNAMIC_STATE];
+    assert(heap);
+
+    uint32_t samplerStateOffset = 0;
+    uint32_t samplerCount = 0;
+    const auto samplerStateArray = function->getSamplerStateArray();
+
+    // Copy our sampler state if it exists
+    if (samplerStateArray) {
+        size_t borderColorOffset = 0;
+        samplerCount = samplerStateArray->Count;
+        auto sizeSamplerState = sizeof(SAMPLER_STATE) * samplerCount;
+        auto borderColorSize = samplerStateArray->Offset - samplerStateArray->BorderColorOffset;
+
+        heap->align(alignIndirectStatePointer);
+        borderColorOffset = heap->getUsed();
+
+        auto borderColor = heap->getSpace(borderColorSize);
+
+        memcpy_s(borderColor, borderColorSize,
+                ptrOffset(function->getDynamicStateHeap(), samplerStateArray->BorderColorOffset),
+                borderColorSize);
+
+        heap->align(INTERFACE_DESCRIPTOR_DATA::SAMPLERSTATEPOINTER_ALIGN_SIZE);
+        samplerStateOffset = static_cast<uint32_t>(heap->getUsed());
+
+        auto samplerState = heap->getSpace(sizeSamplerState);
+
+        auto pSmplr = reinterpret_cast<SAMPLER_STATE *>(samplerState);
+        for (uint32_t i = 0; i < samplerCount; i++) {
+            *pSmplr = GfxFamily::cmdInitSamplerState;
+            pSmplr->setIndirectStatePointer((uint32_t)borderColorOffset);
+            pSmplr++;
+        }
+    }
+
+    idd.setSamplerStatePointer(samplerStateOffset);
+    auto samplerCountState = static_cast<typename INTERFACE_DESCRIPTOR_DATA::SAMPLER_COUNT>((samplerCount + 3) / 4);
+    idd.setSamplerCount(samplerCountState);
+
     auto numGrfCrossThreadData = static_cast<uint32_t>(sizeCrossThreadData / sizeof(float[8]));
     assert(numGrfCrossThreadData > 0u);
     idd.setCrossThreadConstantDataReadLength(numGrfCrossThreadData);
@@ -258,8 +299,6 @@ xe_result_t CommandListCoreFamily<gfxCoreFamily>::appendLaunchFunction(xe_functi
     uint32_t numIDD = 0u;
     uint32_t offsetIDD = 0u;
     {
-        auto heap = indirectHeaps[DYNAMIC_STATE];
-        assert(heap);
         heap->align(OCLRT::KernelCommandsHelper<GfxFamily>::alignInterfaceDescriptorData);
 
         auto sizeIDD = sizeof(INTERFACE_DESCRIPTOR_DATA);

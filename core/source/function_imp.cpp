@@ -418,6 +418,14 @@ uint32_t FunctionImp::getBindingTableOffset() const {
     return static_cast<uint32_t>(this->oclInternals->localBindingTableOffset);
 }
 
+const iOpenCL::SPatchSamplerStateArray *FunctionImp::getSamplerStateArray() const {
+    return this->getKernelInfo()->patchInfo.samplerStateArray;
+}
+
+const void *FunctionImp::getDynamicStateHeap() const {
+    return this->kernelRT->getDynamicStateHeap();
+}
+
 template <typename T>
 void FunctionImp::patchCrossThreadData(uint32_t location, const T &value) {
     if (OCLRT::KernelArgInfo::undefinedOffset == location) {

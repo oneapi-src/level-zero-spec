@@ -1,4 +1,5 @@
 #include "image_hw.h"
+#include "runtime/gmm_helper/gmm.h"
 
 namespace L0 {
 template <GFXCORE_FAMILY gfxCoreFamily>
@@ -17,6 +18,21 @@ bool ImageCoreFamily<gfxCoreFamily>::initialize(Device *device, const xe_image_d
     }
 
     surfaceState = GfxFamily::cmdInitRenderSurfaceState;
+
+    switch(desc->numChannels) {
+    case 4:
+        surfaceState.setShaderChannelSelectAlpha(RENDER_SURFACE_STATE::SHADER_CHANNEL_SELECT_ALPHA_ALPHA);
+        //Fall through on purpose
+    case 3:
+        surfaceState.setShaderChannelSelectBlue(RENDER_SURFACE_STATE::SHADER_CHANNEL_SELECT_BLUE_BLUE);
+    case 2:
+        surfaceState.setShaderChannelSelectGreen(RENDER_SURFACE_STATE::SHADER_CHANNEL_SELECT_GREEN_GREEN);
+    case 1:
+        surfaceState.setShaderChannelSelectRed(RENDER_SURFACE_STATE::SHADER_CHANNEL_SELECT_RED_RED);
+        break;
+    default:
+        return false;
+    }
 
     switch (desc->type) {
     case XE_IMAGE_TYPE_1D:
@@ -44,6 +60,12 @@ bool ImageCoreFamily<gfxCoreFamily>::initialize(Device *device, const xe_image_d
         //Fall through on purpose
     default: // 1D
         surfaceState.setWidth(static_cast<uint32_t>(desc->width));
+    }
+
+    auto gmm = this->allocation->allocationRT->gmm;
+    if (gmm) {
+        surfaceState.setSurfaceHorizontalAlignment(static_cast<typename RENDER_SURFACE_STATE::SURFACE_HORIZONTAL_ALIGNMENT>(gmm->getRenderHAlignment()));
+        surfaceState.setSurfaceVerticalAlignment(static_cast<typename RENDER_SURFACE_STATE::SURFACE_VERTICAL_ALIGNMENT>(gmm->getRenderVAlignment()));
     }
 
     surfaceState.setSurfaceFormat(format_table[desc->format][desc->numChannels - XE_NUMCHANNELS_MIN]);
