@@ -3,6 +3,7 @@
 #include "encode_state_base_address.h"
 #include "event.h"
 #include "graphics_allocation.h"
+#include "image.h"
 #include "memory_manager.h"
 #include "module.h"
 #include "builtins.h"
@@ -423,15 +424,30 @@ xe_result_t CommandListCoreFamily<gfxCoreFamily>::appendExecutionBarrier() {
 template <GFXCORE_FAMILY gfxCoreFamily>
 xe_result_t CommandListCoreFamily<gfxCoreFamily>::appendImageCopyFromMemory(xe_image_handle_t hDstImage,
                                                                             xe_image_region_t *pDstRegion,
-                                                                            const void *srcptr) {
-    return XE_RESULT_ERROR_UNSUPPORTED;
+                                                                            const void *srcPtr) {
+
+    // Use for now the AppendMemoryCopy, as images are internally allocated linearly
+
+    GraphicsAllocation *dstAlloc = L0::Image::fromHandle(hDstImage)->getAllocation();
+    uint64_t dstPtr = dstAlloc->getGpuAddress();
+
+    return this->appendMemoryCopy(reinterpret_cast<void *>(dstPtr + pDstRegion->offset),
+                srcPtr, pDstRegion->size);
 }
 
 template <GFXCORE_FAMILY gfxCoreFamily>
-xe_result_t CommandListCoreFamily<gfxCoreFamily>::appendImageCopyToMemory(void *dstptr,
+xe_result_t CommandListCoreFamily<gfxCoreFamily>::appendImageCopyToMemory(void *dstPtr,
                                                                           xe_image_handle_t hSrcImage,
                                                                           xe_image_region_t *pSrcRegion) {
-    return XE_RESULT_ERROR_UNSUPPORTED;
+
+    // Use for now the AppendMemoryCopy, as images are internally allocated linearly
+
+    GraphicsAllocation *srcAlloc = L0::Image::fromHandle(hSrcImage)->getAllocation();
+    uint64_t srcPtr = srcAlloc->getGpuAddress();
+
+    return this->appendMemoryCopy(dstPtr,
+                reinterpret_cast<void *>(srcPtr + pSrcRegion->offset),
+                pSrcRegion->size);
 }
 
 template <GFXCORE_FAMILY gfxCoreFamily>
@@ -439,13 +455,31 @@ xe_result_t CommandListCoreFamily<gfxCoreFamily>::appendImageCopyRegion(xe_image
                                                                         xe_image_region_t *pDstRegion,
                                                                         xe_image_handle_t hSrcImage,
                                                                         xe_image_region_t *pSrcRegion) {
-    return XE_RESULT_ERROR_UNSUPPORTED;
+
+    // Use for now the AppendMemoryCopy, as images are internally allocated linearly
+
+    GraphicsAllocation *dstAlloc = L0::Image::fromHandle(hDstImage)->getAllocation();
+    GraphicsAllocation *srcAlloc = L0::Image::fromHandle(hSrcImage)->getAllocation();
+
+    uint64_t dstPtr = dstAlloc->getGpuAddress();
+    uint64_t srcPtr = srcAlloc->getGpuAddress();
+
+    return this->appendMemoryCopy(
+                reinterpret_cast<void *>(dstPtr + pDstRegion->offset),
+                reinterpret_cast<void *>(srcPtr + pSrcRegion->offset),
+                pDstRegion->size < pSrcRegion->size ? pDstRegion->size : pSrcRegion->size);
 }
 
 template <GFXCORE_FAMILY gfxCoreFamily>
 xe_result_t CommandListCoreFamily<gfxCoreFamily>::appendImageCopy(xe_image_handle_t hDstImage,
                                                                   xe_image_handle_t hSrcImage) {
-    return XE_RESULT_ERROR_UNSUPPORTED;
+
+    GraphicsAllocation *dstAlloc = L0::Image::fromHandle(hDstImage)->getAllocation();
+    GraphicsAllocation *srcAlloc = L0::Image::fromHandle(hSrcImage)->getAllocation();
+    xe_image_region_t dstRegion = {0, dstAlloc->getSize()};
+    xe_image_region_t srcRegion = {0, srcAlloc->getSize()};
+
+    return this->appendImageCopyRegion(hDstImage, &dstRegion, hSrcImage, &srcRegion);
 }
 
 template <GFXCORE_FAMILY gfxCoreFamily>
