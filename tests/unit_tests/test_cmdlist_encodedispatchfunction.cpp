@@ -238,6 +238,14 @@ HWTEST2_F(CommandListAppendLaunchFunction, withEventAddsPostSyncFlush, IsGen9) {
         EXPECT_EQ(cmd->getAddressHigh(), gpuAddress >> 32u);
         EXPECT_EQ(cmd->getAddress(), uint32_t(gpuAddress));
     }
+
+    // Make sure event is part of the CL residencyContainer
+    {
+        auto itorEvent = std::find(std::begin(commandList->residencyContainer),
+                                   std::end(commandList->residencyContainer),
+                                   event->getAllocation().allocationRT);
+        EXPECT_NE(itorEvent, std::end(commandList->residencyContainer));
+    }
 }
 
 ATSTEST_F(CommandListAppendLaunchFunction, withEventSetsPostSyncOp) {
@@ -270,6 +278,14 @@ ATSTEST_F(CommandListAppendLaunchFunction, withEventSetsPostSyncOp) {
 
         EXPECT_NE(postSync.getDestinationAddress(), 0u);
         EXPECT_EQ(postSync.getOperation(), POSTSYNC_DATA::OPERATION_WRITE_TIMESTAMP);
+    }
+
+    // Make sure event is part of the CL residencyContainer
+    {
+        auto itorEvent = std::find(std::begin(commandList->residencyContainer),
+                                   std::end(commandList->residencyContainer),
+                                   event->getAllocation().allocationRT);
+        EXPECT_NE(itorEvent, std::end(commandList->residencyContainer));
     }
 }
 

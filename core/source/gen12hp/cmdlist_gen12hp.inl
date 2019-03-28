@@ -208,6 +208,8 @@ xe_result_t CommandListCoreFamily<IGFX_GEN12_CORE>::appendLaunchFunction(xe_func
         auto gpuAddress = event->getGpuAddress();
         assert((gpuAddress & 63u) == 0u);
         postSync.setDestinationAddress(event->getGpuAddress());
+
+        addToResidencyContainer(&event->getAllocation());
     }
 
     // Commit our command to the commandStream

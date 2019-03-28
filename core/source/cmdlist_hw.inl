@@ -362,6 +362,7 @@ xe_result_t CommandListCoreFamily<gfxCoreFamily>::appendLaunchFunction(xe_functi
         EncodeFlush<gfxCoreFamily>::encodeWithQwordWrite(*this,
                                                          event->getGpuAddress(),
                                                          Event::STATE_SIGNALED);
+        addToResidencyContainer(&event->getAllocation());
     }
 
     {
