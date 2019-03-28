@@ -169,21 +169,33 @@ ls -la
 """
 				}
 
-				def image = docker.image("${env.DOCKER_REGISTRY}/neo-build-ubuntu18:2")
+				def image = docker.image("${env.DOCKER_REGISTRY}/loki-ubuntu18:1")
 				def workDir = sh script: "(cd .. && pwd)", returnStdout: true
 				def buildId = "${env.BUILD_NUMBER}"
 				if(params.containsKey("COMMON_BUILD_ID")) {
 					buildId = "${COMMON_BUILD_ID}"
 				}
+				image.pull()
 				image.inside("-v /ccache:/ccache -e CCACHE_DIR=/ccache -e CCACHE_TEMPDIR=/tmp/ccache -e CCACHE_BASEDIR=${workDir}") {
 					sh """\
-mkdir build
-cd build
+mkdir ubuntu18
+cd ubuntu18
 cmake -GNinja .. -DCMAKE_BUILD_TYPE=Release -DLOKI_VERSION_BUILD=${buildId}
 cmake --build . --config Release --clean-first --target package
 """
 				}
-				archiveArtifacts "build/*.deb"
+				image.inside() {
+					sh """\
+cd scripts
+python3 run.py --html
+cd ../latex
+make
+"""
+				}
+				archiveArtifacts "ubuntu18/*.deb"
+				dir('latex') {
+					archiveArtifacts "*.pdf"
+				}
 			}()
 		}
 

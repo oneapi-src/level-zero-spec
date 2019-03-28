@@ -7,6 +7,11 @@ import json
 import yaml
 from mako.template import Template
 
+try:
+    from yaml import CLoader as Loader, CDumper as Dumper
+except ImportError:
+    from yaml import Loader, Dumper
+
 """
     safely checks if path/file exists
 """
@@ -93,8 +98,9 @@ def jsonWrite(path, data):
 """
 def yamlRead(path):
     if exists(path):
+        print(yaml)
         with open(path, 'r') as fin:
-            return yaml.load_all(fin.read(), Loader = yaml.CLoader)
+            return yaml.load_all(fin.read(), Loader = yaml.Loader)
     else:
         return None
 

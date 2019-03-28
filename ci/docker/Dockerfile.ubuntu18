@@ -1,0 +1,50 @@
+FROM ubuntu:18.04
+
+ENV http_proxy='http://proxy-chain.intel.com:911'\
+    https_proxy='http://proxy-chain.intel.com:912'\
+    no_proxy='intel.com,.intel.com,10.0.0.0/8,192.168.0.0/16,localhost,127.0.0.0/8,134.134.0.0/16,::1'
+ENV DEBIAN_FRONTEND=noninteractive
+
+RUN apt-get -y update ; apt-get install -y \
+		curl \
+		pkg-config \
+		xz-utils \
+		python \
+		unzip \
+		dos2unix \
+		bc \
+		strace \
+		findutils \
+		gcc \
+		make \
+		ccache \
+		distcc \
+		git \
+		cmake \
+		ninja-build \
+		hostname \
+		procps \
+		time \
+		p7zip \
+		rubygems \
+		python-pip \
+		libasan2 \
+		zlib1g \
+		zlib1g-dev \
+		libtsan0 \
+		rpm \
+		python3 \
+		python3-pip \
+		vim \
+		doxygen \
+		fragmaster \
+		texlive-fonts-recommended \
+		texlive-fonts-extra && apt-get clean
+
+RUN python3 -m pip install PyYaml
+RUN python3 -m pip install Mako
+
+ENV DEBIAN_FRONTEND=''
+ENV http_proxy=''\
+    https_proxy=''\
+    no_proxy=''
