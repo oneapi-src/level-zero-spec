@@ -62,6 +62,18 @@ etors:
       desc: "16-bit signed integer"
     - name: $X_IMAGE_FORMAT_SINT32
       desc: "32-bit signed integer"
+    - name: $X_IMAGE_FORMAT_UNORM8
+      desc: "8-bit unsigned normalized integer"
+    - name: $X_IMAGE_FORMAT_UNORM16
+      desc: "16-bit unsigned normalized integer"
+    - name: $X_IMAGE_FORMAT_UNORM32
+      desc: "32-bit unsigned normalized integer"
+    - name: $X_IMAGE_FORMAT_SNORM8
+      desc: "8-bit signed normalized integer"
+    - name: $X_IMAGE_FORMAT_SNORM16
+      desc: "16-bit signed normalized integer"
+    - name: $X_IMAGE_FORMAT_SNORM32
+      desc: "32-bit signed normalized integer"
     - name: $X_IMAGE_FORMAT_FLOAT16
       desc: "16-bit float"
     - name: $X_IMAGE_FORMAT_FLOAT32

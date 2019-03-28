@@ -82,6 +82,12 @@ typedef enum _xe_image_format_t
     XE_IMAGE_FORMAT_SINT8,                          ///< 8-bit signed integer
     XE_IMAGE_FORMAT_SINT16,                         ///< 16-bit signed integer
     XE_IMAGE_FORMAT_SINT32,                         ///< 32-bit signed integer
+    XE_IMAGE_FORMAT_UNORM8,                         ///< 8-bit unsigned normalized integer
+    XE_IMAGE_FORMAT_UNORM16,                        ///< 16-bit unsigned normalized integer
+    XE_IMAGE_FORMAT_UNORM32,                        ///< 32-bit unsigned normalized integer
+    XE_IMAGE_FORMAT_SNORM8,                         ///< 8-bit signed normalized integer
+    XE_IMAGE_FORMAT_SNORM16,                        ///< 16-bit signed normalized integer
+    XE_IMAGE_FORMAT_SNORM32,                        ///< 32-bit signed normalized integer
     XE_IMAGE_FORMAT_FLOAT16,                        ///< 16-bit float
     XE_IMAGE_FORMAT_FLOAT32,                        ///< 32-bit float
 
