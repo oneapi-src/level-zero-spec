@@ -32,6 +32,20 @@ endif()
 add_dependencies(xello_copy copy_third_party_files ocloc_shared)
 target_link_libraries(xello_copy level_zero_icd_loader ${OS_SPECIFIC_LIBS})
 
+#Basic example with image features
+add_executable(xello_image xello_image.cpp)
+
+if(MSVC)
+    set_target_properties(xello_image
+        PROPERTIES
+            VS_DEBUGGER_COMMAND_ARGUMENTS ""
+            VS_DEBUGGER_WORKING_DIRECTORY "$(OutDir)"
+    )
+endif()
+
+add_dependencies(xello_image copy_third_party_files ocloc_shared)
+target_link_libraries(xello_image level_zero_icd_loader ${OS_SPECIFIC_LIBS})
+
 #Basic example testing multidevice
 add_executable(xello_multidev xello_multidev.cpp)
 

@@ -25,12 +25,13 @@ inline void validate(ResulT result, const char *message) {
 #define SUCCESS_OR_WARNING(CALL) validate<false>(CALL, #CALL)
 #define SUCCESS_OR_WARNING_BOOL(FLAG) validate<false>(!(FLAG), #FLAG)
 
-void testAppendMemoryCopy(xe_device_handle_t &device,
+void testAppendImageCopy(xe_device_handle_t &device,
                           bool &syncRet, bool &validRet) {
-    const size_t allocSize = 4096 + 7; // +7 to brake alignment and make it harder
-    char *heapBuffer = new char[allocSize];
-    void *xeBuffer = nullptr;
-    char stackBuffer[allocSize];
+
+    const xe_image_format_t format = XE_IMAGE_FORMAT_UINT8;
+    const size_t width = 32;
+    const size_t height = 32;
+    const size_t size = width * height * sizeof(format);
 
     xe_command_queue_handle_t cmdQueue;
     xe_command_list_handle_t cmdList;
@@ -43,36 +44,54 @@ void testAppendMemoryCopy(xe_device_handle_t &device,
     xe_command_list_desc_t cmdListDesc = {XE_COMMAND_LIST_DESC_VERSION_CURRENT};
     SUCCESS_OR_TERMINATE(xeDeviceCreateCommandList(device, &cmdListDesc, &cmdList));
 
-    xe_mem_allocator_handle_t allocator;
-    SUCCESS_OR_TERMINATE(xeCreateMemAllocator(&allocator));
+    xe_image_desc_t srcImgDesc = {
+        XE_IMAGE_DESC_VERSION_CURRENT,
+        XE_IMAGE_FLAG_PROGRAM_READ,
+        XE_IMAGE_TYPE_1D,
+        format, 1,
+        width, height, 0, 0, 0
+    };
+    xe_image_handle_t srcImg;
+    xe_image_region_t srcRegion = {0, size};
 
-    SUCCESS_OR_TERMINATE(xeMemAlloc(allocator, device,
-                                    XE_DEVICE_MEM_ALLOC_FLAG_DEFAULT,
-                                    allocSize, allocSize, &xeBuffer));
+    SUCCESS_OR_TERMINATE(xeDeviceCreateImage(device,
+            const_cast<const xe_image_desc_t *>(&srcImgDesc), &srcImg));
 
-    for (size_t i = 0; i < allocSize; ++i) {
-        heapBuffer[i] = static_cast<char>(i + 1);
+    xe_image_desc_t dstImgDesc = {
+        XE_IMAGE_DESC_VERSION_CURRENT,
+        XE_IMAGE_FLAG_PROGRAM_WRITE,
+        XE_IMAGE_TYPE_2D,
+        format, 1,
+        width, height, 0, 0, 0
+    };
+    xe_image_handle_t dstImg;
+    xe_image_region_t dstRegion = {0, size};
+
+    SUCCESS_OR_TERMINATE(xeDeviceCreateImage(device,
+            const_cast<const xe_image_desc_t *>(&dstImgDesc), &dstImg));
+
+    char *srcBuffer = new char[size];
+    char *dstBuffer = new char[size];
+    for (size_t i = 0; i < size; ++i) {
+        srcBuffer[i] = static_cast<char>(i + 1);
+        dstBuffer[i] = 0;
     }
-    memset(stackBuffer, 0, allocSize);
 
-    // Copy from heap to device-allocated memory
-    SUCCESS_OR_TERMINATE(xeCommandListAppendMemoryCopy(cmdList, xeBuffer, heapBuffer, allocSize));
-
+    // Copy from srcBuffer->srcImg->dstImg->dstBuffer, so at the end dstBuffer = srcBuffer
+    SUCCESS_OR_TERMINATE(xeCommandListAppendImageCopyFromMemory(cmdList, srcImg, &srcRegion, srcBuffer));
     SUCCESS_OR_TERMINATE(xeCommandListAppendExecutionBarrier(cmdList));
-
-    // Copy from device-allocated memory to stack
-    SUCCESS_OR_TERMINATE(xeCommandListAppendMemoryCopy(cmdList, stackBuffer, xeBuffer, allocSize));
+    SUCCESS_OR_TERMINATE(xeCommandListAppendImageCopy(cmdList, dstImg, srcImg));
+    SUCCESS_OR_TERMINATE(xeCommandListAppendExecutionBarrier(cmdList));
+    SUCCESS_OR_TERMINATE(xeCommandListAppendImageCopyToMemory(cmdList, dstBuffer, dstImg, &dstRegion));
 
     SUCCESS_OR_TERMINATE(xeCommandListClose(cmdList));
     SUCCESS_OR_TERMINATE(xeCommandQueueExecuteCommandLists(cmdQueue, 1, &cmdList, nullptr));
     syncRet = xeCommandQueueSynchronize(cmdQueue, 1000 * 1000 /*1s*/);
 
-    // Validate stack and xe buffers have the original data from heapBuffer
-    validRet = (0 == memcmp(heapBuffer, stackBuffer, allocSize));
+    validRet = (0 == memcmp(srcBuffer, dstBuffer, size));
 
-    delete[] heapBuffer;
-    SUCCESS_OR_TERMINATE(xeMemFree(allocator, xeBuffer));
-    SUCCESS_OR_TERMINATE(xeMemAllocatorDestroy(allocator));
+    delete[] srcBuffer;
+    delete[] dstBuffer;
     SUCCESS_OR_TERMINATE(xeCommandListDestroy(cmdList));
     SUCCESS_OR_TERMINATE(xeCommandQueueDestroy(cmdQueue));
 }
@@ -93,7 +112,7 @@ int main(int argc, char *argv[]) {
 
     bool synchronizationResult;
     bool outputValidationSuccessful;
-    testAppendMemoryCopy(device0, synchronizationResult, outputValidationSuccessful);
+    testAppendImageCopy(device0, synchronizationResult, outputValidationSuccessful);
 
     bool aubMode = (XE_RESULT_NOT_READY == synchronizationResult);
     if (aubMode == false)
