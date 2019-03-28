@@ -199,6 +199,47 @@ ATSTEST_F(CommandListAppendLaunchFunction, withBarrierAndSLMSetsIDDBarrierEnable
     }
 }
 
+HWTEST2_F(CommandListAppendLaunchFunction, withEventAddsPostSyncFlush, IsGen9) {
+    createFunction("MemcpyBytes");
+
+    auto usedSpaceBefore = commandList->commandStream->getUsed();
+    auto event = whitebox_cast(Event::create(&device));
+
+    auto result = commandList->appendLaunchFunction(function->toHandle(),
+                                                    &dispatchFunctionArguments,
+                                                    event->toHandle());
+    ASSERT_EQ(XE_RESULT_SUCCESS, result);
+
+    auto usedSpaceAfter = commandList->commandStream->getUsed();
+    ASSERT_GT(usedSpaceAfter, usedSpaceBefore);
+
+    GenCmdList cmdList;
+    ASSERT_TRUE(FamilyType::PARSE::parseCommandBuffer(cmdList,
+                                                      ptrOffset(commandList->commandStream->getCpuBase(), 0),
+                                                      usedSpaceAfter));
+    using GPGPU_WALKER = typename FamilyType::GPGPU_WALKER;
+    using PIPE_CONTROL = typename FamilyType::PIPE_CONTROL;
+    using POST_SYNC_OPERATION = typename PIPE_CONTROL::POST_SYNC_OPERATION;
+
+    auto itor = find<GPGPU_WALKER *>(cmdList.begin(), cmdList.end());
+    ASSERT_NE(cmdList.end(), itor);
+    auto itorPC = find<PIPE_CONTROL *>(itor, cmdList.end());
+    ASSERT_NE(cmdList.end(), itorPC);
+
+    {
+        auto cmd = genCmdCast<PIPE_CONTROL *>(*itorPC);
+        ASSERT_NE(cmd, nullptr);
+
+        EXPECT_EQ(cmd->getPostSyncOperation(), POST_SYNC_OPERATION::POST_SYNC_OPERATION_WRITE_IMMEDIATE_DATA);
+        EXPECT_EQ(cmd->getImmediateData(), Event::STATE_SIGNALED);
+        EXPECT_TRUE(cmd->getCommandStreamerStallEnable());
+        EXPECT_TRUE(cmd->getDcFlushEnable());
+        auto gpuAddress = event->getGpuAddress();
+        EXPECT_EQ(cmd->getAddressHigh(), gpuAddress >> 32u);
+        EXPECT_EQ(cmd->getAddress(), uint32_t(gpuAddress));
+    }
+}
+
 ATSTEST_F(CommandListAppendLaunchFunction, withEventSetsPostSyncOp) {
     createFunction("MemcpyBytes");
 

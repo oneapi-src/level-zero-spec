@@ -355,6 +355,15 @@ xe_result_t CommandListCoreFamily<gfxCoreFamily>::appendLaunchFunction(xe_functi
     auto buffer = commandStream->getSpace(sizeof(cmd));
     *(decltype(cmd) *)buffer = cmd;
 
+    // If we are generating an event, append a flush w/ memory write
+    if (hEvent) {
+        auto event = Event::fromHandle(hEvent);
+        assert(event);
+        EncodeFlush<gfxCoreFamily>::encodeWithQwordWrite(*this,
+                                                    event->getGpuAddress(),
+                                                    Event::STATE_SIGNALED);
+    }
+
     {
         // A MEDIA_STATE_FLUSH with no options must be added after a GPGPU_WALKER command which doesn't use either SLM or barriers.
         auto mediaStateFlush = commandStream->getSpace(sizeof(MEDIA_STATE_FLUSH));
