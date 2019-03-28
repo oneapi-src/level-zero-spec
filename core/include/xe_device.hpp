@@ -237,6 +237,12 @@ namespace xe
             SINT8,                                          ///< 8-bit signed integer
             SINT16,                                         ///< 16-bit signed integer
             SINT32,                                         ///< 32-bit signed integer
+            UNORM8,                                         ///< 8-bit unsigned normalized integer
+            UNORM16,                                        ///< 16-bit unsigned normalized integer
+            UNORM32,                                        ///< 32-bit unsigned normalized integer
+            SNORM8,                                         ///< 8-bit signed normalized integer
+            SNORM16,                                        ///< 16-bit signed normalized integer
+            SNORM32,                                        ///< 32-bit signed normalized integer
             FLOAT16,                                        ///< 16-bit float
             FLOAT32,                                        ///< 32-bit float
 
