@@ -409,14 +409,7 @@ xe_result_t CommandListCoreFamily<gfxCoreFamily>::appendEventReset(xe_event_hand
 
 template <GFXCORE_FAMILY gfxCoreFamily>
 xe_result_t CommandListCoreFamily<gfxCoreFamily>::appendExecutionBarrier() {
-
-    using GfxFamily = typename OCLRT::GfxFamilyMapper<gfxCoreFamily>::GfxFamily;
-    using PIPE_CONTROL = typename GfxFamily::PIPE_CONTROL;
-    PIPE_CONTROL cmd = GfxFamily::cmdInitPipeControl;
-    cmd.setCommandStreamerStallEnable(true);
-    cmd.setDcFlushEnable(true);
-    auto buffer = commandStream->getSpace(sizeof(cmd));
-    *(PIPE_CONTROL *)buffer = cmd;
+    EncodeFlush<gfxCoreFamily>::encode(*this);
 
     return XE_RESULT_SUCCESS;
 }
