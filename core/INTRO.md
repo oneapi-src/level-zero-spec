@@ -122,11 +122,18 @@ There are multiple versions that should be used by the application to determine 
     - The value is determined from calling ::xeDriverGetVersion
 
 ## Error Handling
-The following rules must be followed in order to maximize robustness and security:
-- all functions must return ::xe_result_t.
-- functions must never throw unhandled exceptions
-- functions must never fail silently; i.e. return ::XE_RESULT_SUCCESS 
-- function parameters should be validated prior to execution to ensure implementation compatibility, such as structure version.
+The following design philosophies are adopted in order to reduce Host-side overhead:
+- by default, the driver implementation does no parameter validation of any kind
+    + this can be enabled via environment variables, described below
+- by default, neither the driver nor device provide any protection against the following:
+    + invalid API programming
+    + invalid function arguments
+    + function infinite loops or recusions
+    + synchronization primitive deadlocks
+    + non-visible memory access by the Host or device
+    + non-resident memeory access by the device
+- all API functions return ::xe_result_t
+    + this allows for a consistent pattern on the application side for catching errors when enabled in debug environments
 
 ## Multithreading and Concurrency
 The following design philosophies are adopted in order to maximize Host thread concurrency:
@@ -161,4 +168,4 @@ The following table documents the supported knobs for overriding default driver 
 | Category            | Name                                    | Values                 | Description                                           |
 |---------------------|-----------------------------------------|------------------------|-------------------------------------------------------|
 | Memory              | XE_SHARED_FORCE_DEVICE_ALLOC          | {**0**, 1}             | Forces all shared allocations into device memory      |
-| Validation          | XE_DRIVER_PARAMETER_VALIDATION_LEVEL  | {0, **1**, 2}          | Controls the validation level used by the driver for parameters.<br>0 = disabled, no checks<br>1 = pointer and overflow checks only [default]<br>2 = values and states<br> |
+| Validation          | XE_DRIVER_PARAMETER_VALIDATION_LEVEL  | {**0**, 1, 2}          | Controls the validation level used by the driver for parameters.<br>0 = disabled, no checks (default)<br>1 = pointer and overflow checks only<br>2 = values and states<br> |
