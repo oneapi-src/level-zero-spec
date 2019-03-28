@@ -245,6 +245,7 @@ cmake --build . --config Release --clean-first --target ALL_BUILD
 	}
 } catch(Exception e) {
 	gerritPostResult(false)
+	throw e
 } finally {
 	node("loki-common") {
 		dir("tmp") {
