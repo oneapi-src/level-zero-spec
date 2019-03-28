@@ -172,7 +172,7 @@ int main(int argc, char *argv[]) {
     auto synchronizationResult = xeCommandQueueSynchronize(cmdQueue, 1000 * 1000 /*1s*/);
     SUCCESS_OR_WARNING(synchronizationResult);
 
-// 6. Validate
+    // 6. Validate
 
     bool outputValidationSuccessful = (0 == memcmp(initDataSrc, readBackData, sizeof(readBackData)));
     if (verbose && (false == outputValidationSuccessful)) {

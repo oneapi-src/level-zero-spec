@@ -234,10 +234,10 @@ xe_result_t CommandListCoreFamily<gfxCoreFamily>::appendLaunchFunction(xe_functi
             auto ssh = indirectHeaps[SURFACE_STATE];
             assert(ssh);
             bindingTablePointer = copyBindingTableAndSurfaceStates(ssh,
-                                                                    function->getSurfaceStateHeap(),
-                                                                    function->getSurfaceStateHeapSize(),
-                                                                    bindingTableStateCount,
-                                                                    function->getBindingTableOffset());
+                                                                   function->getSurfaceStateHeap(),
+                                                                   function->getSurfaceStateHeapSize(),
+                                                                   bindingTableStateCount,
+                                                                   function->getBindingTableOffset());
         }
 
         idd.setBindingTablePointer(bindingTablePointer);
@@ -360,8 +360,8 @@ xe_result_t CommandListCoreFamily<gfxCoreFamily>::appendLaunchFunction(xe_functi
         auto event = Event::fromHandle(hEvent);
         assert(event);
         EncodeFlush<gfxCoreFamily>::encodeWithQwordWrite(*this,
-                                                    event->getGpuAddress(),
-                                                    Event::STATE_SIGNALED);
+                                                         event->getGpuAddress(),
+                                                         Event::STATE_SIGNALED);
     }
 
     {
@@ -442,7 +442,7 @@ xe_result_t CommandListCoreFamily<gfxCoreFamily>::appendImageCopyFromMemory(xe_i
     uint64_t dstPtr = dstAlloc->getGpuAddress();
 
     return this->appendMemoryCopy(reinterpret_cast<void *>(dstPtr + pDstRegion->offset),
-                srcPtr, pDstRegion->size);
+                                  srcPtr, pDstRegion->size);
 }
 
 template <GFXCORE_FAMILY gfxCoreFamily>
@@ -456,8 +456,8 @@ xe_result_t CommandListCoreFamily<gfxCoreFamily>::appendImageCopyToMemory(void *
     uint64_t srcPtr = srcAlloc->getGpuAddress();
 
     return this->appendMemoryCopy(dstPtr,
-                reinterpret_cast<void *>(srcPtr + pSrcRegion->offset),
-                pSrcRegion->size);
+                                  reinterpret_cast<void *>(srcPtr + pSrcRegion->offset),
+                                  pSrcRegion->size);
 }
 
 template <GFXCORE_FAMILY gfxCoreFamily>
@@ -475,9 +475,9 @@ xe_result_t CommandListCoreFamily<gfxCoreFamily>::appendImageCopyRegion(xe_image
     uint64_t srcPtr = srcAlloc->getGpuAddress();
 
     return this->appendMemoryCopy(
-                reinterpret_cast<void *>(dstPtr + pDstRegion->offset),
-                reinterpret_cast<void *>(srcPtr + pSrcRegion->offset),
-                pDstRegion->size < pSrcRegion->size ? pDstRegion->size : pSrcRegion->size);
+        reinterpret_cast<void *>(dstPtr + pDstRegion->offset),
+        reinterpret_cast<void *>(srcPtr + pSrcRegion->offset),
+        pDstRegion->size < pSrcRegion->size ? pDstRegion->size : pSrcRegion->size);
 }
 
 template <GFXCORE_FAMILY gfxCoreFamily>

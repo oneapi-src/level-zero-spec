@@ -20,7 +20,7 @@ TEST(Event_create, allocationContainsAtLeast64Bytes) {
     ASSERT_NE(event, nullptr);
     EXPECT_GE(event->allocation->getSize(), 64u);
     EXPECT_EQ(event->queryStatus(), XE_RESULT_NOT_READY);
-    
+
     delete event;
 }
 

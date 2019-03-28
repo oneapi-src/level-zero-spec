@@ -32,8 +32,8 @@ struct EventImp : public Event {
         auto hostAddress = static_cast<uint64_t *>(allocation->getHostAddress());
 
         return *hostAddress == Event::STATE_CLEARED
-            ? XE_RESULT_NOT_READY
-            : XE_RESULT_SUCCESS;
+                   ? XE_RESULT_NOT_READY
+                   : XE_RESULT_SUCCESS;
     }
 
     xe_result_t reset() override;

@@ -171,7 +171,7 @@ int main(int argc, char *argv[]) {
     auto synchronizationResult = xeCommandQueueSynchronize(cmdQueue, 1000 * 1000 /*1s*/);
     SUCCESS_OR_WARNING(synchronizationResult);
 
-// 6. Validate
+    // 6. Validate
     bool outputValidationSuccessful = true;
     for (int i = 0; i < allocSize; ++i) {
         outputValidationSuccessful &= ((unsigned char)(initDataSrc[i] + i) == (unsigned char)readBackData[i]);

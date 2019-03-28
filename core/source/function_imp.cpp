@@ -263,7 +263,7 @@ xe_result_t FunctionImp::setArgImage(uint32_t argIndex, size_t argSize, const vo
     //Optimization?  Rather than setting up and copying into a function's SSH, save references to the
     // arguments' surface states, then do all the copying and BTS updating once in appendLaunchFunction
     image->copySurfaceStateToSSH(ssh, kernelArgInfo.offsetHeap,
-            static_cast<uint32_t>(oclInternals->localBindingTableOffset), kernelArgBindingTableIndex[argIndex]);
+                                 static_cast<uint32_t>(oclInternals->localBindingTableOffset), kernelArgBindingTableIndex[argIndex]);
 
     GraphicsAllocation *alloc = image->getAllocation();
     assert(alloc);
@@ -319,9 +319,9 @@ bool FunctionImp::initialize(const xe_function_desc_t *desc) {
         //For some reason this doesn't work through mock:
         //void * ssh = this->getSurfaceStateHeap();
         //uint32_t bindingTableOffset = this->getBindingTableOffset();
-        void * ssh = this->oclInternals->pSshLocal.get();
+        void *ssh = this->oclInternals->pSshLocal.get();
         uint32_t bindingTableOffset = static_cast<uint32_t>(this->oclInternals->localBindingTableOffset);
-        void * bindingTable = ptrOffset(ssh, bindingTableOffset);
+        void *bindingTable = ptrOffset(ssh, bindingTableOffset);
 
         for (uint32_t i = 0; i < this->oclInternals->numberOfBindingTableStates; i++) {
             //auto bts = ptrOffset(bindingTable, getBindingTableStateSize() * i);
