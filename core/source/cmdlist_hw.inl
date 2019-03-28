@@ -404,7 +404,15 @@ xe_result_t CommandListCoreFamily<gfxCoreFamily>::appendLaunchMultipleFunctionsI
 
 template <GFXCORE_FAMILY gfxCoreFamily>
 xe_result_t CommandListCoreFamily<gfxCoreFamily>::appendEventReset(xe_event_handle_t hEvent) {
-    return XE_RESULT_ERROR_UNSUPPORTED;
+    auto event = Event::fromHandle(hEvent);
+    assert(event);
+    addToResidencyContainer(&event->getAllocation());
+
+    EncodeFlush<gfxCoreFamily>::encodeWithQwordWrite(*this,
+                                      event->getGpuAddress(),
+                                      static_cast<uint64_t>(-1));
+
+    return XE_RESULT_SUCCESS;
 }
 
 template <GFXCORE_FAMILY gfxCoreFamily>
