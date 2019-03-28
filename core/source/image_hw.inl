@@ -71,7 +71,7 @@ bool ImageCoreFamily<gfxCoreFamily>::initialize(Device *device, const xe_image_d
     surfaceState.setSurfaceFormat(format_table[desc->format][desc->numChannels - XE_NUMCHANNELS_MIN]);
 
     size_t elem_size = format_size[imageDesc.format];
-    surfaceState.setSurfacePitch(static_cast<uint32_t>(imageDesc.width * elem_size));
+    surfaceState.setSurfacePitch(static_cast<uint32_t>(imageDesc.numChannels * imageDesc.width * elem_size));
 
     surfaceState.setSurfaceBaseAddress(static_cast<uint64_t>(this->allocation->getGpuAddress()));
 
