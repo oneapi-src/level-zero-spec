@@ -31,7 +31,8 @@ void testAppendImageCopy(xe_device_handle_t &device,
     const xe_image_format_t format = XE_IMAGE_FORMAT_UINT8;
     const size_t width = 32;
     const size_t height = 32;
-    const size_t size = width * height * sizeof(format);
+    const size_t numChannels = 4;
+    const size_t size = numChannels * width * height * sizeof(uint8_t);
 
     xe_command_queue_handle_t cmdQueue;
     xe_command_list_handle_t cmdList;
@@ -47,8 +48,8 @@ void testAppendImageCopy(xe_device_handle_t &device,
     xe_image_desc_t srcImgDesc = {
         XE_IMAGE_DESC_VERSION_CURRENT,
         XE_IMAGE_FLAG_PROGRAM_READ,
-        XE_IMAGE_TYPE_1D,
-        format, 1,
+        XE_IMAGE_TYPE_2D,
+        format, numChannels,
         width, height, 0, 0, 0
     };
     xe_image_handle_t srcImg;
@@ -61,7 +62,7 @@ void testAppendImageCopy(xe_device_handle_t &device,
         XE_IMAGE_DESC_VERSION_CURRENT,
         XE_IMAGE_FLAG_PROGRAM_WRITE,
         XE_IMAGE_TYPE_2D,
-        format, 1,
+        format, numChannels,
         width, height, 0, 0, 0
     };
     xe_image_handle_t dstImg;
