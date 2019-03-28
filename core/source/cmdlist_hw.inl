@@ -570,19 +570,10 @@ xe_result_t CommandListCoreFamily<gfxCoreFamily>::appendSignalEvent(xe_event_han
     assert(event);
     addToResidencyContainer(&event->getAllocation());
 
-    using GfxFamily = typename OCLRT::GfxFamilyMapper<gfxCoreFamily>::GfxFamily;
-    using PIPE_CONTROL = typename GfxFamily::PIPE_CONTROL;
-    using POST_SYNC_OPERATION = typename PIPE_CONTROL::POST_SYNC_OPERATION;
-    PIPE_CONTROL cmd = GfxFamily::cmdInitPipeControl;
-    cmd.setPostSyncOperation(POST_SYNC_OPERATION::POST_SYNC_OPERATION_WRITE_IMMEDIATE_DATA);
-    cmd.setImmediateData(0u);
-    cmd.setCommandStreamerStallEnable(true);
-    auto gpuAddress = event->getGpuAddress();
-    cmd.setAddressHigh(gpuAddress >> 32u);
-    cmd.setAddress(uint32_t(gpuAddress));
+    EncodeFlush<gfxCoreFamily>::encodeWithQwordWrite(*this,
+                                      event->getGpuAddress(),
+                                      0u);
 
-    auto buffer = commandStream->getSpace(sizeof(cmd));
-    *(PIPE_CONTROL *)buffer = cmd;
     return XE_RESULT_SUCCESS;
 }
 
