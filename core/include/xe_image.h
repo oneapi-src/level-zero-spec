@@ -109,6 +109,55 @@ typedef struct _xe_image_desc_t
 } xe_image_desc_t;
 
 ///////////////////////////////////////////////////////////////////////////////
+/// @brief API version of ::xe_image_properties_t
+typedef enum _xe_image_properties_version_t
+{
+    XE_IMAGE_PROPERTIES_VERSION_CURRENT = XE_MAKE_VERSION( 1, 0 ),  ///< version 1.0
+
+} xe_image_properties_version_t;
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Supported sampler filtering flags
+typedef enum _xe_image_sampler_filter_flags_t
+{
+    XE_IMAGE_SAMPLER_FILTER_FLAGS_LINEAR = XE_BIT(0),   ///< device supports linear filtering
+
+} xe_image_sampler_filter_flags_t;
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Image properties
+typedef struct _xe_image_properties_t
+{
+    xe_image_properties_version_t version;          ///< [in] ::XE_IMAGE_PROPERTIES_VERSION_CURRENT
+    xe_image_sampler_filter_flags_t samplerFilterFlags; ///< [out] supported sampler filtering
+
+} xe_image_properties_t;
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Retrieves supported properties of an image.
+/// 
+/// @details
+///     - The application may call this function from simultaneous threads.
+///     - The implementation of this function should be lock-free.
+/// 
+/// @returns
+///     - ::XE_RESULT_SUCCESS
+///     - ::XE_RESULT_ERROR_UNINITIALIZED
+///     - ::XE_RESULT_ERROR_DEVICE_LOST
+///     - ::XE_RESULT_ERROR_INVALID_PARAMETER
+///         + nullptr == hDevice
+///         + nullptr == desc
+///         + nullptr == pImageProperties
+///     - ::XE_RESULT_ERROR_UNSUPPORTED
+///         + ::XE_IMAGE_DESC_VERSION_CURRENT < desc->version
+__xedllport xe_result_t __xecall
+xeDeviceGetImageProperties(
+    xe_device_handle_t hDevice,                     ///< [in] handle of the device
+    const xe_image_desc_t* desc,                    ///< [in] pointer to image descriptor
+    xe_image_properties_t* pImageProperties         ///< [out] pointer to image properties
+    );
+
+///////////////////////////////////////////////////////////////////////////////
 /// @brief Creates a image object on the device.
 /// 
 /// @details

@@ -243,6 +243,22 @@ namespace xe
         };
 
         ///////////////////////////////////////////////////////////////////////////////
+        /// @brief C++ version for ::xe_image_properties_version_t
+        enum class image_properties_version_t
+        {
+            CURRENT = XE_MAKE_VERSION( 1, 0 ),              ///< version 1.0
+
+        };
+
+        ///////////////////////////////////////////////////////////////////////////////
+        /// @brief C++ version for ::xe_image_sampler_filter_flags_t
+        enum class image_sampler_filter_flags_t
+        {
+            LINEAR = XE_BIT(0),                             ///< device supports linear filtering
+
+        };
+
+        ///////////////////////////////////////////////////////////////////////////////
         /// @brief C++ version for ::xe_module_desc_version_t
         enum class module_desc_version_t
         {
@@ -431,6 +447,15 @@ namespace xe
             size_t arraylevels = 1;                         ///< [in] array levels (array types only), see
                                                             ///< ::device_memory_properties_t::maxImageArraySlices
             size_t miplevels = 0;                           ///< [in] mipmap levels (must be 0)
+
+        };
+
+        ///////////////////////////////////////////////////////////////////////////////
+        /// @brief C++ version for ::xe_image_properties_t
+        struct image_properties_t
+        {
+            image_properties_version_t version = image_properties_version_t::CURRENT;   ///< [in] ::IMAGE_PROPERTIES_VERSION_CURRENT
+            image_sampler_filter_flags_t samplerFilterFlags;///< [out] supported sampler filtering
 
         };
 
@@ -637,6 +662,17 @@ namespace xe
         PlaceEvent(
             const event_desc_t* desc,                       ///< [in] pointer to event descriptor
             void* ptr                                       ///< [in] pointer to the device pointer where the event should be placed
+            );
+
+        ///////////////////////////////////////////////////////////////////////////////
+        /// @brief C++ wrapper for ::xeDeviceGetImageProperties
+        /// @returns
+        ///     - ::image_properties_t: pointer to image properties
+        /// 
+        /// @throws result_t
+        inline image_properties_t
+        GetImageProperties(
+            const image_desc_t* desc                        ///< [in] pointer to image descriptor
             );
 
         ///////////////////////////////////////////////////////////////////////////////

@@ -110,6 +110,55 @@ members:
       desc: "[in] mipmap levels (must be 0)"
       init: "0"
 --- #--------------------------------------------------------------------------
+type: enum
+desc: "API version of $x_image_properties_t"
+class: $xDevice
+name: $x_image_properties_version_t
+etors:
+    - name: $X_IMAGE_PROPERTIES_VERSION_CURRENT
+      value: "$X_MAKE_VERSION( 1, 0 )"
+      desc: "version 1.0"
+--- #--------------------------------------------------------------------------
+type: enum
+desc: "Supported sampler filtering flags"
+class: $xDevice
+name: $x_image_sampler_filter_flags_t
+etors:
+    - name: $X_IMAGE_SAMPLER_FILTER_FLAGS_LINEAR
+      value: "$X_BIT(0)"
+      desc: "device supports linear filtering"
+--- #--------------------------------------------------------------------------
+type: struct
+desc: "Image properties"
+class: $xDevice
+name: $x_image_properties_t
+members:
+    - type: $x_image_properties_version_t
+      name: version
+      desc: "[in] $X_IMAGE_PROPERTIES_VERSION_CURRENT"
+      init: $X_IMAGE_PROPERTIES_VERSION_CURRENT
+    - type: $x_image_sampler_filter_flags_t
+      name: samplerFilterFlags
+      desc: "[out] supported sampler filtering"
+--- #--------------------------------------------------------------------------
+type: function
+desc: "Retrieves supported properties of an image."
+class: $xDevice
+name: GetImageProperties
+details:
+    - "The application may call this function from simultaneous threads."
+    - "The implementation of this function should be lock-free."
+params:
+    - type: $x_device_handle_t
+      name: hDevice
+      desc: "[in] handle of the device"
+    - type: "const $x_image_desc_t*"
+      name: desc
+      desc: "[in] pointer to image descriptor"
+    - type: "$x_image_properties_t*"
+      name: pImageProperties
+      desc: "[out] pointer to image properties"
+--- #--------------------------------------------------------------------------
 type: function
 desc: "Creates a image object on the device."
 class: $xDevice

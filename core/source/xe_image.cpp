@@ -41,6 +41,67 @@
 #include <new>
 
 ///////////////////////////////////////////////////////////////////////////////
+/// @brief Retrieves supported properties of an image.
+/// 
+/// @details
+///     - The application may call this function from simultaneous threads.
+///     - The implementation of this function should be lock-free.
+/// 
+/// @returns
+///     - ::XE_RESULT_SUCCESS
+///     - ::XE_RESULT_ERROR_UNINITIALIZED
+///     - ::XE_RESULT_ERROR_DEVICE_LOST
+///     - ::XE_RESULT_ERROR_INVALID_PARAMETER
+///         + nullptr == hDevice
+///         + nullptr == desc
+///         + nullptr == pImageProperties
+///     - ::XE_RESULT_ERROR_UNSUPPORTED
+///         + ::XE_IMAGE_DESC_VERSION_CURRENT < desc->version
+///
+/// @hash {7dbaffb711cd245e68d03c429911d6bae57f5b9111605ec3253dd2f5435c0ab5}
+///
+__xedllexport xe_result_t __xecall
+xeDeviceGetImageProperties(
+    xe_device_handle_t hDevice,                     ///< [in] handle of the device
+    const xe_image_desc_t* desc,                    ///< [in] pointer to image descriptor
+    xe_image_properties_t* pImageProperties         ///< [out] pointer to image properties
+    )
+{
+    try
+    {
+        //if( XE_DRIVER_PARAMETER_VALIDATION_LEVEL >= 0 )
+        {
+            // if( nullptr == driver ) return XE_RESULT_ERROR_UNINITIALIZED;
+            // Check parameters
+            if( nullptr == hDevice ) return XE_RESULT_ERROR_INVALID_PARAMETER;
+            if( nullptr == desc ) return XE_RESULT_ERROR_INVALID_PARAMETER;
+            if( nullptr == pImageProperties ) return XE_RESULT_ERROR_INVALID_PARAMETER;
+            if( XE_IMAGE_DESC_VERSION_CURRENT < desc->version ) return XE_RESULT_ERROR_UNSUPPORTED;
+        }
+        /// @begin
+#if defined(XE_NULLDRV)
+        return XE_RESULT_SUCCESS;
+#else
+        return L0::Device::fromHandle(hDevice)->getImageProperties(desc, pImageProperties);
+#endif
+        /// @end
+    }
+    catch(xe_result_t& result)
+    {
+        return result;
+    }
+    catch(std::bad_alloc&)
+    {
+        return XE_RESULT_ERROR_OUT_OF_HOST_MEMORY;
+    }
+    catch(std::exception&)
+    {
+        // @todo: pfnOnException(e.what());
+        return XE_RESULT_ERROR_UNKNOWN;
+    }
+}
+
+///////////////////////////////////////////////////////////////////////////////
 /// @brief Creates a image object on the device.
 /// 
 /// @details

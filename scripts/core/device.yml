@@ -28,7 +28,7 @@ class: $xDevice
 name: $x_device_uuid_t
 members:
     - type: uint8_t
-      name: id[$X_MAX_UUID_SIZE]
+      name: "id[$X_MAX_UUID_SIZE]"
       desc: "[out] device universal unique id"
 --- #--------------------------------------------------------------------------
 type: function

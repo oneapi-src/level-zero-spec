@@ -408,6 +408,26 @@ namespace xe
     }
 
     ///////////////////////////////////////////////////////////////////////////////
+    /// @brief C++ wrapper for ::xeDeviceGetImageProperties
+    /// 
+    /// @details
+    ///     - The application may call this function from simultaneous threads.
+    ///     - The implementation of this function should be lock-free.
+    /// 
+    /// @returns
+    ///     - ::image_properties_t: pointer to image properties
+    /// 
+    /// @throws result_t
+    inline image_properties_t 
+    Device::GetImageProperties(
+        const image_desc_t* desc                        ///< [in] pointer to image descriptor
+        )
+    {
+        // auto result = ::xeDeviceGetImageProperties( handle, desc );
+        // if( ::XE_RESULT_SUCCESS != result ) throw exception(result, "xe::Device::GetImageProperties");
+    }
+
+    ///////////////////////////////////////////////////////////////////////////////
     /// @brief C++ wrapper for ::xeDeviceCreateImage
     /// 
     /// @details

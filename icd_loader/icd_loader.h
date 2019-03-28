@@ -307,6 +307,11 @@ typedef xe_result_t (__xecall *pfn_xeFenceQueryStatus)(
 typedef xe_result_t (__xecall *pfn_xeFenceReset)(
     xe_fence_handle_t hFence                        ///< [in] handle of the fence
     );
+typedef xe_result_t (__xecall *pfn_xeDeviceGetImageProperties)(
+    xe_device_handle_t hDevice,                     ///< [in] handle of the device
+    const xe_image_desc_t* desc,                    ///< [in] pointer to image descriptor
+    xe_image_properties_t* pImageProperties         ///< [out] pointer to image properties
+    );
 typedef xe_result_t (__xecall *pfn_xeDeviceCreateImage)(
     xe_device_handle_t hDevice,                     ///< [in] handle of the device
     const xe_image_desc_t* desc,                    ///< [in] pointer to image descriptor
@@ -550,6 +555,7 @@ typedef struct _xe_dispatch_table_t
     pfn_xeFenceHostSynchronize xeFenceHostSynchronize;
     pfn_xeFenceQueryStatus xeFenceQueryStatus;
     pfn_xeFenceReset xeFenceReset;
+    pfn_xeDeviceGetImageProperties xeDeviceGetImageProperties;
     pfn_xeDeviceCreateImage xeDeviceCreateImage;
     pfn_xeImageDestroy xeImageDestroy;
     pfn_xeSharedMemAlloc xeSharedMemAlloc;
@@ -652,6 +658,7 @@ inline bool load_xe(void *handle, void *(*funcAddressGetter)(void *handle, const
     outTable->xeFenceHostSynchronize = (pfn_xeFenceHostSynchronize)funcAddressGetter(handle, "xeFenceHostSynchronize");
     outTable->xeFenceQueryStatus = (pfn_xeFenceQueryStatus)funcAddressGetter(handle, "xeFenceQueryStatus");
     outTable->xeFenceReset = (pfn_xeFenceReset)funcAddressGetter(handle, "xeFenceReset");
+    outTable->xeDeviceGetImageProperties = (pfn_xeDeviceGetImageProperties)funcAddressGetter(handle, "xeDeviceGetImageProperties");
     outTable->xeDeviceCreateImage = (pfn_xeDeviceCreateImage)funcAddressGetter(handle, "xeDeviceCreateImage");
     outTable->xeImageDestroy = (pfn_xeImageDestroy)funcAddressGetter(handle, "xeImageDestroy");
     outTable->xeSharedMemAlloc = (pfn_xeSharedMemAlloc)funcAddressGetter(handle, "xeSharedMemAlloc");
@@ -856,6 +863,9 @@ inline bool load_xe(void *handle, void *(*funcAddressGetter)(void *handle, const
         return false;
     }
     if(0 == outTable->xeFenceReset){
+        return false;
+    }
+    if(0 == outTable->xeDeviceGetImageProperties){
         return false;
     }
     if(0 == outTable->xeDeviceCreateImage){

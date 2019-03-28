@@ -606,6 +606,16 @@ xe_result_t __xecall xeFenceReset(
     }
     return dispatchTable.xeFenceReset(hFence);
 }
+xe_result_t __xecall xeDeviceGetImageProperties(
+        xe_device_handle_t hDevice,                     ///< [in] handle of the device
+        const xe_image_desc_t* desc,                    ///< [in] pointer to image descriptor
+        xe_image_properties_t* pImageProperties         ///< [out] pointer to image properties
+    ){
+    if(dispatchTableInitialized == false){
+        return XE_RESULT_ERROR_UNINITIALIZED;
+    }
+    return dispatchTable.xeDeviceGetImageProperties(hDevice, desc, pImageProperties);
+}
 xe_result_t __xecall xeDeviceCreateImage(
         xe_device_handle_t hDevice,                     ///< [in] handle of the device
         const xe_image_desc_t* desc,                    ///< [in] pointer to image descriptor
