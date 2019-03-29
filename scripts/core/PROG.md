@@ -378,20 +378,27 @@ However, this generality comes with some cost in efficiency.
 
 Events do **not** represent intra-command list dependencies between programs.
 
+Events are created from a pool of events that all share the same properties.
+- An event pool reduces the cost of creating multiple events byt allowing underlying device allocations to be shared
+- An event pool can be shared via IPC, rather than sharing each individual event
+
 The following diagram illustrates an example of events:  
 ![Event](../images/core_event.png?raw=true)  
 @image latex core_event.png
 
 The following sample code demonstrates a sequence for creation and submission of an event:
 ```c
-    // Create event
-    ${x}_event_desc_t eventDesc = {
-        ${X}_EVENT_DESC_VERSION_CURRENT,
-        ${X}_EVENT_FLAG_NONE,
+    // Create event pool
+    ${x}_event_pool_desc_t eventPoolDesc = {
+        ${X}_EVENT_POOL_DESC_VERSION_CURRENT,
+        ${X}_EVENT_POOL_FLAG_NONE,
         1
     };
+    ${x}_event_pool_handle_t hEventPool;
+    ${x}DeviceCreateEventPool(hDevice, &eventPoolDesc, &hEventPool);
+
     ${x}_event_handle_t hEvent;
-    ${x}DeviceCreateEvent(hDevice, &eventDesc, &hEvent);
+    ${x}EventPoolCreateEvent(hEventPool, 0, &hEvent);
 
     // Append a wait on an event into a command list
     ${x}CommandListAppendWaitOnEvent(hCommandList, hEvent);
@@ -412,7 +419,7 @@ Events can be used to provide different types of device performance metrics:
 ${"###"} Timestamps
 Timestamps are used to measure the time between two events signalled by the same device.
 - An application can use ::${x}EventQueryElapsedTime to calculate the time (in milliseconds) between two events.
-- Both events must be created with ::${X}_EVENT_FLAG_TIMESTAMP
+- Both events must be created from a pool created with ::${X}_EVENT_POOL_FLAG_TIMESTAMP
 - Both events must be signalled
 
 The following sample code demonstrates a sequence for measuring time between events:
@@ -436,7 +443,7 @@ The following sample code demonstrates a sequence for measuring time between eve
 ${"###"} Counters
 Counters are used to collect various device-specific values between two events signalled by the same device.
 - An application can use ::${x}EventQueryMetricsData to calculate the time (in milliseconds) between two events.
-- Both events must be created with ::${X}_EVENT_FLAG_PERFORMANCE_METRICS
+- Both events must be created from a pool created with ::${X}_EVENT_POOL_FLAG_PERFORMANCE_METRICS
 - Both events must be signalled
 
 The following sample code demonstrates a sequence for collecting counters between events:
@@ -991,51 +998,64 @@ Note, there is no guaranteed address equivalence for the values of `dptr` in eac
 ${"##"} Events
 The following code examples demonstrate how to use the event IPC APIs:
 
-1. First, the event is create, packaged, and sent on the sending process:
+1. First, the event pool is create, packaged, and sent on the sending process:
 ```c
-    // create event
-    ${x}_event_desc_t eventDesc = {
-        ${X}_EVENT_DESC_VERSION_CURRENT,
-        ${X}_EVENT_FLAG_IPC | ${X}_EVENT_FLAG_DEVICE_TO_HOST,
-        1
+    // create event pool
+    ${x}_event_pool_desc_t eventPoolDesc = {
+        ${X}_EVENT_POOL_DESC_VERSION_CURRENT,
+        ${X}_EVENT_POOL_FLAG_IPC | ${X}_EVENT_POOL_FLAG_DEVICE_TO_HOST,
+        10
     };
-    ${x}_event_handle_t hEvent;
-    ${x}DeviceCreateEvent(hDevice, &eventDesc, &hEvent);
+    ${x}_event_pool_handle_t hEventPool;
+    ${x}DeviceCreateEventPool(hDevice, &eventPoolDesc, &hEventPool);
  
     // get IPC handle and send to another process
-    ${x}_ipc_event_handle_t hIpcEvent;
-    ${x}EventGetIpcHandle(1, &hEvent, &hIpcEvent);
-    send_to_receiving_process(hIpcEvent);
+    ${x}_ipc_event_pool_handle_t hIpcEvent;
+    ${x}EventPoolGetIpcHandle(hEventPool, &hIpcEventPool);
+    send_to_receiving_process(hIpcEventPool);
 ```
 
-2. Next, the event is received and un-packaged on the receiving process:
+2. Next, the event pool is received and un-packaged on the receiving process:
 ```c
-    // get IPC handle from Process 1
-    ${x}_ipc_event_handle_t hIpcEvent;
-    receive_from_sending_process(&hIpcEvent);
+    // get IPC handle from other process
+    ${x}_ipc_event_pool_handle_t hIpcEventPool;
+    receive_from_sending_process(&hIpcEventPool);
  
-    // open event
-    ${x}_event_handle_t hEvent;
-    ${x}EventOpenIpcHandle(hDevice, hIpcEvent, 1, &hEvent);
+    // open event pool
+    ${x}_event_pool_handle_t hEventPool;
+    ${x}EventPoolOpenIpcHandle(hDevice, hIpcEvent, &hEventPool);
 ```
 
 3. Each process may now refer to the same device event allocation via its handle.
-Note, there is no guaranteed address equivalence for the values of `hEvent` in each process.
 ```c
+    ${x}_event_handle_t hEvent;
+    ${x}EventPoolCreateEvent(hEventPool, 5, &hEvent);
+
     // submit function and signal event when complete
     ${x}CommandListAppendLaunchFunction(hCommandList, hFunction, &args, hEvent);
     ${x}CommandListClose(hCommandList);
     ${x}CommandQueueExecuteCommandLists(hCommandQueue, 1, &hCommandList, nullptr);
 ```
 
-4. To cleanup, first close the handle in the receiving process:
 ```c
-    ${x}EventCloseIpcHandle(1, &hEvent);
+    ${x}_event_handle_t hEvent;
+    ${x}EventPoolCreateEvent(hEventPool, 5, &hEvent);
+
+    ${x}EventHostSynchronize(hEvent, MAX_UINT32);
 ```
 
-5. Finally, free the event handle in the sending process:
+Note, there is no guaranteed address equivalence for the values of `hEvent` in each process.
+
+4. To cleanup, first close the pool handle in the receiving process:
 ```c
     ${x}EventDestroy(hEvent);
+    ${x}EventPoolCloseIpcHandle(&hEventPool);
+```
+
+5. Finally, free the event pool handle in the sending process:
+```c
+    ${x}EventDestroy(hEvent);
+    ${x}EventPoolDestroy(hEventPool);
 ```
 
 ${"#"} <a name="exp">Experimental</a>

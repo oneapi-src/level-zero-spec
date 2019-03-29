@@ -359,29 +359,23 @@ namespace xe
     }
 
     ///////////////////////////////////////////////////////////////////////////////
-    /// @brief C++ wrapper for ::xeDeviceCreateEvent
+    /// @brief C++ wrapper for ::xeDeviceCreateEventPool
     /// 
     /// @details
     ///     - This function may be called from simultaneous threads.
     ///     - The implementation of this function should be lock-free.
     /// 
-    /// @remarks
-    ///   _Analogues_
-    ///     - **clCreateUserEvent**
-    ///     - vkCreateEvent
-    ///     - cuEventCreate
-    /// 
     /// @returns
-    ///     - ::event_handle_t: pointer to handle(s) of event object(s) created
+    ///     - ::event_pool_handle_t: pointer handle of event pool object created
     /// 
     /// @throws result_t
-    inline event_handle_t 
-    Device::CreateEvent(
-        const event_desc_t* desc                        ///< [in] pointer to event descriptor
+    inline event_pool_handle_t 
+    Device::CreateEventPool(
+        const event_pool_desc_t* desc                   ///< [in] pointer to event pool descriptor
         )
     {
-        // auto result = ::xeDeviceCreateEvent( handle, desc );
-        // if( ::XE_RESULT_SUCCESS != result ) throw exception(result, "xe::Device::CreateEvent");
+        // auto result = ::xeDeviceCreateEventPool( handle, desc );
+        // if( ::XE_RESULT_SUCCESS != result ) throw exception(result, "xe::Device::CreateEventPool");
     }
 
     ///////////////////////////////////////////////////////////////////////////////

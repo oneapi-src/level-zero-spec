@@ -64,9 +64,9 @@ namespace xe
     using fence_handle_t = Fence*;
 
     ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Handle of driver's semaphore object
-    class Semaphore;
-    using semaphore_handle_t = Semaphore*;
+    /// @brief Handle of driver's event pool object
+    class EventPool;
+    using event_pool_handle_t = EventPool*;
 
     ///////////////////////////////////////////////////////////////////////////////
     /// @brief Handle of driver's event object
@@ -103,8 +103,8 @@ namespace xe
     using ipc_mem_handle_t = ::xe_ipc_mem_handle_t;
 
     ///////////////////////////////////////////////////////////////////////////////
-    /// @brief IPC handle to a event allocation
-    using ipc_event_handle_t = ::xe_ipc_event_handle_t;
+    /// @brief IPC handle to a event pool allocation
+    using ipc_event_pool_handle_t = ::xe_ipc_event_pool_handle_t;
 
     ///////////////////////////////////////////////////////////////////////////////
     /// @brief Defines Return/Error codes

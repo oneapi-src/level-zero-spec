@@ -281,7 +281,7 @@ members:
       name: numSubGroupSizes
       desc: "[out] Number of subgroup sizes supported. This indicates number of entries in subGroupSizes."
     - type: uint32_t
-      name: subGroupSizes[$X_SUBGROUPSIZE_COUNT]
+      name: "subGroupSizes[$X_SUBGROUPSIZE_COUNT]"
       desc: "[out] Size group sizes supported."
 --- #--------------------------------------------------------------------------
 type: function
@@ -476,7 +476,7 @@ desc: "Supported Cache Config"
 class: $xDevice
 name: $x_cache_config_t
 details:
-    - Supported Cache Config (Default, Large SLM, Large Data Cache)
+    - "Supported Cache Config (Default, Large SLM, Large Data Cache)"
 etors:
     - name: $X_CACHE_CONFIG_DEFAULT
       value: "$X_BIT( 0 )"

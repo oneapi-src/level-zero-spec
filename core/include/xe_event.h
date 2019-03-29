@@ -42,41 +42,95 @@ extern "C" {
 #endif
 
 ///////////////////////////////////////////////////////////////////////////////
-/// @brief API version of ::xe_event_desc_t
-typedef enum _xe_event_desc_version_t
+/// @brief API version of ::xe_event_pool_desc_t
+typedef enum _xe_event_pool_desc_version_t
 {
-    XE_EVENT_DESC_VERSION_CURRENT = XE_MAKE_VERSION( 1, 0 ),///< version 1.0
+    XE_EVENT_POOL_DESC_VERSION_CURRENT = XE_MAKE_VERSION( 1, 0 ),   ///< version 1.0
 
-} xe_event_desc_version_t;
+} xe_event_pool_desc_version_t;
 
 ///////////////////////////////////////////////////////////////////////////////
-/// @brief Supported event creation flags
-typedef enum _xe_event_flag_t
+/// @brief Supported event pool creation flags
+typedef enum _xe_event_pool_flag_t
 {
-    XE_EVENT_FLAG_NONE = 0,                         ///< signals and waits only within the same device
-    XE_EVENT_FLAG_HOST_TO_DEVICE = XE_BIT(0),       ///< signals from host, waits on device
-    XE_EVENT_FLAG_DEVICE_TO_HOST = XE_BIT(1),       ///< signals from device, waits on host
-    XE_EVENT_FLAG_DEVICE_TO_DEVICE = XE_BIT(2),     ///< signals from device, waits on another device
-    XE_EVENT_FLAG_IPC = XE_BIT(3),                  ///< signals and waits may occur across processes
-    XE_EVENT_FLAG_TIMESTAMP = XE_BIT(4),            ///< supports time-based queries
-    XE_EVENT_FLAG_PERFORMANCE_METRICS = XE_BIT(5),  ///< supports performance metrics (MDAPI)
+    XE_EVENT_POOL_FLAG_NONE = 0,                    ///< signals and waits only within the same device
+    XE_EVENT_POOL_FLAG_HOST_TO_DEVICE = XE_BIT(0),  ///< signals from host, waits on device
+    XE_EVENT_POOL_FLAG_DEVICE_TO_HOST = XE_BIT(1),  ///< signals from device, waits on host
+    XE_EVENT_POOL_FLAG_DEVICE_TO_DEVICE = XE_BIT(2),///< signals from device, waits on another device
+    XE_EVENT_POOL_FLAG_IPC = XE_BIT(3),             ///< signals and waits may occur across processes
+    XE_EVENT_POOL_FLAG_TIMESTAMP = XE_BIT(4),       ///< supports time-based queries
+    XE_EVENT_POOL_FLAG_PERFORMANCE_METRICS = XE_BIT(5), ///< supports performance metrics (MDAPI)
 
-} xe_event_flag_t;
+} xe_event_pool_flag_t;
 
 ///////////////////////////////////////////////////////////////////////////////
-/// @brief Event descriptor
-typedef struct _xe_event_desc_t
+/// @brief Event pool descriptor
+typedef struct _xe_event_pool_desc_t
 {
-    xe_event_desc_version_t version;                ///< [in] ::XE_EVENT_DESC_VERSION_CURRENT
-    xe_event_flag_t flags;                          ///< [in] creation flags
-    uint32_t count;                                 ///< [in] number of events to create
+    xe_event_pool_desc_version_t version;           ///< [in] ::XE_EVENT_POOL_DESC_VERSION_CURRENT
+    xe_event_pool_flag_t flags;                     ///< [in] creation flags
+    uint32_t count;                                 ///< [in] number of events within the pool
 
-} xe_event_desc_t;
+} xe_event_pool_desc_t;
 
 ///////////////////////////////////////////////////////////////////////////////
-/// @brief Creates an event object on the device.
+/// @brief Creates a pool for a set of event(s) on the device.
 /// 
 /// @details
+///     - This function may be called from simultaneous threads.
+///     - The implementation of this function should be lock-free.
+/// 
+/// @returns
+///     - ::XE_RESULT_SUCCESS
+///     - ::XE_RESULT_ERROR_UNINITIALIZED
+///     - ::XE_RESULT_ERROR_DEVICE_LOST
+///     - ::XE_RESULT_ERROR_INVALID_PARAMETER
+///         + nullptr == hDevice
+///         + nullptr == desc
+///         + nullptr == phEventPool
+///     - ::XE_RESULT_ERROR_UNSUPPORTED
+///         + ::XE_EVENT_POOL_DESC_VERSION_CURRENT < desc->version
+///     - ::XE_RESULT_ERROR_OUT_OF_HOST_MEMORY
+///     - ::XE_RESULT_ERROR_OUT_OF_DEVICE_MEMORY
+__xedllport xe_result_t __xecall
+xeDeviceCreateEventPool(
+    xe_device_handle_t hDevice,                     ///< [in] handle of the device
+    const xe_event_pool_desc_t* desc,               ///< [in] pointer to event pool descriptor
+    xe_event_pool_handle_t* phEventPool             ///< [out] pointer handle of event pool object created
+    );
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Deletes an event pool object.
+/// 
+/// @details
+///     - The application is responsible for destroying all event handles
+///       created from the pool before destroying the pool itself
+///     - The application is responsible for making sure the GPU is not
+///       currently referencing the any event within the pool before it is
+///       deleted
+///     - The implementation of this function will immediately free all Host and
+///       Device allocations associated with this event pool
+///     - The implementation of this function should be lock-free.
+/// 
+/// @returns
+///     - ::XE_RESULT_SUCCESS
+///     - ::XE_RESULT_ERROR_UNINITIALIZED
+///     - ::XE_RESULT_ERROR_DEVICE_LOST
+///     - ::XE_RESULT_ERROR_INVALID_PARAMETER
+///         + nullptr == hEventPool
+///     - ::XE_RESULT_ERROR_UNSUPPORTED
+__xedllport xe_result_t __xecall
+xeEventPoolDestroy(
+    xe_event_pool_handle_t hEventPool               ///< [in] handle of event pool object to destroy
+    );
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Creates an event on the device.
+/// 
+/// @details
+///     - Multiple events cannot be created using the same index from the same
+///       pool
+///     - The index must be less-than the count specified during pool creation
 ///     - This function may be called from simultaneous threads.
 ///     - The implementation of this function should be lock-free.
 /// 
@@ -91,18 +145,15 @@ typedef struct _xe_event_desc_t
 ///     - ::XE_RESULT_ERROR_UNINITIALIZED
 ///     - ::XE_RESULT_ERROR_DEVICE_LOST
 ///     - ::XE_RESULT_ERROR_INVALID_PARAMETER
-///         + nullptr == hDevice
-///         + nullptr == desc
+///         + nullptr == hEventPool
 ///         + nullptr == phEvent
 ///     - ::XE_RESULT_ERROR_UNSUPPORTED
-///         + ::XE_EVENT_DESC_VERSION_CURRENT < desc->version
 ///     - ::XE_RESULT_ERROR_OUT_OF_HOST_MEMORY
-///     - ::XE_RESULT_ERROR_OUT_OF_DEVICE_MEMORY
 __xedllport xe_result_t __xecall
-xeDeviceCreateEvent(
-    xe_device_handle_t hDevice,                     ///< [in] handle of the device
-    const xe_event_desc_t* desc,                    ///< [in] pointer to event descriptor
-    xe_event_handle_t* phEvent                      ///< [out] pointer to handle(s) of event object(s) created
+xeEventPoolCreateEvent(
+    xe_event_pool_handle_t hEventPool,              ///< [in] handle of the event pool
+    uint32_t index,                                 ///< [in] index of the event within the pool
+    xe_event_handle_t* phEvent                      ///< [out] pointer to handle of event object created
     );
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -131,6 +182,84 @@ xeDeviceCreateEvent(
 __xedllport xe_result_t __xecall
 xeEventDestroy(
     xe_event_handle_t hEvent                        ///< [in] handle of event object to destroy
+    );
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Gets an IPC event pool handle for the specified event handle that can
+///        be shared with another process.
+/// 
+/// @details
+///     - The application may call this function from simultaneous threads.
+/// 
+/// @remarks
+///   _Analogues_
+///     - **cuIpcGetEventHandle**
+/// 
+/// @returns
+///     - ::XE_RESULT_SUCCESS
+///     - ::XE_RESULT_ERROR_UNINITIALIZED
+///     - ::XE_RESULT_ERROR_DEVICE_LOST
+///     - ::XE_RESULT_ERROR_INVALID_PARAMETER
+///         + nullptr == hEventPool
+///         + nullptr == phIpc
+///     - ::XE_RESULT_ERROR_UNSUPPORTED
+__xedllport xe_result_t __xecall
+xeEventPoolGetIpcHandle(
+    xe_event_pool_handle_t hEventPool,              ///< [in] handle of event pool object
+    xe_ipc_event_pool_handle_t* phIpc               ///< [out] Returned IPC event handle
+    );
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Opens an IPC event pool handle to retrieve an event pool handle from
+///        another process.
+/// 
+/// @details
+///     - The event handle in this process should not be freed with
+///       ::xeEventPoolDestroy, but rather with ::xeEventPoolCloseIpcHandle.
+///     - The application may call this function from simultaneous threads.
+/// 
+/// @remarks
+///   _Analogues_
+///     - **cuIpcOpenMemHandle**
+/// 
+/// @returns
+///     - ::XE_RESULT_SUCCESS
+///     - ::XE_RESULT_ERROR_UNINITIALIZED
+///     - ::XE_RESULT_ERROR_DEVICE_LOST
+///     - ::XE_RESULT_ERROR_INVALID_PARAMETER
+///         + nullptr == hDevice
+///         + nullptr == hIpc
+///         + nullptr == phEventPool
+///     - ::XE_RESULT_ERROR_UNSUPPORTED
+__xedllport xe_result_t __xecall
+xeEventPoolOpenIpcHandle(
+    xe_device_handle_t hDevice,                     ///< [in] handle of the device to associate with the IPC event pool handle
+    xe_ipc_event_pool_handle_t hIpc,                ///< [in] IPC event handle
+    xe_event_pool_handle_t* phEventPool             ///< [out] pointer handle of event pool object created
+    );
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Closes an IPC event handle in the current process.
+/// 
+/// @details
+///     - Closes an IPC event handle by destroying events that were opened in
+///       this process using ::xeEventPoolOpenIpcHandle.
+///     - The application may call this function from simultaneous threads.
+/// 
+/// @remarks
+///   _Analogues_
+///     - **cuIpcCloseMemHandle**
+/// 
+/// @returns
+///     - ::XE_RESULT_SUCCESS
+///     - ::XE_RESULT_ERROR_UNINITIALIZED
+///     - ::XE_RESULT_ERROR_DEVICE_LOST
+///     - ::XE_RESULT_ERROR_INVALID_PARAMETER
+///         + nullptr == hEventPool
+///     - ::XE_RESULT_ERROR_UNSUPPORTED
+__xedllport xe_result_t __xecall
+xeEventPoolCloseIpcHandle(
+    xe_event_pool_handle_t hEventPool               ///< [in] handle of event pool object
     );
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -231,9 +360,10 @@ __xedllport xe_result_t __xecall
 xeEventHostSynchronize(
     xe_event_handle_t hEvent,                       ///< [in] handle of the event
     uint32_t timeout                                ///< [in] if non-zero, then indicates the maximum time to yield before
-                                                    ///< returning ::XE_RESULT_SUCCESS or ::XE_RESULT_NOT_READY; if zero, then
-                                                    ///< operates exactly like ::xeEventQueryStatus; if MAX_UINT32, then
-                                                    ///< function will not return until complete or device is lost.
+                                                    ///< returning ::XE_RESULT_SUCCESS or ::XE_RESULT_NOT_READY;
+                                                    ///< if zero, then operates exactly like ::xeEventQueryStatus;
+                                                    ///< if MAX_UINT32, then function will not return until complete or device
+                                                    ///< is lost.
     );
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -283,7 +413,7 @@ xeEventQueryStatus(
 ///         + nullptr == hEventEnd
 ///         + nullptr == pTime
 ///         + either event not signaled by device
-///         + either event not created with ::XE_EVENT_FLAG_TIMESTAMP
+///         + either event not created from pool created with ::XE_EVENT_POOL_FLAG_TIMESTAMP
 ///     - ::XE_RESULT_ERROR_UNSUPPORTED
 __xedllport xe_result_t __xecall
 xeEventQueryElapsedTime(
@@ -308,7 +438,7 @@ xeEventQueryElapsedTime(
 ///         + nullptr == hEventEnd
 ///         + nullptr == pReportData
 ///         + either event not signaled by device
-///         + either event not created with ::XE_EVENT_FLAG_PERFORMANCE_METRICS
+///         + either event not created from pool created with ::XE_EVENT_POOL_FLAG_PERFORMANCE_METRICS
 ///         + report size too small
 ///     - ::XE_RESULT_ERROR_UNSUPPORTED
 __xedllport xe_result_t __xecall
@@ -366,89 +496,6 @@ xeCommandListAppendEventReset(
 __xedllport xe_result_t __xecall
 xeEventReset(
     xe_event_handle_t hEvent                        ///< [in] handle of the event
-    );
-
-///////////////////////////////////////////////////////////////////////////////
-/// @brief Creates an IPC event handle for the specified Event in the sending
-///        process
-/// 
-/// @details
-///     - All events in the array must have been created by a singular
-///       ::xeDeviceCreateEvent call
-///     - The application may call this function from simultaneous threads.
-/// 
-/// @remarks
-///   _Analogues_
-///     - **cuIpcGetEventHandle**
-/// 
-/// @returns
-///     - ::XE_RESULT_SUCCESS
-///     - ::XE_RESULT_ERROR_UNINITIALIZED
-///     - ::XE_RESULT_ERROR_DEVICE_LOST
-///     - ::XE_RESULT_ERROR_INVALID_PARAMETER
-///         + nullptr == phEvent
-///         + nullptr == pIpcHandle
-///     - ::XE_RESULT_ERROR_UNSUPPORTED
-__xedllport xe_result_t __xecall
-xeEventGetIpcHandle(
-    uint32_t count,                                 ///< [in] number of events
-    xe_event_handle_t* phEvent,                     ///< [in] pointer to array of event handle(s)
-    xe_ipc_event_handle_t* pIpcHandle               ///< [out] Returned IPC event handle
-    );
-
-///////////////////////////////////////////////////////////////////////////////
-/// @brief Opens an IPC event handle to retrieve a device pointer in a receiving
-///        process
-/// 
-/// @details
-///     - The event handle in this process should not be freed with
-///       ::xeEventDestroy, but rather with ::xeEventCloseIpcHandle.
-///     - The application may call this function from simultaneous threads.
-/// 
-/// @remarks
-///   _Analogues_
-///     - **cuIpcOpenMemHandle**
-/// 
-/// @returns
-///     - ::XE_RESULT_SUCCESS
-///     - ::XE_RESULT_ERROR_UNINITIALIZED
-///     - ::XE_RESULT_ERROR_DEVICE_LOST
-///     - ::XE_RESULT_ERROR_INVALID_PARAMETER
-///         + nullptr == hDevice
-///         + nullptr == handle
-///         + nullptr == pCount
-///     - ::XE_RESULT_ERROR_UNSUPPORTED
-__xedllport xe_result_t __xecall
-xeEventOpenIpcHandle(
-    xe_device_handle_t hDevice,                     ///< [in] handle of the device to associate with the IPC event handle
-    xe_ipc_event_handle_t handle,                   ///< [in] IPC event handle
-    uint32_t* pCount,                               ///< [out] number of events
-    xe_event_handle_t* phEvent                      ///< [in,out][optional] pointer to handle(s) of event object(s) created
-    );
-
-///////////////////////////////////////////////////////////////////////////////
-/// @brief Closes an IPC event handle in a receiving process
-/// 
-/// @details
-///     - Closes an IPC event handle by destroying events that were opened in
-///       this process using ::xeEventOpenIpcHandle.
-///     - The application may call this function from simultaneous threads.
-/// 
-/// @remarks
-///   _Analogues_
-///     - **cuIpcCloseMemHandle**
-/// 
-/// @returns
-///     - ::XE_RESULT_SUCCESS
-///     - ::XE_RESULT_ERROR_UNINITIALIZED
-///     - ::XE_RESULT_ERROR_DEVICE_LOST
-///     - ::XE_RESULT_ERROR_INVALID_PARAMETER
-///         + nullptr == phEvent
-///     - ::XE_RESULT_ERROR_UNSUPPORTED
-__xedllport xe_result_t __xecall
-xeEventCloseIpcHandle(
-    uint32_t count,                                 ///< [in] number of events
-    xe_event_handle_t* phEvent                      ///< [in] pointer to array of event handle(s)
     );
 
 #if defined(__cplusplus)

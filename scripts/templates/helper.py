@@ -36,19 +36,30 @@ def append_ws(string, count):
 def split_line(line, ch_count):
     if not line:
         return []
+
+    RE_NEWLINE = r"(.*)\n(.*)"
+
     words           = line.split(" ")
     lines           = []
     word_list       = []
+
     for word in words:
-        if re.match(r"(.*)\n", word):
-            word_list.append(re.sub(r"(.*)\n",r"\1",word))
+        if re.match(RE_NEWLINE, word):
+            prologue = re.sub(RE_NEWLINE,r"\1",word)
+            epilogue = re.sub(RE_NEWLINE,r"\2",word)
+            word_list.append(prologue)
             lines.append(" ".join(word_list))
             word_list = []
+            if len(epilogue):
+                word_list.append(epilogue)
+
         elif sum(map(len, word_list)) + len(word_list) + len(word) <= ch_count:
             word_list.append(word)
+
         else:
             lines.append(" ".join(word_list))
             word_list = [word]
+
     if len(word_list):
         lines.append(" ".join(word_list))
     return lines

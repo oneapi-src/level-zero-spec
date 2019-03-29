@@ -7,8 +7,7 @@ desc: "Copies host, device, or shared memory."
 class: $xCommandList
 name: AppendMemoryCopy
 details:
-    - "The memory pointed to by both srcptr and dstptr must be accessible by
-      the device on which the command list is created."
+    - "The memory pointed to by both srcptr and dstptr must be accessible by the device on which the command list is created."
     - "The application may **not** call this function from simultaneous threads with the same command list handle."
     - "The implementation of this function should be lock-free."
 analogue:
@@ -133,8 +132,7 @@ name: AppendImageCopyToMemory
 analogue:
     - clEnqueueReadImage
 details:
-    - "The memory pointed to by dstptr must be accessible by
-      the device on which the command list is created."
+    - "The memory pointed to by dstptr must be accessible by the device on which the command list is created."
     - "The application may **not** call this function from simultaneous threads with the same command list handle."
     - "The implementation of this function should be lock-free."
 params:
@@ -161,8 +159,7 @@ name: AppendImageCopyFromMemory
 analogue:
     - clEnqueueWriteImage
 details:
-    - "The memory pointed to by srcptr must be accessible by
-      the device on which the command list is created."
+    - "The memory pointed to by srcptr must be accessible by the device on which the command list is created."
     - "The application may **not** call this function from simultaneous threads with the same command list handle."
     - "The implementation of this function should be lock-free."
 params:
@@ -183,19 +180,20 @@ params:
       desc: "[in][optional] handle of the event to signal on completion"
 --- #--------------------------------------------------------------------------
 type: function
-desc: "Asynchronously prefetches shared memory to the device associated with
-      the specified command list"
+desc: "Asynchronously prefetches shared memory to the device associated with the specified command list"
 class: $xCommandList
 name: AppendMemoryPrefetch
 details:
     - "This is a hint to improve performance only and is not required for correctness."
-    - "Only prefetching to the device associated with the specified command list is supported.
-       Prefetching to the host or to a peer device is not supported."
-    - "Prefetching may not be supported for all allocation types for all devices.
-       If memory prefetching is not supported for the specified memory range the prefetch hint may be ignored."
-    - "Prefetching may only be supported at a device-specific granularity, such as at a page boundary.
-       In this case, the memory range may be expanded such that the start and end of the range satisfy
-       granularity requirements."
+    - |
+      Only prefetching to the device associated with the specified command list is supported.
+      Prefetching to the host or to a peer device is not supported.
+    - |
+      Prefetching may not be supported for all allocation types for all devices.
+      If memory prefetching is not supported for the specified memory range the prefetch hint may be ignored.
+    - |
+      Prefetching may only be supported at a device-specific granularity, such as at a page boundary.
+      In this case, the memory range may be expanded such that the start and end of the range satisfy granularity requirements.
     - "The application may **not** call this function from simultaneous threads with the same command list handle."
     - "The implementation of this function should be lock-free."
 analogue:
@@ -248,11 +246,12 @@ analogue:
 details:
     - "Memory advice is a performance hint only and is not required for functional correctness."
     - "Memory advice can be used to override driver heuristics to explicitly control shared memory behavior."
-    - "Not all memory advice hints may be supported for all allocation types for all devices.
-       If a memory advice hint is not supported by the device it will be ignored."
-    - "Memory advice may only be supported at a device-specific granularity, such as at a page boundary.
-       In this case, the memory range may be expanded such that the start and end of the range satisfy
-       granularity requirements."
+    - |
+      Not all memory advice hints may be supported for all allocation types for all devices.
+      If a memory advice hint is not supported by the device it will be ignored.
+    - |
+      Memory advice may only be supported at a device-specific granularity, such as at a page boundary.
+      In this case, the memory range may be expanded such that the start and end of the range satisfy granularity requirements.
     - "The application may **not** call this function from simultaneous threads with the same command list handle."
     - "The implementation of this function should be lock-free."
 params:

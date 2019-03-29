@@ -3,66 +3,62 @@ type: header
 desc: "Intel $OneApi Level-Zero APIs for Event"
 --- #--------------------------------------------------------------------------
 type: enum
-desc: "API version of $x_event_desc_t"
+desc: "API version of $x_event_pool_desc_t"
 class: $xDevice
-name: $x_event_desc_version_t
+name: $x_event_pool_desc_version_t
 etors:
-    - name: $X_EVENT_DESC_VERSION_CURRENT
+    - name: $X_EVENT_POOL_DESC_VERSION_CURRENT
       value: "$X_MAKE_VERSION( 1, 0 )"
       desc: "version 1.0"
 --- #--------------------------------------------------------------------------
 type: enum
-desc: "Supported event creation flags"
+desc: "Supported event pool creation flags"
 class: $xDevice
-name: $x_event_flag_t
+name: $x_event_pool_flag_t
 etors:
-    - name: $X_EVENT_FLAG_NONE
+    - name: $X_EVENT_POOL_FLAG_NONE
       value: "0"
       desc: "signals and waits only within the same device"
-    - name: $X_EVENT_FLAG_HOST_TO_DEVICE
+    - name: $X_EVENT_POOL_FLAG_HOST_TO_DEVICE
       value: "$X_BIT(0)"
       desc: "signals from host, waits on device"
-    - name: $X_EVENT_FLAG_DEVICE_TO_HOST
+    - name: $X_EVENT_POOL_FLAG_DEVICE_TO_HOST
       value: "$X_BIT(1)"
       desc: "signals from device, waits on host"
-    - name: $X_EVENT_FLAG_DEVICE_TO_DEVICE
+    - name: $X_EVENT_POOL_FLAG_DEVICE_TO_DEVICE
       value: "$X_BIT(2)"
       desc: "signals from device, waits on another device"
-    - name: $X_EVENT_FLAG_IPC
+    - name: $X_EVENT_POOL_FLAG_IPC
       value: "$X_BIT(3)"
       desc: "signals and waits may occur across processes"
-    - name: $X_EVENT_FLAG_TIMESTAMP
+    - name: $X_EVENT_POOL_FLAG_TIMESTAMP
       value: "$X_BIT(4)"
       desc: "supports time-based queries"
-    - name: $X_EVENT_FLAG_PERFORMANCE_METRICS
+    - name: $X_EVENT_POOL_FLAG_PERFORMANCE_METRICS
       value: "$X_BIT(5)"
       desc: "supports performance metrics (MDAPI)"
 --- #--------------------------------------------------------------------------
 type: struct
-desc: "Event descriptor"
+desc: "Event pool descriptor"
 class: $xDevice
-name: $x_event_desc_t
+name: $x_event_pool_desc_t
 members:
-    - type: $x_event_desc_version_t
+    - type: $x_event_pool_desc_version_t
       name: version
-      desc: "[in] $X_EVENT_DESC_VERSION_CURRENT"
-      init: $X_EVENT_DESC_VERSION_CURRENT
-    - type: $x_event_flag_t
+      desc: "[in] $X_EVENT_POOL_DESC_VERSION_CURRENT"
+      init: $X_EVENT_POOL_DESC_VERSION_CURRENT
+    - type: $x_event_pool_flag_t
       name: flags
       desc: "[in] creation flags"
-      init: $X_EVENT_FLAG_NONE
+      init: $X_EVENT_POOL_FLAG_NONE
     - type: uint32_t
       name: count
-      desc: "[in] number of events to create"
+      desc: "[in] number of events within the pool"
 --- #--------------------------------------------------------------------------
 type: function
-desc: "Creates an event object on the device."
+desc: "Creates a pool for a set of event(s) on the device."
 class: $xDevice
-name: CreateEvent
-analogue:
-    - "**clCreateUserEvent**"
-    - vkCreateEvent
-    - cuEventCreate
+name: CreateEventPool
 details:
     - "This function may be called from simultaneous threads."
     - "The implementation of this function should be lock-free."
@@ -70,15 +66,55 @@ params:
     - type: $x_device_handle_t
       name: hDevice
       desc: "[in] handle of the device"
-    - type: "const $x_event_desc_t*"
+    - type: "const $x_event_pool_desc_t*"
       name: desc
-      desc: "[in] pointer to event descriptor"
-    - type: "$x_event_handle_t*"
-      name: phEvent
-      desc: "[out] pointer to handle(s) of event object(s) created"
+      desc: "[in] pointer to event pool descriptor"
+    - type: "$x_event_pool_handle_t*"
+      name: phEventPool
+      desc: "[out] pointer handle of event pool object created"
 returns:
     - $X_RESULT_ERROR_OUT_OF_HOST_MEMORY
     - $X_RESULT_ERROR_OUT_OF_DEVICE_MEMORY
+--- #--------------------------------------------------------------------------
+type: function
+desc: "Deletes an event pool object."
+class: $xEventPool
+name: Destroy
+details:
+    - "The application is responsible for destroying all event handles created from the pool before destroying the pool itself"
+    - "The application is responsible for making sure the GPU is not currently referencing the any event within the pool before it is deleted"
+    - "The implementation of this function will immediately free all Host and Device allocations associated with this event pool"
+    - "The implementation of this function should be lock-free."
+params:
+    - type: $x_event_pool_handle_t
+      name: hEventPool
+      desc: "[in] handle of event pool object to destroy"
+--- #--------------------------------------------------------------------------
+type: function
+desc: "Creates an event on the device."
+class: $xEventPool
+name: CreateEvent
+analogue:
+    - "**clCreateUserEvent**"
+    - vkCreateEvent
+    - cuEventCreate
+details:
+    - "Multiple events cannot be created using the same index from the same pool"
+    - "The index must be less-than the count specified during pool creation"
+    - "This function may be called from simultaneous threads."
+    - "The implementation of this function should be lock-free."
+params:
+    - type: $x_event_pool_handle_t
+      name: hEventPool
+      desc: "[in] handle of the event pool"
+    - type: uint32_t
+      name: index
+      desc: "[in] index of the event within the pool"
+    - type: "$x_event_handle_t*"
+      name: phEvent
+      desc: "[out] pointer to handle of event object created"
+returns:
+    - $X_RESULT_ERROR_OUT_OF_HOST_MEMORY
 --- #--------------------------------------------------------------------------
 type: function
 desc: "Deletes an event object."
@@ -96,6 +132,57 @@ params:
     - type: $x_event_handle_t
       name: hEvent
       desc: "[in] handle of event object to destroy"
+--- #--------------------------------------------------------------------------
+type: function
+desc: "Gets an IPC event pool handle for the specified event handle that can be shared with another process."
+class: $xEventPool
+name: GetIpcHandle
+analogue:
+    - "**cuIpcGetEventHandle**"
+details:
+    - "The application may call this function from simultaneous threads."
+params:
+    - type: $x_event_pool_handle_t
+      name: hEventPool
+      desc: "[in] handle of event pool object"
+    - type: $x_ipc_event_pool_handle_t*
+      name: phIpc
+      desc: "[out] Returned IPC event handle"
+--- #--------------------------------------------------------------------------
+type: function
+desc: "Opens an IPC event pool handle to retrieve an event pool handle from another process."
+class: $xEventPool
+name: OpenIpcHandle
+decl: static
+analogue:
+    - "**cuIpcOpenMemHandle**"
+details:
+    - "The event handle in this process should not be freed with $xEventPoolDestroy, but rather with $xEventPoolCloseIpcHandle."
+    - "The application may call this function from simultaneous threads."
+params:
+    - type: "$x_device_handle_t"
+      name: hDevice
+      desc: "[in] handle of the device to associate with the IPC event pool handle"
+    - type: $x_ipc_event_pool_handle_t
+      name: hIpc
+      desc: "[in] IPC event handle"
+    - type: "$x_event_pool_handle_t*"
+      name: phEventPool
+      desc: "[out] pointer handle of event pool object created"
+--- #--------------------------------------------------------------------------
+type: function
+desc: "Closes an IPC event handle in the current process."
+class: $xEventPool
+name: CloseIpcHandle
+analogue:
+    - "**cuIpcCloseMemHandle**"
+details:
+    - "Closes an IPC event handle by destroying events that were opened in this process using $xEventPoolOpenIpcHandle."
+    - "The application may call this function from simultaneous threads."
+params:
+    - type: $x_event_pool_handle_t
+      name: hEventPool
+      desc: "[in] handle of event pool object"
 --- #--------------------------------------------------------------------------
 type: function
 desc: "Appends a signal of the event from the device into a command list."
@@ -161,9 +248,10 @@ params:
       desc: "[in] handle of the event"
     - type: "uint32_t"
       name: timeout
-      desc: "[in] if non-zero, then indicates the maximum time to yield before returning $X_RESULT_SUCCESS or $X_RESULT_NOT_READY;
+      desc: |
+            [in] if non-zero, then indicates the maximum time to yield before returning $X_RESULT_SUCCESS or $X_RESULT_NOT_READY;
             if zero, then operates exactly like $xEventQueryStatus;
-            if MAX_UINT32, then function will not return until complete or device is lost."
+            if MAX_UINT32, then function will not return until complete or device is lost.
 returns:
     - $X_RESULT_NOT_READY:
        - "timeout expired"
@@ -210,7 +298,7 @@ params:
 returns:
     - $X_RESULT_ERROR_INVALID_PARAMETER:
         - "either event not signaled by device"
-        - "either event not created with $X_EVENT_FLAG_TIMESTAMP"
+        - "either event not created from pool created with $X_EVENT_POOL_FLAG_TIMESTAMP"
 --- #--------------------------------------------------------------------------
 type: function
 desc: "Queries performance metrics between two device-signaled events."
@@ -236,7 +324,7 @@ params:
 returns:
     - $X_RESULT_ERROR_INVALID_PARAMETER:
         - "either event not signaled by device"
-        - "either event not created with $X_EVENT_FLAG_PERFORMANCE_METRICS"
+        - "either event not created from pool created with $X_EVENT_POOL_FLAG_PERFORMANCE_METRICS"
         - "report size too small"
 --- #--------------------------------------------------------------------------
 type: function
@@ -270,68 +358,16 @@ params:
       name: hEvent
       desc: "[in] handle of the event"
 --- #--------------------------------------------------------------------------
-type: function
-desc: "Creates an IPC event handle for the specified Event in the sending process"
-class: $xEvent
-name: GetIpcHandle
-decl: static
-analogue:
-    - "**cuIpcGetEventHandle**"
-details:
-    - "All events in the array must have been created by a singular $xDeviceCreateEvent call"
-    - "The application may call this function from simultaneous threads."
-params:
-    - type: uint32_t
-      name: count
-      desc: "[in] number of events"
-    - type: $x_event_handle_t*
-      name: phEvent
-      desc: "[in] pointer to array of event handle(s)"
-    - type: $x_ipc_event_handle_t*
-      name: pIpcHandle
-      desc: "[out] Returned IPC event handle"
---- #--------------------------------------------------------------------------
-type: function
-desc: "Opens an IPC event handle to retrieve a device pointer in a receiving process"
-class: $xEvent
-name: OpenIpcHandle
-decl: static
-analogue:
-    - "**cuIpcOpenMemHandle**"
-details:
-    - "The event handle in this process should not be freed with $xEventDestroy, but rather with $xEventCloseIpcHandle."
-    - "The application may call this function from simultaneous threads."
-params:
-    - type: "$x_device_handle_t"
-      name: hDevice
-      desc: "[in] handle of the device to associate with the IPC event handle"
-    - type: $x_ipc_event_handle_t
+type: class
+desc: "C++ wrapper for event pool"
+name: $xEventPool
+members:
+    - type: $x_event_pool_handle_t
       name: handle
-      desc: "[in] IPC event handle"
-    - type: "uint32_t*"
-      name: pCount
-      desc: "[out] number of events"
-    - type: "$x_event_handle_t*"
-      name: phEvent
-      desc: "[in,out][optional] pointer to handle(s) of event object(s) created"
---- #--------------------------------------------------------------------------
-type: function
-desc: "Closes an IPC event handle in a receiving process"
-class: $xEvent
-name: CloseIpcHandle
-decl: static
-analogue:
-    - "**cuIpcCloseMemHandle**"
-details:
-    - "Closes an IPC event handle by destroying events that were opened in this process using $xEventOpenIpcHandle."
-    - "The application may call this function from simultaneous threads."
-params:
-    - type: uint32_t
-      name: count
-      desc: "[in] number of events"
-    - type: "$x_event_handle_t*"
-      name: phEvent
-      desc: "[in] pointer to array of event handle(s)"
+      desc: "handle of event pool object"
+    - type: $x_event_pool_desc_t
+      name: desc
+      desc: "descriptor of the event object"
 --- #--------------------------------------------------------------------------
 type: class
 desc: "C++ wrapper for event"
@@ -340,6 +376,3 @@ members:
     - type: $x_event_handle_t
       name: handle
       desc: "handle of event object"
-    - type: $x_event_desc_t
-      name: desc
-      desc: "descriptor of the event object"

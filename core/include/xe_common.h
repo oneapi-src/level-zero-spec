@@ -117,8 +117,8 @@ typedef struct _xe_command_list_handle_t *xe_command_list_handle_t;
 typedef struct _xe_fence_handle_t *xe_fence_handle_t;
 
 ///////////////////////////////////////////////////////////////////////////////
-/// @brief Handle of driver's semaphore object
-typedef struct _xe_semaphore_handle_t *xe_semaphore_handle_t;
+/// @brief Handle of driver's event pool object
+typedef struct _xe_event_pool_handle_t *xe_event_pool_handle_t;
 
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Handle of driver's event object
@@ -149,8 +149,8 @@ typedef struct _xe_sampler_handle_t *xe_sampler_handle_t;
 typedef struct _xe_ipc_mem_handle_t *xe_ipc_mem_handle_t;
 
 ///////////////////////////////////////////////////////////////////////////////
-/// @brief IPC handle to a event allocation
-typedef struct _xe_ipc_event_handle_t *xe_ipc_event_handle_t;
+/// @brief IPC handle to a event pool allocation
+typedef struct _xe_ipc_event_pool_handle_t *xe_ipc_event_pool_handle_t;
 
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Generic macro for enumerator bit masks

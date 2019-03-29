@@ -116,9 +116,10 @@ typedef xe_result_t (__xecall *pfn_xeCommandQueueExecuteCommandLists)(
 typedef xe_result_t (__xecall *pfn_xeCommandQueueSynchronize)(
     xe_command_queue_handle_t hCommandQueue,        ///< [in] handle of the command queue
     uint32_t timeout                                ///< [in] if non-zero, then indicates the maximum time to yield before
-                                                    ///< returning ::XE_RESULT_SUCCESS or ::XE_RESULT_NOT_READY; if zero, then
-                                                    ///< operates exactly like ::xeFenceQueryStatus; if MAX_UINT32, then
-                                                    ///< function will not return until complete or device is lost.
+                                                    ///< returning ::XE_RESULT_SUCCESS or ::XE_RESULT_NOT_READY;
+                                                    ///< if zero, then operates exactly like ::xeFenceQueryStatus;
+                                                    ///< if MAX_UINT32, then function will not return until complete or device
+                                                    ///< is lost.
     );
 typedef xe_result_t (__xecall *pfn_xeCommandListAppendMemoryCopy)(
     xe_command_list_handle_t hCommandList,          ///< [in] handle of command list
@@ -233,13 +234,33 @@ typedef xe_result_t (__xecall *pfn_xeDriverInit)(
 typedef xe_result_t (__xecall *pfn_xeDriverGetVersion)(
     uint32_t* version                               ///< [out] driver version
     );
-typedef xe_result_t (__xecall *pfn_xeDeviceCreateEvent)(
+typedef xe_result_t (__xecall *pfn_xeDeviceCreateEventPool)(
     xe_device_handle_t hDevice,                     ///< [in] handle of the device
-    const xe_event_desc_t* desc,                    ///< [in] pointer to event descriptor
-    xe_event_handle_t* phEvent                      ///< [out] pointer to handle(s) of event object(s) created
+    const xe_event_pool_desc_t* desc,               ///< [in] pointer to event pool descriptor
+    xe_event_pool_handle_t* phEventPool             ///< [out] pointer handle of event pool object created
+    );
+typedef xe_result_t (__xecall *pfn_xeEventPoolDestroy)(
+    xe_event_pool_handle_t hEventPool               ///< [in] handle of event pool object to destroy
+    );
+typedef xe_result_t (__xecall *pfn_xeEventPoolCreateEvent)(
+    xe_event_pool_handle_t hEventPool,              ///< [in] handle of the event pool
+    uint32_t index,                                 ///< [in] index of the event within the pool
+    xe_event_handle_t* phEvent                      ///< [out] pointer to handle of event object created
     );
 typedef xe_result_t (__xecall *pfn_xeEventDestroy)(
     xe_event_handle_t hEvent                        ///< [in] handle of event object to destroy
+    );
+typedef xe_result_t (__xecall *pfn_xeEventPoolGetIpcHandle)(
+    xe_event_pool_handle_t hEventPool,              ///< [in] handle of event pool object
+    xe_ipc_event_pool_handle_t* phIpc               ///< [out] Returned IPC event handle
+    );
+typedef xe_result_t (__xecall *pfn_xeEventPoolOpenIpcHandle)(
+    xe_device_handle_t hDevice,                     ///< [in] handle of the device to associate with the IPC event pool handle
+    xe_ipc_event_pool_handle_t hIpc,                ///< [in] IPC event handle
+    xe_event_pool_handle_t* phEventPool             ///< [out] pointer handle of event pool object created
+    );
+typedef xe_result_t (__xecall *pfn_xeEventPoolCloseIpcHandle)(
+    xe_event_pool_handle_t hEventPool               ///< [in] handle of event pool object
     );
 typedef xe_result_t (__xecall *pfn_xeCommandListAppendSignalEvent)(
     xe_command_list_handle_t hCommandList,          ///< [in] handle of the command list
@@ -255,9 +276,10 @@ typedef xe_result_t (__xecall *pfn_xeEventHostSignal)(
 typedef xe_result_t (__xecall *pfn_xeEventHostSynchronize)(
     xe_event_handle_t hEvent,                       ///< [in] handle of the event
     uint32_t timeout                                ///< [in] if non-zero, then indicates the maximum time to yield before
-                                                    ///< returning ::XE_RESULT_SUCCESS or ::XE_RESULT_NOT_READY; if zero, then
-                                                    ///< operates exactly like ::xeEventQueryStatus; if MAX_UINT32, then
-                                                    ///< function will not return until complete or device is lost.
+                                                    ///< returning ::XE_RESULT_SUCCESS or ::XE_RESULT_NOT_READY;
+                                                    ///< if zero, then operates exactly like ::xeEventQueryStatus;
+                                                    ///< if MAX_UINT32, then function will not return until complete or device
+                                                    ///< is lost.
     );
 typedef xe_result_t (__xecall *pfn_xeEventQueryStatus)(
     xe_event_handle_t hEvent                        ///< [in] handle of the event
@@ -280,21 +302,6 @@ typedef xe_result_t (__xecall *pfn_xeCommandListAppendEventReset)(
 typedef xe_result_t (__xecall *pfn_xeEventReset)(
     xe_event_handle_t hEvent                        ///< [in] handle of the event
     );
-typedef xe_result_t (__xecall *pfn_xeEventGetIpcHandle)(
-    uint32_t count,                                 ///< [in] number of events
-    xe_event_handle_t* phEvent,                     ///< [in] pointer to array of event handle(s)
-    xe_ipc_event_handle_t* pIpcHandle               ///< [out] Returned IPC event handle
-    );
-typedef xe_result_t (__xecall *pfn_xeEventOpenIpcHandle)(
-    xe_device_handle_t hDevice,                     ///< [in] handle of the device to associate with the IPC event handle
-    xe_ipc_event_handle_t handle,                   ///< [in] IPC event handle
-    uint32_t* pCount,                               ///< [out] number of events
-    xe_event_handle_t* phEvent                      ///< [in,out][optional] pointer to handle(s) of event object(s) created
-    );
-typedef xe_result_t (__xecall *pfn_xeEventCloseIpcHandle)(
-    uint32_t count,                                 ///< [in] number of events
-    xe_event_handle_t* phEvent                      ///< [in] pointer to array of event handle(s)
-    );
 typedef xe_result_t (__xecall *pfn_xeCommandQueueCreateFence)(
     xe_command_queue_handle_t hCommandQueue,        ///< [in] handle of command queue
     const xe_fence_desc_t* desc,                    ///< [in] pointer to fence descriptor
@@ -306,9 +313,10 @@ typedef xe_result_t (__xecall *pfn_xeFenceDestroy)(
 typedef xe_result_t (__xecall *pfn_xeFenceHostSynchronize)(
     xe_fence_handle_t hFence,                       ///< [in] handle of the fence
     uint32_t timeout                                ///< [in] if non-zero, then indicates the maximum time to yield before
-                                                    ///< returning ::XE_RESULT_SUCCESS or ::XE_RESULT_NOT_READY; if zero, then
-                                                    ///< operates exactly like ::xeFenceQueryStatus; if MAX_UINT32, then
-                                                    ///< function will not return until complete or device is lost.
+                                                    ///< returning ::XE_RESULT_SUCCESS or ::XE_RESULT_NOT_READY;
+                                                    ///< if zero, then operates exactly like ::xeFenceQueryStatus;
+                                                    ///< if MAX_UINT32, then function will not return until complete or device
+                                                    ///< is lost.
     );
 typedef xe_result_t (__xecall *pfn_xeFenceQueryStatus)(
     xe_fence_handle_t hFence                        ///< [in] handle of the fence
@@ -547,8 +555,13 @@ typedef struct _xe_dispatch_table_t
     pfn_xeDeviceSetLastLevelCacheConfig xeDeviceSetLastLevelCacheConfig;
     pfn_xeDriverInit xeDriverInit;
     pfn_xeDriverGetVersion xeDriverGetVersion;
-    pfn_xeDeviceCreateEvent xeDeviceCreateEvent;
+    pfn_xeDeviceCreateEventPool xeDeviceCreateEventPool;
+    pfn_xeEventPoolDestroy xeEventPoolDestroy;
+    pfn_xeEventPoolCreateEvent xeEventPoolCreateEvent;
     pfn_xeEventDestroy xeEventDestroy;
+    pfn_xeEventPoolGetIpcHandle xeEventPoolGetIpcHandle;
+    pfn_xeEventPoolOpenIpcHandle xeEventPoolOpenIpcHandle;
+    pfn_xeEventPoolCloseIpcHandle xeEventPoolCloseIpcHandle;
     pfn_xeCommandListAppendSignalEvent xeCommandListAppendSignalEvent;
     pfn_xeCommandListAppendWaitOnEvent xeCommandListAppendWaitOnEvent;
     pfn_xeEventHostSignal xeEventHostSignal;
@@ -558,9 +571,6 @@ typedef struct _xe_dispatch_table_t
     pfn_xeEventQueryMetricsData xeEventQueryMetricsData;
     pfn_xeCommandListAppendEventReset xeCommandListAppendEventReset;
     pfn_xeEventReset xeEventReset;
-    pfn_xeEventGetIpcHandle xeEventGetIpcHandle;
-    pfn_xeEventOpenIpcHandle xeEventOpenIpcHandle;
-    pfn_xeEventCloseIpcHandle xeEventCloseIpcHandle;
     pfn_xeCommandQueueCreateFence xeCommandQueueCreateFence;
     pfn_xeFenceDestroy xeFenceDestroy;
     pfn_xeFenceHostSynchronize xeFenceHostSynchronize;
@@ -652,8 +662,13 @@ inline bool load_xe(void *handle, void *(*funcAddressGetter)(void *handle, const
     outTable->xeDeviceSetLastLevelCacheConfig = (pfn_xeDeviceSetLastLevelCacheConfig)funcAddressGetter(handle, "xeDeviceSetLastLevelCacheConfig");
     outTable->xeDriverInit = (pfn_xeDriverInit)funcAddressGetter(handle, "xeDriverInit");
     outTable->xeDriverGetVersion = (pfn_xeDriverGetVersion)funcAddressGetter(handle, "xeDriverGetVersion");
-    outTable->xeDeviceCreateEvent = (pfn_xeDeviceCreateEvent)funcAddressGetter(handle, "xeDeviceCreateEvent");
+    outTable->xeDeviceCreateEventPool = (pfn_xeDeviceCreateEventPool)funcAddressGetter(handle, "xeDeviceCreateEventPool");
+    outTable->xeEventPoolDestroy = (pfn_xeEventPoolDestroy)funcAddressGetter(handle, "xeEventPoolDestroy");
+    outTable->xeEventPoolCreateEvent = (pfn_xeEventPoolCreateEvent)funcAddressGetter(handle, "xeEventPoolCreateEvent");
     outTable->xeEventDestroy = (pfn_xeEventDestroy)funcAddressGetter(handle, "xeEventDestroy");
+    outTable->xeEventPoolGetIpcHandle = (pfn_xeEventPoolGetIpcHandle)funcAddressGetter(handle, "xeEventPoolGetIpcHandle");
+    outTable->xeEventPoolOpenIpcHandle = (pfn_xeEventPoolOpenIpcHandle)funcAddressGetter(handle, "xeEventPoolOpenIpcHandle");
+    outTable->xeEventPoolCloseIpcHandle = (pfn_xeEventPoolCloseIpcHandle)funcAddressGetter(handle, "xeEventPoolCloseIpcHandle");
     outTable->xeCommandListAppendSignalEvent = (pfn_xeCommandListAppendSignalEvent)funcAddressGetter(handle, "xeCommandListAppendSignalEvent");
     outTable->xeCommandListAppendWaitOnEvent = (pfn_xeCommandListAppendWaitOnEvent)funcAddressGetter(handle, "xeCommandListAppendWaitOnEvent");
     outTable->xeEventHostSignal = (pfn_xeEventHostSignal)funcAddressGetter(handle, "xeEventHostSignal");
@@ -663,9 +678,6 @@ inline bool load_xe(void *handle, void *(*funcAddressGetter)(void *handle, const
     outTable->xeEventQueryMetricsData = (pfn_xeEventQueryMetricsData)funcAddressGetter(handle, "xeEventQueryMetricsData");
     outTable->xeCommandListAppendEventReset = (pfn_xeCommandListAppendEventReset)funcAddressGetter(handle, "xeCommandListAppendEventReset");
     outTable->xeEventReset = (pfn_xeEventReset)funcAddressGetter(handle, "xeEventReset");
-    outTable->xeEventGetIpcHandle = (pfn_xeEventGetIpcHandle)funcAddressGetter(handle, "xeEventGetIpcHandle");
-    outTable->xeEventOpenIpcHandle = (pfn_xeEventOpenIpcHandle)funcAddressGetter(handle, "xeEventOpenIpcHandle");
-    outTable->xeEventCloseIpcHandle = (pfn_xeEventCloseIpcHandle)funcAddressGetter(handle, "xeEventCloseIpcHandle");
     outTable->xeCommandQueueCreateFence = (pfn_xeCommandQueueCreateFence)funcAddressGetter(handle, "xeCommandQueueCreateFence");
     outTable->xeFenceDestroy = (pfn_xeFenceDestroy)funcAddressGetter(handle, "xeFenceDestroy");
     outTable->xeFenceHostSynchronize = (pfn_xeFenceHostSynchronize)funcAddressGetter(handle, "xeFenceHostSynchronize");
@@ -827,10 +839,25 @@ inline bool load_xe(void *handle, void *(*funcAddressGetter)(void *handle, const
     if(0 == outTable->xeDriverGetVersion){
         return false;
     }
-    if(0 == outTable->xeDeviceCreateEvent){
+    if(0 == outTable->xeDeviceCreateEventPool){
+        return false;
+    }
+    if(0 == outTable->xeEventPoolDestroy){
+        return false;
+    }
+    if(0 == outTable->xeEventPoolCreateEvent){
         return false;
     }
     if(0 == outTable->xeEventDestroy){
+        return false;
+    }
+    if(0 == outTable->xeEventPoolGetIpcHandle){
+        return false;
+    }
+    if(0 == outTable->xeEventPoolOpenIpcHandle){
+        return false;
+    }
+    if(0 == outTable->xeEventPoolCloseIpcHandle){
         return false;
     }
     if(0 == outTable->xeCommandListAppendSignalEvent){
@@ -858,15 +885,6 @@ inline bool load_xe(void *handle, void *(*funcAddressGetter)(void *handle, const
         return false;
     }
     if(0 == outTable->xeEventReset){
-        return false;
-    }
-    if(0 == outTable->xeEventGetIpcHandle){
-        return false;
-    }
-    if(0 == outTable->xeEventOpenIpcHandle){
-        return false;
-    }
-    if(0 == outTable->xeEventCloseIpcHandle){
         return false;
     }
     if(0 == outTable->xeCommandQueueCreateFence){
