@@ -16,8 +16,6 @@ ${"##"} Table of Contents
 * [OpenCL Interoperability](#oi)
 * [Inter-Process Communication](#ipc)
 * [Experimental](#exp)
-* [Debug and Instrumentation Layers](#dbg)
-* [Future](#fut)
 
 ${"#"} <a name="dnd">Driver and Device</a>
 The following diagram illustrates the hierarchy of devices to the driver:  
@@ -389,7 +387,8 @@ The following sample code demonstrates a sequence for creation and submission of
     // Create event
     ${x}_event_desc_t eventDesc = {
         ${X}_EVENT_DESC_VERSION_CURRENT,
-        ${X}_EVENT_FLAG_NONE
+        ${X}_EVENT_FLAG_NONE,
+        1
     };
     ${x}_event_handle_t hEvent;
     ${x}DeviceCreateEvent(hDevice, &eventDesc, &hEvent);
@@ -490,18 +489,18 @@ Shared system allocations have no associated device - they are inherently cross-
 Like other shared allocations, shared system allocations are intended to migrate between the host and supported devices, and the same pointer to a shared system allocation may be used on the host and all supported devices.
 
 In summary:
-| Name | Initial Location | Accessible By || Migratable To ||
-| :--: | :--: | :--: | :--: | :--: | :--: |
-| **Host** | Host | Host | Yes | Host | N/A |
-| ^ | ^ | Any Device | Yes (perhaps over PCIe) | Device | No |
-| **Device** | Specific Device | Host | No | Host | No |
-| ^ | ^ | Specific Device | Yes | Device | N/A |
-| ^ | ^ | Another Device | Optional (may require p2p) | Another Device | No |
-| **Shared** | Host, or Specific Device, Or Unspecified | Host | Yes | Host | Yes |
-| ^ | ^ | Specific Device | Yes | Device | Yes |
-| ^ | ^ | Another Device | Optional (may require p2p) | Another Device | Optional |
-| **Shared System** | Host | Host | Yes | Host | Yes |
-| ^ | ^ | Device | Yes | Device | Yes |
+| Name              | Initial Location                      | Accessible By     |                               | Migratable To     |           |
+| :--:              | :--:                                  | :--:              | :--:                          | :--:              | :--:      |
+| **Host**          | Host                                  | Host              | Yes                           | Host              | N/A       |
+| ^                 | ^                                     | Any Device        | Yes (perhaps over PCIe)       | Device            | No        |
+| **Device**        | Specific Device                       | Host              | No                            | Host              | No        |
+| ^                 | ^                                     | Specific Device   | Yes                           | Device            | N/A       |
+| ^                 | ^                                     | Another Device    | Optional (may require p2p)    | Another Device    | No        |
+| **Shared**        | Host, Specific Device, Or Unspecified | Host              | Yes                           | Host              | Yes       |
+| ^                 | ^                                     | Specific Device   | Yes                           | Device            | Yes       |
+| ^                 | ^                                     | Another Device    | Optional (may require p2p)    | Another Device    | Optional  |
+| **Shared System** | Host                                  | Host              | Yes                           | Host              | Yes       |
+| ^                 | ^                                     | Device            | Yes                           | Device            | Yes       |
 
 Devices may support different capabilities for each type of allocation.
 Supported capabilities are:
@@ -947,8 +946,12 @@ will be no worse than an application submitting work to OpenCL, calling clFinish
 ${OneApi} command list.  In most cases, command queue sharing may be much more efficient. 
 
 ${"#"} <a name="ipc">Inter-Process Communication</a>
-The ${OneApi} Inter-Process Communication (IPC) APIs allow device memory allocations to be used across processes.
-The following code examples demonstrate how to use the IPC APIs:
+There are two types of Inter-Process Communication (IPC) APIs for using ${OneApi} allocations across processes:
+1. Memory
+2. Events 
+
+${"##"} Memory
+The following code examples demonstrate how to use the memory IPC APIs:
 
 1. First, the allocation is made, packaged, and sent on the sending process:
 ```c
@@ -985,6 +988,56 @@ Note, there is no guaranteed address equivalence for the values of `dptr` in eac
     ${x}MemFree(dptr);
 ```
 
+${"##"} Events
+The following code examples demonstrate how to use the event IPC APIs:
+
+1. First, the event is create, packaged, and sent on the sending process:
+```c
+    // create event
+    ${x}_event_desc_t eventDesc = {
+        ${X}_EVENT_DESC_VERSION_CURRENT,
+        ${X}_EVENT_FLAG_IPC | ${X}_EVENT_FLAG_DEVICE_TO_HOST,
+        1
+    };
+    ${x}_event_handle_t hEvent;
+    ${x}DeviceCreateEvent(hDevice, &eventDesc, &hEvent);
+ 
+    // get IPC handle and send to another process
+    ${x}_ipc_event_handle_t hIpcEvent;
+    ${x}EventGetIpcHandle(1, &hEvent, &hIpcEvent);
+    send_to_receiving_process(hIpcEvent);
+```
+
+2. Next, the event is received and un-packaged on the receiving process:
+```c
+    // get IPC handle from Process 1
+    ${x}_ipc_event_handle_t hIpcEvent;
+    receive_from_sending_process(&hIpcEvent);
+ 
+    // open event
+    ${x}_event_handle_t hEvent;
+    ${x}EventOpenIpcHandle(hDevice, hIpcEvent, 1, &hEvent);
+```
+
+3. Each process may now refer to the same device event allocation via its handle.
+Note, there is no guaranteed address equivalence for the values of `hEvent` in each process.
+```c
+    // submit function and signal event when complete
+    ${x}CommandListAppendLaunchFunction(hCommandList, hFunction, &args, hEvent);
+    ${x}CommandListClose(hCommandList);
+    ${x}CommandQueueExecuteCommandLists(hCommandQueue, 1, &hCommandList, nullptr);
+```
+
+4. To cleanup, first close the handle in the receiving process:
+```c
+    ${x}EventCloseIpcHandle(1, &hEvent);
+```
+
+5. Finally, free the event handle in the sending process:
+```c
+    ${x}EventDestroy(hEvent);
+```
+
 ${"#"} <a name="exp">Experimental</a>
 The following experimental features are provided only for the development and refinement of future APIs.
 These APIs are **not** supported by production drivers without explicit end-user opt-in.
@@ -998,18 +1051,3 @@ The application is solely responsible for ensuring the commands are valid and co
     ${x}CommandListReserveSpace(hCommandList, sizeof(blob), &ptr);
     ::memcpy(ptr, blob, sizeof(blob));
 ```
-
-${"#"} <a name="dbg">Debug and Instrumentation Layers</a>
-
-${"#"} <a name="fut">Future</a>
-The following is a list a features that are still being defined for inclusion:
-- **Command Graphs**
-    + ability to represent non-linear dependencies between programs to be executed
-    + ability to represent flow-control
-    + ability to represent scheduling and distribution across multiple sub-devices
-- **Predicated Execution**
-    + ability to cull program execution within a command list, based on device-generated value(s)
-- **Execution Flow-Control**
-    + ability to describe loops and if-else-then type program execution within a command list, based on device-generated value(s)
-- **C++ Interfaces**
-    + ability to choose between C and C++ interfaces (e.g., by wrapping C++ interfaces with C interfaces)

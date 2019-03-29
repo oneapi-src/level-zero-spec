@@ -69,6 +69,7 @@ typedef struct _xe_event_desc_t
 {
     xe_event_desc_version_t version;                ///< [in] ::XE_EVENT_DESC_VERSION_CURRENT
     xe_event_flag_t flags;                          ///< [in] creation flags
+    uint32_t count;                                 ///< [in] number of events to create
 
 } xe_event_desc_t;
 
@@ -101,36 +102,7 @@ __xedllport xe_result_t __xecall
 xeDeviceCreateEvent(
     xe_device_handle_t hDevice,                     ///< [in] handle of the device
     const xe_event_desc_t* desc,                    ///< [in] pointer to event descriptor
-    xe_event_handle_t* phEvent                      ///< [out] pointer to handle of event object created
-    );
-
-///////////////////////////////////////////////////////////////////////////////
-/// @brief Creates an event object on the device from existing memory.
-/// 
-/// @details
-///     - This function is intended for sharing fences with peer devices or
-///       across processes
-///     - This function may be called from simultaneous threads.
-///     - The implementation of this function should be lock-free.
-/// 
-/// @returns
-///     - ::XE_RESULT_SUCCESS
-///     - ::XE_RESULT_ERROR_UNINITIALIZED
-///     - ::XE_RESULT_ERROR_DEVICE_LOST
-///     - ::XE_RESULT_ERROR_INVALID_PARAMETER
-///         + nullptr == hDevice
-///         + nullptr == desc
-///         + nullptr == ptr
-///         + nullptr == phEvent
-///     - ::XE_RESULT_ERROR_UNSUPPORTED
-///         + ::XE_EVENT_DESC_VERSION_CURRENT < desc->version
-///     - ::XE_RESULT_ERROR_OUT_OF_HOST_MEMORY
-__xedllport xe_result_t __xecall
-xeDevicePlaceEvent(
-    xe_device_handle_t hDevice,                     ///< [in] handle of the device
-    const xe_event_desc_t* desc,                    ///< [in] pointer to event descriptor
-    void* ptr,                                      ///< [in] pointer to the device pointer where the event should be placed
-    xe_event_handle_t* phEvent                      ///< [out] pointer to handle of event object created
+    xe_event_handle_t* phEvent                      ///< [out] pointer to handle(s) of event object(s) created
     );
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -394,6 +366,89 @@ xeCommandListAppendEventReset(
 __xedllport xe_result_t __xecall
 xeEventReset(
     xe_event_handle_t hEvent                        ///< [in] handle of the event
+    );
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Creates an IPC event handle for the specified Event in the sending
+///        process
+/// 
+/// @details
+///     - All events in the array must have been created by a singular
+///       ::xeDeviceCreateEvent call
+///     - The application may call this function from simultaneous threads.
+/// 
+/// @remarks
+///   _Analogues_
+///     - **cuIpcGetEventHandle**
+/// 
+/// @returns
+///     - ::XE_RESULT_SUCCESS
+///     - ::XE_RESULT_ERROR_UNINITIALIZED
+///     - ::XE_RESULT_ERROR_DEVICE_LOST
+///     - ::XE_RESULT_ERROR_INVALID_PARAMETER
+///         + nullptr == phEvent
+///         + nullptr == pIpcHandle
+///     - ::XE_RESULT_ERROR_UNSUPPORTED
+__xedllport xe_result_t __xecall
+xeEventGetIpcHandle(
+    uint32_t count,                                 ///< [in] number of events
+    xe_event_handle_t* phEvent,                     ///< [in] pointer to array of event handle(s)
+    xe_ipc_event_handle_t* pIpcHandle               ///< [out] Returned IPC event handle
+    );
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Opens an IPC event handle to retrieve a device pointer in a receiving
+///        process
+/// 
+/// @details
+///     - The event handle in this process should not be freed with
+///       ::xeEventDestroy, but rather with ::xeEventCloseIpcHandle.
+///     - The application may call this function from simultaneous threads.
+/// 
+/// @remarks
+///   _Analogues_
+///     - **cuIpcOpenMemHandle**
+/// 
+/// @returns
+///     - ::XE_RESULT_SUCCESS
+///     - ::XE_RESULT_ERROR_UNINITIALIZED
+///     - ::XE_RESULT_ERROR_DEVICE_LOST
+///     - ::XE_RESULT_ERROR_INVALID_PARAMETER
+///         + nullptr == hDevice
+///         + nullptr == handle
+///         + nullptr == pCount
+///     - ::XE_RESULT_ERROR_UNSUPPORTED
+__xedllport xe_result_t __xecall
+xeEventOpenIpcHandle(
+    xe_device_handle_t hDevice,                     ///< [in] handle of the device to associate with the IPC event handle
+    xe_ipc_event_handle_t handle,                   ///< [in] IPC event handle
+    uint32_t* pCount,                               ///< [out] number of events
+    xe_event_handle_t* phEvent                      ///< [in,out][optional] pointer to handle(s) of event object(s) created
+    );
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Closes an IPC event handle in a receiving process
+/// 
+/// @details
+///     - Closes an IPC event handle by destroying events that were opened in
+///       this process using ::xeEventOpenIpcHandle.
+///     - The application may call this function from simultaneous threads.
+/// 
+/// @remarks
+///   _Analogues_
+///     - **cuIpcCloseMemHandle**
+/// 
+/// @returns
+///     - ::XE_RESULT_SUCCESS
+///     - ::XE_RESULT_ERROR_UNINITIALIZED
+///     - ::XE_RESULT_ERROR_DEVICE_LOST
+///     - ::XE_RESULT_ERROR_INVALID_PARAMETER
+///         + nullptr == phEvent
+///     - ::XE_RESULT_ERROR_UNSUPPORTED
+__xedllport xe_result_t __xecall
+xeEventCloseIpcHandle(
+    uint32_t count,                                 ///< [in] number of events
+    xe_event_handle_t* phEvent                      ///< [in] pointer to array of event handle(s)
     );
 
 #if defined(__cplusplus)

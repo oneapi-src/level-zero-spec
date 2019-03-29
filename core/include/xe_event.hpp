@@ -118,6 +118,40 @@ namespace xe
             void
             );
 
+        ///////////////////////////////////////////////////////////////////////////////
+        /// @brief C++ wrapper for ::xeEventGetIpcHandle
+        /// @returns
+        ///     - ::ipc_event_handle_t: Returned IPC event handle
+        /// 
+        /// @throws result_t
+        inline static ipc_event_handle_t
+        GetIpcHandle(
+            uint32_t count,                                 ///< [in] number of events
+            event_handle_t* phEvent                         ///< [in] pointer to array of event handle(s)
+            );
+
+        ///////////////////////////////////////////////////////////////////////////////
+        /// @brief C++ wrapper for ::xeEventOpenIpcHandle
+        /// @returns
+        ///     - uint32_t: number of events
+        /// 
+        /// @throws result_t
+        inline static uint32_t
+        OpenIpcHandle(
+            device_handle_t hDevice,                        ///< [in] handle of the device to associate with the IPC event handle
+            ipc_event_handle_t handle,                      ///< [in] IPC event handle
+            event_handle_t* phEvent                         ///< [in,out][optional] pointer to handle(s) of event object(s) created
+            );
+
+        ///////////////////////////////////////////////////////////////////////////////
+        /// @brief C++ wrapper for ::xeEventCloseIpcHandle
+        /// @throws result_t
+        inline static void
+        CloseIpcHandle(
+            uint32_t count,                                 ///< [in] number of events
+            event_handle_t* phEvent                         ///< [in] pointer to array of event handle(s)
+            );
+
     };
 
 } // namespace xe

@@ -103,8 +103,8 @@ namespace xe
     using ipc_mem_handle_t = ::xe_ipc_mem_handle_t;
 
     ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Semaphore value type
-    using semaphore_value_t = ::xe_semaphore_value_t;
+    /// @brief IPC handle to a event allocation
+    using ipc_event_handle_t = ::xe_ipc_event_handle_t;
 
     ///////////////////////////////////////////////////////////////////////////////
     /// @brief Defines Return/Error codes

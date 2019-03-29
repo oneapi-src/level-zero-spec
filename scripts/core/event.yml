@@ -51,6 +51,9 @@ members:
       name: flags
       desc: "[in] creation flags"
       init: $X_EVENT_FLAG_NONE
+    - type: uint32_t
+      name: count
+      desc: "[in] number of events to create"
 --- #--------------------------------------------------------------------------
 type: function
 desc: "Creates an event object on the device."
@@ -72,34 +75,10 @@ params:
       desc: "[in] pointer to event descriptor"
     - type: "$x_event_handle_t*"
       name: phEvent
-      desc: "[out] pointer to handle of event object created"
+      desc: "[out] pointer to handle(s) of event object(s) created"
 returns:
     - $X_RESULT_ERROR_OUT_OF_HOST_MEMORY
     - $X_RESULT_ERROR_OUT_OF_DEVICE_MEMORY
---- #--------------------------------------------------------------------------
-type: function
-desc: "Creates an event object on the device from existing memory."
-class: $xDevice
-name: PlaceEvent
-details:
-    - "This function is intended for sharing fences with peer devices or across processes"
-    - "This function may be called from simultaneous threads."
-    - "The implementation of this function should be lock-free."
-params:
-    - type: $x_device_handle_t
-      name: hDevice
-      desc: "[in] handle of the device"
-    - type: "const $x_event_desc_t*"
-      name: desc
-      desc: "[in] pointer to event descriptor"
-    - type: "void*"
-      name: ptr
-      desc: "[in] pointer to the device pointer where the event should be placed"
-    - type: "$x_event_handle_t*"
-      name: phEvent
-      desc: "[out] pointer to handle of event object created"
-returns:
-    - $X_RESULT_ERROR_OUT_OF_HOST_MEMORY
 --- #--------------------------------------------------------------------------
 type: function
 desc: "Deletes an event object."
@@ -290,6 +269,69 @@ params:
     - type: $x_event_handle_t
       name: hEvent
       desc: "[in] handle of the event"
+--- #--------------------------------------------------------------------------
+type: function
+desc: "Creates an IPC event handle for the specified Event in the sending process"
+class: $xEvent
+name: GetIpcHandle
+decl: static
+analogue:
+    - "**cuIpcGetEventHandle**"
+details:
+    - "All events in the array must have been created by a singular $xDeviceCreateEvent call"
+    - "The application may call this function from simultaneous threads."
+params:
+    - type: uint32_t
+      name: count
+      desc: "[in] number of events"
+    - type: $x_event_handle_t*
+      name: phEvent
+      desc: "[in] pointer to array of event handle(s)"
+    - type: $x_ipc_event_handle_t*
+      name: pIpcHandle
+      desc: "[out] Returned IPC event handle"
+--- #--------------------------------------------------------------------------
+type: function
+desc: "Opens an IPC event handle to retrieve a device pointer in a receiving process"
+class: $xEvent
+name: OpenIpcHandle
+decl: static
+analogue:
+    - "**cuIpcOpenMemHandle**"
+details:
+    - "The event handle in this process should not be freed with $xEventDestroy, but rather with $xEventCloseIpcHandle."
+    - "The application may call this function from simultaneous threads."
+params:
+    - type: "$x_device_handle_t"
+      name: hDevice
+      desc: "[in] handle of the device to associate with the IPC event handle"
+    - type: $x_ipc_event_handle_t
+      name: handle
+      desc: "[in] IPC event handle"
+    - type: "uint32_t*"
+      name: pCount
+      desc: "[out] number of events"
+    - type: "$x_event_handle_t*"
+      name: phEvent
+      desc: "[in,out][optional] pointer to handle(s) of event object(s) created"
+--- #--------------------------------------------------------------------------
+type: function
+desc: "Closes an IPC event handle in a receiving process"
+class: $xEvent
+name: CloseIpcHandle
+decl: static
+analogue:
+    - "**cuIpcCloseMemHandle**"
+details:
+    - "Closes an IPC event handle by destroying events that were opened in this process using $xEventOpenIpcHandle."
+    - "The application may call this function from simultaneous threads."
+params:
+    - type: uint32_t
+      name: count
+      desc: "[in] number of events"
+    - type: "$x_event_handle_t*"
+      name: phEvent
+      desc: "[in] pointer to array of event handle(s)"
 --- #--------------------------------------------------------------------------
 type: class
 desc: "C++ wrapper for event"

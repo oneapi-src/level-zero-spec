@@ -450,23 +450,12 @@ xe_result_t __xecall xeDriverGetVersion(
 xe_result_t __xecall xeDeviceCreateEvent(
         xe_device_handle_t hDevice,                     ///< [in] handle of the device
         const xe_event_desc_t* desc,                    ///< [in] pointer to event descriptor
-        xe_event_handle_t* phEvent                      ///< [out] pointer to handle of event object created
+        xe_event_handle_t* phEvent                      ///< [out] pointer to handle(s) of event object(s) created
     ){
     if(dispatchTableInitialized == false){
         return XE_RESULT_ERROR_UNINITIALIZED;
     }
     return dispatchTable.xeDeviceCreateEvent(hDevice, desc, phEvent);
-}
-xe_result_t __xecall xeDevicePlaceEvent(
-        xe_device_handle_t hDevice,                     ///< [in] handle of the device
-        const xe_event_desc_t* desc,                    ///< [in] pointer to event descriptor
-        void* ptr,                                      ///< [in] pointer to the device pointer where the event should be placed
-        xe_event_handle_t* phEvent                      ///< [out] pointer to handle of event object created
-    ){
-    if(dispatchTableInitialized == false){
-        return XE_RESULT_ERROR_UNINITIALIZED;
-    }
-    return dispatchTable.xeDevicePlaceEvent(hDevice, desc, ptr, phEvent);
 }
 xe_result_t __xecall xeEventDestroy(
         xe_event_handle_t hEvent                        ///< [in] handle of event object to destroy
@@ -559,6 +548,36 @@ xe_result_t __xecall xeEventReset(
         return XE_RESULT_ERROR_UNINITIALIZED;
     }
     return dispatchTable.xeEventReset(hEvent);
+}
+xe_result_t __xecall xeEventGetIpcHandle(
+        uint32_t count,                                 ///< [in] number of events
+        xe_event_handle_t* phEvent,                     ///< [in] pointer to array of event handle(s)
+        xe_ipc_event_handle_t* pIpcHandle               ///< [out] Returned IPC event handle
+    ){
+    if(dispatchTableInitialized == false){
+        return XE_RESULT_ERROR_UNINITIALIZED;
+    }
+    return dispatchTable.xeEventGetIpcHandle(count, phEvent, pIpcHandle);
+}
+xe_result_t __xecall xeEventOpenIpcHandle(
+        xe_device_handle_t hDevice,                     ///< [in] handle of the device to associate with the IPC event handle
+        xe_ipc_event_handle_t handle,                   ///< [in] IPC event handle
+        uint32_t* pCount,                               ///< [out] number of events
+        xe_event_handle_t* phEvent                      ///< [in,out][optional] pointer to handle(s) of event object(s) created
+    ){
+    if(dispatchTableInitialized == false){
+        return XE_RESULT_ERROR_UNINITIALIZED;
+    }
+    return dispatchTable.xeEventOpenIpcHandle(hDevice, handle, pCount, phEvent);
+}
+xe_result_t __xecall xeEventCloseIpcHandle(
+        uint32_t count,                                 ///< [in] number of events
+        xe_event_handle_t* phEvent                      ///< [in] pointer to array of event handle(s)
+    ){
+    if(dispatchTableInitialized == false){
+        return XE_RESULT_ERROR_UNINITIALIZED;
+    }
+    return dispatchTable.xeEventCloseIpcHandle(count, phEvent);
 }
 xe_result_t __xecall xeCommandQueueCreateFence(
         xe_command_queue_handle_t hCommandQueue,        ///< [in] handle of command queue

@@ -372,7 +372,7 @@ namespace xe
     ///     - cuEventCreate
     /// 
     /// @returns
-    ///     - ::event_handle_t: pointer to handle of event object created
+    ///     - ::event_handle_t: pointer to handle(s) of event object(s) created
     /// 
     /// @throws result_t
     inline event_handle_t 
@@ -382,29 +382,6 @@ namespace xe
     {
         // auto result = ::xeDeviceCreateEvent( handle, desc );
         // if( ::XE_RESULT_SUCCESS != result ) throw exception(result, "xe::Device::CreateEvent");
-    }
-
-    ///////////////////////////////////////////////////////////////////////////////
-    /// @brief C++ wrapper for ::xeDevicePlaceEvent
-    /// 
-    /// @details
-    ///     - This function is intended for sharing fences with peer devices or
-    ///       across processes
-    ///     - This function may be called from simultaneous threads.
-    ///     - The implementation of this function should be lock-free.
-    /// 
-    /// @returns
-    ///     - ::event_handle_t: pointer to handle of event object created
-    /// 
-    /// @throws result_t
-    inline event_handle_t 
-    Device::PlaceEvent(
-        const event_desc_t* desc,                       ///< [in] pointer to event descriptor
-        void* ptr                                       ///< [in] pointer to the device pointer where the event should be placed
-        )
-    {
-        // auto result = ::xeDevicePlaceEvent( handle, desc, ptr );
-        // if( ::XE_RESULT_SUCCESS != result ) throw exception(result, "xe::Device::PlaceEvent");
     }
 
     ///////////////////////////////////////////////////////////////////////////////

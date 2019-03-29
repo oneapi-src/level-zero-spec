@@ -432,6 +432,7 @@ namespace xe
         {
             event_desc_version_t version = event_desc_version_t::CURRENT;   ///< [in] ::EVENT_DESC_VERSION_CURRENT
             event_flag_t flags = event_flag_t::NONE;        ///< [in] creation flags
+            uint32_t count;                                 ///< [in] number of events to create
 
         };
 
@@ -650,24 +651,12 @@ namespace xe
         ///////////////////////////////////////////////////////////////////////////////
         /// @brief C++ wrapper for ::xeDeviceCreateEvent
         /// @returns
-        ///     - ::event_handle_t: pointer to handle of event object created
+        ///     - ::event_handle_t: pointer to handle(s) of event object(s) created
         /// 
         /// @throws result_t
         inline event_handle_t
         CreateEvent(
             const event_desc_t* desc                        ///< [in] pointer to event descriptor
-            );
-
-        ///////////////////////////////////////////////////////////////////////////////
-        /// @brief C++ wrapper for ::xeDevicePlaceEvent
-        /// @returns
-        ///     - ::event_handle_t: pointer to handle of event object created
-        /// 
-        /// @throws result_t
-        inline event_handle_t
-        PlaceEvent(
-            const event_desc_t* desc,                       ///< [in] pointer to event descriptor
-            void* ptr                                       ///< [in] pointer to the device pointer where the event should be placed
             );
 
         ///////////////////////////////////////////////////////////////////////////////

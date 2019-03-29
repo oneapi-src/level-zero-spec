@@ -236,13 +236,7 @@ typedef xe_result_t (__xecall *pfn_xeDriverGetVersion)(
 typedef xe_result_t (__xecall *pfn_xeDeviceCreateEvent)(
     xe_device_handle_t hDevice,                     ///< [in] handle of the device
     const xe_event_desc_t* desc,                    ///< [in] pointer to event descriptor
-    xe_event_handle_t* phEvent                      ///< [out] pointer to handle of event object created
-    );
-typedef xe_result_t (__xecall *pfn_xeDevicePlaceEvent)(
-    xe_device_handle_t hDevice,                     ///< [in] handle of the device
-    const xe_event_desc_t* desc,                    ///< [in] pointer to event descriptor
-    void* ptr,                                      ///< [in] pointer to the device pointer where the event should be placed
-    xe_event_handle_t* phEvent                      ///< [out] pointer to handle of event object created
+    xe_event_handle_t* phEvent                      ///< [out] pointer to handle(s) of event object(s) created
     );
 typedef xe_result_t (__xecall *pfn_xeEventDestroy)(
     xe_event_handle_t hEvent                        ///< [in] handle of event object to destroy
@@ -285,6 +279,21 @@ typedef xe_result_t (__xecall *pfn_xeCommandListAppendEventReset)(
     );
 typedef xe_result_t (__xecall *pfn_xeEventReset)(
     xe_event_handle_t hEvent                        ///< [in] handle of the event
+    );
+typedef xe_result_t (__xecall *pfn_xeEventGetIpcHandle)(
+    uint32_t count,                                 ///< [in] number of events
+    xe_event_handle_t* phEvent,                     ///< [in] pointer to array of event handle(s)
+    xe_ipc_event_handle_t* pIpcHandle               ///< [out] Returned IPC event handle
+    );
+typedef xe_result_t (__xecall *pfn_xeEventOpenIpcHandle)(
+    xe_device_handle_t hDevice,                     ///< [in] handle of the device to associate with the IPC event handle
+    xe_ipc_event_handle_t handle,                   ///< [in] IPC event handle
+    uint32_t* pCount,                               ///< [out] number of events
+    xe_event_handle_t* phEvent                      ///< [in,out][optional] pointer to handle(s) of event object(s) created
+    );
+typedef xe_result_t (__xecall *pfn_xeEventCloseIpcHandle)(
+    uint32_t count,                                 ///< [in] number of events
+    xe_event_handle_t* phEvent                      ///< [in] pointer to array of event handle(s)
     );
 typedef xe_result_t (__xecall *pfn_xeCommandQueueCreateFence)(
     xe_command_queue_handle_t hCommandQueue,        ///< [in] handle of command queue
@@ -539,7 +548,6 @@ typedef struct _xe_dispatch_table_t
     pfn_xeDriverInit xeDriverInit;
     pfn_xeDriverGetVersion xeDriverGetVersion;
     pfn_xeDeviceCreateEvent xeDeviceCreateEvent;
-    pfn_xeDevicePlaceEvent xeDevicePlaceEvent;
     pfn_xeEventDestroy xeEventDestroy;
     pfn_xeCommandListAppendSignalEvent xeCommandListAppendSignalEvent;
     pfn_xeCommandListAppendWaitOnEvent xeCommandListAppendWaitOnEvent;
@@ -550,6 +558,9 @@ typedef struct _xe_dispatch_table_t
     pfn_xeEventQueryMetricsData xeEventQueryMetricsData;
     pfn_xeCommandListAppendEventReset xeCommandListAppendEventReset;
     pfn_xeEventReset xeEventReset;
+    pfn_xeEventGetIpcHandle xeEventGetIpcHandle;
+    pfn_xeEventOpenIpcHandle xeEventOpenIpcHandle;
+    pfn_xeEventCloseIpcHandle xeEventCloseIpcHandle;
     pfn_xeCommandQueueCreateFence xeCommandQueueCreateFence;
     pfn_xeFenceDestroy xeFenceDestroy;
     pfn_xeFenceHostSynchronize xeFenceHostSynchronize;
@@ -642,7 +653,6 @@ inline bool load_xe(void *handle, void *(*funcAddressGetter)(void *handle, const
     outTable->xeDriverInit = (pfn_xeDriverInit)funcAddressGetter(handle, "xeDriverInit");
     outTable->xeDriverGetVersion = (pfn_xeDriverGetVersion)funcAddressGetter(handle, "xeDriverGetVersion");
     outTable->xeDeviceCreateEvent = (pfn_xeDeviceCreateEvent)funcAddressGetter(handle, "xeDeviceCreateEvent");
-    outTable->xeDevicePlaceEvent = (pfn_xeDevicePlaceEvent)funcAddressGetter(handle, "xeDevicePlaceEvent");
     outTable->xeEventDestroy = (pfn_xeEventDestroy)funcAddressGetter(handle, "xeEventDestroy");
     outTable->xeCommandListAppendSignalEvent = (pfn_xeCommandListAppendSignalEvent)funcAddressGetter(handle, "xeCommandListAppendSignalEvent");
     outTable->xeCommandListAppendWaitOnEvent = (pfn_xeCommandListAppendWaitOnEvent)funcAddressGetter(handle, "xeCommandListAppendWaitOnEvent");
@@ -653,6 +663,9 @@ inline bool load_xe(void *handle, void *(*funcAddressGetter)(void *handle, const
     outTable->xeEventQueryMetricsData = (pfn_xeEventQueryMetricsData)funcAddressGetter(handle, "xeEventQueryMetricsData");
     outTable->xeCommandListAppendEventReset = (pfn_xeCommandListAppendEventReset)funcAddressGetter(handle, "xeCommandListAppendEventReset");
     outTable->xeEventReset = (pfn_xeEventReset)funcAddressGetter(handle, "xeEventReset");
+    outTable->xeEventGetIpcHandle = (pfn_xeEventGetIpcHandle)funcAddressGetter(handle, "xeEventGetIpcHandle");
+    outTable->xeEventOpenIpcHandle = (pfn_xeEventOpenIpcHandle)funcAddressGetter(handle, "xeEventOpenIpcHandle");
+    outTable->xeEventCloseIpcHandle = (pfn_xeEventCloseIpcHandle)funcAddressGetter(handle, "xeEventCloseIpcHandle");
     outTable->xeCommandQueueCreateFence = (pfn_xeCommandQueueCreateFence)funcAddressGetter(handle, "xeCommandQueueCreateFence");
     outTable->xeFenceDestroy = (pfn_xeFenceDestroy)funcAddressGetter(handle, "xeFenceDestroy");
     outTable->xeFenceHostSynchronize = (pfn_xeFenceHostSynchronize)funcAddressGetter(handle, "xeFenceHostSynchronize");
@@ -817,9 +830,6 @@ inline bool load_xe(void *handle, void *(*funcAddressGetter)(void *handle, const
     if(0 == outTable->xeDeviceCreateEvent){
         return false;
     }
-    if(0 == outTable->xeDevicePlaceEvent){
-        return false;
-    }
     if(0 == outTable->xeEventDestroy){
         return false;
     }
@@ -848,6 +858,15 @@ inline bool load_xe(void *handle, void *(*funcAddressGetter)(void *handle, const
         return false;
     }
     if(0 == outTable->xeEventReset){
+        return false;
+    }
+    if(0 == outTable->xeEventGetIpcHandle){
+        return false;
+    }
+    if(0 == outTable->xeEventOpenIpcHandle){
+        return false;
+    }
+    if(0 == outTable->xeEventCloseIpcHandle){
         return false;
     }
     if(0 == outTable->xeCommandQueueCreateFence){

@@ -201,6 +201,82 @@ namespace xe
         // if( ::XE_RESULT_SUCCESS != result ) throw exception(result, "xe::Event::Reset");
     }
 
+    ///////////////////////////////////////////////////////////////////////////////
+    /// @brief C++ wrapper for ::xeEventGetIpcHandle
+    /// 
+    /// @details
+    ///     - All events in the array must have been created by a singular
+    ///       ::DeviceCreateEvent call
+    ///     - The application may call this function from simultaneous threads.
+    /// 
+    /// @remarks
+    ///   _Analogues_
+    ///     - **cuIpcGetEventHandle**
+    /// 
+    /// @returns
+    ///     - ::ipc_event_handle_t: Returned IPC event handle
+    /// 
+    /// @throws result_t
+    inline ipc_event_handle_t 
+    Event::GetIpcHandle(
+        uint32_t count,                                 ///< [in] number of events
+        event_handle_t* phEvent                         ///< [in] pointer to array of event handle(s)
+        )
+    {
+        // auto result = ::xeEventGetIpcHandle( handle, count, phEvent );
+        // if( ::XE_RESULT_SUCCESS != result ) throw exception(result, "xe::Event::GetIpcHandle");
+    }
+
+    ///////////////////////////////////////////////////////////////////////////////
+    /// @brief C++ wrapper for ::xeEventOpenIpcHandle
+    /// 
+    /// @details
+    ///     - The event handle in this process should not be freed with
+    ///       ::EventDestroy, but rather with ::EventCloseIpcHandle.
+    ///     - The application may call this function from simultaneous threads.
+    /// 
+    /// @remarks
+    ///   _Analogues_
+    ///     - **cuIpcOpenMemHandle**
+    /// 
+    /// @returns
+    ///     - uint32_t: number of events
+    /// 
+    /// @throws result_t
+    inline uint32_t 
+    Event::OpenIpcHandle(
+        device_handle_t hDevice,                        ///< [in] handle of the device to associate with the IPC event handle
+        ipc_event_handle_t handle,                      ///< [in] IPC event handle
+        event_handle_t* phEvent                         ///< [in,out][optional] pointer to handle(s) of event object(s) created
+        )
+    {
+        // auto result = ::xeEventOpenIpcHandle( handle, hDevice, handle, phEvent );
+        // if( ::XE_RESULT_SUCCESS != result ) throw exception(result, "xe::Event::OpenIpcHandle");
+    }
+
+    ///////////////////////////////////////////////////////////////////////////////
+    /// @brief C++ wrapper for ::xeEventCloseIpcHandle
+    /// 
+    /// @details
+    ///     - Closes an IPC event handle by destroying events that were opened in
+    ///       this process using ::EventOpenIpcHandle.
+    ///     - The application may call this function from simultaneous threads.
+    /// 
+    /// @remarks
+    ///   _Analogues_
+    ///     - **cuIpcCloseMemHandle**
+    /// 
+    /// @throws result_t
+    inline void 
+    Event::CloseIpcHandle(
+        uint32_t count,                                 ///< [in] number of events
+        event_handle_t* phEvent                         ///< [in] pointer to array of event handle(s)
+        )
+    {
+        // auto result = ::xeEventCloseIpcHandle( handle, count, phEvent );
+        // if( ::XE_RESULT_SUCCESS != result ) throw exception(result, "xe::Event::CloseIpcHandle");
+    }
+
 } // namespace xe
 #endif // defined(__cplusplus)
 #endif // _XE_EVENT_INL

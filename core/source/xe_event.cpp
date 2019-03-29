@@ -72,7 +72,7 @@ __xedllexport xe_result_t __xecall
 xeDeviceCreateEvent(
     xe_device_handle_t hDevice,                     ///< [in] handle of the device
     const xe_event_desc_t* desc,                    ///< [in] pointer to event descriptor
-    xe_event_handle_t* phEvent                      ///< [out] pointer to handle of event object created
+    xe_event_handle_t* phEvent                      ///< [out] pointer to handle(s) of event object(s) created
     )
 {
     try
@@ -91,73 +91,6 @@ xeDeviceCreateEvent(
         return XE_RESULT_SUCCESS;
 #else
         return L0::Device::fromHandle(hDevice)->createEvent(desc, phEvent);
-#endif
-        /// @end
-    }
-    catch(xe_result_t& result)
-    {
-        return result;
-    }
-    catch(std::bad_alloc&)
-    {
-        return XE_RESULT_ERROR_OUT_OF_HOST_MEMORY;
-    }
-    catch(std::exception&)
-    {
-        // @todo: pfnOnException(e.what());
-        return XE_RESULT_ERROR_UNKNOWN;
-    }
-}
-
-///////////////////////////////////////////////////////////////////////////////
-/// @brief Creates an event object on the device from existing memory.
-/// 
-/// @details
-///     - This function is intended for sharing fences with peer devices or
-///       across processes
-///     - This function may be called from simultaneous threads.
-///     - The implementation of this function should be lock-free.
-/// 
-/// @returns
-///     - ::XE_RESULT_SUCCESS
-///     - ::XE_RESULT_ERROR_UNINITIALIZED
-///     - ::XE_RESULT_ERROR_DEVICE_LOST
-///     - ::XE_RESULT_ERROR_INVALID_PARAMETER
-///         + nullptr == hDevice
-///         + nullptr == desc
-///         + nullptr == ptr
-///         + nullptr == phEvent
-///     - ::XE_RESULT_ERROR_UNSUPPORTED
-///         + ::XE_EVENT_DESC_VERSION_CURRENT < desc->version
-///     - ::XE_RESULT_ERROR_OUT_OF_HOST_MEMORY
-///
-/// @hash {ff2fcb0cf2905079d5fb305c78b9dc0d9f1c4e5ab7792007b01cd832e94bae5c}
-///
-__xedllexport xe_result_t __xecall
-xeDevicePlaceEvent(
-    xe_device_handle_t hDevice,                     ///< [in] handle of the device
-    const xe_event_desc_t* desc,                    ///< [in] pointer to event descriptor
-    void* ptr,                                      ///< [in] pointer to the device pointer where the event should be placed
-    xe_event_handle_t* phEvent                      ///< [out] pointer to handle of event object created
-    )
-{
-    try
-    {
-        //if( XE_DRIVER_PARAMETER_VALIDATION_LEVEL >= 0 )
-        {
-            // if( nullptr == driver ) return XE_RESULT_ERROR_UNINITIALIZED;
-            // Check parameters
-            if( nullptr == hDevice ) return XE_RESULT_ERROR_INVALID_PARAMETER;
-            if( nullptr == desc ) return XE_RESULT_ERROR_INVALID_PARAMETER;
-            if( nullptr == ptr ) return XE_RESULT_ERROR_INVALID_PARAMETER;
-            if( nullptr == phEvent ) return XE_RESULT_ERROR_INVALID_PARAMETER;
-            if( XE_EVENT_DESC_VERSION_CURRENT < desc->version ) return XE_RESULT_ERROR_UNSUPPORTED;
-        }
-        /// @begin
-#if defined(XE_NULLDRV)
-        return XE_RESULT_SUCCESS;
-#else
-        return L0::Device::fromHandle(hDevice)->placeEvent(desc, ptr, phEvent);
 #endif
         /// @end
     }
@@ -768,6 +701,194 @@ xeEventReset(
         return XE_RESULT_SUCCESS;
 #else
         return L0::Event::fromHandle(hEvent)->reset();
+#endif
+        /// @end
+    }
+    catch(xe_result_t& result)
+    {
+        return result;
+    }
+    catch(std::bad_alloc&)
+    {
+        return XE_RESULT_ERROR_OUT_OF_HOST_MEMORY;
+    }
+    catch(std::exception&)
+    {
+        // @todo: pfnOnException(e.what());
+        return XE_RESULT_ERROR_UNKNOWN;
+    }
+}
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Creates an IPC event handle for the specified Event in the sending
+///        process
+/// 
+/// @details
+///     - All events in the array must have been created by a singular
+///       ::xeDeviceCreateEvent call
+///     - The application may call this function from simultaneous threads.
+/// 
+/// @remarks
+///   _Analogues_
+///     - **cuIpcGetEventHandle**
+/// 
+/// @returns
+///     - ::XE_RESULT_SUCCESS
+///     - ::XE_RESULT_ERROR_UNINITIALIZED
+///     - ::XE_RESULT_ERROR_DEVICE_LOST
+///     - ::XE_RESULT_ERROR_INVALID_PARAMETER
+///         + nullptr == phEvent
+///         + nullptr == pIpcHandle
+///     - ::XE_RESULT_ERROR_UNSUPPORTED
+///
+/// @hash {98085df908914868a8094f5dd86a03ade029f374426108eee45e786a382a59db}
+///
+__xedllexport xe_result_t __xecall
+xeEventGetIpcHandle(
+    uint32_t count,                                 ///< [in] number of events
+    xe_event_handle_t* phEvent,                     ///< [in] pointer to array of event handle(s)
+    xe_ipc_event_handle_t* pIpcHandle               ///< [out] Returned IPC event handle
+    )
+{
+    try
+    {
+        //if( XE_DRIVER_PARAMETER_VALIDATION_LEVEL >= 0 )
+        {
+            // if( nullptr == driver ) return XE_RESULT_ERROR_UNINITIALIZED;
+            // Check parameters
+            if( nullptr == phEvent ) return XE_RESULT_ERROR_INVALID_PARAMETER;
+            if( nullptr == pIpcHandle ) return XE_RESULT_ERROR_INVALID_PARAMETER;
+        }
+        /// @begin
+#if defined(XE_NULLDRV)
+        return XE_RESULT_SUCCESS;
+#else
+        return L0::eventGetIpcHandle(count, phEvent, pIpcHandle);
+#endif
+        /// @end
+    }
+    catch(xe_result_t& result)
+    {
+        return result;
+    }
+    catch(std::bad_alloc&)
+    {
+        return XE_RESULT_ERROR_OUT_OF_HOST_MEMORY;
+    }
+    catch(std::exception&)
+    {
+        // @todo: pfnOnException(e.what());
+        return XE_RESULT_ERROR_UNKNOWN;
+    }
+}
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Opens an IPC event handle to retrieve a device pointer in a receiving
+///        process
+/// 
+/// @details
+///     - The event handle in this process should not be freed with
+///       ::xeEventDestroy, but rather with ::xeEventCloseIpcHandle.
+///     - The application may call this function from simultaneous threads.
+/// 
+/// @remarks
+///   _Analogues_
+///     - **cuIpcOpenMemHandle**
+/// 
+/// @returns
+///     - ::XE_RESULT_SUCCESS
+///     - ::XE_RESULT_ERROR_UNINITIALIZED
+///     - ::XE_RESULT_ERROR_DEVICE_LOST
+///     - ::XE_RESULT_ERROR_INVALID_PARAMETER
+///         + nullptr == hDevice
+///         + nullptr == handle
+///         + nullptr == pCount
+///     - ::XE_RESULT_ERROR_UNSUPPORTED
+///
+/// @hash {feb8d593ed1da42d0ef6511c8dcb38892a109034e346410d18c5bd2897df5317}
+///
+__xedllexport xe_result_t __xecall
+xeEventOpenIpcHandle(
+    xe_device_handle_t hDevice,                     ///< [in] handle of the device to associate with the IPC event handle
+    xe_ipc_event_handle_t handle,                   ///< [in] IPC event handle
+    uint32_t* pCount,                               ///< [out] number of events
+    xe_event_handle_t* phEvent                      ///< [in,out][optional] pointer to handle(s) of event object(s) created
+    )
+{
+    try
+    {
+        //if( XE_DRIVER_PARAMETER_VALIDATION_LEVEL >= 0 )
+        {
+            // if( nullptr == driver ) return XE_RESULT_ERROR_UNINITIALIZED;
+            // Check parameters
+            if( nullptr == hDevice ) return XE_RESULT_ERROR_INVALID_PARAMETER;
+            if( nullptr == handle ) return XE_RESULT_ERROR_INVALID_PARAMETER;
+            if( nullptr == pCount ) return XE_RESULT_ERROR_INVALID_PARAMETER;
+        }
+        /// @begin
+#if defined(XE_NULLDRV)
+        return XE_RESULT_SUCCESS;
+#else
+        return L0::eventOpenIpcHandle(hDevice, handle, pCount, phEvent);
+#endif
+        /// @end
+    }
+    catch(xe_result_t& result)
+    {
+        return result;
+    }
+    catch(std::bad_alloc&)
+    {
+        return XE_RESULT_ERROR_OUT_OF_HOST_MEMORY;
+    }
+    catch(std::exception&)
+    {
+        // @todo: pfnOnException(e.what());
+        return XE_RESULT_ERROR_UNKNOWN;
+    }
+}
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Closes an IPC event handle in a receiving process
+/// 
+/// @details
+///     - Closes an IPC event handle by destroying events that were opened in
+///       this process using ::xeEventOpenIpcHandle.
+///     - The application may call this function from simultaneous threads.
+/// 
+/// @remarks
+///   _Analogues_
+///     - **cuIpcCloseMemHandle**
+/// 
+/// @returns
+///     - ::XE_RESULT_SUCCESS
+///     - ::XE_RESULT_ERROR_UNINITIALIZED
+///     - ::XE_RESULT_ERROR_DEVICE_LOST
+///     - ::XE_RESULT_ERROR_INVALID_PARAMETER
+///         + nullptr == phEvent
+///     - ::XE_RESULT_ERROR_UNSUPPORTED
+///
+/// @hash {4151c301b7f7f94c4b49842cae37206ebe3c9ece1c08138edf4b725a6cc9a904}
+///
+__xedllexport xe_result_t __xecall
+xeEventCloseIpcHandle(
+    uint32_t count,                                 ///< [in] number of events
+    xe_event_handle_t* phEvent                      ///< [in] pointer to array of event handle(s)
+    )
+{
+    try
+    {
+        //if( XE_DRIVER_PARAMETER_VALIDATION_LEVEL >= 0 )
+        {
+            // if( nullptr == driver ) return XE_RESULT_ERROR_UNINITIALIZED;
+            // Check parameters
+            if( nullptr == phEvent ) return XE_RESULT_ERROR_INVALID_PARAMETER;
+        }
+        /// @begin
+#if defined(XE_NULLDRV)
+        return XE_RESULT_SUCCESS;
+#else
+        return L0::eventCloseIpcHandle(count, phEvent);
 #endif
         /// @end
     }
