@@ -119,17 +119,6 @@ xe_result_t CommandListCoreFamily<gfxCoreFamily>::close() {
 
 template <GFXCORE_FAMILY gfxCoreFamily>
 void CommandListCoreFamily<gfxCoreFamily>::programL3(bool isSLMused) {
-    using GfxFamily = typename OCLRT::GfxFamilyMapper<gfxCoreFamily>::GfxFamily;
-    {
-        using MI_LOAD_REGISTER_IMM = typename GfxFamily::MI_LOAD_REGISTER_IMM;
-        MI_LOAD_REGISTER_IMM cmd = GfxFamily::cmdInitLoadRegisterImm;
-        uint32_t offsetL3CNTL = 0x7034u;
-        uint32_t dataL3CNTL = 0x80000140u;
-        cmd.setRegisterOffset(offsetL3CNTL);
-        cmd.setDataDword(dataL3CNTL);
-        auto buffer = commandStream->getSpace(sizeof(cmd));
-        *(MI_LOAD_REGISTER_IMM *)buffer = cmd;
-    }
 }
 
 template <GFXCORE_FAMILY gfxCoreFamily>
@@ -267,8 +256,8 @@ xe_result_t CommandListCoreFamily<gfxCoreFamily>::appendLaunchFunction(xe_functi
         auto borderColor = heap->getSpace(borderColorSize);
 
         memcpy_s(borderColor, borderColorSize,
-                ptrOffset(function->getDynamicStateHeap(), samplerStateArray->BorderColorOffset),
-                borderColorSize);
+                 ptrOffset(function->getDynamicStateHeap(), samplerStateArray->BorderColorOffset),
+                 borderColorSize);
 
         heap->align(INTERFACE_DESCRIPTOR_DATA::SAMPLERSTATEPOINTER_ALIGN_SIZE);
         samplerStateOffset = static_cast<uint32_t>(heap->getUsed());

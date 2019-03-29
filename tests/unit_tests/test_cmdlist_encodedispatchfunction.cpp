@@ -408,7 +408,9 @@ SKLTEST_F(CommandListAppendLaunchFunctionGEN9, copiesThreadDataToIndirectStateHe
     }
 }
 
-HWTEST2_F(CommandListAppendLaunchFunctionGEN9, withSLMProgramsL3WithSLMValue, IsSKL) {
+using IsSKLOrKBL = IsWithinProducts<IGFX_SKYLAKE, IGFX_KABYLAKE>;
+
+HWTEST2_F(CommandListAppendLaunchFunctionGEN9, withSLMProgramsL3WithSLMValue, IsSKLOrKBL) {
     createFunction("SlmBarrier");
     auto result = commandList->appendLaunchFunction(function->toHandle(),
                                                     &dispatchFunctionArguments,
