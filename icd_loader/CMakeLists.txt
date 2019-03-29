@@ -20,8 +20,8 @@ endif(MSVC)
 if(UNIX)
     install(TARGETS level_zero_icd_loader
         DESTINATION ${CMAKE_INSTALL_LIBDIR}
-        COMPONENT l0-devel)
+        COMPONENT loki-devel)
     install(FILES icd_loader.h
         DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}/level_zero
-        COMPONENT l0-devel)
+        COMPONENT loki-devel)
 endif()

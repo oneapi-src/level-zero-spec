@@ -250,6 +250,6 @@ add_custom_command(
 if(UNIX)
     install(TARGETS xello_world xello_world_icd xello_world_icd_clang xello_copy xello_copy_image xello_image
         DESTINATION ${CMAKE_INSTALL_BINDIR}
-        COMPONENT l0-samples
+        COMPONENT loki-samples
     )
 endif()

@@ -75,19 +75,19 @@ set(OS_SPECIFIC_LIBS ${OS_SPECIFIC_LIBS} PARENT_SCOPE)
 if(UNIX)
     install(TARGETS ${TARGET_NAME}
         DESTINATION ${CMAKE_INSTALL_LIBDIR}
-        COMPONENT l0-core)
+        COMPONENT loki-core)
 
     file(GLOB_RECURSE HEADER_FILES "include/*")
     list(REMOVE_ITEM HEADER_FILES "${CMAKE_CURRENT_SOURCE_DIR}/include/CMakeLists.txt")
     install(FILES ${HEADER_FILES}
         DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}/level_zero
-        COMPONENT l0-devel
+        COMPONENT loki-devel
     )
 
     install(FILES source/ocloc_shared.h
         DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}
-        COMPONENT l0-devel)
+        COMPONENT loki-devel)
     install(TARGETS ocloc_shared
         DESTINATION ${CMAKE_INSTALL_LIBDIR}
-        COMPONENT l0-devel)
+        COMPONENT loki-devel)
 endif()
