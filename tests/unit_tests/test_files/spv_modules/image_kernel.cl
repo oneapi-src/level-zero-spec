@@ -21,15 +21,11 @@
  */
 
 const sampler_t sampler =
-    CLK_NORMALIZED_COORDS_TRUE | CLK_ADDRESS_CLAMP | CLK_FILTER_LINEAR;
+    CLK_NORMALIZED_COORDS_FALSE | CLK_ADDRESS_CLAMP | CLK_FILTER_NEAREST;
 
-kernel void xe_image_scaling(read_only image2d_t input,
+kernel void image_copy(read_only image2d_t input,
                              write_only image2d_t output) {
-  const int2 output_coord = {get_global_id(0), get_global_id(1)};
-  const int2 output_size = {get_global_size(0), get_global_size(1)};
-
-  const float2 input_coord =
-      convert_float2(output_coord) / convert_float2(output_size);
-  const float4 pixel = read_imagef(input, sampler, input_coord);
-  write_imagef(output, output_coord, pixel);
+    int2 coord = {get_global_id(0), get_global_id(1)};
+    uint4 pixel = read_imageui(input, sampler, coord);
+    write_imageui(output, coord, pixel);
 }

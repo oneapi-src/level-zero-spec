@@ -371,7 +371,7 @@ TEST_P(ModuleCreateImageArg, onlineCompilationModuleTest) {
 }
 
 static std::tuple<std::string, std::string, std::string> paramsForCreateModuleImageArg[] = {
-    std::make_tuple<std::string, std::string, std::string>("test_files/spv_modules/xe_image_scaling.spv", "xe_image_scaling", "ImageScaling")};
+    std::make_tuple<std::string, std::string, std::string>("test_files/spv_modules/image_kernel.spv", "image_copy", "ImageCopy")};
 
 INSTANTIATE_TEST_CASE_P(, ModuleCreateImageArg, ::testing::ValuesIn(paramsForCreateModuleImageArg));
 

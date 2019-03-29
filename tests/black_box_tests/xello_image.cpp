@@ -1,0 +1,269 @@
+#include "xe_all.h"
+#include <iostream>
+#include <fstream>
+#include <memory>
+
+bool verbose = false;
+
+template <typename SizeT>
+inline std::unique_ptr<char[]> readBinaryFile(const std::string &name, SizeT &outSize) {
+    std::ifstream file(name, std::ios_base::binary);
+    if (false == file.good()) {
+        outSize = 0;
+        return nullptr;
+    }
+
+    size_t length;
+    file.seekg(0, file.end);
+    length = static_cast<size_t>(file.tellg());
+    file.seekg(0, file.beg);
+
+    auto storage = std::make_unique<char[]>(length);
+    file.read(storage.get(), length);
+
+    outSize = static_cast<SizeT>(length);
+    return storage;
+}
+
+template <bool TerminateOnFailure, typename ResulT>
+inline void validate(ResulT result, const char *message) {
+    if (result == 0) { // assumption 0 is success
+        if (verbose) {
+            std::cerr << "SUCCESS : " << message << std::endl;
+        }
+        return;
+    }
+
+    std::cerr << (TerminateOnFailure ? "ERROR : " : "WARNING : ") << message << " : " << result << std::endl;
+    if (TerminateOnFailure) {
+        std::terminate();
+    }
+}
+
+#define SUCCESS_OR_TERMINATE(CALL) validate<true>(CALL, #CALL)
+#define SUCCESS_OR_TERMINATE_BOOL(FLAG) validate<true>(!(FLAG), #FLAG)
+#define SUCCESS_OR_WARNING(CALL) validate<false>(CALL, #CALL)
+#define SUCCESS_OR_WARNING_BOOL(FLAG) validate<false>(!(FLAG), #FLAG)
+
+void testAppendImageFunction(xe_device_handle_t &device,
+                          bool &syncRet, bool &validRet) {
+    const xe_image_format_t format = XE_IMAGE_FORMAT_UINT32;
+    const size_t elem_size = sizeof(uint32_t);
+    const int numChannels = 4;
+    const size_t width = 4;
+    const size_t height = 4;
+    const size_t size = width * height * numChannels;
+
+    xe_module_handle_t module;
+    xe_function_handle_t function;
+    xe_command_queue_handle_t cmdQueue;
+    xe_command_list_handle_t cmdList;
+    xe_thread_group_dimensions_t dispatchTraits;
+
+    xe_command_queue_desc_t cmdQueueDesc = {XE_COMMAND_QUEUE_DESC_VERSION_CURRENT};
+    cmdQueueDesc.ordinal = 0;
+    cmdQueueDesc.mode = XE_COMMAND_QUEUE_MODE_ASYNCHRONOUS;
+    SUCCESS_OR_TERMINATE(xeDeviceCreateCommandQueue(device, &cmdQueueDesc, &cmdQueue));
+
+    xe_command_list_desc_t cmdListDesc = {XE_COMMAND_LIST_DESC_VERSION_CURRENT};
+    SUCCESS_OR_TERMINATE(xeDeviceCreateCommandList(device, &cmdListDesc, &cmdList));
+
+    xe_image_desc_t srcImgDesc = {
+        XE_IMAGE_DESC_VERSION_CURRENT,
+        XE_IMAGE_FLAG_PROGRAM_READ,
+        XE_IMAGE_TYPE_2D,
+        format, numChannels,
+        width, height, 0, 0, 0
+    };
+    xe_image_handle_t srcImg;
+    xe_image_region_t srcRegion = {0, size * elem_size};
+
+    SUCCESS_OR_TERMINATE(xeDeviceCreateImage(device,
+            const_cast<const xe_image_desc_t *>(&srcImgDesc), &srcImg));
+
+    xe_image_desc_t dstImgDesc = {
+        XE_IMAGE_DESC_VERSION_CURRENT,
+        XE_IMAGE_FLAG_PROGRAM_WRITE,
+        XE_IMAGE_TYPE_2D,
+        format, numChannels,
+        width, height, 0, 0, 0
+    };
+    xe_image_handle_t dstImg;
+    xe_image_region_t dstRegion = {0, size * elem_size};
+
+    SUCCESS_OR_TERMINATE(xeDeviceCreateImage(device,
+            const_cast<const xe_image_desc_t *>(&dstImgDesc), &dstImg));
+
+    uint32_t *srcBuffer = new uint32_t[size];
+    uint32_t *dstBuffer = new uint32_t[size];
+    for (size_t i = 0; i < size; ++i) {
+        srcBuffer[i] = static_cast<uint32_t>(i % 2 ? -1 : 0);
+        dstBuffer[i] = 0xff;
+    }
+
+    uint32_t spirvSize = 0;
+    auto spirvModule = readBinaryFile("test_files/spv_modules/image_kernel.spv", spirvSize);
+    SUCCESS_OR_TERMINATE_BOOL(spirvSize != 0);
+
+    xe_module_desc_t moduleDesc = {XE_MODULE_DESC_VERSION_CURRENT};
+    moduleDesc.format = XE_MODULE_FORMAT_IL_SPIRV;
+    moduleDesc.pInputModule = spirvModule.get();
+    moduleDesc.inputSize = spirvSize;
+    SUCCESS_OR_TERMINATE(xeDeviceCreateModule(device, &moduleDesc, &module, nullptr));
+
+    xe_function_desc_t functionDesc = {XE_FUNCTION_DESC_VERSION_CURRENT};
+    functionDesc.pFunctionName = "image_copy";
+    SUCCESS_OR_TERMINATE(xeModuleCreateFunction(module, &functionDesc, &function));
+
+    uint32_t groupSizeX = width;
+    uint32_t groupSizeY = height;
+    uint32_t groupSizeZ = 1u;
+    SUCCESS_OR_TERMINATE(xeFunctionSuggestGroupSize(function, width, height, 1U, &groupSizeX, &groupSizeY, &groupSizeZ));
+    if (verbose) {
+        std::cout << "Group size : (" << groupSizeX << ", " << groupSizeY << ", " << groupSizeZ << ")" << std::endl;
+    }
+    SUCCESS_OR_TERMINATE(xeFunctionSetGroupSize(function, groupSizeX, groupSizeY, groupSizeZ));
+
+    dispatchTraits.groupCountX = width / groupSizeX;
+    dispatchTraits.groupCountY = height / groupSizeY;
+    dispatchTraits.groupCountZ = 1u;
+    if (verbose) {
+        std::cerr << "Number of groups : (" << dispatchTraits.groupCountX << ", " << dispatchTraits.groupCountY << ", " << dispatchTraits.groupCountZ << ")" << std::endl;
+    }
+
+    SUCCESS_OR_TERMINATE(xeFunctionSetArgumentValue(function, 0, sizeof(srcImg), &srcImg));
+    SUCCESS_OR_TERMINATE(xeFunctionSetArgumentValue(function, 1, sizeof(dstImg), &dstImg));
+
+    // Copy from srcBuffer->srcImg->dstImg->dstBuffer, so at the end dstBuffer = srcBuffer
+    SUCCESS_OR_TERMINATE(xeCommandListAppendImageCopyFromMemory(cmdList, srcImg, &srcRegion, srcBuffer));
+    SUCCESS_OR_TERMINATE(xeCommandListAppendExecutionBarrier(cmdList));
+    SUCCESS_OR_TERMINATE(xeCommandListAppendLaunchFunction(cmdList, function, &dispatchTraits, nullptr));
+    SUCCESS_OR_TERMINATE(xeCommandListAppendExecutionBarrier(cmdList));
+    SUCCESS_OR_TERMINATE(xeCommandListAppendImageCopyToMemory(cmdList, dstBuffer, dstImg, &dstRegion));
+
+    SUCCESS_OR_TERMINATE(xeCommandListClose(cmdList));
+    SUCCESS_OR_TERMINATE(xeCommandQueueExecuteCommandLists(cmdQueue, 1, &cmdList, nullptr));
+    syncRet = xeCommandQueueSynchronize(cmdQueue, 1000 * 1000 /*1s*/);
+
+    std::cout << "src ";
+    for (size_t i = 0; i < size; ++i) {
+        std::cout << static_cast<uint32_t>(srcBuffer[i]) << " ";
+    }
+    std::cout << std::endl;
+
+    std::cout << "dst ";
+    for (size_t i = 0; i < size; ++i) {
+        std::cout << static_cast<uint32_t>(dstBuffer[i]) << " ";
+    }
+    std::cout << std::endl;
+
+    validRet = (0 == memcmp(srcBuffer, dstBuffer, size * sizeof(uint32_t)));
+
+    delete[] srcBuffer;
+    delete[] dstBuffer;
+    SUCCESS_OR_TERMINATE(xeImageDestroy(srcImg));
+    SUCCESS_OR_TERMINATE(xeImageDestroy(dstImg));
+    SUCCESS_OR_TERMINATE(xeCommandListDestroy(cmdList));
+    SUCCESS_OR_TERMINATE(xeCommandQueueDestroy(cmdQueue));
+}
+
+void testAppendImageCopy(xe_device_handle_t &device,
+                          bool &syncRet, bool &validRet) {
+
+    const xe_image_format_t format = XE_IMAGE_FORMAT_UINT8;
+    const size_t width = 32;
+    const size_t height = 32;
+    const size_t numChannels = 4;
+    const size_t size = numChannels * width * height * sizeof(format);
+
+    xe_command_queue_handle_t cmdQueue;
+    xe_command_list_handle_t cmdList;
+
+    xe_command_queue_desc_t cmdQueueDesc = {XE_COMMAND_QUEUE_DESC_VERSION_CURRENT};
+    cmdQueueDesc.ordinal = 0;
+    cmdQueueDesc.mode = XE_COMMAND_QUEUE_MODE_ASYNCHRONOUS;
+    SUCCESS_OR_TERMINATE(xeDeviceCreateCommandQueue(device, &cmdQueueDesc, &cmdQueue));
+
+    xe_command_list_desc_t cmdListDesc = {XE_COMMAND_LIST_DESC_VERSION_CURRENT};
+    SUCCESS_OR_TERMINATE(xeDeviceCreateCommandList(device, &cmdListDesc, &cmdList));
+
+    xe_image_desc_t srcImgDesc = {
+        XE_IMAGE_DESC_VERSION_CURRENT,
+        XE_IMAGE_FLAG_PROGRAM_READ,
+        XE_IMAGE_TYPE_2D,
+        format, numChannels,
+        width, height, 0, 0, 0
+    };
+    xe_image_handle_t srcImg;
+    xe_image_region_t srcRegion = {0, size};
+
+    SUCCESS_OR_TERMINATE(xeDeviceCreateImage(device,
+            const_cast<const xe_image_desc_t *>(&srcImgDesc), &srcImg));
+
+    xe_image_desc_t dstImgDesc = {
+        XE_IMAGE_DESC_VERSION_CURRENT,
+        XE_IMAGE_FLAG_PROGRAM_WRITE,
+        XE_IMAGE_TYPE_2D,
+        format, numChannels,
+        width, height, 0, 0, 0
+    };
+    xe_image_handle_t dstImg;
+    xe_image_region_t dstRegion = {0, size};
+
+    SUCCESS_OR_TERMINATE(xeDeviceCreateImage(device,
+            const_cast<const xe_image_desc_t *>(&dstImgDesc), &dstImg));
+
+
+    char *srcBuffer = new char[size];
+    char *dstBuffer = new char[size];
+    for (size_t i = 0; i < size; ++i) {
+        srcBuffer[i] = static_cast<char>(i + 1);
+        dstBuffer[i] = 0;
+    }
+
+    // Copy from srcBuffer->srcImg->dstImg->dstBuffer, so at the end dstBuffer = srcBuffer
+    SUCCESS_OR_TERMINATE(xeCommandListAppendImageCopyFromMemory(cmdList, srcImg, &srcRegion, srcBuffer));
+    SUCCESS_OR_TERMINATE(xeCommandListAppendExecutionBarrier(cmdList));
+    SUCCESS_OR_TERMINATE(xeCommandListAppendImageCopy(cmdList, dstImg, srcImg));
+    SUCCESS_OR_TERMINATE(xeCommandListAppendExecutionBarrier(cmdList));
+    SUCCESS_OR_TERMINATE(xeCommandListAppendImageCopyToMemory(cmdList, dstBuffer, dstImg, &dstRegion));
+    SUCCESS_OR_TERMINATE(xeCommandListClose(cmdList));
+    SUCCESS_OR_TERMINATE(xeCommandQueueExecuteCommandLists(cmdQueue, 1, &cmdList, nullptr));
+    syncRet = xeCommandQueueSynchronize(cmdQueue, 1000 * 1000 /*1s*/);
+
+    validRet = (0 == memcmp(srcBuffer, dstBuffer, size));
+
+    delete[] srcBuffer;
+    delete[] dstBuffer;
+    SUCCESS_OR_TERMINATE(xeImageDestroy(srcImg));
+    SUCCESS_OR_TERMINATE(xeImageDestroy(dstImg));
+    SUCCESS_OR_TERMINATE(xeCommandListDestroy(cmdList));
+    SUCCESS_OR_TERMINATE(xeCommandQueueDestroy(cmdQueue));
+}
+
+int main(int argc, char *argv[]) {
+    xe_device_handle_t device0;
+    xe_device_properties_t device0Properties = {XE_DEVICE_PROPERTIES_VERSION_CURRENT};
+
+    if ((argc >= 2) && ((0 == strcmp(argv[1], "-v")) || (0 == strcmp(argv[1], "--verbose")))) {
+        verbose = true;
+    }
+
+    SUCCESS_OR_TERMINATE(xeDriverInit(XE_INIT_FLAG_NONE));
+    xe_device_uuid_t deviceUniqueID = {};
+    SUCCESS_OR_TERMINATE(xeDriverGetDevice(&deviceUniqueID, &device0));
+    SUCCESS_OR_TERMINATE(xeDeviceGetProperties(device0, &device0Properties));
+    std::cout << device0Properties.device_name << std::endl;
+
+    bool synchronizationResult;
+    bool outputValidationSuccessful;
+    testAppendImageFunction(device0, synchronizationResult, outputValidationSuccessful);
+    //testAppendImageCopy(device0, synchronizationResult, outputValidationSuccessful);
+
+    bool aubMode = (XE_RESULT_NOT_READY == synchronizationResult);
+    if (aubMode == false)
+        std::cout << "\nResults validation " << (outputValidationSuccessful ? "PASSED" : "FAILED") << std::endl;
+
+    int resultOnFailure = aubMode ? 0 : 1;
+    return outputValidationSuccessful ? 0 : resultOnFailure;
+}

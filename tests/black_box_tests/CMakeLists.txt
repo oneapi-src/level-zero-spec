@@ -32,6 +32,20 @@ endif()
 add_dependencies(xello_copy copy_third_party_files ocloc_shared)
 target_link_libraries(xello_copy level_zero_icd_loader ${OS_SPECIFIC_LIBS})
 
+#Basic example with image kernel
+add_executable(xello_image xello_image.cpp)
+
+if(MSVC)
+    set_target_properties(xello_image
+        PROPERTIES
+            VS_DEBUGGER_COMMAND_ARGUMENTS ""
+            VS_DEBUGGER_WORKING_DIRECTORY "$(OutDir)"
+    )
+endif()
+
+add_dependencies(xello_image copy_third_party_files ocloc_shared)
+target_link_libraries(xello_image level_zero_icd_loader ${OS_SPECIFIC_LIBS})
+
 #Basic example with copy image features
 add_executable(xello_copy_image xello_copy_image.cpp)
 
@@ -162,6 +176,43 @@ add_custom_command(
 )
 
 if(MSVC)
+    set(RUN_XELLO_IMAGE_AUB_CMD $<TARGET_FILE:xello_image>)
+else()
+    set(RUN_XELLO_IMAGE_AUB_CMD LD_LIBRARY_PATH=$<TARGET_FILE_DIR:xello_image> $<TARGET_FILE:xello_image>)
+endif()
+
+set(TEST_DIR ${CUSTOM_COMMAND_BINARY_DIR}/xello_image_aub_test_ats)
+add_custom_target(run_xello_image_aub_ats ALL DEPENDS xello_image copy_test_files level_zero)
+add_custom_command(
+  TARGET run_xello_image_aub_ats
+  POST_BUILD
+  COMMAND echo deleting and re-creating ${TEST_DIR} directory...
+  COMMAND ${CMAKE_COMMAND} -E remove_directory ${TEST_DIR}
+  COMMAND ${CMAKE_COMMAND} -E make_directory ${TEST_DIR}
+  COMMAND ${CMAKE_COMMAND} -E echo "SetCommandStreamReceiver = 1" > ${TEST_DIR}/igdrcl.config
+  COMMAND ${CMAKE_COMMAND} -E echo "ProductFamilyOverride = ats" >> ${TEST_DIR}/igdrcl.config
+  COMMAND ${CMAKE_COMMAND} -E echo "EnableLocalMemory = 1" >> ${TEST_DIR}/igdrcl.config
+  COMMAND ${CMAKE_COMMAND} -E copy_directory "${CUSTOM_COMMAND_BINARY_DIR}/test_files" "${TEST_DIR}/test_files"
+  COMMAND echo Running ${RUN_XELLO_IMAGE_AUB_CMD} for ATS in "${CUSTOM_COMMAND_BINARY_DIR}/xello_image_aub_test"
+  COMMAND ${CMAKE_COMMAND} -E chdir ${TEST_DIR} ${CMAKE_COMMAND} -E env SetCommandStreamReceiver=1 ${RUN_XELLO_IMAGE_AUB_CMD}
+)
+
+set(TEST_DIR ${CUSTOM_COMMAND_BINARY_DIR}/xello_image_aub_test_skl)
+add_custom_target(run_xello_image_aub_skl ALL DEPENDS xello_image copy_test_files level_zero)
+add_custom_command(
+  TARGET run_xello_image_aub_skl
+  POST_BUILD
+  COMMAND echo deleting and re-creating ${TEST_DIR} directory...
+  COMMAND ${CMAKE_COMMAND} -E remove_directory ${TEST_DIR}
+  COMMAND ${CMAKE_COMMAND} -E make_directory ${TEST_DIR}
+  COMMAND ${CMAKE_COMMAND} -E echo "SetCommandStreamReceiver = 1" > ${TEST_DIR}/igdrcl.config
+  COMMAND ${CMAKE_COMMAND} -E echo "ProductFamilyOverride = skl" >> ${TEST_DIR}/igdrcl.config
+  COMMAND ${CMAKE_COMMAND} -E copy_directory "${CUSTOM_COMMAND_BINARY_DIR}/test_files" "${TEST_DIR}/test_files"
+  COMMAND echo Running ${RUN_XELLO_IMAGE_AUB_CMD} for SKL in "${CUSTOM_COMMAND_BINARY_DIR}/xello_image_aub_test"
+  COMMAND ${CMAKE_COMMAND} -E chdir ${TEST_DIR} ${CMAKE_COMMAND} -E env SetCommandStreamReceiver=1 ${RUN_XELLO_IMAGE_AUB_CMD}
+)
+
+if(MSVC)
     set(RUN_XELLO_COPY_IMAGE_AUB_CMD $<TARGET_FILE:xello_copy_image>)
 else()
     set(RUN_XELLO_COPY_IMAGE_AUB_CMD LD_LIBRARY_PATH=$<TARGET_FILE_DIR:xello_copy_image> $<TARGET_FILE:xello_copy_image>)
@@ -178,7 +229,6 @@ add_custom_command(
   COMMAND ${CMAKE_COMMAND} -E echo "SetCommandStreamReceiver = 1" > ${TEST_DIR}/igdrcl.config
   COMMAND ${CMAKE_COMMAND} -E echo "ProductFamilyOverride = ats" >> ${TEST_DIR}/igdrcl.config
   COMMAND ${CMAKE_COMMAND} -E echo "EnableLocalMemory = 1" >> ${TEST_DIR}/igdrcl.config
-  COMMAND ${CMAKE_COMMAND} -E copy_directory "${CUSTOM_COMMAND_BINARY_DIR}/test_files" "${TEST_DIR}/test_files"
   COMMAND echo Running ${RUN_XELLO_COPY_IMAGE_AUB_CMD} for ATS in "${CUSTOM_COMMAND_BINARY_DIR}/xello_copy_image_aub_test"
   COMMAND ${CMAKE_COMMAND} -E chdir ${TEST_DIR} ${CMAKE_COMMAND} -E env SetCommandStreamReceiver=1 ${RUN_XELLO_COPY_IMAGE_AUB_CMD}
 )
@@ -193,13 +243,12 @@ add_custom_command(
   COMMAND ${CMAKE_COMMAND} -E make_directory ${TEST_DIR}
   COMMAND ${CMAKE_COMMAND} -E echo "SetCommandStreamReceiver = 1" > ${TEST_DIR}/igdrcl.config
   COMMAND ${CMAKE_COMMAND} -E echo "ProductFamilyOverride = skl" >> ${TEST_DIR}/igdrcl.config
-  COMMAND ${CMAKE_COMMAND} -E copy_directory "${CUSTOM_COMMAND_BINARY_DIR}/test_files" "${TEST_DIR}/test_files"
   COMMAND echo Running ${RUN_XELLO_COPY_IMAGE_AUB_CMD} for SKL in "${CUSTOM_COMMAND_BINARY_DIR}/xello_copy_image_aub_test"
   COMMAND ${CMAKE_COMMAND} -E chdir ${TEST_DIR} ${CMAKE_COMMAND} -E env SetCommandStreamReceiver=1 ${RUN_XELLO_COPY_IMAGE_AUB_CMD}
 )
 
 if(UNIX)
-    install(TARGETS xello_world xello_world_icd xello_world_icd_clang xello_copy xello_copy_image
+    install(TARGETS xello_world xello_world_icd xello_world_icd_clang xello_copy xello_copy_image xello_image
         DESTINATION ${CMAKE_INSTALL_BINDIR}
         COMPONENT l0-samples
     )
