@@ -16,6 +16,7 @@
 #include "runtime/context/context.h"
 #include "runtime/helpers/basic_math.h"
 #include "runtime/helpers/per_thread_data.h"
+#include "runtime/helpers/string.h"
 #include "runtime/kernel/kernel.h"
 #include "runtime/program/kernel_arg_info.h"
 #include "runtime/program/program.h"
@@ -219,11 +220,29 @@ xe_result_t FunctionImp::suggestGroupSize(uint32_t globalSizeX,
 }
 
 xe_result_t FunctionImp::setArgImmediate(uint32_t argIndex, size_t argSize, const void *argVal) {
+    assert(argVal != nullptr);
     const auto &kernelArgInfo = getKernelInfo()->kernelArgInfo[argIndex];
-    auto patchLocation = ptrOffset(crossThreadData,
-                                   kernelArgInfo.kernelArgPatchInfoVector[0].crossthreadOffset);
+    DEBUG_BREAK_IF(kernelArgInfo.kernelArgPatchInfoVector.size() <= 0);
 
-    patchWithRequiredSize(patchLocation, kernelArgInfo.kernelArgPatchInfoVector[0].size, *reinterpret_cast<const uintptr_t *>(argVal));
+    //storeKernelArg(argIndex, NONE_OBJ, nullptr, nullptr, argSize);
+
+    auto crossThreadDataEnd = ptrOffset(crossThreadData, getCrossThreadDataSize());
+
+    for (const auto &kernelArgPatchInfo : kernelArgInfo.kernelArgPatchInfoVector) {
+        DEBUG_BREAK_IF(kernelArgPatchInfo.size <= 0);
+        auto pDst = ptrOffset(crossThreadData, kernelArgPatchInfo.crossthreadOffset);
+
+        auto pSrc = ptrOffset(argVal, kernelArgPatchInfo.sourceOffset);
+
+        DEBUG_BREAK_IF(!(ptrOffset(pDst, kernelArgPatchInfo.size) <= crossThreadDataEnd));
+        ((void)(crossThreadDataEnd));
+
+        if (kernelArgPatchInfo.sourceOffset < argSize) {
+            size_t maxBytesToCopy = argSize - kernelArgPatchInfo.sourceOffset;
+            size_t bytesToCopy = std::min(static_cast<size_t>(kernelArgPatchInfo.size), maxBytesToCopy);
+            memcpy_s(pDst, kernelArgPatchInfo.size, pSrc, bytesToCopy);
+        }
+    }
 
     return XE_RESULT_SUCCESS;
 }
