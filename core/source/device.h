@@ -7,7 +7,9 @@
 #include "xe_image.h"
 #include "xe_module.h"
 #include "xe_sampler.h"
+
 #include "driver.h"
+#include "ptr.h"
 
 #include "runtime/helpers/hw_helper.h"
 
@@ -15,8 +17,9 @@ struct _xe_device_handle_t {
 };
 
 namespace L0 {
-struct MemoryManager;
+struct BuiltinFunctionsLib;
 struct ExecutionEnvironment;
+struct MemoryManager;
 
 struct Device : _xe_device_handle_t {
     virtual xe_result_t canAccessPeer(xe_device_handle_t hPeerDevice,
@@ -49,7 +52,7 @@ struct Device : _xe_device_handle_t {
     virtual xe_result_t getApiVersion(xe_api_version_t *version) = 0;
     virtual xe_result_t getComputeProperties(xe_device_compute_properties_t *pComputeProperties) = 0;
     virtual xe_result_t getP2PProperties(xe_device_handle_t hPeerDevice,
-                                          xe_device_p2p_properties_t *pP2PProperties) = 0;
+                                         xe_device_p2p_properties_t *pP2PProperties) = 0;
     virtual xe_result_t getMemoryProperties(xe_device_memory_properties_t *pMemProperties) = 0;
     virtual xe_result_t getProperties(xe_device_properties_t *pDeviceProperties) = 0;
     virtual xe_result_t getSubDevice(uint32_t ordinal,
@@ -64,7 +67,8 @@ struct Device : _xe_device_handle_t {
     virtual xe_result_t setLastLevelCacheConfig(xe_cache_config_t CacheConfig) = 0;
 
     virtual MemoryManager *getMemoryManager() = 0;
-    virtual void* getExecEnvironment() = 0;
+    virtual void *getExecEnvironment() = 0;
+    virtual PtrRef<BuiltinFunctionsLib> getBuiltinFunctionsLib() = 0;
 
     virtual OCLRT::HwHelper &getHwHelper() = 0;
 
@@ -80,6 +84,6 @@ struct Device : _xe_device_handle_t {
 };
 
 xe_result_t deviceGetP2PProperties(uint32_t srcOrdinal,
-                                    uint32_t dstOrdinal,
-                                    xe_device_p2p_properties_t *pP2PProperties);
+                                   uint32_t dstOrdinal,
+                                   xe_device_p2p_properties_t *pP2PProperties);
 } // namespace L0

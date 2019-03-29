@@ -7,8 +7,10 @@
 #include "memory_manager.h"
 #include "module.h"
 #include "builtins.h"
+#include "builtin_functions_lib.h"
 #include "runtime/command_stream/linear_stream.h"
 #include "runtime/command_stream/preemption.h"
+#include "runtime/built_ins/built_ins.h"
 #include "runtime/helpers/hw_info.h"
 #include "runtime/helpers/kernel_commands.h"
 #include "runtime/helpers/hw_helper.h"
@@ -533,29 +535,12 @@ template <GFXCORE_FAMILY gfxCoreFamily>
 xe_result_t CommandListCoreFamily<gfxCoreFamily>::appendMemoryCopy(void *dstptr,
                                                                    const void *srcptr,
                                                                    size_t size) {
-    xe_module_handle_t module;
-    xe_function_handle_t functionHandle;
-    // TODO : Make these persisten
-    //        * can't do compilations at each appendMemoryCopy
-    //        * who is responsible for freeing module/function?
-    xe_module_desc_t moduleDesc = {XE_MODULE_DESC_VERSION_CURRENT};
-    moduleDesc.format = XE_MODULE_FORMAT_IL_SPIRV;
-    moduleDesc.pInputModule = compileCopyBufferToBufferBin.getModule();
-    moduleDesc.inputSize = compileCopyBufferToBufferBin.getSize();
-    if (xeDeviceCreateModule(this->device, &moduleDesc, &module, nullptr))
-        return XE_RESULT_ERROR_UNKNOWN;
+    auto builtinFunction = this->device->getBuiltinFunctionsLib()->getFunction(Builtin::CopyBufferBytes); // no thread safety!
 
-    xe_function_desc_t functionDesc = {XE_FUNCTION_DESC_VERSION_CURRENT};
-    functionDesc.pFunctionName = compileCopyBufferToBufferBin.getFunctionName();
-    if (xeModuleCreateFunction(module, &functionDesc, &functionHandle))
-        return XE_RESULT_ERROR_UNKNOWN;
-
-    /* Using defaults for now. We need to change this */
-    auto func = Function::fromHandle(functionHandle);
-    uint32_t groupSizeX = func->getSimdSize(); // TODO : consider ATS fused threads
+    uint32_t groupSizeX = builtinFunction->getSimdSize(); // TODO : consider ATS fused threads
     uint32_t groupSizeY = 1u;
     uint32_t groupSizeZ = 1u;
-    if (func->setGroupSize(groupSizeX, groupSizeY, groupSizeZ))
+    if (builtinFunction->setGroupSize(groupSizeX, groupSizeY, groupSizeZ))
         return XE_RESULT_ERROR_UNKNOWN;
 
     GraphicsAllocation *alloc = this->device->getMemoryManager()->findAllocation(dstptr);
@@ -563,14 +548,14 @@ xe_result_t CommandListCoreFamily<gfxCoreFamily>::appendMemoryCopy(void *dstptr,
         // Trying to access non-driver memallocated for dstptr: Allocate managed memory using the host's buffer
         auto allocation = this->device->getMemoryManager()->allocateManagedMemoryFromFault(dstptr, size);
     }
-    func->setArgumentValue(0, sizeof(dstptr), &dstptr);
+    builtinFunction->setArgumentValue(0, sizeof(dstptr), &dstptr);
 
     alloc = this->device->getMemoryManager()->findAllocation(srcptr);
     if (alloc == nullptr) {
         // Trying to access non-driver memallocated for dstptr: Allocate managed memory using the host's buffer
         auto allocation = this->device->getMemoryManager()->allocateManagedMemoryFromFault(const_cast<void *>(srcptr), size);
     }
-    func->setArgumentValue(1, sizeof(srcptr), &srcptr);
+    builtinFunction->setArgumentValue(1, sizeof(srcptr), &srcptr);
 
     constexpr auto elementSize = sizeof(char);
     assert(size / (groupSizeX * elementSize) < MemoryConstants::gigaByte);
@@ -580,21 +565,21 @@ xe_result_t CommandListCoreFamily<gfxCoreFamily>::appendMemoryCopy(void *dstptr,
 
     auto ret = XE_RESULT_SUCCESS;
     if (whole > 0) {
-        ret = this->appendLaunchFunction(functionHandle, &dispatchFuncArgs, nullptr);
+        ret = this->appendLaunchFunction(builtinFunction->toHandle(), &dispatchFuncArgs, nullptr);
     }
     if ((XE_RESULT_SUCCESS != ret) || (rest == 0)) {
         return ret;
     }
     dstptr = ptrOffset(dstptr, whole * groupSizeX * elementSize);
     srcptr = ptrOffset(srcptr, whole * groupSizeX * elementSize);
-    func->setArgumentValue(0, sizeof(dstptr), &dstptr);
-    func->setArgumentValue(1, sizeof(srcptr), &srcptr);
-    if (func->setGroupSize(rest, 1u, 1u)) {
+    builtinFunction->setArgumentValue(0, sizeof(dstptr), &dstptr);
+    builtinFunction->setArgumentValue(1, sizeof(srcptr), &srcptr);
+    if (builtinFunction->setGroupSize(rest, 1u, 1u)) {
         return XE_RESULT_ERROR_UNKNOWN;
     }
     dispatchFuncArgs.groupCountX = 1;
 
-    return this->appendLaunchFunction(functionHandle, &dispatchFuncArgs, nullptr);
+    return this->appendLaunchFunction(builtinFunction->toHandle(), &dispatchFuncArgs, nullptr);
 }
 
 template <GFXCORE_FAMILY gfxCoreFamily>

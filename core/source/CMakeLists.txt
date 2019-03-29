@@ -9,6 +9,9 @@ set(HW_SOURCES_ULT "${HW_SOURCES_ULT}" CACHE STRING "HW_SOURCES_ULT" FORCE)
 
 set(L0_RUNTIME_SOURCES
     ${CMAKE_CURRENT_SOURCE_DIR}/barrier.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/builtin_functions_lib.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/builtin_functions_lib_impl.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/builtin_functions_lib_impl.h
     ${CMAKE_CURRENT_SOURCE_DIR}/builtins.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/builtins.h
     ${CMAKE_CURRENT_SOURCE_DIR}/cl_interop.h

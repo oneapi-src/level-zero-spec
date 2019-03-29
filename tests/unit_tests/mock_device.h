@@ -47,7 +47,7 @@ struct Mock<Device> : public Device {
     MOCK_METHOD1(getApiVersion, xe_result_t(xe_api_version_t *version));
     MOCK_METHOD1(getComputeProperties, xe_result_t(xe_device_compute_properties_t *pComputeProperties));
     MOCK_METHOD2(getP2PProperties, xe_result_t(xe_device_handle_t hPeerDevice,
-                                                xe_device_p2p_properties_t *pP2PProperties));
+                                               xe_device_p2p_properties_t *pP2PProperties));
     MOCK_METHOD1(getMemoryProperties, xe_result_t(xe_device_memory_properties_t *pMemProperties));
     MOCK_METHOD1(getProperties, xe_result_t(xe_device_properties_t *pDeviceProperties));
     MOCK_METHOD2(getSubDevice, xe_result_t(uint32_t ordinal,
@@ -65,6 +65,7 @@ struct Mock<Device> : public Device {
     MOCK_METHOD0(getMemoryManager, MemoryManager *());
     MOCK_METHOD0(getExecEnvironment, void *());
     MOCK_METHOD0(getHwHelper, OCLRT::HwHelper &());
+    MOCK_METHOD0(getBuiltinFunctionsLib, PtrRef<BuiltinFunctionsLib>());
 
     void *deviceRT;
     void *csrRT;

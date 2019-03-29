@@ -1,0 +1,32 @@
+#pragma once
+
+#include "builtin_functions_lib.h"
+
+#include "ptr.h"
+
+namespace OCLRT {
+class BuiltIns;
+}
+
+namespace L0 {
+
+struct BuiltinFunctionsLibImpl : BuiltinFunctionsLib {
+    BuiltinFunctionsLibImpl(PtrRef<Device> device, PtrRef<void> builtinsRT)
+        : device(device), builtinsRT(builtinsRT.weakRef<OCLRT::BuiltIns>()) {
+        initAllToNullptr(builtins);
+    }
+    ~BuiltinFunctionsLibImpl() {
+        deleteAllOwned(builtins);
+    }
+
+    PtrRef<Function> getFunction(Builtin func) override;
+
+  protected:
+    struct BuiltinData;
+    PtrOwn<BuiltinData> builtins[static_cast<uint32_t>(Builtin::COUNT)];
+
+    PtrRef<Device> device;
+    PtrRef<OCLRT::BuiltIns> builtinsRT;
+};
+
+} // namespace L0

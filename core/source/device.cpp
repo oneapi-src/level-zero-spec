@@ -1,6 +1,8 @@
+#include "device.h"
+
+#include "builtin_functions_lib.h"
 #include "cmdlist.h"
 #include "cmdqueue.h"
-#include "device.h"
 #include "event.h"
 #include "memory_manager.h"
 #include "module.h"
@@ -121,7 +123,7 @@ struct DeviceImp : public Device {
     }
 
     xe_result_t getP2PProperties(xe_device_handle_t hPeerDevice,
-                                  xe_device_p2p_properties_t *pP2PProperties) override {
+                                 xe_device_p2p_properties_t *pP2PProperties) override {
         return XE_RESULT_ERROR_UNSUPPORTED;
     }
 
@@ -169,7 +171,7 @@ struct DeviceImp : public Device {
                  deviceInfo.name, strlen(deviceInfo.name) + 1);
         pDeviceProperties->coreClockRate = deviceInfo.maxClockFrequency;
         pDeviceProperties->vendorId = deviceInfo.vendorId;
-        pDeviceProperties->deviceId = this->deviceRT->getDeviceIndex();                              ///< [out] device id from PCI configuration
+        pDeviceProperties->deviceId = this->deviceRT->getDeviceIndex(); ///< [out] device id from PCI configuration
         pDeviceProperties->subdeviceId = isSubdevice ? this->deviceRT->getDeviceIndex() : 0;
         pDeviceProperties->isSubdevice = isSubdevice;
         pDeviceProperties->numSubDevices = isSubdevice ? 0 : deviceInfo.partitionMaxSubDevices;
@@ -225,6 +227,10 @@ struct DeviceImp : public Device {
         return execEnvironment;
     }
 
+    PtrRef<BuiltinFunctionsLib> getBuiltinFunctionsLib() override {
+        return builtins.weakRef();
+    }
+
     OCLRT::HwHelper &getHwHelper() override {
         const auto &hardwareInfo = deviceRT->getHardwareInfo();
         return OCLRT::HwHelper::get(hardwareInfo.pPlatform->eRenderCoreFamily);
@@ -234,6 +240,7 @@ struct DeviceImp : public Device {
     MemoryManager *memoryManager = nullptr;
     bool isSubdevice = false;
     void *execEnvironment = nullptr;
+    PtrOwn<BuiltinFunctionsLib> builtins = nullptr;
 };
 
 Device *Device::create(void *ptr) {
@@ -243,13 +250,15 @@ Device *Device::create(void *ptr) {
     device->deviceRT = deviceRT;
     device->memoryManager = MemoryManager::create(deviceRT->getMemoryManager());
     device->execEnvironment = (void *)deviceRT->getExecutionEnvironment();
+    auto builtinsLib = BuiltinFunctionsLib::create(PtrRef<Device>(device), PtrRef<void>(deviceRT->getExecutionEnvironment()->getBuiltIns()));
+    device->builtins.swap(builtinsLib);
 
     return device;
 }
 
 xe_result_t deviceGetP2PProperties(uint32_t srcOrdinal,
-                                    uint32_t dstOrdinal,
-                                    xe_device_p2p_properties_t *pP2PProperties) {
+                                   uint32_t dstOrdinal,
+                                   xe_device_p2p_properties_t *pP2PProperties) {
     return XE_RESULT_ERROR_UNSUPPORTED;
 }
 
