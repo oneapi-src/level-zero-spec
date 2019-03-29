@@ -28,7 +28,7 @@ struct CommandQueueImp : public CommandQueue {
   protected:
     void processResidency(CommandList *);
     void processCoherency(CommandList *);
-    void submitBatchBuffer();
+    void submitBatchBuffer(size_t offset);
 
     xe_result_t synchronizeByPollingForTaskCount(uint32_t timeout);
     virtual void dispatchTaskCountWrite(bool flushDataCache) = 0;

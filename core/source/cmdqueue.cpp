@@ -49,13 +49,13 @@ struct CommandStreamReceiver : public OCLRT::CommandStreamReceiver {
     using OCLRT::CommandStreamReceiver::taskCount;
 };
 
-void CommandQueueImp::submitBatchBuffer() {
+void CommandQueueImp::submitBatchBuffer(size_t offset) {
     auto commandStreamReceiver = static_cast<CommandStreamReceiver *>(csrRT);
     assert(commandStreamReceiver);
 
     OCLRT::BatchBuffer batchBuffer(
         allocation->allocationRT,
-        0u,
+        offset,
         0u,
         nullptr,
         false,

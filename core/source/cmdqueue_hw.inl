@@ -28,6 +28,8 @@ xe_result_t CommandQueueHw<gfxCoreFamily>::executeCommandLists(uint32_t numComma
     using MI_BATCH_BUFFER_START = typename GfxFamily::MI_BATCH_BUFFER_START;
     using MI_BATCH_BUFFER_END = typename GfxFamily::MI_BATCH_BUFFER_END;
 
+    auto offset = commandStream->getUsed();
+
     for (auto i = 0u; i < numCommandLists; ++i) {
         MI_BATCH_BUFFER_START cmd = GfxFamily::cmdInitBatchBufferStart;
         cmd.setSecondLevelBatchBuffer(MI_BATCH_BUFFER_START::SECOND_LEVEL_BATCH_BUFFER_SECOND_LEVEL_BATCH);
@@ -53,7 +55,7 @@ xe_result_t CommandQueueHw<gfxCoreFamily>::executeCommandLists(uint32_t numComma
     }
 
     // Submit our batch buffer
-    submitBatchBuffer();
+    submitBatchBuffer(offset);
 
     // TODO: Enable unified memory.  For now, imply everything gets made consistent
     for (auto i = 0u; i < numCommandLists; ++i) {
