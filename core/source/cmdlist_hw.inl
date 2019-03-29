@@ -233,10 +233,10 @@ xe_result_t CommandListCoreFamily<gfxCoreFamily>::appendLaunchFunction(xe_functi
             auto ssh = indirectHeaps[SURFACE_STATE];
             assert(ssh);
             bindingTablePointer = copyBindingTableAndSurfaceStates(ssh,
-                                                                    function->getSurfaceStateHeap(),
-                                                                    function->getSurfaceStateHeapSize(),
-                                                                    bindingTableStateCount,
-                                                                    function->getBindingTableOffset());
+                                                                   function->getSurfaceStateHeap(),
+                                                                   function->getSurfaceStateHeapSize(),
+                                                                   bindingTableStateCount,
+                                                                   function->getBindingTableOffset());
         }
 
         idd.setBindingTablePointer(bindingTablePointer);
@@ -586,11 +586,11 @@ template <GFXCORE_FAMILY gfxCoreFamily>
 xe_result_t CommandListCoreFamily<gfxCoreFamily>::reserveSpace(size_t size,
                                                                void **ptr) {
     auto availableSpace = commandStream->getAvailableSpace();
-	if (availableSpace < size) {
+    if (availableSpace < size) {
         *ptr = nullptr;
-	}else {
-		*ptr = commandStream->getSpace(size);
-	}
+    } else {
+        *ptr = commandStream->getSpace(size);
+    }
     return XE_RESULT_SUCCESS;
 }
 

@@ -21,7 +21,7 @@ TEST(xeCommandListAppendReserveSpace, redirectsToObject) {
     void *ptrToReservedMemory = nullptr;
     EXPECT_CALL(commandList, reserveSpace(sizeToReserveForCommand, &ptrToReservedMemory)).Times(1);
 
-    auto result = xeCommandListReserveSpace(commandList.toHandle(),sizeToReserveForCommand,&ptrToReservedMemory);
+    auto result = xeCommandListReserveSpace(commandList.toHandle(), sizeToReserveForCommand, &ptrToReservedMemory);
     EXPECT_EQ(XE_RESULT_SUCCESS, result);
 }
 
@@ -34,22 +34,21 @@ HWTEST_F(CommandList_reserveSpace, addsCommandsToBatchBuffer) {
     ASSERT_NE(nullptr, commandList->commandStream);
     auto usedSpaceBefore = commandList->commandStream->getUsed();
 
-	// Create Testing command to be inserted into the reserved space.
+    // Create Testing command to be inserted into the reserved space.
     using MI_NOOP = typename FamilyType::MI_NOOP;
     MI_NOOP cmd = FamilyType::cmdInitNoop;
     uint32_t uniqueIDforTest = 0x12345u;
     cmd.setIdentificationNumber(uniqueIDforTest);
 
-	// reserve space in BatchBuffer
+    // reserve space in BatchBuffer
     size_t sizeToReserveForCommand = sizeof(cmd);
     void *ptrToReservedMemory = nullptr;
     auto result = commandList->reserveSpace(sizeToReserveForCommand, &ptrToReservedMemory);
     ASSERT_EQ(XE_RESULT_SUCCESS, result);
 
-	if (ptrToReservedMemory != nullptr)
-	{
+    if (ptrToReservedMemory != nullptr) {
         *(MI_NOOP *)ptrToReservedMemory = cmd;
-	}
+    }
 
     auto usedSpaceAfter = commandList->commandStream->getUsed();
     ASSERT_GT(usedSpaceAfter, usedSpaceBefore);
@@ -67,13 +66,13 @@ HWTEST_F(CommandList_reserveSpace, addsCommandsToBatchBuffer) {
         if (itor == cmdList.end())
             break;
 
-		// make sure we found the correct testing command
+        // make sure we found the correct testing command
         auto cmd = genCmdCast<MI_NOOP *>(*itor);
         if (uniqueIDforTest == cmd->getIdentificationNumber()) {
-			break;
+            break;
         }
 
-		itor++;
+        itor++;
     }
     ASSERT_NE(itor, cmdList.end());
 }
