@@ -302,14 +302,34 @@ TYPED_TEST(SmartPointerTest, WeakRefWithCastCreatesNonOwningPointerOfDifferentTy
     };
 
     using SmartPtrT = typename TestFixture::SmatrPtrT;
-    using WeakRefT = typename SmartPtrT::template PointerWeakRefT<TestStruct>;
+    using WeakRefDerivedT = typename SmartPtrT::template PointerWeakRefT<DerivedTestStruct>;
+    using WeakRefBaseT = typename SmartPtrT::template PointerWeakRefT<TestStruct>;
+    using WeakRefVoidT = typename SmartPtrT::template PointerWeakRefT<void>;
 
     DerivedTestStruct memory;
-    SmartPtrT x(&memory);
+    SmartPtrT ptrDerived(&memory);
 
-    auto weakRef = x.template weakRef<TestStruct>();
-    EXPECT_EQ(&memory, weakRef.get());
-    bool usesCorrectType = std::is_same<decltype(weakRef), WeakRefT>::value;
+    // cast to base
+    auto weakRefBase = ptrDerived.template weakRef<TestStruct>();
+    EXPECT_EQ(&memory, weakRefBase.get());
+    bool usesCorrectType = std::is_same<decltype(weakRefBase), WeakRefBaseT>::value;
+    EXPECT_TRUE(usesCorrectType);
+
+    // cast to derived
+    auto weakRefBackToDerived = weakRefBase.template weakRef<DerivedTestStruct>();
+    EXPECT_EQ(&memory, weakRefBackToDerived.get());
+    usesCorrectType = std::is_same<decltype(weakRefBackToDerived), WeakRefDerivedT>::value;
+    EXPECT_TRUE(usesCorrectType);
+
+    // cast to void
+    auto weakRefVoid = ptrDerived.template weakRef<void>();
+    EXPECT_EQ(&memory, weakRefVoid.get());
+    usesCorrectType = std::is_same<decltype(weakRefVoid), WeakRefVoidT>::value;
+    EXPECT_TRUE(usesCorrectType);
+
+    auto voidBackToDerived = weakRefVoid.template weakRef<DerivedTestStruct>();
+    EXPECT_EQ(&memory, voidBackToDerived.get());
+    usesCorrectType = std::is_same<decltype(voidBackToDerived), WeakRefDerivedT>::value;
     EXPECT_TRUE(usesCorrectType);
 }
 
@@ -502,6 +522,18 @@ TEST(DeleteAllOwned, CallsDeleteOnwedOnAllPointersInTheContainer) {
     deleteAllOwned(owningPointers);
     EXPECT_TRUE(d0 && d1 && d2);
     EXPECT_EQ(3U, owningPointers.size()) << "deleteAllOwned calls deleteOwned on pointers in container, but it does not clean the container";
+}
+
+TEST(InitializeToNull, CallsRebindNullptrOnAllPointersInTheContainer) {
+    bool d0 = false, d1 = false, d2 = false;
+    std::vector<PtrRef<TestStruct>> referencingPointers;
+    referencingPointers.resize(5);
+    initAllToNullptr(referencingPointers);
+    uint32_t nullPointersFound = 0;
+    for (auto &p : referencingPointers) {
+        nullPointersFound += (p == nullptr) ? 1 : 0;
+    }
+    EXPECT_EQ(5U, nullPointersFound);
 }
 
 namespace example {

@@ -79,7 +79,7 @@ class IsComplete {
 
 template <typename From, typename To>
 struct AssertCanStaticCast {
-    static_assert(std::is_base_of<From, To>::value || std::is_base_of<To, From>::value, "Cannot convert between given types, use weakRefReinterpret for reinterpret_cast");
+    static_assert(std::is_base_of<From, To>::value || std::is_base_of<To, From>::value || std::is_void<To>::value || std::is_void<From>::value, "Cannot convert between given types, use weakRefReinterpret for reinterpret_cast");
     enum { value = 0 };
 };
 
@@ -173,7 +173,7 @@ struct PointerModeSelector<PointerMode::ZeroCost>::PointerOwnershipSelector<fals
         template <typename T2>
         PointerWeakRefT<T2> weakRef() const noexcept { // create weak reference of different type (static_cast)
             AssertCanStaticCast<T, T2>::value;
-            return PointerWeakRefT<T>(static_cast<T *>(this->ptr));
+            return PointerWeakRefT<T2>(static_cast<T2 *>(this->ptr));
         }
 
         template <typename T2>
@@ -465,6 +465,13 @@ template <typename ContainerT>
 void deleteAllOwned(ContainerT &container) {
     for (auto &ptr : container) {
         ptr.deleteOwned();
+    }
+}
+
+template <typename ContainerT>
+void initAllToNullptr(ContainerT &container) {
+    for (auto &ptr : container) {
+        ptr.rebind(nullptr);
     }
 }
 
