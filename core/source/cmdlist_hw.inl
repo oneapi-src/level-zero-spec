@@ -634,7 +634,13 @@ xe_result_t CommandListCoreFamily<gfxCoreFamily>::getParameter(xe_command_list_p
 template <GFXCORE_FAMILY gfxCoreFamily>
 xe_result_t CommandListCoreFamily<gfxCoreFamily>::reserveSpace(size_t size,
                                                                void **ptr) {
-    return XE_RESULT_ERROR_UNSUPPORTED;
+    auto availableSpace = commandStream->getAvailableSpace();
+    if (availableSpace < size) {
+        *ptr = nullptr;
+    } else {
+        *ptr = commandStream->getSpace(size);
+    }
+    return XE_RESULT_SUCCESS;
 }
 
 template <GFXCORE_FAMILY gfxCoreFamily>

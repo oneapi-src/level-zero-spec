@@ -621,6 +621,7 @@ xeCommandListReserveSpace(
             // Check parameters
             if( nullptr == hCommandList ) return XE_RESULT_ERROR_INVALID_PARAMETER;
             if( nullptr == ptr ) return XE_RESULT_ERROR_INVALID_PARAMETER;
+            if (size == 0) return XE_RESULT_ERROR_INVALID_PARAMETER;
         }
         /// @begin
 #if defined(XE_NULLDRV)
