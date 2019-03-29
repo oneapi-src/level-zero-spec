@@ -39,7 +39,7 @@ void testAppendImageFunction(xe_device_handle_t &device, bool &validRet) {
         format, numChannels,
         width, height, 1, 0, 0};
     xe_image_handle_t srcImg;
-    xe_image_region_t srcRegion = {0, size * elem_size};
+    xe_image_region_t srcRegion = {{0, 0, 0}, {size * elem_size, 0, 0}};
 
     SUCCESS_OR_TERMINATE(xeDeviceCreateImage(device,
                                              const_cast<const xe_image_desc_t *>(&srcImgDesc), &srcImg));
@@ -51,7 +51,7 @@ void testAppendImageFunction(xe_device_handle_t &device, bool &validRet) {
         format, numChannels,
         width, height, 1, 0, 0};
     xe_image_handle_t dstImg;
-    xe_image_region_t dstRegion = {0, size * elem_size};
+    xe_image_region_t dstRegion  = {{0, 0, 0}, {size * elem_size, 0, 0}};
 
     SUCCESS_OR_TERMINATE(xeDeviceCreateImage(device,
                                              const_cast<const xe_image_desc_t *>(&dstImgDesc), &dstImg));
@@ -69,7 +69,7 @@ void testAppendImageFunction(xe_device_handle_t &device, bool &validRet) {
 
     xe_module_desc_t moduleDesc = {XE_MODULE_DESC_VERSION_CURRENT};
     moduleDesc.format = XE_MODULE_FORMAT_IL_SPIRV;
-    moduleDesc.pInputModule = spirvModule.get();
+    moduleDesc.pInputModule = reinterpret_cast<const uint8_t *>(spirvModule.get());
     moduleDesc.inputSize = spirvSize;
     SUCCESS_OR_TERMINATE(xeDeviceCreateModule(device, &moduleDesc, &module, nullptr));
 
@@ -138,8 +138,7 @@ int main(int argc, char *argv[]) {
     verbose = isVerbose(argc, argv);
 
     SUCCESS_OR_TERMINATE(xeDriverInit(XE_INIT_FLAG_NONE));
-    xe_device_uuid_t deviceUniqueID = {};
-    SUCCESS_OR_TERMINATE(xeDriverGetDevice(&deviceUniqueID, &device0));
+    SUCCESS_OR_TERMINATE(xeDriverGetDevice(0, &device0));
     SUCCESS_OR_TERMINATE(xeDeviceGetProperties(device0, &device0Properties));
     std::cout << device0Properties.name << std::endl;
 

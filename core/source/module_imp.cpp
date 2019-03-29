@@ -192,13 +192,16 @@ bool ModuleImp::initialize(const xe_module_desc_t *desc) {
     bool success = true;
 
     if (desc->format == XE_MODULE_FORMAT_NATIVE) {
-        success = this->progRT->createWithNativeBinary(desc->pInputModule, desc->inputSize);
+        success =
+                this->progRT->createWithNativeBinary(reinterpret_cast<const char*>(desc->pInputModule),
+                        desc->inputSize);
         assert(success == true);
     } else if (desc->format == XE_MODULE_FORMAT_IL_SPIRV) {
-        this->progRT->buildSpirV(desc->pInputModule, static_cast<uint32_t>(desc->inputSize));
+        this->progRT->buildSpirV(reinterpret_cast<const char*>(desc->pInputModule),
+                static_cast<uint32_t>(desc->inputSize));
     } else {
         if (desc->format == static_cast<xe_module_format_t>(-1)) { // unofficial support for llvm
-            success = this->progRT->tryBuildAsLlvm(desc->pInputModule,
+            success = this->progRT->tryBuildAsLlvm(reinterpret_cast<const char*>(desc->pInputModule),
                                                    static_cast<uint32_t>(desc->inputSize));
         } else {
             assert(0);

@@ -7,6 +7,7 @@
 #include "runtime/execution_environment/execution_environment.h"
 
 #include <cassert>
+#include <vector>
 
 namespace L0 {
 
@@ -120,6 +121,58 @@ xe_result_t EventImp::reset() {
     _mm_clflush(hostAddress);
 
     return XE_RESULT_SUCCESS;
+}
+
+struct EventPoolImp : public EventPool {
+    EventPoolImp(Device *device) : device(device) {}
+
+    bool initialize(uint32_t count);
+
+    Device *device;
+};
+
+bool EventPoolImp::initialize(uint32_t count) {
+    this->count = count;
+    pool = std::vector<Event *>(this->count, nullptr);
+    for (uint32_t i = 0; i < count; i++) {
+        auto event = Event::create(this->device);
+        assert(event);
+        pool[i] = event;
+    }
+    return true;
+}
+
+EventPool *EventPool::create(Device *device, const xe_event_pool_desc_t *desc) {
+    auto eventPool = new EventPoolImp(device);
+    bool ret = eventPool->initialize(desc->count);
+    assert(ret);
+    return eventPool;
+}
+
+xe_result_t EventPool::destroy() {
+    for (Event *event: pool) {
+        event->destroy();
+    }
+    return XE_RESULT_SUCCESS;
+}
+
+xe_result_t EventPool::createEvent(uint32_t index, xe_event_handle_t* phEvent) {
+    assert(index < pool.size());
+    *phEvent = this->pool[index];
+    return XE_RESULT_SUCCESS;
+}
+
+xe_result_t  EventPool::getIpcHandle(xe_ipc_event_pool_handle_t* pIpcHandle) {
+    return XE_RESULT_ERROR_UNSUPPORTED;
+}
+
+xe_result_t eventPoolOpenIpcHandle(xe_device_handle_t hDevice,
+        xe_ipc_event_pool_handle_t hIpc, xe_event_pool_handle_t* phEventPool) {
+    return XE_RESULT_ERROR_UNSUPPORTED;
+}
+
+xe_result_t  EventPool::closeIpcHandle() {
+    return XE_RESULT_ERROR_UNSUPPORTED;
 }
 
 } // namespace L0

@@ -31,8 +31,8 @@ struct Mock<Device> : public Device {
     MOCK_METHOD2(createCommandQueue, xe_result_t(const xe_command_queue_desc_t *desc,
                                                  xe_command_queue_handle_t *commandQueue));
 
-    MOCK_METHOD2(createEvent, xe_result_t(const xe_event_desc_t *desc,
-                                          xe_event_handle_t *event));
+    MOCK_METHOD2(createEventPool, xe_result_t(const xe_event_pool_desc_t *desc,
+                                          xe_event_pool_handle_t *eventPool));
     MOCK_METHOD2(createImage, xe_result_t(const xe_image_desc_t *desc,
                                           xe_image_handle_t *phImage));
 
@@ -55,9 +55,6 @@ struct Mock<Device> : public Device {
     MOCK_METHOD1(makeImageResident, xe_result_t(xe_image_handle_t hImage));
     MOCK_METHOD2(makeMemoryResident, xe_result_t(void *ptr,
                                                  size_t size));
-    MOCK_METHOD3(placeEvent, xe_result_t(const xe_event_desc_t *desc,
-                                         void *ptr,
-                                         xe_event_handle_t *phEvent));
     MOCK_METHOD1(setIntermediateCacheConfig, xe_result_t(xe_cache_config_t CacheConfig));
     MOCK_METHOD1(setLastLevelCacheConfig, xe_result_t(xe_cache_config_t CacheConfig));
 

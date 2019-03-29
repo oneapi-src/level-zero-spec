@@ -117,13 +117,12 @@ int main(int argc, char *argv[]) {
         std::cerr << "Feeding to L0" << std::endl;
         SUCCESS_OR_TERMINATE(xeDriverInit(XE_INIT_FLAG_NONE));
         xe_device_handle_t device0;
-        xe_device_uuid_t deviceUniqueID = {};
-        SUCCESS_OR_TERMINATE(xeDriverGetDevice(&deviceUniqueID, &device0));
+        SUCCESS_OR_TERMINATE(xeDriverGetDevice(0, &device0));
 
         xe_module_desc_t moduleDesc = {XE_MODULE_DESC_VERSION_CURRENT};
         xe_module_handle_t module;
         moduleDesc.format = XE_MODULE_FORMAT_IL_SPIRV;
-        moduleDesc.pInputModule = reinterpret_cast<const char *>(spirVCompilerOutput.getOutput());
+        moduleDesc.pInputModule = reinterpret_cast<const uint8_t *>(spirVCompilerOutput.getOutput());
         moduleDesc.inputSize = spirVCompilerOutput.getOutputSize();
         auto err = xeDeviceCreateModule(device0, &moduleDesc, &module, nullptr);
         success = (err == XE_RESULT_SUCCESS);

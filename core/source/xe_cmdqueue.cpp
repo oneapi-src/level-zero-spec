@@ -257,9 +257,10 @@ __xedllexport xe_result_t __xecall
 xeCommandQueueSynchronize(
     xe_command_queue_handle_t hCommandQueue,        ///< [in] handle of the command queue
     uint32_t timeout                                ///< [in] if non-zero, then indicates the maximum time to yield before
-                                                    ///< returning ::XE_RESULT_SUCCESS or ::XE_RESULT_NOT_READY; if zero, then
-                                                    ///< operates exactly like ::xeFenceQueryStatus; if MAX_UINT32, then
-                                                    ///< function will not return until complete or device is lost.
+                                                    ///< returning ::XE_RESULT_SUCCESS or ::XE_RESULT_NOT_READY;
+                                                    ///< if zero, then operates exactly like ::xeFenceQueryStatus;
+                                                    ///< if MAX_UINT32, then function will not return until complete or device
+                                                    ///< is lost.
     )
 {
     try

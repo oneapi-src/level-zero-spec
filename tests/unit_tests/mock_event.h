@@ -5,6 +5,8 @@
 #include "white_box.h"
 #include "os_interface/os_context.h"
 
+#include <vector>
+
 namespace L0 {
 namespace ult {
 
@@ -15,6 +17,13 @@ struct WhiteBox<::L0::Event> : public ::L0::Event {
 };
 
 using Event = WhiteBox<::L0::Event>;
+
+template <>
+struct WhiteBox<::L0::EventPool> : public ::L0::EventPool {
+    using BaseClass = ::L0::EventPool;
+};
+
+using EventPool = WhiteBox<::L0::EventPool>;
 
 template <>
 struct Mock<Event> : public Event {
@@ -39,6 +48,19 @@ struct Mock<Event> : public Event {
     FlushStamp mockflushStampToWait;
 
     using Event::allocation;
+};
+
+template <>
+struct Mock<EventPool> : public EventPool {
+    Mock();
+    virtual ~Mock();
+
+    MOCK_METHOD0(destroy, xe_result_t());
+    MOCK_METHOD2(createEvent, xe_result_t(uint32_t index, xe_event_handle_t* phEvent));
+    MOCK_METHOD1(getIpcHandle, xe_result_t(xe_ipc_event_pool_handle_t* pIpcHandle));
+    MOCK_METHOD0(closeIpcHandle, xe_result_t());
+
+    std::vector<Event *> pool;
 };
 
 } // namespace ult

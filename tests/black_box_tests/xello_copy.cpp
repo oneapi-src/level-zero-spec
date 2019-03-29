@@ -64,8 +64,7 @@ int main(int argc, char *argv[]) {
     verbose = isVerbose(argc, argv);
 
     SUCCESS_OR_TERMINATE(xeDriverInit(XE_INIT_FLAG_NONE));
-    xe_device_uuid_t deviceUniqueID = {};
-    SUCCESS_OR_TERMINATE(xeDriverGetDevice(&deviceUniqueID, &device0));
+    SUCCESS_OR_TERMINATE(xeDriverGetDevice(0, &device0));
     SUCCESS_OR_TERMINATE(xeDeviceGetProperties(device0, &device0Properties));
     std::cout << device0Properties.name << std::endl;
 

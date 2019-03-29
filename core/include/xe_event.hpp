@@ -39,16 +39,78 @@
 namespace xe
 {
     ///////////////////////////////////////////////////////////////////////////////
+    /// @brief C++ wrapper for event pool
+    class EventPool
+    {
+    protected:
+        ::xe_event_pool_handle_t handle;                  ///< handle of event pool object
+        ::xe_event_pool_desc_t desc;                      ///< descriptor of the event object
+
+    public:
+        auto getHandle( void ) const { return handle; }
+        auto getDesc( void ) const { return desc; }
+
+        ///////////////////////////////////////////////////////////////////////////////
+        /// @brief C++ wrapper for ::xeEventPoolDestroy
+        /// @throws result_t
+        inline void
+        Destroy(
+            void
+            );
+
+        ///////////////////////////////////////////////////////////////////////////////
+        /// @brief C++ wrapper for ::xeEventPoolCreateEvent
+        /// @returns
+        ///     - ::event_handle_t: pointer to handle of event object created
+        /// 
+        /// @throws result_t
+        inline event_handle_t
+        CreateEvent(
+            uint32_t index                                  ///< [in] index of the event within the pool
+            );
+
+        ///////////////////////////////////////////////////////////////////////////////
+        /// @brief C++ wrapper for ::xeEventPoolGetIpcHandle
+        /// @returns
+        ///     - ::ipc_event_pool_handle_t: Returned IPC event handle
+        /// 
+        /// @throws result_t
+        inline ipc_event_pool_handle_t
+        GetIpcHandle(
+            void
+            );
+
+        ///////////////////////////////////////////////////////////////////////////////
+        /// @brief C++ wrapper for ::xeEventPoolOpenIpcHandle
+        /// @returns
+        ///     - ::event_pool_handle_t: pointer handle of event pool object created
+        /// 
+        /// @throws result_t
+        inline static event_pool_handle_t
+        OpenIpcHandle(
+            device_handle_t hDevice,                        ///< [in] handle of the device to associate with the IPC event pool handle
+            ipc_event_pool_handle_t hIpc                    ///< [in] IPC event handle
+            );
+
+        ///////////////////////////////////////////////////////////////////////////////
+        /// @brief C++ wrapper for ::xeEventPoolCloseIpcHandle
+        /// @throws result_t
+        inline void
+        CloseIpcHandle(
+            void
+            );
+
+    };
+
+    ///////////////////////////////////////////////////////////////////////////////
     /// @brief C++ wrapper for event
     class Event
     {
     protected:
         ::xe_event_handle_t handle;                       ///< handle of event object
-        ::xe_event_desc_t desc;                           ///< descriptor of the event object
 
     public:
         auto getHandle( void ) const { return handle; }
-        auto getDesc( void ) const { return desc; }
 
         ///////////////////////////////////////////////////////////////////////////////
         /// @brief C++ wrapper for ::xeEventDestroy
@@ -72,9 +134,10 @@ namespace xe
         inline void
         HostSynchronize(
             uint32_t timeout                                ///< [in] if non-zero, then indicates the maximum time to yield before
-                                                            ///< returning ::RESULT_SUCCESS or ::RESULT_NOT_READY; if zero, then
-                                                            ///< operates exactly like ::EventQueryStatus; if MAX_UINT32, then function
-                                                            ///< will not return until complete or device is lost.
+                                                            ///< returning ::RESULT_SUCCESS or ::RESULT_NOT_READY;
+                                                            ///< if zero, then operates exactly like ::EventQueryStatus;
+                                                            ///< if MAX_UINT32, then function will not return until complete or device
+                                                            ///< is lost.
             );
 
         ///////////////////////////////////////////////////////////////////////////////

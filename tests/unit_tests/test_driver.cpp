@@ -62,20 +62,18 @@ TEST(xeDriverInit, runDriverInitOnCoupleThreadsAndCheckThatOnceInitializationOcc
 TEST(xeDriverGetDevice, redirectsToObject) {
     Mock<Driver> driver;
     xe_device_handle_t deviceHandle = {};
-    xe_device_uuid_t uniqueId = {};
 
-    EXPECT_CALL(driver, getDevice(&uniqueId, &deviceHandle))
+    EXPECT_CALL(driver, getDevice(0, &deviceHandle))
         .Times(1)
         .WillRepeatedly(Return(XE_RESULT_SUCCESS));
 
-    auto result = xeDriverGetDevice(&uniqueId, &deviceHandle);
+    auto result = xeDriverGetDevice(0, &deviceHandle);
     EXPECT_EQ(XE_RESULT_SUCCESS, result);
 }
 
 TEST(xeDriverGetDevice, returnsSuccess) {
     xe_device_handle_t deviceHandle = {};
-    xe_device_uuid_t uniqueId = {};
-    auto result = xeDriverGetDevice(&uniqueId, &deviceHandle);
+    auto result = xeDriverGetDevice(0, &deviceHandle);
     EXPECT_EQ(XE_RESULT_SUCCESS, result);
     EXPECT_NE(nullptr, deviceHandle);
 }
@@ -86,20 +84,6 @@ TEST(xeDriverGetDeviceCount, DefaultDeviceCount) {
 
     EXPECT_EQ(XE_RESULT_SUCCESS, ret);
     EXPECT_EQ(1, count);
-}
-
-TEST(xeDriverGetDeviceUniqueIds, DefaultDeviceUniqueIds) {
-    uint32_t count = 0;
-    auto ret = xeDriverGetDeviceCount(&count);
-
-    EXPECT_EQ(XE_RESULT_SUCCESS, ret);
-    EXPECT_EQ(1, count);
-
-    xe_device_uuid_t *uniqueIds = new xe_device_uuid_t[count]();
-    xeDriverGetDeviceUniqueIds(count, uniqueIds);
-    for (uint32_t i = 0; i < count; i++) {
-        EXPECT_EQ(i, uniqueIds[i].id[0]);
-    }
 }
 
 } // namespace ult

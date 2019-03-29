@@ -86,7 +86,7 @@ class FunctionPrintfFromSpirvTest : public GlobalFixtureTest {
         modDesc.version = XE_MODULE_DESC_VERSION_CURRENT;
         modDesc.format = XE_MODULE_FORMAT_IL_SPIRV;
         modDesc.inputSize = static_cast<uint32_t>(spvModuleSize);
-        modDesc.pInputModule = reinterpret_cast<char *>(spirvData);
+        modDesc.pInputModule = reinterpret_cast<const uint8_t *>(spirvData);
 
         UserRealCompilerGuard realCompilerGuard;
 

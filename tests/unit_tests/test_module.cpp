@@ -44,7 +44,7 @@ class ModuleOnlineCompiled : public testing::Test {
         modDesc.version = XE_MODULE_DESC_VERSION_CURRENT;
         modDesc.format = XE_MODULE_FORMAT_IL_SPIRV;
         modDesc.inputSize = static_cast<uint32_t>(spvModuleSize);
-        modDesc.pInputModule = spvModule.get();
+        modDesc.pInputModule = reinterpret_cast<const uint8_t*>(spvModule.get());
 
         module.reset(whitebox_cast(Module::create(device.get(), &modDesc, deviceRT, nullptr)));
         ASSERT_NE(nullptr, module);
@@ -170,7 +170,7 @@ TEST_P(ModuleCreateBufArg, onlineCompilationModuleTest) {
     modDesc.version = XE_MODULE_DESC_VERSION_CURRENT;
     modDesc.format = XE_MODULE_FORMAT_IL_SPIRV;
     modDesc.inputSize = static_cast<uint32_t>(spvModuleSize);
-    modDesc.pInputModule = spvModule.get();
+    modDesc.pInputModule = reinterpret_cast<const uint8_t*>(spvModule.get());
 
     auto module = whitebox_cast(Module::create(device, &modDesc, deviceRT, nullptr));
     ASSERT_NE(nullptr, module);
@@ -281,7 +281,7 @@ TEST_P(ModuleCreateImageArg, onlineCompilationModuleTest) {
     modDesc.version = XE_MODULE_DESC_VERSION_CURRENT;
     modDesc.format = XE_MODULE_FORMAT_IL_SPIRV;
     modDesc.inputSize = static_cast<uint32_t>(spvModuleSize);
-    modDesc.pInputModule = spvModule.get();
+    modDesc.pInputModule = reinterpret_cast<const uint8_t*>(spvModule.get());
 
     auto module = whitebox_cast(Module::create(device, &modDesc, deviceRT, nullptr));
     ASSERT_NE(nullptr, module);
@@ -480,7 +480,7 @@ TEST_F(ModuleOnlineCompiled, createFromNativeBinary) {
     modDesc.version = XE_MODULE_DESC_VERSION_CURRENT;
     modDesc.format = XE_MODULE_FORMAT_NATIVE;
     modDesc.inputSize = binarySize;
-    modDesc.pInputModule = reinterpret_cast<char *>(storage.get());
+    modDesc.pInputModule = reinterpret_cast<const uint8_t*>(storage.get());
 
     L0::Module *moduleFromNativeBinary = Module::create(device.get(), &modDesc, deviceRT, nullptr);
     EXPECT_NE(nullptr, moduleFromNativeBinary);

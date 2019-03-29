@@ -22,25 +22,5 @@ TEST(MultipleDevicesCount, SetMultipleDevicesAndVerifyDeviceCount) {
     EXPECT_EQ(requiredDeviceCount, count);
 }
 
-TEST(MultipleDevicesUniqueIds, SetMultipleDevicesAndVerifyDeviceUniqueIds) {
-    uint32_t count = 0;
-    auto requiredDeviceCount = 2u;
-
-    NEO::DebugManager.flags.CreateMultipleDevices.set(requiredDeviceCount);
-    auto result = xeDriverInit(XE_INIT_FLAG_NONE);
-    EXPECT_EQ(XE_RESULT_SUCCESS, result);
-
-    auto ret = xeDriverGetDeviceCount(&count);
-
-    EXPECT_EQ(XE_RESULT_SUCCESS, ret);
-    EXPECT_EQ(requiredDeviceCount, count);
-
-    xe_device_uuid_t *uniqueIds = new xe_device_uuid_t[count];
-    xeDriverGetDeviceUniqueIds(count, uniqueIds);
-    for (uint32_t i = 0; i < count; i++) {
-        EXPECT_EQ(i, uniqueIds[i].id[0]);
-    }
-}
-
 } // namespace ult
 } // namespace L0

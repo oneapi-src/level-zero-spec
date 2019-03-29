@@ -53,9 +53,9 @@ struct DeviceImp : public Device {
         return XE_RESULT_SUCCESS;
     }
 
-    xe_result_t createEvent(const xe_event_desc_t *desc,
-                            xe_event_handle_t *event) override {
-        *event = Event::create(this);
+    xe_result_t createEventPool(const xe_event_pool_desc_t *desc,
+                            xe_event_pool_handle_t *eventPool) override {
+        *eventPool = EventPool::create(this, desc);
         return XE_RESULT_SUCCESS;
     }
 
@@ -170,25 +170,40 @@ struct DeviceImp : public Device {
 
         memcpy_s(pDeviceProperties->name, sizeof(pDeviceProperties->name),
                  deviceInfo.name, strlen(deviceInfo.name) + 1);
-        pDeviceProperties->coreClockRate = deviceInfo.maxClockFrequency;
-        pDeviceProperties->vendorId = deviceInfo.vendorId;
-        pDeviceProperties->deviceId = this->deviceRT->getDeviceIndex(); ///< [out] device id from PCI configuration
-        pDeviceProperties->subdeviceId = isSubdevice ? this->deviceRT->getDeviceIndex() : 0;
-        pDeviceProperties->isSubdevice = isSubdevice;
-        pDeviceProperties->numSubDevices = isSubdevice ? 0 : deviceInfo.partitionMaxSubDevices;
-        pDeviceProperties->coreClockRate = deviceInfo.maxClockFrequency;
-        //pDeviceProperties->memClockRate;                          ///< [out] Clock rate for device global memory
-        //pDeviceProperties->memGlobalBusWidth;                     ///< [out] Bus width between core and memory.
-        pDeviceProperties->totalLocalMemSize = enableLocalMemory ? NEO::DebugManager.flags.HBMSizePerTileInGigabytes.get() * MemoryConstants::gigaByte : 0;
-        pDeviceProperties->numAsyncComputeEngines = static_cast<uint32_t>(hwHelper.getGpgpuEngineInstances().size());
+        pDeviceProperties->coreClockRate =
+                deviceInfo.maxClockFrequency;
+        pDeviceProperties->vendorId =
+                deviceInfo.vendorId;
+        pDeviceProperties->deviceId =
+                this->deviceRT->getDeviceIndex(); ///< [out] device id from PCI configuration
+        pDeviceProperties->subdeviceId =
+                isSubdevice ? this->deviceRT->getDeviceIndex() : 0;
+        pDeviceProperties->isSubdevice =
+                isSubdevice;
+        pDeviceProperties->numSubDevices =
+                isSubdevice ? 0 : deviceInfo.partitionMaxSubDevices;
+        pDeviceProperties->coreClockRate =
+                deviceInfo.maxClockFrequency;
+        //pDeviceProperties->memClockRate; ///< [out] Clock rate for device global memory
+        //pDeviceProperties->memGlobalBusWidth; ///< [out] Bus width between core and memory.
+        pDeviceProperties->totalLocalMemSize =
+                enableLocalMemory ?
+                        NEO::DebugManager.flags.HBMSizePerTileInGigabytes.get()
+                                * MemoryConstants::gigaByte : 0;
+        pDeviceProperties->numAsyncComputeEngines =
+                static_cast<uint32_t>(hwHelper.getGpgpuEngineInstances().size());
         pDeviceProperties->numAsyncCopyEngines = 1; //  hwHelper.getCopyEngineInstances().size(); // NEO refactor
-        pDeviceProperties->numComputeCores = deviceInfo.maxComputUnits;
         pDeviceProperties->maxCommandQueuePriority = 0; // map to cl_khr_priority_hints ?
-        pDeviceProperties->numThreadsPerEU = deviceInfo.numThreadsPerEU;
-        pDeviceProperties->numEUsPerDSS = hardwareInfo.pSysInfo->MaxEuPerSubSlice * 2; // need clarification - does this make sense pre GEN11?
-        pDeviceProperties->numDSSPerSlice = hardwareInfo.pSysInfo->MaxDualSubSlicesSupported / hardwareInfo.pSysInfo->MaxSlicesSupported;
-        pDeviceProperties->numSlicesPerTile = hardwareInfo.pSysInfo->MaxSlicesSupported;
-        //pDeviceProperties->numTiles;                              ///< [out] Number of tiles for this device. TODO : Add support
+        pDeviceProperties->numThreadsPerEU =
+                deviceInfo.numThreadsPerEU;
+        pDeviceProperties->numEUsPerSubslice =
+                hardwareInfo.pSysInfo->MaxEuPerSubSlice * 2; // need clarification - does this make sense pre GEN11?
+        pDeviceProperties->numSubslicesPerSlice =
+                hardwareInfo.pSysInfo->MaxDualSubSlicesSupported
+                        / hardwareInfo.pSysInfo->MaxSlicesSupported;
+        pDeviceProperties->numSlicesPerTile =
+                hardwareInfo.pSysInfo->MaxSlicesSupported;
+        //pDeviceProperties->numTiles; ///< [out] Number of tiles for this device. TODO : Add support
         return XE_RESULT_SUCCESS;
     }
 
@@ -203,12 +218,6 @@ struct DeviceImp : public Device {
 
     xe_result_t makeMemoryResident(void *ptr,
                                    size_t size) override {
-        return XE_RESULT_ERROR_UNSUPPORTED;
-    }
-
-    xe_result_t placeEvent(const xe_event_desc_t *desc,
-                           void *ptr,
-                           xe_event_handle_t *phEvent) override {
         return XE_RESULT_ERROR_UNSUPPORTED;
     }
 

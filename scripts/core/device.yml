@@ -32,28 +32,6 @@ members:
       desc: "[out] device universal unique id"
 --- #--------------------------------------------------------------------------
 type: function
-desc: "Retrieve "
-class: $xDriver
-name: GetDeviceUniqueIds
-decl: singleton
-analogue:
-    - "**cuDeviceGet**"
-    - clGetDeviceIDs
-details:
-    - "The application may call this function from simultaneous threads."
-    - "The implementation of this function should be lock-free."
-params:
-    - type: uint32_t
-      name: count
-      desc: "[in] size of device unique ids array. Typically, this will be ${x}DeviceGetCount."
-    - type: "$x_device_uuid_t*"
-      name: pUniqueIds
-      desc: "[in,out] pointer to an array of unique ids for devices. Caller must supply array."
-returns:
-    - $X_RESULT_ERROR_INVALID_PARAMETER:
-        - "invalid unique id."
---- #--------------------------------------------------------------------------
-type: function
 desc: "Returns a handle to the device object"
 class: $xDriver
 name: GetDevice
@@ -65,9 +43,9 @@ details:
     - "The application may call this function from simultaneous threads."
     - "The implementation of this function should be lock-free."
 params:
-    - type: const $x_device_uuid_t*
-      name: pUUID
-      desc: "[in] unique id of device to retrieve. Use ${x}DriverGetDeviceUniqueIds to obtain a unique Id."
+    - type: uint32_t
+      name: ordinal
+      desc: "[in] The device index in the range of [0, $xGetDeviceCount]"
     - type: "$x_device_handle_t*"
       name: phDevice
       desc: "[out] pointer to handle of device object created"
@@ -155,10 +133,13 @@ members:
       desc: "[out] vendor id from PCI configuration"
     - type: uint32_t
       name: deviceId
-      desc: "[out] device id from PCI configuration"
+      desc: "[out] device id from PCI configuration" 
     - type: uint32_t
       name: subdeviceId
       desc: "[out] Subdevice id. Only valid if isSubdevice is true."
+    - type: $x_device_uuid_t
+      name: uuid
+      desc: "[out] unique id for device."
     - type: $x_bool_t
       name: isSubdevice
       desc: "[out] Is this a subdevice."
@@ -184,20 +165,17 @@ members:
       name: numAsyncCopyEngines
       desc: "[out] Number of asynchronous copy engines"
     - type: uint32_t
-      name: numComputeCores
-      desc: "[out] Number of compute cores"
-    - type: uint32_t
       name: maxCommandQueuePriority
       desc: "[out] Maximum priority for command queues. Higher value is higher priority."
     - type: uint32_t
       name: numThreadsPerEU
       desc: "[out] Number of threads per EU."
     - type: uint32_t
-      name: numEUsPerDSS
-      desc: "[out] Number of EUs per dual sub-slice."
+      name: numEUsPerSubslice
+      desc: "[out] Number of EUs per sub-slice."
     - type: uint32_t
-      name: numDSSPerSlice
-      desc: "[out] Number of dual sub-slices per slice."
+      name: numSubslicesPerSlice
+      desc: "[out] Number of sub-slices per slice."
     - type: uint32_t
       name: numSlicesPerTile
       desc: "[out] Number of slices per tile."
@@ -281,7 +259,7 @@ members:
       name: numSubGroupSizes
       desc: "[out] Number of subgroup sizes supported. This indicates number of entries in subGroupSizes."
     - type: uint32_t
-      name: subGroupSizes[$X_SUBGROUPSIZE_COUNT]
+      name: "subGroupSizes[$X_SUBGROUPSIZE_COUNT]"
       desc: "[out] Size group sizes supported."
 --- #--------------------------------------------------------------------------
 type: function
@@ -476,7 +454,7 @@ desc: "Supported Cache Config"
 class: $xDevice
 name: $x_cache_config_t
 details:
-    - Supported Cache Config (Default, Large SLM, Large Data Cache)
+    - "Supported Cache Config (Default, Large SLM, Large Data Cache)"
 etors:
     - name: $X_CACHE_CONFIG_DEFAULT
       value: "$X_BIT( 0 )"

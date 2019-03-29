@@ -509,8 +509,7 @@ void initializeLevelZero(xe_device_handle_t &device0, xe_device_properties_t &de
     cmdList = {};
 
     SUCCESS_OR_TERMINATE(xeDriverInit(XE_INIT_FLAG_NONE));
-    xe_device_uuid_t deviceUniqueID = {};
-    SUCCESS_OR_TERMINATE(xeDriverGetDevice(&deviceUniqueID, &device0));
+    SUCCESS_OR_TERMINATE(xeDriverGetDevice(0, &device0));
     SUCCESS_OR_TERMINATE(xeDeviceGetProperties(device0, &device0Properties));
     if (verbose) {
         printDeviceProperties(device0Properties);
@@ -521,7 +520,7 @@ void initializeLevelZero(xe_device_handle_t &device0, xe_device_properties_t &de
     {
         xe_module_desc_t moduleDesc = {XE_MODULE_DESC_VERSION_CURRENT};
         moduleDesc.format = static_cast<xe_module_format_t>(-1); // -1 for unofficial (debug-only) support llvm as input
-        moduleDesc.pInputModule = llvmCodeGlobalVariables;
+        moduleDesc.pInputModule = reinterpret_cast<const uint8_t*>(llvmCodeGlobalVariables);
         moduleDesc.inputSize = static_cast<uint32_t>(strlen(llvmCodeGlobalVariables) + 1);
         SUCCESS_OR_TERMINATE(xeDeviceCreateModule(device0, &moduleDesc, &moduleGlobalVariables, nullptr));
     }
@@ -529,7 +528,7 @@ void initializeLevelZero(xe_device_handle_t &device0, xe_device_properties_t &de
     {
         xe_module_desc_t moduleDesc = {XE_MODULE_DESC_VERSION_CURRENT};
         moduleDesc.format = static_cast<xe_module_format_t>(-1); // -1 for unofficial (debug-only) support llvm as input
-        moduleDesc.pInputModule = llvmCodeFuncArray;
+        moduleDesc.pInputModule = reinterpret_cast<const uint8_t*>(llvmCodeFuncArray);
         moduleDesc.inputSize = static_cast<uint32_t>(strlen(llvmCodeFuncArray) + 1);
         SUCCESS_OR_TERMINATE(xeDeviceCreateModule(device0, &moduleDesc, &moduleFuncArray, nullptr));
     }
@@ -542,8 +541,8 @@ void initializeLevelZero(xe_device_handle_t &device0, xe_device_properties_t &de
 
     {
         xe_module_desc_t moduleDesc = {XE_MODULE_DESC_VERSION_CURRENT};
-        moduleDesc.format = static_cast<xe_module_format_t>(-1);                     // -1 for unofficial (debug-only) support llvm as input
-        moduleDesc.pInputModule = llvmCodeFuncArray;                                 // llvmCodeFuncParam;
+        moduleDesc.format = static_cast<xe_module_format_t>(-1); // -1 for unofficial (debug-only) support llvm as input
+        moduleDesc.pInputModule = reinterpret_cast<const uint8_t*>(llvmCodeFuncArray);
         moduleDesc.inputSize = static_cast<uint32_t>(strlen(llvmCodeFuncArray) + 1); //llvmCodeFuncParam) + 1);
         SUCCESS_OR_TERMINATE(xeDeviceCreateModule(device0, &moduleDesc, &moduleFuncParam, nullptr));
     }

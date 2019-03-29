@@ -10,5 +10,13 @@ Mock<Event>::Mock() : mockAllocation(&memory, sizeof(memory)) {
 Mock<Event>::~Mock() {
 }
 
+Mock<EventPool>::Mock() : pool (1, nullptr) {
+    pool[0] = new Event();
+}
+
+Mock<EventPool>::~Mock() {
+    delete(pool[0]);
+}
+
 } // namespace ult
 } // namespace L0

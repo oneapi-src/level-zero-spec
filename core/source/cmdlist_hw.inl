@@ -497,8 +497,8 @@ xe_result_t CommandListCoreFamily<gfxCoreFamily>::appendImageCopyFromMemory(xe_i
     size_t size;
 
     if (pDstRegion) {
-        offset = pDstRegion->offset;
-        size = pDstRegion->size;
+        offset = pDstRegion->origin[0]; // Get the origin in X as the offset
+        size = pDstRegion->region[0]; // Get the widht in X as the size
     } else {
         offset = 0;
         size = dstImage->getSizeInBytes();
@@ -522,8 +522,8 @@ xe_result_t CommandListCoreFamily<gfxCoreFamily>::appendImageCopyToMemory(void *
     size_t size;
 
     if (pSrcRegion) {
-        offset = pSrcRegion->offset;
-        size = pSrcRegion->size;
+        offset = pSrcRegion->origin[0]; // Get the origin in X as the offse
+        size = pSrcRegion->region[0]; // Get the width in X as the offse
     } else {
         offset = 0;
         size = srcImage->getSizeInBytes();
@@ -552,16 +552,16 @@ xe_result_t CommandListCoreFamily<gfxCoreFamily>::appendImageCopyRegion(xe_image
     size_t size;
 
     if (pDstRegion) {
-        dstOffset = pDstRegion->offset;
-        size = pDstRegion->size;
+        dstOffset = pDstRegion->origin[0]; // Get the origin in X as the offse
+        size = pDstRegion->region[0]; // Get the width in X as the offse
     } else {
         dstOffset = 0;
         size = dstImage->getSizeInBytes();
     }
 
     if (pSrcRegion) {
-        srcOffset = pSrcRegion->offset;
-        srcSize = pSrcRegion->size;
+        srcOffset = pSrcRegion->origin[0]; // Get the origin in X as the offse
+        srcSize = pSrcRegion->region[0]; // Get the width in X as the offse
     } else {
         srcOffset = 0;
         srcSize = srcImage->getSizeInBytes();

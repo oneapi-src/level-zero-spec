@@ -67,10 +67,10 @@ typedef enum _xe_command_queue_flag_t
 typedef enum _xe_command_queue_mode_t
 {
     XE_COMMAND_QUEUE_MODE_DEFAULT = 0,              ///< implicit default behavior; uses driver-based heuristics
-    XE_COMMAND_QUEUE_MODE_SYNCHRONOUS,              ///< GPU execution always completes immediately on execute; CPU thread is
-                                                    ///< blocked using wait on implicit synchronization object
-    XE_COMMAND_QUEUE_MODE_ASYNCHRONOUS,             ///< GPU execution is scheduled and will complete in future; explicit
-                                                    ///< synchronization object must be used to determine completeness
+    XE_COMMAND_QUEUE_MODE_SYNCHRONOUS,              ///< GPU execution always completes immediately on execute;
+                                                    ///< CPU thread is blocked using wait on implicit synchronization object
+    XE_COMMAND_QUEUE_MODE_ASYNCHRONOUS,             ///< GPU execution is scheduled and will complete in future;
+                                                    ///< explicit synchronization object must be used to determine completeness
 
 } xe_command_queue_mode_t;
 
@@ -92,12 +92,12 @@ typedef struct _xe_command_queue_desc_t
     xe_command_queue_flag_t flags;                  ///< [in] creation flags
     xe_command_queue_mode_t mode;                   ///< [in] operation mode
     xe_command_queue_priority_t priority;           ///< [in] priority
-    uint32_t ordinal;                               ///< [in] if logical-only flag is set, then will be ignored; else-if
-                                                    ///< copy-only flag is set, then must be less than
-                                                    ///< ::xe_device_properties_t.numAsyncCopyEngines; otherwise must be less
-                                                    ///< than ::xe_device_properties_t.numAsyncComputeEngines. When using
-                                                    ///< sub-devices the ::xe_device_properties_t.numAsyncComputeEngines must
-                                                    ///< be queried from the sub-device being used.
+    uint32_t ordinal;                               ///< [in] if logical-only flag is set, then will be ignored;
+                                                    ///< else-if copy-only flag is set, then must be less than ::xe_device_properties_t.numAsyncCopyEngines;
+                                                    ///< otherwise must be less than
+                                                    ///< ::xe_device_properties_t.numAsyncComputeEngines. When using sub-devices
+                                                    ///< the ::xe_device_properties_t.numAsyncComputeEngines must be queried
+                                                    ///< from the sub-device being used.
 
 } xe_command_queue_desc_t;
 
@@ -209,9 +209,10 @@ __xedllport xe_result_t __xecall
 xeCommandQueueSynchronize(
     xe_command_queue_handle_t hCommandQueue,        ///< [in] handle of the command queue
     uint32_t timeout                                ///< [in] if non-zero, then indicates the maximum time to yield before
-                                                    ///< returning ::XE_RESULT_SUCCESS or ::XE_RESULT_NOT_READY; if zero, then
-                                                    ///< operates exactly like ::xeFenceQueryStatus; if MAX_UINT32, then
-                                                    ///< function will not return until complete or device is lost.
+                                                    ///< returning ::XE_RESULT_SUCCESS or ::XE_RESULT_NOT_READY;
+                                                    ///< if zero, then operates exactly like ::xeFenceQueryStatus;
+                                                    ///< if MAX_UINT32, then function will not return until complete or device
+                                                    ///< is lost.
     );
 
 #if defined(__cplusplus)

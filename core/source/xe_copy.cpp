@@ -452,15 +452,15 @@ xeCommandListAppendImageCopyFromMemory(
 ///     - This is a hint to improve performance only and is not required for
 ///       correctness.
 ///     - Only prefetching to the device associated with the specified command
-///       list is supported. Prefetching to the host or to a peer device is not
-///       supported.
-///     - Prefetching may not be supported for all allocation types for all
-///       devices. If memory prefetching is not supported for the specified
-///       memory range the prefetch hint may be ignored.
+///       list is supported.
+///       Prefetching to the host or to a peer device is not supported.
+///     - Prefetching may not be supported for all allocation types for all devices.
+///       If memory prefetching is not supported for the specified memory range
+///       the prefetch hint may be ignored.
 ///     - Prefetching may only be supported at a device-specific granularity,
-///       such as at a page boundary. In this case, the memory range may be
-///       expanded such that the start and end of the range satisfy granularity
-///       requirements.
+///       such as at a page boundary.
+///       In this case, the memory range may be expanded such that the start and
+///       end of the range satisfy granularity requirements.
 ///     - The application may **not** call this function from simultaneous
 ///       threads with the same command list handle.
 ///     - The implementation of this function should be lock-free.
@@ -529,12 +529,12 @@ xeCommandListAppendMemoryPrefetch(
 ///     - Memory advice can be used to override driver heuristics to explicitly
 ///       control shared memory behavior.
 ///     - Not all memory advice hints may be supported for all allocation types
-///       for all devices. If a memory advice hint is not supported by the
-///       device it will be ignored.
+///       for all devices.
+///       If a memory advice hint is not supported by the device it will be ignored.
 ///     - Memory advice may only be supported at a device-specific granularity,
-///       such as at a page boundary. In this case, the memory range may be
-///       expanded such that the start and end of the range satisfy granularity
-///       requirements.
+///       such as at a page boundary.
+///       In this case, the memory range may be expanded such that the start and
+///       end of the range satisfy granularity requirements.
 ///     - The application may **not** call this function from simultaneous
 ///       threads with the same command list handle.
 ///     - The implementation of this function should be lock-free.

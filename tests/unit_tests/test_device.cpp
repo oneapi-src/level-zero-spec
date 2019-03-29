@@ -1,6 +1,7 @@
 #include "cmdlist.h"
 #include "image.h"
 #include "mock_device.h"
+#include "mock_event.h"
 #include "memory_manager.h"
 #include "xe_cmdlist.h"
 #include "xe_event.h"
@@ -44,17 +45,32 @@ TEST(xeDeviceCreateCommandQueue, redirectsToObject) {
     EXPECT_EQ(XE_RESULT_SUCCESS, result);
 }
 
-TEST(xeDeviceCreateEvent, redirectsToObject) {
+TEST(xeDeviceCreatePoolEvent, redirectsToObject) {
     Mock<Device> device;
-    xe_event_handle_t event = {};
-    xe_event_desc_t desc = {};
+    xe_event_pool_handle_t eventPool = {};
+    xe_event_pool_desc_t desc = {};
+    desc.count = 2;
 
-    EXPECT_CALL(device, createEvent(&desc, &event))
+    EXPECT_CALL(device, createEventPool(&desc, &eventPool))
         .Times(1)
         .WillRepeatedly(Return(XE_RESULT_SUCCESS));
 
-    auto result = xeDeviceCreateEvent(device.toHandle(),
+    auto result = xeDeviceCreateEventPool(device.toHandle(),
                                       &desc,
+                                      &eventPool);
+    ASSERT_EQ(XE_RESULT_SUCCESS, result);
+}
+
+TEST(xeDeviceCreatEvent, redirectsToObject) {
+    Mock<EventPool> eventPool;
+    xe_event_handle_t event = {};
+
+    EXPECT_CALL(eventPool, createEvent(0, &event))
+        .Times(1)
+        .WillRepeatedly(Return(XE_RESULT_SUCCESS));
+
+    auto result = xeEventPoolCreateEvent(eventPool.toHandle(),
+                                      0,
                                       &event);
     ASSERT_EQ(XE_RESULT_SUCCESS, result);
 }
@@ -145,10 +161,10 @@ TEST_F(DeviceCreateCommandQueue, returnsSuccess) {
     delete device;
 }
 
-class DeviceCreateEvent : public GlobalFixtureTest {
+class DeviceCreatePoolEvent : public GlobalFixtureTest {
 };
 
-TEST_F(DeviceCreateEvent, returnsSuccess) {
+TEST_F(DeviceCreatePoolEvent, returnsSuccess) {
     auto platform = NEO::constructPlatform();
     auto success = platform->initialize();
     ASSERT_TRUE(success);
@@ -157,13 +173,14 @@ TEST_F(DeviceCreateEvent, returnsSuccess) {
     ASSERT_NE(nullptr, deviceRT);
     auto device = Device::create(deviceRT);
 
-    xe_event_handle_t event = {};
-    xe_event_desc_t desc = {};
+    xe_event_pool_handle_t eventPool = {};
+    xe_event_pool_desc_t desc = {};
+    desc.count = 1;
 
-    auto result = device->createEvent(&desc,
-                                      &event);
+    auto result = device->createEventPool(&desc,
+                                      &eventPool);
     EXPECT_EQ(XE_RESULT_SUCCESS, result);
-    EXPECT_NE(nullptr, event);
+    EXPECT_NE(nullptr, eventPool);
 
     delete device;
 }

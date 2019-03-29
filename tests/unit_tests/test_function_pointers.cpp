@@ -52,7 +52,7 @@ TEST(FunctionPointers, DISABLED_compileToDeviceBinary) {
     modDesc.version = XE_MODULE_DESC_VERSION_CURRENT;
     modDesc.format = static_cast<xe_module_format_t>(-1); // -1 for unofficial llvm IR support
     modDesc.inputSize = llvmModuleTxt.size() + 1;
-    modDesc.pInputModule = llvmModuleTxt.data();
+    modDesc.pInputModule = reinterpret_cast<const uint8_t *>(llvmModuleTxt.data());
 
     auto module = whitebox_cast(Module::create(device, &modDesc, deviceRT, nullptr));
     ASSERT_NE(nullptr, module);
@@ -60,7 +60,9 @@ TEST(FunctionPointers, DISABLED_compileToDeviceBinary) {
     xe_function_desc_t funDesc = {};
     funDesc.version = XE_FUNCTION_DESC_VERSION_CURRENT;
     funDesc.pFunctionName = "testStackCallMain";
-    auto function = whitebox_cast(Function::create(deviceRT->getHardwareInfo().pPlatform->eProductFamily, module, &funDesc));
+    auto function =
+            whitebox_cast(Function::create(deviceRT->getHardwareInfo().pPlatform->eProductFamily,
+                     module, &funDesc));
     ASSERT_NE(nullptr, function);
 
     function->destroy();

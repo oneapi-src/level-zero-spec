@@ -22,10 +22,9 @@ xe_result_t DriverImp::init(xe_init_flag_t) {
     return XE_RESULT_SUCCESS;
 }
 
-xe_result_t DriverImp::getDevice(const xe_device_uuid_t *uniqueId, xe_device_handle_t *phDevice) {
+xe_result_t DriverImp::getDevice(uint32_t ordinal, xe_device_handle_t *phDevice) {
     auto platform = NEO::constructPlatform();
-    // Assume for now xe_device_uuid_t id[0] contains ordinalID
-    auto device = Device::create(platform->getDevice(static_cast<size_t>(uniqueId->id[0])));
+    auto device = Device::create(platform->getDevice(static_cast<size_t>(ordinal)));
     *phDevice = device;
 
     return XE_RESULT_SUCCESS;
@@ -36,18 +35,6 @@ xe_result_t DriverImp::getDeviceCount(uint32_t *count) {
     *count = 1U;
     if (NEO::DebugManager.flags.CreateMultipleDevices.get() > 0) {
         *count = static_cast<uint32_t>(NEO::DebugManager.flags.CreateMultipleDevices.get());
-    }
-    return XE_RESULT_SUCCESS;
-}
-
-xe_result_t DriverImp::getDeviceUniqueIds(uint32_t count, xe_device_uuid_t *pUniqueIds) {
-    if (count < 1) {
-        return XE_RESULT_ERROR_INVALID_PARAMETER;
-    }
-
-    for (uint8_t i = 0; i < count; i++) {
-        // Assume for now xe_device_uuid_t id[0] contains ordinalID
-        pUniqueIds[i].id[0] = i;
     }
     return XE_RESULT_SUCCESS;
 }

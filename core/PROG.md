@@ -16,8 +16,6 @@ NOTE: This is a **PRELIMINARY** specification, provided for review and feedback.
 * [OpenCL Interoperability](#oi)
 * [Inter-Process Communication](#ipc)
 * [Experimental](#exp)
-* [Debug and Instrumentation Layers](#dbg)
-* [Future](#fut)
 
 # <a name="dnd">Driver and Device</a>
 The following diagram illustrates the hierarchy of devices to the driver:  
@@ -60,14 +58,11 @@ The following sample code demonstrates a basic initialization sequence:
         return;
     }
 
-    xe_device_uuid_t* pUUIDs = (uint32_t*)malloc(deviceCount * sizeof(xe_device_uuid_t));
-    xeDriverGetDeviceUniqueIds(deviceCount, pUUIDs);
-
     // Get the handle for device that supports required API version
     xe_device_handle_t hDevice;
     for(uint32_t i = 0; i < deviceCount; ++i)
     {
-        xeDriverGetDevice(pUUIDs[i], &hDevice);
+        xeDriverGetDevice(i, &hDevice);
         
         xe_api_version_t version;
         xeDeviceGetApiVersion(hDevice, &version);
@@ -83,6 +78,7 @@ The following sample code demonstrates a basic initialization sequence:
     ...
 
 ```
+
 ## Sub-Device Support
 A multi-tile device consists of tiles that are tied together by high-speed interconnects. Each tile
 has local memory that is shared to other tiles through these interconnects. The API represents tiles
@@ -142,6 +138,9 @@ See ::xe_command_queue_desc_t for more details.
     xeDeviceCreateCommandQueue(subdevice, desc, &commandQueueForSubDevice2);
     ...
 ```
+
+## Device Unique Identifier
+The 16 byte unique device identifier (uuid) can be obtained for a device or sub-device using ::xeDeviceGetProperties.
 
 # <a name="cnc">Command Queues and Command Lists</a>
 The following are the motivations for seperating a command queue from a command list:
@@ -380,19 +379,27 @@ However, this generality comes with some cost in efficiency.
 
 Events do **not** represent intra-command list dependencies between programs.
 
+Events are created from a pool of events that all share the same properties.
+- An event pool reduces the cost of creating multiple events byt allowing underlying device allocations to be shared
+- An event pool can be shared via IPC, rather than sharing each individual event
+
 The following diagram illustrates an example of events:  
 ![Event](../images/core_event.png?raw=true)  
 @image latex core_event.png
 
 The following sample code demonstrates a sequence for creation and submission of an event:
 ```c
-    // Create event
-    xe_event_desc_t eventDesc = {
-        XE_EVENT_DESC_VERSION_CURRENT,
-        XE_EVENT_FLAG_NONE
+    // Create event pool
+    xe_event_pool_desc_t eventPoolDesc = {
+        XE_EVENT_POOL_DESC_VERSION_CURRENT,
+        XE_EVENT_POOL_FLAG_NONE,
+        1
     };
+    xe_event_pool_handle_t hEventPool;
+    xeDeviceCreateEventPool(hDevice, &eventPoolDesc, &hEventPool);
+
     xe_event_handle_t hEvent;
-    xeDeviceCreateEvent(hDevice, &eventDesc, &hEvent);
+    xeEventPoolCreateEvent(hEventPool, 0, &hEvent);
 
     // Append a wait on an event into a command list
     xeCommandListAppendWaitOnEvent(hCommandList, hEvent);
@@ -413,7 +420,7 @@ Events can be used to provide different types of device performance metrics:
 ### Timestamps
 Timestamps are used to measure the time between two events signalled by the same device.
 - An application can use ::xeEventQueryElapsedTime to calculate the time (in milliseconds) between two events.
-- Both events must be created with ::XE_EVENT_FLAG_TIMESTAMP
+- Both events must be created from a pool created with ::XE_EVENT_POOL_FLAG_TIMESTAMP
 - Both events must be signalled
 
 The following sample code demonstrates a sequence for measuring time between events:
@@ -437,7 +444,7 @@ The following sample code demonstrates a sequence for measuring time between eve
 ### Counters
 Counters are used to collect various device-specific values between two events signalled by the same device.
 - An application can use ::xeEventQueryMetricsData to calculate the time (in milliseconds) between two events.
-- Both events must be created with ::XE_EVENT_FLAG_PERFORMANCE_METRICS
+- Both events must be created from a pool created with ::XE_EVENT_POOL_FLAG_PERFORMANCE_METRICS
 - Both events must be signalled
 
 The following sample code demonstrates a sequence for collecting counters between events:
@@ -490,18 +497,18 @@ Shared system allocations have no associated device - they are inherently cross-
 Like other shared allocations, shared system allocations are intended to migrate between the host and supported devices, and the same pointer to a shared system allocation may be used on the host and all supported devices.
 
 In summary:
-| Name | Initial Location | Accessible By || Migratable To ||
-| :--: | :--: | :--: | :--: | :--: | :--: |
-| **Host** | Host | Host | Yes | Host | N/A |
-| ^ | ^ | Any Device | Yes (perhaps over PCIe) | Device | No |
-| **Device** | Specific Device | Host | No | Host | No |
-| ^ | ^ | Specific Device | Yes | Device | N/A |
-| ^ | ^ | Another Device | Optional (may require p2p) | Another Device | No |
-| **Shared** | Host, or Specific Device, Or Unspecified | Host | Yes | Host | Yes |
-| ^ | ^ | Specific Device | Yes | Device | Yes |
-| ^ | ^ | Another Device | Optional (may require p2p) | Another Device | Optional |
-| **Shared System** | Host | Host | Yes | Host | Yes |
-| ^ | ^ | Device | Yes | Device | Yes |
+| Name              | Initial Location                      | Accessible By     |                               | Migratable To     |           |
+| :--:              | :--:                                  | :--:              | :--:                          | :--:              | :--:      |
+| **Host**          | Host                                  | Host              | Yes                           | Host              | N/A       |
+| ^                 | ^                                     | Any Device        | Yes (perhaps over PCIe)       | Device            | No        |
+| **Device**        | Specific Device                       | Host              | No                            | Host              | No        |
+| ^                 | ^                                     | Specific Device   | Yes                           | Device            | N/A       |
+| ^                 | ^                                     | Another Device    | Optional (may require p2p)    | Another Device    | No        |
+| **Shared**        | Host, Specific Device, Or Unspecified | Host              | Yes                           | Host              | Yes       |
+| ^                 | ^                                     | Specific Device   | Yes                           | Device            | Yes       |
+| ^                 | ^                                     | Another Device    | Optional (may require p2p)    | Another Device    | Optional  |
+| **Shared System** | Host                                  | Host              | Yes                           | Host              | Yes       |
+| ^                 | ^                                     | Device            | Yes                           | Device            | Yes       |
 
 Devices may support different capabilities for each type of allocation.
 Supported capabilities are:
@@ -945,8 +952,12 @@ will be no worse than an application submitting work to OpenCL, calling clFinish
 Xe command list.  In most cases, command queue sharing may be much more efficient. 
 
 # <a name="ipc">Inter-Process Communication</a>
-The Xe Inter-Process Communication (IPC) APIs allow device memory allocations to be used across processes.
-The following code examples demonstrate how to use the IPC APIs:
+There are two types of Inter-Process Communication (IPC) APIs for using Xe allocations across processes:
+1. Memory
+2. Events 
+
+## Memory
+The following code examples demonstrate how to use the memory IPC APIs:
 
 1. First, the allocation is made, packaged, and sent on the sending process:
 ```c
@@ -983,6 +994,69 @@ Note, there is no guaranteed address equivalence for the values of `dptr` in eac
     xeMemFree(dptr);
 ```
 
+## Events
+The following code examples demonstrate how to use the event IPC APIs:
+
+1. First, the event pool is create, packaged, and sent on the sending process:
+```c
+    // create event pool
+    xe_event_pool_desc_t eventPoolDesc = {
+        XE_EVENT_POOL_DESC_VERSION_CURRENT,
+        XE_EVENT_POOL_FLAG_IPC | XE_EVENT_POOL_FLAG_DEVICE_TO_HOST,
+        10
+    };
+    xe_event_pool_handle_t hEventPool;
+    xeDeviceCreateEventPool(hDevice, &eventPoolDesc, &hEventPool);
+ 
+    // get IPC handle and send to another process
+    xe_ipc_event_pool_handle_t hIpcEvent;
+    xeEventPoolGetIpcHandle(hEventPool, &hIpcEventPool);
+    send_to_receiving_process(hIpcEventPool);
+```
+
+2. Next, the event pool is received and un-packaged on the receiving process:
+```c
+    // get IPC handle from other process
+    xe_ipc_event_pool_handle_t hIpcEventPool;
+    receive_from_sending_process(&hIpcEventPool);
+ 
+    // open event pool
+    xe_event_pool_handle_t hEventPool;
+    xeEventPoolOpenIpcHandle(hDevice, hIpcEvent, &hEventPool);
+```
+
+3. Each process may now refer to the same device event allocation via its handle.
+```c
+    xe_event_handle_t hEvent;
+    xeEventPoolCreateEvent(hEventPool, 5, &hEvent);
+
+    // submit function and signal event when complete
+    xeCommandListAppendLaunchFunction(hCommandList, hFunction, &args, hEvent);
+    xeCommandListClose(hCommandList);
+    xeCommandQueueExecuteCommandLists(hCommandQueue, 1, &hCommandList, nullptr);
+```
+
+```c
+    xe_event_handle_t hEvent;
+    xeEventPoolCreateEvent(hEventPool, 5, &hEvent);
+
+    xeEventHostSynchronize(hEvent, MAX_UINT32);
+```
+
+Note, there is no guaranteed address equivalence for the values of `hEvent` in each process.
+
+4. To cleanup, first close the pool handle in the receiving process:
+```c
+    xeEventDestroy(hEvent);
+    xeEventPoolCloseIpcHandle(&hEventPool);
+```
+
+5. Finally, free the event pool handle in the sending process:
+```c
+    xeEventDestroy(hEvent);
+    xeEventPoolDestroy(hEventPool);
+```
+
 # <a name="exp">Experimental</a>
 The following experimental features are provided only for the development and refinement of future APIs.
 These APIs are **not** supported by production drivers without explicit end-user opt-in.
@@ -996,18 +1070,3 @@ The application is solely responsible for ensuring the commands are valid and co
     xeCommandListReserveSpace(hCommandList, sizeof(blob), &ptr);
     ::memcpy(ptr, blob, sizeof(blob));
 ```
-
-# <a name="dbg">Debug and Instrumentation Layers</a>
-
-# <a name="fut">Future</a>
-The following is a list a features that are still being defined for inclusion:
-- **Command Graphs**
-    + ability to represent non-linear dependencies between programs to be executed
-    + ability to represent flow-control
-    + ability to represent scheduling and distribution across multiple sub-devices
-- **Predicated Execution**
-    + ability to cull program execution within a command list, based on device-generated value(s)
-- **Execution Flow-Control**
-    + ability to describe loops and if-else-then type program execution within a command list, based on device-generated value(s)
-- **C++ Interfaces**
-    + ability to choose between C and C++ interfaces (e.g., by wrapping C++ interfaces with C interfaces)

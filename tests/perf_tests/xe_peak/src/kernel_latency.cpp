@@ -23,7 +23,8 @@
 
 void XePeak::xe_peak_kernel_latency(L0Context &context) {
     uint32_t num_items = (context.device_compute_property.maxGroupCountX) *
-                         (context.device_property.numComputeCores) * FETCH_PER_WI;
+                         //(context.device_property.numComputeCores) * FETCH_PER_WI;
+                         1 * FETCH_PER_WI;
     uint64_t global_size = (num_items / FETCH_PER_WI);
     uint64_t total_work_items = convert_cl_to_xe_work_item_count(
         global_size, context.device_compute_property.maxGroupSizeX);

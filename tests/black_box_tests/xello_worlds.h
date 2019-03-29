@@ -117,7 +117,6 @@ inline void printDeviceProperties(const xe_device_properties_t &props) {
               << " * totalLocalMemSize : " << props.totalLocalMemSize << "\n"
               << " * numAsyncComputeEngines : " << props.numAsyncComputeEngines << "\n"
               << " * numAsyncCopyEngines  : " << props.numAsyncCopyEngines << "\n"
-              << " * numComputeCores : " << props.numComputeCores << "\n"
               << " * maxCommandQueuePriority : " << props.maxCommandQueuePriority << std::endl;
 }
 

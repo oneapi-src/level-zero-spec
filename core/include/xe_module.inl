@@ -63,48 +63,6 @@ namespace xe
     }
 
     ///////////////////////////////////////////////////////////////////////////////
-    /// @brief C++ wrapper for ::xeModuleBuildLogDestroy
-    /// 
-    /// @details
-    ///     - The application is responsible for making sure the GPU is not
-    ///       currently referencing the event before it is deleted
-    ///     - The implementation of this function will immediately free all Host and
-    ///       Device allocations associated with this object
-    ///     - The implementation of this function should be lock-free.
-    ///     - This function can be called before or after ::ModuleDestroy for the
-    ///       associated module.
-    /// 
-    /// @throws result_t
-    inline void 
-    Module::Destroy(
-        void
-        )
-    {
-        // auto result = ::xeModuleBuildLogDestroy( handle );
-        // if( ::XE_RESULT_SUCCESS != result ) throw exception(result, "xe::Module::Destroy");
-    }
-
-    ///////////////////////////////////////////////////////////////////////////////
-    /// @brief C++ wrapper for ::xeModuleBuildLogGetString
-    /// 
-    /// @details
-    ///     - This function may be called from simultaneous threads.
-    ///     - The implementation of this function should be lock-free.
-    ///     - The caller must provide memory for build log.
-    ///     - The caller can pass nullptr for pBuildLog when querying only for size.
-    /// 
-    /// @throws result_t
-    inline void 
-    Module::GetString(
-        size_t* pSize,                                  ///< [in,out] size of build log string.
-        char* pBuildLog                                 ///< [in,out][optional] pointer to null-terminated string of the log.
-        )
-    {
-        // auto result = ::xeModuleBuildLogGetString( handle, pSize, pBuildLog );
-        // if( ::XE_RESULT_SUCCESS != result ) throw exception(result, "xe::Module::GetString");
-    }
-
-    ///////////////////////////////////////////////////////////////////////////////
     /// @brief C++ wrapper for ::xeModuleGetNativeBinary
     /// 
     /// @details

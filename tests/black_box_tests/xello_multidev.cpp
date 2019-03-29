@@ -49,13 +49,11 @@ int main(int argc, char *argv[]) {
 
     // Resize arrays based on returned device count
     device.resize(deviceCount);
-    xe_device_uuid_t *pUniqueIds = new xe_device_uuid_t[deviceCount]();
-    SUCCESS_OR_TERMINATE(xeDriverGetDeviceUniqueIds(deviceCount, pUniqueIds));
 
     // Get Device and command queue
     for (uint32_t i = 0; i < deviceCount; i++) {
         xe_device_properties_t deviceProperties = {XE_DEVICE_PROPERTIES_VERSION_CURRENT};
-        SUCCESS_OR_TERMINATE(xeDriverGetDevice(&pUniqueIds[i], &device[i]));
+        SUCCESS_OR_TERMINATE(xeDriverGetDevice(i, &device[i]));
 
         SUCCESS_OR_TERMINATE(xeDeviceGetProperties(device[i], &deviceProperties));
 
@@ -84,7 +82,7 @@ int main(int argc, char *argv[]) {
 
     xe_module_desc_t moduleDesc = {XE_MODULE_DESC_VERSION_CURRENT};
     moduleDesc.format = XE_MODULE_FORMAT_IL_SPIRV;
-    moduleDesc.pInputModule = static_cast<const char *>(spirvModule);
+    moduleDesc.pInputModule = reinterpret_cast<const uint8_t *>(spirvModule);
     moduleDesc.inputSize = spirvSize;
     for (uint32_t i = 0; i < deviceCount; i++) {
         SUCCESS_OR_TERMINATE(xeDeviceCreateModule(device[i], &moduleDesc,

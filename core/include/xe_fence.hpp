@@ -64,9 +64,10 @@ namespace xe
         inline void
         HostSynchronize(
             uint32_t timeout                                ///< [in] if non-zero, then indicates the maximum time to yield before
-                                                            ///< returning ::RESULT_SUCCESS or ::RESULT_NOT_READY; if zero, then
-                                                            ///< operates exactly like ::FenceQueryStatus; if MAX_UINT32, then function
-                                                            ///< will not return until complete or device is lost.
+                                                            ///< returning ::RESULT_SUCCESS or ::RESULT_NOT_READY;
+                                                            ///< if zero, then operates exactly like ::FenceQueryStatus;
+                                                            ///< if MAX_UINT32, then function will not return until complete or device
+                                                            ///< is lost.
             );
 
         ///////////////////////////////////////////////////////////////////////////////

@@ -28,32 +28,27 @@ int main(int argc, char *argv[]) {
     void *dstBuffer = nullptr;
 
     SUCCESS_OR_TERMINATE(xeDriverInit(XE_INIT_FLAG_NONE));
-
-    xe_device_uuid_t deviceUniqueID = {};
-    SUCCESS_OR_TERMINATE(xeDriverGetDevice(&deviceUniqueID, &device0));
+    SUCCESS_OR_TERMINATE(xeDriverGetDevice(0, &device0));
     SUCCESS_OR_TERMINATE(xeDeviceGetProperties(device0, &device0Properties));
     if (verbose) {
         printDeviceProperties(device0Properties);
     } else {
         std::cout << device0Properties.name << std::endl;
     }
-    {
-        uint32_t spirvSize = 0;
-        auto spirvModule = readBinaryFile("cstring_module.spv", spirvSize);
-        SUCCESS_OR_TERMINATE_BOOL(spirvSize != 0);
 
-        xe_module_desc_t moduleDesc = {XE_MODULE_DESC_VERSION_CURRENT};
-        moduleDesc.format = XE_MODULE_FORMAT_IL_SPIRV;
-        moduleDesc.pInputModule = spirvModule.get();
-        moduleDesc.inputSize = spirvSize;
-        SUCCESS_OR_TERMINATE(xeDeviceCreateModule(device0, &moduleDesc, &module, nullptr));
-    }
+    uint32_t spirvSize = 0;
+    auto spirvModule = readBinaryFile("cstring_module.spv", spirvSize);
+    SUCCESS_OR_TERMINATE_BOOL(spirvSize != 0);
 
-    {
-        xe_function_desc_t functionDesc = {XE_FUNCTION_DESC_VERSION_CURRENT};
-        functionDesc.pFunctionName = "memcpy_bytes";
-        SUCCESS_OR_TERMINATE(xeModuleCreateFunction(module, &functionDesc, &function));
-    }
+    xe_module_desc_t moduleDesc = {XE_MODULE_DESC_VERSION_CURRENT};
+    moduleDesc.format = XE_MODULE_FORMAT_IL_SPIRV;
+    moduleDesc.pInputModule = reinterpret_cast<const uint8_t*>(spirvModule.get());
+    moduleDesc.inputSize = spirvSize;
+    SUCCESS_OR_TERMINATE(xeDeviceCreateModule(device0, &moduleDesc, &module, nullptr));
+
+    xe_function_desc_t functionDesc = {XE_FUNCTION_DESC_VERSION_CURRENT};
+    functionDesc.pFunctionName = "memcpy_bytes";
+    SUCCESS_OR_TERMINATE(xeModuleCreateFunction(module, &functionDesc, &function));
 
     uint32_t groupSizeX = 32u;
     uint32_t groupSizeY = 1u;

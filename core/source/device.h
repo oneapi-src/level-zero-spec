@@ -38,8 +38,8 @@ struct Device : _xe_device_handle_t {
     virtual xe_result_t createCommandQueue(const xe_command_queue_desc_t *desc,
                                            xe_command_queue_handle_t *commandQueue) = 0;
 
-    virtual xe_result_t createEvent(const xe_event_desc_t *desc,
-                                    xe_event_handle_t *event) = 0;
+    virtual xe_result_t createEventPool(const xe_event_pool_desc_t *desc,
+                                    xe_event_pool_handle_t* phEventPool) = 0;
     virtual xe_result_t createImage(const xe_image_desc_t *desc,
                                     xe_image_handle_t *phImage) = 0;
 
@@ -62,9 +62,6 @@ struct Device : _xe_device_handle_t {
     virtual xe_result_t makeImageResident(xe_image_handle_t hImage) = 0;
     virtual xe_result_t makeMemoryResident(void *ptr,
                                            size_t size) = 0;
-    virtual xe_result_t placeEvent(const xe_event_desc_t *desc,
-                                   void *ptr,
-                                   xe_event_handle_t *phEvent) = 0;
     virtual xe_result_t setIntermediateCacheConfig(xe_cache_config_t CacheConfig) = 0;
     virtual xe_result_t setLastLevelCacheConfig(xe_cache_config_t CacheConfig) = 0;
     virtual xe_result_t getImageProperties(const xe_image_desc_t* desc,

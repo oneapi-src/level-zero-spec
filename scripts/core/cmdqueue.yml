@@ -38,11 +38,13 @@ etors:
       value: "0"
       desc: "implicit default behavior; uses driver-based heuristics"
     - name: $X_COMMAND_QUEUE_MODE_SYNCHRONOUS
-      desc: "GPU execution always completes immediately on execute;
-            CPU thread is blocked using wait on implicit synchronization object"
+      desc: |
+        GPU execution always completes immediately on execute;
+        CPU thread is blocked using wait on implicit synchronization object
     - name: $X_COMMAND_QUEUE_MODE_ASYNCHRONOUS
-      desc: "GPU execution is scheduled and will complete in future;
-            explicit synchronization object must be used to determine completeness"
+      desc: |
+        GPU execution is scheduled and will complete in future;
+        explicit synchronization object must be used to determine completeness
 --- #--------------------------------------------------------------------------
 type: enum
 desc: "Supported command queue priorities"
@@ -80,10 +82,11 @@ members:
       init: $X_COMMAND_QUEUE_PRIORITY_NORMAL
     - type: uint32_t
       name: ordinal
-      desc: "[in] if logical-only flag is set, then will be ignored;
-            else-if copy-only flag is set, then must be less than $x_device_properties_t.numAsyncCopyEngines;
-            otherwise must be less than $x_device_properties_t.numAsyncComputeEngines. When using sub-devices
-            the $x_device_properties_t.numAsyncComputeEngines must be queried from the sub-device being used."
+      desc: |
+        [in] if logical-only flag is set, then will be ignored;
+        else-if copy-only flag is set, then must be less than $x_device_properties_t.numAsyncCopyEngines;
+        otherwise must be less than $x_device_properties_t.numAsyncComputeEngines. When using sub-devices
+        the $x_device_properties_t.numAsyncComputeEngines must be queried from the sub-device being used.
       init: "0"
 --- #--------------------------------------------------------------------------
 type: function
@@ -167,9 +170,10 @@ params:
       desc: "[in] handle of the command queue"
     - type: uint32_t
       name: timeout
-      desc: "[in] if non-zero, then indicates the maximum time to yield before returning $X_RESULT_SUCCESS or $X_RESULT_NOT_READY;
+      desc: |
+            [in] if non-zero, then indicates the maximum time to yield before returning $X_RESULT_SUCCESS or $X_RESULT_NOT_READY;
             if zero, then operates exactly like $xFenceQueryStatus;
-            if MAX_UINT32, then function will not return until complete or device is lost."
+            if MAX_UINT32, then function will not return until complete or device is lost.
 returns:
     - $X_RESULT_NOT_READY:
        - "timeout expired"

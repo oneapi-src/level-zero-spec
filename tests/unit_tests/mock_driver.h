@@ -20,11 +20,9 @@ struct Mock<Driver> : public DriverImp {
 
     MOCK_METHOD1(initialize, void(bool *result));
     MOCK_METHOD1(init, xe_result_t(xe_init_flag_t));
-    MOCK_METHOD2(getDevice, xe_result_t(const xe_device_uuid_t *uniqueId,
+    MOCK_METHOD2(getDevice, xe_result_t(uint32_t ordinal,
                                         xe_device_handle_t *phDevice));
     MOCK_METHOD1(getDeviceCount, xe_result_t(uint32_t *count));
-    MOCK_METHOD2(getDeviceUniqueIds, xe_result_t(uint32_t count,
-                                                 xe_device_uuid_t *pUniqueIds));
     MOCK_METHOD1(getVersion, xe_result_t(uint32_t *version));
 
     xe_result_t mockInit(xe_init_flag_t) {

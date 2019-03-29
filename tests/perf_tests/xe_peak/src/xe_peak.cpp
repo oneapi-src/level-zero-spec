@@ -80,7 +80,7 @@ void L0Context::create_module(std::vector<uint8_t> binary_file) {
     module_description.format = XE_MODULE_FORMAT_IL_SPIRV;
     module_description.inputSize = static_cast<uint32_t>(binary_file.size());
     // TODO: Remove cast when pInputModule will be declared as uint8_t
-    module_description.pInputModule = reinterpret_cast<const char *>(binary_file.data());
+    module_description.pInputModule = reinterpret_cast<const uint8_t *>(binary_file.data());
     module_description.pBuildFlags = nullptr;
 
     result = xeDeviceCreateModule(device, &module_description, &module, nullptr);
@@ -108,7 +108,7 @@ void L0Context::print_xe_device_properties(const xe_device_properties_t &props) 
               << " * totalLocalMemSize : " << props.totalLocalMemSize << "\n"
               << " * numAsyncComputeEngines : " << props.numAsyncComputeEngines << "\n"
               << " * numAsyncCopyEngines  : " << props.numAsyncCopyEngines << "\n"
-              << " * numComputeCores : " << props.numComputeCores << "\n"
+              //<< " * numComputeCores : " << props.numComputeCores << "\n"
               << " * maxCommandQueuePriority : " << props.maxCommandQueuePriority << std::endl;
 }
 
@@ -136,15 +136,7 @@ void L0Context::init_xe() {
     if (verbose)
         std::cout << "Device count retrieved\n";
 
-    std::vector<xe_device_uuid_t> uuids(device_count);
-    result = xeDriverGetDeviceUniqueIds(device_count, uuids.data());
-    if (result) {
-        throw std::runtime_error("xeDriverGetDeviceUniqueIds failed: " + result);
-    }
-    if (verbose)
-        std::cout << "Device UUIDs retrieved\n";
-
-    result = xeDriverGetDevice(&uuids[default_device], &device);
+    result = xeDriverGetDevice(0, &device);
     if (result) {
         throw std::runtime_error("xeDriverGetDevice failed: " + result);
     }

@@ -63,29 +63,6 @@ namespace xe
     }
 
     ///////////////////////////////////////////////////////////////////////////////
-    /// @brief C++ wrapper for ::xeDriverGetDeviceUniqueIds
-    /// 
-    /// @details
-    ///     - The application may call this function from simultaneous threads.
-    ///     - The implementation of this function should be lock-free.
-    /// 
-    /// @remarks
-    ///   _Analogues_
-    ///     - **cuDeviceGet**
-    ///     - clGetDeviceIDs
-    /// 
-    /// @throws result_t
-    inline void 
-    Driver::GetDeviceUniqueIds(
-        device_uuid_t* pUniqueIds                       ///< [in,out] pointer to an array of unique ids for devices. Caller must
-                                                        ///< supply array.
-        )
-    {
-        // auto result = ::xeDriverGetDeviceUniqueIds( handle, pUniqueIds );
-        // if( ::XE_RESULT_SUCCESS != result ) throw exception(result, "xe::Driver::GetDeviceUniqueIds");
-    }
-
-    ///////////////////////////////////////////////////////////////////////////////
     /// @brief C++ wrapper for ::xeDriverGetDevice
     /// 
     /// @details

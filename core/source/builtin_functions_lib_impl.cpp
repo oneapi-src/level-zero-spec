@@ -48,7 +48,7 @@ PtrRef<Function> BuiltinFunctionsLibImpl::getFunction(Builtin func) {
         xe_module_handle_t moduleHandle;
         xe_module_desc_t moduleDesc = {XE_MODULE_DESC_VERSION_CURRENT};
         moduleDesc.format = XE_MODULE_FORMAT_IL_SPIRV;
-        moduleDesc.pInputModule = inputModuleSpirV;
+        moduleDesc.pInputModule = reinterpret_cast<const uint8_t*>(inputModuleSpirV);
         moduleDesc.inputSize = inputModuleSize;
         auto res = device->createModule(&moduleDesc, &moduleHandle, nullptr);
         assert(res == XE_RESULT_SUCCESS);

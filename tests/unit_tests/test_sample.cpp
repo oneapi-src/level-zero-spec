@@ -17,9 +17,7 @@ TEST(sample, waitOnEvent) {
     ASSERT_EQ(XE_RESULT_SUCCESS, result);
 
     xe_device_handle_t device = {};
-    xe_device_uuid_t deviceUniqueID = {};
-    result = xeDriverGetDevice(&deviceUniqueID,
-                               &device);
+    result = xeDriverGetDevice(0, &device);
     ASSERT_EQ(XE_RESULT_SUCCESS, result);
 
     xe_command_queue_handle_t hCommandQueue = {};
@@ -36,10 +34,17 @@ TEST(sample, waitOnEvent) {
                                        &hCommandList);
     ASSERT_EQ(XE_RESULT_SUCCESS, result);
 
-    xe_event_desc_t descEvent = {};
+    xe_event_pool_desc_t descEventPool = {};
+    descEventPool.count = 1;
+    xe_event_pool_handle_t hEventPool = {};
     xe_event_handle_t hEvent = {};
-    result = xeDeviceCreateEvent(device,
-                                 &descEvent,
+    result = xeDeviceCreateEventPool(device,
+                                 &descEventPool,
+                                 &hEventPool);
+    ASSERT_EQ(XE_RESULT_SUCCESS, result);
+
+    result = xeEventPoolCreateEvent(hEventPool,
+                                 0,
                                  &hEvent);
     ASSERT_EQ(XE_RESULT_SUCCESS, result);
 
@@ -79,9 +84,7 @@ TEST(sample, helloWorld) {
     ASSERT_EQ(XE_RESULT_SUCCESS, result);
 
     xe_device_handle_t hDevice = {};
-    xe_device_uuid_t deviceUniqueID = {};
-    result = xeDriverGetDevice(&deviceUniqueID,
-                               &hDevice);
+    result = xeDriverGetDevice(0, &hDevice);
     ASSERT_EQ(XE_RESULT_SUCCESS, result);
 
     xe_command_queue_handle_t commandQueue = {};
@@ -105,7 +108,7 @@ TEST(sample, helloWorld) {
     xe_module_desc_t descModule = {};
     xe_module_handle_t module = {};
     descModule.version = XE_MODULE_DESC_VERSION_CURRENT;
-    descModule.pInputModule = inputModule.get();
+    descModule.pInputModule = reinterpret_cast<const uint8_t *>(inputModule.get());
     descModule.inputSize = static_cast<uint32_t>(moduleSize);
     descModule.format = XE_MODULE_FORMAT_IL_SPIRV;
     result = xeDeviceCreateModule(hDevice,

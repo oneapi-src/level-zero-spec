@@ -96,10 +96,10 @@ namespace xe
         enum class command_queue_mode_t
         {
             DEFAULT = 0,                                    ///< implicit default behavior; uses driver-based heuristics
-            SYNCHRONOUS,                                    ///< GPU execution always completes immediately on execute; CPU thread is
-                                                            ///< blocked using wait on implicit synchronization object
-            ASYNCHRONOUS,                                   ///< GPU execution is scheduled and will complete in future; explicit
-                                                            ///< synchronization object must be used to determine completeness
+            SYNCHRONOUS,                                    ///< GPU execution always completes immediately on execute;
+                                                            ///< CPU thread is blocked using wait on implicit synchronization object
+            ASYNCHRONOUS,                                   ///< GPU execution is scheduled and will complete in future;
+                                                            ///< explicit synchronization object must be used to determine completeness
 
         };
 
@@ -175,16 +175,16 @@ namespace xe
         };
 
         ///////////////////////////////////////////////////////////////////////////////
-        /// @brief C++ version for ::xe_event_desc_version_t
-        enum class event_desc_version_t
+        /// @brief C++ version for ::xe_event_pool_desc_version_t
+        enum class event_pool_desc_version_t
         {
             CURRENT = XE_MAKE_VERSION( 1, 0 ),              ///< version 1.0
 
         };
 
         ///////////////////////////////////////////////////////////////////////////////
-        /// @brief C++ version for ::xe_event_flag_t
-        enum class event_flag_t
+        /// @brief C++ version for ::xe_event_pool_flag_t
+        enum class event_pool_flag_t
         {
             NONE = 0,                                       ///< signals and waits only within the same device
             HOST_TO_DEVICE = XE_BIT(0),                     ///< signals from host, waits on device
@@ -326,9 +326,9 @@ namespace xe
             command_queue_flag_t flags = command_queue_flag_t::NONE;///< [in] creation flags
             command_queue_mode_t mode = command_queue_mode_t::DEFAULT;  ///< [in] operation mode
             command_queue_priority_t priority = command_queue_priority_t::NORMAL;   ///< [in] priority
-            uint32_t ordinal = 0;                           ///< [in] if logical-only flag is set, then will be ignored; else-if
-                                                            ///< copy-only flag is set, then must be less than
-                                                            ///< ::device_properties_t.numAsyncCopyEngines; otherwise must be less than
+            uint32_t ordinal = 0;                           ///< [in] if logical-only flag is set, then will be ignored;
+                                                            ///< else-if copy-only flag is set, then must be less than ::device_properties_t.numAsyncCopyEngines;
+                                                            ///< otherwise must be less than
                                                             ///< ::device_properties_t.numAsyncComputeEngines. When using sub-devices
                                                             ///< the ::device_properties_t.numAsyncComputeEngines must be queried from
                                                             ///< the sub-device being used.
@@ -351,6 +351,7 @@ namespace xe
             uint32_t vendorId;                              ///< [out] vendor id from PCI configuration
             uint32_t deviceId;                              ///< [out] device id from PCI configuration
             uint32_t subdeviceId;                           ///< [out] Subdevice id. Only valid if isSubdevice is true.
+            device_uuid_t uuid;                             ///< [out] unique id for device.
             bool_t isSubdevice;                             ///< [out] Is this a subdevice.
             uint32_t numSubDevices;                         ///< [out] Number of sub-devices.
             uint32_t coreClockRate;                         ///< [out] Clock rate for device core.
@@ -359,12 +360,11 @@ namespace xe
             uint64_t totalLocalMemSize;                     ///< [out] Total memory size in bytes.
             uint32_t numAsyncComputeEngines;                ///< [out] Number of asynchronous compute engines
             uint32_t numAsyncCopyEngines;                   ///< [out] Number of asynchronous copy engines
-            uint32_t numComputeCores;                       ///< [out] Number of compute cores
             uint32_t maxCommandQueuePriority;               ///< [out] Maximum priority for command queues. Higher value is higher
                                                             ///< priority.
             uint32_t numThreadsPerEU;                       ///< [out] Number of threads per EU.
-            uint32_t numEUsPerDSS;                          ///< [out] Number of EUs per dual sub-slice.
-            uint32_t numDSSPerSlice;                        ///< [out] Number of dual sub-slices per slice.
+            uint32_t numEUsPerSubslice;                     ///< [out] Number of EUs per sub-slice.
+            uint32_t numSubslicesPerSlice;                  ///< [out] Number of sub-slices per slice.
             uint32_t numSlicesPerTile;                      ///< [out] Number of slices per tile.
             uint32_t numTiles;                              ///< [out] Number of tiles for this device.
             char name[XE_MAX_DEVICE_NAME];                  ///< [out] Device name
@@ -427,11 +427,12 @@ namespace xe
         };
 
         ///////////////////////////////////////////////////////////////////////////////
-        /// @brief C++ version for ::xe_event_desc_t
-        struct event_desc_t
+        /// @brief C++ version for ::xe_event_pool_desc_t
+        struct event_pool_desc_t
         {
-            event_desc_version_t version = event_desc_version_t::CURRENT;   ///< [in] ::EVENT_DESC_VERSION_CURRENT
-            event_flag_t flags = event_flag_t::NONE;        ///< [in] creation flags
+            event_pool_desc_version_t version = event_pool_desc_version_t::CURRENT; ///< [in] ::EVENT_POOL_DESC_VERSION_CURRENT
+            event_pool_flag_t flags = event_pool_flag_t::NONE;  ///< [in] creation flags
+            uint32_t count;                                 ///< [in] number of events within the pool
 
         };
 
@@ -472,7 +473,7 @@ namespace xe
             module_desc_version_t version = module_desc_version_t::CURRENT; ///< [in] ::MODULE_DESC_VERSION_CURRENT
             module_format_t format;                         ///< [in] Module format passed in with pInputModule
             size_t inputSize = 0;                           ///< [in] size of input IL or ISA from pInputModule.
-            const char* pInputModule = nullptr;             ///< [in] pointer to IL or ISA
+            const uint8_t* pInputModule = nullptr;          ///< [in] pointer to IL or ISA
             const char* pBuildFlags = nullptr;              ///< [in] string containing compiler flags. See programming guide for build
                                                             ///< flags.
 
@@ -648,26 +649,14 @@ namespace xe
             );
 
         ///////////////////////////////////////////////////////////////////////////////
-        /// @brief C++ wrapper for ::xeDeviceCreateEvent
+        /// @brief C++ wrapper for ::xeDeviceCreateEventPool
         /// @returns
-        ///     - ::event_handle_t: pointer to handle of event object created
+        ///     - ::event_pool_handle_t: pointer handle of event pool object created
         /// 
         /// @throws result_t
-        inline event_handle_t
-        CreateEvent(
-            const event_desc_t* desc                        ///< [in] pointer to event descriptor
-            );
-
-        ///////////////////////////////////////////////////////////////////////////////
-        /// @brief C++ wrapper for ::xeDevicePlaceEvent
-        /// @returns
-        ///     - ::event_handle_t: pointer to handle of event object created
-        /// 
-        /// @throws result_t
-        inline event_handle_t
-        PlaceEvent(
-            const event_desc_t* desc,                       ///< [in] pointer to event descriptor
-            void* ptr                                       ///< [in] pointer to the device pointer where the event should be placed
+        inline event_pool_handle_t
+        CreateEventPool(
+            const event_pool_desc_t* desc                   ///< [in] pointer to event pool descriptor
             );
 
         ///////////////////////////////////////////////////////////////////////////////

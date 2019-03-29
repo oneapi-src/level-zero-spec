@@ -65,7 +65,7 @@ typedef struct _xe_module_desc_t
     xe_module_desc_version_t version;               ///< [in] ::XE_MODULE_DESC_VERSION_CURRENT
     xe_module_format_t format;                      ///< [in] Module format passed in with pInputModule
     size_t inputSize;                               ///< [in] size of input IL or ISA from pInputModule.
-    const char* pInputModule;                       ///< [in] pointer to IL or ISA
+    const uint8_t* pInputModule;                    ///< [in] pointer to IL or ISA
     const char* pBuildFlags;                        ///< [in] string containing compiler flags. See programming guide for build
                                                     ///< flags.
 

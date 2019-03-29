@@ -328,9 +328,10 @@ xe_result_t __xecall xeCommandQueueExecuteCommandLists(
 xe_result_t __xecall xeCommandQueueSynchronize(
         xe_command_queue_handle_t hCommandQueue,        ///< [in] handle of the command queue
         uint32_t timeout                                ///< [in] if non-zero, then indicates the maximum time to yield before
-                                                        ///< returning ::XE_RESULT_SUCCESS or ::XE_RESULT_NOT_READY; if zero, then
-                                                        ///< operates exactly like ::xeFenceQueryStatus; if MAX_UINT32, then
-                                                        ///< function will not return until complete or device is lost.
+                                                        ///< returning ::XE_RESULT_SUCCESS or ::XE_RESULT_NOT_READY;
+                                                        ///< if zero, then operates exactly like ::xeFenceQueryStatus;
+                                                        ///< if MAX_UINT32, then function will not return until complete or device
+                                                        ///< is lost.
     ){
     if(dispatchTableInitialized == false){
         return XE_RESULT_ERROR_UNINITIALIZED;
@@ -439,26 +440,14 @@ xe_result_t __xecall xeDriverGetDeviceCount(
     }
     return dispatchTable.xeDriverGetDeviceCount(count);
 }
-xe_result_t __xecall xeDriverGetDeviceUniqueIds(
-        uint32_t count,                                 ///< [in] size of device unique ids array. Typically, this will be
-                                                        ///< ${x}DeviceGetCount.
-        xe_device_uuid_t* pUniqueIds                    ///< [in,out] pointer to an array of unique ids for devices. Caller must
-                                                        ///< supply array.
-    ){
-    if(dispatchTableInitialized == false){
-        return XE_RESULT_ERROR_UNINITIALIZED;
-    }
-    return dispatchTable.xeDriverGetDeviceUniqueIds(count, pUniqueIds);
-}
 xe_result_t __xecall xeDriverGetDevice(
-        const xe_device_uuid_t* pUUID,                  ///< [in] unique id of device to retrieve. Use ${x}DriverGetDeviceUniqueIds
-                                                        ///< to obtain a unique Id.
+        uint32_t ordinal,                               ///< [in] The device index in the range of [0, ::xeGetDeviceCount]
         xe_device_handle_t* phDevice                    ///< [out] pointer to handle of device object created
     ){
     if(dispatchTableInitialized == false){
         return XE_RESULT_ERROR_UNINITIALIZED;
     }
-    return dispatchTable.xeDriverGetDevice(pUUID, phDevice);
+    return dispatchTable.xeDriverGetDevice(ordinal, phDevice);
 }
 xe_result_t __xecall xeDeviceGetSubDevice(
         xe_device_handle_t hDevice,                     ///< [in] handle of the device object
@@ -552,26 +541,33 @@ xe_result_t __xecall xeDriverGetVersion(
     }
     return dispatchTable.xeDriverGetVersion(version);
 }
-xe_result_t __xecall xeDeviceCreateEvent(
+xe_result_t __xecall xeDeviceCreateEventPool(
         xe_device_handle_t hDevice,                     ///< [in] handle of the device
-        const xe_event_desc_t* desc,                    ///< [in] pointer to event descriptor
-        xe_event_handle_t* phEvent                      ///< [out] pointer to handle of event object created
+        const xe_event_pool_desc_t* desc,               ///< [in] pointer to event pool descriptor
+        xe_event_pool_handle_t* phEventPool             ///< [out] pointer handle of event pool object created
     ){
     if(dispatchTableInitialized == false){
         return XE_RESULT_ERROR_UNINITIALIZED;
     }
-    return dispatchTable.xeDeviceCreateEvent(hDevice, desc, phEvent);
+    return dispatchTable.xeDeviceCreateEventPool(hDevice, desc, phEventPool);
 }
-xe_result_t __xecall xeDevicePlaceEvent(
-        xe_device_handle_t hDevice,                     ///< [in] handle of the device
-        const xe_event_desc_t* desc,                    ///< [in] pointer to event descriptor
-        void* ptr,                                      ///< [in] pointer to the device pointer where the event should be placed
+xe_result_t __xecall xeEventPoolDestroy(
+        xe_event_pool_handle_t hEventPool               ///< [in] handle of event pool object to destroy
+    ){
+    if(dispatchTableInitialized == false){
+        return XE_RESULT_ERROR_UNINITIALIZED;
+    }
+    return dispatchTable.xeEventPoolDestroy(hEventPool);
+}
+xe_result_t __xecall xeEventPoolCreateEvent(
+        xe_event_pool_handle_t hEventPool,              ///< [in] handle of the event pool
+        uint32_t index,                                 ///< [in] index of the event within the pool
         xe_event_handle_t* phEvent                      ///< [out] pointer to handle of event object created
     ){
     if(dispatchTableInitialized == false){
         return XE_RESULT_ERROR_UNINITIALIZED;
     }
-    return dispatchTable.xeDevicePlaceEvent(hDevice, desc, ptr, phEvent);
+    return dispatchTable.xeEventPoolCreateEvent(hEventPool, index, phEvent);
 }
 xe_result_t __xecall xeEventDestroy(
         xe_event_handle_t hEvent                        ///< [in] handle of event object to destroy
@@ -580,6 +576,33 @@ xe_result_t __xecall xeEventDestroy(
         return XE_RESULT_ERROR_UNINITIALIZED;
     }
     return dispatchTable.xeEventDestroy(hEvent);
+}
+xe_result_t __xecall xeEventPoolGetIpcHandle(
+        xe_event_pool_handle_t hEventPool,              ///< [in] handle of event pool object
+        xe_ipc_event_pool_handle_t* phIpc               ///< [out] Returned IPC event handle
+    ){
+    if(dispatchTableInitialized == false){
+        return XE_RESULT_ERROR_UNINITIALIZED;
+    }
+    return dispatchTable.xeEventPoolGetIpcHandle(hEventPool, phIpc);
+}
+xe_result_t __xecall xeEventPoolOpenIpcHandle(
+        xe_device_handle_t hDevice,                     ///< [in] handle of the device to associate with the IPC event pool handle
+        xe_ipc_event_pool_handle_t hIpc,                ///< [in] IPC event handle
+        xe_event_pool_handle_t* phEventPool             ///< [out] pointer handle of event pool object created
+    ){
+    if(dispatchTableInitialized == false){
+        return XE_RESULT_ERROR_UNINITIALIZED;
+    }
+    return dispatchTable.xeEventPoolOpenIpcHandle(hDevice, hIpc, phEventPool);
+}
+xe_result_t __xecall xeEventPoolCloseIpcHandle(
+        xe_event_pool_handle_t hEventPool               ///< [in] handle of event pool object
+    ){
+    if(dispatchTableInitialized == false){
+        return XE_RESULT_ERROR_UNINITIALIZED;
+    }
+    return dispatchTable.xeEventPoolCloseIpcHandle(hEventPool);
 }
 xe_result_t __xecall xeCommandListAppendSignalEvent(
         xe_command_list_handle_t hCommandList,          ///< [in] handle of the command list
@@ -610,9 +633,10 @@ xe_result_t __xecall xeEventHostSignal(
 xe_result_t __xecall xeEventHostSynchronize(
         xe_event_handle_t hEvent,                       ///< [in] handle of the event
         uint32_t timeout                                ///< [in] if non-zero, then indicates the maximum time to yield before
-                                                        ///< returning ::XE_RESULT_SUCCESS or ::XE_RESULT_NOT_READY; if zero, then
-                                                        ///< operates exactly like ::xeEventQueryStatus; if MAX_UINT32, then
-                                                        ///< function will not return until complete or device is lost.
+                                                        ///< returning ::XE_RESULT_SUCCESS or ::XE_RESULT_NOT_READY;
+                                                        ///< if zero, then operates exactly like ::xeEventQueryStatus;
+                                                        ///< if MAX_UINT32, then function will not return until complete or device
+                                                        ///< is lost.
     ){
     if(dispatchTableInitialized == false){
         return XE_RESULT_ERROR_UNINITIALIZED;
@@ -686,9 +710,10 @@ xe_result_t __xecall xeFenceDestroy(
 xe_result_t __xecall xeFenceHostSynchronize(
         xe_fence_handle_t hFence,                       ///< [in] handle of the fence
         uint32_t timeout                                ///< [in] if non-zero, then indicates the maximum time to yield before
-                                                        ///< returning ::XE_RESULT_SUCCESS or ::XE_RESULT_NOT_READY; if zero, then
-                                                        ///< operates exactly like ::xeFenceQueryStatus; if MAX_UINT32, then
-                                                        ///< function will not return until complete or device is lost.
+                                                        ///< returning ::XE_RESULT_SUCCESS or ::XE_RESULT_NOT_READY;
+                                                        ///< if zero, then operates exactly like ::xeFenceQueryStatus;
+                                                        ///< if MAX_UINT32, then function will not return until complete or device
+                                                        ///< is lost.
     ){
     if(dispatchTableInitialized == false){
         return XE_RESULT_ERROR_UNINITIALIZED;

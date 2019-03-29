@@ -95,7 +95,7 @@ The following naming convention is followed in order to avoid conflicts within t
 - all structure members and function parameters use camel case convention
 - all function input parameters precede output parameters
 
-Note: "Xe" is a placeholder until One-API branding is decided.
+Note: "Xe" is a placeholder until One API branding is decided.
 
 ## Terminology
 This specification uses key words based on [RFC2119](https://www.ietf.org/rfc/rfc2119.txt) to indicate requirement level. 

@@ -359,52 +359,23 @@ namespace xe
     }
 
     ///////////////////////////////////////////////////////////////////////////////
-    /// @brief C++ wrapper for ::xeDeviceCreateEvent
+    /// @brief C++ wrapper for ::xeDeviceCreateEventPool
     /// 
     /// @details
     ///     - This function may be called from simultaneous threads.
     ///     - The implementation of this function should be lock-free.
     /// 
-    /// @remarks
-    ///   _Analogues_
-    ///     - **clCreateUserEvent**
-    ///     - vkCreateEvent
-    ///     - cuEventCreate
-    /// 
     /// @returns
-    ///     - ::event_handle_t: pointer to handle of event object created
+    ///     - ::event_pool_handle_t: pointer handle of event pool object created
     /// 
     /// @throws result_t
-    inline event_handle_t 
-    Device::CreateEvent(
-        const event_desc_t* desc                        ///< [in] pointer to event descriptor
+    inline event_pool_handle_t 
+    Device::CreateEventPool(
+        const event_pool_desc_t* desc                   ///< [in] pointer to event pool descriptor
         )
     {
-        // auto result = ::xeDeviceCreateEvent( handle, desc );
-        // if( ::XE_RESULT_SUCCESS != result ) throw exception(result, "xe::Device::CreateEvent");
-    }
-
-    ///////////////////////////////////////////////////////////////////////////////
-    /// @brief C++ wrapper for ::xeDevicePlaceEvent
-    /// 
-    /// @details
-    ///     - This function is intended for sharing fences with peer devices or
-    ///       across processes
-    ///     - This function may be called from simultaneous threads.
-    ///     - The implementation of this function should be lock-free.
-    /// 
-    /// @returns
-    ///     - ::event_handle_t: pointer to handle of event object created
-    /// 
-    /// @throws result_t
-    inline event_handle_t 
-    Device::PlaceEvent(
-        const event_desc_t* desc,                       ///< [in] pointer to event descriptor
-        void* ptr                                       ///< [in] pointer to the device pointer where the event should be placed
-        )
-    {
-        // auto result = ::xeDevicePlaceEvent( handle, desc, ptr );
-        // if( ::XE_RESULT_SUCCESS != result ) throw exception(result, "xe::Device::PlaceEvent");
+        // auto result = ::xeDeviceCreateEventPool( handle, desc );
+        // if( ::XE_RESULT_SUCCESS != result ) throw exception(result, "xe::Device::CreateEventPool");
     }
 
     ///////////////////////////////////////////////////////////////////////////////
