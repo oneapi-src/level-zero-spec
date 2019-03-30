@@ -20,6 +20,9 @@ void CommandQueueHw<IGFX_GEN12_CORE>::dispatchTaskCountWrite(bool flushDataCache
     using POST_SYNC_OPERATION = typename PIPE_CONTROL::POST_SYNC_OPERATION;
     using MI_BATCH_BUFFER_END = typename GfxFamily::MI_BATCH_BUFFER_END;
 
+    size_t sizeEstimate = sizeof(PIPELINE_SELECT) + sizeof(PIPE_CONTROL) + sizeof(MI_BATCH_BUFFER_END);
+    Substream substream = getCmdSubstream(sizeEstimate);
+
     PIPELINE_SELECT ps = GfxFamily::cmdInitPipelineSelect;
     ps.setPipelineSelection(PIPELINE_SELECT::PIPELINE_SELECTION_GPGPU);
     ps.setMaskBits(3u); //TODO:  Add support for DOP clock gating
@@ -35,24 +38,19 @@ void CommandQueueHw<IGFX_GEN12_CORE>::dispatchTaskCountWrite(bool flushDataCache
 
     MI_BATCH_BUFFER_END cmdEnd = GfxFamily::cmdInitBatchBufferEnd;
 
-    auto bufferBase = commandStream->getSpace(sizeof(ps) + sizeof(pc) + sizeof(cmdEnd));
-    auto cmd = bufferBase;
-
-    *(PIPELINE_SELECT *)cmd = ps;
-    cmd = ptrOffset(cmd, sizeof(ps));
-    *(PIPE_CONTROL *)cmd = pc;
-    cmd = ptrOffset(cmd, sizeof(pc));
-    *(MI_BATCH_BUFFER_END *)cmd = cmdEnd;
+    *substream.getSpaceForCmd<PIPELINE_SELECT>() = ps;
+    *substream.getSpaceForCmd<PIPE_CONTROL>() = pc;
+    *substream.getSpaceForCmd<MI_BATCH_BUFFER_END>() = cmdEnd;
 
     OCLRT::BatchBuffer batchBuffer(
         allocation->allocationRT,
-        ptrDiff(bufferBase, commandStream->getCpuBase()),
+        substream.getBaseOffsetInParent(),
         0u,
         nullptr,
         false,
         false,
         OCLRT::QueueThrottle::HIGH,
-        commandStream->getUsed(),
+        substream.getSizeUsed(),
         commandStream);
     OCLRT::ResidencyContainer residencyContainer;
     residencyContainer.push_back(commandStreamReceiver->getTagAllocation());

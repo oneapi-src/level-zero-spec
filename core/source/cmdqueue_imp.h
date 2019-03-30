@@ -1,5 +1,8 @@
 #pragma once
 #include "cmdqueue.h"
+
+#include "substream.h"
+
 #include <vector>
 
 namespace OCLRT {
@@ -24,6 +27,14 @@ struct CommandQueueImp : public CommandQueue {
     xe_result_t synchronize(uint32_t timeout) override;
 
     void initialize();
+
+    Substream getCmdSubstream(size_t size) {
+        assert(commandStream);
+        if (commandStream->getAvailableSpace() < size) {
+            // discard old allocation, create a new one
+        }
+        return Substream(*commandStream, commandStream->getSpace(size), size);
+    }
 
   protected:
     void processResidency(CommandList *);

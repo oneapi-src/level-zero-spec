@@ -28,7 +28,8 @@ xe_result_t CommandQueueHw<gfxCoreFamily>::executeCommandLists(uint32_t numComma
     using MI_BATCH_BUFFER_START = typename GfxFamily::MI_BATCH_BUFFER_START;
     using MI_BATCH_BUFFER_END = typename GfxFamily::MI_BATCH_BUFFER_END;
 
-    auto offset = commandStream->getUsed();
+    size_t sizeEstimate = sizeof(MI_BATCH_BUFFER_END) + numCommandLists * sizeof(MI_BATCH_BUFFER_START);
+    Substream substream = getCmdSubstream(sizeEstimate);
 
     for (auto i = 0u; i < numCommandLists; ++i) {
         MI_BATCH_BUFFER_START cmd = GfxFamily::cmdInitBatchBufferStart;
@@ -39,7 +40,7 @@ xe_result_t CommandQueueHw<gfxCoreFamily>::executeCommandLists(uint32_t numComma
         auto &allocation = commandList->getAllocation();
         cmd.setBatchBufferStartAddressGraphicsaddress472(allocation.getGpuAddress());
 
-        auto buffer = commandStream->getSpace(sizeof(cmd));
+        auto buffer = substream.getSpaceForCmd<MI_BATCH_BUFFER_START>();
         *(MI_BATCH_BUFFER_START *)buffer = cmd;
 
         // Add each
@@ -50,12 +51,12 @@ xe_result_t CommandQueueHw<gfxCoreFamily>::executeCommandLists(uint32_t numComma
     {
         MI_BATCH_BUFFER_END cmd = GfxFamily::cmdInitBatchBufferEnd;
 
-        auto buffer = commandStream->getSpace(sizeof(cmd));
+        auto buffer = substream.getSpaceForCmd<MI_BATCH_BUFFER_END>();
         *(MI_BATCH_BUFFER_END *)buffer = cmd;
     }
 
     // Submit our batch buffer
-    submitBatchBuffer(offset);
+    submitBatchBuffer(substream.getBaseOffsetInParent());
 
     // TODO: Enable unified memory.  For now, imply everything gets made consistent
     for (auto i = 0u; i < numCommandLists; ++i) {
@@ -79,18 +80,23 @@ void CommandQueueHw<gfxCoreFamily>::dispatchTaskCountWrite(bool flushDataCache) 
     using POST_SYNC_OPERATION = typename PIPE_CONTROL::POST_SYNC_OPERATION;
     using MI_BATCH_BUFFER_END = typename GfxFamily::MI_BATCH_BUFFER_END;
 
+    size_t sizeEstimate = sizeof(PIPELINE_SELECT) + sizeof(PIPE_CONTROL) + sizeof(PIPE_CONTROL) + sizeof(MI_BATCH_BUFFER_END);
+    Substream substream = getCmdSubstream(sizeEstimate);
+
     PIPELINE_SELECT ps = GfxFamily::cmdInitPipelineSelect;
     ps.setPipelineSelection(PIPELINE_SELECT::PIPELINE_SELECTION_GPGPU);
     ps.setMaskBits(3u); //TODO:  Add support for DOP clock gating
+
+    *substream.getSpaceForCmd<PIPELINE_SELECT>() = ps;
 
     {
         // Add a PIPE_CONTROL w/ CS_stall per Bspec, require prior to any PostSync Operation
         // without this PipeControl may leave to early and cause too early resource destruction which may lead to BSODs
         // Note : this is SKL-specific
-        auto pc0 = commandStream->getSpaceForCmd<typename GfxFamily::PIPE_CONTROL>();
-        *pc0 = GfxFamily::cmdInitPipeControl;
-        pc0->setDcFlushEnable(flushDataCache);
-        pc0->setCommandStreamerStallEnable(true);
+        PIPE_CONTROL pc0 = GfxFamily::cmdInitPipeControl;
+        pc0.setDcFlushEnable(flushDataCache);
+        pc0.setCommandStreamerStallEnable(true);
+        *substream.getSpaceForCmd<PIPE_CONTROL>() = pc0;
     }
 
     PIPE_CONTROL pc = GfxFamily::cmdInitPipeControl;
@@ -104,24 +110,18 @@ void CommandQueueHw<gfxCoreFamily>::dispatchTaskCountWrite(bool flushDataCache) 
 
     MI_BATCH_BUFFER_END cmdEnd = GfxFamily::cmdInitBatchBufferEnd;
 
-    auto bufferBase = commandStream->getSpace(sizeof(ps) + sizeof(pc) + sizeof(cmdEnd));
-    auto cmd = bufferBase;
-
-    *(PIPELINE_SELECT *)cmd = ps;
-    cmd = ptrOffset(cmd, sizeof(ps));
-    *(PIPE_CONTROL *)cmd = pc;
-    cmd = ptrOffset(cmd, sizeof(pc));
-    *(MI_BATCH_BUFFER_END *)cmd = cmdEnd;
+    *substream.getSpaceForCmd<PIPE_CONTROL>() = pc;
+    *substream.getSpaceForCmd<MI_BATCH_BUFFER_END>() = cmdEnd;
 
     OCLRT::BatchBuffer batchBuffer(
         allocation->allocationRT,
-        ptrDiff(bufferBase, commandStream->getCpuBase()),
+        substream.getBaseOffsetInParent(),
         0u,
         nullptr,
         false,
         false,
         OCLRT::QueueThrottle::HIGH,
-        commandStream->getUsed(),
+        substream.getSizeUsed(),
         commandStream);
     OCLRT::ResidencyContainer residencyContainer;
     residencyContainer.push_back(commandStreamReceiver->getTagAllocation());
