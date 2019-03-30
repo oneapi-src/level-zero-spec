@@ -102,7 +102,7 @@ FunctionImp::~FunctionImp() {
         kernelRT->release();
     }
     if (printfBuffer) {
-        module->getDevice()->getMemoryManager()->freeMemory(printfBuffer);
+        module->getDevice()->getMemoryManager()->freeMemory(printfBuffer, false);
     }
     privateMemAllocation.deleteOwned();
     delete oclInternals;

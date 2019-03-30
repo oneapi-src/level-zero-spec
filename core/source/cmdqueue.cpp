@@ -20,10 +20,29 @@ xe_result_t CommandQueueImp::destroy() {
 void CommandQueueImp::initialize() {
     auto memoryManager = device->getMemoryManager();
     assert(memoryManager);
-    allocation = memoryManager->allocateDeviceMemory(16384u, 4096u);
+    allocation = memoryManager->allocateDeviceMemory(defaultQueueCmdBufferSize, 4096u);
     assert(allocation);
 
     commandStream = new OCLRT::LinearStream(allocation->allocationRT);
+}
+
+Substream CommandQueueImp::getCmdSubstream(size_t size) {
+    assert(commandStream);
+    if (commandStream->getAvailableSpace() < size) {
+        auto memoryManager = device->getMemoryManager();
+        assert(memoryManager);
+
+        // TODO: Add reusable allocations pool instead of deferred deletion
+        memoryManager->freeMemory(this->allocation, true);
+
+        this->allocation = memoryManager->allocateDeviceMemory(defaultQueueCmdBufferSize, 4096u);
+        assert(this->allocation);
+
+        commandStream->replaceGraphicsAllocation(this->allocation->allocationRT);
+        commandStream->replaceBuffer(this->allocation->allocationRT->getUnderlyingBuffer(),
+                                     this->allocation->allocationRT->getUnderlyingBufferSize());
+    }
+    return Substream(*commandStream, commandStream->getSpace(size), size);
 }
 
 void CommandQueueImp::processResidency(CommandList *c) {

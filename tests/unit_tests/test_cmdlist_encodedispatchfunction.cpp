@@ -70,8 +70,8 @@ struct CommandListAppendLaunchFunction : public ::testing::Test {
 
         auto memoryManager = device.getMemoryManager();
         ASSERT_NE(memoryManager, nullptr);
-        memoryManager->freeMemory(buffer1);
-        memoryManager->freeMemory(buffer2);
+        memoryManager->freeMemory(buffer1, false);
+        memoryManager->freeMemory(buffer2, false);
     }
 
     void createFunction(const std::string &functionName) {

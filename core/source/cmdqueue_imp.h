@@ -15,6 +15,8 @@ struct Function;
 struct GraphicsAllocation;
 
 struct CommandQueueImp : public CommandQueue {
+    static constexpr size_t defaultQueueCmdBufferSize = 16384u;
+
     CommandQueueImp(Device *device, void *csrRT)
         : device(device),
           csrRT(csrRT),
@@ -28,13 +30,7 @@ struct CommandQueueImp : public CommandQueue {
 
     void initialize();
 
-    Substream getCmdSubstream(size_t size) {
-        assert(commandStream);
-        if (commandStream->getAvailableSpace() < size) {
-            // discard old allocation, create a new one
-        }
-        return Substream(*commandStream, commandStream->getSpace(size), size);
-    }
+    Substream getCmdSubstream(size_t size);
 
   protected:
     void processResidency(CommandList *);

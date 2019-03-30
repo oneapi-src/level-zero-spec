@@ -3,6 +3,8 @@
 #include "graphics_allocation.h"
 
 #include "runtime/helpers/string.h"
+#include "runtime/memory_manager/deferred_deleter.h"
+#include "runtime/memory_manager/deferrable_allocation_deletion.h"
 #include "runtime/memory_manager/memory_manager.h"
 #include "runtime/memory_manager/svm_memory_manager.h"
 
@@ -65,10 +67,15 @@ struct MemoryManagerImp : public MemoryManager {
         return allocMap[knownAllocations.get(ptr)]; // temporary
     }
 
-    void freeMemory(GraphicsAllocation *allocation) {
+    void freeMemory(GraphicsAllocation *allocation, bool deferFreeUntilNotInUse) {
         allocMap.erase(allocation->allocationRT);           // temporary
         knownAllocations.remove(*allocation->allocationRT); // temporary
-        memoryManagerRT->freeGraphicsMemory(static_cast<OCLRT::GraphicsAllocation *>(allocation->allocationRT));
+        if (deferFreeUntilNotInUse) {
+            memoryManagerRT->getDeferredDeleter()->deferDeletion(new OCLRT::DeferrableAllocationDeletion{*memoryManagerRT, *allocation->allocationRT});
+        } else {
+            memoryManagerRT->freeGraphicsMemory(static_cast<OCLRT::GraphicsAllocation *>(allocation->allocationRT));
+        }
+
         delete allocation;
     }
 
