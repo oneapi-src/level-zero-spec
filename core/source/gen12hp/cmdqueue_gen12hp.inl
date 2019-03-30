@@ -50,8 +50,8 @@ void CommandQueueHw<IGFX_GEN12_CORE>::dispatchTaskCountWrite(bool flushDataCache
         false,
         false,
         OCLRT::QueueThrottle::HIGH,
-        substream.getSizeUsed(),
-        commandStream);
+        substream.getParent().getUsed(),
+        &substream.getParent());
     OCLRT::ResidencyContainer residencyContainer;
     residencyContainer.push_back(commandStreamReceiver->getTagAllocation());
     commandStreamReceiver->flush(batchBuffer, residencyContainer);
