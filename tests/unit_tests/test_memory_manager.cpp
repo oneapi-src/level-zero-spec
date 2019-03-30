@@ -18,7 +18,7 @@ TEST(MemoryManagerallocateDeviceMemory, returnsGraphicsAllocation) {
     auto allocation = memoryManager->allocateDeviceMemory(16u, 16u);
     EXPECT_NE(nullptr, allocation);
 
-    memoryManager->freeMemory(allocation, false);
+    memoryManager->freeMemory(allocation);
 
     delete device;
 }

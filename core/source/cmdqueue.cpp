@@ -33,7 +33,7 @@ Substream CommandQueueImp::getCmdSubstream(size_t size) {
         assert(memoryManager);
 
         // TODO: Add reusable allocations pool instead of deferred deletion
-        memoryManager->freeMemory(this->allocation, true);
+        memoryManager->freeMemory(this->allocation);
 
         this->allocation = memoryManager->allocateDeviceMemory(defaultQueueCmdBufferSize, 4096u);
         assert(this->allocation);

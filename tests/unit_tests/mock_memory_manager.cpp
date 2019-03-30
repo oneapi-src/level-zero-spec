@@ -13,7 +13,7 @@ static GraphicsAllocation *createGraphicsAllocation(size_t size, size_t alignmen
     return new GraphicsAllocation(buffer, size);
 }
 
-static void freeGraphicsAllocation(GraphicsAllocation *allocation, bool deferFreeUntilNotInUse) {
+static void freeGraphicsAllocation(GraphicsAllocation *allocation) {
     assert(allocation);
     auto buffer = reinterpret_cast<uint8_t *>(allocation->getGpuAddress());
     alignedFree(buffer);

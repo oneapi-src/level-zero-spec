@@ -67,15 +67,10 @@ struct MemoryManagerImp : public MemoryManager {
         return allocMap[knownAllocations.get(ptr)]; // temporary
     }
 
-    void freeMemory(GraphicsAllocation *allocation, bool deferFreeUntilNotInUse) {
+    void freeMemory(GraphicsAllocation *allocation) {
         allocMap.erase(allocation->allocationRT);           // temporary
         knownAllocations.remove(*allocation->allocationRT); // temporary
-        if (deferFreeUntilNotInUse) {
-            memoryManagerRT->getDeferredDeleter()->deferDeletion(new OCLRT::DeferrableAllocationDeletion{*memoryManagerRT, *allocation->allocationRT});
-        } else {
-            memoryManagerRT->freeGraphicsMemory(static_cast<OCLRT::GraphicsAllocation *>(allocation->allocationRT));
-        }
-
+        memoryManagerRT->freeGraphicsMemory(static_cast<OCLRT::GraphicsAllocation *>(allocation->allocationRT));
         delete allocation;
     }
 

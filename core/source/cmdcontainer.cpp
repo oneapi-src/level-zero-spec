@@ -15,20 +15,20 @@ CommandContainer::~CommandContainer() {
 
     if (allocation) {
         assert(memoryManager);
-        memoryManager->freeMemory(allocation, false);
+        memoryManager->freeMemory(allocation);
     }
 
     for (auto allocationIndirectHeap : allocationIndirectHeaps) {
         if (allocationIndirectHeap) {
             assert(memoryManager);
-            memoryManager->freeMemory(allocationIndirectHeap, false);
+            memoryManager->freeMemory(allocationIndirectHeap);
         }
     }
 
     for (auto deallocation : deallocationContainer) {
         assert(deallocation);
         assert(memoryManager);
-        memoryManager->freeMemory(deallocation, false);
+        memoryManager->freeMemory(deallocation);
     }
 
     delete commandStream;
