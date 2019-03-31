@@ -22,6 +22,7 @@ add_executable(${TARGET_NAME}
     mock_image.h
     mock_memory_manager.cpp
     mock_memory_manager.h
+    mock_mocs_mapper.h
     mock_module_buildlog.cpp
     mock_module_buildlog.h
     mock_module.cpp
@@ -74,6 +75,7 @@ target_include_directories(${TARGET_NAME}
     PRIVATE
         $<TARGET_PROPERTY:${PROJECT_NAME},SOURCE_DIR>/source
         $<TARGET_PROPERTY:${PROJECT_NAME},SOURCE_DIR>/source/os_interface
+        ${COMPUTE_RUNTIME_DIR}/unit_tests/mocks/embargo # TODO : Refactor GMM mocking in NEO
 )
 
 if (UNIX)

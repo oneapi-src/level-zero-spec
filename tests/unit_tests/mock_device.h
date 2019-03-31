@@ -66,6 +66,7 @@ struct Mock<Device> : public Device {
     MOCK_METHOD0(getExecEnvironment, void *());
     MOCK_METHOD0(getHwHelper, OCLRT::HwHelper &());
     MOCK_METHOD0(getBuiltinFunctionsLib, PtrRef<BuiltinFunctionsLib>());
+    MOCK_METHOD0(getMOCSMapper, PtrRef<MOCSMapper>());
 
     void *deviceRT;
     void *csrRT;

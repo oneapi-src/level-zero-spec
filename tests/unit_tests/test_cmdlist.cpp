@@ -1,6 +1,7 @@
 #include "mock_cmdlist.h"
 #include "mock_device.h"
 #include "mock_memory_manager.h"
+#include "mock_mocs_mapper.h"
 #include "event.h"
 #include "graphics_allocation.h"
 #include "igfxfmid.h"
@@ -176,6 +177,10 @@ HWTEST_F(CommandListCreate, addsStateBaseAddressToBatchBuffer) {
         heap = commandList->indirectHeaps[CommandList::SURFACE_STATE];
         EXPECT_TRUE(cmd->getSurfaceStateBaseAddressModifyEnable());
         EXPECT_EQ(cmd->getSurfaceStateBaseAddress(), heap->getHeapGpuBase());
+
+        auto mocsMapper = device.getMOCSMapper();
+        EXPECT_EQ(mocsMapper->getCachedInstructionHeapMOCS(), cmd->getInstructionMemoryObjectControlState());
+        EXPECT_EQ(mocsMapper->getFullyCachedMOCS(), cmd->getStatelessDataPortAccessMemoryObjectControlState());
     }
 }
 
@@ -206,6 +211,9 @@ HWTEST2_F(CommandListCreate, addsBindingTablePoolAllocToBatchBuffer, IsGen12HP) 
         auto cmd = genCmdCast<_3DSTATE_BINDING_TABLE_POOL_ALLOC *>(*itor);
         EXPECT_EQ(heap.getHeapGpuBase(), cmd->getBindingTablePoolBaseAddress());
         EXPECT_EQ(heap.getHeapSizeInPages(), cmd->getBindingTablePoolBufferSize());
+
+        auto mocsMapper = device.getMOCSMapper();
+        EXPECT_EQ(mocsMapper->getCachedStateHeapMOCS(), cmd->getSurfaceObjectControlStateIndexToMocsTables());
     }
 }
 

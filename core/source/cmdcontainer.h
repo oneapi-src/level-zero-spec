@@ -71,6 +71,10 @@ struct CommandContainer : public _xe_command_list_handle_t {
     uint32_t dirtyHeaps = static_cast<uint32_t>(-1);
     uint32_t slmSize = static_cast<uint32_t>(-1);
 
+    Device *getDevice() const {
+        return device;
+    }
+
   protected:
     void storePrintfFunction(Function *function);
     Device *device = nullptr;

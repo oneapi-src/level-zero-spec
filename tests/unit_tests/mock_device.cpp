@@ -1,5 +1,6 @@
 #include "mock_device.h"
 #include "mock_memory_manager.h"
+#include "mock_mocs_mapper.h"
 #include "runtime/device/device.h"
 #include "runtime/platform/platform.h"
 #include "unit_tests/mocks/mock_csr.h"
@@ -26,6 +27,11 @@ Mock<Device>::Mock() {
     static ::testing::NiceMock<Mock<MemoryManager>> memoryManager;
     EXPECT_CALL(*this, getMemoryManager)
         .WillRepeatedly(Return(&memoryManager));
+
+    static ::testing::NiceMock<Mock<MOCSMapper>> mocsMapper;
+    static PtrRef<L0::MOCSMapper> mocsMapperRef{&mocsMapper};
+    EXPECT_CALL(*this, getMOCSMapper)
+        .WillRepeatedly(Return(mocsMapperRef));
 }
 
 Mock<Device>::~Mock() {

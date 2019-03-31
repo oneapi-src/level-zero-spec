@@ -60,6 +60,8 @@ set(L0_RUNTIME_SOURCES
     ${CMAKE_CURRENT_SOURCE_DIR}/memory.h
     ${CMAKE_CURRENT_SOURCE_DIR}/memory_manager.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/memory_manager.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/mocs_mapper.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/mocs_mapper.h
     ${CMAKE_CURRENT_SOURCE_DIR}/module.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/module.h
     ${CMAKE_CURRENT_SOURCE_DIR}/module_build_log.cpp

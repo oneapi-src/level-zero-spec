@@ -152,12 +152,12 @@ else()
     target_sources(compute_runtime_lib_full
     PRIVATE
         ${COMPUTE_RUNTIME_DIR}/runtime/dll/linux/allocator_helper.cpp
-        ${COMPUTE_RUNTIME_DIR}/runtime/dll/linux/devices/${BRANCH_DIR_SUFFIX}/devices.inl
+        ${COMPUTE_RUNTIME_DIR}/runtime/dll/linux/devices/embargo/devices.inl
         ${COMPUTE_RUNTIME_DIR}/runtime/dll/linux/devices/devices_base.inl      
         ${COMPUTE_RUNTIME_DIR}/runtime/dll/linux/options.cpp
         ${COMPUTE_RUNTIME_DIR}/runtime/dll/linux/os_interface.cpp
     )
-    target_include_directories(compute_runtime_lib_full PUBLIC ${COMPUTE_RUNTIME_DIR}/runtime/dll/linux/devices${BRANCH_DIR_SUFFIX})
+    target_include_directories(compute_runtime_lib_full PUBLIC ${COMPUTE_RUNTIME_DIR}/runtime/dll/linux/devices/embargo)
 endif()
 
 #Put all compute runtime items into the same folder
@@ -238,6 +238,8 @@ add_library(compute_runtime_mockable_extra
         ${COMPUTE_RUNTIME_DIR}/unit_tests/mocks/mock_compilers.cpp
         ${COMPUTE_RUNTIME_DIR}/unit_tests/mocks/mock_csr.cpp
         ${COMPUTE_RUNTIME_DIR}/unit_tests/mocks/mock_gmm_resource_info.cpp
+        ${COMPUTE_RUNTIME_DIR}/unit_tests/mocks/mock_gmm_client_context_base.cpp
+        ${COMPUTE_RUNTIME_DIR}/unit_tests/mocks/embargo/mock_gmm_client_context.cpp
         ${COMPUTE_RUNTIME_DIR}/unit_tests/mocks/mock_program.cpp
         ${COMPUTE_RUNTIME_DIR}/unit_tests/mocks/mock_sip.cpp
         ${COMPUTE_RUNTIME_DIR}/unit_tests/program/evaluate_unhandled_token_ult.cpp

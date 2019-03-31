@@ -5,6 +5,7 @@
 #include "cmdqueue.h"
 #include "event.h"
 #include "memory_manager.h"
+#include "mocs_mapper.h"
 #include "module.h"
 #include "image.h"
 #include "runtime/device/device.h"
@@ -231,6 +232,10 @@ struct DeviceImp : public Device {
         return builtins.weakRef();
     }
 
+    PtrRef<MOCSMapper> getMOCSMapper() override {
+        return mocsMapper.weakRef();
+    }
+
     OCLRT::HwHelper &getHwHelper() override {
         const auto &hardwareInfo = deviceRT->getHardwareInfo();
         return OCLRT::HwHelper::get(hardwareInfo.pPlatform->eRenderCoreFamily);
@@ -241,6 +246,7 @@ struct DeviceImp : public Device {
     bool isSubdevice = false;
     void *execEnvironment = nullptr;
     PtrOwn<BuiltinFunctionsLib> builtins = nullptr;
+    PtrOwn<MOCSMapper> mocsMapper = nullptr;
 };
 
 Device *Device::create(void *ptr) {
@@ -250,8 +256,8 @@ Device *Device::create(void *ptr) {
     device->deviceRT = deviceRT;
     device->memoryManager = MemoryManager::create(deviceRT->getMemoryManager());
     device->execEnvironment = (void *)deviceRT->getExecutionEnvironment();
-    auto builtinsLib = BuiltinFunctionsLib::create(PtrRef<Device>(device), PtrRef<void>(deviceRT->getExecutionEnvironment()->getBuiltIns()));
-    device->builtins.swap(builtinsLib);
+    device->builtins = BuiltinFunctionsLib::create(PtrRef<Device>(device), PtrRef<void>(deviceRT->getExecutionEnvironment()->getBuiltIns()));
+    device->mocsMapper.rebind(new MOCSMapper(bindPtrRef(deviceRT->getGmmHelper())));
 
     return device;
 }

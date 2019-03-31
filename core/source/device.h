@@ -20,6 +20,7 @@ namespace L0 {
 struct BuiltinFunctionsLib;
 struct ExecutionEnvironment;
 struct MemoryManager;
+struct MOCSMapper;
 
 struct Device : _xe_device_handle_t {
     virtual xe_result_t canAccessPeer(xe_device_handle_t hPeerDevice,
@@ -69,6 +70,7 @@ struct Device : _xe_device_handle_t {
     virtual MemoryManager *getMemoryManager() = 0;
     virtual void *getExecEnvironment() = 0;
     virtual PtrRef<BuiltinFunctionsLib> getBuiltinFunctionsLib() = 0;
+    virtual PtrRef<MOCSMapper> getMOCSMapper() = 0;
 
     virtual OCLRT::HwHelper &getHwHelper() = 0;
 

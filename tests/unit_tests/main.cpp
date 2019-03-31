@@ -1,5 +1,6 @@
 #include "igfxfmid.h"
 #include "runtime/helpers/hw_info.h"
+#include "mock_gmm_client_context.h"
 
 #include "gmock/gmock.h"
 
@@ -50,6 +51,8 @@ int main(int argc, char **argv) {
             }
         }
     }
+
+    OCLRT::GmmHelper::createGmmContextWrapperFunc = OCLRT::GmmClientContextBase::create<OCLRT::MockGmmClientContext>;
 
     if (environment) {
         ::testing::AddGlobalTestEnvironment(environment);

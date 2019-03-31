@@ -57,6 +57,12 @@ struct EncodeStateBaseAddress<IGFX_GEN12_CORE> {
             cmd.setInstructionBufferSize(MemoryConstants::sizeOf4GBinPageEntities); // no bounds checking
         }
 
+        // Program caches
+        auto mocsMapper = container.getDevice()->getMOCSMapper();
+        cmd.setInstructionMemoryObjectControlState(mocsMapper->getCachedInstructionHeapMOCS());
+        // TODO : Stateless MOCS can't be cached unconditionally for e.g. when false cacheline sharing with CPU (hotptrs)
+        cmd.setStatelessDataPortAccessMemoryObjectControlState(mocsMapper->getFullyCachedMOCS());
+
         auto buffer = container.getCommandStream().getSpace(sizeof(cmd));
         *(STATE_BASE_ADDRESS *)buffer = cmd;
 
@@ -66,7 +72,7 @@ struct EncodeStateBaseAddress<IGFX_GEN12_CORE> {
             auto cmd = GfxFamily::cmdInitStateBindingTablePoolAlloc;
             cmd.setBindingTablePoolBaseAddress(heap.getHeapGpuBase());
             cmd.setBindingTablePoolBufferSize(heap.getHeapSizeInPages());
-            //TODO: cmd.setSurfaceObjectControlStateIndexToMocsTables(gmmHelper->getMOCS(GMM_RESOURCE_USAGE_OCL_STATE_HEAP_BUFFER));
+            cmd.setSurfaceObjectControlStateIndexToMocsTables(mocsMapper->getCachedStateHeapMOCS());
 
             auto buffer = container.getCommandStream().getSpace(sizeof(cmd));
             *(_3DSTATE_BINDING_TABLE_POOL_ALLOC *)buffer = cmd;

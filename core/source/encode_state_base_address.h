@@ -1,6 +1,7 @@
 #pragma once
 #include "cmdlist.h"
 #include "hw_info.h"
+#include "mocs_mapper.h"
 #include "runtime/command_stream/linear_stream.h"
 #include "runtime/indirect_heap/indirect_heap.h"
 
@@ -53,6 +54,12 @@ struct EncodeStateBaseAddress {
             cmd.setInstructionBufferSizeModifyEnable(true);
             cmd.setInstructionBufferSize(MemoryConstants::sizeOf4GBinPageEntities); // no bounds checking
         }
+
+        // Program caches
+        auto mocsMapper = container.getDevice()->getMOCSMapper();
+        cmd.setInstructionMemoryObjectControlState(mocsMapper->getCachedInstructionHeapMOCS());
+        // TODO : Stateless MOCS can't be cached unconditionally for e.g. when false cacheline sharing with CPU (hotptrs)
+        cmd.setStatelessDataPortAccessMemoryObjectControlState(mocsMapper->getFullyCachedMOCS());
 
         auto buffer = container.getCommandStream().getSpace(sizeof(cmd));
         *(STATE_BASE_ADDRESS *)buffer = cmd;
