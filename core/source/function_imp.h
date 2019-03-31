@@ -19,6 +19,8 @@ struct LightweightOclKernel;
 
 namespace L0 {
 
+struct GraphicsAllocation;
+
 struct FunctionImp : Function {
     FunctionImp(Module *module);
 
@@ -80,6 +82,8 @@ struct FunctionImp : Function {
 
     xe_result_t setArgImage(uint32_t argIndex, size_t argSize, const void *argVal);
 
+    virtual void setBufferSurfaceState(uint32_t argIndex, void *address, GraphicsAllocation *alloc) = 0;
+
     bool initialize(const xe_function_desc_t *desc);
 
     const void *getIsaHostMem() const override;
@@ -138,7 +142,7 @@ struct FunctionImp : Function {
 
   protected:
     template <typename T>
-    void patchCrossThreadData(uint32_t location, const T &value);
+    bool patchCrossThreadData(uint32_t location, const T &value);
 
     void patchWorkgroupSizeInCrossThreadData(uint32_t x, uint32_t y, uint32_t z);
 

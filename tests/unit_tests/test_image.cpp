@@ -68,12 +68,13 @@ TEST_F(ImageCreate, descMatchesAllocation) {
     ASSERT_NE(nullptr, alloc);
 
     ASSERT_EQ(alloc->getSize(),
-            desc.numChannels * desc.width * desc.height * desc.depth * sizeof(uint8_t));
+              desc.numChannels * desc.width * desc.height * desc.depth * sizeof(uint8_t));
 
     delete device;
 }
 
-HWTEST2_F(ImageCreate, descBadParamsFail, MatchAny) { using RENDER_SURFACE_STATE = typename FamilyType::RENDER_SURFACE_STATE;
+HWTEST2_F(ImageCreate, descBadParamsFail, MatchAny) {
+    using RENDER_SURFACE_STATE = typename FamilyType::RENDER_SURFACE_STATE;
 
     Mock<Device> device;
 
@@ -183,14 +184,12 @@ HWTEST2_F(ImageSurfaceState, copyToSSH, MatchAny) {
     ASSERT_EQ(surfaceStateA->getSurfaceFormat(), RENDER_SURFACE_STATE::SURFACE_FORMAT_R8G8B8A8_UINT);
     ASSERT_EQ(surfaceStateA->getWidth(), 11);
     ASSERT_EQ(surfaceStateA->getHeight(), 13);
-    ASSERT_EQ(mockBTS[0].getSurfaceStatePointer(), 0);
 
     auto surfaceStateB = reinterpret_cast<RENDER_SURFACE_STATE *>(ptrOffset(mockSSH, sizeof(RENDER_SURFACE_STATE)));
     ASSERT_EQ(surfaceStateB->getSurfaceType(), RENDER_SURFACE_STATE::SURFACE_TYPE_SURFTYPE_2D);
     ASSERT_EQ(surfaceStateB->getSurfaceFormat(), RENDER_SURFACE_STATE::SURFACE_FORMAT_R32G32_UINT);
     ASSERT_EQ(surfaceStateB->getWidth(), 10);
     ASSERT_EQ(surfaceStateB->getHeight(), 10);
-    ASSERT_EQ(mockBTS[1].getSurfaceStatePointer(), sizeof(RENDER_SURFACE_STATE));
 }
 
 } // namespace ult

@@ -9,6 +9,7 @@
 #include "device.h"
 #include "graphics_allocation.h"
 #include "memory_manager.h"
+#include "mocs_mapper.h"
 #include "module.h"
 #include "image.h"
 #include "printf_handler.h"
@@ -18,6 +19,7 @@
 #include "runtime/helpers/per_thread_data.h"
 #include "runtime/helpers/string.h"
 #include "runtime/kernel/kernel.h"
+#include "runtime/mem_obj/buffer.h"
 #include "runtime/program/kernel_arg_info.h"
 #include "runtime/program/program.h"
 
@@ -249,22 +251,22 @@ xe_result_t FunctionImp::setArgImmediate(uint32_t argIndex, size_t argSize, cons
 
 xe_result_t FunctionImp::setArgBuffer(uint32_t argIndex, size_t argSize, const void *argVal) {
     const auto &kernelArgInfo = getKernelInfo()->kernelArgInfo[argIndex];
-    // patchBufferOffset(kernelArgInfo, nullptr, nullptr); // stateless to stateful buffer offsets disabled
 
     auto patchLocation = ptrOffset(crossThreadData,
                                    kernelArgInfo.kernelArgPatchInfoVector[0].crossthreadOffset);
 
     patchWithRequiredSize(patchLocation, kernelArgInfo.kernelArgPatchInfoVector[0].size, *reinterpret_cast<const uintptr_t *>(argVal));
 
+    GraphicsAllocation *alloc = module->getDevice()->getMemoryManager()->findAllocation(*reinterpret_cast<void *const *>(argVal));
+    assert(alloc != nullptr); // TODO : Handle nullptr if *argVal == NULL
+
     oclInternals->storeKernelArg(argIndex, OCLRT::Kernel::BUFFER_OBJ, nullptr, argVal, argSize);
 
-    //if (requiresSshForBuffers()) {
-    //    auto surfaceState = ptrOffset(getSurfaceStateHeap(), kernelArgInfo.offsetHeap);
-    //    Buffer::setSurfaceState(&getDevice(), surfaceState, 0, nullptr);
-    //} // no SSH for buffers for now - stateless to stateful disabled
+    // Handle stateles to stateful
+    if (getKernelInfo()->requiresSshForBuffers) {
+        setBufferSurfaceState(argIndex, *reinterpret_cast<void *const *>(argVal), alloc);
+    }
 
-    GraphicsAllocation *alloc = module->getDevice()->getMemoryManager()->findAllocation(*reinterpret_cast<void *const *>(argVal));
-    assert(alloc != nullptr);
     residencyContainer[argIndex] = alloc;
 
     return XE_RESULT_SUCCESS;
@@ -326,6 +328,8 @@ bool FunctionImp::initialize(const xe_function_desc_t *desc) {
     this->oclInternals->localBindingTableOffset = kernelRT->localBindingTableOffset;
     if (kernelRT->sshLocalSize != 0) {
         this->oclInternals->pSshLocal = std::make_unique<char[]>(kernelRT->sshLocalSize);
+        // just copy-over ssh w/ binding table
+        // note : binding table is already set-up properly by the compiler
         memcpy(this->oclInternals->pSshLocal.get(), kernelRT->pSshLocal.get(), kernelRT->sshLocalSize);
         this->oclInternals->sshLocalSize = kernelRT->sshLocalSize;
 
@@ -334,25 +338,6 @@ bool FunctionImp::initialize(const xe_function_desc_t *desc) {
 
         uint32_t numArgs = static_cast<uint32_t>(kernelInfoRT->kernelArgInfo.size());
         kernelArgBindingTableIndex = new uint32_t[numArgs];
-
-        //For some reason this doesn't work through mock:
-        //void * ssh = this->getSurfaceStateHeap();
-        //uint32_t bindingTableOffset = this->getBindingTableOffset();
-        void *ssh = this->oclInternals->pSshLocal.get();
-        uint32_t bindingTableOffset = static_cast<uint32_t>(this->oclInternals->localBindingTableOffset);
-        void *bindingTable = ptrOffset(ssh, bindingTableOffset);
-
-        for (uint32_t i = 0; i < this->oclInternals->numberOfBindingTableStates; i++) {
-            //auto bts = ptrOffset(bindingTable, getBindingTableStateSize() * i);
-            auto ssPointer = hwHelper.getBindingTableStateSurfaceStatePointer(bindingTable, i);
-            for (uint32_t j = 0; j < numArgs; j++) {
-                if (kernelInfoRT->kernelArgInfo[j].offsetHeap == ssPointer) {
-                    //Optimization: just store the BTS offset here?
-                    kernelArgBindingTableIndex[j] = i;
-                    //Don't break here:  multiple args may use the same BTI?
-                }
-            }
-        }
     }
 
     if (kernelRT->crossThreadDataSize != 0) {
@@ -446,11 +431,12 @@ const void *FunctionImp::getDynamicStateHeap() const {
 }
 
 template <typename T>
-void FunctionImp::patchCrossThreadData(uint32_t location, const T &value) {
+bool FunctionImp::patchCrossThreadData(uint32_t location, const T &value) {
     if (OCLRT::KernelArgInfo::undefinedOffset == location) {
-        return;
+        return false;
     }
     *reinterpret_cast<T *>(ptrOffset(this->crossThreadData, location)) = value;
+    return true;
 }
 
 void FunctionImp::patchWorkgroupSizeInCrossThreadData(uint32_t x, uint32_t y, uint32_t z) {
@@ -467,8 +453,13 @@ void FunctionImp::patchWorkgroupSizeInCrossThreadData(uint32_t x, uint32_t y, ui
     patchCrossThreadData(getKernelInfo()->workloadInfo.enqueuedLocalWorkSizeOffsets[2], z);
 }
 
-Function *Function::create(Module *module, const xe_function_desc_t *desc) {
-    auto function = new FunctionImp(module);
+Function *Function::create(uint32_t productFamily, Module *module, const xe_function_desc_t *desc) {
+    FunctionAllocatorFn allocator = nullptr;
+    if (productFamily < IGFX_MAX_PRODUCT) {
+        allocator = functionFactory[productFamily];
+    }
+
+    auto function = static_cast<FunctionImp *>(allocator(module));
     function->initialize(desc);
     return function;
 }

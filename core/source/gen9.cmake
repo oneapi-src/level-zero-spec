@@ -4,9 +4,11 @@ if(SUPPORT_GEN9)
         ${COMPUTE_RUNTIME_GEN9}
         ${CMAKE_CURRENT_SOURCE_DIR}/gen9/kbl/cmdlist_kbl.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/gen9/kbl/cmdqueue_kbl.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/gen9/kbl/function_kbl.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/gen9/kbl/image_kbl.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/gen9/skl/cmdlist_skl.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/gen9/skl/cmdqueue_skl.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/gen9/skl/function_skl.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/gen9/skl/encode_skl.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/gen9/skl/image_skl.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/gen9/skl/hw_helper_skl.cpp

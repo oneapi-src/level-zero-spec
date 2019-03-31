@@ -7,6 +7,8 @@
 
 #include "device.h"
 
+#include "igfxfmid.h"
+
 #include <cassert>
 #include <memory>
 
@@ -36,8 +38,7 @@ struct ModuleImp : public Module {
         return XE_RESULT_ERROR_UNSUPPORTED;
     }
 
-    virtual xe_result_t getGlobalPointer(const char *pGlobalName, void **pPtr)
-    {
+    virtual xe_result_t getGlobalPointer(const char *pGlobalName, void **pPtr) {
         return XE_RESULT_ERROR_UNSUPPORTED;
     }
 
@@ -60,6 +61,7 @@ struct ModuleImp : public Module {
 
   protected:
     Device *device = nullptr;
+    PRODUCT_FAMILY productFamily{};
     ModuleBuildLog *moduleBuildLog = nullptr;
     OCLRT_temporary::LightweightOclProgram *progRT = nullptr;
     uint32_t maxGroupSize = 0U;

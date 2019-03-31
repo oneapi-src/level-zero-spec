@@ -36,7 +36,7 @@ struct LightweightOclProgram : public OCLRT::Program { // NEO refactor needed : 
         OCLRT::CompilerInterface *pCompilerInterface = this->executionEnvironment.getCompilerInterface();
         assert(pCompilerInterface != nullptr);
 
-        std::string internalOptions = this->internalOptions + " -cl-intel-greater-than-4GB-buffer-required"; // Disable surface states for buffers for now
+        std::string internalOptions = this->internalOptions + " -cl-intel-has-buffer-offset-arg ";
 
         OCLRT::TranslationArgs inputArgs = {};
         inputArgs.pInput = const_cast<char *>(input); // this is a broken in the interface, input is considered const in the end
@@ -84,7 +84,9 @@ namespace L0 {
 ModuleImp::ModuleImp(Device *device, void *deviceRT, ModuleBuildLog *moduleBuildLog)
     : device(device),
       progRT(OCLRT_temporary::LightweightOclProgram::create(deviceRT)),
-      moduleBuildLog(moduleBuildLog) {}
+      moduleBuildLog(moduleBuildLog) {
+    productFamily = reinterpret_cast<OCLRT::Device *>(deviceRT)->getHardwareInfo().pPlatform->eProductFamily;
+}
 
 ModuleImp::~ModuleImp() {
     progRT->release();
@@ -141,7 +143,7 @@ void ModuleImp::updateBuildLog(void *deviceRT) {
 }
 
 xe_result_t ModuleImp::createFunction(const xe_function_desc_t *desc, xe_function_handle_t *phFunction) {
-    *phFunction = Function::create(this, desc)->toHandle();
+    *phFunction = Function::create(productFamily, this, desc)->toHandle();
     return XE_RESULT_SUCCESS;
 }
 

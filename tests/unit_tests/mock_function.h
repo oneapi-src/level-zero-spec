@@ -21,9 +21,9 @@ struct WhiteBox<::L0::Function> : public ::L0::FunctionImp {
     using ::L0::FunctionImp::groupSizeY;
     using ::L0::FunctionImp::groupSizeZ;
     using ::L0::FunctionImp::immFuncInfo;
+    using ::L0::FunctionImp::kernelArgBindingTableIndex;
     using ::L0::FunctionImp::module;
     using ::L0::FunctionImp::printfBuffer;
-    using ::L0::FunctionImp::kernelArgBindingTableIndex;
     using ::L0::FunctionImp::residencyContainer;
 
     WhiteBox() : ::L0::FunctionImp(nullptr) {}
@@ -80,6 +80,7 @@ struct Mock<Function> : public Function {
     MOCK_CONST_METHOD0(getSurfaceStateHeapSize, uint32_t());
     MOCK_CONST_METHOD0(getBindingTableStateCount, uint32_t());
     MOCK_CONST_METHOD0(getBindingTableOffset, uint32_t());
+    MOCK_METHOD3(setBufferSurfaceState, void(uint32_t argIndex, void *address, GraphicsAllocation *alloc));
 
     // TODO : automate generation of such forwarders (e.g. extend GMOCK macros)
     void mock_forwardToBase_getGroupSize(uint32_t &outGroupSizeX, uint32_t &outGroupSizeY, uint32_t &outGroupSizeZ) {

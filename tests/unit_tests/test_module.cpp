@@ -198,7 +198,7 @@ TEST_P(ModuleCreateBufArg, onlineCompilationModuleTest) {
     xe_function_desc_t funDesc = {};
     funDesc.version = XE_FUNCTION_DESC_VERSION_CURRENT;
     funDesc.pFunctionName = functionName.c_str();
-    auto function = whitebox_cast(Function::create(module, &funDesc));
+    auto function = whitebox_cast(Function::create(deviceRT->getHardwareInfo().pPlatform->eProductFamily, module, &funDesc));
     ASSERT_NE(nullptr, function);
 
     auto memoryManager = device->getMemoryManager();
@@ -297,7 +297,7 @@ TEST_P(ModuleCreateImageArg, onlineCompilationModuleTest) {
     xe_function_desc_t funDesc = {};
     funDesc.version = XE_FUNCTION_DESC_VERSION_CURRENT;
     funDesc.pFunctionName = functionName.c_str();
-    auto function = whitebox_cast(Function::create(module, &funDesc));
+    auto function = whitebox_cast(Function::create(deviceRT->getHardwareInfo().pPlatform->eProductFamily, module, &funDesc));
     ASSERT_NE(nullptr, function);
 
     xe_image_desc_t imgDesc = {};
@@ -327,9 +327,6 @@ TEST_P(ModuleCreateImageArg, onlineCompilationModuleTest) {
     auto ssh = function->getSurfaceStateHeap();
     EXPECT_NE(0U, sshSize);
     EXPECT_NE(nullptr, ssh);
-
-    EXPECT_EQ(function->kernelArgBindingTableIndex[0], 0);
-    EXPECT_EQ(function->kernelArgBindingTableIndex[1], 1);
 
     //TODO test for SSH update
     //I could inspect kernelArgInfo[argindex].offsetHeap, then look at that place in the function's SSH
@@ -488,7 +485,7 @@ TEST_F(ModuleOnlineCompiled, functionReturnsCorrectThreadGroupParameters) {
     funDesc.version = XE_FUNCTION_DESC_VERSION_CURRENT;
     funDesc.pFunctionName = "memcpy_bytes";
 
-    auto function = std::unique_ptr<Function>(whitebox_cast(Function::create(module.get(), &funDesc)));
+    auto function = std::unique_ptr<Function>(whitebox_cast(Function::create(deviceRT->getHardwareInfo().pPlatform->eProductFamily, module.get(), &funDesc)));
     ASSERT_NE(nullptr, function);
 
     function->setGroupSize(5u, 7u, 13u);

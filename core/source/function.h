@@ -24,6 +24,15 @@ struct ImmutableFunctionInfo {
 };
 
 struct Function : public _xe_function_handle_t {
+    template <typename Type>
+    struct Allocator {
+        static Function *allocate(Module *module) {
+            return new Type(module);
+        }
+    };
+
+    static Function *create(uint32_t productFamily, Module *module, const xe_function_desc_t *desc);
+
     virtual xe_result_t destroy() = 0;
     virtual xe_result_t setAttribute(xe_function_set_attribute_t attr,
                                      uint32_t value) = 0;
@@ -48,8 +57,6 @@ struct Function : public _xe_function_handle_t {
     virtual const void *getCrossThreadDataHostMem() const = 0;
     virtual uint32_t getCrossThreadDataSize() const = 0;
     virtual const std::vector<GraphicsAllocation *> &getResidencyContainer() const = 0;
-
-    static Function *create(Module *module, const xe_function_desc_t *desc);
 
     virtual void getGroupSize(uint32_t &outGroupSizeX,
                               uint32_t &outGroupSizeY,
@@ -89,6 +96,16 @@ struct Function : public _xe_function_handle_t {
 
     inline xe_function_handle_t toHandle() {
         return this;
+    }
+};
+
+using FunctionAllocatorFn = Function *(*)(Module *module);
+extern FunctionAllocatorFn functionFactory[];
+
+template <uint32_t productFamily, typename FunctionType>
+struct FunctionPopulateFactory {
+    FunctionPopulateFactory() {
+        functionFactory[productFamily] = FunctionType::template Allocator<FunctionType>::allocate;
     }
 };
 
