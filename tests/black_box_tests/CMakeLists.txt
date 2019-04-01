@@ -249,7 +249,14 @@ add_custom_command(
 
 if(UNIX)
     install(TARGETS xello_world xello_world_icd xello_world_icd_clang xello_copy xello_copy_image xello_image
-        DESTINATION ${CMAKE_INSTALL_BINDIR}
+        DESTINATION ${CMAKE_INSTALL_FULL_BINDIR}
+        COMPONENT loki-samples
+    )
+    install(
+        FILES 
+            "${CMAKE_CURRENT_SOURCE_DIR}/../unit_tests/test_files/spv_modules/cstring_module.spv"
+            "${CMAKE_CURRENT_SOURCE_DIR}/../unit_tests/test_files/spv_modules/image_kernel.spv"
+        DESTINATION ${CMAKE_INSTALL_FULL_DATAROOTDIR}/loki-samples
         COMPONENT loki-samples
     )
 endif()
