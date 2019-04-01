@@ -5,6 +5,7 @@ import groovy.json.JsonOutput
 def gerritCreds = "0f565f2a-f10f-421d-ac50-3b169adf5f06"
 def gerritGfxCreds = "696e4269-73bd-496c-8575-632dd078135c"
 
+def skipBuild = false
 def plus2Allowed = (env.JOB_BASE_NAME == "ocl-loki-verification")
 def reportBuildStatus = (env.JOB_BASE_NAME == "ocl-loki-verification")
 
@@ -124,6 +125,18 @@ try {
 						url: "${gerritUrl}",
 						refspec: "+${GERRIT_REFSPEC}:${gerritLocalBranch}"
 					]]]
+
+			if(env.JOB_BASE_NAME == "ocl-loki-verification") {
+				def resp = httpRequest authentication: "${gerritGfxCreds}", url: "https://${GERRIT_HOST}/a/changes/${gerritReview.id}/revisions/${GERRIT_PATCHSET_REVISION}/review"
+				assert resp.content.startsWith(')]}') == true
+
+				def s = resp.content
+				def tmpReview = readJSON text: s.substring(s.indexOf('\n')+1)
+
+				def isDraft = tmpReview.revisions["${GERRIT_PATCHSET_REVISION}"].draft
+				echo "verificaiton build.isDraft = ${isDraft}"
+				skipBuild = !isDraft
+			}
 		}
     lokiStage("lint") {
 			echo "TBD"
