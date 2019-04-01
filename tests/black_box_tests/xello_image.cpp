@@ -145,93 +145,21 @@ void testAppendImageFunction(xe_device_handle_t &device,
     SUCCESS_OR_TERMINATE(xeCommandQueueExecuteCommandLists(cmdQueue, 1, &cmdList, nullptr));
     syncRet = xeCommandQueueSynchronize(cmdQueue, 1000 * 1000 /*1s*/);
 
-    std::cout << "src ";
-    for (size_t i = 0; i < size; ++i) {
-        std::cout << static_cast<uint32_t>(srcBuffer[i]) << " ";
-    }
-    std::cout << std::endl;
+    if (verbose) {
+        std::cout << "src ";
+        for (size_t i = 0; i < size; ++i) {
+            std::cout << static_cast<uint32_t>(srcBuffer[i]) << " ";
+        }
+        std::cout << std::endl;
 
-    std::cout << "dst ";
-    for (size_t i = 0; i < size; ++i) {
-        std::cout << static_cast<uint32_t>(dstBuffer[i]) << " ";
+        std::cout << "dst ";
+        for (size_t i = 0; i < size; ++i) {
+            std::cout << static_cast<uint32_t>(dstBuffer[i]) << " ";
+        }
+        std::cout << std::endl;
     }
-    std::cout << std::endl;
 
     validRet = (0 == memcmp(srcBuffer, dstBuffer, size * sizeof(uint32_t)));
-
-    delete[] srcBuffer;
-    delete[] dstBuffer;
-    SUCCESS_OR_TERMINATE(xeImageDestroy(srcImg));
-    SUCCESS_OR_TERMINATE(xeImageDestroy(dstImg));
-    SUCCESS_OR_TERMINATE(xeCommandListDestroy(cmdList));
-    SUCCESS_OR_TERMINATE(xeCommandQueueDestroy(cmdQueue));
-}
-
-void testAppendImageCopy(xe_device_handle_t &device,
-                          bool &syncRet, bool &validRet) {
-
-    const xe_image_format_t format = XE_IMAGE_FORMAT_UINT8;
-    const size_t width = 32;
-    const size_t height = 32;
-    const size_t numChannels = 4;
-    const size_t size = numChannels * width * height * sizeof(format);
-
-    xe_command_queue_handle_t cmdQueue;
-    xe_command_list_handle_t cmdList;
-
-    xe_command_queue_desc_t cmdQueueDesc = {XE_COMMAND_QUEUE_DESC_VERSION_CURRENT};
-    cmdQueueDesc.ordinal = 0;
-    cmdQueueDesc.mode = XE_COMMAND_QUEUE_MODE_ASYNCHRONOUS;
-    SUCCESS_OR_TERMINATE(xeDeviceCreateCommandQueue(device, &cmdQueueDesc, &cmdQueue));
-
-    xe_command_list_desc_t cmdListDesc = {XE_COMMAND_LIST_DESC_VERSION_CURRENT};
-    SUCCESS_OR_TERMINATE(xeDeviceCreateCommandList(device, &cmdListDesc, &cmdList));
-
-    xe_image_desc_t srcImgDesc = {
-        XE_IMAGE_DESC_VERSION_CURRENT,
-        XE_IMAGE_FLAG_PROGRAM_READ,
-        XE_IMAGE_TYPE_2D,
-        format, numChannels,
-        width, height, 0, 0, 0
-    };
-    xe_image_handle_t srcImg;
-    xe_image_region_t srcRegion = {0, size};
-
-    SUCCESS_OR_TERMINATE(xeDeviceCreateImage(device,
-            const_cast<const xe_image_desc_t *>(&srcImgDesc), &srcImg));
-
-    xe_image_desc_t dstImgDesc = {
-        XE_IMAGE_DESC_VERSION_CURRENT,
-        XE_IMAGE_FLAG_PROGRAM_WRITE,
-        XE_IMAGE_TYPE_2D,
-        format, numChannels,
-        width, height, 0, 0, 0
-    };
-    xe_image_handle_t dstImg;
-    xe_image_region_t dstRegion = {0, size};
-
-    SUCCESS_OR_TERMINATE(xeDeviceCreateImage(device,
-            const_cast<const xe_image_desc_t *>(&dstImgDesc), &dstImg));
-
-
-    char *srcBuffer = new char[size];
-    char *dstBuffer = new char[size];
-    for (size_t i = 0; i < size; ++i) {
-        srcBuffer[i] = static_cast<char>(i + 1);
-        dstBuffer[i] = 0;
-    }
-
-    // Copy from srcBuffer->srcImg->dstImg->dstBuffer, so at the end dstBuffer = srcBuffer
-    SUCCESS_OR_TERMINATE(xeCommandListAppendImageCopyFromMemory(cmdList, srcImg, &srcRegion, srcBuffer));
-    SUCCESS_OR_TERMINATE(xeCommandListAppendExecutionBarrier(cmdList));
-    SUCCESS_OR_TERMINATE(xeCommandListAppendImageCopy(cmdList, dstImg, srcImg));
-    SUCCESS_OR_TERMINATE(xeCommandListAppendExecutionBarrier(cmdList));
-    SUCCESS_OR_TERMINATE(xeCommandListAppendImageCopyToMemory(cmdList, dstBuffer, dstImg, &dstRegion));
-    SUCCESS_OR_TERMINATE(xeCommandListClose(cmdList));
-    SUCCESS_OR_TERMINATE(xeCommandQueueExecuteCommandLists(cmdQueue, 1, &cmdList, nullptr));
-    syncRet = xeCommandQueueSynchronize(cmdQueue, 1000 * 1000 /*1s*/);
-
-    validRet = (0 == memcmp(srcBuffer, dstBuffer, size));
 
     delete[] srcBuffer;
     delete[] dstBuffer;
@@ -258,7 +186,6 @@ int main(int argc, char *argv[]) {
     bool synchronizationResult;
     bool outputValidationSuccessful;
     testAppendImageFunction(device0, synchronizationResult, outputValidationSuccessful);
-    //testAppendImageCopy(device0, synchronizationResult, outputValidationSuccessful);
 
     bool aubMode = (XE_RESULT_NOT_READY == synchronizationResult);
     if (aubMode == false)
