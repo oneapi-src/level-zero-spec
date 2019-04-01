@@ -1,0 +1,174 @@
+table {
+    border-collapse: collapse;
+}
+table.d tbody tr td {
+    text-align: right;
+}
+table.legend tr {
+    text-align: left;
+}
+table tr td {
+    padding: 0 4px 0 4px;
+}
+
+table.fullPQ tr td{
+    padding: 10px;
+}
+
+tr.merged {
+    background-color: #E0FFE0;
+}
+td.merged {
+    background-color: #E0FFE0;
+}
+tr.merged_small {
+    font-size: 8pt;
+}
+tr.merged_daily {
+    font-size: 10pt;
+    background-color: #F8FFF8;
+}
+tr.rc_build {
+    font-weight: bold;
+    background-color: lightcyan;
+}
+
+td.small {
+    font-size: 10pt;
+}
+td.d {
+    text-align: right;
+    padding-right: 10pt;
+    padding-left: 10pt;
+}
+td.g {
+    background-color: #00FF00;
+    font-weight: bold;
+}
+td.r {
+    background-color: #FF0000;
+    font-weight: bold;
+}
+td.y {
+    background-color: #FFFF00;
+    font-weight: bold;
+}
+td.nc {
+    /* not-completed*/
+    color: gray;
+}
+td.p-r {
+    /* passrate - red */
+    color: red;
+}
+td.p-y {
+    /* passrate - yellow */
+    color: orange;
+}
+td.p-g {
+    /* passrate - green */
+    color: green;
+}
+td.p-g a, td.p-r a, td.p-y a {
+    color: inherit;
+}
+
+td.cert-r {
+    /* cert passrate - red */
+    color: red;
+    background-color: #ffffe038;
+}
+td.cert-y {
+    /* cert passrate - yellow */
+    color: orange;
+    background-color: #fbfbc338;
+}
+td.cert-g {
+    /* cert passrate - green */
+    color: green;
+}
+td.cert-g a, td.cert-r a, td.cert-y a {
+    color: inherit;
+}
+
+td.cert-gft-r {
+    /* GFT cert passrate - red */
+    color: black;
+    background-color: red;
+}
+td.cert-gft-y {
+    /* GFT cert passrate - yellow */
+    color: black;
+    background-color: yellow;
+}
+td.cert-gft-yg {
+    /* GFT cert passrate - rc candidate */
+    color: green;
+    background-color: #E0FFE0;
+}
+td.cert-gft-g {
+    /* GFT cert passrate - green */
+    color: green;
+    background-color: lightgreen;
+}
+td.cert-gft-g a, td.cert-gft-r a, td.cert-gft-y a {
+    color: inherit;
+}
+
+td.notes_daily {
+    color: gray;
+}
+
+span.date_small {
+    color: gray;
+    font-size: 8pt;
+    display: block;
+}
+
+td.active {
+    cursor: pointer;
+}
+td.active:hover {
+	background-color: #E0E0E0;
+}
+
+div.content {
+    display: table;
+    border-collapse: separate;
+    border-spacing: 8px;
+}
+div.contentV > div.active_container {
+    display: block;
+}
+div.contentTC {
+    display: table-cell;
+}
+div.active_container {
+    cursor: pointer;
+    padding: 0px;
+    margin: 8px;
+    display: table-cell;
+}
+div.active_container:hover {
+	background-color: #D8FFD8;
+}
+div.one_line {
+    display: inline-block;
+    white-space: nowrap;
+}
+div.form_element {
+    display: table-cell;
+    margin-left: 2px;
+    margin-right: 2px;
+    padding: 2px;
+    border-width: 1px;
+    border-style: dotted;
+    border-color: gray;
+}
+a.simple {
+    text-decoration: none;
+}
+
+a {
+    color: #0066ff;
+}

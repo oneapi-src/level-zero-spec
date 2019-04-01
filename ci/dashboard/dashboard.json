@@ -1,0 +1,31 @@
+#!groovy
+
+def targetDir = "/var/www/loki-test"
+node('master') {
+  currentBuild.description = "<i>${GERRIT_EVENT_TYPE}</i>"
+  stage('checkout') {
+    checkout changelog: false, poll: false,
+      scm: [
+        $class: 'GitSCM',
+        branches: [[name: 'change']],
+        doGenerateSubmoduleConfigurations: false,
+        extensions: [],
+        submoduleCfg: [],
+        userRemoteConfigs: [[credentialsId: '0f565f2a-f10f-421d-ac50-3b169adf5f06',  refspec: "+${GERRIT_REFSPEC}:change", url: "${GERRIT_SCHEME}://${GERRIT_HOST}:${GERRIT_PORT}/${GERRIT_PROJECT}"]]
+      ]
+  }
+
+  stage('sync') {
+    if("${GERRIT_EVENT_TYPE}" == "patchset-created") {
+      targetDir = "/var/www/loki-test"
+    } else if("${GERRIT_EVENT_TYPE}" == "change-merged") {
+      targetDir = "/var/www/loki"
+    } else {
+      error "unsupported: ${GERRIT_EVENT_TYPE}"
+    }
+
+    sh """\
+rsync -rtv --delete ci/dashboard/dashboard_html/ ${targetDir}
+"""
+  }
+}

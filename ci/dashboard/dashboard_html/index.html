@@ -1,0 +1,30 @@
+<html> 
+<head> 
+<meta http-equiv="refresh" content="300">
+<title>Loki dashboard</title>
+<link rel="shortcut icon" href="data:image/x-icon;," type="image/x-icon">
+<link rel="stylesheet" type="text/css" href="style.css">
+<script src="jquery.js"></script> 
+<script> 
+console.log(window.location)
+console.log(window.location.protocol)
+
+$.ajaxSetup ({
+    // Disable caching of AJAX responses
+    cache: false
+});
+$(function(){
+    $("#zuulContent").load("zuul/status.html"); 
+});
+$(function(){
+    $("#publishContent").load("publish_queue/status.html"); 
+});
+</script> 
+</head> 
+
+<body> 
+<h1>Loki - dashboard</h1>
+<div class="content" id="zuulContent"></div>
+<div class="content" id="publishContent"></div>
+</body> 
+</html>

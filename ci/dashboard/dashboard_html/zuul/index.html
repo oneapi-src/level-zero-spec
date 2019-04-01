@@ -1,0 +1,74 @@
+<html>
+<head>
+<meta http-equiv="refresh" content="60">
+<title>Loki - zuul status page</title>
+<script>
+var docRoot = '/' + window.location.pathname.split('/')[1]
+</script>
+<link rel="stylesheet" type="text/css" href="../style.css">
+</head>
+<body>
+<p><script language="javascript">
+var today = new Date();
+document.write(today);
+</script></p>
+
+<script language="javascript">
+var xmlhttp = new XMLHttpRequest();
+var url='http://10.88.112.43:8001/status';
+
+function toHtml(arr) {
+    var out = "";
+    for(p in arr.pipelines) {
+	out += "<table border=1>";
+	out += "<tr><th colspan=\"10\">" + arr.pipelines[p].name+"</th></tr>";
+	out += "<tr>";
+	out += "<th>change</th>";
+	out += "<th>active</th>";
+	out += "<th>live</th>";
+	out += "<th>owner.name</th>";
+	out += "<th>items_behind</th>";
+	out += "<th>item_ahead</th>";
+	out += "<th>failing_reasons</th>";
+	out += "<th>job</th>";
+	out += "<th>job.retry</th>";
+	out += "<th>job.elapsed_time</th>";
+	out += "</tr>";
+
+        if(arr.pipelines[p].change_queues.length>0) {
+		for(a in arr.pipelines[p].change_queues[0].heads[0]) {
+			var h = arr.pipelines[p].change_queues[0].heads[0][a];
+			out += "<tr>";
+			out += "<td><a href=\"" + h.url + "\">" + h.id + "</a></td>";
+			out += "<td>" + h.active + "</td>";
+			out += "<td>" + h.live + "</td>";
+			out += "<td>" + h.owner.name + "</td>";
+			out += "<td>" + h.items_behind + "</td>";
+			out += "<td>" + h.item_ahead + "</td>";
+			out += "<td>" + h.failing_reasons + "</td>";
+			out += "<td><a href=\"" + h.jobs[0].url + "\">" + h.jobs[0].name + "#" + h.jobs[0].number + "</a></td>";
+			out += "<td>" + h.jobs[0].retry + "</td>";
+			out += "<td>" + h.jobs[0].elapsed_time/1000 + "</td>";
+			out += "</tr>";
+		}
+        }
+	out += "</table><br/>";
+    }
+    document.getElementById("id01").innerHTML = out;
+}
+
+xmlhttp.onreadystatechange = function() {
+    if (xmlhttp.readyState == 4 && xmlhttp.status == 200) {
+        var myArr = JSON.parse(xmlhttp.responseText);
+        toHtml(myArr);
+    }
+};
+xmlhttp.open("GET", url, true);
+xmlhttp.send();
+
+</script>
+<div id="id01"></div>
+<hr size="1">
+<div><a href="javascript:self.location.href=docRoot">Go to index</a></div>
+</body>
+</html>
