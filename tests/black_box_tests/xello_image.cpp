@@ -2,28 +2,11 @@
 #include <iostream>
 #include <fstream>
 #include <memory>
+#include <vector>
+
+#include "helpers.inl"
 
 bool verbose = false;
-
-template <typename SizeT>
-inline std::unique_ptr<char[]> readBinaryFile(const std::string &name, SizeT &outSize) {
-    std::ifstream file(name, std::ios_base::binary);
-    if (false == file.good()) {
-        outSize = 0;
-        return nullptr;
-    }
-
-    size_t length;
-    file.seekg(0, file.end);
-    length = static_cast<size_t>(file.tellg());
-    file.seekg(0, file.beg);
-
-    auto storage = std::make_unique<char[]>(length);
-    file.read(storage.get(), length);
-
-    outSize = static_cast<SizeT>(length);
-    return storage;
-}
 
 template <bool TerminateOnFailure, typename ResulT>
 inline void validate(ResulT result, const char *message) {
@@ -102,7 +85,7 @@ void testAppendImageFunction(xe_device_handle_t &device,
     }
 
     uint32_t spirvSize = 0;
-    auto spirvModule = readBinaryFile("test_files/spv_modules/image_kernel.spv", spirvSize);
+    auto spirvModule = readBinaryFile("image_kernel.spv", spirvSize);
     SUCCESS_OR_TERMINATE_BOOL(spirvSize != 0);
 
     xe_module_desc_t moduleDesc = {XE_MODULE_DESC_VERSION_CURRENT};

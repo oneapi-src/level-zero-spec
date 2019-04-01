@@ -4,8 +4,14 @@ else()
     set(OS_SPECIFIC_LIBS "")
 endif()
 
+add_library(xello_black_box_helpers OBJECT helpers.cpp)
+if(UNIX)
+    set(black_box_datadir ${CMAKE_INSTALL_FULL_DATAROOTDIR}/loki-samples)
+    target_compile_definitions(xello_black_box_helpers PRIVATE OS_DATADIR=${black_box_datadir}/)
+endif()
+
 #Dynamically thunking xelloWorld applicaton
-add_executable(xello_world xello_world.cpp)
+add_executable(xello_world xello_world.cpp $<TARGET_OBJECTS:xello_black_box_helpers>)
 
 if(MSVC)
     set_target_properties(xello_world
@@ -33,7 +39,7 @@ add_dependencies(xello_copy copy_third_party_files ocloc_shared)
 target_link_libraries(xello_copy level_zero_icd_loader ${OS_SPECIFIC_LIBS})
 
 #Basic example with image kernel
-add_executable(xello_image xello_image.cpp)
+add_executable(xello_image xello_image.cpp $<TARGET_OBJECTS:xello_black_box_helpers>)
 
 if(MSVC)
     set_target_properties(xello_image
@@ -75,7 +81,7 @@ add_dependencies(xello_multidev copy_third_party_files ocloc_shared)
 target_link_libraries(xello_multidev level_zero_icd_loader ${OS_SPECIFIC_LIBS})
 
 #ICD loader enabled xelloWorld applicaton
-add_executable(xello_world_icd xello_world_icd.cpp)
+add_executable(xello_world_icd xello_world_icd.cpp $<TARGET_OBJECTS:xello_black_box_helpers>)
 
 if(MSVC)
     set_target_properties(xello_world_icd
@@ -256,7 +262,7 @@ if(UNIX)
         FILES 
             "${CMAKE_CURRENT_SOURCE_DIR}/../unit_tests/test_files/spv_modules/cstring_module.spv"
             "${CMAKE_CURRENT_SOURCE_DIR}/../unit_tests/test_files/spv_modules/image_kernel.spv"
-        DESTINATION ${CMAKE_INSTALL_FULL_DATAROOTDIR}/loki-samples
+        DESTINATION ${black_box_datadir}
         COMPONENT loki-samples
     )
 endif()
