@@ -133,9 +133,13 @@ try {
 				def s = resp.content
 				def tmpReview = readJSON text: s.substring(s.indexOf('\n')+1)
 
-				def isDraft = tmpReview.revisions["${GERRIT_PATCHSET_REVISION}"].draft
-				echo "verificaiton build.isDraft = ${isDraft}"
+				def isDraft = false
+				if(tmpReview.revisions["${GERRIT_PATCHSET_REVISION}"].containsKey('draft')) {
+					isDraft = tmpReview.revisions["${GERRIT_PATCHSET_REVISION}"].draft
+				}
 				skipBuild = !isDraft
+				echo "verificaiton build.isDraft = ${isDraft}"
+				echo "verificaiton build.skipBuild = ${skipBuild}"
 			}
 		}
     lokiStage("lint") {
@@ -144,27 +148,28 @@ try {
 	}
 
 	lokiStage('build') {
-		lokiBuilds = [:]
-		lokiBuilds['linux'] = lokiNode("loki-controller") {
-			lokiBuild('linux') {
-				checkout changelog: false, poll: false,
-					scm: [$class: 'GitSCM',
-						branches: [[name: "${GERRIT_PATCHSET_REVISION}"]],
-						doGenerateSubmoduleConfigurations: false,
-						extensions: [
-							[$class: 'CleanCheckout'],
-							// [$class: 'RelativeTargetDirectory', relativeTargetDir: 'loki'],
-							[$class: 'CloneOption', noTags: true, reference: '', shallow: false, honorRefspec: true],
-							[$class: 'PruneStaleBranch']],
-						submoduleCfg: [],
-						userRemoteConfigs: [[
-							credentialsId: '0f565f2a-f10f-421d-ac50-3b169adf5f06',
-							url: "${gerritUrl}",
-							refspec: "+${GERRIT_REFSPEC}:${gerritLocalBranch}"
-						]]]
+		if(!skipBuild) {
+			lokiBuilds = [:]
+			lokiBuilds['linux'] = lokiNode("loki-controller") {
+				lokiBuild('linux') {
+					checkout changelog: false, poll: false,
+						scm: [$class: 'GitSCM',
+							branches: [[name: "${GERRIT_PATCHSET_REVISION}"]],
+							doGenerateSubmoduleConfigurations: false,
+							extensions: [
+								[$class: 'CleanCheckout'],
+								// [$class: 'RelativeTargetDirectory', relativeTargetDir: 'loki'],
+								[$class: 'CloneOption', noTags: true, reference: '', shallow: false, honorRefspec: true],
+								[$class: 'PruneStaleBranch']],
+							submoduleCfg: [],
+							userRemoteConfigs: [[
+								credentialsId: '0f565f2a-f10f-421d-ac50-3b169adf5f06',
+								url: "${gerritUrl}",
+								refspec: "+${GERRIT_REFSPEC}:${gerritLocalBranch}"
+							]]]
 
-				withEnv(["IREPO_CACHE_DIR=$HOME/.irepo"]) {
-					sh """\
+					withEnv(["IREPO_CACHE_DIR=$HOME/.irepo"]) {
+						sh """\
 ~/irepo/irepo select -d . third_party/linux_embargo.yml
 
 ~/irepo/irepo ignore-folder extended
@@ -180,89 +185,90 @@ try {
 ~/irepo/irepo sync --clean --delete-unknown-content
 ls -la
 """
-				}
+					}
 
-				def image = docker.image("${env.DOCKER_REGISTRY}/loki-ubuntu18:1")
-				def workDir = sh script: "(cd .. && pwd)", returnStdout: true
-				def buildId = "${env.BUILD_NUMBER}"
-				if(params.containsKey("COMMON_BUILD_ID")) {
-					buildId = "${COMMON_BUILD_ID}"
-				}
-				image.pull()
-				image.inside("-v /ccache:/ccache -e CCACHE_DIR=/ccache -e CCACHE_TEMPDIR=/tmp/ccache -e CCACHE_BASEDIR=${workDir}") {
-					sh """\
+					def image = docker.image("${env.DOCKER_REGISTRY}/loki-ubuntu18:1")
+					def workDir = sh script: "(cd .. && pwd)", returnStdout: true
+					def buildId = "${env.BUILD_NUMBER}"
+					if(params.containsKey("COMMON_BUILD_ID")) {
+						buildId = "${COMMON_BUILD_ID}"
+					}
+					image.pull()
+					image.inside("-v /ccache:/ccache -e CCACHE_DIR=/ccache -e CCACHE_TEMPDIR=/tmp/ccache -e CCACHE_BASEDIR=${workDir}") {
+						sh """\
 mkdir ubuntu18
 cd ubuntu18
 cmake -GNinja .. -DCMAKE_BUILD_TYPE=Release -DLOKI_VERSION_BUILD=${buildId}
 cmake --build . --config Release --clean-first --target package
 """
-				}
-				image.inside() {
-					sh """\
+					}
+					image.inside() {
+						sh """\
 cd scripts
 python3 run.py --html
 cd ../latex
 make
 """
-				}
-				archiveArtifacts "ubuntu18/*.deb"
-				dir('latex') {
-					archiveArtifacts "*.pdf"
-				}
-			}()
-		}
+					}
+					archiveArtifacts "ubuntu18/*.deb"
+					dir('latex') {
+						archiveArtifacts "*.pdf"
+					}
+				}()
+			}
 
-		lokiBuilds['windows-64'] = lokiNode('loki-windows') {
-			lokiBuild('windows-64') {
-				checkout changelog: false, poll: false,
-					scm: [$class: 'GitSCM',
-						branches: [[name: "${GERRIT_PATCHSET_REVISION}"]],
-						doGenerateSubmoduleConfigurations: false,
-						extensions: [
-							[$class: 'CleanCheckout'],
-							// [$class: 'RelativeTargetDirectory', relativeTargetDir: 'loki'],
-							[$class: 'CloneOption', noTags: true, reference: '', shallow: false, honorRefspec: true],
-							[$class: 'PruneStaleBranch']],
-						submoduleCfg: [],
-						userRemoteConfigs: [[
-							credentialsId: '0f565f2a-f10f-421d-ac50-3b169adf5f06',
-							url: "${gerritUrl}",
-							refspec: "+${GERRIT_REFSPEC}:${gerritLocalBranch}"
-						]]]
+			lokiBuilds['windows-64'] = lokiNode('loki-windows') {
+				lokiBuild('windows-64') {
+					checkout changelog: false, poll: false,
+						scm: [$class: 'GitSCM',
+							branches: [[name: "${GERRIT_PATCHSET_REVISION}"]],
+							doGenerateSubmoduleConfigurations: false,
+							extensions: [
+								[$class: 'CleanCheckout'],
+								// [$class: 'RelativeTargetDirectory', relativeTargetDir: 'loki'],
+								[$class: 'CloneOption', noTags: true, reference: '', shallow: false, honorRefspec: true],
+								[$class: 'PruneStaleBranch']],
+							submoduleCfg: [],
+							userRemoteConfigs: [[
+								credentialsId: '0f565f2a-f10f-421d-ac50-3b169adf5f06',
+								url: "${gerritUrl}",
+								refspec: "+${GERRIT_REFSPEC}:${gerritLocalBranch}"
+							]]]
 
-				echo "irepo cache dir = ${BASE}\\.irepo"
-				withEnv(["IREPO_CACHE_DIR=${BASE}\\.irepo"]) {
-					bat """\
-call c:\\irepo\\irepo select third_party\\windows_embargo.yml
+					echo "irepo cache dir = ${BASE}\\.irepo"
+					withEnv(["IREPO_CACHE_DIR=${BASE}\\.irepo"]) {
+						bat """\
+	call c:\\irepo\\irepo select third_party\\windows_embargo.yml
 
-call c:\\irepo\\irepo ignore-folder extended
-call c:\\irepo\\irepo ignore-folder scripts
-call c:\\irepo\\irepo ignore-folder .git
-call c:\\irepo\\irepo ignore-folder ci
-call c:\\irepo\\irepo ignore-folder icd_loader
-call c:\\irepo\\irepo ignore-folder tests
-call c:\\irepo\\irepo ignore-folder images
-call c:\\irepo\\irepo ignore-folder core
-call c:\\irepo\\irepo ignore-folder samples
+	call c:\\irepo\\irepo ignore-folder extended
+	call c:\\irepo\\irepo ignore-folder scripts
+	call c:\\irepo\\irepo ignore-folder .git
+	call c:\\irepo\\irepo ignore-folder ci
+	call c:\\irepo\\irepo ignore-folder icd_loader
+	call c:\\irepo\\irepo ignore-folder tests
+	call c:\\irepo\\irepo ignore-folder images
+	call c:\\irepo\\irepo ignore-folder core
+	call c:\\irepo\\irepo ignore-folder samples
 
-call c:\\irepo\\irepo sync --clean --delete-unknown-content
-"""
-				}
-				def buildId = "${env.BUILD_NUMBER}"
-				if(params.containsKey("COMMON_BUILD_ID")) {
-					buildId = "${COMMON_BUILD_ID}"
-				}
-				bat """
-md build
-cd build
-cmake -G "Visual Studio 15 2017 Win64" .. -DCMAKE_BUILD_TYPE=Release -DLOKI_VERSION_BUILD=${buildId} -DLOKI_CPACK_GENERATOR="ZIP"
-cmake --build . --config Release --clean-first --target ALL_BUILD
-"""
-				// archiveArtifacts "build/*.zip"
-			}()
-		}
+	call c:\\irepo\\irepo sync --clean --delete-unknown-content
+	"""
+					}
+					def buildId = "${env.BUILD_NUMBER}"
+					if(params.containsKey("COMMON_BUILD_ID")) {
+						buildId = "${COMMON_BUILD_ID}"
+					}
+					bat """
+	md build
+	cd build
+	cmake -G "Visual Studio 15 2017 Win64" .. -DCMAKE_BUILD_TYPE=Release -DLOKI_VERSION_BUILD=${buildId} -DLOKI_CPACK_GENERATOR="ZIP"
+	cmake --build . --config Release --clean-first --target ALL_BUILD
+	"""
+					// archiveArtifacts "build/*.zip"
+				}()
+			}
 
-		parallel lokiBuilds
+			parallel lokiBuilds
+			}
 	}
 
 	lokiStage('publish') {
