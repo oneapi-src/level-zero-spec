@@ -439,6 +439,11 @@ bool FunctionImp::patchCrossThreadData(uint32_t location, const T &value) {
     return true;
 }
 
+template bool FunctionImp::patchCrossThreadData<uint32_t>(uint32_t location, const uint32_t &value);
+template bool FunctionImp::patchCrossThreadData<uint64_t>(uint32_t location, const uint64_t &value);
+template bool FunctionImp::patchCrossThreadData<size_t>(uint32_t location, const size_t &value);
+template bool FunctionImp::patchCrossThreadData<uintptr_t>(uint32_t location, const uintptr_t &value);
+
 void FunctionImp::patchWorkgroupSizeInCrossThreadData(uint32_t x, uint32_t y, uint32_t z) {
     patchCrossThreadData(getKernelInfo()->workloadInfo.localWorkSizeOffsets[0], x);
     patchCrossThreadData(getKernelInfo()->workloadInfo.localWorkSizeOffsets[1], y);
