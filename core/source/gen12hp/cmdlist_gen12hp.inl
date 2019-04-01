@@ -154,6 +154,21 @@ xe_result_t CommandListCoreFamily<IGFX_GEN12_CORE>::appendLaunchFunction(xe_func
         idd.setBindingTableEntryCount(bindingTableStatePrefetchCount);
     }
 
+    uint32_t samplerStateOffset = 0;
+    uint32_t samplerCount = 0;
+    const auto samplerStateArray = function->getSamplerStateArray();
+
+    // Copy our sampler state if it exists
+    if (samplerStateArray) {
+        samplerCount = samplerStateArray->Count;
+        samplerStateOffset = copySamplerState(indirectHeaps[DYNAMIC_STATE],
+                                              samplerStateArray, function->getDynamicStateHeap());
+    }
+
+    idd.setSamplerStatePointer(samplerStateOffset);
+    auto samplerCountState = static_cast<typename INTERFACE_DESCRIPTOR_DATA::SAMPLER_COUNT>((samplerCount + 3) / 4);
+    idd.setSamplerCount(samplerCountState);
+
     // Copy the threadData to the indirect heap
     uint32_t sizeThreadData = sizePerThreadDataForWholeGroup + sizeCrossThreadData;
     uint32_t offsetThreadData = 0u;

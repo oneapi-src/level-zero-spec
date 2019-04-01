@@ -179,6 +179,49 @@ uint32_t CommandListCoreFamily<gfxCoreFamily>::copyBindingTableAndSurfaceStates(
     return static_cast<uint32_t>(ptrDiff(dstBindingTable, ssh->getCpuBase()));
 }
 
+// Copy our sampler state if it exists
+template <GFXCORE_FAMILY gfxCoreFamily>
+uint32_t CommandListCoreFamily<gfxCoreFamily>::copySamplerState(OCLRT::IndirectHeap *dsh,
+                                                           const iOpenCL::SPatchSamplerStateArray *samplerStateArray,
+                                                           const void *fnDynamicStateHeap) {
+    using GfxFamily = typename OCLRT::GfxFamilyMapper<gfxCoreFamily>::GfxFamily;
+    using INTERFACE_DESCRIPTOR_DATA = typename GfxFamily::INTERFACE_DESCRIPTOR_DATA;
+    using SAMPLER_STATE = typename GfxFamily::SAMPLER_STATE;
+
+    assert(dsh);
+    assert(samplerStateArray);
+    assert(fnDynamicStateHeap);
+
+    uint32_t samplerStateOffset = 0;
+    uint32_t borderColorOffset = 0;
+    uint32_t samplerCount = samplerStateArray->Count;
+    auto sizeSamplerState = sizeof(SAMPLER_STATE) * samplerCount;
+    auto borderColorSize = samplerStateArray->Offset - samplerStateArray->BorderColorOffset;
+
+    dsh->align(alignIndirectStatePointer);
+    borderColorOffset = static_cast<uint32_t>(dsh->getUsed());
+
+    auto borderColor = dsh->getSpace(borderColorSize);
+
+    memcpy_s(borderColor, borderColorSize,
+                ptrOffset(fnDynamicStateHeap, samplerStateArray->BorderColorOffset),
+                borderColorSize);
+
+    dsh->align(INTERFACE_DESCRIPTOR_DATA::SAMPLERSTATEPOINTER_ALIGN_SIZE);
+    samplerStateOffset = static_cast<uint32_t>(dsh->getUsed());
+
+    auto samplerState = dsh->getSpace(sizeSamplerState);
+
+    auto pSmplr = reinterpret_cast<SAMPLER_STATE *>(samplerState);
+    for (uint32_t i = 0; i < samplerCount; i++) {
+        *pSmplr = GfxFamily::cmdInitSamplerState;
+        pSmplr->setIndirectStatePointer((uint32_t)borderColorOffset);
+        pSmplr++;
+    }
+
+    return samplerStateOffset;
+}
+
 template <GFXCORE_FAMILY gfxCoreFamily>
 xe_result_t CommandListCoreFamily<gfxCoreFamily>::appendLaunchFunction(xe_function_handle_t hFunction,
                                                                        const xe_thread_group_dimensions_t *pThreadGroupDimensions,
@@ -247,31 +290,8 @@ xe_result_t CommandListCoreFamily<gfxCoreFamily>::appendLaunchFunction(xe_functi
 
     // Copy our sampler state if it exists
     if (samplerStateArray) {
-        size_t borderColorOffset = 0;
         samplerCount = samplerStateArray->Count;
-        auto sizeSamplerState = sizeof(SAMPLER_STATE) * samplerCount;
-        auto borderColorSize = samplerStateArray->Offset - samplerStateArray->BorderColorOffset;
-
-        heap->align(alignIndirectStatePointer);
-        borderColorOffset = heap->getUsed();
-
-        auto borderColor = heap->getSpace(borderColorSize);
-
-        memcpy_s(borderColor, borderColorSize,
-                 ptrOffset(function->getDynamicStateHeap(), samplerStateArray->BorderColorOffset),
-                 borderColorSize);
-
-        heap->align(INTERFACE_DESCRIPTOR_DATA::SAMPLERSTATEPOINTER_ALIGN_SIZE);
-        samplerStateOffset = static_cast<uint32_t>(heap->getUsed());
-
-        auto samplerState = heap->getSpace(sizeSamplerState);
-
-        auto pSmplr = reinterpret_cast<SAMPLER_STATE *>(samplerState);
-        for (uint32_t i = 0; i < samplerCount; i++) {
-            *pSmplr = GfxFamily::cmdInitSamplerState;
-            pSmplr->setIndirectStatePointer((uint32_t)borderColorOffset);
-            pSmplr++;
-        }
+        samplerStateOffset = copySamplerState(heap, samplerStateArray, function->getDynamicStateHeap());
     }
 
     idd.setSamplerStatePointer(samplerStateOffset);
