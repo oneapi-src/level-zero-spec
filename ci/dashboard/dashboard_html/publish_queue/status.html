@@ -1,0 +1,81 @@
+<script src="publish_queue/publish_queue.js"/></script>
+<script>
+function printFile(file)
+{
+    var table = document.getElementById("pqTableData");
+    var row;
+    var rawFile = new XMLHttpRequest();
+    rawFile.open("GET", window.location.protocol + "//opencl.igk.intel.com/jenkins/view/Loki/job/ocl-loki-publish-queue-report/lastSuccessfulBuild/artifact/master_short.csv", false);
+    rawFile.onreadystatechange = function ()
+    {
+        if(rawFile.readyState === 4)
+        {
+            if(rawFile.status === 200 || rawFile.status == 0)
+            {
+                var lines = rawFile.responseText.split("\n");
+
+                var yellow = "#ffff00";
+                var red = "#ff0000";
+                var toDisplay = 8
+                for(var i = lines.length-2; i>=0 && i>=lines.length-2-toDisplay; i--)
+                {
+                    var line             = lines[i].split(";;;");
+                    var branch           = line[2];
+                    var title            = line[10];
+                    var url              = line[12];
+                    var owner            = line[15];
+
+                    if(branch != "master" && owner == "ocldev"){
+                        var tempLine = lines[i-1].split(";;;");
+                        var tempLine2 = lines[i+1].split(";;;");                        
+                        if(title == tempLine[10]){
+                            owner = tempLine[15]
+                        }
+                        if(title == tempLine2[10]){
+                            owner = tempLine2[15]
+                        }
+                    }
+                    var buildId          = getBuildId(line[37]);
+                    var published        = line[29];
+                    var packaged         = line[30];
+                    var mergeTimestamp   = line[31];
+                    var publishTimestamp = line[32];
+                    var packageTimestamp = line[33];
+                    var publishAttempts  = line[34];
+                    var packageAttempts  = line[35];
+
+                    row = table.insertRow(table.rows.length);
+
+                    var cnt = 0
+                    row.insertCell(cnt++).innerHTML="<a class=\"simple\" href=\"" + url + "\">" + title + "</a>"
+                    row.insertCell(cnt++).innerHTML=branch
+                    row.insertCell(cnt++).innerHTML = buildId
+
+                    colouredTdWithString(row.insertCell(cnt++), published, 1, parseInt(published,10),red);
+                    colouredTdWithString(row.insertCell(cnt++), packaged, 1, parseInt(packaged,10),red);
+                    colouredTd(row.insertCell(cnt++), publishAttempts, 1, yellow);
+                    colouredTd(row.insertCell(cnt++), packageAttempts, 1, yellow);
+                }
+            }
+        }
+    }
+    rawFile.send(null);
+}
+$(document).ready(function() {
+    printFile("publish_queue/queue.csv");
+});
+</script>
+<a href="publish_queue/index.html">publish_queue</a>
+<div id="pqContent">
+<table id="pqTableData"  border="1" cellpadding="2">
+  <tr>
+<th>Title</th>
+<th>Branch</th>
+<th>Build</th>
+<th>Published</th>
+<th>Packaged</th>
+<th>#Publish</th>
+<th>#Package</th>
+</tr>
+</table>
+</div>

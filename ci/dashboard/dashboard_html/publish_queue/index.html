@@ -1,0 +1,58 @@
+<html>
+<head>
+<title>Publish queue - detailed status</title>
+<link rel="stylesheet" type="text/css" href="../style.css">
+<script>
+var docRoot = '/' + window.location.pathname.split('/')[1]
+</script>
+<script src="../jquery.js"></script>
+<script src="../jquery.url.js"></script>
+<script src="https://d3js.org/d3.v4.min.js"></script>
+<!-- script src="publish_queue.js"/></script -->
+<script>
+function printFile(file)
+{
+    d3.csv(window.location.protocol + "//opencl.igk.intel.com/jenkins/view/Loki/job/ocl-loki-publish-queue-report/lastSuccessfulBuild/artifact/master_short.csv", function(error, data) {
+        if (error) throw error;
+
+        // id,ts,branch,revision,parent,build_id,change_id,published,packaged,publish_build_number,publish_attempts,published_timestamp,package_build_number,package_attempts,packaged_timestamp
+        columns = ['title', 'revision', 'owner', 'branch', 'build_id', 'published', 'packaged', 'publish_attempts', 'package_attempts']
+        var table = d3.select("#pqTableData")
+        var thead = table.append('thead')
+        var tbody = table.append('tbody')
+
+        thead.append('tr').selectAll('th').data(columns).enter().append('th').text(function(column) { return column; })
+        tbody.selectAll('tr').data(data).enter().append('tr').selectAll('td').data(function(row) {
+            return columns.map(function(column){
+                return {column: column, value: row[column]};
+            });
+        }).enter().append('td').text(function(d) {return d.value;});
+
+    })
+}
+</script>
+</head>
+<body onLoad="printFile('publish_queue/queue.csv')">
+<div id="pqContent">
+<div id="pqNavigator"><span><a href="?">youngest</a></span>&nbsp;|&nbsp;<span><a id="pqNextA" href="">younger</a></span>&nbsp;|&nbsp;<span id="pqNavStart"></span>/<span id="pqNavTotal"></span>&nbsp;|&nbsp;<span><a id="pqPrevA" href="">older</a></span>&nbsp;|&nbsp;<span><a href="?start=0">show all</a><span></div>
+<table class="fullPQ" id="pqTableData"  border="1" cellpadding="2">
+<tr>
+<th>&nbsp;</th>
+<th>Title</th>
+<th>Owner</th>
+<th>Branch</th>
+<th>Build</th>
+<th>Published</th>
+<th>Packaged</th>
+<th>Merge TS</th>
+<th>Publish TS</th>
+<th>Package TS</th>
+<th>#Publish</th>
+<th>#Package</th>
+</tr>
+</table>
+</div>
+<hr size="1">
+<div><a href="javascript:self.location.href=docRoot">Go to index</a></div>
+</body>
+</html>
