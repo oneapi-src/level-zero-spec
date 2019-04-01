@@ -471,9 +471,19 @@ xe_result_t CommandListCoreFamily<gfxCoreFamily>::appendImageCopyFromMemory(xe_i
 
     GraphicsAllocation *dstAlloc = L0::Image::fromHandle(hDstImage)->getAllocation();
     uint64_t dstPtr = dstAlloc->getGpuAddress();
+    size_t offset;
+    size_t size;
 
-    return this->appendMemoryCopy(reinterpret_cast<void *>(dstPtr + pDstRegion->offset),
-                                  srcPtr, pDstRegion->size);
+    if (pDstRegion) {
+        offset = pDstRegion->offset;
+        size = pDstRegion->size;
+    } else {
+        offset = 0;
+        size = dstAlloc->getSize();
+    }
+
+    return this->appendMemoryCopy(reinterpret_cast<void *>(dstPtr + offset),
+                                  srcPtr, size);
 }
 
 template <GFXCORE_FAMILY gfxCoreFamily>
@@ -485,10 +495,20 @@ xe_result_t CommandListCoreFamily<gfxCoreFamily>::appendImageCopyToMemory(void *
 
     GraphicsAllocation *srcAlloc = L0::Image::fromHandle(hSrcImage)->getAllocation();
     uint64_t srcPtr = srcAlloc->getGpuAddress();
+    size_t offset;
+    size_t size;
+
+    if (pSrcRegion) {
+        offset = pSrcRegion->offset;
+        size = pSrcRegion->size;
+    } else {
+        offset = 0;
+        size = srcAlloc->getSize();
+    }
 
     return this->appendMemoryCopy(dstPtr,
-                                  reinterpret_cast<void *>(srcPtr + pSrcRegion->offset),
-                                  pSrcRegion->size);
+                                  reinterpret_cast<void *>(srcPtr + offset),
+                                  size);
 }
 
 template <GFXCORE_FAMILY gfxCoreFamily>
@@ -504,11 +524,35 @@ xe_result_t CommandListCoreFamily<gfxCoreFamily>::appendImageCopyRegion(xe_image
 
     uint64_t dstPtr = dstAlloc->getGpuAddress();
     uint64_t srcPtr = srcAlloc->getGpuAddress();
+    size_t dstOffset;
+    size_t srcOffset;
+    size_t srcSize;
+    size_t size;
+
+    if (pDstRegion) {
+        dstOffset = pDstRegion->offset;
+        size = pDstRegion->size;
+    } else {
+        dstOffset = 0;
+        size = dstAlloc->getSize();
+    }
+
+    if (pSrcRegion) {
+        srcOffset = pSrcRegion->offset;
+        srcSize = pSrcRegion->size;
+    } else {
+        srcOffset = 0;
+        srcSize = srcAlloc->getSize();
+    }
+
+    if (size > srcSize) {
+        size = srcSize;
+    }
 
     return this->appendMemoryCopy(
-        reinterpret_cast<void *>(dstPtr + pDstRegion->offset),
-        reinterpret_cast<void *>(srcPtr + pSrcRegion->offset),
-        pDstRegion->size < pSrcRegion->size ? pDstRegion->size : pSrcRegion->size);
+        reinterpret_cast<void *>(dstPtr + dstOffset),
+        reinterpret_cast<void *>(srcPtr + srcOffset),
+        size);
 }
 
 template <GFXCORE_FAMILY gfxCoreFamily>
