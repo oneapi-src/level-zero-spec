@@ -31,6 +31,9 @@ xe_result_t CommandQueueHw<gfxCoreFamily>::executeCommandLists(uint32_t numComma
     size_t sizeEstimate = sizeof(MI_BATCH_BUFFER_END) + numCommandLists * sizeof(MI_BATCH_BUFFER_START);
     Substream substream = getCmdSubstream(sizeEstimate);
 
+    OCLRT::ResidencyContainer residencyContainer;
+    residencyContainer.reserve(16 * numCommandLists);
+
     for (auto i = 0u; i < numCommandLists; ++i) {
         MI_BATCH_BUFFER_START cmd = GfxFamily::cmdInitBatchBufferStart;
         cmd.setSecondLevelBatchBuffer(MI_BATCH_BUFFER_START::SECOND_LEVEL_BATCH_BUFFER_SECOND_LEVEL_BATCH);
@@ -44,8 +47,13 @@ xe_result_t CommandQueueHw<gfxCoreFamily>::executeCommandLists(uint32_t numComma
         *(MI_BATCH_BUFFER_START *)buffer = cmd;
 
         // Add each
-        processResidency(commandList);
         printfFunctionContainer.insert(printfFunctionContainer.end(), commandList->getPrintfFunctionContainer().begin(), commandList->getPrintfFunctionContainer().end());
+
+        for (auto alloc : commandList->getResidencyContainer()) {
+            if (residencyContainer.end() == std::find(residencyContainer.begin(), residencyContainer.end(), alloc)) {
+                residencyContainer.push_back(alloc);
+            }
+        }
     }
 
     {
@@ -54,6 +62,9 @@ xe_result_t CommandQueueHw<gfxCoreFamily>::executeCommandLists(uint32_t numComma
         auto buffer = substream.getSpaceForCmd<MI_BATCH_BUFFER_END>();
         *(MI_BATCH_BUFFER_END *)buffer = cmd;
     }
+
+    auto commandStreamReceiver = static_cast<OCLRT::CommandStreamReceiver *>(csrRT);
+    commandStreamReceiver->processResidency(residencyContainer);
 
     // Submit our batch buffer
     submitBatchBuffer(substream.getBaseOffsetInParent());

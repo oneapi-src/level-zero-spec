@@ -33,7 +33,6 @@ struct CommandQueueImp : public CommandQueue {
     Substream getCmdSubstream(size_t size);
 
   protected:
-    void processResidency(CommandList *);
     void processCoherency(CommandList *);
     void submitBatchBuffer(size_t offset);
 

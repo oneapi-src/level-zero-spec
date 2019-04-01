@@ -45,13 +45,6 @@ Substream CommandQueueImp::getCmdSubstream(size_t size) {
     return Substream(*commandStream, commandStream->getSpace(size), size);
 }
 
-void CommandQueueImp::processResidency(CommandList *c) {
-    auto commandList = static_cast<CommandListImp *>(c);
-    auto commandStreamReceiver = static_cast<OCLRT::CommandStreamReceiver *>(csrRT);
-    auto &residencyContainer = commandList->getResidencyContainer();
-    commandStreamReceiver->processResidency(residencyContainer);
-}
-
 void CommandQueueImp::processCoherency(CommandList *c) {
     auto commandList = static_cast<CommandListImp *>(c);
     auto commandStreamReceiver = static_cast<OCLRT::CommandStreamReceiver *>(csrRT);
