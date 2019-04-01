@@ -12,7 +12,7 @@ if(MSVC)
     set(CUSTOM_COMMAND_BINARY_DIR ${CUSTOM_COMMAND_BINARY_DIR}/$<CONFIG>)
 endif()
 
-if(LINUX)
+if(UNIX)
     # Load GNUInstallDirs to determine install targets for Linux packages
     include(GNUInstallDirs)
 endif()
