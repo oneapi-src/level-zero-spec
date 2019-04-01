@@ -212,11 +212,13 @@ uint32_t CommandListCoreFamily<gfxCoreFamily>::copySamplerState(OCLRT::IndirectH
 
     auto samplerState = dsh->getSpace(sizeSamplerState);
 
+    memcpy_s(samplerState, sizeSamplerState,
+                ptrOffset(fnDynamicStateHeap, samplerStateArray->Offset),
+                sizeSamplerState);
+
     auto pSmplr = reinterpret_cast<SAMPLER_STATE *>(samplerState);
     for (uint32_t i = 0; i < samplerCount; i++) {
-        *pSmplr = GfxFamily::cmdInitSamplerState;
-        pSmplr->setIndirectStatePointer((uint32_t)borderColorOffset);
-        pSmplr++;
+        pSmplr[i].setIndirectStatePointer((uint32_t)borderColorOffset);
     }
 
     return samplerStateOffset;
