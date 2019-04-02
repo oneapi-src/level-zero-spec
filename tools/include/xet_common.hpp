@@ -39,6 +39,31 @@
 
 namespace xet
 {
+    ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Handle of metric group's object
+    class MetricGroup;
+    using metric_group_handle_t = MetricGroup*;
+
+    ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Handle of metric's object
+    class Metric;
+    using metric_handle_t = Metric*;
+
+    ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Handle of metric tracer's object
+    class MetricTracer;
+    using metric_tracer_handle_t = MetricTracer*;
+
+    ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Handle of metric query pool's object
+    class MetricQueryPool;
+    using metric_query_pool_handle_t = MetricQueryPool*;
+
+    ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Handle of metric query's object
+    class MetricQuery;
+    using metric_query_handle_t = MetricQuery*;
+
 } // namespace xet
 #endif // defined(__cplusplus)
 #endif // _XET_COMMON_HPP

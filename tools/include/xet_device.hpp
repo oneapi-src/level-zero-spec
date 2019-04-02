@@ -52,61 +52,9 @@ namespace xet
         /// @brief C++ version for ::xet_metric_group_sampling_type
         enum class metric_group_sampling_type
         {
-
-        };
-
-        ///////////////////////////////////////////////////////////////////////////////
-        /// @brief C++ version for ::xet_metric_group_properties_version_t
-        enum class metric_group_properties_version_t
-        {
-            CURRENT = XE_MAKE_VERSION( 1, 0 ),              ///< version 1.0
-
-        };
-
-        ///////////////////////////////////////////////////////////////////////////////
-        /// @brief C++ version for ::xet_metric_properties_version_t
-        enum class metric_properties_version_t
-        {
-            CURRENT = XE_MAKE_VERSION( 1, 0 ),              ///< version 1.0
-
-        };
-
-        ///////////////////////////////////////////////////////////////////////////////
-        /// @brief C++ version for ::xet_metric_t
-        enum class metric_t
-        {
-
-        };
-
-        ///////////////////////////////////////////////////////////////////////////////
-        /// @brief C++ version for ::xet_metric_value_t
-        enum class metric_value_t
-        {
-
-        };
-
-        ///////////////////////////////////////////////////////////////////////////////
-        /// @brief C++ version for ::xet_metric_group_properties
-        struct metric_group_properties
-        {
-            metric_group_properties_version_t version = metric_group_properties_version_t::CURRENT; ///< [in] ::METRIC_GROUP_PROPERTIES_VERSION_CURRENT
-            char name[XET_MAX_METRIC_GROUP_NAME];           ///< [out] metric group name
-            char description[XET_MAX_METRIC_GROUP_DESCRIPTION]; ///< [out] metric group description
-            metric_group_sampling_type samplingType;        ///< [out]
-            uint32_t domain;                                ///< [out] cannot use simultaneous metric groups from different domains
-            uint32_t numMetrics;                            ///< [out] number of metrics in the group
-            size_t sizeMetrics;                             ///< [out] size in bytes of the metrics in the group
-
-        };
-
-        ///////////////////////////////////////////////////////////////////////////////
-        /// @brief C++ version for ::xet_metric_properties
-        struct metric_properties
-        {
-            metric_properties_version_t version = metric_properties_version_t::CURRENT; ///< [in] ::METRIC_PROPERTIES_VERSION_CURRENT
-            char name[XET_MAX_METRIC_NAME];                 ///< [out] metric name
-            char description[XET_MAX_METRIC_DESCRIPTION];   ///< metric description
-            char component[XET_MAX_METRIC_NAME];            ///< metric device component
+            METRIC_GROUP_SAMPLING_TYPE_NONE = 0,            ///< No sampling mode
+            METRIC_GROUP_SAMPLING_TYPE_EVENT_BASED = XE_BIT(0), ///< Event based sampling
+            METRIC_GROUP_SAMPLING_TYPE_TIME_BASED = XE_BIT(1),  ///< Time based sampling
 
         };
 
@@ -118,40 +66,49 @@ namespace xet
         /// @throws result_t
         inline static uint32_t
         GetMetricGroupCount(
-            metric_group_sampling_type type                 ///< [in] metric group sampling type
+            void
             );
 
         ///////////////////////////////////////////////////////////////////////////////
-        /// @brief C++ wrapper for ::xetDeviceGetMetricGroupUniqueIds
-        /// @throws result_t
-        inline static void
-        GetMetricGroupUniqueIds(
-            metric_group_sampling_type type,                ///< [in] metric group sampling type
-            uint32_t count,                                 ///< [in] number of metric groups to retrieve uuids
-            xe::_metric_group_uuid_t* pUniqueIds            ///< [in,out] pointer to an array of uuids for metric groups.
-            );
-
-        ///////////////////////////////////////////////////////////////////////////////
-        /// @brief C++ wrapper for ::xetDeviceGetMetricGroupProperties
+        /// @brief C++ wrapper for ::xetDeviceGetMetricGroup
         /// @returns
-        ///     - ::metric_group_properties: device properties
+        ///     - ::metric_group_handle_t: metric group handle
         /// 
         /// @throws result_t
-        inline metric_group_properties
-        GetMetricGroupProperties(
-            xe::_metric_group_uuid_t uuid                   ///< [in] metric group uuid
+        inline metric_group_handle_t
+        GetMetricGroup(
+            uint32_t ordinal                                ///< [in] metric group index
             );
 
         ///////////////////////////////////////////////////////////////////////////////
-        /// @brief C++ wrapper for ::xetDeviceGetMetricGroupMetricProperties
+        /// @brief C++ wrapper for ::xetDeviceActivateMetricGroups
+        /// @throws result_t
+        inline void
+        ActivateMetricGroups(
+            uint32_t count,                                 ///< [in] metric group count to activate
+            metric_group_handle_t* phMetricGroups           ///< [in] handles of the metric groups to activate
+            );
+
+        ///////////////////////////////////////////////////////////////////////////////
+        /// @brief C++ wrapper for ::xetDeviceOpenMetricTracer
         /// @returns
-        ///     - ::metric_properties: device properties
+        ///     - ::metric_tracer_handle_t: handle of metric tracer
         /// 
         /// @throws result_t
-        inline metric_properties
-        GetMetricGroupMetricProperties(
-            xe::_metric_group_uuid_t uuid,                  ///< [in] metric group uuid
-            uint32_t ordinal                                ///< [in] ordinal of the metric
+        inline metric_tracer_handle_t
+        OpenMetricTracer(
+            metric_tracer_desc_t* desc                      ///< [in/out] metric tracer descriptor
+            );
+
+        ///////////////////////////////////////////////////////////////////////////////
+        /// @brief C++ wrapper for ::xetDeviceCreateMetricQueryPool
+        /// @returns
+        ///     - ::metric_query_pool_handle_t: handle of metric query pool
+        /// 
+        /// @throws result_t
+        inline metric_query_pool_handle_t
+        CreateMetricQueryPool(
+            metric_query_pool_desc_t* pDesc                 ///< [in] metric query pool creation data
             );
 
     };

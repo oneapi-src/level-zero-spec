@@ -1,3 +1,28 @@
 --- #--------------------------------------------------------------------------
 type: header
 desc: "Intel $OneApi Level-Zero Tool API common types"
+--- #--------------------------------------------------------------------------
+type: handle
+desc: "Handle of metric group's object"
+class: $tMetricGroup
+name: "$t_metric_group_handle_t"
+--- #--------------------------------------------------------------------------
+type: handle
+desc: "Handle of metric's object"
+class: $tMetric
+name: "$t_metric_handle_t"
+--- #--------------------------------------------------------------------------
+type: handle
+desc: "Handle of metric tracer's object"
+class: $tMetricTracer
+name: "$t_metric_tracer_handle_t"
+--- #--------------------------------------------------------------------------
+type: handle
+desc: "Handle of metric query pool's object"
+class: $tMetricQueryPool
+name: "$t_metric_query_pool_handle_t"
+--- #--------------------------------------------------------------------------
+type: handle
+desc: "Handle of metric query's object"
+class: $tMetricQuery
+name: "$t_metric_query_handle_t"

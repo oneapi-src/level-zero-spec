@@ -42,6 +42,26 @@
 extern "C" {
 #endif
 
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Handle of metric group's object
+typedef struct _xet_metric_group_handle_t *xet_metric_group_handle_t;
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Handle of metric's object
+typedef struct _xet_metric_handle_t *xet_metric_handle_t;
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Handle of metric tracer's object
+typedef struct _xet_metric_tracer_handle_t *xet_metric_tracer_handle_t;
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Handle of metric query pool's object
+typedef struct _xet_metric_query_pool_handle_t *xet_metric_query_pool_handle_t;
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Handle of metric query's object
+typedef struct _xet_metric_query_handle_t *xet_metric_query_handle_t;
+
 #if defined(__cplusplus)
 } // extern "C"
 #endif

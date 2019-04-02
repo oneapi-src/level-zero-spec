@@ -47,59 +47,91 @@ namespace xet
     /// @throws result_t
     inline uint32_t 
     Device::GetMetricGroupCount(
-        metric_group_sampling_type type                 ///< [in] metric group sampling type
+        void
         )
     {
-        // auto result = ::xetDeviceGetMetricGroupCount( handle, type );
+        // auto result = ::xetDeviceGetMetricGroupCount( handle );
         // if( ::XE_RESULT_SUCCESS != result ) throw exception(result, "xet::Device::GetMetricGroupCount");
     }
 
     ///////////////////////////////////////////////////////////////////////////////
-    /// @brief C++ wrapper for ::xetDeviceGetMetricGroupUniqueIds
+    /// @brief C++ wrapper for ::xetDeviceGetMetricGroup
+    /// 
+    /// @details
+    ///     - The application may call this function from simultaneous threads with
+    ///       the same device handle.
+    /// 
+    /// @returns
+    ///     - ::metric_group_handle_t: metric group handle
+    /// 
+    /// @throws result_t
+    inline metric_group_handle_t 
+    Device::GetMetricGroup(
+        uint32_t ordinal                                ///< [in] metric group index
+        )
+    {
+        // auto result = ::xetDeviceGetMetricGroup( handle, ordinal );
+        // if( ::XE_RESULT_SUCCESS != result ) throw exception(result, "xet::Device::GetMetricGroup");
+    }
+
+    ///////////////////////////////////////////////////////////////////////////////
+    /// @brief C++ wrapper for ::xetDeviceActivateMetricGroups
+    /// 
+    /// @details
+    ///     - MetricGroup must be active until MetricQueryGetDeta and
+    ///       ::MetricTracerClose.
+    ///     - Conflicting metric groups cannot be activated, in such case tha call
+    ///       would fail
     /// 
     /// @throws result_t
     inline void 
-    Device::GetMetricGroupUniqueIds(
-        metric_group_sampling_type type,                ///< [in] metric group sampling type
-        uint32_t count,                                 ///< [in] number of metric groups to retrieve uuids
-        xe::_metric_group_uuid_t* pUniqueIds            ///< [in,out] pointer to an array of uuids for metric groups.
+    Device::ActivateMetricGroups(
+        uint32_t count,                                 ///< [in] metric group count to activate
+        metric_group_handle_t* phMetricGroups           ///< [in] handles of the metric groups to activate
         )
     {
-        // auto result = ::xetDeviceGetMetricGroupUniqueIds( handle, type, count, pUniqueIds );
-        // if( ::XE_RESULT_SUCCESS != result ) throw exception(result, "xet::Device::GetMetricGroupUniqueIds");
+        // auto result = ::xetDeviceActivateMetricGroups( handle, count, phMetricGroups );
+        // if( ::XE_RESULT_SUCCESS != result ) throw exception(result, "xet::Device::ActivateMetricGroups");
     }
 
     ///////////////////////////////////////////////////////////////////////////////
-    /// @brief C++ wrapper for ::xetDeviceGetMetricGroupProperties
+    /// @brief C++ wrapper for ::xetDeviceOpenMetricTracer
+    /// 
+    /// @details
+    ///     - The application may not call this function from simultaneous threads
+    ///       with the same device handle.
     /// 
     /// @returns
-    ///     - ::metric_group_properties: device properties
+    ///     - ::metric_tracer_handle_t: handle of metric tracer
     /// 
     /// @throws result_t
-    inline metric_group_properties 
-    Device::GetMetricGroupProperties(
-        xe::_metric_group_uuid_t uuid                   ///< [in] metric group uuid
+    inline metric_tracer_handle_t 
+    Device::OpenMetricTracer(
+        metric_tracer_desc_t* desc                      ///< [in/out] metric tracer descriptor
         )
     {
-        // auto result = ::xetDeviceGetMetricGroupProperties( handle, uuid );
-        // if( ::XE_RESULT_SUCCESS != result ) throw exception(result, "xet::Device::GetMetricGroupProperties");
+        // auto result = ::xetDeviceOpenMetricTracer( handle, desc );
+        // if( ::XE_RESULT_SUCCESS != result ) throw exception(result, "xet::Device::OpenMetricTracer");
     }
 
     ///////////////////////////////////////////////////////////////////////////////
-    /// @brief C++ wrapper for ::xetDeviceGetMetricGroupMetricProperties
+    /// @brief C++ wrapper for ::xetDeviceCreateMetricQueryPool
+    /// 
+    /// @details
+    ///     - The application may call this function from simultaneous threads with
+    ///       the same device handle.
     /// 
     /// @returns
-    ///     - ::metric_properties: device properties
+    ///     - ::metric_query_pool_handle_t: handle of metric query pool
     /// 
     /// @throws result_t
-    inline metric_properties 
-    Device::GetMetricGroupMetricProperties(
-        xe::_metric_group_uuid_t uuid,                  ///< [in] metric group uuid
-        uint32_t ordinal                                ///< [in] ordinal of the metric
+    inline metric_query_pool_handle_t 
+    Device::CreateMetricQueryPool(
+        metric_query_pool_desc_t* pDesc                 ///< [in] metric query pool creation data
         )
     {
-        // auto result = ::xetDeviceGetMetricGroupMetricProperties( handle, uuid, ordinal );
-        // if( ::XE_RESULT_SUCCESS != result ) throw exception(result, "xet::Device::GetMetricGroupMetricProperties");
+        // auto result = ::xetDeviceCreateMetricQueryPool( handle, pDesc );
+        // if( ::XE_RESULT_SUCCESS != result ) throw exception(result, "xet::Device::CreateMetricQueryPool");
     }
 
 } // namespace xet
