@@ -71,7 +71,7 @@ def filter_items(lst, key, filter):
     flst = []
     for item in lst:
         if key in item:
-            if filter in item[key]:
+            if filter == item[key]:
                 flst.append(item)
     return flst
 

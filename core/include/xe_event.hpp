@@ -113,60 +113,10 @@ namespace xe
         auto getHandle( void ) const { return handle; }
 
         ///////////////////////////////////////////////////////////////////////////////
-        /// @brief C++ wrapper for ::xeEventPoolDestroy
-        /// @throws result_t
-        inline void
-        Destroy(
-            void
-            );
-
-        ///////////////////////////////////////////////////////////////////////////////
-        /// @brief C++ wrapper for ::xeEventPoolCreateEvent
-        /// @returns
-        ///     - ::event_handle_t: pointer to handle of event object created
-        /// 
-        /// @throws result_t
-        inline event_handle_t
-        CreateEvent(
-            uint32_t index                                  ///< [in] index of the event within the pool
-            );
-
-        ///////////////////////////////////////////////////////////////////////////////
         /// @brief C++ wrapper for ::xeEventDestroy
         /// @throws result_t
         inline void
         Destroy(
-            void
-            );
-
-        ///////////////////////////////////////////////////////////////////////////////
-        /// @brief C++ wrapper for ::xeEventPoolGetIpcHandle
-        /// @returns
-        ///     - ::ipc_event_pool_handle_t: Returned IPC event handle
-        /// 
-        /// @throws result_t
-        inline ipc_event_pool_handle_t
-        GetIpcHandle(
-            void
-            );
-
-        ///////////////////////////////////////////////////////////////////////////////
-        /// @brief C++ wrapper for ::xeEventPoolOpenIpcHandle
-        /// @returns
-        ///     - ::event_pool_handle_t: pointer handle of event pool object created
-        /// 
-        /// @throws result_t
-        inline static event_pool_handle_t
-        OpenIpcHandle(
-            device_handle_t hDevice,                        ///< [in] handle of the device to associate with the IPC event pool handle
-            ipc_event_pool_handle_t hIpc                    ///< [in] IPC event handle
-            );
-
-        ///////////////////////////////////////////////////////////////////////////////
-        /// @brief C++ wrapper for ::xeEventPoolCloseIpcHandle
-        /// @throws result_t
-        inline void
-        CloseIpcHandle(
             void
             );
 

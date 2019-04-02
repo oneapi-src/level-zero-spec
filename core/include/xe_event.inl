@@ -162,58 +162,6 @@ namespace xe
     }
 
     ///////////////////////////////////////////////////////////////////////////////
-    /// @brief C++ wrapper for ::xeEventPoolDestroy
-    /// 
-    /// @details
-    ///     - The application is responsible for destroying all event handles
-    ///       created from the pool before destroying the pool itself
-    ///     - The application is responsible for making sure the GPU is not
-    ///       currently referencing the any event within the pool before it is
-    ///       deleted
-    ///     - The implementation of this function will immediately free all Host and
-    ///       Device allocations associated with this event pool
-    ///     - The implementation of this function should be lock-free.
-    /// 
-    /// @throws result_t
-    inline void 
-    Event::Destroy(
-        void
-        )
-    {
-        // auto result = ::xeEventPoolDestroy( handle );
-        // if( ::XE_RESULT_SUCCESS != result ) throw exception(result, "xe::Event::Destroy");
-    }
-
-    ///////////////////////////////////////////////////////////////////////////////
-    /// @brief C++ wrapper for ::xeEventPoolCreateEvent
-    /// 
-    /// @details
-    ///     - Multiple events cannot be created using the same index from the same
-    ///       pool
-    ///     - The index must be less-than the count specified during pool creation
-    ///     - This function may be called from simultaneous threads.
-    ///     - The implementation of this function should be lock-free.
-    /// 
-    /// @remarks
-    ///   _Analogues_
-    ///     - **clCreateUserEvent**
-    ///     - vkCreateEvent
-    ///     - cuEventCreate
-    /// 
-    /// @returns
-    ///     - ::event_handle_t: pointer to handle of event object created
-    /// 
-    /// @throws result_t
-    inline event_handle_t 
-    Event::CreateEvent(
-        uint32_t index                                  ///< [in] index of the event within the pool
-        )
-    {
-        // auto result = ::xeEventPoolCreateEvent( handle, index );
-        // if( ::XE_RESULT_SUCCESS != result ) throw exception(result, "xe::Event::CreateEvent");
-    }
-
-    ///////////////////////////////////////////////////////////////////////////////
     /// @brief C++ wrapper for ::xeEventDestroy
     /// 
     /// @details
@@ -237,77 +185,6 @@ namespace xe
     {
         // auto result = ::xeEventDestroy( handle );
         // if( ::XE_RESULT_SUCCESS != result ) throw exception(result, "xe::Event::Destroy");
-    }
-
-    ///////////////////////////////////////////////////////////////////////////////
-    /// @brief C++ wrapper for ::xeEventPoolGetIpcHandle
-    /// 
-    /// @details
-    ///     - The application may call this function from simultaneous threads.
-    /// 
-    /// @remarks
-    ///   _Analogues_
-    ///     - **cuIpcGetEventHandle**
-    /// 
-    /// @returns
-    ///     - ::ipc_event_pool_handle_t: Returned IPC event handle
-    /// 
-    /// @throws result_t
-    inline ipc_event_pool_handle_t 
-    Event::GetIpcHandle(
-        void
-        )
-    {
-        // auto result = ::xeEventPoolGetIpcHandle( handle );
-        // if( ::XE_RESULT_SUCCESS != result ) throw exception(result, "xe::Event::GetIpcHandle");
-    }
-
-    ///////////////////////////////////////////////////////////////////////////////
-    /// @brief C++ wrapper for ::xeEventPoolOpenIpcHandle
-    /// 
-    /// @details
-    ///     - The event handle in this process should not be freed with
-    ///       ::EventPoolDestroy, but rather with ::EventPoolCloseIpcHandle.
-    ///     - The application may call this function from simultaneous threads.
-    /// 
-    /// @remarks
-    ///   _Analogues_
-    ///     - **cuIpcOpenMemHandle**
-    /// 
-    /// @returns
-    ///     - ::event_pool_handle_t: pointer handle of event pool object created
-    /// 
-    /// @throws result_t
-    inline event_pool_handle_t 
-    Event::OpenIpcHandle(
-        device_handle_t hDevice,                        ///< [in] handle of the device to associate with the IPC event pool handle
-        ipc_event_pool_handle_t hIpc                    ///< [in] IPC event handle
-        )
-    {
-        // auto result = ::xeEventPoolOpenIpcHandle( handle, hDevice, hIpc );
-        // if( ::XE_RESULT_SUCCESS != result ) throw exception(result, "xe::Event::OpenIpcHandle");
-    }
-
-    ///////////////////////////////////////////////////////////////////////////////
-    /// @brief C++ wrapper for ::xeEventPoolCloseIpcHandle
-    /// 
-    /// @details
-    ///     - Closes an IPC event handle by destroying events that were opened in
-    ///       this process using ::EventPoolOpenIpcHandle.
-    ///     - The application may call this function from simultaneous threads.
-    /// 
-    /// @remarks
-    ///   _Analogues_
-    ///     - **cuIpcCloseMemHandle**
-    /// 
-    /// @throws result_t
-    inline void 
-    Event::CloseIpcHandle(
-        void
-        )
-    {
-        // auto result = ::xeEventPoolCloseIpcHandle( handle );
-        // if( ::XE_RESULT_SUCCESS != result ) throw exception(result, "xe::Event::CloseIpcHandle");
     }
 
     ///////////////////////////////////////////////////////////////////////////////

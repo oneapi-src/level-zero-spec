@@ -86,23 +86,6 @@ namespace xe
             );
 
         ///////////////////////////////////////////////////////////////////////////////
-        /// @brief C++ wrapper for ::xeModuleBuildLogDestroy
-        /// @throws result_t
-        inline void
-        Destroy(
-            void
-            );
-
-        ///////////////////////////////////////////////////////////////////////////////
-        /// @brief C++ wrapper for ::xeModuleBuildLogGetString
-        /// @throws result_t
-        inline void
-        GetString(
-            size_t* pSize,                                  ///< [in,out] size of build log string.
-            char* pBuildLog                                 ///< [in,out][optional] pointer to null-terminated string of the log.
-            );
-
-        ///////////////////////////////////////////////////////////////////////////////
         /// @brief C++ wrapper for ::xeModuleGetNativeBinary
         /// @throws result_t
         inline void
