@@ -2,6 +2,7 @@
 { ->
 	def debArtifactoryUrl = "https://gfx-assets.igk.intel.com/artifactory"
 	def debArtifactoryRepo = "gfx-debian-sandbox-igk"
+	def debArtifactoryCredentials = "d489d589-f3a9-4441-809c-168ae5167439"
 	def repoDistroComponent = null
 	def repoDistroName = "bionic"	// we stick to Ubuntu 18.04 so far
 	def componentModel = null
@@ -93,6 +94,19 @@ make
 }
 """
 				archiveArtifacts "ubuntu18/apt_get_config.json"
+
+				withCredentials([[$class: "UsernamePasswordMultiBinding", credentialsId: "${debArtifactoryCredentials}", usernameVariable: 'ARTIFACTORY_NAME', passwordVariable: 'ARTIFACTORY_PASS']]) {
+					dir("ubuntu18") {
+						def files = findFiles(glob: '*.deb')
+						for(file in files) {
+							if(file.directory)
+								continue;
+							echo "uploading: ${file.name}"
+							sh "jfrog rt u --url=${debArtifactoryUrl} --user=$ARTIFACTORY_NAME --password=$ARTIFACTORY_PASS --deb=${repoDistroName}-${componentModel}/${repoDistroComponent}/amd64 ${file.name} ${debArtifactoryRepo}/${componentModel}/${repoDistroName}/${repoDistroComponent}/"
+						}
+					}
+				}
+
 			}
 
 		}()
