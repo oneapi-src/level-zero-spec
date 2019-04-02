@@ -58,14 +58,11 @@ The following sample code demonstrates a basic initialization sequence:
         return;
     }
 
-    ${x}_device_uuid_t* pUUIDs = (uint32_t*)malloc(deviceCount * sizeof(${x}_device_uuid_t));
-    ${x}DriverGetDeviceUniqueIds(deviceCount, pUUIDs);
-
     // Get the handle for device that supports required API version
     ${x}_device_handle_t hDevice;
     for(uint32_t i = 0; i < deviceCount; ++i)
     {
-        ${x}DriverGetDevice(pUUIDs[i], &hDevice);
+        ${x}DriverGetDevice(i, &hDevice);
         
         ${x}_api_version_t version;
         ${x}DeviceGetApiVersion(hDevice, &version);
@@ -81,6 +78,7 @@ The following sample code demonstrates a basic initialization sequence:
     ...
 
 ```
+
 ${"##"} Sub-Device Support
 A multi-tile device consists of tiles that are tied together by high-speed interconnects. Each tile
 has local memory that is shared to other tiles through these interconnects. The API represents tiles
@@ -140,6 +138,9 @@ See ::${x}_command_queue_desc_t for more details.
     ${x}DeviceCreateCommandQueue(subdevice, desc, &commandQueueForSubDevice2);
     ...
 ```
+
+${"##"} Device Unique Identifier
+The 16 byte unique device identifier (uuid) can be obtained for a device or sub-device using ::${x}DeviceGetProperties.
 
 ${"#"} <a name="cnc">Command Queues and Command Lists</a>
 The following are the motivations for seperating a command queue from a command list:

@@ -77,34 +77,6 @@ typedef struct _xe_device_uuid_t
 } xe_device_uuid_t;
 
 ///////////////////////////////////////////////////////////////////////////////
-/// @brief Retrieve 
-/// 
-/// @details
-///     - The application may call this function from simultaneous threads.
-///     - The implementation of this function should be lock-free.
-/// 
-/// @remarks
-///   _Analogues_
-///     - **cuDeviceGet**
-///     - clGetDeviceIDs
-/// 
-/// @returns
-///     - ::XE_RESULT_SUCCESS
-///     - ::XE_RESULT_ERROR_UNINITIALIZED
-///     - ::XE_RESULT_ERROR_DEVICE_LOST
-///     - ::XE_RESULT_ERROR_INVALID_PARAMETER
-///         + nullptr == pUniqueIds
-///         + invalid unique id.
-///     - ::XE_RESULT_ERROR_UNSUPPORTED
-__xedllport xe_result_t __xecall
-xeDriverGetDeviceUniqueIds(
-    uint32_t count,                                 ///< [in] size of device unique ids array. Typically, this will be
-                                                    ///< ${x}DeviceGetCount.
-    xe_device_uuid_t* pUniqueIds                    ///< [in,out] pointer to an array of unique ids for devices. Caller must
-                                                    ///< supply array.
-    );
-
-///////////////////////////////////////////////////////////////////////////////
 /// @brief Returns a handle to the device object
 /// 
 /// @details
@@ -121,14 +93,12 @@ xeDriverGetDeviceUniqueIds(
 ///     - ::XE_RESULT_ERROR_UNINITIALIZED
 ///     - ::XE_RESULT_ERROR_DEVICE_LOST
 ///     - ::XE_RESULT_ERROR_INVALID_PARAMETER
-///         + nullptr == pUUID
 ///         + nullptr == phDevice
 ///         + ordinal is out of range reported by ::xeDriverGetDeviceCount
 ///     - ::XE_RESULT_ERROR_UNSUPPORTED
 __xedllport xe_result_t __xecall
 xeDriverGetDevice(
-    const xe_device_uuid_t* pUUID,                  ///< [in] unique id of device to retrieve. Use ${x}DriverGetDeviceUniqueIds
-                                                    ///< to obtain a unique Id.
+    uint32_t ordinal,                               ///< [in] The device index in the range of [0, ::xeGetDeviceCount]
     xe_device_handle_t* phDevice                    ///< [out] pointer to handle of device object created
     );
 
@@ -217,6 +187,7 @@ typedef struct _xe_device_properties_t
     uint32_t vendorId;                              ///< [out] vendor id from PCI configuration
     uint32_t deviceId;                              ///< [out] device id from PCI configuration
     uint32_t subdeviceId;                           ///< [out] Subdevice id. Only valid if isSubdevice is true.
+    xe_device_uuid_t uuid;                          ///< [out] unique id for device.
     xe_bool_t isSubdevice;                          ///< [out] Is this a subdevice.
     uint32_t numSubDevices;                         ///< [out] Number of sub-devices.
     uint32_t coreClockRate;                         ///< [out] Clock rate for device core.

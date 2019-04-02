@@ -32,28 +32,6 @@ members:
       desc: "[out] device universal unique id"
 --- #--------------------------------------------------------------------------
 type: function
-desc: "Retrieve "
-class: $xDriver
-name: GetDeviceUniqueIds
-decl: singleton
-analogue:
-    - "**cuDeviceGet**"
-    - clGetDeviceIDs
-details:
-    - "The application may call this function from simultaneous threads."
-    - "The implementation of this function should be lock-free."
-params:
-    - type: uint32_t
-      name: count
-      desc: "[in] size of device unique ids array. Typically, this will be ${x}DeviceGetCount."
-    - type: "$x_device_uuid_t*"
-      name: pUniqueIds
-      desc: "[in,out] pointer to an array of unique ids for devices. Caller must supply array."
-returns:
-    - $X_RESULT_ERROR_INVALID_PARAMETER:
-        - "invalid unique id."
---- #--------------------------------------------------------------------------
-type: function
 desc: "Returns a handle to the device object"
 class: $xDriver
 name: GetDevice
@@ -65,9 +43,9 @@ details:
     - "The application may call this function from simultaneous threads."
     - "The implementation of this function should be lock-free."
 params:
-    - type: const $x_device_uuid_t*
-      name: pUUID
-      desc: "[in] unique id of device to retrieve. Use ${x}DriverGetDeviceUniqueIds to obtain a unique Id."
+    - type: uint32_t
+      name: ordinal
+      desc: "[in] The device index in the range of [0, $xGetDeviceCount]"
     - type: "$x_device_handle_t*"
       name: phDevice
       desc: "[out] pointer to handle of device object created"
@@ -155,10 +133,13 @@ members:
       desc: "[out] vendor id from PCI configuration"
     - type: uint32_t
       name: deviceId
-      desc: "[out] device id from PCI configuration"
+      desc: "[out] device id from PCI configuration" 
     - type: uint32_t
       name: subdeviceId
       desc: "[out] Subdevice id. Only valid if isSubdevice is true."
+    - type: $x_device_uuid_t
+      name: uuid
+      desc: "[out] unique id for device."
     - type: $x_bool_t
       name: isSubdevice
       desc: "[out] Is this a subdevice."

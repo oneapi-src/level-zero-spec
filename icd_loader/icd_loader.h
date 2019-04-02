@@ -178,15 +178,8 @@ typedef xe_result_t (__xecall *pfn_xeCommandListAppendMemAdvise)(
 typedef xe_result_t (__xecall *pfn_xeDriverGetDeviceCount)(
     uint32_t* count                                 ///< [out] number of devices available
     );
-typedef xe_result_t (__xecall *pfn_xeDriverGetDeviceUniqueIds)(
-    uint32_t count,                                 ///< [in] size of device unique ids array. Typically, this will be
-                                                    ///< ${x}DeviceGetCount.
-    xe_device_uuid_t* pUniqueIds                    ///< [in,out] pointer to an array of unique ids for devices. Caller must
-                                                    ///< supply array.
-    );
 typedef xe_result_t (__xecall *pfn_xeDriverGetDevice)(
-    const xe_device_uuid_t* pUUID,                  ///< [in] unique id of device to retrieve. Use ${x}DriverGetDeviceUniqueIds
-                                                    ///< to obtain a unique Id.
+    uint32_t ordinal,                               ///< [in] The device index in the range of [0, ::xeGetDeviceCount]
     xe_device_handle_t* phDevice                    ///< [out] pointer to handle of device object created
     );
 typedef xe_result_t (__xecall *pfn_xeDeviceGetSubDevice)(
@@ -542,7 +535,6 @@ typedef struct _xe_dispatch_table_t
     pfn_xeCommandListAppendMemoryPrefetch xeCommandListAppendMemoryPrefetch;
     pfn_xeCommandListAppendMemAdvise xeCommandListAppendMemAdvise;
     pfn_xeDriverGetDeviceCount xeDriverGetDeviceCount;
-    pfn_xeDriverGetDeviceUniqueIds xeDriverGetDeviceUniqueIds;
     pfn_xeDriverGetDevice xeDriverGetDevice;
     pfn_xeDeviceGetSubDevice xeDeviceGetSubDevice;
     pfn_xeDeviceGetApiVersion xeDeviceGetApiVersion;
@@ -649,7 +641,6 @@ inline bool load_xe(void *handle, void *(*funcAddressGetter)(void *handle, const
     outTable->xeCommandListAppendMemoryPrefetch = (pfn_xeCommandListAppendMemoryPrefetch)funcAddressGetter(handle, "xeCommandListAppendMemoryPrefetch");
     outTable->xeCommandListAppendMemAdvise = (pfn_xeCommandListAppendMemAdvise)funcAddressGetter(handle, "xeCommandListAppendMemAdvise");
     outTable->xeDriverGetDeviceCount = (pfn_xeDriverGetDeviceCount)funcAddressGetter(handle, "xeDriverGetDeviceCount");
-    outTable->xeDriverGetDeviceUniqueIds = (pfn_xeDriverGetDeviceUniqueIds)funcAddressGetter(handle, "xeDriverGetDeviceUniqueIds");
     outTable->xeDriverGetDevice = (pfn_xeDriverGetDevice)funcAddressGetter(handle, "xeDriverGetDevice");
     outTable->xeDeviceGetSubDevice = (pfn_xeDeviceGetSubDevice)funcAddressGetter(handle, "xeDeviceGetSubDevice");
     outTable->xeDeviceGetApiVersion = (pfn_xeDeviceGetApiVersion)funcAddressGetter(handle, "xeDeviceGetApiVersion");
@@ -798,9 +789,6 @@ inline bool load_xe(void *handle, void *(*funcAddressGetter)(void *handle, const
         return false;
     }
     if(0 == outTable->xeDriverGetDeviceCount){
-        return false;
-    }
-    if(0 == outTable->xeDriverGetDeviceUniqueIds){
         return false;
     }
     if(0 == outTable->xeDriverGetDevice){

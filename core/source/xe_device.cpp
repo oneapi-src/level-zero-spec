@@ -97,67 +97,6 @@ xeDriverGetDeviceCount(
 }
 
 ///////////////////////////////////////////////////////////////////////////////
-/// @brief Retrieve 
-/// 
-/// @details
-///     - The application may call this function from simultaneous threads.
-///     - The implementation of this function should be lock-free.
-/// 
-/// @remarks
-///   _Analogues_
-///     - **cuDeviceGet**
-///     - clGetDeviceIDs
-/// 
-/// @returns
-///     - ::XE_RESULT_SUCCESS
-///     - ::XE_RESULT_ERROR_UNINITIALIZED
-///     - ::XE_RESULT_ERROR_DEVICE_LOST
-///     - ::XE_RESULT_ERROR_INVALID_PARAMETER
-///         + nullptr == pUniqueIds
-///         + invalid unique id.
-///     - ::XE_RESULT_ERROR_UNSUPPORTED
-///
-/// @hash {24e74b8964d6a14365f1dad2176f01a73114e0331ab5c1bdf0b0826d2d0ea10f}
-///
-__xedllexport xe_result_t __xecall
-xeDriverGetDeviceUniqueIds(
-    uint32_t count,                                 ///< [in] size of device unique ids array. Typically, this will be
-                                                    ///< ${x}DeviceGetCount.
-    xe_device_uuid_t* pUniqueIds                    ///< [in,out] pointer to an array of unique ids for devices. Caller must
-                                                    ///< supply array.
-    )
-{
-    try
-    {
-        //if( XE_DRIVER_PARAMETER_VALIDATION_LEVEL >= 0 )
-        {
-            // Check parameters
-            if( nullptr == pUniqueIds ) return XE_RESULT_ERROR_INVALID_PARAMETER;
-        }
-        /// @begin
-#if defined(XE_NULLDRV)
-        return XE_RESULT_SUCCESS;
-#else
-        return L0::Driver::get()->getDeviceUniqueIds(count, pUniqueIds);
-#endif
-        /// @end
-    }
-    catch(xe_result_t& result)
-    {
-        return result;
-    }
-    catch(std::bad_alloc&)
-    {
-        return XE_RESULT_ERROR_OUT_OF_HOST_MEMORY;
-    }
-    catch(std::exception&)
-    {
-        // @todo: pfnOnException(e.what());
-        return XE_RESULT_ERROR_UNKNOWN;
-    }
-}
-
-///////////////////////////////////////////////////////////////////////////////
 /// @brief Returns a handle to the device object
 /// 
 /// @details
@@ -174,17 +113,15 @@ xeDriverGetDeviceUniqueIds(
 ///     - ::XE_RESULT_ERROR_UNINITIALIZED
 ///     - ::XE_RESULT_ERROR_DEVICE_LOST
 ///     - ::XE_RESULT_ERROR_INVALID_PARAMETER
-///         + nullptr == pUUID
 ///         + nullptr == phDevice
 ///         + ordinal is out of range reported by ::xeDriverGetDeviceCount
 ///     - ::XE_RESULT_ERROR_UNSUPPORTED
 ///
-/// @hash {976b41d647d0c95fec5464a3a8e84a8b4b5617c1b6eecb0665c3feabd1582fa1}
+/// @hash {0fcaea081072b19126b15d5ddf6bf62c8c5a75b8647a0176af861cfb0adb1697}
 ///
 __xedllexport xe_result_t __xecall
 xeDriverGetDevice(
-    const xe_device_uuid_t* pUUID,                  ///< [in] unique id of device to retrieve. Use ${x}DriverGetDeviceUniqueIds
-                                                    ///< to obtain a unique Id.
+    uint32_t ordinal,                               ///< [in] The device index in the range of [0, ::xeGetDeviceCount]
     xe_device_handle_t* phDevice                    ///< [out] pointer to handle of device object created
     )
 {
@@ -193,14 +130,13 @@ xeDriverGetDevice(
         //if( XE_DRIVER_PARAMETER_VALIDATION_LEVEL >= 0 )
         {
             // Check parameters
-            if( nullptr == pUUID ) return XE_RESULT_ERROR_INVALID_PARAMETER;
             if( nullptr == phDevice ) return XE_RESULT_ERROR_INVALID_PARAMETER;
         }
         /// @begin
 #if defined(XE_NULLDRV)
         return XE_RESULT_SUCCESS;
 #else
-        return L0::Driver::get()->getDevice(pUUID, phDevice);
+        return L0::Driver::get()->getDevice(ordinal, phDevice);
 #endif
         /// @end
     }

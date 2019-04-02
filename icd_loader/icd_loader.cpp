@@ -335,26 +335,14 @@ xe_result_t __xecall xeDriverGetDeviceCount(
     }
     return dispatchTable.xeDriverGetDeviceCount(count);
 }
-xe_result_t __xecall xeDriverGetDeviceUniqueIds(
-        uint32_t count,                                 ///< [in] size of device unique ids array. Typically, this will be
-                                                        ///< ${x}DeviceGetCount.
-        xe_device_uuid_t* pUniqueIds                    ///< [in,out] pointer to an array of unique ids for devices. Caller must
-                                                        ///< supply array.
-    ){
-    if(dispatchTableInitialized == false){
-        return XE_RESULT_ERROR_UNINITIALIZED;
-    }
-    return dispatchTable.xeDriverGetDeviceUniqueIds(count, pUniqueIds);
-}
 xe_result_t __xecall xeDriverGetDevice(
-        const xe_device_uuid_t* pUUID,                  ///< [in] unique id of device to retrieve. Use ${x}DriverGetDeviceUniqueIds
-                                                        ///< to obtain a unique Id.
+        uint32_t ordinal,                               ///< [in] The device index in the range of [0, ::xeGetDeviceCount]
         xe_device_handle_t* phDevice                    ///< [out] pointer to handle of device object created
     ){
     if(dispatchTableInitialized == false){
         return XE_RESULT_ERROR_UNINITIALIZED;
     }
-    return dispatchTable.xeDriverGetDevice(pUUID, phDevice);
+    return dispatchTable.xeDriverGetDevice(ordinal, phDevice);
 }
 xe_result_t __xecall xeDeviceGetSubDevice(
         xe_device_handle_t hDevice,                     ///< [in] handle of the device object
