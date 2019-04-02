@@ -12,6 +12,7 @@ def reportBuildStatus = (env.JOB_BASE_NAME == "ocl-loki-verification")
 gerritLocalBranch="change"
 def buildData = [:]
 def currentStage = null
+def buildLinux = null
 
 def gerritPostResult = { passed ->
 	if(reportBuildStatus) {
@@ -69,7 +70,7 @@ def lokiStage = { name, body ->
   currentStage = null
 }
 
-def lokiNode = { name, body ->
+lokiNode = { name, body ->
 	return {
 		echo "entering node ${name}"
 		node(name) {
@@ -79,7 +80,7 @@ def lokiNode = { name, body ->
 	}
 }
 
-def lokiBuild = { name, body ->
+lokiBuild = { name, body ->
 	return {
 		try {
 			if(!buildData[currentStage].containsKey('builds')) {
@@ -141,6 +142,8 @@ try {
 				echo "verificaiton build.isDraft = ${isDraft}"
 				echo "verificaiton build.skipBuild = ${skipBuild}"
 			}
+			buildLinux = load("ci/jenkins/build.linux.groovy")
+			buildWindows = load("ci/jenkins/build.windows.groovy")
 		}
     lokiStage("lint") {
 			echo "TBD"
@@ -150,125 +153,11 @@ try {
 	lokiStage('build') {
 		if(!skipBuild) {
 			lokiBuilds = [:]
-			lokiBuilds['linux'] = lokiNode("loki-controller") {
-				lokiBuild('linux') {
-					checkout changelog: false, poll: false,
-						scm: [$class: 'GitSCM',
-							branches: [[name: "${GERRIT_PATCHSET_REVISION}"]],
-							doGenerateSubmoduleConfigurations: false,
-							extensions: [
-								[$class: 'CleanCheckout'],
-								// [$class: 'RelativeTargetDirectory', relativeTargetDir: 'loki'],
-								[$class: 'CloneOption', noTags: true, reference: '', shallow: false, honorRefspec: true],
-								[$class: 'PruneStaleBranch']],
-							submoduleCfg: [],
-							userRemoteConfigs: [[
-								credentialsId: '0f565f2a-f10f-421d-ac50-3b169adf5f06',
-								url: "${gerritUrl}",
-								refspec: "+${GERRIT_REFSPEC}:${gerritLocalBranch}"
-							]]]
-
-					withEnv(["IREPO_CACHE_DIR=$HOME/.irepo"]) {
-						sh """\
-~/irepo/irepo select -d . third_party/linux_embargo.yml
-
-~/irepo/irepo ignore-folder extended
-~/irepo/irepo ignore-folder scripts
-~/irepo/irepo ignore-folder .git
-~/irepo/irepo ignore-folder ci
-~/irepo/irepo ignore-folder icd_loader
-~/irepo/irepo ignore-folder tests
-~/irepo/irepo ignore-folder images
-~/irepo/irepo ignore-folder core
-~/irepo/irepo ignore-folder samples
-
-~/irepo/irepo sync --clean --delete-unknown-content
-ls -la
-"""
-					}
-
-					def image = docker.image("${env.DOCKER_REGISTRY}/loki-ubuntu18:1")
-					def workDir = sh script: "(cd .. && pwd)", returnStdout: true
-					def buildId = "${env.BUILD_NUMBER}"
-					if(params.containsKey("COMMON_BUILD_ID")) {
-						buildId = "${COMMON_BUILD_ID}"
-					}
-					image.pull()
-					image.inside("-v /ccache:/ccache -e CCACHE_DIR=/ccache -e CCACHE_TEMPDIR=/tmp/ccache -e CCACHE_BASEDIR=${workDir}") {
-						sh """\
-mkdir ubuntu18
-cd ubuntu18
-cmake -GNinja .. -DCMAKE_BUILD_TYPE=Release -DLOKI_VERSION_BUILD=${buildId}
-cmake --build . --config Release --clean-first --target package
-"""
-					}
-					image.inside() {
-						sh """\
-cd scripts
-python3 run.py --html
-cd ../latex
-make
-"""
-					}
-					archiveArtifacts "ubuntu18/*.deb"
-					dir('latex') {
-						archiveArtifacts "*.pdf"
-					}
-				}()
-			}
-
-			lokiBuilds['windows-64'] = lokiNode('loki-windows') {
-				lokiBuild('windows-64') {
-					checkout changelog: false, poll: false,
-						scm: [$class: 'GitSCM',
-							branches: [[name: "${GERRIT_PATCHSET_REVISION}"]],
-							doGenerateSubmoduleConfigurations: false,
-							extensions: [
-								[$class: 'CleanCheckout'],
-								// [$class: 'RelativeTargetDirectory', relativeTargetDir: 'loki'],
-								[$class: 'CloneOption', noTags: true, reference: '', shallow: false, honorRefspec: true],
-								[$class: 'PruneStaleBranch']],
-							submoduleCfg: [],
-							userRemoteConfigs: [[
-								credentialsId: '0f565f2a-f10f-421d-ac50-3b169adf5f06',
-								url: "${gerritUrl}",
-								refspec: "+${GERRIT_REFSPEC}:${gerritLocalBranch}"
-							]]]
-
-					echo "irepo cache dir = ${BASE}\\.irepo"
-					withEnv(["IREPO_CACHE_DIR=${BASE}\\.irepo"]) {
-						bat """\
-	call c:\\irepo\\irepo select third_party\\windows_embargo.yml
-
-	call c:\\irepo\\irepo ignore-folder extended
-	call c:\\irepo\\irepo ignore-folder scripts
-	call c:\\irepo\\irepo ignore-folder .git
-	call c:\\irepo\\irepo ignore-folder ci
-	call c:\\irepo\\irepo ignore-folder icd_loader
-	call c:\\irepo\\irepo ignore-folder tests
-	call c:\\irepo\\irepo ignore-folder images
-	call c:\\irepo\\irepo ignore-folder core
-	call c:\\irepo\\irepo ignore-folder samples
-
-	call c:\\irepo\\irepo sync --clean --delete-unknown-content
-	"""
-					}
-					def buildId = "${env.BUILD_NUMBER}"
-					if(params.containsKey("COMMON_BUILD_ID")) {
-						buildId = "${COMMON_BUILD_ID}"
-					}
-					bat """
-	md build
-	cd build
-	cmake -G "Visual Studio 15 2017 Win64" .. -DCMAKE_BUILD_TYPE=Release -DLOKI_VERSION_BUILD=${buildId} -DLOKI_CPACK_GENERATOR="ZIP"
-	cmake --build . --config Release --clean-first --target ALL_BUILD
-	"""
-					// archiveArtifacts "build/*.zip"
-				}()
-			}
+			lokiBuilds['linux'] = buildLinux()
+			lokiBuilds['windows-64'] = buildWindows()
 
 			parallel lokiBuilds
-			}
+		}
 	}
 
 	lokiStage('publish') {
