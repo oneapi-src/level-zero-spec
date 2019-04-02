@@ -152,7 +152,7 @@ try {
 
 	lokiStage('build') {
 		if(!skipBuild) {
-			lokiBuilds = [:]
+			lokiBuilds = [failFast:true]
 			lokiBuilds['linux'] = buildLinux()
 			lokiBuilds['windows-64'] = buildWindows()
 

@@ -1,5 +1,19 @@
 #!groovy
 { ->
+	def debArtifactoryUrl = "https://gfx-assets.igk.intel.com/artifactory"
+	def debArtifactoryRepo = "gfx-debian-sandbox-igk"
+	def repoDistroComponent = null
+	def repoDistroName = "bionic"	// we stick to Ubuntu 18.04 so far
+	def componentModel = null
+
+	if(env.JOB_BASE_NAME == "ocl-loki-verification") {
+		componentModel = "verify"
+		repoDistroComponent = "loki-${GERRIT_BRANCH}"
+	} else if(env.JOB_BASE_NAME == "ocl-loki-publish") {
+		componentModel = "ci"
+		repoDistroComponent = "loki-${GERRIT_REFSPEC}"
+	}
+
 	return lokiNode("loki-controller") {
 		lokiBuild('linux') {
 			checkout changelog: false, poll: false,
@@ -64,6 +78,23 @@ make
 			dir('latex') {
 				archiveArtifacts "*.pdf"
 			}
+
+			//generate apt_get config when componentModel is specified
+			if(componentModel != null) {
+				def pi = readJSON file: "ubuntu18/package_info.json"
+				writeFile file: "ubuntu18/apt_get_config.json", text: """\
+{
+	"version": "${pi.version}",
+	"package": "${pi.package}",
+	"repo_url": "${debArtifactoryUrl}/${debArtifactoryRepo}",
+	"key_url": "${debArtifactoryUrl}/api/gpg/key/public",
+	"distro_name": "${repoDistroName}-${componentModel}",
+	"distro_component": "${repoDistroComponent}"
+}
+"""
+				archiveArtifacts "ubuntu18/apt_get_config.json"
+			}
+
 		}()
 	}
 }

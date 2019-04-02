@@ -1,0 +1,4 @@
+{
+	"version": "@LOKI_PACKAGE_VERSION_DEB@",
+	"package": "@LOKI_CORE_COMPONENT_NAME@"
+}
