@@ -306,6 +306,7 @@ TEST_P(ModuleCreateImageArg, onlineCompilationModuleTest) {
     imgDesc.format = XE_IMAGE_FORMAT_UINT32;
     imgDesc.width = 10;
     imgDesc.height = 10;
+    imgDesc.depth = 1;
 
     auto srcImage = whitebox_cast(Image::create(productFamily, device, &imgDesc));
     ASSERT_NE(nullptr, srcImage);

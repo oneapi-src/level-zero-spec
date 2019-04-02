@@ -30,9 +30,14 @@ struct ImageImp : public Image {
         return allocation;
     }
 
+    size_t getSizeInBytes() override {
+        return sizeBytes;
+    }
+
   protected:
     xe_image_desc_t imageDesc;
     GraphicsAllocation *allocation;
+    size_t sizeBytes;
 };
 
 } //namespace L0

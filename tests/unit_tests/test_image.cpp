@@ -69,6 +69,8 @@ TEST_F(ImageCreate, descMatchesAllocation) {
 
     ASSERT_EQ(alloc->getSize(),
               desc.numChannels * desc.width * desc.height * desc.depth * sizeof(uint8_t));
+    ASSERT_EQ(image->getSizeInBytes(),
+              desc.numChannels * desc.width * desc.height * desc.depth * sizeof(uint8_t));
 
     delete device;
 }
@@ -162,6 +164,7 @@ HWTEST2_F(ImageSurfaceState, copyToSSH, MatchAny) {
     desc.format = XE_IMAGE_FORMAT_UINT8;
     desc.width = 11;
     desc.height = 13;
+    desc.depth = 1;
 
     auto imageA = new ImageCoreFamily<gfxCoreFamily>();
     bool ret = imageA->initialize(&device, &desc);

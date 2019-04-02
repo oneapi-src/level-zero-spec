@@ -50,7 +50,7 @@ void testAppendImageCopy(xe_device_handle_t &device,
         XE_IMAGE_FLAG_PROGRAM_READ,
         XE_IMAGE_TYPE_2D,
         format, numChannels,
-        width, height, 0, 0, 0
+        width, height, 1, 0, 0
     };
     xe_image_handle_t srcImg;
     xe_image_region_t srcRegion = {0, size};
@@ -63,7 +63,7 @@ void testAppendImageCopy(xe_device_handle_t &device,
         XE_IMAGE_FLAG_PROGRAM_WRITE,
         XE_IMAGE_TYPE_2D,
         format, numChannels,
-        width, height, 0, 0, 0
+        width, height, 1, 0, 0
     };
     xe_image_handle_t dstImg;
     xe_image_region_t dstRegion = {0, size};

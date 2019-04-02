@@ -490,8 +490,8 @@ xe_result_t CommandListCoreFamily<gfxCoreFamily>::appendImageCopyFromMemory(xe_i
                                                                             const void *srcPtr) {
 
     // Use for now the AppendMemoryCopy, as images are internally allocated linearly
-
-    GraphicsAllocation *dstAlloc = L0::Image::fromHandle(hDstImage)->getAllocation();
+    auto dstImage = L0::Image::fromHandle(hDstImage);
+    GraphicsAllocation *dstAlloc = dstImage->getAllocation();
     uint64_t dstPtr = dstAlloc->getGpuAddress();
     size_t offset;
     size_t size;
@@ -501,7 +501,7 @@ xe_result_t CommandListCoreFamily<gfxCoreFamily>::appendImageCopyFromMemory(xe_i
         size = pDstRegion->size;
     } else {
         offset = 0;
-        size = dstAlloc->getSize();
+        size = dstImage->getSizeInBytes();
     }
 
     return this->appendMemoryCopy(reinterpret_cast<void *>(dstPtr + offset),
@@ -514,8 +514,8 @@ xe_result_t CommandListCoreFamily<gfxCoreFamily>::appendImageCopyToMemory(void *
                                                                           xe_image_region_t *pSrcRegion) {
 
     // Use for now the AppendMemoryCopy, as images are internally allocated linearly
-
-    GraphicsAllocation *srcAlloc = L0::Image::fromHandle(hSrcImage)->getAllocation();
+    auto srcImage = L0::Image::fromHandle(hSrcImage);
+    GraphicsAllocation *srcAlloc = srcImage->getAllocation();
     uint64_t srcPtr = srcAlloc->getGpuAddress();
     size_t offset;
     size_t size;
@@ -525,7 +525,7 @@ xe_result_t CommandListCoreFamily<gfxCoreFamily>::appendImageCopyToMemory(void *
         size = pSrcRegion->size;
     } else {
         offset = 0;
-        size = srcAlloc->getSize();
+        size = srcImage->getSizeInBytes();
     }
 
     return this->appendMemoryCopy(dstPtr,
@@ -540,12 +540,10 @@ xe_result_t CommandListCoreFamily<gfxCoreFamily>::appendImageCopyRegion(xe_image
                                                                         xe_image_region_t *pSrcRegion) {
 
     // Use for now the AppendMemoryCopy, as images are internally allocated linearly
-
-    GraphicsAllocation *dstAlloc = L0::Image::fromHandle(hDstImage)->getAllocation();
-    GraphicsAllocation *srcAlloc = L0::Image::fromHandle(hSrcImage)->getAllocation();
-
-    uint64_t dstPtr = dstAlloc->getGpuAddress();
-    uint64_t srcPtr = srcAlloc->getGpuAddress();
+    auto dstImage = L0::Image::fromHandle(hDstImage);
+    auto srcImage = L0::Image::fromHandle(hSrcImage);
+    uint64_t dstPtr = dstImage->getAllocation()->getGpuAddress();
+    uint64_t srcPtr = srcImage->getAllocation()->getGpuAddress();
     size_t dstOffset;
     size_t srcOffset;
     size_t srcSize;
@@ -556,7 +554,7 @@ xe_result_t CommandListCoreFamily<gfxCoreFamily>::appendImageCopyRegion(xe_image
         size = pDstRegion->size;
     } else {
         dstOffset = 0;
-        size = dstAlloc->getSize();
+        size = dstImage->getSizeInBytes();
     }
 
     if (pSrcRegion) {
@@ -564,7 +562,7 @@ xe_result_t CommandListCoreFamily<gfxCoreFamily>::appendImageCopyRegion(xe_image
         srcSize = pSrcRegion->size;
     } else {
         srcOffset = 0;
-        srcSize = srcAlloc->getSize();
+        srcSize = srcImage->getSizeInBytes();
     }
 
     if (size > srcSize) {
@@ -580,13 +578,7 @@ xe_result_t CommandListCoreFamily<gfxCoreFamily>::appendImageCopyRegion(xe_image
 template <GFXCORE_FAMILY gfxCoreFamily>
 xe_result_t CommandListCoreFamily<gfxCoreFamily>::appendImageCopy(xe_image_handle_t hDstImage,
                                                                   xe_image_handle_t hSrcImage) {
-
-    GraphicsAllocation *dstAlloc = L0::Image::fromHandle(hDstImage)->getAllocation();
-    GraphicsAllocation *srcAlloc = L0::Image::fromHandle(hSrcImage)->getAllocation();
-    xe_image_region_t dstRegion = {0, dstAlloc->getSize()};
-    xe_image_region_t srcRegion = {0, srcAlloc->getSize()};
-
-    return this->appendImageCopyRegion(hDstImage, &dstRegion, hSrcImage, &srcRegion);
+    return this->appendImageCopyRegion(hDstImage, NULL, hSrcImage, NULL);
 }
 
 template <GFXCORE_FAMILY gfxCoreFamily>

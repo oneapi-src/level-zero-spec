@@ -23,6 +23,7 @@ struct Image : public _xe_image_handle_t {
     virtual GraphicsAllocation *getAllocation() = 0;
     virtual void copySurfaceStateToSSH(void *surfaceStateHeap, const uint32_t surfaceStateOffset,
             const uint32_t bindingTableOffset, const uint32_t bindingTableIndex) = 0;
+    virtual size_t getSizeInBytes() = 0;
 
     static Image *fromHandle(xe_image_handle_t handle) {
         return static_cast<Image *>(handle);

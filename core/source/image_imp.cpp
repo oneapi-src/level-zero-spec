@@ -35,15 +35,15 @@ bool ImageImp::initialize(Device *device, const xe_image_desc_t *desc) {
     auto memoryManager = device->getMemoryManager();
     assert(memoryManager);
 
-    if (desc)
+    if (desc) {
         imageDesc = *desc;
+    }
 
 	size_t elem_size = format_size[imageDesc.format] * imageDesc.numChannels;
-	size_t size = elem_size * imageDesc.height * imageDesc.width * imageDesc.width;
+	sizeBytes = elem_size * imageDesc.height * imageDesc.width * imageDesc.depth;
 
-	//TODO should this really be allocating memory?  Should it be done later?
 	//TODO free the allocation when image is destroyed
-	allocation = memoryManager->allocateManagedMemory(size, elem_size);
+	allocation = memoryManager->allocateManagedMemory(sizeBytes, elem_size);
     assert(allocation);
     return true;
 }

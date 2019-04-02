@@ -44,6 +44,7 @@ struct Mock<Image> : public Image {
     MOCK_METHOD0(getAllocation, GraphicsAllocation *());
     MOCK_METHOD4(copySurfaceStateToSSH, void(void *surfaceStateHeap, const uint32_t surfaceStateOffset,
             const uint32_t bindingTableOffset, const uint32_t bindingTableIndex));
+    MOCK_METHOD0(getSizeInBytes, size_t());
 };
 
 } // namespace ult
