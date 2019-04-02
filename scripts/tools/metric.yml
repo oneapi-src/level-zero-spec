@@ -1,6 +1,6 @@
 --- #--------------------------------------------------------------------------
 type: header
-desc: "Intel $OneApi Level-Zero Tool APIs for Metrics"
+desc: "Intel $OneApi Level-Zero Tool APIs for Metric"
 --- #--------------------------------------------------------------------------
 type: macro
 desc: "Maximum metric group name string size"
@@ -93,7 +93,7 @@ etors:
       desc: "version 1.0"
 --- #--------------------------------------------------------------------------
 type: struct
-desc: "Metric group properties"
+desc: "Metric group properties queried using $tMetricGroupGetProperties"
 class: $tMetricGroup
 name: $t_metric_group_properties_t
 members:
@@ -103,25 +103,25 @@ members:
       init: $T_METRIC_GROUP_PROPERTIES_VERSION_CURRENT
     - type: char
       name: "name[$T_MAX_METRIC_GROUP_NAME]"
-      desc: "[in] metric group name"
+      desc: "[out] metric group name"
     - type: char
       name: "description[$T_MAX_METRIC_GROUP_DESCRIPTION]"
-      desc: "[in] metric group description"
+      desc: "[out] metric group description"
     - type: "$t_metric_group_sampling_type"
       name: "samplingType"
-      desc: "[in] metric group sampling type"
+      desc: "[out] metric group sampling type"
     - type: uint32_t
       name: "domain"
-      desc: "[in] metric group domain number"
+      desc: "[out] metric group domain number"
     - type: uint32_t
       name: "metricCount"
-      desc: "[in] metric count belonging to this group"
+      desc: "[out] metric count belonging to this group"
     - type: uint32_t
       name: "rawReportSize"
-      desc: "[in] size of raw report"
+      desc: "[out] size of raw report"
     - type: uint32_t
       name: "calculatedReportSize"
-      desc: "[in] size of calculated report"
+      desc: "[out] size of calculated report"
 --- #--------------------------------------------------------------------------
 type: enum
 desc: "Metric types"
@@ -185,25 +185,25 @@ members:
       init: $T_TYPED_VALUE_VERSION_CURRENT
     - type: $t_value_type_t
       name: "type"
-      desc: "[in] value type"
+      desc: "[out] value type"
     - type: uint32_t
       name: "valueUInt32"
-      desc: "[in] uint32_t value"
+      desc: "[out] uint32_t value"
     - type: uint64_t
       name: "valueUInt64"
-      desc: "[in] uint64_t value"
+      desc: "[out] uint64_t value"
     - type: float
       name: "valueFloat"
-      desc: "[in] float value"
+      desc: "[out] float value"
     - type: $x_bool_t
       name: "valueBool"
-      desc: "[in] bool value"
+      desc: "[out] bool value"
     - type: const char*
       name: "valueString"
-      desc: "[in] string value"
+      desc: "[out] string value"
 --- #--------------------------------------------------------------------------
 type: struct
-desc: "Metric properties"
+desc: "Metric properties queried using $tMetricGetProperties"
 class: $tMetric
 name: $t_metric_properties_t
 members:
@@ -213,25 +213,25 @@ members:
       init: $T_METRIC_PROPERTIES_VERSION_CURRENT
     - type: char
       name: "name[$T_MAX_METRIC_NAME]"
-      desc: "[in] metric name"
+      desc: "[out] metric name"
     - type: char
       name: "description[$T_MAX_METRIC_DESCRIPTION]"
-      desc: "[in] metric description"
+      desc: "[out] metric description"
     - type: char
       name: "component[$T_MAX_METRIC_COMPONENT]"
-      desc: "[in] metric component"
+      desc: "[out] metric component"
     - type: uint32_t
       name: "tierNumber"
-      desc: "[in] number of tier"
+      desc: "[out] number of tier"
     - type: $t_metric_type_t
       name: "metricType"
-      desc: "[in] metric type"
+      desc: "[out] metric type"
     - type: $t_value_type_t
       name: "resultType"
-      desc: "[in] metric result type"
+      desc: "[out] metric result type"
     - type: char
       name: "resultUnits[$T_MAX_METRIC_RESULT_UNITS]"
-      desc: "[in] metric result units"
+      desc: "[out] metric result units"
 --- #--------------------------------------------------------------------------
 type: struct
 desc: "Metric tracer descriptor"
@@ -245,9 +245,9 @@ members:
     - type: "$t_metric_group_handle_t"
       name: "hMetricGroup"
       desc: "[in] handle of the metric group"
-    - type: "$t_event_handle_t"
+    - type: "$x_event_handle_t"
       name: "hNotificationEvent"
-      desc: "[in] event used for report availability notification. Must be host to host type."
+      desc: "[in] event used for report availability notification. Must be device to host type."
     - type: uint32_t
       name: "notifyEveryNReports"
       desc: "[in/out] number of collected reports after which notification event will be signalled"
@@ -372,22 +372,22 @@ returns:
         - "invalid metric group handle"
 --- #--------------------------------------------------------------------------
 type: function
-desc: "Activates metric group."
+desc: "Activates metric groups."
 class: $tDevice
 name: ActivateMetricGroups
 details:
     - MetricGroup must be active until MetricQueryGetDeta and $tMetricTracerClose.
-    - Conflicting metric groups cannot be activated, in such case tha call would fail
+    - Conflicting metric groups cannot be activated, in such case tha call would fail.
 params:
     - type: "$t_device_handle_t"
       name: hDevice
       desc: "[in] handle of the device"
     - type: uint32_t
       name: count
-      desc: "[in] metric group count to activate"
+      desc: "[in] metric group count to activate. 0 to deactivate."
     - type: "$t_metric_group_handle_t*"
       name: phMetricGroups
-      desc: "[in] handles of the metric groups to activate"
+      desc: "[in] handles of the metric groups to activate. NULL to deactivate."
 returns:
     - $X_RESULT_ERROR_INVALID_PARAMETER:
         - "invalid metric groups"

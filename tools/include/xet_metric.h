@@ -23,7 +23,7 @@
 *
 * @file xet_metric.h
 *
-* @brief Intel Xe Level-Zero Tool APIs for Metrics
+* @brief Intel Xe Level-Zero Tool APIs for Metric
 *
 * @cond DEV
 * DO NOT EDIT: generated from /scripts/tools/metric.yml
@@ -116,17 +116,17 @@ typedef enum _xet_metric_tracer_desc_version_t
 } xet_metric_tracer_desc_version_t;
 
 ///////////////////////////////////////////////////////////////////////////////
-/// @brief Metric group properties
+/// @brief Metric group properties queried using ::xetMetricGroupGetProperties
 typedef struct _xet_metric_group_properties_t
 {
     xet_metric_group_properties_version_t version;  ///< [in] ::XET_METRIC_GROUP_PROPERTIES_VERSION_CURRENT
-    char name[XET_MAX_METRIC_GROUP_NAME];           ///< [in] metric group name
-    char description[XET_MAX_METRIC_GROUP_DESCRIPTION]; ///< [in] metric group description
-    xet_metric_group_sampling_type samplingType;    ///< [in] metric group sampling type
-    uint32_t domain;                                ///< [in] metric group domain number
-    uint32_t metricCount;                           ///< [in] metric count belonging to this group
-    uint32_t rawReportSize;                         ///< [in] size of raw report
-    uint32_t calculatedReportSize;                  ///< [in] size of calculated report
+    char name[XET_MAX_METRIC_GROUP_NAME];           ///< [out] metric group name
+    char description[XET_MAX_METRIC_GROUP_DESCRIPTION]; ///< [out] metric group description
+    xet_metric_group_sampling_type samplingType;    ///< [out] metric group sampling type
+    uint32_t domain;                                ///< [out] metric group domain number
+    uint32_t metricCount;                           ///< [out] metric count belonging to this group
+    uint32_t rawReportSize;                         ///< [out] size of raw report
+    uint32_t calculatedReportSize;                  ///< [out] size of calculated report
 
 } xet_metric_group_properties_t;
 
@@ -162,27 +162,27 @@ typedef enum _xet_value_type_t
 typedef struct _xet_typed_value_t
 {
     xet_typed_value_version_t version;              ///< [in] ::XET_TYPED_VALUE_VERSION_CURRENT
-    xet_value_type_t type;                          ///< [in] value type
-    uint32_t valueUInt32;                           ///< [in] uint32_t value
-    uint64_t valueUInt64;                           ///< [in] uint64_t value
-    float valueFloat;                               ///< [in] float value
-    xe_bool_t valueBool;                            ///< [in] bool value
-    const char* valueString;                        ///< [in] string value
+    xet_value_type_t type;                          ///< [out] value type
+    uint32_t valueUInt32;                           ///< [out] uint32_t value
+    uint64_t valueUInt64;                           ///< [out] uint64_t value
+    float valueFloat;                               ///< [out] float value
+    xe_bool_t valueBool;                            ///< [out] bool value
+    const char* valueString;                        ///< [out] string value
 
 } xet_typed_value_t;
 
 ///////////////////////////////////////////////////////////////////////////////
-/// @brief Metric properties
+/// @brief Metric properties queried using ::xetMetricGetProperties
 typedef struct _xet_metric_properties_t
 {
     xet_metric_properties_version_t version;        ///< [in] ::XET_METRIC_PROPERTIES_VERSION_CURRENT
-    char name[XET_MAX_METRIC_NAME];                 ///< [in] metric name
-    char description[XET_MAX_METRIC_DESCRIPTION];   ///< [in] metric description
-    char component[XET_MAX_METRIC_COMPONENT];       ///< [in] metric component
-    uint32_t tierNumber;                            ///< [in] number of tier
-    xet_metric_type_t metricType;                   ///< [in] metric type
-    xet_value_type_t resultType;                    ///< [in] metric result type
-    char resultUnits[XET_MAX_METRIC_RESULT_UNITS];  ///< [in] metric result units
+    char name[XET_MAX_METRIC_NAME];                 ///< [out] metric name
+    char description[XET_MAX_METRIC_DESCRIPTION];   ///< [out] metric description
+    char component[XET_MAX_METRIC_COMPONENT];       ///< [out] metric component
+    uint32_t tierNumber;                            ///< [out] number of tier
+    xet_metric_type_t metricType;                   ///< [out] metric type
+    xet_value_type_t resultType;                    ///< [out] metric result type
+    char resultUnits[XET_MAX_METRIC_RESULT_UNITS];  ///< [out] metric result units
 
 } xet_metric_properties_t;
 
@@ -192,8 +192,8 @@ typedef struct _xet_metric_tracer_desc_t
 {
     xet_metric_tracer_desc_version_t version;       ///< [in] ::XET_METRIC_TRACER_DESC_VERSION_CURRENT
     xet_metric_group_handle_t hMetricGroup;         ///< [in] handle of the metric group
-    xet_event_handle_t hNotificationEvent;          ///< [in] event used for report availability notification. Must be host to
-                                                    ///< host type.
+    xe_event_handle_t hNotificationEvent;           ///< [in] event used for report availability notification. Must be device
+                                                    ///< to host type.
     uint32_t notifyEveryNReports;                   ///< [in/out] number of collected reports after which notification event
                                                     ///< will be signalled
     uint32_t samplingPeriodNs;                      ///< [in/out] tracer sampling period in nanoseconds
@@ -336,13 +336,13 @@ xetMetricGroupCalculateData(
     );
 
 ///////////////////////////////////////////////////////////////////////////////
-/// @brief Activates metric group.
+/// @brief Activates metric groups.
 /// 
 /// @details
 ///     - MetricGroup must be active until MetricQueryGetDeta and
 ///       ::xetMetricTracerClose.
 ///     - Conflicting metric groups cannot be activated, in such case tha call
-///       would fail
+///       would fail.
 /// 
 /// @returns
 ///     - ::XE_RESULT_SUCCESS
@@ -356,8 +356,8 @@ xetMetricGroupCalculateData(
 __xedllport xe_result_t __xecall
 xetDeviceActivateMetricGroups(
     xet_device_handle_t hDevice,                    ///< [in] handle of the device
-    uint32_t count,                                 ///< [in] metric group count to activate
-    xet_metric_group_handle_t* phMetricGroups       ///< [in] handles of the metric groups to activate
+    uint32_t count,                                 ///< [in] metric group count to activate. 0 to deactivate.
+    xet_metric_group_handle_t* phMetricGroups       ///< [in] handles of the metric groups to activate. NULL to deactivate.
     );
 
 ///////////////////////////////////////////////////////////////////////////////

@@ -40,6 +40,11 @@
 namespace xet
 {
     ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Handle of tool driver's device object
+    class Device;
+    using device_handle_t = Device*;
+
+    ///////////////////////////////////////////////////////////////////////////////
     /// @brief Handle of metric group's object
     class MetricGroup;
     using metric_group_handle_t = MetricGroup*;

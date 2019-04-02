@@ -81,13 +81,13 @@ namespace xet
     ///     - MetricGroup must be active until MetricQueryGetDeta and
     ///       ::MetricTracerClose.
     ///     - Conflicting metric groups cannot be activated, in such case tha call
-    ///       would fail
+    ///       would fail.
     /// 
     /// @throws result_t
     inline void 
     Device::ActivateMetricGroups(
-        uint32_t count,                                 ///< [in] metric group count to activate
-        metric_group_handle_t* phMetricGroups           ///< [in] handles of the metric groups to activate
+        uint32_t count,                                 ///< [in] metric group count to activate. 0 to deactivate.
+        metric_group_handle_t* phMetricGroups           ///< [in] handles of the metric groups to activate. NULL to deactivate.
         )
     {
         // auto result = ::xetDeviceActivateMetricGroups( handle, count, phMetricGroups );

@@ -23,7 +23,7 @@
 *
 * @file xet_metric.inl
 *
-* @brief C++ wrapper of Intel Xe Level-Zero Tool APIs for Metrics
+* @brief C++ wrapper of Intel Xe Level-Zero Tool APIs for Metric
 *
 * @cond DEV
 * DO NOT EDIT: generated from /scripts/tools/metric.yml

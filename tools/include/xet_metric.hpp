@@ -23,7 +23,7 @@
 *
 * @file xet_metric.hpp
 *
-* @brief C++ wrapper of Intel Xe Level-Zero Tool APIs for Metrics
+* @brief C++ wrapper of Intel Xe Level-Zero Tool APIs for Metric
 *
 * @cond DEV
 * DO NOT EDIT: generated from /scripts/tools/metric.yml
@@ -61,13 +61,13 @@ namespace xet
         struct metric_group_properties_t
         {
             metric_group_properties_version_t version = metric_group_properties_version_t::CURRENT; ///< [in] ::METRIC_GROUP_PROPERTIES_VERSION_CURRENT
-            char name[XET_MAX_METRIC_GROUP_NAME];           ///< [in] metric group name
-            char description[XET_MAX_METRIC_GROUP_DESCRIPTION]; ///< [in] metric group description
-            metric_group_sampling_type samplingType;        ///< [in] metric group sampling type
-            uint32_t domain;                                ///< [in] metric group domain number
-            uint32_t metricCount;                           ///< [in] metric count belonging to this group
-            uint32_t rawReportSize;                         ///< [in] size of raw report
-            uint32_t calculatedReportSize;                  ///< [in] size of calculated report
+            char name[XET_MAX_METRIC_GROUP_NAME];           ///< [out] metric group name
+            char description[XET_MAX_METRIC_GROUP_DESCRIPTION]; ///< [out] metric group description
+            metric_group_sampling_type samplingType;        ///< [out] metric group sampling type
+            uint32_t domain;                                ///< [out] metric group domain number
+            uint32_t metricCount;                           ///< [out] metric count belonging to this group
+            uint32_t rawReportSize;                         ///< [out] size of raw report
+            uint32_t calculatedReportSize;                  ///< [out] size of calculated report
 
         };
 
@@ -200,13 +200,13 @@ namespace xet
         struct metric_group_properties_t
         {
             metric_group_properties_version_t version = metric_group_properties_version_t::CURRENT; ///< [in] ::METRIC_GROUP_PROPERTIES_VERSION_CURRENT
-            char name[XET_MAX_METRIC_GROUP_NAME];           ///< [in] metric group name
-            char description[XET_MAX_METRIC_GROUP_DESCRIPTION]; ///< [in] metric group description
-            metric_group_sampling_type samplingType;        ///< [in] metric group sampling type
-            uint32_t domain;                                ///< [in] metric group domain number
-            uint32_t metricCount;                           ///< [in] metric count belonging to this group
-            uint32_t rawReportSize;                         ///< [in] size of raw report
-            uint32_t calculatedReportSize;                  ///< [in] size of calculated report
+            char name[XET_MAX_METRIC_GROUP_NAME];           ///< [out] metric group name
+            char description[XET_MAX_METRIC_GROUP_DESCRIPTION]; ///< [out] metric group description
+            metric_group_sampling_type samplingType;        ///< [out] metric group sampling type
+            uint32_t domain;                                ///< [out] metric group domain number
+            uint32_t metricCount;                           ///< [out] metric count belonging to this group
+            uint32_t rawReportSize;                         ///< [out] size of raw report
+            uint32_t calculatedReportSize;                  ///< [out] size of calculated report
 
         };
 
@@ -215,12 +215,12 @@ namespace xet
         struct typed_value_t
         {
             typed_value_version_t version = typed_value_version_t::CURRENT; ///< [in] ::TYPED_VALUE_VERSION_CURRENT
-            value_type_t type;                              ///< [in] value type
-            uint32_t valueUInt32;                           ///< [in] uint32_t value
-            uint64_t valueUInt64;                           ///< [in] uint64_t value
-            float valueFloat;                               ///< [in] float value
-            xe::_bool_t valueBool;                          ///< [in] bool value
-            const char* valueString;                        ///< [in] string value
+            value_type_t type;                              ///< [out] value type
+            uint32_t valueUInt32;                           ///< [out] uint32_t value
+            uint64_t valueUInt64;                           ///< [out] uint64_t value
+            float valueFloat;                               ///< [out] float value
+            xe::_bool_t valueBool;                          ///< [out] bool value
+            const char* valueString;                        ///< [out] string value
 
         };
 
@@ -229,13 +229,13 @@ namespace xet
         struct metric_properties_t
         {
             metric_properties_version_t version = metric_properties_version_t::CURRENT; ///< [in] ::METRIC_PROPERTIES_VERSION_CURRENT
-            char name[XET_MAX_METRIC_NAME];                 ///< [in] metric name
-            char description[XET_MAX_METRIC_DESCRIPTION];   ///< [in] metric description
-            char component[XET_MAX_METRIC_COMPONENT];       ///< [in] metric component
-            uint32_t tierNumber;                            ///< [in] number of tier
-            metric_type_t metricType;                       ///< [in] metric type
-            value_type_t resultType;                        ///< [in] metric result type
-            char resultUnits[XET_MAX_METRIC_RESULT_UNITS];  ///< [in] metric result units
+            char name[XET_MAX_METRIC_NAME];                 ///< [out] metric name
+            char description[XET_MAX_METRIC_DESCRIPTION];   ///< [out] metric description
+            char component[XET_MAX_METRIC_COMPONENT];       ///< [out] metric component
+            uint32_t tierNumber;                            ///< [out] number of tier
+            metric_type_t metricType;                       ///< [out] metric type
+            value_type_t resultType;                        ///< [out] metric result type
+            char resultUnits[XET_MAX_METRIC_RESULT_UNITS];  ///< [out] metric result units
 
         };
 
@@ -245,8 +245,8 @@ namespace xet
         {
             metric_tracer_desc_version_t version = metric_tracer_desc_version_t::CURRENT;   ///< [in] ::METRIC_TRACER_DESC_VERSION_CURRENT
             metric_group_handle_t hMetricGroup;             ///< [in] handle of the metric group
-            event_handle_t hNotificationEvent;              ///< [in] event used for report availability notification. Must be host to
-                                                            ///< host type.
+            xe::_event_handle_t hNotificationEvent;         ///< [in] event used for report availability notification. Must be device
+                                                            ///< to host type.
             uint32_t notifyEveryNReports;                   ///< [in/out] number of collected reports after which notification event
                                                             ///< will be signalled
             uint32_t samplingPeriodNs;                      ///< [in/out] tracer sampling period in nanoseconds
@@ -384,8 +384,8 @@ namespace xet
         {
             metric_tracer_desc_version_t version = metric_tracer_desc_version_t::CURRENT;   ///< [in] ::METRIC_TRACER_DESC_VERSION_CURRENT
             metric_group_handle_t hMetricGroup;             ///< [in] handle of the metric group
-            event_handle_t hNotificationEvent;              ///< [in] event used for report availability notification. Must be host to
-                                                            ///< host type.
+            xe::_event_handle_t hNotificationEvent;         ///< [in] event used for report availability notification. Must be device
+                                                            ///< to host type.
             uint32_t notifyEveryNReports;                   ///< [in/out] number of collected reports after which notification event
                                                             ///< will be signalled
             uint32_t samplingPeriodNs;                      ///< [in/out] tracer sampling period in nanoseconds

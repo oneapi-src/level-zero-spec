@@ -23,7 +23,7 @@
 *
 * @file xet_metric.cpp
 *
-* @brief Intel Xe Level-Zero Tool APIs for Metrics
+* @brief Intel Xe Level-Zero Tool APIs for Metric
 *
 * DO NOT EDIT: generated from /scripts/tools/metric.yml
 *
@@ -388,13 +388,13 @@ xetMetricGroupCalculateData(
 }
 
 ///////////////////////////////////////////////////////////////////////////////
-/// @brief Activates metric group.
+/// @brief Activates metric groups.
 /// 
 /// @details
 ///     - MetricGroup must be active until MetricQueryGetDeta and
 ///       ::xetMetricTracerClose.
 ///     - Conflicting metric groups cannot be activated, in such case tha call
-///       would fail
+///       would fail.
 /// 
 /// @returns
 ///     - ::XE_RESULT_SUCCESS
@@ -411,8 +411,8 @@ xetMetricGroupCalculateData(
 __xedllexport xe_result_t __xecall
 xetDeviceActivateMetricGroups(
     xet_device_handle_t hDevice,                    ///< [in] handle of the device
-    uint32_t count,                                 ///< [in] metric group count to activate
-    xet_metric_group_handle_t* phMetricGroups       ///< [in] handles of the metric groups to activate
+    uint32_t count,                                 ///< [in] metric group count to activate. 0 to deactivate.
+    xet_metric_group_handle_t* phMetricGroups       ///< [in] handles of the metric groups to activate. NULL to deactivate.
     )
 {
     try
