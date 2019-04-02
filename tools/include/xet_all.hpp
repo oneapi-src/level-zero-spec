@@ -34,10 +34,10 @@
 
 #include "xet_device.hpp"
 #include "xet_gtpin.hpp"
-#include "xet_metrics.hpp"
+#include "xet_metric.hpp"
 #include "xet_device.inl"
 #include "xet_gtpin.inl"
-#include "xet_metrics.inl"
+#include "xet_metric.inl"
 
 #endif // defined(__cplusplus)
 #endif // _XET_ALL_HPP

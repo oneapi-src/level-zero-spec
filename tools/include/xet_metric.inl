@@ -21,23 +21,23 @@
 * express and approved by Intel in writing.  
 * @endcond
 *
-* @file xet_metrics.inl
+* @file xet_metric.inl
 *
-* @brief C++ wrapper of Intel Xe Level-Zero Tool APIs for Metrics
+* @brief C++ wrapper of Intel Xe Level-Zero Tool APIs for Metric
 *
 * @cond DEV
-* DO NOT EDIT: generated from /scripts/tools/metrics.yml
+* DO NOT EDIT: generated from /scripts/tools/metric.yml
 * @endcond
 *
 ******************************************************************************/
-#ifndef _XET_METRICS_INL
-#define _XET_METRICS_INL
+#ifndef _XET_METRIC_INL
+#define _XET_METRIC_INL
 #if defined(__cplusplus)
 #pragma once
-#include "xet_metrics.hpp"
+#include "xet_metric.hpp"
 
 namespace xet
 {
 } // namespace xet
 #endif // defined(__cplusplus)
-#endif // _XET_METRICS_INL
+#endif // _XET_METRIC_INL

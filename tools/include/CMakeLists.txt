@@ -9,6 +9,6 @@ target_sources(${TARGET_NAME}
     ${CMAKE_CURRENT_SOURCE_DIR}/xet_device.inl
     ${CMAKE_CURRENT_SOURCE_DIR}/xet_gtpin.h
     ${CMAKE_CURRENT_SOURCE_DIR}/xet_gtpin.inl
-    ${CMAKE_CURRENT_SOURCE_DIR}/xet_metrics.h
-    ${CMAKE_CURRENT_SOURCE_DIR}/xet_metrics.inl
+    ${CMAKE_CURRENT_SOURCE_DIR}/xet_metric.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/xet_metric.inl
 )

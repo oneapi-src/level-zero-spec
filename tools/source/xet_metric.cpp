@@ -21,20 +21,20 @@
 * express and approved by Intel in writing.  
 * @endcond
 *
-* @file xet_metrics.cpp
+* @file xet_metric.cpp
 *
-* @brief Intel Xe Level-Zero Tool APIs for Metrics
+* @brief Intel Xe Level-Zero Tool APIs for Metric
 *
-* DO NOT EDIT: generated from /scripts/tools/metrics.yml
+* DO NOT EDIT: generated from /scripts/tools/metric.yml
 *
 ******************************************************************************/
 #if defined(XET_CPP)
-#include "../include/xet_metrics.hpp"
+#include "../include/xet_metric.hpp"
 #else
-#include "../include/xet_metrics.h"
+#include "../include/xet_metric.h"
 #endif
 #if !defined(XET_NULLDRV)
-#include "metrics.h"
+#include "metric.h"
 #endif
 
 #include <exception>    // @todo: move to common and/or precompiled header

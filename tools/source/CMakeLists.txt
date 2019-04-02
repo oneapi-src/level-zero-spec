@@ -11,7 +11,7 @@ set(L0_RUNTIME_SOURCES
     ${CMAKE_CURRENT_SOURCE_DIR}/xet_common.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/xet_device.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/xet_gtpin.cpp
-    ${CMAKE_CURRENT_SOURCE_DIR}/xet_metrics.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/xet_metric.cpp
 )
 
 # Make our source files visible to parent 

@@ -21,17 +21,17 @@
 * express and approved by Intel in writing.  
 * @endcond
 *
-* @file xet_metrics.h
+* @file xet_metric.h
 *
-* @brief Intel Xe Level-Zero Tool APIs for Metrics
+* @brief Intel Xe Level-Zero Tool APIs for Metric
 *
 * @cond DEV
-* DO NOT EDIT: generated from /scripts/tools/metrics.yml
+* DO NOT EDIT: generated from /scripts/tools/metric.yml
 * @endcond
 *
 ******************************************************************************/
-#ifndef _XET_METRICS_H
-#define _XET_METRICS_H
+#ifndef _XET_METRIC_H
+#define _XET_METRIC_H
 #if defined(__cplusplus)
 #pragma once
 #endif
@@ -201,4 +201,4 @@ xetDeviceGetMetricGroupMetricProperties(
 } // extern "C"
 #endif
 
-#endif // _XET_METRICS_H
+#endif // _XET_METRIC_H

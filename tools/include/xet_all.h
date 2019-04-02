@@ -35,6 +35,6 @@
 
 #include "xet_device.h"
 #include "xet_gtpin.h"
-#include "xet_metrics.h"
+#include "xet_metric.h"
 
 #endif // _XET_ALL_H

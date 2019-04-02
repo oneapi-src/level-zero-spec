@@ -1,6 +1,6 @@
 --- #--------------------------------------------------------------------------
 type: header
-desc: "Intel $OneApi Level-Zero Tool APIs for Metrics"
+desc: "Intel $OneApi Level-Zero Tool APIs for Metric"
 --- #--------------------------------------------------------------------------
 type: enum
 desc: ""
