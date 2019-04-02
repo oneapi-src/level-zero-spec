@@ -196,7 +196,6 @@ typedef struct _xe_device_properties_t
     uint64_t totalLocalMemSize;                     ///< [out] Total memory size in bytes.
     uint32_t numAsyncComputeEngines;                ///< [out] Number of asynchronous compute engines
     uint32_t numAsyncCopyEngines;                   ///< [out] Number of asynchronous copy engines
-    uint32_t numComputeCores;                       ///< [out] Number of compute cores
     uint32_t maxCommandQueuePriority;               ///< [out] Maximum priority for command queues. Higher value is higher
                                                     ///< priority.
     uint32_t numThreadsPerEU;                       ///< [out] Number of threads per EU.

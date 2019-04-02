@@ -165,9 +165,6 @@ members:
       name: numAsyncCopyEngines
       desc: "[out] Number of asynchronous copy engines"
     - type: uint32_t
-      name: numComputeCores
-      desc: "[out] Number of compute cores"
-    - type: uint32_t
       name: maxCommandQueuePriority
       desc: "[out] Maximum priority for command queues. Higher value is higher priority."
     - type: uint32_t

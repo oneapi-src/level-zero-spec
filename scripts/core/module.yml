@@ -38,7 +38,7 @@ members:
       name: inputSize
       desc: "[in] size of input IL or ISA from pInputModule."
       init: "0"
-    - type: "const char*"
+    - type: "const uint8_t*"
       name: pInputModule
       desc: "[in] pointer to IL or ISA"
       init: nullptr

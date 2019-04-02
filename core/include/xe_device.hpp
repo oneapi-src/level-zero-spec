@@ -360,7 +360,6 @@ namespace xe
             uint64_t totalLocalMemSize;                     ///< [out] Total memory size in bytes.
             uint32_t numAsyncComputeEngines;                ///< [out] Number of asynchronous compute engines
             uint32_t numAsyncCopyEngines;                   ///< [out] Number of asynchronous copy engines
-            uint32_t numComputeCores;                       ///< [out] Number of compute cores
             uint32_t maxCommandQueuePriority;               ///< [out] Maximum priority for command queues. Higher value is higher
                                                             ///< priority.
             uint32_t numThreadsPerEU;                       ///< [out] Number of threads per EU.
@@ -474,7 +473,7 @@ namespace xe
             module_desc_version_t version = module_desc_version_t::CURRENT; ///< [in] ::MODULE_DESC_VERSION_CURRENT
             module_format_t format;                         ///< [in] Module format passed in with pInputModule
             size_t inputSize = 0;                           ///< [in] size of input IL or ISA from pInputModule.
-            const char* pInputModule = nullptr;             ///< [in] pointer to IL or ISA
+            const uint8_t* pInputModule = nullptr;          ///< [in] pointer to IL or ISA
             const char* pBuildFlags = nullptr;              ///< [in] string containing compiler flags. See programming guide for build
                                                             ///< flags.
 
