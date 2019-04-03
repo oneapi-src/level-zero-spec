@@ -363,8 +363,8 @@ namespace xe
             uint32_t maxCommandQueuePriority;               ///< [out] Maximum priority for command queues. Higher value is higher
                                                             ///< priority.
             uint32_t numThreadsPerEU;                       ///< [out] Number of threads per EU.
-            uint32_t numEUsPerDSS;                          ///< [out] Number of EUs per dual sub-slice.
-            uint32_t numDSSPerSlice;                        ///< [out] Number of dual sub-slices per slice.
+            uint32_t numEUsPerSubslice;                     ///< [out] Number of EUs per sub-slice.
+            uint32_t numSubslicesPerSlice;                  ///< [out] Number of sub-slices per slice.
             uint32_t numSlicesPerTile;                      ///< [out] Number of slices per tile.
             uint32_t numTiles;                              ///< [out] Number of tiles for this device.
             char name[XE_MAX_DEVICE_NAME];                  ///< [out] Device name

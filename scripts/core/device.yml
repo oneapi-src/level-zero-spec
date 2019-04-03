@@ -171,11 +171,11 @@ members:
       name: numThreadsPerEU
       desc: "[out] Number of threads per EU."
     - type: uint32_t
-      name: numEUsPerDSS
-      desc: "[out] Number of EUs per dual sub-slice."
+      name: numEUsPerSubslice
+      desc: "[out] Number of EUs per sub-slice."
     - type: uint32_t
-      name: numDSSPerSlice
-      desc: "[out] Number of dual sub-slices per slice."
+      name: numSubslicesPerSlice
+      desc: "[out] Number of sub-slices per slice."
     - type: uint32_t
       name: numSlicesPerTile
       desc: "[out] Number of slices per tile."
