@@ -93,7 +93,7 @@ xetDeviceGetMetricGroup(
 /// @brief Metric group sampling type
 typedef enum _xet_metric_group_sampling_type
 {
-    XET_METRIC_GROUP_SAMPLING_TYPE_NONE = 0,        ///< No sampling mode
+    XET_METRIC_GROUP_SAMPLING_TYPE_NONE = 0,        ///< Invalid sampling mode
     XET_METRIC_GROUP_SAMPLING_TYPE_EVENT_BASED = XE_BIT(0), ///< Event based sampling
     XET_METRIC_GROUP_SAMPLING_TYPE_TIME_BASED = XE_BIT(1),  ///< Time based sampling
 
@@ -115,7 +115,8 @@ typedef struct _xet_metric_group_properties_t
     char name[XET_MAX_METRIC_GROUP_NAME];           ///< [out] metric group name
     char description[XET_MAX_METRIC_GROUP_DESCRIPTION]; ///< [out] metric group description
     xet_metric_group_sampling_type samplingType;    ///< [out] metric group sampling type
-    uint32_t domain;                                ///< [out] metric group domain number
+    uint32_t domain;                                ///< [out] metric group domain number. Cannot use simultaneous metric
+                                                    ///< groups from different domains.
     uint32_t metricCount;                           ///< [out] metric count belonging to this group
     uint32_t rawReportSize;                         ///< [out] size of raw report
     uint32_t calculatedReportSize;                  ///< [out] size of calculated report
@@ -164,14 +165,14 @@ xetMetricGroupGetProperties(
 /// @brief Metric types
 typedef enum _xet_metric_type_t
 {
-    XET_METRIC_TYPE_DURATION = 0,                   ///< Metric type: duration
-    XET_METRIC_TYPE_EVENT = 1,                      ///< Metric type: event
-    XET_METRIC_TYPE_EVENT_WITH_RANGE = 2,           ///< Metric type: event with range
-    XET_METRIC_TYPE_THROUGHPUT = 3,                 ///< Metric type: throughput
-    XET_METRIC_TYPE_TIMESTAMP = 4,                  ///< Metric type: timestamp
-    XET_METRIC_TYPE_FLAG = 5,                       ///< Metric type: flag
-    XET_METRIC_TYPE_RATIO = 6,                      ///< Metric type: ratio
-    XET_METRIC_TYPE_RAW = 7,                        ///< Metric type: raw
+    XET_METRIC_TYPE_DURATION,                       ///< Metric type: duration
+    XET_METRIC_TYPE_EVENT,                          ///< Metric type: event
+    XET_METRIC_TYPE_EVENT_WITH_RANGE,               ///< Metric type: event with range
+    XET_METRIC_TYPE_THROUGHPUT,                     ///< Metric type: throughput
+    XET_METRIC_TYPE_TIMESTAMP,                      ///< Metric type: timestamp
+    XET_METRIC_TYPE_FLAG,                           ///< Metric type: flag
+    XET_METRIC_TYPE_RATIO,                          ///< Metric type: ratio
+    XET_METRIC_TYPE_RAW,                            ///< Metric type: raw
 
 } xet_metric_type_t;
 
@@ -179,11 +180,11 @@ typedef enum _xet_metric_type_t
 /// @brief Value types
 typedef enum _xet_value_type_t
 {
-    XET_VALUE_TYPE_UINT32 = 0,                      ///< Value type: uint32
-    XET_VALUE_TYPE_UINT64 = 1,                      ///< Value type: uint64
-    XET_VALUE_TYPE_FLOAT = 2,                       ///< Value type: float
-    XET_VALUE_TYPE_BOOL = 3,                        ///< Value type: bool
-    XET_VALUE_TYPE_STRING = 4,                      ///< Value type: string
+    XET_VALUE_TYPE_UINT32,                          ///< Value type: uint32
+    XET_VALUE_TYPE_UINT64,                          ///< Value type: uint64
+    XET_VALUE_TYPE_FLOAT,                           ///< Value type: float
+    XET_VALUE_TYPE_BOOL,                            ///< Value type: bool
+    XET_VALUE_TYPE_STRING,                          ///< Value type: string
 
 } xet_value_type_t;
 
@@ -327,7 +328,7 @@ __xedllport xe_result_t __xecall
 xetDeviceActivateMetricGroups(
     xe_device_handle_t hDevice,                     ///< [in] handle of the device
     uint32_t count,                                 ///< [in] metric group count to activate. 0 to deactivate.
-    xet_metric_group_handle_t* phMetricGroups       ///< [in] handles of the metric groups to activate. NULL to deactivate
+    xet_metric_group_handle_t* phMetricGroups       ///< [in] handles of the metric groups to activate. NULL to deactivate.
     );
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -344,8 +345,6 @@ typedef struct _xet_metric_tracer_desc_t
 {
     xet_metric_tracer_desc_version_t version;       ///< [in] ::XET_METRIC_TRACER_DESC_VERSION_CURRENT
     xet_metric_group_handle_t hMetricGroup;         ///< [in] handle of the metric group
-    xe_event_handle_t hNotificationEvent;           ///< [in] event used for report availability notification. Must be device
-                                                    ///< to host type.
     uint32_t notifyEveryNReports;                   ///< [in/out] number of collected reports after which notification event
                                                     ///< will be signalled
     uint32_t samplingPeriodNs;                      ///< [in/out] tracer sampling period in nanoseconds
@@ -365,15 +364,18 @@ typedef struct _xet_metric_tracer_desc_t
 ///     - ::XE_RESULT_ERROR_DEVICE_LOST
 ///     - ::XE_RESULT_ERROR_INVALID_PARAMETER
 ///         + nullptr == hDevice
-///         + nullptr == desc
+///         + nullptr == pDesc
+///         + nullptr == hNotificationEvent
 ///         + nullptr == phMetricTracer
 ///         + devices do not support metric tracer
 ///     - ::XE_RESULT_ERROR_UNSUPPORTED
-///         + ::XET_METRIC_TRACER_DESC_VERSION_CURRENT < desc->version
+///         + ::XET_METRIC_TRACER_DESC_VERSION_CURRENT < pDesc->version
 __xedllport xe_result_t __xecall
 xetDeviceOpenMetricTracer(
     xe_device_handle_t hDevice,                     ///< [in] handle of the device
-    xet_metric_tracer_desc_t* desc,                 ///< [in/out] metric tracer descriptor
+    xet_metric_tracer_desc_t* pDesc,                ///< [in/out] metric tracer descriptor
+    xe_event_handle_t hNotificationEvent,           ///< [in] event used for report availability notification. Must be device
+                                                    ///< to host type.
     xet_metric_tracer_handle_t* phMetricTracer      ///< [out] handle of metric tracer
     );
 
@@ -449,8 +451,8 @@ xetMetricTracerReadData(
 /// @brief Metric query pool types
 typedef enum _xet_metric_query_pool_flag_t
 {
-    XET_METRIC_QUERY_POOL_FLAG_PERFORMANCE = 0,     ///< Performance metric query pool.
-    XET_METRIC_QUERY_POOL_FLAG_SKIP_EXECUTION = 1,  ///< Skips workload execution between begin/end calls.
+    XET_METRIC_QUERY_POOL_FLAG_PERFORMANCE,         ///< Performance metric query pool.
+    XET_METRIC_QUERY_POOL_FLAG_SKIP_EXECUTION,      ///< Skips workload execution between begin/end calls.
 
 } xet_metric_query_pool_flag_t;
 

@@ -52,7 +52,7 @@ namespace xet
         /// @brief C++ version for ::xet_metric_group_sampling_type
         enum class metric_group_sampling_type
         {
-            METRIC_GROUP_SAMPLING_TYPE_NONE = 0,            ///< No sampling mode
+            METRIC_GROUP_SAMPLING_TYPE_NONE = 0,            ///< Invalid sampling mode
             METRIC_GROUP_SAMPLING_TYPE_EVENT_BASED = XE_BIT(0), ///< Event based sampling
             METRIC_GROUP_SAMPLING_TYPE_TIME_BASED = XE_BIT(1),  ///< Time based sampling
 
@@ -86,7 +86,7 @@ namespace xet
         inline void
         ActivateMetricGroups(
             uint32_t count,                                 ///< [in] metric group count to activate. 0 to deactivate.
-            metric_group_handle_t* phMetricGroups           ///< [in] handles of the metric groups to activate. NULL to deactivate
+            metric_group_handle_t* phMetricGroups           ///< [in] handles of the metric groups to activate. NULL to deactivate.
             );
 
         ///////////////////////////////////////////////////////////////////////////////
@@ -97,7 +97,9 @@ namespace xet
         /// @throws result_t
         inline metric_tracer_handle_t
         OpenMetricTracer(
-            metric_tracer_desc_t* desc                      ///< [in/out] metric tracer descriptor
+            metric_tracer_desc_t* pDesc,                    ///< [in/out] metric tracer descriptor
+            xe::_event_handle_t hNotificationEvent          ///< [in] event used for report availability notification. Must be device
+                                                            ///< to host type.
             );
 
         ///////////////////////////////////////////////////////////////////////////////

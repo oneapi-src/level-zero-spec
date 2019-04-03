@@ -87,7 +87,7 @@ namespace xet
     inline void 
     Device::ActivateMetricGroups(
         uint32_t count,                                 ///< [in] metric group count to activate. 0 to deactivate.
-        metric_group_handle_t* phMetricGroups           ///< [in] handles of the metric groups to activate. NULL to deactivate
+        metric_group_handle_t* phMetricGroups           ///< [in] handles of the metric groups to activate. NULL to deactivate.
         )
     {
         // auto result = ::xetDeviceActivateMetricGroups( handle, count, phMetricGroups );
@@ -107,10 +107,12 @@ namespace xet
     /// @throws result_t
     inline metric_tracer_handle_t 
     Device::OpenMetricTracer(
-        metric_tracer_desc_t* desc                      ///< [in/out] metric tracer descriptor
+        metric_tracer_desc_t* pDesc,                    ///< [in/out] metric tracer descriptor
+        xe::_event_handle_t hNotificationEvent          ///< [in] event used for report availability notification. Must be device
+                                                        ///< to host type.
         )
     {
-        // auto result = ::xetDeviceOpenMetricTracer( handle, desc );
+        // auto result = ::xetDeviceOpenMetricTracer( handle, pDesc, hNotificationEvent );
         // if( ::XE_RESULT_SUCCESS != result ) throw exception(result, "xet::Device::OpenMetricTracer");
     }
 

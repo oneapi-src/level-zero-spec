@@ -64,7 +64,8 @@ namespace xet
             char name[XET_MAX_METRIC_GROUP_NAME];           ///< [out] metric group name
             char description[XET_MAX_METRIC_GROUP_DESCRIPTION]; ///< [out] metric group description
             metric_group_sampling_type samplingType;        ///< [out] metric group sampling type
-            uint32_t domain;                                ///< [out] metric group domain number
+            uint32_t domain;                                ///< [out] metric group domain number. Cannot use simultaneous metric
+                                                            ///< groups from different domains.
             uint32_t metricCount;                           ///< [out] metric count belonging to this group
             uint32_t rawReportSize;                         ///< [out] size of raw report
             uint32_t calculatedReportSize;                  ///< [out] size of calculated report
@@ -131,14 +132,14 @@ namespace xet
         /// @brief C++ version for ::xet_metric_type_t
         enum class metric_type_t
         {
-            DURATION = 0,                                   ///< Metric type: duration
-            EVENT = 1,                                      ///< Metric type: event
-            EVENT_WITH_RANGE = 2,                           ///< Metric type: event with range
-            THROUGHPUT = 3,                                 ///< Metric type: throughput
-            TIMESTAMP = 4,                                  ///< Metric type: timestamp
-            FLAG = 5,                                       ///< Metric type: flag
-            RATIO = 6,                                      ///< Metric type: ratio
-            RAW = 7,                                        ///< Metric type: raw
+            DURATION,                                       ///< Metric type: duration
+            EVENT,                                          ///< Metric type: event
+            EVENT_WITH_RANGE,                               ///< Metric type: event with range
+            THROUGHPUT,                                     ///< Metric type: throughput
+            TIMESTAMP,                                      ///< Metric type: timestamp
+            FLAG,                                           ///< Metric type: flag
+            RATIO,                                          ///< Metric type: ratio
+            RAW,                                            ///< Metric type: raw
 
         };
 
@@ -146,11 +147,11 @@ namespace xet
         /// @brief C++ version for ::xet_value_type_t
         enum class value_type_t
         {
-            UINT32 = 0,                                     ///< Value type: uint32
-            UINT64 = 1,                                     ///< Value type: uint64
-            FLOAT = 2,                                      ///< Value type: float
-            BOOL = 3,                                       ///< Value type: bool
-            STRING = 4,                                     ///< Value type: string
+            UINT32,                                         ///< Value type: uint32
+            UINT64,                                         ///< Value type: uint64
+            FLOAT,                                          ///< Value type: float
+            BOOL,                                           ///< Value type: bool
+            STRING,                                         ///< Value type: string
 
         };
 
@@ -182,8 +183,8 @@ namespace xet
         /// @brief C++ version for ::xet_metric_query_pool_flag_t
         enum class metric_query_pool_flag_t
         {
-            PERFORMANCE = 0,                                ///< Performance metric query pool.
-            SKIP_EXECUTION = 1,                             ///< Skips workload execution between begin/end calls.
+            PERFORMANCE,                                    ///< Performance metric query pool.
+            SKIP_EXECUTION,                                 ///< Skips workload execution between begin/end calls.
 
         };
 
@@ -203,7 +204,8 @@ namespace xet
             char name[XET_MAX_METRIC_GROUP_NAME];           ///< [out] metric group name
             char description[XET_MAX_METRIC_GROUP_DESCRIPTION]; ///< [out] metric group description
             metric_group_sampling_type samplingType;        ///< [out] metric group sampling type
-            uint32_t domain;                                ///< [out] metric group domain number
+            uint32_t domain;                                ///< [out] metric group domain number. Cannot use simultaneous metric
+                                                            ///< groups from different domains.
             uint32_t metricCount;                           ///< [out] metric count belonging to this group
             uint32_t rawReportSize;                         ///< [out] size of raw report
             uint32_t calculatedReportSize;                  ///< [out] size of calculated report
@@ -245,8 +247,6 @@ namespace xet
         {
             metric_tracer_desc_version_t version = metric_tracer_desc_version_t::CURRENT;   ///< [in] ::METRIC_TRACER_DESC_VERSION_CURRENT
             metric_group_handle_t hMetricGroup;             ///< [in] handle of the metric group
-            xe::_event_handle_t hNotificationEvent;         ///< [in] event used for report availability notification. Must be device
-                                                            ///< to host type.
             uint32_t notifyEveryNReports;                   ///< [in/out] number of collected reports after which notification event
                                                             ///< will be signalled
             uint32_t samplingPeriodNs;                      ///< [in/out] tracer sampling period in nanoseconds
@@ -384,8 +384,6 @@ namespace xet
         {
             metric_tracer_desc_version_t version = metric_tracer_desc_version_t::CURRENT;   ///< [in] ::METRIC_TRACER_DESC_VERSION_CURRENT
             metric_group_handle_t hMetricGroup;             ///< [in] handle of the metric group
-            xe::_event_handle_t hNotificationEvent;         ///< [in] event used for report availability notification. Must be device
-                                                            ///< to host type.
             uint32_t notifyEveryNReports;                   ///< [in/out] number of collected reports after which notification event
                                                             ///< will be signalled
             uint32_t samplingPeriodNs;                      ///< [in/out] tracer sampling period in nanoseconds
@@ -426,8 +424,8 @@ namespace xet
         /// @brief C++ version for ::xet_metric_query_pool_flag_t
         enum class metric_query_pool_flag_t
         {
-            PERFORMANCE = 0,                                ///< Performance metric query pool.
-            SKIP_EXECUTION = 1,                             ///< Skips workload execution between begin/end calls.
+            PERFORMANCE,                                    ///< Performance metric query pool.
+            SKIP_EXECUTION,                                 ///< Skips workload execution between begin/end calls.
 
         };
 
@@ -485,8 +483,8 @@ namespace xet
         /// @brief C++ version for ::xet_metric_query_pool_flag_t
         enum class metric_query_pool_flag_t
         {
-            PERFORMANCE = 0,                                ///< Performance metric query pool.
-            SKIP_EXECUTION = 1,                             ///< Skips workload execution between begin/end calls.
+            PERFORMANCE,                                    ///< Performance metric query pool.
+            SKIP_EXECUTION,                                 ///< Skips workload execution between begin/end calls.
 
         };
 

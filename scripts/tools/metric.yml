@@ -51,7 +51,7 @@ class: $tDevice
 name: $t_metric_group_sampling_type
 etors:
     - name: $T_METRIC_GROUP_SAMPLING_TYPE_NONE
-      desc: "No sampling mode"
+      desc: "Invalid sampling mode"
       value: "0"
     - name: $T_METRIC_GROUP_SAMPLING_TYPE_EVENT_BASED
       desc: "Event based sampling"
@@ -89,7 +89,7 @@ members:
       desc: "[out] metric group sampling type"
     - type: uint32_t
       name: "domain"
-      desc: "[out] metric group domain number"
+      desc: "[out] metric group domain number. Cannot use simultaneous metric groups from different domains."
     - type: uint32_t
       name: "metricCount"
       desc: "[out] metric count belonging to this group"
@@ -143,28 +143,20 @@ class: $tMetric
 name: $t_metric_type_t
 etors:
     - name: $T_METRIC_TYPE_DURATION
-      value: "0"
       desc: "Metric type: duration"
     - name: $T_METRIC_TYPE_EVENT
-      value: "1"
       desc: "Metric type: event"
     - name: $T_METRIC_TYPE_EVENT_WITH_RANGE
-      value: "2"
       desc: "Metric type: event with range"
     - name: $T_METRIC_TYPE_THROUGHPUT
-      value: "3"
       desc: "Metric type: throughput"
     - name: $T_METRIC_TYPE_TIMESTAMP
-      value: "4"
       desc: "Metric type: timestamp"
     - name: $T_METRIC_TYPE_FLAG
-      value: "5"
       desc: "Metric type: flag"
     - name: $T_METRIC_TYPE_RATIO
-      value: "6"
       desc: "Metric type: ratio"
     - name: $T_METRIC_TYPE_RAW
-      value: "7"
       desc: "Metric type: raw"
 --- #--------------------------------------------------------------------------
 type: enum
@@ -173,19 +165,14 @@ class: $tMetric
 name: $t_value_type_t
 etors:
     - name: $T_VALUE_TYPE_UINT32
-      value: "0"
       desc: "Value type: uint32"
     - name: $T_VALUE_TYPE_UINT64
-      value: "1"
       desc: "Value type: uint64"
     - name: $T_VALUE_TYPE_FLOAT
-      value: "2"
       desc: "Value type: float"
     - name: $T_VALUE_TYPE_BOOL
-      value: "3"
       desc: "Value type: bool"
     - name: $T_VALUE_TYPE_STRING
-      value: "4"
       desc: "Value type: string"
 --- #--------------------------------------------------------------------------
 type: enum
@@ -373,9 +360,6 @@ members:
     - type: "$t_metric_group_handle_t"
       name: "hMetricGroup"
       desc: "[in] handle of the metric group"
-    - type: "$x_event_handle_t"
-      name: "hNotificationEvent"
-      desc: "[in] event used for report availability notification. Must be device to host type."
     - type: uint32_t
       name: "notifyEveryNReports"
       desc: "[in/out] number of collected reports after which notification event will be signalled"
@@ -394,8 +378,11 @@ params:
       name: hDevice
       desc: "[in] handle of the device"
     - type: "$t_metric_tracer_desc_t*"
-      name: desc
+      name: pDesc
       desc: "[in/out] metric tracer descriptor"
+    - type: "$x_event_handle_t"
+      name: hNotificationEvent
+      desc: "[in] event used for report availability notification. Must be device to host type."
     - type: "$t_metric_tracer_handle_t*"
       name: phMetricTracer
       desc: "[out] handle of metric tracer"
@@ -466,10 +453,8 @@ class: $tMetricQueryPool
 name: $t_metric_query_pool_flag_t
 etors:
     - name: $T_METRIC_QUERY_POOL_FLAG_PERFORMANCE
-      value: "0"
       desc: "Performance metric query pool."
     - name: $T_METRIC_QUERY_POOL_FLAG_SKIP_EXECUTION
-      value: "1"
       desc: "Skips workload execution between begin/end calls."
 --- #--------------------------------------------------------------------------
 type: enum

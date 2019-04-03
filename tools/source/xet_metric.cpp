@@ -412,7 +412,7 @@ __xedllexport xe_result_t __xecall
 xetDeviceActivateMetricGroups(
     xe_device_handle_t hDevice,                     ///< [in] handle of the device
     uint32_t count,                                 ///< [in] metric group count to activate. 0 to deactivate.
-    xet_metric_group_handle_t* phMetricGroups       ///< [in] handles of the metric groups to activate. NULL to deactivate
+    xet_metric_group_handle_t* phMetricGroups       ///< [in] handles of the metric groups to activate. NULL to deactivate.
     )
 {
     try
@@ -460,18 +460,21 @@ xetDeviceActivateMetricGroups(
 ///     - ::XE_RESULT_ERROR_DEVICE_LOST
 ///     - ::XE_RESULT_ERROR_INVALID_PARAMETER
 ///         + nullptr == hDevice
-///         + nullptr == desc
+///         + nullptr == pDesc
+///         + nullptr == hNotificationEvent
 ///         + nullptr == phMetricTracer
 ///         + devices do not support metric tracer
 ///     - ::XE_RESULT_ERROR_UNSUPPORTED
-///         + ::XET_METRIC_TRACER_DESC_VERSION_CURRENT < desc->version
+///         + ::XET_METRIC_TRACER_DESC_VERSION_CURRENT < pDesc->version
 ///
-/// @hash {e17492f51bf594024d76b0bf4f8c120347bd4c136f3e11c379e2a2cce35ad883}
+/// @hash {f070d5f429853ce212d28d22d65c9f567cf4952a45325971b9a2bf219ad5b666}
 ///
 __xedllexport xe_result_t __xecall
 xetDeviceOpenMetricTracer(
     xe_device_handle_t hDevice,                     ///< [in] handle of the device
-    xet_metric_tracer_desc_t* desc,                 ///< [in/out] metric tracer descriptor
+    xet_metric_tracer_desc_t* pDesc,                ///< [in/out] metric tracer descriptor
+    xe_event_handle_t hNotificationEvent,           ///< [in] event used for report availability notification. Must be device
+                                                    ///< to host type.
     xet_metric_tracer_handle_t* phMetricTracer      ///< [out] handle of metric tracer
     )
 {
@@ -482,15 +485,16 @@ xetDeviceOpenMetricTracer(
             // if( nullptr == driver ) return XE_RESULT_ERROR_UNINITIALIZED;
             // Check parameters
             if( nullptr == hDevice ) return XE_RESULT_ERROR_INVALID_PARAMETER;
-            if( nullptr == desc ) return XE_RESULT_ERROR_INVALID_PARAMETER;
+            if( nullptr == pDesc ) return XE_RESULT_ERROR_INVALID_PARAMETER;
+            if( nullptr == hNotificationEvent ) return XE_RESULT_ERROR_INVALID_PARAMETER;
             if( nullptr == phMetricTracer ) return XE_RESULT_ERROR_INVALID_PARAMETER;
-            if( _VERSION_CURRENT < desc->version ) return XE_RESULT_ERROR_UNSUPPORTED;
+            if( _VERSION_CURRENT < pDesc->version ) return XE_RESULT_ERROR_UNSUPPORTED;
         }
         /// @begin
 #if defined(XE_NULLDRV)
         return XE_RESULT_SUCCESS;
 #else
-        return L0::Device::fromHandle(hDevice)->openMetricTracer(desc, phMetricTracer);
+        return L0::Device::fromHandle(hDevice)->openMetricTracer(pDesc, hNotificationEvent, phMetricTracer);
 #endif
         /// @end
     }
