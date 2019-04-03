@@ -1,7 +1,12 @@
 #!groovy
-import groovy.json.JsonOutput
-
 { ->
+  def cmakeFlags = []
+
+  if(env.JOB_BASE_NAME == "ocl-loki-verification") {
+  } else if(env.JOB_BASE_NAME == "ocl-loki-publish") {
+    cmakeFlags << "-Dlevel_zero_BUILD_TESTS"
+  }
+
 	return lokiNode('loki-windows') {
 		lokiBuild('windows-64') {
 			checkout changelog: false, poll: false,
@@ -45,7 +50,7 @@ call c:\\irepo\\irepo sync --clean --delete-unknown-content
 			bat """
 md build
 cd build
-cmake -G "Visual Studio 15 2017 Win64" .. -DCMAKE_BUILD_TYPE=Release -DLOKI_VERSION_BUILD=${buildId} -DLOKI_CPACK_GENERATOR="ZIP"
+cmake -G "Visual Studio 15 2017 Win64" .. -DCMAKE_BUILD_TYPE=Release -DLOKI_VERSION_BUILD=${buildId} -DLOKI_CPACK_GENERATOR="ZIP" ${cmakeFlags.join(' ')}
 cmake --build . --config Release --clean-first --target ALL_BUILD
 """
 			// archiveArtifacts "build/*.zip"

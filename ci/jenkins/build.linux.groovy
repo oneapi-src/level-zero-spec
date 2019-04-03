@@ -6,6 +6,7 @@
 	def repoDistroComponent = null
 	def repoDistroName = "bionic"	// we stick to Ubuntu 18.04 so far
 	def componentModel = null
+	def cmakeFlags = []
 
 	if(env.JOB_BASE_NAME == "ocl-loki-verification") {
 		componentModel = "verify"
@@ -13,6 +14,7 @@
 	} else if(env.JOB_BASE_NAME == "ocl-loki-publish") {
 		componentModel = "ci"
 		repoDistroComponent = "loki-${GERRIT_REFSPEC}"
+		cmakeFlags << "-Dlevel_zero_BUILD_TESTS"
 	}
 
 	return lokiNode("loki-controller") {
@@ -63,7 +65,7 @@ ls -la
 				sh """\
 mkdir ubuntu18
 cd ubuntu18
-cmake -GNinja .. -DCMAKE_BUILD_TYPE=Release -DLOKI_VERSION_BUILD=${buildId}
+cmake -GNinja .. -DCMAKE_BUILD_TYPE=Release -DLOKI_VERSION_BUILD=${buildId} ${cmakeFlags.join(' ')}
 cmake --build . --config Release --clean-first --target package
 """
 			}
