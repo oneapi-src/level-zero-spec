@@ -14,7 +14,7 @@
 	} else if(env.JOB_BASE_NAME == "ocl-loki-publish") {
 		componentModel = "ci"
 		repoDistroComponent = "loki-${GERRIT_REFSPEC}"
-		cmakeFlags << "-Dlevel_zero_BUILD_TESTS"
+		cmakeFlags << "-Dlevel_zero_BUILD_TESTS=FALSE"
 	}
 
 	return lokiNode("loki-controller") {

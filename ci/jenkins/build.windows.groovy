@@ -4,7 +4,7 @@
 
   if(env.JOB_BASE_NAME == "ocl-loki-verification") {
   } else if(env.JOB_BASE_NAME == "ocl-loki-publish") {
-    cmakeFlags << "-Dlevel_zero_BUILD_TESTS"
+    cmakeFlags << "-Dlevel_zero_BUILD_TESTS=FALSE"
   }
 
 	return lokiNode('loki-windows') {
