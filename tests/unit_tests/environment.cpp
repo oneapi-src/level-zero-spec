@@ -8,30 +8,30 @@
 PRODUCT_FAMILY productFamily = DEFAULT_PRODUCT_FAMILY;
 GFXCORE_FAMILY renderCoreFamily;
 
-namespace OCLRT {
+namespace NEO {
 extern bool overrideCommandStreamReceiverCreation;
 extern TestMode testMode;
-} // namespace OCLRT
+} // namespace NEO
 
 namespace L0 {
 namespace ult {
 
 extern ::testing::Environment *environment;
 
-static OCLRT::HardwareInfo hwInfo = {};
-static OCLRT::FeatureTable skuTable = {};
+static NEO::HardwareInfo hwInfo = {};
+static NEO::FeatureTable skuTable = {};
 static GT_SYSTEM_INFO sysInfo = {};
 
 struct Environment : public ::testing::Environment {
     void SetUp() override {
-        if (OCLRT::DebugManager.flags.SetCommandStreamReceiver.get()) {
-            OCLRT::overrideCommandStreamReceiverCreation = true;
-            OCLRT::testMode = OCLRT::TestMode::AubTestsWithTbx;
+        if (NEO::DebugManager.flags.SetCommandStreamReceiver.get()) {
+            NEO::overrideCommandStreamReceiverCreation = false;
+            NEO::testMode = NEO::TestMode::AubTestsWithTbx;
         }
 
         // Clone default device information
-        assert(OCLRT::hardwareInfoTable[productFamily]);
-        hwInfo = *OCLRT::hardwareInfoTable[productFamily];
+        assert(NEO::hardwareInfoTable[productFamily]);
+        hwInfo = *NEO::hardwareInfoTable[productFamily];
         sysInfo = *hwInfo.pSysInfo;
         skuTable = *hwInfo.pSkuTable;
 
@@ -39,15 +39,15 @@ struct Environment : public ::testing::Environment {
         renderCoreFamily = hwInfo.pPlatform->eRenderCoreFamily;
 
         // Disable mid-thread preemption
-        hwInfo.capabilityTable.defaultPreemptionMode = OCLRT::PreemptionMode::ThreadGroup;
+        hwInfo.capabilityTable.defaultPreemptionMode = NEO::PreemptionMode::ThreadGroup;
 
         // Initialize hardwareInfo
-        OCLRT::hardwareInfoSetup[productFamily](&sysInfo, &skuTable, true, "default");
+        NEO::hardwareInfoSetup[productFamily](&sysInfo, &skuTable, true, "default");
 
         // Replace original hardwareInfo with our clone
         hwInfo.pSysInfo = &sysInfo;
         hwInfo.pSkuTable = &skuTable;
-        OCLRT::platformDevices[0] = &hwInfo;
+        NEO::platformDevices[0] = &hwInfo;
     }
 };
 

@@ -10,7 +10,7 @@ namespace L0 {
 template <>
 struct EncodeStateBaseAddress<IGFX_GEN12_CORE> {
     static const GFXCORE_FAMILY gfxCoreFamily = IGFX_GEN12_CORE;
-    using GfxFamily = typename OCLRT::GfxFamilyMapper<gfxCoreFamily>::GfxFamily;
+    using GfxFamily = typename NEO::GfxFamilyMapper<gfxCoreFamily>::GfxFamily;
     using STATE_BASE_ADDRESS = typename GfxFamily::STATE_BASE_ADDRESS;
     using _3DSTATE_BINDING_TABLE_POOL_ALLOC = typename GfxFamily::_3DSTATE_BINDING_TABLE_POOL_ALLOC;
 
@@ -82,7 +82,7 @@ struct EncodeStateBaseAddress<IGFX_GEN12_CORE> {
 
 template <>
 void CommandListCoreFamily<IGFX_GEN12_CORE>::programFrontEndState() {
-    using GfxFamily = typename OCLRT::GfxFamilyMapper<IGFX_GEN12_CORE>::GfxFamily;
+    using GfxFamily = typename NEO::GfxFamilyMapper<IGFX_GEN12_CORE>::GfxFamily;
 
     {
         using CFE_STATE = typename GfxFamily::CFE_STATE;
@@ -102,7 +102,7 @@ xe_result_t CommandListCoreFamily<IGFX_GEN12_CORE>::appendLaunchFunction(xe_func
                                                                          const xe_thread_group_dimensions_t *pThreadGroupDimensions,
                                                                          xe_event_handle_t hEvent) {
     constexpr GFXCORE_FAMILY gfxCoreFamily = IGFX_GEN12_CORE;
-    using GfxFamily = typename OCLRT::GfxFamilyMapper<gfxCoreFamily>::GfxFamily;
+    using GfxFamily = typename NEO::GfxFamilyMapper<gfxCoreFamily>::GfxFamily;
     using COMPUTE_WALKER = typename GfxFamily::COMPUTE_WALKER;
     using INTERFACE_DESCRIPTOR_DATA = typename GfxFamily::INTERFACE_DESCRIPTOR_DATA;
     using STATE_BASE_ADDRESS = typename GfxFamily::STATE_BASE_ADDRESS;

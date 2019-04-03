@@ -72,7 +72,7 @@ struct Device : _xe_device_handle_t {
     virtual PtrRef<BuiltinFunctionsLib> getBuiltinFunctionsLib() = 0;
     virtual PtrRef<MOCSMapper> getMOCSMapper() = 0;
 
-    virtual OCLRT::HwHelper &getHwHelper() = 0;
+    virtual NEO::HwHelper &getHwHelper() = 0;
 
     static Device *fromHandle(xe_device_handle_t handle) {
         return static_cast<Device *>(handle);

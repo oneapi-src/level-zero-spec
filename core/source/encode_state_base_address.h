@@ -9,7 +9,7 @@ namespace L0 {
 
 template <GFXCORE_FAMILY gfxCoreFamily>
 struct EncodeStateBaseAddress {
-    using GfxFamily = typename OCLRT::GfxFamilyMapper<gfxCoreFamily>::GfxFamily;
+    using GfxFamily = typename NEO::GfxFamilyMapper<gfxCoreFamily>::GfxFamily;
     using STATE_BASE_ADDRESS = typename GfxFamily::STATE_BASE_ADDRESS;
 
     static const size_t size = sizeof(STATE_BASE_ADDRESS);

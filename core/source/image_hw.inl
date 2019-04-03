@@ -62,7 +62,7 @@ bool ImageCoreFamily<gfxCoreFamily>::initialize(Device *device, const xe_image_d
         surfaceState.setWidth(static_cast<uint32_t>(desc->width));
     }
 
-    auto gmm = this->allocation->allocationRT->gmm;
+    auto gmm = this->allocation->allocationRT->getDefaultGmm();
     if (gmm) {
         surfaceState.setSurfaceHorizontalAlignment(static_cast<typename RENDER_SURFACE_STATE::SURFACE_HORIZONTAL_ALIGNMENT>(gmm->getRenderHAlignment()));
         surfaceState.setSurfaceVerticalAlignment(static_cast<typename RENDER_SURFACE_STATE::SURFACE_VERTICAL_ALIGNMENT>(gmm->getRenderVAlignment()));
@@ -81,7 +81,7 @@ bool ImageCoreFamily<gfxCoreFamily>::initialize(Device *device, const xe_image_d
 template <GFXCORE_FAMILY gfxCoreFamily>
 void ImageCoreFamily<gfxCoreFamily>::copySurfaceStateToSSH(void *surfaceStateHeap, const uint32_t surfaceStateOffset,
                                                            const uint32_t bindingTableOffset, const uint32_t bindingTableIndex) {
-    using GfxFamily = typename OCLRT::GfxFamilyMapper<gfxCoreFamily>::GfxFamily;
+    using GfxFamily = typename NEO::GfxFamilyMapper<gfxCoreFamily>::GfxFamily;
     using RENDER_SURFACE_STATE = typename GfxFamily::RENDER_SURFACE_STATE;
     using BINDING_TABLE_STATE = typename GfxFamily::BINDING_TABLE_STATE;
 

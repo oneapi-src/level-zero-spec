@@ -5,7 +5,7 @@
 
 #include <vector>
 
-namespace OCLRT {
+namespace NEO {
 class LinearStream;
 }
 
@@ -44,7 +44,7 @@ struct CommandQueueImp : public CommandQueue {
     Device *device;
     void *csrRT;
     GraphicsAllocation *allocation;
-    OCLRT::LinearStream *commandStream;
+    NEO::LinearStream *commandStream;
     uint32_t taskCount = 0;
     std::vector<Function *> printfFunctionContainer;
 };

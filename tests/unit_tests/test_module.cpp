@@ -46,7 +46,7 @@ class ModuleOnlineCompiled : public testing::Test {
     void SetUp() override {
         UserRealCompilerGuard realCompilerGuard;
 
-        auto platform = OCLRT::constructPlatform();
+        auto platform = NEO::constructPlatform();
         auto success = platform->initialize();
         ASSERT_TRUE(success);
 
@@ -73,7 +73,7 @@ class ModuleOnlineCompiled : public testing::Test {
 
     std::unique_ptr<WhiteBox<L0::Module>> module;
     std::unique_ptr<L0::Device> device;
-    OCLRT::Device *deviceRT = nullptr;
+    NEO::Device *deviceRT = nullptr;
 };
 
 TEST(ModuleBuildLog, createModuleBuildLog) {
@@ -171,7 +171,7 @@ TEST_P(ModuleCreateBufArg, onlineCompilationModuleTest) {
 
     std::tie(filename, functionName, moduleName) = GetParam();
 
-    auto platform = OCLRT::constructPlatform();
+    auto platform = NEO::constructPlatform();
     auto success = platform->initialize();
     ASSERT_TRUE(success);
 
@@ -270,7 +270,7 @@ TEST_P(ModuleCreateImageArg, onlineCompilationModuleTest) {
 
     std::tie(filename, functionName, moduleName) = GetParam();
 
-    auto platform = OCLRT::constructPlatform();
+    auto platform = NEO::constructPlatform();
     auto success = platform->initialize();
     ASSERT_TRUE(success);
 
@@ -375,7 +375,7 @@ INSTANTIATE_TEST_CASE_P(, ModuleCreateImageArg, ::testing::ValuesIn(paramsForCre
 
 TEST(ModuleCreateSimple, mockedModuleTest) {
     Mock<Device> device;
-    OCLRT::Device *deviceRT = reinterpret_cast<OCLRT::Device *>(device.deviceRT);
+    NEO::Device *deviceRT = reinterpret_cast<NEO::Device *>(device.deviceRT);
     const PrecompiledFunctionMockData *expectedData = PrecompiledFunctionMocksDataRegistry::get().getDataFor("MemcpyBytes", deviceRT->getFamilyNameWithType());
     ASSERT_NE(nullptr, expectedData);
     GraphicsAllocation mockAlloc1{nullptr, 0}, mockAlloc2{nullptr, 0};
@@ -430,7 +430,7 @@ TEST(ModuleCreateSimple, mockedModuleTest) {
 
 TEST(ModuleCreateSimple, moduleWithSLMandBarriers) {
     Mock<Device> device;
-    OCLRT::Device *deviceRT = reinterpret_cast<OCLRT::Device *>(device.deviceRT);
+    NEO::Device *deviceRT = reinterpret_cast<NEO::Device *>(device.deviceRT);
     const PrecompiledFunctionMockData *expectedData = PrecompiledFunctionMocksDataRegistry::get().getDataFor("SlmBarrier", deviceRT->getFamilyNameWithType());
     ASSERT_NE(nullptr, expectedData);
 

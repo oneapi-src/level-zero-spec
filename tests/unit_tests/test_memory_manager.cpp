@@ -6,7 +6,7 @@
 namespace L0 {
 
 TEST(MemoryManagerallocateDeviceMemory, returnsGraphicsAllocation) {
-    auto platform = OCLRT::constructPlatform();
+    auto platform = NEO::constructPlatform();
     auto success = platform->initialize();
     ASSERT_TRUE(success);
 

@@ -12,9 +12,9 @@
 #include <cassert>
 #include <memory>
 
-namespace OCLRT_temporary {
+namespace NEO_temporary {
 struct LightweightOclProgram;
-} // namespace OCLRT_temporary
+} // namespace NEO_temporary
 
 namespace L0 {
 
@@ -63,7 +63,7 @@ struct ModuleImp : public Module {
     Device *device = nullptr;
     PRODUCT_FAMILY productFamily{};
     ModuleBuildLog *moduleBuildLog = nullptr;
-    OCLRT_temporary::LightweightOclProgram *progRT = nullptr;
+    NEO_temporary::LightweightOclProgram *progRT = nullptr;
     uint32_t maxGroupSize = 0U;
     std::vector<PtrOwn<ImmutableFunctionInfo>> immFuncInfos;
 };

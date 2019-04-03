@@ -26,7 +26,7 @@ int main(int argc, char **argv) {
             if (i < argc) {
                 if (::isdigit(argv[i][0])) {
                     int productValue = atoi(argv[i]);
-                    if (productValue > 0 && productValue < IGFX_MAX_PRODUCT && OCLRT::hardwarePrefix[productValue] != nullptr) {
+                    if (productValue > 0 && productValue < IGFX_MAX_PRODUCT && NEO::hardwarePrefix[productValue] != nullptr) {
                         ::productFamily = static_cast<PRODUCT_FAMILY>(productValue);
                     } else {
                         ::productFamily = IGFX_UNKNOWN;
@@ -34,9 +34,9 @@ int main(int argc, char **argv) {
                 } else {
                     ::productFamily = IGFX_UNKNOWN;
                     for (int j = 0; j < IGFX_MAX_PRODUCT; j++) {
-                        if (OCLRT::hardwarePrefix[j] == nullptr)
+                        if (NEO::hardwarePrefix[j] == nullptr)
                             continue;
-                        if (strcmp(OCLRT::hardwarePrefix[j], argv[i]) == 0) {
+                        if (strcmp(NEO::hardwarePrefix[j], argv[i]) == 0) {
                             ::productFamily = static_cast<PRODUCT_FAMILY>(j);
                             break;
                         }
@@ -46,13 +46,13 @@ int main(int argc, char **argv) {
                     std::cout << "unknown or unsupported product family has been set: " << argv[i] << std::endl;
                     return -1;
                 } else {
-                    std::cout << "product family: " << OCLRT::hardwarePrefix[::productFamily] << " (" << ::productFamily << ")" << std::endl;
+                    std::cout << "product family: " << NEO::hardwarePrefix[::productFamily] << " (" << ::productFamily << ")" << std::endl;
                 }
             }
         }
     }
 
-    OCLRT::GmmHelper::createGmmContextWrapperFunc = OCLRT::GmmClientContextBase::create<OCLRT::MockGmmClientContext>;
+    NEO::GmmHelper::createGmmContextWrapperFunc = NEO::GmmClientContextBase::create<NEO::MockGmmClientContext>;
 
     if (environment) {
         ::testing::AddGlobalTestEnvironment(environment);

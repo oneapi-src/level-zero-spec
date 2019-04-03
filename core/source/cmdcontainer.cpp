@@ -59,10 +59,10 @@ bool CommandContainer::initialize(Device *device) {
     uint32_t index = 0;
     for (auto &indirectHeap : indirectHeaps) {
         auto allocationRT = allocationIndirectHeaps[index++]->allocationRT;
-        indirectHeap = new OCLRT::IndirectHeap(allocationRT);
+        indirectHeap = new NEO::IndirectHeap(allocationRT);
     }
 
-    commandStream = new OCLRT::LinearStream(allocation->allocationRT);
+    commandStream = new NEO::LinearStream(allocation->allocationRT);
 
     instructionHeapBaseAddress = memoryManager->getIsaHeapGpuAddress();
 

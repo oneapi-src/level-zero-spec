@@ -16,7 +16,7 @@ WhiteBox<::L0::CommandQueue>::~WhiteBox() {
 Mock<CommandQueue>::Mock(Device *device, void *csrRT)
     : WhiteBox<::L0::CommandQueue>(device, csrRT) {
     auto ordinal = 0u;
-    auto platform = OCLRT::constructPlatform();
+    auto platform = NEO::constructPlatform();
     auto deviceRT = platform->getDevice(ordinal);
     auto executionEnvironment = deviceRT->getExecutionEnvironment();
 

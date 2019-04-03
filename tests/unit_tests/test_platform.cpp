@@ -6,7 +6,7 @@
 namespace L0 {
 
 TEST(platformInitialize, shouldSucceed) {
-    auto platform = OCLRT::constructPlatform();
+    auto platform = NEO::constructPlatform();
     ASSERT_NE(nullptr, platform);
 
     bool ret = platform->initialize();
@@ -16,7 +16,7 @@ TEST(platformInitialize, shouldSucceed) {
 }
 
 TEST(platformGetDevice, returnsDevice) {
-    auto platform = OCLRT::constructPlatform();
+    auto platform = NEO::constructPlatform();
     ASSERT_NE(nullptr, platform);
 
     bool ret = platform->initialize();

@@ -23,7 +23,7 @@ void CommandQueueImp::initialize() {
     allocation = memoryManager->allocateDeviceMemory(defaultQueueCmdBufferSize, 4096u);
     assert(allocation);
 
-    commandStream = new OCLRT::LinearStream(allocation->allocationRT);
+    commandStream = new NEO::LinearStream(allocation->allocationRT);
 }
 
 Substream CommandQueueImp::getCmdSubstream(size_t size) {
@@ -47,7 +47,7 @@ Substream CommandQueueImp::getCmdSubstream(size_t size) {
 
 void CommandQueueImp::processCoherency(CommandList *c) {
     auto commandList = static_cast<CommandListImp *>(c);
-    auto commandStreamReceiver = static_cast<OCLRT::CommandStreamReceiver *>(csrRT);
+    auto commandStreamReceiver = static_cast<NEO::CommandStreamReceiver *>(csrRT);
     auto &residencyContainer = commandList->getResidencyContainer();
     for (auto allocation : residencyContainer) {
         commandStreamReceiver->makeCoherent(*allocation);
@@ -56,26 +56,26 @@ void CommandQueueImp::processCoherency(CommandList *c) {
 
 //FIXME: Remove direct access to taskCount.
 //Needed below
-struct CommandStreamReceiver : public OCLRT::CommandStreamReceiver {
-    using OCLRT::CommandStreamReceiver::latestFlushedTaskCount;
-    using OCLRT::CommandStreamReceiver::taskCount;
+struct CommandStreamReceiver : public NEO::CommandStreamReceiver {
+    using NEO::CommandStreamReceiver::latestFlushedTaskCount;
+    using NEO::CommandStreamReceiver::taskCount;
 };
 
 void CommandQueueImp::submitBatchBuffer(size_t offset) {
     auto commandStreamReceiver = static_cast<CommandStreamReceiver *>(csrRT);
     assert(commandStreamReceiver);
 
-    OCLRT::BatchBuffer batchBuffer(
+    NEO::BatchBuffer batchBuffer(
         allocation->allocationRT,
         offset,
         0u,
         nullptr,
         false,
         false,
-        OCLRT::QueueThrottle::HIGH,
+        NEO::QueueThrottle::HIGH,
         commandStream->getUsed(),
         commandStream);
-    OCLRT::ResidencyContainer residencyContainer;
+    NEO::ResidencyContainer residencyContainer;
     commandStreamReceiver->flush(batchBuffer, residencyContainer);
 
     //FIXME: Remove direct access to taskCount.

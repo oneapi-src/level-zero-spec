@@ -22,7 +22,7 @@ namespace L0 {
 
 template <GFXCORE_FAMILY gfxCoreFamily>
 bool CommandListCoreFamily<gfxCoreFamily>::initialize(Device *device) {
-    using GfxFamily = typename OCLRT::GfxFamilyMapper<gfxCoreFamily>::GfxFamily;
+    using GfxFamily = typename NEO::GfxFamilyMapper<gfxCoreFamily>::GfxFamily;
 
     if (!BaseClass::initialize(device)) {
         return false;
@@ -67,7 +67,7 @@ void *CommandListCoreFamily<gfxCoreFamily>::getHeapSpaceAllowGrow(CommandContain
 
 template <GFXCORE_FAMILY gfxCoreFamily>
 void CommandListCoreFamily<gfxCoreFamily>::enableGpgpu() {
-    using GfxFamily = typename OCLRT::GfxFamilyMapper<gfxCoreFamily>::GfxFamily;
+    using GfxFamily = typename NEO::GfxFamilyMapper<gfxCoreFamily>::GfxFamily;
 
     using PIPELINE_SELECT = typename GfxFamily::PIPELINE_SELECT;
     PIPELINE_SELECT cmd = GfxFamily::cmdInitPipelineSelect;
@@ -80,7 +80,7 @@ void CommandListCoreFamily<gfxCoreFamily>::enableGpgpu() {
 
 template <GFXCORE_FAMILY gfxCoreFamily>
 void CommandListCoreFamily<gfxCoreFamily>::programFrontEndState() {
-    using GfxFamily = typename OCLRT::GfxFamilyMapper<gfxCoreFamily>::GfxFamily;
+    using GfxFamily = typename NEO::GfxFamilyMapper<gfxCoreFamily>::GfxFamily;
 
     using MEDIA_VFE_STATE = typename GfxFamily::MEDIA_VFE_STATE;
     MEDIA_VFE_STATE cmd = GfxFamily::cmdInitMediaVfeState;
@@ -104,13 +104,13 @@ void CommandListCoreFamily<gfxCoreFamily>::programPreemption() {
     constexpr uint32_t mask = maskVal << maskShift;
     constexpr uint32_t threadGroupVal = (1 << 1);
     constexpr uint32_t regVal = threadGroupVal | mask;
-    using GfxFamily = typename OCLRT::GfxFamilyMapper<gfxCoreFamily>::GfxFamily;
-    OCLRT::LriHelper<GfxFamily>::program(commandStream, mmioAddress, regVal);
+    using GfxFamily = typename NEO::GfxFamilyMapper<gfxCoreFamily>::GfxFamily;
+    NEO::LriHelper<GfxFamily>::program(commandStream, mmioAddress, regVal);
 }
 
 template <GFXCORE_FAMILY gfxCoreFamily>
 xe_result_t CommandListCoreFamily<gfxCoreFamily>::close() {
-    using GfxFamily = typename OCLRT::GfxFamilyMapper<gfxCoreFamily>::GfxFamily;
+    using GfxFamily = typename NEO::GfxFamilyMapper<gfxCoreFamily>::GfxFamily;
     using MI_BATCH_BUFFER_END = typename GfxFamily::MI_BATCH_BUFFER_END;
     MI_BATCH_BUFFER_END cmd = GfxFamily::cmdInitBatchBufferEnd;
     auto buffer = commandStream->getSpace(sizeof(cmd));
@@ -132,10 +132,10 @@ xe_result_t CommandListCoreFamily<gfxCoreFamily>::appendCommandLists(uint32_t nu
 // Returned binding table pointer is relative to given heap (which is assumed to be the Surface state base addess)
 // as required by the INTERFACE_DESCRIPTOR_DATA.
 template <GFXCORE_FAMILY gfxCoreFamily>
-uint32_t CommandListCoreFamily<gfxCoreFamily>::copyBindingTableAndSurfaceStates(OCLRT::IndirectHeap *ssh,
+uint32_t CommandListCoreFamily<gfxCoreFamily>::copyBindingTableAndSurfaceStates(NEO::IndirectHeap *ssh,
                                                                                 const void *srcSsh, uint32_t srcSshSize,
                                                                                 uint32_t numberOfBindingTableStates, uint32_t offsetOfBindingTable) {
-    using GfxFamily = typename OCLRT::GfxFamilyMapper<gfxCoreFamily>::GfxFamily;
+    using GfxFamily = typename NEO::GfxFamilyMapper<gfxCoreFamily>::GfxFamily;
     using BINDING_TABLE_STATE = typename GfxFamily::BINDING_TABLE_STATE;
     using INTERFACE_DESCRIPTOR_DATA = typename GfxFamily::INTERFACE_DESCRIPTOR_DATA;
 
@@ -181,10 +181,10 @@ uint32_t CommandListCoreFamily<gfxCoreFamily>::copyBindingTableAndSurfaceStates(
 
 // Copy our sampler state if it exists
 template <GFXCORE_FAMILY gfxCoreFamily>
-uint32_t CommandListCoreFamily<gfxCoreFamily>::copySamplerState(OCLRT::IndirectHeap *dsh,
-                                                           const iOpenCL::SPatchSamplerStateArray *samplerStateArray,
-                                                           const void *fnDynamicStateHeap) {
-    using GfxFamily = typename OCLRT::GfxFamilyMapper<gfxCoreFamily>::GfxFamily;
+uint32_t CommandListCoreFamily<gfxCoreFamily>::copySamplerState(NEO::IndirectHeap *dsh,
+                                                                const iOpenCL::SPatchSamplerStateArray *samplerStateArray,
+                                                                const void *fnDynamicStateHeap) {
+    using GfxFamily = typename NEO::GfxFamilyMapper<gfxCoreFamily>::GfxFamily;
     using INTERFACE_DESCRIPTOR_DATA = typename GfxFamily::INTERFACE_DESCRIPTOR_DATA;
     using SAMPLER_STATE = typename GfxFamily::SAMPLER_STATE;
 
@@ -204,8 +204,8 @@ uint32_t CommandListCoreFamily<gfxCoreFamily>::copySamplerState(OCLRT::IndirectH
     auto borderColor = dsh->getSpace(borderColorSize);
 
     memcpy_s(borderColor, borderColorSize,
-                ptrOffset(fnDynamicStateHeap, samplerStateArray->BorderColorOffset),
-                borderColorSize);
+             ptrOffset(fnDynamicStateHeap, samplerStateArray->BorderColorOffset),
+             borderColorSize);
 
     dsh->align(INTERFACE_DESCRIPTOR_DATA::SAMPLERSTATEPOINTER_ALIGN_SIZE);
     samplerStateOffset = static_cast<uint32_t>(dsh->getUsed());
@@ -213,8 +213,8 @@ uint32_t CommandListCoreFamily<gfxCoreFamily>::copySamplerState(OCLRT::IndirectH
     auto samplerState = dsh->getSpace(sizeSamplerState);
 
     memcpy_s(samplerState, sizeSamplerState,
-                ptrOffset(fnDynamicStateHeap, samplerStateArray->Offset),
-                sizeSamplerState);
+             ptrOffset(fnDynamicStateHeap, samplerStateArray->Offset),
+             sizeSamplerState);
 
     auto pSmplr = reinterpret_cast<SAMPLER_STATE *>(samplerState);
     for (uint32_t i = 0; i < samplerCount; i++) {
@@ -228,7 +228,7 @@ template <GFXCORE_FAMILY gfxCoreFamily>
 xe_result_t CommandListCoreFamily<gfxCoreFamily>::appendLaunchFunction(xe_function_handle_t hFunction,
                                                                        const xe_thread_group_dimensions_t *pThreadGroupDimensions,
                                                                        xe_event_handle_t hEvent) {
-    using GfxFamily = typename OCLRT::GfxFamilyMapper<gfxCoreFamily>::GfxFamily;
+    using GfxFamily = typename NEO::GfxFamilyMapper<gfxCoreFamily>::GfxFamily;
     using GPGPU_WALKER = typename GfxFamily::GPGPU_WALKER;
     using MEDIA_STATE_FLUSH = typename GfxFamily::MEDIA_STATE_FLUSH;
     using MEDIA_INTERFACE_DESCRIPTOR_LOAD = typename GfxFamily::MEDIA_INTERFACE_DESCRIPTOR_LOAD;
@@ -312,7 +312,7 @@ xe_result_t CommandListCoreFamily<gfxCoreFamily>::appendLaunchFunction(xe_functi
     uint32_t numIDD = 0u;
     uint32_t offsetIDD = 0u;
     {
-        heap->align(OCLRT::KernelCommandsHelper<GfxFamily>::alignInterfaceDescriptorData);
+        heap->align(NEO::KernelCommandsHelper<GfxFamily>::alignInterfaceDescriptorData);
 
         auto sizeIDD = sizeof(INTERFACE_DESCRIPTOR_DATA);
         auto ptr = getHeapSpaceAllowGrow(DYNAMIC_STATE, sizeIDD);
@@ -668,7 +668,7 @@ xe_result_t CommandListCoreFamily<gfxCoreFamily>::appendSignalEvent(xe_event_han
 
 template <GFXCORE_FAMILY gfxCoreFamily>
 xe_result_t CommandListCoreFamily<gfxCoreFamily>::appendWaitOnEvent(xe_event_handle_t hEvent) {
-    using GfxFamily = typename OCLRT::GfxFamilyMapper<gfxCoreFamily>::GfxFamily;
+    using GfxFamily = typename NEO::GfxFamilyMapper<gfxCoreFamily>::GfxFamily;
     using MI_SEMAPHORE_WAIT = typename GfxFamily::MI_SEMAPHORE_WAIT;
     MI_SEMAPHORE_WAIT cmd = GfxFamily::cmdInitMiSemaphoreWait;
     auto event = Event::fromHandle(hEvent);

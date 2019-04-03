@@ -11,7 +11,7 @@ TEST(MultipleDevicesCount, SetMultipleDevicesAndVerifyDeviceCount) {
     uint32_t count = 0;
     auto requiredDeviceCount = 2u;
 
-    OCLRT::DebugManager.flags.CreateMultipleDevices.set(requiredDeviceCount);
+    NEO::DebugManager.flags.CreateMultipleDevices.set(requiredDeviceCount);
 
     auto result = xeDriverInit(XE_INIT_FLAG_NONE);
     EXPECT_EQ(XE_RESULT_SUCCESS, result);
@@ -26,7 +26,7 @@ TEST(MultipleDevicesUniqueIds, SetMultipleDevicesAndVerifyDeviceUniqueIds) {
     uint32_t count = 0;
     auto requiredDeviceCount = 2u;
 
-    OCLRT::DebugManager.flags.CreateMultipleDevices.set(requiredDeviceCount);
+    NEO::DebugManager.flags.CreateMultipleDevices.set(requiredDeviceCount);
     auto result = xeDriverInit(XE_INIT_FLAG_NONE);
     EXPECT_EQ(XE_RESULT_SUCCESS, result);
 

@@ -60,11 +60,11 @@ __xedllexport int __xecall compileClToSpirv(const char *src,
         return OCLOC_RESULT_ERROR_INVALID_PARAMETERS;
     }
 
-    std::unique_ptr<OCLRT::OsLibrary> fclLib = nullptr;
+    std::unique_ptr<NEO::OsLibrary> fclLib = nullptr;
     CIF::RAII::UPtr_t<CIF::CIFMain> fclMain = nullptr;
     CIF::RAII::UPtr_t<IGC::FclOclDeviceCtxTagOCL> fclDeviceCtx = nullptr;
 
-    fclLib.reset(OCLRT::OsLibrary::load(Os::frontEndDllName));
+    fclLib.reset(NEO::OsLibrary::load(Os::frontEndDllName));
     if (fclLib == nullptr) {
         return OCLOC_RESULT_ERROR_MISSING_FCL_LIBRARY;
     }

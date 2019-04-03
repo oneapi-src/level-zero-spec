@@ -5,14 +5,14 @@
 #include <cassert>
 #include <cstddef>
 
-namespace OCLRT {
-class OCLRT::LinearStream;
+namespace NEO {
+class NEO::LinearStream;
 }
 
 namespace L0 {
 
 struct Substream {
-    Substream(OCLRT::LinearStream &parent, void *substreamBuffer, size_t substreamSize)
+    Substream(NEO::LinearStream &parent, void *substreamBuffer, size_t substreamSize)
         : parent(parent), substreamBuffer(substreamBuffer), substreamSize(substreamSize) {
     }
 
@@ -35,7 +35,7 @@ struct Substream {
         // nothing, parent stream owns resources
     }
 
-    OCLRT::LinearStream &getParent() {
+    NEO::LinearStream &getParent() {
         return parent;
     }
 
@@ -69,7 +69,7 @@ struct Substream {
         return memory;
     }
 
-    OCLRT::LinearStream &parent;
+    NEO::LinearStream &parent;
     void *substreamBuffer = nullptr;
     size_t substreamSize = 0;
     size_t substreamSizeUsed = 0;

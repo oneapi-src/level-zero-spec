@@ -57,7 +57,7 @@ TEST(xeDeviceCreateEvent, redirectsToObject) {
 }
 
 TEST(DeviceCreateImage, returnsSuccess) {
-    auto platform = OCLRT::constructPlatform();
+    auto platform = NEO::constructPlatform();
     auto success = platform->initialize();
     ASSERT_TRUE(success);
 
@@ -78,7 +78,7 @@ TEST(DeviceCreateImage, returnsSuccess) {
 }
 
 TEST(DeviceCreateCommandList, returnsSuccess) {
-    auto platform = OCLRT::constructPlatform();
+    auto platform = NEO::constructPlatform();
     auto success = platform->initialize();
     ASSERT_TRUE(success);
 
@@ -99,7 +99,7 @@ TEST(DeviceCreateCommandList, returnsSuccess) {
 }
 
 TEST(DeviceCreateCommandQueue, returnsSuccess) {
-    auto platform = OCLRT::constructPlatform();
+    auto platform = NEO::constructPlatform();
     auto success = platform->initialize();
     ASSERT_TRUE(success);
 
@@ -119,7 +119,7 @@ TEST(DeviceCreateCommandQueue, returnsSuccess) {
 }
 
 TEST(DeviceCreateEvent, returnsSuccess) {
-    auto platform = OCLRT::constructPlatform();
+    auto platform = NEO::constructPlatform();
     auto success = platform->initialize();
     ASSERT_TRUE(success);
 
@@ -139,7 +139,7 @@ TEST(DeviceCreateEvent, returnsSuccess) {
 }
 
 TEST(DeviceGetMemoryManager, returnsPointer) {
-    auto platform = OCLRT::constructPlatform();
+    auto platform = NEO::constructPlatform();
     auto success = platform->initialize();
     ASSERT_TRUE(success);
 

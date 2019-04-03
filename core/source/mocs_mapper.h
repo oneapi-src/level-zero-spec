@@ -4,14 +4,14 @@
 
 #include "ptr.h"
 
-namespace OCLRT {
+namespace NEO {
 class GmmHelper;
 }
 
 namespace L0 {
 
 struct MOCSMapper {
-    MOCSMapper(PtrRef<OCLRT::GmmHelper> gmmHelper)
+    MOCSMapper(PtrRef<NEO::GmmHelper> gmmHelper)
         : gmmHelper(gmmHelper) {
     }
 
@@ -21,7 +21,7 @@ struct MOCSMapper {
     virtual uint32_t getCachedStateHeapMOCS() const;
 
   protected:
-    PtrRef<OCLRT::GmmHelper> gmmHelper = nullptr;
+    PtrRef<NEO::GmmHelper> gmmHelper = nullptr;
 };
 
 } // namespace L0

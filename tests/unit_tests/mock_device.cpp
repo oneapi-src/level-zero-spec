@@ -13,7 +13,7 @@ using ::testing::Return;
 
 Mock<Device>::Mock() {
     auto ordinal = 0u;
-    auto platform = OCLRT::constructPlatform();
+    auto platform = NEO::constructPlatform();
     auto success = platform->initialize();
     assert(success);
     auto deviceRT = platform->getDevice(ordinal);

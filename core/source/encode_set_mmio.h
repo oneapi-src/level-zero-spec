@@ -7,7 +7,7 @@ namespace L0 {
 
 template <GFXCORE_FAMILY gfxCoreFamily>
 struct EncodeSetMMIO {
-    using GfxFamily = typename OCLRT::GfxFamilyMapper<gfxCoreFamily>::GfxFamily;
+    using GfxFamily = typename NEO::GfxFamilyMapper<gfxCoreFamily>::GfxFamily;
     using MI_LOAD_REGISTER_IMM = typename GfxFamily::MI_LOAD_REGISTER_IMM;
 
     static const size_t size = sizeof(MI_LOAD_REGISTER_IMM);

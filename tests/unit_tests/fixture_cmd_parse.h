@@ -36,7 +36,7 @@ struct CmdParseFixture : ::testing::Test {
 
     Mock<Device> device;
     CommandList *commandList = nullptr;
-    OCLRT::LinearStream *commandStream = nullptr;
+    NEO::LinearStream *commandStream = nullptr;
 
     size_t usedSpaceBefore = 0;
     size_t usedSpaceAfter = 0;

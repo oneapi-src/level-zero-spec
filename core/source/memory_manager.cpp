@@ -15,7 +15,7 @@ namespace L0 {
 
 struct MemoryManagerImp : public MemoryManager {
     GraphicsAllocation *allocateDeviceMemory(size_t size, size_t alignment) override {
-        OCLRT::AllocationProperties properties(size, OCLRT::GraphicsAllocation::AllocationType::UNDECIDED);
+        NEO::AllocationProperties properties(size, NEO::GraphicsAllocation::AllocationType::UNDECIDED);
         properties.alignment = alignment;
 
         auto allocation = new GraphicsAllocation(memoryManagerRT->allocateGraphicsMemoryWithProperties(properties));
@@ -26,7 +26,7 @@ struct MemoryManagerImp : public MemoryManager {
     }
 
     GraphicsAllocation *allocateManagedMemory(size_t size, size_t alignment) override {
-        OCLRT::AllocationProperties properties(size, OCLRT::GraphicsAllocation::AllocationType::UNDECIDED);
+        NEO::AllocationProperties properties(size, NEO::GraphicsAllocation::AllocationType::UNDECIDED);
         properties.alignment = alignment;
 
         auto allocation = new GraphicsAllocation(memoryManagerRT->allocateGraphicsMemoryWithProperties(properties));
@@ -41,7 +41,7 @@ struct MemoryManagerImp : public MemoryManager {
         //        * How are allocations removed from this list?
         //        * What if we encouter the same allocation multiple times but with different sizes (note : it's a valid and very probable scenario)
         //        * How are handle fragmented allocations handled (aka tripple allocations) ?
-        auto allocation = new GraphicsAllocation(memoryManagerRT->allocateGraphicsMemoryForHostPtr(size, buffer, true, false));
+        auto allocation = new GraphicsAllocation(memoryManagerRT->allocateGraphicsMemoryWithProperties({false, size, NEO::GraphicsAllocation::AllocationType::UNDECIDED}, buffer));
         allocation->setAllocatedFromFault(true);
         knownAllocations.insert(*allocation->allocationRT); // temporary
         allocMap[allocation->allocationRT] = allocation;    // temporary
@@ -51,7 +51,7 @@ struct MemoryManagerImp : public MemoryManager {
 
     PtrOwn<GraphicsAllocation> allocateGraphicsMemoryForIsa(PtrRef<const void> isaHostMem, size_t size) override {
         assert(size > 0);
-        auto alloc = this->memoryManagerRT->allocateGraphicsMemoryWithProperties({size, OCLRT::GraphicsAllocation::AllocationType::KERNEL_ISA});
+        auto alloc = this->memoryManagerRT->allocateGraphicsMemoryWithProperties({size, NEO::GraphicsAllocation::AllocationType::KERNEL_ISA});
         if (isaHostMem != nullptr) {
             // this->memoryManagerRT->copyMemoryToAllocation(alloc, isaHostMem, size);                    // TODO : reusue NEO's copyMemoryToAllocation once manifest gets updated
             memcpy_s(alloc->getUnderlyingBuffer(), alloc->getUnderlyingBufferSize(), isaHostMem.get(), size); //
@@ -70,17 +70,17 @@ struct MemoryManagerImp : public MemoryManager {
     void freeMemory(GraphicsAllocation *allocation) {
         allocMap.erase(allocation->allocationRT);           // temporary
         knownAllocations.remove(*allocation->allocationRT); // temporary
-        memoryManagerRT->freeGraphicsMemory(static_cast<OCLRT::GraphicsAllocation *>(allocation->allocationRT));
+        memoryManagerRT->freeGraphicsMemory(static_cast<NEO::GraphicsAllocation *>(allocation->allocationRT));
         delete allocation;
     }
 
     MemoryManagerImp(void *memoryManagerRT)
-        : memoryManagerRT(static_cast<OCLRT::MemoryManager *>(memoryManagerRT)) {
+        : memoryManagerRT(static_cast<NEO::MemoryManager *>(memoryManagerRT)) {
     }
 
-    OCLRT::MemoryManager *memoryManagerRT;
-    OCLRT::SVMAllocsManager::MapBasedAllocationTracker knownAllocations;
-    std::unordered_map<OCLRT::GraphicsAllocation *, L0::GraphicsAllocation *> allocMap; // temporary
+    NEO::MemoryManager *memoryManagerRT;
+    NEO::SVMAllocsManager::MapBasedAllocationTracker knownAllocations;
+    std::unordered_map<NEO::GraphicsAllocation *, L0::GraphicsAllocation *> allocMap; // temporary
 };
 
 MemoryManager *MemoryManager::create(void *memoryManagerRT) {

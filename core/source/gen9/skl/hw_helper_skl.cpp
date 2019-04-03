@@ -4,13 +4,13 @@
 #include "runtime/helpers/hw_helper_common.inl"
 #include "runtime/helpers/flat_batch_buffer_helper_hw.inl"
 
-namespace OCLRT {
+namespace NEO {
 
 #if defined(__linux__)
 template <>
 bool HwHelperHw<SKLFamily>::timestampPacketWriteSupported() const {
-	return true;
+    return true;
 }
 #endif
 
-} // namespace OCLRT
+} // namespace NEO

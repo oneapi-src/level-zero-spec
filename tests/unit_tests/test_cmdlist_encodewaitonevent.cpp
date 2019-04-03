@@ -72,7 +72,7 @@ HWTEST_F(CommandListAppendWaitOnEvent, addsEventGraphicsAllocationToResidencyCon
     ASSERT_EQ(XE_RESULT_SUCCESS, result);
 
     auto &residencyContainer = commandList->residencyContainer;
-    auto allocationRT = static_cast<OCLRT::GraphicsAllocation *>(event.allocation->allocationRT);
+    auto allocationRT = static_cast<NEO::GraphicsAllocation *>(event.allocation->allocationRT);
     auto itor = std::find(std::begin(residencyContainer), std::end(residencyContainer), allocationRT);
     EXPECT_NE(itor, std::end(residencyContainer));
 }

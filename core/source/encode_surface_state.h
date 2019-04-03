@@ -10,7 +10,7 @@ namespace L0 {
 
 template <GFXCORE_FAMILY gfxCoreFamily>
 struct EncodeSurfaceState {
-    using GfxFamily = typename OCLRT::GfxFamilyMapper<gfxCoreFamily>::GfxFamily;
+    using GfxFamily = typename NEO::GfxFamilyMapper<gfxCoreFamily>::GfxFamily;
 
     static void encodeBuffer(void *dst, void *address, size_t size, uint32_t mocs, bool cpuCoherent) {
         using R_SURFACE_STATE = typename GfxFamily::RENDER_SURFACE_STATE;
@@ -23,7 +23,7 @@ struct EncodeSurfaceState {
         assert(isAligned<getSurfaceBaseAddressAlignment()>(address));
         assert(isAligned<getSurfaceBaseAddressAlignment()>(size));
 
-        OCLRT::SURFACE_STATE_BUFFER_LENGTH Length = {0};
+        NEO::SURFACE_STATE_BUFFER_LENGTH Length = {0};
         Length.Length = static_cast<uint32_t>(size - 1);
 
         ss->setWidth(Length.SurfaceState.Width + 1);

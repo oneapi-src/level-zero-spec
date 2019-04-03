@@ -13,9 +13,9 @@
 #include <cassert>
 #include <memory>
 
-namespace OCLRT_temporary {
+namespace NEO_temporary {
 struct LightweightOclKernel;
-} // namespace OCLRT_temporary
+} // namespace NEO_temporary
 
 namespace L0 {
 
@@ -94,8 +94,8 @@ struct FunctionImp : Function {
         return immFuncInfo->isaGraphicsAllocation.weakRef();
     }
 
-    PtrRef<OCLRT::KernelInfo> getKernelInfo() const {
-        return immFuncInfo->kernelInfoRT.weakRefReinterpret<OCLRT::KernelInfo>();
+    PtrRef<NEO::KernelInfo> getKernelInfo() const {
+        return immFuncInfo->kernelInfoRT.weakRefReinterpret<NEO::KernelInfo>();
     }
 
     const void *getPerThreadDataHostMem() const override {
@@ -153,7 +153,7 @@ struct FunctionImp : Function {
     struct OCLInternal;
     OCLInternal *oclInternals = nullptr;
 
-    OCLRT_temporary::LightweightOclKernel *kernelRT = nullptr;
+    NEO_temporary::LightweightOclKernel *kernelRT = nullptr;
     PtrRef<ImmutableFunctionInfo> immFuncInfo;
     Module *module = nullptr;
 

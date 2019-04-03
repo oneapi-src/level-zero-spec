@@ -26,9 +26,9 @@
 #include <cassert>
 #include <memory>
 
-namespace OCLRT_temporary {
-struct LightweightOclKernel : public OCLRT::Kernel {
-    LightweightOclKernel(OCLRT::Program *program, const OCLRT::KernelInfo &kernelInfo)
+namespace NEO_temporary {
+struct LightweightOclKernel : public NEO::Kernel {
+    LightweightOclKernel(NEO::Program *program, const NEO::KernelInfo &kernelInfo)
         : Kernel(program, kernelInfo, program->getDevice(0), false) {
     }
 
@@ -55,25 +55,25 @@ struct LightweightOclKernel : public OCLRT::Kernel {
 
     using Kernel::kernelInfo;
 };
-} // namespace OCLRT_temporary
+} // namespace NEO_temporary
 
-namespace OCLRT {
+namespace NEO {
 namespace Math {
 using namespace ::Math; // just to emphasize the origin (wich originally is not encapsulated in OCLRT)
 }
 using KernelArgInfo = ::KernelArgInfo;
-} // namespace OCLRT
+} // namespace NEO
 
 namespace L0 {
 
-struct FunctionImp::OCLInternal { // cloned from OCLRT::Kernel - keeping types/names the same for simplicity
-    std::vector<OCLRT::Kernel::SimpleKernelArgInfo> kernelArguments;
+struct FunctionImp::OCLInternal { // cloned from NEO::Kernel - keeping types/names the same for simplicity
+    std::vector<NEO::Kernel::SimpleKernelArgInfo> kernelArguments;
     std::vector<FunctionImp::FunctionArgHandler> kernelArgHandlers;
-    std::vector<OCLRT::GraphicsAllocation *> kernelSvmGfxAllocations;
+    std::vector<NEO::GraphicsAllocation *> kernelSvmGfxAllocations;
 
-    void storeKernelArg(uint32_t argIndex, OCLRT::Kernel::kernelArgType argType, void *argObject,
+    void storeKernelArg(uint32_t argIndex, NEO::Kernel::kernelArgType argType, void *argObject,
                         const void *argValue, size_t argSize,
-                        OCLRT::GraphicsAllocation *argSvmAlloc = nullptr, cl_mem_flags argSvmFlags = 0) {
+                        NEO::GraphicsAllocation *argSvmAlloc = nullptr, cl_mem_flags argSvmFlags = 0) {
         kernelArguments[argIndex].type = argType;
         kernelArguments[argIndex].object = argObject;
         kernelArguments[argIndex].value = argValue;
@@ -141,11 +141,11 @@ xe_result_t FunctionImp::setGroupSize(uint32_t groupSizeX,
         return XE_RESULT_ERROR_INVALID_PARAMETER; // needs clarification in the spec
     }
 
-    auto numChannels = OCLRT::PerThreadDataHelper::getNumLocalIdChannels(*getKernelInfo()->patchInfo.threadPayload);
+    auto numChannels = NEO::PerThreadDataHelper::getNumLocalIdChannels(*getKernelInfo()->patchInfo.threadPayload);
     Vec3<size_t> groupSize{groupSizeX, groupSizeY, groupSizeZ};
-    auto itemsInGroup = OCLRT::Math::computeTotalElementsCount(groupSize);
-    uint32_t perThreadDataSizeForWholeThreadGroupNeeded = static_cast<uint32_t>(OCLRT::PerThreadDataHelper::getPerThreadDataSizeTotal(getKernelInfo()->getMaxSimdSize(),
-                                                                                                                                      numChannels, itemsInGroup));
+    auto itemsInGroup = NEO::Math::computeTotalElementsCount(groupSize);
+    uint32_t perThreadDataSizeForWholeThreadGroupNeeded = static_cast<uint32_t>(NEO::PerThreadDataHelper::getPerThreadDataSizeTotal(getKernelInfo()->getMaxSimdSize(),
+                                                                                                                                    numChannels, itemsInGroup));
     if (perThreadDataSizeForWholeThreadGroupNeeded > perThreadDataSizeForWholeThreadGroupAllocated) {
         alignedFree(perThreadDataForWholeThreadGroup);
         perThreadDataForWholeThreadGroup = alignedMalloc(perThreadDataSizeForWholeThreadGroupNeeded, 32); // alignment for vector instructions
@@ -156,10 +156,10 @@ xe_result_t FunctionImp::setGroupSize(uint32_t groupSizeX,
     if (numChannels > 0) {
         // don't generate local IDs if not needed
         assert(3 == numChannels); // if we do need local ids, we support only all 3 channels
-        OCLRT::generateLocalIDs(perThreadDataForWholeThreadGroup, static_cast<uint16_t>(getSimdSize()),
-                                std::array<uint16_t, 3>{{static_cast<uint16_t>(groupSizeX), static_cast<uint16_t>(groupSizeY), static_cast<uint16_t>(groupSizeZ)}},
-                                std::array<uint8_t, 3>{{0, 1, 2}}, // to do : add support for non-default walk order
-                                false);
+        NEO::generateLocalIDs(perThreadDataForWholeThreadGroup, static_cast<uint16_t>(getSimdSize()),
+                              std::array<uint16_t, 3>{{static_cast<uint16_t>(groupSizeX), static_cast<uint16_t>(groupSizeY), static_cast<uint16_t>(groupSizeZ)}},
+                              std::array<uint8_t, 3>{{0, 1, 2}}, // to do : add support for non-default walk order
+                              false);
     }
 
     this->groupSizeX = groupSizeX;
@@ -207,11 +207,11 @@ xe_result_t FunctionImp::suggestGroupSize(uint32_t globalSizeX,
         dim = 3U;
     }
     if (1U == dim) {
-        OCLRT::computeWorkgroupSize1D(maxWorkGroupSize, retGroupSize, workItems, simd);
-    } else if (OCLRT::DebugManager.flags.EnableComputeWorkSizeSquared.get() && (2U == dim)) {
-        OCLRT::computeWorkgroupSizeSquared(maxWorkGroupSize, retGroupSize, workItems, simd, dim);
+        NEO::computeWorkgroupSize1D(maxWorkGroupSize, retGroupSize, workItems, simd);
+    } else if (NEO::DebugManager.flags.EnableComputeWorkSizeSquared.get() && (2U == dim)) {
+        NEO::computeWorkgroupSizeSquared(maxWorkGroupSize, retGroupSize, workItems, simd, dim);
     } else {
-        OCLRT::computeWorkgroupSize2D(maxWorkGroupSize, retGroupSize, workItems, simd);
+        NEO::computeWorkgroupSize2D(maxWorkGroupSize, retGroupSize, workItems, simd);
     }
 
     *groupSizeX = static_cast<uint32_t>(retGroupSize[0]);
@@ -260,7 +260,7 @@ xe_result_t FunctionImp::setArgBuffer(uint32_t argIndex, size_t argSize, const v
     GraphicsAllocation *alloc = module->getDevice()->getMemoryManager()->findAllocation(*reinterpret_cast<void *const *>(argVal));
     assert(alloc != nullptr); // TODO : Handle nullptr if *argVal == NULL
 
-    oclInternals->storeKernelArg(argIndex, OCLRT::Kernel::BUFFER_OBJ, nullptr, argVal, argSize);
+    oclInternals->storeKernelArg(argIndex, NEO::Kernel::BUFFER_OBJ, nullptr, argVal, argSize);
 
     // Handle stateles to stateful
     if (getKernelInfo()->requiresSshForBuffers) {
@@ -276,7 +276,7 @@ xe_result_t FunctionImp::setArgImage(uint32_t argIndex, size_t argSize, const vo
     const auto image = Image::fromHandle(*static_cast<const xe_image_handle_t *>(argVal));
     const auto &kernelArgInfo = getKernelInfo()->kernelArgInfo[argIndex];
 
-    oclInternals->storeKernelArg(argIndex, OCLRT::Kernel::IMAGE_OBJ, image, argVal, argSize);
+    oclInternals->storeKernelArg(argIndex, NEO::Kernel::IMAGE_OBJ, image, argVal, argSize);
 
     auto ssh = getSurfaceStateHeap();
     assert(ssh);
@@ -299,23 +299,23 @@ bool FunctionImp::initialize(const xe_function_desc_t *desc) {
 
     this->immFuncInfo = module->getImmutableFunctionInfo(CStringRef(desc->pFunctionName));
     assert(this->immFuncInfo != nullptr);
-    PtrRef<OCLRT::KernelInfo> kernelInfoRT = immFuncInfo->kernelInfoRT.weakRefReinterpret<OCLRT::KernelInfo>();
+    PtrRef<NEO::KernelInfo> kernelInfoRT = immFuncInfo->kernelInfoRT.weakRefReinterpret<NEO::KernelInfo>();
     assert(kernelInfoRT != nullptr);
 
     // TODO : move immutable kernelRT to ImmutableFunctionInfo
     // kernelRT is currently part of Function because in early stages of API, Function objects were immutable/singleton (thanks to separation from FunctionArgs)
     // right now Function is greatly mutable and mutli-instanced, that's why immutable resources should be moved to ImmutableFunctionInfo
-    kernelRT = new OCLRT_temporary::LightweightOclKernel(static_cast<OCLRT::Program *>(static_cast<ModuleImp *>(module)->getProgramRT()), *kernelInfoRT);
+    kernelRT = new NEO_temporary::LightweightOclKernel(static_cast<NEO::Program *>(static_cast<ModuleImp *>(module)->getProgramRT()), *kernelInfoRT);
     kernelRT->initialize();
 
     // clone muttables from kernel object - note some may be immutable - fix this later
     this->oclInternals->kernelArguments = kernelRT->kernelArguments;
     for (auto handleRT : kernelRT->kernelArgHandlers) {
-        if (handleRT == &OCLRT::Kernel::setArgBuffer) {
+        if (handleRT == &NEO::Kernel::setArgBuffer) {
             this->oclInternals->kernelArgHandlers.push_back(&FunctionImp::setArgBuffer);
-        } else if (handleRT == &OCLRT::Kernel::setArgImage) {
+        } else if (handleRT == &NEO::Kernel::setArgImage) {
             this->oclInternals->kernelArgHandlers.push_back(&FunctionImp::setArgImage);
-        } else if (handleRT == &OCLRT::Kernel::setArgImmediate) {
+        } else if (handleRT == &NEO::Kernel::setArgImmediate) {
             this->oclInternals->kernelArgHandlers.push_back(&FunctionImp::setArgImmediate);
         } else {
             assert(0);
@@ -432,7 +432,7 @@ const void *FunctionImp::getDynamicStateHeap() const {
 
 template <typename T>
 bool FunctionImp::patchCrossThreadData(uint32_t location, const T &value) {
-    if (OCLRT::KernelArgInfo::undefinedOffset == location) {
+    if (NEO::KernelArgInfo::undefinedOffset == location) {
         return false;
     }
     *reinterpret_cast<T *>(ptrOffset(this->crossThreadData, location)) = value;

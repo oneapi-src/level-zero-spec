@@ -14,15 +14,15 @@
 #include <cassert>
 #include <memory>
 
-namespace OCLRT_temporary {
-struct LightweightOclProgram : public OCLRT::Program { // NEO refactor needed : decouple process gen binary, remove context
+namespace NEO_temporary {
+struct LightweightOclProgram : public NEO::Program { // NEO refactor needed : decouple process gen binary, remove context
     static LightweightOclProgram *create(void *deviceRT) {
         assert(deviceRT != nullptr);
-        LightweightOclProgram *prog = new LightweightOclProgram(static_cast<OCLRT::Device *>(deviceRT));
+        LightweightOclProgram *prog = new LightweightOclProgram(static_cast<NEO::Device *>(deviceRT));
         return prog;
     }
 
-    LightweightOclProgram(OCLRT::Device *deviceRT) : Program(*deviceRT->getExecutionEnvironment(), nullptr, false), deviceRT(deviceRT) {
+    LightweightOclProgram(NEO::Device *deviceRT) : Program(*deviceRT->getExecutionEnvironment(), nullptr, false), deviceRT(deviceRT) {
         setDevice(deviceRT);
     }
 
@@ -33,12 +33,12 @@ struct LightweightOclProgram : public OCLRT::Program { // NEO refactor needed : 
         this->isSpirV = true;
         this->programBinaryType = CL_PROGRAM_BINARY_TYPE_INTERMEDIATE;
 
-        OCLRT::CompilerInterface *pCompilerInterface = this->executionEnvironment.getCompilerInterface();
+        NEO::CompilerInterface *pCompilerInterface = this->executionEnvironment.getCompilerInterface();
         assert(pCompilerInterface != nullptr);
 
         std::string internalOptions = this->internalOptions + " -cl-intel-has-buffer-offset-arg ";
 
-        OCLRT::TranslationArgs inputArgs = {};
+        NEO::TranslationArgs inputArgs = {};
         inputArgs.pInput = const_cast<char *>(input); // this is a broken in the interface, input is considered const in the end
         inputArgs.InputSize = inputSize;
         inputArgs.pOptions = options.c_str();
@@ -73,19 +73,19 @@ struct LightweightOclProgram : public OCLRT::Program { // NEO refactor needed : 
         return false;
     }
 
-    OCLRT::Device *deviceRT;
-    using OCLRT::Program::kernelInfoArray;
+    NEO::Device *deviceRT;
+    using NEO::Program::kernelInfoArray;
 };
 
-} // namespace OCLRT_temporary
+} // namespace NEO_temporary
 
 namespace L0 {
 
 ModuleImp::ModuleImp(Device *device, void *deviceRT, ModuleBuildLog *moduleBuildLog)
     : device(device),
-      progRT(OCLRT_temporary::LightweightOclProgram::create(deviceRT)),
+      progRT(NEO_temporary::LightweightOclProgram::create(deviceRT)),
       moduleBuildLog(moduleBuildLog) {
-    productFamily = reinterpret_cast<OCLRT::Device *>(deviceRT)->getHardwareInfo().pPlatform->eProductFamily;
+    productFamily = reinterpret_cast<NEO::Device *>(deviceRT)->getHardwareInfo().pPlatform->eProductFamily;
 }
 
 ModuleImp::~ModuleImp() {
@@ -128,7 +128,7 @@ bool ModuleImp::initialize(const xe_module_desc_t *desc) {
 
 PtrRef<ImmutableFunctionInfo> ModuleImp::getImmutableFunctionInfo(CStringRef functionName) const {
     for (auto &immFuncInfo : immFuncInfos) {
-        auto kernelInfoRT = immFuncInfo->kernelInfoRT.weakRefReinterpret<OCLRT::KernelInfo>();
+        auto kernelInfoRT = immFuncInfo->kernelInfoRT.weakRefReinterpret<NEO::KernelInfo>();
         if (kernelInfoRT->name == functionName.get()) {
             return immFuncInfo.weakRef();
         }
@@ -137,7 +137,7 @@ PtrRef<ImmutableFunctionInfo> ModuleImp::getImmutableFunctionInfo(CStringRef fun
 }
 
 void ModuleImp::updateBuildLog(void *deviceRT) {
-    const char *buildLog = this->progRT->getBuildLog(static_cast<OCLRT::Device *>(deviceRT));
+    const char *buildLog = this->progRT->getBuildLog(static_cast<NEO::Device *>(deviceRT));
     if (this->moduleBuildLog && buildLog)
         moduleBuildLog->appendString(buildLog, strlen(buildLog));
 }

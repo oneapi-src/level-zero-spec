@@ -13,7 +13,7 @@ TEST(GraphicsAllocation, ctor) {
 
 TEST(GraphicsAllocation, ctorWrapper) {
     uint8_t buffer[1024];
-    OCLRT::GraphicsAllocation graphicsAllocation(buffer, sizeof(buffer), 0, 1, false);
+    NEO::GraphicsAllocation graphicsAllocation(NEO::GraphicsAllocation::AllocationType::UNDECIDED, buffer, sizeof(buffer), 0, 1, false);
     GraphicsAllocation allocation(&graphicsAllocation);
 
     EXPECT_NE(nullptr, allocation.allocationRT);

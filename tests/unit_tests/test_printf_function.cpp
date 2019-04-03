@@ -29,7 +29,7 @@ class FunctionPrintfTest : public ::testing::Test {
     void SetUp() override {
         device.reset(new Mock<Device>);
         module.reset(new Mock<Module>);
-        kernelInfo.rebind(new OCLRT::KernelInfo{});
+        kernelInfo.rebind(new NEO::KernelInfo{});
         funcInfo.kernelInfoRT = kernelInfo.weakRefReinterpret<void>();
 
         function.reset(new ::testing::NiceMock<Mock<Function>>);
@@ -47,8 +47,8 @@ class FunctionPrintfTest : public ::testing::Test {
         kernelInfo.deleteOwned();
     }
 
-    OCLRT::SPatchAllocateStatelessPrintfSurface printfSurfaceToken;
-    PtrOwn<OCLRT::KernelInfo> kernelInfo = nullptr;
+    NEO::SPatchAllocateStatelessPrintfSurface printfSurfaceToken;
+    PtrOwn<NEO::KernelInfo> kernelInfo = nullptr;
     ImmutableFunctionInfo funcInfo = {};
     std::unique_ptr<Mock<Function>> function;
     std::unique_ptr<Mock<Module>> module;
@@ -58,7 +58,7 @@ class FunctionPrintfTest : public ::testing::Test {
 class FunctionPrintfFromSpirvTest : public ::testing::Test {
   public:
     void SetUp() override {
-        platform = OCLRT::constructPlatform();
+        platform = NEO::constructPlatform();
         auto success = platform->initialize();
         ASSERT_TRUE(success);
 
@@ -100,7 +100,7 @@ class FunctionPrintfFromSpirvTest : public ::testing::Test {
     }
 
     xe_function_desc_t funDesc = {};
-    OCLRT::Platform *platform = nullptr;
+    NEO::Platform *platform = nullptr;
     std::unique_ptr<Module> module;
     std::unique_ptr<L0::Device> device;
 };

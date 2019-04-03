@@ -4,7 +4,7 @@
 
 #include "ptr.h"
 
-namespace OCLRT {
+namespace NEO {
 class BuiltIns;
 }
 
@@ -12,7 +12,7 @@ namespace L0 {
 
 struct BuiltinFunctionsLibImpl : BuiltinFunctionsLib {
     BuiltinFunctionsLibImpl(PtrRef<Device> device, PtrRef<void> builtinsRT)
-        : device(device), builtinsRT(builtinsRT.weakRef<OCLRT::BuiltIns>()) {
+        : device(device), builtinsRT(builtinsRT.weakRef<NEO::BuiltIns>()) {
         initAllToNullptr(builtins);
     }
     ~BuiltinFunctionsLibImpl() {
@@ -26,7 +26,7 @@ struct BuiltinFunctionsLibImpl : BuiltinFunctionsLib {
     PtrOwn<BuiltinData> builtins[static_cast<uint32_t>(Builtin::COUNT)];
 
     PtrRef<Device> device;
-    PtrRef<OCLRT::BuiltIns> builtinsRT;
+    PtrRef<NEO::BuiltIns> builtinsRT;
 };
 
 } // namespace L0

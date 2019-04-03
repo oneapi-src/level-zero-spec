@@ -86,7 +86,7 @@ xe_result_t EventImp::hostSynchronize(uint32_t timeout) {
         return XE_RESULT_ERROR_INVALID_PARAMETER;
     }
 
-    auto execEnvironment = static_cast<OCLRT::ExecutionEnvironment *>(device->getExecEnvironment());
+    auto execEnvironment = static_cast<NEO::ExecutionEnvironment *>(device->getExecEnvironment());
     auto osContext = OsContext::create(execEnvironment);
 
     // Fake Flush Stamp value for now

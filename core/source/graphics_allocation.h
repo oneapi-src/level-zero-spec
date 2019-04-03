@@ -2,7 +2,7 @@
 #include <cstring>
 #include <cstdint>
 
-namespace OCLRT {
+namespace NEO {
 class GraphicsAllocation;
 }
 
@@ -12,7 +12,7 @@ struct GraphicsAllocation {
     GraphicsAllocation(const GraphicsAllocation &) = delete;
     GraphicsAllocation &operator=(GraphicsAllocation const &) = delete;
 
-    GraphicsAllocation(OCLRT::GraphicsAllocation *allocationRT);
+    GraphicsAllocation(NEO::GraphicsAllocation *allocationRT);
     GraphicsAllocation(void *buffer, size_t size);
 
     uint64_t getGpuAddress() const;
@@ -23,12 +23,12 @@ struct GraphicsAllocation {
         this->allocatedFromFault = val;
     }
 
-    bool getAllocatedFromFault(){
+    bool getAllocatedFromFault() {
         return this->allocatedFromFault;
     }
 
     bool allocatedFromFault = false;
-    OCLRT::GraphicsAllocation *allocationRT = nullptr;
+    NEO::GraphicsAllocation *allocationRT = nullptr;
 };
 
 } // namespace L0

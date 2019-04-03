@@ -5,13 +5,13 @@
 struct _xe_command_list_handle_t {
 };
 
-namespace OCLRT {
+namespace NEO {
 class IndirectHeap;
 class LinearStream;
 class GraphicsAllocation;
 
 using ResidencyContainer = std::vector<GraphicsAllocation *>;
-} // namespace OCLRT
+} // namespace NEO
 
 namespace L0 {
 
@@ -42,17 +42,17 @@ struct CommandContainer : public _xe_command_list_handle_t {
         return *allocation;
     }
 
-    OCLRT::ResidencyContainer &getResidencyContainer() {
+    NEO::ResidencyContainer &getResidencyContainer() {
         return residencyContainer;
     }
 
     void addToResidencyContainer(GraphicsAllocation *alloc);
 
-    OCLRT::LinearStream &getCommandStream() {
+    NEO::LinearStream &getCommandStream() {
         return *commandStream;
     }
 
-    OCLRT::IndirectHeap &getIndirectHeap(HeapType heapType) {
+    NEO::IndirectHeap &getIndirectHeap(HeapType heapType) {
         return *indirectHeaps[heapType];
     }
 
@@ -84,9 +84,9 @@ struct CommandContainer : public _xe_command_list_handle_t {
 
     uint64_t instructionHeapBaseAddress = 0u;
 
-    OCLRT::LinearStream *commandStream = nullptr;
-    OCLRT::IndirectHeap *indirectHeaps[NUM_HEAPS];
-    OCLRT::ResidencyContainer residencyContainer;
+    NEO::LinearStream *commandStream = nullptr;
+    NEO::IndirectHeap *indirectHeaps[NUM_HEAPS];
+    NEO::ResidencyContainer residencyContainer;
     std::vector<GraphicsAllocation *> deallocationContainer;
     std::vector<Function *> printfFunctionContainer;
 };

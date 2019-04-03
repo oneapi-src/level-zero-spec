@@ -10,7 +10,7 @@ namespace ult {
 
 template <GFXCORE_FAMILY gfxCoreFamily>
 struct WhiteBox<::L0::ImageCoreFamily<gfxCoreFamily>> : public ::L0::ImageCoreFamily<gfxCoreFamily> {
-    using GfxFamily = typename OCLRT::GfxFamilyMapper<gfxCoreFamily>::GfxFamily;
+    using GfxFamily = typename NEO::GfxFamilyMapper<gfxCoreFamily>::GfxFamily;
     using RENDER_SURFACE_STATE = typename GfxFamily::RENDER_SURFACE_STATE;
 
     WhiteBox() : ::L0::ImageCoreFamily<gfxCoreFamily>() {
@@ -43,7 +43,7 @@ struct Mock<Image> : public Image {
     MOCK_METHOD0(destroy, xe_result_t());
     MOCK_METHOD0(getAllocation, GraphicsAllocation *());
     MOCK_METHOD4(copySurfaceStateToSSH, void(void *surfaceStateHeap, const uint32_t surfaceStateOffset,
-            const uint32_t bindingTableOffset, const uint32_t bindingTableIndex));
+                                             const uint32_t bindingTableOffset, const uint32_t bindingTableIndex));
     MOCK_METHOD0(getSizeInBytes, size_t());
 };
 

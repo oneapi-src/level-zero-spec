@@ -3,7 +3,7 @@
 #include "runtime/memory_manager/memory_constants.h"
 
 #include <cstdint>
-namespace OCLRT {
+namespace NEO {
 class Kernel;
 }
 
@@ -13,7 +13,7 @@ struct GraphicsAllocation;
 
 struct PrintfHandler {
     static GraphicsAllocation *createPrintfBuffer(Device *device);
-    static void printOutput(OCLRT::Kernel *kernel, GraphicsAllocation *printfBuffer);
+    static void printOutput(NEO::Kernel *kernel, GraphicsAllocation *printfBuffer);
 
   protected:
     PrintfHandler(const PrintfHandler &) = delete;

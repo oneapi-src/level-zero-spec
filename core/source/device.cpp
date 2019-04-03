@@ -133,7 +133,7 @@ struct DeviceImp : public Device {
         assert(pMemProperties->version == XE_DEVICE_MEMORY_PROPERTIES_VERSION_CURRENT);
         const auto &deviceInfo = this->deviceRT->getDeviceInfo();
         const auto &hardwareInfo = this->deviceRT->getHardwareInfo();
-        auto &hwHelper = OCLRT::HwHelper::get(hardwareInfo.pPlatform->eRenderCoreFamily);
+        auto &hwHelper = NEO::HwHelper::get(hardwareInfo.pPlatform->eRenderCoreFamily);
         auto enableLocalMemory = hwHelper.getEnableLocalMemory(hardwareInfo);
 
         pMemProperties->unifiedMemory = true;                                                // need clarification - "Host and device share same physical memory."
@@ -165,7 +165,7 @@ struct DeviceImp : public Device {
         assert(pDeviceProperties->version == XE_DEVICE_PROPERTIES_VERSION_CURRENT);
         const auto &deviceInfo = this->deviceRT->getDeviceInfo();
         const auto &hardwareInfo = this->deviceRT->getHardwareInfo();
-        auto &hwHelper = OCLRT::HwHelper::get(hardwareInfo.pPlatform->eRenderCoreFamily);
+        auto &hwHelper = NEO::HwHelper::get(hardwareInfo.pPlatform->eRenderCoreFamily);
         auto enableLocalMemory = hwHelper.getEnableLocalMemory(hardwareInfo);
 
         memcpy_s(pDeviceProperties->device_name, sizeof(pDeviceProperties->device_name),
@@ -179,7 +179,7 @@ struct DeviceImp : public Device {
         pDeviceProperties->coreClockRate = deviceInfo.maxClockFrequency;
         //pDeviceProperties->memClockRate;                          ///< [out] Clock rate for device global memory
         //pDeviceProperties->memGlobalBusWidth;                     ///< [out] Bus width between core and memory.
-        pDeviceProperties->totalLocalMemSize = enableLocalMemory ? OCLRT::DebugManager.flags.HBMSizePerTileInGigabytes.get() * MemoryConstants::gigaByte : 0;
+        pDeviceProperties->totalLocalMemSize = enableLocalMemory ? NEO::DebugManager.flags.HBMSizePerTileInGigabytes.get() * MemoryConstants::gigaByte : 0;
         pDeviceProperties->numAsyncComputeEngines = static_cast<uint32_t>(hwHelper.getGpgpuEngineInstances().size());
         pDeviceProperties->numAsyncCopyEngines = 1; //  hwHelper.getCopyEngineInstances().size(); // NEO refactor
         pDeviceProperties->numComputeCores = deviceInfo.maxComputUnits;
@@ -236,12 +236,12 @@ struct DeviceImp : public Device {
         return mocsMapper.weakRef();
     }
 
-    OCLRT::HwHelper &getHwHelper() override {
+    NEO::HwHelper &getHwHelper() override {
         const auto &hardwareInfo = deviceRT->getHardwareInfo();
-        return OCLRT::HwHelper::get(hardwareInfo.pPlatform->eRenderCoreFamily);
+        return NEO::HwHelper::get(hardwareInfo.pPlatform->eRenderCoreFamily);
     }
 
-    OCLRT::Device *deviceRT = nullptr;
+    NEO::Device *deviceRT = nullptr;
     MemoryManager *memoryManager = nullptr;
     bool isSubdevice = false;
     void *execEnvironment = nullptr;
@@ -252,7 +252,7 @@ struct DeviceImp : public Device {
 Device *Device::create(void *ptr) {
     auto device = new DeviceImp;
 
-    auto deviceRT = static_cast<OCLRT::Device *>(ptr);
+    auto deviceRT = static_cast<NEO::Device *>(ptr);
     device->deviceRT = deviceRT;
     device->memoryManager = MemoryManager::create(deviceRT->getMemoryManager());
     device->execEnvironment = (void *)deviceRT->getExecutionEnvironment();

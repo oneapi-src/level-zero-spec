@@ -9,11 +9,11 @@ namespace L0 {
 template <>
 void CommandQueueHw<IGFX_GEN12_CORE>::dispatchTaskCountWrite(bool flushDataCache) {
     constexpr auto gfxCoreFamily = IGFX_GEN12_CORE;
-    auto commandStreamReceiver = static_cast<OCLRT::CommandStreamReceiver *>(csrRT);
+    auto commandStreamReceiver = static_cast<NEO::CommandStreamReceiver *>(csrRT);
     assert(commandStreamReceiver);
     auto taskCountToWrite = commandStreamReceiver->peekTaskCount();
 
-    using GfxFamily = typename OCLRT::GfxFamilyMapper<gfxCoreFamily>::GfxFamily;
+    using GfxFamily = typename NEO::GfxFamilyMapper<gfxCoreFamily>::GfxFamily;
 
     using PIPELINE_SELECT = typename GfxFamily::PIPELINE_SELECT;
     using PIPE_CONTROL = typename GfxFamily::PIPE_CONTROL;
@@ -42,17 +42,17 @@ void CommandQueueHw<IGFX_GEN12_CORE>::dispatchTaskCountWrite(bool flushDataCache
     *substream.getSpaceForCmd<PIPE_CONTROL>() = pc;
     *substream.getSpaceForCmd<MI_BATCH_BUFFER_END>() = cmdEnd;
 
-    OCLRT::BatchBuffer batchBuffer(
+    NEO::BatchBuffer batchBuffer(
         allocation->allocationRT,
         substream.getBaseOffsetInParent(),
         0u,
         nullptr,
         false,
         false,
-        OCLRT::QueueThrottle::HIGH,
+        NEO::QueueThrottle::HIGH,
         substream.getParent().getUsed(),
         &substream.getParent());
-    OCLRT::ResidencyContainer residencyContainer;
+    NEO::ResidencyContainer residencyContainer;
     residencyContainer.push_back(commandStreamReceiver->getTagAllocation());
     commandStreamReceiver->flush(batchBuffer, residencyContainer);
     commandStreamReceiver->makeCoherent(*commandStreamReceiver->getTagAllocation());

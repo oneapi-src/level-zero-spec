@@ -14,8 +14,8 @@ GraphicsAllocation *PrintfHandler::createPrintfBuffer(Device *device) {
     return allocation;
 }
 
-void PrintfHandler::printOutput(OCLRT::Kernel *kernel, GraphicsAllocation *printfBuffer) {
-    OCLRT::PrintFormatter printFormatter(*kernel, *printfBuffer->allocationRT);
+void PrintfHandler::printOutput(NEO::Kernel *kernel, GraphicsAllocation *printfBuffer) {
+    NEO::PrintFormatter printFormatter(*kernel, *printfBuffer->allocationRT);
     printFormatter.printKernelOutput();
 
     // reset to initial state after printing

@@ -17,7 +17,7 @@ using ::testing::Return;
 TEST(FunctionImp, crossThreadDataIsCorrectlyPatchedWithGlobalWorkSizeAndGroupCount) {
     uint32_t *crossThreadData = reinterpret_cast<uint32_t *>(alignedMalloc(sizeof(uint32_t[6]), 32));
 
-    PtrOwn<OCLRT::KernelInfo> kernelInfo{new OCLRT::KernelInfo{}};
+    PtrOwn<NEO::KernelInfo> kernelInfo{new NEO::KernelInfo{}};
     kernelInfo->workloadInfo.globalWorkSizeOffsets[0] = 0 * sizeof(uint32_t);
     kernelInfo->workloadInfo.globalWorkSizeOffsets[1] = 1 * sizeof(uint32_t);
     kernelInfo->workloadInfo.globalWorkSizeOffsets[2] = 2 * sizeof(uint32_t);
@@ -53,8 +53,8 @@ TEST(FunctionImp, crossThreadDataIsCorrectlyPatchedWithGlobalWorkSizeAndGroupCou
 }
 
 TEST(FunctionImp, suggestGroupSizeClampsToMaxGroupSize) {
-    OCLRT::SPatchExecutionEnvironment execEnv = {};
-    PtrOwn<OCLRT::KernelInfo> kernelInfo{new OCLRT::KernelInfo{}};
+    NEO::SPatchExecutionEnvironment execEnv = {};
+    PtrOwn<NEO::KernelInfo> kernelInfo{new NEO::KernelInfo{}};
     kernelInfo->patchInfo.executionEnvironment = &execEnv;
     ImmutableFunctionInfo funcInfo = {};
     funcInfo.kernelInfoRT = kernelInfo.weakRefReinterpret<void>();
@@ -83,8 +83,8 @@ INSTANTIATE_TEST_CASE_P(,
                         ::testing::Values(4, 7, 8, 16, 32, 192, 1024, 4097, 16000));
 
 TEST_P(FunctionImpSuggestGroupSize, suggestGroupChoosesProperGroupSize) {
-    OCLRT::SPatchExecutionEnvironment execEnv = {};
-    PtrOwn<OCLRT::KernelInfo> kernelInfo{new OCLRT::KernelInfo{}};
+    NEO::SPatchExecutionEnvironment execEnv = {};
+    PtrOwn<NEO::KernelInfo> kernelInfo{new NEO::KernelInfo{}};
     kernelInfo->patchInfo.executionEnvironment = &execEnv;
     ImmutableFunctionInfo funcInfo = {};
     funcInfo.kernelInfoRT = kernelInfo.weakRefReinterpret<void>();
@@ -152,8 +152,8 @@ TEST(FunctionImp, setGroupSizeGuardsAgainst0SizeDispatch) {
 
 TEST(FunctionImp, setGroupSizeDoesNotGenerateLocalIdsIfNumChannelsIs0) {
     iOpenCL::SPatchThreadPayload payload{};
-    OCLRT::SPatchExecutionEnvironment execEnv = {};
-    PtrOwn<OCLRT::KernelInfo> kernelInfo{new OCLRT::KernelInfo{}};
+    NEO::SPatchExecutionEnvironment execEnv = {};
+    PtrOwn<NEO::KernelInfo> kernelInfo{new NEO::KernelInfo{}};
     kernelInfo->patchInfo.executionEnvironment = &execEnv;
     kernelInfo->patchInfo.threadPayload = &payload;
     ImmutableFunctionInfo funcInfo = {};

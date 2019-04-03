@@ -112,6 +112,7 @@ add_library(compute_runtime_lib_full
         ${COMPUTE_RUNTIME_DIR}/runtime/dll/create_command_stream.cpp
         ${COMPUTE_RUNTIME_DIR}/runtime/dll/create_deferred_deleter.cpp
         ${COMPUTE_RUNTIME_DIR}/runtime/dll/create_tbx_sockets.cpp
+        ${COMPUTE_RUNTIME_DIR}/runtime/dll/get_devices.cpp
         ${COMPUTE_RUNTIME_DIR}/runtime/dll/source_level_debugger.cpp
         ${COMPUTE_RUNTIME_DIR}/runtime/helpers/built_ins_helper.cpp
         ${COMPUTE_RUNTIME_DIR}/runtime/gmm_helper/page_table_mngr.cpp
@@ -138,6 +139,7 @@ if(WIN32)
             ${COMPUTE_RUNTIME_DIR}/runtime/dll/windows/environment_variables.cpp
             ${COMPUTE_RUNTIME_DIR}/runtime/dll/windows/options.cpp
             ${COMPUTE_RUNTIME_DIR}/runtime/dll/windows/os_interface.cpp
+            ${COMPUTE_RUNTIME_DIR}/runtime/dll/windows/create_wddm_memory_manager.cpp
             ${COMPUTE_RUNTIME_DIR}/runtime/os_interface/windows/os_interface.cpp
             ${COMPUTE_RUNTIME_DIR}/runtime/os_interface/windows/sys_calls.cpp
             ${COMPUTE_RUNTIME_DIR}/runtime/os_interface/windows/wddm/wddm_calls.cpp
@@ -152,6 +154,7 @@ else()
     target_sources(compute_runtime_lib_full
     PRIVATE
         ${COMPUTE_RUNTIME_DIR}/runtime/dll/linux/allocator_helper.cpp
+        ${COMPUTE_RUNTIME_DIR}/runtime/dll/linux/create_drm_memory_manager.cpp
         ${COMPUTE_RUNTIME_DIR}/runtime/dll/linux/devices/embargo/devices.inl
         ${COMPUTE_RUNTIME_DIR}/runtime/dll/linux/devices/devices_base.inl      
         ${COMPUTE_RUNTIME_DIR}/runtime/dll/linux/options.cpp
@@ -277,6 +280,7 @@ if(WIN32)
             ${COMPUTE_RUNTIME_DIR}/runtime/dll/windows/environment_variables.cpp
             ${COMPUTE_RUNTIME_DIR}/unit_tests/mocks/mock_gmm_memory_base.cpp
             ${COMPUTE_RUNTIME_DIR}/unit_tests/mocks/mock_wddm.cpp
+            ${COMPUTE_RUNTIME_DIR}/unit_tests/os_interface/windows/create_wddm_memory_manager.cpp
             ${COMPUTE_RUNTIME_DIR}/unit_tests/os_interface/windows/options.cpp
             ${COMPUTE_RUNTIME_DIR}/unit_tests/os_interface/windows/sys_calls.cpp
             ${COMPUTE_RUNTIME_DIR}/unit_tests/os_interface/windows/ult_dxgi_factory.cpp
@@ -297,6 +301,7 @@ if(UNIX)
             ${COMPUTE_RUNTIME_DIR}/runtime/os_interface/device_factory.cpp
             ${COMPUTE_RUNTIME_DIR}/runtime/os_interface/linux/os_library.cpp
             ${COMPUTE_RUNTIME_DIR}/runtime/tbx/tbx_sockets_imp.cpp
+            ${COMPUTE_RUNTIME_DIR}/unit_tests/os_interface/linux/create_drm_memory_manager.cpp
             ${COMPUTE_RUNTIME_DIR}/unit_tests/os_interface/linux/options.cpp
     )
 

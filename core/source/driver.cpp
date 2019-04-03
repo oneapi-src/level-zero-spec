@@ -9,7 +9,7 @@ namespace L0 {
 
 struct DriverImp : public Driver {
     xe_result_t init(xe_init_flag_t) override {
-        auto platform = OCLRT::constructPlatform();
+        auto platform = NEO::constructPlatform();
         auto success = platform->initialize();
 
         return XE_RESULT_SUCCESS;
@@ -17,7 +17,7 @@ struct DriverImp : public Driver {
 
     xe_result_t getDevice(const xe_device_uuid_t *uniqueId,
                           xe_device_handle_t *phDevice) override {
-        auto platform = OCLRT::constructPlatform();
+        auto platform = NEO::constructPlatform();
         // Assume for now xe_device_uuid_t id[0] contains ordinalID
         auto device = Device::create(platform->getDevice(static_cast<size_t>(uniqueId->id[0])));
         *phDevice = device;
@@ -28,8 +28,8 @@ struct DriverImp : public Driver {
     xe_result_t getDeviceCount(uint32_t *count) override {
         assert(count);
         *count = 1U;
-        if (OCLRT::DebugManager.flags.CreateMultipleDevices.get() > 0) {
-            *count = static_cast<uint32_t>(OCLRT::DebugManager.flags.CreateMultipleDevices.get());
+        if (NEO::DebugManager.flags.CreateMultipleDevices.get() > 0) {
+            *count = static_cast<uint32_t>(NEO::DebugManager.flags.CreateMultipleDevices.get());
         }
         return XE_RESULT_SUCCESS;
     }
