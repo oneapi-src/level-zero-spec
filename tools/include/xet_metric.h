@@ -42,12 +42,107 @@ extern "C" {
 #endif
 
 ///////////////////////////////////////////////////////////////////////////////
+/// @brief Returns metric group count for a given device.
+/// 
+/// @returns
+///     - ::XE_RESULT_SUCCESS
+///     - ::XE_RESULT_ERROR_UNINITIALIZED
+///     - ::XE_RESULT_ERROR_DEVICE_LOST
+///     - ::XE_RESULT_ERROR_INVALID_PARAMETER
+///         + nullptr == hDevice
+///         + nullptr == pCount
+///     - ::XE_RESULT_ERROR_UNSUPPORTED
+__xedllport xe_result_t __xecall
+xetDeviceGetMetricGroupCount(
+    xe_device_handle_t hDevice,                     ///< [in] handle of the device object
+    uint32_t* pCount                                ///< [out] number of metric groups supported by the device
+    );
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Returns metric group handle for a device.
+/// 
+/// @details
+///     - The application may call this function from simultaneous threads with
+///       the same device handle.
+/// 
+/// @returns
+///     - ::XE_RESULT_SUCCESS
+///     - ::XE_RESULT_ERROR_UNINITIALIZED
+///     - ::XE_RESULT_ERROR_DEVICE_LOST
+///     - ::XE_RESULT_ERROR_INVALID_PARAMETER
+///         + nullptr == hDevice
+///         + nullptr == phMetricGroup
+///         + devices do not contain a given metric group
+///     - ::XE_RESULT_ERROR_UNSUPPORTED
+__xedllport xe_result_t __xecall
+xetDeviceGetMetricGroup(
+    xe_device_handle_t hDevice,                     ///< [in] handle of the device
+    uint32_t ordinal,                               ///< [in] metric group index
+    xet_metric_group_handle_t* phMetricGroup        ///< [out] metric group handle
+    );
+
+///////////////////////////////////////////////////////////////////////////////
 /// @brief Maximum metric group name string size
 #define XET_MAX_METRIC_GROUP_NAME  256
 
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Maximum metric group description string size
 #define XET_MAX_METRIC_GROUP_DESCRIPTION  256
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Metric group sampling type
+typedef enum _xet_metric_group_sampling_type
+{
+    XET_METRIC_GROUP_SAMPLING_TYPE_NONE = 0,        ///< No sampling mode
+    XET_METRIC_GROUP_SAMPLING_TYPE_EVENT_BASED = XE_BIT(0), ///< Event based sampling
+    XET_METRIC_GROUP_SAMPLING_TYPE_TIME_BASED = XE_BIT(1),  ///< Time based sampling
+
+} xet_metric_group_sampling_type;
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief API version of ::xet_metric_group_properties_t
+typedef enum _xet_metric_group_properties_version_t
+{
+    XET_METRIC_GROUP_PROPERTIES_VERSION_CURRENT = XE_MAKE_VERSION( 1, 0 ),  ///< version 1.0
+
+} xet_metric_group_properties_version_t;
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Metric group properties queried using ::xetMetricGroupGetProperties
+typedef struct _xet_metric_group_properties_t
+{
+    xet_metric_group_properties_version_t version;  ///< [in] ::XET_METRIC_GROUP_PROPERTIES_VERSION_CURRENT
+    char name[XET_MAX_METRIC_GROUP_NAME];           ///< [out] metric group name
+    char description[XET_MAX_METRIC_GROUP_DESCRIPTION]; ///< [out] metric group description
+    xet_metric_group_sampling_type samplingType;    ///< [out] metric group sampling type
+    uint32_t domain;                                ///< [out] metric group domain number
+    uint32_t metricCount;                           ///< [out] metric count belonging to this group
+    uint32_t rawReportSize;                         ///< [out] size of raw report
+    uint32_t calculatedReportSize;                  ///< [out] size of calculated report
+
+} xet_metric_group_properties_t;
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Returns properties for a given metric group.
+/// 
+/// @details
+///     - The application may call this function from simultaneous threads with
+///       the same metric group handle.
+/// 
+/// @returns
+///     - ::XE_RESULT_SUCCESS
+///     - ::XE_RESULT_ERROR_UNINITIALIZED
+///     - ::XE_RESULT_ERROR_DEVICE_LOST
+///     - ::XE_RESULT_ERROR_INVALID_PARAMETER
+///         + nullptr == hMetricGroup
+///         + nullptr == pProperties
+///         + invalid metric group handle
+///     - ::XE_RESULT_ERROR_UNSUPPORTED
+__xedllport xe_result_t __xecall
+xetMetricGroupGetProperties(
+    xet_metric_group_handle_t hMetricGroup,         ///< [in] handle of the metric group
+    xet_metric_group_properties_t* pProperties      ///< [out] metric group properties
+    );
 
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Maximum metric name string size
@@ -64,71 +159,6 @@ extern "C" {
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Maximum metric result units string size
 #define XET_MAX_METRIC_RESULT_UNITS  256
-
-///////////////////////////////////////////////////////////////////////////////
-/// @brief API version of ::xet_metric_group_properties_t
-typedef enum _xet_metric_group_properties_version_t
-{
-    XET_METRIC_GROUP_PROPERTIES_VERSION_CURRENT = XE_MAKE_VERSION( 1, 0 ),  ///< version 1.0
-
-} xet_metric_group_properties_version_t;
-
-///////////////////////////////////////////////////////////////////////////////
-/// @brief Metric group sampling type
-typedef enum _xet_metric_group_sampling_type
-{
-    XET_METRIC_GROUP_SAMPLING_TYPE_NONE = 0,        ///< No sampling mode
-    XET_METRIC_GROUP_SAMPLING_TYPE_EVENT_BASED = XE_BIT(0), ///< Event based sampling
-    XET_METRIC_GROUP_SAMPLING_TYPE_TIME_BASED = XE_BIT(1),  ///< Time based sampling
-
-} xet_metric_group_sampling_type;
-
-///////////////////////////////////////////////////////////////////////////////
-/// @brief API version of ::xet_metric_query_pool_desc_t
-typedef enum _xet_metric_query_pool_desc_version_t
-{
-    XET_METRIC_QUERY_POOL_DESC_VERSION_CURRENT = XE_MAKE_VERSION( 1, 0 ),   ///< version 1.0
-
-} xet_metric_query_pool_desc_version_t;
-
-///////////////////////////////////////////////////////////////////////////////
-/// @brief API version of ::xet_metric_properties_t
-typedef enum _xet_metric_properties_version_t
-{
-    XET_METRIC_PROPERTIES_VERSION_CURRENT = XE_MAKE_VERSION( 1, 0 ),///< version 1.0
-
-} xet_metric_properties_version_t;
-
-///////////////////////////////////////////////////////////////////////////////
-/// @brief API version of ::xet_typed_value_t
-typedef enum _xet_typed_value_version_t
-{
-    XET_TYPED_VALUE_VERSION_CURRENT = XE_MAKE_VERSION( 1, 0 ),  ///< version 1.0
-
-} xet_typed_value_version_t;
-
-///////////////////////////////////////////////////////////////////////////////
-/// @brief API version of ::xet_metric_tracer_desc_t
-typedef enum _xet_metric_tracer_desc_version_t
-{
-    XET_METRIC_TRACER_DESC_VERSION_CURRENT = XE_MAKE_VERSION( 1, 0 ),   ///< version 1.0
-
-} xet_metric_tracer_desc_version_t;
-
-///////////////////////////////////////////////////////////////////////////////
-/// @brief Metric group properties queried using ::xetMetricGroupGetProperties
-typedef struct _xet_metric_group_properties_t
-{
-    xet_metric_group_properties_version_t version;  ///< [in] ::XET_METRIC_GROUP_PROPERTIES_VERSION_CURRENT
-    char name[XET_MAX_METRIC_GROUP_NAME];           ///< [out] metric group name
-    char description[XET_MAX_METRIC_GROUP_DESCRIPTION]; ///< [out] metric group description
-    xet_metric_group_sampling_type samplingType;    ///< [out] metric group sampling type
-    uint32_t domain;                                ///< [out] metric group domain number
-    uint32_t metricCount;                           ///< [out] metric count belonging to this group
-    uint32_t rawReportSize;                         ///< [out] size of raw report
-    uint32_t calculatedReportSize;                  ///< [out] size of calculated report
-
-} xet_metric_group_properties_t;
 
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Metric types
@@ -158,6 +188,14 @@ typedef enum _xet_value_type_t
 } xet_value_type_t;
 
 ///////////////////////////////////////////////////////////////////////////////
+/// @brief API version of ::xet_typed_value_t
+typedef enum _xet_typed_value_version_t
+{
+    XET_TYPED_VALUE_VERSION_CURRENT = XE_MAKE_VERSION( 1, 0 ),  ///< version 1.0
+
+} xet_typed_value_version_t;
+
+///////////////////////////////////////////////////////////////////////////////
 /// @brief Typed value
 typedef struct _xet_typed_value_t
 {
@@ -170,6 +208,14 @@ typedef struct _xet_typed_value_t
     const char* valueString;                        ///< [out] string value
 
 } xet_typed_value_t;
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief API version of ::xet_metric_properties_t
+typedef enum _xet_metric_properties_version_t
+{
+    XET_METRIC_PROPERTIES_VERSION_CURRENT = XE_MAKE_VERSION( 1, 0 ),///< version 1.0
+
+} xet_metric_properties_version_t;
 
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Metric properties queried using ::xetMetricGetProperties
@@ -185,82 +231,6 @@ typedef struct _xet_metric_properties_t
     char resultUnits[XET_MAX_METRIC_RESULT_UNITS];  ///< [out] metric result units
 
 } xet_metric_properties_t;
-
-///////////////////////////////////////////////////////////////////////////////
-/// @brief Metric tracer descriptor
-typedef struct _xet_metric_tracer_desc_t
-{
-    xet_metric_tracer_desc_version_t version;       ///< [in] ::XET_METRIC_TRACER_DESC_VERSION_CURRENT
-    xet_metric_group_handle_t hMetricGroup;         ///< [in] handle of the metric group
-    xe_event_handle_t hNotificationEvent;           ///< [in] event used for report availability notification. Must be device
-                                                    ///< to host type.
-    uint32_t notifyEveryNReports;                   ///< [in/out] number of collected reports after which notification event
-                                                    ///< will be signalled
-    uint32_t samplingPeriodNs;                      ///< [in/out] tracer sampling period in nanoseconds
-
-} xet_metric_tracer_desc_t;
-
-///////////////////////////////////////////////////////////////////////////////
-/// @brief Returns metric group count for a given device.
-/// 
-/// @returns
-///     - ::XE_RESULT_SUCCESS
-///     - ::XE_RESULT_ERROR_UNINITIALIZED
-///     - ::XE_RESULT_ERROR_DEVICE_LOST
-///     - ::XE_RESULT_ERROR_INVALID_PARAMETER
-///         + nullptr == hDevice
-///         + nullptr == pCount
-///     - ::XE_RESULT_ERROR_UNSUPPORTED
-__xedllport xe_result_t __xecall
-xetDeviceGetMetricGroupCount(
-    xet_device_handle_t hDevice,                    ///< [in] handle of the device object
-    uint32_t* pCount                                ///< [out] number of metric groups supported by the device
-    );
-
-///////////////////////////////////////////////////////////////////////////////
-/// @brief Returns metric group handle for a device.
-/// 
-/// @details
-///     - The application may call this function from simultaneous threads with
-///       the same device handle.
-/// 
-/// @returns
-///     - ::XE_RESULT_SUCCESS
-///     - ::XE_RESULT_ERROR_UNINITIALIZED
-///     - ::XE_RESULT_ERROR_DEVICE_LOST
-///     - ::XE_RESULT_ERROR_INVALID_PARAMETER
-///         + nullptr == hDevice
-///         + nullptr == phMetricGroup
-///         + devices do not contain a given metric group
-///     - ::XE_RESULT_ERROR_UNSUPPORTED
-__xedllport xe_result_t __xecall
-xetDeviceGetMetricGroup(
-    xet_device_handle_t hDevice,                    ///< [in] handle of the device
-    uint32_t ordinal,                               ///< [in] metric group index
-    xet_metric_group_handle_t* phMetricGroup        ///< [out] metric group handle
-    );
-
-///////////////////////////////////////////////////////////////////////////////
-/// @brief Returns properties for a given metric group.
-/// 
-/// @details
-///     - The application may call this function from simultaneous threads with
-///       the same metric group handle.
-/// 
-/// @returns
-///     - ::XE_RESULT_SUCCESS
-///     - ::XE_RESULT_ERROR_UNINITIALIZED
-///     - ::XE_RESULT_ERROR_DEVICE_LOST
-///     - ::XE_RESULT_ERROR_INVALID_PARAMETER
-///         + nullptr == hMetricGroup
-///         + nullptr == pProperties
-///         + invalid metric group handle
-///     - ::XE_RESULT_ERROR_UNSUPPORTED
-__xedllport xe_result_t __xecall
-xetMetricGroupGetProperties(
-    xet_metric_group_handle_t hMetricGroup,         ///< [in] handle of the metric group
-    xet_metric_group_properties_t* pProperties      ///< [out] metric group properties
-    );
 
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Returns metric from a given metric group.
@@ -355,10 +325,32 @@ xetMetricGroupCalculateData(
 ///     - ::XE_RESULT_ERROR_UNSUPPORTED
 __xedllport xe_result_t __xecall
 xetDeviceActivateMetricGroups(
-    xet_device_handle_t hDevice,                    ///< [in] handle of the device
+    xe_device_handle_t hDevice,                     ///< [in] handle of the device
     uint32_t count,                                 ///< [in] metric group count to activate. 0 to deactivate.
-    xet_metric_group_handle_t* phMetricGroups       ///< [in] handles of the metric groups to activate. NULL to deactivate.
+    xet_metric_group_handle_t* phMetricGroups       ///< [in] handles of the metric groups to activate. NULL to deactivate
     );
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief API version of ::xet_metric_tracer_desc_t
+typedef enum _xet_metric_tracer_desc_version_t
+{
+    XET_METRIC_TRACER_DESC_VERSION_CURRENT = XE_MAKE_VERSION( 1, 0 ),   ///< version 1.0
+
+} xet_metric_tracer_desc_version_t;
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Metric tracer descriptor
+typedef struct _xet_metric_tracer_desc_t
+{
+    xet_metric_tracer_desc_version_t version;       ///< [in] ::XET_METRIC_TRACER_DESC_VERSION_CURRENT
+    xet_metric_group_handle_t hMetricGroup;         ///< [in] handle of the metric group
+    xe_event_handle_t hNotificationEvent;           ///< [in] event used for report availability notification. Must be device
+                                                    ///< to host type.
+    uint32_t notifyEveryNReports;                   ///< [in/out] number of collected reports after which notification event
+                                                    ///< will be signalled
+    uint32_t samplingPeriodNs;                      ///< [in/out] tracer sampling period in nanoseconds
+
+} xet_metric_tracer_desc_t;
 
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Opens metric tracer for a given device.
@@ -380,7 +372,7 @@ xetDeviceActivateMetricGroups(
 ///         + ::XET_METRIC_TRACER_DESC_VERSION_CURRENT < desc->version
 __xedllport xe_result_t __xecall
 xetDeviceOpenMetricTracer(
-    xet_device_handle_t hDevice,                    ///< [in] handle of the device
+    xe_device_handle_t hDevice,                     ///< [in] handle of the device
     xet_metric_tracer_desc_t* desc,                 ///< [in/out] metric tracer descriptor
     xet_metric_tracer_handle_t* phMetricTracer      ///< [out] handle of metric tracer
     );
@@ -463,6 +455,14 @@ typedef enum _xet_metric_query_pool_flag_t
 } xet_metric_query_pool_flag_t;
 
 ///////////////////////////////////////////////////////////////////////////////
+/// @brief API version of ::xet_metric_query_pool_desc_t
+typedef enum _xet_metric_query_pool_desc_version_t
+{
+    XET_METRIC_QUERY_POOL_DESC_VERSION_CURRENT = XE_MAKE_VERSION( 1, 0 ),   ///< version 1.0
+
+} xet_metric_query_pool_desc_version_t;
+
+///////////////////////////////////////////////////////////////////////////////
 /// @brief Metric query pool description
 typedef struct _xet_metric_query_pool_desc_t
 {
@@ -493,7 +493,7 @@ typedef struct _xet_metric_query_pool_desc_t
 ///         + ::XET_METRIC_QUERY_POOL_DESC_VERSION_CURRENT < pDesc->version
 __xedllport xe_result_t __xecall
 xetDeviceCreateMetricQueryPool(
-    xet_device_handle_t hDevice,                    ///< [in] handle of the device
+    xe_device_handle_t hDevice,                     ///< [in] handle of the device
     xet_metric_query_pool_desc_t* pDesc,            ///< [in] metric query pool creation data
     xet_metric_query_pool_handle_t* phMetricQueryPool   ///< [out] handle of metric query pool
     );

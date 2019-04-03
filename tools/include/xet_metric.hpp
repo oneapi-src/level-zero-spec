@@ -128,38 +128,6 @@ namespace xet
         };
 
         ///////////////////////////////////////////////////////////////////////////////
-        /// @brief C++ version for ::xet_metric_query_pool_desc_version_t
-        enum class metric_query_pool_desc_version_t
-        {
-            CURRENT = XE_MAKE_VERSION( 1, 0 ),              ///< version 1.0
-
-        };
-
-        ///////////////////////////////////////////////////////////////////////////////
-        /// @brief C++ version for ::xet_metric_properties_version_t
-        enum class metric_properties_version_t
-        {
-            CURRENT = XE_MAKE_VERSION( 1, 0 ),              ///< version 1.0
-
-        };
-
-        ///////////////////////////////////////////////////////////////////////////////
-        /// @brief C++ version for ::xet_typed_value_version_t
-        enum class typed_value_version_t
-        {
-            CURRENT = XE_MAKE_VERSION( 1, 0 ),              ///< version 1.0
-
-        };
-
-        ///////////////////////////////////////////////////////////////////////////////
-        /// @brief C++ version for ::xet_metric_tracer_desc_version_t
-        enum class metric_tracer_desc_version_t
-        {
-            CURRENT = XE_MAKE_VERSION( 1, 0 ),              ///< version 1.0
-
-        };
-
-        ///////////////////////////////////////////////////////////////////////////////
         /// @brief C++ version for ::xet_metric_type_t
         enum class metric_type_t
         {
@@ -187,11 +155,43 @@ namespace xet
         };
 
         ///////////////////////////////////////////////////////////////////////////////
+        /// @brief C++ version for ::xet_typed_value_version_t
+        enum class typed_value_version_t
+        {
+            CURRENT = XE_MAKE_VERSION( 1, 0 ),              ///< version 1.0
+
+        };
+
+        ///////////////////////////////////////////////////////////////////////////////
+        /// @brief C++ version for ::xet_metric_properties_version_t
+        enum class metric_properties_version_t
+        {
+            CURRENT = XE_MAKE_VERSION( 1, 0 ),              ///< version 1.0
+
+        };
+
+        ///////////////////////////////////////////////////////////////////////////////
+        /// @brief C++ version for ::xet_metric_tracer_desc_version_t
+        enum class metric_tracer_desc_version_t
+        {
+            CURRENT = XE_MAKE_VERSION( 1, 0 ),              ///< version 1.0
+
+        };
+
+        ///////////////////////////////////////////////////////////////////////////////
         /// @brief C++ version for ::xet_metric_query_pool_flag_t
         enum class metric_query_pool_flag_t
         {
             PERFORMANCE = 0,                                ///< Performance metric query pool.
             SKIP_EXECUTION = 1,                             ///< Skips workload execution between begin/end calls.
+
+        };
+
+        ///////////////////////////////////////////////////////////////////////////////
+        /// @brief C++ version for ::xet_metric_query_pool_desc_version_t
+        enum class metric_query_pool_desc_version_t
+        {
+            CURRENT = XE_MAKE_VERSION( 1, 0 ),              ///< version 1.0
 
         };
 
@@ -423,19 +423,19 @@ namespace xet
         auto getHandle( void ) const { return handle; }
 
         ///////////////////////////////////////////////////////////////////////////////
-        /// @brief C++ version for ::xet_metric_query_pool_desc_version_t
-        enum class metric_query_pool_desc_version_t
-        {
-            CURRENT = XE_MAKE_VERSION( 1, 0 ),              ///< version 1.0
-
-        };
-
-        ///////////////////////////////////////////////////////////////////////////////
         /// @brief C++ version for ::xet_metric_query_pool_flag_t
         enum class metric_query_pool_flag_t
         {
             PERFORMANCE = 0,                                ///< Performance metric query pool.
             SKIP_EXECUTION = 1,                             ///< Skips workload execution between begin/end calls.
+
+        };
+
+        ///////////////////////////////////////////////////////////////////////////////
+        /// @brief C++ version for ::xet_metric_query_pool_desc_version_t
+        enum class metric_query_pool_desc_version_t
+        {
+            CURRENT = XE_MAKE_VERSION( 1, 0 ),              ///< version 1.0
 
         };
 
@@ -482,19 +482,19 @@ namespace xet
         auto getHandle( void ) const { return handle; }
 
         ///////////////////////////////////////////////////////////////////////////////
-        /// @brief C++ version for ::xet_metric_query_pool_desc_version_t
-        enum class metric_query_pool_desc_version_t
-        {
-            CURRENT = XE_MAKE_VERSION( 1, 0 ),              ///< version 1.0
-
-        };
-
-        ///////////////////////////////////////////////////////////////////////////////
         /// @brief C++ version for ::xet_metric_query_pool_flag_t
         enum class metric_query_pool_flag_t
         {
             PERFORMANCE = 0,                                ///< Performance metric query pool.
             SKIP_EXECUTION = 1,                             ///< Skips workload execution between begin/end calls.
+
+        };
+
+        ///////////////////////////////////////////////////////////////////////////////
+        /// @brief C++ version for ::xet_metric_query_pool_desc_version_t
+        enum class metric_query_pool_desc_version_t
+        {
+            CURRENT = XE_MAKE_VERSION( 1, 0 ),              ///< version 1.0
 
         };
 

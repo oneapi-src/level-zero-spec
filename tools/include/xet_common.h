@@ -43,10 +43,6 @@ extern "C" {
 #endif
 
 ///////////////////////////////////////////////////////////////////////////////
-/// @brief Handle of tool driver's device object
-typedef struct _xet_device_handle_t *xet_device_handle_t;
-
-///////////////////////////////////////////////////////////////////////////////
 /// @brief Handle of metric group's object
 typedef struct _xet_metric_group_handle_t *xet_metric_group_handle_t;
 

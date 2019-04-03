@@ -52,11 +52,11 @@
 ///         + nullptr == pCount
 ///     - ::XE_RESULT_ERROR_UNSUPPORTED
 ///
-/// @hash {ddd6b033eec66021baeab9d5fc6cbf10a8472ee1305e3c0c96952dba200689aa}
+/// @hash {d0710daae279b9c1c058593cb46c5c55cf9d773f373758db5243e4ea07e06388}
 ///
 __xedllexport xe_result_t __xecall
 xetDeviceGetMetricGroupCount(
-    xet_device_handle_t hDevice,                    ///< [in] handle of the device object
+    xe_device_handle_t hDevice,                     ///< [in] handle of the device object
     uint32_t* pCount                                ///< [out] number of metric groups supported by the device
     )
 {
@@ -109,11 +109,11 @@ xetDeviceGetMetricGroupCount(
 ///         + devices do not contain a given metric group
 ///     - ::XE_RESULT_ERROR_UNSUPPORTED
 ///
-/// @hash {b7bfd7e587a024863bc89669c7f499efafe497fbc2f7eed8f2c43fed40c565b5}
+/// @hash {e9e8b4b249f20eb7711abf56101e781d1f7cae3b25349d1719a38efbf90927a0}
 ///
 __xedllexport xe_result_t __xecall
 xetDeviceGetMetricGroup(
-    xet_device_handle_t hDevice,                    ///< [in] handle of the device
+    xe_device_handle_t hDevice,                     ///< [in] handle of the device
     uint32_t ordinal,                               ///< [in] metric group index
     xet_metric_group_handle_t* phMetricGroup        ///< [out] metric group handle
     )
@@ -406,13 +406,13 @@ xetMetricGroupCalculateData(
 ///         + invalid metric groups
 ///     - ::XE_RESULT_ERROR_UNSUPPORTED
 ///
-/// @hash {3ff34253099b9027c85b56a00e38e6f53e4b225b8530edf876e369aae8bcbc15}
+/// @hash {f85ae6d56e1552e3b0ed78ec5e05465e6754753ef02e47aaebe55915a3ec8ff5}
 ///
 __xedllexport xe_result_t __xecall
 xetDeviceActivateMetricGroups(
-    xet_device_handle_t hDevice,                    ///< [in] handle of the device
+    xe_device_handle_t hDevice,                     ///< [in] handle of the device
     uint32_t count,                                 ///< [in] metric group count to activate. 0 to deactivate.
-    xet_metric_group_handle_t* phMetricGroups       ///< [in] handles of the metric groups to activate. NULL to deactivate.
+    xet_metric_group_handle_t* phMetricGroups       ///< [in] handles of the metric groups to activate. NULL to deactivate
     )
 {
     try
@@ -466,11 +466,11 @@ xetDeviceActivateMetricGroups(
 ///     - ::XE_RESULT_ERROR_UNSUPPORTED
 ///         + ::XET_METRIC_TRACER_DESC_VERSION_CURRENT < desc->version
 ///
-/// @hash {bc74ceaf1a0f1e7760c931986001225f418ab1cc0d8a197fcbd618da1f802e45}
+/// @hash {e17492f51bf594024d76b0bf4f8c120347bd4c136f3e11c379e2a2cce35ad883}
 ///
 __xedllexport xe_result_t __xecall
 xetDeviceOpenMetricTracer(
-    xet_device_handle_t hDevice,                    ///< [in] handle of the device
+    xe_device_handle_t hDevice,                     ///< [in] handle of the device
     xet_metric_tracer_desc_t* desc,                 ///< [in/out] metric tracer descriptor
     xet_metric_tracer_handle_t* phMetricTracer      ///< [out] handle of metric tracer
     )
@@ -701,11 +701,11 @@ xetMetricTracerReadData(
 ///     - ::XE_RESULT_ERROR_UNSUPPORTED
 ///         + ::XET_METRIC_QUERY_POOL_DESC_VERSION_CURRENT < pDesc->version
 ///
-/// @hash {8cf8a361915315c3359057d06d2e2646c0c09908df83acebf01afcbad934fa9b}
+/// @hash {e6c4c8c870459ffc43841c9ec2a8a086b86c045c869ec5cfdf54107acc5f0752}
 ///
 __xedllexport xe_result_t __xecall
 xetDeviceCreateMetricQueryPool(
-    xet_device_handle_t hDevice,                    ///< [in] handle of the device
+    xe_device_handle_t hDevice,                     ///< [in] handle of the device
     xet_metric_query_pool_desc_t* pDesc,            ///< [in] metric query pool creation data
     xet_metric_query_pool_handle_t* phMetricQueryPool   ///< [out] handle of metric query pool
     )
