@@ -2,20 +2,6 @@
 
 #include "xe_all.h"
 
-#if defined(__linux__)
-#include <dlfcn.h>
-#define LOAD_DRIVER_LIBRARY() dlopen("liblevel_zero.so", RTLD_LAZY | RTLD_LOCAL)
-#define CLOSE_LIBRARY(LIB) dlclose(LIB)
-#define LOAD_FUNCTION_PTR(LIB, FUNC_NAME) dlsym(LIB, FUNC_NAME)
-#elif defined(_WIN32)
-#include <Windows.h>
-#define LOAD_DRIVER_LIBRARY() LoadLibraryA("level_zero.dll")
-#define CLOSE_LIBRARY(LIB) FreeLibrary(LIB)
-#define LOAD_FUNCTION_PTR(LIB, FUNC_NAME) GetProcAddress((HMODULE)LIB, FUNC_NAME)
-#else
-#error "Unsupported OS"
-#endif
-
 #include <iostream>
 #include <fstream>
 #include <memory>
@@ -55,17 +41,6 @@ int main(int argc, char *argv[]) {
     if (verbose) {
         std::cerr << "VERBOSE MODE ENABLED" << std::endl;
     }
-    // 0. Load the driver
-    auto driverLibrary = LOAD_DRIVER_LIBRARY();
-    if (NULL == driverLibrary) {
-        std::cerr << "Failed to load driver library\n";
-        return 1;
-    }
-    xe_dispatch_table_t xeApi = {};
-    load_xe(
-        driverLibrary,
-        [](void *library, const char *funcName) -> void * { return LOAD_FUNCTION_PTR(library, funcName); },
-        &xeApi);
 
     // 1. Set-up
     constexpr size_t allocSize = 4096;
@@ -81,11 +56,11 @@ int main(int argc, char *argv[]) {
     void *srcBuffer = nullptr;
     void *dstBuffer = nullptr;
 
-    SUCCESS_OR_TERMINATE(xeApi.xeDriverInit(XE_INIT_FLAG_NONE));
+    SUCCESS_OR_TERMINATE(xeDriverInit(XE_INIT_FLAG_NONE));
 
     xe_device_uuid_t deviceUniqueID = {};
-    SUCCESS_OR_TERMINATE(xeApi.xeDriverGetDevice(&deviceUniqueID, &device0));
-    SUCCESS_OR_TERMINATE(xeApi.xeDeviceGetProperties(device0, &device0Properties));
+    SUCCESS_OR_TERMINATE(xeDriverGetDevice(&deviceUniqueID, &device0));
+    SUCCESS_OR_TERMINATE(xeDeviceGetProperties(device0, &device0Properties));
     if (verbose) {
         printDeviceProperties(device0Properties);
     } else {
@@ -100,44 +75,44 @@ int main(int argc, char *argv[]) {
         moduleDesc.format = XE_MODULE_FORMAT_IL_SPIRV;
         moduleDesc.pInputModule = spirvModule.get();
         moduleDesc.inputSize = spirvSize;
-        SUCCESS_OR_TERMINATE(xeApi.xeDeviceCreateModule(device0, &moduleDesc, &module, nullptr));
+        SUCCESS_OR_TERMINATE(xeDeviceCreateModule(device0, &moduleDesc, &module, nullptr));
     }
 
     {
         xe_function_desc_t functionDesc = {XE_FUNCTION_DESC_VERSION_CURRENT};
         functionDesc.pFunctionName = "memcpy_bytes";
-        SUCCESS_OR_TERMINATE(xeApi.xeModuleCreateFunction(module, &functionDesc, &function));
+        SUCCESS_OR_TERMINATE(xeModuleCreateFunction(module, &functionDesc, &function));
     }
 
     uint32_t groupSizeX = 32u;
     uint32_t groupSizeY = 1u;
     uint32_t groupSizeZ = 1u;
-    SUCCESS_OR_TERMINATE(xeApi.xeFunctionSuggestGroupSize(function, numThreads, 1U, 1U, &groupSizeX, &groupSizeY, &groupSizeZ));
+    SUCCESS_OR_TERMINATE(xeFunctionSuggestGroupSize(function, numThreads, 1U, 1U, &groupSizeX, &groupSizeY, &groupSizeZ));
     SUCCESS_OR_TERMINATE_BOOL(numThreads % groupSizeX == 0);
     if (verbose) {
         std::cout << "Group size : (" << groupSizeX << ", " << groupSizeY << ", " << groupSizeZ << ")" << std::endl;
     }
-    SUCCESS_OR_TERMINATE(xeApi.xeFunctionSetGroupSize(function, groupSizeX, groupSizeY, groupSizeZ));
+    SUCCESS_OR_TERMINATE(xeFunctionSetGroupSize(function, groupSizeX, groupSizeY, groupSizeZ));
 
     {
         xe_command_queue_desc_t cmdQueueDesc = {XE_COMMAND_QUEUE_DESC_VERSION_CURRENT};
         cmdQueueDesc.ordinal = 0;
         cmdQueueDesc.mode = XE_COMMAND_QUEUE_MODE_ASYNCHRONOUS;
-        SUCCESS_OR_TERMINATE(xeApi.xeDeviceCreateCommandQueue(device0, &cmdQueueDesc, &cmdQueue));
+        SUCCESS_OR_TERMINATE(xeDeviceCreateCommandQueue(device0, &cmdQueueDesc, &cmdQueue));
     }
 
     {
         xe_command_list_desc_t cmdListDesc = {XE_COMMAND_LIST_DESC_VERSION_CURRENT};
-        SUCCESS_OR_TERMINATE(xeApi.xeDeviceCreateCommandList(device0, &cmdListDesc, &cmdList));
+        SUCCESS_OR_TERMINATE(xeDeviceCreateCommandList(device0, &cmdListDesc, &cmdList));
     }
 
-    SUCCESS_OR_TERMINATE(xeApi.xeCreateMemAllocator(&allocator));
+    SUCCESS_OR_TERMINATE(xeCreateMemAllocator(&allocator));
 #if SUPPORT_MEM_ALLOC
-    SUCCESS_OR_TERMINATE(xeApi.xeMemAlloc(allocator, device0, XE_DEVICE_MEM_ALLOC_FLAG_DEFAULT, allocSize, 1, &srcBuffer));
-    SUCCESS_OR_TERMINATE(xeApi.xeMemAlloc(allocator, device0, XE_DEVICE_MEM_ALLOC_FLAG_DEFAULT, allocSize, 1, &dstBuffer));
+    SUCCESS_OR_TERMINATE(xeMemAlloc(allocator, device0, XE_DEVICE_MEM_ALLOC_FLAG_DEFAULT, allocSize, 1, &srcBuffer));
+    SUCCESS_OR_TERMINATE(xeMemAlloc(allocator, device0, XE_DEVICE_MEM_ALLOC_FLAG_DEFAULT, allocSize, 1, &dstBuffer));
 #else
-    SUCCESS_OR_TERMINATE(xeApi.xeSharedMemAlloc(allocator, device0, XE_DEVICE_MEM_ALLOC_FLAG_DEFAULT, XE_HOST_MEM_ALLOC_FLAG_DEFAULT, allocSize, 1, &srcBuffer));
-    SUCCESS_OR_TERMINATE(xeApi.xeSharedMemAlloc(allocator, device0, XE_DEVICE_MEM_ALLOC_FLAG_DEFAULT, XE_HOST_MEM_ALLOC_FLAG_DEFAULT, allocSize, 1, &dstBuffer));
+    SUCCESS_OR_TERMINATE(xeSharedMemAlloc(allocator, device0, XE_DEVICE_MEM_ALLOC_FLAG_DEFAULT, XE_HOST_MEM_ALLOC_FLAG_DEFAULT, allocSize, 1, &srcBuffer));
+    SUCCESS_OR_TERMINATE(xeSharedMemAlloc(allocator, device0, XE_DEVICE_MEM_ALLOC_FLAG_DEFAULT, XE_HOST_MEM_ALLOC_FLAG_DEFAULT, allocSize, 1, &dstBuffer));
 #endif
 
     // 2. Encode initialize memory
@@ -146,14 +121,14 @@ int main(int argc, char *argv[]) {
     uint8_t initDataDst[allocSize];
     memset(initDataDst, 3, sizeof(initDataDst));
 
-    SUCCESS_OR_TERMINATE(xeApi.xeCommandListAppendMemoryCopy(cmdList, srcBuffer, initDataSrc, sizeof(initDataSrc)));
-    SUCCESS_OR_TERMINATE(xeApi.xeCommandListAppendMemoryCopy(cmdList, dstBuffer, initDataDst, sizeof(initDataDst)));
+    SUCCESS_OR_TERMINATE(xeCommandListAppendMemoryCopy(cmdList, srcBuffer, initDataSrc, sizeof(initDataSrc)));
+    SUCCESS_OR_TERMINATE(xeCommandListAppendMemoryCopy(cmdList, dstBuffer, initDataDst, sizeof(initDataDst)));
 
-    SUCCESS_OR_TERMINATE(xeApi.xeCommandListAppendExecutionBarrier(cmdList)); // copying of data must finish before running the user function
+    SUCCESS_OR_TERMINATE(xeCommandListAppendExecutionBarrier(cmdList)); // copying of data must finish before running the user function
 
     // 3. Encode run user function
-    SUCCESS_OR_TERMINATE(xeApi.xeFunctionSetArgumentValue(function, 0, sizeof(dstBuffer), &dstBuffer));
-    SUCCESS_OR_TERMINATE(xeApi.xeFunctionSetArgumentValue(function, 1, sizeof(srcBuffer), &srcBuffer));
+    SUCCESS_OR_TERMINATE(xeFunctionSetArgumentValue(function, 0, sizeof(dstBuffer), &dstBuffer));
+    SUCCESS_OR_TERMINATE(xeFunctionSetArgumentValue(function, 1, sizeof(srcBuffer), &srcBuffer));
     {
         xe_thread_group_dimensions_t dispatchTraits;
         dispatchTraits.groupCountX = numThreads / groupSizeX;
@@ -163,20 +138,20 @@ int main(int argc, char *argv[]) {
             std::cerr << "Number of groups : (" << dispatchTraits.groupCountX << ", " << dispatchTraits.groupCountY << ", " << dispatchTraits.groupCountZ << ")" << std::endl;
         }
         SUCCESS_OR_TERMINATE_BOOL(dispatchTraits.groupCountX * groupSizeX == allocSize);
-        SUCCESS_OR_TERMINATE(xeApi.xeCommandListAppendLaunchFunction(cmdList, function, &dispatchTraits, nullptr));
+        SUCCESS_OR_TERMINATE(xeCommandListAppendLaunchFunction(cmdList, function, &dispatchTraits, nullptr));
     }
 
     // 4. Encode read back memory
     uint8_t readBackData[allocSize];
     memset(readBackData, 2, sizeof(readBackData));
-    SUCCESS_OR_TERMINATE(xeApi.xeCommandListAppendExecutionBarrier(cmdList)); // user function must finish before we start copying data
+    SUCCESS_OR_TERMINATE(xeCommandListAppendExecutionBarrier(cmdList)); // user function must finish before we start copying data
 
-    SUCCESS_OR_TERMINATE(xeApi.xeCommandListAppendMemoryCopy(cmdList, readBackData, dstBuffer, sizeof(readBackData)));
+    SUCCESS_OR_TERMINATE(xeCommandListAppendMemoryCopy(cmdList, readBackData, dstBuffer, sizeof(readBackData)));
 
     // 5. Dispatch and wait
-    SUCCESS_OR_TERMINATE(xeApi.xeCommandListClose(cmdList));
-    SUCCESS_OR_TERMINATE(xeApi.xeCommandQueueExecuteCommandLists(cmdQueue, 1, &cmdList, nullptr));
-    auto synchronizationResult = xeApi.xeCommandQueueSynchronize(cmdQueue, 1000 * 1000 /*1s*/);
+    SUCCESS_OR_TERMINATE(xeCommandListClose(cmdList));
+    SUCCESS_OR_TERMINATE(xeCommandQueueExecuteCommandLists(cmdQueue, 1, &cmdList, nullptr));
+    auto synchronizationResult = xeCommandQueueSynchronize(cmdQueue, 1000 * 1000 /*1s*/);
     SUCCESS_OR_WARNING(synchronizationResult);
 
 // 6. Validate
@@ -188,16 +163,16 @@ int main(int argc, char *argv[]) {
     SUCCESS_OR_WARNING_BOOL(outputValidationSuccessful);
 
     // X. Cleanup
-    SUCCESS_OR_TERMINATE(xeApi.xeMemFree(allocator, dstBuffer));
-    SUCCESS_OR_TERMINATE(xeApi.xeMemFree(allocator, srcBuffer));
-    SUCCESS_OR_TERMINATE(xeApi.xeMemAllocatorDestroy(allocator));
+    SUCCESS_OR_TERMINATE(xeMemFree(allocator, dstBuffer));
+    SUCCESS_OR_TERMINATE(xeMemFree(allocator, srcBuffer));
+    SUCCESS_OR_TERMINATE(xeMemAllocatorDestroy(allocator));
 
-    SUCCESS_OR_TERMINATE(xeApi.xeCommandListDestroy(cmdList));
+    SUCCESS_OR_TERMINATE(xeCommandListDestroy(cmdList));
 
-    SUCCESS_OR_TERMINATE(xeApi.xeCommandQueueDestroy(cmdQueue));
+    SUCCESS_OR_TERMINATE(xeCommandQueueDestroy(cmdQueue));
 
-    SUCCESS_OR_TERMINATE(xeApi.xeFunctionDestroy(function));
-    SUCCESS_OR_TERMINATE(xeApi.xeModuleDestroy(module));
+    SUCCESS_OR_TERMINATE(xeFunctionDestroy(function));
+    SUCCESS_OR_TERMINATE(xeModuleDestroy(module));
 
     bool aubMode = (XE_RESULT_NOT_READY == synchronizationResult);
     if (aubMode == false) {
