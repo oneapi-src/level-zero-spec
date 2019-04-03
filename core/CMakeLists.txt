@@ -68,13 +68,11 @@ target_include_directories(ocloc_shared PRIVATE ${OCLOC_INCLUDES} ${CMAKE_CURREN
 target_link_libraries(ocloc_shared ${OCLOC_LIBRARY_DEPENDENCIES})
 target_compile_definitions(ocloc_shared PRIVATE ${OCLOC_COMPILE_DEFINITIONS} -DMOCKABLE_VIRTUAL= CL_USE_DEPRECATED_OPENCL_1_1_APIS CL_USE_DEPRECATED_OPENCL_1_2_APIS CL_USE_DEPRECATED_OPENCL_2_0_APIS CL_TARGET_OPENCL_VERSION=210)
 
-
-
 set(OS_SPECIFIC_LIBS ${OS_SPECIFIC_LIBS} PARENT_SCOPE)
 
 if(UNIX)
     install(TARGETS ${TARGET_NAME}
-        DESTINATION ${CMAKE_INSTALL_LIBDIR}
+        DESTINATION ${CMAKE_INSTALL_FULL_LIBDIR}/level_zero
         COMPONENT loki-core)
 
     file(GLOB_RECURSE HEADER_FILES "include/*")
@@ -85,9 +83,15 @@ if(UNIX)
     )
 
     install(FILES source/ocloc_shared.h
-        DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}
+        DESTINATION ${CMAKE_INSTALL_FULL_INCLUDEDIR}
         COMPONENT loki-devel)
     install(TARGETS ocloc_shared
-        DESTINATION ${CMAKE_INSTALL_LIBDIR}
+        DESTINATION ${CMAKE_INSTALL_FULL_LIBDIR}
         COMPONENT loki-devel)
+    file(GENERATE
+        OUTPUT ${CMAKE_CURRENT_BINARY_DIR}/intel.icd
+        CONTENT "${CMAKE_INSTALL_FULL_LIBDIR}/level_zero/$<TARGET_FILE_NAME:${TARGET_NAME}>\n")
+    install(FILES ${CMAKE_CURRENT_BINARY_DIR}/intel.icd
+        DESTINATION ${CMAKE_INSTALL_FULL_SYSCONFDIR}/intel/level_zero/icd.d
+        COMPONENT loki-core)
 endif()
