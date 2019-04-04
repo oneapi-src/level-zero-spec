@@ -22,6 +22,8 @@ struct ImageImp : public Image {
     size_t format_size[XE_IMAGE_FORMAT_MAX + 1] = {
         sizeof(uint8_t), sizeof(uint16_t), sizeof(uint32_t),
         sizeof(int8_t), sizeof(int16_t), sizeof(int32_t),
+        sizeof(uint8_t), sizeof(uint16_t), sizeof(uint32_t),
+        sizeof(int8_t), sizeof(int16_t), sizeof(int32_t),
         sizeof(uint16_t), sizeof(float)};
     ImageImp() : allocation(nullptr) {
     }
