@@ -89,14 +89,12 @@ desc: "Region descriptor"
 class: $xCommandList
 name: $x_image_region_t
 members:
-    - type: size_t
-      name: offset
-      desc: "[in] offset in bytes from base"
-      init: "0"
-    - type: size_t
-      name: size
-      desc: "[in] size in bytes from base+offset"
-      init: "0"
+    - type: uint32_t
+      name: origin[3]
+      desc: "[in] The origin (x, y, z) for region in pixels"
+    - type: uint32_t
+      name: region[3]
+      desc: "[in] The region (width, height, depth) relative to origin in pixels"
 --- #--------------------------------------------------------------------------
 type: function
 desc: "Copies a region of a image to another image."

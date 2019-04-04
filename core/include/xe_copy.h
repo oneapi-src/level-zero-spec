@@ -143,8 +143,8 @@ xeCommandListAppendImageCopy(
 /// @brief Region descriptor
 typedef struct _xe_image_region_t
 {
-    size_t offset;                                  ///< [in] offset in bytes from base
-    size_t size;                                    ///< [in] size in bytes from base+offset
+    uint32_t origin[3];                             ///< [in] The origin (x, y, z) for region in pixels
+    uint32_t region[3];                             ///< [in] The region (width, height, depth) relative to origin in pixels
 
 } xe_image_region_t;
 
