@@ -149,6 +149,47 @@ HWTEST2_F(ImageSurfaceState, descMatchesSurface, MatchAny) {
     ASSERT_EQ(surfaceState->getSurfacePitch(), sizeof(uint8_t) * desc.width * desc.numChannels);
 }
 
+HWTEST2_F(ImageSurfaceState, descMatchesSurfaceFormats, MatchAny) {
+    using RENDER_SURFACE_STATE = typename FamilyType::RENDER_SURFACE_STATE;
+    using SURFACE_FORMAT = typename RENDER_SURFACE_STATE::SURFACE_FORMAT;
+    Mock<Device> device;
+
+    xe_image_desc_t desc = {};
+    desc.type = XE_IMAGE_TYPE_3D;
+    desc.width = 11;
+    desc.height = 13;
+    desc.depth = 17;
+
+    struct FormatInfo {
+        int numChannels;
+        xe_image_format_t xeFormat;
+        SURFACE_FORMAT ssFormat;
+    };
+    struct FormatInfo testFormats[] = {
+        { 1, XE_IMAGE_FORMAT_UINT8, RENDER_SURFACE_STATE::SURFACE_FORMAT_R8_UINT},
+        { 4, XE_IMAGE_FORMAT_UINT32, RENDER_SURFACE_STATE::SURFACE_FORMAT_R32G32B32A32_UINT},
+        { 4, XE_IMAGE_FORMAT_UNORM8, RENDER_SURFACE_STATE::SURFACE_FORMAT_R8G8B8A8_UNORM},
+        { 1, XE_IMAGE_FORMAT_SNORM32, RENDER_SURFACE_STATE::SURFACE_FORMAT_R32_SNORM},
+        { 4, XE_IMAGE_FORMAT_FLOAT32, RENDER_SURFACE_STATE::SURFACE_FORMAT_R32G32B32A32_FLOAT},
+    };
+    size_t numFormats = sizeof(testFormats) / sizeof(struct FormatInfo);
+
+    for (size_t i = 0; i < numFormats; i++) {
+        desc.numChannels = testFormats[i].numChannels;
+        desc.format = testFormats[i].xeFormat;
+
+        auto imageCore = new ImageCoreFamily<gfxCoreFamily>();
+        bool ret = imageCore->initialize(&device, &desc);
+        ASSERT_TRUE(ret);
+
+        auto surfaceState = &imageCore->surfaceState;
+        ASSERT_EQ(surfaceState->getSurfaceFormat(), testFormats[i].ssFormat);
+
+        delete imageCore;
+    }
+}
+
+
 HWTEST2_F(ImageSurfaceState, copyToSSH, MatchAny) {
     using RENDER_SURFACE_STATE = typename FamilyType::RENDER_SURFACE_STATE;
     using BINDING_TABLE_STATE = typename FamilyType::BINDING_TABLE_STATE;
