@@ -53,6 +53,7 @@
 # Debug files
 scripts/core/*.json
 scripts/extended/*.json
+scripts/tools/*.json
 
 # Generated docs
 html/
