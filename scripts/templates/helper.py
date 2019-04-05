@@ -35,7 +35,7 @@ def append_ws(string, count):
 """
 def split_line(line, ch_count):
     if not line:
-        return []
+        return [""]
 
     RE_NEWLINE = r"(.*)\n(.*)"
 

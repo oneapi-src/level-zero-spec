@@ -96,9 +96,9 @@ typedef enum _${th.subt(n, tags, obj['name'])}
     %endfor
 
 } ${th.subt(n, tags, obj['name'])};
-## STRUCT #####################################################################
-%elif re.match(r"struct", obj['type']):
-typedef struct _${th.subt(n, tags, obj['name'])}
+## STRUCT/UNION ###############################################################
+%elif re.match(r"struct", obj['type']) or re.match(r"union", obj['type']):
+typedef ${obj['type']} _${th.subt(n, tags, obj['name'])}
 {
     %for line in th.make_member_lines(n, tags, obj):
     ${line}

@@ -86,9 +86,9 @@ namespace ${n}
         %endfor
 
     };
-    ## STRUCT #####################################################################
-    %elif re.match(r"struct", obj['type']):
-    struct ${th.subt(n, tags, obj['name'], cpp=True)}
+    ## STRUCT/UNION ###############################################################
+    %elif re.match(r"struct", obj['type']) or re.match(r"union", obj['type']):
+    ${obj['type']} ${th.subt(n, tags, obj['name'], cpp=True)}
     {
         %for line in th.make_member_lines(n, tags, obj, cpp=True, meta=meta):
         ${line}
@@ -121,7 +121,7 @@ namespace ${n}
         ${line}
         %endfor
 
-        %for t in th.filter_items(th.extract_objs(specs, "typedef"), 'class', obj['name']):
+        %for t in th.filter_items(th.extract_objs(specs, r"typedef"), 'class', obj['name']):
 %if 'condition' in t:
 #if ${th.subt(n, tags, t['condition'])}
 %endif
@@ -133,7 +133,7 @@ namespace ${n}
 %endif
 
         %endfor
-        %for e in th.filter_items(th.extract_objs(specs, "enum"), 'class', obj['name']):
+        %for e in th.filter_items(th.extract_objs(specs, r"enum"), 'class', obj['name']):
 %if 'condition' in e:
 #if ${th.subt(n, tags, e['condition'])}
 %endif
@@ -151,13 +151,13 @@ namespace ${n}
 %endif
 
         %endfor
-        %for s in th.filter_items(th.extract_objs(specs, "struct"), 'class', obj['name']):
+        %for s in th.filter_items(th.extract_objs(specs, r"struct|union"), 'class', obj['name']):
 %if 'condition' in s:
 #if ${th.subt(n, tags, s['condition'])}
 %endif
         ///////////////////////////////////////////////////////////////////////////////
         /// @brief C++ version for ::${th.subt(n, tags, s['name'])}
-        struct ${th.subt(n, tags, s['name'], cpp=True)}
+        ${s['type']} ${th.subt(n, tags, s['name'], cpp=True)}
         {
             %for line in th.make_member_lines(n, tags, s, cpp=True, meta=meta):
             ${line}
@@ -169,7 +169,7 @@ namespace ${n}
 %endif
 
         %endfor
-        %for f in th.filter_items(th.extract_objs(specs, "function"), 'class', obj['name']):
+        %for f in th.filter_items(th.extract_objs(specs, r"function"), 'class', obj['name']):
 %if 'condition' in f:
 #if ${th.subt(n, tags, f['condition'])}
 %endif

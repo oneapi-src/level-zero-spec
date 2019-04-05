@@ -79,17 +79,17 @@ etors:
       desc: "brief description"
 ```
 
-#### struct
-* A struct initiates the creation of a c/c++ 'struct' definition in the source code
-* A struct requires the following scalar fields: "desc" and "name"
-* A struct may take the following optional scalar fields: "class"
-* A struct requires the following sequence of scalars: "members"
+#### struct/union
+* A struct/union initiates the creation of a c/c++ 'struct/union' definition in the source code
+* A struct/union requires the following scalar fields: "desc" and "name"
+* A struct/union may take the following optional scalar fields: "class"
+* A struct/union requires the following sequence of scalars: "members"
 * A member requires the following scalar fields: "type", "name" and "desc"
 * A member may take the following optional scalar fields: "init"
-* The scripts only support simple 'struct' definitions: no bitfields, no functions, no constructors, no overloaded operators, etc.
+* The scripts only support simple 'struct/union' definitions: no bitfields, no functions, no constructors, no overloaded operators, etc.
 
 ```yml
-type: struct
+type: struct/union
 desc: "A brief description..."
 name: descriptor_t
 members:
@@ -102,7 +102,7 @@ members:
 ```
 
 #### handle
-* A handle initiates the creation of a c/c++ 'struct' definition in the source code
+* A handle initiates the creation of a c/c++ forwarding 'struct' pointer definition in the source code
 * A handle is a special-case structure for strongly-typed handles
 * A handle requires the following scalar fields: "desc" and "name"
 * A handle may take the following optional scalar fields: "class"

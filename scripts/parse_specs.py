@@ -70,7 +70,7 @@ def generate_meta(d, meta):
         elif 'function' == type:
             for p in d['params']:
                 meta[type][name]['types'].append(p['type'])
-        elif 'struct' == type:
+        elif 'struct' == type or 'union' == type:
             for m in d['members']:
                 meta[type][name]['types'].append(m['type'])
         

@@ -91,7 +91,7 @@ namespace ${n}
 
 %elif re.match(r"class", obj['type']):
     ## CLASS FUNCTION #############################################################
-    %for f in th.filter_items(th.extract_objs(specs, "function"), 'class', obj['name']):
+    %for f in th.filter_items(th.extract_objs(specs, r"function"), 'class', obj['name']):
     ///////////////////////////////////////////////////////////////////////////////
 %if 'condition' in f:
 #if ${th.subt(n, tags, f['condition'])}
