@@ -177,7 +177,7 @@ namespace xe
             void* dstptr,                                   ///< [in] pointer to destination memory to copy to
             const void* srcptr,                             ///< [in] pointer to source memory to copy from
             size_t size,                                    ///< [in] size in bytes to copy
-            event_handle_t hEvent                           ///< [in][optional] handle of the event to signal on completion
+            event_handle_t hEvent = nullptr                 ///< [in][optional] handle of the event to signal on completion
             );
 
         ///////////////////////////////////////////////////////////////////////////////
@@ -188,7 +188,7 @@ namespace xe
             void* ptr,                                      ///< [in] pointer to memory to initialize
             int value,                                      ///< [in] value to initialize memory to
             size_t size,                                    ///< [in] size in bytes to initailize
-            event_handle_t hEvent                           ///< [in][optional] handle of the event to signal on completion
+            event_handle_t hEvent = nullptr                 ///< [in][optional] handle of the event to signal on completion
             );
 
         ///////////////////////////////////////////////////////////////////////////////
@@ -198,7 +198,7 @@ namespace xe
         AppendImageCopy(
             image_handle_t hDstImage,                       ///< [in] handle of destination image to copy to
             image_handle_t hSrcImage,                       ///< [in] handle of source image to copy from
-            event_handle_t hEvent                           ///< [in][optional] handle of the event to signal on completion
+            event_handle_t hEvent = nullptr                 ///< [in][optional] handle of the event to signal on completion
             );
 
         ///////////////////////////////////////////////////////////////////////////////
@@ -207,10 +207,10 @@ namespace xe
         inline void
         AppendImageCopyRegion(
             image_handle_t hDstImage,                       ///< [in] handle of destination image to copy to
-            image_region_t* pDstRegion,                     ///< [in][optional] destination region descriptor
             image_handle_t hSrcImage,                       ///< [in] handle of source image to copy from
-            image_region_t* pSrcRegion,                     ///< [in][optional] source region descriptor
-            event_handle_t hEvent                           ///< [in][optional] handle of the event to signal on completion
+            image_region_t* pDstRegion = nullptr,           ///< [in][optional] destination region descriptor
+            image_region_t* pSrcRegion = nullptr,           ///< [in][optional] source region descriptor
+            event_handle_t hEvent = nullptr                 ///< [in][optional] handle of the event to signal on completion
             );
 
         ///////////////////////////////////////////////////////////////////////////////
@@ -220,8 +220,8 @@ namespace xe
         AppendImageCopyToMemory(
             void* dstptr,                                   ///< [in] pointer to destination memory to copy to
             image_handle_t hSrcImage,                       ///< [in] handle of source image to copy from
-            image_region_t* pSrcRegion,                     ///< [in][optional] source region descriptor
-            event_handle_t hEvent                           ///< [in][optional] handle of the event to signal on completion
+            image_region_t* pSrcRegion = nullptr,           ///< [in][optional] source region descriptor
+            event_handle_t hEvent = nullptr                 ///< [in][optional] handle of the event to signal on completion
             );
 
         ///////////////////////////////////////////////////////////////////////////////
@@ -230,9 +230,9 @@ namespace xe
         inline void
         AppendImageCopyFromMemory(
             image_handle_t hDstImage,                       ///< [in] handle of destination image to copy to
-            image_region_t* pDstRegion,                     ///< [in][optional] destination region descriptor
             const void* srcptr,                             ///< [in] pointer to source memory to copy from
-            event_handle_t hEvent                           ///< [in][optional] handle of the event to signal on completion
+            image_region_t* pDstRegion = nullptr,           ///< [in][optional] destination region descriptor
+            event_handle_t hEvent = nullptr                 ///< [in][optional] handle of the event to signal on completion
             );
 
         ///////////////////////////////////////////////////////////////////////////////
@@ -286,7 +286,7 @@ namespace xe
         AppendLaunchFunction(
             function_handle_t hFunction,                    ///< [in] handle of the function object
             const thread_group_dimensions_t* pLaunchFuncArgs,   ///< [in] launch function arguments.
-            event_handle_t hEvent                           ///< [in][optional] handle of the event to signal on completion
+            event_handle_t hEvent = nullptr                 ///< [in][optional] handle of the event to signal on completion
             );
 
         ///////////////////////////////////////////////////////////////////////////////
@@ -296,7 +296,7 @@ namespace xe
         AppendLaunchFunctionIndirect(
             function_handle_t hFunction,                    ///< [in] handle of the function object
             const thread_group_dimensions_t* pLaunchArgumentsBuffer,///< [in] pointer to device buffer that will contain launch arguments
-            event_handle_t hEvent                           ///< [in][optional] handle of the event to signal on completion
+            event_handle_t hEvent = nullptr                 ///< [in][optional] handle of the event to signal on completion
             );
 
         ///////////////////////////////////////////////////////////////////////////////
@@ -310,7 +310,7 @@ namespace xe
                                                             ///< number of launch arguments; must be less-than or equal-to numFunctions
             const thread_group_dimensions_t* pLaunchArgumentsBuffer,///< [in] pointer to device buffer that will contain a contiguous array of
                                                             ///< launch arguments
-            event_handle_t hEvent                           ///< [in][optional] handle of the event to signal on completion
+            event_handle_t hEvent = nullptr                 ///< [in][optional] handle of the event to signal on completion
             );
 
         ///////////////////////////////////////////////////////////////////////////////

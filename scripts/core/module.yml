@@ -77,7 +77,7 @@ params:
       desc: "[out] pointer to handle of module object created"
     - type: "$x_module_build_log_handle_t*"
       name: phBuildLog
-      desc: "[out][optional] pointer to handle of module's build log."
+      desc: "[in,out][optional] pointer to handle of module's build log."
 returns:
     - $X_RESULT_ERROR_INVALID_PARAMETER:
         - "invalid pDesc->format"

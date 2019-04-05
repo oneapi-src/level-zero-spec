@@ -144,8 +144,8 @@ typedef xe_result_t (__xecall *pfn_xeCommandListAppendImageCopy)(
 typedef xe_result_t (__xecall *pfn_xeCommandListAppendImageCopyRegion)(
     xe_command_list_handle_t hCommandList,          ///< [in] handle of command list
     xe_image_handle_t hDstImage,                    ///< [in] handle of destination image to copy to
-    xe_image_region_t* pDstRegion,                  ///< [in][optional] destination region descriptor
     xe_image_handle_t hSrcImage,                    ///< [in] handle of source image to copy from
+    xe_image_region_t* pDstRegion,                  ///< [in][optional] destination region descriptor
     xe_image_region_t* pSrcRegion,                  ///< [in][optional] source region descriptor
     xe_event_handle_t hEvent                        ///< [in][optional] handle of the event to signal on completion
     );
@@ -159,8 +159,8 @@ typedef xe_result_t (__xecall *pfn_xeCommandListAppendImageCopyToMemory)(
 typedef xe_result_t (__xecall *pfn_xeCommandListAppendImageCopyFromMemory)(
     xe_command_list_handle_t hCommandList,          ///< [in] handle of command list
     xe_image_handle_t hDstImage,                    ///< [in] handle of destination image to copy to
-    xe_image_region_t* pDstRegion,                  ///< [in][optional] destination region descriptor
     const void* srcptr,                             ///< [in] pointer to source memory to copy from
+    xe_image_region_t* pDstRegion,                  ///< [in][optional] destination region descriptor
     xe_event_handle_t hEvent                        ///< [in][optional] handle of the event to signal on completion
     );
 typedef xe_result_t (__xecall *pfn_xeCommandListAppendMemoryPrefetch)(
@@ -380,7 +380,7 @@ typedef xe_result_t (__xecall *pfn_xeDeviceCreateModule)(
     xe_device_handle_t hDevice,                     ///< [in] handle of the device
     const xe_module_desc_t* pDesc,                  ///< [in] pointer to module descriptor
     xe_module_handle_t* phModule,                   ///< [out] pointer to handle of module object created
-    xe_module_build_log_handle_t* phBuildLog        ///< [out][optional] pointer to handle of module's build log.
+    xe_module_build_log_handle_t* phBuildLog        ///< [in,out][optional] pointer to handle of module's build log.
     );
 typedef xe_result_t (__xecall *pfn_xeModuleDestroy)(
     xe_module_handle_t hModule                      ///< [in] handle of the module

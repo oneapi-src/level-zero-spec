@@ -90,7 +90,7 @@ namespace xe
         ExecuteCommandLists(
             uint32_t numCommandLists,                       ///< [in] number of command lists to execute
             command_list_handle_t* phCommandLists,          ///< [in] list of handles of the command lists to execute
-            fence_handle_t hFence                           ///< [in][optional] handle of the fence to signal on completion
+            fence_handle_t hFence = nullptr                 ///< [in][optional] handle of the fence to signal on completion
             );
 
         ///////////////////////////////////////////////////////////////////////////////

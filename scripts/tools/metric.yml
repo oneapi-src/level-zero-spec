@@ -6,7 +6,6 @@ type: function
 desc: "Returns metric group count for a given device."
 class: $tDevice
 name: GetMetricGroupCount
-decl: singleton
 params:
     - type: $x_device_handle_t
       name: hDevice

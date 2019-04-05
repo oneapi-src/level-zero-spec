@@ -83,7 +83,7 @@ namespace xe
         uint32_t ordinal                                ///< [in] The device index in the range of [0, ::GetDeviceCount]
         )
     {
-        // auto result = ::xeGetDevice( handle );
+        // auto result = ::xeGetDevice( handle, ordinal );
         // if( ::XE_RESULT_SUCCESS != result ) throw exception(result, "GetDevice");
     }
 
@@ -498,15 +498,15 @@ namespace xe
     /// 
     /// @returns
     ///     - ::module_handle_t: pointer to handle of module object created
-    ///     - ::module_build_log_handle_t: pointer to handle of module's build log.
     /// 
     /// @throws result_t
-    inline std::tuple<module_handle_t, module_build_log_handle_t> 
+    inline module_handle_t 
     Device::CreateModule(
-        const module_desc_t* pDesc                      ///< [in] pointer to module descriptor
+        const module_desc_t* pDesc,                     ///< [in] pointer to module descriptor
+        module_build_log_handle_t* phBuildLog           ///< [in,out][optional] pointer to handle of module's build log.
         )
     {
-        // auto result = ::xeDeviceCreateModule( handle, pDesc );
+        // auto result = ::xeDeviceCreateModule( handle, pDesc, phBuildLog );
         // if( ::XE_RESULT_SUCCESS != result ) throw exception(result, "xe::Device::CreateModule");
     }
 

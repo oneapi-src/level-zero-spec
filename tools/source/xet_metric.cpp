@@ -73,7 +73,7 @@ xetDeviceGetMetricGroupCount(
 #if defined(XE_NULLDRV)
         return XE_RESULT_SUCCESS;
 #else
-        return L0::Device::get()->getMetricGroupCount(hDevice, pCount);
+        return L0::Device::fromHandle(hDevice)->getMetricGroupCount(pCount);
 #endif
         /// @end
     }

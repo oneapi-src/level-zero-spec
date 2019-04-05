@@ -91,7 +91,7 @@ xeDeviceCreateModule(
     xe_device_handle_t hDevice,                     ///< [in] handle of the device
     const xe_module_desc_t* pDesc,                  ///< [in] pointer to module descriptor
     xe_module_handle_t* phModule,                   ///< [out] pointer to handle of module object created
-    xe_module_build_log_handle_t* phBuildLog        ///< [out][optional] pointer to handle of module's build log.
+    xe_module_build_log_handle_t* phBuildLog        ///< [in,out][optional] pointer to handle of module's build log.
     )
 {
     try

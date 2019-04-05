@@ -59,7 +59,7 @@ namespace xe
         init_flag_t flags                               ///< [in] initialization flags
         )
     {
-        // auto result = ::xeInit( handle );
+        // auto result = ::xeInit( handle, flags );
         // if( ::XE_RESULT_SUCCESS != result ) throw exception(result, "Init");
     }
 

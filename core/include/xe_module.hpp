@@ -91,7 +91,7 @@ namespace xe
         inline void
         GetNativeBinary(
             size_t* pSize,                                  ///< [in,out] size of native binary in bytes.
-            uint8_t* pModuleNativeBinary                    ///< [in,out][optional] byte pointer to native binary
+            uint8_t* pModuleNativeBinary = nullptr          ///< [in,out][optional] byte pointer to native binary
             );
 
         ///////////////////////////////////////////////////////////////////////////////
@@ -207,7 +207,7 @@ namespace xe
         SetArgumentValue(
             uint32_t argIndex,                              ///< [in] argument index in range [0, num args - 1]
             size_t argSize,                                 ///< [in] size of argument type
-            const void* pArgValue                           ///< [in][optional] argument value represented as matching arg type. If
+            const void* pArgValue = nullptr                 ///< [in][optional] argument value represented as matching arg type. If
                                                             ///< null then argument value is considered null.
             );
 

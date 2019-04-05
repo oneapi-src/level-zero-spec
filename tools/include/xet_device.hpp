@@ -63,7 +63,7 @@ namespace xet
         ///     - uint32_t: number of metric groups supported by the device
         /// 
         /// @throws result_t
-        inline static uint32_t
+        inline uint32_t
         GetMetricGroupCount(
             void
             );

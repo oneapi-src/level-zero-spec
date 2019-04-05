@@ -726,12 +726,12 @@ namespace xe
         /// @brief C++ wrapper for ::xeDeviceCreateModule
         /// @returns
         ///     - ::module_handle_t: pointer to handle of module object created
-        ///     - ::module_build_log_handle_t: pointer to handle of module's build log.
         /// 
         /// @throws result_t
-        inline std::tuple<module_handle_t, module_build_log_handle_t>
+        inline module_handle_t
         CreateModule(
-            const module_desc_t* pDesc                      ///< [in] pointer to module descriptor
+            const module_desc_t* pDesc,                     ///< [in] pointer to module descriptor
+            module_build_log_handle_t* phBuildLog = nullptr ///< [in,out][optional] pointer to handle of module's build log.
             );
 
         ///////////////////////////////////////////////////////////////////////////////

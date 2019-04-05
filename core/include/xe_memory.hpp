@@ -218,8 +218,8 @@ namespace xe
     inline void
     MemGetAddressRange(
         const void* ptr,                                ///< [in] Pointer to query
-        void** pBase,                                   ///< [in,out][optional] base address of the allocation
-        size_t* pSize                                   ///< [in,out][optional] size of the allocation
+        void** pBase = nullptr,                         ///< [in,out][optional] base address of the allocation
+        size_t* pSize = nullptr                         ///< [in,out][optional] size of the allocation
         );
 
     ///////////////////////////////////////////////////////////////////////////////

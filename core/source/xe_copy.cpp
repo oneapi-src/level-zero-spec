@@ -263,14 +263,14 @@ xeCommandListAppendImageCopy(
 ///         + nullptr == hSrcImage
 ///     - ::XE_RESULT_ERROR_UNSUPPORTED
 ///
-/// @hash {07d45feb87ea580f8056eb2e89a8b48eea0ea19e1eb1e891b3b5c10c5012cad6}
+/// @hash {54b356a1dd20945969aa9b80e6915bb536d771fda6b2f9df59ecc39642140314}
 ///
 __xedllexport xe_result_t __xecall
 xeCommandListAppendImageCopyRegion(
     xe_command_list_handle_t hCommandList,          ///< [in] handle of command list
     xe_image_handle_t hDstImage,                    ///< [in] handle of destination image to copy to
-    xe_image_region_t* pDstRegion,                  ///< [in][optional] destination region descriptor
     xe_image_handle_t hSrcImage,                    ///< [in] handle of source image to copy from
+    xe_image_region_t* pDstRegion,                  ///< [in][optional] destination region descriptor
     xe_image_region_t* pSrcRegion,                  ///< [in][optional] source region descriptor
     xe_event_handle_t hEvent                        ///< [in][optional] handle of the event to signal on completion
     )
@@ -289,7 +289,7 @@ xeCommandListAppendImageCopyRegion(
 #if defined(XE_NULLDRV)
         return XE_RESULT_SUCCESS;
 #else
-        return L0::CommandList::fromHandle(hCommandList)->appendImageCopyRegion(hDstImage, pDstRegion, hSrcImage, pSrcRegion, hEvent);
+        return L0::CommandList::fromHandle(hCommandList)->appendImageCopyRegion(hDstImage, hSrcImage, pDstRegion, pSrcRegion, hEvent);
 #endif
         /// @end
     }
@@ -400,14 +400,14 @@ xeCommandListAppendImageCopyToMemory(
 ///         + nullptr == srcptr
 ///     - ::XE_RESULT_ERROR_UNSUPPORTED
 ///
-/// @hash {7e772dcb127ae57814d155e0cabb0eb4d0fa1cb58a43f83a7c8b804c5c11b0c5}
+/// @hash {feddee77dde6f7f14d10be5b96620c59dcafbd8c783be1d89aa79153de88d69b}
 ///
 __xedllexport xe_result_t __xecall
 xeCommandListAppendImageCopyFromMemory(
     xe_command_list_handle_t hCommandList,          ///< [in] handle of command list
     xe_image_handle_t hDstImage,                    ///< [in] handle of destination image to copy to
-    xe_image_region_t* pDstRegion,                  ///< [in][optional] destination region descriptor
     const void* srcptr,                             ///< [in] pointer to source memory to copy from
+    xe_image_region_t* pDstRegion,                  ///< [in][optional] destination region descriptor
     xe_event_handle_t hEvent                        ///< [in][optional] handle of the event to signal on completion
     )
 {
@@ -425,7 +425,7 @@ xeCommandListAppendImageCopyFromMemory(
 #if defined(XE_NULLDRV)
         return XE_RESULT_SUCCESS;
 #else
-        return L0::CommandList::fromHandle(hCommandList)->appendImageCopyFromMemory(hDstImage, pDstRegion, srcptr, hEvent);
+        return L0::CommandList::fromHandle(hCommandList)->appendImageCopyFromMemory(hDstImage, srcptr, pDstRegion, hEvent);
 #endif
         /// @end
     }

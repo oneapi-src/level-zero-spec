@@ -310,13 +310,13 @@ namespace xe
     inline void 
     CommandList::AppendImageCopyRegion(
         image_handle_t hDstImage,                       ///< [in] handle of destination image to copy to
-        image_region_t* pDstRegion,                     ///< [in][optional] destination region descriptor
         image_handle_t hSrcImage,                       ///< [in] handle of source image to copy from
+        image_region_t* pDstRegion,                     ///< [in][optional] destination region descriptor
         image_region_t* pSrcRegion,                     ///< [in][optional] source region descriptor
         event_handle_t hEvent                           ///< [in][optional] handle of the event to signal on completion
         )
     {
-        // auto result = ::xeCommandListAppendImageCopyRegion( handle, hDstImage, pDstRegion, hSrcImage, pSrcRegion, hEvent );
+        // auto result = ::xeCommandListAppendImageCopyRegion( handle, hDstImage, hSrcImage, pDstRegion, pSrcRegion, hEvent );
         // if( ::XE_RESULT_SUCCESS != result ) throw exception(result, "xe::CommandList::AppendImageCopyRegion");
     }
 
@@ -365,12 +365,12 @@ namespace xe
     inline void 
     CommandList::AppendImageCopyFromMemory(
         image_handle_t hDstImage,                       ///< [in] handle of destination image to copy to
-        image_region_t* pDstRegion,                     ///< [in][optional] destination region descriptor
         const void* srcptr,                             ///< [in] pointer to source memory to copy from
+        image_region_t* pDstRegion,                     ///< [in][optional] destination region descriptor
         event_handle_t hEvent                           ///< [in][optional] handle of the event to signal on completion
         )
     {
-        // auto result = ::xeCommandListAppendImageCopyFromMemory( handle, hDstImage, pDstRegion, srcptr, hEvent );
+        // auto result = ::xeCommandListAppendImageCopyFromMemory( handle, hDstImage, srcptr, pDstRegion, hEvent );
         // if( ::XE_RESULT_SUCCESS != result ) throw exception(result, "xe::CommandList::AppendImageCopyFromMemory");
     }
 

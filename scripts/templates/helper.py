@@ -225,12 +225,13 @@ def filter_param_list(params, in_or_out):
 """
     returns a list of strings for each parameter of a function
 """
-def make_param_lines(namespace, tags, obj, cpp=False):
+def make_param_lines(namespace, tags, obj, cpp=False, decl=False):
     lines = []
 
     if cpp:
-        if ('decl' in obj and re.match(r"static", obj['decl'])) or \
-           ('class' in obj and re.match(r"\$x$", obj['class'])):
+        is_static = 'decl' in obj and re.match(r"static|singleton", obj['decl'])
+        is_global = 'class' in obj and re.match(r"\$x$", obj['class'])
+        if is_static or is_global:
             params = filter_param_list(obj['params'], "in")
         else:
             params = filter_param_list(obj['params'][1:], "in")
@@ -240,6 +241,12 @@ def make_param_lines(namespace, tags, obj, cpp=False):
     for i, item in enumerate(params):
         name = subt(namespace, tags, item['name'], cpp=cpp)
         type = subt(namespace, tags, item['type'], cpp=cpp)
+
+        is_optional = re.match(r".*\[optional\].*", item['desc'])
+        is_pointer = re.match(r".*\w+\*+", item['type'])
+        is_handle = re.match(r".*handle_t", item['type'])
+        if cpp and decl and is_optional and (is_pointer or is_handle):
+            name += " = nullptr"
 
         if i < len(params)-1:
             prologue = "%s %s,"%(type, name)
@@ -260,7 +267,8 @@ def make_param_lines(namespace, tags, obj, cpp=False):
 """
 def make_param_call_str(prologue, obj, cpp=False):
     if cpp:
-        if 'decl' in obj and re.match(r"static", obj['decl']):
+        is_static = 'decl' in obj and re.match(r"static|singleton", obj['decl'])
+        if is_static:
             params = filter_param_list(obj['params'], "in")
         else:
             params = filter_param_list(obj['params'][1:], "in")
@@ -271,7 +279,8 @@ def make_param_call_str(prologue, obj, cpp=False):
     if len(prologue) > 0:
         names.append(prologue)
     for item in params:
-#        if re.match(r"\$\w+_handle_t", item['type']):
+#        is_handle = re.match(r".*handle_t", item['type'])
+#        if is_handle:
 #            names.append("%s->getHandle()"%item['name'])
 #        else:
             names.append(item['name'])
@@ -333,13 +342,18 @@ def make_param_checks(namespace, tags, obj, comment=False, cpp=False):
     checks[eus] = []
 
     for item in obj['params']:
-        if not re.match(r".*\[optional\].*", item['desc']): #skip optional params
-            if re.match(r".*\w+\*+", item['type']): # pointer-type
+        is_optional = re.match(r".*\[optional\].*", item['desc'])
+        if not is_optional:
+            is_pointer = re.match(r".*\w+\*+", item['type'])
+            is_handle = re.match(r".*handle_t", item['type'])
+            is_desc =re.match(r".*desc_t.*", item['type'])
+
+            if is_pointer:
                 checks[eip].append("nullptr == %s"%subt(namespace, tags, item['name'], comment, cpp))
-            elif re.match(r".*handle_t.*", item['type']): # handle-type
+            elif is_handle:
                 checks[eip].append("nullptr == %s"%subt(namespace, tags, item['name'], comment, cpp))
 
-            if re.match(r".*desc_t.*", item['type']): # descriptor-type
+            if is_desc: # descriptor-type
                 checks[eus].append("%s < %s->version"%(re.sub(r"\w*\s*(.*)_t.*", r"\1_VERSION_CURRENT", subt(namespace, tags, item['type'], comment, cpp)).upper(), item['name']))
     return checks
 

@@ -103,7 +103,7 @@ namespace ${n}
     %endfor
     inline ${th.make_return_value(n, tags, obj, cpp=True, decl=True, meta=meta)}
     ${th.make_func_name(n, tags, obj, cpp=True)}(
-        %for line in th.make_param_lines(n, tags, obj, cpp=True):
+        %for line in th.make_param_lines(n, tags, obj, cpp=True, decl=True):
         ${line}
         %endfor
         );
@@ -180,7 +180,7 @@ namespace ${n}
         %endfor
         inline ${th.make_return_value(n, tags, f, cpp=True, decl=True, meta=meta)}
         ${th.make_func_name(n, tags, f, cpp=True)}(
-            %for line in th.make_param_lines(n, tags, f, cpp=True):
+            %for line in th.make_param_lines(n, tags, f, cpp=True, decl=True):
             ${line}
             %endfor
             );

@@ -271,15 +271,15 @@ xe_result_t __xecall xeCommandListAppendImageCopy(
 xe_result_t __xecall xeCommandListAppendImageCopyRegion(
         xe_command_list_handle_t hCommandList,          ///< [in] handle of command list
         xe_image_handle_t hDstImage,                    ///< [in] handle of destination image to copy to
-        xe_image_region_t* pDstRegion,                  ///< [in][optional] destination region descriptor
         xe_image_handle_t hSrcImage,                    ///< [in] handle of source image to copy from
+        xe_image_region_t* pDstRegion,                  ///< [in][optional] destination region descriptor
         xe_image_region_t* pSrcRegion,                  ///< [in][optional] source region descriptor
         xe_event_handle_t hEvent                        ///< [in][optional] handle of the event to signal on completion
     ){
     if(dispatchTableInitialized == false){
         return XE_RESULT_ERROR_UNINITIALIZED;
     }
-    return dispatchTable.xeCommandListAppendImageCopyRegion(hCommandList, hDstImage, pDstRegion, hSrcImage, pSrcRegion, hEvent);
+    return dispatchTable.xeCommandListAppendImageCopyRegion(hCommandList, hDstImage, hSrcImage, pDstRegion, pSrcRegion, hEvent);
 }
 xe_result_t __xecall xeCommandListAppendImageCopyToMemory(
         xe_command_list_handle_t hCommandList,          ///< [in] handle of command list
@@ -296,14 +296,14 @@ xe_result_t __xecall xeCommandListAppendImageCopyToMemory(
 xe_result_t __xecall xeCommandListAppendImageCopyFromMemory(
         xe_command_list_handle_t hCommandList,          ///< [in] handle of command list
         xe_image_handle_t hDstImage,                    ///< [in] handle of destination image to copy to
-        xe_image_region_t* pDstRegion,                  ///< [in][optional] destination region descriptor
         const void* srcptr,                             ///< [in] pointer to source memory to copy from
+        xe_image_region_t* pDstRegion,                  ///< [in][optional] destination region descriptor
         xe_event_handle_t hEvent                        ///< [in][optional] handle of the event to signal on completion
     ){
     if(dispatchTableInitialized == false){
         return XE_RESULT_ERROR_UNINITIALIZED;
     }
-    return dispatchTable.xeCommandListAppendImageCopyFromMemory(hCommandList, hDstImage, pDstRegion, srcptr, hEvent);
+    return dispatchTable.xeCommandListAppendImageCopyFromMemory(hCommandList, hDstImage, srcptr, pDstRegion, hEvent);
 }
 xe_result_t __xecall xeCommandListAppendMemoryPrefetch(
         xe_command_list_handle_t hCommandList,          ///< [in] handle of command list
@@ -762,7 +762,7 @@ xe_result_t __xecall xeDeviceCreateModule(
         xe_device_handle_t hDevice,                     ///< [in] handle of the device
         const xe_module_desc_t* pDesc,                  ///< [in] pointer to module descriptor
         xe_module_handle_t* phModule,                   ///< [out] pointer to handle of module object created
-        xe_module_build_log_handle_t* phBuildLog        ///< [out][optional] pointer to handle of module's build log.
+        xe_module_build_log_handle_t* phBuildLog        ///< [in,out][optional] pointer to handle of module's build log.
     ){
     if(dispatchTableInitialized == false){
         return XE_RESULT_ERROR_UNINITIALIZED;
