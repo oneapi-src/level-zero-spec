@@ -1,0 +1,651 @@
+--- #--------------------------------------------------------------------------
+type: header
+desc: "Intel $OneApi Level-Zero Tool APIs for Metric"
+--- #--------------------------------------------------------------------------
+type: function
+desc: "Returns metric group count for a given device."
+class: $tDevice
+name: GetMetricGroupCount
+decl: singleton
+params:
+    - type: $x_device_handle_t
+      name: hDevice
+      desc: "[in] handle of the device object"
+    - type: uint32_t*
+      name: pCount
+      desc: "[out] number of metric groups supported by the device"
+--- #--------------------------------------------------------------------------
+type: function
+desc: "Returns metric group handle for a device."
+class: $tDevice
+name: GetMetricGroup
+details:
+    - "The application may call this function from simultaneous threads with the same device handle."
+params:
+    - type: "$x_device_handle_t"
+      name: hDevice
+      desc: "[in] handle of the device"
+    - type: uint32_t
+      name: ordinal
+      desc: "[in] metric group index"
+    - type: "$t_metric_group_handle_t*"
+      name: phMetricGroup
+      desc: "[out] metric group handle"
+returns:
+    - $X_RESULT_ERROR_INVALID_PARAMETER:
+        - "devices do not contain a given metric group"
+--- #--------------------------------------------------------------------------
+type: macro
+desc: "Maximum metric group name string size"
+name: $T_MAX_METRIC_GROUP_NAME
+value: "256"
+--- #--------------------------------------------------------------------------
+type: macro
+desc: "Maximum metric group description string size"
+name: $T_MAX_METRIC_GROUP_DESCRIPTION
+value: "256"
+--- #--------------------------------------------------------------------------
+type: enum
+desc: "Metric group sampling type"
+class: $tDevice
+name: $t_metric_group_sampling_type
+etors:
+    - name: $T_METRIC_GROUP_SAMPLING_TYPE_EVENT_BASED
+      desc: "Event based sampling"
+      value: "$X_BIT(0)"
+    - name: $T_METRIC_GROUP_SAMPLING_TYPE_TIME_BASED
+      desc: "Time based sampling"
+      value: "$X_BIT(1)"
+--- #--------------------------------------------------------------------------
+type: enum
+desc: "API version of $t_metric_group_properties_t"
+class: $tMetricGroup
+name: $t_metric_group_properties_version_t
+etors:
+    - name: $T_METRIC_GROUP_PROPERTIES_VERSION_CURRENT
+      value: "$X_MAKE_VERSION( 1, 0 )"
+      desc: "version 1.0"
+--- #--------------------------------------------------------------------------
+type: struct
+desc: "Metric group properties queried using $tMetricGroupGetProperties"
+class: $tMetricGroup
+name: $t_metric_group_properties_t
+members:
+    - type: $t_metric_group_properties_version_t
+      name: version
+      desc: "[in] $T_METRIC_GROUP_PROPERTIES_VERSION_CURRENT"
+      init: $T_METRIC_GROUP_PROPERTIES_VERSION_CURRENT
+    - type: char
+      name: "name[$T_MAX_METRIC_GROUP_NAME]"
+      desc: "[out] metric group name"
+    - type: char
+      name: "description[$T_MAX_METRIC_GROUP_DESCRIPTION]"
+      desc: "[out] metric group description"
+    - type: "$t_metric_group_sampling_type"
+      name: "samplingType"
+      desc: "[out] metric group sampling type"
+    - type: uint32_t
+      name: "domain"
+      desc: "[out] metric group domain number. Cannot use simultaneous metric groups from different domains."
+    - type: uint32_t
+      name: "metricCount"
+      desc: "[out] metric count belonging to this group"
+    - type: uint32_t
+      name: "rawReportSize"
+      desc: "[out] size of raw report"
+    - type: uint32_t
+      name: "calculatedReportSize"
+      desc: "[out] size of calculated report"
+--- #--------------------------------------------------------------------------
+type: function
+desc: "Returns properties for a given metric group."
+class: $tMetricGroup
+name: GetProperties
+details:
+    - "The application may call this function from simultaneous threads with the same metric group handle."
+params:
+    - type: "$t_metric_group_handle_t"
+      name: hMetricGroup
+      desc: "[in] handle of the metric group"
+    - type: "$t_metric_group_properties_t*"
+      name: pProperties
+      desc: "[out] metric group properties"
+returns:
+    - $X_RESULT_ERROR_INVALID_PARAMETER:
+        - "invalid metric group handle"
+--- #--------------------------------------------------------------------------
+type: macro
+desc: "Maximum metric name string size"
+name: $T_MAX_METRIC_NAME
+value: "256"
+--- #--------------------------------------------------------------------------
+type: macro
+desc: "Maximum metric description string size"
+name: $T_MAX_METRIC_DESCRIPTION
+value: "256"
+--- #--------------------------------------------------------------------------
+type: macro
+desc: "Maximum metric component string size"
+name: $T_MAX_METRIC_COMPONENT
+value: "256"
+--- #--------------------------------------------------------------------------
+type: macro
+desc: "Maximum metric result units string size"
+name: $T_MAX_METRIC_RESULT_UNITS
+value: "256"
+--- #--------------------------------------------------------------------------
+type: enum
+desc: "Metric types"
+class: $tMetric
+name: $t_metric_type_t
+etors:
+    - name: $T_METRIC_TYPE_DURATION
+      desc: "Metric type: duration"
+    - name: $T_METRIC_TYPE_EVENT
+      desc: "Metric type: event"
+    - name: $T_METRIC_TYPE_EVENT_WITH_RANGE
+      desc: "Metric type: event with range"
+    - name: $T_METRIC_TYPE_THROUGHPUT
+      desc: "Metric type: throughput"
+    - name: $T_METRIC_TYPE_TIMESTAMP
+      desc: "Metric type: timestamp"
+    - name: $T_METRIC_TYPE_FLAG
+      desc: "Metric type: flag"
+    - name: $T_METRIC_TYPE_RATIO
+      desc: "Metric type: ratio"
+    - name: $T_METRIC_TYPE_RAW
+      desc: "Metric type: raw"
+--- #--------------------------------------------------------------------------
+type: enum
+desc: "Value types"
+class: $tMetric
+name: $t_value_type_t
+etors:
+    - name: $T_VALUE_TYPE_UINT32
+      desc: "Value type: uint32"
+    - name: $T_VALUE_TYPE_UINT64
+      desc: "Value type: uint64"
+    - name: $T_VALUE_TYPE_FLOAT
+      desc: "Value type: float"
+    - name: $T_VALUE_TYPE_BOOL
+      desc: "Value type: bool"
+    - name: $T_VALUE_TYPE_STRING
+      desc: "Value type: string"
+--- #--------------------------------------------------------------------------
+type: enum
+desc: "API version of $t_typed_value_t"
+class: $tMetric
+name: $t_typed_value_version_t
+etors:
+    - name: $T_TYPED_VALUE_VERSION_CURRENT
+      value: "$X_MAKE_VERSION( 1, 0 )"
+      desc: "version 1.0"
+--- #--------------------------------------------------------------------------
+type: struct
+desc: "Typed value"
+class: $tMetric
+name: $t_typed_value_t
+members:
+    - type: $t_typed_value_version_t
+      name: version
+      desc: "[in] $T_TYPED_VALUE_VERSION_CURRENT"
+      init: $T_TYPED_VALUE_VERSION_CURRENT
+    - type: $t_value_type_t
+      name: "type"
+      desc: "[out] value type"
+    - type: uint32_t
+      name: "valueUInt32"
+      desc: "[out] uint32_t value"
+    - type: uint64_t
+      name: "valueUInt64"
+      desc: "[out] uint64_t value"
+    - type: float
+      name: "valueFloat"
+      desc: "[out] float value"
+    - type: $x_bool_t
+      name: "valueBool"
+      desc: "[out] bool value"
+    - type: const char*
+      name: "valueString"
+      desc: "[out] string value"
+--- #--------------------------------------------------------------------------
+type: enum
+desc: "API version of $t_metric_properties_t"
+class: $tMetric
+name: $t_metric_properties_version_t
+etors:
+    - name: $T_METRIC_PROPERTIES_VERSION_CURRENT
+      value: "$X_MAKE_VERSION( 1, 0 )"
+      desc: "version 1.0"
+--- #--------------------------------------------------------------------------
+type: struct
+desc: "Metric properties queried using $tMetricGetProperties"
+class: $tMetric
+name: $t_metric_properties_t
+members:
+    - type: $t_metric_properties_version_t
+      name: version
+      desc: "[in] $T_METRIC_PROPERTIES_VERSION_CURRENT"
+      init: $T_METRIC_PROPERTIES_VERSION_CURRENT
+    - type: char
+      name: "name[$T_MAX_METRIC_NAME]"
+      desc: "[out] metric name"
+    - type: char
+      name: "description[$T_MAX_METRIC_DESCRIPTION]"
+      desc: "[out] metric description"
+    - type: char
+      name: "component[$T_MAX_METRIC_COMPONENT]"
+      desc: "[out] metric component"
+    - type: uint32_t
+      name: "tierNumber"
+      desc: "[out] number of tier"
+    - type: $t_metric_type_t
+      name: "metricType"
+      desc: "[out] metric type"
+    - type: $t_value_type_t
+      name: "resultType"
+      desc: "[out] metric result type"
+    - type: char
+      name: "resultUnits[$T_MAX_METRIC_RESULT_UNITS]"
+      desc: "[out] metric result units"
+--- #--------------------------------------------------------------------------
+type: function
+desc: "Returns metric from a given metric group."
+class: $tMetricGroup
+name: GetMetric
+details:
+    - "The application may call this function from simultaneous threads with the same metric group handle."
+params:
+    - type: "$t_metric_group_handle_t"
+      name: hMetricGroup
+      desc: "[in] handle of the metric group"
+    - type: uint32_t
+      name: ordinal
+      desc: "[in] metric index"
+    - type: "$t_metric_handle_t*"
+      name: phMetric
+      desc: "[out] handle of metric"
+returns:
+    - $X_RESULT_ERROR_INVALID_PARAMETER:
+        - "invalid metric group handle"
+--- #--------------------------------------------------------------------------
+type: function
+desc: "Returns metric properties."
+class: $tMetric
+name: GetProperties
+details:
+    - "The application may call this function from simultaneous threads with the same metric group handle."
+params:
+    - type: "$t_metric_handle_t"
+      name: hMetric
+      desc: "[in] handle of the metric"
+    - type: "$t_metric_properties_t*"
+      name: pProperties
+      desc: "[out] metric properties"
+returns:
+    - $X_RESULT_ERROR_INVALID_PARAMETER:
+        - "invalid handle"
+--- #--------------------------------------------------------------------------
+type: function
+desc: "Calculates counter values from raw data."
+class: $tMetricGroup
+name: CalculateData
+details:
+    - "The application may not call this function from simultaneous threads with the same metric group handle."
+params:
+    - type: "$t_metric_group_handle_t"
+      name: hMetricGroup
+      desc: "[in] handle of the metric group"
+    - type: uint32_t*
+      name: pReportCount
+      desc: "[in/out] report count to calculate"
+    - type: uint32_t
+      name: rawDataSize
+      desc: "[in] raw data size"
+    - type: "uint8_t*"
+      name: pRawData
+      desc: "[in] raw data to calculate"
+    - type: uint32_t
+      name: calculatedDataSize
+      desc: "[in] calculated data size"
+    - type: "$t_typed_value_t*"
+      name: pCalculatedData
+      desc: "[out] calculated metrics"
+returns:
+    - $X_RESULT_ERROR_INVALID_PARAMETER:
+        - "invalid metric group handle"
+--- #--------------------------------------------------------------------------
+type: function
+desc: "Activates metric groups."
+class: $tDevice
+name: ActivateMetricGroups
+details:
+    - MetricGroup must be active until MetricQueryGetDeta and $tMetricTracerClose.
+    - Conflicting metric groups cannot be activated, in such case tha call would fail.
+params:
+    - type: "$x_device_handle_t"
+      name: hDevice
+      desc: "[in] handle of the device"
+    - type: uint32_t
+      name: count
+      desc: "[in] metric group count to activate. 0 to deactivate."
+    - type: "$t_metric_group_handle_t*"
+      name: phMetricGroups
+      desc: "[in] handles of the metric groups to activate. NULL to deactivate."
+returns:
+    - $X_RESULT_ERROR_INVALID_PARAMETER:
+        - "invalid metric groups"
+--- #--------------------------------------------------------------------------
+type: enum
+desc: "API version of $t_metric_tracer_desc_t"
+class: $tMetricTracer
+name: $t_metric_tracer_desc_version_t
+etors:
+    - name: $T_METRIC_TRACER_DESC_VERSION_CURRENT
+      value: "$X_MAKE_VERSION( 1, 0 )"
+      desc: "version 1.0"
+--- #--------------------------------------------------------------------------
+type: struct
+desc: "Metric tracer descriptor"
+class: $tMetricTracer
+name: $t_metric_tracer_desc_t
+members:
+    - type: $t_metric_tracer_desc_version_t
+      name: version
+      desc: "[in] $T_METRIC_TRACER_DESC_VERSION_CURRENT"
+      init: $T_METRIC_TRACER_DESC_VERSION_CURRENT
+    - type: "$t_metric_group_handle_t"
+      name: "hMetricGroup"
+      desc: "[in] handle of the metric group"
+    - type: uint32_t
+      name: "notifyEveryNReports"
+      desc: "[in/out] number of collected reports after which notification event will be signalled"
+    - type: uint32_t
+      name: "samplingPeriodNs"
+      desc: "[in/out] tracer sampling period in nanoseconds"
+--- #--------------------------------------------------------------------------
+type: function
+desc: "Opens metric tracer for a given device."
+class: $tDevice
+name: OpenMetricTracer
+details:
+    - "The application may not call this function from simultaneous threads with the same device handle."
+params:
+    - type: "$x_device_handle_t"
+      name: hDevice
+      desc: "[in] handle of the device"
+    - type: "$t_metric_tracer_desc_t*"
+      name: pDesc
+      desc: "[in/out] metric tracer descriptor"
+    - type: "$x_event_handle_t"
+      name: hNotificationEvent
+      desc: "[in] event used for report availability notification. Must be device to host type."
+    - type: "$t_metric_tracer_handle_t*"
+      name: phMetricTracer
+      desc: "[out] handle of metric tracer"
+returns:
+    - $X_RESULT_ERROR_INVALID_PARAMETER:
+        - "devices do not support metric tracer"
+--- #--------------------------------------------------------------------------
+type: function
+desc: "Append metric tracer marker to a given command list."
+class: $xCommandList
+name: AppendMetricTracerMarker
+details:
+    - "The application may not call this function from simultaneous threads with the same device handle."
+params:
+    - type: "$x_command_list_handle_t"
+      name: hCommandList
+      desc: "[in] handle of the command list"
+    - type: "$t_metric_tracer_handle_t"
+      name: hMetricTracer
+      desc: "[in] handle of the metric tracer"
+    - type: "uint32_t"
+      name: value
+      desc: "[in] tracer marker value"
+returns:
+    - $X_RESULT_ERROR_INVALID_PARAMETER:
+        - "command list do not support metric tracer"
+--- #--------------------------------------------------------------------------
+type: function
+desc: "Closes metric tracer."
+class: $tMetricTracer
+name: Close
+details:
+    - "The application may not call this function from simultaneous threads with the same device handle."
+params:
+    - type: "$t_metric_tracer_handle_t"
+      name: hMetricTracer
+      desc: "[in] handle of the metric tracer"
+returns:
+    - $X_RESULT_ERROR_INVALID_PARAMETER:
+        - "invalid metric tracer handle"
+--- #--------------------------------------------------------------------------
+type: function
+desc: "Reads data from metric tracer."
+class: $tMetricTracer
+name: ReadData
+details:
+    - "The application may not call this function from simultaneous threads with the same device handle."
+params:
+    - type: "$t_metric_tracer_handle_t"
+      name: hMetricTracer
+      desc: "[in] handle of the metric tracer"
+    - type: uint32_t*
+      name: pReportCount
+      desc: "[in/out] report count to read/returned"
+    - type: uint32_t
+      name: rawDataSize
+      desc: "[in] raw data buffer size"
+    - type: uint8_t*
+      name: pRawData
+      desc: "[in/out] raw data buffer for reports"
+returns:
+    - $X_RESULT_ERROR_INVALID_PARAMETER:
+        - "invalid metric tracer handle"
+--- #--------------------------------------------------------------------------
+type: enum
+desc: "Metric query pool types"
+class: $tMetricQueryPool
+name: $t_metric_query_pool_flag_t
+etors:
+    - name: $T_METRIC_QUERY_POOL_FLAG_PERFORMANCE
+      desc: "Performance metric query pool."
+    - name: $T_METRIC_QUERY_POOL_FLAG_SKIP_EXECUTION
+      desc: "Skips workload execution between begin/end calls."
+--- #--------------------------------------------------------------------------
+type: enum
+desc: "API version of $t_metric_query_pool_desc_t"
+class: $tMetricQueryPool
+name: $t_metric_query_pool_desc_version_t
+etors:
+    - name: $T_METRIC_QUERY_POOL_DESC_VERSION_CURRENT
+      value: "$X_MAKE_VERSION( 1, 0 )"
+      desc: "version 1.0"
+--- #--------------------------------------------------------------------------
+type: struct
+desc: "Metric query pool description"
+class: $tMetricQueryPool
+name: $t_metric_query_pool_desc_t
+members:
+    - type: $t_metric_query_pool_desc_version_t
+      name: version
+      desc: "[in] $T_METRIC_QUERY_POOL_DESC_VERSION_CURRENT"
+      init: $T_METRIC_QUERY_POOL_DESC_VERSION_CURRENT
+    - type: $t_metric_query_pool_flag_t
+      name: flags
+      desc: "[in] Query pool type."
+    - type: $t_metric_group_handle_t
+      name: "hMetricGroup"
+      desc: "[in] Metric group associated with the query object."
+    - type: uint32_t
+      name: "count"
+      desc: "[in] Internal slots count within query pool object."
+--- #--------------------------------------------------------------------------
+type: function
+desc: "Creates metric query pool."
+class: $tDevice
+name: CreateMetricQueryPool
+details:
+    - "The application may call this function from simultaneous threads with the same device handle."
+params:
+    - type: "$x_device_handle_t"
+      name: hDevice
+      desc: "[in] handle of the device"
+    - type: "$t_metric_query_pool_desc_t*"
+      name: pDesc
+      desc: "[in] metric query pool creation data"
+    - type: "$t_metric_query_pool_handle_t*"
+      name: phMetricQueryPool
+      desc: "[out] handle of metric query pool"
+returns:
+    - $X_RESULT_ERROR_INVALID_PARAMETER:
+        - "invalid device handle"
+--- #--------------------------------------------------------------------------
+type: function
+desc: "Returns metric query handle from a given metric query pool."
+class: $tMetricQueryPool
+name: GetMetricQuery
+details:
+    - "The application may call this function from simultaneous threads with the same device handle."
+params:
+    - type: "$t_metric_query_pool_handle_t"
+      name: hMetricQueryPool
+      desc: "[in] handle of the metric query pool"
+    - type: uint32_t
+      name: ordinal
+      desc: "[in] index of the query within the pool"
+    - type: "$t_metric_query_handle_t*"
+      name: phMetricQuery
+      desc: "[out] handle of metric query"
+returns:
+    - $X_RESULT_ERROR_INVALID_PARAMETER:
+        - "invalid device handle"
+--- #--------------------------------------------------------------------------
+type: function
+desc: "Appends metric query begin commands to command list."
+class: $xCommandList
+name: AppendMetricQueryBegin
+details:
+    - "The application may call this function from simultaneous threads with the same device handle."
+params:
+    - type: "$x_command_list_handle_t"
+      name: hCommandList
+      desc: "[in] handle of the command list"
+    - type: "$t_metric_query_handle_t"
+      name: hMetricQuery
+      desc: "[in] handle of the metric query"
+returns:
+    - $X_RESULT_ERROR_INVALID_PARAMETER:
+        - "invalid handle"
+--- #--------------------------------------------------------------------------
+type: function
+desc: "Appends metric query end commands to command list."
+class: $xCommandList
+name: AppendMetricQueryEnd
+details:
+    - "The application may call this function from simultaneous threads with the same device handle."
+params:
+    - type: "$x_command_list_handle_t"
+      name: hCommandList
+      desc: "[in] handle of the command list"
+    - type: "$t_metric_query_handle_t"
+      name: hMetricQuery
+      desc: "[in] handle of the metric query"
+    - type: "$x_event_handle_t"
+      name: hCompletionEvent
+      desc: "[in] handle of the completion event to signal"
+returns:
+    - $X_RESULT_ERROR_INVALID_PARAMETER:
+        - "invalid handle"
+--- #--------------------------------------------------------------------------
+type: function
+desc: "Appends metric query commands to flush all caches."
+class: $xCommandList
+name: AppendMetricMemoryBarrier
+details:
+    - "The application may call this function from simultaneous threads with the same device handle."
+params:
+    - type: "$x_command_list_handle_t"
+      name: hCommandList
+      desc: "[in] handle of the command list"
+returns:
+    - $X_RESULT_ERROR_INVALID_PARAMETER:
+        - "invalid command list handle"
+--- #--------------------------------------------------------------------------
+type: function
+desc: "Returns raw data for a given metric query slot."
+class: $tMetricQuery
+name: GetData
+details:
+    - "The application may not call this function from simultaneous threads with the same device handle."
+params:
+    - type: "$t_metric_query_handle_t"
+      name: hMetricQuery
+      desc: "[in] handle of the metric query"
+    - type: uint32_t*
+      name: pReportCount
+      desc: "[in/out] report count to read/returned"
+    - type: uint32_t
+      name: rawDataSize
+      desc: "[in] raw data size passed by the user"
+    - type: uint8_t*
+      name: pRawData
+      desc: "[in/out] query result data in raw format"
+returns:
+    - $X_RESULT_ERROR_INVALID_PARAMETER:
+        - "invalid metric query handle"
+--- #--------------------------------------------------------------------------
+type: function
+desc: "Destroys query pool object."
+class: $tMetricQueryPool
+name: Destroy
+details:
+    - "The application may call this function from simultaneous threads with the same device handle."
+params:
+    - type: "$t_metric_query_pool_handle_t"
+      name: hMetricQueryPool
+      desc: "[in] handle of the metric query pool"
+returns:
+    - $X_RESULT_ERROR_INVALID_PARAMETER:
+        - "invalid metric query pool handle"
+--- #--------------------------------------------------------------------------
+type: class
+desc: "C++ wrapper for metric group"
+name: $tMetricGroup
+members:
+    - type: $t_metric_group_handle_t
+      name: handle
+      desc: "handle of metric group object" 
+--- #--------------------------------------------------------------------------
+type: class
+desc: "C++ wrapper for metric"
+name: $tMetric
+members:
+    - type: $t_metric_handle_t
+      name: handle
+      desc: "handle of metric object" 
+--- #--------------------------------------------------------------------------
+type: class
+desc: "C++ wrapper for metric tracer"
+name: $tMetricTracer
+members:
+    - type: $t_metric_tracer_handle_t
+      name: handle
+      desc: "handle of metric tracer object" 
+--- #--------------------------------------------------------------------------
+type: class
+desc: "C++ wrapper for metric query pool"
+name: $tMetricQueryPool
+members:
+    - type: $t_metric_query_pool_handle_t
+      name: handle
+      desc: "handle of metric query pool object" 
+--- #--------------------------------------------------------------------------
+type: class
+desc: "C++ wrapper for metric query"
+name: $tMetricQuery
+members:
+    - type: $t_metric_query_handle_t
+      name: handle
+      desc: "handle of metric query object" 

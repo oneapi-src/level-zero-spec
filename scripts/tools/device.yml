@@ -1,0 +1,12 @@
+--- #--------------------------------------------------------------------------
+type: header
+desc: "Intel $OneApi Level-Zero Tool APIs for Device"
+--- #--------------------------------------------------------------------------
+type: class
+desc: "C++ wrapper for device"
+name: $tDevice
+base: $xDevice
+members:
+    - type: $x_device_handle_t
+      name: handle
+      desc: "handle of device object"
