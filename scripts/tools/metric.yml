@@ -181,18 +181,11 @@ etors:
       value: "$X_MAKE_VERSION( 1, 0 )"
       desc: "version 1.0"
 --- #--------------------------------------------------------------------------
-type: struct
-desc: "Typed value"
+type: union
+desc: "Different value types union"
 class: $tMetric
-name: $t_typed_value_t
+name: $t_value_t
 members:
-    - type: $t_typed_value_version_t
-      name: version
-      desc: "[in] $T_TYPED_VALUE_VERSION_CURRENT"
-      init: $T_TYPED_VALUE_VERSION_CURRENT
-    - type: $t_value_type_t
-      name: "type"
-      desc: "[out] value type"
     - type: uint32_t
       name: "valueUInt32"
       desc: "[out] uint32_t value"
@@ -208,6 +201,22 @@ members:
     - type: const char*
       name: "valueString"
       desc: "[out] string value"
+--- #--------------------------------------------------------------------------
+type: struct
+desc: "Typed value"
+class: $tMetric
+name: $t_typed_value_t
+members:
+    - type: $t_typed_value_version_t
+      name: version
+      desc: "[in] $T_TYPED_VALUE_VERSION_CURRENT"
+      init: $T_TYPED_VALUE_VERSION_CURRENT
+    - type: $t_value_type_t
+      name: "type"
+      desc: "[out] value type"
+    - type: $t_value_t
+      name: "value"
+      desc: "[out] value of a specified type"
 --- #--------------------------------------------------------------------------
 type: enum
 desc: "API version of $t_metric_properties_t"

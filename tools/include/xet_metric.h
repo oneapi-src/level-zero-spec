@@ -196,16 +196,24 @@ typedef enum _xet_typed_value_version_t
 } xet_typed_value_version_t;
 
 ///////////////////////////////////////////////////////////////////////////////
-/// @brief Typed value
-typedef struct _xet_typed_value_t
+/// @brief Different value types union
+typedef union _xet_value_t
 {
-    xet_typed_value_version_t version;              ///< [in] ::XET_TYPED_VALUE_VERSION_CURRENT
-    xet_value_type_t type;                          ///< [out] value type
     uint32_t valueUInt32;                           ///< [out] uint32_t value
     uint64_t valueUInt64;                           ///< [out] uint64_t value
     float valueFloat;                               ///< [out] float value
     xe_bool_t valueBool;                            ///< [out] bool value
     const char* valueString;                        ///< [out] string value
+
+} xet_value_t;
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Typed value
+typedef struct _xet_typed_value_t
+{
+    xet_typed_value_version_t version;              ///< [in] ::XET_TYPED_VALUE_VERSION_CURRENT
+    xet_value_type_t type;                          ///< [out] value type
+    xet_value_t value;                              ///< [out] value of a specified type
 
 } xet_typed_value_t;
 

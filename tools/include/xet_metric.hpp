@@ -164,16 +164,24 @@ namespace xet
         };
 
         ///////////////////////////////////////////////////////////////////////////////
-        /// @brief C++ version for ::xet_typed_value_t
-        struct typed_value_t
+        /// @brief C++ version for ::xet_value_t
+        union value_t
         {
-            typed_value_version_t version = typed_value_version_t::CURRENT; ///< [in] ::TYPED_VALUE_VERSION_CURRENT
-            value_type_t type;                              ///< [out] value type
             uint32_t valueUInt32;                           ///< [out] uint32_t value
             uint64_t valueUInt64;                           ///< [out] uint64_t value
             float valueFloat;                               ///< [out] float value
             xe::_bool_t valueBool;                          ///< [out] bool value
             const char* valueString;                        ///< [out] string value
+
+        };
+
+        ///////////////////////////////////////////////////////////////////////////////
+        /// @brief C++ version for ::xet_typed_value_t
+        struct typed_value_t
+        {
+            typed_value_version_t version = typed_value_version_t::CURRENT; ///< [in] ::TYPED_VALUE_VERSION_CURRENT
+            value_type_t type;                              ///< [out] value type
+            value_t value;                                  ///< [out] value of a specified type
 
         };
 
