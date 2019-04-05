@@ -49,7 +49,7 @@ namespace xet
     ///     - ::metric_group_properties_t: metric group properties
     /// 
     /// @throws result_t
-    inline metric_group_properties_t 
+    inline MetricGroup::metric_group_properties_t 
     MetricGroup::GetProperties(
         void
         )
@@ -89,7 +89,7 @@ namespace xet
     ///     - ::typed_value_t: calculated metrics
     /// 
     /// @throws result_t
-    inline typed_value_t 
+    inline Metric::typed_value_t 
     MetricGroup::CalculateData(
         uint32_t* pReportCount,                         ///< [in/out] report count to calculate
         uint32_t rawDataSize,                           ///< [in] raw data size
@@ -99,46 +99,6 @@ namespace xet
     {
         // auto result = ::xetMetricGroupCalculateData( handle, pReportCount, rawDataSize, pRawData, calculatedDataSize );
         // if( ::XE_RESULT_SUCCESS != result ) throw exception(result, "xet::MetricGroup::CalculateData");
-    }
-
-    ///////////////////////////////////////////////////////////////////////////////
-    /// @brief C++ wrapper for ::xetMetricGroupGetProperties
-    /// 
-    /// @details
-    ///     - The application may call this function from simultaneous threads with
-    ///       the same metric group handle.
-    /// 
-    /// @returns
-    ///     - ::metric_group_properties_t: metric group properties
-    /// 
-    /// @throws result_t
-    inline metric_group_properties_t 
-    Metric::GetProperties(
-        void
-        )
-    {
-        // auto result = ::xetMetricGroupGetProperties( handle );
-        // if( ::XE_RESULT_SUCCESS != result ) throw exception(result, "xet::Metric::GetProperties");
-    }
-
-    ///////////////////////////////////////////////////////////////////////////////
-    /// @brief C++ wrapper for ::xetMetricGroupGetMetric
-    /// 
-    /// @details
-    ///     - The application may call this function from simultaneous threads with
-    ///       the same metric group handle.
-    /// 
-    /// @returns
-    ///     - ::metric_handle_t: handle of metric
-    /// 
-    /// @throws result_t
-    inline metric_handle_t 
-    Metric::GetMetric(
-        uint32_t ordinal                                ///< [in] metric index
-        )
-    {
-        // auto result = ::xetMetricGroupGetMetric( handle, ordinal );
-        // if( ::XE_RESULT_SUCCESS != result ) throw exception(result, "xet::Metric::GetMetric");
     }
 
     ///////////////////////////////////////////////////////////////////////////////
@@ -152,128 +112,13 @@ namespace xet
     ///     - ::metric_properties_t: metric properties
     /// 
     /// @throws result_t
-    inline metric_properties_t 
+    inline Metric::metric_properties_t 
     Metric::GetProperties(
         void
         )
     {
         // auto result = ::xetMetricGetProperties( handle );
         // if( ::XE_RESULT_SUCCESS != result ) throw exception(result, "xet::Metric::GetProperties");
-    }
-
-    ///////////////////////////////////////////////////////////////////////////////
-    /// @brief C++ wrapper for ::xetMetricGroupCalculateData
-    /// 
-    /// @details
-    ///     - The application may not call this function from simultaneous threads
-    ///       with the same metric group handle.
-    /// 
-    /// @returns
-    ///     - ::typed_value_t: calculated metrics
-    /// 
-    /// @throws result_t
-    inline typed_value_t 
-    Metric::CalculateData(
-        uint32_t* pReportCount,                         ///< [in/out] report count to calculate
-        uint32_t rawDataSize,                           ///< [in] raw data size
-        uint8_t* pRawData,                              ///< [in] raw data to calculate
-        uint32_t calculatedDataSize                     ///< [in] calculated data size
-        )
-    {
-        // auto result = ::xetMetricGroupCalculateData( handle, pReportCount, rawDataSize, pRawData, calculatedDataSize );
-        // if( ::XE_RESULT_SUCCESS != result ) throw exception(result, "xet::Metric::CalculateData");
-    }
-
-    ///////////////////////////////////////////////////////////////////////////////
-    /// @brief C++ wrapper for ::xetMetricTracerClose
-    /// 
-    /// @details
-    ///     - The application may not call this function from simultaneous threads
-    ///       with the same device handle.
-    /// 
-    /// @throws result_t
-    inline void 
-    Metric::Close(
-        void
-        )
-    {
-        // auto result = ::xetMetricTracerClose( handle );
-        // if( ::XE_RESULT_SUCCESS != result ) throw exception(result, "xet::Metric::Close");
-    }
-
-    ///////////////////////////////////////////////////////////////////////////////
-    /// @brief C++ wrapper for ::xetMetricTracerReadData
-    /// 
-    /// @details
-    ///     - The application may not call this function from simultaneous threads
-    ///       with the same device handle.
-    /// 
-    /// @throws result_t
-    inline void 
-    Metric::ReadData(
-        uint32_t* pReportCount,                         ///< [in/out] report count to read/returned
-        uint32_t rawDataSize,                           ///< [in] raw data buffer size
-        uint8_t* pRawData                               ///< [in/out] raw data buffer for reports
-        )
-    {
-        // auto result = ::xetMetricTracerReadData( handle, pReportCount, rawDataSize, pRawData );
-        // if( ::XE_RESULT_SUCCESS != result ) throw exception(result, "xet::Metric::ReadData");
-    }
-
-    ///////////////////////////////////////////////////////////////////////////////
-    /// @brief C++ wrapper for ::xetMetricQueryPoolGetMetricQuery
-    /// 
-    /// @details
-    ///     - The application may call this function from simultaneous threads with
-    ///       the same device handle.
-    /// 
-    /// @returns
-    ///     - ::metric_query_handle_t: handle of metric query
-    /// 
-    /// @throws result_t
-    inline metric_query_handle_t 
-    Metric::GetMetricQuery(
-        uint32_t ordinal                                ///< [in] index of the query within the pool
-        )
-    {
-        // auto result = ::xetMetricQueryPoolGetMetricQuery( handle, ordinal );
-        // if( ::XE_RESULT_SUCCESS != result ) throw exception(result, "xet::Metric::GetMetricQuery");
-    }
-
-    ///////////////////////////////////////////////////////////////////////////////
-    /// @brief C++ wrapper for ::xetMetricQueryGetData
-    /// 
-    /// @details
-    ///     - The application may not call this function from simultaneous threads
-    ///       with the same device handle.
-    /// 
-    /// @throws result_t
-    inline void 
-    Metric::GetData(
-        uint32_t* pReportCount,                         ///< [in/out] report count to read/returned
-        uint32_t rawDataSize,                           ///< [in] raw data size passed by the user
-        uint8_t* pRawData                               ///< [in/out] query result data in raw format
-        )
-    {
-        // auto result = ::xetMetricQueryGetData( handle, pReportCount, rawDataSize, pRawData );
-        // if( ::XE_RESULT_SUCCESS != result ) throw exception(result, "xet::Metric::GetData");
-    }
-
-    ///////////////////////////////////////////////////////////////////////////////
-    /// @brief C++ wrapper for ::xetMetricQueryPoolDestroy
-    /// 
-    /// @details
-    ///     - The application may call this function from simultaneous threads with
-    ///       the same device handle.
-    /// 
-    /// @throws result_t
-    inline void 
-    Metric::Destroy(
-        void
-        )
-    {
-        // auto result = ::xetMetricQueryPoolDestroy( handle );
-        // if( ::XE_RESULT_SUCCESS != result ) throw exception(result, "xet::Metric::Destroy");
     }
 
     ///////////////////////////////////////////////////////////////////////////////
@@ -350,26 +195,6 @@ namespace xet
     }
 
     ///////////////////////////////////////////////////////////////////////////////
-    /// @brief C++ wrapper for ::xetMetricQueryPoolGetMetricQuery
-    /// 
-    /// @details
-    ///     - The application may call this function from simultaneous threads with
-    ///       the same device handle.
-    /// 
-    /// @returns
-    ///     - ::metric_query_handle_t: handle of metric query
-    /// 
-    /// @throws result_t
-    inline metric_query_handle_t 
-    MetricQuery::GetMetricQuery(
-        uint32_t ordinal                                ///< [in] index of the query within the pool
-        )
-    {
-        // auto result = ::xetMetricQueryPoolGetMetricQuery( handle, ordinal );
-        // if( ::XE_RESULT_SUCCESS != result ) throw exception(result, "xet::MetricQuery::GetMetricQuery");
-    }
-
-    ///////////////////////////////////////////////////////////////////////////////
     /// @brief C++ wrapper for ::xetMetricQueryGetData
     /// 
     /// @details
@@ -386,23 +211,6 @@ namespace xet
     {
         // auto result = ::xetMetricQueryGetData( handle, pReportCount, rawDataSize, pRawData );
         // if( ::XE_RESULT_SUCCESS != result ) throw exception(result, "xet::MetricQuery::GetData");
-    }
-
-    ///////////////////////////////////////////////////////////////////////////////
-    /// @brief C++ wrapper for ::xetMetricQueryPoolDestroy
-    /// 
-    /// @details
-    ///     - The application may call this function from simultaneous threads with
-    ///       the same device handle.
-    /// 
-    /// @throws result_t
-    inline void 
-    MetricQuery::Destroy(
-        void
-        )
-    {
-        // auto result = ::xetMetricQueryPoolDestroy( handle );
-        // if( ::XE_RESULT_SUCCESS != result ) throw exception(result, "xet::MetricQuery::Destroy");
     }
 
 } // namespace xet
