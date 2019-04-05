@@ -306,11 +306,11 @@ xetMetricGetProperties(
 __xedllport xe_result_t __xecall
 xetMetricGroupCalculateData(
     xet_metric_group_handle_t hMetricGroup,         ///< [in] handle of the metric group
-    uint32_t* pReportCount,                         ///< [in/out] report count to calculate
+    uint32_t* pReportCount,                         ///< [in,out] report count to calculate
     uint32_t rawDataSize,                           ///< [in] raw data size
     uint8_t* pRawData,                              ///< [in] raw data to calculate
     uint32_t calculatedDataSize,                    ///< [in] calculated data size
-    xet_typed_value_t* pCalculatedData              ///< [out] calculated metrics
+    xet_typed_value_t* pCalculatedData              ///< [in,out] calculated metrics
     );
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -352,9 +352,9 @@ typedef struct _xet_metric_tracer_desc_t
 {
     xet_metric_tracer_desc_version_t version;       ///< [in] ::XET_METRIC_TRACER_DESC_VERSION_CURRENT
     xet_metric_group_handle_t hMetricGroup;         ///< [in] handle of the metric group
-    uint32_t notifyEveryNReports;                   ///< [in/out] number of collected reports after which notification event
+    uint32_t notifyEveryNReports;                   ///< [in,out] number of collected reports after which notification event
                                                     ///< will be signalled
-    uint32_t samplingPeriodNs;                      ///< [in/out] tracer sampling period in nanoseconds
+    uint32_t samplingPeriodNs;                      ///< [in,out] tracer sampling period in nanoseconds
 
 } xet_metric_tracer_desc_t;
 
@@ -380,7 +380,7 @@ typedef struct _xet_metric_tracer_desc_t
 __xedllport xe_result_t __xecall
 xetMetricTracerOpen(
     xe_device_handle_t hDevice,                     ///< [in] handle of the device
-    xet_metric_tracer_desc_t* pDesc,                ///< [in/out] metric tracer descriptor
+    xet_metric_tracer_desc_t* pDesc,                ///< [in,out] metric tracer descriptor
     xe_event_handle_t hNotificationEvent,           ///< [in] event used for report availability notification. Must be device
                                                     ///< to host type.
     xet_metric_tracer_handle_t* phMetricTracer      ///< [out] handle of metric tracer
@@ -449,9 +449,9 @@ xetMetricTracerClose(
 __xedllport xe_result_t __xecall
 xetMetricTracerReadData(
     xet_metric_tracer_handle_t hMetricTracer,       ///< [in] handle of the metric tracer
-    uint32_t* pReportCount,                         ///< [in/out] report count to read/returned
+    uint32_t* pReportCount,                         ///< [in,out] report count to read/returned
     uint32_t rawDataSize,                           ///< [in] raw data buffer size
-    uint8_t* pRawData                               ///< [in/out] raw data buffer for reports
+    uint8_t* pRawData                               ///< [in,out] raw data buffer for reports
     );
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -636,9 +636,9 @@ xetCommandListAppendMetricMemoryBarrier(
 __xedllport xe_result_t __xecall
 xetMetricQueryGetData(
     xet_metric_query_handle_t hMetricQuery,         ///< [in] handle of the metric query
-    uint32_t* pReportCount,                         ///< [in/out] report count to read/returned
+    uint32_t* pReportCount,                         ///< [in,out] report count to read/returned
     uint32_t rawDataSize,                           ///< [in] raw data size passed by the user
-    uint8_t* pRawData                               ///< [in/out] query result data in raw format
+    uint8_t* pRawData                               ///< [in,out] query result data in raw format
     );
 
 #if defined(__cplusplus)

@@ -869,7 +869,7 @@ xe_result_t __xecall xeFunctionSuggestGroupSize(
     return dispatchTable.xeFunctionSuggestGroupSize(hFunction, globalSizeX, globalSizeY, globalSizeZ, groupSizeX, groupSizeY, groupSizeZ);
 }
 xe_result_t __xecall xeFunctionSetArgumentValue(
-        xe_function_handle_t hFunction,                 ///< [in/out] handle of the function args object.
+        xe_function_handle_t hFunction,                 ///< [in,out] handle of the function args object.
         uint32_t argIndex,                              ///< [in] argument index in range [0, num args - 1]
         size_t argSize,                                 ///< [in] size of argument type
         const void* pArgValue                           ///< [in][optional] argument value represented as matching arg type. If
@@ -881,7 +881,7 @@ xe_result_t __xecall xeFunctionSetArgumentValue(
     return dispatchTable.xeFunctionSetArgumentValue(hFunction, argIndex, argSize, pArgValue);
 }
 xe_result_t __xecall xeFunctionSetAttribute(
-        xe_function_handle_t hFunction,                 ///< [in/out] handle of the function.
+        xe_function_handle_t hFunction,                 ///< [in,out] handle of the function.
         xe_function_set_attribute_t attr,               ///< [in] attribute to set
         uint32_t value                                  ///< [in] attribute value to set
     ){

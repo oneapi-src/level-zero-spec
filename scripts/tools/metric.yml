@@ -309,7 +309,7 @@ params:
       desc: "[in] handle of the metric group"
     - type: uint32_t*
       name: pReportCount
-      desc: "[in/out] report count to calculate"
+      desc: "[in,out] report count to calculate"
     - type: uint32_t
       name: rawDataSize
       desc: "[in] raw data size"
@@ -321,7 +321,7 @@ params:
       desc: "[in] calculated data size"
     - type: "$t_typed_value_t*"
       name: pCalculatedData
-      desc: "[out] calculated metrics"
+      desc: "[in,out] calculated metrics"
 returns:
     - $X_RESULT_ERROR_INVALID_PARAMETER:
         - "invalid metric group handle"
@@ -370,10 +370,10 @@ members:
       desc: "[in] handle of the metric group"
     - type: uint32_t
       name: "notifyEveryNReports"
-      desc: "[in/out] number of collected reports after which notification event will be signalled"
+      desc: "[in,out] number of collected reports after which notification event will be signalled"
     - type: uint32_t
       name: "samplingPeriodNs"
-      desc: "[in/out] tracer sampling period in nanoseconds"
+      desc: "[in,out] tracer sampling period in nanoseconds"
 --- #--------------------------------------------------------------------------
 type: function
 desc: "Opens metric tracer for a given device."
@@ -388,7 +388,7 @@ params:
       desc: "[in] handle of the device"
     - type: "$t_metric_tracer_desc_t*"
       name: pDesc
-      desc: "[in/out] metric tracer descriptor"
+      desc: "[in,out] metric tracer descriptor"
     - type: "$x_event_handle_t"
       name: hNotificationEvent
       desc: "[in] event used for report availability notification. Must be device to host type."
@@ -445,13 +445,13 @@ params:
       desc: "[in] handle of the metric tracer"
     - type: uint32_t*
       name: pReportCount
-      desc: "[in/out] report count to read/returned"
+      desc: "[in,out] report count to read/returned"
     - type: uint32_t
       name: rawDataSize
       desc: "[in] raw data buffer size"
     - type: uint8_t*
       name: pRawData
-      desc: "[in/out] raw data buffer for reports"
+      desc: "[in,out] raw data buffer for reports"
 returns:
     - $X_RESULT_ERROR_INVALID_PARAMETER:
         - "invalid metric tracer handle"
@@ -613,13 +613,13 @@ params:
       desc: "[in] handle of the metric query"
     - type: uint32_t*
       name: pReportCount
-      desc: "[in/out] report count to read/returned"
+      desc: "[in,out] report count to read/returned"
     - type: uint32_t
       name: rawDataSize
       desc: "[in] raw data size passed by the user"
     - type: uint8_t*
       name: pRawData
-      desc: "[in/out] query result data in raw format"
+      desc: "[in,out] query result data in raw format"
 returns:
     - $X_RESULT_ERROR_INVALID_PARAMETER:
         - "invalid metric query handle"

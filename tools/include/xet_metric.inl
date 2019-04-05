@@ -102,19 +102,17 @@ namespace xet
     ///     - The application may not call this function from simultaneous threads
     ///       with the same metric group handle.
     /// 
-    /// @returns
-    ///     - ::typed_value_t: calculated metrics
-    /// 
     /// @throws result_t
-    inline Metric::typed_value_t 
+    inline void 
     MetricGroup::CalculateData(
-        uint32_t* pReportCount,                         ///< [in/out] report count to calculate
+        uint32_t* pReportCount,                         ///< [in,out] report count to calculate
         uint32_t rawDataSize,                           ///< [in] raw data size
         uint8_t* pRawData,                              ///< [in] raw data to calculate
-        uint32_t calculatedDataSize                     ///< [in] calculated data size
+        uint32_t calculatedDataSize,                    ///< [in] calculated data size
+        typed_value_t* pCalculatedData                  ///< [in,out] calculated metrics
         )
     {
-        // auto result = ::xetMetricGroupCalculateData( handle, pReportCount, rawDataSize, pRawData, calculatedDataSize );
+        // auto result = ::xetMetricGroupCalculateData( handle, pReportCount, rawDataSize, pRawData, calculatedDataSize, pCalculatedData );
         // if( ::XE_RESULT_SUCCESS != result ) throw exception(result, "xet::MetricGroup::CalculateData");
     }
 
@@ -173,7 +171,7 @@ namespace xet
     inline metric_tracer_handle_t 
     MetricTracer::Open(
         xe::device_handle_t hDevice,                    ///< [in] handle of the device
-        metric_tracer_desc_t* pDesc,                    ///< [in/out] metric tracer descriptor
+        metric_tracer_desc_t* pDesc,                    ///< [in,out] metric tracer descriptor
         xe::event_handle_t hNotificationEvent           ///< [in] event used for report availability notification. Must be device
                                                         ///< to host type.
         )
@@ -209,9 +207,9 @@ namespace xet
     /// @throws result_t
     inline void 
     MetricTracer::ReadData(
-        uint32_t* pReportCount,                         ///< [in/out] report count to read/returned
+        uint32_t* pReportCount,                         ///< [in,out] report count to read/returned
         uint32_t rawDataSize,                           ///< [in] raw data buffer size
-        uint8_t* pRawData                               ///< [in/out] raw data buffer for reports
+        uint8_t* pRawData                               ///< [in,out] raw data buffer for reports
         )
     {
         // auto result = ::xetMetricTracerReadData( handle, pReportCount, rawDataSize, pRawData );
@@ -286,9 +284,9 @@ namespace xet
     /// @throws result_t
     inline void 
     MetricQuery::GetData(
-        uint32_t* pReportCount,                         ///< [in/out] report count to read/returned
+        uint32_t* pReportCount,                         ///< [in,out] report count to read/returned
         uint32_t rawDataSize,                           ///< [in] raw data size passed by the user
-        uint8_t* pRawData                               ///< [in/out] query result data in raw format
+        uint8_t* pRawData                               ///< [in,out] query result data in raw format
         )
     {
         // auto result = ::xetMetricQueryGetData( handle, pReportCount, rawDataSize, pRawData );

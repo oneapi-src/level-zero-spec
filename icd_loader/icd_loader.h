@@ -432,14 +432,14 @@ typedef xe_result_t (__xecall *pfn_xeFunctionSuggestGroupSize)(
     uint32_t* groupSizeZ                            ///< [out] recommended size of group for Z dimension.
     );
 typedef xe_result_t (__xecall *pfn_xeFunctionSetArgumentValue)(
-    xe_function_handle_t hFunction,                 ///< [in/out] handle of the function args object.
+    xe_function_handle_t hFunction,                 ///< [in,out] handle of the function args object.
     uint32_t argIndex,                              ///< [in] argument index in range [0, num args - 1]
     size_t argSize,                                 ///< [in] size of argument type
     const void* pArgValue                           ///< [in][optional] argument value represented as matching arg type. If
                                                     ///< null then argument value is considered null.
     );
 typedef xe_result_t (__xecall *pfn_xeFunctionSetAttribute)(
-    xe_function_handle_t hFunction,                 ///< [in/out] handle of the function.
+    xe_function_handle_t hFunction,                 ///< [in,out] handle of the function.
     xe_function_set_attribute_t attr,               ///< [in] attribute to set
     uint32_t value                                  ///< [in] attribute value to set
     );
