@@ -954,14 +954,16 @@ xeFunctionGetAttribute(
 ///         + nullptr == pLaunchFuncArgs
 ///     - ::XE_RESULT_ERROR_UNSUPPORTED
 ///
-/// @hash {266d96cac288055a97632576afa737b41087a1099ccf11da0681fbaf5b96c572}
+/// @hash {f2f69d909776636afca36f16aa5b042aefeecabf5beba251d38169136e9af336}
 ///
 __xedllexport xe_result_t __xecall
 xeCommandListAppendLaunchFunction(
     xe_command_list_handle_t hCommandList,          ///< [in] handle of the command list
     xe_function_handle_t hFunction,                 ///< [in] handle of the function object
     const xe_thread_group_dimensions_t* pLaunchFuncArgs,///< [in] launch function arguments.
-    xe_event_handle_t hEvent                        ///< [in][optional] handle of the event to signal on completion
+    xe_event_handle_t hSignalEvent,                 ///< [in][optional] handle of the event to signal on completion
+    uint32_t numWaitEvents,                         ///< [in][optional] number of events to wait on before launching
+    xe_event_handle_t* phWaitEvents                 ///< [in][optional] handle of the events to wait on before launching
     )
 {
     try
@@ -978,7 +980,7 @@ xeCommandListAppendLaunchFunction(
 #if defined(XE_NULLDRV)
         return XE_RESULT_SUCCESS;
 #else
-        return L0::CommandList::fromHandle(hCommandList)->appendLaunchFunction(hFunction, pLaunchFuncArgs, hEvent);
+        return L0::CommandList::fromHandle(hCommandList)->appendLaunchFunction(hFunction, pLaunchFuncArgs, hSignalEvent, numWaitEvents, phWaitEvents);
 #endif
         /// @end
     }
@@ -1023,14 +1025,16 @@ xeCommandListAppendLaunchFunction(
 ///         + nullptr == pLaunchArgumentsBuffer
 ///     - ::XE_RESULT_ERROR_UNSUPPORTED
 ///
-/// @hash {94f95d0b88ad0b8f094b439520d37d3b542fb6a07456e3d9b91e1908264d95d9}
+/// @hash {0d2b2dba2d7d8380043fe4a792a65dd04aef7bec61bf8c7f37c1463fc2cff7d7}
 ///
 __xedllexport xe_result_t __xecall
 xeCommandListAppendLaunchFunctionIndirect(
     xe_command_list_handle_t hCommandList,          ///< [in] handle of the command list
     xe_function_handle_t hFunction,                 ///< [in] handle of the function object
     const xe_thread_group_dimensions_t* pLaunchArgumentsBuffer, ///< [in] pointer to device buffer that will contain launch arguments
-    xe_event_handle_t hEvent                        ///< [in][optional] handle of the event to signal on completion
+    xe_event_handle_t hSignalEvent,                 ///< [in][optional] handle of the event to signal on completion
+    uint32_t numWaitEvents,                         ///< [in][optional] number of events to wait on before launching
+    xe_event_handle_t* phWaitEvents                 ///< [in][optional] handle of the events to wait on before launching
     )
 {
     try
@@ -1047,7 +1051,7 @@ xeCommandListAppendLaunchFunctionIndirect(
 #if defined(XE_NULLDRV)
         return XE_RESULT_SUCCESS;
 #else
-        return L0::CommandList::fromHandle(hCommandList)->appendLaunchFunctionIndirect(hFunction, pLaunchArgumentsBuffer, hEvent);
+        return L0::CommandList::fromHandle(hCommandList)->appendLaunchFunctionIndirect(hFunction, pLaunchArgumentsBuffer, hSignalEvent, numWaitEvents, phWaitEvents);
 #endif
         /// @end
     }
@@ -1094,7 +1098,7 @@ xeCommandListAppendLaunchFunctionIndirect(
 ///         + nullptr == pLaunchArgumentsBuffer
 ///     - ::XE_RESULT_ERROR_UNSUPPORTED
 ///
-/// @hash {299af49d4365e1dc7472f8f575098b9af5d9218fe80f52c4aa9fa2cb4e6b6311}
+/// @hash {0f9a2ee39f2f2c434a24d2029ba53398c3bfb7487cf76812f0bf6f499ab6f687}
 ///
 __xedllexport xe_result_t __xecall
 xeCommandListAppendLaunchMultipleFunctionsIndirect(
@@ -1105,7 +1109,9 @@ xeCommandListAppendLaunchMultipleFunctionsIndirect(
                                                     ///< number of launch arguments; must be less-than or equal-to numFunctions
     const xe_thread_group_dimensions_t* pLaunchArgumentsBuffer, ///< [in] pointer to device buffer that will contain a contiguous array of
                                                     ///< launch arguments
-    xe_event_handle_t hEvent                        ///< [in][optional] handle of the event to signal on completion
+    xe_event_handle_t hSignalEvent,                 ///< [in][optional] handle of the event to signal on completion
+    uint32_t numWaitEvents,                         ///< [in][optional] number of events to wait on before launching
+    xe_event_handle_t* phWaitEvents                 ///< [in][optional] handle of the events to wait on before launching
     )
 {
     try
@@ -1123,7 +1129,7 @@ xeCommandListAppendLaunchMultipleFunctionsIndirect(
 #if defined(XE_NULLDRV)
         return XE_RESULT_SUCCESS;
 #else
-        return L0::CommandList::fromHandle(hCommandList)->appendLaunchMultipleFunctionsIndirect(numFunctions, phFunctions, pNumLaunchArguments, pLaunchArgumentsBuffer, hEvent);
+        return L0::CommandList::fromHandle(hCommandList)->appendLaunchMultipleFunctionsIndirect(numFunctions, phFunctions, pNumLaunchArguments, pLaunchArgumentsBuffer, hSignalEvent, numWaitEvents, phWaitEvents);
 #endif
         /// @end
     }

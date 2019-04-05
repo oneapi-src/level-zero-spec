@@ -568,7 +568,9 @@ xeCommandListAppendLaunchFunction(
     xe_command_list_handle_t hCommandList,          ///< [in] handle of the command list
     xe_function_handle_t hFunction,                 ///< [in] handle of the function object
     const xe_thread_group_dimensions_t* pLaunchFuncArgs,///< [in] launch function arguments.
-    xe_event_handle_t hEvent                        ///< [in][optional] handle of the event to signal on completion
+    xe_event_handle_t hSignalEvent,                 ///< [in][optional] handle of the event to signal on completion
+    uint32_t numWaitEvents,                         ///< [in][optional] number of events to wait on before launching
+    xe_event_handle_t* phWaitEvents                 ///< [in][optional] handle of the events to wait on before launching
     );
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -601,7 +603,9 @@ xeCommandListAppendLaunchFunctionIndirect(
     xe_command_list_handle_t hCommandList,          ///< [in] handle of the command list
     xe_function_handle_t hFunction,                 ///< [in] handle of the function object
     const xe_thread_group_dimensions_t* pLaunchArgumentsBuffer, ///< [in] pointer to device buffer that will contain launch arguments
-    xe_event_handle_t hEvent                        ///< [in][optional] handle of the event to signal on completion
+    xe_event_handle_t hSignalEvent,                 ///< [in][optional] handle of the event to signal on completion
+    uint32_t numWaitEvents,                         ///< [in][optional] number of events to wait on before launching
+    xe_event_handle_t* phWaitEvents                 ///< [in][optional] handle of the events to wait on before launching
     );
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -640,7 +644,9 @@ xeCommandListAppendLaunchMultipleFunctionsIndirect(
                                                     ///< number of launch arguments; must be less-than or equal-to numFunctions
     const xe_thread_group_dimensions_t* pLaunchArgumentsBuffer, ///< [in] pointer to device buffer that will contain a contiguous array of
                                                     ///< launch arguments
-    xe_event_handle_t hEvent                        ///< [in][optional] handle of the event to signal on completion
+    xe_event_handle_t hSignalEvent,                 ///< [in][optional] handle of the event to signal on completion
+    uint32_t numWaitEvents,                         ///< [in][optional] number of events to wait on before launching
+    xe_event_handle_t* phWaitEvents                 ///< [in][optional] handle of the events to wait on before launching
     );
 
 ///////////////////////////////////////////////////////////////////////////////

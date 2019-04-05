@@ -224,7 +224,9 @@ namespace xe
             void* dstptr,                                   ///< [in] pointer to destination memory to copy to
             const void* srcptr,                             ///< [in] pointer to source memory to copy from
             size_t size,                                    ///< [in] size in bytes to copy
-            event_handle_t hEvent = nullptr                 ///< [in][optional] handle of the event to signal on completion
+            event_handle_t hSignalEvent = nullptr,          ///< [in][optional] handle of the event to signal on completion
+            uint32_t numWaitEvents = 0,                     ///< [in][optional] number of events to wait on before launching
+            event_handle_t* phWaitEvents = nullptr          ///< [in][optional] handle of the events to wait on before launching
             );
 
         ///////////////////////////////////////////////////////////////////////////////
@@ -235,7 +237,9 @@ namespace xe
             void* ptr,                                      ///< [in] pointer to memory to initialize
             int value,                                      ///< [in] value to initialize memory to
             size_t size,                                    ///< [in] size in bytes to initailize
-            event_handle_t hEvent = nullptr                 ///< [in][optional] handle of the event to signal on completion
+            event_handle_t hSignalEvent = nullptr,          ///< [in][optional] handle of the event to signal on completion
+            uint32_t numWaitEvents = 0,                     ///< [in][optional] number of events to wait on before launching
+            event_handle_t* phWaitEvents = nullptr          ///< [in][optional] handle of the events to wait on before launching
             );
 
         ///////////////////////////////////////////////////////////////////////////////
@@ -245,7 +249,9 @@ namespace xe
         AppendImageCopy(
             image_handle_t hDstImage,                       ///< [in] handle of destination image to copy to
             image_handle_t hSrcImage,                       ///< [in] handle of source image to copy from
-            event_handle_t hEvent = nullptr                 ///< [in][optional] handle of the event to signal on completion
+            event_handle_t hSignalEvent = nullptr,          ///< [in][optional] handle of the event to signal on completion
+            uint32_t numWaitEvents = 0,                     ///< [in][optional] number of events to wait on before launching
+            event_handle_t* phWaitEvents = nullptr          ///< [in][optional] handle of the events to wait on before launching
             );
 
         ///////////////////////////////////////////////////////////////////////////////
@@ -257,7 +263,9 @@ namespace xe
             image_handle_t hSrcImage,                       ///< [in] handle of source image to copy from
             image_region_t* pDstRegion = nullptr,           ///< [in][optional] destination region descriptor
             image_region_t* pSrcRegion = nullptr,           ///< [in][optional] source region descriptor
-            event_handle_t hEvent = nullptr                 ///< [in][optional] handle of the event to signal on completion
+            event_handle_t hSignalEvent = nullptr,          ///< [in][optional] handle of the event to signal on completion
+            uint32_t numWaitEvents = 0,                     ///< [in][optional] number of events to wait on before launching
+            event_handle_t* phWaitEvents = nullptr          ///< [in][optional] handle of the events to wait on before launching
             );
 
         ///////////////////////////////////////////////////////////////////////////////
@@ -268,7 +276,9 @@ namespace xe
             void* dstptr,                                   ///< [in] pointer to destination memory to copy to
             image_handle_t hSrcImage,                       ///< [in] handle of source image to copy from
             image_region_t* pSrcRegion = nullptr,           ///< [in][optional] source region descriptor
-            event_handle_t hEvent = nullptr                 ///< [in][optional] handle of the event to signal on completion
+            event_handle_t hSignalEvent = nullptr,          ///< [in][optional] handle of the event to signal on completion
+            uint32_t numWaitEvents = 0,                     ///< [in][optional] number of events to wait on before launching
+            event_handle_t* phWaitEvents = nullptr          ///< [in][optional] handle of the events to wait on before launching
             );
 
         ///////////////////////////////////////////////////////////////////////////////
@@ -279,7 +289,9 @@ namespace xe
             image_handle_t hDstImage,                       ///< [in] handle of destination image to copy to
             const void* srcptr,                             ///< [in] pointer to source memory to copy from
             image_region_t* pDstRegion = nullptr,           ///< [in][optional] destination region descriptor
-            event_handle_t hEvent = nullptr                 ///< [in][optional] handle of the event to signal on completion
+            event_handle_t hSignalEvent = nullptr,          ///< [in][optional] handle of the event to signal on completion
+            uint32_t numWaitEvents = 0,                     ///< [in][optional] number of events to wait on before launching
+            event_handle_t* phWaitEvents = nullptr          ///< [in][optional] handle of the events to wait on before launching
             );
 
         ///////////////////////////////////////////////////////////////////////////////
@@ -333,7 +345,9 @@ namespace xe
         AppendLaunchFunction(
             function_handle_t hFunction,                    ///< [in] handle of the function object
             const thread_group_dimensions_t* pLaunchFuncArgs,   ///< [in] launch function arguments.
-            event_handle_t hEvent = nullptr                 ///< [in][optional] handle of the event to signal on completion
+            event_handle_t hSignalEvent = nullptr,          ///< [in][optional] handle of the event to signal on completion
+            uint32_t numWaitEvents = 0,                     ///< [in][optional] number of events to wait on before launching
+            event_handle_t* phWaitEvents = nullptr          ///< [in][optional] handle of the events to wait on before launching
             );
 
         ///////////////////////////////////////////////////////////////////////////////
@@ -343,7 +357,9 @@ namespace xe
         AppendLaunchFunctionIndirect(
             function_handle_t hFunction,                    ///< [in] handle of the function object
             const thread_group_dimensions_t* pLaunchArgumentsBuffer,///< [in] pointer to device buffer that will contain launch arguments
-            event_handle_t hEvent = nullptr                 ///< [in][optional] handle of the event to signal on completion
+            event_handle_t hSignalEvent = nullptr,          ///< [in][optional] handle of the event to signal on completion
+            uint32_t numWaitEvents = 0,                     ///< [in][optional] number of events to wait on before launching
+            event_handle_t* phWaitEvents = nullptr          ///< [in][optional] handle of the events to wait on before launching
             );
 
         ///////////////////////////////////////////////////////////////////////////////
@@ -357,7 +373,9 @@ namespace xe
                                                             ///< number of launch arguments; must be less-than or equal-to numFunctions
             const thread_group_dimensions_t* pLaunchArgumentsBuffer,///< [in] pointer to device buffer that will contain a contiguous array of
                                                             ///< launch arguments
-            event_handle_t hEvent = nullptr                 ///< [in][optional] handle of the event to signal on completion
+            event_handle_t hSignalEvent = nullptr,          ///< [in][optional] handle of the event to signal on completion
+            uint32_t numWaitEvents = 0,                     ///< [in][optional] number of events to wait on before launching
+            event_handle_t* phWaitEvents = nullptr          ///< [in][optional] handle of the events to wait on before launching
             );
 
         ///////////////////////////////////////////////////////////////////////////////

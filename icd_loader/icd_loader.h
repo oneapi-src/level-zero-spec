@@ -126,20 +126,26 @@ typedef xe_result_t (__xecall *pfn_xeCommandListAppendMemoryCopy)(
     void* dstptr,                                   ///< [in] pointer to destination memory to copy to
     const void* srcptr,                             ///< [in] pointer to source memory to copy from
     size_t size,                                    ///< [in] size in bytes to copy
-    xe_event_handle_t hEvent                        ///< [in][optional] handle of the event to signal on completion
+    xe_event_handle_t hSignalEvent,                 ///< [in][optional] handle of the event to signal on completion
+    uint32_t numWaitEvents,                         ///< [in][optional] number of events to wait on before launching
+    xe_event_handle_t* phWaitEvents                 ///< [in][optional] handle of the events to wait on before launching
     );
 typedef xe_result_t (__xecall *pfn_xeCommandListAppendMemorySet)(
     xe_command_list_handle_t hCommandList,          ///< [in] handle of command list
     void* ptr,                                      ///< [in] pointer to memory to initialize
     int value,                                      ///< [in] value to initialize memory to
     size_t size,                                    ///< [in] size in bytes to initailize
-    xe_event_handle_t hEvent                        ///< [in][optional] handle of the event to signal on completion
+    xe_event_handle_t hSignalEvent,                 ///< [in][optional] handle of the event to signal on completion
+    uint32_t numWaitEvents,                         ///< [in][optional] number of events to wait on before launching
+    xe_event_handle_t* phWaitEvents                 ///< [in][optional] handle of the events to wait on before launching
     );
 typedef xe_result_t (__xecall *pfn_xeCommandListAppendImageCopy)(
     xe_command_list_handle_t hCommandList,          ///< [in] handle of command list
     xe_image_handle_t hDstImage,                    ///< [in] handle of destination image to copy to
     xe_image_handle_t hSrcImage,                    ///< [in] handle of source image to copy from
-    xe_event_handle_t hEvent                        ///< [in][optional] handle of the event to signal on completion
+    xe_event_handle_t hSignalEvent,                 ///< [in][optional] handle of the event to signal on completion
+    uint32_t numWaitEvents,                         ///< [in][optional] number of events to wait on before launching
+    xe_event_handle_t* phWaitEvents                 ///< [in][optional] handle of the events to wait on before launching
     );
 typedef xe_result_t (__xecall *pfn_xeCommandListAppendImageCopyRegion)(
     xe_command_list_handle_t hCommandList,          ///< [in] handle of command list
@@ -147,21 +153,27 @@ typedef xe_result_t (__xecall *pfn_xeCommandListAppendImageCopyRegion)(
     xe_image_handle_t hSrcImage,                    ///< [in] handle of source image to copy from
     xe_image_region_t* pDstRegion,                  ///< [in][optional] destination region descriptor
     xe_image_region_t* pSrcRegion,                  ///< [in][optional] source region descriptor
-    xe_event_handle_t hEvent                        ///< [in][optional] handle of the event to signal on completion
+    xe_event_handle_t hSignalEvent,                 ///< [in][optional] handle of the event to signal on completion
+    uint32_t numWaitEvents,                         ///< [in][optional] number of events to wait on before launching
+    xe_event_handle_t* phWaitEvents                 ///< [in][optional] handle of the events to wait on before launching
     );
 typedef xe_result_t (__xecall *pfn_xeCommandListAppendImageCopyToMemory)(
     xe_command_list_handle_t hCommandList,          ///< [in] handle of command list
     void* dstptr,                                   ///< [in] pointer to destination memory to copy to
     xe_image_handle_t hSrcImage,                    ///< [in] handle of source image to copy from
     xe_image_region_t* pSrcRegion,                  ///< [in][optional] source region descriptor
-    xe_event_handle_t hEvent                        ///< [in][optional] handle of the event to signal on completion
+    xe_event_handle_t hSignalEvent,                 ///< [in][optional] handle of the event to signal on completion
+    uint32_t numWaitEvents,                         ///< [in][optional] number of events to wait on before launching
+    xe_event_handle_t* phWaitEvents                 ///< [in][optional] handle of the events to wait on before launching
     );
 typedef xe_result_t (__xecall *pfn_xeCommandListAppendImageCopyFromMemory)(
     xe_command_list_handle_t hCommandList,          ///< [in] handle of command list
     xe_image_handle_t hDstImage,                    ///< [in] handle of destination image to copy to
     const void* srcptr,                             ///< [in] pointer to source memory to copy from
     xe_image_region_t* pDstRegion,                  ///< [in][optional] destination region descriptor
-    xe_event_handle_t hEvent                        ///< [in][optional] handle of the event to signal on completion
+    xe_event_handle_t hSignalEvent,                 ///< [in][optional] handle of the event to signal on completion
+    uint32_t numWaitEvents,                         ///< [in][optional] number of events to wait on before launching
+    xe_event_handle_t* phWaitEvents                 ///< [in][optional] handle of the events to wait on before launching
     );
 typedef xe_result_t (__xecall *pfn_xeCommandListAppendMemoryPrefetch)(
     xe_command_list_handle_t hCommandList,          ///< [in] handle of command list
@@ -237,7 +249,7 @@ typedef xe_result_t (__xecall *pfn_xeEventPoolDestroy)(
     );
 typedef xe_result_t (__xecall *pfn_xeEventCreate)(
     xe_event_pool_handle_t hEventPool,              ///< [in] handle of the event pool
-    uint32_t index,                                 ///< [in] index of the event within the pool
+    const xe_event_desc_t* desc,                    ///< [in] pointer to event descriptor
     xe_event_handle_t* phEvent                      ///< [out] pointer to handle of event object created
     );
 typedef xe_result_t (__xecall *pfn_xeEventDestroy)(
@@ -276,17 +288,6 @@ typedef xe_result_t (__xecall *pfn_xeEventHostSynchronize)(
     );
 typedef xe_result_t (__xecall *pfn_xeEventQueryStatus)(
     xe_event_handle_t hEvent                        ///< [in] handle of the event
-    );
-typedef xe_result_t (__xecall *pfn_xeEventQueryElapsedTime)(
-    xe_event_handle_t hEventBegin,                  ///< [in] handle of the begin event
-    xe_event_handle_t hEventEnd,                    ///< [in] handle of the end event
-    double* pTime                                   ///< [out] time in milliseconds
-    );
-typedef xe_result_t (__xecall *pfn_xeEventQueryMetricsData)(
-    xe_event_handle_t hEventStart,                  ///< [in] handle of the start event
-    xe_event_handle_t hEventEnd,                    ///< [in] handle of the end event
-    size_t reportSize,                              ///< [in] size of the report data buffer in bytes
-    uint32_t* pReportData                           ///< [out] report data buffer
     );
 typedef xe_result_t (__xecall *pfn_xeCommandListAppendEventReset)(
     xe_command_list_handle_t hCommandList,          ///< [in] handle of the command list
@@ -452,13 +453,17 @@ typedef xe_result_t (__xecall *pfn_xeCommandListAppendLaunchFunction)(
     xe_command_list_handle_t hCommandList,          ///< [in] handle of the command list
     xe_function_handle_t hFunction,                 ///< [in] handle of the function object
     const xe_thread_group_dimensions_t* pLaunchFuncArgs,///< [in] launch function arguments.
-    xe_event_handle_t hEvent                        ///< [in][optional] handle of the event to signal on completion
+    xe_event_handle_t hSignalEvent,                 ///< [in][optional] handle of the event to signal on completion
+    uint32_t numWaitEvents,                         ///< [in][optional] number of events to wait on before launching
+    xe_event_handle_t* phWaitEvents                 ///< [in][optional] handle of the events to wait on before launching
     );
 typedef xe_result_t (__xecall *pfn_xeCommandListAppendLaunchFunctionIndirect)(
     xe_command_list_handle_t hCommandList,          ///< [in] handle of the command list
     xe_function_handle_t hFunction,                 ///< [in] handle of the function object
     const xe_thread_group_dimensions_t* pLaunchArgumentsBuffer, ///< [in] pointer to device buffer that will contain launch arguments
-    xe_event_handle_t hEvent                        ///< [in][optional] handle of the event to signal on completion
+    xe_event_handle_t hSignalEvent,                 ///< [in][optional] handle of the event to signal on completion
+    uint32_t numWaitEvents,                         ///< [in][optional] number of events to wait on before launching
+    xe_event_handle_t* phWaitEvents                 ///< [in][optional] handle of the events to wait on before launching
     );
 typedef xe_result_t (__xecall *pfn_xeCommandListAppendLaunchMultipleFunctionsIndirect)(
     xe_command_list_handle_t hCommandList,          ///< [in] handle of the command list
@@ -468,7 +473,9 @@ typedef xe_result_t (__xecall *pfn_xeCommandListAppendLaunchMultipleFunctionsInd
                                                     ///< number of launch arguments; must be less-than or equal-to numFunctions
     const xe_thread_group_dimensions_t* pLaunchArgumentsBuffer, ///< [in] pointer to device buffer that will contain a contiguous array of
                                                     ///< launch arguments
-    xe_event_handle_t hEvent                        ///< [in][optional] handle of the event to signal on completion
+    xe_event_handle_t hSignalEvent,                 ///< [in][optional] handle of the event to signal on completion
+    uint32_t numWaitEvents,                         ///< [in][optional] number of events to wait on before launching
+    xe_event_handle_t* phWaitEvents                 ///< [in][optional] handle of the events to wait on before launching
     );
 typedef xe_result_t (__xecall *pfn_xeCommandListAppendLaunchHostFunction)(
     xe_command_list_handle_t hCommandList,          ///< [in] handle of the command list
@@ -559,8 +566,6 @@ typedef struct _xe_dispatch_table_t
     pfn_xeEventHostSignal xeEventHostSignal;
     pfn_xeEventHostSynchronize xeEventHostSynchronize;
     pfn_xeEventQueryStatus xeEventQueryStatus;
-    pfn_xeEventQueryElapsedTime xeEventQueryElapsedTime;
-    pfn_xeEventQueryMetricsData xeEventQueryMetricsData;
     pfn_xeCommandListAppendEventReset xeCommandListAppendEventReset;
     pfn_xeEventReset xeEventReset;
     pfn_xeFenceCreate xeFenceCreate;
@@ -665,8 +670,6 @@ inline bool load_xe(void *handle, void *(*funcAddressGetter)(void *handle, const
     outTable->xeEventHostSignal = (pfn_xeEventHostSignal)funcAddressGetter(handle, "xeEventHostSignal");
     outTable->xeEventHostSynchronize = (pfn_xeEventHostSynchronize)funcAddressGetter(handle, "xeEventHostSynchronize");
     outTable->xeEventQueryStatus = (pfn_xeEventQueryStatus)funcAddressGetter(handle, "xeEventQueryStatus");
-    outTable->xeEventQueryElapsedTime = (pfn_xeEventQueryElapsedTime)funcAddressGetter(handle, "xeEventQueryElapsedTime");
-    outTable->xeEventQueryMetricsData = (pfn_xeEventQueryMetricsData)funcAddressGetter(handle, "xeEventQueryMetricsData");
     outTable->xeCommandListAppendEventReset = (pfn_xeCommandListAppendEventReset)funcAddressGetter(handle, "xeCommandListAppendEventReset");
     outTable->xeEventReset = (pfn_xeEventReset)funcAddressGetter(handle, "xeEventReset");
     outTable->xeFenceCreate = (pfn_xeFenceCreate)funcAddressGetter(handle, "xeFenceCreate");
@@ -861,12 +864,6 @@ inline bool load_xe(void *handle, void *(*funcAddressGetter)(void *handle, const
         return false;
     }
     if(0 == outTable->xeEventQueryStatus){
-        return false;
-    }
-    if(0 == outTable->xeEventQueryElapsedTime){
-        return false;
-    }
-    if(0 == outTable->xeEventQueryMetricsData){
         return false;
     }
     if(0 == outTable->xeCommandListAppendEventReset){

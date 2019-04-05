@@ -53,13 +53,11 @@ typedef enum _xe_event_pool_desc_version_t
 /// @brief Supported event pool creation flags
 typedef enum _xe_event_pool_flag_t
 {
-    XE_EVENT_POOL_FLAG_NONE = 0,                    ///< signals and waits only within the same device
-    XE_EVENT_POOL_FLAG_HOST_TO_DEVICE = XE_BIT(0),  ///< signals from host, waits on device
-    XE_EVENT_POOL_FLAG_DEVICE_TO_HOST = XE_BIT(1),  ///< signals from device, waits on host
-    XE_EVENT_POOL_FLAG_DEVICE_TO_DEVICE = XE_BIT(2),///< signals from device, waits on another device
-    XE_EVENT_POOL_FLAG_IPC = XE_BIT(3),             ///< signals and waits may occur across processes
-    XE_EVENT_POOL_FLAG_TIMESTAMP = XE_BIT(4),       ///< supports time-based queries
-    XE_EVENT_POOL_FLAG_PERFORMANCE_METRICS = XE_BIT(5), ///< supports performance metrics (MDAPI)
+    XE_EVENT_POOL_FLAG_NONE = 0,                    ///< signals and waits only visible within a sub-device
+    XE_EVENT_POOL_FLAG_HOST_VISIBLE = XE_BIT(0),    ///< signals and waits are visible to host
+    XE_EVENT_POOL_FLAG_DEVICE_VISIBLE = XE_BIT(1),  ///< signals and waits are visible to the entire device
+    XE_EVENT_POOL_FLAG_P2P_VISIBLE = XE_BIT(2),     ///< signals and waits may occur across peer devices
+    XE_EVENT_POOL_FLAG_IPC_VISIBLE = XE_BIT(3),     ///< signals and waits may occur across processes
 
 } xe_event_pool_flag_t;
 
@@ -125,6 +123,38 @@ xeEventPoolDestroy(
     );
 
 ///////////////////////////////////////////////////////////////////////////////
+/// @brief API version of ::xe_event_desc_t
+typedef enum _xe_event_desc_version_t
+{
+    XE_EVENT_DESC_VERSION_CURRENT = XE_MAKE_VERSION( 1, 0 ),///< version 1.0
+
+} xe_event_desc_version_t;
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Supported event scope flags
+typedef enum _xe_event_scope_flag_t
+{
+    XE_EVENT_SCOPE_FLAG_NONE = 0,                   ///< 
+    XE_EVENT_SCOPE_FLAG_SELF = XE_BIT(0),           ///< 
+    XE_EVENT_SCOPE_FLAG_DEVICE = XE_BIT(1),         ///< 
+    XE_EVENT_SCOPE_FLAG_HOST = XE_BIT(2),           ///< 
+
+} xe_event_scope_flag_t;
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Event descriptor
+typedef struct _xe_event_desc_t
+{
+    xe_event_desc_version_t version;                ///< [in] ::XE_EVENT_DESC_VERSION_CURRENT
+    uint32_t index;                                 ///< [in] index of the event within the pool
+    xe_event_scope_flag_t release;                  ///< [in] defines the scope of relevant cache hierarchies to flush on a
+                                                    ///< ‘signal’ action before the event is triggered
+    xe_event_scope_flag_t acquire;                  ///< [in] defines the scope of relevant cache hierarchies to invalidate on
+                                                    ///< a ‘wait’ action after the event is complete
+
+} xe_event_desc_t;
+
+///////////////////////////////////////////////////////////////////////////////
 /// @brief Creates an event on the device.
 /// 
 /// @details
@@ -146,13 +176,15 @@ xeEventPoolDestroy(
 ///     - ::XE_RESULT_ERROR_DEVICE_LOST
 ///     - ::XE_RESULT_ERROR_INVALID_PARAMETER
 ///         + nullptr == hEventPool
+///         + nullptr == desc
 ///         + nullptr == phEvent
 ///     - ::XE_RESULT_ERROR_UNSUPPORTED
+///         + ::XE_EVENT_DESC_VERSION_CURRENT < desc->version
 ///     - ::XE_RESULT_ERROR_OUT_OF_HOST_MEMORY
 __xedllport xe_result_t __xecall
 xeEventCreate(
     xe_event_pool_handle_t hEventPool,              ///< [in] handle of the event pool
-    uint32_t index,                                 ///< [in] index of the event within the pool
+    const xe_event_desc_t* desc,                    ///< [in] pointer to event descriptor
     xe_event_handle_t* phEvent                      ///< [out] pointer to handle of event object created
     );
 
@@ -391,62 +423,6 @@ xeEventHostSynchronize(
 __xedllport xe_result_t __xecall
 xeEventQueryStatus(
     xe_event_handle_t hEvent                        ///< [in] handle of the event
-    );
-
-///////////////////////////////////////////////////////////////////////////////
-/// @brief Queries the elapsed time between two device-signaled events.
-/// 
-/// @details
-///     - The application may call this function from simultaneous threads.
-///     - The implementation of this function should be lock-free.
-/// 
-/// @remarks
-///   _Analogues_
-///     - **cuEventElapsedTime**
-/// 
-/// @returns
-///     - ::XE_RESULT_SUCCESS
-///     - ::XE_RESULT_ERROR_UNINITIALIZED
-///     - ::XE_RESULT_ERROR_DEVICE_LOST
-///     - ::XE_RESULT_ERROR_INVALID_PARAMETER
-///         + nullptr == hEventBegin
-///         + nullptr == hEventEnd
-///         + nullptr == pTime
-///         + either event not signaled by device
-///         + either event not created from pool created with ::XE_EVENT_POOL_FLAG_TIMESTAMP
-///     - ::XE_RESULT_ERROR_UNSUPPORTED
-__xedllport xe_result_t __xecall
-xeEventQueryElapsedTime(
-    xe_event_handle_t hEventBegin,                  ///< [in] handle of the begin event
-    xe_event_handle_t hEventEnd,                    ///< [in] handle of the end event
-    double* pTime                                   ///< [out] time in milliseconds
-    );
-
-///////////////////////////////////////////////////////////////////////////////
-/// @brief Queries performance metrics between two device-signaled events.
-/// 
-/// @details
-///     - The application may call this function from simultaneous threads.
-///     - The implementation of this function should be lock-free.
-/// 
-/// @returns
-///     - ::XE_RESULT_SUCCESS
-///     - ::XE_RESULT_ERROR_UNINITIALIZED
-///     - ::XE_RESULT_ERROR_DEVICE_LOST
-///     - ::XE_RESULT_ERROR_INVALID_PARAMETER
-///         + nullptr == hEventStart
-///         + nullptr == hEventEnd
-///         + nullptr == pReportData
-///         + either event not signaled by device
-///         + either event not created from pool created with ::XE_EVENT_POOL_FLAG_PERFORMANCE_METRICS
-///         + report size too small
-///     - ::XE_RESULT_ERROR_UNSUPPORTED
-__xedllport xe_result_t __xecall
-xeEventQueryMetricsData(
-    xe_event_handle_t hEventStart,                  ///< [in] handle of the start event
-    xe_event_handle_t hEventEnd,                    ///< [in] handle of the end event
-    size_t reportSize,                              ///< [in] size of the report data buffer in bytes
-    uint32_t* pReportData                           ///< [out] report data buffer
     );
 
 ///////////////////////////////////////////////////////////////////////////////

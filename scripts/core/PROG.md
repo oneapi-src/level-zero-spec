@@ -289,12 +289,12 @@ ${"##"} Execution Barriers
 
 The following sample code demonstrates a sequence for submission of an execution barrier:
 ```c
-    ${x}CommandListAppendLaunchFunction(hCommandList, hFunction, &launchArgs, nullptr);
+    ${x}CommandListAppendLaunchFunction(hCommandList, hFunction, &launchArgs, nullptr, 0, nullptr);
 
     // Append a barrier into a command list to ensure hFunctionFunction1 completes before hFunction2 begins
     ${x}CommandListAppendExecutionBarrier(hCommandList);
 
-    ${x}CommandListAppendLaunchFunction(hCommandList, hFunction, &launchArgs, nullptr);
+    ${x}CommandListAppendLaunchFunction(hCommandList, hFunction, &launchArgs, nullptr, 0, nullptr);
     ...
 ```
 
@@ -412,59 +412,6 @@ The following sample code demonstrates a sequence for creation and submission of
     ...
 ```
 
-${"##"} Performance Metrics
-Events can be used to provide different types of device performance metrics:
-1. Timestamps - records the value of the device timer at the completion of the event.
-2. Counters - records a collection of device-specific counters at the completion of the event.
-
-${"###"} Timestamps
-Timestamps are used to measure the time between two events signalled by the same device.
-- An application can use ::${x}EventQueryElapsedTime to calculate the time (in milliseconds) between two events.
-- Both events must be created from a pool created with ::${X}_EVENT_POOL_FLAG_TIMESTAMP
-- Both events must be signalled
-
-The following sample code demonstrates a sequence for measuring time between events:
-```c
-    // Append the function call to measure
-    ${x}CommandListAppendSignalEvent(hCommandList, hEventBegin);
-    ${x}CommandListAppendLaunchFunction(hCommandList, hFunction, &launchArgs, hEventEnd);
-
-    // Execute the command list
-    ${x}CommandQueueExecuteCommandLists(hCommandQueue, 1, &hCommandList, nullptr);
-
-    // Wait for the last event to complete
-    ${x}EventHostSynchronize(hEventEnd, MAX_UINT32);
-
-    // calculate the delta time
-    double time = 0.f;
-    ${x}EventQueryElapsedTime(hEventBegin, hEventEnd, &time);
-    ...
-```
-
-${"###"} Counters
-Counters are used to collect various device-specific values between two events signalled by the same device.
-- An application can use ::${x}EventQueryMetricsData to calculate the time (in milliseconds) between two events.
-- Both events must be created from a pool created with ::${X}_EVENT_POOL_FLAG_PERFORMANCE_METRICS
-- Both events must be signalled
-
-The following sample code demonstrates a sequence for collecting counters between events:
-```c
-    // Append the function call to measure
-    ${x}CommandListAppendSignalEvent(hCommandList, hEventBegin);
-    ${x}CommandListAppendLaunchFunction(hCommandList, hFunction, &launchArgs, hEventEnd);
-
-    // Execute the command list
-    ${x}CommandQueueExecuteCommandLists(hCommandQueue, 1, &hCommandList, nullptr);
-
-    // Wait for the last event to complete
-    ${x}EventHostSynchronize(hEventEnd, MAX_UINT32);
-
-    // calculate the delta counter values
-    uint32_t counters[64] = {};
-    ${x}EventQueryMetricsData(hEventBegin, hEventEnd, sizeof(counters), &counters);
-    ...
-```
-
 ${"#"} <a name="mim">Memory and Image Management</a>
 There are two types of allocations:
 1. **Memory** - linear, unformatted allocations for direct access from both the host and device.
@@ -559,7 +506,7 @@ and avoids exposing these details in the API in a backwards compatible fashion.
     ${x}ImageCreate(hDevice, &imageDesc, &hImage);
 
     // upload contents from host pointer
-    ${x}CommandListAppendImageCopyFromMemory(hCommandList, hImage, nullptr, pImageData, nullptr);
+    ${x}CommandListAppendImageCopyFromMemory(hCommandList, hImage, nullptr, pImageData, nullptr, 0, nullptr);
     ...
 ```
 
@@ -608,7 +555,7 @@ The following sample code demonstrate a sequence for using coarse-grain residenc
     // 'begin' is passed as function argument and appended into command list
     ${x}FunctionSetAttribute(hFuncArgs, ${X}_FUNCTION_SET_ATTR_INDIRECT_HOST_ACCESS, TRUE);
     ${x}FunctionSetArgumentValue(hFunction, 0, sizeof(node*), &begin);
-    ${x}CommandListAppendLaunchFunction(hCommandList, hFunction, &launchArgs, nullptr);
+    ${x}CommandListAppendLaunchFunction(hCommandList, hFunction, &launchArgs, nullptr, 0, nullptr);
     ...
 
     ${x}CommandQueueExecuteCommandLists(hCommandQueue, 1, &hCommandList, nullptr);
@@ -627,7 +574,7 @@ The following sample code demonstrate a sequence for using fine-grain residency 
 
     // 'begin' is passed as function argument and appended into command list
     ${x}FunctionSetArgumentValue(hFunction, 0, sizeof(node*), &begin);
-    ${x}CommandListAppendLaunchFunction(hCommandList, hFunction, &launchArgs, nullptr);
+    ${x}CommandListAppendLaunchFunction(hCommandList, hFunction, &launchArgs, nullptr, 0, nullptr);
     ...
 
     // Make indirect allocations resident before enqueuing
@@ -836,14 +783,14 @@ The following sample code demonstrates a sequence for creating function args and
     ${x}_thread_group_dimensions_t launchArgs = { numGroupsX, numGroupsY, 1 };
 
     // Append function
-    ${x}CommandListAppendLaunchFunction(hCommandList, hFunction, &launchArgs, nullptr);
+    ${x}CommandListAppendLaunchFunction(hCommandList, hFunction, &launchArgs, nullptr, 0, nullptr);
 
     // Update image pointers to copy and scale next image.
     ${x}FunctionSetArgumentValue(hFunction, 0, sizeof(${x}_image_handle_t), &src2_image);
     ${x}FunctionSetArgumentValue(hFunction, 1, sizeof(${x}_image_handle_t), &dest2_image);
 
     // Append function
-    ${x}CommandListAppendLaunchFunction(hCommandList, hFunction, &launchArgs, nullptr);
+    ${x}CommandListAppendLaunchFunction(hCommandList, hFunction, &launchArgs, nullptr, 0, nullptr);
 
     ...
 ```
@@ -862,7 +809,7 @@ The launch arguments contain thread group dimensions.
     ${x}_thread_group_dimensions_t launchArgs = { numGroupsX, numGroupsY, 1 };
 
     // Append function
-    ${x}CommandListAppendLaunchFunction(hCommandList, hFunction, &launchArgs, nullptr);
+    ${x}CommandListAppendLaunchFunction(hCommandList, hFunction, &launchArgs, nullptr, 0, nullptr);
 ```
 
 ::${x}CommandListAppendLaunchFunctionIndirect allows the launch parameters to be supplied indirectly in a
@@ -876,7 +823,7 @@ device to generate the parameters.
     ${x}MemAlloc(hDevice, flags, sizeof(${x}_thread_group_dimensions_t), sizeof(uint32_t), &pIndirectArgs);
 
     // Append function
-    ${x}CommandListAppendLaunchFunctionIndirect(hCommandList, hFunction, &pIndirectArgs, nullptr);
+    ${x}CommandListAppendLaunchFunctionIndirect(hCommandList, hFunction, &pIndirectArgs, nullptr, 0, nullptr);
 ```
 
 ${"##"} <a name="arg">Sampler</a>
@@ -907,7 +854,7 @@ The following is sample for code creating a sampler object and passing it as a F
     ${x}FunctionSetArgumentValue(hFunction, 0, sizeof(${x}_sampler_handle_t), &sampler);
 
     // Append function
-    ${x}CommandListAppendLaunchFunction(hCommandList, hFunction, &launchArgs, nullptr);
+    ${x}CommandListAppendLaunchFunction(hCommandList, hFunction, &launchArgs, nullptr, 0, nullptr);
 ```
 
 ${"#"} <a name="oi">OpenCL Interoperability</a>
@@ -1004,7 +951,7 @@ The following code examples demonstrate how to use the event IPC APIs:
     // create event pool
     ${x}_event_pool_desc_t eventPoolDesc = {
         ${X}_EVENT_POOL_DESC_VERSION_CURRENT,
-        ${X}_EVENT_POOL_FLAG_IPC | ${X}_EVENT_POOL_FLAG_DEVICE_TO_HOST,
+        ${X}_EVENT_POOL_FLAG_IPC_VISIBLE | ${X}_EVENT_POOL_FLAG_HOST_VISIBLE,
         10
     };
     ${x}_event_pool_handle_t hEventPool;
@@ -1034,7 +981,7 @@ The following code examples demonstrate how to use the event IPC APIs:
     ${x}EventCreate(hEventPool, 5, &hEvent);
 
     // submit function and signal event when complete
-    ${x}CommandListAppendLaunchFunction(hCommandList, hFunction, &args, hEvent);
+    ${x}CommandListAppendLaunchFunction(hCommandList, hFunction, &args, hEvent, 0, nullptr);
     ${x}CommandListClose(hCommandList);
     ${x}CommandQueueExecuteCommandLists(hCommandQueue, 1, &hCommandList, nullptr);
 ```

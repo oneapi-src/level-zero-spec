@@ -248,10 +248,13 @@ def make_param_lines(namespace, tags, obj, cpp=False, decl=False):
         type = subt(namespace, tags, item['type'], cpp=cpp)
 
         is_optional = re.match(r".*\[optional\].*", item['desc'])
-        is_pointer = re.match(r".*\w+\*+", item['type'])
-        is_handle = re.match(r".*handle_t", item['type'])
-        if cpp and decl and is_optional and (is_pointer or is_handle):
-            name += " = nullptr"
+        if cpp and decl and is_optional:
+            is_pointer = re.match(r".*\w+\*+", item['type'])
+            is_handle = re.match(r".*handle_t", item['type'])
+            if is_pointer or is_handle:
+                name += " = nullptr"
+            else:
+                name += " = 0"
 
         if i < len(params)-1:
             prologue = "%s %s,"%(type, name)

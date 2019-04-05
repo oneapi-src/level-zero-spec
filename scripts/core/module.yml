@@ -498,8 +498,14 @@ params:
       name: pLaunchFuncArgs
       desc: "[in] launch function arguments."
     - type: $x_event_handle_t
-      name: hEvent
+      name: hSignalEvent
       desc: "[in][optional] handle of the event to signal on completion"
+    - type: uint32_t
+      name: numWaitEvents
+      desc: "[in][optional] number of events to wait on before launching"
+    - type: "$x_event_handle_t*"
+      name: phWaitEvents
+      desc: "[in][optional] handle of the events to wait on before launching"
 --- #--------------------------------------------------------------------------
 type: function
 desc: "Launch function over one or more work groups using indirect arguments."
@@ -524,8 +530,14 @@ params:
       name: pLaunchArgumentsBuffer
       desc: "[in] pointer to device buffer that will contain launch arguments"
     - type: $x_event_handle_t
-      name: hEvent
+      name: hSignalEvent
       desc: "[in][optional] handle of the event to signal on completion"
+    - type: uint32_t
+      name: numWaitEvents
+      desc: "[in][optional] number of events to wait on before launching"
+    - type: "$x_event_handle_t*"
+      name: phWaitEvents
+      desc: "[in][optional] handle of the events to wait on before launching"
 --- #--------------------------------------------------------------------------
 type: function
 desc: "Launch multiple functions over one or more work groups using an array of indirect arguments."
@@ -556,8 +568,14 @@ params:
       name: pLaunchArgumentsBuffer
       desc: "[in] pointer to device buffer that will contain a contiguous array of launch arguments"
     - type: $x_event_handle_t
-      name: hEvent
+      name: hSignalEvent
       desc: "[in][optional] handle of the event to signal on completion"
+    - type: uint32_t
+      name: numWaitEvents
+      desc: "[in][optional] number of events to wait on before launching"
+    - type: "$x_event_handle_t*"
+      name: phWaitEvents
+      desc: "[in][optional] handle of the events to wait on before launching"
 --- #--------------------------------------------------------------------------
 type: typedef
 desc: "type definition for host function pointers used with $xCommandListAppendLaunchHostFunction"

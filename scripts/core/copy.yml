@@ -29,8 +29,14 @@ params:
       name: size
       desc: "[in] size in bytes to copy"
     - type: $x_event_handle_t
-      name: hEvent
+      name: hSignalEvent
       desc: "[in][optional] handle of the event to signal on completion"
+    - type: uint32_t
+      name: numWaitEvents
+      desc: "[in][optional] number of events to wait on before launching"
+    - type: "$x_event_handle_t*"
+      name: phWaitEvents
+      desc: "[in][optional] handle of the events to wait on before launching"
 --- #--------------------------------------------------------------------------
 type: function
 desc: "Initializes host, device, or shared memory."
@@ -58,8 +64,14 @@ params:
       name: size
       desc: "[in] size in bytes to initailize"
     - type: $x_event_handle_t
-      name: hEvent
+      name: hSignalEvent
       desc: "[in][optional] handle of the event to signal on completion"
+    - type: uint32_t
+      name: numWaitEvents
+      desc: "[in][optional] number of events to wait on before launching"
+    - type: "$x_event_handle_t*"
+      name: phWaitEvents
+      desc: "[in][optional] handle of the events to wait on before launching"
 --- #--------------------------------------------------------------------------
 type: function
 desc: "Copies a image."
@@ -81,8 +93,14 @@ params:
       name: hSrcImage
       desc: "[in] handle of source image to copy from"
     - type: $x_event_handle_t
-      name: hEvent
+      name: hSignalEvent
       desc: "[in][optional] handle of the event to signal on completion"
+    - type: uint32_t
+      name: numWaitEvents
+      desc: "[in][optional] number of events to wait on before launching"
+    - type: "$x_event_handle_t*"
+      name: phWaitEvents
+      desc: "[in][optional] handle of the events to wait on before launching"
 --- #--------------------------------------------------------------------------
 type: struct
 desc: "Region descriptor"
@@ -132,8 +150,14 @@ params:
       name: pSrcRegion
       desc: "[in][optional] source region descriptor"
     - type: $x_event_handle_t
-      name: hEvent
+      name: hSignalEvent
       desc: "[in][optional] handle of the event to signal on completion"
+    - type: uint32_t
+      name: numWaitEvents
+      desc: "[in][optional] number of events to wait on before launching"
+    - type: "$x_event_handle_t*"
+      name: phWaitEvents
+      desc: "[in][optional] handle of the events to wait on before launching"
 --- #--------------------------------------------------------------------------
 type: function
 desc: "Copies from a image to device or shared memory."
@@ -159,8 +183,14 @@ params:
       name: pSrcRegion
       desc: "[in][optional] source region descriptor"
     - type: $x_event_handle_t
-      name: hEvent
+      name: hSignalEvent
       desc: "[in][optional] handle of the event to signal on completion"
+    - type: uint32_t
+      name: numWaitEvents
+      desc: "[in][optional] number of events to wait on before launching"
+    - type: "$x_event_handle_t*"
+      name: phWaitEvents
+      desc: "[in][optional] handle of the events to wait on before launching"
 --- #--------------------------------------------------------------------------
 type: function
 desc: "Copies to a image from device or shared memory."
@@ -186,8 +216,14 @@ params:
       name: pDstRegion
       desc: "[in][optional] destination region descriptor"
     - type: $x_event_handle_t
-      name: hEvent
+      name: hSignalEvent
       desc: "[in][optional] handle of the event to signal on completion"
+    - type: uint32_t
+      name: numWaitEvents
+      desc: "[in][optional] number of events to wait on before launching"
+    - type: "$x_event_handle_t*"
+      name: phWaitEvents
+      desc: "[in][optional] handle of the events to wait on before launching"
 --- #--------------------------------------------------------------------------
 type: function
 desc: "Asynchronously prefetches shared memory to the device associated with the specified command list"

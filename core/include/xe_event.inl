@@ -176,10 +176,10 @@ namespace xe
     inline event_handle_t 
     Event::Create(
         event_pool_handle_t hEventPool,                 ///< [in] handle of the event pool
-        uint32_t index                                  ///< [in] index of the event within the pool
+        const event_desc_t* desc                        ///< [in] pointer to event descriptor
         )
     {
-        // auto result = ::xeEventCreate( handle, hEventPool, index );
+        // auto result = ::xeEventCreate( handle, hEventPool, desc );
         // if( ::XE_RESULT_SUCCESS != result ) throw exception(result, "xe::Event::Create");
     }
 
@@ -277,53 +277,6 @@ namespace xe
     {
         // auto result = ::xeEventQueryStatus( handle );
         // if( ::XE_RESULT_SUCCESS != result ) throw exception(result, "xe::Event::QueryStatus");
-    }
-
-    ///////////////////////////////////////////////////////////////////////////////
-    /// @brief C++ wrapper for ::xeEventQueryElapsedTime
-    /// 
-    /// @details
-    ///     - The application may call this function from simultaneous threads.
-    ///     - The implementation of this function should be lock-free.
-    /// 
-    /// @remarks
-    ///   _Analogues_
-    ///     - **cuEventElapsedTime**
-    /// 
-    /// @returns
-    ///     - double: time in milliseconds
-    /// 
-    /// @throws result_t
-    inline double 
-    Event::QueryElapsedTime(
-        event_handle_t hEventBegin,                     ///< [in] handle of the begin event
-        event_handle_t hEventEnd                        ///< [in] handle of the end event
-        )
-    {
-        // auto result = ::xeEventQueryElapsedTime( handle, hEventBegin, hEventEnd );
-        // if( ::XE_RESULT_SUCCESS != result ) throw exception(result, "xe::Event::QueryElapsedTime");
-    }
-
-    ///////////////////////////////////////////////////////////////////////////////
-    /// @brief C++ wrapper for ::xeEventQueryMetricsData
-    /// 
-    /// @details
-    ///     - The application may call this function from simultaneous threads.
-    ///     - The implementation of this function should be lock-free.
-    /// 
-    /// @returns
-    ///     - uint32_t: report data buffer
-    /// 
-    /// @throws result_t
-    inline uint32_t 
-    Event::QueryMetricsData(
-        event_handle_t hEventStart,                     ///< [in] handle of the start event
-        event_handle_t hEventEnd,                       ///< [in] handle of the end event
-        size_t reportSize                               ///< [in] size of the report data buffer in bytes
-        )
-    {
-        // auto result = ::xeEventQueryMetricsData( handle, hEventStart, hEventEnd, reportSize );
-        // if( ::XE_RESULT_SUCCESS != result ) throw exception(result, "xe::Event::QueryMetricsData");
     }
 
     ///////////////////////////////////////////////////////////////////////////////

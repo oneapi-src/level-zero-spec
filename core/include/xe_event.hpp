@@ -62,13 +62,11 @@ namespace xe
         /// @brief C++ version for ::xe_event_pool_flag_t
         enum class event_pool_flag_t
         {
-            NONE = 0,                                       ///< signals and waits only within the same device
-            HOST_TO_DEVICE = XE_BIT(0),                     ///< signals from host, waits on device
-            DEVICE_TO_HOST = XE_BIT(1),                     ///< signals from device, waits on host
-            DEVICE_TO_DEVICE = XE_BIT(2),                   ///< signals from device, waits on another device
-            IPC = XE_BIT(3),                                ///< signals and waits may occur across processes
-            TIMESTAMP = XE_BIT(4),                          ///< supports time-based queries
-            PERFORMANCE_METRICS = XE_BIT(5),                ///< supports performance metrics (MDAPI)
+            NONE = 0,                                       ///< signals and waits only visible within a sub-device
+            HOST_VISIBLE = XE_BIT(0),                       ///< signals and waits are visible to host
+            DEVICE_VISIBLE = XE_BIT(1),                     ///< signals and waits are visible to the entire device
+            P2P_VISIBLE = XE_BIT(2),                        ///< signals and waits may occur across peer devices
+            IPC_VISIBLE = XE_BIT(3),                        ///< signals and waits may occur across processes
 
         };
 
@@ -146,6 +144,38 @@ namespace xe
         auto getHandle( void ) const { return handle; }
 
         ///////////////////////////////////////////////////////////////////////////////
+        /// @brief C++ version for ::xe_event_desc_version_t
+        enum class event_desc_version_t
+        {
+            CURRENT = XE_MAKE_VERSION( 1, 0 ),              ///< version 1.0
+
+        };
+
+        ///////////////////////////////////////////////////////////////////////////////
+        /// @brief C++ version for ::xe_event_scope_flag_t
+        enum class event_scope_flag_t
+        {
+            NONE = 0,                                       ///< 
+            SELF = XE_BIT(0),                               ///< 
+            DEVICE = XE_BIT(1),                             ///< 
+            HOST = XE_BIT(2),                               ///< 
+
+        };
+
+        ///////////////////////////////////////////////////////////////////////////////
+        /// @brief C++ version for ::xe_event_desc_t
+        struct event_desc_t
+        {
+            event_desc_version_t version = event_desc_version_t::CURRENT;   ///< [in] ::EVENT_DESC_VERSION_CURRENT
+            uint32_t index;                                 ///< [in] index of the event within the pool
+            event_scope_flag_t release = event_scope_flag_t::NONE;  ///< [in] defines the scope of relevant cache hierarchies to flush on a
+                                                            ///< ‘signal’ action before the event is triggered
+            event_scope_flag_t acquire = event_scope_flag_t::NONE;  ///< [in] defines the scope of relevant cache hierarchies to invalidate on
+                                                            ///< a ‘wait’ action after the event is complete
+
+        };
+
+        ///////////////////////////////////////////////////////////////////////////////
         /// @brief C++ wrapper for ::xeEventCreate
         /// @returns
         ///     - ::event_handle_t: pointer to handle of event object created
@@ -154,7 +184,7 @@ namespace xe
         inline static event_handle_t
         Create(
             event_pool_handle_t hEventPool,                 ///< [in] handle of the event pool
-            uint32_t index                                  ///< [in] index of the event within the pool
+            const event_desc_t* desc                        ///< [in] pointer to event descriptor
             );
 
         ///////////////////////////////////////////////////////////////////////////////
@@ -191,31 +221,6 @@ namespace xe
         inline void
         QueryStatus(
             void
-            );
-
-        ///////////////////////////////////////////////////////////////////////////////
-        /// @brief C++ wrapper for ::xeEventQueryElapsedTime
-        /// @returns
-        ///     - double: time in milliseconds
-        /// 
-        /// @throws result_t
-        inline static double
-        QueryElapsedTime(
-            event_handle_t hEventBegin,                     ///< [in] handle of the begin event
-            event_handle_t hEventEnd                        ///< [in] handle of the end event
-            );
-
-        ///////////////////////////////////////////////////////////////////////////////
-        /// @brief C++ wrapper for ::xeEventQueryMetricsData
-        /// @returns
-        ///     - uint32_t: report data buffer
-        /// 
-        /// @throws result_t
-        inline static uint32_t
-        QueryMetricsData(
-            event_handle_t hEventStart,                     ///< [in] handle of the start event
-            event_handle_t hEventEnd,                       ///< [in] handle of the end event
-            size_t reportSize                               ///< [in] size of the report data buffer in bytes
             );
 
         ///////////////////////////////////////////////////////////////////////////////

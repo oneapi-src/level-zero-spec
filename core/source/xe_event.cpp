@@ -184,16 +184,18 @@ xeEventPoolDestroy(
 ///     - ::XE_RESULT_ERROR_DEVICE_LOST
 ///     - ::XE_RESULT_ERROR_INVALID_PARAMETER
 ///         + nullptr == hEventPool
+///         + nullptr == desc
 ///         + nullptr == phEvent
 ///     - ::XE_RESULT_ERROR_UNSUPPORTED
+///         + ::XE_EVENT_DESC_VERSION_CURRENT < desc->version
 ///     - ::XE_RESULT_ERROR_OUT_OF_HOST_MEMORY
 ///
-/// @hash {52dd25e26475037f8ecdc4bc28d1fc979f14ac5c4ebb1bcc04b28f48f22daa98}
+/// @hash {d97c70e94ec9c407da18c97bd320458316894526b0a335697c0e6c71d82adfda}
 ///
 __xedllexport xe_result_t __xecall
 xeEventCreate(
     xe_event_pool_handle_t hEventPool,              ///< [in] handle of the event pool
-    uint32_t index,                                 ///< [in] index of the event within the pool
+    const xe_event_desc_t* desc,                    ///< [in] pointer to event descriptor
     xe_event_handle_t* phEvent                      ///< [out] pointer to handle of event object created
     )
 {
@@ -204,13 +206,15 @@ xeEventCreate(
             // if( nullptr == driver ) return XE_RESULT_ERROR_UNINITIALIZED;
             // Check parameters
             if( nullptr == hEventPool ) return XE_RESULT_ERROR_INVALID_PARAMETER;
+            if( nullptr == desc ) return XE_RESULT_ERROR_INVALID_PARAMETER;
             if( nullptr == phEvent ) return XE_RESULT_ERROR_INVALID_PARAMETER;
+            if( XE_EVENT_DESC_VERSION_CURRENT < desc->version ) return XE_RESULT_ERROR_UNSUPPORTED;
         }
         /// @begin
 #if defined(XE_NULLDRV)
         return XE_RESULT_SUCCESS;
 #else
-        return L0::eventCreate(hEventPool, index, phEvent);
+        return L0::eventCreate(hEventPool, desc, phEvent);
 #endif
         /// @end
     }
@@ -759,134 +763,6 @@ xeEventQueryStatus(
         return XE_RESULT_SUCCESS;
 #else
         return L0::Event::fromHandle(hEvent)->queryStatus();
-#endif
-        /// @end
-    }
-    catch(xe_result_t& result)
-    {
-        return result;
-    }
-    catch(std::bad_alloc&)
-    {
-        return XE_RESULT_ERROR_OUT_OF_HOST_MEMORY;
-    }
-    catch(std::exception&)
-    {
-        // @todo: pfnOnException(e.what());
-        return XE_RESULT_ERROR_UNKNOWN;
-    }
-}
-
-///////////////////////////////////////////////////////////////////////////////
-/// @brief Queries the elapsed time between two device-signaled events.
-/// 
-/// @details
-///     - The application may call this function from simultaneous threads.
-///     - The implementation of this function should be lock-free.
-/// 
-/// @remarks
-///   _Analogues_
-///     - **cuEventElapsedTime**
-/// 
-/// @returns
-///     - ::XE_RESULT_SUCCESS
-///     - ::XE_RESULT_ERROR_UNINITIALIZED
-///     - ::XE_RESULT_ERROR_DEVICE_LOST
-///     - ::XE_RESULT_ERROR_INVALID_PARAMETER
-///         + nullptr == hEventBegin
-///         + nullptr == hEventEnd
-///         + nullptr == pTime
-///         + either event not signaled by device
-///         + either event not created from pool created with ::XE_EVENT_POOL_FLAG_TIMESTAMP
-///     - ::XE_RESULT_ERROR_UNSUPPORTED
-///
-/// @hash {000cf8bcf96b698cc26dd8e792ec1c1a4120a4829d617e0f33323e241e258ec4}
-///
-__xedllexport xe_result_t __xecall
-xeEventQueryElapsedTime(
-    xe_event_handle_t hEventBegin,                  ///< [in] handle of the begin event
-    xe_event_handle_t hEventEnd,                    ///< [in] handle of the end event
-    double* pTime                                   ///< [out] time in milliseconds
-    )
-{
-    try
-    {
-        //if( XE_DRIVER_PARAMETER_VALIDATION_LEVEL >= 0 )
-        {
-            // if( nullptr == driver ) return XE_RESULT_ERROR_UNINITIALIZED;
-            // Check parameters
-            if( nullptr == hEventBegin ) return XE_RESULT_ERROR_INVALID_PARAMETER;
-            if( nullptr == hEventEnd ) return XE_RESULT_ERROR_INVALID_PARAMETER;
-            if( nullptr == pTime ) return XE_RESULT_ERROR_INVALID_PARAMETER;
-        }
-        /// @begin
-#if defined(XE_NULLDRV)
-        return XE_RESULT_SUCCESS;
-#else
-        return L0::eventQueryElapsedTime(hEventBegin, hEventEnd, pTime);
-#endif
-        /// @end
-    }
-    catch(xe_result_t& result)
-    {
-        return result;
-    }
-    catch(std::bad_alloc&)
-    {
-        return XE_RESULT_ERROR_OUT_OF_HOST_MEMORY;
-    }
-    catch(std::exception&)
-    {
-        // @todo: pfnOnException(e.what());
-        return XE_RESULT_ERROR_UNKNOWN;
-    }
-}
-
-///////////////////////////////////////////////////////////////////////////////
-/// @brief Queries performance metrics between two device-signaled events.
-/// 
-/// @details
-///     - The application may call this function from simultaneous threads.
-///     - The implementation of this function should be lock-free.
-/// 
-/// @returns
-///     - ::XE_RESULT_SUCCESS
-///     - ::XE_RESULT_ERROR_UNINITIALIZED
-///     - ::XE_RESULT_ERROR_DEVICE_LOST
-///     - ::XE_RESULT_ERROR_INVALID_PARAMETER
-///         + nullptr == hEventStart
-///         + nullptr == hEventEnd
-///         + nullptr == pReportData
-///         + either event not signaled by device
-///         + either event not created from pool created with ::XE_EVENT_POOL_FLAG_PERFORMANCE_METRICS
-///         + report size too small
-///     - ::XE_RESULT_ERROR_UNSUPPORTED
-///
-/// @hash {2aadae68763b475a5f8ea4f780f115829c192fe6ab8fdff1c744906cf1cb832e}
-///
-__xedllexport xe_result_t __xecall
-xeEventQueryMetricsData(
-    xe_event_handle_t hEventStart,                  ///< [in] handle of the start event
-    xe_event_handle_t hEventEnd,                    ///< [in] handle of the end event
-    size_t reportSize,                              ///< [in] size of the report data buffer in bytes
-    uint32_t* pReportData                           ///< [out] report data buffer
-    )
-{
-    try
-    {
-        //if( XE_DRIVER_PARAMETER_VALIDATION_LEVEL >= 0 )
-        {
-            // if( nullptr == driver ) return XE_RESULT_ERROR_UNINITIALIZED;
-            // Check parameters
-            if( nullptr == hEventStart ) return XE_RESULT_ERROR_INVALID_PARAMETER;
-            if( nullptr == hEventEnd ) return XE_RESULT_ERROR_INVALID_PARAMETER;
-            if( nullptr == pReportData ) return XE_RESULT_ERROR_INVALID_PARAMETER;
-        }
-        /// @begin
-#if defined(XE_NULLDRV)
-        return XE_RESULT_SUCCESS;
-#else
-        return L0::eventQueryMetricsData(hEventStart, hEventEnd, reportSize, pReportData);
 #endif
         /// @end
     }

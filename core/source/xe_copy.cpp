@@ -67,7 +67,7 @@
 ///         + nullptr == srcptr
 ///     - ::XE_RESULT_ERROR_UNSUPPORTED
 ///
-/// @hash {afeec28367816bb4f7dec7b461478cdaa6c039f2610ce7f653b13ae5f2fdfabc}
+/// @hash {ad0b0d6ec34781d2d948dae898bcef13d0c53606d2e15f44083e0344c71b0c58}
 ///
 __xedllexport xe_result_t __xecall
 xeCommandListAppendMemoryCopy(
@@ -75,7 +75,9 @@ xeCommandListAppendMemoryCopy(
     void* dstptr,                                   ///< [in] pointer to destination memory to copy to
     const void* srcptr,                             ///< [in] pointer to source memory to copy from
     size_t size,                                    ///< [in] size in bytes to copy
-    xe_event_handle_t hEvent                        ///< [in][optional] handle of the event to signal on completion
+    xe_event_handle_t hSignalEvent,                 ///< [in][optional] handle of the event to signal on completion
+    uint32_t numWaitEvents,                         ///< [in][optional] number of events to wait on before launching
+    xe_event_handle_t* phWaitEvents                 ///< [in][optional] handle of the events to wait on before launching
     )
 {
     try
@@ -92,7 +94,7 @@ xeCommandListAppendMemoryCopy(
 #if defined(XE_NULLDRV)
         return XE_RESULT_SUCCESS;
 #else
-        return L0::CommandList::fromHandle(hCommandList)->appendMemoryCopy(dstptr, srcptr, size, hEvent);
+        return L0::CommandList::fromHandle(hCommandList)->appendMemoryCopy(dstptr, srcptr, size, hSignalEvent, numWaitEvents, phWaitEvents);
 #endif
         /// @end
     }
@@ -137,7 +139,7 @@ xeCommandListAppendMemoryCopy(
 ///         + nullptr == ptr
 ///     - ::XE_RESULT_ERROR_UNSUPPORTED
 ///
-/// @hash {1a0456ddb8c06fa753bc30b3754646918b6d1cf107429c87155649aa414c3067}
+/// @hash {756b0bffa236851bb5b5df6c7e804251ae990e69226878ad865e1fe7a9a3e6a0}
 ///
 __xedllexport xe_result_t __xecall
 xeCommandListAppendMemorySet(
@@ -145,7 +147,9 @@ xeCommandListAppendMemorySet(
     void* ptr,                                      ///< [in] pointer to memory to initialize
     int value,                                      ///< [in] value to initialize memory to
     size_t size,                                    ///< [in] size in bytes to initailize
-    xe_event_handle_t hEvent                        ///< [in][optional] handle of the event to signal on completion
+    xe_event_handle_t hSignalEvent,                 ///< [in][optional] handle of the event to signal on completion
+    uint32_t numWaitEvents,                         ///< [in][optional] number of events to wait on before launching
+    xe_event_handle_t* phWaitEvents                 ///< [in][optional] handle of the events to wait on before launching
     )
 {
     try
@@ -161,7 +165,7 @@ xeCommandListAppendMemorySet(
 #if defined(XE_NULLDRV)
         return XE_RESULT_SUCCESS;
 #else
-        return L0::CommandList::fromHandle(hCommandList)->appendMemorySet(ptr, value, size, hEvent);
+        return L0::CommandList::fromHandle(hCommandList)->appendMemorySet(ptr, value, size, hSignalEvent, numWaitEvents, phWaitEvents);
 #endif
         /// @end
     }
@@ -202,14 +206,16 @@ xeCommandListAppendMemorySet(
 ///         + nullptr == hSrcImage
 ///     - ::XE_RESULT_ERROR_UNSUPPORTED
 ///
-/// @hash {edc7c10bb053df778a34fd5d3f6f059d575d1ab1e926dbf8f2c9bb443c6a5e42}
+/// @hash {8b5c252b1ea29a9d0b4c115d15fd74725a40ada1f7ddf99f800127e5be286176}
 ///
 __xedllexport xe_result_t __xecall
 xeCommandListAppendImageCopy(
     xe_command_list_handle_t hCommandList,          ///< [in] handle of command list
     xe_image_handle_t hDstImage,                    ///< [in] handle of destination image to copy to
     xe_image_handle_t hSrcImage,                    ///< [in] handle of source image to copy from
-    xe_event_handle_t hEvent                        ///< [in][optional] handle of the event to signal on completion
+    xe_event_handle_t hSignalEvent,                 ///< [in][optional] handle of the event to signal on completion
+    uint32_t numWaitEvents,                         ///< [in][optional] number of events to wait on before launching
+    xe_event_handle_t* phWaitEvents                 ///< [in][optional] handle of the events to wait on before launching
     )
 {
     try
@@ -226,7 +232,7 @@ xeCommandListAppendImageCopy(
 #if defined(XE_NULLDRV)
         return XE_RESULT_SUCCESS;
 #else
-        return L0::CommandList::fromHandle(hCommandList)->appendImageCopy(hDstImage, hSrcImage, hEvent);
+        return L0::CommandList::fromHandle(hCommandList)->appendImageCopy(hDstImage, hSrcImage, hSignalEvent, numWaitEvents, phWaitEvents);
 #endif
         /// @end
     }
@@ -263,7 +269,7 @@ xeCommandListAppendImageCopy(
 ///         + nullptr == hSrcImage
 ///     - ::XE_RESULT_ERROR_UNSUPPORTED
 ///
-/// @hash {54b356a1dd20945969aa9b80e6915bb536d771fda6b2f9df59ecc39642140314}
+/// @hash {f5a434c8bc940c22acb5a65e83cd2e7b3597e068852b37f01b543a2e6cb43e74}
 ///
 __xedllexport xe_result_t __xecall
 xeCommandListAppendImageCopyRegion(
@@ -272,7 +278,9 @@ xeCommandListAppendImageCopyRegion(
     xe_image_handle_t hSrcImage,                    ///< [in] handle of source image to copy from
     xe_image_region_t* pDstRegion,                  ///< [in][optional] destination region descriptor
     xe_image_region_t* pSrcRegion,                  ///< [in][optional] source region descriptor
-    xe_event_handle_t hEvent                        ///< [in][optional] handle of the event to signal on completion
+    xe_event_handle_t hSignalEvent,                 ///< [in][optional] handle of the event to signal on completion
+    uint32_t numWaitEvents,                         ///< [in][optional] number of events to wait on before launching
+    xe_event_handle_t* phWaitEvents                 ///< [in][optional] handle of the events to wait on before launching
     )
 {
     try
@@ -289,7 +297,7 @@ xeCommandListAppendImageCopyRegion(
 #if defined(XE_NULLDRV)
         return XE_RESULT_SUCCESS;
 #else
-        return L0::CommandList::fromHandle(hCommandList)->appendImageCopyRegion(hDstImage, hSrcImage, pDstRegion, pSrcRegion, hEvent);
+        return L0::CommandList::fromHandle(hCommandList)->appendImageCopyRegion(hDstImage, hSrcImage, pDstRegion, pSrcRegion, hSignalEvent, numWaitEvents, phWaitEvents);
 #endif
         /// @end
     }
@@ -332,7 +340,7 @@ xeCommandListAppendImageCopyRegion(
 ///         + nullptr == hSrcImage
 ///     - ::XE_RESULT_ERROR_UNSUPPORTED
 ///
-/// @hash {3c7c46e3fc4686a39db6116b4f15ad61a3846a20751e8bda138325f0bb2568c0}
+/// @hash {279b5990d75af7835daa6f33a5d305f85635878adda172d8d3c50cf14689f0ef}
 ///
 __xedllexport xe_result_t __xecall
 xeCommandListAppendImageCopyToMemory(
@@ -340,7 +348,9 @@ xeCommandListAppendImageCopyToMemory(
     void* dstptr,                                   ///< [in] pointer to destination memory to copy to
     xe_image_handle_t hSrcImage,                    ///< [in] handle of source image to copy from
     xe_image_region_t* pSrcRegion,                  ///< [in][optional] source region descriptor
-    xe_event_handle_t hEvent                        ///< [in][optional] handle of the event to signal on completion
+    xe_event_handle_t hSignalEvent,                 ///< [in][optional] handle of the event to signal on completion
+    uint32_t numWaitEvents,                         ///< [in][optional] number of events to wait on before launching
+    xe_event_handle_t* phWaitEvents                 ///< [in][optional] handle of the events to wait on before launching
     )
 {
     try
@@ -357,7 +367,7 @@ xeCommandListAppendImageCopyToMemory(
 #if defined(XE_NULLDRV)
         return XE_RESULT_SUCCESS;
 #else
-        return L0::CommandList::fromHandle(hCommandList)->appendImageCopyToMemory(dstptr, hSrcImage, pSrcRegion, hEvent);
+        return L0::CommandList::fromHandle(hCommandList)->appendImageCopyToMemory(dstptr, hSrcImage, pSrcRegion, hSignalEvent, numWaitEvents, phWaitEvents);
 #endif
         /// @end
     }
@@ -400,7 +410,7 @@ xeCommandListAppendImageCopyToMemory(
 ///         + nullptr == srcptr
 ///     - ::XE_RESULT_ERROR_UNSUPPORTED
 ///
-/// @hash {feddee77dde6f7f14d10be5b96620c59dcafbd8c783be1d89aa79153de88d69b}
+/// @hash {8897e3e02640f46ff0c1dd57217330809212004d0cc450b65068dec3e90b34de}
 ///
 __xedllexport xe_result_t __xecall
 xeCommandListAppendImageCopyFromMemory(
@@ -408,7 +418,9 @@ xeCommandListAppendImageCopyFromMemory(
     xe_image_handle_t hDstImage,                    ///< [in] handle of destination image to copy to
     const void* srcptr,                             ///< [in] pointer to source memory to copy from
     xe_image_region_t* pDstRegion,                  ///< [in][optional] destination region descriptor
-    xe_event_handle_t hEvent                        ///< [in][optional] handle of the event to signal on completion
+    xe_event_handle_t hSignalEvent,                 ///< [in][optional] handle of the event to signal on completion
+    uint32_t numWaitEvents,                         ///< [in][optional] number of events to wait on before launching
+    xe_event_handle_t* phWaitEvents                 ///< [in][optional] handle of the events to wait on before launching
     )
 {
     try
@@ -425,7 +437,7 @@ xeCommandListAppendImageCopyFromMemory(
 #if defined(XE_NULLDRV)
         return XE_RESULT_SUCCESS;
 #else
-        return L0::CommandList::fromHandle(hCommandList)->appendImageCopyFromMemory(hDstImage, srcptr, pDstRegion, hEvent);
+        return L0::CommandList::fromHandle(hCommandList)->appendImageCopyFromMemory(hDstImage, srcptr, pDstRegion, hSignalEvent, numWaitEvents, phWaitEvents);
 #endif
         /// @end
     }

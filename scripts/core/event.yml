@@ -18,25 +18,19 @@ name: $x_event_pool_flag_t
 etors:
     - name: $X_EVENT_POOL_FLAG_NONE
       value: "0"
-      desc: "signals and waits only within the same device"
-    - name: $X_EVENT_POOL_FLAG_HOST_TO_DEVICE
+      desc: "signals and waits only visible within a sub-device"
+    - name: $X_EVENT_POOL_FLAG_HOST_VISIBLE
       value: "$X_BIT(0)"
-      desc: "signals from host, waits on device"
-    - name: $X_EVENT_POOL_FLAG_DEVICE_TO_HOST
+      desc: "signals and waits are visible to host"
+    - name: $X_EVENT_POOL_FLAG_DEVICE_VISIBLE
       value: "$X_BIT(1)"
-      desc: "signals from device, waits on host"
-    - name: $X_EVENT_POOL_FLAG_DEVICE_TO_DEVICE
+      desc: "signals and waits are visible to the entire device"
+    - name: $X_EVENT_POOL_FLAG_P2P_VISIBLE
       value: "$X_BIT(2)"
-      desc: "signals from device, waits on another device"
-    - name: $X_EVENT_POOL_FLAG_IPC
+      desc: "signals and waits may occur across peer devices"
+    - name: $X_EVENT_POOL_FLAG_IPC_VISIBLE
       value: "$X_BIT(3)"
       desc: "signals and waits may occur across processes"
-    - name: $X_EVENT_POOL_FLAG_TIMESTAMP
-      value: "$X_BIT(4)"
-      desc: "supports time-based queries"
-    - name: $X_EVENT_POOL_FLAG_PERFORMANCE_METRICS
-      value: "$X_BIT(5)"
-      desc: "supports performance metrics (MDAPI)"
 --- #--------------------------------------------------------------------------
 type: struct
 desc: "Event pool descriptor"
@@ -92,6 +86,54 @@ params:
       name: hEventPool
       desc: "[in] handle of event pool object to destroy"
 --- #--------------------------------------------------------------------------
+type: enum
+desc: "API version of $x_event_desc_t"
+class: $xEvent
+name: $x_event_desc_version_t
+etors:
+    - name: $X_EVENT_DESC_VERSION_CURRENT
+      value: "$X_MAKE_VERSION( 1, 0 )"
+      desc: "version 1.0"
+--- #--------------------------------------------------------------------------
+type: enum
+desc: "Supported event scope flags"
+class: $xEvent
+name: $x_event_scope_flag_t
+etors:
+    - name: $X_EVENT_SCOPE_FLAG_NONE
+      value: "0"
+      desc: ""
+    - name: $X_EVENT_SCOPE_FLAG_SELF
+      value: "$X_BIT(0)"
+      desc: ""
+    - name: $X_EVENT_SCOPE_FLAG_DEVICE
+      value: "$X_BIT(1)"
+      desc: ""
+    - name: $X_EVENT_SCOPE_FLAG_HOST
+      value: "$X_BIT(2)"
+      desc: ""
+--- #--------------------------------------------------------------------------
+type: struct
+desc: "Event descriptor"
+class: $xEvent
+name: $x_event_desc_t
+members:
+    - type: $x_event_desc_version_t
+      name: version
+      desc: "[in] $X_EVENT_DESC_VERSION_CURRENT"
+      init: $X_EVENT_DESC_VERSION_CURRENT
+    - type: uint32_t
+      name: index
+      desc: "[in] index of the event within the pool"
+    - type: $x_event_scope_flag_t
+      name: release
+      desc: "[in] defines the scope of relevant cache hierarchies to flush on a ‘signal’ action before the event is triggered"
+      init: $X_EVENT_SCOPE_FLAG_NONE
+    - type: $x_event_scope_flag_t
+      name: acquire
+      desc: "[in] defines the scope of relevant cache hierarchies to invalidate on a ‘wait’ action after the event is complete"
+      init: $X_EVENT_SCOPE_FLAG_NONE
+--- #--------------------------------------------------------------------------
 type: function
 desc: "Creates an event on the device."
 class: $xEvent
@@ -110,9 +152,9 @@ params:
     - type: $x_event_pool_handle_t
       name: hEventPool
       desc: "[in] handle of the event pool"
-    - type: uint32_t
-      name: index
-      desc: "[in] index of the event within the pool"
+    - type: "const $x_event_desc_t*"
+      name: desc
+      desc: "[in] pointer to event descriptor"
     - type: "$x_event_handle_t*"
       name: phEvent
       desc: "[out] pointer to handle of event object created"
@@ -278,58 +320,6 @@ params:
 returns:
     - $X_RESULT_NOT_READY:
         - not signaled
---- #--------------------------------------------------------------------------
-type: function
-desc: "Queries the elapsed time between two device-signaled events."
-class: $xEvent
-name: QueryElapsedTime
-decl: static
-analogue:
-    - "**cuEventElapsedTime**"
-details:
-    - "The application may call this function from simultaneous threads."
-    - "The implementation of this function should be lock-free."
-params:
-    - type: $x_event_handle_t
-      name: hEventBegin
-      desc: "[in] handle of the begin event"
-    - type: $x_event_handle_t
-      name: hEventEnd
-      desc: "[in] handle of the end event"
-    - type: "double*"
-      name: pTime
-      desc: "[out] time in milliseconds"
-returns:
-    - $X_RESULT_ERROR_INVALID_PARAMETER:
-        - "either event not signaled by device"
-        - "either event not created from pool created with $X_EVENT_POOL_FLAG_TIMESTAMP"
---- #--------------------------------------------------------------------------
-type: function
-desc: "Queries performance metrics between two device-signaled events."
-class: $xEvent
-name: QueryMetricsData
-decl: static
-details:
-    - "The application may call this function from simultaneous threads."
-    - "The implementation of this function should be lock-free."
-params:
-    - type: $x_event_handle_t
-      name: hEventStart
-      desc: "[in] handle of the start event"
-    - type: $x_event_handle_t
-      name: hEventEnd
-      desc: "[in] handle of the end event"
-    - type: size_t
-      name: reportSize
-      desc: "[in] size of the report data buffer in bytes"
-    - type: "uint32_t*"
-      name: pReportData
-      desc: "[out] report data buffer"
-returns:
-    - $X_RESULT_ERROR_INVALID_PARAMETER:
-        - "either event not signaled by device"
-        - "either event not created from pool created with $X_EVENT_POOL_FLAG_PERFORMANCE_METRICS"
-        - "report size too small"
 --- #--------------------------------------------------------------------------
 type: function
 desc: "Reset an event back to not signaled state"
