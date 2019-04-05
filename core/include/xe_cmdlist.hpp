@@ -83,8 +83,12 @@ namespace xe
         /// @brief C++ version for ::xe_image_region_t
         struct image_region_t
         {
-            uint32_t origin[3];                             ///< [in] The origin (x, y, z) for region in pixels
-            uint32_t region[3];                             ///< [in] The region (width, height, depth) relative to origin in pixels
+            uint32_t originX;                               ///< [in] The origin x offset for region in pixels
+            uint32_t originY;                               ///< [in] The origin y offset for region in pixels
+            uint32_t originZ;                               ///< [in] The origin z offset for region in pixels
+            uint32_t width;                                 ///< [in] The region width relative to origin in pixels
+            uint32_t height;                                ///< [in] The region height relative to origin in pixels
+            uint32_t depth;                                 ///< [in] The region depth relative to origin in pixels
 
         };
 

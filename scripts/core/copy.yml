@@ -90,11 +90,23 @@ class: $xCommandList
 name: $x_image_region_t
 members:
     - type: uint32_t
-      name: origin[3]
-      desc: "[in] The origin (x, y, z) for region in pixels"
+      name: originX
+      desc: "[in] The origin x offset for region in pixels"
     - type: uint32_t
-      name: region[3]
-      desc: "[in] The region (width, height, depth) relative to origin in pixels"
+      name: originY
+      desc: "[in] The origin y offset for region in pixels"
+    - type: uint32_t
+      name: originZ
+      desc: "[in] The origin z offset for region in pixels"
+    - type: uint32_t
+      name: width
+      desc: "[in] The region width relative to origin in pixels"
+    - type: uint32_t
+      name: height
+      desc: "[in] The region height relative to origin in pixels"
+    - type: uint32_t
+      name: depth
+      desc: "[in] The region depth relative to origin in pixels"
 --- #--------------------------------------------------------------------------
 type: function
 desc: "Copies a region of a image to another image."
