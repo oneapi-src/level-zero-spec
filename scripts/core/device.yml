@@ -4,7 +4,7 @@ desc: "Intel $OneApi Level-Zero APIs for Device"
 --- #--------------------------------------------------------------------------
 type: function
 desc: "Reports the number of devices"
-class: $xDriver
+class: $x
 name: GetDeviceCount
 decl: singleton
 analogue:
@@ -33,7 +33,7 @@ members:
 --- #--------------------------------------------------------------------------
 type: function
 desc: "Returns a handle to the device object"
-class: $xDriver
+class: $x
 name: GetDevice
 decl: singleton
 analogue:
@@ -51,7 +51,7 @@ params:
       desc: "[out] pointer to handle of device object created"
 returns:
     - $X_RESULT_ERROR_INVALID_PARAMETER:
-        - "ordinal is out of range reported by $xDriverGetDeviceCount"
+        - "ordinal is out of range reported by $xGetDeviceCount"
 --- #--------------------------------------------------------------------------
 type: function
 desc: "Returns a handle to the sub-device object"

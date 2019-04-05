@@ -25,10 +25,10 @@ The following diagram illustrates the hierarchy of devices to the driver:
 ${"##"} Driver
 A driver represents an instance of a ${OneApi} driver being loaded and initialized into the current process.
 - Only one instance of a driver per process can be loaded.
-- Multiple calls to ::${x}DriverInit are silently ignored.
+- Multiple calls to ::${x}Init are silently ignored.
 - A driver has minimal global state associated; only that which is sufficient for querying devices recognized by the driver.
 - There is no explicit unload or shutdown of the driver.
-- Any global resources acquired during ::${x}DriverInit will be released during process detach.
+- Any global resources acquired during ::${x}Init will be released during process detach.
 
 ${"##"} Device
 A device represents a physical device in the system that can support ${OneApi}.
@@ -38,7 +38,7 @@ A device represents a physical device in the system that can support ${OneApi}.
 - Device can expose sub-devices that allow finer-grained control of multi-tile devices.
 
 ${"##"} Initialization
-The driver must be initizalized by calling ::${x}DriverInit before any other function.
+The driver must be initizalized by calling ::${x}Init before any other function.
 This function will query the available physical adapters in the system and make this information available to all threads in the current process.
 
 The following sample code demonstrates a basic initialization sequence:
@@ -47,11 +47,11 @@ The following sample code demonstrates a basic initialization sequence:
     //       However, proper error checking is highly recommended and necessary in many cases.
 
     // Initialize the driver
-    ${x}DriverInit(${X}_INIT_FLAG_NONE);
+    ${x}Init(${X}_INIT_FLAG_NONE);
 
     // Get number of devices supporting ${OneApi}
     uint32_t deviceCount = 0;
-    ${x}DriverGetDeviceCount(&deviceCount);
+    ${x}GetDeviceCount(&deviceCount);
     if(0 == deviceCount)
     {
         printf("There is no device supporting ${OneApi}!\n");
@@ -62,7 +62,7 @@ The following sample code demonstrates a basic initialization sequence:
     ${x}_device_handle_t hDevice;
     for(uint32_t i = 0; i < deviceCount; ++i)
     {
-        ${x}DriverGetDevice(i, &hDevice);
+        ${x}GetDevice(i, &hDevice);
         
         ${x}_api_version_t version;
         ${x}DeviceGetApiVersion(hDevice, &version);

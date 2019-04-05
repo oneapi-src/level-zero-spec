@@ -39,6 +39,55 @@
 namespace xe
 {
     ///////////////////////////////////////////////////////////////////////////////
+    /// @brief C++ wrapper for ::xeGetDeviceCount
+    /// 
+    /// @details
+    ///     - The application may call this function from simultaneous threads.
+    ///     - The implementation of this function should be lock-free.
+    /// 
+    /// @remarks
+    ///   _Analogues_
+    ///     - **cuDeviceGetCount**
+    /// 
+    /// @returns
+    ///     - uint32_t: number of devices available
+    /// 
+    /// @throws result_t
+    inline uint32_t 
+    GetDeviceCount(
+        void
+        )
+    {
+        // auto result = ::xeGetDeviceCount( handle );
+        // if( ::XE_RESULT_SUCCESS != result ) throw exception(result, "GetDeviceCount");
+    }
+
+    ///////////////////////////////////////////////////////////////////////////////
+    /// @brief C++ wrapper for ::xeGetDevice
+    /// 
+    /// @details
+    ///     - The application may call this function from simultaneous threads.
+    ///     - The implementation of this function should be lock-free.
+    /// 
+    /// @remarks
+    ///   _Analogues_
+    ///     - **cuDeviceGet**
+    ///     - clGetDeviceIDs
+    /// 
+    /// @returns
+    ///     - ::device_handle_t: pointer to handle of device object created
+    /// 
+    /// @throws result_t
+    inline device_handle_t 
+    GetDevice(
+        uint32_t ordinal                                ///< [in] The device index in the range of [0, ::GetDeviceCount]
+        )
+    {
+        // auto result = ::xeGetDevice( handle );
+        // if( ::XE_RESULT_SUCCESS != result ) throw exception(result, "GetDevice");
+    }
+
+    ///////////////////////////////////////////////////////////////////////////////
 #if XE_ENABLE_OCL_INTEROP
     /// @brief C++ wrapper for ::xeDeviceRegisterCLMemory
     /// 

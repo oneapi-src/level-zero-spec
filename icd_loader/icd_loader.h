@@ -175,10 +175,10 @@ typedef xe_result_t (__xecall *pfn_xeCommandListAppendMemAdvise)(
     size_t size,                                    ///< [in] Size in bytes of the memory range
     xe_memory_advice_t advice                       ///< [in] Memory advice for the memory range
     );
-typedef xe_result_t (__xecall *pfn_xeDriverGetDeviceCount)(
+typedef xe_result_t (__xecall *pfn_xeGetDeviceCount)(
     uint32_t* count                                 ///< [out] number of devices available
     );
-typedef xe_result_t (__xecall *pfn_xeDriverGetDevice)(
+typedef xe_result_t (__xecall *pfn_xeGetDevice)(
     uint32_t ordinal,                               ///< [in] The device index in the range of [0, ::xeGetDeviceCount]
     xe_device_handle_t* phDevice                    ///< [out] pointer to handle of device object created
     );
@@ -221,10 +221,10 @@ typedef xe_result_t (__xecall *pfn_xeDeviceSetLastLevelCacheConfig)(
     xe_device_handle_t hDevice,                     ///< [in] handle of the device 
     xe_cache_config_t CacheConfig                   ///< [in] CacheConfig
     );
-typedef xe_result_t (__xecall *pfn_xeDriverInit)(
+typedef xe_result_t (__xecall *pfn_xeInit)(
     xe_init_flag_t flags                            ///< [in] initialization flags
     );
-typedef xe_result_t (__xecall *pfn_xeDriverGetVersion)(
+typedef xe_result_t (__xecall *pfn_xeGetDriverVersion)(
     uint32_t* version                               ///< [out] driver version
     );
 typedef xe_result_t (__xecall *pfn_xeDeviceCreateEventPool)(
@@ -534,8 +534,8 @@ typedef struct _xe_dispatch_table_t
     pfn_xeCommandListAppendImageCopyFromMemory xeCommandListAppendImageCopyFromMemory;
     pfn_xeCommandListAppendMemoryPrefetch xeCommandListAppendMemoryPrefetch;
     pfn_xeCommandListAppendMemAdvise xeCommandListAppendMemAdvise;
-    pfn_xeDriverGetDeviceCount xeDriverGetDeviceCount;
-    pfn_xeDriverGetDevice xeDriverGetDevice;
+    pfn_xeGetDeviceCount xeGetDeviceCount;
+    pfn_xeGetDevice xeGetDevice;
     pfn_xeDeviceGetSubDevice xeDeviceGetSubDevice;
     pfn_xeDeviceGetApiVersion xeDeviceGetApiVersion;
     pfn_xeDeviceGetProperties xeDeviceGetProperties;
@@ -545,8 +545,8 @@ typedef struct _xe_dispatch_table_t
     pfn_xeDeviceCanAccessPeer xeDeviceCanAccessPeer;
     pfn_xeDeviceSetIntermediateCacheConfig xeDeviceSetIntermediateCacheConfig;
     pfn_xeDeviceSetLastLevelCacheConfig xeDeviceSetLastLevelCacheConfig;
-    pfn_xeDriverInit xeDriverInit;
-    pfn_xeDriverGetVersion xeDriverGetVersion;
+    pfn_xeInit xeInit;
+    pfn_xeGetDriverVersion xeGetDriverVersion;
     pfn_xeDeviceCreateEventPool xeDeviceCreateEventPool;
     pfn_xeEventPoolDestroy xeEventPoolDestroy;
     pfn_xeEventPoolCreateEvent xeEventPoolCreateEvent;
@@ -640,8 +640,8 @@ inline bool load_xe(void *handle, void *(*funcAddressGetter)(void *handle, const
     outTable->xeCommandListAppendImageCopyFromMemory = (pfn_xeCommandListAppendImageCopyFromMemory)funcAddressGetter(handle, "xeCommandListAppendImageCopyFromMemory");
     outTable->xeCommandListAppendMemoryPrefetch = (pfn_xeCommandListAppendMemoryPrefetch)funcAddressGetter(handle, "xeCommandListAppendMemoryPrefetch");
     outTable->xeCommandListAppendMemAdvise = (pfn_xeCommandListAppendMemAdvise)funcAddressGetter(handle, "xeCommandListAppendMemAdvise");
-    outTable->xeDriverGetDeviceCount = (pfn_xeDriverGetDeviceCount)funcAddressGetter(handle, "xeDriverGetDeviceCount");
-    outTable->xeDriverGetDevice = (pfn_xeDriverGetDevice)funcAddressGetter(handle, "xeDriverGetDevice");
+    outTable->xeGetDeviceCount = (pfn_xeGetDeviceCount)funcAddressGetter(handle, "xeGetDeviceCount");
+    outTable->xeGetDevice = (pfn_xeGetDevice)funcAddressGetter(handle, "xeGetDevice");
     outTable->xeDeviceGetSubDevice = (pfn_xeDeviceGetSubDevice)funcAddressGetter(handle, "xeDeviceGetSubDevice");
     outTable->xeDeviceGetApiVersion = (pfn_xeDeviceGetApiVersion)funcAddressGetter(handle, "xeDeviceGetApiVersion");
     outTable->xeDeviceGetProperties = (pfn_xeDeviceGetProperties)funcAddressGetter(handle, "xeDeviceGetProperties");
@@ -651,8 +651,8 @@ inline bool load_xe(void *handle, void *(*funcAddressGetter)(void *handle, const
     outTable->xeDeviceCanAccessPeer = (pfn_xeDeviceCanAccessPeer)funcAddressGetter(handle, "xeDeviceCanAccessPeer");
     outTable->xeDeviceSetIntermediateCacheConfig = (pfn_xeDeviceSetIntermediateCacheConfig)funcAddressGetter(handle, "xeDeviceSetIntermediateCacheConfig");
     outTable->xeDeviceSetLastLevelCacheConfig = (pfn_xeDeviceSetLastLevelCacheConfig)funcAddressGetter(handle, "xeDeviceSetLastLevelCacheConfig");
-    outTable->xeDriverInit = (pfn_xeDriverInit)funcAddressGetter(handle, "xeDriverInit");
-    outTable->xeDriverGetVersion = (pfn_xeDriverGetVersion)funcAddressGetter(handle, "xeDriverGetVersion");
+    outTable->xeInit = (pfn_xeInit)funcAddressGetter(handle, "xeInit");
+    outTable->xeGetDriverVersion = (pfn_xeGetDriverVersion)funcAddressGetter(handle, "xeGetDriverVersion");
     outTable->xeDeviceCreateEventPool = (pfn_xeDeviceCreateEventPool)funcAddressGetter(handle, "xeDeviceCreateEventPool");
     outTable->xeEventPoolDestroy = (pfn_xeEventPoolDestroy)funcAddressGetter(handle, "xeEventPoolDestroy");
     outTable->xeEventPoolCreateEvent = (pfn_xeEventPoolCreateEvent)funcAddressGetter(handle, "xeEventPoolCreateEvent");
@@ -788,10 +788,10 @@ inline bool load_xe(void *handle, void *(*funcAddressGetter)(void *handle, const
     if(0 == outTable->xeCommandListAppendMemAdvise){
         return false;
     }
-    if(0 == outTable->xeDriverGetDeviceCount){
+    if(0 == outTable->xeGetDeviceCount){
         return false;
     }
-    if(0 == outTable->xeDriverGetDevice){
+    if(0 == outTable->xeGetDevice){
         return false;
     }
     if(0 == outTable->xeDeviceGetSubDevice){
@@ -821,10 +821,10 @@ inline bool load_xe(void *handle, void *(*funcAddressGetter)(void *handle, const
     if(0 == outTable->xeDeviceSetLastLevelCacheConfig){
         return false;
     }
-    if(0 == outTable->xeDriverInit){
+    if(0 == outTable->xeInit){
         return false;
     }
-    if(0 == outTable->xeDriverGetVersion){
+    if(0 == outTable->xeGetDriverVersion){
         return false;
     }
     if(0 == outTable->xeDeviceCreateEventPool){

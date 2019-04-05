@@ -65,10 +65,10 @@
 ///     - ::XE_RESULT_ERROR_UNSUPPORTED
 ///     - ::XE_RESULT_ERROR_OUT_OF_HOST_MEMORY
 ///
-/// @hash {0ae71bd1cc936ad12438c9cc7d3471f98557ec8f6b1fb62d2649cc618eb16351}
+/// @hash {d25e461622ba962970f3f93c652bb046d48e0947923a08369c0d413e99269251}
 ///
 __xedllexport xe_result_t __xecall
-xeDriverInit(
+xeInit(
     xe_init_flag_t flags                            ///< [in] initialization flags
     )
 {
@@ -82,7 +82,7 @@ xeDriverInit(
 #if defined(XE_NULLDRV)
         return XE_RESULT_SUCCESS;
 #else
-        return L0::Driver::get()->init(flags);
+        return L0::::get()->init(flags);
 #endif
         /// @end
     }
@@ -122,10 +122,10 @@ xeDriverInit(
 ///         + nullptr == version
 ///     - ::XE_RESULT_ERROR_UNSUPPORTED
 ///
-/// @hash {6ae964da2310ff18a63fe79a8fabcfaa071a342064d2f092042eb2b830d7c54f}
+/// @hash {90fded1cdd2276a681cacd0093a0fed987a9fe9026669b0d71a4628909c71db6}
 ///
 __xedllexport xe_result_t __xecall
-xeDriverGetVersion(
+xeGetDriverVersion(
     uint32_t* version                               ///< [out] driver version
     )
 {
@@ -133,6 +133,7 @@ xeDriverGetVersion(
     {
         //if( XE_DRIVER_PARAMETER_VALIDATION_LEVEL >= 0 )
         {
+            // if( nullptr == driver ) return XE_RESULT_ERROR_UNINITIALIZED;
             // Check parameters
             if( nullptr == version ) return XE_RESULT_ERROR_INVALID_PARAMETER;
         }
@@ -140,7 +141,7 @@ xeDriverGetVersion(
 #if defined(XE_NULLDRV)
         return XE_RESULT_SUCCESS;
 #else
-        return L0::Driver::get()->getVersion(version);
+        return L0::::get()->getDriverVersion(version);
 #endif
         /// @end
     }

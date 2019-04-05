@@ -39,6 +39,47 @@
 namespace xe
 {
     ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Reports the number of devices
+    /// 
+    /// @details
+    ///     - The application may call this function from simultaneous threads.
+    ///     - The implementation of this function should be lock-free.
+    /// 
+    /// @remarks
+    ///   _Analogues_
+    ///     - **cuDeviceGetCount**
+    /// 
+    /// @returns
+    ///     - uint32_t: number of devices available
+    /// 
+    /// @throws result_t
+    inline uint32_t
+    GetDeviceCount(
+        void
+        );
+
+    ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Returns a handle to the device object
+    /// 
+    /// @details
+    ///     - The application may call this function from simultaneous threads.
+    ///     - The implementation of this function should be lock-free.
+    /// 
+    /// @remarks
+    ///   _Analogues_
+    ///     - **cuDeviceGet**
+    ///     - clGetDeviceIDs
+    /// 
+    /// @returns
+    ///     - ::device_handle_t: pointer to handle of device object created
+    /// 
+    /// @throws result_t
+    inline device_handle_t
+    GetDevice(
+        uint32_t ordinal                                ///< [in] The device index in the range of [0, ::GetDeviceCount]
+        );
+
+    ///////////////////////////////////////////////////////////////////////////////
     /// @brief C++ wrapper for device
     class Device
     {

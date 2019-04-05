@@ -39,56 +39,7 @@
 namespace xe
 {
     ///////////////////////////////////////////////////////////////////////////////
-    /// @brief C++ wrapper for ::xeDriverGetDeviceCount
-    /// 
-    /// @details
-    ///     - The application may call this function from simultaneous threads.
-    ///     - The implementation of this function should be lock-free.
-    /// 
-    /// @remarks
-    ///   _Analogues_
-    ///     - **cuDeviceGetCount**
-    /// 
-    /// @returns
-    ///     - uint32_t: number of devices available
-    /// 
-    /// @throws result_t
-    inline uint32_t 
-    Driver::GetDeviceCount(
-        void
-        )
-    {
-        // auto result = ::xeDriverGetDeviceCount( handle );
-        // if( ::XE_RESULT_SUCCESS != result ) throw exception(result, "xe::Driver::GetDeviceCount");
-    }
-
-    ///////////////////////////////////////////////////////////////////////////////
-    /// @brief C++ wrapper for ::xeDriverGetDevice
-    /// 
-    /// @details
-    ///     - The application may call this function from simultaneous threads.
-    ///     - The implementation of this function should be lock-free.
-    /// 
-    /// @remarks
-    ///   _Analogues_
-    ///     - **cuDeviceGet**
-    ///     - clGetDeviceIDs
-    /// 
-    /// @returns
-    ///     - ::device_handle_t: pointer to handle of device object created
-    /// 
-    /// @throws result_t
-    inline device_handle_t 
-    Driver::GetDevice(
-        void
-        )
-    {
-        // auto result = ::xeDriverGetDevice( handle );
-        // if( ::XE_RESULT_SUCCESS != result ) throw exception(result, "xe::Driver::GetDevice");
-    }
-
-    ///////////////////////////////////////////////////////////////////////////////
-    /// @brief C++ wrapper for ::xeDriverInit
+    /// @brief C++ wrapper for ::xeInit
     /// 
     /// @details
     ///     - Only one instance of a driver per process can be loaded.
@@ -104,16 +55,16 @@ namespace xe
     /// 
     /// @throws result_t
     inline void 
-    Driver::Init(
-        void
+    Init(
+        init_flag_t flags                               ///< [in] initialization flags
         )
     {
-        // auto result = ::xeDriverInit( handle );
-        // if( ::XE_RESULT_SUCCESS != result ) throw exception(result, "xe::Driver::Init");
+        // auto result = ::xeInit( handle );
+        // if( ::XE_RESULT_SUCCESS != result ) throw exception(result, "Init");
     }
 
     ///////////////////////////////////////////////////////////////////////////////
-    /// @brief C++ wrapper for ::xeDriverGetVersion
+    /// @brief C++ wrapper for ::xeGetDriverVersion
     /// 
     /// @details
     ///     - The driver version is a non-zero, monotonically increasing value where
@@ -130,12 +81,12 @@ namespace xe
     /// 
     /// @throws result_t
     inline uint32_t 
-    Driver::GetVersion(
+    GetDriverVersion(
         void
         )
     {
-        // auto result = ::xeDriverGetVersion( handle );
-        // if( ::XE_RESULT_SUCCESS != result ) throw exception(result, "xe::Driver::GetVersion");
+        // auto result = ::xeGetDriverVersion( handle );
+        // if( ::XE_RESULT_SUCCESS != result ) throw exception(result, "GetDriverVersion");
     }
 
 } // namespace xe

@@ -60,7 +60,7 @@ extern "C" {
 ///         + nullptr == count
 ///     - ::XE_RESULT_ERROR_UNSUPPORTED
 __xedllport xe_result_t __xecall
-xeDriverGetDeviceCount(
+xeGetDeviceCount(
     uint32_t* count                                 ///< [out] number of devices available
     );
 
@@ -94,10 +94,10 @@ typedef struct _xe_device_uuid_t
 ///     - ::XE_RESULT_ERROR_DEVICE_LOST
 ///     - ::XE_RESULT_ERROR_INVALID_PARAMETER
 ///         + nullptr == phDevice
-///         + ordinal is out of range reported by ::xeDriverGetDeviceCount
+///         + ordinal is out of range reported by ::xeGetDeviceCount
 ///     - ::XE_RESULT_ERROR_UNSUPPORTED
 __xedllport xe_result_t __xecall
-xeDriverGetDevice(
+xeGetDevice(
     uint32_t ordinal,                               ///< [in] The device index in the range of [0, ::xeGetDeviceCount]
     xe_device_handle_t* phDevice                    ///< [out] pointer to handle of device object created
     );

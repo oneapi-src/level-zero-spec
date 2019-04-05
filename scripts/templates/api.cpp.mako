@@ -79,7 +79,7 @@ ${th.make_func_name(n, tags, obj)}(
     {
         //if( ${X}_DRIVER_PARAMETER_VALIDATION_LEVEL >= 0 )
         {
-            %if not re.match(r".*Driver", th.make_func_name(n, tags, obj)):
+            %if not re.match(r".*Init", th.make_func_name(n, tags, obj)):
             // if( nullptr == driver ) return ${X}_RESULT_ERROR_UNINITIALIZED;
             %endif
             // Check parameters

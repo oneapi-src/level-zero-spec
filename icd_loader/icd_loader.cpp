@@ -327,22 +327,22 @@ xe_result_t __xecall xeCommandListAppendMemAdvise(
     }
     return dispatchTable.xeCommandListAppendMemAdvise(hCommandList, hDevice, ptr, size, advice);
 }
-xe_result_t __xecall xeDriverGetDeviceCount(
+xe_result_t __xecall xeGetDeviceCount(
         uint32_t* count                                 ///< [out] number of devices available
     ){
     if(dispatchTableInitialized == false){
         return XE_RESULT_ERROR_UNINITIALIZED;
     }
-    return dispatchTable.xeDriverGetDeviceCount(count);
+    return dispatchTable.xeGetDeviceCount(count);
 }
-xe_result_t __xecall xeDriverGetDevice(
+xe_result_t __xecall xeGetDevice(
         uint32_t ordinal,                               ///< [in] The device index in the range of [0, ::xeGetDeviceCount]
         xe_device_handle_t* phDevice                    ///< [out] pointer to handle of device object created
     ){
     if(dispatchTableInitialized == false){
         return XE_RESULT_ERROR_UNINITIALIZED;
     }
-    return dispatchTable.xeDriverGetDevice(ordinal, phDevice);
+    return dispatchTable.xeGetDevice(ordinal, phDevice);
 }
 xe_result_t __xecall xeDeviceGetSubDevice(
         xe_device_handle_t hDevice,                     ///< [in] handle of the device object
@@ -428,13 +428,21 @@ xe_result_t __xecall xeDeviceSetLastLevelCacheConfig(
     }
     return dispatchTable.xeDeviceSetLastLevelCacheConfig(hDevice, CacheConfig);
 }
-xe_result_t __xecall xeDriverGetVersion(
+xe_result_t __xecall xeInit(
+        xe_init_flag_t flags                            ///< [in] initialization flags
+    ){
+    if(dispatchTableInitialized == false){
+        return XE_RESULT_ERROR_UNINITIALIZED;
+    }
+    return dispatchTable.xeInit(flags);
+}
+xe_result_t __xecall xeGetDriverVersion(
         uint32_t* version                               ///< [out] driver version
     ){
     if(dispatchTableInitialized == false){
         return XE_RESULT_ERROR_UNINITIALIZED;
     }
-    return dispatchTable.xeDriverGetVersion(version);
+    return dispatchTable.xeGetDriverVersion(version);
 }
 xe_result_t __xecall xeDeviceCreateEventPool(
         xe_device_handle_t hDevice,                     ///< [in] handle of the device
