@@ -4,7 +4,7 @@ desc: "Intel $OneApi Level-Zero Extended APIs for CommandGraph"
 --- #--------------------------------------------------------------------------
 type: enum
 desc: "API version of $e_command_graph_desc_t"
-class: $eDevice
+class: $eCommandGraph
 name: $e_command_graph_desc_version_t
 etors:
     - name: $E_COMMAND_GRAPH_DESC_VERSION_CURRENT
@@ -13,7 +13,7 @@ etors:
 --- #--------------------------------------------------------------------------
 type: enum
 desc: "Supported command graph creation flags"
-class: $eDevice
+class: $eCommandGraph
 name: $e_command_graph_flag_t
 etors:
     - name: $E_COMMAND_GRAPH_FLAG_NONE
@@ -22,7 +22,7 @@ etors:
 --- #--------------------------------------------------------------------------
 type: struct
 desc: "CommandGraph descriptor"
-class: $eDevice
+class: $eCommandGraph
 name: $e_command_graph_desc_t
 members:
     - type: $e_command_graph_desc_version_t
@@ -36,8 +36,9 @@ members:
 --- #--------------------------------------------------------------------------
 type: function
 desc: "Creates a command graph on the device for submitting commands to any command queue."
-class: $eDevice
-name: CreateCommandGraph
+class: $eCommandGraph
+name: Create
+decl: static
 details:
     - "This function may be called from simultaneous threads."
     - "The implementation of this function should be lock-free."
@@ -59,6 +60,7 @@ type: function
 desc: "Destroys a command graph."
 class: $eCommandGraph
 name: Destroy
+decl: static
 details:
     - "The implementation of this function will immediately free all Host allocations associated with this command graph."
     - "The implementation of this function should be lock-free."

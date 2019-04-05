@@ -39,6 +39,33 @@
 namespace xe
 {
     ///////////////////////////////////////////////////////////////////////////////
+    /// @brief C++ wrapper for ::xeCommandQueueCreate
+    /// 
+    /// @details
+    ///     - This function may be called from simultaneous threads.
+    ///     - The implementation of this function should be lock-free.
+    /// 
+    /// @remarks
+    ///   _Analogues_
+    ///     - **clCreateCommandQueue**
+    ///     - cuCtxCreate
+    ///     - cuCtxGetCurrent
+    /// 
+    /// @returns
+    ///     - ::command_queue_handle_t: pointer to handle of command queue object created
+    /// 
+    /// @throws result_t
+    inline command_queue_handle_t 
+    CommandQueue::Create(
+        device_handle_t hDevice,                        ///< [in] handle of the device object
+        const command_queue_desc_t* desc                ///< [in] pointer to command queue descriptor
+        )
+    {
+        // auto result = ::xeCommandQueueCreate( handle, hDevice, desc );
+        // if( ::XE_RESULT_SUCCESS != result ) throw exception(result, "xe::CommandQueue::Create");
+    }
+
+    ///////////////////////////////////////////////////////////////////////////////
     /// @brief C++ wrapper for ::xeCommandQueueDestroy
     /// 
     /// @details
@@ -56,10 +83,10 @@ namespace xe
     /// @throws result_t
     inline void 
     CommandQueue::Destroy(
-        void
+        command_queue_handle_t hCommandQueue            ///< [in] handle of command queue object to destroy
         )
     {
-        // auto result = ::xeCommandQueueDestroy( handle );
+        // auto result = ::xeCommandQueueDestroy( handle, hCommandQueue );
         // if( ::XE_RESULT_SUCCESS != result ) throw exception(result, "xe::CommandQueue::Destroy");
     }
 
@@ -105,30 +132,6 @@ namespace xe
     {
         // auto result = ::xeCommandQueueSynchronize( handle, timeout );
         // if( ::XE_RESULT_SUCCESS != result ) throw exception(result, "xe::CommandQueue::Synchronize");
-    }
-
-    ///////////////////////////////////////////////////////////////////////////////
-    /// @brief C++ wrapper for ::xeCommandQueueCreateFence
-    /// 
-    /// @details
-    ///     - The application may call this function from simultaneous threads.
-    ///     - The implementation of this function should be lock-free.
-    /// 
-    /// @remarks
-    ///   _Analogues_
-    ///     - **vkCreateFence**
-    /// 
-    /// @returns
-    ///     - ::fence_handle_t: pointer to handle of fence object created
-    /// 
-    /// @throws result_t
-    inline fence_handle_t 
-    CommandQueue::CreateFence(
-        const fence_desc_t* desc                        ///< [in] pointer to fence descriptor
-        )
-    {
-        // auto result = ::xeCommandQueueCreateFence( handle, desc );
-        // if( ::XE_RESULT_SUCCESS != result ) throw exception(result, "xe::CommandQueue::CreateFence");
     }
 
 } // namespace xe

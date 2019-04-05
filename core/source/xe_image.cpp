@@ -58,10 +58,10 @@
 ///     - ::XE_RESULT_ERROR_UNSUPPORTED
 ///         + ::XE_IMAGE_DESC_VERSION_CURRENT < desc->version
 ///
-/// @hash {7dbaffb711cd245e68d03c429911d6bae57f5b9111605ec3253dd2f5435c0ab5}
+/// @hash {19e802dcabe70d5e46b59da4ba1036ac340f7aae39c7b88b44178df36b38965d}
 ///
 __xedllexport xe_result_t __xecall
-xeDeviceGetImageProperties(
+xeImageGetProperties(
     xe_device_handle_t hDevice,                     ///< [in] handle of the device
     const xe_image_desc_t* desc,                    ///< [in] pointer to image descriptor
     xe_image_properties_t* pImageProperties         ///< [out] pointer to image properties
@@ -82,7 +82,7 @@ xeDeviceGetImageProperties(
 #if defined(XE_NULLDRV)
         return XE_RESULT_SUCCESS;
 #else
-        return L0::Device::fromHandle(hDevice)->getImageProperties(desc, pImageProperties);
+        return L0::imageGetProperties(hDevice, desc, pImageProperties);
 #endif
         /// @end
     }
@@ -125,10 +125,10 @@ xeDeviceGetImageProperties(
 ///     - ::XE_RESULT_ERROR_OUT_OF_HOST_MEMORY
 ///     - ::XE_RESULT_ERROR_OUT_OF_DEVICE_MEMORY
 ///
-/// @hash {27a0a4bcd9c866877aa1fb52838284ccdaae12a2dfd92d87b2b862a4ab19218a}
+/// @hash {e2d438a509cb4ff04e5f32ab96fa2195d29fae7dded57683c41d5d8e4bf803fe}
 ///
 __xedllexport xe_result_t __xecall
-xeDeviceCreateImage(
+xeImageCreate(
     xe_device_handle_t hDevice,                     ///< [in] handle of the device
     const xe_image_desc_t* desc,                    ///< [in] pointer to image descriptor
     xe_image_handle_t* phImage                      ///< [out] pointer to handle of image object created
@@ -149,7 +149,7 @@ xeDeviceCreateImage(
 #if defined(XE_NULLDRV)
         return XE_RESULT_SUCCESS;
 #else
-        return L0::Device::fromHandle(hDevice)->createImage(desc, phImage);
+        return L0::imageCreate(hDevice, desc, phImage);
 #endif
         /// @end
     }
@@ -205,7 +205,7 @@ xeImageDestroy(
 #if defined(XE_NULLDRV)
         return XE_RESULT_SUCCESS;
 #else
-        return L0::Image::fromHandle(hImage)->destroy();
+        return L0::imageDestroy(hImage);
 #endif
         /// @end
     }

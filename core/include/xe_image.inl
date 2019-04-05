@@ -39,6 +39,52 @@
 namespace xe
 {
     ///////////////////////////////////////////////////////////////////////////////
+    /// @brief C++ wrapper for ::xeImageGetProperties
+    /// 
+    /// @details
+    ///     - The application may call this function from simultaneous threads.
+    ///     - The implementation of this function should be lock-free.
+    /// 
+    /// @returns
+    ///     - ::image_properties_t: pointer to image properties
+    /// 
+    /// @throws result_t
+    inline Image::image_properties_t 
+    Image::GetProperties(
+        device_handle_t hDevice,                        ///< [in] handle of the device
+        const image_desc_t* desc                        ///< [in] pointer to image descriptor
+        )
+    {
+        // auto result = ::xeImageGetProperties( handle, hDevice, desc );
+        // if( ::XE_RESULT_SUCCESS != result ) throw exception(result, "xe::Image::GetProperties");
+    }
+
+    ///////////////////////////////////////////////////////////////////////////////
+    /// @brief C++ wrapper for ::xeImageCreate
+    /// 
+    /// @details
+    ///     - The application may call this function from simultaneous threads.
+    ///     - The implementation of this function should be lock-free.
+    /// 
+    /// @remarks
+    ///   _Analogues_
+    ///     - clCreateImage
+    /// 
+    /// @returns
+    ///     - ::image_handle_t: pointer to handle of image object created
+    /// 
+    /// @throws result_t
+    inline image_handle_t 
+    Image::Create(
+        device_handle_t hDevice,                        ///< [in] handle of the device
+        const image_desc_t* desc                        ///< [in] pointer to image descriptor
+        )
+    {
+        // auto result = ::xeImageCreate( handle, hDevice, desc );
+        // if( ::XE_RESULT_SUCCESS != result ) throw exception(result, "xe::Image::Create");
+    }
+
+    ///////////////////////////////////////////////////////////////////////////////
     /// @brief C++ wrapper for ::xeImageDestroy
     /// 
     /// @details
@@ -51,10 +97,10 @@ namespace xe
     /// @throws result_t
     inline void 
     Image::Destroy(
-        void
+        image_handle_t hImage                           ///< [in] handle of image object to destroy
         )
     {
-        // auto result = ::xeImageDestroy( handle );
+        // auto result = ::xeImageDestroy( handle, hImage );
         // if( ::XE_RESULT_SUCCESS != result ) throw exception(result, "xe::Image::Destroy");
     }
 

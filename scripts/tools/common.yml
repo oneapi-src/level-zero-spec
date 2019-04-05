@@ -3,6 +3,16 @@ type: header
 desc: "Intel $OneApi Level-Zero Tool API common types"
 --- #--------------------------------------------------------------------------
 type: handle
+desc: "Handle of device object"
+class: $tDevice
+name: "$t_device_handle_t"
+--- #--------------------------------------------------------------------------
+type: handle
+desc: "Handle of command list object"
+class: $tCommandList
+name: "$t_command_list_handle_t"
+--- #--------------------------------------------------------------------------
+type: handle
 desc: "Handle of metric group's object"
 class: $tMetricGroup
 name: "$t_metric_group_handle_t"

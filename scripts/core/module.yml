@@ -4,7 +4,7 @@ desc: "Intel $OneApi Level-Zero APIs for Module"
 --- #--------------------------------------------------------------------------
 type: enum
 desc: API version of $x_module_desc_t
-class: $xDevice
+class: $xModule
 name: $x_module_desc_version_t
 etors:
     - name: $X_MODULE_DESC_VERSION_CURRENT
@@ -13,7 +13,7 @@ etors:
 --- #--------------------------------------------------------------------------
 type: enum
 desc: "Supported module creation input formats"
-class: $xDevice
+class: $xModule
 name: $x_module_format_t
 etors:
     - name: $X_MODULE_FORMAT_IL_SPIRV
@@ -24,7 +24,7 @@ etors:
 --- #--------------------------------------------------------------------------
 type: struct
 desc: "Module descriptor"
-class: $xDevice
+class: $xModule
 name: $x_module_desc_t
 members:
     - type: $x_module_desc_version_t
@@ -49,8 +49,9 @@ members:
 --- #--------------------------------------------------------------------------
 type: function
 desc: "Creates module object from an input IL or native binary."
-class: $xDevice
-name: CreateModule
+class: $xModule
+name: Create
+decl: static
 analogue:
     - "**cuModuleLoad**"
 details:
@@ -94,6 +95,7 @@ type: function
 desc: "Destroys module"
 class: $xModule
 name: Destroy
+decl: static
 analogue:
     - "**cuModuleUnload**"
 details:
@@ -109,6 +111,7 @@ type: function
 desc: "Destroys module build log object"
 class: $xModuleBuildLog
 name: Destroy
+decl: static
 details:
     - "The application is responsible for making sure the GPU is not currently referencing the event before it is deleted"
     - "The implementation of this function will immediately free all Host and Device allocations associated with this object"
@@ -194,7 +197,7 @@ returns:
 --- #--------------------------------------------------------------------------
 type: enum
 desc: API version of $x_function_desc_t
-class: $xModule
+class: $xFunction
 name: $x_function_desc_version_t
 etors:
     - name: $X_FUNCTION_DESC_VERSION_CURRENT
@@ -203,7 +206,7 @@ etors:
 --- #--------------------------------------------------------------------------
 type: enum
 desc: "Supported function creation flags"
-class: $xModule
+class: $xFunction
 name: $x_function_flag_t
 etors:
     - name: $X_FUNCTION_FLAG_NONE
@@ -214,7 +217,7 @@ etors:
 --- #--------------------------------------------------------------------------
 type: struct
 desc: "Function descriptor"
-class: $xModule
+class: $xFunction
 name: $x_function_desc_t
 members:
     - type: $x_function_desc_version_t
@@ -232,8 +235,9 @@ members:
 --- #--------------------------------------------------------------------------
 type: function
 desc: "Create Function object from Module by name"
-class: $xModule
-name: CreateFunction
+class: $xFunction
+name: Create
+decl: static
 analogue:
     - "**cuModuleGetFunction**"
 details:
@@ -259,6 +263,7 @@ type: function
 desc: "Destroys Function object"
 class: $xFunction
 name: Destroy
+decl: static
 details:
     - "The application is responsible for making sure the GPU is not currently referencing the event before it is deleted"
     - "The implementation of this function will immediately free all Host and Device allocations associated with this function"

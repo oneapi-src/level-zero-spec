@@ -48,42 +48,6 @@ namespace xex
     public:
         auto getHandle( void ) const { return handle; }
 
-        ///////////////////////////////////////////////////////////////////////////////
-        /// @brief C++ version for ::xex_command_graph_desc_version_t
-        enum class command_graph_desc_version_t
-        {
-            CURRENT = XE_MAKE_VERSION( 1, 0 ),              ///< version 1.0
-
-        };
-
-        ///////////////////////////////////////////////////////////////////////////////
-        /// @brief C++ version for ::xex_command_graph_flag_t
-        enum class command_graph_flag_t
-        {
-            NONE = 0,                                       ///< default behavior
-
-        };
-
-        ///////////////////////////////////////////////////////////////////////////////
-        /// @brief C++ version for ::xex_command_graph_desc_t
-        struct command_graph_desc_t
-        {
-            command_graph_desc_version_t version = command_graph_desc_version_t::CURRENT;   ///< [in] ::COMMAND_GRAPH_DESC_VERSION_CURRENT
-            command_graph_flag_t flags = command_graph_flag_t::NONE;///< [in] creation flags
-
-        };
-
-        ///////////////////////////////////////////////////////////////////////////////
-        /// @brief C++ wrapper for ::xexDeviceCreateCommandGraph
-        /// @returns
-        ///     - ::command_graph_handle_t: pointer to handle of command graph object created
-        /// 
-        /// @throws result_t
-        inline command_graph_handle_t
-        CreateCommandGraph(
-            const command_graph_desc_t* desc                ///< [in] pointer to command graph descriptor
-            );
-
     };
 
 } // namespace xex

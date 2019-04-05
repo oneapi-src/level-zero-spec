@@ -4,8 +4,8 @@ desc: "Intel $OneApi Level-Zero APIs for Device"
 --- #--------------------------------------------------------------------------
 type: function
 desc: "Reports the number of devices"
-class: $x
-name: GetDeviceCount
+class: $xDevice
+name: GetCount
 decl: singleton
 analogue:
     - "**cuDeviceGetCount**"
@@ -33,8 +33,8 @@ members:
 --- #--------------------------------------------------------------------------
 type: function
 desc: "Returns a handle to the device object"
-class: $x
-name: GetDevice
+class: $xDevice
+name: Get
 decl: singleton
 analogue:
     - "**cuDeviceGet**"

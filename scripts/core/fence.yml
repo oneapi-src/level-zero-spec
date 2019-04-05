@@ -4,7 +4,7 @@ desc: "Intel $OneApi Level-Zero APIs for Fence"
 --- #--------------------------------------------------------------------------
 type: enum
 desc: "API version of $x_fence_desc_t"
-class: $xCommandQueue
+class: $xFence
 name: $x_fence_desc_version_t
 etors:
     - name: $X_FENCE_DESC_VERSION_CURRENT
@@ -13,7 +13,7 @@ etors:
 --- #--------------------------------------------------------------------------
 type: enum
 desc: "Supported fence creation flags"
-class: $xCommandQueue
+class: $xFence
 name: $x_fence_flag_t
 etors:
     - name: $X_FENCE_FLAG_NONE
@@ -22,7 +22,7 @@ etors:
 --- #--------------------------------------------------------------------------
 type: struct
 desc: "Fence descriptor"
-class: $xCommandQueue
+class: $xFence
 name: $x_fence_desc_t
 members:
     - type: $x_fence_desc_version_t
@@ -36,8 +36,9 @@ members:
 --- #--------------------------------------------------------------------------
 type: function
 desc: "Creates a fence object on the device's command queue."
-class: $xCommandQueue
-name: CreateFence
+class: $xFence
+name: Create
+decl: static
 analogue:
     - "**vkCreateFence**"
 details:
@@ -61,6 +62,7 @@ type: function
 desc: "Deletes a fence object."
 class: $xFence
 name: Destroy
+decl: static
 details:
     - "The application is responsible for making sure the GPU is not currently referencing the fence before it is deleted"
     - "The implementation of this function will immediately free all Host and Device allocations associated with this fence"

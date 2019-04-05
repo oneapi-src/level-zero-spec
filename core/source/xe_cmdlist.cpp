@@ -62,10 +62,10 @@
 ///     - ::XE_RESULT_ERROR_OUT_OF_HOST_MEMORY
 ///     - ::XE_RESULT_ERROR_OUT_OF_DEVICE_MEMORY
 ///
-/// @hash {30179944405dd754aa51afa884ab3ef58a0b94bbdda27c2776a05c23c12678dc}
+/// @hash {b9adb57d038366400eb6414d775de1d0b9e0df4107774781d73480085fa460fc}
 ///
 __xedllexport xe_result_t __xecall
-xeDeviceCreateCommandList(
+xeCommandListCreate(
     xe_device_handle_t hDevice,                     ///< [in] handle of the device object
     const xe_command_list_desc_t* desc,             ///< [in] pointer to command list descriptor
     xe_command_list_handle_t* phCommandList         ///< [out] pointer to handle of command list object created
@@ -86,7 +86,7 @@ xeDeviceCreateCommandList(
 #if defined(XE_NULLDRV)
         return XE_RESULT_SUCCESS;
 #else
-        return L0::Device::fromHandle(hDevice)->createCommandList(desc, phCommandList);
+        return L0::commandListCreate(hDevice, desc, phCommandList);
 #endif
         /// @end
     }
@@ -142,7 +142,7 @@ xeCommandListDestroy(
 #if defined(XE_NULLDRV)
         return XE_RESULT_SUCCESS;
 #else
-        return L0::CommandList::fromHandle(hCommandList)->destroy();
+        return L0::commandListDestroy(hCommandList);
 #endif
         /// @end
     }

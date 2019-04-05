@@ -64,10 +64,10 @@
 ///     - ::XE_RESULT_ERROR_OUT_OF_HOST_MEMORY
 ///     - ::XE_RESULT_ERROR_OUT_OF_DEVICE_MEMORY
 ///
-/// @hash {d42e38d25d111753f5f120d80296f494f658063005c79d78865c2e62e1ef1803}
+/// @hash {ada252e261c878d9688538087a5aa2ffc445069217ec7523d9ab1d72ae4e6fb9}
 ///
 __xedllexport xe_result_t __xecall
-xeCommandQueueCreateFence(
+xeFenceCreate(
     xe_command_queue_handle_t hCommandQueue,        ///< [in] handle of command queue
     const xe_fence_desc_t* desc,                    ///< [in] pointer to fence descriptor
     xe_fence_handle_t* phFence                      ///< [out] pointer to handle of fence object created
@@ -88,7 +88,7 @@ xeCommandQueueCreateFence(
 #if defined(XE_NULLDRV)
         return XE_RESULT_SUCCESS;
 #else
-        return L0::CommandQueue::fromHandle(hCommandQueue)->createFence(desc, phFence);
+        return L0::fenceCreate(hCommandQueue, desc, phFence);
 #endif
         /// @end
     }
@@ -149,7 +149,7 @@ xeFenceDestroy(
 #if defined(XE_NULLDRV)
         return XE_RESULT_SUCCESS;
 #else
-        return L0::Fence::fromHandle(hFence)->destroy();
+        return L0::fenceDestroy(hFence);
 #endif
         /// @end
     }

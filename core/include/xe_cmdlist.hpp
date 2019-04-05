@@ -55,6 +55,28 @@ namespace xe
         using host_pfn_t = ::xe_host_pfn_t;
 
         ///////////////////////////////////////////////////////////////////////////////
+        /// @brief C++ version for ::xe_command_list_desc_version_t
+        enum class command_list_desc_version_t
+        {
+            CURRENT = XE_MAKE_VERSION( 1, 0 ),              ///< version 1.0
+
+        };
+
+        ///////////////////////////////////////////////////////////////////////////////
+        /// @brief C++ version for ::xe_command_list_flag_t
+        enum class command_list_flag_t
+        {
+            NONE = 0,                                       ///< default behavior
+            COPY_ONLY = XE_BIT(0),                          ///< command list **only** contains copy operations (and synchronization
+                                                            ///< primitives)
+            RELAXED_ORDERING = XE_BIT(1),                   ///< driver may reorder programs and copys between barriers and
+                                                            ///< synchronization primitives
+            LOW_LATENCY = XE_BIT(2),                        ///< driver should optimize for immediate submission to a command queue
+            CROSS_DEVICE = XE_BIT(3),                       ///< command list can be shared with another device
+
+        };
+
+        ///////////////////////////////////////////////////////////////////////////////
         /// @brief C++ version for ::xe_command_list_parameter_t
         enum class command_list_parameter_t
         {
@@ -76,6 +98,15 @@ namespace xe
             CLEAR_NON_ATOMIC_MOSTLY,                        ///< removes the affect of ::MEMORY_ADVICE_SET_NON_ATOMIC_MOSTLY
             BIAS_CACHED,                                    ///< hints that memory should be cached
             BIAS_UNCACHED,                                  ///< hints that memory should be not be cached
+
+        };
+
+        ///////////////////////////////////////////////////////////////////////////////
+        /// @brief C++ version for ::xe_command_list_desc_t
+        struct command_list_desc_t
+        {
+            command_list_desc_version_t version = command_list_desc_version_t::CURRENT; ///< [in] ::COMMAND_LIST_DESC_VERSION_CURRENT
+            command_list_flag_t flags = command_list_flag_t::NONE;  ///< [in] creation flags
 
         };
 
@@ -111,11 +142,23 @@ namespace xe
             );
 
         ///////////////////////////////////////////////////////////////////////////////
+        /// @brief C++ wrapper for ::xeCommandListCreate
+        /// @returns
+        ///     - ::command_list_handle_t: pointer to handle of command list object created
+        /// 
+        /// @throws result_t
+        inline static command_list_handle_t
+        Create(
+            device_handle_t hDevice,                        ///< [in] handle of the device object
+            const command_list_desc_t* desc                 ///< [in] pointer to command list descriptor
+            );
+
+        ///////////////////////////////////////////////////////////////////////////////
         /// @brief C++ wrapper for ::xeCommandListDestroy
         /// @throws result_t
-        inline void
+        inline static void
         Destroy(
-            void
+            command_list_handle_t hCommandList              ///< [in] handle of command list object to destroy
             );
 
         ///////////////////////////////////////////////////////////////////////////////

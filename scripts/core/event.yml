@@ -4,7 +4,7 @@ desc: "Intel $OneApi Level-Zero APIs for Event"
 --- #--------------------------------------------------------------------------
 type: enum
 desc: "API version of $x_event_pool_desc_t"
-class: $xDevice
+class: $xEventPool
 name: $x_event_pool_desc_version_t
 etors:
     - name: $X_EVENT_POOL_DESC_VERSION_CURRENT
@@ -13,7 +13,7 @@ etors:
 --- #--------------------------------------------------------------------------
 type: enum
 desc: "Supported event pool creation flags"
-class: $xDevice
+class: $xEventPool
 name: $x_event_pool_flag_t
 etors:
     - name: $X_EVENT_POOL_FLAG_NONE
@@ -40,7 +40,7 @@ etors:
 --- #--------------------------------------------------------------------------
 type: struct
 desc: "Event pool descriptor"
-class: $xDevice
+class: $xEventPool
 name: $x_event_pool_desc_t
 members:
     - type: $x_event_pool_desc_version_t
@@ -57,8 +57,9 @@ members:
 --- #--------------------------------------------------------------------------
 type: function
 desc: "Creates a pool for a set of event(s) on the device."
-class: $xDevice
-name: CreateEventPool
+class: $xEventPool
+name: Create
+decl: static
 details:
     - "This function may be called from simultaneous threads."
     - "The implementation of this function should be lock-free."
@@ -80,6 +81,7 @@ type: function
 desc: "Deletes an event pool object."
 class: $xEventPool
 name: Destroy
+decl: static
 details:
     - "The application is responsible for destroying all event handles created from the pool before destroying the pool itself"
     - "The application is responsible for making sure the GPU is not currently referencing the any event within the pool before it is deleted"
@@ -92,8 +94,9 @@ params:
 --- #--------------------------------------------------------------------------
 type: function
 desc: "Creates an event on the device."
-class: $xEventPool
-name: CreateEvent
+class: $xEvent
+name: Create
+decl: static
 analogue:
     - "**clCreateUserEvent**"
     - vkCreateEvent
@@ -120,6 +123,7 @@ type: function
 desc: "Deletes an event object."
 class: $xEvent
 name: Destroy
+decl: static
 details:
     - "The application is responsible for making sure the GPU is not currently referencing the event before it is deleted"
     - "The implementation of this function will immediately free all Host and Device allocations associated with this event"

@@ -51,36 +51,83 @@ namespace xe
         auto getDesc( void ) const { return desc; }
 
         ///////////////////////////////////////////////////////////////////////////////
-        /// @brief C++ version for ::xe_fence_desc_version_t
-        enum class fence_desc_version_t
+        /// @brief C++ version for ::xe_command_queue_desc_version_t
+        enum class command_queue_desc_version_t
         {
             CURRENT = XE_MAKE_VERSION( 1, 0 ),              ///< version 1.0
 
         };
 
         ///////////////////////////////////////////////////////////////////////////////
-        /// @brief C++ version for ::xe_fence_flag_t
-        enum class fence_flag_t
+        /// @brief C++ version for ::xe_command_queue_flag_t
+        enum class command_queue_flag_t
         {
             NONE = 0,                                       ///< default behavior
+            COPY_ONLY = XE_BIT(0),                          ///< command queue only supports enqueing copy-only command lists
+            LOGICAL_ONLY = XE_BIT(1),                       ///< command queue is not tied to a physical command queue; driver may
+                                                            ///< dynamically assign based on usage
+            SINGLE_SLICE_ONLY = XE_BIT(2),                  ///< command queue reserves and cannot comsume more than a single slice.
+                                                            ///< 'slice' size is device-specific.  cannot be combined with COPY_ONLY.
 
         };
 
         ///////////////////////////////////////////////////////////////////////////////
-        /// @brief C++ version for ::xe_fence_desc_t
-        struct fence_desc_t
+        /// @brief C++ version for ::xe_command_queue_mode_t
+        enum class command_queue_mode_t
         {
-            fence_desc_version_t version = fence_desc_version_t::CURRENT;   ///< [in] ::FENCE_DESC_VERSION_CURRENT
-            fence_flag_t flags = fence_flag_t::NONE;        ///< [in] creation flags
+            DEFAULT = 0,                                    ///< implicit default behavior; uses driver-based heuristics
+            SYNCHRONOUS,                                    ///< GPU execution always completes immediately on execute;
+                                                            ///< CPU thread is blocked using wait on implicit synchronization object
+            ASYNCHRONOUS,                                   ///< GPU execution is scheduled and will complete in future;
+                                                            ///< explicit synchronization object must be used to determine completeness
 
         };
+
+        ///////////////////////////////////////////////////////////////////////////////
+        /// @brief C++ version for ::xe_command_queue_priority_t
+        enum class command_queue_priority_t
+        {
+            NORMAL = 0,                                     ///< [default] normal priority
+            LOW,                                            ///< lower priority than normal
+            HIGH,                                           ///< higher priority than normal
+
+        };
+
+        ///////////////////////////////////////////////////////////////////////////////
+        /// @brief C++ version for ::xe_command_queue_desc_t
+        struct command_queue_desc_t
+        {
+            command_queue_desc_version_t version = command_queue_desc_version_t::CURRENT;   ///< [in] ::COMMAND_QUEUE_DESC_VERSION_CURRENT
+            command_queue_flag_t flags = command_queue_flag_t::NONE;///< [in] creation flags
+            command_queue_mode_t mode = command_queue_mode_t::DEFAULT;  ///< [in] operation mode
+            command_queue_priority_t priority = command_queue_priority_t::NORMAL;   ///< [in] priority
+            uint32_t ordinal = 0;                           ///< [in] if logical-only flag is set, then will be ignored;
+                                                            ///< else-if copy-only flag is set, then must be less than ::device_properties_t.numAsyncCopyEngines;
+                                                            ///< otherwise must be less than
+                                                            ///< ::device_properties_t.numAsyncComputeEngines. When using sub-devices
+                                                            ///< the ::device_properties_t.numAsyncComputeEngines must be queried from
+                                                            ///< the sub-device being used.
+
+        };
+
+        ///////////////////////////////////////////////////////////////////////////////
+        /// @brief C++ wrapper for ::xeCommandQueueCreate
+        /// @returns
+        ///     - ::command_queue_handle_t: pointer to handle of command queue object created
+        /// 
+        /// @throws result_t
+        inline static command_queue_handle_t
+        Create(
+            device_handle_t hDevice,                        ///< [in] handle of the device object
+            const command_queue_desc_t* desc                ///< [in] pointer to command queue descriptor
+            );
 
         ///////////////////////////////////////////////////////////////////////////////
         /// @brief C++ wrapper for ::xeCommandQueueDestroy
         /// @throws result_t
-        inline void
+        inline static void
         Destroy(
-            void
+            command_queue_handle_t hCommandQueue            ///< [in] handle of command queue object to destroy
             );
 
         ///////////////////////////////////////////////////////////////////////////////
@@ -103,17 +150,6 @@ namespace xe
                                                             ///< if zero, then operates exactly like ::FenceQueryStatus;
                                                             ///< if MAX_UINT32, then function will not return until complete or device
                                                             ///< is lost.
-            );
-
-        ///////////////////////////////////////////////////////////////////////////////
-        /// @brief C++ wrapper for ::xeCommandQueueCreateFence
-        /// @returns
-        ///     - ::fence_handle_t: pointer to handle of fence object created
-        /// 
-        /// @throws result_t
-        inline fence_handle_t
-        CreateFence(
-            const fence_desc_t* desc                        ///< [in] pointer to fence descriptor
             );
 
     };

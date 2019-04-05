@@ -41,6 +41,16 @@
 namespace xet
 {
     ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Handle of device object
+    class Device;
+    using device_handle_t = Device*;
+
+    ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Handle of command list object
+    class CommandList;
+    using command_list_handle_t = CommandList*;
+
+    ///////////////////////////////////////////////////////////////////////////////
     /// @brief Handle of metric group's object
     class MetricGroup;
     using metric_group_handle_t = MetricGroup*;

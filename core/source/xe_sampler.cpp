@@ -65,10 +65,10 @@
 ///         + ::XE_SAMPLER_DESC_VERSION_CURRENT < pDesc->version
 ///     - ::XE_RESULT_ERROR_OUT_OF_HOST_MEMORY
 ///
-/// @hash {d6e17778345dc3a543e1add74375d5b50c06e8a5678e82e59353e25f9eabf95f}
+/// @hash {b2f5b380216f04ba149bc100f66dffef87c66dc8c46a5172e9b070e41012d972}
 ///
 __xedllexport xe_result_t __xecall
-xeDeviceCreateSampler(
+xeSamplerCreate(
     xe_device_handle_t hDevice,                     ///< [in] handle of the device
     const xe_sampler_desc_t* pDesc,                 ///< [in] pointer to sampler descriptor
     xe_sampler_handle_t* phSampler                  ///< [out] handle of the sampler
@@ -89,7 +89,7 @@ xeDeviceCreateSampler(
 #if defined(XE_NULLDRV)
         return XE_RESULT_SUCCESS;
 #else
-        return L0::Device::fromHandle(hDevice)->createSampler(pDesc, phSampler);
+        return L0::samplerCreate(hDevice, pDesc, phSampler);
 #endif
         /// @end
     }
@@ -149,7 +149,7 @@ xeSamplerDestroy(
 #if defined(XE_NULLDRV)
         return XE_RESULT_SUCCESS;
 #else
-        return L0::Sampler::fromHandle(hSampler)->destroy();
+        return L0::samplerDestroy(hSampler);
 #endif
         /// @end
     }

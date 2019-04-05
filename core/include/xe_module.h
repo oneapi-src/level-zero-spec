@@ -115,7 +115,7 @@ typedef struct _xe_module_desc_t
 ///     - ::XE_RESULT_ERROR_MODULE_BUILD_FAILURE
 ///         + Failure to build module. See build log for more details.
 __xedllport xe_result_t __xecall
-xeDeviceCreateModule(
+xeModuleCreate(
     xe_device_handle_t hDevice,                     ///< [in] handle of the device
     const xe_module_desc_t* pDesc,                  ///< [in] pointer to module descriptor
     xe_module_handle_t* phModule,                   ///< [out] pointer to handle of module object created
@@ -308,7 +308,7 @@ typedef struct _xe_function_desc_t
 ///     - ::XE_RESULT_ERROR_UNSUPPORTED
 ///         + ::XE_FUNCTION_DESC_VERSION_CURRENT < pDesc->version
 __xedllport xe_result_t __xecall
-xeModuleCreateFunction(
+xeFunctionCreate(
     xe_module_handle_t hModule,                     ///< [in] handle of the module
     const xe_function_desc_t* pDesc,                ///< [in] pointer to function descriptor
     xe_function_handle_t* phFunction                ///< [out] handle of the Function object

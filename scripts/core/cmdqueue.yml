@@ -4,7 +4,7 @@ desc: "Intel $OneApi Level-Zero APIs for Command Queue"
 --- #--------------------------------------------------------------------------
 type: enum
 desc: API version of $x_command_queue_desc_t
-class: $xDevice
+class: $xCommandQueue
 name: $x_command_queue_desc_version_t
 etors:
     - name: $X_COMMAND_QUEUE_DESC_VERSION_CURRENT
@@ -13,7 +13,7 @@ etors:
 --- #--------------------------------------------------------------------------
 type: enum
 desc: "Supported command queue flags"
-class: $xDevice
+class: $xCommandQueue
 name: $x_command_queue_flag_t
 etors:
     - name: $X_COMMAND_QUEUE_FLAG_NONE
@@ -31,7 +31,7 @@ etors:
 --- #--------------------------------------------------------------------------
 type: enum
 desc: "Supported command queue modes"
-class: $xDevice
+class: $xCommandQueue
 name: $x_command_queue_mode_t
 etors:
     - name: $X_COMMAND_QUEUE_MODE_DEFAULT
@@ -48,7 +48,7 @@ etors:
 --- #--------------------------------------------------------------------------
 type: enum
 desc: "Supported command queue priorities"
-class: $xDevice
+class: $xCommandQueue
 name: $x_command_queue_priority_t
 etors:
     - name: $X_COMMAND_QUEUE_PRIORITY_NORMAL
@@ -61,7 +61,7 @@ etors:
 --- #--------------------------------------------------------------------------
 type: struct
 desc: "Command Queue descriptor"
-class: $xDevice
+class: $xCommandQueue
 name: $x_command_queue_desc_t
 members:
     - type: $x_command_queue_desc_version_t
@@ -91,8 +91,9 @@ members:
 --- #--------------------------------------------------------------------------
 type: function
 desc: "Creates a command queue on the device."
-class: $xDevice
-name: CreateCommandQueue
+class: $xCommandQueue
+name: Create
+decl: static
 analogue:
     - "**clCreateCommandQueue**"
     - cuCtxCreate
@@ -118,6 +119,7 @@ type: function
 desc: "Destroys a command queue."
 class: $xCommandQueue
 name: Destroy
+decl: static
 analogue:
     - "**clReleaseCommandQueue**"
     - cuCtxDestroy

@@ -4,8 +4,9 @@ desc: "Intel $OneApi Level-Zero Tool APIs for Metric"
 --- #--------------------------------------------------------------------------
 type: function
 desc: "Returns metric group count for a given device."
-class: $tDevice
-name: GetMetricGroupCount
+class: $tMetricGroup
+name: GetCount
+decl: static
 params:
     - type: $x_device_handle_t
       name: hDevice
@@ -16,8 +17,9 @@ params:
 --- #--------------------------------------------------------------------------
 type: function
 desc: "Returns metric group handle for a device."
-class: $tDevice
-name: GetMetricGroup
+class: $tMetricGroup
+name: Get
+decl: static
 details:
     - "The application may call this function from simultaneous threads with the same device handle."
 params:
@@ -46,7 +48,7 @@ value: "256"
 --- #--------------------------------------------------------------------------
 type: enum
 desc: "Metric group sampling type"
-class: $tDevice
+class: $tMetricGroup
 name: $t_metric_group_sampling_type
 etors:
     - name: $T_METRIC_GROUP_SAMPLING_TYPE_EVENT_BASED
@@ -259,8 +261,9 @@ members:
 --- #--------------------------------------------------------------------------
 type: function
 desc: "Returns metric from a given metric group."
-class: $tMetricGroup
-name: GetMetric
+class: $tMetric
+name: Get
+decl: static
 details:
     - "The application may call this function from simultaneous threads with the same metric group handle."
 params:
@@ -328,8 +331,8 @@ desc: "Activates metric groups."
 class: $tDevice
 name: ActivateMetricGroups
 details:
-    - MetricGroup must be active until MetricQueryGetDeta and $tMetricTracerClose.
-    - Conflicting metric groups cannot be activated, in such case tha call would fail.
+    - "MetricGroup must be active until MetricQueryGetDeta and $tMetricTracerClose."
+    - "Conflicting metric groups cannot be activated, in such case tha call would fail."
 params:
     - type: "$x_device_handle_t"
       name: hDevice
@@ -374,8 +377,9 @@ members:
 --- #--------------------------------------------------------------------------
 type: function
 desc: "Opens metric tracer for a given device."
-class: $tDevice
-name: OpenMetricTracer
+class: $tMetricTracer
+name: Open
+decl: static
 details:
     - "The application may not call this function from simultaneous threads with the same device handle."
 params:
@@ -397,7 +401,7 @@ returns:
 --- #--------------------------------------------------------------------------
 type: function
 desc: "Append metric tracer marker to a given command list."
-class: $xCommandList
+class: $tCommandList
 name: AppendMetricTracerMarker
 details:
     - "The application may not call this function from simultaneous threads with the same device handle."
@@ -492,8 +496,9 @@ members:
 --- #--------------------------------------------------------------------------
 type: function
 desc: "Creates metric query pool."
-class: $tDevice
-name: CreateMetricQueryPool
+class: $tMetricQueryPool
+name: Create
+decl: static
 details:
     - "The application may call this function from simultaneous threads with the same device handle."
 params:
@@ -509,6 +514,21 @@ params:
 returns:
     - $X_RESULT_ERROR_INVALID_PARAMETER:
         - "invalid device handle"
+--- #--------------------------------------------------------------------------
+type: function
+desc: "Destroys query pool object."
+class: $tMetricQueryPool
+name: Destroy
+decl: static
+details:
+    - "The application may call this function from simultaneous threads with the same device handle."
+params:
+    - type: "$t_metric_query_pool_handle_t"
+      name: hMetricQueryPool
+      desc: "[in] handle of the metric query pool"
+returns:
+    - $X_RESULT_ERROR_INVALID_PARAMETER:
+        - "invalid metric query pool handle"
 --- #--------------------------------------------------------------------------
 type: function
 desc: "Returns metric query handle from a given metric query pool."
@@ -532,7 +552,7 @@ returns:
 --- #--------------------------------------------------------------------------
 type: function
 desc: "Appends metric query begin commands to command list."
-class: $xCommandList
+class: $tCommandList
 name: AppendMetricQueryBegin
 details:
     - "The application may call this function from simultaneous threads with the same device handle."
@@ -549,7 +569,7 @@ returns:
 --- #--------------------------------------------------------------------------
 type: function
 desc: "Appends metric query end commands to command list."
-class: $xCommandList
+class: $tCommandList
 name: AppendMetricQueryEnd
 details:
     - "The application may call this function from simultaneous threads with the same device handle."
@@ -569,7 +589,7 @@ returns:
 --- #--------------------------------------------------------------------------
 type: function
 desc: "Appends metric query commands to flush all caches."
-class: $xCommandList
+class: $tCommandList
 name: AppendMetricMemoryBarrier
 details:
     - "The application may call this function from simultaneous threads with the same device handle."
@@ -603,20 +623,6 @@ params:
 returns:
     - $X_RESULT_ERROR_INVALID_PARAMETER:
         - "invalid metric query handle"
---- #--------------------------------------------------------------------------
-type: function
-desc: "Destroys query pool object."
-class: $tMetricQueryPool
-name: Destroy
-details:
-    - "The application may call this function from simultaneous threads with the same device handle."
-params:
-    - type: "$t_metric_query_pool_handle_t"
-      name: hMetricQueryPool
-      desc: "[in] handle of the metric query pool"
-returns:
-    - $X_RESULT_ERROR_INVALID_PARAMETER:
-        - "invalid metric query pool handle"
 --- #--------------------------------------------------------------------------
 type: class
 desc: "C++ wrapper for metric group"

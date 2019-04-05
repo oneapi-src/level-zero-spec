@@ -39,6 +39,27 @@
 namespace xe
 {
     ///////////////////////////////////////////////////////////////////////////////
+    /// @brief C++ wrapper for ::xeEventPoolCreate
+    /// 
+    /// @details
+    ///     - This function may be called from simultaneous threads.
+    ///     - The implementation of this function should be lock-free.
+    /// 
+    /// @returns
+    ///     - ::event_pool_handle_t: pointer handle of event pool object created
+    /// 
+    /// @throws result_t
+    inline event_pool_handle_t 
+    EventPool::Create(
+        device_handle_t hDevice,                        ///< [in] handle of the device
+        const event_pool_desc_t* desc                   ///< [in] pointer to event pool descriptor
+        )
+    {
+        // auto result = ::xeEventPoolCreate( handle, hDevice, desc );
+        // if( ::XE_RESULT_SUCCESS != result ) throw exception(result, "xe::EventPool::Create");
+    }
+
+    ///////////////////////////////////////////////////////////////////////////////
     /// @brief C++ wrapper for ::xeEventPoolDestroy
     /// 
     /// @details
@@ -54,40 +75,11 @@ namespace xe
     /// @throws result_t
     inline void 
     EventPool::Destroy(
-        void
+        event_pool_handle_t hEventPool                  ///< [in] handle of event pool object to destroy
         )
     {
-        // auto result = ::xeEventPoolDestroy( handle );
+        // auto result = ::xeEventPoolDestroy( handle, hEventPool );
         // if( ::XE_RESULT_SUCCESS != result ) throw exception(result, "xe::EventPool::Destroy");
-    }
-
-    ///////////////////////////////////////////////////////////////////////////////
-    /// @brief C++ wrapper for ::xeEventPoolCreateEvent
-    /// 
-    /// @details
-    ///     - Multiple events cannot be created using the same index from the same
-    ///       pool
-    ///     - The index must be less-than the count specified during pool creation
-    ///     - This function may be called from simultaneous threads.
-    ///     - The implementation of this function should be lock-free.
-    /// 
-    /// @remarks
-    ///   _Analogues_
-    ///     - **clCreateUserEvent**
-    ///     - vkCreateEvent
-    ///     - cuEventCreate
-    /// 
-    /// @returns
-    ///     - ::event_handle_t: pointer to handle of event object created
-    /// 
-    /// @throws result_t
-    inline event_handle_t 
-    EventPool::CreateEvent(
-        uint32_t index                                  ///< [in] index of the event within the pool
-        )
-    {
-        // auto result = ::xeEventPoolCreateEvent( handle, index );
-        // if( ::XE_RESULT_SUCCESS != result ) throw exception(result, "xe::EventPool::CreateEvent");
     }
 
     ///////////////////////////////////////////////////////////////////////////////
@@ -162,6 +154,36 @@ namespace xe
     }
 
     ///////////////////////////////////////////////////////////////////////////////
+    /// @brief C++ wrapper for ::xeEventCreate
+    /// 
+    /// @details
+    ///     - Multiple events cannot be created using the same index from the same
+    ///       pool
+    ///     - The index must be less-than the count specified during pool creation
+    ///     - This function may be called from simultaneous threads.
+    ///     - The implementation of this function should be lock-free.
+    /// 
+    /// @remarks
+    ///   _Analogues_
+    ///     - **clCreateUserEvent**
+    ///     - vkCreateEvent
+    ///     - cuEventCreate
+    /// 
+    /// @returns
+    ///     - ::event_handle_t: pointer to handle of event object created
+    /// 
+    /// @throws result_t
+    inline event_handle_t 
+    Event::Create(
+        event_pool_handle_t hEventPool,                 ///< [in] handle of the event pool
+        uint32_t index                                  ///< [in] index of the event within the pool
+        )
+    {
+        // auto result = ::xeEventCreate( handle, hEventPool, index );
+        // if( ::XE_RESULT_SUCCESS != result ) throw exception(result, "xe::Event::Create");
+    }
+
+    ///////////////////////////////////////////////////////////////////////////////
     /// @brief C++ wrapper for ::xeEventDestroy
     /// 
     /// @details
@@ -180,10 +202,10 @@ namespace xe
     /// @throws result_t
     inline void 
     Event::Destroy(
-        void
+        event_handle_t hEvent                           ///< [in] handle of event object to destroy
         )
     {
-        // auto result = ::xeEventDestroy( handle );
+        // auto result = ::xeEventDestroy( handle, hEvent );
         // if( ::XE_RESULT_SUCCESS != result ) throw exception(result, "xe::Event::Destroy");
     }
 

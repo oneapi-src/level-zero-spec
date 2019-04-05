@@ -53,7 +53,7 @@ extern "C" {
 ///         + nullptr == pCount
 ///     - ::XE_RESULT_ERROR_UNSUPPORTED
 __xedllport xe_result_t __xecall
-xetDeviceGetMetricGroupCount(
+xetMetricGroupGetCount(
     xe_device_handle_t hDevice,                     ///< [in] handle of the device object
     uint32_t* pCount                                ///< [out] number of metric groups supported by the device
     );
@@ -75,7 +75,7 @@ xetDeviceGetMetricGroupCount(
 ///         + devices do not contain a given metric group
 ///     - ::XE_RESULT_ERROR_UNSUPPORTED
 __xedllport xe_result_t __xecall
-xetDeviceGetMetricGroup(
+xetMetricGroupGet(
     xe_device_handle_t hDevice,                     ///< [in] handle of the device
     uint32_t ordinal,                               ///< [in] metric group index
     xet_metric_group_handle_t* phMetricGroup        ///< [out] metric group handle
@@ -257,7 +257,7 @@ typedef struct _xet_metric_properties_t
 ///         + invalid metric group handle
 ///     - ::XE_RESULT_ERROR_UNSUPPORTED
 __xedllport xe_result_t __xecall
-xetMetricGroupGetMetric(
+xetMetricGet(
     xet_metric_group_handle_t hMetricGroup,         ///< [in] handle of the metric group
     uint32_t ordinal,                               ///< [in] metric index
     xet_metric_handle_t* phMetric                   ///< [out] handle of metric
@@ -378,7 +378,7 @@ typedef struct _xet_metric_tracer_desc_t
 ///     - ::XE_RESULT_ERROR_UNSUPPORTED
 ///         + ::XET_METRIC_TRACER_DESC_VERSION_CURRENT < pDesc->version
 __xedllport xe_result_t __xecall
-xetDeviceOpenMetricTracer(
+xetMetricTracerOpen(
     xe_device_handle_t hDevice,                     ///< [in] handle of the device
     xet_metric_tracer_desc_t* pDesc,                ///< [in/out] metric tracer descriptor
     xe_event_handle_t hNotificationEvent,           ///< [in] event used for report availability notification. Must be device
@@ -403,7 +403,7 @@ xetDeviceOpenMetricTracer(
 ///         + command list do not support metric tracer
 ///     - ::XE_RESULT_ERROR_UNSUPPORTED
 __xedllport xe_result_t __xecall
-xeCommandListAppendMetricTracerMarker(
+xetCommandListAppendMetricTracerMarker(
     xe_command_list_handle_t hCommandList,          ///< [in] handle of the command list
     xet_metric_tracer_handle_t hMetricTracer,       ///< [in] handle of the metric tracer
     uint32_t value                                  ///< [in] tracer marker value
@@ -501,10 +501,30 @@ typedef struct _xet_metric_query_pool_desc_t
 ///     - ::XE_RESULT_ERROR_UNSUPPORTED
 ///         + ::XET_METRIC_QUERY_POOL_DESC_VERSION_CURRENT < pDesc->version
 __xedllport xe_result_t __xecall
-xetDeviceCreateMetricQueryPool(
+xetMetricQueryPoolCreate(
     xe_device_handle_t hDevice,                     ///< [in] handle of the device
     xet_metric_query_pool_desc_t* pDesc,            ///< [in] metric query pool creation data
     xet_metric_query_pool_handle_t* phMetricQueryPool   ///< [out] handle of metric query pool
+    );
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Destroys query pool object.
+/// 
+/// @details
+///     - The application may call this function from simultaneous threads with
+///       the same device handle.
+/// 
+/// @returns
+///     - ::XE_RESULT_SUCCESS
+///     - ::XE_RESULT_ERROR_UNINITIALIZED
+///     - ::XE_RESULT_ERROR_DEVICE_LOST
+///     - ::XE_RESULT_ERROR_INVALID_PARAMETER
+///         + nullptr == hMetricQueryPool
+///         + invalid metric query pool handle
+///     - ::XE_RESULT_ERROR_UNSUPPORTED
+__xedllport xe_result_t __xecall
+xetMetricQueryPoolDestroy(
+    xet_metric_query_pool_handle_t hMetricQueryPool ///< [in] handle of the metric query pool
     );
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -547,7 +567,7 @@ xetMetricQueryPoolGetMetricQuery(
 ///         + invalid handle
 ///     - ::XE_RESULT_ERROR_UNSUPPORTED
 __xedllport xe_result_t __xecall
-xeCommandListAppendMetricQueryBegin(
+xetCommandListAppendMetricQueryBegin(
     xe_command_list_handle_t hCommandList,          ///< [in] handle of the command list
     xet_metric_query_handle_t hMetricQuery          ///< [in] handle of the metric query
     );
@@ -570,7 +590,7 @@ xeCommandListAppendMetricQueryBegin(
 ///         + invalid handle
 ///     - ::XE_RESULT_ERROR_UNSUPPORTED
 __xedllport xe_result_t __xecall
-xeCommandListAppendMetricQueryEnd(
+xetCommandListAppendMetricQueryEnd(
     xe_command_list_handle_t hCommandList,          ///< [in] handle of the command list
     xet_metric_query_handle_t hMetricQuery,         ///< [in] handle of the metric query
     xe_event_handle_t hCompletionEvent              ///< [in] handle of the completion event to signal
@@ -592,7 +612,7 @@ xeCommandListAppendMetricQueryEnd(
 ///         + invalid command list handle
 ///     - ::XE_RESULT_ERROR_UNSUPPORTED
 __xedllport xe_result_t __xecall
-xeCommandListAppendMetricMemoryBarrier(
+xetCommandListAppendMetricMemoryBarrier(
     xe_command_list_handle_t hCommandList           ///< [in] handle of the command list
     );
 
@@ -619,26 +639,6 @@ xetMetricQueryGetData(
     uint32_t* pReportCount,                         ///< [in/out] report count to read/returned
     uint32_t rawDataSize,                           ///< [in] raw data size passed by the user
     uint8_t* pRawData                               ///< [in/out] query result data in raw format
-    );
-
-///////////////////////////////////////////////////////////////////////////////
-/// @brief Destroys query pool object.
-/// 
-/// @details
-///     - The application may call this function from simultaneous threads with
-///       the same device handle.
-/// 
-/// @returns
-///     - ::XE_RESULT_SUCCESS
-///     - ::XE_RESULT_ERROR_UNINITIALIZED
-///     - ::XE_RESULT_ERROR_DEVICE_LOST
-///     - ::XE_RESULT_ERROR_INVALID_PARAMETER
-///         + nullptr == hMetricQueryPool
-///         + invalid metric query pool handle
-///     - ::XE_RESULT_ERROR_UNSUPPORTED
-__xedllport xe_result_t __xecall
-xetMetricQueryPoolDestroy(
-    xet_metric_query_pool_handle_t hMetricQueryPool ///< [in] handle of the metric query pool
     );
 
 #if defined(__cplusplus)

@@ -39,6 +39,46 @@
 namespace xe
 {
     ///////////////////////////////////////////////////////////////////////////////
+    /// @brief C++ wrapper for ::xeModuleCreate
+    /// 
+    /// @details
+    ///     - This function may be called from simultaneous threads.
+    ///     - The implementation of this function should be lock-free.
+    ///     - This function will create and compile the module object.
+    ///     - A build log can optionally be returned to the caller. Caller is
+    ///       responsible for destroying build log using ::ModuleBuildLogDestroy
+    ///     - Device memory will be allocated for module during creation.
+    ///     - A module can be created directly from native binary format.
+    ///     - A native binary object can be retrieved from a module using
+    ///       ::ModuleGetNativeBinary. This can be cached to disk and to create new
+    ///       modules.
+    ///     - The following build options are supported:
+    ///         + "--opt-disable" - Disable optimizations
+    ///         + "--opt-greater-than-4GB-buffer-required" - Use 64-bit offset
+    ///           calculations for buffers.
+    ///         + "--opt-large-register-file" - Increase number of registers
+    ///           available to threads.
+    /// 
+    /// @remarks
+    ///   _Analogues_
+    ///     - **cuModuleLoad**
+    /// 
+    /// @returns
+    ///     - ::module_handle_t: pointer to handle of module object created
+    /// 
+    /// @throws result_t
+    inline module_handle_t 
+    Module::Create(
+        device_handle_t hDevice,                        ///< [in] handle of the device
+        const module_desc_t* pDesc,                     ///< [in] pointer to module descriptor
+        module_build_log_handle_t* phBuildLog           ///< [in,out][optional] pointer to handle of module's build log.
+        )
+    {
+        // auto result = ::xeModuleCreate( handle, hDevice, pDesc, phBuildLog );
+        // if( ::XE_RESULT_SUCCESS != result ) throw exception(result, "xe::Module::Create");
+    }
+
+    ///////////////////////////////////////////////////////////////////////////////
     /// @brief C++ wrapper for ::xeModuleDestroy
     /// 
     /// @details
@@ -55,10 +95,10 @@ namespace xe
     /// @throws result_t
     inline void 
     Module::Destroy(
-        void
+        module_handle_t hModule                         ///< [in] handle of the module
         )
     {
-        // auto result = ::xeModuleDestroy( handle );
+        // auto result = ::xeModuleDestroy( handle, hModule );
         // if( ::XE_RESULT_SUCCESS != result ) throw exception(result, "xe::Module::Destroy");
     }
 
@@ -110,31 +150,6 @@ namespace xe
     }
 
     ///////////////////////////////////////////////////////////////////////////////
-    /// @brief C++ wrapper for ::xeModuleCreateFunction
-    /// 
-    /// @details
-    ///     - This function may be called from simultaneous threads.
-    ///     - The implementation of this function should be lock-free.
-    ///     - Function objects should be destroyed before the Module is destroyed.
-    /// 
-    /// @remarks
-    ///   _Analogues_
-    ///     - **cuModuleGetFunction**
-    /// 
-    /// @returns
-    ///     - ::function_handle_t: handle of the Function object
-    /// 
-    /// @throws result_t
-    inline function_handle_t 
-    Module::CreateFunction(
-        const function_desc_t* pDesc                    ///< [in] pointer to function descriptor
-        )
-    {
-        // auto result = ::xeModuleCreateFunction( handle, pDesc );
-        // if( ::XE_RESULT_SUCCESS != result ) throw exception(result, "xe::Module::CreateFunction");
-    }
-
-    ///////////////////////////////////////////////////////////////////////////////
     /// @brief C++ wrapper for ::xeModuleGetFunctionPointer
     /// 
     /// @details
@@ -156,6 +171,32 @@ namespace xe
     }
 
     ///////////////////////////////////////////////////////////////////////////////
+    /// @brief C++ wrapper for ::xeFunctionCreate
+    /// 
+    /// @details
+    ///     - This function may be called from simultaneous threads.
+    ///     - The implementation of this function should be lock-free.
+    ///     - Function objects should be destroyed before the Module is destroyed.
+    /// 
+    /// @remarks
+    ///   _Analogues_
+    ///     - **cuModuleGetFunction**
+    /// 
+    /// @returns
+    ///     - ::function_handle_t: handle of the Function object
+    /// 
+    /// @throws result_t
+    inline function_handle_t 
+    Function::Create(
+        module_handle_t hModule,                        ///< [in] handle of the module
+        const function_desc_t* pDesc                    ///< [in] pointer to function descriptor
+        )
+    {
+        // auto result = ::xeFunctionCreate( handle, hModule, pDesc );
+        // if( ::XE_RESULT_SUCCESS != result ) throw exception(result, "xe::Function::Create");
+    }
+
+    ///////////////////////////////////////////////////////////////////////////////
     /// @brief C++ wrapper for ::xeFunctionDestroy
     /// 
     /// @details
@@ -168,10 +209,10 @@ namespace xe
     /// @throws result_t
     inline void 
     Function::Destroy(
-        void
+        function_handle_t hFunction                     ///< [in] handle of the function object
         )
     {
-        // auto result = ::xeFunctionDestroy( handle );
+        // auto result = ::xeFunctionDestroy( handle, hFunction );
         // if( ::XE_RESULT_SUCCESS != result ) throw exception(result, "xe::Function::Destroy");
     }
 

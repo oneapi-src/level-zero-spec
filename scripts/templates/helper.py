@@ -12,9 +12,14 @@ def subt(namespace, tags, string, comment=False, cpp=False):
             repl = "::" if comment and "$OneApi" != key else ""
             string = re.sub(r"%s_?"%re.escape(key), repl, string)
             string = re.sub(r"%s_?"%re.escape(key.upper()), repl.upper(), string)
+        elif cpp:
+            string = re.sub(r"-%s"%re.escape(key), "-"+value, string) #hack
+            repl = "::"+value if comment and "$OneApi" != key else value+"::"
+            string = re.sub(r"%s_?"%re.escape(key), repl, string)
+            string = re.sub(r"%s_?"%re.escape(key.upper()), repl.upper(), string)
         else:
             string = re.sub(r"-%s"%re.escape(key), "-"+value, string) #hack
-            repl = "::"+value if comment and "$OneApi" != key else value+"::" if cpp else value
+            repl = "::"+value if comment and "$OneApi" != key else value
             string = re.sub(re.escape(key), repl, string)
             string = re.sub(re.escape(key.upper()), repl.upper(), string)
     return string

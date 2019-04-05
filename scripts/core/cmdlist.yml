@@ -4,7 +4,7 @@ desc: "Intel $OneApi Level-Zero APIs for Command List"
 --- #--------------------------------------------------------------------------
 type: enum
 desc: "API version of $x_command_list_desc_t"
-class: $xDevice
+class: $xCommandList
 name: $x_command_list_desc_version_t
 etors:
     - name: $X_COMMAND_LIST_DESC_VERSION_CURRENT
@@ -13,7 +13,7 @@ etors:
 --- #--------------------------------------------------------------------------
 type: enum
 desc: "Supported command list creation flags"
-class: $xDevice
+class: $xCommandList
 name: $x_command_list_flag_t
 etors:
     - name: $X_COMMAND_LIST_FLAG_NONE
@@ -34,7 +34,7 @@ etors:
 --- #--------------------------------------------------------------------------
 type: struct
 desc: "Command List descriptor"
-class: $xDevice
+class: $xCommandList
 name: $x_command_list_desc_t
 members:
     - type: $x_command_list_desc_version_t
@@ -48,8 +48,9 @@ members:
 --- #--------------------------------------------------------------------------
 type: function
 desc: "Creates a command list on the device for submitting commands to any command queue."
-class: $xDevice
-name: CreateCommandList
+class: $xCommandList
+name: Create
+decl: static
 details:
     - "The command list is created in the 'open' state."
     - "This function may be called from simultaneous threads."
@@ -72,6 +73,7 @@ type: function
 desc: "Destroys a command list."
 class: $xCommandList
 name: Destroy
+decl: static
 details:
     - "The application is responsible for making sure the GPU is not currently referencing the command list before it is deleted"
     - "The implementation of this function will immediately free all Host and Device allocations associated with this command list."

@@ -51,7 +51,7 @@ The following sample code demonstrates a basic initialization sequence:
 
     // Get number of devices supporting Xe
     uint32_t deviceCount = 0;
-    xeGetDeviceCount(&deviceCount);
+    xeDeviceGetCount(&deviceCount);
     if(0 == deviceCount)
     {
         printf("There is no device supporting Xe!\n");
@@ -62,7 +62,7 @@ The following sample code demonstrates a basic initialization sequence:
     xe_device_handle_t hDevice;
     for(uint32_t i = 0; i < deviceCount; ++i)
     {
-        xeGetDevice(i, &hDevice);
+        xeDeviceGet(i, &hDevice);
         
         xe_api_version_t version;
         xeDeviceGetApiVersion(hDevice, &version);
@@ -135,7 +135,7 @@ See ::xe_command_queue_desc_t for more details.
     assert(desc.ordinal < subdeviceProps.numAsyncComputeEngines);
 
     xe_command_queue_handle_t commandQueueForSubDevice2;
-    xeDeviceCreateCommandQueue(subdevice, desc, &commandQueueForSubDevice2);
+    xeCommandQueueCreate(subdevice, desc, &commandQueueForSubDevice2);
     ...
 ```
 
@@ -186,7 +186,7 @@ The following sample code demonstrates a basic sequence for creation of command 
         0
     };
     xe_command_queue_handle_t hCommandQueue;
-    xeDeviceCreateCommandQueue(hDevice, &commandQueueDesc, &hCommandQueue);
+    xeCommandQueueCreate(hDevice, &commandQueueDesc, &hCommandQueue);
     ...
 ```
 
@@ -235,7 +235,7 @@ The following sample code demonstrates a basic sequence for creation of command 
         XE_COMMAND_LIST_FLAG_NONE
     };
     xe_command_list_handle_t hCommandList;
-    xeDeviceCreateCommandList(hDevice, &commandListDesc, &hCommandList);
+    xeCommandListCreate(hDevice, &commandListDesc, &hCommandList);
     ...
 ```
 
@@ -345,7 +345,7 @@ The following sample code demonstrates a sequence for creation, submission and q
         XE_FENCE_FLAG_NONE
     };
     xe_fence_handle_t hFence;
-    xeCommandQueueCreateFence(hCommandQueue, &fenceDesc, &hFence);
+    xeFenceCreate(hCommandQueue, &fenceDesc, &hFence);
 
     // Execute a command list with a signal of the fence
     xeCommandQueueExecuteCommandLists(hCommandQueue, 1, &hCommandList, hFence);
@@ -396,10 +396,10 @@ The following sample code demonstrates a sequence for creation and submission of
         1
     };
     xe_event_pool_handle_t hEventPool;
-    xeDeviceCreateEventPool(hDevice, &eventPoolDesc, &hEventPool);
+    xeEventPoolCreate(hDevice, &eventPoolDesc, &hEventPool);
 
     xe_event_handle_t hEvent;
-    xeEventPoolCreateEvent(hEventPool, 0, &hEvent);
+    xeEventCreate(hEventPool, 0, &hEvent);
 
     // Append a wait on an event into a command list
     xeCommandListAppendWaitOnEvent(hCommandList, hEvent);
@@ -556,7 +556,7 @@ and avoids exposing these details in the API in a backwards compatible fashion.
         128, 128, 0, 0, 0
     };
     xe_image_handle_t hImage;
-    xeDeviceCreateImage(hDevice, &imageDesc, &hImage);
+    xeImageCreate(hDevice, &imageDesc, &hImage);
 
     // upload contents from host pointer
     xeCommandListAppendImageCopyFromMemory(hCommandList, hImage, nullptr, pImageData, nullptr);
@@ -651,9 +651,9 @@ There are multiple levels of constructs needed for executing functions on the de
 2. A [**Function**](#func) represents the function within the module that will be launched directly from a command list.
 
 ## <a name="mod">Modules</a>
-Modules can be created from an IL or directly from native format using ::xeDeviceCreateModule.
-- ::xeDeviceCreateModule takes a format argument that specifies the input format.
-- ::xeDeviceCreateModule performs a compilation step when format is IL.
+Modules can be created from an IL or directly from native format using ::xeModuleCreate.
+- ::xeModuleCreate takes a format argument that specifies the input format.
+- ::xeModuleCreate performs a compilation step when format is IL.
 
 The following sample code demonstrates a sequence for creating a module from an OpenCL function:
 ```c
@@ -682,7 +682,7 @@ The following sample code demonstrates a sequence for creating a module from an 
         nullptr
     };
     xe_module_handle_t hModule;
-    xeDeviceCreateModule(hDevice, &moduleDesc, &hModule, nullptr);
+    xeModuleCreate(hDevice, &moduleDesc, &hModule, nullptr);
     ...
 ```
 
@@ -695,12 +695,12 @@ Build options can be passed with ::xe_module_desc_t as a string.
 | -xe-opt-large-register-file                 | Increase number of registers available to threads.    | Disabled |
 
 ### Module Build Log
-The ::xeDeviceCreateModule function can optionally generate a build log object ::xe_module_build_log_handle_t.
+The ::xeModuleCreate function can optionally generate a build log object ::xe_module_build_log_handle_t.
 
 ```c
     ...
     xe_module_build_log_handle_t buildlog;
-    xe_result_t result = xeDeviceCreateModule(hDevice, &desc, &module, &buildlog);
+    xe_result_t result = xeModuleCreate(hDevice, &desc, &module, &buildlog);
 
     // Only save build logs for module creation errors.
     if (result != XE_RESULT_SUCCESS)
@@ -762,7 +762,7 @@ The following sample code demonstrates a sequence for creating a function from a
         "image_scaling"
     };
     xe_function_handle_t hFunction;
-    xeModuleCreateFunction(hModule, &functionDesc, &hFunction);
+    xeFunctionCreate(hModule, &functionDesc, &hFunction);
     ...
 ```
 
@@ -879,7 +879,7 @@ device to generate the parameters.
 
 ## <a name="arg">Sampler</a>
 The API supports Sampler objects that represent state needed for sampling images from within
-Module functions.  The ::xeDeviceCreateSampler function takes a sampler descriptor (::xe_sampler_desc_t):
+Module functions.  The ::xeSamplerCreate function takes a sampler descriptor (::xe_sampler_desc_t):
 
 | Sampler Field    | Description                                           |
 | :--              | :--                                                   |
@@ -898,7 +898,7 @@ The following is sample for code creating a sampler object and passing it as a F
         false
         };
     xe_sampler_handle_t sampler;
-    xeDeviceCreateSampler(hDevice, &desc, &sampler);
+    xeSamplerCreate(hDevice, &desc, &sampler);
     ...
     
     // The sampler can be passed as a function argument.
@@ -1006,7 +1006,7 @@ The following code examples demonstrate how to use the event IPC APIs:
         10
     };
     xe_event_pool_handle_t hEventPool;
-    xeDeviceCreateEventPool(hDevice, &eventPoolDesc, &hEventPool);
+    xeEventPoolCreate(hDevice, &eventPoolDesc, &hEventPool);
  
     // get IPC handle and send to another process
     xe_ipc_event_pool_handle_t hIpcEvent;
@@ -1026,24 +1026,24 @@ The following code examples demonstrate how to use the event IPC APIs:
 ```
 
 3. Each process may now refer to the same device event allocation via its handle.
+    a. receiving process creates event at location 
 ```c
     xe_event_handle_t hEvent;
-    xeEventPoolCreateEvent(hEventPool, 5, &hEvent);
+    xeEventCreate(hEventPool, 5, &hEvent);
 
     // submit function and signal event when complete
     xeCommandListAppendLaunchFunction(hCommandList, hFunction, &args, hEvent);
     xeCommandListClose(hCommandList);
     xeCommandQueueExecuteCommandLists(hCommandQueue, 1, &hCommandList, nullptr);
 ```
-
+    b. sending process creates event at same location
 ```c
     xe_event_handle_t hEvent;
-    xeEventPoolCreateEvent(hEventPool, 5, &hEvent);
+    xeEventCreate(hEventPool, 5, &hEvent);
 
     xeEventHostSynchronize(hEvent, MAX_UINT32);
 ```
-
-Note, there is no guaranteed address equivalence for the values of `hEvent` in each process.
+    Note, there is no guaranteed address equivalence for the values of `hEvent` in each process.
 
 4. To cleanup, first close the pool handle in the receiving process:
 ```c

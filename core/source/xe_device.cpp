@@ -59,10 +59,10 @@
 ///         + nullptr == count
 ///     - ::XE_RESULT_ERROR_UNSUPPORTED
 ///
-/// @hash {04876fcc16578eaab0df0893606a7b6668fcceaee9893d7d2b20fd97fe54d941}
+/// @hash {37748b1c3f680cbe7589aa03dce894c783c7bfcf519e1471437066baf4cfb59f}
 ///
 __xedllexport xe_result_t __xecall
-xeGetDeviceCount(
+xeDeviceGetCount(
     uint32_t* count                                 ///< [out] number of devices available
     )
 {
@@ -78,7 +78,7 @@ xeGetDeviceCount(
 #if defined(XE_NULLDRV)
         return XE_RESULT_SUCCESS;
 #else
-        return L0::::get()->getDeviceCount(count);
+        return L0::Device::get()->getCount(count);
 #endif
         /// @end
     }
@@ -118,10 +118,10 @@ xeGetDeviceCount(
 ///         + ordinal is out of range reported by ::xeGetDeviceCount
 ///     - ::XE_RESULT_ERROR_UNSUPPORTED
 ///
-/// @hash {10303266e40d8c906f462dff76c60fe28ceecec3cbaa9a84b818d2eea3c3f921}
+/// @hash {f4b935f7f586ba87c5c2bc1c836eeb7be390d9ff368c62c22f179cbdf256b76a}
 ///
 __xedllexport xe_result_t __xecall
-xeGetDevice(
+xeDeviceGet(
     uint32_t ordinal,                               ///< [in] The device index in the range of [0, ::xeGetDeviceCount]
     xe_device_handle_t* phDevice                    ///< [out] pointer to handle of device object created
     )
@@ -138,7 +138,7 @@ xeGetDevice(
 #if defined(XE_NULLDRV)
         return XE_RESULT_SUCCESS;
 #else
-        return L0::::get()->getDevice(ordinal, phDevice);
+        return L0::Device::get()->get(ordinal, phDevice);
 #endif
         /// @end
     }

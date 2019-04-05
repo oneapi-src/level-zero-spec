@@ -51,38 +51,54 @@ namespace xe
         auto getDesc( void ) const { return desc; }
 
         ///////////////////////////////////////////////////////////////////////////////
-        /// @brief C++ version for ::xe_function_desc_version_t
-        enum class function_desc_version_t
+        /// @brief C++ version for ::xe_module_desc_version_t
+        enum class module_desc_version_t
         {
             CURRENT = XE_MAKE_VERSION( 1, 0 ),              ///< version 1.0
 
         };
 
         ///////////////////////////////////////////////////////////////////////////////
-        /// @brief C++ version for ::xe_function_flag_t
-        enum class function_flag_t
+        /// @brief C++ version for ::xe_module_format_t
+        enum class module_format_t
         {
-            NONE = 0,                                       ///< default driver behavior
-            FORCE_RESIDENCY,                                ///< force all device allocations to be resident during execution
+            IL_SPIRV = 0,                                   ///< Format is SPIRV IL format
+            NATIVE,                                         ///< Format is device native format
 
         };
 
         ///////////////////////////////////////////////////////////////////////////////
-        /// @brief C++ version for ::xe_function_desc_t
-        struct function_desc_t
+        /// @brief C++ version for ::xe_module_desc_t
+        struct module_desc_t
         {
-            function_desc_version_t version = function_desc_version_t::CURRENT; ///< [in] ::FUNCTION_DESC_VERSION_CURRENT
-            function_flag_t flags = function_flag_t::NONE;  ///< [in] creation flags
-            const char* pFunctionName = nullptr;            ///< [in] null-terminated name of function in Module
+            module_desc_version_t version = module_desc_version_t::CURRENT; ///< [in] ::MODULE_DESC_VERSION_CURRENT
+            module_format_t format;                         ///< [in] Module format passed in with pInputModule
+            size_t inputSize = 0;                           ///< [in] size of input IL or ISA from pInputModule.
+            const uint8_t* pInputModule = nullptr;          ///< [in] pointer to IL or ISA
+            const char* pBuildFlags = nullptr;              ///< [in] string containing compiler flags. See programming guide for build
+                                                            ///< flags.
 
         };
+
+        ///////////////////////////////////////////////////////////////////////////////
+        /// @brief C++ wrapper for ::xeModuleCreate
+        /// @returns
+        ///     - ::module_handle_t: pointer to handle of module object created
+        /// 
+        /// @throws result_t
+        inline static module_handle_t
+        Create(
+            device_handle_t hDevice,                        ///< [in] handle of the device
+            const module_desc_t* pDesc,                     ///< [in] pointer to module descriptor
+            module_build_log_handle_t* phBuildLog = nullptr ///< [in,out][optional] pointer to handle of module's build log.
+            );
 
         ///////////////////////////////////////////////////////////////////////////////
         /// @brief C++ wrapper for ::xeModuleDestroy
         /// @throws result_t
-        inline void
+        inline static void
         Destroy(
-            void
+            module_handle_t hModule                         ///< [in] handle of the module
             );
 
         ///////////////////////////////////////////////////////////////////////////////
@@ -103,17 +119,6 @@ namespace xe
         inline void*
         GetGlobalPointer(
             const char* pGlobalName                         ///< [in] name of function in global
-            );
-
-        ///////////////////////////////////////////////////////////////////////////////
-        /// @brief C++ wrapper for ::xeModuleCreateFunction
-        /// @returns
-        ///     - ::function_handle_t: handle of the Function object
-        /// 
-        /// @throws result_t
-        inline function_handle_t
-        CreateFunction(
-            const function_desc_t* pDesc                    ///< [in] pointer to function descriptor
             );
 
         ///////////////////////////////////////////////////////////////////////////////
@@ -142,6 +147,23 @@ namespace xe
         auto getDesc( void ) const { return desc; }
 
         ///////////////////////////////////////////////////////////////////////////////
+        /// @brief C++ version for ::xe_function_desc_version_t
+        enum class function_desc_version_t
+        {
+            CURRENT = XE_MAKE_VERSION( 1, 0 ),              ///< version 1.0
+
+        };
+
+        ///////////////////////////////////////////////////////////////////////////////
+        /// @brief C++ version for ::xe_function_flag_t
+        enum class function_flag_t
+        {
+            NONE = 0,                                       ///< default driver behavior
+            FORCE_RESIDENCY,                                ///< force all device allocations to be resident during execution
+
+        };
+
+        ///////////////////////////////////////////////////////////////////////////////
         /// @brief C++ version for ::xe_function_set_attribute_t
         enum class function_set_attribute_t
         {
@@ -168,11 +190,33 @@ namespace xe
         };
 
         ///////////////////////////////////////////////////////////////////////////////
+        /// @brief C++ version for ::xe_function_desc_t
+        struct function_desc_t
+        {
+            function_desc_version_t version = function_desc_version_t::CURRENT; ///< [in] ::FUNCTION_DESC_VERSION_CURRENT
+            function_flag_t flags = function_flag_t::NONE;  ///< [in] creation flags
+            const char* pFunctionName = nullptr;            ///< [in] null-terminated name of function in Module
+
+        };
+
+        ///////////////////////////////////////////////////////////////////////////////
+        /// @brief C++ wrapper for ::xeFunctionCreate
+        /// @returns
+        ///     - ::function_handle_t: handle of the Function object
+        /// 
+        /// @throws result_t
+        inline static function_handle_t
+        Create(
+            module_handle_t hModule,                        ///< [in] handle of the module
+            const function_desc_t* pDesc                    ///< [in] pointer to function descriptor
+            );
+
+        ///////////////////////////////////////////////////////////////////////////////
         /// @brief C++ wrapper for ::xeFunctionDestroy
         /// @throws result_t
-        inline void
+        inline static void
         Destroy(
-            void
+            function_handle_t hFunction                     ///< [in] handle of the function object
             );
 
         ///////////////////////////////////////////////////////////////////////////////

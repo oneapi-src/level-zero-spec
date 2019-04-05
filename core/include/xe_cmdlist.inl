@@ -64,6 +64,28 @@ namespace xe
     }
 
     ///////////////////////////////////////////////////////////////////////////////
+    /// @brief C++ wrapper for ::xeCommandListCreate
+    /// 
+    /// @details
+    ///     - The command list is created in the 'open' state.
+    ///     - This function may be called from simultaneous threads.
+    ///     - The implementation of this function should be lock-free.
+    /// 
+    /// @returns
+    ///     - ::command_list_handle_t: pointer to handle of command list object created
+    /// 
+    /// @throws result_t
+    inline command_list_handle_t 
+    CommandList::Create(
+        device_handle_t hDevice,                        ///< [in] handle of the device object
+        const command_list_desc_t* desc                 ///< [in] pointer to command list descriptor
+        )
+    {
+        // auto result = ::xeCommandListCreate( handle, hDevice, desc );
+        // if( ::XE_RESULT_SUCCESS != result ) throw exception(result, "xe::CommandList::Create");
+    }
+
+    ///////////////////////////////////////////////////////////////////////////////
     /// @brief C++ wrapper for ::xeCommandListDestroy
     /// 
     /// @details
@@ -76,10 +98,10 @@ namespace xe
     /// @throws result_t
     inline void 
     CommandList::Destroy(
-        void
+        command_list_handle_t hCommandList              ///< [in] handle of command list object to destroy
         )
     {
-        // auto result = ::xeCommandListDestroy( handle );
+        // auto result = ::xeCommandListDestroy( handle, hCommandList );
         // if( ::XE_RESULT_SUCCESS != result ) throw exception(result, "xe::CommandList::Destroy");
     }
 

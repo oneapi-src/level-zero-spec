@@ -84,10 +84,10 @@
 ///     - ::XE_RESULT_ERROR_MODULE_BUILD_FAILURE
 ///         + Failure to build module. See build log for more details.
 ///
-/// @hash {9eb829c1441842e279f9be96688eeb91e18798a1c6f1c8383d0a3ac86bfd4809}
+/// @hash {1156bac448e0a4d469674e6f6c1c4b19b3e4155e7fa2184e0e8407ea88c1ee34}
 ///
 __xedllexport xe_result_t __xecall
-xeDeviceCreateModule(
+xeModuleCreate(
     xe_device_handle_t hDevice,                     ///< [in] handle of the device
     const xe_module_desc_t* pDesc,                  ///< [in] pointer to module descriptor
     xe_module_handle_t* phModule,                   ///< [out] pointer to handle of module object created
@@ -109,7 +109,7 @@ xeDeviceCreateModule(
 #if defined(XE_NULLDRV)
         return XE_RESULT_SUCCESS;
 #else
-        return L0::Device::fromHandle(hDevice)->createModule(pDesc, phModule, phBuildLog);
+        return L0::moduleCreate(hDevice, pDesc, phModule, phBuildLog);
 #endif
         /// @end
     }
@@ -169,7 +169,7 @@ xeModuleDestroy(
 #if defined(XE_NULLDRV)
         return XE_RESULT_SUCCESS;
 #else
-        return L0::Module::fromHandle(hModule)->destroy();
+        return L0::moduleDestroy(hModule);
 #endif
         /// @end
     }
@@ -227,7 +227,7 @@ xeModuleBuildLogDestroy(
 #if defined(XE_NULLDRV)
         return XE_RESULT_SUCCESS;
 #else
-        return L0::ModuleBuildLog::fromHandle(hModuleBuildLog)->destroy();
+        return L0::moduleBuildLogDestroy(hModuleBuildLog);
 #endif
         /// @end
     }
@@ -461,10 +461,10 @@ xeModuleGetGlobalPointer(
 ///     - ::XE_RESULT_ERROR_UNSUPPORTED
 ///         + ::XE_FUNCTION_DESC_VERSION_CURRENT < pDesc->version
 ///
-/// @hash {db1f3dd910ba87cc5f4943397310ef13073b227ef8aad92327a8183e14461837}
+/// @hash {c7cb43b7ce7fe061e7931acec7f30c65b855b948c16910e0982e7fbecce0cce6}
 ///
 __xedllexport xe_result_t __xecall
-xeModuleCreateFunction(
+xeFunctionCreate(
     xe_module_handle_t hModule,                     ///< [in] handle of the module
     const xe_function_desc_t* pDesc,                ///< [in] pointer to function descriptor
     xe_function_handle_t* phFunction                ///< [out] handle of the Function object
@@ -485,7 +485,7 @@ xeModuleCreateFunction(
 #if defined(XE_NULLDRV)
         return XE_RESULT_SUCCESS;
 #else
-        return L0::Module::fromHandle(hModule)->createFunction(pDesc, phFunction);
+        return L0::functionCreate(hModule, pDesc, phFunction);
 #endif
         /// @end
     }
@@ -541,7 +541,7 @@ xeFunctionDestroy(
 #if defined(XE_NULLDRV)
         return XE_RESULT_SUCCESS;
 #else
-        return L0::Function::fromHandle(hFunction)->destroy();
+        return L0::functionDestroy(hFunction);
 #endif
         /// @end
     }

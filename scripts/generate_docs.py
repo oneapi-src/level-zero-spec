@@ -97,7 +97,7 @@ def generate_md(srcpath, dstpath, tags, meta):
     for fin in util.findFiles(srcpath, "*.md"):
         fout = os.path.join(dstpath, os.path.basename(fin))
         print("Generating %s..."%fout)
-        validate_md(fin, meta)
+        validate_md(os.path.abspath(fin), meta)
         loc += util.makoWrite(fin, fout,
             x=tags['$x'],
             X=tags['$x'].upper(),

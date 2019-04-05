@@ -21,43 +21,22 @@
 * express and approved by Intel in writing.  
 * @endcond
 *
-* @file xet_device.inl
+* @file xet_cmdlist.cpp
 *
-* @brief C++ wrapper of Intel Xe Level-Zero Tool APIs for Device
+* @brief Intel Xe Level-Zero Tool APIs for Command List
 *
-* @cond DEV
-* DO NOT EDIT: generated from /scripts/tools/device.yml
-* @endcond
+* DO NOT EDIT: generated from /scripts/tools/cmdlist.yml
 *
 ******************************************************************************/
-#ifndef _XET_DEVICE_INL
-#define _XET_DEVICE_INL
-#if defined(__cplusplus)
-#pragma once
-#include "xet_device.hpp"
+#if defined(XET_CPP)
+#include "../include/xet_cmdlist.hpp"
+#else
+#include "../include/xet_cmdlist.h"
+#endif
+#if !defined(XET_NULLDRV)
+#include "cmdlist.h"
+#endif
 
-namespace xet
-{
-    ///////////////////////////////////////////////////////////////////////////////
-    /// @brief C++ wrapper for ::xetDeviceActivateMetricGroups
-    /// 
-    /// @details
-    ///     - MetricGroup must be active until MetricQueryGetDeta and
-    ///       ::MetricTracerClose.
-    ///     - Conflicting metric groups cannot be activated, in such case tha call
-    ///       would fail.
-    /// 
-    /// @throws result_t
-    inline void 
-    Device::ActivateMetricGroups(
-        uint32_t count,                                 ///< [in] metric group count to activate. 0 to deactivate.
-        metric_group_handle_t* phMetricGroups           ///< [in] handles of the metric groups to activate. NULL to deactivate.
-        )
-    {
-        // auto result = ::xetDeviceActivateMetricGroups( handle, count, phMetricGroups );
-        // if( ::XE_RESULT_SUCCESS != result ) throw exception(result, "xet::Device::ActivateMetricGroups");
-    }
+#include <exception>    // @todo: move to common and/or precompiled header
+#include <new>
 
-} // namespace xet
-#endif // defined(__cplusplus)
-#endif // _XET_DEVICE_INL

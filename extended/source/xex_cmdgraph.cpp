@@ -61,10 +61,10 @@
 ///     - ::XE_RESULT_ERROR_OUT_OF_HOST_MEMORY
 ///     - ::XE_RESULT_ERROR_OUT_OF_DEVICE_MEMORY
 ///
-/// @hash {92696439973305f66e0dddb3093b14b0ae552b435babc2c4e4c9e3507865a8b8}
+/// @hash {55706cef8dab1ae47486f5a73f2ab1a51608fda918802e59405b72947ead78d1}
 ///
 __xedllexport xe_result_t __xecall
-xexDeviceCreateCommandGraph(
+xexCommandGraphCreate(
     xe_device_handle_t hDevice,                     ///< [in] handle of the device object
     const xex_command_graph_desc_t* desc,           ///< [in] pointer to command graph descriptor
     xex_command_graph_handle_t* phCommandGraph      ///< [out] pointer to handle of command graph object created
@@ -85,7 +85,7 @@ xexDeviceCreateCommandGraph(
 #if defined(XE_NULLDRV)
         return XE_RESULT_SUCCESS;
 #else
-        return L0::Device::fromHandle(hDevice)->createCommandGraph(desc, phCommandGraph);
+        return L0::commandGraphCreate(hDevice, desc, phCommandGraph);
 #endif
         /// @end
     }
@@ -139,7 +139,7 @@ xexCommandGraphDestroy(
 #if defined(XE_NULLDRV)
         return XE_RESULT_SUCCESS;
 #else
-        return L0::CommandGraph::fromHandle(hCommandGraph)->destroy();
+        return L0::commandGraphDestroy(hCommandGraph);
 #endif
         /// @end
     }

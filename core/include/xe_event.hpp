@@ -51,22 +51,55 @@ namespace xe
         auto getDesc( void ) const { return desc; }
 
         ///////////////////////////////////////////////////////////////////////////////
-        /// @brief C++ wrapper for ::xeEventPoolDestroy
+        /// @brief C++ version for ::xe_event_pool_desc_version_t
+        enum class event_pool_desc_version_t
+        {
+            CURRENT = XE_MAKE_VERSION( 1, 0 ),              ///< version 1.0
+
+        };
+
+        ///////////////////////////////////////////////////////////////////////////////
+        /// @brief C++ version for ::xe_event_pool_flag_t
+        enum class event_pool_flag_t
+        {
+            NONE = 0,                                       ///< signals and waits only within the same device
+            HOST_TO_DEVICE = XE_BIT(0),                     ///< signals from host, waits on device
+            DEVICE_TO_HOST = XE_BIT(1),                     ///< signals from device, waits on host
+            DEVICE_TO_DEVICE = XE_BIT(2),                   ///< signals from device, waits on another device
+            IPC = XE_BIT(3),                                ///< signals and waits may occur across processes
+            TIMESTAMP = XE_BIT(4),                          ///< supports time-based queries
+            PERFORMANCE_METRICS = XE_BIT(5),                ///< supports performance metrics (MDAPI)
+
+        };
+
+        ///////////////////////////////////////////////////////////////////////////////
+        /// @brief C++ version for ::xe_event_pool_desc_t
+        struct event_pool_desc_t
+        {
+            event_pool_desc_version_t version = event_pool_desc_version_t::CURRENT; ///< [in] ::EVENT_POOL_DESC_VERSION_CURRENT
+            event_pool_flag_t flags = event_pool_flag_t::NONE;  ///< [in] creation flags
+            uint32_t count;                                 ///< [in] number of events within the pool
+
+        };
+
+        ///////////////////////////////////////////////////////////////////////////////
+        /// @brief C++ wrapper for ::xeEventPoolCreate
+        /// @returns
+        ///     - ::event_pool_handle_t: pointer handle of event pool object created
+        /// 
         /// @throws result_t
-        inline void
-        Destroy(
-            void
+        inline static event_pool_handle_t
+        Create(
+            device_handle_t hDevice,                        ///< [in] handle of the device
+            const event_pool_desc_t* desc                   ///< [in] pointer to event pool descriptor
             );
 
         ///////////////////////////////////////////////////////////////////////////////
-        /// @brief C++ wrapper for ::xeEventPoolCreateEvent
-        /// @returns
-        ///     - ::event_handle_t: pointer to handle of event object created
-        /// 
+        /// @brief C++ wrapper for ::xeEventPoolDestroy
         /// @throws result_t
-        inline event_handle_t
-        CreateEvent(
-            uint32_t index                                  ///< [in] index of the event within the pool
+        inline static void
+        Destroy(
+            event_pool_handle_t hEventPool                  ///< [in] handle of event pool object to destroy
             );
 
         ///////////////////////////////////////////////////////////////////////////////
@@ -113,11 +146,23 @@ namespace xe
         auto getHandle( void ) const { return handle; }
 
         ///////////////////////////////////////////////////////////////////////////////
+        /// @brief C++ wrapper for ::xeEventCreate
+        /// @returns
+        ///     - ::event_handle_t: pointer to handle of event object created
+        /// 
+        /// @throws result_t
+        inline static event_handle_t
+        Create(
+            event_pool_handle_t hEventPool,                 ///< [in] handle of the event pool
+            uint32_t index                                  ///< [in] index of the event within the pool
+            );
+
+        ///////////////////////////////////////////////////////////////////////////////
         /// @brief C++ wrapper for ::xeEventDestroy
         /// @throws result_t
-        inline void
+        inline static void
         Destroy(
-            void
+            event_handle_t hEvent                           ///< [in] handle of event object to destroy
             );
 
         ///////////////////////////////////////////////////////////////////////////////

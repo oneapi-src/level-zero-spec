@@ -157,7 +157,7 @@ typedef struct _xe_image_properties_t
 ///     - ::XE_RESULT_ERROR_UNSUPPORTED
 ///         + ::XE_IMAGE_DESC_VERSION_CURRENT < desc->version
 __xedllport xe_result_t __xecall
-xeDeviceGetImageProperties(
+xeImageGetProperties(
     xe_device_handle_t hDevice,                     ///< [in] handle of the device
     const xe_image_desc_t* desc,                    ///< [in] pointer to image descriptor
     xe_image_properties_t* pImageProperties         ///< [out] pointer to image properties
@@ -187,7 +187,7 @@ xeDeviceGetImageProperties(
 ///     - ::XE_RESULT_ERROR_OUT_OF_HOST_MEMORY
 ///     - ::XE_RESULT_ERROR_OUT_OF_DEVICE_MEMORY
 __xedllport xe_result_t __xecall
-xeDeviceCreateImage(
+xeImageCreate(
     xe_device_handle_t hDevice,                     ///< [in] handle of the device
     const xe_image_desc_t* desc,                    ///< [in] pointer to image descriptor
     xe_image_handle_t* phImage                      ///< [out] pointer to handle of image object created

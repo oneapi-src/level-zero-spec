@@ -39,6 +39,27 @@
 namespace xex
 {
     ///////////////////////////////////////////////////////////////////////////////
+    /// @brief C++ wrapper for ::xexCommandGraphCreate
+    /// 
+    /// @details
+    ///     - This function may be called from simultaneous threads.
+    ///     - The implementation of this function should be lock-free.
+    /// 
+    /// @returns
+    ///     - ::command_graph_handle_t: pointer to handle of command graph object created
+    /// 
+    /// @throws result_t
+    inline command_graph_handle_t 
+    CommandGraph::Create(
+        xe::device_handle_t hDevice,                    ///< [in] handle of the device object
+        const command_graph_desc_t* desc                ///< [in] pointer to command graph descriptor
+        )
+    {
+        // auto result = ::xexCommandGraphCreate( handle, hDevice, desc );
+        // if( ::XE_RESULT_SUCCESS != result ) throw exception(result, "xex::CommandGraph::Create");
+    }
+
+    ///////////////////////////////////////////////////////////////////////////////
     /// @brief C++ wrapper for ::xexCommandGraphDestroy
     /// 
     /// @details
@@ -49,10 +70,10 @@ namespace xex
     /// @throws result_t
     inline void 
     CommandGraph::Destroy(
-        void
+        command_graph_handle_t hCommandGraph            ///< [in] handle of command graph object to destroy
         )
     {
-        // auto result = ::xexCommandGraphDestroy( handle );
+        // auto result = ::xexCommandGraphDestroy( handle, hCommandGraph );
         // if( ::XE_RESULT_SUCCESS != result ) throw exception(result, "xex::CommandGraph::Destroy");
     }
 

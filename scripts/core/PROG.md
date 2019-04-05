@@ -51,7 +51,7 @@ The following sample code demonstrates a basic initialization sequence:
 
     // Get number of devices supporting ${OneApi}
     uint32_t deviceCount = 0;
-    ${x}GetDeviceCount(&deviceCount);
+    ${x}DeviceGetCount(&deviceCount);
     if(0 == deviceCount)
     {
         printf("There is no device supporting ${OneApi}!\n");
@@ -62,7 +62,7 @@ The following sample code demonstrates a basic initialization sequence:
     ${x}_device_handle_t hDevice;
     for(uint32_t i = 0; i < deviceCount; ++i)
     {
-        ${x}GetDevice(i, &hDevice);
+        ${x}DeviceGet(i, &hDevice);
         
         ${x}_api_version_t version;
         ${x}DeviceGetApiVersion(hDevice, &version);
@@ -135,7 +135,7 @@ See ::${x}_command_queue_desc_t for more details.
     assert(desc.ordinal < subdeviceProps.numAsyncComputeEngines);
 
     ${x}_command_queue_handle_t commandQueueForSubDevice2;
-    ${x}DeviceCreateCommandQueue(subdevice, desc, &commandQueueForSubDevice2);
+    ${x}CommandQueueCreate(subdevice, desc, &commandQueueForSubDevice2);
     ...
 ```
 
@@ -186,7 +186,7 @@ The following sample code demonstrates a basic sequence for creation of command 
         0
     };
     ${x}_command_queue_handle_t hCommandQueue;
-    ${x}DeviceCreateCommandQueue(hDevice, &commandQueueDesc, &hCommandQueue);
+    ${x}CommandQueueCreate(hDevice, &commandQueueDesc, &hCommandQueue);
     ...
 ```
 
@@ -235,7 +235,7 @@ The following sample code demonstrates a basic sequence for creation of command 
         ${X}_COMMAND_LIST_FLAG_NONE
     };
     ${x}_command_list_handle_t hCommandList;
-    ${x}DeviceCreateCommandList(hDevice, &commandListDesc, &hCommandList);
+    ${x}CommandListCreate(hDevice, &commandListDesc, &hCommandList);
     ...
 ```
 
@@ -345,7 +345,7 @@ The following sample code demonstrates a sequence for creation, submission and q
         ${X}_FENCE_FLAG_NONE
     };
     ${x}_fence_handle_t hFence;
-    ${x}CommandQueueCreateFence(hCommandQueue, &fenceDesc, &hFence);
+    ${x}FenceCreate(hCommandQueue, &fenceDesc, &hFence);
 
     // Execute a command list with a signal of the fence
     ${x}CommandQueueExecuteCommandLists(hCommandQueue, 1, &hCommandList, hFence);
@@ -396,10 +396,10 @@ The following sample code demonstrates a sequence for creation and submission of
         1
     };
     ${x}_event_pool_handle_t hEventPool;
-    ${x}DeviceCreateEventPool(hDevice, &eventPoolDesc, &hEventPool);
+    ${x}EventPoolCreate(hDevice, &eventPoolDesc, &hEventPool);
 
     ${x}_event_handle_t hEvent;
-    ${x}EventPoolCreateEvent(hEventPool, 0, &hEvent);
+    ${x}EventCreate(hEventPool, 0, &hEvent);
 
     // Append a wait on an event into a command list
     ${x}CommandListAppendWaitOnEvent(hCommandList, hEvent);
@@ -556,7 +556,7 @@ and avoids exposing these details in the API in a backwards compatible fashion.
         128, 128, 0, 0, 0
     };
     ${x}_image_handle_t hImage;
-    ${x}DeviceCreateImage(hDevice, &imageDesc, &hImage);
+    ${x}ImageCreate(hDevice, &imageDesc, &hImage);
 
     // upload contents from host pointer
     ${x}CommandListAppendImageCopyFromMemory(hCommandList, hImage, nullptr, pImageData, nullptr);
@@ -651,9 +651,9 @@ There are multiple levels of constructs needed for executing functions on the de
 2. A [**Function**](#func) represents the function within the module that will be launched directly from a command list.
 
 ${"##"} <a name="mod">Modules</a>
-Modules can be created from an IL or directly from native format using ::${x}DeviceCreateModule.
-- ::${x}DeviceCreateModule takes a format argument that specifies the input format.
-- ::${x}DeviceCreateModule performs a compilation step when format is IL.
+Modules can be created from an IL or directly from native format using ::${x}ModuleCreate.
+- ::${x}ModuleCreate takes a format argument that specifies the input format.
+- ::${x}ModuleCreate performs a compilation step when format is IL.
 
 The following sample code demonstrates a sequence for creating a module from an OpenCL function:
 ```c
@@ -682,7 +682,7 @@ The following sample code demonstrates a sequence for creating a module from an 
         nullptr
     };
     ${x}_module_handle_t hModule;
-    ${x}DeviceCreateModule(hDevice, &moduleDesc, &hModule, nullptr);
+    ${x}ModuleCreate(hDevice, &moduleDesc, &hModule, nullptr);
     ...
 ```
 
@@ -697,12 +697,12 @@ Build options can be passed with ::${x}_module_desc_t as a string.
 ## --validate=on
 
 ${"###"} Module Build Log
-The ::${x}DeviceCreateModule function can optionally generate a build log object ::${x}_module_build_log_handle_t.
+The ::${x}ModuleCreate function can optionally generate a build log object ::${x}_module_build_log_handle_t.
 
 ```c
     ...
     ${x}_module_build_log_handle_t buildlog;
-    ${x}_result_t result = ${x}DeviceCreateModule(hDevice, &desc, &module, &buildlog);
+    ${x}_result_t result = ${x}ModuleCreate(hDevice, &desc, &module, &buildlog);
 
     // Only save build logs for module creation errors.
     if (result != ${X}_RESULT_SUCCESS)
@@ -764,7 +764,7 @@ The following sample code demonstrates a sequence for creating a function from a
         "image_scaling"
     };
     ${x}_function_handle_t hFunction;
-    ${x}ModuleCreateFunction(hModule, &functionDesc, &hFunction);
+    ${x}FunctionCreate(hModule, &functionDesc, &hFunction);
     ...
 ```
 
@@ -881,7 +881,7 @@ device to generate the parameters.
 
 ${"##"} <a name="arg">Sampler</a>
 The API supports Sampler objects that represent state needed for sampling images from within
-Module functions.  The ::${x}DeviceCreateSampler function takes a sampler descriptor (::${x}_sampler_desc_t):
+Module functions.  The ::${x}SamplerCreate function takes a sampler descriptor (::${x}_sampler_desc_t):
 
 | Sampler Field    | Description                                           |
 | :--              | :--                                                   |
@@ -900,7 +900,7 @@ The following is sample for code creating a sampler object and passing it as a F
         false
         };
     ${x}_sampler_handle_t sampler;
-    ${x}DeviceCreateSampler(hDevice, &desc, &sampler);
+    ${x}SamplerCreate(hDevice, &desc, &sampler);
     ...
     
     // The sampler can be passed as a function argument.
@@ -1008,7 +1008,7 @@ The following code examples demonstrate how to use the event IPC APIs:
         10
     };
     ${x}_event_pool_handle_t hEventPool;
-    ${x}DeviceCreateEventPool(hDevice, &eventPoolDesc, &hEventPool);
+    ${x}EventPoolCreate(hDevice, &eventPoolDesc, &hEventPool);
  
     // get IPC handle and send to another process
     ${x}_ipc_event_pool_handle_t hIpcEvent;
@@ -1028,24 +1028,24 @@ The following code examples demonstrate how to use the event IPC APIs:
 ```
 
 3. Each process may now refer to the same device event allocation via its handle.
+    a. receiving process creates event at location 
 ```c
     ${x}_event_handle_t hEvent;
-    ${x}EventPoolCreateEvent(hEventPool, 5, &hEvent);
+    ${x}EventCreate(hEventPool, 5, &hEvent);
 
     // submit function and signal event when complete
     ${x}CommandListAppendLaunchFunction(hCommandList, hFunction, &args, hEvent);
     ${x}CommandListClose(hCommandList);
     ${x}CommandQueueExecuteCommandLists(hCommandQueue, 1, &hCommandList, nullptr);
 ```
-
+    b. sending process creates event at same location
 ```c
     ${x}_event_handle_t hEvent;
-    ${x}EventPoolCreateEvent(hEventPool, 5, &hEvent);
+    ${x}EventCreate(hEventPool, 5, &hEvent);
 
     ${x}EventHostSynchronize(hEvent, MAX_UINT32);
 ```
-
-Note, there is no guaranteed address equivalence for the values of `hEvent` in each process.
+    Note, there is no guaranteed address equivalence for the values of `hEvent` in each process.
 
 4. To cleanup, first close the pool handle in the receiving process:
 ```c

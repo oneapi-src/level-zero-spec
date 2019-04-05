@@ -93,7 +93,7 @@ typedef struct _xe_event_pool_desc_t
 ///     - ::XE_RESULT_ERROR_OUT_OF_HOST_MEMORY
 ///     - ::XE_RESULT_ERROR_OUT_OF_DEVICE_MEMORY
 __xedllport xe_result_t __xecall
-xeDeviceCreateEventPool(
+xeEventPoolCreate(
     xe_device_handle_t hDevice,                     ///< [in] handle of the device
     const xe_event_pool_desc_t* desc,               ///< [in] pointer to event pool descriptor
     xe_event_pool_handle_t* phEventPool             ///< [out] pointer handle of event pool object created
@@ -150,7 +150,7 @@ xeEventPoolDestroy(
 ///     - ::XE_RESULT_ERROR_UNSUPPORTED
 ///     - ::XE_RESULT_ERROR_OUT_OF_HOST_MEMORY
 __xedllport xe_result_t __xecall
-xeEventPoolCreateEvent(
+xeEventCreate(
     xe_event_pool_handle_t hEventPool,              ///< [in] handle of the event pool
     uint32_t index,                                 ///< [in] index of the event within the pool
     xe_event_handle_t* phEvent                      ///< [out] pointer to handle of event object created

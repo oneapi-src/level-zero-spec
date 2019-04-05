@@ -49,6 +49,15 @@ namespace xet
         auto getHandle( void ) const { return handle; }
 
         ///////////////////////////////////////////////////////////////////////////////
+        /// @brief C++ version for ::xet_metric_group_sampling_type
+        enum class metric_group_sampling_type
+        {
+            METRIC_GROUP_SAMPLING_TYPE_EVENT_BASED = XE_BIT(0), ///< Event based sampling
+            METRIC_GROUP_SAMPLING_TYPE_TIME_BASED = XE_BIT(1),  ///< Time based sampling
+
+        };
+
+        ///////////////////////////////////////////////////////////////////////////////
         /// @brief C++ version for ::xet_metric_group_properties_version_t
         enum class metric_group_properties_version_t
         {
@@ -73,6 +82,29 @@ namespace xet
         };
 
         ///////////////////////////////////////////////////////////////////////////////
+        /// @brief C++ wrapper for ::xetMetricGroupGetCount
+        /// @returns
+        ///     - uint32_t: number of metric groups supported by the device
+        /// 
+        /// @throws result_t
+        inline static uint32_t
+        GetCount(
+            xe::device_handle_t hDevice                     ///< [in] handle of the device object
+            );
+
+        ///////////////////////////////////////////////////////////////////////////////
+        /// @brief C++ wrapper for ::xetMetricGroupGet
+        /// @returns
+        ///     - ::metric_group_handle_t: metric group handle
+        /// 
+        /// @throws result_t
+        inline static metric_group_handle_t
+        Get(
+            xe::device_handle_t hDevice,                    ///< [in] handle of the device
+            uint32_t ordinal                                ///< [in] metric group index
+            );
+
+        ///////////////////////////////////////////////////////////////////////////////
         /// @brief C++ wrapper for ::xetMetricGroupGetProperties
         /// @returns
         ///     - ::metric_group_properties_t: metric group properties
@@ -81,17 +113,6 @@ namespace xet
         inline metric_group_properties_t
         GetProperties(
             void
-            );
-
-        ///////////////////////////////////////////////////////////////////////////////
-        /// @brief C++ wrapper for ::xetMetricGroupGetMetric
-        /// @returns
-        ///     - ::metric_handle_t: handle of metric
-        /// 
-        /// @throws result_t
-        inline metric_handle_t
-        GetMetric(
-            uint32_t ordinal                                ///< [in] metric index
             );
 
         ///////////////////////////////////////////////////////////////////////////////
@@ -170,7 +191,7 @@ namespace xet
             uint32_t valueUInt32;                           ///< [out] uint32_t value
             uint64_t valueUInt64;                           ///< [out] uint64_t value
             float valueFloat;                               ///< [out] float value
-            xe::_bool_t valueBool;                          ///< [out] bool value
+            xe::bool_t valueBool;                           ///< [out] bool value
             const char* valueString;                        ///< [out] string value
 
         };
@@ -199,6 +220,18 @@ namespace xet
             char resultUnits[XET_MAX_METRIC_RESULT_UNITS];  ///< [out] metric result units
 
         };
+
+        ///////////////////////////////////////////////////////////////////////////////
+        /// @brief C++ wrapper for ::xetMetricGet
+        /// @returns
+        ///     - ::metric_handle_t: handle of metric
+        /// 
+        /// @throws result_t
+        inline static metric_handle_t
+        Get(
+            metric_group_handle_t hMetricGroup,             ///< [in] handle of the metric group
+            uint32_t ordinal                                ///< [in] metric index
+            );
 
         ///////////////////////////////////////////////////////////////////////////////
         /// @brief C++ wrapper for ::xetMetricGetProperties
@@ -242,6 +275,20 @@ namespace xet
             uint32_t samplingPeriodNs;                      ///< [in/out] tracer sampling period in nanoseconds
 
         };
+
+        ///////////////////////////////////////////////////////////////////////////////
+        /// @brief C++ wrapper for ::xetMetricTracerOpen
+        /// @returns
+        ///     - ::metric_tracer_handle_t: handle of metric tracer
+        /// 
+        /// @throws result_t
+        inline static metric_tracer_handle_t
+        Open(
+            xe::device_handle_t hDevice,                    ///< [in] handle of the device
+            metric_tracer_desc_t* pDesc,                    ///< [in/out] metric tracer descriptor
+            xe::event_handle_t hNotificationEvent           ///< [in] event used for report availability notification. Must be device
+                                                            ///< to host type.
+            );
 
         ///////////////////////////////////////////////////////////////////////////////
         /// @brief C++ wrapper for ::xetMetricTracerClose
@@ -302,6 +349,26 @@ namespace xet
         };
 
         ///////////////////////////////////////////////////////////////////////////////
+        /// @brief C++ wrapper for ::xetMetricQueryPoolCreate
+        /// @returns
+        ///     - ::metric_query_pool_handle_t: handle of metric query pool
+        /// 
+        /// @throws result_t
+        inline static metric_query_pool_handle_t
+        Create(
+            xe::device_handle_t hDevice,                    ///< [in] handle of the device
+            metric_query_pool_desc_t* pDesc                 ///< [in] metric query pool creation data
+            );
+
+        ///////////////////////////////////////////////////////////////////////////////
+        /// @brief C++ wrapper for ::xetMetricQueryPoolDestroy
+        /// @throws result_t
+        inline static void
+        Destroy(
+            metric_query_pool_handle_t hMetricQueryPool     ///< [in] handle of the metric query pool
+            );
+
+        ///////////////////////////////////////////////////////////////////////////////
         /// @brief C++ wrapper for ::xetMetricQueryPoolGetMetricQuery
         /// @returns
         ///     - ::metric_query_handle_t: handle of metric query
@@ -310,14 +377,6 @@ namespace xet
         inline metric_query_handle_t
         GetMetricQuery(
             uint32_t ordinal                                ///< [in] index of the query within the pool
-            );
-
-        ///////////////////////////////////////////////////////////////////////////////
-        /// @brief C++ wrapper for ::xetMetricQueryPoolDestroy
-        /// @throws result_t
-        inline void
-        Destroy(
-            void
             );
 
     };

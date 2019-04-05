@@ -119,7 +119,7 @@ xe_result_t __xecall xeDeviceRegisterCLCommandQueue(
     return dispatchTable.xeDeviceRegisterCLCommandQueue(hDevice, context, command_queue, phCommandQueue);
 }
 #endif // XE_ENABLE_OCL_INTEROP
-xe_result_t __xecall xeDeviceCreateCommandList(
+xe_result_t __xecall xeCommandListCreate(
         xe_device_handle_t hDevice,                     ///< [in] handle of the device object
         const xe_command_list_desc_t* desc,             ///< [in] pointer to command list descriptor
         xe_command_list_handle_t* phCommandList         ///< [out] pointer to handle of command list object created
@@ -127,7 +127,7 @@ xe_result_t __xecall xeDeviceCreateCommandList(
     if(dispatchTableInitialized == false){
         return XE_RESULT_ERROR_UNINITIALIZED;
     }
-    return dispatchTable.xeDeviceCreateCommandList(hDevice, desc, phCommandList);
+    return dispatchTable.xeCommandListCreate(hDevice, desc, phCommandList);
 }
 xe_result_t __xecall xeCommandListDestroy(
         xe_command_list_handle_t hCommandList           ///< [in] handle of command list object to destroy
@@ -191,7 +191,7 @@ xe_result_t __xecall xeCommandListReserveSpace(
     }
     return dispatchTable.xeCommandListReserveSpace(hCommandList, size, ptr);
 }
-xe_result_t __xecall xeDeviceCreateCommandQueue(
+xe_result_t __xecall xeCommandQueueCreate(
         xe_device_handle_t hDevice,                     ///< [in] handle of the device object
         const xe_command_queue_desc_t* desc,            ///< [in] pointer to command queue descriptor
         xe_command_queue_handle_t* phCommandQueue       ///< [out] pointer to handle of command queue object created
@@ -199,7 +199,7 @@ xe_result_t __xecall xeDeviceCreateCommandQueue(
     if(dispatchTableInitialized == false){
         return XE_RESULT_ERROR_UNINITIALIZED;
     }
-    return dispatchTable.xeDeviceCreateCommandQueue(hDevice, desc, phCommandQueue);
+    return dispatchTable.xeCommandQueueCreate(hDevice, desc, phCommandQueue);
 }
 xe_result_t __xecall xeCommandQueueDestroy(
         xe_command_queue_handle_t hCommandQueue         ///< [in] handle of command queue object to destroy
@@ -327,22 +327,22 @@ xe_result_t __xecall xeCommandListAppendMemAdvise(
     }
     return dispatchTable.xeCommandListAppendMemAdvise(hCommandList, hDevice, ptr, size, advice);
 }
-xe_result_t __xecall xeGetDeviceCount(
+xe_result_t __xecall xeDeviceGetCount(
         uint32_t* count                                 ///< [out] number of devices available
     ){
     if(dispatchTableInitialized == false){
         return XE_RESULT_ERROR_UNINITIALIZED;
     }
-    return dispatchTable.xeGetDeviceCount(count);
+    return dispatchTable.xeDeviceGetCount(count);
 }
-xe_result_t __xecall xeGetDevice(
+xe_result_t __xecall xeDeviceGet(
         uint32_t ordinal,                               ///< [in] The device index in the range of [0, ::xeGetDeviceCount]
         xe_device_handle_t* phDevice                    ///< [out] pointer to handle of device object created
     ){
     if(dispatchTableInitialized == false){
         return XE_RESULT_ERROR_UNINITIALIZED;
     }
-    return dispatchTable.xeGetDevice(ordinal, phDevice);
+    return dispatchTable.xeDeviceGet(ordinal, phDevice);
 }
 xe_result_t __xecall xeDeviceGetSubDevice(
         xe_device_handle_t hDevice,                     ///< [in] handle of the device object
@@ -444,7 +444,7 @@ xe_result_t __xecall xeGetDriverVersion(
     }
     return dispatchTable.xeGetDriverVersion(version);
 }
-xe_result_t __xecall xeDeviceCreateEventPool(
+xe_result_t __xecall xeEventPoolCreate(
         xe_device_handle_t hDevice,                     ///< [in] handle of the device
         const xe_event_pool_desc_t* desc,               ///< [in] pointer to event pool descriptor
         xe_event_pool_handle_t* phEventPool             ///< [out] pointer handle of event pool object created
@@ -452,7 +452,7 @@ xe_result_t __xecall xeDeviceCreateEventPool(
     if(dispatchTableInitialized == false){
         return XE_RESULT_ERROR_UNINITIALIZED;
     }
-    return dispatchTable.xeDeviceCreateEventPool(hDevice, desc, phEventPool);
+    return dispatchTable.xeEventPoolCreate(hDevice, desc, phEventPool);
 }
 xe_result_t __xecall xeEventPoolDestroy(
         xe_event_pool_handle_t hEventPool               ///< [in] handle of event pool object to destroy
@@ -462,7 +462,7 @@ xe_result_t __xecall xeEventPoolDestroy(
     }
     return dispatchTable.xeEventPoolDestroy(hEventPool);
 }
-xe_result_t __xecall xeEventPoolCreateEvent(
+xe_result_t __xecall xeEventCreate(
         xe_event_pool_handle_t hEventPool,              ///< [in] handle of the event pool
         uint32_t index,                                 ///< [in] index of the event within the pool
         xe_event_handle_t* phEvent                      ///< [out] pointer to handle of event object created
@@ -470,7 +470,7 @@ xe_result_t __xecall xeEventPoolCreateEvent(
     if(dispatchTableInitialized == false){
         return XE_RESULT_ERROR_UNINITIALIZED;
     }
-    return dispatchTable.xeEventPoolCreateEvent(hEventPool, index, phEvent);
+    return dispatchTable.xeEventCreate(hEventPool, index, phEvent);
 }
 xe_result_t __xecall xeEventDestroy(
         xe_event_handle_t hEvent                        ///< [in] handle of event object to destroy
@@ -592,7 +592,7 @@ xe_result_t __xecall xeEventReset(
     }
     return dispatchTable.xeEventReset(hEvent);
 }
-xe_result_t __xecall xeCommandQueueCreateFence(
+xe_result_t __xecall xeFenceCreate(
         xe_command_queue_handle_t hCommandQueue,        ///< [in] handle of command queue
         const xe_fence_desc_t* desc,                    ///< [in] pointer to fence descriptor
         xe_fence_handle_t* phFence                      ///< [out] pointer to handle of fence object created
@@ -600,7 +600,7 @@ xe_result_t __xecall xeCommandQueueCreateFence(
     if(dispatchTableInitialized == false){
         return XE_RESULT_ERROR_UNINITIALIZED;
     }
-    return dispatchTable.xeCommandQueueCreateFence(hCommandQueue, desc, phFence);
+    return dispatchTable.xeFenceCreate(hCommandQueue, desc, phFence);
 }
 xe_result_t __xecall xeFenceDestroy(
         xe_fence_handle_t hFence                        ///< [in] handle of fence object to destroy
@@ -639,7 +639,7 @@ xe_result_t __xecall xeFenceReset(
     }
     return dispatchTable.xeFenceReset(hFence);
 }
-xe_result_t __xecall xeDeviceGetImageProperties(
+xe_result_t __xecall xeImageGetProperties(
         xe_device_handle_t hDevice,                     ///< [in] handle of the device
         const xe_image_desc_t* desc,                    ///< [in] pointer to image descriptor
         xe_image_properties_t* pImageProperties         ///< [out] pointer to image properties
@@ -647,9 +647,9 @@ xe_result_t __xecall xeDeviceGetImageProperties(
     if(dispatchTableInitialized == false){
         return XE_RESULT_ERROR_UNINITIALIZED;
     }
-    return dispatchTable.xeDeviceGetImageProperties(hDevice, desc, pImageProperties);
+    return dispatchTable.xeImageGetProperties(hDevice, desc, pImageProperties);
 }
-xe_result_t __xecall xeDeviceCreateImage(
+xe_result_t __xecall xeImageCreate(
         xe_device_handle_t hDevice,                     ///< [in] handle of the device
         const xe_image_desc_t* desc,                    ///< [in] pointer to image descriptor
         xe_image_handle_t* phImage                      ///< [out] pointer to handle of image object created
@@ -657,7 +657,7 @@ xe_result_t __xecall xeDeviceCreateImage(
     if(dispatchTableInitialized == false){
         return XE_RESULT_ERROR_UNINITIALIZED;
     }
-    return dispatchTable.xeDeviceCreateImage(hDevice, desc, phImage);
+    return dispatchTable.xeImageCreate(hDevice, desc, phImage);
 }
 xe_result_t __xecall xeImageDestroy(
         xe_image_handle_t hImage                        ///< [in] handle of image object to destroy
@@ -758,7 +758,7 @@ xe_result_t __xecall xeIpcCloseMemHandle(
     }
     return dispatchTable.xeIpcCloseMemHandle(ptr);
 }
-xe_result_t __xecall xeDeviceCreateModule(
+xe_result_t __xecall xeModuleCreate(
         xe_device_handle_t hDevice,                     ///< [in] handle of the device
         const xe_module_desc_t* pDesc,                  ///< [in] pointer to module descriptor
         xe_module_handle_t* phModule,                   ///< [out] pointer to handle of module object created
@@ -767,7 +767,7 @@ xe_result_t __xecall xeDeviceCreateModule(
     if(dispatchTableInitialized == false){
         return XE_RESULT_ERROR_UNINITIALIZED;
     }
-    return dispatchTable.xeDeviceCreateModule(hDevice, pDesc, phModule, phBuildLog);
+    return dispatchTable.xeModuleCreate(hDevice, pDesc, phModule, phBuildLog);
 }
 xe_result_t __xecall xeModuleDestroy(
         xe_module_handle_t hModule                      ///< [in] handle of the module
@@ -815,7 +815,7 @@ xe_result_t __xecall xeModuleGetGlobalPointer(
     }
     return dispatchTable.xeModuleGetGlobalPointer(hModule, pGlobalName, pPtr);
 }
-xe_result_t __xecall xeModuleCreateFunction(
+xe_result_t __xecall xeFunctionCreate(
         xe_module_handle_t hModule,                     ///< [in] handle of the module
         const xe_function_desc_t* pDesc,                ///< [in] pointer to function descriptor
         xe_function_handle_t* phFunction                ///< [out] handle of the Function object
@@ -823,7 +823,7 @@ xe_result_t __xecall xeModuleCreateFunction(
     if(dispatchTableInitialized == false){
         return XE_RESULT_ERROR_UNINITIALIZED;
     }
-    return dispatchTable.xeModuleCreateFunction(hModule, pDesc, phFunction);
+    return dispatchTable.xeFunctionCreate(hModule, pDesc, phFunction);
 }
 xe_result_t __xecall xeFunctionDestroy(
         xe_function_handle_t hFunction                  ///< [in] handle of the function object
@@ -985,7 +985,7 @@ xe_result_t __xecall xeDeviceEvictImage(
     }
     return dispatchTable.xeDeviceEvictImage(hDevice, hImage);
 }
-xe_result_t __xecall xeDeviceCreateSampler(
+xe_result_t __xecall xeSamplerCreate(
         xe_device_handle_t hDevice,                     ///< [in] handle of the device
         const xe_sampler_desc_t* pDesc,                 ///< [in] pointer to sampler descriptor
         xe_sampler_handle_t* phSampler                  ///< [out] handle of the sampler
@@ -993,7 +993,7 @@ xe_result_t __xecall xeDeviceCreateSampler(
     if(dispatchTableInitialized == false){
         return XE_RESULT_ERROR_UNINITIALIZED;
     }
-    return dispatchTable.xeDeviceCreateSampler(hDevice, pDesc, phSampler);
+    return dispatchTable.xeSamplerCreate(hDevice, pDesc, phSampler);
 }
 xe_result_t __xecall xeSamplerDestroy(
         xe_sampler_handle_t hSampler                    ///< [in] handle of the sampler

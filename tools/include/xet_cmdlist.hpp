@@ -21,17 +21,17 @@
 * express and approved by Intel in writing.  
 * @endcond
 *
-* @file xet_device.hpp
+* @file xet_cmdlist.hpp
 *
-* @brief C++ wrapper of Intel Xe Level-Zero Tool APIs for Device
+* @brief C++ wrapper of Intel Xe Level-Zero Tool APIs for Command List
 *
 * @cond DEV
-* DO NOT EDIT: generated from /scripts/tools/device.yml
+* DO NOT EDIT: generated from /scripts/tools/cmdlist.yml
 * @endcond
 *
 ******************************************************************************/
-#ifndef _XET_DEVICE_HPP
-#define _XET_DEVICE_HPP
+#ifndef _XET_CMDLIST_HPP
+#define _XET_CMDLIST_HPP
 #if defined(__cplusplus)
 #pragma once
 #include "xet_common.hpp"
@@ -39,26 +39,51 @@
 namespace xet
 {
     ///////////////////////////////////////////////////////////////////////////////
-    /// @brief C++ wrapper for device
-    class Device : public xe::Device
+    /// @brief C++ wrapper for command list
+    class CommandList : public xe::CommandList
     {
     protected:
-        ::xe_device_handle_t handle;                      ///< handle of device object
+        ::xe_command_list_handle_t handle;                ///< handle of command list object
 
     public:
         auto getHandle( void ) const { return handle; }
 
         ///////////////////////////////////////////////////////////////////////////////
-        /// @brief C++ wrapper for ::xetDeviceActivateMetricGroups
+        /// @brief C++ wrapper for ::xetCommandListAppendMetricTracerMarker
         /// @throws result_t
         inline void
-        ActivateMetricGroups(
-            uint32_t count,                                 ///< [in] metric group count to activate. 0 to deactivate.
-            metric_group_handle_t* phMetricGroups           ///< [in] handles of the metric groups to activate. NULL to deactivate.
+        AppendMetricTracerMarker(
+            metric_tracer_handle_t hMetricTracer,           ///< [in] handle of the metric tracer
+            uint32_t value                                  ///< [in] tracer marker value
+            );
+
+        ///////////////////////////////////////////////////////////////////////////////
+        /// @brief C++ wrapper for ::xetCommandListAppendMetricQueryBegin
+        /// @throws result_t
+        inline void
+        AppendMetricQueryBegin(
+            metric_query_handle_t hMetricQuery              ///< [in] handle of the metric query
+            );
+
+        ///////////////////////////////////////////////////////////////////////////////
+        /// @brief C++ wrapper for ::xetCommandListAppendMetricQueryEnd
+        /// @throws result_t
+        inline void
+        AppendMetricQueryEnd(
+            metric_query_handle_t hMetricQuery,             ///< [in] handle of the metric query
+            xe::event_handle_t hCompletionEvent             ///< [in] handle of the completion event to signal
+            );
+
+        ///////////////////////////////////////////////////////////////////////////////
+        /// @brief C++ wrapper for ::xetCommandListAppendMetricMemoryBarrier
+        /// @throws result_t
+        inline void
+        AppendMetricMemoryBarrier(
+            void
             );
 
     };
 
 } // namespace xet
 #endif // defined(__cplusplus)
-#endif // _XET_DEVICE_HPP
+#endif // _XET_CMDLIST_HPP

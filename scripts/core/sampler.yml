@@ -4,7 +4,7 @@ desc: "Intel $OneApi Level-Zero APIs for Sampler"
 --- #--------------------------------------------------------------------------
 type: enum
 desc: API version of $x_sampler_desc_t
-class: $xDevice
+class: $xSampler
 name: $x_sampler_desc_version_t
 etors:
     - name: $X_SAMPLER_DESC_VERSION_CURRENT
@@ -13,7 +13,7 @@ etors:
 --- #--------------------------------------------------------------------------
 type: enum
 desc: "Sampler addressing modes"
-class: $xDevice
+class: $xSampler
 name: $x_sampler_address_mode_t
 etors:
     - name: $X_SAMPLER_ADDRESS_MODE_NONE
@@ -28,7 +28,7 @@ etors:
 --- #--------------------------------------------------------------------------
 type: enum
 desc: "Sampler filtering modes"
-class: $xDevice
+class: $xSampler
 name: $x_sampler_filter_mode_t
 etors:
     - name: $X_SAMPLER_FILTER_MODE_NEAREST
@@ -39,7 +39,7 @@ etors:
 --- #--------------------------------------------------------------------------
 type: struct
 desc: "Sampler descriptor"
-class: $xDevice
+class: $xSampler
 name: $x_sampler_desc_t
 members:
     - type: $x_sampler_desc_version_t
@@ -61,8 +61,9 @@ members:
 --- #--------------------------------------------------------------------------
 type: function
 desc: "Creates sampler object."
-class: $xDevice
-name: CreateSampler
+class: $xSampler
+name: Create
+decl: static
 analogue:
     - "**cuTexObjectCreate**"
 details:
@@ -89,6 +90,7 @@ type: function
 desc: "Destroys sampler object"
 class: $xSampler
 name: Destroy
+decl: static
 analogue:
     - "**cuModuleUnload**"
 details:

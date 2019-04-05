@@ -4,7 +4,7 @@ desc: "Intel $OneApi Level-Zero APIs for Images"
 --- #--------------------------------------------------------------------------
 type: enum
 desc: "API version of $x_image_desc_t"
-class: $xDevice
+class: $xImage
 name: $x_image_desc_version_t
 etors:
     - name: $X_IMAGE_DESC_VERSION_CURRENT
@@ -13,7 +13,7 @@ etors:
 --- #--------------------------------------------------------------------------
 type: enum
 desc: "Supported image creation flags"
-class: $xDevice
+class: $xImage
 name: $x_image_flag_t
 etors:
     - name: $X_IMAGE_FLAG_PROGRAM_READ
@@ -31,7 +31,7 @@ etors:
 --- #--------------------------------------------------------------------------
 type: enum
 desc: "Supported image types"
-class: $xDevice
+class: $xImage
 name: $x_image_type_t
 etors:
     - name: $X_IMAGE_TYPE_1D
@@ -47,7 +47,7 @@ etors:
 --- #--------------------------------------------------------------------------
 type: enum
 desc: "Supported image formats"
-class: $xDevice
+class: $xImage
 name: $x_image_format_t
 etors:
     - name: $X_IMAGE_FORMAT_UINT8
@@ -81,7 +81,7 @@ etors:
 --- #--------------------------------------------------------------------------
 type: struct
 desc: "Image descriptor"
-class: $xDevice
+class: $xImage
 name: $x_image_desc_t
 members:
     - type: $x_image_desc_version_t
@@ -124,7 +124,7 @@ members:
 --- #--------------------------------------------------------------------------
 type: enum
 desc: "API version of $x_image_properties_t"
-class: $xDevice
+class: $xImage
 name: $x_image_properties_version_t
 etors:
     - name: $X_IMAGE_PROPERTIES_VERSION_CURRENT
@@ -133,7 +133,7 @@ etors:
 --- #--------------------------------------------------------------------------
 type: enum
 desc: "Supported sampler filtering flags"
-class: $xDevice
+class: $xImage
 name: $x_image_sampler_filter_flags_t
 etors:
     - name: $X_IMAGE_SAMPLER_FILTER_FLAGS_LINEAR
@@ -142,7 +142,7 @@ etors:
 --- #--------------------------------------------------------------------------
 type: struct
 desc: "Image properties"
-class: $xDevice
+class: $xImage
 name: $x_image_properties_t
 members:
     - type: $x_image_properties_version_t
@@ -155,8 +155,9 @@ members:
 --- #--------------------------------------------------------------------------
 type: function
 desc: "Retrieves supported properties of an image."
-class: $xDevice
-name: GetImageProperties
+class: $xImage
+name: GetProperties
+decl: static
 details:
     - "The application may call this function from simultaneous threads."
     - "The implementation of this function should be lock-free."
@@ -173,8 +174,9 @@ params:
 --- #--------------------------------------------------------------------------
 type: function
 desc: "Creates a image object on the device."
-class: $xDevice
-name: CreateImage
+class: $xImage
+name: Create
+decl: static
 analogue:
     - clCreateImage
 details:
@@ -198,6 +200,7 @@ type: function
 desc: "Deletes a image object."
 class: $xImage
 name: Destroy
+decl: static
 details:
     - "The application is responsible for making sure the GPU is not currently referencing the image before it is deleted"
     - "The implementation of this function will immediately free all Host and Device allocations associated with this image"

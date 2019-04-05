@@ -44,6 +44,14 @@ extern "C" {
 #endif
 
 ///////////////////////////////////////////////////////////////////////////////
+/// @brief Handle of device object
+typedef struct _xet_device_handle_t *xet_device_handle_t;
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Handle of command list object
+typedef struct _xet_command_list_handle_t *xet_command_list_handle_t;
+
+///////////////////////////////////////////////////////////////////////////////
 /// @brief Handle of metric group's object
 typedef struct _xet_metric_group_handle_t *xet_metric_group_handle_t;
 

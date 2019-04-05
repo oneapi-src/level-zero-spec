@@ -60,10 +60,10 @@
 ///     - ::XE_RESULT_ERROR_OUT_OF_HOST_MEMORY
 ///     - ::XE_RESULT_ERROR_OUT_OF_DEVICE_MEMORY
 ///
-/// @hash {93f142372e841c55bbda735869124aaf68b84fa8ba567c01fda65f5aee7e553c}
+/// @hash {1e835a6953e62592a69954f9fa0fc1c6cf52c30d928a7320fe16e51f335fbff5}
 ///
 __xedllexport xe_result_t __xecall
-xeDeviceCreateEventPool(
+xeEventPoolCreate(
     xe_device_handle_t hDevice,                     ///< [in] handle of the device
     const xe_event_pool_desc_t* desc,               ///< [in] pointer to event pool descriptor
     xe_event_pool_handle_t* phEventPool             ///< [out] pointer handle of event pool object created
@@ -84,7 +84,7 @@ xeDeviceCreateEventPool(
 #if defined(XE_NULLDRV)
         return XE_RESULT_SUCCESS;
 #else
-        return L0::Device::fromHandle(hDevice)->createEventPool(desc, phEventPool);
+        return L0::eventPoolCreate(hDevice, desc, phEventPool);
 #endif
         /// @end
     }
@@ -143,7 +143,7 @@ xeEventPoolDestroy(
 #if defined(XE_NULLDRV)
         return XE_RESULT_SUCCESS;
 #else
-        return L0::EventPool::fromHandle(hEventPool)->destroy();
+        return L0::eventPoolDestroy(hEventPool);
 #endif
         /// @end
     }
@@ -188,10 +188,10 @@ xeEventPoolDestroy(
 ///     - ::XE_RESULT_ERROR_UNSUPPORTED
 ///     - ::XE_RESULT_ERROR_OUT_OF_HOST_MEMORY
 ///
-/// @hash {6d93b2c337efedd49494d2656833acd9c675ecf457bd561d478d4b2773579c31}
+/// @hash {52dd25e26475037f8ecdc4bc28d1fc979f14ac5c4ebb1bcc04b28f48f22daa98}
 ///
 __xedllexport xe_result_t __xecall
-xeEventPoolCreateEvent(
+xeEventCreate(
     xe_event_pool_handle_t hEventPool,              ///< [in] handle of the event pool
     uint32_t index,                                 ///< [in] index of the event within the pool
     xe_event_handle_t* phEvent                      ///< [out] pointer to handle of event object created
@@ -210,7 +210,7 @@ xeEventPoolCreateEvent(
 #if defined(XE_NULLDRV)
         return XE_RESULT_SUCCESS;
 #else
-        return L0::EventPool::fromHandle(hEventPool)->createEvent(index, phEvent);
+        return L0::eventCreate(hEventPool, index, phEvent);
 #endif
         /// @end
     }
@@ -272,7 +272,7 @@ xeEventDestroy(
 #if defined(XE_NULLDRV)
         return XE_RESULT_SUCCESS;
 #else
-        return L0::Event::fromHandle(hEvent)->destroy();
+        return L0::eventDestroy(hEvent);
 #endif
         /// @end
     }
