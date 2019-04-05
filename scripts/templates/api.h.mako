@@ -46,6 +46,9 @@ from templates import helper as th
 %if re.match(r"common", name):
 #include <stdint.h>
 #include <string.h>
+%if x != n:
+#include "${x}_all.h"
+%endif
 %else:
 #include "${n}_common.h"
 %endif

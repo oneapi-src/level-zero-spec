@@ -23,7 +23,7 @@ def find_symbol_type(name, meta):
 
     if name.isupper():
         for enum in meta['enum']:
-            if name in meta['enum'][enum]:
+            if name in meta['enum'][enum]['types']:
                 return 'etor'
 
     return None
@@ -79,8 +79,8 @@ def validate_md(fpath, meta):
 
                     if code_block and 'function' == symbol_type:
                         words = re.sub(RE_EXTRACT_PARAMS, r"\1", line).split(",")
-                        if len(words) != len(meta['function'][symbol]):
-                            print("%s(%s) : error : %s parameter count mismatch - %s actual vs. %s expected"%(fpath, iline+1, symbol, len(words), len(meta['function'][symbol])))
+                        if len(words) != len(meta['function'][symbol]['types']):
+                            print("%s(%s) : error : %s parameter count mismatch - %s actual vs. %s expected"%(fpath, iline+1, symbol, len(words), len(meta['function'][symbol]['types'])))
 
             if not code_block:
                  if not re.match(RE_DOXY_LINK, line.lower()):

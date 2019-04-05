@@ -182,7 +182,7 @@ namespace xe
     ///     - ::api_version_t: api version
     /// 
     /// @throws result_t
-    inline api_version_t 
+    inline Device::api_version_t 
     Device::GetApiVersion(
         void
         )
@@ -208,7 +208,7 @@ namespace xe
     ///     - ::device_properties_t: query result for device properties
     /// 
     /// @throws result_t
-    inline device_properties_t 
+    inline Device::device_properties_t 
     Device::GetProperties(
         void
         )
@@ -233,7 +233,7 @@ namespace xe
     ///     - ::device_compute_properties_t: query result for compute properties
     /// 
     /// @throws result_t
-    inline device_compute_properties_t 
+    inline Device::device_compute_properties_t 
     Device::GetComputeProperties(
         void
         )
@@ -259,7 +259,7 @@ namespace xe
     ///     - ::device_memory_properties_t: query result for compute properties
     /// 
     /// @throws result_t
-    inline device_memory_properties_t 
+    inline Device::device_memory_properties_t 
     Device::GetMemoryProperties(
         void
         )
@@ -283,7 +283,7 @@ namespace xe
     ///     - ::device_p2p_properties_t: Peer-to-Peer properties between source and peer device
     /// 
     /// @throws result_t
-    inline device_p2p_properties_t 
+    inline Device::device_p2p_properties_t 
     Device::GetP2PProperties(
         device_handle_t hPeerDevice                     ///< [in] handle of the peer device with the allocation
         )
@@ -389,7 +389,7 @@ namespace xe
     ///     - ::image_properties_t: pointer to image properties
     /// 
     /// @throws result_t
-    inline image_properties_t 
+    inline Device::image_properties_t 
     Device::GetImageProperties(
         const image_desc_t* desc                        ///< [in] pointer to image descriptor
         )

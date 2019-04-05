@@ -12,6 +12,8 @@ def declare_obj(obj, tags):
 %><%
     n=namespace
     N=n.upper()
+
+    x=tags['$x']
 %>/**************************************************************************//**
 * INTEL CONFIDENTIAL  
 * Copyright 2019  
@@ -51,6 +53,9 @@ def declare_obj(obj, tags):
 %if re.match(r"common", name):
 #include "${n}_all.h"
 #include <tuple>
+%if x != n:
+#include "${x}_all.hpp"
+%endif
 %else:
 #include "${n}_common.hpp"
 %endif
@@ -96,7 +101,7 @@ namespace ${n}
     %for line in th.make_returns_lines(n, tags, obj, cpp=True):
     /// ${line}
     %endfor
-    inline ${th.make_return_value(n, tags, obj, cpp=True)}
+    inline ${th.make_return_value(n, tags, obj, cpp=True, decl=True, meta=meta)}
     ${th.make_func_name(n, tags, obj, cpp=True)}(
         %for line in th.make_param_lines(n, tags, obj, cpp=True):
         ${line}
@@ -173,7 +178,7 @@ namespace ${n}
         %for line in th.make_returns_lines(n, tags, f, cpp=True):
         /// ${line}
         %endfor
-        inline ${th.make_return_value(n, tags, f, cpp=True, decl=True)}
+        inline ${th.make_return_value(n, tags, f, cpp=True, decl=True, meta=meta)}
         ${th.make_func_name(n, tags, f, cpp=True)}(
             %for line in th.make_param_lines(n, tags, f, cpp=True):
             ${line}

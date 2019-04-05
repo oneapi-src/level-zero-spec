@@ -97,19 +97,35 @@ def extract_objs(specs, type):
     return objs
 
 """
-    returns the type to which name belongs, if it is known
-    i.e. if the name is an etor, return the name of the enum
+    returns the type to which value belongs, if it is known
+    i.e. if the value is an etor, return the name of the enum
 """
-def get_typename(name, meta, type):
-    if meta:
-        name = re.sub(r"(\$\w+)\(.*\)", r"\1", name) # removes '()' part of macros
-        name = re.sub(r"\w+\[(\$\w+)\]", r"\1", name) # extracts array size '[]' part of types
-        if name in meta[type]:
-            return name
-        for entry in meta[type]:
-            if name in meta[type][entry]:
-                return entry
-    return None
+def convert_value_to_type(value, meta):
+    if meta and '$' in value:
+        value = re.sub(r"(\$\w+)\(.*\)", r"\1", value) # removes '()' part of macros
+        value = re.sub(r"\w+\[(\$\w+)\]", r"\1", value) # extracts array size '[]' part of types
+        for group in meta:
+            if value in meta[group]:
+                return group, value
+            if 'class' == group:
+                continue
+            for type in meta[group]:
+                if value in meta[group][type]['types']:
+                    return group, type
+    return None, None
+
+"""
+    returns the class to which the type belongs, if it is known
+"""
+def get_class_of_type(type, meta):
+    if meta and '$' in type:
+        type = re.sub(r"\*", r"", type) # removes '*'
+        for group in meta:
+            if 'class' == group:
+                continue
+            if type in meta[group]:
+                return group, meta[group][type]['class']
+    return None, None
 
 """
     returns proper name of etor
@@ -127,12 +143,11 @@ def make_etor_name(namespace, tags, enum, etor, cpp):
     returns proper name of value
 """
 def make_cpp_value_name(namespace, tags, value, cpp, meta):
-    macro = get_typename(value, meta, 'macro')
-    enum = get_typename(value, meta, 'enum')
-    if macro:
+    group, type = convert_value_to_type(value, meta)
+    if 'macro' == group:
         value = subt(namespace, tags, value)
-    elif enum:
-        value = "%s::%s"%(subt(namespace, tags, enum, cpp=cpp), make_etor_name(namespace, tags, enum, value, cpp))
+    elif 'enum' == group:
+        value = "%s::%s"%(subt(namespace, tags, type, cpp=cpp), make_etor_name(namespace, tags, type, value, cpp))
     else:
         value = subt(namespace, tags, value, cpp=cpp)
     return value
@@ -376,8 +391,8 @@ def make_returns_lines(namespace, tags, obj, cpp=False):
 """
     returns string for declaring function return type
 """
-def make_return_value(namespace, tags, obj, cpp=False, decl=False):
-    if decl and 'decl' in obj:
+def make_return_value(namespace, tags, obj, cpp=False, decl=False, meta=None):
+    if decl and 'decl' in obj and 'class' in obj and obj['class'] not in tags:
         prologue = "static " if re.match("singleton", obj['decl']) else "%s "%obj['decl']
     else:
         prologue = ""
@@ -388,7 +403,14 @@ def make_return_value(namespace, tags, obj, cpp=False, decl=False):
 
     types = []
     for p in params:
-        types.append(subt(namespace, tags, re.sub(r"(.*)\*", r"\1", p['type']), cpp=cpp))
+        type = ""
+        if cpp and not decl:
+            group, cls = get_class_of_type(p['type'], meta)
+            if cls and 'handle' != group:
+                type = "%s::"%subt(namespace, tags, cls, cpp=cpp)
+
+        type += subt(namespace, tags, re.sub(r"(.*)\*", r"\1", p['type']), cpp=cpp)
+        types.append(type)
 
     if len(types) > 1:
         return prologue+"std::tuple<%s>"%", ".join(types)
