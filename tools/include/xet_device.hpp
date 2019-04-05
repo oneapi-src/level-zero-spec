@@ -52,7 +52,6 @@ namespace xet
         /// @brief C++ version for ::xet_metric_group_sampling_type
         enum class metric_group_sampling_type
         {
-            METRIC_GROUP_SAMPLING_TYPE_NONE = 0,            ///< Invalid sampling mode
             METRIC_GROUP_SAMPLING_TYPE_EVENT_BASED = XE_BIT(0), ///< Event based sampling
             METRIC_GROUP_SAMPLING_TYPE_TIME_BASED = XE_BIT(1),  ///< Time based sampling
 

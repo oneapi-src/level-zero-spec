@@ -93,7 +93,6 @@ xetDeviceGetMetricGroup(
 /// @brief Metric group sampling type
 typedef enum _xet_metric_group_sampling_type
 {
-    XET_METRIC_GROUP_SAMPLING_TYPE_NONE = 0,        ///< Invalid sampling mode
     XET_METRIC_GROUP_SAMPLING_TYPE_EVENT_BASED = XE_BIT(0), ///< Event based sampling
     XET_METRIC_GROUP_SAMPLING_TYPE_TIME_BASED = XE_BIT(1),  ///< Time based sampling
 

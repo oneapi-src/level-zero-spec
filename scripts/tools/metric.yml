@@ -50,9 +50,6 @@ desc: "Metric group sampling type"
 class: $tDevice
 name: $t_metric_group_sampling_type
 etors:
-    - name: $T_METRIC_GROUP_SAMPLING_TYPE_NONE
-      desc: "Invalid sampling mode"
-      value: "0"
     - name: $T_METRIC_GROUP_SAMPLING_TYPE_EVENT_BASED
       desc: "Event based sampling"
       value: "$X_BIT(0)"
