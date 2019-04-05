@@ -47,6 +47,7 @@ add_executable(${TARGET_NAME}
     test_encode_set_mmio.cpp
     test_event.cpp
     test_function.cpp
+    test_function_pointers.cpp
     test_graphics_allocation.cpp
     test_image.cpp
     test_memory_manager.cpp

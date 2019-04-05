@@ -289,5 +289,24 @@ inline void writeMockData(const std::string sourceOrigin, std::string &mockName,
            "} // namespace ult\n";
 }
 
+inline std::unique_ptr<char[]> readBinaryTestFile(const std::string &name, size_t &outSize) {
+    std::ifstream file(name, std::ios_base::binary);
+    if (false == file.good()) {
+        outSize = 0;
+        return nullptr;
+    }
+
+    size_t length;
+    file.seekg(0, file.end);
+    length = static_cast<size_t>(file.tellg());
+    file.seekg(0, file.beg);
+
+    auto storage = std::make_unique<char[]>(length);
+    file.read(storage.get(), length);
+
+    outSize = length;
+    return storage;
+}
+
 } // namespace ult
 } // namespace L0
