@@ -392,7 +392,7 @@ The following sample code demonstrates a sequence for creation and submission of
     // Create event pool
     xe_event_pool_desc_t eventPoolDesc = {
         XE_EVENT_POOL_DESC_VERSION_CURRENT,
-        XE_EVENT_POOL_FLAG_NONE,
+        XE_EVENT_POOL_FLAG_HOST_VISIBLE,
         1
     };
     xe_event_pool_handle_t hEventPool;
@@ -949,7 +949,7 @@ The following code examples demonstrate how to use the event IPC APIs:
     // create event pool
     xe_event_pool_desc_t eventPoolDesc = {
         XE_EVENT_POOL_DESC_VERSION_CURRENT,
-        XE_EVENT_POOL_FLAG_IPC_VISIBLE | XE_EVENT_POOL_FLAG_HOST_VISIBLE,
+        XE_EVENT_POOL_FLAG_IPC | XE_EVENT_POOL_FLAG_HOST_VISIBLE,
         10
     };
     xe_event_pool_handle_t hEventPool;

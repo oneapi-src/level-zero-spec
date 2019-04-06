@@ -53,11 +53,9 @@ typedef enum _xe_event_pool_desc_version_t
 /// @brief Supported event pool creation flags
 typedef enum _xe_event_pool_flag_t
 {
-    XE_EVENT_POOL_FLAG_NONE = 0,                    ///< signals and waits only visible within a sub-device
-    XE_EVENT_POOL_FLAG_HOST_VISIBLE = XE_BIT(0),    ///< signals and waits are visible to host
-    XE_EVENT_POOL_FLAG_DEVICE_VISIBLE = XE_BIT(1),  ///< signals and waits are visible to the entire device
-    XE_EVENT_POOL_FLAG_P2P_VISIBLE = XE_BIT(2),     ///< signals and waits may occur across peer devices
-    XE_EVENT_POOL_FLAG_IPC_VISIBLE = XE_BIT(3),     ///< signals and waits may occur across processes
+    XE_EVENT_POOL_FLAG_DEFAULT = 0,                 ///< signals and waits visible to the entire device and peer devices
+    XE_EVENT_POOL_FLAG_HOST_VISIBLE = XE_BIT(0),    ///< signals and waits are also visible to host
+    XE_EVENT_POOL_FLAG_IPC = XE_BIT(1),             ///< signals and waits may be shared across processes
 
 } xe_event_pool_flag_t;
 
@@ -134,10 +132,13 @@ typedef enum _xe_event_desc_version_t
 /// @brief Supported event scope flags
 typedef enum _xe_event_scope_flag_t
 {
-    XE_EVENT_SCOPE_FLAG_NONE = 0,                   ///< 
-    XE_EVENT_SCOPE_FLAG_SELF = XE_BIT(0),           ///< 
-    XE_EVENT_SCOPE_FLAG_DEVICE = XE_BIT(1),         ///< 
-    XE_EVENT_SCOPE_FLAG_HOST = XE_BIT(2),           ///< 
+    XE_EVENT_SCOPE_FLAG_NONE = 0,                   ///< execution synchronization only; no cache hierarchies are flushed or
+                                                    ///< invalidated
+    XE_EVENT_SCOPE_FLAG_SUBDEVICE = XE_BIT(0),      ///< cache hierarchies are flushed or invalidate sufficient for local
+                                                    ///< sub-device access
+    XE_EVENT_SCOPE_FLAG_DEVICE = XE_BIT(1),         ///< cache hierarchies are flushed or invalidate sufficient for global
+                                                    ///< device access and peer device access
+    XE_EVENT_SCOPE_FLAG_HOST = XE_BIT(2),           ///< cache hierarchies are flushed or invalidate sufficient for host access
 
 } xe_event_scope_flag_t;
 

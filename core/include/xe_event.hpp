@@ -62,11 +62,9 @@ namespace xe
         /// @brief C++ version for ::xe_event_pool_flag_t
         enum class event_pool_flag_t
         {
-            NONE = 0,                                       ///< signals and waits only visible within a sub-device
-            HOST_VISIBLE = XE_BIT(0),                       ///< signals and waits are visible to host
-            DEVICE_VISIBLE = XE_BIT(1),                     ///< signals and waits are visible to the entire device
-            P2P_VISIBLE = XE_BIT(2),                        ///< signals and waits may occur across peer devices
-            IPC_VISIBLE = XE_BIT(3),                        ///< signals and waits may occur across processes
+            DEFAULT = 0,                                    ///< signals and waits visible to the entire device and peer devices
+            HOST_VISIBLE = XE_BIT(0),                       ///< signals and waits are also visible to host
+            IPC = XE_BIT(1),                                ///< signals and waits may be shared across processes
 
         };
 
@@ -75,7 +73,7 @@ namespace xe
         struct event_pool_desc_t
         {
             event_pool_desc_version_t version = event_pool_desc_version_t::CURRENT; ///< [in] ::EVENT_POOL_DESC_VERSION_CURRENT
-            event_pool_flag_t flags = event_pool_flag_t::NONE;  ///< [in] creation flags
+            event_pool_flag_t flags = event_pool_flag_t::DEFAULT;   ///< [in] creation flags
             uint32_t count;                                 ///< [in] number of events within the pool
 
         };
@@ -155,10 +153,13 @@ namespace xe
         /// @brief C++ version for ::xe_event_scope_flag_t
         enum class event_scope_flag_t
         {
-            NONE = 0,                                       ///< 
-            SELF = XE_BIT(0),                               ///< 
-            DEVICE = XE_BIT(1),                             ///< 
-            HOST = XE_BIT(2),                               ///< 
+            NONE = 0,                                       ///< execution synchronization only; no cache hierarchies are flushed or
+                                                            ///< invalidated
+            SUBDEVICE = XE_BIT(0),                          ///< cache hierarchies are flushed or invalidate sufficient for local
+                                                            ///< sub-device access
+            DEVICE = XE_BIT(1),                             ///< cache hierarchies are flushed or invalidate sufficient for global
+                                                            ///< device access and peer device access
+            HOST = XE_BIT(2),                               ///< cache hierarchies are flushed or invalidate sufficient for host access
 
         };
 

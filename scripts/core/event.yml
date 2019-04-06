@@ -16,21 +16,15 @@ desc: "Supported event pool creation flags"
 class: $xEventPool
 name: $x_event_pool_flag_t
 etors:
-    - name: $X_EVENT_POOL_FLAG_NONE
+    - name: $X_EVENT_POOL_FLAG_DEFAULT
       value: "0"
-      desc: "signals and waits only visible within a sub-device"
+      desc: "signals and waits visible to the entire device and peer devices"
     - name: $X_EVENT_POOL_FLAG_HOST_VISIBLE
       value: "$X_BIT(0)"
-      desc: "signals and waits are visible to host"
-    - name: $X_EVENT_POOL_FLAG_DEVICE_VISIBLE
+      desc: "signals and waits are also visible to host"
+    - name: $X_EVENT_POOL_FLAG_IPC
       value: "$X_BIT(1)"
-      desc: "signals and waits are visible to the entire device"
-    - name: $X_EVENT_POOL_FLAG_P2P_VISIBLE
-      value: "$X_BIT(2)"
-      desc: "signals and waits may occur across peer devices"
-    - name: $X_EVENT_POOL_FLAG_IPC_VISIBLE
-      value: "$X_BIT(3)"
-      desc: "signals and waits may occur across processes"
+      desc: "signals and waits may be shared across processes"
 --- #--------------------------------------------------------------------------
 type: struct
 desc: "Event pool descriptor"
@@ -44,7 +38,7 @@ members:
     - type: $x_event_pool_flag_t
       name: flags
       desc: "[in] creation flags"
-      init: $X_EVENT_POOL_FLAG_NONE
+      init: $X_EVENT_POOL_FLAG_DEFAULT
     - type: uint32_t
       name: count
       desc: "[in] number of events within the pool"
@@ -102,16 +96,16 @@ name: $x_event_scope_flag_t
 etors:
     - name: $X_EVENT_SCOPE_FLAG_NONE
       value: "0"
-      desc: ""
-    - name: $X_EVENT_SCOPE_FLAG_SELF
+      desc: "execution synchronization only; no cache hierarchies are flushed or invalidated"
+    - name: $X_EVENT_SCOPE_FLAG_SUBDEVICE
       value: "$X_BIT(0)"
-      desc: ""
+      desc: "cache hierarchies are flushed or invalidate sufficient for local sub-device access"
     - name: $X_EVENT_SCOPE_FLAG_DEVICE
       value: "$X_BIT(1)"
-      desc: ""
+      desc: "cache hierarchies are flushed or invalidate sufficient for global device access and peer device access"
     - name: $X_EVENT_SCOPE_FLAG_HOST
       value: "$X_BIT(2)"
-      desc: ""
+      desc: "cache hierarchies are flushed or invalidate sufficient for host access"
 --- #--------------------------------------------------------------------------
 type: struct
 desc: "Event descriptor"
