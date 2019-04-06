@@ -276,31 +276,41 @@ The following sample code demonstrates submission of commands to a command queue
 
 # <a name="brr">Barriers</a>
 There are two types of barriers:
-1. **Execution Barriers** - used to insert execution dependency between commands _within_ a command list.
-2. **Memory Barriers** - used to insert a dependency between memory access across command queues, devices or Host.
+1. **Execution Barriers** - used to insert execution dependencies between commands _within_ a command list.
+2. **Memory Barriers** - used to insert memory access dependencies between commands _within_ a command list or across command queues, devices and Host.
 
 ## Execution Barriers
 - Commands submitted to a command list are only guarenteed to start in the same order in which they are submitted;
   there is no implicit control of which order they complete.
-- Execution barriers provide explicit control to indicate that previous commands must complete prior to
+- Execution barriers provide coarse-grain control to indicate that previous commands must complete prior to
   starting the following commands.
-- Execution barriers are implicitly added by the driver after each batch of command lists submitted to a command queue.
-- Execution barriers are implicitly added by the driver prior to synchronization primitives.
+- Synchronization primitives provide fine-grain control over execution dependencies.
 
-The following sample code demonstrates a sequence for submission of an execution barrier:
+The following sample code demonstrates a sequence for submission of a coarse-grain execution barrier:
 ```c
-    xeCommandListAppendLaunchFunction(hCommandList, hFunction, &launchArgs, nullptr, 0, nullptr);
+    xeCommandListAppendLaunchFunction(hCommandList, hFunction1, &launchArgs, nullptr, 0, nullptr);
 
-    // Append a barrier into a command list to ensure hFunctionFunction1 completes before hFunction2 begins
+    // Append a barrier into a command list to ensure hFunction1 completes before hFunction2 begins
     xeCommandListAppendExecutionBarrier(hCommandList);
 
-    xeCommandListAppendLaunchFunction(hCommandList, hFunction, &launchArgs, nullptr, 0, nullptr);
+    xeCommandListAppendLaunchFunction(hCommandList, hFunction2, &launchArgs, nullptr, 0, nullptr);
     ...
 ```
 
 ## Memory Barriers
-- Memory barriers are implicitly added by the driver after each batch of command lists submitted to a command queue.
-- Memory barriers are implicitly added by the driver prior to synchronization primitives.
+- Memory barriers provide coarse-grain control to indicate memory ranges that must be coherent across device and Host.
+- Synchronization primitives provide fine-grain control over memory and cache coherency.
+
+The following sample code demonstrates a sequence for submission of a coarse-grain memory barrier:
+```c
+    xeCommandListAppendLaunchFunction(hCommandList, hFunction1, &launchArgs, hEvent1, 0, nullptr);
+
+    // Append a barrier into a command list to ensure hFunction1 completes before hFunction2 begins
+    xeCommandListAppendMemoryBarrier(hCommandList, 1, &size, &ptr, hEvent2, 1, &hEvent1);
+
+    xeCommandListAppendLaunchFunction(hCommandList, hFunction2, &launchArgs, nullptr, 1, &hEvent2);
+    ...
+```
 
 # <a name="sp">Synchronization Primitives</a>
 There are two types of synchronization primitives:

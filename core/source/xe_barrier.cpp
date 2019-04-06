@@ -101,3 +101,67 @@ xeCommandListAppendExecutionBarrier(
     }
 }
 
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Appends an execution barrier into a command list.
+/// 
+/// @details
+///     - The application may **not** call this function from simultaneous
+///       threads with the same command list handle.
+///     - The implementation of this function should be lock-free.
+/// 
+/// @returns
+///     - ::XE_RESULT_SUCCESS
+///     - ::XE_RESULT_ERROR_UNINITIALIZED
+///     - ::XE_RESULT_ERROR_DEVICE_LOST
+///     - ::XE_RESULT_ERROR_INVALID_PARAMETER
+///         + nullptr == hCommandList
+///         + nullptr == pRangeSizes
+///         + nullptr == pRanges
+///     - ::XE_RESULT_ERROR_UNSUPPORTED
+///
+/// @hash {2f44066ce000d6fe229b7f075c757847c0903d8b2ad88ce1e8be783709fc1be5}
+///
+__xedllexport xe_result_t __xecall
+xeCommandListAppendMemoryBarrier(
+    xe_command_list_handle_t hCommandList,          ///< [in] handle of the command list
+    uint32_t numRanges,                             ///< [in] number of memory ranges
+    const size_t* pRangeSizes,                      ///< [in] array of sizes of memory range
+    const void** pRanges,                           ///< [in] array of memory ranges
+    xe_event_handle_t hSignalEvent,                 ///< [in][optional] handle of the event to signal on completion
+    uint32_t numWaitEvents,                         ///< [in][optional] number of events to wait on before barrier
+    xe_event_handle_t* phWaitEvents                 ///< [in][optional] handle of the events to wait on before barrier
+    )
+{
+    try
+    {
+        //if( XE_DRIVER_PARAMETER_VALIDATION_LEVEL >= 0 )
+        {
+            // if( nullptr == driver ) return XE_RESULT_ERROR_UNINITIALIZED;
+            // Check parameters
+            if( nullptr == hCommandList ) return XE_RESULT_ERROR_INVALID_PARAMETER;
+            if( nullptr == pRangeSizes ) return XE_RESULT_ERROR_INVALID_PARAMETER;
+            if( nullptr == pRanges ) return XE_RESULT_ERROR_INVALID_PARAMETER;
+        }
+        /// @begin
+#if defined(XE_NULLDRV)
+        return XE_RESULT_SUCCESS;
+#else
+        return L0::CommandList::fromHandle(hCommandList)->appendMemoryBarrier(numRanges, pRangeSizes, pRanges, hSignalEvent, numWaitEvents, phWaitEvents);
+#endif
+        /// @end
+    }
+    catch(xe_result_t& result)
+    {
+        return result;
+    }
+    catch(std::bad_alloc&)
+    {
+        return XE_RESULT_ERROR_OUT_OF_HOST_MEMORY;
+    }
+    catch(std::exception&)
+    {
+        // @todo: pfnOnException(e.what());
+        return XE_RESULT_ERROR_UNKNOWN;
+    }
+}
+

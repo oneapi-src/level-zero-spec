@@ -142,6 +142,19 @@ namespace xe
             );
 
         ///////////////////////////////////////////////////////////////////////////////
+        /// @brief C++ wrapper for ::xeCommandListAppendMemoryBarrier
+        /// @throws result_t
+        inline void
+        AppendMemoryBarrier(
+            uint32_t numRanges,                             ///< [in] number of memory ranges
+            const size_t* pRangeSizes,                      ///< [in] array of sizes of memory range
+            const void** pRanges,                           ///< [in] array of memory ranges
+            event_handle_t hSignalEvent = nullptr,          ///< [in][optional] handle of the event to signal on completion
+            uint32_t numWaitEvents = 0,                     ///< [in][optional] number of events to wait on before barrier
+            event_handle_t* phWaitEvents = nullptr          ///< [in][optional] handle of the events to wait on before barrier
+            );
+
+        ///////////////////////////////////////////////////////////////////////////////
         /// @brief C++ wrapper for ::xeCommandListCreate
         /// @returns
         ///     - ::command_list_handle_t: pointer to handle of command list object created

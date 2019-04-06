@@ -64,6 +64,29 @@ namespace xe
     }
 
     ///////////////////////////////////////////////////////////////////////////////
+    /// @brief C++ wrapper for ::xeCommandListAppendMemoryBarrier
+    /// 
+    /// @details
+    ///     - The application may **not** call this function from simultaneous
+    ///       threads with the same command list handle.
+    ///     - The implementation of this function should be lock-free.
+    /// 
+    /// @throws result_t
+    inline void 
+    CommandList::AppendMemoryBarrier(
+        uint32_t numRanges,                             ///< [in] number of memory ranges
+        const size_t* pRangeSizes,                      ///< [in] array of sizes of memory range
+        const void** pRanges,                           ///< [in] array of memory ranges
+        event_handle_t hSignalEvent,                    ///< [in][optional] handle of the event to signal on completion
+        uint32_t numWaitEvents,                         ///< [in][optional] number of events to wait on before barrier
+        event_handle_t* phWaitEvents                    ///< [in][optional] handle of the events to wait on before barrier
+        )
+    {
+        // auto result = ::xeCommandListAppendMemoryBarrier( handle, numRanges, pRangeSizes, pRanges, hSignalEvent, numWaitEvents, phWaitEvents );
+        // if( ::XE_RESULT_SUCCESS != result ) throw exception(result, "xe::CommandList::AppendMemoryBarrier");
+    }
+
+    ///////////////////////////////////////////////////////////////////////////////
     /// @brief C++ wrapper for ::xeCommandListCreate
     /// 
     /// @details

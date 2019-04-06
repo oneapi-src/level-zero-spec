@@ -17,3 +17,33 @@ params:
     - type: $x_command_list_handle_t
       name: hCommandList
       desc: "[in] handle of the command list"
+--- #--------------------------------------------------------------------------
+type: function
+desc: "Appends an execution barrier into a command list."
+class: $xCommandList
+name: AppendMemoryBarrier
+details:
+    - "The application may **not** call this function from simultaneous threads with the same command list handle."
+    - "The implementation of this function should be lock-free."
+params:
+    - type: $x_command_list_handle_t
+      name: hCommandList
+      desc: "[in] handle of the command list"
+    - type: uint32_t
+      name: numRanges
+      desc: "[in] number of memory ranges"
+    - type: "const size_t*"
+      name: "pRangeSizes"
+      desc: "[in] array of sizes of memory range"
+    - type: "const void**"
+      name: "pRanges"
+      desc: "[in] array of memory ranges"
+    - type: $x_event_handle_t
+      name: hSignalEvent
+      desc: "[in][optional] handle of the event to signal on completion"
+    - type: uint32_t
+      name: numWaitEvents
+      desc: "[in][optional] number of events to wait on before barrier"
+    - type: "$x_event_handle_t*"
+      name: phWaitEvents
+      desc: "[in][optional] handle of the events to wait on before barrier"

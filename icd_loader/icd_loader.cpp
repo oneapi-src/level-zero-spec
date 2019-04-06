@@ -80,6 +80,20 @@ xe_result_t __xecall xeCommandListAppendExecutionBarrier(
     }
     return dispatchTable.xeCommandListAppendExecutionBarrier(hCommandList);
 }
+xe_result_t __xecall xeCommandListAppendMemoryBarrier(
+        xe_command_list_handle_t hCommandList,          ///< [in] handle of the command list
+        uint32_t numRanges,                             ///< [in] number of memory ranges
+        const size_t* pRangeSizes,                      ///< [in] array of sizes of memory range
+        const void** pRanges,                           ///< [in] array of memory ranges
+        xe_event_handle_t hSignalEvent,                 ///< [in][optional] handle of the event to signal on completion
+        uint32_t numWaitEvents,                         ///< [in][optional] number of events to wait on before barrier
+        xe_event_handle_t* phWaitEvents                 ///< [in][optional] handle of the events to wait on before barrier
+    ){
+    if(dispatchTableInitialized == false){
+        return XE_RESULT_ERROR_UNINITIALIZED;
+    }
+    return dispatchTable.xeCommandListAppendMemoryBarrier(hCommandList, numRanges, pRangeSizes, pRanges, hSignalEvent, numWaitEvents, phWaitEvents);
+}
 #if XE_ENABLE_OCL_INTEROP
 xe_result_t __xecall xeDeviceRegisterCLMemory(
         xe_device_handle_t hDevice,                     ///< [in] handle to the device

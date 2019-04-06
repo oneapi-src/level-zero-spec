@@ -68,6 +68,34 @@ xeCommandListAppendExecutionBarrier(
     xe_command_list_handle_t hCommandList           ///< [in] handle of the command list
     );
 
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Appends an execution barrier into a command list.
+/// 
+/// @details
+///     - The application may **not** call this function from simultaneous
+///       threads with the same command list handle.
+///     - The implementation of this function should be lock-free.
+/// 
+/// @returns
+///     - ::XE_RESULT_SUCCESS
+///     - ::XE_RESULT_ERROR_UNINITIALIZED
+///     - ::XE_RESULT_ERROR_DEVICE_LOST
+///     - ::XE_RESULT_ERROR_INVALID_PARAMETER
+///         + nullptr == hCommandList
+///         + nullptr == pRangeSizes
+///         + nullptr == pRanges
+///     - ::XE_RESULT_ERROR_UNSUPPORTED
+__xedllport xe_result_t __xecall
+xeCommandListAppendMemoryBarrier(
+    xe_command_list_handle_t hCommandList,          ///< [in] handle of the command list
+    uint32_t numRanges,                             ///< [in] number of memory ranges
+    const size_t* pRangeSizes,                      ///< [in] array of sizes of memory range
+    const void** pRanges,                           ///< [in] array of memory ranges
+    xe_event_handle_t hSignalEvent,                 ///< [in][optional] handle of the event to signal on completion
+    uint32_t numWaitEvents,                         ///< [in][optional] number of events to wait on before barrier
+    xe_event_handle_t* phWaitEvents                 ///< [in][optional] handle of the events to wait on before barrier
+    );
+
 #if defined(__cplusplus)
 } // extern "C"
 #endif
