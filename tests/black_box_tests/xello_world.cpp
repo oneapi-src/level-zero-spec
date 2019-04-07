@@ -1,3 +1,5 @@
+#include "xello_worlds.h"
+
 #include "icd_loader/icd_loader.h"
 
 #include "xe_all.h"
@@ -6,41 +8,11 @@
 #include <fstream>
 #include <memory>
 
-#include "helpers.inl"
-
+extern bool verbose;
 bool verbose = false;
 
-template <bool TerminateOnFailure, typename ResulT>
-inline void validate(ResulT result, const char *message) {
-    if (result == 0) { // assumption 0 is success
-        if (verbose) {
-            std::cerr << " SUCCESS : " << message << std::endl;
-        }
-        return;
-    }
-
-    std::cerr << (TerminateOnFailure ? "ERROR : " : "WARNING : ") << message << " : " << result << std::endl;
-    if (TerminateOnFailure) {
-        std::terminate();
-    }
-}
-
-#define SUCCESS_OR_TERMINATE(CALL) validate<true>(CALL, #CALL)
-#define SUCCESS_OR_TERMINATE_BOOL(FLAG) validate<true>(!(FLAG), #FLAG)
-#define SUCCESS_OR_WARNING(CALL) validate<false>(CALL, #CALL)
-#define SUCCESS_OR_WARNING_BOOL(FLAG) validate<false>(!(FLAG), #FLAG)
-
-void printDeviceProperties(const xe_device_properties_t &props);
-void printVerboseValidationError(const void *expected, const void *tested, size_t len);
-
 int main(int argc, char *argv[]) {
-    if ((argc >= 2) && ((0 == strcmp(argv[1], "-v")) || (0 == strcmp(argv[1], "--verbose")))) {
-        verbose = true;
-    }
-
-    if (verbose) {
-        std::cerr << "VERBOSE MODE ENABLED" << std::endl;
-    }
+    verbose = isVerbose(argc, argv);
 
     // 1. Set-up
     constexpr size_t allocSize = 4096;
@@ -151,10 +123,9 @@ int main(int argc, char *argv[]) {
     // 5. Dispatch and wait
     SUCCESS_OR_TERMINATE(xeCommandListClose(cmdList));
     SUCCESS_OR_TERMINATE(xeCommandQueueExecuteCommandLists(cmdQueue, 1, &cmdList, nullptr));
-    auto synchronizationResult = xeCommandQueueSynchronize(cmdQueue, 1000 * 1000 /*1s*/);
-    SUCCESS_OR_WARNING(synchronizationResult);
+    SUCCESS_OR_TERMINATE(xeCommandQueueSynchronize(cmdQueue, std::numeric_limits<uint32_t>::max()));
 
-// 6. Validate
+    // 6. Validate
 
     bool outputValidationSuccessful = (0 == memcmp(initDataSrc, readBackData, sizeof(readBackData)));
     if (verbose && (false == outputValidationSuccessful)) {
@@ -174,50 +145,10 @@ int main(int argc, char *argv[]) {
     SUCCESS_OR_TERMINATE(xeFunctionDestroy(function));
     SUCCESS_OR_TERMINATE(xeModuleDestroy(module));
 
-    bool aubMode = (XE_RESULT_NOT_READY == synchronizationResult);
+    bool aubMode = isAubMode(argc, argv);
     if (aubMode == false) {
         std::cout << "\nResults validation " << (outputValidationSuccessful ? "PASSED" : "FAILED") << std::endl;
     }
     int resultOnFailure = aubMode ? 0 : 1;
     return outputValidationSuccessful ? 0 : resultOnFailure;
-}
-
-void printDeviceProperties(const xe_device_properties_t &props) {
-    std::cout << "Device : "
-              << "\n"
-              << " * name : " << props.device_name << "\n"
-              << " * vendorId : " << props.vendorId << "\n"
-              << " * deviceId : " << props.deviceId << "\n"
-              << " * subdeviceId : " << props.subdeviceId << "\n"
-              << " * isSubdevice : " << (props.isSubdevice ? "TRUE" : "FALSE") << "\n"
-              << " * numSubDevices : " << props.numSubDevices << "\n"
-              << " * coreClockRate : " << props.coreClockRate << "\n"
-              << " * memClockRate : " << props.memClockRate << "\n"
-              << " * memGlobalBusWidth : " << props.memGlobalBusWidth << "\n"
-              << " * totalLocalMemSize : " << props.totalLocalMemSize << "\n"
-              << " * numAsyncComputeEngines : " << props.numAsyncComputeEngines << "\n"
-              << " * numAsyncCopyEngines  : " << props.numAsyncCopyEngines << "\n"
-              << " * numComputeCores : " << props.numComputeCores << "\n"
-              << " * maxCommandQueuePriority : " << props.maxCommandQueuePriority << std::endl;
-}
-
-void printVerboseValidationError(const void *expected, const void *tested, size_t len) {
-    size_t offset = 0;
-
-    const uint8_t *expectedU8 = reinterpret_cast<const uint8_t *>(expected);
-    const uint8_t *testedU8 = reinterpret_cast<const uint8_t *>(tested);
-    uint32_t errorsCount = 0;
-    constexpr uint32_t errorsMax = 20;
-    while (offset < len) {
-        if (expectedU8[offset] != testedU8[offset]) {
-            std::cerr << "Data mismatch expectedU8[" << offset << "] != testedU8[" << offset << "]   ->    "
-                      << +expectedU8[offset] << " != " << +testedU8[offset] << std::endl;
-            ++errorsCount;
-            if (errorsCount >= errorsMax) {
-                std::cerr << "Found " << errorsCount << " data mismatches - skipping further comparison " << std::endl;
-                break;
-            }
-        }
-        ++offset;
-    }
 }

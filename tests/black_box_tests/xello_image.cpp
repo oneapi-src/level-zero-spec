@@ -1,35 +1,16 @@
+#include "xello_worlds.h"
+
 #include "xe_all.h"
+
 #include <iostream>
 #include <fstream>
 #include <memory>
 #include <vector>
 
-#include "helpers.inl"
-
+extern bool verbose;
 bool verbose = false;
 
-template <bool TerminateOnFailure, typename ResulT>
-inline void validate(ResulT result, const char *message) {
-    if (result == 0) { // assumption 0 is success
-        if (verbose) {
-            std::cerr << "SUCCESS : " << message << std::endl;
-        }
-        return;
-    }
-
-    std::cerr << (TerminateOnFailure ? "ERROR : " : "WARNING : ") << message << " : " << result << std::endl;
-    if (TerminateOnFailure) {
-        std::terminate();
-    }
-}
-
-#define SUCCESS_OR_TERMINATE(CALL) validate<true>(CALL, #CALL)
-#define SUCCESS_OR_TERMINATE_BOOL(FLAG) validate<true>(!(FLAG), #FLAG)
-#define SUCCESS_OR_WARNING(CALL) validate<false>(CALL, #CALL)
-#define SUCCESS_OR_WARNING_BOOL(FLAG) validate<false>(!(FLAG), #FLAG)
-
-void testAppendImageFunction(xe_device_handle_t &device,
-                          bool &syncRet, bool &validRet) {
+void testAppendImageFunction(xe_device_handle_t &device, bool &validRet) {
     const xe_image_format_t format = XE_IMAGE_FORMAT_UINT32;
     const size_t elem_size = sizeof(uint32_t);
     const int numChannels = 4;
@@ -56,26 +37,24 @@ void testAppendImageFunction(xe_device_handle_t &device,
         XE_IMAGE_FLAG_PROGRAM_READ,
         XE_IMAGE_TYPE_2D,
         format, numChannels,
-        width, height, 1, 0, 0
-    };
+        width, height, 1, 0, 0};
     xe_image_handle_t srcImg;
     xe_image_region_t srcRegion = {0, size * elem_size};
 
     SUCCESS_OR_TERMINATE(xeDeviceCreateImage(device,
-            const_cast<const xe_image_desc_t *>(&srcImgDesc), &srcImg));
+                                             const_cast<const xe_image_desc_t *>(&srcImgDesc), &srcImg));
 
     xe_image_desc_t dstImgDesc = {
         XE_IMAGE_DESC_VERSION_CURRENT,
         XE_IMAGE_FLAG_PROGRAM_WRITE,
         XE_IMAGE_TYPE_2D,
         format, numChannels,
-        width, height, 1, 0, 0
-    };
+        width, height, 1, 0, 0};
     xe_image_handle_t dstImg;
     xe_image_region_t dstRegion = {0, size * elem_size};
 
     SUCCESS_OR_TERMINATE(xeDeviceCreateImage(device,
-            const_cast<const xe_image_desc_t *>(&dstImgDesc), &dstImg));
+                                             const_cast<const xe_image_desc_t *>(&dstImgDesc), &dstImg));
 
     uint32_t *srcBuffer = new uint32_t[size];
     uint32_t *dstBuffer = new uint32_t[size];
@@ -126,7 +105,7 @@ void testAppendImageFunction(xe_device_handle_t &device,
 
     SUCCESS_OR_TERMINATE(xeCommandListClose(cmdList));
     SUCCESS_OR_TERMINATE(xeCommandQueueExecuteCommandLists(cmdQueue, 1, &cmdList, nullptr));
-    syncRet = xeCommandQueueSynchronize(cmdQueue, 1000 * 1000 /*1s*/);
+    SUCCESS_OR_TERMINATE(xeCommandQueueSynchronize(cmdQueue, std::numeric_limits<uint32_t>::max()));
 
     if (verbose) {
         std::cout << "src ";
@@ -156,9 +135,7 @@ int main(int argc, char *argv[]) {
     xe_device_handle_t device0;
     xe_device_properties_t device0Properties = {XE_DEVICE_PROPERTIES_VERSION_CURRENT};
 
-    if ((argc >= 2) && ((0 == strcmp(argv[1], "-v")) || (0 == strcmp(argv[1], "--verbose")))) {
-        verbose = true;
-    }
+    verbose = isVerbose(argc, argv);
 
     SUCCESS_OR_TERMINATE(xeDriverInit(XE_INIT_FLAG_NONE));
     xe_device_uuid_t deviceUniqueID = {};
@@ -166,11 +143,10 @@ int main(int argc, char *argv[]) {
     SUCCESS_OR_TERMINATE(xeDeviceGetProperties(device0, &device0Properties));
     std::cout << device0Properties.device_name << std::endl;
 
-    bool synchronizationResult;
     bool outputValidationSuccessful;
-    testAppendImageFunction(device0, synchronizationResult, outputValidationSuccessful);
+    testAppendImageFunction(device0, outputValidationSuccessful);
 
-    bool aubMode = (XE_RESULT_NOT_READY == synchronizationResult);
+    bool aubMode = isAubMode(argc, argv);
     if (aubMode == false)
         std::cout << "\nResults validation " << (outputValidationSuccessful ? "PASSED" : "FAILED") << std::endl;
 

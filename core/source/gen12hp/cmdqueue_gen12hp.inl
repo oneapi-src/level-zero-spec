@@ -9,7 +9,7 @@ namespace L0 {
 template <>
 void CommandQueueHw<IGFX_GEN12_CORE>::dispatchTaskCountWrite(bool flushDataCache) {
     constexpr auto gfxCoreFamily = IGFX_GEN12_CORE;
-    auto commandStreamReceiver = static_cast<NEO::CommandStreamReceiver *>(csrRT);
+    auto commandStreamReceiver = static_cast<CommandStreamReceiver *>(csrRT);
     assert(commandStreamReceiver);
     auto taskCountToWrite = commandStreamReceiver->peekTaskCount();
 
@@ -54,7 +54,10 @@ void CommandQueueHw<IGFX_GEN12_CORE>::dispatchTaskCountWrite(bool flushDataCache
         &substream.getParent());
     NEO::ResidencyContainer residencyContainer;
     residencyContainer.push_back(commandStreamReceiver->getTagAllocation());
+    commandStreamReceiver->latestFlushedTaskCount = taskCountToWrite;
+    commandStreamReceiver->setLatestSentTaskCount(taskCountToWrite);
     commandStreamReceiver->flush(batchBuffer, residencyContainer);
+    commandStreamReceiver->makeSurfacePackNonResident(residencyContainer);
     commandStreamReceiver->makeCoherent(*commandStreamReceiver->getTagAllocation());
     return;
 }

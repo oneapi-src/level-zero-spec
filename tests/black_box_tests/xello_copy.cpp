@@ -1,32 +1,16 @@
+#include "xello_worlds.h"
+
 #include "xe_all.h"
+
 #include <iostream>
+#include <limits>
 #include <fstream>
 #include <memory>
 
+extern bool verbose;
 bool verbose = false;
 
-template <bool TerminateOnFailure, typename ResulT>
-inline void validate(ResulT result, const char *message) {
-    if (result == 0) { // assumption 0 is success
-        if (verbose) {
-            std::cerr << "SUCCESS : " << message << std::endl;
-        }
-        return;
-    }
-
-    std::cerr << (TerminateOnFailure ? "ERROR : " : "WARNING : ") << message << " : " << result << std::endl;
-    if (TerminateOnFailure) {
-        std::terminate();
-    }
-}
-
-#define SUCCESS_OR_TERMINATE(CALL) validate<true>(CALL, #CALL)
-#define SUCCESS_OR_TERMINATE_BOOL(FLAG) validate<true>(!(FLAG), #FLAG)
-#define SUCCESS_OR_WARNING(CALL) validate<false>(CALL, #CALL)
-#define SUCCESS_OR_WARNING_BOOL(FLAG) validate<false>(!(FLAG), #FLAG)
-
-void testAppendMemoryCopy(xe_device_handle_t &device,
-                          bool &syncRet, bool &validRet) {
+void testAppendMemoryCopy(xe_device_handle_t &device, bool &validRet) {
     const size_t allocSize = 4096 + 7; // +7 to brake alignment and make it harder
     char *heapBuffer = new char[allocSize];
     void *xeBuffer = nullptr;
@@ -65,7 +49,7 @@ void testAppendMemoryCopy(xe_device_handle_t &device,
 
     SUCCESS_OR_TERMINATE(xeCommandListClose(cmdList));
     SUCCESS_OR_TERMINATE(xeCommandQueueExecuteCommandLists(cmdQueue, 1, &cmdList, nullptr));
-    syncRet = xeCommandQueueSynchronize(cmdQueue, 1000 * 1000 /*1s*/);
+    SUCCESS_OR_TERMINATE(xeCommandQueueSynchronize(cmdQueue, std::numeric_limits<uint32_t>::max()));
 
     // Validate stack and xe buffers have the original data from heapBuffer
     validRet = (0 == memcmp(heapBuffer, stackBuffer, allocSize));
@@ -81,9 +65,7 @@ int main(int argc, char *argv[]) {
     xe_device_handle_t device0;
     xe_device_properties_t device0Properties = {XE_DEVICE_PROPERTIES_VERSION_CURRENT};
 
-    if ((argc >= 2) && ((0 == strcmp(argv[1], "-v")) || (0 == strcmp(argv[1], "--verbose")))) {
-        verbose = true;
-    }
+    verbose = isVerbose(argc, argv);
 
     SUCCESS_OR_TERMINATE(xeDriverInit(XE_INIT_FLAG_NONE));
     xe_device_uuid_t deviceUniqueID = {};
@@ -91,11 +73,10 @@ int main(int argc, char *argv[]) {
     SUCCESS_OR_TERMINATE(xeDeviceGetProperties(device0, &device0Properties));
     std::cout << device0Properties.device_name << std::endl;
 
-    bool synchronizationResult;
     bool outputValidationSuccessful;
-    testAppendMemoryCopy(device0, synchronizationResult, outputValidationSuccessful);
+    testAppendMemoryCopy(device0, outputValidationSuccessful);
 
-    bool aubMode = (XE_RESULT_NOT_READY == synchronizationResult);
+    bool aubMode = isAubMode(argc, argv);
     if (aubMode == false)
         std::cout << "\nResults validation " << (outputValidationSuccessful ? "PASSED" : "FAILED") << std::endl;
 

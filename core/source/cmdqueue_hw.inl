@@ -78,9 +78,16 @@ xe_result_t CommandQueueHw<gfxCoreFamily>::executeCommandLists(uint32_t numComma
     return XE_RESULT_SUCCESS;
 }
 
+//FIXME: Remove direct access to taskCount.
+//Needed below
+struct CommandStreamReceiver : public NEO::CommandStreamReceiver {
+    using NEO::CommandStreamReceiver::latestFlushedTaskCount;
+    using NEO::CommandStreamReceiver::taskCount;
+};
+
 template <GFXCORE_FAMILY gfxCoreFamily>
 void CommandQueueHw<gfxCoreFamily>::dispatchTaskCountWrite(bool flushDataCache) {
-    auto commandStreamReceiver = static_cast<NEO::CommandStreamReceiver *>(csrRT);
+    auto commandStreamReceiver = static_cast<CommandStreamReceiver *>(csrRT);
     assert(commandStreamReceiver);
     auto taskCountToWrite = commandStreamReceiver->peekTaskCount();
 
@@ -136,7 +143,10 @@ void CommandQueueHw<gfxCoreFamily>::dispatchTaskCountWrite(bool flushDataCache) 
         &substream.getParent());
     NEO::ResidencyContainer residencyContainer;
     residencyContainer.push_back(commandStreamReceiver->getTagAllocation());
+    commandStreamReceiver->latestFlushedTaskCount = taskCountToWrite;
+    commandStreamReceiver->setLatestSentTaskCount(taskCountToWrite);
     commandStreamReceiver->flush(batchBuffer, residencyContainer);
+    commandStreamReceiver->makeSurfacePackNonResident(residencyContainer);
     commandStreamReceiver->makeCoherent(*commandStreamReceiver->getTagAllocation());
     return;
 }

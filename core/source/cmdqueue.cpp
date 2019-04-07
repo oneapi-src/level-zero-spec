@@ -79,9 +79,7 @@ void CommandQueueImp::submitBatchBuffer(size_t offset) {
     commandStreamReceiver->flush(batchBuffer, residencyContainer);
 
     //FIXME: Remove direct access to taskCount.
-    //Goal here is to access pollForCompletion which isn't directly visible
     this->taskCount = ++commandStreamReceiver->taskCount;
-    commandStreamReceiver->waitForTaskCountWithKmdNotifyFallback(0u, 0u, false, false);
 }
 
 xe_result_t CommandQueueImp::synchronize(uint32_t timeout) {
@@ -93,7 +91,7 @@ xe_result_t CommandQueueImp::synchronizeByPollingForTaskCount(uint32_t timeout) 
     assert(commandStreamReceiver);
 
     auto taskCountToWait = this->taskCount;
-    if (commandStreamReceiver->latestFlushedTaskCount < taskCountToWait) {
+    if (commandStreamReceiver->peekLatestSentTaskCount() < taskCountToWait) {
         dispatchTaskCountWrite(true);
     }
 

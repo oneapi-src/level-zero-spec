@@ -1,17 +1,13 @@
 if(UNIX)
     set(OS_SPECIFIC_LIBS dl pthread)
+    set(black_box_datadir ${CMAKE_INSTALL_FULL_DATAROOTDIR}/loki-samples)
+    add_definitions(-DOS_DATADIR=${black_box_datadir}/)
 else()
     set(OS_SPECIFIC_LIBS "")
 endif()
 
-add_library(xello_black_box_helpers OBJECT helpers.cpp)
-if(UNIX)
-    set(black_box_datadir ${CMAKE_INSTALL_FULL_DATAROOTDIR}/loki-samples)
-    target_compile_definitions(xello_black_box_helpers PRIVATE OS_DATADIR=${black_box_datadir}/)
-endif()
-
 #Dynamically thunking xelloWorld applicaton
-add_executable(xello_world xello_world.cpp $<TARGET_OBJECTS:xello_black_box_helpers>)
+add_executable(xello_world xello_world.cpp)
 
 if(MSVC)
     set_target_properties(xello_world
@@ -39,7 +35,7 @@ add_dependencies(xello_copy copy_third_party_files ocloc_shared)
 target_link_libraries(xello_copy level_zero_icd_loader ${OS_SPECIFIC_LIBS})
 
 #Basic example with image kernel
-add_executable(xello_image xello_image.cpp $<TARGET_OBJECTS:xello_black_box_helpers>)
+add_executable(xello_image xello_image.cpp)
 
 if(MSVC)
     set_target_properties(xello_image
@@ -81,7 +77,7 @@ add_dependencies(xello_multidev copy_third_party_files ocloc_shared)
 target_link_libraries(xello_multidev level_zero_icd_loader ${OS_SPECIFIC_LIBS})
 
 #ICD loader enabled xelloWorld applicaton
-add_executable(xello_world_icd xello_world_icd.cpp $<TARGET_OBJECTS:xello_black_box_helpers>)
+add_executable(xello_world_icd xello_world_icd.cpp)
 
 if(MSVC)
     set_target_properties(xello_world_icd
@@ -109,9 +105,9 @@ add_dependencies(xello_world_icd_clang copy_third_party_files ocloc_shared)
 target_link_libraries(xello_world_icd_clang level_zero_icd_loader ${OS_SPECIFIC_LIBS})
 
 if(MSVC)
-    set(RUN_XELLO_WORLD_ICD_AUB_CMD $<TARGET_FILE:xello_world_icd>)
+    set(RUN_XELLO_WORLD_ICD_AUB_CMD $<TARGET_FILE:xello_world_icd> --aub)
 else()
-    set(RUN_XELLO_WORLD_ICD_AUB_CMD LD_LIBRARY_PATH=$<TARGET_FILE_DIR:xello_world_icd> $<TARGET_FILE:xello_world_icd>)
+    set(RUN_XELLO_WORLD_ICD_AUB_CMD LD_LIBRARY_PATH=$<TARGET_FILE_DIR:xello_world_icd> $<TARGET_FILE:xello_world_icd> --aub)
 endif()
 
 set(TEST_DIR ${CUSTOM_COMMAND_BINARY_DIR}/xello_world_icd_aub_test_ats)
@@ -147,9 +143,9 @@ add_custom_command(
 )
 
 if(MSVC)
-    set(RUN_XELLO_COPY_AUB_CMD $<TARGET_FILE:xello_copy>)
+    set(RUN_XELLO_COPY_AUB_CMD $<TARGET_FILE:xello_copy> --aub)
 else()
-    set(RUN_XELLO_COPY_AUB_CMD LD_LIBRARY_PATH=$<TARGET_FILE_DIR:xello_copy> $<TARGET_FILE:xello_copy>)
+    set(RUN_XELLO_COPY_AUB_CMD LD_LIBRARY_PATH=$<TARGET_FILE_DIR:xello_copy> $<TARGET_FILE:xello_copy> --aub)
 endif()
 
 set(TEST_DIR ${CUSTOM_COMMAND_BINARY_DIR}/xello_copy_aub_test_ats)
@@ -182,9 +178,9 @@ add_custom_command(
 )
 
 if(MSVC)
-    set(RUN_XELLO_IMAGE_AUB_CMD $<TARGET_FILE:xello_image>)
+    set(RUN_XELLO_IMAGE_AUB_CMD $<TARGET_FILE:xello_image> --aub)
 else()
-    set(RUN_XELLO_IMAGE_AUB_CMD LD_LIBRARY_PATH=$<TARGET_FILE_DIR:xello_image> $<TARGET_FILE:xello_image>)
+    set(RUN_XELLO_IMAGE_AUB_CMD LD_LIBRARY_PATH=$<TARGET_FILE_DIR:xello_image> $<TARGET_FILE:xello_image> --aub)
 endif()
 
 set(TEST_DIR ${CUSTOM_COMMAND_BINARY_DIR}/xello_image_aub_test_ats)
@@ -219,9 +215,9 @@ add_custom_command(
 )
 
 if(MSVC)
-    set(RUN_XELLO_COPY_IMAGE_AUB_CMD $<TARGET_FILE:xello_copy_image>)
+    set(RUN_XELLO_COPY_IMAGE_AUB_CMD $<TARGET_FILE:xello_copy_image> --aub)
 else()
-    set(RUN_XELLO_COPY_IMAGE_AUB_CMD LD_LIBRARY_PATH=$<TARGET_FILE_DIR:xello_copy_image> $<TARGET_FILE:xello_copy_image>)
+    set(RUN_XELLO_COPY_IMAGE_AUB_CMD LD_LIBRARY_PATH=$<TARGET_FILE_DIR:xello_copy_image> $<TARGET_FILE:xello_copy_image> --aub)
 endif()
 
 set(TEST_DIR ${CUSTOM_COMMAND_BINARY_DIR}/xello_copy_image_aub_test_ats)
