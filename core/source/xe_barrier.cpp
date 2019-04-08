@@ -101,3 +101,52 @@ xeCommandListAppendExecutionBarrier(
     }
 }
 
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Forces system-wide memory coherency.
+/// 
+/// @returns
+///     - ::XE_RESULT_SUCCESS
+///     - ::XE_RESULT_ERROR_UNINITIALIZED
+///     - ::XE_RESULT_ERROR_DEVICE_LOST
+///     - ::XE_RESULT_ERROR_INVALID_PARAMETER
+///         + nullptr == hDevice
+///     - ::XE_RESULT_ERROR_UNSUPPORTED
+///
+/// @hash {b7f1d536c1cada60a943db1fb361f9d61a673ec341052bf8e49ad96e837e6dc2}
+///
+__xedllexport xe_result_t __xecall
+xeDeviceSystemBarrier(
+    $_device_handle_t hDevice                       ///< [in] handle of the device
+    )
+{
+    try
+    {
+        //if( XE_DRIVER_PARAMETER_VALIDATION_LEVEL >= 0 )
+        {
+            // if( nullptr == driver ) return XE_RESULT_ERROR_UNINITIALIZED;
+            // Check parameters
+            if( nullptr == hDevice ) return XE_RESULT_ERROR_INVALID_PARAMETER;
+        }
+        /// @begin
+#if defined(XE_NULLDRV)
+        return XE_RESULT_SUCCESS;
+#else
+        return L0::Device::fromHandle(hDevice)->systemBarrier();
+#endif
+        /// @end
+    }
+    catch(xe_result_t& result)
+    {
+        return result;
+    }
+    catch(std::bad_alloc&)
+    {
+        return XE_RESULT_ERROR_OUT_OF_HOST_MEMORY;
+    }
+    catch(std::exception&)
+    {
+        // @todo: pfnOnException(e.what());
+        return XE_RESULT_ERROR_UNKNOWN;
+    }
+}
+

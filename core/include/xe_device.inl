@@ -39,6 +39,19 @@
 namespace xe
 {
     ///////////////////////////////////////////////////////////////////////////////
+    /// @brief C++ wrapper for ::xeDeviceSystemBarrier
+    /// 
+    /// @throws result_t
+    inline void 
+    Device::SystemBarrier(
+        void
+        )
+    {
+        // auto result = ::xeDeviceSystemBarrier( handle );
+        // if( ::XE_RESULT_SUCCESS != result ) throw exception(result, "xe::Device::SystemBarrier");
+    }
+
+    ///////////////////////////////////////////////////////////////////////////////
 #if XE_ENABLE_OCL_INTEROP
     /// @brief C++ wrapper for ::xeDeviceRegisterCLMemory
     /// 

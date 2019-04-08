@@ -17,3 +17,22 @@ params:
     - type: $x_command_list_handle_t
       name: hCommandList
       desc: "[in] handle of the command list"
+--- #--------------------------------------------------------------------------
+type: function
+desc: "Forces memory range to be globally observable."
+class: $xDevice
+name: SystemBarrier
+details:
+    = ""
+    - "The application may call this function from simultaneous threads."
+    - "The implementation of this function should be lock-free."
+params:
+    - type: $_device_handle_t
+      name: hDevice
+      desc: "[in] handle of the device"
+    - tyoe: size_t
+      name: size
+      desc: "[in] size in bytes of memory region"
+    - type: "void*"
+      name: ptr
+      desc: "[in] pointer to memory region"

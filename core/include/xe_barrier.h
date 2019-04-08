@@ -68,6 +68,21 @@ xeCommandListAppendExecutionBarrier(
     xe_command_list_handle_t hCommandList           ///< [in] handle of the command list
     );
 
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Forces system-wide memory coherency.
+/// 
+/// @returns
+///     - ::XE_RESULT_SUCCESS
+///     - ::XE_RESULT_ERROR_UNINITIALIZED
+///     - ::XE_RESULT_ERROR_DEVICE_LOST
+///     - ::XE_RESULT_ERROR_INVALID_PARAMETER
+///         + nullptr == hDevice
+///     - ::XE_RESULT_ERROR_UNSUPPORTED
+__xedllport xe_result_t __xecall
+xeDeviceSystemBarrier(
+    $_device_handle_t hDevice                       ///< [in] handle of the device
+    );
+
 #if defined(__cplusplus)
 } // extern "C"
 #endif
