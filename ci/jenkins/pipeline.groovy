@@ -109,59 +109,61 @@ lokiBuild = { name, body ->
 }
 
 try {
-	node("loki-common") {
-		lokiStage("checkout") {
-			checkout changelog: false, poll: false,
-				scm: [$class: 'GitSCM',
-					branches: [[name: "${GERRIT_PATCHSET_REVISION}"]],
-					doGenerateSubmoduleConfigurations: false,
-					extensions: [
-						[$class: 'CleanCheckout'],
-						// [$class: 'RelativeTargetDirectory', relativeTargetDir: 'loki'],
-						[$class: 'CloneOption', noTags: true, reference: '', shallow: false, honorRefspec: true],
-						[$class: 'PruneStaleBranch']],
-					submoduleCfg: [],
-					userRemoteConfigs: [[
-						credentialsId: '0f565f2a-f10f-421d-ac50-3b169adf5f06',
-						url: "${gerritUrl}",
-						refspec: "+${GERRIT_REFSPEC}:${gerritLocalBranch}"
-					]]]
+	timeout(time: 60, unit: 'MINUTES') {
+		node("loki-common") {
+			lokiStage("checkout") {
+				checkout changelog: false, poll: false,
+					scm: [$class: 'GitSCM',
+						branches: [[name: "${GERRIT_PATCHSET_REVISION}"]],
+						doGenerateSubmoduleConfigurations: false,
+						extensions: [
+							[$class: 'CleanCheckout'],
+							// [$class: 'RelativeTargetDirectory', relativeTargetDir: 'loki'],
+							[$class: 'CloneOption', noTags: true, reference: '', shallow: false, honorRefspec: true],
+							[$class: 'PruneStaleBranch']],
+						submoduleCfg: [],
+						userRemoteConfigs: [[
+							credentialsId: '0f565f2a-f10f-421d-ac50-3b169adf5f06',
+							url: "${gerritUrl}",
+							refspec: "+${GERRIT_REFSPEC}:${gerritLocalBranch}"
+						]]]
 
-			if(env.JOB_BASE_NAME == "ocl-loki-verification") {
-				def resp = httpRequest authentication: "${gerritGfxCreds}", url: "https://${GERRIT_HOST}/a/changes/${gerritReview.id}/revisions/${GERRIT_PATCHSET_REVISION}/review"
-				assert resp.content.startsWith(')]}') == true
+				if(env.JOB_BASE_NAME == "ocl-loki-verification") {
+					def resp = httpRequest authentication: "${gerritGfxCreds}", url: "https://${GERRIT_HOST}/a/changes/${gerritReview.id}/revisions/${GERRIT_PATCHSET_REVISION}/review"
+					assert resp.content.startsWith(')]}') == true
 
-				def s = resp.content
-				def tmpReview = readJSON text: s.substring(s.indexOf('\n')+1)
+					def s = resp.content
+					def tmpReview = readJSON text: s.substring(s.indexOf('\n')+1)
 
-				def isDraft = false
-				if(tmpReview.revisions["${GERRIT_PATCHSET_REVISION}"].containsKey('draft')) {
-					isDraft = tmpReview.revisions["${GERRIT_PATCHSET_REVISION}"].draft
+					def isDraft = false
+					if(tmpReview.revisions["${GERRIT_PATCHSET_REVISION}"].containsKey('draft')) {
+						isDraft = tmpReview.revisions["${GERRIT_PATCHSET_REVISION}"].draft
+					}
+					skipBuild = !isDraft
+					echo "verificaiton build.isDraft = ${isDraft}"
+					echo "verificaiton build.skipBuild = ${skipBuild}"
 				}
-				skipBuild = !isDraft
-				echo "verificaiton build.isDraft = ${isDraft}"
-				echo "verificaiton build.skipBuild = ${skipBuild}"
+				buildLinux = load("ci/jenkins/build.linux.groovy")
+				buildWindows = load("ci/jenkins/build.windows.groovy")
 			}
-			buildLinux = load("ci/jenkins/build.linux.groovy")
-			buildWindows = load("ci/jenkins/build.windows.groovy")
+			lokiStage("lint") {
+				echo "TBD"
+			}
 		}
-    lokiStage("lint") {
-			echo "TBD"
-    }
-	}
 
-	lokiStage('build') {
-		if(!skipBuild) {
-			lokiBuilds = [failFast:true]
-			lokiBuilds['linux'] = buildLinux()
-			lokiBuilds['windows-64'] = buildWindows()
+		lokiStage('build') {
+			if(!skipBuild) {
+				lokiBuilds = [failFast:true]
+				lokiBuilds['linux'] = buildLinux()
+				lokiBuilds['windows-64'] = buildWindows()
 
-			parallel lokiBuilds
+				parallel lokiBuilds
+			}
 		}
-	}
 
-	lokiStage('publish') {
-		gerritPostResult(true)
+		lokiStage('publish') {
+			gerritPostResult(true)
+		}
 	}
 } catch(Exception e) {
 	gerritPostResult(false)
