@@ -15,6 +15,8 @@
 #include "runtime/os_interface/debug_settings_manager.h"
 #include "runtime/command_queue/command_queue.h"
 #include "runtime/execution_environment/execution_environment.h"
+#include "runtime/mem_obj/mem_obj.h"
+#include "runtime/helpers/validators.h"
 
 namespace L0 {
 
@@ -257,8 +259,17 @@ struct DeviceImp : public Device {
     }
 
     xe_result_t registerCLMemory(cl_context context, cl_mem mem, void** ptr) override {
-        return XE_RESULT_ERROR_UNSUPPORTED;
+        NEO::MemObj *memObjRT = static_cast<NEO::MemObj *>(mem);
+        NEO::GraphicsAllocation *graphicsAllocationRT = memObjRT->getGraphicsAllocation();
+        assert(*graphicsAllocationRT != nullptr);
+
+        void *hostAddr = graphicsAllocationRT->getUnderlyingBuffer();
+        assert(*hostAddr != nullptr);
+
+        *ptr = hostAddr;
+        return XE_RESULT_SUCCESS;
     }
+
     xe_result_t registerCLProgram(cl_context context, cl_program program,
             xe_module_handle_t* phModule) override {
         return XE_RESULT_ERROR_UNSUPPORTED;
