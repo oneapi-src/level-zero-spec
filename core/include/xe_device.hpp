@@ -200,6 +200,14 @@ namespace xe
 
         };
 
+        ///////////////////////////////////////////////////////////////////////////////
+        /// @brief C++ wrapper for ::xeDeviceSystemBarrier
+        /// @throws result_t
+        inline void
+        SystemBarrier(
+            void
+            );
+
 #if XE_ENABLE_OCL_INTEROP
         ///////////////////////////////////////////////////////////////////////////////
         /// @brief C++ wrapper for ::xeDeviceRegisterCLMemory
