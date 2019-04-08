@@ -183,7 +183,6 @@ typedef enum _xet_value_type_t
     XET_VALUE_TYPE_UINT64,                          ///< Value type: uint64
     XET_VALUE_TYPE_FLOAT,                           ///< Value type: float
     XET_VALUE_TYPE_BOOL,                            ///< Value type: bool
-    XET_VALUE_TYPE_STRING,                          ///< Value type: string
 
 } xet_value_type_t;
 
@@ -203,7 +202,6 @@ typedef union _xet_value_t
     uint64_t valueUInt64;                           ///< [out] uint64_t value
     float valueFloat;                               ///< [out] float value
     xe_bool_t valueBool;                            ///< [out] bool value
-    const char* valueString;                        ///< [out] string value
 
 } xet_value_t;
 

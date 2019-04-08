@@ -162,7 +162,6 @@ namespace xet
             UINT64,                                         ///< Value type: uint64
             FLOAT,                                          ///< Value type: float
             BOOL,                                           ///< Value type: bool
-            STRING,                                         ///< Value type: string
 
         };
 
@@ -190,7 +189,6 @@ namespace xet
             uint64_t valueUInt64;                           ///< [out] uint64_t value
             float valueFloat;                               ///< [out] float value
             xe::bool_t valueBool;                           ///< [out] bool value
-            const char* valueString;                        ///< [out] string value
 
         };
 

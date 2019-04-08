@@ -170,8 +170,6 @@ etors:
       desc: "Value type: float"
     - name: $T_VALUE_TYPE_BOOL
       desc: "Value type: bool"
-    - name: $T_VALUE_TYPE_STRING
-      desc: "Value type: string"
 --- #--------------------------------------------------------------------------
 type: enum
 desc: "API version of $t_typed_value_t"
@@ -199,9 +197,6 @@ members:
     - type: $x_bool_t
       name: "valueBool"
       desc: "[out] bool value"
-    - type: const char*
-      name: "valueString"
-      desc: "[out] string value"
 --- #--------------------------------------------------------------------------
 type: struct
 desc: "Typed value"
