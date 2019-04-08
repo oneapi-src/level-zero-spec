@@ -19,20 +19,14 @@ params:
       desc: "[in] handle of the command list"
 --- #--------------------------------------------------------------------------
 type: function
-desc: "Forces memory range to be globally observable."
+desc: "Ensures in-bound writes to the device are globally observable."
 class: $xDevice
 name: SystemBarrier
 details:
-    = ""
+    - "This is a special-case system level barrier that can be used to ensure global observability of writes; typically needed after a producer (e.g., NIC) performs direct writes to the device's memory (e.g., Direct RDMA writes).  This is typically required when the memory corresponding to the writes is subsequently accessed from a remote device."
     - "The application may call this function from simultaneous threads."
     - "The implementation of this function should be lock-free."
 params:
     - type: $_device_handle_t
       name: hDevice
       desc: "[in] handle of the device"
-    - tyoe: size_t
-      name: size
-      desc: "[in] size in bytes of memory region"
-    - type: "void*"
-      name: ptr
-      desc: "[in] pointer to memory region"

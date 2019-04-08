@@ -41,6 +41,16 @@ namespace xe
     ///////////////////////////////////////////////////////////////////////////////
     /// @brief C++ wrapper for ::xeDeviceSystemBarrier
     /// 
+    /// @details
+    ///     - This is a special-case system level barrier that can be used to ensure
+    ///       global observability of writes; typically needed after a producer
+    ///       (e.g., NIC) performs direct writes to the device's memory (e.g.,
+    ///       Direct RDMA writes).  This is typically required when the memory
+    ///       corresponding to the writes is subsequently accessed from a remote
+    ///       device.
+    ///     - The application may call this function from simultaneous threads.
+    ///     - The implementation of this function should be lock-free.
+    /// 
     /// @throws result_t
     inline void 
     Device::SystemBarrier(
