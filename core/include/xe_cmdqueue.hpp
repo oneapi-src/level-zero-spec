@@ -152,6 +152,17 @@ namespace xe
                                                             ///< is lost.
             );
 
+        ///////////////////////////////////////////////////////////////////////////////
+        /// @brief C++ wrapper for ::xeCommandQueueOpenCommandList
+        /// @returns
+        ///     - ::command_list_handle_t: pointer to handle of command list object created
+        /// 
+        /// @throws result_t
+        inline static command_list_handle_t
+        OpenCommandList(
+            command_queue_handle_t hCommandQueue            ///< [in] handle of the command queue
+            );
+
     };
 
 } // namespace xe

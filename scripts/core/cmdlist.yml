@@ -25,12 +25,6 @@ etors:
     - name: $X_COMMAND_LIST_FLAG_RELAXED_ORDERING
       value: "$X_BIT(1)"
       desc: "driver may reorder programs and copys between barriers and synchronization primitives"
-    - name: $X_COMMAND_LIST_FLAG_LOW_LATENCY
-      value: "$X_BIT(2)"
-      desc: "driver should optimize for immediate submission to a command queue"
-    - name: $X_COMMAND_LIST_FLAG_CROSS_DEVICE
-      value: "$X_BIT(3)"
-      desc: "command list can be shared with another device"
 --- #--------------------------------------------------------------------------
 type: struct
 desc: "Command List descriptor"

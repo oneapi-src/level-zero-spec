@@ -69,6 +69,31 @@ xeCommandListAppendMemoryRangesBarrier(
     xe_event_handle_t* phWaitEvents                 ///< [in][optional] handle of the events to wait on before barrier
     );
 
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Ensures in-bound writes to the device are globally observable.
+/// 
+/// @details
+///     - This is a special-case system level barrier that can be used to ensure
+///       global observability of writes; typically needed after a producer
+///       (e.g., NIC) performs direct writes to the device's memory (e.g.,
+///       Direct RDMA writes).  This is typically required when the memory
+///       corresponding to the writes is subsequently accessed from a remote
+///       device.
+///     - The application may call this function from simultaneous threads.
+///     - The implementation of this function should be lock-free.
+/// 
+/// @returns
+///     - ::XE_RESULT_SUCCESS
+///     - ::XE_RESULT_ERROR_UNINITIALIZED
+///     - ::XE_RESULT_ERROR_DEVICE_LOST
+///     - ::XE_RESULT_ERROR_INVALID_PARAMETER
+///         + nullptr == hDevice
+///     - ::XE_RESULT_ERROR_UNSUPPORTED
+__xedllport xe_result_t __xecall
+xeDeviceSystemBarrier(
+    xe_device_handle_t hDevice                      ///< [in] handle of the device
+    );
+
 #if defined(__cplusplus)
 } // extern "C"
 #endif

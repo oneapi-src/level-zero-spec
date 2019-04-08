@@ -134,6 +134,29 @@ namespace xe
         // if( ::XE_RESULT_SUCCESS != result ) throw exception(result, "xe::CommandQueue::Synchronize");
     }
 
+    ///////////////////////////////////////////////////////////////////////////////
+    /// @brief C++ wrapper for ::xeCommandQueueOpenCommandList
+    /// 
+    /// @details
+    ///     - Only one command list may be opened on a command queue simultaneously.
+    ///     - No other command lists may be executed on the command queue while a
+    ///       command list is open.
+    ///     - This function may **not** be called from simultaneous threads.
+    ///     - The implementation of this function should be lock-free.
+    /// 
+    /// @returns
+    ///     - ::command_list_handle_t: pointer to handle of command list object created
+    /// 
+    /// @throws result_t
+    inline command_list_handle_t 
+    CommandQueue::OpenCommandList(
+        command_queue_handle_t hCommandQueue            ///< [in] handle of the command queue
+        )
+    {
+        // auto result = ::xeCommandQueueOpenCommandList( handle, hCommandQueue );
+        // if( ::XE_RESULT_SUCCESS != result ) throw exception(result, "xe::CommandQueue::OpenCommandList");
+    }
+
 } // namespace xe
 #endif // defined(__cplusplus)
 #endif // _XE_CMDQUEUE_INL

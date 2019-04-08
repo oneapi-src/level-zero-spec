@@ -104,3 +104,62 @@ xeCommandListAppendMemoryRangesBarrier(
     }
 }
 
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Ensures in-bound writes to the device are globally observable.
+/// 
+/// @details
+///     - This is a special-case system level barrier that can be used to ensure
+///       global observability of writes; typically needed after a producer
+///       (e.g., NIC) performs direct writes to the device's memory (e.g.,
+///       Direct RDMA writes).  This is typically required when the memory
+///       corresponding to the writes is subsequently accessed from a remote
+///       device.
+///     - The application may call this function from simultaneous threads.
+///     - The implementation of this function should be lock-free.
+/// 
+/// @returns
+///     - ::XE_RESULT_SUCCESS
+///     - ::XE_RESULT_ERROR_UNINITIALIZED
+///     - ::XE_RESULT_ERROR_DEVICE_LOST
+///     - ::XE_RESULT_ERROR_INVALID_PARAMETER
+///         + nullptr == hDevice
+///     - ::XE_RESULT_ERROR_UNSUPPORTED
+///
+/// @hash {74606e3bee84096f120a4e1f8d315c23c351510376801f54dca3aa14a96da2c1}
+///
+__xedllexport xe_result_t __xecall
+xeDeviceSystemBarrier(
+    xe_device_handle_t hDevice                      ///< [in] handle of the device
+    )
+{
+    try
+    {
+        //if( XE_DRIVER_PARAMETER_VALIDATION_LEVEL >= 0 )
+        {
+            // if( nullptr == driver ) return XE_RESULT_ERROR_UNINITIALIZED;
+            // Check parameters
+            if( nullptr == hDevice ) return XE_RESULT_ERROR_INVALID_PARAMETER;
+        }
+        /// @begin
+#if defined(XE_NULLDRV)
+        return XE_RESULT_SUCCESS;
+#else
+        return L0::Device::fromHandle(hDevice)->systemBarrier();
+#endif
+        /// @end
+    }
+    catch(xe_result_t& result)
+    {
+        return result;
+    }
+    catch(std::bad_alloc&)
+    {
+        return XE_RESULT_ERROR_OUT_OF_HOST_MEMORY;
+    }
+    catch(std::exception&)
+    {
+        // @todo: pfnOnException(e.what());
+        return XE_RESULT_ERROR_UNKNOWN;
+    }
+}
+

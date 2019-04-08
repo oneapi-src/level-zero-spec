@@ -49,6 +49,9 @@ typedef xe_result_t (__xecall *pfn_xeCommandListAppendMemoryRangesBarrier)(
     uint32_t numWaitEvents,                         ///< [in][optional] number of events to wait on before barrier
     xe_event_handle_t* phWaitEvents                 ///< [in][optional] handle of the events to wait on before barrier
     );
+typedef xe_result_t (__xecall *pfn_xeDeviceSystemBarrier)(
+    xe_device_handle_t hDevice                      ///< [in] handle of the device
+    );
 #if XE_ENABLE_OCL_INTEROP
 typedef xe_result_t (__xecall *pfn_xeDeviceRegisterCLMemory)(
     xe_device_handle_t hDevice,                     ///< [in] handle to the device
@@ -126,6 +129,10 @@ typedef xe_result_t (__xecall *pfn_xeCommandQueueSynchronize)(
                                                     ///< if zero, then operates exactly like ::xeFenceQueryStatus;
                                                     ///< if MAX_UINT32, then function will not return until complete or device
                                                     ///< is lost.
+    );
+typedef xe_result_t (__xecall *pfn_xeCommandQueueOpenCommandList)(
+    xe_command_queue_handle_t hCommandQueue,        ///< [in] handle of the command queue
+    xe_command_list_handle_t* phCommandList         ///< [out] pointer to handle of command list object created
     );
 typedef xe_result_t (__xecall *pfn_xeCommandListAppendMemoryCopy)(
     xe_command_list_handle_t hCommandList,          ///< [in] handle of command list
@@ -518,6 +525,7 @@ typedef xe_result_t (__xecall *pfn_xeSamplerDestroy)(
 typedef struct _xe_dispatch_table_t
 {
     pfn_xeCommandListAppendMemoryRangesBarrier xeCommandListAppendMemoryRangesBarrier;
+    pfn_xeDeviceSystemBarrier xeDeviceSystemBarrier;
 #if XE_ENABLE_OCL_INTEROP
     pfn_xeDeviceRegisterCLMemory xeDeviceRegisterCLMemory;
 #endif // XE_ENABLE_OCL_INTEROP
@@ -539,6 +547,7 @@ typedef struct _xe_dispatch_table_t
     pfn_xeCommandQueueDestroy xeCommandQueueDestroy;
     pfn_xeCommandQueueExecuteCommandLists xeCommandQueueExecuteCommandLists;
     pfn_xeCommandQueueSynchronize xeCommandQueueSynchronize;
+    pfn_xeCommandQueueOpenCommandList xeCommandQueueOpenCommandList;
     pfn_xeCommandListAppendMemoryCopy xeCommandListAppendMemoryCopy;
     pfn_xeCommandListAppendMemorySet xeCommandListAppendMemorySet;
     pfn_xeCommandListAppendImageCopy xeCommandListAppendImageCopy;
@@ -622,6 +631,7 @@ inline bool load_xe(void *handle, void *(*funcAddressGetter)(void *handle, const
         return false;
     }
     outTable->xeCommandListAppendMemoryRangesBarrier = (pfn_xeCommandListAppendMemoryRangesBarrier)funcAddressGetter(handle, "xeCommandListAppendMemoryRangesBarrier");
+    outTable->xeDeviceSystemBarrier = (pfn_xeDeviceSystemBarrier)funcAddressGetter(handle, "xeDeviceSystemBarrier");
 #if XE_ENABLE_OCL_INTEROP
     outTable->xeDeviceRegisterCLMemory = (pfn_xeDeviceRegisterCLMemory)funcAddressGetter(handle, "xeDeviceRegisterCLMemory");
 #endif // XE_ENABLE_OCL_INTEROP
@@ -643,6 +653,7 @@ inline bool load_xe(void *handle, void *(*funcAddressGetter)(void *handle, const
     outTable->xeCommandQueueDestroy = (pfn_xeCommandQueueDestroy)funcAddressGetter(handle, "xeCommandQueueDestroy");
     outTable->xeCommandQueueExecuteCommandLists = (pfn_xeCommandQueueExecuteCommandLists)funcAddressGetter(handle, "xeCommandQueueExecuteCommandLists");
     outTable->xeCommandQueueSynchronize = (pfn_xeCommandQueueSynchronize)funcAddressGetter(handle, "xeCommandQueueSynchronize");
+    outTable->xeCommandQueueOpenCommandList = (pfn_xeCommandQueueOpenCommandList)funcAddressGetter(handle, "xeCommandQueueOpenCommandList");
     outTable->xeCommandListAppendMemoryCopy = (pfn_xeCommandListAppendMemoryCopy)funcAddressGetter(handle, "xeCommandListAppendMemoryCopy");
     outTable->xeCommandListAppendMemorySet = (pfn_xeCommandListAppendMemorySet)funcAddressGetter(handle, "xeCommandListAppendMemorySet");
     outTable->xeCommandListAppendImageCopy = (pfn_xeCommandListAppendImageCopy)funcAddressGetter(handle, "xeCommandListAppendImageCopy");
@@ -722,6 +733,9 @@ inline bool load_xe(void *handle, void *(*funcAddressGetter)(void *handle, const
     if(0 == outTable->xeCommandListAppendMemoryRangesBarrier){
         return false;
     }
+    if(0 == outTable->xeDeviceSystemBarrier){
+        return false;
+    }
 #if XE_ENABLE_OCL_INTEROP
     if(0 == outTable->xeDeviceRegisterCLMemory){
         return false;
@@ -771,6 +785,9 @@ inline bool load_xe(void *handle, void *(*funcAddressGetter)(void *handle, const
         return false;
     }
     if(0 == outTable->xeCommandQueueSynchronize){
+        return false;
+    }
+    if(0 == outTable->xeCommandQueueOpenCommandList){
         return false;
     }
     if(0 == outTable->xeCommandListAppendMemoryCopy){
