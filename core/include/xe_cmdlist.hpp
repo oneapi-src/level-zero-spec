@@ -71,8 +71,6 @@ namespace xe
                                                             ///< primitives)
             RELAXED_ORDERING = XE_BIT(1),                   ///< driver may reorder programs and copys between barriers and
                                                             ///< synchronization primitives
-            LOW_LATENCY = XE_BIT(2),                        ///< driver should optimize for immediate submission to a command queue
-            CROSS_DEVICE = XE_BIT(3),                       ///< command list can be shared with another device
 
         };
 

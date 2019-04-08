@@ -215,6 +215,33 @@ xeCommandQueueSynchronize(
                                                     ///< is lost.
     );
 
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Opens a command list on the command queue for immediate submission of
+///        commands to the command queue.
+/// 
+/// @details
+///     - Only one command list may be opened on a command queue simultaneously.
+///     - No other command lists may be executed on the command queue while a
+///       command list is open.
+///     - This function may **not** be called from simultaneous threads.
+///     - The implementation of this function should be lock-free.
+/// 
+/// @returns
+///     - ::XE_RESULT_SUCCESS
+///     - ::XE_RESULT_ERROR_UNINITIALIZED
+///     - ::XE_RESULT_ERROR_DEVICE_LOST
+///     - ::XE_RESULT_ERROR_INVALID_PARAMETER
+///         + nullptr == hCommandQueue
+///         + nullptr == phCommandList
+///     - ::XE_RESULT_ERROR_UNSUPPORTED
+///     - ::XE_RESULT_ERROR_OUT_OF_HOST_MEMORY
+///     - ::XE_RESULT_ERROR_OUT_OF_DEVICE_MEMORY
+__xedllport xe_result_t __xecall
+xeCommandQueueOpenCommandList(
+    xe_command_queue_handle_t hCommandQueue,        ///< [in] handle of the command queue
+    xe_command_list_handle_t* phCommandList         ///< [out] pointer to handle of command list object created
+    );
+
 #if defined(__cplusplus)
 } // extern "C"
 #endif

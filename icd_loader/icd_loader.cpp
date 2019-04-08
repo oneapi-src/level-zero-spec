@@ -233,6 +233,15 @@ xe_result_t __xecall xeCommandQueueSynchronize(
     }
     return dispatchTable.xeCommandQueueSynchronize(hCommandQueue, timeout);
 }
+xe_result_t __xecall xeCommandQueueOpenCommandList(
+        xe_command_queue_handle_t hCommandQueue,        ///< [in] handle of the command queue
+        xe_command_list_handle_t* phCommandList         ///< [out] pointer to handle of command list object created
+    ){
+    if(dispatchTableInitialized == false){
+        return XE_RESULT_ERROR_UNINITIALIZED;
+    }
+    return dispatchTable.xeCommandQueueOpenCommandList(hCommandQueue, phCommandList);
+}
 xe_result_t __xecall xeCommandListAppendMemoryCopy(
         xe_command_list_handle_t hCommandList,          ///< [in] handle of command list
         void* dstptr,                                   ///< [in] pointer to destination memory to copy to

@@ -58,8 +58,6 @@ typedef enum _xe_command_list_flag_t
                                                     ///< primitives)
     XE_COMMAND_LIST_FLAG_RELAXED_ORDERING = XE_BIT(1),  ///< driver may reorder programs and copys between barriers and
                                                     ///< synchronization primitives
-    XE_COMMAND_LIST_FLAG_LOW_LATENCY = XE_BIT(2),   ///< driver should optimize for immediate submission to a command queue
-    XE_COMMAND_LIST_FLAG_CROSS_DEVICE = XE_BIT(3),  ///< command list can be shared with another device
 
 } xe_command_list_flag_t;
 
