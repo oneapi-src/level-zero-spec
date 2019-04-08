@@ -44,7 +44,7 @@ typedef xe_result_t (__xecall *pfn_xeCommandListAppendExecutionBarrier)(
     xe_command_list_handle_t hCommandList           ///< [in] handle of the command list
     );
 typedef xe_result_t (__xecall *pfn_xeDeviceSystemBarrier)(
-    $_device_handle_t hDevice                       ///< [in] handle of the device
+    xe_device_handle_t hDevice                      ///< [in] handle of the device
     );
 #if XE_ENABLE_OCL_INTEROP
 typedef xe_result_t (__xecall *pfn_xeDeviceRegisterCLMemory)(

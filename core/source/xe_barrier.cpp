@@ -122,11 +122,11 @@ xeCommandListAppendExecutionBarrier(
 ///         + nullptr == hDevice
 ///     - ::XE_RESULT_ERROR_UNSUPPORTED
 ///
-/// @hash {b7f1d536c1cada60a943db1fb361f9d61a673ec341052bf8e49ad96e837e6dc2}
+/// @hash {74606e3bee84096f120a4e1f8d315c23c351510376801f54dca3aa14a96da2c1}
 ///
 __xedllexport xe_result_t __xecall
 xeDeviceSystemBarrier(
-    $_device_handle_t hDevice                       ///< [in] handle of the device
+    xe_device_handle_t hDevice                      ///< [in] handle of the device
     )
 {
     try

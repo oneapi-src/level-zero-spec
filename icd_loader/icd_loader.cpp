@@ -81,7 +81,7 @@ xe_result_t __xecall xeCommandListAppendExecutionBarrier(
     return dispatchTable.xeCommandListAppendExecutionBarrier(hCommandList);
 }
 xe_result_t __xecall xeDeviceSystemBarrier(
-        $_device_handle_t hDevice                       ///< [in] handle of the device
+        xe_device_handle_t hDevice                      ///< [in] handle of the device
     ){
     if(dispatchTableInitialized == false){
         return XE_RESULT_ERROR_UNINITIALIZED;

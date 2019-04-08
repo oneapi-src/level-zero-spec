@@ -27,6 +27,6 @@ details:
     - "The application may call this function from simultaneous threads."
     - "The implementation of this function should be lock-free."
 params:
-    - type: $_device_handle_t
+    - type: $x_device_handle_t
       name: hDevice
       desc: "[in] handle of the device"

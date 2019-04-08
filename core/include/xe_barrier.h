@@ -90,7 +90,7 @@ xeCommandListAppendExecutionBarrier(
 ///     - ::XE_RESULT_ERROR_UNSUPPORTED
 __xedllport xe_result_t __xecall
 xeDeviceSystemBarrier(
-    $_device_handle_t hDevice                       ///< [in] handle of the device
+    xe_device_handle_t hDevice                      ///< [in] handle of the device
     );
 
 #if defined(__cplusplus)
