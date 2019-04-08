@@ -289,7 +289,7 @@ The following are the motivations for seperating the different types of synchron
     + fences may share device memory with all other fences for the queue or device.
     + events may be implemented using pipelined operations as part of the program execution.
     + fences are implicit, coarse-grain execution and memory barriers.
-    + event support explicit, fine-grain execution and memory barriers.
+    + events support explicit, fine-grain execution and memory barriers.
 - Allows distinction on which type of primitive may be shared across devices.
 
 ${"##"} <a name="fnc">Fences</a>
@@ -366,7 +366,7 @@ The following sample code demonstrates a sequence for creation and submission of
     // Create event pool
     ${x}_event_pool_desc_t eventPoolDesc = {
         ${X}_EVENT_POOL_DESC_VERSION_CURRENT,
-        ${X}_EVENT_POOL_FLAG_HOST_VISIBLE,
+        ${X}_EVENT_POOL_FLAG_HOST_VISIBLE, // all events in pool are visible to Host
         1
     };
     ${x}_event_pool_handle_t hEventPool;
@@ -376,7 +376,7 @@ The following sample code demonstrates a sequence for creation and submission of
         ${X}_EVENT_DESC_VERSION_CURRENT,
         0,
         ${X}_EVENT_SCOPE_FLAG_NONE,
-        ${X}_EVENT_SCOPE_FLAG_HOST
+        ${X}_EVENT_SCOPE_FLAG_HOST  // ensure memory coherency across device and Host after event completes
     };
     ${x}_event_handle_t hEvent;
     ${x}EventCreate(hEventPool, &eventDesc, &hEvent);
@@ -434,7 +434,7 @@ The following sample code demonstrates a sequence for submission of a fine-grain
     ${x}_event_desc_t event1Desc = {
         ${X}_EVENT_DESC_VERSION_CURRENT,
         0,
-        ${X}_EVENT_SCOPE_FLAG_DEVICE,
+        ${X}_EVENT_SCOPE_FLAG_DEVICE, // ensure memory coherency across device before event signalled
         ${X}_EVENT_SCOPE_FLAG_NONE
     };
     ${x}_event_handle_t hEvent1;
@@ -459,7 +459,7 @@ The following sample code demonstrates a sequence for submission of a fine-grain
     ${x}_event_desc_t event2Desc = {
         ${X}_EVENT_DESC_VERSION_CURRENT,
         1,
-        ${X}_EVENT_SCOPE_FLAG_DEVICE,
+        ${X}_EVENT_SCOPE_FLAG_DEVICE, // ensure memory coherency across device before event signalled
         ${X}_EVENT_SCOPE_FLAG_NONE
     };
     ${x}_event_handle_t hEvent1, hEvent2;

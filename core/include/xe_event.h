@@ -138,7 +138,8 @@ typedef enum _xe_event_scope_flag_t
                                                     ///< sub-device access
     XE_EVENT_SCOPE_FLAG_DEVICE = XE_BIT(1),         ///< cache hierarchies are flushed or invalidate sufficient for global
                                                     ///< device access and peer device access
-    XE_EVENT_SCOPE_FLAG_HOST = XE_BIT(2),           ///< cache hierarchies are flushed or invalidate sufficient for host access
+    XE_EVENT_SCOPE_FLAG_HOST = XE_BIT(2),           ///< cache hierarchies are flushed or invalidate sufficient for device and
+                                                    ///< host access
 
 } xe_event_scope_flag_t;
 

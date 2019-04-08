@@ -289,7 +289,7 @@ The following are the motivations for seperating the different types of synchron
     + fences may share device memory with all other fences for the queue or device.
     + events may be implemented using pipelined operations as part of the program execution.
     + fences are implicit, coarse-grain execution and memory barriers.
-    + event support explicit, fine-grain execution and memory barriers.
+    + events support explicit, fine-grain execution and memory barriers.
 - Allows distinction on which type of primitive may be shared across devices.
 
 ## <a name="fnc">Fences</a>
@@ -366,7 +366,7 @@ The following sample code demonstrates a sequence for creation and submission of
     // Create event pool
     xe_event_pool_desc_t eventPoolDesc = {
         XE_EVENT_POOL_DESC_VERSION_CURRENT,
-        XE_EVENT_POOL_FLAG_HOST_VISIBLE,
+        XE_EVENT_POOL_FLAG_HOST_VISIBLE, // all events in pool are visible to Host
         1
     };
     xe_event_pool_handle_t hEventPool;
@@ -376,7 +376,7 @@ The following sample code demonstrates a sequence for creation and submission of
         XE_EVENT_DESC_VERSION_CURRENT,
         0,
         XE_EVENT_SCOPE_FLAG_NONE,
-        XE_EVENT_SCOPE_FLAG_HOST
+        XE_EVENT_SCOPE_FLAG_HOST  // ensure memory coherency across device and Host after event completes
     };
     xe_event_handle_t hEvent;
     xeEventCreate(hEventPool, &eventDesc, &hEvent);
@@ -434,7 +434,7 @@ The following sample code demonstrates a sequence for submission of a fine-grain
     xe_event_desc_t event1Desc = {
         XE_EVENT_DESC_VERSION_CURRENT,
         0,
-        XE_EVENT_SCOPE_FLAG_DEVICE,
+        XE_EVENT_SCOPE_FLAG_DEVICE, // ensure memory coherency across device before event signalled
         XE_EVENT_SCOPE_FLAG_NONE
     };
     xe_event_handle_t hEvent1;
@@ -459,7 +459,7 @@ The following sample code demonstrates a sequence for submission of a fine-grain
     xe_event_desc_t event2Desc = {
         XE_EVENT_DESC_VERSION_CURRENT,
         1,
-        XE_EVENT_SCOPE_FLAG_DEVICE,
+        XE_EVENT_SCOPE_FLAG_DEVICE, // ensure memory coherency across device before event signalled
         XE_EVENT_SCOPE_FLAG_NONE
     };
     xe_event_handle_t hEvent1, hEvent2;

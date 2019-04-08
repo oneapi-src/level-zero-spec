@@ -105,7 +105,7 @@ etors:
       desc: "cache hierarchies are flushed or invalidate sufficient for global device access and peer device access"
     - name: $X_EVENT_SCOPE_FLAG_HOST
       value: "$X_BIT(2)"
-      desc: "cache hierarchies are flushed or invalidate sufficient for host access"
+      desc: "cache hierarchies are flushed or invalidate sufficient for device and host access"
 --- #--------------------------------------------------------------------------
 type: struct
 desc: "Event descriptor"

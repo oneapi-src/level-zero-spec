@@ -159,7 +159,8 @@ namespace xe
                                                             ///< sub-device access
             DEVICE = XE_BIT(1),                             ///< cache hierarchies are flushed or invalidate sufficient for global
                                                             ///< device access and peer device access
-            HOST = XE_BIT(2),                               ///< cache hierarchies are flushed or invalidate sufficient for host access
+            HOST = XE_BIT(2),                               ///< cache hierarchies are flushed or invalidate sufficient for device and
+                                                            ///< host access
 
         };
 
