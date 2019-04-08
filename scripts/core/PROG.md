@@ -405,19 +405,20 @@ ${"###"} Execution Barriers
 
 The following sample code demonstrates a sequence for submission of a fine-grain execution-only barrier:
 ```c
-    ${x}_event_desc_t eventDesc = {
+    ${x}_event_desc_t event1Desc = {
         ${X}_EVENT_DESC_VERSION_CURRENT,
         0,
         ${X}_EVENT_SCOPE_FLAG_NONE,
         ${X}_EVENT_SCOPE_FLAG_NONE
     };
-    ${x}_event_handle_t hEvent;
-    ${x}EventCreate(hEventPool, &eventDesc, &hEvent);
+    ${x}_event_handle_t hEvent1;
+    ${x}EventCreate(hEventPool, &event1Desc, &hEvent1);
 
-    ${x}CommandListAppendLaunchFunction(hCommandList, hFunction1, &launchArgs, hEvent, 0, nullptr);
+    // Ensure hFunction1 completes before signaling hEvent1
+    ${x}CommandListAppendLaunchFunction(hCommandList, hFunction1, &launchArgs, hEvent1, 0, nullptr);
 
-    // Ensure hFunction1 completes before hFunction2 begins
-    ${x}CommandListAppendLaunchFunction(hCommandList, hFunction2, &launchArgs, nullptr, 1, &hEvent);
+    // Ensure hEvent1 is signalled before starting hFunction2
+    ${x}CommandListAppendLaunchFunction(hCommandList, hFunction2, &launchArgs, nullptr, 1, &hEvent1);
     ...
 ```
 
@@ -427,6 +428,25 @@ ${"###"} Memory Barriers
 - Fences provide implicit, coarse-grain control to indicate that all caches and memory are coherent across the device and Host prior to the fence being signalled.
 - Events provide explicit, fine-grain control over cache and memory coherency dependencies between commands; allowing more opportunities for concurrent execution and higher device utilization.
 - In addition, explicit, range-based memory barriers provide very fine-grain control of which cachelines require coherency.
+
+The following sample code demonstrates a sequence for submission of a fine-grain memory barrier:
+```c
+    ${x}_event_desc_t event1Desc = {
+        ${X}_EVENT_DESC_VERSION_CURRENT,
+        0,
+        ${X}_EVENT_SCOPE_FLAG_DEVICE,
+        ${X}_EVENT_SCOPE_FLAG_NONE
+    };
+    ${x}_event_handle_t hEvent1;
+    ${x}EventCreate(hEventPool, &event1Desc, &hEvent1);
+
+    // Ensure hFunction1 memory writes are fully coherent across the device before signaling hEvent1
+    ${x}CommandListAppendLaunchFunction(hCommandList, hFunction1, &launchArgs, hEvent1, 0, nullptr);
+
+    // Ensure hEvent1 is signalled before starting hFunction2
+    ${x}CommandListAppendLaunchFunction(hCommandList, hFunction2, &launchArgs, nullptr, 1, &hEvent1);
+    ...
+```
 
 The following sample code demonstrates a sequence for submission of a fine-grain, range-based memory barrier:
 ```c
@@ -446,12 +466,14 @@ The following sample code demonstrates a sequence for submission of a fine-grain
     ${x}EventCreate(hEventPool, &event1Desc, &hEvent1);
     ${x}EventCreate(hEventPool, &event2Desc, &hEvent2);
 
+    // Ensure hFunction1 completes before signaling hEvent1
     ${x}CommandListAppendLaunchFunction(hCommandList, hFunction1, &launchArgs, hEvent1, 0, nullptr);
 
-    // Append a range-based memory barrier into a command list to ensure hFunction1 memory writes are
-    // fully coherent across the device before hFunction2 begins
+    // Ensure hEvent1 is signalled before starting memory barrier
+    // Ensure memory range is fully coherent across the device before signaling hEvent2
     ${x}CommandListAppendMemoryRangesBarrier(hCommandList, 1, &size, &ptr, hEvent2, 1, &hEvent1);
 
+    // Ensure hEvent2 is signalled before starting hFunction2
     ${x}CommandListAppendLaunchFunction(hCommandList, hFunction2, &launchArgs, nullptr, 1, &hEvent2);
     ...
 ```
