@@ -5,23 +5,7 @@ desc: "Intel $OneApi Level-Zero APIs for Barrier"
 type: function
 desc: "Appends an execution barrier into a command list."
 class: $xCommandList
-name: AppendExecutionBarrier
-analogue:
-    - "**vkCmdPipelineBarrier**"
-    - clEnqueueBarrierWithWaitList
-details:
-    - "This may **not** be called for a command list created with $X_COMMAND_LIST_FLAG_COPY_ONLY."
-    - "The application may **not** call this function from simultaneous threads with the same command list handle."
-    - "The implementation of this function should be lock-free."
-params:
-    - type: $x_command_list_handle_t
-      name: hCommandList
-      desc: "[in] handle of the command list"
---- #--------------------------------------------------------------------------
-type: function
-desc: "Appends an execution barrier into a command list."
-class: $xCommandList
-name: AppendMemoryBarrier
+name: AppendMemoryRangesBarrier
 details:
     - "The application may **not** call this function from simultaneous threads with the same command list handle."
     - "The implementation of this function should be lock-free."

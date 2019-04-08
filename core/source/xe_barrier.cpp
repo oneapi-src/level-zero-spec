@@ -44,67 +44,6 @@
 /// @brief Appends an execution barrier into a command list.
 /// 
 /// @details
-///     - This may **not** be called for a command list created with
-///       ::XE_COMMAND_LIST_FLAG_COPY_ONLY.
-///     - The application may **not** call this function from simultaneous
-///       threads with the same command list handle.
-///     - The implementation of this function should be lock-free.
-/// 
-/// @remarks
-///   _Analogues_
-///     - **vkCmdPipelineBarrier**
-///     - clEnqueueBarrierWithWaitList
-/// 
-/// @returns
-///     - ::XE_RESULT_SUCCESS
-///     - ::XE_RESULT_ERROR_UNINITIALIZED
-///     - ::XE_RESULT_ERROR_DEVICE_LOST
-///     - ::XE_RESULT_ERROR_INVALID_PARAMETER
-///         + nullptr == hCommandList
-///     - ::XE_RESULT_ERROR_UNSUPPORTED
-///
-/// @hash {b7f3f20a5e54174f765a7560d254515c25d90ace7add120975c8136f78e62775}
-///
-__xedllexport xe_result_t __xecall
-xeCommandListAppendExecutionBarrier(
-    xe_command_list_handle_t hCommandList           ///< [in] handle of the command list
-    )
-{
-    try
-    {
-        //if( XE_DRIVER_PARAMETER_VALIDATION_LEVEL >= 0 )
-        {
-            // if( nullptr == driver ) return XE_RESULT_ERROR_UNINITIALIZED;
-            // Check parameters
-            if( nullptr == hCommandList ) return XE_RESULT_ERROR_INVALID_PARAMETER;
-        }
-        /// @begin
-#if defined(XE_NULLDRV)
-        return XE_RESULT_SUCCESS;
-#else
-        return L0::CommandList::fromHandle(hCommandList)->appendExecutionBarrier();
-#endif
-        /// @end
-    }
-    catch(xe_result_t& result)
-    {
-        return result;
-    }
-    catch(std::bad_alloc&)
-    {
-        return XE_RESULT_ERROR_OUT_OF_HOST_MEMORY;
-    }
-    catch(std::exception&)
-    {
-        // @todo: pfnOnException(e.what());
-        return XE_RESULT_ERROR_UNKNOWN;
-    }
-}
-
-///////////////////////////////////////////////////////////////////////////////
-/// @brief Appends an execution barrier into a command list.
-/// 
-/// @details
 ///     - The application may **not** call this function from simultaneous
 ///       threads with the same command list handle.
 ///     - The implementation of this function should be lock-free.
@@ -119,10 +58,10 @@ xeCommandListAppendExecutionBarrier(
 ///         + nullptr == pRanges
 ///     - ::XE_RESULT_ERROR_UNSUPPORTED
 ///
-/// @hash {2f44066ce000d6fe229b7f075c757847c0903d8b2ad88ce1e8be783709fc1be5}
+/// @hash {fae8b64e8c86fd1906d766d41853886f1dbdb52d56a653b71bda797ae302cd7c}
 ///
 __xedllexport xe_result_t __xecall
-xeCommandListAppendMemoryBarrier(
+xeCommandListAppendMemoryRangesBarrier(
     xe_command_list_handle_t hCommandList,          ///< [in] handle of the command list
     uint32_t numRanges,                             ///< [in] number of memory ranges
     const size_t* pRangeSizes,                      ///< [in] array of sizes of memory range
@@ -146,7 +85,7 @@ xeCommandListAppendMemoryBarrier(
 #if defined(XE_NULLDRV)
         return XE_RESULT_SUCCESS;
 #else
-        return L0::CommandList::fromHandle(hCommandList)->appendMemoryBarrier(numRanges, pRangeSizes, pRanges, hSignalEvent, numWaitEvents, phWaitEvents);
+        return L0::CommandList::fromHandle(hCommandList)->appendMemoryRangesBarrier(numRanges, pRangeSizes, pRanges, hSignalEvent, numWaitEvents, phWaitEvents);
 #endif
         /// @end
     }

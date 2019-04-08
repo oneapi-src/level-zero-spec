@@ -40,10 +40,7 @@ typedef struct _cl_command_queue* cl_command_queue;
 typedef struct _cl_context* cl_context;
 typedef struct _cl_program* cl_program;
 
-typedef xe_result_t (__xecall *pfn_xeCommandListAppendExecutionBarrier)(
-    xe_command_list_handle_t hCommandList           ///< [in] handle of the command list
-    );
-typedef xe_result_t (__xecall *pfn_xeCommandListAppendMemoryBarrier)(
+typedef xe_result_t (__xecall *pfn_xeCommandListAppendMemoryRangesBarrier)(
     xe_command_list_handle_t hCommandList,          ///< [in] handle of the command list
     uint32_t numRanges,                             ///< [in] number of memory ranges
     const size_t* pRangeSizes,                      ///< [in] array of sizes of memory range
@@ -520,8 +517,7 @@ typedef xe_result_t (__xecall *pfn_xeSamplerDestroy)(
 
 typedef struct _xe_dispatch_table_t
 {
-    pfn_xeCommandListAppendExecutionBarrier xeCommandListAppendExecutionBarrier;
-    pfn_xeCommandListAppendMemoryBarrier xeCommandListAppendMemoryBarrier;
+    pfn_xeCommandListAppendMemoryRangesBarrier xeCommandListAppendMemoryRangesBarrier;
 #if XE_ENABLE_OCL_INTEROP
     pfn_xeDeviceRegisterCLMemory xeDeviceRegisterCLMemory;
 #endif // XE_ENABLE_OCL_INTEROP
@@ -625,8 +621,7 @@ inline bool load_xe(void *handle, void *(*funcAddressGetter)(void *handle, const
     if((0 == funcAddressGetter) || (0 == outTable)){
         return false;
     }
-    outTable->xeCommandListAppendExecutionBarrier = (pfn_xeCommandListAppendExecutionBarrier)funcAddressGetter(handle, "xeCommandListAppendExecutionBarrier");
-    outTable->xeCommandListAppendMemoryBarrier = (pfn_xeCommandListAppendMemoryBarrier)funcAddressGetter(handle, "xeCommandListAppendMemoryBarrier");
+    outTable->xeCommandListAppendMemoryRangesBarrier = (pfn_xeCommandListAppendMemoryRangesBarrier)funcAddressGetter(handle, "xeCommandListAppendMemoryRangesBarrier");
 #if XE_ENABLE_OCL_INTEROP
     outTable->xeDeviceRegisterCLMemory = (pfn_xeDeviceRegisterCLMemory)funcAddressGetter(handle, "xeDeviceRegisterCLMemory");
 #endif // XE_ENABLE_OCL_INTEROP
@@ -724,10 +719,7 @@ inline bool load_xe(void *handle, void *(*funcAddressGetter)(void *handle, const
     outTable->xeDeviceEvictImage = (pfn_xeDeviceEvictImage)funcAddressGetter(handle, "xeDeviceEvictImage");
     outTable->xeSamplerCreate = (pfn_xeSamplerCreate)funcAddressGetter(handle, "xeSamplerCreate");
     outTable->xeSamplerDestroy = (pfn_xeSamplerDestroy)funcAddressGetter(handle, "xeSamplerDestroy");
-    if(0 == outTable->xeCommandListAppendExecutionBarrier){
-        return false;
-    }
-    if(0 == outTable->xeCommandListAppendMemoryBarrier){
+    if(0 == outTable->xeCommandListAppendMemoryRangesBarrier){
         return false;
     }
 #if XE_ENABLE_OCL_INTEROP

@@ -72,15 +72,7 @@ xe_result_t __xecall xeDriverInit(xe_init_flag_t flags){
     return dispatchTable.xeDriverInit(flags);
 }
 
-xe_result_t __xecall xeCommandListAppendExecutionBarrier(
-        xe_command_list_handle_t hCommandList           ///< [in] handle of the command list
-    ){
-    if(dispatchTableInitialized == false){
-        return XE_RESULT_ERROR_UNINITIALIZED;
-    }
-    return dispatchTable.xeCommandListAppendExecutionBarrier(hCommandList);
-}
-xe_result_t __xecall xeCommandListAppendMemoryBarrier(
+xe_result_t __xecall xeCommandListAppendMemoryRangesBarrier(
         xe_command_list_handle_t hCommandList,          ///< [in] handle of the command list
         uint32_t numRanges,                             ///< [in] number of memory ranges
         const size_t* pRangeSizes,                      ///< [in] array of sizes of memory range
@@ -92,7 +84,7 @@ xe_result_t __xecall xeCommandListAppendMemoryBarrier(
     if(dispatchTableInitialized == false){
         return XE_RESULT_ERROR_UNINITIALIZED;
     }
-    return dispatchTable.xeCommandListAppendMemoryBarrier(hCommandList, numRanges, pRangeSizes, pRanges, hSignalEvent, numWaitEvents, phWaitEvents);
+    return dispatchTable.xeCommandListAppendMemoryRangesBarrier(hCommandList, numRanges, pRangeSizes, pRanges, hSignalEvent, numWaitEvents, phWaitEvents);
 }
 #if XE_ENABLE_OCL_INTEROP
 xe_result_t __xecall xeDeviceRegisterCLMemory(

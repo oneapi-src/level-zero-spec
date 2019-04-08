@@ -134,18 +134,10 @@ namespace xe
         };
 
         ///////////////////////////////////////////////////////////////////////////////
-        /// @brief C++ wrapper for ::xeCommandListAppendExecutionBarrier
+        /// @brief C++ wrapper for ::xeCommandListAppendMemoryRangesBarrier
         /// @throws result_t
         inline void
-        AppendExecutionBarrier(
-            void
-            );
-
-        ///////////////////////////////////////////////////////////////////////////////
-        /// @brief C++ wrapper for ::xeCommandListAppendMemoryBarrier
-        /// @throws result_t
-        inline void
-        AppendMemoryBarrier(
+        AppendMemoryRangesBarrier(
             uint32_t numRanges,                             ///< [in] number of memory ranges
             const size_t* pRangeSizes,                      ///< [in] array of sizes of memory range
             const void** pRanges,                           ///< [in] array of memory ranges
