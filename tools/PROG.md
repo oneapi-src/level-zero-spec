@@ -4,15 +4,24 @@
 
 ### Introduction
 
+**note: use TODO to mark portions requiring more work**
+
 ### Enumeration
+
+TODO: metric group hierarchy description, graphs missing, use bitmaps ?
+TODO: describe the concept of domains
+TODO: provide sample data?
+
 
 Sample code
 ```cpp
-xe_result_t MetricGroupEnumerationExample( xe_device_handle_t hDevice, uint32_t desiredSamplingType )
+xe_result_t FindMetricGroup( xe_device_handle_t hDevice, char* metricGroupName, uint32_t desiredSamplingType, xet_metric_group_handle_t* metricGroup )
 {
     // METRIC GROUP COUNT
     uint32_t metricGroupCount = 0;
     xetMetricGroupGetCount( hDevice, &metricGroupCount );
+
+    *metricGroup = NULL;
 
     // METRIC GROUPS
     for( uint32_t i = 0; i < metricGroupCount; i++ )
@@ -26,7 +35,10 @@ xe_result_t MetricGroupEnumerationExample( xe_device_handle_t hDevice, uint32_t 
 
         if( (metricGroupProperties.samplingType & desiredSamplingType) == desiredSamplingType )
         {   
-	        // METRICS
+            if( strcmp( metricGroupName, metricGroupProperties.name ) == 0 ) {
+                *metricGroup = hMetricGroup;
+            }
+	        // list METRICS
             for( uint32_t j = 0; j < metricGroupProperties.metricCount; j++ )	
             {
                 xet_metric_handle_t metricHandle = NULL;
@@ -197,3 +209,6 @@ xe_result_t MetricQueryUsageExample( xe_device_handle_t hDevice )
 
 ### Calculation
 
+Both MetricTracer and MetricQuery collect the data in it's hardware specific, raw form that is not suitable for application processing. To calculate metric values use the `xetMetricGroupCalculateData`.
+
+TODO: clarify the API: first call is just to determine the size/count, the next does the actual calculations
