@@ -37,6 +37,7 @@ struct ImageImp : public Image {
     }
 
   protected:
+    Device *device = nullptr;
     xe_image_desc_t imageDesc;
     GraphicsAllocation *allocation;
     size_t sizeBytes;

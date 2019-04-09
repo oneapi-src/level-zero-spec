@@ -15,10 +15,16 @@ namespace ult {
 using ::testing::AnyNumber;
 
 TEST(xeImageDestroy, redirectsToObject) {
-    Mock<Image> image;
-    EXPECT_CALL(image, destroy()).Times(1);
 
-    auto result = xeImageDestroy(image.toHandle());
+    Mock<Device> device;
+    EXPECT_CALL(device, getMemoryManager).Times(AnyNumber());
+
+    xe_image_desc_t desc = {};
+
+    auto image = whitebox_cast(Image::create(productFamily, &device, &desc));
+    ASSERT_NE(nullptr, image);
+
+    auto result = xeImageDestroy(image->toHandle());
     EXPECT_EQ(XE_RESULT_SUCCESS, result);
 }
 

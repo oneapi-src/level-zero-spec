@@ -74,6 +74,8 @@ void testAppendImageCopy(xe_device_handle_t &device, bool &validRet) {
 
     delete[] srcBuffer;
     delete[] dstBuffer;
+    SUCCESS_OR_TERMINATE(xeImageDestroy(dstImg));
+    SUCCESS_OR_TERMINATE(xeImageDestroy(srcImg));
     SUCCESS_OR_TERMINATE(xeCommandListDestroy(cmdList));
     SUCCESS_OR_TERMINATE(xeCommandQueueDestroy(cmdQueue));
 }
