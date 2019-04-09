@@ -2,6 +2,14 @@ if(SUPPORT_GEN9)
     set(HW_SOURCES
         ${HW_SOURCES}
         ${COMPUTE_RUNTIME_GEN9}
+        ${CMAKE_CURRENT_SOURCE_DIR}/gen9/cfl/cmdlist_cfl.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/gen9/cfl/cmdqueue_cfl.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/gen9/cfl/function_cfl.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/gen9/cfl/image_cfl.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/gen9/glk/cmdlist_glk.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/gen9/glk/cmdqueue_glk.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/gen9/glk/function_glk.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/gen9/glk/image_glk.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/gen9/kbl/cmdlist_kbl.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/gen9/kbl/cmdqueue_kbl.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/gen9/kbl/function_kbl.cpp
