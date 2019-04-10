@@ -4,12 +4,24 @@
 namespace L0 {
 template <GFXCORE_FAMILY gfxCoreFamily>
 bool ImageCoreFamily<gfxCoreFamily>::initialize(Device *device, const xe_image_desc_t *desc) {
+    using RENDER_SURFACE_STATE = typename GfxFamily::RENDER_SURFACE_STATE;
 
-    if (desc->numChannels < XE_NUMCHANNELS_MIN || desc->numChannels > XE_NUMCHANNELS_MAX) {
+    if (desc == nullptr) {
         return false;
     }
 
-    if (desc->format > XE_IMAGE_FORMAT_MAX) {
+    if (desc->format.layout > XE_IMAGE_FORMAT_LAYOUT_MAX) {
+        return false;
+    }
+
+    if (desc->format.type > XE_IMAGE_FORMAT_TYPE_MAX) {
+        return false;
+    }
+
+    if (desc->format.x > XE_IMAGE_FORMAT_SWIZZLE_MAX ||
+            desc->format.y > XE_IMAGE_FORMAT_SWIZZLE_MAX ||
+            desc->format.z > XE_IMAGE_FORMAT_SWIZZLE_MAX ||
+            desc->format.w > XE_IMAGE_FORMAT_SWIZZLE_MAX) {
         return false;
     }
 
@@ -19,20 +31,18 @@ bool ImageCoreFamily<gfxCoreFamily>::initialize(Device *device, const xe_image_d
 
     surfaceState = GfxFamily::cmdInitRenderSurfaceState;
 
-    switch (desc->numChannels) {
-    case 4:
-        surfaceState.setShaderChannelSelectAlpha(RENDER_SURFACE_STATE::SHADER_CHANNEL_SELECT_ALPHA_ALPHA);
-        //Fall through on purpose
-    case 3:
-        surfaceState.setShaderChannelSelectBlue(RENDER_SURFACE_STATE::SHADER_CHANNEL_SELECT_BLUE_BLUE);
-    case 2:
-        surfaceState.setShaderChannelSelectGreen(RENDER_SURFACE_STATE::SHADER_CHANNEL_SELECT_GREEN_GREEN);
-    case 1:
-        surfaceState.setShaderChannelSelectRed(RENDER_SURFACE_STATE::SHADER_CHANNEL_SELECT_RED_RED);
-        break;
-    default:
-        return false;
-    }
+    surfaceState.setShaderChannelSelectRed(
+            static_cast<const typename RENDER_SURFACE_STATE::SHADER_CHANNEL_SELECT_RED>(
+                shaderChannelSelect[desc->format.x]));
+    surfaceState.setShaderChannelSelectGreen(
+            static_cast<const typename RENDER_SURFACE_STATE::SHADER_CHANNEL_SELECT_GREEN>(
+                shaderChannelSelect[desc->format.y]));
+    surfaceState.setShaderChannelSelectBlue(
+            static_cast<const typename RENDER_SURFACE_STATE::SHADER_CHANNEL_SELECT_BLUE>(
+                shaderChannelSelect[desc->format.z]));
+    surfaceState.setShaderChannelSelectAlpha(
+            static_cast<const typename RENDER_SURFACE_STATE::SHADER_CHANNEL_SELECT_ALPHA>(
+                shaderChannelSelect[desc->format.w]));
 
     switch (desc->type) {
     case XE_IMAGE_TYPE_1D:
@@ -68,10 +78,10 @@ bool ImageCoreFamily<gfxCoreFamily>::initialize(Device *device, const xe_image_d
         surfaceState.setSurfaceVerticalAlignment(static_cast<typename RENDER_SURFACE_STATE::SURFACE_VERTICAL_ALIGNMENT>(gmm->getRenderVAlignment()));
     }
 
-    surfaceState.setSurfaceFormat(format_table[desc->format][desc->numChannels - XE_NUMCHANNELS_MIN]);
+    surfaceState.setSurfaceFormat(surfaceFormatTable[desc->format.layout][desc->format.type]);
 
-    size_t elem_size = format_size[imageDesc.format];
-    surfaceState.setSurfacePitch(static_cast<uint32_t>(imageDesc.numChannels * imageDesc.width * elem_size));
+    size_t elem_size = formatLayoutSize[desc->format.layout];
+    surfaceState.setSurfacePitch(static_cast<uint32_t>(desc->width * elem_size));
 
     surfaceState.setSurfaceBaseAddress(static_cast<uint64_t>(this->allocation->getGpuAddress()));
 

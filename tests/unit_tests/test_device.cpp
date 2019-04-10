@@ -75,7 +75,10 @@ TEST(xeDeviceCreatEvent, redirectsToObject) {
     ASSERT_EQ(XE_RESULT_SUCCESS, result);
 }
 
-TEST(DeviceCreateImage, returnsSuccess) {
+class DeviceCreateImage : public GlobalFixtureTest {
+};
+
+TEST_F(DeviceCreateImage, returnsSuccess) {
     auto platform = NEO::constructPlatform();
     auto success = platform->initialize();
     ASSERT_TRUE(success);
@@ -83,6 +86,7 @@ TEST(DeviceCreateImage, returnsSuccess) {
     auto deviceRT = platform->getDevice(0);
     ASSERT_NE(nullptr, deviceRT);
     auto device = Device::create(deviceRT);
+    assert(globalMemoryManager);
 
     xe_image_handle_t image = {};
     xe_image_desc_t desc = {};

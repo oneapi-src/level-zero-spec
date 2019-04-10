@@ -51,6 +51,182 @@ namespace xe
         auto getDesc( void ) const { return desc; }
 
         ///////////////////////////////////////////////////////////////////////////////
+        /// @brief C++ version for ::xe_image_desc_version_t
+        enum class image_desc_version_t
+        {
+            CURRENT = XE_MAKE_VERSION( 1, 0 ),              ///< version 1.0
+
+        };
+
+        ///////////////////////////////////////////////////////////////////////////////
+        /// @brief C++ version for ::xe_image_flag_t
+        enum class image_flag_t
+        {
+            PROGRAM_READ = XE_BIT( 0 ),                     ///< programs will read contents
+            PROGRAM_WRITE = XE_BIT( 1 ),                    ///< programs will write contents
+            BIAS_CACHED = XE_BIT( 2 ),                      ///< device should cache contents
+            BIAS_UNCACHED = XE_BIT( 3 ),                    ///< device should not cache contents
+
+        };
+
+        ///////////////////////////////////////////////////////////////////////////////
+        /// @brief C++ version for ::xe_image_type_t
+        enum class image_type_t
+        {
+            _1D,                                            ///< 1D
+            _1DARRAY,                                       ///< 1D array
+            _2D,                                            ///< 2D
+            _2DARRAY,                                       ///< 2D array
+            _3D,                                            ///< 3D
+
+        };
+
+        ///////////////////////////////////////////////////////////////////////////////
+        /// @brief C++ version for ::xe_image_format_layout_t
+        enum class image_format_layout_t
+        {
+            8,                                              ///< 8-bit single component layout
+            _16,                                            ///< 16-bit single component layout
+            _32,                                            ///< 32-bit single component layout
+            _8_8,                                           ///< 2-component 8-bit layout
+            _8_8_8_8,                                       ///< 4-component 8-bit layout
+            _16_16,                                         ///< 2-component 16-bit layout
+            _16_16_16_16,                                   ///< 4-component 16-bit layout
+            _32_32,                                         ///< 2-component 32-bit layout
+            _32_32_32_32,                                   ///< 4-component 32-bit layout
+            _10_10_10_2,                                    ///< 4-component 10_10_10_2 layout
+            _11_11_10,                                      ///< 3-component 11_11_10 layout
+            _5_6_5,                                         ///< 3-component 5_6_5 layout
+            _5_5_5_1,                                       ///< 4-component 5_5_5_1 layout
+            _4_4_4_4,                                       ///< 4-component 4_4_4_4 layout
+            Y8,                                             ///< Media Format: Y8. Format type and swizzle is ignored for this.
+            NV12,                                           ///< Media Format: NV12. Format type and swizzle is ignored for this.
+            YUYV,                                           ///< Media Format: YUYV. Format type and swizzle is ignored for this.
+            VYUY,                                           ///< Media Format: VYUY. Format type and swizzle is ignored for this.
+            YVYU,                                           ///< Media Format: YVYU. Format type and swizzle is ignored for this.
+            UYVY,                                           ///< Media Format: UYVY. Format type and swizzle is ignored for this.
+            AYUV,                                           ///< Media Format: AYUV. Format type and swizzle is ignored for this.
+            YUAV,                                           ///< Media Format: YUAV. Format type and swizzle is ignored for this.
+            P010,                                           ///< Media Format: P010. Format type and swizzle is ignored for this.
+            Y410,                                           ///< Media Format: Y410. Format type and swizzle is ignored for this.
+            P012,                                           ///< Media Format: P012. Format type and swizzle is ignored for this.
+            Y16,                                            ///< Media Format: Y16. Format type and swizzle is ignored for this.
+            P016,                                           ///< Media Format: P016. Format type and swizzle is ignored for this.
+            Y216,                                           ///< Media Format: Y216. Format type and swizzle is ignored for this.
+            P216,                                           ///< Media Format: P216. Format type and swizzle is ignored for this.
+            P416,                                           ///< Media Format: P416. Format type and swizzle is ignored for this.
+
+        };
+
+        ///////////////////////////////////////////////////////////////////////////////
+        /// @brief C++ version for ::xe_image_format_type_t
+        enum class image_format_type_t
+        {
+            UINT,                                           ///< Unsigned integer
+            SINT,                                           ///< Signed integer
+            UNORM,                                          ///< Unsigned normalized integer
+            SNORM,                                          ///< Signed normalized integer
+            FLOAT,                                          ///< Float
+
+        };
+
+        ///////////////////////////////////////////////////////////////////////////////
+        /// @brief C++ version for ::xe_image_format_swizzle_t
+        enum class image_format_swizzle_t
+        {
+            R,                                              ///< Red component
+            G,                                              ///< Green component
+            B,                                              ///< Blue component
+            A,                                              ///< Alpha component
+            _0,                                             ///< Zero
+            _1,                                             ///< One
+            X,                                              ///< Don't care
+
+        };
+
+        ///////////////////////////////////////////////////////////////////////////////
+        /// @brief C++ version for ::xe_image_properties_version_t
+        enum class image_properties_version_t
+        {
+            CURRENT = XE_MAKE_VERSION( 1, 0 ),              ///< version 1.0
+
+        };
+
+        ///////////////////////////////////////////////////////////////////////////////
+        /// @brief C++ version for ::xe_image_sampler_filter_flags_t
+        enum class image_sampler_filter_flags_t
+        {
+            LINEAR = XE_BIT(0),                             ///< device supports linear filtering
+
+        };
+
+        ///////////////////////////////////////////////////////////////////////////////
+        /// @brief C++ version for ::xe_image_format_desc_t
+        struct image_format_desc_t
+        {
+            image_format_layout_t layout;                   ///< [in] image format component layout
+            image_format_type_t type;                       ///< [in] image format type
+            image_format_swizzle_t x;                       ///< [in] image component swizzle into channel x
+            image_format_swizzle_t y;                       ///< [in] image component swizzle into channel y
+            image_format_swizzle_t z;                       ///< [in] image component swizzle into channel z
+            image_format_swizzle_t w;                       ///< [in] image component swizzle into channel w
+
+        };
+
+        ///////////////////////////////////////////////////////////////////////////////
+        /// @brief C++ version for ::xe_image_desc_t
+        struct image_desc_t
+        {
+            image_desc_version_t version = image_desc_version_t::CURRENT;   ///< [in] ::IMAGE_DESC_VERSION_CURRENT
+            image_flag_t flags;                             ///< [in] creation flags
+            image_type_t type;                              ///< [in] image type
+            image_format_desc_t format;                     ///< [in] image format
+            size_t width = 0;                               ///< [in] width in pixels, see
+                                                            ///< ::device_memory_properties_t::maxImageDims1D/2D/3D
+            size_t height = 0;                              ///< [in] height in pixels (2D or 3D only), see
+                                                            ///< ::device_memory_properties_t::maxImageDims2D/3D
+            size_t depth = 0;                               ///< [in] depth in pixels (3D only), see
+                                                            ///< ::device_memory_properties_t::maxImageDims3D
+            size_t arraylevels = 1;                         ///< [in] array levels (array types only), see
+                                                            ///< ::device_memory_properties_t::maxImageArraySlices
+            size_t miplevels = 0;                           ///< [in] mipmap levels (must be 0)
+
+        };
+
+        ///////////////////////////////////////////////////////////////////////////////
+        /// @brief C++ version for ::xe_image_properties_t
+        struct image_properties_t
+        {
+            image_properties_version_t version = image_properties_version_t::CURRENT;   ///< [in] ::IMAGE_PROPERTIES_VERSION_CURRENT
+            image_sampler_filter_flags_t samplerFilterFlags;///< [out] supported sampler filtering
+
+        };
+
+        ///////////////////////////////////////////////////////////////////////////////
+        /// @brief C++ wrapper for ::xeImageGetProperties
+        /// @returns
+        ///     - ::image_properties_t: pointer to image properties
+        /// 
+        /// @throws result_t
+        inline static image_properties_t
+        GetProperties(
+            device_handle_t hDevice,                        ///< [in] handle of the device
+            const image_desc_t* desc                        ///< [in] pointer to image descriptor
+            );
+
+        ///////////////////////////////////////////////////////////////////////////////
+        /// @brief C++ wrapper for ::xeImageCreate
+        /// @returns
+        ///     - ::image_handle_t: pointer to handle of image object created
+        /// 
+        /// @throws result_t
+        inline static image_handle_t
+        Create(
+            device_handle_t hDevice,                        ///< [in] handle of the device
+            const image_desc_t* desc                        ///< [in] pointer to image descriptor
+            );
+
+        ///////////////////////////////////////////////////////////////////////////////
         /// @brief C++ wrapper for ::xeImageDestroy
         /// @throws result_t
         inline void

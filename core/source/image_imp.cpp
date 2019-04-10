@@ -41,11 +41,13 @@ bool ImageImp::initialize(Device *device, const xe_image_desc_t *desc) {
     this->device = device;
     assert(globalMemoryManager);
 
-    if (desc) {
-        imageDesc = *desc;
+    if (desc == nullptr) {
+        return false;
     }
 
-    size_t elem_size = format_size[imageDesc.format] * imageDesc.numChannels;
+    imageDesc = *desc;
+
+    size_t elem_size = formatLayoutSize[imageDesc.format.layout];
     sizeBytes = elem_size * imageDesc.height * imageDesc.width * imageDesc.depth;
 
     allocation = globalMemoryManager->allocateManagedMemory(sizeBytes, elem_size);

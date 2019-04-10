@@ -11,11 +11,9 @@ bool verbose = false;
 
 void testAppendImageCopy(xe_device_handle_t &device, bool &validRet) {
 
-    const xe_image_format_t format = XE_IMAGE_FORMAT_UINT8;
     const size_t width = 32;
     const size_t height = 32;
-    const size_t numChannels = 4;
-    const size_t size = numChannels * width * height * sizeof(uint8_t);
+    const size_t size = 4 * width * height * sizeof(uint8_t);
 
     xe_command_queue_handle_t cmdQueue;
     xe_command_list_handle_t cmdList;
@@ -32,7 +30,9 @@ void testAppendImageCopy(xe_device_handle_t &device, bool &validRet) {
         XE_IMAGE_DESC_VERSION_CURRENT,
         XE_IMAGE_FLAG_PROGRAM_READ,
         XE_IMAGE_TYPE_2D,
-        format, numChannels,
+        { XE_IMAGE_FORMAT_LAYOUT_8_8_8_8, XE_IMAGE_FORMAT_TYPE_UINT,
+          XE_IMAGE_FORMAT_SWIZZLE_R, XE_IMAGE_FORMAT_SWIZZLE_G,
+          XE_IMAGE_FORMAT_SWIZZLE_B, XE_IMAGE_FORMAT_SWIZZLE_A},
         width, height, 1, 0, 0};
     xe_image_handle_t srcImg;
     xe_image_region_t srcRegion = {{0, 0, 0}, {size, 0, 0}};
@@ -44,7 +44,9 @@ void testAppendImageCopy(xe_device_handle_t &device, bool &validRet) {
         XE_IMAGE_DESC_VERSION_CURRENT,
         XE_IMAGE_FLAG_PROGRAM_WRITE,
         XE_IMAGE_TYPE_2D,
-        format, numChannels,
+        { XE_IMAGE_FORMAT_LAYOUT_8_8_8_8, XE_IMAGE_FORMAT_TYPE_UINT,
+          XE_IMAGE_FORMAT_SWIZZLE_R, XE_IMAGE_FORMAT_SWIZZLE_G,
+          XE_IMAGE_FORMAT_SWIZZLE_B, XE_IMAGE_FORMAT_SWIZZLE_A},
         width, height, 1, 0, 0};
     xe_image_handle_t dstImg;
     xe_image_region_t dstRegion = {{0, 0, 0}, {size, 0, 0}};

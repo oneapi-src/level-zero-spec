@@ -62,8 +62,9 @@ TEST_F(ImageCreate, descMatchesAllocation) {
     xe_image_desc_t desc = {};
 
     desc.type = XE_IMAGE_TYPE_3D;
-    desc.numChannels = 4;
-    desc.format = XE_IMAGE_FORMAT_UINT8;
+    desc.format.layout = XE_IMAGE_FORMAT_LAYOUT_8_8_8_8;
+    desc.format.type = XE_IMAGE_FORMAT_TYPE_UINT;
+    desc.format.x = desc.format.y = desc.format.z = desc.format.w = XE_IMAGE_FORMAT_SWIZZLE_R;
     desc.width = 10;
     desc.height = 10;
     desc.depth = 10;
@@ -74,9 +75,9 @@ TEST_F(ImageCreate, descMatchesAllocation) {
     ASSERT_NE(nullptr, alloc);
 
     ASSERT_EQ(alloc->getSize(),
-              desc.numChannels * desc.width * desc.height * desc.depth * sizeof(uint8_t));
+              4 * desc.width * desc.height * desc.depth * sizeof(uint8_t));
     ASSERT_EQ(image->getSizeInBytes(),
-              desc.numChannels * desc.width * desc.height * desc.depth * sizeof(uint8_t));
+              4 * desc.width * desc.height * desc.depth * sizeof(uint8_t));
 
     delete device;
 }
@@ -92,8 +93,9 @@ HWTEST2_F(ImageCreate, descBadParamsFail, MatchAny) {
     bool ret;
 
     default_desc.type = XE_IMAGE_TYPE_2D;
-    default_desc.numChannels = 1;
-    default_desc.format = XE_IMAGE_FORMAT_UINT32;
+    default_desc.format.layout = XE_IMAGE_FORMAT_LAYOUT_32;
+    default_desc.format.type = XE_IMAGE_FORMAT_TYPE_UINT;
+    default_desc.format.x = XE_IMAGE_FORMAT_SWIZZLE_R;
     default_desc.width = 10;
     default_desc.height = 10;
     default_desc.depth = 1;
@@ -107,17 +109,32 @@ HWTEST2_F(ImageCreate, descBadParamsFail, MatchAny) {
     ASSERT_FALSE(ret);
 
     desc = default_desc;
-    desc.numChannels = 0;
+    desc.format.layout = static_cast<xe_image_format_layout_t>(XE_IMAGE_FORMAT_LAYOUT_P416 + 100);
     ret = imageCore->initialize(&device, &desc);
     ASSERT_FALSE(ret);
 
     desc = default_desc;
-    desc.numChannels = 100;
+    desc.format.type = static_cast<xe_image_format_type_t>(XE_IMAGE_FORMAT_TYPE_FLOAT + 100);
     ret = imageCore->initialize(&device, &desc);
     ASSERT_FALSE(ret);
 
     desc = default_desc;
-    desc.format = static_cast<xe_image_format_t>(XE_IMAGE_FORMAT_FLOAT32 + 100);
+    desc.format.x = static_cast<xe_image_format_swizzle_t>(XE_IMAGE_FORMAT_SWIZZLE_X + 100);
+    ret = imageCore->initialize(&device, &desc);
+    ASSERT_FALSE(ret);
+
+    desc = default_desc;
+    desc.format.y = static_cast<xe_image_format_swizzle_t>(XE_IMAGE_FORMAT_SWIZZLE_X + 100);
+    ret = imageCore->initialize(&device, &desc);
+    ASSERT_FALSE(ret);
+
+    desc = default_desc;
+    desc.format.z = static_cast<xe_image_format_swizzle_t>(XE_IMAGE_FORMAT_SWIZZLE_X + 100);
+    ret = imageCore->initialize(&device, &desc);
+    ASSERT_FALSE(ret);
+
+    desc = default_desc;
+    desc.format.w = static_cast<xe_image_format_swizzle_t>(XE_IMAGE_FORMAT_SWIZZLE_X + 100);
     ret = imageCore->initialize(&device, &desc);
     ASSERT_FALSE(ret);
 }
@@ -131,8 +148,12 @@ HWTEST2_F(ImageSurfaceState, descMatchesSurface, MatchAny) {
     xe_image_desc_t desc = {};
 
     desc.type = XE_IMAGE_TYPE_3D;
-    desc.numChannels = 4;
-    desc.format = XE_IMAGE_FORMAT_UINT8;
+    desc.format.layout = XE_IMAGE_FORMAT_LAYOUT_8_8_8_8;
+    desc.format.type = XE_IMAGE_FORMAT_TYPE_UINT;
+    desc.format.x = XE_IMAGE_FORMAT_SWIZZLE_R;
+    desc.format.y = XE_IMAGE_FORMAT_SWIZZLE_G;
+    desc.format.z = XE_IMAGE_FORMAT_SWIZZLE_B;
+    desc.format.w = XE_IMAGE_FORMAT_SWIZZLE_A;
     desc.width = 11;
     desc.height = 13;
     desc.depth = 17;
@@ -152,7 +173,37 @@ HWTEST2_F(ImageSurfaceState, descMatchesSurface, MatchAny) {
     ASSERT_EQ(surfaceState->getShaderChannelSelectGreen(), RENDER_SURFACE_STATE::SHADER_CHANNEL_SELECT_GREEN_GREEN);
     ASSERT_EQ(surfaceState->getShaderChannelSelectBlue(), RENDER_SURFACE_STATE::SHADER_CHANNEL_SELECT_BLUE_BLUE);
     ASSERT_EQ(surfaceState->getShaderChannelSelectAlpha(), RENDER_SURFACE_STATE::SHADER_CHANNEL_SELECT_ALPHA_ALPHA);
-    ASSERT_EQ(surfaceState->getSurfacePitch(), sizeof(uint8_t) * desc.width * desc.numChannels);
+    ASSERT_EQ(surfaceState->getSurfacePitch(), sizeof(uint8_t) * desc.width * 4);
+}
+
+HWTEST2_F(ImageSurfaceState, descSwizzlesMatchSurface, MatchAny) {
+    using RENDER_SURFACE_STATE = typename FamilyType::RENDER_SURFACE_STATE;
+    Mock<Device> device;
+
+    xe_image_desc_t desc = {};
+
+    desc.type = XE_IMAGE_TYPE_3D;
+    desc.format.layout = XE_IMAGE_FORMAT_LAYOUT_8_8_8_8;
+    desc.format.type = XE_IMAGE_FORMAT_TYPE_UINT;
+    desc.width = 11;
+    desc.height = 13;
+    desc.depth = 17;
+
+    desc.format.x = XE_IMAGE_FORMAT_SWIZZLE_A;
+    desc.format.y = XE_IMAGE_FORMAT_SWIZZLE_0;
+    desc.format.z = XE_IMAGE_FORMAT_SWIZZLE_1;
+    desc.format.w = XE_IMAGE_FORMAT_SWIZZLE_X;
+
+    auto imageCore = new ImageCoreFamily<gfxCoreFamily>();
+    bool ret = imageCore->initialize(&device, &desc);
+    ASSERT_TRUE(ret);
+
+    auto surfaceState = &imageCore->surfaceState;
+
+    ASSERT_EQ(surfaceState->getShaderChannelSelectRed(), RENDER_SURFACE_STATE::SHADER_CHANNEL_SELECT_RED_ALPHA);
+    ASSERT_EQ(surfaceState->getShaderChannelSelectGreen(), RENDER_SURFACE_STATE::SHADER_CHANNEL_SELECT_GREEN_ZERO);
+    ASSERT_EQ(surfaceState->getShaderChannelSelectBlue(), RENDER_SURFACE_STATE::SHADER_CHANNEL_SELECT_BLUE_ONE);
+    ASSERT_EQ(surfaceState->getShaderChannelSelectAlpha(), RENDER_SURFACE_STATE::SHADER_CHANNEL_SELECT_ALPHA_ZERO);
 }
 
 HWTEST2_F(ImageSurfaceState, descMatchesSurfaceFormats, MatchAny) {
@@ -168,22 +219,27 @@ HWTEST2_F(ImageSurfaceState, descMatchesSurfaceFormats, MatchAny) {
 
     struct FormatInfo {
         size_t elemSize;
-        int numChannels;
-        xe_image_format_t xeFormat;
+        xe_image_format_layout_t formatLayout;
+        xe_image_format_type_t formatType;
         SURFACE_FORMAT ssFormat;
     };
     struct FormatInfo testFormats[] = {
-        {sizeof(uint8_t), 1, XE_IMAGE_FORMAT_UINT8, RENDER_SURFACE_STATE::SURFACE_FORMAT_R8_UINT},
-        {sizeof(uint32_t), 4, XE_IMAGE_FORMAT_UINT32, RENDER_SURFACE_STATE::SURFACE_FORMAT_R32G32B32A32_UINT},
-        {sizeof(uint8_t), 4, XE_IMAGE_FORMAT_UNORM8, RENDER_SURFACE_STATE::SURFACE_FORMAT_R8G8B8A8_UNORM},
-        {sizeof(int32_t), 1, XE_IMAGE_FORMAT_SNORM32, RENDER_SURFACE_STATE::SURFACE_FORMAT_R32_SNORM},
-        {sizeof(float), 4, XE_IMAGE_FORMAT_FLOAT32, RENDER_SURFACE_STATE::SURFACE_FORMAT_R32G32B32A32_FLOAT},
+        {sizeof(uint8_t), XE_IMAGE_FORMAT_LAYOUT_8, XE_IMAGE_FORMAT_TYPE_UINT,
+                RENDER_SURFACE_STATE::SURFACE_FORMAT_R8_UINT},
+        {sizeof(uint32_t) * 4, XE_IMAGE_FORMAT_LAYOUT_32_32_32_32, XE_IMAGE_FORMAT_TYPE_UINT,
+                RENDER_SURFACE_STATE::SURFACE_FORMAT_R32G32B32A32_UINT},
+        {sizeof(uint8_t) * 4, XE_IMAGE_FORMAT_LAYOUT_8_8_8_8, XE_IMAGE_FORMAT_TYPE_UNORM,
+                RENDER_SURFACE_STATE::SURFACE_FORMAT_R8G8B8A8_UNORM},
+        {sizeof(int16_t), XE_IMAGE_FORMAT_LAYOUT_16, XE_IMAGE_FORMAT_TYPE_SNORM,
+                RENDER_SURFACE_STATE::SURFACE_FORMAT_R16_SNORM},
+        {sizeof(float) * 4, XE_IMAGE_FORMAT_LAYOUT_32_32_32_32, XE_IMAGE_FORMAT_TYPE_FLOAT,
+                RENDER_SURFACE_STATE::SURFACE_FORMAT_R32G32B32A32_FLOAT},
     };
     size_t numFormats = sizeof(testFormats) / sizeof(struct FormatInfo);
 
     for (size_t i = 0; i < numFormats; i++) {
-        desc.numChannels = testFormats[i].numChannels;
-        desc.format = testFormats[i].xeFormat;
+        desc.format.layout = testFormats[i].formatLayout;
+        desc.format.type = testFormats[i].formatType;
 
         auto imageCore = new ImageCoreFamily<gfxCoreFamily>();
         bool ret = imageCore->initialize(&device, &desc);
@@ -193,7 +249,7 @@ HWTEST2_F(ImageSurfaceState, descMatchesSurfaceFormats, MatchAny) {
         ASSERT_EQ(surfaceState->getSurfaceFormat(), testFormats[i].ssFormat);
 
         ASSERT_EQ(imageCore->getSizeInBytes(),
-                  testFormats[i].elemSize * testFormats[i].numChannels * desc.width * desc.height * desc.depth);
+                  testFormats[i].elemSize * desc.width * desc.height * desc.depth);
 
         delete imageCore;
     }
@@ -209,8 +265,9 @@ HWTEST2_F(ImageSurfaceState, copyToSSH, MatchAny) {
     xe_image_desc_t desc = {};
 
     desc.type = XE_IMAGE_TYPE_2D;
-    desc.numChannels = 4;
-    desc.format = XE_IMAGE_FORMAT_UINT8;
+    desc.format.layout = XE_IMAGE_FORMAT_LAYOUT_8_8_8_8;
+    desc.format.type = XE_IMAGE_FORMAT_TYPE_UINT;
+    desc.format.x = desc.format.y = desc.format.z = desc.format.w = XE_IMAGE_FORMAT_SWIZZLE_R;
     desc.width = 11;
     desc.height = 13;
     desc.depth = 1;
@@ -219,8 +276,9 @@ HWTEST2_F(ImageSurfaceState, copyToSSH, MatchAny) {
     bool ret = imageA->initialize(&device, &desc);
     ASSERT_TRUE(ret);
 
-    desc.numChannels = 2;
-    desc.format = XE_IMAGE_FORMAT_UINT32;
+    desc.format.layout = XE_IMAGE_FORMAT_LAYOUT_32_32;
+    desc.format.type = XE_IMAGE_FORMAT_TYPE_UINT;
+    desc.format.x = desc.format.y = desc.format.z = desc.format.w = XE_IMAGE_FORMAT_SWIZZLE_R;
     desc.width = 10;
     desc.height = 10;
 

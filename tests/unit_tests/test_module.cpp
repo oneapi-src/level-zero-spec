@@ -307,8 +307,9 @@ TEST_P(ModuleCreateImageArg, onlineCompilationModuleTest) {
 
     xe_image_desc_t imgDesc = {};
     imgDesc.type = XE_IMAGE_TYPE_2D;
-    imgDesc.numChannels = 1;
-    imgDesc.format = XE_IMAGE_FORMAT_UINT32;
+    imgDesc.format.layout = XE_IMAGE_FORMAT_LAYOUT_32;
+    imgDesc.format.type = XE_IMAGE_FORMAT_TYPE_UINT;
+    imgDesc.format.x = XE_IMAGE_FORMAT_SWIZZLE_R;
     imgDesc.width = 10;
     imgDesc.height = 10;
     imgDesc.depth = 1;
