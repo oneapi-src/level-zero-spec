@@ -2,6 +2,7 @@
 #include "mock_device.h"
 #include "mock_memory_manager.h"
 #include "gmock/gmock.h"
+#include "global_fixture.h"
 
 using ::testing::_;
 using ::testing::AnyNumber;
@@ -10,7 +11,10 @@ using ::testing::Return;
 namespace L0 {
 namespace ult {
 
-TEST(sharedMemAlloc, returnsValidPtr) {
+class SharedMemAllocTest: public GlobalFixtureTest {
+};
+
+TEST_F(SharedMemAllocTest, returnsValidPtr) {
     Mock<Device> device;
 
     xe_mem_allocator_handle_t hMemAllocHandle = {};
@@ -34,7 +38,7 @@ TEST(sharedMemAlloc, returnsValidPtr) {
     ASSERT_EQ(result, XE_RESULT_SUCCESS);
     memset(ptr, 0xbf, size);
 
-    result = xeMemFree(hMemAllocHandle, ptr);
+    result = xeMemFree(hMemAllocHandle, const_cast<const void *>(ptr));
     ASSERT_EQ(result, XE_RESULT_SUCCESS);
 
     result = xeMemAllocatorDestroy(hMemAllocHandle);

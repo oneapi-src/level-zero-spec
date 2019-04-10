@@ -18,9 +18,8 @@ xe_result_t CommandQueueImp::destroy() {
 }
 
 void CommandQueueImp::initialize() {
-    auto memoryManager = device->getMemoryManager();
-    assert(memoryManager);
-    allocation = memoryManager->allocateDeviceMemory(defaultQueueCmdBufferSize, 4096u);
+    assert(globalMemoryManager);
+    allocation = globalMemoryManager->allocateDeviceMemory(defaultQueueCmdBufferSize, 4096u);
     assert(allocation);
 
     commandStream = new NEO::LinearStream(allocation->allocationRT);
@@ -29,13 +28,12 @@ void CommandQueueImp::initialize() {
 Substream CommandQueueImp::getCmdSubstream(size_t size) {
     assert(commandStream);
     if (commandStream->getAvailableSpace() < size) {
-        auto memoryManager = device->getMemoryManager();
-        assert(memoryManager);
+        assert(globalMemoryManager);
 
         // TODO: Add reusable allocations pool instead of deferred deletion
-        memoryManager->freeMemory(this->allocation);
+        globalMemoryManager->freeMemory(this->allocation);
 
-        this->allocation = memoryManager->allocateDeviceMemory(defaultQueueCmdBufferSize, 4096u);
+        this->allocation = globalMemoryManager->allocateDeviceMemory(defaultQueueCmdBufferSize, 4096u);
         assert(this->allocation);
 
         commandStream->replaceGraphicsAllocation(this->allocation->allocationRT);

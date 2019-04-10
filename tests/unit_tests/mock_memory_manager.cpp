@@ -20,7 +20,7 @@ static void freeGraphicsAllocation(GraphicsAllocation *allocation) {
     alignedFree(buffer);
 }
 
-static void freePtr(void *ptr) {
+static void freePtr(const void *ptr) {
     assert(ptr);
     alignedFree(const_cast<void *>(ptr));
 }
@@ -30,13 +30,13 @@ Mock<MemoryManager>::Mock() {
     ON_CALL(*this, allocateDeviceMemory)
         .WillByDefault(Invoke(createGraphicsAllocation));
 
-    ON_CALL(*this, allocateManagedMemory)
-        .WillByDefault(Invoke(createGraphicsAllocation));
+    EXPECT_CALL(*this, allocateManagedMemory)
+        .WillRepeatedly(Invoke(createGraphicsAllocation));
 
-    ON_CALL(*this, freeMemory(An<GraphicsAllocation *>()))
-        .WillByDefault(Invoke(freeGraphicsAllocation));
+    EXPECT_CALL(*this, freeMemory(An<GraphicsAllocation *>()))
+        .WillRepeatedly(Invoke(freeGraphicsAllocation));
 
-    EXPECT_CALL(*this, freeMemory(An<void *>()))
+    EXPECT_CALL(*this, freeMemory(An<const void *>()))
         .WillRepeatedly(Invoke(freePtr));
 }
 

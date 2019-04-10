@@ -1,6 +1,7 @@
 #include "cmdlist.h"
 #include "image.h"
 #include "mock_device.h"
+#include "memory_manager.h"
 #include "xe_cmdlist.h"
 #include "xe_event.h"
 #include "gmock/gmock.h"
@@ -147,7 +148,7 @@ TEST(DeviceGetMemoryManager, returnsPointer) {
     ASSERT_NE(nullptr, deviceRT);
     auto device = Device::create(deviceRT);
 
-    auto memoryManager = device->getMemoryManager();
+    auto memoryManager = globalMemoryManager;
     EXPECT_NE(nullptr, memoryManager);
 
     delete device;

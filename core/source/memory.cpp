@@ -50,10 +50,9 @@ xe_result_t memAlloc(xe_mem_allocator_handle_t hMemAllocHandle,
                      void **ptr) {
     auto device = Device::fromHandle(hDevice);
     assert(device);
-    auto memoryManager = device->getMemoryManager();
-    assert(memoryManager);
+    assert(globalMemoryManager);
 
-    auto allocation = memoryManager->allocateManagedMemory(size, alignment);
+    auto allocation = globalMemoryManager->allocateManagedMemory(size, alignment);
     assert(allocation);
     *ptr = allocation->getHostAddress();
 
@@ -67,7 +66,9 @@ xe_result_t memAllocatorDestroy(xe_mem_allocator_handle_t hMemAllocHandle) {
 
 xe_result_t memFree(xe_mem_allocator_handle_t hMemAllocHandle,
                     const void *ptr) {
-    //TODO: Currently leaking memory.  Need to route to UnifiedMemoryManager
+    assert(globalMemoryManager);
+    globalMemoryManager->freeMemory(ptr);
+
     return XE_RESULT_SUCCESS;
 }
 
@@ -93,10 +94,9 @@ xe_result_t sharedMemAlloc(xe_mem_allocator_handle_t hMemAllocHandle,
                            void **ptr) {
     auto device = Device::fromHandle(hDevice);
     assert(device);
-    auto memoryManager = device->getMemoryManager();
-    assert(memoryManager);
+    assert(globalMemoryManager);
 
-    auto allocation = memoryManager->allocateManagedMemory(size, alignment);
+    auto allocation = globalMemoryManager->allocateManagedMemory(size, alignment);
     assert(allocation);
     *ptr = allocation->getHostAddress();
 

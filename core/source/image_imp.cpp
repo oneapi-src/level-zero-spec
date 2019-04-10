@@ -13,9 +13,8 @@ ImageAllocatorFn imageFactory[IGFX_MAX_PRODUCT] = {};
 xe_result_t ImageImp::destroy() {
     if (this->allocation) {
         assert(this->device);
-        auto memoryManager = this->device->getMemoryManager();
-        assert(memoryManager);
-        memoryManager->freeMemory(this->allocation);
+        assert(globalMemoryManager);
+        globalMemoryManager->freeMemory(this->allocation);
     }
 
     delete this;
@@ -40,17 +39,16 @@ Image *Image::create(uint32_t productFamily, Device *device, const xe_image_desc
 bool ImageImp::initialize(Device *device, const xe_image_desc_t *desc) {
     assert(device);
     this->device = device;
-    auto memoryManager = device->getMemoryManager();
-    assert(memoryManager);
+    assert(globalMemoryManager);
 
     if (desc) {
         imageDesc = *desc;
     }
 
-	size_t elem_size = format_size[imageDesc.format] * imageDesc.numChannels;
-	sizeBytes = elem_size * imageDesc.height * imageDesc.width * imageDesc.depth;
+    size_t elem_size = format_size[imageDesc.format] * imageDesc.numChannels;
+    sizeBytes = elem_size * imageDesc.height * imageDesc.width * imageDesc.depth;
 
-	allocation = memoryManager->allocateManagedMemory(sizeBytes, elem_size);
+    allocation = globalMemoryManager->allocateManagedMemory(sizeBytes, elem_size);
     assert(allocation);
     return true;
 }

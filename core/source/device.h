@@ -67,7 +67,6 @@ struct Device : _xe_device_handle_t {
     virtual xe_result_t setIntermediateCacheConfig(xe_cache_config_t CacheConfig) = 0;
     virtual xe_result_t setLastLevelCacheConfig(xe_cache_config_t CacheConfig) = 0;
 
-    virtual MemoryManager *getMemoryManager() = 0;
     virtual void *getExecEnvironment() = 0;
     virtual PtrRef<BuiltinFunctionsLib> getBuiltinFunctionsLib() = 0;
     virtual PtrRef<MOCSMapper> getMOCSMapper() = 0;

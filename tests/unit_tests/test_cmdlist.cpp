@@ -9,6 +9,7 @@
 #include "runtime/indirect_heap/indirect_heap.h"
 #include "test.h"
 #include "unit_tests/gen_common/gen_cmd_parse.h"
+#include "global_fixture.h"
 
 namespace L0 {
 namespace ult {
@@ -24,9 +25,11 @@ TEST(xeCommandListDestroy, redirectsToObject) {
 using ::testing::_;
 using ::testing::AnyNumber;
 using ::testing::Return;
-using CommandListCreate = ::testing::Test;
 
-TEST(CommandListCreate, returnsCommandListOnSuccess) {
+class CommandListCreate: public GlobalFixtureTest {
+};
+
+TEST_F(CommandListCreate, returnsCommandListOnSuccess) {
     Mock<Device> device;
 
     auto commandList = whitebox_cast(CommandList::create(productFamily, &device));

@@ -13,6 +13,8 @@
 
 namespace L0 {
 
+MemoryManager *globalMemoryManager = nullptr;
+
 struct MemoryManagerImp : public MemoryManager {
     GraphicsAllocation *allocateDeviceMemory(size_t size, size_t alignment) override {
         NEO::AllocationProperties properties(size, NEO::GraphicsAllocation::AllocationType::UNDECIDED);
@@ -74,7 +76,12 @@ struct MemoryManagerImp : public MemoryManager {
         delete allocation;
     }
 
-    void freeMemory(void *ptr) override {
+    void freeMemory(const void *ptr) override {
+        NEO::GraphicsAllocation *allocationRT = knownAllocations.get(ptr);
+        assert(allocationRT);
+        GraphicsAllocation *allocation = allocMap[allocationRT];
+        assert(allocation);
+        freeMemory(allocation);
     }
 
     MemoryManagerImp(void *memoryManagerRT)

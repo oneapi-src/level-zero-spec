@@ -10,7 +10,7 @@ namespace L0 {
 
 CommandContainer::~CommandContainer() {
     auto memoryManager = device
-                             ? device->getMemoryManager()
+                             ? globalMemoryManager
                              : nullptr;
 
     if (allocation) {
@@ -38,21 +38,17 @@ bool CommandContainer::initialize(Device *device) {
     assert(device);
     this->device = device;
 
-    auto memoryManager = device->getMemoryManager();
-    assert(memoryManager);
-
     // Allocate memory for our batch buffer
-    {
-        allocation = memoryManager->allocateDeviceMemory(65536u, 4096u);
-        assert(allocation);
+    assert(globalMemoryManager);
+    allocation = globalMemoryManager->allocateDeviceMemory(65536u, 4096u);
+    assert(allocation);
 
-        // Add our allocation to the residency container
-        residencyContainer.push_back(allocation->allocationRT);
-    }
+    // Add our allocation to the residency container
+    residencyContainer.push_back(allocation->allocationRT);
 
     // Allocate memory for each of our indirect state heaps
     for (auto &allocationIndirectHeap : allocationIndirectHeaps) {
-        allocationIndirectHeap = memoryManager->allocateDeviceMemory(16384u, 4096u);
+        allocationIndirectHeap = globalMemoryManager->allocateDeviceMemory(16384u, 4096u);
         residencyContainer.push_back(allocationIndirectHeap->allocationRT);
     }
 
@@ -64,7 +60,7 @@ bool CommandContainer::initialize(Device *device) {
 
     commandStream = new NEO::LinearStream(allocation->allocationRT);
 
-    instructionHeapBaseAddress = memoryManager->getIsaHeapGpuAddress();
+    instructionHeapBaseAddress = globalMemoryManager->getIsaHeapGpuAddress();
 
     return true;
 }

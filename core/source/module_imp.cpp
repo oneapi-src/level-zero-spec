@@ -112,11 +112,10 @@ bool ModuleImp::initialize(const xe_module_desc_t *desc) {
 
     if (success) {
         // allocate graphics memory for ISA upfront to avoid critical sections at function create time
-        auto memoryManager = this->device->getMemoryManager();
         immFuncInfos.reserve(this->progRT->kernelInfoArray.size());
         for (auto &ki : this->progRT->kernelInfoArray) {
             auto kernelIsaSize = ki->heapInfo.pKernelHeader->KernelHeapSize;
-            auto alloc = memoryManager->allocateGraphicsMemoryForIsa(bindPtrRef(ki->heapInfo.pKernelHeap), kernelIsaSize);
+            auto alloc = globalMemoryManager->allocateGraphicsMemoryForIsa(bindPtrRef(ki->heapInfo.pKernelHeap), kernelIsaSize);
             assert(ki->kernelAllocation != nullptr);
             PtrOwn<ImmutableFunctionInfo> immFuncInfo{new ImmutableFunctionInfo{bindPtrRef(ki).weakRefReinterpret<void>(), std::move(alloc)}};
             immFuncInfos.push_back(std::move(immFuncInfo));

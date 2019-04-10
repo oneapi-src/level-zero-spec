@@ -104,7 +104,7 @@ FunctionImp::~FunctionImp() {
         kernelRT->release();
     }
     if (printfBuffer) {
-        module->getDevice()->getMemoryManager()->freeMemory(printfBuffer);
+        globalMemoryManager->freeMemory(printfBuffer);
     }
     privateMemAllocation.deleteOwned();
     delete oclInternals;
@@ -257,7 +257,8 @@ xe_result_t FunctionImp::setArgBuffer(uint32_t argIndex, size_t argSize, const v
 
     patchWithRequiredSize(patchLocation, kernelArgInfo.kernelArgPatchInfoVector[0].size, *reinterpret_cast<const uintptr_t *>(argVal));
 
-    GraphicsAllocation *alloc = module->getDevice()->getMemoryManager()->findAllocation(*reinterpret_cast<void *const *>(argVal));
+    GraphicsAllocation *alloc =
+            globalMemoryManager->findAllocation(*reinterpret_cast<void *const *>(argVal));
     assert(alloc != nullptr); // TODO : Handle nullptr if *argVal == NULL
 
     oclInternals->storeKernelArg(argIndex, NEO::Kernel::BUFFER_OBJ, nullptr, argVal, argSize);

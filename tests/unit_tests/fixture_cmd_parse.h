@@ -4,14 +4,16 @@
 #include "runtime/command_stream/linear_stream.h"
 #include "unit_tests/gen_common/gen_cmd_parse.h"
 #include "test.h"
+#include "global_fixture.h"
 
 extern PRODUCT_FAMILY productFamily;
 
 namespace L0 {
 namespace ult {
 
-struct CmdParseFixture : ::testing::Test {
+struct CmdParseFixture : public GlobalFixtureTest {
     void SetUp() override {
+        GlobalFixtureTest::SetUp();
         commandList = whitebox_cast(CommandList::create(::productFamily, &device));
         ASSERT_NE(commandList, nullptr);
 
@@ -21,6 +23,7 @@ struct CmdParseFixture : ::testing::Test {
 
     void TearDown() override {
         delete commandList;
+        GlobalFixtureTest::TearDown();
     }
 
     template <typename FamilyType>

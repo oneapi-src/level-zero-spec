@@ -16,6 +16,7 @@
 #include "test.h"
 
 #include <fstream>
+#include "global_fixture.h"
 
 namespace L0 {
 namespace ult {
@@ -24,9 +25,10 @@ using ::testing::_;
 using ::testing::Invoke;
 using ::testing::Return;
 
-class FunctionPrintfTest : public ::testing::Test {
+class FunctionPrintfTest : public GlobalFixtureTest {
   public:
     void SetUp() override {
+        GlobalFixtureTest::SetUp();
         device.reset(new Mock<Device>);
         module.reset(new Mock<Module>);
         kernelInfo.rebind(new NEO::KernelInfo{});
@@ -45,6 +47,7 @@ class FunctionPrintfTest : public ::testing::Test {
     void TearDown() override {
         delete function.release();
         kernelInfo.deleteOwned();
+        GlobalFixtureTest::TearDown();
     }
 
     NEO::SPatchAllocateStatelessPrintfSurface printfSurfaceToken;
@@ -55,9 +58,10 @@ class FunctionPrintfTest : public ::testing::Test {
     std::unique_ptr<Mock<Device>> device;
 };
 
-class FunctionPrintfFromSpirvTest : public ::testing::Test {
+class FunctionPrintfFromSpirvTest : public GlobalFixtureTest {
   public:
     void SetUp() override {
+        GlobalFixtureTest::SetUp();
         platform = NEO::constructPlatform();
         auto success = platform->initialize();
         ASSERT_TRUE(success);
@@ -97,6 +101,7 @@ class FunctionPrintfFromSpirvTest : public ::testing::Test {
     }
 
     void TearDown() override {
+        GlobalFixtureTest::TearDown();
     }
 
     xe_function_desc_t funDesc = {};
@@ -165,7 +170,7 @@ TEST_F(FunctionPrintfTest, createPrintfBufferDoesNotCreateWhenNotUsingPrintf) {
 
 TEST_F(FunctionPrintfTest, createPrintfBufferPatchesCrossThreadData) {
     ON_CALL(*module, getDevice).WillByDefault(Return(device.get()));
-    EXPECT_CALL(*module, getDevice).Times(2);
+    EXPECT_CALL(*module, getDevice).Times(1);
 
     uint32_t *crossThreadData = new uint32_t[4];
     printfSurfaceToken.DataParamOffset = 0;

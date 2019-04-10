@@ -9,6 +9,7 @@
 #include "runtime/command_stream/linear_stream.h"
 #include "unit_tests/gen_common/gen_cmd_parse.h"
 #include "gmock/gmock.h"
+#include "global_fixture.h"
 
 namespace L0 {
 namespace ult {
@@ -28,7 +29,8 @@ TEST(xeCommandListAppendWaitOnEvent, redirectsToObject) {
     EXPECT_EQ(XE_RESULT_SUCCESS, result);
 }
 
-using CommandListAppendWaitOnEvent = ::testing::Test;
+class CommandListAppendWaitOnEvent : public GlobalFixtureTest{
+};
 
 HWTEST_F(CommandListAppendWaitOnEvent, addsSemaphoreToCommandStream) {
     Mock<Device> device;

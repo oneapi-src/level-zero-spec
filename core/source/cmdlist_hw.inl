@@ -44,14 +44,13 @@ void *CommandListCoreFamily<gfxCoreFamily>::getHeapSpaceAllowGrow(CommandContain
 
     if (indirectHeap.getAvailableSpace() < size) {
         // grow
-        auto memoryManager = device->getMemoryManager();
 
         size_t newSize = indirectHeap.getUsed() + indirectHeap.getAvailableSpace();
         newSize *= 2; // grow by factor of 2
         newSize = std::max(newSize, indirectHeap.getAvailableSpace() + size);
         newSize = alignUp(newSize, 4096U);
         auto oldAlloc = this->allocationIndirectHeaps[heapType];
-        auto newAlloc = memoryManager->allocateDeviceMemory(newSize, 4096u);
+        auto newAlloc = globalMemoryManager->allocateDeviceMemory(newSize, 4096u);
         assert(oldAlloc);
         assert(newAlloc);
         auto alreadyUsedSize = indirectHeap.getUsed();
@@ -601,17 +600,17 @@ xe_result_t CommandListCoreFamily<gfxCoreFamily>::appendMemoryCopy(void *dstptr,
     if (builtinFunction->setGroupSize(groupSizeX, groupSizeY, groupSizeZ))
         return XE_RESULT_ERROR_UNKNOWN;
 
-    GraphicsAllocation *alloc = this->device->getMemoryManager()->findAllocation(dstptr);
+    GraphicsAllocation *alloc = globalMemoryManager->findAllocation(dstptr);
     if (alloc == nullptr) {
         // Trying to access non-driver memallocated for dstptr: Allocate managed memory using the host's buffer
-        auto allocation = this->device->getMemoryManager()->allocateManagedMemoryFromFault(dstptr, size);
+        auto allocation = globalMemoryManager->allocateManagedMemoryFromFault(dstptr, size);
     }
     builtinFunction->setArgumentValue(0, sizeof(dstptr), &dstptr);
 
-    alloc = this->device->getMemoryManager()->findAllocation(srcptr);
+    alloc = globalMemoryManager->findAllocation(srcptr);
     if (alloc == nullptr) {
         // Trying to access non-driver memallocated for dstptr: Allocate managed memory using the host's buffer
-        auto allocation = this->device->getMemoryManager()->allocateManagedMemoryFromFault(const_cast<void *>(srcptr), size);
+        auto allocation = globalMemoryManager->allocateManagedMemoryFromFault(const_cast<void *>(srcptr), size);
     }
     builtinFunction->setArgumentValue(1, sizeof(srcptr), &srcptr);
 

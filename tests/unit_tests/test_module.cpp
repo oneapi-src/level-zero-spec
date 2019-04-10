@@ -182,9 +182,8 @@ TEST_P(ModuleCreateBufArg, onlineCompilationModuleTest) {
     auto function = whitebox_cast(Function::create(deviceRT->getHardwareInfo().pPlatform->eProductFamily, module, &funDesc));
     ASSERT_NE(nullptr, function);
 
-    auto memoryManager = device->getMemoryManager();
-    auto dst = memoryManager->allocateDeviceMemory(4096u, 4096u);
-    auto src = memoryManager->allocateDeviceMemory(4096u, 4096u);
+    auto dst = globalMemoryManager->allocateDeviceMemory(4096u, 4096u);
+    auto src = globalMemoryManager->allocateDeviceMemory(4096u, 4096u);
 
     uintptr_t dstAddress = static_cast<uintptr_t>(dst->getGpuAddress());
     function->setArgumentValue(0, sizeof(dstAddress), &dstAddress);

@@ -8,6 +8,7 @@
 #include "unit_tests/mocks/mock_csr.h"
 #include "xe_cmdqueue.h"
 #include "gtest/gtest.h"
+#include "global_fixture.h"
 
 using ::testing::_;
 using ::testing::AnyNumber;
@@ -26,7 +27,10 @@ TEST(xeCommandQueueDestroy, redirectsToObject) {
     EXPECT_EQ(XE_RESULT_SUCCESS, result);
 }
 
-TEST(CommandQueueCreate, returnsCommandQueueOnSuccess) {
+class CommandQueueCreate : public GlobalFixtureTest {
+};
+
+TEST_F(CommandQueueCreate, returnsCommandQueueOnSuccess) {
     Mock<Device> device;
 
     auto commandQueue = whitebox_cast(CommandQueue::create(productFamily, &device, device.csrRT));

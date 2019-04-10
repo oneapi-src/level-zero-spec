@@ -7,6 +7,7 @@
 #include "mock_memory_manager.h"
 #include "runtime/command_stream/linear_stream.h"
 #include "unit_tests/gen_common/gen_cmd_parse.h"
+#include "global_fixture.h"
 
 namespace L0 {
 namespace ult {
@@ -25,7 +26,8 @@ TEST(xeCommandListAppendReserveSpace, redirectsToObject) {
     EXPECT_EQ(XE_RESULT_SUCCESS, result);
 }
 
-using CommandList_reserveSpace = ::testing::Test;
+class CommandList_reserveSpace : public GlobalFixtureTest {
+};
 
 HWTEST_F(CommandList_reserveSpace, addsCommandsToBatchBuffer) {
     Mock<Device> device;

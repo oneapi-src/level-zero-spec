@@ -8,6 +8,7 @@
 #include "unit_tests/gen_common/gen_cmd_parse.h"
 #include "xe_all.h"
 #include "gtest/gtest.h"
+#include "global_fixture.h"
 
 namespace L0 {
 namespace ult {
@@ -34,7 +35,8 @@ TEST(xeCommandQueueEnqueueCommandQueue, redirectsToObject) {
     EXPECT_EQ(XE_RESULT_SUCCESS, result);
 }
 
-using CommandQueueExecuteCommandLists = ::testing::Test;
+class CommandQueueExecuteCommandLists : public GlobalFixtureTest{
+};
 
 HWTEST_F(CommandQueueExecuteCommandLists, addsASecondLevelBatchBufferPerCommandList) {
     Mock<Device> device;

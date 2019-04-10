@@ -15,6 +15,7 @@
 #include "runtime/indirect_heap/indirect_heap.h"
 #include "unit_tests/gen_common/gen_cmd_parse.h"
 #include "gmock/gmock.h"
+#include "global_fixture.h"
 
 namespace L0 {
 
@@ -46,13 +47,14 @@ TEST(xeCommandListAppendLaunchFunction, redirectsToObject) {
     EXPECT_EQ(XE_RESULT_SUCCESS, result);
 }
 
-struct CommandListAppendLaunchFunction : public ::testing::Test {
+struct CommandListAppendLaunchFunction : public GlobalFixtureTest {
 
     CommandListAppendLaunchFunction() {
     }
 
     void SetUp() override {
-        auto memoryManager = device.getMemoryManager();
+        GlobalFixtureTest::SetUp();
+        auto memoryManager = globalMemoryManager;
         ASSERT_NE(memoryManager, nullptr);
         buffer1 = memoryManager->allocateDeviceMemory(16384u, 4096u);
         buffer2 = memoryManager->allocateDeviceMemory(16384u, 4096u);
@@ -68,10 +70,11 @@ struct CommandListAppendLaunchFunction : public ::testing::Test {
     void TearDown() override {
         delete function;
 
-        auto memoryManager = device.getMemoryManager();
+        auto memoryManager = globalMemoryManager;
         ASSERT_NE(memoryManager, nullptr);
         memoryManager->freeMemory(buffer1);
         memoryManager->freeMemory(buffer2);
+        GlobalFixtureTest::TearDown();
     }
 
     void createFunction(const std::string &functionName) {

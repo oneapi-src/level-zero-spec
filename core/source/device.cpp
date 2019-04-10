@@ -220,10 +220,6 @@ struct DeviceImp : public Device {
         return XE_RESULT_ERROR_UNSUPPORTED;
     }
 
-    MemoryManager *getMemoryManager() override {
-        return memoryManager;
-    }
-
     void *getExecEnvironment() override {
         return execEnvironment;
     }
@@ -242,7 +238,6 @@ struct DeviceImp : public Device {
     }
 
     NEO::Device *deviceRT = nullptr;
-    MemoryManager *memoryManager = nullptr;
     bool isSubdevice = false;
     void *execEnvironment = nullptr;
     PtrOwn<BuiltinFunctionsLib> builtins = nullptr;
@@ -254,9 +249,14 @@ Device *Device::create(void *ptr) {
 
     auto deviceRT = static_cast<NEO::Device *>(ptr);
     device->deviceRT = deviceRT;
-    device->memoryManager = MemoryManager::create(deviceRT->getMemoryManager());
+
+    if (globalMemoryManager == nullptr)
+        globalMemoryManager = MemoryManager::create(deviceRT->getMemoryManager());
+
     device->execEnvironment = (void *)deviceRT->getExecutionEnvironment();
-    device->builtins = BuiltinFunctionsLib::create(PtrRef<Device>(device), PtrRef<void>(deviceRT->getExecutionEnvironment()->getBuiltIns()));
+    device->builtins =
+            BuiltinFunctionsLib::create(PtrRef<Device>(device),
+                    PtrRef<void>(deviceRT->getExecutionEnvironment()->getBuiltIns()));
     device->mocsMapper.rebind(new MOCSMapper(bindPtrRef(deviceRT->getGmmHelper())));
 
     return device;

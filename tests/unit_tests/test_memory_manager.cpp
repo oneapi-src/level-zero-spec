@@ -14,11 +14,10 @@ TEST(MemoryManagerallocateDeviceMemory, returnsGraphicsAllocation) {
     ASSERT_NE(nullptr, deviceRT);
     auto device = Device::create(deviceRT);
 
-    auto memoryManager = device->getMemoryManager();
-    auto allocation = memoryManager->allocateDeviceMemory(16u, 16u);
+    auto allocation = globalMemoryManager->allocateDeviceMemory(16u, 16u);
     EXPECT_NE(nullptr, allocation);
 
-    memoryManager->freeMemory(allocation);
+    globalMemoryManager->freeMemory(allocation);
 
     delete device;
 }

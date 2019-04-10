@@ -3,6 +3,7 @@ set(TARGET_NAME ${PROJECT_NAME}_unit_tests)
 add_executable(${TARGET_NAME}
     environment.cpp
     fixture_cmd_parse.h
+    global_fixture.h
     main.cpp
     mock.h
     mock_cmdlist.cpp

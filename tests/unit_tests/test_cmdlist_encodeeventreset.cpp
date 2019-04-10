@@ -7,6 +7,7 @@
 #include "mock_memory_manager.h"
 #include "runtime/command_stream/linear_stream.h"
 #include "unit_tests/gen_common/gen_cmd_parse.h"
+#include "global_fixture.h"
 
 namespace L0 {
 namespace ult {
@@ -26,7 +27,8 @@ TEST(xeCommandListAppendEventReset, redirectsToObject) {
     EXPECT_EQ(XE_RESULT_SUCCESS, result);
 }
 
-using CommandListAppendEventReset = ::testing::Test;
+class CommandListAppendEventReset : public GlobalFixtureTest {
+};
 
 HWTEST_F(CommandListAppendEventReset, addsPipeControlToCommandStream) {
     Mock<Device> device;
