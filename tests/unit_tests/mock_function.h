@@ -81,6 +81,9 @@ struct Mock<Function> : public Function {
     MOCK_CONST_METHOD0(getBindingTableStateCount, uint32_t());
     MOCK_CONST_METHOD0(getBindingTableOffset, uint32_t());
     MOCK_METHOD3(setBufferSurfaceState, void(uint32_t argIndex, void *address, GraphicsAllocation *alloc));
+    MOCK_CONST_METHOD0(getDynamicStateHeap, const void *());
+    MOCK_CONST_METHOD0(getDynamicStateHeapSize, const size_t());
+    MOCK_CONST_METHOD0(getSamplerStateArray, const iOpenCL::SPatchSamplerStateArray *());
 
     // TODO : automate generation of such forwarders (e.g. extend GMOCK macros)
     void mock_forwardToBase_getGroupSize(uint32_t &outGroupSizeX, uint32_t &outGroupSizeY, uint32_t &outGroupSizeZ) {

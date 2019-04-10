@@ -430,6 +430,10 @@ const void *FunctionImp::getDynamicStateHeap() const {
     return this->kernelRT->getDynamicStateHeap();
 }
 
+const size_t FunctionImp::getDynamicStateHeapSize() const {
+    return this->kernelRT->getDynamicStateHeapSize();
+}
+
 template <typename T>
 bool FunctionImp::patchCrossThreadData(uint32_t location, const T &value) {
     if (NEO::KernelArgInfo::undefinedOffset == location) {

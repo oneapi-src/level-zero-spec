@@ -368,6 +368,48 @@ ATSTEST_F(CommandListAppendLaunchFunction, growsGeneralStateHeapIfNeeded) {
     }
 }
 
+ATSTEST_F(CommandListAppendLaunchFunction, storesImageSampler) {
+    using COMPUTE_WALKER = typename FamilyType::COMPUTE_WALKER;
+    using INTERFACE_DESCRIPTOR_DATA = typename FamilyType::INTERFACE_DESCRIPTOR_DATA;
+    using SAMPLER_STATE = typename FamilyType::SAMPLER_STATE;
+
+    createFunction("ImageCopy");
+
+    auto fnDynamicStateHeap = function->getDynamicStateHeap();
+    auto fnSamplerStateArray = function->getSamplerStateArray();
+    ASSERT_NE(fnDynamicStateHeap, nullptr);
+    ASSERT_NE(function->getDynamicStateHeapSize(), 0);
+    ASSERT_NE(fnSamplerStateArray, nullptr);
+
+    auto result = commandList->appendLaunchFunction(function->toHandle(),
+                                                    &dispatchFunctionArguments,
+                                                    nullptr);
+    EXPECT_EQ(XE_RESULT_SUCCESS, result);
+
+    auto usedSpaceAfter = commandList->commandStream->getUsed();
+
+    GenCmdList cmdList;
+    ASSERT_TRUE(FamilyType::PARSE::parseCommandBuffer(cmdList,
+                                                      ptrOffset(commandList->commandStream->getCpuBase(), 0),
+                                                      usedSpaceAfter));
+
+    auto itor = find<COMPUTE_WALKER *>(cmdList.begin(), cmdList.end());
+    ASSERT_NE(cmdList.end(), itor);
+
+    auto cmd = genCmdCast<COMPUTE_WALKER *>(*itor);
+    auto &idd = cmd->getInterfaceDescriptor();
+    auto dsh = commandList->indirectHeaps[CommandList::DYNAMIC_STATE];
+
+    auto samplerCount = fnSamplerStateArray->Count;
+    ASSERT_LE(samplerCount, static_cast<uint32_t>(idd.getSamplerCount() * 4));
+
+    auto sizeSamplerState = sizeof(SAMPLER_STATE) * samplerCount;
+    auto fnSamplerState = static_cast<const SAMPLER_STATE *>(ptrOffset(fnDynamicStateHeap, fnSamplerStateArray->Offset));
+    auto samplerState = static_cast<const SAMPLER_STATE *>(ptrOffset(dsh->getCpuBase(), idd.getSamplerStatePointer()));
+
+    ASSERT_EQ(memcmp(fnSamplerState, samplerState, sizeSamplerState), 0u);
+}
+
 using CommandListAppendLaunchFunctionGEN9 = CommandListAppendLaunchFunction;
 SKLTEST_F(CommandListAppendLaunchFunctionGEN9, copiesThreadDataToIndirectStateHeap) {
     createFunction("MemcpyBytes");
@@ -714,6 +756,59 @@ HWTEST_F(CommandListAppendLaunchFunction, residencyContainerDoesNotContainDuplic
     }
 
     delete commandList;
+}
+
+GEN9TEST_F(CommandListAppendLaunchFunctionGEN9, storesImageSampler) {
+    using GPGPU_WALKER = typename FamilyType::GPGPU_WALKER;
+    using MEDIA_INTERFACE_DESCRIPTOR_LOAD = typename FamilyType::MEDIA_INTERFACE_DESCRIPTOR_LOAD;
+    using INTERFACE_DESCRIPTOR_DATA = typename FamilyType::INTERFACE_DESCRIPTOR_DATA;
+    using SAMPLER_STATE = typename FamilyType::SAMPLER_STATE;
+
+    createFunction("ImageCopy");
+
+    auto fnDynamicStateHeap = function->getDynamicStateHeap();
+    auto fnSamplerStateArray = function->getSamplerStateArray();
+    ASSERT_NE(fnDynamicStateHeap, nullptr);
+    ASSERT_NE(function->getDynamicStateHeapSize(), 0);
+    ASSERT_NE(fnSamplerStateArray, nullptr);
+
+    auto result = commandList->appendLaunchFunction(function->toHandle(),
+                                                    &dispatchFunctionArguments,
+                                                    nullptr);
+    EXPECT_EQ(XE_RESULT_SUCCESS, result);
+
+    auto usedSpaceAfter = commandList->commandStream->getUsed();
+
+    GenCmdList cmdList;
+    ASSERT_TRUE(FamilyType::PARSE::parseCommandBuffer(cmdList,
+                                                      ptrOffset(commandList->commandStream->getCpuBase(), 0),
+                                                      usedSpaceAfter));
+
+    auto itorWalker = find<GPGPU_WALKER *>(cmdList.begin(), cmdList.end());
+    ASSERT_NE(cmdList.end(), itorWalker);
+
+    auto itorMIDL = find<MEDIA_INTERFACE_DESCRIPTOR_LOAD *>(cmdList.begin(), itorWalker);
+    ASSERT_NE(itorMIDL, itorWalker);
+    INTERFACE_DESCRIPTOR_DATA *idd = nullptr;
+    {
+        auto cmd = genCmdCast<MEDIA_INTERFACE_DESCRIPTOR_LOAD *>(*itorMIDL);
+        ASSERT_NE(cmd, nullptr);
+
+        EXPECT_EQ(cmd->getInterfaceDescriptorTotalLength(), sizeof(INTERFACE_DESCRIPTOR_DATA));
+        auto dsh = commandList->indirectHeaps[CommandList::DYNAMIC_STATE];
+        EXPECT_LE(cmd->getInterfaceDescriptorDataStartAddress() + cmd->getInterfaceDescriptorTotalLength(), dsh->getUsed());
+        idd = static_cast<INTERFACE_DESCRIPTOR_DATA *>(ptrOffset(dsh->getCpuBase(), cmd->getInterfaceDescriptorDataStartAddress()));
+    }
+
+    auto dsh = commandList->indirectHeaps[CommandList::DYNAMIC_STATE];
+    auto samplerCount = fnSamplerStateArray->Count;
+    ASSERT_LE(samplerCount, static_cast<uint32_t>(idd->getSamplerCount() * 4));
+
+    auto sizeSamplerState = sizeof(SAMPLER_STATE) * samplerCount;
+    auto fnSamplerState = static_cast<const SAMPLER_STATE *>(ptrOffset(fnDynamicStateHeap, fnSamplerStateArray->Offset));
+    auto samplerState = static_cast<const SAMPLER_STATE *>(ptrOffset(dsh->getCpuBase(), idd->getSamplerStatePointer()));
+
+    ASSERT_EQ(memcmp(fnSamplerState, samplerState, sizeSamplerState), 0u);
 }
 
 } // namespace ult

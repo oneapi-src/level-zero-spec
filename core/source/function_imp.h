@@ -138,6 +138,7 @@ struct FunctionImp : Function {
     uint32_t getBindingTableOffset() const override;
 
     const void *getDynamicStateHeap() const override;
+    const size_t getDynamicStateHeapSize() const override;
     const iOpenCL::SPatchSamplerStateArray *getSamplerStateArray() const override;
 
   protected:

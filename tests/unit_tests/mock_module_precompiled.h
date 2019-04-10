@@ -23,6 +23,9 @@ struct PrecompiledFunctionMockData {
     const uint32_t crossThreadDataBaseSize;
     const uint32_t *perThreadDataBase;
     const uint32_t perThreadDataBaseSize;
+    const uint32_t *dynamicStateHeap;
+    const size_t dynamicStateHeapSize;
+    const uint32_t *samplerStateArray;
     const uint32_t *groupSizeInPerThreadDataBase;
     const std::pair<int, int> *bufferArgIndicesAndOffsets;
     const size_t bufferArgIndicesAndOffsetsCount;
@@ -66,6 +69,9 @@ struct PrecompiledFunctionMock : Mock<Function> {
         ON_CALL(*this, getHasBarriers).WillByDefault(::testing::Return(precompiledFunctionMockData->hasBarriers));
         ON_CALL(*this, getSlmSize).WillByDefault(::testing::Return(precompiledFunctionMockData->slmSize));
         ON_CALL(*this, hasPrintfOutput).WillByDefault(::testing::Return(precompiledFunctionMockData->hasPrintfOutput));
+        ON_CALL(*this, getDynamicStateHeap).WillByDefault(::testing::Return(precompiledFunctionMockData->dynamicStateHeap));
+        ON_CALL(*this, getDynamicStateHeapSize).WillByDefault(::testing::Return(precompiledFunctionMockData->dynamicStateHeapSize));
+        ON_CALL(*this, getSamplerStateArray).WillByDefault(::testing::Return(reinterpret_cast<const iOpenCL::SPatchSamplerStateArray *>(precompiledFunctionMockData->samplerStateArray)));
 
         ON_CALL(*this, setArgumentValue)
             .WillByDefault(::testing::Invoke([this](uint32_t argIndex, size_t argSize, const void *pArgValue) { return this->setArgumentValueImpl(argIndex, argSize, pArgValue); }));
@@ -98,6 +104,9 @@ struct PrecompiledFunctionMock : Mock<Function> {
         EXPECT_CALL(*this, getThreadsPerThreadGroup()).Times(::testing::AnyNumber());
         EXPECT_CALL(*this, setGroupCount(_, _, _)).Times(::testing::AnyNumber());
         EXPECT_CALL(*this, getBindingTableStateCount()).Times(::testing::AnyNumber());
+        EXPECT_CALL(*this, getDynamicStateHeap()).Times(::testing::AnyNumber());
+        EXPECT_CALL(*this, getDynamicStateHeapSize()).Times(::testing::AnyNumber());
+        EXPECT_CALL(*this, getSamplerStateArray()).Times(::testing::AnyNumber());
     }
 
     xe_result_t setArgumentValueImpl(uint32_t argIndex, size_t argSize, const void *pArgValue) {
@@ -123,10 +132,6 @@ struct PrecompiledFunctionMock : Mock<Function> {
         auto simd = getSimdSize();
 
         return (lws + simd - 1) / simd;
-    }
-
-    const iOpenCL::SPatchSamplerStateArray *getSamplerStateArray() const {
-        return nullptr;
     }
 
     const PrecompiledFunctionMockData *precompiledFunctionMockData = nullptr;
@@ -226,6 +231,10 @@ inline void writeMockData(const std::string sourceOrigin, std::string &mockName,
     std::string globalNameIsa = mockName + "_ISA_" + deviceName;
     std::string globalNameCrossThreadData = mockName + "_CrossThreadDataBase_" + deviceName;
     std::string globalNamePerThreadData = mockName + "_PerThreadDataBase_" + deviceName;
+    std::string globalNameBorderColorData = mockName + "_BorderColorDataBase_" + deviceName;
+    std::string globalNameDynamicStateHeapSize = mockName + "_DynamicStateHeapSize_" + deviceName;
+    std::string globalNameDynamicStateHeap = mockName + "_DynamicStateHeap_" + deviceName;
+    std::string globalNameSamplerArrayData = mockName + "_SamplerArrayDataBase_" + deviceName;
     std::string globalNameBufferArgIndices = mockName + "_BufferArgIndicesAndOffsets_" + deviceName;
     std::string globalNameGroupSize = mockName + "_GroupSizeInPerThreadData_" + deviceName;
     std::string globalNamePrecompiledFunctionMockData = mockName + "_" + deviceName;
@@ -243,6 +252,24 @@ inline void writeMockData(const std::string sourceOrigin, std::string &mockName,
     out << "\n\n";
     out << "static const uint32_t " << globalNamePerThreadData << "[] = \n";
     writeAsCppArrayInitializer(function->getPerThreadDataHostMem(), function->getPerThreadDataSizeForWholeThreadGroup(), out);
+    out << "\n\n";
+
+    auto dshSize = function->getDynamicStateHeapSize();
+    out << "static const size_t " << globalNameDynamicStateHeapSize << " = 0x" << dshSize << ";\n\n";
+
+    out << "static const uint32_t " << globalNameDynamicStateHeap << "[] =\n";
+    writeAsCppArrayInitializer(function->getDynamicStateHeap(), dshSize, out);
+    out << "\n\n";
+
+    iOpenCL::SPatchSamplerStateArray emptySamplerStateArray;
+    auto samplerStateArray = function->getSamplerStateArray();
+    if (samplerStateArray == nullptr) {
+        memset(&emptySamplerStateArray, 0, sizeof(emptySamplerStateArray));
+        samplerStateArray = &emptySamplerStateArray;
+    }
+
+    out << "static const uint32_t " << globalNameSamplerArrayData << "[] =\n";
+    writeAsCppArrayInitializer(samplerStateArray, sizeof(*samplerStateArray), out);
     out << "\n\n";
 
     out << "static const bool " << globalNameHasBarriers << " = " << function->getHasBarriers() << ";\n\n";
@@ -275,6 +302,9 @@ inline void writeMockData(const std::string sourceOrigin, std::string &mockName,
         << globalNameIsa << ", sizeof(" << globalNameIsa << "),\n"
         << globalNameCrossThreadData << ", sizeof(" << globalNameCrossThreadData << "),\n"
         << globalNamePerThreadData << ", sizeof(" << globalNamePerThreadData << "),\n"
+        << globalNameDynamicStateHeapSize << ", sizeof(" << globalNameDynamicStateHeapSize << "),\n"
+        << globalNameDynamicStateHeap<< ", sizeof(" << globalNameDynamicStateHeap << "),\n"
+        << globalNameSamplerArrayData << ", sizeof(" << globalNameSamplerArrayData << "),\n"
         << globalNameGroupSize << ",\n"
         << globalNameBufferArgIndices << ", sizeof(" << globalNameBufferArgIndices << ") / sizeof(" << globalNameBufferArgIndices << "[0]),\n"
         << globalNameHasBarriers << ",\n"

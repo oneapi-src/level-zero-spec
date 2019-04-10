@@ -79,6 +79,7 @@ struct Function : public _xe_function_handle_t {
     virtual uint32_t getBindingTableOffset() const = 0;
 
     virtual const void *getDynamicStateHeap() const = 0;
+    virtual const size_t getDynamicStateHeapSize() const = 0;
     virtual const iOpenCL::SPatchSamplerStateArray *getSamplerStateArray() const = 0;
 
     virtual GraphicsAllocation *getPrintfBufferAllocation() = 0;
