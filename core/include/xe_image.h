@@ -73,25 +73,64 @@ typedef enum _xe_image_type_t
 } xe_image_type_t;
 
 ///////////////////////////////////////////////////////////////////////////////
-/// @brief Supported image formats
-typedef enum _xe_image_format_t
+/// @brief Supported image format layouts
+typedef enum _xe_image_format_layout_t
 {
-    XE_IMAGE_FORMAT_UINT8,                          ///< 8-bit unsigned integer
-    XE_IMAGE_FORMAT_UINT16,                         ///< 16-bit unsigned integer
-    XE_IMAGE_FORMAT_UINT32,                         ///< 32-bit unsigned integer
-    XE_IMAGE_FORMAT_SINT8,                          ///< 8-bit signed integer
-    XE_IMAGE_FORMAT_SINT16,                         ///< 16-bit signed integer
-    XE_IMAGE_FORMAT_SINT32,                         ///< 32-bit signed integer
-    XE_IMAGE_FORMAT_UNORM8,                         ///< 8-bit unsigned normalized integer
-    XE_IMAGE_FORMAT_UNORM16,                        ///< 16-bit unsigned normalized integer
-    XE_IMAGE_FORMAT_UNORM32,                        ///< 32-bit unsigned normalized integer
-    XE_IMAGE_FORMAT_SNORM8,                         ///< 8-bit signed normalized integer
-    XE_IMAGE_FORMAT_SNORM16,                        ///< 16-bit signed normalized integer
-    XE_IMAGE_FORMAT_SNORM32,                        ///< 32-bit signed normalized integer
-    XE_IMAGE_FORMAT_FLOAT16,                        ///< 16-bit float
-    XE_IMAGE_FORMAT_FLOAT32,                        ///< 32-bit float
+    XE_IMAGE_FORMAT_LAYOUT_8,                       ///< 8-bit single component layout
+    XE_IMAGE_FORMAT_LAYOUT_16,                      ///< 16-bit single component layout
+    XE_IMAGE_FORMAT_LAYOUT_32,                      ///< 32-bit single component layout
+    XE_IMAGE_FORMAT_LAYOUT_8_8,                     ///< 2-component 8-bit layout
+    XE_IMAGE_FORMAT_LAYOUT_8_8_8_8,                 ///< 4-component 8-bit layout
+    XE_IMAGE_FORMAT_LAYOUT_16_16,                   ///< 2-component 16-bit layout
+    XE_IMAGE_FORMAT_LAYOUT_16_16_16_16,             ///< 4-component 16-bit layout
+    XE_IMAGE_FORMAT_LAYOUT_32_32,                   ///< 2-component 32-bit layout
+    XE_IMAGE_FORMAT_LAYOUT_32_32_32_32,             ///< 4-component 32-bit layout
+    XE_IMAGE_FORMAT_LAYOUT_10_10_10_2,              ///< 4-component 10_10_10_2 layout
+    XE_IMAGE_FORMAT_LAYOUT_11_11_10,                ///< 3-component 11_11_10 layout
+    XE_IMAGE_FORMAT_LAYOUT_5_6_5,                   ///< 3-component 5_6_5 layout
+    XE_IMAGE_FORMAT_LAYOUT_5_5_5_1,                 ///< 4-component 5_5_5_1 layout
+    XE_IMAGE_FORMAT_LAYOUT_4_4_4_4,                 ///< 4-component 4_4_4_4 layout
 
-} xe_image_format_t;
+} xe_image_format_layout_t;
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Supported image format types
+typedef enum _xe_image_format_type_t
+{
+    XE_IMAGE_FORMAT_TYPE_UINT,                      ///< Unsigned integer
+    XE_IMAGE_FORMAT_TYPE_SINT,                      ///< Signed integer
+    XE_IMAGE_FORMAT_TYPE_UNORM,                     ///< Unsigned normalized integer
+    XE_IMAGE_FORMAT_TYPE_SNORM,                     ///< Signed normalized integer
+    XE_IMAGE_FORMAT_TYPE_FLOAT,                     ///< Float
+
+} xe_image_format_type_t;
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Supported image format component swizzle into channel
+typedef enum _xe_image_format_swizzle_t
+{
+    XE_IMAGE_FORMAT_SWIZ_R,                         ///< Red component
+    XE_IMAGE_FORMAT_SWIZ_G,                         ///< Green component
+    XE_IMAGE_FORMAT_SWIZ_B,                         ///< Blue component
+    XE_IMAGE_FORMAT_SWIZ_A,                         ///< Alpha component
+    XE_IMAGE_FORMAT_SWIZ_0,                         ///< Zero
+    XE_IMAGE_FORMAT_SWIZ_1,                         ///< One
+    XE_IMAGE_FORMAT_SWIZ_X,                         ///< Don't care
+
+} xe_image_format_swizzle_t;
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Image format descriptor
+typedef struct _xe_image_format_desc_t
+{
+    xe_image_format_layout_t layout;                ///< [in] image format component layout
+    xe_image_format_type_t type;                    ///< [in] image format type
+    xe_image_format_swizzle_t x;                    ///< [in] image component swizzle into channel x
+    xe_image_format_swizzle_t y;                    ///< [in] image component swizzle into channel y
+    xe_image_format_swizzle_t z;                    ///< [in] image component swizzle into channel z
+    xe_image_format_swizzle_t w;                    ///< [in] image component swizzle into channel w
+
+} xe_image_format_desc_t;
 
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Image descriptor
@@ -100,8 +139,7 @@ typedef struct _xe_image_desc_t
     xe_image_desc_version_t version;                ///< [in] ::XE_IMAGE_DESC_VERSION_CURRENT
     xe_image_flag_t flags;                          ///< [in] creation flags
     xe_image_type_t type;                           ///< [in] image type
-    xe_image_format_t format;                       ///< [in] image channel format
-    uint32_t numChannels;                           ///< [in] number of channels per pixel [1,4]
+    xe_image_format_desc_t format;                  ///< [in] image format
     size_t width;                                   ///< [in] width in pixels, see
                                                     ///< ::xe_device_memory_properties_t::maxImageDims1D/2D/3D
     size_t height;                                  ///< [in] height in pixels (2D or 3D only), see
