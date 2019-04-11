@@ -134,11 +134,11 @@ typedef enum _xe_event_scope_flag_t
 {
     XE_EVENT_SCOPE_FLAG_NONE = 0,                   ///< execution synchronization only; no cache hierarchies are flushed or
                                                     ///< invalidated
-    XE_EVENT_SCOPE_FLAG_SUBDEVICE = XE_BIT(0),      ///< cache hierarchies are flushed or invalidate sufficient for local
+    XE_EVENT_SCOPE_FLAG_SUBDEVICE = XE_BIT(0),      ///< cache hierarchies are flushed or invalidated sufficient for local
                                                     ///< sub-device access
-    XE_EVENT_SCOPE_FLAG_DEVICE = XE_BIT(1),         ///< cache hierarchies are flushed or invalidate sufficient for global
+    XE_EVENT_SCOPE_FLAG_DEVICE = XE_BIT(1),         ///< cache hierarchies are flushed or invalidated sufficient for global
                                                     ///< device access and peer device access
-    XE_EVENT_SCOPE_FLAG_HOST = XE_BIT(2),           ///< cache hierarchies are flushed or invalidate sufficient for device and
+    XE_EVENT_SCOPE_FLAG_HOST = XE_BIT(2),           ///< cache hierarchies are flushed or invalidated sufficient for device and
                                                     ///< host access
 
 } xe_event_scope_flag_t;
@@ -149,9 +149,9 @@ typedef struct _xe_event_desc_t
 {
     xe_event_desc_version_t version;                ///< [in] ::XE_EVENT_DESC_VERSION_CURRENT
     uint32_t index;                                 ///< [in] index of the event within the pool
-    xe_event_scope_flag_t release;                  ///< [in] defines the scope of relevant cache hierarchies to flush on a
+    xe_event_scope_flag_t signal;                   ///< [in] defines the scope of relevant cache hierarchies to flush on a
                                                     ///< ‘signal’ action before the event is triggered
-    xe_event_scope_flag_t acquire;                  ///< [in] defines the scope of relevant cache hierarchies to invalidate on
+    xe_event_scope_flag_t wait;                     ///< [in] defines the scope of relevant cache hierarchies to invalidate on
                                                     ///< a ‘wait’ action after the event is complete
 
 } xe_event_desc_t;
@@ -325,7 +325,7 @@ xeCommandListAppendSignalEvent(
     );
 
 ///////////////////////////////////////////////////////////////////////////////
-/// @brief Appends a wait on event from a host signal into a command list.
+/// @brief Appends wait on event(s) on the device into a command list.
 /// 
 /// @details
 ///     - The application may **not** call this function from simultaneous
@@ -338,12 +338,13 @@ xeCommandListAppendSignalEvent(
 ///     - ::XE_RESULT_ERROR_DEVICE_LOST
 ///     - ::XE_RESULT_ERROR_INVALID_PARAMETER
 ///         + nullptr == hCommandList
-///         + nullptr == hEvent
+///         + nullptr == phEvents
 ///     - ::XE_RESULT_ERROR_UNSUPPORTED
 __xedllport xe_result_t __xecall
-xeCommandListAppendWaitOnEvent(
+xeCommandListAppendWaitOnEvents(
     xe_command_list_handle_t hCommandList,          ///< [in] handle of the command list
-    xe_event_handle_t hEvent                        ///< [in] handle of the event
+    uint32_t numEvents,                             ///< [in] number of events to wait on before continuing
+    xe_event_handle_t* phEvents                     ///< [in] handle of the events to wait on before continuing
     );
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -370,7 +371,7 @@ xeEventHostSignal(
     );
 
 ///////////////////////////////////////////////////////////////////////////////
-/// @brief The current host thread waits on an event from a device signal.
+/// @brief The current host thread waits on an event to be signalled.
 /// 
 /// @details
 ///     - The application may call this function from simultaneous threads.

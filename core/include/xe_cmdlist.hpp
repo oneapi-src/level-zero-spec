@@ -132,16 +132,21 @@ namespace xe
         };
 
         ///////////////////////////////////////////////////////////////////////////////
+        /// @brief C++ wrapper for ::xeCommandListAppendBarrier
+        /// @throws result_t
+        inline void
+        AppendBarrier(
+            void
+            );
+
+        ///////////////////////////////////////////////////////////////////////////////
         /// @brief C++ wrapper for ::xeCommandListAppendMemoryRangesBarrier
         /// @throws result_t
         inline void
         AppendMemoryRangesBarrier(
             uint32_t numRanges,                             ///< [in] number of memory ranges
             const size_t* pRangeSizes,                      ///< [in] array of sizes of memory range
-            const void** pRanges,                           ///< [in] array of memory ranges
-            event_handle_t hSignalEvent = nullptr,          ///< [in][optional] handle of the event to signal on completion
-            uint32_t numWaitEvents = 0,                     ///< [in][optional] number of events to wait on before barrier
-            event_handle_t* phWaitEvents = nullptr          ///< [in][optional] handle of the events to wait on before barrier
+            const void** pRanges                            ///< [in] array of memory ranges
             );
 
         ///////////////////////////////////////////////////////////////////////////////
@@ -326,11 +331,12 @@ namespace xe
             );
 
         ///////////////////////////////////////////////////////////////////////////////
-        /// @brief C++ wrapper for ::xeCommandListAppendWaitOnEvent
+        /// @brief C++ wrapper for ::xeCommandListAppendWaitOnEvents
         /// @throws result_t
         inline void
-        AppendWaitOnEvent(
-            event_handle_t hEvent                           ///< [in] handle of the event
+        AppendWaitOnEvents(
+            uint32_t numEvents,                             ///< [in] number of events to wait on before continuing
+            event_handle_t* phEvents                        ///< [in] handle of the events to wait on before continuing
             );
 
         ///////////////////////////////////////////////////////////////////////////////

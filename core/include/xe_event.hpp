@@ -155,11 +155,11 @@ namespace xe
         {
             NONE = 0,                                       ///< execution synchronization only; no cache hierarchies are flushed or
                                                             ///< invalidated
-            SUBDEVICE = XE_BIT(0),                          ///< cache hierarchies are flushed or invalidate sufficient for local
+            SUBDEVICE = XE_BIT(0),                          ///< cache hierarchies are flushed or invalidated sufficient for local
                                                             ///< sub-device access
-            DEVICE = XE_BIT(1),                             ///< cache hierarchies are flushed or invalidate sufficient for global
+            DEVICE = XE_BIT(1),                             ///< cache hierarchies are flushed or invalidated sufficient for global
                                                             ///< device access and peer device access
-            HOST = XE_BIT(2),                               ///< cache hierarchies are flushed or invalidate sufficient for device and
+            HOST = XE_BIT(2),                               ///< cache hierarchies are flushed or invalidated sufficient for device and
                                                             ///< host access
 
         };
@@ -170,9 +170,9 @@ namespace xe
         {
             event_desc_version_t version = event_desc_version_t::CURRENT;   ///< [in] ::EVENT_DESC_VERSION_CURRENT
             uint32_t index;                                 ///< [in] index of the event within the pool
-            event_scope_flag_t release = event_scope_flag_t::NONE;  ///< [in] defines the scope of relevant cache hierarchies to flush on a
+            event_scope_flag_t signal = event_scope_flag_t::NONE;   ///< [in] defines the scope of relevant cache hierarchies to flush on a
                                                             ///< ‘signal’ action before the event is triggered
-            event_scope_flag_t acquire = event_scope_flag_t::NONE;  ///< [in] defines the scope of relevant cache hierarchies to invalidate on
+            event_scope_flag_t wait = event_scope_flag_t::NONE; ///< [in] defines the scope of relevant cache hierarchies to invalidate on
                                                             ///< a ‘wait’ action after the event is complete
 
         };

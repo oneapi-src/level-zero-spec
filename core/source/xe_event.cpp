@@ -542,7 +542,7 @@ xeCommandListAppendSignalEvent(
 }
 
 ///////////////////////////////////////////////////////////////////////////////
-/// @brief Appends a wait on event from a host signal into a command list.
+/// @brief Appends wait on event(s) on the device into a command list.
 /// 
 /// @details
 ///     - The application may **not** call this function from simultaneous
@@ -555,15 +555,16 @@ xeCommandListAppendSignalEvent(
 ///     - ::XE_RESULT_ERROR_DEVICE_LOST
 ///     - ::XE_RESULT_ERROR_INVALID_PARAMETER
 ///         + nullptr == hCommandList
-///         + nullptr == hEvent
+///         + nullptr == phEvents
 ///     - ::XE_RESULT_ERROR_UNSUPPORTED
 ///
-/// @hash {dda8072af72d89bb301747e4ac4ec6e12129883832ebcbdbd6a5acd47d4179ef}
+/// @hash {ba8886530b42c816643a1fd9bc79e7b1599c5488c322575de5cb14cb4422e611}
 ///
 __xedllexport xe_result_t __xecall
-xeCommandListAppendWaitOnEvent(
+xeCommandListAppendWaitOnEvents(
     xe_command_list_handle_t hCommandList,          ///< [in] handle of the command list
-    xe_event_handle_t hEvent                        ///< [in] handle of the event
+    uint32_t numEvents,                             ///< [in] number of events to wait on before continuing
+    xe_event_handle_t* phEvents                     ///< [in] handle of the events to wait on before continuing
     )
 {
     try
@@ -573,13 +574,13 @@ xeCommandListAppendWaitOnEvent(
             // if( nullptr == driver ) return XE_RESULT_ERROR_UNINITIALIZED;
             // Check parameters
             if( nullptr == hCommandList ) return XE_RESULT_ERROR_INVALID_PARAMETER;
-            if( nullptr == hEvent ) return XE_RESULT_ERROR_INVALID_PARAMETER;
+            if( nullptr == phEvents ) return XE_RESULT_ERROR_INVALID_PARAMETER;
         }
         /// @begin
 #if defined(XE_NULLDRV)
         return XE_RESULT_SUCCESS;
 #else
-        return L0::CommandList::fromHandle(hCommandList)->appendWaitOnEvent(hEvent);
+        return L0::CommandList::fromHandle(hCommandList)->appendWaitOnEvents(numEvents, phEvents);
 #endif
         /// @end
     }
@@ -656,7 +657,7 @@ xeEventHostSignal(
 }
 
 ///////////////////////////////////////////////////////////////////////////////
-/// @brief The current host thread waits on an event from a device signal.
+/// @brief The current host thread waits on an event to be signalled.
 /// 
 /// @details
 ///     - The application may call this function from simultaneous threads.

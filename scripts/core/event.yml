@@ -99,13 +99,13 @@ etors:
       desc: "execution synchronization only; no cache hierarchies are flushed or invalidated"
     - name: $X_EVENT_SCOPE_FLAG_SUBDEVICE
       value: "$X_BIT(0)"
-      desc: "cache hierarchies are flushed or invalidate sufficient for local sub-device access"
+      desc: "cache hierarchies are flushed or invalidated sufficient for local sub-device access"
     - name: $X_EVENT_SCOPE_FLAG_DEVICE
       value: "$X_BIT(1)"
-      desc: "cache hierarchies are flushed or invalidate sufficient for global device access and peer device access"
+      desc: "cache hierarchies are flushed or invalidated sufficient for global device access and peer device access"
     - name: $X_EVENT_SCOPE_FLAG_HOST
       value: "$X_BIT(2)"
-      desc: "cache hierarchies are flushed or invalidate sufficient for device and host access"
+      desc: "cache hierarchies are flushed or invalidated sufficient for device and host access"
 --- #--------------------------------------------------------------------------
 type: struct
 desc: "Event descriptor"
@@ -120,11 +120,11 @@ members:
       name: index
       desc: "[in] index of the event within the pool"
     - type: $x_event_scope_flag_t
-      name: release
+      name: signal
       desc: "[in] defines the scope of relevant cache hierarchies to flush on a ‘signal’ action before the event is triggered"
       init: $X_EVENT_SCOPE_FLAG_NONE
     - type: $x_event_scope_flag_t
-      name: acquire
+      name: wait
       desc: "[in] defines the scope of relevant cache hierarchies to invalidate on a ‘wait’ action after the event is complete"
       init: $X_EVENT_SCOPE_FLAG_NONE
 --- #--------------------------------------------------------------------------
@@ -244,9 +244,9 @@ params:
       desc: "[in] handle of the event"
 --- #--------------------------------------------------------------------------
 type: function
-desc: "Appends a wait on event from a host signal into a command list."
+desc: "Appends wait on event(s) on the device into a command list."
 class: $xCommandList
-name: AppendWaitOnEvent
+name: AppendWaitOnEvents
 details:
     - "The application may **not** call this function from simultaneous threads with the same command list handle."
     - "The implementation of this function should be lock-free."
@@ -254,9 +254,12 @@ params:
     - type: $x_command_list_handle_t
       name: hCommandList
       desc: "[in] handle of the command list"
-    - type: $x_event_handle_t
-      name: hEvent
-      desc: "[in] handle of the event"
+    - type: uint32_t
+      name: numEvents
+      desc: "[in] number of events to wait on before continuing"
+    - type: "$x_event_handle_t*"
+      name: phEvents
+      desc: "[in] handle of the events to wait on before continuing"
 --- #--------------------------------------------------------------------------
 type: function
 desc: "Signals a event from host."
@@ -273,7 +276,7 @@ params:
       desc: "[in] handle of the event"
 --- #--------------------------------------------------------------------------
 type: function
-desc: "The current host thread waits on an event from a device signal."
+desc: "The current host thread waits on an event to be signalled."
 class: $xEvent
 name: HostSynchronize
 analogue:

@@ -42,9 +42,46 @@ extern "C" {
 #endif
 
 ///////////////////////////////////////////////////////////////////////////////
-/// @brief Appends an execution barrier into a command list.
+/// @brief Appends an execution and global memory barrier into a command list.
 /// 
 /// @details
+///     - All previous commands are completed prior to the execution of the
+///       barrier.
+///     - No following commands will begin until the execution of the barrier
+///       completes.
+///     - Memory and cache hierarchies are flushed and invalidated sufficient
+///       for device and host access.
+///     - The application may **not** call this function from simultaneous
+///       threads with the same command list handle.
+///     - The implementation of this function should be lock-free.
+/// 
+/// @remarks
+///   _Analogues_
+///     - **vkCmdPipelineBarrier**
+///     - clEnqueueBarrierWithWaitList
+/// 
+/// @returns
+///     - ::XE_RESULT_SUCCESS
+///     - ::XE_RESULT_ERROR_UNINITIALIZED
+///     - ::XE_RESULT_ERROR_DEVICE_LOST
+///     - ::XE_RESULT_ERROR_INVALID_PARAMETER
+///         + nullptr == hCommandList
+///     - ::XE_RESULT_ERROR_UNSUPPORTED
+__xedllport xe_result_t __xecall
+xeCommandListAppendBarrier(
+    xe_command_list_handle_t hCommandList           ///< [in] handle of the command list
+    );
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Appends a global memory ranges barrier into a command list.
+/// 
+/// @details
+///     - All previous commands are completed prior to the execution of the
+///       barrier.
+///     - No following commands will begin until the execution of the barrier
+///       completes.
+///     - Memory and cache hierarchies are flushed and invalidated sufficient
+///       for device and host access.
 ///     - The application may **not** call this function from simultaneous
 ///       threads with the same command list handle.
 ///     - The implementation of this function should be lock-free.
@@ -63,10 +100,7 @@ xeCommandListAppendMemoryRangesBarrier(
     xe_command_list_handle_t hCommandList,          ///< [in] handle of the command list
     uint32_t numRanges,                             ///< [in] number of memory ranges
     const size_t* pRangeSizes,                      ///< [in] array of sizes of memory range
-    const void** pRanges,                           ///< [in] array of memory ranges
-    xe_event_handle_t hSignalEvent,                 ///< [in][optional] handle of the event to signal on completion
-    uint32_t numWaitEvents,                         ///< [in][optional] number of events to wait on before barrier
-    xe_event_handle_t* phWaitEvents                 ///< [in][optional] handle of the events to wait on before barrier
+    const void** pRanges                            ///< [in] array of memory ranges
     );
 
 ///////////////////////////////////////////////////////////////////////////////

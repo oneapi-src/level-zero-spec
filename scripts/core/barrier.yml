@@ -3,10 +3,31 @@ type: header
 desc: "Intel $OneApi Level-Zero APIs for Barrier"
 --- #--------------------------------------------------------------------------
 type: function
-desc: "Appends an execution barrier into a command list."
+desc: "Appends an execution and global memory barrier into a command list."
+class: $xCommandList
+name: AppendBarrier
+analogue:
+    - "**vkCmdPipelineBarrier**"
+    - clEnqueueBarrierWithWaitList
+details:
+    - "All previous commands are completed prior to the execution of the barrier."
+    - "No following commands will begin until the execution of the barrier completes."
+    - "Memory and cache hierarchies are flushed and invalidated sufficient for device and host access."
+    - "The application may **not** call this function from simultaneous threads with the same command list handle."
+    - "The implementation of this function should be lock-free."
+params:
+    - type: $x_command_list_handle_t
+      name: hCommandList
+      desc: "[in] handle of the command list"
+--- #--------------------------------------------------------------------------
+type: function
+desc: "Appends a global memory ranges barrier into a command list."
 class: $xCommandList
 name: AppendMemoryRangesBarrier
 details:
+    - "All previous commands are completed prior to the execution of the barrier."
+    - "No following commands will begin until the execution of the barrier completes."
+    - "Memory and cache hierarchies are flushed and invalidated sufficient for device and host access."
     - "The application may **not** call this function from simultaneous threads with the same command list handle."
     - "The implementation of this function should be lock-free."
 params:
@@ -22,15 +43,6 @@ params:
     - type: "const void**"
       name: "pRanges"
       desc: "[in] array of memory ranges"
-    - type: $x_event_handle_t
-      name: hSignalEvent
-      desc: "[in][optional] handle of the event to signal on completion"
-    - type: uint32_t
-      name: numWaitEvents
-      desc: "[in][optional] number of events to wait on before barrier"
-    - type: "$x_event_handle_t*"
-      name: phWaitEvents
-      desc: "[in][optional] handle of the events to wait on before barrier"
 --- #--------------------------------------------------------------------------
 type: function
 desc: "Ensures in-bound writes to the device are globally observable."

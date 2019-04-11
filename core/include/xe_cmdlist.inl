@@ -39,9 +39,44 @@
 namespace xe
 {
     ///////////////////////////////////////////////////////////////////////////////
+    /// @brief C++ wrapper for ::xeCommandListAppendBarrier
+    /// 
+    /// @details
+    ///     - All previous commands are completed prior to the execution of the
+    ///       barrier.
+    ///     - No following commands will begin until the execution of the barrier
+    ///       completes.
+    ///     - Memory and cache hierarchies are flushed and invalidated sufficient
+    ///       for device and host access.
+    ///     - The application may **not** call this function from simultaneous
+    ///       threads with the same command list handle.
+    ///     - The implementation of this function should be lock-free.
+    /// 
+    /// @remarks
+    ///   _Analogues_
+    ///     - **vkCmdPipelineBarrier**
+    ///     - clEnqueueBarrierWithWaitList
+    /// 
+    /// @throws result_t
+    inline void 
+    CommandList::AppendBarrier(
+        void
+        )
+    {
+        // auto result = ::xeCommandListAppendBarrier( handle );
+        // if( ::XE_RESULT_SUCCESS != result ) throw exception(result, "xe::CommandList::AppendBarrier");
+    }
+
+    ///////////////////////////////////////////////////////////////////////////////
     /// @brief C++ wrapper for ::xeCommandListAppendMemoryRangesBarrier
     /// 
     /// @details
+    ///     - All previous commands are completed prior to the execution of the
+    ///       barrier.
+    ///     - No following commands will begin until the execution of the barrier
+    ///       completes.
+    ///     - Memory and cache hierarchies are flushed and invalidated sufficient
+    ///       for device and host access.
     ///     - The application may **not** call this function from simultaneous
     ///       threads with the same command list handle.
     ///     - The implementation of this function should be lock-free.
@@ -51,13 +86,10 @@ namespace xe
     CommandList::AppendMemoryRangesBarrier(
         uint32_t numRanges,                             ///< [in] number of memory ranges
         const size_t* pRangeSizes,                      ///< [in] array of sizes of memory range
-        const void** pRanges,                           ///< [in] array of memory ranges
-        event_handle_t hSignalEvent,                    ///< [in][optional] handle of the event to signal on completion
-        uint32_t numWaitEvents,                         ///< [in][optional] number of events to wait on before barrier
-        event_handle_t* phWaitEvents                    ///< [in][optional] handle of the events to wait on before barrier
+        const void** pRanges                            ///< [in] array of memory ranges
         )
     {
-        // auto result = ::xeCommandListAppendMemoryRangesBarrier( handle, numRanges, pRangeSizes, pRanges, hSignalEvent, numWaitEvents, phWaitEvents );
+        // auto result = ::xeCommandListAppendMemoryRangesBarrier( handle, numRanges, pRangeSizes, pRanges );
         // if( ::XE_RESULT_SUCCESS != result ) throw exception(result, "xe::CommandList::AppendMemoryRangesBarrier");
     }
 
@@ -503,7 +535,7 @@ namespace xe
     }
 
     ///////////////////////////////////////////////////////////////////////////////
-    /// @brief C++ wrapper for ::xeCommandListAppendWaitOnEvent
+    /// @brief C++ wrapper for ::xeCommandListAppendWaitOnEvents
     /// 
     /// @details
     ///     - The application may **not** call this function from simultaneous
@@ -512,12 +544,13 @@ namespace xe
     /// 
     /// @throws result_t
     inline void 
-    CommandList::AppendWaitOnEvent(
-        event_handle_t hEvent                           ///< [in] handle of the event
+    CommandList::AppendWaitOnEvents(
+        uint32_t numEvents,                             ///< [in] number of events to wait on before continuing
+        event_handle_t* phEvents                        ///< [in] handle of the events to wait on before continuing
         )
     {
-        // auto result = ::xeCommandListAppendWaitOnEvent( handle, hEvent );
-        // if( ::XE_RESULT_SUCCESS != result ) throw exception(result, "xe::CommandList::AppendWaitOnEvent");
+        // auto result = ::xeCommandListAppendWaitOnEvents( handle, numEvents, phEvents );
+        // if( ::XE_RESULT_SUCCESS != result ) throw exception(result, "xe::CommandList::AppendWaitOnEvents");
     }
 
     ///////////////////////////////////////////////////////////////////////////////

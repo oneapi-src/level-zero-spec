@@ -10,6 +10,7 @@ ${"##"} Table of Contents
 * [Driver and Device](#dnd)
 * [Command Queues and Command Lists](#cnc)
 * [Synchronization Primitives](#sp)
+* [Barriers](#brr)
 * [Memory and Image Management](#mim)
 * [Modules and Functions](#mnf)
 * [OpenCL Interoperability](#oi)
@@ -276,9 +277,7 @@ ${"###"} Recycling
 ${"#"} <a name="sp">Synchronization Primitives</a>
 There are two types of synchronization primitives:
 1. [**Fences**](#fnc) - used to communicate to the host that command queue execution has completed.
-2. [**Events**](#evnt) - used as fine-grain host-to-device, device-to-host or device-to-device waits and signals within a command list.
-
-Synchronization primitives also provide the capabilities for expressing execution and memory [**Barriers**](#brr).
+2. [**Events**](#evnt) - used as fine-grain host-to-device, device-to-host or device-to-device execution and memory dependencies.
 
 The following diagram illustrats the relationship of capabilities of these types of synchronization primitives:  
 ![Graph](../images/core_sync.png?raw=true)  
@@ -286,17 +285,21 @@ The following diagram illustrats the relationship of capabilities of these types
 
 The following are the motivations for seperating the different types of synchronization primitives:
 - Allows device-specific optimizations for certain types of primitives:
-    + fences may share device memory with all other fences for the queue or device.
+    + fences may share device memory with all other fences within the same command queue.
     + events may be implemented using pipelined operations as part of the program execution.
     + fences are implicit, coarse-grain execution and memory barriers.
-    + events support explicit, fine-grain execution and memory barriers.
+    + events optionally cause fine-grain execution and memory barriers.
 - Allows distinction on which type of primitive may be shared across devices.
 
+Generally. Events are generic synchronization primitives that can be used across many different usage-models, including those of fences.
+However, this generality comes with some cost in memory overhead and efficiency.
+
 ${"##"} <a name="fnc">Fences</a>
-A fence is a lightweight synchronization primitive used to communicate to the host that command queue execution has completed.
-- A fence is associated with single command queue.
+A fence is a heavyweight synchronization primitive used to communicate to the host that command list execution within a command queue has completed.
+- A fence is associated with a single command queue.
 - A fence can only be signaled from a device's command queue (e.g. between execution of command lists)
   and can only be waited upon from the host.
+- A fence gaurentees both execution completion and memory coherency, across the device and host, prior to being signalled.
 - A fence only has two states: not signaled and signaled.
 - A fence can only be reset from the Host.
 - A fence cannot be shared across processes.
@@ -331,31 +334,25 @@ The following sample code demonstrates a sequence for creation, submission and q
 ```
 
 ${"##"} <a name="evnt">Events</a>
-An event is used as fine-grain host-to-device, device-to-host or device-to-device waits and signals from within a command list.
-- An event can be __either__:
-  + signaled from within a device's command list (e.g. between execution of kernels) and waited upon from the host, another command queue or another device, **or**
+An event is used to communicate fine-grain host-to-device, device-to-host or device-to-device dependencies from within a command list.
+- An event can be:
+  + signaled from within a device's command list and waited upon within the same command list
+  + signaled from within a device's command list and waited upon from the host, another command queue or another device
   + signaled from the host, and waited upon from within a device's command list.
 - An event only has two states: not signaled and signaled.
 - An event can be reset from the Host or device.
-- An event can be appended into any command list from the same device.
-- An event cannot be signaled and waited upon in the same command list or command queue.
 - An event can be appended into multiple command lists simultaneously.
-- An event can be shared across processes.
-- An event can be an explicit execution and/or memory barrier; which should be used sparingly to avoid device underutilization.
+- An event can be shared across devices and processes.
+- An event can invoke an execution and/or memory barrier; which should be used sparingly to avoid device underutilization.
 - There are no protections against events causing deadlocks, such as circular waits scenarios. 
   + These problems are left to the application to avoid.
 - An event intended to be signaled by the host, another command queue or another device after command list submission to a command queue may prevent 
   subsequent forward progress within the command queue itself.
   + This can create create bubbles in the pipeline or deadlock situations if not correctly scheduled.
 
-Events are generic synchronization primitives that can be used across many different usage-models, includes those of fences and semaphores.
-However, this generality comes with some cost in efficiency.
-
-Events do **not** represent intra-command list dependencies between programs.
-
-Events are created from a pool of events that all share the same properties.
-- An event pool reduces the cost of creating multiple events byt allowing underlying device allocations to be shared
-- An event pool can be shared via IPC, rather than sharing each individual event
+An event pool is used for creation of individual events:
+- An event pool reduces the cost of creating multiple events by allowing underlying device allocations to be shared by events with the same properties
+- An event pool can be shared via IPC; allowing sharing blocks of events rather than sharing each individual event
 
 The following diagram illustrates an example of events:  
 ![Event](../images/core_event.png?raw=true)  
@@ -382,7 +379,7 @@ The following sample code demonstrates a sequence for creation and submission of
     ${x}EventCreate(hEventPool, &eventDesc, &hEvent);
 
     // Append a wait on an event into a command list
-    ${x}CommandListAppendWaitOnEvent(hCommandList, hEvent);
+    ${x}CommandListAppendWaitOnEvents(hCommandList, 1, &hEvent);
 
     // Execute the command list with the wait
     ${x}CommandQueueExecuteCommandLists(hCommandQueue, 1, &hCommandList, nullptr);
@@ -392,24 +389,35 @@ The following sample code demonstrates a sequence for creation and submission of
     ...
 ```
 
-${"##"} <a name="brr">Barriers</a>
+${"#"}<a name="brr">Barriers</a>
 There are two types of barriers:
-1. **Execution Barriers** - used to insert execution dependencies between commands within a command list or across command queues, devices and/or Host.
-2. **Memory Barriers** - used to insert memory coherency between commands within a command list or across command queues, devices and/or Host.
+1. **Execution Barriers** - used to communicate execution dependencies between commands within a command list or across command queues, devices and/or Host.
+2. **Memory Barriers** - used to communicate memory coherency dependencies between commands within a command list or across command queues, devices and/or Host.
 
-${"###"} Execution Barriers
-- Commands executed on a command list are only guarenteed to start in the same order in which they are submitted;
-  there is no implicit definition of the order of completion.
+The following sample code demonstrates a sequence for submission of a brute-force execution and global memory barrier:
+```c
+    ${x}CommandListAppendLaunchFunction(hCommandList, hFunction, &launchArgs, nullptr, 0, nullptr);
+
+    // Append a barrier into a command list to ensure hFunction1 completes before hFunction2 begins
+    ${x}CommandListAppendBarrier(hCommandList);
+
+    ${x}CommandListAppendLaunchFunction(hCommandList, hFunction, &launchArgs, nullptr, 0, nullptr);
+    ...
+```
+
+${"##"} Execution Barriers
+Commands executed on a command list are only guarenteed to start in the same order in which they are submitted;
+i.e. there is no implicit definition of the order of completion.
 - Fences provide implicit, coarse-grain control to indicate that all previous commands must complete prior to the fence being signalled.
 - Events provide explicit, fine-grain control over execution dependencies between commands; allowing more opportunities for concurrent execution and higher device utilization.
 
-The following sample code demonstrates a sequence for submission of a fine-grain execution-only barrier:
+The following sample code demonstrates a sequence for submission of a fine-grain execution-only dependency using events:
 ```c
     ${x}_event_desc_t event1Desc = {
         ${X}_EVENT_DESC_VERSION_CURRENT,
         0,
-        ${X}_EVENT_SCOPE_FLAG_NONE,
-        ${X}_EVENT_SCOPE_FLAG_NONE
+        ${X}_EVENT_SCOPE_FLAG_NONE, // no memory/cache coherency required on signal
+        ${X}_EVENT_SCOPE_FLAG_NONE  // no memory/cache coherency required on wait
     };
     ${x}_event_handle_t hEvent1;
     ${x}EventCreate(hEventPool, &event1Desc, &hEvent1);
@@ -422,14 +430,13 @@ The following sample code demonstrates a sequence for submission of a fine-grain
     ...
 ```
 
-${"###"} Memory Barriers
-- Commands executed on a command list are only gauarenteed to maintain memory coherency within the command queue in which they are submitted;
-  there is no implicit memory or cache coherency.
+${"##"} Memory Barriers
+Commands executed on a command list are *not* guarenteed to maintain memory coherency with other commands; 
+i.e. there is no implicit memory or cache coherency.
 - Fences provide implicit, coarse-grain control to indicate that all caches and memory are coherent across the device and Host prior to the fence being signalled.
 - Events provide explicit, fine-grain control over cache and memory coherency dependencies between commands; allowing more opportunities for concurrent execution and higher device utilization.
-- In addition, explicit, range-based memory barriers provide very fine-grain control of which cachelines require coherency.
 
-The following sample code demonstrates a sequence for submission of a fine-grain memory barrier:
+The following sample code demonstrates a sequence for submission of a fine-grain memory dependency using events:
 ```c
     ${x}_event_desc_t event1Desc = {
         ${X}_EVENT_DESC_VERSION_CURRENT,
@@ -448,33 +455,20 @@ The following sample code demonstrates a sequence for submission of a fine-grain
     ...
 ```
 
-The following sample code demonstrates a sequence for submission of a fine-grain, range-based memory barrier:
-```c
-    ${x}_event_desc_t event1Desc = {
-        ${X}_EVENT_DESC_VERSION_CURRENT,
-        0,
-        ${X}_EVENT_SCOPE_FLAG_NONE,
-        ${X}_EVENT_SCOPE_FLAG_NONE
-    };
-    ${x}_event_desc_t event2Desc = {
-        ${X}_EVENT_DESC_VERSION_CURRENT,
-        1,
-        ${X}_EVENT_SCOPE_FLAG_DEVICE, // ensure memory coherency across device before event signalled
-        ${X}_EVENT_SCOPE_FLAG_NONE
-    };
-    ${x}_event_handle_t hEvent1, hEvent2;
-    ${x}EventCreate(hEventPool, &event1Desc, &hEvent1);
-    ${x}EventCreate(hEventPool, &event2Desc, &hEvent2);
+${"##"} Range-based Memory Barriers
+Range-based memory barriers provide explicit control of which cachelines require coherency.
 
+The following sample code demonstrates a sequence for submission of a range-based memory barrier:
+```c
     // Ensure hFunction1 completes before signaling hEvent1
-    ${x}CommandListAppendLaunchFunction(hCommandList, hFunction1, &launchArgs, hEvent1, 0, nullptr);
+    ${x}CommandListAppendLaunchFunction(hCommandList, hFunction1, &launchArgs, nullptr, 0, nullptr);
 
     // Ensure hEvent1 is signalled before starting memory barrier
     // Ensure memory range is fully coherent across the device before signaling hEvent2
-    ${x}CommandListAppendMemoryRangesBarrier(hCommandList, 1, &size, &ptr, hEvent2, 1, &hEvent1);
+    ${x}CommandListAppendMemoryRangesBarrier(hCommandList, 1, &size, &ptr);
 
     // Ensure hEvent2 is signalled before starting hFunction2
-    ${x}CommandListAppendLaunchFunction(hCommandList, hFunction2, &launchArgs, nullptr, 1, &hEvent2);
+    ${x}CommandListAppendLaunchFunction(hCommandList, hFunction2, &launchArgs, nullptr, 0, nullptr);
     ...
 ```
 

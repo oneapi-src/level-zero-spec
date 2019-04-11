@@ -40,14 +40,14 @@ typedef struct _cl_command_queue* cl_command_queue;
 typedef struct _cl_context* cl_context;
 typedef struct _cl_program* cl_program;
 
+typedef xe_result_t (__xecall *pfn_xeCommandListAppendBarrier)(
+    xe_command_list_handle_t hCommandList           ///< [in] handle of the command list
+    );
 typedef xe_result_t (__xecall *pfn_xeCommandListAppendMemoryRangesBarrier)(
     xe_command_list_handle_t hCommandList,          ///< [in] handle of the command list
     uint32_t numRanges,                             ///< [in] number of memory ranges
     const size_t* pRangeSizes,                      ///< [in] array of sizes of memory range
-    const void** pRanges,                           ///< [in] array of memory ranges
-    xe_event_handle_t hSignalEvent,                 ///< [in][optional] handle of the event to signal on completion
-    uint32_t numWaitEvents,                         ///< [in][optional] number of events to wait on before barrier
-    xe_event_handle_t* phWaitEvents                 ///< [in][optional] handle of the events to wait on before barrier
+    const void** pRanges                            ///< [in] array of memory ranges
     );
 typedef xe_result_t (__xecall *pfn_xeDeviceSystemBarrier)(
     xe_device_handle_t hDevice                      ///< [in] handle of the device
@@ -284,9 +284,10 @@ typedef xe_result_t (__xecall *pfn_xeCommandListAppendSignalEvent)(
     xe_command_list_handle_t hCommandList,          ///< [in] handle of the command list
     xe_event_handle_t hEvent                        ///< [in] handle of the event
     );
-typedef xe_result_t (__xecall *pfn_xeCommandListAppendWaitOnEvent)(
+typedef xe_result_t (__xecall *pfn_xeCommandListAppendWaitOnEvents)(
     xe_command_list_handle_t hCommandList,          ///< [in] handle of the command list
-    xe_event_handle_t hEvent                        ///< [in] handle of the event
+    uint32_t numEvents,                             ///< [in] number of events to wait on before continuing
+    xe_event_handle_t* phEvents                     ///< [in] handle of the events to wait on before continuing
     );
 typedef xe_result_t (__xecall *pfn_xeEventHostSignal)(
     xe_event_handle_t hEvent                        ///< [in] handle of the event
@@ -524,6 +525,7 @@ typedef xe_result_t (__xecall *pfn_xeSamplerDestroy)(
 
 typedef struct _xe_dispatch_table_t
 {
+    pfn_xeCommandListAppendBarrier xeCommandListAppendBarrier;
     pfn_xeCommandListAppendMemoryRangesBarrier xeCommandListAppendMemoryRangesBarrier;
     pfn_xeDeviceSystemBarrier xeDeviceSystemBarrier;
 #if XE_ENABLE_OCL_INTEROP
@@ -577,7 +579,7 @@ typedef struct _xe_dispatch_table_t
     pfn_xeEventPoolOpenIpcHandle xeEventPoolOpenIpcHandle;
     pfn_xeEventPoolCloseIpcHandle xeEventPoolCloseIpcHandle;
     pfn_xeCommandListAppendSignalEvent xeCommandListAppendSignalEvent;
-    pfn_xeCommandListAppendWaitOnEvent xeCommandListAppendWaitOnEvent;
+    pfn_xeCommandListAppendWaitOnEvents xeCommandListAppendWaitOnEvents;
     pfn_xeEventHostSignal xeEventHostSignal;
     pfn_xeEventHostSynchronize xeEventHostSynchronize;
     pfn_xeEventQueryStatus xeEventQueryStatus;
@@ -630,6 +632,7 @@ inline bool load_xe(void *handle, void *(*funcAddressGetter)(void *handle, const
     if((0 == funcAddressGetter) || (0 == outTable)){
         return false;
     }
+    outTable->xeCommandListAppendBarrier = (pfn_xeCommandListAppendBarrier)funcAddressGetter(handle, "xeCommandListAppendBarrier");
     outTable->xeCommandListAppendMemoryRangesBarrier = (pfn_xeCommandListAppendMemoryRangesBarrier)funcAddressGetter(handle, "xeCommandListAppendMemoryRangesBarrier");
     outTable->xeDeviceSystemBarrier = (pfn_xeDeviceSystemBarrier)funcAddressGetter(handle, "xeDeviceSystemBarrier");
 #if XE_ENABLE_OCL_INTEROP
@@ -683,7 +686,7 @@ inline bool load_xe(void *handle, void *(*funcAddressGetter)(void *handle, const
     outTable->xeEventPoolOpenIpcHandle = (pfn_xeEventPoolOpenIpcHandle)funcAddressGetter(handle, "xeEventPoolOpenIpcHandle");
     outTable->xeEventPoolCloseIpcHandle = (pfn_xeEventPoolCloseIpcHandle)funcAddressGetter(handle, "xeEventPoolCloseIpcHandle");
     outTable->xeCommandListAppendSignalEvent = (pfn_xeCommandListAppendSignalEvent)funcAddressGetter(handle, "xeCommandListAppendSignalEvent");
-    outTable->xeCommandListAppendWaitOnEvent = (pfn_xeCommandListAppendWaitOnEvent)funcAddressGetter(handle, "xeCommandListAppendWaitOnEvent");
+    outTable->xeCommandListAppendWaitOnEvents = (pfn_xeCommandListAppendWaitOnEvents)funcAddressGetter(handle, "xeCommandListAppendWaitOnEvents");
     outTable->xeEventHostSignal = (pfn_xeEventHostSignal)funcAddressGetter(handle, "xeEventHostSignal");
     outTable->xeEventHostSynchronize = (pfn_xeEventHostSynchronize)funcAddressGetter(handle, "xeEventHostSynchronize");
     outTable->xeEventQueryStatus = (pfn_xeEventQueryStatus)funcAddressGetter(handle, "xeEventQueryStatus");
@@ -730,6 +733,9 @@ inline bool load_xe(void *handle, void *(*funcAddressGetter)(void *handle, const
     outTable->xeDeviceEvictImage = (pfn_xeDeviceEvictImage)funcAddressGetter(handle, "xeDeviceEvictImage");
     outTable->xeSamplerCreate = (pfn_xeSamplerCreate)funcAddressGetter(handle, "xeSamplerCreate");
     outTable->xeSamplerDestroy = (pfn_xeSamplerDestroy)funcAddressGetter(handle, "xeSamplerDestroy");
+    if(0 == outTable->xeCommandListAppendBarrier){
+        return false;
+    }
     if(0 == outTable->xeCommandListAppendMemoryRangesBarrier){
         return false;
     }
@@ -877,7 +883,7 @@ inline bool load_xe(void *handle, void *(*funcAddressGetter)(void *handle, const
     if(0 == outTable->xeCommandListAppendSignalEvent){
         return false;
     }
-    if(0 == outTable->xeCommandListAppendWaitOnEvent){
+    if(0 == outTable->xeCommandListAppendWaitOnEvents){
         return false;
     }
     if(0 == outTable->xeEventHostSignal){
