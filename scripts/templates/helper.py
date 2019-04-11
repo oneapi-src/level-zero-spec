@@ -362,7 +362,9 @@ def make_param_checks(namespace, tags, obj, comment=False, cpp=False):
                 checks[eip].append("nullptr == %s"%subt(namespace, tags, item['name'], comment, cpp))
 
             if is_desc: # descriptor-type
-                checks[eus].append("%s < %s->version"%(re.sub(r"\w*\s*(.*)_t.*", r"\1_VERSION_CURRENT", subt(namespace, tags, item['type'], comment, cpp)).upper(), item['name']))
+                words = subt(namespace, tags, item['type'], comment, cpp).split(" ")
+                ver = re.sub(r"(.*)_t.*", r"\1_VERSION_CURRENT", words[-1]).upper()
+                checks[eus].append("%s < %s->version"%(ver, item['name']))
     return checks
 
 """

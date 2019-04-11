@@ -39,6 +39,46 @@
 namespace xet
 {
     ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Value types
+    enum class value_type_t
+    {
+        UINT32,                                         ///< Value type: uint32
+        UINT64,                                         ///< Value type: uint64
+        FLOAT,                                          ///< Value type: float
+        BOOL,                                           ///< Value type: bool
+
+    };
+
+    ///////////////////////////////////////////////////////////////////////////////
+    /// @brief API version of ::typed_value_t
+    enum class typed_value_version_t
+    {
+        CURRENT = XE_MAKE_VERSION( 1, 0 ),              ///< version 1.0
+
+    };
+
+    ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Different value types union
+    union value_t
+    {
+        uint32_t valueUInt32;                           ///< [out] uint32_t value
+        uint64_t valueUInt64;                           ///< [out] uint64_t value
+        float valueFloat;                               ///< [out] float value
+        xe::bool_t valueBool;                           ///< [out] bool value
+
+    };
+
+    ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Typed value
+    struct typed_value_t
+    {
+        typed_value_version_t version = typed_value_version_t::CURRENT; ///< [in] ::TYPED_VALUE_VERSION_CURRENT
+        value_type_t type;                              ///< [out] value type
+        value_t value;                                  ///< [out] value of a specified type
+
+    };
+
+    ///////////////////////////////////////////////////////////////////////////////
     /// @brief C++ wrapper for metric group
     class MetricGroup
     {
@@ -155,50 +195,10 @@ namespace xet
         };
 
         ///////////////////////////////////////////////////////////////////////////////
-        /// @brief C++ version for ::xet_value_type_t
-        enum class value_type_t
-        {
-            UINT32,                                         ///< Value type: uint32
-            UINT64,                                         ///< Value type: uint64
-            FLOAT,                                          ///< Value type: float
-            BOOL,                                           ///< Value type: bool
-
-        };
-
-        ///////////////////////////////////////////////////////////////////////////////
-        /// @brief C++ version for ::xet_typed_value_version_t
-        enum class typed_value_version_t
-        {
-            CURRENT = XE_MAKE_VERSION( 1, 0 ),              ///< version 1.0
-
-        };
-
-        ///////////////////////////////////////////////////////////////////////////////
         /// @brief C++ version for ::xet_metric_properties_version_t
         enum class metric_properties_version_t
         {
             CURRENT = XE_MAKE_VERSION( 1, 0 ),              ///< version 1.0
-
-        };
-
-        ///////////////////////////////////////////////////////////////////////////////
-        /// @brief C++ version for ::xet_value_t
-        union value_t
-        {
-            uint32_t valueUInt32;                           ///< [out] uint32_t value
-            uint64_t valueUInt64;                           ///< [out] uint64_t value
-            float valueFloat;                               ///< [out] float value
-            xe::bool_t valueBool;                           ///< [out] bool value
-
-        };
-
-        ///////////////////////////////////////////////////////////////////////////////
-        /// @brief C++ version for ::xet_typed_value_t
-        struct typed_value_t
-        {
-            typed_value_version_t version = typed_value_version_t::CURRENT; ///< [in] ::TYPED_VALUE_VERSION_CURRENT
-            value_type_t type;                              ///< [out] value type
-            value_t value;                                  ///< [out] value of a specified type
 
         };
 

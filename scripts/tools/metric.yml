@@ -159,7 +159,7 @@ etors:
 --- #--------------------------------------------------------------------------
 type: enum
 desc: "Value types"
-class: $tMetric
+class: $t
 name: $t_value_type_t
 etors:
     - name: $T_VALUE_TYPE_UINT32
@@ -173,7 +173,7 @@ etors:
 --- #--------------------------------------------------------------------------
 type: enum
 desc: "API version of $t_typed_value_t"
-class: $tMetric
+class: $t
 name: $t_typed_value_version_t
 etors:
     - name: $T_TYPED_VALUE_VERSION_CURRENT
@@ -182,7 +182,7 @@ etors:
 --- #--------------------------------------------------------------------------
 type: union
 desc: "Different value types union"
-class: $tMetric
+class: $t
 name: $t_value_t
 members:
     - type: uint32_t
@@ -200,7 +200,7 @@ members:
 --- #--------------------------------------------------------------------------
 type: struct
 desc: "Typed value"
-class: $tMetric
+class: $t
 name: $t_typed_value_t
 members:
     - type: $t_typed_value_version_t

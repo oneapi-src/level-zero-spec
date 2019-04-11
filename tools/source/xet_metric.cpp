@@ -488,7 +488,7 @@ xetMetricTracerOpen(
             if( nullptr == pDesc ) return XE_RESULT_ERROR_INVALID_PARAMETER;
             if( nullptr == hNotificationEvent ) return XE_RESULT_ERROR_INVALID_PARAMETER;
             if( nullptr == phMetricTracer ) return XE_RESULT_ERROR_INVALID_PARAMETER;
-            if( _VERSION_CURRENT < pDesc->version ) return XE_RESULT_ERROR_UNSUPPORTED;
+            if( XET_METRIC_TRACER_DESC_VERSION_CURRENT < pDesc->version ) return XE_RESULT_ERROR_UNSUPPORTED;
         }
         /// @begin
 #if defined(XE_NULLDRV)
@@ -723,7 +723,7 @@ xetMetricQueryPoolCreate(
             if( nullptr == hDevice ) return XE_RESULT_ERROR_INVALID_PARAMETER;
             if( nullptr == pDesc ) return XE_RESULT_ERROR_INVALID_PARAMETER;
             if( nullptr == phMetricQueryPool ) return XE_RESULT_ERROR_INVALID_PARAMETER;
-            if( _VERSION_CURRENT < pDesc->version ) return XE_RESULT_ERROR_UNSUPPORTED;
+            if( XET_METRIC_QUERY_POOL_DESC_VERSION_CURRENT < pDesc->version ) return XE_RESULT_ERROR_UNSUPPORTED;
         }
         /// @begin
 #if defined(XE_NULLDRV)
