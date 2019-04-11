@@ -42,10 +42,12 @@ namespace xe
     /// @brief C++ wrapper for ::xeCommandListAppendBarrier
     /// 
     /// @details
-    ///     - All previous commands are completed prior to the execution of the
-    ///       barrier.
-    ///     - No following commands will begin until the execution of the barrier
-    ///       completes.
+    ///     - If numWaitEvents is zero, then all previous commands are completed
+    ///       prior to the execution of the barrier.
+    ///     - If numWaitEvents is non-zero, then then all phWaitEvents must be
+    ///       signalled prior to the execution of the barrier.
+    ///     - This command blocks all following commands from beginning until the
+    ///       execution of the barrier completes.
     ///     - Memory and cache hierarchies are flushed and invalidated sufficient
     ///       for device and host access.
     ///     - The application may **not** call this function from simultaneous
@@ -60,10 +62,12 @@ namespace xe
     /// @throws result_t
     inline void 
     CommandList::AppendBarrier(
-        void
+        uint32_t numWaitEvents,                         ///< [in][optional] number of events to wait on before executing barrier
+        event_handle_t* phWaitEvents                    ///< [in][optional] handle of the events to wait on before executing
+                                                        ///< barrier
         )
     {
-        // auto result = ::xeCommandListAppendBarrier( handle );
+        // auto result = ::xeCommandListAppendBarrier( handle, numWaitEvents, phWaitEvents );
         // if( ::XE_RESULT_SUCCESS != result ) throw exception(result, "xe::CommandList::AppendBarrier");
     }
 
@@ -71,10 +75,12 @@ namespace xe
     /// @brief C++ wrapper for ::xeCommandListAppendMemoryRangesBarrier
     /// 
     /// @details
-    ///     - All previous commands are completed prior to the execution of the
-    ///       barrier.
-    ///     - No following commands will begin until the execution of the barrier
-    ///       completes.
+    ///     - If numWaitEvents is zero, then all previous commands are completed
+    ///       prior to the execution of the barrier.
+    ///     - If numWaitEvents is non-zero, then then all phWaitEvents must be
+    ///       signalled prior to the execution of the barrier.
+    ///     - This command blocks all following commands from beginning until the
+    ///       execution of the barrier completes.
     ///     - Memory and cache hierarchies are flushed and invalidated sufficient
     ///       for device and host access.
     ///     - The application may **not** call this function from simultaneous
@@ -86,10 +92,13 @@ namespace xe
     CommandList::AppendMemoryRangesBarrier(
         uint32_t numRanges,                             ///< [in] number of memory ranges
         const size_t* pRangeSizes,                      ///< [in] array of sizes of memory range
-        const void** pRanges                            ///< [in] array of memory ranges
+        const void** pRanges,                           ///< [in] array of memory ranges
+        uint32_t numWaitEvents,                         ///< [in][optional] number of events to wait on before executing barrier
+        event_handle_t* phWaitEvents                    ///< [in][optional] handle of the events to wait on before executing
+                                                        ///< barrier
         )
     {
-        // auto result = ::xeCommandListAppendMemoryRangesBarrier( handle, numRanges, pRangeSizes, pRanges );
+        // auto result = ::xeCommandListAppendMemoryRangesBarrier( handle, numRanges, pRangeSizes, pRanges, numWaitEvents, phWaitEvents );
         // if( ::XE_RESULT_SUCCESS != result ) throw exception(result, "xe::CommandList::AppendMemoryRangesBarrier");
     }
 
@@ -290,8 +299,8 @@ namespace xe
         const void* srcptr,                             ///< [in] pointer to source memory to copy from
         size_t size,                                    ///< [in] size in bytes to copy
         event_handle_t hSignalEvent,                    ///< [in][optional] handle of the event to signal on completion
-        uint32_t numWaitEvents,                         ///< [in][optional] number of events to wait on before launching
-        event_handle_t* phWaitEvents                    ///< [in][optional] handle of the events to wait on before launching
+        uint32_t numWaitEvents,                         ///< [in][optional] number of events to wait on before copy
+        event_handle_t* phWaitEvents                    ///< [in][optional] handle of the events to wait on before copy
         )
     {
         // auto result = ::xeCommandListAppendMemoryCopy( handle, dstptr, srcptr, size, hSignalEvent, numWaitEvents, phWaitEvents );
@@ -322,8 +331,8 @@ namespace xe
         int value,                                      ///< [in] value to initialize memory to
         size_t size,                                    ///< [in] size in bytes to initailize
         event_handle_t hSignalEvent,                    ///< [in][optional] handle of the event to signal on completion
-        uint32_t numWaitEvents,                         ///< [in][optional] number of events to wait on before launching
-        event_handle_t* phWaitEvents                    ///< [in][optional] handle of the events to wait on before launching
+        uint32_t numWaitEvents,                         ///< [in][optional] number of events to wait on before copy
+        event_handle_t* phWaitEvents                    ///< [in][optional] handle of the events to wait on before copy
         )
     {
         // auto result = ::xeCommandListAppendMemorySet( handle, ptr, value, size, hSignalEvent, numWaitEvents, phWaitEvents );
@@ -348,8 +357,8 @@ namespace xe
         image_handle_t hDstImage,                       ///< [in] handle of destination image to copy to
         image_handle_t hSrcImage,                       ///< [in] handle of source image to copy from
         event_handle_t hSignalEvent,                    ///< [in][optional] handle of the event to signal on completion
-        uint32_t numWaitEvents,                         ///< [in][optional] number of events to wait on before launching
-        event_handle_t* phWaitEvents                    ///< [in][optional] handle of the events to wait on before launching
+        uint32_t numWaitEvents,                         ///< [in][optional] number of events to wait on before copy
+        event_handle_t* phWaitEvents                    ///< [in][optional] handle of the events to wait on before copy
         )
     {
         // auto result = ::xeCommandListAppendImageCopy( handle, hDstImage, hSrcImage, hSignalEvent, numWaitEvents, phWaitEvents );
@@ -372,8 +381,8 @@ namespace xe
         image_region_t* pDstRegion,                     ///< [in][optional] destination region descriptor
         image_region_t* pSrcRegion,                     ///< [in][optional] source region descriptor
         event_handle_t hSignalEvent,                    ///< [in][optional] handle of the event to signal on completion
-        uint32_t numWaitEvents,                         ///< [in][optional] number of events to wait on before launching
-        event_handle_t* phWaitEvents                    ///< [in][optional] handle of the events to wait on before launching
+        uint32_t numWaitEvents,                         ///< [in][optional] number of events to wait on before copy
+        event_handle_t* phWaitEvents                    ///< [in][optional] handle of the events to wait on before copy
         )
     {
         // auto result = ::xeCommandListAppendImageCopyRegion( handle, hDstImage, hSrcImage, pDstRegion, pSrcRegion, hSignalEvent, numWaitEvents, phWaitEvents );
@@ -401,8 +410,8 @@ namespace xe
         image_handle_t hSrcImage,                       ///< [in] handle of source image to copy from
         image_region_t* pSrcRegion,                     ///< [in][optional] source region descriptor
         event_handle_t hSignalEvent,                    ///< [in][optional] handle of the event to signal on completion
-        uint32_t numWaitEvents,                         ///< [in][optional] number of events to wait on before launching
-        event_handle_t* phWaitEvents                    ///< [in][optional] handle of the events to wait on before launching
+        uint32_t numWaitEvents,                         ///< [in][optional] number of events to wait on before copy
+        event_handle_t* phWaitEvents                    ///< [in][optional] handle of the events to wait on before copy
         )
     {
         // auto result = ::xeCommandListAppendImageCopyToMemory( handle, dstptr, hSrcImage, pSrcRegion, hSignalEvent, numWaitEvents, phWaitEvents );
@@ -430,8 +439,8 @@ namespace xe
         const void* srcptr,                             ///< [in] pointer to source memory to copy from
         image_region_t* pDstRegion,                     ///< [in][optional] destination region descriptor
         event_handle_t hSignalEvent,                    ///< [in][optional] handle of the event to signal on completion
-        uint32_t numWaitEvents,                         ///< [in][optional] number of events to wait on before launching
-        event_handle_t* phWaitEvents                    ///< [in][optional] handle of the events to wait on before launching
+        uint32_t numWaitEvents,                         ///< [in][optional] number of events to wait on before copy
+        event_handle_t* phWaitEvents                    ///< [in][optional] handle of the events to wait on before copy
         )
     {
         // auto result = ::xeCommandListAppendImageCopyFromMemory( handle, hDstImage, srcptr, pDstRegion, hSignalEvent, numWaitEvents, phWaitEvents );

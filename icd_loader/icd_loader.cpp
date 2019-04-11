@@ -73,23 +73,29 @@ xe_result_t __xecall xeDriverInit(xe_init_flag_t flags){
 }
 
 xe_result_t __xecall xeCommandListAppendBarrier(
-        xe_command_list_handle_t hCommandList           ///< [in] handle of the command list
+        xe_command_list_handle_t hCommandList,          ///< [in] handle of the command list
+        uint32_t numWaitEvents,                         ///< [in][optional] number of events to wait on before executing barrier
+        xe_event_handle_t* phWaitEvents                 ///< [in][optional] handle of the events to wait on before executing
+                                                        ///< barrier
     ){
     if(dispatchTableInitialized == false){
         return XE_RESULT_ERROR_UNINITIALIZED;
     }
-    return dispatchTable.xeCommandListAppendBarrier(hCommandList);
+    return dispatchTable.xeCommandListAppendBarrier(hCommandList, numWaitEvents, phWaitEvents);
 }
 xe_result_t __xecall xeCommandListAppendMemoryRangesBarrier(
         xe_command_list_handle_t hCommandList,          ///< [in] handle of the command list
         uint32_t numRanges,                             ///< [in] number of memory ranges
         const size_t* pRangeSizes,                      ///< [in] array of sizes of memory range
-        const void** pRanges                            ///< [in] array of memory ranges
+        const void** pRanges,                           ///< [in] array of memory ranges
+        uint32_t numWaitEvents,                         ///< [in][optional] number of events to wait on before executing barrier
+        xe_event_handle_t* phWaitEvents                 ///< [in][optional] handle of the events to wait on before executing
+                                                        ///< barrier
     ){
     if(dispatchTableInitialized == false){
         return XE_RESULT_ERROR_UNINITIALIZED;
     }
-    return dispatchTable.xeCommandListAppendMemoryRangesBarrier(hCommandList, numRanges, pRangeSizes, pRanges);
+    return dispatchTable.xeCommandListAppendMemoryRangesBarrier(hCommandList, numRanges, pRangeSizes, pRanges, numWaitEvents, phWaitEvents);
 }
 xe_result_t __xecall xeDeviceSystemBarrier(
         xe_device_handle_t hDevice                      ///< [in] handle of the device
@@ -267,8 +273,8 @@ xe_result_t __xecall xeCommandListAppendMemoryCopy(
         const void* srcptr,                             ///< [in] pointer to source memory to copy from
         size_t size,                                    ///< [in] size in bytes to copy
         xe_event_handle_t hSignalEvent,                 ///< [in][optional] handle of the event to signal on completion
-        uint32_t numWaitEvents,                         ///< [in][optional] number of events to wait on before launching
-        xe_event_handle_t* phWaitEvents                 ///< [in][optional] handle of the events to wait on before launching
+        uint32_t numWaitEvents,                         ///< [in][optional] number of events to wait on before copy
+        xe_event_handle_t* phWaitEvents                 ///< [in][optional] handle of the events to wait on before copy
     ){
     if(dispatchTableInitialized == false){
         return XE_RESULT_ERROR_UNINITIALIZED;
@@ -281,8 +287,8 @@ xe_result_t __xecall xeCommandListAppendMemorySet(
         int value,                                      ///< [in] value to initialize memory to
         size_t size,                                    ///< [in] size in bytes to initailize
         xe_event_handle_t hSignalEvent,                 ///< [in][optional] handle of the event to signal on completion
-        uint32_t numWaitEvents,                         ///< [in][optional] number of events to wait on before launching
-        xe_event_handle_t* phWaitEvents                 ///< [in][optional] handle of the events to wait on before launching
+        uint32_t numWaitEvents,                         ///< [in][optional] number of events to wait on before copy
+        xe_event_handle_t* phWaitEvents                 ///< [in][optional] handle of the events to wait on before copy
     ){
     if(dispatchTableInitialized == false){
         return XE_RESULT_ERROR_UNINITIALIZED;
@@ -294,8 +300,8 @@ xe_result_t __xecall xeCommandListAppendImageCopy(
         xe_image_handle_t hDstImage,                    ///< [in] handle of destination image to copy to
         xe_image_handle_t hSrcImage,                    ///< [in] handle of source image to copy from
         xe_event_handle_t hSignalEvent,                 ///< [in][optional] handle of the event to signal on completion
-        uint32_t numWaitEvents,                         ///< [in][optional] number of events to wait on before launching
-        xe_event_handle_t* phWaitEvents                 ///< [in][optional] handle of the events to wait on before launching
+        uint32_t numWaitEvents,                         ///< [in][optional] number of events to wait on before copy
+        xe_event_handle_t* phWaitEvents                 ///< [in][optional] handle of the events to wait on before copy
     ){
     if(dispatchTableInitialized == false){
         return XE_RESULT_ERROR_UNINITIALIZED;
@@ -309,8 +315,8 @@ xe_result_t __xecall xeCommandListAppendImageCopyRegion(
         xe_image_region_t* pDstRegion,                  ///< [in][optional] destination region descriptor
         xe_image_region_t* pSrcRegion,                  ///< [in][optional] source region descriptor
         xe_event_handle_t hSignalEvent,                 ///< [in][optional] handle of the event to signal on completion
-        uint32_t numWaitEvents,                         ///< [in][optional] number of events to wait on before launching
-        xe_event_handle_t* phWaitEvents                 ///< [in][optional] handle of the events to wait on before launching
+        uint32_t numWaitEvents,                         ///< [in][optional] number of events to wait on before copy
+        xe_event_handle_t* phWaitEvents                 ///< [in][optional] handle of the events to wait on before copy
     ){
     if(dispatchTableInitialized == false){
         return XE_RESULT_ERROR_UNINITIALIZED;
@@ -323,8 +329,8 @@ xe_result_t __xecall xeCommandListAppendImageCopyToMemory(
         xe_image_handle_t hSrcImage,                    ///< [in] handle of source image to copy from
         xe_image_region_t* pSrcRegion,                  ///< [in][optional] source region descriptor
         xe_event_handle_t hSignalEvent,                 ///< [in][optional] handle of the event to signal on completion
-        uint32_t numWaitEvents,                         ///< [in][optional] number of events to wait on before launching
-        xe_event_handle_t* phWaitEvents                 ///< [in][optional] handle of the events to wait on before launching
+        uint32_t numWaitEvents,                         ///< [in][optional] number of events to wait on before copy
+        xe_event_handle_t* phWaitEvents                 ///< [in][optional] handle of the events to wait on before copy
     ){
     if(dispatchTableInitialized == false){
         return XE_RESULT_ERROR_UNINITIALIZED;
@@ -337,8 +343,8 @@ xe_result_t __xecall xeCommandListAppendImageCopyFromMemory(
         const void* srcptr,                             ///< [in] pointer to source memory to copy from
         xe_image_region_t* pDstRegion,                  ///< [in][optional] destination region descriptor
         xe_event_handle_t hSignalEvent,                 ///< [in][optional] handle of the event to signal on completion
-        uint32_t numWaitEvents,                         ///< [in][optional] number of events to wait on before launching
-        xe_event_handle_t* phWaitEvents                 ///< [in][optional] handle of the events to wait on before launching
+        uint32_t numWaitEvents,                         ///< [in][optional] number of events to wait on before copy
+        xe_event_handle_t* phWaitEvents                 ///< [in][optional] handle of the events to wait on before copy
     ){
     if(dispatchTableInitialized == false){
         return XE_RESULT_ERROR_UNINITIALIZED;

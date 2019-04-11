@@ -44,10 +44,12 @@
 /// @brief Appends an execution and global memory barrier into a command list.
 /// 
 /// @details
-///     - All previous commands are completed prior to the execution of the
-///       barrier.
-///     - No following commands will begin until the execution of the barrier
-///       completes.
+///     - If numWaitEvents is zero, then all previous commands are completed
+///       prior to the execution of the barrier.
+///     - If numWaitEvents is non-zero, then then all phWaitEvents must be
+///       signalled prior to the execution of the barrier.
+///     - This command blocks all following commands from beginning until the
+///       execution of the barrier completes.
 ///     - Memory and cache hierarchies are flushed and invalidated sufficient
 ///       for device and host access.
 ///     - The application may **not** call this function from simultaneous
@@ -67,11 +69,14 @@
 ///         + nullptr == hCommandList
 ///     - ::XE_RESULT_ERROR_UNSUPPORTED
 ///
-/// @hash {be746d08ec15f9b8335fcdd25f3ab29a5e16a95c008e6f50ecdf64e366754ab9}
+/// @hash {1fa97f0733c92d12007c13dda750ccc44ace5129a276caa743b1b851b0e87591}
 ///
 __xedllexport xe_result_t __xecall
 xeCommandListAppendBarrier(
-    xe_command_list_handle_t hCommandList           ///< [in] handle of the command list
+    xe_command_list_handle_t hCommandList,          ///< [in] handle of the command list
+    uint32_t numWaitEvents,                         ///< [in][optional] number of events to wait on before executing barrier
+    xe_event_handle_t* phWaitEvents                 ///< [in][optional] handle of the events to wait on before executing
+                                                    ///< barrier
     )
 {
     try
@@ -86,7 +91,7 @@ xeCommandListAppendBarrier(
 #if defined(XE_NULLDRV)
         return XE_RESULT_SUCCESS;
 #else
-        return L0::CommandList::fromHandle(hCommandList)->appendBarrier();
+        return L0::CommandList::fromHandle(hCommandList)->appendBarrier(numWaitEvents, phWaitEvents);
 #endif
         /// @end
     }
@@ -109,10 +114,12 @@ xeCommandListAppendBarrier(
 /// @brief Appends a global memory ranges barrier into a command list.
 /// 
 /// @details
-///     - All previous commands are completed prior to the execution of the
-///       barrier.
-///     - No following commands will begin until the execution of the barrier
-///       completes.
+///     - If numWaitEvents is zero, then all previous commands are completed
+///       prior to the execution of the barrier.
+///     - If numWaitEvents is non-zero, then then all phWaitEvents must be
+///       signalled prior to the execution of the barrier.
+///     - This command blocks all following commands from beginning until the
+///       execution of the barrier completes.
 ///     - Memory and cache hierarchies are flushed and invalidated sufficient
 ///       for device and host access.
 ///     - The application may **not** call this function from simultaneous
@@ -129,14 +136,17 @@ xeCommandListAppendBarrier(
 ///         + nullptr == pRanges
 ///     - ::XE_RESULT_ERROR_UNSUPPORTED
 ///
-/// @hash {58f89c1088c5168e43069987822c16f457abfe2b737e697be321867d356db269}
+/// @hash {159e56e09dd84d49d39d6ed4f2d0d6c3ecb3242564df83499e8927eb8b56ae39}
 ///
 __xedllexport xe_result_t __xecall
 xeCommandListAppendMemoryRangesBarrier(
     xe_command_list_handle_t hCommandList,          ///< [in] handle of the command list
     uint32_t numRanges,                             ///< [in] number of memory ranges
     const size_t* pRangeSizes,                      ///< [in] array of sizes of memory range
-    const void** pRanges                            ///< [in] array of memory ranges
+    const void** pRanges,                           ///< [in] array of memory ranges
+    uint32_t numWaitEvents,                         ///< [in][optional] number of events to wait on before executing barrier
+    xe_event_handle_t* phWaitEvents                 ///< [in][optional] handle of the events to wait on before executing
+                                                    ///< barrier
     )
 {
     try
@@ -153,7 +163,7 @@ xeCommandListAppendMemoryRangesBarrier(
 #if defined(XE_NULLDRV)
         return XE_RESULT_SUCCESS;
 #else
-        return L0::CommandList::fromHandle(hCommandList)->appendMemoryRangesBarrier(numRanges, pRangeSizes, pRanges);
+        return L0::CommandList::fromHandle(hCommandList)->appendMemoryRangesBarrier(numRanges, pRangeSizes, pRanges, numWaitEvents, phWaitEvents);
 #endif
         /// @end
     }

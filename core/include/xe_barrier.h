@@ -45,10 +45,12 @@ extern "C" {
 /// @brief Appends an execution and global memory barrier into a command list.
 /// 
 /// @details
-///     - All previous commands are completed prior to the execution of the
-///       barrier.
-///     - No following commands will begin until the execution of the barrier
-///       completes.
+///     - If numWaitEvents is zero, then all previous commands are completed
+///       prior to the execution of the barrier.
+///     - If numWaitEvents is non-zero, then then all phWaitEvents must be
+///       signalled prior to the execution of the barrier.
+///     - This command blocks all following commands from beginning until the
+///       execution of the barrier completes.
 ///     - Memory and cache hierarchies are flushed and invalidated sufficient
 ///       for device and host access.
 ///     - The application may **not** call this function from simultaneous
@@ -69,17 +71,22 @@ extern "C" {
 ///     - ::XE_RESULT_ERROR_UNSUPPORTED
 __xedllport xe_result_t __xecall
 xeCommandListAppendBarrier(
-    xe_command_list_handle_t hCommandList           ///< [in] handle of the command list
+    xe_command_list_handle_t hCommandList,          ///< [in] handle of the command list
+    uint32_t numWaitEvents,                         ///< [in][optional] number of events to wait on before executing barrier
+    xe_event_handle_t* phWaitEvents                 ///< [in][optional] handle of the events to wait on before executing
+                                                    ///< barrier
     );
 
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Appends a global memory ranges barrier into a command list.
 /// 
 /// @details
-///     - All previous commands are completed prior to the execution of the
-///       barrier.
-///     - No following commands will begin until the execution of the barrier
-///       completes.
+///     - If numWaitEvents is zero, then all previous commands are completed
+///       prior to the execution of the barrier.
+///     - If numWaitEvents is non-zero, then then all phWaitEvents must be
+///       signalled prior to the execution of the barrier.
+///     - This command blocks all following commands from beginning until the
+///       execution of the barrier completes.
 ///     - Memory and cache hierarchies are flushed and invalidated sufficient
 ///       for device and host access.
 ///     - The application may **not** call this function from simultaneous
@@ -100,7 +107,10 @@ xeCommandListAppendMemoryRangesBarrier(
     xe_command_list_handle_t hCommandList,          ///< [in] handle of the command list
     uint32_t numRanges,                             ///< [in] number of memory ranges
     const size_t* pRangeSizes,                      ///< [in] array of sizes of memory range
-    const void** pRanges                            ///< [in] array of memory ranges
+    const void** pRanges,                           ///< [in] array of memory ranges
+    uint32_t numWaitEvents,                         ///< [in][optional] number of events to wait on before executing barrier
+    xe_event_handle_t* phWaitEvents                 ///< [in][optional] handle of the events to wait on before executing
+                                                    ///< barrier
     );
 
 ///////////////////////////////////////////////////////////////////////////////

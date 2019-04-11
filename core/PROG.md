@@ -399,7 +399,7 @@ The following sample code demonstrates a sequence for submission of a brute-forc
     xeCommandListAppendLaunchFunction(hCommandList, hFunction, &launchArgs, nullptr, 0, nullptr);
 
     // Append a barrier into a command list to ensure hFunction1 completes before hFunction2 begins
-    xeCommandListAppendBarrier(hCommandList);
+    xeCommandListAppendBarrier(hCommandList, 0, nullptr);
 
     xeCommandListAppendLaunchFunction(hCommandList, hFunction, &launchArgs, nullptr, 0, nullptr);
     ...
@@ -463,9 +463,8 @@ The following sample code demonstrates a sequence for submission of a range-base
     // Ensure hFunction1 completes before signaling hEvent1
     xeCommandListAppendLaunchFunction(hCommandList, hFunction1, &launchArgs, nullptr, 0, nullptr);
 
-    // Ensure hEvent1 is signalled before starting memory barrier
     // Ensure memory range is fully coherent across the device before signaling hEvent2
-    xeCommandListAppendMemoryRangesBarrier(hCommandList, 1, &size, &ptr);
+    xeCommandListAppendMemoryRangesBarrier(hCommandList, 1, &size, &ptr, 0, nullptr);
 
     // Ensure hEvent2 is signalled before starting hFunction2
     xeCommandListAppendLaunchFunction(hCommandList, hFunction2, &launchArgs, nullptr, 0, nullptr);

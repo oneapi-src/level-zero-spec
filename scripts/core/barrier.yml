@@ -10,8 +10,9 @@ analogue:
     - "**vkCmdPipelineBarrier**"
     - clEnqueueBarrierWithWaitList
 details:
-    - "All previous commands are completed prior to the execution of the barrier."
-    - "No following commands will begin until the execution of the barrier completes."
+    - "If numWaitEvents is zero, then all previous commands are completed prior to the execution of the barrier."
+    - "If numWaitEvents is non-zero, then then all phWaitEvents must be signalled prior to the execution of the barrier."
+    - "This command blocks all following commands from beginning until the execution of the barrier completes."
     - "Memory and cache hierarchies are flushed and invalidated sufficient for device and host access."
     - "The application may **not** call this function from simultaneous threads with the same command list handle."
     - "The implementation of this function should be lock-free."
@@ -19,14 +20,21 @@ params:
     - type: $x_command_list_handle_t
       name: hCommandList
       desc: "[in] handle of the command list"
+    - type: uint32_t
+      name: numWaitEvents
+      desc: "[in][optional] number of events to wait on before executing barrier"
+    - type: "$x_event_handle_t*"
+      name: phWaitEvents
+      desc: "[in][optional] handle of the events to wait on before executing barrier"
 --- #--------------------------------------------------------------------------
 type: function
 desc: "Appends a global memory ranges barrier into a command list."
 class: $xCommandList
 name: AppendMemoryRangesBarrier
 details:
-    - "All previous commands are completed prior to the execution of the barrier."
-    - "No following commands will begin until the execution of the barrier completes."
+    - "If numWaitEvents is zero, then all previous commands are completed prior to the execution of the barrier."
+    - "If numWaitEvents is non-zero, then then all phWaitEvents must be signalled prior to the execution of the barrier."
+    - "This command blocks all following commands from beginning until the execution of the barrier completes."
     - "Memory and cache hierarchies are flushed and invalidated sufficient for device and host access."
     - "The application may **not** call this function from simultaneous threads with the same command list handle."
     - "The implementation of this function should be lock-free."
@@ -43,6 +51,12 @@ params:
     - type: "const void**"
       name: "pRanges"
       desc: "[in] array of memory ranges"
+    - type: uint32_t
+      name: numWaitEvents
+      desc: "[in][optional] number of events to wait on before executing barrier"
+    - type: "$x_event_handle_t*"
+      name: phWaitEvents
+      desc: "[in][optional] handle of the events to wait on before executing barrier"
 --- #--------------------------------------------------------------------------
 type: function
 desc: "Ensures in-bound writes to the device are globally observable."
