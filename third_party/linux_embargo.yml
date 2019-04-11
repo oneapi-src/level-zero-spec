@@ -4,7 +4,7 @@ components:
     clean_on_sync: false
     dest_dir: third_party/aub_stream
     repository: ssh://gerrit-gfx.intel.com:29418/mirrors/gitlab-intel/aubstream
-    revision: 6b1f2dec259b89eea00605ad017c5330670a0bda
+    revision: 965278d5420cd6e947956063a1fa8b15684be97d
     type: git
   gmmlib:
     asset_name: gmmlib
@@ -34,7 +34,7 @@ components:
     clean_on_sync: false
     dest_dir: third_party/compute_runtime
     repository: ssh://gerrit-gfx.intel.com:29418/gfx/compute/neo
-    revision: 4df99c928b453901a07f622297b351072a475f4b
+    revision: 808c7796f3f2b5c74e9d26f40b56455db4465743
     type: git
 converter: E-1180
 version: '1'
