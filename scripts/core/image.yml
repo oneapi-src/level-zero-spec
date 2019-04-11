@@ -46,38 +46,98 @@ etors:
       desc: "3D"
 --- #--------------------------------------------------------------------------
 type: enum
-desc: "Supported image formats"
+desc: "Supported image format layouts"
 class: $xImage
-name: $x_image_format_t
+name: $x_image_format_layout_t
 etors:
-    - name: $X_IMAGE_FORMAT_UINT8
-      desc: "8-bit unsigned integer"
-    - name: $X_IMAGE_FORMAT_UINT16
-      desc: "16-bit unsigned integer"
-    - name: $X_IMAGE_FORMAT_UINT32
-      desc: "32-bit unsigned integer"
-    - name: $X_IMAGE_FORMAT_SINT8
-      desc: "8-bit signed integer"
-    - name: $X_IMAGE_FORMAT_SINT16
-      desc: "16-bit signed integer"
-    - name: $X_IMAGE_FORMAT_SINT32
-      desc: "32-bit signed integer"
-    - name: $X_IMAGE_FORMAT_UNORM8
-      desc: "8-bit unsigned normalized integer"
-    - name: $X_IMAGE_FORMAT_UNORM16
-      desc: "16-bit unsigned normalized integer"
-    - name: $X_IMAGE_FORMAT_UNORM32
-      desc: "32-bit unsigned normalized integer"
-    - name: $X_IMAGE_FORMAT_SNORM8
-      desc: "8-bit signed normalized integer"
-    - name: $X_IMAGE_FORMAT_SNORM16
-      desc: "16-bit signed normalized integer"
-    - name: $X_IMAGE_FORMAT_SNORM32
-      desc: "32-bit signed normalized integer"
-    - name: $X_IMAGE_FORMAT_FLOAT16
-      desc: "16-bit float"
-    - name: $X_IMAGE_FORMAT_FLOAT32
-      desc: "32-bit float"
+    - name: $X_IMAGE_FORMAT_LAYOUT_8
+      desc: "8-bit single component layout"
+    - name: $X_IMAGE_FORMAT_LAYOUT_16
+      desc: "16-bit single component layout"
+    - name: $X_IMAGE_FORMAT_LAYOUT_32
+      desc: "32-bit single component layout"
+    - name: $X_IMAGE_FORMAT_LAYOUT_8_8
+      desc: "2-component 8-bit layout"
+    - name: $X_IMAGE_FORMAT_LAYOUT_8_8_8_8
+      desc: "4-component 8-bit layout"
+    - name: $X_IMAGE_FORMAT_LAYOUT_16_16
+      desc: "2-component 16-bit layout"
+    - name: $X_IMAGE_FORMAT_LAYOUT_16_16_16_16
+      desc: "4-component 16-bit layout"
+    - name: $X_IMAGE_FORMAT_LAYOUT_32_32
+      desc: "2-component 32-bit layout"
+    - name: $X_IMAGE_FORMAT_LAYOUT_32_32_32_32
+      desc: "4-component 32-bit layout"
+    - name: $X_IMAGE_FORMAT_LAYOUT_10_10_10_2
+      desc: "4-component 10_10_10_2 layout"
+    - name: $X_IMAGE_FORMAT_LAYOUT_11_11_10
+      desc: "3-component 11_11_10 layout"
+    - name: $X_IMAGE_FORMAT_LAYOUT_5_6_5
+      desc: "3-component 5_6_5 layout"
+    - name: $X_IMAGE_FORMAT_LAYOUT_5_5_5_1
+      desc: "4-component 5_5_5_1 layout"
+    - name: $X_IMAGE_FORMAT_LAYOUT_4_4_4_4
+      desc: "4-component 4_4_4_4 layout"
+--- #--------------------------------------------------------------------------
+type: enum
+desc: "Supported image format types"
+class: $xImage
+name: $x_image_format_type_t
+etors:
+    - name: $X_IMAGE_FORMAT_TYPE_UINT
+      desc: "Unsigned integer"
+    - name: $X_IMAGE_FORMAT_TYPE_SINT
+      desc: "Signed integer"
+    - name: $X_IMAGE_FORMAT_TYPE_UNORM
+      desc: "Unsigned normalized integer"
+    - name: $X_IMAGE_FORMAT_TYPE_SNORM
+      desc: "Signed normalized integer"
+    - name: $X_IMAGE_FORMAT_TYPE_FLOAT
+      desc: "Float"
+--- #--------------------------------------------------------------------------
+type: enum
+desc: "Supported image format component swizzle into channel"
+class: $xImage
+name: $x_image_format_swizzle_t
+etors:
+    - name: $X_IMAGE_FORMAT_SWIZ_R
+      desc: "Red component"
+    - name: $X_IMAGE_FORMAT_SWIZ_G
+      desc: "Green component"
+    - name: $X_IMAGE_FORMAT_SWIZ_B
+      desc: "Blue component"
+    - name: $X_IMAGE_FORMAT_SWIZ_A
+      desc: "Alpha component"
+    - name: $X_IMAGE_FORMAT_SWIZ_0
+      desc: "Zero"
+    - name: $X_IMAGE_FORMAT_SWIZ_1
+      desc: "One"
+    - name: $X_IMAGE_FORMAT_SWIZ_X
+      desc: "Don't care"
+--- #--------------------------------------------------------------------------
+type: struct
+desc: "Image format descriptor"
+class: $xImage
+name: $x_image_format_desc_t
+members:
+    - type: $x_image_format_layout_t
+      name: layout
+      desc: "[in] image format component layout"
+    - type: $x_image_format_type_t
+      name: type
+      desc: "[in] image format type"
+    - type: $x_image_format_swizzle_t
+      name: x
+      desc: "[in] image component swizzle into channel x"
+    - type: $x_image_format_swizzle_t
+      name: y
+      desc: "[in] image component swizzle into channel y"
+    - type: $x_image_format_swizzle_t
+      name: z
+      desc: "[in] image component swizzle into channel z"
+    - type: $x_image_format_swizzle_t
+      name: w
+      desc: "[in] image component swizzle into channel w"
 --- #--------------------------------------------------------------------------
 type: struct
 desc: "Image descriptor"
@@ -94,13 +154,9 @@ members:
     - type: $x_image_type_t
       name: type
       desc: "[in] image type"
-    - type: $x_image_format_t
+    - type: $x_image_format_desc_t
       name: format
-      desc: "[in] image channel format"
-    - type: uint32_t
-      name: numChannels
-      desc: "[in] number of channels per pixel [1,4]"
-      init: "1"
+      desc: "[in] image format"
     - type: size_t
       name: width
       desc: "[in] width in pixels, see $x_device_memory_properties_t::maxImageDims1D/2D/3D"

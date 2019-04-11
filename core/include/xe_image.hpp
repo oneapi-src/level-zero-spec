@@ -82,23 +82,49 @@ namespace xe
         };
 
         ///////////////////////////////////////////////////////////////////////////////
-        /// @brief C++ version for ::xe_image_format_t
-        enum class image_format_t
+        /// @brief C++ version for ::xe_image_format_layout_t
+        enum class image_format_layout_t
         {
-            UINT8,                                          ///< 8-bit unsigned integer
-            UINT16,                                         ///< 16-bit unsigned integer
-            UINT32,                                         ///< 32-bit unsigned integer
-            SINT8,                                          ///< 8-bit signed integer
-            SINT16,                                         ///< 16-bit signed integer
-            SINT32,                                         ///< 32-bit signed integer
-            UNORM8,                                         ///< 8-bit unsigned normalized integer
-            UNORM16,                                        ///< 16-bit unsigned normalized integer
-            UNORM32,                                        ///< 32-bit unsigned normalized integer
-            SNORM8,                                         ///< 8-bit signed normalized integer
-            SNORM16,                                        ///< 16-bit signed normalized integer
-            SNORM32,                                        ///< 32-bit signed normalized integer
-            FLOAT16,                                        ///< 16-bit float
-            FLOAT32,                                        ///< 32-bit float
+            8,                                              ///< 8-bit single component layout
+            _16,                                            ///< 16-bit single component layout
+            _32,                                            ///< 32-bit single component layout
+            _8_8,                                           ///< 2-component 8-bit layout
+            _8_8_8_8,                                       ///< 4-component 8-bit layout
+            _16_16,                                         ///< 2-component 16-bit layout
+            _16_16_16_16,                                   ///< 4-component 16-bit layout
+            _32_32,                                         ///< 2-component 32-bit layout
+            _32_32_32_32,                                   ///< 4-component 32-bit layout
+            _10_10_10_2,                                    ///< 4-component 10_10_10_2 layout
+            _11_11_10,                                      ///< 3-component 11_11_10 layout
+            _5_6_5,                                         ///< 3-component 5_6_5 layout
+            _5_5_5_1,                                       ///< 4-component 5_5_5_1 layout
+            _4_4_4_4,                                       ///< 4-component 4_4_4_4 layout
+
+        };
+
+        ///////////////////////////////////////////////////////////////////////////////
+        /// @brief C++ version for ::xe_image_format_type_t
+        enum class image_format_type_t
+        {
+            UINT,                                           ///< Unsigned integer
+            SINT,                                           ///< Signed integer
+            UNORM,                                          ///< Unsigned normalized integer
+            SNORM,                                          ///< Signed normalized integer
+            FLOAT,                                          ///< Float
+
+        };
+
+        ///////////////////////////////////////////////////////////////////////////////
+        /// @brief C++ version for ::xe_image_format_swizzle_t
+        enum class image_format_swizzle_t
+        {
+            IMAGE_FORMAT_SWIZ_R,                            ///< Red component
+            IMAGE_FORMAT_SWIZ_G,                            ///< Green component
+            IMAGE_FORMAT_SWIZ_B,                            ///< Blue component
+            IMAGE_FORMAT_SWIZ_A,                            ///< Alpha component
+            IMAGE_FORMAT_SWIZ_0,                            ///< Zero
+            IMAGE_FORMAT_SWIZ_1,                            ///< One
+            IMAGE_FORMAT_SWIZ_X,                            ///< Don't care
 
         };
 
@@ -119,14 +145,26 @@ namespace xe
         };
 
         ///////////////////////////////////////////////////////////////////////////////
+        /// @brief C++ version for ::xe_image_format_desc_t
+        struct image_format_desc_t
+        {
+            image_format_layout_t layout;                   ///< [in] image format component layout
+            image_format_type_t type;                       ///< [in] image format type
+            image_format_swizzle_t x;                       ///< [in] image component swizzle into channel x
+            image_format_swizzle_t y;                       ///< [in] image component swizzle into channel y
+            image_format_swizzle_t z;                       ///< [in] image component swizzle into channel z
+            image_format_swizzle_t w;                       ///< [in] image component swizzle into channel w
+
+        };
+
+        ///////////////////////////////////////////////////////////////////////////////
         /// @brief C++ version for ::xe_image_desc_t
         struct image_desc_t
         {
             image_desc_version_t version = image_desc_version_t::CURRENT;   ///< [in] ::IMAGE_DESC_VERSION_CURRENT
             image_flag_t flags;                             ///< [in] creation flags
             image_type_t type;                              ///< [in] image type
-            image_format_t format;                          ///< [in] image channel format
-            uint32_t numChannels = 1;                       ///< [in] number of channels per pixel [1,4]
+            image_format_desc_t format;                     ///< [in] image format
             size_t width = 0;                               ///< [in] width in pixels, see
                                                             ///< ::device_memory_properties_t::maxImageDims1D/2D/3D
             size_t height = 0;                              ///< [in] height in pixels (2D or 3D only), see
