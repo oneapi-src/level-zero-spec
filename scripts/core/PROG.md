@@ -552,11 +552,17 @@ This methodology allows for device-specific encoding of image contents (e.g., ti
 and avoids exposing these details in the API in a backwards compatible fashion.
 
 ```c
+    // Specify single component FLOAT32 format
+    ${x}_image_format_desc_t formatDesc = {
+        ${X}_IMAGE_FORMAT_LAYOUT_32, ${X}_IMAGE_FORMAT_TYPE_FLOAT,
+        ${X}_IMAGE_FORMAT_SWIZZLE_R, ${X}_IMAGE_FORMAT_SWIZZLE_0, ${X}_IMAGE_FORMAT_SWIZZLE_0, ${X}_IMAGE_FORMAT_SWIZZLE_1
+    };
+
     ${x}_image_desc_t imageDesc = {
         ${X}_IMAGE_DESC_VERSION_CURRENT,
         ${X}_IMAGE_FLAG_PROGRAM_READ,
         ${X}_IMAGE_TYPE_2D,
-        ${X}_IMAGE_FORMAT_FLOAT32, 1,
+        formatDesc,
         128, 128, 0, 0, 0
     };
     ${x}_image_handle_t hImage;
