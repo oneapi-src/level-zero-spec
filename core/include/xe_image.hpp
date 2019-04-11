@@ -85,7 +85,7 @@ namespace xe
         /// @brief C++ version for ::xe_image_format_layout_t
         enum class image_format_layout_t
         {
-            8,                                              ///< 8-bit single component layout
+            _8,                                             ///< 8-bit single component layout
             _16,                                            ///< 16-bit single component layout
             _32,                                            ///< 32-bit single component layout
             _8_8,                                           ///< 2-component 8-bit layout

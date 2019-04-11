@@ -139,7 +139,7 @@ def make_etor_name(namespace, tags, enum, etor, cpp):
     if cpp:
         prefix = re.sub(r"(\w+)_t", r"\1", subt(namespace, tags, enum, cpp=cpp)).upper()
         name = re.sub(r"%s_(\w+)"%prefix, r"\1", subt(namespace, tags, etor, cpp=cpp))
-        name = re.sub(r"^(\d+\w+)", r"_\1", name) #todo: .lower()?
+        name = re.sub(r"^(\d+\w*)", r"_\1", name) #todo: .lower()?
     else:
         name = subt(namespace, tags, etor)
     return name
