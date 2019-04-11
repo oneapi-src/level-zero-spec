@@ -23,8 +23,8 @@ struct PrecompiledFunctionMockData {
     const uint32_t crossThreadDataBaseSize;
     const uint32_t *perThreadDataBase;
     const uint32_t perThreadDataBaseSize;
-    const uint32_t *dynamicStateHeap;
     const size_t dynamicStateHeapSize;
+    const uint32_t *dynamicStateHeap;
     const uint32_t *samplerStateArray;
     const uint32_t *groupSizeInPerThreadDataBase;
     const std::pair<int, int> *bufferArgIndicesAndOffsets;
@@ -302,9 +302,9 @@ inline void writeMockData(const std::string sourceOrigin, std::string &mockName,
         << globalNameIsa << ", sizeof(" << globalNameIsa << "),\n"
         << globalNameCrossThreadData << ", sizeof(" << globalNameCrossThreadData << "),\n"
         << globalNamePerThreadData << ", sizeof(" << globalNamePerThreadData << "),\n"
-        << globalNameDynamicStateHeapSize << ", sizeof(" << globalNameDynamicStateHeapSize << "),\n"
-        << globalNameDynamicStateHeap<< ", sizeof(" << globalNameDynamicStateHeap << "),\n"
-        << globalNameSamplerArrayData << ", sizeof(" << globalNameSamplerArrayData << "),\n"
+        << globalNameDynamicStateHeapSize << ",\n"
+        << globalNameDynamicStateHeap << ",\n"
+        << globalNameSamplerArrayData << ",\n"
         << globalNameGroupSize << ",\n"
         << globalNameBufferArgIndices << ", sizeof(" << globalNameBufferArgIndices << ") / sizeof(" << globalNameBufferArgIndices << "[0]),\n"
         << globalNameHasBarriers << ",\n"
