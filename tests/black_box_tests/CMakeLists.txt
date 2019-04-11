@@ -27,6 +27,10 @@ foreach(TEST ${TEST_TARGETS})
         )
     endif()
 
+    if(UNIX)
+        set_source_files_properties(${TEST}.cpp PROPERTIES COMPILE_FLAGS -Wall)
+    endif()
+
     add_dependencies(${TEST} copy_third_party_files ocloc_shared)
     target_link_libraries(${TEST} level_zero_icd_loader ${OS_SPECIFIC_LIBS})
 

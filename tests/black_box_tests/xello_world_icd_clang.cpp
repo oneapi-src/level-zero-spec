@@ -149,7 +149,7 @@ int main(int argc, char *argv[]) {
 
     // 6. Validate
     bool outputValidationSuccessful = true;
-    for (int i = 0; i < allocSize; ++i) {
+    for (size_t i = 0; i < allocSize; ++i) {
         outputValidationSuccessful &= ((unsigned char)(initDataSrc[i] + i) == (unsigned char)readBackData[i]);
     }
     SUCCESS_OR_WARNING_BOOL(outputValidationSuccessful);

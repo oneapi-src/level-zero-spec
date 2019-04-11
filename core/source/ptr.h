@@ -80,13 +80,11 @@ class IsComplete {
 template <typename From, typename To>
 struct AssertCanStaticCast {
     static_assert(std::is_base_of<From, To>::value || std::is_base_of<To, From>::value || std::is_void<To>::value || std::is_void<From>::value, "Cannot convert between given types, use weakRefReinterpret for reinterpret_cast");
-    enum { value = 0 };
 };
 
 template <typename T>
 struct AssertIsComplete {
     static_assert(IsComplete<T>::value, "Could not interpret incomplete type (forward reference), verify that you include required headers");
-    enum { value = 0 };
 };
 
 template <PointerMode PointerMode>
@@ -172,7 +170,8 @@ struct PointerModeSelector<PointerMode::ZeroCost>::PointerOwnershipSelector<fals
 
         template <typename T2>
         PointerWeakRefT<T2> weakRef() const noexcept { // create weak reference of different type (static_cast)
-            AssertCanStaticCast<T, T2>::value;
+            AssertCanStaticCast<T, T2> val;
+            (void) val;
             return PointerWeakRefT<T2>(static_cast<T2 *>(this->ptr));
         }
 
@@ -203,13 +202,15 @@ struct PointerModeSelector<PointerMode::ZeroCost>::PointerOwnershipSelector<fals
 
         template <typename TestType = T>
         auto operator*() const noexcept -> std::enable_if_t<!std::is_void<TestType>::value, T> & { // if not void, allow derefence operator
-            AssertIsComplete<PointeeT>::value;
+            AssertIsComplete<PointeeT> val;
+            (void) val;
             return *this->ptr;
         }
 
         template <typename TestType = T>
         auto operator-> () const noexcept -> std::enable_if_t<std::is_class<TestType>::value, T> * { // if class, allow member dereference operator
-            AssertIsComplete<PointeeT>::value;
+            AssertIsComplete<PointeeT> val;
+            (void) val;
             return this->ptr;
         }
 
@@ -328,7 +329,8 @@ struct PointerModeSelector<PointerMode::ZeroCost>::PointerOwnershipSelector<true
 
         template <typename T2>
         PointerWeakRefT<T2> weakRef() const noexcept { // create weak reference of different type (static_cast)
-            AssertCanStaticCast<T, T2>::value;
+            AssertCanStaticCast<T, T2> val;
+            (void) val;
             return PointerWeakRefT<T2>(static_cast<T2 *>(this->ptr));
         }
 
@@ -359,13 +361,15 @@ struct PointerModeSelector<PointerMode::ZeroCost>::PointerOwnershipSelector<true
 
         template <typename TestType = T>
         auto operator*() const noexcept -> std::enable_if_t<!std::is_void<TestType>::value, T> & { // if not void, allow derefence operator
-            AssertIsComplete<PointeeT>::value;
+            AssertIsComplete<PointeeT> val;
+            (void) val;
             return *this->ptr;
         }
 
         template <typename TestType = T>
         auto operator-> () const noexcept -> std::enable_if_t<std::is_class<TestType>::value, T> * { // if class, allow member dereference operator
-            AssertIsComplete<PointeeT>::value;
+            AssertIsComplete<PointeeT> val;
+            (void) val;
             return this->ptr;
         }
 
@@ -375,13 +379,15 @@ struct PointerModeSelector<PointerMode::ZeroCost>::PointerOwnershipSelector<true
       protected:
         template <typename TestType = T>
         auto doDeleteOwned() noexcept -> std::enable_if_t<std::is_array<TestType>::value, void> { // delete []ptr
-            AssertIsComplete<PointeeT>::value;
+            AssertIsComplete<PointeeT> val;
+            (void) val;
             delete[] this->ptr;
         }
 
         template <typename TestType = T>
         auto doDeleteOwned() noexcept -> std::enable_if_t<!std::is_array<TestType>::value, void> { // delete ptr
-            AssertIsComplete<PointeeT>::value;
+            AssertIsComplete<PointeeT> val;
+            (void) val;
             delete ptr;
         }
 

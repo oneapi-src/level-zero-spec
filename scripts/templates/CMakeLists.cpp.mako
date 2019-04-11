@@ -13,6 +13,10 @@ set(L0_RUNTIME_SOURCES
 % endfor
 )
 
+if(UNIX)
+    set_source_files_properties(${"$"}{L0_RUNTIME_SOURCES} PROPERTIES COMPILE_FLAGS -Wall)
+endif()
+
 # Make our source files visible to parent 
 set(L0_RUNTIME_SOURCES "${"$"}{L0_RUNTIME_SOURCES}" CACHE STRING "L0_RUNTIME_SOURCES" FORCE)
 

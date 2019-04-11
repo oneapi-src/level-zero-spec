@@ -6,7 +6,7 @@
 #include <cstddef>
 
 namespace NEO {
-class NEO::LinearStream;
+class LinearStream;
 }
 
 namespace L0 {
