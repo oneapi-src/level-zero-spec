@@ -62,12 +62,13 @@ namespace xe
     /// @throws result_t
     inline void 
     CommandList::AppendBarrier(
+        event_handle_t hSignalEvent,                    ///< [in][optional] handle of the event to signal on completion
         uint32_t numWaitEvents,                         ///< [in][optional] number of events to wait on before executing barrier
         event_handle_t* phWaitEvents                    ///< [in][optional] handle of the events to wait on before executing
                                                         ///< barrier
         )
     {
-        // auto result = ::xeCommandListAppendBarrier( handle, numWaitEvents, phWaitEvents );
+        // auto result = ::xeCommandListAppendBarrier( handle, hSignalEvent, numWaitEvents, phWaitEvents );
         // if( ::XE_RESULT_SUCCESS != result ) throw exception(result, "xe::CommandList::AppendBarrier");
     }
 
@@ -93,12 +94,13 @@ namespace xe
         uint32_t numRanges,                             ///< [in] number of memory ranges
         const size_t* pRangeSizes,                      ///< [in] array of sizes of memory range
         const void** pRanges,                           ///< [in] array of memory ranges
+        event_handle_t hSignalEvent,                    ///< [in][optional] handle of the event to signal on completion
         uint32_t numWaitEvents,                         ///< [in][optional] number of events to wait on before executing barrier
         event_handle_t* phWaitEvents                    ///< [in][optional] handle of the events to wait on before executing
                                                         ///< barrier
         )
     {
-        // auto result = ::xeCommandListAppendMemoryRangesBarrier( handle, numRanges, pRangeSizes, pRanges, numWaitEvents, phWaitEvents );
+        // auto result = ::xeCommandListAppendMemoryRangesBarrier( handle, numRanges, pRangeSizes, pRanges, hSignalEvent, numWaitEvents, phWaitEvents );
         // if( ::XE_RESULT_SUCCESS != result ) throw exception(result, "xe::CommandList::AppendMemoryRangesBarrier");
     }
 

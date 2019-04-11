@@ -69,11 +69,12 @@
 ///         + nullptr == hCommandList
 ///     - ::XE_RESULT_ERROR_UNSUPPORTED
 ///
-/// @hash {1fa97f0733c92d12007c13dda750ccc44ace5129a276caa743b1b851b0e87591}
+/// @hash {5a1b934c89a448d55bf286086ad31aa09ca2ccdf5e12b073074de61f54adaec1}
 ///
 __xedllexport xe_result_t __xecall
 xeCommandListAppendBarrier(
     xe_command_list_handle_t hCommandList,          ///< [in] handle of the command list
+    xe_event_handle_t hSignalEvent,                 ///< [in][optional] handle of the event to signal on completion
     uint32_t numWaitEvents,                         ///< [in][optional] number of events to wait on before executing barrier
     xe_event_handle_t* phWaitEvents                 ///< [in][optional] handle of the events to wait on before executing
                                                     ///< barrier
@@ -91,7 +92,7 @@ xeCommandListAppendBarrier(
 #if defined(XE_NULLDRV)
         return XE_RESULT_SUCCESS;
 #else
-        return L0::CommandList::fromHandle(hCommandList)->appendBarrier(numWaitEvents, phWaitEvents);
+        return L0::CommandList::fromHandle(hCommandList)->appendBarrier(hSignalEvent, numWaitEvents, phWaitEvents);
 #endif
         /// @end
     }
@@ -136,7 +137,7 @@ xeCommandListAppendBarrier(
 ///         + nullptr == pRanges
 ///     - ::XE_RESULT_ERROR_UNSUPPORTED
 ///
-/// @hash {159e56e09dd84d49d39d6ed4f2d0d6c3ecb3242564df83499e8927eb8b56ae39}
+/// @hash {fae8b64e8c86fd1906d766d41853886f1dbdb52d56a653b71bda797ae302cd7c}
 ///
 __xedllexport xe_result_t __xecall
 xeCommandListAppendMemoryRangesBarrier(
@@ -144,6 +145,7 @@ xeCommandListAppendMemoryRangesBarrier(
     uint32_t numRanges,                             ///< [in] number of memory ranges
     const size_t* pRangeSizes,                      ///< [in] array of sizes of memory range
     const void** pRanges,                           ///< [in] array of memory ranges
+    xe_event_handle_t hSignalEvent,                 ///< [in][optional] handle of the event to signal on completion
     uint32_t numWaitEvents,                         ///< [in][optional] number of events to wait on before executing barrier
     xe_event_handle_t* phWaitEvents                 ///< [in][optional] handle of the events to wait on before executing
                                                     ///< barrier
@@ -163,7 +165,7 @@ xeCommandListAppendMemoryRangesBarrier(
 #if defined(XE_NULLDRV)
         return XE_RESULT_SUCCESS;
 #else
-        return L0::CommandList::fromHandle(hCommandList)->appendMemoryRangesBarrier(numRanges, pRangeSizes, pRanges, numWaitEvents, phWaitEvents);
+        return L0::CommandList::fromHandle(hCommandList)->appendMemoryRangesBarrier(numRanges, pRangeSizes, pRanges, hSignalEvent, numWaitEvents, phWaitEvents);
 #endif
         /// @end
     }
