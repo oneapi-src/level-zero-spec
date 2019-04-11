@@ -118,13 +118,13 @@ namespace xe
         /// @brief C++ version for ::xe_image_format_swizzle_t
         enum class image_format_swizzle_t
         {
-            IMAGE_FORMAT_SWIZ_R,                            ///< Red component
-            IMAGE_FORMAT_SWIZ_G,                            ///< Green component
-            IMAGE_FORMAT_SWIZ_B,                            ///< Blue component
-            IMAGE_FORMAT_SWIZ_A,                            ///< Alpha component
-            IMAGE_FORMAT_SWIZ_0,                            ///< Zero
-            IMAGE_FORMAT_SWIZ_1,                            ///< One
-            IMAGE_FORMAT_SWIZ_X,                            ///< Don't care
+            R,                                              ///< Red component
+            G,                                              ///< Green component
+            B,                                              ///< Blue component
+            A,                                              ///< Alpha component
+            _0,                                             ///< Zero
+            _1,                                             ///< One
+            X,                                              ///< Don't care
 
         };
 

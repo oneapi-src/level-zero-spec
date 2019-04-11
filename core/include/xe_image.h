@@ -109,13 +109,13 @@ typedef enum _xe_image_format_type_t
 /// @brief Supported image format component swizzle into channel
 typedef enum _xe_image_format_swizzle_t
 {
-    XE_IMAGE_FORMAT_SWIZ_R,                         ///< Red component
-    XE_IMAGE_FORMAT_SWIZ_G,                         ///< Green component
-    XE_IMAGE_FORMAT_SWIZ_B,                         ///< Blue component
-    XE_IMAGE_FORMAT_SWIZ_A,                         ///< Alpha component
-    XE_IMAGE_FORMAT_SWIZ_0,                         ///< Zero
-    XE_IMAGE_FORMAT_SWIZ_1,                         ///< One
-    XE_IMAGE_FORMAT_SWIZ_X,                         ///< Don't care
+    XE_IMAGE_FORMAT_SWIZZLE_R,                      ///< Red component
+    XE_IMAGE_FORMAT_SWIZZLE_G,                      ///< Green component
+    XE_IMAGE_FORMAT_SWIZZLE_B,                      ///< Blue component
+    XE_IMAGE_FORMAT_SWIZZLE_A,                      ///< Alpha component
+    XE_IMAGE_FORMAT_SWIZZLE_0,                      ///< Zero
+    XE_IMAGE_FORMAT_SWIZZLE_1,                      ///< One
+    XE_IMAGE_FORMAT_SWIZZLE_X,                      ///< Don't care
 
 } xe_image_format_swizzle_t;
 

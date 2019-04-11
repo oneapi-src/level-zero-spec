@@ -100,19 +100,19 @@ desc: "Supported image format component swizzle into channel"
 class: $xImage
 name: $x_image_format_swizzle_t
 etors:
-    - name: $X_IMAGE_FORMAT_SWIZ_R
+    - name: $X_IMAGE_FORMAT_SWIZZLE_R
       desc: "Red component"
-    - name: $X_IMAGE_FORMAT_SWIZ_G
+    - name: $X_IMAGE_FORMAT_SWIZZLE_G
       desc: "Green component"
-    - name: $X_IMAGE_FORMAT_SWIZ_B
+    - name: $X_IMAGE_FORMAT_SWIZZLE_B
       desc: "Blue component"
-    - name: $X_IMAGE_FORMAT_SWIZ_A
+    - name: $X_IMAGE_FORMAT_SWIZZLE_A
       desc: "Alpha component"
-    - name: $X_IMAGE_FORMAT_SWIZ_0
+    - name: $X_IMAGE_FORMAT_SWIZZLE_0
       desc: "Zero"
-    - name: $X_IMAGE_FORMAT_SWIZ_1
+    - name: $X_IMAGE_FORMAT_SWIZZLE_1
       desc: "One"
-    - name: $X_IMAGE_FORMAT_SWIZ_X
+    - name: $X_IMAGE_FORMAT_SWIZZLE_X
       desc: "Don't care"
 --- #--------------------------------------------------------------------------
 type: struct
