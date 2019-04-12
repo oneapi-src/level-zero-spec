@@ -167,7 +167,6 @@ ATSTEST_F(CommandListAppendLaunchFunction, addsWalkerToCommandStream) {
         EXPECT_EQ(idd.getSamplerCount(), INTERFACE_DESCRIPTOR_DATA::SAMPLER_COUNT_NO_SAMPLERS_USED);
         EXPECT_EQ(idd.getSamplerStatePointer(), 0u);
         EXPECT_EQ(idd.getBindingTableEntryCount(), 0u);
-        EXPECT_EQ(idd.getBindingTablePointer(), 0u);
         EXPECT_NE(idd.getNumberOfThreadsInGpgpuThreadGroup(), 0u);
         EXPECT_EQ(idd.getSharedLocalMemorySize(), INTERFACE_DESCRIPTOR_DATA::SHARED_LOCAL_MEMORY_SIZE_ENCODES_0K);
         EXPECT_EQ(idd.getBarrierEnable(), 0u);
@@ -413,6 +412,59 @@ ATSTEST_F(CommandListAppendLaunchFunction, storesImageSampler) {
     ASSERT_EQ(memcmp(fnSamplerState, samplerState, sizeSamplerState), 0u);
 }
 
+ATSTEST_F(CommandListAppendLaunchFunction, storesBindingTableAndSurfaceStates) {
+    using COMPUTE_WALKER = typename FamilyType::COMPUTE_WALKER;
+    using INTERFACE_DESCRIPTOR_DATA = typename FamilyType::INTERFACE_DESCRIPTOR_DATA;
+    using BINDING_TABLE_STATE = typename FamilyType::BINDING_TABLE_STATE;
+
+    createFunction("ImageCopy");
+
+    auto fnSurfaceStateHeap = function->getSurfaceStateHeap();
+    ASSERT_NE(fnSurfaceStateHeap, nullptr);
+
+    auto result = commandList->appendLaunchFunction(function->toHandle(),
+                                                    &dispatchFunctionArguments,
+                                                    nullptr);
+    EXPECT_EQ(XE_RESULT_SUCCESS, result);
+
+    auto usedSpaceAfter = commandList->commandStream->getUsed();
+
+    GenCmdList cmdList;
+    ASSERT_TRUE(FamilyType::PARSE::parseCommandBuffer(cmdList,
+                                                      ptrOffset(commandList->commandStream->getCpuBase(), 0),
+                                                      usedSpaceAfter));
+
+    auto itor = find<COMPUTE_WALKER *>(cmdList.begin(), cmdList.end());
+    ASSERT_NE(cmdList.end(), itor);
+
+    auto cmd = genCmdCast<COMPUTE_WALKER *>(*itor);
+    auto &idd = cmd->getInterfaceDescriptor();
+    auto fnSsh = function->getSurfaceStateHeap();
+    auto ssh = commandList->indirectHeaps[CommandList::SURFACE_STATE];
+    ASSERT_NE(fnSsh, nullptr);
+    ASSERT_NE(ssh, nullptr);
+
+    ASSERT_EQ(ssh->getUsed(), function->getSurfaceStateHeapSize());
+
+    auto fnBindingTableOffset = function->getBindingTableOffset();
+    auto bindingTableOffset = idd.getBindingTablePointer();
+    auto bindingTableOffsetDiff = bindingTableOffset - fnBindingTableOffset;
+
+    auto fnBindingTable = static_cast<const BINDING_TABLE_STATE *>(ptrOffset(fnSsh, fnBindingTableOffset));
+    auto bindingTable = static_cast<const BINDING_TABLE_STATE *>(ptrOffset(ssh->getCpuBase(), bindingTableOffset));
+
+    auto bindingTableStateCount = function->getBindingTableStateCount();
+    ASSERT_GT(bindingTableStateCount, 0u);
+
+    //TODO optimization currently disabled
+    //ASSERT_EQ(bindingTableStateCount, idd.getBindingTableEntryCount());
+
+    for (uint32_t i = 0; i < bindingTableStateCount; i++) {
+        ASSERT_EQ(fnBindingTable[i].getSurfaceStatePointer() + bindingTableOffsetDiff,
+                bindingTable[i].getSurfaceStatePointer());
+    }
+}
+
 using CommandListAppendLaunchFunctionGEN9 = CommandListAppendLaunchFunction;
 SKLTEST_F(CommandListAppendLaunchFunctionGEN9, copiesThreadDataToIndirectStateHeap) {
     createFunction("MemcpyBytes");
@@ -587,7 +639,6 @@ GEN9TEST_F(CommandListAppendLaunchFunctionGEN9, addsWalkerToCommandStream) {
         EXPECT_EQ(INTERFACE_DESCRIPTOR_DATA::SAMPLER_COUNT_NO_SAMPLERS_USED, idd->getSamplerCount());
         EXPECT_EQ(0u, idd->getSamplerStatePointer());
         EXPECT_EQ(0u, idd->getBindingTableEntryCount());
-        EXPECT_EQ(0u, idd->getBindingTablePointer());
         EXPECT_EQ(function->getThreadsPerThreadGroup(), idd->getNumberOfThreadsInGpgpuThreadGroup());
         EXPECT_EQ(INTERFACE_DESCRIPTOR_DATA::SHARED_LOCAL_MEMORY_SIZE_ENCODES_0K, idd->getSharedLocalMemorySize());
         EXPECT_EQ(0u, idd->getBarrierEnable());
@@ -812,6 +863,71 @@ GEN9TEST_F(CommandListAppendLaunchFunctionGEN9, storesImageSampler) {
     auto samplerState = static_cast<const SAMPLER_STATE *>(ptrOffset(dsh->getCpuBase(), idd->getSamplerStatePointer()));
 
     ASSERT_EQ(memcmp(fnSamplerState, samplerState, sizeSamplerState), 0u);
+}
+
+GEN9TEST_F(CommandListAppendLaunchFunctionGEN9, storesBindingTableAndSurfaceStates) {
+    using GPGPU_WALKER = typename FamilyType::GPGPU_WALKER;
+    using MEDIA_INTERFACE_DESCRIPTOR_LOAD = typename FamilyType::MEDIA_INTERFACE_DESCRIPTOR_LOAD;
+    using INTERFACE_DESCRIPTOR_DATA = typename FamilyType::INTERFACE_DESCRIPTOR_DATA;
+    using BINDING_TABLE_STATE = typename FamilyType::BINDING_TABLE_STATE;
+
+    createFunction("ImageCopy");
+
+    auto fnSurfaceStateHeap = function->getSurfaceStateHeap();
+    ASSERT_NE(fnSurfaceStateHeap, nullptr);
+
+    auto result = commandList->appendLaunchFunction(function->toHandle(),
+                                                    &dispatchFunctionArguments,
+                                                    nullptr);
+    EXPECT_EQ(XE_RESULT_SUCCESS, result);
+
+    auto usedSpaceAfter = commandList->commandStream->getUsed();
+
+    GenCmdList cmdList;
+    ASSERT_TRUE(FamilyType::PARSE::parseCommandBuffer(cmdList,
+                                                      ptrOffset(commandList->commandStream->getCpuBase(), 0),
+                                                      usedSpaceAfter));
+
+    auto itorWalker = find<GPGPU_WALKER *>(cmdList.begin(), cmdList.end());
+    ASSERT_NE(cmdList.end(), itorWalker);
+
+    auto itorMIDL = find<MEDIA_INTERFACE_DESCRIPTOR_LOAD *>(cmdList.begin(), itorWalker);
+    ASSERT_NE(itorMIDL, itorWalker);
+    INTERFACE_DESCRIPTOR_DATA *idd = nullptr;
+    {
+        auto cmd = genCmdCast<MEDIA_INTERFACE_DESCRIPTOR_LOAD *>(*itorMIDL);
+        ASSERT_NE(cmd, nullptr);
+
+        EXPECT_EQ(cmd->getInterfaceDescriptorTotalLength(), sizeof(INTERFACE_DESCRIPTOR_DATA));
+        auto dsh = commandList->indirectHeaps[CommandList::DYNAMIC_STATE];
+        EXPECT_LE(cmd->getInterfaceDescriptorDataStartAddress() + cmd->getInterfaceDescriptorTotalLength(), dsh->getUsed());
+        idd = static_cast<INTERFACE_DESCRIPTOR_DATA *>(ptrOffset(dsh->getCpuBase(), cmd->getInterfaceDescriptorDataStartAddress()));
+    }
+
+    auto fnSsh = function->getSurfaceStateHeap();
+    auto ssh = commandList->indirectHeaps[CommandList::SURFACE_STATE];
+    ASSERT_NE(fnSsh, nullptr);
+    ASSERT_NE(ssh, nullptr);
+
+    ASSERT_EQ(ssh->getUsed(), function->getSurfaceStateHeapSize());
+
+    auto fnBindingTableOffset = function->getBindingTableOffset();
+    auto bindingTableOffset = idd->getBindingTablePointer();
+    auto bindingTableOffsetDiff = bindingTableOffset - fnBindingTableOffset;
+
+    auto fnBindingTable = static_cast<const BINDING_TABLE_STATE *>(ptrOffset(fnSsh, fnBindingTableOffset));
+    auto bindingTable = static_cast<const BINDING_TABLE_STATE *>(ptrOffset(ssh->getCpuBase(), bindingTableOffset));
+
+    auto bindingTableStateCount = function->getBindingTableStateCount();
+    ASSERT_GT(bindingTableStateCount, 0u);
+
+    //TODO optimization currently disabled
+    //ASSERT_EQ(bindingTableStateCount, idd->getBindingTableEntryCount());
+
+    for (uint32_t i = 0; i < bindingTableStateCount; i++) {
+        ASSERT_EQ(fnBindingTable[i].getSurfaceStatePointer() + bindingTableOffsetDiff,
+                bindingTable[i].getSurfaceStatePointer());
+    }
 }
 
 } // namespace ult

@@ -64,6 +64,24 @@ static const uint32_t SlmBarrier_PerThreadDataBase_Gen9core[] =
 };
 
 
+static const uint32_t SlmBarrier_BindingTableStateCount_Gen9core = 0x3;
+
+static const uint32_t SlmBarrier_BindingTableOffsetGen9core = 0xc0;
+
+static const size_t SlmBarrier_SurfaceStateHeapSize_Gen9core = 0xcc;
+
+static uint32_t SlmBarrier_SurfaceStateHeap_Gen9core[] =
+{
+    0x87fd4000, 0x04000000, 0x001f007f, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 
+    0xd71d7000, 0x00005642, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 
+    0x87fd4000, 0x04000000, 0x001f007f, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 
+    0xd6ad1000, 0x00005642, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 
+    0x83ffc000, 0x03000000, 0x1fff007f, 0x0fe00000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 
+    0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 
+    0x00000000, 0x00000040, 0x00000080
+};
+
+
 static const size_t SlmBarrier_DynamicStateHeapSize_Gen9core = 0x20;
 
 static const uint32_t SlmBarrier_DynamicStateHeap_Gen9core[] =
@@ -93,6 +111,10 @@ SlmBarrier_SimdSize_Gen9core,
 SlmBarrier_ISA_Gen9core, sizeof(SlmBarrier_ISA_Gen9core),
 SlmBarrier_CrossThreadDataBase_Gen9core, sizeof(SlmBarrier_CrossThreadDataBase_Gen9core),
 SlmBarrier_PerThreadDataBase_Gen9core, sizeof(SlmBarrier_PerThreadDataBase_Gen9core),
+SlmBarrier_BindingTableStateCount_Gen9core,
+SlmBarrier_BindingTableOffsetGen9core,
+SlmBarrier_SurfaceStateHeapSize_Gen9core,
+SlmBarrier_SurfaceStateHeap_Gen9core,
 SlmBarrier_DynamicStateHeapSize_Gen9core,
 SlmBarrier_DynamicStateHeap_Gen9core,
 SlmBarrier_SamplerArrayDataBase_Gen9core,

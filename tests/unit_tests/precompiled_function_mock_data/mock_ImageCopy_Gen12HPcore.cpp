@@ -65,6 +65,22 @@ static const uint32_t ImageCopy_PerThreadDataBase_Gen12HPcore[] =
 };
 
 
+static const uint32_t ImageCopy_BindingTableStateCount_Gen12HPcore = 0x2;
+
+static const uint32_t ImageCopy_BindingTableOffsetGen12HPcore = 0x80;
+
+static const size_t ImageCopy_SurfaceStateHeapSize_Gen12HPcore = 0x88;
+
+static uint32_t ImageCopy_SurfaceStateHeap_Gen12HPcore[] =
+{
+    0x235dc000, 0x00000000, 0x00090009, 0x00000027, 0x00000000, 0x00000000, 0x00000000, 0x0800c000, 
+    0xe5d1e000, 0x000055a6, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 
+    0x235dc000, 0x00000000, 0x00090009, 0x00000027, 0x00000000, 0x00000000, 0x00000000, 0x0800c000, 
+    0xe45d6000, 0x000055a6, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 
+    0x00000000, 0x00000040
+};
+
+
 static const size_t ImageCopy_DynamicStateHeapSize_Gen12HPcore = 0xa0;
 
 static const uint32_t ImageCopy_DynamicStateHeap_Gen12HPcore[] =
@@ -98,6 +114,10 @@ ImageCopy_SimdSize_Gen12HPcore,
 ImageCopy_ISA_Gen12HPcore, sizeof(ImageCopy_ISA_Gen12HPcore),
 ImageCopy_CrossThreadDataBase_Gen12HPcore, sizeof(ImageCopy_CrossThreadDataBase_Gen12HPcore),
 ImageCopy_PerThreadDataBase_Gen12HPcore, sizeof(ImageCopy_PerThreadDataBase_Gen12HPcore),
+ImageCopy_BindingTableStateCount_Gen12HPcore,
+ImageCopy_BindingTableOffsetGen12HPcore,
+ImageCopy_SurfaceStateHeapSize_Gen12HPcore,
+ImageCopy_SurfaceStateHeap_Gen12HPcore,
 ImageCopy_DynamicStateHeapSize_Gen12HPcore,
 ImageCopy_DynamicStateHeap_Gen12HPcore,
 ImageCopy_SamplerArrayDataBase_Gen12HPcore,

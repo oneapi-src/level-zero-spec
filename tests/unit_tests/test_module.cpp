@@ -322,11 +322,6 @@ TEST_P(ModuleCreateImageArg, onlineCompilationModuleTest) {
     EXPECT_NE(0U, sshSize);
     EXPECT_NE(nullptr, ssh);
 
-    // TODO test for SSH update
-    // I could inspect kernelArgInfo[argindex].offsetHeap, then look at that place in the function's
-    // SSH
-    // Look for some specific values to be set?  Anything I do to that affect will be arch-specific.
-
     auto capturedAllocsForResidency = function->getResidencyContainer();
     EXPECT_NE(capturedAllocsForResidency.end(),
               std::find(capturedAllocsForResidency.begin(), capturedAllocsForResidency.end(),

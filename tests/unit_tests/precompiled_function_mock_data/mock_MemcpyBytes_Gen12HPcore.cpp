@@ -49,6 +49,22 @@ static const uint32_t MemcpyBytes_PerThreadDataBase_Gen12HPcore[] =
 };
 
 
+static const uint32_t MemcpyBytes_BindingTableStateCount_Gen12HPcore = 0x2;
+
+static const uint32_t MemcpyBytes_BindingTableOffsetGen12HPcore = 0x80;
+
+static const size_t MemcpyBytes_SurfaceStateHeapSize_Gen12HPcore = 0x88;
+
+static uint32_t MemcpyBytes_SurfaceStateHeap_Gen12HPcore[] =
+{
+    0x87fd4000, 0x04000000, 0x001f007f, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 
+    0xe3fdd000, 0x000055a6, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 
+    0x87fd4000, 0x04000000, 0x001f007f, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 
+    0xe4724000, 0x000055a6, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 
+    0x00000000, 0x00000040
+};
+
+
 static const size_t MemcpyBytes_DynamicStateHeapSize_Gen12HPcore = 0x20;
 
 static const uint32_t MemcpyBytes_DynamicStateHeap_Gen12HPcore[] =
@@ -78,6 +94,10 @@ MemcpyBytes_SimdSize_Gen12HPcore,
 MemcpyBytes_ISA_Gen12HPcore, sizeof(MemcpyBytes_ISA_Gen12HPcore),
 MemcpyBytes_CrossThreadDataBase_Gen12HPcore, sizeof(MemcpyBytes_CrossThreadDataBase_Gen12HPcore),
 MemcpyBytes_PerThreadDataBase_Gen12HPcore, sizeof(MemcpyBytes_PerThreadDataBase_Gen12HPcore),
+MemcpyBytes_BindingTableStateCount_Gen12HPcore,
+MemcpyBytes_BindingTableOffsetGen12HPcore,
+MemcpyBytes_SurfaceStateHeapSize_Gen12HPcore,
+MemcpyBytes_SurfaceStateHeap_Gen12HPcore,
 MemcpyBytes_DynamicStateHeapSize_Gen12HPcore,
 MemcpyBytes_DynamicStateHeap_Gen12HPcore,
 MemcpyBytes_SamplerArrayDataBase_Gen12HPcore,

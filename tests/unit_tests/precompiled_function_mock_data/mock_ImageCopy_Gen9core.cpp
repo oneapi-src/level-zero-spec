@@ -57,6 +57,22 @@ static const uint32_t ImageCopy_PerThreadDataBase_Gen9core[] =
 };
 
 
+static const uint32_t ImageCopy_BindingTableStateCount_Gen9core = 0x2;
+
+static const uint32_t ImageCopy_BindingTableOffsetGen9core = 0x80;
+
+static const size_t ImageCopy_SurfaceStateHeapSize_Gen9core = 0x88;
+
+static uint32_t ImageCopy_SurfaceStateHeap_Gen9core[] =
+{
+    0x235d4000, 0x00000000, 0x00090009, 0x00000027, 0x00000000, 0x00000000, 0x00000000, 0x08000000, 
+    0xd72c6000, 0x00005642, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 
+    0x235d4000, 0x00000000, 0x00090009, 0x00000027, 0x00000000, 0x00000000, 0x00000000, 0x08000000, 
+    0xd70a7000, 0x00005642, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 
+    0x00000000, 0x00000040
+};
+
+
 static const size_t ImageCopy_DynamicStateHeapSize_Gen9core = 0xa0;
 
 static const uint32_t ImageCopy_DynamicStateHeap_Gen9core[] =
@@ -90,6 +106,10 @@ ImageCopy_SimdSize_Gen9core,
 ImageCopy_ISA_Gen9core, sizeof(ImageCopy_ISA_Gen9core),
 ImageCopy_CrossThreadDataBase_Gen9core, sizeof(ImageCopy_CrossThreadDataBase_Gen9core),
 ImageCopy_PerThreadDataBase_Gen9core, sizeof(ImageCopy_PerThreadDataBase_Gen9core),
+ImageCopy_BindingTableStateCount_Gen9core,
+ImageCopy_BindingTableOffsetGen9core,
+ImageCopy_SurfaceStateHeapSize_Gen9core,
+ImageCopy_SurfaceStateHeap_Gen9core,
 ImageCopy_DynamicStateHeapSize_Gen9core,
 ImageCopy_DynamicStateHeap_Gen9core,
 ImageCopy_SamplerArrayDataBase_Gen9core,

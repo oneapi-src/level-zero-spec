@@ -23,6 +23,10 @@ struct PrecompiledFunctionMockData {
     const uint32_t crossThreadDataBaseSize;
     const uint32_t *perThreadDataBase;
     const uint32_t perThreadDataBaseSize;
+    const uint32_t bindingTableStateCount;
+    const uint32_t bindingTableOffset;
+    const size_t surfaceStateHeapSize;
+    uint32_t *surfaceStateHeap;
     const size_t dynamicStateHeapSize;
     const uint32_t *dynamicStateHeap;
     const uint32_t *samplerStateArray;
@@ -69,6 +73,10 @@ struct PrecompiledFunctionMock : Mock<Function> {
         ON_CALL(*this, getHasBarriers).WillByDefault(::testing::Return(precompiledFunctionMockData->hasBarriers));
         ON_CALL(*this, getSlmSize).WillByDefault(::testing::Return(precompiledFunctionMockData->slmSize));
         ON_CALL(*this, hasPrintfOutput).WillByDefault(::testing::Return(precompiledFunctionMockData->hasPrintfOutput));
+        ON_CALL(*this, getBindingTableStateCount).WillByDefault(::testing::Return(precompiledFunctionMockData->bindingTableStateCount));
+        ON_CALL(*this, getBindingTableOffset).WillByDefault(::testing::Return(precompiledFunctionMockData->bindingTableOffset));
+        ON_CALL(*this, getSurfaceStateHeap).WillByDefault(::testing::Return(precompiledFunctionMockData->surfaceStateHeap));
+        ON_CALL(*this, getSurfaceStateHeapSize).WillByDefault(::testing::Return(static_cast<uint32_t>(precompiledFunctionMockData->surfaceStateHeapSize)));
         ON_CALL(*this, getDynamicStateHeap).WillByDefault(::testing::Return(precompiledFunctionMockData->dynamicStateHeap));
         ON_CALL(*this, getDynamicStateHeapSize).WillByDefault(::testing::Return(precompiledFunctionMockData->dynamicStateHeapSize));
         ON_CALL(*this, getSamplerStateArray).WillByDefault(::testing::Return(reinterpret_cast<const iOpenCL::SPatchSamplerStateArray *>(precompiledFunctionMockData->samplerStateArray)));
@@ -104,6 +112,9 @@ struct PrecompiledFunctionMock : Mock<Function> {
         EXPECT_CALL(*this, getThreadsPerThreadGroup()).Times(::testing::AnyNumber());
         EXPECT_CALL(*this, setGroupCount(_, _, _)).Times(::testing::AnyNumber());
         EXPECT_CALL(*this, getBindingTableStateCount()).Times(::testing::AnyNumber());
+        EXPECT_CALL(*this, getBindingTableOffset()).Times(::testing::AnyNumber());
+        EXPECT_CALL(*this, getSurfaceStateHeap()).Times(::testing::AnyNumber());
+        EXPECT_CALL(*this, getSurfaceStateHeapSize()).Times(::testing::AnyNumber());
         EXPECT_CALL(*this, getDynamicStateHeap()).Times(::testing::AnyNumber());
         EXPECT_CALL(*this, getDynamicStateHeapSize()).Times(::testing::AnyNumber());
         EXPECT_CALL(*this, getSamplerStateArray()).Times(::testing::AnyNumber());
@@ -232,6 +243,10 @@ inline void writeMockData(const std::string sourceOrigin, std::string &mockName,
     std::string globalNameCrossThreadData = mockName + "_CrossThreadDataBase_" + deviceName;
     std::string globalNamePerThreadData = mockName + "_PerThreadDataBase_" + deviceName;
     std::string globalNameBorderColorData = mockName + "_BorderColorDataBase_" + deviceName;
+    std::string globalNameBindingTableStateCount = mockName + "_BindingTableStateCount_" + deviceName;
+    std::string globalNameBindingTableOffset = mockName + "_BindingTableOffset" + deviceName;
+    std::string globalNameSurfaceStateHeapSize = mockName + "_SurfaceStateHeapSize_" + deviceName;
+    std::string globalNameSurfaceStateHeap = mockName + "_SurfaceStateHeap_" + deviceName;
     std::string globalNameDynamicStateHeapSize = mockName + "_DynamicStateHeapSize_" + deviceName;
     std::string globalNameDynamicStateHeap = mockName + "_DynamicStateHeap_" + deviceName;
     std::string globalNameSamplerArrayData = mockName + "_SamplerArrayDataBase_" + deviceName;
@@ -252,6 +267,16 @@ inline void writeMockData(const std::string sourceOrigin, std::string &mockName,
     out << "\n\n";
     out << "static const uint32_t " << globalNamePerThreadData << "[] = \n";
     writeAsCppArrayInitializer(function->getPerThreadDataHostMem(), function->getPerThreadDataSizeForWholeThreadGroup(), out);
+    out << "\n\n";
+
+    out << "static const uint32_t " << globalNameBindingTableStateCount << " = 0x" << function->getBindingTableStateCount() << ";\n\n";
+    out << "static const uint32_t " << globalNameBindingTableOffset << " = 0x" << function->getBindingTableOffset() << ";\n\n";
+
+    auto sshSize = function->getSurfaceStateHeapSize();
+    out << "static const size_t " << globalNameSurfaceStateHeapSize << " = 0x" << sshSize << ";\n\n";
+
+    out << "static uint32_t " << globalNameSurfaceStateHeap << "[] =\n";
+    writeAsCppArrayInitializer(function->getSurfaceStateHeap(), sshSize, out);
     out << "\n\n";
 
     auto dshSize = function->getDynamicStateHeapSize();
@@ -302,6 +327,10 @@ inline void writeMockData(const std::string sourceOrigin, std::string &mockName,
         << globalNameIsa << ", sizeof(" << globalNameIsa << "),\n"
         << globalNameCrossThreadData << ", sizeof(" << globalNameCrossThreadData << "),\n"
         << globalNamePerThreadData << ", sizeof(" << globalNamePerThreadData << "),\n"
+        << globalNameBindingTableStateCount << ",\n"
+        << globalNameBindingTableOffset << ",\n"
+        << globalNameSurfaceStateHeapSize << ",\n"
+        << globalNameSurfaceStateHeap << ",\n"
         << globalNameDynamicStateHeapSize << ",\n"
         << globalNameDynamicStateHeap << ",\n"
         << globalNameSamplerArrayData << ",\n"

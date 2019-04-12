@@ -84,6 +84,26 @@ static const uint32_t Printf_PerThreadDataBase_Gen12HPcore[] =
 };
 
 
+static const uint32_t Printf_BindingTableStateCount_Gen12HPcore = 0x4;
+
+static const uint32_t Printf_BindingTableOffsetGen12HPcore = 0x100;
+
+static const size_t Printf_SurfaceStateHeapSize_Gen12HPcore = 0x110;
+
+static uint32_t Printf_SurfaceStateHeap_Gen12HPcore[] =
+{
+    0x87fd4000, 0x04000000, 0x001f007f, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 
+    0xe3ff3000, 0x000055a6, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 
+    0x87fd4000, 0x04000000, 0x001f007f, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 
+    0xe3fd2000, 0x000055a6, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 
+    0x87fd4000, 0x00000000, 0x0000001f, 0x00000000, 0x00000000, 0x00004000, 0x00000000, 0x00000000, 
+    0xe5d1e000, 0x000055a6, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 
+    0x87ffc000, 0x03000000, 0x1fff007f, 0x0fe00000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 
+    0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 
+    0x00000000, 0x00000040, 0x00000080, 0x000000c0
+};
+
+
 static const size_t Printf_DynamicStateHeapSize_Gen12HPcore = 0x20;
 
 static const uint32_t Printf_DynamicStateHeap_Gen12HPcore[] =
@@ -113,6 +133,10 @@ Printf_SimdSize_Gen12HPcore,
 Printf_ISA_Gen12HPcore, sizeof(Printf_ISA_Gen12HPcore),
 Printf_CrossThreadDataBase_Gen12HPcore, sizeof(Printf_CrossThreadDataBase_Gen12HPcore),
 Printf_PerThreadDataBase_Gen12HPcore, sizeof(Printf_PerThreadDataBase_Gen12HPcore),
+Printf_BindingTableStateCount_Gen12HPcore,
+Printf_BindingTableOffsetGen12HPcore,
+Printf_SurfaceStateHeapSize_Gen12HPcore,
+Printf_SurfaceStateHeap_Gen12HPcore,
 Printf_DynamicStateHeapSize_Gen12HPcore,
 Printf_DynamicStateHeap_Gen12HPcore,
 Printf_SamplerArrayDataBase_Gen12HPcore,

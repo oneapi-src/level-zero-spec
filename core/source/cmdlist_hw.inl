@@ -140,6 +140,7 @@ uint32_t CommandListCoreFamily<gfxCoreFamily>::copyBindingTableAndSurfaceStates(
 
     assert(ssh);
     assert(srcSsh);
+    assert(srcSshSize > offsetOfBindingTable);
 
     // Align the heap and allocate space for new ssh data
     ssh->align(BINDING_TABLE_STATE::SURFACESTATEPOINTER_ALIGN_SIZE);
