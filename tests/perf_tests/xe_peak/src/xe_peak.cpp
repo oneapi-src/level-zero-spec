@@ -61,8 +61,7 @@ void L0Context::reset_commandlist() {
 
     command_list_description.version = XE_COMMAND_LIST_DESC_VERSION_CURRENT;
 
-    result = xeDeviceCreateCommandList(device, &command_list_description,
-                                       &command_list);
+    result = xeDeviceCreateCommandList(device, &command_list_description, &command_list);
     if (result) {
         throw std::runtime_error("xeDeviceCreateCommandList failed: " + result);
     }
@@ -133,8 +132,7 @@ void L0Context::init_xe() {
         print_xe_device_properties(device_property);
     }
 
-    device_compute_property.version =
-        XE_DEVICE_COMPUTE_PROPERTIES_VERSION_CURRENT;
+    device_compute_property.version = XE_DEVICE_COMPUTE_PROPERTIES_VERSION_CURRENT;
     result = xeDeviceGetComputeProperties(device, &device_compute_property);
     if (result) {
         throw std::runtime_error("xeDeviceGetComputeProperties failed: " + result);
@@ -151,8 +149,7 @@ void L0Context::init_xe() {
 
     command_list_description.version = XE_COMMAND_LIST_DESC_VERSION_CURRENT;
 
-    result = xeDeviceCreateCommandList(device, &command_list_description,
-                                       &command_list);
+    result = xeDeviceCreateCommandList(device, &command_list_description, &command_list);
     if (result) {
         throw std::runtime_error("xeDeviceCreateCommandList failed: " + result);
     }
@@ -163,8 +160,7 @@ void L0Context::init_xe() {
     command_queue_description.ordinal = command_queue_id;
     command_queue_description.mode = XE_COMMAND_QUEUE_MODE_ASYNCHRONOUS;
 
-    result = xeDeviceCreateCommandQueue(device, &command_queue_description,
-                                        &command_queue);
+    result = xeDeviceCreateCommandQueue(device, &command_queue_description, &command_queue);
     if (result) {
         throw std::runtime_error("xeDeviceCreateCommandQueue failed: " + result);
     }
@@ -209,8 +205,8 @@ uint64_t XePeak::convert_cl_to_xe_work_item_count(uint64_t global_work_size, uin
     return number_of_workgroups * (local_size + local_size + local_size);
 }
 
-void XePeak::set_workgroups(L0Context &context, const uint64_t total_work_items_requested, uint32_t *group_size_x,
-                            uint32_t *group_size_y, uint32_t *group_size_z,
+void XePeak::set_workgroups(L0Context &context, const uint64_t total_work_items_requested,
+                            uint32_t *group_size_x, uint32_t *group_size_y, uint32_t *group_size_z,
                             xe_thread_group_dimensions_t *thread_group_dimensions) {
 
     uint64_t final_work_items = 0;
@@ -228,31 +224,38 @@ void XePeak::set_workgroups(L0Context &context, const uint64_t total_work_items_
                                 *group_size_y * thread_group_dimensions->groupCountY *
                                 *group_size_z * thread_group_dimensions->groupCountZ);
         }
-        if ((thread_group_dimensions->groupCountY < context.device_compute_property.maxGroupCountY) && final_work_items < total_work_items_requested) {
+        if ((thread_group_dimensions->groupCountY <
+             context.device_compute_property.maxGroupCountY) &&
+            final_work_items < total_work_items_requested) {
             thread_group_dimensions->groupCountY += 1;
             final_work_items = (*group_size_x * thread_group_dimensions->groupCountX *
                                 *group_size_y * thread_group_dimensions->groupCountY *
                                 *group_size_z * thread_group_dimensions->groupCountZ);
         }
-        if ((thread_group_dimensions->groupCountZ < context.device_compute_property.maxGroupCountZ) && final_work_items < total_work_items_requested) {
+        if ((thread_group_dimensions->groupCountZ <
+             context.device_compute_property.maxGroupCountZ) &&
+            final_work_items < total_work_items_requested) {
             thread_group_dimensions->groupCountZ += 1;
             final_work_items = (*group_size_x * thread_group_dimensions->groupCountX *
                                 *group_size_y * thread_group_dimensions->groupCountY *
                                 *group_size_z * thread_group_dimensions->groupCountZ);
         }
-        if ((final_work_items < total_work_items_requested) && (*group_size_x < context.device_compute_property.maxGroupSizeX)) {
+        if ((final_work_items < total_work_items_requested) &&
+            (*group_size_x < context.device_compute_property.maxGroupSizeX)) {
             *group_size_x += 1;
             final_work_items = (*group_size_x * thread_group_dimensions->groupCountX *
                                 *group_size_y * thread_group_dimensions->groupCountY *
                                 *group_size_z * thread_group_dimensions->groupCountZ);
         }
-        if ((final_work_items < total_work_items_requested) && (*group_size_y < context.device_compute_property.maxGroupSizeY)) {
+        if ((final_work_items < total_work_items_requested) &&
+            (*group_size_y < context.device_compute_property.maxGroupSizeY)) {
             *group_size_y += 1;
             final_work_items = (*group_size_x * thread_group_dimensions->groupCountX *
                                 *group_size_y * thread_group_dimensions->groupCountY *
                                 *group_size_z * thread_group_dimensions->groupCountZ);
         }
-        if ((final_work_items < total_work_items_requested) && (*group_size_z < context.device_compute_property.maxGroupSizeZ)) {
+        if ((final_work_items < total_work_items_requested) &&
+            (*group_size_z < context.device_compute_property.maxGroupSizeZ)) {
             *group_size_z += 1;
             final_work_items = (*group_size_x * thread_group_dimensions->groupCountX *
                                 *group_size_y * thread_group_dimensions->groupCountY *
@@ -261,11 +264,12 @@ void XePeak::set_workgroups(L0Context &context, const uint64_t total_work_items_
     }
 
     if (verbose)
-        std::cout << "total work items that will be executed: " << final_work_items << " requested: " << total_work_items_requested << "\n";
+        std::cout << "total work items that will be executed: " << final_work_items
+                  << " requested: " << total_work_items_requested << "\n";
 }
 
 float XePeak::run_kernel(L0Context context, xe_function_handle_t &function,
-                         uint64_t total_number_work_items, int iters) {
+                         uint64_t total_number_work_items, int iters, TimingMeasurement type) {
     xe_result_t result = XE_RESULT_SUCCESS;
     float timed = 0;
 
@@ -273,7 +277,8 @@ float XePeak::run_kernel(L0Context context, xe_function_handle_t &function,
     uint32_t group_size_y = 0;
     uint32_t group_size_z = 0;
     xe_thread_group_dimensions_t thread_group_dimensions;
-    set_workgroups(context, total_number_work_items, &group_size_x, &group_size_y, &group_size_z, &thread_group_dimensions);
+    set_workgroups(context, total_number_work_items, &group_size_x, &group_size_y, &group_size_z,
+                   &thread_group_dimensions);
 
     if (verbose) {
         std::cout << "Group size x: " << group_size_x << "\n";
@@ -284,21 +289,17 @@ float XePeak::run_kernel(L0Context context, xe_function_handle_t &function,
         std::cout << "Group count z: " << thread_group_dimensions.groupCountZ << "\n";
     }
 
-    result = xeFunctionSetGroupSize(function, group_size_x, group_size_y,
-                                    group_size_z);
+    result = xeFunctionSetGroupSize(function, group_size_x, group_size_y, group_size_z);
     if (result) {
         throw std::runtime_error("xeFunctionSetGroupSize failed: " + result);
     }
     if (verbose)
         std::cout << "Group size set\n";
 
-    context.reset_commandlist();
-
-    result = xeCommandListAppendLaunchFunction(
-        context.command_list, function, &thread_group_dimensions, nullptr);
+    result = xeCommandListAppendLaunchFunction(context.command_list, function,
+                                               &thread_group_dimensions, nullptr);
     if (result) {
-        throw std::runtime_error("xeCommandListAppendLaunchFunction failed: " +
-                                 result);
+        throw std::runtime_error("xeCommandListAppendLaunchFunction failed: " + result);
     }
     if (verbose)
         std::cout << "Function launch appended\n";
@@ -314,16 +315,23 @@ float XePeak::run_kernel(L0Context context, xe_function_handle_t &function,
 
     Timer timer;
 
-    timer.start();
+    if (type == BANDWIDTH) {
+        timer.start();
+    }
     for (int i = 0; i < iters; i++) {
-        result = xeCommandQueueExecuteCommandLists(
-            context.command_queue, 1, &context.command_list, nullptr);
+        if (type == KERNEL_LAUNCH_LATENCY || type == KERNEL_COMPLETE_LATENCY) {
+            timer.start();
+        }
+        result = xeCommandQueueExecuteCommandLists(context.command_queue, 1, &context.command_list,
+                                                   nullptr);
         if (result) {
-            throw std::runtime_error("xeCommandQueueExecuteCommandLists failed: " +
-                                     result);
+            throw std::runtime_error("xeCommandQueueExecuteCommandLists failed: " + result);
         }
         if (verbose)
             std::cout << "Command list enqueued\n";
+        if (type == KERNEL_LAUNCH_LATENCY) {
+            timed += timer.stopAndTime();
+        }
 
         result = xeCommandQueueSynchronize(context.command_queue, UINT32_MAX);
         if (result) {
@@ -331,8 +339,13 @@ float XePeak::run_kernel(L0Context context, xe_function_handle_t &function,
         }
         if (verbose)
             std::cout << "Command queue synchronized\n";
+        if (type == KERNEL_COMPLETE_LATENCY) {
+            timed += timer.stopAndTime();
+        }
     }
-    timed = timer.stopAndTime();
+    if (type == BANDWIDTH) {
+        timed = timer.stopAndTime();
+    }
 
     result = xeFunctionDestroy(function);
     if (result) {
@@ -355,6 +368,11 @@ int main(int argc, char **argv) {
 
     if (peak_benchmark.run_global_bw)
         peak_benchmark.xe_peak_global_bw(context);
+
+    context.reset_commandlist();
+
+    if (peak_benchmark.run_kernel_lat)
+        peak_benchmark.xe_peak_kernel_latency(context);
 
     context.clean_xe();
 

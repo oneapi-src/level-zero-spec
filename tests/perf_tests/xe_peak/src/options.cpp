@@ -100,7 +100,8 @@ int XePeak::parse_arguments(int argc, char **argv) {
                 exit(-1);
             }
         } else if (strcmp(argv[i], "-a") == 0) {
-            run_global_bw = run_sp_compute = run_dp_compute = run_int_compute = run_transfer_bw = run_kernel_lat = true;
+            run_global_bw = run_sp_compute = run_dp_compute = run_int_compute = run_transfer_bw =
+                run_kernel_lat = true;
         } else {
             std::cout << usage_str;
             exit(-1);

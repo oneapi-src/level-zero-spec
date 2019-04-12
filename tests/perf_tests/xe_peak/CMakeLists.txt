@@ -10,6 +10,7 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(XE_PEAK_COMMON src/common.cpp src/options.cpp src/xe_peak.cpp)
 set(XE_PEAK_BENCHMARKS
     src/global_bw.cpp
+    src/kernel_latency.cpp
 )
 
 add_executable(xe_peak ${XE_PEAK_COMMON} ${XE_PEAK_BENCHMARKS})

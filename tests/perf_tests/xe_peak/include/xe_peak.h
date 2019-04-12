@@ -55,6 +55,12 @@
 
 #define FETCH_PER_WI 16
 
+enum TimingMeasurement {
+    BANDWIDTH = 0,
+    KERNEL_LAUNCH_LATENCY,
+    KERNEL_COMPLETE_LATENCY
+};
+
 struct L0Context {
   xe_command_queue_handle_t command_queue;
   xe_command_list_handle_t command_list;
@@ -94,7 +100,7 @@ public:
   int parse_arguments(int argc, char **argv);
 
   float run_kernel(L0Context context, xe_function_handle_t &function,
-                 uint64_t total_number_work_items, int iters);
+                 uint64_t total_number_work_items, int iters, TimingMeasurement type);
   void set_workgroups(L0Context &context,
         const uint64_t total_work_items_requested, uint32_t *group_size_x,
         uint32_t *group_size_y, uint32_t *group_size_z,
@@ -105,6 +111,7 @@ public:
                                    xe_function_handle_t &function,
                                    const char *name, void *input, void *output);
   void xe_peak_global_bw(L0Context &context);
+  void xe_peak_kernel_latency(L0Context &context);
 };
 
 

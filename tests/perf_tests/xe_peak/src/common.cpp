@@ -23,9 +23,7 @@
 
 using namespace std;
 
-void Timer::start() {
-    tick = chrono::high_resolution_clock::now();
-}
+void Timer::start() { tick = chrono::high_resolution_clock::now(); }
 
 float Timer::stopAndTime() {
     tock = chrono::high_resolution_clock::now();
