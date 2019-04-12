@@ -163,8 +163,6 @@ To work with individual query object, use ::${t}MetricQueryPoolGetMetricQuery to
 Then insert BEGIN/END events into a command list using ::${t}CommandListAppendMetricQueryBegin and ::${t}CommandListAppendMetricQueryEnd calls.
 Once the workload has been executed the ::${t}MetricQueryGetData returns the raw data to be later processed by ::${t}MetricGroupCalculateData.
 
-
-- TODO fix sample to use query pool
 ```c
 ${x}_result_t MetricQueryUsageExample( ${x}_device_handle_t hDevice )
 {
@@ -175,7 +173,7 @@ ${x}_result_t MetricQueryUsageExample( ${x}_device_handle_t hDevice )
     ${x}_event_pool_handle_t         hEventPool            = nullptr;
     ${t}_metric_query_pool_handle_t hMetricQueryPool      = nullptr;
     ${t}_metric_query_handle_t      hMetricQuery          = nullptr;
-    ${t}_metric_query_pool_desc_t   queryPoolDesc         = {${T}_METRIC_QUERY_DESC_VERSION_CURRENT};
+    ${t}_metric_query_pool_desc_t   queryPoolDesc         = {${T}_METRIC_QUERY_POOL_DESC_VERSION_CURRENT};
     
     // Find event metric group
     FindMetricGroup( hDevice, "RenderBasic", ${T}_METRIC_GROUP_SAMPLING_TYPE_EVENT_BASED, &hMetricGroup );
@@ -201,7 +199,7 @@ ${x}_result_t MetricQueryUsageExample( ${x}_device_handle_t hDevice )
 
     // Write END metric query to command list, use an event to determine if the data is available
     ${x}EventCreate( hEventPool, 0 /*slot*/, hCompletionEvent);
-    ${t}CommandListAppendMetricQueryEnd( hCommandList, hMetricQuery, 0 /*slot*/, hCompletionEvent );
+    ${t}CommandListAppendMetricQueryEnd( hCommandList, hMetricQuery, hCompletionEvent );
 
     // use ${x}CommandQueueExecuteCommandLists( , , , ) to submit your workload to the hardware
    
@@ -209,29 +207,54 @@ ${x}_result_t MetricQueryUsageExample( ${x}_device_handle_t hDevice )
     ${x}EventHostSynchronize( hCompletionEvent, 1000 /*timeout*/ );
 
     // Read raw data
-    int size = metricGroupProperties.rawReportSize;
-    uint8_t* rawData = malloc(size); 
-    ${t}MetricQueryGetData( hMetricQuery, size, rawData );
+    uint32_t rawSize = metricGroupProperties.rawReportSize;
+    uint8_t* rawData = malloc(rawSize); 
+    uint32_t reportCount = 1;
+    ${t}MetricQueryGetData( hMetricQuery, &reportCount, rawSize, rawData );
 
     // Free the resources
     ${x}EventDestroy( hCompletionEvent );
-    ${x}EventPoolDestroy( hEventPool );   
-    ${t}MetricQueryDestroy( hMetricQuery );   
+    ${x}EventPoolDestroy( hEventPool );
+    ${t}MetricQueryPoolDestroy( hMetricQueryPool );
 
-    // Deconfigure
+    // Deconfigure HW
     ${t}DeviceActivateMetricGroups( hDevice, 0, nullptr );
 
-    // Calculate metric data, TODO: clarify/cleanup
-    uint32_t calculatedDataSize = 0;
-    ${t}MetricGroupCalculateData( hMetricGroup, &reportCount, size, &calculatedDataSize, nullptr );
+    // Calculate metric data
+    uint32_t calculatedDataSize = metricGroupProperties.calculatedReportSize * reportCount;
     ${t}_typed_value_t* calculatedData = (${t}_typed_value_t*)malloc( calculatedDataSize * sizeof(${t}_typed_value_t) );
-    ${t}MetricGroupCalculateData( hMetricGroup, &reportCount, size, &calculatedDataSize, calculatedData );
+    ${t}MetricGroupCalculateData( hMetricGroup, &reportCount, rawSize, rawData, &calculatedDataSize, calculatedData );
 }
 ```
 
 ${"#"} <a name="cal">Calculation</a>
 
-Both MetricTracer and MetricQuery collect the data in it's hardware specific, raw form that is not suitable for application processing. To calculate metric values use the ::${t}MetricGroupCalculateData.
+Both MetricTracer and MetricQueryPool collect the data in it's hardware specific, raw form that is not suitable for application processing. To calculate metric values use the ::${t}MetricGroupCalculateData.
 
-- TODO: clarify the API: first call is just to determine the size/count, the next does the actual calculations
+- In order to obtain available raw report count the user should call ::${t}MetricTracerReadData or ::${t}MetricQueryGetData with rawSize(0) and pRawData(NULL)
+```c
+${t}MetricTracerReadData( hMetricTracer, &reportCount, 0, NULL );
+${t}MetricQueryGetData( hMetricQuery, &reportCount, 0, NULL );
+```
+
+- In order to obtain raw reports the user should use ::${t}MetricTracerReadData or ::${t}MetricQueryGetData function with below arguments:
+ - pReportCount: report count to read
+ - rawDataSize: raw buffer size allocated and passed by the user
+ - pRawData: buffer for raw reports
+```c
+${t}MetricTracerReadData( hMetricTracer, &reportCount, rawDataSize, pRawData );
+${t}MetricQueryGetData( hMetricQuery, &reportCount, rawDataSize, pRawData );
+```
+
+- In order to calculate metrics from raw data the user should use ::${t}MetricGroupCalculateData with below arguments:
+ - hMetricGroup: handle of the metric group
+ - pReportCount: report count to calculate
+ - rawDataSize:  buffer size with raw reports to calculate 
+ - rawData: buffer with raw reports to calculate 
+ - calculatedDataSize - buffer size for calculated reports
+ - pCalculatedData - buffer for calculated reports allocated by the user
+```c
+${t}MetricGroupCalculateData( hMetricTracer, &reportCount, rawDataSize, pRawData );
+```
+
 
