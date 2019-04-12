@@ -74,6 +74,9 @@ struct MemoryManagerImp : public MemoryManager {
         delete allocation;
     }
 
+    void freeMemory(void *ptr) override {
+    }
+
     MemoryManagerImp(void *memoryManagerRT)
         : memoryManagerRT(static_cast<NEO::MemoryManager *>(memoryManagerRT)) {
     }

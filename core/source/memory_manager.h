@@ -16,6 +16,7 @@ struct MemoryManager {
     virtual uint64_t getIsaHeapGpuAddress() const = 0;
     virtual GraphicsAllocation *findAllocation(const void *ptr) = 0;
     virtual void freeMemory(GraphicsAllocation *allocation) = 0;
+    virtual void freeMemory(void *ptr) = 0;
 
     static MemoryManager *create(void *memoryManagerRT);
 };

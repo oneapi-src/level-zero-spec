@@ -7,6 +7,7 @@ namespace ult {
 
 using ::testing::AnyNumber;
 using ::testing::Invoke;
+using ::testing::An;
 
 static GraphicsAllocation *createGraphicsAllocation(size_t size, size_t alignment) {
     auto buffer = alignedMalloc(size, alignment);
@@ -19,6 +20,11 @@ static void freeGraphicsAllocation(GraphicsAllocation *allocation) {
     alignedFree(buffer);
 }
 
+static void freePtr(void *ptr) {
+    assert(ptr);
+    alignedFree(const_cast<void *>(ptr));
+}
+
 Mock<MemoryManager>::Mock() {
     using MockMemoryManager = Mock<::L0::MemoryManager>;
     ON_CALL(*this, allocateDeviceMemory)
@@ -27,8 +33,11 @@ Mock<MemoryManager>::Mock() {
     ON_CALL(*this, allocateManagedMemory)
         .WillByDefault(Invoke(createGraphicsAllocation));
 
-    ON_CALL(*this, freeMemory)
+    ON_CALL(*this, freeMemory(An<GraphicsAllocation *>()))
         .WillByDefault(Invoke(freeGraphicsAllocation));
+
+    EXPECT_CALL(*this, freeMemory(An<void *>()))
+        .WillRepeatedly(Invoke(freePtr));
 }
 
 Mock<MemoryManager>::~Mock() {
