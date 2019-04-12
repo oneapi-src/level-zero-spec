@@ -150,7 +150,7 @@ Time based collection is using a simple Open/Wait/Read/Close scheme:
         ${t}_metric_group_properties_t metricGroupProperties  = {};
         ${x}_event_handle_t	          hNotificationEvent     = nullptr;
         ${x}_event_pool_handle_t	      hEventPool             = nullptr;
-        ${x}_event_pool_desc_t          eventPoolDesc          = {XE_EVENT_POOL_DESC_VERSION_CURRENT, ${X}_EVENT_POOL_FLAG_DEVICE_TO_HOST, 1};
+        ${x}_event_pool_desc_t          eventPoolDesc          = {${X}_EVENT_POOL_DESC_VERSION_CURRENT, ${X}_EVENT_POOL_FLAG_DEVICE_TO_HOST, 1};
         ${t}_metric_tracer_handle_t    hMetricTracer          = nullptr;
         ${t}_metric_tracer_desc_t      metricTracerDescriptor = {${T}_METRIC_TRACER_DESC_VERSION_CURRENT}; 
 
