@@ -143,6 +143,7 @@ Time based collection is using a simple Open/Wait/Read/Close scheme:
 
 **Note:** To avoid incorrect data, do not reconfigure the hardware using ::${t}DeviceActivateMetricGroups while the tracer is opened.
 
+**TODO** align with new Event architecture (new query pool flags, event scopes).
 ```c
     ${x}_result_t TimeBasedUsageExample( ${x}_device_handle_t hDevice )
     {
@@ -150,7 +151,7 @@ Time based collection is using a simple Open/Wait/Read/Close scheme:
         ${t}_metric_group_properties_t metricGroupProperties  = {};
         ${x}_event_handle_t	          hNotificationEvent     = nullptr;
         ${x}_event_pool_handle_t	      hEventPool             = nullptr;
-        ${x}_event_pool_desc_t          eventPoolDesc          = {${X}_EVENT_POOL_DESC_VERSION_CURRENT, ${X}_EVENT_POOL_FLAG_DEVICE_TO_HOST, 1};
+        ${x}_event_pool_desc_t          eventPoolDesc          = {${X}_EVENT_POOL_DESC_VERSION_CURRENT, ${X}_EVENT_POOL_FLAG_DEFAULT , 1};
         ${t}_metric_tracer_handle_t    hMetricTracer          = nullptr;
         ${t}_metric_tracer_desc_t      metricTracerDescriptor = {${T}_METRIC_TRACER_DESC_VERSION_CURRENT}; 
 
@@ -211,6 +212,8 @@ Typically, multiple queries are used to characterize a workload so the API is po
 - Then insert BEGIN/END events into a command list using ::${t}CommandListAppendMetricQueryBegin and ::${t}CommandListAppendMetricQueryEnd calls.
 - Once the workload has been executed the ::${t}MetricQueryGetData returns the raw data to be later processed by ::${t}MetricGroupCalculateData.
 
+
+**TODO** align with new Event architecture (new query pool flags, event scopes).
 ```c
     ${x}_result_t MetricQueryUsageExample( ${x}_device_handle_t hDevice )
     {
@@ -235,7 +238,7 @@ Typically, multiple queries are used to characterize a workload so the API is po
         queryPoolDesc.hMetricGroup = hMetricGroup;
         queryPoolDesc.count        = 1000;
         ${t}MetricQueryPoolCreate( hDevice, &queryPoolDesc, &hMetricQueryPool );
-        eventPoolDesc.flags = ${X}_EVENT_POOL_FLAG_DEVICE_TO_HOST;
+        eventPoolDesc.flags = ${X}_EVENT_POOL_FLAG_DEFAULT;
         eventPoolDesc.count = 1000;
         ${x}EventPoolCreate( hDevice, &eventPoolDesc, &hEventPool );
 

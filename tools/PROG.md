@@ -143,6 +143,7 @@ Time based collection is using a simple Open/Wait/Read/Close scheme:
 
 **Note:** To avoid incorrect data, do not reconfigure the hardware using ::xetDeviceActivateMetricGroups while the tracer is opened.
 
+**TODO** align with new Event architecture (new query pool flags, event scopes).
 ```c
     xe_result_t TimeBasedUsageExample( xe_device_handle_t hDevice )
     {
@@ -150,7 +151,7 @@ Time based collection is using a simple Open/Wait/Read/Close scheme:
         xet_metric_group_properties_t metricGroupProperties  = {};
         xe_event_handle_t	          hNotificationEvent     = nullptr;
         xe_event_pool_handle_t	      hEventPool             = nullptr;
-        xe_event_pool_desc_t          eventPoolDesc          = {XE_EVENT_POOL_DESC_VERSION_CURRENT, XE_EVENT_POOL_FLAG_DEVICE_TO_HOST, 1};
+        xe_event_pool_desc_t          eventPoolDesc          = {XE_EVENT_POOL_DESC_VERSION_CURRENT, XE_EVENT_POOL_FLAG_DEFAULT , 1};
         xet_metric_tracer_handle_t    hMetricTracer          = nullptr;
         xet_metric_tracer_desc_t      metricTracerDescriptor = {XET_METRIC_TRACER_DESC_VERSION_CURRENT}; 
 
@@ -211,6 +212,8 @@ Typically, multiple queries are used to characterize a workload so the API is po
 - Then insert BEGIN/END events into a command list using ::xetCommandListAppendMetricQueryBegin and ::xetCommandListAppendMetricQueryEnd calls.
 - Once the workload has been executed the ::xetMetricQueryGetData returns the raw data to be later processed by ::xetMetricGroupCalculateData.
 
+
+**TODO** align with new Event architecture (new query pool flags, event scopes).
 ```c
     xe_result_t MetricQueryUsageExample( xe_device_handle_t hDevice )
     {
@@ -235,7 +238,7 @@ Typically, multiple queries are used to characterize a workload so the API is po
         queryPoolDesc.hMetricGroup = hMetricGroup;
         queryPoolDesc.count        = 1000;
         xetMetricQueryPoolCreate( hDevice, &queryPoolDesc, &hMetricQueryPool );
-        eventPoolDesc.flags = XE_EVENT_POOL_FLAG_DEVICE_TO_HOST;
+        eventPoolDesc.flags = XE_EVENT_POOL_FLAG_DEFAULT;
         eventPoolDesc.count = 1000;
         xeEventPoolCreate( hDevice, &eventPoolDesc, &hEventPool );
 
