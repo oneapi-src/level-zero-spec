@@ -98,10 +98,18 @@ def generate_md(srcpath, dstpath, tags, meta):
         fout = os.path.join(dstpath, os.path.basename(fin))
         print("Generating %s..."%fout)
         validate_md(os.path.abspath(fin), meta)
-        loc += util.makoWrite(fin, fout,
-            x=tags['$x'],
-            X=tags['$x'].upper(),
-            OneApi=tags['$OneApi'])
+        if '$t' in tags :
+            loc += util.makoWrite(fin, fout,
+                x=tags['$x'],
+                X=tags['$x'].upper(),
+                t=tags['$t'],
+                T=tags['$t'].upper(),
+                OneApi=tags['$OneApi'])
+        else :
+            loc += util.makoWrite(fin, fout,
+                x=tags['$x'],
+                X=tags['$x'].upper(),
+                OneApi=tags['$OneApi'])
     print("Generated %s lines of markdown.\n"%loc)
 
 """
