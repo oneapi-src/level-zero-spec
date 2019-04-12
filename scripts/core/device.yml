@@ -45,13 +45,13 @@ details:
 params:
     - type: uint32_t
       name: ordinal
-      desc: "[in] The device index in the range of [0, $xGetDeviceCount]"
+      desc: "[in] The device index in the range of [0, $xDeviceGetCount]"
     - type: "$x_device_handle_t*"
       name: phDevice
       desc: "[out] pointer to handle of device object created"
 returns:
     - $X_RESULT_ERROR_INVALID_PARAMETER:
-        - "ordinal is out of range reported by $xGetDeviceCount"
+        - "ordinal is out of range reported by $xDeviceGetCount"
 --- #--------------------------------------------------------------------------
 type: function
 desc: "Returns a handle to the sub-device object"

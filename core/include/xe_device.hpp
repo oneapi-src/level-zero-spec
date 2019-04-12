@@ -269,7 +269,7 @@ namespace xe
         /// @throws result_t
         inline static device_handle_t
         Get(
-            uint32_t ordinal                                ///< [in] The device index in the range of [0, ::GetDeviceCount]
+            uint32_t ordinal                                ///< [in] The device index in the range of [0, ::DeviceGetCount]
             );
 
         ///////////////////////////////////////////////////////////////////////////////

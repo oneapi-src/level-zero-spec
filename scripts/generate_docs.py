@@ -34,6 +34,8 @@ def find_symbol_type(name, meta):
 def validate_md(fpath, meta):
     RE_ENABLE   = r"^\#\#\s*\-\-validate\s*\=\s*on$"
     RE_DISABLE  = r"^\#\#\s*\-\-validate\s*\=\s*off$"
+    RE_PYCODE_BLOCK_BEGIN = r"^\<\%$"
+    RE_PYCODE_BLOCK_END   = r"^\%\>$"
     enable = True
 
     RE_INVALID_TAG  = r".*\$x.*"
@@ -48,10 +50,10 @@ def validate_md(fpath, meta):
     RE_EXTRACT_PARAMS   = r"\w+\((.*)\)\;"
 
     for iline, line in enumerate(util.textRead(fpath)):
-        if re.match(RE_ENABLE, line):
+        if re.match(RE_ENABLE, line) or re.match(RE_PYCODE_BLOCK_END, line):
             enable = True
             continue
-        elif re.match(RE_DISABLE, line):
+        elif re.match(RE_DISABLE, line) or re.match(RE_PYCODE_BLOCK_BEGIN, line):
             enable = False
             continue
 
@@ -98,18 +100,8 @@ def generate_md(srcpath, dstpath, tags, meta):
         fout = os.path.join(dstpath, os.path.basename(fin))
         print("Generating %s..."%fout)
         validate_md(os.path.abspath(fin), meta)
-        if '$t' in tags :
-            loc += util.makoWrite(fin, fout,
-                x=tags['$x'],
-                X=tags['$x'].upper(),
-                t=tags['$t'],
-                T=tags['$t'].upper(),
-                OneApi=tags['$OneApi'])
-        else :
-            loc += util.makoWrite(fin, fout,
-                x=tags['$x'],
-                X=tags['$x'].upper(),
-                OneApi=tags['$OneApi'])
+        loc += util.makoWrite(fin, fout,
+            tags=tags)
     print("Generated %s lines of markdown.\n"%loc)
 
 """

@@ -94,11 +94,11 @@ typedef struct _xe_device_uuid_t
 ///     - ::XE_RESULT_ERROR_DEVICE_LOST
 ///     - ::XE_RESULT_ERROR_INVALID_PARAMETER
 ///         + nullptr == phDevice
-///         + ordinal is out of range reported by ::xeGetDeviceCount
+///         + ordinal is out of range reported by ::xeDeviceGetCount
 ///     - ::XE_RESULT_ERROR_UNSUPPORTED
 __xedllport xe_result_t __xecall
 xeDeviceGet(
-    uint32_t ordinal,                               ///< [in] The device index in the range of [0, ::xeGetDeviceCount]
+    uint32_t ordinal,                               ///< [in] The device index in the range of [0, ::xeDeviceGetCount]
     xe_device_handle_t* phDevice                    ///< [out] pointer to handle of device object created
     );
 

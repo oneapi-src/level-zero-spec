@@ -385,7 +385,7 @@ xe_result_t __xecall xeDeviceGetCount(
     return dispatchTable.xeDeviceGetCount(count);
 }
 xe_result_t __xecall xeDeviceGet(
-        uint32_t ordinal,                               ///< [in] The device index in the range of [0, ::xeGetDeviceCount]
+        uint32_t ordinal,                               ///< [in] The device index in the range of [0, ::xeDeviceGetCount]
         xe_device_handle_t* phDevice                    ///< [out] pointer to handle of device object created
     ){
     if(dispatchTableInitialized == false){

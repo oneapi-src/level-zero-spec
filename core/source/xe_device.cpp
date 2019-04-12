@@ -115,14 +115,14 @@ xeDeviceGetCount(
 ///     - ::XE_RESULT_ERROR_DEVICE_LOST
 ///     - ::XE_RESULT_ERROR_INVALID_PARAMETER
 ///         + nullptr == phDevice
-///         + ordinal is out of range reported by ::xeGetDeviceCount
+///         + ordinal is out of range reported by ::xeDeviceGetCount
 ///     - ::XE_RESULT_ERROR_UNSUPPORTED
 ///
 /// @hash {f4b935f7f586ba87c5c2bc1c836eeb7be390d9ff368c62c22f179cbdf256b76a}
 ///
 __xedllexport xe_result_t __xecall
 xeDeviceGet(
-    uint32_t ordinal,                               ///< [in] The device index in the range of [0, ::xeGetDeviceCount]
+    uint32_t ordinal,                               ///< [in] The device index in the range of [0, ::xeDeviceGetCount]
     xe_device_handle_t* phDevice                    ///< [out] pointer to handle of device object created
     )
 {

@@ -1,5 +1,9 @@
 ${"#"} Programming Guide (Core)
-
+<%
+    OneApi=tags['$OneApi']
+    x=tags['$x']
+    X=x.upper()
+%>
 [DO NOT EDIT]: # (generated from /scripts/core/PROG.md)
 
 The following documents the high-level programming models and guidelines.  
@@ -273,6 +277,31 @@ ${"###"} Recycling
 - The application is responsible for making sure the device is not currently
   executing from a command list before it is deleted.  This should be
   handled by tracking a completion event associated with the command list.
+
+${"###"} Low-Latency Immediate Command Lists
+A special type of command list can be used for very low-latency submission usage-models.
+- An immediate command list is both a command list and an implicit command queue.
+- An immediate command list is created using a command queue descriptor.
+- Commands submitted to an immediate command list are immediately executed on the device.
+- An immediate command list is not required to be closed or reset.  However, usage will be honored and expected behaviors will be followed.
+
+The following sample code demonstrates a basic sequence for creation and usage of immediate command lists:
+```c
+    // Create an immediate command list
+    ${x}_command_queue_desc_t commandQueueDesc = {
+        ${X}_COMMAND_QUEUE_DESC_VERSION_CURRENT,
+        ${X}_COMMAND_QUEUE_FLAG_NONE,
+        ${X}_COMMAND_QUEUE_MODE_DEFAULT,
+        ${X}_COMMAND_QUEUE_PRIORITY_NORMAL,
+        0
+    };
+    ${x}_command_list_handle_t hCommandList;
+    ${x}CommandListCreateImmediate(hDevice, &commandQueueDesc, &hCommandList);
+
+    // Immediately submit a function to the device
+    ${x}CommandListAppendLaunchFunction(hCommandList, hFunction, &launchArgs, nullptr, 0, nullptr);
+    ...
+```
 
 ${"#"} <a name="sp">Synchronization Primitives</a>
 There are two types of synchronization primitives:

@@ -1,5 +1,11 @@
 ${"#"} Programming Guide (Extended)
-
+<%
+    OneApi=tags['$OneApi']
+    x=tags['$x']
+    X=x.upper()
+    e=tags['$e']
+    E=e.upper()
+%>
 [DO NOT EDIT]: # (generated from /scripts/extended/PROG.md)
 
 The following documents the high-level programming models and guidelines.  

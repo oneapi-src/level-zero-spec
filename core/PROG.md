@@ -274,6 +274,31 @@ The following sample code demonstrates submission of commands to a command queue
   executing from a command list before it is deleted.  This should be
   handled by tracking a completion event associated with the command list.
 
+### Low-Latency Immediate Command Lists
+A special type of command list can be used for very low-latency submission usage-models.
+- An immediate command list is both a command list and an implicit command queue.
+- An immediate command list is created using a command queue descriptor.
+- Commands submitted to an immediate command list are immediately executed on the device.
+- An immediate command list is not required to be closed or reset.  However, usage will be honored and expected behaviors will be followed.
+
+The following sample code demonstrates a basic sequence for creation and usage of immediate command lists:
+```c
+    // Create an immediate command list
+    xe_command_queue_desc_t commandQueueDesc = {
+        XE_COMMAND_QUEUE_DESC_VERSION_CURRENT,
+        XE_COMMAND_QUEUE_FLAG_NONE,
+        XE_COMMAND_QUEUE_MODE_DEFAULT,
+        XE_COMMAND_QUEUE_PRIORITY_NORMAL,
+        0
+    };
+    xe_command_list_handle_t hCommandList;
+    xeCommandListCreateImmediate(hDevice, &commandQueueDesc, &hCommandList);
+
+    // Immediately submit a function to the device
+    xeCommandListAppendLaunchFunction(hCommandList, hFunction, &launchArgs, nullptr, 0, nullptr);
+    ...
+```
+
 # <a name="sp">Synchronization Primitives</a>
 There are two types of synchronization primitives:
 1. [**Fences**](#fnc) - used to communicate to the host that command queue execution has completed.

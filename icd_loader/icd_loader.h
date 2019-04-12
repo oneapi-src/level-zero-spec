@@ -213,7 +213,7 @@ typedef xe_result_t (__xecall *pfn_xeDeviceGetCount)(
     uint32_t* count                                 ///< [out] number of devices available
     );
 typedef xe_result_t (__xecall *pfn_xeDeviceGet)(
-    uint32_t ordinal,                               ///< [in] The device index in the range of [0, ::xeGetDeviceCount]
+    uint32_t ordinal,                               ///< [in] The device index in the range of [0, ::xeDeviceGetCount]
     xe_device_handle_t* phDevice                    ///< [out] pointer to handle of device object created
     );
 typedef xe_result_t (__xecall *pfn_xeDeviceGetSubDevice)(

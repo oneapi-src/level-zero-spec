@@ -1,5 +1,9 @@
 ${"#"} Introduction
-
+<%
+    OneApi=tags['$OneApi']
+    x=tags['$x']
+    X=x.upper()
+%>
 [DO NOT EDIT]: # (generated from /scripts/core/INTRO.md)
 
 ${"##"} Table of Contents
