@@ -98,15 +98,14 @@ Time based collection is using a simple Open/Wait/Read/Close scheme:
 
 **Note:** to avoid incorrect data, do not reconfigure the hardware using ::${t}DeviceActivateMetricGroups while the tracer is opened.
 
-- TODO fix sample to use query pool
 ```c
 ${x}_result_t TimeBasedUsageExample( ${x}_device_handle_t hDevice )
 {
     ${t}_metric_group_handle_t     hMetricGroup           = nullptr;
     ${t}_metric_group_properties_t metricGroupProperties  = {};
     ${x}_event_handle_t	          hNotificationEvent     = nullptr;
-    ${x}_event_pool_handle_t	          hEventPool     = nullptr;
-    ${x}_event_pool_desc_t         eventPoolDesc              = {XE_EVENT_POOL_DESC_VERSION_CURRENT, ${X}_EVENT_POOL_FLAG_DEVICE_TO_HOST, 1};
+    ${x}_event_pool_handle_t	      hEventPool             = nullptr;
+    ${x}_event_pool_desc_t          eventPoolDesc          = {XE_EVENT_POOL_DESC_VERSION_CURRENT, ${X}_EVENT_POOL_FLAG_DEVICE_TO_HOST, 1};
     ${t}_metric_tracer_handle_t    hMetricTracer          = nullptr;
     ${t}_metric_tracer_desc_t      metricTracerDescriptor = {${T}_METRIC_TRACER_DESC_VERSION_CURRENT}; 
 
@@ -119,6 +118,7 @@ ${x}_result_t TimeBasedUsageExample( ${x}_device_handle_t hDevice )
 
     // Open time based sampling
     ${x}EventPoolCreate( hDevice, &eventPoolDesc, &hEventPool );
+    ${x}EventCreate( hEventPool, 0 /*slot*/, &hNotificationEvent );
     metricTracerDescriptor.hMetricGroup     	= hMetricGroup;
     metricTracerDescriptor.samplingPeriodNs 	= 1000;
     metricTracerDescriptor.notifyEveryNReports  = 32768;
@@ -142,15 +142,17 @@ ${x}_result_t TimeBasedUsageExample( ${x}_device_handle_t hDevice )
 
     // Close metric tracer
     ${t}MetricTracerClose( hMetricTracer );   
+    ${x}EventDestroy( hNotificationEvent );
+    ${x}EventPoolDestroy( hEventPool );
 
     // Deconfigure the hardware
     ${t}DeviceActivateMetricGroups( hDevice, 0, nullptr );
 
-    // Calculate metric data, TODO: clarify/cleanup
+    // Calculate metric data
     uint32_t calculatedDataSize = 0;
     ${t}MetricGroupCalculateData( hMetricGroup, &reportCount, size, &calculatedDataSize, nullptr );
-    ${t}_typed_value_t* calculatedData = (${t}_typed_value_t*)malloc( calculatedDataSize * sizeof(${t}_typed_value_t) );
-    ${t}MetricGroupCalculateData( hMetricGroup, &reportCount, size, &calculatedDataSize, calculatedData );
+    ${t}_typed_value_t* calculatedData = (${t}_typed_value_t*)malloc( calculatedDataSize );
+    ${t}MetricGroupCalculateData( hMetricGroup, &reportCount, size, rawData, &calculatedDataSize, calculatedData );
 }
 ```
 
@@ -183,9 +185,9 @@ ${x}_result_t MetricQueryUsageExample( ${x}_device_handle_t hDevice )
     ${t}DeviceActivateMetricGroups( hDevice, 1 /* count */, &hMetricGroup );
 
     // Create metric query pool & completion event
-    queryPoolDesc.flags        = ${T}_METRIC_QUERY_POOL_FLAG_PERORMANCE;
+    queryPoolDesc.flags        = ${T}_METRIC_QUERY_POOL_FLAG_PERFORMANCE;
     queryPoolDesc.hMetricGroup = hMetricGroup;
-    queryPoolDesc.slotCount    = 1000;
+    queryPoolDesc.count        = 1000;
     ${t}MetricQueryPoolCreate( hDevice, &queryPoolDesc, &hMetricQueryPool );
     eventPoolDesc.flags = ${X}_EVENT_POOL_FLAG_DEVICE_TO_HOST;
     eventPoolDesc.count = 1000;
@@ -222,7 +224,7 @@ ${x}_result_t MetricQueryUsageExample( ${x}_device_handle_t hDevice )
 
     // Calculate metric data
     uint32_t calculatedDataSize = metricGroupProperties.calculatedReportSize * reportCount;
-    ${t}_typed_value_t* calculatedData = (${t}_typed_value_t*)malloc( calculatedDataSize * sizeof(${t}_typed_value_t) );
+    ${t}_typed_value_t* calculatedData = (${t}_typed_value_t*)malloc( calculatedDataSize );
     ${t}MetricGroupCalculateData( hMetricGroup, &reportCount, rawSize, rawData, &calculatedDataSize, calculatedData );
 }
 ```
@@ -231,10 +233,10 @@ ${"#"} <a name="cal">Calculation</a>
 
 Both MetricTracer and MetricQueryPool collect the data in it's hardware specific, raw form that is not suitable for application processing. To calculate metric values use the ::${t}MetricGroupCalculateData.
 
-- In order to obtain available raw report count the user should call ::${t}MetricTracerReadData or ::${t}MetricQueryGetData with rawSize(0) and pRawData(NULL)
+- In order to obtain available raw report count the user should call ::${t}MetricTracerReadData or ::${t}MetricQueryGetData with rawSize(0) and pRawData(nullptr)
 ```c
-${t}MetricTracerReadData( hMetricTracer, &reportCount, 0, NULL );
-${t}MetricQueryGetData( hMetricQuery, &reportCount, 0, NULL );
+${t}MetricTracerReadData( hMetricTracer, &reportCount, 0, nullptr );
+${t}MetricQueryGetData( hMetricQuery, &reportCount, 0, nullptr );
 ```
 
 - In order to obtain raw reports the user should use ::${t}MetricTracerReadData or ::${t}MetricQueryGetData function with below arguments:
