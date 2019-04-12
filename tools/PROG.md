@@ -6,6 +6,8 @@ The following documents the high-level programming models and guidelines.
 
 NOTE: This is a **PRELIMINARY** specification, provided for review and feedback.
 
+NOTE2: Use **TODO** to mark portions requiring more work.
+
 ## Table of Contents
 * [Hardware Metrics](#hm)
 * [Enumeration](#enu)
@@ -17,20 +19,58 @@ NOTE: This is a **PRELIMINARY** specification, provided for review and feedback.
 
 ## Introduction
 
+Available metrics are organized into Metric Groups.
+- Individual Metric Group represents a uniform hardware counter configuration used for measurements.
+- During data collection, data for the whole Metric Group is gathered.
+- Metric Group names don't have to be unique.
+- List of available Metric Groups and Metrics may be different on different hardwares.
+
+Each level of the metrics hierarchy (MetricGroups and Metrics) provides all information needed for
+its identification and usage.
+- Metric Group properties are accessed through function ::xetMetricGroupGetProperties, returning
+  ::xet_metric_group_properties_t.
+- Metric properties are accessed through function ::xetMetricGetProperties, returning
+  ::xet_metric_properties_t.
+
 ![Metrics](../images/tools_metric_hierarchy.png?raw=true)  
 @image latex tools_metric_hierarchy.png
 
-**note: use TODO to mark portions requiring more work**
+### Sampling types
+
+Metric Groups are designed to be used only with a specifed type of measurements, called sampling types.
+
+All available sampling types are defined in ::xet_metric_group_sampling_type.
+- Information about supported sampling types for a given Metric Group is provided in 
+  ::xet_metric_group_properties_t.samplingType.
+- It's possible Xe provides multiple Metric Groups with the same names but different sampling types.
+- When enumerating, it's important to choose a Metric Group which supports the desired sampling type.
+
+### Domains
+
+Every Metric Group belongs to a given domain (::xet_metric_group_properties_t.domain). 
+- Each domain represents an exclusive resource used by the Metric Group.
+- It's possible to simultaneously gather data for two different Metric Groups, only if they belong
+  to a different domain.
 
 # <a name="enu">Enumeration</a>
 
-- TODO: metric group hierarchy description, graphs missing, use bitmaps ?
-- TODO: describe the concept of domains
+When enumerating Metric tree to find a desired Metric Group, it's important to know in advance with
+which sampling type it will be used. 
+
+To enumerate through the Metric tree:
+1. Call ::xetMetricGroupGetCount with ::xe_device_handle_t to obtain Metric Group count.
+2. Iterate over all available Metric Groups using ::xetMetricGroupGet.
+    - At this point it's possible to check e.g. Metric Group name, domain or sampling type.
+3. For each Metric Group obtain their Metric count calling ::xetMetricGroupGetProperties with
+   Metric Group handle (::xet_metric_group_handle_t) and checking ::xet_metric_group_properties_t.metricCount.
+4. Iterate over available Metrics using ::xetMetricGet with parent Metric Group (::xet_metric_group_handle_t).
+5. Check Metric properties (e.g. name, description) calling ::xetMetricGetProperties with parent
+   Metric (::xet_metric_handle_t).
+
+
 - TODO: provide sample data?
-- TODO: add p to pointers
 
-
-The following sample code demonstrates a basic enumeration:
+The following sample code demonstrates basic enumeration:
 ```c
 xe_result_t FindMetricGroup( xe_device_handle_t hDevice, char* pMetricGroupName, uint32_t desiredSamplingType, xet_metric_group_handle_t* phMetricGroup )
 {
@@ -48,23 +88,25 @@ xe_result_t FindMetricGroup( xe_device_handle_t hDevice, char* pMetricGroupName,
 
         xetMetricGroupGet( hDevice, i, &hMetricGroup );
         xetMetricGroupGetProperties( hMetricGroup, &metricGroupProperties );
-        cout << "Metric Group: " << metricGroupProperties.name << "\n";
 
-        if( (metricGroupProperties.samplingType & desiredSamplingType) == desiredSamplingType )
+        printf("Metric Group: %s\n", metricGroupProperties.name);
+
+        if((metricGroupProperties.samplingType & desiredSamplingType) == desiredSamplingType)
         {   
             if( strcmp( pMetricGroupName, metricGroupProperties.name ) == 0 )
             {
                 *phMetricGroup = hMetricGroup;
             }
 	        // list METRICS
-            for( uint32_t j = 0; j < metricGroupProperties.metricCount; j++ )	
+            for(uint32_t j = 0; j < metricGroupProperties.metricCount; j++)	
             {
                 xet_metric_handle_t metricHandle = nullptr;
-                xet_metric_properties_t metricProperties = {XET_METRIC_PROPERTIES_VERSION_CURRENT};
+                xet_metric_properties_t metricProperties = {XET_METRIC_PROPERTIES_VERSION_CURRENT};   
 
-                xetMetricGet( hMetricGroup, j, &metricHandle );
-                xetMetricGetProperties( metricHandle, &metricProperties );
-                cout << "Metric: " << metricProperties.name << "\n";
+                xetMetricGet(hMetricGroup, j, &metricHandle);
+                xetMetricGetProperties(metricHandle, &metricProperties);
+
+                printf("Metric: %s\n", metricProperties.name);
             }
         }
     }
@@ -79,7 +121,7 @@ To avoid bogous data only call the ::xetDeviceActivateMetricGroups between exper
 
 Programming restrictions:
 - Any combination of metric groups can be configured simultanously provided that all of them have different ::xet_metric_group_properties_t.domain.
-- MetricGroup must be active until MetricQueryGetDeta and MetricTracerClose.
+- MetricGroup must be active until ::xetMetricQueryGetData and ::xetMetricTracerClose.
 - Conflicting Groups cannot be activated, in such case the call to TODO ... would fail.
 
 # <a name="col">Collection</a>
@@ -163,8 +205,6 @@ To work with individual query object, use ::xetMetricQueryPoolGetMetricQuery to 
 Then insert BEGIN/END events into a command list using ::xetCommandListAppendMetricQueryBegin and ::xetCommandListAppendMetricQueryEnd calls.
 Once the workload has been executed the ::xetMetricQueryGetData returns the raw data to be later processed by ::xetMetricGroupCalculateData.
 
-
-- TODO fix sample to use query pool
 ```c
 xe_result_t MetricQueryUsageExample( xe_device_handle_t hDevice )
 {
@@ -175,7 +215,7 @@ xe_result_t MetricQueryUsageExample( xe_device_handle_t hDevice )
     xe_event_pool_handle_t         hEventPool            = nullptr;
     xet_metric_query_pool_handle_t hMetricQueryPool      = nullptr;
     xet_metric_query_handle_t      hMetricQuery          = nullptr;
-    xet_metric_query_pool_desc_t   queryPoolDesc         = {XET_METRIC_QUERY_DESC_VERSION_CURRENT};
+    xet_metric_query_pool_desc_t   queryPoolDesc         = {XET_METRIC_QUERY_POOL_DESC_VERSION_CURRENT};
     
     // Find event metric group
     FindMetricGroup( hDevice, "RenderBasic", XET_METRIC_GROUP_SAMPLING_TYPE_EVENT_BASED, &hMetricGroup );
@@ -201,7 +241,7 @@ xe_result_t MetricQueryUsageExample( xe_device_handle_t hDevice )
 
     // Write END metric query to command list, use an event to determine if the data is available
     xeEventCreate( hEventPool, 0 /*slot*/, hCompletionEvent);
-    xetCommandListAppendMetricQueryEnd( hCommandList, hMetricQuery, 0 /*slot*/, hCompletionEvent );
+    xetCommandListAppendMetricQueryEnd( hCommandList, hMetricQuery, hCompletionEvent );
 
     // use xeCommandQueueExecuteCommandLists( , , , ) to submit your workload to the hardware
    
@@ -209,29 +249,54 @@ xe_result_t MetricQueryUsageExample( xe_device_handle_t hDevice )
     xeEventHostSynchronize( hCompletionEvent, 1000 /*timeout*/ );
 
     // Read raw data
-    int size = metricGroupProperties.rawReportSize;
-    uint8_t* rawData = malloc(size); 
-    xetMetricQueryGetData( hMetricQuery, size, rawData );
+    uint32_t rawSize = metricGroupProperties.rawReportSize;
+    uint8_t* rawData = malloc(rawSize); 
+    uint32_t reportCount = 1;
+    xetMetricQueryGetData( hMetricQuery, &reportCount, rawSize, rawData );
 
     // Free the resources
     xeEventDestroy( hCompletionEvent );
-    xeEventPoolDestroy( hEventPool );   
-    xetMetricQueryDestroy( hMetricQuery );   
+    xeEventPoolDestroy( hEventPool );
+    xetMetricQueryPoolDestroy( hMetricQueryPool );
 
-    // Deconfigure
+    // Deconfigure HW
     xetDeviceActivateMetricGroups( hDevice, 0, nullptr );
 
-    // Calculate metric data, TODO: clarify/cleanup
-    uint32_t calculatedDataSize = 0;
-    xetMetricGroupCalculateData( hMetricGroup, &reportCount, size, &calculatedDataSize, nullptr );
+    // Calculate metric data
+    uint32_t calculatedDataSize = metricGroupProperties.calculatedReportSize * reportCount;
     xet_typed_value_t* calculatedData = (xet_typed_value_t*)malloc( calculatedDataSize * sizeof(xet_typed_value_t) );
-    xetMetricGroupCalculateData( hMetricGroup, &reportCount, size, &calculatedDataSize, calculatedData );
+    xetMetricGroupCalculateData( hMetricGroup, &reportCount, rawSize, rawData, &calculatedDataSize, calculatedData );
 }
 ```
 
 # <a name="cal">Calculation</a>
 
-Both MetricTracer and MetricQuery collect the data in it's hardware specific, raw form that is not suitable for application processing. To calculate metric values use the ::xetMetricGroupCalculateData.
+Both MetricTracer and MetricQueryPool collect the data in it's hardware specific, raw form that is not suitable for application processing. To calculate metric values use the ::xetMetricGroupCalculateData.
 
-- TODO: clarify the API: first call is just to determine the size/count, the next does the actual calculations
+- In order to obtain available raw report count the user should call ::xetMetricTracerReadData or ::xetMetricQueryGetData with rawSize(0) and pRawData(NULL)
+```c
+xetMetricTracerReadData( hMetricTracer, &reportCount, 0, NULL );
+xetMetricQueryGetData( hMetricQuery, &reportCount, 0, NULL );
+```
+
+- In order to obtain raw reports the user should use ::xetMetricTracerReadData or ::xetMetricQueryGetData function with below arguments:
+ - pReportCount: report count to read
+ - rawDataSize: raw buffer size allocated and passed by the user
+ - pRawData: buffer for raw reports
+```c
+xetMetricTracerReadData( hMetricTracer, &reportCount, rawDataSize, pRawData );
+xetMetricQueryGetData( hMetricQuery, &reportCount, rawDataSize, pRawData );
+```
+
+- In order to calculate metrics from raw data the user should use ::xetMetricGroupCalculateData with below arguments:
+ - hMetricGroup: handle of the metric group
+ - pReportCount: report count to calculate
+ - rawDataSize:  buffer size with raw reports to calculate 
+ - rawData: buffer with raw reports to calculate 
+ - calculatedDataSize - buffer size for calculated reports
+ - pCalculatedData - buffer for calculated reports allocated by the user
+```c
+xetMetricGroupCalculateData( hMetricTracer, &reportCount, rawDataSize, pRawData );
+```
+
 

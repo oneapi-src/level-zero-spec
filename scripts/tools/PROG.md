@@ -6,6 +6,8 @@ The following documents the high-level programming models and guidelines.
 
 NOTE: This is a **PRELIMINARY** specification, provided for review and feedback.
 
+NOTE2: Use **TODO** to mark portions requiring more work.
+
 ${"##"} Table of Contents
 * [Hardware Metrics](#hm)
 * [Enumeration](#enu)
@@ -17,20 +19,58 @@ ${"#"} <a name="hm">Hardware Metrics</a>
 
 ${"##"} Introduction
 
+Available metrics are organized into Metric Groups.
+- Individual Metric Group represents a uniform hardware counter configuration used for measurements.
+- During data collection, data for the whole Metric Group is gathered.
+- Metric Group names don't have to be unique.
+- List of available Metric Groups and Metrics may be different on different hardwares.
+
+Each level of the metrics hierarchy (MetricGroups and Metrics) provides all information needed for
+its identification and usage.
+- Metric Group properties are accessed through function ::${t}MetricGroupGetProperties, returning
+  ::${t}_metric_group_properties_t.
+- Metric properties are accessed through function ::${t}MetricGetProperties, returning
+  ::${t}_metric_properties_t.
+
 ![Metrics](../images/tools_metric_hierarchy.png?raw=true)  
 @image latex tools_metric_hierarchy.png
 
-**note: use TODO to mark portions requiring more work**
+${"###"} Sampling types
+
+Metric Groups are designed to be used only with a specifed type of measurements, called sampling types.
+
+All available sampling types are defined in ::${t}_metric_group_sampling_type.
+- Information about supported sampling types for a given Metric Group is provided in 
+  ::${t}_metric_group_properties_t.samplingType.
+- It's possible ${OneApi} provides multiple Metric Groups with the same names but different sampling types.
+- When enumerating, it's important to choose a Metric Group which supports the desired sampling type.
+
+${"###"} Domains
+
+Every Metric Group belongs to a given domain (::${t}_metric_group_properties_t.domain). 
+- Each domain represents an exclusive resource used by the Metric Group.
+- It's possible to simultaneously gather data for two different Metric Groups, only if they belong
+  to a different domain.
 
 ${"#"} <a name="enu">Enumeration</a>
 
-- TODO: metric group hierarchy description, graphs missing, use bitmaps ?
-- TODO: describe the concept of domains
+When enumerating Metric tree to find a desired Metric Group, it's important to know in advance with
+which sampling type it will be used. 
+
+To enumerate through the Metric tree:
+1. Call ::${t}MetricGroupGetCount with ::${x}_device_handle_t to obtain Metric Group count.
+2. Iterate over all available Metric Groups using ::${t}MetricGroupGet.
+    - At this point it's possible to check e.g. Metric Group name, domain or sampling type.
+3. For each Metric Group obtain their Metric count calling ::${t}MetricGroupGetProperties with
+   Metric Group handle (::${t}_metric_group_handle_t) and checking ::${t}_metric_group_properties_t.metricCount.
+4. Iterate over available Metrics using ::${t}MetricGet with parent Metric Group (::${t}_metric_group_handle_t).
+5. Check Metric properties (e.g. name, description) calling ::${t}MetricGetProperties with parent
+   Metric (::${t}_metric_handle_t).
+
+
 - TODO: provide sample data?
-- TODO: add p to pointers
 
-
-The following sample code demonstrates a basic enumeration:
+The following sample code demonstrates basic enumeration:
 ```c
 ${x}_result_t FindMetricGroup( ${x}_device_handle_t hDevice, char* pMetricGroupName, uint32_t desiredSamplingType, ${t}_metric_group_handle_t* phMetricGroup )
 {
@@ -48,23 +88,25 @@ ${x}_result_t FindMetricGroup( ${x}_device_handle_t hDevice, char* pMetricGroupN
 
         ${t}MetricGroupGet( hDevice, i, &hMetricGroup );
         ${t}MetricGroupGetProperties( hMetricGroup, &metricGroupProperties );
-        cout << "Metric Group: " << metricGroupProperties.name << "\n";
 
-        if( (metricGroupProperties.samplingType & desiredSamplingType) == desiredSamplingType )
+        printf("Metric Group: %s\n", metricGroupProperties.name);
+
+        if((metricGroupProperties.samplingType & desiredSamplingType) == desiredSamplingType)
         {   
             if( strcmp( pMetricGroupName, metricGroupProperties.name ) == 0 )
             {
                 *phMetricGroup = hMetricGroup;
             }
 	        // list METRICS
-            for( uint32_t j = 0; j < metricGroupProperties.metricCount; j++ )	
+            for(uint32_t j = 0; j < metricGroupProperties.metricCount; j++)	
             {
                 ${t}_metric_handle_t metricHandle = nullptr;
-                ${t}_metric_properties_t metricProperties = {${T}_METRIC_PROPERTIES_VERSION_CURRENT};
+                ${t}_metric_properties_t metricProperties = {${T}_METRIC_PROPERTIES_VERSION_CURRENT};   
 
-                ${t}MetricGet( hMetricGroup, j, &metricHandle );
-                ${t}MetricGetProperties( metricHandle, &metricProperties );
-                cout << "Metric: " << metricProperties.name << "\n";
+                ${t}MetricGet(hMetricGroup, j, &metricHandle);
+                ${t}MetricGetProperties(metricHandle, &metricProperties);
+
+                printf("Metric: %s\n", metricProperties.name);
             }
         }
     }
@@ -79,7 +121,7 @@ To avoid bogous data only call the ::${t}DeviceActivateMetricGroups between expe
 
 Programming restrictions:
 - Any combination of metric groups can be configured simultanously provided that all of them have different ::${t}_metric_group_properties_t.domain.
-- MetricGroup must be active until MetricQueryGetDeta and MetricTracerClose.
+- MetricGroup must be active until ::${t}MetricQueryGetData and ::${t}MetricTracerClose.
 - Conflicting Groups cannot be activated, in such case the call to TODO ... would fail.
 
 ${"#"} <a name="col">Collection</a>
