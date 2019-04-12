@@ -56,7 +56,7 @@ def generate_meta(d, meta):
             name = d['class']+name
 
         if name not in meta[type]:
-            meta[type][name] = {'types': [], 'class': []}
+            meta[type][name] = {'types': [], 'class': ""}
 
         # add values to list
         if 'enum' == type:
@@ -97,6 +97,8 @@ def parse(path, meta = {'class':{}}):
             # extract header from objects
             if re.match(r"header", d['type']):
                 header = d
+                if 'includes' not in header:
+                    header['includes'] = []
             else:
                 d['hash'] = generate_hash(d)
                 objects.append(d)

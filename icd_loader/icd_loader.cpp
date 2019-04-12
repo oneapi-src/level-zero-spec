@@ -156,6 +156,16 @@ xe_result_t __xecall xeCommandListCreate(
     }
     return dispatchTable.xeCommandListCreate(hDevice, desc, phCommandList);
 }
+xe_result_t __xecall xeCommandListCreateImmediate(
+        xe_device_handle_t hDevice,                     ///< [in] handle of the device object
+        const xe_command_queue_desc_t* desc,            ///< [in] pointer to command queue descriptor
+        xe_command_list_handle_t* phCommandList         ///< [out] pointer to handle of command list object created
+    ){
+    if(dispatchTableInitialized == false){
+        return XE_RESULT_ERROR_UNINITIALIZED;
+    }
+    return dispatchTable.xeCommandListCreateImmediate(hDevice, desc, phCommandList);
+}
 xe_result_t __xecall xeCommandListDestroy(
         xe_command_list_handle_t hCommandList           ///< [in] handle of command list object to destroy
     ){
@@ -259,15 +269,6 @@ xe_result_t __xecall xeCommandQueueSynchronize(
         return XE_RESULT_ERROR_UNINITIALIZED;
     }
     return dispatchTable.xeCommandQueueSynchronize(hCommandQueue, timeout);
-}
-xe_result_t __xecall xeCommandQueueOpenCommandList(
-        xe_command_queue_handle_t hCommandQueue,        ///< [in] handle of the command queue
-        xe_command_list_handle_t* phCommandList         ///< [out] pointer to handle of command list object created
-    ){
-    if(dispatchTableInitialized == false){
-        return XE_RESULT_ERROR_UNINITIALIZED;
-    }
-    return dispatchTable.xeCommandQueueOpenCommandList(hCommandQueue, phCommandList);
 }
 xe_result_t __xecall xeCommandListAppendMemoryCopy(
         xe_command_list_handle_t hCommandList,          ///< [in] handle of command list

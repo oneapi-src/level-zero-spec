@@ -106,6 +106,72 @@ xeCommandListCreate(
 }
 
 ///////////////////////////////////////////////////////////////////////////////
+/// @brief Creates a command list on the device with an implicit command queue
+///        for immediate submission of commands.
+/// 
+/// @details
+///     - The command list is created in the 'open' state and never needs to be
+///       closed.
+///     - This function may **not** be called from simultaneous threads.
+///     - The implementation of this function should be lock-free.
+/// 
+/// @returns
+///     - ::XE_RESULT_SUCCESS
+///     - ::XE_RESULT_ERROR_UNINITIALIZED
+///     - ::XE_RESULT_ERROR_DEVICE_LOST
+///     - ::XE_RESULT_ERROR_INVALID_PARAMETER
+///         + nullptr == hDevice
+///         + nullptr == desc
+///         + nullptr == phCommandList
+///     - ::XE_RESULT_ERROR_UNSUPPORTED
+///         + ::XE_COMMAND_QUEUE_DESC_VERSION_CURRENT < desc->version
+///     - ::XE_RESULT_ERROR_OUT_OF_HOST_MEMORY
+///     - ::XE_RESULT_ERROR_OUT_OF_DEVICE_MEMORY
+///
+/// @hash {e7ab30eddaeddb1d62696d84bed058ae80a78c8b321fe5ed35b435322d71bf52}
+///
+__xedllexport xe_result_t __xecall
+xeCommandListCreateImmediate(
+    xe_device_handle_t hDevice,                     ///< [in] handle of the device object
+    const xe_command_queue_desc_t* desc,            ///< [in] pointer to command queue descriptor
+    xe_command_list_handle_t* phCommandList         ///< [out] pointer to handle of command list object created
+    )
+{
+    try
+    {
+        //if( XE_DRIVER_PARAMETER_VALIDATION_LEVEL >= 0 )
+        {
+            // if( nullptr == driver ) return XE_RESULT_ERROR_UNINITIALIZED;
+            // Check parameters
+            if( nullptr == hDevice ) return XE_RESULT_ERROR_INVALID_PARAMETER;
+            if( nullptr == desc ) return XE_RESULT_ERROR_INVALID_PARAMETER;
+            if( nullptr == phCommandList ) return XE_RESULT_ERROR_INVALID_PARAMETER;
+            if( XE_COMMAND_QUEUE_DESC_VERSION_CURRENT < desc->version ) return XE_RESULT_ERROR_UNSUPPORTED;
+        }
+        /// @begin
+#if defined(XE_NULLDRV)
+        return XE_RESULT_SUCCESS;
+#else
+        return L0::commandListCreateImmediate(hDevice, desc, phCommandList);
+#endif
+        /// @end
+    }
+    catch(xe_result_t& result)
+    {
+        return result;
+    }
+    catch(std::bad_alloc&)
+    {
+        return XE_RESULT_ERROR_OUT_OF_HOST_MEMORY;
+    }
+    catch(std::exception&)
+    {
+        // @todo: pfnOnException(e.what());
+        return XE_RESULT_ERROR_UNKNOWN;
+    }
+}
+
+///////////////////////////////////////////////////////////////////////////////
 /// @brief Destroys a command list.
 /// 
 /// @details

@@ -127,6 +127,29 @@ namespace xe
     }
 
     ///////////////////////////////////////////////////////////////////////////////
+    /// @brief C++ wrapper for ::xeCommandListCreateImmediate
+    /// 
+    /// @details
+    ///     - The command list is created in the 'open' state and never needs to be
+    ///       closed.
+    ///     - This function may **not** be called from simultaneous threads.
+    ///     - The implementation of this function should be lock-free.
+    /// 
+    /// @returns
+    ///     - ::command_list_handle_t: pointer to handle of command list object created
+    /// 
+    /// @throws result_t
+    inline command_list_handle_t 
+    CommandList::CreateImmediate(
+        device_handle_t hDevice,                        ///< [in] handle of the device object
+        const CommandQueue::command_queue_desc_t* desc  ///< [in] pointer to command queue descriptor
+        )
+    {
+        // auto result = ::xeCommandListCreateImmediate( handle, hDevice, desc );
+        // if( ::XE_RESULT_SUCCESS != result ) throw exception(result, "xe::CommandList::CreateImmediate");
+    }
+
+    ///////////////////////////////////////////////////////////////////////////////
     /// @brief C++ wrapper for ::xeCommandListDestroy
     /// 
     /// @details

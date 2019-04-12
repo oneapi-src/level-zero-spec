@@ -1,6 +1,8 @@
 --- #--------------------------------------------------------------------------
 type: header
 desc: "Intel $OneApi Level-Zero APIs for Command List"
+includes:
+    - $x_cmdqueue.$h
 --- #--------------------------------------------------------------------------
 type: enum
 desc: "API version of $x_command_list_desc_t"
@@ -56,6 +58,29 @@ params:
     - type: "const $x_command_list_desc_t*"
       name: desc
       desc: "[in] pointer to command list descriptor"
+    - type: $x_command_list_handle_t*
+      name: phCommandList
+      desc: "[out] pointer to handle of command list object created"
+returns:
+    - $X_RESULT_ERROR_OUT_OF_HOST_MEMORY
+    - $X_RESULT_ERROR_OUT_OF_DEVICE_MEMORY
+--- #--------------------------------------------------------------------------
+type: function
+desc: "Creates a command list on the device with an implicit command queue for immediate submission of commands."
+class: $xCommandList
+name: CreateImmediate
+decl: static
+details:
+    - "The command list is created in the 'open' state and never needs to be closed."
+    - "This function may **not** be called from simultaneous threads."
+    - "The implementation of this function should be lock-free."
+params:
+    - type: $x_device_handle_t
+      name: hDevice
+      desc: "[in] handle of the device object"
+    - type: "const $x_command_queue_desc_t*"
+      name: desc
+      desc: "[in] pointer to command queue descriptor"
     - type: $x_command_list_handle_t*
       name: phCommandList
       desc: "[out] pointer to handle of command list object created"

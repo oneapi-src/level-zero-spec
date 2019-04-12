@@ -120,11 +120,33 @@ def convert_value_to_type(value, meta):
     return None, None
 
 """
+    removes 'const' from c++ type
+"""
+def remove_const(type):
+
+    return type.split(" ")[-1]
+
+"""
+    removes 'const' and '*' from c++ type
+"""
+def remove_const_ptr(type):
+
+    return re.sub(r"(.*)\*", r"\1", remove_const(type))
+
+"""
+    adds class name to type
+"""
+def add_class(type, cls):
+    words = type.split(" ")
+    words[-1] = "%s::%s"%(cls, words[-1])
+    return " ".join(words)
+
+"""
     returns the class to which the type belongs, if it is known
 """
 def get_class_of_type(type, meta):
     if meta and '$' in type:
-        type = re.sub(r"\*", r"", type) # removes '*'
+        type = remove_const_ptr(type)
         for group in meta:
             if 'class' == group:
                 continue
@@ -230,7 +252,7 @@ def filter_param_list(params, in_or_out):
 """
     returns a list of strings for each parameter of a function
 """
-def make_param_lines(namespace, tags, obj, cpp=False, decl=False):
+def make_param_lines(namespace, tags, obj, cpp=False, decl=False, meta=None):
     lines = []
 
     if cpp:
@@ -248,13 +270,20 @@ def make_param_lines(namespace, tags, obj, cpp=False, decl=False):
         type = subt(namespace, tags, item['type'], cpp=cpp)
 
         is_optional = re.match(r".*\[optional\].*", item['desc'])
-        if cpp and decl and is_optional:
-            is_pointer = re.match(r".*\w+\*+", item['type'])
+        if cpp:
+            group, cls = get_class_of_type(item['type'], meta)
+            is_namespace = cls in tags and tags[cls] == namespace
             is_handle = re.match(r".*handle_t", item['type'])
-            if is_pointer or is_handle:
-                name += " = nullptr"
-            else:
-                name += " = 0"
+            if cls and cls != obj['class'] and not is_namespace and not is_handle:
+                type = add_class(type, subt(namespace, tags, cls, cpp=cpp))
+
+            if decl and is_optional:
+                is_pointer = re.match(r".*\w+\*+", item['type'])
+                is_handle = re.match(r".*handle_t", item['type'])
+                if is_pointer or is_handle:
+                    name += " = nullptr"
+                else:
+                    name += " = 0"
 
         if i < len(params)-1:
             prologue = "%s %s,"%(type, name)
@@ -362,8 +391,8 @@ def make_param_checks(namespace, tags, obj, comment=False, cpp=False):
                 checks[eip].append("nullptr == %s"%subt(namespace, tags, item['name'], comment, cpp))
 
             if is_desc: # descriptor-type
-                words = subt(namespace, tags, item['type'], comment, cpp).split(" ")
-                ver = re.sub(r"(.*)_t.*", r"\1_VERSION_CURRENT", words[-1]).upper()
+                name = subt(namespace, tags, remove_const_ptr(item['type']), comment, cpp)
+                ver = re.sub(r"(.*)_t.*", r"\1_VERSION_CURRENT", name).upper()
                 checks[eus].append("%s < %s->version"%(ver, item['name']))
     return checks
 
@@ -377,7 +406,9 @@ def make_returns_lines(namespace, tags, obj, cpp=False):
         if len(params) > 0:
             lines.append("@returns")
             for p in params:
-                lines.append("    - %s"%subt(namespace, tags, re.sub(r"(.*)\*", r"\1:%s"%re.sub(r"\[.*\](.*)", r"\1", p['desc']), p['type']), True, cpp))
+                desc = re.sub(r"\[.*\](.*)", r"\1", p['desc'])
+                type = remove_const_ptr(p['type'])
+                lines.append("    - %s"%subt(namespace, tags, "%s:%s"%(type, desc), True, cpp))
             lines.append("")
         lines.append("@throws result_t")
         return lines
@@ -427,13 +458,12 @@ def make_return_value(namespace, tags, obj, cpp=False, decl=False, meta=None):
 
     types = []
     for p in params:
-        type = ""
+        type = subt(namespace, tags, remove_const_ptr(p['type']), cpp=cpp)
         if cpp and not decl:
             group, cls = get_class_of_type(p['type'], meta)
             if cls and 'handle' != group:
-                type = "%s::"%subt(namespace, tags, cls, cpp=cpp)
+                type = add_class(type, subt(namespace, tags, cls, cpp=cpp))
 
-        type += subt(namespace, tags, re.sub(r"(.*)\*", r"\1", p['type']), cpp=cpp)
         types.append(type)
 
     if len(types) > 1:

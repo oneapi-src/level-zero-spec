@@ -59,6 +59,9 @@ def declare_obj(obj, tags):
 %else:
 #include "${n}_common.hpp"
 %endif
+%for item in header['includes']:
+#include "${re.sub(r"\$h", "hpp", th.subt(n, tags, item))}"
+%endfor
 
 namespace ${n}
 {
@@ -103,7 +106,7 @@ namespace ${n}
     %endfor
     inline ${th.make_return_value(n, tags, obj, cpp=True, decl=True, meta=meta)}
     ${th.make_func_name(n, tags, obj, cpp=True)}(
-        %for line in th.make_param_lines(n, tags, obj, cpp=True, decl=True):
+        %for line in th.make_param_lines(n, tags, obj, cpp=True, decl=True, meta=meta):
         ${line}
         %endfor
         );
@@ -180,7 +183,7 @@ namespace ${n}
         %endfor
         inline ${th.make_return_value(n, tags, f, cpp=True, decl=True, meta=meta)}
         ${th.make_func_name(n, tags, f, cpp=True)}(
-            %for line in th.make_param_lines(n, tags, f, cpp=True, decl=True):
+            %for line in th.make_param_lines(n, tags, f, cpp=True, decl=True, meta=meta):
             ${line}
             %endfor
             );

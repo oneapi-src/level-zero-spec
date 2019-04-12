@@ -180,27 +180,6 @@ returns:
     - $X_RESULT_NOT_READY:
        - "timeout expired"
 --- #--------------------------------------------------------------------------
-type: function
-desc: "Opens a command list on the command queue for immediate submission of commands to the command queue."
-class: $xCommandQueue
-name: OpenCommandList
-decl: static
-details:
-    - "Only one command list may be opened on a command queue simultaneously."
-    - "No other command lists may be executed on the command queue while a command list is open."
-    - "This function may **not** be called from simultaneous threads."
-    - "The implementation of this function should be lock-free."
-params:
-    - type: $x_command_queue_handle_t
-      name: hCommandQueue
-      desc: "[in] handle of the command queue"
-    - type: $x_command_list_handle_t*
-      name: phCommandList
-      desc: "[out] pointer to handle of command list object created"
-returns:
-    - $X_RESULT_ERROR_OUT_OF_HOST_MEMORY
-    - $X_RESULT_ERROR_OUT_OF_DEVICE_MEMORY
---- #--------------------------------------------------------------------------
 type: class
 desc: "C++ wrapper for command queue"
 name: $xCommandQueue

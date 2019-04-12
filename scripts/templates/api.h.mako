@@ -52,6 +52,9 @@ from templates import helper as th
 %else:
 #include "${n}_common.h"
 %endif
+%for item in header['includes']:
+#include "${re.sub(r"\$h", "h", th.subt(n, tags, item))}"
+%endfor
 
 #if defined(__cplusplus)
 extern "C" {
@@ -127,6 +130,15 @@ typedef struct _${th.subt(n, tags, obj['name'])} *${th.subt(n, tags, obj['name']
 
 %endif
 %endfor
+## FORWARD-DECLARE STRUCTS ####################################################
+%if re.match(r"common", name):
+%for obj in th.extract_objs(specs, 'struct'):
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Forward-declare ${th.subt(n, tags, obj['name'])}
+typedef struct _${th.subt(n, tags, obj['name'])} ${th.subt(n, tags, obj['name'])};
+
+%endfor
+%endif
 #if defined(__cplusplus)
 } // extern "C"
 #endif

@@ -177,6 +177,82 @@ typedef enum _xe_result_t
 
 } xe_result_t;
 
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Forward-declare xe_command_list_desc_t
+typedef struct _xe_command_list_desc_t xe_command_list_desc_t;
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Forward-declare xe_command_queue_desc_t
+typedef struct _xe_command_queue_desc_t xe_command_queue_desc_t;
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Forward-declare xe_image_region_t
+typedef struct _xe_image_region_t xe_image_region_t;
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Forward-declare xe_device_uuid_t
+typedef struct _xe_device_uuid_t xe_device_uuid_t;
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Forward-declare xe_device_properties_t
+typedef struct _xe_device_properties_t xe_device_properties_t;
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Forward-declare xe_device_compute_properties_t
+typedef struct _xe_device_compute_properties_t xe_device_compute_properties_t;
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Forward-declare xe_device_memory_properties_t
+typedef struct _xe_device_memory_properties_t xe_device_memory_properties_t;
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Forward-declare xe_device_p2p_properties_t
+typedef struct _xe_device_p2p_properties_t xe_device_p2p_properties_t;
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Forward-declare xe_event_pool_desc_t
+typedef struct _xe_event_pool_desc_t xe_event_pool_desc_t;
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Forward-declare xe_event_desc_t
+typedef struct _xe_event_desc_t xe_event_desc_t;
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Forward-declare xe_fence_desc_t
+typedef struct _xe_fence_desc_t xe_fence_desc_t;
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Forward-declare xe_image_format_desc_t
+typedef struct _xe_image_format_desc_t xe_image_format_desc_t;
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Forward-declare xe_image_desc_t
+typedef struct _xe_image_desc_t xe_image_desc_t;
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Forward-declare xe_image_properties_t
+typedef struct _xe_image_properties_t xe_image_properties_t;
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Forward-declare xe_memory_allocation_properties_t
+typedef struct _xe_memory_allocation_properties_t xe_memory_allocation_properties_t;
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Forward-declare xe_module_desc_t
+typedef struct _xe_module_desc_t xe_module_desc_t;
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Forward-declare xe_function_desc_t
+typedef struct _xe_function_desc_t xe_function_desc_t;
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Forward-declare xe_thread_group_dimensions_t
+typedef struct _xe_thread_group_dimensions_t xe_thread_group_dimensions_t;
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Forward-declare xe_sampler_desc_t
+typedef struct _xe_sampler_desc_t xe_sampler_desc_t;
+
 #if defined(__cplusplus)
 } // extern "C"
 #endif

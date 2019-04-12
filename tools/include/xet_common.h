@@ -71,6 +71,26 @@ typedef struct _xet_metric_query_pool_handle_t *xet_metric_query_pool_handle_t;
 /// @brief Handle of metric query's object
 typedef struct _xet_metric_query_handle_t *xet_metric_query_handle_t;
 
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Forward-declare xet_metric_group_properties_t
+typedef struct _xet_metric_group_properties_t xet_metric_group_properties_t;
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Forward-declare xet_typed_value_t
+typedef struct _xet_typed_value_t xet_typed_value_t;
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Forward-declare xet_metric_properties_t
+typedef struct _xet_metric_properties_t xet_metric_properties_t;
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Forward-declare xet_metric_tracer_desc_t
+typedef struct _xet_metric_tracer_desc_t xet_metric_tracer_desc_t;
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Forward-declare xet_metric_query_pool_desc_t
+typedef struct _xet_metric_query_pool_desc_t xet_metric_query_pool_desc_t;
+
 #if defined(__cplusplus)
 } // extern "C"
 #endif

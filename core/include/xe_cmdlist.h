@@ -36,6 +36,7 @@
 #pragma once
 #endif
 #include "xe_common.h"
+#include "xe_cmdqueue.h"
 
 #if defined(__cplusplus)
 extern "C" {
@@ -95,6 +96,35 @@ __xedllport xe_result_t __xecall
 xeCommandListCreate(
     xe_device_handle_t hDevice,                     ///< [in] handle of the device object
     const xe_command_list_desc_t* desc,             ///< [in] pointer to command list descriptor
+    xe_command_list_handle_t* phCommandList         ///< [out] pointer to handle of command list object created
+    );
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Creates a command list on the device with an implicit command queue
+///        for immediate submission of commands.
+/// 
+/// @details
+///     - The command list is created in the 'open' state and never needs to be
+///       closed.
+///     - This function may **not** be called from simultaneous threads.
+///     - The implementation of this function should be lock-free.
+/// 
+/// @returns
+///     - ::XE_RESULT_SUCCESS
+///     - ::XE_RESULT_ERROR_UNINITIALIZED
+///     - ::XE_RESULT_ERROR_DEVICE_LOST
+///     - ::XE_RESULT_ERROR_INVALID_PARAMETER
+///         + nullptr == hDevice
+///         + nullptr == desc
+///         + nullptr == phCommandList
+///     - ::XE_RESULT_ERROR_UNSUPPORTED
+///         + ::XE_COMMAND_QUEUE_DESC_VERSION_CURRENT < desc->version
+///     - ::XE_RESULT_ERROR_OUT_OF_HOST_MEMORY
+///     - ::XE_RESULT_ERROR_OUT_OF_DEVICE_MEMORY
+__xedllport xe_result_t __xecall
+xeCommandListCreateImmediate(
+    xe_device_handle_t hDevice,                     ///< [in] handle of the device object
+    const xe_command_queue_desc_t* desc,            ///< [in] pointer to command queue descriptor
     xe_command_list_handle_t* phCommandList         ///< [out] pointer to handle of command list object created
     );
 

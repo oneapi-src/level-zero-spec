@@ -47,6 +47,10 @@ extern "C" {
 /// @brief Handle of driver's command graph object
 typedef struct _xex_command_graph_handle_t *xex_command_graph_handle_t;
 
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Forward-declare xex_command_graph_desc_t
+typedef struct _xex_command_graph_desc_t xex_command_graph_desc_t;
+
 #if defined(__cplusplus)
 } // extern "C"
 #endif

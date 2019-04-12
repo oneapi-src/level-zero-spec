@@ -35,6 +35,7 @@
 #if defined(__cplusplus)
 #pragma once
 #include "xe_common.hpp"
+#include "xe_cmdqueue.hpp"
 
 namespace xe
 {
@@ -166,6 +167,18 @@ namespace xe
         Create(
             device_handle_t hDevice,                        ///< [in] handle of the device object
             const command_list_desc_t* desc                 ///< [in] pointer to command list descriptor
+            );
+
+        ///////////////////////////////////////////////////////////////////////////////
+        /// @brief C++ wrapper for ::xeCommandListCreateImmediate
+        /// @returns
+        ///     - ::command_list_handle_t: pointer to handle of command list object created
+        /// 
+        /// @throws result_t
+        inline static command_list_handle_t
+        CreateImmediate(
+            device_handle_t hDevice,                        ///< [in] handle of the device object
+            const CommandQueue::command_queue_desc_t* desc  ///< [in] pointer to command queue descriptor
             );
 
         ///////////////////////////////////////////////////////////////////////////////
