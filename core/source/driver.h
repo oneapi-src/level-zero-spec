@@ -9,9 +9,11 @@ struct Driver {
                                   xe_device_handle_t *phDevice) = 0;
     virtual xe_result_t getDeviceCount(uint32_t *count) = 0;
     virtual xe_result_t getDeviceUniqueIds(uint32_t count,
-                                           xe_device_uuid_t* pUniqueIds) = 0;
+                                           xe_device_uuid_t *pUniqueIds) = 0;
     virtual xe_result_t getVersion(uint32_t *version) = 0;
     virtual xe_result_t init(_xe_init_flag_t) = 0;
+
+    virtual void initialize(bool *result) = 0;
 
     static Driver *get() {
         return driver;
