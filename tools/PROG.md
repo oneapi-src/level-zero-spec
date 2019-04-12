@@ -1,32 +1,49 @@
 # Programming Guide (Tools)
 
-## Hardware Metrics
+[DO NOT EDIT]: # (generated from /scripts/tools/PROG.md)
 
-### Introduction
+The following documents the high-level programming models and guidelines.  
+
+NOTE: This is a **PRELIMINARY** specification, provided for review and feedback.
+
+## Table of Contents
+* [Hardware Metrics](#hm)
+* [Enumeration](#enu)
+* [Configuration](#con)
+* [Collection](#col)
+* [Calculation](#cal)
+
+# <a name="hm">Hardware Metrics</a>
+
+## Introduction
+
+![Metrics](../images/tools_metric_hierarchy.png?raw=true)  
+@image latex tools_metric_hierarchy.png
 
 **note: use TODO to mark portions requiring more work**
 
-### Enumeration
+# <a name="enu">Enumeration</a>
 
-TODO: metric group hierarchy description, graphs missing, use bitmaps ?
-TODO: describe the concept of domains
-TODO: provide sample data?
+- TODO: metric group hierarchy description, graphs missing, use bitmaps ?
+- TODO: describe the concept of domains
+- TODO: provide sample data?
+- TODO: add p to pointers
 
 
-Sample code
-```cpp
-xe_result_t FindMetricGroup( xe_device_handle_t hDevice, char* metricGroupName, uint32_t desiredSamplingType, xet_metric_group_handle_t* metricGroup )
+The following sample code demonstrates a basic enumeration:
+```c
+xe_result_t FindMetricGroup( xe_device_handle_t hDevice, char* pMetricGroupName, uint32_t desiredSamplingType, xet_metric_group_handle_t* phMetricGroup )
 {
     // METRIC GROUP COUNT
     uint32_t metricGroupCount = 0;
     xetMetricGroupGetCount( hDevice, &metricGroupCount );
 
-    *metricGroup = NULL;
+    *phMetricGroup = nullptr;
 
     // METRIC GROUPS
     for( uint32_t i = 0; i < metricGroupCount; i++ )
     {   
-        xet_metric_group_handle_t hMetricGroup = NULL;
+        xet_metric_group_handle_t hMetricGroup = nullptr;
         xet_metric_group_properties_t metricGroupProperties = {XET_METRIC_GROUP_PROPERTIES_VERSION_CURRENT};
 
         xetMetricGroupGet( hDevice, i, &hMetricGroup );
@@ -35,17 +52,18 @@ xe_result_t FindMetricGroup( xe_device_handle_t hDevice, char* metricGroupName, 
 
         if( (metricGroupProperties.samplingType & desiredSamplingType) == desiredSamplingType )
         {   
-            if( strcmp( metricGroupName, metricGroupProperties.name ) == 0 ) {
-                *metricGroup = hMetricGroup;
+            if( strcmp( pMetricGroupName, metricGroupProperties.name ) == 0 )
+            {
+                *phMetricGroup = hMetricGroup;
             }
 	        // list METRICS
             for( uint32_t j = 0; j < metricGroupProperties.metricCount; j++ )	
             {
-                xet_metric_handle_t metricHandle = NULL;
+                xet_metric_handle_t metricHandle = nullptr;
                 xet_metric_properties_t metricProperties = {XET_METRIC_PROPERTIES_VERSION_CURRENT};
 
-                xeMetricGet( hMetricGroup, j, &metricHandle );
-                xeMetricGetProperties( metricHandle, &metricProperties );
+                xetMetricGet( hMetricGroup, j, &metricHandle );
+                xetMetricGetProperties( metricHandle, &metricProperties );
                 cout << "Metric: " << metricProperties.name << "\n";
             }
         }
@@ -53,41 +71,43 @@ xe_result_t FindMetricGroup( xe_device_handle_t hDevice, char* metricGroupName, 
 }
 ```
 
-### Configuration
+# <a name="con">Configuration</a>
 
-Use the `xetDeviceActivateMetricGroups` API call to configure the hardware for data collection.
+Use the ::xetDeviceActivateMetricGroups API call to configure the hardware for data collection.
 Subsequent calls to the function will disable hardware programming for the metric groups not selected for activation.
-To avoid bogous data only call the `xetDeviceActivateMetricGroups` between experiments i.e. while not collecting data.
+To avoid bogous data only call the ::xetDeviceActivateMetricGroups between experiments i.e. while not collecting data.
 
 Programming restrictions:
-- any combination of metric groups can be configured simultanously provided that all of them have different `domain`s
-- MetricGroup must be active until MetricQueryGetDeta and MetricTracerClose
-- Conflicting Groups cannot be activated, in such case the call to ... would fail
+- Any combination of metric groups can be configured simultanously provided that all of them have different ::xet_metric_group_properties_t.domain.
+- MetricGroup must be active until MetricQueryGetDeta and MetricTracerClose.
+- Conflicting Groups cannot be activated, in such case the call to TODO ... would fail.
 
-### Collection
+# <a name="col">Collection</a>
 
 There are two modes of metrics collection supported: time based and query based.
 Time based collection is using a timer as well as other events to store data samples in circular buffer. A metric tracer interface is a software interface for configuration and collection.
 Query based metrics collection is based on a pair of Begin/End events appended to command lists. Query result generally characterizes hardware behavior between those events.
 
-#### Time Based
+## Time Based
 
 Time based collection is using a simple Open/Wait/Read/Close scheme:
-- `xetMetricTracerOpen` opens the tracer
-- `xeEventHostSynchronize` and `xeEventQueryStatus` can be used to wait for data
-- `xetMetricTracerReadData` reads the data
-- `xetMetricTracerClose` closes the tracer
+- ::xetMetricTracerOpen opens the tracer.
+- ::xeEventHostSynchronize and ::xeEventQueryStatus can be used to wait for data.
+- ::xetMetricTracerReadData reads the data.
+- ::xetMetricTracerClose closes the tracer.
 
-**Note:** to avoid incorrect data, do not reconfigure the hardware using `xetDeviceActivateMetricGroups` while the tracer is opened.
+**Note:** to avoid incorrect data, do not reconfigure the hardware using ::xetDeviceActivateMetricGroups while the tracer is opened.
 
-```cpp
+- TODO fix sample to use query pool
+```c
 xe_result_t TimeBasedUsageExample( xe_device_handle_t hDevice )
 {
-    xet_metric_group_handle_t     hMetricGroup           = NULL;
+    xet_metric_group_handle_t     hMetricGroup           = nullptr;
     xet_metric_group_properties_t metricGroupProperties  = {};
-    xe_event_handle_t	          hNotificationEvent     = NULL;
-    xe_event_desc_t               eventDesc              = {XE_EVENT_FLAG_DEVICE_TO_HOST};
-    xet_metric_tracer_handle_t    hMetricTracer          = NULL;
+    xe_event_handle_t	          hNotificationEvent     = nullptr;
+    xe_event_pool_handle_t	          hEventPool     = nullptr;
+    xe_event_pool_desc_t         eventPoolDesc              = {XE_EVENT_POOL_DESC_VERSION_CURRENT, XE_EVENT_POOL_FLAG_DEVICE_TO_HOST, 1};
+    xet_metric_tracer_handle_t    hMetricTracer          = nullptr;
     xet_metric_tracer_desc_t      metricTracerDescriptor = {XET_METRIC_TRACER_DESC_VERSION_CURRENT}; 
 
     // Find a "RenderBasic" metric group suitable for Time Based collection
@@ -98,7 +118,7 @@ xe_result_t TimeBasedUsageExample( xe_device_handle_t hDevice )
     xetDeviceActivateMetricGroup( hDevice, 1 /* count */, &hMetricGroup );
 
     // Open time based sampling
-    xeDeviceCreateEvent( hDevice, &eventDesc, &hNotificationEvent );
+    xeEventPoolCreate( hDevice, &eventPoolDesc, &hEventPool );
     metricTracerDescriptor.hMetricGroup     	= hMetricGroup;
     metricTracerDescriptor.samplingPeriodNs 	= 1000;
     metricTracerDescriptor.notifyEveryNReports  = 32768;
@@ -110,49 +130,51 @@ xe_result_t TimeBasedUsageExample( xe_device_handle_t hDevice )
     //xetCommandListAppendMetricTracerMarker( hCommandList, hMetricTracer, tool_marker_value ); 
 
     // Wait for data, optional in this example since the whole workload has already been executedby now
-    //xeEventHostSynchronize( metricTracerDescriptor.hNotificationEvent, 1000 /*timeout*/ );
+    //xeEventHostSynchronize( hNotificationEvent, 1000 /*timeout*/ );
     // reset the event if it fired
 
     // Read raw data
     uint32_t reportCount = 0;
-    xetMetricTracerReadData( hMetricTracer, &reportCount, 0, NULL ); // first check how many reports are available
+    xetMetricTracerReadData( hMetricTracer, &reportCount, 0, nullptr ); // first check how many reports are available
     uint32_t size = metricGroupProperties.rawReportSize * reportCount;
     uint8_t* rawData = malloc(size); 
-    xeMetricTracerGetData( hMetricTracer, &reportCount, size, rawData );
+    xetMetricTracerGetData( hMetricTracer, &reportCount, size, rawData );
 
     // Close metric tracer
-    xeMetricTracerClose( hMetricTracer );   
+    xetMetricTracerClose( hMetricTracer );   
 
     // Deconfigure the hardware
-    xetDeviceActivateMetricGroups( hDevice, 0, NULL );
+    xetDeviceActivateMetricGroups( hDevice, 0, nullptr );
 
     // Calculate metric data, TODO: clarify/cleanup
     uint32_t calculatedDataSize = 0;
-    xetMetricGroupCalculateData( hMetricGroup, &reportCount, size, &calculatedDataSize, NULL );
+    xetMetricGroupCalculateData( hMetricGroup, &reportCount, size, &calculatedDataSize, nullptr );
     xet_typed_value_t* calculatedData = (xet_typed_value_t*)malloc( calculatedDataSize * sizeof(xet_typed_value_t) );
     xetMetricGroupCalculateData( hMetricGroup, &reportCount, size, &calculatedDataSize, calculatedData );
 }
 ```
 
-#### Queries
+## Queries
 
 Query API provides a way of acquiring metrics per portions of workload delimited by BEGIN/END events.
 Tpically multiple queries are used to characterize a workload so the API is pool based.
-A metric query pool is created and destroyed using `xetMetricQueryPoolCreate` and `xetMetricQueryPoolDestroy` calls.
-To work with individual query object, use `xetMetricQueryPoolGetMetricQuery` to get a handle.
-Then insert BEGIN/END events into a command list using `xetCommandListAppendMetricQueryBegin` and `xetCommandListAppendMetricQueryEnd` calls.
-Once the workload has been executed the `xetMetricQueryGetData` returns the raw data to be later processed by `xetMetricGroupCalculateData`.
+A metric query pool is created and destroyed using ::xetMetricQueryPoolCreate and ::xetMetricQueryPoolDestroy calls.
+To work with individual query object, use ::xetMetricQueryPoolGetMetricQuery to get a handle.
+Then insert BEGIN/END events into a command list using ::xetCommandListAppendMetricQueryBegin and ::xetCommandListAppendMetricQueryEnd calls.
+Once the workload has been executed the ::xetMetricQueryGetData returns the raw data to be later processed by ::xetMetricGroupCalculateData.
 
-```cpp
+
+- TODO fix sample to use query pool
+```c
 xe_result_t MetricQueryUsageExample( xe_device_handle_t hDevice )
 {
-    xet_metric_group_handle_t      hMetricGroup          = NULL;
+    xet_metric_group_handle_t      hMetricGroup          = nullptr;
     xet_metric_group_properties_t  metricGroupProperties = {XET_METRIC_GROUP_PROPERTIES_VERSION_CURRENT};
-    xe_event_handle_t              hCompletionEvent      = NULL;
+    xe_event_handle_t              hCompletionEvent      = nullptr;
     xe_event_pool_desc_t           eventPoolDesc         = {XE_EVENT_POOL_DESC_VERSION_CURRENT};
-    xe_event_pool_handle_t         hEventPool            = NULL;
-    xet_metric_query_pool_handle_t hMetricQueryPool      = NULL;
-    xet_metric_query_handle_t      hMetricQuery          = NULL;
+    xe_event_pool_handle_t         hEventPool            = nullptr;
+    xet_metric_query_pool_handle_t hMetricQueryPool      = nullptr;
+    xet_metric_query_handle_t      hMetricQuery          = nullptr;
     xet_metric_query_pool_desc_t   queryPoolDesc         = {XET_METRIC_QUERY_DESC_VERSION_CURRENT};
     
     // Find event metric group
@@ -167,7 +189,7 @@ xe_result_t MetricQueryUsageExample( xe_device_handle_t hDevice )
     queryPoolDesc.hMetricGroup = hMetricGroup;
     queryPoolDesc.slotCount    = 1000;
     xetMetricQueryPoolCreate( hDevice, &queryPoolDesc, &hMetricQueryPool );
-    eventPoolDesc.flags = XE_EVENT_FLAG_DEVICE_TO_HOST;
+    eventPoolDesc.flags = XE_EVENT_POOL_FLAG_DEVICE_TO_HOST;
     eventPoolDesc.count = 1000;
     xeEventPoolCreate( hDevice, &eventPoolDesc, &hEventPool );
 
@@ -181,7 +203,7 @@ xe_result_t MetricQueryUsageExample( xe_device_handle_t hDevice )
     xeEventCreate( hEventPool, 0 /*slot*/, hCompletionEvent);
     xetCommandListAppendMetricQueryEnd( hCommandList, hMetricQuery, 0 /*slot*/, hCompletionEvent );
 
-    // use xeCommandQueueExecuteCommandLists to submit your workload to the hardware
+    // use xeCommandQueueExecuteCommandLists( , , , ) to submit your workload to the hardware
    
     // Wait for data
     xeEventHostSynchronize( hCompletionEvent, 1000 /*timeout*/ );
@@ -194,21 +216,22 @@ xe_result_t MetricQueryUsageExample( xe_device_handle_t hDevice )
     // Free the resources
     xeEventDestroy( hCompletionEvent );
     xeEventPoolDestroy( hEventPool );   
-    xeMetricQueryDestroy( hMetricQuery );   
+    xetMetricQueryDestroy( hMetricQuery );   
 
     // Deconfigure
-    xetDeviceActivateMetricGroups( hDevice, 0, NULL );
+    xetDeviceActivateMetricGroups( hDevice, 0, nullptr );
 
     // Calculate metric data, TODO: clarify/cleanup
     uint32_t calculatedDataSize = 0;
-    xetMetricGroupCalculateData( hMetricGroup, &reportCount, size, &calculatedDataSize, NULL );
+    xetMetricGroupCalculateData( hMetricGroup, &reportCount, size, &calculatedDataSize, nullptr );
     xet_typed_value_t* calculatedData = (xet_typed_value_t*)malloc( calculatedDataSize * sizeof(xet_typed_value_t) );
     xetMetricGroupCalculateData( hMetricGroup, &reportCount, size, &calculatedDataSize, calculatedData );
 }
 ```
 
-### Calculation
+# <a name="cal">Calculation</a>
 
-Both MetricTracer and MetricQuery collect the data in it's hardware specific, raw form that is not suitable for application processing. To calculate metric values use the `xetMetricGroupCalculateData`.
+Both MetricTracer and MetricQuery collect the data in it's hardware specific, raw form that is not suitable for application processing. To calculate metric values use the ::xetMetricGroupCalculateData.
 
-TODO: clarify the API: first call is just to determine the size/count, the next does the actual calculations
+- TODO: clarify the API: first call is just to determine the size/count, the next does the actual calculations
+
