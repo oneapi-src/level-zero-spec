@@ -129,7 +129,7 @@ int main(int argc, char *argv[]) {
 
     bool outputValidationSuccessful = (0 == memcmp(initDataSrc, readBackData, sizeof(readBackData)));
     if (verbose && (false == outputValidationSuccessful)) {
-        printVerboseValidationError(initDataSrc, readBackData, sizeof(readBackData));
+        validate(initDataSrc, readBackData, sizeof(readBackData));
     }
     SUCCESS_OR_WARNING_BOOL(outputValidationSuccessful);
 

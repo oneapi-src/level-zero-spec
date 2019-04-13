@@ -121,17 +121,24 @@ inline void printDeviceProperties(const xe_device_properties_t &props) {
               << " * maxCommandQueuePriority : " << props.maxCommandQueuePriority << std::endl;
 }
 
-inline void printVerboseValidationError(const void *expected, const void *tested, size_t len) {
+template<typename T = uint8_t>
+inline bool validate(const void *expected, const void *tested, size_t len) {
+    bool resultsAreOk = true;
     size_t offset = 0;
 
-    const uint8_t *expectedU8 = reinterpret_cast<const uint8_t *>(expected);
-    const uint8_t *testedU8 = reinterpret_cast<const uint8_t *>(tested);
+    const T *expectedT = reinterpret_cast<const T *>(expected);
+    const T *testedT = reinterpret_cast<const T *>(tested);
     uint32_t errorsCount = 0;
     constexpr uint32_t errorsMax = 20;
     while (offset < len) {
-        if (expectedU8[offset] != testedU8[offset]) {
+        if (expectedT[offset] != testedT[offset]) {
+            resultsAreOk = false;
+            if(verbose == false){
+                break;
+            }
+            
             std::cerr << "Data mismatch expectedU8[" << offset << "] != testedU8[" << offset << "]   ->    "
-                      << +expectedU8[offset] << " != " << +testedU8[offset] << std::endl;
+                      << +expectedT[offset] << " != " << +testedT[offset] << std::endl;
             ++errorsCount;
             if (errorsCount >= errorsMax) {
                 std::cerr << "Found " << errorsCount << " data mismatches - skipping further comparison " << std::endl;
@@ -140,4 +147,6 @@ inline void printVerboseValidationError(const void *expected, const void *tested
         }
         ++offset;
     }
+
+    return resultsAreOk;
 }
