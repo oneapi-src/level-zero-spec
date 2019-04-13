@@ -119,7 +119,6 @@ add_library(compute_runtime_lib_full
         ${COMPUTE_RUNTIME_DIR}/runtime/gmm_helper/resource_info.cpp
         ${COMPUTE_RUNTIME_DIR}/runtime/helpers/abort.cpp
         ${COMPUTE_RUNTIME_DIR}/runtime/helpers/debug_helpers.cpp
-        ${COMPUTE_RUNTIME_DIR}/runtime/program/evaluate_unhandled_token.cpp
         ${COMPUTE_RUNTIME_DIR}/runtime/utilities/debug_settings_reader_creator.cpp
 )
 
