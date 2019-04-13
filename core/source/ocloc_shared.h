@@ -106,6 +106,8 @@ typedef __xedllexport int(__xecall *compileClToSpirvFT)(const char *, unsigned i
 namespace ocloc {
 
 struct Output {
+    Output() = default;
+
     Output(int status,
            char *output, unsigned int outputSize,
            char *buildLog, unsigned int buildLogSize) noexcept
