@@ -281,4 +281,11 @@ void XePeak::xe_peak_global_bw(L0Context &context) {
     }
     if (verbose)
         std::cout << "Output Buffer freed\n";
+
+    result = xeModuleDestroy(context.module);
+    if (result) {
+        throw std::runtime_error("xeModuleDestroy failed: " + result);
+    }
+    if (verbose)
+        std::cout << "Module destroyed\n";
 }

@@ -110,6 +110,7 @@ public:
   void peak_global_bw_setup_function(L0Context &context,
                                    xe_function_handle_t &function,
                                    const char *name, void *input, void *output);
+  void run_command_queue(L0Context &context);
   void xe_peak_global_bw(L0Context &context);
   void xe_peak_kernel_latency(L0Context &context);
 };

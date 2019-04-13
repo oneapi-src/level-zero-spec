@@ -185,13 +185,6 @@ void L0Context::clean_xe() {
     if (verbose)
         std::cout << "command_list destroyed\n";
 
-    result = xeModuleDestroy(module);
-    if (result) {
-        throw std::runtime_error("xeModuleDestroy failed: " + result);
-    }
-    if (verbose)
-        std::cout << "Module destroyed\n";
-
     result = xeMemAllocatorDestroy(allocator);
     if (result) {
         throw std::runtime_error("xeMemAllocatorDestroy failed: " + result);
@@ -268,6 +261,24 @@ void XePeak::set_workgroups(L0Context &context, const uint64_t total_work_items_
                   << " requested: " << total_work_items_requested << "\n";
 }
 
+void XePeak::run_command_queue(L0Context &context) {
+    xe_result_t result = XE_RESULT_SUCCESS;
+    result =
+        xeCommandQueueExecuteCommandLists(context.command_queue, 1, &context.command_list, nullptr);
+    if (result) {
+        throw std::runtime_error("xeCommandQueueExecuteCommandLists failed: " + result);
+    }
+    if (verbose)
+        std::cout << "Command list enqueued\n";
+
+    result = xeCommandQueueSynchronize(context.command_queue, UINT32_MAX);
+    if (result) {
+        throw std::runtime_error("xeCommandQueueSynchronize failed: " + result);
+    }
+    if (verbose)
+        std::cout << "Command queue synchronized\n";
+}
+
 float XePeak::run_kernel(L0Context context, xe_function_handle_t &function,
                          uint64_t total_number_work_items, int iters, TimingMeasurement type) {
     xe_result_t result = XE_RESULT_SUCCESS;
@@ -317,34 +328,36 @@ float XePeak::run_kernel(L0Context context, xe_function_handle_t &function,
 
     if (type == BANDWIDTH) {
         timer.start();
-    }
-    for (int i = 0; i < iters; i++) {
-        if (type == KERNEL_LAUNCH_LATENCY || type == KERNEL_COMPLETE_LATENCY) {
-            timer.start();
+        for (int i = 0; i < iters; i++) {
+            run_command_queue(context);
         }
-        result = xeCommandQueueExecuteCommandLists(context.command_queue, 1, &context.command_list,
-                                                   nullptr);
-        if (result) {
-            throw std::runtime_error("xeCommandQueueExecuteCommandLists failed: " + result);
-        }
-        if (verbose)
-            std::cout << "Command list enqueued\n";
-        if (type == KERNEL_LAUNCH_LATENCY) {
-            timed += timer.stopAndTime();
-        }
-
-        result = xeCommandQueueSynchronize(context.command_queue, UINT32_MAX);
-        if (result) {
-            throw std::runtime_error("xeCommandQueueSynchronize failed: " + result);
-        }
-        if (verbose)
-            std::cout << "Command queue synchronized\n";
-        if (type == KERNEL_COMPLETE_LATENCY) {
-            timed += timer.stopAndTime();
-        }
-    }
-    if (type == BANDWIDTH) {
         timed = timer.stopAndTime();
+    } else if (type == KERNEL_LAUNCH_LATENCY) {
+        for (int i = 0; i < iters; i++) {
+            /* TODO: implement timing with xeEventQueryElapsedTime for Launch Latency*/
+            timer.start();
+            result = xeCommandQueueExecuteCommandLists(context.command_queue, 1,
+                                                       &context.command_list, nullptr);
+            timed += timer.stopAndTime();
+            if (result) {
+                throw std::runtime_error("xeCommandQueueExecuteCommandLists failed: " + result);
+            }
+            if (verbose)
+                std::cout << "Command list enqueued\n";
+
+            result = xeCommandQueueSynchronize(context.command_queue, UINT32_MAX);
+            if (result) {
+                throw std::runtime_error("xeCommandQueueSynchronize failed: " + result);
+            }
+            if (verbose)
+                std::cout << "Command queue synchronized\n";
+        }
+    } else if (type == KERNEL_COMPLETE_LATENCY) {
+        for (int i = 0; i < iters; i++) {
+            timer.start();
+            run_command_queue(context);
+            timed += timer.stopAndTime();
+        }
     }
 
     result = xeFunctionDestroy(function);
