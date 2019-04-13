@@ -9,6 +9,7 @@ endif()
 set (TEST_TARGETS
     xello_world #Dynamically thunking xelloWorld application
     xello_copy #Basic example with copy buffer feature
+    xello_function_pointers #Basic example with function pointers
     xello_image #Basic example with image kernel
     xello_copy_image #Basic example with copy image features
     xello_multidev #Basic example testing multidevice
