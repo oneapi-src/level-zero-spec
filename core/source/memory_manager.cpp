@@ -55,8 +55,7 @@ struct MemoryManagerImp : public MemoryManager {
         assert(size > 0);
         auto alloc = this->memoryManagerRT->allocateGraphicsMemoryWithProperties({size, NEO::GraphicsAllocation::AllocationType::KERNEL_ISA});
         if (isaHostMem != nullptr) {
-            // this->memoryManagerRT->copyMemoryToAllocation(alloc, isaHostMem, size);                    // TODO : reusue NEO's copyMemoryToAllocation once manifest gets updated
-            memcpy_s(alloc->getUnderlyingBuffer(), alloc->getUnderlyingBufferSize(), isaHostMem.get(), size); //
+            this->memoryManagerRT->copyMemoryToAllocation(alloc, isaHostMem.get(), static_cast<uint32_t>(size));
         }
         return PtrOwn<GraphicsAllocation>{new GraphicsAllocation(alloc)};
     }
