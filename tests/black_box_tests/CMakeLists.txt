@@ -14,6 +14,7 @@ set (TEST_TARGETS
     xello_multidev #Basic example testing multidevice
     xello_world_icd #ICD loader enabled xelloWorld applicaton
     xello_world_icd_clang #ICD loader enabled xelloWorld applicaton using clang in runtime
+    xello_spirv #X -> spirV compilation
 )
 
 foreach(TEST ${TEST_TARGETS})
@@ -23,7 +24,7 @@ foreach(TEST ${TEST_TARGETS})
         set_target_properties(${TEST}
             PROPERTIES
                 VS_DEBUGGER_COMMAND_ARGUMENTS ""
-                VS_DEBUGGER_WORKING_DIRECTORY "$(OutDir)"
+                VS_DEBUGGER_WORKING_DIRECTORY "$(TargetDir)"
         )
     endif()
 
