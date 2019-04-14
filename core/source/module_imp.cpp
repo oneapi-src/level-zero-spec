@@ -33,8 +33,8 @@ struct LightweightOclProgram : public NEO::Program { // NEO refactor needed : de
         this->isSpirV = true;
         this->programBinaryType = CL_PROGRAM_BINARY_TYPE_INTERMEDIATE;
 
-        NEO::CompilerInterface *pCompilerInterface = this->executionEnvironment.getCompilerInterface();
-        assert(pCompilerInterface != nullptr);
+        NEO::CompilerInterface *compilerInterface = this->executionEnvironment.getCompilerInterface();
+        assert(compilerInterface != nullptr);
 
         std::string internalOptions = this->internalOptions + " -cl-intel-has-buffer-offset-arg ";
 
@@ -50,7 +50,7 @@ struct LightweightOclProgram : public NEO::Program { // NEO refactor needed : de
         inputArgs.GTPinInput = nullptr;
 
         cl_int retVal = CL_SUCCESS;
-        retVal = pCompilerInterface->build(*this, inputArgs, false);
+        retVal = compilerInterface->build(*this, inputArgs, false);
         assert(retVal == CL_SUCCESS);
 
         retVal = processGenBinary();
@@ -60,17 +60,66 @@ struct LightweightOclProgram : public NEO::Program { // NEO refactor needed : de
         programBinaryType = CL_PROGRAM_BINARY_TYPE_EXECUTABLE;
     }
 
+    bool tryBuildAsLlvm(const char *input, uint32_t inputSize) {
+        bool tryAsOclText = (false == NEO::Program::isValidLlvmBinary(input, inputSize));
+
+        NEO::CompilerInterface *compilerInterface = this->executionEnvironment.getCompilerInterface();
+        assert(compilerInterface != nullptr);
+
+        std::string internalOptions = this->internalOptions + " -cl-intel-has-buffer-offset-arg ";
+
+        NEO::TranslationArgs inputArgs = {};
+        inputArgs.pInput = const_cast<char *>(input);
+        inputArgs.InputSize = inputSize;
+        inputArgs.pOptions = options.c_str();
+        inputArgs.OptionsSize = (uint32_t)options.length();
+        inputArgs.pInternalOptions = internalOptions.c_str();
+        inputArgs.InternalOptionsSize = (uint32_t)internalOptions.length();
+        inputArgs.pTracingOptions = nullptr;
+        inputArgs.TracingOptionsCount = 0;
+        inputArgs.GTPinInput = nullptr;
+
+        this->isCreatedFromBinary = true;
+        this->programBinaryType = CL_PROGRAM_BINARY_TYPE_INTERMEDIATE;
+
+        struct CompileFromLlvmText : NEO::CompilerInterface {
+            CompileFromLlvmText(bool useLlvmText) : wasUsingLlvmText(NEO::CompilerInterface::useLlvmText) {
+                NEO::CompilerInterface::useLlvmText = useLlvmText;
+            }
+            ~CompileFromLlvmText() {
+                NEO::CompilerInterface::useLlvmText = wasUsingLlvmText;
+            }
+            bool wasUsingLlvmText = false;
+        } compileFromLlvmTextGuard(tryAsOclText);
+
+        if (tryAsOclText && (inputArgs.InputSize > 0)) {
+            // llvm requires llvm text to be null terminated, assert here instead if crashing in IGC
+            assert(inputArgs.pInput[inputArgs.InputSize - 1] == '\0');
+        }
+        cl_int retVal = CL_SUCCESS;
+        retVal = compilerInterface->build(*this, inputArgs, false);
+        if (retVal != CL_SUCCESS) {
+            return false;
+        }
+        assert(retVal == CL_SUCCESS);
+
+        retVal = processGenBinary();
+        assert(retVal == CL_SUCCESS);
+
+        buildStatus = CL_BUILD_SUCCESS;
+        programBinaryType = CL_PROGRAM_BINARY_TYPE_EXECUTABLE;
+        return true;
+    }
     bool createWithNativeBinary(const char *input, size_t inputSize) {
         cl_int retVal = CL_SUCCESS;
 
         this->storeGenBinary(input, inputSize);
         retVal = this->processGenBinary();
-        if (retVal == CL_SUCCESS) {
-            buildStatus = CL_BUILD_SUCCESS;
-            programBinaryType = CL_PROGRAM_BINARY_TYPE_EXECUTABLE;
-            return true;
-        }
-        return false;
+        assert(retVal == CL_SUCCESS);
+
+        buildStatus = CL_BUILD_SUCCESS;
+        programBinaryType = CL_PROGRAM_BINARY_TYPE_EXECUTABLE;
+        return retVal == CL_SUCCESS;
     }
 
     NEO::Device *deviceRT;
@@ -105,9 +154,15 @@ bool ModuleImp::initialize(const xe_module_desc_t *desc) {
     if (desc->format == XE_MODULE_FORMAT_NATIVE) {
         success = this->progRT->createWithNativeBinary(desc->pInputModule, desc->inputSize);
         assert(success == true);
-    } else {
-        assert(desc->format == XE_MODULE_FORMAT_IL_SPIRV);
+    } else if (desc->format == XE_MODULE_FORMAT_IL_SPIRV) {
         this->progRT->buildSpirV(desc->pInputModule, static_cast<uint32_t>(desc->inputSize));
+    } else {
+        if (desc->format == static_cast<xe_module_format_t>(-1)) { // unofficial support for llvm
+            success = this->progRT->tryBuildAsLlvm(desc->pInputModule, static_cast<uint32_t>(desc->inputSize));
+        } else {
+            assert(0);
+            success = false;
+        }
     }
 
     if (success) {
