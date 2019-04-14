@@ -5,13 +5,19 @@
 namespace L0 {
 namespace ult {
 
+using ::testing::An;
 using ::testing::AnyNumber;
 using ::testing::Invoke;
-using ::testing::An;
 
 static GraphicsAllocation *createGraphicsAllocation(size_t size, size_t alignment) {
     auto buffer = alignedMalloc(size, alignment);
     return new GraphicsAllocation(buffer, size);
+}
+
+static PtrOwn<GraphicsAllocation> createGraphicsAllocationForIsa(PtrRef<const void> isaHostMem,
+                                                                 size_t size) {
+    auto buffer = alignedMalloc(size, 64);
+    return PtrOwn<GraphicsAllocation>(new GraphicsAllocation(buffer, size));
 }
 
 static void freeGraphicsAllocation(GraphicsAllocation *allocation) {
@@ -27,21 +33,20 @@ static void freePtr(const void *ptr) {
 
 Mock<MemoryManager>::Mock() {
     using MockMemoryManager = Mock<::L0::MemoryManager>;
-    ON_CALL(*this, allocateDeviceMemory)
-        .WillByDefault(Invoke(createGraphicsAllocation));
+    ON_CALL(*this, allocateDeviceMemory).WillByDefault(Invoke(createGraphicsAllocation));
 
-    EXPECT_CALL(*this, allocateManagedMemory)
-        .WillRepeatedly(Invoke(createGraphicsAllocation));
+    EXPECT_CALL(*this, allocateGraphicsMemoryForIsa)
+        .WillRepeatedly(Invoke(createGraphicsAllocationForIsa));
+
+    EXPECT_CALL(*this, allocateManagedMemory).WillRepeatedly(Invoke(createGraphicsAllocation));
 
     EXPECT_CALL(*this, freeMemory(An<GraphicsAllocation *>()))
         .WillRepeatedly(Invoke(freeGraphicsAllocation));
 
-    EXPECT_CALL(*this, freeMemory(An<const void *>()))
-        .WillRepeatedly(Invoke(freePtr));
+    EXPECT_CALL(*this, freeMemory(An<const void *>())).WillRepeatedly(Invoke(freePtr));
 }
 
-Mock<MemoryManager>::~Mock() {
-}
+Mock<MemoryManager>::~Mock() {}
 
 } // namespace ult
 } // namespace L0

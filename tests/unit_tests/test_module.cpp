@@ -36,7 +36,8 @@ class ModuleOnlineCompiled : public testing::Test {
         device.reset(Device::create(deviceRT));
 
         size_t spvModuleSize = 0;
-        auto spvModule = readBinaryTestFile("test_files/spv_modules/cstring_module.spv", spvModuleSize);
+        auto spvModule =
+            readBinaryTestFile("test_files/spv_modules/cstring_module.spv", spvModuleSize);
         ASSERT_NE(0U, spvModuleSize);
 
         xe_module_desc_t modDesc = {};
@@ -49,8 +50,7 @@ class ModuleOnlineCompiled : public testing::Test {
         ASSERT_NE(nullptr, module);
     }
 
-    void TearDown() override {
-    }
+    void TearDown() override {}
 
     std::unique_ptr<WhiteBox<L0::Module>> module;
     std::unique_ptr<L0::Device> device;
@@ -135,13 +135,12 @@ TEST(xeModuleCreateFunction, redirectsToObject) {
         .Times(1)
         .WillRepeatedly(Return(XE_RESULT_SUCCESS));
 
-    auto result = xeModuleCreateFunction(module.toHandle(),
-                                         &desc,
-                                         &function);
+    auto result = xeModuleCreateFunction(module.toHandle(), &desc, &function);
     EXPECT_EQ(XE_RESULT_SUCCESS, result);
 }
 
-using ModuleCreateBufArg = ::testing::TestWithParam<std::tuple<std::string, std::string, std::string>>;
+using ModuleCreateBufArg =
+    ::testing::TestWithParam<std::tuple<std::string, std::string, std::string>>;
 
 TEST_P(ModuleCreateBufArg, onlineCompilationModuleTest) {
     UserRealCompilerGuard realCompilerGuard; // just for now
@@ -179,7 +178,8 @@ TEST_P(ModuleCreateBufArg, onlineCompilationModuleTest) {
     xe_function_desc_t funDesc = {};
     funDesc.version = XE_FUNCTION_DESC_VERSION_CURRENT;
     funDesc.pFunctionName = functionName.c_str();
-    auto function = whitebox_cast(Function::create(deviceRT->getHardwareInfo().pPlatform->eProductFamily, module, &funDesc));
+    auto function = whitebox_cast(
+        Function::create(deviceRT->getHardwareInfo().pPlatform->eProductFamily, module, &funDesc));
     ASSERT_NE(nullptr, function);
 
     auto dst = globalMemoryManager->allocateDeviceMemory(4096u, 4096u);
@@ -195,7 +195,8 @@ TEST_P(ModuleCreateBufArg, onlineCompilationModuleTest) {
     ASSERT_NE(nullptr, crossThreadData);
     ASSERT_NE(0U, function->getCrossThreadDataSize());
     const uintptr_t *ctdSearchBeg = reinterpret_cast<const uintptr_t *>(crossThreadData);
-    const uintptr_t *ctdSearchEnd = ctdSearchBeg + function->getCrossThreadDataSize() / sizeof(uintptr_t);
+    const uintptr_t *ctdSearchEnd =
+        ctdSearchBeg + function->getCrossThreadDataSize() / sizeof(uintptr_t);
     EXPECT_NE(ctdSearchEnd, std::find(ctdSearchBeg, ctdSearchEnd, srcAddress));
     EXPECT_NE(ctdSearchEnd, std::find(ctdSearchBeg, ctdSearchEnd, dstAddress));
 
@@ -204,12 +205,17 @@ TEST_P(ModuleCreateBufArg, onlineCompilationModuleTest) {
     EXPECT_NE(0U, function->getSimdSize());
 
     auto capturedAllocsForResidency = function->getResidencyContainer();
-    EXPECT_NE(capturedAllocsForResidency.end(), std::find(capturedAllocsForResidency.begin(), capturedAllocsForResidency.end(), dst));
-    EXPECT_NE(capturedAllocsForResidency.end(), std::find(capturedAllocsForResidency.begin(), capturedAllocsForResidency.end(), src));
+    EXPECT_NE(capturedAllocsForResidency.end(),
+              std::find(capturedAllocsForResidency.begin(), capturedAllocsForResidency.end(), dst));
+    EXPECT_NE(capturedAllocsForResidency.end(),
+              std::find(capturedAllocsForResidency.begin(), capturedAllocsForResidency.end(), src));
     ASSERT_NE(nullptr, function->getPerThreadDataHostMem());
-    EXPECT_TRUE(isAligned<32>(function->getPerThreadDataHostMem())) << "Per thread data not properly aligned for vector instructions"; // todo : make a real test out of this
+    EXPECT_TRUE(isAligned<32>(function->getPerThreadDataHostMem()))
+        << "Per thread data not properly aligned for vector instructions"; // todo : make a real
+                                                                           // test out of this
     uint32_t numChannels = 3;
-    EXPECT_EQ(numChannels * function->getSimdSize() * sizeof(uint16_t), function->getPerThreadDataSizeForWholeThreadGroup());
+    EXPECT_EQ(numChannels * function->getSimdSize() * sizeof(uint16_t),
+              function->getPerThreadDataSizeForWholeThreadGroup());
 
     uint32_t groupSizeX, groupSizeY, groupSizeZ;
     function->getGroupSize(groupSizeX, groupSizeY, groupSizeZ);
@@ -221,8 +227,10 @@ TEST_P(ModuleCreateBufArg, onlineCompilationModuleTest) {
     if (generateMockData) {
         auto deviceName = deviceRT->getFamilyNameWithType();
         std::stringstream mockDataStream;
-        std::vector<std::pair<int, uintptr_t>> bufferArgsIndices{std::make_pair(0, dstAddress), std::make_pair(1, srcAddress)};
-        writeMockData(__FUNCTION__, moduleName, deviceName, function, bufferArgsIndices, mockDataStream);
+        std::vector<std::pair<int, uintptr_t>> bufferArgsIndices{std::make_pair(0, dstAddress),
+                                                                 std::make_pair(1, srcAddress)};
+        writeMockData(__FUNCTION__, moduleName, deviceName, function, bufferArgsIndices,
+                      mockDataStream);
         std::string mockData = mockDataStream.str();
         std::string fileName = "mock_" + moduleName + "_" + deviceName + ".cpp";
         std::ofstream(fileName, std::ios::binary).write(mockData.data(), mockData.size());
@@ -233,13 +241,17 @@ TEST_P(ModuleCreateBufArg, onlineCompilationModuleTest) {
 }
 
 static std::tuple<std::string, std::string, std::string> paramsForCreateModuleBufArg[] = {
-    std::make_tuple<std::string, std::string, std::string>("test_files/spv_modules/cstring_module.spv", "memcpy_bytes", "MemcpyBytes"),
-    std::make_tuple<std::string, std::string, std::string>("test_files/spv_modules/slm_barrier_kernel.spv", "slmBarrierSum", "SlmBarrier"),
-    std::make_tuple<std::string, std::string, std::string>("test_files/spv_modules/printf_kernel.spv", "test_printf", "Printf")};
+    std::make_tuple<std::string, std::string, std::string>(
+        "test_files/spv_modules/cstring_module.spv", "memcpy_bytes", "MemcpyBytes"),
+    std::make_tuple<std::string, std::string, std::string>(
+        "test_files/spv_modules/slm_barrier_kernel.spv", "slmBarrierSum", "SlmBarrier"),
+    std::make_tuple<std::string, std::string, std::string>(
+        "test_files/spv_modules/printf_kernel.spv", "test_printf", "Printf")};
 
 INSTANTIATE_TEST_CASE_P(, ModuleCreateBufArg, ::testing::ValuesIn(paramsForCreateModuleBufArg));
 
-using ModuleCreateImageArg = ::testing::TestWithParam<std::tuple<std::string, std::string, std::string>>;
+using ModuleCreateImageArg =
+    ::testing::TestWithParam<std::tuple<std::string, std::string, std::string>>;
 
 TEST_P(ModuleCreateImageArg, onlineCompilationModuleTest) {
     UserRealCompilerGuard realCompilerGuard; // just for now
@@ -277,7 +289,8 @@ TEST_P(ModuleCreateImageArg, onlineCompilationModuleTest) {
     xe_function_desc_t funDesc = {};
     funDesc.version = XE_FUNCTION_DESC_VERSION_CURRENT;
     funDesc.pFunctionName = functionName.c_str();
-    auto function = whitebox_cast(Function::create(deviceRT->getHardwareInfo().pPlatform->eProductFamily, module, &funDesc));
+    auto function = whitebox_cast(
+        Function::create(deviceRT->getHardwareInfo().pPlatform->eProductFamily, module, &funDesc));
     ASSERT_NE(nullptr, function);
 
     xe_image_desc_t imgDesc = {};
@@ -309,20 +322,26 @@ TEST_P(ModuleCreateImageArg, onlineCompilationModuleTest) {
     EXPECT_NE(0U, sshSize);
     EXPECT_NE(nullptr, ssh);
 
-    //TODO test for SSH update
-    //I could inspect kernelArgInfo[argindex].offsetHeap, then look at that place in the function's SSH
+    // TODO test for SSH update
+    // I could inspect kernelArgInfo[argindex].offsetHeap, then look at that place in the function's
+    // SSH
     // Look for some specific values to be set?  Anything I do to that affect will be arch-specific.
 
     auto capturedAllocsForResidency = function->getResidencyContainer();
     EXPECT_NE(capturedAllocsForResidency.end(),
-              std::find(capturedAllocsForResidency.begin(), capturedAllocsForResidency.end(), dstImage->getAllocation()));
+              std::find(capturedAllocsForResidency.begin(), capturedAllocsForResidency.end(),
+                        dstImage->getAllocation()));
     EXPECT_NE(capturedAllocsForResidency.end(),
-              std::find(capturedAllocsForResidency.begin(), capturedAllocsForResidency.end(), srcImage->getAllocation()));
+              std::find(capturedAllocsForResidency.begin(), capturedAllocsForResidency.end(),
+                        srcImage->getAllocation()));
 
     ASSERT_NE(nullptr, function->getPerThreadDataHostMem());
-    EXPECT_TRUE(isAligned<32>(function->getPerThreadDataHostMem())) << "Per thread data not properly aligned for vector instructions"; // todo : make a real test out of this
+    EXPECT_TRUE(isAligned<32>(function->getPerThreadDataHostMem()))
+        << "Per thread data not properly aligned for vector instructions"; // todo : make a real
+                                                                           // test out of this
     uint32_t numChannels = 3;
-    EXPECT_EQ(numChannels * function->getSimdSize() * sizeof(uint16_t), function->getPerThreadDataSizeForWholeThreadGroup());
+    EXPECT_EQ(numChannels * function->getSimdSize() * sizeof(uint16_t),
+              function->getPerThreadDataSizeForWholeThreadGroup());
 
     uint32_t groupSizeX, groupSizeY, groupSizeZ;
     function->getGroupSize(groupSizeX, groupSizeY, groupSizeZ);
@@ -335,10 +354,11 @@ TEST_P(ModuleCreateImageArg, onlineCompilationModuleTest) {
         auto deviceName = deviceRT->getFamilyNameWithType();
         std::stringstream mockDataStream;
 
-        //Image arguments are not passed/set in crossthread data, bufferArgsIndicies is empty.
+        // Image arguments are not passed/set in crossthread data, bufferArgsIndicies is empty.
         std::vector<std::pair<int, uintptr_t>> bufferArgsIndices{std::make_pair(0, 0)};
 
-        writeMockData(__FUNCTION__, moduleName, deviceName, function, bufferArgsIndices, mockDataStream);
+        writeMockData(__FUNCTION__, moduleName, deviceName, function, bufferArgsIndices,
+                      mockDataStream);
         std::string mockData = mockDataStream.str();
         std::string fileName = "mock_" + moduleName + "_" + deviceName + ".cpp";
         std::ofstream(fileName, std::ios::binary).write(mockData.data(), mockData.size());
@@ -349,18 +369,22 @@ TEST_P(ModuleCreateImageArg, onlineCompilationModuleTest) {
 }
 
 static std::tuple<std::string, std::string, std::string> paramsForCreateModuleImageArg[] = {
-    std::make_tuple<std::string, std::string, std::string>("test_files/spv_modules/image_kernel.spv", "image_copy", "ImageCopy")};
+    std::make_tuple<std::string, std::string, std::string>(
+        "test_files/spv_modules/image_kernel.spv", "image_copy", "ImageCopy")};
 
 INSTANTIATE_TEST_CASE_P(, ModuleCreateImageArg, ::testing::ValuesIn(paramsForCreateModuleImageArg));
 
 TEST(ModuleCreateSimple, mockedModuleTest) {
     Mock<Device> device;
     NEO::Device *deviceRT = reinterpret_cast<NEO::Device *>(device.deviceRT);
-    const PrecompiledFunctionMockData *expectedData = PrecompiledFunctionMocksDataRegistry::get().getDataFor("MemcpyBytes", deviceRT->getFamilyNameWithType());
+    const PrecompiledFunctionMockData *expectedData =
+        PrecompiledFunctionMocksDataRegistry::get().getDataFor("MemcpyBytes",
+                                                               deviceRT->getFamilyNameWithType());
     ASSERT_NE(nullptr, expectedData);
     GraphicsAllocation mockAlloc1{nullptr, 0}, mockAlloc2{nullptr, 0};
 
-    PrecompiledFunctionMock function("MemcpyBytes", deviceRT->getFamilyNameWithType(), {&mockAlloc1, &mockAlloc2});
+    PrecompiledFunctionMock function("MemcpyBytes", deviceRT->getFamilyNameWithType(),
+                                     {&mockAlloc1, &mockAlloc2});
     function.expectAnyMockFunctionCall();
 
     EXPECT_EQ(expectedData->simdSize, function.getSimdSize());
@@ -368,19 +392,25 @@ TEST(ModuleCreateSimple, mockedModuleTest) {
     EXPECT_EQ(expectedData->isaSize, function.getIsaSize());
 
     EXPECT_EQ(expectedData->crossThreadDataBaseSize, function.getCrossThreadDataSize());
-    EXPECT_EQ(0, memcmp(expectedData->crossThreadDataBase, function.getCrossThreadDataHostMem(), expectedData->crossThreadDataBaseSize));
+    EXPECT_EQ(0, memcmp(expectedData->crossThreadDataBase, function.getCrossThreadDataHostMem(),
+                        expectedData->crossThreadDataBaseSize));
 
-    EXPECT_EQ(expectedData->perThreadDataBaseSize, function.getPerThreadDataSizeForWholeThreadGroup());
-    EXPECT_EQ(0, memcmp(expectedData->perThreadDataBase, function.getPerThreadDataHostMem(), expectedData->perThreadDataBaseSize));
+    EXPECT_EQ(expectedData->perThreadDataBaseSize,
+              function.getPerThreadDataSizeForWholeThreadGroup());
+    EXPECT_EQ(0, memcmp(expectedData->perThreadDataBase, function.getPerThreadDataHostMem(),
+                        expectedData->perThreadDataBaseSize));
 
     const auto &residencyFromArgs = function.getResidencyContainer();
-    EXPECT_NE(residencyFromArgs.end(), std::find(residencyFromArgs.begin(), residencyFromArgs.end(), &mockAlloc1));
-    EXPECT_NE(residencyFromArgs.end(), std::find(residencyFromArgs.begin(), residencyFromArgs.end(), &mockAlloc2));
+    EXPECT_NE(residencyFromArgs.end(),
+              std::find(residencyFromArgs.begin(), residencyFromArgs.end(), &mockAlloc1));
+    EXPECT_NE(residencyFromArgs.end(),
+              std::find(residencyFromArgs.begin(), residencyFromArgs.end(), &mockAlloc2));
 
     auto *crossThreadData = function.getCrossThreadDataHostMem();
 
     const uintptr_t *ctdSearchBeg = reinterpret_cast<const uintptr_t *>(crossThreadData);
-    const uintptr_t *ctdSearchEnd = ctdSearchBeg + function.getCrossThreadDataSize() / sizeof(uintptr_t);
+    const uintptr_t *ctdSearchEnd =
+        ctdSearchBeg + function.getCrossThreadDataSize() / sizeof(uintptr_t);
 
     uintptr_t clearValue = 0;
     uintptr_t addressToPatch = 2357;
@@ -411,7 +441,9 @@ TEST(ModuleCreateSimple, mockedModuleTest) {
 TEST(ModuleCreateSimple, moduleWithSLMandBarriers) {
     Mock<Device> device;
     NEO::Device *deviceRT = reinterpret_cast<NEO::Device *>(device.deviceRT);
-    const PrecompiledFunctionMockData *expectedData = PrecompiledFunctionMocksDataRegistry::get().getDataFor("SlmBarrier", deviceRT->getFamilyNameWithType());
+    const PrecompiledFunctionMockData *expectedData =
+        PrecompiledFunctionMocksDataRegistry::get().getDataFor("SlmBarrier",
+                                                               deviceRT->getFamilyNameWithType());
     ASSERT_NE(nullptr, expectedData);
 
     PrecompiledFunctionMock function("SlmBarrier", deviceRT->getFamilyNameWithType(), {});
@@ -455,7 +487,7 @@ TEST_F(ModuleOnlineCompiled, createFromNativeBinary) {
     modDesc.inputSize = binarySize;
     modDesc.pInputModule = reinterpret_cast<char *>(storage.get());
 
-    Module *moduleFromNativeBinary = Module::create(device.get(), &modDesc, deviceRT, nullptr);
+    L0::Module *moduleFromNativeBinary = Module::create(device.get(), &modDesc, deviceRT, nullptr);
     EXPECT_NE(nullptr, moduleFromNativeBinary);
 
     delete moduleFromNativeBinary;
@@ -466,7 +498,8 @@ TEST_F(ModuleOnlineCompiled, functionReturnsCorrectThreadGroupParameters) {
     funDesc.version = XE_FUNCTION_DESC_VERSION_CURRENT;
     funDesc.pFunctionName = "memcpy_bytes";
 
-    auto function = std::unique_ptr<Function>(whitebox_cast(Function::create(deviceRT->getHardwareInfo().pPlatform->eProductFamily, module.get(), &funDesc)));
+    auto function = std::unique_ptr<Function>(whitebox_cast(Function::create(
+        deviceRT->getHardwareInfo().pPlatform->eProductFamily, module.get(), &funDesc)));
     ASSERT_NE(nullptr, function);
 
     function->setGroupSize(5u, 7u, 13u);

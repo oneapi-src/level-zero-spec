@@ -1,7 +1,7 @@
 #pragma once
 #ifndef MODULE_INTERNAL
 #error "Don't #include this file directly."
-#endif //MODULE_INTERNAL
+#endif // MODULE_INTERNAL
 
 #include "module.h"
 
@@ -28,13 +28,12 @@ struct ModuleImp : public Module {
         return XE_RESULT_SUCCESS;
     }
 
-    xe_result_t createFunction(const xe_function_desc_t *desc, xe_function_handle_t *phFunction) override;
+    xe_result_t createFunction(const xe_function_desc_t *desc,
+                               xe_function_handle_t *phFunction) override;
 
-    xe_result_t getNativeBinary(size_t *pSize,
-                                uint8_t *pModuleNativeBinary) override;
+    xe_result_t getNativeBinary(size_t *pSize, uint8_t *pModuleNativeBinary) override;
 
-    xe_result_t getFunctionPointer(const char *pFunctionName,
-                                   void **pfnFunction) override {
+    xe_result_t getFunctionPointer(const char *pFunctionName, void **pfnFunction) override {
         return XE_RESULT_ERROR_UNSUPPORTED;
     }
 
@@ -43,23 +42,19 @@ struct ModuleImp : public Module {
     }
 
     PtrRef<ImmutableFunctionInfo> getImmutableFunctionInfo(CStringRef functionName) const override;
-    uint32_t getMaxGroupSize() const override {
-        return maxGroupSize;
-    }
+    uint32_t getMaxGroupSize() const override { return maxGroupSize; }
 
     void updateBuildLog(void *deviceRT);
 
-    Device *getDevice() const override {
-        return device;
-    }
+    Device *getDevice() const override { return device; }
 
     bool initialize(const xe_module_desc_t *desc);
 
-    void *getProgramRT() const {
-        return progRT;
-    }
+    void *getProgramRT() const { return progRT; }
 
   protected:
+    ModuleImp() = default;
+
     Device *device = nullptr;
     PRODUCT_FAMILY productFamily{};
     ModuleBuildLog *moduleBuildLog = nullptr;

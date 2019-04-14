@@ -19,11 +19,12 @@ static const uint32_t MAX_SYMBOL_NAME_LENGTH = 256;
 
 /// GenSymType - Specify the symbol's type
 enum GenSymType {
-    S_NOTYPE = 0,          // The symbol's type is not specified
-    S_UNDEF = 1,           // The symbol is undefined in this module
-    S_FUNC = 2,            // The symbol is associated with a function
-    S_GLOBAL_VAR = 3,      // The symbol is associated with a global variable in global address space
-    S_GLOBAL_VAR_CONST = 4 // The symbol is associated with a global variable in constant address space
+    S_NOTYPE = 0,     // The symbol's type is not specified
+    S_UNDEF = 1,      // The symbol is undefined in this module
+    S_FUNC = 2,       // The symbol is associated with a function
+    S_GLOBAL_VAR = 3, // The symbol is associated with a global variable in global address space
+    S_GLOBAL_VAR_CONST =
+        4 // The symbol is associated with a global variable in constant address space
 };
 
 /// GenSymEntry - An symbol table entry
@@ -36,10 +37,7 @@ typedef struct {
 } GenSymEntry;
 
 /// GenRelocType - Specify the relocation's type
-enum GenRelocType {
-    R_NONE = 0,
-    R_SYM_ADDR = 1
-};
+enum GenRelocType { R_NONE = 0, R_SYM_ADDR = 1 };
 
 /// GenRelocEntry - An relocation table entry
 typedef struct {
@@ -51,31 +49,35 @@ typedef struct {
 } // namespace vISA_temporary
 
 namespace NEO_temporary {
-struct LightweightOclProgram : public NEO::Program { // NEO refactor needed : decouple process gen binary, remove context
+struct LightweightOclProgram
+    : public NEO::Program { // NEO refactor needed : decouple process gen binary, remove context
     static LightweightOclProgram *create(void *deviceRT) {
         assert(deviceRT != nullptr);
-        LightweightOclProgram *prog = new LightweightOclProgram(static_cast<NEO::Device *>(deviceRT));
+        LightweightOclProgram *prog =
+            new LightweightOclProgram(static_cast<NEO::Device *>(deviceRT));
         return prog;
     }
 
-    LightweightOclProgram(NEO::Device *deviceRT) : Program(*deviceRT->getExecutionEnvironment(), nullptr, false), deviceRT(deviceRT) {
+    LightweightOclProgram(NEO::Device *deviceRT)
+        : Program(*deviceRT->getExecutionEnvironment(), nullptr, false), deviceRT(deviceRT) {
         setDevice(deviceRT);
     }
 
-    ~LightweightOclProgram() {
-    }
+    ~LightweightOclProgram() {}
 
     void buildSpirV(const char *input, uint32_t inputSize) {
         this->isSpirV = true;
         this->programBinaryType = CL_PROGRAM_BINARY_TYPE_INTERMEDIATE;
 
-        NEO::CompilerInterface *compilerInterface = this->executionEnvironment.getCompilerInterface();
+        NEO::CompilerInterface *compilerInterface =
+            this->executionEnvironment.getCompilerInterface();
         assert(compilerInterface != nullptr);
 
         std::string internalOptions = this->internalOptions + " -cl-intel-has-buffer-offset-arg ";
 
         NEO::TranslationArgs inputArgs = {};
-        inputArgs.pInput = const_cast<char *>(input); // this is a broken in the interface, input is considered const in the end
+        inputArgs.pInput = const_cast<char *>(
+            input); // this is a broken in the interface, input is considered const in the end
         inputArgs.InputSize = inputSize;
         inputArgs.pOptions = options.c_str();
         inputArgs.OptionsSize = (uint32_t)options.length();
@@ -99,7 +101,8 @@ struct LightweightOclProgram : public NEO::Program { // NEO refactor needed : de
     bool tryBuildAsLlvm(const char *input, uint32_t inputSize) {
         bool tryAsOclText = (false == NEO::Program::isValidLlvmBinary(input, inputSize));
 
-        NEO::CompilerInterface *compilerInterface = this->executionEnvironment.getCompilerInterface();
+        NEO::CompilerInterface *compilerInterface =
+            this->executionEnvironment.getCompilerInterface();
         assert(compilerInterface != nullptr);
 
         std::string internalOptions = this->internalOptions + " -cl-intel-has-buffer-offset-arg ";
@@ -119,12 +122,11 @@ struct LightweightOclProgram : public NEO::Program { // NEO refactor needed : de
         this->programBinaryType = CL_PROGRAM_BINARY_TYPE_INTERMEDIATE;
 
         struct CompileFromLlvmText : NEO::CompilerInterface {
-            CompileFromLlvmText(bool useLlvmText) : wasUsingLlvmText(NEO::CompilerInterface::useLlvmText) {
+            CompileFromLlvmText(bool useLlvmText)
+                : wasUsingLlvmText(NEO::CompilerInterface::useLlvmText) {
                 NEO::CompilerInterface::useLlvmText = useLlvmText;
             }
-            ~CompileFromLlvmText() {
-                NEO::CompilerInterface::useLlvmText = wasUsingLlvmText;
-            }
+            ~CompileFromLlvmText() { NEO::CompilerInterface::useLlvmText = wasUsingLlvmText; }
             bool wasUsingLlvmText = false;
         } compileFromLlvmTextGuard(tryAsOclText);
 
@@ -167,14 +169,16 @@ struct LightweightOclProgram : public NEO::Program { // NEO refactor needed : de
 namespace L0 {
 
 ModuleImp::ModuleImp(Device *device, void *deviceRT, ModuleBuildLog *moduleBuildLog)
-    : device(device),
-      progRT(NEO_temporary::LightweightOclProgram::create(deviceRT)),
+    : device(device), progRT(NEO_temporary::LightweightOclProgram::create(deviceRT)),
       moduleBuildLog(moduleBuildLog) {
-    productFamily = reinterpret_cast<NEO::Device *>(deviceRT)->getHardwareInfo().pPlatform->eProductFamily;
+    productFamily =
+        reinterpret_cast<NEO::Device *>(deviceRT)->getHardwareInfo().pPlatform->eProductFamily;
 }
 
 ModuleImp::~ModuleImp() {
-    progRT->release();
+    if (nullptr != progRT) {
+        progRT->release();
+    }
     deleteAllOwned(immFuncInfos);
 }
 
@@ -194,7 +198,8 @@ bool ModuleImp::initialize(const xe_module_desc_t *desc) {
         this->progRT->buildSpirV(desc->pInputModule, static_cast<uint32_t>(desc->inputSize));
     } else {
         if (desc->format == static_cast<xe_module_format_t>(-1)) { // unofficial support for llvm
-            success = this->progRT->tryBuildAsLlvm(desc->pInputModule, static_cast<uint32_t>(desc->inputSize));
+            success = this->progRT->tryBuildAsLlvm(desc->pInputModule,
+                                                   static_cast<uint32_t>(desc->inputSize));
         } else {
             assert(0);
             success = false;
@@ -202,17 +207,22 @@ bool ModuleImp::initialize(const xe_module_desc_t *desc) {
     }
 
     if (success) {
-        // allocate graphics memory for ISA upfront to avoid critical sections at function create time
+        // allocate graphics memory for ISA upfront to avoid critical sections at function create
+        // time
         immFuncInfos.reserve(this->progRT->kernelInfoArray.size());
         for (auto &ki : this->progRT->kernelInfoArray) {
             auto kernelIsaSize = ki->heapInfo.pKernelHeader->KernelHeapSize;
-            auto alloc = globalMemoryManager->allocateGraphicsMemoryForIsa(bindPtrRef(ki->heapInfo.pKernelHeap), kernelIsaSize);
+            auto alloc = globalMemoryManager->allocateGraphicsMemoryForIsa(
+                bindPtrRef(ki->heapInfo.pKernelHeap), kernelIsaSize);
             assert(ki->kernelAllocation != nullptr);
-            assert(ki->patchInfo.mediavfestate->PerThreadScratchSpace == 0);
-            PtrOwn<ImmutableFunctionInfo> immFuncInfo{new ImmutableFunctionInfo{bindPtrRef(ki).weakRefReinterpret<void>(), std::move(alloc)}};
+            assert((ki->patchInfo.mediavfestate == nullptr) ||
+                   (ki->patchInfo.mediavfestate->PerThreadScratchSpace == 0));
+            PtrOwn<ImmutableFunctionInfo> immFuncInfo{new ImmutableFunctionInfo{
+                bindPtrRef(ki).weakRefReinterpret<void>(), std::move(alloc)}};
             immFuncInfos.push_back(std::move(immFuncInfo));
         }
-        this->maxGroupSize = static_cast<uint32_t>(this->progRT->getDevice(0).getDeviceInfo().maxWorkGroupSize);
+        this->maxGroupSize =
+            static_cast<uint32_t>(this->progRT->getDevice(0).getDeviceInfo().maxWorkGroupSize);
     }
     return success;
 }
@@ -233,7 +243,8 @@ void ModuleImp::updateBuildLog(void *deviceRT) {
         moduleBuildLog->appendString(buildLog, strlen(buildLog));
 }
 
-xe_result_t ModuleImp::createFunction(const xe_function_desc_t *desc, xe_function_handle_t *phFunction) {
+xe_result_t ModuleImp::createFunction(const xe_function_desc_t *desc,
+                                      xe_function_handle_t *phFunction) {
     *phFunction = Function::create(productFamily, this, desc)->toHandle();
     return XE_RESULT_SUCCESS;
 }
@@ -249,8 +260,8 @@ xe_result_t ModuleImp::getNativeBinary(size_t *pSize, uint8_t *pModuleNativeBina
     return XE_RESULT_SUCCESS;
 }
 
-Module *Module::create(Device *device, const xe_module_desc_t *desc,
-                       void *deviceRT, ModuleBuildLog *moduleBuildLog) {
+Module *Module::create(Device *device, const xe_module_desc_t *desc, void *deviceRT,
+                       ModuleBuildLog *moduleBuildLog) {
     auto module = new ModuleImp(device, deviceRT, moduleBuildLog);
 
     module->initialize(desc);
