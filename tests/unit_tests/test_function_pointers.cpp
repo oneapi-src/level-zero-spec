@@ -26,7 +26,7 @@ namespace ult {
 using ::testing::Return;
 
 // Reason for DISABLED :
-// Requires special version of IGC
+// Requires special version of IGC + EnableFunctionPointer regkey
 // Works only with SKL (due to current IGC limitations)
 TEST(FunctionPointers, DISABLED_compileToDeviceBinary) {
     UserRealCompilerGuard realCompilerGuard;
