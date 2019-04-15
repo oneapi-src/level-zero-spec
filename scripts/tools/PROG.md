@@ -25,23 +25,18 @@ ${"#"} <a name="hm">Hardware Metrics</a>
 
 ${"##"} Introduction
 
-Available metrics are organized into Metric Groups.
-- Individual Metric Group represents a uniform hardware counter configuration used for measurements.
-- During data collection, data for the whole Metric Group is gathered.
-- Metric Group names don't have to be unique.
-- List of available Metric Groups and Metrics may be different on different hardwares.
+Intel GPUs includes programmable infrastructure designed to support performance debugging. The API described in this document provides access to hardware metrics.
+It is important to understand that the hardware programming is in most cases global. This generally means that if a software tool or an application is using the hardware features no other application can reliably use the same resources.
 
-Each level of the metrics hierarchy (MetricGroups and Metrics) provides all information needed for
-its identification and usage.
-- Metric Group properties are accessed through function ::${t}MetricGroupGetProperties, returning
-  ::${t}_metric_group_properties_t.
-- Metric properties are accessed through function ::${t}MetricGetProperties, returning
-  ::${t}_metric_properties_t.
+The intention of this API is to support performance debug and it is not advised to use it in regular execution.
 
-![Metrics](../images/tools_metric_hierarchy.png?raw=true)  
-@image latex tools_metric_hierarchy.png
+${"###"} Software abstraction of hardware counting
+
+The hardware infrastucture is a programmable network of connections that work with a set of counters. Some counters do not require programming and some other use a different resources. For sake of simplicity the smallest unit of configuration is a Metric Group. These are sets of metrics that provide certain perspective on workload's performance. An application may choose to collect data from a number of Metric Groups provided that they all belong to different domains. Domains are used as a software representation of independent hardware resources that can safely be used concurrently.
 
 ${"###"} Sampling types
+
+TODO
 
 Metric Groups are designed to be used only with a specifed type of measurements, called sampling types.
 
@@ -59,6 +54,22 @@ Every Metric Group belongs to a given domain (::${t}_metric_group_properties_t.d
   to a different domain.
 
 ${"#"} <a name="enu">Enumeration</a>
+
+Available metrics are organized into Metric Groups.
+- Individual Metric Group represents a uniform hardware counter configuration used for measurements.
+- During data collection, data for the whole Metric Group is gathered.
+- Metric Group names don't have to be unique.
+- List of available Metric Groups and Metrics may be different on different hardwares.
+
+Each level of the metrics hierarchy (MetricGroups and Metrics) provides all information needed for
+its identification and usage.
+- Metric Group properties are accessed through function ::${t}MetricGroupGetProperties, returning
+  ::${t}_metric_group_properties_t.
+- Metric properties are accessed through function ::${t}MetricGetProperties, returning
+  ::${t}_metric_properties_t.
+
+![Metrics](../images/tools_metric_hierarchy.png?raw=true)  
+@image latex tools_metric_hierarchy.png
 
 When enumerating Metric tree to find a desired Metric Group, it's important to know in advance with
 which sampling type it will be used. 
