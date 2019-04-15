@@ -25,8 +25,9 @@ ${"#"} <a name="hm">Hardware Metrics</a>
 
 ${"##"} Introduction
 
-Intel GPUs includes programmable infrastructure designed to support performance debugging. The API described in this document provides access to hardware metrics.
-It is important to understand that the hardware programming is in most cases global. This generally means that if a software tool or an application is using the hardware features no other application can reliably use the same resources.
+Intel GPU includes programmable infrastructure designed to support performance debugging. The API described in this document provides access to hardware metrics.
+
+Most of the detailed metrics require hardware to be properly programmed by the driver. It is important to understand that the hardware programming is in most cases global. This generally means that if a software tool or an application is using the hardware features no other application can reliably use the same resources.
 
 The intention of this API is to support performance debug and it is not advised to use it in regular execution.
 
@@ -36,7 +37,8 @@ The hardware infrastucture consists of non-programmable pre-defined set of count
 
 ${"###"} Sampling types
 
-Sampling types are a software representation of hardware capabilities in terms of reading metrics. Each Metric Group provides information which sampling types it supports.
+Sampling types are a software representation of hardware capabilities in terms of reading metric values. Each Metric Group provides information which sampling types it supports.
+There are separate sets of APIs supporting each of the sampling types [Time based](#tbs) and [Query based](#queries).
 
 All available sampling types are defined in ::${t}_metric_group_sampling_type.
 - Information about supported sampling types for a given Metric Group is provided in 
@@ -49,17 +51,21 @@ ${"###"} <a name="dom">Domains</a>
 Every Metric Group belongs to a given domain (::${t}_metric_group_properties_t.domain). 
 - Each domain represents an exclusive resource used by the Metric Group.
 - It's possible to simultaneously gather data for two different Metric Groups, only if they belong
-  to a different domain.
+  to a different domain i.e. Metric Groups that can be collected concurrently will have different domain values.
 
 ${"#"} <a name="enu">Enumeration</a>
 
-Available metrics are organized into Metric Groups.
-- Individual Metric Group represents a uniform hardware counter configuration used for measurements.
+A common tool flow is to enumerate metrics looking for specific Metric Groups and/or Metrics.
+Depending on the metrics required for a specific scenario a tool may choose to run the workload multiple times recording different set of Metric Groups each time.
+Usually care must be taken to ensure run to run stability and result repeatability if metrics from different runs are meant to be used together.
+
+All available metrics are organized into Metric Groups.
+- If required, a Metric Group contains a uniform hardware counter configuration used for measurements. The programming is not exposed in the API.
 - During data collection, data for the whole Metric Group is gathered.
 - Metric Group names don't have to be unique.
-- List of available Metric Groups and Metrics may be different on different hardwares.
+- List of available Metric Groups and Metrics depends on hardware and driver.
 
-Each level of the metrics hierarchy (MetricGroups and Metrics) provides all information needed for
+Each level of the metrics hierarchy (MetricGroups and Metrics) provides all the information needed for
 its identification and usage.
 - Metric Group properties are accessed through function ::${t}MetricGroupGetProperties, returning
   ::${t}_metric_group_properties_t.
@@ -82,8 +88,6 @@ To enumerate through the Metric tree:
 5. Check Metric properties (e.g. name, description) calling ::${t}MetricGetProperties with parent
    Metric (::${t}_metric_handle_t).
 
-
-- TODO: provide sample data?
 
 The following sample code demonstrates basic enumeration:
 ```c
@@ -148,7 +152,7 @@ There are two modes of metrics collection supported: time based and query based.
 - Query based metrics collection is based on a pair of Begin/End events appended to command lists.
   Query result generally characterizes hardware behavior between those events.
 
-${"##"} Time Based
+${"##"} <a name="tbs">Time Based</a>
 
 Time based collection is using a simple Open/Wait/Read/Close scheme:
 - ::${t}MetricTracerOpen opens the tracer.
@@ -217,7 +221,7 @@ Time based collection is using a simple Open/Wait/Read/Close scheme:
     }
 ```
 
-${"##"} Queries
+${"##"} <a name="queries">Queries</a>
 
 Query API provides a way of acquiring metrics per portions of workload delimited by BEGIN/END events.
 Typically, multiple queries are used to characterize a workload so the API is pool based.
