@@ -108,7 +108,6 @@ FunctionImp::~FunctionImp() {
     }
     privateMemAllocation.deleteOwned();
     delete oclInternals;
-    delete kernelArgBindingTableIndex;
 }
 
 xe_result_t FunctionImp::setArgumentValue(uint32_t argIndex,
@@ -285,7 +284,7 @@ xe_result_t FunctionImp::setArgImage(uint32_t argIndex, size_t argSize, const vo
     //Optimization?  Rather than setting up and copying into a function's SSH, save references to the
     // arguments' surface states, then do all the copying and BTS updating once in appendLaunchFunction
     image->copySurfaceStateToSSH(ssh, kernelArgInfo.offsetHeap,
-                                 static_cast<uint32_t>(oclInternals->localBindingTableOffset), kernelArgBindingTableIndex[argIndex]);
+                                 static_cast<uint32_t>(oclInternals->localBindingTableOffset), argIndex);
 
     GraphicsAllocation *alloc = image->getAllocation();
     assert(alloc);
@@ -333,12 +332,6 @@ bool FunctionImp::initialize(const xe_function_desc_t *desc) {
         // note : binding table is already set-up properly by the compiler
         memcpy(this->oclInternals->pSshLocal.get(), kernelRT->pSshLocal.get(), kernelRT->sshLocalSize);
         this->oclInternals->sshLocalSize = kernelRT->sshLocalSize;
-
-        //Precompute an array of kernel argument BTIs.
-        auto &hwHelper = module->getDevice()->getHwHelper();
-
-        uint32_t numArgs = static_cast<uint32_t>(kernelInfoRT->kernelArgInfo.size());
-        kernelArgBindingTableIndex = new uint32_t[numArgs];
     }
 
     if (kernelRT->crossThreadDataSize != 0) {

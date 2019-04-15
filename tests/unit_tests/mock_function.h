@@ -21,7 +21,6 @@ struct WhiteBox<::L0::Function> : public ::L0::FunctionImp {
     using ::L0::FunctionImp::groupSizeY;
     using ::L0::FunctionImp::groupSizeZ;
     using ::L0::FunctionImp::immFuncInfo;
-    using ::L0::FunctionImp::kernelArgBindingTableIndex;
     using ::L0::FunctionImp::module;
     using ::L0::FunctionImp::printfBuffer;
     using ::L0::FunctionImp::residencyContainer;
