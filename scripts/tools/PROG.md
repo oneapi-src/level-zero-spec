@@ -32,21 +32,19 @@ The intention of this API is to support performance debug and it is not advised 
 
 ${"###"} Software abstraction of hardware counting
 
-The hardware infrastucture is a programmable network of connections that work with a set of counters. Some counters do not require programming and some other use a different resources. For sake of simplicity the smallest unit of configuration is a Metric Group. These are sets of metrics that provide certain perspective on workload's performance. An application may choose to collect data from a number of Metric Groups provided that they all belong to different domains. Domains are used as a software representation of independent hardware resources that can safely be used concurrently.
+The hardware infrastucture consists of non-programmable pre-defined set of counters, a programmable network of connections that work with a separate set of counters as well as other types of counters. For sake of simplicity the smallest unit of configuration is a Metric Group. Metric Groups are sets of metrics that provide certain perspective on workload's performance. The groups aggregate metrics, define hardware programming and available collection methods. An application may choose to collect data from a number of Metric Groups provided that they all belong to different domains. [Domains](#dom) are used as a software representation of independent hardware resources that can safely be used concurrently.
 
 ${"###"} Sampling types
 
-TODO
-
-Metric Groups are designed to be used only with a specifed type of measurements, called sampling types.
+Sampling types are a software representation of hardware capabilities in terms of reading metrics. Each Metric Group provides information which sampling types it supports.
 
 All available sampling types are defined in ::${t}_metric_group_sampling_type.
 - Information about supported sampling types for a given Metric Group is provided in 
   ::${t}_metric_group_properties_t.samplingType.
-- It's possible ${OneApi} provides multiple Metric Groups with the same names but different sampling types.
+- It's possible that ${OneApi} provides multiple Metric Groups with the same names but different sampling types.
 - When enumerating, it's important to choose a Metric Group which supports the desired sampling type.
 
-${"###"} Domains
+${"###"} <a name="dom">Domains</a>
 
 Every Metric Group belongs to a given domain (::${t}_metric_group_properties_t.domain). 
 - Each domain represents an exclusive resource used by the Metric Group.
