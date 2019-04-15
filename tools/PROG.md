@@ -19,6 +19,34 @@ NOTE2: Use **TODO** to mark portions requiring more work.
 
 ## Introduction
 
+Intel GPUs includes programmable infrastructure designed to support performance debugging. The API described in this document provides access to hardware metrics.
+It is important to understand that the hardware programming is in most cases global. This generally means that if a software tool or an application is using the hardware features no other application can reliably use the same resources.
+
+The intention of this API is to support performance debug and it is not advised to use it in regular execution.
+
+### Software abstraction of hardware counting
+
+The hardware infrastucture consists of non-programmable pre-defined set of counters, a programmable network of connections that work with a separate set of counters as well as other types of counters. For sake of simplicity the smallest unit of configuration is a Metric Group. Metric Groups are sets of metrics that provide certain perspective on workload's performance. The groups aggregate metrics, define hardware programming and available collection methods. An application may choose to collect data from a number of Metric Groups provided that they all belong to different domains. [Domains](#dom) are used as a software representation of independent hardware resources that can safely be used concurrently.
+
+### Sampling types
+
+Sampling types are a software representation of hardware capabilities in terms of reading metrics. Each Metric Group provides information which sampling types it supports.
+
+All available sampling types are defined in ::xet_metric_group_sampling_type.
+- Information about supported sampling types for a given Metric Group is provided in 
+  ::xet_metric_group_properties_t.samplingType.
+- It's possible that Xe provides multiple Metric Groups with the same names but different sampling types.
+- When enumerating, it's important to choose a Metric Group which supports the desired sampling type.
+
+### <a name="dom">Domains</a>
+
+Every Metric Group belongs to a given domain (::xet_metric_group_properties_t.domain). 
+- Each domain represents an exclusive resource used by the Metric Group.
+- It's possible to simultaneously gather data for two different Metric Groups, only if they belong
+  to a different domain.
+
+# <a name="enu">Enumeration</a>
+
 Available metrics are organized into Metric Groups.
 - Individual Metric Group represents a uniform hardware counter configuration used for measurements.
 - During data collection, data for the whole Metric Group is gathered.
@@ -34,25 +62,6 @@ its identification and usage.
 
 ![Metrics](../images/tools_metric_hierarchy.png?raw=true)  
 @image latex tools_metric_hierarchy.png
-
-### Sampling types
-
-Metric Groups are designed to be used only with a specifed type of measurements, called sampling types.
-
-All available sampling types are defined in ::xet_metric_group_sampling_type.
-- Information about supported sampling types for a given Metric Group is provided in 
-  ::xet_metric_group_properties_t.samplingType.
-- It's possible Xe provides multiple Metric Groups with the same names but different sampling types.
-- When enumerating, it's important to choose a Metric Group which supports the desired sampling type.
-
-### Domains
-
-Every Metric Group belongs to a given domain (::xet_metric_group_properties_t.domain). 
-- Each domain represents an exclusive resource used by the Metric Group.
-- It's possible to simultaneously gather data for two different Metric Groups, only if they belong
-  to a different domain.
-
-# <a name="enu">Enumeration</a>
 
 When enumerating Metric tree to find a desired Metric Group, it's important to know in advance with
 which sampling type it will be used. 
