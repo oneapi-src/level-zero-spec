@@ -176,6 +176,11 @@ Time based collection is using a simple Open/Wait/Read/Close scheme:
 
 **Note:** To avoid incorrect data, do not reconfigure the hardware using ::xetDeviceActivateMetricGroups while the tracer is opened.
 
+![MetricTracer](../images/tools_metric_tracer.png?raw=true)  
+@image latex tools_metric_tracer.png
+
+
+The following sample code demonstrates a basic sequence for time based collection:
 ```c
     xe_result_t TimeBasedUsageExample( xe_device_handle_t hDevice )
     {
@@ -253,6 +258,7 @@ Typically, multiple queries are used to characterize a workload so the API is po
 ![MetricQuery](../images/tools_metric_query.png?raw=true)  
 @image latex tools_metric_query.png
 
+The following sample code demonstrates a basic sequence for query based collection:
 ```c
     xe_result_t MetricQueryUsageExample( xe_device_handle_t hDevice )
     {
