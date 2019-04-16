@@ -108,13 +108,13 @@ for selecting a preferred metric group for a specific type of measurements.
 ```c
     ${x}_result_t FindMetricGroup( ${x}_device_handle_t hDevice, char* pMetricGroupName, uint32_t desiredSamplingType, ${t}_metric_group_handle_t* phMetricGroup )
     {
-        // Obtain available metric group count for a specific device - 'hDevice'
+        // Obtain available metric group count for the specific device - 'hDevice'
         uint32_t metricGroupCount = 0;
         ${t}MetricGroupGetCount( hDevice, &metricGroupCount );
 
         *phMetricGroup = nullptr;
 
-        // Interate over all metric groups available for 'hDevice'
+        // Interate over all metric groups available for the 'hDevice'
         for( uint32_t i = 0; i < metricGroupCount; i++ )
         {   
             ${t}_metric_group_handle_t hMetricGroup = nullptr;
@@ -126,10 +126,10 @@ for selecting a preferred metric group for a specific type of measurements.
 
             printf("Metric Group: %s\n", metricGroupProperties.name);
 
-            // Check whether the obtained metric group supports a desired sampling type
+            // Check whether the obtained metric group supports the desired sampling type
             if((metricGroupProperties.samplingType & desiredSamplingType) == desiredSamplingType)
             {   
-                // Check whether the obtained metric group has a desired name
+                // Check whether the obtained metric group has the desired name
                 if( strcmp( pMetricGroupName, metricGroupProperties.name ) == 0 )
                 {
                     *phMetricGroup = hMetricGroup;
