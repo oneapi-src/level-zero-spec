@@ -1,5 +1,5 @@
 if(UNIX)
-    set(OS_SPECIFIC_LIBS dl pthread)
+    set(OS_SPECIFIC_LIBS pthread)
 else()
     set(OS_SPECIFIC_LIBS "")
 endif()

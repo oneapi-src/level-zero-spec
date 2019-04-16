@@ -48,6 +48,7 @@
 ~/irepo/irepo ignore-folder images
 ~/irepo/irepo ignore-folder core
 ~/irepo/irepo ignore-folder samples
+~/irepo/irepo ignore-folder cmake
 
 ~/irepo/irepo sync --clean --delete-unknown-content
 ls -la
@@ -63,10 +64,17 @@ ls -la
 			image.pull()
 			image.inside("-v /ccache:/ccache -e CCACHE_DIR=/ccache -e CCACHE_TEMPDIR=/tmp/ccache -e CCACHE_BASEDIR=${workDir}") {
 				sh """\
+#!/bin/bash
+
 mkdir ubuntu18
 cd ubuntu18
 cmake -GNinja .. -DCMAKE_BUILD_TYPE=Release -DLOKI_VERSION_BUILD=${buildId} ${cmakeFlags.join(' ')}
 cmake --build . --config Release --clean-first --target package
+
+dpkg-deb -x intel-loki-devel_*.deb x
+pushd x
+zip -r -9 ../`basename ../intel-loki-devel_0.1.2-0~bionic_amd64.deb ~bionic_amd64.deb`.zip .
+popd
 """
 			}
 			image.inside() {
@@ -78,6 +86,7 @@ make
 """
 			}
 			archiveArtifacts "ubuntu18/*.deb"
+			archiveArtifacts "ubuntu18/*.zip"
 			dir('latex') {
 				archiveArtifacts "*.pdf"
 			}

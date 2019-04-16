@@ -94,7 +94,7 @@ option(${PROJECT_NAME}_BUILD_TESTS "Build unit tests." ON)
 add_subdirectory(${THIRD_PARTY_DIR})
 
 #enable compute_runtime
-include(compute_runtime.cmake)
+include(cmake/compute_runtime.cmake)
 
 # Copy third_party_binaries to output BIN folder
 add_custom_target(copy_third_party_files)
@@ -125,6 +125,21 @@ endif()
 add_subdirectory(icd_loader)
 
 if(UNIX)
+    include(CMakePackageConfigHelpers)
+    configure_package_config_file(
+        cmake/LevelZeroConfig.cmake.in
+        ${CMAKE_CURRENT_BINARY_DIR}/LevelZeroConfig.cmake
+        INSTALL_DESTINATION "${CMAKE_INSTALL_LIBDIR}/cmake/level_zero"
+        PATH_VARS CMAKE_INSTALL_INCLUDEDIR
+        NO_CHECK_REQUIRED_COMPONENTS_MACRO)
+
+    install(FILES ${CMAKE_CURRENT_BINARY_DIR}/LevelZeroConfig.cmake
+        DESTINATION "${CMAKE_INSTALL_LIBDIR}/cmake/level_zero"
+        COMPONENT loki-devel
+    )
+endif()
+
+if(UNIX)
     if(DEFINED LOKI_CPACK_GENERATOR)
         set(CPACK_GENERATOR ${LOKI_CPACK_GENERATOR})
     else()
@@ -153,8 +168,12 @@ if(UNIX)
         endif()
     endif()
 
+    set(CPACK_SET_DESTDIR TRUE)
     set(CPACK_PACKAGE_NAME "intel")
     set(CPACK_PACKAGE_CONTACT "Intel Corporation")
+    set(CPACK_PACKAGE_ARCHITECTURE "x86_64")
+    set(CPACK_PACKAGE_RELOCATABLE FALSE)
+
     set(CPACK_PACKAGE_VERSION_MAJOR 0)
     set(CPACK_PACKAGE_VERSION_MINOR 1)
     set(CPACK_PACKAGE_VERSION_PATCH 2)

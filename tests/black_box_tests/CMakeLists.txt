@@ -1,5 +1,5 @@
 if(UNIX)
-    set(OS_SPECIFIC_LIBS dl pthread)
+    set(OS_SPECIFIC_LIBS pthread)
     set(black_box_datadir ${CMAKE_INSTALL_FULL_DATAROOTDIR}/loki-samples)
     add_definitions(-DOS_DATADIR=${black_box_datadir}/)
 else()
