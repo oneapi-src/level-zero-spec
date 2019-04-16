@@ -19,19 +19,30 @@ NOTE2: Use **TODO** to mark portions requiring more work.
 
 ## Introduction
 
-Intel GPU includes programmable infrastructure designed to support performance debugging. The API described in this document provides access to hardware metrics.
+Intel GPU includes programmable infrastructure designed to support performance debugging. The API
+described in this document provides access to hardware metrics.
 
-Most of the detailed metrics require hardware to be properly programmed by the driver. It is important to understand that the hardware programming is in most cases global. This generally means that if a software tool or an application is using the hardware features no other application can reliably use the same resources.
+Most of the detailed metrics require hardware to be properly programmed by the driver. It is
+important to understand that the hardware programming is in most cases global. This generally means
+that if a software tool or an application is using the hardware features no other application
+can reliably use the same resources.
 
 The intention of this API is to support performance debug and it is not advised to use it in regular execution.
 
 ### Software abstraction of hardware counting
 
-The hardware infrastucture consists of non-programmable pre-defined set of counters, a programmable network of connections that work with a separate set of counters as well as other types of counters. For sake of simplicity the smallest unit of configuration is a Metric Group. Metric Groups are sets of metrics that provide certain perspective on workload's performance. The groups aggregate metrics, define hardware programming and available collection methods. An application may choose to collect data from a number of Metric Groups provided that they all belong to different domains. [Domains](#dom) are used as a software representation of independent hardware resources that can safely be used concurrently.
+The hardware infrastucture consists of non-programmable pre-defined set of counters, a programmable
+network of connections that work with a separate set of counters as well as other types of counters.
+For sake of simplicity the smallest unit of configuration is a Metric Group. Metric Groups are
+sets of metrics that provide certain perspective on workload's performance. The groups aggregate metrics,
+define hardware programming and available collection methods. An application may choose to collect data
+from a number of Metric Groups provided that they all belong to different domains. [Domains](#dom) are used
+as a software representation of independent hardware resources that can safely be used concurrently.
 
 ### Sampling types
 
-Sampling types are a software representation of hardware capabilities in terms of reading metric values. Each Metric Group provides information which sampling types it supports.
+Sampling types are a software representation of hardware capabilities in terms of reading metric values.
+Each Metric Group provides information which sampling types it supports.
 There are separate sets of APIs supporting each of the sampling types [Time based](#tbs) and [Query based](#queries).
 
 All available sampling types are defined in ::xet_metric_group_sampling_type.
@@ -50,11 +61,13 @@ Every Metric Group belongs to a given domain (::xet_metric_group_properties_t.do
 # <a name="enu">Enumeration</a>
 
 A common tool flow is to enumerate metrics looking for specific Metric Groups and/or Metrics.
-Depending on the metrics required for a specific scenario a tool may choose to run the workload multiple times recording different set of Metric Groups each time.
+Depending on the metrics required for a specific scenario a tool may choose to run the workload multiple times
+recording different set of Metric Groups each time.
 Usually care must be taken to ensure run to run stability and result repeatability if metrics from different runs are meant to be used together.
 
 All available metrics are organized into Metric Groups.
-- If required, a Metric Group contains a uniform hardware counter configuration used for measurements. The programming is not exposed in the API.
+- If required, a Metric Group contains a uniform hardware counter configuration used for measurements.
+  The programming is not exposed in the API.
 - During data collection, data for the whole Metric Group is gathered.
 - Metric Group names don't have to be unique.
 - List of available Metric Groups and Metrics depends on hardware and driver.
@@ -83,39 +96,46 @@ To enumerate through the Metric tree:
    Metric (::xet_metric_handle_t).
 
 
-The following sample code demonstrates basic enumeration:
+The following sample code demonstrates a basic enumaration over all available metric groups and their metrics.
+Additionally, it returns a metric group with a chosen name and sampling type. Similar code could be used
+for selecting a preferred metric group for a specific type of measurements.
 ```c
     xe_result_t FindMetricGroup( xe_device_handle_t hDevice, char* pMetricGroupName, uint32_t desiredSamplingType, xet_metric_group_handle_t* phMetricGroup )
     {
-        // METRIC GROUP COUNT
+        // Obtain available metric group count for a specific device - 'hDevice'
         uint32_t metricGroupCount = 0;
         xetMetricGroupGetCount( hDevice, &metricGroupCount );
 
         *phMetricGroup = nullptr;
 
-        // METRIC GROUPS
+        // Interate over all metric groups available for 'hDevice'
         for( uint32_t i = 0; i < metricGroupCount; i++ )
         {   
             xet_metric_group_handle_t hMetricGroup = nullptr;
             xet_metric_group_properties_t metricGroupProperties = {XET_METRIC_GROUP_PROPERTIES_VERSION_CURRENT};
 
+            // Get metric group under index 'i' and its properties
             xetMetricGroupGet( hDevice, i, &hMetricGroup );
             xetMetricGroupGetProperties( hMetricGroup, &metricGroupProperties );
 
             printf("Metric Group: %s\n", metricGroupProperties.name);
 
+            // Check whether the obtained metric group supports a desired sampling type
             if((metricGroupProperties.samplingType & desiredSamplingType) == desiredSamplingType)
             {   
+                // Check whether the obtained metric group has a desired name
                 if( strcmp( pMetricGroupName, metricGroupProperties.name ) == 0 )
                 {
                     *phMetricGroup = hMetricGroup;
                 }
-	            // list METRICS
+
+	            // Interate over all metrics within the 'hMetricGroup'
                 for(uint32_t j = 0; j < metricGroupProperties.metricCount; j++)	
                 {
                     xet_metric_handle_t metricHandle = nullptr;
                     xet_metric_properties_t metricProperties = {XET_METRIC_PROPERTIES_VERSION_CURRENT};   
 
+                    // Get metric under index 'j' and its properties
                     xetMetricGet(hMetricGroup, j, &metricHandle);
                     xetMetricGetProperties(metricHandle, &metricProperties);
 
