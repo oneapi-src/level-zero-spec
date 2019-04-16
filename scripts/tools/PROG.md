@@ -162,7 +162,6 @@ Time based collection is using a simple Open/Wait/Read/Close scheme:
 
 **Note:** To avoid incorrect data, do not reconfigure the hardware using ::${t}DeviceActivateMetricGroups while the tracer is opened.
 
-**TODO** align with new Event architecture (new query pool flags, event scopes).
 ```c
     ${x}_result_t TimeBasedUsageExample( ${x}_device_handle_t hDevice )
     {
@@ -171,6 +170,7 @@ Time based collection is using a simple Open/Wait/Read/Close scheme:
         ${x}_event_handle_t	          hNotificationEvent     = nullptr;
         ${x}_event_pool_handle_t	      hEventPool             = nullptr;
         ${x}_event_pool_desc_t          eventPoolDesc          = {${X}_EVENT_POOL_DESC_VERSION_CURRENT, ${X}_EVENT_POOL_FLAG_DEFAULT , 1};
+        ${x}_event_desc_t               eventDesc              = {${X}_EVENT_DESC_VERSION_CURRENT};
         ${t}_metric_tracer_handle_t    hMetricTracer          = nullptr;
         ${t}_metric_tracer_desc_t      metricTracerDescriptor = {${T}_METRIC_TRACER_DESC_VERSION_CURRENT}; 
 
@@ -181,9 +181,14 @@ Time based collection is using a simple Open/Wait/Read/Close scheme:
         // Configure the HW
         ${t}DeviceActivateMetricGroup( hDevice, 1 /* count */, &hMetricGroup );
 
-        // Open time based sampling
+        // Create notification event
         ${x}EventPoolCreate( hDevice, &eventPoolDesc, &hEventPool );
-        ${x}EventCreate( hEventPool, 0 /*slot*/, &hNotificationEvent );
+        eventDesc.index  = 0;
+        eventDesc.signal = XE_EVENT_SCOPE_FLAG_HOST;
+        eventDesc.wait   = XE_EVENT_SCOPE_FLAG_HOST; 
+        ${x}EventCreate( hEventPool, &eventDesc, &hNotificationEvent );
+        
+        // Open time based sampling
         metricTracerDescriptor.hMetricGroup     	= hMetricGroup;
         metricTracerDescriptor.samplingPeriodNs 	= 1000;
         metricTracerDescriptor.notifyEveryNReports  = 32768;
@@ -231,8 +236,9 @@ Typically, multiple queries are used to characterize a workload so the API is po
 - Then insert BEGIN/END events into a command list using ::${t}CommandListAppendMetricQueryBegin and ::${t}CommandListAppendMetricQueryEnd calls.
 - Once the workload has been executed the ::${t}MetricQueryGetData returns the raw data to be later processed by ::${t}MetricGroupCalculateData.
 
+![MetricQuery](../images/tools_metric_query.png?raw=true)  
+@image latex tools_metric_query.png
 
-**TODO** align with new Event architecture (new query pool flags, event scopes).
 ```c
     ${x}_result_t MetricQueryUsageExample( ${x}_device_handle_t hDevice )
     {
@@ -240,6 +246,7 @@ Typically, multiple queries are used to characterize a workload so the API is po
         ${t}_metric_group_properties_t  metricGroupProperties = {${T}_METRIC_GROUP_PROPERTIES_VERSION_CURRENT};
         ${x}_event_handle_t              hCompletionEvent      = nullptr;
         ${x}_event_pool_desc_t           eventPoolDesc         = {${X}_EVENT_POOL_DESC_VERSION_CURRENT};
+        ${x}_event_desc_t                eventDesc             = {${X}_EVENT_DESC_VERSION_CURRENT};
         ${x}_event_pool_handle_t         hEventPool            = nullptr;
         ${t}_metric_query_pool_handle_t hMetricQueryPool      = nullptr;
         ${t}_metric_query_handle_t      hMetricQuery          = nullptr;
@@ -268,7 +275,10 @@ Typically, multiple queries are used to characterize a workload so the API is po
         // build your command list
 
         // Write END metric query to command list, use an event to determine if the data is available
-        ${x}EventCreate( hEventPool, 0 /*slot*/, hCompletionEvent);
+        eventDesc.index  = 0;
+        eventDesc.signal = XE_EVENT_SCOPE_FLAG_HOST;
+        eventDesc.wait   = XE_EVENT_SCOPE_FLAG_HOST; 
+        ${x}EventCreate( hEventPool, &eventDesc, &hCompletionEvent);
         ${t}CommandListAppendMetricQueryEnd( hCommandList, hMetricQuery, hCompletionEvent );
 
         // use ${x}CommandQueueExecuteCommandLists( , , , ) to submit your workload to the hardware
