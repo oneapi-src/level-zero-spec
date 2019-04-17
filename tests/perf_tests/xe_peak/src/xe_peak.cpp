@@ -49,15 +49,25 @@ std::vector<uint8_t> L0Context::load_binary_file(const std::string &file_path) {
 }
 
 void L0Context::reset_commandlist() {
-    xe_command_list_desc_t command_list_description;
     xe_result_t result = XE_RESULT_SUCCESS;
 
-    result = xeCommandListDestroy(command_list);
+#if 0
+    result = xeCommandListReset(command_list);
     if (result) {
-        throw std::runtime_error("xeCommandListDestroy failed: " + result);
+        throw std::runtime_error("xeCommandListReset failed: " + result);
     }
     if (verbose)
-        std::cout << "Command list destroyed\n";
+        std::cout << "Command list reset\n";
+#else
+    xe_command_list_desc_t command_list_description;
+    if (command_list) {
+        result = xeCommandListDestroy(command_list);
+        if (result) {
+            throw std::runtime_error("xeCommandListDestroy failed: " + result);
+        }
+        if (verbose)
+            std::cout << "Command list destroyed\n";
+    }
 
     command_list_description.version = XE_COMMAND_LIST_DESC_VERSION_CURRENT;
 
@@ -67,6 +77,26 @@ void L0Context::reset_commandlist() {
     }
     if (verbose)
         std::cout << "command_list created\n";
+#endif
+}
+
+void L0Context::create_module(std::vector<uint8_t> binary_file) {
+    xe_result_t result = XE_RESULT_SUCCESS;
+    xe_module_desc_t module_description;
+
+    module_description.version = XE_MODULE_DESC_VERSION_CURRENT;
+    module_description.format = XE_MODULE_FORMAT_IL_SPIRV;
+    module_description.inputSize = static_cast<uint32_t>(binary_file.size());
+    // TODO: Remove cast when pInputModule will be declared as uint8_t
+    module_description.pInputModule = reinterpret_cast<const char *>(binary_file.data());
+    module_description.pBuildFlags = nullptr;
+
+    result = xeDeviceCreateModule(device, &module_description, &module, nullptr);
+    if (result) {
+        throw std::runtime_error("xeDeviceCreateModule failed: " + result);
+    }
+    if (verbose)
+        std::cout << "Module created\n";
 }
 
 void L0Context::print_xe_device_properties(const xe_device_properties_t &props) {
@@ -127,10 +157,10 @@ void L0Context::init_xe() {
     if (result) {
         throw std::runtime_error("xeDeviceGetProperties failed: " + result);
     }
-    if (verbose) {
+    if (verbose)
         std::cout << "Device Properties retrieved\n";
-        print_xe_device_properties(device_property);
-    }
+
+    print_xe_device_properties(device_property);
 
     device_compute_property.version = XE_DEVICE_COMPUTE_PROPERTIES_VERSION_CURRENT;
     result = xeDeviceGetComputeProperties(device, &device_compute_property);
@@ -193,72 +223,115 @@ void L0Context::clean_xe() {
         std::cout << "Allocator destroyed\n";
 }
 
+void L0Context::execute_commandlist_and_sync() {
+    xe_result_t result = XE_RESULT_SUCCESS;
+
+    result = xeCommandListClose(command_list);
+    if (result) {
+        throw std::runtime_error("xeCommandListClose failed: " + result);
+    }
+    if (verbose)
+        std::cout << "Command list closed\n";
+
+    result = xeCommandQueueExecuteCommandLists(command_queue, 1, &command_list, nullptr);
+    if (result) {
+        throw std::runtime_error("xeCommandQueueExecuteCommandLists failed: " + result);
+    }
+    if (verbose)
+        std::cout << "Command list enqueued\n";
+
+    result = xeCommandQueueSynchronize(command_queue, UINT32_MAX);
+    if (result) {
+        throw std::runtime_error("xeCommandQueueSynchronize failed: " + result);
+    }
+    if (verbose)
+        std::cout << "Command queue synchronized\n";
+
+    reset_commandlist();
+}
+
 uint64_t XePeak::convert_cl_to_xe_work_item_count(uint64_t global_work_size, uint64_t local_size) {
     uint64_t number_of_workgroups = global_work_size / local_size;
     return number_of_workgroups * (local_size + local_size + local_size);
 }
 
-void XePeak::set_workgroups(L0Context &context, const uint64_t total_work_items_requested,
-                            uint32_t *group_size_x, uint32_t *group_size_y, uint32_t *group_size_z,
-                            xe_thread_group_dimensions_t *thread_group_dimensions) {
+uint64_t total_current_work_items(uint64_t group_size_x, uint64_t group_count_x,
+                                  uint64_t group_size_y, uint64_t group_count_y,
+                                  uint64_t group_size_z, uint64_t group_count_z) {
+    return (group_size_x * group_count_x * group_size_y * group_count_y * group_size_z *
+            group_count_z);
+}
+
+uint64_t XePeak::set_workgroups(L0Context &context, const uint64_t total_work_items_requested,
+                                struct XeWorkGroups *workgroup_info) {
 
     uint64_t final_work_items = 0;
-    thread_group_dimensions->groupCountX = 1;
-    thread_group_dimensions->groupCountY = 1;
-    thread_group_dimensions->groupCountZ = 1;
-    *group_size_x = 1;
-    *group_size_y = 1;
-    *group_size_z = 1;
+    uint64_t group_count_x = 1;
+    uint64_t group_count_y = 1;
+    uint64_t group_count_z = 1;
+    uint64_t group_size_x = 1;
+    uint64_t group_size_y = 1;
+    uint64_t group_size_z = 1;
 
     while (final_work_items < total_work_items_requested) {
-        if (thread_group_dimensions->groupCountX < context.device_compute_property.maxGroupCountX) {
-            thread_group_dimensions->groupCountX += 1;
-            final_work_items = (*group_size_x * thread_group_dimensions->groupCountX *
-                                *group_size_y * thread_group_dimensions->groupCountY *
-                                *group_size_z * thread_group_dimensions->groupCountZ);
+        if (group_count_x < context.device_compute_property.maxGroupCountX) {
+            group_count_x += 1;
+            final_work_items = total_current_work_items(group_size_x, group_count_x, group_size_y,
+                                                        group_count_y, group_size_z, group_count_z);
         }
-        if ((thread_group_dimensions->groupCountY <
-             context.device_compute_property.maxGroupCountY) &&
+        if ((group_count_y < context.device_compute_property.maxGroupCountY) &&
             final_work_items < total_work_items_requested) {
-            thread_group_dimensions->groupCountY += 1;
-            final_work_items = (*group_size_x * thread_group_dimensions->groupCountX *
-                                *group_size_y * thread_group_dimensions->groupCountY *
-                                *group_size_z * thread_group_dimensions->groupCountZ);
+            group_count_y += 1;
+            final_work_items = total_current_work_items(group_size_x, group_count_x, group_size_y,
+                                                        group_count_y, group_size_z, group_count_z);
         }
-        if ((thread_group_dimensions->groupCountZ <
-             context.device_compute_property.maxGroupCountZ) &&
+        if ((group_count_z < context.device_compute_property.maxGroupCountZ) &&
             final_work_items < total_work_items_requested) {
-            thread_group_dimensions->groupCountZ += 1;
-            final_work_items = (*group_size_x * thread_group_dimensions->groupCountX *
-                                *group_size_y * thread_group_dimensions->groupCountY *
-                                *group_size_z * thread_group_dimensions->groupCountZ);
+            group_count_z += 1;
+            final_work_items = total_current_work_items(group_size_x, group_count_x, group_size_y,
+                                                        group_count_y, group_size_z, group_count_z);
         }
         if ((final_work_items < total_work_items_requested) &&
-            (*group_size_x < context.device_compute_property.maxGroupSizeX)) {
-            *group_size_x += 1;
-            final_work_items = (*group_size_x * thread_group_dimensions->groupCountX *
-                                *group_size_y * thread_group_dimensions->groupCountY *
-                                *group_size_z * thread_group_dimensions->groupCountZ);
+            (group_size_x < context.device_compute_property.maxGroupSizeX)) {
+            group_size_x += 1;
+            final_work_items = total_current_work_items(group_size_x, group_count_x, group_size_y,
+                                                        group_count_y, group_size_z, group_count_z);
         }
         if ((final_work_items < total_work_items_requested) &&
-            (*group_size_y < context.device_compute_property.maxGroupSizeY)) {
-            *group_size_y += 1;
-            final_work_items = (*group_size_x * thread_group_dimensions->groupCountX *
-                                *group_size_y * thread_group_dimensions->groupCountY *
-                                *group_size_z * thread_group_dimensions->groupCountZ);
+            (group_size_y < context.device_compute_property.maxGroupSizeY)) {
+            group_size_y += 1;
+            final_work_items = total_current_work_items(group_size_x, group_count_x, group_size_y,
+                                                        group_count_y, group_size_z, group_count_z);
         }
         if ((final_work_items < total_work_items_requested) &&
-            (*group_size_z < context.device_compute_property.maxGroupSizeZ)) {
-            *group_size_z += 1;
-            final_work_items = (*group_size_x * thread_group_dimensions->groupCountX *
-                                *group_size_y * thread_group_dimensions->groupCountY *
-                                *group_size_z * thread_group_dimensions->groupCountZ);
+            (group_size_z < context.device_compute_property.maxGroupSizeZ)) {
+            group_size_z += 1;
+            final_work_items = total_current_work_items(group_size_x, group_count_x, group_size_y,
+                                                        group_count_y, group_size_z, group_count_z);
         }
+    }
+
+    if (verbose) {
+        std::cout << "Group size x: " << group_size_x << "\n";
+        std::cout << "Group size y: " << group_size_y << "\n";
+        std::cout << "Group size z: " << group_size_z << "\n";
+        std::cout << "Group count x: " << group_count_x << "\n";
+        std::cout << "Group count y: " << group_count_y << "\n";
+        std::cout << "Group count z: " << group_count_z << "\n";
     }
 
     if (verbose)
         std::cout << "total work items that will be executed: " << final_work_items
                   << " requested: " << total_work_items_requested << "\n";
+
+    workgroup_info->group_size_x = static_cast<uint32_t>(group_size_x);
+    workgroup_info->group_size_y = static_cast<uint32_t>(group_size_y);
+    workgroup_info->group_size_z = static_cast<uint32_t>(group_size_z);
+    workgroup_info->thread_group_dimensions.groupCountX = static_cast<uint32_t>(group_count_x);
+    workgroup_info->thread_group_dimensions.groupCountY = static_cast<uint32_t>(group_count_y);
+    workgroup_info->thread_group_dimensions.groupCountZ = static_cast<uint32_t>(group_count_z);
+
+    return final_work_items;
 }
 
 void XePeak::run_command_queue(L0Context &context) {
@@ -280,27 +353,13 @@ void XePeak::run_command_queue(L0Context &context) {
 }
 
 float XePeak::run_kernel(L0Context context, xe_function_handle_t &function,
-                         uint64_t total_number_work_items, int iters, TimingMeasurement type) {
+                         struct XeWorkGroups &workgroup_info, TimingMeasurement type,
+                         bool reset_command_list) {
     xe_result_t result = XE_RESULT_SUCCESS;
     float timed = 0;
 
-    uint32_t group_size_x = 0;
-    uint32_t group_size_y = 0;
-    uint32_t group_size_z = 0;
-    xe_thread_group_dimensions_t thread_group_dimensions;
-    set_workgroups(context, total_number_work_items, &group_size_x, &group_size_y, &group_size_z,
-                   &thread_group_dimensions);
-
-    if (verbose) {
-        std::cout << "Group size x: " << group_size_x << "\n";
-        std::cout << "Group size y: " << group_size_y << "\n";
-        std::cout << "Group size z: " << group_size_z << "\n";
-        std::cout << "Group count x: " << thread_group_dimensions.groupCountX << "\n";
-        std::cout << "Group count y: " << thread_group_dimensions.groupCountY << "\n";
-        std::cout << "Group count z: " << thread_group_dimensions.groupCountZ << "\n";
-    }
-
-    result = xeFunctionSetGroupSize(function, group_size_x, group_size_y, group_size_z);
+    result = xeFunctionSetGroupSize(function, workgroup_info.group_size_x,
+                                    workgroup_info.group_size_y, workgroup_info.group_size_z);
     if (result) {
         throw std::runtime_error("xeFunctionSetGroupSize failed: " + result);
     }
@@ -308,7 +367,7 @@ float XePeak::run_kernel(L0Context context, xe_function_handle_t &function,
         std::cout << "Group size set\n";
 
     result = xeCommandListAppendLaunchFunction(context.command_list, function,
-                                               &thread_group_dimensions, nullptr);
+                                               &workgroup_info.thread_group_dimensions, nullptr);
     if (result) {
         throw std::runtime_error("xeCommandListAppendLaunchFunction failed: " + result);
     }
@@ -328,12 +387,12 @@ float XePeak::run_kernel(L0Context context, xe_function_handle_t &function,
 
     if (type == BANDWIDTH) {
         timer.start();
-        for (int i = 0; i < iters; i++) {
+        for (uint32_t i = 0; i < iters; i++) {
             run_command_queue(context);
         }
         timed = timer.stopAndTime();
     } else if (type == KERNEL_LAUNCH_LATENCY) {
-        for (int i = 0; i < iters; i++) {
+        for (uint32_t i = 0; i < iters; i++) {
             /* TODO: implement timing with xeEventQueryElapsedTime for Launch Latency*/
             timer.start();
             result = xeCommandQueueExecuteCommandLists(context.command_queue, 1,
@@ -353,22 +412,64 @@ float XePeak::run_kernel(L0Context context, xe_function_handle_t &function,
                 std::cout << "Command queue synchronized\n";
         }
     } else if (type == KERNEL_COMPLETE_LATENCY) {
-        for (int i = 0; i < iters; i++) {
+        for (uint32_t i = 0; i < iters; i++) {
             timer.start();
             run_command_queue(context);
             timed += timer.stopAndTime();
         }
     }
 
-    result = xeFunctionDestroy(function);
-    if (result) {
-        throw std::runtime_error("xeFunctionDestroy failed: " + result);
-    }
-    if (verbose)
-        std::cout << "Function Destroyed\n";
+    if (reset_command_list)
+        context.reset_commandlist();
 
     return (timed / static_cast<float>(iters));
 }
+
+void XePeak::setup_function(L0Context &context, xe_function_handle_t &function, const char *name,
+                            void *input, void *output) {
+    xe_function_desc_t function_description;
+    xe_result_t result = XE_RESULT_SUCCESS;
+
+    function_description.version = XE_FUNCTION_DESC_VERSION_CURRENT;
+    function_description.flags = XE_FUNCTION_FLAG_NONE;
+    function_description.pFunctionName = name;
+
+    result = xeModuleCreateFunction(context.module, &function_description, &function);
+    if (result) {
+        throw std::runtime_error("xeModuleCreateFunction failed: " + result);
+    }
+    if (verbose)
+        std::cout << "Function created\n";
+
+    result = xeFunctionSetArgumentValue(function, 0, sizeof(input), &input);
+    if (result) {
+        throw std::runtime_error("xeFunctionSetArgumentValue failed: " + result);
+    }
+    if (verbose)
+        std::cout << "Input buffer set as function argument\n";
+
+    result = xeFunctionSetArgumentValue(function, 1, sizeof(output), &output);
+    if (result) {
+        throw std::runtime_error("xeFunctionSetArgumentValue failed: " + result);
+    }
+    if (verbose)
+        std::cout << "Output buffer set as function argument\n";
+}
+
+uint64_t XePeak::get_max_work_items(L0Context &context) {
+    uint64_t group_size_x = context.device_compute_property.maxGroupSizeX;
+    uint64_t group_size_y = context.device_compute_property.maxGroupSizeY;
+    uint64_t group_size_z = context.device_compute_property.maxGroupSizeZ;
+    uint64_t group_count_x = context.device_compute_property.maxGroupCountX;
+    uint64_t group_count_y = context.device_compute_property.maxGroupCountY;
+    uint64_t group_count_z = context.device_compute_property.maxGroupCountZ;
+
+    uint64_t max_work_items = (group_size_x * group_size_y * group_size_z * group_count_x *
+                               group_count_y * group_count_z);
+    return max_work_items;
+}
+
+void XePeak::print_test_complete() { std::cout << "<<<<<<<<<<<<<<<<<<<<<<<<<<<<\n"; }
 
 int main(int argc, char **argv) {
     XePeak peak_benchmark;
@@ -382,7 +483,14 @@ int main(int argc, char **argv) {
     if (peak_benchmark.run_global_bw)
         peak_benchmark.xe_peak_global_bw(context);
 
-    context.reset_commandlist();
+    if (peak_benchmark.run_sp_compute)
+        peak_benchmark.xe_peak_sp_compute(context);
+
+    if (peak_benchmark.run_dp_compute)
+        peak_benchmark.xe_peak_dp_compute(context);
+
+    if (peak_benchmark.run_int_compute)
+        peak_benchmark.xe_peak_int_compute(context);
 
     if (peak_benchmark.run_kernel_lat)
         peak_benchmark.xe_peak_kernel_latency(context);

@@ -27,25 +27,14 @@ void XePeak::xe_peak_kernel_latency(L0Context &context) {
     uint64_t global_size = (num_items / FETCH_PER_WI);
     uint64_t total_work_items = convert_cl_to_xe_work_item_count(
         global_size, context.device_compute_property.maxGroupSizeX);
+    struct XeWorkGroups workgroup_info;
+    total_work_items = set_workgroups(context, total_work_items, &workgroup_info);
     float latency = 0;
     xe_result_t result = XE_RESULT_SUCCESS;
-    xe_module_desc_t module_description;
 
     std::vector<uint8_t> binary_file = context.load_binary_file("xe_global_bw.spv");
 
-    module_description.version = XE_MODULE_DESC_VERSION_CURRENT;
-    module_description.format = XE_MODULE_FORMAT_IL_SPIRV;
-    module_description.inputSize = static_cast<uint32_t>(binary_file.size());
-    // TODO: Remove cast when pInputModule will be declared as uint8_t
-    module_description.pInputModule = reinterpret_cast<const char *>(binary_file.data());
-    module_description.pBuildFlags = nullptr;
-
-    result = xeDeviceCreateModule(context.device, &module_description, &context.module, nullptr);
-    if (result) {
-        throw std::runtime_error("xeDeviceCreateModule failed: " + result);
-    }
-    if (verbose)
-        std::cout << "Module created\n";
+    context.create_module(binary_file);
 
     void *inputBuf;
     result = xeMemAlloc(context.allocator, context.device, XE_DEVICE_MEM_ALLOC_FLAG_DEFAULT,
@@ -66,25 +55,29 @@ void XePeak::xe_peak_kernel_latency(L0Context &context) {
         std::cout << "outputBuf device buffer allocated\n";
 
     xe_function_handle_t local_offset_v1;
-    peak_global_bw_setup_function(context, local_offset_v1, "global_bandwidth_v1_local_offset",
-                                  inputBuf, outputBuf);
+    setup_function(context, local_offset_v1, "global_bandwidth_v1_local_offset", inputBuf,
+                   outputBuf);
 
-    std::cout << "Kernel launch latency\n";
+    ///////////////////////////////////////////////////////////////////////////
+    std::cout << "Kernel launch latency (us)\n";
 
-    latency = run_kernel(context, local_offset_v1, total_work_items, iters, KERNEL_LAUNCH_LATENCY);
-
-    std::cout << latency << " us\n";
-
-    context.reset_commandlist();
-    peak_global_bw_setup_function(context, local_offset_v1, "global_bandwidth_v1_local_offset",
-                                  inputBuf, outputBuf);
-
-    std::cout << "Kernel latency\n";
-
-    latency =
-        run_kernel(context, local_offset_v1, total_work_items, iters, KERNEL_COMPLETE_LATENCY);
+    latency = run_kernel(context, local_offset_v1, workgroup_info, KERNEL_LAUNCH_LATENCY, false);
 
     std::cout << latency << " us\n";
+    ///////////////////////////////////////////////////////////////////////////
+    std::cout << "Kernel latency (us)\n";
+
+    latency = run_kernel(context, local_offset_v1, workgroup_info, KERNEL_COMPLETE_LATENCY, false);
+
+    std::cout << latency << " us\n";
+    ///////////////////////////////////////////////////////////////////////////
+
+    result = xeFunctionDestroy(local_offset_v1);
+    if (result) {
+        throw std::runtime_error("xeFunctionDestroy failed: " + result);
+    }
+    if (verbose)
+        std::cout << "local_offset_v1 Function Destroyed\n";
 
     result = xeMemFree(context.allocator, inputBuf);
     if (result) {
@@ -106,4 +99,6 @@ void XePeak::xe_peak_kernel_latency(L0Context &context) {
     }
     if (verbose)
         std::cout << "Module destroyed\n";
+
+    print_test_complete();
 }

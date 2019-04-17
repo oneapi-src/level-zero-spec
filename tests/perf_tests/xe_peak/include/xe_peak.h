@@ -35,6 +35,8 @@
 #include "xe_memory.h"
 #include "xe_module.h"
 
+#define MIN(X, Y) (X < Y) ? X : Y
+
 /* Workaround until query of max memory size is fixed*/
 #define MAX_DEVICE_OBJECT_SIZE 3315838976
 
@@ -78,7 +80,16 @@ struct L0Context {
   void clean_xe();
   void print_xe_device_properties(const xe_device_properties_t &props);
   void reset_commandlist();
+  void execute_commandlist_and_sync();
   std::vector<uint8_t> load_binary_file(const std::string &file_path);
+  void create_module(std::vector<uint8_t> binary_file);
+};
+
+struct XeWorkGroups {
+    xe_thread_group_dimensions_t thread_group_dimensions;
+    uint32_t group_size_x;
+    uint32_t group_size_y;
+    uint32_t group_size_z;
 };
 
 class XePeak
@@ -99,20 +110,24 @@ public:
 
   int parse_arguments(int argc, char **argv);
 
+  /* Helper Functions */
   float run_kernel(L0Context context, xe_function_handle_t &function,
-                 uint64_t total_number_work_items, int iters, TimingMeasurement type);
-  void set_workgroups(L0Context &context,
-        const uint64_t total_work_items_requested, uint32_t *group_size_x,
-        uint32_t *group_size_y, uint32_t *group_size_z,
-        xe_thread_group_dimensions_t *thread_group_dimensions);
+                 struct XeWorkGroups &workgroup_info, TimingMeasurement type, bool reset_command_list=true);
+  uint64_t set_workgroups(L0Context &context,
+        const uint64_t total_work_items_requested, struct XeWorkGroups *workgroup_info);
   uint64_t convert_cl_to_xe_work_item_count(uint64_t global_work_size, uint64_t local_size);
-  /* Benchmark Functions*/
-  void peak_global_bw_setup_function(L0Context &context,
+  void setup_function(L0Context &context,
                                    xe_function_handle_t &function,
                                    const char *name, void *input, void *output);
+  uint64_t get_max_work_items(L0Context &context);
+  void print_test_complete();
   void run_command_queue(L0Context &context);
+  /* Benchmark Functions*/
   void xe_peak_global_bw(L0Context &context);
   void xe_peak_kernel_latency(L0Context &context);
+  void xe_peak_sp_compute(L0Context &context);
+  void xe_peak_dp_compute(L0Context &context);
+  void xe_peak_int_compute(L0Context &context);
 };
 
 
