@@ -4,8 +4,6 @@
 namespace L0 {
 
 OsContext *OsContext::create(void *execEnvRT) {
-    auto wddm = new WddmEvent(execEnvRT);
-
     return new OsContextWindows(execEnvRT);
 }
 

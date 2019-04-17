@@ -53,7 +53,6 @@ void *CommandListCoreFamily<gfxCoreFamily>::getHeapSpaceAllowGrow(CommandContain
         auto newAlloc = globalMemoryManager->allocateDeviceMemory(newSize, 4096u);
         assert(oldAlloc);
         assert(newAlloc);
-        auto alreadyUsedSize = indirectHeap.getUsed();
         indirectHeap.replaceGraphicsAllocation(newAlloc->allocationRT);
         indirectHeap.replaceBuffer(newAlloc->allocationRT->getUnderlyingBuffer(), newAlloc->allocationRT->getUnderlyingBufferSize());
         this->residencyContainer.push_back(newAlloc->allocationRT);
@@ -604,14 +603,14 @@ xe_result_t CommandListCoreFamily<gfxCoreFamily>::appendMemoryCopy(void *dstptr,
     GraphicsAllocation *alloc = globalMemoryManager->findAllocation(dstptr);
     if (alloc == nullptr) {
         // Trying to access non-driver memallocated for dstptr: Allocate managed memory using the host's buffer
-        auto allocation = globalMemoryManager->allocateManagedMemoryFromFault(dstptr, size);
+        globalMemoryManager->allocateManagedMemoryFromFault(dstptr, size);
     }
     builtinFunction->setArgumentValue(0, sizeof(dstptr), &dstptr);
 
     alloc = globalMemoryManager->findAllocation(srcptr);
     if (alloc == nullptr) {
         // Trying to access non-driver memallocated for dstptr: Allocate managed memory using the host's buffer
-        auto allocation = globalMemoryManager->allocateManagedMemoryFromFault(const_cast<void *>(srcptr), size);
+        globalMemoryManager->allocateManagedMemoryFromFault(const_cast<void *>(srcptr), size);
     }
     builtinFunction->setArgumentValue(1, sizeof(srcptr), &srcptr);
 

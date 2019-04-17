@@ -26,7 +26,7 @@ using ::testing::_;
 using ::testing::AnyNumber;
 using ::testing::Return;
 
-class CommandListCreate: public GlobalFixtureTest {
+class CommandListCreate : public GlobalFixtureTest {
 };
 
 TEST_F(CommandListCreate, returnsCommandListOnSuccess) {
@@ -276,10 +276,6 @@ ATSTEST_F(CommandListCreate, addsCfeStateToBatchBuffer) {
     using CFE_STATE = typename FamilyType::CFE_STATE;
     auto itor = find<CFE_STATE *>(cmdList.begin(), cmdList.end());
     ASSERT_NE(cmdList.end(), itor);
-
-    {
-        auto cmd = genCmdCast<CFE_STATE *>(*itor);
-    }
 }
 
 } // namespace ult

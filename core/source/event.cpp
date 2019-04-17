@@ -86,7 +86,7 @@ xe_result_t EventImp::hostSynchronize(uint32_t timeout) {
     }
 
     auto execEnvironment = static_cast<NEO::ExecutionEnvironment *>(device->getExecEnvironment());
-    auto osContext = OsContext::create(execEnvironment);
+    OsContext::create(execEnvironment);
 
     // Fake Flush Stamp value for now
     flushStampToWait = 1;

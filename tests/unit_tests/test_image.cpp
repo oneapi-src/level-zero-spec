@@ -205,7 +205,6 @@ HWTEST2_F(ImageSurfaceState, copyToSSH, MatchAny) {
     Mock<Device> device;
     uint8_t mockSSH[sizeof(RENDER_SURFACE_STATE) * 4] = {0};
     const uint32_t bindingTableOffset = sizeof(RENDER_SURFACE_STATE) * 2;
-    auto mockBTS = reinterpret_cast<BINDING_TABLE_STATE *>(ptrOffset(mockSSH, bindingTableOffset));
 
     xe_image_desc_t desc = {};
 

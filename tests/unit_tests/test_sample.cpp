@@ -54,7 +54,6 @@ TEST(sample, waitOnEvent) {
     result = xeCommandListClose(hCommandList);
     ASSERT_EQ(XE_RESULT_SUCCESS, result);
 
-    xe_fence_handle_t hFence = {};
     result = xeCommandQueueExecuteCommandLists(hCommandQueue,
                                                1,
                                                &hCommandList,

@@ -525,7 +525,6 @@ TEST(DeleteAllOwned, CallsDeleteOnwedOnAllPointersInTheContainer) {
 }
 
 TEST(InitializeToNull, CallsRebindNullptrOnAllPointersInTheContainer) {
-    bool d0 = false, d1 = false, d2 = false;
     std::vector<PtrRef<TestStruct>> referencingPointers;
     referencingPointers.resize(5);
     initAllToNullptr(referencingPointers);

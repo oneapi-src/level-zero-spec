@@ -29,7 +29,7 @@ TEST(xeCommandListAppendWaitOnEvent, redirectsToObject) {
     EXPECT_EQ(XE_RESULT_SUCCESS, result);
 }
 
-class CommandListAppendWaitOnEvent : public GlobalFixtureTest{
+class CommandListAppendWaitOnEvent : public GlobalFixtureTest {
 };
 
 HWTEST_F(CommandListAppendWaitOnEvent, addsSemaphoreToCommandStream) {
@@ -67,7 +67,6 @@ HWTEST_F(CommandListAppendWaitOnEvent, addsEventGraphicsAllocationToResidencyCon
 
     auto commandList = whitebox_cast(CommandList::create(productFamily, &device));
     ASSERT_NE(nullptr, commandList->commandStream);
-    auto usedSpaceBefore = commandList->commandStream->getUsed();
 
     Mock<Event> event;
     auto result = commandList->appendWaitOnEvent(event.toHandle());

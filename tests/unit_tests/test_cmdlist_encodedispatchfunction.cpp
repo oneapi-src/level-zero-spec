@@ -461,7 +461,7 @@ ATSTEST_F(CommandListAppendLaunchFunction, storesBindingTableAndSurfaceStates) {
 
     for (uint32_t i = 0; i < bindingTableStateCount; i++) {
         ASSERT_EQ(fnBindingTable[i].getSurfaceStatePointer() + bindingTableOffsetDiff,
-                bindingTable[i].getSurfaceStatePointer());
+                  bindingTable[i].getSurfaceStatePointer());
     }
 }
 
@@ -772,7 +772,6 @@ GEN9TEST_F(CommandListAppendLaunchFunctionGEN9, withBarrierAndSLMSetsIDDBarrierE
 
 HWTEST_F(CommandListAppendLaunchFunction, setsGroupCountBeforeAccessingCrossThreadData) {
     createFunction("MemcpyBytes");
-    auto usedSpaceBefore = commandList->commandStream->getUsed();
 
     int res = 0;
     ON_CALL(*this->function, setGroupCount)
@@ -926,7 +925,7 @@ GEN9TEST_F(CommandListAppendLaunchFunctionGEN9, storesBindingTableAndSurfaceStat
 
     for (uint32_t i = 0; i < bindingTableStateCount; i++) {
         ASSERT_EQ(fnBindingTable[i].getSurfaceStatePointer() + bindingTableOffsetDiff,
-                bindingTable[i].getSurfaceStatePointer());
+                  bindingTable[i].getSurfaceStatePointer());
     }
 }
 

@@ -90,7 +90,6 @@ HWTEST_F(CommandListAppendSignalEvent, addsEventGraphicsAllocationToResidencyCon
 
     auto commandList = whitebox_cast(CommandList::create(productFamily, &device));
     ASSERT_NE(nullptr, commandList->commandStream);
-    auto usedSpaceBefore = commandList->commandStream->getUsed();
 
     Mock<Event> event;
     auto result = commandList->appendSignalEvent(event.toHandle());
