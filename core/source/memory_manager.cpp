@@ -78,12 +78,12 @@ struct MemoryManagerImp : public MemoryManager {
     }
 
     void freeMemory(const void *ptr) override {
-       /* NEO::GraphicsAllocation *allocationRT = knownAllocations.get(ptr);
+        NEO::GraphicsAllocation *allocationRT = knownAllocations.get(ptr);
         assert(allocationRT);
         GraphicsAllocation *allocation = allocMap[allocationRT];
         assert(allocation);
         assert(allocation->getHostAddress() == ptr);
-        freeMemory(allocation);*/
+        freeMemory(allocation);
     }
 
     MemoryManagerImp(void *memoryManagerRT)
@@ -100,14 +100,18 @@ MemoryManager *MemoryManager::create(void *memoryManagerRT) {
 }
 
 void MemoryManager::createGlobalMemoryManager() {
-    if (globalMemoryManager == nullptr) {
-        auto platform = NEO::platform();
-        static std::once_flag initGlobalMemoryManagerOnce;
-        std::call_once(initGlobalMemoryManagerOnce, [&platform]() {
-            globalMemoryManager = MemoryManager::create(
-                platform->peekExecutionEnvironment()->memoryManager.get());
-        });
+    static std::mutex mutex;
+    std::unique_lock<std::mutex> lock(mutex);
+
+    // Delete the global memory manager if the driver has been
+    // called repeateadly in the same program
+    if (globalMemoryManager) {
+        delete globalMemoryManager;
     }
+
+    auto platform = NEO::platform();
+    globalMemoryManager = MemoryManager::create(
+            platform->peekExecutionEnvironment()->memoryManager.get());
 }
 
 } // namespace L0
