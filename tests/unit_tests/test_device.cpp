@@ -6,6 +6,7 @@
 #include "xe_event.h"
 #include "gmock/gmock.h"
 #include "runtime/platform/platform.h"
+#include "global_fixture.h"
 
 using ::testing::Return;
 
@@ -78,7 +79,10 @@ TEST(DeviceCreateImage, returnsSuccess) {
     delete device;
 }
 
-TEST(DeviceCreateCommandList, returnsSuccess) {
+class DeviceCreateCommandList : public GlobalFixtureTest {
+};
+
+TEST_F(DeviceCreateCommandList, returnsSuccess) {
     auto platform = NEO::constructPlatform();
     auto success = platform->initialize();
     ASSERT_TRUE(success);
@@ -99,7 +103,10 @@ TEST(DeviceCreateCommandList, returnsSuccess) {
     delete device;
 }
 
-TEST(DeviceCreateCommandQueue, returnsSuccess) {
+class DeviceCreateCommandQueue : public GlobalFixtureTest {
+};
+
+TEST_F(DeviceCreateCommandQueue, returnsSuccess) {
     auto platform = NEO::constructPlatform();
     auto success = platform->initialize();
     ASSERT_TRUE(success);
@@ -119,7 +126,10 @@ TEST(DeviceCreateCommandQueue, returnsSuccess) {
     delete device;
 }
 
-TEST(DeviceCreateEvent, returnsSuccess) {
+class DeviceCreateEvent : public GlobalFixtureTest {
+};
+
+TEST_F(DeviceCreateEvent, returnsSuccess) {
     auto platform = NEO::constructPlatform();
     auto success = platform->initialize();
     ASSERT_TRUE(success);
@@ -139,7 +149,10 @@ TEST(DeviceCreateEvent, returnsSuccess) {
     delete device;
 }
 
-TEST(DeviceGetMemoryManager, returnsPointer) {
+class DeviceGetMemoryManager : public GlobalFixtureTest {
+};
+
+TEST_F(DeviceGetMemoryManager, returnsPointer) {
     auto platform = NEO::constructPlatform();
     auto success = platform->initialize();
     ASSERT_TRUE(success);

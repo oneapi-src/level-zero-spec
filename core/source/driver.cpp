@@ -1,6 +1,7 @@
 #include "device.h"
 #include "driver.h"
 #include "driver_imp.h"
+#include "memory_manager.h"
 #include "runtime/helpers/string.h"
 #include "runtime/platform/platform.h"
 #include "runtime/os_interface/debug_settings_manager.h"
@@ -16,6 +17,7 @@ void DriverImp::initialize(bool *result) {
 xe_result_t DriverImp::init(xe_init_flag_t) {
     bool result = false;
     std::call_once(initDriverOnce, [this, &result]() { this->initialize(&result); });
+    MemoryManager::createGlobalMemoryManager();
 
     return XE_RESULT_SUCCESS;
 }

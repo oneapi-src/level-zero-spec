@@ -7,6 +7,8 @@
 #include "runtime/memory_manager/deferrable_allocation_deletion.h"
 #include "runtime/memory_manager/memory_manager.h"
 #include "runtime/memory_manager/svm_memory_manager.h"
+#include "runtime/platform/platform.h"
+#include "runtime/execution_environment/execution_environment.h"
 
 #include <cassert>
 #include <unordered_map> // temporary
@@ -76,11 +78,12 @@ struct MemoryManagerImp : public MemoryManager {
     }
 
     void freeMemory(const void *ptr) override {
-        NEO::GraphicsAllocation *allocationRT = knownAllocations.get(ptr);
+       /* NEO::GraphicsAllocation *allocationRT = knownAllocations.get(ptr);
         assert(allocationRT);
         GraphicsAllocation *allocation = allocMap[allocationRT];
         assert(allocation);
-        freeMemory(allocation);
+        assert(allocation->getHostAddress() == ptr);
+        freeMemory(allocation);*/
     }
 
     MemoryManagerImp(void *memoryManagerRT)
@@ -94,6 +97,17 @@ struct MemoryManagerImp : public MemoryManager {
 
 MemoryManager *MemoryManager::create(void *memoryManagerRT) {
     return new MemoryManagerImp(memoryManagerRT);
+}
+
+void MemoryManager::createGlobalMemoryManager() {
+    if (globalMemoryManager == nullptr) {
+        auto platform = NEO::platform();
+        static std::once_flag initGlobalMemoryManagerOnce;
+        std::call_once(initGlobalMemoryManagerOnce, [&platform]() {
+            globalMemoryManager = MemoryManager::create(
+                platform->peekExecutionEnvironment()->memoryManager.get());
+        });
+    }
 }
 
 } // namespace L0

@@ -250,9 +250,6 @@ Device *Device::create(void *ptr) {
     auto deviceRT = static_cast<NEO::Device *>(ptr);
     device->deviceRT = deviceRT;
 
-    if (globalMemoryManager == nullptr)
-        globalMemoryManager = MemoryManager::create(deviceRT->getMemoryManager());
-
     device->execEnvironment = (void *)deviceRT->getExecutionEnvironment();
     device->builtins =
             BuiltinFunctionsLib::create(PtrRef<Device>(device),

@@ -19,6 +19,8 @@ struct MemoryManager {
     virtual void freeMemory(const void *ptr) = 0;
 
     static MemoryManager *create(void *memoryManagerRT);
+
+    static void createGlobalMemoryManager();
 };
 
 extern MemoryManager *globalMemoryManager;

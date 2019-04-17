@@ -33,17 +33,20 @@ static void freePtr(const void *ptr) {
 
 Mock<MemoryManager>::Mock() {
     using MockMemoryManager = Mock<::L0::MemoryManager>;
-    ON_CALL(*this, allocateDeviceMemory).WillByDefault(Invoke(createGraphicsAllocation));
+    EXPECT_CALL(*this, allocateDeviceMemory)
+            .WillRepeatedly(Invoke(createGraphicsAllocation));
 
     EXPECT_CALL(*this, allocateGraphicsMemoryForIsa)
         .WillRepeatedly(Invoke(createGraphicsAllocationForIsa));
 
-    EXPECT_CALL(*this, allocateManagedMemory).WillRepeatedly(Invoke(createGraphicsAllocation));
+    EXPECT_CALL(*this, allocateManagedMemory).
+            WillRepeatedly(Invoke(createGraphicsAllocation));
 
     EXPECT_CALL(*this, freeMemory(An<GraphicsAllocation *>()))
         .WillRepeatedly(Invoke(freeGraphicsAllocation));
 
-    EXPECT_CALL(*this, freeMemory(An<const void *>())).WillRepeatedly(Invoke(freePtr));
+    EXPECT_CALL(*this, freeMemory(An<const void *>()))
+        .WillRepeatedly(Invoke(freePtr));
 }
 
 Mock<MemoryManager>::~Mock() {}
