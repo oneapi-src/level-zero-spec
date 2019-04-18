@@ -119,8 +119,7 @@ void L0Context::create_module(std::vector<uint8_t> binary_file) {
 // Utility function to print the device properties from xeDeviceGetProperties.
 //---------------------------------------------------------------------
 void L0Context::print_xe_device_properties(const xe_device_properties_t &props) {
-    std::cout << "Device : "
-              << "\n"
+    std::cout << "Device : \n"
               << " * name : " << props.name << "\n"
               << " * vendorId : " << props.vendorId << "\n"
               << " * deviceId : " << props.deviceId << "\n"
