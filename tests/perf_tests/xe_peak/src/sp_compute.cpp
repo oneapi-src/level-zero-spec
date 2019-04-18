@@ -24,7 +24,7 @@
 void XePeak::xe_peak_sp_compute(L0Context &context) {
     float gflops, timed;
     xe_result_t result = XE_RESULT_SUCCESS;
-    TimingMeasurement type = BANDWIDTH;
+    TimingMeasurement type = TimingMeasurement::BANDWIDTH;
     float flops_per_work_item = 4096;
     struct XeWorkGroups workgroup_info;
     float input_value = 1.3f;

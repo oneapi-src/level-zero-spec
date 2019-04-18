@@ -14,6 +14,7 @@ set(XE_PEAK_BENCHMARKS
     src/sp_compute.cpp
     src/integer_compute.cpp
     src/dp_compute.cpp
+    src/transfer_bw.cpp
 )
 
 add_executable(xe_peak ${XE_PEAK_COMMON} ${XE_PEAK_BENCHMARKS})

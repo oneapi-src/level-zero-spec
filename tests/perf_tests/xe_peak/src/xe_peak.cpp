@@ -209,6 +209,29 @@ void L0Context::clean_xe() {
         std::cout << "command_list destroyed\n";
 }
 
+void L0Context::enqueue_op_with_device_buffer(void *device_buffer, void *local_buffer, size_t size_of_data, MemoryOperation type) {
+    xe_result_t result = XE_RESULT_SUCCESS;
+    void *destination_buffer;
+    void *source_buffer;
+
+    switch (type) {
+    case (MemoryOperation::WRITE):
+        destination_buffer = device_buffer;
+        source_buffer = local_buffer;
+    case (MemoryOperation::READ):
+        destination_buffer = local_buffer;
+        source_buffer = device_buffer;
+    }
+
+    result = xeCommandListAppendMemoryCopy(command_list, destination_buffer, source_buffer,
+                                           size_of_data, nullptr);
+    if (result) {
+        throw std::runtime_error("xeCommandListAppendMemoryCopy failed: " + result);
+    }
+    if (verbose)
+        std::cout << "Copy of Host to Device Buffer Enqueued\n";
+}
+
 void L0Context::execute_commandlist_and_sync() {
     xe_result_t result = XE_RESULT_SUCCESS;
 
@@ -371,13 +394,13 @@ float XePeak::run_kernel(L0Context context, xe_function_handle_t &function,
 
     Timer timer;
 
-    if (type == BANDWIDTH) {
+    if (type == TimingMeasurement::BANDWIDTH) {
         timer.start();
         for (uint32_t i = 0; i < iters; i++) {
             run_command_queue(context);
         }
         timed = timer.stopAndTime();
-    } else if (type == KERNEL_LAUNCH_LATENCY) {
+    } else if (type == TimingMeasurement::KERNEL_LAUNCH_LATENCY) {
         for (uint32_t i = 0; i < iters; i++) {
             /* TODO: implement timing with xeEventQueryElapsedTime for Launch Latency*/
             timer.start();
@@ -397,7 +420,7 @@ float XePeak::run_kernel(L0Context context, xe_function_handle_t &function,
             if (verbose)
                 std::cout << "Command queue synchronized\n";
         }
-    } else if (type == KERNEL_COMPLETE_LATENCY) {
+    } else if (type == TimingMeasurement::KERNEL_COMPLETE_LATENCY) {
         for (uint32_t i = 0; i < iters; i++) {
             timer.start();
             run_command_queue(context);
@@ -477,6 +500,9 @@ int main(int argc, char **argv) {
 
     if (peak_benchmark.run_int_compute)
         peak_benchmark.xe_peak_int_compute(context);
+
+    if (peak_benchmark.run_transfer_bw)
+        peak_benchmark.xe_peak_transfer_bw(context);
 
     if (peak_benchmark.run_kernel_lat)
         peak_benchmark.xe_peak_kernel_latency(context);

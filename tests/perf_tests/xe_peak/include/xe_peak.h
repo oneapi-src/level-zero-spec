@@ -57,10 +57,15 @@
 
 #define FETCH_PER_WI 16
 
-enum TimingMeasurement {
+enum class TimingMeasurement {
     BANDWIDTH = 0,
     KERNEL_LAUNCH_LATENCY,
     KERNEL_COMPLETE_LATENCY
+};
+
+enum class MemoryOperation {
+    WRITE = 0,
+    READ
 };
 
 struct L0Context {
@@ -80,6 +85,8 @@ struct L0Context {
   void print_xe_device_properties(const xe_device_properties_t &props);
   void reset_commandlist();
   void execute_commandlist_and_sync();
+  void enqueue_op_with_device_buffer(void *device_buffer, void *local_buffer,
+        size_t size_of_data, MemoryOperation type);
   std::vector<uint8_t> load_binary_file(const std::string &file_path);
   void create_module(std::vector<uint8_t> binary_file);
 };
@@ -105,6 +112,7 @@ public:
   bool run_kernel_lat = true;
   int specified_platform, specified_device;
   uint32_t global_bw_max_size = 1 << 29;
+  uint32_t transfer_bw_max_size = 1 << 29;
   uint32_t iters = 50;
 
   int parse_arguments(int argc, char **argv);
@@ -127,6 +135,7 @@ public:
   void xe_peak_sp_compute(L0Context &context);
   void xe_peak_dp_compute(L0Context &context);
   void xe_peak_int_compute(L0Context &context);
+  void xe_peak_transfer_bw(L0Context &context);
 };
 
 
