@@ -1,3 +1,4 @@
+#include "xe_common.h"
 #include "cmdcontainer.h"
 #include "device.h"
 #include "graphics_allocation.h"
@@ -9,29 +10,7 @@
 namespace L0 {
 
 CommandContainer::~CommandContainer() {
-    auto memoryManager = device
-                             ? globalMemoryManager
-                             : nullptr;
-
-    if (allocation) {
-        assert(memoryManager);
-        memoryManager->freeMemory(allocation);
-    }
-
-    for (auto allocationIndirectHeap : allocationIndirectHeaps) {
-        if (allocationIndirectHeap) {
-            assert(memoryManager);
-            memoryManager->freeMemory(allocationIndirectHeap);
-        }
-    }
-
-    for (auto deallocation : deallocationContainer) {
-        assert(deallocation);
-        assert(memoryManager);
-        memoryManager->freeMemory(deallocation);
-    }
-
-    delete commandStream;
+    destroy();
 }
 
 bool CommandContainer::initialize(Device *device) {
@@ -63,6 +42,44 @@ bool CommandContainer::initialize(Device *device) {
     instructionHeapBaseAddress = globalMemoryManager->getIsaHeapGpuAddress();
 
     return true;
+}
+
+xe_result_t CommandContainer::destroy() {
+    auto memoryManager = device
+                             ? globalMemoryManager
+                             : nullptr;
+
+    if (allocation) {
+        assert(memoryManager);
+        memoryManager->freeMemory(allocation);
+    }
+
+    for (auto allocationIndirectHeap : allocationIndirectHeaps) {
+        if (allocationIndirectHeap) {
+            assert(memoryManager);
+            memoryManager->freeMemory(allocationIndirectHeap);
+        }
+    }
+
+    for (auto deallocation : deallocationContainer) {
+        assert(deallocation);
+        assert(memoryManager);
+        memoryManager->freeMemory(deallocation);
+    }
+
+    for (auto &indirectHeap : indirectHeaps) {
+        delete indirectHeap;
+    }
+
+    //For reset, all variables need to be put back to initial state
+    dirtyHeaps = static_cast<uint32_t>(-1);
+    slmSize = static_cast<uint32_t>(-1);
+
+    delete commandStream;
+    residencyContainer.clear();
+    deallocationContainer.clear();
+    printfFunctionContainer.clear();
+    return XE_RESULT_SUCCESS;
 }
 
 void CommandContainer::addToResidencyContainer(GraphicsAllocation *alloc) {

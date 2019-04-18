@@ -35,7 +35,7 @@ bool CommandListCoreFamily<gfxCoreFamily>::initialize(Device *device) {
     programFrontEndState();
     programPreemption();
 
-    return XE_RESULT_SUCCESS;
+    return true;
 }
 
 template <GFXCORE_FAMILY gfxCoreFamily>
@@ -708,7 +708,13 @@ xe_result_t CommandListCoreFamily<gfxCoreFamily>::reserveSpace(size_t size,
 
 template <GFXCORE_FAMILY gfxCoreFamily>
 xe_result_t CommandListCoreFamily<gfxCoreFamily>::reset() {
-    return XE_RESULT_ERROR_UNSUPPORTED;
+    //CommandListImp::destroy does 'delete this', not what we want here.
+    CommandContainer::destroy();
+
+    if(!this->initialize(device)) {
+        return XE_RESULT_ERROR_DEVICE_LOST;
+    }
+    return XE_RESULT_SUCCESS;
 }
 
 template <GFXCORE_FAMILY gfxCoreFamily>

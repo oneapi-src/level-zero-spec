@@ -65,6 +65,7 @@ struct CommandContainer : public _xe_command_list_handle_t {
     }
 
     virtual bool initialize(Device *device);
+    virtual xe_result_t destroy();
 
     virtual ~CommandContainer();
 

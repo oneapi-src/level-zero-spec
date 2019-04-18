@@ -20,6 +20,7 @@ struct WhiteBox<::L0::CommandList> : public ::L0::CommandListImp {
     using BaseClass::indirectHeaps;
     using BaseClass::printfFunctionContainer;
     using BaseClass::residencyContainer;
+    using BaseClass::deallocationContainer;
 
     WhiteBox(Device *device);
     virtual ~WhiteBox();

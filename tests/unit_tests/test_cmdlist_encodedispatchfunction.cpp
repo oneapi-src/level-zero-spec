@@ -123,6 +123,57 @@ TEST_F(CommandListAppendLaunchFunction, storesFunctionOnceWhenAppendingFunctionM
     EXPECT_EQ(1u, commandList->printfFunctionContainer.size());
 }
 
+TEST_F(CommandListAppendLaunchFunction, resetCommandListResetsAfterClose) {
+    Mock<Device> device;
+    createFunction("SlmBarrier");
+
+    auto commandList = whitebox_cast(CommandList::create(productFamily, &device));
+    ASSERT_NE(nullptr, commandList);
+    ASSERT_NE(nullptr, commandList->commandStream);
+
+    auto commandListControl = whitebox_cast(CommandList::create(productFamily, &device));
+    ASSERT_NE(nullptr, commandListControl);
+    ASSERT_NE(nullptr, commandListControl->commandStream);
+
+    auto result = commandList->appendLaunchFunction(function->toHandle(),
+                                                    &dispatchFunctionArguments,
+                                                    nullptr);
+    ASSERT_EQ(XE_RESULT_SUCCESS, result);
+
+    result = commandList->close();
+    ASSERT_EQ(XE_RESULT_SUCCESS, result);
+
+    result = commandList->reset();
+    ASSERT_EQ(XE_RESULT_SUCCESS, result);
+
+    ASSERT_EQ(&device, commandList->device);
+    ASSERT_NE(nullptr, commandList->commandStream);
+    ASSERT_EQ(commandListControl->allocation->getSize(),
+            commandList->allocation->getSize());
+    ASSERT_EQ(commandListControl->residencyContainer.size(),
+            commandList->residencyContainer.size());
+    ASSERT_EQ(commandListControl->deallocationContainer.size(),
+            commandList->deallocationContainer.size());
+    ASSERT_EQ(commandListControl->printfFunctionContainer.size(),
+            commandList->printfFunctionContainer.size());
+    ASSERT_EQ(commandListControl->commandStream->getUsed(),
+            commandList->commandStream->getUsed());
+    ASSERT_EQ(commandListControl->dirtyHeaps, commandList->dirtyHeaps);
+    ASSERT_EQ(commandListControl->slmSize, commandList->slmSize);
+
+    for (int i = 0; i < CommandContainer::NUM_HEAPS; i++) {
+        ASSERT_NE(nullptr, commandListControl->allocationIndirectHeaps[i]);
+        ASSERT_NE(nullptr, commandList->allocationIndirectHeaps[i]);
+        ASSERT_EQ(commandListControl->allocationIndirectHeaps[i]->getSize(),
+                commandList->allocationIndirectHeaps[i]->getSize());
+
+        ASSERT_NE(nullptr, commandListControl->indirectHeaps[i]);
+        ASSERT_NE(nullptr, commandList->indirectHeaps[i]);
+        ASSERT_EQ(commandListControl->indirectHeaps[i]->getUsed(),
+                commandList->indirectHeaps[i]->getUsed());
+    }
+}
+
 ATSTEST_F(CommandListAppendLaunchFunction, addsWalkerToCommandStream) {
     createFunction("MemcpyBytes");
 
