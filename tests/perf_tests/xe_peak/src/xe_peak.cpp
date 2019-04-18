@@ -21,6 +21,10 @@
  */
 #include "../include/xe_peak.h"
 
+//---------------------------------------------------------------------
+// Utility function to load the binary spv file from a path
+// and return the file as a vector for use by L0.
+//---------------------------------------------------------------------
 std::vector<uint8_t> L0Context::load_binary_file(const std::string &file_path) {
     if (verbose)
         std::cout << "File path: " << file_path << "\n";
@@ -48,6 +52,12 @@ std::vector<uint8_t> L0Context::load_binary_file(const std::string &file_path) {
     return binary_file;
 }
 
+//---------------------------------------------------------------------
+// Utility function to reset the Command List.
+// This function current has to destroy and re-create the
+// Command List since xeCommandListReset is not yet functional.
+// Call to xeCommandListReset is ifdef'd out until it is implemented.
+//---------------------------------------------------------------------
 void L0Context::reset_commandlist() {
     xe_result_t result = XE_RESULT_SUCCESS;
 
@@ -80,6 +90,12 @@ void L0Context::reset_commandlist() {
 #endif
 }
 
+//---------------------------------------------------------------------
+// Utility function to create the L0 module from a binary file.
+// If successful, this function will set the context's module
+// handle to a valid value for use in future calls.
+// On error, an exception will be thrown describing the failure.
+//---------------------------------------------------------------------
 void L0Context::create_module(std::vector<uint8_t> binary_file) {
     xe_result_t result = XE_RESULT_SUCCESS;
     xe_module_desc_t module_description;
@@ -99,6 +115,9 @@ void L0Context::create_module(std::vector<uint8_t> binary_file) {
         std::cout << "Module created\n";
 }
 
+//---------------------------------------------------------------------
+// Utility function to print the device properties from xeDeviceGetProperties.
+//---------------------------------------------------------------------
 void L0Context::print_xe_device_properties(const xe_device_properties_t &props) {
     std::cout << "Device : "
               << "\n"
@@ -118,6 +137,11 @@ void L0Context::print_xe_device_properties(const xe_device_properties_t &props) 
               << " * maxCommandQueuePriority : " << props.maxCommandQueuePriority << std::endl;
 }
 
+//---------------------------------------------------------------------
+// Utility function to initialize the xe driver, device, command list,
+// command queue, & device property information.
+// On error, an exception will be thrown describing the failure.
+//---------------------------------------------------------------------
 void L0Context::init_xe() {
     xe_command_list_desc_t command_list_description;
     xe_command_queue_desc_t command_queue_description;
@@ -191,6 +215,10 @@ void L0Context::init_xe() {
         std::cout << "Command queue created\n";
 }
 
+//---------------------------------------------------------------------
+// Utility function to close the command list & command queue.
+// On error, an exception will be thrown describing the failure.
+//---------------------------------------------------------------------
 void L0Context::clean_xe() {
     xe_result_t result = XE_RESULT_SUCCESS;
 
@@ -209,6 +237,15 @@ void L0Context::clean_xe() {
         std::cout << "command_list destroyed\n";
 }
 
+//---------------------------------------------------------------------
+// Utility function to enqueue an operation to be performed using
+// a device buffer. This support the ability to add Copy calls with
+// this device buffer into the Command List.
+// Currently supported calls are:
+//          WRITE -> Copy from Host to Device Buffer
+//          READ -> Copy from Device to Host Buffer
+// On error, an exception will be thrown describing the failure.
+//---------------------------------------------------------------------
 void L0Context::enqueue_op_with_device_buffer(void *device_buffer, void *local_buffer, size_t size_of_data, MemoryOperation type) {
     xe_result_t result = XE_RESULT_SUCCESS;
     void *destination_buffer;
@@ -232,6 +269,13 @@ void L0Context::enqueue_op_with_device_buffer(void *device_buffer, void *local_b
         std::cout << "Copy of Host to Device Buffer Enqueued\n";
 }
 
+//---------------------------------------------------------------------
+// Utility function to execute the command list & synchronize
+// the command queue. This function will reset the command list once the
+// queue has been synchronized indicating that the commands in the command
+// list have been completed.
+// On error, an exception will be thrown describing the failure.
+//---------------------------------------------------------------------
 void L0Context::execute_commandlist_and_sync() {
     xe_result_t result = XE_RESULT_SUCCESS;
 
@@ -259,11 +303,19 @@ void L0Context::execute_commandlist_and_sync() {
     reset_commandlist();
 }
 
+//---------------------------------------------------------------------
+// Utility function to convert a global work size and a local work size
+// into the number of work items that would be executed with OpenCL.
+//---------------------------------------------------------------------
 uint64_t XePeak::convert_cl_to_xe_work_item_count(uint64_t global_work_size, uint64_t local_size) {
     uint64_t number_of_workgroups = global_work_size / local_size;
     return number_of_workgroups * (local_size + local_size + local_size);
 }
 
+//---------------------------------------------------------------------
+// Utility function to total the current work items that would be
+// executed given x,y,z sizes and x,y,z counts for the workgroups.
+//---------------------------------------------------------------------
 uint64_t total_current_work_items(uint64_t group_size_x, uint64_t group_count_x,
                                   uint64_t group_size_y, uint64_t group_count_y,
                                   uint64_t group_size_z, uint64_t group_count_z) {
@@ -271,6 +323,15 @@ uint64_t total_current_work_items(uint64_t group_size_x, uint64_t group_count_x,
             group_count_z);
 }
 
+//---------------------------------------------------------------------
+// Utility function to set the workgroup dimensions based on the desired
+// number of work items a user wants to execute.
+// This will attempt to distribute the work items across the workgroup
+// dimensions and get to as close to the work items requested as possible.
+// Once the number of work items that would be executed is equal to or >
+// the number of work items requested, then the workgroup information
+// is set accordingly and the total work items that will execute is returned.
+//---------------------------------------------------------------------
 uint64_t XePeak::set_workgroups(L0Context &context, const uint64_t total_work_items_requested,
                                 struct XeWorkGroups *workgroup_info) {
 
@@ -343,6 +404,10 @@ uint64_t XePeak::set_workgroups(L0Context &context, const uint64_t total_work_it
     return final_work_items;
 }
 
+//---------------------------------------------------------------------
+// Utility function to execute the command lists and sync the command queue.
+// On error, an exception will be thrown describing the failure.
+//---------------------------------------------------------------------
 void XePeak::run_command_queue(L0Context &context) {
     xe_result_t result = XE_RESULT_SUCCESS;
     result =
@@ -361,6 +426,20 @@ void XePeak::run_command_queue(L0Context &context) {
         std::cout << "Command queue synchronized\n";
 }
 
+//---------------------------------------------------------------------
+// Utility function to execute a kernel function for a set of iterations
+// and measure the time elapsed based off the timing type.
+// This function takes a pre-calculated workgroup distribution
+// and will time the kernel executed given the timing type.
+// The current timing types supported are:
+//          BANDWIDTH -> Average time to execute the kernel for # iterations
+//          KERNEL_LAUNCH_LATENCY -> Average time to execute the kernel on
+//                                  the command list
+//          KERNEL_COMPLETE_LATENCY - Average time to execute a given kernel
+//                                  for # iterations.
+// On success, the average time is returned.
+// On error, an exception will be thrown describing the failure.
+//---------------------------------------------------------------------
 float XePeak::run_kernel(L0Context context, xe_function_handle_t &function,
                          struct XeWorkGroups &workgroup_info, TimingMeasurement type,
                          bool reset_command_list) {
@@ -434,6 +513,10 @@ float XePeak::run_kernel(L0Context context, xe_function_handle_t &function,
     return (timed / static_cast<float>(iters));
 }
 
+//---------------------------------------------------------------------
+// Utility function to setup a kernel function with an input & output argument.
+// On error, an exception will be thrown describing the failure.
+//---------------------------------------------------------------------
 void XePeak::setup_function(L0Context &context, xe_function_handle_t &function, const char *name,
                             void *input, void *output) {
     xe_function_desc_t function_description;
@@ -465,6 +548,10 @@ void XePeak::setup_function(L0Context &context, xe_function_handle_t &function, 
         std::cout << "Output buffer set as function argument\n";
 }
 
+//---------------------------------------------------------------------
+// Utility function to calculate the max work items that the current
+// device can execute with a single kernel function enqueued.
+//---------------------------------------------------------------------
 uint64_t XePeak::get_max_work_items(L0Context &context) {
     uint64_t group_size_x = context.device_compute_property.maxGroupSizeX;
     uint64_t group_size_y = context.device_compute_property.maxGroupSizeY;
@@ -478,8 +565,15 @@ uint64_t XePeak::get_max_work_items(L0Context &context) {
     return max_work_items;
 }
 
+//---------------------------------------------------------------------
+// Utility function to print a standard string to end a test.
+//---------------------------------------------------------------------
 void XePeak::print_test_complete() { std::cout << "<<<<<<<<<<<<<<<<<<<<<<<<<<<<\n"; }
 
+//---------------------------------------------------------------------
+// Main function which calls the argument parsing and calls each
+// test requested.
+//---------------------------------------------------------------------
 int main(int argc, char **argv) {
     XePeak peak_benchmark;
     L0Context context;

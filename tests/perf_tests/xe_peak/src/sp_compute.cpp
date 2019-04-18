@@ -99,7 +99,6 @@ void XePeak::xe_peak_sp_compute(L0Context &context) {
     std::cout << "float   : \n";
 
     timed = run_kernel(context, compute_sp_v1, workgroup_info, type);
-    context.reset_commandlist();
 
     gflops = number_of_work_items * flops_per_work_item / timed / 1e3f;
 
@@ -109,7 +108,6 @@ void XePeak::xe_peak_sp_compute(L0Context &context) {
     std::cout << "float2   : \n";
 
     timed = run_kernel(context, compute_sp_v2, workgroup_info, type);
-    context.reset_commandlist();
 
     gflops = number_of_work_items * flops_per_work_item / timed / 1e3f;
 
@@ -119,7 +117,6 @@ void XePeak::xe_peak_sp_compute(L0Context &context) {
     std::cout << "float4   : \n";
 
     timed = run_kernel(context, compute_sp_v4, workgroup_info, type);
-    context.reset_commandlist();
 
     gflops = number_of_work_items * flops_per_work_item / timed / 1e3f;
 
@@ -129,7 +126,6 @@ void XePeak::xe_peak_sp_compute(L0Context &context) {
     std::cout << "float8   : \n";
 
     timed = run_kernel(context, compute_sp_v8, workgroup_info, type);
-    context.reset_commandlist();
 
     gflops = number_of_work_items * flops_per_work_item / timed / 1e3f;
 
@@ -139,7 +135,6 @@ void XePeak::xe_peak_sp_compute(L0Context &context) {
     std::cout << "float16   : \n";
 
     timed = run_kernel(context, compute_sp_v16, workgroup_info, type);
-    context.reset_commandlist();
 
     gflops = number_of_work_items * flops_per_work_item / timed / 1e3f;
 

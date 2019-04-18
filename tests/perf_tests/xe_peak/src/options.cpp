@@ -42,6 +42,11 @@ static const char *usage_str =
     "\n  -h, --help                  display help message"
     "\n";
 
+//---------------------------------------------------------------------
+// Utility function which parses the arguments to xe_peak and
+// sets the test parameters accordingly for main to execute the tests
+// with the correct environment.
+//---------------------------------------------------------------------
 int XePeak::parse_arguments(int argc, char **argv) {
     for (int i = 1; i < argc; i++) {
         if ((strcmp(argv[i], "-h") == 0) || (strcmp(argv[i], "--help") == 0)) {
