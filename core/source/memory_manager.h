@@ -18,8 +18,6 @@ struct MemoryManager {
     virtual void freeMemory(GraphicsAllocation *allocation) = 0;
     virtual void freeMemory(const void *ptr) = 0;
 
-    static MemoryManager *create(void *memoryManagerRT);
-
     static void createGlobalMemoryManager();
 };
 
