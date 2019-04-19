@@ -95,23 +95,23 @@ struct MemoryManagerImp : public MemoryManager {
     std::unordered_map<NEO::GraphicsAllocation *, L0::GraphicsAllocation *> allocMap; // temporary
 };
 
+MemoryManager *MemoryManager::create(void *memoryManagerRT) {
+    return new MemoryManagerImp(memoryManagerRT);
+}
+
 void MemoryManager::createGlobalMemoryManager() {
+    static std::mutex mutex;
+    std::unique_lock<std::mutex> lock(mutex);
 
-    struct MemoryManagerWrapper {
-        MemoryManagerWrapper(MemoryManager *&globalMemoryManager) {
-            auto platform = NEO::platform();
-            globalMemoryManager = new MemoryManagerImp(platform->peekExecutionEnvironment()->memoryManager.get());
-        }
+    // Delete the global memory manager if the driver has been
+    // called repeateadly in the same program
+    if (globalMemoryManager) {
+        delete globalMemoryManager;
+    }
 
-        ~MemoryManagerWrapper() {
-            if (globalMemoryManager) {
-                delete globalMemoryManager;
-            }
-        }
-    };
-
-    static MemoryManagerWrapper memoryManagerWrapper(globalMemoryManager);
-    return;
+    auto platform = NEO::platform();
+    globalMemoryManager = MemoryManager::create(
+            platform->peekExecutionEnvironment()->memoryManager.get());
 }
 
 } // namespace L0
