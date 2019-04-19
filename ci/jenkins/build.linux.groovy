@@ -73,7 +73,7 @@ cmake --build . --config Release --clean-first --target package
 
 dpkg-deb -x intel-loki-devel_*.deb x
 pushd x
-zip -r -9 ../`basename ../intel-loki-devel_0.1.2-0~bionic_amd64.deb ~bionic_amd64.deb`.zip .
+zip -r -9 ../`basename ../intel-loki-devel_*.deb ~bionic_amd64.deb`.zip .
 popd
 """
 			}
