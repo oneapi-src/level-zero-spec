@@ -9,7 +9,7 @@ extern MemoryManager *globalMemoryManager;
 
 namespace ult {
 
-class GlobalFixtureTest: public ::testing::Test {
+class GlobalFixtureTest: public ::testing::TestWithParam<std::string> {
   public:
     void SetUp() override {
         globalMemoryManager_prev = globalMemoryManager;
