@@ -47,6 +47,8 @@ Mock<MemoryManager>::Mock() {
 
     EXPECT_CALL(*this, freeMemory(An<const void *>()))
         .WillRepeatedly(Invoke(freePtr));
+
+    EXPECT_CALL(*this, getIsaHeapGpuAddress).Times(AnyNumber());
 }
 
 Mock<MemoryManager>::~Mock() {}
