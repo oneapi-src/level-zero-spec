@@ -99,6 +99,22 @@ namespace xe
             _5_6_5,                                         ///< 3-component 5_6_5 layout
             _5_5_5_1,                                       ///< 4-component 5_5_5_1 layout
             _4_4_4_4,                                       ///< 4-component 4_4_4_4 layout
+            Y8,                                             ///< Media Format: Y8. Format type and swizzle is ignored for this.
+            NV12,                                           ///< Media Format: NV12. Format type and swizzle is ignored for this.
+            YUYV,                                           ///< Media Format: YUYV. Format type and swizzle is ignored for this.
+            VYUY,                                           ///< Media Format: VYUY. Format type and swizzle is ignored for this.
+            YVYU,                                           ///< Media Format: YVYU. Format type and swizzle is ignored for this.
+            UYVY,                                           ///< Media Format: UYVY. Format type and swizzle is ignored for this.
+            AYUV,                                           ///< Media Format: AYUV. Format type and swizzle is ignored for this.
+            YUAV,                                           ///< Media Format: YUAV. Format type and swizzle is ignored for this.
+            P010,                                           ///< Media Format: P010. Format type and swizzle is ignored for this.
+            Y410,                                           ///< Media Format: Y410. Format type and swizzle is ignored for this.
+            P012,                                           ///< Media Format: P012. Format type and swizzle is ignored for this.
+            Y16,                                            ///< Media Format: Y16. Format type and swizzle is ignored for this.
+            P016,                                           ///< Media Format: P016. Format type and swizzle is ignored for this.
+            Y216,                                           ///< Media Format: Y216. Format type and swizzle is ignored for this.
+            P216,                                           ///< Media Format: P216. Format type and swizzle is ignored for this.
+            P416,                                           ///< Media Format: P416. Format type and swizzle is ignored for this.
 
         };
 

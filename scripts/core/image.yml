@@ -78,6 +78,38 @@ etors:
       desc: "4-component 5_5_5_1 layout"
     - name: $X_IMAGE_FORMAT_LAYOUT_4_4_4_4
       desc: "4-component 4_4_4_4 layout"
+    - name: $X_IMAGE_FORMAT_LAYOUT_Y8
+      desc: "Media Format: Y8. Format type and swizzle is ignored for this."     
+    - name: $X_IMAGE_FORMAT_LAYOUT_NV12
+      desc: "Media Format: NV12. Format type and swizzle is ignored for this."
+    - name: $X_IMAGE_FORMAT_LAYOUT_YUYV
+      desc: "Media Format: YUYV. Format type and swizzle is ignored for this."
+    - name: $X_IMAGE_FORMAT_LAYOUT_VYUY
+      desc: "Media Format: VYUY. Format type and swizzle is ignored for this."
+    - name: $X_IMAGE_FORMAT_LAYOUT_YVYU
+      desc: "Media Format: YVYU. Format type and swizzle is ignored for this."
+    - name: $X_IMAGE_FORMAT_LAYOUT_UYVY
+      desc: "Media Format: UYVY. Format type and swizzle is ignored for this."
+    - name: $X_IMAGE_FORMAT_LAYOUT_AYUV
+      desc: "Media Format: AYUV. Format type and swizzle is ignored for this."   
+    - name: $X_IMAGE_FORMAT_LAYOUT_YUAV
+      desc: "Media Format: YUAV. Format type and swizzle is ignored for this."
+    - name: $X_IMAGE_FORMAT_LAYOUT_P010
+      desc: "Media Format: P010. Format type and swizzle is ignored for this."
+    - name: $X_IMAGE_FORMAT_LAYOUT_Y410
+      desc: "Media Format: Y410. Format type and swizzle is ignored for this."
+    - name: $X_IMAGE_FORMAT_LAYOUT_P012
+      desc: "Media Format: P012. Format type and swizzle is ignored for this."
+    - name: $X_IMAGE_FORMAT_LAYOUT_Y16
+      desc: "Media Format: Y16. Format type and swizzle is ignored for this."
+    - name: $X_IMAGE_FORMAT_LAYOUT_P016
+      desc: "Media Format: P016. Format type and swizzle is ignored for this."
+    - name: $X_IMAGE_FORMAT_LAYOUT_Y216
+      desc: "Media Format: Y216. Format type and swizzle is ignored for this."
+    - name: $X_IMAGE_FORMAT_LAYOUT_P216
+      desc: "Media Format: P216. Format type and swizzle is ignored for this."
+    - name: $X_IMAGE_FORMAT_LAYOUT_P416
+      desc: "Media Format: P416. Format type and swizzle is ignored for this."
 --- #--------------------------------------------------------------------------
 type: enum
 desc: "Supported image format types"

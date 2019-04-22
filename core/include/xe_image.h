@@ -90,6 +90,22 @@ typedef enum _xe_image_format_layout_t
     XE_IMAGE_FORMAT_LAYOUT_5_6_5,                   ///< 3-component 5_6_5 layout
     XE_IMAGE_FORMAT_LAYOUT_5_5_5_1,                 ///< 4-component 5_5_5_1 layout
     XE_IMAGE_FORMAT_LAYOUT_4_4_4_4,                 ///< 4-component 4_4_4_4 layout
+    XE_IMAGE_FORMAT_LAYOUT_Y8,                      ///< Media Format: Y8. Format type and swizzle is ignored for this.
+    XE_IMAGE_FORMAT_LAYOUT_NV12,                    ///< Media Format: NV12. Format type and swizzle is ignored for this.
+    XE_IMAGE_FORMAT_LAYOUT_YUYV,                    ///< Media Format: YUYV. Format type and swizzle is ignored for this.
+    XE_IMAGE_FORMAT_LAYOUT_VYUY,                    ///< Media Format: VYUY. Format type and swizzle is ignored for this.
+    XE_IMAGE_FORMAT_LAYOUT_YVYU,                    ///< Media Format: YVYU. Format type and swizzle is ignored for this.
+    XE_IMAGE_FORMAT_LAYOUT_UYVY,                    ///< Media Format: UYVY. Format type and swizzle is ignored for this.
+    XE_IMAGE_FORMAT_LAYOUT_AYUV,                    ///< Media Format: AYUV. Format type and swizzle is ignored for this.
+    XE_IMAGE_FORMAT_LAYOUT_YUAV,                    ///< Media Format: YUAV. Format type and swizzle is ignored for this.
+    XE_IMAGE_FORMAT_LAYOUT_P010,                    ///< Media Format: P010. Format type and swizzle is ignored for this.
+    XE_IMAGE_FORMAT_LAYOUT_Y410,                    ///< Media Format: Y410. Format type and swizzle is ignored for this.
+    XE_IMAGE_FORMAT_LAYOUT_P012,                    ///< Media Format: P012. Format type and swizzle is ignored for this.
+    XE_IMAGE_FORMAT_LAYOUT_Y16,                     ///< Media Format: Y16. Format type and swizzle is ignored for this.
+    XE_IMAGE_FORMAT_LAYOUT_P016,                    ///< Media Format: P016. Format type and swizzle is ignored for this.
+    XE_IMAGE_FORMAT_LAYOUT_Y216,                    ///< Media Format: Y216. Format type and swizzle is ignored for this.
+    XE_IMAGE_FORMAT_LAYOUT_P216,                    ///< Media Format: P216. Format type and swizzle is ignored for this.
+    XE_IMAGE_FORMAT_LAYOUT_P416,                    ///< Media Format: P416. Format type and swizzle is ignored for this.
 
 } xe_image_format_layout_t;
 
