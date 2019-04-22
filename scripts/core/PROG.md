@@ -814,7 +814,7 @@ Use ::${x}FunctionGetAttribute to query attributes from a function object.
     ...
     uint32_t numRegisters;
 
-    // Number of hardware registers used by function.
+    // Number of program registers used by function.
     ${x}FunctionGetAttribute(hFunction, ${X}_FUNCTION_GET_ATTR_MAX_REGS_USED, &numRegisters);
     ...
 ```

@@ -13,7 +13,7 @@ ${"##"} Table of Contents
 
 ${"#"} <a name="obj">Objective</a>
 The objective of the Level-Zero API is to provide direct-to-metal interfaces to offload accelerator devices. 
-It is a programming interface that can be published at a cadence that better matches Intel hardware releases and can be tailored to any hardware needs. 
+It is a programming interface that can be published at a cadence that better matches Intel hardware releases and can be tailored to any device needs. 
 It can be adapted to support broader set of languages features, such as function pointers, virtual functions, unified memory, and  I/O capabilities.
 
 The Level-Zero API provides the lowest-level, fine-grain and most explicit control over:

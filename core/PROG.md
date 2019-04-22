@@ -808,7 +808,7 @@ Use ::xeFunctionGetAttribute to query attributes from a function object.
     ...
     uint32_t numRegisters;
 
-    // Number of hardware registers used by function.
+    // Number of program registers used by function.
     xeFunctionGetAttribute(hFunction, XE_FUNCTION_GET_ATTR_MAX_REGS_USED, &numRegisters);
     ...
 ```
