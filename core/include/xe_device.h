@@ -261,7 +261,6 @@ typedef struct _xe_device_compute_properties_t
     uint32_t maxGroupCountY;                        ///< [out] Maximum groups that can be launched for y dimension
     uint32_t maxGroupCountZ;                        ///< [out] Maximum groups that can be launched for z dimension
     uint32_t maxSharedLocalMemory;                  ///< [out] Maximum shared local memory per group.
-    uint32_t maxGroupRegisters;                     ///< [out] Maximum physical registers available per group
     uint32_t numSubGroupSizes;                      ///< [out] Number of subgroup sizes supported. This indicates number of
                                                     ///< entries in subGroupSizes.
     uint32_t subGroupSizes[XE_SUBGROUPSIZE_COUNT];  ///< [out] Size group sizes supported.

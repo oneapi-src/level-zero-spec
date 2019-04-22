@@ -259,9 +259,6 @@ members:
       name: maxSharedLocalMemory
       desc: "[out] Maximum shared local memory per group."
     - type: uint32_t
-      name: maxGroupRegisters
-      desc: "[out] Maximum physical registers available per group"
-    - type: uint32_t
       name: numSubGroupSizes
       desc: "[out] Number of subgroup sizes supported. This indicates number of entries in subGroupSizes."
     - type: uint32_t
