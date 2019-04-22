@@ -168,12 +168,15 @@ ${"###"} Creation
   allow the driver to choose dynamically, based on usage.
 - Multiple command queues may be created that use the same physical input stream. For example,
   an application may create a command queue per Host thread with different scheduling priorities.
-- However, an application should avoid creating multiple command queues for the same physical
-  input stream with the same priority due to possible performance penalties with hardware
-  context switching.
-- The number of simultaneous compute command queues per device is queried from 
+- However, because each command queue allocates a logical hardware context, an application 
+  should avoid creating multiple command queues for the same physical input stream with the
+  same priority due to possible performance penalties with hardware context switching.
+- The maximum number of command queues an application can create is limited by device-specific
+  resources; e.g., the maximum number of logical hardware contexts supported by the device. 
+  This can be queried from ::${x}_device_properties_t.maxCommandQueues.
+- The maximum number of simultaneous compute command queues per device is queried from 
   ::${x}_device_properties_t.numAsyncComputeEngines.
-- The number of simultaneous copy command queues per device is queried from 
+- The maximum number of simultaneous copy command queues per device is queried from 
   ::${x}_device_properties_t.numAsyncCopyEngines.
 - All command lists executed on a command queue are gaurenteed to only execute on its 
   single, physical input stream; e.g., copy commands in a compute command list / queue will

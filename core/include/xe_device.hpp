@@ -132,6 +132,7 @@ namespace xe
             uint32_t memClockRate;                          ///< [out] Clock rate for device global memory
             uint32_t memGlobalBusWidth;                     ///< [out] Bus width between core and memory.
             uint64_t totalLocalMemSize;                     ///< [out] Total memory size in bytes.
+            uint32_t maxCommandQueues;                      ///< [out] Maximum number of logical command queues.
             uint32_t numAsyncComputeEngines;                ///< [out] Number of asynchronous compute engines
             uint32_t numAsyncCopyEngines;                   ///< [out] Number of asynchronous copy engines
             uint32_t maxCommandQueuePriority;               ///< [out] Maximum priority for command queues. Higher value is higher

@@ -159,6 +159,9 @@ members:
       name: totalLocalMemSize
       desc: "[out] Total memory size in bytes."
     - type: uint32_t
+      name: maxCommandQueues
+      desc: "[out] Maximum number of logical command queues."
+    - type: uint32_t
       name: numAsyncComputeEngines
       desc: "[out] Number of asynchronous compute engines"
     - type: uint32_t
