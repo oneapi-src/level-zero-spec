@@ -138,6 +138,7 @@ namespace xe
             uint32_t maxCommandQueuePriority;               ///< [out] Maximum priority for command queues. Higher value is higher
                                                             ///< priority.
             uint32_t numThreadsPerEU;                       ///< [out] Number of threads per EU.
+            uint32_t physicalEUSimdWidth;                   ///< [out] The physical EU simd width.
             uint32_t numEUsPerSubslice;                     ///< [out] Number of EUs per sub-slice.
             uint32_t numSubslicesPerSlice;                  ///< [out] Number of sub-slices per slice.
             uint32_t numSlicesPerTile;                      ///< [out] Number of slices per tile.
