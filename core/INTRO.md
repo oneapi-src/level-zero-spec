@@ -133,7 +133,7 @@ The following design philosophies are adopted in order to reduce Host-side overh
     + non-visible memory access by the Host or device
     + non-resident memeory access by the device
 - all API functions return ::xe_result_t
-    + this allows for a consistent pattern on the application side for catching errors when enabled in debug environments
+    + this allows for a consistent pattern on the application side for catching errors; especially when validation layer(s) are enabled
 
 ## Multithreading and Concurrency
 The following design philosophies are adopted in order to maximize Host thread concurrency:
@@ -156,16 +156,32 @@ The primary usage-models enabled by these rules is:
 
 
 # <a name="drv">Drivers</a>
-## Installation
+## Installation (WIP)
 The Level-Zero API is implemented within a _xe_vendor_device.dll_ (windows) / _xe_vendor_device.so_ (linux), which is copied on the system during installation of the device driver;
 where _vendor_ and _device_ are names chosen by the device vendor.  For Intel GPUs, the name would be "xe_intc_gpu".
 
 This API does not define an Installable Client Driver (ICD), as it is expected that users of this API would prefer to implement
 their own device abstraction layer and communicate directly with the device-driver.
 
+## Validation Layers
+Validation layers provide the optional capability for application developers to enable additional API validation while maintaining minimal driver implementation overhead.
+- works independent of driver implementation
+- works for production / release drivers
+- checks for common application errors, such as null pointer parameters, invalid enumerations, uninitialized structures, etc.
+- provides for common application debug tracking, such as object and memory lifetime
+
+![Validation](../images/intro_val.png?raw=true)  
+@image latex intro_val.png
+
+The validation layers are enabled via environment variables.
+
 ## Environment Variables
 The following table documents the supported knobs for overriding default driver behavior.
-| Category            | Name                                    | Values                 | Description                                           |
-|---------------------|-----------------------------------------|------------------------|-------------------------------------------------------|
-| Memory              | XE_SHARED_FORCE_DEVICE_ALLOC          | {**0**, 1}             | Forces all shared allocations into device memory      |
-| Validation          | XE_DRIVER_PARAMETER_VALIDATION_LEVEL  | {**0**, 1, 2}          | Controls the validation level used by the driver for parameters.<br>0 = disabled, no checks (default)<br>1 = pointer and overflow checks only<br>2 = values and states<br> |
+| Category            | Name                                    | Values                 | Description                                                  |
+|---------------------|-----------------------------------------|------------------------|--------------------------------------------------------------|
+| Memory              | XE_SHARED_FORCE_DEVICE_ALLOC          | {**0**, 1}             | Forces all shared allocations into device memory             |
+| Validation          | XE_ENABLE_VALIDATION_LAYER            | {**0**, 1}             | Enables validation layer(s) for debugging                    |
+| ^                   | XE_ENABLE_PARAMETER_VALIDATION        | {**0**, 1}             | Enables the validation level for parameters                  |
+| ^                   | XE_ENABLE_HANDLE_LIFETIME             | {**0**, 1}             | Enables the validation level for tracking handle lifetime    |
+| ^                   | XE_ENABLE_THREADING_VALIDATION        | {**0**, 1}             | Enables the validation level for multithreading usage        |
+| ^                   | XE_ENABLE_MEMORY_TRACKER              | {**0**, 1}             | Enables the validation level for tracking memory lifetime    |
