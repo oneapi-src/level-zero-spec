@@ -6,6 +6,7 @@
 * [Objective](#obj)
 * [API Specification](#spec)
 * [Drivers](#drv)
+* [Tools](#tls)
 
 # <a name="obj">Objective</a>
 The objective of the Level-Zero API is to provide direct-to-metal interfaces to offload accelerator devices. 
@@ -185,3 +186,13 @@ The following table documents the supported knobs for overriding default driver 
 | ^                   | XE_ENABLE_HANDLE_LIFETIME             | {**0**, 1}             | Enables the validation level for tracking handle lifetime    |
 | ^                   | XE_ENABLE_THREADING_VALIDATION        | {**0**, 1}             | Enables the validation level for multithreading usage        |
 | ^                   | XE_ENABLE_MEMORY_TRACKER              | {**0**, 1}             | Enables the validation level for tracking memory lifetime    |
+
+
+# <a name="tls">Tools</a>
+Level-Zero APIs specific for supporting 3rd-party tools are seperated from "Core" into "Tools" APIs.
+
+The following diagram illustrates the hierachy of "Core" versus "Tool" APIs:
+![Tools](../images/intro_tools.png?raw=true)  
+@image latex intro_tools.png
+
+This allows for 

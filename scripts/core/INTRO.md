@@ -10,6 +10,7 @@ ${"##"} Table of Contents
 * [Objective](#obj)
 * [API Specification](#spec)
 * [Drivers](#drv)
+* [Tools](#tls)
 
 ${"#"} <a name="obj">Objective</a>
 The objective of the Level-Zero API is to provide direct-to-metal interfaces to offload accelerator devices. 
@@ -195,3 +196,12 @@ The following table documents the supported knobs for overriding default driver 
 | ^                   | ${X}_ENABLE_THREADING_VALIDATION        | {**0**, 1}             | Enables the validation level for multithreading usage        |
 | ^                   | ${X}_ENABLE_MEMORY_TRACKER              | {**0**, 1}             | Enables the validation level for tracking memory lifetime    |
 ## --validate=on
+
+
+${"#"} <a name="tls">Tools</a> (WIP)
+Level-Zero APIs specific for supporting 3rd-party tools are seperated from "Core" into "Tools" APIs.
+
+The following diagram illustrates the hierachy of "Core" versus "Tool" APIs:
+![Tools](../images/intro_tools.png?raw=true)  
+@image latex intro_tools.png
+
