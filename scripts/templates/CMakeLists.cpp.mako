@@ -35,3 +35,5 @@ target_sources(${"$"}{TARGET_NAME}
         ${"$"}{CMAKE_CURRENT_SOURCE_DIR}/gen12hp.cmake
         ${"$"}{CMAKE_CURRENT_SOURCE_DIR}/gen12lp.cmake
 )
+
+add_subdirectory(os_interface)

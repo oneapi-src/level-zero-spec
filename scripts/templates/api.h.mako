@@ -49,6 +49,11 @@ from templates import helper as th
 %else:
 #include "${n}_common.h"
 %endif
+%if re.match(r"cl_interop", name):
+#if XE_ENABLE_OCL_INTEROP
+#include "CL/cl.h"
+#endif
+%endif
 
 #if defined(__cplusplus)
 extern "C" {

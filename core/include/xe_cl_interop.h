@@ -36,6 +36,9 @@
 #pragma once
 #endif
 #include "xe_common.h"
+#if XE_ENABLE_OCL_INTEROP
+#include "CL/cl.h"
+#endif
 
 #if defined(__cplusplus)
 extern "C" {

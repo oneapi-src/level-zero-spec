@@ -63,7 +63,13 @@ struct Mock<Device> : public Device {
 
     MOCK_METHOD2(getImageProperties, xe_result_t(const xe_image_desc_t* desc,
                                         xe_image_properties_t* pImageProperties));
-
+#if XE_ENABLE_OCL_INTEROP
+    MOCK_METHOD3(registerCLMemory, xe_result_t(cl_context context, cl_mem mem, void** ptr));
+    MOCK_METHOD3(registerCLProgram, xe_result_t(cl_context context, cl_program program,
+            xe_module_handle_t* phModule));
+    MOCK_METHOD3(registerCLCommandQueue, xe_result_t(cl_context context,
+            cl_command_queue command_queue, xe_command_queue_handle_t* phCommandQueue));
+#endif
     // Runtime internal methods
     MOCK_METHOD0(getMemoryManager, MemoryManager *());
     MOCK_METHOD0(getExecEnvironment, void *());

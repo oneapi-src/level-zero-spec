@@ -23,8 +23,19 @@ target_include_directories(${TARGET_NAME}
 target_compile_definitions(${TARGET_NAME}
     PUBLIC
         XE_MAKEDLL
-        XE_ENABLE_OCL_INTEROP=0
 )
+
+if(UNIX)
+    target_compile_definitions(${TARGET_NAME}
+        PUBLIC
+            XE_ENABLE_OCL_INTEROP=0
+    )
+else()
+    target_compile_definitions(${TARGET_NAME}
+        PUBLIC
+            XE_ENABLE_OCL_INTEROP=0
+    )
+endif()
 
 target_compile_definitions(${TARGET_NAME}
     PRIVATE

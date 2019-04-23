@@ -246,6 +246,21 @@ struct DeviceImp : public Device {
         return maxNumHwThreads;
     }
 
+#if XE_ENABLE_OCL_INTEROP
+    xe_result_t registerCLMemory(cl_context context, cl_mem mem, void** ptr) override {
+        return XE_RESULT_ERROR_UNSUPPORTED;
+    }
+    xe_result_t registerCLProgram(cl_context context, cl_program program,
+            xe_module_handle_t* phModule) override {
+        return XE_RESULT_ERROR_UNSUPPORTED;
+    }
+    xe_result_t registerCLCommandQueue(cl_context context,
+            cl_command_queue command_queue,
+            xe_command_queue_handle_t* phCommandQueue) override {
+        return XE_RESULT_ERROR_UNSUPPORTED;
+    }
+#endif
+
     NEO::Device *deviceRT = nullptr;
     bool isSubdevice = false;
     void *execEnvironment = nullptr;
