@@ -88,13 +88,17 @@ An implementation will return ::XE_RESULT_ERROR_UNSUPPORTED for any feature requ
 Note: currently all APIs are defined as part of the "Core" specification until they are determined to not be supportable by other devices.
 
 ## Naming Convention
-The following naming convention is followed in order to avoid conflicts within the API, or with other APIs and libraries:
+The following naming conventions are followed in order to avoid conflicts within the API, or with other APIs and libraries:
 - all driver entry points are prefixed with xe
 - all types follow **xe_\<name\>_t** convention
 - all macros and enumerator values use all caps **XE_\<SCOPE\>_\<NAME\>** convention
-- all functions use camel case **xe\<Actor\>\<Action\>\<Object\>** convention
+- all functions use camel case **xe\<Object\>\<Action\>** convention
+    + exception: since "driver" functions use implicit \<Object\>, it is omitted
 - all structure members and function parameters use camel case convention
+
+In addition, the following coding standards are followed:
 - all function input parameters precede output parameters
+- all functions return ::xe_result_t
 
 Note: "Xe" is a placeholder until One API branding is decided.
 
