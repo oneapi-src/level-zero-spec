@@ -72,6 +72,7 @@ struct Device : _xe_device_handle_t {
     virtual void *getExecEnvironment() = 0;
     virtual PtrRef<BuiltinFunctionsLib> getBuiltinFunctionsLib() = 0;
     virtual PtrRef<MOCSMapper> getMOCSMapper() = 0;
+    virtual uint32_t getMaxNumHwThreads() const = 0;
 
     virtual NEO::HwHelper &getHwHelper() = 0;
 

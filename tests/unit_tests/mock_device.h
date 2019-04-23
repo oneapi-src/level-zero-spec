@@ -70,6 +70,7 @@ struct Mock<Device> : public Device {
     MOCK_METHOD0(getHwHelper, NEO::HwHelper &());
     MOCK_METHOD0(getBuiltinFunctionsLib, PtrRef<BuiltinFunctionsLib>());
     MOCK_METHOD0(getMOCSMapper, PtrRef<MOCSMapper>());
+    MOCK_CONST_METHOD0(getMaxNumHwThreads, uint32_t());
 
     void *deviceRT;
     void *csrRT;

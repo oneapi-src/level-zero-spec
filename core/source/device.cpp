@@ -242,12 +242,23 @@ struct DeviceImp : public Device {
         return NEO::HwHelper::get(hardwareInfo.pPlatform->eRenderCoreFamily);
     }
 
+    uint32_t getMaxNumHwThreads() const override {
+        return maxNumHwThreads;
+    }
+
     NEO::Device *deviceRT = nullptr;
     bool isSubdevice = false;
     void *execEnvironment = nullptr;
     PtrOwn<BuiltinFunctionsLib> builtins = nullptr;
     PtrOwn<MOCSMapper> mocsMapper = nullptr;
+    uint32_t maxNumHwThreads = 0;
 };
+
+// TODO: Refactor in NEO - remove dependency on template parameter
+static uint32_t getMaxThreadsForVfe(const NEO::HardwareInfo &hwInfo) {
+    uint32_t threadsPerEU = (hwInfo.pSysInfo->ThreadCount / hwInfo.pSysInfo->EUCount) + hwInfo.capabilityTable.extraQuantityThreadsPerEU;
+    return hwInfo.pSysInfo->EUCount * threadsPerEU;
+}
 
 Device *Device::create(void *ptr) {
     auto device = new DeviceImp;
@@ -260,6 +271,7 @@ Device *Device::create(void *ptr) {
             BuiltinFunctionsLib::create(PtrRef<Device>(device),
                     PtrRef<void>(deviceRT->getExecutionEnvironment()->getBuiltIns()));
     device->mocsMapper.rebind(new MOCSMapper(bindPtrRef(deviceRT->getGmmHelper())));
+    device->maxNumHwThreads = getMaxThreadsForVfe(deviceRT->getHardwareInfo());
 
     return device;
 }

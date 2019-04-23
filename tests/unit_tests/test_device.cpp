@@ -6,6 +6,7 @@
 #include "xe_event.h"
 #include "gmock/gmock.h"
 #include "runtime/platform/platform.h"
+#include "runtime/device/device.h"
 #include "global_fixture.h"
 
 using ::testing::Return;
@@ -77,6 +78,24 @@ TEST(DeviceCreateImage, returnsSuccess) {
 
     Image::fromHandle(image)->destroy();
     delete device;
+}
+
+TEST(MaxHwTrheads, getMaxHwThreads) {
+    auto platform = NEO::constructPlatform();
+    auto success = platform->initialize();
+    ASSERT_TRUE(success);
+
+    auto deviceRT = platform->getDevice(0);
+    ASSERT_NE(nullptr, deviceRT);
+    auto device = Device::create(deviceRT);
+
+    auto hwInfo = deviceRT->getHardwareInfo();
+
+    uint32_t threadsPerEU = (hwInfo.pSysInfo->ThreadCount / hwInfo.pSysInfo->EUCount) + hwInfo.capabilityTable.extraQuantityThreadsPerEU;
+    uint32_t value = device->getMaxNumHwThreads();
+
+    uint32_t expected = hwInfo.pSysInfo->EUCount * threadsPerEU;
+    EXPECT_EQ(expected, value);
 }
 
 class DeviceCreateCommandList : public GlobalFixtureTest {

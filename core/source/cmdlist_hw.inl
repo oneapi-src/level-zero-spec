@@ -85,7 +85,7 @@ void CommandListCoreFamily<gfxCoreFamily>::programFrontEndState() {
     cmd.setNumberOfUrbEntries(1u);
     uint32_t urbEntryAllocationSize = 0x782; //TODO:  Gen family specific
     cmd.setUrbEntryAllocationSize(urbEntryAllocationSize);
-    uint32_t maxNumThreads = 16u; //TODO:  get this from HwInfo
+    uint32_t maxNumThreads = this->device->getMaxNumHwThreads();
     cmd.setMaximumNumberOfThreads(maxNumThreads);
 
     auto buffer = commandStream->getSpace(sizeof(cmd));
