@@ -188,11 +188,11 @@ The following table documents the supported knobs for overriding default driver 
 | ^                   | XE_ENABLE_MEMORY_TRACKER              | {**0**, 1}             | Enables the validation level for tracking memory lifetime    |
 
 
-# <a name="tls">Tools</a>
+# <a name="tls">Tools</a> (WIP)
 Level-Zero APIs specific for supporting 3rd-party tools are seperated from "Core" into "Tools" APIs.
 
 The following diagram illustrates the hierachy of "Core" versus "Tool" APIs:
-![Tools](../images/intro_tools.png?raw=true)  
+![Tool](../images/intro_tools.png?raw=true)  
 @image latex intro_tools.png
 
-This allows for 
+
