@@ -18,10 +18,6 @@ NOTE: This is a **PRELIMINARY** specification, provided for review and feedback.
 * [Experimental](#exp)
 
 # <a name="dnd">Driver and Device</a>
-The following diagram illustrates the hierarchy of devices to the driver:  
-![Driver](../images/core_driver.png?raw=true)  
-@image latex core_driver.png
-
 ## Driver
 A driver represents an instance of a Xe driver being loaded and initialized into the current process.
 - Only one instance of a driver per process can be loaded.
@@ -417,7 +413,7 @@ The following sample code demonstrates a sequence for creation and submission of
     ...
 ```
 
-#<a name="brr">Barriers</a>
+# <a name="brr">Barriers</a>
 There are two types of barriers:
 1. **Execution Barriers** - used to communicate execution dependencies between commands within a command list or across command queues, devices and/or Host.
 2. **Memory Barriers** - used to communicate memory coherency dependencies between commands within a command list or across command queues, devices and/or Host.
