@@ -55,9 +55,7 @@ def declare_obj(obj, tags):
 #include "${n}_common.hpp"
 %endif
 %if re.match(r"cl_interop", name):
-#if XE_ENABLE_OCL_INTEROP
-#include "CL/cl.h"
-#endif
+#include <CL/cl.h>
 %endif
 
 namespace ${n}

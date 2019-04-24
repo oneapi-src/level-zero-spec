@@ -67,13 +67,11 @@ struct Device : _xe_device_handle_t {
     virtual xe_result_t getImageProperties(const xe_image_desc_t* desc,
             xe_image_properties_t* pImageProperties) = 0;
 
-#if XE_ENABLE_OCL_INTEROP
     virtual xe_result_t registerCLMemory(cl_context context, cl_mem mem, void** ptr) = 0;
     virtual xe_result_t registerCLProgram(cl_context context, cl_program program,
             xe_module_handle_t* phModule) = 0;
     virtual xe_result_t registerCLCommandQueue(cl_context context,
             cl_command_queue command_queue, xe_command_queue_handle_t* phCommandQueue) = 0;
-#endif
 
     virtual void *getExecEnvironment() = 0;
     virtual PtrRef<BuiltinFunctionsLib> getBuiltinFunctionsLib() = 0;

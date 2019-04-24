@@ -41,7 +41,6 @@
 #include <new>
 
 ///////////////////////////////////////////////////////////////////////////////
-#if XE_ENABLE_OCL_INTEROP
 /// @brief Registers OpenCL memory with Xe
 /// 
 /// @returns
@@ -96,10 +95,8 @@ xeDeviceRegisterCLMemory(
         return XE_RESULT_ERROR_UNKNOWN;
     }
 }
-#endif // XE_ENABLE_OCL_INTEROP
 
 ///////////////////////////////////////////////////////////////////////////////
-#if XE_ENABLE_OCL_INTEROP
 /// @brief Registers OpenCL program with Xe
 /// 
 /// @returns
@@ -154,10 +151,8 @@ xeDeviceRegisterCLProgram(
         return XE_RESULT_ERROR_UNKNOWN;
     }
 }
-#endif // XE_ENABLE_OCL_INTEROP
 
 ///////////////////////////////////////////////////////////////////////////////
-#if XE_ENABLE_OCL_INTEROP
 /// @brief Registers OpenCL command queue with Xe
 /// 
 /// @returns
@@ -212,5 +207,4 @@ xeDeviceRegisterCLCommandQueue(
         return XE_RESULT_ERROR_UNKNOWN;
     }
 }
-#endif // XE_ENABLE_OCL_INTEROP
 

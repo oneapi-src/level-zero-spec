@@ -93,6 +93,8 @@ option(${PROJECT_NAME}_BUILD_TESTS "Build unit tests." ON)
 
 add_subdirectory(${THIRD_PARTY_DIR})
 
+include_directories(${COMPUTE_RUNTIME_DIR}/third_party/opencl_headers)
+
 #enable compute_runtime
 include(cmake/compute_runtime.cmake)
 

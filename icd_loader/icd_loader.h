@@ -43,30 +43,24 @@ typedef struct _cl_program* cl_program;
 typedef xe_result_t (__xecall *pfn_xeCommandListAppendExecutionBarrier)(
     xe_command_list_handle_t hCommandList           ///< [in] handle of the command list
     );
-#if XE_ENABLE_OCL_INTEROP
 typedef xe_result_t (__xecall *pfn_xeDeviceRegisterCLMemory)(
     xe_device_handle_t hDevice,                     ///< [in] handle to the device
     cl_context context,                             ///< [in] the OpenCL context that created the memory
     cl_mem mem,                                     ///< [in] the OpenCL memory to register
     void** ptr                                      ///< [out] pointer to device allocation
     );
-#endif // XE_ENABLE_OCL_INTEROP
-#if XE_ENABLE_OCL_INTEROP
 typedef xe_result_t (__xecall *pfn_xeDeviceRegisterCLProgram)(
     xe_device_handle_t hDevice,                     ///< [in] handle to the device
     cl_context context,                             ///< [in] the OpenCL context that created the program
     cl_program program,                             ///< [in] the OpenCL program to register
     xe_module_handle_t* phModule                    ///< [out] pointer to handle of module object created
     );
-#endif // XE_ENABLE_OCL_INTEROP
-#if XE_ENABLE_OCL_INTEROP
 typedef xe_result_t (__xecall *pfn_xeDeviceRegisterCLCommandQueue)(
     xe_device_handle_t hDevice,                     ///< [in] handle to the device
     cl_context context,                             ///< [in] the OpenCL context that created the command queue
     cl_command_queue command_queue,                 ///< [in] the OpenCL command queue to register
     xe_command_queue_handle_t* phCommandQueue       ///< [out] pointer to handle of command queue object created
     );
-#endif // XE_ENABLE_OCL_INTEROP
 typedef xe_result_t (__xecall *pfn_xeDeviceCreateCommandList)(
     xe_device_handle_t hDevice,                     ///< [in] handle of the device object
     const xe_command_list_desc_t* desc,             ///< [in] pointer to command list descriptor
@@ -505,15 +499,9 @@ typedef xe_result_t (__xecall *pfn_xeSamplerDestroy)(
 typedef struct _xe_dispatch_table_t
 {
     pfn_xeCommandListAppendExecutionBarrier xeCommandListAppendExecutionBarrier;
-#if XE_ENABLE_OCL_INTEROP
     pfn_xeDeviceRegisterCLMemory xeDeviceRegisterCLMemory;
-#endif // XE_ENABLE_OCL_INTEROP
-#if XE_ENABLE_OCL_INTEROP
     pfn_xeDeviceRegisterCLProgram xeDeviceRegisterCLProgram;
-#endif // XE_ENABLE_OCL_INTEROP
-#if XE_ENABLE_OCL_INTEROP
     pfn_xeDeviceRegisterCLCommandQueue xeDeviceRegisterCLCommandQueue;
-#endif // XE_ENABLE_OCL_INTEROP
     pfn_xeDeviceCreateCommandList xeDeviceCreateCommandList;
     pfn_xeCommandListDestroy xeCommandListDestroy;
     pfn_xeCommandListClose xeCommandListClose;
@@ -611,15 +599,9 @@ inline bool load_xe(void *handle, void *(*funcAddressGetter)(void *handle, const
         return false;
     }
     outTable->xeCommandListAppendExecutionBarrier = (pfn_xeCommandListAppendExecutionBarrier)funcAddressGetter(handle, "xeCommandListAppendExecutionBarrier");
-#if XE_ENABLE_OCL_INTEROP
     outTable->xeDeviceRegisterCLMemory = (pfn_xeDeviceRegisterCLMemory)funcAddressGetter(handle, "xeDeviceRegisterCLMemory");
-#endif // XE_ENABLE_OCL_INTEROP
-#if XE_ENABLE_OCL_INTEROP
     outTable->xeDeviceRegisterCLProgram = (pfn_xeDeviceRegisterCLProgram)funcAddressGetter(handle, "xeDeviceRegisterCLProgram");
-#endif // XE_ENABLE_OCL_INTEROP
-#if XE_ENABLE_OCL_INTEROP
     outTable->xeDeviceRegisterCLCommandQueue = (pfn_xeDeviceRegisterCLCommandQueue)funcAddressGetter(handle, "xeDeviceRegisterCLCommandQueue");
-#endif // XE_ENABLE_OCL_INTEROP
     outTable->xeDeviceCreateCommandList = (pfn_xeDeviceCreateCommandList)funcAddressGetter(handle, "xeDeviceCreateCommandList");
     outTable->xeCommandListDestroy = (pfn_xeCommandListDestroy)funcAddressGetter(handle, "xeCommandListDestroy");
     outTable->xeCommandListClose = (pfn_xeCommandListClose)funcAddressGetter(handle, "xeCommandListClose");
@@ -713,21 +695,15 @@ inline bool load_xe(void *handle, void *(*funcAddressGetter)(void *handle, const
     if(0 == outTable->xeCommandListAppendExecutionBarrier){
         return false;
     }
-#if XE_ENABLE_OCL_INTEROP
     if(0 == outTable->xeDeviceRegisterCLMemory){
         return false;
     }
-#endif // XE_ENABLE_OCL_INTEROP
-#if XE_ENABLE_OCL_INTEROP
     if(0 == outTable->xeDeviceRegisterCLProgram){
         return false;
     }
-#endif // XE_ENABLE_OCL_INTEROP
-#if XE_ENABLE_OCL_INTEROP
     if(0 == outTable->xeDeviceRegisterCLCommandQueue){
         return false;
     }
-#endif // XE_ENABLE_OCL_INTEROP
     if(0 == outTable->xeDeviceCreateCommandList){
         return false;
     }

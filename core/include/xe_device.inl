@@ -39,7 +39,6 @@
 namespace xe
 {
     ///////////////////////////////////////////////////////////////////////////////
-#if XE_ENABLE_OCL_INTEROP
     /// @brief C++ wrapper for ::xeDeviceRegisterCLMemory
     /// 
     /// @returns
@@ -55,10 +54,8 @@ namespace xe
         // auto result = ::xeDeviceRegisterCLMemory( handle, context, mem );
         // if( ::XE_RESULT_SUCCESS != result ) throw exception(result, "xe::Device::RegisterCLMemory");
     }
-#endif // XE_ENABLE_OCL_INTEROP
 
     ///////////////////////////////////////////////////////////////////////////////
-#if XE_ENABLE_OCL_INTEROP
     /// @brief C++ wrapper for ::xeDeviceRegisterCLProgram
     /// 
     /// @returns
@@ -74,10 +71,8 @@ namespace xe
         // auto result = ::xeDeviceRegisterCLProgram( handle, context, program );
         // if( ::XE_RESULT_SUCCESS != result ) throw exception(result, "xe::Device::RegisterCLProgram");
     }
-#endif // XE_ENABLE_OCL_INTEROP
 
     ///////////////////////////////////////////////////////////////////////////////
-#if XE_ENABLE_OCL_INTEROP
     /// @brief C++ wrapper for ::xeDeviceRegisterCLCommandQueue
     /// 
     /// @returns
@@ -93,7 +88,6 @@ namespace xe
         // auto result = ::xeDeviceRegisterCLCommandQueue( handle, context, command_queue );
         // if( ::XE_RESULT_SUCCESS != result ) throw exception(result, "xe::Device::RegisterCLCommandQueue");
     }
-#endif // XE_ENABLE_OCL_INTEROP
 
     ///////////////////////////////////////////////////////////////////////////////
     /// @brief C++ wrapper for ::xeDeviceCreateCommandList

@@ -255,7 +255,6 @@ struct DeviceImp : public Device {
         return maxNumHwThreads;
     }
 
-#if XE_ENABLE_OCL_INTEROP
     xe_result_t registerCLMemory(cl_context context, cl_mem mem, void** ptr) override {
         return XE_RESULT_ERROR_UNSUPPORTED;
     }
@@ -268,7 +267,6 @@ struct DeviceImp : public Device {
             xe_command_queue_handle_t* phCommandQueue) override {
         return XE_RESULT_ERROR_UNSUPPORTED;
     }
-#endif
 
     NEO::Device *deviceRT = nullptr;
     bool isSubdevice = false;

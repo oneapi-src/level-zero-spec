@@ -491,7 +491,6 @@ namespace xe
 
         };
 
-#if XE_ENABLE_OCL_INTEROP
         ///////////////////////////////////////////////////////////////////////////////
         /// @brief C++ wrapper for ::xeDeviceRegisterCLMemory
         /// @returns
@@ -503,9 +502,7 @@ namespace xe
             cl_context context,                             ///< [in] the OpenCL context that created the memory
             cl_mem mem                                      ///< [in] the OpenCL memory to register
             );
-#endif // XE_ENABLE_OCL_INTEROP
 
-#if XE_ENABLE_OCL_INTEROP
         ///////////////////////////////////////////////////////////////////////////////
         /// @brief C++ wrapper for ::xeDeviceRegisterCLProgram
         /// @returns
@@ -517,9 +514,7 @@ namespace xe
             cl_context context,                             ///< [in] the OpenCL context that created the program
             cl_program program                              ///< [in] the OpenCL program to register
             );
-#endif // XE_ENABLE_OCL_INTEROP
 
-#if XE_ENABLE_OCL_INTEROP
         ///////////////////////////////////////////////////////////////////////////////
         /// @brief C++ wrapper for ::xeDeviceRegisterCLCommandQueue
         /// @returns
@@ -531,7 +526,6 @@ namespace xe
             cl_context context,                             ///< [in] the OpenCL context that created the command queue
             cl_command_queue command_queue                  ///< [in] the OpenCL command queue to register
             );
-#endif // XE_ENABLE_OCL_INTEROP
 
         ///////////////////////////////////////////////////////////////////////////////
         /// @brief C++ wrapper for ::xeDeviceCreateCommandList

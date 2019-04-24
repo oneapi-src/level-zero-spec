@@ -185,7 +185,6 @@ xe_result_t __xecall xeCommandListAppendExecutionBarrier(
     }
     return dispatchTable.xeCommandListAppendExecutionBarrier(hCommandList);
 }
-#if XE_ENABLE_OCL_INTEROP
 xe_result_t __xecall xeDeviceRegisterCLMemory(
         xe_device_handle_t hDevice,                     ///< [in] handle to the device
         cl_context context,                             ///< [in] the OpenCL context that created the memory
@@ -197,8 +196,6 @@ xe_result_t __xecall xeDeviceRegisterCLMemory(
     }
     return dispatchTable.xeDeviceRegisterCLMemory(hDevice, context, mem, ptr);
 }
-#endif // XE_ENABLE_OCL_INTEROP
-#if XE_ENABLE_OCL_INTEROP
 xe_result_t __xecall xeDeviceRegisterCLProgram(
         xe_device_handle_t hDevice,                     ///< [in] handle to the device
         cl_context context,                             ///< [in] the OpenCL context that created the program
@@ -210,8 +207,6 @@ xe_result_t __xecall xeDeviceRegisterCLProgram(
     }
     return dispatchTable.xeDeviceRegisterCLProgram(hDevice, context, program, phModule);
 }
-#endif // XE_ENABLE_OCL_INTEROP
-#if XE_ENABLE_OCL_INTEROP
 xe_result_t __xecall xeDeviceRegisterCLCommandQueue(
         xe_device_handle_t hDevice,                     ///< [in] handle to the device
         cl_context context,                             ///< [in] the OpenCL context that created the command queue
@@ -223,7 +218,6 @@ xe_result_t __xecall xeDeviceRegisterCLCommandQueue(
     }
     return dispatchTable.xeDeviceRegisterCLCommandQueue(hDevice, context, command_queue, phCommandQueue);
 }
-#endif // XE_ENABLE_OCL_INTEROP
 xe_result_t __xecall xeDeviceCreateCommandList(
         xe_device_handle_t hDevice,                     ///< [in] handle of the device object
         const xe_command_list_desc_t* desc,             ///< [in] pointer to command list descriptor

@@ -36,16 +36,13 @@
 #pragma once
 #endif
 #include "xe_common.h"
-#if XE_ENABLE_OCL_INTEROP
-#include "CL/cl.h"
-#endif
+#include <CL/cl.h>
 
 #if defined(__cplusplus)
 extern "C" {
 #endif
 
 ///////////////////////////////////////////////////////////////////////////////
-#if XE_ENABLE_OCL_INTEROP
 /// @brief Registers OpenCL memory with Xe
 /// 
 /// @returns
@@ -65,10 +62,8 @@ xeDeviceRegisterCLMemory(
     cl_mem mem,                                     ///< [in] the OpenCL memory to register
     void** ptr                                      ///< [out] pointer to device allocation
     );
-#endif // XE_ENABLE_OCL_INTEROP
 
 ///////////////////////////////////////////////////////////////////////////////
-#if XE_ENABLE_OCL_INTEROP
 /// @brief Registers OpenCL program with Xe
 /// 
 /// @returns
@@ -88,10 +83,8 @@ xeDeviceRegisterCLProgram(
     cl_program program,                             ///< [in] the OpenCL program to register
     xe_module_handle_t* phModule                    ///< [out] pointer to handle of module object created
     );
-#endif // XE_ENABLE_OCL_INTEROP
 
 ///////////////////////////////////////////////////////////////////////////////
-#if XE_ENABLE_OCL_INTEROP
 /// @brief Registers OpenCL command queue with Xe
 /// 
 /// @returns
@@ -111,7 +104,6 @@ xeDeviceRegisterCLCommandQueue(
     cl_command_queue command_queue,                 ///< [in] the OpenCL command queue to register
     xe_command_queue_handle_t* phCommandQueue       ///< [out] pointer to handle of command queue object created
     );
-#endif // XE_ENABLE_OCL_INTEROP
 
 #if defined(__cplusplus)
 } // extern "C"

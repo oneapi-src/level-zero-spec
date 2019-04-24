@@ -91,12 +91,6 @@ extern "C" {
 #endif // defined(XE_MAKEDLL)
 
 ///////////////////////////////////////////////////////////////////////////////
-#if !defined(XE_ENABLE_OCL_INTEROP)
-/// @brief Disable OpenCL interoperability functions if not explicitly defined
-#define XE_ENABLE_OCL_INTEROP  0
-#endif // !defined(XE_ENABLE_OCL_INTEROP)
-
-///////////////////////////////////////////////////////////////////////////////
 /// @brief compiler-independent type
 typedef uint8_t xe_bool_t;
 
