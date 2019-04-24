@@ -109,7 +109,7 @@ namespace xe
     /// 
     /// @details
     ///     - The command list is created in the 'open' state.
-    ///     - This function may be called from simultaneous threads.
+    ///     - The application may call this function from simultaneous threads.
     ///     - The implementation of this function should be lock-free.
     /// 
     /// @returns
@@ -132,7 +132,7 @@ namespace xe
     /// @details
     ///     - The command list is created in the 'open' state and never needs to be
     ///       closed.
-    ///     - This function may **not** be called from simultaneous threads.
+    ///     - The application may call this function from simultaneous threads.
     ///     - The implementation of this function should be lock-free.
     /// 
     /// @returns
@@ -157,6 +157,8 @@ namespace xe
     ///       currently referencing the command list before it is deleted
     ///     - The implementation of this function will immediately free all Host and
     ///       Device allocations associated with this command list.
+    ///     - The application may **not** call this function from simultaneous
+    ///       threads with the same command list handle.
     ///     - The implementation of this function should be lock-free.
     /// 
     /// @throws result_t
@@ -236,8 +238,7 @@ namespace xe
     /// @brief C++ wrapper for ::xeCommandListGetParameter
     /// 
     /// @details
-    ///     - The application may **not** call this function from simultaneous
-    ///       threads with the same command list handle.
+    ///     - The application may call this function from simultaneous threads.
     ///     - The implementation of this function should be lock-free.
     /// 
     /// @remarks
@@ -592,7 +593,7 @@ namespace xe
     /// 
     /// @details
     ///     - The application may **not** call this function from simultaneous
-    ///       threads.
+    ///       threads with the same command list handle.
     ///     - The implementation of this function should be lock-free.
     /// 
     /// @remarks
@@ -615,7 +616,8 @@ namespace xe
     /// @details
     ///     - This may **not** be called for a command list created with
     ///       ::COMMAND_LIST_FLAG_COPY_ONLY.
-    ///     - This function may **not** be called from simultaneous threads.
+    ///     - This function may **not** be called from simultaneous threads with the
+    ///       same command list handle.
     ///     - The implementation of this function should be lock-free.
     /// 
     /// @remarks
@@ -645,7 +647,8 @@ namespace xe
     ///       completed on the device.
     ///     - This may **not** be called for a command list created with
     ///       ::COMMAND_LIST_FLAG_COPY_ONLY.
-    ///     - This function may **not** be called from simultaneous threads.
+    ///     - This function may **not** be called from simultaneous threads with the
+    ///       same command list handle.
     ///     - The implementation of this function should be lock-free.
     /// 
     /// @remarks
@@ -675,7 +678,8 @@ namespace xe
     ///       function has completed on the device.
     ///     - This may **not** be called for a command list created with
     ///       ::COMMAND_LIST_FLAG_COPY_ONLY.
-    ///     - This function may **not** be called from simultaneous threads.
+    ///     - This function may **not** be called from simultaneous threads with the
+    ///       same command list handle.
     ///     - The implementation of this function should be lock-free.
     /// 
     /// @remarks
@@ -706,7 +710,8 @@ namespace xe
     /// @details
     ///     - This may **not** be called for a command list created with
     ///       ::COMMAND_LIST_FLAG_COPY_ONLY.
-    ///     - This function may **not** be called from simultaneous threads.
+    ///     - This function may **not** be called from simultaneous threads with the
+    ///       same command list handle.
     ///     - The implementation of this function should be lock-free.
     /// 
     /// @remarks

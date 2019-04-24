@@ -104,6 +104,8 @@ xeFenceCreate(
 ///       currently referencing the fence before it is deleted
 ///     - The implementation of this function will immediately free all Host and
 ///       Device allocations associated with this fence
+///     - The application may **not** call this function from simultaneous
+///       threads with the same fence handle.
 ///     - The implementation of this function should be lock-free.
 /// 
 /// @remarks

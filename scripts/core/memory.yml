@@ -146,6 +146,7 @@ analogue:
 details:
     - "The application is responsible for making sure the GPU is not currently referencing the memory before it is freed"
     - "The implementation of this function will immediately free all Host and Device allocations associated with this memory"
+    - "The application may **not** call this function from simultaneous threads with the same pointer."
 params:
     - type: "const void*"
       name: ptr
@@ -291,7 +292,7 @@ analogue:
     - "**cuIpcCloseMemHandle**"
 details:
     - "Closes an IPC memory handle by unmapping memory that was opened in this process using $xIpcOpenMemHandle."
-    - "The application may call this function from simultaneous threads."
+    - "The application may **not** call this function from simultaneous threads with the same pointer."
 params:
     - type: "const void*"
       name: ptr

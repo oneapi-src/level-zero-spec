@@ -96,8 +96,7 @@ xetMetricGroupGetCount(
 /// @brief Returns metric group handle for a device.
 /// 
 /// @details
-///     - The application may call this function from simultaneous threads with
-///       the same device handle.
+///     - The application may call this function from simultaneous threads.
 /// 
 /// @returns
 ///     - ::XE_RESULT_SUCCESS
@@ -154,8 +153,7 @@ xetMetricGroupGet(
 /// @brief Returns properties for a given metric group.
 /// 
 /// @details
-///     - The application may call this function from simultaneous threads with
-///       the same metric group handle.
+///     - The application may call this function from simultaneous threads.
 /// 
 /// @returns
 ///     - ::XE_RESULT_SUCCESS
@@ -211,8 +209,7 @@ xetMetricGroupGetProperties(
 /// @brief Returns metric from a given metric group.
 /// 
 /// @details
-///     - The application may call this function from simultaneous threads with
-///       the same metric group handle.
+///     - The application may call this function from simultaneous threads.
 /// 
 /// @returns
 ///     - ::XE_RESULT_SUCCESS
@@ -269,8 +266,7 @@ xetMetricGet(
 /// @brief Returns metric properties.
 /// 
 /// @details
-///     - The application may call this function from simultaneous threads with
-///       the same metric group handle.
+///     - The application may call this function from simultaneous threads.
 /// 
 /// @returns
 ///     - ::XE_RESULT_SUCCESS
@@ -326,8 +322,8 @@ xetMetricGetProperties(
 /// @brief Calculates counter values from raw data.
 /// 
 /// @details
-///     - The application may not call this function from simultaneous threads
-///       with the same metric group handle.
+///     - The application may **not** call this function from simultaneous
+///       threads wth the same metric group handle.
 /// 
 /// @returns
 ///     - ::XE_RESULT_SUCCESS
@@ -451,8 +447,8 @@ xetDeviceActivateMetricGroups(
 /// @brief Opens metric tracer for a given device.
 /// 
 /// @details
-///     - The application may not call this function from simultaneous threads
-///       with the same device handle.
+///     - The application may **not** call this function from simultaneous
+///       threads with the same device handle.
 /// 
 /// @returns
 ///     - ::XE_RESULT_SUCCESS
@@ -517,8 +513,8 @@ xetMetricTracerOpen(
 /// @brief Append metric tracer marker to a given command list.
 /// 
 /// @details
-///     - The application may not call this function from simultaneous threads
-///       with the same device handle.
+///     - The application may **not** call this function from simultaneous
+///       threads with the same command list handle.
 /// 
 /// @returns
 ///     - ::XE_RESULT_SUCCESS
@@ -575,8 +571,8 @@ xetCommandListAppendMetricTracerMarker(
 /// @brief Closes metric tracer.
 /// 
 /// @details
-///     - The application may not call this function from simultaneous threads
-///       with the same device handle.
+///     - The application may **not** call this function from simultaneous
+///       threads with the same metric tracer handle.
 /// 
 /// @returns
 ///     - ::XE_RESULT_SUCCESS
@@ -629,8 +625,7 @@ xetMetricTracerClose(
 /// @brief Reads data from metric tracer.
 /// 
 /// @details
-///     - The application may not call this function from simultaneous threads
-///       with the same device handle.
+///     - The application may call this function from simultaneous threads.
 /// 
 /// @returns
 ///     - ::XE_RESULT_SUCCESS
@@ -690,8 +685,7 @@ xetMetricTracerReadData(
 /// @brief Creates metric query pool.
 /// 
 /// @details
-///     - The application may call this function from simultaneous threads with
-///       the same device handle.
+///     - The application may call this function from simultaneous threads.
 /// 
 /// @returns
 ///     - ::XE_RESULT_SUCCESS
@@ -752,8 +746,8 @@ xetMetricQueryPoolCreate(
 /// @brief Destroys query pool object.
 /// 
 /// @details
-///     - The application may call this function from simultaneous threads with
-///       the same device handle.
+///     - The application may **not** call this function from simultaneous
+///       threads with the same query pool handle.
 /// 
 /// @returns
 ///     - ::XE_RESULT_SUCCESS
@@ -806,8 +800,7 @@ xetMetricQueryPoolDestroy(
 /// @brief Returns metric query handle from a given metric query pool.
 /// 
 /// @details
-///     - The application may call this function from simultaneous threads with
-///       the same device handle.
+///     - The application may call this function from simultaneous threads.
 /// 
 /// @returns
 ///     - ::XE_RESULT_SUCCESS
@@ -864,8 +857,8 @@ xetMetricQueryPoolGetMetricQuery(
 /// @brief Appends metric query begin commands to command list.
 /// 
 /// @details
-///     - The application may call this function from simultaneous threads with
-///       the same device handle.
+///     - The application may **not** call this function from simultaneous
+///       threads with the same command list handle.
 /// 
 /// @returns
 ///     - ::XE_RESULT_SUCCESS
@@ -921,8 +914,8 @@ xetCommandListAppendMetricQueryBegin(
 /// @brief Appends metric query end commands to command list.
 /// 
 /// @details
-///     - The application may call this function from simultaneous threads with
-///       the same device handle.
+///     - The application may **not** call this function from simultaneous
+///       threads with the same command list handle.
 /// 
 /// @returns
 ///     - ::XE_RESULT_SUCCESS
@@ -981,8 +974,8 @@ xetCommandListAppendMetricQueryEnd(
 /// @brief Appends metric query commands to flush all caches.
 /// 
 /// @details
-///     - The application may call this function from simultaneous threads with
-///       the same device handle.
+///     - The application may **not** call this function from simultaneous
+///       threads with the same command list handle.
 /// 
 /// @returns
 ///     - ::XE_RESULT_SUCCESS
@@ -1035,8 +1028,7 @@ xetCommandListAppendMetricMemoryBarrier(
 /// @brief Returns raw data for a given metric query slot.
 /// 
 /// @details
-///     - The application may not call this function from simultaneous threads
-///       with the same device handle.
+///     - The application may call this function from simultaneous threads.
 /// 
 /// @returns
 ///     - ::XE_RESULT_SUCCESS

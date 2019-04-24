@@ -71,7 +71,7 @@ typedef struct _xex_command_graph_desc_t
 ///        command queue.
 /// 
 /// @details
-///     - This function may be called from simultaneous threads.
+///     - The application may call this function from simultaneous threads.
 ///     - The implementation of this function should be lock-free.
 /// 
 /// @returns
@@ -99,6 +99,8 @@ xexCommandGraphCreate(
 /// @details
 ///     - The implementation of this function will immediately free all Host
 ///       allocations associated with this command graph.
+///     - The application may **not** call this function from simultaneous
+///       threads with the same command graph handle.
 ///     - The implementation of this function should be lock-free.
 /// 
 /// @returns

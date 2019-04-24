@@ -73,7 +73,7 @@ typedef struct _xe_event_pool_desc_t
 /// @brief Creates a pool for a set of event(s) on the device.
 /// 
 /// @details
-///     - This function may be called from simultaneous threads.
+///     - The application may call this function from simultaneous threads.
 ///     - The implementation of this function should be lock-free.
 /// 
 /// @returns
@@ -106,6 +106,8 @@ xeEventPoolCreate(
 ///       deleted
 ///     - The implementation of this function will immediately free all Host and
 ///       Device allocations associated with this event pool
+///     - The application may **not** call this function from simultaneous
+///       threads with the same event pool handle.
 ///     - The implementation of this function should be lock-free.
 /// 
 /// @returns
@@ -163,7 +165,7 @@ typedef struct _xe_event_desc_t
 ///     - Multiple events cannot be created using the same index from the same
 ///       pool
 ///     - The index must be less-than the count specified during pool creation
-///     - This function may be called from simultaneous threads.
+///     - The application may call this function from simultaneous threads.
 ///     - The implementation of this function should be lock-free.
 /// 
 /// @remarks
@@ -198,6 +200,8 @@ xeEventCreate(
 ///       currently referencing the event before it is deleted
 ///     - The implementation of this function will immediately free all Host and
 ///       Device allocations associated with this event
+///     - The application may **not** call this function from simultaneous
+///       threads with the same event handle.
 ///     - The implementation of this function should be lock-free.
 /// 
 /// @remarks
@@ -278,7 +282,8 @@ xeEventPoolOpenIpcHandle(
 /// @details
 ///     - Closes an IPC event handle by destroying events that were opened in
 ///       this process using ::xeEventPoolOpenIpcHandle.
-///     - The application may call this function from simultaneous threads.
+///     - The application may **not** call this function from simultaneous
+///       threads with the same event pool handle.
 /// 
 /// @remarks
 ///   _Analogues_
@@ -433,7 +438,7 @@ xeEventQueryStatus(
 /// 
 /// @details
 ///     - The application may **not** call this function from simultaneous
-///       threads.
+///       threads with the same command list handle.
 ///     - The implementation of this function should be lock-free.
 /// 
 /// @remarks

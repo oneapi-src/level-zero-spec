@@ -21,7 +21,7 @@ class: $tMetricGroup
 name: Get
 decl: static
 details:
-    - "The application may call this function from simultaneous threads with the same device handle."
+    - "The application may call this function from simultaneous threads."
 params:
     - type: "$x_device_handle_t"
       name: hDevice
@@ -103,7 +103,7 @@ desc: "Returns properties for a given metric group."
 class: $tMetricGroup
 name: GetProperties
 details:
-    - "The application may call this function from simultaneous threads with the same metric group handle."
+    - "The application may call this function from simultaneous threads."
 params:
     - type: "$t_metric_group_handle_t"
       name: hMetricGroup
@@ -260,7 +260,7 @@ class: $tMetric
 name: Get
 decl: static
 details:
-    - "The application may call this function from simultaneous threads with the same metric group handle."
+    - "The application may call this function from simultaneous threads."
 params:
     - type: "$t_metric_group_handle_t"
       name: hMetricGroup
@@ -280,7 +280,7 @@ desc: "Returns metric properties."
 class: $tMetric
 name: GetProperties
 details:
-    - "The application may call this function from simultaneous threads with the same metric group handle."
+    - "The application may call this function from simultaneous threads."
 params:
     - type: "$t_metric_handle_t"
       name: hMetric
@@ -297,7 +297,7 @@ desc: "Calculates counter values from raw data."
 class: $tMetricGroup
 name: CalculateData
 details:
-    - "The application may not call this function from simultaneous threads with the same metric group handle."
+    - "The application may **not** call this function from simultaneous threads wth the same metric group handle."
 params:
     - type: "$t_metric_group_handle_t"
       name: hMetricGroup
@@ -376,7 +376,7 @@ class: $tMetricTracer
 name: Open
 decl: static
 details:
-    - "The application may not call this function from simultaneous threads with the same device handle."
+    - "The application may **not** call this function from simultaneous threads with the same device handle."
 params:
     - type: "$x_device_handle_t"
       name: hDevice
@@ -399,7 +399,7 @@ desc: "Append metric tracer marker to a given command list."
 class: $tCommandList
 name: AppendMetricTracerMarker
 details:
-    - "The application may not call this function from simultaneous threads with the same device handle."
+    - "The application may **not** call this function from simultaneous threads with the same command list handle."
 params:
     - type: "$x_command_list_handle_t"
       name: hCommandList
@@ -419,7 +419,7 @@ desc: "Closes metric tracer."
 class: $tMetricTracer
 name: Close
 details:
-    - "The application may not call this function from simultaneous threads with the same device handle."
+    - "The application may **not** call this function from simultaneous threads with the same metric tracer handle."
 params:
     - type: "$t_metric_tracer_handle_t"
       name: hMetricTracer
@@ -433,7 +433,7 @@ desc: "Reads data from metric tracer."
 class: $tMetricTracer
 name: ReadData
 details:
-    - "The application may not call this function from simultaneous threads with the same device handle."
+    - "The application may call this function from simultaneous threads."
 params:
     - type: "$t_metric_tracer_handle_t"
       name: hMetricTracer
@@ -495,7 +495,7 @@ class: $tMetricQueryPool
 name: Create
 decl: static
 details:
-    - "The application may call this function from simultaneous threads with the same device handle."
+    - "The application may call this function from simultaneous threads."
 params:
     - type: "$x_device_handle_t"
       name: hDevice
@@ -516,7 +516,7 @@ class: $tMetricQueryPool
 name: Destroy
 decl: static
 details:
-    - "The application may call this function from simultaneous threads with the same device handle."
+    - "The application may **not** call this function from simultaneous threads with the same query pool handle."
 params:
     - type: "$t_metric_query_pool_handle_t"
       name: hMetricQueryPool
@@ -530,7 +530,7 @@ desc: "Returns metric query handle from a given metric query pool."
 class: $tMetricQueryPool
 name: GetMetricQuery
 details:
-    - "The application may call this function from simultaneous threads with the same device handle."
+    - "The application may call this function from simultaneous threads."
 params:
     - type: "$t_metric_query_pool_handle_t"
       name: hMetricQueryPool
@@ -550,7 +550,7 @@ desc: "Appends metric query begin commands to command list."
 class: $tCommandList
 name: AppendMetricQueryBegin
 details:
-    - "The application may call this function from simultaneous threads with the same device handle."
+    - "The application may **not** call this function from simultaneous threads with the same command list handle."
 params:
     - type: "$x_command_list_handle_t"
       name: hCommandList
@@ -567,7 +567,7 @@ desc: "Appends metric query end commands to command list."
 class: $tCommandList
 name: AppendMetricQueryEnd
 details:
-    - "The application may call this function from simultaneous threads with the same device handle."
+    - "The application may **not** call this function from simultaneous threads with the same command list handle."
 params:
     - type: "$x_command_list_handle_t"
       name: hCommandList
@@ -587,7 +587,7 @@ desc: "Appends metric query commands to flush all caches."
 class: $tCommandList
 name: AppendMetricMemoryBarrier
 details:
-    - "The application may call this function from simultaneous threads with the same device handle."
+    - "The application may **not** call this function from simultaneous threads with the same command list handle."
 params:
     - type: "$x_command_list_handle_t"
       name: hCommandList
@@ -601,7 +601,7 @@ desc: "Returns raw data for a given metric query slot."
 class: $tMetricQuery
 name: GetData
 details:
-    - "The application may not call this function from simultaneous threads with the same device handle."
+    - "The application may call this function from simultaneous threads."
 params:
     - type: "$t_metric_query_handle_t"
       name: hMetricQuery

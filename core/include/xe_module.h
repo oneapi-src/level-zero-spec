@@ -75,7 +75,7 @@ typedef struct _xe_module_desc_t
 /// @brief Creates module object from an input IL or native binary.
 /// 
 /// @details
-///     - This function may be called from simultaneous threads.
+///     - The application may call this function from simultaneous threads.
 ///     - The implementation of this function should be lock-free.
 ///     - This function will create and compile the module object.
 ///     - A build log can optionally be returned to the caller. Caller is
@@ -127,9 +127,11 @@ xeModuleCreate(
 /// 
 /// @details
 ///     - The application is responsible for making sure the GPU is not
-///       currently referencing the event before it is deleted
+///       currently referencing the module before it is deleted
 ///     - The implementation of this function will immediately free all Host and
 ///       Device allocations associated with this module
+///     - The application may **not** call this function from simultaneous
+///       threads with the same module handle.
 ///     - The implementation of this function should be lock-free.
 /// 
 /// @remarks
@@ -153,9 +155,11 @@ xeModuleDestroy(
 /// 
 /// @details
 ///     - The application is responsible for making sure the GPU is not
-///       currently referencing the event before it is deleted
+///       currently referencing the build log before it is deleted
 ///     - The implementation of this function will immediately free all Host and
 ///       Device allocations associated with this object
+///     - The application may **not** call this function from simultaneous
+///       threads with the same build log handle.
 ///     - The implementation of this function should be lock-free.
 ///     - This function can be called before or after ::xeModuleDestroy for the
 ///       associated module.
@@ -176,7 +180,7 @@ xeModuleBuildLogDestroy(
 /// @brief Retrieves text string for build log.
 /// 
 /// @details
-///     - This function may be called from simultaneous threads.
+///     - The application may call this function from simultaneous threads.
 ///     - The implementation of this function should be lock-free.
 ///     - The caller must provide memory for build log.
 ///     - The caller can pass nullptr for pBuildLog when querying only for size.
@@ -202,7 +206,7 @@ xeModuleBuildLogGetString(
 /// @brief Retrieve native binary from Module.
 /// 
 /// @details
-///     - This function may be called from simultaneous threads.
+///     - The application may call this function from simultaneous threads.
 ///     - The implementation of this function should be lock-free.
 ///     - The caller can pass nullptr for pModuleNativeBinary when querying only
 ///       for size.
@@ -236,7 +240,7 @@ xeModuleGetNativeBinary(
 /// @brief Retrieve global variable pointer from Module.
 /// 
 /// @details
-///     - This function may be called from simultaneous threads.
+///     - The application may call this function from simultaneous threads.
 ///     - The implementation of this function should be lock-free.
 /// 
 /// @returns
@@ -287,7 +291,7 @@ typedef struct _xe_function_desc_t
 /// @brief Create Function object from Module by name
 /// 
 /// @details
-///     - This function may be called from simultaneous threads.
+///     - The application may call this function from simultaneous threads.
 ///     - The implementation of this function should be lock-free.
 ///     - Function objects should be destroyed before the Module is destroyed.
 /// 
@@ -319,9 +323,11 @@ xeFunctionCreate(
 /// 
 /// @details
 ///     - The application is responsible for making sure the GPU is not
-///       currently referencing the event before it is deleted
+///       currently referencing the function before it is deleted
 ///     - The implementation of this function will immediately free all Host and
 ///       Device allocations associated with this function
+///     - The application may **not** call this function from simultaneous
+///       threads with the same function handle.
 ///     - The implementation of this function should be lock-free.
 /// 
 /// @returns
@@ -340,7 +346,7 @@ xeFunctionDestroy(
 /// @brief Retrieve function pointer from Module by name
 /// 
 /// @details
-///     - This function may be called from simultaneous threads.
+///     - The application may call this function from simultaneous threads.
 ///     - The implementation of this function should be lock-free.
 ///     - Function pointer is no longer valid if Module is destroyed.
 /// 
@@ -391,7 +397,7 @@ xeFunctionSetGroupSize(
 ///        dimension.
 /// 
 /// @details
-///     - This function may be called from simultaneous threads.
+///     - The application may call this function from simultaneous threads.
 ///     - The implementation of this function should be lock-free.
 ///     - This function ignores the group size that is set using
 ///       ::xeFunctionSetGroupSize.
@@ -422,7 +428,8 @@ xeFunctionSuggestGroupSize(
 /// @brief Set function argument used on function launch.
 /// 
 /// @details
-///     - This function may **not** be called from simultaneous threads.
+///     - This function may **not** be called from simultaneous threads with the
+///       same function handle.
 ///     - The implementation of this function should be lock-free.
 /// 
 /// @returns
@@ -464,7 +471,8 @@ typedef enum _xe_function_set_attribute_t
 /// @brief Sets a function attribute
 /// 
 /// @details
-///     - This function may **not** be called from simultaneous threads.
+///     - This function may **not** be called from simultaneous threads with the
+///       same function handle.
 ///     - The implementation of this function should be lock-free.
 /// 
 /// @remarks
@@ -508,7 +516,7 @@ typedef enum _xe_function_get_attribute_t
 /// @brief Query a function attribute.
 /// 
 /// @details
-///     - This function may be called from simultaneous threads.
+///     - The application may call this function from simultaneous threads.
 ///     - The implementation of this function should be lock-free.
 /// 
 /// @remarks
@@ -547,7 +555,8 @@ typedef struct _xe_thread_group_dimensions_t
 /// @details
 ///     - This may **not** be called for a command list created with
 ///       ::XE_COMMAND_LIST_FLAG_COPY_ONLY.
-///     - This function may **not** be called from simultaneous threads.
+///     - This function may **not** be called from simultaneous threads with the
+///       same command list handle.
 ///     - The implementation of this function should be lock-free.
 /// 
 /// @remarks
@@ -582,7 +591,8 @@ xeCommandListAppendLaunchFunction(
 ///       completed on the device.
 ///     - This may **not** be called for a command list created with
 ///       ::XE_COMMAND_LIST_FLAG_COPY_ONLY.
-///     - This function may **not** be called from simultaneous threads.
+///     - This function may **not** be called from simultaneous threads with the
+///       same command list handle.
 ///     - The implementation of this function should be lock-free.
 /// 
 /// @remarks
@@ -618,7 +628,8 @@ xeCommandListAppendLaunchFunctionIndirect(
 ///       function has completed on the device.
 ///     - This may **not** be called for a command list created with
 ///       ::XE_COMMAND_LIST_FLAG_COPY_ONLY.
-///     - This function may **not** be called from simultaneous threads.
+///     - This function may **not** be called from simultaneous threads with the
+///       same command list handle.
 ///     - The implementation of this function should be lock-free.
 /// 
 /// @remarks
@@ -654,7 +665,7 @@ xeCommandListAppendLaunchMultipleFunctionsIndirect(
 ///        ::xeCommandListAppendLaunchHostFunction
 /// 
 /// @details
-///     - This function may be called from simultaneous threads.
+///     - The application may call this function from simultaneous threads.
 ///     - The implementation of this function should be lock-free.
 typedef void(__xecall *xe_host_pfn_t)(
   void* pUserData                                 ///< [in] Pointer to user data to pass to host function.
@@ -667,7 +678,8 @@ typedef void(__xecall *xe_host_pfn_t)(
 /// @details
 ///     - This may **not** be called for a command list created with
 ///       ::XE_COMMAND_LIST_FLAG_COPY_ONLY.
-///     - This function may **not** be called from simultaneous threads.
+///     - This function may **not** be called from simultaneous threads with the
+///       same command list handle.
 ///     - The implementation of this function should be lock-free.
 /// 
 /// @remarks

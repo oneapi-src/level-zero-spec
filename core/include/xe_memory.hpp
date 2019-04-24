@@ -143,6 +143,8 @@ namespace xe
     ///       currently referencing the memory before it is freed
     ///     - The implementation of this function will immediately free all Host and
     ///       Device allocations associated with this memory
+    ///     - The application may **not** call this function from simultaneous
+    ///       threads with the same pointer.
     /// 
     /// @remarks
     ///   _Analogues_
@@ -284,7 +286,8 @@ namespace xe
     /// @details
     ///     - Closes an IPC memory handle by unmapping memory that was opened in
     ///       this process using ::IpcOpenMemHandle.
-    ///     - The application may call this function from simultaneous threads.
+    ///     - The application may **not** call this function from simultaneous
+    ///       threads with the same pointer.
     /// 
     /// @remarks
     ///   _Analogues_

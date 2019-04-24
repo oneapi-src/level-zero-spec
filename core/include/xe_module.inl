@@ -42,7 +42,7 @@ namespace xe
     /// @brief C++ wrapper for ::xeModuleCreate
     /// 
     /// @details
-    ///     - This function may be called from simultaneous threads.
+    ///     - The application may call this function from simultaneous threads.
     ///     - The implementation of this function should be lock-free.
     ///     - This function will create and compile the module object.
     ///     - A build log can optionally be returned to the caller. Caller is
@@ -83,9 +83,11 @@ namespace xe
     /// 
     /// @details
     ///     - The application is responsible for making sure the GPU is not
-    ///       currently referencing the event before it is deleted
+    ///       currently referencing the module before it is deleted
     ///     - The implementation of this function will immediately free all Host and
     ///       Device allocations associated with this module
+    ///     - The application may **not** call this function from simultaneous
+    ///       threads with the same module handle.
     ///     - The implementation of this function should be lock-free.
     /// 
     /// @remarks
@@ -106,7 +108,7 @@ namespace xe
     /// @brief C++ wrapper for ::xeModuleGetNativeBinary
     /// 
     /// @details
-    ///     - This function may be called from simultaneous threads.
+    ///     - The application may call this function from simultaneous threads.
     ///     - The implementation of this function should be lock-free.
     ///     - The caller can pass nullptr for pModuleNativeBinary when querying only
     ///       for size.
@@ -133,7 +135,7 @@ namespace xe
     /// @brief C++ wrapper for ::xeModuleGetGlobalPointer
     /// 
     /// @details
-    ///     - This function may be called from simultaneous threads.
+    ///     - The application may call this function from simultaneous threads.
     ///     - The implementation of this function should be lock-free.
     /// 
     /// @returns
@@ -153,7 +155,7 @@ namespace xe
     /// @brief C++ wrapper for ::xeModuleGetFunctionPointer
     /// 
     /// @details
-    ///     - This function may be called from simultaneous threads.
+    ///     - The application may call this function from simultaneous threads.
     ///     - The implementation of this function should be lock-free.
     ///     - Function pointer is no longer valid if Module is destroyed.
     /// 
@@ -174,7 +176,7 @@ namespace xe
     /// @brief C++ wrapper for ::xeFunctionCreate
     /// 
     /// @details
-    ///     - This function may be called from simultaneous threads.
+    ///     - The application may call this function from simultaneous threads.
     ///     - The implementation of this function should be lock-free.
     ///     - Function objects should be destroyed before the Module is destroyed.
     /// 
@@ -201,9 +203,11 @@ namespace xe
     /// 
     /// @details
     ///     - The application is responsible for making sure the GPU is not
-    ///       currently referencing the event before it is deleted
+    ///       currently referencing the function before it is deleted
     ///     - The implementation of this function will immediately free all Host and
     ///       Device allocations associated with this function
+    ///     - The application may **not** call this function from simultaneous
+    ///       threads with the same function handle.
     ///     - The implementation of this function should be lock-free.
     /// 
     /// @throws result_t
@@ -242,7 +246,7 @@ namespace xe
     /// @brief C++ wrapper for ::xeFunctionSuggestGroupSize
     /// 
     /// @details
-    ///     - This function may be called from simultaneous threads.
+    ///     - The application may call this function from simultaneous threads.
     ///     - The implementation of this function should be lock-free.
     ///     - This function ignores the group size that is set using
     ///       ::FunctionSetGroupSize.
@@ -268,7 +272,8 @@ namespace xe
     /// @brief C++ wrapper for ::xeFunctionSetArgumentValue
     /// 
     /// @details
-    ///     - This function may **not** be called from simultaneous threads.
+    ///     - This function may **not** be called from simultaneous threads with the
+    ///       same function handle.
     ///     - The implementation of this function should be lock-free.
     /// 
     /// @throws result_t
@@ -288,7 +293,8 @@ namespace xe
     /// @brief C++ wrapper for ::xeFunctionSetAttribute
     /// 
     /// @details
-    ///     - This function may **not** be called from simultaneous threads.
+    ///     - This function may **not** be called from simultaneous threads with the
+    ///       same function handle.
     ///     - The implementation of this function should be lock-free.
     /// 
     /// @remarks
@@ -310,7 +316,7 @@ namespace xe
     /// @brief C++ wrapper for ::xeFunctionGetAttribute
     /// 
     /// @details
-    ///     - This function may be called from simultaneous threads.
+    ///     - The application may call this function from simultaneous threads.
     ///     - The implementation of this function should be lock-free.
     /// 
     /// @remarks

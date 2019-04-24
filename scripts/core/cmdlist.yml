@@ -49,7 +49,7 @@ name: Create
 decl: static
 details:
     - "The command list is created in the 'open' state."
-    - "This function may be called from simultaneous threads."
+    - "The application may call this function from simultaneous threads."
     - "The implementation of this function should be lock-free."
 params:
     - type: $x_device_handle_t
@@ -72,7 +72,7 @@ name: CreateImmediate
 decl: static
 details:
     - "The command list is created in the 'open' state and never needs to be closed."
-    - "This function may **not** be called from simultaneous threads."
+    - "The application may call this function from simultaneous threads."
     - "The implementation of this function should be lock-free."
 params:
     - type: $x_device_handle_t
@@ -96,6 +96,7 @@ decl: static
 details:
     - "The application is responsible for making sure the GPU is not currently referencing the command list before it is deleted"
     - "The implementation of this function will immediately free all Host and Device allocations associated with this command list."
+    - "The application may **not** call this function from simultaneous threads with the same command list handle."
     - "The implementation of this function should be lock-free."
 params:
     - type: $x_command_list_handle_t
@@ -171,7 +172,7 @@ analogue:
     - cuCtxGetSharedMemConfig
     - cuCtxGetStreamPriorityRange
 details:
-    - "The application may **not** call this function from simultaneous threads with the same command list handle."
+    - "The application may call this function from simultaneous threads."
     - "The implementation of this function should be lock-free."
 params:
     - type: $x_command_list_handle_t

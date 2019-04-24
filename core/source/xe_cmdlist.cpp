@@ -46,7 +46,7 @@
 /// 
 /// @details
 ///     - The command list is created in the 'open' state.
-///     - This function may be called from simultaneous threads.
+///     - The application may call this function from simultaneous threads.
 ///     - The implementation of this function should be lock-free.
 /// 
 /// @returns
@@ -112,7 +112,7 @@ xeCommandListCreate(
 /// @details
 ///     - The command list is created in the 'open' state and never needs to be
 ///       closed.
-///     - This function may **not** be called from simultaneous threads.
+///     - The application may call this function from simultaneous threads.
 ///     - The implementation of this function should be lock-free.
 /// 
 /// @returns
@@ -179,6 +179,8 @@ xeCommandListCreateImmediate(
 ///       currently referencing the command list before it is deleted
 ///     - The implementation of this function will immediately free all Host and
 ///       Device allocations associated with this command list.
+///     - The application may **not** call this function from simultaneous
+///       threads with the same command list handle.
 ///     - The implementation of this function should be lock-free.
 /// 
 /// @returns
@@ -406,8 +408,7 @@ xeCommandListSetParameter(
 /// @brief Retrieves a command list's parameter.
 /// 
 /// @details
-///     - The application may **not** call this function from simultaneous
-///       threads with the same command list handle.
+///     - The application may call this function from simultaneous threads.
 ///     - The implementation of this function should be lock-free.
 /// 
 /// @remarks

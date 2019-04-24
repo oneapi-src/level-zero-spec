@@ -55,7 +55,7 @@ decl: static
 analogue:
     - "**cuModuleLoad**"
 details:
-    - "This function may be called from simultaneous threads."
+    - "The application may call this function from simultaneous threads."
     - "The implementation of this function should be lock-free."
     - "This function will create and compile the module object."
     - "A build log can optionally be returned to the caller. Caller is responsible for destroying build log using $xModuleBuildLogDestroy"
@@ -99,8 +99,9 @@ decl: static
 analogue:
     - "**cuModuleUnload**"
 details:
-    - "The application is responsible for making sure the GPU is not currently referencing the event before it is deleted"
+    - "The application is responsible for making sure the GPU is not currently referencing the module before it is deleted"
     - "The implementation of this function will immediately free all Host and Device allocations associated with this module"
+    - "The application may **not** call this function from simultaneous threads with the same module handle."
     - "The implementation of this function should be lock-free."
 params:
     - type: "$x_module_handle_t"
@@ -113,8 +114,9 @@ class: $xModuleBuildLog
 name: Destroy
 decl: static
 details:
-    - "The application is responsible for making sure the GPU is not currently referencing the event before it is deleted"
+    - "The application is responsible for making sure the GPU is not currently referencing the build log before it is deleted"
     - "The implementation of this function will immediately free all Host and Device allocations associated with this object"
+    - "The application may **not** call this function from simultaneous threads with the same build log handle."
     - "The implementation of this function should be lock-free."
     - "This function can be called before or after $xModuleDestroy for the associated module."
 params:
@@ -127,7 +129,7 @@ desc: "Retrieves text string for build log."
 class: $xModuleBuildLog
 name: GetString
 details:
-    - "This function may be called from simultaneous threads."
+    - "The application may call this function from simultaneous threads."
     - "The implementation of this function should be lock-free."
     - "The caller must provide memory for build log."
     - "The caller can pass nullptr for pBuildLog when querying only for size."
@@ -150,7 +152,7 @@ desc: "Retrieve native binary from Module."
 class: $xModule
 name: GetNativeBinary
 details:
-    - "This function may be called from simultaneous threads."
+    - "The application may call this function from simultaneous threads."
     - "The implementation of this function should be lock-free."
     - "The caller can pass nullptr for pModuleNativeBinary when querying only for size."
     - "The implementation will copy the native binary into a buffer supplied by the caller."
@@ -178,7 +180,7 @@ desc: "Retrieve global variable pointer from Module."
 class: $xModule
 name: GetGlobalPointer
 details:
-    - "This function may be called from simultaneous threads."
+    - "The application may call this function from simultaneous threads."
     - "The implementation of this function should be lock-free."
 params:
     - type: $x_module_handle_t
@@ -241,7 +243,7 @@ decl: static
 analogue:
     - "**cuModuleGetFunction**"
 details:
-    - "This function may be called from simultaneous threads."
+    - "The application may call this function from simultaneous threads."
     - "The implementation of this function should be lock-free."
     - "Function objects should be destroyed before the Module is destroyed."
 params:
@@ -265,8 +267,9 @@ class: $xFunction
 name: Destroy
 decl: static
 details:
-    - "The application is responsible for making sure the GPU is not currently referencing the event before it is deleted"
+    - "The application is responsible for making sure the GPU is not currently referencing the function before it is deleted"
     - "The implementation of this function will immediately free all Host and Device allocations associated with this function"
+    - "The application may **not** call this function from simultaneous threads with the same function handle."
     - "The implementation of this function should be lock-free."
 params:
     - type: "$x_function_handle_t"
@@ -278,7 +281,7 @@ desc: "Retrieve function pointer from Module by name"
 class: $xModule
 name: GetFunctionPointer
 details:
-    - "This function may be called from simultaneous threads."
+    - "The application may call this function from simultaneous threads."
     - "The implementation of this function should be lock-free."
     - "Function pointer is no longer valid if Module is destroyed."
 params:
@@ -322,7 +325,7 @@ desc: "Query a suggested group size for function given a global size for each di
 class: $xFunction
 name: SuggestGroupSize
 details:
-    - "This function may be called from simultaneous threads."
+    - "The application may call this function from simultaneous threads."
     - "The implementation of this function should be lock-free."
     - "This function ignores the group size that is set using $xFunctionSetGroupSize."
 params:
@@ -356,7 +359,7 @@ desc: "Set function argument used on function launch."
 class: $xFunction
 name: SetArgumentValue
 details:
-    - "This function may **not** be called from simultaneous threads."
+    - "This function may **not** be called from simultaneous threads with the same function handle."
     - "The implementation of this function should be lock-free."
 params:
     - type: "$x_function_handle_t"
@@ -398,7 +401,7 @@ name: SetAttribute
 analogue:
     - "**clSetKernelExecInfo**"
 details:
-    - "This function may **not** be called from simultaneous threads."
+    - "This function may **not** be called from simultaneous threads with the same function handle."
     - "The implementation of this function should be lock-free."
 params:
     - type: "$x_function_handle_t"
@@ -443,7 +446,7 @@ name: GetAttribute
 analogue:
     - "**cuFuncGetAttribute**"
 details:
-    - "This function may be called from simultaneous threads."
+    - "The application may call this function from simultaneous threads."
     - "The implementation of this function should be lock-free."
 params:
     - type: "$x_function_handle_t"
@@ -485,7 +488,7 @@ analogue:
     - "**cuLaunchKernel**"
 details:
     - "This may **not** be called for a command list created with $X_COMMAND_LIST_FLAG_COPY_ONLY."
-    - "This function may **not** be called from simultaneous threads."
+    - "This function may **not** be called from simultaneous threads with the same command list handle."
     - "The implementation of this function should be lock-free."
 params:
     - type: "$x_command_list_handle_t"
@@ -517,7 +520,7 @@ details:
     - "The launch arguments need to be device visible."
     - "The launch arguments buffer may not be reusued until the function has completed on the device."
     - "This may **not** be called for a command list created with $X_COMMAND_LIST_FLAG_COPY_ONLY."
-    - "This function may **not** be called from simultaneous threads."
+    - "This function may **not** be called from simultaneous threads with the same command list handle."
     - "The implementation of this function should be lock-free."
 params:
     - type: "$x_command_list_handle_t"
@@ -549,7 +552,7 @@ details:
     - "The array of launch arguments need to be device visible."
     - "The array of launch arguments buffer may not be reusued until the function has completed on the device."
     - "This may **not** be called for a command list created with $X_COMMAND_LIST_FLAG_COPY_ONLY."
-    - "This function may **not** be called from simultaneous threads."
+    - "This function may **not** be called from simultaneous threads with the same command list handle."
     - "The implementation of this function should be lock-free."
 params:
     - type: "$x_command_list_handle_t"
@@ -583,7 +586,7 @@ class: $xCommandList
 name: $x_host_pfn_t
 returns: void
 details:
-    - "This function may be called from simultaneous threads."
+    - "The application may call this function from simultaneous threads."
     - "The implementation of this function should be lock-free."
 params:
     - type: "void*"
@@ -598,7 +601,7 @@ analogue:
     - "**cuLaunchHostFunc**"
 details:
     - "This may **not** be called for a command list created with $X_COMMAND_LIST_FLAG_COPY_ONLY."
-    - "This function may **not** be called from simultaneous threads."
+    - "This function may **not** be called from simultaneous threads with the same command list handle."
     - "The implementation of this function should be lock-free."
 params:
     - type: "$x_command_list_handle_t"

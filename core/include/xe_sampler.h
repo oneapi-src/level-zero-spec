@@ -85,7 +85,7 @@ typedef struct _xe_sampler_desc_t
 /// @brief Creates sampler object.
 /// 
 /// @details
-///     - This function may be called from simultaneous threads.
+///     - The application may call this function from simultaneous threads.
 ///     - The implementation of this function should be lock-free.
 /// 
 /// @remarks
@@ -117,9 +117,11 @@ xeSamplerCreate(
 /// 
 /// @details
 ///     - The application is responsible for making sure the GPU is not
-///       currently referencing the event before it is deleted
+///       currently referencing the sampler before it is deleted
 ///     - The implementation of this function will immediately free all Host and
 ///       Device allocations associated with this module
+///     - The application may **not** call this function from simultaneous
+///       threads with the same sampler handle.
 ///     - The implementation of this function should be lock-free.
 /// 
 /// @remarks

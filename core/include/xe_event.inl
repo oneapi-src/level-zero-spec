@@ -42,7 +42,7 @@ namespace xe
     /// @brief C++ wrapper for ::xeEventPoolCreate
     /// 
     /// @details
-    ///     - This function may be called from simultaneous threads.
+    ///     - The application may call this function from simultaneous threads.
     ///     - The implementation of this function should be lock-free.
     /// 
     /// @returns
@@ -70,6 +70,8 @@ namespace xe
     ///       deleted
     ///     - The implementation of this function will immediately free all Host and
     ///       Device allocations associated with this event pool
+    ///     - The application may **not** call this function from simultaneous
+    ///       threads with the same event pool handle.
     ///     - The implementation of this function should be lock-free.
     /// 
     /// @throws result_t
@@ -137,7 +139,8 @@ namespace xe
     /// @details
     ///     - Closes an IPC event handle by destroying events that were opened in
     ///       this process using ::EventPoolOpenIpcHandle.
-    ///     - The application may call this function from simultaneous threads.
+    ///     - The application may **not** call this function from simultaneous
+    ///       threads with the same event pool handle.
     /// 
     /// @remarks
     ///   _Analogues_
@@ -160,7 +163,7 @@ namespace xe
     ///     - Multiple events cannot be created using the same index from the same
     ///       pool
     ///     - The index must be less-than the count specified during pool creation
-    ///     - This function may be called from simultaneous threads.
+    ///     - The application may call this function from simultaneous threads.
     ///     - The implementation of this function should be lock-free.
     /// 
     /// @remarks
@@ -191,6 +194,8 @@ namespace xe
     ///       currently referencing the event before it is deleted
     ///     - The implementation of this function will immediately free all Host and
     ///       Device allocations associated with this event
+    ///     - The application may **not** call this function from simultaneous
+    ///       threads with the same event handle.
     ///     - The implementation of this function should be lock-free.
     /// 
     /// @remarks

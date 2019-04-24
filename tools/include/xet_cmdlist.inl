@@ -42,8 +42,8 @@ namespace xet
     /// @brief C++ wrapper for ::xetCommandListAppendMetricTracerMarker
     /// 
     /// @details
-    ///     - The application may not call this function from simultaneous threads
-    ///       with the same device handle.
+    ///     - The application may **not** call this function from simultaneous
+    ///       threads with the same command list handle.
     /// 
     /// @throws result_t
     inline void 
@@ -60,8 +60,8 @@ namespace xet
     /// @brief C++ wrapper for ::xetCommandListAppendMetricQueryBegin
     /// 
     /// @details
-    ///     - The application may call this function from simultaneous threads with
-    ///       the same device handle.
+    ///     - The application may **not** call this function from simultaneous
+    ///       threads with the same command list handle.
     /// 
     /// @throws result_t
     inline void 
@@ -77,8 +77,8 @@ namespace xet
     /// @brief C++ wrapper for ::xetCommandListAppendMetricQueryEnd
     /// 
     /// @details
-    ///     - The application may call this function from simultaneous threads with
-    ///       the same device handle.
+    ///     - The application may **not** call this function from simultaneous
+    ///       threads with the same command list handle.
     /// 
     /// @throws result_t
     inline void 
@@ -95,8 +95,8 @@ namespace xet
     /// @brief C++ wrapper for ::xetCommandListAppendMetricMemoryBarrier
     /// 
     /// @details
-    ///     - The application may call this function from simultaneous threads with
-    ///       the same device handle.
+    ///     - The application may **not** call this function from simultaneous
+    ///       threads with the same command list handle.
     /// 
     /// @throws result_t
     inline void 

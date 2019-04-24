@@ -58,8 +58,7 @@ namespace xet
     /// @brief C++ wrapper for ::xetMetricGroupGet
     /// 
     /// @details
-    ///     - The application may call this function from simultaneous threads with
-    ///       the same device handle.
+    ///     - The application may call this function from simultaneous threads.
     /// 
     /// @returns
     ///     - ::metric_group_handle_t: metric group handle
@@ -79,8 +78,7 @@ namespace xet
     /// @brief C++ wrapper for ::xetMetricGroupGetProperties
     /// 
     /// @details
-    ///     - The application may call this function from simultaneous threads with
-    ///       the same metric group handle.
+    ///     - The application may call this function from simultaneous threads.
     /// 
     /// @returns
     ///     - ::metric_group_properties_t: metric group properties
@@ -99,8 +97,8 @@ namespace xet
     /// @brief C++ wrapper for ::xetMetricGroupCalculateData
     /// 
     /// @details
-    ///     - The application may not call this function from simultaneous threads
-    ///       with the same metric group handle.
+    ///     - The application may **not** call this function from simultaneous
+    ///       threads wth the same metric group handle.
     /// 
     /// @throws result_t
     inline void 
@@ -120,8 +118,7 @@ namespace xet
     /// @brief C++ wrapper for ::xetMetricGet
     /// 
     /// @details
-    ///     - The application may call this function from simultaneous threads with
-    ///       the same metric group handle.
+    ///     - The application may call this function from simultaneous threads.
     /// 
     /// @returns
     ///     - ::metric_handle_t: handle of metric
@@ -141,8 +138,7 @@ namespace xet
     /// @brief C++ wrapper for ::xetMetricGetProperties
     /// 
     /// @details
-    ///     - The application may call this function from simultaneous threads with
-    ///       the same metric group handle.
+    ///     - The application may call this function from simultaneous threads.
     /// 
     /// @returns
     ///     - ::metric_properties_t: metric properties
@@ -161,8 +157,8 @@ namespace xet
     /// @brief C++ wrapper for ::xetMetricTracerOpen
     /// 
     /// @details
-    ///     - The application may not call this function from simultaneous threads
-    ///       with the same device handle.
+    ///     - The application may **not** call this function from simultaneous
+    ///       threads with the same device handle.
     /// 
     /// @returns
     ///     - ::metric_tracer_handle_t: handle of metric tracer
@@ -184,8 +180,8 @@ namespace xet
     /// @brief C++ wrapper for ::xetMetricTracerClose
     /// 
     /// @details
-    ///     - The application may not call this function from simultaneous threads
-    ///       with the same device handle.
+    ///     - The application may **not** call this function from simultaneous
+    ///       threads with the same metric tracer handle.
     /// 
     /// @throws result_t
     inline void 
@@ -201,8 +197,7 @@ namespace xet
     /// @brief C++ wrapper for ::xetMetricTracerReadData
     /// 
     /// @details
-    ///     - The application may not call this function from simultaneous threads
-    ///       with the same device handle.
+    ///     - The application may call this function from simultaneous threads.
     /// 
     /// @throws result_t
     inline void 
@@ -220,8 +215,7 @@ namespace xet
     /// @brief C++ wrapper for ::xetMetricQueryPoolCreate
     /// 
     /// @details
-    ///     - The application may call this function from simultaneous threads with
-    ///       the same device handle.
+    ///     - The application may call this function from simultaneous threads.
     /// 
     /// @returns
     ///     - ::metric_query_pool_handle_t: handle of metric query pool
@@ -241,8 +235,8 @@ namespace xet
     /// @brief C++ wrapper for ::xetMetricQueryPoolDestroy
     /// 
     /// @details
-    ///     - The application may call this function from simultaneous threads with
-    ///       the same device handle.
+    ///     - The application may **not** call this function from simultaneous
+    ///       threads with the same query pool handle.
     /// 
     /// @throws result_t
     inline void 
@@ -258,8 +252,7 @@ namespace xet
     /// @brief C++ wrapper for ::xetMetricQueryPoolGetMetricQuery
     /// 
     /// @details
-    ///     - The application may call this function from simultaneous threads with
-    ///       the same device handle.
+    ///     - The application may call this function from simultaneous threads.
     /// 
     /// @returns
     ///     - ::metric_query_handle_t: handle of metric query
@@ -278,8 +271,7 @@ namespace xet
     /// @brief C++ wrapper for ::xetMetricQueryGetData
     /// 
     /// @details
-    ///     - The application may not call this function from simultaneous threads
-    ///       with the same device handle.
+    ///     - The application may call this function from simultaneous threads.
     /// 
     /// @throws result_t
     inline void 
