@@ -8,13 +8,26 @@ NOTE: This is a **PRELIMINARY** specification, provided for review and feedback.
 
 ## Table of Contents
 * [Driver and Device](#dnd)
-* [Command Queues and Command Lists](#cnc)
-* [Synchronization Primitives](#sp)
-* [Barriers](#brr)
 * [Memory and Image Management](#mim)
+    + [Memory](#mem)
+    + [Images](#img)
+    + [Device Residency](#res)
+* [Command Queues and Command Lists](#cnc)
+    + [Command Queue](#cq)
+    + [Command List](#cl)
+* [Synchronization Primitives](#sp)
+    + [Fences](#fnc)
+    + [Events](#evnt)
+* [Barriers](#brr)
 * [Modules and Functions](#mnf)
-* [OpenCL Interoperability](#oi)
-* [Inter-Process Communication](#ipc)
+    + [Modules](#mod)
+    + [Functions](#func)
+    + [Execution](#exe)
+    + [Sampler](#smp)
+* [Advanced](#adv)
+    + [Sub-Device Support](#sd)
+    + [OpenCL Interoperability](#oi)
+    + [Inter-Process Communication](#ipc)
 * [Experimental](#exp)
 
 # <a name="dnd">Driver and Device</a>
@@ -75,68 +88,191 @@ The following sample code demonstrates a basic initialization sequence:
 
 ```
 
-## Sub-Device Support
-A multi-tile device consists of tiles that are tied together by high-speed interconnects. Each tile
-has local memory that is shared to other tiles through these interconnects. The API represents tiles
-as sub-devices and there are functions to query and obtain a sub-device. Outside of these functions
-there are no distinction between sub-devices and devices. 
+# <a name="mim">Memory and Image Management</a>
+There are two types of allocations:
+1. [**Memory**](#mem) - linear, unformatted allocations for direct access from both the host and device.
+2. [**Images**](#img) - non-linear, formatted allocations for direct access from the device.
 
-![Subdevice](../images/core_subdevice.png?raw=true)  
-@image latex core_subdevice.png
+## <a name="mem">Memory</a>
+Linear, unformatted memory allocations are represented as pointers in the host application.
+A pointer on the host has the same size as a pointer on the device.
 
-Query device properties using ::xeDeviceGetProperties to confirm subdevices are supported with
-::xe_device_properties_t.numSubDevices. Use ::xeDeviceGetSubDevice to obtain a sub-device handle.
-There are additional device properties in ::xe_device_properties_t for sub-devices to confirm a
-device is a sub-device and to query the id. This is useful when needing to pass a sub-device
-handle to another library.
+### Types
+Three types of allocations are supported.
+The type of allocation describes the _ownership_ of the allocation:
+1. **Host** allocations are owned by the host and are intended to be allocated out of system memory.
+  Host allocations are accessible by the host and one or more devices.
+  The same pointer to a host allocation may be used on the host and all supported devices; they have _address equivalence_.
+  Host allocations are not expected to migrate between system memory and device local memory.
+  Host allocations trade off wide accessibility and transfer benefits for potentially higher per-access costs, such as over PCI express.
+2. **Device** allocations are owned by a specific device and are intended to be allocated out of device local memory, if present.
+  Device allocations generally trade off access limitations for higher performance.
+  With very few exceptions, device allocations may only be accessed by the specific device that they are allocated on, or copied to a host or another device allocation.
+  The same pointer to a device allocation may be used on any supported device.
+3. **Shared** allocations share ownership and are intended to migrate between the host and one or more devices.
+  Shared allocations are accessible by at least the host and an associated device.
+  Shared allocations may be accessed by other devices in some cases.
+  Shared allocations trade off transfer costs for per-access benefits.
+  The same pointer to a shared allocation may be used on the host and all supported devices.
 
-To allocate memory and dispatch tasks to a particular sub-device then obtain the sub-device
-handle and use this with memory and command queue/lists APIs. Local memory allocation will be placed
-in the local memory that is attached to the sub-device. An out-of-memory error indicates
-that there is not enough local sub-device memory for the allocation. The driver will not try and spill
-sub-device allocations over to another sub-device's local memory. However, the application can retry using the
-parent device and the driver will decide where to place the allocation.
+A **Shared System** allocation is a sub-class of a **Shared** allocation, where the memory is allocated by a _system allocator_ - such as `malloc` or `new` - rather than by a driver allocation API.
+Shared system allocations have no associated device - they are inherently cross-device.
+Like other shared allocations, shared system allocations are intended to migrate between the host and supported devices, and the same pointer to a shared system allocation may be used on the host and all supported devices.
 
-One thing to note is that the ordinal
-that is used when creating a command queue is relative to the sub-device. This ordinal specifies which
-physical compute queue on the device or sub-device to map the logical queue to. You need to query
-::xe_device_properties_t.numAsyncComputeEngines from the sub-device to determine how to set this ordinal.
-See ::xe_command_queue_desc_t for more details.
+In summary:
+| Name              | Initial Location                      | Accessible By     |                               | Migratable To     |           |
+| :--:              | :--:                                  | :--:              | :--:                          | :--:              | :--:      |
+| **Host**          | Host                                  | Host              | Yes                           | Host              | N/A       |
+| ^                 | ^                                     | Any Device        | Yes (perhaps over PCIe)       | Device            | No        |
+| **Device**        | Specific Device                       | Host              | No                            | Host              | No        |
+| ^                 | ^                                     | Specific Device   | Yes                           | Device            | N/A       |
+| ^                 | ^                                     | Another Device    | Optional (may require p2p)    | Another Device    | No        |
+| **Shared**        | Host, Specific Device, Or Unspecified | Host              | Yes                           | Host              | Yes       |
+| ^                 | ^                                     | Specific Device   | Yes                           | Device            | Yes       |
+| ^                 | ^                                     | Another Device    | Optional (may require p2p)    | Another Device    | Optional  |
+| **Shared System** | Host                                  | Host              | Yes                           | Host              | Yes       |
+| ^                 | ^                                     | Device            | Yes                           | Device            | Yes       |
+
+Devices may support different capabilities for each type of allocation.
+Supported capabilities are:
+* ::XE_MEMORY_ACCESS - if a device supports access (read or write) to allocations of the specified type.
+* ::XE_MEMORY_ATOMIC_ACCESS - if a device support atomic access to allocations of the specified type.
+* ::XE_MEMORY_CONCURRENT_ACCESS - if a device supports concurrent access to allocations of the specified type, or another device's allocation of the specified type.
+* ::XE_MEMORY_CONCURRENT_ATOMIC_ACCESS - if a device supports concurrent atomic access to allocations of the specified type, or another device's allocations of the specified type.
+
+Some devices may _oversubscribe_ some **shared** allocations.
+When and how such oversubscription occurs, including which allocations are evicted when the working set changes, are considered implementation details.
+
+The required matrix of capabilities are:
+| Allocation Type                  | Access   | Atomic Access | Concurrent Access | Concurrent Atomic Access |
+| :--:                             | :--:     | :--:          | :--:              | :--:                     |
+| **Host**                         | Required | Optional      | Optional          | Optional                 |
+| **Device**                       | Required | Optional      | Optional          | Optional                 |
+| **Shared**                       | Required | Optional      | Optional          | Optional                 |
+| **Shared** (Cross-Device)        | Optional | Optional      | Optional          | Optional                 |
+| **Shared System** (Cross-Device) | Optional | Optional      | Optional          | Optional                 |
+
+### Cache Hints, Prefetch, and Memory Advice
+Cacheability hints may be provided via separate host and device allocation flags when memory is allocated.
+
+**Shared** allocations may be prefetched to a supporting device via the ::xeCommandListAppendMemoryPrefetch API.
+Prefetching may allow memory transfers to be scheduled concurrently with other computations and may improve performance.
+
+Additionally, an application may provide memory advice for a **shared** allocation via the ::xeCommandListAppendMemAdvise API, to override driver heuristics or migration policies.
+Memory advice may avoid unnecessary or unprofitable memory transfers and may improve performance.
+
+Both prefetch and memory advice are asynchronous operations that are appended into command lists.
+
+## <a name="img">Images</a>
+An image is used to store multi-dimensional and format-defined memory for optimal device access.
+An image's contents can be copied to and from other images, as well as host-accessable memory allocations.
+This is the only method for host access to the contents of an image.
+This methodology allows for device-specific encoding of image contents (e.g., tile swizzle patterns, loseless compression, etc.) 
+and avoids exposing these details in the API in a backwards compatible fashion.
 
 ```c
-    ...
-    xeDeviceGetProperties(device, &deviceProps);
-    ...
+    // Specify single component FLOAT32 format
+    xe_image_format_desc_t formatDesc = {
+        XE_IMAGE_FORMAT_LAYOUT_32, XE_IMAGE_FORMAT_TYPE_FLOAT,
+        XE_IMAGE_FORMAT_SWIZZLE_R, XE_IMAGE_FORMAT_SWIZZLE_0, XE_IMAGE_FORMAT_SWIZZLE_0, XE_IMAGE_FORMAT_SWIZZLE_1
+    };
 
-    // Code assumes a specific device configuration.
-    assert(deviceProps.numSubDevices == 4);
+    xe_image_desc_t imageDesc = {
+        XE_IMAGE_DESC_VERSION_CURRENT,
+        XE_IMAGE_FLAG_PROGRAM_READ,
+        XE_IMAGE_TYPE_2D,
+        formatDesc,
+        128, 128, 0, 0, 0
+    };
+    xe_image_handle_t hImage;
+    xeImageCreate(hDevice, &imageDesc, &hImage);
 
-    // Desire is to allocate and dispatch work to sub-device 2.
-    uint32_t subdeviceId = 2;
-    xeDeviceGetSubDevice(device, subdeviceId, &subdevice);
-
-    // Query sub-device properties.
-    xe_device_properties_t subdeviceProps;
-    xeDeviceGetProperties(subdevice, &subdeviceProps);
-
-    assert(subdeviceProps.isSubdevice == true); // Ensure that we have a handle to a sub-device.
-    assert(subdeviceProps.subdeviceId == 2);    // Ensure that we have a handle to the sub-device we asked for.
-
-    void* pMemForSubDevice2;
-    xeMemAlloc(subDevice, XE_DEVICE_MEM_ALLOC_FLAG_DEFAULT, memSize, sizeof(uint32_t), &pMemForSubDevice2);
-    ...
-
-    ...
-    // Check that cmd queue ordinal that was chosen is valid.
-    assert(desc.ordinal < subdeviceProps.numAsyncComputeEngines);
-
-    xe_command_queue_handle_t commandQueueForSubDevice2;
-    xeCommandQueueCreate(subdevice, desc, &commandQueueForSubDevice2);
+    // upload contents from host pointer
+    xeCommandListAppendImageCopyFromMemory(hCommandList, hImage, nullptr, pImageData, nullptr, 0, nullptr);
     ...
 ```
 
-## Device Unique Identifier
-The 16 byte unique device identifier (uuid) can be obtained for a device or sub-device using ::xeDeviceGetProperties.
+## Device Cache Settings
+For device support cache control and config, there are two methods for cache control:
+1. Cache Size Configuration: Ability to configure larger size for SLM vs Data globally for Device
+2. Runtime Hint/prefrence for application to allow access to be Cached or not in Device Caches. For GPU device this is provided via two ways  
+      -  During Image creation via Flag
+      -  Kernel instruction 
+
+The following sample code demonstrates a basic sequence for Cache size configuration:
+```c
+    // Large SLM for Intermediate and Last Level cache
+    xeDeviceSetIntermediateCacheConfig(hDevice, XE_CACHE_CONFIG_LARGE_SLM);
+    xeDeviceSetLastLevelCacheConfig(hDevice, XE_CACHE_CONFIG_LARGE_SLM);
+    ...
+```
+The following sample code demonstrates a basic sequence for Runtime Hint/Prefrence for Cache:
+
+## <a name="res">Device Residency</a>
+For devices that do not support page-faults, the driver must ensure that all pages that will be accessed by the kernel are resident before program execution.
+This can be determined by checking ::xe_device_memory_properties_t.onDemandPageFaults.
+
+In most cases, the driver implicitly handles residency of allocations for device access.
+This can be done by inspecting API parameters, including function arguments.
+However, in cases where the devices does **not** support page-faulting _and_ the driver is incapable of determining whether an allocation will be accessed by the device,
+such as multiple levels of indirection, there are two methods available:
+1. the application may set the ::XE_FUNCTION_FLAG_FORCE_RESIDENCY flag during program creation to force all device allocations to be resident during execution.
+ + in addition, the application should indicate the type of allocations that will be indirectly accessed using ::xe_function_set_attribute_t
+ + if the driver is unable to make all allocations resident, then the call to ::xeCommandQueueExecuteCommandLists will return XE_RESULT_ERROR_OUT_OF_DEVICE_MEMORY
+2. explcit ::xeDeviceMakeMemoryResident APIs are included for the application to dynamically change residency as needed. (Windows-only)
+ + if the application over-commits device memory, then a call to ::xeDeviceMakeMemoryResident will return XE_RESULT_ERROR_OUT_OF_DEVICE_MEMORY
+
+If the application does not properly manage residency for these cases then the device may experience unrecoverable page-faults.
+
+The following sample code demonstrate a sequence for using coarse-grain residency control for indirect arguments:
+```c
+    struct node {
+        node* next;
+    };
+    node* begin = nullptr;
+    xeHostMemAlloc(XE_HOST_MEM_ALLOC_FLAG_DEFAULT, sizeof(node), 1, &begin);
+    xeHostMemAlloc(XE_HOST_MEM_ALLOC_FLAG_DEFAULT, sizeof(node), 1, &begin->next);
+    xeHostMemAlloc(XE_HOST_MEM_ALLOC_FLAG_DEFAULT, sizeof(node), 1, &begin->next->next);
+
+    // 'begin' is passed as function argument and appended into command list
+    xeFunctionSetAttribute(hFuncArgs, XE_FUNCTION_SET_ATTR_INDIRECT_HOST_ACCESS, TRUE);
+    xeFunctionSetArgumentValue(hFunction, 0, sizeof(node*), &begin);
+    xeCommandListAppendLaunchFunction(hCommandList, hFunction, &launchArgs, nullptr, 0, nullptr);
+    ...
+
+    xeCommandQueueExecuteCommandLists(hCommandQueue, 1, &hCommandList, nullptr);
+    ...
+```
+
+The following sample code demonstrate a sequence for using fine-grain residency control for indirect arguments:
+```c
+    struct node {
+        node* next;
+    };
+    node* begin = nullptr;
+    xeHostMemAlloc(XE_HOST_MEM_ALLOC_FLAG_DEFAULT, sizeof(node), 1, &begin);
+    xeHostMemAlloc(XE_HOST_MEM_ALLOC_FLAG_DEFAULT, sizeof(node), 1, &begin->next);
+    xeHostMemAlloc(XE_HOST_MEM_ALLOC_FLAG_DEFAULT, sizeof(node), 1, &begin->next->next);
+
+    // 'begin' is passed as function argument and appended into command list
+    xeFunctionSetArgumentValue(hFunction, 0, sizeof(node*), &begin);
+    xeCommandListAppendLaunchFunction(hCommandList, hFunction, &launchArgs, nullptr, 0, nullptr);
+    ...
+
+    // Make indirect allocations resident before enqueuing
+    xeDeviceMakeMemoryResident(hDevice, begin->next, sizeof(node));
+    xeDeviceMakeMemoryResident(hDevice, begin->next->next, sizeof(node));
+
+    xeCommandQueueExecuteCommandLists(hCommandQueue, 1, &hCommandList, hFence);
+
+    // wait until complete
+    xeFenceHostSynchronize(hFence, MAX_UINT32);
+
+    // Finally, evict to free device resources
+    xeDeviceEvictMemory(hDevice, begin->next, sizeof(node));
+    xeDeviceEvictMemory(hDevice, begin->next->next, sizeof(node));
+    ...
+```
 
 # <a name="cnc">Command Queues and Command Lists</a>
 The following are the motivations for seperating a command queue from a command list:
@@ -151,7 +287,7 @@ The following diagram illustrates the hierarchy of command lists and command que
 ![Queue](../images/core_queue.png?raw=true)  
 @image latex core_queue.png
 
-## Command Queues
+## <a name="cq">Command Queues</a>
 A command queue represents a logical input stream to the device, tied to a physical input
 stream via an ordinal at creation time.
 
@@ -204,7 +340,7 @@ The following sample code demonstrates a basic sequence for creation of command 
   typically done by tracking command queue fences, but may also be
   handled by calling ::xeCommandQueueSynchronize.
 
-## Command Lists
+## <a name="cl">Command Lists</a>
 A command list represents a sequence of commands for execution on a command queue.
 
 ### Creation
@@ -493,192 +629,6 @@ The following sample code demonstrates a sequence for submission of a range-base
     ...
 ```
 
-# <a name="mim">Memory and Image Management</a>
-There are two types of allocations:
-1. **Memory** - linear, unformatted allocations for direct access from both the host and device.
-2. **Images** - non-linear, formatted allocations for direct access from the device.
-
-## Memory
-Linear, unformatted memory allocations are represented as pointers in the host application.
-A pointer on the host has the same size as a pointer on the device.
-
-### Types
-Three types of allocations are supported.
-The type of allocation describes the _ownership_ of the allocation:
-1. **Host** allocations are owned by the host and are intended to be allocated out of system memory.
-  Host allocations are accessible by the host and one or more devices.
-  The same pointer to a host allocation may be used on the host and all supported devices; they have _address equivalence_.
-  Host allocations are not expected to migrate between system memory and device local memory.
-  Host allocations trade off wide accessibility and transfer benefits for potentially higher per-access costs, such as over PCI express.
-2. **Device** allocations are owned by a specific device and are intended to be allocated out of device local memory, if present.
-  Device allocations generally trade off access limitations for higher performance.
-  With very few exceptions, device allocations may only be accessed by the specific device that they are allocated on, or copied to a host or another device allocation.
-  The same pointer to a device allocation may be used on any supported device.
-3. **Shared** allocations share ownership and are intended to migrate between the host and one or more devices.
-  Shared allocations are accessible by at least the host and an associated device.
-  Shared allocations may be accessed by other devices in some cases.
-  Shared allocations trade off transfer costs for per-access benefits.
-  The same pointer to a shared allocation may be used on the host and all supported devices.
-
-A **Shared System** allocation is a sub-class of a **Shared** allocation, where the memory is allocated by a _system allocator_ - such as `malloc` or `new` - rather than by a driver allocation API.
-Shared system allocations have no associated device - they are inherently cross-device.
-Like other shared allocations, shared system allocations are intended to migrate between the host and supported devices, and the same pointer to a shared system allocation may be used on the host and all supported devices.
-
-In summary:
-| Name              | Initial Location                      | Accessible By     |                               | Migratable To     |           |
-| :--:              | :--:                                  | :--:              | :--:                          | :--:              | :--:      |
-| **Host**          | Host                                  | Host              | Yes                           | Host              | N/A       |
-| ^                 | ^                                     | Any Device        | Yes (perhaps over PCIe)       | Device            | No        |
-| **Device**        | Specific Device                       | Host              | No                            | Host              | No        |
-| ^                 | ^                                     | Specific Device   | Yes                           | Device            | N/A       |
-| ^                 | ^                                     | Another Device    | Optional (may require p2p)    | Another Device    | No        |
-| **Shared**        | Host, Specific Device, Or Unspecified | Host              | Yes                           | Host              | Yes       |
-| ^                 | ^                                     | Specific Device   | Yes                           | Device            | Yes       |
-| ^                 | ^                                     | Another Device    | Optional (may require p2p)    | Another Device    | Optional  |
-| **Shared System** | Host                                  | Host              | Yes                           | Host              | Yes       |
-| ^                 | ^                                     | Device            | Yes                           | Device            | Yes       |
-
-Devices may support different capabilities for each type of allocation.
-Supported capabilities are:
-* ::XE_MEMORY_ACCESS - if a device supports access (read or write) to allocations of the specified type.
-* ::XE_MEMORY_ATOMIC_ACCESS - if a device support atomic access to allocations of the specified type.
-* ::XE_MEMORY_CONCURRENT_ACCESS - if a device supports concurrent access to allocations of the specified type, or another device's allocation of the specified type.
-* ::XE_MEMORY_CONCURRENT_ATOMIC_ACCESS - if a device supports concurrent atomic access to allocations of the specified type, or another device's allocations of the specified type.
-
-Some devices may _oversubscribe_ some **shared** allocations.
-When and how such oversubscription occurs, including which allocations are evicted when the working set changes, are considered implementation details.
-
-The required matrix of capabilities are:
-| Allocation Type                  | Access   | Atomic Access | Concurrent Access | Concurrent Atomic Access |
-| :--:                             | :--:     | :--:          | :--:              | :--:                     |
-| **Host**                         | Required | Optional      | Optional          | Optional                 |
-| **Device**                       | Required | Optional      | Optional          | Optional                 |
-| **Shared**                       | Required | Optional      | Optional          | Optional                 |
-| **Shared** (Cross-Device)        | Optional | Optional      | Optional          | Optional                 |
-| **Shared System** (Cross-Device) | Optional | Optional      | Optional          | Optional                 |
-
-### Cache Hints, Prefetch, and Memory Advice
-Cacheability hints may be provided via separate host and device allocation flags when memory is allocated.
-
-**Shared** allocations may be prefetched to a supporting device via the ::xeCommandListAppendMemoryPrefetch API.
-Prefetching may allow memory transfers to be scheduled concurrently with other computations and may improve performance.
-
-Additionally, an application may provide memory advice for a **shared** allocation via the ::xeCommandListAppendMemAdvise API, to override driver heuristics or migration policies.
-Memory advice may avoid unnecessary or unprofitable memory transfers and may improve performance.
-
-Both prefetch and memory advice are asynchronous operations that are appended into command lists.
-
-## Images
-An image is used to store multi-dimensional and format-defined memory for optimal device access.
-An image's contents can be copied to and from other images, as well as host-accessable memory allocations.
-This is the only method for host access to the contents of an image.
-This methodology allows for device-specific encoding of image contents (e.g., tile swizzle patterns, loseless compression, etc.) 
-and avoids exposing these details in the API in a backwards compatible fashion.
-
-```c
-    // Specify single component FLOAT32 format
-    xe_image_format_desc_t formatDesc = {
-        XE_IMAGE_FORMAT_LAYOUT_32, XE_IMAGE_FORMAT_TYPE_FLOAT,
-        XE_IMAGE_FORMAT_SWIZZLE_R, XE_IMAGE_FORMAT_SWIZZLE_0, XE_IMAGE_FORMAT_SWIZZLE_0, XE_IMAGE_FORMAT_SWIZZLE_1
-    };
-
-    xe_image_desc_t imageDesc = {
-        XE_IMAGE_DESC_VERSION_CURRENT,
-        XE_IMAGE_FLAG_PROGRAM_READ,
-        XE_IMAGE_TYPE_2D,
-        formatDesc,
-        128, 128, 0, 0, 0
-    };
-    xe_image_handle_t hImage;
-    xeImageCreate(hDevice, &imageDesc, &hImage);
-
-    // upload contents from host pointer
-    xeCommandListAppendImageCopyFromMemory(hCommandList, hImage, nullptr, pImageData, nullptr, 0, nullptr);
-    ...
-```
-
-## Device Cache Settings
-For device support cache control and config, there are two methods for cache control:
-1. Cache Size Configuration: Ability to configure larger size for SLM vs Data globally for Device
-2. Runtime Hint/prefrence for application to allow access to be Cached or not in Device Caches. For GPU device this is provided via two ways  
-      -  During Image creation via Flag
-      -  Kernel instruction 
-
-The following sample code demonstrates a basic sequence for Cache size configuration:
-```c
-    // Large SLM for Intermediate and Last Level cache
-    xeDeviceSetIntermediateCacheConfig(hDevice, XE_CACHE_CONFIG_LARGE_SLM);
-    xeDeviceSetLastLevelCacheConfig(hDevice, XE_CACHE_CONFIG_LARGE_SLM);
-    ...
-```
-The following sample code demonstrates a basic sequence for Runtime Hint/Prefrence for Cache:
-
-## Device Residency
-For devices that do not support page-faults, the driver must ensure that all pages that will be accessed by the kernel are resident before program execution.
-This can be determined by checking ::xe_device_memory_properties_t.onDemandPageFaults.
-
-In most cases, the driver implicitly handles residency of allocations for device access.
-This can be done by inspecting API parameters, including function arguments.
-However, in cases where the devices does **not** support page-faulting _and_ the driver is incapable of determining whether an allocation will be accessed by the device,
-such as multiple levels of indirection, there are two methods available:
-1. the application may set the ::XE_FUNCTION_FLAG_FORCE_RESIDENCY flag during program creation to force all device allocations to be resident during execution.
- + in addition, the application should indicate the type of allocations that will be indirectly accessed using ::xe_function_set_attribute_t
- + if the driver is unable to make all allocations resident, then the call to ::xeCommandQueueExecuteCommandLists will return XE_RESULT_ERROR_OUT_OF_DEVICE_MEMORY
-2. explcit ::xeDeviceMakeMemoryResident APIs are included for the application to dynamically change residency as needed. (Windows-only)
- + if the application over-commits device memory, then a call to ::xeDeviceMakeMemoryResident will return XE_RESULT_ERROR_OUT_OF_DEVICE_MEMORY
-
-If the application does not properly manage residency for these cases then the device may experience unrecoverable page-faults.
-
-The following sample code demonstrate a sequence for using coarse-grain residency control for indirect arguments:
-```c
-    struct node {
-        node* next;
-    };
-    node* begin = nullptr;
-    xeHostMemAlloc(XE_HOST_MEM_ALLOC_FLAG_DEFAULT, sizeof(node), 1, &begin);
-    xeHostMemAlloc(XE_HOST_MEM_ALLOC_FLAG_DEFAULT, sizeof(node), 1, &begin->next);
-    xeHostMemAlloc(XE_HOST_MEM_ALLOC_FLAG_DEFAULT, sizeof(node), 1, &begin->next->next);
-
-    // 'begin' is passed as function argument and appended into command list
-    xeFunctionSetAttribute(hFuncArgs, XE_FUNCTION_SET_ATTR_INDIRECT_HOST_ACCESS, TRUE);
-    xeFunctionSetArgumentValue(hFunction, 0, sizeof(node*), &begin);
-    xeCommandListAppendLaunchFunction(hCommandList, hFunction, &launchArgs, nullptr, 0, nullptr);
-    ...
-
-    xeCommandQueueExecuteCommandLists(hCommandQueue, 1, &hCommandList, nullptr);
-    ...
-```
-
-The following sample code demonstrate a sequence for using fine-grain residency control for indirect arguments:
-```c
-    struct node {
-        node* next;
-    };
-    node* begin = nullptr;
-    xeHostMemAlloc(XE_HOST_MEM_ALLOC_FLAG_DEFAULT, sizeof(node), 1, &begin);
-    xeHostMemAlloc(XE_HOST_MEM_ALLOC_FLAG_DEFAULT, sizeof(node), 1, &begin->next);
-    xeHostMemAlloc(XE_HOST_MEM_ALLOC_FLAG_DEFAULT, sizeof(node), 1, &begin->next->next);
-
-    // 'begin' is passed as function argument and appended into command list
-    xeFunctionSetArgumentValue(hFunction, 0, sizeof(node*), &begin);
-    xeCommandListAppendLaunchFunction(hCommandList, hFunction, &launchArgs, nullptr, 0, nullptr);
-    ...
-
-    // Make indirect allocations resident before enqueuing
-    xeDeviceMakeMemoryResident(hDevice, begin->next, sizeof(node));
-    xeDeviceMakeMemoryResident(hDevice, begin->next->next, sizeof(node));
-
-    xeCommandQueueExecuteCommandLists(hCommandQueue, 1, &hCommandList, hFence);
-
-    // wait until complete
-    xeFenceHostSynchronize(hFence, MAX_UINT32);
-
-    // Finally, evict to free device resources
-    xeDeviceEvictMemory(hDevice, begin->next, sizeof(node));
-    xeDeviceEvictMemory(hDevice, begin->next->next, sizeof(node));
-    ...
-```
-
 # <a name="mnf">Modules and Functions</a>
 There are multiple levels of constructs needed for executing functions on the device:
 1. A [**Module**](#mod) represents a single translation unit that consists of functions that have been compiled together.
@@ -823,7 +773,7 @@ Use ::xeFunctionSetAttribute to set attributes from a function object.
 
 See ::xe_function_set_attribute_t for more information on the "set" attributes.
 
-## Execution
+## <a name="exe">Execution</a>
 
 ### Function Group Size
 The group size for a function can be set using ::xeFunctionSetGroupSize. If a group size is not
@@ -851,7 +801,7 @@ group size that was set on the function using ::xeFunctionSetGroupSize.
     ...
 ```
 
-### <a name="arg">Function Arguments</a>
+### Function Arguments
 Function arguments represent only the explicit function arguments that are within "brackets" e.g. func(arg1, arg2, ...).
 - Use ::xeFunctionSetArgumentValue to setup arguments for a function launch.
 - The AppendLaunchFunction command will make a copy the function arguments to send to the device.
@@ -880,7 +830,7 @@ The following sample code demonstrates a sequence for creating function args and
     ...
 ```
 
-### <a name="arg">Function Launch</a>
+### Function Launch
 In order to invoke a function on the device you must call one of the CommandListAppendLaunch* functions for
 a command list. The most basic version of these is ::xeCommandListAppendLaunchFunction which takes a
 command list, function, launch arguments, and an optional synchronization event used to signal completion.
@@ -911,7 +861,7 @@ device to generate the parameters.
     xeCommandListAppendLaunchFunctionIndirect(hCommandList, hFunction, &pIndirectArgs, nullptr, 0, nullptr);
 ```
 
-## <a name="arg">Sampler</a>
+## <a name="smp">Sampler</a>
 The API supports Sampler objects that represent state needed for sampling images from within
 Module functions.  The ::xeSamplerCreate function takes a sampler descriptor (::xe_sampler_desc_t):
 
@@ -942,7 +892,70 @@ The following is sample for code creating a sampler object and passing it as a F
     xeCommandListAppendLaunchFunction(hCommandList, hFunction, &launchArgs, nullptr, 0, nullptr);
 ```
 
-# <a name="oi">OpenCL Interoperability</a>
+# <a name="adv">Advanced</a>
+## <a name="sd">Sub-Device Support</a>
+A multi-tile device consists of tiles that are tied together by high-speed interconnects. Each tile
+has local memory that is shared to other tiles through these interconnects. The API represents tiles
+as sub-devices and there are functions to query and obtain a sub-device. Outside of these functions
+there are no distinction between sub-devices and devices. 
+
+![Subdevice](../images/core_subdevice.png?raw=true)  
+@image latex core_subdevice.png
+
+Query device properties using ::xeDeviceGetProperties to confirm subdevices are supported with
+::xe_device_properties_t.numSubDevices. Use ::xeDeviceGetSubDevice to obtain a sub-device handle.
+There are additional device properties in ::xe_device_properties_t for sub-devices to confirm a
+device is a sub-device and to query the id. This is useful when needing to pass a sub-device
+handle to another library.
+
+To allocate memory and dispatch tasks to a particular sub-device then obtain the sub-device
+handle and use this with memory and command queue/lists APIs. Local memory allocation will be placed
+in the local memory that is attached to the sub-device. An out-of-memory error indicates
+that there is not enough local sub-device memory for the allocation. The driver will not try and spill
+sub-device allocations over to another sub-device's local memory. However, the application can retry using the
+parent device and the driver will decide where to place the allocation.
+
+One thing to note is that the ordinal
+that is used when creating a command queue is relative to the sub-device. This ordinal specifies which
+physical compute queue on the device or sub-device to map the logical queue to. You need to query
+::xe_device_properties_t.numAsyncComputeEngines from the sub-device to determine how to set this ordinal.
+See ::xe_command_queue_desc_t for more details.
+
+A 16-byte unique device identifier (uuid) can be obtained for a device or sub-device using ::xeDeviceGetProperties.
+
+```c
+    ...
+    xeDeviceGetProperties(device, &deviceProps);
+    ...
+
+    // Code assumes a specific device configuration.
+    assert(deviceProps.numSubDevices == 4);
+
+    // Desire is to allocate and dispatch work to sub-device 2.
+    uint32_t subdeviceId = 2;
+    xeDeviceGetSubDevice(device, subdeviceId, &subdevice);
+
+    // Query sub-device properties.
+    xe_device_properties_t subdeviceProps;
+    xeDeviceGetProperties(subdevice, &subdeviceProps);
+
+    assert(subdeviceProps.isSubdevice == true); // Ensure that we have a handle to a sub-device.
+    assert(subdeviceProps.subdeviceId == 2);    // Ensure that we have a handle to the sub-device we asked for.
+
+    void* pMemForSubDevice2;
+    xeMemAlloc(subDevice, XE_DEVICE_MEM_ALLOC_FLAG_DEFAULT, memSize, sizeof(uint32_t), &pMemForSubDevice2);
+    ...
+
+    ...
+    // Check that cmd queue ordinal that was chosen is valid.
+    assert(desc.ordinal < subdeviceProps.numAsyncComputeEngines);
+
+    xe_command_queue_handle_t commandQueueForSubDevice2;
+    xeCommandQueueCreate(subdevice, desc, &commandQueueForSubDevice2);
+    ...
+```
+
+## <a name="oi">OpenCL Interoperability</a>
 Interoperability with OpenCL is currently only supported _from_ OpenCL _to_ Xe for a subset of types.
 The APIs are designed to be OS agnostics and allow implementations to optimize for unified device drivers;
 while allowing less-optimal interopability across different device types and/or vendors.
@@ -952,7 +965,7 @@ There are three OpenCL types that can be shared for interoperability:
 2. **cl_program** - an OpenCL program object
 3. **cl_command_queue** - an OpenCL command queue object
 
-## cl_mem
+### cl_mem
 OpenCL buffer objects may be registered for use as an Xe device memory allocation.
 Registering an OpenCL buffer object with Xe merely obtains a pointer to the underlying device memory
 allocation and does not alter the lifetime of the device memory underlying the OpenCL buffer object.
@@ -963,11 +976,11 @@ result in undefined behavior.
 
 Applications are responsible for enforcing memory consistency for shared buffer objects using existing OpenCL and/or Xe APIs.
 
-## cl_program
+### cl_program
 Xe modules are always in a compiled state and therefore prior to retrieving an ::xe_module_handle_t from
 a cl_program the caller must ensure the cl_program is compiled and linked.
 
-## cl_command_queue
+### cl_command_queue
 Sharing OpenCL command queues provide opportunities to minimize transition costs when submitting work from
 an OpenCL queue followed by submitting work to Xe command queue and vice-versa.  Enqueuing Xe command lists
 to Xe command queues are immediately submitted to the device.  OpenCL implementations, however, may not
@@ -985,12 +998,12 @@ The cost to ensure memory consistency may be implementation dependent.  The perf
 will be no worse than an application submitting work to OpenCL, calling clFinish followed by submitting an
 Xe command list.  In most cases, command queue sharing may be much more efficient. 
 
-# <a name="ipc">Inter-Process Communication</a>
+## <a name="ipc">Inter-Process Communication</a>
 There are two types of Inter-Process Communication (IPC) APIs for using Xe allocations across processes:
 1. Memory
 2. Events 
 
-## Memory
+### Memory
 The following code examples demonstrate how to use the memory IPC APIs:
 
 1. First, the allocation is made, packaged, and sent on the sending process:
@@ -1028,7 +1041,7 @@ Note, there is no guaranteed address equivalence for the values of `dptr` in eac
     xeMemFree(dptr);
 ```
 
-## Events
+### Events
 The following code examples demonstrate how to use the event IPC APIs:
 
 1. First, the event pool is create, packaged, and sent on the sending process:
