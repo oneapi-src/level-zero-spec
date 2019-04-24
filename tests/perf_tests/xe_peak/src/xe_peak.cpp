@@ -54,40 +54,16 @@ std::vector<uint8_t> L0Context::load_binary_file(const std::string &file_path) {
 
 //---------------------------------------------------------------------
 // Utility function to reset the Command List.
-// This function current has to destroy and re-create the
-// Command List since xeCommandListReset is not yet functional.
-// Call to xeCommandListReset is ifdef'd out until it is implemented.
 //---------------------------------------------------------------------
 void L0Context::reset_commandlist() {
     xe_result_t result = XE_RESULT_SUCCESS;
 
-#if 0
     result = xeCommandListReset(command_list);
     if (result) {
         throw std::runtime_error("xeCommandListReset failed: " + result);
     }
     if (verbose)
         std::cout << "Command list reset\n";
-#else
-    xe_command_list_desc_t command_list_description;
-    if (command_list) {
-        result = xeCommandListDestroy(command_list);
-        if (result) {
-            throw std::runtime_error("xeCommandListDestroy failed: " + result);
-        }
-        if (verbose)
-            std::cout << "Command list destroyed\n";
-    }
-
-    command_list_description.version = XE_COMMAND_LIST_DESC_VERSION_CURRENT;
-
-    result = xeDeviceCreateCommandList(device, &command_list_description, &command_list);
-    if (result) {
-        throw std::runtime_error("xeDeviceCreateCommandList failed: " + result);
-    }
-    if (verbose)
-        std::cout << "command_list created\n";
-#endif
 }
 
 //---------------------------------------------------------------------
