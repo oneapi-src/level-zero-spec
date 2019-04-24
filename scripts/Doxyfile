@@ -1793,7 +1793,7 @@ LATEX_EXTRA_FILES      = ../images/core_event.png \
                          ../images/core_queue.png \
                          ../images/core_subdevice.png \
                          ../images/intel-logo.png \
-                         ../images/intro_val.png \
+                         ../images/intro_driver.png \
                          ../images/intro_tools.png
 
 # If the PDF_HYPERLINKS tag is set to YES, the LaTeX that is generated is

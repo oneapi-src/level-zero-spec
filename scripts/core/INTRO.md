@@ -144,7 +144,7 @@ The following design philosophies are adopted in order to reduce Host-side overh
     + non-visible memory access by the Host or device
     + non-resident memeory access by the device
 - all API functions return ::${x}_result_t
-    + this allows for a consistent pattern on the application side for catching errors; especially when validation layer(s) are enabled
+    + this allows for a consistent pattern on the application side for catching errors; especially when validation layer is enabled
 
 ${"##"} Multithreading and Concurrency
 The following design philosophies are adopted in order to maximize Host thread concurrency:
@@ -167,45 +167,68 @@ The primary usage-models enabled by these rules is:
 
 
 ${"#"} <a name="drv">Drivers</a>
-${"##"} Installation (WIP)
+
+${"##"} Loading
 ## --validate=off
-The Level-Zero API is implemented within a _${x}_vendor_device.dll_ (windows) / _${x}_vendor_device.so_ (linux), which is copied on the system during installation of the device driver;
-where _vendor_ and _device_ are names chosen by the device vendor.  For Intel GPUs, the name would be "${x}_intc_gpu".
+The Level-Zero driver(s) are loaded using a _${x}_vendor_loader.dll_ (windows) / _${x}_vendor_loader.so_ (linux), which is copied on the system during installation of the device driver;
+where _vendor_ is a name chosen by the device vendor.  For Intel GPUs, the name would be _${x}_intc_loader_.
 ## --validate=on
 
-This API does not define an Installable Client Driver (ICD), as it is expected that users of this API would prefer to implement
-their own device abstraction layer and communicate directly with the device-driver.
+The following diagram illustrates the driver architecture:  
+![Driver](../images/intro_driver.png?raw=true)  
+@image latex intro_driver.png
 
-${"##"} Validation Layers
-Validation layers provide the optional capability for application developers to enable additional API validation while maintaining minimal driver implementation overhead.
+- The loader initiates the loading of the validation layer and/or the common driver.
+- The loader maintains a per-process function pointer table.
+- The loader's function pointer table entries may point to:
+    + validation layer intercepts (if enabled)
+    + common driver exports (if more than one supported device group are present in the system)
+    + device group driver exports
+- The common driver determines which other device group-specific drivers need to be loaded based on which devices are present in the system.
+- The common driver may be bypassed entirely if there are no other device group drivers
+- If the common driver is needed, then it may implement specific APIs (such as memory allocation) and use private DDIs to notify device group-specific drivers
+
+${"##"} Validation Layer
+The validation layer provides an optional capability for application developers to enable additional API validation while maintaining minimal driver implementation overhead.
 - works independent of driver implementation
 - works for production / release drivers
-- checks for common application errors, such as null pointer parameters, invalid enumerations, uninitialized structures, etc.
+- checks for common application errors, such as parameter validation
 - provides for common application debug tracking, such as object and memory lifetime
 
-![Validation](../images/intro_val.png?raw=true)  
-@image latex intro_val.png
+The validation layer supports the following capabilities:
+- [**API Tracing**](#v1)
+    + enables API tracing and profiling APIs
+- [**Parameter Validation**](#v2)
+    + checks function parameters, such as null pointer parameters, invalid enumerations, uninitialized structures, etc.
+    + functions may return ::${X}_RESULT_ERROR_INVALID_PARAMETER or ::${X}_RESULT_ERROR_UNSUPPORTED
+- [**Handle Lifetime**](#v3)
+    + tracks handle allocations, destruction and usage for leaks and invalid usage (e.g., destruction while still in-use by device)
+- [**Memory Tracker**](#v4)
+    + tracks memory allocations and free for leaks and invalid usage (e.g., non-visible to device)
+- [**Threading Validation**](#v5)
+    + checks multi-threading usage (e.g., functions are not called from simultaneous threads using the same handle)
 
-The validation layers are enabled via environment variables.
+The validation layer is enabled via an [environment variable](#v0).
 
 ${"##"} Environment Variables
 The following table documents the supported knobs for overriding default driver behavior.
 ## --validate=off
-| Category            | Name                                    | Values                 | Description                                                  |
-|---------------------|-----------------------------------------|------------------------|--------------------------------------------------------------|
-| Memory              | ${X}_SHARED_FORCE_DEVICE_ALLOC          | {**0**, 1}             | Forces all shared allocations into device memory             |
-| Validation          | ${X}_ENABLE_VALIDATION_LAYER            | {**0**, 1}             | Enables validation layer(s) for debugging                    |
-| ^                   | ${X}_ENABLE_PARAMETER_VALIDATION        | {**0**, 1}             | Enables the validation level for parameters                  |
-| ^                   | ${X}_ENABLE_HANDLE_LIFETIME             | {**0**, 1}             | Enables the validation level for tracking handle lifetime    |
-| ^                   | ${X}_ENABLE_THREADING_VALIDATION        | {**0**, 1}             | Enables the validation level for multithreading usage        |
-| ^                   | ${X}_ENABLE_MEMORY_TRACKER              | {**0**, 1}             | Enables the validation level for tracking memory lifetime    |
+| Category            | Name                                                | Values                 | Description                                                  |
+|---------------------|-----------------------------------------------------|------------------------|--------------------------------------------------------------|
+| Memory              | ${X}_SHARED_FORCE_DEVICE_ALLOC                      | {**0**, 1}             | Forces all shared allocations into device memory             |
+| Validation          | <a name="v0">${X}_ENABLE_VALIDATION_LAYER</a>       | {**0**, 1}             | Enables validation layer(s) for debugging                    |
+| ^                   | <a name="v0">${X}_ENABLE_API_TRACING</a>            | {**0**, 1}             | Enables the validation level for tracing API calls           |
+| ^                   | <a name="v0">${X}_ENABLE_PARAMETER_VALIDATION</a>   | {**0**, 1}             | Enables the validation level for parameters                  |
+| ^                   | <a name="v0">${X}_ENABLE_HANDLE_LIFETIME</a>        | {**0**, 1}             | Enables the validation level for tracking handle lifetime    |
+| ^                   | <a name="v0">${X}_ENABLE_MEMORY_TRACKER</a>         | {**0**, 1}             | Enables the validation level for tracking memory lifetime    |
+| ^                   | <a name="v0">${X}_ENABLE_THREADING_VALIDATION</a>   | {**0**, 1}             | Enables the validation level for multithreading usage        |
 ## --validate=on
 
 
 ${"#"} <a name="tls">Tools</a> (WIP)
 Level-Zero APIs specific for supporting 3rd-party tools are seperated from "Core" into "Tools" APIs.
 
-The following diagram illustrates the hierachy of "Core" versus "Tool" APIs:
+The following diagram illustrates the hierachy of "Core" versus "Tool" APIs:  
 ![Tool](../images/intro_tools.png?raw=true)  
 @image latex intro_tools.png
 
