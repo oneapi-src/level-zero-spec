@@ -13,6 +13,7 @@
 #include "runtime/helpers/string.h"
 #include "runtime/kernel/grf_config.h"
 #include "runtime/os_interface/debug_settings_manager.h"
+#include "runtime/command_queue/command_queue.h"
 #include "runtime/execution_environment/execution_environment.h"
 
 namespace L0 {
@@ -262,10 +263,21 @@ struct DeviceImp : public Device {
             xe_module_handle_t* phModule) override {
         return XE_RESULT_ERROR_UNSUPPORTED;
     }
+
     xe_result_t registerCLCommandQueue(cl_context context,
             cl_command_queue command_queue,
             xe_command_queue_handle_t* phCommandQueue) override {
-        return XE_RESULT_ERROR_UNSUPPORTED;
+
+        NEO::CommandQueue *commandQueueRT = static_cast<NEO::CommandQueue *>(command_queue);
+
+        xe_command_queue_handle_t commandQueue =
+                CommandQueue::create(commandQueueRT->getDevice().getHardwareInfo()
+                        .pPlatform->eProductFamily, this,
+                        reinterpret_cast<void *>(&commandQueueRT->getCommandStreamReceiver()));
+
+        phCommandQueue = &commandQueue;
+
+        return XE_RESULT_SUCCESS;
     }
 
     NEO::Device *deviceRT = nullptr;
