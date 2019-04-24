@@ -11,7 +11,6 @@ NOTE: This is a **PRELIMINARY** specification, provided for review and feedback.
 * [Memory and Image Management](#mim)
     + [Memory](#mem)
     + [Images](#img)
-    + [Device Residency](#res)
 * [Command Queues and Command Lists](#cnc)
     + [Command Queue](#cq)
     + [Command List](#cl)
@@ -26,6 +25,7 @@ NOTE: This is a **PRELIMINARY** specification, provided for review and feedback.
     + [Sampler](#smp)
 * [Advanced](#adv)
     + [Sub-Device Support](#sd)
+    + [Device Residency](#res)
     + [OpenCL Interoperability](#oi)
     + [Inter-Process Communication](#ipc)
 * [Experimental](#exp)
@@ -207,72 +207,6 @@ The following sample code demonstrates a basic sequence for Cache size configura
     ...
 ```
 The following sample code demonstrates a basic sequence for Runtime Hint/Prefrence for Cache:
-
-## <a name="res">Device Residency</a>
-For devices that do not support page-faults, the driver must ensure that all pages that will be accessed by the kernel are resident before program execution.
-This can be determined by checking ::xe_device_memory_properties_t.onDemandPageFaults.
-
-In most cases, the driver implicitly handles residency of allocations for device access.
-This can be done by inspecting API parameters, including function arguments.
-However, in cases where the devices does **not** support page-faulting _and_ the driver is incapable of determining whether an allocation will be accessed by the device,
-such as multiple levels of indirection, there are two methods available:
-1. the application may set the ::XE_FUNCTION_FLAG_FORCE_RESIDENCY flag during program creation to force all device allocations to be resident during execution.
- + in addition, the application should indicate the type of allocations that will be indirectly accessed using ::xe_function_set_attribute_t
- + if the driver is unable to make all allocations resident, then the call to ::xeCommandQueueExecuteCommandLists will return XE_RESULT_ERROR_OUT_OF_DEVICE_MEMORY
-2. explcit ::xeDeviceMakeMemoryResident APIs are included for the application to dynamically change residency as needed. (Windows-only)
- + if the application over-commits device memory, then a call to ::xeDeviceMakeMemoryResident will return XE_RESULT_ERROR_OUT_OF_DEVICE_MEMORY
-
-If the application does not properly manage residency for these cases then the device may experience unrecoverable page-faults.
-
-The following sample code demonstrate a sequence for using coarse-grain residency control for indirect arguments:
-```c
-    struct node {
-        node* next;
-    };
-    node* begin = nullptr;
-    xeHostMemAlloc(XE_HOST_MEM_ALLOC_FLAG_DEFAULT, sizeof(node), 1, &begin);
-    xeHostMemAlloc(XE_HOST_MEM_ALLOC_FLAG_DEFAULT, sizeof(node), 1, &begin->next);
-    xeHostMemAlloc(XE_HOST_MEM_ALLOC_FLAG_DEFAULT, sizeof(node), 1, &begin->next->next);
-
-    // 'begin' is passed as function argument and appended into command list
-    xeFunctionSetAttribute(hFuncArgs, XE_FUNCTION_SET_ATTR_INDIRECT_HOST_ACCESS, TRUE);
-    xeFunctionSetArgumentValue(hFunction, 0, sizeof(node*), &begin);
-    xeCommandListAppendLaunchFunction(hCommandList, hFunction, &launchArgs, nullptr, 0, nullptr);
-    ...
-
-    xeCommandQueueExecuteCommandLists(hCommandQueue, 1, &hCommandList, nullptr);
-    ...
-```
-
-The following sample code demonstrate a sequence for using fine-grain residency control for indirect arguments:
-```c
-    struct node {
-        node* next;
-    };
-    node* begin = nullptr;
-    xeHostMemAlloc(XE_HOST_MEM_ALLOC_FLAG_DEFAULT, sizeof(node), 1, &begin);
-    xeHostMemAlloc(XE_HOST_MEM_ALLOC_FLAG_DEFAULT, sizeof(node), 1, &begin->next);
-    xeHostMemAlloc(XE_HOST_MEM_ALLOC_FLAG_DEFAULT, sizeof(node), 1, &begin->next->next);
-
-    // 'begin' is passed as function argument and appended into command list
-    xeFunctionSetArgumentValue(hFunction, 0, sizeof(node*), &begin);
-    xeCommandListAppendLaunchFunction(hCommandList, hFunction, &launchArgs, nullptr, 0, nullptr);
-    ...
-
-    // Make indirect allocations resident before enqueuing
-    xeDeviceMakeMemoryResident(hDevice, begin->next, sizeof(node));
-    xeDeviceMakeMemoryResident(hDevice, begin->next->next, sizeof(node));
-
-    xeCommandQueueExecuteCommandLists(hCommandQueue, 1, &hCommandList, hFence);
-
-    // wait until complete
-    xeFenceHostSynchronize(hFence, MAX_UINT32);
-
-    // Finally, evict to free device resources
-    xeDeviceEvictMemory(hDevice, begin->next, sizeof(node));
-    xeDeviceEvictMemory(hDevice, begin->next->next, sizeof(node));
-    ...
-```
 
 # <a name="cnc">Command Queues and Command Lists</a>
 The following are the motivations for seperating a command queue from a command list:
@@ -464,16 +398,6 @@ A fence is a heavyweight synchronization primitive used to communicate to the ho
 - A fence can only be reset from the Host.
 - A fence cannot be shared across processes.
 
-The primary usage model(s) for fences are to notify the Host when a command list has finished execution to allow:
-- Recycling of memory and images
-- Recycling of command lists
-- Recycling of other synchronization primitives
-- Explicit memory residency.
-
-The following diagram illustrates an example of fences:  
-![Fence](../images/core_fence.png?raw=true)  
-@image latex core_fence.png
-
 The following sample code demonstrates a sequence for creation, submission and querying of a fence:
 ```c
     // Create fence
@@ -492,6 +416,16 @@ The following sample code demonstrates a sequence for creation, submission and q
     xeFenceReset(hFence);
     ...
 ```
+
+The primary usage model(s) for fences are to notify the Host when a command list has finished execution to allow:
+- Recycling of memory and images
+- Recycling of command lists
+- Recycling of other synchronization primitives
+- Explicit memory residency.
+
+The following diagram illustrates fences signalled after command lists on execution:  
+![Fence](../images/core_fence.png?raw=true)  
+@image latex core_fence.png
 
 ## <a name="evnt">Events</a>
 An event is used to communicate fine-grain host-to-device, device-to-host or device-to-device dependencies from within a command list.
@@ -514,10 +448,6 @@ An event pool is used for creation of individual events:
 - An event pool reduces the cost of creating multiple events by allowing underlying device allocations to be shared by events with the same properties
 - An event pool can be shared via IPC; allowing sharing blocks of events rather than sharing each individual event
 
-The following diagram illustrates an example of events:  
-![Event](../images/core_event.png?raw=true)  
-@image latex core_event.png
-
 The following sample code demonstrates a sequence for creation and submission of an event:
 ```c
     // Create event pool
@@ -538,16 +468,17 @@ The following sample code demonstrates a sequence for creation and submission of
     xe_event_handle_t hEvent;
     xeEventCreate(hEventPool, &eventDesc, &hEvent);
 
-    // Append a wait on an event into a command list
-    xeCommandListAppendWaitOnEvents(hCommandList, 1, &hEvent);
+    // Append a signal of an event into the command list after the function executes
+    xeCommandListAppendLaunchFunction(hCommandList, hFunction1, &launchArgs, hEvent, 0, nullptr);
 
-    // Execute the command list with the wait
+    // Execute the command list with the signal
     xeCommandQueueExecuteCommandLists(hCommandQueue, 1, &hCommandList, nullptr);
-
-    // Signal the device to start execution
-    xeEventHostSignal(hEvent);
     ...
 ```
+
+The following diagram illustrates an event being signalled between functions within a command list:  
+![Event](../images/core_event.png?raw=true)  
+@image latex core_event.png
 
 # <a name="brr">Barriers</a>
 There are two types of barriers:
@@ -952,6 +883,72 @@ A 16-byte unique device identifier (uuid) can be obtained for a device or sub-de
 
     xe_command_queue_handle_t commandQueueForSubDevice2;
     xeCommandQueueCreate(subdevice, desc, &commandQueueForSubDevice2);
+    ...
+```
+
+## <a name="res">Device Residency</a>
+For devices that do not support page-faults, the driver must ensure that all pages that will be accessed by the kernel are resident before program execution.
+This can be determined by checking ::xe_device_memory_properties_t.onDemandPageFaults.
+
+In most cases, the driver implicitly handles residency of allocations for device access.
+This can be done by inspecting API parameters, including function arguments.
+However, in cases where the devices does **not** support page-faulting _and_ the driver is incapable of determining whether an allocation will be accessed by the device,
+such as multiple levels of indirection, there are two methods available:
+1. the application may set the ::XE_FUNCTION_FLAG_FORCE_RESIDENCY flag during program creation to force all device allocations to be resident during execution.
+ + in addition, the application should indicate the type of allocations that will be indirectly accessed using ::xe_function_set_attribute_t
+ + if the driver is unable to make all allocations resident, then the call to ::xeCommandQueueExecuteCommandLists will return XE_RESULT_ERROR_OUT_OF_DEVICE_MEMORY
+2. explcit ::xeDeviceMakeMemoryResident APIs are included for the application to dynamically change residency as needed. (Windows-only)
+ + if the application over-commits device memory, then a call to ::xeDeviceMakeMemoryResident will return XE_RESULT_ERROR_OUT_OF_DEVICE_MEMORY
+
+If the application does not properly manage residency for these cases then the device may experience unrecoverable page-faults.
+
+The following sample code demonstrate a sequence for using coarse-grain residency control for indirect arguments:
+```c
+    struct node {
+        node* next;
+    };
+    node* begin = nullptr;
+    xeHostMemAlloc(XE_HOST_MEM_ALLOC_FLAG_DEFAULT, sizeof(node), 1, &begin);
+    xeHostMemAlloc(XE_HOST_MEM_ALLOC_FLAG_DEFAULT, sizeof(node), 1, &begin->next);
+    xeHostMemAlloc(XE_HOST_MEM_ALLOC_FLAG_DEFAULT, sizeof(node), 1, &begin->next->next);
+
+    // 'begin' is passed as function argument and appended into command list
+    xeFunctionSetAttribute(hFuncArgs, XE_FUNCTION_SET_ATTR_INDIRECT_HOST_ACCESS, TRUE);
+    xeFunctionSetArgumentValue(hFunction, 0, sizeof(node*), &begin);
+    xeCommandListAppendLaunchFunction(hCommandList, hFunction, &launchArgs, nullptr, 0, nullptr);
+    ...
+
+    xeCommandQueueExecuteCommandLists(hCommandQueue, 1, &hCommandList, nullptr);
+    ...
+```
+
+The following sample code demonstrate a sequence for using fine-grain residency control for indirect arguments:
+```c
+    struct node {
+        node* next;
+    };
+    node* begin = nullptr;
+    xeHostMemAlloc(XE_HOST_MEM_ALLOC_FLAG_DEFAULT, sizeof(node), 1, &begin);
+    xeHostMemAlloc(XE_HOST_MEM_ALLOC_FLAG_DEFAULT, sizeof(node), 1, &begin->next);
+    xeHostMemAlloc(XE_HOST_MEM_ALLOC_FLAG_DEFAULT, sizeof(node), 1, &begin->next->next);
+
+    // 'begin' is passed as function argument and appended into command list
+    xeFunctionSetArgumentValue(hFunction, 0, sizeof(node*), &begin);
+    xeCommandListAppendLaunchFunction(hCommandList, hFunction, &launchArgs, nullptr, 0, nullptr);
+    ...
+
+    // Make indirect allocations resident before enqueuing
+    xeDeviceMakeMemoryResident(hDevice, begin->next, sizeof(node));
+    xeDeviceMakeMemoryResident(hDevice, begin->next->next, sizeof(node));
+
+    xeCommandQueueExecuteCommandLists(hCommandQueue, 1, &hCommandList, hFence);
+
+    // wait until complete
+    xeFenceHostSynchronize(hFence, MAX_UINT32);
+
+    // Finally, evict to free device resources
+    xeDeviceEvictMemory(hDevice, begin->next, sizeof(node));
+    xeDeviceEvictMemory(hDevice, begin->next->next, sizeof(node));
     ...
 ```
 
