@@ -5,7 +5,7 @@
 ## Table of Contents
 * [Objective](#obj)
 * [API Specification](#spec)
-* [Drivers](#drv)
+* [Driver Architecture](#drv)
 * [Tools](#tls)
 
 # <a name="obj">Objective</a>
@@ -79,13 +79,12 @@ There are a set of APIs that makes it easier to share the memory objects with ea
 The following section provides high-level design philosophy of the APIs.
 For more detailed information, refer to the programming guides and detailed specification pages.
 
-## Cross-Device Support
-In order to both expose the full capabilities of GPUs and remain supportable by other devices, the API definition is sub-divided into "Core" and "Extended".  
-"Core" represents APIs that all fully cross-device while "Extended" represents APIs that are device-specific.
-All implementations must support "Core" APIs while "Extended" APIs are optional.
-An implementation will return ::XE_RESULT_ERROR_UNSUPPORTED for any feature request not supported by that device.
-
-Note: currently all APIs are defined as part of the "Core" specification until they are determined to not be supportable by other devices.
+## Terminology
+This specification uses key words based on [RFC2119](https://www.ietf.org/rfc/rfc2119.txt) to indicate requirement level. 
+In particular, the following words are used to describe the actions of an implementation of this specification:
+- **May**: the word _may_, or the adjective _optional_, mean that conforming implementations are permitted to, but need not behave as described.
+- **Should**: the word _should_, or the adjective _recommended_, mean that there could be reasons for an implementations to deviate from the behavior described, but that such deviation should be avoided.  
+- **Must**: the word _must_, or the term _required_ or _shall_, mean that the behavior described is an absolute requirement of the specification.
 
 ## Naming Convention
 The following naming conventions are followed in order to avoid conflicts within the API, or with other APIs and libraries:
@@ -101,13 +100,6 @@ In addition, the following coding standards are followed:
 - all functions return ::xe_result_t
 
 Note: "Xe" is a placeholder until One API branding is decided.
-
-## Terminology
-This specification uses key words based on [RFC2119](https://www.ietf.org/rfc/rfc2119.txt) to indicate requirement level. 
-In particular, the following words are used to describe the actions of an implementation of this specification:
-- **May**: the word _may_, or the adjective _optional_, mean that conforming implementations are permitted to, but need not behave as described.
-- **Should**: the word _should_, or the adjective _recommended_, mean that there could be reasons for an implementations to deviate from the behavior described, but that such deviation should be avoided.  
-- **Must**: the word _must_, or the term _required_ or _shall_, mean that the behavior described is an absolute requirement of the specification.
 
 ## Versioning
 There are multiple versions that should be used by the application to determine compatibility:
@@ -159,16 +151,23 @@ The primary usage-models enabled by these rules is:
 - multiple, simultaneous threads may operate on independent driver objects with no implicit thread-locks
 - driver object handles may be passed between and used by multiple threads with no implicit thread-locks
 
+## Heterogeneous Device Support
+In order to both expose the full capabilities of GPUs and remain supportable by other devices, the API definition is sub-divided into "Core" and "Extended".  
+"Core" represents APIs that all fully cross-device while "Extended" represents APIs that are device-specific.
+All implementations must support "Core" APIs while "Extended" APIs are optional.
+An implementation will return ::XE_RESULT_ERROR_UNSUPPORTED for any feature request not supported by that device.
 
-# <a name="drv">Drivers</a>
+Note: currently all APIs are defined as part of the "Core" specification until they are determined to not be supportable by other devices.
+
+# <a name="drv">Driver Architecture</a>
+The following section provides high-level driver architecture.
+
+![Driver](../images/intro_driver.png?raw=true)  
+@image latex intro_driver.png
 
 ## Loading
 The Level-Zero driver(s) are loaded using a _xe_vendor_loader.dll_ (windows) / _xe_vendor_loader.so_ (linux), which is copied on the system during installation of the device driver;
 where _vendor_ is a name chosen by the device vendor.  For Intel GPUs, the name would be _xe_intc_loader_.
-
-The following diagram illustrates the driver architecture:  
-![Driver](../images/intro_driver.png?raw=true)  
-@image latex intro_driver.png
 
 - The loader initiates the loading of the validation layer and/or the common driver.
 - The loader maintains a per-process function pointer table.
@@ -221,5 +220,4 @@ Level-Zero APIs specific for supporting 3rd-party tools are seperated from "Core
 The following diagram illustrates the hierachy of "Core" versus "Tool" APIs:  
 ![Tool](../images/intro_tools.png?raw=true)  
 @image latex intro_tools.png
-
 
