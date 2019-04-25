@@ -112,12 +112,21 @@ namespace ${n}
         );
     ## CLASS ######################################################################
     %elif re.match(r"class", obj['type']):
-    class ${th.make_class_name(n, tags, obj)}
+    class ${th.make_class_name(n, tags, obj)}${th.make_baseclass_decl(n, tags, obj)}
     {
     protected:
         %for line in th.make_member_lines(n, tags, obj):
         ::${line}
         %endfor
+
+        ${th.make_class_name(n, tags, obj)}( void ) = default;
+        ~${th.make_class_name(n, tags, obj)}( void ) = default;
+
+        ${th.make_class_name(n, tags, obj)}( ${th.make_class_name(n, tags, obj)} const& other ) = delete;
+        void operator=( ${th.make_class_name(n, tags, obj)} const& other ) = delete;
+
+        ${th.make_class_name(n, tags, obj)}( ${th.make_class_name(n, tags, obj)}&& other ) = delete;
+        void operator=( ${th.make_class_name(n, tags, obj)}&& other ) = delete;
 
     public:
         %for line in th.make_member_function_lines(n, tags, obj):

@@ -486,9 +486,15 @@ def make_func_name(namespace, tags, obj, cpp=False):
 """
 def make_class_name(namespace, tags, obj):
     name = subt(namespace, tags, obj['name'], cpp=True)
-    if 'base' in obj:
-        name += " : public %s"%(subt(namespace, tags, obj['base'], cpp=True))
     return name
+
+"""
+    returns the declaration of a base class
+"""
+def make_baseclass_decl(namespace, tags, obj):
+    if 'base' in obj:
+        return " : public %s"%(subt(namespace, tags, obj['base'], cpp=True))
+    return ""
 
 """
     returns a single-line driver function call

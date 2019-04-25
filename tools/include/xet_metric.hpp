@@ -85,6 +85,15 @@ namespace xet
     protected:
         ::xet_metric_group_handle_t handle;               ///< handle of metric group object
 
+        MetricGroup( void ) = default;
+        ~MetricGroup( void ) = default;
+
+        MetricGroup( MetricGroup const& other ) = delete;
+        void operator=( MetricGroup const& other ) = delete;
+
+        MetricGroup( MetricGroup&& other ) = delete;
+        void operator=( MetricGroup&& other ) = delete;
+
     public:
         auto getHandle( void ) const { return handle; }
 
@@ -176,6 +185,15 @@ namespace xet
     protected:
         ::xet_metric_handle_t handle;                     ///< handle of metric object
 
+        Metric( void ) = default;
+        ~Metric( void ) = default;
+
+        Metric( Metric const& other ) = delete;
+        void operator=( Metric const& other ) = delete;
+
+        Metric( Metric&& other ) = delete;
+        void operator=( Metric&& other ) = delete;
+
     public:
         auto getHandle( void ) const { return handle; }
 
@@ -249,6 +267,15 @@ namespace xet
     protected:
         ::xet_metric_tracer_handle_t handle;              ///< handle of metric tracer object
 
+        MetricTracer( void ) = default;
+        ~MetricTracer( void ) = default;
+
+        MetricTracer( MetricTracer const& other ) = delete;
+        void operator=( MetricTracer const& other ) = delete;
+
+        MetricTracer( MetricTracer&& other ) = delete;
+        void operator=( MetricTracer&& other ) = delete;
+
     public:
         auto getHandle( void ) const { return handle; }
 
@@ -312,6 +339,15 @@ namespace xet
     {
     protected:
         ::xet_metric_query_pool_handle_t handle;          ///< handle of metric query pool object
+
+        MetricQueryPool( void ) = default;
+        ~MetricQueryPool( void ) = default;
+
+        MetricQueryPool( MetricQueryPool const& other ) = delete;
+        void operator=( MetricQueryPool const& other ) = delete;
+
+        MetricQueryPool( MetricQueryPool&& other ) = delete;
+        void operator=( MetricQueryPool&& other ) = delete;
 
     public:
         auto getHandle( void ) const { return handle; }
@@ -383,6 +419,15 @@ namespace xet
     {
     protected:
         ::xet_metric_query_handle_t handle;               ///< handle of metric query object
+
+        MetricQuery( void ) = default;
+        ~MetricQuery( void ) = default;
+
+        MetricQuery( MetricQuery const& other ) = delete;
+        void operator=( MetricQuery const& other ) = delete;
+
+        MetricQuery( MetricQuery&& other ) = delete;
+        void operator=( MetricQuery&& other ) = delete;
 
     public:
         auto getHandle( void ) const { return handle; }

@@ -45,6 +45,15 @@ namespace xe
     protected:
         ::xe_device_handle_t handle;                      ///< handle of device object
 
+        Device( void ) = default;
+        ~Device( void ) = default;
+
+        Device( Device const& other ) = delete;
+        void operator=( Device const& other ) = delete;
+
+        Device( Device&& other ) = delete;
+        void operator=( Device&& other ) = delete;
+
     public:
         auto getHandle( void ) const { return handle; }
 

@@ -46,6 +46,15 @@ namespace xe
         ::xe_event_pool_handle_t handle;                  ///< handle of event pool object
         ::xe_event_pool_desc_t desc;                      ///< descriptor of the event object
 
+        EventPool( void ) = default;
+        ~EventPool( void ) = default;
+
+        EventPool( EventPool const& other ) = delete;
+        void operator=( EventPool const& other ) = delete;
+
+        EventPool( EventPool&& other ) = delete;
+        void operator=( EventPool&& other ) = delete;
+
     public:
         auto getHandle( void ) const { return handle; }
         auto getDesc( void ) const { return desc; }
@@ -137,6 +146,15 @@ namespace xe
     {
     protected:
         ::xe_event_handle_t handle;                       ///< handle of event object
+
+        Event( void ) = default;
+        ~Event( void ) = default;
+
+        Event( Event const& other ) = delete;
+        void operator=( Event const& other ) = delete;
+
+        Event( Event&& other ) = delete;
+        void operator=( Event&& other ) = delete;
 
     public:
         auto getHandle( void ) const { return handle; }

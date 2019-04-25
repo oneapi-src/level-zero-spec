@@ -46,6 +46,15 @@ namespace xe
         ::xe_fence_handle_t handle;                       ///< handle of fence object
         ::xe_fence_desc_t desc;                           ///< descriptor of the fence object
 
+        Fence( void ) = default;
+        ~Fence( void ) = default;
+
+        Fence( Fence const& other ) = delete;
+        void operator=( Fence const& other ) = delete;
+
+        Fence( Fence&& other ) = delete;
+        void operator=( Fence&& other ) = delete;
+
     public:
         auto getHandle( void ) const { return handle; }
         auto getDesc( void ) const { return desc; }

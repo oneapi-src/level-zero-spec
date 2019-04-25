@@ -47,6 +47,15 @@ namespace xe
         ::xe_command_list_handle_t handle;                ///< handle of command list object
         ::xe_command_list_desc_t desc;                    ///< descriptor of the command list object
 
+        CommandList( void ) = default;
+        ~CommandList( void ) = default;
+
+        CommandList( CommandList const& other ) = delete;
+        void operator=( CommandList const& other ) = delete;
+
+        CommandList( CommandList&& other ) = delete;
+        void operator=( CommandList&& other ) = delete;
+
     public:
         auto getHandle( void ) const { return handle; }
         auto getDesc( void ) const { return desc; }

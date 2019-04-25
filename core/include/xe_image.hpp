@@ -46,6 +46,15 @@ namespace xe
         ::xe_image_handle_t handle;                       ///< handle of image object
         ::xe_image_desc_t desc;                           ///< descriptor of the image object
 
+        Image( void ) = default;
+        ~Image( void ) = default;
+
+        Image( Image const& other ) = delete;
+        void operator=( Image const& other ) = delete;
+
+        Image( Image&& other ) = delete;
+        void operator=( Image&& other ) = delete;
+
     public:
         auto getHandle( void ) const { return handle; }
         auto getDesc( void ) const { return desc; }

@@ -46,6 +46,15 @@ namespace xex
         ::xex_command_graph_handle_t handle;              ///< handle of command graph object
         ::xex_command_graph_desc_t desc;                  ///< descriptor of the command graph object
 
+        CommandGraph( void ) = default;
+        ~CommandGraph( void ) = default;
+
+        CommandGraph( CommandGraph const& other ) = delete;
+        void operator=( CommandGraph const& other ) = delete;
+
+        CommandGraph( CommandGraph&& other ) = delete;
+        void operator=( CommandGraph&& other ) = delete;
+
     public:
         auto getHandle( void ) const { return handle; }
         auto getDesc( void ) const { return desc; }

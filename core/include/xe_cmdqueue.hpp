@@ -46,6 +46,15 @@ namespace xe
         ::xe_command_queue_handle_t handle;               ///< handle of command queue object
         ::xe_command_queue_desc_t desc;                   ///< descriptor of the command queue object
 
+        CommandQueue( void ) = default;
+        ~CommandQueue( void ) = default;
+
+        CommandQueue( CommandQueue const& other ) = delete;
+        void operator=( CommandQueue const& other ) = delete;
+
+        CommandQueue( CommandQueue&& other ) = delete;
+        void operator=( CommandQueue&& other ) = delete;
+
     public:
         auto getHandle( void ) const { return handle; }
         auto getDesc( void ) const { return desc; }

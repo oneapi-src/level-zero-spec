@@ -46,6 +46,15 @@ namespace xe
         ::xe_module_handle_t handle;                      ///< handle of module object
         ::xe_module_desc_t desc;                          ///< descriptor of the module object
 
+        Module( void ) = default;
+        ~Module( void ) = default;
+
+        Module( Module const& other ) = delete;
+        void operator=( Module const& other ) = delete;
+
+        Module( Module&& other ) = delete;
+        void operator=( Module&& other ) = delete;
+
     public:
         auto getHandle( void ) const { return handle; }
         auto getDesc( void ) const { return desc; }
@@ -141,6 +150,15 @@ namespace xe
     protected:
         ::xe_function_handle_t handle;                    ///< handle of function object
         ::xe_function_desc_t desc;                        ///< descriptor of the function object
+
+        Function( void ) = default;
+        ~Function( void ) = default;
+
+        Function( Function const& other ) = delete;
+        void operator=( Function const& other ) = delete;
+
+        Function( Function&& other ) = delete;
+        void operator=( Function&& other ) = delete;
 
     public:
         auto getHandle( void ) const { return handle; }
