@@ -13,6 +13,7 @@
 inline const std::vector<const char *> &getResourcesSearchLocations() {
     static std::vector<const char *> locations {
         "test_files/spv_modules/",
+        "./",
 #if defined(OS_DATADIR)
     // later try install location when OS_DATADIR is defined
         TOSTR(OS_DATADIR),

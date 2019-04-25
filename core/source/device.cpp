@@ -281,12 +281,10 @@ struct DeviceImp : public Device {
 
         NEO::CommandQueue *commandQueueRT = static_cast<NEO::CommandQueue *>(command_queue);
 
-        xe_command_queue_handle_t commandQueue =
+        *phCommandQueue =
                 CommandQueue::create(commandQueueRT->getDevice().getHardwareInfo()
                         .pPlatform->eProductFamily, this,
                         reinterpret_cast<void *>(&commandQueueRT->getCommandStreamReceiver()));
-
-        phCommandQueue = &commandQueue;
 
         return XE_RESULT_SUCCESS;
     }
