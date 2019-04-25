@@ -666,9 +666,9 @@ int main() {
     if (ret)
         return -1;
 
-    /* ret = clCompute();
+    ret = clCompute();
     if (ret)
-        return -1; */
+        return -1;
 
     ret = xeCLRegister();
     if (ret)
@@ -678,18 +678,18 @@ int main() {
     if (ret)
         return -1;
 
-    /* if (!validateArrays(hostBufCCL))
+    if (!validateArrays(hostBufCCL))
         std::cout << "GOOD with CL\n";
     else
-        std::cout << "ERROR with CL\n";*/
+        std::cout << "ERROR with CL\n";
 
     if (!validateArrays(hostBufCXE))
         std::cout << "GOOD wit XE\n";
     else
         std::cout << "ERROR with XE\n";
 
-    clCleanup();
     xeCleanup();
+    clCleanup();
 
     return 0;
 }
