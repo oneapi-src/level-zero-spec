@@ -43,10 +43,18 @@ namespace xe
     class Module
     {
     protected:
-        ::xe_module_handle_t handle;                      ///< handle of module object
-        ::xe_module_desc_t desc;                          ///< descriptor of the module object
+        ::xe_module_handle_t m_handle;                    ///< handle of module object
+        ::xe_module_desc_t m_desc;                        ///< descriptor of the module object
 
-        Module( void ) = default;
+        Module( void ) = delete;
+        Module( 
+                xe_module_handle_t handle,                      ///< handle of module object
+                xe_module_desc_t desc                           ///< descriptor of the module object
+                ) :
+                m_handle( handle ),
+                m_desc( desc )
+            {}
+
         ~Module( void ) = default;
 
         Module( Module const& other ) = delete;
@@ -56,8 +64,8 @@ namespace xe
         void operator=( Module&& other ) = delete;
 
     public:
-        auto getHandle( void ) const { return handle; }
-        auto getDesc( void ) const { return desc; }
+        auto getHandle( void ) const { return m_handle; }
+        auto getDesc( void ) const { return m_desc; }
 
         ///////////////////////////////////////////////////////////////////////////////
         /// @brief C++ version for ::xe_module_desc_version_t
@@ -148,10 +156,18 @@ namespace xe
     class Function
     {
     protected:
-        ::xe_function_handle_t handle;                    ///< handle of function object
-        ::xe_function_desc_t desc;                        ///< descriptor of the function object
+        ::xe_function_handle_t m_handle;                  ///< handle of function object
+        ::xe_function_desc_t m_desc;                      ///< descriptor of the function object
 
-        Function( void ) = default;
+        Function( void ) = delete;
+        Function( 
+                xe_function_handle_t handle,                    ///< handle of function object
+                xe_function_desc_t desc                         ///< descriptor of the function object
+                ) :
+                m_handle( handle ),
+                m_desc( desc )
+            {}
+
         ~Function( void ) = default;
 
         Function( Function const& other ) = delete;
@@ -161,8 +177,8 @@ namespace xe
         void operator=( Function&& other ) = delete;
 
     public:
-        auto getHandle( void ) const { return handle; }
-        auto getDesc( void ) const { return desc; }
+        auto getHandle( void ) const { return m_handle; }
+        auto getDesc( void ) const { return m_desc; }
 
         ///////////////////////////////////////////////////////////////////////////////
         /// @brief C++ version for ::xe_function_desc_version_t

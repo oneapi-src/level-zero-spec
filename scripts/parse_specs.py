@@ -76,6 +76,15 @@ def generate_meta(d, meta):
         
         if 'class' in d:
             meta[type][name]['class'] = d['class']
+    else:
+        if 'members' in d:
+            if name not in meta['class']:
+                meta['class'][name] = {}
+
+            meta['class'][name]['members'] = []
+
+            for m in d['members']:
+                meta['class'][name]['members'].append(m['type'])
 
     return meta
 

@@ -201,16 +201,16 @@ def make_etor_lines(namespace, tags, obj, cpp=False, meta=None):
 """
     returns a list of strings for each member of a structure or class
 """
-def make_member_lines(namespace, tags, obj, cpp=False, meta=None):
+def make_member_lines(namespace, tags, obj, prefix="", cpp=False, meta=None):
     lines = []
     if 'members' not in obj:
         return lines
 
     for item in obj['members']:
         if cpp:
-            name = make_cpp_value_name(namespace, tags, item['name'], cpp, meta)
+            name = make_cpp_value_name(namespace, tags, prefix+item['name'], cpp, meta)
         else:
-            name = subt(namespace, tags, item['name'], cpp=cpp)
+            name = subt(namespace, tags, prefix+item['name'], cpp=cpp)
         type = subt(namespace, tags, item['type'], cpp=cpp)
 
         if cpp and 'init' in item:
@@ -227,14 +227,14 @@ def make_member_lines(namespace, tags, obj, cpp=False, meta=None):
 """
     returns a list of strings for each member of a class
 """
-def make_member_function_lines(namespace, tags, obj):
+def make_member_function_lines(namespace, tags, obj, prefix=""):
     lines = []
     if 'members' not in obj:
         return lines
 
     for item in obj['members']:
         name = subt(namespace, tags, item['name'], cpp=True)
-        lines.append("auto get%s( void ) const { return %s; }"%(name.title(), name))
+        lines.append("auto get%s( void ) const { return %s; }"%(name.title(), prefix+name))
     return lines
 
 """
@@ -322,7 +322,54 @@ def make_param_call_str(prologue, obj, cpp=False):
 #        else:
             names.append(item['name'])
     return ", ".join(names)
-    
+
+"""
+    returns a string of template parameters
+"""
+def make_tparams_line(namespace, tags, obj):
+    line = ", ".join(obj['tparams'])
+    return subt(namespace, tags, line, cpp=True)
+
+"""
+    returns a list of strings for ctor parameters of members
+"""
+def make_member_param_lines(namespace, tags, obj, meta=None):
+    lines = []
+    params = obj['members'] if 'members' in obj else []
+    for i, item in enumerate(params):
+        name = subt(namespace, tags, item['name'])
+        type = subt(namespace, tags, item['type'])
+
+        if i < len(params)-1:
+            prologue = "%s %s,"%(type, name)
+        else:
+            prologue = "%s %s"%(type, name)
+
+        for line in split_line(subt(namespace, tags, item['desc'], True), 70):
+            lines.append("%s///< %s"%(append_ws(prologue, 48), line))
+            prologue = ""
+
+    if len(lines) > 0:
+        return lines
+    else:
+        return ["void"]
+
+"""
+    returns a list of strings for initializing members from ctor parameters of members
+"""
+def make_member_param_init_lines(namespace, tags, obj, prefix="", meta=None):
+    lines = []
+    params = obj['members'] if 'members' in obj else []
+    for i, item in enumerate(params):
+        name = subt(namespace, tags, item['name'])
+
+        if i < len(params)-1:
+            lines.append("%s( %s ),"%(prefix+name, name))
+        else:
+            lines.append("%s( %s )"%(prefix+name, name))
+
+    return lines
+
 """
     returns a list of strings for the description
 """
@@ -489,12 +536,20 @@ def make_class_name(namespace, tags, obj):
     return name
 
 """
-    returns the declaration of a base class
+    returns a string for the declaration of a base class
 """
 def make_baseclass_decl(namespace, tags, obj):
     if 'base' in obj:
         return " : public %s"%(subt(namespace, tags, obj['base'], cpp=True))
     return ""
+
+"""
+    returns a string for the declaration of a base class ctor
+"""
+def make_baseclass_ctor(namespace, tags, obj):
+    base = subt(namespace, tags, obj['base'], cpp=True)
+    ctor = make_class_name(namespace, tags, obj)
+    return "%s::%s"%(base, ctor)
 
 """
     returns a single-line driver function call

@@ -43,10 +43,18 @@ namespace xex
     class CommandGraph
     {
     protected:
-        ::xex_command_graph_handle_t handle;              ///< handle of command graph object
-        ::xex_command_graph_desc_t desc;                  ///< descriptor of the command graph object
+        ::xex_command_graph_handle_t m_handle;            ///< handle of command graph object
+        ::xex_command_graph_desc_t m_desc;                ///< descriptor of the command graph object
 
-        CommandGraph( void ) = default;
+        CommandGraph( void ) = delete;
+        CommandGraph( 
+                xex_command_graph_handle_t handle,              ///< handle of command graph object
+                xex_command_graph_desc_t desc                   ///< descriptor of the command graph object
+                ) :
+                m_handle( handle ),
+                m_desc( desc )
+            {}
+
         ~CommandGraph( void ) = default;
 
         CommandGraph( CommandGraph const& other ) = delete;
@@ -56,8 +64,8 @@ namespace xex
         void operator=( CommandGraph&& other ) = delete;
 
     public:
-        auto getHandle( void ) const { return handle; }
-        auto getDesc( void ) const { return desc; }
+        auto getHandle( void ) const { return m_handle; }
+        auto getDesc( void ) const { return m_desc; }
 
         ///////////////////////////////////////////////////////////////////////////////
         /// @brief C++ version for ::xex_command_graph_desc_version_t

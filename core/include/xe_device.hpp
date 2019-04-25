@@ -43,9 +43,15 @@ namespace xe
     class Device
     {
     protected:
-        ::xe_device_handle_t handle;                      ///< handle of device object
+        ::xe_device_handle_t m_handle;                    ///< handle of device object
 
-        Device( void ) = default;
+        Device( void ) = delete;
+        Device( 
+                xe_device_handle_t handle                       ///< handle of device object
+                ) :
+                m_handle( handle )
+            {}
+
         ~Device( void ) = default;
 
         Device( Device const& other ) = delete;
@@ -55,7 +61,7 @@ namespace xe
         void operator=( Device&& other ) = delete;
 
     public:
-        auto getHandle( void ) const { return handle; }
+        auto getHandle( void ) const { return m_handle; }
 
         ///////////////////////////////////////////////////////////////////////////////
         /// @brief C++ version for ::xe_api_version_t

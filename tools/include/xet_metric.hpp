@@ -83,9 +83,15 @@ namespace xet
     class MetricGroup
     {
     protected:
-        ::xet_metric_group_handle_t handle;               ///< handle of metric group object
+        ::xet_metric_group_handle_t m_handle;             ///< handle of metric group object
 
-        MetricGroup( void ) = default;
+        MetricGroup( void ) = delete;
+        MetricGroup( 
+                xet_metric_group_handle_t handle                ///< handle of metric group object
+                ) :
+                m_handle( handle )
+            {}
+
         ~MetricGroup( void ) = default;
 
         MetricGroup( MetricGroup const& other ) = delete;
@@ -95,7 +101,7 @@ namespace xet
         void operator=( MetricGroup&& other ) = delete;
 
     public:
-        auto getHandle( void ) const { return handle; }
+        auto getHandle( void ) const { return m_handle; }
 
         ///////////////////////////////////////////////////////////////////////////////
         /// @brief C++ version for ::xet_metric_group_sampling_type
@@ -183,9 +189,15 @@ namespace xet
     class Metric
     {
     protected:
-        ::xet_metric_handle_t handle;                     ///< handle of metric object
+        ::xet_metric_handle_t m_handle;                   ///< handle of metric object
 
-        Metric( void ) = default;
+        Metric( void ) = delete;
+        Metric( 
+                xet_metric_handle_t handle                      ///< handle of metric object
+                ) :
+                m_handle( handle )
+            {}
+
         ~Metric( void ) = default;
 
         Metric( Metric const& other ) = delete;
@@ -195,7 +207,7 @@ namespace xet
         void operator=( Metric&& other ) = delete;
 
     public:
-        auto getHandle( void ) const { return handle; }
+        auto getHandle( void ) const { return m_handle; }
 
         ///////////////////////////////////////////////////////////////////////////////
         /// @brief C++ version for ::xet_metric_type_t
@@ -265,9 +277,15 @@ namespace xet
     class MetricTracer
     {
     protected:
-        ::xet_metric_tracer_handle_t handle;              ///< handle of metric tracer object
+        ::xet_metric_tracer_handle_t m_handle;            ///< handle of metric tracer object
 
-        MetricTracer( void ) = default;
+        MetricTracer( void ) = delete;
+        MetricTracer( 
+                xet_metric_tracer_handle_t handle               ///< handle of metric tracer object
+                ) :
+                m_handle( handle )
+            {}
+
         ~MetricTracer( void ) = default;
 
         MetricTracer( MetricTracer const& other ) = delete;
@@ -277,7 +295,7 @@ namespace xet
         void operator=( MetricTracer&& other ) = delete;
 
     public:
-        auto getHandle( void ) const { return handle; }
+        auto getHandle( void ) const { return m_handle; }
 
         ///////////////////////////////////////////////////////////////////////////////
         /// @brief C++ version for ::xet_metric_tracer_desc_version_t
@@ -338,9 +356,15 @@ namespace xet
     class MetricQueryPool
     {
     protected:
-        ::xet_metric_query_pool_handle_t handle;          ///< handle of metric query pool object
+        ::xet_metric_query_pool_handle_t m_handle;        ///< handle of metric query pool object
 
-        MetricQueryPool( void ) = default;
+        MetricQueryPool( void ) = delete;
+        MetricQueryPool( 
+                xet_metric_query_pool_handle_t handle           ///< handle of metric query pool object
+                ) :
+                m_handle( handle )
+            {}
+
         ~MetricQueryPool( void ) = default;
 
         MetricQueryPool( MetricQueryPool const& other ) = delete;
@@ -350,7 +374,7 @@ namespace xet
         void operator=( MetricQueryPool&& other ) = delete;
 
     public:
-        auto getHandle( void ) const { return handle; }
+        auto getHandle( void ) const { return m_handle; }
 
         ///////////////////////////////////////////////////////////////////////////////
         /// @brief C++ version for ::xet_metric_query_pool_flag_t
@@ -418,9 +442,15 @@ namespace xet
     class MetricQuery
     {
     protected:
-        ::xet_metric_query_handle_t handle;               ///< handle of metric query object
+        ::xet_metric_query_handle_t m_handle;             ///< handle of metric query object
 
-        MetricQuery( void ) = default;
+        MetricQuery( void ) = delete;
+        MetricQuery( 
+                xet_metric_query_handle_t handle                ///< handle of metric query object
+                ) :
+                m_handle( handle )
+            {}
+
         ~MetricQuery( void ) = default;
 
         MetricQuery( MetricQuery const& other ) = delete;
@@ -430,7 +460,7 @@ namespace xet
         void operator=( MetricQuery&& other ) = delete;
 
     public:
-        auto getHandle( void ) const { return handle; }
+        auto getHandle( void ) const { return m_handle; }
 
         ///////////////////////////////////////////////////////////////////////////////
         /// @brief C++ wrapper for ::xetMetricQueryGetData

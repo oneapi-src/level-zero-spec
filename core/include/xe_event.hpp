@@ -43,10 +43,18 @@ namespace xe
     class EventPool
     {
     protected:
-        ::xe_event_pool_handle_t handle;                  ///< handle of event pool object
-        ::xe_event_pool_desc_t desc;                      ///< descriptor of the event object
+        ::xe_event_pool_handle_t m_handle;                ///< handle of event pool object
+        ::xe_event_pool_desc_t m_desc;                    ///< descriptor of the event object
 
-        EventPool( void ) = default;
+        EventPool( void ) = delete;
+        EventPool( 
+                xe_event_pool_handle_t handle,                  ///< handle of event pool object
+                xe_event_pool_desc_t desc                       ///< descriptor of the event object
+                ) :
+                m_handle( handle ),
+                m_desc( desc )
+            {}
+
         ~EventPool( void ) = default;
 
         EventPool( EventPool const& other ) = delete;
@@ -56,8 +64,8 @@ namespace xe
         void operator=( EventPool&& other ) = delete;
 
     public:
-        auto getHandle( void ) const { return handle; }
-        auto getDesc( void ) const { return desc; }
+        auto getHandle( void ) const { return m_handle; }
+        auto getDesc( void ) const { return m_desc; }
 
         ///////////////////////////////////////////////////////////////////////////////
         /// @brief C++ version for ::xe_event_pool_desc_version_t
@@ -145,9 +153,15 @@ namespace xe
     class Event
     {
     protected:
-        ::xe_event_handle_t handle;                       ///< handle of event object
+        ::xe_event_handle_t m_handle;                     ///< handle of event object
 
-        Event( void ) = default;
+        Event( void ) = delete;
+        Event( 
+                xe_event_handle_t handle                        ///< handle of event object
+                ) :
+                m_handle( handle )
+            {}
+
         ~Event( void ) = default;
 
         Event( Event const& other ) = delete;
@@ -157,7 +171,7 @@ namespace xe
         void operator=( Event&& other ) = delete;
 
     public:
-        auto getHandle( void ) const { return handle; }
+        auto getHandle( void ) const { return m_handle; }
 
         ///////////////////////////////////////////////////////////////////////////////
         /// @brief C++ version for ::xe_event_desc_version_t

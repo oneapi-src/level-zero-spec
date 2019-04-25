@@ -44,10 +44,18 @@ namespace xe
     class CommandList
     {
     protected:
-        ::xe_command_list_handle_t handle;                ///< handle of command list object
-        ::xe_command_list_desc_t desc;                    ///< descriptor of the command list object
+        ::xe_command_list_handle_t m_handle;              ///< handle of command list object
+        ::xe_command_list_desc_t m_desc;                  ///< descriptor of the command list object
 
-        CommandList( void ) = default;
+        CommandList( void ) = delete;
+        CommandList( 
+                xe_command_list_handle_t handle,                ///< handle of command list object
+                xe_command_list_desc_t desc                     ///< descriptor of the command list object
+                ) :
+                m_handle( handle ),
+                m_desc( desc )
+            {}
+
         ~CommandList( void ) = default;
 
         CommandList( CommandList const& other ) = delete;
@@ -57,8 +65,8 @@ namespace xe
         void operator=( CommandList&& other ) = delete;
 
     public:
-        auto getHandle( void ) const { return handle; }
-        auto getDesc( void ) const { return desc; }
+        auto getHandle( void ) const { return m_handle; }
+        auto getDesc( void ) const { return m_desc; }
 
         ///////////////////////////////////////////////////////////////////////////////
         /// @brief C++ version for ::xe_host_pfn_t

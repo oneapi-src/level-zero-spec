@@ -6,7 +6,3 @@ type: class
 desc: "C++ wrapper for command list"
 name: $tCommandList
 base: $xCommandList
-members:
-    - type: $x_command_list_handle_t
-      name: handle
-      desc: "handle of command list object"

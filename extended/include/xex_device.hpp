@@ -43,9 +43,10 @@ namespace xex
     class Device : public xe::Device
     {
     protected:
-        ::xe_device_handle_t handle;                      ///< handle of device object
 
-        Device( void ) = default;
+        Device( void ) = delete;
+        using xe::Device::Device;
+
         ~Device( void ) = default;
 
         Device( Device const& other ) = delete;
@@ -55,7 +56,6 @@ namespace xex
         void operator=( Device&& other ) = delete;
 
     public:
-        auto getHandle( void ) const { return handle; }
 
     };
 

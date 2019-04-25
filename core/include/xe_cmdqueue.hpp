@@ -43,10 +43,18 @@ namespace xe
     class CommandQueue
     {
     protected:
-        ::xe_command_queue_handle_t handle;               ///< handle of command queue object
-        ::xe_command_queue_desc_t desc;                   ///< descriptor of the command queue object
+        ::xe_command_queue_handle_t m_handle;             ///< handle of command queue object
+        ::xe_command_queue_desc_t m_desc;                 ///< descriptor of the command queue object
 
-        CommandQueue( void ) = default;
+        CommandQueue( void ) = delete;
+        CommandQueue( 
+                xe_command_queue_handle_t handle,               ///< handle of command queue object
+                xe_command_queue_desc_t desc                    ///< descriptor of the command queue object
+                ) :
+                m_handle( handle ),
+                m_desc( desc )
+            {}
+
         ~CommandQueue( void ) = default;
 
         CommandQueue( CommandQueue const& other ) = delete;
@@ -56,8 +64,8 @@ namespace xe
         void operator=( CommandQueue&& other ) = delete;
 
     public:
-        auto getHandle( void ) const { return handle; }
-        auto getDesc( void ) const { return desc; }
+        auto getHandle( void ) const { return m_handle; }
+        auto getDesc( void ) const { return m_desc; }
 
         ///////////////////////////////////////////////////////////////////////////////
         /// @brief C++ version for ::xe_command_queue_desc_version_t

@@ -43,10 +43,18 @@ namespace xe
     class Fence
     {
     protected:
-        ::xe_fence_handle_t handle;                       ///< handle of fence object
-        ::xe_fence_desc_t desc;                           ///< descriptor of the fence object
+        ::xe_fence_handle_t m_handle;                     ///< handle of fence object
+        ::xe_fence_desc_t m_desc;                         ///< descriptor of the fence object
 
-        Fence( void ) = default;
+        Fence( void ) = delete;
+        Fence( 
+                xe_fence_handle_t handle,                       ///< handle of fence object
+                xe_fence_desc_t desc                            ///< descriptor of the fence object
+                ) :
+                m_handle( handle ),
+                m_desc( desc )
+            {}
+
         ~Fence( void ) = default;
 
         Fence( Fence const& other ) = delete;
@@ -56,8 +64,8 @@ namespace xe
         void operator=( Fence&& other ) = delete;
 
     public:
-        auto getHandle( void ) const { return handle; }
-        auto getDesc( void ) const { return desc; }
+        auto getHandle( void ) const { return m_handle; }
+        auto getDesc( void ) const { return m_desc; }
 
         ///////////////////////////////////////////////////////////////////////////////
         /// @brief C++ version for ::xe_fence_desc_version_t

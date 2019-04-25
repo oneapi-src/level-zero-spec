@@ -43,9 +43,10 @@ namespace xet
     class CommandList : public xe::CommandList
     {
     protected:
-        ::xe_command_list_handle_t handle;                ///< handle of command list object
 
-        CommandList( void ) = default;
+        CommandList( void ) = delete;
+        using xe::CommandList::CommandList;
+
         ~CommandList( void ) = default;
 
         CommandList( CommandList const& other ) = delete;
@@ -55,7 +56,6 @@ namespace xet
         void operator=( CommandList&& other ) = delete;
 
     public:
-        auto getHandle( void ) const { return handle; }
 
         ///////////////////////////////////////////////////////////////////////////////
         /// @brief C++ wrapper for ::xetCommandListAppendMetricTracerMarker

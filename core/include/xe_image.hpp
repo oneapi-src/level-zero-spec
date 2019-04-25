@@ -43,10 +43,18 @@ namespace xe
     class Image
     {
     protected:
-        ::xe_image_handle_t handle;                       ///< handle of image object
-        ::xe_image_desc_t desc;                           ///< descriptor of the image object
+        ::xe_image_handle_t m_handle;                     ///< handle of image object
+        ::xe_image_desc_t m_desc;                         ///< descriptor of the image object
 
-        Image( void ) = default;
+        Image( void ) = delete;
+        Image( 
+                xe_image_handle_t handle,                       ///< handle of image object
+                xe_image_desc_t desc                            ///< descriptor of the image object
+                ) :
+                m_handle( handle ),
+                m_desc( desc )
+            {}
+
         ~Image( void ) = default;
 
         Image( Image const& other ) = delete;
@@ -56,8 +64,8 @@ namespace xe
         void operator=( Image&& other ) = delete;
 
     public:
-        auto getHandle( void ) const { return handle; }
-        auto getDesc( void ) const { return desc; }
+        auto getHandle( void ) const { return m_handle; }
+        auto getDesc( void ) const { return m_desc; }
 
         ///////////////////////////////////////////////////////////////////////////////
         /// @brief C++ version for ::xe_image_desc_version_t

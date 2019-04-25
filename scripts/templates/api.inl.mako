@@ -104,6 +104,9 @@ namespace ${n}
     %for line in th.make_returns_lines(n, tags, f, cpp=True):
     /// ${line}
     %endfor
+    %if 'tparams' in f:
+    template<${th.make_tparams_line(n, tags, f)}>
+    %endif
     inline ${th.make_return_value(n, tags, f, cpp=True, meta=meta)} 
     ${th.subt(n, tags, obj['name'], cpp=True)}::${th.make_func_name(n, tags, f, cpp=True)}(
         %for line in th.make_param_lines(n, tags, f, cpp=True, meta=meta):
