@@ -7,15 +7,7 @@ else()
 endif()
 
 set (TEST_TARGETS
-    xello_world #Dynamically thunking xelloWorld application
-    xello_copy #Basic example with copy buffer feature
-    xello_function_pointers #Basic example with function pointers
-    xello_image #Basic example with image kernel
-    xello_copy_image #Basic example with copy image features
-    xello_multidev #Basic example testing multidevice
-    xello_world_icd #ICD loader enabled xelloWorld applicaton
-    xello_world_icd_clang #ICD loader enabled xelloWorld applicaton using clang in runtime
-    xello_spirv #X -> spirV compilation
+    xello_interop_cl_cmd_queue #MM in XE using a CL command queue
 )
 
 foreach(TEST ${TEST_TARGETS})
@@ -29,12 +21,15 @@ foreach(TEST ${TEST_TARGETS})
         )
     endif()
 
+    include_directories(${COMPUTE_RUNTIME_DIR}/third_party/opencl_headers)
+
     if(UNIX)
         set_source_files_properties(${TEST}.cpp PROPERTIES COMPILE_FLAGS -Wall)
     endif()
 
     add_dependencies(${TEST} copy_third_party_files ocloc_shared)
     target_link_libraries(${TEST} level_zero_icd_loader ${OS_SPECIFIC_LIBS})
+    target_link_libraries(${TEST} OpenCL ${OS_SPECIFIC_LIBS})
 
     if(MSVC)
         set(RUN_TEST $<TARGET_FILE:${TEST}> --aub)
@@ -81,14 +76,8 @@ if(UNIX)
     )
     install(
         FILES
-            "${CMAKE_CURRENT_SOURCE_DIR}/../unit_tests/test_files/spv_modules/cstring_module.spv"
-            "${CMAKE_CURRENT_SOURCE_DIR}/../unit_tests/test_files/spv_modules/image_kernel.spv"
+            "${CMAKE_CURRENT_SOURCE_DIR}/../unit_tests/test_files/spv_modules/mat_mul.spv"
         DESTINATION ${black_box_datadir}
         COMPONENT loki-samples
     )
-endif()
-
-find_library(CL_LIB OpenCL)
-if(CL_LIB)
-    add_subdirectory(xello_interop)
 endif()

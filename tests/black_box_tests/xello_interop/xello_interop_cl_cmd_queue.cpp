@@ -43,7 +43,6 @@ static float hostBufCXE[N * P];
 
 static void matmat_host(int n, int m, int p, float *a, float *b, float* c)
 {
-    int i, j, k;
     for (int i = 0; i < n; i++) {
         for (int k = 0; k < p; k++) {
             float sum = 0;
@@ -633,7 +632,7 @@ int validateArrays(float *c) {
     return res;
 }
 
-int main() {
+int main(int argc, char **argv) {
     int ret;
 
     initArrays();
@@ -674,19 +673,26 @@ int main() {
     if (ret)
         return -1;
 
-    if (!validateArrays(hostBufCCL))
-        std::cout << "GOOD with CL\n";
-    else
-        std::cout << "ERROR with CL\n";
+    int goodWithCL = validateArrays(hostBufCCL);
+    int goodWithXE = validateArrays(hostBufCXE);
+    int goodWithBoth = goodWithCL & goodWithXE;
+    bool aubMode = isAubMode(argc, argv);
+    if (aubMode == false) {
+        if (!goodWithCL)
+            std::cout << "GOOD with CL\n";
+        else
+            std::cout << "ERROR with CL\n";
 
-    if (!validateArrays(hostBufCXE))
-        std::cout << "GOOD wit XE\n";
-    else
-        std::cout << "ERROR with XE\n";
+        if (!goodWithXE)
+            std::cout << "GOOD wit XE\n";
+        else
+            std::cout << "ERROR with XE\n";
+    }
 
     xeCleanup();
     clCleanup();
 
-    return 0;
+    int resultOnFailure = aubMode ? 0 : 1;
+    return goodWithBoth ? 0 : resultOnFailure;
 }
 
