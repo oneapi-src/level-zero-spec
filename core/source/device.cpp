@@ -261,12 +261,10 @@ struct DeviceImp : public Device {
     xe_result_t registerCLMemory(cl_context context, cl_mem mem, void** ptr) override {
         NEO::MemObj *memObjRT = static_cast<NEO::MemObj *>(mem);
         NEO::GraphicsAllocation *graphicsAllocationRT = memObjRT->getGraphicsAllocation();
-        assert(*graphicsAllocationRT != nullptr);
+        assert(graphicsAllocationRT != nullptr);
 
-        void *hostAddr = graphicsAllocationRT->getUnderlyingBuffer();
-        assert(*hostAddr != nullptr);
+        *ptr = graphicsAllocationRT->getUnderlyingBuffer();
 
-        *ptr = hostAddr;
         return XE_RESULT_SUCCESS;
     }
 
