@@ -32,6 +32,9 @@ Mock<Device>::Mock() {
     static PtrRef<L0::MOCSMapper> mocsMapperRef{&mocsMapper};
     EXPECT_CALL(*this, getMOCSMapper)
         .WillRepeatedly(Return(mocsMapperRef));
+
+    EXPECT_CALL(*this, getMaxNumHwThreads)
+        .WillRepeatedly(Return(16));
 }
 
 Mock<Device>::~Mock() {
