@@ -179,40 +179,59 @@ where _vendor_ is a name chosen by the device vendor.  For Intel GPUs, the name 
 - The common driver may be bypassed entirely if there are no other device group drivers
 - If the common driver is needed, then it may implement specific APIs (such as memory allocation) and use private DDIs to notify device group-specific drivers
 
-## Validation Layer
+## <a name="v0">Validation Layer</a>
 The validation layer provides an optional capability for application developers to enable additional API validation while maintaining minimal driver implementation overhead.
 - works independent of driver implementation
 - works for production / release drivers
 - checks for common application errors, such as parameter validation
 - provides for common application debug tracking, such as object and memory lifetime
 
+The validation layer must be enabled via an environment variables.
+Each capability is enabled by additional environment variables.
+
 The validation layer supports the following capabilities:
-- [**API Tracing**](#v1)
-    + enables API tracing and profiling APIs
-- [**Parameter Validation**](#v2)
+- <a name="v1">API Tracing</a>
+    + enables API tracing and profiling APIs; more details in Tools programming guide
+- <a name="v2">Parameter Validation</a>
     + checks function parameters, such as null pointer parameters, invalid enumerations, uninitialized structures, etc.
     + functions may return ::XE_RESULT_ERROR_INVALID_PARAMETER or ::XE_RESULT_ERROR_UNSUPPORTED
-- [**Handle Lifetime**](#v3)
+- <a name="v3">Handle Lifetime</a>
     + tracks handle allocations, destruction and usage for leaks and invalid usage (e.g., destruction while still in-use by device)
-- [**Memory Tracker**](#v4)
+- <a name="v4">Memory Tracker</a>
     + tracks memory allocations and free for leaks and invalid usage (e.g., non-visible to device)
-- [**Threading Validation**](#v5)
+- <a name="v5">Threading Validation</a>
     + checks multi-threading usage (e.g., functions are not called from simultaneous threads using the same handle)
-
-The validation layer is enabled via an [environment variable](#v0).
 
 ## Environment Variables
 The following table documents the supported knobs for overriding default driver behavior.
-| Category            | Name                                                | Values                 | Description                                                  |
-|---------------------|-----------------------------------------------------|------------------------|--------------------------------------------------------------|
-| Memory              | XE_SHARED_FORCE_DEVICE_ALLOC                      | {**0**, 1}             | Forces all shared allocations into device memory             |
-| Validation          | <a name="v0">XE_ENABLE_VALIDATION_LAYER</a>       | {**0**, 1}             | Enables validation layer(s) for debugging                    |
-| ^                   | <a name="v0">XE_ENABLE_API_TRACING</a>            | {**0**, 1}             | Enables the validation level for tracing API calls           |
-| ^                   | <a name="v0">XE_ENABLE_PARAMETER_VALIDATION</a>   | {**0**, 1}             | Enables the validation level for parameters                  |
-| ^                   | <a name="v0">XE_ENABLE_HANDLE_LIFETIME</a>        | {**0**, 1}             | Enables the validation level for tracking handle lifetime    |
-| ^                   | <a name="v0">XE_ENABLE_MEMORY_TRACKER</a>         | {**0**, 1}             | Enables the validation level for tracking memory lifetime    |
-| ^                   | <a name="v0">XE_ENABLE_THREADING_VALIDATION</a>   | {**0**, 1}             | Enables the validation level for multithreading usage        |
+| Category            | Name                                        | Values            | Description                                                                       |
+|---------------------|---------------------------------------------|-------------------|-----------------------------------------------------------------------------------|
+| Device              | [XE_AFFINITY_MASK](#aff)                  | hex string        | Forces driver to only report devices (and sub-devices) as specified by mask value |
+| Memory              | XE_SHARED_FORCE_DEVICE_ALLOC              | {**0**, 1}        | Forces all shared allocations into device memory                                  |
+| Validation          | [XE_ENABLE_VALIDATION_LAYER](#v0)         | {**0**, 1}        | Enables validation layer(s) for debugging                                         |
+| ^                   | [XE_ENABLE_API_TRACING](#v1)              | {**0**, 1}        | Enables the validation level for tracing API calls                                |
+| ^                   | [XE_ENABLE_PARAMETER_VALIDATION](#v2)     | {**0**, 1}        | Enables the validation level for parameters                                       |
+| ^                   | [XE_ENABLE_HANDLE_LIFETIME](#v3)          | {**0**, 1}        | Enables the validation level for tracking handle lifetime                         |
+| ^                   | [XE_ENABLE_MEMORY_TRACKER](#v4)           | {**0**, 1}        | Enables the validation level for tracking memory lifetime                         |
+| ^                   | [XE_ENABLE_THREADING_VALIDATION](#v5)     | {**0**, 1}        | Enables the validation level for multithreading usage                             |
 
+### <a name="aff">Affinity Mask</a>
+The affinity mask allows an application or tool to restrict which devices (and sub-devices) are visible to 3rd-party libraries or applications in another process, respectively.
+The affinity mask is specified via an environment variable as a string of hexidecimal values.
+The value is specific to system configuration; e.g., the number of devices and the number of sub-devices for each device.
+
+The following examples demonstrate proper usage:
+- "" (empty string) = disabled; i.e. all devices and sub-devices are reported.  This is the default value.
+- Two devices, each with four sub-devices
+    + "FF" = all devices and sub-devices are reported (same as default)
+    + "0F" = only device 0 (with all its sub-devices) is reported
+    + "F0" = only device 1 (with all its sub-devices) is reported as device 0
+    + "AA" = both device 0 and 1 are reported, however each only has two sub-devices reported as sub-device 0 and 1
+- Two devices, device 0 with one sub-device and device 1 with two sub-devices
+    + "07" = all devices and sub-devices are reported (same as default)
+    + "01" = only device 0 (with all its sub-devices) is reported
+    + "06" = only device 1 (with all its sub-devices) is reported as device 0
+    + "05" = both device 0 and device 1 are reported, however each only has one sub-device reported as sub-device 0
 
 # <a name="tls">Tools</a> (WIP)
 Level-Zero APIs specific for supporting 3rd-party tools are seperated from "Core" into "Tools" APIs.
