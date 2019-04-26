@@ -36,6 +36,10 @@
 #pragma once
 #endif
 #include "xe_common.h"
+#if !defined(CL_TARGET_OPENCL_VERSION)
+#define CL_USE_DEPRECATED_OPENCL_2_0_APIS
+#define CL_TARGET_OPENCL_VERSION 210
+#endif
 #include <CL/cl.h>
 
 #if defined(__cplusplus)

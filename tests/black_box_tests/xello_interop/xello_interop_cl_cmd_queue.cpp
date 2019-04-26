@@ -3,10 +3,6 @@
 #include <stdbool.h>
 #include <math.h>
 
-#define CL_USE_DEPRECATED_OPENCL_1_2_APIS
-#define CL_TARGET_OPENCL_VERSION 220
-#include <CL/cl.h>
-
 #include "../xello_worlds.h"
 #include "xe_all.h"
 
@@ -408,7 +404,7 @@ int clInit() {
     }
 
     std::cout << "clCreateKernel...\n";
-    clQueue = clCreateCommandQueue(clContext, clDevice, 0, &ret);
+    clQueue = clCreateCommandQueueWithProperties(clContext, clDevice, 0, &ret);
     if (!clQueue) {
         std::cout << "clCreateCommandQueue failed ret "
                 << static_cast<int>(ret) << "\n";

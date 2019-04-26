@@ -55,6 +55,10 @@ def declare_obj(obj, tags):
 #include "${n}_common.hpp"
 %endif
 %if re.match(r"cl_interop", name):
+#if !defined(CL_TARGET_OPENCL_VERSION)
+#define CL_USE_DEPRECATED_OPENCL_2_0_APIS
+#define CL_TARGET_OPENCL_VERSION 210
+#endif
 #include <CL/cl.h>
 %endif
 
