@@ -51,6 +51,10 @@ void XePeak::xe_peak_transfer_bw(L0Context &context) {
     /*TODO: Add support for timing the enqueue using event timers*/
     timed = 0;
 
+    for (uint32_t i = 0; i < warmup_iterations; i++) {
+        context.enqueue_op_with_device_buffer(device_buffer, local_memory.data(), (local_memory.size() * sizeof(float)), MemoryOperation::WRITE);
+    }
+
     timer.start();
     for (uint32_t i = 0; i < iters; i++) {
         context.enqueue_op_with_device_buffer(device_buffer, local_memory.data(), (local_memory.size() * sizeof(float)), MemoryOperation::WRITE);
@@ -69,6 +73,10 @@ void XePeak::xe_peak_transfer_bw(L0Context &context) {
 
     /*TODO: Add support for timing the enqueue using event timers*/
     timed = 0;
+
+    for (uint32_t i = 0; i < warmup_iterations; i++) {
+        context.enqueue_op_with_device_buffer(device_buffer, local_memory.data(), (local_memory.size() * sizeof(float)), MemoryOperation::READ);
+    }
 
     timer.start();
     for (uint32_t i = 0; i < iters; i++) {

@@ -34,6 +34,7 @@
 #include "xe_device.h"
 #include "xe_memory.h"
 #include "xe_module.h"
+#include "xe_event.h"
 
 #define MIN(X, Y) (X < Y) ? X : Y
 
@@ -114,6 +115,7 @@ public:
   uint32_t global_bw_max_size = 1 << 29;
   uint32_t transfer_bw_max_size = 1 << 29;
   uint32_t iters = 50;
+  uint32_t warmup_iterations = 10;
 
   int parse_arguments(int argc, char **argv);
 

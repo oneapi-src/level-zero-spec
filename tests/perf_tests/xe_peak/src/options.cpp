@@ -39,6 +39,7 @@ static const char *usage_str =
     "\n  -a                          run all above tests [default]"
     "\n  -v                          enable verbose prints"
     "\n  -i                          set number of iterations to run[default: 50]"
+    "\n  -w                          set number of warmup iterations to run[default: 10]"
     "\n  -h, --help                  display help message"
     "\n";
 
@@ -69,6 +70,11 @@ int XePeak::parse_arguments(int argc, char **argv) {
         } else if (strcmp(argv[i], "-i") == 0) {
             if ((i + 1) < argc) {
                 iters = strtoul(argv[i + 1], NULL, 0);
+                i++;
+            }
+        } else if (strcmp(argv[i], "-w") == 0) {
+            if ((i + 1) < argc) {
+                warmup_iterations = strtoul(argv[i + 1], NULL, 0);
                 i++;
             }
         } else if ((strcmp(argv[i], "-t") == 0)) {

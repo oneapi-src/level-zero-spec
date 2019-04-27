@@ -382,15 +382,11 @@ void XePeak::run_command_queue(L0Context &context) {
     if (result) {
         throw std::runtime_error("xeCommandQueueExecuteCommandLists failed: " + result);
     }
-    if (verbose)
-        std::cout << "Command list enqueued\n";
 
     result = xeCommandQueueSynchronize(context.command_queue, UINT32_MAX);
     if (result) {
         throw std::runtime_error("xeCommandQueueSynchronize failed: " + result);
     }
-    if (verbose)
-        std::cout << "Command queue synchronized\n";
 }
 
 //---------------------------------------------------------------------
@@ -429,35 +425,88 @@ float XePeak::run_kernel(L0Context context, xe_function_handle_t &function,
     if (verbose)
         std::cout << "Function launch appended\n";
 
-    result = xeCommandListClose(context.command_list);
-    if (result) {
-        throw std::runtime_error("xeCommandListClose failed: " + result);
-    }
-    if (verbose)
-        std::cout << "Command list closed\n";
-
-    /* TODO: implement timing with xeEventQueryElapsedTime*/
+    /* TODO: implement timing with event profiling for all cases*/
 
     Timer timer;
 
     if (type == TimingMeasurement::BANDWIDTH) {
+        result = xeCommandListClose(context.command_list);
+        if (result) {
+            throw std::runtime_error("xeCommandListClose failed: " + result);
+        }
+        if (verbose)
+            std::cout << "Command list closed\n";
+
+        for (uint32_t i = 0; i < warmup_iterations; i++) {
+            run_command_queue(context);
+        }
+
         timer.start();
         for (uint32_t i = 0; i < iters; i++) {
             run_command_queue(context);
         }
         timed = timer.stopAndTime();
     } else if (type == TimingMeasurement::KERNEL_LAUNCH_LATENCY) {
+        xe_event_pool_desc_t kernel_launch_event_pool_desc;
+        xe_event_pool_handle_t kernel_launch_event_pool;
+        xe_event_handle_t kernel_launch_event;
+        kernel_launch_event_pool_desc.count = 1;
+        kernel_launch_event_pool_desc.flags = XE_EVENT_POOL_FLAG_DEVICE_TO_HOST;
+        kernel_launch_event_pool_desc.version = XE_EVENT_POOL_DESC_VERSION_CURRENT;
+
+        result = xeDeviceCreateEventPool(context.device, &kernel_launch_event_pool_desc, &kernel_launch_event_pool);
+        if (result) {
+            throw std::runtime_error("xeDeviceCreateEventPool failed: " + result);
+        }
+        if (verbose)
+            std::cout << "Event Pool Created\n";
+        result = xeEventPoolCreateEvent(kernel_launch_event_pool, 0, &kernel_launch_event);
+        if (result) {
+            throw std::runtime_error("xeEventPoolCreateEvent failed: " + result);
+        }
+        if (verbose)
+            std::cout << "Event Created\n";
+        result = xeCommandListAppendSignalEvent(context.command_list, kernel_launch_event);
+        if (result) {
+            throw std::runtime_error("xeCommandListAppendSignalEvent failed: " + result);
+        }
+        if (verbose)
+            std::cout << "Kernel Launch Event signal appended to command list\n";
+
+        result = xeCommandListClose(context.command_list);
+        if (result) {
+            throw std::runtime_error("xeCommandListClose failed: " + result);
+        }
+        if (verbose)
+            std::cout << "Command list closed\n";
+
+        for (uint32_t i = 0; i < warmup_iterations; i++) {
+            run_command_queue(context);
+            result = xeEventHostSynchronize(kernel_launch_event, UINT32_MAX);
+            if (result) {
+                throw std::runtime_error("xeEventHostSynchronize failed: " + result);
+            }
+            result = xeEventReset(kernel_launch_event);
+            if (result) {
+                throw std::runtime_error("xeEventReset failed: " + result);
+            }
+            if (verbose)
+                std::cout << "Event Reset\n";
+        }
+
         for (uint32_t i = 0; i < iters; i++) {
-            /* TODO: implement timing with xeEventQueryElapsedTime for Launch Latency*/
             timer.start();
             result = xeCommandQueueExecuteCommandLists(context.command_queue, 1,
                                                        &context.command_list, nullptr);
-            timed += timer.stopAndTime();
             if (result) {
                 throw std::runtime_error("xeCommandQueueExecuteCommandLists failed: " + result);
             }
-            if (verbose)
-                std::cout << "Command list enqueued\n";
+
+            result = xeEventHostSynchronize(kernel_launch_event, UINT32_MAX);
+            if (result) {
+                throw std::runtime_error("xeEventHostSynchronize failed: " + result);
+            }
+            timed += timer.stopAndTime();
 
             result = xeCommandQueueSynchronize(context.command_queue, UINT32_MAX);
             if (result) {
@@ -465,8 +514,26 @@ float XePeak::run_kernel(L0Context context, xe_function_handle_t &function,
             }
             if (verbose)
                 std::cout << "Command queue synchronized\n";
+
+            result = xeEventReset(kernel_launch_event);
+            if (result) {
+                throw std::runtime_error("xeEventReset failed: " + result);
+            }
+            if (verbose)
+                std::cout << "Event Reset\n";
         }
     } else if (type == TimingMeasurement::KERNEL_COMPLETE_LATENCY) {
+        result = xeCommandListClose(context.command_list);
+        if (result) {
+            throw std::runtime_error("xeCommandListClose failed: " + result);
+        }
+        if (verbose)
+            std::cout << "Command list closed\n";
+
+        for (uint32_t i = 0; i < warmup_iterations; i++) {
+            run_command_queue(context);
+        }
+
         for (uint32_t i = 0; i < iters; i++) {
             timer.start();
             run_command_queue(context);
