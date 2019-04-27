@@ -8,6 +8,7 @@ endif()
 
 set (TEST_TARGETS
     xello_interop_cl_cmd_queue #MM in XE using a CL command queue
+    xello_interop_cl_program   #MM in XE using a CL program
 )
 
 foreach(TEST ${TEST_TARGETS})

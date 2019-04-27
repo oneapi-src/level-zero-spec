@@ -17,8 +17,15 @@
 #include "runtime/execution_environment/execution_environment.h"
 #include "runtime/mem_obj/mem_obj.h"
 #include "runtime/helpers/validators.h"
+#include "runtime/program/program.h"
 
 namespace L0 {
+
+class ProgramRTHelper : public NEO::Program {
+    public:
+        uint8_t* getIrBinary() { return reinterpret_cast<uint8_t*>(irBinary); }
+        size_t getIrBinarySize() { return irBinarySize; }
+};
 
 struct DeviceImp : public Device {
     xe_result_t canAccessPeer(xe_device_handle_t hPeerDevice,
@@ -270,7 +277,23 @@ struct DeviceImp : public Device {
 
     xe_result_t registerCLProgram(cl_context context, cl_program program,
             xe_module_handle_t* phModule) override {
-        return XE_RESULT_ERROR_UNSUPPORTED;
+        NEO::Program *programRT = static_cast<NEO::Program *>(program);
+
+        if (programRT->getIsSpirV()) {
+            uint8_t* spirvData = (reinterpret_cast<ProgramRTHelper*>(programRT))->getIrBinary();
+            size_t spirvSize = (reinterpret_cast<ProgramRTHelper*>(programRT))->getIrBinarySize();
+
+            xe_module_desc_t module_desc;
+            module_desc.version = XE_MODULE_DESC_VERSION_CURRENT;
+            module_desc.format = XE_MODULE_FORMAT_IL_SPIRV;
+            module_desc.inputSize = spirvSize;
+            module_desc.pInputModule = spirvData;
+            module_desc.pBuildFlags = nullptr;
+
+            return createModule(&module_desc, phModule, nullptr);
+        } else {
+            return XE_RESULT_ERROR_INVALID_PARAMETER;
+        }
     }
 
     xe_result_t registerCLCommandQueue(cl_context context,
