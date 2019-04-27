@@ -673,17 +673,17 @@ int main(int argc, char **argv) {
     if (ret)
         return -1;
 
-    int goodWithCL = validateArrays(hostBufCCL);
-    int goodWithXE = validateArrays(hostBufCXE);
-    int goodWithBoth = goodWithCL & goodWithXE;
+    bool goodWithCL = (validateArrays(hostBufCCL) == 0);
+    bool goodWithXE = (validateArrays(hostBufCXE) == 0);
+    bool goodWithBoth = goodWithCL && goodWithXE;
     bool aubMode = isAubMode(argc, argv);
     if (aubMode == false) {
-        if (!goodWithCL)
+        if (goodWithCL)
             std::cout << "GOOD with CL\n";
         else
             std::cout << "ERROR with CL\n";
 
-        if (!goodWithXE)
+        if (goodWithXE)
             std::cout << "GOOD wit XE\n";
         else
             std::cout << "ERROR with XE\n";
