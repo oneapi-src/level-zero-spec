@@ -498,7 +498,7 @@ xe_result_t CommandListCoreFamily<gfxCoreFamily>::appendImageCopyFromMemory(xe_i
 
     if (pDstRegion) {
         offset = pDstRegion->origin[0]; // Get the origin in X as the offset
-        size = pDstRegion->region[0]; // Get the widht in X as the size
+        size = pDstRegion->region[0];   // Get the widht in X as the size
     } else {
         offset = 0;
         size = dstImage->getSizeInBytes();
@@ -523,7 +523,7 @@ xe_result_t CommandListCoreFamily<gfxCoreFamily>::appendImageCopyToMemory(void *
 
     if (pSrcRegion) {
         offset = pSrcRegion->origin[0]; // Get the origin in X as the offse
-        size = pSrcRegion->region[0]; // Get the width in X as the offse
+        size = pSrcRegion->region[0];   // Get the width in X as the offse
     } else {
         offset = 0;
         size = srcImage->getSizeInBytes();
@@ -553,7 +553,7 @@ xe_result_t CommandListCoreFamily<gfxCoreFamily>::appendImageCopyRegion(xe_image
 
     if (pDstRegion) {
         dstOffset = pDstRegion->origin[0]; // Get the origin in X as the offse
-        size = pDstRegion->region[0]; // Get the width in X as the offse
+        size = pDstRegion->region[0];      // Get the width in X as the offse
     } else {
         dstOffset = 0;
         size = dstImage->getSizeInBytes();
@@ -561,7 +561,7 @@ xe_result_t CommandListCoreFamily<gfxCoreFamily>::appendImageCopyRegion(xe_image
 
     if (pSrcRegion) {
         srcOffset = pSrcRegion->origin[0]; // Get the origin in X as the offse
-        srcSize = pSrcRegion->region[0]; // Get the width in X as the offse
+        srcSize = pSrcRegion->region[0];   // Get the width in X as the offse
     } else {
         srcOffset = 0;
         srcSize = srcImage->getSizeInBytes();
@@ -608,15 +608,23 @@ xe_result_t CommandListCoreFamily<gfxCoreFamily>::appendMemoryCopy(void *dstptr,
     GraphicsAllocation *alloc = globalMemoryManager->findAllocation(dstptr);
     if (alloc == nullptr) {
         // Trying to access non-driver memallocated for dstptr: Allocate managed memory using the host's buffer
-        globalMemoryManager->allocateManagedMemoryFromFault(dstptr, size);
+        auto dstAlloc = globalMemoryManager->allocateManagedMemoryFromFault(dstptr, size);
+        this->deallocationContainer.push_back(dstAlloc);
+    } else {
+        assert(alloc->getSize() >= size);
     }
+
     builtinFunction->setArgumentValue(0, sizeof(dstptr), &dstptr);
 
     alloc = globalMemoryManager->findAllocation(srcptr);
     if (alloc == nullptr) {
         // Trying to access non-driver memallocated for dstptr: Allocate managed memory using the host's buffer
-        globalMemoryManager->allocateManagedMemoryFromFault(const_cast<void *>(srcptr), size);
+        auto srcAlloc = globalMemoryManager->allocateManagedMemoryFromFault(const_cast<void *>(srcptr), size);
+        this->deallocationContainer.push_back(srcAlloc);
+    } else {
+        assert(alloc->getSize() >= size);
     }
+
     builtinFunction->setArgumentValue(1, sizeof(srcptr), &srcptr);
 
     constexpr auto elementSize = sizeof(char);
@@ -711,7 +719,7 @@ xe_result_t CommandListCoreFamily<gfxCoreFamily>::reset() {
     //CommandListImp::destroy does 'delete this', not what we want here.
     CommandContainer::destroy();
 
-    if(!this->initialize(device)) {
+    if (!this->initialize(device)) {
         return XE_RESULT_ERROR_DEVICE_LOST;
     }
     return XE_RESULT_SUCCESS;
