@@ -172,7 +172,7 @@ where _vendor_ is a name chosen by the device vendor.  For Intel GPUs, the name 
 The loader initiates the loading of the driver(s) and layer(s).
 The loader exports all API functions to the application; which internally map to a per-process function pointer table.
 
-The following diagram illustrates the expected loading sequence:
+The following diagram illustrates the expected loading sequence:  
 ![Loader](../images/intro_loader.png?raw=true)  
 @image latex intro_loader.png
 
