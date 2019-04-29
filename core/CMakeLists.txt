@@ -91,6 +91,6 @@ if(UNIX)
         OUTPUT ${CMAKE_CURRENT_BINARY_DIR}/intel.icd
         CONTENT "${CMAKE_INSTALL_FULL_LIBDIR}/level_zero/$<TARGET_FILE_NAME:${TARGET_NAME}>\n")
     install(FILES ${CMAKE_CURRENT_BINARY_DIR}/intel.icd
-        DESTINATION ${CMAKE_INSTALL_SYSCONFDIR}/intel/level_zero/icd.d
+        DESTINATION /etc/intel/level_zero/icd.d
         COMPONENT loki-core)
 endif()
