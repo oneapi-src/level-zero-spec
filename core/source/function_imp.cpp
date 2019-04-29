@@ -26,37 +26,6 @@
 #include <cassert>
 #include <memory>
 
-namespace NEO_temporary {
-struct LightweightOclKernel : public NEO::Kernel {
-    LightweightOclKernel(NEO::Program *program, const NEO::KernelInfo &kernelInfo)
-        : Kernel(program, kernelInfo, program->getDevice(0), false) {
-    }
-
-    using Kernel::kernelArgHandlers;
-    using Kernel::kernelArguments;
-    using Kernel::kernelSvmGfxAllocations;
-
-    using Kernel::localBindingTableOffset;
-    using Kernel::numberOfBindingTableStates;
-    using Kernel::pSshLocal;
-    using Kernel::sshLocalSize;
-
-    using Kernel::crossThreadData;
-    using Kernel::crossThreadDataSize;
-
-    using Kernel::privateSurface;
-    using Kernel::privateSurfaceSize;
-
-    using Kernel::auxTranslationRequired;
-    using Kernel::patchedArgumentsNum;
-    using Kernel::startOffset;
-    using Kernel::usingImagesOnly;
-    using Kernel::usingSharedObjArgs;
-
-    using Kernel::kernelInfo;
-};
-} // namespace NEO_temporary
-
 namespace NEO {
 namespace Math {
 using namespace ::Math; // just to emphasize the origin (wich originally is not encapsulated in OCLRT)
@@ -66,55 +35,250 @@ using KernelArgInfo = ::KernelArgInfo;
 
 namespace L0 {
 
-struct FunctionImp::OCLInternal { // cloned from NEO::Kernel - keeping types/names the same for simplicity
-    std::vector<NEO::Kernel::SimpleKernelArgInfo> kernelArguments;
-    std::vector<FunctionImp::FunctionArgHandler> kernelArgHandlers;
-    std::vector<NEO::GraphicsAllocation *> kernelSvmGfxAllocations;
+FunctionImmutableData::~FunctionImmutableData() {
+    isaGraphicsAllocation.deleteOwned();
+}
 
-    void storeKernelArg(uint32_t argIndex, NEO::Kernel::kernelArgType argType, void *argObject,
-                        const void *argValue, size_t argSize,
-                        NEO::GraphicsAllocation *argSvmAlloc = nullptr, cl_mem_flags argSvmFlags = 0) {
-        kernelArguments[argIndex].type = argType;
-        kernelArguments[argIndex].object = argObject;
-        kernelArguments[argIndex].value = argValue;
-        kernelArguments[argIndex].size = argSize;
-        kernelArguments[argIndex].pSvmAlloc = argSvmAlloc;
-        kernelArguments[argIndex].svmFlags = argSvmFlags;
+template <typename PatchTokenT>
+static void patchWithImplicitSurface(PtrRef<uint8_t> crossThreadData, uint32_t crossThreadDataSize,
+                                     PtrRef<uint8_t> surfaceStateHeap, uint32_t surfaceStateHeapSize,
+                                     uintptr_t ptrToPatchInCrossThreadData, GraphicsAllocation &allocation,
+                                     const PatchTokenT &patch, const NEO::Device &deviceRT) {
+    uint32_t pointerSize = patch.DataParamSize;
+
+    if (crossThreadData != nullptr) {
+        uint32_t crossThreadDataOffset = patch.DataParamOffset;
+        FunctionSignature::patchPointer(crossThreadData, crossThreadDataSize, ArgPointer::onlyStateless(crossThreadDataOffset, pointerSize),
+                                        ptrToPatchInCrossThreadData);
     }
 
-    size_t numberOfBindingTableStates = 0;
-    size_t localBindingTableOffset = 0;
-    std::unique_ptr<char[]> pSshLocal = nullptr;
-    uint32_t sshLocalSize = 0;
+    if (surfaceStateHeap != nullptr) {
+        uint32_t sshOffset = patch.SurfaceStateHeapOffset;
+        assert(sshOffset + 64 < surfaceStateHeapSize);
+        auto surfaceState = surfaceStateHeap.offsetBytesBy(sshOffset);
+        void *addressToPatch = reinterpret_cast<void *>(allocation.getHostAddress());
+        size_t sizeToPatch = allocation.getSize();
+        NEO::Buffer::setSurfaceState(&deviceRT, surfaceState.get(), sizeToPatch, addressToPatch, allocation.allocationRT, 0);
+    }
+}
 
-    bool usingSharedObjArgs = false;
-    bool usingImagesOnly = false;
-    bool auxTranslationRequired = false;
-    uint32_t patchedArgumentsNum = 0;
-    uint32_t startOffset = 0;
-};
+void FunctionImmutableData::initialize(PtrRef<void> kernelInfoRT, MemoryManager &memoryManager, const void *deviceRT,
+                                       uint32_t computeUnitsUsedForSratch,
+                                       PtrRef<GraphicsAllocation> globalConstBuffer, PtrRef<GraphicsAllocation> globalVarBuffer) {
+    assert(kernelInfoRT != nullptr);
+    this->kernelInfoRT = kernelInfoRT;
+    auto &kernelInfo = *kernelInfoRT.weakRef<NEO::KernelInfo>();
 
-FunctionImp::FunctionImp(Module *module) : module(module), oclInternals(new OCLInternal) {}
+    const auto &workloadInfo = kernelInfo.workloadInfo;
+    const auto &heapInfo = kernelInfo.heapInfo;
+    const auto &patchInfo = kernelInfo.patchInfo;
+
+    auto kernelIsaSize = kernelInfo.heapInfo.pKernelHeader->KernelHeapSize;
+    isaGraphicsAllocation = memoryManager.allocateGraphicsMemoryForIsa(
+        bindPtrRef(kernelInfo.heapInfo.pKernelHeap), kernelIsaSize);
+
+    this->crossThreadDataSize = patchInfo.dataParameterStream
+                                    ? patchInfo.dataParameterStream->DataParameterStreamSize
+                                    : 0;
+
+    // now allocate our own cross-thread data, if necessary
+    if (crossThreadDataSize != 0) {
+        crossThreadDataTemplate.rebind(new uint8_t[crossThreadDataSize]);
+
+        if (kernelInfo.crossThreadData) {
+            memcpy_s(crossThreadDataTemplate.weakRef().get(), crossThreadDataSize, kernelInfo.crossThreadData, crossThreadDataSize);
+        } else {
+            memset(crossThreadDataTemplate.weakRef().get(), 0x00, crossThreadDataSize);
+        }
+
+        static_assert(NEO::KernelArgInfo::undefinedOffset == Undefined, "");
+        auto crossThread = reinterpret_cast<uint32_t *>(crossThreadDataTemplate.weakRef().get());
+        FunctionSignature::setOffsetsVec(this->signature.dispatchMetadata.globalWorkOffset, workloadInfo.globalWorkOffsetOffsets);
+        FunctionSignature::setOffsetsVec(this->signature.dispatchMetadata.localWorkSize, workloadInfo.localWorkSizeOffsets);
+        FunctionSignature::setOffsetsVec(this->signature.dispatchMetadata.localWorkSize2, workloadInfo.localWorkSizeOffsets2);
+        FunctionSignature::setOffsetsVec(this->signature.dispatchMetadata.globalWorkSize, workloadInfo.globalWorkSizeOffsets);
+        FunctionSignature::setOffsetsVec(this->signature.dispatchMetadata.enqueuedLocalWorkSize, workloadInfo.enqueuedLocalWorkSizeOffsets);
+        FunctionSignature::setOffsetsVec(this->signature.dispatchMetadata.numWorkGroups, workloadInfo.numWorkGroupsOffset);
+
+        this->signature.dispatchMetadata.workDim = workloadInfo.workDimOffset;
+
+        if (kernelInfo.patchInfo.pAllocateStatelessPrintfSurface != nullptr) {
+            this->signature.implicitArgs.printfSurface.stateless = kernelInfo.patchInfo.pAllocateStatelessPrintfSurface->DataParamOffset;
+            this->signature.implicitArgs.printfSurface.pointerSize = kernelInfo.patchInfo.pAllocateStatelessPrintfSurface->DataParamSize;
+            this->signature.implicitArgs.printfSurface.stateful = kernelInfo.patchInfo.pAllocateStatelessPrintfSurface->SurfaceStateHeapOffset;
+            this->signature.attributes.flags.hasPrintf = true;
+        }
+
+        FunctionSignature::patchNonPointer<uint32_t>(this->crossThreadDataTemplate.weakRef(), this->crossThreadDataSize,
+                                                     workloadInfo.simdSizeOffset, kernelInfo.getMaxSimdSize());
+    }
+
+    // patch crossthread data and ssh with inline surfaces, if necessary
+    uint32_t privateSurfaceSize = 0;
+    if (patchInfo.pAllocateStatelessPrivateSurface != nullptr) {
+        privateSurfaceSize = patchInfo.pAllocateStatelessPrivateSurface->PerThreadPrivateMemorySize;
+    }
+
+    if (privateSurfaceSize != 0) {
+        privateSurfaceSize *= computeUnitsUsedForSratch * kernelInfo.getMaxSimdSize();
+        assert(privateSurfaceSize != 0);
+
+        this->privateMemoryGraphicsAllocation = memoryManager.allocateGraphicsMemoryForPrivateMemory(privateSurfaceSize);
+
+        assert(this->privateMemoryGraphicsAllocation != nullptr);
+        const auto &patchToken = patchInfo.pAllocateStatelessPrivateSurface;
+        patchWithImplicitSurface(crossThreadDataTemplate.weakRef(), getCrossThreadDataSize(),
+                                 bindPtrRef<uint8_t>(static_cast<uint8_t *>(kernelInfo.heapInfo.pSsh)), getSurfaceStateHeapSize(),
+                                 static_cast<uintptr_t>(privateMemoryGraphicsAllocation->getGpuAddressOffsetFromHeapBase()),
+                                 *privateMemoryGraphicsAllocation, *patchToken, *static_cast<const NEO::Device *>(deviceRT));
+        this->residencyContainer.push_back(this->privateMemoryGraphicsAllocation.weakRef());
+    }
+
+    if (patchInfo.pAllocateStatelessConstantMemorySurfaceWithInitialization) {
+        assert(globalConstBuffer != nullptr);
+
+        const auto &patchToken = patchInfo.pAllocateStatelessConstantMemorySurfaceWithInitialization;
+        patchWithImplicitSurface(crossThreadDataTemplate.weakRef(), getCrossThreadDataSize(),
+                                 bindPtrRef<uint8_t>(static_cast<uint8_t *>(kernelInfo.heapInfo.pSsh)), getSurfaceStateHeapSize(),
+                                 static_cast<uintptr_t>(globalConstBuffer->getGpuAddressOffsetFromHeapBase()),
+                                 *globalConstBuffer, *patchToken, *static_cast<const NEO::Device *>(deviceRT));
+        this->residencyContainer.push_back(globalConstBuffer.weakRef());
+    }
+
+    if (patchInfo.pAllocateStatelessGlobalMemorySurfaceWithInitialization) {
+        assert(globalVarBuffer != nullptr);
+
+        const auto &patchToken = patchInfo.pAllocateStatelessGlobalMemorySurfaceWithInitialization;
+        patchWithImplicitSurface(crossThreadDataTemplate.weakRef(), getCrossThreadDataSize(),
+                                 bindPtrRef<uint8_t>(static_cast<uint8_t *>(kernelInfo.heapInfo.pSsh)), getSurfaceStateHeapSize(),
+                                 static_cast<uintptr_t>(globalVarBuffer->getGpuAddressOffsetFromHeapBase()),
+                                 *globalVarBuffer, *patchToken, *static_cast<const NEO::Device *>(deviceRT));
+        this->residencyContainer.push_back(globalVarBuffer.weakRef());
+    }
+
+    auto numArgs = kernelInfo.kernelArgInfo.size();
+    this->signature.explicitArgs.args.reserve(numArgs);
+
+    for (uint32_t i = 0; i < numArgs; ++i) {
+        auto &argInfo = kernelInfo.kernelArgInfo[i];
+        PtrOwn<Arg> argDesc;
+        if ((argInfo.typeStr.find("*") != std::string::npos) || argInfo.isBuffer) {
+            argDesc.rebind(new ArgPointer);
+            auto &argPointer = argDesc->as<ArgPointer>();
+            argPointer.stateful = argInfo.offsetHeap;
+            assert(argInfo.kernelArgPatchInfoVector.size() == 1);
+            argPointer.stateless = argInfo.kernelArgPatchInfoVector[0].crossthreadOffset;
+            argPointer.pointerSize = argInfo.kernelArgPatchInfoVector[0].size;
+            // TODO : Check bindless path
+        } else if (argInfo.isImage) {
+            argDesc.rebind(new ArgImage);
+            auto &argImage = argDesc->as<ArgImage>();
+            argImage.stateful = argInfo.offsetHeap;
+            assert(argInfo.kernelArgPatchInfoVector.size() == 1);
+            argImage.bindless = argInfo.kernelArgPatchInfoVector[0].crossthreadOffset;
+            // TODO : Check bindless path
+
+            argImage.metadata.arraySize = argInfo.offsetArraySize;
+            argImage.metadata.channelDataType = argInfo.offsetChannelDataType;
+            argImage.metadata.channelOrder = argInfo.offsetChannelOrder;
+            argImage.metadata.imgDepth = argInfo.offsetImgDepth;
+            argImage.metadata.imgHeight = argInfo.offsetImgHeight;
+            argImage.metadata.imgWidth = argInfo.offsetImgWidth;
+            argImage.metadata.numMipLevels = argInfo.offsetNumMipLevels;
+            argImage.metadata.numSamples = argInfo.offsetNumSamples;
+            argImage.metadata.samplerAddressingMode = argInfo.offsetSamplerAddressingMode;
+            argImage.metadata.samplerNormalizedCoords = argInfo.offsetSamplerNormalizedCoords;
+            argImage.metadata.samplerSnapWa = argInfo.offsetSamplerSnapWa;
+        } else if (argInfo.isSampler) {
+            argDesc.rebind(new Arg(Arg::ArgTSampler));
+        } else {
+            argDesc.rebind(new ArgValue);
+            auto &argVal = argDesc->as<ArgValue>();
+            argVal.elements.reserve(argInfo.kernelArgPatchInfoVector.size());
+
+            for (const auto &patch : argInfo.kernelArgPatchInfoVector) {
+                ArgValue::Element el;
+                el.size = patch.size;
+                el.sourceOffset = patch.sourceOffset;
+                el.valueOffset = patch.crossthreadOffset;
+            }
+        }
+        this->signature.explicitArgs.args.push_back(std::move(argDesc));
+    }
+
+    numLocalIdChannels = NEO::PerThreadDataHelper::getNumLocalIdChannels(*kernelInfo.patchInfo.threadPayload);
+    signature.attributes.simdSize = kernelInfo.getMaxSimdSize();
+    signature.attributes.slmInlineSize = kernelInfo.patchInfo.localsurface
+                                             ? kernelInfo.patchInfo.localsurface->TotalInlineLocalMemorySize
+                                             : 0;
+
+    signature.attributes.flags.hasBarriers = kernelInfo.patchInfo.executionEnvironment->HasBarriers;
+    signature.bindingTable.numSurfaceStates = kernelInfo.patchInfo.bindingTableState
+                                                  ? kernelInfo.patchInfo.bindingTableState->Count
+                                                  : 0;
+
+    signature.bindingTable.tableOffset = kernelInfo.patchInfo.bindingTableState
+                                             ? kernelInfo.patchInfo.bindingTableState->Offset
+                                             : 0;
+
+    if (kernelInfo.patchInfo.samplerStateArray != nullptr) {
+        signature.samplerTable.tableOffset = kernelInfo.patchInfo.samplerStateArray->Offset;
+        signature.samplerTable.numSamplers = kernelInfo.patchInfo.samplerStateArray->Count;
+        signature.samplerTable.borderColor = kernelInfo.patchInfo.samplerStateArray->BorderColorOffset;
+    }
+
+    signature.name = kernelInfo.name;
+}
+
+uint32_t FunctionImmutableData::getIsaSize() const {
+    return static_cast<uint32_t>(isaGraphicsAllocation->getSize());
+}
+
+uint64_t FunctionImmutableData::getPrivateMemorySize() const {
+    uint64_t size = 0;
+    if (privateMemoryGraphicsAllocation != nullptr) {
+        size = privateMemoryGraphicsAllocation->getSize();
+    }
+    return size;
+}
+
+uint32_t FunctionImmutableData::getSurfaceStateHeapSize() const {
+    auto &kernelInfo = *kernelInfoRT.weakRef<NEO::KernelInfo>();
+    return kernelInfo.heapInfo.pKernelHeader->SurfaceStateHeapSize;
+}
+
+PtrRef<const uint8_t> FunctionImmutableData::getSurfaceStateHeapTemplate() const {
+    auto &kernelInfo = *kernelInfoRT.weakRef<NEO::KernelInfo>();
+    return bindPtrRef<const uint8_t>(static_cast<uint8_t *>(kernelInfo.heapInfo.pSsh));
+}
+
+uint32_t FunctionImmutableData::getDynamicStateHeapSize() const {
+    auto &kernelInfo = *kernelInfoRT.weakRef<NEO::KernelInfo>();
+    return kernelInfo.heapInfo.pKernelHeader->DynamicStateHeapSize;
+}
+
+PtrRef<const uint8_t> FunctionImmutableData::getDynamicStateHeapTemplate() const {
+    auto &kernelInfo = *kernelInfoRT.weakRef<NEO::KernelInfo>();
+    return bindPtrRef<const uint8_t>(static_cast<const uint8_t *>(kernelInfo.heapInfo.pDsh));
+}
+
+FunctionImp::FunctionImp(Module *module) : module(module) {}
 
 FunctionImp::~FunctionImp() {
     if (perThreadDataForWholeThreadGroup) {
         alignedFree(perThreadDataForWholeThreadGroup);
     }
-    if (kernelRT) {
-        kernelRT->release();
-    }
-    if (printfBuffer) {
-        globalMemoryManager->freeMemory(printfBuffer);
+    if (printfBuffer != nullptr) {
+        globalMemoryManager->freeMemory(printfBuffer.weakRef().get());
     }
     privateMemAllocation.deleteOwned();
-    delete oclInternals;
 }
 
 xe_result_t FunctionImp::setArgumentValue(uint32_t argIndex,
                                           size_t argSize,
                                           const void *pArgValue) {
-    assert(argIndex < oclInternals->kernelArgHandlers.size());
-    (this->*oclInternals->kernelArgHandlers[argIndex])(argIndex, argSize, pArgValue);
+    assert(argIndex < kernelArgHandlers.size());
+    (this->*kernelArgHandlers[argIndex])(argIndex, argSize, pArgValue);
     return XE_RESULT_SUCCESS;
 }
 
@@ -124,13 +288,12 @@ void FunctionImp::setGroupCount(uint32_t groupCountX, uint32_t groupCountY, uint
     uint32_t groupSizeZ;
     getGroupSize(groupSizeX, groupSizeY, groupSizeZ);
 
-    patchCrossThreadData(getKernelInfo()->workloadInfo.globalWorkSizeOffsets[0], groupCountX * groupSizeX);
-    patchCrossThreadData(getKernelInfo()->workloadInfo.globalWorkSizeOffsets[1], groupCountY * groupSizeY);
-    patchCrossThreadData(getKernelInfo()->workloadInfo.globalWorkSizeOffsets[2], groupCountZ * groupSizeZ);
+    const FunctionSignature &sig = funcImmData->getSignature();
+    uint32_t globalWorkSize[3] = {groupCountX * groupSizeX, groupCountY * groupSizeY, groupCountZ * groupSizeZ};
+    FunctionSignature::patchVecNonPointer(crossThreadData.weakRef(), crossThreadDataSize, sig.dispatchMetadata.globalWorkSize, globalWorkSize);
 
-    patchCrossThreadData(getKernelInfo()->workloadInfo.numWorkGroupsOffset[0], groupCountX);
-    patchCrossThreadData(getKernelInfo()->workloadInfo.numWorkGroupsOffset[1], groupCountY);
-    patchCrossThreadData(getKernelInfo()->workloadInfo.numWorkGroupsOffset[2], groupCountZ);
+    uint32_t groupCount[3] = {groupCountX, groupCountY, groupCountZ};
+    FunctionSignature::patchVecNonPointer(crossThreadData.weakRef(), crossThreadDataSize, sig.dispatchMetadata.numWorkGroups, groupCount);
 }
 
 xe_result_t FunctionImp::setGroupSize(uint32_t groupSizeX,
@@ -140,10 +303,10 @@ xe_result_t FunctionImp::setGroupSize(uint32_t groupSizeX,
         return XE_RESULT_ERROR_INVALID_PARAMETER; // needs clarification in the spec
     }
 
-    auto numChannels = NEO::PerThreadDataHelper::getNumLocalIdChannels(*getKernelInfo()->patchInfo.threadPayload);
+    auto numChannels = funcImmData->getNumLocalIdChannels();
     Vec3<size_t> groupSize{groupSizeX, groupSizeY, groupSizeZ};
     auto itemsInGroup = NEO::Math::computeTotalElementsCount(groupSize);
-    uint32_t perThreadDataSizeForWholeThreadGroupNeeded = static_cast<uint32_t>(NEO::PerThreadDataHelper::getPerThreadDataSizeTotal(getKernelInfo()->getMaxSimdSize(),
+    uint32_t perThreadDataSizeForWholeThreadGroupNeeded = static_cast<uint32_t>(NEO::PerThreadDataHelper::getPerThreadDataSizeTotal(funcImmData->getSignature().attributes.simdSize,
                                                                                                                                     numChannels, itemsInGroup));
     if (perThreadDataSizeForWholeThreadGroupNeeded > perThreadDataSizeForWholeThreadGroupAllocated) {
         alignedFree(perThreadDataForWholeThreadGroup);
@@ -155,17 +318,17 @@ xe_result_t FunctionImp::setGroupSize(uint32_t groupSizeX,
     if (numChannels > 0) {
         // don't generate local IDs if not needed
         assert(3 == numChannels); // if we do need local ids, we support only all 3 channels
-        NEO::generateLocalIDs(perThreadDataForWholeThreadGroup, static_cast<uint16_t>(getSimdSize()),
+        NEO::generateLocalIDs(perThreadDataForWholeThreadGroup, static_cast<uint16_t>(funcImmData->getSignature().attributes.simdSize),
                               std::array<uint16_t, 3>{{static_cast<uint16_t>(groupSizeX), static_cast<uint16_t>(groupSizeY), static_cast<uint16_t>(groupSizeZ)}},
                               std::array<uint8_t, 3>{{0, 1, 2}}, // to do : add support for non-default walk order
                               false);
     }
 
-    this->groupSizeX = groupSizeX;
-    this->groupSizeY = groupSizeY;
-    this->groupSizeZ = groupSizeZ;
+    this->groupSize[0] = groupSizeX;
+    this->groupSize[1] = groupSizeY;
+    this->groupSize[2] = groupSizeZ;
 
-    auto simdSize = getKernelInfo()->getMaxSimdSize();
+    auto simdSize = funcImmData->getSignature().attributes.simdSize;
     this->threadsPerThreadGroup = static_cast<uint32_t>((itemsInGroup + simdSize - 1u) / simdSize);
     this->perThreadDataSize = perThreadDataSizeForWholeThreadGroup / threadsPerThreadGroup;
     patchWorkgroupSizeInCrossThreadData(groupSizeX, groupSizeY, groupSizeZ);
@@ -196,7 +359,7 @@ xe_result_t FunctionImp::suggestGroupSize(uint32_t globalSizeX,
     // TODO : evaluate DebugManager.flags.EnableComputeWorkSizeND
     size_t retGroupSize[3] = {};
     auto maxWorkGroupSize = module->getMaxGroupSize();
-    auto simd = getKernelInfo()->getMaxSimdSize();
+    auto simd = funcImmData->getSignature().attributes.simdSize;
     size_t workItems[3] = {globalSizeX, globalSizeY, globalSizeZ};
     uint32_t dim = 1U;
     if (globalSizeY > 1U) {
@@ -222,50 +385,34 @@ xe_result_t FunctionImp::suggestGroupSize(uint32_t globalSizeX,
 
 xe_result_t FunctionImp::setArgImmediate(uint32_t argIndex, size_t argSize, const void *argVal) {
     assert(argVal != nullptr);
-    const auto &kernelArgInfo = getKernelInfo()->kernelArgInfo[argIndex];
-    DEBUG_BREAK_IF(kernelArgInfo.kernelArgPatchInfoVector.size() <= 0);
+    assert(funcImmData->getSignature().explicitArgs.args.size() > argIndex);
+    const auto &arg = funcImmData->getSignature().explicitArgs.args[argIndex];
 
-    //storeKernelArg(argIndex, NONE_OBJ, nullptr, nullptr, argSize);
+    for (const auto &element : arg->as<ArgValue>().elements) {
+        auto pDst = crossThreadData.weakRef().offsetBytesBy(element.valueOffset);
+        auto pSrc = ptrOffset(argVal, element.sourceOffset);
 
-    auto crossThreadDataEnd = ptrOffset(crossThreadData, getCrossThreadDataSize());
-
-    for (const auto &kernelArgPatchInfo : kernelArgInfo.kernelArgPatchInfoVector) {
-        DEBUG_BREAK_IF(kernelArgPatchInfo.size <= 0);
-        auto pDst = ptrOffset(crossThreadData, kernelArgPatchInfo.crossthreadOffset);
-
-        auto pSrc = ptrOffset(argVal, kernelArgPatchInfo.sourceOffset);
-
-        DEBUG_BREAK_IF(!(ptrOffset(pDst, kernelArgPatchInfo.size) <= crossThreadDataEnd));
-        ((void)(crossThreadDataEnd));
-
-        if (kernelArgPatchInfo.sourceOffset < argSize) {
-            size_t maxBytesToCopy = argSize - kernelArgPatchInfo.sourceOffset;
-            size_t bytesToCopy = std::min(static_cast<size_t>(kernelArgPatchInfo.size), maxBytesToCopy);
-            memcpy_s(pDst, kernelArgPatchInfo.size, pSrc, bytesToCopy);
+        if (element.sourceOffset < argSize) {
+            size_t maxBytesToCopy = argSize - element.sourceOffset;
+            size_t bytesToCopy = std::min(static_cast<size_t>(element.size), maxBytesToCopy);
+            memcpy_s(pDst.get(), element.size, pSrc, bytesToCopy);
         }
     }
-
     return XE_RESULT_SUCCESS;
 }
 
 xe_result_t FunctionImp::setArgBuffer(uint32_t argIndex, size_t argSize, const void *argVal) {
-    const auto &kernelArgInfo = getKernelInfo()->kernelArgInfo[argIndex];
+    const auto &arg = funcImmData->getSignature().explicitArgs.args[argIndex]->as<ArgPointer>();
+    const auto val = *reinterpret_cast<const uintptr_t *>(argVal);
 
-    auto patchLocation = ptrOffset(crossThreadData,
-                                   kernelArgInfo.kernelArgPatchInfoVector[0].crossthreadOffset);
-
-    patchWithRequiredSize(patchLocation, kernelArgInfo.kernelArgPatchInfoVector[0].size, *reinterpret_cast<const uintptr_t *>(argVal));
+    FunctionSignature::patchPointer(crossThreadData.weakRef(), crossThreadDataSize, arg, val);
 
     GraphicsAllocation *alloc =
-            globalMemoryManager->findAllocation(*reinterpret_cast<void *const *>(argVal));
+        globalMemoryManager->findAllocation(*reinterpret_cast<void *const *>(argVal));
     assert(alloc != nullptr); // TODO : Handle nullptr if *argVal == NULL
 
-    oclInternals->storeKernelArg(argIndex, NEO::Kernel::BUFFER_OBJ, nullptr, argVal, argSize);
-
     // Handle stateles to stateful
-    if (getKernelInfo()->requiresSshForBuffers) {
-        setBufferSurfaceState(argIndex, *reinterpret_cast<void *const *>(argVal), alloc);
-    }
+    setBufferSurfaceState(argIndex, *reinterpret_cast<void *const *>(argVal), alloc);
 
     residencyContainer[argIndex] = alloc;
 
@@ -274,17 +421,14 @@ xe_result_t FunctionImp::setArgBuffer(uint32_t argIndex, size_t argSize, const v
 
 xe_result_t FunctionImp::setArgImage(uint32_t argIndex, size_t argSize, const void *argVal) {
     const auto image = Image::fromHandle(*static_cast<const xe_image_handle_t *>(argVal));
-    const auto &kernelArgInfo = getKernelInfo()->kernelArgInfo[argIndex];
-
-    oclInternals->storeKernelArg(argIndex, NEO::Kernel::IMAGE_OBJ, image, argVal, argSize);
+    const auto &arg = funcImmData->getSignature().explicitArgs.args[argIndex]->as<ArgImage>();
 
     auto ssh = getSurfaceStateHeap();
     assert(ssh);
 
     //Optimization?  Rather than setting up and copying into a function's SSH, save references to the
     // arguments' surface states, then do all the copying and BTS updating once in appendLaunchFunction
-    image->copySurfaceStateToSSH(ssh, kernelArgInfo.offsetHeap,
-                                 static_cast<uint32_t>(oclInternals->localBindingTableOffset), argIndex);
+    image->copySurfaceStateToSSH(ssh, arg.stateful);
 
     GraphicsAllocation *alloc = image->getAllocation();
     assert(alloc);
@@ -297,163 +441,82 @@ bool FunctionImp::initialize(const xe_function_desc_t *desc) {
     assert(desc->version == XE_API_HEADER_VERSION);
     assert(desc->flags == 0);
 
-    this->immFuncInfo = module->getImmutableFunctionInfo(CStringRef(desc->pFunctionName));
-    assert(this->immFuncInfo != nullptr);
-    PtrRef<NEO::KernelInfo> kernelInfoRT = immFuncInfo->kernelInfoRT.weakRefReinterpret<NEO::KernelInfo>();
-    assert(kernelInfoRT != nullptr);
+    this->funcImmData = module->getFunctionImmutableData(CStringRef(desc->pFunctionName));
+    assert(this->funcImmData != nullptr);
 
-    // TODO : move immutable kernelRT to ImmutableFunctionInfo
-    // kernelRT is currently part of Function because in early stages of API, Function objects were immutable/singleton (thanks to separation from FunctionArgs)
-    // right now Function is greatly mutable and mutli-instanced, that's why immutable resources should be moved to ImmutableFunctionInfo
-    kernelRT = new NEO_temporary::LightweightOclKernel(static_cast<NEO::Program *>(static_cast<ModuleImp *>(module)->getProgramRT()), *kernelInfoRT);
-    kernelRT->initialize();
-
-    // clone muttables from kernel object - note some may be immutable - fix this later
-    this->oclInternals->kernelArguments = kernelRT->kernelArguments;
-    for (auto handleRT : kernelRT->kernelArgHandlers) {
-        if (handleRT == &NEO::Kernel::setArgBuffer) {
-            this->oclInternals->kernelArgHandlers.push_back(&FunctionImp::setArgBuffer);
-        } else if (handleRT == &NEO::Kernel::setArgImage) {
-            this->oclInternals->kernelArgHandlers.push_back(&FunctionImp::setArgImage);
-        } else if (handleRT == &NEO::Kernel::setArgImmediate) {
-            this->oclInternals->kernelArgHandlers.push_back(&FunctionImp::setArgImmediate);
-        } else {
+    for (const auto &argT : funcImmData->getSignature().explicitArgs.args) {
+        switch (argT->type) {
+        case Arg::ArgTPointer:
+            this->kernelArgHandlers.push_back(&FunctionImp::setArgBuffer);
+            break;
+        case Arg::ArgTImage:
+            this->kernelArgHandlers.push_back(&FunctionImp::setArgImage);
+            break;
+        case Arg::ArgTSampler:
             assert(0);
+            this->kernelArgHandlers.push_back(&FunctionImp::setArgImmediate);
+            break;
+        case Arg::ArgTValue:
+            this->kernelArgHandlers.push_back(&FunctionImp::setArgImmediate);
+            break;
         }
     }
 
-    this->oclInternals->kernelSvmGfxAllocations = kernelRT->kernelSvmGfxAllocations;
-
-    this->oclInternals->numberOfBindingTableStates = kernelRT->numberOfBindingTableStates;
-    this->oclInternals->localBindingTableOffset = kernelRT->localBindingTableOffset;
-    if (kernelRT->sshLocalSize != 0) {
-        this->oclInternals->pSshLocal = std::make_unique<char[]>(kernelRT->sshLocalSize);
+    if (funcImmData->getSurfaceStateHeapSize() > 0) {
+        this->pSshLocal = std::make_unique<char[]>(funcImmData->getSurfaceStateHeapSize());
         // just copy-over ssh w/ binding table
         // note : binding table is already set-up properly by the compiler
-        memcpy(this->oclInternals->pSshLocal.get(), kernelRT->pSshLocal.get(), kernelRT->sshLocalSize);
-        this->oclInternals->sshLocalSize = kernelRT->sshLocalSize;
+        memcpy(this->pSshLocal.get(), funcImmData->getSurfaceStateHeapTemplate().get(), funcImmData->getSurfaceStateHeapSize());
+        this->sshLocalSize = funcImmData->getSurfaceStateHeapSize();
     }
 
-    if (kernelRT->crossThreadDataSize != 0) {
-        this->crossThreadData = new char[kernelRT->crossThreadDataSize];
-        memcpy(this->crossThreadData, kernelRT->crossThreadData, kernelRT->crossThreadDataSize);
-        this->crossThreadDataSize = kernelRT->crossThreadDataSize;
+    if (funcImmData->getCrossThreadDataSize() != 0) {
+        this->crossThreadData.rebind(new uint8_t[funcImmData->getCrossThreadDataSize()], funcImmData->getCrossThreadDataSize());
+        memcpy(this->crossThreadData.weakRef().get(), funcImmData->getCrossThreadDataTemplate().get(), funcImmData->getCrossThreadDataSize());
+        this->crossThreadDataSize = funcImmData->getCrossThreadDataSize();
     }
 
-    setGroupSize(getSimdSize(), 1, 1); // until apps sets-up something smarter
+    if (funcImmData->getDynamicStateHeapSize() != 0) {
+        this->dshLocal.rebind(new uint8_t[funcImmData->getDynamicStateHeapSize()], funcImmData->getDynamicStateHeapSize());
+        memcpy(this->dshLocal.weakRef().get(), funcImmData->getDynamicStateHeapTemplate().get(), funcImmData->getDynamicStateHeapSize());
+        this->dshLocalSize = funcImmData->getDynamicStateHeapSize();
+    }
 
-    residencyContainer.resize(this->oclInternals->kernelArgHandlers.size(), nullptr); // todo : handle implicit surfaces - printf/private/constant
+    // TODO : reqd_workgroup_size
+    // TODO : fused EUs
+    setGroupSize(funcImmData->getSignature().attributes.simdSize, 1, 1); // until apps chooses something smarter
+
+    residencyContainer.resize(this->kernelArgHandlers.size(), nullptr);
 
     this->createPrintfBuffer();
-    if (kernelRT->privateSurface != nullptr) {
-        privateMemAllocation.rebind(new GraphicsAllocation(kernelRT->privateSurface));
-        residencyContainer.push_back(privateMemAllocation.weakRef().get());
-    }
 
-    this->oclInternals->usingSharedObjArgs = kernelRT->usingSharedObjArgs;
-    this->oclInternals->usingImagesOnly = kernelRT->usingImagesOnly;
-    this->oclInternals->auxTranslationRequired = kernelRT->auxTranslationRequired;
-    this->oclInternals->patchedArgumentsNum = kernelRT->patchedArgumentsNum;
-    this->oclInternals->startOffset = kernelRT->startOffset;
+    for (auto &alloc : funcImmData->getResidencyContainer()) {
+        residencyContainer.push_back(alloc.get());
+    }
 
     return true;
 }
 
-const void *FunctionImp::getIsaHostMem() const {
-    return kernelRT->getKernelHeap();
-}
-
-size_t FunctionImp::getIsaSize() const {
-    return kernelRT->getKernelHeapSize();
-}
-
-uint32_t FunctionImp::getSimdSize() const {
-    return kernelRT->kernelInfo.getMaxSimdSize();
-}
-
-bool FunctionImp::getHasBarriers() const {
-    return getKernelInfo()->patchInfo.executionEnvironment->HasBarriers;
-}
-
-uint32_t FunctionImp::getSlmSize() const {
-    if (getKernelInfo()->patchInfo.localsurface) {
-        return getKernelInfo()->patchInfo.localsurface->TotalInlineLocalMemorySize;
-    }
-    return 0;
-}
-
-bool FunctionImp::hasPrintfOutput() const {
-    return getKernelInfo()->patchInfo.pAllocateStatelessPrintfSurface != nullptr;
-}
-
 void FunctionImp::createPrintfBuffer() {
-    if (this->hasPrintfOutput()) {
-        this->printfBuffer = PrintfHandler::createPrintfBuffer(this->module->getDevice());
-        this->residencyContainer.push_back(printfBuffer);
-        this->patchCrossThreadData(this->getKernelInfo()->patchInfo.pAllocateStatelessPrintfSurface->DataParamOffset,
-                                   static_cast<uintptr_t>(this->printfBuffer->getGpuAddressOffsetFromHeapBase()));
+    if (this->funcImmData->getSignature().attributes.flags.hasPrintf) {
+        this->printfBuffer.rebind(PrintfHandler::createPrintfBuffer(this->module->getDevice()));
+        this->residencyContainer.push_back(printfBuffer.weakRef().get());
+        FunctionSignature::patchPointer(crossThreadData.weakRef(), crossThreadDataSize,
+                                        this->getImmutableData()->getSignature().implicitArgs.printfSurface,
+                                        static_cast<uintptr_t>(this->printfBuffer->getGpuAddressOffsetFromHeapBase()));
     }
 }
 
 void FunctionImp::printPrintfOutput() {
-    PrintfHandler::printOutput(this->kernelRT, this->printfBuffer);
+    PrintfHandler::printOutput(funcImmData, this->printfBuffer.weakRef(), module->getDevice());
 }
-
-//TODO for performance, make sure this is inlined
-void *FunctionImp::getSurfaceStateHeap() const {
-    return this->oclInternals->pSshLocal.get();
-}
-
-uint32_t FunctionImp::getSurfaceStateHeapSize() const {
-    return this->oclInternals->sshLocalSize;
-}
-
-uint32_t FunctionImp::getBindingTableStateCount() const {
-    return static_cast<uint32_t>(this->oclInternals->numberOfBindingTableStates);
-}
-
-uint32_t FunctionImp::getBindingTableOffset() const {
-    return static_cast<uint32_t>(this->oclInternals->localBindingTableOffset);
-}
-
-const iOpenCL::SPatchSamplerStateArray *FunctionImp::getSamplerStateArray() const {
-    return this->getKernelInfo()->patchInfo.samplerStateArray;
-}
-
-const void *FunctionImp::getDynamicStateHeap() const {
-    return this->kernelRT->getDynamicStateHeap();
-}
-
-const size_t FunctionImp::getDynamicStateHeapSize() const {
-    return this->kernelRT->getDynamicStateHeapSize();
-}
-
-template <typename T>
-bool FunctionImp::patchCrossThreadData(uint32_t location, const T &value) {
-    if (NEO::KernelArgInfo::undefinedOffset == location) {
-        return false;
-    }
-    *reinterpret_cast<T *>(ptrOffset(this->crossThreadData, location)) = value;
-    return true;
-}
-
-template bool FunctionImp::patchCrossThreadData<uint32_t>(uint32_t location, const uint32_t &value);
-template bool FunctionImp::patchCrossThreadData<uint64_t>(uint32_t location, const uint64_t &value);
-template bool FunctionImp::patchCrossThreadData<size_t>(uint32_t location, const size_t &value);
-template bool FunctionImp::patchCrossThreadData<uintptr_t>(uint32_t location, const uintptr_t &value);
 
 void FunctionImp::patchWorkgroupSizeInCrossThreadData(uint32_t x, uint32_t y, uint32_t z) {
-    patchCrossThreadData(getKernelInfo()->workloadInfo.localWorkSizeOffsets[0], x);
-    patchCrossThreadData(getKernelInfo()->workloadInfo.localWorkSizeOffsets[1], y);
-    patchCrossThreadData(getKernelInfo()->workloadInfo.localWorkSizeOffsets[2], z);
-
-    patchCrossThreadData(getKernelInfo()->workloadInfo.localWorkSizeOffsets2[0], x); // not sure why we have second set of those
-    patchCrossThreadData(getKernelInfo()->workloadInfo.localWorkSizeOffsets2[1], y);
-    patchCrossThreadData(getKernelInfo()->workloadInfo.localWorkSizeOffsets2[2], z);
-
-    patchCrossThreadData(getKernelInfo()->workloadInfo.enqueuedLocalWorkSizeOffsets[0], x);
-    patchCrossThreadData(getKernelInfo()->workloadInfo.enqueuedLocalWorkSizeOffsets[1], y);
-    patchCrossThreadData(getKernelInfo()->workloadInfo.enqueuedLocalWorkSizeOffsets[2], z);
+    const FunctionSignature &sig = funcImmData->getSignature();
+    uint32_t workgroupSize[3] = {x, y, z};
+    FunctionSignature::patchVecNonPointer(crossThreadData.weakRef(), crossThreadDataSize, sig.dispatchMetadata.localWorkSize, workgroupSize);
+    FunctionSignature::patchVecNonPointer(crossThreadData.weakRef(), crossThreadDataSize, sig.dispatchMetadata.localWorkSize2, workgroupSize); // not sure why we have second set of those
+    FunctionSignature::patchVecNonPointer(crossThreadData.weakRef(), crossThreadDataSize, sig.dispatchMetadata.enqueuedLocalWorkSize, workgroupSize);
 }
 
 Function *Function::create(uint32_t productFamily, Module *module, const xe_function_desc_t *desc) {

@@ -2,7 +2,6 @@
 #include "mock_device.h"
 #include "mock_module_precompiled.h"
 #include "igfxfmid.h"
-#include "global_fixture.h"
 #include "test.h"
 #include "unit_tests/gen_common/gen_cmd_parse.h"
 #include "runtime/command_stream/linear_stream.h"
@@ -29,8 +28,7 @@ TEST(xeImageDestroy, redirectsToObject) {
     EXPECT_EQ(XE_RESULT_SUCCESS, result);
 }
 
-class ImageCreate : public GlobalFixtureTest {
-};
+using ImageCreate = ::testing::Test;
 
 TEST_F(ImageCreate, returnsImageOnSuccess) {
     Mock<Device> device;
@@ -124,8 +122,7 @@ HWTEST2_F(ImageCreate, descBadParamsFail, MatchAny) {
     ASSERT_FALSE(ret);
 }
 
-class ImageSurfaceState : public GlobalFixtureTest {
-};
+using ImageSurfaceState = ::testing::Test;
 
 HWTEST2_F(ImageSurfaceState, descMatchesSurface, MatchAny) {
     using RENDER_SURFACE_STATE = typename FamilyType::RENDER_SURFACE_STATE;
@@ -231,8 +228,8 @@ HWTEST2_F(ImageSurfaceState, copyToSSH, MatchAny) {
     ret = imageB->initialize(&device, &desc);
     ASSERT_TRUE(ret);
 
-    imageA->copySurfaceStateToSSH(mockSSH, 0, bindingTableOffset, 0);
-    imageB->copySurfaceStateToSSH(mockSSH, sizeof(RENDER_SURFACE_STATE), bindingTableOffset, 1);
+    imageA->copySurfaceStateToSSH(mockSSH, 0);
+    imageB->copySurfaceStateToSSH(mockSSH, sizeof(RENDER_SURFACE_STATE));
 
     auto surfaceStateA = reinterpret_cast<RENDER_SURFACE_STATE *>(mockSSH);
     ASSERT_EQ(surfaceStateA->getSurfaceType(), RENDER_SURFACE_STATE::SURFACE_TYPE_SURFTYPE_2D);

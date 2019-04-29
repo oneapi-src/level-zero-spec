@@ -17,24 +17,23 @@ using ::testing::Return;
 TEST(FunctionImp, crossThreadDataIsCorrectlyPatchedWithGlobalWorkSizeAndGroupCount) {
     uint32_t *crossThreadData = reinterpret_cast<uint32_t *>(alignedMalloc(sizeof(uint32_t[6]), 32));
 
-    PtrOwn<NEO::KernelInfo> kernelInfo{new NEO::KernelInfo{}};
-    kernelInfo->workloadInfo.globalWorkSizeOffsets[0] = 0 * sizeof(uint32_t);
-    kernelInfo->workloadInfo.globalWorkSizeOffsets[1] = 1 * sizeof(uint32_t);
-    kernelInfo->workloadInfo.globalWorkSizeOffsets[2] = 2 * sizeof(uint32_t);
-    kernelInfo->workloadInfo.numWorkGroupsOffset[0] = 3 * sizeof(uint32_t);
-    kernelInfo->workloadInfo.numWorkGroupsOffset[1] = 4 * sizeof(uint32_t);
-    kernelInfo->workloadInfo.numWorkGroupsOffset[2] = 5 * sizeof(uint32_t);
-    ImmutableFunctionInfo funcInfo = {};
-    funcInfo.kernelInfoRT = kernelInfo.weakRefReinterpret<void>();
+    WhiteBox<::L0::FunctionImmutableData> funcInfo = {};
+    funcInfo.signature.dispatchMetadata.globalWorkSize[0] = 0 * sizeof(uint32_t);
+    funcInfo.signature.dispatchMetadata.globalWorkSize[1] = 1 * sizeof(uint32_t);
+    funcInfo.signature.dispatchMetadata.globalWorkSize[2] = 2 * sizeof(uint32_t);
+    funcInfo.signature.dispatchMetadata.numWorkGroups[0] = 3 * sizeof(uint32_t);
+    funcInfo.signature.dispatchMetadata.numWorkGroups[1] = 4 * sizeof(uint32_t);
+    funcInfo.signature.dispatchMetadata.numWorkGroups[2] = 5 * sizeof(uint32_t);
 
     Mock<Function> function;
-    function.immFuncInfo.rebind(&funcInfo);
-    function.crossThreadData = reinterpret_cast<char *>(crossThreadData);
+    function.funcImmData.rebind(&funcInfo);
+    function.crossThreadData.rebind(reinterpret_cast<uint8_t *>(crossThreadData));
+    function.crossThreadDataSize = sizeof(uint32_t[6]);
     EXPECT_CALL(function, getGroupSize(_, _, _))
         .WillRepeatedly(Invoke(&function, &Mock<Function>::mock_forwardToBase_getGroupSize));
-    function.groupSizeX = 2;
-    function.groupSizeY = 3;
-    function.groupSizeZ = 5;
+    function.groupSize[0] = 2;
+    function.groupSize[1] = 3;
+    function.groupSize[2] = 5;
 
     function.FunctionImp::setGroupCount(7, 11, 13);
     auto crossThread = function.FunctionImp::getCrossThreadDataHostMem();
@@ -48,15 +47,13 @@ TEST(FunctionImp, crossThreadDataIsCorrectlyPatchedWithGlobalWorkSizeAndGroupCou
     EXPECT_EQ(7U, numGroups[0]);
     EXPECT_EQ(11U, numGroups[1]);
     EXPECT_EQ(13U, numGroups[2]);
-
-    kernelInfo.deleteOwned();
 }
 
 TEST(FunctionImp, suggestGroupSizeClampsToMaxGroupSize) {
     NEO::SPatchExecutionEnvironment execEnv = {};
     PtrOwn<NEO::KernelInfo> kernelInfo{new NEO::KernelInfo{}};
     kernelInfo->patchInfo.executionEnvironment = &execEnv;
-    ImmutableFunctionInfo funcInfo = {};
+    FunctionImmutableData funcInfo = {};
     funcInfo.kernelInfoRT = kernelInfo.weakRefReinterpret<void>();
     execEnv.LargestCompiledSIMDSize = 16;
 
@@ -65,8 +62,8 @@ TEST(FunctionImp, suggestGroupSizeClampsToMaxGroupSize) {
         .WillRepeatedly(Return(8));
 
     Mock<Function> function;
-    function.immFuncInfo.rebind(&funcInfo);
-    function.module = &module;
+    function.funcImmData.rebind(&funcInfo);
+    function.module.rebind(&module);
     uint32_t groupSize[3];
     function.FunctionImp::suggestGroupSize(256, 1, 1, groupSize, groupSize + 1, groupSize + 2);
     EXPECT_EQ(8U, groupSize[0]);
@@ -86,7 +83,7 @@ TEST_P(FunctionImpSuggestGroupSize, suggestGroupChoosesProperGroupSize) {
     NEO::SPatchExecutionEnvironment execEnv = {};
     PtrOwn<NEO::KernelInfo> kernelInfo{new NEO::KernelInfo{}};
     kernelInfo->patchInfo.executionEnvironment = &execEnv;
-    ImmutableFunctionInfo funcInfo = {};
+    FunctionImmutableData funcInfo = {};
     funcInfo.kernelInfoRT = kernelInfo.weakRefReinterpret<void>();
     execEnv.LargestCompiledSIMDSize = 16;
 
@@ -97,8 +94,8 @@ TEST_P(FunctionImpSuggestGroupSize, suggestGroupChoosesProperGroupSize) {
     uint32_t size = GetParam();
 
     Mock<Function> function;
-    function.immFuncInfo.rebind(&funcInfo);
-    function.module = &module;
+    function.funcImmData.rebind(&funcInfo);
+    function.module.rebind(&module);
     uint32_t groupSize[3];
     function.FunctionImp::suggestGroupSize(size, 1, 1, groupSize, groupSize + 1, groupSize + 2);
     EXPECT_EQ(0U, size % groupSize[0]);
@@ -156,14 +153,14 @@ TEST(FunctionImp, setGroupSizeDoesNotGenerateLocalIdsIfNumChannelsIs0) {
     PtrOwn<NEO::KernelInfo> kernelInfo{new NEO::KernelInfo{}};
     kernelInfo->patchInfo.executionEnvironment = &execEnv;
     kernelInfo->patchInfo.threadPayload = &payload;
-    ImmutableFunctionInfo funcInfo = {};
+    FunctionImmutableData funcInfo = {};
     funcInfo.kernelInfoRT = kernelInfo.weakRefReinterpret<void>();
     execEnv.LargestCompiledSIMDSize = 32;
 
     Mock<Module> module;
     Mock<Function> function;
-    function.immFuncInfo.rebind(&funcInfo);
-    function.module = &module;
+    function.funcImmData.rebind(&funcInfo);
+    function.module.rebind(&module);
 
     function.FunctionImp::setGroupSize(16U, 16U, 1U);
     std::vector<char> memBefore;

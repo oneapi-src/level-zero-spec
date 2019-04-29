@@ -17,10 +17,8 @@ struct WhiteBox<::L0::Function> : public ::L0::FunctionImp {
     using ::L0::FunctionImp::createPrintfBuffer;
     using ::L0::FunctionImp::crossThreadData;
     using ::L0::FunctionImp::crossThreadDataSize;
-    using ::L0::FunctionImp::groupSizeX;
-    using ::L0::FunctionImp::groupSizeY;
-    using ::L0::FunctionImp::groupSizeZ;
-    using ::L0::FunctionImp::immFuncInfo;
+    using ::L0::FunctionImp::funcImmData;
+    using ::L0::FunctionImp::groupSize;
     using ::L0::FunctionImp::module;
     using ::L0::FunctionImp::printfBuffer;
     using ::L0::FunctionImp::residencyContainer;
@@ -58,14 +56,10 @@ struct Mock<Function> : public Function {
                                                uint32_t *groupSizeZ));
 
     MOCK_CONST_METHOD3(getGroupSize, void(uint32_t &outGroupSizeX, uint32_t &outGroupSizeY, uint32_t &outGroupSizeZ));
-    MOCK_CONST_METHOD0(getIsaHostMem, const void *());
-    MOCK_CONST_METHOD0(getIsaSize, size_t());
-    MOCK_CONST_METHOD0(getIsaGraphicsAllocation, PtrRef<GraphicsAllocation>());
     MOCK_CONST_METHOD0(getModule, Module *());
     MOCK_CONST_METHOD0(getPerThreadDataHostMem, const void *());
     MOCK_CONST_METHOD0(getPerThreadDataSizeForWholeThreadGroup, uint32_t());
     MOCK_CONST_METHOD0(getPerThreadDataSize, uint32_t());
-    MOCK_CONST_METHOD0(getSimdSize, uint32_t());
     MOCK_CONST_METHOD0(getThreadsPerThreadGroup, uint32_t());
     MOCK_CONST_METHOD0(getThreadExecutionMask, uint32_t());
     MOCK_CONST_METHOD0(getCrossThreadDataHostMem, const void *());
@@ -73,7 +67,6 @@ struct Mock<Function> : public Function {
     MOCK_CONST_METHOD0(getResidencyContainer, const std::vector<GraphicsAllocation *> &());
     MOCK_CONST_METHOD0(getHasBarriers, bool());
     MOCK_CONST_METHOD0(getSlmSize, uint32_t());
-    MOCK_CONST_METHOD0(hasPrintfOutput, bool());
     MOCK_METHOD0(printPrintfOutput, void());
     MOCK_CONST_METHOD0(getSurfaceStateHeap, void *());
     MOCK_CONST_METHOD0(getSurfaceStateHeapSize, uint32_t());
@@ -82,17 +75,31 @@ struct Mock<Function> : public Function {
     MOCK_METHOD3(setBufferSurfaceState, void(uint32_t argIndex, void *address, GraphicsAllocation *alloc));
     MOCK_CONST_METHOD0(getDynamicStateHeap, const void *());
     MOCK_CONST_METHOD0(getDynamicStateHeapSize, const size_t());
-    MOCK_CONST_METHOD0(getSamplerStateArray, const iOpenCL::SPatchSamplerStateArray *());
+    MOCK_CONST_METHOD0(getImmutableData, PtrRef<FunctionImmutableData>());
 
     // TODO : automate generation of such forwarders (e.g. extend GMOCK macros)
     void mock_forwardToBase_getGroupSize(uint32_t &outGroupSizeX, uint32_t &outGroupSizeY, uint32_t &outGroupSizeZ) {
         this->BaseClass::getGroupSize(outGroupSizeX, outGroupSizeY, outGroupSizeZ);
     }
-
-    bool mock_forwardToBase_hasPrintfOutput() {
-        return this->BaseClass::hasPrintfOutput();
-    }
 };
+
+template <>
+struct WhiteBox<::L0::FunctionImmutableData> : public ::L0::FunctionImmutableData {
+    using BaseClass = ::L0::FunctionImmutableData;
+    using ::L0::FunctionImmutableData::crossThreadDataSize;
+    using ::L0::FunctionImmutableData::crossThreadDataTemplate;
+    using ::L0::FunctionImmutableData::isaGraphicsAllocation;
+    using ::L0::FunctionImmutableData::kernelInfoRT;
+    using ::L0::FunctionImmutableData::numLocalIdChannels;
+    using ::L0::FunctionImmutableData::privateMemoryGraphicsAllocation;
+    using ::L0::FunctionImmutableData::residencyContainer;
+    using ::L0::FunctionImmutableData::signature;
+
+    WhiteBox() : ::L0::FunctionImmutableData() {}
+    virtual ~WhiteBox() = default;
+};
+
+using FunctionImmutableData = WhiteBox<::L0::FunctionImmutableData>;
 
 } // namespace ult
 } // namespace L0

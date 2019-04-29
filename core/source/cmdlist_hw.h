@@ -82,7 +82,9 @@ struct CommandListCoreFamily : public CommandListImp {
                                               const void *srcKernelSsh, uint32_t srcKernelSshSize,
                                               uint32_t numberOfBindingTableStates, uint32_t offsetOfBindingTable);
     uint32_t copySamplerState(NEO::IndirectHeap *dsh,
-                              const iOpenCL::SPatchSamplerStateArray *samplerStateArray,
+                              uint32_t samplerStateOffset,
+                              uint32_t samplerCount,
+                              uint32_t borderColorOffset,
                               const void *fnDynamicStateHeap);
     void copySamplerState(NEO::IndirectHeap *dsh, Function *function);
 

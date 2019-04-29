@@ -11,6 +11,8 @@ Mock<Function>::Mock() {
         .WillByDefault(Return(0xfffffffful));
     EXPECT_CALL(*this, getPerThreadDataSize)
         .WillRepeatedly(Invoke([this]() { return getPerThreadDataSizeForWholeThreadGroup() / getThreadsPerThreadGroup(); }));
+    EXPECT_CALL(*this, getImmutableData)
+        .WillRepeatedly(Invoke([this]() { return ::L0::FunctionImp::getImmutableData(); }));
 }
 
 } // namespace ult

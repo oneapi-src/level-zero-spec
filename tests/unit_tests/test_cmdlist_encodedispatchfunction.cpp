@@ -378,10 +378,10 @@ ATSTEST_F(CommandListAppendLaunchFunction, storesImageSampler) {
     createFunction("ImageCopy");
 
     auto fnDynamicStateHeap = function->getDynamicStateHeap();
-    auto fnSamplerStateArray = function->getSamplerStateArray();
-    ASSERT_NE(fnDynamicStateHeap, nullptr);
-    ASSERT_NE(function->getDynamicStateHeapSize(), 0);
-    ASSERT_NE(fnSamplerStateArray, nullptr);
+    const auto &signature = function->getImmutableData()->getSignature();
+    ASSERT_NE(0U, function->getDynamicStateHeapSize());
+    ASSERT_NE(nullptr, fnDynamicStateHeap);
+    ASSERT_NE(Undefined, signature.samplerTable.tableOffset);
 
     auto result = commandList->appendLaunchFunction(function->toHandle(),
                                                     &dispatchFunctionArguments,
@@ -402,14 +402,14 @@ ATSTEST_F(CommandListAppendLaunchFunction, storesImageSampler) {
     auto &idd = cmd->getInterfaceDescriptor();
     auto dsh = commandList->indirectHeaps[CommandList::DYNAMIC_STATE];
 
-    auto samplerCount = fnSamplerStateArray->Count;
+    auto samplerCount = signature.samplerTable.numSamplers;
     ASSERT_LE(samplerCount, static_cast<uint32_t>(idd.getSamplerCount() * 4));
 
     auto sizeSamplerState = sizeof(SAMPLER_STATE) * samplerCount;
-    auto fnSamplerState = static_cast<const SAMPLER_STATE *>(ptrOffset(fnDynamicStateHeap, fnSamplerStateArray->Offset));
+    auto fnSamplerState = static_cast<const SAMPLER_STATE *>(ptrOffset(fnDynamicStateHeap, signature.samplerTable.tableOffset));
     auto samplerState = static_cast<const SAMPLER_STATE *>(ptrOffset(dsh->getCpuBase(), idd.getSamplerStatePointer()));
 
-    ASSERT_EQ(memcmp(fnSamplerState, samplerState, sizeSamplerState), 0u);
+    EXPECT_EQ(memcmp(fnSamplerState, samplerState, sizeSamplerState), 0u);
 }
 
 ATSTEST_F(CommandListAppendLaunchFunction, storesBindingTableAndSurfaceStates) {
@@ -555,7 +555,7 @@ ATSTEST_F(CommandListAppendLaunchFunction, usesIsaFromInstructionHeap) {
     using INTERFACE_DESCRIPTOR_DATA = typename FamilyType::INTERFACE_DESCRIPTOR_DATA;
 
     COMPUTE_WALKER addressValidator{};
-    addressValidator.getInterfaceDescriptor().setKernelStartPointer(function->getIsaGraphicsAllocation()->getGpuAddressOffsetFromHeapBase());
+    addressValidator.getInterfaceDescriptor().setKernelStartPointer(function->getImmutableData()->getIsaGraphicsAllocation()->getGpuAddressOffsetFromHeapBase());
 
     auto itor = find<COMPUTE_WALKER *>(cmdList.begin(), cmdList.end());
     ASSERT_NE(cmdList.end(), itor);
@@ -818,12 +818,12 @@ GEN9TEST_F(CommandListAppendLaunchFunctionGEN9, storesImageSampler) {
     using SAMPLER_STATE = typename FamilyType::SAMPLER_STATE;
 
     createFunction("ImageCopy");
+    const auto &signature = function->getImmutableData()->getSignature();
 
     auto fnDynamicStateHeap = function->getDynamicStateHeap();
-    auto fnSamplerStateArray = function->getSamplerStateArray();
-    ASSERT_NE(fnDynamicStateHeap, nullptr);
-    ASSERT_NE(function->getDynamicStateHeapSize(), 0);
-    ASSERT_NE(fnSamplerStateArray, nullptr);
+    ASSERT_NE(nullptr, fnDynamicStateHeap);
+    ASSERT_NE(0, function->getDynamicStateHeapSize());
+    ASSERT_NE(Undefined, signature.samplerTable.tableOffset);
 
     auto result = commandList->appendLaunchFunction(function->toHandle(),
                                                     &dispatchFunctionArguments,
@@ -854,11 +854,11 @@ GEN9TEST_F(CommandListAppendLaunchFunctionGEN9, storesImageSampler) {
     }
 
     auto dsh = commandList->indirectHeaps[CommandList::DYNAMIC_STATE];
-    auto samplerCount = fnSamplerStateArray->Count;
+    auto samplerCount = signature.samplerTable.numSamplers;
     ASSERT_LE(samplerCount, static_cast<uint32_t>(idd->getSamplerCount() * 4));
 
     auto sizeSamplerState = sizeof(SAMPLER_STATE) * samplerCount;
-    auto fnSamplerState = static_cast<const SAMPLER_STATE *>(ptrOffset(fnDynamicStateHeap, fnSamplerStateArray->Offset));
+    auto fnSamplerState = static_cast<const SAMPLER_STATE *>(ptrOffset(fnDynamicStateHeap, signature.samplerTable.tableOffset));
     auto samplerState = static_cast<const SAMPLER_STATE *>(ptrOffset(dsh->getCpuBase(), idd->getSamplerStatePointer()));
 
     ASSERT_EQ(memcmp(fnSamplerState, samplerState, sizeSamplerState), 0u);
@@ -962,15 +962,15 @@ TEST_P(CommandListReset, resetCommandListResetsAfterClose) {
     ASSERT_EQ(&device, commandList->device);
     ASSERT_NE(nullptr, commandList->commandStream);
     ASSERT_EQ(commandListControl->allocation->getSize(),
-            commandList->allocation->getSize());
+              commandList->allocation->getSize());
     ASSERT_EQ(commandListControl->residencyContainer.size(),
-            commandList->residencyContainer.size());
+              commandList->residencyContainer.size());
     ASSERT_EQ(commandListControl->deallocationContainer.size(),
-            commandList->deallocationContainer.size());
+              commandList->deallocationContainer.size());
     ASSERT_EQ(commandListControl->printfFunctionContainer.size(),
-            commandList->printfFunctionContainer.size());
+              commandList->printfFunctionContainer.size());
     ASSERT_EQ(commandListControl->commandStream->getUsed(),
-            commandList->commandStream->getUsed());
+              commandList->commandStream->getUsed());
     ASSERT_EQ(commandListControl->dirtyHeaps, commandList->dirtyHeaps);
     ASSERT_EQ(commandListControl->slmSize, commandList->slmSize);
 
@@ -978,12 +978,12 @@ TEST_P(CommandListReset, resetCommandListResetsAfterClose) {
         ASSERT_NE(nullptr, commandListControl->allocationIndirectHeaps[i]);
         ASSERT_NE(nullptr, commandList->allocationIndirectHeaps[i]);
         ASSERT_EQ(commandListControl->allocationIndirectHeaps[i]->getSize(),
-                commandList->allocationIndirectHeaps[i]->getSize());
+                  commandList->allocationIndirectHeaps[i]->getSize());
 
         ASSERT_NE(nullptr, commandListControl->indirectHeaps[i]);
         ASSERT_NE(nullptr, commandList->indirectHeaps[i]);
         ASSERT_EQ(commandListControl->indirectHeaps[i]->getUsed(),
-                commandList->indirectHeaps[i]->getUsed());
+                  commandList->indirectHeaps[i]->getUsed());
     }
 }
 

@@ -30,7 +30,7 @@ struct Module : public _xe_module_handle_t {
                                            void **pfnFunction) = 0;
     virtual xe_result_t getGlobalPointer(const char *pGlobalName, void **pPtr) = 0;
 
-    virtual PtrRef<ImmutableFunctionInfo> getImmutableFunctionInfo(CStringRef functionName) const = 0;
+    virtual PtrRef<FunctionImmutableData> getFunctionImmutableData(CStringRef functionName) const = 0;
     virtual uint32_t getMaxGroupSize() const = 0;
 
     Module() = default;

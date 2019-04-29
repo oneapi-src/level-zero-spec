@@ -66,6 +66,12 @@ struct MemoryManagerImp : public MemoryManager {
         return this->memoryManagerRT->getInternalHeapBaseAddress();
     }
 
+    PtrOwn<GraphicsAllocation> allocateGraphicsMemoryForPrivateMemory(size_t size) override {
+        assert(size > 0);
+        auto alloc = this->memoryManagerRT->allocateGraphicsMemoryWithProperties({size, NEO::GraphicsAllocation::AllocationType::PRIVATE_SURFACE});
+        return PtrOwn<GraphicsAllocation>{new GraphicsAllocation(alloc)};
+    }
+
     GraphicsAllocation *findAllocation(const void *ptr) override {
         return allocMap[knownAllocations.get(ptr)]; // temporary
     }

@@ -5,62 +5,79 @@
 namespace L0 {
 namespace ult {
 
-using ::testing::An;
-using ::testing::AnyNumber;
-using ::testing::Invoke;
+using namespace testing;
 
-std::unordered_map<void *, L0::GraphicsAllocation *> WhiteBox<::L0::MemoryManager>::ptrMap = {};
+using MockMemoryManager = Mock<L0::ult::MemoryManager>;
 
-static GraphicsAllocation *createGraphicsAllocation(size_t size, size_t alignment) {
+MockMemoryManager::Mock() {
+    EXPECT_CALL(*this, allocateDeviceMemory)
+        .WillRepeatedly(Invoke(this, &MockMemoryManager::doCreateGraphicsAllocation));
+
+    EXPECT_CALL(*this, allocateGraphicsMemoryForIsa)
+        .WillRepeatedly(Invoke(this, &MockMemoryManager::doCreateGraphicsAllocationForIsa));
+
+    EXPECT_CALL(*this, allocateGraphicsMemoryForPrivateMemory)
+        .WillRepeatedly(Invoke(this, &MockMemoryManager::doCreateGraphicsAllocationForPrivateMemory));
+
+    EXPECT_CALL(*this, allocateManagedMemory).WillRepeatedly(Invoke(this, &MockMemoryManager::doCreateGraphicsAllocation));
+
+    EXPECT_CALL(*this, freeMemory(An<GraphicsAllocation *>()))
+        .WillRepeatedly(Invoke(this, &MockMemoryManager::doFreeGraphicsAllocation));
+
+    EXPECT_CALL(*this, freeMemory(An<const void *>()))
+        .WillRepeatedly(Invoke(this, &MockMemoryManager::doFreePtr));
+
+    EXPECT_CALL(*this, getIsaHeapGpuAddress).Times(AnyNumber());
+
+    EXPECT_CALL(*this, findAllocation(_))
+        .WillRepeatedly(Invoke(this, &MockMemoryManager::doFindAllocation));
+}
+
+GraphicsAllocation *MockMemoryManager::doCreateGraphicsAllocation(size_t size, size_t alignment) {
     auto buffer = alignedMalloc(size, alignment);
-    GraphicsAllocation *allocation = new GraphicsAllocation(buffer, size);
-    MemoryManager::ptrMap[buffer] = allocation;
+    auto allocation = new GraphicsAllocation(buffer, size);
+    track(allocation);
     return allocation;
 }
 
-static PtrOwn<GraphicsAllocation> createGraphicsAllocationForIsa(PtrRef<const void> isaHostMem,
-                                                                 size_t size) {
+PtrOwn<GraphicsAllocation> MockMemoryManager::doCreateGraphicsAllocationForIsa(PtrRef<const void> isaHostMem,
+                                                                               size_t size) {
     auto buffer = alignedMalloc(size, 64);
-    return PtrOwn<GraphicsAllocation>(new GraphicsAllocation(buffer, size));
+    auto allocation = new GraphicsAllocation(buffer, size);
+    return PtrOwn<GraphicsAllocation>(allocation);
 }
 
-static void freeGraphicsAllocation(GraphicsAllocation *allocation) {
+PtrOwn<GraphicsAllocation> MockMemoryManager::doCreateGraphicsAllocationForPrivateMemory(size_t size) {
+    auto buffer = alignedMalloc(size, 64);
+    auto allocation = new GraphicsAllocation(buffer, size);
+    track(allocation);
+    return PtrOwn<GraphicsAllocation>(allocation);
+}
+
+void MockMemoryManager::doFreeGraphicsAllocation(GraphicsAllocation *allocation) {
     assert(allocation);
     auto buffer = reinterpret_cast<uint8_t *>(allocation->getGpuAddress());
     alignedFree(buffer);
+    drop(allocation);
 }
 
-static void freePtr(const void *ptr) {
+void MockMemoryManager::doFreePtr(const void *ptr) {
     assert(ptr);
     alignedFree(const_cast<void *>(ptr));
 }
 
-GraphicsAllocation * retAllocation(const void *ptr) {
-    assert(ptr);
-    return MemoryManager::ptrMap[const_cast<void *>(ptr)];
+GraphicsAllocation *MockMemoryManager::doFindAllocation(const void *ptr) {
+    return allocMap[knownAllocations.get(ptr)];
 }
 
-Mock<MemoryManager>::Mock() {
-    using MockMemoryManager = Mock<::L0::MemoryManager>;
-    EXPECT_CALL(*this, allocateDeviceMemory)
-            .WillRepeatedly(Invoke(createGraphicsAllocation));
+void MockMemoryManager::track(L0::GraphicsAllocation *alloc) {
+    knownAllocations.insert(*alloc->allocationRT);
+    allocMap[alloc->allocationRT] = alloc;
+}
 
-    EXPECT_CALL(*this, allocateGraphicsMemoryForIsa)
-        .WillRepeatedly(Invoke(createGraphicsAllocationForIsa));
-
-    EXPECT_CALL(*this, allocateManagedMemory).
-            WillRepeatedly(Invoke(createGraphicsAllocation));
-
-    EXPECT_CALL(*this, freeMemory(An<GraphicsAllocation *>()))
-        .WillRepeatedly(Invoke(freeGraphicsAllocation));
-
-    EXPECT_CALL(*this, freeMemory(An<const void *>()))
-        .WillRepeatedly(Invoke(freePtr));
-
-    EXPECT_CALL(*this, getIsaHeapGpuAddress).Times(AnyNumber());
-
-    EXPECT_CALL(*this, findAllocation)
-        .WillRepeatedly(Invoke(retAllocation));
+void MockMemoryManager::drop(L0::GraphicsAllocation *alloc) {
+    allocMap.erase(alloc->allocationRT);
+    knownAllocations.remove(*alloc->allocationRT);
 }
 
 Mock<MemoryManager>::~Mock() {}

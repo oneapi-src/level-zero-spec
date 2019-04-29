@@ -41,7 +41,7 @@ struct ModuleImp : public Module {
         return XE_RESULT_ERROR_UNSUPPORTED;
     }
 
-    PtrRef<ImmutableFunctionInfo> getImmutableFunctionInfo(CStringRef functionName) const override;
+    PtrRef<FunctionImmutableData> getFunctionImmutableData(CStringRef functionName) const override;
     uint32_t getMaxGroupSize() const override { return maxGroupSize; }
 
     void updateBuildLog(void *deviceRT);
@@ -50,8 +50,6 @@ struct ModuleImp : public Module {
 
     bool initialize(const xe_module_desc_t *desc);
 
-    void *getProgramRT() const { return progRT; }
-
   protected:
     ModuleImp() = default;
 
@@ -59,8 +57,10 @@ struct ModuleImp : public Module {
     PRODUCT_FAMILY productFamily{};
     ModuleBuildLog *moduleBuildLog = nullptr;
     NEO_temporary::LightweightOclProgram *progRT = nullptr;
+    PtrOwn<GraphicsAllocation> globalConstBuffer = nullptr;
+    PtrOwn<GraphicsAllocation> globalVarBuffer = nullptr;
     uint32_t maxGroupSize = 0U;
-    std::vector<PtrOwn<ImmutableFunctionInfo>> immFuncInfos;
+    std::vector<PtrOwn<FunctionImmutableData>> funcImmDatas;
 };
 
 } // namespace L0

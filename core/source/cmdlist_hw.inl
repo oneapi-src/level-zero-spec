@@ -181,46 +181,44 @@ uint32_t CommandListCoreFamily<gfxCoreFamily>::copyBindingTableAndSurfaceStates(
 // Copy our sampler state if it exists
 template <GFXCORE_FAMILY gfxCoreFamily>
 uint32_t CommandListCoreFamily<gfxCoreFamily>::copySamplerState(NEO::IndirectHeap *dsh,
-                                                                const iOpenCL::SPatchSamplerStateArray *samplerStateArray,
+                                                                uint32_t samplerStateOffset,
+                                                                uint32_t samplerCount,
+                                                                uint32_t borderColorOffset,
                                                                 const void *fnDynamicStateHeap) {
     using GfxFamily = typename NEO::GfxFamilyMapper<gfxCoreFamily>::GfxFamily;
     using INTERFACE_DESCRIPTOR_DATA = typename GfxFamily::INTERFACE_DESCRIPTOR_DATA;
     using SAMPLER_STATE = typename GfxFamily::SAMPLER_STATE;
 
     assert(dsh);
-    assert(samplerStateArray);
     assert(fnDynamicStateHeap);
 
-    uint32_t samplerStateOffset = 0;
-    uint32_t borderColorOffset = 0;
-    uint32_t samplerCount = samplerStateArray->Count;
     auto sizeSamplerState = sizeof(SAMPLER_STATE) * samplerCount;
-    auto borderColorSize = samplerStateArray->Offset - samplerStateArray->BorderColorOffset;
+    auto borderColorSize = samplerStateOffset - borderColorOffset;
 
     dsh->align(alignIndirectStatePointer);
-    borderColorOffset = static_cast<uint32_t>(dsh->getUsed());
+    auto borderColorOffsetInDsh = static_cast<uint32_t>(dsh->getUsed());
 
     auto borderColor = dsh->getSpace(borderColorSize);
 
     memcpy_s(borderColor, borderColorSize,
-             ptrOffset(fnDynamicStateHeap, samplerStateArray->BorderColorOffset),
+             ptrOffset(fnDynamicStateHeap, borderColorOffset),
              borderColorSize);
 
     dsh->align(INTERFACE_DESCRIPTOR_DATA::SAMPLERSTATEPOINTER_ALIGN_SIZE);
-    samplerStateOffset = static_cast<uint32_t>(dsh->getUsed());
+    auto samplerStateOffsetInDsh = static_cast<uint32_t>(dsh->getUsed());
 
     auto samplerState = dsh->getSpace(sizeSamplerState);
 
     memcpy_s(samplerState, sizeSamplerState,
-             ptrOffset(fnDynamicStateHeap, samplerStateArray->Offset),
+             ptrOffset(fnDynamicStateHeap, samplerStateOffset),
              sizeSamplerState);
 
     auto pSmplr = reinterpret_cast<SAMPLER_STATE *>(samplerState);
     for (uint32_t i = 0; i < samplerCount; i++) {
-        pSmplr[i].setIndirectStatePointer((uint32_t)borderColorOffset);
+        pSmplr[i].setIndirectStatePointer((uint32_t)borderColorOffsetInDsh);
     }
 
-    return samplerStateOffset;
+    return samplerStateOffsetInDsh;
 }
 
 template <GFXCORE_FAMILY gfxCoreFamily>
@@ -237,6 +235,8 @@ xe_result_t CommandListCoreFamily<gfxCoreFamily>::appendLaunchFunction(xe_functi
 
     const auto function = Function::fromHandle(hFunction);
     assert(function);
+    const auto functionImmutableData = function->getImmutableData();
+    const auto &functionSignature = functionImmutableData->getSignature();
     auto sizeCrossThreadData = function->getCrossThreadDataSize();
     auto sizePerThreadData = function->getPerThreadDataSize();
     auto sizePerThreadDataForWholeGroup = function->getPerThreadDataSizeForWholeThreadGroup();
@@ -246,7 +246,7 @@ xe_result_t CommandListCoreFamily<gfxCoreFamily>::appendLaunchFunction(xe_functi
 
     // Point kernel start pointer to the proper offset of instruction heap
     {
-        auto alloc = function->getIsaGraphicsAllocation();
+        auto alloc = functionImmutableData->getIsaGraphicsAllocation();
         assert(nullptr != alloc);
         auto offset = alloc->getGpuAddressOffsetFromHeapBase();
         idd.setKernelStartPointer(offset);
@@ -256,14 +256,14 @@ xe_result_t CommandListCoreFamily<gfxCoreFamily>::appendLaunchFunction(xe_functi
     auto threadsPerThreadGroup = function->getThreadsPerThreadGroup();
     idd.setNumberOfThreadsInGpgpuThreadGroup(threadsPerThreadGroup);
 
-    idd.setBarrierEnable(function->getHasBarriers());
-    idd.setSharedLocalMemorySize(function->getSlmSize() > 0
+    idd.setBarrierEnable(functionSignature.attributes.flags.hasBarriers);
+    idd.setSharedLocalMemorySize(functionSignature.attributes.slmInlineSize > 0
                                      ? INTERFACE_DESCRIPTOR_DATA::SHARED_LOCAL_MEMORY_SIZE_ENCODES_64K
                                      : INTERFACE_DESCRIPTOR_DATA::SHARED_LOCAL_MEMORY_SIZE_ENCODES_0K);
 
     // Set up binding table and surface states
     {
-        auto bindingTableStateCount = function->getBindingTableStateCount();
+        auto bindingTableStateCount = functionSignature.bindingTable.numSurfaceStates;
         uint32_t bindingTablePointer = 0u;
 
         if (bindingTableStateCount > 0u) {
@@ -273,7 +273,7 @@ xe_result_t CommandListCoreFamily<gfxCoreFamily>::appendLaunchFunction(xe_functi
                                                                    function->getSurfaceStateHeap(),
                                                                    function->getSurfaceStateHeapSize(),
                                                                    bindingTableStateCount,
-                                                                   function->getBindingTableOffset());
+                                                                   functionSignature.bindingTable.tableOffset);
         }
 
         idd.setBindingTablePointer(bindingTablePointer);
@@ -287,12 +287,13 @@ xe_result_t CommandListCoreFamily<gfxCoreFamily>::appendLaunchFunction(xe_functi
 
     uint32_t samplerStateOffset = 0;
     uint32_t samplerCount = 0;
-    const auto samplerStateArray = function->getSamplerStateArray();
 
     // Copy our sampler state if it exists
-    if (samplerStateArray) {
-        samplerCount = samplerStateArray->Count;
-        samplerStateOffset = copySamplerState(heap, samplerStateArray, function->getDynamicStateHeap());
+    if (functionSignature.samplerTable.numSamplers > 0) {
+        samplerCount = functionSignature.samplerTable.numSamplers;
+        samplerStateOffset = copySamplerState(heap,
+                                              functionSignature.samplerTable.tableOffset, functionSignature.samplerTable.numSamplers,
+                                              functionSignature.samplerTable.borderColor, function->getDynamicStateHeap());
     }
 
     idd.setSamplerStatePointer(samplerStateOffset);
@@ -346,7 +347,7 @@ xe_result_t CommandListCoreFamily<gfxCoreFamily>::appendLaunchFunction(xe_functi
     }
 
     // Update any non-pipelined state if it changes
-    auto slmSizeNew = function->getSlmSize();
+    auto slmSizeNew = functionSignature.attributes.slmInlineSize;
     bool flush = this->slmSize != slmSizeNew ||
                  this->dirtyHeaps;
 
@@ -390,7 +391,7 @@ xe_result_t CommandListCoreFamily<gfxCoreFamily>::appendLaunchFunction(xe_functi
     cmd.setThreadGroupIdZDimension(pThreadGroupDimensions->groupCountZ);
 
     // Set simd size
-    auto simdSize = function->getSimdSize();
+    auto simdSize = functionSignature.attributes.simdSize;
     auto simdSizeOp =
         GPGPU_WALKER::SIMD_SIZE_SIMD32 * (simdSize == 32) |
         GPGPU_WALKER::SIMD_SIZE_SIMD16 * (simdSize == 16) |
@@ -424,7 +425,7 @@ xe_result_t CommandListCoreFamily<gfxCoreFamily>::appendLaunchFunction(xe_functi
 
     // Attach Function residency to our CommandList residency
     {
-        addToResidencyContainer(function->getIsaGraphicsAllocation().get());
+        addToResidencyContainer(functionImmutableData->getIsaGraphicsAllocation().get());
         auto &residencyContainer = function->getResidencyContainer();
         for (auto resource : residencyContainer) {
             addToResidencyContainer(resource);
@@ -433,7 +434,7 @@ xe_result_t CommandListCoreFamily<gfxCoreFamily>::appendLaunchFunction(xe_functi
 
     // Store PrintfBuffer from a function
     {
-        if (function->hasPrintfOutput()) {
+        if (functionImmutableData->getSignature().attributes.flags.hasPrintf) {
             this->storePrintfFunction(function);
         }
     }
@@ -599,7 +600,7 @@ xe_result_t CommandListCoreFamily<gfxCoreFamily>::appendMemoryCopy(void *dstptr,
                                                                    xe_event_handle_t hEvent) {
     auto builtinFunction = this->device->getBuiltinFunctionsLib()->getFunction(Builtin::CopyBufferBytes); // no thread safety!
 
-    uint32_t groupSizeX = builtinFunction->getSimdSize(); // TODO : consider ATS fused threads
+    uint32_t groupSizeX = builtinFunction->getImmutableData()->getSignature().attributes.simdSize; // TODO : consider ATS fused threads
     uint32_t groupSizeY = 1u;
     uint32_t groupSizeZ = 1u;
     if (builtinFunction->setGroupSize(groupSizeX, groupSizeY, groupSizeZ))

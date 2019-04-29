@@ -79,8 +79,7 @@ bool ImageCoreFamily<gfxCoreFamily>::initialize(Device *device, const xe_image_d
 }
 
 template <GFXCORE_FAMILY gfxCoreFamily>
-void ImageCoreFamily<gfxCoreFamily>::copySurfaceStateToSSH(void *surfaceStateHeap, const uint32_t surfaceStateOffset,
-                                                           const uint32_t bindingTableOffset, const uint32_t bindingTableIndex) {
+void ImageCoreFamily<gfxCoreFamily>::copySurfaceStateToSSH(void *surfaceStateHeap, const uint32_t surfaceStateOffset) {
     using GfxFamily = typename NEO::GfxFamilyMapper<gfxCoreFamily>::GfxFamily;
     using RENDER_SURFACE_STATE = typename GfxFamily::RENDER_SURFACE_STATE;
     using BINDING_TABLE_STATE = typename GfxFamily::BINDING_TABLE_STATE;

@@ -109,6 +109,8 @@ xe_result_t CommandListCoreFamily<IGFX_GEN12_CORE>::appendLaunchFunction(xe_func
 
     const auto function = Function::fromHandle(hFunction);
     assert(function);
+    const auto functionImmutableData = function->getImmutableData();
+    const auto &functionSignature = functionImmutableData->getSignature();
     auto sizeCrossThreadData = function->getCrossThreadDataSize();
     auto sizePerThreadData = function->getPerThreadDataSize();
     auto sizePerThreadDataForWholeGroup = function->getPerThreadDataSizeForWholeThreadGroup();
@@ -118,7 +120,7 @@ xe_result_t CommandListCoreFamily<IGFX_GEN12_CORE>::appendLaunchFunction(xe_func
 
     // Point kernel start pointer to the proper offset of instruction heap
     {
-        auto alloc = function->getIsaGraphicsAllocation();
+        auto alloc = function->getImmutableData()->getIsaGraphicsAllocation();
         assert(nullptr != alloc);
         auto offset = alloc->getGpuAddressOffsetFromHeapBase();
         idd.setKernelStartPointer(offset);
@@ -128,14 +130,14 @@ xe_result_t CommandListCoreFamily<IGFX_GEN12_CORE>::appendLaunchFunction(xe_func
     auto threadsPerThreadGroup = function->getThreadsPerThreadGroup();
     idd.setNumberOfThreadsInGpgpuThreadGroup(threadsPerThreadGroup);
 
-    idd.setBarrierEnable(function->getHasBarriers());
-    idd.setSharedLocalMemorySize(function->getSlmSize() > 0
+    idd.setBarrierEnable(functionSignature.attributes.flags.hasBarriers);
+    idd.setSharedLocalMemorySize(functionSignature.attributes.slmInlineSize > 0
                                      ? INTERFACE_DESCRIPTOR_DATA::SHARED_LOCAL_MEMORY_SIZE_ENCODES_64K
                                      : INTERFACE_DESCRIPTOR_DATA::SHARED_LOCAL_MEMORY_SIZE_ENCODES_0K);
 
     // Set up binding table and surface states
     {
-        auto bindingTableStateCount = function->getBindingTableStateCount();
+        auto bindingTableStateCount = functionSignature.bindingTable.numSurfaceStates;
         uint32_t bindingTablePointer = 0u;
 
         if (bindingTableStateCount > 0u) {
@@ -145,7 +147,7 @@ xe_result_t CommandListCoreFamily<IGFX_GEN12_CORE>::appendLaunchFunction(xe_func
                                                                    function->getSurfaceStateHeap(),
                                                                    function->getSurfaceStateHeapSize(),
                                                                    bindingTableStateCount,
-                                                                   function->getBindingTableOffset());
+                                                                   functionSignature.bindingTable.tableOffset);
         }
 
         idd.setBindingTablePointer(bindingTablePointer);
@@ -156,13 +158,13 @@ xe_result_t CommandListCoreFamily<IGFX_GEN12_CORE>::appendLaunchFunction(xe_func
 
     uint32_t samplerStateOffset = 0;
     uint32_t samplerCount = 0;
-    const auto samplerStateArray = function->getSamplerStateArray();
 
     // Copy our sampler state if it exists
-    if (samplerStateArray) {
-        samplerCount = samplerStateArray->Count;
+    if (functionSignature.samplerTable.numSamplers > 0) {
+        samplerCount = functionSignature.samplerTable.numSamplers;
         samplerStateOffset = copySamplerState(indirectHeaps[DYNAMIC_STATE],
-                                              samplerStateArray, function->getDynamicStateHeap());
+                                              functionSignature.samplerTable.tableOffset, functionSignature.samplerTable.numSamplers,
+                                              functionSignature.samplerTable.borderColor, function->getDynamicStateHeap());
     }
 
     idd.setSamplerStatePointer(samplerStateOffset);
@@ -209,7 +211,7 @@ xe_result_t CommandListCoreFamily<IGFX_GEN12_CORE>::appendLaunchFunction(xe_func
     cmd.setThreadGroupIdZDimension(pThreadGroupDimensions->groupCountZ);
 
     // Set simd size
-    auto simdSize = function->getSimdSize();
+    auto simdSize = functionSignature.attributes.simdSize;
     auto simdSizeOp =
         COMPUTE_WALKER::SIMD_SIZE_SIMD32 * (simdSize == 32) |
         COMPUTE_WALKER::SIMD_SIZE_SIMD16 * (simdSize == 16) |
@@ -239,7 +241,7 @@ xe_result_t CommandListCoreFamily<IGFX_GEN12_CORE>::appendLaunchFunction(xe_func
 
     // Attach Function residency to our CommandList residency
     {
-        addToResidencyContainer(function->getIsaGraphicsAllocation().get());
+        addToResidencyContainer(functionImmutableData->getIsaGraphicsAllocation().get());
         auto &residencyContainer = function->getResidencyContainer();
         for (auto resource : residencyContainer) {
             addToResidencyContainer(resource);
@@ -248,7 +250,7 @@ xe_result_t CommandListCoreFamily<IGFX_GEN12_CORE>::appendLaunchFunction(xe_func
 
     // Store PrintfBuffer from a function
     {
-        if (function->hasPrintfOutput()) {
+        if (functionImmutableData->getSignature().attributes.flags.hasPrintf) {
             this->storePrintfFunction(function);
         }
     }

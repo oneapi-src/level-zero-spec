@@ -42,8 +42,7 @@ struct Mock<Image> : public Image {
 
     MOCK_METHOD0(destroy, xe_result_t());
     MOCK_METHOD0(getAllocation, GraphicsAllocation *());
-    MOCK_METHOD4(copySurfaceStateToSSH, void(void *surfaceStateHeap, const uint32_t surfaceStateOffset,
-                                             const uint32_t bindingTableOffset, const uint32_t bindingTableIndex));
+    MOCK_METHOD2(copySurfaceStateToSSH, void(void *surfaceStateHeap, const uint32_t surfaceStateOffset));
     MOCK_METHOD0(getSizeInBytes, size_t());
 };
 

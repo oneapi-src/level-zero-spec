@@ -5,9 +5,6 @@
 #include "igfxfmid.h"
 
 namespace L0 {
-ImmutableFunctionInfo::~ImmutableFunctionInfo() {
-    isaGraphicsAllocation.deleteOwned();
-}
 
 FunctionAllocatorFn functionFactory[IGFX_MAX_PRODUCT] = {};
 

@@ -31,28 +31,19 @@ class FunctionPrintfTest : public GlobalFixtureTest {
         GlobalFixtureTest::SetUp();
         device.reset(new Mock<Device>);
         module.reset(new Mock<Module>);
-        kernelInfo.rebind(new NEO::KernelInfo{});
-        funcInfo.kernelInfoRT = kernelInfo.weakRefReinterpret<void>();
 
         function.reset(new ::testing::NiceMock<Mock<Function>>);
-        function->module = module.get();
+        function->module.rebind(module.get());
 
-        function->immFuncInfo.rebind(&funcInfo);
-        printfSurfaceToken.DataParamOffset = -1;
-        printfSurfaceToken.DataParamSize = 0;
-
-        ON_CALL(*function, hasPrintfOutput).WillByDefault(Invoke(function.get(), &Mock<Function>::mock_forwardToBase_hasPrintfOutput));
+        function->funcImmData.rebind(&funcInfo);
     }
 
     void TearDown() override {
-        delete function.release();
-        kernelInfo.deleteOwned();
+        function.reset();
         GlobalFixtureTest::TearDown();
     }
 
-    NEO::SPatchAllocateStatelessPrintfSurface printfSurfaceToken;
-    PtrOwn<NEO::KernelInfo> kernelInfo = nullptr;
-    ImmutableFunctionInfo funcInfo = {};
+    WhiteBox<FunctionImmutableData> funcInfo = {};
     std::unique_ptr<Mock<Function>> function;
     std::unique_ptr<Mock<Module>> module;
     std::unique_ptr<Mock<Device>> device;
@@ -110,20 +101,10 @@ class FunctionPrintfFromSpirvTest : public GlobalFixtureTest {
     std::unique_ptr<L0::Device> device;
 };
 
-TEST_F(FunctionPrintfTest, hasPrintfOutputReturnsTrueWhenPrintfIsUsed) {
-    kernelInfo->patchInfo.pAllocateStatelessPrintfSurface = &printfSurfaceToken;
-    EXPECT_TRUE(function->hasPrintfOutput());
-}
-
-TEST_F(FunctionPrintfTest, hasPrintfOutputReturnsFalseWhenPrintfNotUsed) {
-    kernelInfo->patchInfo.pAllocateStatelessPrintfSurface = nullptr;
-    EXPECT_FALSE(function->hasPrintfOutput());
-}
-
 TEST_F(FunctionPrintfTest, createPrintfBufferCreatesOnlyWhenUsingPrintf) {
-    kernelInfo->patchInfo.pAllocateStatelessPrintfSurface = &printfSurfaceToken;
-
-    EXPECT_TRUE(function->hasPrintfOutput());
+    funcInfo.signature.attributes.flags.hasPrintf = true;
+    funcInfo.signature.implicitArgs.printfSurface.pointerSize = 4;
+    EXPECT_TRUE(function->getImmutableData()->getSignature().attributes.flags.hasPrintf);
     EXPECT_CALL(*module, getDevice).WillRepeatedly(Return(device.get()));
 
     xe_function_desc_t funDesc = {};
@@ -136,9 +117,10 @@ TEST_F(FunctionPrintfTest, createPrintfBufferCreatesOnlyWhenUsingPrintf) {
 }
 
 TEST_F(FunctionPrintfTest, createPrintfBufferAddsAllocationToResidencyContainer) {
-    kernelInfo->patchInfo.pAllocateStatelessPrintfSurface = &printfSurfaceToken;
+    funcInfo.signature.attributes.flags.hasPrintf = true;
+    funcInfo.signature.implicitArgs.printfSurface.pointerSize = 4;
 
-    EXPECT_TRUE(function->hasPrintfOutput());
+    EXPECT_TRUE(function->getImmutableData()->getSignature().attributes.flags.hasPrintf);
     EXPECT_CALL(*module, getDevice).WillRepeatedly(Return(device.get()));
 
     xe_function_desc_t funDesc = {};
@@ -155,9 +137,9 @@ TEST_F(FunctionPrintfTest, createPrintfBufferAddsAllocationToResidencyContainer)
 }
 
 TEST_F(FunctionPrintfTest, createPrintfBufferDoesNotCreateWhenNotUsingPrintf) {
-    kernelInfo->patchInfo.pAllocateStatelessPrintfSurface = nullptr;
+    funcInfo.signature.attributes.flags.hasPrintf = false;
 
-    EXPECT_FALSE(function->hasPrintfOutput());
+    EXPECT_FALSE(function->getImmutableData()->getSignature().attributes.flags.hasPrintf);
 
     xe_function_desc_t funDesc = {};
     funDesc.version = XE_FUNCTION_DESC_VERSION_CURRENT;
@@ -173,11 +155,12 @@ TEST_F(FunctionPrintfTest, createPrintfBufferPatchesCrossThreadData) {
     EXPECT_CALL(*module, getDevice).Times(1);
 
     uint32_t *crossThreadData = new uint32_t[4];
-    printfSurfaceToken.DataParamOffset = 0;
-    printfSurfaceToken.DataParamSize = sizeof(uintptr_t);
-    kernelInfo->patchInfo.pAllocateStatelessPrintfSurface = &printfSurfaceToken;
+    funcInfo.signature.attributes.flags.hasPrintf = true;
+    funcInfo.signature.implicitArgs.printfSurface.stateless = 0;
+    funcInfo.signature.implicitArgs.printfSurface.pointerSize = sizeof(uintptr_t);
 
-    function->crossThreadData = reinterpret_cast<char *>(crossThreadData);
+    function->crossThreadData.rebind(reinterpret_cast<uint8_t *>(crossThreadData));
+    function->crossThreadDataSize = 4;
 
     function->createPrintfBuffer();
 
@@ -189,7 +172,7 @@ TEST_F(FunctionPrintfTest, createPrintfBufferPatchesCrossThreadData) {
 
     EXPECT_EQ(printfBufferGpuAddressOffset, printfBufferAddressPatched);
 
-    function->crossThreadData = nullptr;
+    function->crossThreadData.rebind(nullptr);
     delete crossThreadData;
 }
 
@@ -197,13 +180,14 @@ TEST_F(FunctionPrintfFromSpirvTest, initializePutsPrintfBufferAllocationAfterArg
     auto function = std::make_unique<::testing::NiceMock<Mock<Function>>>();
     ASSERT_NE(nullptr, function);
 
-    ON_CALL(*function, hasPrintfOutput).WillByDefault(Invoke(function.get(), &Mock<Function>::mock_forwardToBase_hasPrintfOutput));
-
-    function->module = module.get();
+    function->module.rebind(module.get());
     function->initialize(&funDesc);
 
-    ASSERT_EQ(3u, function->residencyContainer.size());
-    EXPECT_EQ(function->residencyContainer[2], function->getPrintfBufferAllocation());
+    auto &container = function->residencyContainer;
+    auto printfPos = std::find(container.begin(), container.end(), function->getPrintfBufferAllocation());
+    EXPECT_NE(container.end(), printfPos);
+    bool correctPos = printfPos >= container.begin() + function->getImmutableData()->getSignature().explicitArgs.args.size();
+    EXPECT_TRUE(correctPos) << "Needs to be after explicit kernel args";
 }
 
 } // namespace ult

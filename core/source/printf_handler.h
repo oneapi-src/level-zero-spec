@@ -1,8 +1,11 @@
 #pragma once
 
+#include "function.h"
+
 #include "runtime/memory_manager/memory_constants.h"
 
 #include <cstdint>
+
 namespace NEO {
 class Kernel;
 }
@@ -13,7 +16,7 @@ struct GraphicsAllocation;
 
 struct PrintfHandler {
     static GraphicsAllocation *createPrintfBuffer(Device *device);
-    static void printOutput(NEO::Kernel *kernel, GraphicsAllocation *printfBuffer);
+    static void printOutput(PtrRef<FunctionImmutableData> function, PtrRef<GraphicsAllocation> printfBuffer, Device *device);
 
   protected:
     PrintfHandler(const PrintfHandler &) = delete;

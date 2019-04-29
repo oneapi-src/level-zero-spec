@@ -13,10 +13,6 @@
 #include <cassert>
 #include <memory>
 
-namespace NEO_temporary {
-struct LightweightOclKernel;
-} // namespace NEO_temporary
-
 namespace L0 {
 
 struct GraphicsAllocation;
@@ -59,7 +55,7 @@ struct FunctionImp : Function {
                                  uint32_t *groupSizeZ) override;
 
     const void *getCrossThreadDataHostMem() const override {
-        return crossThreadData;
+        return crossThreadData.weakRef().get();
     }
 
     uint32_t getCrossThreadDataSize() const override {
@@ -71,9 +67,9 @@ struct FunctionImp : Function {
     }
 
     void getGroupSize(uint32_t &outGroupSizeX, uint32_t &outGroupSizeY, uint32_t &outGroupSizeZ) const override {
-        outGroupSizeX = this->groupSizeX;
-        outGroupSizeY = this->groupSizeY;
-        outGroupSizeZ = this->groupSizeZ;
+        outGroupSizeX = this->groupSize[0];
+        outGroupSizeY = this->groupSize[1];
+        outGroupSizeZ = this->groupSize[2];
     }
 
     xe_result_t setArgImmediate(uint32_t argIndex, size_t argSize, const void *argVal);
@@ -86,18 +82,6 @@ struct FunctionImp : Function {
 
     bool initialize(const xe_function_desc_t *desc);
 
-    const void *getIsaHostMem() const override;
-
-    size_t getIsaSize() const override;
-
-    PtrRef<GraphicsAllocation> getIsaGraphicsAllocation() const override {
-        return immFuncInfo->isaGraphicsAllocation.weakRef();
-    }
-
-    PtrRef<NEO::KernelInfo> getKernelInfo() const {
-        return immFuncInfo->kernelInfoRT.weakRefReinterpret<NEO::KernelInfo>();
-    }
-
     const void *getPerThreadDataHostMem() const override {
         return perThreadDataForWholeThreadGroup;
     }
@@ -109,9 +93,6 @@ struct FunctionImp : Function {
     uint32_t getPerThreadDataSize() const override {
         return perThreadDataSize;
     }
-
-    uint32_t getSimdSize() const override;
-
     uint32_t getThreadsPerThreadGroup() const override {
         return threadsPerThreadGroup;
     }
@@ -120,53 +101,52 @@ struct FunctionImp : Function {
         return threadExecutionMask;
     }
 
-    bool getHasBarriers() const override;
-
-    uint32_t getSlmSize() const override;
-
-    bool hasPrintfOutput() const override;
-
     GraphicsAllocation *getPrintfBufferAllocation() override {
-        return this->printfBuffer;
+        return this->printfBuffer.weakRef().get();
     }
 
     void printPrintfOutput() override;
 
-    void *getSurfaceStateHeap() const override;
-    uint32_t getSurfaceStateHeapSize() const override;
-    uint32_t getBindingTableStateCount() const override;
-    uint32_t getBindingTableOffset() const override;
+    void *getSurfaceStateHeap() const {
+        return pSshLocal.get();
+    }
 
-    const void *getDynamicStateHeap() const override;
-    const size_t getDynamicStateHeapSize() const override;
-    const iOpenCL::SPatchSamplerStateArray *getSamplerStateArray() const override;
+    uint32_t getSurfaceStateHeapSize() const {
+        return sshLocalSize;
+    }
+
+    const void *getDynamicStateHeap() const {
+        return dshLocal.weakRef().get();
+    }
+    const size_t getDynamicStateHeapSize() const override {
+        return dshLocalSize;
+    }
+
+    PtrRef<FunctionImmutableData> getImmutableData() const override {
+        return funcImmData.weakRef();
+    }
+
+    PtrRef<Module> getModule() const {
+        return module.weakRef();
+    }
 
   protected:
-    template <typename T>
-    bool patchCrossThreadData(uint32_t location, const T &value);
-
     void patchWorkgroupSizeInCrossThreadData(uint32_t x, uint32_t y, uint32_t z);
 
     void createPrintfBuffer();
 
     typedef xe_result_t (FunctionImp::*FunctionArgHandler)(uint32_t argIndex, size_t argSize, const void *argVal);
 
-    struct OCLInternal;
-    OCLInternal *oclInternals = nullptr;
-
-    NEO_temporary::LightweightOclKernel *kernelRT = nullptr;
-    PtrRef<ImmutableFunctionInfo> immFuncInfo;
-    Module *module = nullptr;
+    PtrRef<FunctionImmutableData> funcImmData = nullptr;
+    PtrRef<Module> module = nullptr;
 
     std::vector<GraphicsAllocation *> residencyContainer;
-    GraphicsAllocation *printfBuffer = nullptr;
-    PtrOwn<GraphicsAllocation> privateMemAllocation = nullptr; // TODO : move to ImmutableFunctionInfo along with kernelRT
+    PtrOwn<GraphicsAllocation> printfBuffer = nullptr;
+    PtrOwn<GraphicsAllocation> privateMemAllocation = nullptr; // TODO : move to FunctionImmutableData along with kernelRT
 
-    uint32_t groupSizeX = 0u;
-    uint32_t groupSizeY = 0u;
-    uint32_t groupSizeZ = 0u;
+    uint32_t groupSize[3] = {0u, 0u, 0u};
 
-    char *crossThreadData = 0;
+    PtrOwn<uint8_t> crossThreadData = 0;
     uint32_t crossThreadDataSize = 0;
 
     void *perThreadDataForWholeThreadGroup = nullptr;
@@ -176,6 +156,33 @@ struct FunctionImp : Function {
 
     uint32_t threadsPerThreadGroup = 0u;
     uint32_t threadExecutionMask = 0u;
+    // ocl internals
+
+    std::vector<NEO::Kernel::SimpleKernelArgInfo> kernelArguments;
+    std::vector<FunctionImp::FunctionArgHandler> kernelArgHandlers;
+
+    void storeKernelArg(uint32_t argIndex, NEO::Kernel::kernelArgType argType, void *argObject,
+                        const void *argValue, size_t argSize,
+                        NEO::GraphicsAllocation *argSvmAlloc = nullptr, cl_mem_flags argSvmFlags = 0) {
+        kernelArguments[argIndex].type = argType;
+        kernelArguments[argIndex].object = argObject;
+        kernelArguments[argIndex].value = argValue;
+        kernelArguments[argIndex].size = argSize;
+        kernelArguments[argIndex].pSvmAlloc = argSvmAlloc;
+        kernelArguments[argIndex].svmFlags = argSvmFlags;
+    }
+
+    std::unique_ptr<char[]> pSshLocal = nullptr;
+    uint32_t sshLocalSize = 0;
+
+    PtrOwn<uint8_t> dshLocal = nullptr;
+    uint32_t dshLocalSize = 0;
+
+    bool usingSharedObjArgs = false;
+    bool usingImagesOnly = false;
+    bool auxTranslationRequired = false;
+    uint32_t patchedArgumentsNum = 0;
+    uint32_t startOffset = 0;
 };
 
 } // namespace L0

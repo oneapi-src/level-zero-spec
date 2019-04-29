@@ -42,7 +42,6 @@ struct PrecompiledFunctionMock : Mock<Function> {
 
     PrecompiledFunctionMock(const std::string &precompiledFunctionMockName, const std::string &deviceName, const std::vector<L0::GraphicsAllocation *> &allocationsForResidency);
     ~PrecompiledFunctionMock() override {
-        mockIsaGraphicsAllocation.deleteOwned();
     }
 
     PrecompiledFunctionMock(const std::string &precompiledFunctionMockName, const std::string &deviceName)
@@ -56,14 +55,9 @@ struct PrecompiledFunctionMock : Mock<Function> {
             bufferArgOffsetMap[bufferArgOffsetPairsIt->first] = bufferArgOffsetPairsIt->second;
             ++bufferArgOffsetPairsIt;
         }
-        mockIsaGraphicsAllocation.rebind(new GraphicsAllocation(&mockIsaGraphicsAllocationMemory, sizeof(mockIsaGraphicsAllocationMemory))); // TODO : get a better allocation for mock here
 
         ON_CALL(*this, setAttribute).WillByDefault(::testing::Return(XE_RESULT_ERROR_UNSUPPORTED));
         ON_CALL(*this, getAttribute).WillByDefault(::testing::Return(XE_RESULT_ERROR_UNSUPPORTED));
-        ON_CALL(*this, getSimdSize).WillByDefault(::testing::Return(precompiledFunctionMockData->simdSize));
-        ON_CALL(*this, getIsaHostMem).WillByDefault(::testing::Return(precompiledFunctionMockData->isa));
-        ON_CALL(*this, getIsaSize).WillByDefault(::testing::Return(precompiledFunctionMockData->isaSize));
-        ON_CALL(*this, getIsaGraphicsAllocation).WillByDefault(::testing::Invoke([this]() { return mockIsaGraphicsAllocation.weakRef(); }));
         ON_CALL(*this, getPerThreadDataHostMem).WillByDefault(::testing::Return(precompiledFunctionMockData->perThreadDataBase));
         ON_CALL(*this, getPerThreadDataSizeForWholeThreadGroup).WillByDefault(::testing::Return(precompiledFunctionMockData->perThreadDataBaseSize));
         ON_CALL(*this, getThreadExecutionMask).WillByDefault(::testing::Return(0xfffffffful));
@@ -72,14 +66,13 @@ struct PrecompiledFunctionMock : Mock<Function> {
         ON_CALL(*this, getResidencyContainer).WillByDefault(::testing::ReturnRef(allocationsForResidency));
         ON_CALL(*this, getHasBarriers).WillByDefault(::testing::Return(precompiledFunctionMockData->hasBarriers));
         ON_CALL(*this, getSlmSize).WillByDefault(::testing::Return(precompiledFunctionMockData->slmSize));
-        ON_CALL(*this, hasPrintfOutput).WillByDefault(::testing::Return(precompiledFunctionMockData->hasPrintfOutput));
         ON_CALL(*this, getBindingTableStateCount).WillByDefault(::testing::Return(precompiledFunctionMockData->bindingTableStateCount));
         ON_CALL(*this, getBindingTableOffset).WillByDefault(::testing::Return(precompiledFunctionMockData->bindingTableOffset));
         ON_CALL(*this, getSurfaceStateHeap).WillByDefault(::testing::Return(precompiledFunctionMockData->surfaceStateHeap));
         ON_CALL(*this, getSurfaceStateHeapSize).WillByDefault(::testing::Return(static_cast<uint32_t>(precompiledFunctionMockData->surfaceStateHeapSize)));
         ON_CALL(*this, getDynamicStateHeap).WillByDefault(::testing::Return(precompiledFunctionMockData->dynamicStateHeap));
         ON_CALL(*this, getDynamicStateHeapSize).WillByDefault(::testing::Return(precompiledFunctionMockData->dynamicStateHeapSize));
-        ON_CALL(*this, getSamplerStateArray).WillByDefault(::testing::Return(reinterpret_cast<const iOpenCL::SPatchSamplerStateArray *>(precompiledFunctionMockData->samplerStateArray)));
+        ON_CALL(*this, getImmutableData).WillByDefault(::testing::Return(bindPtrRef(&immutableData).weakRef<::L0::FunctionImmutableData>()));
 
         ON_CALL(*this, setArgumentValue)
             .WillByDefault(::testing::Invoke([this](uint32_t argIndex, size_t argSize, const void *pArgValue) { return this->setArgumentValueImpl(argIndex, argSize, pArgValue); }));
@@ -87,6 +80,20 @@ struct PrecompiledFunctionMock : Mock<Function> {
             .WillByDefault(::testing::Invoke([this](uint32_t &outGroupSizeX, uint32_t &outGroupSizeY, uint32_t &outGroupSizeZ) { this->getGroupSizeImpl(outGroupSizeX, outGroupSizeY, outGroupSizeZ); }));
         ON_CALL(*this, getThreadsPerThreadGroup)
             .WillByDefault(::testing::Invoke([this]() { return this->getThreadsPerThreadGroupImpl(); }));
+
+        immutableData.signature.attributes.flags.hasPrintf = precompiledFunctionMockData->hasPrintfOutput;
+        const uint8_t *isaRaw = reinterpret_cast<const uint8_t *>(precompiledFunctionMockData->isa);
+        isa.assign(isaRaw, isaRaw + precompiledFunctionMockData->isaSize);
+        immutableData.isaGraphicsAllocation.rebind(new GraphicsAllocation(isa.data(), isa.size()));
+        FunctionImp::funcImmData.rebind(&immutableData);
+        immutableData.signature.samplerTable.tableOffset = precompiledFunctionMockData->samplerStateArray[0];
+        immutableData.signature.samplerTable.numSamplers = precompiledFunctionMockData->samplerStateArray[1];
+        immutableData.signature.samplerTable.borderColor = precompiledFunctionMockData->samplerStateArray[2];
+        immutableData.signature.attributes.simdSize = precompiledFunctionMockData->simdSize;
+        immutableData.signature.attributes.slmInlineSize = precompiledFunctionMockData->slmSize;
+        immutableData.signature.attributes.flags.hasBarriers = precompiledFunctionMockData->hasBarriers;
+        immutableData.signature.bindingTable.numSurfaceStates = precompiledFunctionMockData->bindingTableStateCount;
+        immutableData.signature.bindingTable.tableOffset = precompiledFunctionMockData->bindingTableOffset;
     }
 
     // Note : test needs to intentionally opt-in to this
@@ -94,10 +101,6 @@ struct PrecompiledFunctionMock : Mock<Function> {
         const auto &_ = ::testing::_;
         EXPECT_CALL(*this, setAttribute(_, _)).Times(::testing::AnyNumber());
         EXPECT_CALL(*this, getAttribute(_, _)).Times(::testing::AnyNumber());
-        EXPECT_CALL(*this, getSimdSize()).Times(::testing::AnyNumber());
-        EXPECT_CALL(*this, getIsaHostMem()).Times(::testing::AnyNumber());
-        EXPECT_CALL(*this, getIsaSize()).Times(::testing::AnyNumber());
-        EXPECT_CALL(*this, getIsaGraphicsAllocation()).Times(::testing::AnyNumber());
         EXPECT_CALL(*this, getPerThreadDataHostMem()).Times(::testing::AnyNumber());
         EXPECT_CALL(*this, getPerThreadDataSizeForWholeThreadGroup()).Times(::testing::AnyNumber());
         EXPECT_CALL(*this, getThreadExecutionMask()).Times(::testing::AnyNumber());
@@ -106,7 +109,6 @@ struct PrecompiledFunctionMock : Mock<Function> {
         EXPECT_CALL(*this, getResidencyContainer()).Times(::testing::AnyNumber());
         EXPECT_CALL(*this, getHasBarriers()).Times(::testing::AnyNumber());
         EXPECT_CALL(*this, getSlmSize()).Times(::testing::AnyNumber());
-        EXPECT_CALL(*this, hasPrintfOutput()).Times(::testing::AnyNumber());
         EXPECT_CALL(*this, setArgumentValue(_, _, _)).Times(::testing::AnyNumber());
         EXPECT_CALL(*this, getGroupSize(_, _, _)).Times(::testing::AnyNumber());
         EXPECT_CALL(*this, getThreadsPerThreadGroup()).Times(::testing::AnyNumber());
@@ -117,7 +119,7 @@ struct PrecompiledFunctionMock : Mock<Function> {
         EXPECT_CALL(*this, getSurfaceStateHeapSize()).Times(::testing::AnyNumber());
         EXPECT_CALL(*this, getDynamicStateHeap()).Times(::testing::AnyNumber());
         EXPECT_CALL(*this, getDynamicStateHeapSize()).Times(::testing::AnyNumber());
-        EXPECT_CALL(*this, getSamplerStateArray()).Times(::testing::AnyNumber());
+        EXPECT_CALL(*this, getImmutableData()).Times(::testing::AnyNumber());
     }
 
     xe_result_t setArgumentValueImpl(uint32_t argIndex, size_t argSize, const void *pArgValue) {
@@ -140,10 +142,12 @@ struct PrecompiledFunctionMock : Mock<Function> {
         uint32_t lwsX, lwsY, lwsZ;
         this->getGroupSize(lwsX, lwsY, lwsZ);
         auto lws = lwsX * lwsY * lwsZ;
-        auto simd = getSimdSize();
+        auto simd = funcImmData->getSignature().attributes.simdSize;
 
         return (lws + simd - 1) / simd;
     }
+
+    WhiteBox<::L0::FunctionImmutableData> immutableData;
 
     const PrecompiledFunctionMockData *precompiledFunctionMockData = nullptr;
     std::unordered_map<int, int> bufferArgOffsetMap;
@@ -152,8 +156,7 @@ struct PrecompiledFunctionMock : Mock<Function> {
     std::vector<uint8_t> crossThreadData;
 
     // Fake an allocation for ISA
-    alignas(16) uint32_t mockIsaGraphicsAllocationMemory = -1;
-    PtrOwn<GraphicsAllocation> mockIsaGraphicsAllocation = nullptr;
+    std::vector<uint8_t> isa;
 };
 
 struct PrecompiledFunctionMocksDataRegistry {
@@ -257,10 +260,13 @@ inline void writeMockData(const std::string sourceOrigin, std::string &mockName,
     std::string globalNameSlmSize = mockName + "_SlmSize_" + deviceName;
     std::string globalNameHasPrintfOutput = mockName + "_HasPrintfOutput_" + deviceName;
 
-    out << "static const uint32_t " << globalNameSimdSize << " = " << function->getSimdSize() << ";\n\n";
+    auto immutableData = function->getImmutableData();
+    auto &signature = immutableData->getSignature();
+
+    out << "static const uint32_t " << globalNameSimdSize << " = " << signature.attributes.simdSize << ";\n\n";
 
     out << "static const uint32_t " << globalNameIsa << "[] = \n";
-    writeAsCppArrayInitializer(function->getIsaHostMem(), function->getIsaSize(), out);
+    writeAsCppArrayInitializer(immutableData->getIsaGraphicsAllocation()->getHostAddress(), immutableData->getIsaSize(), out);
     out << "\n\n";
     out << "static const uint32_t " << globalNameCrossThreadData << "[] = \n";
     writeAsCppArrayInitializer(function->getCrossThreadDataHostMem(), function->getCrossThreadDataSize(), out);
@@ -269,8 +275,8 @@ inline void writeMockData(const std::string sourceOrigin, std::string &mockName,
     writeAsCppArrayInitializer(function->getPerThreadDataHostMem(), function->getPerThreadDataSizeForWholeThreadGroup(), out);
     out << "\n\n";
 
-    out << "static const uint32_t " << globalNameBindingTableStateCount << " = 0x" << function->getBindingTableStateCount() << ";\n\n";
-    out << "static const uint32_t " << globalNameBindingTableOffset << " = 0x" << function->getBindingTableOffset() << ";\n\n";
+    out << "static const uint32_t " << globalNameBindingTableStateCount << " = 0x" << signature.bindingTable.numSurfaceStates << ";\n\n";
+    out << "static const uint32_t " << globalNameBindingTableOffset << " = 0x" << signature.bindingTable.tableOffset << ";\n\n";
 
     auto sshSize = function->getSurfaceStateHeapSize();
     out << "static const size_t " << globalNameSurfaceStateHeapSize << " = 0x" << sshSize << ";\n\n";
@@ -286,20 +292,14 @@ inline void writeMockData(const std::string sourceOrigin, std::string &mockName,
     writeAsCppArrayInitializer(function->getDynamicStateHeap(), dshSize, out);
     out << "\n\n";
 
-    iOpenCL::SPatchSamplerStateArray emptySamplerStateArray;
-    auto samplerStateArray = function->getSamplerStateArray();
-    if (samplerStateArray == nullptr) {
-        memset(&emptySamplerStateArray, 0, sizeof(emptySamplerStateArray));
-        samplerStateArray = &emptySamplerStateArray;
-    }
-
-    out << "static const uint32_t " << globalNameSamplerArrayData << "[] =\n";
-    writeAsCppArrayInitializer(samplerStateArray, sizeof(*samplerStateArray), out);
+    out << "static const uint32_t " << globalNameSamplerArrayData << "[] = {";
+    out << "0x" << signature.samplerTable.tableOffset << ", 0x" << signature.samplerTable.numSamplers << ", 0x";
+    out << signature.samplerTable.borderColor << "};\n";
     out << "\n\n";
 
-    out << "static const bool " << globalNameHasBarriers << " = " << function->getHasBarriers() << ";\n\n";
-    out << "static const uint32_t " << globalNameSlmSize << " = 0x" << function->getSlmSize() << ";\n\n";
-    out << "static const bool " << globalNameHasPrintfOutput << " = " << function->hasPrintfOutput() << ";\n\n";
+    out << "static const bool " << globalNameHasBarriers << " = " << signature.attributes.flags.hasBarriers << ";\n\n";
+    out << "static const uint32_t " << globalNameSlmSize << " = 0x" << signature.attributes.slmInlineSize << ";\n\n";
+    out << "static const bool " << globalNameHasPrintfOutput << " = " << signature.attributes.flags.hasPrintf << ";\n\n";
 
     out << "static const std::pair<int, int> " << globalNameBufferArgIndices << "[] = { ";
     const void *crossThreadData = function->getCrossThreadDataHostMem();
@@ -311,6 +311,9 @@ inline void writeMockData(const std::string sourceOrigin, std::string &mockName,
         assert(ctdSearchEnd == std::find(it + 1, ctdSearchEnd, buffArgOffset.second)); // make sure this is not just random number
         auto byteOffset = ((it - ctdSearchBeg) * sizeof(uintptr_t));
         out << "{0x" << buffArgOffset.first << ", 0x" << byteOffset << "}, ";
+    }
+    if (bufferArgsIndices.empty()) {
+        out << "{0x0, 0x0}";
     }
     out << " };\n\n";
 

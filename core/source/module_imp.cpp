@@ -37,7 +37,8 @@ typedef struct {
 } GenSymEntry;
 
 /// GenRelocType - Specify the relocation's type
-enum GenRelocType { R_NONE = 0, R_SYM_ADDR = 1 };
+enum GenRelocType { R_NONE = 0,
+                    R_SYM_ADDR = 1 };
 
 /// GenRelocEntry - An relocation table entry
 typedef struct {
@@ -161,6 +162,8 @@ struct LightweightOclProgram
     }
 
     NEO::Device *deviceRT;
+    using NEO::Program::constantSurface;
+    using NEO::Program::globalSurface;
     using NEO::Program::kernelInfoArray;
 };
 
@@ -179,7 +182,7 @@ ModuleImp::~ModuleImp() {
     if (nullptr != progRT) {
         progRT->release();
     }
-    deleteAllOwned(immFuncInfos);
+    deleteAllOwned(funcImmDatas);
 }
 
 bool ModuleImp::initialize(const xe_module_desc_t *desc) {
@@ -193,15 +196,15 @@ bool ModuleImp::initialize(const xe_module_desc_t *desc) {
 
     if (desc->format == XE_MODULE_FORMAT_NATIVE) {
         success =
-                this->progRT->createWithNativeBinary(reinterpret_cast<const char*>(desc->pInputModule),
-                        desc->inputSize);
+            this->progRT->createWithNativeBinary(reinterpret_cast<const char *>(desc->pInputModule),
+                                                 desc->inputSize);
         assert(success == true);
     } else if (desc->format == XE_MODULE_FORMAT_IL_SPIRV) {
-        this->progRT->buildSpirV(reinterpret_cast<const char*>(desc->pInputModule),
-                static_cast<uint32_t>(desc->inputSize));
+        this->progRT->buildSpirV(reinterpret_cast<const char *>(desc->pInputModule),
+                                 static_cast<uint32_t>(desc->inputSize));
     } else {
         if (desc->format == static_cast<xe_module_format_t>(-1)) { // unofficial support for llvm
-            success = this->progRT->tryBuildAsLlvm(reinterpret_cast<const char*>(desc->pInputModule),
+            success = this->progRT->tryBuildAsLlvm(reinterpret_cast<const char *>(desc->pInputModule),
                                                    static_cast<uint32_t>(desc->inputSize));
         } else {
             assert(0);
@@ -210,19 +213,26 @@ bool ModuleImp::initialize(const xe_module_desc_t *desc) {
     }
 
     if (success) {
-        // allocate graphics memory for ISA upfront to avoid critical sections at function create
-        // time
-        immFuncInfos.reserve(this->progRT->kernelInfoArray.size());
+        if (this->progRT->constantSurface != nullptr) {
+            globalConstBuffer.rebind(new GraphicsAllocation(this->progRT->constantSurface));
+        }
+
+        if (this->progRT->globalSurface != nullptr) {
+            globalVarBuffer.rebind(new GraphicsAllocation(this->progRT->globalSurface));
+        }
+
+        funcImmDatas.reserve(this->progRT->kernelInfoArray.size());
         for (auto &ki : this->progRT->kernelInfoArray) {
-            auto kernelIsaSize = ki->heapInfo.pKernelHeader->KernelHeapSize;
-            auto alloc = globalMemoryManager->allocateGraphicsMemoryForIsa(
-                bindPtrRef(ki->heapInfo.pKernelHeap), kernelIsaSize);
             assert(ki->kernelAllocation != nullptr);
             assert((ki->patchInfo.mediavfestate == nullptr) ||
                    (ki->patchInfo.mediavfestate->PerThreadScratchSpace == 0));
-            PtrOwn<ImmutableFunctionInfo> immFuncInfo{new ImmutableFunctionInfo{
-                bindPtrRef(ki).weakRefReinterpret<void>(), std::move(alloc)}};
-            immFuncInfos.push_back(std::move(immFuncInfo));
+            PtrOwn<FunctionImmutableData> funcImmData{new FunctionImmutableData};
+            funcImmData->initialize(bindPtrRef(ki).weakRefReinterpret<void>(),
+                                    *globalMemoryManager, &this->progRT->getDevice(0),
+                                    this->progRT->getDevice(0).getDeviceInfo().computeUnitsUsedForScratch,
+                                    globalConstBuffer.weakRef(),
+                                    globalVarBuffer.weakRef());
+            funcImmDatas.push_back(std::move(funcImmData));
         }
         this->maxGroupSize =
             static_cast<uint32_t>(this->progRT->getDevice(0).getDeviceInfo().maxWorkGroupSize);
@@ -230,11 +240,10 @@ bool ModuleImp::initialize(const xe_module_desc_t *desc) {
     return success;
 }
 
-PtrRef<ImmutableFunctionInfo> ModuleImp::getImmutableFunctionInfo(CStringRef functionName) const {
-    for (auto &immFuncInfo : immFuncInfos) {
-        auto kernelInfoRT = immFuncInfo->kernelInfoRT.weakRefReinterpret<NEO::KernelInfo>();
-        if (kernelInfoRT->name == functionName.get()) {
-            return immFuncInfo.weakRef();
+PtrRef<FunctionImmutableData> ModuleImp::getFunctionImmutableData(CStringRef functionName) const {
+    for (auto &funcImmData : funcImmDatas) {
+        if (funcImmData->getSignature().name == functionName.get()) {
+            return funcImmData.weakRef();
         }
     }
     return nullptr;

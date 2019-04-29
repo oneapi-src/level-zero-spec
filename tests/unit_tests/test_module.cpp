@@ -1,4 +1,7 @@
 #include "graphics_allocation.h"
+#include "module.h"
+
+#include "global_fixture.h"
 #include "mock_compiler.h"
 #include "mock_device.h"
 #include "mock_function.h"
@@ -6,7 +9,6 @@
 #include "mock_memory_manager.h"
 #include "mock_module.h"
 #include "mock_module_precompiled.h"
-#include "module.h"
 
 #include "runtime/device/device.h"
 #include "runtime/gmm_helper/gmm_helper.h"
@@ -15,21 +17,16 @@
 
 #include "gtest/gtest.h"
 #include "test.h"
-#include "global_fixture.h"
 #include <fstream>
 
 namespace L0 {
-
-extern MemoryManager *globalMemoryManager;
-
 namespace ult {
 
 using ::testing::Return;
 
-class ModuleOnlineCompiled : public GlobalFixtureTest {
+class ModuleOnlineCompiled : public testing::Test {
   public:
     void SetUp() override {
-        GlobalFixtureTest::SetUp();
         UserRealCompilerGuard realCompilerGuard;
 
         auto platform = NEO::constructPlatform();
@@ -49,15 +46,13 @@ class ModuleOnlineCompiled : public GlobalFixtureTest {
         modDesc.version = XE_MODULE_DESC_VERSION_CURRENT;
         modDesc.format = XE_MODULE_FORMAT_IL_SPIRV;
         modDesc.inputSize = static_cast<uint32_t>(spvModuleSize);
-        modDesc.pInputModule = reinterpret_cast<const uint8_t*>(spvModule.get());
+        modDesc.pInputModule = reinterpret_cast<const uint8_t *>(spvModule.get());
 
         module.reset(whitebox_cast(Module::create(device.get(), &modDesc, deviceRT, nullptr)));
         ASSERT_NE(nullptr, module);
     }
 
-    void TearDown() override {
-        GlobalFixtureTest::TearDown();
-    }
+    void TearDown() override {}
 
     std::unique_ptr<WhiteBox<L0::Module>> module;
     std::unique_ptr<L0::Device> device;
@@ -146,8 +141,7 @@ TEST(xeModuleCreateFunction, redirectsToObject) {
     EXPECT_EQ(XE_RESULT_SUCCESS, result);
 }
 
-class ModuleCreateBufArg : public
-    ::testing::TestWithParam<std::tuple<std::string, std::string, std::string>> {
+struct ModuleCreateBufArg : ::testing::TestWithParam<std::tuple<std::string, std::string, std::string>> {
     void SetUp() override {
         globalMemoryManager_prev = globalMemoryManager;
         globalMemoryManager = &globalMemoryManager_mock;
@@ -189,7 +183,7 @@ TEST_P(ModuleCreateBufArg, onlineCompilationModuleTest) {
     modDesc.version = XE_MODULE_DESC_VERSION_CURRENT;
     modDesc.format = XE_MODULE_FORMAT_IL_SPIRV;
     modDesc.inputSize = static_cast<uint32_t>(spvModuleSize);
-    modDesc.pInputModule = reinterpret_cast<const uint8_t*>(spvModule.get());
+    modDesc.pInputModule = reinterpret_cast<const uint8_t *>(spvModule.get());
 
     auto module = whitebox_cast(Module::create(device, &modDesc, deviceRT, nullptr));
     ASSERT_NE(nullptr, module);
@@ -219,9 +213,9 @@ TEST_P(ModuleCreateBufArg, onlineCompilationModuleTest) {
     EXPECT_NE(ctdSearchEnd, std::find(ctdSearchBeg, ctdSearchEnd, srcAddress));
     EXPECT_NE(ctdSearchEnd, std::find(ctdSearchBeg, ctdSearchEnd, dstAddress));
 
-    EXPECT_NE(nullptr, function->getIsaHostMem());
-    EXPECT_NE(0U, function->getIsaSize());
-    EXPECT_NE(0U, function->getSimdSize());
+    EXPECT_NE(nullptr, function->getImmutableData()->getIsaGraphicsAllocation());
+    EXPECT_NE(0U, function->getImmutableData()->getIsaSize());
+    EXPECT_NE(0U, function->getImmutableData()->getSignature().attributes.simdSize);
 
     auto capturedAllocsForResidency = function->getResidencyContainer();
     EXPECT_NE(capturedAllocsForResidency.end(),
@@ -233,12 +227,12 @@ TEST_P(ModuleCreateBufArg, onlineCompilationModuleTest) {
         << "Per thread data not properly aligned for vector instructions"; // todo : make a real
                                                                            // test out of this
     uint32_t numChannels = 3;
-    EXPECT_EQ(numChannels * function->getSimdSize() * sizeof(uint16_t),
+    EXPECT_EQ(numChannels * function->getImmutableData()->getSignature().attributes.simdSize * sizeof(uint16_t),
               function->getPerThreadDataSizeForWholeThreadGroup());
 
     uint32_t groupSizeX, groupSizeY, groupSizeZ;
     function->getGroupSize(groupSizeX, groupSizeY, groupSizeZ);
-    EXPECT_EQ(function->getSimdSize(), groupSizeX);
+    EXPECT_EQ(function->getImmutableData()->getSignature().attributes.simdSize, groupSizeX);
     EXPECT_EQ(1U, groupSizeY);
     EXPECT_EQ(1U, groupSizeZ);
 
@@ -248,7 +242,7 @@ TEST_P(ModuleCreateBufArg, onlineCompilationModuleTest) {
         std::stringstream mockDataStream;
         std::vector<std::pair<int, uintptr_t>> bufferArgsIndices{std::make_pair(0, dstAddress),
                                                                  std::make_pair(1, srcAddress)};
-        writeMockData(__FUNCTION__, moduleName, deviceName, function, bufferArgsIndices,
+        writeMockData(std::string(__FILE__) + " : " + std::to_string(__LINE__), moduleName, deviceName, function, bufferArgsIndices,
                       mockDataStream);
         std::string mockData = mockDataStream.str();
         std::string fileName = "mock_" + moduleName + "_" + deviceName + ".cpp";
@@ -269,20 +263,7 @@ static std::tuple<std::string, std::string, std::string> paramsForCreateModuleBu
 
 INSTANTIATE_TEST_CASE_P(, ModuleCreateBufArg, ::testing::ValuesIn(paramsForCreateModuleBufArg));
 
-class ModuleCreateImageArg :
-    public ::testing::TestWithParam<std::tuple<std::string, std::string, std::string>> {
-    void SetUp() override {
-        globalMemoryManager_prev = globalMemoryManager;
-        globalMemoryManager = &globalMemoryManager_mock;
-    }
-
-    void TearDown() override {
-        globalMemoryManager = globalMemoryManager_prev;
-    }
-
-    Mock<MemoryManager> globalMemoryManager_mock;
-    L0::MemoryManager *globalMemoryManager_prev;
-};
+using ModuleCreateImageArg = ModuleCreateBufArg;
 
 TEST_P(ModuleCreateImageArg, onlineCompilationModuleTest) {
     UserRealCompilerGuard realCompilerGuard; // just for now
@@ -312,7 +293,7 @@ TEST_P(ModuleCreateImageArg, onlineCompilationModuleTest) {
     modDesc.version = XE_MODULE_DESC_VERSION_CURRENT;
     modDesc.format = XE_MODULE_FORMAT_IL_SPIRV;
     modDesc.inputSize = static_cast<uint32_t>(spvModuleSize);
-    modDesc.pInputModule = reinterpret_cast<const uint8_t*>(spvModule.get());
+    modDesc.pInputModule = reinterpret_cast<const uint8_t *>(spvModule.get());
 
     auto module = whitebox_cast(Module::create(device, &modDesc, deviceRT, nullptr));
     ASSERT_NE(nullptr, module);
@@ -342,11 +323,11 @@ TEST_P(ModuleCreateImageArg, onlineCompilationModuleTest) {
     function->setArgumentValue(0, sizeof(xe_image_handle_t), &srcHandle);
     function->setArgumentValue(1, sizeof(xe_image_handle_t), &dstHandle);
 
-    EXPECT_EQ(2, function->getBindingTableStateCount());
-    EXPECT_EQ(128, function->getBindingTableOffset());
-    EXPECT_NE(nullptr, function->getIsaHostMem());
-    EXPECT_NE(0U, function->getIsaSize());
-    EXPECT_NE(0U, function->getSimdSize());
+    EXPECT_EQ(2, function->getImmutableData()->getSignature().bindingTable.numSurfaceStates);
+    EXPECT_EQ(128, function->getImmutableData()->getSignature().bindingTable.tableOffset);
+    EXPECT_NE(nullptr, function->getImmutableData()->getIsaGraphicsAllocation());
+    EXPECT_NE(0U, function->getImmutableData()->getIsaSize());
+    EXPECT_NE(0U, function->getImmutableData()->getSignature().attributes.simdSize);
 
     auto sshSize = function->getSurfaceStateHeapSize();
     auto ssh = function->getSurfaceStateHeap();
@@ -366,12 +347,12 @@ TEST_P(ModuleCreateImageArg, onlineCompilationModuleTest) {
         << "Per thread data not properly aligned for vector instructions"; // todo : make a real
                                                                            // test out of this
     uint32_t numChannels = 3;
-    EXPECT_EQ(numChannels * function->getSimdSize() * sizeof(uint16_t),
+    EXPECT_EQ(numChannels * function->getImmutableData()->getSignature().attributes.simdSize * sizeof(uint16_t),
               function->getPerThreadDataSizeForWholeThreadGroup());
 
     uint32_t groupSizeX, groupSizeY, groupSizeZ;
     function->getGroupSize(groupSizeX, groupSizeY, groupSizeZ);
-    EXPECT_EQ(function->getSimdSize(), groupSizeX);
+    EXPECT_EQ(function->getImmutableData()->getSignature().attributes.simdSize, groupSizeX);
     EXPECT_EQ(1U, groupSizeY);
     EXPECT_EQ(1U, groupSizeZ);
 
@@ -381,9 +362,7 @@ TEST_P(ModuleCreateImageArg, onlineCompilationModuleTest) {
         std::stringstream mockDataStream;
 
         // Image arguments are not passed/set in crossthread data, bufferArgsIndicies is empty.
-        std::vector<std::pair<int, uintptr_t>> bufferArgsIndices{std::make_pair(0, 0)};
-
-        writeMockData(__FUNCTION__, moduleName, deviceName, function, bufferArgsIndices,
+        writeMockData(std::string(__FILE__) + " : " + std::to_string(__LINE__), moduleName, deviceName, function, {},
                       mockDataStream);
         std::string mockData = mockDataStream.str();
         std::string fileName = "mock_" + moduleName + "_" + deviceName + ".cpp";
@@ -413,9 +392,10 @@ TEST(ModuleCreateSimple, mockedModuleTest) {
                                      {&mockAlloc1, &mockAlloc2});
     function.expectAnyMockFunctionCall();
 
-    EXPECT_EQ(expectedData->simdSize, function.getSimdSize());
-    EXPECT_EQ(expectedData->isa, function.getIsaHostMem());
-    EXPECT_EQ(expectedData->isaSize, function.getIsaSize());
+    EXPECT_EQ(expectedData->simdSize, function.getImmutableData()->getSignature().attributes.simdSize);
+    ASSERT_EQ(expectedData->isaSize, function.getImmutableData()->getIsaSize());
+    EXPECT_EQ(0, memcmp(expectedData->isa, function.getImmutableData()->getIsaGraphicsAllocation()->getHostAddress(),
+                        expectedData->isaSize));
 
     EXPECT_EQ(expectedData->crossThreadDataBaseSize, function.getCrossThreadDataSize());
     EXPECT_EQ(0, memcmp(expectedData->crossThreadDataBase, function.getCrossThreadDataHostMem(),
@@ -511,7 +491,7 @@ TEST_F(ModuleOnlineCompiled, createFromNativeBinary) {
     modDesc.version = XE_MODULE_DESC_VERSION_CURRENT;
     modDesc.format = XE_MODULE_FORMAT_NATIVE;
     modDesc.inputSize = binarySize;
-    modDesc.pInputModule = reinterpret_cast<const uint8_t*>(storage.get());
+    modDesc.pInputModule = reinterpret_cast<const uint8_t *>(storage.get());
 
     L0::Module *moduleFromNativeBinary = Module::create(device.get(), &modDesc, deviceRT, nullptr);
     EXPECT_NE(nullptr, moduleFromNativeBinary);
