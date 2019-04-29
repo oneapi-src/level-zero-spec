@@ -171,44 +171,70 @@ The following section provides high-level driver architecture.
 ![Driver](../images/intro_driver.png?raw=true)  
 @image latex intro_driver.png
 
-${"##"} Loading
+${"##"} Driver Loader
 ## --validate=off
 The Level-Zero driver(s) are loaded using a _${x}_vendor_loader.dll_ (windows) / _${x}_vendor_loader.so_ (linux), which is copied on the system during installation of the device driver;
 where _vendor_ is a name chosen by the device vendor.  For Intel GPUs, the name would be _${x}_intc_loader_.
 ## --validate=on
 
-- The loader initiates the loading of the validation layer and/or the common driver.
-- The loader maintains a per-process function pointer table.
-- The loader's function pointer table entries may point to:
-    + validation layer intercepts (if enabled)
-    + common driver exports (if more than one supported device group are present in the system)
-    + device group driver exports
-- The common driver determines which other device group-specific drivers need to be loaded based on which devices are present in the system.
-- The common driver may be bypassed entirely if there are no other device group drivers
-- If the common driver is needed, then it may implement specific APIs (such as memory allocation) and use private DDIs to notify device group-specific drivers
+The loader initiates the loading of the driver(s) and layer(s).
+The loader exports all API functions to the application; which internally map to a per-process function pointer table.
+
+The following diagram illustrates the expected loading sequence:
+![Loader](../images/intro_loader.png?raw=true)  
+@image latex intro_loader.png
+
+Thus, the loader's internal function pointer table entries may point to:
+    + validation layer intercepts (if enabled),
+    + common driver intercepts (e.g., if more than one supported device type are present in the system),
+    + instrumentation layer intercepts (if enabled),
+    + device driver exports,
+    + or any combination of the above
+
+${"##"} Common Driver
+The common driver determines which other device drivers need to be loaded, based on which device types are present in the system.
+The common driver may be bypassed entirely if there is only one device driver needed.
+If the common driver is required, then it may implement specific APIs (such as memory allocation) and use private DDIs for notifying device drivers of these events.
+
+${"##"} Device Driver
+The device driver(s) implement device-specific APIs.
 
 ${"##"} <a name="v0">Validation Layer</a>
 The validation layer provides an optional capability for application developers to enable additional API validation while maintaining minimal driver implementation overhead.
 - works independent of driver implementation
 - works for production / release drivers
+- works independent of device type
 - checks for common application errors, such as parameter validation
-- provides for common application debug tracking, such as object and memory lifetime
+- provides common application debug tracking, such as object and memory lifetime
 
 The validation layer must be enabled via an environment variables.
 Each capability is enabled by additional environment variables.
 
 The validation layer supports the following capabilities:
-- <a name="v1">API Tracing</a>
-    + enables API tracing and profiling APIs; more details in Tools programming guide
-- <a name="v2">Parameter Validation</a>
+- <a name="v1">Parameter Validation</a>
     + checks function parameters, such as null pointer parameters, invalid enumerations, uninitialized structures, etc.
     + functions may return ::${X}_RESULT_ERROR_INVALID_PARAMETER or ::${X}_RESULT_ERROR_UNSUPPORTED
-- <a name="v3">Handle Lifetime</a>
+- <a name="v2">Handle Lifetime</a>
     + tracks handle allocations, destruction and usage for leaks and invalid usage (e.g., destruction while still in-use by device)
-- <a name="v4">Memory Tracker</a>
+- <a name="v3">Memory Tracker</a>
     + tracks memory allocations and free for leaks and invalid usage (e.g., non-visible to device)
-- <a name="v5">Threading Validation</a>
+- <a name="v4">Threading Validation</a>
     + checks multi-threading usage (e.g., functions are not called from simultaneous threads using the same handle)
+
+${"##"} <a name="i0">Instrumentation Layer</a>
+The instrumentation layer provides an optional capability for application developers to enable additional profiling API while maintaining minimal driver implementation overhead.
+- works independent of driver implementation
+- works for production / release drivers
+- implements [Tools](#tls) APIs
+
+The instrumentation layer must be enabled via an environment variables.
+Each capability is enabled by additional environment variables.
+
+The instrumentation layer supports the following capabilities:
+- <a name="i1">API Tracing</a>
+    + enables API tracing and profiling APIs; more details in Tools programming guide
+- <a name="i1">PIN</a>
+    + enables binary instrumentation of programs for profiling; more details in Tools programming guide
 
 ${"##"} Environment Variables
 The following table documents the supported knobs for overriding default driver behavior.
@@ -217,12 +243,14 @@ The following table documents the supported knobs for overriding default driver 
 |---------------------|---------------------------------------------|-------------------|-----------------------------------------------------------------------------------|
 | Device              | [${X}_AFFINITY_MASK](#aff)                  | hex string        | Forces driver to only report devices (and sub-devices) as specified by mask value |
 | Memory              | ${X}_SHARED_FORCE_DEVICE_ALLOC              | {**0**, 1}        | Forces all shared allocations into device memory                                  |
-| Validation          | [${X}_ENABLE_VALIDATION_LAYER](#v0)         | {**0**, 1}        | Enables validation layer(s) for debugging                                         |
-| ^                   | [${X}_ENABLE_API_TRACING](#v1)              | {**0**, 1}        | Enables the validation level for tracing API calls                                |
-| ^                   | [${X}_ENABLE_PARAMETER_VALIDATION](#v2)     | {**0**, 1}        | Enables the validation level for parameters                                       |
-| ^                   | [${X}_ENABLE_HANDLE_LIFETIME](#v3)          | {**0**, 1}        | Enables the validation level for tracking handle lifetime                         |
-| ^                   | [${X}_ENABLE_MEMORY_TRACKER](#v4)           | {**0**, 1}        | Enables the validation level for tracking memory lifetime                         |
-| ^                   | [${X}_ENABLE_THREADING_VALIDATION](#v5)     | {**0**, 1}        | Enables the validation level for multithreading usage                             |
+| Validation          | [${X}_ENABLE_VALIDATION_LAYER](#v0)         | {**0**, 1}        | Enables validation layer for debugging                                            |
+| ^                   | [${X}_ENABLE_PARAMETER_VALIDATION](#v1)     | {**0**, 1}        | Enables the validation level for parameters                                       |
+| ^                   | [${X}_ENABLE_HANDLE_LIFETIME](#v2)          | {**0**, 1}        | Enables the validation level for tracking handle lifetime                         |
+| ^                   | [${X}_ENABLE_MEMORY_TRACKER](#v3)           | {**0**, 1}        | Enables the validation level for tracking memory lifetime                         |
+| ^                   | [${X}_ENABLE_THREADING_VALIDATION](#v4)     | {**0**, 1}        | Enables the validation level for multithreading usage                             |
+| Instrumentation     | [${X}_ENABLE_INSTRUMENTATION_LAYER](#i0)    | {**0**, 1}        | Enables instrumentation layer for profiling                                       |
+| ^                   | [${X}_ENABLE_API_TRACING](#i1)              | {**0**, 1}        | Enables the instrumentation level for tracing API calls                           |
+| ^                   | [${X}_ENABLE_PIN](#i2)                      | {**0**, 1}        | Enables the instrumentation level for program instrumentation                     |
 ## --validate=on
 
 ${"###"} <a name="aff">Affinity Mask</a>
@@ -243,10 +271,13 @@ The following examples demonstrate proper usage:
     + "06" = only device 1 (with all its sub-devices) is reported as device 0
     + "05" = both device 0 and device 1 are reported, however each only has one sub-device reported as sub-device 0
 
-${"#"} <a name="tls">Tools</a> (WIP)
+${"#"} <a name="tls">Tools</a>
 Level-Zero APIs specific for supporting 3rd-party tools are seperated from "Core" into "Tools" APIs.
 
 The following diagram illustrates the hierachy of "Core" versus "Tool" APIs:  
 ![Tool](../images/intro_tools.png?raw=true)  
 @image latex intro_tools.png
+
+The "Tools" APIs are designed to provided low-level access to device capabilities in order to support 3rd-party tools, but are not intended to replace or directly interface 3rd-party tools.
+The "Tools" APIs allow for driver callbacks to be registered by 3rd-party tools to be notified of specific event.
 
