@@ -109,7 +109,7 @@ HMODULE ICD_LOAD_DRIVER_LIBRARY() {
 
     DWORD it = 0;
     lib = NULL;
-    while(true){
+    for(;true; ++it){
         char driverPath[4096] = { 0 };
         DWORD driverPathMaxSize = sizeof(driverPath);
         DWORD driverPathRegType = 0;
@@ -143,8 +143,6 @@ HMODULE ICD_LOAD_DRIVER_LIBRARY() {
             //        Currently, return first that was loaded succesfully
             break;
         }
-
-        ++it;
     }
     result = RegCloseKey(driversKey);
     assert(ERROR_SUCCESS == result);
