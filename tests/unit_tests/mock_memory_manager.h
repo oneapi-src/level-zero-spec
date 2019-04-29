@@ -2,6 +2,7 @@
 #include "memory_manager.h"
 #include "mock.h"
 #include "white_box.h"
+#include <unordered_map>
 
 namespace L0 {
 namespace ult {
@@ -9,6 +10,7 @@ namespace ult {
 template <>
 struct WhiteBox<::L0::MemoryManager> : public ::L0::MemoryManager {
     using BaseClass = ::L0::MemoryManager;
+    static std::unordered_map<void *, L0::GraphicsAllocation *> ptrMap;
 };
 
 using MemoryManager = WhiteBox<::L0::MemoryManager>;

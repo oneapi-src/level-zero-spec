@@ -15,16 +15,21 @@
 
 #include "gtest/gtest.h"
 #include "test.h"
+#include "global_fixture.h"
 #include <fstream>
 
 namespace L0 {
+
+extern MemoryManager *globalMemoryManager;
+
 namespace ult {
 
 using ::testing::Return;
 
-class ModuleOnlineCompiled : public testing::Test {
+class ModuleOnlineCompiled : public GlobalFixtureTest {
   public:
     void SetUp() override {
+        GlobalFixtureTest::SetUp();
         UserRealCompilerGuard realCompilerGuard;
 
         auto platform = NEO::constructPlatform();
@@ -50,7 +55,9 @@ class ModuleOnlineCompiled : public testing::Test {
         ASSERT_NE(nullptr, module);
     }
 
-    void TearDown() override {}
+    void TearDown() override {
+        GlobalFixtureTest::TearDown();
+    }
 
     std::unique_ptr<WhiteBox<L0::Module>> module;
     std::unique_ptr<L0::Device> device;
@@ -139,8 +146,20 @@ TEST(xeModuleCreateFunction, redirectsToObject) {
     EXPECT_EQ(XE_RESULT_SUCCESS, result);
 }
 
-using ModuleCreateBufArg =
-    ::testing::TestWithParam<std::tuple<std::string, std::string, std::string>>;
+class ModuleCreateBufArg : public
+    ::testing::TestWithParam<std::tuple<std::string, std::string, std::string>> {
+    void SetUp() override {
+        globalMemoryManager_prev = globalMemoryManager;
+        globalMemoryManager = &globalMemoryManager_mock;
+    }
+
+    void TearDown() override {
+        globalMemoryManager = globalMemoryManager_prev;
+    }
+
+    Mock<MemoryManager> globalMemoryManager_mock;
+    L0::MemoryManager *globalMemoryManager_prev;
+};
 
 TEST_P(ModuleCreateBufArg, onlineCompilationModuleTest) {
     UserRealCompilerGuard realCompilerGuard; // just for now
@@ -250,8 +269,20 @@ static std::tuple<std::string, std::string, std::string> paramsForCreateModuleBu
 
 INSTANTIATE_TEST_CASE_P(, ModuleCreateBufArg, ::testing::ValuesIn(paramsForCreateModuleBufArg));
 
-using ModuleCreateImageArg =
-    ::testing::TestWithParam<std::tuple<std::string, std::string, std::string>>;
+class ModuleCreateImageArg :
+    public ::testing::TestWithParam<std::tuple<std::string, std::string, std::string>> {
+    void SetUp() override {
+        globalMemoryManager_prev = globalMemoryManager;
+        globalMemoryManager = &globalMemoryManager_mock;
+    }
+
+    void TearDown() override {
+        globalMemoryManager = globalMemoryManager_prev;
+    }
+
+    Mock<MemoryManager> globalMemoryManager_mock;
+    L0::MemoryManager *globalMemoryManager_prev;
+};
 
 TEST_P(ModuleCreateImageArg, onlineCompilationModuleTest) {
     UserRealCompilerGuard realCompilerGuard; // just for now

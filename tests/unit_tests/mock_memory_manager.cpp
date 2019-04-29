@@ -9,9 +9,13 @@ using ::testing::An;
 using ::testing::AnyNumber;
 using ::testing::Invoke;
 
+std::unordered_map<void *, L0::GraphicsAllocation *> WhiteBox<::L0::MemoryManager>::ptrMap = {};
+
 static GraphicsAllocation *createGraphicsAllocation(size_t size, size_t alignment) {
     auto buffer = alignedMalloc(size, alignment);
-    return new GraphicsAllocation(buffer, size);
+    GraphicsAllocation *allocation = new GraphicsAllocation(buffer, size);
+    MemoryManager::ptrMap[buffer] = allocation;
+    return allocation;
 }
 
 static PtrOwn<GraphicsAllocation> createGraphicsAllocationForIsa(PtrRef<const void> isaHostMem,
@@ -29,6 +33,11 @@ static void freeGraphicsAllocation(GraphicsAllocation *allocation) {
 static void freePtr(const void *ptr) {
     assert(ptr);
     alignedFree(const_cast<void *>(ptr));
+}
+
+GraphicsAllocation * retAllocation(const void *ptr) {
+    assert(ptr);
+    return MemoryManager::ptrMap[const_cast<void *>(ptr)];
 }
 
 Mock<MemoryManager>::Mock() {
@@ -49,6 +58,9 @@ Mock<MemoryManager>::Mock() {
         .WillRepeatedly(Invoke(freePtr));
 
     EXPECT_CALL(*this, getIsaHeapGpuAddress).Times(AnyNumber());
+
+    EXPECT_CALL(*this, findAllocation)
+        .WillRepeatedly(Invoke(retAllocation));
 }
 
 Mock<MemoryManager>::~Mock() {}
