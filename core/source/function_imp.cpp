@@ -201,6 +201,7 @@ void FunctionImmutableData::initialize(PtrRef<void> kernelInfoRT, MemoryManager 
                 el.size = patch.size;
                 el.sourceOffset = patch.sourceOffset;
                 el.valueOffset = patch.crossthreadOffset;
+                argVal.elements.push_back(el);
             }
         }
         this->signature.explicitArgs.args.push_back(std::move(argDesc));
