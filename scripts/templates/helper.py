@@ -70,6 +70,14 @@ def split_line(line, ch_count):
     return lines
 
 """
+    converts string from camelCase to snake_case
+"""
+def camel_to_snake(name):
+    str = re.sub('(.)([A-Z][a-z]+)', r'\1_\2', name)
+    str = re.sub('([a-z0-9])([A-Z])', r'\1_\2', str).lower()
+    return str
+
+"""
     removes items from the list with the key and whose value do not match filter
 """
 def filter_items(lst, key, filter):
