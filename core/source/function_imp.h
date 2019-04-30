@@ -83,7 +83,7 @@ struct FunctionImp : Function {
     bool initialize(const xe_function_desc_t *desc);
 
     const void *getPerThreadDataHostMem() const override {
-        return perThreadDataForWholeThreadGroup;
+        return perThreadDataForWholeThreadGroup.weakRef().get();
     }
 
     uint32_t getPerThreadDataSizeForWholeThreadGroup() const override {
@@ -108,18 +108,18 @@ struct FunctionImp : Function {
     void printPrintfOutput() override;
 
     void *getSurfaceStateHeap() const {
-        return pSshLocal.get();
+        return surfaceStateHeapData.weakRef().get();
     }
 
     uint32_t getSurfaceStateHeapSize() const {
-        return sshLocalSize;
+        return surfaceStateHeapDataSize;
     }
 
     const void *getDynamicStateHeap() const {
-        return dshLocal.weakRef().get();
+        return dynamicStateHeapData.weakRef().get();
     }
     const size_t getDynamicStateHeapSize() const override {
-        return dshLocalSize;
+        return dynamicStateHeapDataSize;
     }
 
     PtrRef<FunctionImmutableData> getImmutableData() const override {
@@ -135,35 +135,33 @@ struct FunctionImp : Function {
 
     void createPrintfBuffer();
 
-    typedef xe_result_t (FunctionImp::*FunctionArgHandler)(uint32_t argIndex, size_t argSize, const void *argVal);
-
     PtrRef<FunctionImmutableData> funcImmData = nullptr;
     PtrRef<Module> module = nullptr;
 
+    typedef xe_result_t (FunctionImp::*FunctionArgHandler)(uint32_t argIndex, size_t argSize, const void *argVal);
+    std::vector<FunctionImp::FunctionArgHandler> kernelArgHandlers;
     std::vector<GraphicsAllocation *> residencyContainer;
+
     PtrOwn<GraphicsAllocation> printfBuffer = nullptr;
     PtrOwn<GraphicsAllocation> privateMemAllocation = nullptr; // TODO : move to FunctionImmutableData along with kernelRT
 
     uint32_t groupSize[3] = {0u, 0u, 0u};
-
-    PtrOwn<uint8_t> crossThreadData = 0;
-    uint32_t crossThreadDataSize = 0;
-
-    void *perThreadDataForWholeThreadGroup = nullptr;
-    uint32_t perThreadDataSizeForWholeThreadGroupAllocated = 0; // length of underlying buffer behind perThreadDataForWholeThreadGroup
-    uint32_t perThreadDataSizeForWholeThreadGroup = 0u;         // part of perThreadDataForWholeThreadGroup used by current group size
-    uint32_t perThreadDataSize = 0u;
-
     uint32_t threadsPerThreadGroup = 0u;
     uint32_t threadExecutionMask = 0u;
 
-    std::vector<FunctionImp::FunctionArgHandler> kernelArgHandlers;
+    PtrOwn<uint8_t[]> crossThreadData = 0;
+    uint32_t crossThreadDataSize = 0;
 
-    std::unique_ptr<char[]> pSshLocal = nullptr;
-    uint32_t sshLocalSize = 0;
+    PtrOwn<uint8_t[]> surfaceStateHeapData = nullptr;
+    uint32_t surfaceStateHeapDataSize = 0;
 
-    PtrOwn<uint8_t> dshLocal = nullptr;
-    uint32_t dshLocalSize = 0;
+    PtrOwn<uint8_t[]> dynamicStateHeapData = nullptr;
+    uint32_t dynamicStateHeapDataSize = 0;
+
+    PtrOwn<uint8_t[]> perThreadDataForWholeThreadGroup = nullptr;
+    uint32_t perThreadDataSizeForWholeThreadGroupAllocated = 0; // length of underlying buffer behind perThreadDataForWholeThreadGroup
+    uint32_t perThreadDataSizeForWholeThreadGroup = 0u;         // part of perThreadDataForWholeThreadGroup used by current group size
+    uint32_t perThreadDataSize = 0u;
 };
 
 } // namespace L0

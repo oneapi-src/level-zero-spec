@@ -47,6 +47,9 @@ TEST(FunctionImp, crossThreadDataIsCorrectlyPatchedWithGlobalWorkSizeAndGroupCou
     EXPECT_EQ(7U, numGroups[0]);
     EXPECT_EQ(11U, numGroups[1]);
     EXPECT_EQ(13U, numGroups[2]);
+
+    function.crossThreadData.rebind(nullptr);
+    alignedFree(crossThreadData);
 }
 
 TEST(FunctionImp, suggestGroupSizeClampsToMaxGroupSize) {

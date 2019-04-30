@@ -198,7 +198,7 @@ struct FunctionSignature {
     }
 
     template <typename T>
-    static bool patchNonPointer(PtrRef<uint8_t> buffer, uint32_t bufferSize, CrossThreadDataOffset location, const T &value) {
+    static bool patchNonPointer(PtrRef<uint8_t[]> buffer, uint32_t bufferSize, CrossThreadDataOffset location, const T &value) {
         if (Undefined == location) {
             return false;
         }
@@ -208,7 +208,7 @@ struct FunctionSignature {
     }
 
     template <uint32_t VecSize, typename T>
-    static uint32_t patchVecNonPointer(PtrRef<uint8_t> buffer, uint32_t bufferSize, const CrossThreadDataOffset (&location)[VecSize], const T (&value)[VecSize]) {
+    static uint32_t patchVecNonPointer(PtrRef<uint8_t[]> buffer, uint32_t bufferSize, const CrossThreadDataOffset (&location)[VecSize], const T (&value)[VecSize]) {
         uint32_t numPatched = 0;
         for (uint32_t i = 0; i < VecSize; ++i) {
             numPatched += patchNonPointer(buffer, bufferSize, location[i], value[i]) ? 1 : 0;
@@ -216,7 +216,7 @@ struct FunctionSignature {
         return numPatched;
     }
 
-    static bool patchPointer(PtrRef<uint8_t> buffer, uint32_t bufferSize, const ArgPointer &arg, uintptr_t value) {
+    static bool patchPointer(PtrRef<uint8_t[]> buffer, uint32_t bufferSize, const ArgPointer &arg, uintptr_t value) {
         if (arg.pointerSize == 8) {
             return patchNonPointer(buffer, bufferSize, arg.stateless, static_cast<uint64_t>(value));
         } else {
@@ -252,15 +252,15 @@ struct FunctionImmutableData {
         return crossThreadDataSize;
     }
 
-    PtrRef<const uint8_t> getCrossThreadDataTemplate() const {
+    PtrRef<const uint8_t[]> getCrossThreadDataTemplate() const {
         return crossThreadDataTemplate.weakRefAddConst();
     }
 
     uint32_t getSurfaceStateHeapSize() const;
-    PtrRef<const uint8_t> getSurfaceStateHeapTemplate() const;
+    PtrRef<const uint8_t[]> getSurfaceStateHeapTemplate() const;
 
     uint32_t getDynamicStateHeapSize() const;
-    PtrRef<const uint8_t> getDynamicStateHeapTemplate() const;
+    PtrRef<const uint8_t[]> getDynamicStateHeapTemplate() const;
     uint32_t getNumLocalIdChannels() const {
         return numLocalIdChannels;
     }
@@ -280,7 +280,7 @@ struct FunctionImmutableData {
     PtrOwn<GraphicsAllocation> privateMemoryGraphicsAllocation = nullptr;
 
     uint32_t crossThreadDataSize = 0;
-    PtrOwn<uint8_t> crossThreadDataTemplate = nullptr;
+    PtrOwn<uint8_t[]> crossThreadDataTemplate = nullptr;
 
     std::vector<PtrRef<GraphicsAllocation>> residencyContainer;
     FunctionSignature signature;

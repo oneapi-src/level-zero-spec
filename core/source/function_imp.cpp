@@ -40,8 +40,8 @@ FunctionImmutableData::~FunctionImmutableData() {
 }
 
 template <typename PatchTokenT>
-static void patchWithImplicitSurface(PtrRef<uint8_t> crossThreadData, uint32_t crossThreadDataSize,
-                                     PtrRef<uint8_t> surfaceStateHeap, uint32_t surfaceStateHeapSize,
+static void patchWithImplicitSurface(PtrRef<uint8_t[]> crossThreadData, uint32_t crossThreadDataSize,
+                                     PtrRef<uint8_t[]> surfaceStateHeap, uint32_t surfaceStateHeapSize,
                                      uintptr_t ptrToPatchInCrossThreadData, GraphicsAllocation &allocation,
                                      const PatchTokenT &patch, const NEO::Device &deviceRT) {
     uint32_t pointerSize = patch.DataParamSize;
@@ -83,7 +83,7 @@ void FunctionImmutableData::initialize(PtrRef<void> kernelInfoRT, MemoryManager 
 
     // now allocate our own cross-thread data, if necessary
     if (crossThreadDataSize != 0) {
-        crossThreadDataTemplate.rebind(new uint8_t[crossThreadDataSize]);
+        crossThreadDataTemplate.rebind(new uint8_t[crossThreadDataSize], crossThreadDataSize);
 
         if (kernelInfo.crossThreadData) {
             memcpy_s(crossThreadDataTemplate.weakRef().get(), crossThreadDataSize, kernelInfo.crossThreadData, crossThreadDataSize);
@@ -128,7 +128,7 @@ void FunctionImmutableData::initialize(PtrRef<void> kernelInfoRT, MemoryManager 
         assert(this->privateMemoryGraphicsAllocation != nullptr);
         const auto &patchToken = patchInfo.pAllocateStatelessPrivateSurface;
         patchWithImplicitSurface(crossThreadDataTemplate.weakRef(), getCrossThreadDataSize(),
-                                 bindPtrRef<uint8_t>(static_cast<uint8_t *>(kernelInfo.heapInfo.pSsh)), getSurfaceStateHeapSize(),
+                                 bindPtrRef<uint8_t[]>(static_cast<uint8_t *>(kernelInfo.heapInfo.pSsh)), getSurfaceStateHeapSize(),
                                  static_cast<uintptr_t>(privateMemoryGraphicsAllocation->getGpuAddressOffsetFromHeapBase()),
                                  *privateMemoryGraphicsAllocation, *patchToken, *static_cast<const NEO::Device *>(deviceRT));
         this->residencyContainer.push_back(this->privateMemoryGraphicsAllocation.weakRef());
@@ -139,7 +139,7 @@ void FunctionImmutableData::initialize(PtrRef<void> kernelInfoRT, MemoryManager 
 
         const auto &patchToken = patchInfo.pAllocateStatelessConstantMemorySurfaceWithInitialization;
         patchWithImplicitSurface(crossThreadDataTemplate.weakRef(), getCrossThreadDataSize(),
-                                 bindPtrRef<uint8_t>(static_cast<uint8_t *>(kernelInfo.heapInfo.pSsh)), getSurfaceStateHeapSize(),
+                                 bindPtrRef<uint8_t[]>(static_cast<uint8_t *>(kernelInfo.heapInfo.pSsh)), getSurfaceStateHeapSize(),
                                  static_cast<uintptr_t>(globalConstBuffer->getGpuAddressOffsetFromHeapBase()),
                                  *globalConstBuffer, *patchToken, *static_cast<const NEO::Device *>(deviceRT));
         this->residencyContainer.push_back(globalConstBuffer.weakRef());
@@ -150,7 +150,7 @@ void FunctionImmutableData::initialize(PtrRef<void> kernelInfoRT, MemoryManager 
 
         const auto &patchToken = patchInfo.pAllocateStatelessGlobalMemorySurfaceWithInitialization;
         patchWithImplicitSurface(crossThreadDataTemplate.weakRef(), getCrossThreadDataSize(),
-                                 bindPtrRef<uint8_t>(static_cast<uint8_t *>(kernelInfo.heapInfo.pSsh)), getSurfaceStateHeapSize(),
+                                 bindPtrRef<uint8_t[]>(static_cast<uint8_t *>(kernelInfo.heapInfo.pSsh)), getSurfaceStateHeapSize(),
                                  static_cast<uintptr_t>(globalVarBuffer->getGpuAddressOffsetFromHeapBase()),
                                  *globalVarBuffer, *patchToken, *static_cast<const NEO::Device *>(deviceRT));
         this->residencyContainer.push_back(globalVarBuffer.weakRef());
@@ -248,9 +248,9 @@ uint32_t FunctionImmutableData::getSurfaceStateHeapSize() const {
     return kernelInfo.heapInfo.pKernelHeader->SurfaceStateHeapSize;
 }
 
-PtrRef<const uint8_t> FunctionImmutableData::getSurfaceStateHeapTemplate() const {
+PtrRef<const uint8_t[]> FunctionImmutableData::getSurfaceStateHeapTemplate() const {
     auto &kernelInfo = *kernelInfoRT.weakRef<NEO::KernelInfo>();
-    return bindPtrRef<const uint8_t>(static_cast<uint8_t *>(kernelInfo.heapInfo.pSsh));
+    return bindPtrRef<const uint8_t[]>(static_cast<uint8_t *>(kernelInfo.heapInfo.pSsh));
 }
 
 uint32_t FunctionImmutableData::getDynamicStateHeapSize() const {
@@ -258,21 +258,25 @@ uint32_t FunctionImmutableData::getDynamicStateHeapSize() const {
     return kernelInfo.heapInfo.pKernelHeader->DynamicStateHeapSize;
 }
 
-PtrRef<const uint8_t> FunctionImmutableData::getDynamicStateHeapTemplate() const {
+PtrRef<const uint8_t[]> FunctionImmutableData::getDynamicStateHeapTemplate() const {
     auto &kernelInfo = *kernelInfoRT.weakRef<NEO::KernelInfo>();
-    return bindPtrRef<const uint8_t>(static_cast<const uint8_t *>(kernelInfo.heapInfo.pDsh));
+    return bindPtrRef<const uint8_t[]>(static_cast<const uint8_t *>(kernelInfo.heapInfo.pDsh));
 }
 
 FunctionImp::FunctionImp(Module *module) : module(module) {}
 
 FunctionImp::~FunctionImp() {
-    if (perThreadDataForWholeThreadGroup) {
-        alignedFree(perThreadDataForWholeThreadGroup);
+    if (perThreadDataForWholeThreadGroup != nullptr) {
+        alignedFree(perThreadDataForWholeThreadGroup.weakRef().get()); // TODO : Refactor this
+        perThreadDataForWholeThreadGroup.rebind(nullptr);
     }
     if (printfBuffer != nullptr) {
         globalMemoryManager->freeMemory(printfBuffer.weakRef().get());
     }
     privateMemAllocation.deleteOwned();
+    crossThreadData.deleteOwned();
+    surfaceStateHeapData.deleteOwned();
+    dynamicStateHeapData.deleteOwned();
 }
 
 xe_result_t FunctionImp::setArgumentValue(uint32_t argIndex,
@@ -310,8 +314,8 @@ xe_result_t FunctionImp::setGroupSize(uint32_t groupSizeX,
     uint32_t perThreadDataSizeForWholeThreadGroupNeeded = static_cast<uint32_t>(NEO::PerThreadDataHelper::getPerThreadDataSizeTotal(funcImmData->getSignature().attributes.simdSize,
                                                                                                                                     numChannels, itemsInGroup));
     if (perThreadDataSizeForWholeThreadGroupNeeded > perThreadDataSizeForWholeThreadGroupAllocated) {
-        alignedFree(perThreadDataForWholeThreadGroup);
-        perThreadDataForWholeThreadGroup = alignedMalloc(perThreadDataSizeForWholeThreadGroupNeeded, 32); // alignment for vector instructions
+        alignedFree(perThreadDataForWholeThreadGroup.weakRef().get());
+        perThreadDataForWholeThreadGroup.rebind(static_cast<uint8_t *>(alignedMalloc(perThreadDataSizeForWholeThreadGroupNeeded, 32))); // alignment for vector instructions
         perThreadDataSizeForWholeThreadGroupAllocated = perThreadDataSizeForWholeThreadGroupNeeded;
     }
     perThreadDataSizeForWholeThreadGroup = perThreadDataSizeForWholeThreadGroupNeeded;
@@ -319,7 +323,7 @@ xe_result_t FunctionImp::setGroupSize(uint32_t groupSizeX,
     if (numChannels > 0) {
         // don't generate local IDs if not needed
         assert(3 == numChannels); // if we do need local ids, we support only all 3 channels
-        NEO::generateLocalIDs(perThreadDataForWholeThreadGroup, static_cast<uint16_t>(funcImmData->getSignature().attributes.simdSize),
+        NEO::generateLocalIDs(perThreadDataForWholeThreadGroup.weakRef().get(), static_cast<uint16_t>(funcImmData->getSignature().attributes.simdSize),
                               std::array<uint16_t, 3>{{static_cast<uint16_t>(groupSizeX), static_cast<uint16_t>(groupSizeY), static_cast<uint16_t>(groupSizeZ)}},
                               std::array<uint8_t, 3>{{0, 1, 2}}, // to do : add support for non-default walk order
                               false);
@@ -464,11 +468,9 @@ bool FunctionImp::initialize(const xe_function_desc_t *desc) {
     }
 
     if (funcImmData->getSurfaceStateHeapSize() > 0) {
-        this->pSshLocal = std::make_unique<char[]>(funcImmData->getSurfaceStateHeapSize());
-        // just copy-over ssh w/ binding table
-        // note : binding table is already set-up properly by the compiler
-        memcpy(this->pSshLocal.get(), funcImmData->getSurfaceStateHeapTemplate().get(), funcImmData->getSurfaceStateHeapSize());
-        this->sshLocalSize = funcImmData->getSurfaceStateHeapSize();
+        this->surfaceStateHeapData.rebind(new uint8_t[funcImmData->getSurfaceStateHeapSize()]);
+        memcpy(this->surfaceStateHeapData.weakRef().get(), funcImmData->getSurfaceStateHeapTemplate().get(), funcImmData->getSurfaceStateHeapSize());
+        this->surfaceStateHeapDataSize = funcImmData->getSurfaceStateHeapSize();
     }
 
     if (funcImmData->getCrossThreadDataSize() != 0) {
@@ -478,9 +480,9 @@ bool FunctionImp::initialize(const xe_function_desc_t *desc) {
     }
 
     if (funcImmData->getDynamicStateHeapSize() != 0) {
-        this->dshLocal.rebind(new uint8_t[funcImmData->getDynamicStateHeapSize()], funcImmData->getDynamicStateHeapSize());
-        memcpy(this->dshLocal.weakRef().get(), funcImmData->getDynamicStateHeapTemplate().get(), funcImmData->getDynamicStateHeapSize());
-        this->dshLocalSize = funcImmData->getDynamicStateHeapSize();
+        this->dynamicStateHeapData.rebind(new uint8_t[funcImmData->getDynamicStateHeapSize()], funcImmData->getDynamicStateHeapSize());
+        memcpy(this->dynamicStateHeapData.weakRef().get(), funcImmData->getDynamicStateHeapTemplate().get(), funcImmData->getDynamicStateHeapSize());
+        this->dynamicStateHeapDataSize = funcImmData->getDynamicStateHeapSize();
     }
 
     // TODO : reqd_workgroup_size
