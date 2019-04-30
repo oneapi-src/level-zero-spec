@@ -179,6 +179,7 @@ struct FunctionSignature {
 
         uint32_t simdSize = 8;
         uint32_t slmInlineSize = 0;
+        uint32_t numLocalIdChannels = 3;
 
         union {
             struct {
@@ -261,9 +262,6 @@ struct FunctionImmutableData {
 
     uint32_t getDynamicStateHeapSize() const;
     PtrRef<const uint8_t[]> getDynamicStateHeapTemplate() const;
-    uint32_t getNumLocalIdChannels() const {
-        return numLocalIdChannels;
-    }
 
     const FunctionSignature &getSignature() const {
         return signature;
@@ -284,8 +282,6 @@ struct FunctionImmutableData {
 
     std::vector<PtrRef<GraphicsAllocation>> residencyContainer;
     FunctionSignature signature;
-
-    uint32_t numLocalIdChannels = 3;
 };
 
 struct Function : public _xe_function_handle_t {

@@ -90,7 +90,6 @@ struct WhiteBox<::L0::FunctionImmutableData> : public ::L0::FunctionImmutableDat
     using ::L0::FunctionImmutableData::crossThreadDataTemplate;
     using ::L0::FunctionImmutableData::isaGraphicsAllocation;
     using ::L0::FunctionImmutableData::kernelInfoRT;
-    using ::L0::FunctionImmutableData::numLocalIdChannels;
     using ::L0::FunctionImmutableData::privateMemoryGraphicsAllocation;
     using ::L0::FunctionImmutableData::residencyContainer;
     using ::L0::FunctionImmutableData::signature;

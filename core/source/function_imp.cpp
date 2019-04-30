@@ -207,7 +207,7 @@ void FunctionImmutableData::initialize(PtrRef<void> kernelInfoRT, MemoryManager 
         this->signature.explicitArgs.args.push_back(std::move(argDesc));
     }
 
-    numLocalIdChannels = NEO::PerThreadDataHelper::getNumLocalIdChannels(*kernelInfo.patchInfo.threadPayload);
+    signature.attributes.numLocalIdChannels = NEO::PerThreadDataHelper::getNumLocalIdChannels(*kernelInfo.patchInfo.threadPayload);
     signature.attributes.simdSize = kernelInfo.getMaxSimdSize();
     signature.attributes.slmInlineSize = kernelInfo.patchInfo.localsurface
                                              ? kernelInfo.patchInfo.localsurface->TotalInlineLocalMemorySize
@@ -307,7 +307,7 @@ xe_result_t FunctionImp::setGroupSize(uint32_t groupSizeX,
         return XE_RESULT_ERROR_INVALID_PARAMETER; // needs clarification in the spec
     }
 
-    auto numChannels = funcImmData->getNumLocalIdChannels();
+    auto numChannels = funcImmData->getSignature().attributes.numLocalIdChannels;
     Vec3<size_t> groupSize{groupSizeX, groupSizeY, groupSizeZ};
     auto itemsInGroup = NEO::Math::computeTotalElementsCount(groupSize);
     uint32_t perThreadDataSizeForWholeThreadGroupNeeded = static_cast<uint32_t>(NEO::PerThreadDataHelper::getPerThreadDataSizeTotal(funcImmData->getSignature().attributes.simdSize,
