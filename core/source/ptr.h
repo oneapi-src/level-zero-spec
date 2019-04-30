@@ -100,8 +100,8 @@ template <>
 struct PointerModeSelector<PointerMode::ZeroCost>::PointerOwnershipSelector<false> {
     template <typename T>
     struct Pointer { // Note : will be aliased by type selector to PtrRef
-        using PointerT = T *;
-        using PointeeT = T;
+        using PointeeT = typename std::remove_extent<T>::type;
+        using PointerT = PointeeT *;
 
         template <typename T2>
         using PointerWeakRefT = typename PointerOwnershipSelector<false>::template Pointer<T2>;
@@ -112,11 +112,11 @@ struct PointerModeSelector<PointerMode::ZeroCost>::PointerOwnershipSelector<fals
         Pointer(std::nullptr_t) noexcept // nullptr constructor, note : this->ptr initialized to nullptr
             : ptr(nullptr) {}
 
-        explicit Pointer(T *ptr) noexcept // explicit, binding constructor
+        explicit Pointer(PointeeT *ptr) noexcept // explicit, binding constructor
             : ptr(ptr) {}
 
-        explicit Pointer(T *ptr, size_t numElements) noexcept // explicit, binding constructor with numElements (or bytes for void)
-            : ptr(ptr) {}                                     // Note : size ignored in ZeroCost mode
+        explicit Pointer(PointeeT *ptr, size_t numElements) noexcept // explicit, binding constructor with numElements (or bytes for void)
+            : ptr(ptr) {}                                            // Note : size ignored in ZeroCost mode
 
         Pointer(const Pointer &rhs) noexcept { // non-owning pointer - allow copies
             this->ptr = rhs.ptr;
@@ -156,12 +156,12 @@ struct PointerModeSelector<PointerMode::ZeroCost>::PointerOwnershipSelector<fals
             return false == this->empty();
         }
 
-        void rebind(T *newPointer) noexcept { // change pointer
+        void rebind(PointeeT *newPointer) noexcept { // change pointer
             this->ptr = newPointer;
         }
 
-        void rebind(T *newPointer, size_t numElements) noexcept { // change pointer with numElements (or bytes for void)
-            this->rebind(newPointer);                             // Note : size ignored in ZeroCost mode
+        void rebind(PointeeT *newPointer, size_t numElements) noexcept { // change pointer with numElements (or bytes for void)
+            this->rebind(newPointer);                                    // Note : size ignored in ZeroCost mode
         }
 
         PointerWeakRefT<T> weakRef() const noexcept { // create weak reference (non-owning) pointer
@@ -171,7 +171,7 @@ struct PointerModeSelector<PointerMode::ZeroCost>::PointerOwnershipSelector<fals
         template <typename T2>
         PointerWeakRefT<T2> weakRef() const noexcept { // create weak reference of different type (static_cast)
             AssertCanStaticCast<T, T2> val;
-            (void) val;
+            (void)val;
             return PointerWeakRefT<T2>(static_cast<T2 *>(this->ptr));
         }
 
@@ -181,7 +181,7 @@ struct PointerModeSelector<PointerMode::ZeroCost>::PointerOwnershipSelector<fals
         }
 
         PointerWeakRefT<const T> weakRefAddConst() const noexcept { // create weak reference with const T* , note : no weak_ref_removeconst
-            return PointerWeakRefT<const T>(const_cast<const T *>(this->ptr));
+            return PointerWeakRefT<const T>(const_cast<const PointeeT *>(this->ptr));
         }
 
         uintptr_t asUintptr() const noexcept { // reintepret_cast to uintptr_t
@@ -203,14 +203,14 @@ struct PointerModeSelector<PointerMode::ZeroCost>::PointerOwnershipSelector<fals
         template <typename TestType = T>
         auto operator*() const noexcept -> std::enable_if_t<!std::is_void<TestType>::value, T> & { // if not void, allow derefence operator
             AssertIsComplete<PointeeT> val;
-            (void) val;
+            (void)val;
             return *this->ptr;
         }
 
         template <typename TestType = T>
         auto operator-> () const noexcept -> std::enable_if_t<std::is_class<TestType>::value, T> * { // if class, allow member dereference operator
             AssertIsComplete<PointeeT> val;
-            (void) val;
+            (void)val;
             return this->ptr;
         }
 
@@ -221,7 +221,7 @@ struct PointerModeSelector<PointerMode::ZeroCost>::PointerOwnershipSelector<fals
         }
 
         // * direct access to raw ptr (aka no T* get())
-        T *get() const noexcept {
+        PointeeT *get() const noexcept {
             return this->ptr;
         }
 
@@ -237,12 +237,12 @@ struct PointerModeSelector<PointerMode::ZeroCost>::PointerOwnershipSelector<fals
 
         Pointer &offsetBytesBy(size_t offset) noexcept { // offset by bytes
             using RawPtrT = typename std::conditional<std::is_const<PointeeT>::value, const char *, char *>::type;
-            this->ptr = reinterpret_cast<T *>(reinterpret_cast<RawPtrT>(this->ptr) + offset);
+            this->ptr = reinterpret_cast<PointeeT *>(reinterpret_cast<RawPtrT>(this->ptr) + offset);
             return *this;
         }
 
       protected:
-        T *ptr; // uninitialized by default! (as regular pointers)
+        PointeeT *ptr; // uninitialized by default! (as regular pointers)
     };
 };
 
@@ -250,8 +250,8 @@ template <>
 struct PointerModeSelector<PointerMode::ZeroCost>::PointerOwnershipSelector<true> {
     template <typename T>
     struct Pointer { // will be aliased by type selector to ptr_own
-        using PointerT = T *;
-        using PointeeT = T;
+        using PointeeT = typename std::remove_extent<T>::type;
+        using PointerT = PointeeT *;
 
         template <typename T2>
         using PointerWeakRefT = typename PointerOwnershipSelector<false>::template Pointer<T2>;
@@ -263,11 +263,11 @@ struct PointerModeSelector<PointerMode::ZeroCost>::PointerOwnershipSelector<true
         Pointer(std::nullptr_t) noexcept // nullptr constructor, note : this->ptr initialized to nullptr
             : ptr(nullptr) {}
 
-        explicit Pointer(T *ptr) noexcept // explicit, binding constructor
+        explicit Pointer(PointeeT *ptr) noexcept // explicit, binding constructor
             : ptr(ptr) {}
 
-        explicit Pointer(T *ptr, size_t numElements) noexcept // explicit, binding constructor with numElements (or bytes for void)
-            : ptr(ptr) {}                                     // Note : size ignored in ZeroCost mode
+        explicit Pointer(PointeeT *ptr, size_t numElements) noexcept // explicit, binding constructor with numElements (or bytes for void)
+            : ptr(ptr) {}                                            // Note : size ignored in ZeroCost mode
 
         Pointer(const Pointer &rhs) = delete;            // owning pointer - disallow copies - assert(this != &rhs)
         Pointer &operator=(const Pointer &rhs) = delete; // owning pointer - disallow copies - assert(this != &rhs)
@@ -301,22 +301,22 @@ struct PointerModeSelector<PointerMode::ZeroCost>::PointerOwnershipSelector<true
             return false == this->empty();
         }
 
-        void rebind(T *newPointer) noexcept { // change pointer
+        void rebind(PointeeT *newPointer) noexcept { // change pointer
             this->ptr = newPointer;
         }
 
-        void rebind(T *newPointer, size_t numElements) noexcept { // change pointer with numElements (or bytes for void)
-            this->rebind(newPointer);                             // Note : size ignored in ZeroCost mode
+        void rebind(PointeeT *newPointer, size_t numElements) noexcept { // change pointer with numElements (or bytes for void)
+            this->rebind(newPointer);                                    // Note : size ignored in ZeroCost mode
         }
 
-        void rebindDeleteOld(T *newPointer) noexcept { // change owned pointer, delete old one
+        void rebindDeleteOld(PointeeT *newPointer) noexcept { // change owned pointer, delete old one
             assert(this->ptr != newPointer);
             this->deleteOwned();
             this->ptr = newPointer;
         }
 
-        void rebindDeleteOld(T *newPointer, size_t newPointerNumElements) noexcept { // change owned pointer, delete old one
-            this->rebindDeleteOld(newPointer);                                       // Note : size ignored in ZeroCost mode
+        void rebindDeleteOld(PointeeT *newPointer, size_t newPointerNumElements) noexcept { // change owned pointer, delete old one
+            this->rebindDeleteOld(newPointer);                                              // Note : size ignored in ZeroCost mode
         }
 
         void deleteOwned() noexcept { // explicitly delete owned pointer
@@ -330,7 +330,7 @@ struct PointerModeSelector<PointerMode::ZeroCost>::PointerOwnershipSelector<true
         template <typename T2>
         PointerWeakRefT<T2> weakRef() const noexcept { // create weak reference of different type (static_cast)
             AssertCanStaticCast<T, T2> val;
-            (void) val;
+            (void)val;
             return PointerWeakRefT<T2>(static_cast<T2 *>(this->ptr));
         }
 
@@ -340,7 +340,7 @@ struct PointerModeSelector<PointerMode::ZeroCost>::PointerOwnershipSelector<true
         }
 
         PointerWeakRefT<const T> weakRefAddConst() const noexcept { // create weak reference with const T* , note : no weak_ref_removeconst
-            return PointerWeakRefT<const T>(const_cast<const T *>(this->ptr));
+            return PointerWeakRefT<const T>(const_cast<const PointeeT *>(this->ptr));
         }
 
         uintptr_t asUintptr() const noexcept { // reinterpret_cast to uintptr_t
@@ -362,14 +362,14 @@ struct PointerModeSelector<PointerMode::ZeroCost>::PointerOwnershipSelector<true
         template <typename TestType = T>
         auto operator*() const noexcept -> std::enable_if_t<!std::is_void<TestType>::value, T> & { // if not void, allow derefence operator
             AssertIsComplete<PointeeT> val;
-            (void) val;
+            (void)val;
             return *this->ptr;
         }
 
         template <typename TestType = T>
         auto operator-> () const noexcept -> std::enable_if_t<std::is_class<TestType>::value, T> * { // if class, allow member dereference operator
             AssertIsComplete<PointeeT> val;
-            (void) val;
+            (void)val;
             return this->ptr;
         }
 
@@ -380,18 +380,18 @@ struct PointerModeSelector<PointerMode::ZeroCost>::PointerOwnershipSelector<true
         template <typename TestType = T>
         auto doDeleteOwned() noexcept -> std::enable_if_t<std::is_array<TestType>::value, void> { // delete []ptr
             AssertIsComplete<PointeeT> val;
-            (void) val;
+            (void)val;
             delete[] this->ptr;
         }
 
         template <typename TestType = T>
         auto doDeleteOwned() noexcept -> std::enable_if_t<!std::is_array<TestType>::value, void> { // delete ptr
             AssertIsComplete<PointeeT> val;
-            (void) val;
+            (void)val;
             delete ptr;
         }
 
-        T *ptr; // uninitialized by default! (as regular pointers)
+        PointeeT *ptr; // uninitialized by default! (as regular pointers)
     };
 };
 
@@ -464,6 +464,11 @@ using CStringRef = PtrRef<const char>;
 
 template <typename T>
 PtrRef<T> bindPtrRef(T *ptr) { // helper for type deduction
+    return PtrRef<T>{ptr};
+}
+
+template <typename T, typename TArg>
+typename std::enable_if<std::is_array<T>::value, PtrRef<T>>::type bindPtrRef(TArg *ptr) { // helper for type deduction
     return PtrRef<T>{ptr};
 }
 
