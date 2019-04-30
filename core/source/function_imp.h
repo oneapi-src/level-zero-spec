@@ -156,33 +156,14 @@ struct FunctionImp : Function {
 
     uint32_t threadsPerThreadGroup = 0u;
     uint32_t threadExecutionMask = 0u;
-    // ocl internals
 
-    std::vector<NEO::Kernel::SimpleKernelArgInfo> kernelArguments;
     std::vector<FunctionImp::FunctionArgHandler> kernelArgHandlers;
-
-    void storeKernelArg(uint32_t argIndex, NEO::Kernel::kernelArgType argType, void *argObject,
-                        const void *argValue, size_t argSize,
-                        NEO::GraphicsAllocation *argSvmAlloc = nullptr, cl_mem_flags argSvmFlags = 0) {
-        kernelArguments[argIndex].type = argType;
-        kernelArguments[argIndex].object = argObject;
-        kernelArguments[argIndex].value = argValue;
-        kernelArguments[argIndex].size = argSize;
-        kernelArguments[argIndex].pSvmAlloc = argSvmAlloc;
-        kernelArguments[argIndex].svmFlags = argSvmFlags;
-    }
 
     std::unique_ptr<char[]> pSshLocal = nullptr;
     uint32_t sshLocalSize = 0;
 
     PtrOwn<uint8_t> dshLocal = nullptr;
     uint32_t dshLocalSize = 0;
-
-    bool usingSharedObjArgs = false;
-    bool usingImagesOnly = false;
-    bool auxTranslationRequired = false;
-    uint32_t patchedArgumentsNum = 0;
-    uint32_t startOffset = 0;
 };
 
 } // namespace L0
