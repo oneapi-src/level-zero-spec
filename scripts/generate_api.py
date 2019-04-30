@@ -10,6 +10,7 @@ def generate_cmake(path, type):
     fout = os.path.join(path, "CMakeLists.txt")
     files=[]
     files.extend([os.path.basename(f) for f in util.findFiles(path, "*.h")])
+    files.extend([os.path.basename(f) for f in util.findFiles(path, "*.hpp")])
     files.extend([os.path.basename(f) for f in util.findFiles(path, "*.inl")])
     files.extend([os.path.basename(f) for f in util.findFiles(path, "*.cpp")])
     files.sort()
@@ -64,32 +65,30 @@ def generate_include_all(path, namespace, tags, files, type):
     generates c/c++ include files from the specification documents
 """
 def generate_cpp_include(path, namespace, tags, specs, meta):
-    cpp_path = os.path.join(path, "include")
-    util.makePath(cpp_path)
-    util.removeFiles(cpp_path, "*.h")
-    util.removeFiles(cpp_path, "*.hpp")
-    util.removeFiles(cpp_path, "*.inl")
+    util.makePath(path)
+    util.removeFiles(path, "*.h")
+    util.removeFiles(path, "*.hpp")
+    util.removeFiles(path, "*.inl")
 
-    hloc, hfiles = generate_code(cpp_path, os.path.basename(path), namespace, tags, specs, meta, ".h")
-    hpploc, hppfiles = generate_code(cpp_path, os.path.basename(path), namespace, tags, specs, meta, ".hpp")
-    inlloc, inlfiles = generate_code(cpp_path, os.path.basename(path), namespace, tags, specs, meta, ".inl")
+    hloc, hfiles = generate_code(path, os.path.basename(path), namespace, tags, specs, meta, ".h")
+    hpploc, hppfiles = generate_code(path, os.path.basename(path), namespace, tags, specs, meta, ".hpp")
+    inlloc, inlfiles = generate_code(path, os.path.basename(path), namespace, tags, specs, meta, ".inl")
 
-    hloc += generate_include_all(cpp_path, namespace, tags, hfiles, ".h")
-    hpploc += generate_include_all(cpp_path, namespace, tags, hppfiles + inlfiles, ".hpp")
+    hloc += generate_include_all(path, namespace, tags, hfiles, ".h")
+    hpploc += generate_include_all(path, namespace, tags, hppfiles + inlfiles, ".hpp")
 
-    generate_cmake(cpp_path, ".h")
+    generate_cmake(path, ".h")
     return hloc + hpploc + inlloc
 
 """
     generates c/c++ source files from the specification documents
 """
 def generate_cpp_source(path, namespace, tags, specs, meta):
-    cpp_path = os.path.join(path, "source")
-    util.makePath(cpp_path)
-    util.removeFiles(cpp_path, "%s_*.cpp"%namespace)
+    util.makePath(path)
+    util.removeFiles(path, "%s_*.cpp"%namespace)
 
-    loc, files = generate_code(cpp_path, os.path.basename(path), namespace, tags, specs, meta, ".cpp")
-    generate_cmake(cpp_path, ".cpp")
+    loc, files = generate_code(path, os.path.basename(path), namespace, tags, specs, meta, ".cpp")
+    generate_cmake(path, ".cpp")
     return loc
 
 """
@@ -99,5 +98,4 @@ Entry-point:
 def generate_cpp(path, namespace, tags, specs, meta):
     loc = 0
     loc += generate_cpp_include(path, namespace, tags, specs, meta)
-    loc += generate_cpp_source(path, namespace, tags, specs, meta)
     print("Generated %s lines of code.\n"%loc)

@@ -1,0 +1,22 @@
+# DO NOT EDIT: Generated from "scripts/templates/CMakeLists.h.mako"
+target_sources(${TARGET_NAME}
+    PRIVATE
+    ${CMAKE_CURRENT_SOURCE_DIR}/CMakeLists.txt
+    ${CMAKE_CURRENT_SOURCE_DIR}/xet_all.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/xet_all.hpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/xet_cmdlist.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/xet_cmdlist.hpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/xet_cmdlist.inl
+    ${CMAKE_CURRENT_SOURCE_DIR}/xet_common.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/xet_common.hpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/xet_common.inl
+    ${CMAKE_CURRENT_SOURCE_DIR}/xet_device.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/xet_device.hpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/xet_device.inl
+    ${CMAKE_CURRENT_SOURCE_DIR}/xet_gtpin.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/xet_gtpin.hpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/xet_gtpin.inl
+    ${CMAKE_CURRENT_SOURCE_DIR}/xet_metric.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/xet_metric.hpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/xet_metric.inl
+)

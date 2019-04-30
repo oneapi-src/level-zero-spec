@@ -2,9 +2,7 @@ import argparse
 import util
 import parse_specs
 import generate_api
-import compile_api
 import generate_docs
-import generate_icd
 import os
 import time
 
@@ -33,20 +31,18 @@ def main():
     add_argument(parser, "md", "generation of markdown files.", True)
     add_argument(parser, "html", "generation of HTML files.", True)
     add_argument(parser, "pdf", "generation of PDF file.")
-    add_argument(parser, "cl", "compilation of generated C/C++ files.")
-    add_argument(parser, "icd", "generation of C++ icd_loader files.", True)
     args = vars(parser.parse_args())
 
     start = time.time()
 
     for idx, section in enumerate(configParser.sections()):
-        dstpath = configParser.get(section,'dstpath')
         namespace = configParser.get(section,'namespace')
         tags={}
         for key in configParser.get(section,'tags').split(","):
             tags['$'+key] = configParser.get(section,key)
 
         srcpath = os.path.join("./", section)
+        dstpath = os.path.join("../include/", section)
 
         if args[section] and util.exists(srcpath):
             if idx > 0:
@@ -59,12 +55,6 @@ def main():
                 util.jsonWrite(os.path.join(srcpath, "meta.json"), meta)
 
             generate_api.generate_cpp(dstpath, namespace, tags, specs, meta)
-
-            if args['icd'] and idx < 1: #todo: generate per-section icd loaders
-                generate_icd.generate(namespace, tags, specs, meta)
-
-            if args['cl']:
-                compile_api.compile_cpp_source(dstpath, namespace, specs)
 
             if args['md']:
                 generate_docs.generate_md(srcpath, dstpath, tags, meta)
