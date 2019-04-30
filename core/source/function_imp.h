@@ -143,7 +143,6 @@ struct FunctionImp : Function {
     std::vector<GraphicsAllocation *> residencyContainer;
 
     PtrOwn<GraphicsAllocation> printfBuffer = nullptr;
-    PtrOwn<GraphicsAllocation> privateMemAllocation = nullptr; // TODO : move to FunctionImmutableData along with kernelRT
 
     uint32_t groupSize[3] = {0u, 0u, 0u};
     uint32_t threadsPerThreadGroup = 0u;

@@ -273,7 +273,6 @@ FunctionImp::~FunctionImp() {
     if (printfBuffer != nullptr) {
         globalMemoryManager->freeMemory(printfBuffer.weakRef().get());
     }
-    privateMemAllocation.deleteOwned();
     crossThreadData.deleteOwned();
     surfaceStateHeapData.deleteOwned();
     dynamicStateHeapData.deleteOwned();
