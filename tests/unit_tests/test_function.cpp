@@ -36,9 +36,9 @@ TEST(FunctionImp, crossThreadDataIsCorrectlyPatchedWithGlobalWorkSizeAndGroupCou
     function.groupSize[2] = 5;
 
     function.FunctionImp::setGroupCount(7, 11, 13);
-    auto crossThread = function.FunctionImp::getCrossThreadDataHostMem();
-    ASSERT_NE(nullptr, crossThread);
-    const uint32_t *globalWorkSizes = reinterpret_cast<const uint32_t *>(crossThread);
+    auto crossThread = function.FunctionImp::getCrossThreadData();
+    ASSERT_NE(nullptr, crossThread.get());
+    const uint32_t *globalWorkSizes = reinterpret_cast<const uint32_t *>(crossThread.get());
     EXPECT_EQ(2U * 7U, globalWorkSizes[0]);
     EXPECT_EQ(3U * 11U, globalWorkSizes[1]);
     EXPECT_EQ(5U * 13U, globalWorkSizes[2]);
@@ -168,14 +168,14 @@ TEST(FunctionImp, setGroupSizeDoesNotGenerateLocalIdsIfNumChannelsIs0) {
     function.FunctionImp::setGroupSize(16U, 16U, 1U);
     std::vector<char> memBefore;
     {
-        auto perThreadData = reinterpret_cast<const char *>(function.FunctionImp::getPerThreadDataHostMem());
+        auto perThreadData = reinterpret_cast<const char *>(function.FunctionImp::getPerThreadData().get());
         memBefore.assign(perThreadData, perThreadData + function.FunctionImp::getPerThreadDataSize());
     }
 
     function.FunctionImp::setGroupSize(8U, 32U, 1U);
     std::vector<char> memAfter;
     {
-        auto perThreadData = reinterpret_cast<const char *>(function.FunctionImp::getPerThreadDataHostMem());
+        auto perThreadData = reinterpret_cast<const char *>(function.FunctionImp::getPerThreadData().get());
         memAfter.assign(perThreadData, perThreadData + function.FunctionImp::getPerThreadDataSize());
     }
 

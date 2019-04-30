@@ -204,7 +204,7 @@ struct FunctionSignature {
             return false;
         }
         assert(location < bufferSize);
-        *reinterpret_cast<T *>(buffer.offsetBytesBy(location).get()) = value;
+        *reinterpret_cast<T *>(buffer.weakRef().offsetBytesBy(location).get()) = value;
         return true;
     }
 
@@ -260,7 +260,7 @@ struct FunctionImmutableData {
     uint32_t getSurfaceStateHeapSize() const;
     PtrRef<const uint8_t[]> getSurfaceStateHeapTemplate() const;
 
-    uint32_t getDynamicStateHeapSize() const;
+    uint32_t getDynamicStateHeapDataSize() const;
     PtrRef<const uint8_t[]> getDynamicStateHeapTemplate() const;
 
     const FunctionSignature &getSignature() const {
@@ -315,30 +315,32 @@ struct Function : public _xe_function_handle_t {
                                          uint32_t *groupSizeY,
                                          uint32_t *groupSizeZ) = 0;
 
-    virtual uint32_t getThreadsPerThreadGroup() const = 0;
-    virtual uint32_t getThreadExecutionMask() const = 0;
+    virtual PtrRef<FunctionImmutableData> getImmutableData() const = 0;
+    virtual PtrOwn<Function> clone() const = 0;
 
-    virtual const void *getCrossThreadDataHostMem() const = 0;
-    virtual uint32_t getCrossThreadDataSize() const = 0;
     virtual const std::vector<GraphicsAllocation *> &getResidencyContainer() const = 0;
 
     virtual void getGroupSize(uint32_t &outGroupSizeX,
                               uint32_t &outGroupSizeY,
                               uint32_t &outGroupSizeZ) const = 0;
 
-    virtual const void *getPerThreadDataHostMem() const = 0;
+    virtual uint32_t getThreadsPerThreadGroup() const = 0;
+    virtual uint32_t getThreadExecutionMask() const = 0;
+
+    virtual PtrRef<const uint8_t[]> getCrossThreadData() const = 0;
+    virtual uint32_t getCrossThreadDataSize() const = 0;
+
+    virtual PtrRef<const uint8_t[]> getPerThreadData() const = 0;
     virtual uint32_t getPerThreadDataSizeForWholeThreadGroup() const = 0;
     virtual uint32_t getPerThreadDataSize() const = 0;
-    virtual void *getSurfaceStateHeap() const = 0;
-    virtual uint32_t getSurfaceStateHeapSize() const = 0;
+    virtual PtrRef<const uint8_t[]> getSurfaceStateHeapData() const = 0;
+    virtual uint32_t getSurfaceStateHeapDataSize() const = 0;
 
-    virtual const void *getDynamicStateHeap() const = 0;
-    virtual const size_t getDynamicStateHeapSize() const = 0;
+    virtual PtrRef<const uint8_t[]> getDynamicStateHeapData() const = 0;
+    virtual const size_t getDynamicStateHeapDataSize() const = 0;
 
-    virtual GraphicsAllocation *getPrintfBufferAllocation() = 0;
+    virtual PtrRef<GraphicsAllocation> getPrintfBufferAllocation() = 0;
     virtual void printPrintfOutput() = 0;
-
-    virtual PtrRef<FunctionImmutableData> getImmutableData() const = 0;
 
     Function() = default;
     Function(const Function &) = delete;

@@ -58,20 +58,16 @@ struct PrecompiledFunctionMock : Mock<Function> {
 
         ON_CALL(*this, setAttribute).WillByDefault(::testing::Return(XE_RESULT_ERROR_UNSUPPORTED));
         ON_CALL(*this, getAttribute).WillByDefault(::testing::Return(XE_RESULT_ERROR_UNSUPPORTED));
-        ON_CALL(*this, getPerThreadDataHostMem).WillByDefault(::testing::Return(precompiledFunctionMockData->perThreadDataBase));
+        ON_CALL(*this, getPerThreadData).WillByDefault(::testing::Return(bindPtrRef<const uint8_t[]>(reinterpret_cast<const uint8_t *>(precompiledFunctionMockData->perThreadDataBase))));
         ON_CALL(*this, getPerThreadDataSizeForWholeThreadGroup).WillByDefault(::testing::Return(precompiledFunctionMockData->perThreadDataBaseSize));
         ON_CALL(*this, getThreadExecutionMask).WillByDefault(::testing::Return(0xfffffffful));
-        ON_CALL(*this, getCrossThreadDataHostMem).WillByDefault(::testing::Invoke([this]() { return crossThreadData.data(); }));
+        ON_CALL(*this, getCrossThreadData).WillByDefault(::testing::Invoke([this]() { return bindPtrRef<const uint8_t[]>(crossThreadData.data()); }));
         ON_CALL(*this, getCrossThreadDataSize).WillByDefault(::testing::Return(precompiledFunctionMockData->crossThreadDataBaseSize));
         ON_CALL(*this, getResidencyContainer).WillByDefault(::testing::ReturnRef(allocationsForResidency));
-        ON_CALL(*this, getHasBarriers).WillByDefault(::testing::Return(precompiledFunctionMockData->hasBarriers));
-        ON_CALL(*this, getSlmSize).WillByDefault(::testing::Return(precompiledFunctionMockData->slmSize));
-        ON_CALL(*this, getBindingTableStateCount).WillByDefault(::testing::Return(precompiledFunctionMockData->bindingTableStateCount));
-        ON_CALL(*this, getBindingTableOffset).WillByDefault(::testing::Return(precompiledFunctionMockData->bindingTableOffset));
-        ON_CALL(*this, getSurfaceStateHeap).WillByDefault(::testing::Return(precompiledFunctionMockData->surfaceStateHeap));
-        ON_CALL(*this, getSurfaceStateHeapSize).WillByDefault(::testing::Return(static_cast<uint32_t>(precompiledFunctionMockData->surfaceStateHeapSize)));
-        ON_CALL(*this, getDynamicStateHeap).WillByDefault(::testing::Return(precompiledFunctionMockData->dynamicStateHeap));
-        ON_CALL(*this, getDynamicStateHeapSize).WillByDefault(::testing::Return(precompiledFunctionMockData->dynamicStateHeapSize));
+        ON_CALL(*this, getSurfaceStateHeapData).WillByDefault(::testing::Return(bindPtrRef<const uint8_t[]>(reinterpret_cast<const uint8_t *>(precompiledFunctionMockData->surfaceStateHeap))));
+        ON_CALL(*this, getSurfaceStateHeapDataSize).WillByDefault(::testing::Return(static_cast<uint32_t>(precompiledFunctionMockData->surfaceStateHeapSize)));
+        ON_CALL(*this, getDynamicStateHeapData).WillByDefault(::testing::Return(bindPtrRef<const uint8_t[]>(reinterpret_cast<const uint8_t *>(precompiledFunctionMockData->dynamicStateHeap))));
+        ON_CALL(*this, getDynamicStateHeapDataSize).WillByDefault(::testing::Return(precompiledFunctionMockData->dynamicStateHeapSize));
         ON_CALL(*this, getImmutableData).WillByDefault(::testing::Return(bindPtrRef(&immutableData).weakRef<::L0::FunctionImmutableData>()));
 
         ON_CALL(*this, setArgumentValue)
@@ -101,24 +97,20 @@ struct PrecompiledFunctionMock : Mock<Function> {
         const auto &_ = ::testing::_;
         EXPECT_CALL(*this, setAttribute(_, _)).Times(::testing::AnyNumber());
         EXPECT_CALL(*this, getAttribute(_, _)).Times(::testing::AnyNumber());
-        EXPECT_CALL(*this, getPerThreadDataHostMem()).Times(::testing::AnyNumber());
+        EXPECT_CALL(*this, getPerThreadData()).Times(::testing::AnyNumber());
         EXPECT_CALL(*this, getPerThreadDataSizeForWholeThreadGroup()).Times(::testing::AnyNumber());
         EXPECT_CALL(*this, getThreadExecutionMask()).Times(::testing::AnyNumber());
-        EXPECT_CALL(*this, getCrossThreadDataHostMem()).Times(::testing::AnyNumber());
+        EXPECT_CALL(*this, getCrossThreadData()).Times(::testing::AnyNumber());
         EXPECT_CALL(*this, getCrossThreadDataSize()).Times(::testing::AnyNumber());
         EXPECT_CALL(*this, getResidencyContainer()).Times(::testing::AnyNumber());
-        EXPECT_CALL(*this, getHasBarriers()).Times(::testing::AnyNumber());
-        EXPECT_CALL(*this, getSlmSize()).Times(::testing::AnyNumber());
         EXPECT_CALL(*this, setArgumentValue(_, _, _)).Times(::testing::AnyNumber());
         EXPECT_CALL(*this, getGroupSize(_, _, _)).Times(::testing::AnyNumber());
         EXPECT_CALL(*this, getThreadsPerThreadGroup()).Times(::testing::AnyNumber());
         EXPECT_CALL(*this, setGroupCount(_, _, _)).Times(::testing::AnyNumber());
-        EXPECT_CALL(*this, getBindingTableStateCount()).Times(::testing::AnyNumber());
-        EXPECT_CALL(*this, getBindingTableOffset()).Times(::testing::AnyNumber());
-        EXPECT_CALL(*this, getSurfaceStateHeap()).Times(::testing::AnyNumber());
-        EXPECT_CALL(*this, getSurfaceStateHeapSize()).Times(::testing::AnyNumber());
-        EXPECT_CALL(*this, getDynamicStateHeap()).Times(::testing::AnyNumber());
-        EXPECT_CALL(*this, getDynamicStateHeapSize()).Times(::testing::AnyNumber());
+        EXPECT_CALL(*this, getSurfaceStateHeapData()).Times(::testing::AnyNumber());
+        EXPECT_CALL(*this, getSurfaceStateHeapDataSize()).Times(::testing::AnyNumber());
+        EXPECT_CALL(*this, getDynamicStateHeapData()).Times(::testing::AnyNumber());
+        EXPECT_CALL(*this, getDynamicStateHeapDataSize()).Times(::testing::AnyNumber());
         EXPECT_CALL(*this, getImmutableData()).Times(::testing::AnyNumber());
     }
 
@@ -269,27 +261,27 @@ inline void writeMockData(const std::string sourceOrigin, std::string &mockName,
     writeAsCppArrayInitializer(immutableData->getIsaGraphicsAllocation()->getHostAddress(), immutableData->getIsaSize(), out);
     out << "\n\n";
     out << "static const uint32_t " << globalNameCrossThreadData << "[] = \n";
-    writeAsCppArrayInitializer(function->getCrossThreadDataHostMem(), function->getCrossThreadDataSize(), out);
+    writeAsCppArrayInitializer(function->getCrossThreadData().get(), function->getCrossThreadDataSize(), out);
     out << "\n\n";
     out << "static const uint32_t " << globalNamePerThreadData << "[] = \n";
-    writeAsCppArrayInitializer(function->getPerThreadDataHostMem(), function->getPerThreadDataSizeForWholeThreadGroup(), out);
+    writeAsCppArrayInitializer(function->getPerThreadData().get(), function->getPerThreadDataSizeForWholeThreadGroup(), out);
     out << "\n\n";
 
     out << "static const uint32_t " << globalNameBindingTableStateCount << " = 0x" << signature.bindingTable.numSurfaceStates << ";\n\n";
     out << "static const uint32_t " << globalNameBindingTableOffset << " = 0x" << signature.bindingTable.tableOffset << ";\n\n";
 
-    auto sshSize = function->getSurfaceStateHeapSize();
+    auto sshSize = function->getSurfaceStateHeapDataSize();
     out << "static const size_t " << globalNameSurfaceStateHeapSize << " = 0x" << sshSize << ";\n\n";
 
     out << "static uint32_t " << globalNameSurfaceStateHeap << "[] =\n";
-    writeAsCppArrayInitializer(function->getSurfaceStateHeap(), sshSize, out);
+    writeAsCppArrayInitializer(function->getSurfaceStateHeapData().get(), sshSize, out);
     out << "\n\n";
 
-    auto dshSize = function->getDynamicStateHeapSize();
+    auto dshSize = function->getDynamicStateHeapDataSize();
     out << "static const size_t " << globalNameDynamicStateHeapSize << " = 0x" << dshSize << ";\n\n";
 
     out << "static const uint32_t " << globalNameDynamicStateHeap << "[] =\n";
-    writeAsCppArrayInitializer(function->getDynamicStateHeap(), dshSize, out);
+    writeAsCppArrayInitializer(function->getDynamicStateHeapData().get(), dshSize, out);
     out << "\n\n";
 
     out << "static const uint32_t " << globalNameSamplerArrayData << "[] = {";
@@ -302,7 +294,7 @@ inline void writeMockData(const std::string sourceOrigin, std::string &mockName,
     out << "static const bool " << globalNameHasPrintfOutput << " = " << signature.attributes.flags.hasPrintf << ";\n\n";
 
     out << "static const std::pair<int, int> " << globalNameBufferArgIndices << "[] = { ";
-    const void *crossThreadData = function->getCrossThreadDataHostMem();
+    const void *crossThreadData = function->getCrossThreadData().get();
     const uintptr_t *ctdSearchBeg = reinterpret_cast<const uintptr_t *>(crossThreadData);
     const uintptr_t *ctdSearchEnd = ctdSearchBeg + function->getCrossThreadDataSize() / sizeof(uintptr_t);
     for (auto buffArgOffset : bufferArgsIndices) {

@@ -235,6 +235,7 @@ struct PointerModeSelector<PointerMode::ZeroCost>::PointerOwnershipSelector<fals
             return Pointer(this->ptr + offset);
         }
 
+        /// TODO : Remove me - I'm ambigous
         Pointer &offsetBytesBy(size_t offset) noexcept { // offset by bytes
             using RawPtrT = typename std::conditional<std::is_const<PointeeT>::value, const char *, char *>::type;
             this->ptr = reinterpret_cast<PointeeT *>(reinterpret_cast<RawPtrT>(this->ptr) + offset);

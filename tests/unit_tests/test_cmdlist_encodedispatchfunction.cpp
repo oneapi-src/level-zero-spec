@@ -323,9 +323,9 @@ ATSTEST_F(CommandListAppendLaunchFunction, copiesThreadDataToGeneralStateHeap) {
         EXPECT_LE(cmd->getIndirectDataLength(), indirectDataLength);
 
         auto ptrHeap = ptrOffset(heap->getCpuBase(), cmd->getIndirectDataStartAddress());
-        EXPECT_EQ(memcmp(ptrHeap, function->getCrossThreadDataHostMem(), function->getCrossThreadDataSize()), 0u);
+        EXPECT_EQ(memcmp(ptrHeap, function->getCrossThreadData().get(), function->getCrossThreadDataSize()), 0u);
         ptrHeap = ptrOffset(ptrHeap, function->getCrossThreadDataSize());
-        EXPECT_EQ(memcmp(ptrHeap, function->getPerThreadDataHostMem(), function->getPerThreadDataSizeForWholeThreadGroup()), 0u);
+        EXPECT_EQ(memcmp(ptrHeap, function->getPerThreadData().get(), function->getPerThreadDataSizeForWholeThreadGroup()), 0u);
         ptrHeap = ptrOffset(ptrHeap, function->getPerThreadDataSizeForWholeThreadGroup());
     }
 }
@@ -363,9 +363,9 @@ ATSTEST_F(CommandListAppendLaunchFunction, growsGeneralStateHeapIfNeeded) {
         EXPECT_LE(cmd->getIndirectDataLength(), indirectDataLength);
 
         auto ptrHeap = ptrOffset(heap->getCpuBase(), cmd->getIndirectDataStartAddress());
-        EXPECT_EQ(memcmp(ptrHeap, function->getCrossThreadDataHostMem(), function->getCrossThreadDataSize()), 0u);
+        EXPECT_EQ(memcmp(ptrHeap, function->getCrossThreadData().get(), function->getCrossThreadDataSize()), 0u);
         ptrHeap = ptrOffset(ptrHeap, function->getCrossThreadDataSize());
-        EXPECT_EQ(memcmp(ptrHeap, function->getPerThreadDataHostMem(), function->getPerThreadDataSizeForWholeThreadGroup()), 0u);
+        EXPECT_EQ(memcmp(ptrHeap, function->getPerThreadData().get(), function->getPerThreadDataSizeForWholeThreadGroup()), 0u);
         ptrHeap = ptrOffset(ptrHeap, function->getPerThreadDataSizeForWholeThreadGroup());
     }
 }
@@ -377,10 +377,10 @@ ATSTEST_F(CommandListAppendLaunchFunction, storesImageSampler) {
 
     createFunction("ImageCopy");
 
-    auto fnDynamicStateHeap = function->getDynamicStateHeap();
+    auto fnDynamicStateHeap = function->getDynamicStateHeapData();
     const auto &signature = function->getImmutableData()->getSignature();
-    ASSERT_NE(0U, function->getDynamicStateHeapSize());
-    ASSERT_NE(nullptr, fnDynamicStateHeap);
+    ASSERT_NE(0U, function->getDynamicStateHeapDataSize());
+    ASSERT_NE(nullptr, fnDynamicStateHeap.get());
     ASSERT_NE(Undefined, signature.samplerTable.tableOffset);
 
     auto result = commandList->appendLaunchFunction(function->toHandle(),
@@ -406,8 +406,8 @@ ATSTEST_F(CommandListAppendLaunchFunction, storesImageSampler) {
     ASSERT_LE(samplerCount, static_cast<uint32_t>(idd.getSamplerCount() * 4));
 
     auto sizeSamplerState = sizeof(SAMPLER_STATE) * samplerCount;
-    auto fnSamplerState = static_cast<const SAMPLER_STATE *>(ptrOffset(fnDynamicStateHeap, signature.samplerTable.tableOffset));
-    auto samplerState = static_cast<const SAMPLER_STATE *>(ptrOffset(dsh->getCpuBase(), idd.getSamplerStatePointer()));
+    auto fnSamplerState = reinterpret_cast<const SAMPLER_STATE *>(ptrOffset(fnDynamicStateHeap.get(), signature.samplerTable.tableOffset));
+    auto samplerState = reinterpret_cast<const SAMPLER_STATE *>(ptrOffset(dsh->getCpuBase(), idd.getSamplerStatePointer()));
 
     EXPECT_EQ(memcmp(fnSamplerState, samplerState, sizeSamplerState), 0u);
 }
@@ -419,8 +419,8 @@ ATSTEST_F(CommandListAppendLaunchFunction, storesBindingTableAndSurfaceStates) {
 
     createFunction("ImageCopy");
 
-    auto fnSurfaceStateHeap = function->getSurfaceStateHeap();
-    ASSERT_NE(fnSurfaceStateHeap, nullptr);
+    auto fnSurfaceStateHeap = function->getSurfaceStateHeapData();
+    ASSERT_NE(fnSurfaceStateHeap.get(), nullptr);
 
     auto result = commandList->appendLaunchFunction(function->toHandle(),
                                                     &dispatchFunctionArguments,
@@ -439,21 +439,21 @@ ATSTEST_F(CommandListAppendLaunchFunction, storesBindingTableAndSurfaceStates) {
 
     auto cmd = genCmdCast<COMPUTE_WALKER *>(*itor);
     auto &idd = cmd->getInterfaceDescriptor();
-    auto fnSsh = function->getSurfaceStateHeap();
+    auto fnSsh = function->getSurfaceStateHeapData();
     auto ssh = commandList->indirectHeaps[CommandList::SURFACE_STATE];
-    ASSERT_NE(fnSsh, nullptr);
+    ASSERT_NE(fnSsh.get(), nullptr);
     ASSERT_NE(ssh, nullptr);
 
-    ASSERT_EQ(ssh->getUsed(), function->getSurfaceStateHeapSize());
+    ASSERT_EQ(ssh->getUsed(), function->getSurfaceStateHeapDataSize());
 
-    auto fnBindingTableOffset = function->getBindingTableOffset();
+    auto fnBindingTableOffset = function->getImmutableData()->getSignature().bindingTable.tableOffset;
     auto bindingTableOffset = idd.getBindingTablePointer();
     auto bindingTableOffsetDiff = bindingTableOffset - fnBindingTableOffset;
 
-    auto fnBindingTable = static_cast<const BINDING_TABLE_STATE *>(ptrOffset(fnSsh, fnBindingTableOffset));
-    auto bindingTable = static_cast<const BINDING_TABLE_STATE *>(ptrOffset(ssh->getCpuBase(), bindingTableOffset));
+    auto fnBindingTable = reinterpret_cast<const BINDING_TABLE_STATE *>(ptrOffset(fnSsh.get(), fnBindingTableOffset));
+    auto bindingTable = reinterpret_cast<const BINDING_TABLE_STATE *>(ptrOffset(ssh->getCpuBase(), bindingTableOffset));
 
-    auto bindingTableStateCount = function->getBindingTableStateCount();
+    auto bindingTableStateCount = function->getImmutableData()->getSignature().bindingTable.numSurfaceStates;
     ASSERT_GT(bindingTableStateCount, 0u);
 
     //TODO optimization currently disabled
@@ -498,9 +498,9 @@ SKLTEST_F(CommandListAppendLaunchFunctionGEN9, copiesThreadDataToIndirectStateHe
         EXPECT_LE(cmd->getIndirectDataLength(), indirectDataLength);
 
         auto ptrHeap = ptrOffset(heap->getCpuBase(), cmd->getIndirectDataStartAddress());
-        EXPECT_EQ(memcmp(ptrHeap, function->getCrossThreadDataHostMem(), function->getCrossThreadDataSize()), 0u);
+        EXPECT_EQ(memcmp(ptrHeap, function->getCrossThreadData().get(), function->getCrossThreadDataSize()), 0u);
         ptrHeap = ptrOffset(ptrHeap, function->getCrossThreadDataSize());
-        EXPECT_EQ(memcmp(ptrHeap, function->getPerThreadDataHostMem(), function->getPerThreadDataSizeForWholeThreadGroup()), 0u);
+        EXPECT_EQ(memcmp(ptrHeap, function->getPerThreadData().get(), function->getPerThreadDataSizeForWholeThreadGroup()), 0u);
         ptrHeap = ptrOffset(ptrHeap, function->getPerThreadDataSizeForWholeThreadGroup());
     }
 }
@@ -631,9 +631,9 @@ GEN9TEST_F(CommandListAppendLaunchFunctionGEN9, addsWalkerToCommandStream) {
         auto heap = commandList->indirectHeaps[CommandList::INDIRECT_OBJECT];
 
         auto ptrHeap = ptrOffset(heap->getCpuBase(), cmd->getIndirectDataStartAddress());
-        EXPECT_EQ(memcmp(ptrHeap, function->getCrossThreadDataHostMem(), function->getCrossThreadDataSize()), 0u);
+        EXPECT_EQ(memcmp(ptrHeap, function->getCrossThreadData().get(), function->getCrossThreadDataSize()), 0u);
         ptrHeap = ptrOffset(ptrHeap, function->getCrossThreadDataSize());
-        EXPECT_EQ(memcmp(ptrHeap, function->getPerThreadDataHostMem(), function->getPerThreadDataSizeForWholeThreadGroup()), 0u);
+        EXPECT_EQ(memcmp(ptrHeap, function->getPerThreadData().get(), function->getPerThreadDataSizeForWholeThreadGroup()), 0u);
         ptrHeap = ptrOffset(ptrHeap, function->getPerThreadDataSizeForWholeThreadGroup());
 
         EXPECT_EQ(INTERFACE_DESCRIPTOR_DATA::SAMPLER_COUNT_NO_SAMPLERS_USED, idd->getSamplerCount());
@@ -777,8 +777,8 @@ HWTEST_F(CommandListAppendLaunchFunction, setsGroupCountBeforeAccessingCrossThre
     ON_CALL(*this->function, setGroupCount)
         .WillByDefault(::testing::Invoke([&](uint32_t x, uint32_t y, uint32_t z) { res += 1; }));
 
-    ON_CALL(*this->function, getCrossThreadDataHostMem)
-        .WillByDefault(::testing::Invoke([&]() { res *= 2; return function->crossThreadData.data(); }));
+    ON_CALL(*this->function, getCrossThreadData)
+        .WillByDefault(::testing::Invoke([&]() { res *= 2; return bindPtrRef<const uint8_t[]>(function->crossThreadData.data()); }));
 
     auto result = commandList->appendLaunchFunction(function->toHandle(), &dispatchFunctionArguments, nullptr);
     ASSERT_EQ(XE_RESULT_SUCCESS, result);
@@ -820,9 +820,9 @@ GEN9TEST_F(CommandListAppendLaunchFunctionGEN9, storesImageSampler) {
     createFunction("ImageCopy");
     const auto &signature = function->getImmutableData()->getSignature();
 
-    auto fnDynamicStateHeap = function->getDynamicStateHeap();
-    ASSERT_NE(nullptr, fnDynamicStateHeap);
-    ASSERT_NE(0, function->getDynamicStateHeapSize());
+    auto fnDynamicStateHeap = function->getDynamicStateHeapData();
+    ASSERT_NE(nullptr, fnDynamicStateHeap.get());
+    ASSERT_NE(0, function->getDynamicStateHeapDataSize());
     ASSERT_NE(Undefined, signature.samplerTable.tableOffset);
 
     auto result = commandList->appendLaunchFunction(function->toHandle(),
@@ -858,8 +858,8 @@ GEN9TEST_F(CommandListAppendLaunchFunctionGEN9, storesImageSampler) {
     ASSERT_LE(samplerCount, static_cast<uint32_t>(idd->getSamplerCount() * 4));
 
     auto sizeSamplerState = sizeof(SAMPLER_STATE) * samplerCount;
-    auto fnSamplerState = static_cast<const SAMPLER_STATE *>(ptrOffset(fnDynamicStateHeap, signature.samplerTable.tableOffset));
-    auto samplerState = static_cast<const SAMPLER_STATE *>(ptrOffset(dsh->getCpuBase(), idd->getSamplerStatePointer()));
+    auto fnSamplerState = reinterpret_cast<const SAMPLER_STATE *>(ptrOffset(fnDynamicStateHeap.get(), signature.samplerTable.tableOffset));
+    auto samplerState = reinterpret_cast<const SAMPLER_STATE *>(ptrOffset(dsh->getCpuBase(), idd->getSamplerStatePointer()));
 
     ASSERT_EQ(memcmp(fnSamplerState, samplerState, sizeSamplerState), 0u);
 }
@@ -872,8 +872,8 @@ GEN9TEST_F(CommandListAppendLaunchFunctionGEN9, storesBindingTableAndSurfaceStat
 
     createFunction("ImageCopy");
 
-    auto fnSurfaceStateHeap = function->getSurfaceStateHeap();
-    ASSERT_NE(fnSurfaceStateHeap, nullptr);
+    auto fnSurfaceStateHeap = function->getSurfaceStateHeapData();
+    ASSERT_NE(fnSurfaceStateHeap.get(), nullptr);
 
     auto result = commandList->appendLaunchFunction(function->toHandle(),
                                                     &dispatchFunctionArguments,
@@ -903,21 +903,21 @@ GEN9TEST_F(CommandListAppendLaunchFunctionGEN9, storesBindingTableAndSurfaceStat
         idd = static_cast<INTERFACE_DESCRIPTOR_DATA *>(ptrOffset(dsh->getCpuBase(), cmd->getInterfaceDescriptorDataStartAddress()));
     }
 
-    auto fnSsh = function->getSurfaceStateHeap();
+    auto fnSsh = function->getSurfaceStateHeapData();
     auto ssh = commandList->indirectHeaps[CommandList::SURFACE_STATE];
-    ASSERT_NE(fnSsh, nullptr);
+    ASSERT_NE(fnSsh.get(), nullptr);
     ASSERT_NE(ssh, nullptr);
 
-    ASSERT_EQ(ssh->getUsed(), function->getSurfaceStateHeapSize());
+    ASSERT_EQ(ssh->getUsed(), function->getSurfaceStateHeapDataSize());
 
-    auto fnBindingTableOffset = function->getBindingTableOffset();
+    auto fnBindingTableOffset = function->getImmutableData()->getSignature().bindingTable.tableOffset;
     auto bindingTableOffset = idd->getBindingTablePointer();
     auto bindingTableOffsetDiff = bindingTableOffset - fnBindingTableOffset;
 
-    auto fnBindingTable = static_cast<const BINDING_TABLE_STATE *>(ptrOffset(fnSsh, fnBindingTableOffset));
-    auto bindingTable = static_cast<const BINDING_TABLE_STATE *>(ptrOffset(ssh->getCpuBase(), bindingTableOffset));
+    auto fnBindingTable = reinterpret_cast<const BINDING_TABLE_STATE *>(ptrOffset(fnSsh.get(), fnBindingTableOffset));
+    auto bindingTable = reinterpret_cast<const BINDING_TABLE_STATE *>(ptrOffset(ssh->getCpuBase(), bindingTableOffset));
 
-    auto bindingTableStateCount = function->getBindingTableStateCount();
+    auto bindingTableStateCount = function->getImmutableData()->getSignature().bindingTable.numSurfaceStates;
     ASSERT_GT(bindingTableStateCount, 0u);
 
     //TODO optimization currently disabled

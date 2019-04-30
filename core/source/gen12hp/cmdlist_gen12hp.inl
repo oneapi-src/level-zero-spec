@@ -144,8 +144,8 @@ xe_result_t CommandListCoreFamily<IGFX_GEN12_CORE>::appendLaunchFunction(xe_func
             auto ssh = indirectHeaps[SURFACE_STATE];
             assert(ssh);
             bindingTablePointer = copyBindingTableAndSurfaceStates(ssh,
-                                                                   function->getSurfaceStateHeap(),
-                                                                   function->getSurfaceStateHeapSize(),
+                                                                   function->getSurfaceStateHeapData().get(),
+                                                                   function->getSurfaceStateHeapDataSize(),
                                                                    bindingTableStateCount,
                                                                    functionSignature.bindingTable.tableOffset);
         }
@@ -164,7 +164,7 @@ xe_result_t CommandListCoreFamily<IGFX_GEN12_CORE>::appendLaunchFunction(xe_func
         samplerCount = functionSignature.samplerTable.numSamplers;
         samplerStateOffset = copySamplerState(indirectHeaps[DYNAMIC_STATE],
                                               functionSignature.samplerTable.tableOffset, functionSignature.samplerTable.numSamplers,
-                                              functionSignature.samplerTable.borderColor, function->getDynamicStateHeap());
+                                              functionSignature.samplerTable.borderColor, function->getDynamicStateHeapData().get());
     }
 
     idd.setSamplerStatePointer(samplerStateOffset);
@@ -188,9 +188,9 @@ xe_result_t CommandListCoreFamily<IGFX_GEN12_CORE>::appendLaunchFunction(xe_func
         offsetThreadData = static_cast<uint32_t>(ptrDiff(ptr, heap->getCpuBase()));
         assert(offsetThreadData + sizeThreadData <= heap->getMaxAvailableSpace());
 
-        memcpy(ptr, function->getCrossThreadDataHostMem(), sizeCrossThreadData);
+        memcpy(ptr, function->getCrossThreadData().get(), sizeCrossThreadData);
         ptr = ptrOffset(ptr, sizeCrossThreadData);
-        memcpy(ptr, function->getPerThreadDataHostMem(), sizePerThreadDataForWholeGroup);
+        memcpy(ptr, function->getPerThreadData().get(), sizePerThreadDataForWholeGroup);
     }
 
     if (this->dirtyHeaps) {

@@ -54,8 +54,8 @@ struct FunctionImp : Function {
                                  uint32_t *groupSizeY,
                                  uint32_t *groupSizeZ) override;
 
-    const void *getCrossThreadDataHostMem() const override {
-        return crossThreadData.weakRef().get();
+    PtrRef<const uint8_t[]> getCrossThreadData() const override {
+        return crossThreadData.weakRef();
     }
 
     uint32_t getCrossThreadDataSize() const override {
@@ -82,8 +82,8 @@ struct FunctionImp : Function {
 
     bool initialize(const xe_function_desc_t *desc);
 
-    const void *getPerThreadDataHostMem() const override {
-        return perThreadDataForWholeThreadGroup.weakRef().get();
+    PtrRef<const uint8_t[]> getPerThreadData() const override {
+        return perThreadDataForWholeThreadGroup.weakRef();
     }
 
     uint32_t getPerThreadDataSizeForWholeThreadGroup() const override {
@@ -101,24 +101,24 @@ struct FunctionImp : Function {
         return threadExecutionMask;
     }
 
-    GraphicsAllocation *getPrintfBufferAllocation() override {
-        return this->printfBuffer.weakRef().get();
+    PtrRef<GraphicsAllocation> getPrintfBufferAllocation() override {
+        return this->printfBuffer.weakRef();
     }
 
     void printPrintfOutput() override;
 
-    void *getSurfaceStateHeap() const {
-        return surfaceStateHeapData.weakRef().get();
+    PtrRef<const uint8_t[]> getSurfaceStateHeapData() const {
+        return surfaceStateHeapData.weakRef();
     }
 
-    uint32_t getSurfaceStateHeapSize() const {
+    uint32_t getSurfaceStateHeapDataSize() const {
         return surfaceStateHeapDataSize;
     }
 
-    const void *getDynamicStateHeap() const {
-        return dynamicStateHeapData.weakRef().get();
+    PtrRef<const uint8_t[]> getDynamicStateHeapData() const {
+        return dynamicStateHeapData.weakRef();
     }
-    const size_t getDynamicStateHeapSize() const override {
+    const size_t getDynamicStateHeapDataSize() const override {
         return dynamicStateHeapDataSize;
     }
 
@@ -126,11 +126,9 @@ struct FunctionImp : Function {
         return funcImmData.weakRef();
     }
 
-    PtrRef<Module> getModule() const {
-        return module.weakRef();
-    }
-
   protected:
+    FunctionImp() = default;
+
     void patchWorkgroupSizeInCrossThreadData(uint32_t x, uint32_t y, uint32_t z);
 
     void createPrintfBuffer();

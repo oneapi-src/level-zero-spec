@@ -270,8 +270,8 @@ xe_result_t CommandListCoreFamily<gfxCoreFamily>::appendLaunchFunction(xe_functi
             auto ssh = indirectHeaps[SURFACE_STATE];
             assert(ssh);
             bindingTablePointer = copyBindingTableAndSurfaceStates(ssh,
-                                                                   function->getSurfaceStateHeap(),
-                                                                   function->getSurfaceStateHeapSize(),
+                                                                   function->getSurfaceStateHeapData().get(),
+                                                                   function->getSurfaceStateHeapDataSize(),
                                                                    bindingTableStateCount,
                                                                    functionSignature.bindingTable.tableOffset);
         }
@@ -293,7 +293,7 @@ xe_result_t CommandListCoreFamily<gfxCoreFamily>::appendLaunchFunction(xe_functi
         samplerCount = functionSignature.samplerTable.numSamplers;
         samplerStateOffset = copySamplerState(heap,
                                               functionSignature.samplerTable.tableOffset, functionSignature.samplerTable.numSamplers,
-                                              functionSignature.samplerTable.borderColor, function->getDynamicStateHeap());
+                                              functionSignature.samplerTable.borderColor, function->getDynamicStateHeapData().get());
     }
 
     idd.setSamplerStatePointer(samplerStateOffset);
@@ -341,9 +341,9 @@ xe_result_t CommandListCoreFamily<gfxCoreFamily>::appendLaunchFunction(xe_functi
         offsetThreadData = static_cast<uint32_t>(ptrDiff(ptr, heap->getCpuBase()));
         assert(offsetThreadData + sizeThreadData <= heap->getMaxAvailableSpace());
 
-        memcpy(ptr, function->getCrossThreadDataHostMem(), sizeCrossThreadData);
+        memcpy(ptr, function->getCrossThreadData().get(), sizeCrossThreadData);
         ptr = ptrOffset(ptr, sizeCrossThreadData);
-        memcpy(ptr, function->getPerThreadDataHostMem(), sizePerThreadDataForWholeGroup);
+        memcpy(ptr, function->getPerThreadData().get(), sizePerThreadDataForWholeGroup);
     }
 
     // Update any non-pipelined state if it changes

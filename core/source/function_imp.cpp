@@ -55,7 +55,7 @@ static void patchWithImplicitSurface(PtrRef<uint8_t[]> crossThreadData, uint32_t
     if (surfaceStateHeap != nullptr) {
         uint32_t sshOffset = patch.SurfaceStateHeapOffset;
         assert(sshOffset + 64 < surfaceStateHeapSize);
-        auto surfaceState = surfaceStateHeap.offsetBytesBy(sshOffset);
+        auto surfaceState = surfaceStateHeap.weakRef().offsetBytesBy(sshOffset);
         void *addressToPatch = reinterpret_cast<void *>(allocation.getHostAddress());
         size_t sizeToPatch = allocation.getSize();
         NEO::Buffer::setSurfaceState(&deviceRT, surfaceState.get(), sizeToPatch, addressToPatch, allocation.allocationRT, 0);
@@ -81,7 +81,6 @@ void FunctionImmutableData::initialize(PtrRef<void> kernelInfoRT, MemoryManager 
                                     ? patchInfo.dataParameterStream->DataParameterStreamSize
                                     : 0;
 
-    // now allocate our own cross-thread data, if necessary
     if (crossThreadDataSize != 0) {
         crossThreadDataTemplate.rebind(new uint8_t[crossThreadDataSize], crossThreadDataSize);
 
@@ -253,7 +252,7 @@ PtrRef<const uint8_t[]> FunctionImmutableData::getSurfaceStateHeapTemplate() con
     return bindPtrRef<const uint8_t[]>(static_cast<uint8_t *>(kernelInfo.heapInfo.pSsh));
 }
 
-uint32_t FunctionImmutableData::getDynamicStateHeapSize() const {
+uint32_t FunctionImmutableData::getDynamicStateHeapDataSize() const {
     auto &kernelInfo = *kernelInfoRT.weakRef<NEO::KernelInfo>();
     return kernelInfo.heapInfo.pKernelHeader->DynamicStateHeapSize;
 }
@@ -427,12 +426,11 @@ xe_result_t FunctionImp::setArgImage(uint32_t argIndex, size_t argSize, const vo
     const auto image = Image::fromHandle(*static_cast<const xe_image_handle_t *>(argVal));
     const auto &arg = funcImmData->getSignature().explicitArgs.args[argIndex]->as<ArgImage>();
 
-    auto ssh = getSurfaceStateHeap();
-    assert(ssh);
+    assert(surfaceStateHeapData != nullptr);
 
     //Optimization?  Rather than setting up and copying into a function's SSH, save references to the
     // arguments' surface states, then do all the copying and BTS updating once in appendLaunchFunction
-    image->copySurfaceStateToSSH(ssh, arg.stateful);
+    image->copySurfaceStateToSSH(surfaceStateHeapData.weakRef().get(), arg.stateful);
 
     GraphicsAllocation *alloc = image->getAllocation();
     assert(alloc);
@@ -467,7 +465,7 @@ bool FunctionImp::initialize(const xe_function_desc_t *desc) {
     }
 
     if (funcImmData->getSurfaceStateHeapSize() > 0) {
-        this->surfaceStateHeapData.rebind(new uint8_t[funcImmData->getSurfaceStateHeapSize()]);
+        this->surfaceStateHeapData.rebind(new uint8_t[funcImmData->getSurfaceStateHeapSize()], funcImmData->getSurfaceStateHeapSize());
         memcpy(this->surfaceStateHeapData.weakRef().get(), funcImmData->getSurfaceStateHeapTemplate().get(), funcImmData->getSurfaceStateHeapSize());
         this->surfaceStateHeapDataSize = funcImmData->getSurfaceStateHeapSize();
     }
@@ -478,10 +476,10 @@ bool FunctionImp::initialize(const xe_function_desc_t *desc) {
         this->crossThreadDataSize = funcImmData->getCrossThreadDataSize();
     }
 
-    if (funcImmData->getDynamicStateHeapSize() != 0) {
-        this->dynamicStateHeapData.rebind(new uint8_t[funcImmData->getDynamicStateHeapSize()], funcImmData->getDynamicStateHeapSize());
-        memcpy(this->dynamicStateHeapData.weakRef().get(), funcImmData->getDynamicStateHeapTemplate().get(), funcImmData->getDynamicStateHeapSize());
-        this->dynamicStateHeapDataSize = funcImmData->getDynamicStateHeapSize();
+    if (funcImmData->getDynamicStateHeapDataSize() != 0) {
+        this->dynamicStateHeapData.rebind(new uint8_t[funcImmData->getDynamicStateHeapDataSize()], funcImmData->getDynamicStateHeapDataSize());
+        memcpy(this->dynamicStateHeapData.weakRef().get(), funcImmData->getDynamicStateHeapTemplate().get(), funcImmData->getDynamicStateHeapDataSize());
+        this->dynamicStateHeapDataSize = funcImmData->getDynamicStateHeapDataSize();
     }
 
     // TODO : reqd_workgroup_size

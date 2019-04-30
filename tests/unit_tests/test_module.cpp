@@ -204,7 +204,7 @@ TEST_P(ModuleCreateBufArg, onlineCompilationModuleTest) {
     uintptr_t srcAddress = static_cast<uintptr_t>(src->getGpuAddress());
     function->setArgumentValue(1, sizeof(srcAddress), &srcAddress);
 
-    const void *crossThreadData = function->getCrossThreadDataHostMem();
+    const void *crossThreadData = function->getCrossThreadData().get();
     ASSERT_NE(nullptr, crossThreadData);
     ASSERT_NE(0U, function->getCrossThreadDataSize());
     const uintptr_t *ctdSearchBeg = reinterpret_cast<const uintptr_t *>(crossThreadData);
@@ -222,8 +222,8 @@ TEST_P(ModuleCreateBufArg, onlineCompilationModuleTest) {
               std::find(capturedAllocsForResidency.begin(), capturedAllocsForResidency.end(), dst));
     EXPECT_NE(capturedAllocsForResidency.end(),
               std::find(capturedAllocsForResidency.begin(), capturedAllocsForResidency.end(), src));
-    ASSERT_NE(nullptr, function->getPerThreadDataHostMem());
-    EXPECT_TRUE(isAligned<32>(function->getPerThreadDataHostMem()))
+    ASSERT_NE(nullptr, function->getPerThreadData().get());
+    EXPECT_TRUE(isAligned<32>(function->getPerThreadData()))
         << "Per thread data not properly aligned for vector instructions"; // todo : make a real
                                                                            // test out of this
     uint32_t numChannels = 3;
@@ -329,10 +329,10 @@ TEST_P(ModuleCreateImageArg, onlineCompilationModuleTest) {
     EXPECT_NE(0U, function->getImmutableData()->getIsaSize());
     EXPECT_NE(0U, function->getImmutableData()->getSignature().attributes.simdSize);
 
-    auto sshSize = function->getSurfaceStateHeapSize();
-    auto ssh = function->getSurfaceStateHeap();
+    auto sshSize = function->getSurfaceStateHeapDataSize();
+    auto ssh = function->getSurfaceStateHeapData();
     EXPECT_NE(0U, sshSize);
-    EXPECT_NE(nullptr, ssh);
+    EXPECT_NE(nullptr, ssh.get());
 
     auto capturedAllocsForResidency = function->getResidencyContainer();
     EXPECT_NE(capturedAllocsForResidency.end(),
@@ -342,8 +342,8 @@ TEST_P(ModuleCreateImageArg, onlineCompilationModuleTest) {
               std::find(capturedAllocsForResidency.begin(), capturedAllocsForResidency.end(),
                         srcImage->getAllocation()));
 
-    ASSERT_NE(nullptr, function->getPerThreadDataHostMem());
-    EXPECT_TRUE(isAligned<32>(function->getPerThreadDataHostMem()))
+    ASSERT_NE(nullptr, function->getPerThreadData().get());
+    EXPECT_TRUE(isAligned<32>(function->getPerThreadData()))
         << "Per thread data not properly aligned for vector instructions"; // todo : make a real
                                                                            // test out of this
     uint32_t numChannels = 3;
@@ -398,12 +398,12 @@ TEST(ModuleCreateSimple, mockedModuleTest) {
                         expectedData->isaSize));
 
     EXPECT_EQ(expectedData->crossThreadDataBaseSize, function.getCrossThreadDataSize());
-    EXPECT_EQ(0, memcmp(expectedData->crossThreadDataBase, function.getCrossThreadDataHostMem(),
+    EXPECT_EQ(0, memcmp(expectedData->crossThreadDataBase, function.getCrossThreadData().get(),
                         expectedData->crossThreadDataBaseSize));
 
     EXPECT_EQ(expectedData->perThreadDataBaseSize,
               function.getPerThreadDataSizeForWholeThreadGroup());
-    EXPECT_EQ(0, memcmp(expectedData->perThreadDataBase, function.getPerThreadDataHostMem(),
+    EXPECT_EQ(0, memcmp(expectedData->perThreadDataBase, function.getPerThreadData().get(),
                         expectedData->perThreadDataBaseSize));
 
     const auto &residencyFromArgs = function.getResidencyContainer();
@@ -412,7 +412,7 @@ TEST(ModuleCreateSimple, mockedModuleTest) {
     EXPECT_NE(residencyFromArgs.end(),
               std::find(residencyFromArgs.begin(), residencyFromArgs.end(), &mockAlloc2));
 
-    auto *crossThreadData = function.getCrossThreadDataHostMem();
+    auto *crossThreadData = function.getCrossThreadData().get();
 
     const uintptr_t *ctdSearchBeg = reinterpret_cast<const uintptr_t *>(crossThreadData);
     const uintptr_t *ctdSearchEnd =
@@ -454,8 +454,8 @@ TEST(ModuleCreateSimple, moduleWithSLMandBarriers) {
 
     PrecompiledFunctionMock function("SlmBarrier", deviceRT->getFamilyNameWithType(), {});
 
-    EXPECT_TRUE(function.getHasBarriers());
-    EXPECT_EQ(64u, function.getSlmSize());
+    EXPECT_TRUE(function.getImmutableData()->getSignature().attributes.flags.hasBarriers);
+    EXPECT_EQ(64u, function.getImmutableData()->getSignature().attributes.slmInlineSize);
 }
 
 TEST_F(ModuleOnlineCompiled, getNativeBinaryReturnsGenBinary) {

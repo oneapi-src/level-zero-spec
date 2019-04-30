@@ -55,26 +55,24 @@ struct Mock<Function> : public Function {
                                                uint32_t *groupSizeY,
                                                uint32_t *groupSizeZ));
 
+    MOCK_CONST_METHOD0(clone, PtrOwn<Function>());
+
     MOCK_CONST_METHOD3(getGroupSize, void(uint32_t &outGroupSizeX, uint32_t &outGroupSizeY, uint32_t &outGroupSizeZ));
     MOCK_CONST_METHOD0(getModule, Module *());
-    MOCK_CONST_METHOD0(getPerThreadDataHostMem, const void *());
+    MOCK_CONST_METHOD0(getPerThreadData, PtrRef<const uint8_t[]>());
     MOCK_CONST_METHOD0(getPerThreadDataSizeForWholeThreadGroup, uint32_t());
     MOCK_CONST_METHOD0(getPerThreadDataSize, uint32_t());
     MOCK_CONST_METHOD0(getThreadsPerThreadGroup, uint32_t());
     MOCK_CONST_METHOD0(getThreadExecutionMask, uint32_t());
-    MOCK_CONST_METHOD0(getCrossThreadDataHostMem, const void *());
+    MOCK_CONST_METHOD0(getCrossThreadData, PtrRef<const uint8_t[]>());
     MOCK_CONST_METHOD0(getCrossThreadDataSize, uint32_t());
     MOCK_CONST_METHOD0(getResidencyContainer, const std::vector<GraphicsAllocation *> &());
-    MOCK_CONST_METHOD0(getHasBarriers, bool());
-    MOCK_CONST_METHOD0(getSlmSize, uint32_t());
     MOCK_METHOD0(printPrintfOutput, void());
-    MOCK_CONST_METHOD0(getSurfaceStateHeap, void *());
-    MOCK_CONST_METHOD0(getSurfaceStateHeapSize, uint32_t());
-    MOCK_CONST_METHOD0(getBindingTableStateCount, uint32_t());
-    MOCK_CONST_METHOD0(getBindingTableOffset, uint32_t());
+    MOCK_CONST_METHOD0(getSurfaceStateHeapData, PtrRef<const uint8_t[]>());
+    MOCK_CONST_METHOD0(getSurfaceStateHeapDataSize, uint32_t());
     MOCK_METHOD3(setBufferSurfaceState, void(uint32_t argIndex, void *address, GraphicsAllocation *alloc));
-    MOCK_CONST_METHOD0(getDynamicStateHeap, const void *());
-    MOCK_CONST_METHOD0(getDynamicStateHeapSize, const size_t());
+    MOCK_CONST_METHOD0(getDynamicStateHeapData, PtrRef<const uint8_t[]>());
+    MOCK_CONST_METHOD0(getDynamicStateHeapDataSize, const size_t());
     MOCK_CONST_METHOD0(getImmutableData, PtrRef<FunctionImmutableData>());
 
     // TODO : automate generation of such forwarders (e.g. extend GMOCK macros)

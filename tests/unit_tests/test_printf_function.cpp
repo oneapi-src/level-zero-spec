@@ -133,7 +133,7 @@ TEST_F(FunctionPrintfTest, createPrintfBufferAddsAllocationToResidencyContainer)
     EXPECT_NE(nullptr, printfBufferAllocation);
 
     EXPECT_NE(0u, function->residencyContainer.size());
-    EXPECT_EQ(function->residencyContainer[0], printfBufferAllocation);
+    EXPECT_EQ(function->residencyContainer[0], printfBufferAllocation.get());
 }
 
 TEST_F(FunctionPrintfTest, createPrintfBufferDoesNotCreateWhenNotUsingPrintf) {
@@ -184,7 +184,7 @@ TEST_F(FunctionPrintfFromSpirvTest, initializePutsPrintfBufferAllocationAfterArg
     function->initialize(&funDesc);
 
     auto &container = function->residencyContainer;
-    auto printfPos = std::find(container.begin(), container.end(), function->getPrintfBufferAllocation());
+    auto printfPos = std::find(container.begin(), container.end(), function->getPrintfBufferAllocation().get());
     EXPECT_NE(container.end(), printfPos);
     bool correctPos = printfPos >= container.begin() + function->getImmutableData()->getSignature().explicitArgs.args.size();
     EXPECT_TRUE(correctPos) << "Needs to be after explicit kernel args";
