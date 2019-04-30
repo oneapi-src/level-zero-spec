@@ -77,7 +77,7 @@ if(UNIX)
     )
     install(
         FILES
-            "${CMAKE_CURRENT_SOURCE_DIR}/../unit_tests/test_files/spv_modules/mat_mul.spv"
+            "${CMAKE_CURRENT_SOURCE_DIR}/../../unit_tests/test_files/spv_modules/mat_mult.spv"
         DESTINATION ${black_box_datadir}
         COMPONENT loki-samples
     )
