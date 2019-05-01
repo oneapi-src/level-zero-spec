@@ -5,6 +5,10 @@
 #include <cstddef>
 #include <cstdint>
 
+namespace NEO {
+class GraphicsAllocation;
+}
+
 namespace L0 {
 struct GraphicsAllocation;
 
@@ -16,6 +20,7 @@ struct MemoryManager {
     virtual PtrOwn<GraphicsAllocation> allocateGraphicsMemoryForPrivateMemory(size_t size) = 0;
     virtual uint64_t getIsaHeapGpuAddress() const = 0;
     virtual GraphicsAllocation *findAllocation(const void *ptr) = 0;
+    virtual void registerCLMemory(GraphicsAllocation *allocation) = 0;
     virtual void freeMemory(GraphicsAllocation *allocation) = 0;
     virtual void freeMemory(const void *ptr) = 0;
 

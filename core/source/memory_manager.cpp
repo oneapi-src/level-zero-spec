@@ -40,6 +40,11 @@ struct MemoryManagerImp : public MemoryManager {
         return allocation;
     }
 
+    void registerCLMemory(GraphicsAllocation *allocation) override {
+        knownAllocations.insert(*allocation->allocationRT); // temporary
+        allocMap[allocation->allocationRT] = allocation;    // temporary
+    }
+
     GraphicsAllocation *allocateManagedMemoryFromFault(void *buffer, size_t size) override {
         // TODO :
         //        * How are allocations removed from this list?
@@ -79,7 +84,11 @@ struct MemoryManagerImp : public MemoryManager {
     void freeMemory(GraphicsAllocation *allocation) {
         allocMap.erase(allocation->allocationRT);           // temporary
         knownAllocations.remove(*allocation->allocationRT); // temporary
-        memoryManagerRT->freeGraphicsMemory(static_cast<NEO::GraphicsAllocation *>(allocation->allocationRT));
+
+        if (allocation->getAllocatedFromCL() == false) {
+            memoryManagerRT->freeGraphicsMemory(static_cast<NEO::GraphicsAllocation *>(allocation->allocationRT));
+        }
+
         delete allocation;
     }
 
