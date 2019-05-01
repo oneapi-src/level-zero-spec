@@ -1,13 +1,4 @@
-<%!
-import re
-from templates import helper as th
-%><%
-    n=namespace
-    N=n.upper()
-
-    x=tags['$x']
-    X=x.upper()
-%>/**************************************************************************//**
+/**************************************************************************//**
 * INTEL CONFIDENTIAL  
 * Copyright 2019  
 * Intel Corporation All Rights Reserved.  
@@ -30,57 +21,40 @@ from templates import helper as th
 * express and approved by Intel in writing.  
 * @endcond
 *
-* @file ${name}.h
-*
-* @cond DEV
-* DO NOT EDIT: generated from /scripts/templates/loader.h.mako
-* @endcond
+* @file layer.h
 *
 ******************************************************************************/
-#ifndef _${name.upper()}_H
-#define _${name.upper()}_H
+#ifndef _LAYER_H
+#define _LAYER_H
 #if defined(__cplusplus)
 #pragma once
 #endif
-#include "${n}_all.h"
-#include "loader.h"
-
-%for obj in th.extract_objs(specs, r"function"):
-///////////////////////////////////////////////////////////////////////////////
-%if 'condition' in obj:
-#if ${th.subt(n, tags, obj['condition'])}
-%endif
-typedef ${x}_result_t (__${x}call *pfn_${th.make_func_name(n, tags, obj)}_t)(
-    %for line in th.make_param_lines(n, tags, obj, format=["type", "delim"]):
-    ${line}
-    %endfor
-    );
-%if 'condition' in obj:
-#endif // ${th.subt(n, tags, obj['condition'])}
-%endif
-
-%endfor
 
 ///////////////////////////////////////////////////////////////////////////////
-typedef struct _${n}api_pfntable_t
-{
-    %for obj in th.extract_objs(specs, r"function"):
-    %if 'condition' in obj:
-    #if ${th.subt(n, tags, obj['condition'])}
-    %endif
-    ${th.append_ws("pfn_"+th.make_func_name(n, tags, obj)+"_t", 63)} ${th.make_func_name(n, tags, obj)};
-    %if 'condition' in obj:
-    #endif // ${th.subt(n, tags, obj['condition'])}
-    %endif
-    %endfor
-} ${n}api_pfntable_t;
+#if XE_ENABLE_OCL_INTEROP
+typedef struct _cl_mem* cl_mem;
+typedef struct _cl_command_queue* cl_command_queue;
+typedef struct _cl_context* cl_context;
+typedef struct _cl_program* cl_program;
+#endif
 
 
-namespace xe_loader
+///////////////////////////////////////////////////////////////////////////////
+typedef struct _xeapi_pfntable_t*  xeapi_pfntable_ptr_t;
+typedef struct _xexapi_pfntable_t* xexapi_pfntable_ptr_t;
+typedef struct _xetapi_pfntable_t* xetapi_pfntable_ptr_t;
+
+
+namespace xe_layer
 {
     ///////////////////////////////////////////////////////////////////////////////
-    bool ${n}LoadExports( void* );
+    typedef struct _context_t
+    {
+        xeapi_pfntable_ptr_t   xeapi;
+        xexapi_pfntable_ptr_t  xexapi;
+        xetapi_pfntable_ptr_t  xetapi;
+    } context_t;
 
-} // namespace xe_loader
+} // namespace xe_layer
 
-#endif // _${name.upper()}_H
+#endif // _LAYER_H

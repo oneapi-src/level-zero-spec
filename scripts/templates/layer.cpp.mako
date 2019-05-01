@@ -30,90 +30,74 @@ from templates import helper as th
 * express and approved by Intel in writing.  
 * @endcond
 *
-* @file ${n}_${name}.cpp
+* @file ${name}.cpp
 *
-* @brief ${th.subt(n, tags, header['desc'])}
-*
-* DO NOT EDIT: generated from /scripts/${section}/${name}.yml
+* @cond DEV
+* DO NOT EDIT: generated from /scripts/templates/layer.cpp.mako
+* @endcond
 *
 ******************************************************************************/
-#if defined(${N}_CPP)
-#include "../include/${n}_${name}.hpp"
-#else
-#include "../include/${n}_${name}.h"
-#endif
-#if !defined(${N}_NULLDRV)
 #include "${name}.h"
+
+namespace xe_layer
+{
+    extern context_t context;
+
+    ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Loads function pointer table for loaded driver
+    bool ${n}Intercept(
+        ${n}api_pfntable_ptr_t pfntable )   ///< [in] pointer to table of ${n} API function pointers
+    {
+        if((nullptr == context.${n}api) || (nullptr == pfntable))
+            return false;
+
+        %for obj in th.extract_objs(specs, r"function"):
+        %if 'condition' in obj:
+        #if ${th.subt(n, tags, obj['condition'])}
+        %endif
+        context.${n}api->${th.append_ws(th.make_func_name(n, tags, obj), 59)} = pfntable->${th.make_func_name(n, tags, obj)};
+        pfntable->${th.append_ws(th.make_func_name(n, tags, obj), 62+len(n))} = ${th.make_func_name(n, tags, obj)};
+        %if 'condition' in obj:
+        #endif // ${th.subt(n, tags, obj['condition'])}
+        %endif
+
+        %endfor
+
+        return true;
+    }
+
+} // namespace xe_layer
+
+
+#if defined(__cplusplus)
+extern "C" {
 #endif
 
-#include <exception>    // @todo: move to common and/or precompiled header
-#include <new>
-
-%for obj in objects:
-%if re.match(r"function", obj['type']):
+%for obj in th.extract_objs(specs, r"function"):
 ///////////////////////////////////////////////////////////////////////////////
 %if 'condition' in obj:
 #if ${th.subt(n, tags, obj['condition'])}
 %endif
-%for line in th.make_desc_lines(n, tags, obj):
-/// ${line}
-%endfor
-%for line in th.make_details_lines(n, tags, obj):
-/// ${line}
-%endfor
-/// 
-%for line in th.make_returns_lines(n, tags, obj):
-/// ${line}
-%endfor
-///
-/// @hash {${obj['hash']}}
-///
-__${x}dllexport ${x}_result_t __${x}call
+${x}_result_t __${x}call
 ${th.make_func_name(n, tags, obj)}(
-    %for line in th.make_param_lines(n, tags, obj):
-    ${line}
+        %for line in th.make_param_lines(n, tags, obj):
+        ${line}
+        %endfor
+    ){
+    // Check parameters
+    %for key, values in th.make_param_checks(n, tags, obj).items():
+    %for val in values:
+    if( ${val} ) return ${key};
     %endfor
-    )
-{
-    try
-    {
-        //if( ${X}_DRIVER_PARAMETER_VALIDATION_LEVEL >= 0 )
-        {
-            %if not re.match(r".*Init", th.make_func_name(n, tags, obj)):
-            // if( nullptr == driver ) return ${X}_RESULT_ERROR_UNINITIALIZED;
-            %endif
-            // Check parameters
-            %for key, values in th.make_param_checks(n, tags, obj).items():
-            %for val in values:
-            if( ${val} ) return ${key};
-            %endfor
-            %endfor
-        }
-        /// @begin
-#if defined(XE_NULLDRV)
-        return ${X}_RESULT_SUCCESS;
-#else
-        return L0::${th.make_obj_accessor(tags, obj)}
-#endif
-        /// @end
-    }
-    catch(${x}_result_t& result)
-    {
-        return result;
-    }
-    catch(std::bad_alloc&)
-    {
-        return ${X}_RESULT_ERROR_OUT_OF_HOST_MEMORY;
-    }
-    catch(std::exception&)
-    {
-        // @todo: pfnOnException(e.what());
-        return ${X}_RESULT_ERROR_UNKNOWN;
-    }
+    %endfor
+
+    return xe_layer::context.${n}api->${th.make_func_name(n, tags, obj)}(${", ".join(th.make_param_lines(n, tags, obj, format=["name"]))});
 }
 %if 'condition' in obj:
 #endif // ${th.subt(n, tags, obj['condition'])}
 %endif
 
-%endif
 %endfor
+#if defined(__cplusplus)
+};
+#endif

@@ -3,22 +3,6 @@ import re
 import util
 
 """
-    generates the CMakeLists file for the list of files
-"""
-def generate_cmake(path, type):
-    fin = os.path.join("templates", "CMakeLists%s.mako"%type)
-    fout = os.path.join(path, "CMakeLists.txt")
-    files=[]
-    files.extend([os.path.basename(f) for f in util.findFiles(path, "*.h")])
-    files.extend([os.path.basename(f) for f in util.findFiles(path, "*.hpp")])
-    files.extend([os.path.basename(f) for f in util.findFiles(path, "*.inl")])
-    files.extend([os.path.basename(f) for f in util.findFiles(path, "*.cpp")])
-    files.sort()
-    return util.makoWrite(
-        fin, fout,
-        files=files)
-
-"""
     generic function for generating c/c++ files from the specification documents
 """
 def generate_code(path, section, namespace, tags, specs, meta, type):
@@ -77,19 +61,7 @@ def generate_cpp_include(path, namespace, tags, specs, meta):
     hloc += generate_include_all(path, namespace, tags, hfiles, ".h")
     hpploc += generate_include_all(path, namespace, tags, hppfiles + inlfiles, ".hpp")
 
-    generate_cmake(path, ".h")
     return hloc + hpploc + inlloc
-
-"""
-    generates c/c++ source files from the specification documents
-"""
-def generate_cpp_source(path, namespace, tags, specs, meta):
-    util.makePath(path)
-    util.removeFiles(path, "%s_*.cpp"%namespace)
-
-    loc, files = generate_code(path, os.path.basename(path), namespace, tags, specs, meta, ".cpp")
-    generate_cmake(path, ".cpp")
-    return loc
 
 """
 Entry-point:

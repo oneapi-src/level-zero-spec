@@ -2,9 +2,13 @@ set(TARGET_NAME xe_intc_loader)
 
 add_library(${TARGET_NAME}
     SHARED
+        ${CMAKE_CURRENT_SOURCE_DIR}/loader.h
         ${CMAKE_CURRENT_SOURCE_DIR}/loader.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/core_loader.h
         ${CMAKE_CURRENT_SOURCE_DIR}/core_loader.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/extended_loader.h
         ${CMAKE_CURRENT_SOURCE_DIR}/extended_loader.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/tools_loader.h
         ${CMAKE_CURRENT_SOURCE_DIR}/tools_loader.cpp
 )
 

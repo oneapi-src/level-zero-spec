@@ -21,53 +21,52 @@
 * express and approved by Intel in writing.  
 * @endcond
 *
-* @file extended_loader.h
-*
-* @cond DEV
-* DO NOT EDIT: generated from /scripts/templates/loader.h.mako
-* @endcond
+* @file layer.cpp
 *
 ******************************************************************************/
-#ifndef _EXTENDED_LOADER_H
-#define _EXTENDED_LOADER_H
-#if defined(__cplusplus)
-#pragma once
-#endif
-#include "xex_all.h"
-#include "loader.h"
+#include "layer.h"
+#include "core_layer.h"
+#include "extended_layer.h"
+#include "tools_layer.h"
 
-///////////////////////////////////////////////////////////////////////////////
-typedef xe_result_t (__xecall *pfn_xexCommandGraphCreate_t)(
-    xe_device_handle_t,
-    const xex_command_graph_desc_t*,
-    xex_command_graph_handle_t*
-    );
-
-///////////////////////////////////////////////////////////////////////////////
-typedef xe_result_t (__xecall *pfn_xexCommandGraphDestroy_t)(
-    xex_command_graph_handle_t
-    );
-
-///////////////////////////////////////////////////////////////////////////////
-typedef xe_result_t (__xecall *pfn_xexCommandGraphClose_t)(
-    xex_command_graph_handle_t
-    );
-
-
-///////////////////////////////////////////////////////////////////////////////
-typedef struct _xexapi_pfntable_t
-{
-    pfn_xexCommandGraphCreate_t                                     xexCommandGraphCreate;
-    pfn_xexCommandGraphDestroy_t                                    xexCommandGraphDestroy;
-    pfn_xexCommandGraphClose_t                                      xexCommandGraphClose;
-} xexapi_pfntable_t;
-
-
-namespace xe_loader
+namespace xe_layer
 {
     ///////////////////////////////////////////////////////////////////////////////
-    bool xexLoadExports( void* );
+    xeapi_pfntable_t  xeapi_pfntable = {};
+    xexapi_pfntable_t xexapi_pfntable = {};
+    xetapi_pfntable_t xetapi_pfntable = {};
 
-} // namespace xe_loader
+    ///////////////////////////////////////////////////////////////////////////////
+    context_t context = {
+        &xeapi_pfntable,    // xeapi
+        &xexapi_pfntable,   // xexapi
+        &xetapi_pfntable    // xetapi
+    };
 
-#endif // _EXTENDED_LOADER_H
+} // namespace xe_layer
+
+///////////////////////////////////////////////////////////////////////////////
+#if defined(__cplusplus)
+extern "C" {
+#endif
+
+__xedllexport xe_result_t __xecall
+xeInitLayer(
+    xeapi_pfntable_ptr_t   xeapi,
+    xexapi_pfntable_ptr_t  xexapi,
+    xetapi_pfntable_ptr_t  xetapi ){
+
+    bool initialized = 
+        xe_layer::xeIntercept(xeapi) &&
+        xe_layer::xexIntercept(xexapi) &&
+        xe_layer::xetIntercept(xetapi);
+            
+    if(false == initialized)
+        return XE_RESULT_ERROR_UNINITIALIZED;
+
+    return XE_RESULT_SUCCESS;
+}
+
+#if defined(__cplusplus)
+};
+#endif

@@ -21,20 +21,20 @@
 * express and approved by Intel in writing.  
 * @endcond
 *
-* @file tools_loader.h
+* @file tools_layer.h
 *
 * @cond DEV
-* DO NOT EDIT: generated from /scripts/templates/loader.h.mako
+* DO NOT EDIT: generated from /scripts/templates/layer.h.mako
 * @endcond
 *
 ******************************************************************************/
-#ifndef _TOOLS_LOADER_H
-#define _TOOLS_LOADER_H
+#ifndef _TOOLS_LAYER_H
+#define _TOOLS_LAYER_H
 #if defined(__cplusplus)
 #pragma once
 #endif
 #include "xet_all.h"
-#include "loader.h"
+#include "layer.h"
 
 ///////////////////////////////////////////////////////////////////////////////
 typedef xe_result_t (__xecall *pfn_xetMetricGroupGetCount_t)(
@@ -183,11 +183,12 @@ typedef struct _xetapi_pfntable_t
 } xetapi_pfntable_t;
 
 
-namespace xe_loader
+namespace xe_layer
 {
     ///////////////////////////////////////////////////////////////////////////////
-    bool xetLoadExports( void* );
+    bool xetIntercept(
+        xetapi_pfntable_t* );  ///< [in] pointer to table of xet API function pointers
 
-} // namespace xe_loader
+} // namespace xe_layer
 
-#endif // _TOOLS_LOADER_H
+#endif // _TOOLS_LAYER_H

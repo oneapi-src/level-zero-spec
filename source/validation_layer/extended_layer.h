@@ -1,13 +1,4 @@
-<%!
-import re
-from templates import helper as th
-%><%
-    n=namespace
-    N=n.upper()
-
-    x=tags['$x']
-    X=x.upper()
-%>/**************************************************************************//**
+/**************************************************************************//**
 * INTEL CONFIDENTIAL  
 * Copyright 2019  
 * Intel Corporation All Rights Reserved.  
@@ -30,57 +21,54 @@ from templates import helper as th
 * express and approved by Intel in writing.  
 * @endcond
 *
-* @file ${name}.h
+* @file extended_layer.h
 *
 * @cond DEV
-* DO NOT EDIT: generated from /scripts/templates/loader.h.mako
+* DO NOT EDIT: generated from /scripts/templates/layer.h.mako
 * @endcond
 *
 ******************************************************************************/
-#ifndef _${name.upper()}_H
-#define _${name.upper()}_H
+#ifndef _EXTENDED_LAYER_H
+#define _EXTENDED_LAYER_H
 #if defined(__cplusplus)
 #pragma once
 #endif
-#include "${n}_all.h"
-#include "loader.h"
+#include "xex_all.h"
+#include "layer.h"
 
-%for obj in th.extract_objs(specs, r"function"):
 ///////////////////////////////////////////////////////////////////////////////
-%if 'condition' in obj:
-#if ${th.subt(n, tags, obj['condition'])}
-%endif
-typedef ${x}_result_t (__${x}call *pfn_${th.make_func_name(n, tags, obj)}_t)(
-    %for line in th.make_param_lines(n, tags, obj, format=["type", "delim"]):
-    ${line}
-    %endfor
+typedef xe_result_t (__xecall *pfn_xexCommandGraphCreate_t)(
+    xe_device_handle_t,
+    const xex_command_graph_desc_t*,
+    xex_command_graph_handle_t*
     );
-%if 'condition' in obj:
-#endif // ${th.subt(n, tags, obj['condition'])}
-%endif
-
-%endfor
 
 ///////////////////////////////////////////////////////////////////////////////
-typedef struct _${n}api_pfntable_t
+typedef xe_result_t (__xecall *pfn_xexCommandGraphDestroy_t)(
+    xex_command_graph_handle_t
+    );
+
+///////////////////////////////////////////////////////////////////////////////
+typedef xe_result_t (__xecall *pfn_xexCommandGraphClose_t)(
+    xex_command_graph_handle_t
+    );
+
+
+///////////////////////////////////////////////////////////////////////////////
+typedef struct _xexapi_pfntable_t
 {
-    %for obj in th.extract_objs(specs, r"function"):
-    %if 'condition' in obj:
-    #if ${th.subt(n, tags, obj['condition'])}
-    %endif
-    ${th.append_ws("pfn_"+th.make_func_name(n, tags, obj)+"_t", 63)} ${th.make_func_name(n, tags, obj)};
-    %if 'condition' in obj:
-    #endif // ${th.subt(n, tags, obj['condition'])}
-    %endif
-    %endfor
-} ${n}api_pfntable_t;
+    pfn_xexCommandGraphCreate_t                                     xexCommandGraphCreate;
+    pfn_xexCommandGraphDestroy_t                                    xexCommandGraphDestroy;
+    pfn_xexCommandGraphClose_t                                      xexCommandGraphClose;
+} xexapi_pfntable_t;
 
 
-namespace xe_loader
+namespace xe_layer
 {
     ///////////////////////////////////////////////////////////////////////////////
-    bool ${n}LoadExports( void* );
+    bool xexIntercept(
+        xexapi_pfntable_t* );  ///< [in] pointer to table of xex API function pointers
 
-} // namespace xe_loader
+} // namespace xe_layer
 
-#endif // _${name.upper()}_H
+#endif // _EXTENDED_LAYER_H

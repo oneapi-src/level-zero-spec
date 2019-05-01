@@ -33,11 +33,11 @@
 ///////////////////////////////////////////////////////////////////////////////
 #if defined(__linux__)
 #  include <dlfcn.h>
-#  define LOAD_DRIVER_LIBRARY() dlopen("liblevel_zero.so", RTLD_LAZY|RTLD_LOCAL)
+#  define LOAD_DRIVER_LIBRARY(NAME) dlopen("lib"NAME".so", RTLD_LAZY|RTLD_LOCAL)
 #  define LOAD_FUNCTION_PTR(LIB, FUNC_NAME) dlsym(LIB, FUNC_NAME)
 #elif defined(_WIN32)
 #  include <Windows.h>
-#  define LOAD_DRIVER_LIBRARY() LoadLibraryA("level_zero.dll")
+#  define LOAD_DRIVER_LIBRARY(NAME) LoadLibraryA(NAME".dll")
 #  define LOAD_FUNCTION_PTR(LIB, FUNC_NAME) GetProcAddress((HMODULE)LIB, FUNC_NAME)
 #else
 #  error "Unsupported OS"
@@ -51,19 +51,25 @@ typedef struct _cl_context* cl_context;
 typedef struct _cl_program* cl_program;
 #endif
 
+
 ///////////////////////////////////////////////////////////////////////////////
 typedef struct _xeapi_pfntable_t*  xeapi_pfntable_ptr_t;
 typedef struct _xexapi_pfntable_t* xexapi_pfntable_ptr_t;
 typedef struct _xetapi_pfntable_t* xetapi_pfntable_ptr_t;
 
-///////////////////////////////////////////////////////////////////////////////
-typedef struct _context_t 
+
+namespace xe_loader
 {
-    xeapi_pfntable_ptr_t   xeapi;
-    xexapi_pfntable_ptr_t  xexapi;
-    xetapi_pfntable_ptr_t  xetapi;
+    ///////////////////////////////////////////////////////////////////////////////
+    typedef struct _context_t
+    {
+        xeapi_pfntable_ptr_t   xeapi;
+        xexapi_pfntable_ptr_t  xexapi;
+        xetapi_pfntable_ptr_t  xetapi;
     
-    bool initialized;
-} context_t;
+        bool initialized;
+    } context_t;
+
+} // namespace xe_loader
 
 #endif // _LOADER_H

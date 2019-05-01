@@ -21,20 +21,20 @@
 * express and approved by Intel in writing.  
 * @endcond
 *
-* @file core_loader.h
+* @file core_layer.h
 *
 * @cond DEV
-* DO NOT EDIT: generated from /scripts/templates/loader.h.mako
+* DO NOT EDIT: generated from /scripts/templates/layer.h.mako
 * @endcond
 *
 ******************************************************************************/
-#ifndef _CORE_LOADER_H
-#define _CORE_LOADER_H
+#ifndef _CORE_LAYER_H
+#define _CORE_LAYER_H
 #if defined(__cplusplus)
 #pragma once
 #endif
 #include "xe_all.h"
-#include "loader.h"
+#include "layer.h"
 
 ///////////////////////////////////////////////////////////////////////////////
 typedef xe_result_t (__xecall *pfn_xeCommandListAppendBarrier_t)(
@@ -808,11 +808,12 @@ typedef struct _xeapi_pfntable_t
 } xeapi_pfntable_t;
 
 
-namespace xe_loader
+namespace xe_layer
 {
     ///////////////////////////////////////////////////////////////////////////////
-    bool xeLoadExports( void* );
+    bool xeIntercept(
+        xeapi_pfntable_t* );  ///< [in] pointer to table of xe API function pointers
 
-} // namespace xe_loader
+} // namespace xe_layer
 
-#endif // _CORE_LOADER_H
+#endif // _CORE_LAYER_H

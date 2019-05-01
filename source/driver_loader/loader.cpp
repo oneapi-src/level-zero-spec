@@ -25,51 +25,72 @@
 *
 ******************************************************************************/
 #include <mutex>
+#include <stdlib.h>
+
 #include "loader.h"
 #include "core_loader.h"
 #include "extended_loader.h"
 #include "tools_loader.h"
 
-///////////////////////////////////////////////////////////////////////////////
-xeapi_pfntable_t  xeapi_pfntable = {};
-xexapi_pfntable_t xexapi_pfntable = {};
-xetapi_pfntable_t xetapi_pfntable = {};
+namespace xe_loader
+{
+    ///////////////////////////////////////////////////////////////////////////////
+    xeapi_pfntable_t  xeapi_pfntable = {};
+    xexapi_pfntable_t xexapi_pfntable = {};
+    xetapi_pfntable_t xetapi_pfntable = {};
+
+    ///////////////////////////////////////////////////////////////////////////////
+    context_t context = {
+        &xeapi_pfntable,    // xeapi
+        &xexapi_pfntable,   // xexapi
+        &xetapi_pfntable,   // xetapi
+
+        false   // initialized
+    };
+
+} // namespace xe_loader
 
 ///////////////////////////////////////////////////////////////////////////////
-context_t context = {
-    &xeapi_pfntable,    // xeapi
-    &xexapi_pfntable,   // xexapi
-    &xetapi_pfntable,   // xetapi
-    
-    false   // initialized
-};
+typedef xe_result_t( __xecall *pfn_xeInitLayer_t )(
+    xeapi_pfntable_ptr_t,
+    xexapi_pfntable_ptr_t,
+    xetapi_pfntable_ptr_t
+    );
 
-///////////////////////////////////////////////////////////////////////////////
+
 #if defined(__cplusplus)
 extern "C" {
 #endif
 
+///////////////////////////////////////////////////////////////////////////////
 __xedllexport xe_result_t __xecall
 xeInit(
     xe_init_flag_t flags ){
-    static std::mutex crit;
-    {
-        std::lock_guard<std::mutex> lockGuard{crit};
-        
-        if(context.initialized)
-            return XE_RESULT_SUCCESS;
-        
-        auto driverLibrary = LOAD_DRIVER_LIBRARY(); // persistent handle
 
-        context.initialized = 
-            xeLoad(driverLibrary, context.xeapi) &&
-            xexLoad(driverLibrary, context.xexapi) &&
-            xetLoad(driverLibrary, context.xetapi);
+    static std::mutex crit;
+    std::lock_guard<std::mutex> lockGuard{crit};
+        
+    if(xe_loader::context.initialized)
+        return XE_RESULT_SUCCESS;
+        
+    auto driverLibrary = LOAD_DRIVER_LIBRARY("xe_common"); // persistent handle
+
+    xe_loader::context.initialized =
+        xe_loader::xeLoadExports(driverLibrary) &&
+        xe_loader::xexLoadExports(driverLibrary) &&
+        xe_loader::xetLoadExports(driverLibrary);
             
-        if(false == context.initialized)
-            return XE_RESULT_ERROR_UNINITIALIZED;
+    if(false == xe_loader::context.initialized)
+        return XE_RESULT_ERROR_UNINITIALIZED;
+
+    const char* env_var = getenv( "XE_ENABLE_VALIDATION_LAYER" );
+    if((nullptr != env_var) && (0 != atoi(env_var))){
+        auto validationLayer = LOAD_DRIVER_LIBRARY("xe_validation_layer");
+        auto xeInitLayer = (pfn_xeInitLayer_t)LOAD_FUNCTION_PTR(validationLayer, "xeInitLayer");
+        xeInitLayer(xe_loader::context.xeapi, xe_loader::context.xexapi, xe_loader::context.xetapi);
     }
-    return context.xeapi->xeInit(flags);
+
+    return xe_loader::context.xeapi->xeInit(flags);
 }
 
 #if defined(__cplusplus)

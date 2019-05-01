@@ -30,77 +30,78 @@
 ******************************************************************************/
 #include "tools_loader.h"
 
-///////////////////////////////////////////////////////////////////////////////
-/// @brief Loads function pointer table for loaded driver
-bool xetLoad(
-    void* handle,                   ///< [in] driver handle
-    xetapi_pfntable_t* pfntable )  ///< [in] pointer to table of xet API function pointers
+namespace xe_loader
 {
-    if(nullptr == pfntable){
-        return false;
+    extern context_t context;
+
+    ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Loads function pointer table for loaded driver
+    bool xetLoadExports(
+        void* handle )  ///< [in] driver handle
+    {
+        if(nullptr == context.xetapi)
+            return false;
+
+        context.xetapi->xetMetricGroupGetCount                                          = (pfn_xetMetricGroupGetCount_t)LOAD_FUNCTION_PTR(handle, "xetMetricGroupGetCount");
+        context.xetapi->xetMetricGroupGet                                               = (pfn_xetMetricGroupGet_t)LOAD_FUNCTION_PTR(handle, "xetMetricGroupGet");
+        context.xetapi->xetMetricGroupGetProperties                                     = (pfn_xetMetricGroupGetProperties_t)LOAD_FUNCTION_PTR(handle, "xetMetricGroupGetProperties");
+        context.xetapi->xetMetricGet                                                    = (pfn_xetMetricGet_t)LOAD_FUNCTION_PTR(handle, "xetMetricGet");
+        context.xetapi->xetMetricGetProperties                                          = (pfn_xetMetricGetProperties_t)LOAD_FUNCTION_PTR(handle, "xetMetricGetProperties");
+        context.xetapi->xetMetricGroupCalculateData                                     = (pfn_xetMetricGroupCalculateData_t)LOAD_FUNCTION_PTR(handle, "xetMetricGroupCalculateData");
+        context.xetapi->xetDeviceActivateMetricGroups                                   = (pfn_xetDeviceActivateMetricGroups_t)LOAD_FUNCTION_PTR(handle, "xetDeviceActivateMetricGroups");
+        context.xetapi->xetMetricTracerOpen                                             = (pfn_xetMetricTracerOpen_t)LOAD_FUNCTION_PTR(handle, "xetMetricTracerOpen");
+        context.xetapi->xetCommandListAppendMetricTracerMarker                          = (pfn_xetCommandListAppendMetricTracerMarker_t)LOAD_FUNCTION_PTR(handle, "xetCommandListAppendMetricTracerMarker");
+        context.xetapi->xetMetricTracerClose                                            = (pfn_xetMetricTracerClose_t)LOAD_FUNCTION_PTR(handle, "xetMetricTracerClose");
+        context.xetapi->xetMetricTracerReadData                                         = (pfn_xetMetricTracerReadData_t)LOAD_FUNCTION_PTR(handle, "xetMetricTracerReadData");
+        context.xetapi->xetMetricQueryPoolCreate                                        = (pfn_xetMetricQueryPoolCreate_t)LOAD_FUNCTION_PTR(handle, "xetMetricQueryPoolCreate");
+        context.xetapi->xetMetricQueryPoolDestroy                                       = (pfn_xetMetricQueryPoolDestroy_t)LOAD_FUNCTION_PTR(handle, "xetMetricQueryPoolDestroy");
+        context.xetapi->xetMetricQueryPoolGetMetricQuery                                = (pfn_xetMetricQueryPoolGetMetricQuery_t)LOAD_FUNCTION_PTR(handle, "xetMetricQueryPoolGetMetricQuery");
+        context.xetapi->xetCommandListAppendMetricQueryBegin                            = (pfn_xetCommandListAppendMetricQueryBegin_t)LOAD_FUNCTION_PTR(handle, "xetCommandListAppendMetricQueryBegin");
+        context.xetapi->xetCommandListAppendMetricQueryEnd                              = (pfn_xetCommandListAppendMetricQueryEnd_t)LOAD_FUNCTION_PTR(handle, "xetCommandListAppendMetricQueryEnd");
+        context.xetapi->xetCommandListAppendMetricMemoryBarrier                         = (pfn_xetCommandListAppendMetricMemoryBarrier_t)LOAD_FUNCTION_PTR(handle, "xetCommandListAppendMetricMemoryBarrier");
+        context.xetapi->xetMetricQueryGetData                                           = (pfn_xetMetricQueryGetData_t)LOAD_FUNCTION_PTR(handle, "xetMetricQueryGetData");
+
+        if(nullptr == context.xetapi->xetMetricGroupGetCount)
+            return false;
+        if(nullptr == context.xetapi->xetMetricGroupGet)
+            return false;
+        if(nullptr == context.xetapi->xetMetricGroupGetProperties)
+            return false;
+        if(nullptr == context.xetapi->xetMetricGet)
+            return false;
+        if(nullptr == context.xetapi->xetMetricGetProperties)
+            return false;
+        if(nullptr == context.xetapi->xetMetricGroupCalculateData)
+            return false;
+        if(nullptr == context.xetapi->xetDeviceActivateMetricGroups)
+            return false;
+        if(nullptr == context.xetapi->xetMetricTracerOpen)
+            return false;
+        if(nullptr == context.xetapi->xetCommandListAppendMetricTracerMarker)
+            return false;
+        if(nullptr == context.xetapi->xetMetricTracerClose)
+            return false;
+        if(nullptr == context.xetapi->xetMetricTracerReadData)
+            return false;
+        if(nullptr == context.xetapi->xetMetricQueryPoolCreate)
+            return false;
+        if(nullptr == context.xetapi->xetMetricQueryPoolDestroy)
+            return false;
+        if(nullptr == context.xetapi->xetMetricQueryPoolGetMetricQuery)
+            return false;
+        if(nullptr == context.xetapi->xetCommandListAppendMetricQueryBegin)
+            return false;
+        if(nullptr == context.xetapi->xetCommandListAppendMetricQueryEnd)
+            return false;
+        if(nullptr == context.xetapi->xetCommandListAppendMetricMemoryBarrier)
+            return false;
+        if(nullptr == context.xetapi->xetMetricQueryGetData)
+            return false;
+
+        return true;
     }
+} // namespace xe_loader
 
-    pfntable->xetMetricGroupGetCount                                          = (pfn_xetMetricGroupGetCount_t)LOAD_FUNCTION_PTR(handle, "xetMetricGroupGetCount");
-    pfntable->xetMetricGroupGet                                               = (pfn_xetMetricGroupGet_t)LOAD_FUNCTION_PTR(handle, "xetMetricGroupGet");
-    pfntable->xetMetricGroupGetProperties                                     = (pfn_xetMetricGroupGetProperties_t)LOAD_FUNCTION_PTR(handle, "xetMetricGroupGetProperties");
-    pfntable->xetMetricGet                                                    = (pfn_xetMetricGet_t)LOAD_FUNCTION_PTR(handle, "xetMetricGet");
-    pfntable->xetMetricGetProperties                                          = (pfn_xetMetricGetProperties_t)LOAD_FUNCTION_PTR(handle, "xetMetricGetProperties");
-    pfntable->xetMetricGroupCalculateData                                     = (pfn_xetMetricGroupCalculateData_t)LOAD_FUNCTION_PTR(handle, "xetMetricGroupCalculateData");
-    pfntable->xetDeviceActivateMetricGroups                                   = (pfn_xetDeviceActivateMetricGroups_t)LOAD_FUNCTION_PTR(handle, "xetDeviceActivateMetricGroups");
-    pfntable->xetMetricTracerOpen                                             = (pfn_xetMetricTracerOpen_t)LOAD_FUNCTION_PTR(handle, "xetMetricTracerOpen");
-    pfntable->xetCommandListAppendMetricTracerMarker                          = (pfn_xetCommandListAppendMetricTracerMarker_t)LOAD_FUNCTION_PTR(handle, "xetCommandListAppendMetricTracerMarker");
-    pfntable->xetMetricTracerClose                                            = (pfn_xetMetricTracerClose_t)LOAD_FUNCTION_PTR(handle, "xetMetricTracerClose");
-    pfntable->xetMetricTracerReadData                                         = (pfn_xetMetricTracerReadData_t)LOAD_FUNCTION_PTR(handle, "xetMetricTracerReadData");
-    pfntable->xetMetricQueryPoolCreate                                        = (pfn_xetMetricQueryPoolCreate_t)LOAD_FUNCTION_PTR(handle, "xetMetricQueryPoolCreate");
-    pfntable->xetMetricQueryPoolDestroy                                       = (pfn_xetMetricQueryPoolDestroy_t)LOAD_FUNCTION_PTR(handle, "xetMetricQueryPoolDestroy");
-    pfntable->xetMetricQueryPoolGetMetricQuery                                = (pfn_xetMetricQueryPoolGetMetricQuery_t)LOAD_FUNCTION_PTR(handle, "xetMetricQueryPoolGetMetricQuery");
-    pfntable->xetCommandListAppendMetricQueryBegin                            = (pfn_xetCommandListAppendMetricQueryBegin_t)LOAD_FUNCTION_PTR(handle, "xetCommandListAppendMetricQueryBegin");
-    pfntable->xetCommandListAppendMetricQueryEnd                              = (pfn_xetCommandListAppendMetricQueryEnd_t)LOAD_FUNCTION_PTR(handle, "xetCommandListAppendMetricQueryEnd");
-    pfntable->xetCommandListAppendMetricMemoryBarrier                         = (pfn_xetCommandListAppendMetricMemoryBarrier_t)LOAD_FUNCTION_PTR(handle, "xetCommandListAppendMetricMemoryBarrier");
-    pfntable->xetMetricQueryGetData                                           = (pfn_xetMetricQueryGetData_t)LOAD_FUNCTION_PTR(handle, "xetMetricQueryGetData");
-
-    if(nullptr == pfntable->xetMetricGroupGetCount)
-        return false;
-    if(nullptr == pfntable->xetMetricGroupGet)
-        return false;
-    if(nullptr == pfntable->xetMetricGroupGetProperties)
-        return false;
-    if(nullptr == pfntable->xetMetricGet)
-        return false;
-    if(nullptr == pfntable->xetMetricGetProperties)
-        return false;
-    if(nullptr == pfntable->xetMetricGroupCalculateData)
-        return false;
-    if(nullptr == pfntable->xetDeviceActivateMetricGroups)
-        return false;
-    if(nullptr == pfntable->xetMetricTracerOpen)
-        return false;
-    if(nullptr == pfntable->xetCommandListAppendMetricTracerMarker)
-        return false;
-    if(nullptr == pfntable->xetMetricTracerClose)
-        return false;
-    if(nullptr == pfntable->xetMetricTracerReadData)
-        return false;
-    if(nullptr == pfntable->xetMetricQueryPoolCreate)
-        return false;
-    if(nullptr == pfntable->xetMetricQueryPoolDestroy)
-        return false;
-    if(nullptr == pfntable->xetMetricQueryPoolGetMetricQuery)
-        return false;
-    if(nullptr == pfntable->xetCommandListAppendMetricQueryBegin)
-        return false;
-    if(nullptr == pfntable->xetCommandListAppendMetricQueryEnd)
-        return false;
-    if(nullptr == pfntable->xetCommandListAppendMetricMemoryBarrier)
-        return false;
-    if(nullptr == pfntable->xetMetricQueryGetData)
-        return false;
-
-    return true;
-}
-
-///////////////////////////////////////////////////////////////////////////////
-extern context_t context;
 
 #if defined(__cplusplus)
 extern "C" {
@@ -112,10 +113,10 @@ xetMetricGroupGetCount(
         xe_device_handle_t hDevice,                     ///< [in] handle of the device object
         uint32_t* pCount                                ///< [out] number of metric groups supported by the device
     ){
-    if(false == context.initialized)
+    if(false == xe_loader::context.initialized)
         return XE_RESULT_ERROR_UNINITIALIZED;
 
-    return context.xetapi->xetMetricGroupGetCount(hDevice, pCount);
+    return xe_loader::context.xetapi->xetMetricGroupGetCount(hDevice, pCount);
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -125,10 +126,10 @@ xetMetricGroupGet(
         uint32_t ordinal,                               ///< [in] metric group index
         xet_metric_group_handle_t* phMetricGroup        ///< [out] metric group handle
     ){
-    if(false == context.initialized)
+    if(false == xe_loader::context.initialized)
         return XE_RESULT_ERROR_UNINITIALIZED;
 
-    return context.xetapi->xetMetricGroupGet(hDevice, ordinal, phMetricGroup);
+    return xe_loader::context.xetapi->xetMetricGroupGet(hDevice, ordinal, phMetricGroup);
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -137,10 +138,10 @@ xetMetricGroupGetProperties(
         xet_metric_group_handle_t hMetricGroup,         ///< [in] handle of the metric group
         xet_metric_group_properties_t* pProperties      ///< [out] metric group properties
     ){
-    if(false == context.initialized)
+    if(false == xe_loader::context.initialized)
         return XE_RESULT_ERROR_UNINITIALIZED;
 
-    return context.xetapi->xetMetricGroupGetProperties(hMetricGroup, pProperties);
+    return xe_loader::context.xetapi->xetMetricGroupGetProperties(hMetricGroup, pProperties);
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -150,10 +151,10 @@ xetMetricGet(
         uint32_t ordinal,                               ///< [in] metric index
         xet_metric_handle_t* phMetric                   ///< [out] handle of metric
     ){
-    if(false == context.initialized)
+    if(false == xe_loader::context.initialized)
         return XE_RESULT_ERROR_UNINITIALIZED;
 
-    return context.xetapi->xetMetricGet(hMetricGroup, ordinal, phMetric);
+    return xe_loader::context.xetapi->xetMetricGet(hMetricGroup, ordinal, phMetric);
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -162,10 +163,10 @@ xetMetricGetProperties(
         xet_metric_handle_t hMetric,                    ///< [in] handle of the metric
         xet_metric_properties_t* pProperties            ///< [out] metric properties
     ){
-    if(false == context.initialized)
+    if(false == xe_loader::context.initialized)
         return XE_RESULT_ERROR_UNINITIALIZED;
 
-    return context.xetapi->xetMetricGetProperties(hMetric, pProperties);
+    return xe_loader::context.xetapi->xetMetricGetProperties(hMetric, pProperties);
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -178,10 +179,10 @@ xetMetricGroupCalculateData(
         uint32_t calculatedDataSize,                    ///< [in] calculated data size
         xet_typed_value_t* pCalculatedData              ///< [in,out] calculated metrics
     ){
-    if(false == context.initialized)
+    if(false == xe_loader::context.initialized)
         return XE_RESULT_ERROR_UNINITIALIZED;
 
-    return context.xetapi->xetMetricGroupCalculateData(hMetricGroup, pReportCount, rawDataSize, pRawData, calculatedDataSize, pCalculatedData);
+    return xe_loader::context.xetapi->xetMetricGroupCalculateData(hMetricGroup, pReportCount, rawDataSize, pRawData, calculatedDataSize, pCalculatedData);
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -191,10 +192,10 @@ xetDeviceActivateMetricGroups(
         uint32_t count,                                 ///< [in] metric group count to activate. 0 to deactivate.
         xet_metric_group_handle_t* phMetricGroups       ///< [in] handles of the metric groups to activate. NULL to deactivate.
     ){
-    if(false == context.initialized)
+    if(false == xe_loader::context.initialized)
         return XE_RESULT_ERROR_UNINITIALIZED;
 
-    return context.xetapi->xetDeviceActivateMetricGroups(hDevice, count, phMetricGroups);
+    return xe_loader::context.xetapi->xetDeviceActivateMetricGroups(hDevice, count, phMetricGroups);
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -206,10 +207,10 @@ xetMetricTracerOpen(
                                                         ///< to host type.
         xet_metric_tracer_handle_t* phMetricTracer      ///< [out] handle of metric tracer
     ){
-    if(false == context.initialized)
+    if(false == xe_loader::context.initialized)
         return XE_RESULT_ERROR_UNINITIALIZED;
 
-    return context.xetapi->xetMetricTracerOpen(hDevice, pDesc, hNotificationEvent, phMetricTracer);
+    return xe_loader::context.xetapi->xetMetricTracerOpen(hDevice, pDesc, hNotificationEvent, phMetricTracer);
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -219,10 +220,10 @@ xetCommandListAppendMetricTracerMarker(
         xet_metric_tracer_handle_t hMetricTracer,       ///< [in] handle of the metric tracer
         uint32_t value                                  ///< [in] tracer marker value
     ){
-    if(false == context.initialized)
+    if(false == xe_loader::context.initialized)
         return XE_RESULT_ERROR_UNINITIALIZED;
 
-    return context.xetapi->xetCommandListAppendMetricTracerMarker(hCommandList, hMetricTracer, value);
+    return xe_loader::context.xetapi->xetCommandListAppendMetricTracerMarker(hCommandList, hMetricTracer, value);
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -230,10 +231,10 @@ __xedllexport xe_result_t __xecall
 xetMetricTracerClose(
         xet_metric_tracer_handle_t hMetricTracer        ///< [in] handle of the metric tracer
     ){
-    if(false == context.initialized)
+    if(false == xe_loader::context.initialized)
         return XE_RESULT_ERROR_UNINITIALIZED;
 
-    return context.xetapi->xetMetricTracerClose(hMetricTracer);
+    return xe_loader::context.xetapi->xetMetricTracerClose(hMetricTracer);
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -244,10 +245,10 @@ xetMetricTracerReadData(
         uint32_t rawDataSize,                           ///< [in] raw data buffer size
         uint8_t* pRawData                               ///< [in,out] raw data buffer for reports
     ){
-    if(false == context.initialized)
+    if(false == xe_loader::context.initialized)
         return XE_RESULT_ERROR_UNINITIALIZED;
 
-    return context.xetapi->xetMetricTracerReadData(hMetricTracer, pReportCount, rawDataSize, pRawData);
+    return xe_loader::context.xetapi->xetMetricTracerReadData(hMetricTracer, pReportCount, rawDataSize, pRawData);
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -257,10 +258,10 @@ xetMetricQueryPoolCreate(
         xet_metric_query_pool_desc_t* pDesc,            ///< [in] metric query pool creation data
         xet_metric_query_pool_handle_t* phMetricQueryPool   ///< [out] handle of metric query pool
     ){
-    if(false == context.initialized)
+    if(false == xe_loader::context.initialized)
         return XE_RESULT_ERROR_UNINITIALIZED;
 
-    return context.xetapi->xetMetricQueryPoolCreate(hDevice, pDesc, phMetricQueryPool);
+    return xe_loader::context.xetapi->xetMetricQueryPoolCreate(hDevice, pDesc, phMetricQueryPool);
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -268,10 +269,10 @@ __xedllexport xe_result_t __xecall
 xetMetricQueryPoolDestroy(
         xet_metric_query_pool_handle_t hMetricQueryPool ///< [in] handle of the metric query pool
     ){
-    if(false == context.initialized)
+    if(false == xe_loader::context.initialized)
         return XE_RESULT_ERROR_UNINITIALIZED;
 
-    return context.xetapi->xetMetricQueryPoolDestroy(hMetricQueryPool);
+    return xe_loader::context.xetapi->xetMetricQueryPoolDestroy(hMetricQueryPool);
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -281,10 +282,10 @@ xetMetricQueryPoolGetMetricQuery(
         uint32_t ordinal,                               ///< [in] index of the query within the pool
         xet_metric_query_handle_t* phMetricQuery        ///< [out] handle of metric query
     ){
-    if(false == context.initialized)
+    if(false == xe_loader::context.initialized)
         return XE_RESULT_ERROR_UNINITIALIZED;
 
-    return context.xetapi->xetMetricQueryPoolGetMetricQuery(hMetricQueryPool, ordinal, phMetricQuery);
+    return xe_loader::context.xetapi->xetMetricQueryPoolGetMetricQuery(hMetricQueryPool, ordinal, phMetricQuery);
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -293,10 +294,10 @@ xetCommandListAppendMetricQueryBegin(
         xe_command_list_handle_t hCommandList,          ///< [in] handle of the command list
         xet_metric_query_handle_t hMetricQuery          ///< [in] handle of the metric query
     ){
-    if(false == context.initialized)
+    if(false == xe_loader::context.initialized)
         return XE_RESULT_ERROR_UNINITIALIZED;
 
-    return context.xetapi->xetCommandListAppendMetricQueryBegin(hCommandList, hMetricQuery);
+    return xe_loader::context.xetapi->xetCommandListAppendMetricQueryBegin(hCommandList, hMetricQuery);
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -306,10 +307,10 @@ xetCommandListAppendMetricQueryEnd(
         xet_metric_query_handle_t hMetricQuery,         ///< [in] handle of the metric query
         xe_event_handle_t hCompletionEvent              ///< [in] handle of the completion event to signal
     ){
-    if(false == context.initialized)
+    if(false == xe_loader::context.initialized)
         return XE_RESULT_ERROR_UNINITIALIZED;
 
-    return context.xetapi->xetCommandListAppendMetricQueryEnd(hCommandList, hMetricQuery, hCompletionEvent);
+    return xe_loader::context.xetapi->xetCommandListAppendMetricQueryEnd(hCommandList, hMetricQuery, hCompletionEvent);
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -317,10 +318,10 @@ __xedllexport xe_result_t __xecall
 xetCommandListAppendMetricMemoryBarrier(
         xe_command_list_handle_t hCommandList           ///< [in] handle of the command list
     ){
-    if(false == context.initialized)
+    if(false == xe_loader::context.initialized)
         return XE_RESULT_ERROR_UNINITIALIZED;
 
-    return context.xetapi->xetCommandListAppendMetricMemoryBarrier(hCommandList);
+    return xe_loader::context.xetapi->xetCommandListAppendMetricMemoryBarrier(hCommandList);
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -331,10 +332,10 @@ xetMetricQueryGetData(
         uint32_t rawDataSize,                           ///< [in] raw data size passed by the user
         uint8_t* pRawData                               ///< [in,out] query result data in raw format
     ){
-    if(false == context.initialized)
+    if(false == xe_loader::context.initialized)
         return XE_RESULT_ERROR_UNINITIALIZED;
 
-    return context.xetapi->xetMetricQueryGetData(hMetricQuery, pReportCount, rawDataSize, pRawData);
+    return xe_loader::context.xetapi->xetMetricQueryGetData(hMetricQuery, pReportCount, rawDataSize, pRawData);
 }
 
 #if defined(__cplusplus)

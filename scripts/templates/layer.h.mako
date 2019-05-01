@@ -33,7 +33,7 @@ from templates import helper as th
 * @file ${name}.h
 *
 * @cond DEV
-* DO NOT EDIT: generated from /scripts/templates/loader.h.mako
+* DO NOT EDIT: generated from /scripts/templates/layer.h.mako
 * @endcond
 *
 ******************************************************************************/
@@ -43,7 +43,7 @@ from templates import helper as th
 #pragma once
 #endif
 #include "${n}_all.h"
-#include "loader.h"
+#include "layer.h"
 
 %for obj in th.extract_objs(specs, r"function"):
 ///////////////////////////////////////////////////////////////////////////////
@@ -76,11 +76,12 @@ typedef struct _${n}api_pfntable_t
 } ${n}api_pfntable_t;
 
 
-namespace xe_loader
+namespace xe_layer
 {
     ///////////////////////////////////////////////////////////////////////////////
-    bool ${n}LoadExports( void* );
+    bool ${n}Intercept(
+        ${n}api_pfntable_t* );  ///< [in] pointer to table of ${n} API function pointers
 
-} // namespace xe_loader
+} // namespace xe_layer
 
 #endif // _${name.upper()}_H

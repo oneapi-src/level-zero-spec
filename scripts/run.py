@@ -4,6 +4,7 @@ import parse_specs
 import generate_api
 import generate_docs
 import generate_loader
+import generate_layer
 import os
 import time
 
@@ -29,6 +30,7 @@ def main():
     for section in configParser.sections():
         add_argument(parser, section, "generation of C/C++ '%s' files."%section, True)
     add_argument(parser, "loader", "generation of driver loader files.", True)
+    add_argument(parser, "layer", "generation of validation layer files.", True)
     add_argument(parser, "debug", "dump intermediate data to disk.")
     add_argument(parser, "md", "generation of markdown files.", True)
     add_argument(parser, "html", "generation of HTML files.", True)
@@ -60,6 +62,9 @@ def main():
 
             if args['loader']:
                 generate_loader.generate(section, namespace, tags, specs)
+
+            if args['layer']:
+                generate_layer.generate(section, namespace, tags, specs)
 
             if args['md']:
                 generate_docs.generate_md(srcpath, dstpath, tags, meta)
