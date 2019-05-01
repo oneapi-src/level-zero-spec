@@ -22,10 +22,10 @@ void testAppendMemoryCopy(xe_device_handle_t &device, bool &validRet) {
     xe_command_queue_desc_t cmdQueueDesc = {XE_COMMAND_QUEUE_DESC_VERSION_CURRENT};
     cmdQueueDesc.ordinal = 0;
     cmdQueueDesc.mode = XE_COMMAND_QUEUE_MODE_ASYNCHRONOUS;
-    SUCCESS_OR_TERMINATE(xeDeviceCreateCommandQueue(device, &cmdQueueDesc, &cmdQueue));
+    SUCCESS_OR_TERMINATE(xeCommandQueueCreate(device, &cmdQueueDesc, &cmdQueue));
 
     xe_command_list_desc_t cmdListDesc = {XE_COMMAND_LIST_DESC_VERSION_CURRENT};
-    SUCCESS_OR_TERMINATE(xeDeviceCreateCommandList(device, &cmdListDesc, &cmdList));
+    SUCCESS_OR_TERMINATE(xeCommandListCreate(device, &cmdListDesc, &cmdList));
 
     SUCCESS_OR_TERMINATE(xeMemAlloc(device,
                                     XE_DEVICE_MEM_ALLOC_FLAG_DEFAULT,
@@ -37,12 +37,12 @@ void testAppendMemoryCopy(xe_device_handle_t &device, bool &validRet) {
     memset(stackBuffer, 0, allocSize);
 
     // Copy from heap to device-allocated memory
-    SUCCESS_OR_TERMINATE(xeCommandListAppendMemoryCopy(cmdList, xeBuffer, heapBuffer, allocSize, nullptr));
+    SUCCESS_OR_TERMINATE(xeCommandListAppendMemoryCopy(cmdList, xeBuffer, heapBuffer, allocSize, nullptr, 0, nullptr));
 
-    SUCCESS_OR_TERMINATE(xeCommandListAppendExecutionBarrier(cmdList));
+    SUCCESS_OR_TERMINATE(xeCommandListAppendBarrier(cmdList, nullptr, 0, nullptr));
 
     // Copy from device-allocated memory to stack
-    SUCCESS_OR_TERMINATE(xeCommandListAppendMemoryCopy(cmdList, stackBuffer, xeBuffer, allocSize, nullptr));
+    SUCCESS_OR_TERMINATE(xeCommandListAppendMemoryCopy(cmdList, stackBuffer, xeBuffer, allocSize, nullptr, 0, nullptr));
 
     SUCCESS_OR_TERMINATE(xeCommandListClose(cmdList));
     SUCCESS_OR_TERMINATE(xeCommandQueueExecuteCommandLists(cmdQueue, 1, &cmdList, nullptr));
@@ -63,8 +63,8 @@ int main(int argc, char *argv[]) {
 
     verbose = isVerbose(argc, argv);
 
-    SUCCESS_OR_TERMINATE(xeDriverInit(XE_INIT_FLAG_NONE));
-    SUCCESS_OR_TERMINATE(xeDriverGetDevice(0, &device0));
+    SUCCESS_OR_TERMINATE(xeInit(XE_INIT_FLAG_NONE));
+    SUCCESS_OR_TERMINATE(xeDeviceGet(0, &device0));
     SUCCESS_OR_TERMINATE(xeDeviceGetProperties(device0, &device0Properties));
     std::cout << device0Properties.name << std::endl;
 

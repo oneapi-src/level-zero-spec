@@ -80,7 +80,7 @@ int xeInit() {
     xe_result_t ret;
 
     std::cout << "xeDriverInit...\n";
-    ret = xeDriverInit(XE_INIT_FLAG_NONE);
+    ret = xeInit(XE_INIT_FLAG_NONE);
     if(ret) {
         std::cout << "xeDriverInit failed ret "
                 << static_cast<int>(ret) << "\n";
@@ -88,7 +88,7 @@ int xeInit() {
     }
 
     std::cout << "xeDriverGetDevice...\n";
-    ret = xeDriverGetDevice(0, &xeDevice);
+    ret = xeDeviceGet(0, &xeDevice);
     if(ret) {
         std::cout << "xeDriverGetDevice failed ret "
                 << static_cast<int>(ret) << "\n";
@@ -121,7 +121,7 @@ int xeInitProgram() {
     xeModuleDesc.format = XE_MODULE_FORMAT_IL_SPIRV;
     xeModuleDesc.pInputModule = reinterpret_cast<const uint8_t *>(spirvModule.get());
     xeModuleDesc.inputSize = spirvSize;
-    ret = xeDeviceCreateModule(xeDevice, &xeModuleDesc, &xeModule, nullptr);
+    ret = xeModuleCreate(xeDevice, &xeModuleDesc, &xeModule, nullptr);
     if(ret) {
         std::cout << "xeDeviceCreateModule failed ret "
                 << static_cast<int>(ret) << "\n";
@@ -131,7 +131,7 @@ int xeInitProgram() {
     std::cout << "xeModuleCreateFunction...\n";
     xe_function_desc_t xeFunctionDesc = {XE_FUNCTION_DESC_VERSION_CURRENT};
     xeFunctionDesc.pFunctionName = "matmat_gpu";
-    ret = xeModuleCreateFunction(xeModule, &xeFunctionDesc, &xeFunction);
+    ret = xeFunctionCreate(xeModule, &xeFunctionDesc, &xeFunction);
     if(ret) {
         std::cout << "xeModuleCreateFunction failed ret "
                 << static_cast<int>(ret) << "\n";
@@ -140,7 +140,7 @@ int xeInitProgram() {
 
     std::cout << "xeDeviceCreateCommandList...\n";
     xe_command_list_desc_t xeCmdListDesc = {XE_COMMAND_LIST_DESC_VERSION_CURRENT};
-    ret = xeDeviceCreateCommandList(xeDevice, &xeCmdListDesc, &xeCmdList);
+    ret = xeCommandListCreate(xeDevice, &xeCmdListDesc, &xeCmdList);
     if(ret) {
         std::cout << "xeDeviceCreateCommandList failed ret "
                 << static_cast<int>(ret) << "\n";
@@ -187,7 +187,7 @@ int xeInitCmdQueue() {
     cmdQueueDesc.mode = XE_COMMAND_QUEUE_MODE_ASYNCHRONOUS;
 
     std::cout << "xeDeviceCreateCommandQueue...\n";
-    ret = xeDeviceCreateCommandQueue(xeDevice, &cmdQueueDesc, &xeCmdQueue);
+    ret = xeCommandQueueCreate(xeDevice, &cmdQueueDesc, &xeCmdQueue);
     if (ret) {
         std::cout << "xeDeviceCreateCommandQueue failed ret "
                 << static_cast<int>(ret) << "\n";
@@ -201,14 +201,14 @@ int xeCompute() {
     xe_result_t ret;
 
     std::cout << "xeCommandListAppendMemoryCopy...\n";
-    ret = xeCommandListAppendMemoryCopy(xeCmdList, xeMemA, hostBufA, sizeof(hostBufA), nullptr);
+    ret = xeCommandListAppendMemoryCopy(xeCmdList, xeMemA, hostBufA, sizeof(hostBufA), nullptr, 0, nullptr);
     if(ret) {
         std::cout << "xeCommandListAppendMemoryCopy failed ret "
                 << static_cast<int>(ret) << "\n";
         return static_cast<int>(ret);
     }
 
-    ret = xeCommandListAppendMemoryCopy(xeCmdList, xeMemB, hostBufB, sizeof(hostBufB), nullptr);
+    ret = xeCommandListAppendMemoryCopy(xeCmdList, xeMemB, hostBufB, sizeof(hostBufB), nullptr, 0, nullptr);
     if(ret) {
         std::cout << "xeCommandListAppendMemoryCopy failed ret "
                 << static_cast<int>(ret) << "\n";
@@ -217,7 +217,7 @@ int xeCompute() {
 
     // Wait until memory copies are ready before launching the function
     std::cout << "xeCommandListAppendExecutionBarrier...\n";
-    ret = xeCommandListAppendExecutionBarrier(xeCmdList);
+    ret = xeCommandListAppendBarrier(xeCmdList, nullptr, 0, nullptr);
     if(ret) {
         std::cout << "xeCommandListAppendExecutionBarrier failed ret "
                 << static_cast<int>(ret) << "\n";
@@ -294,7 +294,7 @@ int xeCompute() {
     xeGroupDim.groupCountZ = 1;
 
     std::cout << "xeCommandListAppendLaunchFunction...\n";
-    ret = xeCommandListAppendLaunchFunction(xeCmdList, xeFunction, &xeGroupDim, nullptr);
+    ret = xeCommandListAppendLaunchFunction(xeCmdList, xeFunction, &xeGroupDim, nullptr, 0, nullptr);
     if(ret) {
         std::cout << "xeCommandListAppendLaunchFunction failed ret "
                 << static_cast<int>(ret) << "\n";
@@ -303,7 +303,7 @@ int xeCompute() {
 
     // Wait until function has completed
     std::cout << "xeCommandListAppendExecutionBarrier...\n";
-    ret = xeCommandListAppendExecutionBarrier(xeCmdList);
+    ret = xeCommandListAppendBarrier(xeCmdList, nullptr, 0, nullptr);
     if(ret) {
         std::cout << "xeCommandListAppendExecutionBarrier failed ret "
                 << static_cast<int>(ret) << "\n";
@@ -313,7 +313,7 @@ int xeCompute() {
     // Copy results back
     std::cout << "xeCommandListAppendMemoryCopy...\n";
     ret = xeCommandListAppendMemoryCopy(xeCmdList, hostBufCXE, xeMemC,
-            sizeof(hostBufB), nullptr);
+            sizeof(hostBufB), nullptr, 0, nullptr);
     if(ret) {
         std::cout << "xeCommandListAppendMemoryCopy failed ret "
                 << static_cast<int>(ret) << "\n";

@@ -44,7 +44,7 @@
 /// @brief Creates sampler object.
 /// 
 /// @details
-///     - This function may be called from simultaneous threads.
+///     - The application may call this function from simultaneous threads.
 ///     - The implementation of this function should be lock-free.
 /// 
 /// @remarks
@@ -65,10 +65,10 @@
 ///         + ::XE_SAMPLER_DESC_VERSION_CURRENT < pDesc->version
 ///     - ::XE_RESULT_ERROR_OUT_OF_HOST_MEMORY
 ///
-/// @hash {d6e17778345dc3a543e1add74375d5b50c06e8a5678e82e59353e25f9eabf95f}
+/// @hash {b2f5b380216f04ba149bc100f66dffef87c66dc8c46a5172e9b070e41012d972}
 ///
 __xedllexport xe_result_t __xecall
-xeDeviceCreateSampler(
+xeSamplerCreate(
     xe_device_handle_t hDevice,                     ///< [in] handle of the device
     const xe_sampler_desc_t* pDesc,                 ///< [in] pointer to sampler descriptor
     xe_sampler_handle_t* phSampler                  ///< [out] handle of the sampler
@@ -89,7 +89,7 @@ xeDeviceCreateSampler(
 #if defined(XE_NULLDRV)
         return XE_RESULT_SUCCESS;
 #else
-        return L0::Device::fromHandle(hDevice)->createSampler(pDesc, phSampler);
+        return L0::samplerCreate(hDevice, pDesc, phSampler);
 #endif
         /// @end
     }
@@ -113,9 +113,11 @@ xeDeviceCreateSampler(
 /// 
 /// @details
 ///     - The application is responsible for making sure the GPU is not
-///       currently referencing the event before it is deleted
+///       currently referencing the sampler before it is deleted
 ///     - The implementation of this function will immediately free all Host and
 ///       Device allocations associated with this module
+///     - The application may **not** call this function from simultaneous
+///       threads with the same sampler handle.
 ///     - The implementation of this function should be lock-free.
 /// 
 /// @remarks
@@ -149,7 +151,7 @@ xeSamplerDestroy(
 #if defined(XE_NULLDRV)
         return XE_RESULT_SUCCESS;
 #else
-        return L0::Sampler::fromHandle(hSampler)->destroy();
+        return L0::samplerDestroy(hSampler);
 #endif
         /// @end
     }

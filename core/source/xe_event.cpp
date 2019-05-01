@@ -44,7 +44,7 @@
 /// @brief Creates a pool for a set of event(s) on the device.
 /// 
 /// @details
-///     - This function may be called from simultaneous threads.
+///     - The application may call this function from simultaneous threads.
 ///     - The implementation of this function should be lock-free.
 /// 
 /// @returns
@@ -60,10 +60,10 @@
 ///     - ::XE_RESULT_ERROR_OUT_OF_HOST_MEMORY
 ///     - ::XE_RESULT_ERROR_OUT_OF_DEVICE_MEMORY
 ///
-/// @hash {93f142372e841c55bbda735869124aaf68b84fa8ba567c01fda65f5aee7e553c}
+/// @hash {1e835a6953e62592a69954f9fa0fc1c6cf52c30d928a7320fe16e51f335fbff5}
 ///
 __xedllexport xe_result_t __xecall
-xeDeviceCreateEventPool(
+xeEventPoolCreate(
     xe_device_handle_t hDevice,                     ///< [in] handle of the device
     const xe_event_pool_desc_t* desc,               ///< [in] pointer to event pool descriptor
     xe_event_pool_handle_t* phEventPool             ///< [out] pointer handle of event pool object created
@@ -84,7 +84,7 @@ xeDeviceCreateEventPool(
 #if defined(XE_NULLDRV)
         return XE_RESULT_SUCCESS;
 #else
-        return L0::Device::fromHandle(hDevice)->createEventPool(desc, phEventPool);
+        return L0::eventPoolCreate(hDevice, desc, phEventPool);
 #endif
         /// @end
     }
@@ -114,6 +114,8 @@ xeDeviceCreateEventPool(
 ///       deleted
 ///     - The implementation of this function will immediately free all Host and
 ///       Device allocations associated with this event pool
+///     - The application may **not** call this function from simultaneous
+///       threads with the same event pool handle.
 ///     - The implementation of this function should be lock-free.
 /// 
 /// @returns
@@ -143,7 +145,7 @@ xeEventPoolDestroy(
 #if defined(XE_NULLDRV)
         return XE_RESULT_SUCCESS;
 #else
-        return L0::EventPool::fromHandle(hEventPool)->destroy();
+        return L0::eventPoolDestroy(hEventPool);
 #endif
         /// @end
     }
@@ -169,7 +171,7 @@ xeEventPoolDestroy(
 ///     - Multiple events cannot be created using the same index from the same
 ///       pool
 ///     - The index must be less-than the count specified during pool creation
-///     - This function may be called from simultaneous threads.
+///     - The application may call this function from simultaneous threads.
 ///     - The implementation of this function should be lock-free.
 /// 
 /// @remarks
@@ -184,16 +186,18 @@ xeEventPoolDestroy(
 ///     - ::XE_RESULT_ERROR_DEVICE_LOST
 ///     - ::XE_RESULT_ERROR_INVALID_PARAMETER
 ///         + nullptr == hEventPool
+///         + nullptr == desc
 ///         + nullptr == phEvent
 ///     - ::XE_RESULT_ERROR_UNSUPPORTED
+///         + ::XE_EVENT_DESC_VERSION_CURRENT < desc->version
 ///     - ::XE_RESULT_ERROR_OUT_OF_HOST_MEMORY
 ///
-/// @hash {6d93b2c337efedd49494d2656833acd9c675ecf457bd561d478d4b2773579c31}
+/// @hash {d97c70e94ec9c407da18c97bd320458316894526b0a335697c0e6c71d82adfda}
 ///
 __xedllexport xe_result_t __xecall
-xeEventPoolCreateEvent(
+xeEventCreate(
     xe_event_pool_handle_t hEventPool,              ///< [in] handle of the event pool
-    uint32_t index,                                 ///< [in] index of the event within the pool
+    const xe_event_desc_t* desc,                    ///< [in] pointer to event descriptor
     xe_event_handle_t* phEvent                      ///< [out] pointer to handle of event object created
     )
 {
@@ -204,13 +208,15 @@ xeEventPoolCreateEvent(
             // if( nullptr == driver ) return XE_RESULT_ERROR_UNINITIALIZED;
             // Check parameters
             if( nullptr == hEventPool ) return XE_RESULT_ERROR_INVALID_PARAMETER;
+            if( nullptr == desc ) return XE_RESULT_ERROR_INVALID_PARAMETER;
             if( nullptr == phEvent ) return XE_RESULT_ERROR_INVALID_PARAMETER;
+            if( XE_EVENT_DESC_VERSION_CURRENT < desc->version ) return XE_RESULT_ERROR_UNSUPPORTED;
         }
         /// @begin
 #if defined(XE_NULLDRV)
         return XE_RESULT_SUCCESS;
 #else
-        return L0::EventPool::fromHandle(hEventPool)->createEvent(index, phEvent);
+        return L0::eventCreate(hEventPool, desc, phEvent);
 #endif
         /// @end
     }
@@ -237,6 +243,8 @@ xeEventPoolCreateEvent(
 ///       currently referencing the event before it is deleted
 ///     - The implementation of this function will immediately free all Host and
 ///       Device allocations associated with this event
+///     - The application may **not** call this function from simultaneous
+///       threads with the same event handle.
 ///     - The implementation of this function should be lock-free.
 /// 
 /// @remarks
@@ -272,7 +280,7 @@ xeEventDestroy(
 #if defined(XE_NULLDRV)
         return XE_RESULT_SUCCESS;
 #else
-        return L0::Event::fromHandle(hEvent)->destroy();
+        return L0::eventDestroy(hEvent);
 #endif
         /// @end
     }
@@ -422,7 +430,8 @@ xeEventPoolOpenIpcHandle(
 /// @details
 ///     - Closes an IPC event handle by destroying events that were opened in
 ///       this process using ::xeEventPoolOpenIpcHandle.
-///     - The application may call this function from simultaneous threads.
+///     - The application may **not** call this function from simultaneous
+///       threads with the same event pool handle.
 /// 
 /// @remarks
 ///   _Analogues_
@@ -538,7 +547,7 @@ xeCommandListAppendSignalEvent(
 }
 
 ///////////////////////////////////////////////////////////////////////////////
-/// @brief Appends a wait on event from a host signal into a command list.
+/// @brief Appends wait on event(s) on the device into a command list.
 /// 
 /// @details
 ///     - The application may **not** call this function from simultaneous
@@ -551,15 +560,16 @@ xeCommandListAppendSignalEvent(
 ///     - ::XE_RESULT_ERROR_DEVICE_LOST
 ///     - ::XE_RESULT_ERROR_INVALID_PARAMETER
 ///         + nullptr == hCommandList
-///         + nullptr == hEvent
+///         + nullptr == phEvents
 ///     - ::XE_RESULT_ERROR_UNSUPPORTED
 ///
-/// @hash {dda8072af72d89bb301747e4ac4ec6e12129883832ebcbdbd6a5acd47d4179ef}
+/// @hash {ba8886530b42c816643a1fd9bc79e7b1599c5488c322575de5cb14cb4422e611}
 ///
 __xedllexport xe_result_t __xecall
-xeCommandListAppendWaitOnEvent(
+xeCommandListAppendWaitOnEvents(
     xe_command_list_handle_t hCommandList,          ///< [in] handle of the command list
-    xe_event_handle_t hEvent                        ///< [in] handle of the event
+    uint32_t numEvents,                             ///< [in] number of events to wait on before continuing
+    xe_event_handle_t* phEvents                     ///< [in] handle of the events to wait on before continuing
     )
 {
     try
@@ -569,13 +579,13 @@ xeCommandListAppendWaitOnEvent(
             // if( nullptr == driver ) return XE_RESULT_ERROR_UNINITIALIZED;
             // Check parameters
             if( nullptr == hCommandList ) return XE_RESULT_ERROR_INVALID_PARAMETER;
-            if( nullptr == hEvent ) return XE_RESULT_ERROR_INVALID_PARAMETER;
+            if( nullptr == phEvents ) return XE_RESULT_ERROR_INVALID_PARAMETER;
         }
         /// @begin
 #if defined(XE_NULLDRV)
         return XE_RESULT_SUCCESS;
 #else
-        return L0::CommandList::fromHandle(hCommandList)->appendWaitOnEvent(hEvent);
+        return L0::CommandList::fromHandle(hCommandList)->appendWaitOnEvents(numEvents, phEvents);
 #endif
         /// @end
     }
@@ -652,7 +662,7 @@ xeEventHostSignal(
 }
 
 ///////////////////////////////////////////////////////////////////////////////
-/// @brief The current host thread waits on an event from a device signal.
+/// @brief The current host thread waits on an event to be signalled.
 /// 
 /// @details
 ///     - The application may call this function from simultaneous threads.
@@ -778,139 +788,11 @@ xeEventQueryStatus(
 }
 
 ///////////////////////////////////////////////////////////////////////////////
-/// @brief Queries the elapsed time between two device-signaled events.
-/// 
-/// @details
-///     - The application may call this function from simultaneous threads.
-///     - The implementation of this function should be lock-free.
-/// 
-/// @remarks
-///   _Analogues_
-///     - **cuEventElapsedTime**
-/// 
-/// @returns
-///     - ::XE_RESULT_SUCCESS
-///     - ::XE_RESULT_ERROR_UNINITIALIZED
-///     - ::XE_RESULT_ERROR_DEVICE_LOST
-///     - ::XE_RESULT_ERROR_INVALID_PARAMETER
-///         + nullptr == hEventBegin
-///         + nullptr == hEventEnd
-///         + nullptr == pTime
-///         + either event not signaled by device
-///         + either event not created from pool created with ::XE_EVENT_POOL_FLAG_TIMESTAMP
-///     - ::XE_RESULT_ERROR_UNSUPPORTED
-///
-/// @hash {000cf8bcf96b698cc26dd8e792ec1c1a4120a4829d617e0f33323e241e258ec4}
-///
-__xedllexport xe_result_t __xecall
-xeEventQueryElapsedTime(
-    xe_event_handle_t hEventBegin,                  ///< [in] handle of the begin event
-    xe_event_handle_t hEventEnd,                    ///< [in] handle of the end event
-    double* pTime                                   ///< [out] time in milliseconds
-    )
-{
-    try
-    {
-        //if( XE_DRIVER_PARAMETER_VALIDATION_LEVEL >= 0 )
-        {
-            // if( nullptr == driver ) return XE_RESULT_ERROR_UNINITIALIZED;
-            // Check parameters
-            if( nullptr == hEventBegin ) return XE_RESULT_ERROR_INVALID_PARAMETER;
-            if( nullptr == hEventEnd ) return XE_RESULT_ERROR_INVALID_PARAMETER;
-            if( nullptr == pTime ) return XE_RESULT_ERROR_INVALID_PARAMETER;
-        }
-        /// @begin
-#if defined(XE_NULLDRV)
-        return XE_RESULT_SUCCESS;
-#else
-        return L0::eventQueryElapsedTime(hEventBegin, hEventEnd, pTime);
-#endif
-        /// @end
-    }
-    catch(xe_result_t& result)
-    {
-        return result;
-    }
-    catch(std::bad_alloc&)
-    {
-        return XE_RESULT_ERROR_OUT_OF_HOST_MEMORY;
-    }
-    catch(std::exception&)
-    {
-        // @todo: pfnOnException(e.what());
-        return XE_RESULT_ERROR_UNKNOWN;
-    }
-}
-
-///////////////////////////////////////////////////////////////////////////////
-/// @brief Queries performance metrics between two device-signaled events.
-/// 
-/// @details
-///     - The application may call this function from simultaneous threads.
-///     - The implementation of this function should be lock-free.
-/// 
-/// @returns
-///     - ::XE_RESULT_SUCCESS
-///     - ::XE_RESULT_ERROR_UNINITIALIZED
-///     - ::XE_RESULT_ERROR_DEVICE_LOST
-///     - ::XE_RESULT_ERROR_INVALID_PARAMETER
-///         + nullptr == hEventStart
-///         + nullptr == hEventEnd
-///         + nullptr == pReportData
-///         + either event not signaled by device
-///         + either event not created from pool created with ::XE_EVENT_POOL_FLAG_PERFORMANCE_METRICS
-///         + report size too small
-///     - ::XE_RESULT_ERROR_UNSUPPORTED
-///
-/// @hash {2aadae68763b475a5f8ea4f780f115829c192fe6ab8fdff1c744906cf1cb832e}
-///
-__xedllexport xe_result_t __xecall
-xeEventQueryMetricsData(
-    xe_event_handle_t hEventStart,                  ///< [in] handle of the start event
-    xe_event_handle_t hEventEnd,                    ///< [in] handle of the end event
-    size_t reportSize,                              ///< [in] size of the report data buffer in bytes
-    uint32_t* pReportData                           ///< [out] report data buffer
-    )
-{
-    try
-    {
-        //if( XE_DRIVER_PARAMETER_VALIDATION_LEVEL >= 0 )
-        {
-            // if( nullptr == driver ) return XE_RESULT_ERROR_UNINITIALIZED;
-            // Check parameters
-            if( nullptr == hEventStart ) return XE_RESULT_ERROR_INVALID_PARAMETER;
-            if( nullptr == hEventEnd ) return XE_RESULT_ERROR_INVALID_PARAMETER;
-            if( nullptr == pReportData ) return XE_RESULT_ERROR_INVALID_PARAMETER;
-        }
-        /// @begin
-#if defined(XE_NULLDRV)
-        return XE_RESULT_SUCCESS;
-#else
-        return L0::eventQueryMetricsData(hEventStart, hEventEnd, reportSize, pReportData);
-#endif
-        /// @end
-    }
-    catch(xe_result_t& result)
-    {
-        return result;
-    }
-    catch(std::bad_alloc&)
-    {
-        return XE_RESULT_ERROR_OUT_OF_HOST_MEMORY;
-    }
-    catch(std::exception&)
-    {
-        // @todo: pfnOnException(e.what());
-        return XE_RESULT_ERROR_UNKNOWN;
-    }
-}
-
-///////////////////////////////////////////////////////////////////////////////
 /// @brief Reset an event back to not signaled state
 /// 
 /// @details
 ///     - The application may **not** call this function from simultaneous
-///       threads.
+///       threads with the same command list handle.
 ///     - The implementation of this function should be lock-free.
 /// 
 /// @remarks

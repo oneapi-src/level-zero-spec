@@ -44,7 +44,7 @@
 /// @brief Creates module object from an input IL or native binary.
 /// 
 /// @details
-///     - This function may be called from simultaneous threads.
+///     - The application may call this function from simultaneous threads.
 ///     - The implementation of this function should be lock-free.
 ///     - This function will create and compile the module object.
 ///     - A build log can optionally be returned to the caller. Caller is
@@ -84,14 +84,14 @@
 ///     - ::XE_RESULT_ERROR_MODULE_BUILD_FAILURE
 ///         + Failure to build module. See build log for more details.
 ///
-/// @hash {9eb829c1441842e279f9be96688eeb91e18798a1c6f1c8383d0a3ac86bfd4809}
+/// @hash {1156bac448e0a4d469674e6f6c1c4b19b3e4155e7fa2184e0e8407ea88c1ee34}
 ///
 __xedllexport xe_result_t __xecall
-xeDeviceCreateModule(
+xeModuleCreate(
     xe_device_handle_t hDevice,                     ///< [in] handle of the device
     const xe_module_desc_t* pDesc,                  ///< [in] pointer to module descriptor
     xe_module_handle_t* phModule,                   ///< [out] pointer to handle of module object created
-    xe_module_build_log_handle_t* phBuildLog        ///< [out][optional] pointer to handle of module's build log.
+    xe_module_build_log_handle_t* phBuildLog        ///< [in,out][optional] pointer to handle of module's build log.
     )
 {
     try
@@ -109,7 +109,7 @@ xeDeviceCreateModule(
 #if defined(XE_NULLDRV)
         return XE_RESULT_SUCCESS;
 #else
-        return L0::Device::fromHandle(hDevice)->createModule(pDesc, phModule, phBuildLog);
+        return L0::moduleCreate(hDevice, pDesc, phModule, phBuildLog);
 #endif
         /// @end
     }
@@ -133,9 +133,11 @@ xeDeviceCreateModule(
 /// 
 /// @details
 ///     - The application is responsible for making sure the GPU is not
-///       currently referencing the event before it is deleted
+///       currently referencing the module before it is deleted
 ///     - The implementation of this function will immediately free all Host and
 ///       Device allocations associated with this module
+///     - The application may **not** call this function from simultaneous
+///       threads with the same module handle.
 ///     - The implementation of this function should be lock-free.
 /// 
 /// @remarks
@@ -169,7 +171,7 @@ xeModuleDestroy(
 #if defined(XE_NULLDRV)
         return XE_RESULT_SUCCESS;
 #else
-        return L0::Module::fromHandle(hModule)->destroy();
+        return L0::moduleDestroy(hModule);
 #endif
         /// @end
     }
@@ -193,9 +195,11 @@ xeModuleDestroy(
 /// 
 /// @details
 ///     - The application is responsible for making sure the GPU is not
-///       currently referencing the event before it is deleted
+///       currently referencing the build log before it is deleted
 ///     - The implementation of this function will immediately free all Host and
 ///       Device allocations associated with this object
+///     - The application may **not** call this function from simultaneous
+///       threads with the same build log handle.
 ///     - The implementation of this function should be lock-free.
 ///     - This function can be called before or after ::xeModuleDestroy for the
 ///       associated module.
@@ -227,7 +231,7 @@ xeModuleBuildLogDestroy(
 #if defined(XE_NULLDRV)
         return XE_RESULT_SUCCESS;
 #else
-        return L0::ModuleBuildLog::fromHandle(hModuleBuildLog)->destroy();
+        return L0::moduleBuildLogDestroy(hModuleBuildLog);
 #endif
         /// @end
     }
@@ -250,7 +254,7 @@ xeModuleBuildLogDestroy(
 /// @brief Retrieves text string for build log.
 /// 
 /// @details
-///     - This function may be called from simultaneous threads.
+///     - The application may call this function from simultaneous threads.
 ///     - The implementation of this function should be lock-free.
 ///     - The caller must provide memory for build log.
 ///     - The caller can pass nullptr for pBuildLog when querying only for size.
@@ -311,7 +315,7 @@ xeModuleBuildLogGetString(
 /// @brief Retrieve native binary from Module.
 /// 
 /// @details
-///     - This function may be called from simultaneous threads.
+///     - The application may call this function from simultaneous threads.
 ///     - The implementation of this function should be lock-free.
 ///     - The caller can pass nullptr for pModuleNativeBinary when querying only
 ///       for size.
@@ -380,7 +384,7 @@ xeModuleGetNativeBinary(
 /// @brief Retrieve global variable pointer from Module.
 /// 
 /// @details
-///     - This function may be called from simultaneous threads.
+///     - The application may call this function from simultaneous threads.
 ///     - The implementation of this function should be lock-free.
 /// 
 /// @returns
@@ -440,7 +444,7 @@ xeModuleGetGlobalPointer(
 /// @brief Create Function object from Module by name
 /// 
 /// @details
-///     - This function may be called from simultaneous threads.
+///     - The application may call this function from simultaneous threads.
 ///     - The implementation of this function should be lock-free.
 ///     - Function objects should be destroyed before the Module is destroyed.
 /// 
@@ -461,10 +465,10 @@ xeModuleGetGlobalPointer(
 ///     - ::XE_RESULT_ERROR_UNSUPPORTED
 ///         + ::XE_FUNCTION_DESC_VERSION_CURRENT < pDesc->version
 ///
-/// @hash {db1f3dd910ba87cc5f4943397310ef13073b227ef8aad92327a8183e14461837}
+/// @hash {c7cb43b7ce7fe061e7931acec7f30c65b855b948c16910e0982e7fbecce0cce6}
 ///
 __xedllexport xe_result_t __xecall
-xeModuleCreateFunction(
+xeFunctionCreate(
     xe_module_handle_t hModule,                     ///< [in] handle of the module
     const xe_function_desc_t* pDesc,                ///< [in] pointer to function descriptor
     xe_function_handle_t* phFunction                ///< [out] handle of the Function object
@@ -485,7 +489,7 @@ xeModuleCreateFunction(
 #if defined(XE_NULLDRV)
         return XE_RESULT_SUCCESS;
 #else
-        return L0::Module::fromHandle(hModule)->createFunction(pDesc, phFunction);
+        return L0::functionCreate(hModule, pDesc, phFunction);
 #endif
         /// @end
     }
@@ -509,9 +513,11 @@ xeModuleCreateFunction(
 /// 
 /// @details
 ///     - The application is responsible for making sure the GPU is not
-///       currently referencing the event before it is deleted
+///       currently referencing the function before it is deleted
 ///     - The implementation of this function will immediately free all Host and
 ///       Device allocations associated with this function
+///     - The application may **not** call this function from simultaneous
+///       threads with the same function handle.
 ///     - The implementation of this function should be lock-free.
 /// 
 /// @returns
@@ -541,7 +547,7 @@ xeFunctionDestroy(
 #if defined(XE_NULLDRV)
         return XE_RESULT_SUCCESS;
 #else
-        return L0::Function::fromHandle(hFunction)->destroy();
+        return L0::functionDestroy(hFunction);
 #endif
         /// @end
     }
@@ -564,7 +570,7 @@ xeFunctionDestroy(
 /// @brief Retrieve function pointer from Module by name
 /// 
 /// @details
-///     - This function may be called from simultaneous threads.
+///     - The application may call this function from simultaneous threads.
 ///     - The implementation of this function should be lock-free.
 ///     - Function pointer is no longer valid if Module is destroyed.
 /// 
@@ -685,7 +691,7 @@ xeFunctionSetGroupSize(
 ///        dimension.
 /// 
 /// @details
-///     - This function may be called from simultaneous threads.
+///     - The application may call this function from simultaneous threads.
 ///     - The implementation of this function should be lock-free.
 ///     - This function ignores the group size that is set using
 ///       ::xeFunctionSetGroupSize.
@@ -753,7 +759,8 @@ xeFunctionSuggestGroupSize(
 /// @brief Set function argument used on function launch.
 /// 
 /// @details
-///     - This function may **not** be called from simultaneous threads.
+///     - This function may **not** be called from simultaneous threads with the
+///       same function handle.
 ///     - The implementation of this function should be lock-free.
 /// 
 /// @returns
@@ -770,7 +777,7 @@ xeFunctionSuggestGroupSize(
 ///
 __xedllexport xe_result_t __xecall
 xeFunctionSetArgumentValue(
-    xe_function_handle_t hFunction,                 ///< [in/out] handle of the function args object.
+    xe_function_handle_t hFunction,                 ///< [in,out] handle of the function args object.
     uint32_t argIndex,                              ///< [in] argument index in range [0, num args - 1]
     size_t argSize,                                 ///< [in] size of argument type
     const void* pArgValue                           ///< [in][optional] argument value represented as matching arg type. If
@@ -812,7 +819,8 @@ xeFunctionSetArgumentValue(
 /// @brief Sets a function attribute
 /// 
 /// @details
-///     - This function may **not** be called from simultaneous threads.
+///     - This function may **not** be called from simultaneous threads with the
+///       same function handle.
 ///     - The implementation of this function should be lock-free.
 /// 
 /// @remarks
@@ -833,7 +841,7 @@ xeFunctionSetArgumentValue(
 ///
 __xedllexport xe_result_t __xecall
 xeFunctionSetAttribute(
-    xe_function_handle_t hFunction,                 ///< [in/out] handle of the function.
+    xe_function_handle_t hFunction,                 ///< [in,out] handle of the function.
     xe_function_set_attribute_t attr,               ///< [in] attribute to set
     uint32_t value                                  ///< [in] attribute value to set
     )
@@ -873,7 +881,7 @@ xeFunctionSetAttribute(
 /// @brief Query a function attribute.
 /// 
 /// @details
-///     - This function may be called from simultaneous threads.
+///     - The application may call this function from simultaneous threads.
 ///     - The implementation of this function should be lock-free.
 /// 
 /// @remarks
@@ -937,7 +945,8 @@ xeFunctionGetAttribute(
 /// @details
 ///     - This may **not** be called for a command list created with
 ///       ::XE_COMMAND_LIST_FLAG_COPY_ONLY.
-///     - This function may **not** be called from simultaneous threads.
+///     - This function may **not** be called from simultaneous threads with the
+///       same command list handle.
 ///     - The implementation of this function should be lock-free.
 /// 
 /// @remarks
@@ -954,14 +963,16 @@ xeFunctionGetAttribute(
 ///         + nullptr == pLaunchFuncArgs
 ///     - ::XE_RESULT_ERROR_UNSUPPORTED
 ///
-/// @hash {266d96cac288055a97632576afa737b41087a1099ccf11da0681fbaf5b96c572}
+/// @hash {f2f69d909776636afca36f16aa5b042aefeecabf5beba251d38169136e9af336}
 ///
 __xedllexport xe_result_t __xecall
 xeCommandListAppendLaunchFunction(
     xe_command_list_handle_t hCommandList,          ///< [in] handle of the command list
     xe_function_handle_t hFunction,                 ///< [in] handle of the function object
     const xe_thread_group_dimensions_t* pLaunchFuncArgs,///< [in] launch function arguments.
-    xe_event_handle_t hEvent                        ///< [in][optional] handle of the event to signal on completion
+    xe_event_handle_t hSignalEvent,                 ///< [in][optional] handle of the event to signal on completion
+    uint32_t numWaitEvents,                         ///< [in][optional] number of events to wait on before launching
+    xe_event_handle_t* phWaitEvents                 ///< [in][optional] handle of the events to wait on before launching
     )
 {
     try
@@ -978,7 +989,7 @@ xeCommandListAppendLaunchFunction(
 #if defined(XE_NULLDRV)
         return XE_RESULT_SUCCESS;
 #else
-        return L0::CommandList::fromHandle(hCommandList)->appendLaunchFunction(hFunction, pLaunchFuncArgs, hEvent);
+        return L0::CommandList::fromHandle(hCommandList)->appendLaunchFunction(hFunction, pLaunchFuncArgs, hSignalEvent, numWaitEvents, phWaitEvents);
 #endif
         /// @end
     }
@@ -1006,7 +1017,8 @@ xeCommandListAppendLaunchFunction(
 ///       completed on the device.
 ///     - This may **not** be called for a command list created with
 ///       ::XE_COMMAND_LIST_FLAG_COPY_ONLY.
-///     - This function may **not** be called from simultaneous threads.
+///     - This function may **not** be called from simultaneous threads with the
+///       same command list handle.
 ///     - The implementation of this function should be lock-free.
 /// 
 /// @remarks
@@ -1023,14 +1035,16 @@ xeCommandListAppendLaunchFunction(
 ///         + nullptr == pLaunchArgumentsBuffer
 ///     - ::XE_RESULT_ERROR_UNSUPPORTED
 ///
-/// @hash {94f95d0b88ad0b8f094b439520d37d3b542fb6a07456e3d9b91e1908264d95d9}
+/// @hash {0d2b2dba2d7d8380043fe4a792a65dd04aef7bec61bf8c7f37c1463fc2cff7d7}
 ///
 __xedllexport xe_result_t __xecall
 xeCommandListAppendLaunchFunctionIndirect(
     xe_command_list_handle_t hCommandList,          ///< [in] handle of the command list
     xe_function_handle_t hFunction,                 ///< [in] handle of the function object
     const xe_thread_group_dimensions_t* pLaunchArgumentsBuffer, ///< [in] pointer to device buffer that will contain launch arguments
-    xe_event_handle_t hEvent                        ///< [in][optional] handle of the event to signal on completion
+    xe_event_handle_t hSignalEvent,                 ///< [in][optional] handle of the event to signal on completion
+    uint32_t numWaitEvents,                         ///< [in][optional] number of events to wait on before launching
+    xe_event_handle_t* phWaitEvents                 ///< [in][optional] handle of the events to wait on before launching
     )
 {
     try
@@ -1047,7 +1061,7 @@ xeCommandListAppendLaunchFunctionIndirect(
 #if defined(XE_NULLDRV)
         return XE_RESULT_SUCCESS;
 #else
-        return L0::CommandList::fromHandle(hCommandList)->appendLaunchFunctionIndirect(hFunction, pLaunchArgumentsBuffer, hEvent);
+        return L0::CommandList::fromHandle(hCommandList)->appendLaunchFunctionIndirect(hFunction, pLaunchArgumentsBuffer, hSignalEvent, numWaitEvents, phWaitEvents);
 #endif
         /// @end
     }
@@ -1076,7 +1090,8 @@ xeCommandListAppendLaunchFunctionIndirect(
 ///       function has completed on the device.
 ///     - This may **not** be called for a command list created with
 ///       ::XE_COMMAND_LIST_FLAG_COPY_ONLY.
-///     - This function may **not** be called from simultaneous threads.
+///     - This function may **not** be called from simultaneous threads with the
+///       same command list handle.
 ///     - The implementation of this function should be lock-free.
 /// 
 /// @remarks
@@ -1094,7 +1109,7 @@ xeCommandListAppendLaunchFunctionIndirect(
 ///         + nullptr == pLaunchArgumentsBuffer
 ///     - ::XE_RESULT_ERROR_UNSUPPORTED
 ///
-/// @hash {299af49d4365e1dc7472f8f575098b9af5d9218fe80f52c4aa9fa2cb4e6b6311}
+/// @hash {0f9a2ee39f2f2c434a24d2029ba53398c3bfb7487cf76812f0bf6f499ab6f687}
 ///
 __xedllexport xe_result_t __xecall
 xeCommandListAppendLaunchMultipleFunctionsIndirect(
@@ -1105,7 +1120,9 @@ xeCommandListAppendLaunchMultipleFunctionsIndirect(
                                                     ///< number of launch arguments; must be less-than or equal-to numFunctions
     const xe_thread_group_dimensions_t* pLaunchArgumentsBuffer, ///< [in] pointer to device buffer that will contain a contiguous array of
                                                     ///< launch arguments
-    xe_event_handle_t hEvent                        ///< [in][optional] handle of the event to signal on completion
+    xe_event_handle_t hSignalEvent,                 ///< [in][optional] handle of the event to signal on completion
+    uint32_t numWaitEvents,                         ///< [in][optional] number of events to wait on before launching
+    xe_event_handle_t* phWaitEvents                 ///< [in][optional] handle of the events to wait on before launching
     )
 {
     try
@@ -1123,7 +1140,7 @@ xeCommandListAppendLaunchMultipleFunctionsIndirect(
 #if defined(XE_NULLDRV)
         return XE_RESULT_SUCCESS;
 #else
-        return L0::CommandList::fromHandle(hCommandList)->appendLaunchMultipleFunctionsIndirect(numFunctions, phFunctions, pNumLaunchArguments, pLaunchArgumentsBuffer, hEvent);
+        return L0::CommandList::fromHandle(hCommandList)->appendLaunchMultipleFunctionsIndirect(numFunctions, phFunctions, pNumLaunchArguments, pLaunchArgumentsBuffer, hSignalEvent, numWaitEvents, phWaitEvents);
 #endif
         /// @end
     }
@@ -1149,7 +1166,8 @@ xeCommandListAppendLaunchMultipleFunctionsIndirect(
 /// @details
 ///     - This may **not** be called for a command list created with
 ///       ::XE_COMMAND_LIST_FLAG_COPY_ONLY.
-///     - This function may **not** be called from simultaneous threads.
+///     - This function may **not** be called from simultaneous threads with the
+///       same command list handle.
 ///     - The implementation of this function should be lock-free.
 /// 
 /// @remarks

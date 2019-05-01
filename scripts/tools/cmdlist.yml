@@ -1,0 +1,8 @@
+--- #--------------------------------------------------------------------------
+type: header
+desc: "Intel $OneApi Level-Zero Tool APIs for Command List"
+--- #--------------------------------------------------------------------------
+type: class
+desc: "C++ wrapper for command list"
+name: $tCommandList
+base: $xCommandList

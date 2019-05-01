@@ -36,6 +36,7 @@
 #pragma once
 #include "xex_all.h"
 #include <tuple>
+#include "xe_all.hpp"
 
 namespace xex
 {

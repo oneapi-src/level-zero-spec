@@ -160,13 +160,13 @@ bool dispatchTableInitialized = false;
 extern "C" {
 #endif
 
-${x}_result_t __${x}call ${x}DriverInit(${x}_init_flag_t flags){
+${x}_result_t __${x}call ${x}Init(${x}_init_flag_t flags){
     static std::mutex crit;
     {
         std::lock_guard<std::mutex> lockGuard{crit};
         
         if(dispatchTableInitialized){
-            return dispatchTable.${x}DriverInit(flags);
+            return dispatchTable.${x}Init(flags);
         }
         
         auto driverLibrary = ICD_LOAD_DRIVER_LIBRARY(); // persistent handle
@@ -178,12 +178,12 @@ ${x}_result_t __${x}call ${x}DriverInit(${x}_init_flag_t flags){
             return ${X}_RESULT_ERROR_UNINITIALIZED;
         }
     }
-    return dispatchTable.${x}DriverInit(flags);
+    return dispatchTable.${x}Init(flags);
 }
 
 %for obj in objects:
 %if re.match(r"function", obj['type']):
-%if not "DriverInit" in th.make_func_name(n, tags, obj):
+%if not "Init" in th.make_func_name(n, tags, obj):
 %if 'condition' in obj:
 #if ${th.subt(n, tags, obj['condition'])}
 %endif

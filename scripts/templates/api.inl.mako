@@ -75,9 +75,9 @@ namespace ${n}
     %for line in th.make_returns_lines(n, tags, obj, cpp=True):
     /// ${line}
     %endfor
-    inline ${th.make_return_value(n, tags, obj, cpp=True)} 
+    inline ${th.make_return_value(n, tags, obj, cpp=True, meta=meta)} 
     ${th.make_func_name(n, tags, obj, cpp=True)}(
-        %for line in th.make_param_lines(n, tags, obj, cpp=True):
+        %for line in th.make_param_lines(n, tags, obj, cpp=True, meta=meta):
         ${line}
         %endfor
         )
@@ -91,7 +91,7 @@ namespace ${n}
 
 %elif re.match(r"class", obj['type']):
     ## CLASS FUNCTION #############################################################
-    %for f in th.filter_items(th.extract_objs(specs, "function"), 'class', obj['name']):
+    %for f in th.filter_items(th.extract_objs(specs, r"function"), 'class', obj['name']):
     ///////////////////////////////////////////////////////////////////////////////
 %if 'condition' in f:
 #if ${th.subt(n, tags, f['condition'])}
@@ -104,9 +104,12 @@ namespace ${n}
     %for line in th.make_returns_lines(n, tags, f, cpp=True):
     /// ${line}
     %endfor
-    inline ${th.make_return_value(n, tags, f, cpp=True)} 
+    %if 'tparams' in f:
+    template<${th.make_tparams_line(n, tags, f)}>
+    %endif
+    inline ${th.make_return_value(n, tags, f, cpp=True, meta=meta)} 
     ${th.subt(n, tags, obj['name'], cpp=True)}::${th.make_func_name(n, tags, f, cpp=True)}(
-        %for line in th.make_param_lines(n, tags, f, cpp=True):
+        %for line in th.make_param_lines(n, tags, f, cpp=True, meta=meta):
         ${line}
         %endfor
         )

@@ -25,6 +25,17 @@ bool ImageCoreFamily<gfxCoreFamily>::initialize(Device *device, const xe_image_d
         return false;
     }
 
+    if (desc->format.type > XE_IMAGE_FORMAT_TYPE_MAX) {
+        return false;
+    }
+
+    if (desc->format.x > XE_IMAGE_FORMAT_SWIZZLE_MAX ||
+            desc->format.y > XE_IMAGE_FORMAT_SWIZZLE_MAX ||
+            desc->format.z > XE_IMAGE_FORMAT_SWIZZLE_MAX ||
+            desc->format.w > XE_IMAGE_FORMAT_SWIZZLE_MAX) {
+        return false;
+    }
+
     if (!BaseClass::initialize(device, desc)) {
         return false;
     }

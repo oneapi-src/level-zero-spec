@@ -20,7 +20,6 @@ struct ImageImp : public Image {
 
     //Sizes of xe_image_format_t image formats
     const size_t formatLayoutSize[XE_IMAGE_FORMAT_LAYOUT_MAX] = {
-
             1,  //XE_IMAGE_FORMAT_LAYOUT_8
             2,  //XE_IMAGE_FORMAT_LAYOUT_16
             4,  //XE_IMAGE_FORMAT_LAYOUT_32

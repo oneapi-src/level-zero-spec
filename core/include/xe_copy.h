@@ -73,7 +73,9 @@ xeCommandListAppendMemoryCopy(
     void* dstptr,                                   ///< [in] pointer to destination memory to copy to
     const void* srcptr,                             ///< [in] pointer to source memory to copy from
     size_t size,                                    ///< [in] size in bytes to copy
-    xe_event_handle_t hEvent                        ///< [in][optional] handle of the event to signal on completion
+    xe_event_handle_t hSignalEvent,                 ///< [in][optional] handle of the event to signal on completion
+    uint32_t numWaitEvents,                         ///< [in][optional] number of events to wait on before copy
+    xe_event_handle_t* phWaitEvents                 ///< [in][optional] handle of the events to wait on before copy
     );
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -107,7 +109,9 @@ xeCommandListAppendMemorySet(
     void* ptr,                                      ///< [in] pointer to memory to initialize
     int value,                                      ///< [in] value to initialize memory to
     size_t size,                                    ///< [in] size in bytes to initailize
-    xe_event_handle_t hEvent                        ///< [in][optional] handle of the event to signal on completion
+    xe_event_handle_t hSignalEvent,                 ///< [in][optional] handle of the event to signal on completion
+    uint32_t numWaitEvents,                         ///< [in][optional] number of events to wait on before copy
+    xe_event_handle_t* phWaitEvents                 ///< [in][optional] handle of the events to wait on before copy
     );
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -136,15 +140,21 @@ xeCommandListAppendImageCopy(
     xe_command_list_handle_t hCommandList,          ///< [in] handle of command list
     xe_image_handle_t hDstImage,                    ///< [in] handle of destination image to copy to
     xe_image_handle_t hSrcImage,                    ///< [in] handle of source image to copy from
-    xe_event_handle_t hEvent                        ///< [in][optional] handle of the event to signal on completion
+    xe_event_handle_t hSignalEvent,                 ///< [in][optional] handle of the event to signal on completion
+    uint32_t numWaitEvents,                         ///< [in][optional] number of events to wait on before copy
+    xe_event_handle_t* phWaitEvents                 ///< [in][optional] handle of the events to wait on before copy
     );
 
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Region descriptor
 typedef struct _xe_image_region_t
 {
-    uint32_t origin[3];                             ///< [in] The origin (x, y, z) for region in pixels
-    uint32_t region[3];                             ///< [in] The region (width, height, depth) relative to origin in pixels
+    uint32_t originX;                               ///< [in] The origin x offset for region in pixels
+    uint32_t originY;                               ///< [in] The origin y offset for region in pixels
+    uint32_t originZ;                               ///< [in] The origin z offset for region in pixels
+    uint32_t width;                                 ///< [in] The region width relative to origin in pixels
+    uint32_t height;                                ///< [in] The region height relative to origin in pixels
+    uint32_t depth;                                 ///< [in] The region depth relative to origin in pixels
 
 } xe_image_region_t;
 
@@ -169,10 +179,12 @@ __xedllport xe_result_t __xecall
 xeCommandListAppendImageCopyRegion(
     xe_command_list_handle_t hCommandList,          ///< [in] handle of command list
     xe_image_handle_t hDstImage,                    ///< [in] handle of destination image to copy to
-    xe_image_region_t* pDstRegion,                  ///< [in][optional] destination region descriptor
     xe_image_handle_t hSrcImage,                    ///< [in] handle of source image to copy from
+    xe_image_region_t* pDstRegion,                  ///< [in][optional] destination region descriptor
     xe_image_region_t* pSrcRegion,                  ///< [in][optional] source region descriptor
-    xe_event_handle_t hEvent                        ///< [in][optional] handle of the event to signal on completion
+    xe_event_handle_t hSignalEvent,                 ///< [in][optional] handle of the event to signal on completion
+    uint32_t numWaitEvents,                         ///< [in][optional] number of events to wait on before copy
+    xe_event_handle_t* phWaitEvents                 ///< [in][optional] handle of the events to wait on before copy
     );
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -204,7 +216,9 @@ xeCommandListAppendImageCopyToMemory(
     void* dstptr,                                   ///< [in] pointer to destination memory to copy to
     xe_image_handle_t hSrcImage,                    ///< [in] handle of source image to copy from
     xe_image_region_t* pSrcRegion,                  ///< [in][optional] source region descriptor
-    xe_event_handle_t hEvent                        ///< [in][optional] handle of the event to signal on completion
+    xe_event_handle_t hSignalEvent,                 ///< [in][optional] handle of the event to signal on completion
+    uint32_t numWaitEvents,                         ///< [in][optional] number of events to wait on before copy
+    xe_event_handle_t* phWaitEvents                 ///< [in][optional] handle of the events to wait on before copy
     );
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -234,9 +248,11 @@ __xedllport xe_result_t __xecall
 xeCommandListAppendImageCopyFromMemory(
     xe_command_list_handle_t hCommandList,          ///< [in] handle of command list
     xe_image_handle_t hDstImage,                    ///< [in] handle of destination image to copy to
-    xe_image_region_t* pDstRegion,                  ///< [in][optional] destination region descriptor
     const void* srcptr,                             ///< [in] pointer to source memory to copy from
-    xe_event_handle_t hEvent                        ///< [in][optional] handle of the event to signal on completion
+    xe_image_region_t* pDstRegion,                  ///< [in][optional] destination region descriptor
+    xe_event_handle_t hSignalEvent,                 ///< [in][optional] handle of the event to signal on completion
+    uint32_t numWaitEvents,                         ///< [in][optional] number of events to wait on before copy
+    xe_event_handle_t* phWaitEvents                 ///< [in][optional] handle of the events to wait on before copy
     );
 
 ///////////////////////////////////////////////////////////////////////////////

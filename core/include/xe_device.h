@@ -60,7 +60,7 @@ extern "C" {
 ///         + nullptr == count
 ///     - ::XE_RESULT_ERROR_UNSUPPORTED
 __xedllport xe_result_t __xecall
-xeDriverGetDeviceCount(
+xeDeviceGetCount(
     uint32_t* count                                 ///< [out] number of devices available
     );
 
@@ -94,11 +94,11 @@ typedef struct _xe_device_uuid_t
 ///     - ::XE_RESULT_ERROR_DEVICE_LOST
 ///     - ::XE_RESULT_ERROR_INVALID_PARAMETER
 ///         + nullptr == phDevice
-///         + ordinal is out of range reported by ::xeDriverGetDeviceCount
+///         + ordinal is out of range reported by ::xeDeviceGetCount
 ///     - ::XE_RESULT_ERROR_UNSUPPORTED
 __xedllport xe_result_t __xecall
-xeDriverGetDevice(
-    uint32_t ordinal,                               ///< [in] The device index in the range of [0, ::xeGetDeviceCount]
+xeDeviceGet(
+    uint32_t ordinal,                               ///< [in] The device index in the range of [0, ::xeDeviceGetCount]
     xe_device_handle_t* phDevice                    ///< [out] pointer to handle of device object created
     );
 
@@ -194,11 +194,13 @@ typedef struct _xe_device_properties_t
     uint32_t memClockRate;                          ///< [out] Clock rate for device global memory
     uint32_t memGlobalBusWidth;                     ///< [out] Bus width between core and memory.
     uint64_t totalLocalMemSize;                     ///< [out] Total memory size in bytes.
+    uint32_t maxCommandQueues;                      ///< [out] Maximum number of logical command queues.
     uint32_t numAsyncComputeEngines;                ///< [out] Number of asynchronous compute engines
     uint32_t numAsyncCopyEngines;                   ///< [out] Number of asynchronous copy engines
     uint32_t maxCommandQueuePriority;               ///< [out] Maximum priority for command queues. Higher value is higher
                                                     ///< priority.
     uint32_t numThreadsPerEU;                       ///< [out] Number of threads per EU.
+    uint32_t physicalEUSimdWidth;                   ///< [out] The physical EU simd width.
     uint32_t numEUsPerSubslice;                     ///< [out] Number of EUs per sub-slice.
     uint32_t numSubslicesPerSlice;                  ///< [out] Number of sub-slices per slice.
     uint32_t numSlicesPerTile;                      ///< [out] Number of slices per tile.
@@ -259,7 +261,6 @@ typedef struct _xe_device_compute_properties_t
     uint32_t maxGroupCountY;                        ///< [out] Maximum groups that can be launched for y dimension
     uint32_t maxGroupCountZ;                        ///< [out] Maximum groups that can be launched for z dimension
     uint32_t maxSharedLocalMemory;                  ///< [out] Maximum shared local memory per group.
-    uint32_t maxGroupRegisters;                     ///< [out] Maximum physical registers available per group
     uint32_t numSubGroupSizes;                      ///< [out] Number of subgroup sizes supported. This indicates number of
                                                     ///< entries in subGroupSizes.
     uint32_t subGroupSizes[XE_SUBGROUPSIZE_COUNT];  ///< [out] Size group sizes supported.

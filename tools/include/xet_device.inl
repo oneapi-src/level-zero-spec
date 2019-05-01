@@ -39,42 +39,6 @@
 namespace xet
 {
     ///////////////////////////////////////////////////////////////////////////////
-    /// @brief C++ wrapper for ::xetDeviceGetMetricGroupCount
-    /// 
-    /// @returns
-    ///     - uint32_t: number of metric groups supported by the device
-    /// 
-    /// @throws result_t
-    inline uint32_t 
-    Device::GetMetricGroupCount(
-        void
-        )
-    {
-        // auto result = ::xetDeviceGetMetricGroupCount( handle );
-        // if( ::XE_RESULT_SUCCESS != result ) throw exception(result, "xet::Device::GetMetricGroupCount");
-    }
-
-    ///////////////////////////////////////////////////////////////////////////////
-    /// @brief C++ wrapper for ::xetDeviceGetMetricGroup
-    /// 
-    /// @details
-    ///     - The application may call this function from simultaneous threads with
-    ///       the same device handle.
-    /// 
-    /// @returns
-    ///     - ::metric_group_handle_t: metric group handle
-    /// 
-    /// @throws result_t
-    inline metric_group_handle_t 
-    Device::GetMetricGroup(
-        uint32_t ordinal                                ///< [in] metric group index
-        )
-    {
-        // auto result = ::xetDeviceGetMetricGroup( handle, ordinal );
-        // if( ::XE_RESULT_SUCCESS != result ) throw exception(result, "xet::Device::GetMetricGroup");
-    }
-
-    ///////////////////////////////////////////////////////////////////////////////
     /// @brief C++ wrapper for ::xetDeviceActivateMetricGroups
     /// 
     /// @details
@@ -92,48 +56,6 @@ namespace xet
     {
         // auto result = ::xetDeviceActivateMetricGroups( handle, count, phMetricGroups );
         // if( ::XE_RESULT_SUCCESS != result ) throw exception(result, "xet::Device::ActivateMetricGroups");
-    }
-
-    ///////////////////////////////////////////////////////////////////////////////
-    /// @brief C++ wrapper for ::xetDeviceOpenMetricTracer
-    /// 
-    /// @details
-    ///     - The application may not call this function from simultaneous threads
-    ///       with the same device handle.
-    /// 
-    /// @returns
-    ///     - ::metric_tracer_handle_t: handle of metric tracer
-    /// 
-    /// @throws result_t
-    inline metric_tracer_handle_t 
-    Device::OpenMetricTracer(
-        metric_tracer_desc_t* pDesc,                    ///< [in/out] metric tracer descriptor
-        xe::_event_handle_t hNotificationEvent          ///< [in] event used for report availability notification. Must be device
-                                                        ///< to host type.
-        )
-    {
-        // auto result = ::xetDeviceOpenMetricTracer( handle, pDesc, hNotificationEvent );
-        // if( ::XE_RESULT_SUCCESS != result ) throw exception(result, "xet::Device::OpenMetricTracer");
-    }
-
-    ///////////////////////////////////////////////////////////////////////////////
-    /// @brief C++ wrapper for ::xetDeviceCreateMetricQueryPool
-    /// 
-    /// @details
-    ///     - The application may call this function from simultaneous threads with
-    ///       the same device handle.
-    /// 
-    /// @returns
-    ///     - ::metric_query_pool_handle_t: handle of metric query pool
-    /// 
-    /// @throws result_t
-    inline metric_query_pool_handle_t 
-    Device::CreateMetricQueryPool(
-        metric_query_pool_desc_t* pDesc                 ///< [in] metric query pool creation data
-        )
-    {
-        // auto result = ::xetDeviceCreateMetricQueryPool( handle, pDesc );
-        // if( ::XE_RESULT_SUCCESS != result ) throw exception(result, "xet::Device::CreateMetricQueryPool");
     }
 
 } // namespace xet

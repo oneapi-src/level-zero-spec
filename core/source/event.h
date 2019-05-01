@@ -67,6 +67,26 @@ struct Event : public _xe_event_handle_t {
     GraphicsAllocation *allocation = nullptr;
 };
 
+struct EventPool : public _xe_event_pool_handle_t {
+    static EventPool *create(Device *device, const xe_event_pool_desc_t *desc);
+
+    virtual xe_result_t destroy() = 0;
+    virtual xe_result_t createEvent(const xe_event_desc_t* desc,
+            xe_event_handle_t* phEvent) = 0;
+    virtual size_t getPoolSize() = 0;
+    virtual Event *getEvent(uint32_t index) = 0;
+    virtual xe_result_t getIpcHandle(xe_ipc_event_pool_handle_t* pIpcHandle) = 0;
+    virtual xe_result_t closeIpcHandle() = 0;
+
+    static EventPool *fromHandle(xe_event_pool_handle_t handle) {
+        return static_cast<EventPool *>(handle);
+    }
+
+    inline xe_event_pool_handle_t toHandle() {
+        return this;
+    }
+};
+
 xe_result_t eventQueryElapsedTime(xe_event_handle_t hEventStart,
                                   xe_event_handle_t hEventEnd,
                                   double *pTime);
@@ -76,35 +96,12 @@ xe_result_t eventQueryMetricsData(xe_event_handle_t hEventStart,
                                   size_t reportSize,
                                   uint32_t *pReportData);
 
-xe_result_t eventHostSignal(xe_event_handle_t hEvent);
-
-xe_result_t eventHostSynchronize(xe_event_handle_t hEvent, uint32_t timeout);
-
 xe_result_t eventPoolOpenIpcHandle(xe_device_handle_t hDevice,
         xe_ipc_event_pool_handle_t hIpc, xe_event_pool_handle_t* phEventPool);
 
-struct EventPool : public _xe_event_pool_handle_t {
-    static EventPool *create(Device *device, const xe_event_pool_desc_t *desc);
+xe_result_t eventCreate(xe_event_pool_handle_t hEventPool, const xe_event_desc_t* desc,
+        xe_event_handle_t* phEvent);
 
-    virtual xe_result_t destroy();
-
-    virtual xe_result_t createEvent(uint32_t index, xe_event_handle_t* phEvent);
-
-    static EventPool *fromHandle(xe_event_pool_handle_t handle) {
-        return static_cast<EventPool *>(handle);
-    }
-
-    inline xe_event_pool_handle_t toHandle() {
-        return this;
-    }
-
-    virtual xe_result_t getIpcHandle(xe_ipc_event_pool_handle_t* pIpcHandle);
-
-    virtual xe_result_t closeIpcHandle();
-
-    Device *device;
-    uint32_t count;
-    std::vector<Event *> pool;
-};
+xe_result_t eventDestroy(xe_event_handle_t hEvent);
 
 } // namespace L0

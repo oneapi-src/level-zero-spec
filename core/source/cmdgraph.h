@@ -12,7 +12,7 @@ struct CommandGraph : public _xe_command_graph_handle_t {
     virtual xe_result_t close() = 0;
     virtual xe_result_t destroy() = 0;
     virtual xe_result_t appendLaunchFunction(xe_function_handle_t hFunction,
-                                               const xe_thread_group_dimensions_t *pThreadGroupDimensions,
+                                               const xe_thread_group_dimensions_t *pDispatchFuncArgs,
                                                xe_event_handle_t hEvent) = 0;
     virtual xe_result_t appendLaunchFunctionIndirect(xe_function_handle_t hFunction,
                                                        const xe_thread_group_dimensions_t *pDispatchArgumentsBuffer,

@@ -35,6 +35,7 @@
 #if defined(__cplusplus)
 #pragma once
 #include "xe_common.hpp"
+#include "xe_cmdqueue.hpp"
 
 namespace xe
 {
@@ -43,16 +44,53 @@ namespace xe
     class CommandList
     {
     protected:
-        ::xe_command_list_handle_t handle;                ///< handle of command list object
-        ::xe_command_list_desc_t desc;                    ///< descriptor of the command list object
+        ::xe_command_list_handle_t m_handle;              ///< handle of command list object
+        ::xe_command_list_desc_t m_desc;                  ///< descriptor of the command list object
+
+        CommandList( void ) = delete;
+        CommandList( 
+                xe_command_list_handle_t handle,                ///< handle of command list object
+                xe_command_list_desc_t desc                     ///< descriptor of the command list object
+                ) :
+                m_handle( handle ),
+                m_desc( desc )
+            {}
+
+        ~CommandList( void ) = default;
+
+        CommandList( CommandList const& other ) = delete;
+        void operator=( CommandList const& other ) = delete;
+
+        CommandList( CommandList&& other ) = delete;
+        void operator=( CommandList&& other ) = delete;
 
     public:
-        auto getHandle( void ) const { return handle; }
-        auto getDesc( void ) const { return desc; }
+        auto getHandle( void ) const { return m_handle; }
+        auto getDesc( void ) const { return m_desc; }
 
         ///////////////////////////////////////////////////////////////////////////////
         /// @brief C++ version for ::xe_host_pfn_t
         using host_pfn_t = ::xe_host_pfn_t;
+
+        ///////////////////////////////////////////////////////////////////////////////
+        /// @brief C++ version for ::xe_command_list_desc_version_t
+        enum class command_list_desc_version_t
+        {
+            CURRENT = XE_MAKE_VERSION( 1, 0 ),              ///< version 1.0
+
+        };
+
+        ///////////////////////////////////////////////////////////////////////////////
+        /// @brief C++ version for ::xe_command_list_flag_t
+        enum class command_list_flag_t
+        {
+            NONE = 0,                                       ///< default behavior
+            COPY_ONLY = XE_BIT(0),                          ///< command list **only** contains copy operations (and synchronization
+                                                            ///< primitives)
+            RELAXED_ORDERING = XE_BIT(1),                   ///< driver may reorder programs and copys between barriers and
+                                                            ///< synchronization primitives
+
+        };
 
         ///////////////////////////////////////////////////////////////////////////////
         /// @brief C++ version for ::xe_command_list_parameter_t
@@ -80,11 +118,24 @@ namespace xe
         };
 
         ///////////////////////////////////////////////////////////////////////////////
+        /// @brief C++ version for ::xe_command_list_desc_t
+        struct command_list_desc_t
+        {
+            command_list_desc_version_t version = command_list_desc_version_t::CURRENT; ///< [in] ::COMMAND_LIST_DESC_VERSION_CURRENT
+            command_list_flag_t flags = command_list_flag_t::NONE;  ///< [in] creation flags
+
+        };
+
+        ///////////////////////////////////////////////////////////////////////////////
         /// @brief C++ version for ::xe_image_region_t
         struct image_region_t
         {
-            uint32_t origin[3];                             ///< [in] The origin (x, y, z) for region in pixels
-            uint32_t region[3];                             ///< [in] The region (width, height, depth) relative to origin in pixels
+            uint32_t originX;                               ///< [in] The origin x offset for region in pixels
+            uint32_t originY;                               ///< [in] The origin y offset for region in pixels
+            uint32_t originZ;                               ///< [in] The origin z offset for region in pixels
+            uint32_t width;                                 ///< [in] The region width relative to origin in pixels
+            uint32_t height;                                ///< [in] The region height relative to origin in pixels
+            uint32_t depth;                                 ///< [in] The region depth relative to origin in pixels
 
         };
 
@@ -99,19 +150,60 @@ namespace xe
         };
 
         ///////////////////////////////////////////////////////////////////////////////
-        /// @brief C++ wrapper for ::xeCommandListAppendExecutionBarrier
+        /// @brief C++ wrapper for ::xeCommandListAppendBarrier
         /// @throws result_t
         inline void
-        AppendExecutionBarrier(
-            void
+        AppendBarrier(
+            event_handle_t hSignalEvent = nullptr,          ///< [in][optional] handle of the event to signal on completion
+            uint32_t numWaitEvents = 0,                     ///< [in][optional] number of events to wait on before executing barrier
+            event_handle_t* phWaitEvents = nullptr          ///< [in][optional] handle of the events to wait on before executing
+                                                            ///< barrier
+            );
+
+        ///////////////////////////////////////////////////////////////////////////////
+        /// @brief C++ wrapper for ::xeCommandListAppendMemoryRangesBarrier
+        /// @throws result_t
+        inline void
+        AppendMemoryRangesBarrier(
+            uint32_t numRanges,                             ///< [in] number of memory ranges
+            const size_t* pRangeSizes,                      ///< [in] array of sizes of memory range
+            const void** pRanges,                           ///< [in] array of memory ranges
+            event_handle_t hSignalEvent = nullptr,          ///< [in][optional] handle of the event to signal on completion
+            uint32_t numWaitEvents = 0,                     ///< [in][optional] number of events to wait on before executing barrier
+            event_handle_t* phWaitEvents = nullptr          ///< [in][optional] handle of the events to wait on before executing
+                                                            ///< barrier
+            );
+
+        ///////////////////////////////////////////////////////////////////////////////
+        /// @brief C++ wrapper for ::xeCommandListCreate
+        /// @returns
+        ///     - ::command_list_handle_t: pointer to handle of command list object created
+        /// 
+        /// @throws result_t
+        inline static command_list_handle_t
+        Create(
+            device_handle_t hDevice,                        ///< [in] handle of the device object
+            const command_list_desc_t* desc                 ///< [in] pointer to command list descriptor
+            );
+
+        ///////////////////////////////////////////////////////////////////////////////
+        /// @brief C++ wrapper for ::xeCommandListCreateImmediate
+        /// @returns
+        ///     - ::command_list_handle_t: pointer to handle of command list object created
+        /// 
+        /// @throws result_t
+        inline static command_list_handle_t
+        CreateImmediate(
+            device_handle_t hDevice,                        ///< [in] handle of the device object
+            const CommandQueue::command_queue_desc_t* desc  ///< [in] pointer to command queue descriptor
             );
 
         ///////////////////////////////////////////////////////////////////////////////
         /// @brief C++ wrapper for ::xeCommandListDestroy
         /// @throws result_t
-        inline void
+        inline static void
         Destroy(
-            void
+            command_list_handle_t hCommandList              ///< [in] handle of command list object to destroy
             );
 
         ///////////////////////////////////////////////////////////////////////////////
@@ -177,7 +269,9 @@ namespace xe
             void* dstptr,                                   ///< [in] pointer to destination memory to copy to
             const void* srcptr,                             ///< [in] pointer to source memory to copy from
             size_t size,                                    ///< [in] size in bytes to copy
-            event_handle_t hEvent                           ///< [in][optional] handle of the event to signal on completion
+            event_handle_t hSignalEvent = nullptr,          ///< [in][optional] handle of the event to signal on completion
+            uint32_t numWaitEvents = 0,                     ///< [in][optional] number of events to wait on before copy
+            event_handle_t* phWaitEvents = nullptr          ///< [in][optional] handle of the events to wait on before copy
             );
 
         ///////////////////////////////////////////////////////////////////////////////
@@ -188,7 +282,9 @@ namespace xe
             void* ptr,                                      ///< [in] pointer to memory to initialize
             int value,                                      ///< [in] value to initialize memory to
             size_t size,                                    ///< [in] size in bytes to initailize
-            event_handle_t hEvent                           ///< [in][optional] handle of the event to signal on completion
+            event_handle_t hSignalEvent = nullptr,          ///< [in][optional] handle of the event to signal on completion
+            uint32_t numWaitEvents = 0,                     ///< [in][optional] number of events to wait on before copy
+            event_handle_t* phWaitEvents = nullptr          ///< [in][optional] handle of the events to wait on before copy
             );
 
         ///////////////////////////////////////////////////////////////////////////////
@@ -198,7 +294,9 @@ namespace xe
         AppendImageCopy(
             image_handle_t hDstImage,                       ///< [in] handle of destination image to copy to
             image_handle_t hSrcImage,                       ///< [in] handle of source image to copy from
-            event_handle_t hEvent                           ///< [in][optional] handle of the event to signal on completion
+            event_handle_t hSignalEvent = nullptr,          ///< [in][optional] handle of the event to signal on completion
+            uint32_t numWaitEvents = 0,                     ///< [in][optional] number of events to wait on before copy
+            event_handle_t* phWaitEvents = nullptr          ///< [in][optional] handle of the events to wait on before copy
             );
 
         ///////////////////////////////////////////////////////////////////////////////
@@ -207,10 +305,12 @@ namespace xe
         inline void
         AppendImageCopyRegion(
             image_handle_t hDstImage,                       ///< [in] handle of destination image to copy to
-            image_region_t* pDstRegion,                     ///< [in][optional] destination region descriptor
             image_handle_t hSrcImage,                       ///< [in] handle of source image to copy from
-            image_region_t* pSrcRegion,                     ///< [in][optional] source region descriptor
-            event_handle_t hEvent                           ///< [in][optional] handle of the event to signal on completion
+            image_region_t* pDstRegion = nullptr,           ///< [in][optional] destination region descriptor
+            image_region_t* pSrcRegion = nullptr,           ///< [in][optional] source region descriptor
+            event_handle_t hSignalEvent = nullptr,          ///< [in][optional] handle of the event to signal on completion
+            uint32_t numWaitEvents = 0,                     ///< [in][optional] number of events to wait on before copy
+            event_handle_t* phWaitEvents = nullptr          ///< [in][optional] handle of the events to wait on before copy
             );
 
         ///////////////////////////////////////////////////////////////////////////////
@@ -220,8 +320,10 @@ namespace xe
         AppendImageCopyToMemory(
             void* dstptr,                                   ///< [in] pointer to destination memory to copy to
             image_handle_t hSrcImage,                       ///< [in] handle of source image to copy from
-            image_region_t* pSrcRegion,                     ///< [in][optional] source region descriptor
-            event_handle_t hEvent                           ///< [in][optional] handle of the event to signal on completion
+            image_region_t* pSrcRegion = nullptr,           ///< [in][optional] source region descriptor
+            event_handle_t hSignalEvent = nullptr,          ///< [in][optional] handle of the event to signal on completion
+            uint32_t numWaitEvents = 0,                     ///< [in][optional] number of events to wait on before copy
+            event_handle_t* phWaitEvents = nullptr          ///< [in][optional] handle of the events to wait on before copy
             );
 
         ///////////////////////////////////////////////////////////////////////////////
@@ -230,9 +332,11 @@ namespace xe
         inline void
         AppendImageCopyFromMemory(
             image_handle_t hDstImage,                       ///< [in] handle of destination image to copy to
-            image_region_t* pDstRegion,                     ///< [in][optional] destination region descriptor
             const void* srcptr,                             ///< [in] pointer to source memory to copy from
-            event_handle_t hEvent                           ///< [in][optional] handle of the event to signal on completion
+            image_region_t* pDstRegion = nullptr,           ///< [in][optional] destination region descriptor
+            event_handle_t hSignalEvent = nullptr,          ///< [in][optional] handle of the event to signal on completion
+            uint32_t numWaitEvents = 0,                     ///< [in][optional] number of events to wait on before copy
+            event_handle_t* phWaitEvents = nullptr          ///< [in][optional] handle of the events to wait on before copy
             );
 
         ///////////////////////////////////////////////////////////////////////////////
@@ -264,11 +368,12 @@ namespace xe
             );
 
         ///////////////////////////////////////////////////////////////////////////////
-        /// @brief C++ wrapper for ::xeCommandListAppendWaitOnEvent
+        /// @brief C++ wrapper for ::xeCommandListAppendWaitOnEvents
         /// @throws result_t
         inline void
-        AppendWaitOnEvent(
-            event_handle_t hEvent                           ///< [in] handle of the event
+        AppendWaitOnEvents(
+            uint32_t numEvents,                             ///< [in] number of events to wait on before continuing
+            event_handle_t* phEvents                        ///< [in] handle of the events to wait on before continuing
             );
 
         ///////////////////////////////////////////////////////////////////////////////
@@ -286,7 +391,9 @@ namespace xe
         AppendLaunchFunction(
             function_handle_t hFunction,                    ///< [in] handle of the function object
             const thread_group_dimensions_t* pLaunchFuncArgs,   ///< [in] launch function arguments.
-            event_handle_t hEvent                           ///< [in][optional] handle of the event to signal on completion
+            event_handle_t hSignalEvent = nullptr,          ///< [in][optional] handle of the event to signal on completion
+            uint32_t numWaitEvents = 0,                     ///< [in][optional] number of events to wait on before launching
+            event_handle_t* phWaitEvents = nullptr          ///< [in][optional] handle of the events to wait on before launching
             );
 
         ///////////////////////////////////////////////////////////////////////////////
@@ -296,7 +403,9 @@ namespace xe
         AppendLaunchFunctionIndirect(
             function_handle_t hFunction,                    ///< [in] handle of the function object
             const thread_group_dimensions_t* pLaunchArgumentsBuffer,///< [in] pointer to device buffer that will contain launch arguments
-            event_handle_t hEvent                           ///< [in][optional] handle of the event to signal on completion
+            event_handle_t hSignalEvent = nullptr,          ///< [in][optional] handle of the event to signal on completion
+            uint32_t numWaitEvents = 0,                     ///< [in][optional] number of events to wait on before launching
+            event_handle_t* phWaitEvents = nullptr          ///< [in][optional] handle of the events to wait on before launching
             );
 
         ///////////////////////////////////////////////////////////////////////////////
@@ -310,7 +419,9 @@ namespace xe
                                                             ///< number of launch arguments; must be less-than or equal-to numFunctions
             const thread_group_dimensions_t* pLaunchArgumentsBuffer,///< [in] pointer to device buffer that will contain a contiguous array of
                                                             ///< launch arguments
-            event_handle_t hEvent                           ///< [in][optional] handle of the event to signal on completion
+            event_handle_t hSignalEvent = nullptr,          ///< [in][optional] handle of the event to signal on completion
+            uint32_t numWaitEvents = 0,                     ///< [in][optional] number of events to wait on before launching
+            event_handle_t* phWaitEvents = nullptr          ///< [in][optional] handle of the events to wait on before launching
             );
 
         ///////////////////////////////////////////////////////////////////////////////

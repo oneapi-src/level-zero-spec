@@ -46,6 +46,9 @@ from templates import helper as th
 %if re.match(r"common", name):
 #include <stdint.h>
 #include <string.h>
+%if x != n:
+#include "${x}_all.h"
+%endif
 %else:
 #include "${n}_common.h"
 %endif
@@ -56,6 +59,9 @@ from templates import helper as th
 #endif
 #include <CL/cl.h>
 %endif
+%for item in header['includes']:
+#include "${re.sub(r"\$h", "h", th.subt(n, tags, item))}"
+%endfor
 
 #if defined(__cplusplus)
 extern "C" {
@@ -100,9 +106,9 @@ typedef enum _${th.subt(n, tags, obj['name'])}
     %endfor
 
 } ${th.subt(n, tags, obj['name'])};
-## STRUCT #####################################################################
-%elif re.match(r"struct", obj['type']):
-typedef struct _${th.subt(n, tags, obj['name'])}
+## STRUCT/UNION ###############################################################
+%elif re.match(r"struct", obj['type']) or re.match(r"union", obj['type']):
+typedef ${obj['type']} _${th.subt(n, tags, obj['name'])}
 {
     %for line in th.make_member_lines(n, tags, obj):
     ${line}
@@ -131,6 +137,15 @@ typedef struct _${th.subt(n, tags, obj['name'])} *${th.subt(n, tags, obj['name']
 
 %endif
 %endfor
+## FORWARD-DECLARE STRUCTS ####################################################
+%if re.match(r"common", name):
+%for obj in th.extract_objs(specs, 'struct'):
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Forward-declare ${th.subt(n, tags, obj['name'])}
+typedef struct _${th.subt(n, tags, obj['name'])} ${th.subt(n, tags, obj['name'])};
+
+%endfor
+%endif
 #if defined(__cplusplus)
 } // extern "C"
 #endif

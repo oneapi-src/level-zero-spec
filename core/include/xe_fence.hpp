@@ -43,19 +43,73 @@ namespace xe
     class Fence
     {
     protected:
-        ::xe_fence_handle_t handle;                       ///< handle of fence object
-        ::xe_fence_desc_t desc;                           ///< descriptor of the fence object
+        ::xe_fence_handle_t m_handle;                     ///< handle of fence object
+        ::xe_fence_desc_t m_desc;                         ///< descriptor of the fence object
+
+        Fence( void ) = delete;
+        Fence( 
+                xe_fence_handle_t handle,                       ///< handle of fence object
+                xe_fence_desc_t desc                            ///< descriptor of the fence object
+                ) :
+                m_handle( handle ),
+                m_desc( desc )
+            {}
+
+        ~Fence( void ) = default;
+
+        Fence( Fence const& other ) = delete;
+        void operator=( Fence const& other ) = delete;
+
+        Fence( Fence&& other ) = delete;
+        void operator=( Fence&& other ) = delete;
 
     public:
-        auto getHandle( void ) const { return handle; }
-        auto getDesc( void ) const { return desc; }
+        auto getHandle( void ) const { return m_handle; }
+        auto getDesc( void ) const { return m_desc; }
+
+        ///////////////////////////////////////////////////////////////////////////////
+        /// @brief C++ version for ::xe_fence_desc_version_t
+        enum class fence_desc_version_t
+        {
+            CURRENT = XE_MAKE_VERSION( 1, 0 ),              ///< version 1.0
+
+        };
+
+        ///////////////////////////////////////////////////////////////////////////////
+        /// @brief C++ version for ::xe_fence_flag_t
+        enum class fence_flag_t
+        {
+            NONE = 0,                                       ///< default behavior
+
+        };
+
+        ///////////////////////////////////////////////////////////////////////////////
+        /// @brief C++ version for ::xe_fence_desc_t
+        struct fence_desc_t
+        {
+            fence_desc_version_t version = fence_desc_version_t::CURRENT;   ///< [in] ::FENCE_DESC_VERSION_CURRENT
+            fence_flag_t flags = fence_flag_t::NONE;        ///< [in] creation flags
+
+        };
+
+        ///////////////////////////////////////////////////////////////////////////////
+        /// @brief C++ wrapper for ::xeFenceCreate
+        /// @returns
+        ///     - ::fence_handle_t: pointer to handle of fence object created
+        /// 
+        /// @throws result_t
+        inline static fence_handle_t
+        Create(
+            command_queue_handle_t hCommandQueue,           ///< [in] handle of command queue
+            const fence_desc_t* desc                        ///< [in] pointer to fence descriptor
+            );
 
         ///////////////////////////////////////////////////////////////////////////////
         /// @brief C++ wrapper for ::xeFenceDestroy
         /// @throws result_t
-        inline void
+        inline static void
         Destroy(
-            void
+            fence_handle_t hFence                           ///< [in] handle of fence object to destroy
             );
 
         ///////////////////////////////////////////////////////////////////////////////

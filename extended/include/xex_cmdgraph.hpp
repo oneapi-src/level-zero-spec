@@ -43,19 +43,73 @@ namespace xex
     class CommandGraph
     {
     protected:
-        ::xex_command_graph_handle_t handle;              ///< handle of command graph object
-        ::xex_command_graph_desc_t desc;                  ///< descriptor of the command graph object
+        ::xex_command_graph_handle_t m_handle;            ///< handle of command graph object
+        ::xex_command_graph_desc_t m_desc;                ///< descriptor of the command graph object
+
+        CommandGraph( void ) = delete;
+        CommandGraph( 
+                xex_command_graph_handle_t handle,              ///< handle of command graph object
+                xex_command_graph_desc_t desc                   ///< descriptor of the command graph object
+                ) :
+                m_handle( handle ),
+                m_desc( desc )
+            {}
+
+        ~CommandGraph( void ) = default;
+
+        CommandGraph( CommandGraph const& other ) = delete;
+        void operator=( CommandGraph const& other ) = delete;
+
+        CommandGraph( CommandGraph&& other ) = delete;
+        void operator=( CommandGraph&& other ) = delete;
 
     public:
-        auto getHandle( void ) const { return handle; }
-        auto getDesc( void ) const { return desc; }
+        auto getHandle( void ) const { return m_handle; }
+        auto getDesc( void ) const { return m_desc; }
+
+        ///////////////////////////////////////////////////////////////////////////////
+        /// @brief C++ version for ::xex_command_graph_desc_version_t
+        enum class command_graph_desc_version_t
+        {
+            CURRENT = XE_MAKE_VERSION( 1, 0 ),              ///< version 1.0
+
+        };
+
+        ///////////////////////////////////////////////////////////////////////////////
+        /// @brief C++ version for ::xex_command_graph_flag_t
+        enum class command_graph_flag_t
+        {
+            NONE = 0,                                       ///< default behavior
+
+        };
+
+        ///////////////////////////////////////////////////////////////////////////////
+        /// @brief C++ version for ::xex_command_graph_desc_t
+        struct command_graph_desc_t
+        {
+            command_graph_desc_version_t version = command_graph_desc_version_t::CURRENT;   ///< [in] ::COMMAND_GRAPH_DESC_VERSION_CURRENT
+            command_graph_flag_t flags = command_graph_flag_t::NONE;///< [in] creation flags
+
+        };
+
+        ///////////////////////////////////////////////////////////////////////////////
+        /// @brief C++ wrapper for ::xexCommandGraphCreate
+        /// @returns
+        ///     - ::command_graph_handle_t: pointer to handle of command graph object created
+        /// 
+        /// @throws result_t
+        inline static command_graph_handle_t
+        Create(
+            xe::device_handle_t hDevice,                    ///< [in] handle of the device object
+            const command_graph_desc_t* desc                ///< [in] pointer to command graph descriptor
+            );
 
         ///////////////////////////////////////////////////////////////////////////////
         /// @brief C++ wrapper for ::xexCommandGraphDestroy
         /// @throws result_t
-        inline void
+        inline static void
         Destroy(
-            void
+            command_graph_handle_t hCommandGraph            ///< [in] handle of command graph object to destroy
             );
 
         ///////////////////////////////////////////////////////////////////////////////

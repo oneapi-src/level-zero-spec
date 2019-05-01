@@ -61,14 +61,14 @@ void XePeak::xe_peak_dp_compute(L0Context &context) {
         std::cout << "device output buffer allocated\n";
 
     result = xeCommandListAppendMemoryCopy(context.command_list, device_input_value, &input_value,
-                                           sizeof(double), nullptr);
+                                           sizeof(double), nullptr, 0, nullptr);
     if (result) {
         throw std::runtime_error("xeCommandListAppendMemoryCopy failed: " + result);
     }
     if (verbose)
         std::cout << "Input value copy encoded\n";
 
-    result = xeCommandListAppendExecutionBarrier(context.command_list);
+    result = xeCommandListAppendBarrier(context.command_list, nullptr, 0, nullptr);
     if (result) {
         throw std::runtime_error("xeCommandListAppendExecutionBarrier failed: " + result);
     }

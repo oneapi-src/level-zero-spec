@@ -4,7 +4,7 @@ desc: "Intel $OneApi Level-Zero APIs"
 --- #--------------------------------------------------------------------------
 type: enum
 desc: "Supported initialization flags"
-class: $xDriver
+class: $x
 name: $x_init_flag_t
 etors:
     - name: $X_INIT_FLAG_NONE
@@ -13,9 +13,9 @@ etors:
 --- #--------------------------------------------------------------------------
 type: function
 desc: "Initialize the $OneApi driver and must be called before any other API function."
-class: $xDriver
+class: $x
 name: Init
-decl: singleton
+decl: static
 details: 
     - "Only one instance of a driver per process can be loaded."
     - "There is no reference tracking if multiple drivers are initialized."
@@ -34,9 +34,9 @@ returns:
 --- #--------------------------------------------------------------------------
 type: function
 desc: "Returns the current version of the installed driver."
-class: $xDriver
-name: GetVersion
-decl: singleton
+class: $x
+name: GetDriverVersion
+decl: static
 details:
     - "The driver version is a non-zero, monotonically increasing value where higher values always indicate a more recent version."
     - "The application may call this function from simultaneous threads."
@@ -47,7 +47,3 @@ params:
     - type: "uint32_t*"
       name: version
       desc: "[out] driver version"
---- #--------------------------------------------------------------------------
-type: class
-desc: "C++ wrapper for driver"
-name: $xDriver

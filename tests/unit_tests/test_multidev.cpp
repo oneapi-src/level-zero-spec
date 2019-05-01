@@ -13,10 +13,10 @@ TEST(MultipleDevicesCount, SetMultipleDevicesAndVerifyDeviceCount) {
 
     NEO::DebugManager.flags.CreateMultipleDevices.set(requiredDeviceCount);
 
-    auto result = xeDriverInit(XE_INIT_FLAG_NONE);
+    auto result = xeInit(XE_INIT_FLAG_NONE);
     EXPECT_EQ(XE_RESULT_SUCCESS, result);
 
-    auto ret = xeDriverGetDeviceCount(&count);
+    auto ret = xeDeviceGetCount(&count);
 
     EXPECT_EQ(XE_RESULT_SUCCESS, ret);
     EXPECT_EQ(requiredDeviceCount, count);

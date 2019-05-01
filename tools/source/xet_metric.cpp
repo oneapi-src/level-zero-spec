@@ -52,10 +52,10 @@
 ///         + nullptr == pCount
 ///     - ::XE_RESULT_ERROR_UNSUPPORTED
 ///
-/// @hash {d0710daae279b9c1c058593cb46c5c55cf9d773f373758db5243e4ea07e06388}
+/// @hash {640b9005a27c580ef8d09e27294c9a356cb2f57d1f69fc13dc6f2ca261c148fe}
 ///
 __xedllexport xe_result_t __xecall
-xetDeviceGetMetricGroupCount(
+xetMetricGroupGetCount(
     xe_device_handle_t hDevice,                     ///< [in] handle of the device object
     uint32_t* pCount                                ///< [out] number of metric groups supported by the device
     )
@@ -73,7 +73,7 @@ xetDeviceGetMetricGroupCount(
 #if defined(XE_NULLDRV)
         return XE_RESULT_SUCCESS;
 #else
-        return L0::Device::get()->getMetricGroupCount(hDevice, pCount);
+        return L0::metricGroupGetCount(hDevice, pCount);
 #endif
         /// @end
     }
@@ -96,8 +96,7 @@ xetDeviceGetMetricGroupCount(
 /// @brief Returns metric group handle for a device.
 /// 
 /// @details
-///     - The application may call this function from simultaneous threads with
-///       the same device handle.
+///     - The application may call this function from simultaneous threads.
 /// 
 /// @returns
 ///     - ::XE_RESULT_SUCCESS
@@ -109,10 +108,10 @@ xetDeviceGetMetricGroupCount(
 ///         + devices do not contain a given metric group
 ///     - ::XE_RESULT_ERROR_UNSUPPORTED
 ///
-/// @hash {e9e8b4b249f20eb7711abf56101e781d1f7cae3b25349d1719a38efbf90927a0}
+/// @hash {76abcdb010385a5730e9337f4df080b7866b4992a0c2c2bcacfbd5b260567d1b}
 ///
 __xedllexport xe_result_t __xecall
-xetDeviceGetMetricGroup(
+xetMetricGroupGet(
     xe_device_handle_t hDevice,                     ///< [in] handle of the device
     uint32_t ordinal,                               ///< [in] metric group index
     xet_metric_group_handle_t* phMetricGroup        ///< [out] metric group handle
@@ -131,7 +130,7 @@ xetDeviceGetMetricGroup(
 #if defined(XE_NULLDRV)
         return XE_RESULT_SUCCESS;
 #else
-        return L0::Device::fromHandle(hDevice)->getMetricGroup(ordinal, phMetricGroup);
+        return L0::metricGroupGet(hDevice, ordinal, phMetricGroup);
 #endif
         /// @end
     }
@@ -154,8 +153,7 @@ xetDeviceGetMetricGroup(
 /// @brief Returns properties for a given metric group.
 /// 
 /// @details
-///     - The application may call this function from simultaneous threads with
-///       the same metric group handle.
+///     - The application may call this function from simultaneous threads.
 /// 
 /// @returns
 ///     - ::XE_RESULT_SUCCESS
@@ -211,8 +209,7 @@ xetMetricGroupGetProperties(
 /// @brief Returns metric from a given metric group.
 /// 
 /// @details
-///     - The application may call this function from simultaneous threads with
-///       the same metric group handle.
+///     - The application may call this function from simultaneous threads.
 /// 
 /// @returns
 ///     - ::XE_RESULT_SUCCESS
@@ -224,10 +221,10 @@ xetMetricGroupGetProperties(
 ///         + invalid metric group handle
 ///     - ::XE_RESULT_ERROR_UNSUPPORTED
 ///
-/// @hash {b5b996b7559d1311a6771b2e104dc08a568118d9207605f4c18dc14891608fdd}
+/// @hash {41e4857c50b413aab007a4b769ce940306e1dd11a478cd17de3fbd16197f3681}
 ///
 __xedllexport xe_result_t __xecall
-xetMetricGroupGetMetric(
+xetMetricGet(
     xet_metric_group_handle_t hMetricGroup,         ///< [in] handle of the metric group
     uint32_t ordinal,                               ///< [in] metric index
     xet_metric_handle_t* phMetric                   ///< [out] handle of metric
@@ -246,7 +243,7 @@ xetMetricGroupGetMetric(
 #if defined(XE_NULLDRV)
         return XE_RESULT_SUCCESS;
 #else
-        return L0::MetricGroup::fromHandle(hMetricGroup)->getMetric(ordinal, phMetric);
+        return L0::metricGet(hMetricGroup, ordinal, phMetric);
 #endif
         /// @end
     }
@@ -269,8 +266,7 @@ xetMetricGroupGetMetric(
 /// @brief Returns metric properties.
 /// 
 /// @details
-///     - The application may call this function from simultaneous threads with
-///       the same metric group handle.
+///     - The application may call this function from simultaneous threads.
 /// 
 /// @returns
 ///     - ::XE_RESULT_SUCCESS
@@ -326,8 +322,8 @@ xetMetricGetProperties(
 /// @brief Calculates counter values from raw data.
 /// 
 /// @details
-///     - The application may not call this function from simultaneous threads
-///       with the same metric group handle.
+///     - The application may **not** call this function from simultaneous
+///       threads wth the same metric group handle.
 /// 
 /// @returns
 ///     - ::XE_RESULT_SUCCESS
@@ -346,11 +342,11 @@ xetMetricGetProperties(
 __xedllexport xe_result_t __xecall
 xetMetricGroupCalculateData(
     xet_metric_group_handle_t hMetricGroup,         ///< [in] handle of the metric group
-    uint32_t* pReportCount,                         ///< [in/out] report count to calculate
+    uint32_t* pReportCount,                         ///< [in,out] report count to calculate
     uint32_t rawDataSize,                           ///< [in] raw data size
     uint8_t* pRawData,                              ///< [in] raw data to calculate
     uint32_t calculatedDataSize,                    ///< [in] calculated data size
-    xet_typed_value_t* pCalculatedData              ///< [out] calculated metrics
+    xet_typed_value_t* pCalculatedData              ///< [in,out] calculated metrics
     )
 {
     try
@@ -451,8 +447,8 @@ xetDeviceActivateMetricGroups(
 /// @brief Opens metric tracer for a given device.
 /// 
 /// @details
-///     - The application may not call this function from simultaneous threads
-///       with the same device handle.
+///     - The application may **not** call this function from simultaneous
+///       threads with the same device handle.
 /// 
 /// @returns
 ///     - ::XE_RESULT_SUCCESS
@@ -467,12 +463,12 @@ xetDeviceActivateMetricGroups(
 ///     - ::XE_RESULT_ERROR_UNSUPPORTED
 ///         + ::XET_METRIC_TRACER_DESC_VERSION_CURRENT < pDesc->version
 ///
-/// @hash {f070d5f429853ce212d28d22d65c9f567cf4952a45325971b9a2bf219ad5b666}
+/// @hash {9a5dbc8879fb843890b71d5f50c1b944ccda25ecc627d46c1fa2a483c5b29031}
 ///
 __xedllexport xe_result_t __xecall
-xetDeviceOpenMetricTracer(
+xetMetricTracerOpen(
     xe_device_handle_t hDevice,                     ///< [in] handle of the device
-    xet_metric_tracer_desc_t* pDesc,                ///< [in/out] metric tracer descriptor
+    xet_metric_tracer_desc_t* pDesc,                ///< [in,out] metric tracer descriptor
     xe_event_handle_t hNotificationEvent,           ///< [in] event used for report availability notification. Must be device
                                                     ///< to host type.
     xet_metric_tracer_handle_t* phMetricTracer      ///< [out] handle of metric tracer
@@ -488,13 +484,13 @@ xetDeviceOpenMetricTracer(
             if( nullptr == pDesc ) return XE_RESULT_ERROR_INVALID_PARAMETER;
             if( nullptr == hNotificationEvent ) return XE_RESULT_ERROR_INVALID_PARAMETER;
             if( nullptr == phMetricTracer ) return XE_RESULT_ERROR_INVALID_PARAMETER;
-            if( _VERSION_CURRENT < pDesc->version ) return XE_RESULT_ERROR_UNSUPPORTED;
+            if( XET_METRIC_TRACER_DESC_VERSION_CURRENT < pDesc->version ) return XE_RESULT_ERROR_UNSUPPORTED;
         }
         /// @begin
 #if defined(XE_NULLDRV)
         return XE_RESULT_SUCCESS;
 #else
-        return L0::Device::fromHandle(hDevice)->openMetricTracer(pDesc, hNotificationEvent, phMetricTracer);
+        return L0::metricTracerOpen(hDevice, pDesc, hNotificationEvent, phMetricTracer);
 #endif
         /// @end
     }
@@ -517,8 +513,8 @@ xetDeviceOpenMetricTracer(
 /// @brief Append metric tracer marker to a given command list.
 /// 
 /// @details
-///     - The application may not call this function from simultaneous threads
-///       with the same device handle.
+///     - The application may **not** call this function from simultaneous
+///       threads with the same command list handle.
 /// 
 /// @returns
 ///     - ::XE_RESULT_SUCCESS
@@ -530,10 +526,10 @@ xetDeviceOpenMetricTracer(
 ///         + command list do not support metric tracer
 ///     - ::XE_RESULT_ERROR_UNSUPPORTED
 ///
-/// @hash {4308c67536e97e08b8e64f10cf352a8f824ed873dd56c6689d06527c937004f2}
+/// @hash {213a074e85e0b8c36bb822ab9845711e9bcb205d10c125d88cb684723446d408}
 ///
 __xedllexport xe_result_t __xecall
-xeCommandListAppendMetricTracerMarker(
+xetCommandListAppendMetricTracerMarker(
     xe_command_list_handle_t hCommandList,          ///< [in] handle of the command list
     xet_metric_tracer_handle_t hMetricTracer,       ///< [in] handle of the metric tracer
     uint32_t value                                  ///< [in] tracer marker value
@@ -575,8 +571,8 @@ xeCommandListAppendMetricTracerMarker(
 /// @brief Closes metric tracer.
 /// 
 /// @details
-///     - The application may not call this function from simultaneous threads
-///       with the same device handle.
+///     - The application may **not** call this function from simultaneous
+///       threads with the same metric tracer handle.
 /// 
 /// @returns
 ///     - ::XE_RESULT_SUCCESS
@@ -629,8 +625,7 @@ xetMetricTracerClose(
 /// @brief Reads data from metric tracer.
 /// 
 /// @details
-///     - The application may not call this function from simultaneous threads
-///       with the same device handle.
+///     - The application may call this function from simultaneous threads.
 /// 
 /// @returns
 ///     - ::XE_RESULT_SUCCESS
@@ -648,9 +643,9 @@ xetMetricTracerClose(
 __xedllexport xe_result_t __xecall
 xetMetricTracerReadData(
     xet_metric_tracer_handle_t hMetricTracer,       ///< [in] handle of the metric tracer
-    uint32_t* pReportCount,                         ///< [in/out] report count to read/returned
+    uint32_t* pReportCount,                         ///< [in,out] report count to read/returned
     uint32_t rawDataSize,                           ///< [in] raw data buffer size
-    uint8_t* pRawData                               ///< [in/out] raw data buffer for reports
+    uint8_t* pRawData                               ///< [in,out] raw data buffer for reports
     )
 {
     try
@@ -690,8 +685,7 @@ xetMetricTracerReadData(
 /// @brief Creates metric query pool.
 /// 
 /// @details
-///     - The application may call this function from simultaneous threads with
-///       the same device handle.
+///     - The application may call this function from simultaneous threads.
 /// 
 /// @returns
 ///     - ::XE_RESULT_SUCCESS
@@ -705,10 +699,10 @@ xetMetricTracerReadData(
 ///     - ::XE_RESULT_ERROR_UNSUPPORTED
 ///         + ::XET_METRIC_QUERY_POOL_DESC_VERSION_CURRENT < pDesc->version
 ///
-/// @hash {e6c4c8c870459ffc43841c9ec2a8a086b86c045c869ec5cfdf54107acc5f0752}
+/// @hash {60d850aed01a647334996906734764ee503bee92bc687ff291aaa0b25a0166c0}
 ///
 __xedllexport xe_result_t __xecall
-xetDeviceCreateMetricQueryPool(
+xetMetricQueryPoolCreate(
     xe_device_handle_t hDevice,                     ///< [in] handle of the device
     xet_metric_query_pool_desc_t* pDesc,            ///< [in] metric query pool creation data
     xet_metric_query_pool_handle_t* phMetricQueryPool   ///< [out] handle of metric query pool
@@ -723,13 +717,67 @@ xetDeviceCreateMetricQueryPool(
             if( nullptr == hDevice ) return XE_RESULT_ERROR_INVALID_PARAMETER;
             if( nullptr == pDesc ) return XE_RESULT_ERROR_INVALID_PARAMETER;
             if( nullptr == phMetricQueryPool ) return XE_RESULT_ERROR_INVALID_PARAMETER;
-            if( _VERSION_CURRENT < pDesc->version ) return XE_RESULT_ERROR_UNSUPPORTED;
+            if( XET_METRIC_QUERY_POOL_DESC_VERSION_CURRENT < pDesc->version ) return XE_RESULT_ERROR_UNSUPPORTED;
         }
         /// @begin
 #if defined(XE_NULLDRV)
         return XE_RESULT_SUCCESS;
 #else
-        return L0::Device::fromHandle(hDevice)->createMetricQueryPool(pDesc, phMetricQueryPool);
+        return L0::metricQueryPoolCreate(hDevice, pDesc, phMetricQueryPool);
+#endif
+        /// @end
+    }
+    catch(xe_result_t& result)
+    {
+        return result;
+    }
+    catch(std::bad_alloc&)
+    {
+        return XE_RESULT_ERROR_OUT_OF_HOST_MEMORY;
+    }
+    catch(std::exception&)
+    {
+        // @todo: pfnOnException(e.what());
+        return XE_RESULT_ERROR_UNKNOWN;
+    }
+}
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Destroys query pool object.
+/// 
+/// @details
+///     - The application may **not** call this function from simultaneous
+///       threads with the same query pool handle.
+/// 
+/// @returns
+///     - ::XE_RESULT_SUCCESS
+///     - ::XE_RESULT_ERROR_UNINITIALIZED
+///     - ::XE_RESULT_ERROR_DEVICE_LOST
+///     - ::XE_RESULT_ERROR_INVALID_PARAMETER
+///         + nullptr == hMetricQueryPool
+///         + invalid metric query pool handle
+///     - ::XE_RESULT_ERROR_UNSUPPORTED
+///
+/// @hash {b26d02c53519d670c87cb7b785b5df2a25f8a4fcbe931f5ecd168e5730641c6e}
+///
+__xedllexport xe_result_t __xecall
+xetMetricQueryPoolDestroy(
+    xet_metric_query_pool_handle_t hMetricQueryPool ///< [in] handle of the metric query pool
+    )
+{
+    try
+    {
+        //if( XE_DRIVER_PARAMETER_VALIDATION_LEVEL >= 0 )
+        {
+            // if( nullptr == driver ) return XE_RESULT_ERROR_UNINITIALIZED;
+            // Check parameters
+            if( nullptr == hMetricQueryPool ) return XE_RESULT_ERROR_INVALID_PARAMETER;
+        }
+        /// @begin
+#if defined(XE_NULLDRV)
+        return XE_RESULT_SUCCESS;
+#else
+        return L0::metricQueryPoolDestroy(hMetricQueryPool);
 #endif
         /// @end
     }
@@ -752,8 +800,7 @@ xetDeviceCreateMetricQueryPool(
 /// @brief Returns metric query handle from a given metric query pool.
 /// 
 /// @details
-///     - The application may call this function from simultaneous threads with
-///       the same device handle.
+///     - The application may call this function from simultaneous threads.
 /// 
 /// @returns
 ///     - ::XE_RESULT_SUCCESS
@@ -810,8 +857,8 @@ xetMetricQueryPoolGetMetricQuery(
 /// @brief Appends metric query begin commands to command list.
 /// 
 /// @details
-///     - The application may call this function from simultaneous threads with
-///       the same device handle.
+///     - The application may **not** call this function from simultaneous
+///       threads with the same command list handle.
 /// 
 /// @returns
 ///     - ::XE_RESULT_SUCCESS
@@ -823,10 +870,10 @@ xetMetricQueryPoolGetMetricQuery(
 ///         + invalid handle
 ///     - ::XE_RESULT_ERROR_UNSUPPORTED
 ///
-/// @hash {d2584330082dd327ddedec8b87367680e67be79a2afe86d4f284c9224f32a976}
+/// @hash {15bdd8bba56d7dba1c45bdcc83b91ea1fae017d162c8c8e7213792361b2e680e}
 ///
 __xedllexport xe_result_t __xecall
-xeCommandListAppendMetricQueryBegin(
+xetCommandListAppendMetricQueryBegin(
     xe_command_list_handle_t hCommandList,          ///< [in] handle of the command list
     xet_metric_query_handle_t hMetricQuery          ///< [in] handle of the metric query
     )
@@ -867,8 +914,8 @@ xeCommandListAppendMetricQueryBegin(
 /// @brief Appends metric query end commands to command list.
 /// 
 /// @details
-///     - The application may call this function from simultaneous threads with
-///       the same device handle.
+///     - The application may **not** call this function from simultaneous
+///       threads with the same command list handle.
 /// 
 /// @returns
 ///     - ::XE_RESULT_SUCCESS
@@ -881,10 +928,10 @@ xeCommandListAppendMetricQueryBegin(
 ///         + invalid handle
 ///     - ::XE_RESULT_ERROR_UNSUPPORTED
 ///
-/// @hash {8385f781f5883b1c3cdb17e0526ac55dd8f5876054f11a4dd812e23ff625cc79}
+/// @hash {c5ea2d953e9de89ab035e4b4711f39928562c5ac84b9eb96053689049313a7e2}
 ///
 __xedllexport xe_result_t __xecall
-xeCommandListAppendMetricQueryEnd(
+xetCommandListAppendMetricQueryEnd(
     xe_command_list_handle_t hCommandList,          ///< [in] handle of the command list
     xet_metric_query_handle_t hMetricQuery,         ///< [in] handle of the metric query
     xe_event_handle_t hCompletionEvent              ///< [in] handle of the completion event to signal
@@ -927,8 +974,8 @@ xeCommandListAppendMetricQueryEnd(
 /// @brief Appends metric query commands to flush all caches.
 /// 
 /// @details
-///     - The application may call this function from simultaneous threads with
-///       the same device handle.
+///     - The application may **not** call this function from simultaneous
+///       threads with the same command list handle.
 /// 
 /// @returns
 ///     - ::XE_RESULT_SUCCESS
@@ -939,10 +986,10 @@ xeCommandListAppendMetricQueryEnd(
 ///         + invalid command list handle
 ///     - ::XE_RESULT_ERROR_UNSUPPORTED
 ///
-/// @hash {1200d64ccd63e31b89872251262f236294e49e392e85d59b32656c461eaa76d3}
+/// @hash {074ab43bc4e408bfb417b14faacb55072857765bdbee6e7bc5f714b957f18825}
 ///
 __xedllexport xe_result_t __xecall
-xeCommandListAppendMetricMemoryBarrier(
+xetCommandListAppendMetricMemoryBarrier(
     xe_command_list_handle_t hCommandList           ///< [in] handle of the command list
     )
 {
@@ -981,8 +1028,7 @@ xeCommandListAppendMetricMemoryBarrier(
 /// @brief Returns raw data for a given metric query slot.
 /// 
 /// @details
-///     - The application may not call this function from simultaneous threads
-///       with the same device handle.
+///     - The application may call this function from simultaneous threads.
 /// 
 /// @returns
 ///     - ::XE_RESULT_SUCCESS
@@ -1000,9 +1046,9 @@ xeCommandListAppendMetricMemoryBarrier(
 __xedllexport xe_result_t __xecall
 xetMetricQueryGetData(
     xet_metric_query_handle_t hMetricQuery,         ///< [in] handle of the metric query
-    uint32_t* pReportCount,                         ///< [in/out] report count to read/returned
+    uint32_t* pReportCount,                         ///< [in,out] report count to read/returned
     uint32_t rawDataSize,                           ///< [in] raw data size passed by the user
-    uint8_t* pRawData                               ///< [in/out] query result data in raw format
+    uint8_t* pRawData                               ///< [in,out] query result data in raw format
     )
 {
     try
@@ -1020,60 +1066,6 @@ xetMetricQueryGetData(
         return XE_RESULT_SUCCESS;
 #else
         return L0::MetricQuery::fromHandle(hMetricQuery)->getData(pReportCount, rawDataSize, pRawData);
-#endif
-        /// @end
-    }
-    catch(xe_result_t& result)
-    {
-        return result;
-    }
-    catch(std::bad_alloc&)
-    {
-        return XE_RESULT_ERROR_OUT_OF_HOST_MEMORY;
-    }
-    catch(std::exception&)
-    {
-        // @todo: pfnOnException(e.what());
-        return XE_RESULT_ERROR_UNKNOWN;
-    }
-}
-
-///////////////////////////////////////////////////////////////////////////////
-/// @brief Destroys query pool object.
-/// 
-/// @details
-///     - The application may call this function from simultaneous threads with
-///       the same device handle.
-/// 
-/// @returns
-///     - ::XE_RESULT_SUCCESS
-///     - ::XE_RESULT_ERROR_UNINITIALIZED
-///     - ::XE_RESULT_ERROR_DEVICE_LOST
-///     - ::XE_RESULT_ERROR_INVALID_PARAMETER
-///         + nullptr == hMetricQueryPool
-///         + invalid metric query pool handle
-///     - ::XE_RESULT_ERROR_UNSUPPORTED
-///
-/// @hash {b26d02c53519d670c87cb7b785b5df2a25f8a4fcbe931f5ecd168e5730641c6e}
-///
-__xedllexport xe_result_t __xecall
-xetMetricQueryPoolDestroy(
-    xet_metric_query_pool_handle_t hMetricQueryPool ///< [in] handle of the metric query pool
-    )
-{
-    try
-    {
-        //if( XE_DRIVER_PARAMETER_VALIDATION_LEVEL >= 0 )
-        {
-            // if( nullptr == driver ) return XE_RESULT_ERROR_UNINITIALIZED;
-            // Check parameters
-            if( nullptr == hMetricQueryPool ) return XE_RESULT_ERROR_INVALID_PARAMETER;
-        }
-        /// @begin
-#if defined(XE_NULLDRV)
-        return XE_RESULT_SUCCESS;
-#else
-        return L0::MetricQueryPool::fromHandle(hMetricQueryPool)->destroy();
 #endif
         /// @end
     }

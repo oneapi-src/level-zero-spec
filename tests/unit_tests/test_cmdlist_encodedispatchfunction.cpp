@@ -37,13 +37,13 @@ TEST(xeCommandListAppendLaunchFunction, redirectsToObject) {
     EXPECT_CALL(commandList, appendLaunchFunction(
                                  function.toHandle(),
                                  &dispatchFunctionArguments,
-                                 event.toHandle()))
+                                 event.toHandle(), 0, nullptr))
         .Times(1);
 
     auto result = xeCommandListAppendLaunchFunction(commandList.toHandle(),
                                                     function.toHandle(),
                                                     &dispatchFunctionArguments,
-                                                    event.toHandle());
+                                                    event.toHandle(), 0, nullptr);
     EXPECT_EQ(XE_RESULT_SUCCESS, result);
 }
 
@@ -98,7 +98,7 @@ TEST_F(CommandListAppendLaunchFunction, storesFunctionWhenPrintfUsedByFunction) 
 
     auto result = commandList->appendLaunchFunction(function->toHandle(),
                                                     &dispatchFunctionArguments,
-                                                    nullptr);
+                                                    nullptr, 0, nullptr);
 
     EXPECT_EQ(1u, commandList->printfFunctionContainer.size());
     EXPECT_EQ(function, commandList->printfFunctionContainer[0]);
@@ -110,7 +110,7 @@ TEST_F(CommandListAppendLaunchFunction, storesFunctionOnceWhenAppendingFunctionM
 
     auto result = commandList->appendLaunchFunction(function->toHandle(),
                                                     &dispatchFunctionArguments,
-                                                    nullptr);
+                                                    nullptr, 0, nullptr);
 
     EXPECT_EQ(1u, commandList->printfFunctionContainer.size());
     EXPECT_EQ(function, commandList->printfFunctionContainer[0]);
@@ -118,7 +118,7 @@ TEST_F(CommandListAppendLaunchFunction, storesFunctionOnceWhenAppendingFunctionM
 
     result = commandList->appendLaunchFunction(function->toHandle(),
                                                &dispatchFunctionArguments,
-                                               nullptr);
+                                               nullptr, 0, nullptr);
 
     EXPECT_EQ(1u, commandList->printfFunctionContainer.size());
 }
@@ -130,7 +130,7 @@ ATSTEST_F(CommandListAppendLaunchFunction, addsWalkerToCommandStream) {
 
     auto result = commandList->appendLaunchFunction(function->toHandle(),
                                                     &dispatchFunctionArguments,
-                                                    nullptr);
+                                                    nullptr, 0, nullptr);
     ASSERT_EQ(XE_RESULT_SUCCESS, result);
 
     auto usedSpaceAfter = commandList->commandStream->getUsed();
@@ -178,7 +178,7 @@ ATSTEST_F(CommandListAppendLaunchFunction, withBarrierAndSLMSetsIDDBarrierEnable
     createFunction("SlmBarrier");
     auto result = commandList->appendLaunchFunction(function->toHandle(),
                                                     &dispatchFunctionArguments,
-                                                    nullptr);
+                                                    nullptr, 0, nullptr);
     ASSERT_EQ(XE_RESULT_SUCCESS, result);
 
     auto usedSpaceAfter = commandList->commandStream->getUsed();
@@ -209,7 +209,7 @@ HWTEST2_F(CommandListAppendLaunchFunction, withEventAddsPostSyncFlush, IsGen9) {
 
     auto result = commandList->appendLaunchFunction(function->toHandle(),
                                                     &dispatchFunctionArguments,
-                                                    event->toHandle());
+                                                    event->toHandle(), 0, nullptr);
     ASSERT_EQ(XE_RESULT_SUCCESS, result);
 
     auto usedSpaceAfter = commandList->commandStream->getUsed();
@@ -258,7 +258,7 @@ ATSTEST_F(CommandListAppendLaunchFunction, withEventSetsPostSyncOp) {
 
     auto result = commandList->appendLaunchFunction(function->toHandle(),
                                                     &dispatchFunctionArguments,
-                                                    event->toHandle());
+                                                    event->toHandle(), 0, nullptr);
     ASSERT_EQ(XE_RESULT_SUCCESS, result);
 
     auto usedSpaceAfter = commandList->commandStream->getUsed();
@@ -302,7 +302,7 @@ ATSTEST_F(CommandListAppendLaunchFunction, copiesThreadDataToGeneralStateHeap) {
 
     auto result = commandList->appendLaunchFunction(function->toHandle(),
                                                     &dispatchFunctionArguments,
-                                                    nullptr);
+                                                    nullptr, 0, nullptr);
     ASSERT_EQ(XE_RESULT_SUCCESS, result);
 
     auto usedSpaceAfter = commandList->commandStream->getUsed();
@@ -342,7 +342,7 @@ ATSTEST_F(CommandListAppendLaunchFunction, growsGeneralStateHeapIfNeeded) {
 
     auto result = commandList->appendLaunchFunction(function->toHandle(),
                                                     &dispatchFunctionArguments,
-                                                    nullptr);
+                                                    nullptr, 0, nullptr);
     ASSERT_EQ(XE_RESULT_SUCCESS, result);
 
     auto usedSpaceAfter = commandList->commandStream->getUsed();
@@ -385,7 +385,7 @@ ATSTEST_F(CommandListAppendLaunchFunction, storesImageSampler) {
 
     auto result = commandList->appendLaunchFunction(function->toHandle(),
                                                     &dispatchFunctionArguments,
-                                                    nullptr);
+                                                    nullptr, 0, nullptr);
     EXPECT_EQ(XE_RESULT_SUCCESS, result);
 
     auto usedSpaceAfter = commandList->commandStream->getUsed();
@@ -424,7 +424,7 @@ ATSTEST_F(CommandListAppendLaunchFunction, storesBindingTableAndSurfaceStates) {
 
     auto result = commandList->appendLaunchFunction(function->toHandle(),
                                                     &dispatchFunctionArguments,
-                                                    nullptr);
+                                                    nullptr, 0, nullptr);
     EXPECT_EQ(XE_RESULT_SUCCESS, result);
 
     auto usedSpaceAfter = commandList->commandStream->getUsed();
@@ -477,7 +477,7 @@ SKLTEST_F(CommandListAppendLaunchFunctionGEN9, copiesThreadDataToIndirectStateHe
 
     auto result = commandList->appendLaunchFunction(function->toHandle(),
                                                     &dispatchFunctionArguments,
-                                                    nullptr);
+                                                    nullptr, 0, nullptr);
     ASSERT_EQ(XE_RESULT_SUCCESS, result);
 
     auto usedSpaceAfter = commandList->commandStream->getUsed();
@@ -511,7 +511,7 @@ HWTEST2_F(CommandListAppendLaunchFunctionGEN9, withSLMProgramsL3WithSLMValue, Is
     createFunction("SlmBarrier");
     auto result = commandList->appendLaunchFunction(function->toHandle(),
                                                     &dispatchFunctionArguments,
-                                                    nullptr);
+                                                    nullptr, 0, nullptr);
     ASSERT_EQ(XE_RESULT_SUCCESS, result);
 
     auto usedSpaceAfter = commandList->commandStream->getUsed();
@@ -542,7 +542,7 @@ ATSTEST_F(CommandListAppendLaunchFunction, usesIsaFromInstructionHeap) {
     createFunction("MemcpyBytes");
     auto result = commandList->appendLaunchFunction(function->toHandle(),
                                                     &dispatchFunctionArguments,
-                                                    nullptr);
+                                                    nullptr, 0, nullptr);
     ASSERT_EQ(XE_RESULT_SUCCESS, result);
 
     auto usedSpaceAfter = commandList->commandStream->getUsed();
@@ -574,7 +574,7 @@ GEN9TEST_F(CommandListAppendLaunchFunctionGEN9, addsWalkerToCommandStream) {
 
     auto result = commandList->appendLaunchFunction(function->toHandle(),
                                                     &dispatchFunctionArguments,
-                                                    nullptr);
+                                                    nullptr, 0, nullptr);
     ASSERT_EQ(XE_RESULT_SUCCESS, result);
 
     auto usedSpaceAfter = commandList->commandStream->getUsed();
@@ -662,7 +662,7 @@ GEN9TEST_F(CommandListAppendLaunchFunction, usesProperInterfaceDescriptorOffsets
 
     auto result = commandList->appendLaunchFunction(function->toHandle(),
                                                     &dispatchFunctionArguments,
-                                                    nullptr);
+                                                    nullptr, 0, nullptr);
     ASSERT_EQ(XE_RESULT_SUCCESS, result);
     auto usedSpaceAfter = commandList->commandStream->getUsed();
 
@@ -703,7 +703,7 @@ GEN9TEST_F(CommandListAppendLaunchFunctionGEN9, programsL3InBatchBuffer) {
 
     auto result = commandList->appendLaunchFunction(function->toHandle(),
                                                     &dispatchFunctionArguments,
-                                                    nullptr);
+                                                    nullptr, 0, nullptr);
     ASSERT_EQ(XE_RESULT_SUCCESS, result);
 
     auto usedSpaceAfter = commandList->commandStream->getUsed();
@@ -737,7 +737,7 @@ GEN9TEST_F(CommandListAppendLaunchFunctionGEN9, withBarrierAndSLMSetsIDDBarrierE
 
     auto result = commandList->appendLaunchFunction(function->toHandle(),
                                                     &dispatchFunctionArguments,
-                                                    nullptr);
+                                                    nullptr, 0, nullptr);
     ASSERT_EQ(XE_RESULT_SUCCESS, result);
 
     auto usedSpaceAfter = commandList->commandStream->getUsed();
@@ -780,7 +780,7 @@ HWTEST_F(CommandListAppendLaunchFunction, setsGroupCountBeforeAccessingCrossThre
     ON_CALL(*this->function, getCrossThreadData)
         .WillByDefault(::testing::Invoke([&]() { res *= 2; return bindPtrRef<const uint8_t[]>(function->crossThreadData.data()); }));
 
-    auto result = commandList->appendLaunchFunction(function->toHandle(), &dispatchFunctionArguments, nullptr);
+    auto result = commandList->appendLaunchFunction(function->toHandle(), &dispatchFunctionArguments, nullptr, 0, nullptr);
     ASSERT_EQ(XE_RESULT_SUCCESS, result);
 
     EXPECT_EQ(2, res);
@@ -796,7 +796,7 @@ HWTEST_F(CommandListAppendLaunchFunction, residencyContainerDoesNotContainDuplic
     for (int i = 0; i < 4; ++i) {
         auto result = commandList->appendLaunchFunction(function->toHandle(),
                                                         &dispatchFunctionArguments,
-                                                        nullptr);
+                                                        nullptr, 0, nullptr);
         ASSERT_EQ(XE_RESULT_SUCCESS, result);
     }
 
@@ -827,7 +827,7 @@ GEN9TEST_F(CommandListAppendLaunchFunctionGEN9, storesImageSampler) {
 
     auto result = commandList->appendLaunchFunction(function->toHandle(),
                                                     &dispatchFunctionArguments,
-                                                    nullptr);
+                                                    nullptr, 0, nullptr);
     EXPECT_EQ(XE_RESULT_SUCCESS, result);
 
     auto usedSpaceAfter = commandList->commandStream->getUsed();
@@ -877,7 +877,7 @@ GEN9TEST_F(CommandListAppendLaunchFunctionGEN9, storesBindingTableAndSurfaceStat
 
     auto result = commandList->appendLaunchFunction(function->toHandle(),
                                                     &dispatchFunctionArguments,
-                                                    nullptr);
+                                                    nullptr, 0, nullptr);
     EXPECT_EQ(XE_RESULT_SUCCESS, result);
 
     auto usedSpaceAfter = commandList->commandStream->getUsed();
@@ -950,7 +950,7 @@ TEST_P(CommandListReset, resetCommandListResetsAfterClose) {
 
     auto result = commandList->appendLaunchFunction(function->toHandle(),
                                                     &dispatchFunctionArguments,
-                                                    nullptr);
+                                                    nullptr, 0, nullptr);
     ASSERT_EQ(XE_RESULT_SUCCESS, result);
 
     result = commandList->close();

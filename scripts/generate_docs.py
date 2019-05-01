@@ -23,7 +23,7 @@ def find_symbol_type(name, meta):
 
     if name.isupper():
         for enum in meta['enum']:
-            if name in meta['enum'][enum]:
+            if name in meta['enum'][enum]['types']:
                 return 'etor'
 
     return None
@@ -34,6 +34,8 @@ def find_symbol_type(name, meta):
 def validate_md(fpath, meta):
     RE_ENABLE   = r"^\#\#\s*\-\-validate\s*\=\s*on$"
     RE_DISABLE  = r"^\#\#\s*\-\-validate\s*\=\s*off$"
+    RE_PYCODE_BLOCK_BEGIN = r"^\<\%$"
+    RE_PYCODE_BLOCK_END   = r"^\%\>$"
     enable = True
 
     RE_INVALID_TAG  = r".*\$x.*"
@@ -48,10 +50,10 @@ def validate_md(fpath, meta):
     RE_EXTRACT_PARAMS   = r"\w+\((.*)\)\;"
 
     for iline, line in enumerate(util.textRead(fpath)):
-        if re.match(RE_ENABLE, line):
+        if re.match(RE_ENABLE, line) or re.match(RE_PYCODE_BLOCK_END, line):
             enable = True
             continue
-        elif re.match(RE_DISABLE, line):
+        elif re.match(RE_DISABLE, line) or re.match(RE_PYCODE_BLOCK_BEGIN, line):
             enable = False
             continue
 
@@ -79,8 +81,8 @@ def validate_md(fpath, meta):
 
                     if code_block and 'function' == symbol_type:
                         words = re.sub(RE_EXTRACT_PARAMS, r"\1", line).split(",")
-                        if len(words) != len(meta['function'][symbol]):
-                            print("%s(%s) : error : %s parameter count mismatch - %s actual vs. %s expected"%(fpath, iline+1, symbol, len(words), len(meta['function'][symbol])))
+                        if len(words) != len(meta['function'][symbol]['types']):
+                            print("%s(%s) : error : %s parameter count mismatch - %s actual vs. %s expected"%(fpath, iline+1, symbol, len(words), len(meta['function'][symbol]['types'])))
 
             if not code_block:
                  if not re.match(RE_DOXY_LINK, line.lower()):
@@ -97,11 +99,9 @@ def generate_md(srcpath, dstpath, tags, meta):
     for fin in util.findFiles(srcpath, "*.md"):
         fout = os.path.join(dstpath, os.path.basename(fin))
         print("Generating %s..."%fout)
-        validate_md(fin, meta)
+        validate_md(os.path.abspath(fin), meta)
         loc += util.makoWrite(fin, fout,
-            x=tags['$x'],
-            X=tags['$x'].upper(),
-            OneApi=tags['$OneApi'])
+            tags=tags)
     print("Generated %s lines of markdown.\n"%loc)
 
 """
@@ -115,11 +115,11 @@ def generate_html():
     cmdline = "doxygen Doxyfile"
     os.system(cmdline)
 
-"""
-Entry-point:
-    generate PDF file using generated LaTeX files
-"""
-def generate_pdf():
-    print("Generating PDF..")
-    cmdline = "..\latex\make.bat"
-    os.system(cmdline)
+#"""
+#Entry-point:
+#    generate PDF file using generated LaTeX files
+#"""
+#def generate_pdf():
+#    print("Generating PDF..")
+#   cmdline = "..\latex\make.bat"
+#    os.system(cmdline)

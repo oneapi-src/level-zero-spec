@@ -39,6 +39,27 @@
 namespace xe
 {
     ///////////////////////////////////////////////////////////////////////////////
+    /// @brief C++ wrapper for ::xeEventPoolCreate
+    /// 
+    /// @details
+    ///     - The application may call this function from simultaneous threads.
+    ///     - The implementation of this function should be lock-free.
+    /// 
+    /// @returns
+    ///     - ::event_pool_handle_t: pointer handle of event pool object created
+    /// 
+    /// @throws result_t
+    inline event_pool_handle_t 
+    EventPool::Create(
+        device_handle_t hDevice,                        ///< [in] handle of the device
+        const event_pool_desc_t* desc                   ///< [in] pointer to event pool descriptor
+        )
+    {
+        // auto result = ::xeEventPoolCreate( handle, hDevice, desc );
+        // if( ::XE_RESULT_SUCCESS != result ) throw exception(result, "xe::EventPool::Create");
+    }
+
+    ///////////////////////////////////////////////////////////////////////////////
     /// @brief C++ wrapper for ::xeEventPoolDestroy
     /// 
     /// @details
@@ -49,45 +70,18 @@ namespace xe
     ///       deleted
     ///     - The implementation of this function will immediately free all Host and
     ///       Device allocations associated with this event pool
+    ///     - The application may **not** call this function from simultaneous
+    ///       threads with the same event pool handle.
     ///     - The implementation of this function should be lock-free.
     /// 
     /// @throws result_t
     inline void 
     EventPool::Destroy(
-        void
+        event_pool_handle_t hEventPool                  ///< [in] handle of event pool object to destroy
         )
     {
-        // auto result = ::xeEventPoolDestroy( handle );
+        // auto result = ::xeEventPoolDestroy( handle, hEventPool );
         // if( ::XE_RESULT_SUCCESS != result ) throw exception(result, "xe::EventPool::Destroy");
-    }
-
-    ///////////////////////////////////////////////////////////////////////////////
-    /// @brief C++ wrapper for ::xeEventPoolCreateEvent
-    /// 
-    /// @details
-    ///     - Multiple events cannot be created using the same index from the same
-    ///       pool
-    ///     - The index must be less-than the count specified during pool creation
-    ///     - This function may be called from simultaneous threads.
-    ///     - The implementation of this function should be lock-free.
-    /// 
-    /// @remarks
-    ///   _Analogues_
-    ///     - **clCreateUserEvent**
-    ///     - vkCreateEvent
-    ///     - cuEventCreate
-    /// 
-    /// @returns
-    ///     - ::event_handle_t: pointer to handle of event object created
-    /// 
-    /// @throws result_t
-    inline event_handle_t 
-    EventPool::CreateEvent(
-        uint32_t index                                  ///< [in] index of the event within the pool
-        )
-    {
-        // auto result = ::xeEventPoolCreateEvent( handle, index );
-        // if( ::XE_RESULT_SUCCESS != result ) throw exception(result, "xe::EventPool::CreateEvent");
     }
 
     ///////////////////////////////////////////////////////////////////////////////
@@ -145,7 +139,8 @@ namespace xe
     /// @details
     ///     - Closes an IPC event handle by destroying events that were opened in
     ///       this process using ::EventPoolOpenIpcHandle.
-    ///     - The application may call this function from simultaneous threads.
+    ///     - The application may **not** call this function from simultaneous
+    ///       threads with the same event pool handle.
     /// 
     /// @remarks
     ///   _Analogues_
@@ -162,6 +157,36 @@ namespace xe
     }
 
     ///////////////////////////////////////////////////////////////////////////////
+    /// @brief C++ wrapper for ::xeEventCreate
+    /// 
+    /// @details
+    ///     - Multiple events cannot be created using the same index from the same
+    ///       pool
+    ///     - The index must be less-than the count specified during pool creation
+    ///     - The application may call this function from simultaneous threads.
+    ///     - The implementation of this function should be lock-free.
+    /// 
+    /// @remarks
+    ///   _Analogues_
+    ///     - **clCreateUserEvent**
+    ///     - vkCreateEvent
+    ///     - cuEventCreate
+    /// 
+    /// @returns
+    ///     - ::event_handle_t: pointer to handle of event object created
+    /// 
+    /// @throws result_t
+    inline event_handle_t 
+    Event::Create(
+        event_pool_handle_t hEventPool,                 ///< [in] handle of the event pool
+        const event_desc_t* desc                        ///< [in] pointer to event descriptor
+        )
+    {
+        // auto result = ::xeEventCreate( handle, hEventPool, desc );
+        // if( ::XE_RESULT_SUCCESS != result ) throw exception(result, "xe::Event::Create");
+    }
+
+    ///////////////////////////////////////////////////////////////////////////////
     /// @brief C++ wrapper for ::xeEventDestroy
     /// 
     /// @details
@@ -169,6 +194,8 @@ namespace xe
     ///       currently referencing the event before it is deleted
     ///     - The implementation of this function will immediately free all Host and
     ///       Device allocations associated with this event
+    ///     - The application may **not** call this function from simultaneous
+    ///       threads with the same event handle.
     ///     - The implementation of this function should be lock-free.
     /// 
     /// @remarks
@@ -180,10 +207,10 @@ namespace xe
     /// @throws result_t
     inline void 
     Event::Destroy(
-        void
+        event_handle_t hEvent                           ///< [in] handle of event object to destroy
         )
     {
-        // auto result = ::xeEventDestroy( handle );
+        // auto result = ::xeEventDestroy( handle, hEvent );
         // if( ::XE_RESULT_SUCCESS != result ) throw exception(result, "xe::Event::Destroy");
     }
 
@@ -255,53 +282,6 @@ namespace xe
     {
         // auto result = ::xeEventQueryStatus( handle );
         // if( ::XE_RESULT_SUCCESS != result ) throw exception(result, "xe::Event::QueryStatus");
-    }
-
-    ///////////////////////////////////////////////////////////////////////////////
-    /// @brief C++ wrapper for ::xeEventQueryElapsedTime
-    /// 
-    /// @details
-    ///     - The application may call this function from simultaneous threads.
-    ///     - The implementation of this function should be lock-free.
-    /// 
-    /// @remarks
-    ///   _Analogues_
-    ///     - **cuEventElapsedTime**
-    /// 
-    /// @returns
-    ///     - double: time in milliseconds
-    /// 
-    /// @throws result_t
-    inline double 
-    Event::QueryElapsedTime(
-        event_handle_t hEventBegin,                     ///< [in] handle of the begin event
-        event_handle_t hEventEnd                        ///< [in] handle of the end event
-        )
-    {
-        // auto result = ::xeEventQueryElapsedTime( handle, hEventBegin, hEventEnd );
-        // if( ::XE_RESULT_SUCCESS != result ) throw exception(result, "xe::Event::QueryElapsedTime");
-    }
-
-    ///////////////////////////////////////////////////////////////////////////////
-    /// @brief C++ wrapper for ::xeEventQueryMetricsData
-    /// 
-    /// @details
-    ///     - The application may call this function from simultaneous threads.
-    ///     - The implementation of this function should be lock-free.
-    /// 
-    /// @returns
-    ///     - uint32_t: report data buffer
-    /// 
-    /// @throws result_t
-    inline uint32_t 
-    Event::QueryMetricsData(
-        event_handle_t hEventStart,                     ///< [in] handle of the start event
-        event_handle_t hEventEnd,                       ///< [in] handle of the end event
-        size_t reportSize                               ///< [in] size of the report data buffer in bytes
-        )
-    {
-        // auto result = ::xeEventQueryMetricsData( handle, hEventStart, hEventEnd, reportSize );
-        // if( ::XE_RESULT_SUCCESS != result ) throw exception(result, "xe::Event::QueryMetricsData");
     }
 
     ///////////////////////////////////////////////////////////////////////////////

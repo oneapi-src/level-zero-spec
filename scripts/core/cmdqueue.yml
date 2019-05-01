@@ -4,7 +4,7 @@ desc: "Intel $OneApi Level-Zero APIs for Command Queue"
 --- #--------------------------------------------------------------------------
 type: enum
 desc: API version of $x_command_queue_desc_t
-class: $xDevice
+class: $xCommandQueue
 name: $x_command_queue_desc_version_t
 etors:
     - name: $X_COMMAND_QUEUE_DESC_VERSION_CURRENT
@@ -13,7 +13,7 @@ etors:
 --- #--------------------------------------------------------------------------
 type: enum
 desc: "Supported command queue flags"
-class: $xDevice
+class: $xCommandQueue
 name: $x_command_queue_flag_t
 etors:
     - name: $X_COMMAND_QUEUE_FLAG_NONE
@@ -31,7 +31,7 @@ etors:
 --- #--------------------------------------------------------------------------
 type: enum
 desc: "Supported command queue modes"
-class: $xDevice
+class: $xCommandQueue
 name: $x_command_queue_mode_t
 etors:
     - name: $X_COMMAND_QUEUE_MODE_DEFAULT
@@ -48,7 +48,7 @@ etors:
 --- #--------------------------------------------------------------------------
 type: enum
 desc: "Supported command queue priorities"
-class: $xDevice
+class: $xCommandQueue
 name: $x_command_queue_priority_t
 etors:
     - name: $X_COMMAND_QUEUE_PRIORITY_NORMAL
@@ -61,7 +61,7 @@ etors:
 --- #--------------------------------------------------------------------------
 type: struct
 desc: "Command Queue descriptor"
-class: $xDevice
+class: $xCommandQueue
 name: $x_command_queue_desc_t
 members:
     - type: $x_command_queue_desc_version_t
@@ -91,14 +91,15 @@ members:
 --- #--------------------------------------------------------------------------
 type: function
 desc: "Creates a command queue on the device."
-class: $xDevice
-name: CreateCommandQueue
+class: $xCommandQueue
+name: Create
+decl: static
 analogue:
     - "**clCreateCommandQueue**"
     - cuCtxCreate
     - cuCtxGetCurrent
 details:
-    - "This function may be called from simultaneous threads."
+    - "The application may call this function from simultaneous threads."
     - "The implementation of this function should be lock-free."
 params:
     - type: $x_device_handle_t
@@ -118,12 +119,14 @@ type: function
 desc: "Destroys a command queue."
 class: $xCommandQueue
 name: Destroy
+decl: static
 analogue:
     - "**clReleaseCommandQueue**"
     - cuCtxDestroy
 details:
     - "The application is responsible for making sure the GPU is not currently referencing the command queue before it is deleted"
     - "The implementation of this function will immediately free all Host and Device allocations associated with this command queue"
+    - "The application may **not** call this function from simultaneous threads with the same command queue handle."
     - "The implementation of this function should be lock-free."
 params:
     - type: $x_command_queue_handle_t

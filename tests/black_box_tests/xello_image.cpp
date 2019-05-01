@@ -25,10 +25,10 @@ void testAppendImageFunction(xe_device_handle_t &device, bool &validRet) {
     xe_command_queue_desc_t cmdQueueDesc = {XE_COMMAND_QUEUE_DESC_VERSION_CURRENT};
     cmdQueueDesc.ordinal = 0;
     cmdQueueDesc.mode = XE_COMMAND_QUEUE_MODE_ASYNCHRONOUS;
-    SUCCESS_OR_TERMINATE(xeDeviceCreateCommandQueue(device, &cmdQueueDesc, &cmdQueue));
+    SUCCESS_OR_TERMINATE(xeCommandQueueCreate(device, &cmdQueueDesc, &cmdQueue));
 
     xe_command_list_desc_t cmdListDesc = {XE_COMMAND_LIST_DESC_VERSION_CURRENT};
-    SUCCESS_OR_TERMINATE(xeDeviceCreateCommandList(device, &cmdListDesc, &cmdList));
+    SUCCESS_OR_TERMINATE(xeCommandListCreate(device, &cmdListDesc, &cmdList));
 
     xe_image_desc_t srcImgDesc = {
         XE_IMAGE_DESC_VERSION_CURRENT,
@@ -39,9 +39,9 @@ void testAppendImageFunction(xe_device_handle_t &device, bool &validRet) {
           XE_IMAGE_FORMAT_SWIZZLE_B, XE_IMAGE_FORMAT_SWIZZLE_A},
         width, height, 1, 0, 0};
     xe_image_handle_t srcImg;
-    xe_image_region_t srcRegion = {{0, 0, 0}, {size * elem_size, 0, 0}};
+    xe_image_region_t srcRegion = {0, 0, 0, size * elem_size, 0, 0};
 
-    SUCCESS_OR_TERMINATE(xeDeviceCreateImage(device,
+    SUCCESS_OR_TERMINATE(xeImageCreate(device,
                                              const_cast<const xe_image_desc_t *>(&srcImgDesc), &srcImg));
 
     xe_image_desc_t dstImgDesc = {
@@ -53,9 +53,9 @@ void testAppendImageFunction(xe_device_handle_t &device, bool &validRet) {
           XE_IMAGE_FORMAT_SWIZZLE_B, XE_IMAGE_FORMAT_SWIZZLE_A},
         width, height, 1, 0, 0};
     xe_image_handle_t dstImg;
-    xe_image_region_t dstRegion  = {{0, 0, 0}, {size * elem_size, 0, 0}};
+    xe_image_region_t dstRegion  = {0, 0, 0, size * elem_size, 0, 0};
 
-    SUCCESS_OR_TERMINATE(xeDeviceCreateImage(device,
+    SUCCESS_OR_TERMINATE(xeImageCreate(device,
                                              const_cast<const xe_image_desc_t *>(&dstImgDesc), &dstImg));
 
     uint32_t *srcBuffer = new uint32_t[size];
@@ -73,11 +73,11 @@ void testAppendImageFunction(xe_device_handle_t &device, bool &validRet) {
     moduleDesc.format = XE_MODULE_FORMAT_IL_SPIRV;
     moduleDesc.pInputModule = reinterpret_cast<const uint8_t *>(spirvModule.get());
     moduleDesc.inputSize = spirvSize;
-    SUCCESS_OR_TERMINATE(xeDeviceCreateModule(device, &moduleDesc, &module, nullptr));
+    SUCCESS_OR_TERMINATE(xeModuleCreate(device, &moduleDesc, &module, nullptr));
 
     xe_function_desc_t functionDesc = {XE_FUNCTION_DESC_VERSION_CURRENT};
     functionDesc.pFunctionName = "image_copy";
-    SUCCESS_OR_TERMINATE(xeModuleCreateFunction(module, &functionDesc, &function));
+    SUCCESS_OR_TERMINATE(xeFunctionCreate(module, &functionDesc, &function));
 
     uint32_t groupSizeX = width;
     uint32_t groupSizeY = height;
@@ -99,11 +99,11 @@ void testAppendImageFunction(xe_device_handle_t &device, bool &validRet) {
     SUCCESS_OR_TERMINATE(xeFunctionSetArgumentValue(function, 1, sizeof(dstImg), &dstImg));
 
     // Copy from srcBuffer->srcImg->dstImg->dstBuffer, so at the end dstBuffer = srcBuffer
-    SUCCESS_OR_TERMINATE(xeCommandListAppendImageCopyFromMemory(cmdList, srcImg, &srcRegion, srcBuffer, nullptr));
-    SUCCESS_OR_TERMINATE(xeCommandListAppendExecutionBarrier(cmdList));
-    SUCCESS_OR_TERMINATE(xeCommandListAppendLaunchFunction(cmdList, function, &dispatchTraits, nullptr));
-    SUCCESS_OR_TERMINATE(xeCommandListAppendExecutionBarrier(cmdList));
-    SUCCESS_OR_TERMINATE(xeCommandListAppendImageCopyToMemory(cmdList, dstBuffer, dstImg, &dstRegion, nullptr));
+    SUCCESS_OR_TERMINATE(xeCommandListAppendImageCopyFromMemory(cmdList, srcImg, srcBuffer, &srcRegion, nullptr, 0, nullptr));
+    SUCCESS_OR_TERMINATE(xeCommandListAppendBarrier(cmdList, nullptr, 0, nullptr));
+    SUCCESS_OR_TERMINATE(xeCommandListAppendLaunchFunction(cmdList, function, &dispatchTraits, nullptr, 0, nullptr));
+    SUCCESS_OR_TERMINATE(xeCommandListAppendBarrier(cmdList, nullptr, 0, nullptr));
+    SUCCESS_OR_TERMINATE(xeCommandListAppendImageCopyToMemory(cmdList, dstBuffer, dstImg, &dstRegion, nullptr, 0, nullptr));
 
     SUCCESS_OR_TERMINATE(xeCommandListClose(cmdList));
     SUCCESS_OR_TERMINATE(xeCommandQueueExecuteCommandLists(cmdQueue, 1, &cmdList, nullptr));
@@ -139,8 +139,8 @@ int main(int argc, char *argv[]) {
 
     verbose = isVerbose(argc, argv);
 
-    SUCCESS_OR_TERMINATE(xeDriverInit(XE_INIT_FLAG_NONE));
-    SUCCESS_OR_TERMINATE(xeDriverGetDevice(0, &device0));
+    SUCCESS_OR_TERMINATE(xeInit(XE_INIT_FLAG_NONE));
+    SUCCESS_OR_TERMINATE(xeDeviceGet(0, &device0));
     SUCCESS_OR_TERMINATE(xeDeviceGetProperties(device0, &device0Properties));
     std::cout << device0Properties.name << std::endl;
 

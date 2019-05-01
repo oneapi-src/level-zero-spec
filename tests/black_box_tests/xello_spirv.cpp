@@ -115,16 +115,16 @@ int main(int argc, char *argv[]) {
     bool success = spirVCompilerOutput.success();
     if (hasArg(argX) && spirVCompilerOutput.success()) {
         std::cerr << "Feeding to L0" << std::endl;
-        SUCCESS_OR_TERMINATE(xeDriverInit(XE_INIT_FLAG_NONE));
+        SUCCESS_OR_TERMINATE(xeInit(XE_INIT_FLAG_NONE));
         xe_device_handle_t device0;
-        SUCCESS_OR_TERMINATE(xeDriverGetDevice(0, &device0));
+        SUCCESS_OR_TERMINATE(xeDeviceGet(0, &device0));
 
         xe_module_desc_t moduleDesc = {XE_MODULE_DESC_VERSION_CURRENT};
         xe_module_handle_t module;
         moduleDesc.format = XE_MODULE_FORMAT_IL_SPIRV;
         moduleDesc.pInputModule = reinterpret_cast<const uint8_t *>(spirVCompilerOutput.getOutput());
         moduleDesc.inputSize = spirVCompilerOutput.getOutputSize();
-        auto err = xeDeviceCreateModule(device0, &moduleDesc, &module, nullptr);
+        auto err = xeModuleCreate(device0, &moduleDesc, &module, nullptr);
         success = (err == XE_RESULT_SUCCESS);
         std::cerr << "Level zero create module : " << (success ? "SUCCESS" : "FAIL") << std::endl;
     }

@@ -224,7 +224,9 @@ uint32_t CommandListCoreFamily<gfxCoreFamily>::copySamplerState(NEO::IndirectHea
 template <GFXCORE_FAMILY gfxCoreFamily>
 xe_result_t CommandListCoreFamily<gfxCoreFamily>::appendLaunchFunction(xe_function_handle_t hFunction,
                                                                        const xe_thread_group_dimensions_t *pThreadGroupDimensions,
-                                                                       xe_event_handle_t hEvent) {
+                                                                       xe_event_handle_t hEvent,
+                                                                        uint32_t numWaitEvents,
+                                                                        xe_event_handle_t* phWaitEvents) {
     using GfxFamily = typename NEO::GfxFamilyMapper<gfxCoreFamily>::GfxFamily;
     using GPGPU_WALKER = typename GfxFamily::GPGPU_WALKER;
     using MEDIA_STATE_FLUSH = typename GfxFamily::MEDIA_STATE_FLUSH;
@@ -445,7 +447,9 @@ xe_result_t CommandListCoreFamily<gfxCoreFamily>::appendLaunchFunction(xe_functi
 template <GFXCORE_FAMILY gfxCoreFamily>
 xe_result_t CommandListCoreFamily<gfxCoreFamily>::appendLaunchFunctionIndirect(xe_function_handle_t hFunction,
                                                                                const xe_thread_group_dimensions_t *pDispatchArgumentsBuffer,
-                                                                               xe_event_handle_t hEvent) {
+                                                                               xe_event_handle_t hEvent,
+                                                                            uint32_t numWaitEvents,
+                                                                            xe_event_handle_t* phWaitEvents) {
     return XE_RESULT_ERROR_UNSUPPORTED;
 }
 
@@ -460,7 +464,9 @@ xe_result_t CommandListCoreFamily<gfxCoreFamily>::appendLaunchMultipleFunctionsI
                                                                                         const xe_function_handle_t *phFunctions,
                                                                                         const size_t *pNumLaunchArguments,
                                                                                         const xe_thread_group_dimensions_t *pLaunchArgumentsBuffer,
-                                                                                        xe_event_handle_t hEvent) {
+                                                                                        xe_event_handle_t hEvent,
+                                                                                        uint32_t numWaitEvents,
+                                                                                        xe_event_handle_t* phWaitEvents) {
     return XE_RESULT_ERROR_UNSUPPORTED;
 }
 
@@ -478,17 +484,31 @@ xe_result_t CommandListCoreFamily<gfxCoreFamily>::appendEventReset(xe_event_hand
 }
 
 template <GFXCORE_FAMILY gfxCoreFamily>
-xe_result_t CommandListCoreFamily<gfxCoreFamily>::appendExecutionBarrier() {
+xe_result_t CommandListCoreFamily<gfxCoreFamily>::appendBarrier(xe_event_handle_t hSignalEvent,
+                                                uint32_t numWaitEvents,
+                                                xe_event_handle_t* phWaitEvents) {
     EncodeFlush<gfxCoreFamily>::encode(*this);
 
     return XE_RESULT_SUCCESS;
 }
 
 template <GFXCORE_FAMILY gfxCoreFamily>
+xe_result_t CommandListCoreFamily<gfxCoreFamily>::appendMemoryRangesBarrier(uint32_t numRanges,
+                                        const size_t* pRangeSizes,
+                                        const void** pRanges,
+                                        xe_event_handle_t hSignalEvent,
+                                        uint32_t numWaitEvents,
+                                        xe_event_handle_t* phWaitEvents) {
+    return XE_RESULT_ERROR_UNSUPPORTED;
+}
+
+template <GFXCORE_FAMILY gfxCoreFamily>
 xe_result_t CommandListCoreFamily<gfxCoreFamily>::appendImageCopyFromMemory(xe_image_handle_t hDstImage,
-                                                                            xe_image_region_t *pDstRegion,
                                                                             const void *srcPtr,
-                                                                            xe_event_handle_t hEvent) {
+                                                                            xe_image_region_t *pDstRegion,
+                                                                            xe_event_handle_t hEvent,
+                                                                            uint32_t numWaitEvents,
+                                                                            xe_event_handle_t* phWaitEvents) {
 
     // Use for now the AppendMemoryCopy, as images are internally allocated linearly
     auto dstImage = L0::Image::fromHandle(hDstImage);
@@ -498,22 +518,24 @@ xe_result_t CommandListCoreFamily<gfxCoreFamily>::appendImageCopyFromMemory(xe_i
     size_t size;
 
     if (pDstRegion) {
-        offset = pDstRegion->origin[0]; // Get the origin in X as the offset
-        size = pDstRegion->region[0];   // Get the widht in X as the size
+        offset = pDstRegion->originX; // Get the origin in X as the offset
+        size = pDstRegion->width;
     } else {
         offset = 0;
         size = dstImage->getSizeInBytes();
     }
 
     return this->appendMemoryCopy(reinterpret_cast<void *>(dstPtr + offset),
-                                  srcPtr, size, nullptr);
+                                  srcPtr, size, hEvent, numWaitEvents, phWaitEvents);
 }
 
 template <GFXCORE_FAMILY gfxCoreFamily>
 xe_result_t CommandListCoreFamily<gfxCoreFamily>::appendImageCopyToMemory(void *dstPtr,
                                                                           xe_image_handle_t hSrcImage,
                                                                           xe_image_region_t *pSrcRegion,
-                                                                          xe_event_handle_t hEvent) {
+                                                                          xe_event_handle_t hEvent,
+                                                                        uint32_t numWaitEvents,
+                                                                        xe_event_handle_t* phWaitEvents) {
 
     // Use for now the AppendMemoryCopy, as images are internally allocated linearly
     auto srcImage = L0::Image::fromHandle(hSrcImage);
@@ -523,8 +545,8 @@ xe_result_t CommandListCoreFamily<gfxCoreFamily>::appendImageCopyToMemory(void *
     size_t size;
 
     if (pSrcRegion) {
-        offset = pSrcRegion->origin[0]; // Get the origin in X as the offse
-        size = pSrcRegion->region[0];   // Get the width in X as the offse
+        offset = pSrcRegion->originX; // Get the origin in X as the offse
+        size = pSrcRegion->width;
     } else {
         offset = 0;
         size = srcImage->getSizeInBytes();
@@ -532,15 +554,17 @@ xe_result_t CommandListCoreFamily<gfxCoreFamily>::appendImageCopyToMemory(void *
 
     return this->appendMemoryCopy(dstPtr,
                                   reinterpret_cast<void *>(srcPtr + offset),
-                                  size, hEvent);
+                                  size, hEvent, numWaitEvents, phWaitEvents);
 }
 
 template <GFXCORE_FAMILY gfxCoreFamily>
 xe_result_t CommandListCoreFamily<gfxCoreFamily>::appendImageCopyRegion(xe_image_handle_t hDstImage,
-                                                                        xe_image_region_t *pDstRegion,
                                                                         xe_image_handle_t hSrcImage,
-                                                                        xe_image_region_t *pSrcRegion,
-                                                                        xe_event_handle_t hEvent) {
+                                                                        xe_image_region_t* pDstRegion,
+                                                                        xe_image_region_t* pSrcRegion,
+                                                                        xe_event_handle_t hSignalEvent,
+                                                                        uint32_t numWaitEvents,
+                                                                        xe_event_handle_t* phWaitEvents) {
 
     // Use for now the AppendMemoryCopy, as images are internally allocated linearly
     auto dstImage = L0::Image::fromHandle(hDstImage);
@@ -553,16 +577,16 @@ xe_result_t CommandListCoreFamily<gfxCoreFamily>::appendImageCopyRegion(xe_image
     size_t size;
 
     if (pDstRegion) {
-        dstOffset = pDstRegion->origin[0]; // Get the origin in X as the offse
-        size = pDstRegion->region[0];      // Get the width in X as the offse
+        dstOffset = pDstRegion->originX; // Get the origin in X as the offse
+        size = pDstRegion->width;
     } else {
         dstOffset = 0;
         size = dstImage->getSizeInBytes();
     }
 
     if (pSrcRegion) {
-        srcOffset = pSrcRegion->origin[0]; // Get the origin in X as the offse
-        srcSize = pSrcRegion->region[0];   // Get the width in X as the offse
+        srcOffset = pSrcRegion->originX; // Get the origin in X as the offse
+        srcSize = pSrcRegion->width;
     } else {
         srcOffset = 0;
         srcSize = srcImage->getSizeInBytes();
@@ -575,14 +599,16 @@ xe_result_t CommandListCoreFamily<gfxCoreFamily>::appendImageCopyRegion(xe_image
     return this->appendMemoryCopy(
         reinterpret_cast<void *>(dstPtr + dstOffset),
         reinterpret_cast<void *>(srcPtr + srcOffset),
-        size, hEvent);
+        size, hSignalEvent, numWaitEvents, phWaitEvents);
 }
 
 template <GFXCORE_FAMILY gfxCoreFamily>
 xe_result_t CommandListCoreFamily<gfxCoreFamily>::appendImageCopy(xe_image_handle_t hDstImage,
                                                                   xe_image_handle_t hSrcImage,
-                                                                  xe_event_handle_t hEvent) {
-    return this->appendImageCopyRegion(hDstImage, NULL, hSrcImage, NULL, hEvent);
+                                                                  xe_event_handle_t hEvent,
+                                                                    uint32_t numWaitEvents,
+                                                                    xe_event_handle_t* phWaitEvents) {
+    return this->appendImageCopyRegion(hDstImage, hSrcImage, nullptr, nullptr, hEvent, numWaitEvents, phWaitEvents);
 }
 
 template <GFXCORE_FAMILY gfxCoreFamily>
@@ -594,10 +620,12 @@ xe_result_t CommandListCoreFamily<gfxCoreFamily>::appendMemAdvise(xe_device_hand
 }
 
 template <GFXCORE_FAMILY gfxCoreFamily>
-xe_result_t CommandListCoreFamily<gfxCoreFamily>::appendMemoryCopy(void *dstptr,
-                                                                   const void *srcptr,
-                                                                   size_t size,
-                                                                   xe_event_handle_t hEvent) {
+xe_result_t CommandListCoreFamily<gfxCoreFamily>::appendMemoryCopy(void* dstptr,
+                                                                const void* srcptr,
+                                                                size_t size,
+                                                                xe_event_handle_t hSignalEvent,
+                                                                uint32_t numWaitEvents,
+                                                                xe_event_handle_t* phWaitEvents) {
     auto builtinFunction = this->device->getBuiltinFunctionsLib()->getFunction(Builtin::CopyBufferBytes);
 
     uint32_t groupSizeX = builtinFunction->getImmutableData()->getSignature().attributes.simdSize; // TODO : consider ATS fused threads
@@ -642,7 +670,7 @@ xe_result_t CommandListCoreFamily<gfxCoreFamily>::appendMemoryCopy(void *dstptr,
 
     auto ret = XE_RESULT_SUCCESS;
     if (whole > 0) {
-        ret = this->appendLaunchFunction(builtinFunction->toHandle(), &dispatchFuncArgs, nullptr);
+        ret = this->appendLaunchFunction(builtinFunction->toHandle(), &dispatchFuncArgs, nullptr, 0, nullptr);
     }
     if ((XE_RESULT_SUCCESS != ret) || (rest == 0)) {
         return ret;
@@ -656,7 +684,7 @@ xe_result_t CommandListCoreFamily<gfxCoreFamily>::appendMemoryCopy(void *dstptr,
     }
     dispatchFuncArgs.groupCountX = 1;
 
-    return this->appendLaunchFunction(builtinFunction->toHandle(), &dispatchFuncArgs, nullptr);
+    return this->appendLaunchFunction(builtinFunction->toHandle(), &dispatchFuncArgs, nullptr, 0, nullptr);
 }
 
 template <GFXCORE_FAMILY gfxCoreFamily>
@@ -669,7 +697,9 @@ template <GFXCORE_FAMILY gfxCoreFamily>
 xe_result_t CommandListCoreFamily<gfxCoreFamily>::appendMemorySet(void *ptr,
                                                                   int value,
                                                                   size_t size,
-                                                                  xe_event_handle_t hEvent) {
+                                                                  xe_event_handle_t hEvent,
+                                                                    uint32_t numWaitEvents,
+                                                                    xe_event_handle_t* phWaitEvents) {
     return XE_RESULT_ERROR_UNSUPPORTED;
 }
 
@@ -687,11 +717,16 @@ xe_result_t CommandListCoreFamily<gfxCoreFamily>::appendSignalEvent(xe_event_han
 }
 
 template <GFXCORE_FAMILY gfxCoreFamily>
-xe_result_t CommandListCoreFamily<gfxCoreFamily>::appendWaitOnEvent(xe_event_handle_t hEvent) {
+xe_result_t CommandListCoreFamily<gfxCoreFamily>::appendWaitOnEvents(uint32_t numEvents, xe_event_handle_t *phEvent) {
+
+    if (numEvents > 1) {
+        return XE_RESULT_ERROR_UNSUPPORTED;
+    }
+
     using GfxFamily = typename NEO::GfxFamilyMapper<gfxCoreFamily>::GfxFamily;
     using MI_SEMAPHORE_WAIT = typename GfxFamily::MI_SEMAPHORE_WAIT;
     MI_SEMAPHORE_WAIT cmd = GfxFamily::cmdInitMiSemaphoreWait;
-    auto event = Event::fromHandle(hEvent);
+    auto event = Event::fromHandle(*phEvent);
     assert(event);
     addToResidencyContainer(&event->getAllocation());
 

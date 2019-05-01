@@ -29,4 +29,6 @@ xe_result_t fenceQueryElapsedTime(xe_fence_handle_t hFenceStart,
                                   xe_fence_handle_t hFenceEnd,
                                   double *pTime);
 
+xe_result_t fenceDestroy(xe_fence_handle_t* phFence);
+
 } // namespace L0

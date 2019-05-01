@@ -124,7 +124,6 @@ struct DeviceImp : public Device {
         pComputeProperties->maxGroupCountY = 0xffffffff;
         pComputeProperties->maxGroupCountZ = 0xffffffff;
         pComputeProperties->maxSharedLocalMemory = static_cast<uint32_t>(deviceInfo.localMemSize);
-        pComputeProperties->maxGroupRegisters = GrfConfig::DefaultGrfNumber; // registers per group or subgroup?! Need clarification
         pComputeProperties->numSubGroupSizes = sizeof(deviceInfo.maxSubGroups) / sizeof(deviceInfo.maxSubGroups[0]);
         for (uint32_t i = 0; i < pComputeProperties->numSubGroupSizes; ++i) {
             pComputeProperties->subGroupSizes[i] = static_cast<uint32_t>(deviceInfo.maxSubGroups[i]);
@@ -244,6 +243,10 @@ struct DeviceImp : public Device {
         return XE_RESULT_ERROR_UNSUPPORTED;
     }
 
+    xe_result_t systemBarrier() {
+        return XE_RESULT_ERROR_UNSUPPORTED;
+    }
+
     void *getExecEnvironment() override {
         return execEnvironment;
     }
@@ -354,9 +357,80 @@ Device *Device::create(void *ptr) {
     return device;
 }
 
-xe_result_t deviceGetP2PProperties(uint32_t srcOrdinal,
-                                   uint32_t dstOrdinal,
-                                   xe_device_p2p_properties_t *pP2PProperties) {
+xe_result_t commandListCreate(xe_device_handle_t hDevice,
+                                const xe_command_list_desc_t *desc,
+                                xe_command_list_handle_t *commandList) {
+    DeviceImp *device = static_cast<DeviceImp *>(Device::fromHandle(hDevice));
+    return device->createCommandList(desc, commandList);
+}
+
+xe_result_t commandListCreateImmediate(xe_device_handle_t hDevice,
+                                const xe_command_queue_desc_t* desc,
+                                xe_command_list_handle_t* phCommandList) {
+    return XE_RESULT_ERROR_UNSUPPORTED;
+}
+
+xe_result_t commandListDestroy(xe_command_list_handle_t hCommandList) {
+    CommandList *commandList = CommandList::fromHandle(hCommandList);
+    return commandList->destroy();
+}
+
+xe_result_t commandQueueCreate(xe_device_handle_t hDevice,
+                                const xe_command_queue_desc_t *desc,
+                                xe_command_queue_handle_t *commandQueue) {
+    DeviceImp *device = static_cast<DeviceImp *>(Device::fromHandle(hDevice));
+    return device->createCommandQueue(desc, commandQueue);
+}
+
+xe_result_t commandQueueDestroy(xe_command_queue_handle_t hCommandQueue) {
+    CommandQueue *commandQueue = CommandQueue::fromHandle(hCommandQueue);
+    return commandQueue->destroy();
+}
+
+xe_result_t imageGetProperties(xe_device_handle_t hDevice, const xe_image_desc_t* desc,
+            xe_image_properties_t* pImageProperties) {
+    DeviceImp *device = static_cast<DeviceImp *>(Device::fromHandle(hDevice));
+    return device->getImageProperties(desc, pImageProperties);
+}
+
+xe_result_t eventPoolCreate(xe_device_handle_t hDevice, const xe_event_pool_desc_t *desc,
+                            xe_event_pool_handle_t *eventPool) {
+    DeviceImp *device = static_cast<DeviceImp *>(Device::fromHandle(hDevice));
+    return device->createEventPool(desc, eventPool);
+}
+
+xe_result_t eventPoolDestroy(xe_event_pool_handle_t hEventPool) {
+    return EventPool::fromHandle(hEventPool)->destroy();
+}
+
+xe_result_t imageCreate(xe_device_handle_t hDevice, const xe_image_desc_t* desc,
+        xe_image_handle_t* phImage) {
+    DeviceImp *device = static_cast<DeviceImp *>(Device::fromHandle(hDevice));
+    return device->createImage(desc, phImage);
+}
+
+xe_result_t imageDestroy(xe_image_handle_t hImage) {
+    return Image::fromHandle(hImage)->destroy();
+}
+
+xe_result_t moduleCreate(xe_device_handle_t hDevice, const xe_module_desc_t *desc,
+                    xe_module_handle_t *phModule,
+                    xe_module_build_log_handle_t *buildLog) {
+    DeviceImp *device = static_cast<DeviceImp *>(Device::fromHandle(hDevice));
+    return device->createModule(desc, phModule, buildLog);
+}
+
+xe_result_t moduleDestroy(xe_module_handle_t hModule) {
+    return Module::fromHandle(hModule)->destroy();
+}
+
+xe_result_t samplerCreate(xe_device_handle_t hDevice, const xe_sampler_desc_t *pDesc,
+                                      xe_sampler_handle_t *phSampler) {
+    DeviceImp *device = static_cast<DeviceImp *>(Device::fromHandle(hDevice));
+    return device->createSampler(pDesc, phSampler);
+}
+
+xe_result_t samplerDestroy(xe_sampler_handle_t hSampler) {
     return XE_RESULT_ERROR_UNSUPPORTED;
 }
 

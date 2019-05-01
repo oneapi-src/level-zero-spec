@@ -63,14 +63,14 @@ void XePeak::xe_peak_global_bw(L0Context &context) {
         std::cout << "outputBuf device buffer allocated\n";
 
     result = xeCommandListAppendMemoryCopy(context.command_list, inputBuf, arr.data(),
-                                           (arr.size() * sizeof(float)), nullptr);
+                                           (arr.size() * sizeof(float)), nullptr, 0, nullptr);
     if (result) {
         throw std::runtime_error("xeCommandListAppendMemoryCopy failed: " + result);
     }
     if (verbose)
         std::cout << "Input buffer copy encoded\n";
 
-    result = xeCommandListAppendExecutionBarrier(context.command_list);
+    result = xeCommandListAppendBarrier(context.command_list, nullptr, 0, nullptr);
     if (result) {
         throw std::runtime_error("xeCommandListAppendExecutionBarrier failed: " + result);
     }

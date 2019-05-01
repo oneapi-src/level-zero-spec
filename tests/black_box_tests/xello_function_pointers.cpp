@@ -410,11 +410,11 @@ int main(int argc, char *argv[]) {
     memset(initDataDst, 0xFF, sizeof(initDataDst));
 
 #ifdef GPU_COPY
-    SUCCESS_OR_TERMINATE(xeCommandListAppendMemoryCopy(cmdList, dstBufferOpAdd, initDataDst, sizeof(initDataDst), nullptr));
-    SUCCESS_OR_TERMINATE(xeCommandListAppendMemoryCopy(cmdList, dstBufferOpMul, initDataDst, sizeof(initDataDst), nullptr));
-    SUCCESS_OR_TERMINATE(xeCommandListAppendMemoryCopy(cmdList, dstBufferOpSub, initDataDst, sizeof(initDataDst), nullptr));
+    SUCCESS_OR_TERMINATE(xeCommandListAppendMemoryCopy(cmdList, dstBufferOpAdd, initDataDst, sizeof(initDataDst), nullptr, 0, nullptr));
+    SUCCESS_OR_TERMINATE(xeCommandListAppendMemoryCopy(cmdList, dstBufferOpMul, initDataDst, sizeof(initDataDst), nullptr, 0, nullptr));
+    SUCCESS_OR_TERMINATE(xeCommandListAppendMemoryCopy(cmdList, dstBufferOpSub, initDataDst, sizeof(initDataDst), nullptr, 0, nullptr));
 
-    SUCCESS_OR_TERMINATE(xeCommandListAppendExecutionBarrier(cmdList)); // copying of data must finish before running the user function
+    SUCCESS_OR_TERMINATE(xeCommandListAppendBarrier(cmdList, nullptr, 0, nullptr)); // copying of data must finish before running the user function
 #else
     memcpy(dstBufferOpAdd, initDataDst, sizeof(initDataDst));
     memcpy(dstBufferOpMul, initDataDst, sizeof(initDataDst));
@@ -436,7 +436,7 @@ int main(int argc, char *argv[]) {
             std::cerr << "Number of groups : (" << dispatchTraits.groupCountX << ", " << dispatchTraits.groupCountY << ", " << dispatchTraits.groupCountZ << ")" << std::endl;
         }
         SUCCESS_OR_TERMINATE_BOOL(dispatchTraits.groupCountX * groupSizeX == numSimtThreads);
-        SUCCESS_OR_TERMINATE(xeCommandListAppendLaunchFunction(cmdList, functionFuncArray, &dispatchTraits, nullptr));
+        SUCCESS_OR_TERMINATE(xeCommandListAppendLaunchFunction(cmdList, functionFuncArray, &dispatchTraits, nullptr, 0, nullptr));
     }
 
     // 4. Read back memory
@@ -448,10 +448,10 @@ int main(int argc, char *argv[]) {
     memset(readBackDataOpMul, 0xFF, sizeof(readBackDataOpMul));
 
 #ifdef GPU_COPY
-    SUCCESS_OR_TERMINATE(xeCommandListAppendExecutionBarrier(cmdList)); // user function must finish before we start copying data
-    SUCCESS_OR_TERMINATE(xeCommandListAppendMemoryCopy(cmdList, readBackDataOpAdd, dstBufferOpAdd, sizeof(readBackDataOpAdd), nullptr));
-    SUCCESS_OR_TERMINATE(xeCommandListAppendMemoryCopy(cmdList, readBackDataOpSub, dstBufferOpSub, sizeof(readBackDataOpSub), nullptr));
-    SUCCESS_OR_TERMINATE(xeCommandListAppendMemoryCopy(cmdList, readBackDataOpMul, dstBufferOpMul, sizeof(readBackDataOpMul), nullptr));
+    SUCCESS_OR_TERMINATE(xeCommandListAppendBarrier(cmdList, nullptr, 0, nullptr)); // user function must finish before we start copying data
+    SUCCESS_OR_TERMINATE(xeCommandListAppendMemoryCopy(cmdList, readBackDataOpAdd, dstBufferOpAdd, sizeof(readBackDataOpAdd), nullptr, 0, nullptr));
+    SUCCESS_OR_TERMINATE(xeCommandListAppendMemoryCopy(cmdList, readBackDataOpSub, dstBufferOpSub, sizeof(readBackDataOpSub), nullptr, 0, nullptr));
+    SUCCESS_OR_TERMINATE(xeCommandListAppendMemoryCopy(cmdList, readBackDataOpMul, dstBufferOpMul, sizeof(readBackDataOpMul), nullptr, 0, nullptr));
 #endif
 
     // 5. Execute and wait
@@ -508,8 +508,8 @@ void initializeLevelZero(xe_device_handle_t &device0, xe_device_properties_t &de
     cmdQueue = {};
     cmdList = {};
 
-    SUCCESS_OR_TERMINATE(xeDriverInit(XE_INIT_FLAG_NONE));
-    SUCCESS_OR_TERMINATE(xeDriverGetDevice(0, &device0));
+    SUCCESS_OR_TERMINATE(xeInit(XE_INIT_FLAG_NONE));
+    SUCCESS_OR_TERMINATE(xeDeviceGet(0, &device0));
     SUCCESS_OR_TERMINATE(xeDeviceGetProperties(device0, &device0Properties));
     if (verbose) {
         printDeviceProperties(device0Properties);
@@ -522,7 +522,7 @@ void initializeLevelZero(xe_device_handle_t &device0, xe_device_properties_t &de
         moduleDesc.format = static_cast<xe_module_format_t>(-1); // -1 for unofficial (debug-only) support llvm as input
         moduleDesc.pInputModule = reinterpret_cast<const uint8_t*>(llvmCodeGlobalVariables);
         moduleDesc.inputSize = static_cast<uint32_t>(strlen(llvmCodeGlobalVariables) + 1);
-        SUCCESS_OR_TERMINATE(xeDeviceCreateModule(device0, &moduleDesc, &moduleGlobalVariables, nullptr));
+        SUCCESS_OR_TERMINATE(xeModuleCreate(device0, &moduleDesc, &moduleGlobalVariables, nullptr));
     }
 
     {
@@ -530,13 +530,13 @@ void initializeLevelZero(xe_device_handle_t &device0, xe_device_properties_t &de
         moduleDesc.format = static_cast<xe_module_format_t>(-1); // -1 for unofficial (debug-only) support llvm as input
         moduleDesc.pInputModule = reinterpret_cast<const uint8_t*>(llvmCodeFuncArray);
         moduleDesc.inputSize = static_cast<uint32_t>(strlen(llvmCodeFuncArray) + 1);
-        SUCCESS_OR_TERMINATE(xeDeviceCreateModule(device0, &moduleDesc, &moduleFuncArray, nullptr));
+        SUCCESS_OR_TERMINATE(xeModuleCreate(device0, &moduleDesc, &moduleFuncArray, nullptr));
     }
 
     {
         xe_function_desc_t functionDesc = {XE_FUNCTION_DESC_VERSION_CURRENT};
         functionDesc.pFunctionName = "fptr_array";
-        SUCCESS_OR_TERMINATE(xeModuleCreateFunction(moduleFuncArray, &functionDesc, &functionFuncArray));
+        SUCCESS_OR_TERMINATE(xeFunctionCreate(moduleFuncArray, &functionDesc, &functionFuncArray));
     }
 
     {
@@ -544,24 +544,24 @@ void initializeLevelZero(xe_device_handle_t &device0, xe_device_properties_t &de
         moduleDesc.format = static_cast<xe_module_format_t>(-1); // -1 for unofficial (debug-only) support llvm as input
         moduleDesc.pInputModule = reinterpret_cast<const uint8_t*>(llvmCodeFuncArray);
         moduleDesc.inputSize = static_cast<uint32_t>(strlen(llvmCodeFuncArray) + 1); //llvmCodeFuncParam) + 1);
-        SUCCESS_OR_TERMINATE(xeDeviceCreateModule(device0, &moduleDesc, &moduleFuncParam, nullptr));
+        SUCCESS_OR_TERMINATE(xeModuleCreate(device0, &moduleDesc, &moduleFuncParam, nullptr));
     }
 
     {
         xe_function_desc_t functionDesc = {XE_FUNCTION_DESC_VERSION_CURRENT};
         functionDesc.pFunctionName = "fptr_array"; //"fptr_param";
-        SUCCESS_OR_TERMINATE(xeModuleCreateFunction(moduleFuncParam, &functionDesc, &functionFuncParam));
+        SUCCESS_OR_TERMINATE(xeFunctionCreate(moduleFuncParam, &functionDesc, &functionFuncParam));
     }
 
     {
         xe_command_queue_desc_t cmdQueueDesc = {XE_COMMAND_QUEUE_DESC_VERSION_CURRENT};
         cmdQueueDesc.ordinal = 0;
         cmdQueueDesc.mode = XE_COMMAND_QUEUE_MODE_ASYNCHRONOUS;
-        SUCCESS_OR_TERMINATE(xeDeviceCreateCommandQueue(device0, &cmdQueueDesc, &cmdQueue));
+        SUCCESS_OR_TERMINATE(xeCommandQueueCreate(device0, &cmdQueueDesc, &cmdQueue));
     }
 
     {
         xe_command_list_desc_t cmdListDesc = {XE_COMMAND_LIST_DESC_VERSION_CURRENT};
-        SUCCESS_OR_TERMINATE(xeDeviceCreateCommandList(device0, &cmdListDesc, &cmdList));
+        SUCCESS_OR_TERMINATE(xeCommandListCreate(device0, &cmdListDesc, &cmdList));
     }
 }

@@ -19,9 +19,9 @@ using ::testing::Return;
 TEST(xeCommandListAppendExecutionBarrier, redirectsToObject) {
     Mock<CommandList> commandList;
 
-    EXPECT_CALL(commandList, appendExecutionBarrier()).Times(1);
+    EXPECT_CALL(commandList, appendBarrier(_, _, _)).Times(1);
 
-    auto result = xeCommandListAppendExecutionBarrier(commandList.toHandle());
+    auto result = xeCommandListAppendBarrier(commandList.toHandle(), nullptr, 0, nullptr);
     EXPECT_EQ(XE_RESULT_SUCCESS, result);
 }
 
@@ -36,7 +36,7 @@ HWTEST_F(CommandListAppendExecutionBarrier, addPipeControlToCommandStream) {
     auto usedSpaceBefore = commandList->commandStream->getUsed();
 
     Mock<Event> event;
-    auto result = commandList->appendExecutionBarrier();
+    auto result = commandList->appendBarrier(nullptr, 0, nullptr);
     ASSERT_EQ(XE_RESULT_SUCCESS, result);
 
     auto usedSpaceAfter = commandList->commandStream->getUsed();

@@ -39,6 +39,30 @@
 namespace xe
 {
     ///////////////////////////////////////////////////////////////////////////////
+    /// @brief C++ wrapper for ::xeDeviceSystemBarrier
+    /// 
+    /// @details
+    ///     - This is a special-case system level barrier that can be used to ensure
+    ///       global observability of writes; typically needed after a producer
+    ///       (e.g., NIC) performs direct writes to the device's memory (e.g.,
+    ///       Direct RDMA writes).  This is typically required when the memory
+    ///       corresponding to the writes is subsequently accessed from a remote
+    ///       device.
+    ///     - The application may call this function from simultaneous threads.
+    ///     - The implementation of this function should be lock-free.
+    /// 
+    /// @throws result_t
+    inline void 
+    Device::SystemBarrier(
+        void
+        )
+    {
+        // auto result = ::xeDeviceSystemBarrier( handle );
+        // if( ::XE_RESULT_SUCCESS != result ) throw exception(result, "xe::Device::SystemBarrier");
+    }
+
+    ///////////////////////////////////////////////////////////////////////////////
+#if XE_ENABLE_OCL_INTEROP
     /// @brief C++ wrapper for ::xeDeviceRegisterCLMemory
     /// 
     /// @returns
@@ -88,52 +112,55 @@ namespace xe
         // auto result = ::xeDeviceRegisterCLCommandQueue( handle, context, command_queue );
         // if( ::XE_RESULT_SUCCESS != result ) throw exception(result, "xe::Device::RegisterCLCommandQueue");
     }
+#endif // XE_ENABLE_OCL_INTEROP
 
     ///////////////////////////////////////////////////////////////////////////////
-    /// @brief C++ wrapper for ::xeDeviceCreateCommandList
+    /// @brief C++ wrapper for ::xeDeviceGetCount
     /// 
     /// @details
-    ///     - The command list is created in the 'open' state.
-    ///     - This function may be called from simultaneous threads.
-    ///     - The implementation of this function should be lock-free.
-    /// 
-    /// @returns
-    ///     - ::command_list_handle_t: pointer to handle of command list object created
-    /// 
-    /// @throws result_t
-    inline command_list_handle_t 
-    Device::CreateCommandList(
-        const command_list_desc_t* desc                 ///< [in] pointer to command list descriptor
-        )
-    {
-        // auto result = ::xeDeviceCreateCommandList( handle, desc );
-        // if( ::XE_RESULT_SUCCESS != result ) throw exception(result, "xe::Device::CreateCommandList");
-    }
-
-    ///////////////////////////////////////////////////////////////////////////////
-    /// @brief C++ wrapper for ::xeDeviceCreateCommandQueue
-    /// 
-    /// @details
-    ///     - This function may be called from simultaneous threads.
+    ///     - The application may call this function from simultaneous threads.
     ///     - The implementation of this function should be lock-free.
     /// 
     /// @remarks
     ///   _Analogues_
-    ///     - **clCreateCommandQueue**
-    ///     - cuCtxCreate
-    ///     - cuCtxGetCurrent
+    ///     - **cuDeviceGetCount**
     /// 
     /// @returns
-    ///     - ::command_queue_handle_t: pointer to handle of command queue object created
+    ///     - uint32_t: number of devices available
     /// 
     /// @throws result_t
-    inline command_queue_handle_t 
-    Device::CreateCommandQueue(
-        const command_queue_desc_t* desc                ///< [in] pointer to command queue descriptor
+    inline uint32_t 
+    Device::GetCount(
+        void
         )
     {
-        // auto result = ::xeDeviceCreateCommandQueue( handle, desc );
-        // if( ::XE_RESULT_SUCCESS != result ) throw exception(result, "xe::Device::CreateCommandQueue");
+        // auto result = ::xeDeviceGetCount( handle );
+        // if( ::XE_RESULT_SUCCESS != result ) throw exception(result, "xe::Device::GetCount");
+    }
+
+    ///////////////////////////////////////////////////////////////////////////////
+    /// @brief C++ wrapper for ::xeDeviceGet
+    /// 
+    /// @details
+    ///     - The application may call this function from simultaneous threads.
+    ///     - The implementation of this function should be lock-free.
+    /// 
+    /// @remarks
+    ///   _Analogues_
+    ///     - **cuDeviceGet**
+    ///     - clGetDeviceIDs
+    /// 
+    /// @returns
+    ///     - ::device_handle_t: pointer to handle of device object created
+    /// 
+    /// @throws result_t
+    inline device_handle_t 
+    Device::Get(
+        uint32_t ordinal                                ///< [in] The device index in the range of [0, ::DeviceGetCount]
+        )
+    {
+        // auto result = ::xeDeviceGet( handle, ordinal );
+        // if( ::XE_RESULT_SUCCESS != result ) throw exception(result, "xe::Device::Get");
     }
 
     ///////////////////////////////////////////////////////////////////////////////
@@ -176,7 +203,7 @@ namespace xe
     ///     - ::api_version_t: api version
     /// 
     /// @throws result_t
-    inline api_version_t 
+    inline Device::api_version_t 
     Device::GetApiVersion(
         void
         )
@@ -202,7 +229,7 @@ namespace xe
     ///     - ::device_properties_t: query result for device properties
     /// 
     /// @throws result_t
-    inline device_properties_t 
+    inline Device::device_properties_t 
     Device::GetProperties(
         void
         )
@@ -227,7 +254,7 @@ namespace xe
     ///     - ::device_compute_properties_t: query result for compute properties
     /// 
     /// @throws result_t
-    inline device_compute_properties_t 
+    inline Device::device_compute_properties_t 
     Device::GetComputeProperties(
         void
         )
@@ -253,7 +280,7 @@ namespace xe
     ///     - ::device_memory_properties_t: query result for compute properties
     /// 
     /// @throws result_t
-    inline device_memory_properties_t 
+    inline Device::device_memory_properties_t 
     Device::GetMemoryProperties(
         void
         )
@@ -277,7 +304,7 @@ namespace xe
     ///     - ::device_p2p_properties_t: Peer-to-Peer properties between source and peer device
     /// 
     /// @throws result_t
-    inline device_p2p_properties_t 
+    inline Device::device_p2p_properties_t 
     Device::GetP2PProperties(
         device_handle_t hPeerDevice                     ///< [in] handle of the peer device with the allocation
         )
@@ -350,109 +377,6 @@ namespace xe
     {
         // auto result = ::xeDeviceSetLastLevelCacheConfig( handle, CacheConfig );
         // if( ::XE_RESULT_SUCCESS != result ) throw exception(result, "xe::Device::SetLastLevelCacheConfig");
-    }
-
-    ///////////////////////////////////////////////////////////////////////////////
-    /// @brief C++ wrapper for ::xeDeviceCreateEventPool
-    /// 
-    /// @details
-    ///     - This function may be called from simultaneous threads.
-    ///     - The implementation of this function should be lock-free.
-    /// 
-    /// @returns
-    ///     - ::event_pool_handle_t: pointer handle of event pool object created
-    /// 
-    /// @throws result_t
-    inline event_pool_handle_t 
-    Device::CreateEventPool(
-        const event_pool_desc_t* desc                   ///< [in] pointer to event pool descriptor
-        )
-    {
-        // auto result = ::xeDeviceCreateEventPool( handle, desc );
-        // if( ::XE_RESULT_SUCCESS != result ) throw exception(result, "xe::Device::CreateEventPool");
-    }
-
-    ///////////////////////////////////////////////////////////////////////////////
-    /// @brief C++ wrapper for ::xeDeviceGetImageProperties
-    /// 
-    /// @details
-    ///     - The application may call this function from simultaneous threads.
-    ///     - The implementation of this function should be lock-free.
-    /// 
-    /// @returns
-    ///     - ::image_properties_t: pointer to image properties
-    /// 
-    /// @throws result_t
-    inline image_properties_t 
-    Device::GetImageProperties(
-        const image_desc_t* desc                        ///< [in] pointer to image descriptor
-        )
-    {
-        // auto result = ::xeDeviceGetImageProperties( handle, desc );
-        // if( ::XE_RESULT_SUCCESS != result ) throw exception(result, "xe::Device::GetImageProperties");
-    }
-
-    ///////////////////////////////////////////////////////////////////////////////
-    /// @brief C++ wrapper for ::xeDeviceCreateImage
-    /// 
-    /// @details
-    ///     - The application may call this function from simultaneous threads.
-    ///     - The implementation of this function should be lock-free.
-    /// 
-    /// @remarks
-    ///   _Analogues_
-    ///     - clCreateImage
-    /// 
-    /// @returns
-    ///     - ::image_handle_t: pointer to handle of image object created
-    /// 
-    /// @throws result_t
-    inline image_handle_t 
-    Device::CreateImage(
-        const image_desc_t* desc                        ///< [in] pointer to image descriptor
-        )
-    {
-        // auto result = ::xeDeviceCreateImage( handle, desc );
-        // if( ::XE_RESULT_SUCCESS != result ) throw exception(result, "xe::Device::CreateImage");
-    }
-
-    ///////////////////////////////////////////////////////////////////////////////
-    /// @brief C++ wrapper for ::xeDeviceCreateModule
-    /// 
-    /// @details
-    ///     - This function may be called from simultaneous threads.
-    ///     - The implementation of this function should be lock-free.
-    ///     - This function will create and compile the module object.
-    ///     - A build log can optionally be returned to the caller. Caller is
-    ///       responsible for destroying build log using ::ModuleBuildLogDestroy
-    ///     - Device memory will be allocated for module during creation.
-    ///     - A module can be created directly from native binary format.
-    ///     - A native binary object can be retrieved from a module using
-    ///       ::ModuleGetNativeBinary. This can be cached to disk and to create new
-    ///       modules.
-    ///     - The following build options are supported:
-    ///         + "--opt-disable" - Disable optimizations
-    ///         + "--opt-greater-than-4GB-buffer-required" - Use 64-bit offset
-    ///           calculations for buffers.
-    ///         + "--opt-large-register-file" - Increase number of registers
-    ///           available to threads.
-    /// 
-    /// @remarks
-    ///   _Analogues_
-    ///     - **cuModuleLoad**
-    /// 
-    /// @returns
-    ///     - ::module_handle_t: pointer to handle of module object created
-    ///     - ::module_build_log_handle_t: pointer to handle of module's build log.
-    /// 
-    /// @throws result_t
-    inline std::tuple<module_handle_t, module_build_log_handle_t> 
-    Device::CreateModule(
-        const module_desc_t* pDesc                      ///< [in] pointer to module descriptor
-        )
-    {
-        // auto result = ::xeDeviceCreateModule( handle, pDesc );
-        // if( ::XE_RESULT_SUCCESS != result ) throw exception(result, "xe::Device::CreateModule");
     }
 
     ///////////////////////////////////////////////////////////////////////////////
@@ -534,30 +458,6 @@ namespace xe
     {
         // auto result = ::xeDeviceEvictImage( handle, hImage );
         // if( ::XE_RESULT_SUCCESS != result ) throw exception(result, "xe::Device::EvictImage");
-    }
-
-    ///////////////////////////////////////////////////////////////////////////////
-    /// @brief C++ wrapper for ::xeDeviceCreateSampler
-    /// 
-    /// @details
-    ///     - This function may be called from simultaneous threads.
-    ///     - The implementation of this function should be lock-free.
-    /// 
-    /// @remarks
-    ///   _Analogues_
-    ///     - **cuTexObjectCreate**
-    /// 
-    /// @returns
-    ///     - ::sampler_handle_t: handle of the sampler
-    /// 
-    /// @throws result_t
-    inline sampler_handle_t 
-    Device::CreateSampler(
-        const sampler_desc_t* pDesc                     ///< [in] pointer to sampler descriptor
-        )
-    {
-        // auto result = ::xeDeviceCreateSampler( handle, pDesc );
-        // if( ::XE_RESULT_SUCCESS != result ) throw exception(result, "xe::Device::CreateSampler");
     }
 
 } // namespace xe

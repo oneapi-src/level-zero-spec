@@ -21,11 +21,12 @@ using ::testing::Return;
 TEST(xeCommandListAppendWaitOnEvent, redirectsToObject) {
     Mock<CommandList> commandList;
     Mock<Event> event;
+    xe_event_handle_t hEventHandle = event.toHandle();
 
-    EXPECT_CALL(commandList, appendWaitOnEvent(event.toHandle())).Times(1);
+    EXPECT_CALL(commandList, appendWaitOnEvents(1, &hEventHandle)).Times(1);
 
-    auto result = xeCommandListAppendWaitOnEvent(commandList.toHandle(),
-                                                 event.toHandle());
+    auto result = xeCommandListAppendWaitOnEvents(commandList.toHandle(), 1,
+                                                 &hEventHandle);
     EXPECT_EQ(XE_RESULT_SUCCESS, result);
 }
 
@@ -40,7 +41,8 @@ HWTEST_F(CommandListAppendWaitOnEvent, addsSemaphoreToCommandStream) {
     auto usedSpaceBefore = commandList->commandStream->getUsed();
 
     Mock<Event> event;
-    auto result = commandList->appendWaitOnEvent(event.toHandle());
+    xe_event_handle_t hEventHandle = event.toHandle();
+    auto result = commandList->appendWaitOnEvents(1, &hEventHandle);
     ASSERT_EQ(XE_RESULT_SUCCESS, result);
 
     auto usedSpaceAfter = commandList->commandStream->getUsed();
@@ -69,7 +71,8 @@ HWTEST_F(CommandListAppendWaitOnEvent, addsEventGraphicsAllocationToResidencyCon
     ASSERT_NE(nullptr, commandList->commandStream);
 
     Mock<Event> event;
-    auto result = commandList->appendWaitOnEvent(event.toHandle());
+    xe_event_handle_t hEventHandle = event.toHandle();
+    auto result = commandList->appendWaitOnEvents(1, &hEventHandle);
     ASSERT_EQ(XE_RESULT_SUCCESS, result);
 
     auto &residencyContainer = commandList->residencyContainer;

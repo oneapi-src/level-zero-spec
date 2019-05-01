@@ -44,8 +44,8 @@ int main(int argc, char *argv[]) {
     uint32_t deviceCount;
     bool outputValidationSuccessful;
 
-    SUCCESS_OR_TERMINATE(xeDriverInit(XE_INIT_FLAG_NONE));
-    SUCCESS_OR_TERMINATE(xeDriverGetDeviceCount(&deviceCount));
+    SUCCESS_OR_TERMINATE(xeInit(XE_INIT_FLAG_NONE));
+    SUCCESS_OR_TERMINATE(xeDeviceGetCount(&deviceCount));
 
     // Resize arrays based on returned device count
     device.resize(deviceCount);
@@ -53,7 +53,7 @@ int main(int argc, char *argv[]) {
     // Get Device and command queue
     for (uint32_t i = 0; i < deviceCount; i++) {
         xe_device_properties_t deviceProperties = {XE_DEVICE_PROPERTIES_VERSION_CURRENT};
-        SUCCESS_OR_TERMINATE(xeDriverGetDevice(i, &device[i]));
+        SUCCESS_OR_TERMINATE(xeDeviceGet(i, &device[i]));
 
         SUCCESS_OR_TERMINATE(xeDeviceGetProperties(device[i], &deviceProperties));
 
@@ -71,7 +71,7 @@ int main(int argc, char *argv[]) {
         xe_command_queue_desc_t cmdQueueDesc = {XE_COMMAND_QUEUE_DESC_VERSION_CURRENT};
         cmdQueueDesc.ordinal = 0;
         cmdQueueDesc.mode = XE_COMMAND_QUEUE_MODE_ASYNCHRONOUS;
-        SUCCESS_OR_TERMINATE(xeDeviceCreateCommandQueue(device[i],
+        SUCCESS_OR_TERMINATE(xeCommandQueueCreate(device[i],
                              &cmdQueueDesc, &cmdQueue[i]));
     }
 
@@ -85,7 +85,7 @@ int main(int argc, char *argv[]) {
     moduleDesc.pInputModule = reinterpret_cast<const uint8_t *>(spirvModule);
     moduleDesc.inputSize = spirvSize;
     for (uint32_t i = 0; i < deviceCount; i++) {
-        SUCCESS_OR_TERMINATE(xeDeviceCreateModule(device[i], &moduleDesc,
+        SUCCESS_OR_TERMINATE(xeModuleCreate(device[i], &moduleDesc,
                              &module[i], nullptr));
     }
 
@@ -95,13 +95,13 @@ int main(int argc, char *argv[]) {
 
         // Command Lists
         xe_command_list_desc_t cmdListDesc = {XE_COMMAND_LIST_DESC_VERSION_CURRENT};
-        SUCCESS_OR_TERMINATE(xeDeviceCreateCommandList(device[i], &cmdListDesc,
+        SUCCESS_OR_TERMINATE(xeCommandListCreate(device[i], &cmdListDesc,
                              &cmdList[i]));
 
         // Create Function
         xe_function_desc_t functionDesc = {XE_FUNCTION_DESC_VERSION_CURRENT};
         functionDesc.pFunctionName = "increment_by_one";
-        SUCCESS_OR_TERMINATE(xeModuleCreateFunction(module[i],
+        SUCCESS_OR_TERMINATE(xeFunctionCreate(module[i],
                              &functionDesc, &function[i]));
         uint32_t groupSizeX = 32u;
         uint32_t groupSizeY = 1u;
@@ -124,10 +124,10 @@ int main(int argc, char *argv[]) {
         memset(initDataSrc, 7, sizeof(initDataSrc));
         uint8_t initDataDst[allocSize];
         memset(initDataDst, 3, sizeof(initDataDst));
-        SUCCESS_OR_TERMINATE(xeCommandListAppendMemoryCopy(cmdList[i], srcBuffer, initDataSrc, sizeof(initDataSrc), nullptr));
-        SUCCESS_OR_TERMINATE(xeCommandListAppendMemoryCopy(cmdList[i], dstBuffer, initDataDst, sizeof(initDataDst), nullptr));
+        SUCCESS_OR_TERMINATE(xeCommandListAppendMemoryCopy(cmdList[i], srcBuffer, initDataSrc, sizeof(initDataSrc), nullptr, 0, nullptr));
+        SUCCESS_OR_TERMINATE(xeCommandListAppendMemoryCopy(cmdList[i], dstBuffer, initDataDst, sizeof(initDataDst), nullptr, 0, nullptr));
 
-        SUCCESS_OR_TERMINATE(xeCommandListAppendExecutionBarrier(cmdList[i])); // copying of data must finish before running the user function
+        SUCCESS_OR_TERMINATE(xeCommandListAppendBarrier(cmdList[i], nullptr, 0, nullptr)); // copying of data must finish before running the user function
 
         // Set function args and get ready to dispatch
         SUCCESS_OR_TERMINATE(xeFunctionSetArgumentValue(function[i], 0, sizeof(dstBuffer), &dstBuffer));
@@ -142,14 +142,14 @@ int main(int argc, char *argv[]) {
             }
             SUCCESS_OR_TERMINATE_BOOL(dispatchTraits.groupCountX * groupSizeX == allocSize);
             SUCCESS_OR_TERMINATE(xeCommandListAppendLaunchFunction(cmdList[i],
-                                 function[i], &dispatchTraits, nullptr));
+                                 function[i], &dispatchTraits, nullptr, 0, nullptr));
         }
 
         // Barrier to complete function
         uint8_t readBackData[allocSize];
         memset(readBackData, 2, sizeof(readBackData));
-        SUCCESS_OR_TERMINATE(xeCommandListAppendExecutionBarrier(cmdList[i]));
-        SUCCESS_OR_TERMINATE(xeCommandListAppendMemoryCopy(cmdList[i], readBackData, dstBuffer, sizeof(readBackData), nullptr));
+        SUCCESS_OR_TERMINATE(xeCommandListAppendBarrier(cmdList[i], nullptr, 0, nullptr));
+        SUCCESS_OR_TERMINATE(xeCommandListAppendMemoryCopy(cmdList[i], readBackData, dstBuffer, sizeof(readBackData), nullptr, 0, nullptr));
 
         // Dispatch and wait
         SUCCESS_OR_TERMINATE(xeCommandListClose(cmdList[i]));

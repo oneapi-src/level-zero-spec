@@ -143,6 +143,8 @@ namespace xe
     ///       currently referencing the memory before it is freed
     ///     - The implementation of this function will immediately free all Host and
     ///       Device allocations associated with this memory
+    ///     - The application may **not** call this function from simultaneous
+    ///       threads with the same pointer.
     /// 
     /// @remarks
     ///   _Analogues_
@@ -218,8 +220,8 @@ namespace xe
     inline void
     MemGetAddressRange(
         const void* ptr,                                ///< [in] Pointer to query
-        void** pBase,                                   ///< [in,out][optional] base address of the allocation
-        size_t* pSize                                   ///< [in,out][optional] size of the allocation
+        void** pBase = nullptr,                         ///< [in,out][optional] base address of the allocation
+        size_t* pSize = nullptr                         ///< [in,out][optional] size of the allocation
         );
 
     ///////////////////////////////////////////////////////////////////////////////
@@ -284,7 +286,8 @@ namespace xe
     /// @details
     ///     - Closes an IPC memory handle by unmapping memory that was opened in
     ///       this process using ::IpcOpenMemHandle.
-    ///     - The application may call this function from simultaneous threads.
+    ///     - The application may **not** call this function from simultaneous
+    ///       threads with the same pointer.
     /// 
     /// @remarks
     ///   _Analogues_

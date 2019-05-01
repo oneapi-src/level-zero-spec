@@ -154,13 +154,13 @@ bool dispatchTableInitialized = false;
 extern "C" {
 #endif
 
-xe_result_t __xecall xeDriverInit(xe_init_flag_t flags){
+xe_result_t __xecall xeInit(xe_init_flag_t flags){
     static std::mutex crit;
     {
         std::lock_guard<std::mutex> lockGuard{crit};
         
         if(dispatchTableInitialized){
-            return dispatchTable.xeDriverInit(flags);
+            return dispatchTable.xeInit(flags);
         }
         
         auto driverLibrary = ICD_LOAD_DRIVER_LIBRARY(); // persistent handle
@@ -172,16 +172,43 @@ xe_result_t __xecall xeDriverInit(xe_init_flag_t flags){
             return XE_RESULT_ERROR_UNINITIALIZED;
         }
     }
-    return dispatchTable.xeDriverInit(flags);
+    return dispatchTable.xeInit(flags);
 }
 
-xe_result_t __xecall xeCommandListAppendExecutionBarrier(
-        xe_command_list_handle_t hCommandList           ///< [in] handle of the command list
+xe_result_t __xecall xeCommandListAppendBarrier(
+        xe_command_list_handle_t hCommandList,          ///< [in] handle of the command list
+        xe_event_handle_t hSignalEvent,                 ///< [in][optional] handle of the event to signal on completion
+        uint32_t numWaitEvents,                         ///< [in][optional] number of events to wait on before executing barrier
+        xe_event_handle_t* phWaitEvents                 ///< [in][optional] handle of the events to wait on before executing
+                                                        ///< barrier
     ){
     if(dispatchTableInitialized == false){
         return XE_RESULT_ERROR_UNINITIALIZED;
     }
-    return dispatchTable.xeCommandListAppendExecutionBarrier(hCommandList);
+    return dispatchTable.xeCommandListAppendBarrier(hCommandList, hSignalEvent, numWaitEvents, phWaitEvents);
+}
+xe_result_t __xecall xeCommandListAppendMemoryRangesBarrier(
+        xe_command_list_handle_t hCommandList,          ///< [in] handle of the command list
+        uint32_t numRanges,                             ///< [in] number of memory ranges
+        const size_t* pRangeSizes,                      ///< [in] array of sizes of memory range
+        const void** pRanges,                           ///< [in] array of memory ranges
+        xe_event_handle_t hSignalEvent,                 ///< [in][optional] handle of the event to signal on completion
+        uint32_t numWaitEvents,                         ///< [in][optional] number of events to wait on before executing barrier
+        xe_event_handle_t* phWaitEvents                 ///< [in][optional] handle of the events to wait on before executing
+                                                        ///< barrier
+    ){
+    if(dispatchTableInitialized == false){
+        return XE_RESULT_ERROR_UNINITIALIZED;
+    }
+    return dispatchTable.xeCommandListAppendMemoryRangesBarrier(hCommandList, numRanges, pRangeSizes, pRanges, hSignalEvent, numWaitEvents, phWaitEvents);
+}
+xe_result_t __xecall xeDeviceSystemBarrier(
+        xe_device_handle_t hDevice                      ///< [in] handle of the device
+    ){
+    if(dispatchTableInitialized == false){
+        return XE_RESULT_ERROR_UNINITIALIZED;
+    }
+    return dispatchTable.xeDeviceSystemBarrier(hDevice);
 }
 xe_result_t __xecall xeDeviceRegisterCLMemory(
         xe_device_handle_t hDevice,                     ///< [in] handle to the device
@@ -216,7 +243,7 @@ xe_result_t __xecall xeDeviceRegisterCLCommandQueue(
     }
     return dispatchTable.xeDeviceRegisterCLCommandQueue(hDevice, context, command_queue, phCommandQueue);
 }
-xe_result_t __xecall xeDeviceCreateCommandList(
+xe_result_t __xecall xeCommandListCreate(
         xe_device_handle_t hDevice,                     ///< [in] handle of the device object
         const xe_command_list_desc_t* desc,             ///< [in] pointer to command list descriptor
         xe_command_list_handle_t* phCommandList         ///< [out] pointer to handle of command list object created
@@ -224,7 +251,17 @@ xe_result_t __xecall xeDeviceCreateCommandList(
     if(dispatchTableInitialized == false){
         return XE_RESULT_ERROR_UNINITIALIZED;
     }
-    return dispatchTable.xeDeviceCreateCommandList(hDevice, desc, phCommandList);
+    return dispatchTable.xeCommandListCreate(hDevice, desc, phCommandList);
+}
+xe_result_t __xecall xeCommandListCreateImmediate(
+        xe_device_handle_t hDevice,                     ///< [in] handle of the device object
+        const xe_command_queue_desc_t* desc,            ///< [in] pointer to command queue descriptor
+        xe_command_list_handle_t* phCommandList         ///< [out] pointer to handle of command list object created
+    ){
+    if(dispatchTableInitialized == false){
+        return XE_RESULT_ERROR_UNINITIALIZED;
+    }
+    return dispatchTable.xeCommandListCreateImmediate(hDevice, desc, phCommandList);
 }
 xe_result_t __xecall xeCommandListDestroy(
         xe_command_list_handle_t hCommandList           ///< [in] handle of command list object to destroy
@@ -288,7 +325,7 @@ xe_result_t __xecall xeCommandListReserveSpace(
     }
     return dispatchTable.xeCommandListReserveSpace(hCommandList, size, ptr);
 }
-xe_result_t __xecall xeDeviceCreateCommandQueue(
+xe_result_t __xecall xeCommandQueueCreate(
         xe_device_handle_t hDevice,                     ///< [in] handle of the device object
         const xe_command_queue_desc_t* desc,            ///< [in] pointer to command queue descriptor
         xe_command_queue_handle_t* phCommandQueue       ///< [out] pointer to handle of command queue object created
@@ -296,7 +333,7 @@ xe_result_t __xecall xeDeviceCreateCommandQueue(
     if(dispatchTableInitialized == false){
         return XE_RESULT_ERROR_UNINITIALIZED;
     }
-    return dispatchTable.xeDeviceCreateCommandQueue(hDevice, desc, phCommandQueue);
+    return dispatchTable.xeCommandQueueCreate(hDevice, desc, phCommandQueue);
 }
 xe_result_t __xecall xeCommandQueueDestroy(
         xe_command_queue_handle_t hCommandQueue         ///< [in] handle of command queue object to destroy
@@ -335,72 +372,84 @@ xe_result_t __xecall xeCommandListAppendMemoryCopy(
         void* dstptr,                                   ///< [in] pointer to destination memory to copy to
         const void* srcptr,                             ///< [in] pointer to source memory to copy from
         size_t size,                                    ///< [in] size in bytes to copy
-        xe_event_handle_t hEvent                        ///< [in][optional] handle of the event to signal on completion
+        xe_event_handle_t hSignalEvent,                 ///< [in][optional] handle of the event to signal on completion
+        uint32_t numWaitEvents,                         ///< [in][optional] number of events to wait on before copy
+        xe_event_handle_t* phWaitEvents                 ///< [in][optional] handle of the events to wait on before copy
     ){
     if(dispatchTableInitialized == false){
         return XE_RESULT_ERROR_UNINITIALIZED;
     }
-    return dispatchTable.xeCommandListAppendMemoryCopy(hCommandList, dstptr, srcptr, size, hEvent);
+    return dispatchTable.xeCommandListAppendMemoryCopy(hCommandList, dstptr, srcptr, size, hSignalEvent, numWaitEvents, phWaitEvents);
 }
 xe_result_t __xecall xeCommandListAppendMemorySet(
         xe_command_list_handle_t hCommandList,          ///< [in] handle of command list
         void* ptr,                                      ///< [in] pointer to memory to initialize
         int value,                                      ///< [in] value to initialize memory to
         size_t size,                                    ///< [in] size in bytes to initailize
-        xe_event_handle_t hEvent                        ///< [in][optional] handle of the event to signal on completion
+        xe_event_handle_t hSignalEvent,                 ///< [in][optional] handle of the event to signal on completion
+        uint32_t numWaitEvents,                         ///< [in][optional] number of events to wait on before copy
+        xe_event_handle_t* phWaitEvents                 ///< [in][optional] handle of the events to wait on before copy
     ){
     if(dispatchTableInitialized == false){
         return XE_RESULT_ERROR_UNINITIALIZED;
     }
-    return dispatchTable.xeCommandListAppendMemorySet(hCommandList, ptr, value, size, hEvent);
+    return dispatchTable.xeCommandListAppendMemorySet(hCommandList, ptr, value, size, hSignalEvent, numWaitEvents, phWaitEvents);
 }
 xe_result_t __xecall xeCommandListAppendImageCopy(
         xe_command_list_handle_t hCommandList,          ///< [in] handle of command list
         xe_image_handle_t hDstImage,                    ///< [in] handle of destination image to copy to
         xe_image_handle_t hSrcImage,                    ///< [in] handle of source image to copy from
-        xe_event_handle_t hEvent                        ///< [in][optional] handle of the event to signal on completion
+        xe_event_handle_t hSignalEvent,                 ///< [in][optional] handle of the event to signal on completion
+        uint32_t numWaitEvents,                         ///< [in][optional] number of events to wait on before copy
+        xe_event_handle_t* phWaitEvents                 ///< [in][optional] handle of the events to wait on before copy
     ){
     if(dispatchTableInitialized == false){
         return XE_RESULT_ERROR_UNINITIALIZED;
     }
-    return dispatchTable.xeCommandListAppendImageCopy(hCommandList, hDstImage, hSrcImage, hEvent);
+    return dispatchTable.xeCommandListAppendImageCopy(hCommandList, hDstImage, hSrcImage, hSignalEvent, numWaitEvents, phWaitEvents);
 }
 xe_result_t __xecall xeCommandListAppendImageCopyRegion(
         xe_command_list_handle_t hCommandList,          ///< [in] handle of command list
         xe_image_handle_t hDstImage,                    ///< [in] handle of destination image to copy to
-        xe_image_region_t* pDstRegion,                  ///< [in][optional] destination region descriptor
         xe_image_handle_t hSrcImage,                    ///< [in] handle of source image to copy from
+        xe_image_region_t* pDstRegion,                  ///< [in][optional] destination region descriptor
         xe_image_region_t* pSrcRegion,                  ///< [in][optional] source region descriptor
-        xe_event_handle_t hEvent                        ///< [in][optional] handle of the event to signal on completion
+        xe_event_handle_t hSignalEvent,                 ///< [in][optional] handle of the event to signal on completion
+        uint32_t numWaitEvents,                         ///< [in][optional] number of events to wait on before copy
+        xe_event_handle_t* phWaitEvents                 ///< [in][optional] handle of the events to wait on before copy
     ){
     if(dispatchTableInitialized == false){
         return XE_RESULT_ERROR_UNINITIALIZED;
     }
-    return dispatchTable.xeCommandListAppendImageCopyRegion(hCommandList, hDstImage, pDstRegion, hSrcImage, pSrcRegion, hEvent);
+    return dispatchTable.xeCommandListAppendImageCopyRegion(hCommandList, hDstImage, hSrcImage, pDstRegion, pSrcRegion, hSignalEvent, numWaitEvents, phWaitEvents);
 }
 xe_result_t __xecall xeCommandListAppendImageCopyToMemory(
         xe_command_list_handle_t hCommandList,          ///< [in] handle of command list
         void* dstptr,                                   ///< [in] pointer to destination memory to copy to
         xe_image_handle_t hSrcImage,                    ///< [in] handle of source image to copy from
         xe_image_region_t* pSrcRegion,                  ///< [in][optional] source region descriptor
-        xe_event_handle_t hEvent                        ///< [in][optional] handle of the event to signal on completion
+        xe_event_handle_t hSignalEvent,                 ///< [in][optional] handle of the event to signal on completion
+        uint32_t numWaitEvents,                         ///< [in][optional] number of events to wait on before copy
+        xe_event_handle_t* phWaitEvents                 ///< [in][optional] handle of the events to wait on before copy
     ){
     if(dispatchTableInitialized == false){
         return XE_RESULT_ERROR_UNINITIALIZED;
     }
-    return dispatchTable.xeCommandListAppendImageCopyToMemory(hCommandList, dstptr, hSrcImage, pSrcRegion, hEvent);
+    return dispatchTable.xeCommandListAppendImageCopyToMemory(hCommandList, dstptr, hSrcImage, pSrcRegion, hSignalEvent, numWaitEvents, phWaitEvents);
 }
 xe_result_t __xecall xeCommandListAppendImageCopyFromMemory(
         xe_command_list_handle_t hCommandList,          ///< [in] handle of command list
         xe_image_handle_t hDstImage,                    ///< [in] handle of destination image to copy to
-        xe_image_region_t* pDstRegion,                  ///< [in][optional] destination region descriptor
         const void* srcptr,                             ///< [in] pointer to source memory to copy from
-        xe_event_handle_t hEvent                        ///< [in][optional] handle of the event to signal on completion
+        xe_image_region_t* pDstRegion,                  ///< [in][optional] destination region descriptor
+        xe_event_handle_t hSignalEvent,                 ///< [in][optional] handle of the event to signal on completion
+        uint32_t numWaitEvents,                         ///< [in][optional] number of events to wait on before copy
+        xe_event_handle_t* phWaitEvents                 ///< [in][optional] handle of the events to wait on before copy
     ){
     if(dispatchTableInitialized == false){
         return XE_RESULT_ERROR_UNINITIALIZED;
     }
-    return dispatchTable.xeCommandListAppendImageCopyFromMemory(hCommandList, hDstImage, pDstRegion, srcptr, hEvent);
+    return dispatchTable.xeCommandListAppendImageCopyFromMemory(hCommandList, hDstImage, srcptr, pDstRegion, hSignalEvent, numWaitEvents, phWaitEvents);
 }
 xe_result_t __xecall xeCommandListAppendMemoryPrefetch(
         xe_command_list_handle_t hCommandList,          ///< [in] handle of command list
@@ -424,22 +473,22 @@ xe_result_t __xecall xeCommandListAppendMemAdvise(
     }
     return dispatchTable.xeCommandListAppendMemAdvise(hCommandList, hDevice, ptr, size, advice);
 }
-xe_result_t __xecall xeDriverGetDeviceCount(
+xe_result_t __xecall xeDeviceGetCount(
         uint32_t* count                                 ///< [out] number of devices available
     ){
     if(dispatchTableInitialized == false){
         return XE_RESULT_ERROR_UNINITIALIZED;
     }
-    return dispatchTable.xeDriverGetDeviceCount(count);
+    return dispatchTable.xeDeviceGetCount(count);
 }
-xe_result_t __xecall xeDriverGetDevice(
-        uint32_t ordinal,                               ///< [in] The device index in the range of [0, ::xeGetDeviceCount]
+xe_result_t __xecall xeDeviceGet(
+        uint32_t ordinal,                               ///< [in] The device index in the range of [0, ::xeDeviceGetCount]
         xe_device_handle_t* phDevice                    ///< [out] pointer to handle of device object created
     ){
     if(dispatchTableInitialized == false){
         return XE_RESULT_ERROR_UNINITIALIZED;
     }
-    return dispatchTable.xeDriverGetDevice(ordinal, phDevice);
+    return dispatchTable.xeDeviceGet(ordinal, phDevice);
 }
 xe_result_t __xecall xeDeviceGetSubDevice(
         xe_device_handle_t hDevice,                     ///< [in] handle of the device object
@@ -525,15 +574,15 @@ xe_result_t __xecall xeDeviceSetLastLevelCacheConfig(
     }
     return dispatchTable.xeDeviceSetLastLevelCacheConfig(hDevice, CacheConfig);
 }
-xe_result_t __xecall xeDriverGetVersion(
+xe_result_t __xecall xeGetDriverVersion(
         uint32_t* version                               ///< [out] driver version
     ){
     if(dispatchTableInitialized == false){
         return XE_RESULT_ERROR_UNINITIALIZED;
     }
-    return dispatchTable.xeDriverGetVersion(version);
+    return dispatchTable.xeGetDriverVersion(version);
 }
-xe_result_t __xecall xeDeviceCreateEventPool(
+xe_result_t __xecall xeEventPoolCreate(
         xe_device_handle_t hDevice,                     ///< [in] handle of the device
         const xe_event_pool_desc_t* desc,               ///< [in] pointer to event pool descriptor
         xe_event_pool_handle_t* phEventPool             ///< [out] pointer handle of event pool object created
@@ -541,7 +590,7 @@ xe_result_t __xecall xeDeviceCreateEventPool(
     if(dispatchTableInitialized == false){
         return XE_RESULT_ERROR_UNINITIALIZED;
     }
-    return dispatchTable.xeDeviceCreateEventPool(hDevice, desc, phEventPool);
+    return dispatchTable.xeEventPoolCreate(hDevice, desc, phEventPool);
 }
 xe_result_t __xecall xeEventPoolDestroy(
         xe_event_pool_handle_t hEventPool               ///< [in] handle of event pool object to destroy
@@ -551,15 +600,15 @@ xe_result_t __xecall xeEventPoolDestroy(
     }
     return dispatchTable.xeEventPoolDestroy(hEventPool);
 }
-xe_result_t __xecall xeEventPoolCreateEvent(
+xe_result_t __xecall xeEventCreate(
         xe_event_pool_handle_t hEventPool,              ///< [in] handle of the event pool
-        uint32_t index,                                 ///< [in] index of the event within the pool
+        const xe_event_desc_t* desc,                    ///< [in] pointer to event descriptor
         xe_event_handle_t* phEvent                      ///< [out] pointer to handle of event object created
     ){
     if(dispatchTableInitialized == false){
         return XE_RESULT_ERROR_UNINITIALIZED;
     }
-    return dispatchTable.xeEventPoolCreateEvent(hEventPool, index, phEvent);
+    return dispatchTable.xeEventCreate(hEventPool, desc, phEvent);
 }
 xe_result_t __xecall xeEventDestroy(
         xe_event_handle_t hEvent                        ///< [in] handle of event object to destroy
@@ -605,14 +654,15 @@ xe_result_t __xecall xeCommandListAppendSignalEvent(
     }
     return dispatchTable.xeCommandListAppendSignalEvent(hCommandList, hEvent);
 }
-xe_result_t __xecall xeCommandListAppendWaitOnEvent(
+xe_result_t __xecall xeCommandListAppendWaitOnEvents(
         xe_command_list_handle_t hCommandList,          ///< [in] handle of the command list
-        xe_event_handle_t hEvent                        ///< [in] handle of the event
+        uint32_t numEvents,                             ///< [in] number of events to wait on before continuing
+        xe_event_handle_t* phEvents                     ///< [in] handle of the events to wait on before continuing
     ){
     if(dispatchTableInitialized == false){
         return XE_RESULT_ERROR_UNINITIALIZED;
     }
-    return dispatchTable.xeCommandListAppendWaitOnEvent(hCommandList, hEvent);
+    return dispatchTable.xeCommandListAppendWaitOnEvents(hCommandList, numEvents, phEvents);
 }
 xe_result_t __xecall xeEventHostSignal(
         xe_event_handle_t hEvent                        ///< [in] handle of the event
@@ -643,27 +693,6 @@ xe_result_t __xecall xeEventQueryStatus(
     }
     return dispatchTable.xeEventQueryStatus(hEvent);
 }
-xe_result_t __xecall xeEventQueryElapsedTime(
-        xe_event_handle_t hEventBegin,                  ///< [in] handle of the begin event
-        xe_event_handle_t hEventEnd,                    ///< [in] handle of the end event
-        double* pTime                                   ///< [out] time in milliseconds
-    ){
-    if(dispatchTableInitialized == false){
-        return XE_RESULT_ERROR_UNINITIALIZED;
-    }
-    return dispatchTable.xeEventQueryElapsedTime(hEventBegin, hEventEnd, pTime);
-}
-xe_result_t __xecall xeEventQueryMetricsData(
-        xe_event_handle_t hEventStart,                  ///< [in] handle of the start event
-        xe_event_handle_t hEventEnd,                    ///< [in] handle of the end event
-        size_t reportSize,                              ///< [in] size of the report data buffer in bytes
-        uint32_t* pReportData                           ///< [out] report data buffer
-    ){
-    if(dispatchTableInitialized == false){
-        return XE_RESULT_ERROR_UNINITIALIZED;
-    }
-    return dispatchTable.xeEventQueryMetricsData(hEventStart, hEventEnd, reportSize, pReportData);
-}
 xe_result_t __xecall xeCommandListAppendEventReset(
         xe_command_list_handle_t hCommandList,          ///< [in] handle of the command list
         xe_event_handle_t hEvent                        ///< [in] handle of the event
@@ -681,7 +710,7 @@ xe_result_t __xecall xeEventReset(
     }
     return dispatchTable.xeEventReset(hEvent);
 }
-xe_result_t __xecall xeCommandQueueCreateFence(
+xe_result_t __xecall xeFenceCreate(
         xe_command_queue_handle_t hCommandQueue,        ///< [in] handle of command queue
         const xe_fence_desc_t* desc,                    ///< [in] pointer to fence descriptor
         xe_fence_handle_t* phFence                      ///< [out] pointer to handle of fence object created
@@ -689,7 +718,7 @@ xe_result_t __xecall xeCommandQueueCreateFence(
     if(dispatchTableInitialized == false){
         return XE_RESULT_ERROR_UNINITIALIZED;
     }
-    return dispatchTable.xeCommandQueueCreateFence(hCommandQueue, desc, phFence);
+    return dispatchTable.xeFenceCreate(hCommandQueue, desc, phFence);
 }
 xe_result_t __xecall xeFenceDestroy(
         xe_fence_handle_t hFence                        ///< [in] handle of fence object to destroy
@@ -728,7 +757,7 @@ xe_result_t __xecall xeFenceReset(
     }
     return dispatchTable.xeFenceReset(hFence);
 }
-xe_result_t __xecall xeDeviceGetImageProperties(
+xe_result_t __xecall xeImageGetProperties(
         xe_device_handle_t hDevice,                     ///< [in] handle of the device
         const xe_image_desc_t* desc,                    ///< [in] pointer to image descriptor
         xe_image_properties_t* pImageProperties         ///< [out] pointer to image properties
@@ -736,9 +765,9 @@ xe_result_t __xecall xeDeviceGetImageProperties(
     if(dispatchTableInitialized == false){
         return XE_RESULT_ERROR_UNINITIALIZED;
     }
-    return dispatchTable.xeDeviceGetImageProperties(hDevice, desc, pImageProperties);
+    return dispatchTable.xeImageGetProperties(hDevice, desc, pImageProperties);
 }
-xe_result_t __xecall xeDeviceCreateImage(
+xe_result_t __xecall xeImageCreate(
         xe_device_handle_t hDevice,                     ///< [in] handle of the device
         const xe_image_desc_t* desc,                    ///< [in] pointer to image descriptor
         xe_image_handle_t* phImage                      ///< [out] pointer to handle of image object created
@@ -746,7 +775,7 @@ xe_result_t __xecall xeDeviceCreateImage(
     if(dispatchTableInitialized == false){
         return XE_RESULT_ERROR_UNINITIALIZED;
     }
-    return dispatchTable.xeDeviceCreateImage(hDevice, desc, phImage);
+    return dispatchTable.xeImageCreate(hDevice, desc, phImage);
 }
 xe_result_t __xecall xeImageDestroy(
         xe_image_handle_t hImage                        ///< [in] handle of image object to destroy
@@ -847,16 +876,16 @@ xe_result_t __xecall xeIpcCloseMemHandle(
     }
     return dispatchTable.xeIpcCloseMemHandle(ptr);
 }
-xe_result_t __xecall xeDeviceCreateModule(
+xe_result_t __xecall xeModuleCreate(
         xe_device_handle_t hDevice,                     ///< [in] handle of the device
         const xe_module_desc_t* pDesc,                  ///< [in] pointer to module descriptor
         xe_module_handle_t* phModule,                   ///< [out] pointer to handle of module object created
-        xe_module_build_log_handle_t* phBuildLog        ///< [out][optional] pointer to handle of module's build log.
+        xe_module_build_log_handle_t* phBuildLog        ///< [in,out][optional] pointer to handle of module's build log.
     ){
     if(dispatchTableInitialized == false){
         return XE_RESULT_ERROR_UNINITIALIZED;
     }
-    return dispatchTable.xeDeviceCreateModule(hDevice, pDesc, phModule, phBuildLog);
+    return dispatchTable.xeModuleCreate(hDevice, pDesc, phModule, phBuildLog);
 }
 xe_result_t __xecall xeModuleDestroy(
         xe_module_handle_t hModule                      ///< [in] handle of the module
@@ -904,7 +933,7 @@ xe_result_t __xecall xeModuleGetGlobalPointer(
     }
     return dispatchTable.xeModuleGetGlobalPointer(hModule, pGlobalName, pPtr);
 }
-xe_result_t __xecall xeModuleCreateFunction(
+xe_result_t __xecall xeFunctionCreate(
         xe_module_handle_t hModule,                     ///< [in] handle of the module
         const xe_function_desc_t* pDesc,                ///< [in] pointer to function descriptor
         xe_function_handle_t* phFunction                ///< [out] handle of the Function object
@@ -912,7 +941,7 @@ xe_result_t __xecall xeModuleCreateFunction(
     if(dispatchTableInitialized == false){
         return XE_RESULT_ERROR_UNINITIALIZED;
     }
-    return dispatchTable.xeModuleCreateFunction(hModule, pDesc, phFunction);
+    return dispatchTable.xeFunctionCreate(hModule, pDesc, phFunction);
 }
 xe_result_t __xecall xeFunctionDestroy(
         xe_function_handle_t hFunction                  ///< [in] handle of the function object
@@ -958,7 +987,7 @@ xe_result_t __xecall xeFunctionSuggestGroupSize(
     return dispatchTable.xeFunctionSuggestGroupSize(hFunction, globalSizeX, globalSizeY, globalSizeZ, groupSizeX, groupSizeY, groupSizeZ);
 }
 xe_result_t __xecall xeFunctionSetArgumentValue(
-        xe_function_handle_t hFunction,                 ///< [in/out] handle of the function args object.
+        xe_function_handle_t hFunction,                 ///< [in,out] handle of the function args object.
         uint32_t argIndex,                              ///< [in] argument index in range [0, num args - 1]
         size_t argSize,                                 ///< [in] size of argument type
         const void* pArgValue                           ///< [in][optional] argument value represented as matching arg type. If
@@ -970,7 +999,7 @@ xe_result_t __xecall xeFunctionSetArgumentValue(
     return dispatchTable.xeFunctionSetArgumentValue(hFunction, argIndex, argSize, pArgValue);
 }
 xe_result_t __xecall xeFunctionSetAttribute(
-        xe_function_handle_t hFunction,                 ///< [in/out] handle of the function.
+        xe_function_handle_t hFunction,                 ///< [in,out] handle of the function.
         xe_function_set_attribute_t attr,               ///< [in] attribute to set
         uint32_t value                                  ///< [in] attribute value to set
     ){
@@ -993,23 +1022,27 @@ xe_result_t __xecall xeCommandListAppendLaunchFunction(
         xe_command_list_handle_t hCommandList,          ///< [in] handle of the command list
         xe_function_handle_t hFunction,                 ///< [in] handle of the function object
         const xe_thread_group_dimensions_t* pLaunchFuncArgs,///< [in] launch function arguments.
-        xe_event_handle_t hEvent                        ///< [in][optional] handle of the event to signal on completion
+        xe_event_handle_t hSignalEvent,                 ///< [in][optional] handle of the event to signal on completion
+        uint32_t numWaitEvents,                         ///< [in][optional] number of events to wait on before launching
+        xe_event_handle_t* phWaitEvents                 ///< [in][optional] handle of the events to wait on before launching
     ){
     if(dispatchTableInitialized == false){
         return XE_RESULT_ERROR_UNINITIALIZED;
     }
-    return dispatchTable.xeCommandListAppendLaunchFunction(hCommandList, hFunction, pLaunchFuncArgs, hEvent);
+    return dispatchTable.xeCommandListAppendLaunchFunction(hCommandList, hFunction, pLaunchFuncArgs, hSignalEvent, numWaitEvents, phWaitEvents);
 }
 xe_result_t __xecall xeCommandListAppendLaunchFunctionIndirect(
         xe_command_list_handle_t hCommandList,          ///< [in] handle of the command list
         xe_function_handle_t hFunction,                 ///< [in] handle of the function object
         const xe_thread_group_dimensions_t* pLaunchArgumentsBuffer, ///< [in] pointer to device buffer that will contain launch arguments
-        xe_event_handle_t hEvent                        ///< [in][optional] handle of the event to signal on completion
+        xe_event_handle_t hSignalEvent,                 ///< [in][optional] handle of the event to signal on completion
+        uint32_t numWaitEvents,                         ///< [in][optional] number of events to wait on before launching
+        xe_event_handle_t* phWaitEvents                 ///< [in][optional] handle of the events to wait on before launching
     ){
     if(dispatchTableInitialized == false){
         return XE_RESULT_ERROR_UNINITIALIZED;
     }
-    return dispatchTable.xeCommandListAppendLaunchFunctionIndirect(hCommandList, hFunction, pLaunchArgumentsBuffer, hEvent);
+    return dispatchTable.xeCommandListAppendLaunchFunctionIndirect(hCommandList, hFunction, pLaunchArgumentsBuffer, hSignalEvent, numWaitEvents, phWaitEvents);
 }
 xe_result_t __xecall xeCommandListAppendLaunchMultipleFunctionsIndirect(
         xe_command_list_handle_t hCommandList,          ///< [in] handle of the command list
@@ -1019,12 +1052,14 @@ xe_result_t __xecall xeCommandListAppendLaunchMultipleFunctionsIndirect(
                                                         ///< number of launch arguments; must be less-than or equal-to numFunctions
         const xe_thread_group_dimensions_t* pLaunchArgumentsBuffer, ///< [in] pointer to device buffer that will contain a contiguous array of
                                                         ///< launch arguments
-        xe_event_handle_t hEvent                        ///< [in][optional] handle of the event to signal on completion
+        xe_event_handle_t hSignalEvent,                 ///< [in][optional] handle of the event to signal on completion
+        uint32_t numWaitEvents,                         ///< [in][optional] number of events to wait on before launching
+        xe_event_handle_t* phWaitEvents                 ///< [in][optional] handle of the events to wait on before launching
     ){
     if(dispatchTableInitialized == false){
         return XE_RESULT_ERROR_UNINITIALIZED;
     }
-    return dispatchTable.xeCommandListAppendLaunchMultipleFunctionsIndirect(hCommandList, numFunctions, phFunctions, pNumLaunchArguments, pLaunchArgumentsBuffer, hEvent);
+    return dispatchTable.xeCommandListAppendLaunchMultipleFunctionsIndirect(hCommandList, numFunctions, phFunctions, pNumLaunchArguments, pLaunchArgumentsBuffer, hSignalEvent, numWaitEvents, phWaitEvents);
 }
 xe_result_t __xecall xeCommandListAppendLaunchHostFunction(
         xe_command_list_handle_t hCommandList,          ///< [in] handle of the command list
@@ -1074,7 +1109,7 @@ xe_result_t __xecall xeDeviceEvictImage(
     }
     return dispatchTable.xeDeviceEvictImage(hDevice, hImage);
 }
-xe_result_t __xecall xeDeviceCreateSampler(
+xe_result_t __xecall xeSamplerCreate(
         xe_device_handle_t hDevice,                     ///< [in] handle of the device
         const xe_sampler_desc_t* pDesc,                 ///< [in] pointer to sampler descriptor
         xe_sampler_handle_t* phSampler                  ///< [out] handle of the sampler
@@ -1082,7 +1117,7 @@ xe_result_t __xecall xeDeviceCreateSampler(
     if(dispatchTableInitialized == false){
         return XE_RESULT_ERROR_UNINITIALIZED;
     }
-    return dispatchTable.xeDeviceCreateSampler(hDevice, pDesc, phSampler);
+    return dispatchTable.xeSamplerCreate(hDevice, pDesc, phSampler);
 }
 xe_result_t __xecall xeSamplerDestroy(
         xe_sampler_handle_t hSampler                    ///< [in] handle of the sampler

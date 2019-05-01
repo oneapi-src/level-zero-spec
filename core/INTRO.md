@@ -5,11 +5,12 @@
 ## Table of Contents
 * [Objective](#obj)
 * [API Specification](#spec)
-* [Drivers](#drv)
+* [Driver Architecture](#drv)
+* [Tools](#tls)
 
 # <a name="obj">Objective</a>
 The objective of the Level-Zero API is to provide direct-to-metal interfaces to offload accelerator devices. 
-It is a programming interface that can be published at a cadence that better matches Intel hardware releases and can be tailored to any hardware needs. 
+It is a programming interface that can be published at a cadence that better matches Intel hardware releases and can be tailored to any device needs. 
 It can be adapted to support broader set of languages features, such as function pointers, virtual functions, unified memory, and  I/O capabilities.
 
 The Level-Zero API provides the lowest-level, fine-grain and most explicit control over:
@@ -78,31 +79,27 @@ There are a set of APIs that makes it easier to share the memory objects with ea
 The following section provides high-level design philosophy of the APIs.
 For more detailed information, refer to the programming guides and detailed specification pages.
 
-## Cross-Device Support
-In order to both expose the full capabilities of GPUs and remain supportable by other devices, the API definition is sub-divided into "Core" and "Extended".  
-"Core" represents APIs that all fully cross-device while "Extended" represents APIs that are device-specific.
-All implementations must support "Core" APIs while "Extended" APIs are optional.
-An implementation will return ::XE_RESULT_ERROR_UNSUPPORTED for any feature request not supported by that device.
-
-Note: currently all APIs are defined as part of the "Core" specification until they are determined to not be supportable by other devices.
-
-## Naming Convention
-The following naming convention is followed in order to avoid conflicts within the API, or with other APIs and libraries:
-- all driver entry points are prefixed with xe
-- all types follow **xe_\<name\>_t** convention
-- all macros and enumerator values use all caps **XE_\<SCOPE\>_\<NAME\>** convention
-- all functions use camel case **xe\<Actor\>\<Action\>\<Object\>** convention
-- all structure members and function parameters use camel case convention
-- all function input parameters precede output parameters
-
-Note: "Xe" is a placeholder until One API branding is decided.
-
 ## Terminology
 This specification uses key words based on [RFC2119](https://www.ietf.org/rfc/rfc2119.txt) to indicate requirement level. 
 In particular, the following words are used to describe the actions of an implementation of this specification:
 - **May**: the word _may_, or the adjective _optional_, mean that conforming implementations are permitted to, but need not behave as described.
 - **Should**: the word _should_, or the adjective _recommended_, mean that there could be reasons for an implementations to deviate from the behavior described, but that such deviation should be avoided.  
 - **Must**: the word _must_, or the term _required_ or _shall_, mean that the behavior described is an absolute requirement of the specification.
+
+## Naming Convention
+The following naming conventions are followed in order to avoid conflicts within the API, or with other APIs and libraries:
+- all driver entry points are prefixed with xe
+- all types follow **xe_\<name\>_t** convention
+- all macros and enumerator values use all caps **XE_\<SCOPE\>_\<NAME\>** convention
+- all functions use camel case **xe\<Object\>\<Action\>** convention
+    + exception: since "driver" functions use implicit \<Object\>, it is omitted
+- all structure members and function parameters use camel case convention
+
+In addition, the following coding standards are followed:
+- all function input parameters precede output parameters
+- all functions return ::xe_result_t
+
+Note: "Xe" is a placeholder until One API branding is decided.
 
 ## Versioning
 There are multiple versions that should be used by the application to determine compatibility:
@@ -119,7 +116,7 @@ There are multiple versions that should be used by the application to determine 
     - They are provided as the first member of every structure passed to the driver.
 4. Driver Version - this is the version of the driver installed in the system.
     - This is typically used to mitigate driver implementation issues for a feature.
-    - The value is determined from calling ::xeDriverGetVersion
+    - The value is determined from calling ::xeGetDriverVersion
 
 ## Error Handling
 The following design philosophies are adopted in order to reduce Host-side overhead:
@@ -133,7 +130,7 @@ The following design philosophies are adopted in order to reduce Host-side overh
     + non-visible memory access by the Host or device
     + non-resident memeory access by the device
 - all API functions return ::xe_result_t
-    + this allows for a consistent pattern on the application side for catching errors when enabled in debug environments
+    + this allows for a consistent pattern on the application side for catching errors; especially when validation layer is enabled
 
 ## Multithreading and Concurrency
 The following design philosophies are adopted in order to maximize Host thread concurrency:
@@ -154,18 +151,123 @@ The primary usage-models enabled by these rules is:
 - multiple, simultaneous threads may operate on independent driver objects with no implicit thread-locks
 - driver object handles may be passed between and used by multiple threads with no implicit thread-locks
 
+## Heterogeneous Device Support
+In order to both expose the full capabilities of GPUs and remain supportable by other devices, the API definition is sub-divided into "Core" and "Extended".  
+"Core" represents APIs that all fully cross-device while "Extended" represents APIs that are device-specific.
+All implementations must support "Core" APIs while "Extended" APIs are optional.
+An implementation will return ::XE_RESULT_ERROR_UNSUPPORTED for any feature request not supported by that device.
 
-# <a name="drv">Drivers</a>
-## Installation
-The Level-Zero API is implemented within a _xe_vendor_device.dll_ (windows) / _xe_vendor_device.so_ (linux), which is copied on the system during installation of the device driver;
-where _vendor_ and _device_ are names chosen by the device vendor.  For Intel GPUs, the name would be "xe_intc_gpu".
+Note: currently all APIs are defined as part of the "Core" specification until they are determined to not be supportable by other devices.
 
-This API does not define an Installable Client Driver (ICD), as it is expected that users of this API would prefer to implement
-their own device abstraction layer and communicate directly with the device-driver.
+# <a name="drv">Driver Architecture</a>
+The following section provides high-level driver architecture.
+
+![Driver](../images/intro_driver.png?raw=true)  
+@image latex intro_driver.png
+
+## Driver Loader
+The Level-Zero driver(s) are loaded using a _xe_vendor_loader.dll_ (windows) / _xe_vendor_loader.so_ (linux), which is copied on the system during installation of the device driver;
+where _vendor_ is a name chosen by the device vendor.  For Intel GPUs, the name would be _xe_intc_loader_.
+
+The loader initiates the loading of the driver(s) and layer(s).
+The loader exports all API functions to the application; which internally map to a per-process function pointer table.
+
+The following diagram illustrates the expected loading sequence:  
+![Loader](../images/intro_loader.png?raw=true)  
+@image latex intro_loader.png
+
+Thus, the loader's internal function pointer table entries may point to:
+    + validation layer intercepts (if enabled),
+    + common driver intercepts (e.g., if more than one supported device type are present in the system),
+    + instrumentation layer intercepts (if enabled),
+    + device driver exports,
+    + or any combination of the above
+
+## Common Driver
+The common driver determines which other device drivers need to be loaded, based on which device types are present in the system.
+The common driver may be bypassed entirely if there is only one device driver needed.
+If the common driver is required, then it may implement specific APIs (such as memory allocation) and use private DDIs for notifying device drivers of these events.
+
+## Device Driver
+The device driver(s) implement device-specific APIs.
+
+## <a name="v0">Validation Layer</a>
+The validation layer provides an optional capability for application developers to enable additional API validation while maintaining minimal driver implementation overhead.
+- works independent of driver implementation
+- works for production / release drivers
+- works independent of device type
+- checks for common application errors, such as parameter validation
+- provides common application debug tracking, such as object and memory lifetime
+
+The validation layer must be enabled via an environment variables.
+Each capability is enabled by additional environment variables.
+
+The validation layer supports the following capabilities:
+- <a name="v1">Parameter Validation</a>
+    + checks function parameters, such as null pointer parameters, invalid enumerations, uninitialized structures, etc.
+    + functions may return ::XE_RESULT_ERROR_INVALID_PARAMETER or ::XE_RESULT_ERROR_UNSUPPORTED
+- <a name="v2">Handle Lifetime</a>
+    + tracks handle allocations, destruction and usage for leaks and invalid usage (e.g., destruction while still in-use by device)
+- <a name="v3">Memory Tracker</a>
+    + tracks memory allocations and free for leaks and invalid usage (e.g., non-visible to device)
+- <a name="v4">Threading Validation</a>
+    + checks multi-threading usage (e.g., functions are not called from simultaneous threads using the same handle)
+
+## <a name="i0">Instrumentation Layer</a>
+The instrumentation layer provides an optional capability for application developers to enable additional profiling API while maintaining minimal driver implementation overhead.
+- works independent of driver implementation
+- works for production / release drivers
+- implements [Tools](#tls) APIs
+
+The instrumentation layer must be enabled via an environment variables.
+Each capability is enabled by additional environment variables.
+
+The instrumentation layer supports the following capabilities:
+- <a name="i1">API Tracing</a>
+    + enables API tracing and profiling APIs; more details in Tools programming guide
+- <a name="i1">PIN</a>
+    + enables binary instrumentation of programs for profiling; more details in Tools programming guide
 
 ## Environment Variables
 The following table documents the supported knobs for overriding default driver behavior.
-| Category            | Name                                    | Values                 | Description                                           |
-|---------------------|-----------------------------------------|------------------------|-------------------------------------------------------|
-| Memory              | XE_SHARED_FORCE_DEVICE_ALLOC          | {**0**, 1}             | Forces all shared allocations into device memory      |
-| Validation          | XE_DRIVER_PARAMETER_VALIDATION_LEVEL  | {**0**, 1, 2}          | Controls the validation level used by the driver for parameters.<br>0 = disabled, no checks (default)<br>1 = pointer and overflow checks only<br>2 = values and states<br> |
+| Category            | Name                                        | Values            | Description                                                                       |
+|---------------------|---------------------------------------------|-------------------|-----------------------------------------------------------------------------------|
+| Device              | [XE_AFFINITY_MASK](#aff)                  | hex string        | Forces driver to only report devices (and sub-devices) as specified by mask value |
+| Memory              | XE_SHARED_FORCE_DEVICE_ALLOC              | {**0**, 1}        | Forces all shared allocations into device memory                                  |
+| Validation          | [XE_ENABLE_VALIDATION_LAYER](#v0)         | {**0**, 1}        | Enables validation layer for debugging                                            |
+| ^                   | [XE_ENABLE_PARAMETER_VALIDATION](#v1)     | {**0**, 1}        | Enables the validation level for parameters                                       |
+| ^                   | [XE_ENABLE_HANDLE_LIFETIME](#v2)          | {**0**, 1}        | Enables the validation level for tracking handle lifetime                         |
+| ^                   | [XE_ENABLE_MEMORY_TRACKER](#v3)           | {**0**, 1}        | Enables the validation level for tracking memory lifetime                         |
+| ^                   | [XE_ENABLE_THREADING_VALIDATION](#v4)     | {**0**, 1}        | Enables the validation level for multithreading usage                             |
+| Instrumentation     | [XE_ENABLE_INSTRUMENTATION_LAYER](#i0)    | {**0**, 1}        | Enables instrumentation layer for profiling                                       |
+| ^                   | [XE_ENABLE_API_TRACING](#i1)              | {**0**, 1}        | Enables the instrumentation level for tracing API calls                           |
+| ^                   | [XE_ENABLE_PIN](#i2)                      | {**0**, 1}        | Enables the instrumentation level for program instrumentation                     |
+
+### <a name="aff">Affinity Mask</a>
+The affinity mask allows an application or tool to restrict which devices (and sub-devices) are visible to 3rd-party libraries or applications in another process, respectively.
+The affinity mask is specified via an environment variable as a string of hexidecimal values.
+The value is specific to system configuration; e.g., the number of devices and the number of sub-devices for each device.
+
+The following examples demonstrate proper usage:
+- "" (empty string) = disabled; i.e. all devices and sub-devices are reported.  This is the default value.
+- Two devices, each with four sub-devices
+    + "FF" = all devices and sub-devices are reported (same as default)
+    + "0F" = only device 0 (with all its sub-devices) is reported
+    + "F0" = only device 1 (with all its sub-devices) is reported as device 0
+    + "AA" = both device 0 and 1 are reported, however each only has two sub-devices reported as sub-device 0 and 1
+- Two devices, device 0 with one sub-device and device 1 with two sub-devices
+    + "07" = all devices and sub-devices are reported (same as default)
+    + "01" = only device 0 (with all its sub-devices) is reported
+    + "06" = only device 1 (with all its sub-devices) is reported as device 0
+    + "05" = both device 0 and device 1 are reported, however each only has one sub-device reported as sub-device 0
+
+# <a name="tls">Tools</a>
+Level-Zero APIs specific for supporting 3rd-party tools are seperated from "Core" into "Tools" APIs.
+
+The following diagram illustrates the hierachy of "Core" versus "Tool" APIs:  
+![Tool](../images/intro_tools.png?raw=true)  
+@image latex intro_tools.png
+
+The "Tools" APIs are designed to provided low-level access to device capabilities in order to support 3rd-party tools, but are not intended to replace or directly interface 3rd-party tools.
+The "Tools" APIs allow for driver callbacks to be registered by 3rd-party tools to be notified of specific event.
+

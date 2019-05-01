@@ -3,17 +3,76 @@ type: header
 desc: "Intel $OneApi Level-Zero APIs for Barrier"
 --- #--------------------------------------------------------------------------
 type: function
-desc: "Appends an execution barrier into a command list."
+desc: "Appends an execution and global memory barrier into a command list."
 class: $xCommandList
-name: AppendExecutionBarrier
+name: AppendBarrier
 analogue:
     - "**vkCmdPipelineBarrier**"
     - clEnqueueBarrierWithWaitList
 details:
-    - "This may **not** be called for a command list created with $X_COMMAND_LIST_FLAG_COPY_ONLY."
+    - "If numWaitEvents is zero, then all previous commands are completed prior to the execution of the barrier."
+    - "If numWaitEvents is non-zero, then then all phWaitEvents must be signalled prior to the execution of the barrier."
+    - "This command blocks all following commands from beginning until the execution of the barrier completes."
+    - "Memory and cache hierarchies are flushed and invalidated sufficient for device and host access."
     - "The application may **not** call this function from simultaneous threads with the same command list handle."
     - "The implementation of this function should be lock-free."
 params:
     - type: $x_command_list_handle_t
       name: hCommandList
       desc: "[in] handle of the command list"
+    - type: $x_event_handle_t
+      name: hSignalEvent
+      desc: "[in][optional] handle of the event to signal on completion"
+    - type: uint32_t
+      name: numWaitEvents
+      desc: "[in][optional] number of events to wait on before executing barrier"
+    - type: "$x_event_handle_t*"
+      name: phWaitEvents
+      desc: "[in][optional] handle of the events to wait on before executing barrier"
+--- #--------------------------------------------------------------------------
+type: function
+desc: "Appends a global memory ranges barrier into a command list."
+class: $xCommandList
+name: AppendMemoryRangesBarrier
+details:
+    - "If numWaitEvents is zero, then all previous commands are completed prior to the execution of the barrier."
+    - "If numWaitEvents is non-zero, then then all phWaitEvents must be signalled prior to the execution of the barrier."
+    - "This command blocks all following commands from beginning until the execution of the barrier completes."
+    - "Memory and cache hierarchies are flushed and invalidated sufficient for device and host access."
+    - "The application may **not** call this function from simultaneous threads with the same command list handle."
+    - "The implementation of this function should be lock-free."
+params:
+    - type: $x_command_list_handle_t
+      name: hCommandList
+      desc: "[in] handle of the command list"
+    - type: uint32_t
+      name: numRanges
+      desc: "[in] number of memory ranges"
+    - type: "const size_t*"
+      name: "pRangeSizes"
+      desc: "[in] array of sizes of memory range"
+    - type: "const void**"
+      name: "pRanges"
+      desc: "[in] array of memory ranges"
+    - type: $x_event_handle_t
+      name: hSignalEvent
+      desc: "[in][optional] handle of the event to signal on completion"
+    - type: uint32_t
+      name: numWaitEvents
+      desc: "[in][optional] number of events to wait on before executing barrier"
+    - type: "$x_event_handle_t*"
+      name: phWaitEvents
+      desc: "[in][optional] handle of the events to wait on before executing barrier"
+--- #--------------------------------------------------------------------------
+type: function
+desc: "Ensures in-bound writes to the device are globally observable."
+class: $xDevice
+name: SystemBarrier
+details:
+    - "This is a special-case system level barrier that can be used to ensure global observability of writes; typically needed after a producer (e.g., NIC) performs direct writes to the device's memory (e.g., Direct RDMA writes).  This is typically required when the memory corresponding to the writes is subsequently accessed from a remote device."
+    - "The application may call this function from simultaneous threads."
+    - "The implementation of this function should be lock-free."
+params:
+    - type: $x_device_handle_t
+      name: hDevice
+      desc: "[in] handle of the device"

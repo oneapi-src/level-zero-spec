@@ -60,6 +60,7 @@ struct Mock<Device> : public Device {
 
     MOCK_METHOD2(getImageProperties, xe_result_t(const xe_image_desc_t* desc,
                                         xe_image_properties_t* pImageProperties));
+    MOCK_METHOD0(systemBarrier, xe_result_t());
     MOCK_METHOD3(registerCLMemory, xe_result_t(cl_context context, cl_mem mem, void** ptr));
     MOCK_METHOD3(registerCLProgram, xe_result_t(cl_context context, cl_program program,
             xe_module_handle_t* phModule));

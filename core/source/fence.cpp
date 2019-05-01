@@ -43,4 +43,10 @@ xe_result_t fenceQueryElapsedTime(xe_fence_handle_t hFenceStart,
     return XE_RESULT_ERROR_UNSUPPORTED;
 }
 
+xe_result_t fenceDestroy(xe_fence_handle_t phFence) {
+    return Fence::fromHandle(phFence)->destroy();
+
+    return XE_RESULT_SUCCESS;
+}
+
 } // namespace L0

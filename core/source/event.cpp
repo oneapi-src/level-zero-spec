@@ -100,6 +100,81 @@ xe_result_t EventImp::hostSynchronize(uint32_t timeout) {
     return XE_RESULT_SUCCESS;
 }
 
+xe_result_t EventImp::reset() {
+    auto hostAddress = static_cast<uint64_t *>(allocation->getHostAddress());
+    *(hostAddress) = Event::STATE_INITIAL;
+
+    // Flush cache line at all levels containing the value
+    _mm_clflush(hostAddress);
+
+    return XE_RESULT_SUCCESS;
+}
+
+struct EventPoolImp : public EventPool {
+    EventPoolImp(Device *device, uint32_t count): device(device), count(count) {
+        pool = std::vector<Event *>(this->count, nullptr);
+        for (uint32_t i = 0; i < count; i++) {
+            auto event = Event::create(this->device);
+            assert(event);
+            pool[i] = event;
+        }
+    }
+
+    xe_result_t destroy() override;
+
+    xe_result_t createEvent(const xe_event_desc_t* desc,
+            xe_event_handle_t* phEvent) override;
+
+    size_t getPoolSize() override {
+        return this->pool.size();
+    }
+
+    Event *getEvent(uint32_t index) override {
+        return this->pool[index];
+    }
+
+    xe_result_t getIpcHandle(xe_ipc_event_pool_handle_t* pIpcHandle) override;
+
+    xe_result_t closeIpcHandle() override;
+
+    void destroyPool() {
+        for (Event *event: this->pool) {
+            event->destroy();
+        }
+    }
+
+    Device *device;
+    uint32_t count;
+    std::vector<Event *> pool;
+};
+
+xe_result_t EventPoolImp::createEvent(const xe_event_desc_t* desc,
+            xe_event_handle_t* phEvent) {
+    assert(desc->index >= 0 && desc->index < this->getPoolSize());
+    *phEvent = this->getEvent(desc->index);
+    return XE_RESULT_SUCCESS;
+}
+
+xe_result_t EventPoolImp::getIpcHandle(xe_ipc_event_pool_handle_t* pIpcHandle) {
+    return XE_RESULT_ERROR_UNSUPPORTED;
+}
+
+xe_result_t EventPoolImp::closeIpcHandle() {
+    return XE_RESULT_ERROR_UNSUPPORTED;
+}
+
+xe_result_t EventPoolImp::destroy() {
+    this->destroyPool();
+
+    return XE_RESULT_SUCCESS;
+}
+
+EventPool *EventPool::create(Device *device, const xe_event_pool_desc_t *desc) {
+    auto eventPool = new EventPoolImp(device, desc->count);
+    assert(eventPool);
+
+    return eventPool;
+}
 xe_result_t eventQueryElapsedTime(xe_event_handle_t hEventStart,
                                   xe_event_handle_t hEventEnd,
                                   double *pTime) {
@@ -113,66 +188,19 @@ xe_result_t eventQueryMetricsData(xe_event_handle_t hEventStart,
     return XE_RESULT_ERROR_UNSUPPORTED;
 }
 
-xe_result_t EventImp::reset() {
-    auto hostAddress = static_cast<uint64_t *>(allocation->getHostAddress());
-    *(hostAddress) = Event::STATE_INITIAL;
-
-    // Flush cache line at all levels containing the value
-    _mm_clflush(hostAddress);
-
-    return XE_RESULT_SUCCESS;
-}
-
-struct EventPoolImp : public EventPool {
-    EventPoolImp(Device *device) : device(device) {}
-
-    bool initialize(uint32_t count);
-
-    Device *device;
-};
-
-bool EventPoolImp::initialize(uint32_t count) {
-    this->count = count;
-    pool = std::vector<Event *>(this->count, nullptr);
-    for (uint32_t i = 0; i < count; i++) {
-        auto event = Event::create(this->device);
-        assert(event);
-        pool[i] = event;
-    }
-    return true;
-}
-
-EventPool *EventPool::create(Device *device, const xe_event_pool_desc_t *desc) {
-    auto eventPool = new EventPoolImp(device);
-    bool ret = eventPool->initialize(desc->count);
-    assert(ret);
-    return eventPool;
-}
-
-xe_result_t EventPool::destroy() {
-    for (Event *event: pool) {
-        event->destroy();
-    }
-    return XE_RESULT_SUCCESS;
-}
-
-xe_result_t EventPool::createEvent(uint32_t index, xe_event_handle_t* phEvent) {
-    assert(index < pool.size());
-    *phEvent = this->pool[index];
-    return XE_RESULT_SUCCESS;
-}
-
-xe_result_t  EventPool::getIpcHandle(xe_ipc_event_pool_handle_t* pIpcHandle) {
-    return XE_RESULT_ERROR_UNSUPPORTED;
-}
-
 xe_result_t eventPoolOpenIpcHandle(xe_device_handle_t hDevice,
         xe_ipc_event_pool_handle_t hIpc, xe_event_pool_handle_t* phEventPool) {
     return XE_RESULT_ERROR_UNSUPPORTED;
 }
 
-xe_result_t  EventPool::closeIpcHandle() {
-    return XE_RESULT_ERROR_UNSUPPORTED;
+xe_result_t eventCreate(xe_event_pool_handle_t hEventPool, const xe_event_desc_t* desc,
+            xe_event_handle_t* phEvent) {
+    EventPool *eventPool = EventPool::fromHandle(hEventPool);
+    return eventPool->createEvent(desc, phEvent);
+}
+
+xe_result_t eventDestroy(xe_event_handle_t hEvent) {
+    return Event::fromHandle(hEvent)->destroy();
 }
 
 } // namespace L0

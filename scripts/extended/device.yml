@@ -6,7 +6,3 @@ type: class
 desc: "C++ wrapper for device"
 name: $eDevice
 base: $xDevice
-members:
-    - type: $x_device_handle_t
-      name: handle
-      desc: "handle of device object"

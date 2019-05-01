@@ -67,6 +67,8 @@ struct Device : _xe_device_handle_t {
     virtual xe_result_t getImageProperties(const xe_image_desc_t* desc,
             xe_image_properties_t* pImageProperties) = 0;
 
+    virtual xe_result_t systemBarrier() = 0;
+
     virtual xe_result_t registerCLMemory(cl_context context, cl_mem mem, void** ptr) = 0;
     virtual xe_result_t registerCLProgram(cl_context context, cl_program program,
             xe_module_handle_t* phModule) = 0;
@@ -91,7 +93,44 @@ struct Device : _xe_device_handle_t {
     static Device *create(void *device);
 };
 
-xe_result_t deviceGetP2PProperties(uint32_t srcOrdinal,
-                                   uint32_t dstOrdinal,
-                                   xe_device_p2p_properties_t *pP2PProperties);
+xe_result_t commandListCreate(xe_device_handle_t hDevice,
+                                const xe_command_list_desc_t *desc,
+                                xe_command_list_handle_t *commandList);
+
+xe_result_t commandListCreateImmediate(xe_device_handle_t hDevice,
+                                const xe_command_queue_desc_t* desc,
+                                xe_command_list_handle_t* phCommandList);
+
+xe_result_t commandListDestroy(xe_command_list_handle_t hCommandList);
+
+xe_result_t commandQueueCreate(xe_device_handle_t hDevice,
+                            const xe_command_queue_desc_t *desc,
+                            xe_command_queue_handle_t *commandQueue);
+
+xe_result_t commandQueueDestroy(xe_command_queue_handle_t hCommandQueue);
+
+xe_result_t imageGetProperties(xe_device_handle_t hDevice, const xe_image_desc_t* desc,
+            xe_image_properties_t* pImageProperties);
+
+xe_result_t eventPoolCreate(xe_device_handle_t hDevice, const xe_event_pool_desc_t *desc,
+    xe_event_pool_handle_t *eventPool);
+
+xe_result_t eventPoolDestroy(xe_event_pool_handle_t hEventPool);
+
+xe_result_t imageCreate(xe_device_handle_t hDevice, const xe_image_desc_t* desc,
+        xe_image_handle_t* phImage);
+
+xe_result_t imageDestroy(xe_image_handle_t hImage);
+
+xe_result_t moduleCreate(xe_device_handle_t hDevice, const xe_module_desc_t *desc,
+                    xe_module_handle_t *phModule,
+                    xe_module_build_log_handle_t *buildLog);
+
+xe_result_t moduleDestroy(xe_module_handle_t hModule);
+
+xe_result_t samplerCreate(xe_device_handle_t hDevice, const xe_sampler_desc_t *pDesc,
+                                      xe_sampler_handle_t *phSampler);
+
+xe_result_t samplerDestroy(xe_sampler_handle_t hSampler);
+
 } // namespace L0

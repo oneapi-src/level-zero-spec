@@ -39,63 +39,56 @@
 namespace xe
 {
     ///////////////////////////////////////////////////////////////////////////////
-    /// @brief C++ wrapper for driver
-    class Driver
+    /// @brief Supported initialization flags
+    enum class init_flag_t
     {
-    protected:
-
-    public:
-
-        ///////////////////////////////////////////////////////////////////////////////
-        /// @brief C++ version for ::xe_init_flag_t
-        enum class init_flag_t
-        {
-            NONE = 0,                                       ///< default behavior
-
-        };
-
-        ///////////////////////////////////////////////////////////////////////////////
-        /// @brief C++ wrapper for ::xeDriverGetDeviceCount
-        /// @returns
-        ///     - uint32_t: number of devices available
-        /// 
-        /// @throws result_t
-        inline static uint32_t
-        GetDeviceCount(
-            void
-            );
-
-        ///////////////////////////////////////////////////////////////////////////////
-        /// @brief C++ wrapper for ::xeDriverGetDevice
-        /// @returns
-        ///     - ::device_handle_t: pointer to handle of device object created
-        /// 
-        /// @throws result_t
-        inline static device_handle_t
-        GetDevice(
-            void
-            );
-
-        ///////////////////////////////////////////////////////////////////////////////
-        /// @brief C++ wrapper for ::xeDriverInit
-        /// @throws result_t
-        inline static void
-        Init(
-            void
-            );
-
-        ///////////////////////////////////////////////////////////////////////////////
-        /// @brief C++ wrapper for ::xeDriverGetVersion
-        /// @returns
-        ///     - uint32_t: driver version
-        /// 
-        /// @throws result_t
-        inline static uint32_t
-        GetVersion(
-            void
-            );
+        NONE = 0,                                       ///< default behavior
 
     };
+
+    ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Initialize the Xe:: driver and must be called before any other API
+    ///        function.
+    /// 
+    /// @details
+    ///     - Only one instance of a driver per process can be loaded.
+    ///     - There is no reference tracking if multiple drivers are initialized.
+    ///     - If this function is not called then all other functions will return
+    ///       ::RESULT_ERROR_UNINITIALIZED.
+    ///     - This function is thread-safe for scenarios where multiple libraries
+    ///       may initialize the driver simultaneously.
+    /// 
+    /// @remarks
+    ///   _Analogues_
+    ///     - **cuInit**
+    /// 
+    /// @throws result_t
+    inline void
+    Init(
+        init_flag_t flags                               ///< [in] initialization flags
+        );
+
+    ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Returns the current version of the installed driver.
+    /// 
+    /// @details
+    ///     - The driver version is a non-zero, monotonically increasing value where
+    ///       higher values always indicate a more recent version.
+    ///     - The application may call this function from simultaneous threads.
+    ///     - The implementation of this function should be lock-free.
+    /// 
+    /// @remarks
+    ///   _Analogues_
+    ///     - **cuDriverGetVersion**
+    /// 
+    /// @returns
+    ///     - uint32_t: driver version
+    /// 
+    /// @throws result_t
+    inline uint32_t
+    GetDriverVersion(
+        void
+        );
 
 } // namespace xe
 #endif // defined(__cplusplus)

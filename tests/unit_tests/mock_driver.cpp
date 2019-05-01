@@ -1,6 +1,7 @@
 #include "mock_driver.h"
 
 namespace L0 {
+
 namespace ult {
 
 Mock<Driver>::Mock() {

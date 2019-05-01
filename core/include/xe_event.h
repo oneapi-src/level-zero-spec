@@ -53,13 +53,9 @@ typedef enum _xe_event_pool_desc_version_t
 /// @brief Supported event pool creation flags
 typedef enum _xe_event_pool_flag_t
 {
-    XE_EVENT_POOL_FLAG_NONE = 0,                    ///< signals and waits only within the same device
-    XE_EVENT_POOL_FLAG_HOST_TO_DEVICE = XE_BIT(0),  ///< signals from host, waits on device
-    XE_EVENT_POOL_FLAG_DEVICE_TO_HOST = XE_BIT(1),  ///< signals from device, waits on host
-    XE_EVENT_POOL_FLAG_DEVICE_TO_DEVICE = XE_BIT(2),///< signals from device, waits on another device
-    XE_EVENT_POOL_FLAG_IPC = XE_BIT(3),             ///< signals and waits may occur across processes
-    XE_EVENT_POOL_FLAG_TIMESTAMP = XE_BIT(4),       ///< supports time-based queries
-    XE_EVENT_POOL_FLAG_PERFORMANCE_METRICS = XE_BIT(5), ///< supports performance metrics (MDAPI)
+    XE_EVENT_POOL_FLAG_DEFAULT = 0,                 ///< signals and waits visible to the entire device and peer devices
+    XE_EVENT_POOL_FLAG_HOST_VISIBLE = XE_BIT(0),    ///< signals and waits are also visible to host
+    XE_EVENT_POOL_FLAG_IPC = XE_BIT(1),             ///< signals and waits may be shared across processes
 
 } xe_event_pool_flag_t;
 
@@ -77,7 +73,7 @@ typedef struct _xe_event_pool_desc_t
 /// @brief Creates a pool for a set of event(s) on the device.
 /// 
 /// @details
-///     - This function may be called from simultaneous threads.
+///     - The application may call this function from simultaneous threads.
 ///     - The implementation of this function should be lock-free.
 /// 
 /// @returns
@@ -93,7 +89,7 @@ typedef struct _xe_event_pool_desc_t
 ///     - ::XE_RESULT_ERROR_OUT_OF_HOST_MEMORY
 ///     - ::XE_RESULT_ERROR_OUT_OF_DEVICE_MEMORY
 __xedllport xe_result_t __xecall
-xeDeviceCreateEventPool(
+xeEventPoolCreate(
     xe_device_handle_t hDevice,                     ///< [in] handle of the device
     const xe_event_pool_desc_t* desc,               ///< [in] pointer to event pool descriptor
     xe_event_pool_handle_t* phEventPool             ///< [out] pointer handle of event pool object created
@@ -110,6 +106,8 @@ xeDeviceCreateEventPool(
 ///       deleted
 ///     - The implementation of this function will immediately free all Host and
 ///       Device allocations associated with this event pool
+///     - The application may **not** call this function from simultaneous
+///       threads with the same event pool handle.
 ///     - The implementation of this function should be lock-free.
 /// 
 /// @returns
@@ -125,13 +123,49 @@ xeEventPoolDestroy(
     );
 
 ///////////////////////////////////////////////////////////////////////////////
+/// @brief API version of ::xe_event_desc_t
+typedef enum _xe_event_desc_version_t
+{
+    XE_EVENT_DESC_VERSION_CURRENT = XE_MAKE_VERSION( 1, 0 ),///< version 1.0
+
+} xe_event_desc_version_t;
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Supported event scope flags
+typedef enum _xe_event_scope_flag_t
+{
+    XE_EVENT_SCOPE_FLAG_NONE = 0,                   ///< execution synchronization only; no cache hierarchies are flushed or
+                                                    ///< invalidated
+    XE_EVENT_SCOPE_FLAG_SUBDEVICE = XE_BIT(0),      ///< cache hierarchies are flushed or invalidated sufficient for local
+                                                    ///< sub-device access
+    XE_EVENT_SCOPE_FLAG_DEVICE = XE_BIT(1),         ///< cache hierarchies are flushed or invalidated sufficient for global
+                                                    ///< device access and peer device access
+    XE_EVENT_SCOPE_FLAG_HOST = XE_BIT(2),           ///< cache hierarchies are flushed or invalidated sufficient for device and
+                                                    ///< host access
+
+} xe_event_scope_flag_t;
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Event descriptor
+typedef struct _xe_event_desc_t
+{
+    xe_event_desc_version_t version;                ///< [in] ::XE_EVENT_DESC_VERSION_CURRENT
+    uint32_t index;                                 ///< [in] index of the event within the pool
+    xe_event_scope_flag_t signal;                   ///< [in] defines the scope of relevant cache hierarchies to flush on a
+                                                    ///< ‘signal’ action before the event is triggered
+    xe_event_scope_flag_t wait;                     ///< [in] defines the scope of relevant cache hierarchies to invalidate on
+                                                    ///< a ‘wait’ action after the event is complete
+
+} xe_event_desc_t;
+
+///////////////////////////////////////////////////////////////////////////////
 /// @brief Creates an event on the device.
 /// 
 /// @details
 ///     - Multiple events cannot be created using the same index from the same
 ///       pool
 ///     - The index must be less-than the count specified during pool creation
-///     - This function may be called from simultaneous threads.
+///     - The application may call this function from simultaneous threads.
 ///     - The implementation of this function should be lock-free.
 /// 
 /// @remarks
@@ -146,13 +180,15 @@ xeEventPoolDestroy(
 ///     - ::XE_RESULT_ERROR_DEVICE_LOST
 ///     - ::XE_RESULT_ERROR_INVALID_PARAMETER
 ///         + nullptr == hEventPool
+///         + nullptr == desc
 ///         + nullptr == phEvent
 ///     - ::XE_RESULT_ERROR_UNSUPPORTED
+///         + ::XE_EVENT_DESC_VERSION_CURRENT < desc->version
 ///     - ::XE_RESULT_ERROR_OUT_OF_HOST_MEMORY
 __xedllport xe_result_t __xecall
-xeEventPoolCreateEvent(
+xeEventCreate(
     xe_event_pool_handle_t hEventPool,              ///< [in] handle of the event pool
-    uint32_t index,                                 ///< [in] index of the event within the pool
+    const xe_event_desc_t* desc,                    ///< [in] pointer to event descriptor
     xe_event_handle_t* phEvent                      ///< [out] pointer to handle of event object created
     );
 
@@ -164,6 +200,8 @@ xeEventPoolCreateEvent(
 ///       currently referencing the event before it is deleted
 ///     - The implementation of this function will immediately free all Host and
 ///       Device allocations associated with this event
+///     - The application may **not** call this function from simultaneous
+///       threads with the same event handle.
 ///     - The implementation of this function should be lock-free.
 /// 
 /// @remarks
@@ -244,7 +282,8 @@ xeEventPoolOpenIpcHandle(
 /// @details
 ///     - Closes an IPC event handle by destroying events that were opened in
 ///       this process using ::xeEventPoolOpenIpcHandle.
-///     - The application may call this function from simultaneous threads.
+///     - The application may **not** call this function from simultaneous
+///       threads with the same event pool handle.
 /// 
 /// @remarks
 ///   _Analogues_
@@ -291,7 +330,7 @@ xeCommandListAppendSignalEvent(
     );
 
 ///////////////////////////////////////////////////////////////////////////////
-/// @brief Appends a wait on event from a host signal into a command list.
+/// @brief Appends wait on event(s) on the device into a command list.
 /// 
 /// @details
 ///     - The application may **not** call this function from simultaneous
@@ -304,12 +343,13 @@ xeCommandListAppendSignalEvent(
 ///     - ::XE_RESULT_ERROR_DEVICE_LOST
 ///     - ::XE_RESULT_ERROR_INVALID_PARAMETER
 ///         + nullptr == hCommandList
-///         + nullptr == hEvent
+///         + nullptr == phEvents
 ///     - ::XE_RESULT_ERROR_UNSUPPORTED
 __xedllport xe_result_t __xecall
-xeCommandListAppendWaitOnEvent(
+xeCommandListAppendWaitOnEvents(
     xe_command_list_handle_t hCommandList,          ///< [in] handle of the command list
-    xe_event_handle_t hEvent                        ///< [in] handle of the event
+    uint32_t numEvents,                             ///< [in] number of events to wait on before continuing
+    xe_event_handle_t* phEvents                     ///< [in] handle of the events to wait on before continuing
     );
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -336,7 +376,7 @@ xeEventHostSignal(
     );
 
 ///////////////////////////////////////////////////////////////////////////////
-/// @brief The current host thread waits on an event from a device signal.
+/// @brief The current host thread waits on an event to be signalled.
 /// 
 /// @details
 ///     - The application may call this function from simultaneous threads.
@@ -394,67 +434,11 @@ xeEventQueryStatus(
     );
 
 ///////////////////////////////////////////////////////////////////////////////
-/// @brief Queries the elapsed time between two device-signaled events.
-/// 
-/// @details
-///     - The application may call this function from simultaneous threads.
-///     - The implementation of this function should be lock-free.
-/// 
-/// @remarks
-///   _Analogues_
-///     - **cuEventElapsedTime**
-/// 
-/// @returns
-///     - ::XE_RESULT_SUCCESS
-///     - ::XE_RESULT_ERROR_UNINITIALIZED
-///     - ::XE_RESULT_ERROR_DEVICE_LOST
-///     - ::XE_RESULT_ERROR_INVALID_PARAMETER
-///         + nullptr == hEventBegin
-///         + nullptr == hEventEnd
-///         + nullptr == pTime
-///         + either event not signaled by device
-///         + either event not created from pool created with ::XE_EVENT_POOL_FLAG_TIMESTAMP
-///     - ::XE_RESULT_ERROR_UNSUPPORTED
-__xedllport xe_result_t __xecall
-xeEventQueryElapsedTime(
-    xe_event_handle_t hEventBegin,                  ///< [in] handle of the begin event
-    xe_event_handle_t hEventEnd,                    ///< [in] handle of the end event
-    double* pTime                                   ///< [out] time in milliseconds
-    );
-
-///////////////////////////////////////////////////////////////////////////////
-/// @brief Queries performance metrics between two device-signaled events.
-/// 
-/// @details
-///     - The application may call this function from simultaneous threads.
-///     - The implementation of this function should be lock-free.
-/// 
-/// @returns
-///     - ::XE_RESULT_SUCCESS
-///     - ::XE_RESULT_ERROR_UNINITIALIZED
-///     - ::XE_RESULT_ERROR_DEVICE_LOST
-///     - ::XE_RESULT_ERROR_INVALID_PARAMETER
-///         + nullptr == hEventStart
-///         + nullptr == hEventEnd
-///         + nullptr == pReportData
-///         + either event not signaled by device
-///         + either event not created from pool created with ::XE_EVENT_POOL_FLAG_PERFORMANCE_METRICS
-///         + report size too small
-///     - ::XE_RESULT_ERROR_UNSUPPORTED
-__xedllport xe_result_t __xecall
-xeEventQueryMetricsData(
-    xe_event_handle_t hEventStart,                  ///< [in] handle of the start event
-    xe_event_handle_t hEventEnd,                    ///< [in] handle of the end event
-    size_t reportSize,                              ///< [in] size of the report data buffer in bytes
-    uint32_t* pReportData                           ///< [out] report data buffer
-    );
-
-///////////////////////////////////////////////////////////////////////////////
 /// @brief Reset an event back to not signaled state
 /// 
 /// @details
 ///     - The application may **not** call this function from simultaneous
-///       threads.
+///       threads with the same command list handle.
 ///     - The implementation of this function should be lock-free.
 /// 
 /// @remarks

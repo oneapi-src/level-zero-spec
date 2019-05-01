@@ -12,6 +12,9 @@ Mock<Event>::~Mock() {
 
 Mock<EventPool>::Mock() : pool (1, nullptr) {
     pool[0] = new Event();
+
+    EXPECT_CALL(*this, getPoolSize())
+        .WillRepeatedly(testing::Return(1));
 }
 
 Mock<EventPool>::~Mock() {

@@ -43,42 +43,19 @@ namespace xet
     class Device : public xe::Device
     {
     protected:
-        ::xe_device_handle_t handle;                      ///< handle of device object
+
+        Device( void ) = delete;
+        using xe::Device::Device;
+
+        ~Device( void ) = default;
+
+        Device( Device const& other ) = delete;
+        void operator=( Device const& other ) = delete;
+
+        Device( Device&& other ) = delete;
+        void operator=( Device&& other ) = delete;
 
     public:
-        auto getHandle( void ) const { return handle; }
-
-        ///////////////////////////////////////////////////////////////////////////////
-        /// @brief C++ version for ::xet_metric_group_sampling_type
-        enum class metric_group_sampling_type
-        {
-            METRIC_GROUP_SAMPLING_TYPE_NONE = 0,            ///< Invalid sampling mode
-            METRIC_GROUP_SAMPLING_TYPE_EVENT_BASED = XE_BIT(0), ///< Event based sampling
-            METRIC_GROUP_SAMPLING_TYPE_TIME_BASED = XE_BIT(1),  ///< Time based sampling
-
-        };
-
-        ///////////////////////////////////////////////////////////////////////////////
-        /// @brief C++ wrapper for ::xetDeviceGetMetricGroupCount
-        /// @returns
-        ///     - uint32_t: number of metric groups supported by the device
-        /// 
-        /// @throws result_t
-        inline static uint32_t
-        GetMetricGroupCount(
-            void
-            );
-
-        ///////////////////////////////////////////////////////////////////////////////
-        /// @brief C++ wrapper for ::xetDeviceGetMetricGroup
-        /// @returns
-        ///     - ::metric_group_handle_t: metric group handle
-        /// 
-        /// @throws result_t
-        inline metric_group_handle_t
-        GetMetricGroup(
-            uint32_t ordinal                                ///< [in] metric group index
-            );
 
         ///////////////////////////////////////////////////////////////////////////////
         /// @brief C++ wrapper for ::xetDeviceActivateMetricGroups
@@ -87,30 +64,6 @@ namespace xet
         ActivateMetricGroups(
             uint32_t count,                                 ///< [in] metric group count to activate. 0 to deactivate.
             metric_group_handle_t* phMetricGroups           ///< [in] handles of the metric groups to activate. NULL to deactivate.
-            );
-
-        ///////////////////////////////////////////////////////////////////////////////
-        /// @brief C++ wrapper for ::xetDeviceOpenMetricTracer
-        /// @returns
-        ///     - ::metric_tracer_handle_t: handle of metric tracer
-        /// 
-        /// @throws result_t
-        inline metric_tracer_handle_t
-        OpenMetricTracer(
-            metric_tracer_desc_t* pDesc,                    ///< [in/out] metric tracer descriptor
-            xe::_event_handle_t hNotificationEvent          ///< [in] event used for report availability notification. Must be device
-                                                            ///< to host type.
-            );
-
-        ///////////////////////////////////////////////////////////////////////////////
-        /// @brief C++ wrapper for ::xetDeviceCreateMetricQueryPool
-        /// @returns
-        ///     - ::metric_query_pool_handle_t: handle of metric query pool
-        /// 
-        /// @throws result_t
-        inline metric_query_pool_handle_t
-        CreateMetricQueryPool(
-            metric_query_pool_desc_t* pDesc                 ///< [in] metric query pool creation data
             );
 
     };

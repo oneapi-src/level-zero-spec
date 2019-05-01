@@ -46,7 +46,7 @@
 /// 
 /// @details
 ///     - The command list is created in the 'open' state.
-///     - This function may be called from simultaneous threads.
+///     - The application may call this function from simultaneous threads.
 ///     - The implementation of this function should be lock-free.
 /// 
 /// @returns
@@ -62,10 +62,10 @@
 ///     - ::XE_RESULT_ERROR_OUT_OF_HOST_MEMORY
 ///     - ::XE_RESULT_ERROR_OUT_OF_DEVICE_MEMORY
 ///
-/// @hash {30179944405dd754aa51afa884ab3ef58a0b94bbdda27c2776a05c23c12678dc}
+/// @hash {b9adb57d038366400eb6414d775de1d0b9e0df4107774781d73480085fa460fc}
 ///
 __xedllexport xe_result_t __xecall
-xeDeviceCreateCommandList(
+xeCommandListCreate(
     xe_device_handle_t hDevice,                     ///< [in] handle of the device object
     const xe_command_list_desc_t* desc,             ///< [in] pointer to command list descriptor
     xe_command_list_handle_t* phCommandList         ///< [out] pointer to handle of command list object created
@@ -86,7 +86,73 @@ xeDeviceCreateCommandList(
 #if defined(XE_NULLDRV)
         return XE_RESULT_SUCCESS;
 #else
-        return L0::Device::fromHandle(hDevice)->createCommandList(desc, phCommandList);
+        return L0::commandListCreate(hDevice, desc, phCommandList);
+#endif
+        /// @end
+    }
+    catch(xe_result_t& result)
+    {
+        return result;
+    }
+    catch(std::bad_alloc&)
+    {
+        return XE_RESULT_ERROR_OUT_OF_HOST_MEMORY;
+    }
+    catch(std::exception&)
+    {
+        // @todo: pfnOnException(e.what());
+        return XE_RESULT_ERROR_UNKNOWN;
+    }
+}
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Creates a command list on the device with an implicit command queue
+///        for immediate submission of commands.
+/// 
+/// @details
+///     - The command list is created in the 'open' state and never needs to be
+///       closed.
+///     - The application may call this function from simultaneous threads.
+///     - The implementation of this function should be lock-free.
+/// 
+/// @returns
+///     - ::XE_RESULT_SUCCESS
+///     - ::XE_RESULT_ERROR_UNINITIALIZED
+///     - ::XE_RESULT_ERROR_DEVICE_LOST
+///     - ::XE_RESULT_ERROR_INVALID_PARAMETER
+///         + nullptr == hDevice
+///         + nullptr == desc
+///         + nullptr == phCommandList
+///     - ::XE_RESULT_ERROR_UNSUPPORTED
+///         + ::XE_COMMAND_QUEUE_DESC_VERSION_CURRENT < desc->version
+///     - ::XE_RESULT_ERROR_OUT_OF_HOST_MEMORY
+///     - ::XE_RESULT_ERROR_OUT_OF_DEVICE_MEMORY
+///
+/// @hash {e7ab30eddaeddb1d62696d84bed058ae80a78c8b321fe5ed35b435322d71bf52}
+///
+__xedllexport xe_result_t __xecall
+xeCommandListCreateImmediate(
+    xe_device_handle_t hDevice,                     ///< [in] handle of the device object
+    const xe_command_queue_desc_t* desc,            ///< [in] pointer to command queue descriptor
+    xe_command_list_handle_t* phCommandList         ///< [out] pointer to handle of command list object created
+    )
+{
+    try
+    {
+        //if( XE_DRIVER_PARAMETER_VALIDATION_LEVEL >= 0 )
+        {
+            // if( nullptr == driver ) return XE_RESULT_ERROR_UNINITIALIZED;
+            // Check parameters
+            if( nullptr == hDevice ) return XE_RESULT_ERROR_INVALID_PARAMETER;
+            if( nullptr == desc ) return XE_RESULT_ERROR_INVALID_PARAMETER;
+            if( nullptr == phCommandList ) return XE_RESULT_ERROR_INVALID_PARAMETER;
+            if( XE_COMMAND_QUEUE_DESC_VERSION_CURRENT < desc->version ) return XE_RESULT_ERROR_UNSUPPORTED;
+        }
+        /// @begin
+#if defined(XE_NULLDRV)
+        return XE_RESULT_SUCCESS;
+#else
+        return L0::commandListCreateImmediate(hDevice, desc, phCommandList);
 #endif
         /// @end
     }
@@ -113,6 +179,8 @@ xeDeviceCreateCommandList(
 ///       currently referencing the command list before it is deleted
 ///     - The implementation of this function will immediately free all Host and
 ///       Device allocations associated with this command list.
+///     - The application may **not** call this function from simultaneous
+///       threads with the same command list handle.
 ///     - The implementation of this function should be lock-free.
 /// 
 /// @returns
@@ -142,7 +210,7 @@ xeCommandListDestroy(
 #if defined(XE_NULLDRV)
         return XE_RESULT_SUCCESS;
 #else
-        return L0::CommandList::fromHandle(hCommandList)->destroy();
+        return L0::commandListDestroy(hCommandList);
 #endif
         /// @end
     }
@@ -340,8 +408,7 @@ xeCommandListSetParameter(
 /// @brief Retrieves a command list's parameter.
 /// 
 /// @details
-///     - The application may **not** call this function from simultaneous
-///       threads with the same command list handle.
+///     - The application may call this function from simultaneous threads.
 ///     - The implementation of this function should be lock-free.
 /// 
 /// @remarks

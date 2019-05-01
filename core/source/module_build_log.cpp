@@ -56,4 +56,8 @@ ModuleBuildLog *ModuleBuildLog::create() {
     return moduleBuildLog;
 }
 
+xe_result_t moduleBuildLogDestroy(xe_module_build_log_handle_t hModuleBuildLog) {
+    return ModuleBuildLog::fromHandle(hModuleBuildLog)->destroy();
+}
+
 } // namespace L0

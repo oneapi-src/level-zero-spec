@@ -56,25 +56,35 @@ def generate_meta(d, meta):
             name = d['class']+name
 
         if name not in meta[type]:
-            meta[type][name] = []
+            meta[type][name] = {'types': [], 'class': ""}
 
         # add values to list
         if 'enum' == type:
             for etor in d['etors']:
-                meta[type][name].append(etor['name'])
+                meta[type][name]['types'].append(etor['name'])
         elif 'macro' == type:   
             if 'value' in d:
-                meta[type][name].append(d['value'])
+                meta[type][name]['types'].append(d['value'])
             if 'altvalue' in d:
-                meta[type][name].append(d['altvalue'])
+                meta[type][name]['types'].append(d['altvalue'])
         elif 'function' == type:
             for p in d['params']:
-                meta[type][name].append(p['type'])
-        elif 'struct' == type:
+                meta[type][name]['types'].append(p['type'])
+        elif 'struct' == type or 'union' == type:
             for m in d['members']:
-                meta[type][name].append(m['type'])
-        elif 'class' in d:
-            meta[type][name].append(d['class'])
+                meta[type][name]['types'].append(m['type'])
+        
+        if 'class' in d:
+            meta[type][name]['class'] = d['class']
+    else:
+        if 'members' in d:
+            if name not in meta['class']:
+                meta['class'][name] = {}
+
+            meta['class'][name]['members'] = []
+
+            for m in d['members']:
+                meta['class'][name]['members'].append(m['type'])
 
     return meta
 
@@ -96,6 +106,8 @@ def parse(path, meta = {'class':{}}):
             # extract header from objects
             if re.match(r"header", d['type']):
                 header = d
+                if 'includes' not in header:
+                    header['includes'] = []
             else:
                 d['hash'] = generate_hash(d)
                 objects.append(d)

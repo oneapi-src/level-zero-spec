@@ -59,10 +59,10 @@
 ///         + nullptr == count
 ///     - ::XE_RESULT_ERROR_UNSUPPORTED
 ///
-/// @hash {5c7c465fde2ab4523bf907a3b46343641d9b73a17c0e20334834e54d19ef5103}
+/// @hash {37748b1c3f680cbe7589aa03dce894c783c7bfcf519e1471437066baf4cfb59f}
 ///
 __xedllexport xe_result_t __xecall
-xeDriverGetDeviceCount(
+xeDeviceGetCount(
     uint32_t* count                                 ///< [out] number of devices available
     )
 {
@@ -70,6 +70,7 @@ xeDriverGetDeviceCount(
     {
         //if( XE_DRIVER_PARAMETER_VALIDATION_LEVEL >= 0 )
         {
+            // if( nullptr == driver ) return XE_RESULT_ERROR_UNINITIALIZED;
             // Check parameters
             if( nullptr == count ) return XE_RESULT_ERROR_INVALID_PARAMETER;
         }
@@ -77,7 +78,7 @@ xeDriverGetDeviceCount(
 #if defined(XE_NULLDRV)
         return XE_RESULT_SUCCESS;
 #else
-        return L0::Driver::get()->getDeviceCount(count);
+        return L0::deviceGetCount(count);
 #endif
         /// @end
     }
@@ -114,14 +115,14 @@ xeDriverGetDeviceCount(
 ///     - ::XE_RESULT_ERROR_DEVICE_LOST
 ///     - ::XE_RESULT_ERROR_INVALID_PARAMETER
 ///         + nullptr == phDevice
-///         + ordinal is out of range reported by ::xeDriverGetDeviceCount
+///         + ordinal is out of range reported by ::xeDeviceGetCount
 ///     - ::XE_RESULT_ERROR_UNSUPPORTED
 ///
-/// @hash {0fcaea081072b19126b15d5ddf6bf62c8c5a75b8647a0176af861cfb0adb1697}
+/// @hash {f4b935f7f586ba87c5c2bc1c836eeb7be390d9ff368c62c22f179cbdf256b76a}
 ///
 __xedllexport xe_result_t __xecall
-xeDriverGetDevice(
-    uint32_t ordinal,                               ///< [in] The device index in the range of [0, ::xeGetDeviceCount]
+xeDeviceGet(
+    uint32_t ordinal,                               ///< [in] The device index in the range of [0, ::xeDeviceGetCount]
     xe_device_handle_t* phDevice                    ///< [out] pointer to handle of device object created
     )
 {
@@ -129,6 +130,7 @@ xeDriverGetDevice(
     {
         //if( XE_DRIVER_PARAMETER_VALIDATION_LEVEL >= 0 )
         {
+            // if( nullptr == driver ) return XE_RESULT_ERROR_UNINITIALIZED;
             // Check parameters
             if( nullptr == phDevice ) return XE_RESULT_ERROR_INVALID_PARAMETER;
         }
@@ -136,7 +138,7 @@ xeDriverGetDevice(
 #if defined(XE_NULLDRV)
         return XE_RESULT_SUCCESS;
 #else
-        return L0::Driver::get()->getDevice(ordinal, phDevice);
+        return L0::deviceGet(ordinal, phDevice);
 #endif
         /// @end
     }

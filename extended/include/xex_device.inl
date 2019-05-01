@@ -38,26 +38,6 @@
 
 namespace xex
 {
-    ///////////////////////////////////////////////////////////////////////////////
-    /// @brief C++ wrapper for ::xexDeviceCreateCommandGraph
-    /// 
-    /// @details
-    ///     - This function may be called from simultaneous threads.
-    ///     - The implementation of this function should be lock-free.
-    /// 
-    /// @returns
-    ///     - ::command_graph_handle_t: pointer to handle of command graph object created
-    /// 
-    /// @throws result_t
-    inline command_graph_handle_t 
-    Device::CreateCommandGraph(
-        const command_graph_desc_t* desc                ///< [in] pointer to command graph descriptor
-        )
-    {
-        // auto result = ::xexDeviceCreateCommandGraph( handle, desc );
-        // if( ::XE_RESULT_SUCCESS != result ) throw exception(result, "xex::Device::CreateCommandGraph");
-    }
-
 } // namespace xex
 #endif // defined(__cplusplus)
 #endif // _XEX_DEVICE_INL

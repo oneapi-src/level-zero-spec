@@ -44,7 +44,7 @@
 /// @brief Creates a command queue on the device.
 /// 
 /// @details
-///     - This function may be called from simultaneous threads.
+///     - The application may call this function from simultaneous threads.
 ///     - The implementation of this function should be lock-free.
 /// 
 /// @remarks
@@ -66,10 +66,10 @@
 ///     - ::XE_RESULT_ERROR_OUT_OF_HOST_MEMORY
 ///     - ::XE_RESULT_ERROR_OUT_OF_DEVICE_MEMORY
 ///
-/// @hash {64cb11be0bd61d15890524c332cd41e37a7ff6c4b24ce3b3bdb3b0d19d687ad8}
+/// @hash {7de020ff882bbc454d2d425141ef1a94b660d9bf8e007043c95f17d4cf5caf9f}
 ///
 __xedllexport xe_result_t __xecall
-xeDeviceCreateCommandQueue(
+xeCommandQueueCreate(
     xe_device_handle_t hDevice,                     ///< [in] handle of the device object
     const xe_command_queue_desc_t* desc,            ///< [in] pointer to command queue descriptor
     xe_command_queue_handle_t* phCommandQueue       ///< [out] pointer to handle of command queue object created
@@ -90,7 +90,7 @@ xeDeviceCreateCommandQueue(
 #if defined(XE_NULLDRV)
         return XE_RESULT_SUCCESS;
 #else
-        return L0::Device::fromHandle(hDevice)->createCommandQueue(desc, phCommandQueue);
+        return L0::commandQueueCreate(hDevice, desc, phCommandQueue);
 #endif
         /// @end
     }
@@ -117,6 +117,8 @@ xeDeviceCreateCommandQueue(
 ///       currently referencing the command queue before it is deleted
 ///     - The implementation of this function will immediately free all Host and
 ///       Device allocations associated with this command queue
+///     - The application may **not** call this function from simultaneous
+///       threads with the same command queue handle.
 ///     - The implementation of this function should be lock-free.
 /// 
 /// @remarks
@@ -151,7 +153,7 @@ xeCommandQueueDestroy(
 #if defined(XE_NULLDRV)
         return XE_RESULT_SUCCESS;
 #else
-        return L0::CommandQueue::fromHandle(hCommandQueue)->destroy();
+        return L0::commandQueueDestroy(hCommandQueue);
 #endif
         /// @end
     }

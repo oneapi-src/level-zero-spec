@@ -24,7 +24,7 @@ TEST(xeDeviceCreateCommandList, redirectsToObject) {
         .Times(1)
         .WillRepeatedly(Return(XE_RESULT_SUCCESS));
 
-    auto result = xeDeviceCreateCommandList(device.toHandle(),
+    auto result = xeCommandListCreate(device.toHandle(),
                                             &desc,
                                             &commandList);
     EXPECT_EQ(XE_RESULT_SUCCESS, result);
@@ -39,7 +39,7 @@ TEST(xeDeviceCreateCommandQueue, redirectsToObject) {
         .Times(1)
         .WillRepeatedly(Return(XE_RESULT_SUCCESS));
 
-    auto result = xeDeviceCreateCommandQueue(device.toHandle(),
+    auto result = xeCommandQueueCreate(device.toHandle(),
                                              &desc,
                                              &commandQueue);
     EXPECT_EQ(XE_RESULT_SUCCESS, result);
@@ -55,22 +55,24 @@ TEST(xeDeviceCreatePoolEvent, redirectsToObject) {
         .Times(1)
         .WillRepeatedly(Return(XE_RESULT_SUCCESS));
 
-    auto result = xeDeviceCreateEventPool(device.toHandle(),
+    auto result = xeEventPoolCreate(device.toHandle(),
                                       &desc,
                                       &eventPool);
     ASSERT_EQ(XE_RESULT_SUCCESS, result);
 }
 
-TEST(xeDeviceCreatEvent, redirectsToObject) {
+TEST(xeDeviceCreateEvent, redirectsToObject) {
     Mock<EventPool> eventPool;
     xe_event_handle_t event = {};
+    const xe_event_desc_t desc = {XE_EVENT_DESC_VERSION_CURRENT, 0,
+        XE_EVENT_SCOPE_FLAG_NONE, XE_EVENT_SCOPE_FLAG_NONE};
 
-    EXPECT_CALL(eventPool, createEvent(0, &event))
+    EXPECT_CALL(eventPool, createEvent(&desc, &event))
         .Times(1)
         .WillRepeatedly(Return(XE_RESULT_SUCCESS));
 
-    auto result = xeEventPoolCreateEvent(eventPool.toHandle(),
-                                      0,
+    auto result = xeEventCreate(eventPool.toHandle(),
+                                      &desc,
                                       &event);
     ASSERT_EQ(XE_RESULT_SUCCESS, result);
 }

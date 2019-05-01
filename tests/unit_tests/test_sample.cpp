@@ -13,38 +13,39 @@ namespace L0 {
 namespace ult {
 
 TEST(sample, waitOnEvent) {
-    auto result = xeDriverInit(XE_INIT_FLAG_NONE);
+    auto result = xeInit(XE_INIT_FLAG_NONE);
     ASSERT_EQ(XE_RESULT_SUCCESS, result);
 
     xe_device_handle_t device = {};
-    result = xeDriverGetDevice(0, &device);
+    result = xeDeviceGet(0, &device);
     ASSERT_EQ(XE_RESULT_SUCCESS, result);
 
     xe_command_queue_handle_t hCommandQueue = {};
     xe_command_queue_desc_t desc = {};
-    result = xeDeviceCreateCommandQueue(device,
+    result = xeCommandQueueCreate(device,
                                         &desc,
                                         &hCommandQueue);
     ASSERT_EQ(XE_RESULT_SUCCESS, result);
 
     xe_command_list_desc_t descCommandList = {};
     xe_command_list_handle_t hCommandList = {};
-    result = xeDeviceCreateCommandList(device,
+    result = xeCommandListCreate(device,
                                        &descCommandList,
                                        &hCommandList);
     ASSERT_EQ(XE_RESULT_SUCCESS, result);
 
-    xe_event_pool_desc_t descEventPool = {};
-    descEventPool.count = 1;
+    xe_event_pool_desc_t poolDesc = {};
+    poolDesc.count = 1;
+    const xe_event_desc_t eventDesc = {};
     xe_event_pool_handle_t hEventPool = {};
     xe_event_handle_t hEvent = {};
-    result = xeDeviceCreateEventPool(device,
-                                 &descEventPool,
+    result = xeEventPoolCreate(device,
+                                 &poolDesc,
                                  &hEventPool);
     ASSERT_EQ(XE_RESULT_SUCCESS, result);
 
-    result = xeEventPoolCreateEvent(hEventPool,
-                                 0,
+    result = xeEventCreate(hEventPool,
+                                 &eventDesc,
                                  &hEvent);
     ASSERT_EQ(XE_RESULT_SUCCESS, result);
 
@@ -52,8 +53,8 @@ TEST(sample, waitOnEvent) {
                                             hEvent);
     ASSERT_EQ(XE_RESULT_SUCCESS, result);
 
-    result = xeCommandListAppendWaitOnEvent(hCommandList,
-                                            hEvent);
+    result = xeCommandListAppendWaitOnEvents(hCommandList, 1,
+                                            &hEvent);
     ASSERT_EQ(XE_RESULT_SUCCESS, result);
 
     result = xeCommandListClose(hCommandList);
@@ -80,23 +81,23 @@ extern std::unique_ptr<char[]> readBinaryTestFile(const std::string &name, size_
 TEST(sample, helloWorld) {
     UserRealCompilerGuard realCompilerGuard; // just for now
 
-    auto result = xeDriverInit(XE_INIT_FLAG_NONE);
+    auto result = xeInit(XE_INIT_FLAG_NONE);
     ASSERT_EQ(XE_RESULT_SUCCESS, result);
 
     xe_device_handle_t hDevice = {};
-    result = xeDriverGetDevice(0, &hDevice);
+    result = xeDeviceGet(0, &hDevice);
     ASSERT_EQ(XE_RESULT_SUCCESS, result);
 
     xe_command_queue_handle_t commandQueue = {};
     xe_command_queue_desc_t descCommandQueue = {};
-    result = xeDeviceCreateCommandQueue(hDevice,
+    result = xeCommandQueueCreate(hDevice,
                                         &descCommandQueue,
                                         &commandQueue);
     ASSERT_EQ(XE_RESULT_SUCCESS, result);
 
     xe_command_list_desc_t descCommandList = {};
     xe_command_list_handle_t commandList = {};
-    result = xeDeviceCreateCommandList(hDevice,
+    result = xeCommandListCreate(hDevice,
                                        &descCommandList,
                                        &commandList);
     ASSERT_EQ(XE_RESULT_SUCCESS, result);
@@ -111,7 +112,7 @@ TEST(sample, helloWorld) {
     descModule.pInputModule = reinterpret_cast<const uint8_t *>(inputModule.get());
     descModule.inputSize = static_cast<uint32_t>(moduleSize);
     descModule.format = XE_MODULE_FORMAT_IL_SPIRV;
-    result = xeDeviceCreateModule(hDevice,
+    result = xeModuleCreate(hDevice,
                                   &descModule,
                                   &module,
                                   nullptr);
@@ -122,7 +123,7 @@ TEST(sample, helloWorld) {
     descFunction.version = XE_FUNCTION_DESC_VERSION_CURRENT;
     descFunction.flags = XE_FUNCTION_FLAG_NONE;
     descFunction.pFunctionName = "memcpy_bytes";
-    result = xeModuleCreateFunction(module,
+    result = xeFunctionCreate(module,
                                     &descFunction,
                                     &function);
     ASSERT_EQ(XE_RESULT_SUCCESS, result);
@@ -171,7 +172,7 @@ TEST(sample, helloWorld) {
     result = xeCommandListAppendLaunchFunction(commandList,
                                                function,
                                                &dispatchFunctionArgs,
-                                               nullptr);
+                                               nullptr, 0, nullptr);
     ASSERT_EQ(XE_RESULT_SUCCESS, result);
 
     result = xeCommandListClose(commandList);

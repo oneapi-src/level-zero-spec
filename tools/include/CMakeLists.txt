@@ -3,6 +3,8 @@ target_sources(${TARGET_NAME}
     PRIVATE
     ${CMAKE_CURRENT_SOURCE_DIR}/CMakeLists.txt
     ${CMAKE_CURRENT_SOURCE_DIR}/xet_all.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/xet_cmdlist.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/xet_cmdlist.inl
     ${CMAKE_CURRENT_SOURCE_DIR}/xet_common.h
     ${CMAKE_CURRENT_SOURCE_DIR}/xet_common.inl
     ${CMAKE_CURRENT_SOURCE_DIR}/xet_device.h

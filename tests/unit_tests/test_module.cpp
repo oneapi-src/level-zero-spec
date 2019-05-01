@@ -137,7 +137,7 @@ TEST(xeModuleCreateFunction, redirectsToObject) {
         .Times(1)
         .WillRepeatedly(Return(XE_RESULT_SUCCESS));
 
-    auto result = xeModuleCreateFunction(module.toHandle(), &desc, &function);
+    auto result = xeFunctionCreate(module.toHandle(), &desc, &function);
     EXPECT_EQ(XE_RESULT_SUCCESS, result);
 }
 

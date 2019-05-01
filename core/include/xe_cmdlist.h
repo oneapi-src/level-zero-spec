@@ -36,6 +36,7 @@
 #pragma once
 #endif
 #include "xe_common.h"
+#include "xe_cmdqueue.h"
 
 #if defined(__cplusplus)
 extern "C" {
@@ -58,8 +59,6 @@ typedef enum _xe_command_list_flag_t
                                                     ///< primitives)
     XE_COMMAND_LIST_FLAG_RELAXED_ORDERING = XE_BIT(1),  ///< driver may reorder programs and copys between barriers and
                                                     ///< synchronization primitives
-    XE_COMMAND_LIST_FLAG_LOW_LATENCY = XE_BIT(2),   ///< driver should optimize for immediate submission to a command queue
-    XE_COMMAND_LIST_FLAG_CROSS_DEVICE = XE_BIT(3),  ///< command list can be shared with another device
 
 } xe_command_list_flag_t;
 
@@ -78,7 +77,7 @@ typedef struct _xe_command_list_desc_t
 /// 
 /// @details
 ///     - The command list is created in the 'open' state.
-///     - This function may be called from simultaneous threads.
+///     - The application may call this function from simultaneous threads.
 ///     - The implementation of this function should be lock-free.
 /// 
 /// @returns
@@ -94,9 +93,38 @@ typedef struct _xe_command_list_desc_t
 ///     - ::XE_RESULT_ERROR_OUT_OF_HOST_MEMORY
 ///     - ::XE_RESULT_ERROR_OUT_OF_DEVICE_MEMORY
 __xedllport xe_result_t __xecall
-xeDeviceCreateCommandList(
+xeCommandListCreate(
     xe_device_handle_t hDevice,                     ///< [in] handle of the device object
     const xe_command_list_desc_t* desc,             ///< [in] pointer to command list descriptor
+    xe_command_list_handle_t* phCommandList         ///< [out] pointer to handle of command list object created
+    );
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Creates a command list on the device with an implicit command queue
+///        for immediate submission of commands.
+/// 
+/// @details
+///     - The command list is created in the 'open' state and never needs to be
+///       closed.
+///     - The application may call this function from simultaneous threads.
+///     - The implementation of this function should be lock-free.
+/// 
+/// @returns
+///     - ::XE_RESULT_SUCCESS
+///     - ::XE_RESULT_ERROR_UNINITIALIZED
+///     - ::XE_RESULT_ERROR_DEVICE_LOST
+///     - ::XE_RESULT_ERROR_INVALID_PARAMETER
+///         + nullptr == hDevice
+///         + nullptr == desc
+///         + nullptr == phCommandList
+///     - ::XE_RESULT_ERROR_UNSUPPORTED
+///         + ::XE_COMMAND_QUEUE_DESC_VERSION_CURRENT < desc->version
+///     - ::XE_RESULT_ERROR_OUT_OF_HOST_MEMORY
+///     - ::XE_RESULT_ERROR_OUT_OF_DEVICE_MEMORY
+__xedllport xe_result_t __xecall
+xeCommandListCreateImmediate(
+    xe_device_handle_t hDevice,                     ///< [in] handle of the device object
+    const xe_command_queue_desc_t* desc,            ///< [in] pointer to command queue descriptor
     xe_command_list_handle_t* phCommandList         ///< [out] pointer to handle of command list object created
     );
 
@@ -108,6 +136,8 @@ xeDeviceCreateCommandList(
 ///       currently referencing the command list before it is deleted
 ///     - The implementation of this function will immediately free all Host and
 ///       Device allocations associated with this command list.
+///     - The application may **not** call this function from simultaneous
+///       threads with the same command list handle.
 ///     - The implementation of this function should be lock-free.
 /// 
 /// @returns
@@ -207,8 +237,7 @@ xeCommandListSetParameter(
 /// @brief Retrieves a command list's parameter.
 /// 
 /// @details
-///     - The application may **not** call this function from simultaneous
-///       threads with the same command list handle.
+///     - The application may call this function from simultaneous threads.
 ///     - The implementation of this function should be lock-free.
 /// 
 /// @remarks

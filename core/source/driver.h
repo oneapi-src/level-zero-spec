@@ -5,11 +5,10 @@
 namespace L0 {
 
 struct Driver {
-    virtual xe_result_t getDevice(uint32_t ordinal,
-                                  xe_device_handle_t *phDevice) = 0;
-    virtual xe_result_t getDeviceCount(uint32_t *count) = 0;
-    virtual xe_result_t getVersion(uint32_t *version) = 0;
-    virtual xe_result_t init(_xe_init_flag_t) = 0;
+    virtual xe_result_t driverGetDevice(uint32_t ordinal, xe_device_handle_t *phDevice)= 0;
+    virtual xe_result_t driverGetDeviceCount(uint32_t *count) = 0;
+    virtual xe_result_t driverGetVersion(uint32_t *version)= 0;
+    virtual xe_result_t driverInit(_xe_init_flag_t) = 0;
 
     virtual void initialize(bool *result) = 0;
 
@@ -17,8 +16,13 @@ struct Driver {
         return driver;
     }
 
-  protected:
+  //protected:
     static Driver *driver;
 };
+
+xe_result_t deviceGet(uint32_t ordinal, xe_device_handle_t *phDevice);
+xe_result_t deviceGetCount(uint32_t *count);
+xe_result_t getDriverVersion(uint32_t *version);
+xe_result_t init(_xe_init_flag_t);
 
 } // namespace L0

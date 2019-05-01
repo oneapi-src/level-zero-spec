@@ -56,7 +56,10 @@ struct Mock<EventPool> : public EventPool {
     virtual ~Mock();
 
     MOCK_METHOD0(destroy, xe_result_t());
-    MOCK_METHOD2(createEvent, xe_result_t(uint32_t index, xe_event_handle_t* phEvent));
+    MOCK_METHOD2(createEvent, xe_result_t(const xe_event_desc_t* desc,
+            xe_event_handle_t* phEvent));
+    MOCK_METHOD0(getPoolSize, size_t());
+    MOCK_METHOD1(getEvent, Event *(uint32_t index));
     MOCK_METHOD1(getIpcHandle, xe_result_t(xe_ipc_event_pool_handle_t* pIpcHandle));
     MOCK_METHOD0(closeIpcHandle, xe_result_t());
 

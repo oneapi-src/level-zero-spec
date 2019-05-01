@@ -39,11 +39,17 @@
 namespace xe
 {
     ///////////////////////////////////////////////////////////////////////////////
-    /// @brief C++ wrapper for ::xeCommandListAppendExecutionBarrier
+    /// @brief C++ wrapper for ::xeCommandListAppendBarrier
     /// 
     /// @details
-    ///     - This may **not** be called for a command list created with
-    ///       ::COMMAND_LIST_FLAG_COPY_ONLY.
+    ///     - If numWaitEvents is zero, then all previous commands are completed
+    ///       prior to the execution of the barrier.
+    ///     - If numWaitEvents is non-zero, then then all phWaitEvents must be
+    ///       signalled prior to the execution of the barrier.
+    ///     - This command blocks all following commands from beginning until the
+    ///       execution of the barrier completes.
+    ///     - Memory and cache hierarchies are flushed and invalidated sufficient
+    ///       for device and host access.
     ///     - The application may **not** call this function from simultaneous
     ///       threads with the same command list handle.
     ///     - The implementation of this function should be lock-free.
@@ -55,12 +61,92 @@ namespace xe
     /// 
     /// @throws result_t
     inline void 
-    CommandList::AppendExecutionBarrier(
-        void
+    CommandList::AppendBarrier(
+        event_handle_t hSignalEvent,                    ///< [in][optional] handle of the event to signal on completion
+        uint32_t numWaitEvents,                         ///< [in][optional] number of events to wait on before executing barrier
+        event_handle_t* phWaitEvents                    ///< [in][optional] handle of the events to wait on before executing
+                                                        ///< barrier
         )
     {
-        // auto result = ::xeCommandListAppendExecutionBarrier( handle );
-        // if( ::XE_RESULT_SUCCESS != result ) throw exception(result, "xe::CommandList::AppendExecutionBarrier");
+        // auto result = ::xeCommandListAppendBarrier( handle, hSignalEvent, numWaitEvents, phWaitEvents );
+        // if( ::XE_RESULT_SUCCESS != result ) throw exception(result, "xe::CommandList::AppendBarrier");
+    }
+
+    ///////////////////////////////////////////////////////////////////////////////
+    /// @brief C++ wrapper for ::xeCommandListAppendMemoryRangesBarrier
+    /// 
+    /// @details
+    ///     - If numWaitEvents is zero, then all previous commands are completed
+    ///       prior to the execution of the barrier.
+    ///     - If numWaitEvents is non-zero, then then all phWaitEvents must be
+    ///       signalled prior to the execution of the barrier.
+    ///     - This command blocks all following commands from beginning until the
+    ///       execution of the barrier completes.
+    ///     - Memory and cache hierarchies are flushed and invalidated sufficient
+    ///       for device and host access.
+    ///     - The application may **not** call this function from simultaneous
+    ///       threads with the same command list handle.
+    ///     - The implementation of this function should be lock-free.
+    /// 
+    /// @throws result_t
+    inline void 
+    CommandList::AppendMemoryRangesBarrier(
+        uint32_t numRanges,                             ///< [in] number of memory ranges
+        const size_t* pRangeSizes,                      ///< [in] array of sizes of memory range
+        const void** pRanges,                           ///< [in] array of memory ranges
+        event_handle_t hSignalEvent,                    ///< [in][optional] handle of the event to signal on completion
+        uint32_t numWaitEvents,                         ///< [in][optional] number of events to wait on before executing barrier
+        event_handle_t* phWaitEvents                    ///< [in][optional] handle of the events to wait on before executing
+                                                        ///< barrier
+        )
+    {
+        // auto result = ::xeCommandListAppendMemoryRangesBarrier( handle, numRanges, pRangeSizes, pRanges, hSignalEvent, numWaitEvents, phWaitEvents );
+        // if( ::XE_RESULT_SUCCESS != result ) throw exception(result, "xe::CommandList::AppendMemoryRangesBarrier");
+    }
+
+    ///////////////////////////////////////////////////////////////////////////////
+    /// @brief C++ wrapper for ::xeCommandListCreate
+    /// 
+    /// @details
+    ///     - The command list is created in the 'open' state.
+    ///     - The application may call this function from simultaneous threads.
+    ///     - The implementation of this function should be lock-free.
+    /// 
+    /// @returns
+    ///     - ::command_list_handle_t: pointer to handle of command list object created
+    /// 
+    /// @throws result_t
+    inline command_list_handle_t 
+    CommandList::Create(
+        device_handle_t hDevice,                        ///< [in] handle of the device object
+        const command_list_desc_t* desc                 ///< [in] pointer to command list descriptor
+        )
+    {
+        // auto result = ::xeCommandListCreate( handle, hDevice, desc );
+        // if( ::XE_RESULT_SUCCESS != result ) throw exception(result, "xe::CommandList::Create");
+    }
+
+    ///////////////////////////////////////////////////////////////////////////////
+    /// @brief C++ wrapper for ::xeCommandListCreateImmediate
+    /// 
+    /// @details
+    ///     - The command list is created in the 'open' state and never needs to be
+    ///       closed.
+    ///     - The application may call this function from simultaneous threads.
+    ///     - The implementation of this function should be lock-free.
+    /// 
+    /// @returns
+    ///     - ::command_list_handle_t: pointer to handle of command list object created
+    /// 
+    /// @throws result_t
+    inline command_list_handle_t 
+    CommandList::CreateImmediate(
+        device_handle_t hDevice,                        ///< [in] handle of the device object
+        const CommandQueue::command_queue_desc_t* desc  ///< [in] pointer to command queue descriptor
+        )
+    {
+        // auto result = ::xeCommandListCreateImmediate( handle, hDevice, desc );
+        // if( ::XE_RESULT_SUCCESS != result ) throw exception(result, "xe::CommandList::CreateImmediate");
     }
 
     ///////////////////////////////////////////////////////////////////////////////
@@ -71,15 +157,17 @@ namespace xe
     ///       currently referencing the command list before it is deleted
     ///     - The implementation of this function will immediately free all Host and
     ///       Device allocations associated with this command list.
+    ///     - The application may **not** call this function from simultaneous
+    ///       threads with the same command list handle.
     ///     - The implementation of this function should be lock-free.
     /// 
     /// @throws result_t
     inline void 
     CommandList::Destroy(
-        void
+        command_list_handle_t hCommandList              ///< [in] handle of command list object to destroy
         )
     {
-        // auto result = ::xeCommandListDestroy( handle );
+        // auto result = ::xeCommandListDestroy( handle, hCommandList );
         // if( ::XE_RESULT_SUCCESS != result ) throw exception(result, "xe::CommandList::Destroy");
     }
 
@@ -150,8 +238,7 @@ namespace xe
     /// @brief C++ wrapper for ::xeCommandListGetParameter
     /// 
     /// @details
-    ///     - The application may **not** call this function from simultaneous
-    ///       threads with the same command list handle.
+    ///     - The application may call this function from simultaneous threads.
     ///     - The implementation of this function should be lock-free.
     /// 
     /// @remarks
@@ -237,10 +324,12 @@ namespace xe
         void* dstptr,                                   ///< [in] pointer to destination memory to copy to
         const void* srcptr,                             ///< [in] pointer to source memory to copy from
         size_t size,                                    ///< [in] size in bytes to copy
-        event_handle_t hEvent                           ///< [in][optional] handle of the event to signal on completion
+        event_handle_t hSignalEvent,                    ///< [in][optional] handle of the event to signal on completion
+        uint32_t numWaitEvents,                         ///< [in][optional] number of events to wait on before copy
+        event_handle_t* phWaitEvents                    ///< [in][optional] handle of the events to wait on before copy
         )
     {
-        // auto result = ::xeCommandListAppendMemoryCopy( handle, dstptr, srcptr, size, hEvent );
+        // auto result = ::xeCommandListAppendMemoryCopy( handle, dstptr, srcptr, size, hSignalEvent, numWaitEvents, phWaitEvents );
         // if( ::XE_RESULT_SUCCESS != result ) throw exception(result, "xe::CommandList::AppendMemoryCopy");
     }
 
@@ -267,10 +356,12 @@ namespace xe
         void* ptr,                                      ///< [in] pointer to memory to initialize
         int value,                                      ///< [in] value to initialize memory to
         size_t size,                                    ///< [in] size in bytes to initailize
-        event_handle_t hEvent                           ///< [in][optional] handle of the event to signal on completion
+        event_handle_t hSignalEvent,                    ///< [in][optional] handle of the event to signal on completion
+        uint32_t numWaitEvents,                         ///< [in][optional] number of events to wait on before copy
+        event_handle_t* phWaitEvents                    ///< [in][optional] handle of the events to wait on before copy
         )
     {
-        // auto result = ::xeCommandListAppendMemorySet( handle, ptr, value, size, hEvent );
+        // auto result = ::xeCommandListAppendMemorySet( handle, ptr, value, size, hSignalEvent, numWaitEvents, phWaitEvents );
         // if( ::XE_RESULT_SUCCESS != result ) throw exception(result, "xe::CommandList::AppendMemorySet");
     }
 
@@ -291,10 +382,12 @@ namespace xe
     CommandList::AppendImageCopy(
         image_handle_t hDstImage,                       ///< [in] handle of destination image to copy to
         image_handle_t hSrcImage,                       ///< [in] handle of source image to copy from
-        event_handle_t hEvent                           ///< [in][optional] handle of the event to signal on completion
+        event_handle_t hSignalEvent,                    ///< [in][optional] handle of the event to signal on completion
+        uint32_t numWaitEvents,                         ///< [in][optional] number of events to wait on before copy
+        event_handle_t* phWaitEvents                    ///< [in][optional] handle of the events to wait on before copy
         )
     {
-        // auto result = ::xeCommandListAppendImageCopy( handle, hDstImage, hSrcImage, hEvent );
+        // auto result = ::xeCommandListAppendImageCopy( handle, hDstImage, hSrcImage, hSignalEvent, numWaitEvents, phWaitEvents );
         // if( ::XE_RESULT_SUCCESS != result ) throw exception(result, "xe::CommandList::AppendImageCopy");
     }
 
@@ -310,13 +403,15 @@ namespace xe
     inline void 
     CommandList::AppendImageCopyRegion(
         image_handle_t hDstImage,                       ///< [in] handle of destination image to copy to
-        image_region_t* pDstRegion,                     ///< [in][optional] destination region descriptor
         image_handle_t hSrcImage,                       ///< [in] handle of source image to copy from
+        image_region_t* pDstRegion,                     ///< [in][optional] destination region descriptor
         image_region_t* pSrcRegion,                     ///< [in][optional] source region descriptor
-        event_handle_t hEvent                           ///< [in][optional] handle of the event to signal on completion
+        event_handle_t hSignalEvent,                    ///< [in][optional] handle of the event to signal on completion
+        uint32_t numWaitEvents,                         ///< [in][optional] number of events to wait on before copy
+        event_handle_t* phWaitEvents                    ///< [in][optional] handle of the events to wait on before copy
         )
     {
-        // auto result = ::xeCommandListAppendImageCopyRegion( handle, hDstImage, pDstRegion, hSrcImage, pSrcRegion, hEvent );
+        // auto result = ::xeCommandListAppendImageCopyRegion( handle, hDstImage, hSrcImage, pDstRegion, pSrcRegion, hSignalEvent, numWaitEvents, phWaitEvents );
         // if( ::XE_RESULT_SUCCESS != result ) throw exception(result, "xe::CommandList::AppendImageCopyRegion");
     }
 
@@ -340,10 +435,12 @@ namespace xe
         void* dstptr,                                   ///< [in] pointer to destination memory to copy to
         image_handle_t hSrcImage,                       ///< [in] handle of source image to copy from
         image_region_t* pSrcRegion,                     ///< [in][optional] source region descriptor
-        event_handle_t hEvent                           ///< [in][optional] handle of the event to signal on completion
+        event_handle_t hSignalEvent,                    ///< [in][optional] handle of the event to signal on completion
+        uint32_t numWaitEvents,                         ///< [in][optional] number of events to wait on before copy
+        event_handle_t* phWaitEvents                    ///< [in][optional] handle of the events to wait on before copy
         )
     {
-        // auto result = ::xeCommandListAppendImageCopyToMemory( handle, dstptr, hSrcImage, pSrcRegion, hEvent );
+        // auto result = ::xeCommandListAppendImageCopyToMemory( handle, dstptr, hSrcImage, pSrcRegion, hSignalEvent, numWaitEvents, phWaitEvents );
         // if( ::XE_RESULT_SUCCESS != result ) throw exception(result, "xe::CommandList::AppendImageCopyToMemory");
     }
 
@@ -365,12 +462,14 @@ namespace xe
     inline void 
     CommandList::AppendImageCopyFromMemory(
         image_handle_t hDstImage,                       ///< [in] handle of destination image to copy to
-        image_region_t* pDstRegion,                     ///< [in][optional] destination region descriptor
         const void* srcptr,                             ///< [in] pointer to source memory to copy from
-        event_handle_t hEvent                           ///< [in][optional] handle of the event to signal on completion
+        image_region_t* pDstRegion,                     ///< [in][optional] destination region descriptor
+        event_handle_t hSignalEvent,                    ///< [in][optional] handle of the event to signal on completion
+        uint32_t numWaitEvents,                         ///< [in][optional] number of events to wait on before copy
+        event_handle_t* phWaitEvents                    ///< [in][optional] handle of the events to wait on before copy
         )
     {
-        // auto result = ::xeCommandListAppendImageCopyFromMemory( handle, hDstImage, pDstRegion, srcptr, hEvent );
+        // auto result = ::xeCommandListAppendImageCopyFromMemory( handle, hDstImage, srcptr, pDstRegion, hSignalEvent, numWaitEvents, phWaitEvents );
         // if( ::XE_RESULT_SUCCESS != result ) throw exception(result, "xe::CommandList::AppendImageCopyFromMemory");
     }
 
@@ -471,7 +570,7 @@ namespace xe
     }
 
     ///////////////////////////////////////////////////////////////////////////////
-    /// @brief C++ wrapper for ::xeCommandListAppendWaitOnEvent
+    /// @brief C++ wrapper for ::xeCommandListAppendWaitOnEvents
     /// 
     /// @details
     ///     - The application may **not** call this function from simultaneous
@@ -480,12 +579,13 @@ namespace xe
     /// 
     /// @throws result_t
     inline void 
-    CommandList::AppendWaitOnEvent(
-        event_handle_t hEvent                           ///< [in] handle of the event
+    CommandList::AppendWaitOnEvents(
+        uint32_t numEvents,                             ///< [in] number of events to wait on before continuing
+        event_handle_t* phEvents                        ///< [in] handle of the events to wait on before continuing
         )
     {
-        // auto result = ::xeCommandListAppendWaitOnEvent( handle, hEvent );
-        // if( ::XE_RESULT_SUCCESS != result ) throw exception(result, "xe::CommandList::AppendWaitOnEvent");
+        // auto result = ::xeCommandListAppendWaitOnEvents( handle, numEvents, phEvents );
+        // if( ::XE_RESULT_SUCCESS != result ) throw exception(result, "xe::CommandList::AppendWaitOnEvents");
     }
 
     ///////////////////////////////////////////////////////////////////////////////
@@ -493,7 +593,7 @@ namespace xe
     /// 
     /// @details
     ///     - The application may **not** call this function from simultaneous
-    ///       threads.
+    ///       threads with the same command list handle.
     ///     - The implementation of this function should be lock-free.
     /// 
     /// @remarks
@@ -516,7 +616,8 @@ namespace xe
     /// @details
     ///     - This may **not** be called for a command list created with
     ///       ::COMMAND_LIST_FLAG_COPY_ONLY.
-    ///     - This function may **not** be called from simultaneous threads.
+    ///     - This function may **not** be called from simultaneous threads with the
+    ///       same command list handle.
     ///     - The implementation of this function should be lock-free.
     /// 
     /// @remarks
@@ -528,10 +629,12 @@ namespace xe
     CommandList::AppendLaunchFunction(
         function_handle_t hFunction,                    ///< [in] handle of the function object
         const thread_group_dimensions_t* pLaunchFuncArgs,   ///< [in] launch function arguments.
-        event_handle_t hEvent                           ///< [in][optional] handle of the event to signal on completion
+        event_handle_t hSignalEvent,                    ///< [in][optional] handle of the event to signal on completion
+        uint32_t numWaitEvents,                         ///< [in][optional] number of events to wait on before launching
+        event_handle_t* phWaitEvents                    ///< [in][optional] handle of the events to wait on before launching
         )
     {
-        // auto result = ::xeCommandListAppendLaunchFunction( handle, hFunction, pLaunchFuncArgs, hEvent );
+        // auto result = ::xeCommandListAppendLaunchFunction( handle, hFunction, pLaunchFuncArgs, hSignalEvent, numWaitEvents, phWaitEvents );
         // if( ::XE_RESULT_SUCCESS != result ) throw exception(result, "xe::CommandList::AppendLaunchFunction");
     }
 
@@ -544,7 +647,8 @@ namespace xe
     ///       completed on the device.
     ///     - This may **not** be called for a command list created with
     ///       ::COMMAND_LIST_FLAG_COPY_ONLY.
-    ///     - This function may **not** be called from simultaneous threads.
+    ///     - This function may **not** be called from simultaneous threads with the
+    ///       same command list handle.
     ///     - The implementation of this function should be lock-free.
     /// 
     /// @remarks
@@ -556,10 +660,12 @@ namespace xe
     CommandList::AppendLaunchFunctionIndirect(
         function_handle_t hFunction,                    ///< [in] handle of the function object
         const thread_group_dimensions_t* pLaunchArgumentsBuffer,///< [in] pointer to device buffer that will contain launch arguments
-        event_handle_t hEvent                           ///< [in][optional] handle of the event to signal on completion
+        event_handle_t hSignalEvent,                    ///< [in][optional] handle of the event to signal on completion
+        uint32_t numWaitEvents,                         ///< [in][optional] number of events to wait on before launching
+        event_handle_t* phWaitEvents                    ///< [in][optional] handle of the events to wait on before launching
         )
     {
-        // auto result = ::xeCommandListAppendLaunchFunctionIndirect( handle, hFunction, pLaunchArgumentsBuffer, hEvent );
+        // auto result = ::xeCommandListAppendLaunchFunctionIndirect( handle, hFunction, pLaunchArgumentsBuffer, hSignalEvent, numWaitEvents, phWaitEvents );
         // if( ::XE_RESULT_SUCCESS != result ) throw exception(result, "xe::CommandList::AppendLaunchFunctionIndirect");
     }
 
@@ -572,7 +678,8 @@ namespace xe
     ///       function has completed on the device.
     ///     - This may **not** be called for a command list created with
     ///       ::COMMAND_LIST_FLAG_COPY_ONLY.
-    ///     - This function may **not** be called from simultaneous threads.
+    ///     - This function may **not** be called from simultaneous threads with the
+    ///       same command list handle.
     ///     - The implementation of this function should be lock-free.
     /// 
     /// @remarks
@@ -588,10 +695,12 @@ namespace xe
                                                         ///< number of launch arguments; must be less-than or equal-to numFunctions
         const thread_group_dimensions_t* pLaunchArgumentsBuffer,///< [in] pointer to device buffer that will contain a contiguous array of
                                                         ///< launch arguments
-        event_handle_t hEvent                           ///< [in][optional] handle of the event to signal on completion
+        event_handle_t hSignalEvent,                    ///< [in][optional] handle of the event to signal on completion
+        uint32_t numWaitEvents,                         ///< [in][optional] number of events to wait on before launching
+        event_handle_t* phWaitEvents                    ///< [in][optional] handle of the events to wait on before launching
         )
     {
-        // auto result = ::xeCommandListAppendLaunchMultipleFunctionsIndirect( handle, numFunctions, phFunctions, pNumLaunchArguments, pLaunchArgumentsBuffer, hEvent );
+        // auto result = ::xeCommandListAppendLaunchMultipleFunctionsIndirect( handle, numFunctions, phFunctions, pNumLaunchArguments, pLaunchArgumentsBuffer, hSignalEvent, numWaitEvents, phWaitEvents );
         // if( ::XE_RESULT_SUCCESS != result ) throw exception(result, "xe::CommandList::AppendLaunchMultipleFunctionsIndirect");
     }
 
@@ -601,7 +710,8 @@ namespace xe
     /// @details
     ///     - This may **not** be called for a command list created with
     ///       ::COMMAND_LIST_FLAG_COPY_ONLY.
-    ///     - This function may **not** be called from simultaneous threads.
+    ///     - This function may **not** be called from simultaneous threads with the
+    ///       same command list handle.
     ///     - The implementation of this function should be lock-free.
     /// 
     /// @remarks

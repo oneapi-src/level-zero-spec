@@ -55,13 +55,13 @@ XeApp::XeApp(std::string module_path) {
     command_queue = nullptr;
     this->module_path = module_path;
 
-    SUCCESS_OR_TERMINATE(xeDriverInit(XE_INIT_FLAG_NONE));
+    SUCCESS_OR_TERMINATE(xeInit(XE_INIT_FLAG_NONE));
 
     uint32_t device_count = 0;
-    SUCCESS_OR_TERMINATE(xeDriverGetDeviceCount(&device_count));
+    SUCCESS_OR_TERMINATE(xeDeviceGetCount(&device_count));
 
     const uint32_t default_device = 0;
-    SUCCESS_OR_TERMINATE(xeDriverGetDevice(default_device, &device));
+    SUCCESS_OR_TERMINATE(xeDeviceGet(default_device, &device));
 
     const std::vector<uint8_t> binary_file = load_binary_file(module_path);
     std::cout << std::endl;
@@ -73,7 +73,7 @@ XeApp::XeApp(std::string module_path) {
     module_description.pInputModule = binary_file.data();
     module_description.pBuildFlags = nullptr;
 
-    SUCCESS_OR_TERMINATE(xeDeviceCreateModule(device, &module_description,
+    SUCCESS_OR_TERMINATE(xeModuleCreate(device, &module_description,
                                               &module, nullptr));
     commandQueueCreate(0, /* command_queue_id */
                        &command_queue);
@@ -101,7 +101,7 @@ void XeApp::functionCreate(xe_function_handle_t *function,
     function_description.flags = XE_FUNCTION_FLAG_NONE;
     function_description.pFunctionName = pFunctionName;
 
-    SUCCESS_OR_TERMINATE(xeModuleCreateFunction(module,
+    SUCCESS_OR_TERMINATE(xeFunctionCreate(module,
                                                 &function_description,
                                                 function));
 }
@@ -115,7 +115,7 @@ void XeApp::commandListCreate(xe_command_list_handle_t *phCommandList) {
     command_list_description.version = XE_COMMAND_LIST_DESC_VERSION_CURRENT;
 
     xe_command_list_handle_t command_list = nullptr;
-    SUCCESS_OR_TERMINATE(xeDeviceCreateCommandList(device,
+    SUCCESS_OR_TERMINATE(xeCommandListCreate(device,
                                                    &command_list_description,
                                                    phCommandList));
 }
@@ -133,7 +133,7 @@ void XeApp::commandQueueCreate(const uint32_t command_queue_id,
     command_queue_description.mode = XE_COMMAND_QUEUE_MODE_ASYNCHRONOUS;
 
     SUCCESS_OR_TERMINATE(
-        xeDeviceCreateCommandQueue(device, &command_queue_description,
+        xeCommandQueueCreate(device, &command_queue_description,
                                    command_queue));
 }
 

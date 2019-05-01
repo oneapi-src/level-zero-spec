@@ -39,6 +39,31 @@
 namespace xe
 {
     ///////////////////////////////////////////////////////////////////////////////
+    /// @brief C++ wrapper for ::xeFenceCreate
+    /// 
+    /// @details
+    ///     - The application may call this function from simultaneous threads.
+    ///     - The implementation of this function should be lock-free.
+    /// 
+    /// @remarks
+    ///   _Analogues_
+    ///     - **vkCreateFence**
+    /// 
+    /// @returns
+    ///     - ::fence_handle_t: pointer to handle of fence object created
+    /// 
+    /// @throws result_t
+    inline fence_handle_t 
+    Fence::Create(
+        command_queue_handle_t hCommandQueue,           ///< [in] handle of command queue
+        const fence_desc_t* desc                        ///< [in] pointer to fence descriptor
+        )
+    {
+        // auto result = ::xeFenceCreate( handle, hCommandQueue, desc );
+        // if( ::XE_RESULT_SUCCESS != result ) throw exception(result, "xe::Fence::Create");
+    }
+
+    ///////////////////////////////////////////////////////////////////////////////
     /// @brief C++ wrapper for ::xeFenceDestroy
     /// 
     /// @details
@@ -46,6 +71,8 @@ namespace xe
     ///       currently referencing the fence before it is deleted
     ///     - The implementation of this function will immediately free all Host and
     ///       Device allocations associated with this fence
+    ///     - The application may **not** call this function from simultaneous
+    ///       threads with the same fence handle.
     ///     - The implementation of this function should be lock-free.
     /// 
     /// @remarks
@@ -55,10 +82,10 @@ namespace xe
     /// @throws result_t
     inline void 
     Fence::Destroy(
-        void
+        fence_handle_t hFence                           ///< [in] handle of fence object to destroy
         )
     {
-        // auto result = ::xeFenceDestroy( handle );
+        // auto result = ::xeFenceDestroy( handle, hFence );
         // if( ::XE_RESULT_SUCCESS != result ) throw exception(result, "xe::Fence::Destroy");
     }
 

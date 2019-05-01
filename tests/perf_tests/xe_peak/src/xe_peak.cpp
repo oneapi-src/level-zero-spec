@@ -84,7 +84,7 @@ void L0Context::create_module(std::vector<uint8_t> binary_file) {
     module_description.pInputModule = reinterpret_cast<const uint8_t *>(binary_file.data());
     module_description.pBuildFlags = nullptr;
 
-    result = xeDeviceCreateModule(device, &module_description, &module, nullptr);
+    result = xeModuleCreate(device, &module_description, &module, nullptr);
     if (result) {
         throw std::runtime_error("xeDeviceCreateModule failed: " + result);
     }
@@ -123,21 +123,21 @@ void L0Context::init_xe() {
     xe_command_queue_desc_t command_queue_description;
     xe_result_t result = XE_RESULT_SUCCESS;
 
-    result = xeDriverInit(XE_INIT_FLAG_NONE);
+    result = xeInit(XE_INIT_FLAG_NONE);
     if (result) {
         throw std::runtime_error("xeDriverInit failed: " + result);
     }
     if (verbose)
         std::cout << "Driver initialized\n";
 
-    result = xeDriverGetDeviceCount(&device_count);
+    result = xeDeviceGetCount(&device_count);
     if (result) {
         throw std::runtime_error("xeDriverGetDeviceCount failed: " + result);
     }
     if (verbose)
         std::cout << "Device count retrieved\n";
 
-    result = xeDriverGetDevice(0, &device);
+    result = xeDeviceGet(0, &device);
     if (result) {
         throw std::runtime_error("xeDriverGetDevice failed: " + result);
     }
@@ -164,7 +164,7 @@ void L0Context::init_xe() {
 
     command_list_description.version = XE_COMMAND_LIST_DESC_VERSION_CURRENT;
 
-    result = xeDeviceCreateCommandList(device, &command_list_description, &command_list);
+    result = xeCommandListCreate(device, &command_list_description, &command_list);
     if (result) {
         throw std::runtime_error("xeDeviceCreateCommandList failed: " + result);
     }
@@ -175,7 +175,7 @@ void L0Context::init_xe() {
     command_queue_description.ordinal = command_queue_id;
     command_queue_description.mode = XE_COMMAND_QUEUE_MODE_ASYNCHRONOUS;
 
-    result = xeDeviceCreateCommandQueue(device, &command_queue_description, &command_queue);
+    result = xeCommandQueueCreate(device, &command_queue_description, &command_queue);
     if (result) {
         throw std::runtime_error("xeDeviceCreateCommandQueue failed: " + result);
     }
@@ -229,7 +229,7 @@ void L0Context::enqueue_op_with_device_buffer(void *device_buffer, void *local_b
     }
 
     result = xeCommandListAppendMemoryCopy(command_list, destination_buffer, source_buffer,
-                                           size_of_data, nullptr);
+                                           size_of_data, nullptr, 0, nullptr);
     if (result) {
         throw std::runtime_error("xeCommandListAppendMemoryCopy failed: " + result);
     }
@@ -394,7 +394,7 @@ float XePeak::run_kernel(L0Context context, xe_function_handle_t &function,
         std::cout << "Group size set\n";
 
     result = xeCommandListAppendLaunchFunction(context.command_list, function,
-                                               &workgroup_info.thread_group_dimensions, nullptr);
+                                               &workgroup_info.thread_group_dimensions, nullptr, 0, nullptr);
     if (result) {
         throw std::runtime_error("xeCommandListAppendLaunchFunction failed: " + result);
     }
@@ -427,16 +427,16 @@ float XePeak::run_kernel(L0Context context, xe_function_handle_t &function,
         xe_event_pool_handle_t kernel_launch_event_pool;
         xe_event_handle_t kernel_launch_event;
         kernel_launch_event_pool_desc.count = 1;
-        kernel_launch_event_pool_desc.flags = XE_EVENT_POOL_FLAG_DEVICE_TO_HOST;
+        kernel_launch_event_pool_desc.flags = XE_EVENT_POOL_FLAG_HOST_VISIBLE;
         kernel_launch_event_pool_desc.version = XE_EVENT_POOL_DESC_VERSION_CURRENT;
 
-        result = xeDeviceCreateEventPool(context.device, &kernel_launch_event_pool_desc, &kernel_launch_event_pool);
+        result = xeEventPoolCreate(context.device, &kernel_launch_event_pool_desc, &kernel_launch_event_pool);
         if (result) {
             throw std::runtime_error("xeDeviceCreateEventPool failed: " + result);
         }
         if (verbose)
             std::cout << "Event Pool Created\n";
-        result = xeEventPoolCreateEvent(kernel_launch_event_pool, 0, &kernel_launch_event);
+        result = xeEventCreate(kernel_launch_event_pool, 0, &kernel_launch_event);
         if (result) {
             throw std::runtime_error("xeEventPoolCreateEvent failed: " + result);
         }
@@ -536,7 +536,7 @@ void XePeak::setup_function(L0Context &context, xe_function_handle_t &function, 
     function_description.flags = XE_FUNCTION_FLAG_NONE;
     function_description.pFunctionName = name;
 
-    result = xeModuleCreateFunction(context.module, &function_description, &function);
+    result = xeFunctionCreate(context.module, &function_description, &function);
     if (result) {
         throw std::runtime_error("xeModuleCreateFunction failed: " + result);
     }

@@ -56,4 +56,11 @@ xe_result_t __xecall
 xeCommandQueueSynchronize(xe_command_queue_handle_t hCommandQueue,
                           uint32_t timeout);
 
+xe_result_t __xecall
+fenceCreate(xe_command_queue_handle_t hCommandQueue,
+            const xe_fence_desc_t* desc, xe_fence_handle_t* phFence);
+
+xe_result_t __xecall
+fenceDestroy(xe_fence_handle_t hFence);
+
 } // namespace L0

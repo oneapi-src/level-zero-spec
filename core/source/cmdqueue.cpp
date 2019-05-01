@@ -144,4 +144,10 @@ xeCommandQueueSynchronize(xe_command_queue_handle_t hCommandQueue,
     return CommandQueue::fromHandle(hCommandQueue)->synchronize(timeout);
 }
 
+xe_result_t __xecall
+fenceCreate(xe_command_queue_handle_t hCommandQueue,
+            const xe_fence_desc_t* desc, xe_fence_handle_t* phFence) {
+    return CommandQueue::fromHandle(hCommandQueue)->createFence(desc, phFence);
+}
+
 } // namespace L0

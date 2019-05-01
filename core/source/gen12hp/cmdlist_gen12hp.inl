@@ -100,7 +100,9 @@ void CommandListCoreFamily<IGFX_GEN12_CORE>::programPreemption() {
 template <>
 xe_result_t CommandListCoreFamily<IGFX_GEN12_CORE>::appendLaunchFunction(xe_function_handle_t hFunction,
                                                                          const xe_thread_group_dimensions_t *pThreadGroupDimensions,
-                                                                         xe_event_handle_t hEvent) {
+                                                                         xe_event_handle_t hEvent,
+                                                                        uint32_t numWaitEvents,
+                                                                        xe_event_handle_t* phWaitEvents) {
     constexpr GFXCORE_FAMILY gfxCoreFamily = IGFX_GEN12_CORE;
     using GfxFamily = typename NEO::GfxFamilyMapper<gfxCoreFamily>::GfxFamily;
     using COMPUTE_WALKER = typename GfxFamily::COMPUTE_WALKER;
