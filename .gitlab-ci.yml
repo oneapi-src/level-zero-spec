@@ -40,3 +40,42 @@ pages:
     - bt
   when: always
 
+linux:
+  image: loki:latest
+  stage: build
+  only:
+  - branches
+  - tags
+  - merge_requests
+  tags:
+    - Linux
+  script:
+    - pwd
+    - ls -l
+    - ~/irepo/irepo select -d . third_party/linux.yml
+    - ~/irepo/irepo sync
+    - mkdir build
+    - cd build
+    - cmake -GNinja .. -DCMAKE_BUILD_TYPE=Release
+    - cmake --build . --config Release --clean-first --target all
+
+windows:
+  stage: build
+  only:
+  - branches
+  - tags
+  - merge_requests
+  tags:
+    - Build_VS2017
+  variables:
+    IREPO_CACHE_DIR: /.irepo
+  script:
+    - cd
+    - dir
+    - whoami
+    - call /irepo/irepo select third_party\windows.yml
+    - call /irepo/irepo sync
+    - md build
+    - cd build
+    - cmake -G "Visual Studio 15 2017 Win64" .. -DCMAKE_BUILD_TYPE=Release
+    - cmake --build . --config Release --clean-first --target ALL_BUILD
