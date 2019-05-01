@@ -260,7 +260,7 @@ def filter_param_list(params, in_or_out):
 """
     returns a list of strings for each parameter of a function
 """
-def make_param_lines(namespace, tags, obj, cpp=False, decl=False, meta=None):
+def make_param_lines(namespace, tags, obj, cpp=False, decl=False, meta=None, format=["type", "name", "init", "delim", "desc"]):
     lines = []
 
     if cpp:
@@ -276,6 +276,7 @@ def make_param_lines(namespace, tags, obj, cpp=False, decl=False, meta=None):
     for i, item in enumerate(params):
         name = subt(namespace, tags, item['name'], cpp=cpp)
         type = subt(namespace, tags, item['type'], cpp=cpp)
+        init = ""
 
         is_optional = re.match(r".*\[optional\].*", item['desc'])
         if cpp:
@@ -289,18 +290,29 @@ def make_param_lines(namespace, tags, obj, cpp=False, decl=False, meta=None):
                 is_pointer = re.match(r".*\w+\*+", item['type'])
                 is_handle = re.match(r".*handle_t", item['type'])
                 if is_pointer or is_handle:
-                    name += " = nullptr"
+                    init += "= nullptr"
                 else:
-                    name += " = 0"
+                    init += "= 0"
 
-        if i < len(params)-1:
-            prologue = "%s %s,"%(type, name)
+        words = []
+        if "type" in format:
+            words.append(type)
+        if "name" in format:
+            words.append(name)
+        if "init" in format and len(init) > 0:
+            words.append(init)
+
+        prologue = " ".join(words)
+        if "delim" in format:
+            if i < len(params)-1:
+                prologue += ","
+
+        if "desc" in format:
+            for line in split_line(subt(namespace, tags, item['desc'], True, cpp), 70):
+                lines.append("%s///< %s"%(append_ws(prologue, 48), line))
+                prologue = ""
         else:
-            prologue = "%s %s"%(type, name)
-
-        for line in split_line(subt(namespace, tags, item['desc'], True, cpp), 70):
-            lines.append("%s///< %s"%(append_ws(prologue, 48), line))
-            prologue = ""
+            lines.append(prologue)
 
     if len(lines) > 0:
         return lines
@@ -310,25 +322,13 @@ def make_param_lines(namespace, tags, obj, cpp=False, decl=False, meta=None):
 """
     returns a string of parameter names for passing to a function
 """
-def make_param_call_str(prologue, obj, cpp=False):
-    if cpp:
-        is_static = 'decl' in obj and re.match(r"static|singleton", obj['decl'])
-        if is_static:
-            params = filter_param_list(obj['params'], "in")
-        else:
-            params = filter_param_list(obj['params'][1:], "in")
-    else:
-        params = obj['params']
-
+def make_param_call_str(namespace, tags, prologue, obj, cpp=False):
     names = []
     if len(prologue) > 0:
         names.append(prologue)
-    for item in params:
-#        is_handle = re.match(r".*handle_t", item['type'])
-#        if is_handle:
-#            names.append("%s->getHandle()"%item['name'])
-#        else:
-            names.append(item['name'])
+    params = make_param_lines(namespace, tags, obj, cpp=cpp, format=["name"])
+    if len(params) > 0 and params[0] != "void":
+        names.extend(params)
     return ", ".join(names)
 
 """
@@ -558,61 +558,3 @@ def make_baseclass_ctor(namespace, tags, obj):
     base = subt(namespace, tags, obj['base'], cpp=True)
     ctor = make_class_name(namespace, tags, obj)
     return "%s::%s"%(base, ctor)
-
-"""
-    returns a single-line driver function call
-"""
-def make_obj_accessor(tags, obj):
-    null_tags = {}
-    for key, value in tags.items():
-        null_tags[key] = ""
-
-    method = obj['name']
-
-    if 'class' in obj:
-        cls = obj['class']
-    else:
-        cls = ""
-
-    if 'decl' in obj:
-        decl_type = obj['decl']
-    else:
-        decl_type = ""
-
-    noobject = decl_type == "static"
-    if noobject:
-        method = subt("", null_tags, cls) + method
-
-    singleton = decl_type == "singleton"
-    method = method[0].lower() + method[1:]
-    if noobject:
-        str = subt("", null_tags, "%s("%(method))
-        str += make_param_call_str("", obj)
-    elif singleton:
-        str = subt("", null_tags, "%s::get()->%s("%(cls, method))
-        str += make_param_call_str("", obj)
-    else:
-        params = obj['params']
-        str = subt("", null_tags, "%s::fromHandle("%cls)
-        argStr=""
-        lastArg=""
-        calledMethod=False
-        for item in params:
-            if len(lastArg) == 0:
-                #First must match class name
-                if item['name'][1:] == subt("", null_tags, cls):
-                    str += item['name'] + ")->" + method + "("
-                    calledMethod=True
-                elif item.get('class',"") == "":
-                    argStr += item['name']
-                    lastArg=item['name']
-            else:
-                if len(argStr) > 0:
-                    argStr += ", "
-                argStr += item['name']
-                lastArg=item['name']
-        if not calledMethod:
-            str += ")->" + method + "("
-        str += argStr
-    str += ");"
-    return str
