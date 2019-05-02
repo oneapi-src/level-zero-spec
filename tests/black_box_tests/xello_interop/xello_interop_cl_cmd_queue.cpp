@@ -637,18 +637,6 @@ int main(int argc, char **argv) {
 
     initArrays();
 
-    ret = xeInit();
-    if (ret)
-        return -1;
-
-    ret = xeInitProgram();
-    if (ret)
-        return -1;
-
-    ret = xeInitBuffers();
-    if (ret)
-        return -1;
-
     ret = clInit();
     if (ret)
         return -1;
@@ -661,11 +649,23 @@ int main(int argc, char **argv) {
     if (ret)
         return -1;
 
-    ret = clCompute();
+    ret = xeInit();
+    if (ret)
+        return -1;
+
+    ret = xeInitProgram();
+    if (ret)
+        return -1;
+
+    ret = xeInitBuffers();
     if (ret)
         return -1;
 
     ret = xeCLRegister();
+    if (ret)
+        return -1;
+
+    ret = clCompute();
     if (ret)
         return -1;
 

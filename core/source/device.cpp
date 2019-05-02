@@ -306,11 +306,16 @@ struct DeviceImp : public Device {
             xe_command_queue_handle_t* phCommandQueue) override {
 
         NEO::CommandQueue *commandQueueRT = static_cast<NEO::CommandQueue *>(command_queue);
+        uint32_t deviceIndex = commandQueueRT->getDevice().getDeviceIndex();
+        assert(deviceIndex >= 0);
+        uint32_t csrIndex = 0; // TODO: To get the exact value, for now, use the default one
+        auto executionEnvironment = deviceRT->getExecutionEnvironment();
+        assert(executionEnvironment);
+        void* csrRT = executionEnvironment->commandStreamReceivers[deviceIndex][csrIndex].get();
 
         *phCommandQueue =
                 CommandQueue::create(commandQueueRT->getDevice().getHardwareInfo()
-                        .pPlatform->eProductFamily, this,
-                        reinterpret_cast<void *>(&commandQueueRT->getCommandStreamReceiver()));
+                        .pPlatform->eProductFamily, this, csrRT);
 
         return XE_RESULT_SUCCESS;
     }
