@@ -73,9 +73,15 @@ typedef enum _xe_init_flag_t
 ///         + invalid value for flags
 ///     - ::XE_RESULT_ERROR_UNSUPPORTED
 ///     - ::XE_RESULT_ERROR_OUT_OF_HOST_MEMORY
-xe_result_t __xecall
+__xedllexport xe_result_t __xecall
 xeInit(
     xe_init_flag_t flags                            ///< [in] initialization flags
+    );
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Function-pointer for xeInit 
+typedef xe_result_t (__xecall *xe_pfnInit_t)(
+    xe_init_flag_t
     );
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -98,9 +104,15 @@ xeInit(
 ///     - ::XE_RESULT_ERROR_INVALID_PARAMETER
 ///         + nullptr == version
 ///     - ::XE_RESULT_ERROR_UNSUPPORTED
-xe_result_t __xecall
+__xedllexport xe_result_t __xecall
 xeGetDriverVersion(
     uint32_t* version                               ///< [out] driver version
+    );
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Function-pointer for xeGetDriverVersion 
+typedef xe_result_t (__xecall *xe_pfnGetDriverVersion_t)(
+    uint32_t*
     );
 
 #if defined(__cplusplus)

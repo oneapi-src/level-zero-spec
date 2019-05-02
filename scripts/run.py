@@ -4,7 +4,7 @@ import parse_specs
 import generate_api
 import generate_docs
 import generate_loader
-import generate_layer
+import generate_layers
 import os
 import time
 
@@ -16,6 +16,17 @@ def add_argument(parser, name, help, default=False):
     group.add_argument("--" + name, dest=name, help="Enable "+help, action="store_true")
     group.add_argument("--!" + name, dest=name, help="Disable "+help, action="store_false")
     parser.set_defaults(**{name:default})
+
+
+"""
+    command lines for running cmake windows build
+"""
+def run_cmake():
+    util.removePath("../build")
+    util.makePath("../build")
+    os.system('cmake -B ../build/ -S .. -G "Visual Studio 15 2017 Win64"')
+    os.system('cmake --build ../build --clean-first')
+
 
 """
 Main entry:
@@ -29,8 +40,9 @@ def main():
     parser = argparse.ArgumentParser()
     for section in configParser.sections():
         add_argument(parser, section, "generation of C/C++ '%s' files."%section, True)
-    add_argument(parser, "loader", "generation of driver loader files.", True)
-    add_argument(parser, "layer", "generation of validation layer files.", True)
+    add_argument(parser, "loader", "generation of loader files.", True)
+    add_argument(parser, "layers", "generation of layer files.", True)
+    add_argument(parser, "build", "runs cmake to generate and build projects")
     add_argument(parser, "debug", "dump intermediate data to disk.")
     add_argument(parser, "md", "generation of markdown files.", True)
     add_argument(parser, "html", "generation of HTML files.", True)
@@ -39,6 +51,7 @@ def main():
 
     start = time.time()
 
+    # generate code
     for idx, section in enumerate(configParser.sections()):
         namespace = configParser.get(section,'namespace')
         tags={}
@@ -63,11 +76,15 @@ def main():
             if args['loader']:
                 generate_loader.generate(section, namespace, tags, specs)
 
-            if args['layer']:
-                generate_layer.generate(section, namespace, tags, specs)
+            if args['layers']:
+                generate_layers.generate(section, namespace, tags, specs)
 
             if args['md']:
                 generate_docs.generate_md(srcpath, dstpath, tags, meta)
+
+    # build code
+    if args['build']:
+        run_cmake()
 
     # generate documentation
     if args['html']:

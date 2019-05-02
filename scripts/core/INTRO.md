@@ -171,14 +171,14 @@ The following section provides high-level driver architecture.
 ![Driver](../images/intro_driver.png?raw=true)  
 @image latex intro_driver.png
 
-${"##"} Driver Loader
-## --validate=off
-The Level-Zero API is statically linked with the application using the _${x}_api.lib_ (windows) or _${x}_api.a_ (linux).
-## --validate=on
-The static library implements the driver loader.
-
+${"##"} Loader
 The loader initiates the loading of the driver(s) and layer(s).
 The loader exports all API functions to the application; which internally map to a per-process function pointer table.
+
+## --validate=off
+The loader is dynamically linked with the application using the _${x}_vendor_loader.dll_ (windows) or _${x}_vendor_loader.so_ (linux).
+For example, Intel uses the name: "${x}_intc_loader".
+## --validate=on
 
 The following diagram illustrates the expected loading sequence:  
 ![Loader](../images/intro_loader.png?raw=true)  
@@ -192,13 +192,13 @@ Thus, the loader's internal function pointer table entries may point to:
     + or any combination of the above
 
 ${"##"} Common Driver
-The Level-Zero common driver determines which other device drivers need to be loaded, based on which device types are present in the system.
+The common driver determines which other device drivers need to be loaded, based on which device types are present in the system.
 The common driver may be bypassed entirely if there is only one device driver needed.
 If the common driver is required, then it may implement specific APIs (such as memory allocation) and use private DDIs for notifying device drivers of these events.
 
 ${"##"} Device Drivers
 ## --validate=off
-The Level-Zero device driver(s) are loaded using a _${x}_vendor_type.dll_ (windows) / _${x}_vendor_type.so_ (linux);
+The device driver(s) are dynamically linked using a _${x}_vendor_type.dll_ (windows) / _${x}_vendor_type.so_ (linux);
 where _vendor_ and _type_ are names chosen by the device vendor.
 For example, Intel GPUs use the name: "${x}_intc_gpu".
 ## --validate=on

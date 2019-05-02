@@ -21,34 +21,40 @@
 * express and approved by Intel in writing.  
 * @endcond
 *
-* @file extended_loader.cpp
+* @file extended_layer.cpp
 *
 * @cond DEV
-* DO NOT EDIT: generated from /scripts/templates/loader.cpp.mako
+* DO NOT EDIT: generated from /scripts/templates/layer_val.cpp.mako
 * @endcond
 *
 ******************************************************************************/
-#include "xex_ddi.h"
-#include "loader.h"
+#include "xex_api.h"
+#include "layer.h"
 
 xex_apitable_t xex_apitable = {};
 
 ///////////////////////////////////////////////////////////////////////////////
-/// @brief Loads function pointer table for loaded driver
-bool xexLoadExports(
-    void* handle )  ///< [in] driver handle
+/// @brief Intercepts function pointer table for loaded driver
+bool xexIntercept(
+    xex_apitable_t* original ) ///< [in] pointer to table of xex API function pointers
 {
-    xex_apitable.pfnCommandGraphCreate                                   = (xex_pfnCommandGraphCreate_t)LOAD_FUNCTION_PTR(handle, "xexCommandGraphCreate");
-    if( nullptr == xex_apitable.pfnCommandGraphCreate )
+    if(nullptr == original)
         return false;
 
-    xex_apitable.pfnCommandGraphDestroy                                  = (xex_pfnCommandGraphDestroy_t)LOAD_FUNCTION_PTR(handle, "xexCommandGraphDestroy");
-    if( nullptr == xex_apitable.pfnCommandGraphDestroy )
+    if( nullptr == original->pfnCommandGraphCreate )
         return false;
+    xex_apitable.pfnCommandGraphCreate                                   = original->pfnCommandGraphCreate;
+    original->pfnCommandGraphCreate                                      = xexCommandGraphCreate;
 
-    xex_apitable.pfnCommandGraphClose                                    = (xex_pfnCommandGraphClose_t)LOAD_FUNCTION_PTR(handle, "xexCommandGraphClose");
-    if( nullptr == xex_apitable.pfnCommandGraphClose )
+    if( nullptr == original->pfnCommandGraphDestroy )
         return false;
+    xex_apitable.pfnCommandGraphDestroy                                  = original->pfnCommandGraphDestroy;
+    original->pfnCommandGraphDestroy                                     = xexCommandGraphDestroy;
+
+    if( nullptr == original->pfnCommandGraphClose )
+        return false;
+    xex_apitable.pfnCommandGraphClose                                    = original->pfnCommandGraphClose;
+    original->pfnCommandGraphClose                                       = xexCommandGraphClose;
 
     return true;
 }
@@ -69,6 +75,12 @@ xexCommandGraphCreate(
     if( nullptr == xex_apitable.pfnCommandGraphCreate )
         return XE_RESULT_ERROR_UNINITIALIZED;
 
+    // Check parameters
+    if( nullptr == hDevice ) return XE_RESULT_ERROR_INVALID_PARAMETER;
+    if( nullptr == desc ) return XE_RESULT_ERROR_INVALID_PARAMETER;
+    if( nullptr == phCommandGraph ) return XE_RESULT_ERROR_INVALID_PARAMETER;
+    if( XEX_COMMAND_GRAPH_DESC_VERSION_CURRENT < desc->version ) return XE_RESULT_ERROR_UNSUPPORTED;
+
     return xex_apitable.pfnCommandGraphCreate( hDevice, desc, phCommandGraph );
 }
 
@@ -81,6 +93,9 @@ xexCommandGraphDestroy(
     if( nullptr == xex_apitable.pfnCommandGraphDestroy )
         return XE_RESULT_ERROR_UNINITIALIZED;
 
+    // Check parameters
+    if( nullptr == hCommandGraph ) return XE_RESULT_ERROR_INVALID_PARAMETER;
+
     return xex_apitable.pfnCommandGraphDestroy( hCommandGraph );
 }
 
@@ -92,6 +107,9 @@ xexCommandGraphClose(
 {
     if( nullptr == xex_apitable.pfnCommandGraphClose )
         return XE_RESULT_ERROR_UNINITIALIZED;
+
+    // Check parameters
+    if( nullptr == hCommandGraph ) return XE_RESULT_ERROR_INVALID_PARAMETER;
 
     return xex_apitable.pfnCommandGraphClose( hCommandGraph );
 }

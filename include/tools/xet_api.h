@@ -38,4 +38,27 @@
 #include "xet_gtpin.h"
 #include "xet_metric.h"
 
+///////////////////////////////////////////////////////////////////////////////
+typedef struct _xet_apitable_t
+{
+    xet_pfnMetricGroupGetCount_t                                pfnMetricGroupGetCount;
+    xet_pfnMetricGroupGet_t                                     pfnMetricGroupGet;
+    xet_pfnMetricGroupGetProperties_t                           pfnMetricGroupGetProperties;
+    xet_pfnMetricGet_t                                          pfnMetricGet;
+    xet_pfnMetricGetProperties_t                                pfnMetricGetProperties;
+    xet_pfnMetricGroupCalculateData_t                           pfnMetricGroupCalculateData;
+    xet_pfnDeviceActivateMetricGroups_t                         pfnDeviceActivateMetricGroups;
+    xet_pfnMetricTracerOpen_t                                   pfnMetricTracerOpen;
+    xet_pfnCommandListAppendMetricTracerMarker_t                pfnCommandListAppendMetricTracerMarker;
+    xet_pfnMetricTracerClose_t                                  pfnMetricTracerClose;
+    xet_pfnMetricTracerReadData_t                               pfnMetricTracerReadData;
+    xet_pfnMetricQueryPoolCreate_t                              pfnMetricQueryPoolCreate;
+    xet_pfnMetricQueryPoolDestroy_t                             pfnMetricQueryPoolDestroy;
+    xet_pfnMetricQueryPoolGetMetricQuery_t                      pfnMetricQueryPoolGetMetricQuery;
+    xet_pfnCommandListAppendMetricQueryBegin_t                  pfnCommandListAppendMetricQueryBegin;
+    xet_pfnCommandListAppendMetricQueryEnd_t                    pfnCommandListAppendMetricQueryEnd;
+    xet_pfnCommandListAppendMetricMemoryBarrier_t               pfnCommandListAppendMetricMemoryBarrier;
+    xet_pfnMetricQueryGetData_t                                 pfnMetricQueryGetData;
+} xet_apitable_t;
+
 #endif // _XET_API_H

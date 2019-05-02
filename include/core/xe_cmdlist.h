@@ -92,11 +92,19 @@ typedef struct _xe_command_list_desc_t
 ///         + ::XE_COMMAND_LIST_DESC_VERSION_CURRENT < desc->version
 ///     - ::XE_RESULT_ERROR_OUT_OF_HOST_MEMORY
 ///     - ::XE_RESULT_ERROR_OUT_OF_DEVICE_MEMORY
-xe_result_t __xecall
+__xedllexport xe_result_t __xecall
 xeCommandListCreate(
     xe_device_handle_t hDevice,                     ///< [in] handle of the device object
     const xe_command_list_desc_t* desc,             ///< [in] pointer to command list descriptor
     xe_command_list_handle_t* phCommandList         ///< [out] pointer to handle of command list object created
+    );
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Function-pointer for xeCommandListCreate 
+typedef xe_result_t (__xecall *xe_pfnCommandListCreate_t)(
+    xe_device_handle_t,
+    const xe_command_list_desc_t*,
+    xe_command_list_handle_t*
     );
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -121,11 +129,19 @@ xeCommandListCreate(
 ///         + ::XE_COMMAND_QUEUE_DESC_VERSION_CURRENT < desc->version
 ///     - ::XE_RESULT_ERROR_OUT_OF_HOST_MEMORY
 ///     - ::XE_RESULT_ERROR_OUT_OF_DEVICE_MEMORY
-xe_result_t __xecall
+__xedllexport xe_result_t __xecall
 xeCommandListCreateImmediate(
     xe_device_handle_t hDevice,                     ///< [in] handle of the device object
     const xe_command_queue_desc_t* desc,            ///< [in] pointer to command queue descriptor
     xe_command_list_handle_t* phCommandList         ///< [out] pointer to handle of command list object created
+    );
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Function-pointer for xeCommandListCreateImmediate 
+typedef xe_result_t (__xecall *xe_pfnCommandListCreateImmediate_t)(
+    xe_device_handle_t,
+    const xe_command_queue_desc_t*,
+    xe_command_list_handle_t*
     );
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -147,9 +163,15 @@ xeCommandListCreateImmediate(
 ///     - ::XE_RESULT_ERROR_INVALID_PARAMETER
 ///         + nullptr == hCommandList
 ///     - ::XE_RESULT_ERROR_UNSUPPORTED
-xe_result_t __xecall
+__xedllexport xe_result_t __xecall
 xeCommandListDestroy(
     xe_command_list_handle_t hCommandList           ///< [in] handle of command list object to destroy
+    );
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Function-pointer for xeCommandListDestroy 
+typedef xe_result_t (__xecall *xe_pfnCommandListDestroy_t)(
+    xe_command_list_handle_t
     );
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -167,9 +189,15 @@ xeCommandListDestroy(
 ///     - ::XE_RESULT_ERROR_INVALID_PARAMETER
 ///         + nullptr == hCommandList
 ///     - ::XE_RESULT_ERROR_UNSUPPORTED
-xe_result_t __xecall
+__xedllexport xe_result_t __xecall
 xeCommandListClose(
     xe_command_list_handle_t hCommandList           ///< [in] handle of command list object to close
+    );
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Function-pointer for xeCommandListClose 
+typedef xe_result_t (__xecall *xe_pfnCommandListClose_t)(
+    xe_command_list_handle_t
     );
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -190,9 +218,15 @@ xeCommandListClose(
 ///     - ::XE_RESULT_ERROR_INVALID_PARAMETER
 ///         + nullptr == hCommandList
 ///     - ::XE_RESULT_ERROR_UNSUPPORTED
-xe_result_t __xecall
+__xedllexport xe_result_t __xecall
 xeCommandListReset(
     xe_command_list_handle_t hCommandList           ///< [in] handle of command list object to reset
+    );
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Function-pointer for xeCommandListReset 
+typedef xe_result_t (__xecall *xe_pfnCommandListReset_t)(
+    xe_command_list_handle_t
     );
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -226,11 +260,19 @@ typedef enum _xe_command_list_parameter_t
 ///         + invalid value for attribute
 ///         + invalid value for value
 ///     - ::XE_RESULT_ERROR_UNSUPPORTED
-xe_result_t __xecall
+__xedllexport xe_result_t __xecall
 xeCommandListSetParameter(
     xe_command_list_handle_t hCommandList,          ///< [in] handle of command list
     xe_command_list_parameter_t parameter,          ///< [in] parameter to change
     uint32_t value                                  ///< [in] value of attribute
+    );
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Function-pointer for xeCommandListSetParameter 
+typedef xe_result_t (__xecall *xe_pfnCommandListSetParameter_t)(
+    xe_command_list_handle_t,
+    xe_command_list_parameter_t,
+    uint32_t
     );
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -256,11 +298,19 @@ xeCommandListSetParameter(
 ///         + nullptr == value
 ///         + invalid value for attribute
 ///     - ::XE_RESULT_ERROR_UNSUPPORTED
-xe_result_t __xecall
+__xedllexport xe_result_t __xecall
 xeCommandListGetParameter(
     xe_command_list_handle_t hCommandList,          ///< [in] handle of command list
     xe_command_list_parameter_t parameter,          ///< [in] parameter to retrieve
     uint32_t* value                                 ///< [out] value of attribute
+    );
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Function-pointer for xeCommandListGetParameter 
+typedef xe_result_t (__xecall *xe_pfnCommandListGetParameter_t)(
+    xe_command_list_handle_t,
+    xe_command_list_parameter_t,
+    uint32_t*
     );
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -278,9 +328,15 @@ xeCommandListGetParameter(
 ///     - ::XE_RESULT_ERROR_INVALID_PARAMETER
 ///         + nullptr == hCommandList
 ///     - ::XE_RESULT_ERROR_UNSUPPORTED
-xe_result_t __xecall
+__xedllexport xe_result_t __xecall
 xeCommandListResetParameters(
     xe_command_list_handle_t hCommandList           ///< [in] handle of the command list
+    );
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Function-pointer for xeCommandListResetParameters 
+typedef xe_result_t (__xecall *xe_pfnCommandListResetParameters_t)(
+    xe_command_list_handle_t
     );
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -302,11 +358,19 @@ xeCommandListResetParameters(
 ///         + nullptr == ptr
 ///         + 0 for size
 ///     - ::XE_RESULT_ERROR_UNSUPPORTED
-xe_result_t __xecall
+__xedllexport xe_result_t __xecall
 xeCommandListReserveSpace(
     xe_command_list_handle_t hCommandList,          ///< [in] handle of the command list
     size_t size,                                    ///< [in] size (in bytes) to reserve
     void** ptr                                      ///< [out] pointer to command buffer space reserved
+    );
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Function-pointer for xeCommandListReserveSpace 
+typedef xe_result_t (__xecall *xe_pfnCommandListReserveSpace_t)(
+    xe_command_list_handle_t,
+    size_t,
+    void**
     );
 
 #if defined(__cplusplus)

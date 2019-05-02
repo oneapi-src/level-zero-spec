@@ -37,7 +37,7 @@ from templates import helper as th
 * @endcond
 *
 ******************************************************************************/
-#include "${n}_ddi.h"
+#include "${n}_api.h"
 #include "loader.h"
 
 ${n}_apitable_t ${n}_apitable = {};
@@ -73,7 +73,7 @@ extern "C" {
 %if 'condition' in obj:
 #if ${th.subt(n, tags, obj['condition'])}
 %endif
-${x}_result_t __${x}call
+__xedllexport ${x}_result_t __${x}call
 ${th.make_func_name(n, tags, obj)}(
     %for line in th.make_param_lines(n, tags, obj):
     ${line}

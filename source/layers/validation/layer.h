@@ -38,12 +38,4 @@ typedef struct _cl_context* cl_context;
 typedef struct _cl_program* cl_program;
 #endif
 
-///////////////////////////////////////////////////////////////////////////////
-#if defined(_WIN32)
-/// @brief Microsoft-specific dllexport storage-class attribute
-#define __xedllexport  __declspec(dllexport)
-#else
-#define __xedllexport  
-#endif // defined(_WIN32)
-
 #endif // _LAYER_H

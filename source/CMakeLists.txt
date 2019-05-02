@@ -1,2 +1,2 @@
-add_subdirectory(driver_loader)
-add_subdirectory(validation_layer)
+add_subdirectory(loader)
+add_subdirectory(layers)

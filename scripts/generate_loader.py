@@ -26,7 +26,7 @@ Entry-point:
     generates loader for level_zero driver
 """
 def generate(section, namespace, tags, specs):
-    dstpath = "../source/driver_loader"
+    dstpath = "../source/loader"
     util.makePath(dstpath)
 
     loc = 0

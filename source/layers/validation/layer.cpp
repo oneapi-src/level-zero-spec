@@ -25,9 +25,9 @@
 *
 ******************************************************************************/
 #include "layer.h"
-#include "xe_ddi.h"
-#include "xex_ddi.h"
-#include "xet_ddi.h"
+#include "xe_api.h"
+#include "xex_api.h"
+#include "xet_api.h"
 
 ///////////////////////////////////////////////////////////////////////////////
 extern xe_apitable_t xe_apitable;

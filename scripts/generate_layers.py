@@ -5,8 +5,9 @@ import util
 """
     generic function for generating c/c++ files from the specification documents
 """
-def generate_cpp(dstpath, section, namespace, tags, specs, type):
-    template = "layer%s.mako"%type
+def generate_validation_cpp(path, section, namespace, tags, specs, type):
+    dstpath = os.path.join(path, "validation")
+    template = "layer_val%s.mako"%type
     fin = os.path.join("templates", template)
 
     name = "%s_layer"%section
@@ -26,9 +27,9 @@ Entry-point:
     generates validation layer for level_zero driver
 """
 def generate(section, namespace, tags, specs):
-    dstpath = "../source/validation_layer"
+    dstpath = "../source/layers"
     util.makePath(dstpath)
 
     loc = 0
-    loc += generate_cpp(dstpath, section, namespace, tags, specs, ".cpp")
+    loc += generate_validation_cpp(dstpath, section, namespace, tags, specs, ".cpp")
     return loc

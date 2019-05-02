@@ -50,25 +50,6 @@ def generate_cpp_api(path, namespace, tags, specs, files, type):
     return loc
 
 """
-    generates a single c/c++ include file for the ddi
-"""
-def generate_cpp_ddi(path, namespace, tags, specs):
-    loc = 0
-    template = "ddi.h.mako"
-    fin = os.path.join("templates", template)
-
-    filename = "%s_ddi.h"%namespace
-    fout = os.path.join(path, filename)
-
-    loc += util.makoWrite(
-        fin, fout,
-        section=os.path.basename(path),
-        namespace=namespace,
-        tags=tags,
-        specs=specs)
-    return loc
-
-"""
     generates c/c++ include files from the specification documents
 """
 def generate_cpp(path, namespace, tags, specs, meta):
@@ -83,8 +64,6 @@ def generate_cpp(path, namespace, tags, specs, meta):
 
     hloc += generate_cpp_api(path, namespace, tags, specs, hfiles, ".h")
     hpploc += generate_cpp_api(path, namespace, tags, specs, hppfiles + inlfiles, ".hpp")
-
-    hloc += generate_cpp_ddi(path, namespace, tags, specs)
 
     return hloc + hpploc + inlloc
 

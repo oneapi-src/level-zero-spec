@@ -69,13 +69,22 @@ extern "C" {
 ///     - ::XE_RESULT_ERROR_INVALID_PARAMETER
 ///         + nullptr == hCommandList
 ///     - ::XE_RESULT_ERROR_UNSUPPORTED
-xe_result_t __xecall
+__xedllexport xe_result_t __xecall
 xeCommandListAppendBarrier(
     xe_command_list_handle_t hCommandList,          ///< [in] handle of the command list
     xe_event_handle_t hSignalEvent,                 ///< [in][optional] handle of the event to signal on completion
     uint32_t numWaitEvents,                         ///< [in][optional] number of events to wait on before executing barrier
     xe_event_handle_t* phWaitEvents                 ///< [in][optional] handle of the events to wait on before executing
                                                     ///< barrier
+    );
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Function-pointer for xeCommandListAppendBarrier 
+typedef xe_result_t (__xecall *xe_pfnCommandListAppendBarrier_t)(
+    xe_command_list_handle_t,
+    xe_event_handle_t,
+    uint32_t,
+    xe_event_handle_t*
     );
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -103,7 +112,7 @@ xeCommandListAppendBarrier(
 ///         + nullptr == pRangeSizes
 ///         + nullptr == pRanges
 ///     - ::XE_RESULT_ERROR_UNSUPPORTED
-xe_result_t __xecall
+__xedllexport xe_result_t __xecall
 xeCommandListAppendMemoryRangesBarrier(
     xe_command_list_handle_t hCommandList,          ///< [in] handle of the command list
     uint32_t numRanges,                             ///< [in] number of memory ranges
@@ -113,6 +122,18 @@ xeCommandListAppendMemoryRangesBarrier(
     uint32_t numWaitEvents,                         ///< [in][optional] number of events to wait on before executing barrier
     xe_event_handle_t* phWaitEvents                 ///< [in][optional] handle of the events to wait on before executing
                                                     ///< barrier
+    );
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Function-pointer for xeCommandListAppendMemoryRangesBarrier 
+typedef xe_result_t (__xecall *xe_pfnCommandListAppendMemoryRangesBarrier_t)(
+    xe_command_list_handle_t,
+    uint32_t,
+    const size_t*,
+    const void**,
+    xe_event_handle_t,
+    uint32_t,
+    xe_event_handle_t*
     );
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -135,9 +156,15 @@ xeCommandListAppendMemoryRangesBarrier(
 ///     - ::XE_RESULT_ERROR_INVALID_PARAMETER
 ///         + nullptr == hDevice
 ///     - ::XE_RESULT_ERROR_UNSUPPORTED
-xe_result_t __xecall
+__xedllexport xe_result_t __xecall
 xeDeviceSystemBarrier(
     xe_device_handle_t hDevice                      ///< [in] handle of the device
+    );
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Function-pointer for xeDeviceSystemBarrier 
+typedef xe_result_t (__xecall *xe_pfnDeviceSystemBarrier_t)(
+    xe_device_handle_t
     );
 
 #if defined(__cplusplus)

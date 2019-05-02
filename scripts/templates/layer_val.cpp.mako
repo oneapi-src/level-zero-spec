@@ -33,11 +33,11 @@ from templates import helper as th
 * @file ${name}.cpp
 *
 * @cond DEV
-* DO NOT EDIT: generated from /scripts/templates/layer.cpp.mako
+* DO NOT EDIT: generated from /scripts/templates/layer_val.cpp.mako
 * @endcond
 *
 ******************************************************************************/
-#include "${n}_ddi.h"
+#include "${n}_api.h"
 #include "layer.h"
 
 ${n}_apitable_t ${n}_apitable = {};

@@ -21,408 +21,506 @@
 * express and approved by Intel in writing.  
 * @endcond
 *
-* @file core_loader.cpp
+* @file core_layer.cpp
 *
 * @cond DEV
-* DO NOT EDIT: generated from /scripts/templates/loader.cpp.mako
+* DO NOT EDIT: generated from /scripts/templates/layer_val.cpp.mako
 * @endcond
 *
 ******************************************************************************/
-#include "xe_ddi.h"
-#include "loader.h"
+#include "xe_api.h"
+#include "layer.h"
 
 xe_apitable_t xe_apitable = {};
 
 ///////////////////////////////////////////////////////////////////////////////
-/// @brief Loads function pointer table for loaded driver
-bool xeLoadExports(
-    void* handle )  ///< [in] driver handle
+/// @brief Intercepts function pointer table for loaded driver
+bool xeIntercept(
+    xe_apitable_t* original ) ///< [in] pointer to table of xe API function pointers
 {
-    xe_apitable.pfnCommandListAppendBarrier                             = (xe_pfnCommandListAppendBarrier_t)LOAD_FUNCTION_PTR(handle, "xeCommandListAppendBarrier");
-    if( nullptr == xe_apitable.pfnCommandListAppendBarrier )
+    if(nullptr == original)
         return false;
 
-    xe_apitable.pfnCommandListAppendMemoryRangesBarrier                 = (xe_pfnCommandListAppendMemoryRangesBarrier_t)LOAD_FUNCTION_PTR(handle, "xeCommandListAppendMemoryRangesBarrier");
-    if( nullptr == xe_apitable.pfnCommandListAppendMemoryRangesBarrier )
+    if( nullptr == original->pfnCommandListAppendBarrier )
         return false;
+    xe_apitable.pfnCommandListAppendBarrier                             = original->pfnCommandListAppendBarrier;
+    original->pfnCommandListAppendBarrier                               = xeCommandListAppendBarrier;
 
-    xe_apitable.pfnDeviceSystemBarrier                                  = (xe_pfnDeviceSystemBarrier_t)LOAD_FUNCTION_PTR(handle, "xeDeviceSystemBarrier");
-    if( nullptr == xe_apitable.pfnDeviceSystemBarrier )
+    if( nullptr == original->pfnCommandListAppendMemoryRangesBarrier )
         return false;
+    xe_apitable.pfnCommandListAppendMemoryRangesBarrier                 = original->pfnCommandListAppendMemoryRangesBarrier;
+    original->pfnCommandListAppendMemoryRangesBarrier                   = xeCommandListAppendMemoryRangesBarrier;
+
+    if( nullptr == original->pfnDeviceSystemBarrier )
+        return false;
+    xe_apitable.pfnDeviceSystemBarrier                                  = original->pfnDeviceSystemBarrier;
+    original->pfnDeviceSystemBarrier                                    = xeDeviceSystemBarrier;
 
     #if XE_ENABLE_OCL_INTEROP
-    xe_apitable.pfnDeviceRegisterCLMemory                               = (xe_pfnDeviceRegisterCLMemory_t)LOAD_FUNCTION_PTR(handle, "xeDeviceRegisterCLMemory");
-    if( nullptr == xe_apitable.pfnDeviceRegisterCLMemory )
+    if( nullptr == original->pfnDeviceRegisterCLMemory )
         return false;
+    xe_apitable.pfnDeviceRegisterCLMemory                               = original->pfnDeviceRegisterCLMemory;
+    original->pfnDeviceRegisterCLMemory                                 = xeDeviceRegisterCLMemory;
     #endif // XE_ENABLE_OCL_INTEROP
 
     #if XE_ENABLE_OCL_INTEROP
-    xe_apitable.pfnDeviceRegisterCLProgram                              = (xe_pfnDeviceRegisterCLProgram_t)LOAD_FUNCTION_PTR(handle, "xeDeviceRegisterCLProgram");
-    if( nullptr == xe_apitable.pfnDeviceRegisterCLProgram )
+    if( nullptr == original->pfnDeviceRegisterCLProgram )
         return false;
+    xe_apitable.pfnDeviceRegisterCLProgram                              = original->pfnDeviceRegisterCLProgram;
+    original->pfnDeviceRegisterCLProgram                                = xeDeviceRegisterCLProgram;
     #endif // XE_ENABLE_OCL_INTEROP
 
     #if XE_ENABLE_OCL_INTEROP
-    xe_apitable.pfnDeviceRegisterCLCommandQueue                         = (xe_pfnDeviceRegisterCLCommandQueue_t)LOAD_FUNCTION_PTR(handle, "xeDeviceRegisterCLCommandQueue");
-    if( nullptr == xe_apitable.pfnDeviceRegisterCLCommandQueue )
+    if( nullptr == original->pfnDeviceRegisterCLCommandQueue )
         return false;
+    xe_apitable.pfnDeviceRegisterCLCommandQueue                         = original->pfnDeviceRegisterCLCommandQueue;
+    original->pfnDeviceRegisterCLCommandQueue                           = xeDeviceRegisterCLCommandQueue;
     #endif // XE_ENABLE_OCL_INTEROP
 
-    xe_apitable.pfnCommandListCreate                                    = (xe_pfnCommandListCreate_t)LOAD_FUNCTION_PTR(handle, "xeCommandListCreate");
-    if( nullptr == xe_apitable.pfnCommandListCreate )
+    if( nullptr == original->pfnCommandListCreate )
         return false;
+    xe_apitable.pfnCommandListCreate                                    = original->pfnCommandListCreate;
+    original->pfnCommandListCreate                                      = xeCommandListCreate;
 
-    xe_apitable.pfnCommandListCreateImmediate                           = (xe_pfnCommandListCreateImmediate_t)LOAD_FUNCTION_PTR(handle, "xeCommandListCreateImmediate");
-    if( nullptr == xe_apitable.pfnCommandListCreateImmediate )
+    if( nullptr == original->pfnCommandListCreateImmediate )
         return false;
+    xe_apitable.pfnCommandListCreateImmediate                           = original->pfnCommandListCreateImmediate;
+    original->pfnCommandListCreateImmediate                             = xeCommandListCreateImmediate;
 
-    xe_apitable.pfnCommandListDestroy                                   = (xe_pfnCommandListDestroy_t)LOAD_FUNCTION_PTR(handle, "xeCommandListDestroy");
-    if( nullptr == xe_apitable.pfnCommandListDestroy )
+    if( nullptr == original->pfnCommandListDestroy )
         return false;
+    xe_apitable.pfnCommandListDestroy                                   = original->pfnCommandListDestroy;
+    original->pfnCommandListDestroy                                     = xeCommandListDestroy;
 
-    xe_apitable.pfnCommandListClose                                     = (xe_pfnCommandListClose_t)LOAD_FUNCTION_PTR(handle, "xeCommandListClose");
-    if( nullptr == xe_apitable.pfnCommandListClose )
+    if( nullptr == original->pfnCommandListClose )
         return false;
+    xe_apitable.pfnCommandListClose                                     = original->pfnCommandListClose;
+    original->pfnCommandListClose                                       = xeCommandListClose;
 
-    xe_apitable.pfnCommandListReset                                     = (xe_pfnCommandListReset_t)LOAD_FUNCTION_PTR(handle, "xeCommandListReset");
-    if( nullptr == xe_apitable.pfnCommandListReset )
+    if( nullptr == original->pfnCommandListReset )
         return false;
+    xe_apitable.pfnCommandListReset                                     = original->pfnCommandListReset;
+    original->pfnCommandListReset                                       = xeCommandListReset;
 
-    xe_apitable.pfnCommandListSetParameter                              = (xe_pfnCommandListSetParameter_t)LOAD_FUNCTION_PTR(handle, "xeCommandListSetParameter");
-    if( nullptr == xe_apitable.pfnCommandListSetParameter )
+    if( nullptr == original->pfnCommandListSetParameter )
         return false;
+    xe_apitable.pfnCommandListSetParameter                              = original->pfnCommandListSetParameter;
+    original->pfnCommandListSetParameter                                = xeCommandListSetParameter;
 
-    xe_apitable.pfnCommandListGetParameter                              = (xe_pfnCommandListGetParameter_t)LOAD_FUNCTION_PTR(handle, "xeCommandListGetParameter");
-    if( nullptr == xe_apitable.pfnCommandListGetParameter )
+    if( nullptr == original->pfnCommandListGetParameter )
         return false;
+    xe_apitable.pfnCommandListGetParameter                              = original->pfnCommandListGetParameter;
+    original->pfnCommandListGetParameter                                = xeCommandListGetParameter;
 
-    xe_apitable.pfnCommandListResetParameters                           = (xe_pfnCommandListResetParameters_t)LOAD_FUNCTION_PTR(handle, "xeCommandListResetParameters");
-    if( nullptr == xe_apitable.pfnCommandListResetParameters )
+    if( nullptr == original->pfnCommandListResetParameters )
         return false;
+    xe_apitable.pfnCommandListResetParameters                           = original->pfnCommandListResetParameters;
+    original->pfnCommandListResetParameters                             = xeCommandListResetParameters;
 
-    xe_apitable.pfnCommandListReserveSpace                              = (xe_pfnCommandListReserveSpace_t)LOAD_FUNCTION_PTR(handle, "xeCommandListReserveSpace");
-    if( nullptr == xe_apitable.pfnCommandListReserveSpace )
+    if( nullptr == original->pfnCommandListReserveSpace )
         return false;
+    xe_apitable.pfnCommandListReserveSpace                              = original->pfnCommandListReserveSpace;
+    original->pfnCommandListReserveSpace                                = xeCommandListReserveSpace;
 
-    xe_apitable.pfnCommandQueueCreate                                   = (xe_pfnCommandQueueCreate_t)LOAD_FUNCTION_PTR(handle, "xeCommandQueueCreate");
-    if( nullptr == xe_apitable.pfnCommandQueueCreate )
+    if( nullptr == original->pfnCommandQueueCreate )
         return false;
+    xe_apitable.pfnCommandQueueCreate                                   = original->pfnCommandQueueCreate;
+    original->pfnCommandQueueCreate                                     = xeCommandQueueCreate;
 
-    xe_apitable.pfnCommandQueueDestroy                                  = (xe_pfnCommandQueueDestroy_t)LOAD_FUNCTION_PTR(handle, "xeCommandQueueDestroy");
-    if( nullptr == xe_apitable.pfnCommandQueueDestroy )
+    if( nullptr == original->pfnCommandQueueDestroy )
         return false;
+    xe_apitable.pfnCommandQueueDestroy                                  = original->pfnCommandQueueDestroy;
+    original->pfnCommandQueueDestroy                                    = xeCommandQueueDestroy;
 
-    xe_apitable.pfnCommandQueueExecuteCommandLists                      = (xe_pfnCommandQueueExecuteCommandLists_t)LOAD_FUNCTION_PTR(handle, "xeCommandQueueExecuteCommandLists");
-    if( nullptr == xe_apitable.pfnCommandQueueExecuteCommandLists )
+    if( nullptr == original->pfnCommandQueueExecuteCommandLists )
         return false;
+    xe_apitable.pfnCommandQueueExecuteCommandLists                      = original->pfnCommandQueueExecuteCommandLists;
+    original->pfnCommandQueueExecuteCommandLists                        = xeCommandQueueExecuteCommandLists;
 
-    xe_apitable.pfnCommandQueueSynchronize                              = (xe_pfnCommandQueueSynchronize_t)LOAD_FUNCTION_PTR(handle, "xeCommandQueueSynchronize");
-    if( nullptr == xe_apitable.pfnCommandQueueSynchronize )
+    if( nullptr == original->pfnCommandQueueSynchronize )
         return false;
+    xe_apitable.pfnCommandQueueSynchronize                              = original->pfnCommandQueueSynchronize;
+    original->pfnCommandQueueSynchronize                                = xeCommandQueueSynchronize;
 
-    xe_apitable.pfnCommandListAppendMemoryCopy                          = (xe_pfnCommandListAppendMemoryCopy_t)LOAD_FUNCTION_PTR(handle, "xeCommandListAppendMemoryCopy");
-    if( nullptr == xe_apitable.pfnCommandListAppendMemoryCopy )
+    if( nullptr == original->pfnCommandListAppendMemoryCopy )
         return false;
+    xe_apitable.pfnCommandListAppendMemoryCopy                          = original->pfnCommandListAppendMemoryCopy;
+    original->pfnCommandListAppendMemoryCopy                            = xeCommandListAppendMemoryCopy;
 
-    xe_apitable.pfnCommandListAppendMemorySet                           = (xe_pfnCommandListAppendMemorySet_t)LOAD_FUNCTION_PTR(handle, "xeCommandListAppendMemorySet");
-    if( nullptr == xe_apitable.pfnCommandListAppendMemorySet )
+    if( nullptr == original->pfnCommandListAppendMemorySet )
         return false;
+    xe_apitable.pfnCommandListAppendMemorySet                           = original->pfnCommandListAppendMemorySet;
+    original->pfnCommandListAppendMemorySet                             = xeCommandListAppendMemorySet;
 
-    xe_apitable.pfnCommandListAppendImageCopy                           = (xe_pfnCommandListAppendImageCopy_t)LOAD_FUNCTION_PTR(handle, "xeCommandListAppendImageCopy");
-    if( nullptr == xe_apitable.pfnCommandListAppendImageCopy )
+    if( nullptr == original->pfnCommandListAppendImageCopy )
         return false;
+    xe_apitable.pfnCommandListAppendImageCopy                           = original->pfnCommandListAppendImageCopy;
+    original->pfnCommandListAppendImageCopy                             = xeCommandListAppendImageCopy;
 
-    xe_apitable.pfnCommandListAppendImageCopyRegion                     = (xe_pfnCommandListAppendImageCopyRegion_t)LOAD_FUNCTION_PTR(handle, "xeCommandListAppendImageCopyRegion");
-    if( nullptr == xe_apitable.pfnCommandListAppendImageCopyRegion )
+    if( nullptr == original->pfnCommandListAppendImageCopyRegion )
         return false;
+    xe_apitable.pfnCommandListAppendImageCopyRegion                     = original->pfnCommandListAppendImageCopyRegion;
+    original->pfnCommandListAppendImageCopyRegion                       = xeCommandListAppendImageCopyRegion;
 
-    xe_apitable.pfnCommandListAppendImageCopyToMemory                   = (xe_pfnCommandListAppendImageCopyToMemory_t)LOAD_FUNCTION_PTR(handle, "xeCommandListAppendImageCopyToMemory");
-    if( nullptr == xe_apitable.pfnCommandListAppendImageCopyToMemory )
+    if( nullptr == original->pfnCommandListAppendImageCopyToMemory )
         return false;
+    xe_apitable.pfnCommandListAppendImageCopyToMemory                   = original->pfnCommandListAppendImageCopyToMemory;
+    original->pfnCommandListAppendImageCopyToMemory                     = xeCommandListAppendImageCopyToMemory;
 
-    xe_apitable.pfnCommandListAppendImageCopyFromMemory                 = (xe_pfnCommandListAppendImageCopyFromMemory_t)LOAD_FUNCTION_PTR(handle, "xeCommandListAppendImageCopyFromMemory");
-    if( nullptr == xe_apitable.pfnCommandListAppendImageCopyFromMemory )
+    if( nullptr == original->pfnCommandListAppendImageCopyFromMemory )
         return false;
+    xe_apitable.pfnCommandListAppendImageCopyFromMemory                 = original->pfnCommandListAppendImageCopyFromMemory;
+    original->pfnCommandListAppendImageCopyFromMemory                   = xeCommandListAppendImageCopyFromMemory;
 
-    xe_apitable.pfnCommandListAppendMemoryPrefetch                      = (xe_pfnCommandListAppendMemoryPrefetch_t)LOAD_FUNCTION_PTR(handle, "xeCommandListAppendMemoryPrefetch");
-    if( nullptr == xe_apitable.pfnCommandListAppendMemoryPrefetch )
+    if( nullptr == original->pfnCommandListAppendMemoryPrefetch )
         return false;
+    xe_apitable.pfnCommandListAppendMemoryPrefetch                      = original->pfnCommandListAppendMemoryPrefetch;
+    original->pfnCommandListAppendMemoryPrefetch                        = xeCommandListAppendMemoryPrefetch;
 
-    xe_apitable.pfnCommandListAppendMemAdvise                           = (xe_pfnCommandListAppendMemAdvise_t)LOAD_FUNCTION_PTR(handle, "xeCommandListAppendMemAdvise");
-    if( nullptr == xe_apitable.pfnCommandListAppendMemAdvise )
+    if( nullptr == original->pfnCommandListAppendMemAdvise )
         return false;
+    xe_apitable.pfnCommandListAppendMemAdvise                           = original->pfnCommandListAppendMemAdvise;
+    original->pfnCommandListAppendMemAdvise                             = xeCommandListAppendMemAdvise;
 
-    xe_apitable.pfnDeviceGetCount                                       = (xe_pfnDeviceGetCount_t)LOAD_FUNCTION_PTR(handle, "xeDeviceGetCount");
-    if( nullptr == xe_apitable.pfnDeviceGetCount )
+    if( nullptr == original->pfnDeviceGetCount )
         return false;
+    xe_apitable.pfnDeviceGetCount                                       = original->pfnDeviceGetCount;
+    original->pfnDeviceGetCount                                         = xeDeviceGetCount;
 
-    xe_apitable.pfnDeviceGet                                            = (xe_pfnDeviceGet_t)LOAD_FUNCTION_PTR(handle, "xeDeviceGet");
-    if( nullptr == xe_apitable.pfnDeviceGet )
+    if( nullptr == original->pfnDeviceGet )
         return false;
+    xe_apitable.pfnDeviceGet                                            = original->pfnDeviceGet;
+    original->pfnDeviceGet                                              = xeDeviceGet;
 
-    xe_apitable.pfnDeviceGetSubDevice                                   = (xe_pfnDeviceGetSubDevice_t)LOAD_FUNCTION_PTR(handle, "xeDeviceGetSubDevice");
-    if( nullptr == xe_apitable.pfnDeviceGetSubDevice )
+    if( nullptr == original->pfnDeviceGetSubDevice )
         return false;
+    xe_apitable.pfnDeviceGetSubDevice                                   = original->pfnDeviceGetSubDevice;
+    original->pfnDeviceGetSubDevice                                     = xeDeviceGetSubDevice;
 
-    xe_apitable.pfnDeviceGetApiVersion                                  = (xe_pfnDeviceGetApiVersion_t)LOAD_FUNCTION_PTR(handle, "xeDeviceGetApiVersion");
-    if( nullptr == xe_apitable.pfnDeviceGetApiVersion )
+    if( nullptr == original->pfnDeviceGetApiVersion )
         return false;
+    xe_apitable.pfnDeviceGetApiVersion                                  = original->pfnDeviceGetApiVersion;
+    original->pfnDeviceGetApiVersion                                    = xeDeviceGetApiVersion;
 
-    xe_apitable.pfnDeviceGetProperties                                  = (xe_pfnDeviceGetProperties_t)LOAD_FUNCTION_PTR(handle, "xeDeviceGetProperties");
-    if( nullptr == xe_apitable.pfnDeviceGetProperties )
+    if( nullptr == original->pfnDeviceGetProperties )
         return false;
+    xe_apitable.pfnDeviceGetProperties                                  = original->pfnDeviceGetProperties;
+    original->pfnDeviceGetProperties                                    = xeDeviceGetProperties;
 
-    xe_apitable.pfnDeviceGetComputeProperties                           = (xe_pfnDeviceGetComputeProperties_t)LOAD_FUNCTION_PTR(handle, "xeDeviceGetComputeProperties");
-    if( nullptr == xe_apitable.pfnDeviceGetComputeProperties )
+    if( nullptr == original->pfnDeviceGetComputeProperties )
         return false;
+    xe_apitable.pfnDeviceGetComputeProperties                           = original->pfnDeviceGetComputeProperties;
+    original->pfnDeviceGetComputeProperties                             = xeDeviceGetComputeProperties;
 
-    xe_apitable.pfnDeviceGetMemoryProperties                            = (xe_pfnDeviceGetMemoryProperties_t)LOAD_FUNCTION_PTR(handle, "xeDeviceGetMemoryProperties");
-    if( nullptr == xe_apitable.pfnDeviceGetMemoryProperties )
+    if( nullptr == original->pfnDeviceGetMemoryProperties )
         return false;
+    xe_apitable.pfnDeviceGetMemoryProperties                            = original->pfnDeviceGetMemoryProperties;
+    original->pfnDeviceGetMemoryProperties                              = xeDeviceGetMemoryProperties;
 
-    xe_apitable.pfnDeviceGetP2PProperties                               = (xe_pfnDeviceGetP2PProperties_t)LOAD_FUNCTION_PTR(handle, "xeDeviceGetP2PProperties");
-    if( nullptr == xe_apitable.pfnDeviceGetP2PProperties )
+    if( nullptr == original->pfnDeviceGetP2PProperties )
         return false;
+    xe_apitable.pfnDeviceGetP2PProperties                               = original->pfnDeviceGetP2PProperties;
+    original->pfnDeviceGetP2PProperties                                 = xeDeviceGetP2PProperties;
 
-    xe_apitable.pfnDeviceCanAccessPeer                                  = (xe_pfnDeviceCanAccessPeer_t)LOAD_FUNCTION_PTR(handle, "xeDeviceCanAccessPeer");
-    if( nullptr == xe_apitable.pfnDeviceCanAccessPeer )
+    if( nullptr == original->pfnDeviceCanAccessPeer )
         return false;
+    xe_apitable.pfnDeviceCanAccessPeer                                  = original->pfnDeviceCanAccessPeer;
+    original->pfnDeviceCanAccessPeer                                    = xeDeviceCanAccessPeer;
 
-    xe_apitable.pfnDeviceSetIntermediateCacheConfig                     = (xe_pfnDeviceSetIntermediateCacheConfig_t)LOAD_FUNCTION_PTR(handle, "xeDeviceSetIntermediateCacheConfig");
-    if( nullptr == xe_apitable.pfnDeviceSetIntermediateCacheConfig )
+    if( nullptr == original->pfnDeviceSetIntermediateCacheConfig )
         return false;
+    xe_apitable.pfnDeviceSetIntermediateCacheConfig                     = original->pfnDeviceSetIntermediateCacheConfig;
+    original->pfnDeviceSetIntermediateCacheConfig                       = xeDeviceSetIntermediateCacheConfig;
 
-    xe_apitable.pfnDeviceSetLastLevelCacheConfig                        = (xe_pfnDeviceSetLastLevelCacheConfig_t)LOAD_FUNCTION_PTR(handle, "xeDeviceSetLastLevelCacheConfig");
-    if( nullptr == xe_apitable.pfnDeviceSetLastLevelCacheConfig )
+    if( nullptr == original->pfnDeviceSetLastLevelCacheConfig )
         return false;
+    xe_apitable.pfnDeviceSetLastLevelCacheConfig                        = original->pfnDeviceSetLastLevelCacheConfig;
+    original->pfnDeviceSetLastLevelCacheConfig                          = xeDeviceSetLastLevelCacheConfig;
 
-    xe_apitable.pfnInit                                                 = (xe_pfnInit_t)LOAD_FUNCTION_PTR(handle, "xeInit");
-    if( nullptr == xe_apitable.pfnInit )
+    if( nullptr == original->pfnInit )
         return false;
+    xe_apitable.pfnInit                                                 = original->pfnInit;
+    original->pfnInit                                                   = xeInit;
 
-    xe_apitable.pfnGetDriverVersion                                     = (xe_pfnGetDriverVersion_t)LOAD_FUNCTION_PTR(handle, "xeGetDriverVersion");
-    if( nullptr == xe_apitable.pfnGetDriverVersion )
+    if( nullptr == original->pfnGetDriverVersion )
         return false;
+    xe_apitable.pfnGetDriverVersion                                     = original->pfnGetDriverVersion;
+    original->pfnGetDriverVersion                                       = xeGetDriverVersion;
 
-    xe_apitable.pfnEventPoolCreate                                      = (xe_pfnEventPoolCreate_t)LOAD_FUNCTION_PTR(handle, "xeEventPoolCreate");
-    if( nullptr == xe_apitable.pfnEventPoolCreate )
+    if( nullptr == original->pfnEventPoolCreate )
         return false;
+    xe_apitable.pfnEventPoolCreate                                      = original->pfnEventPoolCreate;
+    original->pfnEventPoolCreate                                        = xeEventPoolCreate;
 
-    xe_apitable.pfnEventPoolDestroy                                     = (xe_pfnEventPoolDestroy_t)LOAD_FUNCTION_PTR(handle, "xeEventPoolDestroy");
-    if( nullptr == xe_apitable.pfnEventPoolDestroy )
+    if( nullptr == original->pfnEventPoolDestroy )
         return false;
+    xe_apitable.pfnEventPoolDestroy                                     = original->pfnEventPoolDestroy;
+    original->pfnEventPoolDestroy                                       = xeEventPoolDestroy;
 
-    xe_apitable.pfnEventCreate                                          = (xe_pfnEventCreate_t)LOAD_FUNCTION_PTR(handle, "xeEventCreate");
-    if( nullptr == xe_apitable.pfnEventCreate )
+    if( nullptr == original->pfnEventCreate )
         return false;
+    xe_apitable.pfnEventCreate                                          = original->pfnEventCreate;
+    original->pfnEventCreate                                            = xeEventCreate;
 
-    xe_apitable.pfnEventDestroy                                         = (xe_pfnEventDestroy_t)LOAD_FUNCTION_PTR(handle, "xeEventDestroy");
-    if( nullptr == xe_apitable.pfnEventDestroy )
+    if( nullptr == original->pfnEventDestroy )
         return false;
+    xe_apitable.pfnEventDestroy                                         = original->pfnEventDestroy;
+    original->pfnEventDestroy                                           = xeEventDestroy;
 
-    xe_apitable.pfnEventPoolGetIpcHandle                                = (xe_pfnEventPoolGetIpcHandle_t)LOAD_FUNCTION_PTR(handle, "xeEventPoolGetIpcHandle");
-    if( nullptr == xe_apitable.pfnEventPoolGetIpcHandle )
+    if( nullptr == original->pfnEventPoolGetIpcHandle )
         return false;
+    xe_apitable.pfnEventPoolGetIpcHandle                                = original->pfnEventPoolGetIpcHandle;
+    original->pfnEventPoolGetIpcHandle                                  = xeEventPoolGetIpcHandle;
 
-    xe_apitable.pfnEventPoolOpenIpcHandle                               = (xe_pfnEventPoolOpenIpcHandle_t)LOAD_FUNCTION_PTR(handle, "xeEventPoolOpenIpcHandle");
-    if( nullptr == xe_apitable.pfnEventPoolOpenIpcHandle )
+    if( nullptr == original->pfnEventPoolOpenIpcHandle )
         return false;
+    xe_apitable.pfnEventPoolOpenIpcHandle                               = original->pfnEventPoolOpenIpcHandle;
+    original->pfnEventPoolOpenIpcHandle                                 = xeEventPoolOpenIpcHandle;
 
-    xe_apitable.pfnEventPoolCloseIpcHandle                              = (xe_pfnEventPoolCloseIpcHandle_t)LOAD_FUNCTION_PTR(handle, "xeEventPoolCloseIpcHandle");
-    if( nullptr == xe_apitable.pfnEventPoolCloseIpcHandle )
+    if( nullptr == original->pfnEventPoolCloseIpcHandle )
         return false;
+    xe_apitable.pfnEventPoolCloseIpcHandle                              = original->pfnEventPoolCloseIpcHandle;
+    original->pfnEventPoolCloseIpcHandle                                = xeEventPoolCloseIpcHandle;
 
-    xe_apitable.pfnCommandListAppendSignalEvent                         = (xe_pfnCommandListAppendSignalEvent_t)LOAD_FUNCTION_PTR(handle, "xeCommandListAppendSignalEvent");
-    if( nullptr == xe_apitable.pfnCommandListAppendSignalEvent )
+    if( nullptr == original->pfnCommandListAppendSignalEvent )
         return false;
+    xe_apitable.pfnCommandListAppendSignalEvent                         = original->pfnCommandListAppendSignalEvent;
+    original->pfnCommandListAppendSignalEvent                           = xeCommandListAppendSignalEvent;
 
-    xe_apitable.pfnCommandListAppendWaitOnEvents                        = (xe_pfnCommandListAppendWaitOnEvents_t)LOAD_FUNCTION_PTR(handle, "xeCommandListAppendWaitOnEvents");
-    if( nullptr == xe_apitable.pfnCommandListAppendWaitOnEvents )
+    if( nullptr == original->pfnCommandListAppendWaitOnEvents )
         return false;
+    xe_apitable.pfnCommandListAppendWaitOnEvents                        = original->pfnCommandListAppendWaitOnEvents;
+    original->pfnCommandListAppendWaitOnEvents                          = xeCommandListAppendWaitOnEvents;
 
-    xe_apitable.pfnEventHostSignal                                      = (xe_pfnEventHostSignal_t)LOAD_FUNCTION_PTR(handle, "xeEventHostSignal");
-    if( nullptr == xe_apitable.pfnEventHostSignal )
+    if( nullptr == original->pfnEventHostSignal )
         return false;
+    xe_apitable.pfnEventHostSignal                                      = original->pfnEventHostSignal;
+    original->pfnEventHostSignal                                        = xeEventHostSignal;
 
-    xe_apitable.pfnEventHostSynchronize                                 = (xe_pfnEventHostSynchronize_t)LOAD_FUNCTION_PTR(handle, "xeEventHostSynchronize");
-    if( nullptr == xe_apitable.pfnEventHostSynchronize )
+    if( nullptr == original->pfnEventHostSynchronize )
         return false;
+    xe_apitable.pfnEventHostSynchronize                                 = original->pfnEventHostSynchronize;
+    original->pfnEventHostSynchronize                                   = xeEventHostSynchronize;
 
-    xe_apitable.pfnEventQueryStatus                                     = (xe_pfnEventQueryStatus_t)LOAD_FUNCTION_PTR(handle, "xeEventQueryStatus");
-    if( nullptr == xe_apitable.pfnEventQueryStatus )
+    if( nullptr == original->pfnEventQueryStatus )
         return false;
+    xe_apitable.pfnEventQueryStatus                                     = original->pfnEventQueryStatus;
+    original->pfnEventQueryStatus                                       = xeEventQueryStatus;
 
-    xe_apitable.pfnCommandListAppendEventReset                          = (xe_pfnCommandListAppendEventReset_t)LOAD_FUNCTION_PTR(handle, "xeCommandListAppendEventReset");
-    if( nullptr == xe_apitable.pfnCommandListAppendEventReset )
+    if( nullptr == original->pfnCommandListAppendEventReset )
         return false;
+    xe_apitable.pfnCommandListAppendEventReset                          = original->pfnCommandListAppendEventReset;
+    original->pfnCommandListAppendEventReset                            = xeCommandListAppendEventReset;
 
-    xe_apitable.pfnEventReset                                           = (xe_pfnEventReset_t)LOAD_FUNCTION_PTR(handle, "xeEventReset");
-    if( nullptr == xe_apitable.pfnEventReset )
+    if( nullptr == original->pfnEventReset )
         return false;
+    xe_apitable.pfnEventReset                                           = original->pfnEventReset;
+    original->pfnEventReset                                             = xeEventReset;
 
-    xe_apitable.pfnFenceCreate                                          = (xe_pfnFenceCreate_t)LOAD_FUNCTION_PTR(handle, "xeFenceCreate");
-    if( nullptr == xe_apitable.pfnFenceCreate )
+    if( nullptr == original->pfnFenceCreate )
         return false;
+    xe_apitable.pfnFenceCreate                                          = original->pfnFenceCreate;
+    original->pfnFenceCreate                                            = xeFenceCreate;
 
-    xe_apitable.pfnFenceDestroy                                         = (xe_pfnFenceDestroy_t)LOAD_FUNCTION_PTR(handle, "xeFenceDestroy");
-    if( nullptr == xe_apitable.pfnFenceDestroy )
+    if( nullptr == original->pfnFenceDestroy )
         return false;
+    xe_apitable.pfnFenceDestroy                                         = original->pfnFenceDestroy;
+    original->pfnFenceDestroy                                           = xeFenceDestroy;
 
-    xe_apitable.pfnFenceHostSynchronize                                 = (xe_pfnFenceHostSynchronize_t)LOAD_FUNCTION_PTR(handle, "xeFenceHostSynchronize");
-    if( nullptr == xe_apitable.pfnFenceHostSynchronize )
+    if( nullptr == original->pfnFenceHostSynchronize )
         return false;
+    xe_apitable.pfnFenceHostSynchronize                                 = original->pfnFenceHostSynchronize;
+    original->pfnFenceHostSynchronize                                   = xeFenceHostSynchronize;
 
-    xe_apitable.pfnFenceQueryStatus                                     = (xe_pfnFenceQueryStatus_t)LOAD_FUNCTION_PTR(handle, "xeFenceQueryStatus");
-    if( nullptr == xe_apitable.pfnFenceQueryStatus )
+    if( nullptr == original->pfnFenceQueryStatus )
         return false;
+    xe_apitable.pfnFenceQueryStatus                                     = original->pfnFenceQueryStatus;
+    original->pfnFenceQueryStatus                                       = xeFenceQueryStatus;
 
-    xe_apitable.pfnFenceReset                                           = (xe_pfnFenceReset_t)LOAD_FUNCTION_PTR(handle, "xeFenceReset");
-    if( nullptr == xe_apitable.pfnFenceReset )
+    if( nullptr == original->pfnFenceReset )
         return false;
+    xe_apitable.pfnFenceReset                                           = original->pfnFenceReset;
+    original->pfnFenceReset                                             = xeFenceReset;
 
-    xe_apitable.pfnImageGetProperties                                   = (xe_pfnImageGetProperties_t)LOAD_FUNCTION_PTR(handle, "xeImageGetProperties");
-    if( nullptr == xe_apitable.pfnImageGetProperties )
+    if( nullptr == original->pfnImageGetProperties )
         return false;
+    xe_apitable.pfnImageGetProperties                                   = original->pfnImageGetProperties;
+    original->pfnImageGetProperties                                     = xeImageGetProperties;
 
-    xe_apitable.pfnImageCreate                                          = (xe_pfnImageCreate_t)LOAD_FUNCTION_PTR(handle, "xeImageCreate");
-    if( nullptr == xe_apitable.pfnImageCreate )
+    if( nullptr == original->pfnImageCreate )
         return false;
+    xe_apitable.pfnImageCreate                                          = original->pfnImageCreate;
+    original->pfnImageCreate                                            = xeImageCreate;
 
-    xe_apitable.pfnImageDestroy                                         = (xe_pfnImageDestroy_t)LOAD_FUNCTION_PTR(handle, "xeImageDestroy");
-    if( nullptr == xe_apitable.pfnImageDestroy )
+    if( nullptr == original->pfnImageDestroy )
         return false;
+    xe_apitable.pfnImageDestroy                                         = original->pfnImageDestroy;
+    original->pfnImageDestroy                                           = xeImageDestroy;
 
-    xe_apitable.pfnSharedMemAlloc                                       = (xe_pfnSharedMemAlloc_t)LOAD_FUNCTION_PTR(handle, "xeSharedMemAlloc");
-    if( nullptr == xe_apitable.pfnSharedMemAlloc )
+    if( nullptr == original->pfnSharedMemAlloc )
         return false;
+    xe_apitable.pfnSharedMemAlloc                                       = original->pfnSharedMemAlloc;
+    original->pfnSharedMemAlloc                                         = xeSharedMemAlloc;
 
-    xe_apitable.pfnMemAlloc                                             = (xe_pfnMemAlloc_t)LOAD_FUNCTION_PTR(handle, "xeMemAlloc");
-    if( nullptr == xe_apitable.pfnMemAlloc )
+    if( nullptr == original->pfnMemAlloc )
         return false;
+    xe_apitable.pfnMemAlloc                                             = original->pfnMemAlloc;
+    original->pfnMemAlloc                                               = xeMemAlloc;
 
-    xe_apitable.pfnHostMemAlloc                                         = (xe_pfnHostMemAlloc_t)LOAD_FUNCTION_PTR(handle, "xeHostMemAlloc");
-    if( nullptr == xe_apitable.pfnHostMemAlloc )
+    if( nullptr == original->pfnHostMemAlloc )
         return false;
+    xe_apitable.pfnHostMemAlloc                                         = original->pfnHostMemAlloc;
+    original->pfnHostMemAlloc                                           = xeHostMemAlloc;
 
-    xe_apitable.pfnMemFree                                              = (xe_pfnMemFree_t)LOAD_FUNCTION_PTR(handle, "xeMemFree");
-    if( nullptr == xe_apitable.pfnMemFree )
+    if( nullptr == original->pfnMemFree )
         return false;
+    xe_apitable.pfnMemFree                                              = original->pfnMemFree;
+    original->pfnMemFree                                                = xeMemFree;
 
-    xe_apitable.pfnMemGetProperties                                     = (xe_pfnMemGetProperties_t)LOAD_FUNCTION_PTR(handle, "xeMemGetProperties");
-    if( nullptr == xe_apitable.pfnMemGetProperties )
+    if( nullptr == original->pfnMemGetProperties )
         return false;
+    xe_apitable.pfnMemGetProperties                                     = original->pfnMemGetProperties;
+    original->pfnMemGetProperties                                       = xeMemGetProperties;
 
-    xe_apitable.pfnMemGetAddressRange                                   = (xe_pfnMemGetAddressRange_t)LOAD_FUNCTION_PTR(handle, "xeMemGetAddressRange");
-    if( nullptr == xe_apitable.pfnMemGetAddressRange )
+    if( nullptr == original->pfnMemGetAddressRange )
         return false;
+    xe_apitable.pfnMemGetAddressRange                                   = original->pfnMemGetAddressRange;
+    original->pfnMemGetAddressRange                                     = xeMemGetAddressRange;
 
-    xe_apitable.pfnIpcGetMemHandle                                      = (xe_pfnIpcGetMemHandle_t)LOAD_FUNCTION_PTR(handle, "xeIpcGetMemHandle");
-    if( nullptr == xe_apitable.pfnIpcGetMemHandle )
+    if( nullptr == original->pfnIpcGetMemHandle )
         return false;
+    xe_apitable.pfnIpcGetMemHandle                                      = original->pfnIpcGetMemHandle;
+    original->pfnIpcGetMemHandle                                        = xeIpcGetMemHandle;
 
-    xe_apitable.pfnIpcOpenMemHandle                                     = (xe_pfnIpcOpenMemHandle_t)LOAD_FUNCTION_PTR(handle, "xeIpcOpenMemHandle");
-    if( nullptr == xe_apitable.pfnIpcOpenMemHandle )
+    if( nullptr == original->pfnIpcOpenMemHandle )
         return false;
+    xe_apitable.pfnIpcOpenMemHandle                                     = original->pfnIpcOpenMemHandle;
+    original->pfnIpcOpenMemHandle                                       = xeIpcOpenMemHandle;
 
-    xe_apitable.pfnIpcCloseMemHandle                                    = (xe_pfnIpcCloseMemHandle_t)LOAD_FUNCTION_PTR(handle, "xeIpcCloseMemHandle");
-    if( nullptr == xe_apitable.pfnIpcCloseMemHandle )
+    if( nullptr == original->pfnIpcCloseMemHandle )
         return false;
+    xe_apitable.pfnIpcCloseMemHandle                                    = original->pfnIpcCloseMemHandle;
+    original->pfnIpcCloseMemHandle                                      = xeIpcCloseMemHandle;
 
-    xe_apitable.pfnModuleCreate                                         = (xe_pfnModuleCreate_t)LOAD_FUNCTION_PTR(handle, "xeModuleCreate");
-    if( nullptr == xe_apitable.pfnModuleCreate )
+    if( nullptr == original->pfnModuleCreate )
         return false;
+    xe_apitable.pfnModuleCreate                                         = original->pfnModuleCreate;
+    original->pfnModuleCreate                                           = xeModuleCreate;
 
-    xe_apitable.pfnModuleDestroy                                        = (xe_pfnModuleDestroy_t)LOAD_FUNCTION_PTR(handle, "xeModuleDestroy");
-    if( nullptr == xe_apitable.pfnModuleDestroy )
+    if( nullptr == original->pfnModuleDestroy )
         return false;
+    xe_apitable.pfnModuleDestroy                                        = original->pfnModuleDestroy;
+    original->pfnModuleDestroy                                          = xeModuleDestroy;
 
-    xe_apitable.pfnModuleBuildLogDestroy                                = (xe_pfnModuleBuildLogDestroy_t)LOAD_FUNCTION_PTR(handle, "xeModuleBuildLogDestroy");
-    if( nullptr == xe_apitable.pfnModuleBuildLogDestroy )
+    if( nullptr == original->pfnModuleBuildLogDestroy )
         return false;
+    xe_apitable.pfnModuleBuildLogDestroy                                = original->pfnModuleBuildLogDestroy;
+    original->pfnModuleBuildLogDestroy                                  = xeModuleBuildLogDestroy;
 
-    xe_apitable.pfnModuleBuildLogGetString                              = (xe_pfnModuleBuildLogGetString_t)LOAD_FUNCTION_PTR(handle, "xeModuleBuildLogGetString");
-    if( nullptr == xe_apitable.pfnModuleBuildLogGetString )
+    if( nullptr == original->pfnModuleBuildLogGetString )
         return false;
+    xe_apitable.pfnModuleBuildLogGetString                              = original->pfnModuleBuildLogGetString;
+    original->pfnModuleBuildLogGetString                                = xeModuleBuildLogGetString;
 
-    xe_apitable.pfnModuleGetNativeBinary                                = (xe_pfnModuleGetNativeBinary_t)LOAD_FUNCTION_PTR(handle, "xeModuleGetNativeBinary");
-    if( nullptr == xe_apitable.pfnModuleGetNativeBinary )
+    if( nullptr == original->pfnModuleGetNativeBinary )
         return false;
+    xe_apitable.pfnModuleGetNativeBinary                                = original->pfnModuleGetNativeBinary;
+    original->pfnModuleGetNativeBinary                                  = xeModuleGetNativeBinary;
 
-    xe_apitable.pfnModuleGetGlobalPointer                               = (xe_pfnModuleGetGlobalPointer_t)LOAD_FUNCTION_PTR(handle, "xeModuleGetGlobalPointer");
-    if( nullptr == xe_apitable.pfnModuleGetGlobalPointer )
+    if( nullptr == original->pfnModuleGetGlobalPointer )
         return false;
+    xe_apitable.pfnModuleGetGlobalPointer                               = original->pfnModuleGetGlobalPointer;
+    original->pfnModuleGetGlobalPointer                                 = xeModuleGetGlobalPointer;
 
-    xe_apitable.pfnFunctionCreate                                       = (xe_pfnFunctionCreate_t)LOAD_FUNCTION_PTR(handle, "xeFunctionCreate");
-    if( nullptr == xe_apitable.pfnFunctionCreate )
+    if( nullptr == original->pfnFunctionCreate )
         return false;
+    xe_apitable.pfnFunctionCreate                                       = original->pfnFunctionCreate;
+    original->pfnFunctionCreate                                         = xeFunctionCreate;
 
-    xe_apitable.pfnFunctionDestroy                                      = (xe_pfnFunctionDestroy_t)LOAD_FUNCTION_PTR(handle, "xeFunctionDestroy");
-    if( nullptr == xe_apitable.pfnFunctionDestroy )
+    if( nullptr == original->pfnFunctionDestroy )
         return false;
+    xe_apitable.pfnFunctionDestroy                                      = original->pfnFunctionDestroy;
+    original->pfnFunctionDestroy                                        = xeFunctionDestroy;
 
-    xe_apitable.pfnModuleGetFunctionPointer                             = (xe_pfnModuleGetFunctionPointer_t)LOAD_FUNCTION_PTR(handle, "xeModuleGetFunctionPointer");
-    if( nullptr == xe_apitable.pfnModuleGetFunctionPointer )
+    if( nullptr == original->pfnModuleGetFunctionPointer )
         return false;
+    xe_apitable.pfnModuleGetFunctionPointer                             = original->pfnModuleGetFunctionPointer;
+    original->pfnModuleGetFunctionPointer                               = xeModuleGetFunctionPointer;
 
-    xe_apitable.pfnFunctionSetGroupSize                                 = (xe_pfnFunctionSetGroupSize_t)LOAD_FUNCTION_PTR(handle, "xeFunctionSetGroupSize");
-    if( nullptr == xe_apitable.pfnFunctionSetGroupSize )
+    if( nullptr == original->pfnFunctionSetGroupSize )
         return false;
+    xe_apitable.pfnFunctionSetGroupSize                                 = original->pfnFunctionSetGroupSize;
+    original->pfnFunctionSetGroupSize                                   = xeFunctionSetGroupSize;
 
-    xe_apitable.pfnFunctionSuggestGroupSize                             = (xe_pfnFunctionSuggestGroupSize_t)LOAD_FUNCTION_PTR(handle, "xeFunctionSuggestGroupSize");
-    if( nullptr == xe_apitable.pfnFunctionSuggestGroupSize )
+    if( nullptr == original->pfnFunctionSuggestGroupSize )
         return false;
+    xe_apitable.pfnFunctionSuggestGroupSize                             = original->pfnFunctionSuggestGroupSize;
+    original->pfnFunctionSuggestGroupSize                               = xeFunctionSuggestGroupSize;
 
-    xe_apitable.pfnFunctionSetArgumentValue                             = (xe_pfnFunctionSetArgumentValue_t)LOAD_FUNCTION_PTR(handle, "xeFunctionSetArgumentValue");
-    if( nullptr == xe_apitable.pfnFunctionSetArgumentValue )
+    if( nullptr == original->pfnFunctionSetArgumentValue )
         return false;
+    xe_apitable.pfnFunctionSetArgumentValue                             = original->pfnFunctionSetArgumentValue;
+    original->pfnFunctionSetArgumentValue                               = xeFunctionSetArgumentValue;
 
-    xe_apitable.pfnFunctionSetAttribute                                 = (xe_pfnFunctionSetAttribute_t)LOAD_FUNCTION_PTR(handle, "xeFunctionSetAttribute");
-    if( nullptr == xe_apitable.pfnFunctionSetAttribute )
+    if( nullptr == original->pfnFunctionSetAttribute )
         return false;
+    xe_apitable.pfnFunctionSetAttribute                                 = original->pfnFunctionSetAttribute;
+    original->pfnFunctionSetAttribute                                   = xeFunctionSetAttribute;
 
-    xe_apitable.pfnFunctionGetAttribute                                 = (xe_pfnFunctionGetAttribute_t)LOAD_FUNCTION_PTR(handle, "xeFunctionGetAttribute");
-    if( nullptr == xe_apitable.pfnFunctionGetAttribute )
+    if( nullptr == original->pfnFunctionGetAttribute )
         return false;
+    xe_apitable.pfnFunctionGetAttribute                                 = original->pfnFunctionGetAttribute;
+    original->pfnFunctionGetAttribute                                   = xeFunctionGetAttribute;
 
-    xe_apitable.pfnCommandListAppendLaunchFunction                      = (xe_pfnCommandListAppendLaunchFunction_t)LOAD_FUNCTION_PTR(handle, "xeCommandListAppendLaunchFunction");
-    if( nullptr == xe_apitable.pfnCommandListAppendLaunchFunction )
+    if( nullptr == original->pfnCommandListAppendLaunchFunction )
         return false;
+    xe_apitable.pfnCommandListAppendLaunchFunction                      = original->pfnCommandListAppendLaunchFunction;
+    original->pfnCommandListAppendLaunchFunction                        = xeCommandListAppendLaunchFunction;
 
-    xe_apitable.pfnCommandListAppendLaunchFunctionIndirect              = (xe_pfnCommandListAppendLaunchFunctionIndirect_t)LOAD_FUNCTION_PTR(handle, "xeCommandListAppendLaunchFunctionIndirect");
-    if( nullptr == xe_apitable.pfnCommandListAppendLaunchFunctionIndirect )
+    if( nullptr == original->pfnCommandListAppendLaunchFunctionIndirect )
         return false;
+    xe_apitable.pfnCommandListAppendLaunchFunctionIndirect              = original->pfnCommandListAppendLaunchFunctionIndirect;
+    original->pfnCommandListAppendLaunchFunctionIndirect                = xeCommandListAppendLaunchFunctionIndirect;
 
-    xe_apitable.pfnCommandListAppendLaunchMultipleFunctionsIndirect     = (xe_pfnCommandListAppendLaunchMultipleFunctionsIndirect_t)LOAD_FUNCTION_PTR(handle, "xeCommandListAppendLaunchMultipleFunctionsIndirect");
-    if( nullptr == xe_apitable.pfnCommandListAppendLaunchMultipleFunctionsIndirect )
+    if( nullptr == original->pfnCommandListAppendLaunchMultipleFunctionsIndirect )
         return false;
+    xe_apitable.pfnCommandListAppendLaunchMultipleFunctionsIndirect     = original->pfnCommandListAppendLaunchMultipleFunctionsIndirect;
+    original->pfnCommandListAppendLaunchMultipleFunctionsIndirect       = xeCommandListAppendLaunchMultipleFunctionsIndirect;
 
-    xe_apitable.pfnCommandListAppendLaunchHostFunction                  = (xe_pfnCommandListAppendLaunchHostFunction_t)LOAD_FUNCTION_PTR(handle, "xeCommandListAppendLaunchHostFunction");
-    if( nullptr == xe_apitable.pfnCommandListAppendLaunchHostFunction )
+    if( nullptr == original->pfnCommandListAppendLaunchHostFunction )
         return false;
+    xe_apitable.pfnCommandListAppendLaunchHostFunction                  = original->pfnCommandListAppendLaunchHostFunction;
+    original->pfnCommandListAppendLaunchHostFunction                    = xeCommandListAppendLaunchHostFunction;
 
-    xe_apitable.pfnDeviceMakeMemoryResident                             = (xe_pfnDeviceMakeMemoryResident_t)LOAD_FUNCTION_PTR(handle, "xeDeviceMakeMemoryResident");
-    if( nullptr == xe_apitable.pfnDeviceMakeMemoryResident )
+    if( nullptr == original->pfnDeviceMakeMemoryResident )
         return false;
+    xe_apitable.pfnDeviceMakeMemoryResident                             = original->pfnDeviceMakeMemoryResident;
+    original->pfnDeviceMakeMemoryResident                               = xeDeviceMakeMemoryResident;
 
-    xe_apitable.pfnDeviceEvictMemory                                    = (xe_pfnDeviceEvictMemory_t)LOAD_FUNCTION_PTR(handle, "xeDeviceEvictMemory");
-    if( nullptr == xe_apitable.pfnDeviceEvictMemory )
+    if( nullptr == original->pfnDeviceEvictMemory )
         return false;
+    xe_apitable.pfnDeviceEvictMemory                                    = original->pfnDeviceEvictMemory;
+    original->pfnDeviceEvictMemory                                      = xeDeviceEvictMemory;
 
-    xe_apitable.pfnDeviceMakeImageResident                              = (xe_pfnDeviceMakeImageResident_t)LOAD_FUNCTION_PTR(handle, "xeDeviceMakeImageResident");
-    if( nullptr == xe_apitable.pfnDeviceMakeImageResident )
+    if( nullptr == original->pfnDeviceMakeImageResident )
         return false;
+    xe_apitable.pfnDeviceMakeImageResident                              = original->pfnDeviceMakeImageResident;
+    original->pfnDeviceMakeImageResident                                = xeDeviceMakeImageResident;
 
-    xe_apitable.pfnDeviceEvictImage                                     = (xe_pfnDeviceEvictImage_t)LOAD_FUNCTION_PTR(handle, "xeDeviceEvictImage");
-    if( nullptr == xe_apitable.pfnDeviceEvictImage )
+    if( nullptr == original->pfnDeviceEvictImage )
         return false;
+    xe_apitable.pfnDeviceEvictImage                                     = original->pfnDeviceEvictImage;
+    original->pfnDeviceEvictImage                                       = xeDeviceEvictImage;
 
-    xe_apitable.pfnSamplerCreate                                        = (xe_pfnSamplerCreate_t)LOAD_FUNCTION_PTR(handle, "xeSamplerCreate");
-    if( nullptr == xe_apitable.pfnSamplerCreate )
+    if( nullptr == original->pfnSamplerCreate )
         return false;
+    xe_apitable.pfnSamplerCreate                                        = original->pfnSamplerCreate;
+    original->pfnSamplerCreate                                          = xeSamplerCreate;
 
-    xe_apitable.pfnSamplerDestroy                                       = (xe_pfnSamplerDestroy_t)LOAD_FUNCTION_PTR(handle, "xeSamplerDestroy");
-    if( nullptr == xe_apitable.pfnSamplerDestroy )
+    if( nullptr == original->pfnSamplerDestroy )
         return false;
+    xe_apitable.pfnSamplerDestroy                                       = original->pfnSamplerDestroy;
+    original->pfnSamplerDestroy                                         = xeSamplerDestroy;
 
     return true;
 }
@@ -445,6 +543,9 @@ xeCommandListAppendBarrier(
     if( nullptr == xe_apitable.pfnCommandListAppendBarrier )
         return XE_RESULT_ERROR_UNINITIALIZED;
 
+    // Check parameters
+    if( nullptr == hCommandList ) return XE_RESULT_ERROR_INVALID_PARAMETER;
+
     return xe_apitable.pfnCommandListAppendBarrier( hCommandList, hSignalEvent, numWaitEvents, phWaitEvents );
 }
 
@@ -464,6 +565,11 @@ xeCommandListAppendMemoryRangesBarrier(
     if( nullptr == xe_apitable.pfnCommandListAppendMemoryRangesBarrier )
         return XE_RESULT_ERROR_UNINITIALIZED;
 
+    // Check parameters
+    if( nullptr == hCommandList ) return XE_RESULT_ERROR_INVALID_PARAMETER;
+    if( nullptr == pRangeSizes ) return XE_RESULT_ERROR_INVALID_PARAMETER;
+    if( nullptr == pRanges ) return XE_RESULT_ERROR_INVALID_PARAMETER;
+
     return xe_apitable.pfnCommandListAppendMemoryRangesBarrier( hCommandList, numRanges, pRangeSizes, pRanges, hSignalEvent, numWaitEvents, phWaitEvents );
 }
 
@@ -475,6 +581,9 @@ xeDeviceSystemBarrier(
 {
     if( nullptr == xe_apitable.pfnDeviceSystemBarrier )
         return XE_RESULT_ERROR_UNINITIALIZED;
+
+    // Check parameters
+    if( nullptr == hDevice ) return XE_RESULT_ERROR_INVALID_PARAMETER;
 
     return xe_apitable.pfnDeviceSystemBarrier( hDevice );
 }
@@ -491,6 +600,10 @@ xeDeviceRegisterCLMemory(
 {
     if( nullptr == xe_apitable.pfnDeviceRegisterCLMemory )
         return XE_RESULT_ERROR_UNINITIALIZED;
+
+    // Check parameters
+    if( nullptr == hDevice ) return XE_RESULT_ERROR_INVALID_PARAMETER;
+    if( nullptr == ptr ) return XE_RESULT_ERROR_INVALID_PARAMETER;
 
     return xe_apitable.pfnDeviceRegisterCLMemory( hDevice, context, mem, ptr );
 }
@@ -509,6 +622,10 @@ xeDeviceRegisterCLProgram(
     if( nullptr == xe_apitable.pfnDeviceRegisterCLProgram )
         return XE_RESULT_ERROR_UNINITIALIZED;
 
+    // Check parameters
+    if( nullptr == hDevice ) return XE_RESULT_ERROR_INVALID_PARAMETER;
+    if( nullptr == phModule ) return XE_RESULT_ERROR_INVALID_PARAMETER;
+
     return xe_apitable.pfnDeviceRegisterCLProgram( hDevice, context, program, phModule );
 }
 #endif // XE_ENABLE_OCL_INTEROP
@@ -526,6 +643,10 @@ xeDeviceRegisterCLCommandQueue(
     if( nullptr == xe_apitable.pfnDeviceRegisterCLCommandQueue )
         return XE_RESULT_ERROR_UNINITIALIZED;
 
+    // Check parameters
+    if( nullptr == hDevice ) return XE_RESULT_ERROR_INVALID_PARAMETER;
+    if( nullptr == phCommandQueue ) return XE_RESULT_ERROR_INVALID_PARAMETER;
+
     return xe_apitable.pfnDeviceRegisterCLCommandQueue( hDevice, context, command_queue, phCommandQueue );
 }
 #endif // XE_ENABLE_OCL_INTEROP
@@ -541,6 +662,12 @@ xeCommandListCreate(
     if( nullptr == xe_apitable.pfnCommandListCreate )
         return XE_RESULT_ERROR_UNINITIALIZED;
 
+    // Check parameters
+    if( nullptr == hDevice ) return XE_RESULT_ERROR_INVALID_PARAMETER;
+    if( nullptr == desc ) return XE_RESULT_ERROR_INVALID_PARAMETER;
+    if( nullptr == phCommandList ) return XE_RESULT_ERROR_INVALID_PARAMETER;
+    if( XE_COMMAND_LIST_DESC_VERSION_CURRENT < desc->version ) return XE_RESULT_ERROR_UNSUPPORTED;
+
     return xe_apitable.pfnCommandListCreate( hDevice, desc, phCommandList );
 }
 
@@ -555,6 +682,12 @@ xeCommandListCreateImmediate(
     if( nullptr == xe_apitable.pfnCommandListCreateImmediate )
         return XE_RESULT_ERROR_UNINITIALIZED;
 
+    // Check parameters
+    if( nullptr == hDevice ) return XE_RESULT_ERROR_INVALID_PARAMETER;
+    if( nullptr == desc ) return XE_RESULT_ERROR_INVALID_PARAMETER;
+    if( nullptr == phCommandList ) return XE_RESULT_ERROR_INVALID_PARAMETER;
+    if( XE_COMMAND_QUEUE_DESC_VERSION_CURRENT < desc->version ) return XE_RESULT_ERROR_UNSUPPORTED;
+
     return xe_apitable.pfnCommandListCreateImmediate( hDevice, desc, phCommandList );
 }
 
@@ -566,6 +699,9 @@ xeCommandListDestroy(
 {
     if( nullptr == xe_apitable.pfnCommandListDestroy )
         return XE_RESULT_ERROR_UNINITIALIZED;
+
+    // Check parameters
+    if( nullptr == hCommandList ) return XE_RESULT_ERROR_INVALID_PARAMETER;
 
     return xe_apitable.pfnCommandListDestroy( hCommandList );
 }
@@ -579,6 +715,9 @@ xeCommandListClose(
     if( nullptr == xe_apitable.pfnCommandListClose )
         return XE_RESULT_ERROR_UNINITIALIZED;
 
+    // Check parameters
+    if( nullptr == hCommandList ) return XE_RESULT_ERROR_INVALID_PARAMETER;
+
     return xe_apitable.pfnCommandListClose( hCommandList );
 }
 
@@ -590,6 +729,9 @@ xeCommandListReset(
 {
     if( nullptr == xe_apitable.pfnCommandListReset )
         return XE_RESULT_ERROR_UNINITIALIZED;
+
+    // Check parameters
+    if( nullptr == hCommandList ) return XE_RESULT_ERROR_INVALID_PARAMETER;
 
     return xe_apitable.pfnCommandListReset( hCommandList );
 }
@@ -605,6 +747,9 @@ xeCommandListSetParameter(
     if( nullptr == xe_apitable.pfnCommandListSetParameter )
         return XE_RESULT_ERROR_UNINITIALIZED;
 
+    // Check parameters
+    if( nullptr == hCommandList ) return XE_RESULT_ERROR_INVALID_PARAMETER;
+
     return xe_apitable.pfnCommandListSetParameter( hCommandList, parameter, value );
 }
 
@@ -619,6 +764,10 @@ xeCommandListGetParameter(
     if( nullptr == xe_apitable.pfnCommandListGetParameter )
         return XE_RESULT_ERROR_UNINITIALIZED;
 
+    // Check parameters
+    if( nullptr == hCommandList ) return XE_RESULT_ERROR_INVALID_PARAMETER;
+    if( nullptr == value ) return XE_RESULT_ERROR_INVALID_PARAMETER;
+
     return xe_apitable.pfnCommandListGetParameter( hCommandList, parameter, value );
 }
 
@@ -630,6 +779,9 @@ xeCommandListResetParameters(
 {
     if( nullptr == xe_apitable.pfnCommandListResetParameters )
         return XE_RESULT_ERROR_UNINITIALIZED;
+
+    // Check parameters
+    if( nullptr == hCommandList ) return XE_RESULT_ERROR_INVALID_PARAMETER;
 
     return xe_apitable.pfnCommandListResetParameters( hCommandList );
 }
@@ -645,6 +797,10 @@ xeCommandListReserveSpace(
     if( nullptr == xe_apitable.pfnCommandListReserveSpace )
         return XE_RESULT_ERROR_UNINITIALIZED;
 
+    // Check parameters
+    if( nullptr == hCommandList ) return XE_RESULT_ERROR_INVALID_PARAMETER;
+    if( nullptr == ptr ) return XE_RESULT_ERROR_INVALID_PARAMETER;
+
     return xe_apitable.pfnCommandListReserveSpace( hCommandList, size, ptr );
 }
 
@@ -659,6 +815,12 @@ xeCommandQueueCreate(
     if( nullptr == xe_apitable.pfnCommandQueueCreate )
         return XE_RESULT_ERROR_UNINITIALIZED;
 
+    // Check parameters
+    if( nullptr == hDevice ) return XE_RESULT_ERROR_INVALID_PARAMETER;
+    if( nullptr == desc ) return XE_RESULT_ERROR_INVALID_PARAMETER;
+    if( nullptr == phCommandQueue ) return XE_RESULT_ERROR_INVALID_PARAMETER;
+    if( XE_COMMAND_QUEUE_DESC_VERSION_CURRENT < desc->version ) return XE_RESULT_ERROR_UNSUPPORTED;
+
     return xe_apitable.pfnCommandQueueCreate( hDevice, desc, phCommandQueue );
 }
 
@@ -670,6 +832,9 @@ xeCommandQueueDestroy(
 {
     if( nullptr == xe_apitable.pfnCommandQueueDestroy )
         return XE_RESULT_ERROR_UNINITIALIZED;
+
+    // Check parameters
+    if( nullptr == hCommandQueue ) return XE_RESULT_ERROR_INVALID_PARAMETER;
 
     return xe_apitable.pfnCommandQueueDestroy( hCommandQueue );
 }
@@ -685,6 +850,10 @@ xeCommandQueueExecuteCommandLists(
 {
     if( nullptr == xe_apitable.pfnCommandQueueExecuteCommandLists )
         return XE_RESULT_ERROR_UNINITIALIZED;
+
+    // Check parameters
+    if( nullptr == hCommandQueue ) return XE_RESULT_ERROR_INVALID_PARAMETER;
+    if( nullptr == phCommandLists ) return XE_RESULT_ERROR_INVALID_PARAMETER;
 
     return xe_apitable.pfnCommandQueueExecuteCommandLists( hCommandQueue, numCommandLists, phCommandLists, hFence );
 }
@@ -702,6 +871,9 @@ xeCommandQueueSynchronize(
 {
     if( nullptr == xe_apitable.pfnCommandQueueSynchronize )
         return XE_RESULT_ERROR_UNINITIALIZED;
+
+    // Check parameters
+    if( nullptr == hCommandQueue ) return XE_RESULT_ERROR_INVALID_PARAMETER;
 
     return xe_apitable.pfnCommandQueueSynchronize( hCommandQueue, timeout );
 }
@@ -721,6 +893,11 @@ xeCommandListAppendMemoryCopy(
     if( nullptr == xe_apitable.pfnCommandListAppendMemoryCopy )
         return XE_RESULT_ERROR_UNINITIALIZED;
 
+    // Check parameters
+    if( nullptr == hCommandList ) return XE_RESULT_ERROR_INVALID_PARAMETER;
+    if( nullptr == dstptr ) return XE_RESULT_ERROR_INVALID_PARAMETER;
+    if( nullptr == srcptr ) return XE_RESULT_ERROR_INVALID_PARAMETER;
+
     return xe_apitable.pfnCommandListAppendMemoryCopy( hCommandList, dstptr, srcptr, size, hSignalEvent, numWaitEvents, phWaitEvents );
 }
 
@@ -739,6 +916,10 @@ xeCommandListAppendMemorySet(
     if( nullptr == xe_apitable.pfnCommandListAppendMemorySet )
         return XE_RESULT_ERROR_UNINITIALIZED;
 
+    // Check parameters
+    if( nullptr == hCommandList ) return XE_RESULT_ERROR_INVALID_PARAMETER;
+    if( nullptr == ptr ) return XE_RESULT_ERROR_INVALID_PARAMETER;
+
     return xe_apitable.pfnCommandListAppendMemorySet( hCommandList, ptr, value, size, hSignalEvent, numWaitEvents, phWaitEvents );
 }
 
@@ -755,6 +936,11 @@ xeCommandListAppendImageCopy(
 {
     if( nullptr == xe_apitable.pfnCommandListAppendImageCopy )
         return XE_RESULT_ERROR_UNINITIALIZED;
+
+    // Check parameters
+    if( nullptr == hCommandList ) return XE_RESULT_ERROR_INVALID_PARAMETER;
+    if( nullptr == hDstImage ) return XE_RESULT_ERROR_INVALID_PARAMETER;
+    if( nullptr == hSrcImage ) return XE_RESULT_ERROR_INVALID_PARAMETER;
 
     return xe_apitable.pfnCommandListAppendImageCopy( hCommandList, hDstImage, hSrcImage, hSignalEvent, numWaitEvents, phWaitEvents );
 }
@@ -775,6 +961,11 @@ xeCommandListAppendImageCopyRegion(
     if( nullptr == xe_apitable.pfnCommandListAppendImageCopyRegion )
         return XE_RESULT_ERROR_UNINITIALIZED;
 
+    // Check parameters
+    if( nullptr == hCommandList ) return XE_RESULT_ERROR_INVALID_PARAMETER;
+    if( nullptr == hDstImage ) return XE_RESULT_ERROR_INVALID_PARAMETER;
+    if( nullptr == hSrcImage ) return XE_RESULT_ERROR_INVALID_PARAMETER;
+
     return xe_apitable.pfnCommandListAppendImageCopyRegion( hCommandList, hDstImage, hSrcImage, pDstRegion, pSrcRegion, hSignalEvent, numWaitEvents, phWaitEvents );
 }
 
@@ -792,6 +983,11 @@ xeCommandListAppendImageCopyToMemory(
 {
     if( nullptr == xe_apitable.pfnCommandListAppendImageCopyToMemory )
         return XE_RESULT_ERROR_UNINITIALIZED;
+
+    // Check parameters
+    if( nullptr == hCommandList ) return XE_RESULT_ERROR_INVALID_PARAMETER;
+    if( nullptr == dstptr ) return XE_RESULT_ERROR_INVALID_PARAMETER;
+    if( nullptr == hSrcImage ) return XE_RESULT_ERROR_INVALID_PARAMETER;
 
     return xe_apitable.pfnCommandListAppendImageCopyToMemory( hCommandList, dstptr, hSrcImage, pSrcRegion, hSignalEvent, numWaitEvents, phWaitEvents );
 }
@@ -811,6 +1007,11 @@ xeCommandListAppendImageCopyFromMemory(
     if( nullptr == xe_apitable.pfnCommandListAppendImageCopyFromMemory )
         return XE_RESULT_ERROR_UNINITIALIZED;
 
+    // Check parameters
+    if( nullptr == hCommandList ) return XE_RESULT_ERROR_INVALID_PARAMETER;
+    if( nullptr == hDstImage ) return XE_RESULT_ERROR_INVALID_PARAMETER;
+    if( nullptr == srcptr ) return XE_RESULT_ERROR_INVALID_PARAMETER;
+
     return xe_apitable.pfnCommandListAppendImageCopyFromMemory( hCommandList, hDstImage, srcptr, pDstRegion, hSignalEvent, numWaitEvents, phWaitEvents );
 }
 
@@ -824,6 +1025,10 @@ xeCommandListAppendMemoryPrefetch(
 {
     if( nullptr == xe_apitable.pfnCommandListAppendMemoryPrefetch )
         return XE_RESULT_ERROR_UNINITIALIZED;
+
+    // Check parameters
+    if( nullptr == hCommandList ) return XE_RESULT_ERROR_INVALID_PARAMETER;
+    if( nullptr == ptr ) return XE_RESULT_ERROR_INVALID_PARAMETER;
 
     return xe_apitable.pfnCommandListAppendMemoryPrefetch( hCommandList, ptr, count );
 }
@@ -841,6 +1046,11 @@ xeCommandListAppendMemAdvise(
     if( nullptr == xe_apitable.pfnCommandListAppendMemAdvise )
         return XE_RESULT_ERROR_UNINITIALIZED;
 
+    // Check parameters
+    if( nullptr == hCommandList ) return XE_RESULT_ERROR_INVALID_PARAMETER;
+    if( nullptr == hDevice ) return XE_RESULT_ERROR_INVALID_PARAMETER;
+    if( nullptr == ptr ) return XE_RESULT_ERROR_INVALID_PARAMETER;
+
     return xe_apitable.pfnCommandListAppendMemAdvise( hCommandList, hDevice, ptr, size, advice );
 }
 
@@ -852,6 +1062,9 @@ xeDeviceGetCount(
 {
     if( nullptr == xe_apitable.pfnDeviceGetCount )
         return XE_RESULT_ERROR_UNINITIALIZED;
+
+    // Check parameters
+    if( nullptr == count ) return XE_RESULT_ERROR_INVALID_PARAMETER;
 
     return xe_apitable.pfnDeviceGetCount( count );
 }
@@ -865,6 +1078,9 @@ xeDeviceGet(
 {
     if( nullptr == xe_apitable.pfnDeviceGet )
         return XE_RESULT_ERROR_UNINITIALIZED;
+
+    // Check parameters
+    if( nullptr == phDevice ) return XE_RESULT_ERROR_INVALID_PARAMETER;
 
     return xe_apitable.pfnDeviceGet( ordinal, phDevice );
 }
@@ -880,6 +1096,10 @@ xeDeviceGetSubDevice(
     if( nullptr == xe_apitable.pfnDeviceGetSubDevice )
         return XE_RESULT_ERROR_UNINITIALIZED;
 
+    // Check parameters
+    if( nullptr == hDevice ) return XE_RESULT_ERROR_INVALID_PARAMETER;
+    if( nullptr == phSubDevice ) return XE_RESULT_ERROR_INVALID_PARAMETER;
+
     return xe_apitable.pfnDeviceGetSubDevice( hDevice, ordinal, phSubDevice );
 }
 
@@ -892,6 +1112,10 @@ xeDeviceGetApiVersion(
 {
     if( nullptr == xe_apitable.pfnDeviceGetApiVersion )
         return XE_RESULT_ERROR_UNINITIALIZED;
+
+    // Check parameters
+    if( nullptr == hDevice ) return XE_RESULT_ERROR_INVALID_PARAMETER;
+    if( nullptr == version ) return XE_RESULT_ERROR_INVALID_PARAMETER;
 
     return xe_apitable.pfnDeviceGetApiVersion( hDevice, version );
 }
@@ -906,6 +1130,10 @@ xeDeviceGetProperties(
     if( nullptr == xe_apitable.pfnDeviceGetProperties )
         return XE_RESULT_ERROR_UNINITIALIZED;
 
+    // Check parameters
+    if( nullptr == hDevice ) return XE_RESULT_ERROR_INVALID_PARAMETER;
+    if( nullptr == pDeviceProperties ) return XE_RESULT_ERROR_INVALID_PARAMETER;
+
     return xe_apitable.pfnDeviceGetProperties( hDevice, pDeviceProperties );
 }
 
@@ -919,6 +1147,10 @@ xeDeviceGetComputeProperties(
     if( nullptr == xe_apitable.pfnDeviceGetComputeProperties )
         return XE_RESULT_ERROR_UNINITIALIZED;
 
+    // Check parameters
+    if( nullptr == hDevice ) return XE_RESULT_ERROR_INVALID_PARAMETER;
+    if( nullptr == pComputeProperties ) return XE_RESULT_ERROR_INVALID_PARAMETER;
+
     return xe_apitable.pfnDeviceGetComputeProperties( hDevice, pComputeProperties );
 }
 
@@ -931,6 +1163,10 @@ xeDeviceGetMemoryProperties(
 {
     if( nullptr == xe_apitable.pfnDeviceGetMemoryProperties )
         return XE_RESULT_ERROR_UNINITIALIZED;
+
+    // Check parameters
+    if( nullptr == hDevice ) return XE_RESULT_ERROR_INVALID_PARAMETER;
+    if( nullptr == pMemProperties ) return XE_RESULT_ERROR_INVALID_PARAMETER;
 
     return xe_apitable.pfnDeviceGetMemoryProperties( hDevice, pMemProperties );
 }
@@ -946,6 +1182,11 @@ xeDeviceGetP2PProperties(
     if( nullptr == xe_apitable.pfnDeviceGetP2PProperties )
         return XE_RESULT_ERROR_UNINITIALIZED;
 
+    // Check parameters
+    if( nullptr == hDevice ) return XE_RESULT_ERROR_INVALID_PARAMETER;
+    if( nullptr == hPeerDevice ) return XE_RESULT_ERROR_INVALID_PARAMETER;
+    if( nullptr == pP2PProperties ) return XE_RESULT_ERROR_INVALID_PARAMETER;
+
     return xe_apitable.pfnDeviceGetP2PProperties( hDevice, hPeerDevice, pP2PProperties );
 }
 
@@ -960,6 +1201,11 @@ xeDeviceCanAccessPeer(
     if( nullptr == xe_apitable.pfnDeviceCanAccessPeer )
         return XE_RESULT_ERROR_UNINITIALIZED;
 
+    // Check parameters
+    if( nullptr == hDevice ) return XE_RESULT_ERROR_INVALID_PARAMETER;
+    if( nullptr == hPeerDevice ) return XE_RESULT_ERROR_INVALID_PARAMETER;
+    if( nullptr == value ) return XE_RESULT_ERROR_INVALID_PARAMETER;
+
     return xe_apitable.pfnDeviceCanAccessPeer( hDevice, hPeerDevice, value );
 }
 
@@ -972,6 +1218,9 @@ xeDeviceSetIntermediateCacheConfig(
 {
     if( nullptr == xe_apitable.pfnDeviceSetIntermediateCacheConfig )
         return XE_RESULT_ERROR_UNINITIALIZED;
+
+    // Check parameters
+    if( nullptr == hDevice ) return XE_RESULT_ERROR_INVALID_PARAMETER;
 
     return xe_apitable.pfnDeviceSetIntermediateCacheConfig( hDevice, CacheConfig );
 }
@@ -986,9 +1235,25 @@ xeDeviceSetLastLevelCacheConfig(
     if( nullptr == xe_apitable.pfnDeviceSetLastLevelCacheConfig )
         return XE_RESULT_ERROR_UNINITIALIZED;
 
+    // Check parameters
+    if( nullptr == hDevice ) return XE_RESULT_ERROR_INVALID_PARAMETER;
+
     return xe_apitable.pfnDeviceSetLastLevelCacheConfig( hDevice, CacheConfig );
 }
 
+///////////////////////////////////////////////////////////////////////////////
+xe_result_t __xecall
+xeInit(
+    xe_init_flag_t flags                            ///< [in] initialization flags
+    )
+{
+    if( nullptr == xe_apitable.pfnInit )
+        return XE_RESULT_ERROR_UNINITIALIZED;
+
+    // Check parameters
+
+    return xe_apitable.pfnInit( flags );
+}
 
 ///////////////////////////////////////////////////////////////////////////////
 xe_result_t __xecall
@@ -998,6 +1263,9 @@ xeGetDriverVersion(
 {
     if( nullptr == xe_apitable.pfnGetDriverVersion )
         return XE_RESULT_ERROR_UNINITIALIZED;
+
+    // Check parameters
+    if( nullptr == version ) return XE_RESULT_ERROR_INVALID_PARAMETER;
 
     return xe_apitable.pfnGetDriverVersion( version );
 }
@@ -1013,6 +1281,12 @@ xeEventPoolCreate(
     if( nullptr == xe_apitable.pfnEventPoolCreate )
         return XE_RESULT_ERROR_UNINITIALIZED;
 
+    // Check parameters
+    if( nullptr == hDevice ) return XE_RESULT_ERROR_INVALID_PARAMETER;
+    if( nullptr == desc ) return XE_RESULT_ERROR_INVALID_PARAMETER;
+    if( nullptr == phEventPool ) return XE_RESULT_ERROR_INVALID_PARAMETER;
+    if( XE_EVENT_POOL_DESC_VERSION_CURRENT < desc->version ) return XE_RESULT_ERROR_UNSUPPORTED;
+
     return xe_apitable.pfnEventPoolCreate( hDevice, desc, phEventPool );
 }
 
@@ -1024,6 +1298,9 @@ xeEventPoolDestroy(
 {
     if( nullptr == xe_apitable.pfnEventPoolDestroy )
         return XE_RESULT_ERROR_UNINITIALIZED;
+
+    // Check parameters
+    if( nullptr == hEventPool ) return XE_RESULT_ERROR_INVALID_PARAMETER;
 
     return xe_apitable.pfnEventPoolDestroy( hEventPool );
 }
@@ -1039,6 +1316,12 @@ xeEventCreate(
     if( nullptr == xe_apitable.pfnEventCreate )
         return XE_RESULT_ERROR_UNINITIALIZED;
 
+    // Check parameters
+    if( nullptr == hEventPool ) return XE_RESULT_ERROR_INVALID_PARAMETER;
+    if( nullptr == desc ) return XE_RESULT_ERROR_INVALID_PARAMETER;
+    if( nullptr == phEvent ) return XE_RESULT_ERROR_INVALID_PARAMETER;
+    if( XE_EVENT_DESC_VERSION_CURRENT < desc->version ) return XE_RESULT_ERROR_UNSUPPORTED;
+
     return xe_apitable.pfnEventCreate( hEventPool, desc, phEvent );
 }
 
@@ -1050,6 +1333,9 @@ xeEventDestroy(
 {
     if( nullptr == xe_apitable.pfnEventDestroy )
         return XE_RESULT_ERROR_UNINITIALIZED;
+
+    // Check parameters
+    if( nullptr == hEvent ) return XE_RESULT_ERROR_INVALID_PARAMETER;
 
     return xe_apitable.pfnEventDestroy( hEvent );
 }
@@ -1063,6 +1349,10 @@ xeEventPoolGetIpcHandle(
 {
     if( nullptr == xe_apitable.pfnEventPoolGetIpcHandle )
         return XE_RESULT_ERROR_UNINITIALIZED;
+
+    // Check parameters
+    if( nullptr == hEventPool ) return XE_RESULT_ERROR_INVALID_PARAMETER;
+    if( nullptr == phIpc ) return XE_RESULT_ERROR_INVALID_PARAMETER;
 
     return xe_apitable.pfnEventPoolGetIpcHandle( hEventPool, phIpc );
 }
@@ -1078,6 +1368,11 @@ xeEventPoolOpenIpcHandle(
     if( nullptr == xe_apitable.pfnEventPoolOpenIpcHandle )
         return XE_RESULT_ERROR_UNINITIALIZED;
 
+    // Check parameters
+    if( nullptr == hDevice ) return XE_RESULT_ERROR_INVALID_PARAMETER;
+    if( nullptr == hIpc ) return XE_RESULT_ERROR_INVALID_PARAMETER;
+    if( nullptr == phEventPool ) return XE_RESULT_ERROR_INVALID_PARAMETER;
+
     return xe_apitable.pfnEventPoolOpenIpcHandle( hDevice, hIpc, phEventPool );
 }
 
@@ -1089,6 +1384,9 @@ xeEventPoolCloseIpcHandle(
 {
     if( nullptr == xe_apitable.pfnEventPoolCloseIpcHandle )
         return XE_RESULT_ERROR_UNINITIALIZED;
+
+    // Check parameters
+    if( nullptr == hEventPool ) return XE_RESULT_ERROR_INVALID_PARAMETER;
 
     return xe_apitable.pfnEventPoolCloseIpcHandle( hEventPool );
 }
@@ -1102,6 +1400,10 @@ xeCommandListAppendSignalEvent(
 {
     if( nullptr == xe_apitable.pfnCommandListAppendSignalEvent )
         return XE_RESULT_ERROR_UNINITIALIZED;
+
+    // Check parameters
+    if( nullptr == hCommandList ) return XE_RESULT_ERROR_INVALID_PARAMETER;
+    if( nullptr == hEvent ) return XE_RESULT_ERROR_INVALID_PARAMETER;
 
     return xe_apitable.pfnCommandListAppendSignalEvent( hCommandList, hEvent );
 }
@@ -1117,6 +1419,10 @@ xeCommandListAppendWaitOnEvents(
     if( nullptr == xe_apitable.pfnCommandListAppendWaitOnEvents )
         return XE_RESULT_ERROR_UNINITIALIZED;
 
+    // Check parameters
+    if( nullptr == hCommandList ) return XE_RESULT_ERROR_INVALID_PARAMETER;
+    if( nullptr == phEvents ) return XE_RESULT_ERROR_INVALID_PARAMETER;
+
     return xe_apitable.pfnCommandListAppendWaitOnEvents( hCommandList, numEvents, phEvents );
 }
 
@@ -1128,6 +1434,9 @@ xeEventHostSignal(
 {
     if( nullptr == xe_apitable.pfnEventHostSignal )
         return XE_RESULT_ERROR_UNINITIALIZED;
+
+    // Check parameters
+    if( nullptr == hEvent ) return XE_RESULT_ERROR_INVALID_PARAMETER;
 
     return xe_apitable.pfnEventHostSignal( hEvent );
 }
@@ -1146,6 +1455,9 @@ xeEventHostSynchronize(
     if( nullptr == xe_apitable.pfnEventHostSynchronize )
         return XE_RESULT_ERROR_UNINITIALIZED;
 
+    // Check parameters
+    if( nullptr == hEvent ) return XE_RESULT_ERROR_INVALID_PARAMETER;
+
     return xe_apitable.pfnEventHostSynchronize( hEvent, timeout );
 }
 
@@ -1157,6 +1469,9 @@ xeEventQueryStatus(
 {
     if( nullptr == xe_apitable.pfnEventQueryStatus )
         return XE_RESULT_ERROR_UNINITIALIZED;
+
+    // Check parameters
+    if( nullptr == hEvent ) return XE_RESULT_ERROR_INVALID_PARAMETER;
 
     return xe_apitable.pfnEventQueryStatus( hEvent );
 }
@@ -1171,6 +1486,10 @@ xeCommandListAppendEventReset(
     if( nullptr == xe_apitable.pfnCommandListAppendEventReset )
         return XE_RESULT_ERROR_UNINITIALIZED;
 
+    // Check parameters
+    if( nullptr == hCommandList ) return XE_RESULT_ERROR_INVALID_PARAMETER;
+    if( nullptr == hEvent ) return XE_RESULT_ERROR_INVALID_PARAMETER;
+
     return xe_apitable.pfnCommandListAppendEventReset( hCommandList, hEvent );
 }
 
@@ -1182,6 +1501,9 @@ xeEventReset(
 {
     if( nullptr == xe_apitable.pfnEventReset )
         return XE_RESULT_ERROR_UNINITIALIZED;
+
+    // Check parameters
+    if( nullptr == hEvent ) return XE_RESULT_ERROR_INVALID_PARAMETER;
 
     return xe_apitable.pfnEventReset( hEvent );
 }
@@ -1197,6 +1519,12 @@ xeFenceCreate(
     if( nullptr == xe_apitable.pfnFenceCreate )
         return XE_RESULT_ERROR_UNINITIALIZED;
 
+    // Check parameters
+    if( nullptr == hCommandQueue ) return XE_RESULT_ERROR_INVALID_PARAMETER;
+    if( nullptr == desc ) return XE_RESULT_ERROR_INVALID_PARAMETER;
+    if( nullptr == phFence ) return XE_RESULT_ERROR_INVALID_PARAMETER;
+    if( XE_FENCE_DESC_VERSION_CURRENT < desc->version ) return XE_RESULT_ERROR_UNSUPPORTED;
+
     return xe_apitable.pfnFenceCreate( hCommandQueue, desc, phFence );
 }
 
@@ -1208,6 +1536,9 @@ xeFenceDestroy(
 {
     if( nullptr == xe_apitable.pfnFenceDestroy )
         return XE_RESULT_ERROR_UNINITIALIZED;
+
+    // Check parameters
+    if( nullptr == hFence ) return XE_RESULT_ERROR_INVALID_PARAMETER;
 
     return xe_apitable.pfnFenceDestroy( hFence );
 }
@@ -1226,6 +1557,9 @@ xeFenceHostSynchronize(
     if( nullptr == xe_apitable.pfnFenceHostSynchronize )
         return XE_RESULT_ERROR_UNINITIALIZED;
 
+    // Check parameters
+    if( nullptr == hFence ) return XE_RESULT_ERROR_INVALID_PARAMETER;
+
     return xe_apitable.pfnFenceHostSynchronize( hFence, timeout );
 }
 
@@ -1238,6 +1572,9 @@ xeFenceQueryStatus(
     if( nullptr == xe_apitable.pfnFenceQueryStatus )
         return XE_RESULT_ERROR_UNINITIALIZED;
 
+    // Check parameters
+    if( nullptr == hFence ) return XE_RESULT_ERROR_INVALID_PARAMETER;
+
     return xe_apitable.pfnFenceQueryStatus( hFence );
 }
 
@@ -1249,6 +1586,9 @@ xeFenceReset(
 {
     if( nullptr == xe_apitable.pfnFenceReset )
         return XE_RESULT_ERROR_UNINITIALIZED;
+
+    // Check parameters
+    if( nullptr == hFence ) return XE_RESULT_ERROR_INVALID_PARAMETER;
 
     return xe_apitable.pfnFenceReset( hFence );
 }
@@ -1264,6 +1604,12 @@ xeImageGetProperties(
     if( nullptr == xe_apitable.pfnImageGetProperties )
         return XE_RESULT_ERROR_UNINITIALIZED;
 
+    // Check parameters
+    if( nullptr == hDevice ) return XE_RESULT_ERROR_INVALID_PARAMETER;
+    if( nullptr == desc ) return XE_RESULT_ERROR_INVALID_PARAMETER;
+    if( nullptr == pImageProperties ) return XE_RESULT_ERROR_INVALID_PARAMETER;
+    if( XE_IMAGE_DESC_VERSION_CURRENT < desc->version ) return XE_RESULT_ERROR_UNSUPPORTED;
+
     return xe_apitable.pfnImageGetProperties( hDevice, desc, pImageProperties );
 }
 
@@ -1278,6 +1624,12 @@ xeImageCreate(
     if( nullptr == xe_apitable.pfnImageCreate )
         return XE_RESULT_ERROR_UNINITIALIZED;
 
+    // Check parameters
+    if( nullptr == hDevice ) return XE_RESULT_ERROR_INVALID_PARAMETER;
+    if( nullptr == desc ) return XE_RESULT_ERROR_INVALID_PARAMETER;
+    if( nullptr == phImage ) return XE_RESULT_ERROR_INVALID_PARAMETER;
+    if( XE_IMAGE_DESC_VERSION_CURRENT < desc->version ) return XE_RESULT_ERROR_UNSUPPORTED;
+
     return xe_apitable.pfnImageCreate( hDevice, desc, phImage );
 }
 
@@ -1289,6 +1641,9 @@ xeImageDestroy(
 {
     if( nullptr == xe_apitable.pfnImageDestroy )
         return XE_RESULT_ERROR_UNINITIALIZED;
+
+    // Check parameters
+    if( nullptr == hImage ) return XE_RESULT_ERROR_INVALID_PARAMETER;
 
     return xe_apitable.pfnImageDestroy( hImage );
 }
@@ -1307,6 +1662,10 @@ xeSharedMemAlloc(
     if( nullptr == xe_apitable.pfnSharedMemAlloc )
         return XE_RESULT_ERROR_UNINITIALIZED;
 
+    // Check parameters
+    if( nullptr == hDevice ) return XE_RESULT_ERROR_INVALID_PARAMETER;
+    if( nullptr == ptr ) return XE_RESULT_ERROR_INVALID_PARAMETER;
+
     return xe_apitable.pfnSharedMemAlloc( hDevice, device_flags, host_flags, size, alignment, ptr );
 }
 
@@ -1323,6 +1682,10 @@ xeMemAlloc(
     if( nullptr == xe_apitable.pfnMemAlloc )
         return XE_RESULT_ERROR_UNINITIALIZED;
 
+    // Check parameters
+    if( nullptr == hDevice ) return XE_RESULT_ERROR_INVALID_PARAMETER;
+    if( nullptr == ptr ) return XE_RESULT_ERROR_INVALID_PARAMETER;
+
     return xe_apitable.pfnMemAlloc( hDevice, flags, size, alignment, ptr );
 }
 
@@ -1338,6 +1701,9 @@ xeHostMemAlloc(
     if( nullptr == xe_apitable.pfnHostMemAlloc )
         return XE_RESULT_ERROR_UNINITIALIZED;
 
+    // Check parameters
+    if( nullptr == ptr ) return XE_RESULT_ERROR_INVALID_PARAMETER;
+
     return xe_apitable.pfnHostMemAlloc( flags, size, alignment, ptr );
 }
 
@@ -1349,6 +1715,9 @@ xeMemFree(
 {
     if( nullptr == xe_apitable.pfnMemFree )
         return XE_RESULT_ERROR_UNINITIALIZED;
+
+    // Check parameters
+    if( nullptr == ptr ) return XE_RESULT_ERROR_INVALID_PARAMETER;
 
     return xe_apitable.pfnMemFree( ptr );
 }
@@ -1362,6 +1731,10 @@ xeMemGetProperties(
 {
     if( nullptr == xe_apitable.pfnMemGetProperties )
         return XE_RESULT_ERROR_UNINITIALIZED;
+
+    // Check parameters
+    if( nullptr == ptr ) return XE_RESULT_ERROR_INVALID_PARAMETER;
+    if( nullptr == pMemProperties ) return XE_RESULT_ERROR_INVALID_PARAMETER;
 
     return xe_apitable.pfnMemGetProperties( ptr, pMemProperties );
 }
@@ -1377,6 +1750,9 @@ xeMemGetAddressRange(
     if( nullptr == xe_apitable.pfnMemGetAddressRange )
         return XE_RESULT_ERROR_UNINITIALIZED;
 
+    // Check parameters
+    if( nullptr == ptr ) return XE_RESULT_ERROR_INVALID_PARAMETER;
+
     return xe_apitable.pfnMemGetAddressRange( ptr, pBase, pSize );
 }
 
@@ -1389,6 +1765,10 @@ xeIpcGetMemHandle(
 {
     if( nullptr == xe_apitable.pfnIpcGetMemHandle )
         return XE_RESULT_ERROR_UNINITIALIZED;
+
+    // Check parameters
+    if( nullptr == ptr ) return XE_RESULT_ERROR_INVALID_PARAMETER;
+    if( nullptr == pIpcHandle ) return XE_RESULT_ERROR_INVALID_PARAMETER;
 
     return xe_apitable.pfnIpcGetMemHandle( ptr, pIpcHandle );
 }
@@ -1405,6 +1785,11 @@ xeIpcOpenMemHandle(
     if( nullptr == xe_apitable.pfnIpcOpenMemHandle )
         return XE_RESULT_ERROR_UNINITIALIZED;
 
+    // Check parameters
+    if( nullptr == hDevice ) return XE_RESULT_ERROR_INVALID_PARAMETER;
+    if( nullptr == handle ) return XE_RESULT_ERROR_INVALID_PARAMETER;
+    if( nullptr == ptr ) return XE_RESULT_ERROR_INVALID_PARAMETER;
+
     return xe_apitable.pfnIpcOpenMemHandle( hDevice, handle, flags, ptr );
 }
 
@@ -1416,6 +1801,9 @@ xeIpcCloseMemHandle(
 {
     if( nullptr == xe_apitable.pfnIpcCloseMemHandle )
         return XE_RESULT_ERROR_UNINITIALIZED;
+
+    // Check parameters
+    if( nullptr == ptr ) return XE_RESULT_ERROR_INVALID_PARAMETER;
 
     return xe_apitable.pfnIpcCloseMemHandle( ptr );
 }
@@ -1432,6 +1820,12 @@ xeModuleCreate(
     if( nullptr == xe_apitable.pfnModuleCreate )
         return XE_RESULT_ERROR_UNINITIALIZED;
 
+    // Check parameters
+    if( nullptr == hDevice ) return XE_RESULT_ERROR_INVALID_PARAMETER;
+    if( nullptr == pDesc ) return XE_RESULT_ERROR_INVALID_PARAMETER;
+    if( nullptr == phModule ) return XE_RESULT_ERROR_INVALID_PARAMETER;
+    if( XE_MODULE_DESC_VERSION_CURRENT < pDesc->version ) return XE_RESULT_ERROR_UNSUPPORTED;
+
     return xe_apitable.pfnModuleCreate( hDevice, pDesc, phModule, phBuildLog );
 }
 
@@ -1444,6 +1838,9 @@ xeModuleDestroy(
     if( nullptr == xe_apitable.pfnModuleDestroy )
         return XE_RESULT_ERROR_UNINITIALIZED;
 
+    // Check parameters
+    if( nullptr == hModule ) return XE_RESULT_ERROR_INVALID_PARAMETER;
+
     return xe_apitable.pfnModuleDestroy( hModule );
 }
 
@@ -1455,6 +1852,9 @@ xeModuleBuildLogDestroy(
 {
     if( nullptr == xe_apitable.pfnModuleBuildLogDestroy )
         return XE_RESULT_ERROR_UNINITIALIZED;
+
+    // Check parameters
+    if( nullptr == hModuleBuildLog ) return XE_RESULT_ERROR_INVALID_PARAMETER;
 
     return xe_apitable.pfnModuleBuildLogDestroy( hModuleBuildLog );
 }
@@ -1470,6 +1870,10 @@ xeModuleBuildLogGetString(
     if( nullptr == xe_apitable.pfnModuleBuildLogGetString )
         return XE_RESULT_ERROR_UNINITIALIZED;
 
+    // Check parameters
+    if( nullptr == hModuleBuildLog ) return XE_RESULT_ERROR_INVALID_PARAMETER;
+    if( nullptr == pSize ) return XE_RESULT_ERROR_INVALID_PARAMETER;
+
     return xe_apitable.pfnModuleBuildLogGetString( hModuleBuildLog, pSize, pBuildLog );
 }
 
@@ -1483,6 +1887,10 @@ xeModuleGetNativeBinary(
 {
     if( nullptr == xe_apitable.pfnModuleGetNativeBinary )
         return XE_RESULT_ERROR_UNINITIALIZED;
+
+    // Check parameters
+    if( nullptr == hModule ) return XE_RESULT_ERROR_INVALID_PARAMETER;
+    if( nullptr == pSize ) return XE_RESULT_ERROR_INVALID_PARAMETER;
 
     return xe_apitable.pfnModuleGetNativeBinary( hModule, pSize, pModuleNativeBinary );
 }
@@ -1498,6 +1906,11 @@ xeModuleGetGlobalPointer(
     if( nullptr == xe_apitable.pfnModuleGetGlobalPointer )
         return XE_RESULT_ERROR_UNINITIALIZED;
 
+    // Check parameters
+    if( nullptr == hModule ) return XE_RESULT_ERROR_INVALID_PARAMETER;
+    if( nullptr == pGlobalName ) return XE_RESULT_ERROR_INVALID_PARAMETER;
+    if( nullptr == pPtr ) return XE_RESULT_ERROR_INVALID_PARAMETER;
+
     return xe_apitable.pfnModuleGetGlobalPointer( hModule, pGlobalName, pPtr );
 }
 
@@ -1512,6 +1925,12 @@ xeFunctionCreate(
     if( nullptr == xe_apitable.pfnFunctionCreate )
         return XE_RESULT_ERROR_UNINITIALIZED;
 
+    // Check parameters
+    if( nullptr == hModule ) return XE_RESULT_ERROR_INVALID_PARAMETER;
+    if( nullptr == pDesc ) return XE_RESULT_ERROR_INVALID_PARAMETER;
+    if( nullptr == phFunction ) return XE_RESULT_ERROR_INVALID_PARAMETER;
+    if( XE_FUNCTION_DESC_VERSION_CURRENT < pDesc->version ) return XE_RESULT_ERROR_UNSUPPORTED;
+
     return xe_apitable.pfnFunctionCreate( hModule, pDesc, phFunction );
 }
 
@@ -1523,6 +1942,9 @@ xeFunctionDestroy(
 {
     if( nullptr == xe_apitable.pfnFunctionDestroy )
         return XE_RESULT_ERROR_UNINITIALIZED;
+
+    // Check parameters
+    if( nullptr == hFunction ) return XE_RESULT_ERROR_INVALID_PARAMETER;
 
     return xe_apitable.pfnFunctionDestroy( hFunction );
 }
@@ -1538,6 +1960,11 @@ xeModuleGetFunctionPointer(
     if( nullptr == xe_apitable.pfnModuleGetFunctionPointer )
         return XE_RESULT_ERROR_UNINITIALIZED;
 
+    // Check parameters
+    if( nullptr == hModule ) return XE_RESULT_ERROR_INVALID_PARAMETER;
+    if( nullptr == pFunctionName ) return XE_RESULT_ERROR_INVALID_PARAMETER;
+    if( nullptr == pfnFunction ) return XE_RESULT_ERROR_INVALID_PARAMETER;
+
     return xe_apitable.pfnModuleGetFunctionPointer( hModule, pFunctionName, pfnFunction );
 }
 
@@ -1552,6 +1979,9 @@ xeFunctionSetGroupSize(
 {
     if( nullptr == xe_apitable.pfnFunctionSetGroupSize )
         return XE_RESULT_ERROR_UNINITIALIZED;
+
+    // Check parameters
+    if( nullptr == hFunction ) return XE_RESULT_ERROR_INVALID_PARAMETER;
 
     return xe_apitable.pfnFunctionSetGroupSize( hFunction, groupSizeX, groupSizeY, groupSizeZ );
 }
@@ -1571,6 +2001,12 @@ xeFunctionSuggestGroupSize(
     if( nullptr == xe_apitable.pfnFunctionSuggestGroupSize )
         return XE_RESULT_ERROR_UNINITIALIZED;
 
+    // Check parameters
+    if( nullptr == hFunction ) return XE_RESULT_ERROR_INVALID_PARAMETER;
+    if( nullptr == groupSizeX ) return XE_RESULT_ERROR_INVALID_PARAMETER;
+    if( nullptr == groupSizeY ) return XE_RESULT_ERROR_INVALID_PARAMETER;
+    if( nullptr == groupSizeZ ) return XE_RESULT_ERROR_INVALID_PARAMETER;
+
     return xe_apitable.pfnFunctionSuggestGroupSize( hFunction, globalSizeX, globalSizeY, globalSizeZ, groupSizeX, groupSizeY, groupSizeZ );
 }
 
@@ -1587,6 +2023,9 @@ xeFunctionSetArgumentValue(
     if( nullptr == xe_apitable.pfnFunctionSetArgumentValue )
         return XE_RESULT_ERROR_UNINITIALIZED;
 
+    // Check parameters
+    if( nullptr == hFunction ) return XE_RESULT_ERROR_INVALID_PARAMETER;
+
     return xe_apitable.pfnFunctionSetArgumentValue( hFunction, argIndex, argSize, pArgValue );
 }
 
@@ -1601,6 +2040,9 @@ xeFunctionSetAttribute(
     if( nullptr == xe_apitable.pfnFunctionSetAttribute )
         return XE_RESULT_ERROR_UNINITIALIZED;
 
+    // Check parameters
+    if( nullptr == hFunction ) return XE_RESULT_ERROR_INVALID_PARAMETER;
+
     return xe_apitable.pfnFunctionSetAttribute( hFunction, attr, value );
 }
 
@@ -1614,6 +2056,10 @@ xeFunctionGetAttribute(
 {
     if( nullptr == xe_apitable.pfnFunctionGetAttribute )
         return XE_RESULT_ERROR_UNINITIALIZED;
+
+    // Check parameters
+    if( nullptr == hFunction ) return XE_RESULT_ERROR_INVALID_PARAMETER;
+    if( nullptr == pValue ) return XE_RESULT_ERROR_INVALID_PARAMETER;
 
     return xe_apitable.pfnFunctionGetAttribute( hFunction, attr, pValue );
 }
@@ -1632,6 +2078,11 @@ xeCommandListAppendLaunchFunction(
     if( nullptr == xe_apitable.pfnCommandListAppendLaunchFunction )
         return XE_RESULT_ERROR_UNINITIALIZED;
 
+    // Check parameters
+    if( nullptr == hCommandList ) return XE_RESULT_ERROR_INVALID_PARAMETER;
+    if( nullptr == hFunction ) return XE_RESULT_ERROR_INVALID_PARAMETER;
+    if( nullptr == pLaunchFuncArgs ) return XE_RESULT_ERROR_INVALID_PARAMETER;
+
     return xe_apitable.pfnCommandListAppendLaunchFunction( hCommandList, hFunction, pLaunchFuncArgs, hSignalEvent, numWaitEvents, phWaitEvents );
 }
 
@@ -1648,6 +2099,11 @@ xeCommandListAppendLaunchFunctionIndirect(
 {
     if( nullptr == xe_apitable.pfnCommandListAppendLaunchFunctionIndirect )
         return XE_RESULT_ERROR_UNINITIALIZED;
+
+    // Check parameters
+    if( nullptr == hCommandList ) return XE_RESULT_ERROR_INVALID_PARAMETER;
+    if( nullptr == hFunction ) return XE_RESULT_ERROR_INVALID_PARAMETER;
+    if( nullptr == pLaunchArgumentsBuffer ) return XE_RESULT_ERROR_INVALID_PARAMETER;
 
     return xe_apitable.pfnCommandListAppendLaunchFunctionIndirect( hCommandList, hFunction, pLaunchArgumentsBuffer, hSignalEvent, numWaitEvents, phWaitEvents );
 }
@@ -1670,6 +2126,12 @@ xeCommandListAppendLaunchMultipleFunctionsIndirect(
     if( nullptr == xe_apitable.pfnCommandListAppendLaunchMultipleFunctionsIndirect )
         return XE_RESULT_ERROR_UNINITIALIZED;
 
+    // Check parameters
+    if( nullptr == hCommandList ) return XE_RESULT_ERROR_INVALID_PARAMETER;
+    if( nullptr == phFunctions ) return XE_RESULT_ERROR_INVALID_PARAMETER;
+    if( nullptr == pNumLaunchArguments ) return XE_RESULT_ERROR_INVALID_PARAMETER;
+    if( nullptr == pLaunchArgumentsBuffer ) return XE_RESULT_ERROR_INVALID_PARAMETER;
+
     return xe_apitable.pfnCommandListAppendLaunchMultipleFunctionsIndirect( hCommandList, numFunctions, phFunctions, pNumLaunchArguments, pLaunchArgumentsBuffer, hSignalEvent, numWaitEvents, phWaitEvents );
 }
 
@@ -1683,6 +2145,10 @@ xeCommandListAppendLaunchHostFunction(
 {
     if( nullptr == xe_apitable.pfnCommandListAppendLaunchHostFunction )
         return XE_RESULT_ERROR_UNINITIALIZED;
+
+    // Check parameters
+    if( nullptr == hCommandList ) return XE_RESULT_ERROR_INVALID_PARAMETER;
+    if( nullptr == pUserData ) return XE_RESULT_ERROR_INVALID_PARAMETER;
 
     return xe_apitable.pfnCommandListAppendLaunchHostFunction( hCommandList, pfnHostFunc, pUserData );
 }
@@ -1698,6 +2164,10 @@ xeDeviceMakeMemoryResident(
     if( nullptr == xe_apitable.pfnDeviceMakeMemoryResident )
         return XE_RESULT_ERROR_UNINITIALIZED;
 
+    // Check parameters
+    if( nullptr == hDevice ) return XE_RESULT_ERROR_INVALID_PARAMETER;
+    if( nullptr == ptr ) return XE_RESULT_ERROR_INVALID_PARAMETER;
+
     return xe_apitable.pfnDeviceMakeMemoryResident( hDevice, ptr, size );
 }
 
@@ -1712,6 +2182,10 @@ xeDeviceEvictMemory(
     if( nullptr == xe_apitable.pfnDeviceEvictMemory )
         return XE_RESULT_ERROR_UNINITIALIZED;
 
+    // Check parameters
+    if( nullptr == hDevice ) return XE_RESULT_ERROR_INVALID_PARAMETER;
+    if( nullptr == ptr ) return XE_RESULT_ERROR_INVALID_PARAMETER;
+
     return xe_apitable.pfnDeviceEvictMemory( hDevice, ptr, size );
 }
 
@@ -1725,6 +2199,10 @@ xeDeviceMakeImageResident(
     if( nullptr == xe_apitable.pfnDeviceMakeImageResident )
         return XE_RESULT_ERROR_UNINITIALIZED;
 
+    // Check parameters
+    if( nullptr == hDevice ) return XE_RESULT_ERROR_INVALID_PARAMETER;
+    if( nullptr == hImage ) return XE_RESULT_ERROR_INVALID_PARAMETER;
+
     return xe_apitable.pfnDeviceMakeImageResident( hDevice, hImage );
 }
 
@@ -1737,6 +2215,10 @@ xeDeviceEvictImage(
 {
     if( nullptr == xe_apitable.pfnDeviceEvictImage )
         return XE_RESULT_ERROR_UNINITIALIZED;
+
+    // Check parameters
+    if( nullptr == hDevice ) return XE_RESULT_ERROR_INVALID_PARAMETER;
+    if( nullptr == hImage ) return XE_RESULT_ERROR_INVALID_PARAMETER;
 
     return xe_apitable.pfnDeviceEvictImage( hDevice, hImage );
 }
@@ -1752,6 +2234,12 @@ xeSamplerCreate(
     if( nullptr == xe_apitable.pfnSamplerCreate )
         return XE_RESULT_ERROR_UNINITIALIZED;
 
+    // Check parameters
+    if( nullptr == hDevice ) return XE_RESULT_ERROR_INVALID_PARAMETER;
+    if( nullptr == pDesc ) return XE_RESULT_ERROR_INVALID_PARAMETER;
+    if( nullptr == phSampler ) return XE_RESULT_ERROR_INVALID_PARAMETER;
+    if( XE_SAMPLER_DESC_VERSION_CURRENT < pDesc->version ) return XE_RESULT_ERROR_UNSUPPORTED;
+
     return xe_apitable.pfnSamplerCreate( hDevice, pDesc, phSampler );
 }
 
@@ -1763,6 +2251,9 @@ xeSamplerDestroy(
 {
     if( nullptr == xe_apitable.pfnSamplerDestroy )
         return XE_RESULT_ERROR_UNINITIALIZED;
+
+    // Check parameters
+    if( nullptr == hSampler ) return XE_RESULT_ERROR_INVALID_PARAMETER;
 
     return xe_apitable.pfnSamplerDestroy( hSampler );
 }

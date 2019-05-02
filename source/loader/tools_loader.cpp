@@ -21,115 +21,94 @@
 * express and approved by Intel in writing.  
 * @endcond
 *
-* @file tools_layer.cpp
+* @file tools_loader.cpp
 *
 * @cond DEV
-* DO NOT EDIT: generated from /scripts/templates/layer.cpp.mako
+* DO NOT EDIT: generated from /scripts/templates/loader.cpp.mako
 * @endcond
 *
 ******************************************************************************/
-#include "xet_ddi.h"
-#include "layer.h"
+#include "xet_api.h"
+#include "loader.h"
 
 xet_apitable_t xet_apitable = {};
 
 ///////////////////////////////////////////////////////////////////////////////
-/// @brief Intercepts function pointer table for loaded driver
-bool xetIntercept(
-    xet_apitable_t* original ) ///< [in] pointer to table of xet API function pointers
+/// @brief Loads function pointer table for loaded driver
+bool xetLoadExports(
+    void* handle )  ///< [in] driver handle
 {
-    if(nullptr == original)
+    xet_apitable.pfnMetricGroupGetCount                                  = (xet_pfnMetricGroupGetCount_t)LOAD_FUNCTION_PTR(handle, "xetMetricGroupGetCount");
+    if( nullptr == xet_apitable.pfnMetricGroupGetCount )
         return false;
 
-    if( nullptr == original->pfnMetricGroupGetCount )
+    xet_apitable.pfnMetricGroupGet                                       = (xet_pfnMetricGroupGet_t)LOAD_FUNCTION_PTR(handle, "xetMetricGroupGet");
+    if( nullptr == xet_apitable.pfnMetricGroupGet )
         return false;
-    xet_apitable.pfnMetricGroupGetCount                                  = original->pfnMetricGroupGetCount;
-    original->pfnMetricGroupGetCount                                     = xetMetricGroupGetCount;
 
-    if( nullptr == original->pfnMetricGroupGet )
+    xet_apitable.pfnMetricGroupGetProperties                             = (xet_pfnMetricGroupGetProperties_t)LOAD_FUNCTION_PTR(handle, "xetMetricGroupGetProperties");
+    if( nullptr == xet_apitable.pfnMetricGroupGetProperties )
         return false;
-    xet_apitable.pfnMetricGroupGet                                       = original->pfnMetricGroupGet;
-    original->pfnMetricGroupGet                                          = xetMetricGroupGet;
 
-    if( nullptr == original->pfnMetricGroupGetProperties )
+    xet_apitable.pfnMetricGet                                            = (xet_pfnMetricGet_t)LOAD_FUNCTION_PTR(handle, "xetMetricGet");
+    if( nullptr == xet_apitable.pfnMetricGet )
         return false;
-    xet_apitable.pfnMetricGroupGetProperties                             = original->pfnMetricGroupGetProperties;
-    original->pfnMetricGroupGetProperties                                = xetMetricGroupGetProperties;
 
-    if( nullptr == original->pfnMetricGet )
+    xet_apitable.pfnMetricGetProperties                                  = (xet_pfnMetricGetProperties_t)LOAD_FUNCTION_PTR(handle, "xetMetricGetProperties");
+    if( nullptr == xet_apitable.pfnMetricGetProperties )
         return false;
-    xet_apitable.pfnMetricGet                                            = original->pfnMetricGet;
-    original->pfnMetricGet                                               = xetMetricGet;
 
-    if( nullptr == original->pfnMetricGetProperties )
+    xet_apitable.pfnMetricGroupCalculateData                             = (xet_pfnMetricGroupCalculateData_t)LOAD_FUNCTION_PTR(handle, "xetMetricGroupCalculateData");
+    if( nullptr == xet_apitable.pfnMetricGroupCalculateData )
         return false;
-    xet_apitable.pfnMetricGetProperties                                  = original->pfnMetricGetProperties;
-    original->pfnMetricGetProperties                                     = xetMetricGetProperties;
 
-    if( nullptr == original->pfnMetricGroupCalculateData )
+    xet_apitable.pfnDeviceActivateMetricGroups                           = (xet_pfnDeviceActivateMetricGroups_t)LOAD_FUNCTION_PTR(handle, "xetDeviceActivateMetricGroups");
+    if( nullptr == xet_apitable.pfnDeviceActivateMetricGroups )
         return false;
-    xet_apitable.pfnMetricGroupCalculateData                             = original->pfnMetricGroupCalculateData;
-    original->pfnMetricGroupCalculateData                                = xetMetricGroupCalculateData;
 
-    if( nullptr == original->pfnDeviceActivateMetricGroups )
+    xet_apitable.pfnMetricTracerOpen                                     = (xet_pfnMetricTracerOpen_t)LOAD_FUNCTION_PTR(handle, "xetMetricTracerOpen");
+    if( nullptr == xet_apitable.pfnMetricTracerOpen )
         return false;
-    xet_apitable.pfnDeviceActivateMetricGroups                           = original->pfnDeviceActivateMetricGroups;
-    original->pfnDeviceActivateMetricGroups                              = xetDeviceActivateMetricGroups;
 
-    if( nullptr == original->pfnMetricTracerOpen )
+    xet_apitable.pfnCommandListAppendMetricTracerMarker                  = (xet_pfnCommandListAppendMetricTracerMarker_t)LOAD_FUNCTION_PTR(handle, "xetCommandListAppendMetricTracerMarker");
+    if( nullptr == xet_apitable.pfnCommandListAppendMetricTracerMarker )
         return false;
-    xet_apitable.pfnMetricTracerOpen                                     = original->pfnMetricTracerOpen;
-    original->pfnMetricTracerOpen                                        = xetMetricTracerOpen;
 
-    if( nullptr == original->pfnCommandListAppendMetricTracerMarker )
+    xet_apitable.pfnMetricTracerClose                                    = (xet_pfnMetricTracerClose_t)LOAD_FUNCTION_PTR(handle, "xetMetricTracerClose");
+    if( nullptr == xet_apitable.pfnMetricTracerClose )
         return false;
-    xet_apitable.pfnCommandListAppendMetricTracerMarker                  = original->pfnCommandListAppendMetricTracerMarker;
-    original->pfnCommandListAppendMetricTracerMarker                     = xetCommandListAppendMetricTracerMarker;
 
-    if( nullptr == original->pfnMetricTracerClose )
+    xet_apitable.pfnMetricTracerReadData                                 = (xet_pfnMetricTracerReadData_t)LOAD_FUNCTION_PTR(handle, "xetMetricTracerReadData");
+    if( nullptr == xet_apitable.pfnMetricTracerReadData )
         return false;
-    xet_apitable.pfnMetricTracerClose                                    = original->pfnMetricTracerClose;
-    original->pfnMetricTracerClose                                       = xetMetricTracerClose;
 
-    if( nullptr == original->pfnMetricTracerReadData )
+    xet_apitable.pfnMetricQueryPoolCreate                                = (xet_pfnMetricQueryPoolCreate_t)LOAD_FUNCTION_PTR(handle, "xetMetricQueryPoolCreate");
+    if( nullptr == xet_apitable.pfnMetricQueryPoolCreate )
         return false;
-    xet_apitable.pfnMetricTracerReadData                                 = original->pfnMetricTracerReadData;
-    original->pfnMetricTracerReadData                                    = xetMetricTracerReadData;
 
-    if( nullptr == original->pfnMetricQueryPoolCreate )
+    xet_apitable.pfnMetricQueryPoolDestroy                               = (xet_pfnMetricQueryPoolDestroy_t)LOAD_FUNCTION_PTR(handle, "xetMetricQueryPoolDestroy");
+    if( nullptr == xet_apitable.pfnMetricQueryPoolDestroy )
         return false;
-    xet_apitable.pfnMetricQueryPoolCreate                                = original->pfnMetricQueryPoolCreate;
-    original->pfnMetricQueryPoolCreate                                   = xetMetricQueryPoolCreate;
 
-    if( nullptr == original->pfnMetricQueryPoolDestroy )
+    xet_apitable.pfnMetricQueryPoolGetMetricQuery                        = (xet_pfnMetricQueryPoolGetMetricQuery_t)LOAD_FUNCTION_PTR(handle, "xetMetricQueryPoolGetMetricQuery");
+    if( nullptr == xet_apitable.pfnMetricQueryPoolGetMetricQuery )
         return false;
-    xet_apitable.pfnMetricQueryPoolDestroy                               = original->pfnMetricQueryPoolDestroy;
-    original->pfnMetricQueryPoolDestroy                                  = xetMetricQueryPoolDestroy;
 
-    if( nullptr == original->pfnMetricQueryPoolGetMetricQuery )
+    xet_apitable.pfnCommandListAppendMetricQueryBegin                    = (xet_pfnCommandListAppendMetricQueryBegin_t)LOAD_FUNCTION_PTR(handle, "xetCommandListAppendMetricQueryBegin");
+    if( nullptr == xet_apitable.pfnCommandListAppendMetricQueryBegin )
         return false;
-    xet_apitable.pfnMetricQueryPoolGetMetricQuery                        = original->pfnMetricQueryPoolGetMetricQuery;
-    original->pfnMetricQueryPoolGetMetricQuery                           = xetMetricQueryPoolGetMetricQuery;
 
-    if( nullptr == original->pfnCommandListAppendMetricQueryBegin )
+    xet_apitable.pfnCommandListAppendMetricQueryEnd                      = (xet_pfnCommandListAppendMetricQueryEnd_t)LOAD_FUNCTION_PTR(handle, "xetCommandListAppendMetricQueryEnd");
+    if( nullptr == xet_apitable.pfnCommandListAppendMetricQueryEnd )
         return false;
-    xet_apitable.pfnCommandListAppendMetricQueryBegin                    = original->pfnCommandListAppendMetricQueryBegin;
-    original->pfnCommandListAppendMetricQueryBegin                       = xetCommandListAppendMetricQueryBegin;
 
-    if( nullptr == original->pfnCommandListAppendMetricQueryEnd )
+    xet_apitable.pfnCommandListAppendMetricMemoryBarrier                 = (xet_pfnCommandListAppendMetricMemoryBarrier_t)LOAD_FUNCTION_PTR(handle, "xetCommandListAppendMetricMemoryBarrier");
+    if( nullptr == xet_apitable.pfnCommandListAppendMetricMemoryBarrier )
         return false;
-    xet_apitable.pfnCommandListAppendMetricQueryEnd                      = original->pfnCommandListAppendMetricQueryEnd;
-    original->pfnCommandListAppendMetricQueryEnd                         = xetCommandListAppendMetricQueryEnd;
 
-    if( nullptr == original->pfnCommandListAppendMetricMemoryBarrier )
+    xet_apitable.pfnMetricQueryGetData                                   = (xet_pfnMetricQueryGetData_t)LOAD_FUNCTION_PTR(handle, "xetMetricQueryGetData");
+    if( nullptr == xet_apitable.pfnMetricQueryGetData )
         return false;
-    xet_apitable.pfnCommandListAppendMetricMemoryBarrier                 = original->pfnCommandListAppendMetricMemoryBarrier;
-    original->pfnCommandListAppendMetricMemoryBarrier                    = xetCommandListAppendMetricMemoryBarrier;
-
-    if( nullptr == original->pfnMetricQueryGetData )
-        return false;
-    xet_apitable.pfnMetricQueryGetData                                   = original->pfnMetricQueryGetData;
-    original->pfnMetricQueryGetData                                      = xetMetricQueryGetData;
 
     return true;
 }
@@ -140,7 +119,7 @@ extern "C" {
 #endif
 
 ///////////////////////////////////////////////////////////////////////////////
-xe_result_t __xecall
+__xedllexport xe_result_t __xecall
 xetMetricGroupGetCount(
     xe_device_handle_t hDevice,                     ///< [in] handle of the device object
     uint32_t* pCount                                ///< [out] number of metric groups supported by the device
@@ -149,15 +128,11 @@ xetMetricGroupGetCount(
     if( nullptr == xet_apitable.pfnMetricGroupGetCount )
         return XE_RESULT_ERROR_UNINITIALIZED;
 
-    // Check parameters
-    if( nullptr == hDevice ) return XE_RESULT_ERROR_INVALID_PARAMETER;
-    if( nullptr == pCount ) return XE_RESULT_ERROR_INVALID_PARAMETER;
-
     return xet_apitable.pfnMetricGroupGetCount( hDevice, pCount );
 }
 
 ///////////////////////////////////////////////////////////////////////////////
-xe_result_t __xecall
+__xedllexport xe_result_t __xecall
 xetMetricGroupGet(
     xe_device_handle_t hDevice,                     ///< [in] handle of the device
     uint32_t ordinal,                               ///< [in] metric group index
@@ -167,15 +142,11 @@ xetMetricGroupGet(
     if( nullptr == xet_apitable.pfnMetricGroupGet )
         return XE_RESULT_ERROR_UNINITIALIZED;
 
-    // Check parameters
-    if( nullptr == hDevice ) return XE_RESULT_ERROR_INVALID_PARAMETER;
-    if( nullptr == phMetricGroup ) return XE_RESULT_ERROR_INVALID_PARAMETER;
-
     return xet_apitable.pfnMetricGroupGet( hDevice, ordinal, phMetricGroup );
 }
 
 ///////////////////////////////////////////////////////////////////////////////
-xe_result_t __xecall
+__xedllexport xe_result_t __xecall
 xetMetricGroupGetProperties(
     xet_metric_group_handle_t hMetricGroup,         ///< [in] handle of the metric group
     xet_metric_group_properties_t* pProperties      ///< [out] metric group properties
@@ -184,15 +155,11 @@ xetMetricGroupGetProperties(
     if( nullptr == xet_apitable.pfnMetricGroupGetProperties )
         return XE_RESULT_ERROR_UNINITIALIZED;
 
-    // Check parameters
-    if( nullptr == hMetricGroup ) return XE_RESULT_ERROR_INVALID_PARAMETER;
-    if( nullptr == pProperties ) return XE_RESULT_ERROR_INVALID_PARAMETER;
-
     return xet_apitable.pfnMetricGroupGetProperties( hMetricGroup, pProperties );
 }
 
 ///////////////////////////////////////////////////////////////////////////////
-xe_result_t __xecall
+__xedllexport xe_result_t __xecall
 xetMetricGet(
     xet_metric_group_handle_t hMetricGroup,         ///< [in] handle of the metric group
     uint32_t ordinal,                               ///< [in] metric index
@@ -202,15 +169,11 @@ xetMetricGet(
     if( nullptr == xet_apitable.pfnMetricGet )
         return XE_RESULT_ERROR_UNINITIALIZED;
 
-    // Check parameters
-    if( nullptr == hMetricGroup ) return XE_RESULT_ERROR_INVALID_PARAMETER;
-    if( nullptr == phMetric ) return XE_RESULT_ERROR_INVALID_PARAMETER;
-
     return xet_apitable.pfnMetricGet( hMetricGroup, ordinal, phMetric );
 }
 
 ///////////////////////////////////////////////////////////////////////////////
-xe_result_t __xecall
+__xedllexport xe_result_t __xecall
 xetMetricGetProperties(
     xet_metric_handle_t hMetric,                    ///< [in] handle of the metric
     xet_metric_properties_t* pProperties            ///< [out] metric properties
@@ -219,15 +182,11 @@ xetMetricGetProperties(
     if( nullptr == xet_apitable.pfnMetricGetProperties )
         return XE_RESULT_ERROR_UNINITIALIZED;
 
-    // Check parameters
-    if( nullptr == hMetric ) return XE_RESULT_ERROR_INVALID_PARAMETER;
-    if( nullptr == pProperties ) return XE_RESULT_ERROR_INVALID_PARAMETER;
-
     return xet_apitable.pfnMetricGetProperties( hMetric, pProperties );
 }
 
 ///////////////////////////////////////////////////////////////////////////////
-xe_result_t __xecall
+__xedllexport xe_result_t __xecall
 xetMetricGroupCalculateData(
     xet_metric_group_handle_t hMetricGroup,         ///< [in] handle of the metric group
     uint32_t* pReportCount,                         ///< [in,out] report count to calculate
@@ -240,17 +199,11 @@ xetMetricGroupCalculateData(
     if( nullptr == xet_apitable.pfnMetricGroupCalculateData )
         return XE_RESULT_ERROR_UNINITIALIZED;
 
-    // Check parameters
-    if( nullptr == hMetricGroup ) return XE_RESULT_ERROR_INVALID_PARAMETER;
-    if( nullptr == pReportCount ) return XE_RESULT_ERROR_INVALID_PARAMETER;
-    if( nullptr == pRawData ) return XE_RESULT_ERROR_INVALID_PARAMETER;
-    if( nullptr == pCalculatedData ) return XE_RESULT_ERROR_INVALID_PARAMETER;
-
     return xet_apitable.pfnMetricGroupCalculateData( hMetricGroup, pReportCount, rawDataSize, pRawData, calculatedDataSize, pCalculatedData );
 }
 
 ///////////////////////////////////////////////////////////////////////////////
-xe_result_t __xecall
+__xedllexport xe_result_t __xecall
 xetDeviceActivateMetricGroups(
     xe_device_handle_t hDevice,                     ///< [in] handle of the device
     uint32_t count,                                 ///< [in] metric group count to activate. 0 to deactivate.
@@ -260,15 +213,11 @@ xetDeviceActivateMetricGroups(
     if( nullptr == xet_apitable.pfnDeviceActivateMetricGroups )
         return XE_RESULT_ERROR_UNINITIALIZED;
 
-    // Check parameters
-    if( nullptr == hDevice ) return XE_RESULT_ERROR_INVALID_PARAMETER;
-    if( nullptr == phMetricGroups ) return XE_RESULT_ERROR_INVALID_PARAMETER;
-
     return xet_apitable.pfnDeviceActivateMetricGroups( hDevice, count, phMetricGroups );
 }
 
 ///////////////////////////////////////////////////////////////////////////////
-xe_result_t __xecall
+__xedllexport xe_result_t __xecall
 xetMetricTracerOpen(
     xe_device_handle_t hDevice,                     ///< [in] handle of the device
     xet_metric_tracer_desc_t* pDesc,                ///< [in,out] metric tracer descriptor
@@ -280,18 +229,11 @@ xetMetricTracerOpen(
     if( nullptr == xet_apitable.pfnMetricTracerOpen )
         return XE_RESULT_ERROR_UNINITIALIZED;
 
-    // Check parameters
-    if( nullptr == hDevice ) return XE_RESULT_ERROR_INVALID_PARAMETER;
-    if( nullptr == pDesc ) return XE_RESULT_ERROR_INVALID_PARAMETER;
-    if( nullptr == hNotificationEvent ) return XE_RESULT_ERROR_INVALID_PARAMETER;
-    if( nullptr == phMetricTracer ) return XE_RESULT_ERROR_INVALID_PARAMETER;
-    if( XET_METRIC_TRACER_DESC_VERSION_CURRENT < pDesc->version ) return XE_RESULT_ERROR_UNSUPPORTED;
-
     return xet_apitable.pfnMetricTracerOpen( hDevice, pDesc, hNotificationEvent, phMetricTracer );
 }
 
 ///////////////////////////////////////////////////////////////////////////////
-xe_result_t __xecall
+__xedllexport xe_result_t __xecall
 xetCommandListAppendMetricTracerMarker(
     xe_command_list_handle_t hCommandList,          ///< [in] handle of the command list
     xet_metric_tracer_handle_t hMetricTracer,       ///< [in] handle of the metric tracer
@@ -301,15 +243,11 @@ xetCommandListAppendMetricTracerMarker(
     if( nullptr == xet_apitable.pfnCommandListAppendMetricTracerMarker )
         return XE_RESULT_ERROR_UNINITIALIZED;
 
-    // Check parameters
-    if( nullptr == hCommandList ) return XE_RESULT_ERROR_INVALID_PARAMETER;
-    if( nullptr == hMetricTracer ) return XE_RESULT_ERROR_INVALID_PARAMETER;
-
     return xet_apitable.pfnCommandListAppendMetricTracerMarker( hCommandList, hMetricTracer, value );
 }
 
 ///////////////////////////////////////////////////////////////////////////////
-xe_result_t __xecall
+__xedllexport xe_result_t __xecall
 xetMetricTracerClose(
     xet_metric_tracer_handle_t hMetricTracer        ///< [in] handle of the metric tracer
     )
@@ -317,14 +255,11 @@ xetMetricTracerClose(
     if( nullptr == xet_apitable.pfnMetricTracerClose )
         return XE_RESULT_ERROR_UNINITIALIZED;
 
-    // Check parameters
-    if( nullptr == hMetricTracer ) return XE_RESULT_ERROR_INVALID_PARAMETER;
-
     return xet_apitable.pfnMetricTracerClose( hMetricTracer );
 }
 
 ///////////////////////////////////////////////////////////////////////////////
-xe_result_t __xecall
+__xedllexport xe_result_t __xecall
 xetMetricTracerReadData(
     xet_metric_tracer_handle_t hMetricTracer,       ///< [in] handle of the metric tracer
     uint32_t* pReportCount,                         ///< [in,out] report count to read/returned
@@ -335,16 +270,11 @@ xetMetricTracerReadData(
     if( nullptr == xet_apitable.pfnMetricTracerReadData )
         return XE_RESULT_ERROR_UNINITIALIZED;
 
-    // Check parameters
-    if( nullptr == hMetricTracer ) return XE_RESULT_ERROR_INVALID_PARAMETER;
-    if( nullptr == pReportCount ) return XE_RESULT_ERROR_INVALID_PARAMETER;
-    if( nullptr == pRawData ) return XE_RESULT_ERROR_INVALID_PARAMETER;
-
     return xet_apitable.pfnMetricTracerReadData( hMetricTracer, pReportCount, rawDataSize, pRawData );
 }
 
 ///////////////////////////////////////////////////////////////////////////////
-xe_result_t __xecall
+__xedllexport xe_result_t __xecall
 xetMetricQueryPoolCreate(
     xe_device_handle_t hDevice,                     ///< [in] handle of the device
     xet_metric_query_pool_desc_t* pDesc,            ///< [in] metric query pool creation data
@@ -354,17 +284,11 @@ xetMetricQueryPoolCreate(
     if( nullptr == xet_apitable.pfnMetricQueryPoolCreate )
         return XE_RESULT_ERROR_UNINITIALIZED;
 
-    // Check parameters
-    if( nullptr == hDevice ) return XE_RESULT_ERROR_INVALID_PARAMETER;
-    if( nullptr == pDesc ) return XE_RESULT_ERROR_INVALID_PARAMETER;
-    if( nullptr == phMetricQueryPool ) return XE_RESULT_ERROR_INVALID_PARAMETER;
-    if( XET_METRIC_QUERY_POOL_DESC_VERSION_CURRENT < pDesc->version ) return XE_RESULT_ERROR_UNSUPPORTED;
-
     return xet_apitable.pfnMetricQueryPoolCreate( hDevice, pDesc, phMetricQueryPool );
 }
 
 ///////////////////////////////////////////////////////////////////////////////
-xe_result_t __xecall
+__xedllexport xe_result_t __xecall
 xetMetricQueryPoolDestroy(
     xet_metric_query_pool_handle_t hMetricQueryPool ///< [in] handle of the metric query pool
     )
@@ -372,14 +296,11 @@ xetMetricQueryPoolDestroy(
     if( nullptr == xet_apitable.pfnMetricQueryPoolDestroy )
         return XE_RESULT_ERROR_UNINITIALIZED;
 
-    // Check parameters
-    if( nullptr == hMetricQueryPool ) return XE_RESULT_ERROR_INVALID_PARAMETER;
-
     return xet_apitable.pfnMetricQueryPoolDestroy( hMetricQueryPool );
 }
 
 ///////////////////////////////////////////////////////////////////////////////
-xe_result_t __xecall
+__xedllexport xe_result_t __xecall
 xetMetricQueryPoolGetMetricQuery(
     xet_metric_query_pool_handle_t hMetricQueryPool,///< [in] handle of the metric query pool
     uint32_t ordinal,                               ///< [in] index of the query within the pool
@@ -389,15 +310,11 @@ xetMetricQueryPoolGetMetricQuery(
     if( nullptr == xet_apitable.pfnMetricQueryPoolGetMetricQuery )
         return XE_RESULT_ERROR_UNINITIALIZED;
 
-    // Check parameters
-    if( nullptr == hMetricQueryPool ) return XE_RESULT_ERROR_INVALID_PARAMETER;
-    if( nullptr == phMetricQuery ) return XE_RESULT_ERROR_INVALID_PARAMETER;
-
     return xet_apitable.pfnMetricQueryPoolGetMetricQuery( hMetricQueryPool, ordinal, phMetricQuery );
 }
 
 ///////////////////////////////////////////////////////////////////////////////
-xe_result_t __xecall
+__xedllexport xe_result_t __xecall
 xetCommandListAppendMetricQueryBegin(
     xe_command_list_handle_t hCommandList,          ///< [in] handle of the command list
     xet_metric_query_handle_t hMetricQuery          ///< [in] handle of the metric query
@@ -406,15 +323,11 @@ xetCommandListAppendMetricQueryBegin(
     if( nullptr == xet_apitable.pfnCommandListAppendMetricQueryBegin )
         return XE_RESULT_ERROR_UNINITIALIZED;
 
-    // Check parameters
-    if( nullptr == hCommandList ) return XE_RESULT_ERROR_INVALID_PARAMETER;
-    if( nullptr == hMetricQuery ) return XE_RESULT_ERROR_INVALID_PARAMETER;
-
     return xet_apitable.pfnCommandListAppendMetricQueryBegin( hCommandList, hMetricQuery );
 }
 
 ///////////////////////////////////////////////////////////////////////////////
-xe_result_t __xecall
+__xedllexport xe_result_t __xecall
 xetCommandListAppendMetricQueryEnd(
     xe_command_list_handle_t hCommandList,          ///< [in] handle of the command list
     xet_metric_query_handle_t hMetricQuery,         ///< [in] handle of the metric query
@@ -424,16 +337,11 @@ xetCommandListAppendMetricQueryEnd(
     if( nullptr == xet_apitable.pfnCommandListAppendMetricQueryEnd )
         return XE_RESULT_ERROR_UNINITIALIZED;
 
-    // Check parameters
-    if( nullptr == hCommandList ) return XE_RESULT_ERROR_INVALID_PARAMETER;
-    if( nullptr == hMetricQuery ) return XE_RESULT_ERROR_INVALID_PARAMETER;
-    if( nullptr == hCompletionEvent ) return XE_RESULT_ERROR_INVALID_PARAMETER;
-
     return xet_apitable.pfnCommandListAppendMetricQueryEnd( hCommandList, hMetricQuery, hCompletionEvent );
 }
 
 ///////////////////////////////////////////////////////////////////////////////
-xe_result_t __xecall
+__xedllexport xe_result_t __xecall
 xetCommandListAppendMetricMemoryBarrier(
     xe_command_list_handle_t hCommandList           ///< [in] handle of the command list
     )
@@ -441,14 +349,11 @@ xetCommandListAppendMetricMemoryBarrier(
     if( nullptr == xet_apitable.pfnCommandListAppendMetricMemoryBarrier )
         return XE_RESULT_ERROR_UNINITIALIZED;
 
-    // Check parameters
-    if( nullptr == hCommandList ) return XE_RESULT_ERROR_INVALID_PARAMETER;
-
     return xet_apitable.pfnCommandListAppendMetricMemoryBarrier( hCommandList );
 }
 
 ///////////////////////////////////////////////////////////////////////////////
-xe_result_t __xecall
+__xedllexport xe_result_t __xecall
 xetMetricQueryGetData(
     xet_metric_query_handle_t hMetricQuery,         ///< [in] handle of the metric query
     uint32_t* pReportCount,                         ///< [in,out] report count to read/returned
@@ -458,11 +363,6 @@ xetMetricQueryGetData(
 {
     if( nullptr == xet_apitable.pfnMetricQueryGetData )
         return XE_RESULT_ERROR_UNINITIALIZED;
-
-    // Check parameters
-    if( nullptr == hMetricQuery ) return XE_RESULT_ERROR_INVALID_PARAMETER;
-    if( nullptr == pReportCount ) return XE_RESULT_ERROR_INVALID_PARAMETER;
-    if( nullptr == pRawData ) return XE_RESULT_ERROR_INVALID_PARAMETER;
 
     return xet_apitable.pfnMetricQueryGetData( hMetricQuery, pReportCount, rawDataSize, pRawData );
 }

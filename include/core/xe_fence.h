@@ -89,11 +89,19 @@ typedef struct _xe_fence_desc_t
 ///         + ::XE_FENCE_DESC_VERSION_CURRENT < desc->version
 ///     - ::XE_RESULT_ERROR_OUT_OF_HOST_MEMORY
 ///     - ::XE_RESULT_ERROR_OUT_OF_DEVICE_MEMORY
-xe_result_t __xecall
+__xedllexport xe_result_t __xecall
 xeFenceCreate(
     xe_command_queue_handle_t hCommandQueue,        ///< [in] handle of command queue
     const xe_fence_desc_t* desc,                    ///< [in] pointer to fence descriptor
     xe_fence_handle_t* phFence                      ///< [out] pointer to handle of fence object created
+    );
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Function-pointer for xeFenceCreate 
+typedef xe_result_t (__xecall *xe_pfnFenceCreate_t)(
+    xe_command_queue_handle_t,
+    const xe_fence_desc_t*,
+    xe_fence_handle_t*
     );
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -120,9 +128,15 @@ xeFenceCreate(
 ///         + nullptr == hFence
 ///         + fence is enqueued in a command queue
 ///     - ::XE_RESULT_ERROR_UNSUPPORTED
-xe_result_t __xecall
+__xedllexport xe_result_t __xecall
 xeFenceDestroy(
     xe_fence_handle_t hFence                        ///< [in] handle of fence object to destroy
+    );
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Function-pointer for xeFenceDestroy 
+typedef xe_result_t (__xecall *xe_pfnFenceDestroy_t)(
+    xe_fence_handle_t
     );
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -146,7 +160,7 @@ xeFenceDestroy(
 ///     - ::XE_RESULT_ERROR_UNSUPPORTED
 ///     - ::XE_RESULT_NOT_READY
 ///         + timeout expired
-xe_result_t __xecall
+__xedllexport xe_result_t __xecall
 xeFenceHostSynchronize(
     xe_fence_handle_t hFence,                       ///< [in] handle of the fence
     uint32_t timeout                                ///< [in] if non-zero, then indicates the maximum time to yield before
@@ -154,6 +168,13 @@ xeFenceHostSynchronize(
                                                     ///< if zero, then operates exactly like ::xeFenceQueryStatus;
                                                     ///< if MAX_UINT32, then function will not return until complete or device
                                                     ///< is lost.
+    );
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Function-pointer for xeFenceHostSynchronize 
+typedef xe_result_t (__xecall *xe_pfnFenceHostSynchronize_t)(
+    xe_fence_handle_t,
+    uint32_t
     );
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -177,9 +198,15 @@ xeFenceHostSynchronize(
 ///     - ::XE_RESULT_ERROR_UNSUPPORTED
 ///     - ::XE_RESULT_NOT_READY
 ///         + not signaled
-xe_result_t __xecall
+__xedllexport xe_result_t __xecall
 xeFenceQueryStatus(
     xe_fence_handle_t hFence                        ///< [in] handle of the fence
+    );
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Function-pointer for xeFenceQueryStatus 
+typedef xe_result_t (__xecall *xe_pfnFenceQueryStatus_t)(
+    xe_fence_handle_t
     );
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -200,9 +227,15 @@ xeFenceQueryStatus(
 ///     - ::XE_RESULT_ERROR_INVALID_PARAMETER
 ///         + nullptr == hFence
 ///     - ::XE_RESULT_ERROR_UNSUPPORTED
-xe_result_t __xecall
+__xedllexport xe_result_t __xecall
 xeFenceReset(
     xe_fence_handle_t hFence                        ///< [in] handle of the fence
+    );
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Function-pointer for xeFenceReset 
+typedef xe_result_t (__xecall *xe_pfnFenceReset_t)(
+    xe_fence_handle_t
     );
 
 #if defined(__cplusplus)
