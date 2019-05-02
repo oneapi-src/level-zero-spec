@@ -3,24 +3,9 @@ import re
 import util
 
 """
-    generates the CMakeLists file for the list of files
+    generic function for generating c/c++ header files from the specification documents
 """
-def generate_cmake(path, type):
-    fin = os.path.join("templates", "CMakeLists%s.mako"%type)
-    fout = os.path.join(path, "CMakeLists.txt")
-    files=[]
-    files.extend([os.path.basename(f) for f in util.findFiles(path, "*.h")])
-    files.extend([os.path.basename(f) for f in util.findFiles(path, "*.inl")])
-    files.extend([os.path.basename(f) for f in util.findFiles(path, "*.cpp")])
-    files.sort()
-    return util.makoWrite(
-        fin, fout,
-        files=files)
-
-"""
-    generic function for generating c/c++ files from the specification documents
-"""
-def generate_code(path, section, namespace, tags, specs, meta, type):
+def generate_cpp_headers(path, namespace, tags, specs, meta, type):
     loc = 0
     template = "api%s.mako"%type
     fin = os.path.join("templates", template)
@@ -37,7 +22,7 @@ def generate_code(path, section, namespace, tags, specs, meta, type):
             name = s['name'],
             header = s['header'],
             objects = s['objects'],
-            section=section,
+            section=os.path.basename(path),
             namespace=namespace,
             tags=tags,
             specs=specs,
@@ -45,59 +30,48 @@ def generate_code(path, section, namespace, tags, specs, meta, type):
     return loc, files
 
 """
-    generates a single c/c++ include file for the list of files
+    generates a single c/c++ include file for the list of header files
 """
-def generate_include_all(path, namespace, tags, files, type):
+def generate_cpp_api(path, namespace, tags, specs, files, type):
+    loc = 0
     template = "api_all%s.mako"%type
     fin = os.path.join("templates", template)
 
-    filename = "%s_all%s"%(namespace,type)
+    filename = "%s_api%s"%(namespace,type)
     fout = os.path.join(path, filename)
 
-    return util.makoWrite(
+    loc += util.makoWrite(
         fin, fout,
+        section=os.path.basename(path),
         namespace=namespace,
         tags=tags,
+        specs=specs,
         files=files)
+    return loc
 
 """
     generates c/c++ include files from the specification documents
 """
-def generate_cpp_include(path, namespace, tags, specs, meta):
-    cpp_path = os.path.join(path, "include")
-    util.makePath(cpp_path)
-    util.removeFiles(cpp_path, "*.h")
-    util.removeFiles(cpp_path, "*.hpp")
-    util.removeFiles(cpp_path, "*.inl")
+def generate_cpp(path, namespace, tags, specs, meta):
+    util.makePath(path)
+    util.removeFiles(path, "*.h")
+    util.removeFiles(path, "*.hpp")
+    util.removeFiles(path, "*.inl")
 
-    hloc, hfiles = generate_code(cpp_path, os.path.basename(path), namespace, tags, specs, meta, ".h")
-    hpploc, hppfiles = generate_code(cpp_path, os.path.basename(path), namespace, tags, specs, meta, ".hpp")
-    inlloc, inlfiles = generate_code(cpp_path, os.path.basename(path), namespace, tags, specs, meta, ".inl")
+    hloc, hfiles = generate_cpp_headers(path, namespace, tags, specs, meta, ".h")
+    hpploc, hppfiles = generate_cpp_headers(path, namespace, tags, specs, meta, ".hpp")
+    inlloc, inlfiles = generate_cpp_headers(path, namespace, tags, specs, meta, ".inl")
 
-    hloc += generate_include_all(cpp_path, namespace, tags, hfiles, ".h")
-    hpploc += generate_include_all(cpp_path, namespace, tags, hppfiles + inlfiles, ".hpp")
+    hloc += generate_cpp_api(path, namespace, tags, specs, hfiles, ".h")
+    hpploc += generate_cpp_api(path, namespace, tags, specs, hppfiles + inlfiles, ".hpp")
 
-    generate_cmake(cpp_path, ".h")
     return hloc + hpploc + inlloc
-
-"""
-    generates c/c++ source files from the specification documents
-"""
-def generate_cpp_source(path, namespace, tags, specs, meta):
-    cpp_path = os.path.join(path, "source")
-    util.makePath(cpp_path)
-    util.removeFiles(cpp_path, "%s_*.cpp"%namespace)
-
-    loc, files = generate_code(cpp_path, os.path.basename(path), namespace, tags, specs, meta, ".cpp")
-    generate_cmake(cpp_path, ".cpp")
-    return loc
 
 """
 Entry-point:
     generates all c/c++ code
 """
-def generate_cpp(path, namespace, tags, specs, meta):
+def generate(path, namespace, tags, specs, meta):
     loc = 0
-    loc += generate_cpp_include(path, namespace, tags, specs, meta)
-    loc += generate_cpp_source(path, namespace, tags, specs, meta)
+    loc += generate_cpp(path, namespace, tags, specs, meta)
     print("Generated %s lines of code.\n"%loc)

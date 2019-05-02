@@ -52,7 +52,7 @@ def declare_obj(obj, tags):
 #if defined(__cplusplus)
 #pragma once
 %if re.match(r"common", name):
-#include "${n}_all.h"
+#include "${n}_api.h"
 %else:
 #include "${n}_${name}.hpp"
 %endif
@@ -82,7 +82,7 @@ namespace ${n}
         %endfor
         )
     {
-        // auto result = ::${th.make_func_name(n, tags, obj)}( ${th.make_param_call_str("handle", obj, True)} );
+        // auto result = ::${th.make_func_name(n, tags, obj)}( ${th.make_param_call_str(n, tags, "handle", obj, True)} );
         // if( ::${X}_RESULT_SUCCESS != result ) throw exception(result, "${th.subt(n, tags, obj['name'], cpp=True)}");
     }
 %if 'condition' in obj:
@@ -114,7 +114,7 @@ namespace ${n}
         %endfor
         )
     {
-        // auto result = ::${th.make_func_name(n, tags, f)}( ${th.make_param_call_str("handle", f, True)} );
+        // auto result = ::${th.make_func_name(n, tags, f)}( ${th.make_param_call_str(n, tags, "handle", f, True)} );
         // if( ::${X}_RESULT_SUCCESS != result ) throw exception(result, "${n}::${th.subt(n, tags, obj['name'], cpp=True)}::${th.subt(n, tags, f['name'], cpp=True)}");
     }
 %if 'condition' in f:

@@ -47,7 +47,7 @@ from templates import helper as th
 #include <stdint.h>
 #include <string.h>
 %if x != n:
-#include "${x}_all.h"
+#include "${x}_api.h"
 %endif
 %else:
 #include "${n}_common.h"
@@ -114,9 +114,17 @@ typedef ${obj['type']} _${th.subt(n, tags, obj['name'])}
 %for line in th.make_returns_lines(n, tags, obj):
 /// ${line}
 %endfor
-__${x}dllport ${x}_result_t __${x}call
+__${x}dllexport ${x}_result_t __${x}call
 ${th.make_func_name(n, tags, obj)}(
     %for line in th.make_param_lines(n, tags, obj):
+    ${line}
+    %endfor
+    );
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Function-pointer for ${th.make_func_name(n, tags, obj)} 
+typedef ${x}_result_t (__${x}call *${th.make_pfn_type(n, tags, obj)})(
+    %for line in th.make_param_lines(n, tags, obj, format=["type", "delim"]):
     ${line}
     %endfor
     );

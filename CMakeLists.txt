@@ -39,70 +39,27 @@ if(MSVC)
     set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} /MP")
 endif()
 
-add_definitions(-D_RELEASE_BUILD_WITH_REGKEYS)
-
-set(XE_ROOT_DIR "${CMAKE_CURRENT_SOURCE_DIR}")
-
 # Allow custom third_party folder
 if(NOT DEFINED THIRD_PARTY_DIR)
     set(THIRD_PARTY_DIR ${CMAKE_CURRENT_SOURCE_DIR}/third_party)
 endif()
-
-# Add AubStream support
-if(NOT DEFINED AUB_STREAM_DIR)
-    set(AUB_STREAM_DIR ${THIRD_PARTY_DIR}/aub_stream)
-endif()
-if(EXISTS ${AUB_STREAM_DIR}/aub_mem_dump/aub_stream.cpp)
-    set(AUB_STREAM_SUPPORT TRUE)
-endif()
-
-# Add compute runtime support
-if(NOT DEFINED COMPUTE_RUNTIME_DIR)
-    set(COMPUTE_RUNTIME_DIR ${THIRD_PARTY_DIR}/compute_runtime)
-    set(IGC_DIR ${THIRD_PARTY_DIR}/igc)
-    set(GMM_SOURCE_DIR ${THIRD_PARTY_DIR}/gmmlib)
-
-    if(NOT UNIX)
-        set(WDK_DIR ${THIRD_PARTY_DIR}/wdk)
-    endif()
-endif()
-
-if(NOT EXISTS ${COMPUTE_RUNTIME_DIR}/runtime/command_stream)
-    message(FATAL_ERROR "COMPUTE_RUNTIME_DIR = Not found!")
-endif() 
-message(STATUS "COMPUTE_RUNTIME_DIR = ${COMPUTE_RUNTIME_DIR}")
 
 # Option to disable tests
 option(${PROJECT_NAME}_BUILD_TESTS "Build unit tests." ON)
 
 add_subdirectory(${THIRD_PARTY_DIR})
 
-#enable compute_runtime
-include(compute_runtime.cmake)
-
 # Copy third_party_binaries to output BIN folder
-add_custom_target(copy_third_party_files)
+#add_custom_target(copy_third_party_files)
 
-add_custom_command(
-    TARGET copy_third_party_files
-    POST_BUILD
-    COMMAND ${CMAKE_COMMAND} -E copy_directory "${IGC_DIR}/lib" "${CUSTOM_COMMAND_BINARY_DIR}/"
-    COMMAND ${CMAKE_COMMAND} -E copy_directory "${GMM_SOURCE_DIR}/lib" "${CUSTOM_COMMAND_BINARY_DIR}/"
-    DEPENDS "${IGC_DIR}/lib" "${GMM_SOURCE_DIR}/lib"
-)
+#add_custom_command(
+#    TARGET copy_third_party_files
+#    POST_BUILD
+#)
 
-add_subdirectory(core)
-
-include_directories(${CMAKE_CURRENT_SOURCE_DIR}/core/include)
+include_directories(${CMAKE_CURRENT_SOURCE_DIR}/include/core)
+include_directories(${CMAKE_CURRENT_SOURCE_DIR}/include/extended)
+include_directories(${CMAKE_CURRENT_SOURCE_DIR}/include/tools)
 include_directories("${CMAKE_CURRENT_SOURCE_DIR}")
 
-if (${PROJECT_NAME}_BUILD_TESTS)
-    add_subdirectory(tests)
-    set_property(
-        DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}
-        PROPERTY
-            VS_STARTUP_PROJECT ${PROJECT_NAME}_unit_tests
-    )
-endif()
-
-add_subdirectory(icd_loader)
+add_subdirectory(source)

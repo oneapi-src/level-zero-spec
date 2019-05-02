@@ -51,7 +51,7 @@ def declare_obj(obj, tags):
 #if defined(__cplusplus)
 #pragma once
 %if re.match(r"common", name):
-#include "${n}_all.h"
+#include "${n}_api.h"
 #include <tuple>
 %if x != n:
 #include "${x}_all.hpp"

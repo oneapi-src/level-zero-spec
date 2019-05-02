@@ -1,10 +1,4 @@
-<%
-import re
-from templates import helper as th
-%><%
-    n=namespace
-    N=n.upper()
-%>/**************************************************************************//**
+/**************************************************************************//**
 *
 * INTEL CONFIDENTIAL
 * Copyright 2019
@@ -26,37 +20,46 @@ from templates import helper as th
 * or otherwise. Any license under such intellectual property rights must be
 * express and approved by Intel in writing.
 *
-* @file ${n}_api.h
+* @file xe_api.hpp
 *
 * @cond DEV
-* DO NOT EDIT: generated from /scripts/${section}
+* DO NOT EDIT: generated from /scripts/core
 * @endcond
 *
 ******************************************************************************/
-#ifndef _${N}_API_H
-#define _${N}_API_H
+#ifndef _XE_API_HPP
+#define _XE_API_HPP
 #if defined(__cplusplus)
 #pragma once
-#endif
 
-%for f in files:
-%if not re.match(r"\w+_common", f):
-#include "${f}"
-%endif
-%endfor
+#include "xe_barrier.hpp"
+#include "xe_cl_interop.hpp"
+#include "xe_cmdlist.hpp"
+#include "xe_cmdqueue.hpp"
+#include "xe_copy.hpp"
+#include "xe_device.hpp"
+#include "xe_driver.hpp"
+#include "xe_event.hpp"
+#include "xe_fence.hpp"
+#include "xe_image.hpp"
+#include "xe_memory.hpp"
+#include "xe_module.hpp"
+#include "xe_residency.hpp"
+#include "xe_sampler.hpp"
+#include "xe_barrier.inl"
+#include "xe_cl_interop.inl"
+#include "xe_cmdlist.inl"
+#include "xe_cmdqueue.inl"
+#include "xe_copy.inl"
+#include "xe_device.inl"
+#include "xe_driver.inl"
+#include "xe_event.inl"
+#include "xe_fence.inl"
+#include "xe_image.inl"
+#include "xe_memory.inl"
+#include "xe_module.inl"
+#include "xe_residency.inl"
+#include "xe_sampler.inl"
 
-///////////////////////////////////////////////////////////////////////////////
-typedef struct _${n}_apitable_t
-{
-    %for obj in th.extract_objs(specs, r"function"):
-    %if 'condition' in obj:
-    #if ${th.subt(n, tags, obj['condition'])}
-    %endif
-    ${th.append_ws(th.make_pfn_type(n, tags, obj), 59)} ${th.make_pfn_name(n, tags, obj)};
-    %if 'condition' in obj:
-    #endif // ${th.subt(n, tags, obj['condition'])}
-    %endif
-    %endfor
-} ${n}_apitable_t;
-
-#endif // _${N}_API_H
+#endif // defined(__cplusplus)
+#endif // _XE_API_HPP

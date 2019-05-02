@@ -31,23 +31,9 @@ altvalue: ""
 --- #--------------------------------------------------------------------------
 type: macro
 desc: "Microsoft-specific dllexport storage-class attribute"
-condition: "defined(_WIN32)"
+condition: "defined(_WIN32) && $X_MAKE_DLL"
 name: __$xdllexport
 value: __declspec(dllexport)
-altvalue: ""
---- #--------------------------------------------------------------------------
-type: macro
-desc: "Microsoft-specific dllimport storage-class attribute"
-condition: "defined(_WIN32)"
-name: __$xdllimport
-value: "__declspec(dllimport)"
-altvalue: ""
---- #--------------------------------------------------------------------------
-type: macro
-desc: "DLL-specific function call attribute"
-condition: "defined($X_MAKEDLL)"
-name: __$xdllport
-value: __$xdllexport
 altvalue: ""
 --- #--------------------------------------------------------------------------
 type: macro

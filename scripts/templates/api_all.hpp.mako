@@ -25,15 +25,15 @@ import re
 * or otherwise. Any license under such intellectual property rights must be
 * express and approved by Intel in writing.
 *
-* @file ${n}_all.hpp
+* @file ${n}_api.hpp
 *
 * @cond DEV
-* DO NOT EDIT: generated from /scripts/templates/api_all.hpp.mako
+* DO NOT EDIT: generated from /scripts/${section}
 * @endcond
 *
 ******************************************************************************/
-#ifndef _${N}_ALL_HPP
-#define _${N}_ALL_HPP
+#ifndef _${N}_API_HPP
+#define _${N}_API_HPP
 #if defined(__cplusplus)
 #pragma once
 
@@ -44,4 +44,4 @@ import re
 %endfor
 
 #endif // defined(__cplusplus)
-#endif // _${N}_ALL_HPP
+#endif // _${N}_API_HPP
