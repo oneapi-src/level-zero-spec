@@ -270,10 +270,9 @@ struct DeviceImp : public Device {
         NEO::GraphicsAllocation *graphicsAllocationRT = memObjRT->getGraphicsAllocation();
         assert(graphicsAllocationRT != nullptr);
 
-        auto allocation = new GraphicsAllocation(graphicsAllocationRT);
-        allocation->setAllocatedFromCL(true);
-
-        globalMemoryManager->registerCLMemory(allocation);
+        auto allocation = globalMemoryManager->allocateManagedMemoryFromFault(
+            graphicsAllocationRT->getUnderlyingBuffer(),
+            graphicsAllocationRT->getUnderlyingBufferSize());
 
         *ptr = allocation->getHostAddress();
 

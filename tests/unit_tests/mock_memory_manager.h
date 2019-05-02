@@ -34,7 +34,6 @@ struct Mock<MemoryManager> : public MemoryManager {
     MOCK_METHOD1(freeMemory, void(GraphicsAllocation *allocation));
     MOCK_METHOD1(freeMemory, void(const void *ptr));
     MOCK_METHOD1(findAllocation, GraphicsAllocation *(const void *ptr));
-    MOCK_METHOD1(registerCLMemory, void(GraphicsAllocation *allocation));
 
     // default mock implementation
     GraphicsAllocation *doCreateGraphicsAllocation(size_t size, size_t alignment);

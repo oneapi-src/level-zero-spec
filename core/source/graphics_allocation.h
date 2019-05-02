@@ -27,16 +27,7 @@ struct GraphicsAllocation {
         return this->allocatedFromFault;
     }
 
-    void setAllocatedFromCL(bool val) {
-        this->allocatedFromCL = val;
-    }
-
-    bool getAllocatedFromCL() {
-        return this->allocatedFromCL;
-    }
-
     bool allocatedFromFault = false;
-    bool allocatedFromCL = false;
     NEO::GraphicsAllocation *allocationRT = nullptr;
 };
 
