@@ -1,0 +1,17 @@
+# Required components to generate level_zero docs (for Windows)
+components:
+  python3-win64:
+    type: artifactory
+    root_url: https://gfx-assets.intel.com/artifactory
+    asset_path: gta-fm/tools
+    asset_name: python
+    asset_version: 3.6.5-2-win64-full
+    dest_dir: third_party/3.6.5-2-win64-full
+  doxygen:
+    type: artifactory
+    root_url: https://gfx-assets.intel.com/artifactory
+    asset_path: gfx-rasty-build-assets-fm/tools
+    asset_name: doxygen
+    asset_version: 1.8.15.windows.x64
+    dest_dir: third_party/doxygen_1.8.15.windows.x64
+version: '1'
