@@ -98,6 +98,18 @@ xeSharedMemAlloc(
     );
 
 ///////////////////////////////////////////////////////////////////////////////
+/// @brief xeSharedMemAlloc function-pointer
+typedef xe_result_t (__xecall *xe_pfnSharedMemAlloc_t)(
+    xe_device_handle_t,
+    xe_device_mem_alloc_flag_t,
+    xe_host_mem_alloc_flag_t,
+    size_t,
+    size_t,
+    void**
+    );
+
+
+///////////////////////////////////////////////////////////////////////////////
 /// @brief Allocates memory specific to a device
 /// 
 /// @details
@@ -130,6 +142,17 @@ xeMemAlloc(
     size_t alignment,                               ///< [in] minimum alignment in bytes for the allocation
     void** ptr                                      ///< [out] pointer to device allocation
     );
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief xeMemAlloc function-pointer
+typedef xe_result_t (__xecall *xe_pfnMemAlloc_t)(
+    xe_device_handle_t,
+    xe_device_mem_alloc_flag_t,
+    size_t,
+    size_t,
+    void**
+    );
+
 
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Allocates host memory
@@ -165,6 +188,16 @@ xeHostMemAlloc(
     );
 
 ///////////////////////////////////////////////////////////////////////////////
+/// @brief xeHostMemAlloc function-pointer
+typedef xe_result_t (__xecall *xe_pfnHostMemAlloc_t)(
+    xe_host_mem_alloc_flag_t,
+    size_t,
+    size_t,
+    void**
+    );
+
+
+///////////////////////////////////////////////////////////////////////////////
 /// @brief Frees allocated host memory, device memory, or shared memory
 /// 
 /// @details
@@ -191,6 +224,13 @@ __xedllport xe_result_t __xecall
 xeMemFree(
     const void* ptr                                 ///< [in] pointer to memory to free
     );
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief xeMemFree function-pointer
+typedef xe_result_t (__xecall *xe_pfnMemFree_t)(
+    const void*
+    );
+
 
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief API version of ::xe_memory_allocation_properties_t
@@ -247,6 +287,14 @@ xeMemGetProperties(
     );
 
 ///////////////////////////////////////////////////////////////////////////////
+/// @brief xeMemGetProperties function-pointer
+typedef xe_result_t (__xecall *xe_pfnMemGetProperties_t)(
+    const void*,
+    xe_memory_allocation_properties_t*
+    );
+
+
+///////////////////////////////////////////////////////////////////////////////
 /// @brief Retrieves the base address and/or size of an allocation
 /// 
 /// @details
@@ -269,6 +317,15 @@ xeMemGetAddressRange(
     void** pBase,                                   ///< [in,out][optional] base address of the allocation
     size_t* pSize                                   ///< [in,out][optional] size of the allocation
     );
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief xeMemGetAddressRange function-pointer
+typedef xe_result_t (__xecall *xe_pfnMemGetAddressRange_t)(
+    const void*,
+    void**,
+    size_t*
+    );
+
 
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Creates an IPC memory handle for the specified allocation in the
@@ -296,6 +353,14 @@ xeIpcGetMemHandle(
     const void* ptr,                                ///< [in] Pointer to the device memory allocation
     xe_ipc_mem_handle_t* pIpcHandle                 ///< [out] Returned IPC memory handle
     );
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief xeIpcGetMemHandle function-pointer
+typedef xe_result_t (__xecall *xe_pfnIpcGetMemHandle_t)(
+    const void*,
+    xe_ipc_mem_handle_t*
+    );
+
 
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Supported IPC memory flags
@@ -339,6 +404,16 @@ xeIpcOpenMemHandle(
     );
 
 ///////////////////////////////////////////////////////////////////////////////
+/// @brief xeIpcOpenMemHandle function-pointer
+typedef xe_result_t (__xecall *xe_pfnIpcOpenMemHandle_t)(
+    xe_device_handle_t,
+    xe_ipc_mem_handle_t,
+    xe_ipc_memory_flag_t,
+    void**
+    );
+
+
+///////////////////////////////////////////////////////////////////////////////
 /// @brief Closes an IPC memory handle in a receiving process
 /// 
 /// @details
@@ -362,6 +437,13 @@ __xedllport xe_result_t __xecall
 xeIpcCloseMemHandle(
     const void* ptr                                 ///< [in] pointer to device allocation in this process
     );
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief xeIpcCloseMemHandle function-pointer
+typedef xe_result_t (__xecall *xe_pfnIpcCloseMemHandle_t)(
+    const void*
+    );
+
 
 #if defined(__cplusplus)
 } // extern "C"

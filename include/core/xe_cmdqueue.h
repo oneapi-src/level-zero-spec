@@ -134,6 +134,15 @@ xeCommandQueueCreate(
     );
 
 ///////////////////////////////////////////////////////////////////////////////
+/// @brief xeCommandQueueCreate function-pointer
+typedef xe_result_t (__xecall *xe_pfnCommandQueueCreate_t)(
+    xe_device_handle_t,
+    const xe_command_queue_desc_t*,
+    xe_command_queue_handle_t*
+    );
+
+
+///////////////////////////////////////////////////////////////////////////////
 /// @brief Destroys a command queue.
 /// 
 /// @details
@@ -161,6 +170,13 @@ __xedllport xe_result_t __xecall
 xeCommandQueueDestroy(
     xe_command_queue_handle_t hCommandQueue         ///< [in] handle of command queue object to destroy
     );
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief xeCommandQueueDestroy function-pointer
+typedef xe_result_t (__xecall *xe_pfnCommandQueueDestroy_t)(
+    xe_command_queue_handle_t
+    );
+
 
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Executes a command list in a command queue.
@@ -192,6 +208,16 @@ xeCommandQueueExecuteCommandLists(
     );
 
 ///////////////////////////////////////////////////////////////////////////////
+/// @brief xeCommandQueueExecuteCommandLists function-pointer
+typedef xe_result_t (__xecall *xe_pfnCommandQueueExecuteCommandLists_t)(
+    xe_command_queue_handle_t,
+    uint32_t,
+    xe_command_list_handle_t*,
+    xe_fence_handle_t
+    );
+
+
+///////////////////////////////////////////////////////////////////////////////
 /// @brief Synchronizes a command queue by waiting on the host.
 /// 
 /// @details
@@ -216,6 +242,14 @@ xeCommandQueueSynchronize(
                                                     ///< if MAX_UINT32, then function will not return until complete or device
                                                     ///< is lost.
     );
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief xeCommandQueueSynchronize function-pointer
+typedef xe_result_t (__xecall *xe_pfnCommandQueueSynchronize_t)(
+    xe_command_queue_handle_t,
+    uint32_t
+    );
+
 
 #if defined(__cplusplus)
 } // extern "C"

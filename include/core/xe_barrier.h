@@ -79,6 +79,16 @@ xeCommandListAppendBarrier(
     );
 
 ///////////////////////////////////////////////////////////////////////////////
+/// @brief xeCommandListAppendBarrier function-pointer
+typedef xe_result_t (__xecall *xe_pfnCommandListAppendBarrier_t)(
+    xe_command_list_handle_t,
+    xe_event_handle_t,
+    uint32_t,
+    xe_event_handle_t*
+    );
+
+
+///////////////////////////////////////////////////////////////////////////////
 /// @brief Appends a global memory ranges barrier into a command list.
 /// 
 /// @details
@@ -116,6 +126,19 @@ xeCommandListAppendMemoryRangesBarrier(
     );
 
 ///////////////////////////////////////////////////////////////////////////////
+/// @brief xeCommandListAppendMemoryRangesBarrier function-pointer
+typedef xe_result_t (__xecall *xe_pfnCommandListAppendMemoryRangesBarrier_t)(
+    xe_command_list_handle_t,
+    uint32_t,
+    const size_t*,
+    const void**,
+    xe_event_handle_t,
+    uint32_t,
+    xe_event_handle_t*
+    );
+
+
+///////////////////////////////////////////////////////////////////////////////
 /// @brief Ensures in-bound writes to the device are globally observable.
 /// 
 /// @details
@@ -139,6 +162,13 @@ __xedllport xe_result_t __xecall
 xeDeviceSystemBarrier(
     xe_device_handle_t hDevice                      ///< [in] handle of the device
     );
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief xeDeviceSystemBarrier function-pointer
+typedef xe_result_t (__xecall *xe_pfnDeviceSystemBarrier_t)(
+    xe_device_handle_t
+    );
+
 
 #if defined(__cplusplus)
 } // extern "C"

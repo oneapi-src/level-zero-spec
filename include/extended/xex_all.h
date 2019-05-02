@@ -36,4 +36,12 @@
 #include "xex_cmdgraph.h"
 #include "xex_device.h"
 
+///////////////////////////////////////////////////////////////////////////////
+typedef struct _xex_apitable_t
+{
+    xex_pfnCommandGraphCreate_t                         pfnCommandGraphCreate;
+    xex_pfnCommandGraphDestroy_t                        pfnCommandGraphDestroy;
+    xex_pfnCommandGraphClose_t                          pfnCommandGraphClose;
+} xex_apitable_t;
+
 #endif // _XEX_ALL_H

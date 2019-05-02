@@ -97,6 +97,15 @@ xeFenceCreate(
     );
 
 ///////////////////////////////////////////////////////////////////////////////
+/// @brief xeFenceCreate function-pointer
+typedef xe_result_t (__xecall *xe_pfnFenceCreate_t)(
+    xe_command_queue_handle_t,
+    const xe_fence_desc_t*,
+    xe_fence_handle_t*
+    );
+
+
+///////////////////////////////////////////////////////////////////////////////
 /// @brief Deletes a fence object.
 /// 
 /// @details
@@ -124,6 +133,13 @@ __xedllport xe_result_t __xecall
 xeFenceDestroy(
     xe_fence_handle_t hFence                        ///< [in] handle of fence object to destroy
     );
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief xeFenceDestroy function-pointer
+typedef xe_result_t (__xecall *xe_pfnFenceDestroy_t)(
+    xe_fence_handle_t
+    );
+
 
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief The current host thread waits on a fence to be signaled.
@@ -157,6 +173,14 @@ xeFenceHostSynchronize(
     );
 
 ///////////////////////////////////////////////////////////////////////////////
+/// @brief xeFenceHostSynchronize function-pointer
+typedef xe_result_t (__xecall *xe_pfnFenceHostSynchronize_t)(
+    xe_fence_handle_t,
+    uint32_t
+    );
+
+
+///////////////////////////////////////////////////////////////////////////////
 /// @brief Queries a fence object's status.
 /// 
 /// @details
@@ -183,6 +207,13 @@ xeFenceQueryStatus(
     );
 
 ///////////////////////////////////////////////////////////////////////////////
+/// @brief xeFenceQueryStatus function-pointer
+typedef xe_result_t (__xecall *xe_pfnFenceQueryStatus_t)(
+    xe_fence_handle_t
+    );
+
+
+///////////////////////////////////////////////////////////////////////////////
 /// @brief Reset a fence back to the not signaled state.
 /// 
 /// @details
@@ -204,6 +235,13 @@ __xedllport xe_result_t __xecall
 xeFenceReset(
     xe_fence_handle_t hFence                        ///< [in] handle of the fence
     );
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief xeFenceReset function-pointer
+typedef xe_result_t (__xecall *xe_pfnFenceReset_t)(
+    xe_fence_handle_t
+    );
+
 
 #if defined(__cplusplus)
 } // extern "C"

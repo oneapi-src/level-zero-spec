@@ -32,7 +32,7 @@ def generate_code(path, section, namespace, tags, specs, meta, type):
 """
     generates a single c/c++ include file for the list of files
 """
-def generate_include_all(path, namespace, tags, files, type):
+def generate_include_all(path, namespace, tags, specs, files, type):
     template = "api_all%s.mako"%type
     fin = os.path.join("templates", template)
 
@@ -43,6 +43,7 @@ def generate_include_all(path, namespace, tags, files, type):
         fin, fout,
         namespace=namespace,
         tags=tags,
+        specs=specs,
         files=files)
 
 """
@@ -58,8 +59,8 @@ def generate_cpp_include(path, namespace, tags, specs, meta):
     hpploc, hppfiles = generate_code(path, os.path.basename(path), namespace, tags, specs, meta, ".hpp")
     inlloc, inlfiles = generate_code(path, os.path.basename(path), namespace, tags, specs, meta, ".inl")
 
-    hloc += generate_include_all(path, namespace, tags, hfiles, ".h")
-    hpploc += generate_include_all(path, namespace, tags, hppfiles + inlfiles, ".hpp")
+    hloc += generate_include_all(path, namespace, tags, specs, hfiles, ".h")
+    hpploc += generate_include_all(path, namespace, tags, specs, hppfiles + inlfiles, ".hpp")
 
     return hloc + hpploc + inlloc
 

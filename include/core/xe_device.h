@@ -65,6 +65,13 @@ xeDeviceGetCount(
     );
 
 ///////////////////////////////////////////////////////////////////////////////
+/// @brief xeDeviceGetCount function-pointer
+typedef xe_result_t (__xecall *xe_pfnDeviceGetCount_t)(
+    uint32_t*
+    );
+
+
+///////////////////////////////////////////////////////////////////////////////
 /// @brief Maximum device uuid size in bytes
 #define XE_MAX_UUID_SIZE  16
 
@@ -103,6 +110,14 @@ xeDeviceGet(
     );
 
 ///////////////////////////////////////////////////////////////////////////////
+/// @brief xeDeviceGet function-pointer
+typedef xe_result_t (__xecall *xe_pfnDeviceGet_t)(
+    uint32_t,
+    xe_device_handle_t*
+    );
+
+
+///////////////////////////////////////////////////////////////////////////////
 /// @brief Returns a handle to the sub-device object
 /// 
 /// @details
@@ -129,6 +144,15 @@ xeDeviceGetSubDevice(
     uint32_t ordinal,                               ///< [in] ordinal of sub-device to retrieve
     xe_device_handle_t* phSubDevice                 ///< [out] pointer to handle of sub-device object.
     );
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief xeDeviceGetSubDevice function-pointer
+typedef xe_result_t (__xecall *xe_pfnDeviceGetSubDevice_t)(
+    xe_device_handle_t,
+    uint32_t,
+    xe_device_handle_t*
+    );
+
 
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Supported API versions
@@ -166,6 +190,14 @@ xeDeviceGetApiVersion(
     xe_device_handle_t hDevice,                     ///< [in] handle of the device object
     xe_api_version_t* version                       ///< [out] api version
     );
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief xeDeviceGetApiVersion function-pointer
+typedef xe_result_t (__xecall *xe_pfnDeviceGetApiVersion_t)(
+    xe_device_handle_t,
+    xe_api_version_t*
+    );
+
 
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief API version of ::xe_device_properties_t
@@ -237,6 +269,14 @@ xeDeviceGetProperties(
     );
 
 ///////////////////////////////////////////////////////////////////////////////
+/// @brief xeDeviceGetProperties function-pointer
+typedef xe_result_t (__xecall *xe_pfnDeviceGetProperties_t)(
+    xe_device_handle_t,
+    xe_device_properties_t*
+    );
+
+
+///////////////////////////////////////////////////////////////////////////////
 /// @brief API version of ::xe_device_compute_properties_t
 typedef enum _xe_device_compute_properties_version_t
 {
@@ -292,6 +332,14 @@ xeDeviceGetComputeProperties(
     xe_device_handle_t hDevice,                     ///< [in] handle of the device object
     xe_device_compute_properties_t* pComputeProperties  ///< [out] query result for compute properties
     );
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief xeDeviceGetComputeProperties function-pointer
+typedef xe_result_t (__xecall *xe_pfnDeviceGetComputeProperties_t)(
+    xe_device_handle_t,
+    xe_device_compute_properties_t*
+    );
+
 
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief API version of ::xe_device_memory_properties_t
@@ -369,6 +417,14 @@ xeDeviceGetMemoryProperties(
     );
 
 ///////////////////////////////////////////////////////////////////////////////
+/// @brief xeDeviceGetMemoryProperties function-pointer
+typedef xe_result_t (__xecall *xe_pfnDeviceGetMemoryProperties_t)(
+    xe_device_handle_t,
+    xe_device_memory_properties_t*
+    );
+
+
+///////////////////////////////////////////////////////////////////////////////
 /// @brief API version of ::xe_device_p2p_properties_t
 typedef enum _xe_device_p2p_properties_version_t
 {
@@ -415,6 +471,15 @@ xeDeviceGetP2PProperties(
     );
 
 ///////////////////////////////////////////////////////////////////////////////
+/// @brief xeDeviceGetP2PProperties function-pointer
+typedef xe_result_t (__xecall *xe_pfnDeviceGetP2PProperties_t)(
+    xe_device_handle_t,
+    xe_device_handle_t,
+    xe_device_p2p_properties_t*
+    );
+
+
+///////////////////////////////////////////////////////////////////////////////
 /// @brief Queries if one device can directly access peer device allocations
 /// 
 /// @details
@@ -440,6 +505,15 @@ xeDeviceCanAccessPeer(
     xe_device_handle_t hPeerDevice,                 ///< [in] handle of the peer device with the allocation
     xe_bool_t* value                                ///< [out] returned access capability
     );
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief xeDeviceCanAccessPeer function-pointer
+typedef xe_result_t (__xecall *xe_pfnDeviceCanAccessPeer_t)(
+    xe_device_handle_t,
+    xe_device_handle_t,
+    xe_bool_t*
+    );
+
 
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Supported Cache Config
@@ -480,6 +554,14 @@ xeDeviceSetIntermediateCacheConfig(
     );
 
 ///////////////////////////////////////////////////////////////////////////////
+/// @brief xeDeviceSetIntermediateCacheConfig function-pointer
+typedef xe_result_t (__xecall *xe_pfnDeviceSetIntermediateCacheConfig_t)(
+    xe_device_handle_t,
+    xe_cache_config_t
+    );
+
+
+///////////////////////////////////////////////////////////////////////////////
 /// @brief Sets the preferred Last Level cache configuration for a device.
 /// 
 /// @details
@@ -503,6 +585,14 @@ xeDeviceSetLastLevelCacheConfig(
     xe_device_handle_t hDevice,                     ///< [in] handle of the device 
     xe_cache_config_t CacheConfig                   ///< [in] CacheConfig
     );
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief xeDeviceSetLastLevelCacheConfig function-pointer
+typedef xe_result_t (__xecall *xe_pfnDeviceSetLastLevelCacheConfig_t)(
+    xe_device_handle_t,
+    xe_cache_config_t
+    );
+
 
 #if defined(__cplusplus)
 } // extern "C"

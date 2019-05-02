@@ -37,44 +37,30 @@ from templates import helper as th
 * @endcond
 *
 ******************************************************************************/
-#include "${name}.h"
+#include "${n}_all.h"
+#include "loader.h"
 
-namespace xe_loader
+${n}_apitable_t ${n}_apitable = {};
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Loads function pointer table for loaded driver
+bool ${n}LoadExports(
+    void* handle )  ///< [in] driver handle
 {
-    extern context_t context;
+    %for obj in th.extract_objs(specs, r"function"):
+    %if 'condition' in obj:
+    #if ${th.subt(n, tags, obj['condition'])}
+    %endif
+    ${n}_apitable.${th.append_ws(th.make_pfn_name(n, tags, obj), 55)} = (${n}_${th.make_pfn_name(n, tags, obj)}_t)LOAD_FUNCTION_PTR(handle, "${th.make_func_name(n, tags, obj)}");
+    if( nullptr == ${n}_apitable.${th.make_pfn_name(n, tags, obj)} )
+        return false;
+    %if 'condition' in obj:
+    #endif // ${th.subt(n, tags, obj['condition'])}
+    %endif
 
-    ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Loads function pointer table for loaded driver
-    bool ${n}LoadExports(
-        void* handle )  ///< [in] driver handle
-    {
-        if(nullptr == context.${n}api)
-            return false;
-
-        %for obj in th.extract_objs(specs, r"function"):
-        %if 'condition' in obj:
-        #if ${th.subt(n, tags, obj['condition'])}
-        %endif
-        context.${n}api->${th.append_ws(th.make_func_name(n, tags, obj), 63)} = (pfn_${th.make_func_name(n, tags, obj)}_t)LOAD_FUNCTION_PTR(handle, "${th.make_func_name(n, tags, obj)}");
-        %if 'condition' in obj:
-        #endif // ${th.subt(n, tags, obj['condition'])}
-        %endif
-        %endfor
-
-        %for obj in th.extract_objs(specs, r"function"):
-        %if 'condition' in obj:
-        #if ${th.subt(n, tags, obj['condition'])}
-        %endif
-        if(nullptr == context.${n}api->${th.make_func_name(n, tags, obj)})
-            return false;
-        %if 'condition' in obj:
-        #endif // ${th.subt(n, tags, obj['condition'])}
-        %endif
-        %endfor
-
-        return true;
-    }
-} // namespace xe_loader
+    %endfor
+    return true;
+}
 
 
 #if defined(__cplusplus)
@@ -89,14 +75,15 @@ extern "C" {
 %endif
 __${x}dllexport ${x}_result_t __${x}call
 ${th.make_func_name(n, tags, obj)}(
-        %for line in th.make_param_lines(n, tags, obj):
-        ${line}
-        %endfor
-    ){
-    if(false == xe_loader::context.initialized)
+    %for line in th.make_param_lines(n, tags, obj):
+    ${line}
+    %endfor
+    )
+{
+    if( nullptr == ${n}_apitable.${th.make_pfn_name(n, tags, obj)} )
         return ${X}_RESULT_ERROR_UNINITIALIZED;
 
-    return xe_loader::context.${n}api->${th.make_func_name(n, tags, obj)}(${", ".join(th.make_param_lines(n, tags, obj, format=["name"]))});
+    return ${n}_apitable.${th.make_pfn_name(n, tags, obj)}( ${", ".join(th.make_param_lines(n, tags, obj, format=["name"]))} );
 }
 %if 'condition' in obj:
 #endif // ${th.subt(n, tags, obj['condition'])}

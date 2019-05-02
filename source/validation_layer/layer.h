@@ -39,22 +39,4 @@ typedef struct _cl_program* cl_program;
 #endif
 
 
-///////////////////////////////////////////////////////////////////////////////
-typedef struct _xeapi_pfntable_t*  xeapi_pfntable_ptr_t;
-typedef struct _xexapi_pfntable_t* xexapi_pfntable_ptr_t;
-typedef struct _xetapi_pfntable_t* xetapi_pfntable_ptr_t;
-
-
-namespace xe_layer
-{
-    ///////////////////////////////////////////////////////////////////////////////
-    typedef struct _context_t
-    {
-        xeapi_pfntable_ptr_t   xeapi;
-        xexapi_pfntable_ptr_t  xexapi;
-        xetapi_pfntable_ptr_t  xetapi;
-    } context_t;
-
-} // namespace xe_layer
-
 #endif // _LAYER_H

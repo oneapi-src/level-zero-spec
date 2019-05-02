@@ -218,6 +218,15 @@ xeImageGetProperties(
     );
 
 ///////////////////////////////////////////////////////////////////////////////
+/// @brief xeImageGetProperties function-pointer
+typedef xe_result_t (__xecall *xe_pfnImageGetProperties_t)(
+    xe_device_handle_t,
+    const xe_image_desc_t*,
+    xe_image_properties_t*
+    );
+
+
+///////////////////////////////////////////////////////////////////////////////
 /// @brief Creates a image object on the device.
 /// 
 /// @details
@@ -248,6 +257,15 @@ xeImageCreate(
     );
 
 ///////////////////////////////////////////////////////////////////////////////
+/// @brief xeImageCreate function-pointer
+typedef xe_result_t (__xecall *xe_pfnImageCreate_t)(
+    xe_device_handle_t,
+    const xe_image_desc_t*,
+    xe_image_handle_t*
+    );
+
+
+///////////////////////////////////////////////////////////////////////////////
 /// @brief Deletes a image object.
 /// 
 /// @details
@@ -270,6 +288,13 @@ __xedllport xe_result_t __xecall
 xeImageDestroy(
     xe_image_handle_t hImage                        ///< [in] handle of image object to destroy
     );
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief xeImageDestroy function-pointer
+typedef xe_result_t (__xecall *xe_pfnImageDestroy_t)(
+    xe_image_handle_t
+    );
+
 
 #if defined(__cplusplus)
 } // extern "C"

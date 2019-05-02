@@ -26,35 +26,25 @@
 ******************************************************************************/
 #include <mutex>
 #include <stdlib.h>
-
 #include "loader.h"
-#include "core_loader.h"
-#include "extended_loader.h"
-#include "tools_loader.h"
-
-namespace xe_loader
-{
-    ///////////////////////////////////////////////////////////////////////////////
-    xeapi_pfntable_t  xeapi_pfntable = {};
-    xexapi_pfntable_t xexapi_pfntable = {};
-    xetapi_pfntable_t xetapi_pfntable = {};
-
-    ///////////////////////////////////////////////////////////////////////////////
-    context_t context = {
-        &xeapi_pfntable,    // xeapi
-        &xexapi_pfntable,   // xexapi
-        &xetapi_pfntable,   // xetapi
-
-        false   // initialized
-    };
-
-} // namespace xe_loader
+#include "xe_all.h"
+#include "xex_all.h"
+#include "xet_all.h"
 
 ///////////////////////////////////////////////////////////////////////////////
-typedef xe_result_t( __xecall *pfn_xeInitLayer_t )(
-    xeapi_pfntable_ptr_t,
-    xexapi_pfntable_ptr_t,
-    xetapi_pfntable_ptr_t
+extern xe_apitable_t xe_apitable;
+extern xex_apitable_t xex_apitable;
+extern xet_apitable_t xet_apitable;
+
+bool xeLoadExports( void* );
+bool xexLoadExports( void* );
+bool xetLoadExports( void* );
+
+///////////////////////////////////////////////////////////////////////////////
+typedef xe_result_t( __xecall *xe_pfnInitLayer_t )(
+    xe_apitable_t*,
+    xex_apitable_t*,
+    xet_apitable_t*
     );
 
 
@@ -65,32 +55,33 @@ extern "C" {
 ///////////////////////////////////////////////////////////////////////////////
 __xedllexport xe_result_t __xecall
 xeInit(
-    xe_init_flag_t flags ){
-
+    xe_init_flag_t flags )
+{
     static std::mutex crit;
     std::lock_guard<std::mutex> lockGuard{crit};
-        
-    if(xe_loader::context.initialized)
+
+    static bool initialized = false;
+    if( initialized )
         return XE_RESULT_SUCCESS;
         
-    auto driverLibrary = LOAD_DRIVER_LIBRARY("xe_common"); // persistent handle
+    auto driverLibrary = LOAD_DRIVER_LIBRARY("xe_common"); // todo: fix persistent handle
 
-    xe_loader::context.initialized =
-        xe_loader::xeLoadExports(driverLibrary) &&
-        xe_loader::xexLoadExports(driverLibrary) &&
-        xe_loader::xetLoadExports(driverLibrary);
+    initialized =
+        xeLoadExports( driverLibrary ) &&
+        xexLoadExports( driverLibrary ) &&
+        xetLoadExports (driverLibrary );
             
-    if(false == xe_loader::context.initialized)
+    if( !initialized )
         return XE_RESULT_ERROR_UNINITIALIZED;
 
     const char* env_var = getenv( "XE_ENABLE_VALIDATION_LAYER" );
     if((nullptr != env_var) && (0 != atoi(env_var))){
-        auto validationLayer = LOAD_DRIVER_LIBRARY("xe_validation_layer");
-        auto xeInitLayer = (pfn_xeInitLayer_t)LOAD_FUNCTION_PTR(validationLayer, "xeInitLayer");
-        xeInitLayer(xe_loader::context.xeapi, xe_loader::context.xexapi, xe_loader::context.xetapi);
+        auto validationLayer = LOAD_DRIVER_LIBRARY("xe_validation_layer"); // todo: fix persistent handle
+        auto xeInitLayer = (xe_pfnInitLayer_t)LOAD_FUNCTION_PTR(validationLayer, "xeInitLayer");
+        xeInitLayer( &xe_apitable, &xex_apitable, &xet_apitable );
     }
 
-    return xe_loader::context.xeapi->xeInit(flags);
+    return xe_apitable.pfnInit( flags );
 }
 
 #if defined(__cplusplus)

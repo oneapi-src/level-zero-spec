@@ -59,6 +59,14 @@ xetMetricGroupGetCount(
     );
 
 ///////////////////////////////////////////////////////////////////////////////
+/// @brief xetMetricGroupGetCount function-pointer
+typedef xe_result_t (__xecall *xet_pfnMetricGroupGetCount_t)(
+    xe_device_handle_t,
+    uint32_t*
+    );
+
+
+///////////////////////////////////////////////////////////////////////////////
 /// @brief Returns metric group handle for a device.
 /// 
 /// @details
@@ -79,6 +87,15 @@ xetMetricGroupGet(
     uint32_t ordinal,                               ///< [in] metric group index
     xet_metric_group_handle_t* phMetricGroup        ///< [out] metric group handle
     );
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief xetMetricGroupGet function-pointer
+typedef xe_result_t (__xecall *xet_pfnMetricGroupGet_t)(
+    xe_device_handle_t,
+    uint32_t,
+    xet_metric_group_handle_t*
+    );
+
 
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Maximum metric group name string size
@@ -141,6 +158,14 @@ xetMetricGroupGetProperties(
     xet_metric_group_handle_t hMetricGroup,         ///< [in] handle of the metric group
     xet_metric_group_properties_t* pProperties      ///< [out] metric group properties
     );
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief xetMetricGroupGetProperties function-pointer
+typedef xe_result_t (__xecall *xet_pfnMetricGroupGetProperties_t)(
+    xet_metric_group_handle_t,
+    xet_metric_group_properties_t*
+    );
+
 
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Maximum metric name string size
@@ -259,6 +284,15 @@ xetMetricGet(
     );
 
 ///////////////////////////////////////////////////////////////////////////////
+/// @brief xetMetricGet function-pointer
+typedef xe_result_t (__xecall *xet_pfnMetricGet_t)(
+    xet_metric_group_handle_t,
+    uint32_t,
+    xet_metric_handle_t*
+    );
+
+
+///////////////////////////////////////////////////////////////////////////////
 /// @brief Returns metric properties.
 /// 
 /// @details
@@ -278,6 +312,14 @@ xetMetricGetProperties(
     xet_metric_handle_t hMetric,                    ///< [in] handle of the metric
     xet_metric_properties_t* pProperties            ///< [out] metric properties
     );
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief xetMetricGetProperties function-pointer
+typedef xe_result_t (__xecall *xet_pfnMetricGetProperties_t)(
+    xet_metric_handle_t,
+    xet_metric_properties_t*
+    );
+
 
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Calculates counter values from raw data.
@@ -308,6 +350,18 @@ xetMetricGroupCalculateData(
     );
 
 ///////////////////////////////////////////////////////////////////////////////
+/// @brief xetMetricGroupCalculateData function-pointer
+typedef xe_result_t (__xecall *xet_pfnMetricGroupCalculateData_t)(
+    xet_metric_group_handle_t,
+    uint32_t*,
+    uint32_t,
+    uint8_t*,
+    uint32_t,
+    xet_typed_value_t*
+    );
+
+
+///////////////////////////////////////////////////////////////////////////////
 /// @brief Activates metric groups.
 /// 
 /// @details
@@ -331,6 +385,15 @@ xetDeviceActivateMetricGroups(
     uint32_t count,                                 ///< [in] metric group count to activate. 0 to deactivate.
     xet_metric_group_handle_t* phMetricGroups       ///< [in] handles of the metric groups to activate. NULL to deactivate.
     );
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief xetDeviceActivateMetricGroups function-pointer
+typedef xe_result_t (__xecall *xet_pfnDeviceActivateMetricGroups_t)(
+    xe_device_handle_t,
+    uint32_t,
+    xet_metric_group_handle_t*
+    );
+
 
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief API version of ::xet_metric_tracer_desc_t
@@ -381,6 +444,16 @@ xetMetricTracerOpen(
     );
 
 ///////////////////////////////////////////////////////////////////////////////
+/// @brief xetMetricTracerOpen function-pointer
+typedef xe_result_t (__xecall *xet_pfnMetricTracerOpen_t)(
+    xe_device_handle_t,
+    xet_metric_tracer_desc_t*,
+    xe_event_handle_t,
+    xet_metric_tracer_handle_t*
+    );
+
+
+///////////////////////////////////////////////////////////////////////////////
 /// @brief Append metric tracer marker to a given command list.
 /// 
 /// @details
@@ -404,6 +477,15 @@ xetCommandListAppendMetricTracerMarker(
     );
 
 ///////////////////////////////////////////////////////////////////////////////
+/// @brief xetCommandListAppendMetricTracerMarker function-pointer
+typedef xe_result_t (__xecall *xet_pfnCommandListAppendMetricTracerMarker_t)(
+    xe_command_list_handle_t,
+    xet_metric_tracer_handle_t,
+    uint32_t
+    );
+
+
+///////////////////////////////////////////////////////////////////////////////
 /// @brief Closes metric tracer.
 /// 
 /// @details
@@ -422,6 +504,13 @@ __xedllport xe_result_t __xecall
 xetMetricTracerClose(
     xet_metric_tracer_handle_t hMetricTracer        ///< [in] handle of the metric tracer
     );
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief xetMetricTracerClose function-pointer
+typedef xe_result_t (__xecall *xet_pfnMetricTracerClose_t)(
+    xet_metric_tracer_handle_t
+    );
+
 
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Reads data from metric tracer.
@@ -446,6 +535,16 @@ xetMetricTracerReadData(
     uint32_t rawDataSize,                           ///< [in] raw data buffer size
     uint8_t* pRawData                               ///< [in,out] raw data buffer for reports
     );
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief xetMetricTracerReadData function-pointer
+typedef xe_result_t (__xecall *xet_pfnMetricTracerReadData_t)(
+    xet_metric_tracer_handle_t,
+    uint32_t*,
+    uint32_t,
+    uint8_t*
+    );
+
 
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Metric query pool types
@@ -500,6 +599,15 @@ xetMetricQueryPoolCreate(
     );
 
 ///////////////////////////////////////////////////////////////////////////////
+/// @brief xetMetricQueryPoolCreate function-pointer
+typedef xe_result_t (__xecall *xet_pfnMetricQueryPoolCreate_t)(
+    xe_device_handle_t,
+    xet_metric_query_pool_desc_t*,
+    xet_metric_query_pool_handle_t*
+    );
+
+
+///////////////////////////////////////////////////////////////////////////////
 /// @brief Destroys query pool object.
 /// 
 /// @details
@@ -518,6 +626,13 @@ __xedllport xe_result_t __xecall
 xetMetricQueryPoolDestroy(
     xet_metric_query_pool_handle_t hMetricQueryPool ///< [in] handle of the metric query pool
     );
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief xetMetricQueryPoolDestroy function-pointer
+typedef xe_result_t (__xecall *xet_pfnMetricQueryPoolDestroy_t)(
+    xet_metric_query_pool_handle_t
+    );
+
 
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Returns metric query handle from a given metric query pool.
@@ -542,6 +657,15 @@ xetMetricQueryPoolGetMetricQuery(
     );
 
 ///////////////////////////////////////////////////////////////////////////////
+/// @brief xetMetricQueryPoolGetMetricQuery function-pointer
+typedef xe_result_t (__xecall *xet_pfnMetricQueryPoolGetMetricQuery_t)(
+    xet_metric_query_pool_handle_t,
+    uint32_t,
+    xet_metric_query_handle_t*
+    );
+
+
+///////////////////////////////////////////////////////////////////////////////
 /// @brief Appends metric query begin commands to command list.
 /// 
 /// @details
@@ -562,6 +686,14 @@ xetCommandListAppendMetricQueryBegin(
     xe_command_list_handle_t hCommandList,          ///< [in] handle of the command list
     xet_metric_query_handle_t hMetricQuery          ///< [in] handle of the metric query
     );
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief xetCommandListAppendMetricQueryBegin function-pointer
+typedef xe_result_t (__xecall *xet_pfnCommandListAppendMetricQueryBegin_t)(
+    xe_command_list_handle_t,
+    xet_metric_query_handle_t
+    );
+
 
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Appends metric query end commands to command list.
@@ -588,6 +720,15 @@ xetCommandListAppendMetricQueryEnd(
     );
 
 ///////////////////////////////////////////////////////////////////////////////
+/// @brief xetCommandListAppendMetricQueryEnd function-pointer
+typedef xe_result_t (__xecall *xet_pfnCommandListAppendMetricQueryEnd_t)(
+    xe_command_list_handle_t,
+    xet_metric_query_handle_t,
+    xe_event_handle_t
+    );
+
+
+///////////////////////////////////////////////////////////////////////////////
 /// @brief Appends metric query commands to flush all caches.
 /// 
 /// @details
@@ -606,6 +747,13 @@ __xedllport xe_result_t __xecall
 xetCommandListAppendMetricMemoryBarrier(
     xe_command_list_handle_t hCommandList           ///< [in] handle of the command list
     );
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief xetCommandListAppendMetricMemoryBarrier function-pointer
+typedef xe_result_t (__xecall *xet_pfnCommandListAppendMetricMemoryBarrier_t)(
+    xe_command_list_handle_t
+    );
+
 
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Returns raw data for a given metric query slot.
@@ -630,6 +778,16 @@ xetMetricQueryGetData(
     uint32_t rawDataSize,                           ///< [in] raw data size passed by the user
     uint8_t* pRawData                               ///< [in,out] query result data in raw format
     );
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief xetMetricQueryGetData function-pointer
+typedef xe_result_t (__xecall *xet_pfnMetricQueryGetData_t)(
+    xet_metric_query_handle_t,
+    uint32_t*,
+    uint32_t,
+    uint8_t*
+    );
+
 
 #if defined(__cplusplus)
 } // extern "C"

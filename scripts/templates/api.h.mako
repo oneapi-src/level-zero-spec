@@ -120,6 +120,15 @@ ${th.make_func_name(n, tags, obj)}(
     ${line}
     %endfor
     );
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief ${th.make_func_name(n, tags, obj)} function-pointer
+typedef ${x}_result_t (__${x}call *${n}_${th.make_pfn_name(n, tags, obj)}_t)(
+    %for line in th.make_param_lines(n, tags, obj, format=["type", "delim"]):
+    ${line}
+    %endfor
+    );
+
 ## HANDLE #####################################################################
 %elif re.match(r"handle", obj['type']):
 typedef struct _${th.subt(n, tags, obj['name'])} *${th.subt(n, tags, obj['name'])};

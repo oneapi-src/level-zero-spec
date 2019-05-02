@@ -537,6 +537,16 @@ def make_func_name(namespace, tags, obj, cpp=False):
     return subt(namespace, tags, "%s%s"%(cls, obj['name']), cpp=cpp)
 
 """
+    returns the name of a function pointer
+"""
+def make_pfn_name(namespace, tags, obj):
+    newtags = dict()
+    for key, value in tags.items():
+        if re.match(namespace, value):
+            newtags[key] = "pfn"
+    return make_func_name(namespace, newtags, obj)
+
+"""
     returns the name of a class
 """
 def make_class_name(namespace, tags, obj):

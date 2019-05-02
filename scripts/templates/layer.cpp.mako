@@ -37,36 +37,34 @@ from templates import helper as th
 * @endcond
 *
 ******************************************************************************/
-#include "${name}.h"
+#include "${n}_all.h"
+#include "layer.h"
 
-namespace xe_layer
+${n}_apitable_t ${n}_apitable = {};
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Intercepts function pointer table for loaded driver
+bool ${n}Intercept(
+    ${n}_apitable_t* original ) ///< [in] pointer to table of ${n} API function pointers
 {
-    extern context_t context;
+    if(nullptr == original)
+        return false;
 
-    ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Loads function pointer table for loaded driver
-    bool ${n}Intercept(
-        ${n}api_pfntable_ptr_t pfntable )   ///< [in] pointer to table of ${n} API function pointers
-    {
-        if((nullptr == context.${n}api) || (nullptr == pfntable))
-            return false;
+    %for obj in th.extract_objs(specs, r"function"):
+    %if 'condition' in obj:
+    #if ${th.subt(n, tags, obj['condition'])}
+    %endif
+    if( nullptr == original->${th.make_pfn_name(n, tags, obj)} )
+        return false;
+    ${n}_apitable.${th.append_ws(th.make_pfn_name(n, tags, obj), 55)} = original->${th.make_pfn_name(n, tags, obj)};
+    original->${th.append_ws(th.make_pfn_name(n, tags, obj), 55+len(n))} = ${th.make_func_name(n, tags, obj)};
+    %if 'condition' in obj:
+    #endif // ${th.subt(n, tags, obj['condition'])}
+    %endif
 
-        %for obj in th.extract_objs(specs, r"function"):
-        %if 'condition' in obj:
-        #if ${th.subt(n, tags, obj['condition'])}
-        %endif
-        context.${n}api->${th.append_ws(th.make_func_name(n, tags, obj), 59)} = pfntable->${th.make_func_name(n, tags, obj)};
-        pfntable->${th.append_ws(th.make_func_name(n, tags, obj), 62+len(n))} = ${th.make_func_name(n, tags, obj)};
-        %if 'condition' in obj:
-        #endif // ${th.subt(n, tags, obj['condition'])}
-        %endif
-
-        %endfor
-
-        return true;
-    }
-
-} // namespace xe_layer
+    %endfor
+    return true;
+}
 
 
 #if defined(__cplusplus)
@@ -80,10 +78,14 @@ extern "C" {
 %endif
 ${x}_result_t __${x}call
 ${th.make_func_name(n, tags, obj)}(
-        %for line in th.make_param_lines(n, tags, obj):
-        ${line}
-        %endfor
-    ){
+    %for line in th.make_param_lines(n, tags, obj):
+    ${line}
+    %endfor
+    )
+{
+    if( nullptr == ${n}_apitable.${th.make_pfn_name(n, tags, obj)} )
+        return ${X}_RESULT_ERROR_UNINITIALIZED;
+
     // Check parameters
     %for key, values in th.make_param_checks(n, tags, obj).items():
     %for val in values:
@@ -91,7 +93,7 @@ ${th.make_func_name(n, tags, obj)}(
     %endfor
     %endfor
 
-    return xe_layer::context.${n}api->${th.make_func_name(n, tags, obj)}(${", ".join(th.make_param_lines(n, tags, obj, format=["name"]))});
+    return ${n}_apitable.${th.make_pfn_name(n, tags, obj)}( ${", ".join(th.make_param_lines(n, tags, obj, format=["name"]))} );
 }
 %if 'condition' in obj:
 #endif // ${th.subt(n, tags, obj['condition'])}

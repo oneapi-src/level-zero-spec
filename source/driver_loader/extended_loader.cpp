@@ -28,34 +28,30 @@
 * @endcond
 *
 ******************************************************************************/
-#include "extended_loader.h"
+#include "xex_all.h"
+#include "loader.h"
 
-namespace xe_loader
+xex_apitable_t xex_apitable = {};
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Loads function pointer table for loaded driver
+bool xexLoadExports(
+    void* handle )  ///< [in] driver handle
 {
-    extern context_t context;
+    xex_apitable.pfnCommandGraphCreate                                   = (xex_pfnCommandGraphCreate_t)LOAD_FUNCTION_PTR(handle, "xexCommandGraphCreate");
+    if( nullptr == xex_apitable.pfnCommandGraphCreate )
+        return false;
 
-    ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Loads function pointer table for loaded driver
-    bool xexLoadExports(
-        void* handle )  ///< [in] driver handle
-    {
-        if(nullptr == context.xexapi)
-            return false;
+    xex_apitable.pfnCommandGraphDestroy                                  = (xex_pfnCommandGraphDestroy_t)LOAD_FUNCTION_PTR(handle, "xexCommandGraphDestroy");
+    if( nullptr == xex_apitable.pfnCommandGraphDestroy )
+        return false;
 
-        context.xexapi->xexCommandGraphCreate                                           = (pfn_xexCommandGraphCreate_t)LOAD_FUNCTION_PTR(handle, "xexCommandGraphCreate");
-        context.xexapi->xexCommandGraphDestroy                                          = (pfn_xexCommandGraphDestroy_t)LOAD_FUNCTION_PTR(handle, "xexCommandGraphDestroy");
-        context.xexapi->xexCommandGraphClose                                            = (pfn_xexCommandGraphClose_t)LOAD_FUNCTION_PTR(handle, "xexCommandGraphClose");
+    xex_apitable.pfnCommandGraphClose                                    = (xex_pfnCommandGraphClose_t)LOAD_FUNCTION_PTR(handle, "xexCommandGraphClose");
+    if( nullptr == xex_apitable.pfnCommandGraphClose )
+        return false;
 
-        if(nullptr == context.xexapi->xexCommandGraphCreate)
-            return false;
-        if(nullptr == context.xexapi->xexCommandGraphDestroy)
-            return false;
-        if(nullptr == context.xexapi->xexCommandGraphClose)
-            return false;
-
-        return true;
-    }
-} // namespace xe_loader
+    return true;
+}
 
 
 #if defined(__cplusplus)
@@ -65,36 +61,39 @@ extern "C" {
 ///////////////////////////////////////////////////////////////////////////////
 __xedllexport xe_result_t __xecall
 xexCommandGraphCreate(
-        xe_device_handle_t hDevice,                     ///< [in] handle of the device object
-        const xex_command_graph_desc_t* desc,           ///< [in] pointer to command graph descriptor
-        xex_command_graph_handle_t* phCommandGraph      ///< [out] pointer to handle of command graph object created
-    ){
-    if(false == xe_loader::context.initialized)
+    xe_device_handle_t hDevice,                     ///< [in] handle of the device object
+    const xex_command_graph_desc_t* desc,           ///< [in] pointer to command graph descriptor
+    xex_command_graph_handle_t* phCommandGraph      ///< [out] pointer to handle of command graph object created
+    )
+{
+    if( nullptr == xex_apitable.pfnCommandGraphCreate )
         return XE_RESULT_ERROR_UNINITIALIZED;
 
-    return xe_loader::context.xexapi->xexCommandGraphCreate(hDevice, desc, phCommandGraph);
+    return xex_apitable.pfnCommandGraphCreate( hDevice, desc, phCommandGraph );
 }
 
 ///////////////////////////////////////////////////////////////////////////////
 __xedllexport xe_result_t __xecall
 xexCommandGraphDestroy(
-        xex_command_graph_handle_t hCommandGraph        ///< [in] handle of command graph object to destroy
-    ){
-    if(false == xe_loader::context.initialized)
+    xex_command_graph_handle_t hCommandGraph        ///< [in] handle of command graph object to destroy
+    )
+{
+    if( nullptr == xex_apitable.pfnCommandGraphDestroy )
         return XE_RESULT_ERROR_UNINITIALIZED;
 
-    return xe_loader::context.xexapi->xexCommandGraphDestroy(hCommandGraph);
+    return xex_apitable.pfnCommandGraphDestroy( hCommandGraph );
 }
 
 ///////////////////////////////////////////////////////////////////////////////
 __xedllexport xe_result_t __xecall
 xexCommandGraphClose(
-        xex_command_graph_handle_t hCommandGraph        ///< [in] handle of command graph object to close
-    ){
-    if(false == xe_loader::context.initialized)
+    xex_command_graph_handle_t hCommandGraph        ///< [in] handle of command graph object to close
+    )
+{
+    if( nullptr == xex_apitable.pfnCommandGraphClose )
         return XE_RESULT_ERROR_UNINITIALIZED;
 
-    return xe_loader::context.xexapi->xexCommandGraphClose(hCommandGraph);
+    return xex_apitable.pfnCommandGraphClose( hCommandGraph );
 }
 
 #if defined(__cplusplus)

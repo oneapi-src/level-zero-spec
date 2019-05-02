@@ -25,43 +25,37 @@
 *
 ******************************************************************************/
 #include "layer.h"
-#include "core_layer.h"
-#include "extended_layer.h"
-#include "tools_layer.h"
-
-namespace xe_layer
-{
-    ///////////////////////////////////////////////////////////////////////////////
-    xeapi_pfntable_t  xeapi_pfntable = {};
-    xexapi_pfntable_t xexapi_pfntable = {};
-    xetapi_pfntable_t xetapi_pfntable = {};
-
-    ///////////////////////////////////////////////////////////////////////////////
-    context_t context = {
-        &xeapi_pfntable,    // xeapi
-        &xexapi_pfntable,   // xexapi
-        &xetapi_pfntable    // xetapi
-    };
-
-} // namespace xe_layer
+#include "xe_all.h"
+#include "xex_all.h"
+#include "xet_all.h"
 
 ///////////////////////////////////////////////////////////////////////////////
+extern xe_apitable_t xe_apitable;
+extern xex_apitable_t xex_apitable;
+extern xet_apitable_t xet_apitable;
+
+bool xeIntercept( xe_apitable_t* );
+bool xexIntercept( xex_apitable_t* );
+bool xetIntercept( xet_apitable_t* );
+
+
 #if defined(__cplusplus)
 extern "C" {
 #endif
 
+///////////////////////////////////////////////////////////////////////////////
 __xedllexport xe_result_t __xecall
 xeInitLayer(
-    xeapi_pfntable_ptr_t   xeapi,
-    xexapi_pfntable_ptr_t  xexapi,
-    xetapi_pfntable_ptr_t  xetapi ){
-
+    xe_apitable_t*  xeapi,
+    xex_apitable_t* xexapi,
+    xet_apitable_t* xetapi )
+{
     bool initialized = 
-        xe_layer::xeIntercept(xeapi) &&
-        xe_layer::xexIntercept(xexapi) &&
-        xe_layer::xetIntercept(xetapi);
+        xeIntercept(xeapi) &&
+        xexIntercept(xexapi) &&
+        xetIntercept(xetapi);
             
-    if(false == initialized)
+    if( !initialized )
         return XE_RESULT_ERROR_UNINITIALIZED;
 
     return XE_RESULT_SUCCESS;

@@ -30,6 +30,5 @@ def generate(section, namespace, tags, specs):
     util.makePath(dstpath)
 
     loc = 0
-    loc += generate_code(dstpath, section, namespace, tags, specs, ".h")
     loc += generate_code(dstpath, section, namespace, tags, specs, ".cpp")
     return loc

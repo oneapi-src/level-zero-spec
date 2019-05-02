@@ -1,5 +1,6 @@
 <%
 import re
+from templates import helper as th
 %><%
     n=namespace
     N=n.upper()
@@ -43,5 +44,19 @@ import re
 #include "${f}"
 %endif
 %endfor
+
+///////////////////////////////////////////////////////////////////////////////
+typedef struct _${n}_apitable_t
+{
+    %for obj in th.extract_objs(specs, r"function"):
+    %if 'condition' in obj:
+    #if ${th.subt(n, tags, obj['condition'])}
+    %endif
+    ${n}_${th.append_ws(th.make_pfn_name(n, tags, obj)+"_t", 47)} ${th.make_pfn_name(n, tags, obj)};
+    %if 'condition' in obj:
+    #endif // ${th.subt(n, tags, obj['condition'])}
+    %endif
+    %endfor
+} ${n}_apitable_t;
 
 #endif // _${N}_ALL_H

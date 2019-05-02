@@ -79,6 +79,13 @@ xeInit(
     );
 
 ///////////////////////////////////////////////////////////////////////////////
+/// @brief xeInit function-pointer
+typedef xe_result_t (__xecall *xe_pfnInit_t)(
+    xe_init_flag_t
+    );
+
+
+///////////////////////////////////////////////////////////////////////////////
 /// @brief Returns the current version of the installed driver.
 /// 
 /// @details
@@ -102,6 +109,13 @@ __xedllport xe_result_t __xecall
 xeGetDriverVersion(
     uint32_t* version                               ///< [out] driver version
     );
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief xeGetDriverVersion function-pointer
+typedef xe_result_t (__xecall *xe_pfnGetDriverVersion_t)(
+    uint32_t*
+    );
+
 
 #if defined(__cplusplus)
 } // extern "C"
