@@ -166,8 +166,8 @@ The following section provides high-level driver architecture.
 @image latex intro_driver.png
 
 ## Driver Loader
-The Level-Zero driver(s) are loaded using a _xe_vendor_loader.dll_ (windows) / _xe_vendor_loader.so_ (linux), which is copied on the system during installation of the device driver;
-where _vendor_ is a name chosen by the device vendor.  For Intel GPUs, the name would be _xe_intc_loader_.
+The Level-Zero API is statically linked with the application using the _xe_api.lib_ (windows) or _xe_api.a_ (linux).
+The static library implements the driver loader.
 
 The loader initiates the loading of the driver(s) and layer(s).
 The loader exports all API functions to the application; which internally map to a per-process function pointer table.
@@ -184,12 +184,14 @@ Thus, the loader's internal function pointer table entries may point to:
     + or any combination of the above
 
 ## Common Driver
-The common driver determines which other device drivers need to be loaded, based on which device types are present in the system.
+The Level-Zero common driver determines which other device drivers need to be loaded, based on which device types are present in the system.
 The common driver may be bypassed entirely if there is only one device driver needed.
 If the common driver is required, then it may implement specific APIs (such as memory allocation) and use private DDIs for notifying device drivers of these events.
 
-## Device Driver
-The device driver(s) implement device-specific APIs.
+## Device Drivers
+The Level-Zero device driver(s) are loaded using a _xe_vendor_type.dll_ (windows) / _xe_vendor_type.so_ (linux);
+where _vendor_ and _type_ are names chosen by the device vendor.
+For example, Intel GPUs use the name: "xe_intc_gpu".
 
 ## <a name="v0">Validation Layer</a>
 The validation layer provides an optional capability for application developers to enable additional API validation while maintaining minimal driver implementation overhead.
