@@ -547,6 +547,16 @@ def make_pfn_name(namespace, tags, obj):
     return make_func_name(namespace, newtags, obj)
 
 """
+    returns the name of a function pointer
+"""
+def make_pfn_type(namespace, tags, obj):
+    newtags = dict()
+    for key, value in tags.items():
+        if re.match(namespace, value):
+            newtags[key] = "pfn"
+    return "%s_%s_t"%(namespace, make_func_name(namespace, newtags, obj))
+
+"""
     returns the name of a class
 """
 def make_class_name(namespace, tags, obj):

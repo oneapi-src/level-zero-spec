@@ -34,7 +34,7 @@
 #define _XEX_COMMON_INL
 #if defined(__cplusplus)
 #pragma once
-#include "xex_all.h"
+#include "xex_api.h"
 
 namespace xex
 {

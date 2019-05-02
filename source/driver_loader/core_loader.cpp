@@ -28,7 +28,7 @@
 * @endcond
 *
 ******************************************************************************/
-#include "xe_all.h"
+#include "xe_ddi.h"
 #include "loader.h"
 
 xe_apitable_t xe_apitable = {};
@@ -433,7 +433,7 @@ extern "C" {
 #endif
 
 ///////////////////////////////////////////////////////////////////////////////
-__xedllexport xe_result_t __xecall
+xe_result_t __xecall
 xeCommandListAppendBarrier(
     xe_command_list_handle_t hCommandList,          ///< [in] handle of the command list
     xe_event_handle_t hSignalEvent,                 ///< [in][optional] handle of the event to signal on completion
@@ -449,7 +449,7 @@ xeCommandListAppendBarrier(
 }
 
 ///////////////////////////////////////////////////////////////////////////////
-__xedllexport xe_result_t __xecall
+xe_result_t __xecall
 xeCommandListAppendMemoryRangesBarrier(
     xe_command_list_handle_t hCommandList,          ///< [in] handle of the command list
     uint32_t numRanges,                             ///< [in] number of memory ranges
@@ -468,7 +468,7 @@ xeCommandListAppendMemoryRangesBarrier(
 }
 
 ///////////////////////////////////////////////////////////////////////////////
-__xedllexport xe_result_t __xecall
+xe_result_t __xecall
 xeDeviceSystemBarrier(
     xe_device_handle_t hDevice                      ///< [in] handle of the device
     )
@@ -481,7 +481,7 @@ xeDeviceSystemBarrier(
 
 ///////////////////////////////////////////////////////////////////////////////
 #if XE_ENABLE_OCL_INTEROP
-__xedllexport xe_result_t __xecall
+xe_result_t __xecall
 xeDeviceRegisterCLMemory(
     xe_device_handle_t hDevice,                     ///< [in] handle to the device
     cl_context context,                             ///< [in] the OpenCL context that created the memory
@@ -498,7 +498,7 @@ xeDeviceRegisterCLMemory(
 
 ///////////////////////////////////////////////////////////////////////////////
 #if XE_ENABLE_OCL_INTEROP
-__xedllexport xe_result_t __xecall
+xe_result_t __xecall
 xeDeviceRegisterCLProgram(
     xe_device_handle_t hDevice,                     ///< [in] handle to the device
     cl_context context,                             ///< [in] the OpenCL context that created the program
@@ -515,7 +515,7 @@ xeDeviceRegisterCLProgram(
 
 ///////////////////////////////////////////////////////////////////////////////
 #if XE_ENABLE_OCL_INTEROP
-__xedllexport xe_result_t __xecall
+xe_result_t __xecall
 xeDeviceRegisterCLCommandQueue(
     xe_device_handle_t hDevice,                     ///< [in] handle to the device
     cl_context context,                             ///< [in] the OpenCL context that created the command queue
@@ -531,7 +531,7 @@ xeDeviceRegisterCLCommandQueue(
 #endif // XE_ENABLE_OCL_INTEROP
 
 ///////////////////////////////////////////////////////////////////////////////
-__xedllexport xe_result_t __xecall
+xe_result_t __xecall
 xeCommandListCreate(
     xe_device_handle_t hDevice,                     ///< [in] handle of the device object
     const xe_command_list_desc_t* desc,             ///< [in] pointer to command list descriptor
@@ -545,7 +545,7 @@ xeCommandListCreate(
 }
 
 ///////////////////////////////////////////////////////////////////////////////
-__xedllexport xe_result_t __xecall
+xe_result_t __xecall
 xeCommandListCreateImmediate(
     xe_device_handle_t hDevice,                     ///< [in] handle of the device object
     const xe_command_queue_desc_t* desc,            ///< [in] pointer to command queue descriptor
@@ -559,7 +559,7 @@ xeCommandListCreateImmediate(
 }
 
 ///////////////////////////////////////////////////////////////////////////////
-__xedllexport xe_result_t __xecall
+xe_result_t __xecall
 xeCommandListDestroy(
     xe_command_list_handle_t hCommandList           ///< [in] handle of command list object to destroy
     )
@@ -571,7 +571,7 @@ xeCommandListDestroy(
 }
 
 ///////////////////////////////////////////////////////////////////////////////
-__xedllexport xe_result_t __xecall
+xe_result_t __xecall
 xeCommandListClose(
     xe_command_list_handle_t hCommandList           ///< [in] handle of command list object to close
     )
@@ -583,7 +583,7 @@ xeCommandListClose(
 }
 
 ///////////////////////////////////////////////////////////////////////////////
-__xedllexport xe_result_t __xecall
+xe_result_t __xecall
 xeCommandListReset(
     xe_command_list_handle_t hCommandList           ///< [in] handle of command list object to reset
     )
@@ -595,7 +595,7 @@ xeCommandListReset(
 }
 
 ///////////////////////////////////////////////////////////////////////////////
-__xedllexport xe_result_t __xecall
+xe_result_t __xecall
 xeCommandListSetParameter(
     xe_command_list_handle_t hCommandList,          ///< [in] handle of command list
     xe_command_list_parameter_t parameter,          ///< [in] parameter to change
@@ -609,7 +609,7 @@ xeCommandListSetParameter(
 }
 
 ///////////////////////////////////////////////////////////////////////////////
-__xedllexport xe_result_t __xecall
+xe_result_t __xecall
 xeCommandListGetParameter(
     xe_command_list_handle_t hCommandList,          ///< [in] handle of command list
     xe_command_list_parameter_t parameter,          ///< [in] parameter to retrieve
@@ -623,7 +623,7 @@ xeCommandListGetParameter(
 }
 
 ///////////////////////////////////////////////////////////////////////////////
-__xedllexport xe_result_t __xecall
+xe_result_t __xecall
 xeCommandListResetParameters(
     xe_command_list_handle_t hCommandList           ///< [in] handle of the command list
     )
@@ -635,7 +635,7 @@ xeCommandListResetParameters(
 }
 
 ///////////////////////////////////////////////////////////////////////////////
-__xedllexport xe_result_t __xecall
+xe_result_t __xecall
 xeCommandListReserveSpace(
     xe_command_list_handle_t hCommandList,          ///< [in] handle of the command list
     size_t size,                                    ///< [in] size (in bytes) to reserve
@@ -649,7 +649,7 @@ xeCommandListReserveSpace(
 }
 
 ///////////////////////////////////////////////////////////////////////////////
-__xedllexport xe_result_t __xecall
+xe_result_t __xecall
 xeCommandQueueCreate(
     xe_device_handle_t hDevice,                     ///< [in] handle of the device object
     const xe_command_queue_desc_t* desc,            ///< [in] pointer to command queue descriptor
@@ -663,7 +663,7 @@ xeCommandQueueCreate(
 }
 
 ///////////////////////////////////////////////////////////////////////////////
-__xedllexport xe_result_t __xecall
+xe_result_t __xecall
 xeCommandQueueDestroy(
     xe_command_queue_handle_t hCommandQueue         ///< [in] handle of command queue object to destroy
     )
@@ -675,7 +675,7 @@ xeCommandQueueDestroy(
 }
 
 ///////////////////////////////////////////////////////////////////////////////
-__xedllexport xe_result_t __xecall
+xe_result_t __xecall
 xeCommandQueueExecuteCommandLists(
     xe_command_queue_handle_t hCommandQueue,        ///< [in] handle of the command queue
     uint32_t numCommandLists,                       ///< [in] number of command lists to execute
@@ -690,7 +690,7 @@ xeCommandQueueExecuteCommandLists(
 }
 
 ///////////////////////////////////////////////////////////////////////////////
-__xedllexport xe_result_t __xecall
+xe_result_t __xecall
 xeCommandQueueSynchronize(
     xe_command_queue_handle_t hCommandQueue,        ///< [in] handle of the command queue
     uint32_t timeout                                ///< [in] if non-zero, then indicates the maximum time to yield before
@@ -707,7 +707,7 @@ xeCommandQueueSynchronize(
 }
 
 ///////////////////////////////////////////////////////////////////////////////
-__xedllexport xe_result_t __xecall
+xe_result_t __xecall
 xeCommandListAppendMemoryCopy(
     xe_command_list_handle_t hCommandList,          ///< [in] handle of command list
     void* dstptr,                                   ///< [in] pointer to destination memory to copy to
@@ -725,7 +725,7 @@ xeCommandListAppendMemoryCopy(
 }
 
 ///////////////////////////////////////////////////////////////////////////////
-__xedllexport xe_result_t __xecall
+xe_result_t __xecall
 xeCommandListAppendMemorySet(
     xe_command_list_handle_t hCommandList,          ///< [in] handle of command list
     void* ptr,                                      ///< [in] pointer to memory to initialize
@@ -743,7 +743,7 @@ xeCommandListAppendMemorySet(
 }
 
 ///////////////////////////////////////////////////////////////////////////////
-__xedllexport xe_result_t __xecall
+xe_result_t __xecall
 xeCommandListAppendImageCopy(
     xe_command_list_handle_t hCommandList,          ///< [in] handle of command list
     xe_image_handle_t hDstImage,                    ///< [in] handle of destination image to copy to
@@ -760,7 +760,7 @@ xeCommandListAppendImageCopy(
 }
 
 ///////////////////////////////////////////////////////////////////////////////
-__xedllexport xe_result_t __xecall
+xe_result_t __xecall
 xeCommandListAppendImageCopyRegion(
     xe_command_list_handle_t hCommandList,          ///< [in] handle of command list
     xe_image_handle_t hDstImage,                    ///< [in] handle of destination image to copy to
@@ -779,7 +779,7 @@ xeCommandListAppendImageCopyRegion(
 }
 
 ///////////////////////////////////////////////////////////////////////////////
-__xedllexport xe_result_t __xecall
+xe_result_t __xecall
 xeCommandListAppendImageCopyToMemory(
     xe_command_list_handle_t hCommandList,          ///< [in] handle of command list
     void* dstptr,                                   ///< [in] pointer to destination memory to copy to
@@ -797,7 +797,7 @@ xeCommandListAppendImageCopyToMemory(
 }
 
 ///////////////////////////////////////////////////////////////////////////////
-__xedllexport xe_result_t __xecall
+xe_result_t __xecall
 xeCommandListAppendImageCopyFromMemory(
     xe_command_list_handle_t hCommandList,          ///< [in] handle of command list
     xe_image_handle_t hDstImage,                    ///< [in] handle of destination image to copy to
@@ -815,7 +815,7 @@ xeCommandListAppendImageCopyFromMemory(
 }
 
 ///////////////////////////////////////////////////////////////////////////////
-__xedllexport xe_result_t __xecall
+xe_result_t __xecall
 xeCommandListAppendMemoryPrefetch(
     xe_command_list_handle_t hCommandList,          ///< [in] handle of command list
     const void* ptr,                                ///< [in] pointer to start of the memory range to prefetch
@@ -829,7 +829,7 @@ xeCommandListAppendMemoryPrefetch(
 }
 
 ///////////////////////////////////////////////////////////////////////////////
-__xedllexport xe_result_t __xecall
+xe_result_t __xecall
 xeCommandListAppendMemAdvise(
     xe_command_list_handle_t hCommandList,          ///< [in] handle of command list
     xe_device_handle_t hDevice,                     ///< [in] device associated with the memory advice
@@ -845,7 +845,7 @@ xeCommandListAppendMemAdvise(
 }
 
 ///////////////////////////////////////////////////////////////////////////////
-__xedllexport xe_result_t __xecall
+xe_result_t __xecall
 xeDeviceGetCount(
     uint32_t* count                                 ///< [out] number of devices available
     )
@@ -857,7 +857,7 @@ xeDeviceGetCount(
 }
 
 ///////////////////////////////////////////////////////////////////////////////
-__xedllexport xe_result_t __xecall
+xe_result_t __xecall
 xeDeviceGet(
     uint32_t ordinal,                               ///< [in] The device index in the range of [0, ::xeDeviceGetCount]
     xe_device_handle_t* phDevice                    ///< [out] pointer to handle of device object created
@@ -870,7 +870,7 @@ xeDeviceGet(
 }
 
 ///////////////////////////////////////////////////////////////////////////////
-__xedllexport xe_result_t __xecall
+xe_result_t __xecall
 xeDeviceGetSubDevice(
     xe_device_handle_t hDevice,                     ///< [in] handle of the device object
     uint32_t ordinal,                               ///< [in] ordinal of sub-device to retrieve
@@ -884,7 +884,7 @@ xeDeviceGetSubDevice(
 }
 
 ///////////////////////////////////////////////////////////////////////////////
-__xedllexport xe_result_t __xecall
+xe_result_t __xecall
 xeDeviceGetApiVersion(
     xe_device_handle_t hDevice,                     ///< [in] handle of the device object
     xe_api_version_t* version                       ///< [out] api version
@@ -897,7 +897,7 @@ xeDeviceGetApiVersion(
 }
 
 ///////////////////////////////////////////////////////////////////////////////
-__xedllexport xe_result_t __xecall
+xe_result_t __xecall
 xeDeviceGetProperties(
     xe_device_handle_t hDevice,                     ///< [in] handle of the device object
     xe_device_properties_t* pDeviceProperties       ///< [out] query result for device properties
@@ -910,7 +910,7 @@ xeDeviceGetProperties(
 }
 
 ///////////////////////////////////////////////////////////////////////////////
-__xedllexport xe_result_t __xecall
+xe_result_t __xecall
 xeDeviceGetComputeProperties(
     xe_device_handle_t hDevice,                     ///< [in] handle of the device object
     xe_device_compute_properties_t* pComputeProperties  ///< [out] query result for compute properties
@@ -923,7 +923,7 @@ xeDeviceGetComputeProperties(
 }
 
 ///////////////////////////////////////////////////////////////////////////////
-__xedllexport xe_result_t __xecall
+xe_result_t __xecall
 xeDeviceGetMemoryProperties(
     xe_device_handle_t hDevice,                     ///< [in] handle of the device object
     xe_device_memory_properties_t* pMemProperties   ///< [out] query result for compute properties
@@ -936,7 +936,7 @@ xeDeviceGetMemoryProperties(
 }
 
 ///////////////////////////////////////////////////////////////////////////////
-__xedllexport xe_result_t __xecall
+xe_result_t __xecall
 xeDeviceGetP2PProperties(
     xe_device_handle_t hDevice,                     ///< [in] handle of the device performing the access
     xe_device_handle_t hPeerDevice,                 ///< [in] handle of the peer device with the allocation
@@ -950,7 +950,7 @@ xeDeviceGetP2PProperties(
 }
 
 ///////////////////////////////////////////////////////////////////////////////
-__xedllexport xe_result_t __xecall
+xe_result_t __xecall
 xeDeviceCanAccessPeer(
     xe_device_handle_t hDevice,                     ///< [in] handle of the device performing the access
     xe_device_handle_t hPeerDevice,                 ///< [in] handle of the peer device with the allocation
@@ -964,7 +964,7 @@ xeDeviceCanAccessPeer(
 }
 
 ///////////////////////////////////////////////////////////////////////////////
-__xedllexport xe_result_t __xecall
+xe_result_t __xecall
 xeDeviceSetIntermediateCacheConfig(
     xe_device_handle_t hDevice,                     ///< [in] handle of the device 
     xe_cache_config_t CacheConfig                   ///< [in] CacheConfig
@@ -977,7 +977,7 @@ xeDeviceSetIntermediateCacheConfig(
 }
 
 ///////////////////////////////////////////////////////////////////////////////
-__xedllexport xe_result_t __xecall
+xe_result_t __xecall
 xeDeviceSetLastLevelCacheConfig(
     xe_device_handle_t hDevice,                     ///< [in] handle of the device 
     xe_cache_config_t CacheConfig                   ///< [in] CacheConfig
@@ -991,7 +991,7 @@ xeDeviceSetLastLevelCacheConfig(
 
 
 ///////////////////////////////////////////////////////////////////////////////
-__xedllexport xe_result_t __xecall
+xe_result_t __xecall
 xeGetDriverVersion(
     uint32_t* version                               ///< [out] driver version
     )
@@ -1003,7 +1003,7 @@ xeGetDriverVersion(
 }
 
 ///////////////////////////////////////////////////////////////////////////////
-__xedllexport xe_result_t __xecall
+xe_result_t __xecall
 xeEventPoolCreate(
     xe_device_handle_t hDevice,                     ///< [in] handle of the device
     const xe_event_pool_desc_t* desc,               ///< [in] pointer to event pool descriptor
@@ -1017,7 +1017,7 @@ xeEventPoolCreate(
 }
 
 ///////////////////////////////////////////////////////////////////////////////
-__xedllexport xe_result_t __xecall
+xe_result_t __xecall
 xeEventPoolDestroy(
     xe_event_pool_handle_t hEventPool               ///< [in] handle of event pool object to destroy
     )
@@ -1029,7 +1029,7 @@ xeEventPoolDestroy(
 }
 
 ///////////////////////////////////////////////////////////////////////////////
-__xedllexport xe_result_t __xecall
+xe_result_t __xecall
 xeEventCreate(
     xe_event_pool_handle_t hEventPool,              ///< [in] handle of the event pool
     const xe_event_desc_t* desc,                    ///< [in] pointer to event descriptor
@@ -1043,7 +1043,7 @@ xeEventCreate(
 }
 
 ///////////////////////////////////////////////////////////////////////////////
-__xedllexport xe_result_t __xecall
+xe_result_t __xecall
 xeEventDestroy(
     xe_event_handle_t hEvent                        ///< [in] handle of event object to destroy
     )
@@ -1055,7 +1055,7 @@ xeEventDestroy(
 }
 
 ///////////////////////////////////////////////////////////////////////////////
-__xedllexport xe_result_t __xecall
+xe_result_t __xecall
 xeEventPoolGetIpcHandle(
     xe_event_pool_handle_t hEventPool,              ///< [in] handle of event pool object
     xe_ipc_event_pool_handle_t* phIpc               ///< [out] Returned IPC event handle
@@ -1068,7 +1068,7 @@ xeEventPoolGetIpcHandle(
 }
 
 ///////////////////////////////////////////////////////////////////////////////
-__xedllexport xe_result_t __xecall
+xe_result_t __xecall
 xeEventPoolOpenIpcHandle(
     xe_device_handle_t hDevice,                     ///< [in] handle of the device to associate with the IPC event pool handle
     xe_ipc_event_pool_handle_t hIpc,                ///< [in] IPC event handle
@@ -1082,7 +1082,7 @@ xeEventPoolOpenIpcHandle(
 }
 
 ///////////////////////////////////////////////////////////////////////////////
-__xedllexport xe_result_t __xecall
+xe_result_t __xecall
 xeEventPoolCloseIpcHandle(
     xe_event_pool_handle_t hEventPool               ///< [in] handle of event pool object
     )
@@ -1094,7 +1094,7 @@ xeEventPoolCloseIpcHandle(
 }
 
 ///////////////////////////////////////////////////////////////////////////////
-__xedllexport xe_result_t __xecall
+xe_result_t __xecall
 xeCommandListAppendSignalEvent(
     xe_command_list_handle_t hCommandList,          ///< [in] handle of the command list
     xe_event_handle_t hEvent                        ///< [in] handle of the event
@@ -1107,7 +1107,7 @@ xeCommandListAppendSignalEvent(
 }
 
 ///////////////////////////////////////////////////////////////////////////////
-__xedllexport xe_result_t __xecall
+xe_result_t __xecall
 xeCommandListAppendWaitOnEvents(
     xe_command_list_handle_t hCommandList,          ///< [in] handle of the command list
     uint32_t numEvents,                             ///< [in] number of events to wait on before continuing
@@ -1121,7 +1121,7 @@ xeCommandListAppendWaitOnEvents(
 }
 
 ///////////////////////////////////////////////////////////////////////////////
-__xedllexport xe_result_t __xecall
+xe_result_t __xecall
 xeEventHostSignal(
     xe_event_handle_t hEvent                        ///< [in] handle of the event
     )
@@ -1133,7 +1133,7 @@ xeEventHostSignal(
 }
 
 ///////////////////////////////////////////////////////////////////////////////
-__xedllexport xe_result_t __xecall
+xe_result_t __xecall
 xeEventHostSynchronize(
     xe_event_handle_t hEvent,                       ///< [in] handle of the event
     uint32_t timeout                                ///< [in] if non-zero, then indicates the maximum time to yield before
@@ -1150,7 +1150,7 @@ xeEventHostSynchronize(
 }
 
 ///////////////////////////////////////////////////////////////////////////////
-__xedllexport xe_result_t __xecall
+xe_result_t __xecall
 xeEventQueryStatus(
     xe_event_handle_t hEvent                        ///< [in] handle of the event
     )
@@ -1162,7 +1162,7 @@ xeEventQueryStatus(
 }
 
 ///////////////////////////////////////////////////////////////////////////////
-__xedllexport xe_result_t __xecall
+xe_result_t __xecall
 xeCommandListAppendEventReset(
     xe_command_list_handle_t hCommandList,          ///< [in] handle of the command list
     xe_event_handle_t hEvent                        ///< [in] handle of the event
@@ -1175,7 +1175,7 @@ xeCommandListAppendEventReset(
 }
 
 ///////////////////////////////////////////////////////////////////////////////
-__xedllexport xe_result_t __xecall
+xe_result_t __xecall
 xeEventReset(
     xe_event_handle_t hEvent                        ///< [in] handle of the event
     )
@@ -1187,7 +1187,7 @@ xeEventReset(
 }
 
 ///////////////////////////////////////////////////////////////////////////////
-__xedllexport xe_result_t __xecall
+xe_result_t __xecall
 xeFenceCreate(
     xe_command_queue_handle_t hCommandQueue,        ///< [in] handle of command queue
     const xe_fence_desc_t* desc,                    ///< [in] pointer to fence descriptor
@@ -1201,7 +1201,7 @@ xeFenceCreate(
 }
 
 ///////////////////////////////////////////////////////////////////////////////
-__xedllexport xe_result_t __xecall
+xe_result_t __xecall
 xeFenceDestroy(
     xe_fence_handle_t hFence                        ///< [in] handle of fence object to destroy
     )
@@ -1213,7 +1213,7 @@ xeFenceDestroy(
 }
 
 ///////////////////////////////////////////////////////////////////////////////
-__xedllexport xe_result_t __xecall
+xe_result_t __xecall
 xeFenceHostSynchronize(
     xe_fence_handle_t hFence,                       ///< [in] handle of the fence
     uint32_t timeout                                ///< [in] if non-zero, then indicates the maximum time to yield before
@@ -1230,7 +1230,7 @@ xeFenceHostSynchronize(
 }
 
 ///////////////////////////////////////////////////////////////////////////////
-__xedllexport xe_result_t __xecall
+xe_result_t __xecall
 xeFenceQueryStatus(
     xe_fence_handle_t hFence                        ///< [in] handle of the fence
     )
@@ -1242,7 +1242,7 @@ xeFenceQueryStatus(
 }
 
 ///////////////////////////////////////////////////////////////////////////////
-__xedllexport xe_result_t __xecall
+xe_result_t __xecall
 xeFenceReset(
     xe_fence_handle_t hFence                        ///< [in] handle of the fence
     )
@@ -1254,7 +1254,7 @@ xeFenceReset(
 }
 
 ///////////////////////////////////////////////////////////////////////////////
-__xedllexport xe_result_t __xecall
+xe_result_t __xecall
 xeImageGetProperties(
     xe_device_handle_t hDevice,                     ///< [in] handle of the device
     const xe_image_desc_t* desc,                    ///< [in] pointer to image descriptor
@@ -1268,7 +1268,7 @@ xeImageGetProperties(
 }
 
 ///////////////////////////////////////////////////////////////////////////////
-__xedllexport xe_result_t __xecall
+xe_result_t __xecall
 xeImageCreate(
     xe_device_handle_t hDevice,                     ///< [in] handle of the device
     const xe_image_desc_t* desc,                    ///< [in] pointer to image descriptor
@@ -1282,7 +1282,7 @@ xeImageCreate(
 }
 
 ///////////////////////////////////////////////////////////////////////////////
-__xedllexport xe_result_t __xecall
+xe_result_t __xecall
 xeImageDestroy(
     xe_image_handle_t hImage                        ///< [in] handle of image object to destroy
     )
@@ -1294,7 +1294,7 @@ xeImageDestroy(
 }
 
 ///////////////////////////////////////////////////////////////////////////////
-__xedllexport xe_result_t __xecall
+xe_result_t __xecall
 xeSharedMemAlloc(
     xe_device_handle_t hDevice,                     ///< [in] handle of the device
     xe_device_mem_alloc_flag_t device_flags,        ///< [in] flags specifying additional device allocation controls
@@ -1311,7 +1311,7 @@ xeSharedMemAlloc(
 }
 
 ///////////////////////////////////////////////////////////////////////////////
-__xedllexport xe_result_t __xecall
+xe_result_t __xecall
 xeMemAlloc(
     xe_device_handle_t hDevice,                     ///< [in] handle of the device
     xe_device_mem_alloc_flag_t flags,               ///< [in] flags specifying additional allocation controls
@@ -1327,7 +1327,7 @@ xeMemAlloc(
 }
 
 ///////////////////////////////////////////////////////////////////////////////
-__xedllexport xe_result_t __xecall
+xe_result_t __xecall
 xeHostMemAlloc(
     xe_host_mem_alloc_flag_t flags,                 ///< [in] flags specifying additional allocation controls
     size_t size,                                    ///< [in] size in bytes to allocate
@@ -1342,7 +1342,7 @@ xeHostMemAlloc(
 }
 
 ///////////////////////////////////////////////////////////////////////////////
-__xedllexport xe_result_t __xecall
+xe_result_t __xecall
 xeMemFree(
     const void* ptr                                 ///< [in] pointer to memory to free
     )
@@ -1354,7 +1354,7 @@ xeMemFree(
 }
 
 ///////////////////////////////////////////////////////////////////////////////
-__xedllexport xe_result_t __xecall
+xe_result_t __xecall
 xeMemGetProperties(
     const void* ptr,                                ///< [in] Pointer to query
     xe_memory_allocation_properties_t* pMemProperties   ///< [out] Query result for memory allocation properties
@@ -1367,7 +1367,7 @@ xeMemGetProperties(
 }
 
 ///////////////////////////////////////////////////////////////////////////////
-__xedllexport xe_result_t __xecall
+xe_result_t __xecall
 xeMemGetAddressRange(
     const void* ptr,                                ///< [in] Pointer to query
     void** pBase,                                   ///< [in,out][optional] base address of the allocation
@@ -1381,7 +1381,7 @@ xeMemGetAddressRange(
 }
 
 ///////////////////////////////////////////////////////////////////////////////
-__xedllexport xe_result_t __xecall
+xe_result_t __xecall
 xeIpcGetMemHandle(
     const void* ptr,                                ///< [in] Pointer to the device memory allocation
     xe_ipc_mem_handle_t* pIpcHandle                 ///< [out] Returned IPC memory handle
@@ -1394,7 +1394,7 @@ xeIpcGetMemHandle(
 }
 
 ///////////////////////////////////////////////////////////////////////////////
-__xedllexport xe_result_t __xecall
+xe_result_t __xecall
 xeIpcOpenMemHandle(
     xe_device_handle_t hDevice,                     ///< [in] handle of the device to associate with the IPC memory handle
     xe_ipc_mem_handle_t handle,                     ///< [in] IPC memory handle
@@ -1409,7 +1409,7 @@ xeIpcOpenMemHandle(
 }
 
 ///////////////////////////////////////////////////////////////////////////////
-__xedllexport xe_result_t __xecall
+xe_result_t __xecall
 xeIpcCloseMemHandle(
     const void* ptr                                 ///< [in] pointer to device allocation in this process
     )
@@ -1421,7 +1421,7 @@ xeIpcCloseMemHandle(
 }
 
 ///////////////////////////////////////////////////////////////////////////////
-__xedllexport xe_result_t __xecall
+xe_result_t __xecall
 xeModuleCreate(
     xe_device_handle_t hDevice,                     ///< [in] handle of the device
     const xe_module_desc_t* pDesc,                  ///< [in] pointer to module descriptor
@@ -1436,7 +1436,7 @@ xeModuleCreate(
 }
 
 ///////////////////////////////////////////////////////////////////////////////
-__xedllexport xe_result_t __xecall
+xe_result_t __xecall
 xeModuleDestroy(
     xe_module_handle_t hModule                      ///< [in] handle of the module
     )
@@ -1448,7 +1448,7 @@ xeModuleDestroy(
 }
 
 ///////////////////////////////////////////////////////////////////////////////
-__xedllexport xe_result_t __xecall
+xe_result_t __xecall
 xeModuleBuildLogDestroy(
     xe_module_build_log_handle_t hModuleBuildLog    ///< [in] handle of the module build log object.
     )
@@ -1460,7 +1460,7 @@ xeModuleBuildLogDestroy(
 }
 
 ///////////////////////////////////////////////////////////////////////////////
-__xedllexport xe_result_t __xecall
+xe_result_t __xecall
 xeModuleBuildLogGetString(
     xe_module_build_log_handle_t hModuleBuildLog,   ///< [in] handle of the module build log object.
     size_t* pSize,                                  ///< [in,out] size of build log string.
@@ -1474,7 +1474,7 @@ xeModuleBuildLogGetString(
 }
 
 ///////////////////////////////////////////////////////////////////////////////
-__xedllexport xe_result_t __xecall
+xe_result_t __xecall
 xeModuleGetNativeBinary(
     xe_module_handle_t hModule,                     ///< [in] handle of the device
     size_t* pSize,                                  ///< [in,out] size of native binary in bytes.
@@ -1488,7 +1488,7 @@ xeModuleGetNativeBinary(
 }
 
 ///////////////////////////////////////////////////////////////////////////////
-__xedllexport xe_result_t __xecall
+xe_result_t __xecall
 xeModuleGetGlobalPointer(
     xe_module_handle_t hModule,                     ///< [in] handle of the device
     const char* pGlobalName,                        ///< [in] name of function in global
@@ -1502,7 +1502,7 @@ xeModuleGetGlobalPointer(
 }
 
 ///////////////////////////////////////////////////////////////////////////////
-__xedllexport xe_result_t __xecall
+xe_result_t __xecall
 xeFunctionCreate(
     xe_module_handle_t hModule,                     ///< [in] handle of the module
     const xe_function_desc_t* pDesc,                ///< [in] pointer to function descriptor
@@ -1516,7 +1516,7 @@ xeFunctionCreate(
 }
 
 ///////////////////////////////////////////////////////////////////////////////
-__xedllexport xe_result_t __xecall
+xe_result_t __xecall
 xeFunctionDestroy(
     xe_function_handle_t hFunction                  ///< [in] handle of the function object
     )
@@ -1528,7 +1528,7 @@ xeFunctionDestroy(
 }
 
 ///////////////////////////////////////////////////////////////////////////////
-__xedllexport xe_result_t __xecall
+xe_result_t __xecall
 xeModuleGetFunctionPointer(
     xe_module_handle_t hModule,                     ///< [in] handle of the module
     const char* pFunctionName,                      ///< [in] Name of function to retrieve function pointer for.
@@ -1542,7 +1542,7 @@ xeModuleGetFunctionPointer(
 }
 
 ///////////////////////////////////////////////////////////////////////////////
-__xedllexport xe_result_t __xecall
+xe_result_t __xecall
 xeFunctionSetGroupSize(
     xe_function_handle_t hFunction,                 ///< [in] handle of the function object
     uint32_t groupSizeX,                            ///< [in] group size for X dimension to use for this function.
@@ -1557,7 +1557,7 @@ xeFunctionSetGroupSize(
 }
 
 ///////////////////////////////////////////////////////////////////////////////
-__xedllexport xe_result_t __xecall
+xe_result_t __xecall
 xeFunctionSuggestGroupSize(
     xe_function_handle_t hFunction,                 ///< [in] handle of the function object
     uint32_t globalSizeX,                           ///< [in] global width for X dimension.
@@ -1575,7 +1575,7 @@ xeFunctionSuggestGroupSize(
 }
 
 ///////////////////////////////////////////////////////////////////////////////
-__xedllexport xe_result_t __xecall
+xe_result_t __xecall
 xeFunctionSetArgumentValue(
     xe_function_handle_t hFunction,                 ///< [in,out] handle of the function args object.
     uint32_t argIndex,                              ///< [in] argument index in range [0, num args - 1]
@@ -1591,7 +1591,7 @@ xeFunctionSetArgumentValue(
 }
 
 ///////////////////////////////////////////////////////////////////////////////
-__xedllexport xe_result_t __xecall
+xe_result_t __xecall
 xeFunctionSetAttribute(
     xe_function_handle_t hFunction,                 ///< [in,out] handle of the function.
     xe_function_set_attribute_t attr,               ///< [in] attribute to set
@@ -1605,7 +1605,7 @@ xeFunctionSetAttribute(
 }
 
 ///////////////////////////////////////////////////////////////////////////////
-__xedllexport xe_result_t __xecall
+xe_result_t __xecall
 xeFunctionGetAttribute(
     xe_function_handle_t hFunction,                 ///< [in] handle of the function object
     xe_function_get_attribute_t attr,               ///< [in] attribute to query
@@ -1619,7 +1619,7 @@ xeFunctionGetAttribute(
 }
 
 ///////////////////////////////////////////////////////////////////////////////
-__xedllexport xe_result_t __xecall
+xe_result_t __xecall
 xeCommandListAppendLaunchFunction(
     xe_command_list_handle_t hCommandList,          ///< [in] handle of the command list
     xe_function_handle_t hFunction,                 ///< [in] handle of the function object
@@ -1636,7 +1636,7 @@ xeCommandListAppendLaunchFunction(
 }
 
 ///////////////////////////////////////////////////////////////////////////////
-__xedllexport xe_result_t __xecall
+xe_result_t __xecall
 xeCommandListAppendLaunchFunctionIndirect(
     xe_command_list_handle_t hCommandList,          ///< [in] handle of the command list
     xe_function_handle_t hFunction,                 ///< [in] handle of the function object
@@ -1653,7 +1653,7 @@ xeCommandListAppendLaunchFunctionIndirect(
 }
 
 ///////////////////////////////////////////////////////////////////////////////
-__xedllexport xe_result_t __xecall
+xe_result_t __xecall
 xeCommandListAppendLaunchMultipleFunctionsIndirect(
     xe_command_list_handle_t hCommandList,          ///< [in] handle of the command list
     uint32_t numFunctions,                          ///< [in] maximum number of functions to launch
@@ -1674,7 +1674,7 @@ xeCommandListAppendLaunchMultipleFunctionsIndirect(
 }
 
 ///////////////////////////////////////////////////////////////////////////////
-__xedllexport xe_result_t __xecall
+xe_result_t __xecall
 xeCommandListAppendLaunchHostFunction(
     xe_command_list_handle_t hCommandList,          ///< [in] handle of the command list
     xe_host_pfn_t pfnHostFunc,                      ///< [in] pointer to host function.
@@ -1688,7 +1688,7 @@ xeCommandListAppendLaunchHostFunction(
 }
 
 ///////////////////////////////////////////////////////////////////////////////
-__xedllexport xe_result_t __xecall
+xe_result_t __xecall
 xeDeviceMakeMemoryResident(
     xe_device_handle_t hDevice,                     ///< [in] handle of the device
     void* ptr,                                      ///< [in] pointer to memory to make resident
@@ -1702,7 +1702,7 @@ xeDeviceMakeMemoryResident(
 }
 
 ///////////////////////////////////////////////////////////////////////////////
-__xedllexport xe_result_t __xecall
+xe_result_t __xecall
 xeDeviceEvictMemory(
     xe_device_handle_t hDevice,                     ///< [in] handle of the device
     void* ptr,                                      ///< [in] pointer to memory to evict
@@ -1716,7 +1716,7 @@ xeDeviceEvictMemory(
 }
 
 ///////////////////////////////////////////////////////////////////////////////
-__xedllexport xe_result_t __xecall
+xe_result_t __xecall
 xeDeviceMakeImageResident(
     xe_device_handle_t hDevice,                     ///< [in] handle of the device
     xe_image_handle_t hImage                        ///< [in] handle of image to make resident
@@ -1729,7 +1729,7 @@ xeDeviceMakeImageResident(
 }
 
 ///////////////////////////////////////////////////////////////////////////////
-__xedllexport xe_result_t __xecall
+xe_result_t __xecall
 xeDeviceEvictImage(
     xe_device_handle_t hDevice,                     ///< [in] handle of the device
     xe_image_handle_t hImage                        ///< [in] handle of image to make evict
@@ -1742,7 +1742,7 @@ xeDeviceEvictImage(
 }
 
 ///////////////////////////////////////////////////////////////////////////////
-__xedllexport xe_result_t __xecall
+xe_result_t __xecall
 xeSamplerCreate(
     xe_device_handle_t hDevice,                     ///< [in] handle of the device
     const xe_sampler_desc_t* pDesc,                 ///< [in] pointer to sampler descriptor
@@ -1756,7 +1756,7 @@ xeSamplerCreate(
 }
 
 ///////////////////////////////////////////////////////////////////////////////
-__xedllexport xe_result_t __xecall
+xe_result_t __xecall
 xeSamplerDestroy(
     xe_sampler_handle_t hSampler                    ///< [in] handle of the sampler
     )

@@ -34,7 +34,7 @@
 #define _XET_COMMON_INL
 #if defined(__cplusplus)
 #pragma once
-#include "xet_all.h"
+#include "xet_api.h"
 
 namespace xet
 {

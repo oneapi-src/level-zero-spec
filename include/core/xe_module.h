@@ -114,23 +114,13 @@ typedef struct _xe_module_desc_t
 ///     - ::XE_RESULT_ERROR_OUT_OF_DEVICE_MEMORY
 ///     - ::XE_RESULT_ERROR_MODULE_BUILD_FAILURE
 ///         + Failure to build module. See build log for more details.
-__xedllport xe_result_t __xecall
+xe_result_t __xecall
 xeModuleCreate(
     xe_device_handle_t hDevice,                     ///< [in] handle of the device
     const xe_module_desc_t* pDesc,                  ///< [in] pointer to module descriptor
     xe_module_handle_t* phModule,                   ///< [out] pointer to handle of module object created
     xe_module_build_log_handle_t* phBuildLog        ///< [in,out][optional] pointer to handle of module's build log.
     );
-
-///////////////////////////////////////////////////////////////////////////////
-/// @brief xeModuleCreate function-pointer
-typedef xe_result_t (__xecall *xe_pfnModuleCreate_t)(
-    xe_device_handle_t,
-    const xe_module_desc_t*,
-    xe_module_handle_t*,
-    xe_module_build_log_handle_t*
-    );
-
 
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Destroys module
@@ -155,17 +145,10 @@ typedef xe_result_t (__xecall *xe_pfnModuleCreate_t)(
 ///     - ::XE_RESULT_ERROR_INVALID_PARAMETER
 ///         + nullptr == hModule
 ///     - ::XE_RESULT_ERROR_UNSUPPORTED
-__xedllport xe_result_t __xecall
+xe_result_t __xecall
 xeModuleDestroy(
     xe_module_handle_t hModule                      ///< [in] handle of the module
     );
-
-///////////////////////////////////////////////////////////////////////////////
-/// @brief xeModuleDestroy function-pointer
-typedef xe_result_t (__xecall *xe_pfnModuleDestroy_t)(
-    xe_module_handle_t
-    );
-
 
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Destroys module build log object
@@ -188,17 +171,10 @@ typedef xe_result_t (__xecall *xe_pfnModuleDestroy_t)(
 ///     - ::XE_RESULT_ERROR_INVALID_PARAMETER
 ///         + nullptr == hModuleBuildLog
 ///     - ::XE_RESULT_ERROR_UNSUPPORTED
-__xedllport xe_result_t __xecall
+xe_result_t __xecall
 xeModuleBuildLogDestroy(
     xe_module_build_log_handle_t hModuleBuildLog    ///< [in] handle of the module build log object.
     );
-
-///////////////////////////////////////////////////////////////////////////////
-/// @brief xeModuleBuildLogDestroy function-pointer
-typedef xe_result_t (__xecall *xe_pfnModuleBuildLogDestroy_t)(
-    xe_module_build_log_handle_t
-    );
-
 
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Retrieves text string for build log.
@@ -219,21 +195,12 @@ typedef xe_result_t (__xecall *xe_pfnModuleBuildLogDestroy_t)(
 ///     - ::XE_RESULT_ERROR_UNSUPPORTED
 ///     - ::XE_RESULT_ERROR_OUT_OF_HOST_MEMORY
 ///     - ::XE_RESULT_ERROR_OUT_OF_DEVICE_MEMORY
-__xedllport xe_result_t __xecall
+xe_result_t __xecall
 xeModuleBuildLogGetString(
     xe_module_build_log_handle_t hModuleBuildLog,   ///< [in] handle of the module build log object.
     size_t* pSize,                                  ///< [in,out] size of build log string.
     char* pBuildLog                                 ///< [in,out][optional] pointer to null-terminated string of the log.
     );
-
-///////////////////////////////////////////////////////////////////////////////
-/// @brief xeModuleBuildLogGetString function-pointer
-typedef xe_result_t (__xecall *xe_pfnModuleBuildLogGetString_t)(
-    xe_module_build_log_handle_t,
-    size_t*,
-    char*
-    );
-
 
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Retrieve native binary from Module.
@@ -262,21 +229,12 @@ typedef xe_result_t (__xecall *xe_pfnModuleBuildLogGetString_t)(
 ///     - ::XE_RESULT_ERROR_UNSUPPORTED
 ///     - ::XE_RESULT_ERROR_OUT_OF_HOST_MEMORY
 ///     - ::XE_RESULT_ERROR_OUT_OF_DEVICE_MEMORY
-__xedllport xe_result_t __xecall
+xe_result_t __xecall
 xeModuleGetNativeBinary(
     xe_module_handle_t hModule,                     ///< [in] handle of the device
     size_t* pSize,                                  ///< [in,out] size of native binary in bytes.
     uint8_t* pModuleNativeBinary                    ///< [in,out][optional] byte pointer to native binary
     );
-
-///////////////////////////////////////////////////////////////////////////////
-/// @brief xeModuleGetNativeBinary function-pointer
-typedef xe_result_t (__xecall *xe_pfnModuleGetNativeBinary_t)(
-    xe_module_handle_t,
-    size_t*,
-    uint8_t*
-    );
-
 
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Retrieve global variable pointer from Module.
@@ -295,21 +253,12 @@ typedef xe_result_t (__xecall *xe_pfnModuleGetNativeBinary_t)(
 ///         + nullptr == pPtr
 ///         + invalid name
 ///     - ::XE_RESULT_ERROR_UNSUPPORTED
-__xedllport xe_result_t __xecall
+xe_result_t __xecall
 xeModuleGetGlobalPointer(
     xe_module_handle_t hModule,                     ///< [in] handle of the device
     const char* pGlobalName,                        ///< [in] name of function in global
     void** pPtr                                     ///< [out] device visible pointer
     );
-
-///////////////////////////////////////////////////////////////////////////////
-/// @brief xeModuleGetGlobalPointer function-pointer
-typedef xe_result_t (__xecall *xe_pfnModuleGetGlobalPointer_t)(
-    xe_module_handle_t,
-    const char*,
-    void**
-    );
-
 
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief API version of ::xe_function_desc_t
@@ -362,21 +311,12 @@ typedef struct _xe_function_desc_t
 ///         + invalid value for pDesc->pFunctionName
 ///     - ::XE_RESULT_ERROR_UNSUPPORTED
 ///         + ::XE_FUNCTION_DESC_VERSION_CURRENT < pDesc->version
-__xedllport xe_result_t __xecall
+xe_result_t __xecall
 xeFunctionCreate(
     xe_module_handle_t hModule,                     ///< [in] handle of the module
     const xe_function_desc_t* pDesc,                ///< [in] pointer to function descriptor
     xe_function_handle_t* phFunction                ///< [out] handle of the Function object
     );
-
-///////////////////////////////////////////////////////////////////////////////
-/// @brief xeFunctionCreate function-pointer
-typedef xe_result_t (__xecall *xe_pfnFunctionCreate_t)(
-    xe_module_handle_t,
-    const xe_function_desc_t*,
-    xe_function_handle_t*
-    );
-
 
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Destroys Function object
@@ -397,17 +337,10 @@ typedef xe_result_t (__xecall *xe_pfnFunctionCreate_t)(
 ///     - ::XE_RESULT_ERROR_INVALID_PARAMETER
 ///         + nullptr == hFunction
 ///     - ::XE_RESULT_ERROR_UNSUPPORTED
-__xedllport xe_result_t __xecall
+xe_result_t __xecall
 xeFunctionDestroy(
     xe_function_handle_t hFunction                  ///< [in] handle of the function object
     );
-
-///////////////////////////////////////////////////////////////////////////////
-/// @brief xeFunctionDestroy function-pointer
-typedef xe_result_t (__xecall *xe_pfnFunctionDestroy_t)(
-    xe_function_handle_t
-    );
-
 
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Retrieve function pointer from Module by name
@@ -427,21 +360,12 @@ typedef xe_result_t (__xecall *xe_pfnFunctionDestroy_t)(
 ///         + nullptr == pfnFunction
 ///         + invalid value pFunctionName. Function name must exist in Module.
 ///     - ::XE_RESULT_ERROR_UNSUPPORTED
-__xedllport xe_result_t __xecall
+xe_result_t __xecall
 xeModuleGetFunctionPointer(
     xe_module_handle_t hModule,                     ///< [in] handle of the module
     const char* pFunctionName,                      ///< [in] Name of function to retrieve function pointer for.
     void** pfnFunction                              ///< [out] pointer to function.
     );
-
-///////////////////////////////////////////////////////////////////////////////
-/// @brief xeModuleGetFunctionPointer function-pointer
-typedef xe_result_t (__xecall *xe_pfnModuleGetFunctionPointer_t)(
-    xe_module_handle_t,
-    const char*,
-    void**
-    );
-
 
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Set group size for Function.
@@ -460,23 +384,13 @@ typedef xe_result_t (__xecall *xe_pfnModuleGetFunctionPointer_t)(
 ///     - ::XE_RESULT_ERROR_INVALID_PARAMETER
 ///         + nullptr == hFunction
 ///     - ::XE_RESULT_ERROR_UNSUPPORTED
-__xedllport xe_result_t __xecall
+xe_result_t __xecall
 xeFunctionSetGroupSize(
     xe_function_handle_t hFunction,                 ///< [in] handle of the function object
     uint32_t groupSizeX,                            ///< [in] group size for X dimension to use for this function.
     uint32_t groupSizeY,                            ///< [in] group size for Y dimension to use for this function.
     uint32_t groupSizeZ                             ///< [in] group size for Z dimension to use for this function.
     );
-
-///////////////////////////////////////////////////////////////////////////////
-/// @brief xeFunctionSetGroupSize function-pointer
-typedef xe_result_t (__xecall *xe_pfnFunctionSetGroupSize_t)(
-    xe_function_handle_t,
-    uint32_t,
-    uint32_t,
-    uint32_t
-    );
-
 
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Query a suggested group size for function given a global size for each
@@ -499,7 +413,7 @@ typedef xe_result_t (__xecall *xe_pfnFunctionSetGroupSize_t)(
 ///         + nullptr == groupSizeZ
 ///         + invalid number of threads.
 ///     - ::XE_RESULT_ERROR_UNSUPPORTED
-__xedllport xe_result_t __xecall
+xe_result_t __xecall
 xeFunctionSuggestGroupSize(
     xe_function_handle_t hFunction,                 ///< [in] handle of the function object
     uint32_t globalSizeX,                           ///< [in] global width for X dimension.
@@ -509,19 +423,6 @@ xeFunctionSuggestGroupSize(
     uint32_t* groupSizeY,                           ///< [out] recommended size of group for Y dimension.
     uint32_t* groupSizeZ                            ///< [out] recommended size of group for Z dimension.
     );
-
-///////////////////////////////////////////////////////////////////////////////
-/// @brief xeFunctionSuggestGroupSize function-pointer
-typedef xe_result_t (__xecall *xe_pfnFunctionSuggestGroupSize_t)(
-    xe_function_handle_t,
-    uint32_t,
-    uint32_t,
-    uint32_t,
-    uint32_t*,
-    uint32_t*,
-    uint32_t*
-    );
-
 
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Set function argument used on function launch.
@@ -540,7 +441,7 @@ typedef xe_result_t (__xecall *xe_pfnFunctionSuggestGroupSize_t)(
 ///         + invalid argument index
 ///         + invalid size specified
 ///     - ::XE_RESULT_ERROR_UNSUPPORTED
-__xedllport xe_result_t __xecall
+xe_result_t __xecall
 xeFunctionSetArgumentValue(
     xe_function_handle_t hFunction,                 ///< [in,out] handle of the function args object.
     uint32_t argIndex,                              ///< [in] argument index in range [0, num args - 1]
@@ -548,16 +449,6 @@ xeFunctionSetArgumentValue(
     const void* pArgValue                           ///< [in][optional] argument value represented as matching arg type. If
                                                     ///< null then argument value is considered null.
     );
-
-///////////////////////////////////////////////////////////////////////////////
-/// @brief xeFunctionSetArgumentValue function-pointer
-typedef xe_result_t (__xecall *xe_pfnFunctionSetArgumentValue_t)(
-    xe_function_handle_t,
-    uint32_t,
-    size_t,
-    const void*
-    );
-
 
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Function attributes
@@ -597,21 +488,12 @@ typedef enum _xe_function_set_attribute_t
 ///         + invalid value for attr
 ///         + invalid value for value
 ///     - ::XE_RESULT_ERROR_UNSUPPORTED
-__xedllport xe_result_t __xecall
+xe_result_t __xecall
 xeFunctionSetAttribute(
     xe_function_handle_t hFunction,                 ///< [in,out] handle of the function.
     xe_function_set_attribute_t attr,               ///< [in] attribute to set
     uint32_t value                                  ///< [in] attribute value to set
     );
-
-///////////////////////////////////////////////////////////////////////////////
-/// @brief xeFunctionSetAttribute function-pointer
-typedef xe_result_t (__xecall *xe_pfnFunctionSetAttribute_t)(
-    xe_function_handle_t,
-    xe_function_set_attribute_t,
-    uint32_t
-    );
-
 
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Function attributes
@@ -650,21 +532,12 @@ typedef enum _xe_function_get_attribute_t
 ///         + nullptr == pValue
 ///         + invalid value for attr
 ///     - ::XE_RESULT_ERROR_UNSUPPORTED
-__xedllport xe_result_t __xecall
+xe_result_t __xecall
 xeFunctionGetAttribute(
     xe_function_handle_t hFunction,                 ///< [in] handle of the function object
     xe_function_get_attribute_t attr,               ///< [in] attribute to query
     uint32_t* pValue                                ///< [out] returned attribute value
     );
-
-///////////////////////////////////////////////////////////////////////////////
-/// @brief xeFunctionGetAttribute function-pointer
-typedef xe_result_t (__xecall *xe_pfnFunctionGetAttribute_t)(
-    xe_function_handle_t,
-    xe_function_get_attribute_t,
-    uint32_t*
-    );
-
 
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Function thread group dimensions.
@@ -699,7 +572,7 @@ typedef struct _xe_thread_group_dimensions_t
 ///         + nullptr == hFunction
 ///         + nullptr == pLaunchFuncArgs
 ///     - ::XE_RESULT_ERROR_UNSUPPORTED
-__xedllport xe_result_t __xecall
+xe_result_t __xecall
 xeCommandListAppendLaunchFunction(
     xe_command_list_handle_t hCommandList,          ///< [in] handle of the command list
     xe_function_handle_t hFunction,                 ///< [in] handle of the function object
@@ -708,18 +581,6 @@ xeCommandListAppendLaunchFunction(
     uint32_t numWaitEvents,                         ///< [in][optional] number of events to wait on before launching
     xe_event_handle_t* phWaitEvents                 ///< [in][optional] handle of the events to wait on before launching
     );
-
-///////////////////////////////////////////////////////////////////////////////
-/// @brief xeCommandListAppendLaunchFunction function-pointer
-typedef xe_result_t (__xecall *xe_pfnCommandListAppendLaunchFunction_t)(
-    xe_command_list_handle_t,
-    xe_function_handle_t,
-    const xe_thread_group_dimensions_t*,
-    xe_event_handle_t,
-    uint32_t,
-    xe_event_handle_t*
-    );
-
 
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Launch function over one or more work groups using indirect arguments.
@@ -747,7 +608,7 @@ typedef xe_result_t (__xecall *xe_pfnCommandListAppendLaunchFunction_t)(
 ///         + nullptr == hFunction
 ///         + nullptr == pLaunchArgumentsBuffer
 ///     - ::XE_RESULT_ERROR_UNSUPPORTED
-__xedllport xe_result_t __xecall
+xe_result_t __xecall
 xeCommandListAppendLaunchFunctionIndirect(
     xe_command_list_handle_t hCommandList,          ///< [in] handle of the command list
     xe_function_handle_t hFunction,                 ///< [in] handle of the function object
@@ -756,18 +617,6 @@ xeCommandListAppendLaunchFunctionIndirect(
     uint32_t numWaitEvents,                         ///< [in][optional] number of events to wait on before launching
     xe_event_handle_t* phWaitEvents                 ///< [in][optional] handle of the events to wait on before launching
     );
-
-///////////////////////////////////////////////////////////////////////////////
-/// @brief xeCommandListAppendLaunchFunctionIndirect function-pointer
-typedef xe_result_t (__xecall *xe_pfnCommandListAppendLaunchFunctionIndirect_t)(
-    xe_command_list_handle_t,
-    xe_function_handle_t,
-    const xe_thread_group_dimensions_t*,
-    xe_event_handle_t,
-    uint32_t,
-    xe_event_handle_t*
-    );
-
 
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Launch multiple functions over one or more work groups using an array
@@ -797,7 +646,7 @@ typedef xe_result_t (__xecall *xe_pfnCommandListAppendLaunchFunctionIndirect_t)(
 ///         + nullptr == pNumLaunchArguments
 ///         + nullptr == pLaunchArgumentsBuffer
 ///     - ::XE_RESULT_ERROR_UNSUPPORTED
-__xedllport xe_result_t __xecall
+xe_result_t __xecall
 xeCommandListAppendLaunchMultipleFunctionsIndirect(
     xe_command_list_handle_t hCommandList,          ///< [in] handle of the command list
     uint32_t numFunctions,                          ///< [in] maximum number of functions to launch
@@ -810,20 +659,6 @@ xeCommandListAppendLaunchMultipleFunctionsIndirect(
     uint32_t numWaitEvents,                         ///< [in][optional] number of events to wait on before launching
     xe_event_handle_t* phWaitEvents                 ///< [in][optional] handle of the events to wait on before launching
     );
-
-///////////////////////////////////////////////////////////////////////////////
-/// @brief xeCommandListAppendLaunchMultipleFunctionsIndirect function-pointer
-typedef xe_result_t (__xecall *xe_pfnCommandListAppendLaunchMultipleFunctionsIndirect_t)(
-    xe_command_list_handle_t,
-    uint32_t,
-    const xe_function_handle_t*,
-    const size_t*,
-    const xe_thread_group_dimensions_t*,
-    xe_event_handle_t,
-    uint32_t,
-    xe_event_handle_t*
-    );
-
 
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief type definition for host function pointers used with
@@ -859,21 +694,12 @@ typedef void(__xecall *xe_host_pfn_t)(
 ///         + nullptr == hCommandList
 ///         + nullptr == pUserData
 ///     - ::XE_RESULT_ERROR_UNSUPPORTED
-__xedllport xe_result_t __xecall
+xe_result_t __xecall
 xeCommandListAppendLaunchHostFunction(
     xe_command_list_handle_t hCommandList,          ///< [in] handle of the command list
     xe_host_pfn_t pfnHostFunc,                      ///< [in] pointer to host function.
     void* pUserData                                 ///< [in] pointer to user data to pass to host function.
     );
-
-///////////////////////////////////////////////////////////////////////////////
-/// @brief xeCommandListAppendLaunchHostFunction function-pointer
-typedef xe_result_t (__xecall *xe_pfnCommandListAppendLaunchHostFunction_t)(
-    xe_command_list_handle_t,
-    xe_host_pfn_t,
-    void*
-    );
-
 
 #if defined(__cplusplus)
 } // extern "C"

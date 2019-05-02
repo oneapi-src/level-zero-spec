@@ -20,22 +20,47 @@
 * or otherwise. Any license under such intellectual property rights must be
 * express and approved by Intel in writing.
 *
-* @file xex_all.hpp
+* @file xex_ddi.h
 *
 * @cond DEV
-* DO NOT EDIT: generated from /scripts/templates/api_all.hpp.mako
+* DO NOT EDIT: generated from /scripts/extended
 * @endcond
 *
 ******************************************************************************/
-#ifndef _XEX_ALL_HPP
-#define _XEX_ALL_HPP
+#ifndef _XEX_DDI_H
+#define _XEX_DDI_H
 #if defined(__cplusplus)
 #pragma once
+#endif
+#include "xex_api.h"
 
-#include "xex_cmdgraph.hpp"
-#include "xex_device.hpp"
-#include "xex_cmdgraph.inl"
-#include "xex_device.inl"
+///////////////////////////////////////////////////////////////////////////////
+/// @brief xexCommandGraphCreate function-pointer
+typedef xe_result_t (__xecall *xex_pfnCommandGraphCreate_t)(
+    xe_device_handle_t,
+    const xex_command_graph_desc_t*,
+    xex_command_graph_handle_t*
+    );
 
-#endif // defined(__cplusplus)
-#endif // _XEX_ALL_HPP
+///////////////////////////////////////////////////////////////////////////////
+/// @brief xexCommandGraphDestroy function-pointer
+typedef xe_result_t (__xecall *xex_pfnCommandGraphDestroy_t)(
+    xex_command_graph_handle_t
+    );
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief xexCommandGraphClose function-pointer
+typedef xe_result_t (__xecall *xex_pfnCommandGraphClose_t)(
+    xex_command_graph_handle_t
+    );
+
+
+///////////////////////////////////////////////////////////////////////////////
+typedef struct _xex_apitable_t
+{
+    xex_pfnCommandGraphCreate_t                     pfnCommandGraphCreate;
+    xex_pfnCommandGraphDestroy_t                    pfnCommandGraphDestroy;
+    xex_pfnCommandGraphClose_t                      pfnCommandGraphClose;
+} xex_apitable_t;
+
+#endif // _XEX_DDI_H

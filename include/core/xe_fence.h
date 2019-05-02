@@ -89,21 +89,12 @@ typedef struct _xe_fence_desc_t
 ///         + ::XE_FENCE_DESC_VERSION_CURRENT < desc->version
 ///     - ::XE_RESULT_ERROR_OUT_OF_HOST_MEMORY
 ///     - ::XE_RESULT_ERROR_OUT_OF_DEVICE_MEMORY
-__xedllport xe_result_t __xecall
+xe_result_t __xecall
 xeFenceCreate(
     xe_command_queue_handle_t hCommandQueue,        ///< [in] handle of command queue
     const xe_fence_desc_t* desc,                    ///< [in] pointer to fence descriptor
     xe_fence_handle_t* phFence                      ///< [out] pointer to handle of fence object created
     );
-
-///////////////////////////////////////////////////////////////////////////////
-/// @brief xeFenceCreate function-pointer
-typedef xe_result_t (__xecall *xe_pfnFenceCreate_t)(
-    xe_command_queue_handle_t,
-    const xe_fence_desc_t*,
-    xe_fence_handle_t*
-    );
-
 
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Deletes a fence object.
@@ -129,17 +120,10 @@ typedef xe_result_t (__xecall *xe_pfnFenceCreate_t)(
 ///         + nullptr == hFence
 ///         + fence is enqueued in a command queue
 ///     - ::XE_RESULT_ERROR_UNSUPPORTED
-__xedllport xe_result_t __xecall
+xe_result_t __xecall
 xeFenceDestroy(
     xe_fence_handle_t hFence                        ///< [in] handle of fence object to destroy
     );
-
-///////////////////////////////////////////////////////////////////////////////
-/// @brief xeFenceDestroy function-pointer
-typedef xe_result_t (__xecall *xe_pfnFenceDestroy_t)(
-    xe_fence_handle_t
-    );
-
 
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief The current host thread waits on a fence to be signaled.
@@ -162,7 +146,7 @@ typedef xe_result_t (__xecall *xe_pfnFenceDestroy_t)(
 ///     - ::XE_RESULT_ERROR_UNSUPPORTED
 ///     - ::XE_RESULT_NOT_READY
 ///         + timeout expired
-__xedllport xe_result_t __xecall
+xe_result_t __xecall
 xeFenceHostSynchronize(
     xe_fence_handle_t hFence,                       ///< [in] handle of the fence
     uint32_t timeout                                ///< [in] if non-zero, then indicates the maximum time to yield before
@@ -171,14 +155,6 @@ xeFenceHostSynchronize(
                                                     ///< if MAX_UINT32, then function will not return until complete or device
                                                     ///< is lost.
     );
-
-///////////////////////////////////////////////////////////////////////////////
-/// @brief xeFenceHostSynchronize function-pointer
-typedef xe_result_t (__xecall *xe_pfnFenceHostSynchronize_t)(
-    xe_fence_handle_t,
-    uint32_t
-    );
-
 
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Queries a fence object's status.
@@ -201,17 +177,10 @@ typedef xe_result_t (__xecall *xe_pfnFenceHostSynchronize_t)(
 ///     - ::XE_RESULT_ERROR_UNSUPPORTED
 ///     - ::XE_RESULT_NOT_READY
 ///         + not signaled
-__xedllport xe_result_t __xecall
+xe_result_t __xecall
 xeFenceQueryStatus(
     xe_fence_handle_t hFence                        ///< [in] handle of the fence
     );
-
-///////////////////////////////////////////////////////////////////////////////
-/// @brief xeFenceQueryStatus function-pointer
-typedef xe_result_t (__xecall *xe_pfnFenceQueryStatus_t)(
-    xe_fence_handle_t
-    );
-
 
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Reset a fence back to the not signaled state.
@@ -231,17 +200,10 @@ typedef xe_result_t (__xecall *xe_pfnFenceQueryStatus_t)(
 ///     - ::XE_RESULT_ERROR_INVALID_PARAMETER
 ///         + nullptr == hFence
 ///     - ::XE_RESULT_ERROR_UNSUPPORTED
-__xedllport xe_result_t __xecall
+xe_result_t __xecall
 xeFenceReset(
     xe_fence_handle_t hFence                        ///< [in] handle of the fence
     );
-
-///////////////////////////////////////////////////////////////////////////////
-/// @brief xeFenceReset function-pointer
-typedef xe_result_t (__xecall *xe_pfnFenceReset_t)(
-    xe_fence_handle_t
-    );
-
 
 #if defined(__cplusplus)
 } // extern "C"

@@ -26,15 +26,15 @@ from templates import helper as th
 * or otherwise. Any license under such intellectual property rights must be
 * express and approved by Intel in writing.
 *
-* @file ${n}_all.h
+* @file ${n}_api.h
 *
 * @cond DEV
-* DO NOT EDIT: generated from /scripts/templates/api_all.h.mako
+* DO NOT EDIT: generated from /scripts/${section}
 * @endcond
 *
 ******************************************************************************/
-#ifndef _${N}_ALL_H
-#define _${N}_ALL_H
+#ifndef _${N}_API_H
+#define _${N}_API_H
 #if defined(__cplusplus)
 #pragma once
 #endif
@@ -45,18 +45,4 @@ from templates import helper as th
 %endif
 %endfor
 
-///////////////////////////////////////////////////////////////////////////////
-typedef struct _${n}_apitable_t
-{
-    %for obj in th.extract_objs(specs, r"function"):
-    %if 'condition' in obj:
-    #if ${th.subt(n, tags, obj['condition'])}
-    %endif
-    ${n}_${th.append_ws(th.make_pfn_name(n, tags, obj)+"_t", 47)} ${th.make_pfn_name(n, tags, obj)};
-    %if 'condition' in obj:
-    #endif // ${th.subt(n, tags, obj['condition'])}
-    %endif
-    %endfor
-} ${n}_apitable_t;
-
-#endif // _${N}_ALL_H
+#endif // _${N}_API_H

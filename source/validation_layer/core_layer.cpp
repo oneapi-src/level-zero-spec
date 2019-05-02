@@ -28,7 +28,7 @@
 * @endcond
 *
 ******************************************************************************/
-#include "xe_all.h"
+#include "xe_ddi.h"
 #include "layer.h"
 
 xe_apitable_t xe_apitable = {};

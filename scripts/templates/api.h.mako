@@ -47,7 +47,7 @@ from templates import helper as th
 #include <stdint.h>
 #include <string.h>
 %if x != n:
-#include "${x}_all.h"
+#include "${x}_api.h"
 %endif
 %else:
 #include "${n}_common.h"
@@ -114,21 +114,12 @@ typedef ${obj['type']} _${th.subt(n, tags, obj['name'])}
 %for line in th.make_returns_lines(n, tags, obj):
 /// ${line}
 %endfor
-__${x}dllport ${x}_result_t __${x}call
+${x}_result_t __${x}call
 ${th.make_func_name(n, tags, obj)}(
     %for line in th.make_param_lines(n, tags, obj):
     ${line}
     %endfor
     );
-
-///////////////////////////////////////////////////////////////////////////////
-/// @brief ${th.make_func_name(n, tags, obj)} function-pointer
-typedef ${x}_result_t (__${x}call *${n}_${th.make_pfn_name(n, tags, obj)}_t)(
-    %for line in th.make_param_lines(n, tags, obj, format=["type", "delim"]):
-    ${line}
-    %endfor
-    );
-
 ## HANDLE #####################################################################
 %elif re.match(r"handle", obj['type']):
 typedef struct _${th.subt(n, tags, obj['name'])} *${th.subt(n, tags, obj['name'])};

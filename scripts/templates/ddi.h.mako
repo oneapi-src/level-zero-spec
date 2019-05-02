@@ -1,8 +1,11 @@
 <%
 import re
+from templates import helper as th
 %><%
     n=namespace
     N=n.upper()
+
+    x=tags['$x']
 %>/**************************************************************************//**
 *
 * INTEL CONFIDENTIAL
@@ -25,23 +28,49 @@ import re
 * or otherwise. Any license under such intellectual property rights must be
 * express and approved by Intel in writing.
 *
-* @file ${n}_api.hpp
+* @file ${n}_ddi.h
 *
 * @cond DEV
 * DO NOT EDIT: generated from /scripts/${section}
 * @endcond
 *
 ******************************************************************************/
-#ifndef _${N}_API_HPP
-#define _${N}_API_HPP
+#ifndef _${N}_DDI_H
+#define _${N}_DDI_H
 #if defined(__cplusplus)
 #pragma once
+#endif
+#include "${n}_api.h"
 
-%for f in files:
-%if not re.match(r"\w+_common", f):
-#include "${f}"
+%for obj in th.extract_objs(specs, r"function"):
+///////////////////////////////////////////////////////////////////////////////
+%if 'condition' in obj:
+#if ${th.subt(n, tags, obj['condition'])}
 %endif
+/// @brief ${th.make_func_name(n, tags, obj)} function-pointer
+typedef ${x}_result_t (__${x}call *${th.make_pfn_type(n, tags, obj)})(
+    %for line in th.make_param_lines(n, tags, obj, format=["type", "delim"]):
+    ${line}
+    %endfor
+    );
+%if 'condition' in obj:
+#endif // ${th.subt(n, tags, obj['condition'])}
+%endif
+
 %endfor
 
-#endif // defined(__cplusplus)
-#endif // _${N}_API_HPP
+///////////////////////////////////////////////////////////////////////////////
+typedef struct _${n}_apitable_t
+{
+    %for obj in th.extract_objs(specs, r"function"):
+    %if 'condition' in obj:
+    #if ${th.subt(n, tags, obj['condition'])}
+    %endif
+    ${th.append_ws(th.make_pfn_type(n, tags, obj), 47)} ${th.make_pfn_name(n, tags, obj)};
+    %if 'condition' in obj:
+    #endif // ${th.subt(n, tags, obj['condition'])}
+    %endif
+    %endfor
+} ${n}_apitable_t;
+
+#endif // _${N}_DDI_H

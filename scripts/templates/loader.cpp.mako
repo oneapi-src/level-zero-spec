@@ -37,7 +37,7 @@ from templates import helper as th
 * @endcond
 *
 ******************************************************************************/
-#include "${n}_all.h"
+#include "${n}_ddi.h"
 #include "loader.h"
 
 ${n}_apitable_t ${n}_apitable = {};
@@ -51,7 +51,7 @@ bool ${n}LoadExports(
     %if 'condition' in obj:
     #if ${th.subt(n, tags, obj['condition'])}
     %endif
-    ${n}_apitable.${th.append_ws(th.make_pfn_name(n, tags, obj), 55)} = (${n}_${th.make_pfn_name(n, tags, obj)}_t)LOAD_FUNCTION_PTR(handle, "${th.make_func_name(n, tags, obj)}");
+    ${n}_apitable.${th.append_ws(th.make_pfn_name(n, tags, obj), 55)} = (${th.make_pfn_type(n, tags, obj)})LOAD_FUNCTION_PTR(handle, "${th.make_func_name(n, tags, obj)}");
     if( nullptr == ${n}_apitable.${th.make_pfn_name(n, tags, obj)} )
         return false;
     %if 'condition' in obj:
@@ -73,7 +73,7 @@ extern "C" {
 %if 'condition' in obj:
 #if ${th.subt(n, tags, obj['condition'])}
 %endif
-__${x}dllexport ${x}_result_t __${x}call
+${x}_result_t __${x}call
 ${th.make_func_name(n, tags, obj)}(
     %for line in th.make_param_lines(n, tags, obj):
     ${line}

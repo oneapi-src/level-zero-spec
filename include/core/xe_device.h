@@ -59,17 +59,10 @@ extern "C" {
 ///     - ::XE_RESULT_ERROR_INVALID_PARAMETER
 ///         + nullptr == count
 ///     - ::XE_RESULT_ERROR_UNSUPPORTED
-__xedllport xe_result_t __xecall
+xe_result_t __xecall
 xeDeviceGetCount(
     uint32_t* count                                 ///< [out] number of devices available
     );
-
-///////////////////////////////////////////////////////////////////////////////
-/// @brief xeDeviceGetCount function-pointer
-typedef xe_result_t (__xecall *xe_pfnDeviceGetCount_t)(
-    uint32_t*
-    );
-
 
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Maximum device uuid size in bytes
@@ -103,19 +96,11 @@ typedef struct _xe_device_uuid_t
 ///         + nullptr == phDevice
 ///         + ordinal is out of range reported by ::xeDeviceGetCount
 ///     - ::XE_RESULT_ERROR_UNSUPPORTED
-__xedllport xe_result_t __xecall
+xe_result_t __xecall
 xeDeviceGet(
     uint32_t ordinal,                               ///< [in] The device index in the range of [0, ::xeDeviceGetCount]
     xe_device_handle_t* phDevice                    ///< [out] pointer to handle of device object created
     );
-
-///////////////////////////////////////////////////////////////////////////////
-/// @brief xeDeviceGet function-pointer
-typedef xe_result_t (__xecall *xe_pfnDeviceGet_t)(
-    uint32_t,
-    xe_device_handle_t*
-    );
-
 
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Returns a handle to the sub-device object
@@ -138,21 +123,12 @@ typedef xe_result_t (__xecall *xe_pfnDeviceGet_t)(
 ///         + nullptr == phSubDevice
 ///         + ordinal is out of range reported by device properties.
 ///     - ::XE_RESULT_ERROR_UNSUPPORTED
-__xedllport xe_result_t __xecall
+xe_result_t __xecall
 xeDeviceGetSubDevice(
     xe_device_handle_t hDevice,                     ///< [in] handle of the device object
     uint32_t ordinal,                               ///< [in] ordinal of sub-device to retrieve
     xe_device_handle_t* phSubDevice                 ///< [out] pointer to handle of sub-device object.
     );
-
-///////////////////////////////////////////////////////////////////////////////
-/// @brief xeDeviceGetSubDevice function-pointer
-typedef xe_result_t (__xecall *xe_pfnDeviceGetSubDevice_t)(
-    xe_device_handle_t,
-    uint32_t,
-    xe_device_handle_t*
-    );
-
 
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Supported API versions
@@ -185,19 +161,11 @@ typedef enum _xe_api_version_t
 ///         + nullptr == hDevice
 ///         + nullptr == version
 ///     - ::XE_RESULT_ERROR_UNSUPPORTED
-__xedllport xe_result_t __xecall
+xe_result_t __xecall
 xeDeviceGetApiVersion(
     xe_device_handle_t hDevice,                     ///< [in] handle of the device object
     xe_api_version_t* version                       ///< [out] api version
     );
-
-///////////////////////////////////////////////////////////////////////////////
-/// @brief xeDeviceGetApiVersion function-pointer
-typedef xe_result_t (__xecall *xe_pfnDeviceGetApiVersion_t)(
-    xe_device_handle_t,
-    xe_api_version_t*
-    );
-
 
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief API version of ::xe_device_properties_t
@@ -262,19 +230,11 @@ typedef struct _xe_device_properties_t
 ///         + nullptr == hDevice
 ///         + nullptr == pDeviceProperties
 ///     - ::XE_RESULT_ERROR_UNSUPPORTED
-__xedllport xe_result_t __xecall
+xe_result_t __xecall
 xeDeviceGetProperties(
     xe_device_handle_t hDevice,                     ///< [in] handle of the device object
     xe_device_properties_t* pDeviceProperties       ///< [out] query result for device properties
     );
-
-///////////////////////////////////////////////////////////////////////////////
-/// @brief xeDeviceGetProperties function-pointer
-typedef xe_result_t (__xecall *xe_pfnDeviceGetProperties_t)(
-    xe_device_handle_t,
-    xe_device_properties_t*
-    );
-
 
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief API version of ::xe_device_compute_properties_t
@@ -327,19 +287,11 @@ typedef struct _xe_device_compute_properties_t
 ///         + nullptr == hDevice
 ///         + nullptr == pComputeProperties
 ///     - ::XE_RESULT_ERROR_UNSUPPORTED
-__xedllport xe_result_t __xecall
+xe_result_t __xecall
 xeDeviceGetComputeProperties(
     xe_device_handle_t hDevice,                     ///< [in] handle of the device object
     xe_device_compute_properties_t* pComputeProperties  ///< [out] query result for compute properties
     );
-
-///////////////////////////////////////////////////////////////////////////////
-/// @brief xeDeviceGetComputeProperties function-pointer
-typedef xe_result_t (__xecall *xe_pfnDeviceGetComputeProperties_t)(
-    xe_device_handle_t,
-    xe_device_compute_properties_t*
-    );
-
 
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief API version of ::xe_device_memory_properties_t
@@ -410,19 +362,11 @@ typedef struct _xe_device_memory_properties_t
 ///         + nullptr == hDevice
 ///         + nullptr == pMemProperties
 ///     - ::XE_RESULT_ERROR_UNSUPPORTED
-__xedllport xe_result_t __xecall
+xe_result_t __xecall
 xeDeviceGetMemoryProperties(
     xe_device_handle_t hDevice,                     ///< [in] handle of the device object
     xe_device_memory_properties_t* pMemProperties   ///< [out] query result for compute properties
     );
-
-///////////////////////////////////////////////////////////////////////////////
-/// @brief xeDeviceGetMemoryProperties function-pointer
-typedef xe_result_t (__xecall *xe_pfnDeviceGetMemoryProperties_t)(
-    xe_device_handle_t,
-    xe_device_memory_properties_t*
-    );
-
 
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief API version of ::xe_device_p2p_properties_t
@@ -463,21 +407,12 @@ typedef struct _xe_device_p2p_properties_t
 ///         + nullptr == hPeerDevice
 ///         + nullptr == pP2PProperties
 ///     - ::XE_RESULT_ERROR_UNSUPPORTED
-__xedllport xe_result_t __xecall
+xe_result_t __xecall
 xeDeviceGetP2PProperties(
     xe_device_handle_t hDevice,                     ///< [in] handle of the device performing the access
     xe_device_handle_t hPeerDevice,                 ///< [in] handle of the peer device with the allocation
     xe_device_p2p_properties_t* pP2PProperties      ///< [out] Peer-to-Peer properties between source and peer device
     );
-
-///////////////////////////////////////////////////////////////////////////////
-/// @brief xeDeviceGetP2PProperties function-pointer
-typedef xe_result_t (__xecall *xe_pfnDeviceGetP2PProperties_t)(
-    xe_device_handle_t,
-    xe_device_handle_t,
-    xe_device_p2p_properties_t*
-    );
-
 
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Queries if one device can directly access peer device allocations
@@ -499,21 +434,12 @@ typedef xe_result_t (__xecall *xe_pfnDeviceGetP2PProperties_t)(
 ///         + nullptr == hPeerDevice
 ///         + nullptr == value
 ///     - ::XE_RESULT_ERROR_UNSUPPORTED
-__xedllport xe_result_t __xecall
+xe_result_t __xecall
 xeDeviceCanAccessPeer(
     xe_device_handle_t hDevice,                     ///< [in] handle of the device performing the access
     xe_device_handle_t hPeerDevice,                 ///< [in] handle of the peer device with the allocation
     xe_bool_t* value                                ///< [out] returned access capability
     );
-
-///////////////////////////////////////////////////////////////////////////////
-/// @brief xeDeviceCanAccessPeer function-pointer
-typedef xe_result_t (__xecall *xe_pfnDeviceCanAccessPeer_t)(
-    xe_device_handle_t,
-    xe_device_handle_t,
-    xe_bool_t*
-    );
-
 
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Supported Cache Config
@@ -547,19 +473,11 @@ typedef enum _xe_cache_config_t
 ///         + nullptr == hDevice
 ///         + devices do not support CacheConfig
 ///     - ::XE_RESULT_ERROR_UNSUPPORTED
-__xedllport xe_result_t __xecall
+xe_result_t __xecall
 xeDeviceSetIntermediateCacheConfig(
     xe_device_handle_t hDevice,                     ///< [in] handle of the device 
     xe_cache_config_t CacheConfig                   ///< [in] CacheConfig
     );
-
-///////////////////////////////////////////////////////////////////////////////
-/// @brief xeDeviceSetIntermediateCacheConfig function-pointer
-typedef xe_result_t (__xecall *xe_pfnDeviceSetIntermediateCacheConfig_t)(
-    xe_device_handle_t,
-    xe_cache_config_t
-    );
-
 
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Sets the preferred Last Level cache configuration for a device.
@@ -580,19 +498,11 @@ typedef xe_result_t (__xecall *xe_pfnDeviceSetIntermediateCacheConfig_t)(
 ///         + nullptr == hDevice
 ///         + devices do not support CacheConfig
 ///     - ::XE_RESULT_ERROR_UNSUPPORTED
-__xedllport xe_result_t __xecall
+xe_result_t __xecall
 xeDeviceSetLastLevelCacheConfig(
     xe_device_handle_t hDevice,                     ///< [in] handle of the device 
     xe_cache_config_t CacheConfig                   ///< [in] CacheConfig
     );
-
-///////////////////////////////////////////////////////////////////////////////
-/// @brief xeDeviceSetLastLevelCacheConfig function-pointer
-typedef xe_result_t (__xecall *xe_pfnDeviceSetLastLevelCacheConfig_t)(
-    xe_device_handle_t,
-    xe_cache_config_t
-    );
-
 
 #if defined(__cplusplus)
 } // extern "C"

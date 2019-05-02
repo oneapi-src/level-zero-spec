@@ -20,26 +20,22 @@
 * or otherwise. Any license under such intellectual property rights must be
 * express and approved by Intel in writing.
 *
-* @file xet_all.hpp
+* @file xex_api.hpp
 *
 * @cond DEV
-* DO NOT EDIT: generated from /scripts/templates/api_all.hpp.mako
+* DO NOT EDIT: generated from /scripts/extended
 * @endcond
 *
 ******************************************************************************/
-#ifndef _XET_ALL_HPP
-#define _XET_ALL_HPP
+#ifndef _XEX_API_HPP
+#define _XEX_API_HPP
 #if defined(__cplusplus)
 #pragma once
 
-#include "xet_cmdlist.hpp"
-#include "xet_device.hpp"
-#include "xet_gtpin.hpp"
-#include "xet_metric.hpp"
-#include "xet_cmdlist.inl"
-#include "xet_device.inl"
-#include "xet_gtpin.inl"
-#include "xet_metric.inl"
+#include "xex_cmdgraph.hpp"
+#include "xex_device.hpp"
+#include "xex_cmdgraph.inl"
+#include "xex_device.inl"
 
 #endif // defined(__cplusplus)
-#endif // _XET_ALL_HPP
+#endif // _XEX_API_HPP

@@ -37,7 +37,7 @@ from templates import helper as th
 * @endcond
 *
 ******************************************************************************/
-#include "${n}_all.h"
+#include "${n}_ddi.h"
 #include "layer.h"
 
 ${n}_apitable_t ${n}_apitable = {};

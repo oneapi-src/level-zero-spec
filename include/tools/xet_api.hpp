@@ -20,28 +20,26 @@
 * or otherwise. Any license under such intellectual property rights must be
 * express and approved by Intel in writing.
 *
-* @file xex_all.h
+* @file xet_api.hpp
 *
 * @cond DEV
-* DO NOT EDIT: generated from /scripts/templates/api_all.h.mako
+* DO NOT EDIT: generated from /scripts/tools
 * @endcond
 *
 ******************************************************************************/
-#ifndef _XEX_ALL_H
-#define _XEX_ALL_H
+#ifndef _XET_API_HPP
+#define _XET_API_HPP
 #if defined(__cplusplus)
 #pragma once
-#endif
 
-#include "xex_cmdgraph.h"
-#include "xex_device.h"
+#include "xet_cmdlist.hpp"
+#include "xet_device.hpp"
+#include "xet_gtpin.hpp"
+#include "xet_metric.hpp"
+#include "xet_cmdlist.inl"
+#include "xet_device.inl"
+#include "xet_gtpin.inl"
+#include "xet_metric.inl"
 
-///////////////////////////////////////////////////////////////////////////////
-typedef struct _xex_apitable_t
-{
-    xex_pfnCommandGraphCreate_t                         pfnCommandGraphCreate;
-    xex_pfnCommandGraphDestroy_t                        pfnCommandGraphDestroy;
-    xex_pfnCommandGraphClose_t                          pfnCommandGraphClose;
-} xex_apitable_t;
-
-#endif // _XEX_ALL_H
+#endif // defined(__cplusplus)
+#endif // _XET_API_HPP

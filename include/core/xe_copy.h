@@ -67,7 +67,7 @@ extern "C" {
 ///         + nullptr == dstptr
 ///         + nullptr == srcptr
 ///     - ::XE_RESULT_ERROR_UNSUPPORTED
-__xedllport xe_result_t __xecall
+xe_result_t __xecall
 xeCommandListAppendMemoryCopy(
     xe_command_list_handle_t hCommandList,          ///< [in] handle of command list
     void* dstptr,                                   ///< [in] pointer to destination memory to copy to
@@ -77,19 +77,6 @@ xeCommandListAppendMemoryCopy(
     uint32_t numWaitEvents,                         ///< [in][optional] number of events to wait on before copy
     xe_event_handle_t* phWaitEvents                 ///< [in][optional] handle of the events to wait on before copy
     );
-
-///////////////////////////////////////////////////////////////////////////////
-/// @brief xeCommandListAppendMemoryCopy function-pointer
-typedef xe_result_t (__xecall *xe_pfnCommandListAppendMemoryCopy_t)(
-    xe_command_list_handle_t,
-    void*,
-    const void*,
-    size_t,
-    xe_event_handle_t,
-    uint32_t,
-    xe_event_handle_t*
-    );
-
 
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Initializes host, device, or shared memory.
@@ -116,7 +103,7 @@ typedef xe_result_t (__xecall *xe_pfnCommandListAppendMemoryCopy_t)(
 ///         + nullptr == hCommandList
 ///         + nullptr == ptr
 ///     - ::XE_RESULT_ERROR_UNSUPPORTED
-__xedllport xe_result_t __xecall
+xe_result_t __xecall
 xeCommandListAppendMemorySet(
     xe_command_list_handle_t hCommandList,          ///< [in] handle of command list
     void* ptr,                                      ///< [in] pointer to memory to initialize
@@ -126,19 +113,6 @@ xeCommandListAppendMemorySet(
     uint32_t numWaitEvents,                         ///< [in][optional] number of events to wait on before copy
     xe_event_handle_t* phWaitEvents                 ///< [in][optional] handle of the events to wait on before copy
     );
-
-///////////////////////////////////////////////////////////////////////////////
-/// @brief xeCommandListAppendMemorySet function-pointer
-typedef xe_result_t (__xecall *xe_pfnCommandListAppendMemorySet_t)(
-    xe_command_list_handle_t,
-    void*,
-    int,
-    size_t,
-    xe_event_handle_t,
-    uint32_t,
-    xe_event_handle_t*
-    );
-
 
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Copies a image.
@@ -161,7 +135,7 @@ typedef xe_result_t (__xecall *xe_pfnCommandListAppendMemorySet_t)(
 ///         + nullptr == hDstImage
 ///         + nullptr == hSrcImage
 ///     - ::XE_RESULT_ERROR_UNSUPPORTED
-__xedllport xe_result_t __xecall
+xe_result_t __xecall
 xeCommandListAppendImageCopy(
     xe_command_list_handle_t hCommandList,          ///< [in] handle of command list
     xe_image_handle_t hDstImage,                    ///< [in] handle of destination image to copy to
@@ -170,18 +144,6 @@ xeCommandListAppendImageCopy(
     uint32_t numWaitEvents,                         ///< [in][optional] number of events to wait on before copy
     xe_event_handle_t* phWaitEvents                 ///< [in][optional] handle of the events to wait on before copy
     );
-
-///////////////////////////////////////////////////////////////////////////////
-/// @brief xeCommandListAppendImageCopy function-pointer
-typedef xe_result_t (__xecall *xe_pfnCommandListAppendImageCopy_t)(
-    xe_command_list_handle_t,
-    xe_image_handle_t,
-    xe_image_handle_t,
-    xe_event_handle_t,
-    uint32_t,
-    xe_event_handle_t*
-    );
-
 
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Region descriptor
@@ -213,7 +175,7 @@ typedef struct _xe_image_region_t
 ///         + nullptr == hDstImage
 ///         + nullptr == hSrcImage
 ///     - ::XE_RESULT_ERROR_UNSUPPORTED
-__xedllport xe_result_t __xecall
+xe_result_t __xecall
 xeCommandListAppendImageCopyRegion(
     xe_command_list_handle_t hCommandList,          ///< [in] handle of command list
     xe_image_handle_t hDstImage,                    ///< [in] handle of destination image to copy to
@@ -224,20 +186,6 @@ xeCommandListAppendImageCopyRegion(
     uint32_t numWaitEvents,                         ///< [in][optional] number of events to wait on before copy
     xe_event_handle_t* phWaitEvents                 ///< [in][optional] handle of the events to wait on before copy
     );
-
-///////////////////////////////////////////////////////////////////////////////
-/// @brief xeCommandListAppendImageCopyRegion function-pointer
-typedef xe_result_t (__xecall *xe_pfnCommandListAppendImageCopyRegion_t)(
-    xe_command_list_handle_t,
-    xe_image_handle_t,
-    xe_image_handle_t,
-    xe_image_region_t*,
-    xe_image_region_t*,
-    xe_event_handle_t,
-    uint32_t,
-    xe_event_handle_t*
-    );
-
 
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Copies from a image to device or shared memory.
@@ -262,7 +210,7 @@ typedef xe_result_t (__xecall *xe_pfnCommandListAppendImageCopyRegion_t)(
 ///         + nullptr == dstptr
 ///         + nullptr == hSrcImage
 ///     - ::XE_RESULT_ERROR_UNSUPPORTED
-__xedllport xe_result_t __xecall
+xe_result_t __xecall
 xeCommandListAppendImageCopyToMemory(
     xe_command_list_handle_t hCommandList,          ///< [in] handle of command list
     void* dstptr,                                   ///< [in] pointer to destination memory to copy to
@@ -272,19 +220,6 @@ xeCommandListAppendImageCopyToMemory(
     uint32_t numWaitEvents,                         ///< [in][optional] number of events to wait on before copy
     xe_event_handle_t* phWaitEvents                 ///< [in][optional] handle of the events to wait on before copy
     );
-
-///////////////////////////////////////////////////////////////////////////////
-/// @brief xeCommandListAppendImageCopyToMemory function-pointer
-typedef xe_result_t (__xecall *xe_pfnCommandListAppendImageCopyToMemory_t)(
-    xe_command_list_handle_t,
-    void*,
-    xe_image_handle_t,
-    xe_image_region_t*,
-    xe_event_handle_t,
-    uint32_t,
-    xe_event_handle_t*
-    );
-
 
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Copies to a image from device or shared memory.
@@ -309,7 +244,7 @@ typedef xe_result_t (__xecall *xe_pfnCommandListAppendImageCopyToMemory_t)(
 ///         + nullptr == hDstImage
 ///         + nullptr == srcptr
 ///     - ::XE_RESULT_ERROR_UNSUPPORTED
-__xedllport xe_result_t __xecall
+xe_result_t __xecall
 xeCommandListAppendImageCopyFromMemory(
     xe_command_list_handle_t hCommandList,          ///< [in] handle of command list
     xe_image_handle_t hDstImage,                    ///< [in] handle of destination image to copy to
@@ -319,19 +254,6 @@ xeCommandListAppendImageCopyFromMemory(
     uint32_t numWaitEvents,                         ///< [in][optional] number of events to wait on before copy
     xe_event_handle_t* phWaitEvents                 ///< [in][optional] handle of the events to wait on before copy
     );
-
-///////////////////////////////////////////////////////////////////////////////
-/// @brief xeCommandListAppendImageCopyFromMemory function-pointer
-typedef xe_result_t (__xecall *xe_pfnCommandListAppendImageCopyFromMemory_t)(
-    xe_command_list_handle_t,
-    xe_image_handle_t,
-    const void*,
-    xe_image_region_t*,
-    xe_event_handle_t,
-    uint32_t,
-    xe_event_handle_t*
-    );
-
 
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Asynchronously prefetches shared memory to the device associated with
@@ -367,21 +289,12 @@ typedef xe_result_t (__xecall *xe_pfnCommandListAppendImageCopyFromMemory_t)(
 ///         + nullptr == hCommandList
 ///         + nullptr == ptr
 ///     - ::XE_RESULT_ERROR_UNSUPPORTED
-__xedllport xe_result_t __xecall
+xe_result_t __xecall
 xeCommandListAppendMemoryPrefetch(
     xe_command_list_handle_t hCommandList,          ///< [in] handle of command list
     const void* ptr,                                ///< [in] pointer to start of the memory range to prefetch
     size_t count                                    ///< [in] size in bytes of the memory range to prefetch
     );
-
-///////////////////////////////////////////////////////////////////////////////
-/// @brief xeCommandListAppendMemoryPrefetch function-pointer
-typedef xe_result_t (__xecall *xe_pfnCommandListAppendMemoryPrefetch_t)(
-    xe_command_list_handle_t,
-    const void*,
-    size_t
-    );
-
 
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Supported memory advice hints
@@ -433,7 +346,7 @@ typedef enum _xe_memory_advice_t
 ///         + nullptr == ptr
 ///         + invalid value for advice
 ///     - ::XE_RESULT_ERROR_UNSUPPORTED
-__xedllport xe_result_t __xecall
+xe_result_t __xecall
 xeCommandListAppendMemAdvise(
     xe_command_list_handle_t hCommandList,          ///< [in] handle of command list
     xe_device_handle_t hDevice,                     ///< [in] device associated with the memory advice
@@ -441,17 +354,6 @@ xeCommandListAppendMemAdvise(
     size_t size,                                    ///< [in] Size in bytes of the memory range
     xe_memory_advice_t advice                       ///< [in] Memory advice for the memory range
     );
-
-///////////////////////////////////////////////////////////////////////////////
-/// @brief xeCommandListAppendMemAdvise function-pointer
-typedef xe_result_t (__xecall *xe_pfnCommandListAppendMemAdvise_t)(
-    xe_command_list_handle_t,
-    xe_device_handle_t,
-    const void*,
-    size_t,
-    xe_memory_advice_t
-    );
-
 
 #if defined(__cplusplus)
 } // extern "C"

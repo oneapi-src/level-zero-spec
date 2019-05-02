@@ -28,7 +28,7 @@
 * @endcond
 *
 ******************************************************************************/
-#include "xet_all.h"
+#include "xet_ddi.h"
 #include "loader.h"
 
 xet_apitable_t xet_apitable = {};
@@ -119,7 +119,7 @@ extern "C" {
 #endif
 
 ///////////////////////////////////////////////////////////////////////////////
-__xedllexport xe_result_t __xecall
+xe_result_t __xecall
 xetMetricGroupGetCount(
     xe_device_handle_t hDevice,                     ///< [in] handle of the device object
     uint32_t* pCount                                ///< [out] number of metric groups supported by the device
@@ -132,7 +132,7 @@ xetMetricGroupGetCount(
 }
 
 ///////////////////////////////////////////////////////////////////////////////
-__xedllexport xe_result_t __xecall
+xe_result_t __xecall
 xetMetricGroupGet(
     xe_device_handle_t hDevice,                     ///< [in] handle of the device
     uint32_t ordinal,                               ///< [in] metric group index
@@ -146,7 +146,7 @@ xetMetricGroupGet(
 }
 
 ///////////////////////////////////////////////////////////////////////////////
-__xedllexport xe_result_t __xecall
+xe_result_t __xecall
 xetMetricGroupGetProperties(
     xet_metric_group_handle_t hMetricGroup,         ///< [in] handle of the metric group
     xet_metric_group_properties_t* pProperties      ///< [out] metric group properties
@@ -159,7 +159,7 @@ xetMetricGroupGetProperties(
 }
 
 ///////////////////////////////////////////////////////////////////////////////
-__xedllexport xe_result_t __xecall
+xe_result_t __xecall
 xetMetricGet(
     xet_metric_group_handle_t hMetricGroup,         ///< [in] handle of the metric group
     uint32_t ordinal,                               ///< [in] metric index
@@ -173,7 +173,7 @@ xetMetricGet(
 }
 
 ///////////////////////////////////////////////////////////////////////////////
-__xedllexport xe_result_t __xecall
+xe_result_t __xecall
 xetMetricGetProperties(
     xet_metric_handle_t hMetric,                    ///< [in] handle of the metric
     xet_metric_properties_t* pProperties            ///< [out] metric properties
@@ -186,7 +186,7 @@ xetMetricGetProperties(
 }
 
 ///////////////////////////////////////////////////////////////////////////////
-__xedllexport xe_result_t __xecall
+xe_result_t __xecall
 xetMetricGroupCalculateData(
     xet_metric_group_handle_t hMetricGroup,         ///< [in] handle of the metric group
     uint32_t* pReportCount,                         ///< [in,out] report count to calculate
@@ -203,7 +203,7 @@ xetMetricGroupCalculateData(
 }
 
 ///////////////////////////////////////////////////////////////////////////////
-__xedllexport xe_result_t __xecall
+xe_result_t __xecall
 xetDeviceActivateMetricGroups(
     xe_device_handle_t hDevice,                     ///< [in] handle of the device
     uint32_t count,                                 ///< [in] metric group count to activate. 0 to deactivate.
@@ -217,7 +217,7 @@ xetDeviceActivateMetricGroups(
 }
 
 ///////////////////////////////////////////////////////////////////////////////
-__xedllexport xe_result_t __xecall
+xe_result_t __xecall
 xetMetricTracerOpen(
     xe_device_handle_t hDevice,                     ///< [in] handle of the device
     xet_metric_tracer_desc_t* pDesc,                ///< [in,out] metric tracer descriptor
@@ -233,7 +233,7 @@ xetMetricTracerOpen(
 }
 
 ///////////////////////////////////////////////////////////////////////////////
-__xedllexport xe_result_t __xecall
+xe_result_t __xecall
 xetCommandListAppendMetricTracerMarker(
     xe_command_list_handle_t hCommandList,          ///< [in] handle of the command list
     xet_metric_tracer_handle_t hMetricTracer,       ///< [in] handle of the metric tracer
@@ -247,7 +247,7 @@ xetCommandListAppendMetricTracerMarker(
 }
 
 ///////////////////////////////////////////////////////////////////////////////
-__xedllexport xe_result_t __xecall
+xe_result_t __xecall
 xetMetricTracerClose(
     xet_metric_tracer_handle_t hMetricTracer        ///< [in] handle of the metric tracer
     )
@@ -259,7 +259,7 @@ xetMetricTracerClose(
 }
 
 ///////////////////////////////////////////////////////////////////////////////
-__xedllexport xe_result_t __xecall
+xe_result_t __xecall
 xetMetricTracerReadData(
     xet_metric_tracer_handle_t hMetricTracer,       ///< [in] handle of the metric tracer
     uint32_t* pReportCount,                         ///< [in,out] report count to read/returned
@@ -274,7 +274,7 @@ xetMetricTracerReadData(
 }
 
 ///////////////////////////////////////////////////////////////////////////////
-__xedllexport xe_result_t __xecall
+xe_result_t __xecall
 xetMetricQueryPoolCreate(
     xe_device_handle_t hDevice,                     ///< [in] handle of the device
     xet_metric_query_pool_desc_t* pDesc,            ///< [in] metric query pool creation data
@@ -288,7 +288,7 @@ xetMetricQueryPoolCreate(
 }
 
 ///////////////////////////////////////////////////////////////////////////////
-__xedllexport xe_result_t __xecall
+xe_result_t __xecall
 xetMetricQueryPoolDestroy(
     xet_metric_query_pool_handle_t hMetricQueryPool ///< [in] handle of the metric query pool
     )
@@ -300,7 +300,7 @@ xetMetricQueryPoolDestroy(
 }
 
 ///////////////////////////////////////////////////////////////////////////////
-__xedllexport xe_result_t __xecall
+xe_result_t __xecall
 xetMetricQueryPoolGetMetricQuery(
     xet_metric_query_pool_handle_t hMetricQueryPool,///< [in] handle of the metric query pool
     uint32_t ordinal,                               ///< [in] index of the query within the pool
@@ -314,7 +314,7 @@ xetMetricQueryPoolGetMetricQuery(
 }
 
 ///////////////////////////////////////////////////////////////////////////////
-__xedllexport xe_result_t __xecall
+xe_result_t __xecall
 xetCommandListAppendMetricQueryBegin(
     xe_command_list_handle_t hCommandList,          ///< [in] handle of the command list
     xet_metric_query_handle_t hMetricQuery          ///< [in] handle of the metric query
@@ -327,7 +327,7 @@ xetCommandListAppendMetricQueryBegin(
 }
 
 ///////////////////////////////////////////////////////////////////////////////
-__xedllexport xe_result_t __xecall
+xe_result_t __xecall
 xetCommandListAppendMetricQueryEnd(
     xe_command_list_handle_t hCommandList,          ///< [in] handle of the command list
     xet_metric_query_handle_t hMetricQuery,         ///< [in] handle of the metric query
@@ -341,7 +341,7 @@ xetCommandListAppendMetricQueryEnd(
 }
 
 ///////////////////////////////////////////////////////////////////////////////
-__xedllexport xe_result_t __xecall
+xe_result_t __xecall
 xetCommandListAppendMetricMemoryBarrier(
     xe_command_list_handle_t hCommandList           ///< [in] handle of the command list
     )
@@ -353,7 +353,7 @@ xetCommandListAppendMetricMemoryBarrier(
 }
 
 ///////////////////////////////////////////////////////////////////////////////
-__xedllexport xe_result_t __xecall
+xe_result_t __xecall
 xetMetricQueryGetData(
     xet_metric_query_handle_t hMetricQuery,         ///< [in] handle of the metric query
     uint32_t* pReportCount,                         ///< [in,out] report count to read/returned

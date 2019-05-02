@@ -58,21 +58,12 @@ extern "C" {
 ///         + nullptr == hDevice
 ///         + nullptr == ptr
 ///     - ::XE_RESULT_ERROR_UNSUPPORTED
-__xedllport xe_result_t __xecall
+xe_result_t __xecall
 xeDeviceMakeMemoryResident(
     xe_device_handle_t hDevice,                     ///< [in] handle of the device
     void* ptr,                                      ///< [in] pointer to memory to make resident
     size_t size                                     ///< [in] size in bytes to make resident
     );
-
-///////////////////////////////////////////////////////////////////////////////
-/// @brief xeDeviceMakeMemoryResident function-pointer
-typedef xe_result_t (__xecall *xe_pfnDeviceMakeMemoryResident_t)(
-    xe_device_handle_t,
-    void*,
-    size_t
-    );
-
 
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Allows memory to be evicted from the device.
@@ -92,21 +83,12 @@ typedef xe_result_t (__xecall *xe_pfnDeviceMakeMemoryResident_t)(
 ///         + nullptr == hDevice
 ///         + nullptr == ptr
 ///     - ::XE_RESULT_ERROR_UNSUPPORTED
-__xedllport xe_result_t __xecall
+xe_result_t __xecall
 xeDeviceEvictMemory(
     xe_device_handle_t hDevice,                     ///< [in] handle of the device
     void* ptr,                                      ///< [in] pointer to memory to evict
     size_t size                                     ///< [in] size in bytes to evict
     );
-
-///////////////////////////////////////////////////////////////////////////////
-/// @brief xeDeviceEvictMemory function-pointer
-typedef xe_result_t (__xecall *xe_pfnDeviceEvictMemory_t)(
-    xe_device_handle_t,
-    void*,
-    size_t
-    );
-
 
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Makes image resident for the device.
@@ -125,19 +107,11 @@ typedef xe_result_t (__xecall *xe_pfnDeviceEvictMemory_t)(
 ///         + nullptr == hDevice
 ///         + nullptr == hImage
 ///     - ::XE_RESULT_ERROR_UNSUPPORTED
-__xedllport xe_result_t __xecall
+xe_result_t __xecall
 xeDeviceMakeImageResident(
     xe_device_handle_t hDevice,                     ///< [in] handle of the device
     xe_image_handle_t hImage                        ///< [in] handle of image to make resident
     );
-
-///////////////////////////////////////////////////////////////////////////////
-/// @brief xeDeviceMakeImageResident function-pointer
-typedef xe_result_t (__xecall *xe_pfnDeviceMakeImageResident_t)(
-    xe_device_handle_t,
-    xe_image_handle_t
-    );
-
 
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Allows image to be evicted from the device.
@@ -158,19 +132,11 @@ typedef xe_result_t (__xecall *xe_pfnDeviceMakeImageResident_t)(
 ///         + nullptr == hDevice
 ///         + nullptr == hImage
 ///     - ::XE_RESULT_ERROR_UNSUPPORTED
-__xedllport xe_result_t __xecall
+xe_result_t __xecall
 xeDeviceEvictImage(
     xe_device_handle_t hDevice,                     ///< [in] handle of the device
     xe_image_handle_t hImage                        ///< [in] handle of image to make evict
     );
-
-///////////////////////////////////////////////////////////////////////////////
-/// @brief xeDeviceEvictImage function-pointer
-typedef xe_result_t (__xecall *xe_pfnDeviceEvictImage_t)(
-    xe_device_handle_t,
-    xe_image_handle_t
-    );
-
 
 #if defined(__cplusplus)
 } // extern "C"

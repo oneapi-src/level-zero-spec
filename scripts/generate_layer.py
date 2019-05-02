@@ -5,7 +5,7 @@ import util
 """
     generic function for generating c/c++ files from the specification documents
 """
-def generate_code(dstpath, section, namespace, tags, specs, type):
+def generate_cpp(dstpath, section, namespace, tags, specs, type):
     template = "layer%s.mako"%type
     fin = os.path.join("templates", template)
 
@@ -30,5 +30,5 @@ def generate(section, namespace, tags, specs):
     util.makePath(dstpath)
 
     loc = 0
-    loc += generate_code(dstpath, section, namespace, tags, specs, ".cpp")
+    loc += generate_cpp(dstpath, section, namespace, tags, specs, ".cpp")
     return loc

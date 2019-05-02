@@ -73,17 +73,10 @@ typedef enum _xe_init_flag_t
 ///         + invalid value for flags
 ///     - ::XE_RESULT_ERROR_UNSUPPORTED
 ///     - ::XE_RESULT_ERROR_OUT_OF_HOST_MEMORY
-__xedllport xe_result_t __xecall
+xe_result_t __xecall
 xeInit(
     xe_init_flag_t flags                            ///< [in] initialization flags
     );
-
-///////////////////////////////////////////////////////////////////////////////
-/// @brief xeInit function-pointer
-typedef xe_result_t (__xecall *xe_pfnInit_t)(
-    xe_init_flag_t
-    );
-
 
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Returns the current version of the installed driver.
@@ -105,17 +98,10 @@ typedef xe_result_t (__xecall *xe_pfnInit_t)(
 ///     - ::XE_RESULT_ERROR_INVALID_PARAMETER
 ///         + nullptr == version
 ///     - ::XE_RESULT_ERROR_UNSUPPORTED
-__xedllport xe_result_t __xecall
+xe_result_t __xecall
 xeGetDriverVersion(
     uint32_t* version                               ///< [out] driver version
     );
-
-///////////////////////////////////////////////////////////////////////////////
-/// @brief xeGetDriverVersion function-pointer
-typedef xe_result_t (__xecall *xe_pfnGetDriverVersion_t)(
-    uint32_t*
-    );
-
 
 #if defined(__cplusplus)
 } // extern "C"

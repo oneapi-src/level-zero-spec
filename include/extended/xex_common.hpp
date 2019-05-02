@@ -34,7 +34,7 @@
 #define _XEX_COMMON_HPP
 #if defined(__cplusplus)
 #pragma once
-#include "xex_all.h"
+#include "xex_api.h"
 #include <tuple>
 #include "xe_all.hpp"
 

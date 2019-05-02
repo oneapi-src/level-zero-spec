@@ -28,7 +28,7 @@
 * @endcond
 *
 ******************************************************************************/
-#include "xex_all.h"
+#include "xex_ddi.h"
 #include "loader.h"
 
 xex_apitable_t xex_apitable = {};
@@ -59,7 +59,7 @@ extern "C" {
 #endif
 
 ///////////////////////////////////////////////////////////////////////////////
-__xedllexport xe_result_t __xecall
+xe_result_t __xecall
 xexCommandGraphCreate(
     xe_device_handle_t hDevice,                     ///< [in] handle of the device object
     const xex_command_graph_desc_t* desc,           ///< [in] pointer to command graph descriptor
@@ -73,7 +73,7 @@ xexCommandGraphCreate(
 }
 
 ///////////////////////////////////////////////////////////////////////////////
-__xedllexport xe_result_t __xecall
+xe_result_t __xecall
 xexCommandGraphDestroy(
     xex_command_graph_handle_t hCommandGraph        ///< [in] handle of command graph object to destroy
     )
@@ -85,7 +85,7 @@ xexCommandGraphDestroy(
 }
 
 ///////////////////////////////////////////////////////////////////////////////
-__xedllexport xe_result_t __xecall
+xe_result_t __xecall
 xexCommandGraphClose(
     xex_command_graph_handle_t hCommandGraph        ///< [in] handle of command graph object to close
     )

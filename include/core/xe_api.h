@@ -20,46 +20,32 @@
 * or otherwise. Any license under such intellectual property rights must be
 * express and approved by Intel in writing.
 *
-* @file xe_all.hpp
+* @file xe_api.h
 *
 * @cond DEV
-* DO NOT EDIT: generated from /scripts/templates/api_all.hpp.mako
+* DO NOT EDIT: generated from /scripts/core
 * @endcond
 *
 ******************************************************************************/
-#ifndef _XE_ALL_HPP
-#define _XE_ALL_HPP
+#ifndef _XE_API_H
+#define _XE_API_H
 #if defined(__cplusplus)
 #pragma once
+#endif
 
-#include "xe_barrier.hpp"
-#include "xe_cl_interop.hpp"
-#include "xe_cmdlist.hpp"
-#include "xe_cmdqueue.hpp"
-#include "xe_copy.hpp"
-#include "xe_device.hpp"
-#include "xe_driver.hpp"
-#include "xe_event.hpp"
-#include "xe_fence.hpp"
-#include "xe_image.hpp"
-#include "xe_memory.hpp"
-#include "xe_module.hpp"
-#include "xe_residency.hpp"
-#include "xe_sampler.hpp"
-#include "xe_barrier.inl"
-#include "xe_cl_interop.inl"
-#include "xe_cmdlist.inl"
-#include "xe_cmdqueue.inl"
-#include "xe_copy.inl"
-#include "xe_device.inl"
-#include "xe_driver.inl"
-#include "xe_event.inl"
-#include "xe_fence.inl"
-#include "xe_image.inl"
-#include "xe_memory.inl"
-#include "xe_module.inl"
-#include "xe_residency.inl"
-#include "xe_sampler.inl"
+#include "xe_barrier.h"
+#include "xe_cl_interop.h"
+#include "xe_cmdlist.h"
+#include "xe_cmdqueue.h"
+#include "xe_copy.h"
+#include "xe_device.h"
+#include "xe_driver.h"
+#include "xe_event.h"
+#include "xe_fence.h"
+#include "xe_image.h"
+#include "xe_memory.h"
+#include "xe_module.h"
+#include "xe_residency.h"
+#include "xe_sampler.h"
 
-#endif // defined(__cplusplus)
-#endif // _XE_ALL_HPP
+#endif // _XE_API_H

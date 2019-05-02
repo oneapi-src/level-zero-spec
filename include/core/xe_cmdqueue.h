@@ -126,21 +126,12 @@ typedef struct _xe_command_queue_desc_t
 ///         + ::XE_COMMAND_QUEUE_DESC_VERSION_CURRENT < desc->version
 ///     - ::XE_RESULT_ERROR_OUT_OF_HOST_MEMORY
 ///     - ::XE_RESULT_ERROR_OUT_OF_DEVICE_MEMORY
-__xedllport xe_result_t __xecall
+xe_result_t __xecall
 xeCommandQueueCreate(
     xe_device_handle_t hDevice,                     ///< [in] handle of the device object
     const xe_command_queue_desc_t* desc,            ///< [in] pointer to command queue descriptor
     xe_command_queue_handle_t* phCommandQueue       ///< [out] pointer to handle of command queue object created
     );
-
-///////////////////////////////////////////////////////////////////////////////
-/// @brief xeCommandQueueCreate function-pointer
-typedef xe_result_t (__xecall *xe_pfnCommandQueueCreate_t)(
-    xe_device_handle_t,
-    const xe_command_queue_desc_t*,
-    xe_command_queue_handle_t*
-    );
-
 
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Destroys a command queue.
@@ -166,17 +157,10 @@ typedef xe_result_t (__xecall *xe_pfnCommandQueueCreate_t)(
 ///     - ::XE_RESULT_ERROR_INVALID_PARAMETER
 ///         + nullptr == hCommandQueue
 ///     - ::XE_RESULT_ERROR_UNSUPPORTED
-__xedllport xe_result_t __xecall
+xe_result_t __xecall
 xeCommandQueueDestroy(
     xe_command_queue_handle_t hCommandQueue         ///< [in] handle of command queue object to destroy
     );
-
-///////////////////////////////////////////////////////////////////////////////
-/// @brief xeCommandQueueDestroy function-pointer
-typedef xe_result_t (__xecall *xe_pfnCommandQueueDestroy_t)(
-    xe_command_queue_handle_t
-    );
-
 
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Executes a command list in a command queue.
@@ -199,23 +183,13 @@ typedef xe_result_t (__xecall *xe_pfnCommandQueueDestroy_t)(
 ///         + 0 for numCommandLists
 ///         + hFence is in signaled state
 ///     - ::XE_RESULT_ERROR_UNSUPPORTED
-__xedllport xe_result_t __xecall
+xe_result_t __xecall
 xeCommandQueueExecuteCommandLists(
     xe_command_queue_handle_t hCommandQueue,        ///< [in] handle of the command queue
     uint32_t numCommandLists,                       ///< [in] number of command lists to execute
     xe_command_list_handle_t* phCommandLists,       ///< [in] list of handles of the command lists to execute
     xe_fence_handle_t hFence                        ///< [in][optional] handle of the fence to signal on completion
     );
-
-///////////////////////////////////////////////////////////////////////////////
-/// @brief xeCommandQueueExecuteCommandLists function-pointer
-typedef xe_result_t (__xecall *xe_pfnCommandQueueExecuteCommandLists_t)(
-    xe_command_queue_handle_t,
-    uint32_t,
-    xe_command_list_handle_t*,
-    xe_fence_handle_t
-    );
-
 
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Synchronizes a command queue by waiting on the host.
@@ -233,7 +207,7 @@ typedef xe_result_t (__xecall *xe_pfnCommandQueueExecuteCommandLists_t)(
 ///     - ::XE_RESULT_ERROR_UNSUPPORTED
 ///     - ::XE_RESULT_NOT_READY
 ///         + timeout expired
-__xedllport xe_result_t __xecall
+xe_result_t __xecall
 xeCommandQueueSynchronize(
     xe_command_queue_handle_t hCommandQueue,        ///< [in] handle of the command queue
     uint32_t timeout                                ///< [in] if non-zero, then indicates the maximum time to yield before
@@ -242,14 +216,6 @@ xeCommandQueueSynchronize(
                                                     ///< if MAX_UINT32, then function will not return until complete or device
                                                     ///< is lost.
     );
-
-///////////////////////////////////////////////////////////////////////////////
-/// @brief xeCommandQueueSynchronize function-pointer
-typedef xe_result_t (__xecall *xe_pfnCommandQueueSynchronize_t)(
-    xe_command_queue_handle_t,
-    uint32_t
-    );
-
 
 #if defined(__cplusplus)
 } // extern "C"

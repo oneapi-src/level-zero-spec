@@ -1,9 +1,4 @@
-<%
-import re
-%><%
-    n=namespace
-    N=n.upper()
-%>/**************************************************************************//**
+/**************************************************************************//**
 *
 * INTEL CONFIDENTIAL
 * Copyright 2019
@@ -25,23 +20,20 @@ import re
 * or otherwise. Any license under such intellectual property rights must be
 * express and approved by Intel in writing.
 *
-* @file ${n}_api.hpp
+* @file xex_api.h
 *
 * @cond DEV
-* DO NOT EDIT: generated from /scripts/${section}
+* DO NOT EDIT: generated from /scripts/extended
 * @endcond
 *
 ******************************************************************************/
-#ifndef _${N}_API_HPP
-#define _${N}_API_HPP
+#ifndef _XEX_API_H
+#define _XEX_API_H
 #if defined(__cplusplus)
 #pragma once
+#endif
 
-%for f in files:
-%if not re.match(r"\w+_common", f):
-#include "${f}"
-%endif
-%endfor
+#include "xex_cmdgraph.h"
+#include "xex_device.h"
 
-#endif // defined(__cplusplus)
-#endif // _${N}_API_HPP
+#endif // _XEX_API_H

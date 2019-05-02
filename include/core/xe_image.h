@@ -210,21 +210,12 @@ typedef struct _xe_image_properties_t
 ///         + nullptr == pImageProperties
 ///     - ::XE_RESULT_ERROR_UNSUPPORTED
 ///         + ::XE_IMAGE_DESC_VERSION_CURRENT < desc->version
-__xedllport xe_result_t __xecall
+xe_result_t __xecall
 xeImageGetProperties(
     xe_device_handle_t hDevice,                     ///< [in] handle of the device
     const xe_image_desc_t* desc,                    ///< [in] pointer to image descriptor
     xe_image_properties_t* pImageProperties         ///< [out] pointer to image properties
     );
-
-///////////////////////////////////////////////////////////////////////////////
-/// @brief xeImageGetProperties function-pointer
-typedef xe_result_t (__xecall *xe_pfnImageGetProperties_t)(
-    xe_device_handle_t,
-    const xe_image_desc_t*,
-    xe_image_properties_t*
-    );
-
 
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Creates a image object on the device.
@@ -249,21 +240,12 @@ typedef xe_result_t (__xecall *xe_pfnImageGetProperties_t)(
 ///         + ::XE_IMAGE_DESC_VERSION_CURRENT < desc->version
 ///     - ::XE_RESULT_ERROR_OUT_OF_HOST_MEMORY
 ///     - ::XE_RESULT_ERROR_OUT_OF_DEVICE_MEMORY
-__xedllport xe_result_t __xecall
+xe_result_t __xecall
 xeImageCreate(
     xe_device_handle_t hDevice,                     ///< [in] handle of the device
     const xe_image_desc_t* desc,                    ///< [in] pointer to image descriptor
     xe_image_handle_t* phImage                      ///< [out] pointer to handle of image object created
     );
-
-///////////////////////////////////////////////////////////////////////////////
-/// @brief xeImageCreate function-pointer
-typedef xe_result_t (__xecall *xe_pfnImageCreate_t)(
-    xe_device_handle_t,
-    const xe_image_desc_t*,
-    xe_image_handle_t*
-    );
-
 
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Deletes a image object.
@@ -284,17 +266,10 @@ typedef xe_result_t (__xecall *xe_pfnImageCreate_t)(
 ///     - ::XE_RESULT_ERROR_INVALID_PARAMETER
 ///         + nullptr == hImage
 ///     - ::XE_RESULT_ERROR_UNSUPPORTED
-__xedllport xe_result_t __xecall
+xe_result_t __xecall
 xeImageDestroy(
     xe_image_handle_t hImage                        ///< [in] handle of image object to destroy
     );
-
-///////////////////////////////////////////////////////////////////////////////
-/// @brief xeImageDestroy function-pointer
-typedef xe_result_t (__xecall *xe_pfnImageDestroy_t)(
-    xe_image_handle_t
-    );
-
 
 #if defined(__cplusplus)
 } // extern "C"

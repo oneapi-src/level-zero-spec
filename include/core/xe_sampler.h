@@ -105,21 +105,12 @@ typedef struct _xe_sampler_desc_t
 ///     - ::XE_RESULT_ERROR_UNSUPPORTED
 ///         + ::XE_SAMPLER_DESC_VERSION_CURRENT < pDesc->version
 ///     - ::XE_RESULT_ERROR_OUT_OF_HOST_MEMORY
-__xedllport xe_result_t __xecall
+xe_result_t __xecall
 xeSamplerCreate(
     xe_device_handle_t hDevice,                     ///< [in] handle of the device
     const xe_sampler_desc_t* pDesc,                 ///< [in] pointer to sampler descriptor
     xe_sampler_handle_t* phSampler                  ///< [out] handle of the sampler
     );
-
-///////////////////////////////////////////////////////////////////////////////
-/// @brief xeSamplerCreate function-pointer
-typedef xe_result_t (__xecall *xe_pfnSamplerCreate_t)(
-    xe_device_handle_t,
-    const xe_sampler_desc_t*,
-    xe_sampler_handle_t*
-    );
-
 
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Destroys sampler object
@@ -144,17 +135,10 @@ typedef xe_result_t (__xecall *xe_pfnSamplerCreate_t)(
 ///     - ::XE_RESULT_ERROR_INVALID_PARAMETER
 ///         + nullptr == hSampler
 ///     - ::XE_RESULT_ERROR_UNSUPPORTED
-__xedllport xe_result_t __xecall
+xe_result_t __xecall
 xeSamplerDestroy(
     xe_sampler_handle_t hSampler                    ///< [in] handle of the sampler
     );
-
-///////////////////////////////////////////////////////////////////////////////
-/// @brief xeSamplerDestroy function-pointer
-typedef xe_result_t (__xecall *xe_pfnSamplerDestroy_t)(
-    xe_sampler_handle_t
-    );
-
 
 #if defined(__cplusplus)
 } // extern "C"

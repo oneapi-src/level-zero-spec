@@ -27,9 +27,9 @@
 #include <mutex>
 #include <stdlib.h>
 #include "loader.h"
-#include "xe_all.h"
-#include "xex_all.h"
-#include "xet_all.h"
+#include "xe_ddi.h"
+#include "xex_ddi.h"
+#include "xet_ddi.h"
 
 ///////////////////////////////////////////////////////////////////////////////
 extern xe_apitable_t xe_apitable;
@@ -53,7 +53,7 @@ extern "C" {
 #endif
 
 ///////////////////////////////////////////////////////////////////////////////
-__xedllexport xe_result_t __xecall
+xe_result_t __xecall
 xeInit(
     xe_init_flag_t flags )
 {

@@ -58,7 +58,7 @@ def main():
                 util.jsonWrite(os.path.join(srcpath, "specs.json"), specs)
                 util.jsonWrite(os.path.join(srcpath, "meta.json"), meta)
 
-            generate_api.generate_cpp(dstpath, namespace, tags, specs, meta)
+            generate_api.generate(dstpath, namespace, tags, specs, meta)
 
             if args['loader']:
                 generate_loader.generate(section, namespace, tags, specs)

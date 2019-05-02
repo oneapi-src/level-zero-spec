@@ -1,7 +1,7 @@
-set(TARGET_NAME xe_intc_loader)
+set(TARGET_NAME xe_api)
 
 add_library(${TARGET_NAME}
-    SHARED
+    STATIC
         ${CMAKE_CURRENT_SOURCE_DIR}/loader.h
         ${CMAKE_CURRENT_SOURCE_DIR}/loader.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/core_loader.cpp
@@ -16,6 +16,5 @@ target_include_directories(${TARGET_NAME}
 
 target_compile_definitions(${TARGET_NAME}
     PRIVATE
-        XE_MAKEDLL
         XE_ENABLE_OCL_INTEROP=0
 )
