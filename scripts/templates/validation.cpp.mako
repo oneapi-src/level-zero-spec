@@ -33,7 +33,7 @@ from templates import helper as th
 * @file ${name}.cpp
 *
 * @cond DEV
-* DO NOT EDIT: generated from /scripts/templates/layer_val.cpp.mako
+* DO NOT EDIT: generated from /scripts/templates/validation.cpp.mako
 * @endcond
 *
 ******************************************************************************/
@@ -49,17 +49,25 @@ bool ${n}Intercept(
 {
     if(nullptr == original)
         return false;
-
     %for obj in th.extract_objs(specs, r"function"):
     %if 'condition' in obj:
-    #if ${th.subt(n, tags, obj['condition'])}
+#if ${th.subt(n, tags, obj['condition'])}
     %endif
     if( nullptr == original->${th.make_pfn_name(n, tags, obj)} )
         return false;
+    %if 'condition' in obj:
+#endif
+    %endif
+    %endfor
+
+    %for obj in th.extract_objs(specs, r"function"):
+    %if 'condition' in obj:
+#if ${th.subt(n, tags, obj['condition'])}
+    %endif
     ${n}_apitable.${th.append_ws(th.make_pfn_name(n, tags, obj), 55)} = original->${th.make_pfn_name(n, tags, obj)};
     original->${th.append_ws(th.make_pfn_name(n, tags, obj), 55+len(n))} = ${th.make_func_name(n, tags, obj)};
     %if 'condition' in obj:
-    #endif // ${th.subt(n, tags, obj['condition'])}
+#endif
     %endif
 
     %endfor
@@ -83,16 +91,20 @@ ${th.make_func_name(n, tags, obj)}(
     %endfor
     )
 {
-    if( nullptr == ${n}_apitable.${th.make_pfn_name(n, tags, obj)} )
-        return ${X}_RESULT_ERROR_UNINITIALIZED;
+    if( ${x}_validation_enables.ParameterValidation )
+    {
+        if( nullptr == ${n}_apitable.${th.make_pfn_name(n, tags, obj)} )
+            return ${X}_RESULT_ERROR_UNINITIALIZED;
 
-    // Check parameters
-    %for key, values in th.make_param_checks(n, tags, obj).items():
-    %for val in values:
-    if( ${val} ) return ${key};
-    %endfor
-    %endfor
+        // Check parameters
+        %for key, values in th.make_param_checks(n, tags, obj).items():
+        %for val in values:
+        if( ${val} )
+            return ${key};
 
+        %endfor
+        %endfor
+    }
     return ${n}_apitable.${th.make_pfn_name(n, tags, obj)}( ${", ".join(th.make_param_lines(n, tags, obj, format=["name"]))} );
 }
 %if 'condition' in obj:

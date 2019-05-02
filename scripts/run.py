@@ -17,13 +17,19 @@ def add_argument(parser, name, help, default=False):
     group.add_argument("--!" + name, dest=name, help="Disable "+help, action="store_false")
     parser.set_defaults(**{name:default})
 
+"""
+    
+"""
+def clean():
+    util.removePath("../include")
+    util.makePath("../include")
+    util.removePath("../build")
+    util.makePath("../build")
 
 """
     command lines for running cmake windows build
 """
-def run_cmake():
-    util.removePath("../build")
-    util.makePath("../build")
+def build():
     os.system('cmake -B ../build/ -S .. -G "Visual Studio 15 2017 Win64"')
     os.system('cmake --build ../build --clean-first')
 
@@ -40,9 +46,10 @@ def main():
     parser = argparse.ArgumentParser()
     for section in configParser.sections():
         add_argument(parser, section, "generation of C/C++ '%s' files."%section, True)
+    add_argument(parser, "clean", "cleaning previous generated files.")
     add_argument(parser, "loader", "generation of loader files.", True)
     add_argument(parser, "layers", "generation of layer files.", True)
-    add_argument(parser, "build", "runs cmake to generate and build projects")
+    add_argument(parser, "build", "running cmake to generate and build projects.")
     add_argument(parser, "debug", "dump intermediate data to disk.")
     add_argument(parser, "md", "generation of markdown files.", True)
     add_argument(parser, "html", "generation of HTML files.", True)
@@ -50,6 +57,9 @@ def main():
     args = vars(parser.parse_args())
 
     start = time.time()
+
+    if args['clean']:
+        clean()
 
     # generate code
     for idx, section in enumerate(configParser.sections()):
@@ -84,7 +94,7 @@ def main():
 
     # build code
     if args['build']:
-        run_cmake()
+        build()
 
     # generate documentation
     if args['html']:

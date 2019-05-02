@@ -47,6 +47,15 @@ typedef xe_result_t( __xecall *xe_pfnInitLayer_t )(
     xet_apitable_t*
     );
 
+///////////////////////////////////////////////////////////////////////////////
+inline bool getenv_tobool( const char* name )
+{
+    const char* env = getenv( name );
+    if(( nullptr == env ) || strcmp( "0", env ))
+        return false;
+    return strcmp( "1", env );
+}
+
 
 #if defined(__cplusplus)
 extern "C" {
@@ -74,8 +83,8 @@ xeInit(
     if( !initialized )
         return XE_RESULT_ERROR_UNINITIALIZED;
 
-    const char* env_var = getenv( "XE_ENABLE_VALIDATION_LAYER" );
-    if((nullptr != env_var) && (0 != atoi(env_var))){
+    if( getenv_tobool("XE_ENABLE_VALIDATION_LAYER") )
+    {
         auto validationLayer = LOAD_DRIVER_LIBRARY("xe_validation_layer"); // todo: fix persistent handle
         auto xeInitLayer = (xe_pfnInitLayer_t)LOAD_FUNCTION_PTR(validationLayer, "xeInitLayer");
         xeInitLayer( &xe_apitable, &xex_apitable, &xet_apitable );

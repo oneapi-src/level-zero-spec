@@ -24,10 +24,13 @@
 * @file layer.cpp
 *
 ******************************************************************************/
+#include <stdlib.h>
 #include "layer.h"
 #include "xe_api.h"
 #include "xex_api.h"
 #include "xet_api.h"
+
+xe_validation_enables_t xe_validation_enables = {};
 
 ///////////////////////////////////////////////////////////////////////////////
 extern xe_apitable_t xe_apitable;
@@ -37,6 +40,15 @@ extern xet_apitable_t xet_apitable;
 bool xeIntercept( xe_apitable_t* );
 bool xexIntercept( xex_apitable_t* );
 bool xetIntercept( xet_apitable_t* );
+
+///////////////////////////////////////////////////////////////////////////////
+inline bool getenv_tobool( const char* name )
+{
+    const char* env = getenv( name );
+    if( ( nullptr == env ) || strcmp( "0", env ) )
+        return false;
+    return strcmp( "1", env );
+}
 
 
 #if defined(__cplusplus)
@@ -57,6 +69,11 @@ xeInitLayer(
             
     if( !initialized )
         return XE_RESULT_ERROR_UNINITIALIZED;
+
+    xe_validation_enables.ParameterValidation = getenv_tobool("XE_ENABLE_PARAMETER_VALIDATION");
+    xe_validation_enables.HandleLifetime = getenv_tobool( "XE_ENABLE_HANDLE_LIFETIME" );
+    xe_validation_enables.MemoryTracker = getenv_tobool( "XE_ENABLE_MEMORY_TRACKER" );
+    xe_validation_enables.ThreadingValidation = getenv_tobool( "XE_ENABLE_THREADING_VALIDATION" );
 
     return XE_RESULT_SUCCESS;
 }

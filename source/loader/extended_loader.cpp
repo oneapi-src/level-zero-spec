@@ -39,17 +39,15 @@ bool xexLoadExports(
     void* handle )  ///< [in] driver handle
 {
     xex_apitable.pfnCommandGraphCreate                                   = (xex_pfnCommandGraphCreate_t)LOAD_FUNCTION_PTR(handle, "xexCommandGraphCreate");
+    xex_apitable.pfnCommandGraphDestroy                                  = (xex_pfnCommandGraphDestroy_t)LOAD_FUNCTION_PTR(handle, "xexCommandGraphDestroy");
+    xex_apitable.pfnCommandGraphClose                                    = (xex_pfnCommandGraphClose_t)LOAD_FUNCTION_PTR(handle, "xexCommandGraphClose");
+
     if( nullptr == xex_apitable.pfnCommandGraphCreate )
         return false;
-
-    xex_apitable.pfnCommandGraphDestroy                                  = (xex_pfnCommandGraphDestroy_t)LOAD_FUNCTION_PTR(handle, "xexCommandGraphDestroy");
     if( nullptr == xex_apitable.pfnCommandGraphDestroy )
         return false;
-
-    xex_apitable.pfnCommandGraphClose                                    = (xex_pfnCommandGraphClose_t)LOAD_FUNCTION_PTR(handle, "xexCommandGraphClose");
     if( nullptr == xex_apitable.pfnCommandGraphClose )
         return false;
-
     return true;
 }
 
@@ -66,9 +64,6 @@ xexCommandGraphCreate(
     xex_command_graph_handle_t* phCommandGraph      ///< [out] pointer to handle of command graph object created
     )
 {
-    if( nullptr == xex_apitable.pfnCommandGraphCreate )
-        return XE_RESULT_ERROR_UNINITIALIZED;
-
     return xex_apitable.pfnCommandGraphCreate( hDevice, desc, phCommandGraph );
 }
 
@@ -78,9 +73,6 @@ xexCommandGraphDestroy(
     xex_command_graph_handle_t hCommandGraph        ///< [in] handle of command graph object to destroy
     )
 {
-    if( nullptr == xex_apitable.pfnCommandGraphDestroy )
-        return XE_RESULT_ERROR_UNINITIALIZED;
-
     return xex_apitable.pfnCommandGraphDestroy( hCommandGraph );
 }
 
@@ -90,9 +82,6 @@ xexCommandGraphClose(
     xex_command_graph_handle_t hCommandGraph        ///< [in] handle of command graph object to close
     )
 {
-    if( nullptr == xex_apitable.pfnCommandGraphClose )
-        return XE_RESULT_ERROR_UNINITIALIZED;
-
     return xex_apitable.pfnCommandGraphClose( hCommandGraph );
 }
 

@@ -38,4 +38,16 @@ typedef struct _cl_context* cl_context;
 typedef struct _cl_program* cl_program;
 #endif
 
+///////////////////////////////////////////////////////////////////////////////
+typedef struct _xe_validation_enables_t
+{
+    bool ParameterValidation;
+    bool HandleLifetime;
+    bool MemoryTracker;
+    bool ThreadingValidation;
+
+} xe_validation_enables_t;
+
+extern xe_validation_enables_t xe_validation_enables;
+
 #endif // _LAYER_H

@@ -49,15 +49,23 @@ bool ${n}LoadExports(
 {
     %for obj in th.extract_objs(specs, r"function"):
     %if 'condition' in obj:
-    #if ${th.subt(n, tags, obj['condition'])}
+#if ${th.subt(n, tags, obj['condition'])}
     %endif
     ${n}_apitable.${th.append_ws(th.make_pfn_name(n, tags, obj), 55)} = (${th.make_pfn_type(n, tags, obj)})LOAD_FUNCTION_PTR(handle, "${th.make_func_name(n, tags, obj)}");
+    %if 'condition' in obj:
+#endif
+    %endif
+    %endfor
+
+    %for obj in th.extract_objs(specs, r"function"):
+    %if 'condition' in obj:
+#if ${th.subt(n, tags, obj['condition'])}
+    %endif
     if( nullptr == ${n}_apitable.${th.make_pfn_name(n, tags, obj)} )
         return false;
     %if 'condition' in obj:
-    #endif // ${th.subt(n, tags, obj['condition'])}
+#endif
     %endif
-
     %endfor
     return true;
 }
@@ -80,9 +88,6 @@ ${th.make_func_name(n, tags, obj)}(
     %endfor
     )
 {
-    if( nullptr == ${n}_apitable.${th.make_pfn_name(n, tags, obj)} )
-        return ${X}_RESULT_ERROR_UNINITIALIZED;
-
     return ${n}_apitable.${th.make_pfn_name(n, tags, obj)}( ${", ".join(th.make_param_lines(n, tags, obj, format=["name"]))} );
 }
 %if 'condition' in obj:

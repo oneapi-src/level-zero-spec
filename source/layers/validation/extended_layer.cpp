@@ -24,7 +24,7 @@
 * @file extended_layer.cpp
 *
 * @cond DEV
-* DO NOT EDIT: generated from /scripts/templates/layer_val.cpp.mako
+* DO NOT EDIT: generated from /scripts/templates/validation.cpp.mako
 * @endcond
 *
 ******************************************************************************/
@@ -40,19 +40,19 @@ bool xexIntercept(
 {
     if(nullptr == original)
         return false;
-
     if( nullptr == original->pfnCommandGraphCreate )
         return false;
+    if( nullptr == original->pfnCommandGraphDestroy )
+        return false;
+    if( nullptr == original->pfnCommandGraphClose )
+        return false;
+
     xex_apitable.pfnCommandGraphCreate                                   = original->pfnCommandGraphCreate;
     original->pfnCommandGraphCreate                                      = xexCommandGraphCreate;
 
-    if( nullptr == original->pfnCommandGraphDestroy )
-        return false;
     xex_apitable.pfnCommandGraphDestroy                                  = original->pfnCommandGraphDestroy;
     original->pfnCommandGraphDestroy                                     = xexCommandGraphDestroy;
 
-    if( nullptr == original->pfnCommandGraphClose )
-        return false;
     xex_apitable.pfnCommandGraphClose                                    = original->pfnCommandGraphClose;
     original->pfnCommandGraphClose                                       = xexCommandGraphClose;
 
@@ -72,15 +72,25 @@ xexCommandGraphCreate(
     xex_command_graph_handle_t* phCommandGraph      ///< [out] pointer to handle of command graph object created
     )
 {
-    if( nullptr == xex_apitable.pfnCommandGraphCreate )
-        return XE_RESULT_ERROR_UNINITIALIZED;
+    if( xe_validation_enables.ParameterValidation )
+    {
+        if( nullptr == xex_apitable.pfnCommandGraphCreate )
+            return XE_RESULT_ERROR_UNINITIALIZED;
 
-    // Check parameters
-    if( nullptr == hDevice ) return XE_RESULT_ERROR_INVALID_PARAMETER;
-    if( nullptr == desc ) return XE_RESULT_ERROR_INVALID_PARAMETER;
-    if( nullptr == phCommandGraph ) return XE_RESULT_ERROR_INVALID_PARAMETER;
-    if( XEX_COMMAND_GRAPH_DESC_VERSION_CURRENT < desc->version ) return XE_RESULT_ERROR_UNSUPPORTED;
+        // Check parameters
+        if( nullptr == hDevice )
+            return XE_RESULT_ERROR_INVALID_PARAMETER;
 
+        if( nullptr == desc )
+            return XE_RESULT_ERROR_INVALID_PARAMETER;
+
+        if( nullptr == phCommandGraph )
+            return XE_RESULT_ERROR_INVALID_PARAMETER;
+
+        if( XEX_COMMAND_GRAPH_DESC_VERSION_CURRENT < desc->version )
+            return XE_RESULT_ERROR_UNSUPPORTED;
+
+    }
     return xex_apitable.pfnCommandGraphCreate( hDevice, desc, phCommandGraph );
 }
 
@@ -90,12 +100,16 @@ xexCommandGraphDestroy(
     xex_command_graph_handle_t hCommandGraph        ///< [in] handle of command graph object to destroy
     )
 {
-    if( nullptr == xex_apitable.pfnCommandGraphDestroy )
-        return XE_RESULT_ERROR_UNINITIALIZED;
+    if( xe_validation_enables.ParameterValidation )
+    {
+        if( nullptr == xex_apitable.pfnCommandGraphDestroy )
+            return XE_RESULT_ERROR_UNINITIALIZED;
 
-    // Check parameters
-    if( nullptr == hCommandGraph ) return XE_RESULT_ERROR_INVALID_PARAMETER;
+        // Check parameters
+        if( nullptr == hCommandGraph )
+            return XE_RESULT_ERROR_INVALID_PARAMETER;
 
+    }
     return xex_apitable.pfnCommandGraphDestroy( hCommandGraph );
 }
 
@@ -105,12 +119,16 @@ xexCommandGraphClose(
     xex_command_graph_handle_t hCommandGraph        ///< [in] handle of command graph object to close
     )
 {
-    if( nullptr == xex_apitable.pfnCommandGraphClose )
-        return XE_RESULT_ERROR_UNINITIALIZED;
+    if( xe_validation_enables.ParameterValidation )
+    {
+        if( nullptr == xex_apitable.pfnCommandGraphClose )
+            return XE_RESULT_ERROR_UNINITIALIZED;
 
-    // Check parameters
-    if( nullptr == hCommandGraph ) return XE_RESULT_ERROR_INVALID_PARAMETER;
+        // Check parameters
+        if( nullptr == hCommandGraph )
+            return XE_RESULT_ERROR_INVALID_PARAMETER;
 
+    }
     return xex_apitable.pfnCommandGraphClose( hCommandGraph );
 }
 

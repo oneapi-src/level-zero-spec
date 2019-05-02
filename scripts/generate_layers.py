@@ -7,7 +7,7 @@ import util
 """
 def generate_validation_cpp(path, section, namespace, tags, specs, type):
     dstpath = os.path.join(path, "validation")
-    template = "layer_val%s.mako"%type
+    template = "validation%s.mako"%type
     fin = os.path.join("templates", template)
 
     name = "%s_layer"%section
