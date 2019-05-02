@@ -569,6 +569,11 @@ There are multiple levels of constructs needed for executing functions on the de
 1. A [**Module**](#mod) represents a single translation unit that consists of functions that have been compiled together.
 2. A [**Function**](#func) represents the function within the module that will be launched directly from a command list.
 
+The following diagram provides a high level overview of the major parts of the system.
+
+![Driver](../images/module.png?raw=true)  
+@image latex module.png
+
 ${"##"} <a name="mod">Modules</a>
 Modules can be created from an IL or directly from native format using ::${x}ModuleCreate.
 - ::${x}ModuleCreate takes a format argument that specifies the input format.

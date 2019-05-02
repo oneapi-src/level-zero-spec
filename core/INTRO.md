@@ -13,6 +13,9 @@ The objective of the Level-Zero API is to provide direct-to-metal interfaces to 
 It is a programming interface that can be published at a cadence that better matches Intel hardware releases and can be tailored to any device needs. 
 It can be adapted to support broader set of languages features, such as function pointers, virtual functions, unified memory, and  I/O capabilities.
 
+![Driver](../images/one_api_sw_stack.png?raw=true)  
+@image latex one_api_sw_stack.png
+
 The Level-Zero API provides the lowest-level, fine-grain and most explicit control over:
 - Device Discovery
 - Memory Allocation
