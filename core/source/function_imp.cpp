@@ -410,8 +410,7 @@ xe_result_t FunctionImp::setArgBuffer(uint32_t argIndex, size_t argSize, const v
 
     FunctionSignature::patchPointer(crossThreadData.weakRef(), crossThreadDataSize, arg, val);
 
-    GraphicsAllocation *alloc =
-        globalMemoryManager->findAllocation(*reinterpret_cast<void *const *>(argVal));
+    GraphicsAllocation *alloc = globalMemoryManager->findGraphicsAllocation(*reinterpret_cast<void *const *>(argVal));
     assert(alloc != nullptr); // TODO : Handle nullptr if *argVal == NULL
 
     // Handle stateles to stateful

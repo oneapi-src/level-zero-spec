@@ -1,6 +1,5 @@
 #pragma once
 
-#include "device.h"
 #include "ptr.h"
 
 #include <cstddef>
@@ -11,6 +10,8 @@ class GraphicsAllocation;
 }
 
 namespace L0 {
+struct Device;
+struct MemAllocation;
 struct GraphicsAllocation;
 
 struct MemoryManager {
@@ -21,7 +22,8 @@ struct MemoryManager {
     virtual PtrOwn<GraphicsAllocation> allocateGraphicsMemoryForIsa(PtrRef<const void> isaHostMem, size_t size) = 0;
     virtual PtrOwn<GraphicsAllocation> allocateGraphicsMemoryForPrivateMemory(size_t size) = 0;
     virtual uint64_t getIsaHeapGpuAddress() const = 0;
-    virtual GraphicsAllocation *findAllocation(const void *ptr) = 0;
+    virtual GraphicsAllocation *findGraphicsAllocation(const void *ptr) = 0;
+    virtual MemAllocation *findMemAllocation(const void *ptr) = 0;
     virtual void freeMemory(GraphicsAllocation *allocation) = 0;
     virtual void freeMemory(const void *ptr) = 0;
 

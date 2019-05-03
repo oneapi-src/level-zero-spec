@@ -10,9 +10,8 @@ xe_result_t hostMemAlloc(xe_host_mem_alloc_flag_t flags,
                          size_t size,
                          size_t alignment,
                          void **ptr) {
-
+    assert(globalMemoryManager);
     *ptr = globalMemoryManager->allocateHostMemory(size, alignment);
-    assert(*ptr);
 
     return XE_RESULT_SUCCESS;
 }
@@ -44,6 +43,8 @@ xe_result_t memAlloc(xe_device_handle_t hDevice,
 
     auto allocation = globalMemoryManager->allocateManagedMemory(device, size, alignment);
     assert(allocation);
+    allocation->allocType = AllocationType::DEVICE;
+
     *ptr = allocation->getHostAddress();
 
     return XE_RESULT_SUCCESS;
@@ -79,6 +80,8 @@ xe_result_t sharedMemAlloc(xe_device_handle_t hDevice,
 
     auto allocation = globalMemoryManager->allocateManagedMemory(device, size, alignment);
     assert(allocation);
+    allocation->allocType = AllocationType::SHARED;
+
     *ptr = allocation->getHostAddress();
 
     return XE_RESULT_SUCCESS;

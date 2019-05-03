@@ -32,36 +32,39 @@ MockMemoryManager::Mock() {
 
     EXPECT_CALL(*this, getIsaHeapGpuAddress).Times(AnyNumber());
 
-    EXPECT_CALL(*this, findAllocation(_))
-        .WillRepeatedly(Invoke(this, &MockMemoryManager::doFindAllocation));
+    EXPECT_CALL(*this, findGraphicsAllocation(_))
+        .WillRepeatedly(Invoke(this, &MockMemoryManager::doFindGraphicsAllocation));
+
+    EXPECT_CALL(*this, findMemAllocation(_))
+        .WillRepeatedly(Invoke(this, &MockMemoryManager::doFindMemAllocation));
 }
 
 void *MockMemoryManager::doAllocateHostMemory(size_t size, size_t alignment) {
     return alignedMalloc(size, alignment);
 }
 
-GraphicsAllocation *MockMemoryManager::doCreateGraphicsAllocation(L0::Device *device, size_t size, size_t alignment) {
+GraphicsAllocation *MockMemoryManager::doCreateGraphicsAllocation(Device *device, size_t size, size_t alignment) {
     auto buffer = alignedMalloc(size, alignment);
     auto allocation = new GraphicsAllocation(buffer, size);
     track(allocation);
     return allocation;
 }
 
-PtrOwn<GraphicsAllocation> MockMemoryManager::doCreateGraphicsAllocationForIsa(PtrRef<const void> isaHostMem,
+PtrOwn<L0::GraphicsAllocation> MockMemoryManager::doCreateGraphicsAllocationForIsa(PtrRef<const void> isaHostMem,
                                                                                size_t size) {
     auto buffer = alignedMalloc(size, 64);
     auto allocation = new GraphicsAllocation(buffer, size);
-    return PtrOwn<GraphicsAllocation>(allocation);
+    return PtrOwn<L0::GraphicsAllocation>(allocation);
 }
 
 PtrOwn<GraphicsAllocation> MockMemoryManager::doCreateGraphicsAllocationForPrivateMemory(size_t size) {
     auto buffer = alignedMalloc(size, 64);
     auto allocation = new GraphicsAllocation(buffer, size);
     track(allocation);
-    return PtrOwn<GraphicsAllocation>(allocation);
+    return PtrOwn<L0::GraphicsAllocation>(allocation);
 }
 
-void MockMemoryManager::doFreeGraphicsAllocation(GraphicsAllocation *allocation) {
+void MockMemoryManager::doFreeGraphicsAllocation(L0::GraphicsAllocation *allocation) {
     assert(allocation);
     auto buffer = reinterpret_cast<uint8_t *>(allocation->getGpuAddress());
     alignedFree(buffer);
@@ -73,7 +76,11 @@ void MockMemoryManager::doFreePtr(const void *ptr) {
     alignedFree(const_cast<void *>(ptr));
 }
 
-GraphicsAllocation *MockMemoryManager::doFindAllocation(const void *ptr) {
+L0::GraphicsAllocation *MockMemoryManager::doFindGraphicsAllocation(const void *ptr) {
+    return static_cast<L0::GraphicsAllocation *>(allocMap[knownAllocations.get(ptr)]);
+}
+
+L0::MemAllocation *MockMemoryManager::doFindMemAllocation(const void *ptr) {
     return allocMap[knownAllocations.get(ptr)];
 }
 

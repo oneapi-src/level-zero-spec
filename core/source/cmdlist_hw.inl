@@ -606,7 +606,7 @@ xe_result_t CommandListCoreFamily<gfxCoreFamily>::appendMemoryCopy(void *dstptr,
     if (builtinFunction->setGroupSize(groupSizeX, groupSizeY, groupSizeZ))
         return XE_RESULT_ERROR_UNKNOWN;
 
-    GraphicsAllocation *alloc = globalMemoryManager->findAllocation(dstptr);
+    auto alloc = globalMemoryManager->findMemAllocation(dstptr);
     if (alloc == nullptr) {
         // Trying to access non-driver memallocated for dstptr: Allocate managed memory using the host's buffer
         auto dstAlloc = globalMemoryManager->allocateManagedMemoryFromFault(device, dstptr, size);
@@ -617,7 +617,7 @@ xe_result_t CommandListCoreFamily<gfxCoreFamily>::appendMemoryCopy(void *dstptr,
 
     builtinFunction->setArgumentValue(0, sizeof(dstptr), &dstptr);
 
-    alloc = globalMemoryManager->findAllocation(srcptr);
+    alloc = globalMemoryManager->findMemAllocation(srcptr);
     if (alloc == nullptr) {
         // Trying to access non-driver memallocated for dstptr: Allocate managed memory using the host's buffer
         auto srcAlloc = globalMemoryManager->allocateManagedMemoryFromFault(device, const_cast<void *>(srcptr), size);

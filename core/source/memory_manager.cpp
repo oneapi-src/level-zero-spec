@@ -20,7 +20,11 @@ MemoryManager *globalMemoryManager = nullptr;
 struct MemoryManagerImp : public MemoryManager {
 
     void *allocateHostMemory(size_t size, size_t alignment) override {
-        return this->memoryManagerRT->allocateSystemMemory(size, alignment);
+        void *buffer = this->memoryManagerRT->allocateSystemMemory(size, alignment);
+        HostAllocation *allocation = new HostAllocation(buffer, size);
+        allocationTracker[allocation->getHostAddress()] = allocation;
+
+        return buffer;
     }
 
     GraphicsAllocation *allocateDeviceMemory(Device *device, size_t size, size_t alignment) override {
@@ -29,7 +33,9 @@ struct MemoryManagerImp : public MemoryManager {
 
         auto allocation = new GraphicsAllocation(memoryManagerRT->allocateGraphicsMemoryWithProperties(properties));
         knownAllocations.insert(*allocation->allocationRT); // temporary
-        allocMap[allocation->allocationRT] = std::make_pair(allocation, device);    // temporary
+        allocMap[allocation->allocationRT] = allocation;    // temporary
+        allocationTracker[allocation->getHostAddress()] = allocation;
+        allocation->setDevice(device);
 
         return allocation;
     }
@@ -40,7 +46,9 @@ struct MemoryManagerImp : public MemoryManager {
 
         auto allocation = new GraphicsAllocation(memoryManagerRT->allocateGraphicsMemoryWithProperties(properties));
         knownAllocations.insert(*allocation->allocationRT); // temporary
-        allocMap[allocation->allocationRT] = std::make_pair(allocation, device);    // temporary
+        allocMap[allocation->allocationRT] = allocation;    // temporary
+        allocationTracker[allocation->getHostAddress()] = allocation;
+        allocation->setDevice(device);
 
         return allocation;
     }
@@ -53,7 +61,9 @@ struct MemoryManagerImp : public MemoryManager {
         auto allocation = new GraphicsAllocation(memoryManagerRT->allocateGraphicsMemoryWithProperties({false, size, NEO::GraphicsAllocation::AllocationType::UNDECIDED}, buffer));
         allocation->setAllocatedFromFault(true);
         knownAllocations.insert(*allocation->allocationRT); // temporary
-        allocMap[allocation->allocationRT] = std::make_pair(allocation, device);    // temporary
+        allocMap[allocation->allocationRT] = allocation;    // temporary
+        allocationTracker[allocation->getHostAddress()] = allocation;
+        allocation->setDevice(device);
 
         return allocation;
     }
@@ -77,8 +87,12 @@ struct MemoryManagerImp : public MemoryManager {
         return PtrOwn<GraphicsAllocation>{new GraphicsAllocation(alloc)};
     }
 
-    GraphicsAllocation *findAllocation(const void *ptr) override {
-        return allocMap[knownAllocations.get(ptr)].first; // temporary
+    GraphicsAllocation *findGraphicsAllocation(const void *ptr) override {
+        return static_cast<GraphicsAllocation *>(allocMap[knownAllocations.get(ptr)]); // temporary
+    }
+
+    MemAllocation *findMemAllocation(const void *ptr) override {
+        return allocMap[knownAllocations.get(ptr)]; // temporary
     }
 
     void freeMemory(GraphicsAllocation *allocation) {
@@ -91,14 +105,14 @@ struct MemoryManagerImp : public MemoryManager {
     }
 
     void freeMemory(const void *ptr) override {
-        NEO::GraphicsAllocation *allocationRT = knownAllocations.get(ptr);
-        if (allocationRT) {
-            GraphicsAllocation *allocation = allocMap[allocationRT].first;
-            assert(allocation);
-            assert(allocation->getHostAddress() == ptr);
-            freeMemory(allocation);
+        void *bufferAddress = const_cast<void *>(ptr);
+        MemAllocation *allocation = allocationTracker[bufferAddress];
+        assert(allocation);
+        if (allocation->allocType == AllocationType::DEVICE ||
+                allocation->allocType == AllocationType::SHARED) {
+            freeMemory(static_cast<GraphicsAllocation *>(allocation));
         } else {
-            alignedFree(const_cast<void *>(ptr));
+            alignedFree(bufferAddress);
         }
     }
 
@@ -108,7 +122,8 @@ struct MemoryManagerImp : public MemoryManager {
 
     NEO::MemoryManager *memoryManagerRT;
     NEO::SVMAllocsManager::MapBasedAllocationTracker knownAllocations;
-    std::unordered_map<NEO::GraphicsAllocation *, std::pair<L0::GraphicsAllocation *, Device *>> allocMap; // temporary
+    std::unordered_map<NEO::GraphicsAllocation *, L0::MemAllocation *> allocMap; // temporary
+    std::unordered_map<void *, L0::MemAllocation *> allocationTracker;
 };
 
 void MemoryManager::createGlobalMemoryManager() {
