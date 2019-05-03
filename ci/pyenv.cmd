@@ -41,7 +41,7 @@ goto :eof
 :setup_manifest
 pushd %_CI_ROOTDIR%
 set MANIFEST_FILE=%_CI_MANIFEST_DIR%\windows_docs.yml
-echo cmd /C %_CI_SETUP_DIR%setup_manifest.cmd %MANIFEST_FILE%
+::echo cmd /C %_CI_SETUP_DIR%setup_manifest.cmd %MANIFEST_FILE%
 cmd /C %_CI_SETUP_DIR%setup_manifest.cmd %MANIFEST_FILE%
 if errorlevel 1 ( exit /B %ERRORLEVEL% )
 popd

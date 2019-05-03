@@ -59,6 +59,7 @@ scripts/tools/*.json
 html/
 latex/
 public/
+.public/
 
 # Build files
 /build*/
@@ -68,9 +69,6 @@ public/
 
 # third_party files
 /third_party/*/
-
-# ci exceptions
-!ci/deps/getparentproc/*.exe
 
 # VS CMake settings
 /CMakeSettings.json

@@ -4,12 +4,10 @@ import argparse
 import re
 import fileinput
 from distutils import dir_util
-import ci_util
+import util
 
-scripts_dir = os.environ.get("SCRIPTS_DIR")
-root_dir = os.environ.get("ROOT_DIR")
-
-util = ci_util.load_module_from_file(os.path.join(scripts_dir, "util.py"))
+script_dir = os.path.dirname(os.path.abspath(__file__))
+root_dir = os.path.dirname(script_dir)
 
 
 """
@@ -24,8 +22,12 @@ def publish_gitlab_html():
     publishing_dir = os.path.join(root_dir, "public")
 
     # Remove dest dirs
-    util.removePath(tmp_dir)
-    util.removePath(publishing_dir)
+    if os.path.exists(tmp_dir):
+        print("Deleting temp dir: %s" % tmp_dir)
+        util.removePath(tmp_dir)
+    if os.path.exists(publishing_dir):
+        print("Deleting publishing dir: %s" % publishing_dir)
+        util.removePath(publishing_dir)
 
     # Copy over generated content to new folder
     print("Copying html files from '%s' to '%s'" % (src_html_dir, tmp_dir))
@@ -45,7 +47,7 @@ def publish_gitlab_html():
             print(re.sub(regex_pattern, './images', line), end='')
 
     # Publish new folder to GitLab Pages folder (/public)
-    print("Publishing to GitLab pages by renaming '%s' to '%s'..." % (tmp_dir, publishing_dir))
+    print("Publishing to GitLab pages by renaming '%s' to '%s'" % (tmp_dir, publishing_dir))
     os.rename(tmp_dir, publishing_dir)
 
 
@@ -66,9 +68,17 @@ def main(args=sys.argv[1:]):
 
     # Publish GitLab html
     if options.publish_html:
-        publish_gitlab_html()
+        try:
+            publish_gitlab_html()
+        except Exception as e:
+            print(e)
+            print("Failed")
+            return 1
+
+    print("Done")
+    return 0
 
 
 if __name__ == '__main__':
-    main()
+    sys.exit(main())
 # END OF FILE

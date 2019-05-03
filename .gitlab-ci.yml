@@ -1,12 +1,19 @@
+cache:
+  paths:
+  - .irepo/
+  - third_party/
+
 stages:
 - build
 - deploy
 
 generate_html:
   stage: build
-  script: ci/gen_docs.cmd
-  only:
-    - master@one-api/level_zero
+  script:
+    - ci/pyenv.cmd up
+    - set PATH=%PATH%;%_CI_TOOLS_DIR%\doxygen_1.8.15.windows.x64
+    - cd scripts
+    - python run.py --!core --!extended --!tools --!md
   artifacts:
     name: "%CI_JOB_NAME%"
     paths:
@@ -18,15 +25,13 @@ generate_html:
       - staging_ci
   tags:
     - win
-    - python
-    - doxygen
-    - bt
 
 pages:
   stage: deploy
-  script: ci/publish_docs.cmd
-  only:
-    - master@one-api/level_zero
+  script:
+    - ci/pyenv.cmd up
+    - cd scripts
+    - python ci.py --publish-html
   artifacts:
     paths:
     - public
@@ -36,6 +41,4 @@ pages:
       - staging_ci
   tags:
     - win
-    - python
-    - bt
   when: always
