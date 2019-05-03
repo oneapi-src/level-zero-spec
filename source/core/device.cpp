@@ -110,7 +110,7 @@ struct DeviceImp : public Device {
         assert(pComputeProperties->version == XE_DEVICE_COMPUTE_PROPERTIES_VERSION_CURRENT);
         const auto &deviceInfo = this->deviceRT->getDeviceInfo();
 
-        pComputeProperties->maxThreadsPerGroup = static_cast<uint32_t>(
+        pComputeProperties->maxTotalGroupSize = static_cast<uint32_t>(
             deviceInfo.maxWorkGroupSize /
             8); // threads per group or items per group?! Clarify naming vs maxGroupSizeX/Y/Z
         pComputeProperties->maxGroupSizeX = static_cast<uint32_t>(
