@@ -18,6 +18,11 @@ namespace L0 {
 MemoryManager *globalMemoryManager = nullptr;
 
 struct MemoryManagerImp : public MemoryManager {
+
+    void *allocateHostMemory(size_t size, size_t alignment) override {
+        return this->memoryManagerRT->allocateSystemMemory(size, alignment);
+    }
+
     GraphicsAllocation *allocateDeviceMemory(size_t size, size_t alignment) override {
         NEO::AllocationProperties properties(size, NEO::GraphicsAllocation::AllocationType::UNDECIDED);
         properties.alignment = alignment;
@@ -87,11 +92,14 @@ struct MemoryManagerImp : public MemoryManager {
 
     void freeMemory(const void *ptr) override {
         NEO::GraphicsAllocation *allocationRT = knownAllocations.get(ptr);
-        assert(allocationRT);
-        GraphicsAllocation *allocation = allocMap[allocationRT];
-        assert(allocation);
-        assert(allocation->getHostAddress() == ptr);
-        freeMemory(allocation);
+        if (allocationRT) {
+            GraphicsAllocation *allocation = allocMap[allocationRT];
+            assert(allocation);
+            assert(allocation->getHostAddress() == ptr);
+            freeMemory(allocation);
+        } else {
+            alignedFree(const_cast<void *>(ptr));
+        }
     }
 
     MemoryManagerImp(void *memoryManagerRT)

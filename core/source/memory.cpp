@@ -10,7 +10,11 @@ xe_result_t hostMemAlloc(xe_host_mem_alloc_flag_t flags,
                          size_t size,
                          size_t alignment,
                          void **ptr) {
-    return XE_RESULT_ERROR_UNSUPPORTED;
+
+    *ptr = globalMemoryManager->allocateHostMemory(size, alignment);
+    assert(*ptr);
+
+    return XE_RESULT_SUCCESS;
 }
 
 xe_result_t ipcCloseMemHandle(const void *ptr) {

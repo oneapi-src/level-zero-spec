@@ -25,6 +25,7 @@ struct Mock<MemoryManager> : public MemoryManager {
     Mock();
     virtual ~Mock();
 
+    MOCK_METHOD2(allocateHostMemory, void *(size_t size, size_t alignment));
     MOCK_METHOD2(allocateDeviceMemory, GraphicsAllocation *(size_t size, size_t alignment));
     MOCK_METHOD2(allocateManagedMemory, GraphicsAllocation *(size_t size, size_t alignment));
     MOCK_METHOD2(allocateManagedMemoryFromFault, GraphicsAllocation *(void *buffer, size_t size));
@@ -36,6 +37,7 @@ struct Mock<MemoryManager> : public MemoryManager {
     MOCK_METHOD1(findAllocation, GraphicsAllocation *(const void *ptr));
 
     // default mock implementation
+    void *doAllocateHostMemory(size_t size, size_t alignment);
     GraphicsAllocation *doCreateGraphicsAllocation(size_t size, size_t alignment);
     PtrOwn<GraphicsAllocation> doCreateGraphicsAllocationForIsa(PtrRef<const void> isaHostMem, size_t size);
     PtrOwn<GraphicsAllocation> doCreateGraphicsAllocationForPrivateMemory(size_t size);

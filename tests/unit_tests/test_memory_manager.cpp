@@ -5,6 +5,17 @@
 
 namespace L0 {
 
+TEST(MemoryManagerallocateHostMemory, returnsHostBuffer) {
+    auto platform = NEO::constructPlatform();
+    auto success = platform->initialize();
+    ASSERT_TRUE(success);
+
+    void *ptr = globalMemoryManager->allocateHostMemory(16u, 16u);
+    EXPECT_NE(nullptr, ptr);
+
+    globalMemoryManager->freeMemory(ptr);
+}
+
 TEST(MemoryManagerallocateDeviceMemory, returnsGraphicsAllocation) {
     auto platform = NEO::constructPlatform();
     auto success = platform->initialize();

@@ -10,6 +10,9 @@ using namespace testing;
 using MockMemoryManager = Mock<L0::ult::MemoryManager>;
 
 MockMemoryManager::Mock() {
+    EXPECT_CALL(*this, allocateHostMemory)
+        .WillRepeatedly(Invoke(this, &MockMemoryManager::doAllocateHostMemory));
+
     EXPECT_CALL(*this, allocateDeviceMemory)
         .WillRepeatedly(Invoke(this, &MockMemoryManager::doCreateGraphicsAllocation));
 
@@ -31,6 +34,10 @@ MockMemoryManager::Mock() {
 
     EXPECT_CALL(*this, findAllocation(_))
         .WillRepeatedly(Invoke(this, &MockMemoryManager::doFindAllocation));
+}
+
+void *MockMemoryManager::doAllocateHostMemory(size_t size, size_t alignment) {
+    return alignedMalloc(size, alignment);
 }
 
 GraphicsAllocation *MockMemoryManager::doCreateGraphicsAllocation(size_t size, size_t alignment) {

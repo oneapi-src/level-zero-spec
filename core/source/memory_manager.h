@@ -13,6 +13,7 @@ namespace L0 {
 struct GraphicsAllocation;
 
 struct MemoryManager {
+    virtual void *allocateHostMemory(size_t size, size_t alignment) = 0;
     virtual GraphicsAllocation *allocateDeviceMemory(size_t size, size_t alignment) = 0;
     virtual GraphicsAllocation *allocateManagedMemory(size_t size, size_t alignment) = 0;
     virtual GraphicsAllocation *allocateManagedMemoryFromFault(void *buffer, size_t size) = 0;
