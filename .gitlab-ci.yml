@@ -10,7 +10,9 @@ stages:
 generate_html:
   stage: build
   script:
+    - echo setting up python virtual env
     - ci/pyenv.cmd up
+    - echo we got here
     - set PATH=%PATH%;%_CI_TOOLS_DIR%\doxygen_1.8.15.windows.x64
     - cd scripts
     - python run.py --!core --!extended --!tools --!md
