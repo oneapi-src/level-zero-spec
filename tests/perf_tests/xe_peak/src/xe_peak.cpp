@@ -20,6 +20,7 @@
  * SOFTWARE.
  */
 #include "../include/xe_peak.h"
+#include <algorithm>
 
 //---------------------------------------------------------------------
 // Utility function to load the binary spv file from a path
@@ -302,51 +303,26 @@ uint64_t total_current_work_items(uint64_t group_size_x, uint64_t group_count_x,
 uint64_t XePeak::set_workgroups(L0Context &context, const uint64_t total_work_items_requested,
                                 struct XeWorkGroups *workgroup_info) {
 
-    uint64_t final_work_items = 0;
-    uint64_t group_count_x = 1;
-    uint64_t group_count_y = 1;
-    uint64_t group_count_z = 1;
-    uint64_t group_size_x = 1;
-    uint64_t group_size_y = 1;
-    uint64_t group_size_z = 1;
+    auto group_size_x = std::min(total_work_items_requested, uint64_t(context.device_compute_property.maxGroupSizeX));
+    auto group_size_y = 1;
+    auto group_size_z = 1;
+    auto group_size = group_size_x * group_size_y * group_size_z;
 
-    while (final_work_items < total_work_items_requested) {
-        if (group_count_x < context.device_compute_property.maxGroupCountX) {
-            group_count_x += 1;
-            final_work_items = total_current_work_items(group_size_x, group_count_x, group_size_y,
-                                                        group_count_y, group_size_z, group_count_z);
-        }
-        if ((group_count_y < context.device_compute_property.maxGroupCountY) &&
-            final_work_items < total_work_items_requested) {
-            group_count_y += 1;
-            final_work_items = total_current_work_items(group_size_x, group_count_x, group_size_y,
-                                                        group_count_y, group_size_z, group_count_z);
-        }
-        if ((group_count_z < context.device_compute_property.maxGroupCountZ) &&
-            final_work_items < total_work_items_requested) {
-            group_count_z += 1;
-            final_work_items = total_current_work_items(group_size_x, group_count_x, group_size_y,
-                                                        group_count_y, group_size_z, group_count_z);
-        }
-        if ((final_work_items < total_work_items_requested) &&
-            (group_size_x < context.device_compute_property.maxGroupSizeX)) {
-            group_size_x += 1;
-            final_work_items = total_current_work_items(group_size_x, group_count_x, group_size_y,
-                                                        group_count_y, group_size_z, group_count_z);
-        }
-        if ((final_work_items < total_work_items_requested) &&
-            (group_size_y < context.device_compute_property.maxGroupSizeY)) {
-            group_size_y += 1;
-            final_work_items = total_current_work_items(group_size_x, group_count_x, group_size_y,
-                                                        group_count_y, group_size_z, group_count_z);
-        }
-        if ((final_work_items < total_work_items_requested) &&
-            (group_size_z < context.device_compute_property.maxGroupSizeZ)) {
-            group_size_z += 1;
-            final_work_items = total_current_work_items(group_size_x, group_count_x, group_size_y,
-                                                        group_count_y, group_size_z, group_count_z);
-        }
-    }
+    auto group_count_x = total_work_items_requested / group_size;
+    group_count_x = std::min(group_count_x, uint64_t(context.device_compute_property.maxGroupCountX));
+    auto remaining_items = total_work_items_requested - group_count_x * group_size;
+
+    uint64_t group_count_y = remaining_items / (group_count_x * group_size);
+    group_count_y = std::min(group_count_y, uint64_t(context.device_compute_property.maxGroupCountY));
+    group_count_y = std::max(group_count_y, uint64_t(1));
+    remaining_items = total_work_items_requested - group_count_x * group_count_y * group_size;
+
+    uint64_t group_count_z = remaining_items / (group_count_x * group_count_y * group_size);
+    group_count_z = std::min(group_count_z, uint64_t(context.device_compute_property.maxGroupCountZ));
+    group_count_z = std::max(group_count_z, uint64_t(1));
+
+    auto final_work_items = group_count_x * group_count_y * group_count_z * group_size;
+    remaining_items = total_work_items_requested - final_work_items;
 
     if (verbose) {
         std::cout << "Group size x: " << group_size_x << "\n";
@@ -584,19 +560,13 @@ void XePeak::setup_function(L0Context &context, xe_function_handle_t &function, 
 
 //---------------------------------------------------------------------
 // Utility function to calculate the max work items that the current
-// device can execute with a single kernel function enqueued.
+// device can execute simultaneously with a single kernel function enqueued.
 //---------------------------------------------------------------------
 uint64_t XePeak::get_max_work_items(L0Context &context) {
-    uint64_t group_size_x = context.device_compute_property.maxGroupSizeX;
-    uint64_t group_size_y = context.device_compute_property.maxGroupSizeY;
-    uint64_t group_size_z = context.device_compute_property.maxGroupSizeZ;
-    uint64_t group_count_x = context.device_compute_property.maxGroupCountX;
-    uint64_t group_count_y = context.device_compute_property.maxGroupCountY;
-    uint64_t group_count_z = context.device_compute_property.maxGroupCountZ;
-
-    uint64_t max_work_items = (group_size_x * group_size_y * group_size_z * group_count_x *
-                               group_count_y * group_count_z);
-    return max_work_items;
+    return context.device_property.numSlicesPerTile *
+           context.device_property.numSubslicesPerSlice *
+           context.device_property.numEUsPerSubslice *
+           context.device_compute_property.maxGroupSizeX;
 }
 
 //---------------------------------------------------------------------

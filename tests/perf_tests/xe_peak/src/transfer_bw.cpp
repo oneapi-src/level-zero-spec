@@ -27,7 +27,7 @@ void XePeak::xe_peak_transfer_bw(L0Context &context) {
     Timer timer;
 
     uint64_t max_number_of_allocated_items = MAX_DEVICE_OBJECT_SIZE / sizeof(float) / 2;
-    uint64_t number_of_items = roundToMultipleOf(max_number_of_allocated_items, context.device_compute_property.maxGroupCountX, transfer_bw_max_size);
+    uint64_t number_of_items = roundToMultipleOf(max_number_of_allocated_items, context.device_compute_property.maxGroupSizeX, transfer_bw_max_size);
 
     std::vector<float> local_memory(number_of_items);
     for (uint64_t i = 0; i < number_of_items; i++) {

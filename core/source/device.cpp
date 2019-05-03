@@ -116,13 +116,13 @@ struct DeviceImp : public Device {
         assert(pComputeProperties->version == XE_DEVICE_COMPUTE_PROPERTIES_VERSION_CURRENT);
         const auto &deviceInfo = this->deviceRT->getDeviceInfo();
 
-        pComputeProperties->maxThreadsPerGroup = static_cast<uint32_t>(deviceInfo.maxWorkGroupSize); // threads per group or items per group?! Clarify naming vs maxGroupSizeX/Y/Z
-        pComputeProperties->maxGroupSizeX = pComputeProperties->maxThreadsPerGroup;                  // Note : it doesn't mean that it can be max x max x max
-        pComputeProperties->maxGroupSizeY = pComputeProperties->maxThreadsPerGroup;                  //        rather max x 1 x 1
-        pComputeProperties->maxGroupSizeZ = pComputeProperties->maxThreadsPerGroup;                  //
-        pComputeProperties->maxGroupCountX = static_cast<uint32_t>(deviceInfo.maxWorkItemSizes[0]);  // assuming 1 x y z  // need clarification on the intent
-        pComputeProperties->maxGroupCountY = static_cast<uint32_t>(deviceInfo.maxWorkItemSizes[1]);  // assuming x x 1 z
-        pComputeProperties->maxGroupCountZ = static_cast<uint32_t>(deviceInfo.maxWorkItemSizes[2]);  // assuming x x y 1
+        pComputeProperties->maxThreadsPerGroup = static_cast<uint32_t>(deviceInfo.maxWorkGroupSize / 8); // threads per group or items per group?! Clarify naming vs maxGroupSizeX/Y/Z
+        pComputeProperties->maxGroupSizeX = static_cast<uint32_t>(deviceInfo.maxWorkItemSizes[0]);                  // Note : it doesn't mean that it can be max x max x max
+        pComputeProperties->maxGroupSizeY = static_cast<uint32_t>(deviceInfo.maxWorkItemSizes[1]);                  //        rather max x 1 x 1
+        pComputeProperties->maxGroupSizeZ = static_cast<uint32_t>(deviceInfo.maxWorkItemSizes[2]);                  //
+        pComputeProperties->maxGroupCountX = 0xffffffff;
+        pComputeProperties->maxGroupCountY = 0xffffffff;
+        pComputeProperties->maxGroupCountZ = 0xffffffff;
         pComputeProperties->maxSharedLocalMemory = static_cast<uint32_t>(deviceInfo.localMemSize);
         pComputeProperties->maxGroupRegisters = GrfConfig::DefaultGrfNumber; // registers per group or subgroup?! Need clarification
         pComputeProperties->numSubGroupSizes = sizeof(deviceInfo.maxSubGroups) / sizeof(deviceInfo.maxSubGroups[0]);
@@ -207,12 +207,12 @@ struct DeviceImp : public Device {
         pDeviceProperties->numThreadsPerEU =
                 deviceInfo.numThreadsPerEU;
         pDeviceProperties->numEUsPerSubslice =
-                hardwareInfo.pSysInfo->MaxEuPerSubSlice * 2; // need clarification - does this make sense pre GEN11?
+                hardwareInfo.pSysInfo->MaxEuPerSubSlice;
         pDeviceProperties->numSubslicesPerSlice =
-                hardwareInfo.pSysInfo->MaxDualSubSlicesSupported
-                        / hardwareInfo.pSysInfo->MaxSlicesSupported;
+                hardwareInfo.pSysInfo->SubSliceCount
+                        / hardwareInfo.pSysInfo->SliceCount;
         pDeviceProperties->numSlicesPerTile =
-                hardwareInfo.pSysInfo->MaxSlicesSupported;
+                hardwareInfo.pSysInfo->SliceCount;
         //pDeviceProperties->numTiles; ///< [out] Number of tiles for this device. TODO : Add support
         return XE_RESULT_SUCCESS;
     }
