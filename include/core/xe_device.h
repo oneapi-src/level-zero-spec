@@ -288,7 +288,8 @@ typedef enum _xe_device_compute_properties_version_t
 typedef struct _xe_device_compute_properties_t
 {
     xe_device_compute_properties_version_t version; ///< [in] ::XE_DEVICE_COMPUTE_PROPERTIES_VERSION_CURRENT
-    uint32_t maxThreadsPerGroup;                    ///< [out] Maximum threads per compute group
+    uint32_t maxTotalGroupSize;                     ///< [out] Maximum items per compute group. (maxGroupSizeX * maxGroupSizeY
+                                                    ///< * maxGroupSizeZ) <= maxTotalGroupSize
     uint32_t maxGroupSizeX;                         ///< [out] Maximum items for X dimension in group
     uint32_t maxGroupSizeY;                         ///< [out] Maximum items for Y dimension in group
     uint32_t maxGroupSizeZ;                         ///< [out] Maximum items for Z dimension in group
