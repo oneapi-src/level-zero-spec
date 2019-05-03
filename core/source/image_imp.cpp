@@ -50,7 +50,7 @@ bool ImageImp::initialize(Device *device, const xe_image_desc_t *desc) {
     size_t elem_size = formatLayoutSize[imageDesc.format.layout];
     sizeBytes = elem_size * imageDesc.height * imageDesc.width * imageDesc.depth;
 
-    allocation = globalMemoryManager->allocateManagedMemory(sizeBytes, elem_size);
+    allocation = globalMemoryManager->allocateManagedMemory(device, sizeBytes, elem_size);
     assert(allocation);
     return true;
 }

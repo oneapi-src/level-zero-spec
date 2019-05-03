@@ -25,7 +25,7 @@ TEST(MemoryManagerallocateDeviceMemory, returnsGraphicsAllocation) {
     ASSERT_NE(nullptr, deviceRT);
     auto device = Device::create(deviceRT);
 
-    auto allocation = globalMemoryManager->allocateDeviceMemory(16u, 16u);
+    auto allocation = globalMemoryManager->allocateDeviceMemory(device, 16u, 16u);
     EXPECT_NE(nullptr, allocation);
 
     globalMemoryManager->freeMemory(allocation);

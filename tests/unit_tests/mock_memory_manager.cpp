@@ -40,7 +40,7 @@ void *MockMemoryManager::doAllocateHostMemory(size_t size, size_t alignment) {
     return alignedMalloc(size, alignment);
 }
 
-GraphicsAllocation *MockMemoryManager::doCreateGraphicsAllocation(size_t size, size_t alignment) {
+GraphicsAllocation *MockMemoryManager::doCreateGraphicsAllocation(L0::Device *device, size_t size, size_t alignment) {
     auto buffer = alignedMalloc(size, alignment);
     auto allocation = new GraphicsAllocation(buffer, size);
     track(allocation);

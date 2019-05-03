@@ -19,7 +19,7 @@ bool CommandContainer::initialize(Device *device) {
 
     // Allocate memory for our batch buffer
     assert(globalMemoryManager);
-    allocation = globalMemoryManager->allocateDeviceMemory(65536u, 4096u);
+    allocation = globalMemoryManager->allocateDeviceMemory(device, 65536u, 4096u);
     assert(allocation);
 
     // Add our allocation to the residency container
@@ -27,7 +27,7 @@ bool CommandContainer::initialize(Device *device) {
 
     // Allocate memory for each of our indirect state heaps
     for (auto &allocationIndirectHeap : allocationIndirectHeaps) {
-        allocationIndirectHeap = globalMemoryManager->allocateDeviceMemory(16384u, 4096u);
+        allocationIndirectHeap = globalMemoryManager->allocateDeviceMemory(device, 16384u, 4096u);
         residencyContainer.push_back(allocationIndirectHeap->allocationRT);
     }
 

@@ -1,5 +1,6 @@
 #pragma once
 
+#include "device.h"
 #include "ptr.h"
 
 #include <cstddef>
@@ -14,9 +15,9 @@ struct GraphicsAllocation;
 
 struct MemoryManager {
     virtual void *allocateHostMemory(size_t size, size_t alignment) = 0;
-    virtual GraphicsAllocation *allocateDeviceMemory(size_t size, size_t alignment) = 0;
-    virtual GraphicsAllocation *allocateManagedMemory(size_t size, size_t alignment) = 0;
-    virtual GraphicsAllocation *allocateManagedMemoryFromFault(void *buffer, size_t size) = 0;
+    virtual GraphicsAllocation *allocateDeviceMemory(Device *device, size_t size, size_t alignment) = 0;
+    virtual GraphicsAllocation *allocateManagedMemory(Device *device, size_t size, size_t alignment) = 0;
+    virtual GraphicsAllocation *allocateManagedMemoryFromFault(Device *device, void *buffer, size_t size) = 0;
     virtual PtrOwn<GraphicsAllocation> allocateGraphicsMemoryForIsa(PtrRef<const void> isaHostMem, size_t size) = 0;
     virtual PtrOwn<GraphicsAllocation> allocateGraphicsMemoryForPrivateMemory(size_t size) = 0;
     virtual uint64_t getIsaHeapGpuAddress() const = 0;

@@ -58,7 +58,7 @@ uint64_t Event::getGpuAddress() {
 
 bool EventImp::initialize() {
     assert(globalMemoryManager);
-    allocation = globalMemoryManager->allocateDeviceMemory(64u, 64u);
+    allocation = globalMemoryManager->allocateDeviceMemory(device, 64u, 64u);
     assert(allocation);
 
     reset();

@@ -271,6 +271,7 @@ struct DeviceImp : public Device {
         assert(graphicsAllocationRT != nullptr);
 
         auto allocation = globalMemoryManager->allocateManagedMemoryFromFault(
+            this,
             graphicsAllocationRT->getUnderlyingBuffer(),
             graphicsAllocationRT->getUnderlyingBufferSize());
 

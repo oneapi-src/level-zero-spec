@@ -23,29 +23,29 @@ struct MemoryManagerImp : public MemoryManager {
         return this->memoryManagerRT->allocateSystemMemory(size, alignment);
     }
 
-    GraphicsAllocation *allocateDeviceMemory(size_t size, size_t alignment) override {
+    GraphicsAllocation *allocateDeviceMemory(Device *device, size_t size, size_t alignment) override {
         NEO::AllocationProperties properties(size, NEO::GraphicsAllocation::AllocationType::UNDECIDED);
         properties.alignment = alignment;
 
         auto allocation = new GraphicsAllocation(memoryManagerRT->allocateGraphicsMemoryWithProperties(properties));
         knownAllocations.insert(*allocation->allocationRT); // temporary
-        allocMap[allocation->allocationRT] = allocation;    // temporary
+        allocMap[allocation->allocationRT] = std::make_pair(allocation, device);    // temporary
 
         return allocation;
     }
 
-    GraphicsAllocation *allocateManagedMemory(size_t size, size_t alignment) override {
+    GraphicsAllocation *allocateManagedMemory(Device *device, size_t size, size_t alignment) override {
         NEO::AllocationProperties properties(size, NEO::GraphicsAllocation::AllocationType::UNDECIDED);
         properties.alignment = alignment;
 
         auto allocation = new GraphicsAllocation(memoryManagerRT->allocateGraphicsMemoryWithProperties(properties));
         knownAllocations.insert(*allocation->allocationRT); // temporary
-        allocMap[allocation->allocationRT] = allocation;    // temporary
+        allocMap[allocation->allocationRT] = std::make_pair(allocation, device);    // temporary
 
         return allocation;
     }
 
-    GraphicsAllocation *allocateManagedMemoryFromFault(void *buffer, size_t size) override {
+    GraphicsAllocation *allocateManagedMemoryFromFault(Device *device, void *buffer, size_t size) override {
         // TODO :
         //        * How are allocations removed from this list?
         //        * What if we encouter the same allocation multiple times but with different sizes (note : it's a valid and very probable scenario)
@@ -53,7 +53,7 @@ struct MemoryManagerImp : public MemoryManager {
         auto allocation = new GraphicsAllocation(memoryManagerRT->allocateGraphicsMemoryWithProperties({false, size, NEO::GraphicsAllocation::AllocationType::UNDECIDED}, buffer));
         allocation->setAllocatedFromFault(true);
         knownAllocations.insert(*allocation->allocationRT); // temporary
-        allocMap[allocation->allocationRT] = allocation;    // temporary
+        allocMap[allocation->allocationRT] = std::make_pair(allocation, device);    // temporary
 
         return allocation;
     }
@@ -78,7 +78,7 @@ struct MemoryManagerImp : public MemoryManager {
     }
 
     GraphicsAllocation *findAllocation(const void *ptr) override {
-        return allocMap[knownAllocations.get(ptr)]; // temporary
+        return allocMap[knownAllocations.get(ptr)].first; // temporary
     }
 
     void freeMemory(GraphicsAllocation *allocation) {
@@ -93,7 +93,7 @@ struct MemoryManagerImp : public MemoryManager {
     void freeMemory(const void *ptr) override {
         NEO::GraphicsAllocation *allocationRT = knownAllocations.get(ptr);
         if (allocationRT) {
-            GraphicsAllocation *allocation = allocMap[allocationRT];
+            GraphicsAllocation *allocation = allocMap[allocationRT].first;
             assert(allocation);
             assert(allocation->getHostAddress() == ptr);
             freeMemory(allocation);
@@ -108,7 +108,7 @@ struct MemoryManagerImp : public MemoryManager {
 
     NEO::MemoryManager *memoryManagerRT;
     NEO::SVMAllocsManager::MapBasedAllocationTracker knownAllocations;
-    std::unordered_map<NEO::GraphicsAllocation *, L0::GraphicsAllocation *> allocMap; // temporary
+    std::unordered_map<NEO::GraphicsAllocation *, std::pair<L0::GraphicsAllocation *, Device *>> allocMap; // temporary
 };
 
 void MemoryManager::createGlobalMemoryManager() {

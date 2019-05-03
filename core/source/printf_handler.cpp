@@ -23,7 +23,7 @@ struct DummyKernel : NEO::Kernel {
 };
 
 GraphicsAllocation *PrintfHandler::createPrintfBuffer(Device *device) {
-    auto allocation = globalMemoryManager->allocateManagedMemory(PrintfHandler::printfBufferSize, MemoryConstants::pageSize64k);
+    auto allocation = globalMemoryManager->allocateManagedMemory(device, PrintfHandler::printfBufferSize, MemoryConstants::pageSize64k);
     *reinterpret_cast<uint32_t *>(allocation->getHostAddress()) = PrintfHandler::printfSurfaceInitialDataSize;
     return allocation;
 }

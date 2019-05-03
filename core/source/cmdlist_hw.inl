@@ -50,7 +50,7 @@ void *CommandListCoreFamily<gfxCoreFamily>::getHeapSpaceAllowGrow(CommandContain
         newSize = std::max(newSize, indirectHeap.getAvailableSpace() + size);
         newSize = alignUp(newSize, 4096U);
         auto oldAlloc = this->allocationIndirectHeaps[heapType];
-        auto newAlloc = globalMemoryManager->allocateDeviceMemory(newSize, 4096u);
+        auto newAlloc = globalMemoryManager->allocateDeviceMemory(device, newSize, 4096u);
         assert(oldAlloc);
         assert(newAlloc);
         indirectHeap.replaceGraphicsAllocation(newAlloc->allocationRT);
@@ -609,7 +609,7 @@ xe_result_t CommandListCoreFamily<gfxCoreFamily>::appendMemoryCopy(void *dstptr,
     GraphicsAllocation *alloc = globalMemoryManager->findAllocation(dstptr);
     if (alloc == nullptr) {
         // Trying to access non-driver memallocated for dstptr: Allocate managed memory using the host's buffer
-        auto dstAlloc = globalMemoryManager->allocateManagedMemoryFromFault(dstptr, size);
+        auto dstAlloc = globalMemoryManager->allocateManagedMemoryFromFault(device, dstptr, size);
         this->deallocationContainer.push_back(dstAlloc);
     } else {
         assert(alloc->getSize() >= size);
@@ -620,7 +620,7 @@ xe_result_t CommandListCoreFamily<gfxCoreFamily>::appendMemoryCopy(void *dstptr,
     alloc = globalMemoryManager->findAllocation(srcptr);
     if (alloc == nullptr) {
         // Trying to access non-driver memallocated for dstptr: Allocate managed memory using the host's buffer
-        auto srcAlloc = globalMemoryManager->allocateManagedMemoryFromFault(const_cast<void *>(srcptr), size);
+        auto srcAlloc = globalMemoryManager->allocateManagedMemoryFromFault(device, const_cast<void *>(srcptr), size);
         this->deallocationContainer.push_back(srcAlloc);
     } else {
         assert(alloc->getSize() >= size);

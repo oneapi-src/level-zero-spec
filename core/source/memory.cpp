@@ -42,7 +42,7 @@ xe_result_t memAlloc(xe_device_handle_t hDevice,
     assert(device);
     assert(globalMemoryManager);
 
-    auto allocation = globalMemoryManager->allocateManagedMemory(size, alignment);
+    auto allocation = globalMemoryManager->allocateManagedMemory(device, size, alignment);
     assert(allocation);
     *ptr = allocation->getHostAddress();
 
@@ -77,7 +77,7 @@ xe_result_t sharedMemAlloc(xe_device_handle_t hDevice,
     assert(device);
     assert(globalMemoryManager);
 
-    auto allocation = globalMemoryManager->allocateManagedMemory(size, alignment);
+    auto allocation = globalMemoryManager->allocateManagedMemory(device, size, alignment);
     assert(allocation);
     *ptr = allocation->getHostAddress();
 

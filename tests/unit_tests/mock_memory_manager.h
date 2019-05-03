@@ -1,4 +1,5 @@
 #pragma once
+
 #include "memory_manager.h"
 
 #include "graphics_allocation.h"
@@ -26,19 +27,19 @@ struct Mock<MemoryManager> : public MemoryManager {
     virtual ~Mock();
 
     MOCK_METHOD2(allocateHostMemory, void *(size_t size, size_t alignment));
-    MOCK_METHOD2(allocateDeviceMemory, GraphicsAllocation *(size_t size, size_t alignment));
-    MOCK_METHOD2(allocateManagedMemory, GraphicsAllocation *(size_t size, size_t alignment));
-    MOCK_METHOD2(allocateManagedMemoryFromFault, GraphicsAllocation *(void *buffer, size_t size));
+    MOCK_METHOD3(allocateDeviceMemory, GraphicsAllocation *(L0::Device *device, size_t size, size_t alignment));
+    MOCK_METHOD3(allocateManagedMemory, GraphicsAllocation *(L0::Device *device, size_t size, size_t alignment));
+    MOCK_METHOD3(allocateManagedMemoryFromFault, GraphicsAllocation *(L0::Device *device, void *buffer, size_t size));
     MOCK_METHOD2(allocateGraphicsMemoryForIsa, PtrOwn<GraphicsAllocation>(PtrRef<const void> isaHostMem, size_t size));
-    MOCK_METHOD1(allocateGraphicsMemoryForPrivateMemory, PtrOwn<GraphicsAllocation>(size_t));
+    MOCK_METHOD1(allocateGraphicsMemoryForPrivateMemory, PtrOwn<GraphicsAllocation>(size_t size));
     MOCK_CONST_METHOD0(getIsaHeapGpuAddress, uint64_t());
+    MOCK_METHOD1(findAllocation, GraphicsAllocation *(const void *ptr));
     MOCK_METHOD1(freeMemory, void(GraphicsAllocation *allocation));
     MOCK_METHOD1(freeMemory, void(const void *ptr));
-    MOCK_METHOD1(findAllocation, GraphicsAllocation *(const void *ptr));
 
     // default mock implementation
     void *doAllocateHostMemory(size_t size, size_t alignment);
-    GraphicsAllocation *doCreateGraphicsAllocation(size_t size, size_t alignment);
+    GraphicsAllocation *doCreateGraphicsAllocation(Device *device, size_t size, size_t alignment);
     PtrOwn<GraphicsAllocation> doCreateGraphicsAllocationForIsa(PtrRef<const void> isaHostMem, size_t size);
     PtrOwn<GraphicsAllocation> doCreateGraphicsAllocationForPrivateMemory(size_t size);
     void doFreeGraphicsAllocation(GraphicsAllocation *allocation);

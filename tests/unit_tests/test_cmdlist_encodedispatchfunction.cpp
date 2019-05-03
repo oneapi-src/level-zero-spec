@@ -56,8 +56,8 @@ struct CommandListAppendLaunchFunction : public GlobalFixtureTest {
         GlobalFixtureTest::SetUp();
         auto memoryManager = globalMemoryManager;
         ASSERT_NE(memoryManager, nullptr);
-        buffer1 = memoryManager->allocateDeviceMemory(16384u, 4096u);
-        buffer2 = memoryManager->allocateDeviceMemory(16384u, 4096u);
+        buffer1 = memoryManager->allocateDeviceMemory(&device, 16384u, 4096u);
+        buffer2 = memoryManager->allocateDeviceMemory(&device, 16384u, 4096u);
 
         commandList = whitebox_cast(CommandList::create(productFamily, &device));
         ASSERT_NE(commandList->commandStream, nullptr);
