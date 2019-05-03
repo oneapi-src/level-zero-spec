@@ -66,6 +66,17 @@ namespace xet
             metric_group_handle_t* phMetricGroups           ///< [in] handles of the metric groups to activate. NULL to deactivate.
             );
 
+        ///////////////////////////////////////////////////////////////////////////////
+        /// @brief C++ wrapper for ::xetDevicePowerInit
+        /// @returns
+        ///     - ::power_handle_t: handle for accessing power features of the device
+        /// 
+        /// @throws result_t
+        inline power_handle_t
+        PowerInit(
+            uint32_t flags                                  ///< [in] bitfield of ::power_init_flags_t
+            );
+
     };
 
 } // namespace xet

@@ -21,65 +21,49 @@
 * express and approved by Intel in writing.  
 * @endcond
 *
-* @file xet_common.hpp
+* @file xet_power.hpp
 *
-* @brief C++ wrapper of Intel Xe Level-Zero Tool API common types
+* @brief C++ wrapper of Intel Xe Level-Zero Tool APIs for Power
 *
 * @cond DEV
-* DO NOT EDIT: generated from /scripts/tools/common.yml
+* DO NOT EDIT: generated from /scripts/tools/power.yml
 * @endcond
 *
 ******************************************************************************/
-#ifndef _XET_COMMON_HPP
-#define _XET_COMMON_HPP
+#ifndef _XET_POWER_HPP
+#define _XET_POWER_HPP
 #if defined(__cplusplus)
 #pragma once
-#include "xet_api.h"
-#include <tuple>
-#include "xe_all.hpp"
+#include "xet_common.hpp"
 
 namespace xet
 {
     ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Handle of device object
-    class Device;
-    using device_handle_t = Device*;
-
-    ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Handle of command list object
-    class CommandList;
-    using command_list_handle_t = CommandList*;
-
-    ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Handle of metric group's object
-    class MetricGroup;
-    using metric_group_handle_t = MetricGroup*;
-
-    ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Handle of metric's object
-    class Metric;
-    using metric_handle_t = Metric*;
-
-    ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Handle of metric tracer's object
-    class MetricTracer;
-    using metric_tracer_handle_t = MetricTracer*;
-
-    ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Handle of metric query pool's object
-    class MetricQueryPool;
-    using metric_query_pool_handle_t = MetricQueryPool*;
-
-    ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Handle of metric query's object
-    class MetricQuery;
-    using metric_query_handle_t = MetricQuery*;
-
-    ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Handle of power object
+    /// @brief Handle of a frequency domain on a device
     class Power;
-    using power_handle_t = Power*;
+    using freq_domain_handle_t = Power*;
+
+    ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Fan capabilities
+    enum class fan_capabilities_t
+    {
+        GET_SPEED_PERCENTAGE = XE_BIT( 0 ),             ///< can query fan speed as a percentage
+        SET_SPEED_PERCENTAGE = XE_BIT( 1 ),             ///< can set fan speed as a percentage
+        GET_SPEED_RPM = XE_BIT( 2 ),                    ///< can query fan speed as rpm
+        SET_SPEED_RPM = XE_BIT( 3 ),                    ///< can set fan speed as rpm
+        HAVE_TEMPERATURE_SPEED_TABLE = XE_BIT( 4 ),     ///< can set temperature/fan speed table
+
+    };
+
+    ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Fan speed modes
+    enum class fan_speed_mode_t
+    {
+        AUTO = 0,                                       ///< fan speed is dynamically controlled based on temperature
+        FIXED,                                          ///< fan speed is fixed
+
+    };
 
 } // namespace xet
 #endif // defined(__cplusplus)
-#endif // _XET_COMMON_HPP
+#endif // _XET_POWER_HPP

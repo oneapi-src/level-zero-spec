@@ -4,7 +4,7 @@ desc: "Intel $OneApi Level-Zero Tool APIs for Power"
 --- #--------------------------------------------------------------------------
 type: enum
 desc: "Power initialization flags (bitfield)"
-class: $tDevice
+class: $tPower
 name: $t_power_init_flags_t
 etors:
     - name: $T_POWER_INIT_FLAGS_NONE
@@ -13,11 +13,6 @@ etors:
     - name: $T_POWER_INIT_FLAGS_WRITE
       value: "$X_BIT( 0 )"
       desc: "request access to power controls"
---- #--------------------------------------------------------------------------
-type: handle
-desc: "Handle of driver's power object"
-class: $tDevice
-name: "$t_power_handle_t"
 --- #--------------------------------------------------------------------------
 type: function
 desc: "Initialize power management features"
@@ -38,11 +33,12 @@ params:
     - type: "$t_power_handle_t*"
       name: pPowerHandle
       desc: "[out] handle for accessing power features of the device"
+
 --- #--------------------------------------------------------------------------
 type: function
 desc: "Removes access to power management features"
-class: $tDevice
-name: PowerShutdown
+class: $tPower
+name: Shutdown
 analogue:
     - "**nvmlShutdown**"
     - "**rsmi_shut_down**"
@@ -56,7 +52,7 @@ params:
 --- #--------------------------------------------------------------------------
 type: struct
 desc: "Average power limit"
-class: $tDevice
+class: $tPower
 name: $t_power_average_limit_t
 details:
     - "The power controller (Punit) will throttle the operating frequency of the device if the power averaged over a window (typically seconds) exceeds a limit known as PL1."
@@ -73,7 +69,7 @@ members:
 --- #--------------------------------------------------------------------------
 type: struct
 desc: "Burst power limit"
-class: $tDevice
+class: $tPower
 name: $t_power_burst_limit_t
 details:
     - "The power controller (Punit) will throttle the operating frequency of the device if the power averaged over a few milliseconds exceeds a limit known as PL2. Typically PL2 > PL1 so that it permits the frequency to burst higher for short periods than would be otherwise permitted by PL1."
@@ -87,7 +83,7 @@ members:
 --- #--------------------------------------------------------------------------
 type: struct
 desc: "Peak power limit"
-class: $tDevice
+class: $tPower
 name: $t_power_peak_limit_t
 details:
     - "The power controller (Punit) will preemptively throttle the operating frequency of the device when the instantaneous power exceeds this limit. The limit is known as PL4. It expresses the maximum power that can be drawn from the power supply."
@@ -99,7 +95,7 @@ members:
 --- #--------------------------------------------------------------------------
 type: struct
 desc: "All power limits"
-class: $tDevice
+class: $tPower
 name: $t_power_limits_t
 members:
     - type: $t_power_average_limit_t
@@ -114,8 +110,8 @@ members:
 --- #--------------------------------------------------------------------------
 type: function
 desc: "Get current average power limit information for a device"
-class: $tDevice
-name: PowerGetAveragePowerLimit
+class: $tPower
+name: GetAveragePowerLimit
 params:
     - type: $t_power_handle_t
       name: hPower
@@ -126,8 +122,8 @@ params:
 --- #--------------------------------------------------------------------------
 type: function
 desc: "Get current burst power limit information for a device"
-class: $tDevice
-name: PowerGetBurstPowerLimit
+class: $tPower
+name: GetBurstPowerLimit
 params:
     - type: $t_power_handle_t
       name: hPower
@@ -138,8 +134,8 @@ params:
 --- #--------------------------------------------------------------------------
 type: function
 desc: "Get current peak power limit information for a device"
-class: $tDevice
-name: PowerGetPeakPowerLimit
+class: $tPower
+name: GetPeakPowerLimit
 params:
     - type: $t_power_handle_t
       name: hPower
@@ -150,8 +146,8 @@ params:
 --- #--------------------------------------------------------------------------
 type: function
 desc: "Get all current power limits for a device"
-class: $tDevice
-name: PowerGetAllPowerLimits
+class: $tPower
+name: GetAllPowerLimits
 params:
     - type: $t_power_handle_t
       name: hPower
@@ -162,8 +158,8 @@ params:
 --- #--------------------------------------------------------------------------
 type: function
 desc: "Get default power limits for a device"
-class: $tDevice
-name: PowerGetDefaultPowerLimits
+class: $tPower
+name: GetDefaultPowerLimits
 params:
     - type: $t_power_handle_t
       name: hPower
@@ -174,8 +170,8 @@ params:
 --- #--------------------------------------------------------------------------
 type: function
 desc: "Set the average power limit for a device"
-class: $tDevice
-name: PowerSetAveragePowerLimit
+class: $tPower
+name: SetAveragePowerLimit
 params:
     - type: $t_power_handle_t
       name: hPower
@@ -186,8 +182,8 @@ params:
 --- #--------------------------------------------------------------------------
 type: function
 desc: "Set the burst power limit for a device"
-class: $tDevice
-name: PowerSetBurstPowerLimit
+class: $tPower
+name: SetBurstPowerLimit
 params:
     - type: $t_power_handle_t
       name: hPower
@@ -198,8 +194,8 @@ params:
 --- #--------------------------------------------------------------------------
 type: function
 desc: "Set the peak power limit for a device"
-class: $tDevice
-name: PowerSetPeakPowerLimit
+class: $tPower
+name: SetPeakPowerLimit
 params:
     - type: $t_power_handle_t
       name: hPower
@@ -210,8 +206,8 @@ params:
 --- #--------------------------------------------------------------------------
 type: function
 desc: "Set the average/burst/peak power limits for a device"
-class: $tDevice
-name: PowerSetPowerLimits
+class: $tPower
+name: SetPowerLimits
 params:
     - type: $t_power_handle_t
       name: hPower
@@ -222,8 +218,8 @@ params:
 --- #--------------------------------------------------------------------------
 type: function
 desc: "Get energy counter"
-class: $tDevice
-name: PowerGetEnergyCounter
+class: $tPower
+name: GetEnergyCounter
 details:
     - "Average power = delta(energyMillijoules) / delta(timeMilliseconds)"
 params:
@@ -239,27 +235,27 @@ params:
 --- #--------------------------------------------------------------------------
 type: enum
 desc: "Turbo (dynamic hardware frequency management) modes"
-class: $tDevice
+class: $tPower
 name: $t_turbo_mode_t
 etors:
-    - name: $T_TURBO_DISABLED
+    - name: $T_TURBO_MODE_DISABLED
       value: "0"
       desc: "DVFS is currently disabled - frequency is fixed"
-    - name: $T_TURBO_DEFAULT
+    - name: $T_TURBO_MODE_DEFAULT
       desc: "hardware default DVFS (typically EFFICIENT)"
-    - name: $T_TURBO_MIN_PERFORMANCE
+    - name: $T_TURBO_MODE_MIN_PERFORMANCE
       desc: "min efficient frequency unless specific applications require otherwise"
-    - name: $T_TURBO_EFFICIENT_PERFORMANCE
+    - name: $T_TURBO_MODE_EFFICIENT_PERFORMANCE
       desc: "balanced power and performance"
-    - name: $T_TURBO_AGGRESSIVE_PERFORMANCE
+    - name: $T_TURBO_MODE_AGGRESSIVE_PERFORMANCE
       desc: "aggressively favor performance over power"
-    - name: $T_TURBO_MAX_PERFORMANCE
+    - name: $T_TURBO_MODE_MAX_PERFORMANCE
       desc: "fixed max frequency unless limited by thermals/power"
 --- #--------------------------------------------------------------------------
 type: function
 desc: "Get the current Turbo mode for a device"
-class: $tDevice
-name: PowerGetTurboMode
+class: $tPower
+name: GetTurboMode
 params:
     - type: $t_power_handle_t
       name: hPower
@@ -270,8 +266,8 @@ params:
 --- #--------------------------------------------------------------------------
 type: function
 desc: "Set the current Turbo mode for a device"
-class: $tDevice
-name: PowerSetTurboMode
+class: $tPower
+name: SetTurboMode
 params:
     - type: $t_power_handle_t
       name: hPower
@@ -282,7 +278,7 @@ params:
 --- #--------------------------------------------------------------------------
 type: enum
 desc: "GPU domains"
-class: $tDevice
+class: $tPower
 name: $t_gpu_domain_t
 etors:
     - name: $T_GPU_DOMAIN_BASE
@@ -321,62 +317,62 @@ etors:
 --- #--------------------------------------------------------------------------
 type: enum
 desc: "Clock types"
-class: $tDevice
+class: $tPower
 name: $t_clock_type_t
 etors:
-    - name: $T_CLOCK_FIXED
+    - name: $T_CLOCK_TYPE_FIXED
       value: "0"
       desc: "fixed crystal clock"
-    - name: $T_CLOCK_PLL
+    - name: $T_CLOCK_TYPE_PLL
       desc: "phase-locked-loop (PLL) frequency range"
-    - name: $T_CLOCK_DIVIDER
+    - name: $T_CLOCK_TYPE_DIVIDER
       desc: "frequency is linked to another domain by a divider"
 --- #--------------------------------------------------------------------------
 type: enum
 desc: "Frequency throttle reasons"
-class: $tDevice
+class: $tPower
 name: $t_freq_throttle_reasons_t
 etors:
-    - name: $T_FREQ_THROTTLE_REASON_NONE
+    - name: $T_FREQ_THROTTLE_REASONS_NONE
       value: "0"
       desc: "frequency not throttled"
-    - name: $T_FREQ_THROTTLE_REASON_AVE_PWR_CAP
+    - name: $T_FREQ_THROTTLE_REASONS_AVE_PWR_CAP
       value: "$X_BIT( 0 )"
       desc: "frequency throttled due to average power excursion (PL1)"
-    - name: $T_FREQ_THROTTLE_REASON_BURST_PWR_CAP
+    - name: $T_FREQ_THROTTLE_REASONS_BURST_PWR_CAP
       value: "$X_BIT( 1 )"
       desc: "frequency throttled due to burst power excursion (PL2)"
-    - name: $T_FREQ_THROTTLE_REASON_CURRENT_LIMIT
+    - name: $T_FREQ_THROTTLE_REASONS_CURRENT_LIMIT
       value: "$X_BIT( 2 )"
       desc: "frequency throttled due to current excursion (PL4)"
-    - name: $T_FREQ_THROTTLE_REASON_THERMAL_LIMIT
+    - name: $T_FREQ_THROTTLE_REASONS_THERMAL_LIMIT
       value: "$X_BIT( 3 )"
       desc: "frequency throttled due to thermal excursion (T > TjMax)"
-    - name: $T_FREQ_THROTTLE_REASON_PSU_ALERT
+    - name: $T_FREQ_THROTTLE_REASONS_PSU_ALERT
       value: "$X_BIT( 4 )"
       desc: "frequency throttled due to power supply assertion"
-    - name: $T_FREQ_THROTTLE_REASON_SW_RANGE
+    - name: $T_FREQ_THROTTLE_REASONS_SW_RANGE
       value: "$X_BIT( 5 )"
       desc: "frequency throttled due to software supplied frequency range"
-    - name: $T_FREQ_THROTTLE_REASON_HW_RANGE
+    - name: $T_FREQ_THROTTLE_REASONS_HW_RANGE
       value: "$X_BIT( 6 )"
       desc: "frequency throttled due to a sub block that has a lower frequency range when it receives clocks"
 --- #--------------------------------------------------------------------------
 type: handle
 desc: "Handle of a frequency domain on a device"
-class: $tDevice
+class: $tPower
 name: "$t_freq_domain_handle_t"
 --- #--------------------------------------------------------------------------
 type: struct
 desc: "Properties of a frequency domain"
-class: $tDevice
+class: $tPower
 name: $t_freq_domain_properties_t
 details:
     - "A frequency domain contains one or more GPU functional blocks - see $t_gpu_domain_t"
     - "There is more than one type of clock - check clockType"
-    - "For clock type $T_CLOCK_FIXED, minClockMHz and maxClockMHz will be the same and numClockPoints will be 1."
-    - "For clock type $T_CLOCK_PLL, numClockPoints is given for informational purposes. Do not assume the frequency step between min/max clocks is (max - min) / (numClockPoints - 1). Instead, use the function $tPowerFreqDomainGetSupportedClocks to get the list of all supported clocks between min/max."
-    - "For clock type $T_CLOCK_DIVIDER, the frequency of the domain is given by multiplying the divider by the frequency of the source domain. The possible divider values can be obtained using the function $tPowerFreqDomainGetSupportedDividers. For this clock type, minClockMHz/maxClockMHz specifies the total range of frequencies whereas the actual range depends on the current divider value."
+    - "For clock type $T_CLOCK_TYPE_FIXED, minClockMHz and maxClockMHz will be the same and numClockPoints will be 1."
+    - "For clock type $T_CLOCK_TYPE_PLL, numClockPoints is given for informational purposes. Do not assume the frequency step between min/max clocks is (max - min) / (numClockPoints - 1). Instead, use the function $tPowerFreqDomainGetSupportedClocks to get the list of all supported clocks between min/max."
+    - "For clock type $T_CLOCK_TYPE_DIVIDER, the frequency of the domain is given by multiplying the divider by the frequency of the source domain. The possible divider values can be obtained using the function $tPowerFreqDomainGetSupportedClockDividers. For this clock type, minClockMHz/maxClockMHz specifies the total range of frequencies whereas the actual range depends on the current divider value."
 members:
     - type: uint32_t
       name: gpuDomains
@@ -395,17 +391,17 @@ members:
       desc: "[in] number of discrete clock points between and including min/max"
     - type: $t_freq_domain_handle_t
       name: srcFreqDomain
-      desc: "[in] for clock type $T_CLOCK_DIVIDER, this is the handle to the source frequency domain"
+      desc: "[in] for clock type $T_CLOCK_TYPE_DIVIDER, this is the handle to the source frequency domain"
     - type: uint32_t
       name: numClockDividers
-      desc: "[in] for clock type $T_CLOCK_DIVIDER, this gives the number of dividers available"
+      desc: "[in] for clock type $T_CLOCK_TYPE_DIVIDER, this gives the number of dividers available"
 --- #--------------------------------------------------------------------------
 type: struct
 desc: "Frequency divider configuration"
-class: $tDevice
+class: $tPower
 name: $t_clock_divider_t
 details:
-    - "The frequency of a domain of type $T_CLOCK_DIVIDER is obtained by the formula:"
+    - "The frequency of a domain of type $T_CLOCK_TYPE_DIVIDER is obtained by the formula:"
     - "freqMHz = src_domain_freqMHz * numerator / denominator"
 members:
     - type: uint16_t
@@ -417,8 +413,8 @@ members:
 --- #--------------------------------------------------------------------------
 type: function
 desc: "Get the number of frequency domains on the device"
-class: $tDevice
-name: PowerFreqDomainCount
+class: $tPower
+name: FreqDomainCount
 params:
     - type: $t_power_handle_t
       name: hPower
@@ -429,8 +425,8 @@ params:
 --- #--------------------------------------------------------------------------
 type: function
 desc: "Get a handle to a frequency domain"
-class: $tDevice
-name: PowerFreqDomainGetHandle
+class: $tPower
+name: FreqDomainGetHandle
 params:
     - type: $t_power_handle_t
       name: hPower
@@ -444,8 +440,8 @@ params:
 --- #--------------------------------------------------------------------------
 type: function
 desc: "Get the properties for a frequency domain"
-class: $tDevice
-name: PowerFreqDomainGetProperties
+class: $tPower
+name: FreqDomainGetProperties
 params:
     - type: $t_freq_domain_handle_t
       name: hFreqDomain
@@ -455,9 +451,9 @@ params:
       desc: "[out] pointer to properties for the frequency domain"
 --- #--------------------------------------------------------------------------
 type: function
-desc: "Get supported frequency points for frequency domains with clock type $T_CLOCK_PLL"
-class: $tDevice
-name: PowerFreqDomainGetSupportedClocks
+desc: "Get supported frequency points for frequency domains with clock type $T_CLOCK_TYPE_PLL"
+class: $tPower
+name: FreqDomainGetSupportedClocks
 details:
     - "The total available list of frequencies can be found in $t_freq_domain_properties_t.numClockPoints."
 params:
@@ -472,9 +468,9 @@ params:
       desc: "[out] pointer to array of frequencies"
 --- #--------------------------------------------------------------------------
 type: function
-desc: "Get supported frequency dividers for frequency domains with clock type $T_CLOCK_DIVIDER"
-class: $tDevice
-name: PowerFreqDomainGetSupportedClockDividers
+desc: "Get supported frequency dividers for frequency domains with clock type $T_CLOCK_TYPE_DIVIDER"
+class: $tPower
+name: FreqDomainGetSupportedClockDividers
 details:
     - "The total available list of frequencies can be found in $t_freq_domain_properties_t.numClockDividers."
 params:
@@ -489,8 +485,8 @@ params:
       desc: "[out] pointer to array of dividers"
 --- #--------------------------------------------------------------------------
 type: function
-desc: "Get the frequency range for a frequency domain with clock type $T_CLOCK_PLL."
-class: $tDevice
+desc: "Get the frequency range for a frequency domain with clock type $T_CLOCK_TYPE_PLL."
+class: $tPower
 name: $tPowerFreqDomainGetClockRange
 params:
     - type: $t_freq_domain_handle_t
@@ -504,8 +500,8 @@ params:
       desc: "[out] max clock frequency in units of MHz"
 --- #--------------------------------------------------------------------------
 type: function
-desc: "Set the frequency range for a frequency domain with clock type $T_CLOCK_PLL."
-class: $tDevice
+desc: "Set the frequency range for a frequency domain with clock type $T_CLOCK_TYPE_PLL."
+class: $tPower
 name: $tPowerFreqDomainSetClockRange
 details:
     - "Turbo (dynamic hardware frequency management) will select frequencies between this range based on the current Turbo mode in effect."
@@ -524,9 +520,9 @@ params:
       desc: "[in] max clock frequency in units of MHz"
 --- #--------------------------------------------------------------------------
 type: function
-desc: "Set frequency divider for a frequency domain with clock type $T_CLOCK_DIVIDER"
-class: $tDevice
-name: PowerFreqDomainSetClockDivider
+desc: "Set frequency divider for a frequency domain with clock type $T_CLOCK_TYPE_DIVIDER"
+class: $tPower
+name: FreqDomainSetClockDivider
 details:
     - "This disables dynamic frequency divider management running on the hardware."
     - "Setting pClockDivider to nullptr will enable dynamic frequency divider management."
@@ -540,8 +536,8 @@ params:
 --- #--------------------------------------------------------------------------
 type: function
 desc: "Get current frequency"
-class: $tDevice
-name: PowerGetCurrentFrequency
+class: $tPower
+name: GetCurrentFrequency
 params:
     - type: $t_freq_domain_handle_t
       name: hFreqDomain
@@ -561,35 +557,35 @@ type: enum
 desc: "Fan capabilities"
 name: $t_fan_capabilities_t
 etors:
-    - name: $T_FAN_CAP_GET_SPEED_PERCENTAGE
+    - name: $T_FAN_CAPABILITIES_GET_SPEED_PERCENTAGE
       value: "$X_BIT( 0 )"
       desc: "can query fan speed as a percentage"
-    - name: $T_FAN_CAP_SET_SPEED_PERCENTAGE
+    - name: $T_FAN_CAPABILITIES_SET_SPEED_PERCENTAGE
       value: "$X_BIT( 1 )"
       desc: "can set fan speed as a percentage"
-    - name: $T_FAN_CAP_GET_SPEED_RPM
+    - name: $T_FAN_CAPABILITIES_GET_SPEED_RPM
       value: "$X_BIT( 2 )"
       desc: "can query fan speed as rpm"
-    - name: $T_FAN_CAP_SET_SPEED_RPM
+    - name: $T_FAN_CAPABILITIES_SET_SPEED_RPM
       value: "$X_BIT( 3 )"
       desc: "can set fan speed as rpm"
-    - name: $T_FAN_CAP_HAVE_TEMPERATURE_SPEED_TABLE
+    - name: $T_FAN_CAPABILITIES_HAVE_TEMPERATURE_SPEED_TABLE
       value: "$X_BIT( 4 )"
       desc: "can set temperature/fan speed table"
 --- #--------------------------------------------------------------------------
 type: enum
 desc: "Fan speed modes"
-name: $t_fan_mode_t
+name: $t_fan_speed_mode_t
 etors:
-    - name: $T_FAN_SPEED_AUTO
+    - name: $T_FAN_SPEED_MODE_AUTO
       value: "0"
       desc: "fan speed is dynamically controlled based on temperature"
-    - name: $T_FAN_SPEED_FIXED
+    - name: $T_FAN_SPEED_MODE_FIXED
       desc: "fan speed is fixed"
 --- #--------------------------------------------------------------------------
 type: struct
 desc: "Fan properties"
-class: $tDevice
+class: $tPower
 name: $t_fan_properties_t
 members:
     - type: uint32_t
@@ -604,7 +600,7 @@ members:
 --- #--------------------------------------------------------------------------
 type: struct
 desc: "Temperature/fan-speed point"
-class: $tDevice
+class: $tPower
 name: $t_fan_point_t
 members:
     - type: $x_bool_t
@@ -619,7 +615,7 @@ members:
 --- #--------------------------------------------------------------------------
 type: struct
 desc: "Fan speed info"
-class: $tDevice
+class: $tPower
 name: $t_fan_speed_info_t
 members:
     - type: $x_bool_t
@@ -634,8 +630,8 @@ members:
 --- #--------------------------------------------------------------------------
 type: function
 desc: "Get number of fans on the device"
-class: $tDevice
-name: PowerFanCount
+class: $tPower
+name: FanCount
 params:
     - type: $t_power_handle_t
       name: hPower
@@ -646,8 +642,8 @@ params:
 --- #--------------------------------------------------------------------------
 type: function
 desc: "Get fan properties for one of the fans on a device"
-class: $tDevice
-name: PowerFanGetProperties
+class: $tPower
+name: FanGetProperties
 params:
     - type: $t_power_handle_t
       name: hPower
@@ -661,8 +657,8 @@ params:
 --- #--------------------------------------------------------------------------
 type: function
 desc: "Get fan speed table"
-class: $tDevice
-name: PowerFanGetSpeedTable
+class: $tPower
+name: FanGetSpeedTable
 details:
     - "Set pFanSpeedTable = nullptr to find out the current number of fan speed points in the table."
 params:
@@ -684,10 +680,10 @@ params:
 --- #--------------------------------------------------------------------------
 type: function
 desc: "Set fan speed table"
-class: $tDevice
-name: PowerFanSetSpeedTable
+class: $tPower
+name: FanSetSpeedTable
 details:
-    - "Use $tPowerGetFanCapabilities to determine acceptable units for fan speed (percent, RPM)."
+    - "Use $tPowerFanGetProperties to determine acceptable units for fan speed (percent, RPM)."
     - "Fan points should be ordered according to increasing temperature."
 params:
     - type: $t_power_handle_t
@@ -705,8 +701,8 @@ params:
 --- #--------------------------------------------------------------------------
 type: function
 desc: "Get current fan speeds"
-class: $tDevice
-name: PowerFanGetSpeed
+class: $tPower
+name: FanGetSpeed
 details:
     - "The array pFanSpeed must contain at least numFans entries."
 params:
@@ -728,8 +724,8 @@ params:
 --- #--------------------------------------------------------------------------
 type: function
 desc: "Set fan speeds"
-class: $tDevice
-name: PowerFanSetSpeed
+class: $tPower
+name: FanSetSpeed
 details:
     - "Use t_fan_speed_info_t.fanSpeedMode to set whether the speed should be fixed or dynamically controlled"
 params:
@@ -751,7 +747,7 @@ params:
 --- #--------------------------------------------------------------------------
 type: struct
 desc: "Temperature sensor properties"
-class: $tDevice
+class: $tPower
 name: $t_temperature_properties_t
 details:
     - "Temperature sensor index 0 is special - it is a virtual sensor that gives the max across all sensors. The member **location** equals 0xFFFFFFFF in this case."
@@ -772,8 +768,8 @@ members:
 --- #--------------------------------------------------------------------------
 type: function
 desc: "Get number of temperature sensors on the device"
-class: $tDevice
-name: PowerTemperatureSensorCount
+class: $tPower
+name: TemperatureSensorCount
 params:
     - type: $t_power_handle_t
       name: hPower
@@ -784,8 +780,8 @@ params:
 --- #--------------------------------------------------------------------------
 type: function
 desc: "Get temperatures sensor properties"
-class: $tDevice
-name: PowerGetTemperatureProperties
+class: $tPower
+name: GetTemperatureProperties
 details:
     - "Temperature sensor index 0 is special - it gives the maximum temperature across all sensors"
 params:
@@ -801,8 +797,8 @@ params:
 --- #--------------------------------------------------------------------------
 type: function
 desc: "Get current temperatures"
-class: $tDevice
-name: PowerGetTemperature
+class: $tPower
+name: GetTemperature
 details:
     - "Temperature sensor index 0 is special - it gives the maximum temperature across all sensors"
 params:
@@ -821,8 +817,8 @@ params:
 --- #--------------------------------------------------------------------------
 type: function
 desc: "Set temperature threshold"
-class: $tDevice
-name: PowerSetTemperatureThreshold
+class: $tPower
+name: SetTemperatureThreshold
 details:
     - "Check $t_temperature_properties_t.canChangeThreshold to determine if the threshold can be changed."
     - "On most systems, there is only one threshold and sensorIndex should be 0."
@@ -841,7 +837,7 @@ params:
 --- #--------------------------------------------------------------------------
 type: struct
 desc: "Activity counter properties"
-class: $tDevice
+class: $tPower
 name: $t_activity_properties_t
 details:
     - "Activity counter 0 is a normalized accumulation of activity across all blocks. The member **blocks** equals 0xFFFFFFFF in this case."
@@ -852,7 +848,7 @@ members:
 --- #--------------------------------------------------------------------------
 type: struct
 desc: "Activity counter data"
-class: $tDevice
+class: $tPower
 name: $t_activity_counters_t
 details:
     - "Activity counter 0 is a normalized accumulation of activity across all blocks."
@@ -871,8 +867,8 @@ members:
 --- #--------------------------------------------------------------------------
 type: function
 desc: "Get number of activity counters"
-class: $tDevice
-name: PowerActivityCount
+class: $tPower
+name: ActivityCount
 params:
     - type: $t_power_handle_t
       name: hPower
@@ -883,8 +879,8 @@ params:
 --- #--------------------------------------------------------------------------
 type: function
 desc: "Get activity counter properties"
-class: $tDevice
-name: PowerGetActivityProperties
+class: $tPower
+name: GetActivityProperties
 details:
     - "Activity counter index 0 is special - it acculates activity across all blocks."
 params:
@@ -900,8 +896,8 @@ params:
 --- #--------------------------------------------------------------------------
 type: function
 desc: "Get activity counters"
-class: $tDevice
-name: PowerGetActivityCounters
+class: $tPower
+name: GetActivityCounters
 details:
     - "Activity counter index 0 is special - it acculates activity across all blocks."
 params:

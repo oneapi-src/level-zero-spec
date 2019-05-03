@@ -36,10 +36,12 @@
 #include "xet_device.hpp"
 #include "xet_gtpin.hpp"
 #include "xet_metric.hpp"
+#include "xet_power.hpp"
 #include "xet_cmdlist.inl"
 #include "xet_device.inl"
 #include "xet_gtpin.inl"
 #include "xet_metric.inl"
+#include "xet_power.inl"
 
 #endif // defined(__cplusplus)
 #endif // _XET_API_HPP

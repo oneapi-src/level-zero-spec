@@ -36,3 +36,8 @@ type: handle
 desc: "Handle of metric query's object"
 class: $tMetricQuery
 name: "$t_metric_query_handle_t"
+--- #--------------------------------------------------------------------------
+type: handle
+desc: "Handle of power object"
+class: $tPower
+name: "$t_power_handle_t"

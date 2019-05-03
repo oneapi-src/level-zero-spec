@@ -72,6 +72,10 @@ typedef struct _xet_metric_query_pool_handle_t *xet_metric_query_pool_handle_t;
 typedef struct _xet_metric_query_handle_t *xet_metric_query_handle_t;
 
 ///////////////////////////////////////////////////////////////////////////////
+/// @brief Handle of power object
+typedef struct _xet_power_handle_t *xet_power_handle_t;
+
+///////////////////////////////////////////////////////////////////////////////
 /// @brief Forward-declare xet_metric_group_properties_t
 typedef struct _xet_metric_group_properties_t xet_metric_group_properties_t;
 
@@ -90,6 +94,54 @@ typedef struct _xet_metric_tracer_desc_t xet_metric_tracer_desc_t;
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Forward-declare xet_metric_query_pool_desc_t
 typedef struct _xet_metric_query_pool_desc_t xet_metric_query_pool_desc_t;
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Forward-declare xet_power_average_limit_t
+typedef struct _xet_power_average_limit_t xet_power_average_limit_t;
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Forward-declare xet_power_burst_limit_t
+typedef struct _xet_power_burst_limit_t xet_power_burst_limit_t;
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Forward-declare xet_power_peak_limit_t
+typedef struct _xet_power_peak_limit_t xet_power_peak_limit_t;
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Forward-declare xet_power_limits_t
+typedef struct _xet_power_limits_t xet_power_limits_t;
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Forward-declare xet_freq_domain_properties_t
+typedef struct _xet_freq_domain_properties_t xet_freq_domain_properties_t;
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Forward-declare xet_clock_divider_t
+typedef struct _xet_clock_divider_t xet_clock_divider_t;
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Forward-declare xet_fan_properties_t
+typedef struct _xet_fan_properties_t xet_fan_properties_t;
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Forward-declare xet_fan_point_t
+typedef struct _xet_fan_point_t xet_fan_point_t;
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Forward-declare xet_fan_speed_info_t
+typedef struct _xet_fan_speed_info_t xet_fan_speed_info_t;
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Forward-declare xet_temperature_properties_t
+typedef struct _xet_temperature_properties_t xet_temperature_properties_t;
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Forward-declare xet_activity_properties_t
+typedef struct _xet_activity_properties_t xet_activity_properties_t;
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Forward-declare xet_activity_counters_t
+typedef struct _xet_activity_counters_t xet_activity_counters_t;
 
 #if defined(__cplusplus)
 } // extern "C"

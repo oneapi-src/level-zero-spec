@@ -76,6 +76,78 @@ bool xetIntercept(
         return false;
     if( nullptr == original->pfnMetricQueryGetData )
         return false;
+    if( nullptr == original->pfnDevicePowerInit )
+        return false;
+    if( nullptr == original->pfnPowerShutdown )
+        return false;
+    if( nullptr == original->pfnPowerGetAveragePowerLimit )
+        return false;
+    if( nullptr == original->pfnPowerGetBurstPowerLimit )
+        return false;
+    if( nullptr == original->pfnPowerGetPeakPowerLimit )
+        return false;
+    if( nullptr == original->pfnPowerGetAllPowerLimits )
+        return false;
+    if( nullptr == original->pfnPowerGetDefaultPowerLimits )
+        return false;
+    if( nullptr == original->pfnPowerSetAveragePowerLimit )
+        return false;
+    if( nullptr == original->pfnPowerSetBurstPowerLimit )
+        return false;
+    if( nullptr == original->pfnPowerSetPeakPowerLimit )
+        return false;
+    if( nullptr == original->pfnPowerSetPowerLimits )
+        return false;
+    if( nullptr == original->pfnPowerGetEnergyCounter )
+        return false;
+    if( nullptr == original->pfnPowerGetTurboMode )
+        return false;
+    if( nullptr == original->pfnPowerSetTurboMode )
+        return false;
+    if( nullptr == original->pfnPowerFreqDomainCount )
+        return false;
+    if( nullptr == original->pfnPowerFreqDomainGetHandle )
+        return false;
+    if( nullptr == original->pfnPowerFreqDomainGetProperties )
+        return false;
+    if( nullptr == original->pfnPowerFreqDomainGetSupportedClocks )
+        return false;
+    if( nullptr == original->pfnPowerFreqDomainGetSupportedClockDividers )
+        return false;
+    if( nullptr == original->pfnPowerpfnPowerFreqDomainGetClockRange )
+        return false;
+    if( nullptr == original->pfnPowerpfnPowerFreqDomainSetClockRange )
+        return false;
+    if( nullptr == original->pfnPowerFreqDomainSetClockDivider )
+        return false;
+    if( nullptr == original->pfnPowerGetCurrentFrequency )
+        return false;
+    if( nullptr == original->pfnPowerFanCount )
+        return false;
+    if( nullptr == original->pfnPowerFanGetProperties )
+        return false;
+    if( nullptr == original->pfnPowerFanGetSpeedTable )
+        return false;
+    if( nullptr == original->pfnPowerFanSetSpeedTable )
+        return false;
+    if( nullptr == original->pfnPowerFanGetSpeed )
+        return false;
+    if( nullptr == original->pfnPowerFanSetSpeed )
+        return false;
+    if( nullptr == original->pfnPowerTemperatureSensorCount )
+        return false;
+    if( nullptr == original->pfnPowerGetTemperatureProperties )
+        return false;
+    if( nullptr == original->pfnPowerGetTemperature )
+        return false;
+    if( nullptr == original->pfnPowerSetTemperatureThreshold )
+        return false;
+    if( nullptr == original->pfnPowerActivityCount )
+        return false;
+    if( nullptr == original->pfnPowerGetActivityProperties )
+        return false;
+    if( nullptr == original->pfnPowerGetActivityCounters )
+        return false;
 
     xet_apitable.pfnMetricGroupGetCount                                  = original->pfnMetricGroupGetCount;
     original->pfnMetricGroupGetCount                                     = xetMetricGroupGetCount;
@@ -130,6 +202,114 @@ bool xetIntercept(
 
     xet_apitable.pfnMetricQueryGetData                                   = original->pfnMetricQueryGetData;
     original->pfnMetricQueryGetData                                      = xetMetricQueryGetData;
+
+    xet_apitable.pfnDevicePowerInit                                      = original->pfnDevicePowerInit;
+    original->pfnDevicePowerInit                                         = xetDevicePowerInit;
+
+    xet_apitable.pfnPowerShutdown                                        = original->pfnPowerShutdown;
+    original->pfnPowerShutdown                                           = xetPowerShutdown;
+
+    xet_apitable.pfnPowerGetAveragePowerLimit                            = original->pfnPowerGetAveragePowerLimit;
+    original->pfnPowerGetAveragePowerLimit                               = xetPowerGetAveragePowerLimit;
+
+    xet_apitable.pfnPowerGetBurstPowerLimit                              = original->pfnPowerGetBurstPowerLimit;
+    original->pfnPowerGetBurstPowerLimit                                 = xetPowerGetBurstPowerLimit;
+
+    xet_apitable.pfnPowerGetPeakPowerLimit                               = original->pfnPowerGetPeakPowerLimit;
+    original->pfnPowerGetPeakPowerLimit                                  = xetPowerGetPeakPowerLimit;
+
+    xet_apitable.pfnPowerGetAllPowerLimits                               = original->pfnPowerGetAllPowerLimits;
+    original->pfnPowerGetAllPowerLimits                                  = xetPowerGetAllPowerLimits;
+
+    xet_apitable.pfnPowerGetDefaultPowerLimits                           = original->pfnPowerGetDefaultPowerLimits;
+    original->pfnPowerGetDefaultPowerLimits                              = xetPowerGetDefaultPowerLimits;
+
+    xet_apitable.pfnPowerSetAveragePowerLimit                            = original->pfnPowerSetAveragePowerLimit;
+    original->pfnPowerSetAveragePowerLimit                               = xetPowerSetAveragePowerLimit;
+
+    xet_apitable.pfnPowerSetBurstPowerLimit                              = original->pfnPowerSetBurstPowerLimit;
+    original->pfnPowerSetBurstPowerLimit                                 = xetPowerSetBurstPowerLimit;
+
+    xet_apitable.pfnPowerSetPeakPowerLimit                               = original->pfnPowerSetPeakPowerLimit;
+    original->pfnPowerSetPeakPowerLimit                                  = xetPowerSetPeakPowerLimit;
+
+    xet_apitable.pfnPowerSetPowerLimits                                  = original->pfnPowerSetPowerLimits;
+    original->pfnPowerSetPowerLimits                                     = xetPowerSetPowerLimits;
+
+    xet_apitable.pfnPowerGetEnergyCounter                                = original->pfnPowerGetEnergyCounter;
+    original->pfnPowerGetEnergyCounter                                   = xetPowerGetEnergyCounter;
+
+    xet_apitable.pfnPowerGetTurboMode                                    = original->pfnPowerGetTurboMode;
+    original->pfnPowerGetTurboMode                                       = xetPowerGetTurboMode;
+
+    xet_apitable.pfnPowerSetTurboMode                                    = original->pfnPowerSetTurboMode;
+    original->pfnPowerSetTurboMode                                       = xetPowerSetTurboMode;
+
+    xet_apitable.pfnPowerFreqDomainCount                                 = original->pfnPowerFreqDomainCount;
+    original->pfnPowerFreqDomainCount                                    = xetPowerFreqDomainCount;
+
+    xet_apitable.pfnPowerFreqDomainGetHandle                             = original->pfnPowerFreqDomainGetHandle;
+    original->pfnPowerFreqDomainGetHandle                                = xetPowerFreqDomainGetHandle;
+
+    xet_apitable.pfnPowerFreqDomainGetProperties                         = original->pfnPowerFreqDomainGetProperties;
+    original->pfnPowerFreqDomainGetProperties                            = xetPowerFreqDomainGetProperties;
+
+    xet_apitable.pfnPowerFreqDomainGetSupportedClocks                    = original->pfnPowerFreqDomainGetSupportedClocks;
+    original->pfnPowerFreqDomainGetSupportedClocks                       = xetPowerFreqDomainGetSupportedClocks;
+
+    xet_apitable.pfnPowerFreqDomainGetSupportedClockDividers             = original->pfnPowerFreqDomainGetSupportedClockDividers;
+    original->pfnPowerFreqDomainGetSupportedClockDividers                = xetPowerFreqDomainGetSupportedClockDividers;
+
+    xet_apitable.pfnPowerpfnPowerFreqDomainGetClockRange                 = original->pfnPowerpfnPowerFreqDomainGetClockRange;
+    original->pfnPowerpfnPowerFreqDomainGetClockRange                    = xetPowerxetPowerFreqDomainGetClockRange;
+
+    xet_apitable.pfnPowerpfnPowerFreqDomainSetClockRange                 = original->pfnPowerpfnPowerFreqDomainSetClockRange;
+    original->pfnPowerpfnPowerFreqDomainSetClockRange                    = xetPowerxetPowerFreqDomainSetClockRange;
+
+    xet_apitable.pfnPowerFreqDomainSetClockDivider                       = original->pfnPowerFreqDomainSetClockDivider;
+    original->pfnPowerFreqDomainSetClockDivider                          = xetPowerFreqDomainSetClockDivider;
+
+    xet_apitable.pfnPowerGetCurrentFrequency                             = original->pfnPowerGetCurrentFrequency;
+    original->pfnPowerGetCurrentFrequency                                = xetPowerGetCurrentFrequency;
+
+    xet_apitable.pfnPowerFanCount                                        = original->pfnPowerFanCount;
+    original->pfnPowerFanCount                                           = xetPowerFanCount;
+
+    xet_apitable.pfnPowerFanGetProperties                                = original->pfnPowerFanGetProperties;
+    original->pfnPowerFanGetProperties                                   = xetPowerFanGetProperties;
+
+    xet_apitable.pfnPowerFanGetSpeedTable                                = original->pfnPowerFanGetSpeedTable;
+    original->pfnPowerFanGetSpeedTable                                   = xetPowerFanGetSpeedTable;
+
+    xet_apitable.pfnPowerFanSetSpeedTable                                = original->pfnPowerFanSetSpeedTable;
+    original->pfnPowerFanSetSpeedTable                                   = xetPowerFanSetSpeedTable;
+
+    xet_apitable.pfnPowerFanGetSpeed                                     = original->pfnPowerFanGetSpeed;
+    original->pfnPowerFanGetSpeed                                        = xetPowerFanGetSpeed;
+
+    xet_apitable.pfnPowerFanSetSpeed                                     = original->pfnPowerFanSetSpeed;
+    original->pfnPowerFanSetSpeed                                        = xetPowerFanSetSpeed;
+
+    xet_apitable.pfnPowerTemperatureSensorCount                          = original->pfnPowerTemperatureSensorCount;
+    original->pfnPowerTemperatureSensorCount                             = xetPowerTemperatureSensorCount;
+
+    xet_apitable.pfnPowerGetTemperatureProperties                        = original->pfnPowerGetTemperatureProperties;
+    original->pfnPowerGetTemperatureProperties                           = xetPowerGetTemperatureProperties;
+
+    xet_apitable.pfnPowerGetTemperature                                  = original->pfnPowerGetTemperature;
+    original->pfnPowerGetTemperature                                     = xetPowerGetTemperature;
+
+    xet_apitable.pfnPowerSetTemperatureThreshold                         = original->pfnPowerSetTemperatureThreshold;
+    original->pfnPowerSetTemperatureThreshold                            = xetPowerSetTemperatureThreshold;
+
+    xet_apitable.pfnPowerActivityCount                                   = original->pfnPowerActivityCount;
+    original->pfnPowerActivityCount                                      = xetPowerActivityCount;
+
+    xet_apitable.pfnPowerGetActivityProperties                           = original->pfnPowerGetActivityProperties;
+    original->pfnPowerGetActivityProperties                              = xetPowerGetActivityProperties;
+
+    xet_apitable.pfnPowerGetActivityCounters                             = original->pfnPowerGetActivityCounters;
+    original->pfnPowerGetActivityCounters                                = xetPowerGetActivityCounters;
 
     return true;
 }
@@ -587,6 +767,865 @@ xetMetricQueryGetData(
 
     }
     return xet_apitable.pfnMetricQueryGetData( hMetricQuery, pReportCount, rawDataSize, pRawData );
+}
+
+///////////////////////////////////////////////////////////////////////////////
+xe_result_t __xecall
+xetDevicePowerInit(
+    xe_device_handle_t hDevice,                     ///< [in] handle of the device object
+    uint32_t flags,                                 ///< [in] bitfield of ::xet_power_init_flags_t
+    xet_power_handle_t* pPowerHandle                ///< [out] handle for accessing power features of the device
+    )
+{
+    if( xe_validation_enables.ParameterValidation )
+    {
+        if( nullptr == xet_apitable.pfnDevicePowerInit )
+            return XE_RESULT_ERROR_UNINITIALIZED;
+
+        // Check parameters
+        if( nullptr == hDevice )
+            return XE_RESULT_ERROR_INVALID_PARAMETER;
+
+        if( nullptr == pPowerHandle )
+            return XE_RESULT_ERROR_INVALID_PARAMETER;
+
+    }
+    return xet_apitable.pfnDevicePowerInit( hDevice, flags, pPowerHandle );
+}
+
+///////////////////////////////////////////////////////////////////////////////
+xe_result_t __xecall
+xetPowerShutdown(
+    xet_power_handle_t hPower                       ///< [in] handle of the power object
+    )
+{
+    if( xe_validation_enables.ParameterValidation )
+    {
+        if( nullptr == xet_apitable.pfnPowerShutdown )
+            return XE_RESULT_ERROR_UNINITIALIZED;
+
+        // Check parameters
+        if( nullptr == hPower )
+            return XE_RESULT_ERROR_INVALID_PARAMETER;
+
+    }
+    return xet_apitable.pfnPowerShutdown( hPower );
+}
+
+///////////////////////////////////////////////////////////////////////////////
+xe_result_t __xecall
+xetPowerGetAveragePowerLimit(
+    xet_power_handle_t hPower,                      ///< [in] handle of the power object
+    xet_power_average_limit_t* pLimit               ///< [out] information about the average power limit
+    )
+{
+    if( xe_validation_enables.ParameterValidation )
+    {
+        if( nullptr == xet_apitable.pfnPowerGetAveragePowerLimit )
+            return XE_RESULT_ERROR_UNINITIALIZED;
+
+        // Check parameters
+        if( nullptr == hPower )
+            return XE_RESULT_ERROR_INVALID_PARAMETER;
+
+        if( nullptr == pLimit )
+            return XE_RESULT_ERROR_INVALID_PARAMETER;
+
+    }
+    return xet_apitable.pfnPowerGetAveragePowerLimit( hPower, pLimit );
+}
+
+///////////////////////////////////////////////////////////////////////////////
+xe_result_t __xecall
+xetPowerGetBurstPowerLimit(
+    xet_power_handle_t hPower,                      ///< [in] handle of the power object
+    xet_power_burst_limit_t* pLimit                 ///< [out] information about the burst power limit
+    )
+{
+    if( xe_validation_enables.ParameterValidation )
+    {
+        if( nullptr == xet_apitable.pfnPowerGetBurstPowerLimit )
+            return XE_RESULT_ERROR_UNINITIALIZED;
+
+        // Check parameters
+        if( nullptr == hPower )
+            return XE_RESULT_ERROR_INVALID_PARAMETER;
+
+        if( nullptr == pLimit )
+            return XE_RESULT_ERROR_INVALID_PARAMETER;
+
+    }
+    return xet_apitable.pfnPowerGetBurstPowerLimit( hPower, pLimit );
+}
+
+///////////////////////////////////////////////////////////////////////////////
+xe_result_t __xecall
+xetPowerGetPeakPowerLimit(
+    xet_power_handle_t hPower,                      ///< [in] handle of the power object
+    xet_power_peak_limit_t* pLimit                  ///< [out] information about the peak power limit
+    )
+{
+    if( xe_validation_enables.ParameterValidation )
+    {
+        if( nullptr == xet_apitable.pfnPowerGetPeakPowerLimit )
+            return XE_RESULT_ERROR_UNINITIALIZED;
+
+        // Check parameters
+        if( nullptr == hPower )
+            return XE_RESULT_ERROR_INVALID_PARAMETER;
+
+        if( nullptr == pLimit )
+            return XE_RESULT_ERROR_INVALID_PARAMETER;
+
+    }
+    return xet_apitable.pfnPowerGetPeakPowerLimit( hPower, pLimit );
+}
+
+///////////////////////////////////////////////////////////////////////////////
+xe_result_t __xecall
+xetPowerGetAllPowerLimits(
+    xet_power_handle_t hPower,                      ///< [in] handle of the power object
+    xet_power_limits_t* pLimits                     ///< [out] information about the average/burst/peak power limits
+    )
+{
+    if( xe_validation_enables.ParameterValidation )
+    {
+        if( nullptr == xet_apitable.pfnPowerGetAllPowerLimits )
+            return XE_RESULT_ERROR_UNINITIALIZED;
+
+        // Check parameters
+        if( nullptr == hPower )
+            return XE_RESULT_ERROR_INVALID_PARAMETER;
+
+        if( nullptr == pLimits )
+            return XE_RESULT_ERROR_INVALID_PARAMETER;
+
+    }
+    return xet_apitable.pfnPowerGetAllPowerLimits( hPower, pLimits );
+}
+
+///////////////////////////////////////////////////////////////////////////////
+xe_result_t __xecall
+xetPowerGetDefaultPowerLimits(
+    xet_power_handle_t hPower,                      ///< [in] handle of the power object
+    xet_power_limits_t* pLimits                     ///< [out] information about the default average/burst/peak power limits
+    )
+{
+    if( xe_validation_enables.ParameterValidation )
+    {
+        if( nullptr == xet_apitable.pfnPowerGetDefaultPowerLimits )
+            return XE_RESULT_ERROR_UNINITIALIZED;
+
+        // Check parameters
+        if( nullptr == hPower )
+            return XE_RESULT_ERROR_INVALID_PARAMETER;
+
+        if( nullptr == pLimits )
+            return XE_RESULT_ERROR_INVALID_PARAMETER;
+
+    }
+    return xet_apitable.pfnPowerGetDefaultPowerLimits( hPower, pLimits );
+}
+
+///////////////////////////////////////////////////////////////////////////////
+xe_result_t __xecall
+xetPowerSetAveragePowerLimit(
+    xet_power_handle_t hPower,                      ///< [in] handle of the power object
+    xet_power_average_limit_t* pLimit               ///< [in] information about the average power limit
+    )
+{
+    if( xe_validation_enables.ParameterValidation )
+    {
+        if( nullptr == xet_apitable.pfnPowerSetAveragePowerLimit )
+            return XE_RESULT_ERROR_UNINITIALIZED;
+
+        // Check parameters
+        if( nullptr == hPower )
+            return XE_RESULT_ERROR_INVALID_PARAMETER;
+
+        if( nullptr == pLimit )
+            return XE_RESULT_ERROR_INVALID_PARAMETER;
+
+    }
+    return xet_apitable.pfnPowerSetAveragePowerLimit( hPower, pLimit );
+}
+
+///////////////////////////////////////////////////////////////////////////////
+xe_result_t __xecall
+xetPowerSetBurstPowerLimit(
+    xet_power_handle_t hPower,                      ///< [in] handle of the power object
+    xet_power_burst_limit_t* pLimit                 ///< [in] information about the burst power limit
+    )
+{
+    if( xe_validation_enables.ParameterValidation )
+    {
+        if( nullptr == xet_apitable.pfnPowerSetBurstPowerLimit )
+            return XE_RESULT_ERROR_UNINITIALIZED;
+
+        // Check parameters
+        if( nullptr == hPower )
+            return XE_RESULT_ERROR_INVALID_PARAMETER;
+
+        if( nullptr == pLimit )
+            return XE_RESULT_ERROR_INVALID_PARAMETER;
+
+    }
+    return xet_apitable.pfnPowerSetBurstPowerLimit( hPower, pLimit );
+}
+
+///////////////////////////////////////////////////////////////////////////////
+xe_result_t __xecall
+xetPowerSetPeakPowerLimit(
+    xet_power_handle_t hPower,                      ///< [in] handle of the power object
+    xet_power_peak_limit_t* pLimit                  ///< [in] information about the peak power limit
+    )
+{
+    if( xe_validation_enables.ParameterValidation )
+    {
+        if( nullptr == xet_apitable.pfnPowerSetPeakPowerLimit )
+            return XE_RESULT_ERROR_UNINITIALIZED;
+
+        // Check parameters
+        if( nullptr == hPower )
+            return XE_RESULT_ERROR_INVALID_PARAMETER;
+
+        if( nullptr == pLimit )
+            return XE_RESULT_ERROR_INVALID_PARAMETER;
+
+    }
+    return xet_apitable.pfnPowerSetPeakPowerLimit( hPower, pLimit );
+}
+
+///////////////////////////////////////////////////////////////////////////////
+xe_result_t __xecall
+xetPowerSetPowerLimits(
+    xet_power_handle_t hPower,                      ///< [in] handle of the power object
+    xet_power_limits_t* pLimits                     ///< [in] information about the average/burst/peak power limits
+    )
+{
+    if( xe_validation_enables.ParameterValidation )
+    {
+        if( nullptr == xet_apitable.pfnPowerSetPowerLimits )
+            return XE_RESULT_ERROR_UNINITIALIZED;
+
+        // Check parameters
+        if( nullptr == hPower )
+            return XE_RESULT_ERROR_INVALID_PARAMETER;
+
+        if( nullptr == pLimits )
+            return XE_RESULT_ERROR_INVALID_PARAMETER;
+
+    }
+    return xet_apitable.pfnPowerSetPowerLimits( hPower, pLimits );
+}
+
+///////////////////////////////////////////////////////////////////////////////
+xe_result_t __xecall
+xetPowerGetEnergyCounter(
+    xet_power_handle_t hPower,                      ///< [in] handle of the power object
+    uint64_t* pEnergyMillijoules                    ///< [out] the energy counter in millijoules
+    )
+{
+    if( xe_validation_enables.ParameterValidation )
+    {
+        if( nullptr == xet_apitable.pfnPowerGetEnergyCounter )
+            return XE_RESULT_ERROR_UNINITIALIZED;
+
+        // Check parameters
+        if( nullptr == hPower )
+            return XE_RESULT_ERROR_INVALID_PARAMETER;
+
+        if( nullptr == pEnergyMillijoules )
+            return XE_RESULT_ERROR_INVALID_PARAMETER;
+
+    }
+    return xet_apitable.pfnPowerGetEnergyCounter( hPower, pEnergyMillijoules );
+}
+
+///////////////////////////////////////////////////////////////////////////////
+xe_result_t __xecall
+xetPowerGetTurboMode(
+    xet_power_handle_t hPower,                      ///< [in] handle of the power object
+    xet_turbo_mode_t* pTurboMode                    ///< [out] turbo mode currently in effect
+    )
+{
+    if( xe_validation_enables.ParameterValidation )
+    {
+        if( nullptr == xet_apitable.pfnPowerGetTurboMode )
+            return XE_RESULT_ERROR_UNINITIALIZED;
+
+        // Check parameters
+        if( nullptr == hPower )
+            return XE_RESULT_ERROR_INVALID_PARAMETER;
+
+        if( nullptr == pTurboMode )
+            return XE_RESULT_ERROR_INVALID_PARAMETER;
+
+    }
+    return xet_apitable.pfnPowerGetTurboMode( hPower, pTurboMode );
+}
+
+///////////////////////////////////////////////////////////////////////////////
+xe_result_t __xecall
+xetPowerSetTurboMode(
+    xet_power_handle_t hPower,                      ///< [in] handle of the power object
+    xet_turbo_mode_t pTurboMode                     ///< [in] new turbo mode
+    )
+{
+    if( xe_validation_enables.ParameterValidation )
+    {
+        if( nullptr == xet_apitable.pfnPowerSetTurboMode )
+            return XE_RESULT_ERROR_UNINITIALIZED;
+
+        // Check parameters
+        if( nullptr == hPower )
+            return XE_RESULT_ERROR_INVALID_PARAMETER;
+
+    }
+    return xet_apitable.pfnPowerSetTurboMode( hPower, pTurboMode );
+}
+
+///////////////////////////////////////////////////////////////////////////////
+xe_result_t __xecall
+xetPowerFreqDomainCount(
+    xet_power_handle_t hPower,                      ///< [in] handle of the power object
+    uint32_t* pNumFreqDomains                       ///< [out] the number of frequency domains
+    )
+{
+    if( xe_validation_enables.ParameterValidation )
+    {
+        if( nullptr == xet_apitable.pfnPowerFreqDomainCount )
+            return XE_RESULT_ERROR_UNINITIALIZED;
+
+        // Check parameters
+        if( nullptr == hPower )
+            return XE_RESULT_ERROR_INVALID_PARAMETER;
+
+        if( nullptr == pNumFreqDomains )
+            return XE_RESULT_ERROR_INVALID_PARAMETER;
+
+    }
+    return xet_apitable.pfnPowerFreqDomainCount( hPower, pNumFreqDomains );
+}
+
+///////////////////////////////////////////////////////////////////////////////
+xe_result_t __xecall
+xetPowerFreqDomainGetHandle(
+    xet_power_handle_t hPower,                      ///< [in] handle of the power object
+    uint32_t ordinal,                               ///< [in] frequency domain index [0 .. ::xetPowerFreqDomainCount - 1]
+    xet_freq_domain_handle_t* phFreqDomain          ///< [out] pointer to handle of frequency domain object
+    )
+{
+    if( xe_validation_enables.ParameterValidation )
+    {
+        if( nullptr == xet_apitable.pfnPowerFreqDomainGetHandle )
+            return XE_RESULT_ERROR_UNINITIALIZED;
+
+        // Check parameters
+        if( nullptr == hPower )
+            return XE_RESULT_ERROR_INVALID_PARAMETER;
+
+        if( nullptr == phFreqDomain )
+            return XE_RESULT_ERROR_INVALID_PARAMETER;
+
+    }
+    return xet_apitable.pfnPowerFreqDomainGetHandle( hPower, ordinal, phFreqDomain );
+}
+
+///////////////////////////////////////////////////////////////////////////////
+xe_result_t __xecall
+xetPowerFreqDomainGetProperties(
+    xet_freq_domain_handle_t hFreqDomain,           ///< [in] handle of the frequency domain
+    xet_freq_domain_properties_t* pFreqDomainProperties ///< [out] pointer to properties for the frequency domain
+    )
+{
+    if( xe_validation_enables.ParameterValidation )
+    {
+        if( nullptr == xet_apitable.pfnPowerFreqDomainGetProperties )
+            return XE_RESULT_ERROR_UNINITIALIZED;
+
+        // Check parameters
+        if( nullptr == hFreqDomain )
+            return XE_RESULT_ERROR_INVALID_PARAMETER;
+
+        if( nullptr == pFreqDomainProperties )
+            return XE_RESULT_ERROR_INVALID_PARAMETER;
+
+    }
+    return xet_apitable.pfnPowerFreqDomainGetProperties( hFreqDomain, pFreqDomainProperties );
+}
+
+///////////////////////////////////////////////////////////////////////////////
+xe_result_t __xecall
+xetPowerFreqDomainGetSupportedClocks(
+    xet_freq_domain_handle_t hFreqDomain,           ///< [in] handle of the frequency domain
+    uint32_t numClockPoints,                        ///< [in] number of elements in pClocksMHz
+    uint32_t* pClocksMHz                            ///< [out] pointer to array of frequencies
+    )
+{
+    if( xe_validation_enables.ParameterValidation )
+    {
+        if( nullptr == xet_apitable.pfnPowerFreqDomainGetSupportedClocks )
+            return XE_RESULT_ERROR_UNINITIALIZED;
+
+        // Check parameters
+        if( nullptr == hFreqDomain )
+            return XE_RESULT_ERROR_INVALID_PARAMETER;
+
+        if( nullptr == pClocksMHz )
+            return XE_RESULT_ERROR_INVALID_PARAMETER;
+
+    }
+    return xet_apitable.pfnPowerFreqDomainGetSupportedClocks( hFreqDomain, numClockPoints, pClocksMHz );
+}
+
+///////////////////////////////////////////////////////////////////////////////
+xe_result_t __xecall
+xetPowerFreqDomainGetSupportedClockDividers(
+    xet_freq_domain_handle_t hFreqDomain,           ///< [in] handle of the frequency domain
+    uint32_t numClockDividers,                      ///< [in] number of elements in pDividers
+    xet_clock_divider_t* pDividers                  ///< [out] pointer to array of dividers
+    )
+{
+    if( xe_validation_enables.ParameterValidation )
+    {
+        if( nullptr == xet_apitable.pfnPowerFreqDomainGetSupportedClockDividers )
+            return XE_RESULT_ERROR_UNINITIALIZED;
+
+        // Check parameters
+        if( nullptr == hFreqDomain )
+            return XE_RESULT_ERROR_INVALID_PARAMETER;
+
+        if( nullptr == pDividers )
+            return XE_RESULT_ERROR_INVALID_PARAMETER;
+
+    }
+    return xet_apitable.pfnPowerFreqDomainGetSupportedClockDividers( hFreqDomain, numClockDividers, pDividers );
+}
+
+///////////////////////////////////////////////////////////////////////////////
+xe_result_t __xecall
+xetPowerxetPowerFreqDomainGetClockRange(
+    xet_freq_domain_handle_t hFreqDomain,           ///< [in] handle of the frequency domain
+    uint32_t* pMinClockMHz,                         ///< [out] min clock frequency in units of MHz
+    uint32_t* pMaxClockMHz                          ///< [out] max clock frequency in units of MHz
+    )
+{
+    if( xe_validation_enables.ParameterValidation )
+    {
+        if( nullptr == xet_apitable.pfnPowerpfnPowerFreqDomainGetClockRange )
+            return XE_RESULT_ERROR_UNINITIALIZED;
+
+        // Check parameters
+        if( nullptr == hFreqDomain )
+            return XE_RESULT_ERROR_INVALID_PARAMETER;
+
+        if( nullptr == pMinClockMHz )
+            return XE_RESULT_ERROR_INVALID_PARAMETER;
+
+        if( nullptr == pMaxClockMHz )
+            return XE_RESULT_ERROR_INVALID_PARAMETER;
+
+    }
+    return xet_apitable.pfnPowerpfnPowerFreqDomainGetClockRange( hFreqDomain, pMinClockMHz, pMaxClockMHz );
+}
+
+///////////////////////////////////////////////////////////////////////////////
+xe_result_t __xecall
+xetPowerxetPowerFreqDomainSetClockRange(
+    xet_freq_domain_handle_t hFreqDomain,           ///< [in] handle of the frequency domain
+    uint32_t minClockMHz,                           ///< [in] min clock frequency in units of MHz
+    uint32_t maxClockMHz                            ///< [in] max clock frequency in units of MHz
+    )
+{
+    if( xe_validation_enables.ParameterValidation )
+    {
+        if( nullptr == xet_apitable.pfnPowerpfnPowerFreqDomainSetClockRange )
+            return XE_RESULT_ERROR_UNINITIALIZED;
+
+        // Check parameters
+        if( nullptr == hFreqDomain )
+            return XE_RESULT_ERROR_INVALID_PARAMETER;
+
+    }
+    return xet_apitable.pfnPowerpfnPowerFreqDomainSetClockRange( hFreqDomain, minClockMHz, maxClockMHz );
+}
+
+///////////////////////////////////////////////////////////////////////////////
+xe_result_t __xecall
+xetPowerFreqDomainSetClockDivider(
+    xet_freq_domain_handle_t hFreqDomain,           ///< [in] handle of the frequency domain
+    xet_clock_divider_t* pClockDividerRequest       ///< [out] pointer to frequency divider request
+    )
+{
+    if( xe_validation_enables.ParameterValidation )
+    {
+        if( nullptr == xet_apitable.pfnPowerFreqDomainSetClockDivider )
+            return XE_RESULT_ERROR_UNINITIALIZED;
+
+        // Check parameters
+        if( nullptr == hFreqDomain )
+            return XE_RESULT_ERROR_INVALID_PARAMETER;
+
+        if( nullptr == pClockDividerRequest )
+            return XE_RESULT_ERROR_INVALID_PARAMETER;
+
+    }
+    return xet_apitable.pfnPowerFreqDomainSetClockDivider( hFreqDomain, pClockDividerRequest );
+}
+
+///////////////////////////////////////////////////////////////////////////////
+xe_result_t __xecall
+xetPowerGetCurrentFrequency(
+    xet_freq_domain_handle_t hFreqDomain,           ///< [in] handle of the frequency domain
+    uint32_t* pFreqRequestMHz,                      ///< [out] current frequency in MHz requested by the driver
+    uint32_t* pFreqResolvedMHz,                     ///< [out] the actual frequency in MHz
+    xet_freq_throttle_reasons_t* pFreqThrottleReasons   ///< [out] the reason the resolved frequency is lower than the request
+    )
+{
+    if( xe_validation_enables.ParameterValidation )
+    {
+        if( nullptr == xet_apitable.pfnPowerGetCurrentFrequency )
+            return XE_RESULT_ERROR_UNINITIALIZED;
+
+        // Check parameters
+        if( nullptr == hFreqDomain )
+            return XE_RESULT_ERROR_INVALID_PARAMETER;
+
+        if( nullptr == pFreqRequestMHz )
+            return XE_RESULT_ERROR_INVALID_PARAMETER;
+
+        if( nullptr == pFreqResolvedMHz )
+            return XE_RESULT_ERROR_INVALID_PARAMETER;
+
+        if( nullptr == pFreqThrottleReasons )
+            return XE_RESULT_ERROR_INVALID_PARAMETER;
+
+    }
+    return xet_apitable.pfnPowerGetCurrentFrequency( hFreqDomain, pFreqRequestMHz, pFreqResolvedMHz, pFreqThrottleReasons );
+}
+
+///////////////////////////////////////////////////////////////////////////////
+xe_result_t __xecall
+xetPowerFanCount(
+    xet_power_handle_t hPower,                      ///< [in] handle of the power object
+    uint32_t* pFanCount                             ///< [out] the number of fans on the device
+    )
+{
+    if( xe_validation_enables.ParameterValidation )
+    {
+        if( nullptr == xet_apitable.pfnPowerFanCount )
+            return XE_RESULT_ERROR_UNINITIALIZED;
+
+        // Check parameters
+        if( nullptr == hPower )
+            return XE_RESULT_ERROR_INVALID_PARAMETER;
+
+        if( nullptr == pFanCount )
+            return XE_RESULT_ERROR_INVALID_PARAMETER;
+
+    }
+    return xet_apitable.pfnPowerFanCount( hPower, pFanCount );
+}
+
+///////////////////////////////////////////////////////////////////////////////
+xe_result_t __xecall
+xetPowerFanGetProperties(
+    xet_power_handle_t hPower,                      ///< [in] handle of the power object
+    uint32_t fanIndex,                              ///< [in] fan index [0 .. ::xetPowerFanCount - 1]
+    xet_fan_properties_t* pFanProperties            ///< [out] pointer to storage for fan properties
+    )
+{
+    if( xe_validation_enables.ParameterValidation )
+    {
+        if( nullptr == xet_apitable.pfnPowerFanGetProperties )
+            return XE_RESULT_ERROR_UNINITIALIZED;
+
+        // Check parameters
+        if( nullptr == hPower )
+            return XE_RESULT_ERROR_INVALID_PARAMETER;
+
+        if( nullptr == pFanProperties )
+            return XE_RESULT_ERROR_INVALID_PARAMETER;
+
+    }
+    return xet_apitable.pfnPowerFanGetProperties( hPower, fanIndex, pFanProperties );
+}
+
+///////////////////////////////////////////////////////////////////////////////
+xe_result_t __xecall
+xetPowerFanGetSpeedTable(
+    xet_power_handle_t hPower,                      ///< [in] handle of the power object
+    uint32_t fanIndex,                              ///< [in] fan index [0 .. ::xetPowerFanCount - 1]
+    xe_bool_t fanSpeedInRpm,                        ///< [in] true will request fan speeds in RPM, otherwise in percentage
+    uint32_t* pNumFanPoints,                        ///< [in/out] input number of elements in pFanSpeedTable array; output
+                                                    ///< number of elements returned
+    xet_fan_point_t* pFanPoints                     ///< [out] pointer to an array of temperature/fan-speed points
+    )
+{
+    if( xe_validation_enables.ParameterValidation )
+    {
+        if( nullptr == xet_apitable.pfnPowerFanGetSpeedTable )
+            return XE_RESULT_ERROR_UNINITIALIZED;
+
+        // Check parameters
+        if( nullptr == hPower )
+            return XE_RESULT_ERROR_INVALID_PARAMETER;
+
+        if( nullptr == pNumFanPoints )
+            return XE_RESULT_ERROR_INVALID_PARAMETER;
+
+        if( nullptr == pFanPoints )
+            return XE_RESULT_ERROR_INVALID_PARAMETER;
+
+    }
+    return xet_apitable.pfnPowerFanGetSpeedTable( hPower, fanIndex, fanSpeedInRpm, pNumFanPoints, pFanPoints );
+}
+
+///////////////////////////////////////////////////////////////////////////////
+xe_result_t __xecall
+xetPowerFanSetSpeedTable(
+    xet_power_handle_t hPower,                      ///< [in] handle of the power object
+    uint32_t fanIndex,                              ///< [in] fan index [0 .. ::xetPowerFanCount - 1]
+    uint32_t numFanPoints,                          ///< [in] number of points in pFanSpeedTable array
+    xet_fan_point_t* pFanPoints                     ///< [in] pointer to an array of temperature/fan-speed points
+    )
+{
+    if( xe_validation_enables.ParameterValidation )
+    {
+        if( nullptr == xet_apitable.pfnPowerFanSetSpeedTable )
+            return XE_RESULT_ERROR_UNINITIALIZED;
+
+        // Check parameters
+        if( nullptr == hPower )
+            return XE_RESULT_ERROR_INVALID_PARAMETER;
+
+        if( nullptr == pFanPoints )
+            return XE_RESULT_ERROR_INVALID_PARAMETER;
+
+    }
+    return xet_apitable.pfnPowerFanSetSpeedTable( hPower, fanIndex, numFanPoints, pFanPoints );
+}
+
+///////////////////////////////////////////////////////////////////////////////
+xe_result_t __xecall
+xetPowerFanGetSpeed(
+    xet_power_handle_t hPower,                      ///< [in] handle of the power object
+    uint32_t startFanIndex,                         ///< [in] fan index [0 .. ::xetPowerFanCount - 1]
+    uint32_t numFans,                               ///< [in] pFanSpeed will contain results for fan index
+                                                    ///< (startFanIndex)..(startFanIndex + numFans - 1)
+    xe_bool_t fanSpeedInRpm,                        ///< [in] true will request fan speeds in RPM, otherwise in percentage
+    xet_fan_speed_info_t* pFanSpeed                 ///< [out] pointer to an array of current fan speeds
+    )
+{
+    if( xe_validation_enables.ParameterValidation )
+    {
+        if( nullptr == xet_apitable.pfnPowerFanGetSpeed )
+            return XE_RESULT_ERROR_UNINITIALIZED;
+
+        // Check parameters
+        if( nullptr == hPower )
+            return XE_RESULT_ERROR_INVALID_PARAMETER;
+
+        if( nullptr == pFanSpeed )
+            return XE_RESULT_ERROR_INVALID_PARAMETER;
+
+    }
+    return xet_apitable.pfnPowerFanGetSpeed( hPower, startFanIndex, numFans, fanSpeedInRpm, pFanSpeed );
+}
+
+///////////////////////////////////////////////////////////////////////////////
+xe_result_t __xecall
+xetPowerFanSetSpeed(
+    xet_power_handle_t hPower,                      ///< [in] handle of the power object
+    uint32_t startFanIndex,                         ///< [in] fan index [0 .. ::xetPowerFanCount - 1]
+    uint32_t numFans,                               ///< [in] pFanSpeed will contain results for fan index
+                                                    ///< (startFanIndex)..(startFanIndex + numFans - 1)
+    xet_fan_speed_info_t* pFanSpeed                 ///< [in] pointer to an array of current fan speeds
+    )
+{
+    if( xe_validation_enables.ParameterValidation )
+    {
+        if( nullptr == xet_apitable.pfnPowerFanSetSpeed )
+            return XE_RESULT_ERROR_UNINITIALIZED;
+
+        // Check parameters
+        if( nullptr == hPower )
+            return XE_RESULT_ERROR_INVALID_PARAMETER;
+
+        if( nullptr == pFanSpeed )
+            return XE_RESULT_ERROR_INVALID_PARAMETER;
+
+    }
+    return xet_apitable.pfnPowerFanSetSpeed( hPower, startFanIndex, numFans, pFanSpeed );
+}
+
+///////////////////////////////////////////////////////////////////////////////
+xe_result_t __xecall
+xetPowerTemperatureSensorCount(
+    xet_power_handle_t hPower,                      ///< [in] handle of the power object
+    uint32_t* pSensorCount                          ///< [out] the number of temperature sensors on the device
+    )
+{
+    if( xe_validation_enables.ParameterValidation )
+    {
+        if( nullptr == xet_apitable.pfnPowerTemperatureSensorCount )
+            return XE_RESULT_ERROR_UNINITIALIZED;
+
+        // Check parameters
+        if( nullptr == hPower )
+            return XE_RESULT_ERROR_INVALID_PARAMETER;
+
+        if( nullptr == pSensorCount )
+            return XE_RESULT_ERROR_INVALID_PARAMETER;
+
+    }
+    return xet_apitable.pfnPowerTemperatureSensorCount( hPower, pSensorCount );
+}
+
+///////////////////////////////////////////////////////////////////////////////
+xe_result_t __xecall
+xetPowerGetTemperatureProperties(
+    xet_power_handle_t hPower,                      ///< [in] handle of the power object
+    uint32_t sensorIndex,                           ///< [in] sensor index [0 .. ::xetPowerTemperatureSensorCount]
+    xet_temperature_properties_t* pProperties       ///< [out] pointer to properties for this sensor
+    )
+{
+    if( xe_validation_enables.ParameterValidation )
+    {
+        if( nullptr == xet_apitable.pfnPowerGetTemperatureProperties )
+            return XE_RESULT_ERROR_UNINITIALIZED;
+
+        // Check parameters
+        if( nullptr == hPower )
+            return XE_RESULT_ERROR_INVALID_PARAMETER;
+
+        if( nullptr == pProperties )
+            return XE_RESULT_ERROR_INVALID_PARAMETER;
+
+    }
+    return xet_apitable.pfnPowerGetTemperatureProperties( hPower, sensorIndex, pProperties );
+}
+
+///////////////////////////////////////////////////////////////////////////////
+xe_result_t __xecall
+xetPowerGetTemperature(
+    xet_power_handle_t hPower,                      ///< [in] handle of the power object
+    uint32_t startSensorIndex,                      ///< [in] sensor index [0 .. ::xetPowerTemperatureSensorCount]
+    uint32_t numSensors,                            ///< [in] pTemperatures will contain results for sensors index
+                                                    ///< (startSensorIndex)..(startSensorIndex + numSensors - 1)
+    uint16_t* pTemperatures                         ///< [out] pointer to an array of temperatures in units of degrees celsius
+    )
+{
+    if( xe_validation_enables.ParameterValidation )
+    {
+        if( nullptr == xet_apitable.pfnPowerGetTemperature )
+            return XE_RESULT_ERROR_UNINITIALIZED;
+
+        // Check parameters
+        if( nullptr == hPower )
+            return XE_RESULT_ERROR_INVALID_PARAMETER;
+
+        if( nullptr == pTemperatures )
+            return XE_RESULT_ERROR_INVALID_PARAMETER;
+
+    }
+    return xet_apitable.pfnPowerGetTemperature( hPower, startSensorIndex, numSensors, pTemperatures );
+}
+
+///////////////////////////////////////////////////////////////////////////////
+xe_result_t __xecall
+xetPowerSetTemperatureThreshold(
+    xet_power_handle_t hPower,                      ///< [in] handle of the power object
+    uint32_t sensorIndex,                           ///< [in] sensor index [0 .. ::xetPowerTemperatureSensorCount]
+    uint16_t maxTemperature                         ///< [in] temperature threshold in degrees celsius beyond which frequency
+                                                    ///< will be throttled
+    )
+{
+    if( xe_validation_enables.ParameterValidation )
+    {
+        if( nullptr == xet_apitable.pfnPowerSetTemperatureThreshold )
+            return XE_RESULT_ERROR_UNINITIALIZED;
+
+        // Check parameters
+        if( nullptr == hPower )
+            return XE_RESULT_ERROR_INVALID_PARAMETER;
+
+    }
+    return xet_apitable.pfnPowerSetTemperatureThreshold( hPower, sensorIndex, maxTemperature );
+}
+
+///////////////////////////////////////////////////////////////////////////////
+xe_result_t __xecall
+xetPowerActivityCount(
+    xet_power_handle_t hPower,                      ///< [in] handle of the power object
+    uint32_t* pActivityCount                        ///< [out] the number of activity counters on the device
+    )
+{
+    if( xe_validation_enables.ParameterValidation )
+    {
+        if( nullptr == xet_apitable.pfnPowerActivityCount )
+            return XE_RESULT_ERROR_UNINITIALIZED;
+
+        // Check parameters
+        if( nullptr == hPower )
+            return XE_RESULT_ERROR_INVALID_PARAMETER;
+
+        if( nullptr == pActivityCount )
+            return XE_RESULT_ERROR_INVALID_PARAMETER;
+
+    }
+    return xet_apitable.pfnPowerActivityCount( hPower, pActivityCount );
+}
+
+///////////////////////////////////////////////////////////////////////////////
+xe_result_t __xecall
+xetPowerGetActivityProperties(
+    xet_power_handle_t hPower,                      ///< [in] handle of the power object
+    uint32_t activityIndex,                         ///< [in] activity counter index [0 .. ::xetPowerActivityCount]
+    xet_activity_properties_t* pProperties          ///< [out] pointer to properties for this activity counter
+    )
+{
+    if( xe_validation_enables.ParameterValidation )
+    {
+        if( nullptr == xet_apitable.pfnPowerGetActivityProperties )
+            return XE_RESULT_ERROR_UNINITIALIZED;
+
+        // Check parameters
+        if( nullptr == hPower )
+            return XE_RESULT_ERROR_INVALID_PARAMETER;
+
+        if( nullptr == pProperties )
+            return XE_RESULT_ERROR_INVALID_PARAMETER;
+
+    }
+    return xet_apitable.pfnPowerGetActivityProperties( hPower, activityIndex, pProperties );
+}
+
+///////////////////////////////////////////////////////////////////////////////
+xe_result_t __xecall
+xetPowerGetActivityCounters(
+    xet_power_handle_t hPower,                      ///< [in] handle of the power object
+    uint32_t startCounterIndex,                     ///< [in] sensor index [0 .. ::xetPowerActivityCount]
+    uint32_t numCounters,                           ///< [in] pCounters will contain results for activity counter index
+                                                    ///< (startCounterIndex)..(startCounterIndex + numCounters - 1)
+    xet_activity_counters_t* pCounters              ///< [out] pointer to an array of activity counter data
+    )
+{
+    if( xe_validation_enables.ParameterValidation )
+    {
+        if( nullptr == xet_apitable.pfnPowerGetActivityCounters )
+            return XE_RESULT_ERROR_UNINITIALIZED;
+
+        // Check parameters
+        if( nullptr == hPower )
+            return XE_RESULT_ERROR_INVALID_PARAMETER;
+
+        if( nullptr == pCounters )
+            return XE_RESULT_ERROR_INVALID_PARAMETER;
+
+    }
+    return xet_apitable.pfnPowerGetActivityCounters( hPower, startCounterIndex, numCounters, pCounters );
 }
 
 #if defined(__cplusplus)

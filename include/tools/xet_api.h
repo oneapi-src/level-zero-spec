@@ -37,6 +37,7 @@
 #include "xet_device.h"
 #include "xet_gtpin.h"
 #include "xet_metric.h"
+#include "xet_power.h"
 
 ///////////////////////////////////////////////////////////////////////////////
 typedef struct _xet_apitable_t
@@ -59,6 +60,42 @@ typedef struct _xet_apitable_t
     xet_pfnCommandListAppendMetricQueryEnd_t                    pfnCommandListAppendMetricQueryEnd;
     xet_pfnCommandListAppendMetricMemoryBarrier_t               pfnCommandListAppendMetricMemoryBarrier;
     xet_pfnMetricQueryGetData_t                                 pfnMetricQueryGetData;
+    xet_pfnDevicePowerInit_t                                    pfnDevicePowerInit;
+    xet_pfnPowerShutdown_t                                      pfnPowerShutdown;
+    xet_pfnPowerGetAveragePowerLimit_t                          pfnPowerGetAveragePowerLimit;
+    xet_pfnPowerGetBurstPowerLimit_t                            pfnPowerGetBurstPowerLimit;
+    xet_pfnPowerGetPeakPowerLimit_t                             pfnPowerGetPeakPowerLimit;
+    xet_pfnPowerGetAllPowerLimits_t                             pfnPowerGetAllPowerLimits;
+    xet_pfnPowerGetDefaultPowerLimits_t                         pfnPowerGetDefaultPowerLimits;
+    xet_pfnPowerSetAveragePowerLimit_t                          pfnPowerSetAveragePowerLimit;
+    xet_pfnPowerSetBurstPowerLimit_t                            pfnPowerSetBurstPowerLimit;
+    xet_pfnPowerSetPeakPowerLimit_t                             pfnPowerSetPeakPowerLimit;
+    xet_pfnPowerSetPowerLimits_t                                pfnPowerSetPowerLimits;
+    xet_pfnPowerGetEnergyCounter_t                              pfnPowerGetEnergyCounter;
+    xet_pfnPowerGetTurboMode_t                                  pfnPowerGetTurboMode;
+    xet_pfnPowerSetTurboMode_t                                  pfnPowerSetTurboMode;
+    xet_pfnPowerFreqDomainCount_t                               pfnPowerFreqDomainCount;
+    xet_pfnPowerFreqDomainGetHandle_t                           pfnPowerFreqDomainGetHandle;
+    xet_pfnPowerFreqDomainGetProperties_t                       pfnPowerFreqDomainGetProperties;
+    xet_pfnPowerFreqDomainGetSupportedClocks_t                  pfnPowerFreqDomainGetSupportedClocks;
+    xet_pfnPowerFreqDomainGetSupportedClockDividers_t           pfnPowerFreqDomainGetSupportedClockDividers;
+    xet_pfnPowerpfnPowerFreqDomainGetClockRange_t               pfnPowerpfnPowerFreqDomainGetClockRange;
+    xet_pfnPowerpfnPowerFreqDomainSetClockRange_t               pfnPowerpfnPowerFreqDomainSetClockRange;
+    xet_pfnPowerFreqDomainSetClockDivider_t                     pfnPowerFreqDomainSetClockDivider;
+    xet_pfnPowerGetCurrentFrequency_t                           pfnPowerGetCurrentFrequency;
+    xet_pfnPowerFanCount_t                                      pfnPowerFanCount;
+    xet_pfnPowerFanGetProperties_t                              pfnPowerFanGetProperties;
+    xet_pfnPowerFanGetSpeedTable_t                              pfnPowerFanGetSpeedTable;
+    xet_pfnPowerFanSetSpeedTable_t                              pfnPowerFanSetSpeedTable;
+    xet_pfnPowerFanGetSpeed_t                                   pfnPowerFanGetSpeed;
+    xet_pfnPowerFanSetSpeed_t                                   pfnPowerFanSetSpeed;
+    xet_pfnPowerTemperatureSensorCount_t                        pfnPowerTemperatureSensorCount;
+    xet_pfnPowerGetTemperatureProperties_t                      pfnPowerGetTemperatureProperties;
+    xet_pfnPowerGetTemperature_t                                pfnPowerGetTemperature;
+    xet_pfnPowerSetTemperatureThreshold_t                       pfnPowerSetTemperatureThreshold;
+    xet_pfnPowerActivityCount_t                                 pfnPowerActivityCount;
+    xet_pfnPowerGetActivityProperties_t                         pfnPowerGetActivityProperties;
+    xet_pfnPowerGetActivityCounters_t                           pfnPowerGetActivityCounters;
 } xet_apitable_t;
 
 #endif // _XET_API_H
