@@ -598,7 +598,7 @@ xe_result_t CommandListCoreFamily<gfxCoreFamily>::appendMemoryCopy(void *dstptr,
                                                                    const void *srcptr,
                                                                    size_t size,
                                                                    xe_event_handle_t hEvent) {
-    auto builtinFunction = this->device->getBuiltinFunctionsLib()->getFunction(Builtin::CopyBufferBytes); // no thread safety!
+    auto builtinFunction = this->device->getBuiltinFunctionsLib()->getFunction(Builtin::CopyBufferBytes);
 
     uint32_t groupSizeX = builtinFunction->getImmutableData()->getSignature().attributes.simdSize; // TODO : consider ATS fused threads
     uint32_t groupSizeY = 1u;

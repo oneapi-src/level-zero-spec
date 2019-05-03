@@ -346,6 +346,10 @@ Device *Device::create(void *ptr) {
     device->mocsMapper.rebind(new MOCSMapper(bindPtrRef(deviceRT->getGmmHelper())));
     device->maxNumHwThreads = getMaxThreadsForVfe(deviceRT->getHardwareInfo());
 
+    if (deviceRT->getExecutionEnvironment()->getCompilerInterface()) {
+        device->getBuiltinFunctionsLib()->initFunctions();
+    }
+
     return device;
 }
 

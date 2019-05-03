@@ -20,6 +20,7 @@ struct BuiltinFunctionsLibImpl : BuiltinFunctionsLib {
     }
 
     PtrRef<Function> getFunction(Builtin func) override;
+    void initFunctions() override;
 
   protected:
     struct BuiltinData;
