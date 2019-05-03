@@ -33,42 +33,6 @@ foreach(TEST ${TEST_TARGETS})
     target_link_libraries(${TEST} level_zero_icd_loader ${OS_SPECIFIC_LIBS})
     target_link_libraries(${TEST} OpenCL ${OS_SPECIFIC_LIBS})
 
-    if(MSVC)
-        set(RUN_TEST $<TARGET_FILE:${TEST}> --aub)
-    else()
-        set(RUN_TEST LD_LIBRARY_PATH=$<TARGET_FILE_DIR:${TEST}> $<TARGET_FILE:${TEST}> --aub)
-    endif()
-
-    set(TEST_DIR ${CUSTOM_COMMAND_BINARY_DIR}/${TEST}_aub_test_ats)
-    add_custom_target(run_${TEST}_aub_ats ALL DEPENDS ${TEST} copy_test_files level_zero)
-    add_custom_command(
-      TARGET run_${TEST}_aub_ats
-      POST_BUILD
-      COMMAND echo deleting and re-creating ${TEST_DIR} directory...
-      COMMAND ${CMAKE_COMMAND} -E remove_directory ${TEST_DIR}
-      COMMAND ${CMAKE_COMMAND} -E make_directory ${TEST_DIR}
-      COMMAND ${CMAKE_COMMAND} -E echo "SetCommandStreamReceiver = 1" > ${TEST_DIR}/igdrcl.config
-      COMMAND ${CMAKE_COMMAND} -E echo "ProductFamilyOverride = ats" >> ${TEST_DIR}/igdrcl.config
-      COMMAND ${CMAKE_COMMAND} -E echo "EnableLocalMemory = 1" >> ${TEST_DIR}/igdrcl.config
-      COMMAND ${CMAKE_COMMAND} -E copy_directory "${CUSTOM_COMMAND_BINARY_DIR}/test_files" "${TEST_DIR}/test_files"
-      COMMAND echo Running ${RUN_TEST} for ATS in "${CUSTOM_COMMAND_BINARY_DIR}/${TEST}_aub_test"
-      COMMAND ${CMAKE_COMMAND} -E chdir ${TEST_DIR} ${CMAKE_COMMAND} -E env SetCommandStreamReceiver=1 ${RUN_TEST}
-    )
-
-    set(TEST_DIR ${CUSTOM_COMMAND_BINARY_DIR}/${TEST}_aub_test_skl)
-    add_custom_target(run_${TEST}_aub_skl ALL DEPENDS ${TEST} copy_test_files level_zero)
-    add_custom_command(
-      TARGET run_${TEST}_aub_skl
-      POST_BUILD
-      COMMAND echo deleting and re-creating ${TEST_DIR} directory...
-      COMMAND ${CMAKE_COMMAND} -E remove_directory ${TEST_DIR}
-      COMMAND ${CMAKE_COMMAND} -E make_directory ${TEST_DIR}
-      COMMAND ${CMAKE_COMMAND} -E echo "SetCommandStreamReceiver = 1" > ${TEST_DIR}/igdrcl.config
-      COMMAND ${CMAKE_COMMAND} -E echo "ProductFamilyOverride = skl" >> ${TEST_DIR}/igdrcl.config
-      COMMAND ${CMAKE_COMMAND} -E copy_directory "${CUSTOM_COMMAND_BINARY_DIR}/test_files" "${TEST_DIR}/test_files"
-      COMMAND echo Running ${RUN_TEST} for SKL in "${CUSTOM_COMMAND_BINARY_DIR}/xello_world_icd_aub_test"
-      COMMAND ${CMAKE_COMMAND} -E chdir ${TEST_DIR} ${CMAKE_COMMAND} -E env SetCommandStreamReceiver=1 ${RUN_TEST}
-    )
 endforeach()
 
 if(UNIX)
