@@ -1,3 +1,4 @@
+#include "device.h"
 #include "memory_manager.h"
 
 #include "graphics_allocation.h"
@@ -93,6 +94,23 @@ struct MemoryManagerImp : public MemoryManager {
 
     MemAllocation *findMemAllocation(const void *ptr) override {
         return allocMap[knownAllocations.get(ptr)]; // temporary
+    }
+
+    bool checkMemoryAccessFromDevice(Device *device, const void *ptr) override {
+        MemAllocation *allocation = findMemAllocation(ptr);
+        assert(allocation);
+
+        if (allocation->allocType == AllocationType::HOST ||
+            allocation->allocType == AllocationType::SHARED)
+            return true;
+
+        if (static_cast<GraphicsAllocation *>(allocation)->getDevice() == device)
+            return true;
+
+        xe_bool_t p2pCapable = true;
+        device->canAccessPeer(static_cast<GraphicsAllocation *>(allocation)->getDevice(), &p2pCapable);
+
+        return p2pCapable;
     }
 
     void freeMemory(GraphicsAllocation *allocation) {

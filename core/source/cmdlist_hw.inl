@@ -615,8 +615,6 @@ xe_result_t CommandListCoreFamily<gfxCoreFamily>::appendMemoryCopy(void *dstptr,
         assert(alloc->getSize() >= size);
     }
 
-    builtinFunction->setArgumentValue(0, sizeof(dstptr), &dstptr);
-
     alloc = globalMemoryManager->findMemAllocation(srcptr);
     if (alloc == nullptr) {
         // Trying to access non-driver memallocated for dstptr: Allocate managed memory using the host's buffer
@@ -626,6 +624,14 @@ xe_result_t CommandListCoreFamily<gfxCoreFamily>::appendMemoryCopy(void *dstptr,
         assert(alloc->getSize() >= size);
     }
 
+    // Confirm device has access to both pointers
+    if (!globalMemoryManager->checkMemoryAccessFromDevice(this->getDevice(), dstptr) ||
+            !globalMemoryManager->checkMemoryAccessFromDevice(this->getDevice(), srcptr)) {
+            // TODO: Confirm this is the correct code
+            return XE_RESULT_ERROR_INVALID_PARAMETER;
+    }
+
+    builtinFunction->setArgumentValue(0, sizeof(dstptr), &dstptr);
     builtinFunction->setArgumentValue(1, sizeof(srcptr), &srcptr);
 
     constexpr auto elementSize = sizeof(char);

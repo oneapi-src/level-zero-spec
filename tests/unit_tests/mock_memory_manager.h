@@ -33,6 +33,7 @@ struct Mock<MemoryManager> : public MemoryManager {
     MOCK_METHOD2(allocateGraphicsMemoryForIsa, PtrOwn<L0::GraphicsAllocation>(PtrRef<const void> isaHostMem, size_t size));
     MOCK_METHOD1(allocateGraphicsMemoryForPrivateMemory, PtrOwn<L0::GraphicsAllocation>(size_t size));
     MOCK_CONST_METHOD0(getIsaHeapGpuAddress, uint64_t());
+    MOCK_METHOD2(checkMemoryAccessFromDevice, bool(L0::Device *device, const void *ptr));
     MOCK_METHOD1(findGraphicsAllocation, L0::GraphicsAllocation *(const void *ptr));
     MOCK_METHOD1(findMemAllocation, L0::MemAllocation *(const void *ptr));
     MOCK_METHOD1(freeMemory, void(L0::GraphicsAllocation *allocation));
