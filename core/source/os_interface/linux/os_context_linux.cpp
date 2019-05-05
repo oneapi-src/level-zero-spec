@@ -3,10 +3,8 @@
 
 namespace L0 {
 
-OsContext *OsContext::create(void *execEnvRT) {
-    auto drm = new DrmEvent(execEnvRT);
-
-    return new OsContextLinux(execEnvRT);
+OsContext *OsContext::create() {
+    return new OsContextLinux();
 }
 
 } // namespace L0

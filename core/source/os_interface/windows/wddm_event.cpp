@@ -3,6 +3,13 @@
 
 namespace L0 {
 
-bool WddmEvent::waitForFlushStamp(FlushStamp &flushStamp) { return true; }
+OsEvent *OsEvent::create(void *execEnvRT) {
+    return new WddmEvent(execEnvRT);
+}
+
+bool WddmEvent::hostSynchronize(NEO::GraphicsAllocation *allocation,
+                                uint32_t timeout) {
+    return true;
+}
 
 } // namespace L0

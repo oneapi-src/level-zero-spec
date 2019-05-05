@@ -1,16 +1,14 @@
-#include "device.h"
-#include "event.h"
 #include "runtime/os_interface/linux/os_interface.h"
+
+#include "os_interface/os_event.h"
+#include "graphics_allocation.h"
 
 namespace L0 {
 
-class DrmEvent : public Event {
+class DrmEvent : public OsEvent {
   public:
-    DrmEvent(void *execEnvRT) : execEnvRT(execEnvRT) {}
-    bool waitForFlushStamp(FlushStamp &flushStamp) override;
-
-  protected:
-    void *execEnvRT = nullptr;
+    DrmEvent(void *execEnvRT) : OsEvent(execEnvRT) {}
+    bool hostSynchronize(NEO::GraphicsAllocation* allocation, uint32_t timeout) override;
 };
 
 } // namespace L0

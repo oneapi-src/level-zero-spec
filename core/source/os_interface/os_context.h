@@ -4,7 +4,7 @@ class OsContext {
   public:
     OsContext() {}
 
-    static OsContext *create(void *execEnvRT);
+    static OsContext *create();
 };
 
 } // namespace L0

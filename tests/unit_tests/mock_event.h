@@ -35,12 +35,10 @@ template <> struct Mock<Event> : public Event {
                                                uint32_t *pReportData));
     MOCK_METHOD0(queryStatus, xe_result_t());
     MOCK_METHOD0(reset, xe_result_t());
-    MOCK_METHOD1(waitForFlushStamp, bool(FlushStamp &flushStamp));
 
     // Fake an allocation for event memory
     alignas(16) uint32_t memory = -1;
     GraphicsAllocation mockAllocation;
-    FlushStamp mockflushStampToWait;
 
     using Event::allocation;
 };

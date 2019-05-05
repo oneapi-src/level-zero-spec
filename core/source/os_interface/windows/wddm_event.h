@@ -1,15 +1,12 @@
-#include "device.h"
-#include "event.h"
+#include "os_interface/os_event.h"
+#include "graphics_allocation.h"
 
 namespace L0 {
 
-class WddmEvent : public Event {
+class WddmEvent : public OsEvent{
   public:
-    WddmEvent(void *execEnvRT) : execEnvRT(execEnvRT) {}
-    bool waitForFlushStamp(FlushStamp &flushStamp) override;
-
-  protected:
-    void *execEnvRT = nullptr;
+    WddmEvent(void *execEnvRT) : OsEvent(execEnvRT) {}
+    bool hostSynchronize(NEO::GraphicsAllocation* allocation, uint32_t timeout) override;
 };
 
 } // namespace L0

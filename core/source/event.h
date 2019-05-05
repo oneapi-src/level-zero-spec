@@ -2,6 +2,7 @@
 #include "xe_event.h"
 #include "cmdlist.h"
 #include "device.h"
+#include "graphics_allocation.h"
 
 struct _xe_event_handle_t {};
 
@@ -41,9 +42,6 @@ struct Event : public _xe_event_handle_t {
     GraphicsAllocation &getAllocation() { return *allocation; }
 
     uint64_t getGpuAddress();
-
-    FlushStamp flushStampToWait;
-    virtual bool waitForFlushStamp(FlushStamp &flushStamp) { return true; }
 
   protected:
     GraphicsAllocation *allocation = nullptr;
