@@ -35,9 +35,9 @@ def gerritPostResult = { passed ->
 								gerritOpts = "--label verified=+1 --publish"
 						} else {
 							if(plus2Allowed) {
-								gerritOpts = "--code-review=+2 --label verified=+1 --submit"
+								gerritOpts = "--code-review=+2 --label verified=+1"
 							} else {
-								gerritOpts = "--label verified=+1 --submit"
+								gerritOpts = "--label verified=+1"
 							}
 						}
 					} else {
@@ -139,7 +139,7 @@ try {
 					if(tmpReview.revisions["${GERRIT_PATCHSET_REVISION}"].containsKey('draft')) {
 						isDraft = tmpReview.revisions["${GERRIT_PATCHSET_REVISION}"].draft
 					}
-					//skipBuild = !isDraft
+					skipBuild = !isDraft
 					echo "verificaiton build.isDraft = ${isDraft}"
 					echo "verificaiton build.skipBuild = ${skipBuild}"
 				}
