@@ -1,6 +1,7 @@
 #include "device.h"
 #include "driver.h"
 #include "driver_imp.h"
+#include "driver_version.h"
 #include "memory_manager.h"
 #include "runtime/helpers/string.h"
 #include "runtime/platform/platform.h"
@@ -41,7 +42,7 @@ xe_result_t DriverImp::getDeviceCount(uint32_t *count) {
 
 xe_result_t DriverImp::getVersion(uint32_t *version) {
     assert(version != nullptr);
-    *version = 0U; // TODO : Take this from build system once one is in place
+    *version = static_cast<uint32_t>(LOKI_DRIVER_VERSION);
     return XE_RESULT_SUCCESS;
 }
 

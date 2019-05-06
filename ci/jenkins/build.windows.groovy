@@ -45,13 +45,15 @@ call c:\\irepo\\irepo sync --clean --delete-unknown-content
 """
 			}
 			def buildId = "${env.BUILD_NUMBER}"
+			def driverVersion = "0"
 			if(params.containsKey("COMMON_BUILD_ID")) {
 				buildId = "${COMMON_BUILD_ID}"
+				driverVersion = "${COMMON_BUILD_ID}"
 			}
 			bat """
 md build
 cd build
-cmake -G "Visual Studio 15 2017 Win64" .. -DCMAKE_BUILD_TYPE=Release -DLOKI_VERSION_BUILD=${buildId} -DLOKI_CPACK_GENERATOR="ZIP" ${cmakeFlags.join(' ')}
+cmake -G "Visual Studio 15 2017 Win64" .. -DCMAKE_BUILD_TYPE=Release -DLOKI_VERSION_BUILD=${buildId} -DLOKI_DRIVER_VERSION=${driverVersion} -DLOKI_CPACK_GENERATOR="ZIP" ${cmakeFlags.join(' ')}
 cmake --build . --config Release --clean-first --target ALL_BUILD
 """
 			// archiveArtifacts "build/*.zip"

@@ -123,3 +123,5 @@ target_sources(${TARGET_NAME}
 )
 
 add_subdirectory(os_interface)
+
+configure_file(driver_version.h.in ${CMAKE_BINARY_DIR}/driver_version.h) # Put Driver version into define
