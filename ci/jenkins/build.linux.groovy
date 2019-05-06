@@ -58,20 +58,17 @@ ls -la
 			def image = docker.image("${env.DOCKER_REGISTRY}/loki-ubuntu18:1")
 			def workDir = sh script: "(cd .. && pwd)", returnStdout: true
 			def buildId = "${env.BUILD_NUMBER}"
-			def driverVersion = "0"
 			if(params.containsKey("COMMON_BUILD_ID")) {
 				buildId = "${COMMON_BUILD_ID}"
-				driverVersion = "${COMMON_BUILD_ID}"
 			}
 			image.pull()
 			image.inside("-v /ccache:/ccache -e CCACHE_DIR=/ccache -e CCACHE_TEMPDIR=/tmp/ccache -e CCACHE_BASEDIR=${workDir}") {
 				sh """\
 #!/bin/bash
-set -x
 
 mkdir ubuntu18
 cd ubuntu18
-cmake -GNinja .. -DCMAKE_BUILD_TYPE=Release -DLOKI_VERSION_BUILD=${buildId} -DLOKI_DRIVER_VERSION=${driverVersion} ${cmakeFlags.join(' ')}
+cmake -GNinja .. -DCMAKE_BUILD_TYPE=Release -DLOKI_VERSION_BUILD=${buildId} ${cmakeFlags.join(' ')}
 cmake --build . --config Release --clean-first --target package
 
 dpkg-deb -x intel-loki-devel_*.deb x
