@@ -160,9 +160,8 @@ namespace xe
     /// @brief C++ wrapper for ::xeEventCreate
     /// 
     /// @details
-    ///     - Multiple events cannot be created using the same index from the same
-    ///       pool
-    ///     - The index must be less-than the count specified during pool creation
+    ///     - Multiple events cannot be created using the same location within the
+    ///       same pool.
     ///     - The application may call this function from simultaneous threads.
     ///     - The implementation of this function should be lock-free.
     /// 

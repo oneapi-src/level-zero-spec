@@ -164,7 +164,8 @@ typedef enum _xe_event_scope_flag_t
 typedef struct _xe_event_desc_t
 {
     xe_event_desc_version_t version;                ///< [in] ::XE_EVENT_DESC_VERSION_CURRENT
-    uint32_t index;                                 ///< [in] index of the event within the pool
+    uint32_t index;                                 ///< [in] index of the event within the pool; must be less-than the count
+                                                    ///< specified during pool creation
     xe_event_scope_flag_t signal;                   ///< [in] defines the scope of relevant cache hierarchies to flush on a
                                                     ///< ‘signal’ action before the event is triggered
     xe_event_scope_flag_t wait;                     ///< [in] defines the scope of relevant cache hierarchies to invalidate on
@@ -176,9 +177,8 @@ typedef struct _xe_event_desc_t
 /// @brief Creates an event on the device.
 /// 
 /// @details
-///     - Multiple events cannot be created using the same index from the same
-///       pool
-///     - The index must be less-than the count specified during pool creation
+///     - Multiple events cannot be created using the same location within the
+///       same pool.
 ///     - The application may call this function from simultaneous threads.
 ///     - The implementation of this function should be lock-free.
 /// 

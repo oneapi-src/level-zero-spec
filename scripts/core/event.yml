@@ -119,7 +119,7 @@ members:
       init: $X_EVENT_DESC_VERSION_CURRENT
     - type: uint32_t
       name: index
-      desc: "[in] index of the event within the pool"
+      desc: "[in] index of the event within the pool; must be less-than the count specified during pool creation"
     - type: $x_event_scope_flag_t
       name: signal
       desc: "[in] defines the scope of relevant cache hierarchies to flush on a ‘signal’ action before the event is triggered"
@@ -139,8 +139,7 @@ analogue:
     - vkCreateEvent
     - cuEventCreate
 details:
-    - "Multiple events cannot be created using the same index from the same pool"
-    - "The index must be less-than the count specified during pool creation"
+    - "Multiple events cannot be created using the same location within the same pool."
     - "The application may call this function from simultaneous threads."
     - "The implementation of this function should be lock-free."
 params:

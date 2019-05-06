@@ -201,7 +201,8 @@ namespace xe
         struct event_desc_t
         {
             event_desc_version_t version = event_desc_version_t::CURRENT;   ///< [in] ::EVENT_DESC_VERSION_CURRENT
-            uint32_t index;                                 ///< [in] index of the event within the pool
+            uint32_t index;                                 ///< [in] index of the event within the pool; must be less-than the count
+                                                            ///< specified during pool creation
             event_scope_flag_t signal = event_scope_flag_t::NONE;   ///< [in] defines the scope of relevant cache hierarchies to flush on a
                                                             ///< ‘signal’ action before the event is triggered
             event_scope_flag_t wait = event_scope_flag_t::NONE; ///< [in] defines the scope of relevant cache hierarchies to invalidate on
