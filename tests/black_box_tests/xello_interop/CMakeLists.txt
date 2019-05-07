@@ -9,11 +9,12 @@ endif()
 set (TEST_TARGETS
     xello_interop_cl_cmd_queue #MM in XE using a CL command queue
     xello_interop_cl_program   #MM in XE using a CL program
-    xello_interop_cl_memory   #MM in XE using a CL memory
+    xello_interop_cl_memory    #MM in XE using a CL memory
+    xello_interop
 )
 
 foreach(TEST ${TEST_TARGETS})
-    add_executable(${TEST} ${TEST}.cpp)
+    add_executable(${TEST} ${TEST}.cpp xello_interop_common.cpp)
 
     if(MSVC)
         set_target_properties(${TEST}
