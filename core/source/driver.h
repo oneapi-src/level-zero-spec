@@ -16,7 +16,7 @@ struct Driver {
         return driver;
     }
 
-  //protected:
+  protected:
     static Driver *driver;
 };
 
