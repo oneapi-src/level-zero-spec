@@ -130,21 +130,7 @@ CommandQueue *CommandQueue::create(uint32_t productFamily, Device *device, void 
     return commandQueue;
 }
 
-xe_result_t __xecall
-xeCommandQueueExecuteCommandLists(xe_command_queue_handle_t hCommandQueue,
-                                  uint32_t numCommandLists,
-                                  xe_command_list_handle_t *phCommandLists,
-                                  xe_fence_handle_t hFence) {
-    return CommandQueue::fromHandle(hCommandQueue)->executeCommandLists(numCommandLists, phCommandLists, hFence);
-}
-
-xe_result_t __xecall
-xeCommandQueueSynchronize(xe_command_queue_handle_t hCommandQueue,
-                          uint32_t timeout) {
-    return CommandQueue::fromHandle(hCommandQueue)->synchronize(timeout);
-}
-
-xe_result_t __xecall
+xe_result_t
 fenceCreate(xe_command_queue_handle_t hCommandQueue,
             const xe_fence_desc_t* desc, xe_fence_handle_t* phFence) {
     return CommandQueue::fromHandle(hCommandQueue)->createFence(desc, phFence);

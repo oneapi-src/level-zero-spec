@@ -87,10 +87,10 @@ int xeInit() {
         return static_cast<int>(ret);
     }
 
-    std::cout << "xeGetDevice...\n";
+    std::cout << "xeDeviceGet...\n";
     ret = xeDeviceGet(0, &xeDevice);
     if(ret) {
-        std::cout << "xeGetDevice failed ret "
+        std::cout << "xeDeviceGet failed ret "
                 << static_cast<int>(ret) << "\n";
         return static_cast<int>(ret);
     }

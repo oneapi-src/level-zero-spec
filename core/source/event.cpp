@@ -165,6 +165,7 @@ xe_result_t EventPoolImp::closeIpcHandle() {
 
 xe_result_t EventPoolImp::destroy() {
     this->destroyPool();
+    delete this;
 
     return XE_RESULT_SUCCESS;
 }

@@ -28,7 +28,7 @@ TEST(xeCommandQueueEnqueueCommandQueue, redirectsToObject) {
                                               hFence))
         .Times(1);
 
-    auto result = L0::xeCommandQueueExecuteCommandLists(cmdQueue.toHandle(),
+    auto result = xeCommandQueueExecuteCommandLists(cmdQueue.toHandle(),
                                                         1,
                                                         &hCommandList,
                                                         hFence);
