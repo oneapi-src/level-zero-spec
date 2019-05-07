@@ -39,15 +39,16 @@ set(L0_RUNTIME_SOURCES
     ${CMAKE_CURRENT_SOURCE_DIR}/driver_imp.h
     ${CMAKE_CURRENT_SOURCE_DIR}/encode_flush.h
     ${CMAKE_CURRENT_SOURCE_DIR}/encode_l3state.h
-    ${CMAKE_CURRENT_SOURCE_DIR}/encode_surface_state.h
     ${CMAKE_CURRENT_SOURCE_DIR}/encode_set_mmio.h
     ${CMAKE_CURRENT_SOURCE_DIR}/encode_state_base_address.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/encode_surface_state.h
     ${CMAKE_CURRENT_SOURCE_DIR}/event.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/event.h
     ${CMAKE_CURRENT_SOURCE_DIR}/fence.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/fence.h
     ${CMAKE_CURRENT_SOURCE_DIR}/function.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/function.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/function_hw.h
     ${CMAKE_CURRENT_SOURCE_DIR}/function_imp.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/function_imp.h
     ${CMAKE_CURRENT_SOURCE_DIR}/graphics_allocation.cpp

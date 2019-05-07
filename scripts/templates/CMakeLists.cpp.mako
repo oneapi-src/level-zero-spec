@@ -25,6 +25,8 @@ target_include_directories(${"$"}{TARGET_NAME}
     ${"$"}{CMAKE_CURRENT_SOURCE_DIR}/
 )
 
+include_directories(${"$"}{CMAKE_CURRENT_SOURCE_DIR})
+
 target_sources(${"$"}{TARGET_NAME}
     PRIVATE
         ${"$"}{L0_RUNTIME_SOURCES}
@@ -37,3 +39,9 @@ target_sources(${"$"}{TARGET_NAME}
 )
 
 add_subdirectory(os_interface)
+
+if(NOT DEFINED LOKI_DRIVER_VERSION)
+  set(LOKI_DRIVER_VERSION 0)
+endif()
+
+configure_file(driver_version.h.in ${"$"}{CMAKE_BINARY_DIR}/driver_version.h) # Put Driver version into define
