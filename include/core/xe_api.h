@@ -48,77 +48,436 @@
 #include "xe_residency.h"
 #include "xe_sampler.h"
 
+#if defined(__cplusplus)
+extern "C" {
+#endif
+
 ///////////////////////////////////////////////////////////////////////////////
-typedef struct _xe_apitable_t
+/// @brief Table of CommandList functions pointers
+typedef struct _xe_command_list_apitable_t
 {
-    xe_pfnCommandListAppendBarrier_t                            pfnCommandListAppendBarrier;
-    xe_pfnCommandListAppendMemoryRangesBarrier_t                pfnCommandListAppendMemoryRangesBarrier;
-    xe_pfnDeviceSystemBarrier_t                                 pfnDeviceSystemBarrier;
+    xe_pfnCommandListCreate_t                                   pfnCreate;
+    xe_pfnCommandListCreateImmediate_t                          pfnCreateImmediate;
+    xe_pfnCommandListDestroy_t                                  pfnDestroy;
+    xe_pfnCommandListClose_t                                    pfnClose;
+    xe_pfnCommandListReset_t                                    pfnReset;
+    xe_pfnCommandListSetParameter_t                             pfnSetParameter;
+    xe_pfnCommandListGetParameter_t                             pfnGetParameter;
+    xe_pfnCommandListResetParameters_t                          pfnResetParameters;
+    xe_pfnCommandListReserveSpace_t                             pfnReserveSpace;
+    xe_pfnCommandListAppendBarrier_t                            pfnAppendBarrier;
+    xe_pfnCommandListAppendMemoryRangesBarrier_t                pfnAppendMemoryRangesBarrier;
+    xe_pfnCommandListAppendMemoryCopy_t                         pfnAppendMemoryCopy;
+    xe_pfnCommandListAppendMemorySet_t                          pfnAppendMemorySet;
+    xe_pfnCommandListAppendImageCopy_t                          pfnAppendImageCopy;
+    xe_pfnCommandListAppendImageCopyRegion_t                    pfnAppendImageCopyRegion;
+    xe_pfnCommandListAppendImageCopyToMemory_t                  pfnAppendImageCopyToMemory;
+    xe_pfnCommandListAppendImageCopyFromMemory_t                pfnAppendImageCopyFromMemory;
+    xe_pfnCommandListAppendMemoryPrefetch_t                     pfnAppendMemoryPrefetch;
+    xe_pfnCommandListAppendMemAdvise_t                          pfnAppendMemAdvise;
+    xe_pfnCommandListAppendSignalEvent_t                        pfnAppendSignalEvent;
+    xe_pfnCommandListAppendWaitOnEvents_t                       pfnAppendWaitOnEvents;
+    xe_pfnCommandListAppendEventReset_t                         pfnAppendEventReset;
+    xe_pfnCommandListAppendLaunchFunction_t                     pfnAppendLaunchFunction;
+    xe_pfnCommandListAppendLaunchFunctionIndirect_t             pfnAppendLaunchFunctionIndirect;
+    xe_pfnCommandListAppendLaunchMultipleFunctionsIndirect_t    pfnAppendLaunchMultipleFunctionsIndirect;
+    xe_pfnCommandListAppendLaunchHostFunction_t                 pfnAppendLaunchHostFunction;
+} xe_command_list_apitable_t;
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Exported function for filling application's CommandList table
+///        with current process' addresses
+///
+/// @returns
+///     - ::XE_RESULT_SUCCESS
+///     - ::XE_RESULT_ERROR_INVALID_PARAMETER
+///         + invalid value for version
+///         + nullptr for ptable
+///     - ::XE_RESULT_ERROR_UNSUPPORTED
+///         + version not supported
+__xedllexport xe_result_t __xecall
+xeGetCommandListProcAddrTable(
+    uint32_t version,        ///< [in] ::XE_API_HEADER_VERSION
+    xe_command_list_apitable_t* ptable   ///< [in,out] pointer to table of API function pointers
+    );
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Function-pointer for xeGetCommandListProcAddrTable
+typedef xe_result_t (__xecall *xe_pfnGetCommandListProcAddrTable_t)(
+    uint32_t,
+    xe_command_list_apitable_t*
+    );
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Table of Device functions pointers
+typedef struct _xe_device_apitable_t
+{
+    xe_pfnDeviceGetCount_t                                      pfnGetCount;
+    xe_pfnDeviceGet_t                                           pfnGet;
+    xe_pfnDeviceGetSubDevice_t                                  pfnGetSubDevice;
+    xe_pfnDeviceGetApiVersion_t                                 pfnGetApiVersion;
+    xe_pfnDeviceGetProperties_t                                 pfnGetProperties;
+    xe_pfnDeviceGetComputeProperties_t                          pfnGetComputeProperties;
+    xe_pfnDeviceGetMemoryProperties_t                           pfnGetMemoryProperties;
+    xe_pfnDeviceGetP2PProperties_t                              pfnGetP2PProperties;
+    xe_pfnDeviceCanAccessPeer_t                                 pfnCanAccessPeer;
+    xe_pfnDeviceSetIntermediateCacheConfig_t                    pfnSetIntermediateCacheConfig;
+    xe_pfnDeviceSetLastLevelCacheConfig_t                       pfnSetLastLevelCacheConfig;
+    xe_pfnDeviceSystemBarrier_t                                 pfnSystemBarrier;
     #if XE_ENABLE_OCL_INTEROP
-    xe_pfnDeviceRegisterCLMemory_t                              pfnDeviceRegisterCLMemory;
+    xe_pfnDeviceRegisterCLMemory_t                              pfnRegisterCLMemory;
     #endif // XE_ENABLE_OCL_INTEROP
     #if XE_ENABLE_OCL_INTEROP
-    xe_pfnDeviceRegisterCLProgram_t                             pfnDeviceRegisterCLProgram;
+    xe_pfnDeviceRegisterCLProgram_t                             pfnRegisterCLProgram;
     #endif // XE_ENABLE_OCL_INTEROP
     #if XE_ENABLE_OCL_INTEROP
-    xe_pfnDeviceRegisterCLCommandQueue_t                        pfnDeviceRegisterCLCommandQueue;
+    xe_pfnDeviceRegisterCLCommandQueue_t                        pfnRegisterCLCommandQueue;
     #endif // XE_ENABLE_OCL_INTEROP
-    xe_pfnCommandListCreate_t                                   pfnCommandListCreate;
-    xe_pfnCommandListCreateImmediate_t                          pfnCommandListCreateImmediate;
-    xe_pfnCommandListDestroy_t                                  pfnCommandListDestroy;
-    xe_pfnCommandListClose_t                                    pfnCommandListClose;
-    xe_pfnCommandListReset_t                                    pfnCommandListReset;
-    xe_pfnCommandListSetParameter_t                             pfnCommandListSetParameter;
-    xe_pfnCommandListGetParameter_t                             pfnCommandListGetParameter;
-    xe_pfnCommandListResetParameters_t                          pfnCommandListResetParameters;
-    xe_pfnCommandListReserveSpace_t                             pfnCommandListReserveSpace;
-    xe_pfnCommandQueueCreate_t                                  pfnCommandQueueCreate;
-    xe_pfnCommandQueueDestroy_t                                 pfnCommandQueueDestroy;
-    xe_pfnCommandQueueExecuteCommandLists_t                     pfnCommandQueueExecuteCommandLists;
-    xe_pfnCommandQueueSynchronize_t                             pfnCommandQueueSynchronize;
-    xe_pfnCommandListAppendMemoryCopy_t                         pfnCommandListAppendMemoryCopy;
-    xe_pfnCommandListAppendMemorySet_t                          pfnCommandListAppendMemorySet;
-    xe_pfnCommandListAppendImageCopy_t                          pfnCommandListAppendImageCopy;
-    xe_pfnCommandListAppendImageCopyRegion_t                    pfnCommandListAppendImageCopyRegion;
-    xe_pfnCommandListAppendImageCopyToMemory_t                  pfnCommandListAppendImageCopyToMemory;
-    xe_pfnCommandListAppendImageCopyFromMemory_t                pfnCommandListAppendImageCopyFromMemory;
-    xe_pfnCommandListAppendMemoryPrefetch_t                     pfnCommandListAppendMemoryPrefetch;
-    xe_pfnCommandListAppendMemAdvise_t                          pfnCommandListAppendMemAdvise;
-    xe_pfnDeviceGetCount_t                                      pfnDeviceGetCount;
-    xe_pfnDeviceGet_t                                           pfnDeviceGet;
-    xe_pfnDeviceGetSubDevice_t                                  pfnDeviceGetSubDevice;
-    xe_pfnDeviceGetApiVersion_t                                 pfnDeviceGetApiVersion;
-    xe_pfnDeviceGetProperties_t                                 pfnDeviceGetProperties;
-    xe_pfnDeviceGetComputeProperties_t                          pfnDeviceGetComputeProperties;
-    xe_pfnDeviceGetMemoryProperties_t                           pfnDeviceGetMemoryProperties;
-    xe_pfnDeviceGetP2PProperties_t                              pfnDeviceGetP2PProperties;
-    xe_pfnDeviceCanAccessPeer_t                                 pfnDeviceCanAccessPeer;
-    xe_pfnDeviceSetIntermediateCacheConfig_t                    pfnDeviceSetIntermediateCacheConfig;
-    xe_pfnDeviceSetLastLevelCacheConfig_t                       pfnDeviceSetLastLevelCacheConfig;
+    xe_pfnDeviceMakeMemoryResident_t                            pfnMakeMemoryResident;
+    xe_pfnDeviceEvictMemory_t                                   pfnEvictMemory;
+    xe_pfnDeviceMakeImageResident_t                             pfnMakeImageResident;
+    xe_pfnDeviceEvictImage_t                                    pfnEvictImage;
+} xe_device_apitable_t;
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Exported function for filling application's Device table
+///        with current process' addresses
+///
+/// @returns
+///     - ::XE_RESULT_SUCCESS
+///     - ::XE_RESULT_ERROR_INVALID_PARAMETER
+///         + invalid value for version
+///         + nullptr for ptable
+///     - ::XE_RESULT_ERROR_UNSUPPORTED
+///         + version not supported
+__xedllexport xe_result_t __xecall
+xeGetDeviceProcAddrTable(
+    uint32_t version,        ///< [in] ::XE_API_HEADER_VERSION
+    xe_device_apitable_t* ptable   ///< [in,out] pointer to table of API function pointers
+    );
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Function-pointer for xeGetDeviceProcAddrTable
+typedef xe_result_t (__xecall *xe_pfnGetDeviceProcAddrTable_t)(
+    uint32_t,
+    xe_device_apitable_t*
+    );
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Table of CommandQueue functions pointers
+typedef struct _xe_command_queue_apitable_t
+{
+    xe_pfnCommandQueueCreate_t                                  pfnCreate;
+    xe_pfnCommandQueueDestroy_t                                 pfnDestroy;
+    xe_pfnCommandQueueExecuteCommandLists_t                     pfnExecuteCommandLists;
+    xe_pfnCommandQueueSynchronize_t                             pfnSynchronize;
+} xe_command_queue_apitable_t;
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Exported function for filling application's CommandQueue table
+///        with current process' addresses
+///
+/// @returns
+///     - ::XE_RESULT_SUCCESS
+///     - ::XE_RESULT_ERROR_INVALID_PARAMETER
+///         + invalid value for version
+///         + nullptr for ptable
+///     - ::XE_RESULT_ERROR_UNSUPPORTED
+///         + version not supported
+__xedllexport xe_result_t __xecall
+xeGetCommandQueueProcAddrTable(
+    uint32_t version,        ///< [in] ::XE_API_HEADER_VERSION
+    xe_command_queue_apitable_t* ptable   ///< [in,out] pointer to table of API function pointers
+    );
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Function-pointer for xeGetCommandQueueProcAddrTable
+typedef xe_result_t (__xecall *xe_pfnGetCommandQueueProcAddrTable_t)(
+    uint32_t,
+    xe_command_queue_apitable_t*
+    );
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Table of Fence functions pointers
+typedef struct _xe_fence_apitable_t
+{
+    xe_pfnFenceCreate_t                                         pfnCreate;
+    xe_pfnFenceDestroy_t                                        pfnDestroy;
+    xe_pfnFenceHostSynchronize_t                                pfnHostSynchronize;
+    xe_pfnFenceQueryStatus_t                                    pfnQueryStatus;
+    xe_pfnFenceReset_t                                          pfnReset;
+} xe_fence_apitable_t;
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Exported function for filling application's Fence table
+///        with current process' addresses
+///
+/// @returns
+///     - ::XE_RESULT_SUCCESS
+///     - ::XE_RESULT_ERROR_INVALID_PARAMETER
+///         + invalid value for version
+///         + nullptr for ptable
+///     - ::XE_RESULT_ERROR_UNSUPPORTED
+///         + version not supported
+__xedllexport xe_result_t __xecall
+xeGetFenceProcAddrTable(
+    uint32_t version,        ///< [in] ::XE_API_HEADER_VERSION
+    xe_fence_apitable_t* ptable   ///< [in,out] pointer to table of API function pointers
+    );
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Function-pointer for xeGetFenceProcAddrTable
+typedef xe_result_t (__xecall *xe_pfnGetFenceProcAddrTable_t)(
+    uint32_t,
+    xe_fence_apitable_t*
+    );
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Table of EventPool functions pointers
+typedef struct _xe_event_pool_apitable_t
+{
+    xe_pfnEventPoolCreate_t                                     pfnCreate;
+    xe_pfnEventPoolDestroy_t                                    pfnDestroy;
+    xe_pfnEventPoolGetIpcHandle_t                               pfnGetIpcHandle;
+    xe_pfnEventPoolOpenIpcHandle_t                              pfnOpenIpcHandle;
+    xe_pfnEventPoolCloseIpcHandle_t                             pfnCloseIpcHandle;
+} xe_event_pool_apitable_t;
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Exported function for filling application's EventPool table
+///        with current process' addresses
+///
+/// @returns
+///     - ::XE_RESULT_SUCCESS
+///     - ::XE_RESULT_ERROR_INVALID_PARAMETER
+///         + invalid value for version
+///         + nullptr for ptable
+///     - ::XE_RESULT_ERROR_UNSUPPORTED
+///         + version not supported
+__xedllexport xe_result_t __xecall
+xeGetEventPoolProcAddrTable(
+    uint32_t version,        ///< [in] ::XE_API_HEADER_VERSION
+    xe_event_pool_apitable_t* ptable   ///< [in,out] pointer to table of API function pointers
+    );
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Function-pointer for xeGetEventPoolProcAddrTable
+typedef xe_result_t (__xecall *xe_pfnGetEventPoolProcAddrTable_t)(
+    uint32_t,
+    xe_event_pool_apitable_t*
+    );
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Table of Event functions pointers
+typedef struct _xe_event_apitable_t
+{
+    xe_pfnEventCreate_t                                         pfnCreate;
+    xe_pfnEventDestroy_t                                        pfnDestroy;
+    xe_pfnEventHostSignal_t                                     pfnHostSignal;
+    xe_pfnEventHostSynchronize_t                                pfnHostSynchronize;
+    xe_pfnEventQueryStatus_t                                    pfnQueryStatus;
+    xe_pfnEventReset_t                                          pfnReset;
+} xe_event_apitable_t;
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Exported function for filling application's Event table
+///        with current process' addresses
+///
+/// @returns
+///     - ::XE_RESULT_SUCCESS
+///     - ::XE_RESULT_ERROR_INVALID_PARAMETER
+///         + invalid value for version
+///         + nullptr for ptable
+///     - ::XE_RESULT_ERROR_UNSUPPORTED
+///         + version not supported
+__xedllexport xe_result_t __xecall
+xeGetEventProcAddrTable(
+    uint32_t version,        ///< [in] ::XE_API_HEADER_VERSION
+    xe_event_apitable_t* ptable   ///< [in,out] pointer to table of API function pointers
+    );
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Function-pointer for xeGetEventProcAddrTable
+typedef xe_result_t (__xecall *xe_pfnGetEventProcAddrTable_t)(
+    uint32_t,
+    xe_event_apitable_t*
+    );
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Table of Image functions pointers
+typedef struct _xe_image_apitable_t
+{
+    xe_pfnImageGetProperties_t                                  pfnGetProperties;
+    xe_pfnImageCreate_t                                         pfnCreate;
+    xe_pfnImageDestroy_t                                        pfnDestroy;
+} xe_image_apitable_t;
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Exported function for filling application's Image table
+///        with current process' addresses
+///
+/// @returns
+///     - ::XE_RESULT_SUCCESS
+///     - ::XE_RESULT_ERROR_INVALID_PARAMETER
+///         + invalid value for version
+///         + nullptr for ptable
+///     - ::XE_RESULT_ERROR_UNSUPPORTED
+///         + version not supported
+__xedllexport xe_result_t __xecall
+xeGetImageProcAddrTable(
+    uint32_t version,        ///< [in] ::XE_API_HEADER_VERSION
+    xe_image_apitable_t* ptable   ///< [in,out] pointer to table of API function pointers
+    );
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Function-pointer for xeGetImageProcAddrTable
+typedef xe_result_t (__xecall *xe_pfnGetImageProcAddrTable_t)(
+    uint32_t,
+    xe_image_apitable_t*
+    );
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Table of Module functions pointers
+typedef struct _xe_module_apitable_t
+{
+    xe_pfnModuleCreate_t                                        pfnCreate;
+    xe_pfnModuleDestroy_t                                       pfnDestroy;
+    xe_pfnModuleGetNativeBinary_t                               pfnGetNativeBinary;
+    xe_pfnModuleGetGlobalPointer_t                              pfnGetGlobalPointer;
+    xe_pfnModuleGetFunctionPointer_t                            pfnGetFunctionPointer;
+} xe_module_apitable_t;
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Exported function for filling application's Module table
+///        with current process' addresses
+///
+/// @returns
+///     - ::XE_RESULT_SUCCESS
+///     - ::XE_RESULT_ERROR_INVALID_PARAMETER
+///         + invalid value for version
+///         + nullptr for ptable
+///     - ::XE_RESULT_ERROR_UNSUPPORTED
+///         + version not supported
+__xedllexport xe_result_t __xecall
+xeGetModuleProcAddrTable(
+    uint32_t version,        ///< [in] ::XE_API_HEADER_VERSION
+    xe_module_apitable_t* ptable   ///< [in,out] pointer to table of API function pointers
+    );
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Function-pointer for xeGetModuleProcAddrTable
+typedef xe_result_t (__xecall *xe_pfnGetModuleProcAddrTable_t)(
+    uint32_t,
+    xe_module_apitable_t*
+    );
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Table of ModuleBuildLog functions pointers
+typedef struct _xe_module_build_log_apitable_t
+{
+    xe_pfnModuleBuildLogDestroy_t                               pfnDestroy;
+    xe_pfnModuleBuildLogGetString_t                             pfnGetString;
+} xe_module_build_log_apitable_t;
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Exported function for filling application's ModuleBuildLog table
+///        with current process' addresses
+///
+/// @returns
+///     - ::XE_RESULT_SUCCESS
+///     - ::XE_RESULT_ERROR_INVALID_PARAMETER
+///         + invalid value for version
+///         + nullptr for ptable
+///     - ::XE_RESULT_ERROR_UNSUPPORTED
+///         + version not supported
+__xedllexport xe_result_t __xecall
+xeGetModuleBuildLogProcAddrTable(
+    uint32_t version,        ///< [in] ::XE_API_HEADER_VERSION
+    xe_module_build_log_apitable_t* ptable   ///< [in,out] pointer to table of API function pointers
+    );
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Function-pointer for xeGetModuleBuildLogProcAddrTable
+typedef xe_result_t (__xecall *xe_pfnGetModuleBuildLogProcAddrTable_t)(
+    uint32_t,
+    xe_module_build_log_apitable_t*
+    );
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Table of Function functions pointers
+typedef struct _xe_function_apitable_t
+{
+    xe_pfnFunctionCreate_t                                      pfnCreate;
+    xe_pfnFunctionDestroy_t                                     pfnDestroy;
+    xe_pfnFunctionSetGroupSize_t                                pfnSetGroupSize;
+    xe_pfnFunctionSuggestGroupSize_t                            pfnSuggestGroupSize;
+    xe_pfnFunctionSetArgumentValue_t                            pfnSetArgumentValue;
+    xe_pfnFunctionSetAttribute_t                                pfnSetAttribute;
+    xe_pfnFunctionGetAttribute_t                                pfnGetAttribute;
+} xe_function_apitable_t;
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Exported function for filling application's Function table
+///        with current process' addresses
+///
+/// @returns
+///     - ::XE_RESULT_SUCCESS
+///     - ::XE_RESULT_ERROR_INVALID_PARAMETER
+///         + invalid value for version
+///         + nullptr for ptable
+///     - ::XE_RESULT_ERROR_UNSUPPORTED
+///         + version not supported
+__xedllexport xe_result_t __xecall
+xeGetFunctionProcAddrTable(
+    uint32_t version,        ///< [in] ::XE_API_HEADER_VERSION
+    xe_function_apitable_t* ptable   ///< [in,out] pointer to table of API function pointers
+    );
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Function-pointer for xeGetFunctionProcAddrTable
+typedef xe_result_t (__xecall *xe_pfnGetFunctionProcAddrTable_t)(
+    uint32_t,
+    xe_function_apitable_t*
+    );
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Table of Sampler functions pointers
+typedef struct _xe_sampler_apitable_t
+{
+    xe_pfnSamplerCreate_t                                       pfnCreate;
+    xe_pfnSamplerDestroy_t                                      pfnDestroy;
+} xe_sampler_apitable_t;
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Exported function for filling application's Sampler table
+///        with current process' addresses
+///
+/// @returns
+///     - ::XE_RESULT_SUCCESS
+///     - ::XE_RESULT_ERROR_INVALID_PARAMETER
+///         + invalid value for version
+///         + nullptr for ptable
+///     - ::XE_RESULT_ERROR_UNSUPPORTED
+///         + version not supported
+__xedllexport xe_result_t __xecall
+xeGetSamplerProcAddrTable(
+    uint32_t version,        ///< [in] ::XE_API_HEADER_VERSION
+    xe_sampler_apitable_t* ptable   ///< [in,out] pointer to table of API function pointers
+    );
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Function-pointer for xeGetSamplerProcAddrTable
+typedef xe_result_t (__xecall *xe_pfnGetSamplerProcAddrTable_t)(
+    uint32_t,
+    xe_sampler_apitable_t*
+    );
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Table of Global functions pointers
+typedef struct _xe_global_apitable_t
+{
     xe_pfnInit_t                                                pfnInit;
     xe_pfnGetDriverVersion_t                                    pfnGetDriverVersion;
-    xe_pfnEventPoolCreate_t                                     pfnEventPoolCreate;
-    xe_pfnEventPoolDestroy_t                                    pfnEventPoolDestroy;
-    xe_pfnEventCreate_t                                         pfnEventCreate;
-    xe_pfnEventDestroy_t                                        pfnEventDestroy;
-    xe_pfnEventPoolGetIpcHandle_t                               pfnEventPoolGetIpcHandle;
-    xe_pfnEventPoolOpenIpcHandle_t                              pfnEventPoolOpenIpcHandle;
-    xe_pfnEventPoolCloseIpcHandle_t                             pfnEventPoolCloseIpcHandle;
-    xe_pfnCommandListAppendSignalEvent_t                        pfnCommandListAppendSignalEvent;
-    xe_pfnCommandListAppendWaitOnEvents_t                       pfnCommandListAppendWaitOnEvents;
-    xe_pfnEventHostSignal_t                                     pfnEventHostSignal;
-    xe_pfnEventHostSynchronize_t                                pfnEventHostSynchronize;
-    xe_pfnEventQueryStatus_t                                    pfnEventQueryStatus;
-    xe_pfnCommandListAppendEventReset_t                         pfnCommandListAppendEventReset;
-    xe_pfnEventReset_t                                          pfnEventReset;
-    xe_pfnFenceCreate_t                                         pfnFenceCreate;
-    xe_pfnFenceDestroy_t                                        pfnFenceDestroy;
-    xe_pfnFenceHostSynchronize_t                                pfnFenceHostSynchronize;
-    xe_pfnFenceQueryStatus_t                                    pfnFenceQueryStatus;
-    xe_pfnFenceReset_t                                          pfnFenceReset;
-    xe_pfnImageGetProperties_t                                  pfnImageGetProperties;
-    xe_pfnImageCreate_t                                         pfnImageCreate;
-    xe_pfnImageDestroy_t                                        pfnImageDestroy;
     xe_pfnSharedMemAlloc_t                                      pfnSharedMemAlloc;
     xe_pfnMemAlloc_t                                            pfnMemAlloc;
     xe_pfnHostMemAlloc_t                                        pfnHostMemAlloc;
@@ -128,30 +487,34 @@ typedef struct _xe_apitable_t
     xe_pfnIpcGetMemHandle_t                                     pfnIpcGetMemHandle;
     xe_pfnIpcOpenMemHandle_t                                    pfnIpcOpenMemHandle;
     xe_pfnIpcCloseMemHandle_t                                   pfnIpcCloseMemHandle;
-    xe_pfnModuleCreate_t                                        pfnModuleCreate;
-    xe_pfnModuleDestroy_t                                       pfnModuleDestroy;
-    xe_pfnModuleBuildLogDestroy_t                               pfnModuleBuildLogDestroy;
-    xe_pfnModuleBuildLogGetString_t                             pfnModuleBuildLogGetString;
-    xe_pfnModuleGetNativeBinary_t                               pfnModuleGetNativeBinary;
-    xe_pfnModuleGetGlobalPointer_t                              pfnModuleGetGlobalPointer;
-    xe_pfnFunctionCreate_t                                      pfnFunctionCreate;
-    xe_pfnFunctionDestroy_t                                     pfnFunctionDestroy;
-    xe_pfnModuleGetFunctionPointer_t                            pfnModuleGetFunctionPointer;
-    xe_pfnFunctionSetGroupSize_t                                pfnFunctionSetGroupSize;
-    xe_pfnFunctionSuggestGroupSize_t                            pfnFunctionSuggestGroupSize;
-    xe_pfnFunctionSetArgumentValue_t                            pfnFunctionSetArgumentValue;
-    xe_pfnFunctionSetAttribute_t                                pfnFunctionSetAttribute;
-    xe_pfnFunctionGetAttribute_t                                pfnFunctionGetAttribute;
-    xe_pfnCommandListAppendLaunchFunction_t                     pfnCommandListAppendLaunchFunction;
-    xe_pfnCommandListAppendLaunchFunctionIndirect_t             pfnCommandListAppendLaunchFunctionIndirect;
-    xe_pfnCommandListAppendLaunchMultipleFunctionsIndirect_t    pfnCommandListAppendLaunchMultipleFunctionsIndirect;
-    xe_pfnCommandListAppendLaunchHostFunction_t                 pfnCommandListAppendLaunchHostFunction;
-    xe_pfnDeviceMakeMemoryResident_t                            pfnDeviceMakeMemoryResident;
-    xe_pfnDeviceEvictMemory_t                                   pfnDeviceEvictMemory;
-    xe_pfnDeviceMakeImageResident_t                             pfnDeviceMakeImageResident;
-    xe_pfnDeviceEvictImage_t                                    pfnDeviceEvictImage;
-    xe_pfnSamplerCreate_t                                       pfnSamplerCreate;
-    xe_pfnSamplerDestroy_t                                      pfnSamplerDestroy;
-} xe_apitable_t;
+} xe_global_apitable_t;
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Exported function for filling application's Global table
+///        with current process' addresses
+///
+/// @returns
+///     - ::XE_RESULT_SUCCESS
+///     - ::XE_RESULT_ERROR_INVALID_PARAMETER
+///         + invalid value for version
+///         + nullptr for ptable
+///     - ::XE_RESULT_ERROR_UNSUPPORTED
+///         + version not supported
+__xedllexport xe_result_t __xecall
+xeGetGlobalProcAddrTable(
+    uint32_t version,        ///< [in] ::XE_API_HEADER_VERSION
+    xe_global_apitable_t* ptable   ///< [in,out] pointer to table of API function pointers
+    );
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Function-pointer for xeGetGlobalProcAddrTable
+typedef xe_result_t (__xecall *xe_pfnGetGlobalProcAddrTable_t)(
+    uint32_t,
+    xe_global_apitable_t*
+    );
+
+#if defined(__cplusplus)
+} // extern "C"
+#endif
 
 #endif // _XE_API_H

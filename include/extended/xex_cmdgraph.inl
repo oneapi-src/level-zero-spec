@@ -34,6 +34,9 @@
 #define _XEX_CMDGRAPH_INL
 #if defined(__cplusplus)
 #pragma once
+#if !defined(_XEX_API_HPP)
+#pragma message("warning: this file is not intended to be included directly")
+#endif
 #include "xex_cmdgraph.hpp"
 
 namespace xex

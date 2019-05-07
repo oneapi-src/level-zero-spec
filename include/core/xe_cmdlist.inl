@@ -34,6 +34,9 @@
 #define _XE_CMDLIST_INL
 #if defined(__cplusplus)
 #pragma once
+#if !defined(_XE_API_HPP)
+#pragma message("warning: this file is not intended to be included directly")
+#endif
 #include "xe_cmdlist.hpp"
 
 namespace xe

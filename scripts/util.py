@@ -6,6 +6,7 @@ import glob
 import json
 import yaml
 from mako.template import Template
+from mako.exceptions import RichTraceback
 
 """
     safely checks if path/file exists
@@ -124,7 +125,11 @@ def makoWrite(inpath, outpath, **args):
 
         return len(rendered.splitlines())
     except:
-        print("error: unable to write %s"%outpath)
+        traceback = RichTraceback()
+        for (filename, lineno, function, line) in traceback.traceback:
+            print("%s(%s) : error in %s" % (filename, lineno, function))
+            print(line, "\n")
+        print("%s: %s" % (str(traceback.error.__class__.__name__), traceback.error))
         return 0
 
 # END OF FILE

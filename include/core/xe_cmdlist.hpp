@@ -34,6 +34,9 @@
 #define _XE_CMDLIST_HPP
 #if defined(__cplusplus)
 #pragma once
+#if !defined(_XE_API_HPP)
+#pragma message("warning: this file is not intended to be included directly")
+#endif
 #include "xe_common.hpp"
 #include "xe_cmdqueue.hpp"
 
@@ -150,31 +153,6 @@ namespace xe
         };
 
         ///////////////////////////////////////////////////////////////////////////////
-        /// @brief C++ wrapper for ::xeCommandListAppendBarrier
-        /// @throws result_t
-        inline void
-        AppendBarrier(
-            event_handle_t hSignalEvent = nullptr,          ///< [in][optional] handle of the event to signal on completion
-            uint32_t numWaitEvents = 0,                     ///< [in][optional] number of events to wait on before executing barrier
-            event_handle_t* phWaitEvents = nullptr          ///< [in][optional] handle of the events to wait on before executing
-                                                            ///< barrier
-            );
-
-        ///////////////////////////////////////////////////////////////////////////////
-        /// @brief C++ wrapper for ::xeCommandListAppendMemoryRangesBarrier
-        /// @throws result_t
-        inline void
-        AppendMemoryRangesBarrier(
-            uint32_t numRanges,                             ///< [in] number of memory ranges
-            const size_t* pRangeSizes,                      ///< [in] array of sizes of memory range
-            const void** pRanges,                           ///< [in] array of memory ranges
-            event_handle_t hSignalEvent = nullptr,          ///< [in][optional] handle of the event to signal on completion
-            uint32_t numWaitEvents = 0,                     ///< [in][optional] number of events to wait on before executing barrier
-            event_handle_t* phWaitEvents = nullptr          ///< [in][optional] handle of the events to wait on before executing
-                                                            ///< barrier
-            );
-
-        ///////////////////////////////////////////////////////////////////////////////
         /// @brief C++ wrapper for ::xeCommandListCreate
         /// @returns
         ///     - ::command_list_handle_t: pointer to handle of command list object created
@@ -259,6 +237,31 @@ namespace xe
         inline void*
         ReserveSpace(
             size_t size                                     ///< [in] size (in bytes) to reserve
+            );
+
+        ///////////////////////////////////////////////////////////////////////////////
+        /// @brief C++ wrapper for ::xeCommandListAppendBarrier
+        /// @throws result_t
+        inline void
+        AppendBarrier(
+            event_handle_t hSignalEvent = nullptr,          ///< [in][optional] handle of the event to signal on completion
+            uint32_t numWaitEvents = 0,                     ///< [in][optional] number of events to wait on before executing barrier
+            event_handle_t* phWaitEvents = nullptr          ///< [in][optional] handle of the events to wait on before executing
+                                                            ///< barrier
+            );
+
+        ///////////////////////////////////////////////////////////////////////////////
+        /// @brief C++ wrapper for ::xeCommandListAppendMemoryRangesBarrier
+        /// @throws result_t
+        inline void
+        AppendMemoryRangesBarrier(
+            uint32_t numRanges,                             ///< [in] number of memory ranges
+            const size_t* pRangeSizes,                      ///< [in] array of sizes of memory range
+            const void** pRanges,                           ///< [in] array of memory ranges
+            event_handle_t hSignalEvent = nullptr,          ///< [in][optional] handle of the event to signal on completion
+            uint32_t numWaitEvents = 0,                     ///< [in][optional] number of events to wait on before executing barrier
+            event_handle_t* phWaitEvents = nullptr          ///< [in][optional] handle of the events to wait on before executing
+                                                            ///< barrier
             );
 
         ///////////////////////////////////////////////////////////////////////////////

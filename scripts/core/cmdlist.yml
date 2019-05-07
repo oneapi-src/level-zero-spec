@@ -47,6 +47,7 @@ desc: "Creates a command list on the device for submitting commands to any comma
 class: $xCommandList
 name: Create
 decl: static
+ordinal: "0"
 details:
     - "The command list is created in the 'open' state."
     - "The application may call this function from simultaneous threads."
@@ -70,6 +71,7 @@ desc: "Creates a command list on the device with an implicit command queue for i
 class: $xCommandList
 name: CreateImmediate
 decl: static
+ordinal: "0"
 details:
     - "The command list is created in the 'open' state and never needs to be closed."
     - "The application may call this function from simultaneous threads."
@@ -93,6 +95,7 @@ desc: "Destroys a command list."
 class: $xCommandList
 name: Destroy
 decl: static
+ordinal: "0"
 details:
     - "The application is responsible for making sure the GPU is not currently referencing the command list before it is deleted"
     - "The implementation of this function will immediately free all Host and Device allocations associated with this command list."
@@ -107,6 +110,7 @@ type: function
 desc: "Closes a command list; ready to be executed by a command queue."
 class: $xCommandList
 name: Close
+ordinal: "1"
 details:
     - "The application may **not** call this function from simultaneous threads with the same command list handle."
     - "The implementation of this function should be lock-free."
@@ -119,6 +123,7 @@ type: function
 desc: "Reset a command list to initial (empty) state; ready for appending commands."
 class: $xCommandList
 name: Reset
+ordinal: "1"
 details:
     - "The application is responsible for making sure the GPU is not currently referencing the command list before it is reset"
     - "The application may **not** call this function from simultaneous threads with the same command list handle."
@@ -140,6 +145,7 @@ type: function
 desc: "Sets a command list's parameter."
 class: $xCommandList
 name: SetParameter
+ordinal: "2"
 analogue:
     - cuCtxSetCacheConfig
     - cuCtxSetLimit
@@ -166,6 +172,7 @@ type: function
 desc: "Retrieves a command list's parameter."
 class: $xCommandList
 name: GetParameter
+ordinal: "2"
 analogue:
     - cuCtxGetCacheConfig
     - cuCtxGetLimit
@@ -192,6 +199,7 @@ type: function
 desc: "Resets all command list parameters to default state."
 class: $xCommandList
 name: ResetParameters
+ordinal: "2"
 details:
     - "The application may **not** call this function from simultaneous threads with the same command list handle."
     - "The implementation of this function should be lock-free."
@@ -204,6 +212,7 @@ type: function
 desc: "Reserve a section of contiguous command buffer space within the command list."
 class: $xCommandList
 name: ReserveSpace
+ordinal: "3"
 details:
     - "The pointer returned is valid for both Host and device access."
     - "The application may **not** call this function from simultaneous threads with the same command list handle."

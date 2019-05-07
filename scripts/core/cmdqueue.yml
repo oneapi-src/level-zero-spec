@@ -94,6 +94,7 @@ desc: "Creates a command queue on the device."
 class: $xCommandQueue
 name: Create
 decl: static
+ordinal: "0"
 analogue:
     - "**clCreateCommandQueue**"
     - cuCtxCreate
@@ -120,6 +121,7 @@ desc: "Destroys a command queue."
 class: $xCommandQueue
 name: Destroy
 decl: static
+ordinal: "0"
 analogue:
     - "**clReleaseCommandQueue**"
     - cuCtxDestroy
@@ -137,6 +139,7 @@ type: function
 desc: "Executes a command list in a command queue."
 class: $xCommandQueue
 name: ExecuteCommandLists
+ordinal: "1"
 analogue:
     - vkQueueSubmit
 details:
@@ -164,6 +167,7 @@ type: function
 desc: "Synchronizes a command queue by waiting on the host."
 class: $xCommandQueue
 name: Synchronize
+ordinal: "1"
 details:
     - "The application may call this function from simultaneous threads."
     - "The implementation of this function should be lock-free."

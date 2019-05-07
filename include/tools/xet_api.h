@@ -39,63 +39,306 @@
 #include "xet_metric.h"
 #include "xet_power.h"
 
+#if defined(__cplusplus)
+extern "C" {
+#endif
+
 ///////////////////////////////////////////////////////////////////////////////
-typedef struct _xet_apitable_t
+/// @brief Table of Device functions pointers
+typedef struct _xet_device_apitable_t
 {
-    xet_pfnMetricGroupGetCount_t                                pfnMetricGroupGetCount;
-    xet_pfnMetricGroupGet_t                                     pfnMetricGroupGet;
-    xet_pfnMetricGroupGetProperties_t                           pfnMetricGroupGetProperties;
-    xet_pfnMetricGet_t                                          pfnMetricGet;
-    xet_pfnMetricGetProperties_t                                pfnMetricGetProperties;
-    xet_pfnMetricGroupCalculateData_t                           pfnMetricGroupCalculateData;
-    xet_pfnDeviceActivateMetricGroups_t                         pfnDeviceActivateMetricGroups;
-    xet_pfnMetricTracerOpen_t                                   pfnMetricTracerOpen;
-    xet_pfnCommandListAppendMetricTracerMarker_t                pfnCommandListAppendMetricTracerMarker;
-    xet_pfnMetricTracerClose_t                                  pfnMetricTracerClose;
-    xet_pfnMetricTracerReadData_t                               pfnMetricTracerReadData;
-    xet_pfnMetricQueryPoolCreate_t                              pfnMetricQueryPoolCreate;
-    xet_pfnMetricQueryPoolDestroy_t                             pfnMetricQueryPoolDestroy;
-    xet_pfnMetricQueryPoolGetMetricQuery_t                      pfnMetricQueryPoolGetMetricQuery;
-    xet_pfnCommandListAppendMetricQueryBegin_t                  pfnCommandListAppendMetricQueryBegin;
-    xet_pfnCommandListAppendMetricQueryEnd_t                    pfnCommandListAppendMetricQueryEnd;
-    xet_pfnCommandListAppendMetricMemoryBarrier_t               pfnCommandListAppendMetricMemoryBarrier;
-    xet_pfnMetricQueryGetData_t                                 pfnMetricQueryGetData;
-    xet_pfnDevicePowerInit_t                                    pfnDevicePowerInit;
-    xet_pfnPowerShutdown_t                                      pfnPowerShutdown;
-    xet_pfnPowerGetAveragePowerLimit_t                          pfnPowerGetAveragePowerLimit;
-    xet_pfnPowerGetBurstPowerLimit_t                            pfnPowerGetBurstPowerLimit;
-    xet_pfnPowerGetPeakPowerLimit_t                             pfnPowerGetPeakPowerLimit;
-    xet_pfnPowerGetAllPowerLimits_t                             pfnPowerGetAllPowerLimits;
-    xet_pfnPowerGetDefaultPowerLimits_t                         pfnPowerGetDefaultPowerLimits;
-    xet_pfnPowerSetAveragePowerLimit_t                          pfnPowerSetAveragePowerLimit;
-    xet_pfnPowerSetBurstPowerLimit_t                            pfnPowerSetBurstPowerLimit;
-    xet_pfnPowerSetPeakPowerLimit_t                             pfnPowerSetPeakPowerLimit;
-    xet_pfnPowerSetPowerLimits_t                                pfnPowerSetPowerLimits;
-    xet_pfnPowerGetEnergyCounter_t                              pfnPowerGetEnergyCounter;
-    xet_pfnPowerGetTurboMode_t                                  pfnPowerGetTurboMode;
-    xet_pfnPowerSetTurboMode_t                                  pfnPowerSetTurboMode;
-    xet_pfnPowerFreqDomainCount_t                               pfnPowerFreqDomainCount;
-    xet_pfnPowerFreqDomainGetHandle_t                           pfnPowerFreqDomainGetHandle;
-    xet_pfnPowerFreqDomainGetProperties_t                       pfnPowerFreqDomainGetProperties;
-    xet_pfnPowerFreqDomainGetSupportedClocks_t                  pfnPowerFreqDomainGetSupportedClocks;
-    xet_pfnPowerFreqDomainGetSupportedClockDividers_t           pfnPowerFreqDomainGetSupportedClockDividers;
-    xet_pfnPowerpfnPowerFreqDomainGetClockRange_t               pfnPowerpfnPowerFreqDomainGetClockRange;
-    xet_pfnPowerpfnPowerFreqDomainSetClockRange_t               pfnPowerpfnPowerFreqDomainSetClockRange;
-    xet_pfnPowerFreqDomainSetClockDivider_t                     pfnPowerFreqDomainSetClockDivider;
-    xet_pfnPowerGetCurrentFrequency_t                           pfnPowerGetCurrentFrequency;
-    xet_pfnPowerFanCount_t                                      pfnPowerFanCount;
-    xet_pfnPowerFanGetProperties_t                              pfnPowerFanGetProperties;
-    xet_pfnPowerFanGetSpeedTable_t                              pfnPowerFanGetSpeedTable;
-    xet_pfnPowerFanSetSpeedTable_t                              pfnPowerFanSetSpeedTable;
-    xet_pfnPowerFanGetSpeed_t                                   pfnPowerFanGetSpeed;
-    xet_pfnPowerFanSetSpeed_t                                   pfnPowerFanSetSpeed;
-    xet_pfnPowerTemperatureSensorCount_t                        pfnPowerTemperatureSensorCount;
-    xet_pfnPowerGetTemperatureProperties_t                      pfnPowerGetTemperatureProperties;
-    xet_pfnPowerGetTemperature_t                                pfnPowerGetTemperature;
-    xet_pfnPowerSetTemperatureThreshold_t                       pfnPowerSetTemperatureThreshold;
-    xet_pfnPowerActivityCount_t                                 pfnPowerActivityCount;
-    xet_pfnPowerGetActivityProperties_t                         pfnPowerGetActivityProperties;
-    xet_pfnPowerGetActivityCounters_t                           pfnPowerGetActivityCounters;
-} xet_apitable_t;
+    xet_pfnDeviceActivateMetricGroups_t                         pfnActivateMetricGroups;
+    xet_pfnDevicePowerInit_t                                    pfnPowerInit;
+} xet_device_apitable_t;
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Exported function for filling application's Device table
+///        with current process' addresses
+///
+/// @returns
+///     - ::XE_RESULT_SUCCESS
+///     - ::XE_RESULT_ERROR_INVALID_PARAMETER
+///         + invalid value for version
+///         + nullptr for ptable
+///     - ::XE_RESULT_ERROR_UNSUPPORTED
+///         + version not supported
+__xedllexport xe_result_t __xecall
+xetGetDeviceProcAddrTable(
+    uint32_t version,        ///< [in] ::XE_API_HEADER_VERSION
+    xet_device_apitable_t* ptable   ///< [in,out] pointer to table of API function pointers
+    );
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Function-pointer for xetGetDeviceProcAddrTable
+typedef xe_result_t (__xecall *xet_pfnGetDeviceProcAddrTable_t)(
+    uint32_t,
+    xet_device_apitable_t*
+    );
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Table of CommandList functions pointers
+typedef struct _xet_command_list_apitable_t
+{
+    xet_pfnCommandListAppendMetricTracerMarker_t                pfnAppendMetricTracerMarker;
+    xet_pfnCommandListAppendMetricQueryBegin_t                  pfnAppendMetricQueryBegin;
+    xet_pfnCommandListAppendMetricQueryEnd_t                    pfnAppendMetricQueryEnd;
+    xet_pfnCommandListAppendMetricMemoryBarrier_t               pfnAppendMetricMemoryBarrier;
+} xet_command_list_apitable_t;
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Exported function for filling application's CommandList table
+///        with current process' addresses
+///
+/// @returns
+///     - ::XE_RESULT_SUCCESS
+///     - ::XE_RESULT_ERROR_INVALID_PARAMETER
+///         + invalid value for version
+///         + nullptr for ptable
+///     - ::XE_RESULT_ERROR_UNSUPPORTED
+///         + version not supported
+__xedllexport xe_result_t __xecall
+xetGetCommandListProcAddrTable(
+    uint32_t version,        ///< [in] ::XE_API_HEADER_VERSION
+    xet_command_list_apitable_t* ptable   ///< [in,out] pointer to table of API function pointers
+    );
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Function-pointer for xetGetCommandListProcAddrTable
+typedef xe_result_t (__xecall *xet_pfnGetCommandListProcAddrTable_t)(
+    uint32_t,
+    xet_command_list_apitable_t*
+    );
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Table of MetricGroup functions pointers
+typedef struct _xet_metric_group_apitable_t
+{
+    xet_pfnMetricGroupGetCount_t                                pfnGetCount;
+    xet_pfnMetricGroupGet_t                                     pfnGet;
+    xet_pfnMetricGroupGetProperties_t                           pfnGetProperties;
+    xet_pfnMetricGroupCalculateData_t                           pfnCalculateData;
+} xet_metric_group_apitable_t;
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Exported function for filling application's MetricGroup table
+///        with current process' addresses
+///
+/// @returns
+///     - ::XE_RESULT_SUCCESS
+///     - ::XE_RESULT_ERROR_INVALID_PARAMETER
+///         + invalid value for version
+///         + nullptr for ptable
+///     - ::XE_RESULT_ERROR_UNSUPPORTED
+///         + version not supported
+__xedllexport xe_result_t __xecall
+xetGetMetricGroupProcAddrTable(
+    uint32_t version,        ///< [in] ::XE_API_HEADER_VERSION
+    xet_metric_group_apitable_t* ptable   ///< [in,out] pointer to table of API function pointers
+    );
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Function-pointer for xetGetMetricGroupProcAddrTable
+typedef xe_result_t (__xecall *xet_pfnGetMetricGroupProcAddrTable_t)(
+    uint32_t,
+    xet_metric_group_apitable_t*
+    );
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Table of Metric functions pointers
+typedef struct _xet_metric_apitable_t
+{
+    xet_pfnMetricGet_t                                          pfnGet;
+    xet_pfnMetricGetProperties_t                                pfnGetProperties;
+} xet_metric_apitable_t;
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Exported function for filling application's Metric table
+///        with current process' addresses
+///
+/// @returns
+///     - ::XE_RESULT_SUCCESS
+///     - ::XE_RESULT_ERROR_INVALID_PARAMETER
+///         + invalid value for version
+///         + nullptr for ptable
+///     - ::XE_RESULT_ERROR_UNSUPPORTED
+///         + version not supported
+__xedllexport xe_result_t __xecall
+xetGetMetricProcAddrTable(
+    uint32_t version,        ///< [in] ::XE_API_HEADER_VERSION
+    xet_metric_apitable_t* ptable   ///< [in,out] pointer to table of API function pointers
+    );
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Function-pointer for xetGetMetricProcAddrTable
+typedef xe_result_t (__xecall *xet_pfnGetMetricProcAddrTable_t)(
+    uint32_t,
+    xet_metric_apitable_t*
+    );
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Table of MetricTracer functions pointers
+typedef struct _xet_metric_tracer_apitable_t
+{
+    xet_pfnMetricTracerOpen_t                                   pfnOpen;
+    xet_pfnMetricTracerClose_t                                  pfnClose;
+    xet_pfnMetricTracerReadData_t                               pfnReadData;
+} xet_metric_tracer_apitable_t;
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Exported function for filling application's MetricTracer table
+///        with current process' addresses
+///
+/// @returns
+///     - ::XE_RESULT_SUCCESS
+///     - ::XE_RESULT_ERROR_INVALID_PARAMETER
+///         + invalid value for version
+///         + nullptr for ptable
+///     - ::XE_RESULT_ERROR_UNSUPPORTED
+///         + version not supported
+__xedllexport xe_result_t __xecall
+xetGetMetricTracerProcAddrTable(
+    uint32_t version,        ///< [in] ::XE_API_HEADER_VERSION
+    xet_metric_tracer_apitable_t* ptable   ///< [in,out] pointer to table of API function pointers
+    );
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Function-pointer for xetGetMetricTracerProcAddrTable
+typedef xe_result_t (__xecall *xet_pfnGetMetricTracerProcAddrTable_t)(
+    uint32_t,
+    xet_metric_tracer_apitable_t*
+    );
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Table of MetricQueryPool functions pointers
+typedef struct _xet_metric_query_pool_apitable_t
+{
+    xet_pfnMetricQueryPoolCreate_t                              pfnCreate;
+    xet_pfnMetricQueryPoolDestroy_t                             pfnDestroy;
+    xet_pfnMetricQueryPoolGetMetricQuery_t                      pfnGetMetricQuery;
+} xet_metric_query_pool_apitable_t;
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Exported function for filling application's MetricQueryPool table
+///        with current process' addresses
+///
+/// @returns
+///     - ::XE_RESULT_SUCCESS
+///     - ::XE_RESULT_ERROR_INVALID_PARAMETER
+///         + invalid value for version
+///         + nullptr for ptable
+///     - ::XE_RESULT_ERROR_UNSUPPORTED
+///         + version not supported
+__xedllexport xe_result_t __xecall
+xetGetMetricQueryPoolProcAddrTable(
+    uint32_t version,        ///< [in] ::XE_API_HEADER_VERSION
+    xet_metric_query_pool_apitable_t* ptable   ///< [in,out] pointer to table of API function pointers
+    );
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Function-pointer for xetGetMetricQueryPoolProcAddrTable
+typedef xe_result_t (__xecall *xet_pfnGetMetricQueryPoolProcAddrTable_t)(
+    uint32_t,
+    xet_metric_query_pool_apitable_t*
+    );
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Table of MetricQuery functions pointers
+typedef struct _xet_metric_query_apitable_t
+{
+    xet_pfnMetricQueryGetData_t                                 pfnGetData;
+} xet_metric_query_apitable_t;
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Exported function for filling application's MetricQuery table
+///        with current process' addresses
+///
+/// @returns
+///     - ::XE_RESULT_SUCCESS
+///     - ::XE_RESULT_ERROR_INVALID_PARAMETER
+///         + invalid value for version
+///         + nullptr for ptable
+///     - ::XE_RESULT_ERROR_UNSUPPORTED
+///         + version not supported
+__xedllexport xe_result_t __xecall
+xetGetMetricQueryProcAddrTable(
+    uint32_t version,        ///< [in] ::XE_API_HEADER_VERSION
+    xet_metric_query_apitable_t* ptable   ///< [in,out] pointer to table of API function pointers
+    );
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Function-pointer for xetGetMetricQueryProcAddrTable
+typedef xe_result_t (__xecall *xet_pfnGetMetricQueryProcAddrTable_t)(
+    uint32_t,
+    xet_metric_query_apitable_t*
+    );
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Table of Power functions pointers
+typedef struct _xet_power_apitable_t
+{
+    xet_pfnPowerShutdown_t                                      pfnShutdown;
+    xet_pfnPowerGetAveragePowerLimit_t                          pfnGetAveragePowerLimit;
+    xet_pfnPowerGetBurstPowerLimit_t                            pfnGetBurstPowerLimit;
+    xet_pfnPowerGetPeakPowerLimit_t                             pfnGetPeakPowerLimit;
+    xet_pfnPowerGetAllPowerLimits_t                             pfnGetAllPowerLimits;
+    xet_pfnPowerGetDefaultPowerLimits_t                         pfnGetDefaultPowerLimits;
+    xet_pfnPowerSetAveragePowerLimit_t                          pfnSetAveragePowerLimit;
+    xet_pfnPowerSetBurstPowerLimit_t                            pfnSetBurstPowerLimit;
+    xet_pfnPowerSetPeakPowerLimit_t                             pfnSetPeakPowerLimit;
+    xet_pfnPowerSetPowerLimits_t                                pfnSetPowerLimits;
+    xet_pfnPowerGetEnergyCounter_t                              pfnGetEnergyCounter;
+    xet_pfnPowerGetTurboMode_t                                  pfnGetTurboMode;
+    xet_pfnPowerSetTurboMode_t                                  pfnSetTurboMode;
+    xet_pfnPowerFreqDomainCount_t                               pfnFreqDomainCount;
+    xet_pfnPowerFreqDomainGetHandle_t                           pfnFreqDomainGetHandle;
+    xet_pfnPowerFreqDomainGetProperties_t                       pfnFreqDomainGetProperties;
+    xet_pfnPowerFreqDomainGetSupportedClocks_t                  pfnFreqDomainGetSupportedClocks;
+    xet_pfnPowerFreqDomainGetSupportedClockDividers_t           pfnFreqDomainGetSupportedClockDividers;
+    xet_pfnPowerpfnPowerFreqDomainGetClockRange_t               pfnxetPowerFreqDomainGetClockRange;
+    xet_pfnPowerpfnPowerFreqDomainSetClockRange_t               pfnxetPowerFreqDomainSetClockRange;
+    xet_pfnPowerFreqDomainSetClockDivider_t                     pfnFreqDomainSetClockDivider;
+    xet_pfnPowerGetCurrentFrequency_t                           pfnGetCurrentFrequency;
+    xet_pfnPowerFanCount_t                                      pfnFanCount;
+    xet_pfnPowerFanGetProperties_t                              pfnFanGetProperties;
+    xet_pfnPowerFanGetSpeedTable_t                              pfnFanGetSpeedTable;
+    xet_pfnPowerFanSetSpeedTable_t                              pfnFanSetSpeedTable;
+    xet_pfnPowerFanGetSpeed_t                                   pfnFanGetSpeed;
+    xet_pfnPowerFanSetSpeed_t                                   pfnFanSetSpeed;
+    xet_pfnPowerTemperatureSensorCount_t                        pfnTemperatureSensorCount;
+    xet_pfnPowerGetTemperatureProperties_t                      pfnGetTemperatureProperties;
+    xet_pfnPowerGetTemperature_t                                pfnGetTemperature;
+    xet_pfnPowerSetTemperatureThreshold_t                       pfnSetTemperatureThreshold;
+    xet_pfnPowerActivityCount_t                                 pfnActivityCount;
+    xet_pfnPowerGetActivityProperties_t                         pfnGetActivityProperties;
+    xet_pfnPowerGetActivityCounters_t                           pfnGetActivityCounters;
+} xet_power_apitable_t;
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Exported function for filling application's Power table
+///        with current process' addresses
+///
+/// @returns
+///     - ::XE_RESULT_SUCCESS
+///     - ::XE_RESULT_ERROR_INVALID_PARAMETER
+///         + invalid value for version
+///         + nullptr for ptable
+///     - ::XE_RESULT_ERROR_UNSUPPORTED
+///         + version not supported
+__xedllexport xe_result_t __xecall
+xetGetPowerProcAddrTable(
+    uint32_t version,        ///< [in] ::XE_API_HEADER_VERSION
+    xet_power_apitable_t* ptable   ///< [in,out] pointer to table of API function pointers
+    );
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Function-pointer for xetGetPowerProcAddrTable
+typedef xe_result_t (__xecall *xet_pfnGetPowerProcAddrTable_t)(
+    uint32_t,
+    xet_power_apitable_t*
+    );
+
+#if defined(__cplusplus)
+} // extern "C"
+#endif
 
 #endif // _XET_API_H

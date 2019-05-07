@@ -35,6 +35,9 @@
 #if defined(__cplusplus)
 #pragma once
 #endif
+#if !defined(_XE_API_H)
+#pragma message("warning: this file is not intended to be included directly")
+#endif
 #include "xe_common.h"
 
 #if defined(__cplusplus)
@@ -210,7 +213,7 @@ typedef struct _xe_image_properties_t
 ///         + nullptr == pImageProperties
 ///     - ::XE_RESULT_ERROR_UNSUPPORTED
 ///         + ::XE_IMAGE_DESC_VERSION_CURRENT < desc->version
-__xedllexport xe_result_t __xecall
+xe_result_t __xecall
 xeImageGetProperties(
     xe_device_handle_t hDevice,                     ///< [in] handle of the device
     const xe_image_desc_t* desc,                    ///< [in] pointer to image descriptor
@@ -248,7 +251,7 @@ typedef xe_result_t (__xecall *xe_pfnImageGetProperties_t)(
 ///         + ::XE_IMAGE_DESC_VERSION_CURRENT < desc->version
 ///     - ::XE_RESULT_ERROR_OUT_OF_HOST_MEMORY
 ///     - ::XE_RESULT_ERROR_OUT_OF_DEVICE_MEMORY
-__xedllexport xe_result_t __xecall
+xe_result_t __xecall
 xeImageCreate(
     xe_device_handle_t hDevice,                     ///< [in] handle of the device
     const xe_image_desc_t* desc,                    ///< [in] pointer to image descriptor
@@ -282,7 +285,7 @@ typedef xe_result_t (__xecall *xe_pfnImageCreate_t)(
 ///     - ::XE_RESULT_ERROR_INVALID_PARAMETER
 ///         + nullptr == hImage
 ///     - ::XE_RESULT_ERROR_UNSUPPORTED
-__xedllexport xe_result_t __xecall
+xe_result_t __xecall
 xeImageDestroy(
     xe_image_handle_t hImage                        ///< [in] handle of image object to destroy
     );

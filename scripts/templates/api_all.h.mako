@@ -4,6 +4,9 @@ from templates import helper as th
 %><%
     n=namespace
     N=n.upper()
+
+    x=tags['$x']
+    X=x.upper()
 %>/**************************************************************************//**
 *
 * INTEL CONFIDENTIAL
@@ -45,10 +48,16 @@ from templates import helper as th
 %endif
 %endfor
 
+#if defined(__cplusplus)
+extern "C" {
+#endif
+
+%for tbl in th.get_pfntables(specs, meta, n, tags):
 ///////////////////////////////////////////////////////////////////////////////
-typedef struct _${n}_apitable_t
+/// @brief Table of ${tbl['name']} functions pointers
+typedef struct _${tbl['type']}
 {
-    %for obj in th.extract_objs(specs, r"function"):
+    %for obj in tbl['functions']:
     %if 'condition' in obj:
     #if ${th.subt(n, tags, obj['condition'])}
     %endif
@@ -57,6 +66,35 @@ typedef struct _${n}_apitable_t
     #endif // ${th.subt(n, tags, obj['condition'])}
     %endif
     %endfor
-} ${n}_apitable_t;
+} ${tbl['type']};
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Exported function for filling application's ${tbl['name']} table
+///        with current process' addresses
+///
+/// @returns
+///     - ::${X}_RESULT_SUCCESS
+///     - ::${X}_RESULT_ERROR_INVALID_PARAMETER
+///         + invalid value for version
+///         + nullptr for ptable
+///     - ::${X}_RESULT_ERROR_UNSUPPORTED
+///         + version not supported
+__${x}dllexport ${x}_result_t __${x}call
+${tbl['export']}(
+    uint32_t version,        ///< [in] ::${X}_API_HEADER_VERSION
+    ${tbl['type']}* ptable   ///< [in,out] pointer to table of API function pointers
+    );
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Function-pointer for ${tbl['export']}
+typedef ${x}_result_t (__${x}call *${tbl['pfn']})(
+    uint32_t,
+    ${tbl['type']}*
+    );
+
+%endfor
+#if defined(__cplusplus)
+} // extern "C"
+#endif
 
 #endif // _${N}_API_H

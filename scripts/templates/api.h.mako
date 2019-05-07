@@ -43,6 +43,9 @@ from templates import helper as th
 #if defined(__cplusplus)
 #pragma once
 #endif
+#if !defined(_${N}_API_H)
+#pragma message("warning: this file is not intended to be included directly")
+#endif
 %if re.match(r"common", name):
 #include <stdint.h>
 #include <string.h>
@@ -114,7 +117,7 @@ typedef ${obj['type']} _${th.subt(n, tags, obj['name'])}
 %for line in th.make_returns_lines(n, tags, obj):
 /// ${line}
 %endfor
-__${x}dllexport ${x}_result_t __${x}call
+${x}_result_t __${x}call
 ${th.make_func_name(n, tags, obj)}(
     %for line in th.make_param_lines(n, tags, obj):
     ${line}

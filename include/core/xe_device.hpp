@@ -34,6 +34,9 @@
 #define _XE_DEVICE_HPP
 #if defined(__cplusplus)
 #pragma once
+#if !defined(_XE_API_HPP)
+#pragma message("warning: this file is not intended to be included directly")
+#endif
 #include "xe_common.hpp"
 
 namespace xe
@@ -218,56 +221,6 @@ namespace xe
         };
 
         ///////////////////////////////////////////////////////////////////////////////
-        /// @brief C++ wrapper for ::xeDeviceSystemBarrier
-        /// @throws result_t
-        inline void
-        SystemBarrier(
-            void
-            );
-
-#if XE_ENABLE_OCL_INTEROP
-        ///////////////////////////////////////////////////////////////////////////////
-        /// @brief C++ wrapper for ::xeDeviceRegisterCLMemory
-        /// @returns
-        ///     - void*: pointer to device allocation
-        /// 
-        /// @throws result_t
-        inline void*
-        RegisterCLMemory(
-            cl_context context,                             ///< [in] the OpenCL context that created the memory
-            cl_mem mem                                      ///< [in] the OpenCL memory to register
-            );
-#endif // XE_ENABLE_OCL_INTEROP
-
-#if XE_ENABLE_OCL_INTEROP
-        ///////////////////////////////////////////////////////////////////////////////
-        /// @brief C++ wrapper for ::xeDeviceRegisterCLProgram
-        /// @returns
-        ///     - ::module_handle_t: pointer to handle of module object created
-        /// 
-        /// @throws result_t
-        inline module_handle_t
-        RegisterCLProgram(
-            cl_context context,                             ///< [in] the OpenCL context that created the program
-            cl_program program                              ///< [in] the OpenCL program to register
-            );
-#endif // XE_ENABLE_OCL_INTEROP
-
-#if XE_ENABLE_OCL_INTEROP
-        ///////////////////////////////////////////////////////////////////////////////
-        /// @brief C++ wrapper for ::xeDeviceRegisterCLCommandQueue
-        /// @returns
-        ///     - ::command_queue_handle_t: pointer to handle of command queue object created
-        /// 
-        /// @throws result_t
-        inline command_queue_handle_t
-        RegisterCLCommandQueue(
-            cl_context context,                             ///< [in] the OpenCL context that created the command queue
-            cl_command_queue command_queue                  ///< [in] the OpenCL command queue to register
-            );
-#endif // XE_ENABLE_OCL_INTEROP
-
-        ///////////////////////////////////////////////////////////////////////////////
         /// @brief C++ wrapper for ::xeDeviceGetCount
         /// @returns
         ///     - uint32_t: number of devices available
@@ -381,6 +334,56 @@ namespace xe
         SetLastLevelCacheConfig(
             cache_config_t CacheConfig                      ///< [in] CacheConfig
             );
+
+        ///////////////////////////////////////////////////////////////////////////////
+        /// @brief C++ wrapper for ::xeDeviceSystemBarrier
+        /// @throws result_t
+        inline void
+        SystemBarrier(
+            void
+            );
+
+#if XE_ENABLE_OCL_INTEROP
+        ///////////////////////////////////////////////////////////////////////////////
+        /// @brief C++ wrapper for ::xeDeviceRegisterCLMemory
+        /// @returns
+        ///     - void*: pointer to device allocation
+        /// 
+        /// @throws result_t
+        inline void*
+        RegisterCLMemory(
+            cl_context context,                             ///< [in] the OpenCL context that created the memory
+            cl_mem mem                                      ///< [in] the OpenCL memory to register
+            );
+#endif // XE_ENABLE_OCL_INTEROP
+
+#if XE_ENABLE_OCL_INTEROP
+        ///////////////////////////////////////////////////////////////////////////////
+        /// @brief C++ wrapper for ::xeDeviceRegisterCLProgram
+        /// @returns
+        ///     - ::module_handle_t: pointer to handle of module object created
+        /// 
+        /// @throws result_t
+        inline module_handle_t
+        RegisterCLProgram(
+            cl_context context,                             ///< [in] the OpenCL context that created the program
+            cl_program program                              ///< [in] the OpenCL program to register
+            );
+#endif // XE_ENABLE_OCL_INTEROP
+
+#if XE_ENABLE_OCL_INTEROP
+        ///////////////////////////////////////////////////////////////////////////////
+        /// @brief C++ wrapper for ::xeDeviceRegisterCLCommandQueue
+        /// @returns
+        ///     - ::command_queue_handle_t: pointer to handle of command queue object created
+        /// 
+        /// @throws result_t
+        inline command_queue_handle_t
+        RegisterCLCommandQueue(
+            cl_context context,                             ///< [in] the OpenCL context that created the command queue
+            cl_command_queue command_queue                  ///< [in] the OpenCL command queue to register
+            );
+#endif // XE_ENABLE_OCL_INTEROP
 
         ///////////////////////////////////////////////////////////////////////////////
         /// @brief C++ wrapper for ::xeDeviceMakeMemoryResident

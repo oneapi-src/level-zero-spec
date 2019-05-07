@@ -35,6 +35,9 @@
 #if defined(__cplusplus)
 #pragma once
 #endif
+#if !defined(_XE_API_H)
+#pragma message("warning: this file is not intended to be included directly")
+#endif
 #include <stdint.h>
 #include <string.h>
 
@@ -67,12 +70,12 @@ extern "C" {
 #endif // defined(_WIN32)
 
 ///////////////////////////////////////////////////////////////////////////////
-#if defined(_WIN32) && XE_MAKE_DLL
+#if defined(_WIN32)
 /// @brief Microsoft-specific dllexport storage-class attribute
 #define __xedllexport  __declspec(dllexport)
 #else
 #define __xedllexport  
-#endif // defined(_WIN32) && XE_MAKE_DLL
+#endif // defined(_WIN32)
 
 ///////////////////////////////////////////////////////////////////////////////
 #if !defined(XE_ENABLE_OCL_INTEROP)

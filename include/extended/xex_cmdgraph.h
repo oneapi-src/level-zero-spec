@@ -35,6 +35,9 @@
 #if defined(__cplusplus)
 #pragma once
 #endif
+#if !defined(_XEX_API_H)
+#pragma message("warning: this file is not intended to be included directly")
+#endif
 #include "xex_common.h"
 
 #if defined(__cplusplus)
@@ -86,7 +89,7 @@ typedef struct _xex_command_graph_desc_t
 ///         + ::XEX_COMMAND_GRAPH_DESC_VERSION_CURRENT < desc->version
 ///     - ::XE_RESULT_ERROR_OUT_OF_HOST_MEMORY
 ///     - ::XE_RESULT_ERROR_OUT_OF_DEVICE_MEMORY
-__xedllexport xe_result_t __xecall
+xe_result_t __xecall
 xexCommandGraphCreate(
     xe_device_handle_t hDevice,                     ///< [in] handle of the device object
     const xex_command_graph_desc_t* desc,           ///< [in] pointer to command graph descriptor
@@ -118,7 +121,7 @@ typedef xe_result_t (__xecall *xex_pfnCommandGraphCreate_t)(
 ///     - ::XE_RESULT_ERROR_INVALID_PARAMETER
 ///         + nullptr == hCommandGraph
 ///     - ::XE_RESULT_ERROR_UNSUPPORTED
-__xedllexport xe_result_t __xecall
+xe_result_t __xecall
 xexCommandGraphDestroy(
     xex_command_graph_handle_t hCommandGraph        ///< [in] handle of command graph object to destroy
     );
@@ -147,7 +150,7 @@ typedef xe_result_t (__xecall *xex_pfnCommandGraphDestroy_t)(
 ///     - ::XE_RESULT_ERROR_INVALID_PARAMETER
 ///         + nullptr == hCommandGraph
 ///     - ::XE_RESULT_ERROR_UNSUPPORTED
-__xedllexport xe_result_t __xecall
+xe_result_t __xecall
 xexCommandGraphClose(
     xex_command_graph_handle_t hCommandGraph        ///< [in] handle of command graph object to close
     );

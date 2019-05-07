@@ -35,6 +35,9 @@
 #if defined(__cplusplus)
 #pragma once
 #endif
+#if !defined(_XET_API_H)
+#pragma message("warning: this file is not intended to be included directly")
+#endif
 #include "xet_common.h"
 
 #if defined(__cplusplus)
@@ -52,7 +55,7 @@ extern "C" {
 ///         + nullptr == hDevice
 ///         + nullptr == pCount
 ///     - ::XE_RESULT_ERROR_UNSUPPORTED
-__xedllexport xe_result_t __xecall
+xe_result_t __xecall
 xetMetricGroupGetCount(
     xe_device_handle_t hDevice,                     ///< [in] handle of the device object
     uint32_t* pCount                                ///< [out] number of metric groups supported by the device
@@ -80,7 +83,7 @@ typedef xe_result_t (__xecall *xet_pfnMetricGroupGetCount_t)(
 ///         + nullptr == phMetricGroup
 ///         + devices do not contain a given metric group
 ///     - ::XE_RESULT_ERROR_UNSUPPORTED
-__xedllexport xe_result_t __xecall
+xe_result_t __xecall
 xetMetricGroupGet(
     xe_device_handle_t hDevice,                     ///< [in] handle of the device
     uint32_t ordinal,                               ///< [in] metric group index
@@ -151,7 +154,7 @@ typedef struct _xet_metric_group_properties_t
 ///         + nullptr == pProperties
 ///         + invalid metric group handle
 ///     - ::XE_RESULT_ERROR_UNSUPPORTED
-__xedllexport xe_result_t __xecall
+xe_result_t __xecall
 xetMetricGroupGetProperties(
     xet_metric_group_handle_t hMetricGroup,         ///< [in] handle of the metric group
     xet_metric_group_properties_t* pProperties      ///< [out] metric group properties
@@ -273,7 +276,7 @@ typedef struct _xet_metric_properties_t
 ///         + nullptr == phMetric
 ///         + invalid metric group handle
 ///     - ::XE_RESULT_ERROR_UNSUPPORTED
-__xedllexport xe_result_t __xecall
+xe_result_t __xecall
 xetMetricGet(
     xet_metric_group_handle_t hMetricGroup,         ///< [in] handle of the metric group
     uint32_t ordinal,                               ///< [in] metric index
@@ -303,7 +306,7 @@ typedef xe_result_t (__xecall *xet_pfnMetricGet_t)(
 ///         + nullptr == pProperties
 ///         + invalid handle
 ///     - ::XE_RESULT_ERROR_UNSUPPORTED
-__xedllexport xe_result_t __xecall
+xe_result_t __xecall
 xetMetricGetProperties(
     xet_metric_handle_t hMetric,                    ///< [in] handle of the metric
     xet_metric_properties_t* pProperties            ///< [out] metric properties
@@ -334,7 +337,7 @@ typedef xe_result_t (__xecall *xet_pfnMetricGetProperties_t)(
 ///         + nullptr == pCalculatedData
 ///         + invalid metric group handle
 ///     - ::XE_RESULT_ERROR_UNSUPPORTED
-__xedllexport xe_result_t __xecall
+xe_result_t __xecall
 xetMetricGroupCalculateData(
     xet_metric_group_handle_t hMetricGroup,         ///< [in] handle of the metric group
     uint32_t* pReportCount,                         ///< [in,out] report count to calculate
@@ -373,7 +376,7 @@ typedef xe_result_t (__xecall *xet_pfnMetricGroupCalculateData_t)(
 ///         + nullptr == phMetricGroups
 ///         + invalid metric groups
 ///     - ::XE_RESULT_ERROR_UNSUPPORTED
-__xedllexport xe_result_t __xecall
+xe_result_t __xecall
 xetDeviceActivateMetricGroups(
     xe_device_handle_t hDevice,                     ///< [in] handle of the device
     uint32_t count,                                 ///< [in] metric group count to activate. 0 to deactivate.
@@ -427,7 +430,7 @@ typedef struct _xet_metric_tracer_desc_t
 ///         + devices do not support metric tracer
 ///     - ::XE_RESULT_ERROR_UNSUPPORTED
 ///         + ::XET_METRIC_TRACER_DESC_VERSION_CURRENT < pDesc->version
-__xedllexport xe_result_t __xecall
+xe_result_t __xecall
 xetMetricTracerOpen(
     xe_device_handle_t hDevice,                     ///< [in] handle of the device
     xet_metric_tracer_desc_t* pDesc,                ///< [in,out] metric tracer descriptor
@@ -461,7 +464,7 @@ typedef xe_result_t (__xecall *xet_pfnMetricTracerOpen_t)(
 ///         + nullptr == hMetricTracer
 ///         + command list do not support metric tracer
 ///     - ::XE_RESULT_ERROR_UNSUPPORTED
-__xedllexport xe_result_t __xecall
+xe_result_t __xecall
 xetCommandListAppendMetricTracerMarker(
     xe_command_list_handle_t hCommandList,          ///< [in] handle of the command list
     xet_metric_tracer_handle_t hMetricTracer,       ///< [in] handle of the metric tracer
@@ -491,7 +494,7 @@ typedef xe_result_t (__xecall *xet_pfnCommandListAppendMetricTracerMarker_t)(
 ///         + nullptr == hMetricTracer
 ///         + invalid metric tracer handle
 ///     - ::XE_RESULT_ERROR_UNSUPPORTED
-__xedllexport xe_result_t __xecall
+xe_result_t __xecall
 xetMetricTracerClose(
     xet_metric_tracer_handle_t hMetricTracer        ///< [in] handle of the metric tracer
     );
@@ -518,7 +521,7 @@ typedef xe_result_t (__xecall *xet_pfnMetricTracerClose_t)(
 ///         + nullptr == pRawData
 ///         + invalid metric tracer handle
 ///     - ::XE_RESULT_ERROR_UNSUPPORTED
-__xedllexport xe_result_t __xecall
+xe_result_t __xecall
 xetMetricTracerReadData(
     xet_metric_tracer_handle_t hMetricTracer,       ///< [in] handle of the metric tracer
     uint32_t* pReportCount,                         ///< [in,out] report count to read/returned
@@ -580,7 +583,7 @@ typedef struct _xet_metric_query_pool_desc_t
 ///         + invalid device handle
 ///     - ::XE_RESULT_ERROR_UNSUPPORTED
 ///         + ::XET_METRIC_QUERY_POOL_DESC_VERSION_CURRENT < pDesc->version
-__xedllexport xe_result_t __xecall
+xe_result_t __xecall
 xetMetricQueryPoolCreate(
     xe_device_handle_t hDevice,                     ///< [in] handle of the device
     xet_metric_query_pool_desc_t* pDesc,            ///< [in] metric query pool creation data
@@ -610,7 +613,7 @@ typedef xe_result_t (__xecall *xet_pfnMetricQueryPoolCreate_t)(
 ///         + nullptr == hMetricQueryPool
 ///         + invalid metric query pool handle
 ///     - ::XE_RESULT_ERROR_UNSUPPORTED
-__xedllexport xe_result_t __xecall
+xe_result_t __xecall
 xetMetricQueryPoolDestroy(
     xet_metric_query_pool_handle_t hMetricQueryPool ///< [in] handle of the metric query pool
     );
@@ -636,7 +639,7 @@ typedef xe_result_t (__xecall *xet_pfnMetricQueryPoolDestroy_t)(
 ///         + nullptr == phMetricQuery
 ///         + invalid device handle
 ///     - ::XE_RESULT_ERROR_UNSUPPORTED
-__xedllexport xe_result_t __xecall
+xe_result_t __xecall
 xetMetricQueryPoolGetMetricQuery(
     xet_metric_query_pool_handle_t hMetricQueryPool,///< [in] handle of the metric query pool
     uint32_t ordinal,                               ///< [in] index of the query within the pool
@@ -667,7 +670,7 @@ typedef xe_result_t (__xecall *xet_pfnMetricQueryPoolGetMetricQuery_t)(
 ///         + nullptr == hMetricQuery
 ///         + invalid handle
 ///     - ::XE_RESULT_ERROR_UNSUPPORTED
-__xedllexport xe_result_t __xecall
+xe_result_t __xecall
 xetCommandListAppendMetricQueryBegin(
     xe_command_list_handle_t hCommandList,          ///< [in] handle of the command list
     xet_metric_query_handle_t hMetricQuery          ///< [in] handle of the metric query
@@ -697,7 +700,7 @@ typedef xe_result_t (__xecall *xet_pfnCommandListAppendMetricQueryBegin_t)(
 ///         + nullptr == hCompletionEvent
 ///         + invalid handle
 ///     - ::XE_RESULT_ERROR_UNSUPPORTED
-__xedllexport xe_result_t __xecall
+xe_result_t __xecall
 xetCommandListAppendMetricQueryEnd(
     xe_command_list_handle_t hCommandList,          ///< [in] handle of the command list
     xet_metric_query_handle_t hMetricQuery,         ///< [in] handle of the metric query
@@ -727,7 +730,7 @@ typedef xe_result_t (__xecall *xet_pfnCommandListAppendMetricQueryEnd_t)(
 ///         + nullptr == hCommandList
 ///         + invalid command list handle
 ///     - ::XE_RESULT_ERROR_UNSUPPORTED
-__xedllexport xe_result_t __xecall
+xe_result_t __xecall
 xetCommandListAppendMetricMemoryBarrier(
     xe_command_list_handle_t hCommandList           ///< [in] handle of the command list
     );
@@ -754,7 +757,7 @@ typedef xe_result_t (__xecall *xet_pfnCommandListAppendMetricMemoryBarrier_t)(
 ///         + nullptr == pRawData
 ///         + invalid metric query handle
 ///     - ::XE_RESULT_ERROR_UNSUPPORTED
-__xedllexport xe_result_t __xecall
+xe_result_t __xecall
 xetMetricQueryGetData(
     xet_metric_query_handle_t hMetricQuery,         ///< [in] handle of the metric query
     uint32_t* pReportCount,                         ///< [in,out] report count to read/returned

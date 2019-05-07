@@ -32,7 +32,7 @@ def generate_cpp_headers(path, namespace, tags, specs, meta, type):
 """
     generates a single c/c++ include file for the list of header files
 """
-def generate_cpp_api(path, namespace, tags, specs, files, type):
+def generate_cpp_api(path, namespace, tags, specs, meta, files, type):
     loc = 0
     template = "api_all%s.mako"%type
     fin = os.path.join("templates", template)
@@ -40,12 +40,14 @@ def generate_cpp_api(path, namespace, tags, specs, files, type):
     filename = "%s_api%s"%(namespace,type)
     fout = os.path.join(path, filename)
 
+    print("Generating %s..."%fout)
     loc += util.makoWrite(
         fin, fout,
         section=os.path.basename(path),
         namespace=namespace,
         tags=tags,
         specs=specs,
+        meta=meta,
         files=files)
     return loc
 
@@ -62,8 +64,8 @@ def generate_cpp(path, namespace, tags, specs, meta):
     hpploc, hppfiles = generate_cpp_headers(path, namespace, tags, specs, meta, ".hpp")
     inlloc, inlfiles = generate_cpp_headers(path, namespace, tags, specs, meta, ".inl")
 
-    hloc += generate_cpp_api(path, namespace, tags, specs, hfiles, ".h")
-    hpploc += generate_cpp_api(path, namespace, tags, specs, hppfiles + inlfiles, ".hpp")
+    hloc += generate_cpp_api(path, namespace, tags, specs, meta, hfiles, ".h")
+    hpploc += generate_cpp_api(path, namespace, tags, specs, meta, hppfiles + inlfiles, ".hpp")
 
     return hloc + hpploc + inlloc
 

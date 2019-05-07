@@ -50,6 +50,9 @@ def declare_obj(obj, tags):
 #define _${N}_${name.upper()}_HPP
 #if defined(__cplusplus)
 #pragma once
+#if !defined(_${N}_API_HPP)
+#pragma message("warning: this file is not intended to be included directly")
+#endif
 %if re.match(r"common", name):
 #include "${n}_api.h"
 #include <tuple>
@@ -195,7 +198,7 @@ namespace ${n}
 %endif
 
         %endfor
-        %for f in th.filter_items(th.extract_objs(specs, r"function"), 'class', obj['name']):
+        %for f in th.get_class_function_objs(specs, obj['name']):
 %if 'condition' in f:
 #if ${th.subt(n, tags, f['condition'])}
 %endif

@@ -264,7 +264,7 @@ def make_param_lines(namespace, tags, obj, cpp=False, decl=False, meta=None, for
     lines = []
 
     if cpp:
-        is_static = 'decl' in obj and re.match(r"static|singleton", obj['decl'])
+        is_static = 'decl' in obj and re.match(r"static", obj['decl'])
         is_global = 'class' in obj and re.match(r"\$x$", obj['class'])
         if is_static or is_global:
             params = filter_param_list(obj['params'], "in")
@@ -503,7 +503,7 @@ def make_returns_lines(namespace, tags, obj, cpp=False):
 """
 def make_return_value(namespace, tags, obj, cpp=False, decl=False, meta=None):
     if decl and 'decl' in obj and 'class' in obj and obj['class'] not in tags:
-        prologue = "static " if re.match("singleton", obj['decl']) else "%s "%obj['decl']
+        prologue = "%s "%obj['decl']
     else:
         prologue = ""
 
@@ -540,11 +540,8 @@ def make_func_name(namespace, tags, obj, cpp=False):
     returns the name of a function pointer
 """
 def make_pfn_name(namespace, tags, obj):
-    newtags = dict()
-    for key, value in tags.items():
-        if re.match(namespace, value):
-            newtags[key] = "pfn"
-    return make_func_name(namespace, newtags, obj)
+
+    return subt(namespace, tags, "pfn%s"%obj['name'])
 
 """
     returns the name of a function pointer
@@ -578,3 +575,53 @@ def make_baseclass_ctor(namespace, tags, obj):
     base = subt(namespace, tags, obj['base'], cpp=True)
     ctor = make_class_name(namespace, tags, obj)
     return "%s::%s"%(base, ctor)
+
+"""
+    returns a list of all function objs for the specified class
+"""
+def get_class_function_objs(specs, cls):
+    buckets = dict()
+    for s in specs:
+        for obj in s['objects']:
+            is_function = re.match("function", obj['type'])
+            match_cls = 'class' in obj and cls == obj['class']
+            if is_function and match_cls:
+                ordinal = obj['ordinal'] if 'ordinal' in obj else '9999'
+                if ordinal not in buckets:
+                    buckets[ordinal] = []
+                buckets[ordinal].append(obj)
+    objs = []
+    for k, v in sorted(buckets.items()):
+        objs.extend(v)
+    return objs
+
+"""
+    returns string name of table for function object
+"""
+def get_table_name(namespace, tags, obj):
+    if 'class' in obj:
+        cls = obj['class']
+    else:
+        cls = ""
+    name = subt(namespace, tags, cls, cpp=True)
+    name = name if len(name) > 0 else "Global"
+    return name
+
+"""
+    returns a list of dict of each pfntables needed
+"""
+def get_pfntables(specs, meta, namespace, tags):
+    tables = []
+    for cls in meta['class']:
+        objs = get_class_function_objs(specs, cls)
+        if len(objs) > 0:
+            name = get_table_name(namespace, tags, objs[0])
+            tables.append({
+                'name': name, 
+                'type': "%s_%s_apitable_t"%(namespace, camel_to_snake(name)),
+                'export': "%sGet%sProcAddrTable"%(namespace, name),
+                'pfn': "%s_pfnGet%sProcAddrTable_t"%(namespace, name),
+                'functions': objs
+        })
+    return tables
+    

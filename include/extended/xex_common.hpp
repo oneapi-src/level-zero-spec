@@ -34,6 +34,9 @@
 #define _XEX_COMMON_HPP
 #if defined(__cplusplus)
 #pragma once
+#if !defined(_XEX_API_HPP)
+#pragma message("warning: this file is not intended to be included directly")
+#endif
 #include "xex_api.h"
 #include <tuple>
 #include "xe_all.hpp"

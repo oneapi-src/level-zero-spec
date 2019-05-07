@@ -51,6 +51,9 @@ def declare_obj(obj, tags):
 #define _${N}_${name.upper()}_INL
 #if defined(__cplusplus)
 #pragma once
+#if !defined(_${N}_API_HPP)
+#pragma message("warning: this file is not intended to be included directly")
+#endif
 %if re.match(r"common", name):
 #include "${n}_api.h"
 %else:

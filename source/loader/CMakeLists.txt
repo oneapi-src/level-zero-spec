@@ -16,6 +16,5 @@ target_include_directories(${TARGET_NAME}
 
 target_compile_definitions(${TARGET_NAME}
     PRIVATE
-        XE_MAKE_DLL=1
         XE_ENABLE_OCL_INTEROP=0
 )

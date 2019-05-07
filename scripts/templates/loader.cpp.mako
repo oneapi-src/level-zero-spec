@@ -37,63 +37,56 @@ from templates import helper as th
 * @endcond
 *
 ******************************************************************************/
-#include "${n}_api.h"
 #include "loader.h"
 
-${n}_apitable_t ${n}_apitable = {};
-
-///////////////////////////////////////////////////////////////////////////////
-/// @brief Loads function pointer table for loaded driver
-bool ${n}LoadExports(
-    void* handle )  ///< [in] driver handle
-{
-    %for obj in th.extract_objs(specs, r"function"):
-    %if 'condition' in obj:
-#if ${th.subt(n, tags, obj['condition'])}
-    %endif
-    ${n}_apitable.${th.append_ws(th.make_pfn_name(n, tags, obj), 55)} = (${th.make_pfn_type(n, tags, obj)})LOAD_FUNCTION_PTR(handle, "${th.make_func_name(n, tags, obj)}");
-    %if 'condition' in obj:
-#endif
-    %endif
-    %endfor
-
-    %for obj in th.extract_objs(specs, r"function"):
-    %if 'condition' in obj:
-#if ${th.subt(n, tags, obj['condition'])}
-    %endif
-    if( nullptr == ${n}_apitable.${th.make_pfn_name(n, tags, obj)} )
-        return false;
-    %if 'condition' in obj:
-#endif
-    %endif
-    %endfor
-    return true;
-}
-
+extern ${x}_loader context;
 
 #if defined(__cplusplus)
 extern "C" {
 #endif
 
-%for obj in th.extract_objs(specs, r"function"):
-%if "Init" != obj['name']:
+%for tbl in th.get_pfntables(specs, meta, n, tags):
 ///////////////////////////////////////////////////////////////////////////////
-%if 'condition' in obj:
-#if ${th.subt(n, tags, obj['condition'])}
-%endif
-__xedllexport ${x}_result_t __${x}call
-${th.make_func_name(n, tags, obj)}(
-    %for line in th.make_param_lines(n, tags, obj):
-    ${line}
-    %endfor
+/// @brief Exported function for filling application's ${tbl['name']} table
+///        with current process' addresses
+///
+/// @returns
+///     - ::${X}_RESULT_SUCCESS
+///     - ::${X}_RESULT_ERROR_INVALID_PARAMETER
+///         + invalid value for version
+///         + nullptr for ptable
+///     - ::${X}_RESULT_ERROR_UNSUPPORTED
+///         + version not supported
+__${x}dllexport ${x}_result_t __${x}call
+${tbl['export']}(
+    uint32_t version,           ///< [in] ::XE_API_HEADER_VERSION
+    ${tbl['type']}* ptable      ///< [in,out] pointer to table of API function pointers
     )
 {
-    return ${n}_apitable.${th.make_pfn_name(n, tags, obj)}( ${", ".join(th.make_param_lines(n, tags, obj, format=["name"]))} );
+    if( nullptr == ptable )
+        return ${X}_RESULT_ERROR_INVALID_PARAMETER;
+
+    if( ${X}_API_HEADER_VERSION < version )
+        return ${X}_RESULT_ERROR_UNSUPPORTED;
+
+    ${x}_result_t result = ${X}_RESULT_SUCCESS;
+
+    if( nullptr != context.commonDriver )
+    {
+        static auto getTable = reinterpret_cast<${tbl['pfn']}>(
+            GET_FUNCTION_PTR(context.commonDriver, "${tbl['export']}") );
+        result = getTable( version, ptable );
+    }
+
+    if(( ${X}_RESULT_SUCCESS == result ) && ( nullptr != context.validationLayer ))
+    {
+        static auto getTable = reinterpret_cast<${tbl['pfn']}>(
+            GET_FUNCTION_PTR(context.validationLayer, "${tbl['export']}") );
+        result = getTable( version, ptable );
+    }
+
+    return result;
 }
-%if 'condition' in obj:
-#endif // ${th.subt(n, tags, obj['condition'])}
-%endif
-%endif
 
 %endfor
 #if defined(__cplusplus)

@@ -5,7 +5,7 @@ import util
 """
     generic function for generating c/c++ files from the specification documents
 """
-def generate_cpp(dstpath, section, namespace, tags, specs, type):
+def generate_cpp(dstpath, section, namespace, tags, specs, meta, type):
     template = "loader%s.mako"%type
     fin = os.path.join("templates", template)
 
@@ -19,16 +19,17 @@ def generate_cpp(dstpath, section, namespace, tags, specs, type):
         name=name,
         namespace=namespace,
         tags=tags,
-        specs=specs)
+        specs=specs,
+        meta=meta)
 
 """
 Entry-point:
     generates loader for level_zero driver
 """
-def generate(section, namespace, tags, specs):
+def generate(section, namespace, tags, specs, meta):
     dstpath = "../source/loader"
     util.makePath(dstpath)
 
     loc = 0
-    loc += generate_cpp(dstpath, section, namespace, tags, specs, ".cpp")
+    loc += generate_cpp(dstpath, section, namespace, tags, specs, meta, ".cpp")
     return loc

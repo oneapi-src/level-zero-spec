@@ -48,6 +48,7 @@ desc: "Creates a pool for a set of event(s) on the device."
 class: $xEventPool
 name: Create
 decl: static
+ordinal: "0"
 details:
     - "The application may call this function from simultaneous threads."
     - "The implementation of this function should be lock-free."
@@ -70,6 +71,7 @@ desc: "Deletes an event pool object."
 class: $xEventPool
 name: Destroy
 decl: static
+ordinal: "0"
 details:
     - "The application is responsible for destroying all event handles created from the pool before destroying the pool itself"
     - "The application is responsible for making sure the GPU is not currently referencing the any event within the pool before it is deleted"
@@ -134,6 +136,7 @@ desc: "Creates an event on the device."
 class: $xEvent
 name: Create
 decl: static
+ordinal: "0"
 analogue:
     - "**clCreateUserEvent**"
     - vkCreateEvent
@@ -160,6 +163,7 @@ desc: "Deletes an event object."
 class: $xEvent
 name: Destroy
 decl: static
+ordinal: "0"
 details:
     - "The application is responsible for making sure the GPU is not currently referencing the event before it is deleted"
     - "The implementation of this function will immediately free all Host and Device allocations associated with this event"

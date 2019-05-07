@@ -26,20 +26,8 @@
 ******************************************************************************/
 #include <stdlib.h>
 #include "layer.h"
-#include "xe_api.h"
-#include "xex_api.h"
-#include "xet_api.h"
 
-xe_validation_enables_t xe_validation_enables = {};
-
-///////////////////////////////////////////////////////////////////////////////
-extern xe_apitable_t xe_apitable;
-extern xex_apitable_t xex_apitable;
-extern xet_apitable_t xet_apitable;
-
-bool xeIntercept( xe_apitable_t* );
-bool xexIntercept( xex_apitable_t* );
-bool xetIntercept( xet_apitable_t* );
+xe_layer context;
 
 ///////////////////////////////////////////////////////////////////////////////
 inline bool getenv_tobool( const char* name )
@@ -50,34 +38,16 @@ inline bool getenv_tobool( const char* name )
     return strcmp( "1", env );
 }
 
-
-#if defined(__cplusplus)
-extern "C" {
-#endif
-
 ///////////////////////////////////////////////////////////////////////////////
-__xedllexport xe_result_t __xecall
-xeInitLayer(
-    xe_apitable_t*  xeapi,
-    xex_apitable_t* xexapi,
-    xet_apitable_t* xetapi )
+xe_layer::xe_layer()
 {
-    bool initialized = 
-        xeIntercept(xeapi) &&
-        xexIntercept(xexapi) &&
-        xetIntercept(xetapi);
-            
-    if( !initialized )
-        return XE_RESULT_ERROR_UNINITIALIZED;
-
-    xe_validation_enables.ParameterValidation = getenv_tobool("XE_ENABLE_PARAMETER_VALIDATION");
-    xe_validation_enables.HandleLifetime = getenv_tobool( "XE_ENABLE_HANDLE_LIFETIME" );
-    xe_validation_enables.MemoryTracker = getenv_tobool( "XE_ENABLE_MEMORY_TRACKER" );
-    xe_validation_enables.ThreadingValidation = getenv_tobool( "XE_ENABLE_THREADING_VALIDATION" );
-
-    return XE_RESULT_SUCCESS;
+    enableParameterValidation = getenv_tobool("XE_ENABLE_PARAMETER_VALIDATION");
+    enableHandleLifetime = getenv_tobool( "XE_ENABLE_HANDLE_LIFETIME" );
+    enableMemoryTracker = getenv_tobool( "XE_ENABLE_MEMORY_TRACKER" );
+    enableThreadingValidation = getenv_tobool( "XE_ENABLE_THREADING_VALIDATION" );
 }
 
-#if defined(__cplusplus)
-};
-#endif
+///////////////////////////////////////////////////////////////////////////////
+xe_layer::~xe_layer()
+{
+}

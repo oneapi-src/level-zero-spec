@@ -35,6 +35,9 @@
 #if defined(__cplusplus)
 #pragma once
 #endif
+#if !defined(_XE_API_H)
+#pragma message("warning: this file is not intended to be included directly")
+#endif
 #include "xe_common.h"
 
 #if defined(__cplusplus)
@@ -54,10 +57,9 @@ typedef enum _xe_init_flag_t
 ///        function.
 /// 
 /// @details
-///     - Only one instance of a driver per process can be loaded.
-///     - There is no reference tracking if multiple drivers are initialized.
 ///     - If this function is not called then all other functions will return
 ///       ::XE_RESULT_ERROR_UNINITIALIZED.
+///     - Only one instance of a driver per process will be initialized.
 ///     - This function is thread-safe for scenarios where multiple libraries
 ///       may initialize the driver simultaneously.
 /// 
@@ -73,7 +75,7 @@ typedef enum _xe_init_flag_t
 ///         + invalid value for flags
 ///     - ::XE_RESULT_ERROR_UNSUPPORTED
 ///     - ::XE_RESULT_ERROR_OUT_OF_HOST_MEMORY
-__xedllexport xe_result_t __xecall
+xe_result_t __xecall
 xeInit(
     xe_init_flag_t flags                            ///< [in] initialization flags
     );
@@ -104,7 +106,7 @@ typedef xe_result_t (__xecall *xe_pfnInit_t)(
 ///     - ::XE_RESULT_ERROR_INVALID_PARAMETER
 ///         + nullptr == version
 ///     - ::XE_RESULT_ERROR_UNSUPPORTED
-__xedllexport xe_result_t __xecall
+xe_result_t __xecall
 xeGetDriverVersion(
     uint32_t* version                               ///< [out] driver version
     );

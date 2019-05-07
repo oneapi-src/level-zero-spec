@@ -37,50 +37,58 @@ from templates import helper as th
 * @endcond
 *
 ******************************************************************************/
-#include "${n}_api.h"
 #include "layer.h"
 
-${n}_apitable_t ${n}_apitable = {};
-
-///////////////////////////////////////////////////////////////////////////////
-/// @brief Intercepts function pointer table for loaded driver
-bool ${n}Intercept(
-    ${n}_apitable_t* original ) ///< [in] pointer to table of ${n} API function pointers
-{
-    if(nullptr == original)
-        return false;
-    %for obj in th.extract_objs(specs, r"function"):
-    %if 'condition' in obj:
-#if ${th.subt(n, tags, obj['condition'])}
-    %endif
-    if( nullptr == original->${th.make_pfn_name(n, tags, obj)} )
-        return false;
-    %if 'condition' in obj:
-#endif
-    %endif
-    %endfor
-
-    %for obj in th.extract_objs(specs, r"function"):
-    %if 'condition' in obj:
-#if ${th.subt(n, tags, obj['condition'])}
-    %endif
-    ${n}_apitable.${th.append_ws(th.make_pfn_name(n, tags, obj), 55)} = original->${th.make_pfn_name(n, tags, obj)};
-    original->${th.append_ws(th.make_pfn_name(n, tags, obj), 55+len(n))} = ${th.make_func_name(n, tags, obj)};
-    %if 'condition' in obj:
-#endif
-    %endif
-
-    %endfor
-    return true;
-}
-
+extern ${x}_layer context;
 
 #if defined(__cplusplus)
 extern "C" {
 #endif
 
+%for tbl in th.get_pfntables(specs, meta, n, tags):
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Exported function for filling application's ${tbl['name']} table
+///        with current process' addresses
+///
+/// @returns
+///     - ::${X}_RESULT_SUCCESS
+///     - ::${X}_RESULT_ERROR_INVALID_PARAMETER
+///         + invalid value for version
+///         + nullptr for ptable
+///     - ::${X}_RESULT_ERROR_UNSUPPORTED
+///         + version not supported
+__${x}dllexport ${x}_result_t __${x}call
+${tbl['export']}(
+    uint32_t version,           ///< [in] ::XE_API_HEADER_VERSION
+    ${tbl['type']}* ptable      ///< [in,out] pointer to table of API function pointers
+    )
+{
+    if( nullptr == ptable )
+        return ${X}_RESULT_ERROR_INVALID_PARAMETER;
+
+    if( ${X}_API_HEADER_VERSION < version )
+        return ${X}_RESULT_ERROR_UNSUPPORTED;
+
+    ${x}_result_t result = ${X}_RESULT_SUCCESS;
+
+    %for obj in tbl['functions']:
+    %if 'condition' in obj:
+#if ${th.subt(n, tags, obj['condition'])}
+    %endif
+    context.${n}${tbl['name']}.${th.append_ws(th.make_pfn_name(n, tags, obj), 55)} = ptable->${th.make_pfn_name(n, tags, obj)};
+    ptable->${th.append_ws(th.make_pfn_name(n, tags, obj), 56+len(n)+len(tbl['name']))} = ${th.make_func_name(n, tags, obj)};
+    %if 'condition' in obj:
+#endif
+    %endif
+
+    %endfor
+    return result;
+}
+
+%endfor
 %for obj in th.extract_objs(specs, r"function"):
 ///////////////////////////////////////////////////////////////////////////////
+/// @brief Intercept function for ${th.make_func_name(n, tags, obj)}
 %if 'condition' in obj:
 #if ${th.subt(n, tags, obj['condition'])}
 %endif
@@ -91,12 +99,8 @@ ${th.make_func_name(n, tags, obj)}(
     %endfor
     )
 {
-    if( ${x}_validation_enables.ParameterValidation )
+    if( context.enableParameterValidation )
     {
-        if( nullptr == ${n}_apitable.${th.make_pfn_name(n, tags, obj)} )
-            return ${X}_RESULT_ERROR_UNINITIALIZED;
-
-        // Check parameters
         %for key, values in th.make_param_checks(n, tags, obj).items():
         %for val in values:
         if( ${val} )
@@ -105,7 +109,8 @@ ${th.make_func_name(n, tags, obj)}(
         %endfor
         %endfor
     }
-    return ${n}_apitable.${th.make_pfn_name(n, tags, obj)}( ${", ".join(th.make_param_lines(n, tags, obj, format=["name"]))} );
+
+    return context.${n}${th.get_table_name(n, tags, obj)}.${th.make_pfn_name(n, tags, obj)}( ${", ".join(th.make_param_lines(n, tags, obj, format=["name"]))} );
 }
 %if 'condition' in obj:
 #endif // ${th.subt(n, tags, obj['condition'])}

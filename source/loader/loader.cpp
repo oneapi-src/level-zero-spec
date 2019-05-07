@@ -27,72 +27,32 @@
 #include <mutex>
 #include <stdlib.h>
 #include "loader.h"
-#include "xe_api.h"
-#include "xex_api.h"
-#include "xet_api.h"
-
-///////////////////////////////////////////////////////////////////////////////
-extern xe_apitable_t xe_apitable;
-extern xex_apitable_t xex_apitable;
-extern xet_apitable_t xet_apitable;
-
-bool xeLoadExports( void* );
-bool xexLoadExports( void* );
-bool xetLoadExports( void* );
-
-///////////////////////////////////////////////////////////////////////////////
-typedef xe_result_t( __xecall *xe_pfnInitLayer_t )(
-    xe_apitable_t*,
-    xex_apitable_t*,
-    xet_apitable_t*
-    );
 
 ///////////////////////////////////////////////////////////////////////////////
 inline bool getenv_tobool( const char* name )
 {
     const char* env = getenv( name );
-    if(( nullptr == env ) || strcmp( "0", env ))
+    if( ( nullptr == env ) || strcmp( "0", env ) )
         return false;
-    return strcmp( "1", env );
+    return strcmp( "0", env ) ? false : true;
 }
-
-
-#if defined(__cplusplus)
-extern "C" {
-#endif
 
 ///////////////////////////////////////////////////////////////////////////////
-__xedllexport xe_result_t __xecall
-xeInit(
-    xe_init_flag_t flags )
+xe_loader context;
+
+
+///////////////////////////////////////////////////////////////////////////////
+xe_loader::xe_loader()
 {
-    static std::mutex crit;
-    std::lock_guard<std::mutex> lockGuard{crit};
+    commonDriver = LOAD_DRIVER_LIBRARY( "xe_common" );
 
-    static bool initialized = false;
-    if( initialized )
-        return XE_RESULT_SUCCESS;
-        
-    auto driverLibrary = LOAD_DRIVER_LIBRARY("xe_common"); // todo: fix persistent handle
-
-    initialized =
-        xeLoadExports( driverLibrary ) &&
-        xexLoadExports( driverLibrary ) &&
-        xetLoadExports (driverLibrary );
-            
-    if( !initialized )
-        return XE_RESULT_ERROR_UNINITIALIZED;
-
-    if( getenv_tobool("XE_ENABLE_VALIDATION_LAYER") )
-    {
-        auto validationLayer = LOAD_DRIVER_LIBRARY("xe_validation_layer"); // todo: fix persistent handle
-        auto xeInitLayer = (xe_pfnInitLayer_t)LOAD_FUNCTION_PTR(validationLayer, "xeInitLayer");
-        xeInitLayer( &xe_apitable, &xex_apitable, &xet_apitable );
-    }
-
-    return xe_apitable.pfnInit( flags );
-}
-
-#if defined(__cplusplus)
+    if( getenv_tobool( "XE_ENABLE_VALIDATION_LAYER" ) )
+        validationLayer = LOAD_DRIVER_LIBRARY( "xe_validation_layer" );
 };
-#endif
+
+///////////////////////////////////////////////////////////////////////////////
+xe_loader::~xe_loader()
+{
+    FREE_DRIVER_LIBRARY( validationLayer );
+    FREE_DRIVER_LIBRARY( commonDriver );
+};

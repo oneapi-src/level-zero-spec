@@ -6,7 +6,8 @@ type: function
 desc: "Reports the number of devices"
 class: $xDevice
 name: GetCount
-decl: singleton
+decl: static
+ordinal: "0"
 analogue:
     - "**cuDeviceGetCount**"
 details:
@@ -35,7 +36,8 @@ type: function
 desc: "Returns a handle to the device object"
 class: $xDevice
 name: Get
-decl: singleton
+decl: static
+ordinal: "0"
 analogue:
     - "**cuDeviceGet**"
     - clGetDeviceIDs
@@ -57,6 +59,7 @@ type: function
 desc: "Returns a handle to the sub-device object"
 class: $xDevice
 name: GetSubDevice
+ordinal: "1"
 analogue:
     - "**cuDeviceGet**"
     - clGetDeviceIDs
@@ -92,6 +95,7 @@ type: function
 desc: "Returns the API version supported by the device"
 class: $xDevice
 name: GetApiVersion
+ordinal: "1"
 analogue:
     - "**cuCtxGetApiVersion**"
 details:
@@ -196,6 +200,7 @@ type: function
 desc: "Retrieves attributes of the device"
 class: $xDevice
 name: GetProperties
+ordinal: "1"
 analogue:
     - "**cuDeviceGetAttribute**"
     - cuDeviceGetName
@@ -269,6 +274,7 @@ type: function
 desc: "Retrieves compute attributes of the device"
 class: $xDevice
 name: GetComputeProperties
+ordinal: "1"
 analogue:
     - "**cuDeviceGetAttribute**"
     - clGetDeviceInfo
@@ -371,6 +377,7 @@ type: function
 desc: "Retrieves memory attributes of the device"
 class: $xDevice
 name: GetMemoryProperties
+ordinal: "1"
 analogue:
     - "**cuDeviceGetAttribute**"
     - cuDeviceTotalMem
@@ -416,6 +423,7 @@ type: function
 desc: "Retrieves Peer-to-Peer properties between one device and a peer devices"
 class: $xDevice
 name: GetP2PProperties
+ordinal: "1"
 analogue:
     - "**cudaDeviceGetP2PAttribute**"
 details:
@@ -436,6 +444,7 @@ type: function
 desc: "Queries if one device can directly access peer device allocations"
 class: $xDevice
 name: CanAccessPeer
+ordinal: "2"
 analogue:
     - "**cudaDeviceCanAccessPeer**"
 details:
@@ -473,6 +482,7 @@ type: function
 desc: "Sets the preferred Intermediate cache configuration for a device."
 class: $xDevice
 name: SetIntermediateCacheConfig
+ordinal: "2"
 details:
     - "The application may **not** call this function from simultaneous threads with the same device handle."
 analogue:
@@ -492,6 +502,7 @@ type: function
 desc: "Sets the preferred Last Level cache configuration for a device."
 class: $xDevice
 name: SetLastLevelCacheConfig
+ordinal: "2"
 details:
     - "The application may **not** call this function from simultaneous threads with the same device handle."
 analogue:

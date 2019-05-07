@@ -246,6 +246,7 @@ desc: "Retrieves supported properties of an image."
 class: $xImage
 name: GetProperties
 decl: static
+ordinal: "0"
 details:
     - "The application may call this function from simultaneous threads."
     - "The implementation of this function should be lock-free."
@@ -265,6 +266,7 @@ desc: "Creates a image object on the device."
 class: $xImage
 name: Create
 decl: static
+ordinal: "0"
 analogue:
     - clCreateImage
 details:
@@ -289,6 +291,7 @@ desc: "Deletes a image object."
 class: $xImage
 name: Destroy
 decl: static
+ordinal: "0"
 details:
     - "The application is responsible for making sure the GPU is not currently referencing the image before it is deleted"
     - "The implementation of this function will immediately free all Host and Device allocations associated with this image"

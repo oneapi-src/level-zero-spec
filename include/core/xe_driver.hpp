@@ -34,6 +34,9 @@
 #define _XE_DRIVER_HPP
 #if defined(__cplusplus)
 #pragma once
+#if !defined(_XE_API_HPP)
+#pragma message("warning: this file is not intended to be included directly")
+#endif
 #include "xe_common.hpp"
 
 namespace xe
@@ -51,10 +54,9 @@ namespace xe
     ///        function.
     /// 
     /// @details
-    ///     - Only one instance of a driver per process can be loaded.
-    ///     - There is no reference tracking if multiple drivers are initialized.
     ///     - If this function is not called then all other functions will return
     ///       ::RESULT_ERROR_UNINITIALIZED.
+    ///     - Only one instance of a driver per process will be initialized.
     ///     - This function is thread-safe for scenarios where multiple libraries
     ///       may initialize the driver simultaneously.
     /// 

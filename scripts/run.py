@@ -84,10 +84,10 @@ def main():
             generate_api.generate(dstpath, namespace, tags, specs, meta)
 
             if args['loader']:
-                generate_loader.generate(section, namespace, tags, specs)
+                generate_loader.generate(section, namespace, tags, specs, meta)
 
             if args['layers']:
-                generate_layers.generate(section, namespace, tags, specs)
+                generate_layers.generate(section, namespace, tags, specs, meta)
 
             if args['md']:
                 generate_docs.generate_md(srcpath, dstpath, tags, meta)
