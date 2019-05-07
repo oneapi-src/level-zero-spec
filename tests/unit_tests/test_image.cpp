@@ -1,3 +1,4 @@
+#include "global_fixture.h"
 #include "mock_image.h"
 #include "mock_device.h"
 #include "mock_module_precompiled.h"
@@ -28,7 +29,9 @@ TEST(xeImageDestroy, redirectsToObject) {
     EXPECT_EQ(XE_RESULT_SUCCESS, result);
 }
 
-using ImageCreate = ::testing::Test;
+struct ImageCreate : public GlobalFixtureTest {
+};
+
 
 TEST_F(ImageCreate, returnsImageOnSuccess) {
     Mock<Device> device;
@@ -139,7 +142,8 @@ HWTEST2_F(ImageCreate, descBadParamsFail, MatchAny) {
     ASSERT_FALSE(ret);
 }
 
-using ImageSurfaceState = ::testing::Test;
+struct ImageSurfaceState : public GlobalFixtureTest {
+};
 
 HWTEST2_F(ImageSurfaceState, descMatchesSurface, MatchAny) {
     using RENDER_SURFACE_STATE = typename FamilyType::RENDER_SURFACE_STATE;
