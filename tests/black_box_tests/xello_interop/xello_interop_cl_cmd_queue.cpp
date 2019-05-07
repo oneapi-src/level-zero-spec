@@ -116,33 +116,33 @@ int xeInitProgram() {
         return -1;
     }
 
-    std::cout << "xeDeviceCreateModule...\n";
+    std::cout << "xeModuleCreate...\n";
     xe_module_desc_t xeModuleDesc = {XE_MODULE_DESC_VERSION_CURRENT};
     xeModuleDesc.format = XE_MODULE_FORMAT_IL_SPIRV;
     xeModuleDesc.pInputModule = reinterpret_cast<const uint8_t *>(spirvModule.get());
     xeModuleDesc.inputSize = spirvSize;
     ret = xeModuleCreate(xeDevice, &xeModuleDesc, &xeModule, nullptr);
     if(ret) {
-        std::cout << "xeDeviceCreateModule failed ret "
+        std::cout << "xeModuleCreate failed ret "
                 << static_cast<int>(ret) << "\n";
         return static_cast<int>(ret);
     }
 
-    std::cout << "xeModuleCreateFunction...\n";
+    std::cout << "xeFunctionCreate...\n";
     xe_function_desc_t xeFunctionDesc = {XE_FUNCTION_DESC_VERSION_CURRENT};
     xeFunctionDesc.pFunctionName = "matmat_gpu";
     ret = xeFunctionCreate(xeModule, &xeFunctionDesc, &xeFunction);
     if(ret) {
-        std::cout << "xeModuleCreateFunction failed ret "
+        std::cout << "xeFunctionCreate failed ret "
                 << static_cast<int>(ret) << "\n";
         return static_cast<int>(ret);
     }
 
-    std::cout << "xeDeviceCreateCommandList...\n";
+    std::cout << "xeCommandListCreate...\n";
     xe_command_list_desc_t xeCmdListDesc = {XE_COMMAND_LIST_DESC_VERSION_CURRENT};
     ret = xeCommandListCreate(xeDevice, &xeCmdListDesc, &xeCmdList);
     if(ret) {
-        std::cout << "xeDeviceCreateCommandList failed ret "
+        std::cout << "xeCommandListCreate failed ret "
                 << static_cast<int>(ret) << "\n";
         return static_cast<int>(ret);
     }
