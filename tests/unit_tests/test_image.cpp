@@ -89,7 +89,7 @@ HWTEST2_F(ImageCreate, descBadParamsFail, MatchAny) {
 
     auto imageCore = new ImageCoreFamily<gfxCoreFamily>();
 
-    xe_image_desc_t desc, default_desc;
+    xe_image_desc_t desc = {}, default_desc = {};
     bool ret;
 
     default_desc.type = XE_IMAGE_TYPE_2D;
