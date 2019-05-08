@@ -206,38 +206,6 @@ void L0Context::clean_xe() {
 }
 
 //---------------------------------------------------------------------
-// Utility function to enqueue an operation to be performed using
-// a device buffer. This support the ability to add Copy calls with
-// this device buffer into the Command List.
-// Currently supported calls are:
-//          WRITE -> Copy from Host to Device Buffer
-//          READ -> Copy from Device to Host Buffer
-// On error, an exception will be thrown describing the failure.
-//---------------------------------------------------------------------
-void L0Context::enqueue_op_with_device_buffer(void *device_buffer, void *local_buffer, size_t size_of_data, MemoryOperation type) {
-    xe_result_t result = XE_RESULT_SUCCESS;
-    void *destination_buffer;
-    void *source_buffer;
-
-    switch (type) {
-    case (MemoryOperation::WRITE):
-        destination_buffer = device_buffer;
-        source_buffer = local_buffer;
-    case (MemoryOperation::READ):
-        destination_buffer = local_buffer;
-        source_buffer = device_buffer;
-    }
-
-    result = xeCommandListAppendMemoryCopy(command_list, destination_buffer, source_buffer,
-                                           size_of_data, nullptr, 0, nullptr);
-    if (result) {
-        throw std::runtime_error("xeCommandListAppendMemoryCopy failed: " + result);
-    }
-    if (verbose)
-        std::cout << "Copy of Host to Device Buffer Enqueued\n";
-}
-
-//---------------------------------------------------------------------
 // Utility function to execute the command list & synchronize
 // the command queue. This function will reset the command list once the
 // queue has been synchronized indicating that the commands in the command
@@ -424,21 +392,26 @@ float XePeak::run_kernel(L0Context context, xe_function_handle_t &function,
         timed = timer.stopAndTime();
     } else if (type == TimingMeasurement::KERNEL_LAUNCH_LATENCY) {
         xe_event_pool_desc_t kernel_launch_event_pool_desc;
+        xe_event_desc_t kernel_launch_event_desc;
         xe_event_pool_handle_t kernel_launch_event_pool;
         xe_event_handle_t kernel_launch_event;
         kernel_launch_event_pool_desc.count = 1;
         kernel_launch_event_pool_desc.flags = XE_EVENT_POOL_FLAG_HOST_VISIBLE;
         kernel_launch_event_pool_desc.version = XE_EVENT_POOL_DESC_VERSION_CURRENT;
+        kernel_launch_event_desc.index = 0;
+        kernel_launch_event_desc.signal = XE_EVENT_SCOPE_FLAG_NONE;
+        kernel_launch_event_desc.wait = XE_EVENT_SCOPE_FLAG_NONE;
+        kernel_launch_event_desc.version = XE_EVENT_DESC_VERSION_CURRENT;
 
         result = xeEventPoolCreate(context.device, &kernel_launch_event_pool_desc, &kernel_launch_event_pool);
         if (result) {
-            throw std::runtime_error("xeDeviceCreateEventPool failed: " + result);
+            throw std::runtime_error("xeEventPoolCreate failed: " + result);
         }
         if (verbose)
             std::cout << "Event Pool Created\n";
-        result = xeEventCreate(kernel_launch_event_pool, 0, &kernel_launch_event);
+        result = xeEventCreate(kernel_launch_event_pool, &kernel_launch_event_desc, &kernel_launch_event);
         if (result) {
-            throw std::runtime_error("xeEventPoolCreateEvent failed: " + result);
+            throw std::runtime_error("xeEventCreate failed: " + result);
         }
         if (verbose)
             std::cout << "Event Created\n";

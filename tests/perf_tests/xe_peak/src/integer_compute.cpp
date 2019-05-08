@@ -36,7 +36,7 @@ void XePeak::xe_peak_int_compute(L0Context &context) {
     uint64_t max_work_items = get_max_work_items(context) *
                               2048; // same multiplier in clPeak
     uint64_t max_number_of_allocated_items = MAX_DEVICE_OBJECT_SIZE / sizeof(int);
-    uint64_t number_of_work_items = MIN(max_number_of_allocated_items, max_work_items);
+    uint64_t number_of_work_items = MIN(max_number_of_allocated_items, (max_work_items * sizeof(int)));
 
     number_of_work_items = set_workgroups(context, number_of_work_items, &workgroup_info);
 

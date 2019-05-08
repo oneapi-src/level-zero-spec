@@ -64,11 +64,6 @@ enum class TimingMeasurement {
     KERNEL_COMPLETE_LATENCY
 };
 
-enum class MemoryOperation {
-    WRITE = 0,
-    READ
-};
-
 struct L0Context {
   xe_command_queue_handle_t command_queue;
   xe_command_list_handle_t command_list;
@@ -86,8 +81,6 @@ struct L0Context {
   void print_xe_device_properties(const xe_device_properties_t &props);
   void reset_commandlist();
   void execute_commandlist_and_sync();
-  void enqueue_op_with_device_buffer(void *device_buffer, void *local_buffer,
-        size_t size_of_data, MemoryOperation type);
   std::vector<uint8_t> load_binary_file(const std::string &file_path);
   void create_module(std::vector<uint8_t> binary_file);
 };

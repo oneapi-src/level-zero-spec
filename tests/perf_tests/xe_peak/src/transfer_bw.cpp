@@ -34,6 +34,8 @@ void XePeak::xe_peak_transfer_bw(L0Context &context) {
         local_memory[i] = static_cast<float>(i);
     }
 
+    size_t size_of_data = (local_memory.size() * sizeof(float));
+
     void *device_buffer;
     result = xeMemAlloc(context.device, XE_DEVICE_MEM_ALLOC_FLAG_DEFAULT,
                         sizeof(float) * number_of_items, 1, &device_buffer);
@@ -52,12 +54,21 @@ void XePeak::xe_peak_transfer_bw(L0Context &context) {
     timed = 0;
 
     for (uint32_t i = 0; i < warmup_iterations; i++) {
-        context.enqueue_op_with_device_buffer(device_buffer, local_memory.data(), (local_memory.size() * sizeof(float)), MemoryOperation::WRITE);
+        result = xeCommandListAppendMemoryCopy(context.command_list, device_buffer, local_memory.data(),
+                                               size_of_data, nullptr, 0, nullptr);
+        if (result) {
+            throw std::runtime_error("xeCommandListAppendMemoryCopy failed: " + result);
+        }
     }
+    context.execute_commandlist_and_sync();
 
     timer.start();
     for (uint32_t i = 0; i < iters; i++) {
-        context.enqueue_op_with_device_buffer(device_buffer, local_memory.data(), (local_memory.size() * sizeof(float)), MemoryOperation::WRITE);
+        result = xeCommandListAppendMemoryCopy(context.command_list, device_buffer, local_memory.data(),
+                                               size_of_data, nullptr, 0, nullptr);
+        if (result) {
+            throw std::runtime_error("xeCommandListAppendMemoryCopy failed: " + result);
+        }
     }
     context.execute_commandlist_and_sync();
     timed = timer.stopAndTime();
@@ -75,12 +86,21 @@ void XePeak::xe_peak_transfer_bw(L0Context &context) {
     timed = 0;
 
     for (uint32_t i = 0; i < warmup_iterations; i++) {
-        context.enqueue_op_with_device_buffer(device_buffer, local_memory.data(), (local_memory.size() * sizeof(float)), MemoryOperation::READ);
+        result = xeCommandListAppendMemoryCopy(context.command_list, local_memory.data(), device_buffer,
+                                               size_of_data, nullptr, 0, nullptr);
+        if (result) {
+            throw std::runtime_error("xeCommandListAppendMemoryCopy failed: " + result);
+        }
     }
+    context.execute_commandlist_and_sync();
 
     timer.start();
     for (uint32_t i = 0; i < iters; i++) {
-        context.enqueue_op_with_device_buffer(local_memory.data(), device_buffer, (local_memory.size() * sizeof(float)), MemoryOperation::READ);
+        result = xeCommandListAppendMemoryCopy(context.command_list, local_memory.data(), device_buffer,
+                                               size_of_data, nullptr, 0, nullptr);
+        if (result) {
+            throw std::runtime_error("xeCommandListAppendMemoryCopy failed: " + result);
+        }
     }
     context.execute_commandlist_and_sync();
     timed = timer.stopAndTime();
