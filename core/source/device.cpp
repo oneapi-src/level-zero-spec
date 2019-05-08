@@ -269,6 +269,7 @@ struct DeviceImp : public Device {
         auto allocation = globalMemoryManager->allocateManagedMemoryFromFault(
             this, graphicsAllocationRT->getUnderlyingBuffer(),
             graphicsAllocationRT->getUnderlyingBufferSize());
+        allocation->allocType = AllocationType::SHARED;
 
         *ptr = allocation->getHostAddress();
 

@@ -1,3 +1,4 @@
+#pragma once
 void matmat_host(int n, int m, int p, float *a, float *b, float *c);
 
 int xeInit();
