@@ -241,16 +241,16 @@ The following table documents the supported knobs for overriding default driver 
 ## --validate=off
 | Category            | Name                                        | Values            | Description                                                                       |
 |---------------------|---------------------------------------------|-------------------|-----------------------------------------------------------------------------------|
-| Device              | [${X}_AFFINITY_MASK](#aff)                  | hex string        | Forces driver to only report devices (and sub-devices) as specified by mask value |
+| Device              | [${X}_AFFINITY_MASK](\#aff)                  | hex string        | Forces driver to only report devices (and sub-devices) as specified by mask value |
 | Memory              | ${X}_SHARED_FORCE_DEVICE_ALLOC              | {**0**, 1}        | Forces all shared allocations into device memory                                  |
-| Validation          | [${X}_ENABLE_VALIDATION_LAYER](#v0)         | {**0**, 1}        | Enables validation layer for debugging                                            |
-| ^                   | [${X}_ENABLE_PARAMETER_VALIDATION](#v1)     | {**0**, 1}        | Enables the validation level for parameters                                       |
-| ^                   | [${X}_ENABLE_HANDLE_LIFETIME](#v2)          | {**0**, 1}        | Enables the validation level for tracking handle lifetime                         |
-| ^                   | [${X}_ENABLE_MEMORY_TRACKER](#v3)           | {**0**, 1}        | Enables the validation level for tracking memory lifetime                         |
-| ^                   | [${X}_ENABLE_THREADING_VALIDATION](#v4)     | {**0**, 1}        | Enables the validation level for multithreading usage                             |
-| Instrumentation     | [${X}_ENABLE_INSTRUMENTATION_LAYER](#i0)    | {**0**, 1}        | Enables instrumentation layer for profiling                                       |
-| ^                   | [${X}_ENABLE_API_TRACING](#i1)              | {**0**, 1}        | Enables the instrumentation level for tracing API calls                           |
-| ^                   | [${X}_ENABLE_PIN](#i2)                      | {**0**, 1}        | Enables the instrumentation level for program instrumentation                     |
+| Validation          | [${X}_ENABLE_VALIDATION_LAYER](\#v0)         | {**0**, 1}        | Enables validation layer for debugging                                            |
+| ^                   | [${X}_ENABLE_PARAMETER_VALIDATION](\#v1)     | {**0**, 1}        | Enables the validation level for parameters                                       |
+| ^                   | [${X}_ENABLE_HANDLE_LIFETIME](\#v2)          | {**0**, 1}        | Enables the validation level for tracking handle lifetime                         |
+| ^                   | [${X}_ENABLE_MEMORY_TRACKER](\#v3)           | {**0**, 1}        | Enables the validation level for tracking memory lifetime                         |
+| ^                   | [${X}_ENABLE_THREADING_VALIDATION](\#v4)     | {**0**, 1}        | Enables the validation level for multithreading usage                             |
+| Instrumentation     | [${X}_ENABLE_INSTRUMENTATION_LAYER](\#i0)    | {**0**, 1}        | Enables instrumentation layer for profiling                                       |
+| ^                   | [${X}_ENABLE_API_TRACING](\#i1)              | {**0**, 1}        | Enables the instrumentation level for tracing API calls                           |
+| ^                   | [${X}_ENABLE_PIN](\#i2)                      | {**0**, 1}        | Enables the instrumentation level for program instrumentation                     |
 ## --validate=on
 
 ${"###"} <a name="aff">Affinity Mask</a>

@@ -1794,7 +1794,8 @@ LATEX_EXTRA_FILES      = ../images/core_event.png \
                          ../images/core_subdevice.png \
                          ../images/intel-logo.png \
                          ../images/intro_driver.png \
-                         ../images/intro_tools.png
+                         ../images/intro_tools.png \
+                         ../images/title.png
 
 # If the PDF_HYPERLINKS tag is set to YES, the LaTeX that is generated is
 # prepared for conversion to PDF (using ps2pdf or pdflatex). The PDF file will
