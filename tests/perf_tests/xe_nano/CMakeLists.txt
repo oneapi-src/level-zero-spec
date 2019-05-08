@@ -10,7 +10,7 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(XE_NANO_COMMON src/xe_app.cpp)
 set(XE_NANO_BENCHMARKS
     src/xe_nano.cpp
-    src/benchmark_set_parameter.cpp
+    src/benchmark.cpp
 )
 
 add_executable(xe_nano ${XE_NANO_COMMON} ${XE_NANO_BENCHMARKS})

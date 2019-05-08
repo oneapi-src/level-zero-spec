@@ -40,9 +40,10 @@ inline void print_probe_output(const std::string prefix,
               << std::endl;
 }
 
-#define XE_MEASURE_LATENCY_ITERATION(prefix, iteration_number, function_name, ...)  \
-    _function_call_iter_measure_latency(__FILE__, __LINE__, #function_name,         \
-                                        prefix, iteration_number, function_name,    \
+#define PROBE_MEASURE_LATENCY_ITERATION(prefix, iteration_number, function_name, ...) \
+    _function_call_iter_measure_latency(__FILE__, __LINE__, #function_name,           \
+                                        prefix, iteration_number,                     \
+                                        function_name,                                \
                                         __VA_ARGS__)
 template <typename... Params, typename... Args>
 int64_t _function_call_iter_measure_latency(const std::string filename,

@@ -20,29 +20,12 @@
  * SOFTWARE.
  */
 #include "benchmark.hpp"
+#include "api_static_probe.hpp"
 
-int main() {
-    XeApp nano_benchmarks("xe_nano_benchmarks.spv");
-    int warm_up_iteration = 1000;
-    int measure_iteration = 9000;
-
-    std::cout << "xeFunctionSetArgumentValue: Buffer argument"
-              << "\tWarm up iterations " << warm_up_iteration
-              << "\tMeasured iterations " << measure_iteration
-              << std::endl;
-    xe_api_benchmarks::latency::parameter_buffer(&nano_benchmarks,
-                                                 warm_up_iteration,
-                                                 measure_iteration);
-    std::cout << std::endl;
-
-    std::cout << "xeFunctionSetArgumentValue: Immediate argument"
-              << "\tWarm up iterations " << warm_up_iteration
-              << "\tMeasured iterations " << measure_iteration
-              << std::endl;
-    xe_api_benchmarks::latency::parameter_integer(&nano_benchmarks,
-                                                  warm_up_iteration,
-                                                  measure_iteration);
-    std::cout << std::endl;
-
-    return 0;
-}
+namespace xe_api_benchmarks {
+#undef NANO_PROBE
+#define NANO_PROBE PROBE_MEASURE_LATENCY_ITERATION
+namespace latency {
+#include "benchmark_template/set_parameter.cpp"
+} /* namespace latency */
+} /* namespace xe_api_benchmarks */
