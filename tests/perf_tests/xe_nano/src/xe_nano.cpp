@@ -26,10 +26,19 @@ int main() {
     int warm_up_iteration = 1000;
     int measure_iteration = 9000;
 
+    std::cout << "xeFunctionSetArgumentValue: Buffer argument"
+              << "\tWarm up iterations " << warm_up_iteration
+              << "\tMeasured iterations " << measure_iteration
+              << std::endl;
     xe_api_benchmarks::measure_latency::parameter_buffer(&nano_benchmarks,
                                                          warm_up_iteration,
                                                          measure_iteration);
     std::cout << std::endl;
+
+    std::cout << "xeFunctionSetArgumentValue: Immediate argument"
+              << "\tWarm up iterations " << warm_up_iteration
+              << "\tMeasured iterations " << measure_iteration
+              << std::endl;
     xe_api_benchmarks::measure_latency::parameter_integer(&nano_benchmarks,
                                                           warm_up_iteration,
                                                           measure_iteration);

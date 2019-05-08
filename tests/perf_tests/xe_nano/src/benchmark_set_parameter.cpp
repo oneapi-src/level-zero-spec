@@ -47,18 +47,13 @@ void xe_api_benchmarks::measure_latency::parameter_buffer(XeApp *benchmark, int 
     }
 
     /* Measure latency setting first argument */
-    std::cout << "Latency for xeFunctionSetArgumentValue: Buffer argument"
-              << " - Warm up iterations " << warm_up_iteration << " - Measured iterations "
-              << measure_iteration << std::endl;
-    std::cout << " Argument index 0";
-    std::cout << "\t " << std::flush;
-    XE_MEASURE_LATENCY_ITERATION(measure_iteration, xeFunctionSetArgumentValue, function, 0,
-                                 sizeof(input_buffer), &input_buffer);
+    XE_MEASURE_LATENCY_ITERATION(" Argument index 0\t", measure_iteration,
+				 xeFunctionSetArgumentValue,
+				 function, 0, sizeof(input_buffer), &input_buffer);
 
-    std::cout << " Argument index 5";
-    std::cout << "\t " << std::flush;
-    XE_MEASURE_LATENCY_ITERATION(measure_iteration, xeFunctionSetArgumentValue, function, 5,
-                                 sizeof(input_buffer), &input_buffer);
+    XE_MEASURE_LATENCY_ITERATION(" Argument index 5\t", measure_iteration,
+				 xeFunctionSetArgumentValue,
+				 function, 5, sizeof(input_buffer), &input_buffer);
 
     benchmark->functionDestroy(function);
     benchmark->memoryFree(input_buffer);
@@ -81,18 +76,13 @@ void xe_api_benchmarks::measure_latency::parameter_integer(XeApp *benchmark, int
         SUCCESS_OR_TERMINATE(xeFunctionSetArgumentValue(function, 5, sizeof(input_a), &input_a));
     }
 
-    std::cout << "Latency for xeFunctionSetArgumentValue: Immediate argument"
-              << " - Warm up iterations " << warm_up_iteration << " - Measured iterations "
-              << measure_iteration << std::endl;
-    std::cout << " Argument index 0";
-    std::cout << "\t " << std::flush;
-    XE_MEASURE_LATENCY_ITERATION(measure_iteration, xeFunctionSetArgumentValue, function, 0,
-                                 sizeof(input_a), &input_a);
+    XE_MEASURE_LATENCY_ITERATION(" Argument index 0\t", measure_iteration,
+				 xeFunctionSetArgumentValue,
+				 function, 0, sizeof(input_a), &input_a);
 
-    std::cout << " Argument index 5";
-    std::cout << "\t " << std::flush;
-    XE_MEASURE_LATENCY_ITERATION(measure_iteration, xeFunctionSetArgumentValue, function, 5,
-                                 sizeof(input_a), &input_a);
+    XE_MEASURE_LATENCY_ITERATION(" Argument index 5\t", measure_iteration,
+				 xeFunctionSetArgumentValue,
+				 function, 5, sizeof(input_a), &input_a);
 
     benchmark->functionDestroy(function);
 }

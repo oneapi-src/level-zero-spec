@@ -25,14 +25,30 @@
 #include <string>
 #include "common.hpp"
 
-#define XE_MEASURE_LATENCY_ITERATION(iteration_number, function_name, ...)  \
-    _function_call_iter_measure_latency(__FILE__, __LINE__, #function_name, \
-                                        iteration_number, function_name,    \
+template <typename T>
+inline void print_probe_output(const std::string prefix,
+                               const std::string filename,
+                               const int line_number,
+                               const std::string function_name,
+                               T output_value, const std::string suffix) {
+    std::cout << prefix
+              << (verbose ? filename + ":" + std::to_string(line_number) + "\t" : "")
+              << function_name
+              << "\t"
+              << output_value
+              << suffix
+              << std::endl;
+}
+
+#define XE_MEASURE_LATENCY_ITERATION(prefix, iteration_number, function_name, ...)  \
+    _function_call_iter_measure_latency(__FILE__, __LINE__, #function_name,         \
+                                        prefix, iteration_number, function_name,    \
                                         __VA_ARGS__)
 template <typename... Params, typename... Args>
 int64_t _function_call_iter_measure_latency(const std::string filename,
                                             const int line_number,
                                             const std::string function_name,
+                                            const std::string prefix,
                                             const int iteration_number,
                                             xe_result_t (*api_function)(Params... params),
                                             Args... args) {
@@ -46,13 +62,8 @@ int64_t _function_call_iter_measure_latency(const std::string filename,
 
     auto int_nsec = timer.period_minus_overhead();
 
-    std::cout << filename << ":" << line_number << "\t"
-              << function_name
-              << "\t"
-              << int_nsec / iteration_number
-              << "\t"
-              << "nanoseconds"
-              << std::endl;
+    print_probe_output(prefix, filename, line_number, function_name,
+                       int_nsec / iteration_number, "\tnanoseconds");
 
     return int_nsec;
 }
