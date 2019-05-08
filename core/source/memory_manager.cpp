@@ -95,6 +95,23 @@ struct MemoryManagerImp : public MemoryManager {
         return this->memoryManagerRT->getInternalHeapBaseAddress();
     }
 
+    xe_result_t getAddressRange(const void *ptr, void **pBase, size_t *pSize) override {
+        uint64_t allocPtr = reinterpret_cast<uint64_t>(ptr);
+        uint64_t *allocBase = reinterpret_cast<uint64_t *>(pBase);
+
+        for (auto &alloc : allocationTracker) {
+            uint64_t base = reinterpret_cast<uint64_t>(alloc.second->getHostAddress());
+            size_t size = alloc.second->getSize();
+            if (allocPtr >= base && allocPtr < base + size) {
+                *allocBase = base;
+                *pSize = size;
+
+                return XE_RESULT_SUCCESS;
+            }
+        }
+        return XE_RESULT_ERROR_UNKNOWN;
+    }
+
     PtrOwn<GraphicsAllocation> allocateGraphicsMemoryForPrivateMemory(size_t size) override {
         assert(size > 0);
         auto alloc = this->memoryManagerRT->allocateGraphicsMemoryWithProperties(

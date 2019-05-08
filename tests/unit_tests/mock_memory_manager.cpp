@@ -34,6 +34,9 @@ MockMemoryManager::Mock() {
 
     EXPECT_CALL(*this, getIsaHeapGpuAddress).Times(AnyNumber());
 
+    EXPECT_CALL(*this, getAddressRange(_, _, _))
+        .WillRepeatedly(Invoke(this, &MockMemoryManager::doGetAddressRange));
+
     EXPECT_CALL(*this, findGraphicsAllocation(_))
         .WillRepeatedly(Invoke(this, &MockMemoryManager::doFindGraphicsAllocation));
 
@@ -43,6 +46,23 @@ MockMemoryManager::Mock() {
 
 void *MockMemoryManager::doAllocateHostMemory(size_t size, size_t alignment) {
     return alignedMalloc(size, alignment);
+}
+
+xe_result_t MockMemoryManager::doGetAddressRange(const void *ptr, void **pBase, size_t *pSize) {
+    uint64_t allocPtr = reinterpret_cast<uint64_t>(ptr);
+    uint64_t *allocBase = reinterpret_cast<uint64_t *>(pBase);
+
+    for (auto &alloc : allocationTracker) {
+        uint64_t base = reinterpret_cast<uint64_t>(alloc.second->getHostAddress());
+        size_t size = alloc.second->getSize();
+        if (allocPtr >= base && allocPtr < base + size) {
+            *allocBase = base;
+            *pSize = size;
+
+            return XE_RESULT_SUCCESS;
+        }
+    }
+    return XE_RESULT_ERROR_UNKNOWN;
 }
 
 GraphicsAllocation *MockMemoryManager::doCreateGraphicsAllocation(Device *device, size_t size,
@@ -91,6 +111,7 @@ L0::MemAllocation *MockMemoryManager::doFindMemAllocation(const void *ptr) {
 void MockMemoryManager::track(L0::GraphicsAllocation *alloc) {
     knownAllocations.insert(*alloc->allocationRT);
     allocMap[alloc->allocationRT] = alloc;
+    allocationTracker[alloc->getHostAddress()] = alloc;
 }
 
 void MockMemoryManager::drop(L0::GraphicsAllocation *alloc) {

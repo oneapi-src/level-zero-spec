@@ -36,6 +36,7 @@ template <> struct Mock<MemoryManager> : public MemoryManager {
     MOCK_METHOD1(allocateGraphicsMemoryForPrivateMemory,
                  PtrOwn<L0::GraphicsAllocation>(size_t size));
     MOCK_CONST_METHOD0(getIsaHeapGpuAddress, uint64_t());
+    MOCK_METHOD3(getAddressRange, xe_result_t(const void *ptr, void **pBase, size_t *pSize));
     MOCK_METHOD2(checkMemoryAccessFromDevice, bool(L0::Device *device, const void *ptr));
     MOCK_METHOD1(findGraphicsAllocation, L0::GraphicsAllocation *(const void *ptr));
     MOCK_METHOD1(findMemAllocation, L0::MemAllocation *(const void *ptr));
@@ -53,11 +54,13 @@ template <> struct Mock<MemoryManager> : public MemoryManager {
     void doFreePtr(const void *ptr);
     L0::GraphicsAllocation *doFindGraphicsAllocation(const void *ptr);
     L0::MemAllocation *doFindMemAllocation(const void *ptr);
+    xe_result_t doGetAddressRange(const void *ptr, void **pBase, size_t *pSize);
 
     void track(L0::GraphicsAllocation *alloc);
     void drop(L0::GraphicsAllocation *alloc);
     NEO::SVMAllocsManager::MapBasedAllocationTracker knownAllocations;
     std::unordered_map<NEO::GraphicsAllocation *, L0::GraphicsAllocation *> allocMap;
+    std::unordered_map<void *, L0::MemAllocation *> allocationTracker;
 };
 
 } // namespace ult

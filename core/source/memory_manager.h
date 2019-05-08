@@ -1,5 +1,6 @@
 #pragma once
 
+#include "xe_common.h"
 #include "ptr.h"
 
 #include <cstddef>
@@ -25,6 +26,7 @@ struct MemoryManager {
     virtual PtrOwn<GraphicsAllocation> allocateGraphicsMemoryForIsa(PtrRef<const void> isaHostMem,
                                                                     size_t size) = 0;
     virtual PtrOwn<GraphicsAllocation> allocateGraphicsMemoryForPrivateMemory(size_t size) = 0;
+    virtual xe_result_t getAddressRange(const void *ptr, void **pBase, size_t *pSize) = 0;
     virtual uint64_t getIsaHeapGpuAddress() const = 0;
     virtual GraphicsAllocation *findGraphicsAllocation(const void *ptr) = 0;
     virtual MemAllocation *findMemAllocation(const void *ptr) = 0;

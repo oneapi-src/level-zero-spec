@@ -48,7 +48,8 @@ xe_result_t memFree(const void *ptr) {
 }
 
 xe_result_t memGetAddressRange(const void *ptr, void **pBase, size_t *pSize) {
-    return XE_RESULT_ERROR_UNSUPPORTED;
+    assert(globalMemoryManager);
+    return globalMemoryManager->getAddressRange(ptr, pBase, pSize);
 }
 
 xe_result_t memGetProperties(const void *ptr, xe_memory_allocation_properties_t *pMemProperties) {
