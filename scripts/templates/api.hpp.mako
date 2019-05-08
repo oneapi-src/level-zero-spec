@@ -57,7 +57,7 @@ def declare_obj(obj, tags):
 #include "${n}_api.h"
 #include <tuple>
 %if x != n:
-#include "${x}_all.hpp"
+#include "${x}_api.hpp"
 %endif
 %else:
 #include "${n}_common.hpp"

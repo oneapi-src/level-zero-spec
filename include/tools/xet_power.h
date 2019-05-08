@@ -883,7 +883,7 @@ typedef struct _xet_fan_speed_info_t
 {
     xe_bool_t fanSpeedInRpm;                        ///< [in/out] false means fanSpeed is in percentage, true means fanSpeed is
                                                     ///< in RPM
-    xet_fan_mode_t fanSpeedMode;                    ///< [in/out] whether the fan speed is fixed or being controlled
+    xet_fan_speed_mode_t fanSpeedMode;              ///< [in/out] whether the fan speed is fixed or being controlled
                                                     ///< dynamically
     uint16_t fanSpeed;                              ///< [in/out] the fan speed as a percentage (or RPM if fanSpeedInRpm is
                                                     ///< true)

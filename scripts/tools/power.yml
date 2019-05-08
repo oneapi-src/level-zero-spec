@@ -621,7 +621,7 @@ members:
     - type: $x_bool_t
       name: fanSpeedInRpm
       desc: "[in/out] false means fanSpeed is in percentage, true means fanSpeed is in RPM"
-    - type: $t_fan_mode_t
+    - type: $t_fan_speed_mode_t
       name: fanSpeedMode
       desc: "[in/out] whether the fan speed is fixed or being controlled dynamically"
     - type: uint16_t
