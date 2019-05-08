@@ -4,8 +4,7 @@
 
 namespace L0 {
 
-template <PRODUCT_FAMILY productFamily>
-struct EncodeL3State : ToGfxCoreFamily<productFamily> {
+template <PRODUCT_FAMILY productFamily> struct EncodeL3State : ToGfxCoreFamily<productFamily> {
     using BaseClass = ToGfxCoreFamily<productFamily>;
     using BaseClass::gfxCoreFamily;
 
@@ -16,9 +15,7 @@ struct EncodeL3State : ToGfxCoreFamily<productFamily> {
     static const size_t size = EncodeSetMMIO<gfxCoreFamily>::size;
 
     static void encode(CommandContainer &container, bool enableSLM) {
-        EncodeSetMMIO<gfxCoreFamily>::encode(container,
-                                             offset,
-                                             enableSLM ? dataSLM : data);
+        EncodeSetMMIO<gfxCoreFamily>::encode(container, offset, enableSLM ? dataSLM : data);
     }
 };
 

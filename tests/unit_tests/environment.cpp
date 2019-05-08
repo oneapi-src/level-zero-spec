@@ -52,9 +52,7 @@ struct Environment : public ::testing::Environment {
 };
 
 struct InitializeEnvironment {
-    InitializeEnvironment() {
-        environment = new Environment;
-    }
+    InitializeEnvironment() { environment = new Environment; }
 };
 
 static InitializeEnvironment initializeEnvironment;

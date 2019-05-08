@@ -40,17 +40,20 @@ struct PrecompiledFunctionMockData {
 
 struct PrecompiledFunctionMock : Mock<Function> {
 
-    PrecompiledFunctionMock(const std::string &precompiledFunctionMockName, const std::string &deviceName, const std::vector<L0::GraphicsAllocation *> &allocationsForResidency);
-    ~PrecompiledFunctionMock() override {
-    }
+    PrecompiledFunctionMock(const std::string &precompiledFunctionMockName,
+                            const std::string &deviceName,
+                            const std::vector<L0::GraphicsAllocation *> &allocationsForResidency);
+    ~PrecompiledFunctionMock() override {}
 
-    PrecompiledFunctionMock(const std::string &precompiledFunctionMockName, const std::string &deviceName)
+    PrecompiledFunctionMock(const std::string &precompiledFunctionMockName,
+                            const std::string &deviceName)
         : PrecompiledFunctionMock(precompiledFunctionMockName, deviceName, {}) {}
 
     PrecompiledFunctionMock(const PrecompiledFunctionMockData *precompiledFunctionMockData)
         : precompiledFunctionMockData(precompiledFunctionMockData) {
         auto bufferArgOffsetPairsIt = precompiledFunctionMockData->bufferArgIndicesAndOffsets;
-        auto bufferArgOffsetPairsEnd = bufferArgOffsetPairsIt + precompiledFunctionMockData->bufferArgIndicesAndOffsetsCount;
+        auto bufferArgOffsetPairsEnd =
+            bufferArgOffsetPairsIt + precompiledFunctionMockData->bufferArgIndicesAndOffsetsCount;
         while (bufferArgOffsetPairsIt < bufferArgOffsetPairsEnd) {
             bufferArgOffsetMap[bufferArgOffsetPairsIt->first] = bufferArgOffsetPairsIt->second;
             ++bufferArgOffsetPairsIt;
@@ -58,38 +61,69 @@ struct PrecompiledFunctionMock : Mock<Function> {
 
         ON_CALL(*this, setAttribute).WillByDefault(::testing::Return(XE_RESULT_ERROR_UNSUPPORTED));
         ON_CALL(*this, getAttribute).WillByDefault(::testing::Return(XE_RESULT_ERROR_UNSUPPORTED));
-        ON_CALL(*this, getPerThreadData).WillByDefault(::testing::Return(bindPtrRef<const uint8_t[]>(reinterpret_cast<const uint8_t *>(precompiledFunctionMockData->perThreadDataBase))));
-        ON_CALL(*this, getPerThreadDataSizeForWholeThreadGroup).WillByDefault(::testing::Return(precompiledFunctionMockData->perThreadDataBaseSize));
+        ON_CALL(*this, getPerThreadData)
+            .WillByDefault(
+                ::testing::Return(bindPtrRef<const uint8_t[]>(reinterpret_cast<const uint8_t *>(
+                    precompiledFunctionMockData->perThreadDataBase))));
+        ON_CALL(*this, getPerThreadDataSizeForWholeThreadGroup)
+            .WillByDefault(::testing::Return(precompiledFunctionMockData->perThreadDataBaseSize));
         ON_CALL(*this, getThreadExecutionMask).WillByDefault(::testing::Return(0xfffffffful));
-        ON_CALL(*this, getCrossThreadData).WillByDefault(::testing::Invoke([this]() { return bindPtrRef<const uint8_t[]>(crossThreadData.data()); }));
-        ON_CALL(*this, getCrossThreadDataSize).WillByDefault(::testing::Return(precompiledFunctionMockData->crossThreadDataBaseSize));
-        ON_CALL(*this, getResidencyContainer).WillByDefault(::testing::ReturnRef(allocationsForResidency));
-        ON_CALL(*this, getSurfaceStateHeapData).WillByDefault(::testing::Return(bindPtrRef<const uint8_t[]>(reinterpret_cast<const uint8_t *>(precompiledFunctionMockData->surfaceStateHeap))));
-        ON_CALL(*this, getSurfaceStateHeapDataSize).WillByDefault(::testing::Return(static_cast<uint32_t>(precompiledFunctionMockData->surfaceStateHeapSize)));
-        ON_CALL(*this, getDynamicStateHeapData).WillByDefault(::testing::Return(bindPtrRef<const uint8_t[]>(reinterpret_cast<const uint8_t *>(precompiledFunctionMockData->dynamicStateHeap))));
-        ON_CALL(*this, getDynamicStateHeapDataSize).WillByDefault(::testing::Return(precompiledFunctionMockData->dynamicStateHeapSize));
-        ON_CALL(*this, getImmutableData).WillByDefault(::testing::Return(bindPtrRef(&immutableData).weakRef<::L0::FunctionImmutableData>()));
+        ON_CALL(*this, getCrossThreadData).WillByDefault(::testing::Invoke([this]() {
+            return bindPtrRef<const uint8_t[]>(crossThreadData.data());
+        }));
+        ON_CALL(*this, getCrossThreadDataSize)
+            .WillByDefault(::testing::Return(precompiledFunctionMockData->crossThreadDataBaseSize));
+        ON_CALL(*this, getResidencyContainer)
+            .WillByDefault(::testing::ReturnRef(allocationsForResidency));
+        ON_CALL(*this, getSurfaceStateHeapData)
+            .WillByDefault(::testing::Return(bindPtrRef<const uint8_t[]>(
+                reinterpret_cast<const uint8_t *>(precompiledFunctionMockData->surfaceStateHeap))));
+        ON_CALL(*this, getSurfaceStateHeapDataSize)
+            .WillByDefault(::testing::Return(
+                static_cast<uint32_t>(precompiledFunctionMockData->surfaceStateHeapSize)));
+        ON_CALL(*this, getDynamicStateHeapData)
+            .WillByDefault(::testing::Return(bindPtrRef<const uint8_t[]>(
+                reinterpret_cast<const uint8_t *>(precompiledFunctionMockData->dynamicStateHeap))));
+        ON_CALL(*this, getDynamicStateHeapDataSize)
+            .WillByDefault(::testing::Return(precompiledFunctionMockData->dynamicStateHeapSize));
+        ON_CALL(*this, getImmutableData)
+            .WillByDefault(::testing::Return(
+                bindPtrRef(&immutableData).weakRef<::L0::FunctionImmutableData>()));
 
         ON_CALL(*this, setArgumentValue)
-            .WillByDefault(::testing::Invoke([this](uint32_t argIndex, size_t argSize, const void *pArgValue) { return this->setArgumentValueImpl(argIndex, argSize, pArgValue); }));
+            .WillByDefault(
+                ::testing::Invoke([this](uint32_t argIndex, size_t argSize, const void *pArgValue) {
+                    return this->setArgumentValueImpl(argIndex, argSize, pArgValue);
+                }));
         ON_CALL(*this, getGroupSize)
-            .WillByDefault(::testing::Invoke([this](uint32_t &outGroupSizeX, uint32_t &outGroupSizeY, uint32_t &outGroupSizeZ) { this->getGroupSizeImpl(outGroupSizeX, outGroupSizeY, outGroupSizeZ); }));
-        ON_CALL(*this, getThreadsPerThreadGroup)
-            .WillByDefault(::testing::Invoke([this]() { return this->getThreadsPerThreadGroupImpl(); }));
+            .WillByDefault(::testing::Invoke(
+                [this](uint32_t &outGroupSizeX, uint32_t &outGroupSizeY, uint32_t &outGroupSizeZ) {
+                    this->getGroupSizeImpl(outGroupSizeX, outGroupSizeY, outGroupSizeZ);
+                }));
+        ON_CALL(*this, getThreadsPerThreadGroup).WillByDefault(::testing::Invoke([this]() {
+            return this->getThreadsPerThreadGroupImpl();
+        }));
 
-        immutableData.signature.attributes.flags.hasPrintf = precompiledFunctionMockData->hasPrintfOutput;
+        immutableData.signature.attributes.flags.hasPrintf =
+            precompiledFunctionMockData->hasPrintfOutput;
         const uint8_t *isaRaw = reinterpret_cast<const uint8_t *>(precompiledFunctionMockData->isa);
         isa.assign(isaRaw, isaRaw + precompiledFunctionMockData->isaSize);
         immutableData.isaGraphicsAllocation.rebind(new GraphicsAllocation(isa.data(), isa.size()));
         FunctionImp::funcImmData.rebind(&immutableData);
-        immutableData.signature.samplerTable.tableOffset = precompiledFunctionMockData->samplerStateArray[0];
-        immutableData.signature.samplerTable.numSamplers = precompiledFunctionMockData->samplerStateArray[1];
-        immutableData.signature.samplerTable.borderColor = precompiledFunctionMockData->samplerStateArray[2];
+        immutableData.signature.samplerTable.tableOffset =
+            precompiledFunctionMockData->samplerStateArray[0];
+        immutableData.signature.samplerTable.numSamplers =
+            precompiledFunctionMockData->samplerStateArray[1];
+        immutableData.signature.samplerTable.borderColor =
+            precompiledFunctionMockData->samplerStateArray[2];
         immutableData.signature.attributes.simdSize = precompiledFunctionMockData->simdSize;
         immutableData.signature.attributes.slmInlineSize = precompiledFunctionMockData->slmSize;
-        immutableData.signature.attributes.flags.hasBarriers = precompiledFunctionMockData->hasBarriers;
-        immutableData.signature.bindingTable.numSurfaceStates = precompiledFunctionMockData->bindingTableStateCount;
-        immutableData.signature.bindingTable.tableOffset = precompiledFunctionMockData->bindingTableOffset;
+        immutableData.signature.attributes.flags.hasBarriers =
+            precompiledFunctionMockData->hasBarriers;
+        immutableData.signature.bindingTable.numSurfaceStates =
+            precompiledFunctionMockData->bindingTableStateCount;
+        immutableData.signature.bindingTable.tableOffset =
+            precompiledFunctionMockData->bindingTableOffset;
     }
 
     // Note : test needs to intentionally opt-in to this
@@ -120,11 +154,13 @@ struct PrecompiledFunctionMock : Mock<Function> {
             // not a buffer arg, just assume what's in crossthread data is good enough
             return XE_RESULT_SUCCESS;
         }
-        *reinterpret_cast<uintptr_t *>(&crossThreadData[it->second]) = *reinterpret_cast<const uintptr_t *>(pArgValue);
+        *reinterpret_cast<uintptr_t *>(&crossThreadData[it->second]) =
+            *reinterpret_cast<const uintptr_t *>(pArgValue);
         return XE_RESULT_SUCCESS;
     }
 
-    void getGroupSizeImpl(uint32_t &outGroupSizeX, uint32_t &outGroupSizeY, uint32_t &outGroupSizeZ) const {
+    void getGroupSizeImpl(uint32_t &outGroupSizeX, uint32_t &outGroupSizeY,
+                          uint32_t &outGroupSizeZ) const {
         outGroupSizeX = precompiledFunctionMockData->groupSizeInPerThreadDataBase[0];
         outGroupSizeY = precompiledFunctionMockData->groupSizeInPerThreadDataBase[1];
         outGroupSizeZ = precompiledFunctionMockData->groupSizeInPerThreadDataBase[2];
@@ -157,7 +193,8 @@ struct PrecompiledFunctionMocksDataRegistry {
         return registry;
     }
 
-    const PrecompiledFunctionMockData *getDataFor(const std::string &functionName, const std::string &deviceName) {
+    const PrecompiledFunctionMockData *getDataFor(const std::string &functionName,
+                                                  const std::string &deviceName) {
         auto perDeviceMapIt = data.find(deviceName);
         if (data.end() == perDeviceMapIt) {
             return nullptr;
@@ -169,43 +206,52 @@ struct PrecompiledFunctionMocksDataRegistry {
         return functionDataIt->second;
     }
 
-    void registerDataFor(const PrecompiledFunctionMockData *mockData, const std::string &functionName, const std::string &deviceName) {
+    void registerDataFor(const PrecompiledFunctionMockData *mockData,
+                         const std::string &functionName, const std::string &deviceName) {
         data[deviceName][functionName] = mockData;
     }
 
   protected:
-    using DeviceNameToPrecompiledDataMap = std::unordered_map<std::string, const PrecompiledFunctionMockData *>;
-    using FunctionNameToPerDevicePrecompiledDataMap = std::unordered_map<std::string, const PrecompiledFunctionMockData *>;
+    using DeviceNameToPrecompiledDataMap =
+        std::unordered_map<std::string, const PrecompiledFunctionMockData *>;
+    using FunctionNameToPerDevicePrecompiledDataMap =
+        std::unordered_map<std::string, const PrecompiledFunctionMockData *>;
     std::unordered_map<std::string, FunctionNameToPerDevicePrecompiledDataMap> data;
 };
 
 struct RegisterPrecompiledFunctionMocksData {
-    RegisterPrecompiledFunctionMocksData(const PrecompiledFunctionMockData *data, const std::string &functionName, const std::string &deviceName) {
+    RegisterPrecompiledFunctionMocksData(const PrecompiledFunctionMockData *data,
+                                         const std::string &functionName,
+                                         const std::string &deviceName) {
         PrecompiledFunctionMocksDataRegistry::get().registerDataFor(data, functionName, deviceName);
     }
 };
 
-inline PrecompiledFunctionMock::PrecompiledFunctionMock(const std::string &precompiledFunctionMockName, const std::string &deviceName, const std::vector<L0::GraphicsAllocation *> &allocationsForResidency)
-    : PrecompiledFunctionMock(PrecompiledFunctionMocksDataRegistry::get().getDataFor(precompiledFunctionMockName, deviceName)) {
+inline PrecompiledFunctionMock::PrecompiledFunctionMock(
+    const std::string &precompiledFunctionMockName, const std::string &deviceName,
+    const std::vector<L0::GraphicsAllocation *> &allocationsForResidency)
+    : PrecompiledFunctionMock(PrecompiledFunctionMocksDataRegistry::get().getDataFor(
+          precompiledFunctionMockName, deviceName)) {
     this->allocationsForResidency = allocationsForResidency;
-    auto crossThreadBaseBeg = reinterpret_cast<const uint8_t *>(precompiledFunctionMockData->crossThreadDataBase);
-    crossThreadData.assign(crossThreadBaseBeg, crossThreadBaseBeg + precompiledFunctionMockData->crossThreadDataBaseSize);
+    auto crossThreadBaseBeg =
+        reinterpret_cast<const uint8_t *>(precompiledFunctionMockData->crossThreadDataBase);
+    crossThreadData.assign(crossThreadBaseBeg,
+                           crossThreadBaseBeg +
+                               precompiledFunctionMockData->crossThreadDataBaseSize);
 }
 
-inline void writeAsCppArrayInitializer(const void *data, size_t dataSize, std::ostream &out) { // function taken from cloc
+inline void writeAsCppArrayInitializer(const void *data, size_t dataSize,
+                                       std::ostream &out) { // function taken from cloc
     assert((dataSize & 3) == 0);
 
-    out << "{"
-        << std::endl
-        << "    ";
+    out << "{" << std::endl << "    ";
 
     uint32_t *dataUint = (uint32_t *)data;
     for (size_t i = 0; i < (dataSize + 3) / 4; i++) {
         if (i != 0) {
             out << ", ";
             if (i % 8 == 0) {
-                out << std::endl
-                    << "    ";
+                out << std::endl << "    ";
             }
         }
         if (i < dataSize / 4) {
@@ -224,7 +270,8 @@ inline void writeAsCppArrayInitializer(const void *data, size_t dataSize, std::o
 }
 
 inline void writeMockData(const std::string sourceOrigin, std::string &mockName,
-                          std::string deviceName, L0::Function *function, const std::vector<std::pair<int, uintptr_t>> &bufferArgsIndices,
+                          std::string deviceName, L0::Function *function,
+                          const std::vector<std::pair<int, uintptr_t>> &bufferArgsIndices,
                           std::ostream &out) {
     out << "// This is a generated file\n";
     out << "// Check " << sourceOrigin << " for details\n\n";
@@ -238,7 +285,8 @@ inline void writeMockData(const std::string sourceOrigin, std::string &mockName,
     std::string globalNameCrossThreadData = mockName + "_CrossThreadDataBase_" + deviceName;
     std::string globalNamePerThreadData = mockName + "_PerThreadDataBase_" + deviceName;
     std::string globalNameBorderColorData = mockName + "_BorderColorDataBase_" + deviceName;
-    std::string globalNameBindingTableStateCount = mockName + "_BindingTableStateCount_" + deviceName;
+    std::string globalNameBindingTableStateCount =
+        mockName + "_BindingTableStateCount_" + deviceName;
     std::string globalNameBindingTableOffset = mockName + "_BindingTableOffset" + deviceName;
     std::string globalNameSurfaceStateHeapSize = mockName + "_SurfaceStateHeapSize_" + deviceName;
     std::string globalNameSurfaceStateHeap = mockName + "_SurfaceStateHeap_" + deviceName;
@@ -255,52 +303,67 @@ inline void writeMockData(const std::string sourceOrigin, std::string &mockName,
     auto immutableData = function->getImmutableData();
     auto &signature = immutableData->getSignature();
 
-    out << "static const uint32_t " << globalNameSimdSize << " = " << signature.attributes.simdSize << ";\n\n";
+    out << "static const uint32_t " << globalNameSimdSize << " = " << signature.attributes.simdSize
+        << ";\n\n";
 
     out << "static const uint32_t " << globalNameIsa << "[] = \n";
-    writeAsCppArrayInitializer(immutableData->getIsaGraphicsAllocation()->getHostAddress(), immutableData->getIsaSize(), out);
+    writeAsCppArrayInitializer(immutableData->getIsaGraphicsAllocation()->getHostAddress(),
+                               immutableData->getIsaSize(), out);
     out << "\n\n";
     out << "static const uint32_t " << globalNameCrossThreadData << "[] = \n";
-    writeAsCppArrayInitializer(function->getCrossThreadData().get(), function->getCrossThreadDataSize(), out);
+    writeAsCppArrayInitializer(function->getCrossThreadData().get(),
+                               function->getCrossThreadDataSize(), out);
     out << "\n\n";
     out << "static const uint32_t " << globalNamePerThreadData << "[] = \n";
-    writeAsCppArrayInitializer(function->getPerThreadData().get(), function->getPerThreadDataSizeForWholeThreadGroup(), out);
+    writeAsCppArrayInitializer(function->getPerThreadData().get(),
+                               function->getPerThreadDataSizeForWholeThreadGroup(), out);
     out << "\n\n";
 
-    out << "static const uint32_t " << globalNameBindingTableStateCount << " = 0x" << signature.bindingTable.numSurfaceStates << ";\n\n";
-    out << "static const uint32_t " << globalNameBindingTableOffset << " = 0x" << signature.bindingTable.tableOffset << ";\n\n";
+    out << "static const uint32_t " << globalNameBindingTableStateCount << " = 0x"
+        << signature.bindingTable.numSurfaceStates << ";\n\n";
+    out << "static const uint32_t " << globalNameBindingTableOffset << " = 0x"
+        << signature.bindingTable.tableOffset << ";\n\n";
 
     auto sshSize = function->getSurfaceStateHeapDataSize();
-    out << "static const size_t " << globalNameSurfaceStateHeapSize << " = 0x" << sshSize << ";\n\n";
+    out << "static const size_t " << globalNameSurfaceStateHeapSize << " = 0x" << sshSize
+        << ";\n\n";
 
     out << "static uint32_t " << globalNameSurfaceStateHeap << "[] =\n";
     writeAsCppArrayInitializer(function->getSurfaceStateHeapData().get(), sshSize, out);
     out << "\n\n";
 
     auto dshSize = function->getDynamicStateHeapDataSize();
-    out << "static const size_t " << globalNameDynamicStateHeapSize << " = 0x" << dshSize << ";\n\n";
+    out << "static const size_t " << globalNameDynamicStateHeapSize << " = 0x" << dshSize
+        << ";\n\n";
 
     out << "static const uint32_t " << globalNameDynamicStateHeap << "[] =\n";
     writeAsCppArrayInitializer(function->getDynamicStateHeapData().get(), dshSize, out);
     out << "\n\n";
 
     out << "static const uint32_t " << globalNameSamplerArrayData << "[] = {";
-    out << "0x" << signature.samplerTable.tableOffset << ", 0x" << signature.samplerTable.numSamplers << ", 0x";
+    out << "0x" << signature.samplerTable.tableOffset << ", 0x"
+        << signature.samplerTable.numSamplers << ", 0x";
     out << signature.samplerTable.borderColor << "};\n";
     out << "\n\n";
 
-    out << "static const bool " << globalNameHasBarriers << " = " << signature.attributes.flags.hasBarriers << ";\n\n";
-    out << "static const uint32_t " << globalNameSlmSize << " = 0x" << signature.attributes.slmInlineSize << ";\n\n";
-    out << "static const bool " << globalNameHasPrintfOutput << " = " << signature.attributes.flags.hasPrintf << ";\n\n";
+    out << "static const bool " << globalNameHasBarriers << " = "
+        << signature.attributes.flags.hasBarriers << ";\n\n";
+    out << "static const uint32_t " << globalNameSlmSize << " = 0x"
+        << signature.attributes.slmInlineSize << ";\n\n";
+    out << "static const bool " << globalNameHasPrintfOutput << " = "
+        << signature.attributes.flags.hasPrintf << ";\n\n";
 
     out << "static const std::pair<int, int> " << globalNameBufferArgIndices << "[] = { ";
     const void *crossThreadData = function->getCrossThreadData().get();
     const uintptr_t *ctdSearchBeg = reinterpret_cast<const uintptr_t *>(crossThreadData);
-    const uintptr_t *ctdSearchEnd = ctdSearchBeg + function->getCrossThreadDataSize() / sizeof(uintptr_t);
+    const uintptr_t *ctdSearchEnd =
+        ctdSearchBeg + function->getCrossThreadDataSize() / sizeof(uintptr_t);
     for (auto buffArgOffset : bufferArgsIndices) {
         auto it = std::find(ctdSearchBeg, ctdSearchEnd, buffArgOffset.second);
         assert(it != ctdSearchEnd);
-        assert(ctdSearchEnd == std::find(it + 1, ctdSearchEnd, buffArgOffset.second)); // make sure this is not just random number
+        assert(ctdSearchEnd ==
+               std::find(it + 1, ctdSearchEnd,
+                         buffArgOffset.second)); // make sure this is not just random number
         auto byteOffset = ((it - ctdSearchBeg) * sizeof(uintptr_t));
         out << "{0x" << buffArgOffset.first << ", 0x" << byteOffset << "}, ";
     }
@@ -317,7 +380,8 @@ inline void writeMockData(const std::string sourceOrigin, std::string &mockName,
         << "0x" << groupSizeZ;
     out << " };\n\n";
 
-    out << "static const PrecompiledFunctionMockData " << globalNamePrecompiledFunctionMockData << " {\n"
+    out << "static const PrecompiledFunctionMockData " << globalNamePrecompiledFunctionMockData
+        << " {\n"
         << globalNameSimdSize << ",\n"
         << globalNameIsa << ", sizeof(" << globalNameIsa << "),\n"
         << globalNameCrossThreadData << ", sizeof(" << globalNameCrossThreadData << "),\n"
@@ -330,13 +394,17 @@ inline void writeMockData(const std::string sourceOrigin, std::string &mockName,
         << globalNameDynamicStateHeap << ",\n"
         << globalNameSamplerArrayData << ",\n"
         << globalNameGroupSize << ",\n"
-        << globalNameBufferArgIndices << ", sizeof(" << globalNameBufferArgIndices << ") / sizeof(" << globalNameBufferArgIndices << "[0]),\n"
+        << globalNameBufferArgIndices << ", sizeof(" << globalNameBufferArgIndices << ") / sizeof("
+        << globalNameBufferArgIndices << "[0]),\n"
         << globalNameHasBarriers << ",\n"
         << globalNameSlmSize << ",\n"
-        << globalNameHasPrintfOutput << "\n"
-                                        "};\n\n";
+        << globalNameHasPrintfOutput
+        << "\n"
+           "};\n\n";
 
-    out << "RegisterPrecompiledFunctionMocksData Register_" << mockName << "_" << deviceName << "{ & " << globalNamePrecompiledFunctionMockData << ", \"" << mockName << "\", \"" << deviceName << "\" }; \n";
+    out << "RegisterPrecompiledFunctionMocksData Register_" << mockName << "_" << deviceName
+        << "{ & " << globalNamePrecompiledFunctionMockData << ", \"" << mockName << "\", \""
+        << deviceName << "\" }; \n";
 
     out << "\n"
            "} // namespace L0\n"

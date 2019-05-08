@@ -11,8 +11,7 @@ using ::testing::Return;
 namespace L0 {
 namespace ult {
 
-class SharedMemAllocTest: public GlobalFixtureTest {
-};
+class SharedMemAllocTest : public GlobalFixtureTest {};
 
 TEST_F(SharedMemAllocTest, returnsValidPtr) {
     Mock<Device> device;
@@ -23,13 +22,8 @@ TEST_F(SharedMemAllocTest, returnsValidPtr) {
     size_t alignment = 4096u;
     void *ptr = nullptr;
 
-    auto result = xeSharedMemAlloc(
-        device.toHandle(),
-        flagsDevice,
-        flagsHost,
-        size,
-        alignment,
-        &ptr);
+    auto result =
+        xeSharedMemAlloc(device.toHandle(), flagsDevice, flagsHost, size, alignment, &ptr);
     ASSERT_EQ(result, XE_RESULT_SUCCESS);
     memset(ptr, 0xbf, size);
 

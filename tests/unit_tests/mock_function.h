@@ -11,8 +11,7 @@
 namespace L0 {
 namespace ult {
 
-template <>
-struct WhiteBox<::L0::Function> : public ::L0::FunctionImp {
+template <> struct WhiteBox<::L0::Function> : public ::L0::FunctionImp {
     using BaseClass = ::L0::FunctionImp;
     using ::L0::FunctionImp::createPrintfBuffer;
     using ::L0::FunctionImp::crossThreadData;
@@ -29,35 +28,27 @@ struct WhiteBox<::L0::Function> : public ::L0::FunctionImp {
 
 using Function = WhiteBox<::L0::Function>;
 
-template <>
-struct Mock<Function> : public Function {
+template <> struct Mock<Function> : public Function {
     Mock();
     virtual ~Mock() = default;
 
     MOCK_METHOD0(destroy, xe_result_t());
-    MOCK_METHOD2(setAttribute, xe_result_t(xe_function_set_attribute_t attr,
-                                           uint32_t pValue));
-    MOCK_METHOD2(getAttribute, xe_result_t(xe_function_get_attribute_t attr,
-                                           uint32_t *pValue));
-    MOCK_METHOD3(setArgumentValue, xe_result_t(uint32_t argIndex,
-                                               size_t argSize,
-                                               const void *pArgValue));
-    MOCK_METHOD3(setGroupCount, void(uint32_t groupCountX,
-                                     uint32_t groupCountY,
-                                     uint32_t groupCountZ));
-    MOCK_METHOD3(setGroupSize, xe_result_t(uint32_t groupSizeX,
-                                           uint32_t groupSizeY,
-                                           uint32_t groupSizeZ));
-    MOCK_METHOD6(suggestGroupSize, xe_result_t(uint32_t globalSizeX,
-                                               uint32_t globalSizeY,
-                                               uint32_t globalSizeZ,
-                                               uint32_t *groupSizeX,
-                                               uint32_t *groupSizeY,
-                                               uint32_t *groupSizeZ));
+    MOCK_METHOD2(setAttribute, xe_result_t(xe_function_set_attribute_t attr, uint32_t pValue));
+    MOCK_METHOD2(getAttribute, xe_result_t(xe_function_get_attribute_t attr, uint32_t *pValue));
+    MOCK_METHOD3(setArgumentValue,
+                 xe_result_t(uint32_t argIndex, size_t argSize, const void *pArgValue));
+    MOCK_METHOD3(setGroupCount,
+                 void(uint32_t groupCountX, uint32_t groupCountY, uint32_t groupCountZ));
+    MOCK_METHOD3(setGroupSize,
+                 xe_result_t(uint32_t groupSizeX, uint32_t groupSizeY, uint32_t groupSizeZ));
+    MOCK_METHOD6(suggestGroupSize,
+                 xe_result_t(uint32_t globalSizeX, uint32_t globalSizeY, uint32_t globalSizeZ,
+                             uint32_t *groupSizeX, uint32_t *groupSizeY, uint32_t *groupSizeZ));
 
     MOCK_CONST_METHOD0(clone, PtrOwn<Function>());
 
-    MOCK_CONST_METHOD3(getGroupSize, void(uint32_t &outGroupSizeX, uint32_t &outGroupSizeY, uint32_t &outGroupSizeZ));
+    MOCK_CONST_METHOD3(getGroupSize, void(uint32_t &outGroupSizeX, uint32_t &outGroupSizeY,
+                                          uint32_t &outGroupSizeZ));
     MOCK_CONST_METHOD0(getModule, Module *());
     MOCK_CONST_METHOD0(getPerThreadData, PtrRef<const uint8_t[]>());
     MOCK_CONST_METHOD0(getPerThreadDataSizeForWholeThreadGroup, uint32_t());
@@ -70,19 +61,20 @@ struct Mock<Function> : public Function {
     MOCK_METHOD0(printPrintfOutput, void());
     MOCK_CONST_METHOD0(getSurfaceStateHeapData, PtrRef<const uint8_t[]>());
     MOCK_CONST_METHOD0(getSurfaceStateHeapDataSize, uint32_t());
-    MOCK_METHOD3(setBufferSurfaceState, void(uint32_t argIndex, void *address, GraphicsAllocation *alloc));
+    MOCK_METHOD3(setBufferSurfaceState,
+                 void(uint32_t argIndex, void *address, GraphicsAllocation *alloc));
     MOCK_CONST_METHOD0(getDynamicStateHeapData, PtrRef<const uint8_t[]>());
     MOCK_CONST_METHOD0(getDynamicStateHeapDataSize, const size_t());
     MOCK_CONST_METHOD0(getImmutableData, PtrRef<FunctionImmutableData>());
 
     // TODO : automate generation of such forwarders (e.g. extend GMOCK macros)
-    void mock_forwardToBase_getGroupSize(uint32_t &outGroupSizeX, uint32_t &outGroupSizeY, uint32_t &outGroupSizeZ) {
+    void mock_forwardToBase_getGroupSize(uint32_t &outGroupSizeX, uint32_t &outGroupSizeY,
+                                         uint32_t &outGroupSizeZ) {
         this->BaseClass::getGroupSize(outGroupSizeX, outGroupSizeY, outGroupSizeZ);
     }
 };
 
-template <>
-struct WhiteBox<::L0::FunctionImmutableData> : public ::L0::FunctionImmutableData {
+template <> struct WhiteBox<::L0::FunctionImmutableData> : public ::L0::FunctionImmutableData {
     using BaseClass = ::L0::FunctionImmutableData;
     using ::L0::FunctionImmutableData::crossThreadDataSize;
     using ::L0::FunctionImmutableData::crossThreadDataTemplate;

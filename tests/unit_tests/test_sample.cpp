@@ -22,16 +22,12 @@ TEST(sample, waitOnEvent) {
 
     xe_command_queue_handle_t hCommandQueue = {};
     xe_command_queue_desc_t desc = {};
-    result = xeCommandQueueCreate(device,
-                                        &desc,
-                                        &hCommandQueue);
+    result = xeCommandQueueCreate(device, &desc, &hCommandQueue);
     ASSERT_EQ(XE_RESULT_SUCCESS, result);
 
     xe_command_list_desc_t descCommandList = {};
     xe_command_list_handle_t hCommandList = {};
-    result = xeCommandListCreate(device,
-                                       &descCommandList,
-                                       &hCommandList);
+    result = xeCommandListCreate(device, &descCommandList, &hCommandList);
     ASSERT_EQ(XE_RESULT_SUCCESS, result);
 
     xe_event_pool_desc_t poolDesc = {};
@@ -39,31 +35,23 @@ TEST(sample, waitOnEvent) {
     const xe_event_desc_t eventDesc = {};
     xe_event_pool_handle_t hEventPool = {};
     xe_event_handle_t hEvent = {};
-    result = xeEventPoolCreate(device,
-                                 &poolDesc,
-                                 &hEventPool);
+    result = xeEventPoolCreate(device, &poolDesc, &hEventPool);
     ASSERT_EQ(XE_RESULT_SUCCESS, result);
 
-    result = xeEventCreate(hEventPool,
-                                 &eventDesc,
-                                 &hEvent);
+    result = xeEventCreate(hEventPool, &eventDesc, &hEvent);
     ASSERT_EQ(XE_RESULT_SUCCESS, result);
 
-    result = xeCommandListAppendSignalEvent(hCommandList,
-                                            hEvent);
+    result = xeCommandListAppendSignalEvent(hCommandList, hEvent);
     ASSERT_EQ(XE_RESULT_SUCCESS, result);
 
-    result = xeCommandListAppendWaitOnEvents(hCommandList, 1,
-                                            &hEvent);
+    result = xeCommandListAppendWaitOnEvents(hCommandList, 1, &hEvent);
     ASSERT_EQ(XE_RESULT_SUCCESS, result);
 
     result = xeCommandListClose(hCommandList);
     ASSERT_EQ(XE_RESULT_SUCCESS, result);
 
-    result = xeCommandQueueExecuteCommandLists(hCommandQueue,
-                                               1,
-                                               &hCommandList,
-                                               (xe_fence_handle_t)0);
+    result =
+        xeCommandQueueExecuteCommandLists(hCommandQueue, 1, &hCommandList, (xe_fence_handle_t)0);
     ASSERT_EQ(XE_RESULT_SUCCESS, result);
 
     result = xeEventDestroy(hEvent);
@@ -90,16 +78,12 @@ TEST(sample, helloWorld) {
 
     xe_command_queue_handle_t commandQueue = {};
     xe_command_queue_desc_t descCommandQueue = {};
-    result = xeCommandQueueCreate(hDevice,
-                                        &descCommandQueue,
-                                        &commandQueue);
+    result = xeCommandQueueCreate(hDevice, &descCommandQueue, &commandQueue);
     ASSERT_EQ(XE_RESULT_SUCCESS, result);
 
     xe_command_list_desc_t descCommandList = {};
     xe_command_list_handle_t commandList = {};
-    result = xeCommandListCreate(hDevice,
-                                       &descCommandList,
-                                       &commandList);
+    result = xeCommandListCreate(hDevice, &descCommandList, &commandList);
     ASSERT_EQ(XE_RESULT_SUCCESS, result);
 
     size_t moduleSize = 0u;
@@ -112,10 +96,7 @@ TEST(sample, helloWorld) {
     descModule.pInputModule = reinterpret_cast<const uint8_t *>(inputModule.get());
     descModule.inputSize = static_cast<uint32_t>(moduleSize);
     descModule.format = XE_MODULE_FORMAT_IL_SPIRV;
-    result = xeModuleCreate(hDevice,
-                                  &descModule,
-                                  &module,
-                                  nullptr);
+    result = xeModuleCreate(hDevice, &descModule, &module, nullptr);
     ASSERT_EQ(XE_RESULT_SUCCESS, result);
 
     xe_function_desc_t descFunction = {};
@@ -123,42 +104,27 @@ TEST(sample, helloWorld) {
     descFunction.version = XE_FUNCTION_DESC_VERSION_CURRENT;
     descFunction.flags = XE_FUNCTION_FLAG_NONE;
     descFunction.pFunctionName = "memcpy_bytes";
-    result = xeFunctionCreate(module,
-                                    &descFunction,
-                                    &function);
+    result = xeFunctionCreate(module, &descFunction, &function);
     ASSERT_EQ(XE_RESULT_SUCCESS, result);
 
     uint32_t groupSizeX = 32u;
     uint32_t groupSizeY = 1u;
     uint32_t groupSizeZ = 1u;
-    result = xeFunctionSetGroupSize(function,
-                                    groupSizeX,
-                                    groupSizeY,
-                                    groupSizeZ);
+    result = xeFunctionSetGroupSize(function, groupSizeX, groupSizeY, groupSizeZ);
     ASSERT_EQ(XE_RESULT_SUCCESS, result);
 
     xe_device_mem_alloc_flag_t deviceFlags = {};
     xe_host_mem_alloc_flag_t hostFlags = {};
     size_t bufferSize = 4096u;
     void *dest = nullptr;
-    result = xeSharedMemAlloc(hDevice,
-                              deviceFlags,
-                              hostFlags,
-                              bufferSize,
-                              4096u,
-                              &dest);
+    result = xeSharedMemAlloc(hDevice, deviceFlags, hostFlags, bufferSize, 4096u, &dest);
     ASSERT_EQ(XE_RESULT_SUCCESS, result);
 
     result = xeFunctionSetArgumentValue(function, 0, sizeof(dest), &dest);
     ASSERT_EQ(XE_RESULT_SUCCESS, result);
 
     void *src = nullptr;
-    result = xeSharedMemAlloc(hDevice,
-                              deviceFlags,
-                              hostFlags,
-                              bufferSize,
-                              4096u,
-                              &src);
+    result = xeSharedMemAlloc(hDevice, deviceFlags, hostFlags, bufferSize, 4096u, &src);
     ASSERT_EQ(XE_RESULT_SUCCESS, result);
     memset(reinterpret_cast<void *>(src), 0xbf, bufferSize);
 
@@ -169,19 +135,14 @@ TEST(sample, helloWorld) {
     dispatchFunctionArgs.groupCountX = 2;
     dispatchFunctionArgs.groupCountY = 1;
     dispatchFunctionArgs.groupCountZ = 1;
-    result = xeCommandListAppendLaunchFunction(commandList,
-                                               function,
-                                               &dispatchFunctionArgs,
+    result = xeCommandListAppendLaunchFunction(commandList, function, &dispatchFunctionArgs,
                                                nullptr, 0, nullptr);
     ASSERT_EQ(XE_RESULT_SUCCESS, result);
 
     result = xeCommandListClose(commandList);
     ASSERT_EQ(XE_RESULT_SUCCESS, result);
 
-    result = xeCommandQueueExecuteCommandLists(commandQueue,
-                                               1,
-                                               &commandList,
-                                               (xe_fence_handle_t)0);
+    result = xeCommandQueueExecuteCommandLists(commandQueue, 1, &commandList, (xe_fence_handle_t)0);
     ASSERT_EQ(XE_RESULT_SUCCESS, result);
 
     result = xeMemFree(src);

@@ -16,6 +16,7 @@ struct CommandListProductFamily<IGFX_KABYLAKE> : public CommandListCoreFamily<IG
     }
 };
 
-static CommandListPopulateFactory<IGFX_KABYLAKE, CommandListProductFamily<IGFX_KABYLAKE>> populateKBL;
+static CommandListPopulateFactory<IGFX_KABYLAKE, CommandListProductFamily<IGFX_KABYLAKE>>
+    populateKBL;
 
 } // namespace L0

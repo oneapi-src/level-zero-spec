@@ -18,11 +18,7 @@ struct CommandQueueImp : public CommandQueue {
     static constexpr size_t defaultQueueCmdBufferSize = 16384u;
 
     CommandQueueImp(Device *device, void *csrRT)
-        : device(device),
-          csrRT(csrRT),
-          allocation(nullptr),
-          commandStream(nullptr) {
-    }
+        : device(device), csrRT(csrRT), allocation(nullptr), commandStream(nullptr) {}
 
     xe_result_t destroy() override;
 

@@ -53,10 +53,12 @@ int main(int argc, char *argv[]) {
     uint32_t groupSizeX = 32u;
     uint32_t groupSizeY = 1u;
     uint32_t groupSizeZ = 1u;
-    SUCCESS_OR_TERMINATE(xeFunctionSuggestGroupSize(function, numThreads, 1U, 1U, &groupSizeX, &groupSizeY, &groupSizeZ));
+    SUCCESS_OR_TERMINATE(xeFunctionSuggestGroupSize(function, numThreads, 1U, 1U, &groupSizeX,
+                                                    &groupSizeY, &groupSizeZ));
     SUCCESS_OR_TERMINATE_BOOL(numThreads % groupSizeX == 0);
     if (verbose) {
-        std::cout << "Group size : (" << groupSizeX << ", " << groupSizeY << ", " << groupSizeZ << ")" << std::endl;
+        std::cout << "Group size : (" << groupSizeX << ", " << groupSizeY << ", " << groupSizeZ
+                  << ")" << std::endl;
     }
     SUCCESS_OR_TERMINATE(xeFunctionSetGroupSize(function, groupSizeX, groupSizeY, groupSizeZ));
 
@@ -73,11 +75,17 @@ int main(int argc, char *argv[]) {
     }
 
 #if SUPPORT_MEM_ALLOC
-    SUCCESS_OR_TERMINATE(xeMemAlloc(device0, XE_DEVICE_MEM_ALLOC_FLAG_DEFAULT, allocSize, 1, &srcBuffer));
-    SUCCESS_OR_TERMINATE(xeMemAlloc(device0, XE_DEVICE_MEM_ALLOC_FLAG_DEFAULT, allocSize, 1, &dstBuffer));
+    SUCCESS_OR_TERMINATE(
+        xeMemAlloc(device0, XE_DEVICE_MEM_ALLOC_FLAG_DEFAULT, allocSize, 1, &srcBuffer));
+    SUCCESS_OR_TERMINATE(
+        xeMemAlloc(device0, XE_DEVICE_MEM_ALLOC_FLAG_DEFAULT, allocSize, 1, &dstBuffer));
 #else
-    SUCCESS_OR_TERMINATE(xeSharedMemAlloc(device0, XE_DEVICE_MEM_ALLOC_FLAG_DEFAULT, XE_HOST_MEM_ALLOC_FLAG_DEFAULT, allocSize, 1, &srcBuffer));
-    SUCCESS_OR_TERMINATE(xeSharedMemAlloc(device0, XE_DEVICE_MEM_ALLOC_FLAG_DEFAULT, XE_HOST_MEM_ALLOC_FLAG_DEFAULT, allocSize, 1, &dstBuffer));
+    SUCCESS_OR_TERMINATE(xeSharedMemAlloc(device0, XE_DEVICE_MEM_ALLOC_FLAG_DEFAULT,
+                                          XE_HOST_MEM_ALLOC_FLAG_DEFAULT, allocSize, 1,
+                                          &srcBuffer));
+    SUCCESS_OR_TERMINATE(xeSharedMemAlloc(device0, XE_DEVICE_MEM_ALLOC_FLAG_DEFAULT,
+                                          XE_HOST_MEM_ALLOC_FLAG_DEFAULT, allocSize, 1,
+                                          &dstBuffer));
 #endif
 
     // 2. Encode initialize memory
@@ -86,10 +94,14 @@ int main(int argc, char *argv[]) {
     uint8_t initDataDst[allocSize];
     memset(initDataDst, 3, sizeof(initDataDst));
 
-    SUCCESS_OR_TERMINATE(xeCommandListAppendMemoryCopy(cmdList, srcBuffer, initDataSrc, sizeof(initDataSrc), nullptr, 0, nullptr));
-    SUCCESS_OR_TERMINATE(xeCommandListAppendMemoryCopy(cmdList, dstBuffer, initDataDst, sizeof(initDataDst), nullptr, 0, nullptr));
+    SUCCESS_OR_TERMINATE(xeCommandListAppendMemoryCopy(cmdList, srcBuffer, initDataSrc,
+                                                       sizeof(initDataSrc), nullptr, 0, nullptr));
+    SUCCESS_OR_TERMINATE(xeCommandListAppendMemoryCopy(cmdList, dstBuffer, initDataDst,
+                                                       sizeof(initDataDst), nullptr, 0, nullptr));
 
-    SUCCESS_OR_TERMINATE(xeCommandListAppendBarrier(cmdList, nullptr, 0, nullptr)); // copying of data must finish before running the user function
+    SUCCESS_OR_TERMINATE(xeCommandListAppendBarrier(
+        cmdList, nullptr, 0,
+        nullptr)); // copying of data must finish before running the user function
 
     // 3. Encode run user function
     SUCCESS_OR_TERMINATE(xeFunctionSetArgumentValue(function, 0, sizeof(dstBuffer), &dstBuffer));
@@ -100,18 +112,23 @@ int main(int argc, char *argv[]) {
         dispatchTraits.groupCountY = 1u;
         dispatchTraits.groupCountZ = 1u;
         if (verbose) {
-            std::cerr << "Number of groups : (" << dispatchTraits.groupCountX << ", " << dispatchTraits.groupCountY << ", " << dispatchTraits.groupCountZ << ")" << std::endl;
+            std::cerr << "Number of groups : (" << dispatchTraits.groupCountX << ", "
+                      << dispatchTraits.groupCountY << ", " << dispatchTraits.groupCountZ << ")"
+                      << std::endl;
         }
         SUCCESS_OR_TERMINATE_BOOL(dispatchTraits.groupCountX * groupSizeX == allocSize);
-        SUCCESS_OR_TERMINATE(xeCommandListAppendLaunchFunction(cmdList, function, &dispatchTraits, nullptr, 0, nullptr));
+        SUCCESS_OR_TERMINATE(xeCommandListAppendLaunchFunction(cmdList, function, &dispatchTraits,
+                                                               nullptr, 0, nullptr));
     }
 
     // 4. Encode read back memory
     uint8_t readBackData[allocSize];
     memset(readBackData, 2, sizeof(readBackData));
-    SUCCESS_OR_TERMINATE(xeCommandListAppendBarrier(cmdList, nullptr, 0, nullptr)); // user function must finish before we start copying data
+    SUCCESS_OR_TERMINATE(xeCommandListAppendBarrier(
+        cmdList, nullptr, 0, nullptr)); // user function must finish before we start copying data
 
-    SUCCESS_OR_TERMINATE(xeCommandListAppendMemoryCopy(cmdList, readBackData, dstBuffer, sizeof(readBackData), nullptr, 0, nullptr));
+    SUCCESS_OR_TERMINATE(xeCommandListAppendMemoryCopy(cmdList, readBackData, dstBuffer,
+                                                       sizeof(readBackData), nullptr, 0, nullptr));
 
     // 5. Dispatch and wait
     SUCCESS_OR_TERMINATE(xeCommandListClose(cmdList));
@@ -119,7 +136,8 @@ int main(int argc, char *argv[]) {
     SUCCESS_OR_TERMINATE(xeCommandQueueSynchronize(cmdQueue, std::numeric_limits<uint32_t>::max()));
 
     // 6. Validate
-    bool outputValidationSuccessful = (0 == memcmp(initDataSrc, readBackData, sizeof(readBackData)));
+    bool outputValidationSuccessful =
+        (0 == memcmp(initDataSrc, readBackData, sizeof(readBackData)));
     if (verbose && (false == outputValidationSuccessful)) {
         validate(initDataSrc, readBackData, sizeof(readBackData));
     }
@@ -138,7 +156,8 @@ int main(int argc, char *argv[]) {
 
     bool aubMode = isAubMode(argc, argv);
     if (aubMode == false) {
-        std::cout << "\nResults validation " << (outputValidationSuccessful ? "PASSED" : "FAILED") << std::endl;
+        std::cout << "\nResults validation " << (outputValidationSuccessful ? "PASSED" : "FAILED")
+                  << std::endl;
     }
     int resultOnFailure = aubMode ? 0 : 1;
     return outputValidationSuccessful ? 0 : resultOnFailure;

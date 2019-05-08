@@ -15,7 +15,8 @@ using ::testing::Invoke;
 using ::testing::Return;
 
 TEST(FunctionImp, crossThreadDataIsCorrectlyPatchedWithGlobalWorkSizeAndGroupCount) {
-    uint32_t *crossThreadData = reinterpret_cast<uint32_t *>(alignedMalloc(sizeof(uint32_t[6]), 32));
+    uint32_t *crossThreadData =
+        reinterpret_cast<uint32_t *>(alignedMalloc(sizeof(uint32_t[6]), 32));
 
     WhiteBox<::L0::FunctionImmutableData> funcInfo = {};
     funcInfo.signature.dispatchMetadata.globalWorkSize[0] = 0 * sizeof(uint32_t);
@@ -61,8 +62,7 @@ TEST(FunctionImp, suggestGroupSizeClampsToMaxGroupSize) {
     execEnv.LargestCompiledSIMDSize = 16;
 
     Mock<Module> module;
-    EXPECT_CALL(module, getMaxGroupSize)
-        .WillRepeatedly(Return(8));
+    EXPECT_CALL(module, getMaxGroupSize).WillRepeatedly(Return(8));
 
     Mock<Function> function;
     function.funcImmData.rebind(&funcInfo);
@@ -78,8 +78,7 @@ TEST(FunctionImp, suggestGroupSizeClampsToMaxGroupSize) {
 
 using FunctionImpSuggestGroupSize = ::testing::TestWithParam<uint32_t>;
 
-INSTANTIATE_TEST_CASE_P(,
-                        FunctionImpSuggestGroupSize,
+INSTANTIATE_TEST_CASE_P(, FunctionImpSuggestGroupSize,
                         ::testing::Values(4, 7, 8, 16, 32, 192, 1024, 4097, 16000));
 
 TEST_P(FunctionImpSuggestGroupSize, suggestGroupChoosesProperGroupSize) {
@@ -91,8 +90,7 @@ TEST_P(FunctionImpSuggestGroupSize, suggestGroupChoosesProperGroupSize) {
     execEnv.LargestCompiledSIMDSize = 16;
 
     Mock<Module> module;
-    EXPECT_CALL(module, getMaxGroupSize)
-        .WillRepeatedly(Return(256));
+    EXPECT_CALL(module, getMaxGroupSize).WillRepeatedly(Return(256));
 
     uint32_t size = GetParam();
 
@@ -110,7 +108,8 @@ TEST_P(FunctionImpSuggestGroupSize, suggestGroupChoosesProperGroupSize) {
     EXPECT_EQ(0U, size % groupSize[1]);
     EXPECT_EQ(0U, 1U % groupSize[2]);
 
-    function.FunctionImp::suggestGroupSize(size, size, size, groupSize, groupSize + 1, groupSize + 2);
+    function.FunctionImp::suggestGroupSize(size, size, size, groupSize, groupSize + 1,
+                                           groupSize + 2);
     EXPECT_EQ(0U, size % groupSize[0]);
     EXPECT_EQ(0U, size % groupSize[1]);
     EXPECT_EQ(0U, size % groupSize[2]);
@@ -168,15 +167,19 @@ TEST(FunctionImp, setGroupSizeDoesNotGenerateLocalIdsIfNumChannelsIs0) {
     function.FunctionImp::setGroupSize(16U, 16U, 1U);
     std::vector<char> memBefore;
     {
-        auto perThreadData = reinterpret_cast<const char *>(function.FunctionImp::getPerThreadData().get());
-        memBefore.assign(perThreadData, perThreadData + function.FunctionImp::getPerThreadDataSize());
+        auto perThreadData =
+            reinterpret_cast<const char *>(function.FunctionImp::getPerThreadData().get());
+        memBefore.assign(perThreadData,
+                         perThreadData + function.FunctionImp::getPerThreadDataSize());
     }
 
     function.FunctionImp::setGroupSize(8U, 32U, 1U);
     std::vector<char> memAfter;
     {
-        auto perThreadData = reinterpret_cast<const char *>(function.FunctionImp::getPerThreadData().get());
-        memAfter.assign(perThreadData, perThreadData + function.FunctionImp::getPerThreadDataSize());
+        auto perThreadData =
+            reinterpret_cast<const char *>(function.FunctionImp::getPerThreadData().get());
+        memAfter.assign(perThreadData,
+                        perThreadData + function.FunctionImp::getPerThreadDataSize());
     }
 
     EXPECT_EQ(memAfter, memBefore);

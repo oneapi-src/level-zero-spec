@@ -16,7 +16,8 @@ struct GraphicsAllocation;
 
 struct PrintfHandler {
     static GraphicsAllocation *createPrintfBuffer(Device *device);
-    static void printOutput(PtrRef<FunctionImmutableData> function, PtrRef<GraphicsAllocation> printfBuffer, Device *device);
+    static void printOutput(PtrRef<FunctionImmutableData> function,
+                            PtrRef<GraphicsAllocation> printfBuffer, Device *device);
 
   protected:
     PrintfHandler(const PrintfHandler &) = delete;

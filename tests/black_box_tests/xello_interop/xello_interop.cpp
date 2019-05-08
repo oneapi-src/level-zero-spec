@@ -68,7 +68,6 @@ int main(int argc, char **argv) {
             return -1;
     }
 
-
     ret = clCompute();
     if (ret)
         return -1;

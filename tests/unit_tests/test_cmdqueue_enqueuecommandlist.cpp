@@ -23,20 +23,13 @@ TEST(xeCommandQueueEnqueueCommandQueue, redirectsToObject) {
     Mock<CommandQueue> cmdQueue;
     xe_fence_handle_t hFence = {};
 
-    EXPECT_CALL(cmdQueue, executeCommandLists(1,
-                                              &hCommandList,
-                                              hFence))
-        .Times(1);
+    EXPECT_CALL(cmdQueue, executeCommandLists(1, &hCommandList, hFence)).Times(1);
 
-    auto result = xeCommandQueueExecuteCommandLists(cmdQueue.toHandle(),
-                                                        1,
-                                                        &hCommandList,
-                                                        hFence);
+    auto result = xeCommandQueueExecuteCommandLists(cmdQueue.toHandle(), 1, &hCommandList, hFence);
     EXPECT_EQ(XE_RESULT_SUCCESS, result);
 }
 
-class CommandQueueExecuteCommandLists : public GlobalFixtureTest{
-};
+class CommandQueueExecuteCommandLists : public GlobalFixtureTest {};
 
 HWTEST_F(CommandQueueExecuteCommandLists, addsASecondLevelBatchBufferPerCommandList) {
     Mock<Device> device;
@@ -49,9 +42,7 @@ HWTEST_F(CommandQueueExecuteCommandLists, addsASecondLevelBatchBufferPerCommandL
         CommandList::create(productFamily, &device)->toHandle(),
         CommandList::create(productFamily, &device)->toHandle()};
     uint32_t numCommandLists = sizeof(commandLists) / sizeof(commandLists[0]);
-    auto result = commandQueue->executeCommandLists(numCommandLists,
-                                                    commandLists,
-                                                    nullptr);
+    auto result = commandQueue->executeCommandLists(numCommandLists, commandLists, nullptr);
 
     ASSERT_EQ(XE_RESULT_SUCCESS, result);
 
@@ -59,9 +50,8 @@ HWTEST_F(CommandQueueExecuteCommandLists, addsASecondLevelBatchBufferPerCommandL
     ASSERT_GT(usedSpaceAfter, usedSpaceBefore);
 
     GenCmdList cmdList;
-    ASSERT_TRUE(FamilyType::PARSE::parseCommandBuffer(cmdList,
-                                                      ptrOffset(commandQueue->commandStream->getCpuBase(), 0),
-                                                      usedSpaceAfter));
+    ASSERT_TRUE(FamilyType::PARSE::parseCommandBuffer(
+        cmdList, ptrOffset(commandQueue->commandStream->getCpuBase(), 0), usedSpaceAfter));
     using MI_BATCH_BUFFER_START = typename FamilyType::MI_BATCH_BUFFER_START;
     auto itorCurrent = cmdList.begin();
 
@@ -74,8 +64,10 @@ HWTEST_F(CommandQueueExecuteCommandLists, addsASecondLevelBatchBufferPerCommandL
 
         auto bbs = genCmdCast<MI_BATCH_BUFFER_START *>(*itorCurrent++);
         ASSERT_NE(nullptr, bbs);
-        EXPECT_EQ(MI_BATCH_BUFFER_START::SECOND_LEVEL_BATCH_BUFFER_SECOND_LEVEL_BATCH, bbs->getSecondLevelBatchBuffer());
-        EXPECT_EQ(MI_BATCH_BUFFER_START::ADDRESS_SPACE_INDICATOR_PPGTT, bbs->getAddressSpaceIndicator());
+        EXPECT_EQ(MI_BATCH_BUFFER_START::SECOND_LEVEL_BATCH_BUFFER_SECOND_LEVEL_BATCH,
+                  bbs->getSecondLevelBatchBuffer());
+        EXPECT_EQ(MI_BATCH_BUFFER_START::ADDRESS_SPACE_INDICATOR_PPGTT,
+                  bbs->getAddressSpaceIndicator());
         EXPECT_EQ(allocation.getGpuAddress(), bbs->getBatchBufferStartAddressGraphicsaddress472());
 
         commandList->destroy();

@@ -3,10 +3,11 @@
 namespace L0 {
 
 class OsContextWindows : public OsContext {
-    public:
-        OsContextWindows(void *execEnvRT) : execEnvRT(execEnvRT) {}
-    protected:
-        void *execEnvRT;
+  public:
+    OsContextWindows(void *execEnvRT) : execEnvRT(execEnvRT) {}
+
+  protected:
+    void *execEnvRT;
 };
 
-} //namespace L0
+} // namespace L0

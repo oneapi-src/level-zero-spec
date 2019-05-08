@@ -25,21 +25,16 @@ Mock<Device>::Mock() {
     csrRT = new MockCommandStreamReceiver(*executionEnvironment);
 
     static ::testing::NiceMock<Mock<MemoryManager>> memoryManager;
-    EXPECT_CALL(*this, getMemoryManager)
-        .WillRepeatedly(Return(&memoryManager));
+    EXPECT_CALL(*this, getMemoryManager).WillRepeatedly(Return(&memoryManager));
 
     static ::testing::NiceMock<Mock<MOCSMapper>> mocsMapper;
     static PtrRef<L0::MOCSMapper> mocsMapperRef{&mocsMapper};
-    EXPECT_CALL(*this, getMOCSMapper)
-        .WillRepeatedly(Return(mocsMapperRef));
+    EXPECT_CALL(*this, getMOCSMapper).WillRepeatedly(Return(mocsMapperRef));
 
-    EXPECT_CALL(*this, getMaxNumHwThreads)
-        .WillRepeatedly(Return(16));
+    EXPECT_CALL(*this, getMaxNumHwThreads).WillRepeatedly(Return(16));
 }
 
-Mock<Device>::~Mock() {
-    delete static_cast<MockCommandStreamReceiver *>(csrRT);
-}
+Mock<Device>::~Mock() { delete static_cast<MockCommandStreamReceiver *>(csrRT); }
 
 } // namespace ult
 } // namespace L0

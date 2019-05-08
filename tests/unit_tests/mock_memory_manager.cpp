@@ -20,9 +20,11 @@ MockMemoryManager::Mock() {
         .WillRepeatedly(Invoke(this, &MockMemoryManager::doCreateGraphicsAllocationForIsa));
 
     EXPECT_CALL(*this, allocateGraphicsMemoryForPrivateMemory)
-        .WillRepeatedly(Invoke(this, &MockMemoryManager::doCreateGraphicsAllocationForPrivateMemory));
+        .WillRepeatedly(
+            Invoke(this, &MockMemoryManager::doCreateGraphicsAllocationForPrivateMemory));
 
-    EXPECT_CALL(*this, allocateManagedMemory).WillRepeatedly(Invoke(this, &MockMemoryManager::doCreateGraphicsAllocation));
+    EXPECT_CALL(*this, allocateManagedMemory)
+        .WillRepeatedly(Invoke(this, &MockMemoryManager::doCreateGraphicsAllocation));
 
     EXPECT_CALL(*this, freeMemory(An<GraphicsAllocation *>()))
         .WillRepeatedly(Invoke(this, &MockMemoryManager::doFreeGraphicsAllocation));
@@ -43,21 +45,23 @@ void *MockMemoryManager::doAllocateHostMemory(size_t size, size_t alignment) {
     return alignedMalloc(size, alignment);
 }
 
-GraphicsAllocation *MockMemoryManager::doCreateGraphicsAllocation(Device *device, size_t size, size_t alignment) {
+GraphicsAllocation *MockMemoryManager::doCreateGraphicsAllocation(Device *device, size_t size,
+                                                                  size_t alignment) {
     auto buffer = alignedMalloc(size, alignment);
     auto allocation = new GraphicsAllocation(buffer, size);
     track(allocation);
     return allocation;
 }
 
-PtrOwn<L0::GraphicsAllocation> MockMemoryManager::doCreateGraphicsAllocationForIsa(PtrRef<const void> isaHostMem,
-                                                                               size_t size) {
+PtrOwn<L0::GraphicsAllocation>
+MockMemoryManager::doCreateGraphicsAllocationForIsa(PtrRef<const void> isaHostMem, size_t size) {
     auto buffer = alignedMalloc(size, 64);
     auto allocation = new GraphicsAllocation(buffer, size);
     return PtrOwn<L0::GraphicsAllocation>(allocation);
 }
 
-PtrOwn<GraphicsAllocation> MockMemoryManager::doCreateGraphicsAllocationForPrivateMemory(size_t size) {
+PtrOwn<GraphicsAllocation>
+MockMemoryManager::doCreateGraphicsAllocationForPrivateMemory(size_t size) {
     auto buffer = alignedMalloc(size, 64);
     auto allocation = new GraphicsAllocation(buffer, size);
     track(allocation);

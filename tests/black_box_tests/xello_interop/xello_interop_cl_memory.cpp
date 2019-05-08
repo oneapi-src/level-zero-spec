@@ -46,7 +46,7 @@ int main(int argc, char **argv) {
     if (ret)
         return -1;
 
-    //xeCleanup();
+    // xeCleanup();
     clCleanup();
 
     return 0;

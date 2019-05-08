@@ -22,12 +22,12 @@ TEST(xeCommandListAppendReserveSpace, redirectsToObject) {
     void *ptrToReservedMemory = nullptr;
     EXPECT_CALL(commandList, reserveSpace(sizeToReserveForCommand, &ptrToReservedMemory)).Times(1);
 
-    auto result = xeCommandListReserveSpace(commandList.toHandle(), sizeToReserveForCommand, &ptrToReservedMemory);
+    auto result = xeCommandListReserveSpace(commandList.toHandle(), sizeToReserveForCommand,
+                                            &ptrToReservedMemory);
     EXPECT_EQ(XE_RESULT_SUCCESS, result);
 }
 
-class CommandList_reserveSpace : public GlobalFixtureTest {
-};
+class CommandList_reserveSpace : public GlobalFixtureTest {};
 
 HWTEST_F(CommandList_reserveSpace, addsCommandsToBatchBuffer) {
     Mock<Device> device;
@@ -56,9 +56,8 @@ HWTEST_F(CommandList_reserveSpace, addsCommandsToBatchBuffer) {
     ASSERT_GT(usedSpaceAfter, usedSpaceBefore);
 
     GenCmdList cmdList;
-    ASSERT_TRUE(FamilyType::PARSE::parseCommandBuffer(cmdList,
-                                                      ptrOffset(commandList->commandStream->getCpuBase(), 0),
-                                                      usedSpaceAfter));
+    ASSERT_TRUE(FamilyType::PARSE::parseCommandBuffer(
+        cmdList, ptrOffset(commandList->commandStream->getCpuBase(), 0), usedSpaceAfter));
 
     // Find a testing command in batch buffer
     auto itor = cmdList.begin();

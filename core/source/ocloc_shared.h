@@ -1,29 +1,72 @@
 /**************************************************************************/ /**
-* INTEL CONFIDENTIAL
-* Copyright 2019
-* Intel Corporation All Rights Reserved.
-*
-* @cond DEV
-* The source code contained or described herein and all documents related to the
-* source code ("Material") are owned by Intel Corporation or its suppliers or
-* licensors. Title to the Material remains with Intel Corporation or its suppliers
-* and licensors. The Material contains trade secrets and proprietary and confidential
-* information of Intel or its suppliers and licensors. The Material is protected by
-* worldwide copyright and trade secret laws and treaty provisions. No part of the
-* Material may be used, copied, reproduced, modified, published, uploaded, posted
-* transmitted, distributed, or disclosed in any way without Intel's prior express
-* written permission.
-*
-* No license under any patent, copyright, trade secret or other intellectual
-* property right is granted to or conferred upon you by disclosure or delivery
-* of the Materials, either expressly, by implication, inducement, estoppel
-* or otherwise. Any license under such intellectual property rights must be
-* express and approved by Intel in writing.
-* @endcond
-*
-* @file spirv_compiler.h
-*
-******************************************************************************/
+                                                                              * INTEL CONFIDENTIAL
+                                                                              * Copyright 2019
+                                                                              * Intel Corporation
+                                                                              *All Rights Reserved.
+                                                                              *
+                                                                              * @cond DEV
+                                                                              * The source code
+                                                                              *contained or
+                                                                              *described herein and
+                                                                              *all documents related
+                                                                              *to the source code
+                                                                              *("Material") are
+                                                                              *owned by Intel
+                                                                              *Corporation or its
+                                                                              *suppliers or
+                                                                              * licensors. Title to
+                                                                              *the Material remains
+                                                                              *with Intel
+                                                                              *Corporation or its
+                                                                              *suppliers and
+                                                                              *licensors. The
+                                                                              *Material contains
+                                                                              *trade secrets and
+                                                                              *proprietary and
+                                                                              *confidential
+                                                                              * information of Intel
+                                                                              *or its suppliers and
+                                                                              *licensors. The
+                                                                              *Material is protected
+                                                                              *by worldwide
+                                                                              *copyright and trade
+                                                                              *secret laws and
+                                                                              *treaty provisions. No
+                                                                              *part of the Material
+                                                                              *may be used, copied,
+                                                                              *reproduced, modified,
+                                                                              *published, uploaded,
+                                                                              *posted transmitted,
+                                                                              *distributed, or
+                                                                              *disclosed in any way
+                                                                              *without Intel's prior
+                                                                              *express written
+                                                                              *permission.
+                                                                              *
+                                                                              * No license under any
+                                                                              *patent, copyright,
+                                                                              *trade secret or other
+                                                                              *intellectual property
+                                                                              *right is granted to
+                                                                              *or conferred upon you
+                                                                              *by disclosure or
+                                                                              *delivery of the
+                                                                              *Materials, either
+                                                                              *expressly, by
+                                                                              *implication,
+                                                                              *inducement, estoppel
+                                                                              * or otherwise. Any
+                                                                              *license under such
+                                                                              *intellectual property
+                                                                              *rights must be
+                                                                              * express and approved
+                                                                              *by Intel in writing.
+                                                                              * @endcond
+                                                                              *
+                                                                              * @file
+                                                                              *spirv_compiler.h
+                                                                              *
+                                                                              ******************************************************************************/
 #ifndef _OCLOC_SHARED_H
 #define _OCLOC_SHARED_H
 #if defined(__cplusplus)
@@ -81,23 +124,25 @@ typedef enum _ocloc_result_t {
 /// @returns
 ///     - 0 - success
 ///     - non-zero - error
-__xedllexport int __xecall compileClToSpirv(const char *src,                                             // [in] Input OCL C source
-                                            unsigned int sizeLen,                                        // [in] size of OCL C source in src
-                                            const char *clOptions,                                       // [in][optional] OCL C options
-                                            const char *internalOptions,                                 // [in][optional] internal compiler options
-                                            void *allocator,                                             // [in][optional] allocator object
-                                            void *(__xecall *allocateFn)(void *alllocator, size_t size), // [in] allocator function for outSpirv and buildLogOut
-                                            void **outSpirv,                                             // [out] spirV
-                                            unsigned int *outSpirvLen,                                   // [out] size of spirV
-                                            char **outBuildLog,                                          // [out] build log
-                                            unsigned int *outBuildLogLen                                 // [out] size of build log
+__xedllexport int __xecall compileClToSpirv(
+    const char *src,             // [in] Input OCL C source
+    unsigned int sizeLen,        // [in] size of OCL C source in src
+    const char *clOptions,       // [in][optional] OCL C options
+    const char *internalOptions, // [in][optional] internal compiler options
+    void *allocator,             // [in][optional] allocator object
+    void *(__xecall *allocateFn)(
+        void *alllocator, size_t size), // [in] allocator function for outSpirv and buildLogOut
+    void **outSpirv,                    // [out] spirV
+    unsigned int *outSpirvLen,          // [out] size of spirV
+    char **outBuildLog,                 // [out] build log
+    unsigned int *outBuildLogLen        // [out] size of build log
 );
 
-typedef __xedllexport int(__xecall *compileClToSpirvFT)(const char *, unsigned int,
-                                                        const char *, const char *,
-                                                        void *, void *(__xecall *)(void *, unsigned int),
-                                                        void **, unsigned int *,
-                                                        char **, unsigned int *);
+typedef __xedllexport int(__xecall *compileClToSpirvFT)(const char *, unsigned int, const char *,
+                                                        const char *, void *,
+                                                        void *(__xecall *)(void *, unsigned int),
+                                                        void **, unsigned int *, char **,
+                                                        unsigned int *);
 
 #if defined(__cplusplus)
 } // extern "C"
@@ -108,11 +153,10 @@ namespace ocloc {
 struct Output {
     Output() = default;
 
-    Output(int status,
-           char *output, unsigned int outputSize,
-           char *buildLog, unsigned int buildLogSize) noexcept
-        : status(status), output(output), outputSize(outputSize), buildLog(buildLog), buildLogSize(buildLogSize) {
-    }
+    Output(int status, char *output, unsigned int outputSize, char *buildLog,
+           unsigned int buildLogSize) noexcept
+        : status(status), output(output), outputSize(outputSize), buildLog(buildLog),
+          buildLogSize(buildLogSize) {}
 
     Output(const Output &) noexcept = delete;
     Output(Output &&rhs) noexcept {
@@ -151,29 +195,17 @@ struct Output {
         delete[] this->buildLog;
     }
 
-    bool success() const {
-        return status == 0;
-    }
+    bool success() const { return status == 0; }
 
-    int getStatus() const {
-        return status;
-    }
+    int getStatus() const { return status; }
 
-    const void *getOutput() const {
-        return output;
-    }
+    const void *getOutput() const { return output; }
 
-    unsigned int getOutputSize() const {
-        return outputSize;
-    }
+    unsigned int getOutputSize() const { return outputSize; }
 
-    const char *getBuildLog() const {
-        return buildLog;
-    }
+    const char *getBuildLog() const { return buildLog; }
 
-    unsigned int getBuildLogSize() const {
-        return buildLogSize;
-    }
+    unsigned int getBuildLogSize() const { return buildLogSize; }
 
     void deleteBuildLog() {
         delete[] buildLog;
@@ -197,16 +229,16 @@ struct Output {
 
 struct OclocWrapper {
   public:
-    static Output compileClToSpirV(const char *src, const char *clOptions, const char *internalOptions) {
+    static Output compileClToSpirV(const char *src, const char *clOptions,
+                                   const char *internalOptions) {
         char *spirV;
         unsigned int spirVSize;
         char *buildLog;
         unsigned int buildLogSize;
         auto func = getOclocFunc<compileClToSpirvFT>("compileClToSpirv");
-        int result = func(src, static_cast<unsigned int>(strlen(src)),
-                          clOptions, internalOptions,
-                          nullptr, &allocate,
-                          reinterpret_cast<void **>(&spirV), &spirVSize, &buildLog, &buildLogSize);
+        int result = func(src, static_cast<unsigned int>(strlen(src)), clOptions, internalOptions,
+                          nullptr, &allocate, reinterpret_cast<void **>(&spirV), &spirVSize,
+                          &buildLog, &buildLogSize);
         return Output{result, spirV, spirVSize, buildLog, buildLogSize};
     }
 
@@ -227,12 +259,9 @@ struct OclocWrapper {
     }
 
   protected:
-    static void *__xecall allocate(void *, unsigned int size) {
-        return new char[size];
-    }
+    static void *__xecall allocate(void *, unsigned int size) { return new char[size]; }
 
-    template <typename T>
-    static T getOclocFunc(const char *name) {
+    template <typename T> static T getOclocFunc(const char *name) {
         return reinterpret_cast<T>(getOclocFuncImpl(name));
     }
 

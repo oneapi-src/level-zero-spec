@@ -29,20 +29,15 @@ struct MemAllocation {
 };
 
 struct HostAllocation : public MemAllocation {
-    HostAllocation(): hostBuffer(nullptr) {
-    }
+    HostAllocation() : hostBuffer(nullptr) {}
 
-    HostAllocation(void *buffer, size_t size): hostBuffer(buffer), bufferSize(size) {
+    HostAllocation(void *buffer, size_t size) : hostBuffer(buffer), bufferSize(size) {
         allocType = AllocationType::HOST;
     }
 
-    void *getHostAddress() const override {
-        return hostBuffer;
-    }
+    void *getHostAddress() const override { return hostBuffer; }
 
-    size_t getSize() const override {
-        return bufferSize;
-    }
+    size_t getSize() const override { return bufferSize; }
 
     void *hostBuffer;
     size_t bufferSize;
@@ -59,21 +54,13 @@ struct GraphicsAllocation : public MemAllocation {
     uint64_t getGpuAddressOffsetFromHeapBase() const;
     void *getHostAddress() const override;
     size_t getSize() const override;
-    void setAllocatedFromFault(bool val) {
-        this->allocatedFromFault = val;
-    }
+    void setAllocatedFromFault(bool val) { this->allocatedFromFault = val; }
 
-    bool getAllocatedFromFault() {
-        return this->allocatedFromFault;
-    }
+    bool getAllocatedFromFault() { return this->allocatedFromFault; }
 
-    Device *getDevice() {
-        return deviceOwner;
-    }
+    Device *getDevice() { return deviceOwner; }
 
-    void setDevice(Device * device) {
-        deviceOwner = device;
-    }
+    void setDevice(Device *device) { deviceOwner = device; }
 
     bool allocatedFromFault = false;
     NEO::GraphicsAllocation *allocationRT = nullptr;

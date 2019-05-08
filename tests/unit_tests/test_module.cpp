@@ -141,15 +141,14 @@ TEST(xeModuleCreateFunction, redirectsToObject) {
     EXPECT_EQ(XE_RESULT_SUCCESS, result);
 }
 
-struct ModuleCreateBufArg : ::testing::TestWithParam<std::tuple<std::string, std::string, std::string>> {
+struct ModuleCreateBufArg
+    : ::testing::TestWithParam<std::tuple<std::string, std::string, std::string>> {
     void SetUp() override {
         globalMemoryManager_prev = globalMemoryManager;
         globalMemoryManager = &globalMemoryManager_mock;
     }
 
-    void TearDown() override {
-        globalMemoryManager = globalMemoryManager_prev;
-    }
+    void TearDown() override { globalMemoryManager = globalMemoryManager_prev; }
 
     Mock<MemoryManager> globalMemoryManager_mock;
     L0::MemoryManager *globalMemoryManager_prev;
@@ -227,7 +226,8 @@ TEST_P(ModuleCreateBufArg, onlineCompilationModuleTest) {
         << "Per thread data not properly aligned for vector instructions"; // todo : make a real
                                                                            // test out of this
     uint32_t numChannels = 3;
-    EXPECT_EQ(numChannels * function->getImmutableData()->getSignature().attributes.simdSize * sizeof(uint16_t),
+    EXPECT_EQ(numChannels * function->getImmutableData()->getSignature().attributes.simdSize *
+                  sizeof(uint16_t),
               function->getPerThreadDataSizeForWholeThreadGroup());
 
     uint32_t groupSizeX, groupSizeY, groupSizeZ;
@@ -242,8 +242,8 @@ TEST_P(ModuleCreateBufArg, onlineCompilationModuleTest) {
         std::stringstream mockDataStream;
         std::vector<std::pair<int, uintptr_t>> bufferArgsIndices{std::make_pair(0, dstAddress),
                                                                  std::make_pair(1, srcAddress)};
-        writeMockData(std::string(__FILE__) + " : " + std::to_string(__LINE__), moduleName, deviceName, function, bufferArgsIndices,
-                      mockDataStream);
+        writeMockData(std::string(__FILE__) + " : " + std::to_string(__LINE__), moduleName,
+                      deviceName, function, bufferArgsIndices, mockDataStream);
         std::string mockData = mockDataStream.str();
         std::string fileName = "mock_" + moduleName + "_" + deviceName + ".cpp";
         std::ofstream(fileName, std::ios::binary).write(mockData.data(), mockData.size());
@@ -348,7 +348,8 @@ TEST_P(ModuleCreateImageArg, onlineCompilationModuleTest) {
         << "Per thread data not properly aligned for vector instructions"; // todo : make a real
                                                                            // test out of this
     uint32_t numChannels = 3;
-    EXPECT_EQ(numChannels * function->getImmutableData()->getSignature().attributes.simdSize * sizeof(uint16_t),
+    EXPECT_EQ(numChannels * function->getImmutableData()->getSignature().attributes.simdSize *
+                  sizeof(uint16_t),
               function->getPerThreadDataSizeForWholeThreadGroup());
 
     uint32_t groupSizeX, groupSizeY, groupSizeZ;
@@ -363,8 +364,8 @@ TEST_P(ModuleCreateImageArg, onlineCompilationModuleTest) {
         std::stringstream mockDataStream;
 
         // Image arguments are not passed/set in crossthread data, bufferArgsIndicies is empty.
-        writeMockData(std::string(__FILE__) + " : " + std::to_string(__LINE__), moduleName, deviceName, function, {},
-                      mockDataStream);
+        writeMockData(std::string(__FILE__) + " : " + std::to_string(__LINE__), moduleName,
+                      deviceName, function, {}, mockDataStream);
         std::string mockData = mockDataStream.str();
         std::string fileName = "mock_" + moduleName + "_" + deviceName + ".cpp";
         std::ofstream(fileName, std::ios::binary).write(mockData.data(), mockData.size());
@@ -393,9 +394,11 @@ TEST(ModuleCreateSimple, mockedModuleTest) {
                                      {&mockAlloc1, &mockAlloc2});
     function.expectAnyMockFunctionCall();
 
-    EXPECT_EQ(expectedData->simdSize, function.getImmutableData()->getSignature().attributes.simdSize);
+    EXPECT_EQ(expectedData->simdSize,
+              function.getImmutableData()->getSignature().attributes.simdSize);
     ASSERT_EQ(expectedData->isaSize, function.getImmutableData()->getIsaSize());
-    EXPECT_EQ(0, memcmp(expectedData->isa, function.getImmutableData()->getIsaGraphicsAllocation()->getHostAddress(),
+    EXPECT_EQ(0, memcmp(expectedData->isa,
+                        function.getImmutableData()->getIsaGraphicsAllocation()->getHostAddress(),
                         expectedData->isaSize));
 
     EXPECT_EQ(expectedData->crossThreadDataBaseSize, function.getCrossThreadDataSize());

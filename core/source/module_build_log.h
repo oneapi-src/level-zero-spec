@@ -2,8 +2,7 @@
 #include "xe_common.h"
 #include "xe_module.h"
 
-struct _xe_module_build_log_handle_t {
-};
+struct _xe_module_build_log_handle_t {};
 
 namespace L0 {
 
@@ -13,10 +12,8 @@ struct ModuleBuildLog : public _xe_module_build_log_handle_t {
     static ModuleBuildLog *create();
 
     virtual xe_result_t destroy() = 0;
-    virtual xe_result_t getString(size_t *pSize,
-                                  char *pBuildLog) = 0;
-    virtual void appendString(const char *pBuildLog,
-                              size_t size) = 0;
+    virtual xe_result_t getString(size_t *pSize, char *pBuildLog) = 0;
+    virtual void appendString(const char *pBuildLog, size_t size) = 0;
 
     ModuleBuildLog() = default;
     ModuleBuildLog(const ModuleBuildLog &) = delete;
@@ -28,9 +25,7 @@ struct ModuleBuildLog : public _xe_module_build_log_handle_t {
         return static_cast<ModuleBuildLog *>(handle);
     }
 
-    inline xe_module_build_log_handle_t toHandle() {
-        return this;
-    }
+    inline xe_module_build_log_handle_t toHandle() { return this; }
 };
 
 xe_result_t moduleBuildLogDestroy(xe_module_build_log_handle_t hModuleBuildLog);

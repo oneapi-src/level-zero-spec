@@ -10,6 +10,7 @@ struct CommandListProductFamily<IGFX_ICELAKE_LP> : public CommandListCoreFamily<
     using CommandListCoreFamily::CommandListCoreFamily;
 };
 
-static CommandListPopulateFactory<IGFX_ICELAKE_LP, CommandListProductFamily<IGFX_ICELAKE_LP>> populateICLLP;
+static CommandListPopulateFactory<IGFX_ICELAKE_LP, CommandListProductFamily<IGFX_ICELAKE_LP>>
+    populateICLLP;
 
 } // namespace L0

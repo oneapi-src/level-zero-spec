@@ -22,8 +22,7 @@
 #include "../include/xe_peak.h"
 
 void XePeak::xe_peak_kernel_latency(L0Context &context) {
-    uint64_t num_items = get_max_work_items(context) *
-                         FETCH_PER_WI;
+    uint64_t num_items = get_max_work_items(context) * FETCH_PER_WI;
     uint64_t global_size = (num_items / FETCH_PER_WI);
     uint64_t total_work_items = convert_cl_to_xe_work_item_count(
         global_size, context.device_compute_property.maxGroupSizeX);
@@ -62,13 +61,15 @@ void XePeak::xe_peak_kernel_latency(L0Context &context) {
     ///////////////////////////////////////////////////////////////////////////
     std::cout << "Kernel Launch Latency (us)\n";
 
-    latency = run_kernel(context, local_offset_v1, workgroup_info, TimingMeasurement::KERNEL_LAUNCH_LATENCY, false);
+    latency = run_kernel(context, local_offset_v1, workgroup_info,
+                         TimingMeasurement::KERNEL_LAUNCH_LATENCY, false);
 
     std::cout << "us: " << latency << "\n";
     ///////////////////////////////////////////////////////////////////////////
     std::cout << "Kernel Latency (us)\n";
 
-    latency = run_kernel(context, local_offset_v1, workgroup_info, TimingMeasurement::KERNEL_COMPLETE_LATENCY, false);
+    latency = run_kernel(context, local_offset_v1, workgroup_info,
+                         TimingMeasurement::KERNEL_COMPLETE_LATENCY, false);
 
     std::cout << "us: " << latency << "\n";
     ///////////////////////////////////////////////////////////////////////////

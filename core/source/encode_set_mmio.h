@@ -5,8 +5,7 @@
 
 namespace L0 {
 
-template <GFXCORE_FAMILY gfxCoreFamily>
-struct EncodeSetMMIO {
+template <GFXCORE_FAMILY gfxCoreFamily> struct EncodeSetMMIO {
     using GfxFamily = typename NEO::GfxFamilyMapper<gfxCoreFamily>::GfxFamily;
     using MI_LOAD_REGISTER_IMM = typename GfxFamily::MI_LOAD_REGISTER_IMM;
 

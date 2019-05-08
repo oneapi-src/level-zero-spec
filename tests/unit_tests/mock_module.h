@@ -9,8 +9,7 @@
 namespace L0 {
 namespace ult {
 
-template <>
-struct WhiteBox<::L0::Module> : public ::L0::ModuleImp {
+template <> struct WhiteBox<::L0::Module> : public ::L0::ModuleImp {
     using BaseClass = ::L0::ModuleImp;
 
     WhiteBox() : ::L0::ModuleImp() {}
@@ -19,8 +18,7 @@ struct WhiteBox<::L0::Module> : public ::L0::ModuleImp {
 
 using Module = WhiteBox<::L0::Module>;
 
-template <>
-struct Mock<Module> : public Module {
+template <> struct Mock<Module> : public Module {
     Mock();
     virtual ~Mock() = default;
 
@@ -29,8 +27,7 @@ struct Mock<Module> : public Module {
     MOCK_METHOD0(destroy, xe_result_t());
     MOCK_METHOD2(getFunctionPointer, xe_result_t(const char *pFunctionName, void **pfnFunction));
     MOCK_METHOD2(getNativeBinary, xe_result_t(size_t *pSize, uint8_t *pModuleNativeBinary));
-    MOCK_CONST_METHOD1(getImmutableData,
-                       PtrRef<FunctionImmutableData>(CStringRef functionName));
+    MOCK_CONST_METHOD1(getImmutableData, PtrRef<FunctionImmutableData>(CStringRef functionName));
     MOCK_CONST_METHOD0(getMaxGroupSize, uint32_t());
 
     MOCK_CONST_METHOD0(getDevice, Device *());

@@ -4,11 +4,10 @@
 
 namespace L0 {
 
-template <>
-struct ImageProductFamily<IGFX_ICELAKE_LP> : public ImageCoreFamily<IGFX_GEN11_CORE> {
+template <> struct ImageProductFamily<IGFX_ICELAKE_LP> : public ImageCoreFamily<IGFX_GEN11_CORE> {
     using ImageCoreFamily::ImageCoreFamily;
 };
 
 static ImagePopulateFactory<IGFX_ICELAKE_LP, ImageProductFamily<IGFX_ICELAKE_LP>> populateICLLP;
 
-} //namespace L0
+} // namespace L0

@@ -18,13 +18,11 @@ struct EventImp : public Event {
 
     xe_result_t hostSynchronize(uint32_t timeout) override;
 
-    xe_result_t queryElapsedTime(xe_event_handle_t hEventEnd,
-                                 double *pTime) override {
+    xe_result_t queryElapsedTime(xe_event_handle_t hEventEnd, double *pTime) override {
         return XE_RESULT_ERROR_UNSUPPORTED;
     }
 
-    xe_result_t queryMetricsData(xe_event_handle_t hEventEnd,
-                                 size_t reportSize,
+    xe_result_t queryMetricsData(xe_event_handle_t hEventEnd, size_t reportSize,
                                  uint32_t *pReportData) override {
         return XE_RESULT_ERROR_UNSUPPORTED;
     }
@@ -32,9 +30,7 @@ struct EventImp : public Event {
     xe_result_t queryStatus() override {
         auto hostAddress = static_cast<uint64_t *>(allocation->getHostAddress());
 
-        return *hostAddress == Event::STATE_CLEARED
-                   ? XE_RESULT_NOT_READY
-                   : XE_RESULT_SUCCESS;
+        return *hostAddress == Event::STATE_CLEARED ? XE_RESULT_NOT_READY : XE_RESULT_SUCCESS;
     }
 
     xe_result_t reset() override;
@@ -111,7 +107,7 @@ xe_result_t EventImp::reset() {
 }
 
 struct EventPoolImp : public EventPool {
-    EventPoolImp(Device *device, uint32_t count): device(device), count(count) {
+    EventPoolImp(Device *device, uint32_t count) : device(device), count(count) {
         pool = std::vector<Event *>(this->count, nullptr);
         for (uint32_t i = 0; i < count; i++) {
             auto event = Event::create(this->device);
@@ -122,23 +118,18 @@ struct EventPoolImp : public EventPool {
 
     xe_result_t destroy() override;
 
-    xe_result_t createEvent(const xe_event_desc_t* desc,
-            xe_event_handle_t* phEvent) override;
+    xe_result_t createEvent(const xe_event_desc_t *desc, xe_event_handle_t *phEvent) override;
 
-    size_t getPoolSize() override {
-        return this->pool.size();
-    }
+    size_t getPoolSize() override { return this->pool.size(); }
 
-    Event *getEvent(uint32_t index) override {
-        return this->pool[index];
-    }
+    Event *getEvent(uint32_t index) override { return this->pool[index]; }
 
-    xe_result_t getIpcHandle(xe_ipc_event_pool_handle_t* pIpcHandle) override;
+    xe_result_t getIpcHandle(xe_ipc_event_pool_handle_t *pIpcHandle) override;
 
     xe_result_t closeIpcHandle() override;
 
     void destroyPool() {
-        for (Event *event: this->pool) {
+        for (Event *event : this->pool) {
             event->destroy();
         }
     }
@@ -148,20 +139,17 @@ struct EventPoolImp : public EventPool {
     std::vector<Event *> pool;
 };
 
-xe_result_t EventPoolImp::createEvent(const xe_event_desc_t* desc,
-            xe_event_handle_t* phEvent) {
+xe_result_t EventPoolImp::createEvent(const xe_event_desc_t *desc, xe_event_handle_t *phEvent) {
     assert(desc->index >= 0 && desc->index < this->getPoolSize());
     *phEvent = this->getEvent(desc->index);
     return XE_RESULT_SUCCESS;
 }
 
-xe_result_t EventPoolImp::getIpcHandle(xe_ipc_event_pool_handle_t* pIpcHandle) {
+xe_result_t EventPoolImp::getIpcHandle(xe_ipc_event_pool_handle_t *pIpcHandle) {
     return XE_RESULT_ERROR_UNSUPPORTED;
 }
 
-xe_result_t EventPoolImp::closeIpcHandle() {
-    return XE_RESULT_ERROR_UNSUPPORTED;
-}
+xe_result_t EventPoolImp::closeIpcHandle() { return XE_RESULT_ERROR_UNSUPPORTED; }
 
 xe_result_t EventPoolImp::destroy() {
     this->destroyPool();
@@ -176,32 +164,27 @@ EventPool *EventPool::create(Device *device, const xe_event_pool_desc_t *desc) {
 
     return eventPool;
 }
-xe_result_t eventQueryElapsedTime(xe_event_handle_t hEventStart,
-                                  xe_event_handle_t hEventEnd,
+xe_result_t eventQueryElapsedTime(xe_event_handle_t hEventStart, xe_event_handle_t hEventEnd,
                                   double *pTime) {
     return XE_RESULT_ERROR_UNSUPPORTED;
 }
 
-xe_result_t eventQueryMetricsData(xe_event_handle_t hEventStart,
-                                  xe_event_handle_t hEventEnd,
-                                  size_t reportSize,
-                                  uint32_t *pReportData) {
+xe_result_t eventQueryMetricsData(xe_event_handle_t hEventStart, xe_event_handle_t hEventEnd,
+                                  size_t reportSize, uint32_t *pReportData) {
     return XE_RESULT_ERROR_UNSUPPORTED;
 }
 
-xe_result_t eventPoolOpenIpcHandle(xe_device_handle_t hDevice,
-        xe_ipc_event_pool_handle_t hIpc, xe_event_pool_handle_t* phEventPool) {
+xe_result_t eventPoolOpenIpcHandle(xe_device_handle_t hDevice, xe_ipc_event_pool_handle_t hIpc,
+                                   xe_event_pool_handle_t *phEventPool) {
     return XE_RESULT_ERROR_UNSUPPORTED;
 }
 
-xe_result_t eventCreate(xe_event_pool_handle_t hEventPool, const xe_event_desc_t* desc,
-            xe_event_handle_t* phEvent) {
+xe_result_t eventCreate(xe_event_pool_handle_t hEventPool, const xe_event_desc_t *desc,
+                        xe_event_handle_t *phEvent) {
     EventPool *eventPool = EventPool::fromHandle(hEventPool);
     return eventPool->createEvent(desc, phEvent);
 }
 
-xe_result_t eventDestroy(xe_event_handle_t hEvent) {
-    return Event::fromHandle(hEvent)->destroy();
-}
+xe_result_t eventDestroy(xe_event_handle_t hEvent) { return Event::fromHandle(hEvent)->destroy(); }
 
 } // namespace L0

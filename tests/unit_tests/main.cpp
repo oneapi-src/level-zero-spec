@@ -4,9 +4,7 @@
 
 #include "gmock/gmock.h"
 
-TEST(Should, pass) {
-    EXPECT_TRUE(true);
-}
+TEST(Should, pass) { EXPECT_TRUE(true); }
 
 namespace L0 {
 namespace ult {
@@ -26,7 +24,8 @@ int main(int argc, char **argv) {
             if (i < argc) {
                 if (::isdigit(argv[i][0])) {
                     int productValue = atoi(argv[i]);
-                    if (productValue > 0 && productValue < IGFX_MAX_PRODUCT && NEO::hardwarePrefix[productValue] != nullptr) {
+                    if (productValue > 0 && productValue < IGFX_MAX_PRODUCT &&
+                        NEO::hardwarePrefix[productValue] != nullptr) {
                         ::productFamily = static_cast<PRODUCT_FAMILY>(productValue);
                     } else {
                         ::productFamily = IGFX_UNKNOWN;
@@ -43,16 +42,19 @@ int main(int argc, char **argv) {
                     }
                 }
                 if (::productFamily == IGFX_UNKNOWN) {
-                    std::cout << "unknown or unsupported product family has been set: " << argv[i] << std::endl;
+                    std::cout << "unknown or unsupported product family has been set: " << argv[i]
+                              << std::endl;
                     return -1;
                 } else {
-                    std::cout << "product family: " << NEO::hardwarePrefix[::productFamily] << " (" << ::productFamily << ")" << std::endl;
+                    std::cout << "product family: " << NEO::hardwarePrefix[::productFamily] << " ("
+                              << ::productFamily << ")" << std::endl;
                 }
             }
         }
     }
 
-    NEO::GmmHelper::createGmmContextWrapperFunc = NEO::GmmClientContextBase::create<NEO::MockGmmClientContext>;
+    NEO::GmmHelper::createGmmContextWrapperFunc =
+        NEO::GmmClientContextBase::create<NEO::MockGmmClientContext>;
 
     if (environment) {
         ::testing::AddGlobalTestEnvironment(environment);

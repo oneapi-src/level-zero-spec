@@ -7,10 +7,7 @@
 namespace NEO {
 
 #if defined(__linux__)
-template <>
-bool HwHelperHw<SKLFamily>::timestampPacketWriteSupported() const {
-    return true;
-}
+template <> bool HwHelperHw<SKLFamily>::timestampPacketWriteSupported() const { return true; }
 #endif
 
 } // namespace NEO

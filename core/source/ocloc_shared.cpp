@@ -14,9 +14,9 @@
 #include "ocl_igc_interface/igc_ocl_device_ctx.h"
 #include "ocl_igc_interface/platform_helper.h"
 
-inline bool store(const void *src, unsigned int len,
-                  void *allocator, void *(__xecall *allocateFn)(void *alllocator, size_t size),
-                  void **out, unsigned int &outLen) {
+inline bool store(const void *src, unsigned int len, void *allocator,
+                  void *(__xecall *allocateFn)(void *alllocator, size_t size), void **out,
+                  unsigned int &outLen) {
     if ((src == nullptr) || (len == 0)) {
         assert(len == 0);
         *out = nullptr;
@@ -35,16 +35,10 @@ inline bool store(const void *src, unsigned int len,
     return true;
 }
 
-__xedllexport int __xecall compileClToSpirv(const char *src,
-                                            unsigned int sizeLen,
-                                            const char *clOptions,
-                                            const char *internalOptions,
-                                            void *allocator,
-                                            void *(__xecall *allocateFn)(void *alllocator, size_t size),
-                                            void **outSpirv,
-                                            unsigned int *outSpirvLen,
-                                            char **outBuildLog,
-                                            unsigned int *outBuildLogLen) {
+__xedllexport int __xecall compileClToSpirv(
+    const char *src, unsigned int sizeLen, const char *clOptions, const char *internalOptions,
+    void *allocator, void *(__xecall *allocateFn)(void *alllocator, size_t size), void **outSpirv,
+    unsigned int *outSpirvLen, char **outBuildLog, unsigned int *outBuildLogLen) {
     assert(src);
     assert(sizeLen);
     assert(allocateFn);
@@ -69,7 +63,8 @@ __xedllexport int __xecall compileClToSpirv(const char *src,
         return OCLOC_RESULT_ERROR_MISSING_FCL_LIBRARY;
     }
 
-    auto fclCreateMain = reinterpret_cast<CIF::CreateCIFMainFunc_t>(fclLib->getProcAddress(CIF::CreateCIFMainFuncName));
+    auto fclCreateMain = reinterpret_cast<CIF::CreateCIFMainFunc_t>(
+        fclLib->getProcAddress(CIF::CreateCIFMainFuncName));
     if (fclCreateMain == nullptr) {
         return OCLOC_RESULT_ERROR_MISSING_FCL_LIBRARY;
     }
@@ -93,33 +88,40 @@ __xedllexport int __xecall compileClToSpirv(const char *src,
     IGC::CodeType::CodeType_t intermediateRepresentation = IGC::CodeType::spirV;
 
     auto fclSrc = CIF::Builtins::CreateConstBuffer(fclMain.get(), src, sizeLen);
-    auto fclOptions = CIF::Builtins::CreateConstBuffer(fclMain.get(), clOptions, (clOptions != nullptr) ? strlen(clOptions) + 1 : 0);
+    auto fclOptions = CIF::Builtins::CreateConstBuffer(
+        fclMain.get(), clOptions, (clOptions != nullptr) ? strlen(clOptions) + 1 : 0);
     std::string internalOptionsWithExt = "-cl-ext=+all ";
     if (internalOptions != nullptr) {
         internalOptionsWithExt += internalOptions;
     }
-    auto fclInternalOptions = CIF::Builtins::CreateConstBuffer(fclMain.get(), internalOptionsWithExt.c_str(), internalOptionsWithExt.length() + 1);
+    auto fclInternalOptions = CIF::Builtins::CreateConstBuffer(
+        fclMain.get(), internalOptionsWithExt.c_str(), internalOptionsWithExt.length() + 1);
 
-    auto fclTranslationCtx = fclDeviceCtx->CreateTranslationCtx(IGC::CodeType::oclC, intermediateRepresentation);
+    auto fclTranslationCtx =
+        fclDeviceCtx->CreateTranslationCtx(IGC::CodeType::oclC, intermediateRepresentation);
 
-    if ((nullptr == fclSrc.get()) || (nullptr == fclOptions.get()) || (nullptr == fclInternalOptions.get()) || (nullptr == fclTranslationCtx.get())) {
+    if ((nullptr == fclSrc.get()) || (nullptr == fclOptions.get()) ||
+        (nullptr == fclInternalOptions.get()) || (nullptr == fclTranslationCtx.get())) {
         return OCLOC_RESULT_ERROR_OUT_OF_HOST_MEMORY;
     }
 
     auto fclOutput = fclTranslationCtx->Translate(fclSrc.get(), fclOptions.get(),
                                                   fclInternalOptions.get(), nullptr, 0);
 
-    if ((fclOutput == nullptr) || (fclOutput->GetBuildLog() == nullptr) || (fclOutput->GetOutput() == nullptr)) {
+    if ((fclOutput == nullptr) || (fclOutput->GetBuildLog() == nullptr) ||
+        (fclOutput->GetOutput() == nullptr)) {
         return OCLOC_RESULT_ERROR_OUT_OF_HOST_MEMORY;
     }
 
-    if (false == store(fclOutput->GetOutput()->GetMemoryRaw(), static_cast<unsigned int>(fclOutput->GetOutput()->GetSizeRaw()),
-                       allocator, allocateFn, outSpirv, *outSpirvLen)) {
+    if (false == store(fclOutput->GetOutput()->GetMemoryRaw(),
+                       static_cast<unsigned int>(fclOutput->GetOutput()->GetSizeRaw()), allocator,
+                       allocateFn, outSpirv, *outSpirvLen)) {
         return OCLOC_RESULT_ERROR_OUT_OF_HOST_MEMORY;
     }
 
-    if (false == store(fclOutput->GetBuildLog()->GetMemoryRaw(), static_cast<unsigned int>(fclOutput->GetBuildLog()->GetSizeRaw()),
-                       allocator, allocateFn, reinterpret_cast<void **>(outBuildLog), *outBuildLogLen)) {
+    if (false == store(fclOutput->GetBuildLog()->GetMemoryRaw(),
+                       static_cast<unsigned int>(fclOutput->GetBuildLog()->GetSizeRaw()), allocator,
+                       allocateFn, reinterpret_cast<void **>(outBuildLog), *outBuildLogLen)) {
         return OCLOC_RESULT_ERROR_OUT_OF_HOST_MEMORY;
     }
 

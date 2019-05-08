@@ -7,56 +7,69 @@ namespace ult {
 
 struct TestStruct;
 template <bool Own, typename T>
-using ZeroCostPtr = typename L0::pointer_impl::PointerModeSelector<L0::pointer_impl::PointerMode::ZeroCost>::template PointerOwnershipSelector<Own>::template Pointer<T>;
+using ZeroCostPtr =
+    typename L0::pointer_impl::PointerModeSelector<L0::pointer_impl::PointerMode::ZeroCost>::
+        template PointerOwnershipSelector<Own>::template Pointer<T>;
 
 using RefPointerTypes = testing::Types<ZeroCostPtr<false, TestStruct>>;
 using OwningPointerTypes = testing::Types<ZeroCostPtr<true, TestStruct>>;
-using SmartPointerTypes = testing::Types<ZeroCostPtr<true, TestStruct>,
-                                         ZeroCostPtr<true, TestStruct>>;
-using ZeroCostPointerTypes = testing::Types<ZeroCostPtr<true, TestStruct>,
-                                            ZeroCostPtr<true, TestStruct>>;
+using SmartPointerTypes =
+    testing::Types<ZeroCostPtr<true, TestStruct>, ZeroCostPtr<true, TestStruct>>;
+using ZeroCostPointerTypes =
+    testing::Types<ZeroCostPtr<true, TestStruct>, ZeroCostPtr<true, TestStruct>>;
 
-template <typename ClassT>
-class PtrTraits {
+template <typename ClassT> class PtrTraits {
     template <typename T1, typename T2 = decltype(T1().deleteOwned())>
-    static constexpr bool testDeleteOwned(int) { return true; }
-    template <typename T1>
-    static constexpr bool testDeleteOwned(...) { return false; }
+    static constexpr bool testDeleteOwned(int) {
+        return true;
+    }
+    template <typename T1> static constexpr bool testDeleteOwned(...) { return false; }
 
-    template <typename T1, typename T2 = decltype(T1().rebindDeleteOld((typename T1::PointerT) nullptr))>
-    static constexpr bool testRebindDeleteOld(int) { return true; }
-    template <typename T1>
-    static constexpr bool testRebindDeleteOld(...) { return false; }
+    template <typename T1,
+              typename T2 = decltype(T1().rebindDeleteOld((typename T1::PointerT) nullptr))>
+    static constexpr bool testRebindDeleteOld(int) {
+        return true;
+    }
+    template <typename T1> static constexpr bool testRebindDeleteOld(...) { return false; }
 
-    template <typename T1, typename T2 = decltype(T1().rebindDeleteOld((typename T1::PointerT) nullptr, 0))>
-    static constexpr bool testRebindWithSizeDeleteOld(int) { return true; }
-    template <typename T1>
-    static constexpr bool testRebindWithSizeDeleteOld(...) { return false; }
+    template <typename T1,
+              typename T2 = decltype(T1().rebindDeleteOld((typename T1::PointerT) nullptr, 0))>
+    static constexpr bool testRebindWithSizeDeleteOld(int) {
+        return true;
+    }
+    template <typename T1> static constexpr bool testRebindWithSizeDeleteOld(...) { return false; }
 
     template <typename T1, typename T2 = decltype(T1().get())>
-    static constexpr bool testGetFunction(int) { return true; }
-    template <typename T1>
-    static constexpr bool testGetFunction(...) { return false; }
+    static constexpr bool testGetFunction(int) {
+        return true;
+    }
+    template <typename T1> static constexpr bool testGetFunction(...) { return false; }
 
-    template <typename T1, typename T2 = decltype(T1().operator typename T1::template PointerWeakRefT<const typename T1::PointeeT>())>
-    static constexpr bool testConstCastOperator(int) { return true; }
-    template <typename T1>
-    static constexpr bool testConstCastOperator(...) { return false; }
+    template <typename T1,
+              typename T2 = decltype(T1().operator typename T1::template PointerWeakRefT<
+                                     const typename T1::PointeeT>())>
+    static constexpr bool testConstCastOperator(int) {
+        return true;
+    }
+    template <typename T1> static constexpr bool testConstCastOperator(...) { return false; }
 
     template <typename T1, typename T2 = decltype(T1().operator+(0))>
-    static constexpr bool testAddOperator(int) { return true; }
-    template <typename T1>
-    static constexpr bool testAddOperator(...) { return false; }
+    static constexpr bool testAddOperator(int) {
+        return true;
+    }
+    template <typename T1> static constexpr bool testAddOperator(...) { return false; }
 
     template <typename T1, typename T2 = decltype(T1().operator+=(0))>
-    static constexpr bool testAddAssignOperator(int) { return true; }
-    template <typename T1>
-    static constexpr bool testAddAssignOperator(...) { return false; }
+    static constexpr bool testAddAssignOperator(int) {
+        return true;
+    }
+    template <typename T1> static constexpr bool testAddAssignOperator(...) { return false; }
 
     template <typename T1, typename T2 = decltype(T1().offsetBytesBy(0))>
-    static constexpr bool testOffsetByBytes(int) { return true; }
-    template <typename T1>
-    static constexpr bool testOffsetByBytes(...) { return false; }
+    static constexpr bool testOffsetByBytes(int) {
+        return true;
+    }
+    template <typename T1> static constexpr bool testOffsetByBytes(...) { return false; }
 
   public:
     enum { hasDeleteOwned = testDeleteOwned<ClassT>(0) };
@@ -70,9 +83,7 @@ class PtrTraits {
 };
 
 struct TestStruct {
-    TestStruct(bool *wasDestructedFlag = nullptr)
-        : wasDestructedFlag(wasDestructedFlag) {
-    }
+    TestStruct(bool *wasDestructedFlag = nullptr) : wasDestructedFlag(wasDestructedFlag) {}
     ~TestStruct() {
         if (nullptr != wasDestructedFlag) {
             *wasDestructedFlag = true;
@@ -87,19 +98,15 @@ struct IncompleteTestStruct;
 static_assert(L0::pointer_impl::IsComplete<TestStruct>::value, "");
 static_assert(!L0::pointer_impl::IsComplete<IncompleteTestStruct>::value, "");
 
-template <class SmartPointerT>
-struct SmartPointerTest : public testing::Test {
+template <class SmartPointerT> struct SmartPointerTest : public testing::Test {
     using SmatrPtrT = SmartPointerT;
 };
 
-template <class RefPointerT>
-using RefPointerTest = SmartPointerTest<RefPointerT>;
+template <class RefPointerT> using RefPointerTest = SmartPointerTest<RefPointerT>;
 
-template <class OwningPointerT>
-using OwningPointerTest = SmartPointerTest<OwningPointerT>;
+template <class OwningPointerT> using OwningPointerTest = SmartPointerTest<OwningPointerT>;
 
-template <class OwningPointerT>
-using ZeroCostPointerTest = SmartPointerTest<OwningPointerT>;
+template <class OwningPointerT> using ZeroCostPointerTest = SmartPointerTest<OwningPointerT>;
 
 TYPED_TEST_CASE(SmartPointerTest, SmartPointerTypes);
 TYPED_TEST_CASE(RefPointerTest, RefPointerTypes);
@@ -113,37 +120,58 @@ TYPED_TEST(SmartPointerTest, IsTheSameSizeAsRawPointers) {
 
 TYPED_TEST(OwningPointerTest, HasExpectedInterface) {
     using SmartPtrT = typename TestFixture::SmatrPtrT;
-    EXPECT_FALSE(std::is_copy_constructible<SmartPtrT>()) << "Don't allow copies of owning pointers";
+    EXPECT_FALSE(std::is_copy_constructible<SmartPtrT>())
+        << "Don't allow copies of owning pointers";
     EXPECT_FALSE(std::is_copy_assignable<SmartPtrT>()) << "Don't allow copies of owning pointers";
     EXPECT_TRUE(std::is_move_constructible<SmartPtrT>()) << "Allow moving of owning pointers";
     EXPECT_TRUE(std::is_move_assignable<SmartPtrT>()) << "Allow moving of owning pointers";
     EXPECT_TRUE(PtrTraits<SmartPtrT>::hasDeleteOwned) << "Allow explicit deletion of owned pointer";
-    EXPECT_TRUE(PtrTraits<SmartPtrT>::hasRebindDeleteOld) << "Allow rebind with deletion of previous pointer on owning pointer";
-    EXPECT_TRUE(PtrTraits<SmartPtrT>::hasRebindWithSizeDeleteOld) << "Allow rebind with deletion of previous pointer on owning pointer";
-    EXPECT_FALSE(PtrTraits<SmartPtrT>::hasGetFunction) << "Don't allow raw pointer access other than uintptr_t from owning pointer";
-    EXPECT_FALSE(PtrTraits<SmartPtrT>::hasConstCastOperator) << "Don't allow const cast operator - sharing pointer from owning pointer needs to be explicit";
-    EXPECT_FALSE(PtrTraits<SmartPtrT>::hasAddAssignOperator) << "Don't allow pointer arithmetics on owning pointer (would create copies)";
-    EXPECT_FALSE(PtrTraits<SmartPtrT>::hasOffsetByBytes) << "Don't allow pointer arithmetics on owning pointer (would create copies)";
+    EXPECT_TRUE(PtrTraits<SmartPtrT>::hasRebindDeleteOld)
+        << "Allow rebind with deletion of previous pointer on owning pointer";
+    EXPECT_TRUE(PtrTraits<SmartPtrT>::hasRebindWithSizeDeleteOld)
+        << "Allow rebind with deletion of previous pointer on owning pointer";
+    EXPECT_FALSE(PtrTraits<SmartPtrT>::hasGetFunction)
+        << "Don't allow raw pointer access other than uintptr_t from owning pointer";
+    EXPECT_FALSE(PtrTraits<SmartPtrT>::hasConstCastOperator)
+        << "Don't allow const cast operator - sharing pointer from owning pointer needs to be "
+           "explicit";
+    EXPECT_FALSE(PtrTraits<SmartPtrT>::hasAddAssignOperator)
+        << "Don't allow pointer arithmetics on owning pointer (would create copies)";
+    EXPECT_FALSE(PtrTraits<SmartPtrT>::hasOffsetByBytes)
+        << "Don't allow pointer arithmetics on owning pointer (would create copies)";
 }
 
 TYPED_TEST(RefPointerTest, HasExpectedInterface) {
     using SmartPtrT = typename TestFixture::SmatrPtrT;
 
-    EXPECT_TRUE(std::is_copy_constructible<SmartPtrT>()) << "Allow copies of referencing (non-owning) pointers";
-    EXPECT_TRUE(std::is_copy_assignable<SmartPtrT>()) << "Allow copies of referencing (non-owning) pointers";
-    EXPECT_TRUE(std::is_move_constructible<SmartPtrT>()) << "Allow moving of referencing (non-owning) pointers";
-    EXPECT_TRUE(std::is_move_assignable<SmartPtrT>()) << "Allow moving of referencing (non-owning) pointers";
-    EXPECT_FALSE(PtrTraits<SmartPtrT>::hasDeleteOwned) << "Don't allow deletion of referencing (non-owning) pointers";
-    EXPECT_FALSE(PtrTraits<SmartPtrT>::hasRebindDeleteOld) << "Don't allow deletion of referencing (non-owning) pointers";
-    EXPECT_FALSE(PtrTraits<SmartPtrT>::hasRebindWithSizeDeleteOld) << "Don't allow deletion of referencing (non-owning) pointers";
-    EXPECT_TRUE(PtrTraits<SmartPtrT>::hasGetFunction) << "Allow raw pointer access of referencing (non-owning) pointers";
-    EXPECT_TRUE(PtrTraits<SmartPtrT>::hasConstCastOperator) << "Allow const cast operator of referencing (non-owning) pointers";
-    EXPECT_TRUE(PtrTraits<SmartPtrT>::hasAddOperator) << "Allow pointer arithmetics of referencing (non-owning) pointers";
-    EXPECT_TRUE(PtrTraits<SmartPtrT>::hasAddAssignOperator) << "Allow pointer arithmetics of referencing (non-owning) pointers";
-    EXPECT_TRUE(PtrTraits<SmartPtrT>::hasOffsetByBytes) << "Allow pointer arithmetics of referencing (non-owning) pointers";
+    EXPECT_TRUE(std::is_copy_constructible<SmartPtrT>())
+        << "Allow copies of referencing (non-owning) pointers";
+    EXPECT_TRUE(std::is_copy_assignable<SmartPtrT>())
+        << "Allow copies of referencing (non-owning) pointers";
+    EXPECT_TRUE(std::is_move_constructible<SmartPtrT>())
+        << "Allow moving of referencing (non-owning) pointers";
+    EXPECT_TRUE(std::is_move_assignable<SmartPtrT>())
+        << "Allow moving of referencing (non-owning) pointers";
+    EXPECT_FALSE(PtrTraits<SmartPtrT>::hasDeleteOwned)
+        << "Don't allow deletion of referencing (non-owning) pointers";
+    EXPECT_FALSE(PtrTraits<SmartPtrT>::hasRebindDeleteOld)
+        << "Don't allow deletion of referencing (non-owning) pointers";
+    EXPECT_FALSE(PtrTraits<SmartPtrT>::hasRebindWithSizeDeleteOld)
+        << "Don't allow deletion of referencing (non-owning) pointers";
+    EXPECT_TRUE(PtrTraits<SmartPtrT>::hasGetFunction)
+        << "Allow raw pointer access of referencing (non-owning) pointers";
+    EXPECT_TRUE(PtrTraits<SmartPtrT>::hasConstCastOperator)
+        << "Allow const cast operator of referencing (non-owning) pointers";
+    EXPECT_TRUE(PtrTraits<SmartPtrT>::hasAddOperator)
+        << "Allow pointer arithmetics of referencing (non-owning) pointers";
+    EXPECT_TRUE(PtrTraits<SmartPtrT>::hasAddAssignOperator)
+        << "Allow pointer arithmetics of referencing (non-owning) pointers";
+    EXPECT_TRUE(PtrTraits<SmartPtrT>::hasOffsetByBytes)
+        << "Allow pointer arithmetics of referencing (non-owning) pointers";
 }
 
-TYPED_TEST(ZeroCostPointerTest, WhenDefaultConstructingDontInitializeMemoryWhenDestructingDontZeroOut) {
+TYPED_TEST(ZeroCostPointerTest,
+           WhenDefaultConstructingDontInitializeMemoryWhenDestructingDontZeroOut) {
     using SmartPtrT = typename TestFixture::SmatrPtrT;
 
     TestStruct memory;
@@ -298,8 +326,7 @@ TYPED_TEST(SmartPointerTest, WeakRefCreatesNonOwningPointer) {
 }
 
 TYPED_TEST(SmartPointerTest, WeakRefWithCastCreatesNonOwningPointerOfDifferentTypeUsingStaticCast) {
-    struct DerivedTestStruct : TestStruct {
-    };
+    struct DerivedTestStruct : TestStruct {};
 
     using SmartPtrT = typename TestFixture::SmatrPtrT;
     using WeakRefDerivedT = typename SmartPtrT::template PointerWeakRefT<DerivedTestStruct>;
@@ -333,7 +360,8 @@ TYPED_TEST(SmartPointerTest, WeakRefWithCastCreatesNonOwningPointerOfDifferentTy
     EXPECT_TRUE(usesCorrectType);
 }
 
-TYPED_TEST(SmartPointerTest, WeakRefWithReinterpretCastCreatesNonOwningPointerOfDifferentTypeUsingReinterpretCast) {
+TYPED_TEST(SmartPointerTest,
+           WeakRefWithReinterpretCastCreatesNonOwningPointerOfDifferentTypeUsingReinterpretCast) {
     using SmartPtrT = typename TestFixture::SmatrPtrT;
     using WeakRefT = typename SmartPtrT::template PointerWeakRefT<int>;
 
@@ -348,7 +376,8 @@ TYPED_TEST(SmartPointerTest, WeakRefWithReinterpretCastCreatesNonOwningPointerOf
 
 TYPED_TEST(SmartPointerTest, WeakRefAddConstCreatesNonOwningPointerOfSameTypeButWithConst) {
     using SmartPtrT = typename TestFixture::SmatrPtrT;
-    using ConstWeakRefT = typename SmartPtrT::template PointerWeakRefT<const typename SmartPtrT::PointeeT>;
+    using ConstWeakRefT =
+        typename SmartPtrT::template PointerWeakRefT<const typename SmartPtrT::PointeeT>;
 
     TestStruct memory;
     SmartPtrT x(&memory);
@@ -363,7 +392,7 @@ TYPED_TEST(SmartPointerTest, AsUintReturnsItengerRepresentationOfRawPointer) {
     using SmartPtrT = typename TestFixture::SmatrPtrT;
 
     uint64_t ptr64 = 0x0123456789ABCDEF;
-    uintptr_t ptrActual = static_cast<uintptr_t>(ptr64);                          // deliberately reducing hi to 0 for 32-bit
+    uintptr_t ptrActual = static_cast<uintptr_t>(ptr64); // deliberately reducing hi to 0 for 32-bit
     uint32_t hi = static_cast<uint32_t>(static_cast<uint64_t>(ptrActual) >> 32U); //
     uint32_t lo = static_cast<uint32_t>(ptrActual);
 
@@ -395,7 +424,8 @@ TYPED_TEST(SmartPointerTest, DereferenceOperators) {
 
 TYPED_TEST(RefPointerTest, ConstCastOperator) {
     using SmartPtrT = typename TestFixture::SmatrPtrT;
-    using ConstWeakRefT = typename SmartPtrT::template PointerWeakRefT<const typename SmartPtrT::PointeeT>;
+    using ConstWeakRefT =
+        typename SmartPtrT::template PointerWeakRefT<const typename SmartPtrT::PointeeT>;
 
     TestStruct memory;
     SmartPtrT x(&memory);
@@ -521,7 +551,8 @@ TEST(DeleteAllOwned, CallsDeleteOnwedOnAllPointersInTheContainer) {
     EXPECT_FALSE(d0 || d2);
     deleteAllOwned(owningPointers);
     EXPECT_TRUE(d0 && d1 && d2);
-    EXPECT_EQ(3U, owningPointers.size()) << "deleteAllOwned calls deleteOwned on pointers in container, but it does not clean the container";
+    EXPECT_EQ(3U, owningPointers.size()) << "deleteAllOwned calls deleteOwned on pointers in "
+                                            "container, but it does not clean the container";
 }
 
 TEST(InitializeToNull, CallsRebindNullptrOnAllPointersInTheContainer) {
@@ -537,11 +568,11 @@ TEST(InitializeToNull, CallsRebindNullptrOnAllPointersInTheContainer) {
 
 namespace example {
 struct BNode {
-    BNode(L0::PtrRef<BNode> parent, float value) : parent(parent), value(value) {
-    }
+    BNode(L0::PtrRef<BNode> parent, float value) : parent(parent), value(value) {}
 
     ~BNode() {
-        lhsChild.deleteOwned(); // unlike std::unique_ptr, L0::PtrOwn won't destroy memory implicitly
+        lhsChild
+            .deleteOwned(); // unlike std::unique_ptr, L0::PtrOwn won't destroy memory implicitly
         rhsChild.deleteOwned(); //
     }
 

@@ -1,10 +1,10 @@
 namespace L0 {
 
 class OsContext {
-    public:
-        OsContext() {}
+  public:
+    OsContext() {}
 
-        static OsContext *create(void *execEnvRT);
+    static OsContext *create(void *execEnvRT);
 };
 
-} //namespace L0
+} // namespace L0

@@ -27,9 +27,8 @@ void testAppendMemoryCopy(xe_device_handle_t &device, bool &validRet) {
     xe_command_list_desc_t cmdListDesc = {XE_COMMAND_LIST_DESC_VERSION_CURRENT};
     SUCCESS_OR_TERMINATE(xeCommandListCreate(device, &cmdListDesc, &cmdList));
 
-    SUCCESS_OR_TERMINATE(xeMemAlloc(device,
-                                    XE_DEVICE_MEM_ALLOC_FLAG_DEFAULT,
-                                    allocSize, allocSize, &xeBuffer));
+    SUCCESS_OR_TERMINATE(
+        xeMemAlloc(device, XE_DEVICE_MEM_ALLOC_FLAG_DEFAULT, allocSize, allocSize, &xeBuffer));
 
     for (size_t i = 0; i < allocSize; ++i) {
         heapBuffer[i] = static_cast<char>(i + 1);
@@ -37,12 +36,14 @@ void testAppendMemoryCopy(xe_device_handle_t &device, bool &validRet) {
     memset(stackBuffer, 0, allocSize);
 
     // Copy from heap to device-allocated memory
-    SUCCESS_OR_TERMINATE(xeCommandListAppendMemoryCopy(cmdList, xeBuffer, heapBuffer, allocSize, nullptr, 0, nullptr));
+    SUCCESS_OR_TERMINATE(xeCommandListAppendMemoryCopy(cmdList, xeBuffer, heapBuffer, allocSize,
+                                                       nullptr, 0, nullptr));
 
     SUCCESS_OR_TERMINATE(xeCommandListAppendBarrier(cmdList, nullptr, 0, nullptr));
 
     // Copy from device-allocated memory to stack
-    SUCCESS_OR_TERMINATE(xeCommandListAppendMemoryCopy(cmdList, stackBuffer, xeBuffer, allocSize, nullptr, 0, nullptr));
+    SUCCESS_OR_TERMINATE(xeCommandListAppendMemoryCopy(cmdList, stackBuffer, xeBuffer, allocSize,
+                                                       nullptr, 0, nullptr));
 
     SUCCESS_OR_TERMINATE(xeCommandListClose(cmdList));
     SUCCESS_OR_TERMINATE(xeCommandQueueExecuteCommandLists(cmdQueue, 1, &cmdList, nullptr));
@@ -73,7 +74,8 @@ int main(int argc, char *argv[]) {
 
     bool aubMode = isAubMode(argc, argv);
     if (aubMode == false)
-        std::cout << "\nResults validation " << (outputValidationSuccessful ? "PASSED" : "FAILED") << std::endl;
+        std::cout << "\nResults validation " << (outputValidationSuccessful ? "PASSED" : "FAILED")
+                  << std::endl;
 
     int resultOnFailure = aubMode ? 0 : 1;
     return outputValidationSuccessful ? 0 : resultOnFailure;

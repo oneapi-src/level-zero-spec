@@ -9,21 +9,13 @@ class preCompiledBins {
   public:
     preCompiledBins(const std::string &functionName);
 
-    ~preCompiledBins() {
-        delete[] spirvModule;
-    }
+    ~preCompiledBins() { delete[] spirvModule; }
 
-    uint32_t getSize() {
-        return spirvSize;
-    }
+    uint32_t getSize() { return spirvSize; }
 
-    char *getFunctionName() {
-        return (char *)functionName.c_str();
-    }
+    char *getFunctionName() { return (char *)functionName.c_str(); }
 
-    char *getModule() {
-        return spirvModule;
-    }
+    char *getModule() { return spirvModule; }
 
   private:
     std::string functionName;

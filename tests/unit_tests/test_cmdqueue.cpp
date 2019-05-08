@@ -27,8 +27,7 @@ TEST(xeCommandQueueDestroy, redirectsToObject) {
     EXPECT_EQ(XE_RESULT_SUCCESS, result);
 }
 
-class CommandQueueCreate : public GlobalFixtureTest {
-};
+class CommandQueueCreate : public GlobalFixtureTest {};
 
 TEST_F(CommandQueueCreate, returnsCommandQueueOnSuccess) {
     Mock<Device> device;
@@ -43,7 +42,8 @@ TEST_F(CommandQueueCreate, returnsCommandQueueOnSuccess) {
     commandQueue->destroy();
 }
 
-TEST(CommandQueue, synchronizeByPollingCallsPrintOutputOnPrintfFunctionsStoredAndClearsFunctionContainer) {
+TEST(CommandQueue,
+     synchronizeByPollingCallsPrintOutputOnPrintfFunctionsStoredAndClearsFunctionContainer) {
     Mock<CommandQueue> commandQueue;
 
     uint32_t tag = 0;

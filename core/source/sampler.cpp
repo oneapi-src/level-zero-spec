@@ -12,8 +12,6 @@ xe_result_t SamplerImp::destroy() {
     return XE_RESULT_SUCCESS;
 }
 
-Sampler *Sampler::create(Device *device) {
-    return new SamplerImp;
-}
+Sampler *Sampler::create(Device *device) { return new SamplerImp; }
 
 } // namespace L0

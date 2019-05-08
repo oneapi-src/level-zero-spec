@@ -38,21 +38,16 @@
 #include <ctype.h>
 #include <stdlib.h>
 
-class Timer
-{
-public:
+class Timer {
+  public:
+    std::chrono::high_resolution_clock::time_point tick, tock;
 
-  std::chrono::high_resolution_clock::time_point tick, tock;
+    void start();
 
-  void start();
-
-  // Stop and return time in micro-seconds
-  float stopAndTime();
+    // Stop and return time in micro-seconds
+    float stopAndTime();
 };
 
 uint64_t roundToMultipleOf(uint64_t number, uint64_t base, uint64_t maxValue);
 
-
-
 #endif /* COMMON_H */
-

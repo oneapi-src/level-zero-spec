@@ -4,11 +4,9 @@
 namespace L0 {
 namespace ult {
 
-WhiteBox<::L0::CommandList>::WhiteBox(Device *device) {
-}
+WhiteBox<::L0::CommandList>::WhiteBox(Device *device) {}
 
-WhiteBox<::L0::CommandList>::~WhiteBox() {
-}
+WhiteBox<::L0::CommandList>::~WhiteBox() {}
 
 Mock<CommandList>::Mock(Device *device) : WhiteBox<::L0::CommandList>(device) {
     size_t batchBufferSize = 65536u;

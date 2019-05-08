@@ -24,9 +24,7 @@ TEST(xeDeviceCreateCommandList, redirectsToObject) {
         .Times(1)
         .WillRepeatedly(Return(XE_RESULT_SUCCESS));
 
-    auto result = xeCommandListCreate(device.toHandle(),
-                                            &desc,
-                                            &commandList);
+    auto result = xeCommandListCreate(device.toHandle(), &desc, &commandList);
     EXPECT_EQ(XE_RESULT_SUCCESS, result);
 }
 
@@ -39,9 +37,7 @@ TEST(xeDeviceCreateCommandQueue, redirectsToObject) {
         .Times(1)
         .WillRepeatedly(Return(XE_RESULT_SUCCESS));
 
-    auto result = xeCommandQueueCreate(device.toHandle(),
-                                             &desc,
-                                             &commandQueue);
+    auto result = xeCommandQueueCreate(device.toHandle(), &desc, &commandQueue);
     EXPECT_EQ(XE_RESULT_SUCCESS, result);
 }
 
@@ -55,30 +51,25 @@ TEST(xeDeviceCreatePoolEvent, redirectsToObject) {
         .Times(1)
         .WillRepeatedly(Return(XE_RESULT_SUCCESS));
 
-    auto result = xeEventPoolCreate(device.toHandle(),
-                                      &desc,
-                                      &eventPool);
+    auto result = xeEventPoolCreate(device.toHandle(), &desc, &eventPool);
     ASSERT_EQ(XE_RESULT_SUCCESS, result);
 }
 
 TEST(xeDeviceCreateEvent, redirectsToObject) {
     Mock<EventPool> eventPool;
     xe_event_handle_t event = {};
-    const xe_event_desc_t desc = {XE_EVENT_DESC_VERSION_CURRENT, 0,
-        XE_EVENT_SCOPE_FLAG_NONE, XE_EVENT_SCOPE_FLAG_NONE};
+    const xe_event_desc_t desc = {XE_EVENT_DESC_VERSION_CURRENT, 0, XE_EVENT_SCOPE_FLAG_NONE,
+                                  XE_EVENT_SCOPE_FLAG_NONE};
 
     EXPECT_CALL(eventPool, createEvent(&desc, &event))
         .Times(1)
         .WillRepeatedly(Return(XE_RESULT_SUCCESS));
 
-    auto result = xeEventCreate(eventPool.toHandle(),
-                                      &desc,
-                                      &event);
+    auto result = xeEventCreate(eventPool.toHandle(), &desc, &event);
     ASSERT_EQ(XE_RESULT_SUCCESS, result);
 }
 
-class DeviceCreateImage : public GlobalFixtureTest {
-};
+class DeviceCreateImage : public GlobalFixtureTest {};
 
 TEST_F(DeviceCreateImage, returnsSuccess) {
     auto platform = NEO::constructPlatform();
@@ -93,8 +84,7 @@ TEST_F(DeviceCreateImage, returnsSuccess) {
     xe_image_handle_t image = {};
     xe_image_desc_t desc = {};
 
-    auto result = device->createImage(&desc,
-                                      &image);
+    auto result = device->createImage(&desc, &image);
     EXPECT_EQ(XE_RESULT_SUCCESS, result);
     EXPECT_NE(nullptr, image);
 
@@ -113,15 +103,15 @@ TEST(MaxHwTrheads, getMaxHwThreads) {
 
     auto hwInfo = deviceRT->getHardwareInfo();
 
-    uint32_t threadsPerEU = (hwInfo.pSysInfo->ThreadCount / hwInfo.pSysInfo->EUCount) + hwInfo.capabilityTable.extraQuantityThreadsPerEU;
+    uint32_t threadsPerEU = (hwInfo.pSysInfo->ThreadCount / hwInfo.pSysInfo->EUCount) +
+                            hwInfo.capabilityTable.extraQuantityThreadsPerEU;
     uint32_t value = device->getMaxNumHwThreads();
 
     uint32_t expected = hwInfo.pSysInfo->EUCount * threadsPerEU;
     EXPECT_EQ(expected, value);
 }
 
-class DeviceCreateCommandList : public GlobalFixtureTest {
-};
+class DeviceCreateCommandList : public GlobalFixtureTest {};
 
 TEST_F(DeviceCreateCommandList, returnsSuccess) {
     auto platform = NEO::constructPlatform();
@@ -135,8 +125,7 @@ TEST_F(DeviceCreateCommandList, returnsSuccess) {
     xe_command_list_handle_t commandList = {};
     xe_command_list_desc_t desc = {};
 
-    auto result = device->createCommandList(&desc,
-                                            &commandList);
+    auto result = device->createCommandList(&desc, &commandList);
     EXPECT_EQ(XE_RESULT_SUCCESS, result);
     EXPECT_NE(nullptr, commandList);
 
@@ -144,8 +133,7 @@ TEST_F(DeviceCreateCommandList, returnsSuccess) {
     delete device;
 }
 
-class DeviceCreateCommandQueue : public GlobalFixtureTest {
-};
+class DeviceCreateCommandQueue : public GlobalFixtureTest {};
 
 TEST_F(DeviceCreateCommandQueue, returnsSuccess) {
     auto platform = NEO::constructPlatform();
@@ -159,16 +147,14 @@ TEST_F(DeviceCreateCommandQueue, returnsSuccess) {
     xe_command_queue_handle_t commandQueue = {};
     xe_command_queue_desc_t desc = {};
 
-    auto result = device->createCommandQueue(&desc,
-                                             &commandQueue);
+    auto result = device->createCommandQueue(&desc, &commandQueue);
     EXPECT_EQ(XE_RESULT_SUCCESS, result);
     EXPECT_NE(nullptr, commandQueue);
 
     delete device;
 }
 
-class DeviceCreatePoolEvent : public GlobalFixtureTest {
-};
+class DeviceCreatePoolEvent : public GlobalFixtureTest {};
 
 TEST_F(DeviceCreatePoolEvent, returnsSuccess) {
     auto platform = NEO::constructPlatform();
@@ -183,16 +169,14 @@ TEST_F(DeviceCreatePoolEvent, returnsSuccess) {
     xe_event_pool_desc_t desc = {};
     desc.count = 1;
 
-    auto result = device->createEventPool(&desc,
-                                      &eventPool);
+    auto result = device->createEventPool(&desc, &eventPool);
     EXPECT_EQ(XE_RESULT_SUCCESS, result);
     EXPECT_NE(nullptr, eventPool);
 
     delete device;
 }
 
-class DeviceGetMemoryManager : public GlobalFixtureTest {
-};
+class DeviceGetMemoryManager : public GlobalFixtureTest {};
 
 TEST_F(DeviceGetMemoryManager, returnsPointer) {
     auto platform = NEO::constructPlatform();

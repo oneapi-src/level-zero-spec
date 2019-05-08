@@ -9,16 +9,14 @@ extern MemoryManager *globalMemoryManager;
 
 namespace ult {
 
-class GlobalFixtureTest: public ::testing::TestWithParam<std::string> {
+class GlobalFixtureTest : public ::testing::TestWithParam<std::string> {
   public:
     void SetUp() override {
         globalMemoryManager_prev = globalMemoryManager;
         globalMemoryManager = &globalMemoryManager_mock;
     }
 
-    void TearDown() override {
-        globalMemoryManager = globalMemoryManager_prev;
-    }
+    void TearDown() override { globalMemoryManager = globalMemoryManager_prev; }
 
     Mock<MemoryManager> globalMemoryManager_mock;
     L0::MemoryManager *globalMemoryManager_prev;

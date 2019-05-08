@@ -19,7 +19,7 @@ void DriverImp::initialize(bool *result) {
 
 xe_result_t DriverImp::driverInit(xe_init_flag_t flag) {
     bool result = false;
-    std::call_once(initDriverOnce, [this, &result]() {this->initialize(&result); });
+    std::call_once(initDriverOnce, [this, &result]() { this->initialize(&result); });
 
     return XE_RESULT_SUCCESS;
 }
@@ -47,13 +47,9 @@ xe_result_t DriverImp::driverGetVersion(uint32_t *version) {
     return XE_RESULT_SUCCESS;
 }
 
-xe_result_t getDriverVersion(uint32_t *version) {
-    return Driver::get()->driverGetVersion(version);
-}
+xe_result_t getDriverVersion(uint32_t *version) { return Driver::get()->driverGetVersion(version); }
 
-xe_result_t deviceGetCount(uint32_t *count) {
-    return Driver::get()->driverGetDeviceCount(count);
-}
+xe_result_t deviceGetCount(uint32_t *count) { return Driver::get()->driverGetDeviceCount(count); }
 
 xe_result_t deviceGet(uint32_t ordinal, xe_device_handle_t *phDevice) {
     return Driver::get()->driverGetDevice(ordinal, phDevice);
@@ -62,8 +58,6 @@ xe_result_t deviceGet(uint32_t ordinal, xe_device_handle_t *phDevice) {
 static DriverImp driverImp;
 Driver *Driver::driver = &driverImp;
 
-xe_result_t init(xe_init_flag_t flag) {
-    return Driver::get()->driverInit(flag);
-}
+xe_result_t init(xe_init_flag_t flag) { return Driver::get()->driverInit(flag); }
 
 } // namespace L0

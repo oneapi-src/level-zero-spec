@@ -9,4 +9,4 @@ OsContext *OsContext::create(void *execEnvRT) {
     return new OsContextLinux(execEnvRT);
 }
 
-} //namespace L0
+} // namespace L0

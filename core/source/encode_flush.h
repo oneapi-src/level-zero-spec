@@ -5,8 +5,7 @@
 
 namespace L0 {
 
-template <GFXCORE_FAMILY gfxCoreFamily>
-struct EncodeFlush {
+template <GFXCORE_FAMILY gfxCoreFamily> struct EncodeFlush {
     using GfxFamily = typename NEO::GfxFamilyMapper<gfxCoreFamily>::GfxFamily;
     using PIPE_CONTROL = typename GfxFamily::PIPE_CONTROL;
     using POST_SYNC_OPERATION = typename PIPE_CONTROL::POST_SYNC_OPERATION;
@@ -20,7 +19,8 @@ struct EncodeFlush {
         *(PIPE_CONTROL *)buffer = cmd;
     }
 
-    static void encodeWithQwordWrite(CommandContainer &container, uint64_t gpuAddress, uint64_t value) {
+    static void encodeWithQwordWrite(CommandContainer &container, uint64_t gpuAddress,
+                                     uint64_t value) {
         PIPE_CONTROL cmd = GfxFamily::cmdInitPipeControl;
         cmd.setPostSyncOperation(POST_SYNC_OPERATION::POST_SYNC_OPERATION_WRITE_IMMEDIATE_DATA);
         cmd.setImmediateData(value);

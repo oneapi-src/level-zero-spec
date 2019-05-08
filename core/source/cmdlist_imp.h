@@ -1,7 +1,7 @@
 #pragma once
 #ifndef CMD_LIST_INTERNAL
 #error "Don't #include this file directly."
-#endif //CMD_LIST_INTERNAL
+#endif // CMD_LIST_INTERNAL
 
 #include "cmdlist.h"
 

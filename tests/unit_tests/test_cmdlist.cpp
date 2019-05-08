@@ -26,8 +26,7 @@ using ::testing::_;
 using ::testing::AnyNumber;
 using ::testing::Return;
 
-class CommandListCreate : public GlobalFixtureTest {
-};
+class CommandListCreate : public GlobalFixtureTest {};
 
 TEST_F(CommandListCreate, returnsCommandListOnSuccess) {
     Mock<Device> device;
@@ -78,9 +77,8 @@ GEN9TEST_F(CommandListCreate, addsPipelineSelectBeforeVfeStateToBatchBuffer) {
     ASSERT_GT(usedSpaceAfter, usedSpaceBefore);
 
     GenCmdList cmdList;
-    ASSERT_TRUE(FamilyType::PARSE::parseCommandBuffer(cmdList,
-                                                      ptrOffset(commandList->commandStream->getCpuBase(), 0),
-                                                      usedSpaceAfter));
+    ASSERT_TRUE(FamilyType::PARSE::parseCommandBuffer(
+        cmdList, ptrOffset(commandList->commandStream->getCpuBase(), 0), usedSpaceAfter));
     using MEDIA_VFE_STATE = typename FamilyType::MEDIA_VFE_STATE;
     auto itorVFE = find<MEDIA_VFE_STATE *>(cmdList.begin(), cmdList.end());
     ASSERT_NE(itorVFE, cmdList.end());
@@ -111,9 +109,8 @@ GEN9TEST_F(CommandListCreate, programsThreadGroupPreemption) {
     ASSERT_GT(usedSpaceAfter, usedSpaceBefore);
 
     GenCmdList cmdList;
-    ASSERT_TRUE(FamilyType::PARSE::parseCommandBuffer(cmdList,
-                                                      ptrOffset(commandList->commandStream->getCpuBase(), 0),
-                                                      usedSpaceAfter));
+    ASSERT_TRUE(FamilyType::PARSE::parseCommandBuffer(
+        cmdList, ptrOffset(commandList->commandStream->getCpuBase(), 0), usedSpaceAfter));
 
     using MI_LOAD_REGISTER_IMM = typename FamilyType::MI_LOAD_REGISTER_IMM;
     auto itor = find<MI_LOAD_REGISTER_IMM *>(cmdList.begin(), cmdList.end());
@@ -144,9 +141,8 @@ HWTEST_F(CommandListCreate, addsStateBaseAddressToBatchBuffer) {
     ASSERT_GT(usedSpaceAfter, usedSpaceBefore);
 
     GenCmdList cmdList;
-    ASSERT_TRUE(FamilyType::PARSE::parseCommandBuffer(cmdList,
-                                                      ptrOffset(commandList->commandStream->getCpuBase(), 0),
-                                                      usedSpaceAfter));
+    ASSERT_TRUE(FamilyType::PARSE::parseCommandBuffer(
+        cmdList, ptrOffset(commandList->commandStream->getCpuBase(), 0), usedSpaceAfter));
     using STATE_BASE_ADDRESS = typename FamilyType::STATE_BASE_ADDRESS;
     auto itor = find<STATE_BASE_ADDRESS *>(cmdList.begin(), cmdList.end());
     ASSERT_NE(cmdList.end(), itor);
@@ -161,7 +157,8 @@ HWTEST_F(CommandListCreate, addsStateBaseAddressToBatchBuffer) {
         EXPECT_EQ(cmd->getDynamicStateBufferSize(), heap->getMaxAvailableSpace());
 
         EXPECT_TRUE(cmd->getInstructionBaseAddressModifyEnable());
-        EXPECT_EQ(cmd->getInstructionBaseAddress(), device.getMemoryManager()->getIsaHeapGpuAddress());
+        EXPECT_EQ(cmd->getInstructionBaseAddress(),
+                  device.getMemoryManager()->getIsaHeapGpuAddress());
         EXPECT_TRUE(cmd->getInstructionBufferSizeModifyEnable());
         EXPECT_EQ(cmd->getInstructionBufferSize(), MemoryConstants::sizeOf4GBinPageEntities);
 
@@ -182,8 +179,10 @@ HWTEST_F(CommandListCreate, addsStateBaseAddressToBatchBuffer) {
         EXPECT_EQ(cmd->getSurfaceStateBaseAddress(), heap->getHeapGpuBase());
 
         auto mocsMapper = device.getMOCSMapper();
-        EXPECT_EQ(mocsMapper->getCachedInstructionHeapMOCS(), cmd->getInstructionMemoryObjectControlState());
-        EXPECT_EQ(mocsMapper->getFullyCachedMOCS(), cmd->getStatelessDataPortAccessMemoryObjectControlState());
+        EXPECT_EQ(mocsMapper->getCachedInstructionHeapMOCS(),
+                  cmd->getInstructionMemoryObjectControlState());
+        EXPECT_EQ(mocsMapper->getFullyCachedMOCS(),
+                  cmd->getStatelessDataPortAccessMemoryObjectControlState());
     }
 }
 
@@ -201,10 +200,10 @@ HWTEST2_F(CommandListCreate, addsBindingTablePoolAllocToBatchBuffer, IsGen12HP) 
     ASSERT_GT(usedSpaceAfter, usedSpaceBefore);
 
     GenCmdList cmdList;
-    ASSERT_TRUE(FamilyType::PARSE::parseCommandBuffer(cmdList,
-                                                      ptrOffset(commandList->commandStream->getCpuBase(), 0),
-                                                      usedSpaceAfter));
-    using _3DSTATE_BINDING_TABLE_POOL_ALLOC = typename FamilyType::_3DSTATE_BINDING_TABLE_POOL_ALLOC;
+    ASSERT_TRUE(FamilyType::PARSE::parseCommandBuffer(
+        cmdList, ptrOffset(commandList->commandStream->getCpuBase(), 0), usedSpaceAfter));
+    using _3DSTATE_BINDING_TABLE_POOL_ALLOC =
+        typename FamilyType::_3DSTATE_BINDING_TABLE_POOL_ALLOC;
     auto itor = find<_3DSTATE_BINDING_TABLE_POOL_ALLOC *>(cmdList.begin(), cmdList.end());
     ASSERT_NE(cmdList.end(), itor);
 
@@ -216,7 +215,8 @@ HWTEST2_F(CommandListCreate, addsBindingTablePoolAllocToBatchBuffer, IsGen12HP) 
         EXPECT_EQ(heap.getHeapSizeInPages(), cmd->getBindingTablePoolBufferSize());
 
         auto mocsMapper = device.getMOCSMapper();
-        EXPECT_EQ(mocsMapper->getCachedStateHeapMOCS(), cmd->getSurfaceObjectControlStateIndexToMocsTables());
+        EXPECT_EQ(mocsMapper->getCachedStateHeapMOCS(),
+                  cmd->getSurfaceObjectControlStateIndexToMocsTables());
     }
 }
 
@@ -234,9 +234,8 @@ GEN9TEST_F(CommandListCreate, addsVfeStateToBatchBuffer) {
     ASSERT_GT(usedSpaceAfter, usedSpaceBefore);
 
     GenCmdList cmdList;
-    ASSERT_TRUE(FamilyType::PARSE::parseCommandBuffer(cmdList,
-                                                      ptrOffset(commandList->commandStream->getCpuBase(), 0),
-                                                      usedSpaceAfter));
+    ASSERT_TRUE(FamilyType::PARSE::parseCommandBuffer(
+        cmdList, ptrOffset(commandList->commandStream->getCpuBase(), 0), usedSpaceAfter));
     using MEDIA_VFE_STATE = typename FamilyType::MEDIA_VFE_STATE;
     auto itor = find<MEDIA_VFE_STATE *>(cmdList.begin(), cmdList.end());
     ASSERT_NE(cmdList.end(), itor);
@@ -270,9 +269,8 @@ ATSTEST_F(CommandListCreate, addsCfeStateToBatchBuffer) {
     ASSERT_GT(usedSpaceAfter, usedSpaceBefore);
 
     GenCmdList cmdList;
-    ASSERT_TRUE(FamilyType::PARSE::parseCommandBuffer(cmdList,
-                                                      ptrOffset(commandList->commandStream->getCpuBase(), 0),
-                                                      usedSpaceAfter));
+    ASSERT_TRUE(FamilyType::PARSE::parseCommandBuffer(
+        cmdList, ptrOffset(commandList->commandStream->getCpuBase(), 0), usedSpaceAfter));
     using CFE_STATE = typename FamilyType::CFE_STATE;
     auto itor = find<CFE_STATE *>(cmdList.begin(), cmdList.end());
     ASSERT_NE(cmdList.end(), itor);

@@ -11,9 +11,7 @@ class GmmHelper;
 namespace L0 {
 
 struct MOCSMapper {
-    MOCSMapper(PtrRef<NEO::GmmHelper> gmmHelper)
-        : gmmHelper(gmmHelper) {
-    }
+    MOCSMapper(PtrRef<NEO::GmmHelper> gmmHelper) : gmmHelper(gmmHelper) {}
 
     virtual uint32_t getUncachedMOCS() const;
     virtual uint32_t getFullyCachedMOCS() const;

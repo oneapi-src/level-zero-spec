@@ -25,13 +25,11 @@ TEST(xeCommandListAppendWaitOnEvent, redirectsToObject) {
 
     EXPECT_CALL(commandList, appendWaitOnEvents(1, &hEventHandle)).Times(1);
 
-    auto result = xeCommandListAppendWaitOnEvents(commandList.toHandle(), 1,
-                                                 &hEventHandle);
+    auto result = xeCommandListAppendWaitOnEvents(commandList.toHandle(), 1, &hEventHandle);
     EXPECT_EQ(XE_RESULT_SUCCESS, result);
 }
 
-class CommandListAppendWaitOnEvent : public GlobalFixtureTest {
-};
+class CommandListAppendWaitOnEvent : public GlobalFixtureTest {};
 
 HWTEST_F(CommandListAppendWaitOnEvent, addsSemaphoreToCommandStream) {
     Mock<Device> device;
@@ -49,16 +47,16 @@ HWTEST_F(CommandListAppendWaitOnEvent, addsSemaphoreToCommandStream) {
     ASSERT_GT(usedSpaceAfter, usedSpaceBefore);
 
     GenCmdList cmdList;
-    ASSERT_TRUE(FamilyType::PARSE::parseCommandBuffer(cmdList,
-                                                      ptrOffset(commandList->commandStream->getCpuBase(), 0),
-                                                      usedSpaceAfter));
+    ASSERT_TRUE(FamilyType::PARSE::parseCommandBuffer(
+        cmdList, ptrOffset(commandList->commandStream->getCpuBase(), 0), usedSpaceAfter));
     using MI_SEMAPHORE_WAIT = typename FamilyType::MI_SEMAPHORE_WAIT;
     auto itor = find<MI_SEMAPHORE_WAIT *>(cmdList.begin(), cmdList.end());
     ASSERT_NE(cmdList.end(), itor);
 
     {
         auto cmd = genCmdCast<MI_SEMAPHORE_WAIT *>(*itor);
-        EXPECT_EQ(cmd->getCompareOperation(), MI_SEMAPHORE_WAIT::COMPARE_OPERATION::COMPARE_OPERATION_SAD_NOT_EQUAL_SDD);
+        EXPECT_EQ(cmd->getCompareOperation(),
+                  MI_SEMAPHORE_WAIT::COMPARE_OPERATION::COMPARE_OPERATION_SAD_NOT_EQUAL_SDD);
         EXPECT_EQ(cmd->getSemaphoreDataDword(), Event::STATE_CLEARED);
         EXPECT_EQ(cmd->getSemaphoreGraphicsAddress(), event.allocation->getGpuAddress());
     }
@@ -77,7 +75,8 @@ HWTEST_F(CommandListAppendWaitOnEvent, addsEventGraphicsAllocationToResidencyCon
 
     auto &residencyContainer = commandList->residencyContainer;
     auto allocationRT = static_cast<NEO::GraphicsAllocation *>(event.allocation->allocationRT);
-    auto itor = std::find(std::begin(residencyContainer), std::end(residencyContainer), allocationRT);
+    auto itor =
+        std::find(std::begin(residencyContainer), std::end(residencyContainer), allocationRT);
     EXPECT_NE(itor, std::end(residencyContainer));
 }
 

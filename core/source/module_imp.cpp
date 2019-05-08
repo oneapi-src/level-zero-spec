@@ -37,8 +37,7 @@ typedef struct {
 } GenSymEntry;
 
 /// GenRelocType - Specify the relocation's type
-enum GenRelocType { R_NONE = 0,
-                    R_SYM_ADDR = 1 };
+enum GenRelocType { R_NONE = 0, R_SYM_ADDR = 1 };
 
 /// GenRelocEntry - An relocation table entry
 typedef struct {
@@ -195,17 +194,17 @@ bool ModuleImp::initialize(const xe_module_desc_t *desc) {
     bool success = true;
 
     if (desc->format == XE_MODULE_FORMAT_NATIVE) {
-        success =
-            this->progRT->createWithNativeBinary(reinterpret_cast<const char *>(desc->pInputModule),
-                                                 desc->inputSize);
+        success = this->progRT->createWithNativeBinary(
+            reinterpret_cast<const char *>(desc->pInputModule), desc->inputSize);
         assert(success == true);
     } else if (desc->format == XE_MODULE_FORMAT_IL_SPIRV) {
         this->progRT->buildSpirV(reinterpret_cast<const char *>(desc->pInputModule),
                                  static_cast<uint32_t>(desc->inputSize));
     } else {
         if (desc->format == static_cast<xe_module_format_t>(-1)) { // unofficial support for llvm
-            success = this->progRT->tryBuildAsLlvm(reinterpret_cast<const char *>(desc->pInputModule),
-                                                   static_cast<uint32_t>(desc->inputSize));
+            success =
+                this->progRT->tryBuildAsLlvm(reinterpret_cast<const char *>(desc->pInputModule),
+                                             static_cast<uint32_t>(desc->inputSize));
         } else {
             assert(0);
             success = false;
@@ -227,11 +226,11 @@ bool ModuleImp::initialize(const xe_module_desc_t *desc) {
             assert((ki->patchInfo.mediavfestate == nullptr) ||
                    (ki->patchInfo.mediavfestate->PerThreadScratchSpace == 0));
             PtrOwn<FunctionImmutableData> funcImmData{new FunctionImmutableData};
-            funcImmData->initialize(bindPtrRef(ki).weakRefReinterpret<void>(),
-                                    *globalMemoryManager, &this->progRT->getDevice(0),
-                                    this->progRT->getDevice(0).getDeviceInfo().computeUnitsUsedForScratch,
-                                    globalConstBuffer.weakRef(),
-                                    globalVarBuffer.weakRef());
+            funcImmData->initialize(
+                bindPtrRef(ki).weakRefReinterpret<void>(), *globalMemoryManager,
+                &this->progRT->getDevice(0),
+                this->progRT->getDevice(0).getDeviceInfo().computeUnitsUsedForScratch,
+                globalConstBuffer.weakRef(), globalVarBuffer.weakRef());
             funcImmDatas.push_back(std::move(funcImmData));
         }
         this->maxGroupSize =

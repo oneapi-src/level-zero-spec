@@ -11,4 +11,4 @@ struct ImageProductFamily<IGFX_TIGERLAKE_LP> : public ImageCoreFamily<IGFX_GEN12
 
 static ImagePopulateFactory<IGFX_TIGERLAKE_LP, ImageProductFamily<IGFX_TIGERLAKE_LP>> populateTGLLP;
 
-} //namespace L0
+} // namespace L0

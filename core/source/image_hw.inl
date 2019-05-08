@@ -19,9 +19,9 @@ bool ImageCoreFamily<gfxCoreFamily>::initialize(Device *device, const xe_image_d
     }
 
     if (desc->format.x > XE_IMAGE_FORMAT_SWIZZLE_MAX ||
-            desc->format.y > XE_IMAGE_FORMAT_SWIZZLE_MAX ||
-            desc->format.z > XE_IMAGE_FORMAT_SWIZZLE_MAX ||
-            desc->format.w > XE_IMAGE_FORMAT_SWIZZLE_MAX) {
+        desc->format.y > XE_IMAGE_FORMAT_SWIZZLE_MAX ||
+        desc->format.z > XE_IMAGE_FORMAT_SWIZZLE_MAX ||
+        desc->format.w > XE_IMAGE_FORMAT_SWIZZLE_MAX) {
         return false;
     }
 
@@ -30,9 +30,9 @@ bool ImageCoreFamily<gfxCoreFamily>::initialize(Device *device, const xe_image_d
     }
 
     if (desc->format.x > XE_IMAGE_FORMAT_SWIZZLE_MAX ||
-            desc->format.y > XE_IMAGE_FORMAT_SWIZZLE_MAX ||
-            desc->format.z > XE_IMAGE_FORMAT_SWIZZLE_MAX ||
-            desc->format.w > XE_IMAGE_FORMAT_SWIZZLE_MAX) {
+        desc->format.y > XE_IMAGE_FORMAT_SWIZZLE_MAX ||
+        desc->format.z > XE_IMAGE_FORMAT_SWIZZLE_MAX ||
+        desc->format.w > XE_IMAGE_FORMAT_SWIZZLE_MAX) {
         return false;
     }
 
@@ -43,17 +43,17 @@ bool ImageCoreFamily<gfxCoreFamily>::initialize(Device *device, const xe_image_d
     surfaceState = GfxFamily::cmdInitRenderSurfaceState;
 
     surfaceState.setShaderChannelSelectRed(
-            static_cast<const typename RENDER_SURFACE_STATE::SHADER_CHANNEL_SELECT_RED>(
-                shaderChannelSelect[desc->format.x]));
+        static_cast<const typename RENDER_SURFACE_STATE::SHADER_CHANNEL_SELECT_RED>(
+            shaderChannelSelect[desc->format.x]));
     surfaceState.setShaderChannelSelectGreen(
-            static_cast<const typename RENDER_SURFACE_STATE::SHADER_CHANNEL_SELECT_GREEN>(
-                shaderChannelSelect[desc->format.y]));
+        static_cast<const typename RENDER_SURFACE_STATE::SHADER_CHANNEL_SELECT_GREEN>(
+            shaderChannelSelect[desc->format.y]));
     surfaceState.setShaderChannelSelectBlue(
-            static_cast<const typename RENDER_SURFACE_STATE::SHADER_CHANNEL_SELECT_BLUE>(
-                shaderChannelSelect[desc->format.z]));
+        static_cast<const typename RENDER_SURFACE_STATE::SHADER_CHANNEL_SELECT_BLUE>(
+            shaderChannelSelect[desc->format.z]));
     surfaceState.setShaderChannelSelectAlpha(
-            static_cast<const typename RENDER_SURFACE_STATE::SHADER_CHANNEL_SELECT_ALPHA>(
-                shaderChannelSelect[desc->format.w]));
+        static_cast<const typename RENDER_SURFACE_STATE::SHADER_CHANNEL_SELECT_ALPHA>(
+            shaderChannelSelect[desc->format.w]));
 
     switch (desc->type) {
     case XE_IMAGE_TYPE_1D:
@@ -74,19 +74,23 @@ bool ImageCoreFamily<gfxCoreFamily>::initialize(Device *device, const xe_image_d
     switch (desc->type) {
     case XE_IMAGE_TYPE_3D:
         surfaceState.setDepth(static_cast<uint32_t>(desc->depth));
-        //Fall through on purpose
+        // Fall through on purpose
     case XE_IMAGE_TYPE_2D:
     case XE_IMAGE_TYPE_2DARRAY:
         surfaceState.setHeight(static_cast<uint32_t>(desc->height));
-        //Fall through on purpose
+        // Fall through on purpose
     default: // 1D
         surfaceState.setWidth(static_cast<uint32_t>(desc->width));
     }
 
     auto gmm = this->allocation->allocationRT->getDefaultGmm();
     if (gmm) {
-        surfaceState.setSurfaceHorizontalAlignment(static_cast<typename RENDER_SURFACE_STATE::SURFACE_HORIZONTAL_ALIGNMENT>(gmm->getRenderHAlignment()));
-        surfaceState.setSurfaceVerticalAlignment(static_cast<typename RENDER_SURFACE_STATE::SURFACE_VERTICAL_ALIGNMENT>(gmm->getRenderVAlignment()));
+        surfaceState.setSurfaceHorizontalAlignment(
+            static_cast<typename RENDER_SURFACE_STATE::SURFACE_HORIZONTAL_ALIGNMENT>(
+                gmm->getRenderHAlignment()));
+        surfaceState.setSurfaceVerticalAlignment(
+            static_cast<typename RENDER_SURFACE_STATE::SURFACE_VERTICAL_ALIGNMENT>(
+                gmm->getRenderVAlignment()));
     }
 
     surfaceState.setSurfaceFormat(surfaceFormatTable[desc->format.layout][desc->format.type]);
@@ -100,14 +104,15 @@ bool ImageCoreFamily<gfxCoreFamily>::initialize(Device *device, const xe_image_d
 }
 
 template <GFXCORE_FAMILY gfxCoreFamily>
-void ImageCoreFamily<gfxCoreFamily>::copySurfaceStateToSSH(void *surfaceStateHeap, const uint32_t surfaceStateOffset) {
+void ImageCoreFamily<gfxCoreFamily>::copySurfaceStateToSSH(void *surfaceStateHeap,
+                                                           const uint32_t surfaceStateOffset) {
     using GfxFamily = typename NEO::GfxFamilyMapper<gfxCoreFamily>::GfxFamily;
     using RENDER_SURFACE_STATE = typename GfxFamily::RENDER_SURFACE_STATE;
     using BINDING_TABLE_STATE = typename GfxFamily::BINDING_TABLE_STATE;
 
-    //Copy the image's surface state into position in the provided surface state heap
+    // Copy the image's surface state into position in the provided surface state heap
     auto destSurfaceState = ptrOffset(surfaceStateHeap, surfaceStateOffset);
     memcpy(destSurfaceState, &surfaceState, sizeof(RENDER_SURFACE_STATE));
 }
 
-} //namespace L0
+} // namespace L0

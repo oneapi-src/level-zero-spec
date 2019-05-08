@@ -67,9 +67,8 @@ class FunctionPrintfFromSpirvTest : public GlobalFixtureTest {
 
         void *spirvData = nullptr;
 
-        size_t spvModuleSize = loadDataFromFile(
-            "test_files/spv_modules/printf_kernel.spv",
-            spirvData);
+        size_t spvModuleSize =
+            loadDataFromFile("test_files/spv_modules/printf_kernel.spv", spirvData);
 
         ASSERT_NE(0U, spvModuleSize);
 
@@ -91,9 +90,7 @@ class FunctionPrintfFromSpirvTest : public GlobalFixtureTest {
         funDesc.pFunctionName = "test_printf";
     }
 
-    void TearDown() override {
-        GlobalFixtureTest::TearDown();
-    }
+    void TearDown() override { GlobalFixtureTest::TearDown(); }
 
     xe_function_desc_t funDesc = {};
     NEO::Platform *platform = nullptr;
@@ -168,7 +165,8 @@ TEST_F(FunctionPrintfTest, createPrintfBufferPatchesCrossThreadData) {
     EXPECT_NE(nullptr, printfBufferAllocation);
 
     auto printfBufferAddressPatched = *reinterpret_cast<uintptr_t *>(crossThreadData);
-    auto printfBufferGpuAddressOffset = static_cast<uintptr_t>(printfBufferAllocation->getGpuAddressOffsetFromHeapBase());
+    auto printfBufferGpuAddressOffset =
+        static_cast<uintptr_t>(printfBufferAllocation->getGpuAddressOffsetFromHeapBase());
 
     EXPECT_EQ(printfBufferGpuAddressOffset, printfBufferAddressPatched);
 
@@ -176,7 +174,8 @@ TEST_F(FunctionPrintfTest, createPrintfBufferPatchesCrossThreadData) {
     delete crossThreadData;
 }
 
-TEST_F(FunctionPrintfFromSpirvTest, initializePutsPrintfBufferAllocationAfterArgsInResidencyContainer) {
+TEST_F(FunctionPrintfFromSpirvTest,
+       initializePutsPrintfBufferAllocationAfterArgsInResidencyContainer) {
     auto function = std::make_unique<::testing::NiceMock<Mock<Function>>>();
     ASSERT_NE(nullptr, function);
 
@@ -184,9 +183,12 @@ TEST_F(FunctionPrintfFromSpirvTest, initializePutsPrintfBufferAllocationAfterArg
     function->initialize(&funDesc);
 
     auto &container = function->residencyContainer;
-    auto printfPos = std::find(container.begin(), container.end(), function->getPrintfBufferAllocation().get());
+    auto printfPos =
+        std::find(container.begin(), container.end(), function->getPrintfBufferAllocation().get());
     EXPECT_NE(container.end(), printfPos);
-    bool correctPos = printfPos >= container.begin() + function->getImmutableData()->getSignature().explicitArgs.args.size();
+    bool correctPos =
+        printfPos >=
+        container.begin() + function->getImmutableData()->getSignature().explicitArgs.args.size();
     EXPECT_TRUE(correctPos) << "Needs to be after explicit kernel args";
 }
 

@@ -55,4 +55,4 @@ bool ImageImp::initialize(Device *device, const xe_image_desc_t *desc) {
     return true;
 }
 
-} //namespace L0
+} // namespace L0

@@ -7,11 +7,9 @@ namespace L0 {
 namespace ult {
 
 WhiteBox<::L0::CommandQueue>::WhiteBox(Device *device, void *csrRT)
-    : ::L0::CommandQueueImp(device, csrRT) {
-}
+    : ::L0::CommandQueueImp(device, csrRT) {}
 
-WhiteBox<::L0::CommandQueue>::~WhiteBox() {
-}
+WhiteBox<::L0::CommandQueue>::~WhiteBox() {}
 
 Mock<CommandQueue>::Mock(Device *device, void *csrRT)
     : WhiteBox<::L0::CommandQueue>(device, csrRT) {
@@ -23,9 +21,7 @@ Mock<CommandQueue>::Mock(Device *device, void *csrRT)
     this->csrRT = new MockCommandStreamReceiver(*executionEnvironment);
 }
 
-Mock<CommandQueue>::~Mock() {
-    delete static_cast<MockCommandStreamReceiver *>(csrRT);
-}
+Mock<CommandQueue>::~Mock() { delete static_cast<MockCommandStreamReceiver *>(csrRT); }
 
 } // namespace ult
 } // namespace L0

@@ -8,7 +8,8 @@
 
 namespace L0 {
 
-PtrOwn<BuiltinFunctionsLib> BuiltinFunctionsLib::create(PtrRef<Device> device, PtrRef<void> builtinsRT) {
+PtrOwn<BuiltinFunctionsLib> BuiltinFunctionsLib::create(PtrRef<Device> device,
+                                                        PtrRef<void> builtinsRT) {
     return PtrOwn<BuiltinFunctionsLib>(new BuiltinFunctionsLibImpl(device, builtinsRT));
 }
 
@@ -23,7 +24,7 @@ struct BuiltinFunctionsLibImpl::BuiltinData {
 };
 
 void BuiltinFunctionsLibImpl::initFunctions() {
-    for(uint32_t builtId = 0; builtId < static_cast<uint32_t>(Builtin::COUNT); builtId++) {
+    for (uint32_t builtId = 0; builtId < static_cast<uint32_t>(Builtin::COUNT); builtId++) {
         const char *inputModuleSpirV = nullptr;
         uint32_t inputModuleSize = 0;
         const char *builtinName = nullptr;
@@ -43,7 +44,7 @@ void BuiltinFunctionsLibImpl::initFunctions() {
         xe_module_handle_t moduleHandle;
         xe_module_desc_t moduleDesc = {XE_MODULE_DESC_VERSION_CURRENT};
         moduleDesc.format = XE_MODULE_FORMAT_IL_SPIRV;
-        moduleDesc.pInputModule = reinterpret_cast<const uint8_t*>(inputModuleSpirV);
+        moduleDesc.pInputModule = reinterpret_cast<const uint8_t *>(inputModuleSpirV);
         moduleDesc.inputSize = inputModuleSize;
         res = device->createModule(&moduleDesc, &moduleHandle, nullptr);
         assert(res == XE_RESULT_SUCCESS);

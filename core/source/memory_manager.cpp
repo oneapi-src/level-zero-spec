@@ -28,11 +28,14 @@ struct MemoryManagerImp : public MemoryManager {
         return buffer;
     }
 
-    GraphicsAllocation *allocateDeviceMemory(Device *device, size_t size, size_t alignment) override {
-        NEO::AllocationProperties properties(size, NEO::GraphicsAllocation::AllocationType::UNDECIDED);
+    GraphicsAllocation *allocateDeviceMemory(Device *device, size_t size,
+                                             size_t alignment) override {
+        NEO::AllocationProperties properties(size,
+                                             NEO::GraphicsAllocation::AllocationType::UNDECIDED);
         properties.alignment = alignment;
 
-        auto allocation = new GraphicsAllocation(memoryManagerRT->allocateGraphicsMemoryWithProperties(properties));
+        auto allocation = new GraphicsAllocation(
+            memoryManagerRT->allocateGraphicsMemoryWithProperties(properties));
         knownAllocations.insert(*allocation->allocationRT); // temporary
         allocMap[allocation->allocationRT] = allocation;    // temporary
         allocationTracker[allocation->getHostAddress()] = allocation;
@@ -41,11 +44,14 @@ struct MemoryManagerImp : public MemoryManager {
         return allocation;
     }
 
-    GraphicsAllocation *allocateManagedMemory(Device *device, size_t size, size_t alignment) override {
-        NEO::AllocationProperties properties(size, NEO::GraphicsAllocation::AllocationType::UNDECIDED);
+    GraphicsAllocation *allocateManagedMemory(Device *device, size_t size,
+                                              size_t alignment) override {
+        NEO::AllocationProperties properties(size,
+                                             NEO::GraphicsAllocation::AllocationType::UNDECIDED);
         properties.alignment = alignment;
 
-        auto allocation = new GraphicsAllocation(memoryManagerRT->allocateGraphicsMemoryWithProperties(properties));
+        auto allocation = new GraphicsAllocation(
+            memoryManagerRT->allocateGraphicsMemoryWithProperties(properties));
         knownAllocations.insert(*allocation->allocationRT); // temporary
         allocMap[allocation->allocationRT] = allocation;    // temporary
         allocationTracker[allocation->getHostAddress()] = allocation;
@@ -54,12 +60,16 @@ struct MemoryManagerImp : public MemoryManager {
         return allocation;
     }
 
-    GraphicsAllocation *allocateManagedMemoryFromFault(Device *device, void *buffer, size_t size) override {
+    GraphicsAllocation *allocateManagedMemoryFromFault(Device *device, void *buffer,
+                                                       size_t size) override {
         // TODO :
         //        * How are allocations removed from this list?
-        //        * What if we encouter the same allocation multiple times but with different sizes (note : it's a valid and very probable scenario)
+        //        * What if we encouter the same allocation multiple times but with different sizes
+        //        (note : it's a valid and very probable scenario)
         //        * How are handle fragmented allocations handled (aka tripple allocations) ?
-        auto allocation = new GraphicsAllocation(memoryManagerRT->allocateGraphicsMemoryWithProperties({false, size, NEO::GraphicsAllocation::AllocationType::UNDECIDED}, buffer));
+        auto allocation =
+            new GraphicsAllocation(memoryManagerRT->allocateGraphicsMemoryWithProperties(
+                {false, size, NEO::GraphicsAllocation::AllocationType::UNDECIDED}, buffer));
         allocation->setAllocatedFromFault(true);
         knownAllocations.insert(*allocation->allocationRT); // temporary
         allocMap[allocation->allocationRT] = allocation;    // temporary
@@ -69,11 +79,14 @@ struct MemoryManagerImp : public MemoryManager {
         return allocation;
     }
 
-    PtrOwn<GraphicsAllocation> allocateGraphicsMemoryForIsa(PtrRef<const void> isaHostMem, size_t size) override {
+    PtrOwn<GraphicsAllocation> allocateGraphicsMemoryForIsa(PtrRef<const void> isaHostMem,
+                                                            size_t size) override {
         assert(size > 0);
-        auto alloc = this->memoryManagerRT->allocateGraphicsMemoryWithProperties({size, NEO::GraphicsAllocation::AllocationType::KERNEL_ISA});
+        auto alloc = this->memoryManagerRT->allocateGraphicsMemoryWithProperties(
+            {size, NEO::GraphicsAllocation::AllocationType::KERNEL_ISA});
         if (isaHostMem != nullptr) {
-            this->memoryManagerRT->copyMemoryToAllocation(alloc, isaHostMem.get(), static_cast<uint32_t>(size));
+            this->memoryManagerRT->copyMemoryToAllocation(alloc, isaHostMem.get(),
+                                                          static_cast<uint32_t>(size));
         }
         return PtrOwn<GraphicsAllocation>{new GraphicsAllocation(alloc)};
     }
@@ -84,7 +97,8 @@ struct MemoryManagerImp : public MemoryManager {
 
     PtrOwn<GraphicsAllocation> allocateGraphicsMemoryForPrivateMemory(size_t size) override {
         assert(size > 0);
-        auto alloc = this->memoryManagerRT->allocateGraphicsMemoryWithProperties({size, NEO::GraphicsAllocation::AllocationType::PRIVATE_SURFACE});
+        auto alloc = this->memoryManagerRT->allocateGraphicsMemoryWithProperties(
+            {size, NEO::GraphicsAllocation::AllocationType::PRIVATE_SURFACE});
         return PtrOwn<GraphicsAllocation>{new GraphicsAllocation(alloc)};
     }
 
@@ -108,7 +122,8 @@ struct MemoryManagerImp : public MemoryManager {
             return true;
 
         xe_bool_t p2pCapable = true;
-        device->canAccessPeer(static_cast<GraphicsAllocation *>(allocation)->getDevice(), &p2pCapable);
+        device->canAccessPeer(static_cast<GraphicsAllocation *>(allocation)->getDevice(),
+                              &p2pCapable);
 
         return p2pCapable;
     }
@@ -117,7 +132,8 @@ struct MemoryManagerImp : public MemoryManager {
         allocMap.erase(allocation->allocationRT);           // temporary
         knownAllocations.remove(*allocation->allocationRT); // temporary
 
-        memoryManagerRT->freeGraphicsMemory(static_cast<NEO::GraphicsAllocation *>(allocation->allocationRT));
+        memoryManagerRT->freeGraphicsMemory(
+            static_cast<NEO::GraphicsAllocation *>(allocation->allocationRT));
 
         delete allocation;
     }
@@ -127,7 +143,7 @@ struct MemoryManagerImp : public MemoryManager {
         MemAllocation *allocation = allocationTracker[bufferAddress];
         assert(allocation);
         if (allocation->allocType == AllocationType::DEVICE ||
-                allocation->allocType == AllocationType::SHARED) {
+            allocation->allocType == AllocationType::SHARED) {
             freeMemory(static_cast<GraphicsAllocation *>(allocation));
         } else {
             alignedFree(bufferAddress);
@@ -135,8 +151,7 @@ struct MemoryManagerImp : public MemoryManager {
     }
 
     MemoryManagerImp(void *memoryManagerRT)
-        : memoryManagerRT(static_cast<NEO::MemoryManager *>(memoryManagerRT)) {
-    }
+        : memoryManagerRT(static_cast<NEO::MemoryManager *>(memoryManagerRT)) {}
 
     NEO::MemoryManager *memoryManagerRT;
     NEO::SVMAllocsManager::MapBasedAllocationTracker knownAllocations;
@@ -149,7 +164,8 @@ void MemoryManager::createGlobalMemoryManager() {
     struct MemoryManagerWrapper {
         MemoryManagerWrapper(MemoryManager *&globalMemoryManager) {
             auto platform = NEO::platform();
-            globalMemoryManager = new MemoryManagerImp(platform->peekExecutionEnvironment()->memoryManager.get());
+            globalMemoryManager =
+                new MemoryManagerImp(platform->peekExecutionEnvironment()->memoryManager.get());
         }
 
         ~MemoryManagerWrapper() {

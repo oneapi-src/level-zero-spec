@@ -2,8 +2,7 @@
 #include <cstdint>
 #include <vector>
 
-struct _xe_command_list_handle_t {
-};
+struct _xe_command_list_handle_t {};
 
 namespace NEO {
 class IndirectHeap;
@@ -20,7 +19,8 @@ struct Function;
 struct GraphicsAllocation;
 
 struct CommandContainer : public _xe_command_list_handle_t {
-    enum HeapType : uint32_t { // TODO: Remove - after moving ISA to 4GB heap - this is a duplicate of NEO's counterpart
+    enum HeapType : uint32_t { // TODO: Remove - after moving ISA to 4GB heap - this is a duplicate
+                               // of NEO's counterpart
         DYNAMIC_STATE = 0u,
         GENERAL_STATE,
         INDIRECT_OBJECT,
@@ -38,31 +38,19 @@ struct CommandContainer : public _xe_command_list_handle_t {
         }
     }
 
-    GraphicsAllocation &getAllocation() {
-        return *allocation;
-    }
+    GraphicsAllocation &getAllocation() { return *allocation; }
 
-    NEO::ResidencyContainer &getResidencyContainer() {
-        return residencyContainer;
-    }
+    NEO::ResidencyContainer &getResidencyContainer() { return residencyContainer; }
 
     void addToResidencyContainer(GraphicsAllocation *alloc);
 
-    NEO::LinearStream &getCommandStream() {
-        return *commandStream;
-    }
+    NEO::LinearStream &getCommandStream() { return *commandStream; }
 
-    NEO::IndirectHeap &getIndirectHeap(HeapType heapType) {
-        return *indirectHeaps[heapType];
-    }
+    NEO::IndirectHeap &getIndirectHeap(HeapType heapType) { return *indirectHeaps[heapType]; }
 
-    std::vector<Function *> &getPrintfFunctionContainer() {
-        return this->printfFunctionContainer;
-    }
+    std::vector<Function *> &getPrintfFunctionContainer() { return this->printfFunctionContainer; }
 
-    uint64_t getInstructionHeapBaseAddress() const {
-        return instructionHeapBaseAddress;
-    }
+    uint64_t getInstructionHeapBaseAddress() const { return instructionHeapBaseAddress; }
 
     virtual bool initialize(Device *device);
     virtual xe_result_t destroy();
@@ -72,9 +60,7 @@ struct CommandContainer : public _xe_command_list_handle_t {
     uint32_t dirtyHeaps = static_cast<uint32_t>(-1);
     uint32_t slmSize = static_cast<uint32_t>(-1);
 
-    Device *getDevice() const {
-        return device;
-    }
+    Device *getDevice() const { return device; }
 
   protected:
     void storePrintfFunction(Function *function);

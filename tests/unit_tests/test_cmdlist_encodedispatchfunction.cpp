@@ -34,23 +34,19 @@ TEST(xeCommandListAppendLaunchFunction, redirectsToObject) {
     Mock<Function> function;
     xe_thread_group_dimensions_t dispatchFunctionArguments;
 
-    EXPECT_CALL(commandList, appendLaunchFunction(
-                                 function.toHandle(),
-                                 &dispatchFunctionArguments,
-                                 event.toHandle(), 0, nullptr))
+    EXPECT_CALL(commandList, appendLaunchFunction(function.toHandle(), &dispatchFunctionArguments,
+                                                  event.toHandle(), 0, nullptr))
         .Times(1);
 
-    auto result = xeCommandListAppendLaunchFunction(commandList.toHandle(),
-                                                    function.toHandle(),
-                                                    &dispatchFunctionArguments,
-                                                    event.toHandle(), 0, nullptr);
+    auto result =
+        xeCommandListAppendLaunchFunction(commandList.toHandle(), function.toHandle(),
+                                          &dispatchFunctionArguments, event.toHandle(), 0, nullptr);
     EXPECT_EQ(XE_RESULT_SUCCESS, result);
 }
 
 struct CommandListAppendLaunchFunction : public GlobalFixtureTest {
 
-    CommandListAppendLaunchFunction() {
-    }
+    CommandListAppendLaunchFunction() {}
 
     void SetUp() override {
         GlobalFixtureTest::SetUp();
@@ -96,9 +92,8 @@ struct CommandListAppendLaunchFunction : public GlobalFixtureTest {
 TEST_F(CommandListAppendLaunchFunction, storesFunctionWhenPrintfUsedByFunction) {
     createFunction("Printf");
 
-    auto result = commandList->appendLaunchFunction(function->toHandle(),
-                                                    &dispatchFunctionArguments,
-                                                    nullptr, 0, nullptr);
+    auto result = commandList->appendLaunchFunction(
+        function->toHandle(), &dispatchFunctionArguments, nullptr, 0, nullptr);
 
     EXPECT_EQ(1u, commandList->printfFunctionContainer.size());
     EXPECT_EQ(function, commandList->printfFunctionContainer[0]);
@@ -108,16 +103,14 @@ TEST_F(CommandListAppendLaunchFunction, storesFunctionWhenPrintfUsedByFunction) 
 TEST_F(CommandListAppendLaunchFunction, storesFunctionOnceWhenAppendingFunctionMultipleTimes) {
     createFunction("Printf");
 
-    auto result = commandList->appendLaunchFunction(function->toHandle(),
-                                                    &dispatchFunctionArguments,
-                                                    nullptr, 0, nullptr);
+    auto result = commandList->appendLaunchFunction(
+        function->toHandle(), &dispatchFunctionArguments, nullptr, 0, nullptr);
 
     EXPECT_EQ(1u, commandList->printfFunctionContainer.size());
     EXPECT_EQ(function, commandList->printfFunctionContainer[0]);
     EXPECT_EQ(XE_RESULT_SUCCESS, result);
 
-    result = commandList->appendLaunchFunction(function->toHandle(),
-                                               &dispatchFunctionArguments,
+    result = commandList->appendLaunchFunction(function->toHandle(), &dispatchFunctionArguments,
                                                nullptr, 0, nullptr);
 
     EXPECT_EQ(1u, commandList->printfFunctionContainer.size());
@@ -128,18 +121,16 @@ ATSTEST_F(CommandListAppendLaunchFunction, addsWalkerToCommandStream) {
 
     auto usedSpaceBefore = commandList->commandStream->getUsed();
 
-    auto result = commandList->appendLaunchFunction(function->toHandle(),
-                                                    &dispatchFunctionArguments,
-                                                    nullptr, 0, nullptr);
+    auto result = commandList->appendLaunchFunction(
+        function->toHandle(), &dispatchFunctionArguments, nullptr, 0, nullptr);
     ASSERT_EQ(XE_RESULT_SUCCESS, result);
 
     auto usedSpaceAfter = commandList->commandStream->getUsed();
     ASSERT_GT(usedSpaceAfter, usedSpaceBefore);
 
     GenCmdList cmdList;
-    ASSERT_TRUE(FamilyType::PARSE::parseCommandBuffer(cmdList,
-                                                      ptrOffset(commandList->commandStream->getCpuBase(), 0),
-                                                      usedSpaceAfter));
+    ASSERT_TRUE(FamilyType::PARSE::parseCommandBuffer(
+        cmdList, ptrOffset(commandList->commandStream->getCpuBase(), 0), usedSpaceAfter));
     using COMPUTE_WALKER = typename FamilyType::COMPUTE_WALKER;
     using POSTSYNC_DATA = typename FamilyType::POSTSYNC_DATA;
     using INTERFACE_DESCRIPTOR_DATA = typename FamilyType::INTERFACE_DESCRIPTOR_DATA;
@@ -168,7 +159,8 @@ ATSTEST_F(CommandListAppendLaunchFunction, addsWalkerToCommandStream) {
         EXPECT_EQ(idd.getSamplerStatePointer(), 0u);
         EXPECT_EQ(idd.getBindingTableEntryCount(), 0u);
         EXPECT_NE(idd.getNumberOfThreadsInGpgpuThreadGroup(), 0u);
-        EXPECT_EQ(idd.getSharedLocalMemorySize(), INTERFACE_DESCRIPTOR_DATA::SHARED_LOCAL_MEMORY_SIZE_ENCODES_0K);
+        EXPECT_EQ(idd.getSharedLocalMemorySize(),
+                  INTERFACE_DESCRIPTOR_DATA::SHARED_LOCAL_MEMORY_SIZE_ENCODES_0K);
         EXPECT_EQ(idd.getBarrierEnable(), 0u);
         EXPECT_EQ(idd.getThreadGroupDispatchSize(), 0u);
     }
@@ -176,17 +168,15 @@ ATSTEST_F(CommandListAppendLaunchFunction, addsWalkerToCommandStream) {
 
 ATSTEST_F(CommandListAppendLaunchFunction, withBarrierAndSLMSetsIDDBarrierEnableAndSLMSize) {
     createFunction("SlmBarrier");
-    auto result = commandList->appendLaunchFunction(function->toHandle(),
-                                                    &dispatchFunctionArguments,
-                                                    nullptr, 0, nullptr);
+    auto result = commandList->appendLaunchFunction(
+        function->toHandle(), &dispatchFunctionArguments, nullptr, 0, nullptr);
     ASSERT_EQ(XE_RESULT_SUCCESS, result);
 
     auto usedSpaceAfter = commandList->commandStream->getUsed();
 
     GenCmdList cmdList;
-    ASSERT_TRUE(FamilyType::PARSE::parseCommandBuffer(cmdList,
-                                                      ptrOffset(commandList->commandStream->getCpuBase(), 0),
-                                                      usedSpaceAfter));
+    ASSERT_TRUE(FamilyType::PARSE::parseCommandBuffer(
+        cmdList, ptrOffset(commandList->commandStream->getCpuBase(), 0), usedSpaceAfter));
     using COMPUTE_WALKER = typename FamilyType::COMPUTE_WALKER;
     using INTERFACE_DESCRIPTOR_DATA = typename FamilyType::INTERFACE_DESCRIPTOR_DATA;
 
@@ -197,7 +187,8 @@ ATSTEST_F(CommandListAppendLaunchFunction, withBarrierAndSLMSetsIDDBarrierEnable
         auto cmd = genCmdCast<COMPUTE_WALKER *>(*itor);
         auto &idd = cmd->getInterfaceDescriptor();
         EXPECT_EQ(idd.getBarrierEnable(), 1u);
-        EXPECT_EQ(INTERFACE_DESCRIPTOR_DATA::SHARED_LOCAL_MEMORY_SIZE_ENCODES_64K, idd.getSharedLocalMemorySize());
+        EXPECT_EQ(INTERFACE_DESCRIPTOR_DATA::SHARED_LOCAL_MEMORY_SIZE_ENCODES_64K,
+                  idd.getSharedLocalMemorySize());
     }
 }
 
@@ -207,18 +198,16 @@ HWTEST2_F(CommandListAppendLaunchFunction, withEventAddsPostSyncFlush, IsGen9) {
     auto usedSpaceBefore = commandList->commandStream->getUsed();
     auto event = whitebox_cast(Event::create(&device));
 
-    auto result = commandList->appendLaunchFunction(function->toHandle(),
-                                                    &dispatchFunctionArguments,
-                                                    event->toHandle(), 0, nullptr);
+    auto result = commandList->appendLaunchFunction(
+        function->toHandle(), &dispatchFunctionArguments, event->toHandle(), 0, nullptr);
     ASSERT_EQ(XE_RESULT_SUCCESS, result);
 
     auto usedSpaceAfter = commandList->commandStream->getUsed();
     ASSERT_GT(usedSpaceAfter, usedSpaceBefore);
 
     GenCmdList cmdList;
-    ASSERT_TRUE(FamilyType::PARSE::parseCommandBuffer(cmdList,
-                                                      ptrOffset(commandList->commandStream->getCpuBase(), 0),
-                                                      usedSpaceAfter));
+    ASSERT_TRUE(FamilyType::PARSE::parseCommandBuffer(
+        cmdList, ptrOffset(commandList->commandStream->getCpuBase(), 0), usedSpaceAfter));
     using GPGPU_WALKER = typename FamilyType::GPGPU_WALKER;
     using PIPE_CONTROL = typename FamilyType::PIPE_CONTROL;
     using POST_SYNC_OPERATION = typename PIPE_CONTROL::POST_SYNC_OPERATION;
@@ -232,7 +221,8 @@ HWTEST2_F(CommandListAppendLaunchFunction, withEventAddsPostSyncFlush, IsGen9) {
         auto cmd = genCmdCast<PIPE_CONTROL *>(*itorPC);
         ASSERT_NE(cmd, nullptr);
 
-        EXPECT_EQ(cmd->getPostSyncOperation(), POST_SYNC_OPERATION::POST_SYNC_OPERATION_WRITE_IMMEDIATE_DATA);
+        EXPECT_EQ(cmd->getPostSyncOperation(),
+                  POST_SYNC_OPERATION::POST_SYNC_OPERATION_WRITE_IMMEDIATE_DATA);
         EXPECT_EQ(cmd->getImmediateData(), Event::STATE_SIGNALED);
         EXPECT_TRUE(cmd->getCommandStreamerStallEnable());
         EXPECT_TRUE(cmd->getDcFlushEnable());
@@ -256,18 +246,16 @@ ATSTEST_F(CommandListAppendLaunchFunction, withEventSetsPostSyncOp) {
     auto usedSpaceBefore = commandList->commandStream->getUsed();
     auto event = whitebox_cast(Event::create(&device));
 
-    auto result = commandList->appendLaunchFunction(function->toHandle(),
-                                                    &dispatchFunctionArguments,
-                                                    event->toHandle(), 0, nullptr);
+    auto result = commandList->appendLaunchFunction(
+        function->toHandle(), &dispatchFunctionArguments, event->toHandle(), 0, nullptr);
     ASSERT_EQ(XE_RESULT_SUCCESS, result);
 
     auto usedSpaceAfter = commandList->commandStream->getUsed();
     ASSERT_GT(usedSpaceAfter, usedSpaceBefore);
 
     GenCmdList cmdList;
-    ASSERT_TRUE(FamilyType::PARSE::parseCommandBuffer(cmdList,
-                                                      ptrOffset(commandList->commandStream->getCpuBase(), 0),
-                                                      usedSpaceAfter));
+    ASSERT_TRUE(FamilyType::PARSE::parseCommandBuffer(
+        cmdList, ptrOffset(commandList->commandStream->getCpuBase(), 0), usedSpaceAfter));
     using COMPUTE_WALKER = typename FamilyType::COMPUTE_WALKER;
     using POSTSYNC_DATA = typename FamilyType::POSTSYNC_DATA;
 
@@ -298,18 +286,17 @@ ATSTEST_F(CommandListAppendLaunchFunction, copiesThreadDataToGeneralStateHeap) {
     using INTERFACE_DESCRIPTOR_DATA = typename FamilyType::INTERFACE_DESCRIPTOR_DATA;
 
     auto heap = commandList->indirectHeaps[CommandList::GENERAL_STATE];
-    heap->getSpace(COMPUTE_WALKER::INDIRECTDATASTARTADDRESS_ALIGN_SIZE - 1); // this will check if cmdlist takes care of heap allignment
+    heap->getSpace(COMPUTE_WALKER::INDIRECTDATASTARTADDRESS_ALIGN_SIZE -
+                   1); // this will check if cmdlist takes care of heap allignment
 
-    auto result = commandList->appendLaunchFunction(function->toHandle(),
-                                                    &dispatchFunctionArguments,
-                                                    nullptr, 0, nullptr);
+    auto result = commandList->appendLaunchFunction(
+        function->toHandle(), &dispatchFunctionArguments, nullptr, 0, nullptr);
     ASSERT_EQ(XE_RESULT_SUCCESS, result);
 
     auto usedSpaceAfter = commandList->commandStream->getUsed();
     GenCmdList cmdList;
-    ASSERT_TRUE(FamilyType::PARSE::parseCommandBuffer(cmdList,
-                                                      ptrOffset(commandList->commandStream->getCpuBase(), 0),
-                                                      usedSpaceAfter));
+    ASSERT_TRUE(FamilyType::PARSE::parseCommandBuffer(
+        cmdList, ptrOffset(commandList->commandStream->getCpuBase(), 0), usedSpaceAfter));
 
     auto itor = find<COMPUTE_WALKER *>(cmdList.begin(), cmdList.end());
     ASSERT_NE(cmdList.end(), itor);
@@ -323,9 +310,13 @@ ATSTEST_F(CommandListAppendLaunchFunction, copiesThreadDataToGeneralStateHeap) {
         EXPECT_LE(cmd->getIndirectDataLength(), indirectDataLength);
 
         auto ptrHeap = ptrOffset(heap->getCpuBase(), cmd->getIndirectDataStartAddress());
-        EXPECT_EQ(memcmp(ptrHeap, function->getCrossThreadData().get(), function->getCrossThreadDataSize()), 0u);
+        EXPECT_EQ(memcmp(ptrHeap, function->getCrossThreadData().get(),
+                         function->getCrossThreadDataSize()),
+                  0u);
         ptrHeap = ptrOffset(ptrHeap, function->getCrossThreadDataSize());
-        EXPECT_EQ(memcmp(ptrHeap, function->getPerThreadData().get(), function->getPerThreadDataSizeForWholeThreadGroup()), 0u);
+        EXPECT_EQ(memcmp(ptrHeap, function->getPerThreadData().get(),
+                         function->getPerThreadDataSizeForWholeThreadGroup()),
+                  0u);
         ptrHeap = ptrOffset(ptrHeap, function->getPerThreadDataSizeForWholeThreadGroup());
     }
 }
@@ -340,16 +331,14 @@ ATSTEST_F(CommandListAppendLaunchFunction, growsGeneralStateHeapIfNeeded) {
     ASSERT_EQ(0U, heap->getUsed());
     heap->overrideMaxSize(COMPUTE_WALKER::INDIRECTDATASTARTADDRESS_ALIGN_SIZE);
 
-    auto result = commandList->appendLaunchFunction(function->toHandle(),
-                                                    &dispatchFunctionArguments,
-                                                    nullptr, 0, nullptr);
+    auto result = commandList->appendLaunchFunction(
+        function->toHandle(), &dispatchFunctionArguments, nullptr, 0, nullptr);
     ASSERT_EQ(XE_RESULT_SUCCESS, result);
 
     auto usedSpaceAfter = commandList->commandStream->getUsed();
     GenCmdList cmdList;
-    ASSERT_TRUE(FamilyType::PARSE::parseCommandBuffer(cmdList,
-                                                      ptrOffset(commandList->commandStream->getCpuBase(), 0),
-                                                      usedSpaceAfter));
+    ASSERT_TRUE(FamilyType::PARSE::parseCommandBuffer(
+        cmdList, ptrOffset(commandList->commandStream->getCpuBase(), 0), usedSpaceAfter));
 
     auto itor = find<COMPUTE_WALKER *>(cmdList.begin(), cmdList.end());
     ASSERT_NE(cmdList.end(), itor);
@@ -363,9 +352,13 @@ ATSTEST_F(CommandListAppendLaunchFunction, growsGeneralStateHeapIfNeeded) {
         EXPECT_LE(cmd->getIndirectDataLength(), indirectDataLength);
 
         auto ptrHeap = ptrOffset(heap->getCpuBase(), cmd->getIndirectDataStartAddress());
-        EXPECT_EQ(memcmp(ptrHeap, function->getCrossThreadData().get(), function->getCrossThreadDataSize()), 0u);
+        EXPECT_EQ(memcmp(ptrHeap, function->getCrossThreadData().get(),
+                         function->getCrossThreadDataSize()),
+                  0u);
         ptrHeap = ptrOffset(ptrHeap, function->getCrossThreadDataSize());
-        EXPECT_EQ(memcmp(ptrHeap, function->getPerThreadData().get(), function->getPerThreadDataSizeForWholeThreadGroup()), 0u);
+        EXPECT_EQ(memcmp(ptrHeap, function->getPerThreadData().get(),
+                         function->getPerThreadDataSizeForWholeThreadGroup()),
+                  0u);
         ptrHeap = ptrOffset(ptrHeap, function->getPerThreadDataSizeForWholeThreadGroup());
     }
 }
@@ -383,17 +376,15 @@ ATSTEST_F(CommandListAppendLaunchFunction, storesImageSampler) {
     ASSERT_NE(nullptr, fnDynamicStateHeap.get());
     ASSERT_NE(Undefined, signature.samplerTable.tableOffset);
 
-    auto result = commandList->appendLaunchFunction(function->toHandle(),
-                                                    &dispatchFunctionArguments,
-                                                    nullptr, 0, nullptr);
+    auto result = commandList->appendLaunchFunction(
+        function->toHandle(), &dispatchFunctionArguments, nullptr, 0, nullptr);
     EXPECT_EQ(XE_RESULT_SUCCESS, result);
 
     auto usedSpaceAfter = commandList->commandStream->getUsed();
 
     GenCmdList cmdList;
-    ASSERT_TRUE(FamilyType::PARSE::parseCommandBuffer(cmdList,
-                                                      ptrOffset(commandList->commandStream->getCpuBase(), 0),
-                                                      usedSpaceAfter));
+    ASSERT_TRUE(FamilyType::PARSE::parseCommandBuffer(
+        cmdList, ptrOffset(commandList->commandStream->getCpuBase(), 0), usedSpaceAfter));
 
     auto itor = find<COMPUTE_WALKER *>(cmdList.begin(), cmdList.end());
     ASSERT_NE(cmdList.end(), itor);
@@ -406,8 +397,10 @@ ATSTEST_F(CommandListAppendLaunchFunction, storesImageSampler) {
     ASSERT_LE(samplerCount, static_cast<uint32_t>(idd.getSamplerCount() * 4));
 
     auto sizeSamplerState = sizeof(SAMPLER_STATE) * samplerCount;
-    auto fnSamplerState = reinterpret_cast<const SAMPLER_STATE *>(ptrOffset(fnDynamicStateHeap.get(), signature.samplerTable.tableOffset));
-    auto samplerState = reinterpret_cast<const SAMPLER_STATE *>(ptrOffset(dsh->getCpuBase(), idd.getSamplerStatePointer()));
+    auto fnSamplerState = reinterpret_cast<const SAMPLER_STATE *>(
+        ptrOffset(fnDynamicStateHeap.get(), signature.samplerTable.tableOffset));
+    auto samplerState = reinterpret_cast<const SAMPLER_STATE *>(
+        ptrOffset(dsh->getCpuBase(), idd.getSamplerStatePointer()));
 
     EXPECT_EQ(memcmp(fnSamplerState, samplerState, sizeSamplerState), 0u);
 }
@@ -422,17 +415,15 @@ ATSTEST_F(CommandListAppendLaunchFunction, storesBindingTableAndSurfaceStates) {
     auto fnSurfaceStateHeap = function->getSurfaceStateHeapData();
     ASSERT_NE(fnSurfaceStateHeap.get(), nullptr);
 
-    auto result = commandList->appendLaunchFunction(function->toHandle(),
-                                                    &dispatchFunctionArguments,
-                                                    nullptr, 0, nullptr);
+    auto result = commandList->appendLaunchFunction(
+        function->toHandle(), &dispatchFunctionArguments, nullptr, 0, nullptr);
     EXPECT_EQ(XE_RESULT_SUCCESS, result);
 
     auto usedSpaceAfter = commandList->commandStream->getUsed();
 
     GenCmdList cmdList;
-    ASSERT_TRUE(FamilyType::PARSE::parseCommandBuffer(cmdList,
-                                                      ptrOffset(commandList->commandStream->getCpuBase(), 0),
-                                                      usedSpaceAfter));
+    ASSERT_TRUE(FamilyType::PARSE::parseCommandBuffer(
+        cmdList, ptrOffset(commandList->commandStream->getCpuBase(), 0), usedSpaceAfter));
 
     auto itor = find<COMPUTE_WALKER *>(cmdList.begin(), cmdList.end());
     ASSERT_NE(cmdList.end(), itor);
@@ -446,18 +437,22 @@ ATSTEST_F(CommandListAppendLaunchFunction, storesBindingTableAndSurfaceStates) {
 
     ASSERT_EQ(ssh->getUsed(), function->getSurfaceStateHeapDataSize());
 
-    auto fnBindingTableOffset = function->getImmutableData()->getSignature().bindingTable.tableOffset;
+    auto fnBindingTableOffset =
+        function->getImmutableData()->getSignature().bindingTable.tableOffset;
     auto bindingTableOffset = idd.getBindingTablePointer();
     auto bindingTableOffsetDiff = bindingTableOffset - fnBindingTableOffset;
 
-    auto fnBindingTable = reinterpret_cast<const BINDING_TABLE_STATE *>(ptrOffset(fnSsh.get(), fnBindingTableOffset));
-    auto bindingTable = reinterpret_cast<const BINDING_TABLE_STATE *>(ptrOffset(ssh->getCpuBase(), bindingTableOffset));
+    auto fnBindingTable =
+        reinterpret_cast<const BINDING_TABLE_STATE *>(ptrOffset(fnSsh.get(), fnBindingTableOffset));
+    auto bindingTable = reinterpret_cast<const BINDING_TABLE_STATE *>(
+        ptrOffset(ssh->getCpuBase(), bindingTableOffset));
 
-    auto bindingTableStateCount = function->getImmutableData()->getSignature().bindingTable.numSurfaceStates;
+    auto bindingTableStateCount =
+        function->getImmutableData()->getSignature().bindingTable.numSurfaceStates;
     ASSERT_GT(bindingTableStateCount, 0u);
 
-    //TODO optimization currently disabled
-    //ASSERT_EQ(bindingTableStateCount, idd.getBindingTableEntryCount());
+    // TODO optimization currently disabled
+    // ASSERT_EQ(bindingTableStateCount, idd.getBindingTableEntryCount());
 
     for (uint32_t i = 0; i < bindingTableStateCount; i++) {
         ASSERT_EQ(fnBindingTable[i].getSurfaceStatePointer() + bindingTableOffsetDiff,
@@ -473,18 +468,17 @@ SKLTEST_F(CommandListAppendLaunchFunctionGEN9, copiesThreadDataToIndirectStateHe
     using INTERFACE_DESCRIPTOR_DATA = typename FamilyType::INTERFACE_DESCRIPTOR_DATA;
 
     auto heap = commandList->indirectHeaps[CommandList::INDIRECT_OBJECT];
-    heap->getSpace(GPGPU_WALKER::INDIRECTDATASTARTADDRESS_ALIGN_SIZE - 1); // this will check if cmdlist takes care of heap allignment
+    heap->getSpace(GPGPU_WALKER::INDIRECTDATASTARTADDRESS_ALIGN_SIZE -
+                   1); // this will check if cmdlist takes care of heap allignment
 
-    auto result = commandList->appendLaunchFunction(function->toHandle(),
-                                                    &dispatchFunctionArguments,
-                                                    nullptr, 0, nullptr);
+    auto result = commandList->appendLaunchFunction(
+        function->toHandle(), &dispatchFunctionArguments, nullptr, 0, nullptr);
     ASSERT_EQ(XE_RESULT_SUCCESS, result);
 
     auto usedSpaceAfter = commandList->commandStream->getUsed();
     GenCmdList cmdList;
-    ASSERT_TRUE(FamilyType::PARSE::parseCommandBuffer(cmdList,
-                                                      ptrOffset(commandList->commandStream->getCpuBase(), 0),
-                                                      usedSpaceAfter));
+    ASSERT_TRUE(FamilyType::PARSE::parseCommandBuffer(
+        cmdList, ptrOffset(commandList->commandStream->getCpuBase(), 0), usedSpaceAfter));
 
     auto itor = find<GPGPU_WALKER *>(cmdList.begin(), cmdList.end());
     ASSERT_NE(cmdList.end(), itor);
@@ -498,9 +492,13 @@ SKLTEST_F(CommandListAppendLaunchFunctionGEN9, copiesThreadDataToIndirectStateHe
         EXPECT_LE(cmd->getIndirectDataLength(), indirectDataLength);
 
         auto ptrHeap = ptrOffset(heap->getCpuBase(), cmd->getIndirectDataStartAddress());
-        EXPECT_EQ(memcmp(ptrHeap, function->getCrossThreadData().get(), function->getCrossThreadDataSize()), 0u);
+        EXPECT_EQ(memcmp(ptrHeap, function->getCrossThreadData().get(),
+                         function->getCrossThreadDataSize()),
+                  0u);
         ptrHeap = ptrOffset(ptrHeap, function->getCrossThreadDataSize());
-        EXPECT_EQ(memcmp(ptrHeap, function->getPerThreadData().get(), function->getPerThreadDataSizeForWholeThreadGroup()), 0u);
+        EXPECT_EQ(memcmp(ptrHeap, function->getPerThreadData().get(),
+                         function->getPerThreadDataSizeForWholeThreadGroup()),
+                  0u);
         ptrHeap = ptrOffset(ptrHeap, function->getPerThreadDataSizeForWholeThreadGroup());
     }
 }
@@ -509,17 +507,15 @@ using IsSKLOrKBL = IsWithinProducts<IGFX_SKYLAKE, IGFX_KABYLAKE>;
 
 HWTEST2_F(CommandListAppendLaunchFunctionGEN9, withSLMProgramsL3WithSLMValue, IsSKLOrKBL) {
     createFunction("SlmBarrier");
-    auto result = commandList->appendLaunchFunction(function->toHandle(),
-                                                    &dispatchFunctionArguments,
-                                                    nullptr, 0, nullptr);
+    auto result = commandList->appendLaunchFunction(
+        function->toHandle(), &dispatchFunctionArguments, nullptr, 0, nullptr);
     ASSERT_EQ(XE_RESULT_SUCCESS, result);
 
     auto usedSpaceAfter = commandList->commandStream->getUsed();
 
     GenCmdList cmdList;
-    ASSERT_TRUE(FamilyType::PARSE::parseCommandBuffer(cmdList,
-                                                      ptrOffset(commandList->commandStream->getCpuBase(), 0),
-                                                      usedSpaceAfter));
+    ASSERT_TRUE(FamilyType::PARSE::parseCommandBuffer(
+        cmdList, ptrOffset(commandList->commandStream->getCpuBase(), 0), usedSpaceAfter));
     using MI_LOAD_REGISTER_IMM = typename FamilyType::MI_LOAD_REGISTER_IMM;
 
     bool foundL3 = false;
@@ -540,22 +536,23 @@ HWTEST2_F(CommandListAppendLaunchFunctionGEN9, withSLMProgramsL3WithSLMValue, Is
 
 ATSTEST_F(CommandListAppendLaunchFunction, usesIsaFromInstructionHeap) {
     createFunction("MemcpyBytes");
-    auto result = commandList->appendLaunchFunction(function->toHandle(),
-                                                    &dispatchFunctionArguments,
-                                                    nullptr, 0, nullptr);
+    auto result = commandList->appendLaunchFunction(
+        function->toHandle(), &dispatchFunctionArguments, nullptr, 0, nullptr);
     ASSERT_EQ(XE_RESULT_SUCCESS, result);
 
     auto usedSpaceAfter = commandList->commandStream->getUsed();
 
     GenCmdList cmdList;
-    ASSERT_TRUE(FamilyType::PARSE::parseCommandBuffer(cmdList,
-                                                      ptrOffset(commandList->commandStream->getCpuBase(), 0),
-                                                      usedSpaceAfter));
+    ASSERT_TRUE(FamilyType::PARSE::parseCommandBuffer(
+        cmdList, ptrOffset(commandList->commandStream->getCpuBase(), 0), usedSpaceAfter));
     using COMPUTE_WALKER = typename FamilyType::COMPUTE_WALKER;
     using INTERFACE_DESCRIPTOR_DATA = typename FamilyType::INTERFACE_DESCRIPTOR_DATA;
 
     COMPUTE_WALKER addressValidator{};
-    addressValidator.getInterfaceDescriptor().setKernelStartPointer(function->getImmutableData()->getIsaGraphicsAllocation()->getGpuAddressOffsetFromHeapBase());
+    addressValidator.getInterfaceDescriptor().setKernelStartPointer(
+        function->getImmutableData()
+            ->getIsaGraphicsAllocation()
+            ->getGpuAddressOffsetFromHeapBase());
 
     auto itor = find<COMPUTE_WALKER *>(cmdList.begin(), cmdList.end());
     ASSERT_NE(cmdList.end(), itor);
@@ -564,7 +561,8 @@ ATSTEST_F(CommandListAppendLaunchFunction, usesIsaFromInstructionHeap) {
         auto cmd = genCmdCast<COMPUTE_WALKER *>(*itor);
         auto &idd = cmd->getInterfaceDescriptor();
 
-        EXPECT_EQ(addressValidator.getInterfaceDescriptor().getKernelStartPointer(), idd.getKernelStartPointer());
+        EXPECT_EQ(addressValidator.getInterfaceDescriptor().getKernelStartPointer(),
+                  idd.getKernelStartPointer());
     }
 }
 
@@ -572,18 +570,16 @@ GEN9TEST_F(CommandListAppendLaunchFunctionGEN9, addsWalkerToCommandStream) {
     createFunction("MemcpyBytes");
     auto usedSpaceBefore = commandList->commandStream->getUsed();
 
-    auto result = commandList->appendLaunchFunction(function->toHandle(),
-                                                    &dispatchFunctionArguments,
-                                                    nullptr, 0, nullptr);
+    auto result = commandList->appendLaunchFunction(
+        function->toHandle(), &dispatchFunctionArguments, nullptr, 0, nullptr);
     ASSERT_EQ(XE_RESULT_SUCCESS, result);
 
     auto usedSpaceAfter = commandList->commandStream->getUsed();
     ASSERT_GT(usedSpaceAfter, usedSpaceBefore);
 
     GenCmdList cmdList;
-    ASSERT_TRUE(FamilyType::PARSE::parseCommandBuffer(cmdList,
-                                                      ptrOffset(commandList->commandStream->getCpuBase(), 0),
-                                                      usedSpaceAfter));
+    ASSERT_TRUE(FamilyType::PARSE::parseCommandBuffer(
+        cmdList, ptrOffset(commandList->commandStream->getCpuBase(), 0), usedSpaceAfter));
     using GPGPU_WALKER = typename FamilyType::GPGPU_WALKER;
     using INTERFACE_DESCRIPTOR_DATA = typename FamilyType::INTERFACE_DESCRIPTOR_DATA;
     using MEDIA_INTERFACE_DESCRIPTOR_LOAD = typename FamilyType::MEDIA_INTERFACE_DESCRIPTOR_LOAD;
@@ -600,8 +596,11 @@ GEN9TEST_F(CommandListAppendLaunchFunctionGEN9, addsWalkerToCommandStream) {
 
         EXPECT_EQ(cmd->getInterfaceDescriptorTotalLength(), sizeof(INTERFACE_DESCRIPTOR_DATA));
         auto dsh = commandList->indirectHeaps[CommandList::DYNAMIC_STATE];
-        EXPECT_LE(cmd->getInterfaceDescriptorDataStartAddress() + cmd->getInterfaceDescriptorTotalLength(), dsh->getUsed());
-        idd = static_cast<INTERFACE_DESCRIPTOR_DATA *>(ptrOffset(dsh->getCpuBase(), cmd->getInterfaceDescriptorDataStartAddress()));
+        EXPECT_LE(cmd->getInterfaceDescriptorDataStartAddress() +
+                      cmd->getInterfaceDescriptorTotalLength(),
+                  dsh->getUsed());
+        idd = static_cast<INTERFACE_DESCRIPTOR_DATA *>(
+            ptrOffset(dsh->getCpuBase(), cmd->getInterfaceDescriptorDataStartAddress()));
     }
 
     {
@@ -625,26 +624,36 @@ GEN9TEST_F(CommandListAppendLaunchFunctionGEN9, addsWalkerToCommandStream) {
         // Relative to IndirectObjectBaseAddress
         auto indirectDataLength = function->getPerThreadDataSizeForWholeThreadGroup() +
                                   function->getCrossThreadDataSize();
-        EXPECT_EQ(cmd->getIndirectDataLength() % GPGPU_WALKER::INDIRECTDATASTARTADDRESS_ALIGN_SIZE, 0u);
+        EXPECT_EQ(cmd->getIndirectDataLength() % GPGPU_WALKER::INDIRECTDATASTARTADDRESS_ALIGN_SIZE,
+                  0u);
         EXPECT_GE(cmd->getIndirectDataLength(), indirectDataLength);
 
         auto heap = commandList->indirectHeaps[CommandList::INDIRECT_OBJECT];
 
         auto ptrHeap = ptrOffset(heap->getCpuBase(), cmd->getIndirectDataStartAddress());
-        EXPECT_EQ(memcmp(ptrHeap, function->getCrossThreadData().get(), function->getCrossThreadDataSize()), 0u);
+        EXPECT_EQ(memcmp(ptrHeap, function->getCrossThreadData().get(),
+                         function->getCrossThreadDataSize()),
+                  0u);
         ptrHeap = ptrOffset(ptrHeap, function->getCrossThreadDataSize());
-        EXPECT_EQ(memcmp(ptrHeap, function->getPerThreadData().get(), function->getPerThreadDataSizeForWholeThreadGroup()), 0u);
+        EXPECT_EQ(memcmp(ptrHeap, function->getPerThreadData().get(),
+                         function->getPerThreadDataSizeForWholeThreadGroup()),
+                  0u);
         ptrHeap = ptrOffset(ptrHeap, function->getPerThreadDataSizeForWholeThreadGroup());
 
-        EXPECT_EQ(INTERFACE_DESCRIPTOR_DATA::SAMPLER_COUNT_NO_SAMPLERS_USED, idd->getSamplerCount());
+        EXPECT_EQ(INTERFACE_DESCRIPTOR_DATA::SAMPLER_COUNT_NO_SAMPLERS_USED,
+                  idd->getSamplerCount());
         EXPECT_EQ(0u, idd->getSamplerStatePointer());
         EXPECT_EQ(0u, idd->getBindingTableEntryCount());
-        EXPECT_EQ(function->getThreadsPerThreadGroup(), idd->getNumberOfThreadsInGpgpuThreadGroup());
-        EXPECT_EQ(INTERFACE_DESCRIPTOR_DATA::SHARED_LOCAL_MEMORY_SIZE_ENCODES_0K, idd->getSharedLocalMemorySize());
+        EXPECT_EQ(function->getThreadsPerThreadGroup(),
+                  idd->getNumberOfThreadsInGpgpuThreadGroup());
+        EXPECT_EQ(INTERFACE_DESCRIPTOR_DATA::SHARED_LOCAL_MEMORY_SIZE_ENCODES_0K,
+                  idd->getSharedLocalMemorySize());
         EXPECT_EQ(0u, idd->getBarrierEnable());
 
-        EXPECT_EQ(function->getCrossThreadDataSize() / sizeof(float[8]), idd->getCrossThreadConstantDataReadLength());
-        EXPECT_EQ(function->getPerThreadDataSize() / sizeof(float[8]), idd->getConstantIndirectUrbEntryReadLength());
+        EXPECT_EQ(function->getCrossThreadDataSize() / sizeof(float[8]),
+                  idd->getCrossThreadConstantDataReadLength());
+        EXPECT_EQ(function->getPerThreadDataSize() / sizeof(float[8]),
+                  idd->getConstantIndirectUrbEntryReadLength());
     }
 }
 
@@ -657,25 +666,26 @@ GEN9TEST_F(CommandListAppendLaunchFunction, usesProperInterfaceDescriptorOffsets
     using GPGPU_WALKER = typename FamilyType::GPGPU_WALKER;
 
     constexpr uint32_t expectedIDDOffset = 4;
-    // -1 to check that driver does the required 64-byte alignment (note : sizeof(IDD) is just 32-bytes)
-    commandList->indirectHeaps[CommandList::DYNAMIC_STATE]->getSpace((expectedIDDOffset - 1) * sizeof(INTERFACE_DESCRIPTOR_DATA));
+    // -1 to check that driver does the required 64-byte alignment (note : sizeof(IDD) is just
+    // 32-bytes)
+    commandList->indirectHeaps[CommandList::DYNAMIC_STATE]->getSpace(
+        (expectedIDDOffset - 1) * sizeof(INTERFACE_DESCRIPTOR_DATA));
 
-    auto result = commandList->appendLaunchFunction(function->toHandle(),
-                                                    &dispatchFunctionArguments,
-                                                    nullptr, 0, nullptr);
+    auto result = commandList->appendLaunchFunction(
+        function->toHandle(), &dispatchFunctionArguments, nullptr, 0, nullptr);
     ASSERT_EQ(XE_RESULT_SUCCESS, result);
     auto usedSpaceAfter = commandList->commandStream->getUsed();
 
     GenCmdList cmdList;
-    ASSERT_TRUE(FamilyType::PARSE::parseCommandBuffer(cmdList,
-                                                      ptrOffset(commandList->commandStream->getCpuBase(), 0),
-                                                      usedSpaceAfter));
+    ASSERT_TRUE(FamilyType::PARSE::parseCommandBuffer(
+        cmdList, ptrOffset(commandList->commandStream->getCpuBase(), 0), usedSpaceAfter));
 
     auto itorMIDL = find<MEDIA_INTERFACE_DESCRIPTOR_LOAD *>(cmdList.begin(), cmdList.end());
     ASSERT_NE(cmdList.end(), itorMIDL);
     {
         auto cmd = genCmdCast<MEDIA_INTERFACE_DESCRIPTOR_LOAD *>(*itorMIDL);
-        EXPECT_EQ(expectedIDDOffset * sizeof(INTERFACE_DESCRIPTOR_DATA), cmd->getInterfaceDescriptorDataStartAddress());
+        EXPECT_EQ(expectedIDDOffset * sizeof(INTERFACE_DESCRIPTOR_DATA),
+                  cmd->getInterfaceDescriptorDataStartAddress());
     }
 
     auto itorMSF = find<MEDIA_STATE_FLUSH *>(cmdList.begin(), itorMIDL); // expected before MIDL
@@ -685,7 +695,9 @@ GEN9TEST_F(CommandListAppendLaunchFunction, usesProperInterfaceDescriptorOffsets
     ASSERT_NE(cmdList.end(), itorWalker);
     {
         auto cmd = genCmdCast<GPGPU_WALKER *>(*itorWalker);
-        EXPECT_EQ(0U, cmd->getInterfaceDescriptorOffset()); // single IDD per MEDIA_INTERFACE_DESCRIPTOR_LOAD for now
+        EXPECT_EQ(0U,
+                  cmd->getInterfaceDescriptorOffset()); // single IDD per
+                                                        // MEDIA_INTERFACE_DESCRIPTOR_LOAD for now
     }
 
     itorMSF = find<MEDIA_STATE_FLUSH *>(itorWalker, cmdList.end()); // expected after Walker
@@ -701,18 +713,16 @@ GEN9TEST_F(CommandListAppendLaunchFunctionGEN9, programsL3InBatchBuffer) {
     ASSERT_NE(nullptr, commandList->commandStream);
     auto usedSpaceBefore = commandList->commandStream->getUsed();
 
-    auto result = commandList->appendLaunchFunction(function->toHandle(),
-                                                    &dispatchFunctionArguments,
-                                                    nullptr, 0, nullptr);
+    auto result = commandList->appendLaunchFunction(
+        function->toHandle(), &dispatchFunctionArguments, nullptr, 0, nullptr);
     ASSERT_EQ(XE_RESULT_SUCCESS, result);
 
     auto usedSpaceAfter = commandList->commandStream->getUsed();
     ASSERT_GT(usedSpaceAfter, usedSpaceBefore);
 
     GenCmdList cmdList;
-    ASSERT_TRUE(FamilyType::PARSE::parseCommandBuffer(cmdList,
-                                                      ptrOffset(commandList->commandStream->getCpuBase(), 0),
-                                                      usedSpaceAfter));
+    ASSERT_TRUE(FamilyType::PARSE::parseCommandBuffer(
+        cmdList, ptrOffset(commandList->commandStream->getCpuBase(), 0), usedSpaceAfter));
     using MI_LOAD_REGISTER_IMM = typename FamilyType::MI_LOAD_REGISTER_IMM;
     using PIPE_CONTROL = typename FamilyType::PIPE_CONTROL;
 
@@ -735,17 +745,15 @@ GEN9TEST_F(CommandListAppendLaunchFunctionGEN9, programsL3InBatchBuffer) {
 GEN9TEST_F(CommandListAppendLaunchFunctionGEN9, withBarrierAndSLMSetsIDDBarrierEnable) {
     createFunction("SlmBarrier");
 
-    auto result = commandList->appendLaunchFunction(function->toHandle(),
-                                                    &dispatchFunctionArguments,
-                                                    nullptr, 0, nullptr);
+    auto result = commandList->appendLaunchFunction(
+        function->toHandle(), &dispatchFunctionArguments, nullptr, 0, nullptr);
     ASSERT_EQ(XE_RESULT_SUCCESS, result);
 
     auto usedSpaceAfter = commandList->commandStream->getUsed();
 
     GenCmdList cmdList;
-    ASSERT_TRUE(FamilyType::PARSE::parseCommandBuffer(cmdList,
-                                                      ptrOffset(commandList->commandStream->getCpuBase(), 0),
-                                                      usedSpaceAfter));
+    ASSERT_TRUE(FamilyType::PARSE::parseCommandBuffer(
+        cmdList, ptrOffset(commandList->commandStream->getCpuBase(), 0), usedSpaceAfter));
     using GPGPU_WALKER = typename FamilyType::GPGPU_WALKER;
     using INTERFACE_DESCRIPTOR_DATA = typename FamilyType::INTERFACE_DESCRIPTOR_DATA;
     using MEDIA_INTERFACE_DESCRIPTOR_LOAD = typename FamilyType::MEDIA_INTERFACE_DESCRIPTOR_LOAD;
@@ -762,12 +770,16 @@ GEN9TEST_F(CommandListAppendLaunchFunctionGEN9, withBarrierAndSLMSetsIDDBarrierE
 
         EXPECT_EQ(cmd->getInterfaceDescriptorTotalLength(), sizeof(INTERFACE_DESCRIPTOR_DATA));
         auto dsh = commandList->indirectHeaps[CommandList::DYNAMIC_STATE];
-        EXPECT_LE(cmd->getInterfaceDescriptorDataStartAddress() + cmd->getInterfaceDescriptorTotalLength(), dsh->getUsed());
-        idd = static_cast<INTERFACE_DESCRIPTOR_DATA *>(ptrOffset(dsh->getCpuBase(), cmd->getInterfaceDescriptorDataStartAddress()));
+        EXPECT_LE(cmd->getInterfaceDescriptorDataStartAddress() +
+                      cmd->getInterfaceDescriptorTotalLength(),
+                  dsh->getUsed());
+        idd = static_cast<INTERFACE_DESCRIPTOR_DATA *>(
+            ptrOffset(dsh->getCpuBase(), cmd->getInterfaceDescriptorDataStartAddress()));
     }
 
     EXPECT_EQ(idd->getBarrierEnable(), 1u);
-    EXPECT_NE(INTERFACE_DESCRIPTOR_DATA::SHARED_LOCAL_MEMORY_SIZE_ENCODES_0K, idd->getSharedLocalMemorySize());
+    EXPECT_NE(INTERFACE_DESCRIPTOR_DATA::SHARED_LOCAL_MEMORY_SIZE_ENCODES_0K,
+              idd->getSharedLocalMemorySize());
 }
 
 HWTEST_F(CommandListAppendLaunchFunction, setsGroupCountBeforeAccessingCrossThreadData) {
@@ -777,10 +789,13 @@ HWTEST_F(CommandListAppendLaunchFunction, setsGroupCountBeforeAccessingCrossThre
     ON_CALL(*this->function, setGroupCount)
         .WillByDefault(::testing::Invoke([&](uint32_t x, uint32_t y, uint32_t z) { res += 1; }));
 
-    ON_CALL(*this->function, getCrossThreadData)
-        .WillByDefault(::testing::Invoke([&]() { res *= 2; return bindPtrRef<const uint8_t[]>(function->crossThreadData.data()); }));
+    ON_CALL(*this->function, getCrossThreadData).WillByDefault(::testing::Invoke([&]() {
+        res *= 2;
+        return bindPtrRef<const uint8_t[]>(function->crossThreadData.data());
+    }));
 
-    auto result = commandList->appendLaunchFunction(function->toHandle(), &dispatchFunctionArguments, nullptr, 0, nullptr);
+    auto result = commandList->appendLaunchFunction(
+        function->toHandle(), &dispatchFunctionArguments, nullptr, 0, nullptr);
     ASSERT_EQ(XE_RESULT_SUCCESS, result);
 
     EXPECT_EQ(2, res);
@@ -794,9 +809,8 @@ HWTEST_F(CommandListAppendLaunchFunction, residencyContainerDoesNotContainDuplic
     auto commandList = whitebox_cast(CommandList::create(productFamily, &device));
 
     for (int i = 0; i < 4; ++i) {
-        auto result = commandList->appendLaunchFunction(function->toHandle(),
-                                                        &dispatchFunctionArguments,
-                                                        nullptr, 0, nullptr);
+        auto result = commandList->appendLaunchFunction(
+            function->toHandle(), &dispatchFunctionArguments, nullptr, 0, nullptr);
         ASSERT_EQ(XE_RESULT_SUCCESS, result);
     }
 
@@ -825,17 +839,15 @@ GEN9TEST_F(CommandListAppendLaunchFunctionGEN9, storesImageSampler) {
     ASSERT_NE(0, function->getDynamicStateHeapDataSize());
     ASSERT_NE(Undefined, signature.samplerTable.tableOffset);
 
-    auto result = commandList->appendLaunchFunction(function->toHandle(),
-                                                    &dispatchFunctionArguments,
-                                                    nullptr, 0, nullptr);
+    auto result = commandList->appendLaunchFunction(
+        function->toHandle(), &dispatchFunctionArguments, nullptr, 0, nullptr);
     EXPECT_EQ(XE_RESULT_SUCCESS, result);
 
     auto usedSpaceAfter = commandList->commandStream->getUsed();
 
     GenCmdList cmdList;
-    ASSERT_TRUE(FamilyType::PARSE::parseCommandBuffer(cmdList,
-                                                      ptrOffset(commandList->commandStream->getCpuBase(), 0),
-                                                      usedSpaceAfter));
+    ASSERT_TRUE(FamilyType::PARSE::parseCommandBuffer(
+        cmdList, ptrOffset(commandList->commandStream->getCpuBase(), 0), usedSpaceAfter));
 
     auto itorWalker = find<GPGPU_WALKER *>(cmdList.begin(), cmdList.end());
     ASSERT_NE(cmdList.end(), itorWalker);
@@ -849,8 +861,11 @@ GEN9TEST_F(CommandListAppendLaunchFunctionGEN9, storesImageSampler) {
 
         EXPECT_EQ(cmd->getInterfaceDescriptorTotalLength(), sizeof(INTERFACE_DESCRIPTOR_DATA));
         auto dsh = commandList->indirectHeaps[CommandList::DYNAMIC_STATE];
-        EXPECT_LE(cmd->getInterfaceDescriptorDataStartAddress() + cmd->getInterfaceDescriptorTotalLength(), dsh->getUsed());
-        idd = static_cast<INTERFACE_DESCRIPTOR_DATA *>(ptrOffset(dsh->getCpuBase(), cmd->getInterfaceDescriptorDataStartAddress()));
+        EXPECT_LE(cmd->getInterfaceDescriptorDataStartAddress() +
+                      cmd->getInterfaceDescriptorTotalLength(),
+                  dsh->getUsed());
+        idd = static_cast<INTERFACE_DESCRIPTOR_DATA *>(
+            ptrOffset(dsh->getCpuBase(), cmd->getInterfaceDescriptorDataStartAddress()));
     }
 
     auto dsh = commandList->indirectHeaps[CommandList::DYNAMIC_STATE];
@@ -858,8 +873,10 @@ GEN9TEST_F(CommandListAppendLaunchFunctionGEN9, storesImageSampler) {
     ASSERT_LE(samplerCount, static_cast<uint32_t>(idd->getSamplerCount() * 4));
 
     auto sizeSamplerState = sizeof(SAMPLER_STATE) * samplerCount;
-    auto fnSamplerState = reinterpret_cast<const SAMPLER_STATE *>(ptrOffset(fnDynamicStateHeap.get(), signature.samplerTable.tableOffset));
-    auto samplerState = reinterpret_cast<const SAMPLER_STATE *>(ptrOffset(dsh->getCpuBase(), idd->getSamplerStatePointer()));
+    auto fnSamplerState = reinterpret_cast<const SAMPLER_STATE *>(
+        ptrOffset(fnDynamicStateHeap.get(), signature.samplerTable.tableOffset));
+    auto samplerState = reinterpret_cast<const SAMPLER_STATE *>(
+        ptrOffset(dsh->getCpuBase(), idd->getSamplerStatePointer()));
 
     ASSERT_EQ(memcmp(fnSamplerState, samplerState, sizeSamplerState), 0u);
 }
@@ -875,17 +892,15 @@ GEN9TEST_F(CommandListAppendLaunchFunctionGEN9, storesBindingTableAndSurfaceStat
     auto fnSurfaceStateHeap = function->getSurfaceStateHeapData();
     ASSERT_NE(fnSurfaceStateHeap.get(), nullptr);
 
-    auto result = commandList->appendLaunchFunction(function->toHandle(),
-                                                    &dispatchFunctionArguments,
-                                                    nullptr, 0, nullptr);
+    auto result = commandList->appendLaunchFunction(
+        function->toHandle(), &dispatchFunctionArguments, nullptr, 0, nullptr);
     EXPECT_EQ(XE_RESULT_SUCCESS, result);
 
     auto usedSpaceAfter = commandList->commandStream->getUsed();
 
     GenCmdList cmdList;
-    ASSERT_TRUE(FamilyType::PARSE::parseCommandBuffer(cmdList,
-                                                      ptrOffset(commandList->commandStream->getCpuBase(), 0),
-                                                      usedSpaceAfter));
+    ASSERT_TRUE(FamilyType::PARSE::parseCommandBuffer(
+        cmdList, ptrOffset(commandList->commandStream->getCpuBase(), 0), usedSpaceAfter));
 
     auto itorWalker = find<GPGPU_WALKER *>(cmdList.begin(), cmdList.end());
     ASSERT_NE(cmdList.end(), itorWalker);
@@ -899,8 +914,11 @@ GEN9TEST_F(CommandListAppendLaunchFunctionGEN9, storesBindingTableAndSurfaceStat
 
         EXPECT_EQ(cmd->getInterfaceDescriptorTotalLength(), sizeof(INTERFACE_DESCRIPTOR_DATA));
         auto dsh = commandList->indirectHeaps[CommandList::DYNAMIC_STATE];
-        EXPECT_LE(cmd->getInterfaceDescriptorDataStartAddress() + cmd->getInterfaceDescriptorTotalLength(), dsh->getUsed());
-        idd = static_cast<INTERFACE_DESCRIPTOR_DATA *>(ptrOffset(dsh->getCpuBase(), cmd->getInterfaceDescriptorDataStartAddress()));
+        EXPECT_LE(cmd->getInterfaceDescriptorDataStartAddress() +
+                      cmd->getInterfaceDescriptorTotalLength(),
+                  dsh->getUsed());
+        idd = static_cast<INTERFACE_DESCRIPTOR_DATA *>(
+            ptrOffset(dsh->getCpuBase(), cmd->getInterfaceDescriptorDataStartAddress()));
     }
 
     auto fnSsh = function->getSurfaceStateHeapData();
@@ -910,18 +928,22 @@ GEN9TEST_F(CommandListAppendLaunchFunctionGEN9, storesBindingTableAndSurfaceStat
 
     ASSERT_EQ(ssh->getUsed(), function->getSurfaceStateHeapDataSize());
 
-    auto fnBindingTableOffset = function->getImmutableData()->getSignature().bindingTable.tableOffset;
+    auto fnBindingTableOffset =
+        function->getImmutableData()->getSignature().bindingTable.tableOffset;
     auto bindingTableOffset = idd->getBindingTablePointer();
     auto bindingTableOffsetDiff = bindingTableOffset - fnBindingTableOffset;
 
-    auto fnBindingTable = reinterpret_cast<const BINDING_TABLE_STATE *>(ptrOffset(fnSsh.get(), fnBindingTableOffset));
-    auto bindingTable = reinterpret_cast<const BINDING_TABLE_STATE *>(ptrOffset(ssh->getCpuBase(), bindingTableOffset));
+    auto fnBindingTable =
+        reinterpret_cast<const BINDING_TABLE_STATE *>(ptrOffset(fnSsh.get(), fnBindingTableOffset));
+    auto bindingTable = reinterpret_cast<const BINDING_TABLE_STATE *>(
+        ptrOffset(ssh->getCpuBase(), bindingTableOffset));
 
-    auto bindingTableStateCount = function->getImmutableData()->getSignature().bindingTable.numSurfaceStates;
+    auto bindingTableStateCount =
+        function->getImmutableData()->getSignature().bindingTable.numSurfaceStates;
     ASSERT_GT(bindingTableStateCount, 0u);
 
-    //TODO optimization currently disabled
-    //ASSERT_EQ(bindingTableStateCount, idd->getBindingTableEntryCount());
+    // TODO optimization currently disabled
+    // ASSERT_EQ(bindingTableStateCount, idd->getBindingTableEntryCount());
 
     for (uint32_t i = 0; i < bindingTableStateCount; i++) {
         ASSERT_EQ(fnBindingTable[i].getSurfaceStatePointer() + bindingTableOffsetDiff,
@@ -929,11 +951,9 @@ GEN9TEST_F(CommandListAppendLaunchFunctionGEN9, storesBindingTableAndSurfaceStat
     }
 }
 
-class CommandListReset : public CommandListAppendLaunchFunction {
-};
+class CommandListReset : public CommandListAppendLaunchFunction {};
 
-INSTANTIATE_TEST_CASE_P(,
-                        CommandListReset,
+INSTANTIATE_TEST_CASE_P(, CommandListReset,
                         ::testing::Values("MemcpyBytes", "SlmBarrier", "Printf", "ImageCopy"));
 
 TEST_P(CommandListReset, resetCommandListResetsAfterClose) {
@@ -948,9 +968,8 @@ TEST_P(CommandListReset, resetCommandListResetsAfterClose) {
     ASSERT_NE(nullptr, commandListControl);
     ASSERT_NE(nullptr, commandListControl->commandStream);
 
-    auto result = commandList->appendLaunchFunction(function->toHandle(),
-                                                    &dispatchFunctionArguments,
-                                                    nullptr, 0, nullptr);
+    auto result = commandList->appendLaunchFunction(
+        function->toHandle(), &dispatchFunctionArguments, nullptr, 0, nullptr);
     ASSERT_EQ(XE_RESULT_SUCCESS, result);
 
     result = commandList->close();
@@ -961,16 +980,14 @@ TEST_P(CommandListReset, resetCommandListResetsAfterClose) {
 
     ASSERT_EQ(&device, commandList->device);
     ASSERT_NE(nullptr, commandList->commandStream);
-    ASSERT_EQ(commandListControl->allocation->getSize(),
-              commandList->allocation->getSize());
+    ASSERT_EQ(commandListControl->allocation->getSize(), commandList->allocation->getSize());
     ASSERT_EQ(commandListControl->residencyContainer.size(),
               commandList->residencyContainer.size());
     ASSERT_EQ(commandListControl->deallocationContainer.size(),
               commandList->deallocationContainer.size());
     ASSERT_EQ(commandListControl->printfFunctionContainer.size(),
               commandList->printfFunctionContainer.size());
-    ASSERT_EQ(commandListControl->commandStream->getUsed(),
-              commandList->commandStream->getUsed());
+    ASSERT_EQ(commandListControl->commandStream->getUsed(), commandList->commandStream->getUsed());
     ASSERT_EQ(commandListControl->dirtyHeaps, commandList->dirtyHeaps);
     ASSERT_EQ(commandListControl->slmSize, commandList->slmSize);
 

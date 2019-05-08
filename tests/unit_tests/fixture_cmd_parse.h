@@ -26,14 +26,12 @@ struct CmdParseFixture : public GlobalFixtureTest {
         GlobalFixtureTest::TearDown();
     }
 
-    template <typename FamilyType>
-    void parseCommandBuffer() {
+    template <typename FamilyType> void parseCommandBuffer() {
         usedSpaceAfter = commandStream->getUsed();
         ASSERT_GT(usedSpaceAfter, usedSpaceBefore);
 
         ASSERT_TRUE(FamilyType::PARSE::parseCommandBuffer(
-            commands,
-            ptrOffset(commandStream->getCpuBase(), usedSpaceBefore),
+            commands, ptrOffset(commandStream->getCpuBase(), usedSpaceBefore),
             usedSpaceAfter - usedSpaceBefore));
     }
 

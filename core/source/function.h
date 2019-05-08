@@ -11,8 +11,7 @@ namespace iOpenCL {
 struct SPatchSamplerStateArray;
 } // namespace iOpenCL
 
-struct _xe_function_handle_t {
-};
+struct _xe_function_handle_t {};
 
 namespace L0 {
 struct GraphicsAllocation;
@@ -25,19 +24,13 @@ using SurfaceStateHeapOffset = uint32_t;
 constexpr CrossThreadDataOffset Undefined = 0xFFFFFFFF;
 
 struct Arg {
-    enum ArgType : uint8_t { ArgTPointer,
-                             ArgTImage,
-                             ArgTSampler,
-                             ArgTValue };
+    enum ArgType : uint8_t { ArgTPointer, ArgTImage, ArgTSampler, ArgTValue };
 
-    Arg(ArgType type) : type(type) {
-    }
+    Arg(ArgType type) : type(type) {}
 
-    template <typename T>
-    const T &as() const;
+    template <typename T> const T &as() const;
 
-    template <typename T>
-    T &as();
+    template <typename T> T &as();
 
     const ArgType type;
 };
@@ -90,53 +83,42 @@ struct ArgValue : Arg {
     std::vector<Element> elements;
 };
 
-template <>
-inline const ArgPointer &Arg::as<ArgPointer>() const {
+template <> inline const ArgPointer &Arg::as<ArgPointer>() const {
     assert(type == ArgTPointer);
     return static_cast<const ArgPointer &>(*this);
 }
 
-template <>
-inline const ArgImage &Arg::as<ArgImage>() const {
+template <> inline const ArgImage &Arg::as<ArgImage>() const {
     assert(type == ArgTImage);
     return static_cast<const ArgImage &>(*this);
 }
 
-template <>
-inline const ArgValue &Arg::as<ArgValue>() const {
+template <> inline const ArgValue &Arg::as<ArgValue>() const {
     assert(type == ArgTValue);
     return static_cast<const ArgValue &>(*this);
 }
 
-template <>
-inline ArgPointer &Arg::as<ArgPointer>() {
+template <> inline ArgPointer &Arg::as<ArgPointer>() {
     assert(type == ArgTPointer);
     return static_cast<ArgPointer &>(*this);
 }
 
-template <>
-inline ArgImage &Arg::as<ArgImage>() {
+template <> inline ArgImage &Arg::as<ArgImage>() {
     assert(type == ArgTImage);
     return static_cast<ArgImage &>(*this);
 }
 
-template <>
-inline ArgValue &Arg::as<ArgValue>() {
+template <> inline ArgValue &Arg::as<ArgValue>() {
     assert(type == ArgTValue);
     return static_cast<ArgValue &>(*this);
 }
 
 struct FunctionSignature {
-    enum BufferAddressingMode : uint32_t { Stateless,
-                                           StatefulAndStateless,
-                                           BindlessAndStateless };
-    enum ImageAddressingMode : uint32_t { Stateful,
-                                          Bindless };
+    enum BufferAddressingMode : uint32_t { Stateless, StatefulAndStateless, BindlessAndStateless };
+    enum ImageAddressingMode : uint32_t { Stateful, Bindless };
 
     FunctionSignature() = default;
-    ~FunctionSignature() {
-        deleteAllOwned(explicitArgs.args);
-    }
+    ~FunctionSignature() { deleteAllOwned(explicitArgs.args); }
 
     std::string name;
 
@@ -170,9 +152,7 @@ struct FunctionSignature {
     } samplerTable;
 
     struct Attributes {
-        Attributes() {
-            flags.packed = 0U;
-        }
+        Attributes() { flags.packed = 0U; }
 
         BufferAddressingMode bufferAddressingMode = StatefulAndStateless;
         ImageAddressingMode imageAddressingMode = Stateful;
@@ -199,7 +179,8 @@ struct FunctionSignature {
     }
 
     template <typename T>
-    static bool patchNonPointer(PtrRef<uint8_t[]> buffer, uint32_t bufferSize, CrossThreadDataOffset location, const T &value) {
+    static bool patchNonPointer(PtrRef<uint8_t[]> buffer, uint32_t bufferSize,
+                                CrossThreadDataOffset location, const T &value) {
         if (Undefined == location) {
             return false;
         }
@@ -209,7 +190,9 @@ struct FunctionSignature {
     }
 
     template <uint32_t VecSize, typename T>
-    static uint32_t patchVecNonPointer(PtrRef<uint8_t[]> buffer, uint32_t bufferSize, const CrossThreadDataOffset (&location)[VecSize], const T (&value)[VecSize]) {
+    static uint32_t patchVecNonPointer(PtrRef<uint8_t[]> buffer, uint32_t bufferSize,
+                                       const CrossThreadDataOffset (&location)[VecSize],
+                                       const T (&value)[VecSize]) {
         uint32_t numPatched = 0;
         for (uint32_t i = 0; i < VecSize; ++i) {
             numPatched += patchNonPointer(buffer, bufferSize, location[i], value[i]) ? 1 : 0;
@@ -217,7 +200,8 @@ struct FunctionSignature {
         return numPatched;
     }
 
-    static bool patchPointer(PtrRef<uint8_t[]> buffer, uint32_t bufferSize, const ArgPointer &arg, uintptr_t value) {
+    static bool patchPointer(PtrRef<uint8_t[]> buffer, uint32_t bufferSize, const ArgPointer &arg,
+                             uintptr_t value) {
         if (arg.pointerSize == 8) {
             return patchNonPointer(buffer, bufferSize, arg.stateless, static_cast<uint64_t>(value));
         } else {
@@ -233,7 +217,8 @@ struct FunctionImmutableData {
 
     void initialize(PtrRef<void> kernelInfoRT, MemoryManager &memoryManager, const void *deviceRT,
                     uint32_t computeUnitsUsedForSratch,
-                    PtrRef<GraphicsAllocation> globalConstBuffer, PtrRef<GraphicsAllocation> globalVarBuffer);
+                    PtrRef<GraphicsAllocation> globalConstBuffer,
+                    PtrRef<GraphicsAllocation> globalVarBuffer);
 
     const std::vector<PtrRef<GraphicsAllocation>> &getResidencyContainer() const {
         return residencyContainer;
@@ -249,9 +234,7 @@ struct FunctionImmutableData {
         return privateMemoryGraphicsAllocation.weakRef();
     }
 
-    uint32_t getCrossThreadDataSize() const {
-        return crossThreadDataSize;
-    }
+    uint32_t getCrossThreadDataSize() const { return crossThreadDataSize; }
 
     PtrRef<const uint8_t[]> getCrossThreadDataTemplate() const {
         return crossThreadDataTemplate.weakRefAddConst();
@@ -263,14 +246,10 @@ struct FunctionImmutableData {
     uint32_t getDynamicStateHeapDataSize() const;
     PtrRef<const uint8_t[]> getDynamicStateHeapTemplate() const;
 
-    const FunctionSignature &getSignature() const {
-        return signature;
-    }
+    const FunctionSignature &getSignature() const { return signature; }
 
     // TODO : Remove remaining references to kernelInfoRT (e.g. printfHandler)
-    PtrRef<void> getKernelInfoRT() {
-        return kernelInfoRT.weakRef();
-    }
+    PtrRef<void> getKernelInfoRT() { return kernelInfoRT.weakRef(); }
 
   protected:
     PtrRef<void> kernelInfoRT = nullptr;
@@ -285,43 +264,31 @@ struct FunctionImmutableData {
 };
 
 struct Function : public _xe_function_handle_t {
-    template <typename Type>
-    struct Allocator {
-        static Function *allocate(Module *module) {
-            return new Type(module);
-        }
+    template <typename Type> struct Allocator {
+        static Function *allocate(Module *module) { return new Type(module); }
     };
 
     static Function *create(uint32_t productFamily, Module *module, const xe_function_desc_t *desc);
 
     virtual xe_result_t destroy() = 0;
-    virtual xe_result_t setAttribute(xe_function_set_attribute_t attr,
-                                     uint32_t value) = 0;
-    virtual xe_result_t getAttribute(xe_function_get_attribute_t attr,
-                                     uint32_t *pValue) = 0;
-    virtual xe_result_t setArgumentValue(uint32_t argIndex,
-                                         size_t argSize,
+    virtual xe_result_t setAttribute(xe_function_set_attribute_t attr, uint32_t value) = 0;
+    virtual xe_result_t getAttribute(xe_function_get_attribute_t attr, uint32_t *pValue) = 0;
+    virtual xe_result_t setArgumentValue(uint32_t argIndex, size_t argSize,
                                          const void *pArgValue) = 0;
-    virtual void setGroupCount(uint32_t groupCountX,
-                               uint32_t groupCountY,
+    virtual void setGroupCount(uint32_t groupCountX, uint32_t groupCountY,
                                uint32_t groupCountZ) = 0;
-    virtual xe_result_t setGroupSize(uint32_t groupSizeX,
-                                     uint32_t groupSizeY,
+    virtual xe_result_t setGroupSize(uint32_t groupSizeX, uint32_t groupSizeY,
                                      uint32_t groupSizeZ) = 0;
-    virtual xe_result_t suggestGroupSize(uint32_t globalSizeX,
-                                         uint32_t globalSizeY,
-                                         uint32_t globalSizeZ,
-                                         uint32_t *groupSizeX,
-                                         uint32_t *groupSizeY,
-                                         uint32_t *groupSizeZ) = 0;
+    virtual xe_result_t suggestGroupSize(uint32_t globalSizeX, uint32_t globalSizeY,
+                                         uint32_t globalSizeZ, uint32_t *groupSizeX,
+                                         uint32_t *groupSizeY, uint32_t *groupSizeZ) = 0;
 
     virtual PtrRef<FunctionImmutableData> getImmutableData() const = 0;
     virtual PtrOwn<Function> clone() const = 0;
 
     virtual const std::vector<GraphicsAllocation *> &getResidencyContainer() const = 0;
 
-    virtual void getGroupSize(uint32_t &outGroupSizeX,
-                              uint32_t &outGroupSizeY,
+    virtual void getGroupSize(uint32_t &outGroupSizeX, uint32_t &outGroupSizeY,
                               uint32_t &outGroupSizeZ) const = 0;
 
     virtual uint32_t getThreadsPerThreadGroup() const = 0;
@@ -352,16 +319,13 @@ struct Function : public _xe_function_handle_t {
         return static_cast<Function *>(handle);
     }
 
-    inline xe_function_handle_t toHandle() {
-        return this;
-    }
+    inline xe_function_handle_t toHandle() { return this; }
 };
 
 using FunctionAllocatorFn = Function *(*)(Module *module);
 extern FunctionAllocatorFn functionFactory[];
 
-template <uint32_t productFamily, typename FunctionType>
-struct FunctionPopulateFactory {
+template <uint32_t productFamily, typename FunctionType> struct FunctionPopulateFactory {
     FunctionPopulateFactory() {
         functionFactory[productFamily] = FunctionType::template Allocator<FunctionType>::allocate;
     }

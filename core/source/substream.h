@@ -13,15 +13,13 @@ namespace L0 {
 
 struct Substream {
     Substream(NEO::LinearStream &parent, void *substreamBuffer, size_t substreamSize)
-        : parent(parent), substreamBuffer(substreamBuffer), substreamSize(substreamSize) {
-    }
+        : parent(parent), substreamBuffer(substreamBuffer), substreamSize(substreamSize) {}
 
     Substream(const Substream &) = delete;
     Substream &operator=(const Substream &) = delete;
     Substream &operator=(Substream &&) = delete;
 
-    Substream(Substream &&rhs)
-        : parent(rhs.parent) {
+    Substream(Substream &&rhs) : parent(rhs.parent) {
         assert(this != &rhs);
         this->substreamBuffer = rhs.substreamBuffer;
         this->substreamSize = rhs.substreamSize;
@@ -35,24 +33,15 @@ struct Substream {
         // nothing, parent stream owns resources
     }
 
-    NEO::LinearStream &getParent() {
-        return parent;
-    }
+    NEO::LinearStream &getParent() { return parent; }
 
-    size_t getBaseOffsetInParent() {
-        return ptrDiff(substreamBuffer, parent.getCpuBase());
-    }
+    size_t getBaseOffsetInParent() { return ptrDiff(substreamBuffer, parent.getCpuBase()); }
 
-    size_t getSize() {
-        return substreamSize;
-    }
+    size_t getSize() { return substreamSize; }
 
-    size_t getSizeUsed() {
-        return substreamSizeUsed;
-    }
+    size_t getSizeUsed() { return substreamSizeUsed; }
 
-    template <typename Cmd>
-    Cmd *getSpaceForCmd() {
+    template <typename Cmd> Cmd *getSpaceForCmd() {
         auto ptr = getSpace(sizeof(Cmd));
         return reinterpret_cast<Cmd *>(ptr);
     }

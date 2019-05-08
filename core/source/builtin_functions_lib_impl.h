@@ -15,9 +15,7 @@ struct BuiltinFunctionsLibImpl : BuiltinFunctionsLib {
         : device(device), builtinsRT(builtinsRT.weakRef<NEO::BuiltIns>()) {
         initAllToNullptr(builtins);
     }
-    ~BuiltinFunctionsLibImpl() {
-        deleteAllOwned(builtins);
-    }
+    ~BuiltinFunctionsLibImpl() { deleteAllOwned(builtins); }
 
     PtrRef<Function> getFunction(Builtin func) override;
     void initFunctions() override;

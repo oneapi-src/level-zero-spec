@@ -3,8 +3,6 @@
 
 namespace L0 {
 
-OsContext *OsContext::create(void *execEnvRT) {
-    return new OsContextWindows(execEnvRT);
-}
+OsContext *OsContext::create(void *execEnvRT) { return new OsContextWindows(execEnvRT); }
 
-} //namespace L0
+} // namespace L0

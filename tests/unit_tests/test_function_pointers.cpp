@@ -60,9 +60,8 @@ TEST(FunctionPointers, DISABLED_compileToDeviceBinary) {
     xe_function_desc_t funDesc = {};
     funDesc.version = XE_FUNCTION_DESC_VERSION_CURRENT;
     funDesc.pFunctionName = "testStackCallMain";
-    auto function =
-            whitebox_cast(Function::create(deviceRT->getHardwareInfo().pPlatform->eProductFamily,
-                     module, &funDesc));
+    auto function = whitebox_cast(
+        Function::create(deviceRT->getHardwareInfo().pPlatform->eProductFamily, module, &funDesc));
     ASSERT_NE(nullptr, function);
 
     function->destroy();

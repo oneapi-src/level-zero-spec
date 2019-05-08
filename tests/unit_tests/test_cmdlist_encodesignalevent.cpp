@@ -22,13 +22,11 @@ TEST(xeCommandListAppendSignalEvent, redirectsToObject) {
 
     EXPECT_CALL(commandList, appendSignalEvent(event.toHandle())).Times(1);
 
-    auto result = xeCommandListAppendSignalEvent(commandList.toHandle(),
-                                                 event.toHandle());
+    auto result = xeCommandListAppendSignalEvent(commandList.toHandle(), event.toHandle());
     EXPECT_EQ(XE_RESULT_SUCCESS, result);
 }
 
-class CommandListAppendSignalEvent : public GlobalFixtureTest {
-};
+class CommandListAppendSignalEvent : public GlobalFixtureTest {};
 
 HWTEST_F(CommandListAppendSignalEvent, addsPipeControlToCommandStream) {
     Mock<Device> device;
@@ -45,9 +43,8 @@ HWTEST_F(CommandListAppendSignalEvent, addsPipeControlToCommandStream) {
     ASSERT_GT(usedSpaceAfter, usedSpaceBefore);
 
     GenCmdList cmdList;
-    ASSERT_TRUE(FamilyType::PARSE::parseCommandBuffer(cmdList,
-                                                      ptrOffset(commandList->commandStream->getCpuBase(), 0),
-                                                      usedSpaceAfter));
+    ASSERT_TRUE(FamilyType::PARSE::parseCommandBuffer(
+        cmdList, ptrOffset(commandList->commandStream->getCpuBase(), 0), usedSpaceAfter));
 
     // Find a PC w/ a WriteImmediateData and CS stall
     auto itor = cmdList.begin();
@@ -64,7 +61,8 @@ HWTEST_F(CommandListAppendSignalEvent, addsPipeControlToCommandStream) {
         }
 
         using POST_SYNC_OPERATION = typename PIPE_CONTROL::POST_SYNC_OPERATION;
-        if (cmd->getPostSyncOperation() != POST_SYNC_OPERATION::POST_SYNC_OPERATION_WRITE_IMMEDIATE_DATA) {
+        if (cmd->getPostSyncOperation() !=
+            POST_SYNC_OPERATION::POST_SYNC_OPERATION_WRITE_IMMEDIATE_DATA) {
             itor++;
             continue;
         }
@@ -97,7 +95,8 @@ HWTEST_F(CommandListAppendSignalEvent, addsEventGraphicsAllocationToResidencyCon
 
     auto &residencyContainer = commandList->residencyContainer;
     auto allocationRT = static_cast<NEO::GraphicsAllocation *>(event.allocation->allocationRT);
-    auto itor = std::find(std::begin(residencyContainer), std::end(residencyContainer), allocationRT);
+    auto itor =
+        std::find(std::begin(residencyContainer), std::end(residencyContainer), allocationRT);
     EXPECT_NE(itor, std::end(residencyContainer));
 }
 

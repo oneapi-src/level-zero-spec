@@ -1,4 +1,4 @@
-void matmat_host(int n, int m, int p, float *a, float *b, float* c);
+void matmat_host(int n, int m, int p, float *a, float *b, float *c);
 
 int xeInit();
 int xeInitProgram();
@@ -19,4 +19,3 @@ void clCleanup();
 void initArrays();
 int validateArrays(float *c);
 int validateResults(bool aubMode);
-

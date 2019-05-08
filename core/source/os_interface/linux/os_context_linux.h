@@ -3,10 +3,11 @@
 namespace L0 {
 
 class OsContextLinux : public OsContext {
-    public:
-        OsContextLinux(void *execEnvRT) : execEnvRT(execEnvRT) {}
-    protected:
-        void *execEnvRT;
+  public:
+    OsContextLinux(void *execEnvRT) : execEnvRT(execEnvRT) {}
+
+  protected:
+    void *execEnvRT;
 };
 
-} //namespace L0
+} // namespace L0

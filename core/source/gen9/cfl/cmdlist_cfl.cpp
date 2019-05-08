@@ -16,6 +16,7 @@ struct CommandListProductFamily<IGFX_COFFEELAKE> : public CommandListCoreFamily<
     }
 };
 
-static CommandListPopulateFactory<IGFX_COFFEELAKE, CommandListProductFamily<IGFX_COFFEELAKE>> populateCFL;
+static CommandListPopulateFactory<IGFX_COFFEELAKE, CommandListProductFamily<IGFX_COFFEELAKE>>
+    populateCFL;
 
 } // namespace L0

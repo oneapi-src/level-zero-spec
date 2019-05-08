@@ -25,8 +25,7 @@ TEST(xeCommandListAppendExecutionBarrier, redirectsToObject) {
     EXPECT_EQ(XE_RESULT_SUCCESS, result);
 }
 
-class CommandListAppendExecutionBarrier : public GlobalFixtureTest{
-};
+class CommandListAppendExecutionBarrier : public GlobalFixtureTest {};
 
 HWTEST_F(CommandListAppendExecutionBarrier, addPipeControlToCommandStream) {
     Mock<Device> device;
@@ -43,9 +42,8 @@ HWTEST_F(CommandListAppendExecutionBarrier, addPipeControlToCommandStream) {
     ASSERT_GT(usedSpaceAfter, usedSpaceBefore);
 
     GenCmdList cmdList;
-    ASSERT_TRUE(FamilyType::PARSE::parseCommandBuffer(cmdList,
-                                                      ptrOffset(commandList->commandStream->getCpuBase(), 0),
-                                                      usedSpaceAfter));
+    ASSERT_TRUE(FamilyType::PARSE::parseCommandBuffer(
+        cmdList, ptrOffset(commandList->commandStream->getCpuBase(), 0), usedSpaceAfter));
 
     // Find a PC w/ CS stall and DCFlush
     auto itor = cmdList.begin();

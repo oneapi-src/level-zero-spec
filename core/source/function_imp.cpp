@@ -28,28 +28,30 @@
 
 namespace NEO {
 namespace Math {
-using namespace ::Math; // just to emphasize the origin (wich originally is not encapsulated in OCLRT)
+using namespace ::Math; // just to emphasize the origin (wich originally is not encapsulated in
+                        // OCLRT)
 }
 using KernelArgInfo = ::KernelArgInfo;
 } // namespace NEO
 
 namespace L0 {
 
-FunctionImmutableData::~FunctionImmutableData() {
-    isaGraphicsAllocation.deleteOwned();
-}
+FunctionImmutableData::~FunctionImmutableData() { isaGraphicsAllocation.deleteOwned(); }
 
 template <typename PatchTokenT>
-static void patchWithImplicitSurface(PtrRef<uint8_t[]> crossThreadData, uint32_t crossThreadDataSize,
-                                     PtrRef<uint8_t[]> surfaceStateHeap, uint32_t surfaceStateHeapSize,
-                                     uintptr_t ptrToPatchInCrossThreadData, GraphicsAllocation &allocation,
-                                     const PatchTokenT &patch, const NEO::Device &deviceRT) {
+static void
+patchWithImplicitSurface(PtrRef<uint8_t[]> crossThreadData, uint32_t crossThreadDataSize,
+                         PtrRef<uint8_t[]> surfaceStateHeap, uint32_t surfaceStateHeapSize,
+                         uintptr_t ptrToPatchInCrossThreadData, GraphicsAllocation &allocation,
+                         const PatchTokenT &patch, const NEO::Device &deviceRT) {
     uint32_t pointerSize = patch.DataParamSize;
 
     if (crossThreadData != nullptr) {
         uint32_t crossThreadDataOffset = patch.DataParamOffset;
-        FunctionSignature::patchPointer(crossThreadData, crossThreadDataSize, ArgPointer::onlyStateless(crossThreadDataOffset, pointerSize),
-                                        ptrToPatchInCrossThreadData);
+        FunctionSignature::patchPointer(
+            crossThreadData, crossThreadDataSize,
+            ArgPointer::onlyStateless(crossThreadDataOffset, pointerSize),
+            ptrToPatchInCrossThreadData);
     }
 
     if (surfaceStateHeap != nullptr) {
@@ -58,13 +60,15 @@ static void patchWithImplicitSurface(PtrRef<uint8_t[]> crossThreadData, uint32_t
         auto surfaceState = surfaceStateHeap.weakRef().offsetBytesBy(sshOffset);
         void *addressToPatch = reinterpret_cast<void *>(allocation.getHostAddress());
         size_t sizeToPatch = allocation.getSize();
-        NEO::Buffer::setSurfaceState(&deviceRT, surfaceState.get(), sizeToPatch, addressToPatch, allocation.allocationRT, 0);
+        NEO::Buffer::setSurfaceState(&deviceRT, surfaceState.get(), sizeToPatch, addressToPatch,
+                                     allocation.allocationRT, 0);
     }
 }
 
-void FunctionImmutableData::initialize(PtrRef<void> kernelInfoRT, MemoryManager &memoryManager, const void *deviceRT,
-                                       uint32_t computeUnitsUsedForSratch,
-                                       PtrRef<GraphicsAllocation> globalConstBuffer, PtrRef<GraphicsAllocation> globalVarBuffer) {
+void FunctionImmutableData::initialize(PtrRef<void> kernelInfoRT, MemoryManager &memoryManager,
+                                       const void *deviceRT, uint32_t computeUnitsUsedForSratch,
+                                       PtrRef<GraphicsAllocation> globalConstBuffer,
+                                       PtrRef<GraphicsAllocation> globalVarBuffer) {
     assert(kernelInfoRT != nullptr);
     this->kernelInfoRT = kernelInfoRT;
     auto &kernelInfo = *kernelInfoRT.weakRef<NEO::KernelInfo>();
@@ -77,39 +81,49 @@ void FunctionImmutableData::initialize(PtrRef<void> kernelInfoRT, MemoryManager 
     isaGraphicsAllocation = memoryManager.allocateGraphicsMemoryForIsa(
         bindPtrRef(kernelInfo.heapInfo.pKernelHeap), kernelIsaSize);
 
-    this->crossThreadDataSize = patchInfo.dataParameterStream
-                                    ? patchInfo.dataParameterStream->DataParameterStreamSize
-                                    : 0;
+    this->crossThreadDataSize =
+        patchInfo.dataParameterStream ? patchInfo.dataParameterStream->DataParameterStreamSize : 0;
 
     if (crossThreadDataSize != 0) {
         crossThreadDataTemplate.rebind(new uint8_t[crossThreadDataSize], crossThreadDataSize);
 
         if (kernelInfo.crossThreadData) {
-            memcpy_s(crossThreadDataTemplate.weakRef().get(), crossThreadDataSize, kernelInfo.crossThreadData, crossThreadDataSize);
+            memcpy_s(crossThreadDataTemplate.weakRef().get(), crossThreadDataSize,
+                     kernelInfo.crossThreadData, crossThreadDataSize);
         } else {
             memset(crossThreadDataTemplate.weakRef().get(), 0x00, crossThreadDataSize);
         }
 
         static_assert(NEO::KernelArgInfo::undefinedOffset == Undefined, "");
         auto crossThread = reinterpret_cast<uint32_t *>(crossThreadDataTemplate.weakRef().get());
-        FunctionSignature::setOffsetsVec(this->signature.dispatchMetadata.globalWorkOffset, workloadInfo.globalWorkOffsetOffsets);
-        FunctionSignature::setOffsetsVec(this->signature.dispatchMetadata.localWorkSize, workloadInfo.localWorkSizeOffsets);
-        FunctionSignature::setOffsetsVec(this->signature.dispatchMetadata.localWorkSize2, workloadInfo.localWorkSizeOffsets2);
-        FunctionSignature::setOffsetsVec(this->signature.dispatchMetadata.globalWorkSize, workloadInfo.globalWorkSizeOffsets);
-        FunctionSignature::setOffsetsVec(this->signature.dispatchMetadata.enqueuedLocalWorkSize, workloadInfo.enqueuedLocalWorkSizeOffsets);
-        FunctionSignature::setOffsetsVec(this->signature.dispatchMetadata.numWorkGroups, workloadInfo.numWorkGroupsOffset);
+        FunctionSignature::setOffsetsVec(this->signature.dispatchMetadata.globalWorkOffset,
+                                         workloadInfo.globalWorkOffsetOffsets);
+        FunctionSignature::setOffsetsVec(this->signature.dispatchMetadata.localWorkSize,
+                                         workloadInfo.localWorkSizeOffsets);
+        FunctionSignature::setOffsetsVec(this->signature.dispatchMetadata.localWorkSize2,
+                                         workloadInfo.localWorkSizeOffsets2);
+        FunctionSignature::setOffsetsVec(this->signature.dispatchMetadata.globalWorkSize,
+                                         workloadInfo.globalWorkSizeOffsets);
+        FunctionSignature::setOffsetsVec(this->signature.dispatchMetadata.enqueuedLocalWorkSize,
+                                         workloadInfo.enqueuedLocalWorkSizeOffsets);
+        FunctionSignature::setOffsetsVec(this->signature.dispatchMetadata.numWorkGroups,
+                                         workloadInfo.numWorkGroupsOffset);
 
         this->signature.dispatchMetadata.workDim = workloadInfo.workDimOffset;
 
         if (kernelInfo.patchInfo.pAllocateStatelessPrintfSurface != nullptr) {
-            this->signature.implicitArgs.printfSurface.stateless = kernelInfo.patchInfo.pAllocateStatelessPrintfSurface->DataParamOffset;
-            this->signature.implicitArgs.printfSurface.pointerSize = kernelInfo.patchInfo.pAllocateStatelessPrintfSurface->DataParamSize;
-            this->signature.implicitArgs.printfSurface.stateful = kernelInfo.patchInfo.pAllocateStatelessPrintfSurface->SurfaceStateHeapOffset;
+            this->signature.implicitArgs.printfSurface.stateless =
+                kernelInfo.patchInfo.pAllocateStatelessPrintfSurface->DataParamOffset;
+            this->signature.implicitArgs.printfSurface.pointerSize =
+                kernelInfo.patchInfo.pAllocateStatelessPrintfSurface->DataParamSize;
+            this->signature.implicitArgs.printfSurface.stateful =
+                kernelInfo.patchInfo.pAllocateStatelessPrintfSurface->SurfaceStateHeapOffset;
             this->signature.attributes.flags.hasPrintf = true;
         }
 
-        FunctionSignature::patchNonPointer<uint32_t>(this->crossThreadDataTemplate.weakRef(), this->crossThreadDataSize,
-                                                     workloadInfo.simdSizeOffset, kernelInfo.getMaxSimdSize());
+        FunctionSignature::patchNonPointer<uint32_t>(
+            this->crossThreadDataTemplate.weakRef(), this->crossThreadDataSize,
+            workloadInfo.simdSizeOffset, kernelInfo.getMaxSimdSize());
     }
 
     // patch crossthread data and ssh with inline surfaces, if necessary
@@ -122,25 +136,33 @@ void FunctionImmutableData::initialize(PtrRef<void> kernelInfoRT, MemoryManager 
         privateSurfaceSize *= computeUnitsUsedForSratch * kernelInfo.getMaxSimdSize();
         assert(privateSurfaceSize != 0);
 
-        this->privateMemoryGraphicsAllocation = memoryManager.allocateGraphicsMemoryForPrivateMemory(privateSurfaceSize);
+        this->privateMemoryGraphicsAllocation =
+            memoryManager.allocateGraphicsMemoryForPrivateMemory(privateSurfaceSize);
 
         assert(this->privateMemoryGraphicsAllocation != nullptr);
         const auto &patchToken = patchInfo.pAllocateStatelessPrivateSurface;
-        patchWithImplicitSurface(crossThreadDataTemplate.weakRef(), getCrossThreadDataSize(),
-                                 bindPtrRef<uint8_t[]>(static_cast<uint8_t *>(kernelInfo.heapInfo.pSsh)), getSurfaceStateHeapSize(),
-                                 static_cast<uintptr_t>(privateMemoryGraphicsAllocation->getGpuAddressOffsetFromHeapBase()),
-                                 *privateMemoryGraphicsAllocation, *patchToken, *static_cast<const NEO::Device *>(deviceRT));
+        patchWithImplicitSurface(
+            crossThreadDataTemplate.weakRef(), getCrossThreadDataSize(),
+            bindPtrRef<uint8_t[]>(static_cast<uint8_t *>(kernelInfo.heapInfo.pSsh)),
+            getSurfaceStateHeapSize(),
+            static_cast<uintptr_t>(
+                privateMemoryGraphicsAllocation->getGpuAddressOffsetFromHeapBase()),
+            *privateMemoryGraphicsAllocation, *patchToken,
+            *static_cast<const NEO::Device *>(deviceRT));
         this->residencyContainer.push_back(this->privateMemoryGraphicsAllocation.weakRef());
     }
 
     if (patchInfo.pAllocateStatelessConstantMemorySurfaceWithInitialization) {
         assert(globalConstBuffer != nullptr);
 
-        const auto &patchToken = patchInfo.pAllocateStatelessConstantMemorySurfaceWithInitialization;
-        patchWithImplicitSurface(crossThreadDataTemplate.weakRef(), getCrossThreadDataSize(),
-                                 bindPtrRef<uint8_t[]>(static_cast<uint8_t *>(kernelInfo.heapInfo.pSsh)), getSurfaceStateHeapSize(),
-                                 static_cast<uintptr_t>(globalConstBuffer->getGpuAddressOffsetFromHeapBase()),
-                                 *globalConstBuffer, *patchToken, *static_cast<const NEO::Device *>(deviceRT));
+        const auto &patchToken =
+            patchInfo.pAllocateStatelessConstantMemorySurfaceWithInitialization;
+        patchWithImplicitSurface(
+            crossThreadDataTemplate.weakRef(), getCrossThreadDataSize(),
+            bindPtrRef<uint8_t[]>(static_cast<uint8_t *>(kernelInfo.heapInfo.pSsh)),
+            getSurfaceStateHeapSize(),
+            static_cast<uintptr_t>(globalConstBuffer->getGpuAddressOffsetFromHeapBase()),
+            *globalConstBuffer, *patchToken, *static_cast<const NEO::Device *>(deviceRT));
         this->residencyContainer.push_back(globalConstBuffer.weakRef());
     }
 
@@ -148,10 +170,12 @@ void FunctionImmutableData::initialize(PtrRef<void> kernelInfoRT, MemoryManager 
         assert(globalVarBuffer != nullptr);
 
         const auto &patchToken = patchInfo.pAllocateStatelessGlobalMemorySurfaceWithInitialization;
-        patchWithImplicitSurface(crossThreadDataTemplate.weakRef(), getCrossThreadDataSize(),
-                                 bindPtrRef<uint8_t[]>(static_cast<uint8_t *>(kernelInfo.heapInfo.pSsh)), getSurfaceStateHeapSize(),
-                                 static_cast<uintptr_t>(globalVarBuffer->getGpuAddressOffsetFromHeapBase()),
-                                 *globalVarBuffer, *patchToken, *static_cast<const NEO::Device *>(deviceRT));
+        patchWithImplicitSurface(
+            crossThreadDataTemplate.weakRef(), getCrossThreadDataSize(),
+            bindPtrRef<uint8_t[]>(static_cast<uint8_t *>(kernelInfo.heapInfo.pSsh)),
+            getSurfaceStateHeapSize(),
+            static_cast<uintptr_t>(globalVarBuffer->getGpuAddressOffsetFromHeapBase()),
+            *globalVarBuffer, *patchToken, *static_cast<const NEO::Device *>(deviceRT));
         this->residencyContainer.push_back(globalVarBuffer.weakRef());
     }
 
@@ -206,25 +230,26 @@ void FunctionImmutableData::initialize(PtrRef<void> kernelInfoRT, MemoryManager 
         this->signature.explicitArgs.args.push_back(std::move(argDesc));
     }
 
-    signature.attributes.numLocalIdChannels = NEO::PerThreadDataHelper::getNumLocalIdChannels(*kernelInfo.patchInfo.threadPayload);
+    signature.attributes.numLocalIdChannels =
+        NEO::PerThreadDataHelper::getNumLocalIdChannels(*kernelInfo.patchInfo.threadPayload);
     signature.attributes.simdSize = kernelInfo.getMaxSimdSize();
-    signature.attributes.slmInlineSize = kernelInfo.patchInfo.localsurface
-                                             ? kernelInfo.patchInfo.localsurface->TotalInlineLocalMemorySize
-                                             : 0;
+    signature.attributes.slmInlineSize =
+        kernelInfo.patchInfo.localsurface
+            ? kernelInfo.patchInfo.localsurface->TotalInlineLocalMemorySize
+            : 0;
 
     signature.attributes.flags.hasBarriers = kernelInfo.patchInfo.executionEnvironment->HasBarriers;
-    signature.bindingTable.numSurfaceStates = kernelInfo.patchInfo.bindingTableState
-                                                  ? kernelInfo.patchInfo.bindingTableState->Count
-                                                  : 0;
+    signature.bindingTable.numSurfaceStates =
+        kernelInfo.patchInfo.bindingTableState ? kernelInfo.patchInfo.bindingTableState->Count : 0;
 
-    signature.bindingTable.tableOffset = kernelInfo.patchInfo.bindingTableState
-                                             ? kernelInfo.patchInfo.bindingTableState->Offset
-                                             : 0;
+    signature.bindingTable.tableOffset =
+        kernelInfo.patchInfo.bindingTableState ? kernelInfo.patchInfo.bindingTableState->Offset : 0;
 
     if (kernelInfo.patchInfo.samplerStateArray != nullptr) {
         signature.samplerTable.tableOffset = kernelInfo.patchInfo.samplerStateArray->Offset;
         signature.samplerTable.numSamplers = kernelInfo.patchInfo.samplerStateArray->Count;
-        signature.samplerTable.borderColor = kernelInfo.patchInfo.samplerStateArray->BorderColorOffset;
+        signature.samplerTable.borderColor =
+            kernelInfo.patchInfo.samplerStateArray->BorderColorOffset;
     }
 
     signature.name = kernelInfo.name;
@@ -277,8 +302,7 @@ FunctionImp::~FunctionImp() {
     dynamicStateHeapData.deleteOwned();
 }
 
-xe_result_t FunctionImp::setArgumentValue(uint32_t argIndex,
-                                          size_t argSize,
+xe_result_t FunctionImp::setArgumentValue(uint32_t argIndex, size_t argSize,
                                           const void *pArgValue) {
     assert(argIndex < kernelArgHandlers.size());
     (this->*kernelArgHandlers[argIndex])(argIndex, argSize, pArgValue);
@@ -292,15 +316,17 @@ void FunctionImp::setGroupCount(uint32_t groupCountX, uint32_t groupCountY, uint
     getGroupSize(groupSizeX, groupSizeY, groupSizeZ);
 
     const FunctionSignature &sig = funcImmData->getSignature();
-    uint32_t globalWorkSize[3] = {groupCountX * groupSizeX, groupCountY * groupSizeY, groupCountZ * groupSizeZ};
-    FunctionSignature::patchVecNonPointer(crossThreadData.weakRef(), crossThreadDataSize, sig.dispatchMetadata.globalWorkSize, globalWorkSize);
+    uint32_t globalWorkSize[3] = {groupCountX * groupSizeX, groupCountY * groupSizeY,
+                                  groupCountZ * groupSizeZ};
+    FunctionSignature::patchVecNonPointer(crossThreadData.weakRef(), crossThreadDataSize,
+                                          sig.dispatchMetadata.globalWorkSize, globalWorkSize);
 
     uint32_t groupCount[3] = {groupCountX, groupCountY, groupCountZ};
-    FunctionSignature::patchVecNonPointer(crossThreadData.weakRef(), crossThreadDataSize, sig.dispatchMetadata.numWorkGroups, groupCount);
+    FunctionSignature::patchVecNonPointer(crossThreadData.weakRef(), crossThreadDataSize,
+                                          sig.dispatchMetadata.numWorkGroups, groupCount);
 }
 
-xe_result_t FunctionImp::setGroupSize(uint32_t groupSizeX,
-                                      uint32_t groupSizeY,
+xe_result_t FunctionImp::setGroupSize(uint32_t groupSizeX, uint32_t groupSizeY,
                                       uint32_t groupSizeZ) {
     if ((0 == groupSizeX) || (0 == groupSizeY) || (0 == groupSizeZ)) {
         return XE_RESULT_ERROR_INVALID_PARAMETER; // needs clarification in the spec
@@ -309,11 +335,14 @@ xe_result_t FunctionImp::setGroupSize(uint32_t groupSizeX,
     auto numChannels = funcImmData->getSignature().attributes.numLocalIdChannels;
     Vec3<size_t> groupSize{groupSizeX, groupSizeY, groupSizeZ};
     auto itemsInGroup = NEO::Math::computeTotalElementsCount(groupSize);
-    uint32_t perThreadDataSizeForWholeThreadGroupNeeded = static_cast<uint32_t>(NEO::PerThreadDataHelper::getPerThreadDataSizeTotal(funcImmData->getSignature().attributes.simdSize,
-                                                                                                                                    numChannels, itemsInGroup));
-    if (perThreadDataSizeForWholeThreadGroupNeeded > perThreadDataSizeForWholeThreadGroupAllocated) {
+    uint32_t perThreadDataSizeForWholeThreadGroupNeeded =
+        static_cast<uint32_t>(NEO::PerThreadDataHelper::getPerThreadDataSizeTotal(
+            funcImmData->getSignature().attributes.simdSize, numChannels, itemsInGroup));
+    if (perThreadDataSizeForWholeThreadGroupNeeded >
+        perThreadDataSizeForWholeThreadGroupAllocated) {
         alignedFree(perThreadDataForWholeThreadGroup.weakRef().get());
-        perThreadDataForWholeThreadGroup.rebind(static_cast<uint8_t *>(alignedMalloc(perThreadDataSizeForWholeThreadGroupNeeded, 32))); // alignment for vector instructions
+        perThreadDataForWholeThreadGroup.rebind(static_cast<uint8_t *>(alignedMalloc(
+            perThreadDataSizeForWholeThreadGroupNeeded, 32))); // alignment for vector instructions
         perThreadDataSizeForWholeThreadGroupAllocated = perThreadDataSizeForWholeThreadGroupNeeded;
     }
     perThreadDataSizeForWholeThreadGroup = perThreadDataSizeForWholeThreadGroupNeeded;
@@ -321,10 +350,14 @@ xe_result_t FunctionImp::setGroupSize(uint32_t groupSizeX,
     if (numChannels > 0) {
         // don't generate local IDs if not needed
         assert(3 == numChannels); // if we do need local ids, we support only all 3 channels
-        NEO::generateLocalIDs(perThreadDataForWholeThreadGroup.weakRef().get(), static_cast<uint16_t>(funcImmData->getSignature().attributes.simdSize),
-                              std::array<uint16_t, 3>{{static_cast<uint16_t>(groupSizeX), static_cast<uint16_t>(groupSizeY), static_cast<uint16_t>(groupSizeZ)}},
-                              std::array<uint8_t, 3>{{0, 1, 2}}, // to do : add support for non-default walk order
-                              false);
+        NEO::generateLocalIDs(
+            perThreadDataForWholeThreadGroup.weakRef().get(),
+            static_cast<uint16_t>(funcImmData->getSignature().attributes.simdSize),
+            std::array<uint16_t, 3>{{static_cast<uint16_t>(groupSizeX),
+                                     static_cast<uint16_t>(groupSizeY),
+                                     static_cast<uint16_t>(groupSizeZ)}},
+            std::array<uint8_t, 3>{{0, 1, 2}}, // to do : add support for non-default walk order
+            false);
     }
 
     this->groupSize[0] = groupSizeX;
@@ -346,12 +379,9 @@ xe_result_t FunctionImp::setGroupSize(uint32_t groupSizeX,
     return XE_RESULT_SUCCESS;
 }
 
-xe_result_t FunctionImp::suggestGroupSize(uint32_t globalSizeX,
-                                          uint32_t globalSizeY,
-                                          uint32_t globalSizeZ,
-                                          uint32_t *groupSizeX,
-                                          uint32_t *groupSizeY,
-                                          uint32_t *groupSizeZ) {
+xe_result_t FunctionImp::suggestGroupSize(uint32_t globalSizeX, uint32_t globalSizeY,
+                                          uint32_t globalSizeZ, uint32_t *groupSizeX,
+                                          uint32_t *groupSizeY, uint32_t *groupSizeZ) {
     assert(0 != globalSizeX);
     assert(0 != globalSizeY);
     assert(0 != globalSizeZ);
@@ -410,7 +440,8 @@ xe_result_t FunctionImp::setArgBuffer(uint32_t argIndex, size_t argSize, const v
 
     FunctionSignature::patchPointer(crossThreadData.weakRef(), crossThreadDataSize, arg, val);
 
-    GraphicsAllocation *alloc = globalMemoryManager->findGraphicsAllocation(*reinterpret_cast<void *const *>(argVal));
+    GraphicsAllocation *alloc =
+        globalMemoryManager->findGraphicsAllocation(*reinterpret_cast<void *const *>(argVal));
     assert(alloc != nullptr); // TODO : Handle nullptr if *argVal == NULL
 
     // Handle stateles to stateful
@@ -427,8 +458,10 @@ xe_result_t FunctionImp::setArgImage(uint32_t argIndex, size_t argSize, const vo
 
     assert(surfaceStateHeapData != nullptr);
 
-    //Optimization?  Rather than setting up and copying into a function's SSH, save references to the
-    // arguments' surface states, then do all the copying and BTS updating once in appendLaunchFunction
+    // Optimization?  Rather than setting up and copying into a function's SSH, save references to
+    // the
+    // arguments' surface states, then do all the copying and BTS updating once in
+    // appendLaunchFunction
     image->copySurfaceStateToSSH(surfaceStateHeapData.weakRef().get(), arg.stateful);
 
     GraphicsAllocation *alloc = image->getAllocation();
@@ -464,26 +497,36 @@ bool FunctionImp::initialize(const xe_function_desc_t *desc) {
     }
 
     if (funcImmData->getSurfaceStateHeapSize() > 0) {
-        this->surfaceStateHeapData.rebind(new uint8_t[funcImmData->getSurfaceStateHeapSize()], funcImmData->getSurfaceStateHeapSize());
-        memcpy(this->surfaceStateHeapData.weakRef().get(), funcImmData->getSurfaceStateHeapTemplate().get(), funcImmData->getSurfaceStateHeapSize());
+        this->surfaceStateHeapData.rebind(new uint8_t[funcImmData->getSurfaceStateHeapSize()],
+                                          funcImmData->getSurfaceStateHeapSize());
+        memcpy(this->surfaceStateHeapData.weakRef().get(),
+               funcImmData->getSurfaceStateHeapTemplate().get(),
+               funcImmData->getSurfaceStateHeapSize());
         this->surfaceStateHeapDataSize = funcImmData->getSurfaceStateHeapSize();
     }
 
     if (funcImmData->getCrossThreadDataSize() != 0) {
-        this->crossThreadData.rebind(new uint8_t[funcImmData->getCrossThreadDataSize()], funcImmData->getCrossThreadDataSize());
-        memcpy(this->crossThreadData.weakRef().get(), funcImmData->getCrossThreadDataTemplate().get(), funcImmData->getCrossThreadDataSize());
+        this->crossThreadData.rebind(new uint8_t[funcImmData->getCrossThreadDataSize()],
+                                     funcImmData->getCrossThreadDataSize());
+        memcpy(this->crossThreadData.weakRef().get(),
+               funcImmData->getCrossThreadDataTemplate().get(),
+               funcImmData->getCrossThreadDataSize());
         this->crossThreadDataSize = funcImmData->getCrossThreadDataSize();
     }
 
     if (funcImmData->getDynamicStateHeapDataSize() != 0) {
-        this->dynamicStateHeapData.rebind(new uint8_t[funcImmData->getDynamicStateHeapDataSize()], funcImmData->getDynamicStateHeapDataSize());
-        memcpy(this->dynamicStateHeapData.weakRef().get(), funcImmData->getDynamicStateHeapTemplate().get(), funcImmData->getDynamicStateHeapDataSize());
+        this->dynamicStateHeapData.rebind(new uint8_t[funcImmData->getDynamicStateHeapDataSize()],
+                                          funcImmData->getDynamicStateHeapDataSize());
+        memcpy(this->dynamicStateHeapData.weakRef().get(),
+               funcImmData->getDynamicStateHeapTemplate().get(),
+               funcImmData->getDynamicStateHeapDataSize());
         this->dynamicStateHeapDataSize = funcImmData->getDynamicStateHeapDataSize();
     }
 
     // TODO : reqd_workgroup_size
     // TODO : fused EUs
-    setGroupSize(funcImmData->getSignature().attributes.simdSize, 1, 1); // until apps chooses something smarter
+    setGroupSize(funcImmData->getSignature().attributes.simdSize, 1,
+                 1); // until apps chooses something smarter
 
     residencyContainer.resize(this->kernelArgHandlers.size(), nullptr);
 
@@ -500,9 +543,10 @@ void FunctionImp::createPrintfBuffer() {
     if (this->funcImmData->getSignature().attributes.flags.hasPrintf) {
         this->printfBuffer.rebind(PrintfHandler::createPrintfBuffer(this->module->getDevice()));
         this->residencyContainer.push_back(printfBuffer.weakRef().get());
-        FunctionSignature::patchPointer(crossThreadData.weakRef(), crossThreadDataSize,
-                                        this->getImmutableData()->getSignature().implicitArgs.printfSurface,
-                                        static_cast<uintptr_t>(this->printfBuffer->getGpuAddressOffsetFromHeapBase()));
+        FunctionSignature::patchPointer(
+            crossThreadData.weakRef(), crossThreadDataSize,
+            this->getImmutableData()->getSignature().implicitArgs.printfSurface,
+            static_cast<uintptr_t>(this->printfBuffer->getGpuAddressOffsetFromHeapBase()));
     }
 }
 
@@ -513,9 +557,14 @@ void FunctionImp::printPrintfOutput() {
 void FunctionImp::patchWorkgroupSizeInCrossThreadData(uint32_t x, uint32_t y, uint32_t z) {
     const FunctionSignature &sig = funcImmData->getSignature();
     uint32_t workgroupSize[3] = {x, y, z};
-    FunctionSignature::patchVecNonPointer(crossThreadData.weakRef(), crossThreadDataSize, sig.dispatchMetadata.localWorkSize, workgroupSize);
-    FunctionSignature::patchVecNonPointer(crossThreadData.weakRef(), crossThreadDataSize, sig.dispatchMetadata.localWorkSize2, workgroupSize); // not sure why we have second set of those
-    FunctionSignature::patchVecNonPointer(crossThreadData.weakRef(), crossThreadDataSize, sig.dispatchMetadata.enqueuedLocalWorkSize, workgroupSize);
+    FunctionSignature::patchVecNonPointer(crossThreadData.weakRef(), crossThreadDataSize,
+                                          sig.dispatchMetadata.localWorkSize, workgroupSize);
+    FunctionSignature::patchVecNonPointer(
+        crossThreadData.weakRef(), crossThreadDataSize, sig.dispatchMetadata.localWorkSize2,
+        workgroupSize); // not sure why we have second set of those
+    FunctionSignature::patchVecNonPointer(crossThreadData.weakRef(), crossThreadDataSize,
+                                          sig.dispatchMetadata.enqueuedLocalWorkSize,
+                                          workgroupSize);
 }
 
 Function *Function::create(uint32_t productFamily, Module *module, const xe_function_desc_t *desc) {

@@ -9,9 +9,7 @@
 
 namespace L0 {
 
-CommandContainer::~CommandContainer() {
-    destroy();
-}
+CommandContainer::~CommandContainer() { destroy(); }
 
 bool CommandContainer::initialize(Device *device) {
     assert(device);
@@ -45,9 +43,7 @@ bool CommandContainer::initialize(Device *device) {
 }
 
 xe_result_t CommandContainer::destroy() {
-    auto memoryManager = device
-                             ? globalMemoryManager
-                             : nullptr;
+    auto memoryManager = device ? globalMemoryManager : nullptr;
 
     if (allocation) {
         assert(memoryManager);
@@ -71,7 +67,7 @@ xe_result_t CommandContainer::destroy() {
         delete indirectHeap;
     }
 
-    //For reset, all variables need to be put back to initial state
+    // For reset, all variables need to be put back to initial state
     dirtyHeaps = static_cast<uint32_t>(-1);
     slmSize = static_cast<uint32_t>(-1);
 
@@ -97,7 +93,8 @@ void CommandContainer::addToResidencyContainer(GraphicsAllocation *alloc) {
 }
 
 void CommandContainer::storePrintfFunction(Function *function) {
-    auto it = std::find(this->printfFunctionContainer.begin(), this->printfFunctionContainer.end(), function);
+    auto it = std::find(this->printfFunctionContainer.begin(), this->printfFunctionContainer.end(),
+                        function);
 
     if (it == this->printfFunctionContainer.end()) {
         this->printfFunctionContainer.push_back(function);

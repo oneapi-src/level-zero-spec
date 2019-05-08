@@ -5,6 +5,7 @@
 
 namespace L0 {
 
-static CommandQueuePopulateFactory<IGFX_TIGERLAKE_LP, CommandQueueHw<IGFX_GEN12LP_CORE>> populateTGLLP;
+static CommandQueuePopulateFactory<IGFX_TIGERLAKE_LP, CommandQueueHw<IGFX_GEN12LP_CORE>>
+    populateTGLLP;
 
 } // namespace L0

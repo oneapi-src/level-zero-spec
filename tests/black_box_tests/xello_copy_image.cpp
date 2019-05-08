@@ -26,33 +26,39 @@ void testAppendImageCopy(xe_device_handle_t &device, bool &validRet) {
     xe_command_list_desc_t cmdListDesc = {XE_COMMAND_LIST_DESC_VERSION_CURRENT};
     SUCCESS_OR_TERMINATE(xeCommandListCreate(device, &cmdListDesc, &cmdList));
 
-    xe_image_desc_t srcImgDesc = {
-        XE_IMAGE_DESC_VERSION_CURRENT,
-        XE_IMAGE_FLAG_PROGRAM_READ,
-        XE_IMAGE_TYPE_2D,
-        { XE_IMAGE_FORMAT_LAYOUT_8_8_8_8, XE_IMAGE_FORMAT_TYPE_UINT,
-          XE_IMAGE_FORMAT_SWIZZLE_R, XE_IMAGE_FORMAT_SWIZZLE_G,
-          XE_IMAGE_FORMAT_SWIZZLE_B, XE_IMAGE_FORMAT_SWIZZLE_A},
-        width, height, 1, 0, 0};
+    xe_image_desc_t srcImgDesc = {XE_IMAGE_DESC_VERSION_CURRENT,
+                                  XE_IMAGE_FLAG_PROGRAM_READ,
+                                  XE_IMAGE_TYPE_2D,
+                                  {XE_IMAGE_FORMAT_LAYOUT_8_8_8_8, XE_IMAGE_FORMAT_TYPE_UINT,
+                                   XE_IMAGE_FORMAT_SWIZZLE_R, XE_IMAGE_FORMAT_SWIZZLE_G,
+                                   XE_IMAGE_FORMAT_SWIZZLE_B, XE_IMAGE_FORMAT_SWIZZLE_A},
+                                  width,
+                                  height,
+                                  1,
+                                  0,
+                                  0};
     xe_image_handle_t srcImg;
     xe_image_region_t srcRegion = {0, 0, 0, size, 0, 0};
 
-    SUCCESS_OR_TERMINATE(xeImageCreate(device,
-                                             const_cast<const xe_image_desc_t *>(&srcImgDesc), &srcImg));
+    SUCCESS_OR_TERMINATE(
+        xeImageCreate(device, const_cast<const xe_image_desc_t *>(&srcImgDesc), &srcImg));
 
-    xe_image_desc_t dstImgDesc = {
-        XE_IMAGE_DESC_VERSION_CURRENT,
-        XE_IMAGE_FLAG_PROGRAM_WRITE,
-        XE_IMAGE_TYPE_2D,
-        { XE_IMAGE_FORMAT_LAYOUT_8_8_8_8, XE_IMAGE_FORMAT_TYPE_UINT,
-          XE_IMAGE_FORMAT_SWIZZLE_R, XE_IMAGE_FORMAT_SWIZZLE_G,
-          XE_IMAGE_FORMAT_SWIZZLE_B, XE_IMAGE_FORMAT_SWIZZLE_A},
-        width, height, 1, 0, 0};
+    xe_image_desc_t dstImgDesc = {XE_IMAGE_DESC_VERSION_CURRENT,
+                                  XE_IMAGE_FLAG_PROGRAM_WRITE,
+                                  XE_IMAGE_TYPE_2D,
+                                  {XE_IMAGE_FORMAT_LAYOUT_8_8_8_8, XE_IMAGE_FORMAT_TYPE_UINT,
+                                   XE_IMAGE_FORMAT_SWIZZLE_R, XE_IMAGE_FORMAT_SWIZZLE_G,
+                                   XE_IMAGE_FORMAT_SWIZZLE_B, XE_IMAGE_FORMAT_SWIZZLE_A},
+                                  width,
+                                  height,
+                                  1,
+                                  0,
+                                  0};
     xe_image_handle_t dstImg;
     xe_image_region_t dstRegion = {0, 0, 0, size, 0, 0};
 
-    SUCCESS_OR_TERMINATE(xeImageCreate(device,
-                                             const_cast<const xe_image_desc_t *>(&dstImgDesc), &dstImg));
+    SUCCESS_OR_TERMINATE(
+        xeImageCreate(device, const_cast<const xe_image_desc_t *>(&dstImgDesc), &dstImg));
 
     char *srcBuffer = new char[size];
     char *dstBuffer = new char[size];
@@ -62,11 +68,14 @@ void testAppendImageCopy(xe_device_handle_t &device, bool &validRet) {
     }
 
     // Copy from srcBuffer->srcImg->dstImg->dstBuffer, so at the end dstBuffer = srcBuffer
-    SUCCESS_OR_TERMINATE(xeCommandListAppendImageCopyFromMemory(cmdList, srcImg, srcBuffer, &srcRegion, nullptr, 0, nullptr));
+    SUCCESS_OR_TERMINATE(xeCommandListAppendImageCopyFromMemory(cmdList, srcImg, srcBuffer,
+                                                                &srcRegion, nullptr, 0, nullptr));
     SUCCESS_OR_TERMINATE(xeCommandListAppendBarrier(cmdList, nullptr, 0, nullptr));
-    SUCCESS_OR_TERMINATE(xeCommandListAppendImageCopy(cmdList, dstImg, srcImg, nullptr, 0, nullptr));
+    SUCCESS_OR_TERMINATE(
+        xeCommandListAppendImageCopy(cmdList, dstImg, srcImg, nullptr, 0, nullptr));
     SUCCESS_OR_TERMINATE(xeCommandListAppendBarrier(cmdList, nullptr, 0, nullptr));
-    SUCCESS_OR_TERMINATE(xeCommandListAppendImageCopyToMemory(cmdList, dstBuffer, dstImg, &dstRegion, nullptr, 0, nullptr));
+    SUCCESS_OR_TERMINATE(xeCommandListAppendImageCopyToMemory(cmdList, dstBuffer, dstImg,
+                                                              &dstRegion, nullptr, 0, nullptr));
 
     SUCCESS_OR_TERMINATE(xeCommandListClose(cmdList));
     SUCCESS_OR_TERMINATE(xeCommandQueueExecuteCommandLists(cmdQueue, 1, &cmdList, nullptr));
@@ -98,7 +107,8 @@ int main(int argc, char *argv[]) {
 
     bool aubMode = isAubMode(argc, argv);
     if (aubMode == false)
-        std::cout << "\nResults validation " << (outputValidationSuccessful ? "PASSED" : "FAILED") << std::endl;
+        std::cout << "\nResults validation " << (outputValidationSuccessful ? "PASSED" : "FAILED")
+                  << std::endl;
 
     int resultOnFailure = aubMode ? 0 : 1;
     return outputValidationSuccessful ? 0 : resultOnFailure;

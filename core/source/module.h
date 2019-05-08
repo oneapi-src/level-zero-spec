@@ -10,27 +10,26 @@
 
 #include <vector>
 
-struct _xe_module_handle_t {
-};
+struct _xe_module_handle_t {};
 
 namespace L0 {
 struct Device;
 struct GraphicsAllocation;
 
 struct Module : public _xe_module_handle_t {
-    static Module *create(Device *device, const xe_module_desc_t *desc,
-                          void *deviceRT, ModuleBuildLog *moduleBuildLog);
+    static Module *create(Device *device, const xe_module_desc_t *desc, void *deviceRT,
+                          ModuleBuildLog *moduleBuildLog);
     virtual Device *getDevice() const = 0;
 
-    virtual xe_result_t createFunction(const xe_function_desc_t *desc, xe_function_handle_t *phFunction) = 0;
+    virtual xe_result_t createFunction(const xe_function_desc_t *desc,
+                                       xe_function_handle_t *phFunction) = 0;
     virtual xe_result_t destroy() = 0;
-    virtual xe_result_t getNativeBinary(size_t *pSize,
-                                        uint8_t *pModuleNativeBinary) = 0;
-    virtual xe_result_t getFunctionPointer(const char *pFunctionName,
-                                           void **pfnFunction) = 0;
+    virtual xe_result_t getNativeBinary(size_t *pSize, uint8_t *pModuleNativeBinary) = 0;
+    virtual xe_result_t getFunctionPointer(const char *pFunctionName, void **pfnFunction) = 0;
     virtual xe_result_t getGlobalPointer(const char *pGlobalName, void **pPtr) = 0;
 
-    virtual PtrRef<FunctionImmutableData> getFunctionImmutableData(CStringRef functionName) const = 0;
+    virtual PtrRef<FunctionImmutableData>
+    getFunctionImmutableData(CStringRef functionName) const = 0;
     virtual uint32_t getMaxGroupSize() const = 0;
 
     Module() = default;
@@ -39,16 +38,13 @@ struct Module : public _xe_module_handle_t {
     Module &operator=(const Module &) = delete;
     Module &operator=(Module &&) = delete;
 
-    static Module *fromHandle(xe_module_handle_t handle) {
-        return static_cast<Module *>(handle);
-    }
+    static Module *fromHandle(xe_module_handle_t handle) { return static_cast<Module *>(handle); }
 
-    inline xe_module_handle_t toHandle() {
-        return this;
-    }
+    inline xe_module_handle_t toHandle() { return this; }
 };
 
-xe_result_t functionCreate(xe_module_handle_t hModule, const xe_function_desc_t *desc, xe_function_handle_t *phFunction);
+xe_result_t functionCreate(xe_module_handle_t hModule, const xe_function_desc_t *desc,
+                           xe_function_handle_t *phFunction);
 
 xe_result_t functionDestroy(xe_function_handle_t hFunction);
 

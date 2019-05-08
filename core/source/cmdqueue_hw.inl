@@ -14,21 +14,20 @@ xe_result_t CommandQueueHw<gfxCoreFamily>::createFence(const xe_fence_desc_t *de
     return XE_RESULT_ERROR_UNSUPPORTED;
 }
 
-template <GFXCORE_FAMILY gfxCoreFamily>
-xe_result_t CommandQueueHw<gfxCoreFamily>::destroy() {
+template <GFXCORE_FAMILY gfxCoreFamily> xe_result_t CommandQueueHw<gfxCoreFamily>::destroy() {
     delete this;
     return XE_RESULT_SUCCESS;
 }
 
 template <GFXCORE_FAMILY gfxCoreFamily>
-xe_result_t CommandQueueHw<gfxCoreFamily>::executeCommandLists(uint32_t numCommandLists,
-                                                               xe_command_list_handle_t *phCommandLists,
-                                                               xe_fence_handle_t hFence) {
+xe_result_t CommandQueueHw<gfxCoreFamily>::executeCommandLists(
+    uint32_t numCommandLists, xe_command_list_handle_t *phCommandLists, xe_fence_handle_t hFence) {
     using GfxFamily = typename NEO::GfxFamilyMapper<gfxCoreFamily>::GfxFamily;
     using MI_BATCH_BUFFER_START = typename GfxFamily::MI_BATCH_BUFFER_START;
     using MI_BATCH_BUFFER_END = typename GfxFamily::MI_BATCH_BUFFER_END;
 
-    size_t sizeEstimate = sizeof(MI_BATCH_BUFFER_END) + numCommandLists * sizeof(MI_BATCH_BUFFER_START);
+    size_t sizeEstimate =
+        sizeof(MI_BATCH_BUFFER_END) + numCommandLists * sizeof(MI_BATCH_BUFFER_START);
     Substream substream = getCmdSubstream(sizeEstimate);
 
     NEO::ResidencyContainer residencyContainer;
@@ -36,7 +35,8 @@ xe_result_t CommandQueueHw<gfxCoreFamily>::executeCommandLists(uint32_t numComma
 
     for (auto i = 0u; i < numCommandLists; ++i) {
         MI_BATCH_BUFFER_START cmd = GfxFamily::cmdInitBatchBufferStart;
-        cmd.setSecondLevelBatchBuffer(MI_BATCH_BUFFER_START::SECOND_LEVEL_BATCH_BUFFER_SECOND_LEVEL_BATCH);
+        cmd.setSecondLevelBatchBuffer(
+            MI_BATCH_BUFFER_START::SECOND_LEVEL_BATCH_BUFFER_SECOND_LEVEL_BATCH);
         cmd.setAddressSpaceIndicator(MI_BATCH_BUFFER_START::ADDRESS_SPACE_INDICATOR_PPGTT);
 
         auto commandList = CommandList::fromHandle(phCommandLists[i]);
@@ -47,10 +47,13 @@ xe_result_t CommandQueueHw<gfxCoreFamily>::executeCommandLists(uint32_t numComma
         *(MI_BATCH_BUFFER_START *)buffer = cmd;
 
         // Add each
-        printfFunctionContainer.insert(printfFunctionContainer.end(), commandList->getPrintfFunctionContainer().begin(), commandList->getPrintfFunctionContainer().end());
+        printfFunctionContainer.insert(printfFunctionContainer.end(),
+                                       commandList->getPrintfFunctionContainer().begin(),
+                                       commandList->getPrintfFunctionContainer().end());
 
         for (auto alloc : commandList->getResidencyContainer()) {
-            if (residencyContainer.end() == std::find(residencyContainer.begin(), residencyContainer.end(), alloc)) {
+            if (residencyContainer.end() ==
+                std::find(residencyContainer.begin(), residencyContainer.end(), alloc)) {
                 residencyContainer.push_back(alloc);
             }
         }
@@ -78,8 +81,8 @@ xe_result_t CommandQueueHw<gfxCoreFamily>::executeCommandLists(uint32_t numComma
     return XE_RESULT_SUCCESS;
 }
 
-//FIXME: Remove direct access to taskCount.
-//Needed below
+// FIXME: Remove direct access to taskCount.
+// Needed below
 struct CommandStreamReceiver : public NEO::CommandStreamReceiver {
     using NEO::CommandStreamReceiver::latestFlushedTaskCount;
     using NEO::CommandStreamReceiver::taskCount;
@@ -98,19 +101,20 @@ void CommandQueueHw<gfxCoreFamily>::dispatchTaskCountWrite(bool flushDataCache) 
     using POST_SYNC_OPERATION = typename PIPE_CONTROL::POST_SYNC_OPERATION;
     using MI_BATCH_BUFFER_END = typename GfxFamily::MI_BATCH_BUFFER_END;
 
-    size_t sizeEstimate = sizeof(PIPELINE_SELECT) + sizeof(PIPE_CONTROL) + sizeof(PIPE_CONTROL) + sizeof(MI_BATCH_BUFFER_END);
+    size_t sizeEstimate = sizeof(PIPELINE_SELECT) + sizeof(PIPE_CONTROL) + sizeof(PIPE_CONTROL) +
+                          sizeof(MI_BATCH_BUFFER_END);
     Substream substream = getCmdSubstream(sizeEstimate);
 
     PIPELINE_SELECT ps = GfxFamily::cmdInitPipelineSelect;
     ps.setPipelineSelection(PIPELINE_SELECT::PIPELINE_SELECTION_GPGPU);
-    ps.setMaskBits(3u); //TODO:  Add support for DOP clock gating
+    ps.setMaskBits(3u); // TODO:  Add support for DOP clock gating
 
     *substream.getSpaceForCmd<PIPELINE_SELECT>() = ps;
 
     {
         // Add a PIPE_CONTROL w/ CS_stall per Bspec, require prior to any PostSync Operation
-        // without this PipeControl may leave to early and cause too early resource destruction which may lead to BSODs
-        // Note : this is SKL-specific
+        // without this PipeControl may leave to early and cause too early resource destruction
+        // which may lead to BSODs Note : this is SKL-specific
         PIPE_CONTROL pc0 = GfxFamily::cmdInitPipeControl;
         pc0.setDcFlushEnable(flushDataCache);
         pc0.setCommandStreamerStallEnable(true);
@@ -122,7 +126,8 @@ void CommandQueueHw<gfxCoreFamily>::dispatchTaskCountWrite(bool flushDataCache) 
     pc.setImmediateData(taskCountToWrite);
     pc.setCommandStreamerStallEnable(true);
     pc.setDcFlushEnable(flushDataCache);
-    auto gpuAddress = static_cast<uint64_t>(commandStreamReceiver->getTagAllocation()->getGpuAddress());
+    auto gpuAddress =
+        static_cast<uint64_t>(commandStreamReceiver->getTagAllocation()->getGpuAddress());
     pc.setAddressHigh(gpuAddress >> 32u);
     pc.setAddress(uint32_t(gpuAddress));
 
@@ -131,16 +136,9 @@ void CommandQueueHw<gfxCoreFamily>::dispatchTaskCountWrite(bool flushDataCache) 
     *substream.getSpaceForCmd<PIPE_CONTROL>() = pc;
     *substream.getSpaceForCmd<MI_BATCH_BUFFER_END>() = cmdEnd;
 
-    NEO::BatchBuffer batchBuffer(
-        allocation->allocationRT,
-        substream.getBaseOffsetInParent(),
-        0u,
-        nullptr,
-        false,
-        false,
-        NEO::QueueThrottle::HIGH,
-        substream.getParent().getUsed(),
-        &substream.getParent());
+    NEO::BatchBuffer batchBuffer(allocation->allocationRT, substream.getBaseOffsetInParent(), 0u,
+                                 nullptr, false, false, NEO::QueueThrottle::HIGH,
+                                 substream.getParent().getUsed(), &substream.getParent());
     NEO::ResidencyContainer residencyContainer;
     residencyContainer.push_back(commandStreamReceiver->getTagAllocation());
     commandStreamReceiver->latestFlushedTaskCount = taskCountToWrite;

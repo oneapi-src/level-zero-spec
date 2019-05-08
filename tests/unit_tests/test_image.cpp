@@ -29,9 +29,7 @@ TEST(xeImageDestroy, redirectsToObject) {
     EXPECT_EQ(XE_RESULT_SUCCESS, result);
 }
 
-struct ImageCreate : public GlobalFixtureTest {
-};
-
+struct ImageCreate : public GlobalFixtureTest {};
 
 TEST_F(ImageCreate, returnsImageOnSuccess) {
     Mock<Device> device;
@@ -77,10 +75,8 @@ TEST_F(ImageCreate, descMatchesAllocation) {
     auto alloc = image->getAllocation();
     ASSERT_NE(nullptr, alloc);
 
-    ASSERT_EQ(alloc->getSize(),
-              4 * desc.width * desc.height * desc.depth * sizeof(uint8_t));
-    ASSERT_EQ(image->getSizeInBytes(),
-              4 * desc.width * desc.height * desc.depth * sizeof(uint8_t));
+    ASSERT_EQ(alloc->getSize(), 4 * desc.width * desc.height * desc.depth * sizeof(uint8_t));
+    ASSERT_EQ(image->getSizeInBytes(), 4 * desc.width * desc.height * desc.depth * sizeof(uint8_t));
 
     delete device;
 }
@@ -142,8 +138,7 @@ HWTEST2_F(ImageCreate, descBadParamsFail, MatchAny) {
     ASSERT_FALSE(ret);
 }
 
-struct ImageSurfaceState : public GlobalFixtureTest {
-};
+struct ImageSurfaceState : public GlobalFixtureTest {};
 
 HWTEST2_F(ImageSurfaceState, descMatchesSurface, MatchAny) {
     using RENDER_SURFACE_STATE = typename FamilyType::RENDER_SURFACE_STATE;
@@ -173,10 +168,14 @@ HWTEST2_F(ImageSurfaceState, descMatchesSurface, MatchAny) {
     ASSERT_EQ(surfaceState->getWidth(), 11);
     ASSERT_EQ(surfaceState->getHeight(), 13);
     ASSERT_EQ(surfaceState->getDepth(), 17);
-    ASSERT_EQ(surfaceState->getShaderChannelSelectRed(), RENDER_SURFACE_STATE::SHADER_CHANNEL_SELECT_RED_RED);
-    ASSERT_EQ(surfaceState->getShaderChannelSelectGreen(), RENDER_SURFACE_STATE::SHADER_CHANNEL_SELECT_GREEN_GREEN);
-    ASSERT_EQ(surfaceState->getShaderChannelSelectBlue(), RENDER_SURFACE_STATE::SHADER_CHANNEL_SELECT_BLUE_BLUE);
-    ASSERT_EQ(surfaceState->getShaderChannelSelectAlpha(), RENDER_SURFACE_STATE::SHADER_CHANNEL_SELECT_ALPHA_ALPHA);
+    ASSERT_EQ(surfaceState->getShaderChannelSelectRed(),
+              RENDER_SURFACE_STATE::SHADER_CHANNEL_SELECT_RED_RED);
+    ASSERT_EQ(surfaceState->getShaderChannelSelectGreen(),
+              RENDER_SURFACE_STATE::SHADER_CHANNEL_SELECT_GREEN_GREEN);
+    ASSERT_EQ(surfaceState->getShaderChannelSelectBlue(),
+              RENDER_SURFACE_STATE::SHADER_CHANNEL_SELECT_BLUE_BLUE);
+    ASSERT_EQ(surfaceState->getShaderChannelSelectAlpha(),
+              RENDER_SURFACE_STATE::SHADER_CHANNEL_SELECT_ALPHA_ALPHA);
     ASSERT_EQ(surfaceState->getSurfacePitch(), sizeof(uint8_t) * desc.width * 4);
 }
 
@@ -204,10 +203,14 @@ HWTEST2_F(ImageSurfaceState, descSwizzlesMatchSurface, MatchAny) {
 
     auto surfaceState = &imageCore->surfaceState;
 
-    ASSERT_EQ(surfaceState->getShaderChannelSelectRed(), RENDER_SURFACE_STATE::SHADER_CHANNEL_SELECT_RED_ALPHA);
-    ASSERT_EQ(surfaceState->getShaderChannelSelectGreen(), RENDER_SURFACE_STATE::SHADER_CHANNEL_SELECT_GREEN_ZERO);
-    ASSERT_EQ(surfaceState->getShaderChannelSelectBlue(), RENDER_SURFACE_STATE::SHADER_CHANNEL_SELECT_BLUE_ONE);
-    ASSERT_EQ(surfaceState->getShaderChannelSelectAlpha(), RENDER_SURFACE_STATE::SHADER_CHANNEL_SELECT_ALPHA_ZERO);
+    ASSERT_EQ(surfaceState->getShaderChannelSelectRed(),
+              RENDER_SURFACE_STATE::SHADER_CHANNEL_SELECT_RED_ALPHA);
+    ASSERT_EQ(surfaceState->getShaderChannelSelectGreen(),
+              RENDER_SURFACE_STATE::SHADER_CHANNEL_SELECT_GREEN_ZERO);
+    ASSERT_EQ(surfaceState->getShaderChannelSelectBlue(),
+              RENDER_SURFACE_STATE::SHADER_CHANNEL_SELECT_BLUE_ONE);
+    ASSERT_EQ(surfaceState->getShaderChannelSelectAlpha(),
+              RENDER_SURFACE_STATE::SHADER_CHANNEL_SELECT_ALPHA_ZERO);
 }
 
 HWTEST2_F(ImageSurfaceState, descMatchesSurfaceFormats, MatchAny) {
@@ -229,15 +232,15 @@ HWTEST2_F(ImageSurfaceState, descMatchesSurfaceFormats, MatchAny) {
     };
     struct FormatInfo testFormats[] = {
         {sizeof(uint8_t), XE_IMAGE_FORMAT_LAYOUT_8, XE_IMAGE_FORMAT_TYPE_UINT,
-                RENDER_SURFACE_STATE::SURFACE_FORMAT_R8_UINT},
+         RENDER_SURFACE_STATE::SURFACE_FORMAT_R8_UINT},
         {sizeof(uint32_t) * 4, XE_IMAGE_FORMAT_LAYOUT_32_32_32_32, XE_IMAGE_FORMAT_TYPE_UINT,
-                RENDER_SURFACE_STATE::SURFACE_FORMAT_R32G32B32A32_UINT},
+         RENDER_SURFACE_STATE::SURFACE_FORMAT_R32G32B32A32_UINT},
         {sizeof(uint8_t) * 4, XE_IMAGE_FORMAT_LAYOUT_8_8_8_8, XE_IMAGE_FORMAT_TYPE_UNORM,
-                RENDER_SURFACE_STATE::SURFACE_FORMAT_R8G8B8A8_UNORM},
+         RENDER_SURFACE_STATE::SURFACE_FORMAT_R8G8B8A8_UNORM},
         {sizeof(int16_t), XE_IMAGE_FORMAT_LAYOUT_16, XE_IMAGE_FORMAT_TYPE_SNORM,
-                RENDER_SURFACE_STATE::SURFACE_FORMAT_R16_SNORM},
+         RENDER_SURFACE_STATE::SURFACE_FORMAT_R16_SNORM},
         {sizeof(float) * 4, XE_IMAGE_FORMAT_LAYOUT_32_32_32_32, XE_IMAGE_FORMAT_TYPE_FLOAT,
-                RENDER_SURFACE_STATE::SURFACE_FORMAT_R32G32B32A32_FLOAT},
+         RENDER_SURFACE_STATE::SURFACE_FORMAT_R32G32B32A32_FLOAT},
     };
     size_t numFormats = sizeof(testFormats) / sizeof(struct FormatInfo);
 
@@ -295,11 +298,13 @@ HWTEST2_F(ImageSurfaceState, copyToSSH, MatchAny) {
 
     auto surfaceStateA = reinterpret_cast<RENDER_SURFACE_STATE *>(mockSSH);
     ASSERT_EQ(surfaceStateA->getSurfaceType(), RENDER_SURFACE_STATE::SURFACE_TYPE_SURFTYPE_2D);
-    ASSERT_EQ(surfaceStateA->getSurfaceFormat(), RENDER_SURFACE_STATE::SURFACE_FORMAT_R8G8B8A8_UINT);
+    ASSERT_EQ(surfaceStateA->getSurfaceFormat(),
+              RENDER_SURFACE_STATE::SURFACE_FORMAT_R8G8B8A8_UINT);
     ASSERT_EQ(surfaceStateA->getWidth(), 11);
     ASSERT_EQ(surfaceStateA->getHeight(), 13);
 
-    auto surfaceStateB = reinterpret_cast<RENDER_SURFACE_STATE *>(ptrOffset(mockSSH, sizeof(RENDER_SURFACE_STATE)));
+    auto surfaceStateB =
+        reinterpret_cast<RENDER_SURFACE_STATE *>(ptrOffset(mockSSH, sizeof(RENDER_SURFACE_STATE)));
     ASSERT_EQ(surfaceStateB->getSurfaceType(), RENDER_SURFACE_STATE::SURFACE_TYPE_SURFTYPE_2D);
     ASSERT_EQ(surfaceStateB->getSurfaceFormat(), RENDER_SURFACE_STATE::SURFACE_FORMAT_R32G32_UINT);
     ASSERT_EQ(surfaceStateB->getWidth(), 10);

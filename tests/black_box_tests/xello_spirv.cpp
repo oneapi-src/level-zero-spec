@@ -17,13 +17,16 @@ void printHelpAndExit(int code) {
     std::cerr << " -h    help" << std::endl;
     std::cerr << " -i    input file name (mandatory)" << std::endl;
     std::cerr << " -o    output file name (mandatory if output file required)" << std::endl;
-    std::cerr << " -l    high level language (currently : CL12 or CL20, planned additions : CLXX, CM)" << std::endl;
+    std::cerr
+        << " -l    high level language (currently : CL12 or CL20, planned additions : CLXX, CM)"
+        << std::endl;
     std::cerr << " -x    feed compiled binary into level_zero" << std::endl;
     std::exit(code);
 }
 
 template <typename ContainerT, typename IteratorT = typename ContainerT::const_iterator>
-IteratorT findArg(const std::string &shortName, bool mandatory, bool needsValue, const ContainerT &args) {
+IteratorT findArg(const std::string &shortName, bool mandatory, bool needsValue,
+                  const ContainerT &args) {
     auto it = std::find(args.begin(), args.end(), shortName);
     if (it == args.end()) {
         if (mandatory) {
@@ -70,7 +73,9 @@ int main(int argc, char *argv[]) {
     auto argOutput = findArg("-o", mandatory = false, needsValue = true, args);
     auto arghlL = findArg("-l", mandatory = true, needsValue = true, args);
     auto argX = findArg("-x", mandatory = false, needsValue = false, args);
-    auto hasArg = [&args](const std::vector<std::string>::const_iterator &it) { return it != args.end(); };
+    auto hasArg = [&args](const std::vector<std::string>::const_iterator &it) {
+        return it != args.end();
+    };
 
     if (hasArg(argHelp)) {
         printHelpAndExit(0);
@@ -97,7 +102,8 @@ int main(int argc, char *argv[]) {
     }
 
     if (spirVCompilerOutput.getBuildLogSize() > 0) {
-        std::cerr << "CL->spirV comilation log : " << spirVCompilerOutput.getBuildLog() << std::endl;
+        std::cerr << "CL->spirV comilation log : " << spirVCompilerOutput.getBuildLog()
+                  << std::endl;
     } else {
         std::cerr << "Build log empty" << std::endl;
     }
@@ -122,7 +128,8 @@ int main(int argc, char *argv[]) {
         xe_module_desc_t moduleDesc = {XE_MODULE_DESC_VERSION_CURRENT};
         xe_module_handle_t module;
         moduleDesc.format = XE_MODULE_FORMAT_IL_SPIRV;
-        moduleDesc.pInputModule = reinterpret_cast<const uint8_t *>(spirVCompilerOutput.getOutput());
+        moduleDesc.pInputModule =
+            reinterpret_cast<const uint8_t *>(spirVCompilerOutput.getOutput());
         moduleDesc.inputSize = spirVCompilerOutput.getOutputSize();
         auto err = xeModuleCreate(device0, &moduleDesc, &module, nullptr);
         success = (err == XE_RESULT_SUCCESS);

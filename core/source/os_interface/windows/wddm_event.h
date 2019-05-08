@@ -4,14 +4,12 @@
 namespace L0 {
 
 class WddmEvent : public Event {
-public:
-    WddmEvent(void *execEnvRT) :
-        execEnvRT(execEnvRT) {
-        }
+  public:
+    WddmEvent(void *execEnvRT) : execEnvRT(execEnvRT) {}
     bool waitForFlushStamp(FlushStamp &flushStamp) override;
 
-protected:
+  protected:
     void *execEnvRT = nullptr;
 };
 
-} //namespace L0
+} // namespace L0

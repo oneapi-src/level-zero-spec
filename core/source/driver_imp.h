@@ -9,12 +9,12 @@ namespace L0 {
 
 class Platform {
   public:
-  Platform();
+    Platform();
 
-  static Platform *getPlatform() {
-    static Platform platform;
-    return &platform;
-  }
+    static Platform *getPlatform() {
+        static Platform platform;
+        return &platform;
+    }
 };
 
 class DriverImp : public Driver {

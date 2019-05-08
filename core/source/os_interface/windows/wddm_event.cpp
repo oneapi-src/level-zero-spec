@@ -3,8 +3,6 @@
 
 namespace L0 {
 
-bool WddmEvent::waitForFlushStamp(FlushStamp &flushStamp) {
-    return true;
-}
+bool WddmEvent::waitForFlushStamp(FlushStamp &flushStamp) { return true; }
 
-} //namespace L0
+} // namespace L0

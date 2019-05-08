@@ -1,7 +1,7 @@
 #pragma once
 #ifndef FUNCTION_INTERNAL
 #error "Don't #include this file directly."
-#endif //FUNCTION_INTERNAL
+#endif // FUNCTION_INTERNAL
 
 #include "device.h"
 #include "function.h"
@@ -27,46 +27,37 @@ struct FunctionImp : Function {
         return XE_RESULT_SUCCESS;
     }
 
-    xe_result_t setAttribute(xe_function_set_attribute_t attr,
-                             uint32_t value) override {
+    xe_result_t setAttribute(xe_function_set_attribute_t attr, uint32_t value) override {
         return XE_RESULT_ERROR_UNSUPPORTED;
     }
 
-    xe_result_t getAttribute(xe_function_get_attribute_t attr,
-                             uint32_t *pValue) override {
+    xe_result_t getAttribute(xe_function_get_attribute_t attr, uint32_t *pValue) override {
         return XE_RESULT_ERROR_UNSUPPORTED;
     }
 
-    xe_result_t setArgumentValue(uint32_t argIndex,
-                                 size_t argSize,
-                                 const void *pArgValue) override;
+    xe_result_t setArgumentValue(uint32_t argIndex, size_t argSize, const void *pArgValue) override;
 
     void setGroupCount(uint32_t groupCountX, uint32_t groupCountY, uint32_t groupCountZ) override;
 
-    xe_result_t setGroupSize(uint32_t groupSizeX,
-                             uint32_t groupSizeY,
+    xe_result_t setGroupSize(uint32_t groupSizeX, uint32_t groupSizeY,
                              uint32_t groupSizeZ) override;
 
-    xe_result_t suggestGroupSize(uint32_t globalSizeX,
-                                 uint32_t globalSizeY,
-                                 uint32_t globalSizeZ,
-                                 uint32_t *groupSizeX,
-                                 uint32_t *groupSizeY,
+    xe_result_t suggestGroupSize(uint32_t globalSizeX, uint32_t globalSizeY, uint32_t globalSizeZ,
+                                 uint32_t *groupSizeX, uint32_t *groupSizeY,
                                  uint32_t *groupSizeZ) override;
 
     PtrRef<const uint8_t[]> getCrossThreadData() const override {
         return crossThreadData.weakRef();
     }
 
-    uint32_t getCrossThreadDataSize() const override {
-        return crossThreadDataSize;
-    }
+    uint32_t getCrossThreadDataSize() const override { return crossThreadDataSize; }
 
     const std::vector<GraphicsAllocation *> &getResidencyContainer() const override {
         return residencyContainer;
     }
 
-    void getGroupSize(uint32_t &outGroupSizeX, uint32_t &outGroupSizeY, uint32_t &outGroupSizeZ) const override {
+    void getGroupSize(uint32_t &outGroupSizeX, uint32_t &outGroupSizeY,
+                      uint32_t &outGroupSizeZ) const override {
         outGroupSizeX = this->groupSize[0];
         outGroupSizeY = this->groupSize[1];
         outGroupSizeZ = this->groupSize[2];
@@ -78,7 +69,8 @@ struct FunctionImp : Function {
 
     xe_result_t setArgImage(uint32_t argIndex, size_t argSize, const void *argVal);
 
-    virtual void setBufferSurfaceState(uint32_t argIndex, void *address, GraphicsAllocation *alloc) = 0;
+    virtual void setBufferSurfaceState(uint32_t argIndex, void *address,
+                                       GraphicsAllocation *alloc) = 0;
 
     bool initialize(const xe_function_desc_t *desc);
 
@@ -90,16 +82,10 @@ struct FunctionImp : Function {
         return perThreadDataSizeForWholeThreadGroup;
     }
 
-    uint32_t getPerThreadDataSize() const override {
-        return perThreadDataSize;
-    }
-    uint32_t getThreadsPerThreadGroup() const override {
-        return threadsPerThreadGroup;
-    }
+    uint32_t getPerThreadDataSize() const override { return perThreadDataSize; }
+    uint32_t getThreadsPerThreadGroup() const override { return threadsPerThreadGroup; }
 
-    uint32_t getThreadExecutionMask() const override {
-        return threadExecutionMask;
-    }
+    uint32_t getThreadExecutionMask() const override { return threadExecutionMask; }
 
     PtrRef<GraphicsAllocation> getPrintfBufferAllocation() override {
         return this->printfBuffer.weakRef();
@@ -111,16 +97,12 @@ struct FunctionImp : Function {
         return surfaceStateHeapData.weakRef();
     }
 
-    uint32_t getSurfaceStateHeapDataSize() const {
-        return surfaceStateHeapDataSize;
-    }
+    uint32_t getSurfaceStateHeapDataSize() const { return surfaceStateHeapDataSize; }
 
     PtrRef<const uint8_t[]> getDynamicStateHeapData() const {
         return dynamicStateHeapData.weakRef();
     }
-    const size_t getDynamicStateHeapDataSize() const override {
-        return dynamicStateHeapDataSize;
-    }
+    const size_t getDynamicStateHeapDataSize() const override { return dynamicStateHeapDataSize; }
 
     PtrRef<FunctionImmutableData> getImmutableData() const override {
         return funcImmData.weakRef();
@@ -136,7 +118,8 @@ struct FunctionImp : Function {
     PtrRef<FunctionImmutableData> funcImmData = nullptr;
     PtrRef<Module> module = nullptr;
 
-    typedef xe_result_t (FunctionImp::*FunctionArgHandler)(uint32_t argIndex, size_t argSize, const void *argVal);
+    typedef xe_result_t (FunctionImp::*FunctionArgHandler)(uint32_t argIndex, size_t argSize,
+                                                           const void *argVal);
     std::vector<FunctionImp::FunctionArgHandler> kernelArgHandlers;
     std::vector<GraphicsAllocation *> residencyContainer;
 
@@ -156,8 +139,10 @@ struct FunctionImp : Function {
     uint32_t dynamicStateHeapDataSize = 0;
 
     PtrOwn<uint8_t[]> perThreadDataForWholeThreadGroup = nullptr;
-    uint32_t perThreadDataSizeForWholeThreadGroupAllocated = 0; // length of underlying buffer behind perThreadDataForWholeThreadGroup
-    uint32_t perThreadDataSizeForWholeThreadGroup = 0u;         // part of perThreadDataForWholeThreadGroup used by current group size
+    uint32_t perThreadDataSizeForWholeThreadGroupAllocated =
+        0; // length of underlying buffer behind perThreadDataForWholeThreadGroup
+    uint32_t perThreadDataSizeForWholeThreadGroup =
+        0u; // part of perThreadDataForWholeThreadGroup used by current group size
     uint32_t perThreadDataSize = 0u;
 };
 

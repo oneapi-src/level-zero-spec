@@ -3,21 +3,18 @@
 #include "xe_fence.h"
 #include "device.h"
 
-struct _xe_command_queue_handle_t {
-};
+struct _xe_command_queue_handle_t {};
 
 namespace L0 {
 
 struct CommandQueue : public _xe_command_queue_handle_t {
-    template <typename Type>
-    struct Allocator {
+    template <typename Type> struct Allocator {
         static CommandQueue *allocate(Device *device, void *csrRT) {
             return new Type(device, csrRT);
         }
     };
 
-    virtual xe_result_t createFence(const xe_fence_desc_t *desc,
-                                    xe_fence_handle_t *phFence) = 0;
+    virtual xe_result_t createFence(const xe_fence_desc_t *desc, xe_fence_handle_t *phFence) = 0;
     virtual xe_result_t destroy() = 0;
     virtual xe_result_t executeCommandLists(uint32_t numCommandLists,
                                             xe_command_list_handle_t *phCommandLists,
@@ -30,26 +27,21 @@ struct CommandQueue : public _xe_command_queue_handle_t {
         return static_cast<CommandQueue *>(handle);
     }
 
-    inline xe_command_queue_handle_t toHandle() {
-        return this;
-    }
+    inline xe_command_queue_handle_t toHandle() { return this; }
 };
 
 using CommandQueueAllocatorFn = CommandQueue *(*)(Device *device, void *csrRT);
 extern CommandQueueAllocatorFn commandQueueFactory[];
 
-template <uint32_t productFamily, typename CommandQueueType>
-struct CommandQueuePopulateFactory {
+template <uint32_t productFamily, typename CommandQueueType> struct CommandQueuePopulateFactory {
     CommandQueuePopulateFactory() {
         commandQueueFactory[productFamily] = CommandQueue::Allocator<CommandQueueType>::allocate;
     }
 };
 
-xe_result_t
-fenceCreate(xe_command_queue_handle_t hCommandQueue,
-            const xe_fence_desc_t* desc, xe_fence_handle_t* phFence);
+xe_result_t fenceCreate(xe_command_queue_handle_t hCommandQueue, const xe_fence_desc_t *desc,
+                        xe_fence_handle_t *phFence);
 
-xe_result_t
-fenceDestroy(xe_fence_handle_t hFence);
+xe_result_t fenceDestroy(xe_fence_handle_t hFence);
 
 } // namespace L0

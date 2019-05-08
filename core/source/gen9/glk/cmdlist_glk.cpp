@@ -16,6 +16,7 @@ struct CommandListProductFamily<IGFX_GEMINILAKE> : public CommandListCoreFamily<
     }
 };
 
-static CommandListPopulateFactory<IGFX_GEMINILAKE, CommandListProductFamily<IGFX_GEMINILAKE>> populateGLK;
+static CommandListPopulateFactory<IGFX_GEMINILAKE, CommandListProductFamily<IGFX_GEMINILAKE>>
+    populateGLK;
 
 } // namespace L0

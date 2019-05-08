@@ -14,8 +14,8 @@ inline const std::vector<const char *> &getResourcesSearchLocations() {
     static std::vector<const char *> locations {
         "test_files/spv_modules/",
 #if defined(OS_DATADIR)
-    // later try install location when OS_DATADIR is defined
-        TOSTR(OS_DATADIR),
+            // later try install location when OS_DATADIR is defined
+            TOSTR(OS_DATADIR),
 #endif
     };
     return locations;
@@ -56,7 +56,8 @@ inline void validate(ResulT result, const char *message) {
         return;
     }
 
-    std::cerr << (TerminateOnFailure ? "ERROR : " : "WARNING : ") << message << " : " << result << std::endl;
+    std::cerr << (TerminateOnFailure ? "ERROR : " : "WARNING : ") << message << " : " << result
+              << std::endl;
     if (TerminateOnFailure) {
         std::terminate();
     }
@@ -120,7 +121,7 @@ inline void printDeviceProperties(const xe_device_properties_t &props) {
               << " * maxCommandQueuePriority : " << props.maxCommandQueuePriority << std::endl;
 }
 
-template<typename T = uint8_t>
+template <typename T = uint8_t>
 inline bool validate(const void *expected, const void *tested, size_t len) {
     bool resultsAreOk = true;
     size_t offset = 0;
@@ -132,15 +133,17 @@ inline bool validate(const void *expected, const void *tested, size_t len) {
     while (offset < len) {
         if (expectedT[offset] != testedT[offset]) {
             resultsAreOk = false;
-            if(verbose == false){
+            if (verbose == false) {
                 break;
             }
-            
-            std::cerr << "Data mismatch expectedU8[" << offset << "] != testedU8[" << offset << "]   ->    "
-                      << +expectedT[offset] << " != " << +testedT[offset] << std::endl;
+
+            std::cerr << "Data mismatch expectedU8[" << offset << "] != testedU8[" << offset
+                      << "]   ->    " << +expectedT[offset] << " != " << +testedT[offset]
+                      << std::endl;
             ++errorsCount;
             if (errorsCount >= errorsMax) {
-                std::cerr << "Found " << errorsCount << " data mismatches - skipping further comparison " << std::endl;
+                std::cerr << "Found " << errorsCount
+                          << " data mismatches - skipping further comparison " << std::endl;
                 break;
             }
         }

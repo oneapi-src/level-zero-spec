@@ -7,8 +7,7 @@
 
 namespace L0 {
 
-template <GFXCORE_FAMILY gfxCoreFamily>
-struct EncodeStateBaseAddress {
+template <GFXCORE_FAMILY gfxCoreFamily> struct EncodeStateBaseAddress {
     using GfxFamily = typename NEO::GfxFamilyMapper<gfxCoreFamily>::GfxFamily;
     using STATE_BASE_ADDRESS = typename GfxFamily::STATE_BASE_ADDRESS;
 
@@ -52,13 +51,15 @@ struct EncodeStateBaseAddress {
             cmd.setInstructionBaseAddressModifyEnable(true);
             cmd.setInstructionBaseAddress(container.getInstructionHeapBaseAddress());
             cmd.setInstructionBufferSizeModifyEnable(true);
-            cmd.setInstructionBufferSize(MemoryConstants::sizeOf4GBinPageEntities); // no bounds checking
+            cmd.setInstructionBufferSize(
+                MemoryConstants::sizeOf4GBinPageEntities); // no bounds checking
         }
 
         // Program caches
         auto mocsMapper = container.getDevice()->getMOCSMapper();
         cmd.setInstructionMemoryObjectControlState(mocsMapper->getCachedInstructionHeapMOCS());
-        // TODO : Stateless MOCS can't be cached unconditionally for e.g. when false cacheline sharing with CPU (hotptrs)
+        // TODO : Stateless MOCS can't be cached unconditionally for e.g. when false cacheline
+        // sharing with CPU (hotptrs)
         cmd.setStatelessDataPortAccessMemoryObjectControlState(mocsMapper->getFullyCachedMOCS());
 
         auto buffer = container.getCommandStream().getSpace(sizeof(cmd));

@@ -22,14 +22,13 @@
 namespace L0 {
 
 class ProgramRTHelper : public NEO::Program {
-    public:
-        uint8_t* getIrBinary() { return reinterpret_cast<uint8_t*>(irBinary); }
-        size_t getIrBinarySize() { return irBinarySize; }
+  public:
+    uint8_t *getIrBinary() { return reinterpret_cast<uint8_t *>(irBinary); }
+    size_t getIrBinarySize() { return irBinarySize; }
 };
 
 struct DeviceImp : public Device {
-    xe_result_t canAccessPeer(xe_device_handle_t hPeerDevice,
-                              xe_bool_t *value) override {
+    xe_result_t canAccessPeer(xe_device_handle_t hPeerDevice, xe_bool_t *value) override {
         return XE_RESULT_ERROR_UNSUPPORTED;
     }
 
@@ -38,7 +37,7 @@ struct DeviceImp : public Device {
         return XE_RESULT_ERROR_UNSUPPORTED;
     }
 
-    //xe_result_t createCommandGraph(const xe_command_graph_desc_t *desc,
+    // xe_result_t createCommandGraph(const xe_command_graph_desc_t *desc,
     //                               xe_command_graph_handle_t *phCommandGraph) override {
     //    return XE_RESULT_ERROR_UNSUPPORTED;
     //}
@@ -64,21 +63,19 @@ struct DeviceImp : public Device {
     }
 
     xe_result_t createEventPool(const xe_event_pool_desc_t *desc,
-                            xe_event_pool_handle_t *eventPool) override {
+                                xe_event_pool_handle_t *eventPool) override {
         *eventPool = EventPool::create(this, desc);
         return XE_RESULT_SUCCESS;
     }
 
-    xe_result_t createImage(const xe_image_desc_t *desc,
-                            xe_image_handle_t *phImage) override {
+    xe_result_t createImage(const xe_image_desc_t *desc, xe_image_handle_t *phImage) override {
         auto productFamily = deviceRT->getHardwareInfo().pPlatform->eProductFamily;
         *phImage = Image::create(productFamily, this, desc);
 
         return XE_RESULT_SUCCESS;
     }
 
-    xe_result_t createModule(const xe_module_desc_t *desc,
-                             xe_module_handle_t *module,
+    xe_result_t createModule(const xe_module_desc_t *desc, xe_module_handle_t *module,
                              xe_module_build_log_handle_t *buildLog) override {
         ModuleBuildLog *moduleBuildLog = nullptr;
 
@@ -100,10 +97,7 @@ struct DeviceImp : public Device {
         return XE_RESULT_ERROR_UNSUPPORTED;
     }
 
-    xe_result_t evictMemory(void *ptr,
-                            size_t size) override {
-        return XE_RESULT_ERROR_UNSUPPORTED;
-    }
+    xe_result_t evictMemory(void *ptr, size_t size) override { return XE_RESULT_ERROR_UNSUPPORTED; }
 
     xe_result_t getApiVersion(xe_api_version_t *version) override {
         assert(version != nullptr);
@@ -116,17 +110,25 @@ struct DeviceImp : public Device {
         assert(pComputeProperties->version == XE_DEVICE_COMPUTE_PROPERTIES_VERSION_CURRENT);
         const auto &deviceInfo = this->deviceRT->getDeviceInfo();
 
-        pComputeProperties->maxThreadsPerGroup = static_cast<uint32_t>(deviceInfo.maxWorkGroupSize / 8); // threads per group or items per group?! Clarify naming vs maxGroupSizeX/Y/Z
-        pComputeProperties->maxGroupSizeX = static_cast<uint32_t>(deviceInfo.maxWorkItemSizes[0]);                  // Note : it doesn't mean that it can be max x max x max
-        pComputeProperties->maxGroupSizeY = static_cast<uint32_t>(deviceInfo.maxWorkItemSizes[1]);                  //        rather max x 1 x 1
-        pComputeProperties->maxGroupSizeZ = static_cast<uint32_t>(deviceInfo.maxWorkItemSizes[2]);                  //
+        pComputeProperties->maxThreadsPerGroup = static_cast<uint32_t>(
+            deviceInfo.maxWorkGroupSize /
+            8); // threads per group or items per group?! Clarify naming vs maxGroupSizeX/Y/Z
+        pComputeProperties->maxGroupSizeX = static_cast<uint32_t>(
+            deviceInfo
+                .maxWorkItemSizes[0]); // Note : it doesn't mean that it can be max x max x max
+        pComputeProperties->maxGroupSizeY =
+            static_cast<uint32_t>(deviceInfo.maxWorkItemSizes[1]); //        rather max x 1 x 1
+        pComputeProperties->maxGroupSizeZ =
+            static_cast<uint32_t>(deviceInfo.maxWorkItemSizes[2]); //
         pComputeProperties->maxGroupCountX = 0xffffffff;
         pComputeProperties->maxGroupCountY = 0xffffffff;
         pComputeProperties->maxGroupCountZ = 0xffffffff;
         pComputeProperties->maxSharedLocalMemory = static_cast<uint32_t>(deviceInfo.localMemSize);
-        pComputeProperties->numSubGroupSizes = sizeof(deviceInfo.maxSubGroups) / sizeof(deviceInfo.maxSubGroups[0]);
+        pComputeProperties->numSubGroupSizes =
+            sizeof(deviceInfo.maxSubGroups) / sizeof(deviceInfo.maxSubGroups[0]);
         for (uint32_t i = 0; i < pComputeProperties->numSubGroupSizes; ++i) {
-            pComputeProperties->subGroupSizes[i] = static_cast<uint32_t>(deviceInfo.maxSubGroups[i]);
+            pComputeProperties->subGroupSizes[i] =
+                static_cast<uint32_t>(deviceInfo.maxSubGroups[i]);
         }
 
         return XE_RESULT_SUCCESS;
@@ -145,27 +147,38 @@ struct DeviceImp : public Device {
         auto &hwHelper = NEO::HwHelper::get(hardwareInfo.pPlatform->eRenderCoreFamily);
         auto enableLocalMemory = hwHelper.getEnableLocalMemory(hardwareInfo);
 
-        pMemProperties->unifiedMemory = true;                                                // need clarification - "Host and device share same physical memory."
-                                                                                             //                      i.e. all physical memory?
-        pMemProperties->onDemandPageFaults = false;                                          // TODO : Add support
-        pMemProperties->maxImageDims1D = static_cast<uint32_t>(deviceInfo.image2DMaxWidth);  //
-        pMemProperties->maxImageDims2D = static_cast<uint32_t>(deviceInfo.image2DMaxHeight); // need clarification : assumes max is square
-        pMemProperties->maxImageDims3D = static_cast<uint32_t>(deviceInfo.image3DMaxDepth);  // need clarification : assumes max is a cube
+        pMemProperties->unifiedMemory =
+            true; // need clarification - "Host and device share same physical memory."
+                  //                      i.e. all physical memory?
+        pMemProperties->onDemandPageFaults = false; // TODO : Add support
+        pMemProperties->maxImageDims1D = static_cast<uint32_t>(deviceInfo.image2DMaxWidth); //
+        pMemProperties->maxImageDims2D = static_cast<uint32_t>(
+            deviceInfo.image2DMaxHeight); // need clarification : assumes max is square
+        pMemProperties->maxImageDims3D = static_cast<uint32_t>(
+            deviceInfo.image3DMaxDepth); // need clarification : assumes max is a cube
         pMemProperties->maxImageArraySlices = static_cast<uint32_t>(deviceInfo.imageMaxArraySize);
         // Need clarification on XE_MEMORY_CONCURRENT_ACCESS and XE_MEMORY_CONCURRENT_ATOMIC_ACCESS
-        pMemProperties->hostAllocCapabilities = xe_memory_access_capabilities_t{}; // system level SVM? need clarification
-        pMemProperties->deviceAllocCapabilities = static_cast<xe_memory_access_capabilities_t>(XE_MEMORY_ACCESS | XE_MEMORY_ATOMIC_ACCESS);
+        pMemProperties->hostAllocCapabilities =
+            xe_memory_access_capabilities_t{}; // system level SVM? need clarification
+        pMemProperties->deviceAllocCapabilities = static_cast<xe_memory_access_capabilities_t>(
+            XE_MEMORY_ACCESS | XE_MEMORY_ATOMIC_ACCESS);
         pMemProperties->sharedAllocCapabilities = XE_MEMORY_ACCESS;
         if (false == enableLocalMemory) {
-            pMemProperties->sharedAllocCapabilities = static_cast<xe_memory_access_capabilities_t>(XE_MEMORY_ACCESS | XE_MEMORY_ATOMIC_ACCESS);
+            pMemProperties->sharedAllocCapabilities = static_cast<xe_memory_access_capabilities_t>(
+                XE_MEMORY_ACCESS | XE_MEMORY_ATOMIC_ACCESS);
         }
-        pMemProperties->sharedCrossDeviceAllocCapabilities = xe_memory_access_capabilities_t{};  // need clarification
-        pMemProperties->sharedSystemDeviceAllocCapabilities = xe_memory_access_capabilities_t{}; // need clarification
-        pMemProperties->intermediateCacheSize = 0;                                               // TODO : does old L1$ count, or only PVC+? need clarification
+        pMemProperties->sharedCrossDeviceAllocCapabilities =
+            xe_memory_access_capabilities_t{}; // need clarification
+        pMemProperties->sharedSystemDeviceAllocCapabilities =
+            xe_memory_access_capabilities_t{}; // need clarification
+        pMemProperties->intermediateCacheSize =
+            0; // TODO : does old L1$ count, or only PVC+? need clarification
         pMemProperties->intermediateCacheControl = false;
         pMemProperties->lastLevelCacheSize = static_cast<uint32_t>(deviceInfo.globalMemCacheSize);
-        pMemProperties->lastLevelCacheSizeControl = true; // TODO : Not true for ATS+
-                                                          // Need clarification : No stuff like cacheline size or (preferred) memory alignments
+        pMemProperties->lastLevelCacheSizeControl =
+            true; // TODO : Not true for ATS+
+                  // Need clarification : No stuff like cacheline size or (preferred) memory
+                  // alignments
         return XE_RESULT_SUCCESS;
     }
 
@@ -177,47 +190,38 @@ struct DeviceImp : public Device {
         auto &hwHelper = NEO::HwHelper::get(hardwareInfo.pPlatform->eRenderCoreFamily);
         auto enableLocalMemory = hwHelper.getEnableLocalMemory(hardwareInfo);
 
-        memcpy_s(pDeviceProperties->name, sizeof(pDeviceProperties->name),
-                 deviceInfo.name, strlen(deviceInfo.name) + 1);
-        pDeviceProperties->coreClockRate =
-                deviceInfo.maxClockFrequency;
-        pDeviceProperties->vendorId =
-                deviceInfo.vendorId;
+        memcpy_s(pDeviceProperties->name, sizeof(pDeviceProperties->name), deviceInfo.name,
+                 strlen(deviceInfo.name) + 1);
+        pDeviceProperties->coreClockRate = deviceInfo.maxClockFrequency;
+        pDeviceProperties->vendorId = deviceInfo.vendorId;
         pDeviceProperties->deviceId =
-                this->deviceRT->getDeviceIndex(); ///< [out] device id from PCI configuration
-        pDeviceProperties->subdeviceId =
-                isSubdevice ? this->deviceRT->getDeviceIndex() : 0;
-        pDeviceProperties->isSubdevice =
-                isSubdevice;
-        pDeviceProperties->numSubDevices =
-                isSubdevice ? 0 : deviceInfo.partitionMaxSubDevices;
-        pDeviceProperties->coreClockRate =
-                deviceInfo.maxClockFrequency;
-        //pDeviceProperties->memClockRate; ///< [out] Clock rate for device global memory
-        //pDeviceProperties->memGlobalBusWidth; ///< [out] Bus width between core and memory.
+            this->deviceRT->getDeviceIndex(); ///< [out] device id from PCI configuration
+        pDeviceProperties->subdeviceId = isSubdevice ? this->deviceRT->getDeviceIndex() : 0;
+        pDeviceProperties->isSubdevice = isSubdevice;
+        pDeviceProperties->numSubDevices = isSubdevice ? 0 : deviceInfo.partitionMaxSubDevices;
+        pDeviceProperties->coreClockRate = deviceInfo.maxClockFrequency;
+        // pDeviceProperties->memClockRate; ///< [out] Clock rate for device global memory
+        // pDeviceProperties->memGlobalBusWidth; ///< [out] Bus width between core and memory.
         pDeviceProperties->totalLocalMemSize =
-                enableLocalMemory ?
-                        NEO::DebugManager.flags.HBMSizePerTileInGigabytes.get()
-                                * MemoryConstants::gigaByte : 0;
+            enableLocalMemory ? NEO::DebugManager.flags.HBMSizePerTileInGigabytes.get() *
+                                    MemoryConstants::gigaByte
+                              : 0;
         pDeviceProperties->numAsyncComputeEngines =
-                static_cast<uint32_t>(hwHelper.getGpgpuEngineInstances().size());
-        pDeviceProperties->numAsyncCopyEngines = 1; //  hwHelper.getCopyEngineInstances().size(); // NEO refactor
+            static_cast<uint32_t>(hwHelper.getGpgpuEngineInstances().size());
+        pDeviceProperties->numAsyncCopyEngines =
+            1; //  hwHelper.getCopyEngineInstances().size(); // NEO refactor
         pDeviceProperties->maxCommandQueuePriority = 0; // map to cl_khr_priority_hints ?
-        pDeviceProperties->numThreadsPerEU =
-                deviceInfo.numThreadsPerEU;
-        pDeviceProperties->numEUsPerSubslice =
-                hardwareInfo.pSysInfo->MaxEuPerSubSlice;
+        pDeviceProperties->numThreadsPerEU = deviceInfo.numThreadsPerEU;
+        pDeviceProperties->numEUsPerSubslice = hardwareInfo.pSysInfo->MaxEuPerSubSlice;
         pDeviceProperties->numSubslicesPerSlice =
-                hardwareInfo.pSysInfo->SubSliceCount
-                        / hardwareInfo.pSysInfo->SliceCount;
-        pDeviceProperties->numSlicesPerTile =
-                hardwareInfo.pSysInfo->SliceCount;
-        //pDeviceProperties->numTiles; ///< [out] Number of tiles for this device. TODO : Add support
+            hardwareInfo.pSysInfo->SubSliceCount / hardwareInfo.pSysInfo->SliceCount;
+        pDeviceProperties->numSlicesPerTile = hardwareInfo.pSysInfo->SliceCount;
+        // pDeviceProperties->numTiles; ///< [out] Number of tiles for this device. TODO : Add
+        // support
         return XE_RESULT_SUCCESS;
     }
 
-    xe_result_t getSubDevice(uint32_t ordinal,
-                             xe_device_handle_t *phSubDevice) override {
+    xe_result_t getSubDevice(uint32_t ordinal, xe_device_handle_t *phSubDevice) override {
         return XE_RESULT_ERROR_UNSUPPORTED;
     }
 
@@ -225,8 +229,7 @@ struct DeviceImp : public Device {
         return XE_RESULT_ERROR_UNSUPPORTED;
     }
 
-    xe_result_t makeMemoryResident(void *ptr,
-                                   size_t size) override {
+    xe_result_t makeMemoryResident(void *ptr, size_t size) override {
         return XE_RESULT_ERROR_UNSUPPORTED;
     }
 
@@ -238,44 +241,33 @@ struct DeviceImp : public Device {
         return XE_RESULT_ERROR_UNSUPPORTED;
     }
 
-    xe_result_t getImageProperties(const xe_image_desc_t* desc,
-            xe_image_properties_t* pImageProperties) override {
+    xe_result_t getImageProperties(const xe_image_desc_t *desc,
+                                   xe_image_properties_t *pImageProperties) override {
         return XE_RESULT_ERROR_UNSUPPORTED;
     }
 
-    xe_result_t systemBarrier() {
-        return XE_RESULT_ERROR_UNSUPPORTED;
-    }
+    xe_result_t systemBarrier() { return XE_RESULT_ERROR_UNSUPPORTED; }
 
-    void *getExecEnvironment() override {
-        return execEnvironment;
-    }
+    void *getExecEnvironment() override { return execEnvironment; }
 
-    PtrRef<BuiltinFunctionsLib> getBuiltinFunctionsLib() override {
-        return builtins.weakRef();
-    }
+    PtrRef<BuiltinFunctionsLib> getBuiltinFunctionsLib() override { return builtins.weakRef(); }
 
-    PtrRef<MOCSMapper> getMOCSMapper() override {
-        return mocsMapper.weakRef();
-    }
+    PtrRef<MOCSMapper> getMOCSMapper() override { return mocsMapper.weakRef(); }
 
     NEO::HwHelper &getHwHelper() override {
         const auto &hardwareInfo = deviceRT->getHardwareInfo();
         return NEO::HwHelper::get(hardwareInfo.pPlatform->eRenderCoreFamily);
     }
 
-    uint32_t getMaxNumHwThreads() const override {
-        return maxNumHwThreads;
-    }
+    uint32_t getMaxNumHwThreads() const override { return maxNumHwThreads; }
 
-    xe_result_t registerCLMemory(cl_context context, cl_mem mem, void** ptr) override {
+    xe_result_t registerCLMemory(cl_context context, cl_mem mem, void **ptr) override {
         NEO::MemObj *memObjRT = static_cast<NEO::MemObj *>(mem);
         NEO::GraphicsAllocation *graphicsAllocationRT = memObjRT->getGraphicsAllocation();
         assert(graphicsAllocationRT != nullptr);
 
         auto allocation = globalMemoryManager->allocateManagedMemoryFromFault(
-            this,
-            graphicsAllocationRT->getUnderlyingBuffer(),
+            this, graphicsAllocationRT->getUnderlyingBuffer(),
             graphicsAllocationRT->getUnderlyingBufferSize());
 
         *ptr = allocation->getHostAddress();
@@ -284,12 +276,12 @@ struct DeviceImp : public Device {
     }
 
     xe_result_t registerCLProgram(cl_context context, cl_program program,
-            xe_module_handle_t* phModule) override {
+                                  xe_module_handle_t *phModule) override {
         NEO::Program *programRT = static_cast<NEO::Program *>(program);
 
         if (programRT->getIsSpirV()) {
-            uint8_t* spirvData = (reinterpret_cast<ProgramRTHelper*>(programRT))->getIrBinary();
-            size_t spirvSize = (reinterpret_cast<ProgramRTHelper*>(programRT))->getIrBinarySize();
+            uint8_t *spirvData = (reinterpret_cast<ProgramRTHelper *>(programRT))->getIrBinary();
+            size_t spirvSize = (reinterpret_cast<ProgramRTHelper *>(programRT))->getIrBinarySize();
 
             xe_module_desc_t module_desc;
             module_desc.version = XE_MODULE_DESC_VERSION_CURRENT;
@@ -304,9 +296,8 @@ struct DeviceImp : public Device {
         }
     }
 
-    xe_result_t registerCLCommandQueue(cl_context context,
-            cl_command_queue command_queue,
-            xe_command_queue_handle_t* phCommandQueue) override {
+    xe_result_t registerCLCommandQueue(cl_context context, cl_command_queue command_queue,
+                                       xe_command_queue_handle_t *phCommandQueue) override {
 
         NEO::CommandQueue *commandQueueRT = static_cast<NEO::CommandQueue *>(command_queue);
         uint32_t deviceIndex = commandQueueRT->getDevice().getDeviceIndex();
@@ -314,11 +305,10 @@ struct DeviceImp : public Device {
         uint32_t csrIndex = 0; // TODO: To get the exact value, for now, use the default one
         auto executionEnvironment = deviceRT->getExecutionEnvironment();
         assert(executionEnvironment);
-        void* csrRT = executionEnvironment->commandStreamReceivers[deviceIndex][csrIndex].get();
+        void *csrRT = executionEnvironment->commandStreamReceivers[deviceIndex][csrIndex].get();
 
-        *phCommandQueue =
-                CommandQueue::create(commandQueueRT->getDevice().getHardwareInfo()
-                        .pPlatform->eProductFamily, this, csrRT);
+        *phCommandQueue = CommandQueue::create(
+            commandQueueRT->getDevice().getHardwareInfo().pPlatform->eProductFamily, this, csrRT);
 
         return XE_RESULT_SUCCESS;
     }
@@ -333,7 +323,8 @@ struct DeviceImp : public Device {
 
 // TODO: Refactor in NEO - remove dependency on template parameter
 static uint32_t getMaxThreadsForVfe(const NEO::HardwareInfo &hwInfo) {
-    uint32_t threadsPerEU = (hwInfo.pSysInfo->ThreadCount / hwInfo.pSysInfo->EUCount) + hwInfo.capabilityTable.extraQuantityThreadsPerEU;
+    uint32_t threadsPerEU = (hwInfo.pSysInfo->ThreadCount / hwInfo.pSysInfo->EUCount) +
+                            hwInfo.capabilityTable.extraQuantityThreadsPerEU;
     return hwInfo.pSysInfo->EUCount * threadsPerEU;
 }
 
@@ -344,9 +335,8 @@ Device *Device::create(void *ptr) {
     device->deviceRT = deviceRT;
 
     device->execEnvironment = (void *)deviceRT->getExecutionEnvironment();
-    device->builtins =
-            BuiltinFunctionsLib::create(PtrRef<Device>(device),
-                    PtrRef<void>(deviceRT->getExecutionEnvironment()->getBuiltIns()));
+    device->builtins = BuiltinFunctionsLib::create(
+        PtrRef<Device>(device), PtrRef<void>(deviceRT->getExecutionEnvironment()->getBuiltIns()));
     device->mocsMapper.rebind(new MOCSMapper(bindPtrRef(deviceRT->getGmmHelper())));
     device->maxNumHwThreads = getMaxThreadsForVfe(deviceRT->getHardwareInfo());
 
@@ -357,16 +347,15 @@ Device *Device::create(void *ptr) {
     return device;
 }
 
-xe_result_t commandListCreate(xe_device_handle_t hDevice,
-                                const xe_command_list_desc_t *desc,
-                                xe_command_list_handle_t *commandList) {
+xe_result_t commandListCreate(xe_device_handle_t hDevice, const xe_command_list_desc_t *desc,
+                              xe_command_list_handle_t *commandList) {
     DeviceImp *device = static_cast<DeviceImp *>(Device::fromHandle(hDevice));
     return device->createCommandList(desc, commandList);
 }
 
 xe_result_t commandListCreateImmediate(xe_device_handle_t hDevice,
-                                const xe_command_queue_desc_t* desc,
-                                xe_command_list_handle_t* phCommandList) {
+                                       const xe_command_queue_desc_t *desc,
+                                       xe_command_list_handle_t *phCommandList) {
     return XE_RESULT_ERROR_UNSUPPORTED;
 }
 
@@ -375,9 +364,8 @@ xe_result_t commandListDestroy(xe_command_list_handle_t hCommandList) {
     return commandList->destroy();
 }
 
-xe_result_t commandQueueCreate(xe_device_handle_t hDevice,
-                                const xe_command_queue_desc_t *desc,
-                                xe_command_queue_handle_t *commandQueue) {
+xe_result_t commandQueueCreate(xe_device_handle_t hDevice, const xe_command_queue_desc_t *desc,
+                               xe_command_queue_handle_t *commandQueue) {
     DeviceImp *device = static_cast<DeviceImp *>(Device::fromHandle(hDevice));
     return device->createCommandQueue(desc, commandQueue);
 }
@@ -387,8 +375,8 @@ xe_result_t commandQueueDestroy(xe_command_queue_handle_t hCommandQueue) {
     return commandQueue->destroy();
 }
 
-xe_result_t imageGetProperties(xe_device_handle_t hDevice, const xe_image_desc_t* desc,
-            xe_image_properties_t* pImageProperties) {
+xe_result_t imageGetProperties(xe_device_handle_t hDevice, const xe_image_desc_t *desc,
+                               xe_image_properties_t *pImageProperties) {
     DeviceImp *device = static_cast<DeviceImp *>(Device::fromHandle(hDevice));
     return device->getImageProperties(desc, pImageProperties);
 }
@@ -403,19 +391,16 @@ xe_result_t eventPoolDestroy(xe_event_pool_handle_t hEventPool) {
     return EventPool::fromHandle(hEventPool)->destroy();
 }
 
-xe_result_t imageCreate(xe_device_handle_t hDevice, const xe_image_desc_t* desc,
-        xe_image_handle_t* phImage) {
+xe_result_t imageCreate(xe_device_handle_t hDevice, const xe_image_desc_t *desc,
+                        xe_image_handle_t *phImage) {
     DeviceImp *device = static_cast<DeviceImp *>(Device::fromHandle(hDevice));
     return device->createImage(desc, phImage);
 }
 
-xe_result_t imageDestroy(xe_image_handle_t hImage) {
-    return Image::fromHandle(hImage)->destroy();
-}
+xe_result_t imageDestroy(xe_image_handle_t hImage) { return Image::fromHandle(hImage)->destroy(); }
 
 xe_result_t moduleCreate(xe_device_handle_t hDevice, const xe_module_desc_t *desc,
-                    xe_module_handle_t *phModule,
-                    xe_module_build_log_handle_t *buildLog) {
+                         xe_module_handle_t *phModule, xe_module_build_log_handle_t *buildLog) {
     DeviceImp *device = static_cast<DeviceImp *>(Device::fromHandle(hDevice));
     return device->createModule(desc, phModule, buildLog);
 }
@@ -425,13 +410,11 @@ xe_result_t moduleDestroy(xe_module_handle_t hModule) {
 }
 
 xe_result_t samplerCreate(xe_device_handle_t hDevice, const xe_sampler_desc_t *pDesc,
-                                      xe_sampler_handle_t *phSampler) {
+                          xe_sampler_handle_t *phSampler) {
     DeviceImp *device = static_cast<DeviceImp *>(Device::fromHandle(hDevice));
     return device->createSampler(pDesc, phSampler);
 }
 
-xe_result_t samplerDestroy(xe_sampler_handle_t hSampler) {
-    return XE_RESULT_ERROR_UNSUPPORTED;
-}
+xe_result_t samplerDestroy(xe_sampler_handle_t hSampler) { return XE_RESULT_ERROR_UNSUPPORTED; }
 
 } // namespace L0

@@ -21,4 +21,4 @@ bool DrmEvent::waitForFlushStamp(FlushStamp &flushStamp) {
     return true;
 }
 
-} //namespace L0
+} // namespace L0

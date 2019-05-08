@@ -336,8 +336,10 @@ attributes #2 = { nounwind }
 void initializeLevelZero(xe_device_handle_t &device0, xe_device_properties_t &device0Properties,
                          xe_command_queue_handle_t &cmdQueue, xe_command_list_handle_t &cmdList,
                          xe_module_handle_t &moduleGlobalVariables,
-                         xe_module_handle_t &moduleFuncArray, xe_function_handle_t &functionFuncArray,
-                         xe_module_handle_t &moduleFuncParam, xe_function_handle_t &functionFuncParam);
+                         xe_module_handle_t &moduleFuncArray,
+                         xe_function_handle_t &functionFuncArray,
+                         xe_module_handle_t &moduleFuncParam,
+                         xe_function_handle_t &functionFuncParam);
 
 int main(int argc, char *argv[]) {
     if (isAubMode(argc, argv)) {
@@ -355,10 +357,8 @@ int main(int argc, char *argv[]) {
     xe_function_handle_t functionFuncParam;
     xe_command_queue_handle_t cmdQueue;
     xe_command_list_handle_t cmdList;
-    initializeLevelZero(device0, device0Properties, cmdQueue, cmdList,
-                        moduleGlobalVariables,
-                        moduleFuncArray, functionFuncArray,
-                        moduleFuncParam, functionFuncParam);
+    initializeLevelZero(device0, device0Properties, cmdQueue, cmdList, moduleGlobalVariables,
+                        moduleFuncArray, functionFuncArray, moduleFuncParam, functionFuncParam);
 
     // 1. Set-up
     using ElType = int32_t;
@@ -378,16 +378,25 @@ int main(int argc, char *argv[]) {
     // constexpr int opCodeMul = 2;
 
     uint32_t groupSizeX = 32u, groupSizeY = 1u, groupSizeZ = 1u;
-    SUCCESS_OR_TERMINATE(xeFunctionSuggestGroupSize(functionFuncArray, numSimtThreads, 1U, 1U, &groupSizeX, &groupSizeY, &groupSizeZ));
+    SUCCESS_OR_TERMINATE(xeFunctionSuggestGroupSize(functionFuncArray, numSimtThreads, 1U, 1U,
+                                                    &groupSizeX, &groupSizeY, &groupSizeZ));
     SUCCESS_OR_TERMINATE_BOOL(numSimtThreads % groupSizeX == 0);
     if (verbose) {
-        std::cout << "Group size : (" << groupSizeX << ", " << groupSizeY << ", " << groupSizeZ << ")" << std::endl;
+        std::cout << "Group size : (" << groupSizeX << ", " << groupSizeY << ", " << groupSizeZ
+                  << ")" << std::endl;
     }
-    SUCCESS_OR_TERMINATE(xeFunctionSetGroupSize(functionFuncArray, groupSizeX, groupSizeY, groupSizeZ));
+    SUCCESS_OR_TERMINATE(
+        xeFunctionSetGroupSize(functionFuncArray, groupSizeX, groupSizeY, groupSizeZ));
 
-    SUCCESS_OR_TERMINATE(xeSharedMemAlloc(device0, XE_DEVICE_MEM_ALLOC_FLAG_DEFAULT, XE_HOST_MEM_ALLOC_FLAG_DEFAULT, allocSize, 1, &dstBufferOpAdd));
-    SUCCESS_OR_TERMINATE(xeSharedMemAlloc(device0, XE_DEVICE_MEM_ALLOC_FLAG_DEFAULT, XE_HOST_MEM_ALLOC_FLAG_DEFAULT, allocSize, 1, &dstBufferOpMul));
-    SUCCESS_OR_TERMINATE(xeSharedMemAlloc(device0, XE_DEVICE_MEM_ALLOC_FLAG_DEFAULT, XE_HOST_MEM_ALLOC_FLAG_DEFAULT, allocSize, 1, &dstBufferOpSub));
+    SUCCESS_OR_TERMINATE(xeSharedMemAlloc(device0, XE_DEVICE_MEM_ALLOC_FLAG_DEFAULT,
+                                          XE_HOST_MEM_ALLOC_FLAG_DEFAULT, allocSize, 1,
+                                          &dstBufferOpAdd));
+    SUCCESS_OR_TERMINATE(xeSharedMemAlloc(device0, XE_DEVICE_MEM_ALLOC_FLAG_DEFAULT,
+                                          XE_HOST_MEM_ALLOC_FLAG_DEFAULT, allocSize, 1,
+                                          &dstBufferOpMul));
+    SUCCESS_OR_TERMINATE(xeSharedMemAlloc(device0, XE_DEVICE_MEM_ALLOC_FLAG_DEFAULT,
+                                          XE_HOST_MEM_ALLOC_FLAG_DEFAULT, allocSize, 1,
+                                          &dstBufferOpSub));
 
     void *fptrSub = nullptr;
     void *fptrAdd = nullptr;
@@ -410,11 +419,16 @@ int main(int argc, char *argv[]) {
     memset(initDataDst, 0xFF, sizeof(initDataDst));
 
 #ifdef GPU_COPY
-    SUCCESS_OR_TERMINATE(xeCommandListAppendMemoryCopy(cmdList, dstBufferOpAdd, initDataDst, sizeof(initDataDst), nullptr, 0, nullptr));
-    SUCCESS_OR_TERMINATE(xeCommandListAppendMemoryCopy(cmdList, dstBufferOpMul, initDataDst, sizeof(initDataDst), nullptr, 0, nullptr));
-    SUCCESS_OR_TERMINATE(xeCommandListAppendMemoryCopy(cmdList, dstBufferOpSub, initDataDst, sizeof(initDataDst), nullptr, 0, nullptr));
+    SUCCESS_OR_TERMINATE(xeCommandListAppendMemoryCopy(cmdList, dstBufferOpAdd, initDataDst,
+                                                       sizeof(initDataDst), nullptr, 0, nullptr));
+    SUCCESS_OR_TERMINATE(xeCommandListAppendMemoryCopy(cmdList, dstBufferOpMul, initDataDst,
+                                                       sizeof(initDataDst), nullptr, 0, nullptr));
+    SUCCESS_OR_TERMINATE(xeCommandListAppendMemoryCopy(cmdList, dstBufferOpSub, initDataDst,
+                                                       sizeof(initDataDst), nullptr, 0, nullptr));
 
-    SUCCESS_OR_TERMINATE(xeCommandListAppendBarrier(cmdList, nullptr, 0, nullptr)); // copying of data must finish before running the user function
+    SUCCESS_OR_TERMINATE(xeCommandListAppendBarrier(
+        cmdList, nullptr, 0,
+        nullptr)); // copying of data must finish before running the user function
 #else
     memcpy(dstBufferOpAdd, initDataDst, sizeof(initDataDst));
     memcpy(dstBufferOpMul, initDataDst, sizeof(initDataDst));
@@ -422,21 +436,28 @@ int main(int argc, char *argv[]) {
 #endif
 
     // 3. User function
-    SUCCESS_OR_TERMINATE(xeFunctionSetArgumentValue(functionFuncArray, 0, sizeof(dstBufferOpAdd), &dstBufferOpAdd));
-    SUCCESS_OR_TERMINATE(xeFunctionSetArgumentValue(functionFuncArray, 1, sizeof(operandA), &operandA));
-    SUCCESS_OR_TERMINATE(xeFunctionSetArgumentValue(functionFuncArray, 2, sizeof(operandB), &operandB));
-    //SUCCESS_OR_TERMINATE(xeFunctionSetArgumentValue(function, 3, sizeof(opCodeMul), &opCodeMul));
-    SUCCESS_OR_TERMINATE(xeFunctionSetArgumentValue(functionFuncArray, 3, sizeof(opCodeAdd), &opCodeAdd));
+    SUCCESS_OR_TERMINATE(
+        xeFunctionSetArgumentValue(functionFuncArray, 0, sizeof(dstBufferOpAdd), &dstBufferOpAdd));
+    SUCCESS_OR_TERMINATE(
+        xeFunctionSetArgumentValue(functionFuncArray, 1, sizeof(operandA), &operandA));
+    SUCCESS_OR_TERMINATE(
+        xeFunctionSetArgumentValue(functionFuncArray, 2, sizeof(operandB), &operandB));
+    // SUCCESS_OR_TERMINATE(xeFunctionSetArgumentValue(function, 3, sizeof(opCodeMul), &opCodeMul));
+    SUCCESS_OR_TERMINATE(
+        xeFunctionSetArgumentValue(functionFuncArray, 3, sizeof(opCodeAdd), &opCodeAdd));
     {
         xe_thread_group_dimensions_t dispatchTraits;
         dispatchTraits.groupCountX = numSimtThreads / groupSizeX;
         dispatchTraits.groupCountY = 1u;
         dispatchTraits.groupCountZ = 1u;
         if (verbose) {
-            std::cerr << "Number of groups : (" << dispatchTraits.groupCountX << ", " << dispatchTraits.groupCountY << ", " << dispatchTraits.groupCountZ << ")" << std::endl;
+            std::cerr << "Number of groups : (" << dispatchTraits.groupCountX << ", "
+                      << dispatchTraits.groupCountY << ", " << dispatchTraits.groupCountZ << ")"
+                      << std::endl;
         }
         SUCCESS_OR_TERMINATE_BOOL(dispatchTraits.groupCountX * groupSizeX == numSimtThreads);
-        SUCCESS_OR_TERMINATE(xeCommandListAppendLaunchFunction(cmdList, functionFuncArray, &dispatchTraits, nullptr, 0, nullptr));
+        SUCCESS_OR_TERMINATE(xeCommandListAppendLaunchFunction(
+            cmdList, functionFuncArray, &dispatchTraits, nullptr, 0, nullptr));
     }
 
     // 4. Read back memory
@@ -448,10 +469,17 @@ int main(int argc, char *argv[]) {
     memset(readBackDataOpMul, 0xFF, sizeof(readBackDataOpMul));
 
 #ifdef GPU_COPY
-    SUCCESS_OR_TERMINATE(xeCommandListAppendBarrier(cmdList, nullptr, 0, nullptr)); // user function must finish before we start copying data
-    SUCCESS_OR_TERMINATE(xeCommandListAppendMemoryCopy(cmdList, readBackDataOpAdd, dstBufferOpAdd, sizeof(readBackDataOpAdd), nullptr, 0, nullptr));
-    SUCCESS_OR_TERMINATE(xeCommandListAppendMemoryCopy(cmdList, readBackDataOpSub, dstBufferOpSub, sizeof(readBackDataOpSub), nullptr, 0, nullptr));
-    SUCCESS_OR_TERMINATE(xeCommandListAppendMemoryCopy(cmdList, readBackDataOpMul, dstBufferOpMul, sizeof(readBackDataOpMul), nullptr, 0, nullptr));
+    SUCCESS_OR_TERMINATE(xeCommandListAppendBarrier(
+        cmdList, nullptr, 0, nullptr)); // user function must finish before we start copying data
+    SUCCESS_OR_TERMINATE(xeCommandListAppendMemoryCopy(cmdList, readBackDataOpAdd, dstBufferOpAdd,
+                                                       sizeof(readBackDataOpAdd), nullptr, 0,
+                                                       nullptr));
+    SUCCESS_OR_TERMINATE(xeCommandListAppendMemoryCopy(cmdList, readBackDataOpSub, dstBufferOpSub,
+                                                       sizeof(readBackDataOpSub), nullptr, 0,
+                                                       nullptr));
+    SUCCESS_OR_TERMINATE(xeCommandListAppendMemoryCopy(cmdList, readBackDataOpMul, dstBufferOpMul,
+                                                       sizeof(readBackDataOpMul), nullptr, 0,
+                                                       nullptr));
 #endif
 
     // 5. Execute and wait
@@ -470,7 +498,8 @@ int main(int argc, char *argv[]) {
     std::vector<ElType> expectedData;
     expectedData.clear();
     expectedData.resize(elCount, operandA + operandB);
-    bool outputValidationSuccessful = validate<int>(expectedData.data(), readBackDataOpAdd, elCount);
+    bool outputValidationSuccessful =
+        validate<int>(expectedData.data(), readBackDataOpAdd, elCount);
     SUCCESS_OR_WARNING_BOOL(outputValidationSuccessful);
 
     // X. Cleanup
@@ -487,7 +516,8 @@ int main(int argc, char *argv[]) {
 
     bool aubMode = isAubMode(argc, argv);
     if (aubMode == false) {
-        std::cout << "\nResults validation " << (outputValidationSuccessful ? "PASSED" : "FAILED") << std::endl;
+        std::cout << "\nResults validation " << (outputValidationSuccessful ? "PASSED" : "FAILED")
+                  << std::endl;
     }
     int resultOnFailure = aubMode ? 0 : 1;
     return outputValidationSuccessful ? 0 : resultOnFailure;
@@ -496,8 +526,10 @@ int main(int argc, char *argv[]) {
 void initializeLevelZero(xe_device_handle_t &device0, xe_device_properties_t &device0Properties,
                          xe_command_queue_handle_t &cmdQueue, xe_command_list_handle_t &cmdList,
                          xe_module_handle_t &moduleGlobalVariables,
-                         xe_module_handle_t &moduleFuncArray, xe_function_handle_t &functionFuncArray,
-                         xe_module_handle_t &moduleFuncParam, xe_function_handle_t &functionFuncParam) {
+                         xe_module_handle_t &moduleFuncArray,
+                         xe_function_handle_t &functionFuncArray,
+                         xe_module_handle_t &moduleFuncParam,
+                         xe_function_handle_t &functionFuncParam) {
     device0 = {};
     device0Properties = {XE_DEVICE_PROPERTIES_VERSION_CURRENT};
     moduleGlobalVariables = {};
@@ -519,16 +551,18 @@ void initializeLevelZero(xe_device_handle_t &device0, xe_device_properties_t &de
 
     {
         xe_module_desc_t moduleDesc = {XE_MODULE_DESC_VERSION_CURRENT};
-        moduleDesc.format = static_cast<xe_module_format_t>(-1); // -1 for unofficial (debug-only) support llvm as input
-        moduleDesc.pInputModule = reinterpret_cast<const uint8_t*>(llvmCodeGlobalVariables);
+        moduleDesc.format = static_cast<xe_module_format_t>(
+            -1); // -1 for unofficial (debug-only) support llvm as input
+        moduleDesc.pInputModule = reinterpret_cast<const uint8_t *>(llvmCodeGlobalVariables);
         moduleDesc.inputSize = static_cast<uint32_t>(strlen(llvmCodeGlobalVariables) + 1);
         SUCCESS_OR_TERMINATE(xeModuleCreate(device0, &moduleDesc, &moduleGlobalVariables, nullptr));
     }
 
     {
         xe_module_desc_t moduleDesc = {XE_MODULE_DESC_VERSION_CURRENT};
-        moduleDesc.format = static_cast<xe_module_format_t>(-1); // -1 for unofficial (debug-only) support llvm as input
-        moduleDesc.pInputModule = reinterpret_cast<const uint8_t*>(llvmCodeFuncArray);
+        moduleDesc.format = static_cast<xe_module_format_t>(
+            -1); // -1 for unofficial (debug-only) support llvm as input
+        moduleDesc.pInputModule = reinterpret_cast<const uint8_t *>(llvmCodeFuncArray);
         moduleDesc.inputSize = static_cast<uint32_t>(strlen(llvmCodeFuncArray) + 1);
         SUCCESS_OR_TERMINATE(xeModuleCreate(device0, &moduleDesc, &moduleFuncArray, nullptr));
     }
@@ -541,9 +575,11 @@ void initializeLevelZero(xe_device_handle_t &device0, xe_device_properties_t &de
 
     {
         xe_module_desc_t moduleDesc = {XE_MODULE_DESC_VERSION_CURRENT};
-        moduleDesc.format = static_cast<xe_module_format_t>(-1); // -1 for unofficial (debug-only) support llvm as input
-        moduleDesc.pInputModule = reinterpret_cast<const uint8_t*>(llvmCodeFuncArray);
-        moduleDesc.inputSize = static_cast<uint32_t>(strlen(llvmCodeFuncArray) + 1); //llvmCodeFuncParam) + 1);
+        moduleDesc.format = static_cast<xe_module_format_t>(
+            -1); // -1 for unofficial (debug-only) support llvm as input
+        moduleDesc.pInputModule = reinterpret_cast<const uint8_t *>(llvmCodeFuncArray);
+        moduleDesc.inputSize =
+            static_cast<uint32_t>(strlen(llvmCodeFuncArray) + 1); // llvmCodeFuncParam) + 1);
         SUCCESS_OR_TERMINATE(xeModuleCreate(device0, &moduleDesc, &moduleFuncParam, nullptr));
     }
 

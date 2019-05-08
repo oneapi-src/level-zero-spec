@@ -7,14 +7,14 @@
 
 namespace L0 {
 
-template <>
-struct EncodeStateBaseAddress<IGFX_GEN12_CORE> {
+template <> struct EncodeStateBaseAddress<IGFX_GEN12_CORE> {
     static const GFXCORE_FAMILY gfxCoreFamily = IGFX_GEN12_CORE;
     using GfxFamily = typename NEO::GfxFamilyMapper<gfxCoreFamily>::GfxFamily;
     using STATE_BASE_ADDRESS = typename GfxFamily::STATE_BASE_ADDRESS;
     using _3DSTATE_BINDING_TABLE_POOL_ALLOC = typename GfxFamily::_3DSTATE_BINDING_TABLE_POOL_ALLOC;
 
-    static const size_t size = sizeof(STATE_BASE_ADDRESS) + sizeof(_3DSTATE_BINDING_TABLE_POOL_ALLOC);
+    static const size_t size =
+        sizeof(STATE_BASE_ADDRESS) + sizeof(_3DSTATE_BINDING_TABLE_POOL_ALLOC);
 
     static void encode(CommandContainer &container) {
         STATE_BASE_ADDRESS cmd = GfxFamily::cmdInitStateBaseAddress;
@@ -54,13 +54,15 @@ struct EncodeStateBaseAddress<IGFX_GEN12_CORE> {
             cmd.setInstructionBaseAddressModifyEnable(true);
             cmd.setInstructionBaseAddress(container.getInstructionHeapBaseAddress());
             cmd.setInstructionBufferSizeModifyEnable(true);
-            cmd.setInstructionBufferSize(MemoryConstants::sizeOf4GBinPageEntities); // no bounds checking
+            cmd.setInstructionBufferSize(
+                MemoryConstants::sizeOf4GBinPageEntities); // no bounds checking
         }
 
         // Program caches
         auto mocsMapper = container.getDevice()->getMOCSMapper();
         cmd.setInstructionMemoryObjectControlState(mocsMapper->getCachedInstructionHeapMOCS());
-        // TODO : Stateless MOCS can't be cached unconditionally for e.g. when false cacheline sharing with CPU (hotptrs)
+        // TODO : Stateless MOCS can't be cached unconditionally for e.g. when false cacheline
+        // sharing with CPU (hotptrs)
         cmd.setStatelessDataPortAccessMemoryObjectControlState(mocsMapper->getFullyCachedMOCS());
 
         auto buffer = container.getCommandStream().getSpace(sizeof(cmd));
@@ -80,8 +82,7 @@ struct EncodeStateBaseAddress<IGFX_GEN12_CORE> {
     }
 };
 
-template <>
-void CommandListCoreFamily<IGFX_GEN12_CORE>::programFrontEndState() {
+template <> void CommandListCoreFamily<IGFX_GEN12_CORE>::programFrontEndState() {
     using GfxFamily = typename NEO::GfxFamilyMapper<IGFX_GEN12_CORE>::GfxFamily;
 
     {
@@ -92,17 +93,14 @@ void CommandListCoreFamily<IGFX_GEN12_CORE>::programFrontEndState() {
     }
 }
 
-template <>
-void CommandListCoreFamily<IGFX_GEN12_CORE>::programPreemption() {
+template <> void CommandListCoreFamily<IGFX_GEN12_CORE>::programPreemption() {
     // TODO : Reuse NEO's PreemptionHelper (requires refactoring because of linker problems)
 }
 
 template <>
-xe_result_t CommandListCoreFamily<IGFX_GEN12_CORE>::appendLaunchFunction(xe_function_handle_t hFunction,
-                                                                         const xe_thread_group_dimensions_t *pThreadGroupDimensions,
-                                                                         xe_event_handle_t hEvent,
-                                                                        uint32_t numWaitEvents,
-                                                                        xe_event_handle_t* phWaitEvents) {
+xe_result_t CommandListCoreFamily<IGFX_GEN12_CORE>::appendLaunchFunction(
+    xe_function_handle_t hFunction, const xe_thread_group_dimensions_t *pThreadGroupDimensions,
+    xe_event_handle_t hEvent, uint32_t numWaitEvents, xe_event_handle_t *phWaitEvents) {
     constexpr GFXCORE_FAMILY gfxCoreFamily = IGFX_GEN12_CORE;
     using GfxFamily = typename NEO::GfxFamilyMapper<gfxCoreFamily>::GfxFamily;
     using COMPUTE_WALKER = typename GfxFamily::COMPUTE_WALKER;
@@ -133,9 +131,10 @@ xe_result_t CommandListCoreFamily<IGFX_GEN12_CORE>::appendLaunchFunction(xe_func
     idd.setNumberOfThreadsInGpgpuThreadGroup(threadsPerThreadGroup);
 
     idd.setBarrierEnable(functionSignature.attributes.flags.hasBarriers);
-    idd.setSharedLocalMemorySize(functionSignature.attributes.slmInlineSize > 0
-                                     ? INTERFACE_DESCRIPTOR_DATA::SHARED_LOCAL_MEMORY_SIZE_ENCODES_64K
-                                     : INTERFACE_DESCRIPTOR_DATA::SHARED_LOCAL_MEMORY_SIZE_ENCODES_0K);
+    idd.setSharedLocalMemorySize(
+        functionSignature.attributes.slmInlineSize > 0
+            ? INTERFACE_DESCRIPTOR_DATA::SHARED_LOCAL_MEMORY_SIZE_ENCODES_64K
+            : INTERFACE_DESCRIPTOR_DATA::SHARED_LOCAL_MEMORY_SIZE_ENCODES_0K);
 
     // Set up binding table and surface states
     {
@@ -145,16 +144,15 @@ xe_result_t CommandListCoreFamily<IGFX_GEN12_CORE>::appendLaunchFunction(xe_func
         if (bindingTableStateCount > 0u) {
             auto ssh = indirectHeaps[SURFACE_STATE];
             assert(ssh);
-            bindingTablePointer = copyBindingTableAndSurfaceStates(ssh,
-                                                                   function->getSurfaceStateHeapData().get(),
-                                                                   function->getSurfaceStateHeapDataSize(),
-                                                                   bindingTableStateCount,
-                                                                   functionSignature.bindingTable.tableOffset);
+            bindingTablePointer = copyBindingTableAndSurfaceStates(
+                ssh, function->getSurfaceStateHeapData().get(),
+                function->getSurfaceStateHeapDataSize(), bindingTableStateCount,
+                functionSignature.bindingTable.tableOffset);
         }
 
         idd.setBindingTablePointer(bindingTablePointer);
 
-        auto bindingTableStatePrefetchCount = std::min(31u, 0u); //TODO: bindingTableStateCount
+        auto bindingTableStatePrefetchCount = std::min(31u, 0u); // TODO: bindingTableStateCount
         idd.setBindingTableEntryCount(bindingTableStatePrefetchCount);
     }
 
@@ -164,13 +162,15 @@ xe_result_t CommandListCoreFamily<IGFX_GEN12_CORE>::appendLaunchFunction(xe_func
     // Copy our sampler state if it exists
     if (functionSignature.samplerTable.numSamplers > 0) {
         samplerCount = functionSignature.samplerTable.numSamplers;
-        samplerStateOffset = copySamplerState(indirectHeaps[DYNAMIC_STATE],
-                                              functionSignature.samplerTable.tableOffset, functionSignature.samplerTable.numSamplers,
-                                              functionSignature.samplerTable.borderColor, function->getDynamicStateHeapData().get());
+        samplerStateOffset = copySamplerState(
+            indirectHeaps[DYNAMIC_STATE], functionSignature.samplerTable.tableOffset,
+            functionSignature.samplerTable.numSamplers, functionSignature.samplerTable.borderColor,
+            function->getDynamicStateHeapData().get());
     }
 
     idd.setSamplerStatePointer(samplerStateOffset);
-    auto samplerCountState = static_cast<typename INTERFACE_DESCRIPTOR_DATA::SAMPLER_COUNT>((samplerCount + 3) / 4);
+    auto samplerCountState =
+        static_cast<typename INTERFACE_DESCRIPTOR_DATA::SAMPLER_COUNT>((samplerCount + 3) / 4);
     idd.setSamplerCount(samplerCountState);
 
     // Copy the threadData to the indirect heap
@@ -214,10 +214,9 @@ xe_result_t CommandListCoreFamily<IGFX_GEN12_CORE>::appendLaunchFunction(xe_func
 
     // Set simd size
     auto simdSize = functionSignature.attributes.simdSize;
-    auto simdSizeOp =
-        COMPUTE_WALKER::SIMD_SIZE_SIMD32 * (simdSize == 32) |
-        COMPUTE_WALKER::SIMD_SIZE_SIMD16 * (simdSize == 16) |
-        COMPUTE_WALKER::SIMD_SIZE_SIMD8 * (simdSize == 8);
+    auto simdSizeOp = COMPUTE_WALKER::SIMD_SIZE_SIMD32 * (simdSize == 32) |
+                      COMPUTE_WALKER::SIMD_SIZE_SIMD16 * (simdSize == 16) |
+                      COMPUTE_WALKER::SIMD_SIZE_SIMD8 * (simdSize == 8);
     cmd.setSimdSize(static_cast<COMPUTE_WALKER::SIMD_SIZE>(simdSizeOp));
 
     // Set the last thread execution mask

@@ -19,7 +19,8 @@ xe_result_t CommandQueueImp::destroy() {
 
 void CommandQueueImp::initialize() {
     assert(globalMemoryManager);
-    allocation = globalMemoryManager->allocateDeviceMemory(device, defaultQueueCmdBufferSize, 4096u);
+    allocation =
+        globalMemoryManager->allocateDeviceMemory(device, defaultQueueCmdBufferSize, 4096u);
     assert(allocation);
 
     commandStream = new NEO::LinearStream(allocation->allocationRT);
@@ -33,7 +34,8 @@ Substream CommandQueueImp::getCmdSubstream(size_t size) {
         // TODO: Add reusable allocations pool instead of deferred deletion
         globalMemoryManager->freeMemory(this->allocation);
 
-        this->allocation = globalMemoryManager->allocateDeviceMemory(device, defaultQueueCmdBufferSize, 4096u);
+        this->allocation =
+            globalMemoryManager->allocateDeviceMemory(device, defaultQueueCmdBufferSize, 4096u);
         assert(this->allocation);
 
         commandStream->replaceGraphicsAllocation(this->allocation->allocationRT);
@@ -52,8 +54,8 @@ void CommandQueueImp::processCoherency(CommandList *c) {
     }
 }
 
-//FIXME: Remove direct access to taskCount.
-//Needed below
+// FIXME: Remove direct access to taskCount.
+// Needed below
 struct CommandStreamReceiver : public NEO::CommandStreamReceiver {
     using NEO::CommandStreamReceiver::latestFlushedTaskCount;
     using NEO::CommandStreamReceiver::taskCount;
@@ -63,20 +65,12 @@ void CommandQueueImp::submitBatchBuffer(size_t offset) {
     auto commandStreamReceiver = static_cast<CommandStreamReceiver *>(csrRT);
     assert(commandStreamReceiver);
 
-    NEO::BatchBuffer batchBuffer(
-        allocation->allocationRT,
-        offset,
-        0u,
-        nullptr,
-        false,
-        false,
-        NEO::QueueThrottle::HIGH,
-        commandStream->getUsed(),
-        commandStream);
+    NEO::BatchBuffer batchBuffer(allocation->allocationRT, offset, 0u, nullptr, false, false,
+                                 NEO::QueueThrottle::HIGH, commandStream->getUsed(), commandStream);
     NEO::ResidencyContainer residencyContainer;
     commandStreamReceiver->flush(batchBuffer, residencyContainer);
 
-    //FIXME: Remove direct access to taskCount.
+    // FIXME: Remove direct access to taskCount.
     this->taskCount = ++commandStreamReceiver->taskCount;
 }
 
@@ -130,9 +124,8 @@ CommandQueue *CommandQueue::create(uint32_t productFamily, Device *device, void 
     return commandQueue;
 }
 
-xe_result_t
-fenceCreate(xe_command_queue_handle_t hCommandQueue,
-            const xe_fence_desc_t* desc, xe_fence_handle_t* phFence) {
+xe_result_t fenceCreate(xe_command_queue_handle_t hCommandQueue, const xe_fence_desc_t *desc,
+                        xe_fence_handle_t *phFence) {
     return CommandQueue::fromHandle(hCommandQueue)->createFence(desc, phFence);
 }
 

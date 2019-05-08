@@ -7,6 +7,7 @@ struct CommandListProductFamily<IGFX_TIGERLAKE_HP> : public CommandListCoreFamil
     using CommandListCoreFamily::CommandListCoreFamily;
 };
 
-static CommandListPopulateFactory<IGFX_TIGERLAKE_HP, CommandListProductFamily<IGFX_TIGERLAKE_HP>> populateTGLHP;
+static CommandListPopulateFactory<IGFX_TIGERLAKE_HP, CommandListProductFamily<IGFX_TIGERLAKE_HP>>
+    populateTGLHP;
 
 } // namespace L0
