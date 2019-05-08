@@ -23,6 +23,8 @@
 #define _COMMON_HPP_
 #include <chrono>
 #include <string>
+#include <iostream>
+#include <vector>
 
 class TimerNanosecond {
   public:
@@ -77,5 +79,12 @@ template <typename T>
 int size_in_bytes(const std::vector<T> &v) {
     return static_cast<int>(sizeof(T) * v.size());
 }
+
+#define ERROR_RETURN(retval)                                   \
+    {                                                          \
+        std::cerr << "ERROR : " << __FILE__ << ":" << __LINE__ \
+                  << " " << ret << std::endl;                  \
+        std::terminate();                                      \
+    }
 
 #endif /* _COMMON_HPP_ */

@@ -19,23 +19,37 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-#ifndef _BENCHMARK_HPP_
-#define _BENCHMARK_HPP_
+#ifndef _HARDWARE_COUNTER_HPP_
+#define _HARDWARE_COUNTER_HPP_
 
-#include "xe_app.hpp"
-#include "api_static_probe.hpp"
+class HardwareCounter {
+  public:
+    HardwareCounter();
+    ~HardwareCounter();
+    void start(void);
+    void end(void);
+    long long counter_instructions(void);
+    long long counter_cycles(void);
+    static bool is_supported(void);
 
-namespace xe_api_benchmarks {
-inline void init() {
-    api_static_probe_init();
-}
-inline void cleanup() {
-    api_static_probe_cleanup();
-}
+  private:
+    int event_set;
 
-namespace latency {
-#include "benchmark_template/set_parameter.hpp"
-} /* namespace latency */
-} /* namespace xe_api_benchmarks */
+    /*
+     * It is used to check that at least on measurement was taken
+     * by calling start() and end()
+     */
+    bool measurement_taken;
 
-#endif /* _BENCHMARK_HPP_ */
+    /*
+     * It is used to determine if user finished the measurement
+     * by calling end() after start().
+     */
+    bool active_period;
+
+    static const unsigned int number_events = 2;
+    long long values[number_events];
+    inline void counter_asserts(void);
+};
+
+#endif /* _HARDWARE_COUNTER_HPP_ */

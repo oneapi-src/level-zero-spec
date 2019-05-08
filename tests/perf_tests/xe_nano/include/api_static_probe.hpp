@@ -23,7 +23,15 @@
 #define _API_STATIC_PROBE_HPP_
 
 #include <string>
+#include <assert.h>
+#include "xe_all.h"
 #include "common.hpp"
+#include "hardware_counter.hpp"
+
+extern HardwareCounter *hardware_counters;
+void api_static_probe_init();
+void api_static_probe_cleanup();
+bool api_static_probe_is_init();
 
 template <typename T>
 inline void print_probe_output(const std::string prefix,

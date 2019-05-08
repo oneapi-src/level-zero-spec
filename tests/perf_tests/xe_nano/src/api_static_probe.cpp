@@ -19,23 +19,24 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-#ifndef _BENCHMARK_HPP_
-#define _BENCHMARK_HPP_
-
-#include "xe_app.hpp"
 #include "api_static_probe.hpp"
 
-namespace xe_api_benchmarks {
-inline void init() {
-    api_static_probe_init();
-}
-inline void cleanup() {
-    api_static_probe_cleanup();
+HardwareCounter *hardware_counters = NULL;
+static bool static_probe_init = false;
+
+void api_static_probe_init() {
+    assert(static_probe_init == false); /* Initialize it only once */
+    static_probe_init = true;
+    if (HardwareCounter::is_supported())
+        hardware_counters = new HardwareCounter;
 }
 
-namespace latency {
-#include "benchmark_template/set_parameter.hpp"
-} /* namespace latency */
-} /* namespace xe_api_benchmarks */
+void api_static_probe_cleanup() {
+    /* api static probe needs to be initialized first*/
+    assert(static_probe_init == true);
+    delete hardware_counters;
+}
 
-#endif /* _BENCHMARK_HPP_ */
+bool api_static_probe_is_init() {
+    return static_probe_init;
+}
