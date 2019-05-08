@@ -567,8 +567,8 @@ There are multiple levels of constructs needed for executing functions on the de
 
 The following diagram provides a high level overview of the major parts of the system.
 
-![Driver](../images/module.png?raw=true)  
-@image latex module.png
+![Driver](../images/core_module.png?raw=true)  
+@image latex core_module.png
 
 ## <a name="mod">Modules</a>
 Modules can be created from an IL or directly from native format using ::xeModuleCreate.
