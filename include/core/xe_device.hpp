@@ -198,7 +198,7 @@ namespace xe
             uint32_t maxImageArraySlices;                   ///< [out] Maximum image array slices
             memory_access_capabilities_t hostAllocCapabilities; ///< [out] Bitfield describing host memory capabilities
             memory_access_capabilities_t deviceAllocCapabilities;   ///< [out] Bitfield describing device memory capabilities
-            memory_access_capabilities_t sharedAllocCapabilities;   ///< [out] Bitfield describing shared memory capabilities
+            memory_access_capabilities_t sharedSingleDeviceAllocCapabilities;   ///< [out] Bitfield describing shared (single-device) memory capabilities
             memory_access_capabilities_t sharedCrossDeviceAllocCapabilities;///< [out] Bitfield describing shared (cross-device) memory capabilities
             memory_access_capabilities_t sharedSystemDeviceAllocCapabilities;   ///< [out] Bitfield describing shared (system) memory capabilities
             uint32_t intermediateCacheSize;                 ///< [out] Per-cache Intermediate Cache (L1/L2) size, in bytes

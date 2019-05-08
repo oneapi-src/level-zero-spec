@@ -636,8 +636,8 @@ xeGetGlobalProcAddrTable(
     context.xeGlobal.pfnSharedMemAlloc                                       = ptable->pfnSharedMemAlloc;
     ptable->pfnSharedMemAlloc                                                = xeSharedMemAlloc;
 
-    context.xeGlobal.pfnMemAlloc                                             = ptable->pfnMemAlloc;
-    ptable->pfnMemAlloc                                                      = xeMemAlloc;
+    context.xeGlobal.pfnDeviceMemAlloc                                       = ptable->pfnDeviceMemAlloc;
+    ptable->pfnDeviceMemAlloc                                                = xeDeviceMemAlloc;
 
     context.xeGlobal.pfnHostMemAlloc                                         = ptable->pfnHostMemAlloc;
     ptable->pfnHostMemAlloc                                                  = xeHostMemAlloc;
@@ -2051,9 +2051,9 @@ xeSharedMemAlloc(
 }
 
 ///////////////////////////////////////////////////////////////////////////////
-/// @brief Intercept function for xeMemAlloc
+/// @brief Intercept function for xeDeviceMemAlloc
 xe_result_t __xecall
-xeMemAlloc(
+xeDeviceMemAlloc(
     xe_device_handle_t hDevice,                     ///< [in] handle of the device
     xe_device_mem_alloc_flag_t flags,               ///< [in] flags specifying additional allocation controls
     size_t size,                                    ///< [in] size in bytes to allocate
@@ -2071,7 +2071,7 @@ xeMemAlloc(
 
     }
 
-    return context.xeGlobal.pfnMemAlloc( hDevice, flags, size, alignment, ptr );
+    return context.xeGlobal.pfnDeviceMemAlloc( hDevice, flags, size, alignment, ptr );
 }
 
 ///////////////////////////////////////////////////////////////////////////////

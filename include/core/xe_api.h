@@ -479,7 +479,7 @@ typedef struct _xe_global_apitable_t
     xe_pfnInit_t                                                pfnInit;
     xe_pfnGetDriverVersion_t                                    pfnGetDriverVersion;
     xe_pfnSharedMemAlloc_t                                      pfnSharedMemAlloc;
-    xe_pfnMemAlloc_t                                            pfnMemAlloc;
+    xe_pfnDeviceMemAlloc_t                                      pfnDeviceMemAlloc;
     xe_pfnHostMemAlloc_t                                        pfnHostMemAlloc;
     xe_pfnMemFree_t                                             pfnMemFree;
     xe_pfnMemGetProperties_t                                    pfnMemGetProperties;

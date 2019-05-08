@@ -352,8 +352,8 @@ members:
       name: deviceAllocCapabilities
       desc: "[out] Bitfield describing device memory capabilities"
     - type: $x_memory_access_capabilities_t
-      name: sharedAllocCapabilities
-      desc: "[out] Bitfield describing shared memory capabilities"
+      name: sharedSingleDeviceAllocCapabilities
+      desc: "[out] Bitfield describing shared (single-device) memory capabilities"
     - type: $x_memory_access_capabilities_t
       name: sharedCrossDeviceAllocCapabilities
       desc: "[out] Bitfield describing shared (cross-device) memory capabilities"

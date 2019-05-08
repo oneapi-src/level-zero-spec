@@ -106,7 +106,7 @@ namespace xe
     /// 
     /// @throws result_t
     inline void*
-    MemAlloc(
+    DeviceMemAlloc(
         device_handle_t hDevice,                        ///< [in] handle of the device
         device_mem_alloc_flag_t flags,                  ///< [in] flags specifying additional allocation controls
         size_t size,                                    ///< [in] size in bytes to allocate

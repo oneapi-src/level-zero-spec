@@ -375,7 +375,7 @@ typedef struct _xe_device_memory_properties_t
     uint32_t maxImageArraySlices;                   ///< [out] Maximum image array slices
     xe_memory_access_capabilities_t hostAllocCapabilities;  ///< [out] Bitfield describing host memory capabilities
     xe_memory_access_capabilities_t deviceAllocCapabilities;///< [out] Bitfield describing device memory capabilities
-    xe_memory_access_capabilities_t sharedAllocCapabilities;///< [out] Bitfield describing shared memory capabilities
+    xe_memory_access_capabilities_t sharedSingleDeviceAllocCapabilities;///< [out] Bitfield describing shared (single-device) memory capabilities
     xe_memory_access_capabilities_t sharedCrossDeviceAllocCapabilities; ///< [out] Bitfield describing shared (cross-device) memory capabilities
     xe_memory_access_capabilities_t sharedSystemDeviceAllocCapabilities;///< [out] Bitfield describing shared (system) memory capabilities
     uint32_t intermediateCacheSize;                 ///< [out] Per-cache Intermediate Cache (L1/L2) size, in bytes
