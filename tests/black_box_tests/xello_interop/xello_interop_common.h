@@ -20,3 +20,5 @@ void clCleanup();
 void initArrays();
 int validateArrays(float *c);
 int validateResults(bool aubMode);
+
+extern bool verbose;

@@ -4,6 +4,9 @@
 int main(int argc, char **argv) {
     int ret;
 
+    if (isParamEnabled(argc, argv, "-v", "--verbose"))
+        verbose = true;
+
     initArrays();
 
     ret = clInit();

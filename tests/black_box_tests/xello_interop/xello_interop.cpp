@@ -22,6 +22,9 @@ int main(int argc, char **argv) {
         return 0;
     }
 
+    if (isParamEnabled(argc, argv, "-v", "--verbose"))
+        verbose = true;
+
     initArrays();
 
     ret = xeInit();

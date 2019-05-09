@@ -11,6 +11,11 @@
 #include <fstream>
 #include <memory>
 
+bool verbose = false;
+
+std::ofstream noOutput;
+#define vcout (verbose ? (std::cout) : noOutput)
+
 const char *source = "__kernel void matmat_gpu("
                      "       int n,"
                      "       int m,"
@@ -51,9 +56,6 @@ static void matmat_host(int n, int m, int p, float *a, float *b, float *c) {
     }
 }
 
-extern bool verbose;
-bool verbose = false;
-
 // CL Objects
 cl_platform_id clPlatform;
 cl_device_id clDevice;
@@ -77,20 +79,21 @@ void *xeMemC;
 int xeInit() {
     xe_result_t ret;
 
-    std::cout << "xeInit...\n";
+    vcout << "xeInit...\n";
     ret = xeInit(XE_INIT_FLAG_NONE);
     if (ret) {
         std::cout << "xeInit failed ret " << static_cast<int>(ret) << "\n";
         return static_cast<int>(ret);
     }
 
-    std::cout << "xeGetDevice...\n";
+    vcout << "xeGetDevice...\n";
     ret = xeDeviceGet(0, &xeDevice);
     if (ret) {
         std::cout << "xeGetDevice failed ret " << static_cast<int>(ret) << "\n";
         return static_cast<int>(ret);
     }
 
+    vcout << "xeDeviceGetProperties...\n";
     xe_device_properties_t xeDeviceProperties = {XE_DEVICE_PROPERTIES_VERSION_CURRENT};
     ret = xeDeviceGetProperties(xeDevice, &xeDeviceProperties);
     if (ret) {
@@ -111,7 +114,7 @@ int xeInitProgram() {
         return -1;
     }
 
-    std::cout << "xeModuleCreate...\n";
+    vcout << "xeModuleCreate...\n";
     xe_module_desc_t xeModuleDesc = {XE_MODULE_DESC_VERSION_CURRENT};
     xeModuleDesc.format = XE_MODULE_FORMAT_IL_SPIRV;
     xeModuleDesc.pInputModule = reinterpret_cast<const uint8_t *>(spirvModule.get());
@@ -122,7 +125,7 @@ int xeInitProgram() {
         return static_cast<int>(ret);
     }
 
-    std::cout << "xeFunctionCreate...\n";
+    vcout << "xeFunctionCreate...\n";
     xe_function_desc_t xeFunctionDesc = {XE_FUNCTION_DESC_VERSION_CURRENT};
     xeFunctionDesc.pFunctionName = "matmat_gpu";
     ret = xeFunctionCreate(xeModule, &xeFunctionDesc, &xeFunction);
@@ -131,7 +134,7 @@ int xeInitProgram() {
         return static_cast<int>(ret);
     }
 
-    std::cout << "xeCommandListCreate...\n";
+    vcout << "xeCommandListCreate...\n";
     xe_command_list_desc_t xeCmdListDesc = {XE_COMMAND_LIST_DESC_VERSION_CURRENT};
     ret = xeCommandListCreate(xeDevice, &xeCmdListDesc, &xeCmdList);
     if (ret) {
@@ -145,14 +148,14 @@ int xeInitProgram() {
 int xeUseCLProgram() {
     xe_result_t ret;
 
-    std::cout << "xeDeviceRegisterCLProgram...\n";
+    vcout << "xeDeviceRegisterCLProgram...\n";
     ret = xeDeviceRegisterCLProgram(xeDevice, clContext, clProgram, &xeModule);
     if (ret) {
         std::cout << "xeDeviceRegisterCLProgram failed ret " << static_cast<int>(ret) << "\n";
         return static_cast<int>(ret);
     }
 
-    std::cout << "xeFunctionCreate...\n";
+    vcout << "xeFunctionCreate...\n";
     xe_function_desc_t xeFunctionDesc = {XE_FUNCTION_DESC_VERSION_CURRENT};
     xeFunctionDesc.pFunctionName = "matmat_gpu";
     ret = xeFunctionCreate(xeModule, &xeFunctionDesc, &xeFunction);
@@ -161,7 +164,7 @@ int xeUseCLProgram() {
         return static_cast<int>(ret);
     }
 
-    std::cout << "xeCommandListCreate...\n";
+    vcout << "xeCommandListCreate...\n";
     xe_command_list_desc_t xeCmdListDesc = {XE_COMMAND_LIST_DESC_VERSION_CURRENT};
     ret = xeCommandListCreate(xeDevice, &xeCmdListDesc, &xeCmdList);
     if (ret) {
@@ -175,7 +178,7 @@ int xeUseCLProgram() {
 int xeInitBuffers() {
     xe_result_t ret;
 
-    std::cout << "xeSharedMemAlloc...\n";
+    vcout << "xeSharedMemAlloc...\n";
     ret = xeSharedMemAlloc(xeDevice, XE_DEVICE_MEM_ALLOC_FLAG_DEFAULT,
                            XE_HOST_MEM_ALLOC_FLAG_DEFAULT, sizeof(hostBufA), 1, &xeMemA);
     if (ret) {
@@ -203,7 +206,7 @@ int xeInitBuffers() {
 int xeUseCLBuffers() {
     xe_result_t ret;
 
-    std::cout << "xeDeviceRegisterCLMemory\n";
+    vcout << "xeDeviceRegisterCLMemory...\n";
 
     ret = xeDeviceRegisterCLMemory(xeDevice, clContext, clMemA, &xeMemA);
     if (ret) {
@@ -229,7 +232,7 @@ int xeUseCLBuffers() {
 int xeUseCLCmdQueue() {
     xe_result_t ret;
 
-    std::cout << "xeDeviceRegisterCLCommandQueue...\n";
+    vcout << "xeDeviceRegisterCLCommandQueue...\n";
     ret = xeDeviceRegisterCLCommandQueue(xeDevice, clContext, clQueue, &xeCmdQueue);
     if (ret) {
         std::cout << "xeDeviceRegisterCLCommandQueue failed ret " << static_cast<int>(ret) << "\n";
@@ -247,7 +250,7 @@ int xeInitCmdQueue() {
     cmdQueueDesc.ordinal = 0;
     cmdQueueDesc.mode = XE_COMMAND_QUEUE_MODE_ASYNCHRONOUS;
 
-    std::cout << "xeCommandQueueCreate...\n";
+    vcout << "xeCommandQueueCreate...\n";
     ret = xeCommandQueueCreate(xeDevice, &cmdQueueDesc, &xeCmdQueue);
     if (ret) {
         std::cout << "xeCommandQueueCreate failed ret " << static_cast<int>(ret) << "\n";
@@ -260,7 +263,7 @@ int xeInitCmdQueue() {
 int xeCompute() {
     xe_result_t ret;
 
-    std::cout << "xeCommandListAppendMemoryCopy...\n";
+    vcout << "xeCommandListAppendMemoryCopy...\n";
     ret = xeCommandListAppendMemoryCopy(xeCmdList, xeMemA, hostBufA, sizeof(hostBufA), nullptr, 0,
                                         nullptr);
     if (ret) {
@@ -276,13 +279,14 @@ int xeCompute() {
     }
 
     // Wait until memory copies are ready before launching the function
-    std::cout << "xeCommandListAppendBarrier...\n";
+    vcout << "xeCommandListAppendBarrier...\n";
     ret = xeCommandListAppendBarrier(xeCmdList, nullptr, 0, nullptr);
     if (ret) {
         std::cout << "xeCommandListAppendBarrier failed ret " << static_cast<int>(ret) << "\n";
         return static_cast<int>(ret);
     }
 
+    vcout << "xeFunctionSetArgumentValue...\n";
     int val = N;
     ret = xeFunctionSetArgumentValue(xeFunction, 0, sizeof(val), &val);
     if (ret) {
@@ -322,6 +326,7 @@ int xeCompute() {
         return static_cast<int>(ret);
     }
 
+    vcout << "xeFunctionSuggestGroupSize...";
     uint32_t groupSizeX = 16;
     uint32_t groupSizeY = 16;
     uint32_t groupSizeZ = 1;
@@ -331,6 +336,7 @@ int xeCompute() {
         return static_cast<int>(ret);
     }
 
+    vcout << "xeFunctionSetGroupSize...";
     ret = xeFunctionSetGroupSize(xeFunction, groupSizeX, groupSizeY, groupSizeZ);
     if (ret) {
         std::cout << "xeFunctionSetGroupSize failed ret " << static_cast<int>(ret) << "\n";
@@ -344,7 +350,7 @@ int xeCompute() {
     xeGroupDim.groupCountY = groupCountY;
     xeGroupDim.groupCountZ = 1;
 
-    std::cout << "xeCommandListAppendLaunchFunction...\n";
+    vcout << "xeCommandListAppendLaunchFunction...\n";
     ret =
         xeCommandListAppendLaunchFunction(xeCmdList, xeFunction, &xeGroupDim, nullptr, 0, nullptr);
     if (ret) {
@@ -354,7 +360,7 @@ int xeCompute() {
     }
 
     // Wait until function has completed
-    std::cout << "xeCommandListAppendBarrier...\n";
+    vcout << "xeCommandListAppendBarrier...\n";
     ret = xeCommandListAppendBarrier(xeCmdList, nullptr, 0, nullptr);
     if (ret) {
         std::cout << "xeCommandListAppendBarrier failed ret " << static_cast<int>(ret) << "\n";
@@ -362,7 +368,7 @@ int xeCompute() {
     }
 
     // Copy results back
-    std::cout << "xeCommandListAppendMemoryCopy...\n";
+    vcout << "xeCommandListAppendMemoryCopy...\n";
     ret = xeCommandListAppendMemoryCopy(xeCmdList, hostBufCXE, xeMemC, sizeof(hostBufB), nullptr, 0,
                                         nullptr);
     if (ret) {
@@ -371,14 +377,14 @@ int xeCompute() {
     }
 
     // Dispatch function and wait
-    std::cout << "xeCommandListClose...\n";
+    vcout << "xeCommandListClose...\n";
     ret = xeCommandListClose(xeCmdList);
     if (ret) {
         std::cout << "xeCommandListClose failed ret " << static_cast<int>(ret) << "\n";
         return static_cast<int>(ret);
     }
 
-    std::cout << "xeCommandQueueExecuteCommandLists...\n";
+    vcout << "xeCommandQueueExecuteCommandLists...\n";
     ret = xeCommandQueueExecuteCommandLists(xeCmdQueue, 1, &xeCmdList, nullptr);
     if (ret) {
         std::cout << "xeCommandQueueExecuteCommandLists failed ret " << static_cast<int>(ret)
@@ -386,7 +392,7 @@ int xeCompute() {
         return static_cast<int>(ret);
     }
 
-    std::cout << "xeCommandQueueSynchronize...\n";
+    vcout << "xeCommandQueueSynchronize...\n";
     ret = xeCommandQueueSynchronize(xeCmdQueue, std::numeric_limits<uint32_t>::max());
     if (ret) {
         std::cout << "xeCommandQueueSynchronize failed ret " << static_cast<int>(ret) << "\n";
@@ -410,22 +416,23 @@ int clInit() {
     cl_int ret;
     char str[512];
 
-    std::cout << "clGetPlatformIDs...\n";
+    vcout << "clGetPlatformIDs...\n";
     ret = clGetPlatformIDs(1, &clPlatform, NULL);
     if (ret) {
         std::cout << "clGetPlatformIDs failed ret " << static_cast<int>(ret) << "\n";
         return static_cast<int>(ret);
     }
 
+    vcout << "clGetPlatformInfo...\n";
     ret = clGetPlatformInfo(clPlatform, CL_PLATFORM_NAME, 512, str, NULL);
     if (ret) {
         std::cout << "clGetPlatformInfo failed ret " << static_cast<int>(ret) << "\n";
         return static_cast<int>(ret);
     }
 
-    std::cout << "clPlatform name " << str << "\n";
+    vcout << "clPlatform name " << str << "\n";
 
-    std::cout << "clGetDeviceIDs...\n";
+    vcout << "clGetDeviceIDs...\n";
     ret = clGetDeviceIDs(clPlatform, CL_DEVICE_TYPE_ALL, 1, &clDevice, NULL);
     if (ret) {
         std::cout << "clGetPlatformInfo failed ret " << static_cast<int>(ret) << "\n";
@@ -438,16 +445,16 @@ int clInit() {
         return static_cast<int>(ret);
     }
 
-    std::cout << "clDevice name " << str << "\n";
+    vcout << "clDevice name " << str << "\n";
 
-    std::cout << "clCreateContext...\n";
+    vcout << "clCreateContext...\n";
     clContext = clCreateContext(NULL, 1, &clDevice, NULL, NULL, &ret);
     if (!clContext) {
         std::cout << "clCreateContext failed ret " << static_cast<int>(ret) << "\n";
         return static_cast<int>(ret);
     }
 
-    std::cout << "clCreateKernel...\n";
+    vcout << "clCreateKernel...\n";
     clQueue = clCreateCommandQueueWithProperties(clContext, clDevice, 0, &ret);
     if (!clQueue) {
         std::cout << "clCreateCommandQueue failed ret " << static_cast<int>(ret) << "\n";
@@ -460,21 +467,21 @@ int clInit() {
 int clInitProgram() {
     cl_int ret;
 
-    std::cout << "clCreateProgramWithSource...\n";
+    vcout << "clCreateProgramWithSource...\n";
     clProgram = clCreateProgramWithSource(clContext, 1, (const char **)&source, NULL, &ret);
     if (!clProgram) {
         std::cout << "clCreateProgramWithSource failed ret " << static_cast<int>(ret) << "\n";
         return static_cast<int>(ret);
     }
 
-    std::cout << "clBuildProgram...\n";
+    vcout << "clBuildProgram...\n";
     ret = clBuildProgram(clProgram, 1, &clDevice, NULL, NULL, NULL);
     if (ret) {
         std::cout << "clBuildProgram failed ret " << static_cast<int>(ret) << "\n";
         return static_cast<int>(ret);
     }
 
-    std::cout << "clCreateKernel...\n";
+    vcout << "clCreateKernel...\n";
     clKernel = clCreateKernel(clProgram, "matmat_gpu", &ret);
     if (ret) {
         std::cout << "clCreateKernel failed ret " << static_cast<int>(ret) << "\n";
@@ -487,7 +494,7 @@ int clInitProgram() {
 int clInitBuffers() {
     cl_int ret;
 
-    std::cout << "clCreateBuffer...\n";
+    vcout << "clCreateBuffer...\n";
     clMemA = clCreateBuffer(clContext, CL_MEM_READ_ONLY | CL_MEM_USE_HOST_PTR, sizeof(hostBufA),
                             hostBufA, &ret);
     if (!clMemA) {
@@ -514,7 +521,7 @@ int clInitBuffers() {
 int clCompute() {
     int val, ret;
 
-    std::cout << "clEnqueueWriteBuffer...\n";
+    vcout << "clEnqueueWriteBuffer...\n";
     ret = clEnqueueWriteBuffer(clQueue, clMemA, CL_TRUE, 0, sizeof(hostBufA), hostBufA, 0, nullptr,
                                nullptr);
     if (ret) {
@@ -529,6 +536,7 @@ int clCompute() {
         return static_cast<int>(ret);
     }
 
+    vcout << "clSetKernelArg...\n";
     val = N;
     ret = clSetKernelArg(clKernel, 0, sizeof(val), &val);
     if (ret) {
@@ -568,7 +576,7 @@ int clCompute() {
         return static_cast<int>(ret);
     }
 
-    std::cout << "clEnqueueNDRangeKernel...\n";
+    vcout << "clEnqueueNDRangeKernel...\n";
     size_t global_work_size[] = {N, P};
     size_t local_work_size[] = {1, 1};
     ret = clEnqueueNDRangeKernel(clQueue, clKernel, 2, NULL, global_work_size, local_work_size, 0,
@@ -578,14 +586,14 @@ int clCompute() {
         return static_cast<int>(ret);
     }
 
-    std::cout << "clWaitForEvents...\n";
+    vcout << "clWaitForEvents...\n";
     ret = clWaitForEvents(1, &event);
     if (ret) {
         std::cout << "clWaitForEvents failed ret " << static_cast<int>(ret) << "\n";
         return static_cast<int>(ret);
     }
 
-    std::cout << "clEnqueueReadBuffer...\n";
+    vcout << "clEnqueueReadBuffer...\n";
     ret = clEnqueueReadBuffer(clQueue, clMemC, CL_TRUE, 0, sizeof(hostBufCCL), hostBufCCL, 0, NULL,
                               &event);
     if (ret) {
@@ -593,7 +601,7 @@ int clCompute() {
         return static_cast<int>(ret);
     }
 
-    std::cout << "clWaitForEvents...\n";
+    vcout << "clWaitForEvents...\n";
     ret = clWaitForEvents(1, &event);
     if (ret) {
         std::cout << "clWaitForEvents failed ret " << static_cast<int>(ret) << "\n";

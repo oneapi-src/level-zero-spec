@@ -3,7 +3,9 @@
 
 int main(int argc, char **argv) {
     int ret;
-    bool test_register_cl_program = true;
+
+    if (isParamEnabled(argc, argv, "-v", "--verbose"))
+        verbose = true;
 
     initArrays();
 
@@ -15,23 +17,13 @@ int main(int argc, char **argv) {
     if (ret)
         return -1;
 
-    if (test_register_cl_program) {
-        ret = clInitProgram();
-        if (ret)
-            return -1;
+    ret = clInitProgram();
+    if (ret)
+        return -1;
 
-        ret = xeUseCLProgram();
-        if (ret)
-            return -1;
-    } else {
-        ret = xeInitProgram();
-        if (ret)
-            return -1;
-
-        ret = clInitProgram();
-        if (ret)
-            return -1;
-    }
+    ret = xeUseCLProgram();
+    if (ret)
+        return -1;
 
     ret = xeInitBuffers();
     if (ret)
