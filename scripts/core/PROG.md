@@ -571,8 +571,8 @@ There are multiple levels of constructs needed for executing functions on the de
 
 The following diagram provides a high level overview of the major parts of the system.
 
-![Driver](../images/module.png?raw=true)  
-@image latex module.png
+![Driver](../images/core_module.png?raw=true)  
+@image latex core_module.png
 
 ${"##"} <a name="mod">Modules</a>
 Modules can be created from an IL or directly from native format using ::${x}ModuleCreate.
@@ -797,7 +797,7 @@ device to generate the parameters.
     ${x}_thread_group_dimensions_t* pIndirectArgs;
     
     ...
-    ${x}MemAlloc(hDevice, flags, sizeof(${x}_thread_group_dimensions_t), sizeof(uint32_t), &pIndirectArgs);
+    ${x}DeviceMemAlloc(hDevice, flags, sizeof(${x}_thread_group_dimensions_t), sizeof(uint32_t), &pIndirectArgs);
 
     // Append function
     ${x}CommandListAppendLaunchFunctionIndirect(hCommandList, hFunction, &pIndirectArgs, nullptr, 0, nullptr);
@@ -885,7 +885,7 @@ A 16-byte unique device identifier (uuid) can be obtained for a device or sub-de
     assert(subdeviceProps.subdeviceId == 2);    // Ensure that we have a handle to the sub-device we asked for.
 
     void* pMemForSubDevice2;
-    ${x}MemAlloc(subDevice, ${X}_DEVICE_MEM_ALLOC_FLAG_DEFAULT, memSize, sizeof(uint32_t), &pMemForSubDevice2);
+    ${x}DeviceMemAlloc(subDevice, ${X}_DEVICE_MEM_ALLOC_FLAG_DEFAULT, memSize, sizeof(uint32_t), &pMemForSubDevice2);
     ...
 
     ...
@@ -1017,7 +1017,7 @@ The following code examples demonstrate how to use the memory IPC APIs:
 1. First, the allocation is made, packaged, and sent on the sending process:
 ```c
     void* dptr = nullptr;
-    ${x}MemAlloc(hDevice, flags, size, alignment, &dptr);
+    ${x}DeviceMemAlloc(hDevice, flags, size, alignment, &dptr);
 
     ${x}_ipc_mem_handle_t hIPC;
     ${x}IpcGetMemHandle(dptr, &hIPC);

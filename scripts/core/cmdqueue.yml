@@ -1,6 +1,7 @@
 --- #--------------------------------------------------------------------------
 type: header
 desc: "Intel $OneApi Level-Zero APIs for Command Queue"
+ordinal: "2"
 --- #--------------------------------------------------------------------------
 type: enum
 desc: API version of $x_command_queue_desc_t
@@ -94,6 +95,7 @@ desc: "Creates a command queue on the device."
 class: $xCommandQueue
 name: Create
 decl: static
+ordinal: "0"
 analogue:
     - "**clCreateCommandQueue**"
     - cuCtxCreate
@@ -120,6 +122,7 @@ desc: "Destroys a command queue."
 class: $xCommandQueue
 name: Destroy
 decl: static
+ordinal: "0"
 analogue:
     - "**clReleaseCommandQueue**"
     - cuCtxDestroy
@@ -137,6 +140,7 @@ type: function
 desc: "Executes a command list in a command queue."
 class: $xCommandQueue
 name: ExecuteCommandLists
+ordinal: "1"
 analogue:
     - vkQueueSubmit
 details:
@@ -164,6 +168,7 @@ type: function
 desc: "Synchronizes a command queue by waiting on the host."
 class: $xCommandQueue
 name: Synchronize
+ordinal: "1"
 details:
     - "The application may call this function from simultaneous threads."
     - "The implementation of this function should be lock-free."
@@ -185,6 +190,9 @@ type: class
 desc: "C++ wrapper for command queue"
 name: $xCommandQueue
 members:
+    - type: $xDevice*
+      name: pDevice
+      desc: "pointer to parent object"
     - type: $x_command_queue_handle_t
       name: handle
       desc: "handle of command queue object"

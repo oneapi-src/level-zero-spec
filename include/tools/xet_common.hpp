@@ -34,51 +34,64 @@
 #define _XET_COMMON_HPP
 #if defined(__cplusplus)
 #pragma once
-#include "xet_api.h"
+#if !defined(_XET_API_HPP)
+#pragma message("warning: this file is not intended to be included directly")
+#endif
+#include <stdint.h>
+#include <string.h>
+//#include "xet_api.h"
 #include <tuple>
-#include "xe_all.hpp"
+#include "xe_api.hpp"
 
 namespace xet
 {
     ///////////////////////////////////////////////////////////////////////////////
     /// @brief Handle of device object
     class Device;
-    using device_handle_t = Device*;
+    struct _device_handle_t;
+    using device_handle_t = _device_handle_t*;
 
     ///////////////////////////////////////////////////////////////////////////////
     /// @brief Handle of command list object
     class CommandList;
-    using command_list_handle_t = CommandList*;
+    struct _command_list_handle_t;
+    using command_list_handle_t = _command_list_handle_t*;
 
     ///////////////////////////////////////////////////////////////////////////////
     /// @brief Handle of metric group's object
     class MetricGroup;
-    using metric_group_handle_t = MetricGroup*;
+    struct _metric_group_handle_t;
+    using metric_group_handle_t = _metric_group_handle_t*;
 
     ///////////////////////////////////////////////////////////////////////////////
     /// @brief Handle of metric's object
     class Metric;
-    using metric_handle_t = Metric*;
+    struct _metric_handle_t;
+    using metric_handle_t = _metric_handle_t*;
 
     ///////////////////////////////////////////////////////////////////////////////
     /// @brief Handle of metric tracer's object
     class MetricTracer;
-    using metric_tracer_handle_t = MetricTracer*;
+    struct _metric_tracer_handle_t;
+    using metric_tracer_handle_t = _metric_tracer_handle_t*;
 
     ///////////////////////////////////////////////////////////////////////////////
     /// @brief Handle of metric query pool's object
     class MetricQueryPool;
-    using metric_query_pool_handle_t = MetricQueryPool*;
+    struct _metric_query_pool_handle_t;
+    using metric_query_pool_handle_t = _metric_query_pool_handle_t*;
 
     ///////////////////////////////////////////////////////////////////////////////
     /// @brief Handle of metric query's object
     class MetricQuery;
-    using metric_query_handle_t = MetricQuery*;
+    struct _metric_query_handle_t;
+    using metric_query_handle_t = _metric_query_handle_t*;
 
     ///////////////////////////////////////////////////////////////////////////////
     /// @brief Handle of power object
     class Power;
-    using power_handle_t = Power*;
+    struct _power_handle_t;
+    using power_handle_t = _power_handle_t*;
 
     ///////////////////////////////////////////////////////////////////////////////
     /// @brief Handle of a frequency domain on a device

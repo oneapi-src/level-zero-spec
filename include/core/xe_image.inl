@@ -34,10 +34,25 @@
 #define _XE_IMAGE_INL
 #if defined(__cplusplus)
 #pragma once
+#if !defined(_XE_API_HPP)
+#pragma message("warning: this file is not intended to be included directly")
+#endif
 #include "xe_image.hpp"
 
 namespace xe
 {
+    ///////////////////////////////////////////////////////////////////////////////
+    Image::Image( 
+        Device* pDevice,                                ///< pointer to parent object
+        image_handle_t handle,                          ///< handle of image object
+        desc_t desc                                     ///< descriptor of the image object
+        ) :
+        m_pDevice( pDevice ),
+        m_handle( handle ),
+        m_desc( desc )
+    {
+    }
+
     ///////////////////////////////////////////////////////////////////////////////
     /// @brief C++ wrapper for ::xeImageGetProperties
     /// 
@@ -46,13 +61,13 @@ namespace xe
     ///     - The implementation of this function should be lock-free.
     /// 
     /// @returns
-    ///     - ::image_properties_t: pointer to image properties
+    ///     - properties_t: pointer to image properties
     /// 
     /// @throws result_t
-    inline Image::image_properties_t 
+    inline Image::properties_t 
     Image::GetProperties(
-        device_handle_t hDevice,                        ///< [in] handle of the device
-        const image_desc_t* desc                        ///< [in] pointer to image descriptor
+        Device* hDevice,                                ///< [in] handle of the device
+        const desc_t* desc                              ///< [in] pointer to image descriptor
         )
     {
         // auto result = ::xeImageGetProperties( handle, hDevice, desc );
@@ -71,13 +86,13 @@ namespace xe
     ///     - clCreateImage
     /// 
     /// @returns
-    ///     - ::image_handle_t: pointer to handle of image object created
+    ///     - Image: pointer to handle of image object created
     /// 
     /// @throws result_t
-    inline image_handle_t 
+    inline Image* 
     Image::Create(
-        device_handle_t hDevice,                        ///< [in] handle of the device
-        const image_desc_t* desc                        ///< [in] pointer to image descriptor
+        Device* hDevice,                                ///< [in] handle of the device
+        const desc_t* desc                              ///< [in] pointer to image descriptor
         )
     {
         // auto result = ::xeImageCreate( handle, hDevice, desc );
@@ -99,7 +114,7 @@ namespace xe
     /// @throws result_t
     inline void 
     Image::Destroy(
-        image_handle_t hImage                           ///< [in] handle of image object to destroy
+        Image* hImage                                   ///< [in] handle of image object to destroy
         )
     {
         // auto result = ::xeImageDestroy( handle, hImage );

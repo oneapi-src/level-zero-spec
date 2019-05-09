@@ -48,6 +48,7 @@ desc: "Creates a pool for a set of event(s) on the device."
 class: $xEventPool
 name: Create
 decl: static
+ordinal: "0"
 details:
     - "The application may call this function from simultaneous threads."
     - "The implementation of this function should be lock-free."
@@ -70,6 +71,7 @@ desc: "Deletes an event pool object."
 class: $xEventPool
 name: Destroy
 decl: static
+ordinal: "0"
 details:
     - "The application is responsible for destroying all event handles created from the pool before destroying the pool itself"
     - "The application is responsible for making sure the GPU is not currently referencing the any event within the pool before it is deleted"
@@ -119,7 +121,7 @@ members:
       init: $X_EVENT_DESC_VERSION_CURRENT
     - type: uint32_t
       name: index
-      desc: "[in] index of the event within the pool"
+      desc: "[in] index of the event within the pool; must be less-than the count specified during pool creation"
     - type: $x_event_scope_flag_t
       name: signal
       desc: "[in] defines the scope of relevant cache hierarchies to flush on a ‘signal’ action before the event is triggered"
@@ -134,13 +136,13 @@ desc: "Creates an event on the device."
 class: $xEvent
 name: Create
 decl: static
+ordinal: "0"
 analogue:
     - "**clCreateUserEvent**"
     - vkCreateEvent
     - cuEventCreate
 details:
-    - "Multiple events cannot be created using the same index from the same pool"
-    - "The index must be less-than the count specified during pool creation"
+    - "Multiple events cannot be created using the same location within the same pool."
     - "The application may call this function from simultaneous threads."
     - "The implementation of this function should be lock-free."
 params:
@@ -161,6 +163,7 @@ desc: "Deletes an event object."
 class: $xEvent
 name: Destroy
 decl: static
+ordinal: "0"
 details:
     - "The application is responsible for making sure the GPU is not currently referencing the event before it is deleted"
     - "The implementation of this function will immediately free all Host and Device allocations associated with this event"
@@ -355,6 +358,9 @@ type: class
 desc: "C++ wrapper for event pool"
 name: $xEventPool
 members:
+    - type: $xDevice*
+      name: pDevice
+      desc: "pointer to parent object"
     - type: $x_event_pool_handle_t
       name: handle
       desc: "handle of event pool object"
@@ -366,6 +372,9 @@ type: class
 desc: "C++ wrapper for event"
 name: $xEvent
 members:
+    - type: $xEventPool*
+      name: pEventPool
+      desc: "pointer to parent object"
     - type: $x_event_handle_t
       name: handle
       desc: "handle of event object"

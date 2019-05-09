@@ -52,6 +52,7 @@ desc: "Creates module object from an input IL or native binary."
 class: $xModule
 name: Create
 decl: static
+ordinal: "0"
 analogue:
     - "**cuModuleLoad**"
 details:
@@ -89,13 +90,13 @@ returns:
     - $X_RESULT_ERROR_OUT_OF_DEVICE_MEMORY
     - $X_RESULT_ERROR_MODULE_BUILD_FAILURE:
         - "Failure to build module. See build log for more details."
-    
 --- #--------------------------------------------------------------------------
 type: function
 desc: "Destroys module"
 class: $xModule
 name: Destroy
 decl: static
+ordinal: "0"
 analogue:
     - "**cuModuleUnload**"
 details:
@@ -113,6 +114,7 @@ desc: "Destroys module build log object"
 class: $xModuleBuildLog
 name: Destroy
 decl: static
+ordinal: "0"
 details:
     - "The application is responsible for making sure the GPU is not currently referencing the build log before it is deleted"
     - "The implementation of this function will immediately free all Host and Device allocations associated with this object"
@@ -240,6 +242,7 @@ desc: "Create Function object from Module by name"
 class: $xFunction
 name: Create
 decl: static
+ordinal: "0"
 analogue:
     - "**cuModuleGetFunction**"
 details:
@@ -266,6 +269,7 @@ desc: "Destroys Function object"
 class: $xFunction
 name: Destroy
 decl: static
+ordinal: "0"
 details:
     - "The application is responsible for making sure the GPU is not currently referencing the function before it is deleted"
     - "The implementation of this function will immediately free all Host and Device allocations associated with this function"
@@ -618,6 +622,9 @@ type: class
 desc: "C++ wrapper for module"
 name: $xModule
 members:
+    - type: $xDevice*
+      name: pDevice
+      desc: "pointer to parent object"
     - type: $x_module_handle_t
       name: handle
       desc: "handle of module object"
@@ -629,6 +636,9 @@ type: class
 desc: "C++ wrapper for function"
 name: $xFunction
 members:
+    - type: $xModule*
+      name: pModule
+      desc: "pointer to parent object"
     - type: $x_function_handle_t
       name: handle
       desc: "handle of function object"

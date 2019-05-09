@@ -122,4 +122,4 @@ def parse(path, meta = {'class':{}}):
     print("Parsed %s files and found:"%len(specs))
     for key in meta:
         print(" - %s %s(s)"%(len(meta[key]),key))
-    return specs, meta
+    return sorted(specs, key=lambda x: x['header']['ordinal'] if 'ordinal' in x['header'] else "9999"), meta

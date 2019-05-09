@@ -29,16 +29,22 @@
 #if defined(__cplusplus)
 #pragma once
 #endif
+#include "xe_api.h"
+#include "xex_api.h"
+#include "xet_api.h"
 
 ///////////////////////////////////////////////////////////////////////////////
 #if defined(__linux__)
 #  include <dlfcn.h>
-#  define LOAD_DRIVER_LIBRARY(NAME) dlopen("lib"NAME".so", RTLD_LAZY|RTLD_LOCAL)
-#  define LOAD_FUNCTION_PTR(LIB, FUNC_NAME) dlsym(LIB, FUNC_NAME)
+#  define HMODULE void*
+#  define LOAD_DRIVER_LIBRARY(NAME) dlopen("lib##NAME##.so", RTLD_LAZY|RTLD_LOCAL)
+#  define FREE_DRIVER_LIBRARY(LIB)  if(LIB) dlclose(LIB)
+#  define GET_FUNCTION_PTR(LIB, FUNC_NAME) dlsym(LIB, FUNC_NAME)
 #elif defined(_WIN32)
 #  include <Windows.h>
-#  define LOAD_DRIVER_LIBRARY(NAME) LoadLibraryA(NAME".dll")
-#  define LOAD_FUNCTION_PTR(LIB, FUNC_NAME) GetProcAddress((HMODULE)LIB, FUNC_NAME)
+#  define LOAD_DRIVER_LIBRARY(NAME) LoadLibrary(NAME".dll")
+#  define FREE_DRIVER_LIBRARY(LIB)  if(LIB) FreeLibrary(LIB)
+#  define GET_FUNCTION_PTR(LIB, FUNC_NAME) GetProcAddress(LIB, FUNC_NAME)
 #else
 #  error "Unsupported OS"
 #endif
@@ -51,5 +57,16 @@ typedef struct _cl_context* cl_context;
 typedef struct _cl_program* cl_program;
 #endif
 
+
+///////////////////////////////////////////////////////////////////////////////
+class xe_loader
+{
+public:
+    HMODULE commonDriver = nullptr;
+    HMODULE validationLayer = nullptr;
+
+    xe_loader();
+    ~xe_loader();
+};
 
 #endif // _LOADER_H

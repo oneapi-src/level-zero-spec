@@ -35,6 +35,9 @@
 #if defined(__cplusplus)
 #pragma once
 #endif
+#if !defined(_XE_API_H)
+#pragma message("warning: this file is not intended to be included directly")
+#endif
 #include "xe_common.h"
 
 #if defined(__cplusplus)
@@ -105,7 +108,7 @@ typedef struct _xe_sampler_desc_t
 ///     - ::XE_RESULT_ERROR_UNSUPPORTED
 ///         + ::XE_SAMPLER_DESC_VERSION_CURRENT < pDesc->version
 ///     - ::XE_RESULT_ERROR_OUT_OF_HOST_MEMORY
-__xedllexport xe_result_t __xecall
+xe_result_t __xecall
 xeSamplerCreate(
     xe_device_handle_t hDevice,                     ///< [in] handle of the device
     const xe_sampler_desc_t* pDesc,                 ///< [in] pointer to sampler descriptor
@@ -143,7 +146,7 @@ typedef xe_result_t (__xecall *xe_pfnSamplerCreate_t)(
 ///     - ::XE_RESULT_ERROR_INVALID_PARAMETER
 ///         + nullptr == hSampler
 ///     - ::XE_RESULT_ERROR_UNSUPPORTED
-__xedllexport xe_result_t __xecall
+xe_result_t __xecall
 xeSamplerDestroy(
     xe_sampler_handle_t hSampler                    ///< [in] handle of the sampler
     );

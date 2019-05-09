@@ -35,6 +35,9 @@
 #if defined(__cplusplus)
 #pragma once
 #endif
+#if !defined(_XE_API_H)
+#pragma message("warning: this file is not intended to be included directly")
+#endif
 #include <stdint.h>
 #include <string.h>
 
@@ -43,42 +46,56 @@ extern "C" {
 #endif
 
 ///////////////////////////////////////////////////////////////////////////////
+#ifndef XE_MAKE_VERSION
 /// @brief Generates generic Xe API versions
 #define XE_MAKE_VERSION( _major, _minor )  (( _major << 16 )|( _minor & 0x0000ffff))
+#endif // XE_MAKE_VERSION
 
 ///////////////////////////////////////////////////////////////////////////////
+#ifndef XE_MAJOR_VERSION
 /// @brief Extracts Xe API major version
 #define XE_MAJOR_VERSION( _ver )  ( _ver >> 16 )
+#endif // XE_MAJOR_VERSION
 
 ///////////////////////////////////////////////////////////////////////////////
+#ifndef XE_MINOR_VERSION
 /// @brief Extracts Xe API minor version
 #define XE_MINOR_VERSION( _ver )  ( _ver & 0x0000ffff )
+#endif // XE_MINOR_VERSION
 
 ///////////////////////////////////////////////////////////////////////////////
+#ifndef XE_API_HEADER_VERSION
 /// @brief Current header file version
 #define XE_API_HEADER_VERSION  XE_MAKE_VERSION( 1, 0 )
+#endif // XE_API_HEADER_VERSION
 
 ///////////////////////////////////////////////////////////////////////////////
+#ifndef __xecall
 #if defined(_WIN32)
 /// @brief Calling convention for all API functions
 #define __xecall  __cdecl
 #else
 #define __xecall  
 #endif // defined(_WIN32)
+#endif // __xecall
 
 ///////////////////////////////////////////////////////////////////////////////
-#if defined(_WIN32) && XE_MAKE_DLL
+#ifndef __xedllexport
+#if defined(_WIN32)
 /// @brief Microsoft-specific dllexport storage-class attribute
 #define __xedllexport  __declspec(dllexport)
 #else
 #define __xedllexport  
-#endif // defined(_WIN32) && XE_MAKE_DLL
+#endif // defined(_WIN32)
+#endif // __xedllexport
 
 ///////////////////////////////////////////////////////////////////////////////
+#ifndef XE_ENABLE_OCL_INTEROP
 #if !defined(XE_ENABLE_OCL_INTEROP)
 /// @brief Disable OpenCL interoperability functions if not explicitly defined
 #define XE_ENABLE_OCL_INTEROP  0
 #endif // !defined(XE_ENABLE_OCL_INTEROP)
+#endif // XE_ENABLE_OCL_INTEROP
 
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief compiler-independent type
@@ -137,8 +154,10 @@ typedef struct _xe_ipc_mem_handle_t *xe_ipc_mem_handle_t;
 typedef struct _xe_ipc_event_pool_handle_t *xe_ipc_event_pool_handle_t;
 
 ///////////////////////////////////////////////////////////////////////////////
+#ifndef XE_BIT
 /// @brief Generic macro for enumerator bit masks
 #define XE_BIT( _i )  ( 1 << _i )
+#endif // XE_BIT
 
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Defines Return/Error codes
@@ -162,18 +181,6 @@ typedef enum _xe_result_t
 } xe_result_t;
 
 ///////////////////////////////////////////////////////////////////////////////
-/// @brief Forward-declare xe_command_list_desc_t
-typedef struct _xe_command_list_desc_t xe_command_list_desc_t;
-
-///////////////////////////////////////////////////////////////////////////////
-/// @brief Forward-declare xe_command_queue_desc_t
-typedef struct _xe_command_queue_desc_t xe_command_queue_desc_t;
-
-///////////////////////////////////////////////////////////////////////////////
-/// @brief Forward-declare xe_image_region_t
-typedef struct _xe_image_region_t xe_image_region_t;
-
-///////////////////////////////////////////////////////////////////////////////
 /// @brief Forward-declare xe_device_uuid_t
 typedef struct _xe_device_uuid_t xe_device_uuid_t;
 
@@ -192,6 +199,18 @@ typedef struct _xe_device_memory_properties_t xe_device_memory_properties_t;
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Forward-declare xe_device_p2p_properties_t
 typedef struct _xe_device_p2p_properties_t xe_device_p2p_properties_t;
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Forward-declare xe_command_queue_desc_t
+typedef struct _xe_command_queue_desc_t xe_command_queue_desc_t;
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Forward-declare xe_command_list_desc_t
+typedef struct _xe_command_list_desc_t xe_command_list_desc_t;
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Forward-declare xe_image_region_t
+typedef struct _xe_image_region_t xe_image_region_t;
 
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Forward-declare xe_event_pool_desc_t

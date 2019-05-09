@@ -34,6 +34,9 @@
 #define _XE_CMDQUEUE_HPP
 #if defined(__cplusplus)
 #pragma once
+#if !defined(_XE_API_HPP)
+#pragma message("warning: this file is not intended to be included directly")
+#endif
 #include "xe_common.hpp"
 
 namespace xe
@@ -42,42 +45,18 @@ namespace xe
     /// @brief C++ wrapper for command queue
     class CommandQueue
     {
-    protected:
-        ::xe_command_queue_handle_t m_handle;             ///< handle of command queue object
-        ::xe_command_queue_desc_t m_desc;                 ///< descriptor of the command queue object
-
-        CommandQueue( void ) = delete;
-        CommandQueue( 
-                xe_command_queue_handle_t handle,               ///< handle of command queue object
-                xe_command_queue_desc_t desc                    ///< descriptor of the command queue object
-                ) :
-                m_handle( handle ),
-                m_desc( desc )
-            {}
-
-        ~CommandQueue( void ) = default;
-
-        CommandQueue( CommandQueue const& other ) = delete;
-        void operator=( CommandQueue const& other ) = delete;
-
-        CommandQueue( CommandQueue&& other ) = delete;
-        void operator=( CommandQueue&& other ) = delete;
-
     public:
-        auto getHandle( void ) const { return m_handle; }
-        auto getDesc( void ) const { return m_desc; }
-
         ///////////////////////////////////////////////////////////////////////////////
-        /// @brief C++ version for ::xe_command_queue_desc_version_t
-        enum class command_queue_desc_version_t
+        /// @brief API version of ::command_queue_desc_t
+        enum class desc_version_t
         {
             CURRENT = XE_MAKE_VERSION( 1, 0 ),              ///< version 1.0
 
         };
 
         ///////////////////////////////////////////////////////////////////////////////
-        /// @brief C++ version for ::xe_command_queue_flag_t
-        enum class command_queue_flag_t
+        /// @brief Supported command queue flags
+        enum class flag_t
         {
             NONE = 0,                                       ///< default behavior
             COPY_ONLY = XE_BIT(0),                          ///< command queue only supports enqueing copy-only command lists
@@ -89,8 +68,8 @@ namespace xe
         };
 
         ///////////////////////////////////////////////////////////////////////////////
-        /// @brief C++ version for ::xe_command_queue_mode_t
-        enum class command_queue_mode_t
+        /// @brief Supported command queue modes
+        enum class mode_t
         {
             DEFAULT = 0,                                    ///< implicit default behavior; uses driver-based heuristics
             SYNCHRONOUS,                                    ///< GPU execution always completes immediately on execute;
@@ -101,8 +80,8 @@ namespace xe
         };
 
         ///////////////////////////////////////////////////////////////////////////////
-        /// @brief C++ version for ::xe_command_queue_priority_t
-        enum class command_queue_priority_t
+        /// @brief Supported command queue priorities
+        enum class priority_t
         {
             NORMAL = 0,                                     ///< [default] normal priority
             LOW,                                            ///< lower priority than normal
@@ -111,13 +90,13 @@ namespace xe
         };
 
         ///////////////////////////////////////////////////////////////////////////////
-        /// @brief C++ version for ::xe_command_queue_desc_t
-        struct command_queue_desc_t
+        /// @brief Command Queue descriptor
+        struct desc_t
         {
-            command_queue_desc_version_t version = command_queue_desc_version_t::CURRENT;   ///< [in] ::COMMAND_QUEUE_DESC_VERSION_CURRENT
-            command_queue_flag_t flags = command_queue_flag_t::NONE;///< [in] creation flags
-            command_queue_mode_t mode = command_queue_mode_t::DEFAULT;  ///< [in] operation mode
-            command_queue_priority_t priority = command_queue_priority_t::NORMAL;   ///< [in] priority
+            desc_version_t version = desc_version_t::CURRENT;   ///< [in] ::COMMAND_QUEUE_DESC_VERSION_CURRENT
+            flag_t flags = flag_t::NONE;                    ///< [in] creation flags
+            mode_t mode = mode_t::DEFAULT;                  ///< [in] operation mode
+            priority_t priority = priority_t::NORMAL;       ///< [in] priority
             uint32_t ordinal = 0;                           ///< [in] if logical-only flag is set, then will be ignored;
                                                             ///< else-if copy-only flag is set, then must be less than ::device_properties_t.numAsyncCopyEngines;
                                                             ///< otherwise must be less than
@@ -127,38 +106,103 @@ namespace xe
 
         };
 
+
+    protected:
         ///////////////////////////////////////////////////////////////////////////////
-        /// @brief C++ wrapper for ::xeCommandQueueCreate
+        Device* m_pDevice;                              ///< pointer to parent object
+        command_queue_handle_t m_handle;                ///< handle of command queue object
+        desc_t m_desc;                                  ///< descriptor of the command queue object
+
+        ///////////////////////////////////////////////////////////////////////////////
+        CommandQueue( void ) = delete;
+        CommandQueue( 
+            Device* pDevice,                                ///< pointer to parent object
+            command_queue_handle_t handle,                  ///< handle of command queue object
+            desc_t desc                                     ///< descriptor of the command queue object
+            );
+
+        ~CommandQueue( void ) = default;
+
+        CommandQueue( CommandQueue const& other ) = delete;
+        void operator=( CommandQueue const& other ) = delete;
+
+        CommandQueue( CommandQueue&& other ) = delete;
+        void operator=( CommandQueue&& other ) = delete;
+
+    public:
+        ///////////////////////////////////////////////////////////////////////////////
+        auto getDevice( void ) const { return m_pDevice; }
+        auto getHandle( void ) const { return m_handle; }
+        auto getDesc( void ) const { return m_desc; }
+
+        ///////////////////////////////////////////////////////////////////////////////
+        /// @brief Creates a command queue on the device.
+        /// 
+        /// @details
+        ///     - The application may call this function from simultaneous threads.
+        ///     - The implementation of this function should be lock-free.
+        /// 
+        /// @remarks
+        ///   _Analogues_
+        ///     - **clCreateCommandQueue**
+        ///     - cuCtxCreate
+        ///     - cuCtxGetCurrent
         /// @returns
-        ///     - ::command_queue_handle_t: pointer to handle of command queue object created
+        ///     - CommandQueue: pointer to handle of command queue object created
         /// 
         /// @throws result_t
-        inline static command_queue_handle_t
+        inline static CommandQueue*
         Create(
-            device_handle_t hDevice,                        ///< [in] handle of the device object
-            const command_queue_desc_t* desc                ///< [in] pointer to command queue descriptor
+            Device* hDevice,                                ///< [in] handle of the device object
+            const desc_t* desc                              ///< [in] pointer to command queue descriptor
             );
 
         ///////////////////////////////////////////////////////////////////////////////
-        /// @brief C++ wrapper for ::xeCommandQueueDestroy
+        /// @brief Destroys a command queue.
+        /// 
+        /// @details
+        ///     - The application is responsible for making sure the GPU is not
+        ///       currently referencing the command queue before it is deleted
+        ///     - The implementation of this function will immediately free all Host and
+        ///       Device allocations associated with this command queue
+        ///     - The application may **not** call this function from simultaneous
+        ///       threads with the same command queue handle.
+        ///     - The implementation of this function should be lock-free.
+        /// 
+        /// @remarks
+        ///   _Analogues_
+        ///     - **clReleaseCommandQueue**
+        ///     - cuCtxDestroy
         /// @throws result_t
         inline static void
         Destroy(
-            command_queue_handle_t hCommandQueue            ///< [in] handle of command queue object to destroy
+            CommandQueue* hCommandQueue                     ///< [in] handle of command queue object to destroy
             );
 
         ///////////////////////////////////////////////////////////////////////////////
-        /// @brief C++ wrapper for ::xeCommandQueueExecuteCommandLists
+        /// @brief Executes a command list in a command queue.
+        /// 
+        /// @details
+        ///     - The application may call this function from simultaneous threads.
+        ///     - The implementation of this function should be lock-free.
+        /// 
+        /// @remarks
+        ///   _Analogues_
+        ///     - vkQueueSubmit
         /// @throws result_t
         inline void
         ExecuteCommandLists(
             uint32_t numCommandLists,                       ///< [in] number of command lists to execute
-            command_list_handle_t* phCommandLists,          ///< [in] list of handles of the command lists to execute
-            fence_handle_t hFence = nullptr                 ///< [in][optional] handle of the fence to signal on completion
+            CommandList* phCommandLists,                    ///< [in] list of handles of the command lists to execute
+            Fence* hFence = nullptr                         ///< [in][optional] handle of the fence to signal on completion
             );
 
         ///////////////////////////////////////////////////////////////////////////////
-        /// @brief C++ wrapper for ::xeCommandQueueSynchronize
+        /// @brief Synchronizes a command queue by waiting on the host.
+        /// 
+        /// @details
+        ///     - The application may call this function from simultaneous threads.
+        ///     - The implementation of this function should be lock-free.
         /// @throws result_t
         inline void
         Synchronize(

@@ -35,8 +35,10 @@
 #if defined(__cplusplus)
 #pragma once
 #endif
+#if !defined(_XE_API_H)
+#pragma message("warning: this file is not intended to be included directly")
+#endif
 #include "xe_common.h"
-#include "xe_cmdqueue.h"
 
 #if defined(__cplusplus)
 extern "C" {
@@ -92,7 +94,7 @@ typedef struct _xe_command_list_desc_t
 ///         + ::XE_COMMAND_LIST_DESC_VERSION_CURRENT < desc->version
 ///     - ::XE_RESULT_ERROR_OUT_OF_HOST_MEMORY
 ///     - ::XE_RESULT_ERROR_OUT_OF_DEVICE_MEMORY
-__xedllexport xe_result_t __xecall
+xe_result_t __xecall
 xeCommandListCreate(
     xe_device_handle_t hDevice,                     ///< [in] handle of the device object
     const xe_command_list_desc_t* desc,             ///< [in] pointer to command list descriptor
@@ -129,7 +131,7 @@ typedef xe_result_t (__xecall *xe_pfnCommandListCreate_t)(
 ///         + ::XE_COMMAND_QUEUE_DESC_VERSION_CURRENT < desc->version
 ///     - ::XE_RESULT_ERROR_OUT_OF_HOST_MEMORY
 ///     - ::XE_RESULT_ERROR_OUT_OF_DEVICE_MEMORY
-__xedllexport xe_result_t __xecall
+xe_result_t __xecall
 xeCommandListCreateImmediate(
     xe_device_handle_t hDevice,                     ///< [in] handle of the device object
     const xe_command_queue_desc_t* desc,            ///< [in] pointer to command queue descriptor
@@ -163,7 +165,7 @@ typedef xe_result_t (__xecall *xe_pfnCommandListCreateImmediate_t)(
 ///     - ::XE_RESULT_ERROR_INVALID_PARAMETER
 ///         + nullptr == hCommandList
 ///     - ::XE_RESULT_ERROR_UNSUPPORTED
-__xedllexport xe_result_t __xecall
+xe_result_t __xecall
 xeCommandListDestroy(
     xe_command_list_handle_t hCommandList           ///< [in] handle of command list object to destroy
     );
@@ -189,7 +191,7 @@ typedef xe_result_t (__xecall *xe_pfnCommandListDestroy_t)(
 ///     - ::XE_RESULT_ERROR_INVALID_PARAMETER
 ///         + nullptr == hCommandList
 ///     - ::XE_RESULT_ERROR_UNSUPPORTED
-__xedllexport xe_result_t __xecall
+xe_result_t __xecall
 xeCommandListClose(
     xe_command_list_handle_t hCommandList           ///< [in] handle of command list object to close
     );
@@ -218,7 +220,7 @@ typedef xe_result_t (__xecall *xe_pfnCommandListClose_t)(
 ///     - ::XE_RESULT_ERROR_INVALID_PARAMETER
 ///         + nullptr == hCommandList
 ///     - ::XE_RESULT_ERROR_UNSUPPORTED
-__xedllexport xe_result_t __xecall
+xe_result_t __xecall
 xeCommandListReset(
     xe_command_list_handle_t hCommandList           ///< [in] handle of command list object to reset
     );
@@ -260,7 +262,7 @@ typedef enum _xe_command_list_parameter_t
 ///         + invalid value for attribute
 ///         + invalid value for value
 ///     - ::XE_RESULT_ERROR_UNSUPPORTED
-__xedllexport xe_result_t __xecall
+xe_result_t __xecall
 xeCommandListSetParameter(
     xe_command_list_handle_t hCommandList,          ///< [in] handle of command list
     xe_command_list_parameter_t parameter,          ///< [in] parameter to change
@@ -298,7 +300,7 @@ typedef xe_result_t (__xecall *xe_pfnCommandListSetParameter_t)(
 ///         + nullptr == value
 ///         + invalid value for attribute
 ///     - ::XE_RESULT_ERROR_UNSUPPORTED
-__xedllexport xe_result_t __xecall
+xe_result_t __xecall
 xeCommandListGetParameter(
     xe_command_list_handle_t hCommandList,          ///< [in] handle of command list
     xe_command_list_parameter_t parameter,          ///< [in] parameter to retrieve
@@ -328,7 +330,7 @@ typedef xe_result_t (__xecall *xe_pfnCommandListGetParameter_t)(
 ///     - ::XE_RESULT_ERROR_INVALID_PARAMETER
 ///         + nullptr == hCommandList
 ///     - ::XE_RESULT_ERROR_UNSUPPORTED
-__xedllexport xe_result_t __xecall
+xe_result_t __xecall
 xeCommandListResetParameters(
     xe_command_list_handle_t hCommandList           ///< [in] handle of the command list
     );
@@ -358,7 +360,7 @@ typedef xe_result_t (__xecall *xe_pfnCommandListResetParameters_t)(
 ///         + nullptr == ptr
 ///         + 0 for size
 ///     - ::XE_RESULT_ERROR_UNSUPPORTED
-__xedllexport xe_result_t __xecall
+xe_result_t __xecall
 xeCommandListReserveSpace(
     xe_command_list_handle_t hCommandList,          ///< [in] handle of the command list
     size_t size,                                    ///< [in] size (in bytes) to reserve

@@ -28,61 +28,54 @@
 * @endcond
 *
 ******************************************************************************/
-#include "xex_api.h"
 #include "loader.h"
 
-xex_apitable_t xex_apitable = {};
-
-///////////////////////////////////////////////////////////////////////////////
-/// @brief Loads function pointer table for loaded driver
-bool xexLoadExports(
-    void* handle )  ///< [in] driver handle
-{
-    xex_apitable.pfnCommandGraphCreate                                   = (xex_pfnCommandGraphCreate_t)LOAD_FUNCTION_PTR(handle, "xexCommandGraphCreate");
-    xex_apitable.pfnCommandGraphDestroy                                  = (xex_pfnCommandGraphDestroy_t)LOAD_FUNCTION_PTR(handle, "xexCommandGraphDestroy");
-    xex_apitable.pfnCommandGraphClose                                    = (xex_pfnCommandGraphClose_t)LOAD_FUNCTION_PTR(handle, "xexCommandGraphClose");
-
-    if( nullptr == xex_apitable.pfnCommandGraphCreate )
-        return false;
-    if( nullptr == xex_apitable.pfnCommandGraphDestroy )
-        return false;
-    if( nullptr == xex_apitable.pfnCommandGraphClose )
-        return false;
-    return true;
-}
-
+extern xe_loader context;
 
 #if defined(__cplusplus)
 extern "C" {
 #endif
 
 ///////////////////////////////////////////////////////////////////////////////
+/// @brief Exported function for filling application's CommandGraph table
+///        with current process' addresses
+///
+/// @returns
+///     - ::XE_RESULT_SUCCESS
+///     - ::XE_RESULT_ERROR_INVALID_PARAMETER
+///         + invalid value for version
+///         + nullptr for ptable
+///     - ::XE_RESULT_ERROR_UNSUPPORTED
+///         + version not supported
 __xedllexport xe_result_t __xecall
-xexCommandGraphCreate(
-    xe_device_handle_t hDevice,                     ///< [in] handle of the device object
-    const xex_command_graph_desc_t* desc,           ///< [in] pointer to command graph descriptor
-    xex_command_graph_handle_t* phCommandGraph      ///< [out] pointer to handle of command graph object created
+xexGetCommandGraphProcAddrTable(
+    uint32_t version,           ///< [in] ::XE_API_HEADER_VERSION
+    xex_command_graph_apitable_t* ptable      ///< [in,out] pointer to table of API function pointers
     )
 {
-    return xex_apitable.pfnCommandGraphCreate( hDevice, desc, phCommandGraph );
-}
+    if( nullptr == ptable )
+        return XE_RESULT_ERROR_INVALID_PARAMETER;
 
-///////////////////////////////////////////////////////////////////////////////
-__xedllexport xe_result_t __xecall
-xexCommandGraphDestroy(
-    xex_command_graph_handle_t hCommandGraph        ///< [in] handle of command graph object to destroy
-    )
-{
-    return xex_apitable.pfnCommandGraphDestroy( hCommandGraph );
-}
+    if( XE_API_HEADER_VERSION < version )
+        return XE_RESULT_ERROR_UNSUPPORTED;
 
-///////////////////////////////////////////////////////////////////////////////
-__xedllexport xe_result_t __xecall
-xexCommandGraphClose(
-    xex_command_graph_handle_t hCommandGraph        ///< [in] handle of command graph object to close
-    )
-{
-    return xex_apitable.pfnCommandGraphClose( hCommandGraph );
+    xe_result_t result = XE_RESULT_SUCCESS;
+
+    if( nullptr != context.commonDriver )
+    {
+        static auto getTable = reinterpret_cast<xex_pfnGetCommandGraphProcAddrTable_t>(
+            GET_FUNCTION_PTR(context.commonDriver, "xexGetCommandGraphProcAddrTable") );
+        result = getTable( version, ptable );
+    }
+
+    if(( XE_RESULT_SUCCESS == result ) && ( nullptr != context.validationLayer ))
+    {
+        static auto getTable = reinterpret_cast<xex_pfnGetCommandGraphProcAddrTable_t>(
+            GET_FUNCTION_PTR(context.validationLayer, "xexGetCommandGraphProcAddrTable") );
+        result = getTable( version, ptable );
+    }
+
+    return result;
 }
 
 #if defined(__cplusplus)

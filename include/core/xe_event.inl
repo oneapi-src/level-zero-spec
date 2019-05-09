@@ -34,10 +34,25 @@
 #define _XE_EVENT_INL
 #if defined(__cplusplus)
 #pragma once
+#if !defined(_XE_API_HPP)
+#pragma message("warning: this file is not intended to be included directly")
+#endif
 #include "xe_event.hpp"
 
 namespace xe
 {
+    ///////////////////////////////////////////////////////////////////////////////
+    EventPool::EventPool( 
+        Device* pDevice,                                ///< pointer to parent object
+        event_pool_handle_t handle,                     ///< handle of event pool object
+        desc_t desc                                     ///< descriptor of the event object
+        ) :
+        m_pDevice( pDevice ),
+        m_handle( handle ),
+        m_desc( desc )
+    {
+    }
+
     ///////////////////////////////////////////////////////////////////////////////
     /// @brief C++ wrapper for ::xeEventPoolCreate
     /// 
@@ -46,13 +61,13 @@ namespace xe
     ///     - The implementation of this function should be lock-free.
     /// 
     /// @returns
-    ///     - ::event_pool_handle_t: pointer handle of event pool object created
+    ///     - EventPool: pointer handle of event pool object created
     /// 
     /// @throws result_t
-    inline event_pool_handle_t 
+    inline EventPool* 
     EventPool::Create(
-        device_handle_t hDevice,                        ///< [in] handle of the device
-        const event_pool_desc_t* desc                   ///< [in] pointer to event pool descriptor
+        Device* hDevice,                                ///< [in] handle of the device
+        const desc_t* desc                              ///< [in] pointer to event pool descriptor
         )
     {
         // auto result = ::xeEventPoolCreate( handle, hDevice, desc );
@@ -77,7 +92,7 @@ namespace xe
     /// @throws result_t
     inline void 
     EventPool::Destroy(
-        event_pool_handle_t hEventPool                  ///< [in] handle of event pool object to destroy
+        EventPool* hEventPool                           ///< [in] handle of event pool object to destroy
         )
     {
         // auto result = ::xeEventPoolDestroy( handle, hEventPool );
@@ -95,7 +110,7 @@ namespace xe
     ///     - **cuIpcGetEventHandle**
     /// 
     /// @returns
-    ///     - ::ipc_event_pool_handle_t: Returned IPC event handle
+    ///     - ipc_event_pool_handle_t: Returned IPC event handle
     /// 
     /// @throws result_t
     inline ipc_event_pool_handle_t 
@@ -120,12 +135,12 @@ namespace xe
     ///     - **cuIpcOpenMemHandle**
     /// 
     /// @returns
-    ///     - ::event_pool_handle_t: pointer handle of event pool object created
+    ///     - EventPool: pointer handle of event pool object created
     /// 
     /// @throws result_t
-    inline event_pool_handle_t 
+    inline EventPool* 
     EventPool::OpenIpcHandle(
-        device_handle_t hDevice,                        ///< [in] handle of the device to associate with the IPC event pool handle
+        Device* hDevice,                                ///< [in] handle of the device to associate with the IPC event pool handle
         ipc_event_pool_handle_t hIpc                    ///< [in] IPC event handle
         )
     {
@@ -157,12 +172,21 @@ namespace xe
     }
 
     ///////////////////////////////////////////////////////////////////////////////
+    Event::Event( 
+        EventPool* pEventPool,                          ///< pointer to parent object
+        event_handle_t handle                           ///< handle of event object
+        ) :
+        m_pEventPool( pEventPool ),
+        m_handle( handle )
+    {
+    }
+
+    ///////////////////////////////////////////////////////////////////////////////
     /// @brief C++ wrapper for ::xeEventCreate
     /// 
     /// @details
-    ///     - Multiple events cannot be created using the same index from the same
-    ///       pool
-    ///     - The index must be less-than the count specified during pool creation
+    ///     - Multiple events cannot be created using the same location within the
+    ///       same pool.
     ///     - The application may call this function from simultaneous threads.
     ///     - The implementation of this function should be lock-free.
     /// 
@@ -173,13 +197,13 @@ namespace xe
     ///     - cuEventCreate
     /// 
     /// @returns
-    ///     - ::event_handle_t: pointer to handle of event object created
+    ///     - Event: pointer to handle of event object created
     /// 
     /// @throws result_t
-    inline event_handle_t 
+    inline Event* 
     Event::Create(
-        event_pool_handle_t hEventPool,                 ///< [in] handle of the event pool
-        const event_desc_t* desc                        ///< [in] pointer to event descriptor
+        EventPool* hEventPool,                          ///< [in] handle of the event pool
+        const desc_t* desc                              ///< [in] pointer to event descriptor
         )
     {
         // auto result = ::xeEventCreate( handle, hEventPool, desc );
@@ -207,7 +231,7 @@ namespace xe
     /// @throws result_t
     inline void 
     Event::Destroy(
-        event_handle_t hEvent                           ///< [in] handle of event object to destroy
+        Event* hEvent                                   ///< [in] handle of event object to destroy
         )
     {
         // auto result = ::xeEventDestroy( handle, hEvent );

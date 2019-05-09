@@ -35,6 +35,9 @@
 #if defined(__cplusplus)
 #pragma once
 #endif
+#if !defined(_XE_API_H)
+#pragma message("warning: this file is not intended to be included directly")
+#endif
 #include "xe_common.h"
 
 #if defined(__cplusplus)
@@ -88,7 +91,7 @@ typedef struct _xe_event_pool_desc_t
 ///         + ::XE_EVENT_POOL_DESC_VERSION_CURRENT < desc->version
 ///     - ::XE_RESULT_ERROR_OUT_OF_HOST_MEMORY
 ///     - ::XE_RESULT_ERROR_OUT_OF_DEVICE_MEMORY
-__xedllexport xe_result_t __xecall
+xe_result_t __xecall
 xeEventPoolCreate(
     xe_device_handle_t hDevice,                     ///< [in] handle of the device
     const xe_event_pool_desc_t* desc,               ///< [in] pointer to event pool descriptor
@@ -125,7 +128,7 @@ typedef xe_result_t (__xecall *xe_pfnEventPoolCreate_t)(
 ///     - ::XE_RESULT_ERROR_INVALID_PARAMETER
 ///         + nullptr == hEventPool
 ///     - ::XE_RESULT_ERROR_UNSUPPORTED
-__xedllexport xe_result_t __xecall
+xe_result_t __xecall
 xeEventPoolDestroy(
     xe_event_pool_handle_t hEventPool               ///< [in] handle of event pool object to destroy
     );
@@ -164,7 +167,8 @@ typedef enum _xe_event_scope_flag_t
 typedef struct _xe_event_desc_t
 {
     xe_event_desc_version_t version;                ///< [in] ::XE_EVENT_DESC_VERSION_CURRENT
-    uint32_t index;                                 ///< [in] index of the event within the pool
+    uint32_t index;                                 ///< [in] index of the event within the pool; must be less-than the count
+                                                    ///< specified during pool creation
     xe_event_scope_flag_t signal;                   ///< [in] defines the scope of relevant cache hierarchies to flush on a
                                                     ///< ‘signal’ action before the event is triggered
     xe_event_scope_flag_t wait;                     ///< [in] defines the scope of relevant cache hierarchies to invalidate on
@@ -176,9 +180,8 @@ typedef struct _xe_event_desc_t
 /// @brief Creates an event on the device.
 /// 
 /// @details
-///     - Multiple events cannot be created using the same index from the same
-///       pool
-///     - The index must be less-than the count specified during pool creation
+///     - Multiple events cannot be created using the same location within the
+///       same pool.
 ///     - The application may call this function from simultaneous threads.
 ///     - The implementation of this function should be lock-free.
 /// 
@@ -199,7 +202,7 @@ typedef struct _xe_event_desc_t
 ///     - ::XE_RESULT_ERROR_UNSUPPORTED
 ///         + ::XE_EVENT_DESC_VERSION_CURRENT < desc->version
 ///     - ::XE_RESULT_ERROR_OUT_OF_HOST_MEMORY
-__xedllexport xe_result_t __xecall
+xe_result_t __xecall
 xeEventCreate(
     xe_event_pool_handle_t hEventPool,              ///< [in] handle of the event pool
     const xe_event_desc_t* desc,                    ///< [in] pointer to event descriptor
@@ -239,7 +242,7 @@ typedef xe_result_t (__xecall *xe_pfnEventCreate_t)(
 ///     - ::XE_RESULT_ERROR_INVALID_PARAMETER
 ///         + nullptr == hEvent
 ///     - ::XE_RESULT_ERROR_UNSUPPORTED
-__xedllexport xe_result_t __xecall
+xe_result_t __xecall
 xeEventDestroy(
     xe_event_handle_t hEvent                        ///< [in] handle of event object to destroy
     );
@@ -269,7 +272,7 @@ typedef xe_result_t (__xecall *xe_pfnEventDestroy_t)(
 ///         + nullptr == hEventPool
 ///         + nullptr == phIpc
 ///     - ::XE_RESULT_ERROR_UNSUPPORTED
-__xedllexport xe_result_t __xecall
+xe_result_t __xecall
 xeEventPoolGetIpcHandle(
     xe_event_pool_handle_t hEventPool,              ///< [in] handle of event pool object
     xe_ipc_event_pool_handle_t* phIpc               ///< [out] Returned IPC event handle
@@ -304,7 +307,7 @@ typedef xe_result_t (__xecall *xe_pfnEventPoolGetIpcHandle_t)(
 ///         + nullptr == hIpc
 ///         + nullptr == phEventPool
 ///     - ::XE_RESULT_ERROR_UNSUPPORTED
-__xedllexport xe_result_t __xecall
+xe_result_t __xecall
 xeEventPoolOpenIpcHandle(
     xe_device_handle_t hDevice,                     ///< [in] handle of the device to associate with the IPC event pool handle
     xe_ipc_event_pool_handle_t hIpc,                ///< [in] IPC event handle
@@ -339,7 +342,7 @@ typedef xe_result_t (__xecall *xe_pfnEventPoolOpenIpcHandle_t)(
 ///     - ::XE_RESULT_ERROR_INVALID_PARAMETER
 ///         + nullptr == hEventPool
 ///     - ::XE_RESULT_ERROR_UNSUPPORTED
-__xedllexport xe_result_t __xecall
+xe_result_t __xecall
 xeEventPoolCloseIpcHandle(
     xe_event_pool_handle_t hEventPool               ///< [in] handle of event pool object
     );
@@ -372,7 +375,7 @@ typedef xe_result_t (__xecall *xe_pfnEventPoolCloseIpcHandle_t)(
 ///         + nullptr == hCommandList
 ///         + nullptr == hEvent
 ///     - ::XE_RESULT_ERROR_UNSUPPORTED
-__xedllexport xe_result_t __xecall
+xe_result_t __xecall
 xeCommandListAppendSignalEvent(
     xe_command_list_handle_t hCommandList,          ///< [in] handle of the command list
     xe_event_handle_t hEvent                        ///< [in] handle of the event
@@ -401,7 +404,7 @@ typedef xe_result_t (__xecall *xe_pfnCommandListAppendSignalEvent_t)(
 ///         + nullptr == hCommandList
 ///         + nullptr == phEvents
 ///     - ::XE_RESULT_ERROR_UNSUPPORTED
-__xedllexport xe_result_t __xecall
+xe_result_t __xecall
 xeCommandListAppendWaitOnEvents(
     xe_command_list_handle_t hCommandList,          ///< [in] handle of the command list
     uint32_t numEvents,                             ///< [in] number of events to wait on before continuing
@@ -434,7 +437,7 @@ typedef xe_result_t (__xecall *xe_pfnCommandListAppendWaitOnEvents_t)(
 ///     - ::XE_RESULT_ERROR_INVALID_PARAMETER
 ///         + nullptr == hEvent
 ///     - ::XE_RESULT_ERROR_UNSUPPORTED
-__xedllexport xe_result_t __xecall
+xe_result_t __xecall
 xeEventHostSignal(
     xe_event_handle_t hEvent                        ///< [in] handle of the event
     );
@@ -466,7 +469,7 @@ typedef xe_result_t (__xecall *xe_pfnEventHostSignal_t)(
 ///     - ::XE_RESULT_ERROR_UNSUPPORTED
 ///     - ::XE_RESULT_NOT_READY
 ///         + timeout expired
-__xedllexport xe_result_t __xecall
+xe_result_t __xecall
 xeEventHostSynchronize(
     xe_event_handle_t hEvent,                       ///< [in] handle of the event
     uint32_t timeout                                ///< [in] if non-zero, then indicates the maximum time to yield before
@@ -505,7 +508,7 @@ typedef xe_result_t (__xecall *xe_pfnEventHostSynchronize_t)(
 ///     - ::XE_RESULT_ERROR_UNSUPPORTED
 ///     - ::XE_RESULT_NOT_READY
 ///         + not signaled
-__xedllexport xe_result_t __xecall
+xe_result_t __xecall
 xeEventQueryStatus(
     xe_event_handle_t hEvent                        ///< [in] handle of the event
     );
@@ -536,7 +539,7 @@ typedef xe_result_t (__xecall *xe_pfnEventQueryStatus_t)(
 ///         + nullptr == hCommandList
 ///         + nullptr == hEvent
 ///     - ::XE_RESULT_ERROR_UNSUPPORTED
-__xedllexport xe_result_t __xecall
+xe_result_t __xecall
 xeCommandListAppendEventReset(
     xe_command_list_handle_t hCommandList,          ///< [in] handle of the command list
     xe_event_handle_t hEvent                        ///< [in] handle of the event
@@ -567,7 +570,7 @@ typedef xe_result_t (__xecall *xe_pfnCommandListAppendEventReset_t)(
 ///     - ::XE_RESULT_ERROR_INVALID_PARAMETER
 ///         + nullptr == hEvent
 ///     - ::XE_RESULT_ERROR_UNSUPPORTED
-__xedllexport xe_result_t __xecall
+xe_result_t __xecall
 xeEventReset(
     xe_event_handle_t hEvent                        ///< [in] handle of the event
     );

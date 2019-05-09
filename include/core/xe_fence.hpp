@@ -34,6 +34,9 @@
 #define _XE_FENCE_HPP
 #if defined(__cplusplus)
 #pragma once
+#if !defined(_XE_API_HPP)
+#pragma message("warning: this file is not intended to be included directly")
+#endif
 #include "xe_common.hpp"
 
 namespace xe
@@ -42,18 +45,46 @@ namespace xe
     /// @brief C++ wrapper for fence
     class Fence
     {
-    protected:
-        ::xe_fence_handle_t m_handle;                     ///< handle of fence object
-        ::xe_fence_desc_t m_desc;                         ///< descriptor of the fence object
+    public:
+        ///////////////////////////////////////////////////////////////////////////////
+        /// @brief API version of ::fence_desc_t
+        enum class desc_version_t
+        {
+            CURRENT = XE_MAKE_VERSION( 1, 0 ),              ///< version 1.0
 
+        };
+
+        ///////////////////////////////////////////////////////////////////////////////
+        /// @brief Supported fence creation flags
+        enum class flag_t
+        {
+            NONE = 0,                                       ///< default behavior
+
+        };
+
+        ///////////////////////////////////////////////////////////////////////////////
+        /// @brief Fence descriptor
+        struct desc_t
+        {
+            desc_version_t version = desc_version_t::CURRENT;   ///< [in] ::FENCE_DESC_VERSION_CURRENT
+            flag_t flags = flag_t::NONE;                    ///< [in] creation flags
+
+        };
+
+
+    protected:
+        ///////////////////////////////////////////////////////////////////////////////
+        CommandQueue* m_pCommandQueue;                  ///< pointer to parent object
+        fence_handle_t m_handle;                        ///< handle of fence object
+        desc_t m_desc;                                  ///< descriptor of the fence object
+
+        ///////////////////////////////////////////////////////////////////////////////
         Fence( void ) = delete;
         Fence( 
-                xe_fence_handle_t handle,                       ///< handle of fence object
-                xe_fence_desc_t desc                            ///< descriptor of the fence object
-                ) :
-                m_handle( handle ),
-                m_desc( desc )
-            {}
+            CommandQueue* pCommandQueue,                    ///< pointer to parent object
+            fence_handle_t handle,                          ///< handle of fence object
+            desc_t desc                                     ///< descriptor of the fence object
+            );
 
         ~Fence( void ) = default;
 
@@ -64,56 +95,62 @@ namespace xe
         void operator=( Fence&& other ) = delete;
 
     public:
+        ///////////////////////////////////////////////////////////////////////////////
+        auto getCommandqueue( void ) const { return m_pCommandQueue; }
         auto getHandle( void ) const { return m_handle; }
         auto getDesc( void ) const { return m_desc; }
 
         ///////////////////////////////////////////////////////////////////////////////
-        /// @brief C++ version for ::xe_fence_desc_version_t
-        enum class fence_desc_version_t
-        {
-            CURRENT = XE_MAKE_VERSION( 1, 0 ),              ///< version 1.0
-
-        };
-
-        ///////////////////////////////////////////////////////////////////////////////
-        /// @brief C++ version for ::xe_fence_flag_t
-        enum class fence_flag_t
-        {
-            NONE = 0,                                       ///< default behavior
-
-        };
-
-        ///////////////////////////////////////////////////////////////////////////////
-        /// @brief C++ version for ::xe_fence_desc_t
-        struct fence_desc_t
-        {
-            fence_desc_version_t version = fence_desc_version_t::CURRENT;   ///< [in] ::FENCE_DESC_VERSION_CURRENT
-            fence_flag_t flags = fence_flag_t::NONE;        ///< [in] creation flags
-
-        };
-
-        ///////////////////////////////////////////////////////////////////////////////
-        /// @brief C++ wrapper for ::xeFenceCreate
+        /// @brief Creates a fence object on the device's command queue.
+        /// 
+        /// @details
+        ///     - The application may call this function from simultaneous threads.
+        ///     - The implementation of this function should be lock-free.
+        /// 
+        /// @remarks
+        ///   _Analogues_
+        ///     - **vkCreateFence**
         /// @returns
-        ///     - ::fence_handle_t: pointer to handle of fence object created
+        ///     - Fence: pointer to handle of fence object created
         /// 
         /// @throws result_t
-        inline static fence_handle_t
+        inline static Fence*
         Create(
-            command_queue_handle_t hCommandQueue,           ///< [in] handle of command queue
-            const fence_desc_t* desc                        ///< [in] pointer to fence descriptor
+            CommandQueue* hCommandQueue,                    ///< [in] handle of command queue
+            const desc_t* desc                              ///< [in] pointer to fence descriptor
             );
 
         ///////////////////////////////////////////////////////////////////////////////
-        /// @brief C++ wrapper for ::xeFenceDestroy
+        /// @brief Deletes a fence object.
+        /// 
+        /// @details
+        ///     - The application is responsible for making sure the GPU is not
+        ///       currently referencing the fence before it is deleted
+        ///     - The implementation of this function will immediately free all Host and
+        ///       Device allocations associated with this fence
+        ///     - The application may **not** call this function from simultaneous
+        ///       threads with the same fence handle.
+        ///     - The implementation of this function should be lock-free.
+        /// 
+        /// @remarks
+        ///   _Analogues_
+        ///     - **vkDestroyFence**
         /// @throws result_t
         inline static void
         Destroy(
-            fence_handle_t hFence                           ///< [in] handle of fence object to destroy
+            Fence* hFence                                   ///< [in] handle of fence object to destroy
             );
 
         ///////////////////////////////////////////////////////////////////////////////
-        /// @brief C++ wrapper for ::xeFenceHostSynchronize
+        /// @brief The current host thread waits on a fence to be signaled.
+        /// 
+        /// @details
+        ///     - The application may call this function from simultaneous threads.
+        ///     - The implementation of this function should be lock-free.
+        /// 
+        /// @remarks
+        ///   _Analogues_
+        ///     - **vkWaitForFences**
         /// @throws result_t
         inline void
         HostSynchronize(
@@ -125,7 +162,15 @@ namespace xe
             );
 
         ///////////////////////////////////////////////////////////////////////////////
-        /// @brief C++ wrapper for ::xeFenceQueryStatus
+        /// @brief Queries a fence object's status.
+        /// 
+        /// @details
+        ///     - The application may call this function from simultaneous threads.
+        ///     - The implementation of this function should be lock-free.
+        /// 
+        /// @remarks
+        ///   _Analogues_
+        ///     - **vkGetFenceStatus**
         /// @throws result_t
         inline void
         QueryStatus(
@@ -133,7 +178,15 @@ namespace xe
             );
 
         ///////////////////////////////////////////////////////////////////////////////
-        /// @brief C++ wrapper for ::xeFenceReset
+        /// @brief Reset a fence back to the not signaled state.
+        /// 
+        /// @details
+        ///     - The application may call this function from simultaneous threads.
+        ///     - The implementation of this function should be lock-free.
+        /// 
+        /// @remarks
+        ///   _Analogues_
+        ///     - **vkResetFences**
         /// @throws result_t
         inline void
         Reset(

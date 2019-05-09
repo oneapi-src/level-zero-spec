@@ -35,6 +35,9 @@
 #if defined(__cplusplus)
 #pragma once
 #endif
+#if !defined(_XE_API_H)
+#pragma message("warning: this file is not intended to be included directly")
+#endif
 #include "xe_common.h"
 
 #if defined(__cplusplus)
@@ -59,7 +62,7 @@ extern "C" {
 ///     - ::XE_RESULT_ERROR_INVALID_PARAMETER
 ///         + nullptr == count
 ///     - ::XE_RESULT_ERROR_UNSUPPORTED
-__xedllexport xe_result_t __xecall
+xe_result_t __xecall
 xeDeviceGetCount(
     uint32_t* count                                 ///< [out] number of devices available
     );
@@ -71,8 +74,10 @@ typedef xe_result_t (__xecall *xe_pfnDeviceGetCount_t)(
     );
 
 ///////////////////////////////////////////////////////////////////////////////
+#ifndef XE_MAX_UUID_SIZE
 /// @brief Maximum device uuid size in bytes
 #define XE_MAX_UUID_SIZE  16
+#endif // XE_MAX_UUID_SIZE
 
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Device universal unique id (UUID)
@@ -102,7 +107,7 @@ typedef struct _xe_device_uuid_t
 ///         + nullptr == phDevice
 ///         + ordinal is out of range reported by ::xeDeviceGetCount
 ///     - ::XE_RESULT_ERROR_UNSUPPORTED
-__xedllexport xe_result_t __xecall
+xe_result_t __xecall
 xeDeviceGet(
     uint32_t ordinal,                               ///< [in] The device index in the range of [0, ::xeDeviceGetCount]
     xe_device_handle_t* phDevice                    ///< [out] pointer to handle of device object created
@@ -136,7 +141,7 @@ typedef xe_result_t (__xecall *xe_pfnDeviceGet_t)(
 ///         + nullptr == phSubDevice
 ///         + ordinal is out of range reported by device properties.
 ///     - ::XE_RESULT_ERROR_UNSUPPORTED
-__xedllexport xe_result_t __xecall
+xe_result_t __xecall
 xeDeviceGetSubDevice(
     xe_device_handle_t hDevice,                     ///< [in] handle of the device object
     uint32_t ordinal,                               ///< [in] ordinal of sub-device to retrieve
@@ -182,7 +187,7 @@ typedef enum _xe_api_version_t
 ///         + nullptr == hDevice
 ///         + nullptr == version
 ///     - ::XE_RESULT_ERROR_UNSUPPORTED
-__xedllexport xe_result_t __xecall
+xe_result_t __xecall
 xeDeviceGetApiVersion(
     xe_device_handle_t hDevice,                     ///< [in] handle of the device object
     xe_api_version_t* version                       ///< [out] api version
@@ -204,8 +209,10 @@ typedef enum _xe_device_properties_version_t
 } xe_device_properties_version_t;
 
 ///////////////////////////////////////////////////////////////////////////////
+#ifndef XE_MAX_DEVICE_NAME
 /// @brief Maximum device name string size
 #define XE_MAX_DEVICE_NAME  256
+#endif // XE_MAX_DEVICE_NAME
 
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Device properties queried using ::xeDeviceGetProperties
@@ -258,7 +265,7 @@ typedef struct _xe_device_properties_t
 ///         + nullptr == hDevice
 ///         + nullptr == pDeviceProperties
 ///     - ::XE_RESULT_ERROR_UNSUPPORTED
-__xedllexport xe_result_t __xecall
+xe_result_t __xecall
 xeDeviceGetProperties(
     xe_device_handle_t hDevice,                     ///< [in] handle of the device object
     xe_device_properties_t* pDeviceProperties       ///< [out] query result for device properties
@@ -280,15 +287,18 @@ typedef enum _xe_device_compute_properties_version_t
 } xe_device_compute_properties_version_t;
 
 ///////////////////////////////////////////////////////////////////////////////
+#ifndef XE_SUBGROUPSIZE_COUNT
 /// @brief Maximum number of subgroup sizes supported.
 #define XE_SUBGROUPSIZE_COUNT  8
+#endif // XE_SUBGROUPSIZE_COUNT
 
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Device compute properties queried using ::xeDeviceGetComputeProperties
 typedef struct _xe_device_compute_properties_t
 {
     xe_device_compute_properties_version_t version; ///< [in] ::XE_DEVICE_COMPUTE_PROPERTIES_VERSION_CURRENT
-    uint32_t maxThreadsPerGroup;                    ///< [out] Maximum threads per compute group
+    uint32_t maxTotalGroupSize;                     ///< [out] Maximum items per compute group. (maxGroupSizeX * maxGroupSizeY
+                                                    ///< * maxGroupSizeZ) <= maxTotalGroupSize
     uint32_t maxGroupSizeX;                         ///< [out] Maximum items for X dimension in group
     uint32_t maxGroupSizeY;                         ///< [out] Maximum items for Y dimension in group
     uint32_t maxGroupSizeZ;                         ///< [out] Maximum items for Z dimension in group
@@ -322,7 +332,7 @@ typedef struct _xe_device_compute_properties_t
 ///         + nullptr == hDevice
 ///         + nullptr == pComputeProperties
 ///     - ::XE_RESULT_ERROR_UNSUPPORTED
-__xedllexport xe_result_t __xecall
+xe_result_t __xecall
 xeDeviceGetComputeProperties(
     xe_device_handle_t hDevice,                     ///< [in] handle of the device object
     xe_device_compute_properties_t* pComputeProperties  ///< [out] query result for compute properties
@@ -371,7 +381,7 @@ typedef struct _xe_device_memory_properties_t
     uint32_t maxImageArraySlices;                   ///< [out] Maximum image array slices
     xe_memory_access_capabilities_t hostAllocCapabilities;  ///< [out] Bitfield describing host memory capabilities
     xe_memory_access_capabilities_t deviceAllocCapabilities;///< [out] Bitfield describing device memory capabilities
-    xe_memory_access_capabilities_t sharedAllocCapabilities;///< [out] Bitfield describing shared memory capabilities
+    xe_memory_access_capabilities_t sharedSingleDeviceAllocCapabilities;///< [out] Bitfield describing shared (single-device) memory capabilities
     xe_memory_access_capabilities_t sharedCrossDeviceAllocCapabilities; ///< [out] Bitfield describing shared (cross-device) memory capabilities
     xe_memory_access_capabilities_t sharedSystemDeviceAllocCapabilities;///< [out] Bitfield describing shared (system) memory capabilities
     uint32_t intermediateCacheSize;                 ///< [out] Per-cache Intermediate Cache (L1/L2) size, in bytes
@@ -404,7 +414,7 @@ typedef struct _xe_device_memory_properties_t
 ///         + nullptr == hDevice
 ///         + nullptr == pMemProperties
 ///     - ::XE_RESULT_ERROR_UNSUPPORTED
-__xedllexport xe_result_t __xecall
+xe_result_t __xecall
 xeDeviceGetMemoryProperties(
     xe_device_handle_t hDevice,                     ///< [in] handle of the device object
     xe_device_memory_properties_t* pMemProperties   ///< [out] query result for compute properties
@@ -456,7 +466,7 @@ typedef struct _xe_device_p2p_properties_t
 ///         + nullptr == hPeerDevice
 ///         + nullptr == pP2PProperties
 ///     - ::XE_RESULT_ERROR_UNSUPPORTED
-__xedllexport xe_result_t __xecall
+xe_result_t __xecall
 xeDeviceGetP2PProperties(
     xe_device_handle_t hDevice,                     ///< [in] handle of the device performing the access
     xe_device_handle_t hPeerDevice,                 ///< [in] handle of the peer device with the allocation
@@ -491,7 +501,7 @@ typedef xe_result_t (__xecall *xe_pfnDeviceGetP2PProperties_t)(
 ///         + nullptr == hPeerDevice
 ///         + nullptr == value
 ///     - ::XE_RESULT_ERROR_UNSUPPORTED
-__xedllexport xe_result_t __xecall
+xe_result_t __xecall
 xeDeviceCanAccessPeer(
     xe_device_handle_t hDevice,                     ///< [in] handle of the device performing the access
     xe_device_handle_t hPeerDevice,                 ///< [in] handle of the peer device with the allocation
@@ -538,7 +548,7 @@ typedef enum _xe_cache_config_t
 ///         + nullptr == hDevice
 ///         + devices do not support CacheConfig
 ///     - ::XE_RESULT_ERROR_UNSUPPORTED
-__xedllexport xe_result_t __xecall
+xe_result_t __xecall
 xeDeviceSetIntermediateCacheConfig(
     xe_device_handle_t hDevice,                     ///< [in] handle of the device 
     xe_cache_config_t CacheConfig                   ///< [in] CacheConfig
@@ -570,7 +580,7 @@ typedef xe_result_t (__xecall *xe_pfnDeviceSetIntermediateCacheConfig_t)(
 ///         + nullptr == hDevice
 ///         + devices do not support CacheConfig
 ///     - ::XE_RESULT_ERROR_UNSUPPORTED
-__xedllexport xe_result_t __xecall
+xe_result_t __xecall
 xeDeviceSetLastLevelCacheConfig(
     xe_device_handle_t hDevice,                     ///< [in] handle of the device 
     xe_cache_config_t CacheConfig                   ///< [in] CacheConfig

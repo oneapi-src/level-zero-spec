@@ -51,6 +51,9 @@ def declare_obj(obj, tags):
 #define _${N}_${name.upper()}_INL
 #if defined(__cplusplus)
 #pragma once
+#if !defined(_${N}_API_HPP)
+#pragma message("warning: this file is not intended to be included directly")
+#endif
 %if re.match(r"common", name):
 #include "${n}_api.h"
 %else:
@@ -72,7 +75,7 @@ namespace ${n}
     /// ${line}
     %endfor
     /// 
-    %for line in th.make_returns_lines(n, tags, obj, cpp=True):
+    %for line in th.make_returns_lines(n, tags, obj, cpp=True, meta=meta):
     /// ${line}
     %endfor
     inline ${th.make_return_value(n, tags, obj, cpp=True, meta=meta)} 
@@ -90,6 +93,21 @@ namespace ${n}
 %endif
 
 %elif re.match(r"class", obj['type']):
+    ## CTORS/DTORS ################################################################
+    %if 'base' not in obj:
+    ///////////////////////////////////////////////////////////////////////////////
+    ${th.make_class_name(n, tags, obj)}::${th.make_class_name(n, tags, obj)}( 
+    %for line in th.make_ctor_param_lines(n, tags, obj, meta=meta):
+        ${line}
+    %endfor
+        ) :
+    %for line in th.make_ctor_param_init_lines(n, tags, obj, "m_"):
+        ${line}
+    %endfor
+    {
+    }
+
+    %endif
     ## CLASS FUNCTION #############################################################
     %for f in th.filter_items(th.extract_objs(specs, r"function"), 'class', obj['name']):
     ///////////////////////////////////////////////////////////////////////////////
@@ -101,7 +119,7 @@ namespace ${n}
     /// ${line}
     %endfor
     /// 
-    %for line in th.make_returns_lines(n, tags, f, cpp=True):
+    %for line in th.make_returns_lines(n, tags, f, cpp=True, meta=meta):
     /// ${line}
     %endfor
     %if 'tparams' in f:
@@ -123,8 +141,8 @@ namespace ${n}
 
     %endfor
 %endif
-%endif
-%endfor
+%endif  # declare_obj
+%endfor # obj in objects
 } // namespace ${n}
 #endif // defined(__cplusplus)
 #endif // _${N}_${name.upper()}_INL

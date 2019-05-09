@@ -34,6 +34,9 @@
 #define _XE_MEMORY_HPP
 #if defined(__cplusplus)
 #pragma once
+#if !defined(_XE_API_HPP)
+#pragma message("warning: this file is not intended to be included directly")
+#endif
 #include "xe_common.hpp"
 
 namespace xe
@@ -78,7 +81,7 @@ namespace xe
     /// @throws result_t
     inline void*
     SharedMemAlloc(
-        device_handle_t hDevice,                        ///< [in] handle of the device
+        Device* hDevice,                                ///< [in] handle of the device
         device_mem_alloc_flag_t device_flags,           ///< [in] flags specifying additional device allocation controls
         host_mem_alloc_flag_t host_flags,               ///< [in] flags specifying additional host allocation controls
         size_t size,                                    ///< [in] size in bytes to allocate
@@ -103,8 +106,8 @@ namespace xe
     /// 
     /// @throws result_t
     inline void*
-    MemAlloc(
-        device_handle_t hDevice,                        ///< [in] handle of the device
+    DeviceMemAlloc(
+        Device* hDevice,                                ///< [in] handle of the device
         device_mem_alloc_flag_t flags,                  ///< [in] flags specifying additional allocation controls
         size_t size,                                    ///< [in] size in bytes to allocate
         size_t alignment                                ///< [in] minimum alignment in bytes for the allocation
@@ -182,7 +185,7 @@ namespace xe
     {
         memory_allocation_properties_version_t version = memory_allocation_properties_version_t::CURRENT;   ///< [in] ::MEMORY_ALLOCATION_PROPERTIES_VERSION_CURRENT
         memory_type_t type;                             ///< [out] Type of allocated memory
-        device_handle_t device;                         ///< [out] Device handle associated with this allocation (optional)
+        Device* device;                                 ///< [out] Device handle associated with this allocation (optional)
         uint64_t id;                                    ///< [out] Identifier for this allocation
 
     };
@@ -198,7 +201,7 @@ namespace xe
     ///     - **cuPointerGetAttribute**
     /// 
     /// @returns
-    ///     - ::memory_allocation_properties_t: Query result for memory allocation properties
+    ///     - memory_allocation_properties_t: Query result for memory allocation properties
     /// 
     /// @throws result_t
     inline memory_allocation_properties_t
@@ -238,7 +241,7 @@ namespace xe
     ///     - **cuIpcGetMemHandle**
     /// 
     /// @returns
-    ///     - ::ipc_mem_handle_t: Returned IPC memory handle
+    ///     - ipc_mem_handle_t: Returned IPC memory handle
     /// 
     /// @throws result_t
     inline ipc_mem_handle_t
@@ -275,7 +278,7 @@ namespace xe
     /// @throws result_t
     inline void*
     IpcOpenMemHandle(
-        device_handle_t hDevice,                        ///< [in] handle of the device to associate with the IPC memory handle
+        Device* hDevice,                                ///< [in] handle of the device to associate with the IPC memory handle
         ipc_mem_handle_t handle,                        ///< [in] IPC memory handle
         ipc_memory_flag_t flags                         ///< [in] flags controlling the operation
         );
