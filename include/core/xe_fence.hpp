@@ -96,7 +96,7 @@ namespace xe
 
     public:
         ///////////////////////////////////////////////////////////////////////////////
-        auto getCommandqueue( void ) const { return m_CommandQueue; }
+        auto getCommandqueue( void ) const { return m_pCommandQueue; }
         auto getHandle( void ) const { return m_handle; }
         auto getDesc( void ) const { return m_desc; }
 

@@ -99,7 +99,7 @@ namespace xe
 
     public:
         ///////////////////////////////////////////////////////////////////////////////
-        auto getDevice( void ) const { return m_Device; }
+        auto getDevice( void ) const { return m_pDevice; }
         auto getHandle( void ) const { return m_handle; }
         auto getDesc( void ) const { return m_desc; }
 
@@ -265,7 +265,7 @@ namespace xe
 
     public:
         ///////////////////////////////////////////////////////////////////////////////
-        auto getEventpool( void ) const { return m_EventPool; }
+        auto getEventpool( void ) const { return m_pEventPool; }
         auto getHandle( void ) const { return m_handle; }
 
         ///////////////////////////////////////////////////////////////////////////////

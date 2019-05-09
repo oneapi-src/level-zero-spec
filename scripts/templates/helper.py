@@ -347,9 +347,11 @@ def make_member_function_lines(namespace, tags, obj, prefix=""):
 
         is_pointer = re.match(r".*\w+\*+", item['type'])
         if is_pointer and re.match(r"p\w+", name):  # if this is a pointer and starts with 'p',
-            name = name[1:]                         # then remove the 'p' part of the name
+            fname = name[1:].title()                # then remove the 'p' part of the name
+        else:
+            fname = name.title()
 
-        lines.append("auto get%s( void ) const { return %s; }"%(name.title(), prefix+name))
+        lines.append("auto get%s( void ) const { return %s; }"%(fname, prefix+name))
     return lines
 
 """

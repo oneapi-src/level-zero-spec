@@ -252,7 +252,7 @@ namespace xe
 
     public:
         ///////////////////////////////////////////////////////////////////////////////
-        auto getDriver( void ) const { return m_Driver; }
+        auto getDriver( void ) const { return m_pDriver; }
         auto getHandle( void ) const { return m_handle; }
 
         ///////////////////////////////////////////////////////////////////////////////
