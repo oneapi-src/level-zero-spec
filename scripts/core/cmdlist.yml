@@ -1,8 +1,7 @@
 --- #--------------------------------------------------------------------------
 type: header
 desc: "Intel $OneApi Level-Zero APIs for Command List"
-includes:
-    - $x_cmdqueue.$h
+ordinal: "3"
 --- #--------------------------------------------------------------------------
 type: enum
 desc: "API version of $x_command_list_desc_t"
@@ -235,6 +234,9 @@ type: class
 desc: "C++ wrapper for command list"
 name: $xCommandList
 members:
+    - type: $xDevice*
+      name: pDevice
+      desc: "pointer to parent object"
     - type: $x_command_list_handle_t
       name: handle
       desc: "handle of command list object"

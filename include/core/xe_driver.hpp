@@ -92,6 +92,38 @@ namespace xe
         void
         );
 
+    ///////////////////////////////////////////////////////////////////////////////
+    /// @brief C++ wrapper for driver
+    class Driver
+    {
+    public:
+
+    protected:
+        ///////////////////////////////////////////////////////////////////////////////
+        void* m_handle;                                 ///< handle of driver module
+
+        ///////////////////////////////////////////////////////////////////////////////
+        Driver( void ) = delete;
+        Driver( 
+                void* handle                                    ///< handle of driver module
+                ) :
+                m_handle( handle )
+            {}
+
+        ~Driver( void ) = default;
+
+        Driver( Driver const& other ) = delete;
+        void operator=( Driver const& other ) = delete;
+
+        Driver( Driver&& other ) = delete;
+        void operator=( Driver&& other ) = delete;
+
+    public:
+        ///////////////////////////////////////////////////////////////////////////////
+        auto getHandle( void ) const { return m_handle; }
+
+    };
+
 } // namespace xe
 #endif // defined(__cplusplus)
 #endif // _XE_DRIVER_HPP

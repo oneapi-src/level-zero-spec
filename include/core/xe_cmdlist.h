@@ -39,7 +39,6 @@
 #pragma message("warning: this file is not intended to be included directly")
 #endif
 #include "xe_common.h"
-#include "xe_cmdqueue.h"
 
 #if defined(__cplusplus)
 extern "C" {

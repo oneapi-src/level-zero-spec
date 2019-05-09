@@ -77,15 +77,18 @@ namespace xe
 
     protected:
         ///////////////////////////////////////////////////////////////////////////////
+        Device* m_pDevice;                              ///< pointer to parent object
         event_pool_handle_t m_handle;                   ///< handle of event pool object
         desc_t m_desc;                                  ///< descriptor of the event object
 
         ///////////////////////////////////////////////////////////////////////////////
         EventPool( void ) = delete;
         EventPool( 
+                Device* pDevice,                                ///< pointer to parent object
                 event_pool_handle_t handle,                     ///< handle of event pool object
                 desc_t desc                                     ///< descriptor of the event object
                 ) :
+                m_pDevice( pDevice ),
                 m_handle( handle ),
                 m_desc( desc )
             {}
@@ -100,6 +103,7 @@ namespace xe
 
     public:
         ///////////////////////////////////////////////////////////////////////////////
+        auto getDevice( void ) const { return m_Device; }
         auto getHandle( void ) const { return m_handle; }
         auto getDesc( void ) const { return m_desc; }
 
@@ -245,13 +249,16 @@ namespace xe
 
     protected:
         ///////////////////////////////////////////////////////////////////////////////
+        EventPool* m_pEventPool;                        ///< pointer to parent object
         event_handle_t m_handle;                        ///< handle of event object
 
         ///////////////////////////////////////////////////////////////////////////////
         Event( void ) = delete;
         Event( 
+                EventPool* pEventPool,                          ///< pointer to parent object
                 event_handle_t handle                           ///< handle of event object
                 ) :
+                m_pEventPool( pEventPool ),
                 m_handle( handle )
             {}
 
@@ -265,6 +272,7 @@ namespace xe
 
     public:
         ///////////////////////////////////////////////////////////////////////////////
+        auto getEventpool( void ) const { return m_EventPool; }
         auto getHandle( void ) const { return m_handle; }
 
         ///////////////////////////////////////////////////////////////////////////////

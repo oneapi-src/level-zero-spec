@@ -358,6 +358,9 @@ type: class
 desc: "C++ wrapper for event pool"
 name: $xEventPool
 members:
+    - type: $xDevice*
+      name: pDevice
+      desc: "pointer to parent object"
     - type: $x_event_pool_handle_t
       name: handle
       desc: "handle of event pool object"
@@ -369,6 +372,9 @@ type: class
 desc: "C++ wrapper for event"
 name: $xEvent
 members:
+    - type: $xEventPool*
+      name: pEventPool
+      desc: "pointer to parent object"
     - type: $x_event_handle_t
       name: handle
       desc: "handle of event object"

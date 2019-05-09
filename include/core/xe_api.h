@@ -33,13 +33,13 @@
 #pragma once
 #endif
 
+#include "xe_driver.h"
+#include "xe_device.h"
+#include "xe_cmdqueue.h"
+#include "xe_cmdlist.h"
 #include "xe_barrier.h"
 #include "xe_cl_interop.h"
-#include "xe_cmdlist.h"
-#include "xe_cmdqueue.h"
 #include "xe_copy.h"
-#include "xe_device.h"
-#include "xe_driver.h"
 #include "xe_event.h"
 #include "xe_fence.h"
 #include "xe_image.h"

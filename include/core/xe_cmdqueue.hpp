@@ -109,15 +109,18 @@ namespace xe
 
     protected:
         ///////////////////////////////////////////////////////////////////////////////
+        Device* m_pDevice;                              ///< pointer to parent object
         command_queue_handle_t m_handle;                ///< handle of command queue object
         desc_t m_desc;                                  ///< descriptor of the command queue object
 
         ///////////////////////////////////////////////////////////////////////////////
         CommandQueue( void ) = delete;
         CommandQueue( 
+                Device* pDevice,                                ///< pointer to parent object
                 command_queue_handle_t handle,                  ///< handle of command queue object
                 desc_t desc                                     ///< descriptor of the command queue object
                 ) :
+                m_pDevice( pDevice ),
                 m_handle( handle ),
                 m_desc( desc )
             {}
@@ -132,6 +135,7 @@ namespace xe
 
     public:
         ///////////////////////////////////////////////////////////////////////////////
+        auto getDevice( void ) const { return m_Device; }
         auto getHandle( void ) const { return m_handle; }
         auto getDesc( void ) const { return m_desc; }
 

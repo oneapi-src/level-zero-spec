@@ -622,6 +622,9 @@ type: class
 desc: "C++ wrapper for module"
 name: $xModule
 members:
+    - type: $xDevice*
+      name: pDevice
+      desc: "pointer to parent object"
     - type: $x_module_handle_t
       name: handle
       desc: "handle of module object"
@@ -633,6 +636,9 @@ type: class
 desc: "C++ wrapper for function"
 name: $xFunction
 members:
+    - type: $xModule*
+      name: pModule
+      desc: "pointer to parent object"
     - type: $x_function_handle_t
       name: handle
       desc: "handle of function object"

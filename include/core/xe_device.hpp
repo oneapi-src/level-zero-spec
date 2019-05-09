@@ -232,13 +232,16 @@ namespace xe
 
     protected:
         ///////////////////////////////////////////////////////////////////////////////
+        Driver* m_pDriver;                              ///< pointer to parent object
         device_handle_t m_handle;                       ///< handle of device object
 
         ///////////////////////////////////////////////////////////////////////////////
         Device( void ) = delete;
         Device( 
+                Driver* pDriver,                                ///< pointer to parent object
                 device_handle_t handle                          ///< handle of device object
                 ) :
+                m_pDriver( pDriver ),
                 m_handle( handle )
             {}
 
@@ -252,6 +255,7 @@ namespace xe
 
     public:
         ///////////////////////////////////////////////////////////////////////////////
+        auto getDriver( void ) const { return m_Driver; }
         auto getHandle( void ) const { return m_handle; }
 
         ///////////////////////////////////////////////////////////////////////////////

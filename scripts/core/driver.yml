@@ -1,6 +1,7 @@
 --- #--------------------------------------------------------------------------
 type: header
 desc: "Intel $OneApi Level-Zero APIs"
+ordinal: "0"
 --- #--------------------------------------------------------------------------
 type: enum
 desc: "Supported initialization flags"
@@ -48,3 +49,11 @@ params:
     - type: "uint32_t*"
       name: version
       desc: "[out] driver version"
+--- #--------------------------------------------------------------------------
+type: class
+desc: "C++ wrapper for driver"
+name: $xDriver
+members:
+    - type: void*
+      name: handle
+      desc: "handle of driver module"

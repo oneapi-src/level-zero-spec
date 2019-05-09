@@ -1,6 +1,7 @@
 --- #--------------------------------------------------------------------------
 type: header
 desc: "Intel $OneApi Level-Zero APIs for Device"
+ordinal: "1"
 --- #--------------------------------------------------------------------------
 type: function
 desc: "Reports the number of devices"
@@ -522,6 +523,9 @@ type: class
 desc: "C++ wrapper for device"
 name: $xDevice
 members:
+    - type: $xDriver*
+      name: pDriver
+      desc: "pointer to parent object"
     - type: $x_device_handle_t
       name: handle
       desc: "handle of device object"

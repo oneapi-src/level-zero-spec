@@ -235,11 +235,11 @@ namespace ${n}
         using ${th.make_baseclass_ctor(n, tags, obj)};
         %else:
         ${th.make_class_name(n, tags, obj)}( 
-            %for line in th.make_member_param_lines(n, tags, obj, meta=meta):
+            %for line in th.make_ctor_param_lines(n, tags, obj, meta=meta):
                 ${line}
             %endfor
                 ) :
-            %for line in th.make_member_param_init_lines(n, tags, obj, "m_"):
+            %for line in th.make_ctor_param_init_lines(n, tags, obj, "m_"):
                 ${line}
             %endfor
             {}

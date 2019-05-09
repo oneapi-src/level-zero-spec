@@ -1,6 +1,7 @@
 --- #--------------------------------------------------------------------------
 type: header
 desc: "Intel $OneApi Level-Zero APIs for Command Queue"
+ordinal: "2"
 --- #--------------------------------------------------------------------------
 type: enum
 desc: API version of $x_command_queue_desc_t
@@ -189,6 +190,9 @@ type: class
 desc: "C++ wrapper for command queue"
 name: $xCommandQueue
 members:
+    - type: $xDevice*
+      name: pDevice
+      desc: "pointer to parent object"
     - type: $x_command_queue_handle_t
       name: handle
       desc: "handle of command queue object"

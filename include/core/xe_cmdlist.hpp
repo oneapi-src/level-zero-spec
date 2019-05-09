@@ -38,7 +38,6 @@
 #pragma message("warning: this file is not intended to be included directly")
 #endif
 #include "xe_common.hpp"
-#include "xe_cmdqueue.hpp"
 
 namespace xe
 {
@@ -138,15 +137,18 @@ namespace xe
 
     protected:
         ///////////////////////////////////////////////////////////////////////////////
+        Device* m_pDevice;                              ///< pointer to parent object
         command_list_handle_t m_handle;                 ///< handle of command list object
         desc_t m_desc;                                  ///< descriptor of the command list object
 
         ///////////////////////////////////////////////////////////////////////////////
         CommandList( void ) = delete;
         CommandList( 
+                Device* pDevice,                                ///< pointer to parent object
                 command_list_handle_t handle,                   ///< handle of command list object
                 desc_t desc                                     ///< descriptor of the command list object
                 ) :
+                m_pDevice( pDevice ),
                 m_handle( handle ),
                 m_desc( desc )
             {}
@@ -161,6 +163,7 @@ namespace xe
 
     public:
         ///////////////////////////////////////////////////////////////////////////////
+        auto getDevice( void ) const { return m_Device; }
         auto getHandle( void ) const { return m_handle; }
         auto getDesc( void ) const { return m_desc; }
 

@@ -306,6 +306,9 @@ type: class
 desc: "C++ wrapper for image"
 name: $xImage
 members:
+    - type: $xDevice*
+      name: pDevice
+      desc: "pointer to parent object"
     - type: $x_image_handle_t
       name: handle
       desc: "handle of image object"

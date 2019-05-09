@@ -79,15 +79,18 @@ namespace xe
 
     protected:
         ///////////////////////////////////////////////////////////////////////////////
+        Device* m_pDevice;                              ///< pointer to parent object
         module_handle_t m_handle;                       ///< handle of module object
         desc_t m_desc;                                  ///< descriptor of the module object
 
         ///////////////////////////////////////////////////////////////////////////////
         Module( void ) = delete;
         Module( 
+                Device* pDevice,                                ///< pointer to parent object
                 module_handle_t handle,                         ///< handle of module object
                 desc_t desc                                     ///< descriptor of the module object
                 ) :
+                m_pDevice( pDevice ),
                 m_handle( handle ),
                 m_desc( desc )
             {}
@@ -102,6 +105,7 @@ namespace xe
 
     public:
         ///////////////////////////////////////////////////////////////////////////////
+        auto getDevice( void ) const { return m_Device; }
         auto getHandle( void ) const { return m_handle; }
         auto getDesc( void ) const { return m_desc; }
 
@@ -285,15 +289,18 @@ namespace xe
 
     protected:
         ///////////////////////////////////////////////////////////////////////////////
+        Module* m_pModule;                              ///< pointer to parent object
         function_handle_t m_handle;                     ///< handle of function object
         desc_t m_desc;                                  ///< descriptor of the function object
 
         ///////////////////////////////////////////////////////////////////////////////
         Function( void ) = delete;
         Function( 
+                Module* pModule,                                ///< pointer to parent object
                 function_handle_t handle,                       ///< handle of function object
                 desc_t desc                                     ///< descriptor of the function object
                 ) :
+                m_pModule( pModule ),
                 m_handle( handle ),
                 m_desc( desc )
             {}
@@ -308,6 +315,7 @@ namespace xe
 
     public:
         ///////////////////////////////////////////////////////////////////////////////
+        auto getModule( void ) const { return m_Module; }
         auto getHandle( void ) const { return m_handle; }
         auto getDesc( void ) const { return m_desc; }
 

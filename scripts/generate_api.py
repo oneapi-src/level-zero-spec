@@ -11,7 +11,7 @@ def generate_cpp_headers(path, namespace, tags, specs, meta, type):
     fin = os.path.join("templates", template)
 
     files = []
-    for s in specs:
+    for s in sorted(specs, key=lambda x: x['header']['ordinal'] if 'ordinal' in x['header'] else "9999"):
         filename = "%s_%s%s"%(namespace, s['name'], type)
         files.append(filename)
         fout = os.path.join(path, filename)
