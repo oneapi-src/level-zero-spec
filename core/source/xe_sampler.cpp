@@ -29,9 +29,9 @@
 *
 ******************************************************************************/
 #if defined(XE_CPP)
-#include "../include/xe_sampler.hpp"
+#include "xe_sampler.hpp"
 #else
-#include "../include/xe_sampler.h"
+#include "xe_sampler.h"
 #endif
 #if !defined(XE_NULLDRV)
 #include "sampler.h"

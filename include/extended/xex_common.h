@@ -21,22 +21,38 @@
 * express and approved by Intel in writing.  
 * @endcond
 *
-* @file xe_common.cpp
+* @file xex_common.h
 *
-* @brief Intel Xe Level-Zero API common types
+* @brief Intel Xe Level-Zero Extended API common types
 *
-* DO NOT EDIT: generated from /scripts/core/common.yml
+* @cond DEV
+* DO NOT EDIT: generated from /scripts/extended/common.yml
+* @endcond
 *
 ******************************************************************************/
-#if defined(XE_CPP)
-#include "xe_common.hpp"
-#else
-#include "xe_common.h"
+#ifndef _XEX_COMMON_H
+#define _XEX_COMMON_H
+#if defined(__cplusplus)
+#pragma once
 #endif
-#if !defined(XE_NULLDRV)
-#include "common.h"
+#include <stdint.h>
+#include <string.h>
+#include "xe_all.h"
+
+#if defined(__cplusplus)
+extern "C" {
 #endif
 
-#include <exception>    // @todo: move to common and/or precompiled header
-#include <new>
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Handle of driver's command graph object
+typedef struct _xex_command_graph_handle_t *xex_command_graph_handle_t;
 
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Forward-declare xex_command_graph_desc_t
+typedef struct _xex_command_graph_desc_t xex_command_graph_desc_t;
+
+#if defined(__cplusplus)
+} // extern "C"
+#endif
+
+#endif // _XEX_COMMON_H

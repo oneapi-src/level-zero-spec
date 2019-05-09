@@ -29,9 +29,9 @@
 *
 ******************************************************************************/
 #if defined(XE_CPP)
-#include "../include/xe_memory.hpp"
+#include "xe_memory.hpp"
 #else
-#include "../include/xe_memory.h"
+#include "xe_memory.h"
 #endif
 #if !defined(XE_NULLDRV)
 #include "memory.h"

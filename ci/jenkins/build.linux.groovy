@@ -49,6 +49,7 @@
 ~/irepo/irepo ignore-folder core
 ~/irepo/irepo ignore-folder samples
 ~/irepo/irepo ignore-folder cmake
+~/irepo/irepo ignore-folder include
 
 ~/irepo/irepo sync --clean --delete-unknown-content
 ls -la

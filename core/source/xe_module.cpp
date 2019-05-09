@@ -29,9 +29,9 @@
 *
 ******************************************************************************/
 #if defined(XE_CPP)
-#include "../include/xe_module.hpp"
+#include "xe_module.hpp"
 #else
-#include "../include/xe_module.h"
+#include "xe_module.h"
 #endif
 #if !defined(XE_NULLDRV)
 #include "module.h"

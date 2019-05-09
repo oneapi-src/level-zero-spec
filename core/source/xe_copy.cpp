@@ -29,9 +29,9 @@
 *
 ******************************************************************************/
 #if defined(XE_CPP)
-#include "../include/xe_copy.hpp"
+#include "xe_copy.hpp"
 #else
-#include "../include/xe_copy.h"
+#include "xe_copy.h"
 #endif
 #if !defined(XE_NULLDRV)
 #include "copy.h"

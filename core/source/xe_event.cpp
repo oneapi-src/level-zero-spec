@@ -29,9 +29,9 @@
 *
 ******************************************************************************/
 #if defined(XE_CPP)
-#include "../include/xe_event.hpp"
+#include "xe_event.hpp"
 #else
-#include "../include/xe_event.h"
+#include "xe_event.h"
 #endif
 #if !defined(XE_NULLDRV)
 #include "event.h"

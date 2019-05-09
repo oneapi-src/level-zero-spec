@@ -21,22 +21,28 @@
 * express and approved by Intel in writing.  
 * @endcond
 *
-* @file xe_common.cpp
+* @file xex_device.h
 *
-* @brief Intel Xe Level-Zero API common types
+* @brief Intel Xe Level-Zero Extended APIs for Device
 *
-* DO NOT EDIT: generated from /scripts/core/common.yml
+* @cond DEV
+* DO NOT EDIT: generated from /scripts/extended/device.yml
+* @endcond
 *
 ******************************************************************************/
-#if defined(XE_CPP)
-#include "xe_common.hpp"
-#else
-#include "xe_common.h"
+#ifndef _XEX_DEVICE_H
+#define _XEX_DEVICE_H
+#if defined(__cplusplus)
+#pragma once
 #endif
-#if !defined(XE_NULLDRV)
-#include "common.h"
+#include "xex_common.h"
+
+#if defined(__cplusplus)
+extern "C" {
 #endif
 
-#include <exception>    // @todo: move to common and/or precompiled header
-#include <new>
+#if defined(__cplusplus)
+} // extern "C"
+#endif
 
+#endif // _XEX_DEVICE_H

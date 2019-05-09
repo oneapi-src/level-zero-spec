@@ -109,11 +109,11 @@ add_custom_command(
     DEPENDS "${IGC_DIR}/lib" "${GMM_SOURCE_DIR}/lib"
 )
 
-add_subdirectory(core)
-
-include_directories(${CMAKE_CURRENT_SOURCE_DIR}/core/include)
+include_directories(${CMAKE_CURRENT_SOURCE_DIR}/include/core)
 include_directories(${CMAKE_CURRENT_SOURCE_DIR}/core/source)
 include_directories("${CMAKE_CURRENT_SOURCE_DIR}")
+
+add_subdirectory(core)
 
 if (${PROJECT_NAME}_BUILD_TESTS)
     add_subdirectory(tests)

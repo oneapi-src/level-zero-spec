@@ -21,22 +21,44 @@
 * express and approved by Intel in writing.  
 * @endcond
 *
-* @file xe_common.cpp
+* @file xex_device.hpp
 *
-* @brief Intel Xe Level-Zero API common types
+* @brief C++ wrapper of Intel Xe Level-Zero Extended APIs for Device
 *
-* DO NOT EDIT: generated from /scripts/core/common.yml
+* @cond DEV
+* DO NOT EDIT: generated from /scripts/extended/device.yml
+* @endcond
 *
 ******************************************************************************/
-#if defined(XE_CPP)
-#include "xe_common.hpp"
-#else
-#include "xe_common.h"
-#endif
-#if !defined(XE_NULLDRV)
-#include "common.h"
-#endif
+#ifndef _XEX_DEVICE_HPP
+#define _XEX_DEVICE_HPP
+#if defined(__cplusplus)
+#pragma once
+#include "xex_common.hpp"
 
-#include <exception>    // @todo: move to common and/or precompiled header
-#include <new>
+namespace xex
+{
+    ///////////////////////////////////////////////////////////////////////////////
+    /// @brief C++ wrapper for device
+    class Device : public xe::Device
+    {
+    protected:
 
+        Device( void ) = delete;
+        using xe::Device::Device;
+
+        ~Device( void ) = default;
+
+        Device( Device const& other ) = delete;
+        void operator=( Device const& other ) = delete;
+
+        Device( Device&& other ) = delete;
+        void operator=( Device&& other ) = delete;
+
+    public:
+
+    };
+
+} // namespace xex
+#endif // defined(__cplusplus)
+#endif // _XEX_DEVICE_HPP

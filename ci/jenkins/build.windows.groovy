@@ -40,6 +40,7 @@ call c:\\irepo\\irepo ignore-folder images
 call c:\\irepo\\irepo ignore-folder core
 call c:\\irepo\\irepo ignore-folder samples
 call c:\\irepo\\irepo ignore-folder cmake
+call c:\\irepo\\irepo ignore-folder include
 
 call c:\\irepo\\irepo sync --clean --delete-unknown-content
 """

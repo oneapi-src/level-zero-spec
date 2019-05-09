@@ -29,9 +29,9 @@
 *
 ******************************************************************************/
 #if defined(XE_CPP)
-#include "../include/xe_fence.hpp"
+#include "xe_fence.hpp"
 #else
-#include "../include/xe_fence.h"
+#include "xe_fence.h"
 #endif
 #if !defined(XE_NULLDRV)
 #include "fence.h"

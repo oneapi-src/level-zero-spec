@@ -29,9 +29,9 @@
 *
 ******************************************************************************/
 #if defined(XE_CPP)
-#include "../include/xe_image.hpp"
+#include "xe_image.hpp"
 #else
-#include "../include/xe_image.h"
+#include "xe_image.h"
 #endif
 #if !defined(XE_NULLDRV)
 #include "image.h"

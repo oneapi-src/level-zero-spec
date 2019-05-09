@@ -53,7 +53,6 @@ target_link_libraries(${TARGET_NAME}
     ${OS_SPECIFIC_LIBS}
 )
 
-add_subdirectory(include)
 add_subdirectory(source)
 
 # Recreate ocloc as shared lib
@@ -63,7 +62,7 @@ get_target_property(OCLOC_LIBRARY_DEPENDENCIES ocloc LINK_LIBRARIES)
 get_target_property(OCLOC_COMPILE_DEFINITIONS ocloc COMPILE_DEFINITIONS)
 
 add_library(ocloc_shared SHARED ${OCLOC_SOURCES} ${CMAKE_CURRENT_SOURCE_DIR}/source/ocloc_shared.cpp)
-target_include_directories(ocloc_shared PRIVATE ${OCLOC_INCLUDES} ${CMAKE_CURRENT_SOURCE_DIR}/include)
+target_include_directories(ocloc_shared PRIVATE ${OCLOC_INCLUDES} ${CMAKE_SOURCE_DIR}/include/core)
 target_link_libraries(ocloc_shared ${OCLOC_LIBRARY_DEPENDENCIES})
 target_compile_definitions(ocloc_shared PRIVATE ${OCLOC_COMPILE_DEFINITIONS} -DMOCKABLE_VIRTUAL= CL_USE_DEPRECATED_OPENCL_1_1_APIS CL_USE_DEPRECATED_OPENCL_1_2_APIS CL_USE_DEPRECATED_OPENCL_2_0_APIS CL_TARGET_OPENCL_VERSION=210)
 

@@ -29,9 +29,9 @@
 *
 ******************************************************************************/
 #if defined(XE_CPP)
-#include "../include/xe_cmdqueue.hpp"
+#include "xe_cmdqueue.hpp"
 #else
-#include "../include/xe_cmdqueue.h"
+#include "xe_cmdqueue.h"
 #endif
 #if !defined(XE_NULLDRV)
 #include "cmdqueue.h"

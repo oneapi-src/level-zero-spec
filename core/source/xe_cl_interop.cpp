@@ -29,9 +29,9 @@
 *
 ******************************************************************************/
 #if defined(XE_CPP)
-#include "../include/xe_cl_interop.hpp"
+#include "xe_cl_interop.hpp"
 #else
-#include "../include/xe_cl_interop.h"
+#include "xe_cl_interop.h"
 #endif
 #if !defined(XE_NULLDRV)
 #include "cl_interop.h"

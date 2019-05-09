@@ -29,9 +29,9 @@
 *
 ******************************************************************************/
 #if defined(XE_CPP)
-#include "../include/xe_cmdlist.hpp"
+#include "xe_cmdlist.hpp"
 #else
-#include "../include/xe_cmdlist.h"
+#include "xe_cmdlist.h"
 #endif
 #if !defined(XE_NULLDRV)
 #include "cmdlist.h"

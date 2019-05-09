@@ -29,9 +29,9 @@
 *
 ******************************************************************************/
 #if defined(XE_CPP)
-#include "../include/xe_residency.hpp"
+#include "xe_residency.hpp"
 #else
-#include "../include/xe_residency.h"
+#include "xe_residency.h"
 #endif
 #if !defined(XE_NULLDRV)
 #include "residency.h"

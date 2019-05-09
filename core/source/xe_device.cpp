@@ -29,9 +29,9 @@
 *
 ******************************************************************************/
 #if defined(XE_CPP)
-#include "../include/xe_device.hpp"
+#include "xe_device.hpp"
 #else
-#include "../include/xe_device.h"
+#include "xe_device.h"
 #endif
 #if !defined(XE_NULLDRV)
 #include "device.h"

@@ -29,9 +29,9 @@
 *
 ******************************************************************************/
 #if defined(XE_CPP)
-#include "../include/xe_driver.hpp"
+#include "xe_driver.hpp"
 #else
-#include "../include/xe_driver.h"
+#include "xe_driver.h"
 #endif
 #if !defined(XE_NULLDRV)
 #include "driver.h"

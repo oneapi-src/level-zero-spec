@@ -21,22 +21,23 @@
 * express and approved by Intel in writing.  
 * @endcond
 *
-* @file xe_common.cpp
+* @file xet_common.inl
 *
-* @brief Intel Xe Level-Zero API common types
+* @brief C++ wrapper of Intel Xe Level-Zero Tool API common types
 *
-* DO NOT EDIT: generated from /scripts/core/common.yml
+* @cond DEV
+* DO NOT EDIT: generated from /scripts/tools/common.yml
+* @endcond
 *
 ******************************************************************************/
-#if defined(XE_CPP)
-#include "xe_common.hpp"
-#else
-#include "xe_common.h"
-#endif
-#if !defined(XE_NULLDRV)
-#include "common.h"
-#endif
+#ifndef _XET_COMMON_INL
+#define _XET_COMMON_INL
+#if defined(__cplusplus)
+#pragma once
+#include "xet_all.h"
 
-#include <exception>    // @todo: move to common and/or precompiled header
-#include <new>
-
+namespace xet
+{
+} // namespace xet
+#endif // defined(__cplusplus)
+#endif // _XET_COMMON_INL
