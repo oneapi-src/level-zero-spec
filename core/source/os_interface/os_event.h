@@ -1,3 +1,4 @@
+#pragma once
 #include "runtime/memory_manager/graphics_allocation.h"
 
 namespace L0 {

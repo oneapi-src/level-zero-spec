@@ -1,3 +1,4 @@
+#pragma once
 #include "os_interface/os_context.h"
 
 namespace L0 {

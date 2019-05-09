@@ -1,3 +1,5 @@
+#pragma once
+
 namespace L0 {
 
 class OsContext {

@@ -1,3 +1,4 @@
+#pragma once
 #include "os_interface/os_event.h"
 #include "graphics_allocation.h"
 

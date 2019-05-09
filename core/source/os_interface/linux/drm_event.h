@@ -1,3 +1,4 @@
+#pragma once
 #include "runtime/os_interface/linux/os_interface.h"
 
 #include "os_interface/os_event.h"
