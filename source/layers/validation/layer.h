@@ -73,6 +73,7 @@ public:
     xet_metric_query_pool_apitable_t    xetMetricQueryPool = {};
     xet_metric_query_apitable_t         xetMetricQuery = {};
     xet_power_apitable_t                xetPower = {};
+    xet_freq_domain_apitable_t          xetFreqDomain = {};
 
     xe_layer();
     ~xe_layer();
