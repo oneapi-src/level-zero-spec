@@ -32,7 +32,7 @@ def generate_spec_cpp(path, namespace, tags, specs, meta, type):
 """
     generates c/c++ files from the specification documents
 """
-def generate_api_cpp(path, namespace, tags, specs, meta, files, type):
+def generate_section_cpp(path, namespace, tags, specs, meta, files, type):
     loc = 0
     template = "api%s.mako"%type
     fin = os.path.join("templates", template)
@@ -95,7 +95,7 @@ def generate_validation_layer_cpp(path, section, namespace, tags, specs, meta, t
 """
     generates c/c++ include files from the specification documents
 """
-def generate_cpp(path, namespace, tags, specs, meta):
+def generate_api_cpp(path, namespace, tags, specs, meta):
     util.makePath(path)
     util.removeFiles(path, "*.h")
     util.removeFiles(path, "*.hpp")
@@ -105,8 +105,8 @@ def generate_cpp(path, namespace, tags, specs, meta):
     hpploc, hppfiles = generate_spec_cpp(path, namespace, tags, specs, meta, ".hpp")
     inlloc, inlfiles = generate_spec_cpp(path, namespace, tags, specs, meta, ".inl")
 
-    hloc += generate_api_cpp(path, namespace, tags, specs, meta, hfiles, ".h")
-    hpploc += generate_api_cpp(path, namespace, tags, specs, meta, hppfiles + inlfiles, ".hpp")
+    hloc += generate_section_cpp(path, namespace, tags, specs, meta, hfiles, ".h")
+    hpploc += generate_section_cpp(path, namespace, tags, specs, meta, hppfiles + inlfiles, ".hpp")
 
     return hloc + hpploc + inlloc
 
@@ -116,7 +116,7 @@ Entry-point:
 """
 def generate_api(path, namespace, tags, specs, meta):
     loc = 0
-    loc += generate_cpp(path, namespace, tags, specs, meta)
+    loc += generate_api_cpp(path, namespace, tags, specs, meta)
     print("Generated %s lines of code.\n"%loc)
 
 """

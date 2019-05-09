@@ -42,6 +42,18 @@
 namespace xe
 {
     ///////////////////////////////////////////////////////////////////////////////
+    Module::Module( 
+        Device* pDevice,                                ///< pointer to parent object
+        module_handle_t handle,                         ///< handle of module object
+        desc_t desc                                     ///< descriptor of the module object
+        ) :
+        m_pDevice( pDevice ),
+        m_handle( handle ),
+        m_desc( desc )
+    {
+    }
+
+    ///////////////////////////////////////////////////////////////////////////////
     /// @brief C++ wrapper for ::xeModuleCreate
     /// 
     /// @details
@@ -173,6 +185,18 @@ namespace xe
     {
         // auto result = ::xeModuleGetFunctionPointer( handle, pFunctionName );
         // if( ::XE_RESULT_SUCCESS != result ) throw exception(result, "xe::Module::GetFunctionPointer");
+    }
+
+    ///////////////////////////////////////////////////////////////////////////////
+    Function::Function( 
+        Module* pModule,                                ///< pointer to parent object
+        function_handle_t handle,                       ///< handle of function object
+        desc_t desc                                     ///< descriptor of the function object
+        ) :
+        m_pModule( pModule ),
+        m_handle( handle ),
+        m_desc( desc )
+    {
     }
 
     ///////////////////////////////////////////////////////////////////////////////

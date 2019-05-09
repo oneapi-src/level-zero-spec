@@ -81,14 +81,10 @@ namespace xe
         ///////////////////////////////////////////////////////////////////////////////
         Fence( void ) = delete;
         Fence( 
-                CommandQueue* pCommandQueue,                    ///< pointer to parent object
-                fence_handle_t handle,                          ///< handle of fence object
-                desc_t desc                                     ///< descriptor of the fence object
-                ) :
-                m_pCommandQueue( pCommandQueue ),
-                m_handle( handle ),
-                m_desc( desc )
-            {}
+            CommandQueue* pCommandQueue,                    ///< pointer to parent object
+            fence_handle_t handle,                          ///< handle of fence object
+            desc_t desc                                     ///< descriptor of the fence object
+            );
 
         ~Fence( void ) = default;
 

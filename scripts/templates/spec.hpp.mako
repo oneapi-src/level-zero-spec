@@ -1,6 +1,16 @@
 <%!
 import re
 from templates import helper as th
+
+def declare_obj(obj, tags):
+    if re.match(r"macro", obj['type']):
+        return False
+    if re.match(r"handle", obj['type']):
+        return True
+    if 'class' not in obj or obj['class'] in tags:
+        return True
+    return False
+
 %><%
     n=namespace
     N=n.upper()
@@ -89,7 +99,7 @@ from templates import helper as th
 namespace ${n}
 {
 %for obj in objects:
-%if (('class' not in obj) or (obj['class'] in tags) or re.match(r"handle", obj['type'])) and not re.match(r"macro", obj['type']):
+%if declare_obj(obj, tags):
     ///////////////////////////////////////////////////////////////////////////////
     ## CONDITION-START ############################################################
     %if 'condition' in obj:
@@ -235,14 +245,10 @@ namespace ${n}
         using ${th.make_baseclass_ctor(n, tags, obj)};
         %else:
         ${th.make_class_name(n, tags, obj)}( 
-            %for line in th.make_ctor_param_lines(n, tags, obj, meta=meta):
-                ${line}
-            %endfor
-                ) :
-            %for line in th.make_ctor_param_init_lines(n, tags, obj, "m_"):
-                ${line}
-            %endfor
-            {}
+        %for line in th.make_ctor_param_lines(n, tags, obj, meta=meta):
+            ${line}
+        %endfor
+            );
         %endif
 
         ~${th.make_class_name(n, tags, obj)}( void ) = default;
@@ -302,7 +308,7 @@ namespace ${n}
     #endif // ${th.subt(n, tags, obj['condition'])}
     %endif
 
-%endif  ## (('class' not in obj ...
+%endif  ## declare_obj
 %endfor ## obj in objects
 } // namespace ${n}
 #endif // defined(__cplusplus)

@@ -42,6 +42,16 @@
 namespace xe
 {
     ///////////////////////////////////////////////////////////////////////////////
+    Device::Device( 
+        Driver* pDriver,                                ///< pointer to parent object
+        device_handle_t handle                          ///< handle of device object
+        ) :
+        m_pDriver( pDriver ),
+        m_handle( handle )
+    {
+    }
+
+    ///////////////////////////////////////////////////////////////////////////////
     /// @brief C++ wrapper for ::xeDeviceGetCount
     /// 
     /// @details

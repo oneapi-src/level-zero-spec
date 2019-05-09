@@ -84,14 +84,10 @@ namespace xe
         ///////////////////////////////////////////////////////////////////////////////
         EventPool( void ) = delete;
         EventPool( 
-                Device* pDevice,                                ///< pointer to parent object
-                event_pool_handle_t handle,                     ///< handle of event pool object
-                desc_t desc                                     ///< descriptor of the event object
-                ) :
-                m_pDevice( pDevice ),
-                m_handle( handle ),
-                m_desc( desc )
-            {}
+            Device* pDevice,                                ///< pointer to parent object
+            event_pool_handle_t handle,                     ///< handle of event pool object
+            desc_t desc                                     ///< descriptor of the event object
+            );
 
         ~EventPool( void ) = default;
 
@@ -255,12 +251,9 @@ namespace xe
         ///////////////////////////////////////////////////////////////////////////////
         Event( void ) = delete;
         Event( 
-                EventPool* pEventPool,                          ///< pointer to parent object
-                event_handle_t handle                           ///< handle of event object
-                ) :
-                m_pEventPool( pEventPool ),
-                m_handle( handle )
-            {}
+            EventPool* pEventPool,                          ///< pointer to parent object
+            event_handle_t handle                           ///< handle of event object
+            );
 
         ~Event( void ) = default;
 

@@ -144,14 +144,10 @@ namespace xe
         ///////////////////////////////////////////////////////////////////////////////
         CommandList( void ) = delete;
         CommandList( 
-                Device* pDevice,                                ///< pointer to parent object
-                command_list_handle_t handle,                   ///< handle of command list object
-                desc_t desc                                     ///< descriptor of the command list object
-                ) :
-                m_pDevice( pDevice ),
-                m_handle( handle ),
-                m_desc( desc )
-            {}
+            Device* pDevice,                                ///< pointer to parent object
+            command_list_handle_t handle,                   ///< handle of command list object
+            desc_t desc                                     ///< descriptor of the command list object
+            );
 
         ~CommandList( void ) = default;
 

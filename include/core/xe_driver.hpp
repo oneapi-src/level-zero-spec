@@ -105,10 +105,8 @@ namespace xe
         ///////////////////////////////////////////////////////////////////////////////
         Driver( void ) = delete;
         Driver( 
-                void* handle                                    ///< handle of driver module
-                ) :
-                m_handle( handle )
-            {}
+            void* handle                                    ///< handle of driver module
+            );
 
         ~Driver( void ) = default;
 

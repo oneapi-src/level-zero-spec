@@ -42,6 +42,16 @@
 namespace xex
 {
     ///////////////////////////////////////////////////////////////////////////////
+    CommandGraph::CommandGraph( 
+        command_graph_handle_t handle,                  ///< handle of command graph object
+        desc_t desc                                     ///< descriptor of the command graph object
+        ) :
+        m_handle( handle ),
+        m_desc( desc )
+    {
+    }
+
+    ///////////////////////////////////////////////////////////////////////////////
     /// @brief C++ wrapper for ::xexCommandGraphCreate
     /// 
     /// @details

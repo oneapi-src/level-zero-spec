@@ -42,6 +42,14 @@
 namespace xet
 {
     ///////////////////////////////////////////////////////////////////////////////
+    MetricGroup::MetricGroup( 
+        metric_group_handle_t handle                    ///< handle of metric group object
+        ) :
+        m_handle( handle )
+    {
+    }
+
+    ///////////////////////////////////////////////////////////////////////////////
     /// @brief C++ wrapper for ::xetMetricGroupGetCount
     /// 
     /// @returns
@@ -118,6 +126,14 @@ namespace xet
     }
 
     ///////////////////////////////////////////////////////////////////////////////
+    Metric::Metric( 
+        metric_handle_t handle                          ///< handle of metric object
+        ) :
+        m_handle( handle )
+    {
+    }
+
+    ///////////////////////////////////////////////////////////////////////////////
     /// @brief C++ wrapper for ::xetMetricGet
     /// 
     /// @details
@@ -154,6 +170,14 @@ namespace xet
     {
         // auto result = ::xetMetricGetProperties( handle );
         // if( ::XE_RESULT_SUCCESS != result ) throw exception(result, "xet::Metric::GetProperties");
+    }
+
+    ///////////////////////////////////////////////////////////////////////////////
+    MetricTracer::MetricTracer( 
+        metric_tracer_handle_t handle                   ///< handle of metric tracer object
+        ) :
+        m_handle( handle )
+    {
     }
 
     ///////////////////////////////////////////////////////////////////////////////
@@ -215,6 +239,14 @@ namespace xet
     }
 
     ///////////////////////////////////////////////////////////////////////////////
+    MetricQueryPool::MetricQueryPool( 
+        metric_query_pool_handle_t handle               ///< handle of metric query pool object
+        ) :
+        m_handle( handle )
+    {
+    }
+
+    ///////////////////////////////////////////////////////////////////////////////
     /// @brief C++ wrapper for ::xetMetricQueryPoolCreate
     /// 
     /// @details
@@ -268,6 +300,14 @@ namespace xet
     {
         // auto result = ::xetMetricQueryPoolGetMetricQuery( handle, ordinal );
         // if( ::XE_RESULT_SUCCESS != result ) throw exception(result, "xet::MetricQueryPool::GetMetricQuery");
+    }
+
+    ///////////////////////////////////////////////////////////////////////////////
+    MetricQuery::MetricQuery( 
+        metric_query_handle_t handle                    ///< handle of metric query object
+        ) :
+        m_handle( handle )
+    {
     }
 
     ///////////////////////////////////////////////////////////////////////////////

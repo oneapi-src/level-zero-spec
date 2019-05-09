@@ -93,6 +93,21 @@ namespace ${n}
 %endif
 
 %elif re.match(r"class", obj['type']):
+    ## CTORS/DTORS ################################################################
+    %if 'base' not in obj:
+    ///////////////////////////////////////////////////////////////////////////////
+    ${th.make_class_name(n, tags, obj)}::${th.make_class_name(n, tags, obj)}( 
+    %for line in th.make_ctor_param_lines(n, tags, obj, meta=meta):
+        ${line}
+    %endfor
+        ) :
+    %for line in th.make_ctor_param_init_lines(n, tags, obj, "m_"):
+        ${line}
+    %endfor
+    {
+    }
+
+    %endif
     ## CLASS FUNCTION #############################################################
     %for f in th.filter_items(th.extract_objs(specs, r"function"), 'class', obj['name']):
     ///////////////////////////////////////////////////////////////////////////////
@@ -126,8 +141,8 @@ namespace ${n}
 
     %endfor
 %endif
-%endif
-%endfor
+%endif  # declare_obj
+%endfor # obj in objects
 } // namespace ${n}
 #endif // defined(__cplusplus)
 #endif // _${N}_${name.upper()}_INL

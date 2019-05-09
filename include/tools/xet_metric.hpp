@@ -163,10 +163,8 @@ namespace xet
         ///////////////////////////////////////////////////////////////////////////////
         MetricGroup( void ) = delete;
         MetricGroup( 
-                metric_group_handle_t handle                    ///< handle of metric group object
-                ) :
-                m_handle( handle )
-            {}
+            metric_group_handle_t handle                    ///< handle of metric group object
+            );
 
         ~MetricGroup( void ) = default;
 
@@ -289,10 +287,8 @@ namespace xet
         ///////////////////////////////////////////////////////////////////////////////
         Metric( void ) = delete;
         Metric( 
-                metric_handle_t handle                          ///< handle of metric object
-                ) :
-                m_handle( handle )
-            {}
+            metric_handle_t handle                          ///< handle of metric object
+            );
 
         ~Metric( void ) = default;
 
@@ -370,10 +366,8 @@ namespace xet
         ///////////////////////////////////////////////////////////////////////////////
         MetricTracer( void ) = delete;
         MetricTracer( 
-                metric_tracer_handle_t handle                   ///< handle of metric tracer object
-                ) :
-                m_handle( handle )
-            {}
+            metric_tracer_handle_t handle                   ///< handle of metric tracer object
+            );
 
         ~MetricTracer( void ) = default;
 
@@ -473,10 +467,8 @@ namespace xet
         ///////////////////////////////////////////////////////////////////////////////
         MetricQueryPool( void ) = delete;
         MetricQueryPool( 
-                metric_query_pool_handle_t handle               ///< handle of metric query pool object
-                ) :
-                m_handle( handle )
-            {}
+            metric_query_pool_handle_t handle               ///< handle of metric query pool object
+            );
 
         ~MetricQueryPool( void ) = default;
 
@@ -546,10 +538,8 @@ namespace xet
         ///////////////////////////////////////////////////////////////////////////////
         MetricQuery( void ) = delete;
         MetricQuery( 
-                metric_query_handle_t handle                    ///< handle of metric query object
-                ) :
-                m_handle( handle )
-            {}
+            metric_query_handle_t handle                    ///< handle of metric query object
+            );
 
         ~MetricQuery( void ) = default;
 

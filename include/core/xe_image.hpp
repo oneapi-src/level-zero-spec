@@ -208,14 +208,10 @@ namespace xe
         ///////////////////////////////////////////////////////////////////////////////
         Image( void ) = delete;
         Image( 
-                Device* pDevice,                                ///< pointer to parent object
-                image_handle_t handle,                          ///< handle of image object
-                desc_t desc                                     ///< descriptor of the image object
-                ) :
-                m_pDevice( pDevice ),
-                m_handle( handle ),
-                m_desc( desc )
-            {}
+            Device* pDevice,                                ///< pointer to parent object
+            image_handle_t handle,                          ///< handle of image object
+            desc_t desc                                     ///< descriptor of the image object
+            );
 
         ~Image( void ) = default;
 

@@ -91,6 +91,14 @@ namespace xe
         // if( ::XE_RESULT_SUCCESS != result ) throw exception(result, "GetDriverVersion");
     }
 
+    ///////////////////////////////////////////////////////////////////////////////
+    Driver::Driver( 
+        void* handle                                    ///< handle of driver module
+        ) :
+        m_handle( handle )
+    {
+    }
+
 } // namespace xe
 #endif // defined(__cplusplus)
 #endif // _XE_DRIVER_INL
