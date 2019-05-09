@@ -28,4 +28,10 @@ namespace xe_api_benchmarks {
 namespace latency {
 #include "benchmark_template/set_parameter.cpp"
 } /* namespace latency */
+
+#undef NANO_PROBE
+#define NANO_PROBE PROBE_MEASURE_HARDWARE_COUNTERS
+namespace hardware_counter {
+#include "benchmark_template/set_parameter.cpp"
+} /* namespace hardware_counter */
 } /* namespace xe_api_benchmarks */

@@ -76,4 +76,51 @@ int64_t _function_call_iter_measure_latency(const std::string filename,
 
     return int_nsec;
 }
+
+#define PROBE_MEASURE_HARDWARE_COUNTERS(prefix, iteration_number,   \
+                                        function_name, ...)         \
+    _function_call_iter_hardware_counters(__FILE__, __LINE__,       \
+                                          #function_name,           \
+                                          prefix, iteration_number, \
+                                          function_name,            \
+                                          __VA_ARGS__)
+template <typename... Params, typename... Args>
+void _function_call_iter_hardware_counters(const std::string filename,
+                                           const int line_number,
+                                           const std::string function_name,
+                                           const std::string prefix,
+                                           const int iteration_number,
+                                           xe_result_t (*api_function)(Params... params),
+                                           Args... args) {
+    assert(api_static_probe_is_init());
+    if (HardwareCounter::is_supported() == false) {
+        print_probe_output(prefix, filename, line_number, function_name,
+                           "Hardware counters are not supported. Compile benchmark with the PAPI library on Unix system",
+                           "");
+        api_function(args...);
+        return;
+    }
+
+    hardware_counters->start();
+    for (int i = 0; i < iteration_number; i++) {
+        api_function(args...);
+    }
+    hardware_counters->end();
+
+    auto total_instruction_count = hardware_counters->counter_instructions();
+    auto total_cycle_count = hardware_counters->counter_cycles();
+
+    auto normalized_instruction_count =
+        total_instruction_count / iteration_number;
+    auto normalized_cycle_count = total_cycle_count / iteration_number;
+    auto cycle_per_instruction =
+        normalized_cycle_count / static_cast<double>(normalized_instruction_count);
+
+    print_probe_output(prefix, filename, line_number, function_name,
+                       normalized_instruction_count, "\tinstructions");
+    print_probe_output(prefix, filename, line_number, function_name,
+                       normalized_cycle_count, "\tcycles");
+    print_probe_output(prefix, filename, line_number, function_name,
+                       cycle_per_instruction, "\tcycles/instructions");
+}
 #endif /* _API_STATIC_PROBE_HPP_ */

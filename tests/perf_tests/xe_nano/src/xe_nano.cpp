@@ -34,6 +34,10 @@ int main() {
     xe_api_benchmarks::latency::parameter_buffer(&nano_benchmarks,
                                                  warm_up_iteration,
                                                  measure_iteration);
+    xe_api_benchmarks::hardware_counter::parameter_buffer(&nano_benchmarks,
+                                                          warm_up_iteration,
+                                                          measure_iteration);
+
     std::cout << std::endl;
 
     std::cout << "xeFunctionSetArgumentValue: Immediate argument"
@@ -43,6 +47,9 @@ int main() {
     xe_api_benchmarks::latency::parameter_integer(&nano_benchmarks,
                                                   warm_up_iteration,
                                                   measure_iteration);
+    xe_api_benchmarks::hardware_counter::parameter_integer(&nano_benchmarks,
+                                                           warm_up_iteration,
+                                                           measure_iteration);
     std::cout << std::endl;
     api_static_probe_cleanup();
 
