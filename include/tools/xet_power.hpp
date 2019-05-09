@@ -34,6 +34,9 @@
 #define _XET_POWER_HPP
 #if defined(__cplusplus)
 #pragma once
+#if !defined(_XET_API_HPP)
+#pragma message("warning: this file is not intended to be included directly")
+#endif
 #include "xet_common.hpp"
 
 namespace xet
@@ -63,30 +66,10 @@ namespace xet
     /// @brief C++ wrapper for power
     class Power
     {
-    protected:
-        ::xet_power_handle_t m_handle;                    ///< handle of power object
-
-        Power( void ) = delete;
-        Power( 
-                xet_power_handle_t handle                       ///< handle of power object
-                ) :
-                m_handle( handle )
-            {}
-
-        ~Power( void ) = default;
-
-        Power( Power const& other ) = delete;
-        void operator=( Power const& other ) = delete;
-
-        Power( Power&& other ) = delete;
-        void operator=( Power&& other ) = delete;
-
     public:
-        auto getHandle( void ) const { return m_handle; }
-
         ///////////////////////////////////////////////////////////////////////////////
-        /// @brief C++ version for ::xet_power_init_flags_t
-        enum class power_init_flags_t
+        /// @brief Power initialization flags (bitfield)
+        enum class init_flags_t
         {
             NONE = 0,                                       ///< default initialization
             WRITE = XE_BIT( 0 ),                            ///< request access to power controls
@@ -94,7 +77,7 @@ namespace xet
         };
 
         ///////////////////////////////////////////////////////////////////////////////
-        /// @brief C++ version for ::xet_gpu_domain_t
+        /// @brief GPU domains
         enum class gpu_domain_t
         {
             BASE = XE_BIT( 0 ),                             ///< base die
@@ -112,15 +95,15 @@ namespace xet
         };
 
         ///////////////////////////////////////////////////////////////////////////////
-        /// @brief C++ version for ::xet_power_average_limit_version_t
-        enum class power_average_limit_version_t
+        /// @brief API version of ::power_average_limit_t
+        enum class average_limit_version_t
         {
             AVERAGE_POWER_LIMIT_VERSION_CURRENT = XE_MAKE_VERSION( 1, 0 ),  ///< version 1.0
 
         };
 
         ///////////////////////////////////////////////////////////////////////////////
-        /// @brief C++ version for ::xet_turbo_mode_t
+        /// @brief Turbo (dynamic hardware frequency management) modes
         enum class turbo_mode_t
         {
             DISABLED = 0,                                   ///< DVFS is currently disabled - frequency is fixed
@@ -133,10 +116,15 @@ namespace xet
         };
 
         ///////////////////////////////////////////////////////////////////////////////
-        /// @brief C++ version for ::xet_power_average_limit_t
-        struct power_average_limit_t
+        /// @brief Average power limit
+        /// 
+        /// @details
+        ///     - The power controller (Punit) will throttle the operating frequency of
+        ///       the device if the power averaged over a window (typically seconds)
+        ///       exceeds a limit known as PL1.
+        struct average_limit_t
         {
-            power_average_limit_version_t version = power_average_limit_version_t::AVERAGE_POWER_LIMIT_VERSION_CURRENT; ///< [in] ::AVERAGE_POWER_LIMIT_VERSION_CURRENT
+            average_limit_version_t version = average_limit_version_t::AVERAGE_POWER_LIMIT_VERSION_CURRENT; ///< [in] ::AVERAGE_POWER_LIMIT_VERSION_CURRENT
             xe::bool_t enabled;                             ///< [in,out] indicates if the limit is enabled (true) or ignored (false)
             uint32_t power;                                 ///< [in,out] power limit in milliwatts
             uint32_t interval;                              ///< [in,out] power averaging window (Tau) in milliseconds
@@ -144,8 +132,15 @@ namespace xet
         };
 
         ///////////////////////////////////////////////////////////////////////////////
-        /// @brief C++ version for ::xet_power_burst_limit_t
-        struct power_burst_limit_t
+        /// @brief Burst power limit
+        /// 
+        /// @details
+        ///     - The power controller (Punit) will throttle the operating frequency of
+        ///       the device if the power averaged over a few milliseconds exceeds a
+        ///       limit known as PL2. Typically PL2 > PL1 so that it permits the
+        ///       frequency to burst higher for short periods than would be otherwise
+        ///       permitted by PL1.
+        struct burst_limit_t
         {
             xe::bool_t enabled;                             ///< [in,out] indicates if the limit is enabled (true) or ignored (false)
             uint32_t power;                                 ///< [in,out] power limit in milliwatts
@@ -153,25 +148,36 @@ namespace xet
         };
 
         ///////////////////////////////////////////////////////////////////////////////
-        /// @brief C++ version for ::xet_power_peak_limit_t
-        struct power_peak_limit_t
+        /// @brief Peak power limit
+        /// 
+        /// @details
+        ///     - The power controller (Punit) will preemptively throttle the operating
+        ///       frequency of the device when the instantaneous power exceeds this
+        ///       limit. The limit is known as PL4. It expresses the maximum power that
+        ///       can be drawn from the power supply.
+        ///     - If this power limit is removed or set too high, the power supply will
+        ///       generate an interrupt when it detects an overcurrent condition and the
+        ///       power controller will throttle the device frequencies down to min. It
+        ///       is thus better to tune the PL4 value in order to avoid such
+        ///       excursions.
+        struct peak_limit_t
         {
             uint32_t power;                                 ///< [in,out] power limit in milliwatts
 
         };
 
         ///////////////////////////////////////////////////////////////////////////////
-        /// @brief C++ version for ::xet_power_limits_t
-        struct power_limits_t
+        /// @brief All power limits
+        struct limits_t
         {
-            power_average_limit_t averagePowerLimit;        ///< [in,out] average power limit information
-            power_burst_limit_t burstPowerLimit;            ///< [in,out] burst power limit information
-            power_peak_limit_t peakPowerLimit;              ///< [in,out] peak power limit information
+            average_limit_t averagePowerLimit;              ///< [in,out] average power limit information
+            burst_limit_t burstPowerLimit;                  ///< [in,out] burst power limit information
+            peak_limit_t peakPowerLimit;                    ///< [in,out] peak power limit information
 
         };
 
         ///////////////////////////////////////////////////////////////////////////////
-        /// @brief C++ version for ::xet_fan_properties_t
+        /// @brief Fan properties
         struct fan_properties_t
         {
             uint32_t fanCapabilities;                       ///< [in] bitfield of ::fan_capabilities_t
@@ -182,7 +188,7 @@ namespace xet
         };
 
         ///////////////////////////////////////////////////////////////////////////////
-        /// @brief C++ version for ::xet_fan_point_t
+        /// @brief Temperature/fan-speed point
         struct fan_point_t
         {
             xe::bool_t fanSpeedInRpm;                       ///< [in,out] false means fanSpeed is in percentage, true means fanSpeed is
@@ -194,7 +200,7 @@ namespace xet
         };
 
         ///////////////////////////////////////////////////////////////////////////////
-        /// @brief C++ version for ::xet_fan_speed_info_t
+        /// @brief Fan speed info
         struct fan_speed_info_t
         {
             xe::bool_t fanSpeedInRpm;                       ///< [in,out] false means fanSpeed is in percentage, true means fanSpeed is
@@ -207,7 +213,14 @@ namespace xet
         };
 
         ///////////////////////////////////////////////////////////////////////////////
-        /// @brief C++ version for ::xet_temperature_properties_t
+        /// @brief Temperature sensor properties
+        /// 
+        /// @details
+        ///     - Temperature sensor index 0 is special - it is a virtual sensor that
+        ///       gives the max across all sensors. The member **location** equals
+        ///       0xFFFFFFFF in this case.
+        ///     - Most systems apply the temperature threshold globally. In this case,
+        ///       member **canChangeThreshold** will only be true for sensor index 0.
         struct temperature_properties_t
         {
             uint32_t location;                              ///< [in] bitfield of ::gpu_domain_t whose temperature is measured by this
@@ -221,7 +234,11 @@ namespace xet
         };
 
         ///////////////////////////////////////////////////////////////////////////////
-        /// @brief C++ version for ::xet_activity_properties_t
+        /// @brief Activity counter properties
+        /// 
+        /// @details
+        ///     - Activity counter 0 is a normalized accumulation of activity across all
+        ///       blocks. The member **blocks** equals 0xFFFFFFFF in this case.
         struct activity_properties_t
         {
             uint32_t blocks;                                ///< [in] bitfield of ::gpu_domain_t whose activity is included in this
@@ -230,7 +247,15 @@ namespace xet
         };
 
         ///////////////////////////////////////////////////////////////////////////////
-        /// @brief C++ version for ::xet_activity_counters_t
+        /// @brief Activity counter data
+        /// 
+        /// @details
+        ///     - Activity counter 0 is a normalized accumulation of activity across all
+        ///       blocks.
+        ///     - Samples these counters between two points and calculate utilization by
+        ///       dividing delta(activityCounter) / delta(timeCounter).
+        ///     - Powered down time is given by timeCounter - activityCounter -
+        ///       idleCounter.
         struct activity_counters_t
         {
             uint64_t activityCounter;                       ///< [out] Monotonically increasing counter of activity in microseconds
@@ -240,115 +265,157 @@ namespace xet
 
         };
 
+
+    protected:
         ///////////////////////////////////////////////////////////////////////////////
-        /// @brief C++ wrapper for ::xetPowerCreate
+        power_handle_t m_handle;                        ///< handle of power object
+
+        ///////////////////////////////////////////////////////////////////////////////
+        Power( void ) = delete;
+        Power( 
+            power_handle_t handle                           ///< handle of power object
+            );
+
+        ~Power( void ) = default;
+
+        Power( Power const& other ) = delete;
+        void operator=( Power const& other ) = delete;
+
+        Power( Power&& other ) = delete;
+        void operator=( Power&& other ) = delete;
+
+    public:
+        ///////////////////////////////////////////////////////////////////////////////
+        auto getHandle( void ) const { return m_handle; }
+
+        ///////////////////////////////////////////////////////////////////////////////
+        /// @brief Creates an object to access power features on a device
+        /// 
+        /// @details
+        ///     - Initializes internal structures to support power management features.
+        ///     - Error ::XERESULT_ERROR_UNSUPPORTED is returned if the device does not
+        ///       support access to power management features.
+        /// 
+        /// @remarks
+        ///   _Analogues_
+        ///     - **nvmlInit**
+        ///     - **rsmi_init**
         /// @returns
-        ///     - ::power_handle_t: handle for accessing power features of the device
+        ///     - Power: handle for accessing power features of the device
         /// 
         /// @throws result_t
-        inline static power_handle_t
+        inline static Power*
         Create(
-            xe::device_handle_t hDevice,                    ///< [in] handle of the device object
+            xe::Device* hDevice,                            ///< [in] handle of the device object
             uint32_t flags                                  ///< [in] bitfield of ::power_init_flags_t
             );
 
         ///////////////////////////////////////////////////////////////////////////////
-        /// @brief C++ wrapper for ::xetPowerDestroy
+        /// @brief Deletes a power object
+        /// 
+        /// @remarks
+        ///   _Analogues_
+        ///     - **nvmlShutdown**
+        ///     - **rsmi_shut_down**
         /// @throws result_t
         inline static void
         Destroy(
-            power_handle_t hPower                           ///< [in] handle of the power object to destroy
+            Power* hPower                                   ///< [in] handle of the power object to destroy
             );
 
         ///////////////////////////////////////////////////////////////////////////////
-        /// @brief C++ wrapper for ::xetPowerGetAveragePowerLimit
+        /// @brief Get current average power limit information for a device
         /// @returns
-        ///     - ::power_average_limit_t: information about the average power limit
+        ///     - average_limit_t: information about the average power limit
         /// 
         /// @throws result_t
-        inline power_average_limit_t
+        inline average_limit_t
         GetAveragePowerLimit(
             void
             );
 
         ///////////////////////////////////////////////////////////////////////////////
-        /// @brief C++ wrapper for ::xetPowerGetBurstPowerLimit
+        /// @brief Get current burst power limit information for a device
         /// @returns
-        ///     - ::power_burst_limit_t: information about the burst power limit
+        ///     - burst_limit_t: information about the burst power limit
         /// 
         /// @throws result_t
-        inline power_burst_limit_t
+        inline burst_limit_t
         GetBurstPowerLimit(
             void
             );
 
         ///////////////////////////////////////////////////////////////////////////////
-        /// @brief C++ wrapper for ::xetPowerGetPeakPowerLimit
+        /// @brief Get current peak power limit information for a device
         /// @returns
-        ///     - ::power_peak_limit_t: information about the peak power limit
+        ///     - peak_limit_t: information about the peak power limit
         /// 
         /// @throws result_t
-        inline power_peak_limit_t
+        inline peak_limit_t
         GetPeakPowerLimit(
             void
             );
 
         ///////////////////////////////////////////////////////////////////////////////
-        /// @brief C++ wrapper for ::xetPowerGetAllPowerLimits
+        /// @brief Get all current power limits for a device
         /// @returns
-        ///     - ::power_limits_t: information about the average/burst/peak power limits
+        ///     - limits_t: information about the average/burst/peak power limits
         /// 
         /// @throws result_t
-        inline power_limits_t
+        inline limits_t
         GetAllPowerLimits(
             void
             );
 
         ///////////////////////////////////////////////////////////////////////////////
-        /// @brief C++ wrapper for ::xetPowerGetDefaultPowerLimits
+        /// @brief Get default power limits for a device
         /// @returns
-        ///     - ::power_limits_t: information about the default average/burst/peak power limits
+        ///     - limits_t: information about the default average/burst/peak power limits
         /// 
         /// @throws result_t
-        inline power_limits_t
+        inline limits_t
         GetDefaultPowerLimits(
             void
             );
 
         ///////////////////////////////////////////////////////////////////////////////
-        /// @brief C++ wrapper for ::xetPowerSetAveragePowerLimit
+        /// @brief Set the average power limit for a device
         /// @throws result_t
         inline void
         SetAveragePowerLimit(
-            power_average_limit_t* pLimit                   ///< [in] information about the average power limit
+            average_limit_t* pLimit                         ///< [in] information about the average power limit
             );
 
         ///////////////////////////////////////////////////////////////////////////////
-        /// @brief C++ wrapper for ::xetPowerSetBurstPowerLimit
+        /// @brief Set the burst power limit for a device
         /// @throws result_t
         inline void
         SetBurstPowerLimit(
-            power_burst_limit_t* pLimit                     ///< [in] information about the burst power limit
+            burst_limit_t* pLimit                           ///< [in] information about the burst power limit
             );
 
         ///////////////////////////////////////////////////////////////////////////////
-        /// @brief C++ wrapper for ::xetPowerSetPeakPowerLimit
+        /// @brief Set the peak power limit for a device
         /// @throws result_t
         inline void
         SetPeakPowerLimit(
-            power_peak_limit_t* pLimit                      ///< [in] information about the peak power limit
+            peak_limit_t* pLimit                            ///< [in] information about the peak power limit
             );
 
         ///////////////////////////////////////////////////////////////////////////////
-        /// @brief C++ wrapper for ::xetPowerSetPowerLimits
+        /// @brief Set the average/burst/peak power limits for a device
         /// @throws result_t
         inline void
         SetPowerLimits(
-            power_limits_t* pLimits                         ///< [in] information about the average/burst/peak power limits
+            limits_t* pLimits                               ///< [in] information about the average/burst/peak power limits
             );
 
         ///////////////////////////////////////////////////////////////////////////////
-        /// @brief C++ wrapper for ::xetPowerGetEnergyCounter
+        /// @brief Get energy counter
+        /// 
+        /// @details
+        ///     - Average power = delta(energy counter in millijoules) / delta(time in
+        ///       milliseconds)
         /// @returns
         ///     - uint64_t: the energy counter in millijoules
         /// 
@@ -359,9 +426,9 @@ namespace xet
             );
 
         ///////////////////////////////////////////////////////////////////////////////
-        /// @brief C++ wrapper for ::xetPowerGetTurboMode
+        /// @brief Get the current Turbo mode for a device
         /// @returns
-        ///     - ::turbo_mode_t: turbo mode currently in effect
+        ///     - turbo_mode_t: turbo mode currently in effect
         /// 
         /// @throws result_t
         inline turbo_mode_t
@@ -370,7 +437,7 @@ namespace xet
             );
 
         ///////////////////////////////////////////////////////////////////////////////
-        /// @brief C++ wrapper for ::xetPowerSetTurboMode
+        /// @brief Set the current Turbo mode for a device
         /// @throws result_t
         inline void
         SetTurboMode(
@@ -378,7 +445,7 @@ namespace xet
             );
 
         ///////////////////////////////////////////////////////////////////////////////
-        /// @brief C++ wrapper for ::xetPowerGetFreqDomainCount
+        /// @brief Get the number of frequency domains on the device
         /// @returns
         ///     - uint32_t: the number of frequency domains
         /// 
@@ -389,18 +456,18 @@ namespace xet
             );
 
         ///////////////////////////////////////////////////////////////////////////////
-        /// @brief C++ wrapper for ::xetPowerGetFreqDomainHandle
+        /// @brief Get an object to a frequency domain on a device
         /// @returns
-        ///     - ::freq_domain_handle_t: pointer to handle of frequency domain object
+        ///     - FreqDomain: pointer to handle of frequency domain object
         /// 
         /// @throws result_t
-        inline freq_domain_handle_t
+        inline FreqDomain*
         GetFreqDomainHandle(
             uint32_t ordinal                                ///< [in] frequency domain index [0 .. ::PowerGetFreqDomainCount - 1]
             );
 
         ///////////////////////////////////////////////////////////////////////////////
-        /// @brief C++ wrapper for ::xetPowerFanCount
+        /// @brief Get number of fans on the device
         /// @returns
         ///     - uint32_t: the number of fans on the device
         /// 
@@ -411,9 +478,9 @@ namespace xet
             );
 
         ///////////////////////////////////////////////////////////////////////////////
-        /// @brief C++ wrapper for ::xetPowerFanGetProperties
+        /// @brief Get fan properties for one of the fans on a device
         /// @returns
-        ///     - ::fan_properties_t: pointer to storage for fan properties
+        ///     - fan_properties_t: pointer to storage for fan properties
         /// 
         /// @throws result_t
         inline fan_properties_t
@@ -422,9 +489,13 @@ namespace xet
             );
 
         ///////////////////////////////////////////////////////////////////////////////
-        /// @brief C++ wrapper for ::xetPowerFanGetSpeedTable
+        /// @brief Get fan speed table
+        /// 
+        /// @details
+        ///     - Set pFanSpeedTable = nullptr to find out the current number of fan
+        ///       speed points in the table.
         /// @returns
-        ///     - ::fan_point_t: pointer to an array of temperature/fan-speed points
+        ///     - fan_point_t: pointer to an array of temperature/fan-speed points
         /// 
         /// @throws result_t
         inline fan_point_t
@@ -436,7 +507,12 @@ namespace xet
             );
 
         ///////////////////////////////////////////////////////////////////////////////
-        /// @brief C++ wrapper for ::xetPowerFanSetSpeedTable
+        /// @brief Set fan speed table
+        /// 
+        /// @details
+        ///     - Use ::PowerFanGetProperties to determine acceptable units for fan
+        ///       speed (percent, RPM).
+        ///     - Fan points should be ordered according to increasing temperature.
         /// @throws result_t
         inline void
         FanSetSpeedTable(
@@ -446,9 +522,12 @@ namespace xet
             );
 
         ///////////////////////////////////////////////////////////////////////////////
-        /// @brief C++ wrapper for ::xetPowerFanGetSpeed
+        /// @brief Get current fan speeds
+        /// 
+        /// @details
+        ///     - The array pFanSpeed must contain at least numFans entries.
         /// @returns
-        ///     - ::fan_speed_info_t: pointer to an array of current fan speeds
+        ///     - fan_speed_info_t: pointer to an array of current fan speeds
         /// 
         /// @throws result_t
         inline fan_speed_info_t
@@ -460,7 +539,11 @@ namespace xet
             );
 
         ///////////////////////////////////////////////////////////////////////////////
-        /// @brief C++ wrapper for ::xetPowerFanSetSpeed
+        /// @brief Set fan speeds
+        /// 
+        /// @details
+        ///     - Use ::fan_speed_info_t.fanSpeedMode to set whether the speed should be
+        ///       fixed or dynamically controlled
         /// @throws result_t
         inline void
         FanSetSpeed(
@@ -471,7 +554,7 @@ namespace xet
             );
 
         ///////////////////////////////////////////////////////////////////////////////
-        /// @brief C++ wrapper for ::xetPowerTemperatureSensorCount
+        /// @brief Get number of temperature sensors on the device
         /// @returns
         ///     - uint32_t: the number of temperature sensors on the device
         /// 
@@ -482,9 +565,13 @@ namespace xet
             );
 
         ///////////////////////////////////////////////////////////////////////////////
-        /// @brief C++ wrapper for ::xetPowerGetTemperatureProperties
+        /// @brief Get temperatures sensor properties
+        /// 
+        /// @details
+        ///     - Temperature sensor index 0 is special - it gives the maximum
+        ///       temperature across all sensors
         /// @returns
-        ///     - ::temperature_properties_t: pointer to properties for this sensor
+        ///     - temperature_properties_t: pointer to properties for this sensor
         /// 
         /// @throws result_t
         inline temperature_properties_t
@@ -493,7 +580,11 @@ namespace xet
             );
 
         ///////////////////////////////////////////////////////////////////////////////
-        /// @brief C++ wrapper for ::xetPowerGetTemperature
+        /// @brief Get current temperatures
+        /// 
+        /// @details
+        ///     - Temperature sensor index 0 is special - it gives the maximum
+        ///       temperature across all sensors
         /// @returns
         ///     - uint16_t: pointer to an array of temperatures in units of degrees celsius
         /// 
@@ -506,7 +597,14 @@ namespace xet
             );
 
         ///////////////////////////////////////////////////////////////////////////////
-        /// @brief C++ wrapper for ::xetPowerSetTemperatureThreshold
+        /// @brief Set temperature threshold
+        /// 
+        /// @details
+        ///     - Check ::temperature_properties_t.canChangeThreshold to determine if
+        ///       the threshold can be changed.
+        ///     - On most systems, there is only one threshold and sensorIndex should be
+        ///       0.
+        ///     - **This is an overclocking feature and will void device warranty**
         /// @throws result_t
         inline void
         SetTemperatureThreshold(
@@ -516,7 +614,7 @@ namespace xet
             );
 
         ///////////////////////////////////////////////////////////////////////////////
-        /// @brief C++ wrapper for ::xetPowerActivityCount
+        /// @brief Get number of activity counters
         /// @returns
         ///     - uint32_t: the number of activity counters on the device
         /// 
@@ -527,9 +625,13 @@ namespace xet
             );
 
         ///////////////////////////////////////////////////////////////////////////////
-        /// @brief C++ wrapper for ::xetPowerGetActivityProperties
+        /// @brief Get activity counter properties
+        /// 
+        /// @details
+        ///     - Activity counter index 0 is special - it acculates activity across all
+        ///       blocks.
         /// @returns
-        ///     - ::activity_properties_t: pointer to properties for this activity counter
+        ///     - activity_properties_t: pointer to properties for this activity counter
         /// 
         /// @throws result_t
         inline activity_properties_t
@@ -538,9 +640,13 @@ namespace xet
             );
 
         ///////////////////////////////////////////////////////////////////////////////
-        /// @brief C++ wrapper for ::xetPowerGetActivityCounters
+        /// @brief Get activity counters
+        /// 
+        /// @details
+        ///     - Activity counter index 0 is special - it acculates activity across all
+        ///       blocks.
         /// @returns
-        ///     - ::activity_counters_t: pointer to an array of activity counter data
+        ///     - activity_counters_t: pointer to an array of activity counter data
         /// 
         /// @throws result_t
         inline activity_counters_t
@@ -556,29 +662,9 @@ namespace xet
     /// @brief C++ wrapper for frequency domain
     class FreqDomain
     {
-    protected:
-        ::xet_freq_domain_handle_t m_handle;              ///< handle of frequency domain object
-
-        FreqDomain( void ) = delete;
-        FreqDomain( 
-                xet_freq_domain_handle_t handle                 ///< handle of frequency domain object
-                ) :
-                m_handle( handle )
-            {}
-
-        ~FreqDomain( void ) = default;
-
-        FreqDomain( FreqDomain const& other ) = delete;
-        void operator=( FreqDomain const& other ) = delete;
-
-        FreqDomain( FreqDomain&& other ) = delete;
-        void operator=( FreqDomain&& other ) = delete;
-
     public:
-        auto getHandle( void ) const { return m_handle; }
-
         ///////////////////////////////////////////////////////////////////////////////
-        /// @brief C++ version for ::xet_clock_type_t
+        /// @brief Clock types
         enum class clock_type_t
         {
             FIXED = 0,                                      ///< fixed crystal clock
@@ -588,7 +674,7 @@ namespace xet
         };
 
         ///////////////////////////////////////////////////////////////////////////////
-        /// @brief C++ version for ::xet_freq_throttle_reasons_t
+        /// @brief Frequency throttle reasons
         enum class freq_throttle_reasons_t
         {
             NONE = 0,                                       ///< frequency not throttled
@@ -604,8 +690,26 @@ namespace xet
         };
 
         ///////////////////////////////////////////////////////////////////////////////
-        /// @brief C++ version for ::xet_freq_domain_properties_t
-        struct freq_domain_properties_t
+        /// @brief Properties of a frequency domain
+        /// 
+        /// @details
+        ///     - A frequency domain contains one or more GPU functional blocks - see
+        ///       ::gpu_domain_t
+        ///     - There is more than one type of clock - check clockType
+        ///     - For clock type ::CLOCK_TYPE_FIXED, minClock and maxClock will be the
+        ///       same and numClockPoints will be 1.
+        ///     - For clock type ::CLOCK_TYPE_PLL, numClockPoints is given for
+        ///       informational purposes. Do not assume the frequency step between
+        ///       min/max clocks is (max - min) / (numClockPoints - 1). Instead, use the
+        ///       function ::FreqDomainGetSupportedClocks to get the list of all
+        ///       supported clocks between min/max.
+        ///     - For clock type ::CLOCK_TYPE_DIVIDER, the frequency of the domain is
+        ///       given by multiplying the divider by the frequency of the source
+        ///       domain. The possible divider values can be obtained using the function
+        ///       ::FreqDomainGetSupportedClockDividers. For this clock type,
+        ///       minClock/maxClock specifies the total range of frequencies whereas the
+        ///       actual range depends on the current divider value.
+        struct properties_t
         {
             uint32_t gpuDomains;                            ///< [in] bitfield of xex_gpu_domain_t
             clock_type_t clockType;                         ///< [in] clock type
@@ -618,7 +722,12 @@ namespace xet
         };
 
         ///////////////////////////////////////////////////////////////////////////////
-        /// @brief C++ version for ::xet_clock_divider_t
+        /// @brief Frequency divider configuration
+        /// 
+        /// @details
+        ///     - The frequency of a domain of type ::CLOCK_TYPE_DIVIDER is obtained by
+        ///       the formula:
+        ///     - freq = source domain freq * numerator / denominator
         struct clock_divider_t
         {
             uint16_t numerator;                             ///< [in,out] numerator of the ratio
@@ -626,30 +735,59 @@ namespace xet
 
         };
 
+
+    protected:
         ///////////////////////////////////////////////////////////////////////////////
-        /// @brief C++ wrapper for ::xetFreqDomainGetProperties
+        freq_domain_handle_t m_handle;                  ///< handle of frequency domain object
+
+        ///////////////////////////////////////////////////////////////////////////////
+        FreqDomain( void ) = delete;
+        FreqDomain( 
+            freq_domain_handle_t handle                     ///< handle of frequency domain object
+            );
+
+        ~FreqDomain( void ) = default;
+
+        FreqDomain( FreqDomain const& other ) = delete;
+        void operator=( FreqDomain const& other ) = delete;
+
+        FreqDomain( FreqDomain&& other ) = delete;
+        void operator=( FreqDomain&& other ) = delete;
+
+    public:
+        ///////////////////////////////////////////////////////////////////////////////
+        auto getHandle( void ) const { return m_handle; }
+
+        ///////////////////////////////////////////////////////////////////////////////
+        /// @brief Get the properties for a frequency domain
         /// @returns
-        ///     - ::freq_domain_properties_t: pointer to properties for the frequency domain
+        ///     - properties_t: pointer to properties for the frequency domain
         /// 
         /// @throws result_t
-        inline freq_domain_properties_t
+        inline properties_t
         GetProperties(
             void
             );
 
         ///////////////////////////////////////////////////////////////////////////////
-        /// @brief C++ wrapper for ::xetFreqDomainGetSourceFreqDomain
+        /// @brief Get the source frequency domain handle for a frequency domain of type
+        ///        ::CLOCK_TYPE_DIVIDER
         /// @returns
-        ///     - ::freq_domain_handle_t: pointer to a handle where the source frequency domain handle will be returned
+        ///     - FreqDomain: pointer to a handle where the source frequency domain handle will be returned
         /// 
         /// @throws result_t
-        inline freq_domain_handle_t
+        inline FreqDomain*
         GetSourceFreqDomain(
             void
             );
 
         ///////////////////////////////////////////////////////////////////////////////
-        /// @brief C++ wrapper for ::xetFreqDomainGetSupportedClocks
+        /// @brief Get supported frequency points for frequency domains with clock type
+        ///        ::CLOCK_TYPE_PLL
+        /// 
+        /// @details
+        ///     - The total available list of frequencies can be found in
+        ///       ::freq_domain_properties_t.numClockPoints.
         /// @returns
         ///     - uint32_t: pointer to array of frequencies
         /// 
@@ -660,9 +798,14 @@ namespace xet
             );
 
         ///////////////////////////////////////////////////////////////////////////////
-        /// @brief C++ wrapper for ::xetFreqDomainGetSupportedClockDividers
+        /// @brief Get supported frequency dividers for frequency domains with clock type
+        ///        ::CLOCK_TYPE_DIVIDER
+        /// 
+        /// @details
+        ///     - The total available list of frequencies can be found in
+        ///       ::freq_domain_properties_t.numClockDividers.
         /// @returns
-        ///     - ::clock_divider_t: pointer to array of dividers
+        ///     - clock_divider_t: pointer to array of dividers
         /// 
         /// @throws result_t
         inline clock_divider_t
@@ -671,7 +814,8 @@ namespace xet
             );
 
         ///////////////////////////////////////////////////////////////////////////////
-        /// @brief C++ wrapper for ::xetFreqDomainGetClockRange
+        /// @brief Get the frequency range for a frequency domain with clock type
+        ///        ::CLOCK_TYPE_PLL.
         /// @returns
         ///     - uint32_t: min clock frequency in units of MHz
         ///     - uint32_t: max clock frequency in units of MHz
@@ -683,7 +827,18 @@ namespace xet
             );
 
         ///////////////////////////////////////////////////////////////////////////////
-        /// @brief C++ wrapper for ::xetFreqDomainSetClockRange
+        /// @brief Set the frequency range for a frequency domain with clock type
+        ///        ::CLOCK_TYPE_PLL.
+        /// 
+        /// @details
+        ///     - Turbo (dynamic hardware frequency management) will select frequencies
+        ///       between this range based on the current Turbo mode in effect.
+        ///     - Setting minClock = maxClock will fix the frequency for that frequency
+        ///       domain.
+        ///     - Setting minClock = 0 will instruct the hardware to use the default min
+        ///       value.
+        ///     - Setting maxClock = 0 will instruct the hardware to use the default max
+        ///       value.
         /// @throws result_t
         inline void
         SetClockRange(
@@ -692,9 +847,16 @@ namespace xet
             );
 
         ///////////////////////////////////////////////////////////////////////////////
-        /// @brief C++ wrapper for ::xetFreqDomainSetClockDivider
+        /// @brief Set frequency divider for a frequency domain with clock type
+        ///        ::CLOCK_TYPE_DIVIDER
+        /// 
+        /// @details
+        ///     - This disables dynamic frequency divider management running on the
+        ///       hardware.
+        ///     - Setting pClockDivider to nullptr will enable dynamic frequency divider
+        ///       management.
         /// @returns
-        ///     - ::clock_divider_t: pointer to frequency divider request
+        ///     - clock_divider_t: pointer to frequency divider request
         /// 
         /// @throws result_t
         inline clock_divider_t
@@ -703,11 +865,11 @@ namespace xet
             );
 
         ///////////////////////////////////////////////////////////////////////////////
-        /// @brief C++ wrapper for ::xetFreqDomainGetCurrentFrequency
+        /// @brief Get current frequency
         /// @returns
         ///     - uint32_t: current frequency in MHz requested by the driver
         ///     - uint32_t: the actual frequency in MHz
-        ///     - ::freq_throttle_reasons_t: the reason the resolved frequency is lower than the request
+        ///     - freq_throttle_reasons_t: the reason the resolved frequency is lower than the request
         /// 
         /// @throws result_t
         inline std::tuple<uint32_t, uint32_t, freq_throttle_reasons_t>

@@ -34,8 +34,10 @@
 #define _XE_CMDLIST_HPP
 #if defined(__cplusplus)
 #pragma once
+#if !defined(_XE_API_HPP)
+#pragma message("warning: this file is not intended to be included directly")
+#endif
 #include "xe_common.hpp"
-#include "xe_cmdqueue.hpp"
 
 namespace xe
 {
@@ -43,46 +45,29 @@ namespace xe
     /// @brief C++ wrapper for command list
     class CommandList
     {
-    protected:
-        ::xe_command_list_handle_t m_handle;              ///< handle of command list object
-        ::xe_command_list_desc_t m_desc;                  ///< descriptor of the command list object
-
-        CommandList( void ) = delete;
-        CommandList( 
-                xe_command_list_handle_t handle,                ///< handle of command list object
-                xe_command_list_desc_t desc                     ///< descriptor of the command list object
-                ) :
-                m_handle( handle ),
-                m_desc( desc )
-            {}
-
-        ~CommandList( void ) = default;
-
-        CommandList( CommandList const& other ) = delete;
-        void operator=( CommandList const& other ) = delete;
-
-        CommandList( CommandList&& other ) = delete;
-        void operator=( CommandList&& other ) = delete;
-
     public:
-        auto getHandle( void ) const { return m_handle; }
-        auto getDesc( void ) const { return m_desc; }
+        ///////////////////////////////////////////////////////////////////////////////
+        /// @brief type definition for host function pointers used with
+        ///        ::CommandListAppendLaunchHostFunction
+        /// 
+        /// @details
+        ///     - The application may call this function from simultaneous threads.
+        ///     - The implementation of this function should be lock-free.
+        typedef void(__xecall *host_pfn_t)(
+            void* pUserData                                 ///< [in] Pointer to user data to pass to host function.
+            );
 
         ///////////////////////////////////////////////////////////////////////////////
-        /// @brief C++ version for ::xe_host_pfn_t
-        using host_pfn_t = ::xe_host_pfn_t;
-
-        ///////////////////////////////////////////////////////////////////////////////
-        /// @brief C++ version for ::xe_command_list_desc_version_t
-        enum class command_list_desc_version_t
+        /// @brief API version of ::command_list_desc_t
+        enum class desc_version_t
         {
             CURRENT = XE_MAKE_VERSION( 1, 0 ),              ///< version 1.0
 
         };
 
         ///////////////////////////////////////////////////////////////////////////////
-        /// @brief C++ version for ::xe_command_list_flag_t
-        enum class command_list_flag_t
+        /// @brief Supported command list creation flags
+        enum class flag_t
         {
             NONE = 0,                                       ///< default behavior
             COPY_ONLY = XE_BIT(0),                          ///< command list **only** contains copy operations (and synchronization
@@ -93,15 +78,15 @@ namespace xe
         };
 
         ///////////////////////////////////////////////////////////////////////////////
-        /// @brief C++ version for ::xe_command_list_parameter_t
-        enum class command_list_parameter_t
+        /// @brief Supported command list parameters
+        enum class parameter_t
         {
             TBD,                                            ///< TBD
 
         };
 
         ///////////////////////////////////////////////////////////////////////////////
-        /// @brief C++ version for ::xe_memory_advice_t
+        /// @brief Supported memory advice hints
         enum class memory_advice_t
         {
             SET_READ_MOSTLY = 0,                            ///< hint that memory will be read from frequently and written to rarely
@@ -118,16 +103,16 @@ namespace xe
         };
 
         ///////////////////////////////////////////////////////////////////////////////
-        /// @brief C++ version for ::xe_command_list_desc_t
-        struct command_list_desc_t
+        /// @brief Command List descriptor
+        struct desc_t
         {
-            command_list_desc_version_t version = command_list_desc_version_t::CURRENT; ///< [in] ::COMMAND_LIST_DESC_VERSION_CURRENT
-            command_list_flag_t flags = command_list_flag_t::NONE;  ///< [in] creation flags
+            desc_version_t version = desc_version_t::CURRENT;   ///< [in] ::COMMAND_LIST_DESC_VERSION_CURRENT
+            flag_t flags = flag_t::NONE;                    ///< [in] creation flags
 
         };
 
         ///////////////////////////////////////////////////////////////////////////////
-        /// @brief C++ version for ::xe_image_region_t
+        /// @brief Region descriptor
         struct image_region_t
         {
             uint32_t originX;                               ///< [in] The origin x offset for region in pixels
@@ -140,7 +125,7 @@ namespace xe
         };
 
         ///////////////////////////////////////////////////////////////////////////////
-        /// @brief C++ version for ::xe_thread_group_dimensions_t
+        /// @brief Function thread group dimensions.
         struct thread_group_dimensions_t
         {
             uint32_t groupCountX = 0;                       ///< [in] size of thread group in X dimension
@@ -149,65 +134,96 @@ namespace xe
 
         };
 
+
+    protected:
         ///////////////////////////////////////////////////////////////////////////////
-        /// @brief C++ wrapper for ::xeCommandListAppendBarrier
-        /// @throws result_t
-        inline void
-        AppendBarrier(
-            event_handle_t hSignalEvent = nullptr,          ///< [in][optional] handle of the event to signal on completion
-            uint32_t numWaitEvents = 0,                     ///< [in][optional] number of events to wait on before executing barrier
-            event_handle_t* phWaitEvents = nullptr          ///< [in][optional] handle of the events to wait on before executing
-                                                            ///< barrier
-            );
+        Device* m_pDevice;                              ///< pointer to parent object
+        command_list_handle_t m_handle;                 ///< handle of command list object
+        desc_t m_desc;                                  ///< descriptor of the command list object
 
         ///////////////////////////////////////////////////////////////////////////////
-        /// @brief C++ wrapper for ::xeCommandListAppendMemoryRangesBarrier
-        /// @throws result_t
-        inline void
-        AppendMemoryRangesBarrier(
-            uint32_t numRanges,                             ///< [in] number of memory ranges
-            const size_t* pRangeSizes,                      ///< [in] array of sizes of memory range
-            const void** pRanges,                           ///< [in] array of memory ranges
-            event_handle_t hSignalEvent = nullptr,          ///< [in][optional] handle of the event to signal on completion
-            uint32_t numWaitEvents = 0,                     ///< [in][optional] number of events to wait on before executing barrier
-            event_handle_t* phWaitEvents = nullptr          ///< [in][optional] handle of the events to wait on before executing
-                                                            ///< barrier
+        CommandList( void ) = delete;
+        CommandList( 
+            Device* pDevice,                                ///< pointer to parent object
+            command_list_handle_t handle,                   ///< handle of command list object
+            desc_t desc                                     ///< descriptor of the command list object
             );
 
+        ~CommandList( void ) = default;
+
+        CommandList( CommandList const& other ) = delete;
+        void operator=( CommandList const& other ) = delete;
+
+        CommandList( CommandList&& other ) = delete;
+        void operator=( CommandList&& other ) = delete;
+
+    public:
         ///////////////////////////////////////////////////////////////////////////////
-        /// @brief C++ wrapper for ::xeCommandListCreate
+        auto getDevice( void ) const { return m_pDevice; }
+        auto getHandle( void ) const { return m_handle; }
+        auto getDesc( void ) const { return m_desc; }
+
+        ///////////////////////////////////////////////////////////////////////////////
+        /// @brief Creates a command list on the device for submitting commands to any
+        ///        command queue.
+        /// 
+        /// @details
+        ///     - The command list is created in the 'open' state.
+        ///     - The application may call this function from simultaneous threads.
+        ///     - The implementation of this function should be lock-free.
         /// @returns
-        ///     - ::command_list_handle_t: pointer to handle of command list object created
+        ///     - CommandList: pointer to handle of command list object created
         /// 
         /// @throws result_t
-        inline static command_list_handle_t
+        inline static CommandList*
         Create(
-            device_handle_t hDevice,                        ///< [in] handle of the device object
-            const command_list_desc_t* desc                 ///< [in] pointer to command list descriptor
+            Device* hDevice,                                ///< [in] handle of the device object
+            const desc_t* desc                              ///< [in] pointer to command list descriptor
             );
 
         ///////////////////////////////////////////////////////////////////////////////
-        /// @brief C++ wrapper for ::xeCommandListCreateImmediate
+        /// @brief Creates a command list on the device with an implicit command queue
+        ///        for immediate submission of commands.
+        /// 
+        /// @details
+        ///     - The command list is created in the 'open' state and never needs to be
+        ///       closed.
+        ///     - The application may call this function from simultaneous threads.
+        ///     - The implementation of this function should be lock-free.
         /// @returns
-        ///     - ::command_list_handle_t: pointer to handle of command list object created
+        ///     - CommandList: pointer to handle of command list object created
         /// 
         /// @throws result_t
-        inline static command_list_handle_t
+        inline static CommandList*
         CreateImmediate(
-            device_handle_t hDevice,                        ///< [in] handle of the device object
-            const CommandQueue::command_queue_desc_t* desc  ///< [in] pointer to command queue descriptor
+            Device* hDevice,                                ///< [in] handle of the device object
+            const CommandQueue::desc_t* desc                ///< [in] pointer to command queue descriptor
             );
 
         ///////////////////////////////////////////////////////////////////////////////
-        /// @brief C++ wrapper for ::xeCommandListDestroy
+        /// @brief Destroys a command list.
+        /// 
+        /// @details
+        ///     - The application is responsible for making sure the GPU is not
+        ///       currently referencing the command list before it is deleted
+        ///     - The implementation of this function will immediately free all Host and
+        ///       Device allocations associated with this command list.
+        ///     - The application may **not** call this function from simultaneous
+        ///       threads with the same command list handle.
+        ///     - The implementation of this function should be lock-free.
         /// @throws result_t
         inline static void
         Destroy(
-            command_list_handle_t hCommandList              ///< [in] handle of command list object to destroy
+            CommandList* hCommandList                       ///< [in] handle of command list object to destroy
             );
 
         ///////////////////////////////////////////////////////////////////////////////
-        /// @brief C++ wrapper for ::xeCommandListClose
+        /// @brief Closes a command list; ready to be executed by a command queue.
+        /// 
+        /// @details
+        ///     - The application may **not** call this function from simultaneous
+        ///       threads with the same command list handle.
+        ///     - The implementation of this function should be lock-free.
         /// @throws result_t
         inline void
         Close(
@@ -215,7 +231,15 @@ namespace xe
             );
 
         ///////////////////////////////////////////////////////////////////////////////
-        /// @brief C++ wrapper for ::xeCommandListReset
+        /// @brief Reset a command list to initial (empty) state; ready for appending
+        ///        commands.
+        /// 
+        /// @details
+        ///     - The application is responsible for making sure the GPU is not
+        ///       currently referencing the command list before it is reset
+        ///     - The application may **not** call this function from simultaneous
+        ///       threads with the same command list handle.
+        ///     - The implementation of this function should be lock-free.
         /// @throws result_t
         inline void
         Reset(
@@ -223,27 +247,54 @@ namespace xe
             );
 
         ///////////////////////////////////////////////////////////////////////////////
-        /// @brief C++ wrapper for ::xeCommandListSetParameter
+        /// @brief Sets a command list's parameter.
+        /// 
+        /// @details
+        ///     - The application may **not** call this function from simultaneous
+        ///       threads with the same command list handle.
+        ///     - The implementation of this function should be lock-free.
+        /// 
+        /// @remarks
+        ///   _Analogues_
+        ///     - cuCtxSetCacheConfig
+        ///     - cuCtxSetLimit
+        ///     - cuCtxSetSharedMemConfig
         /// @throws result_t
         inline void
         SetParameter(
-            command_list_parameter_t parameter,             ///< [in] parameter to change
+            parameter_t parameter,                          ///< [in] parameter to change
             uint32_t value                                  ///< [in] value of attribute
             );
 
         ///////////////////////////////////////////////////////////////////////////////
-        /// @brief C++ wrapper for ::xeCommandListGetParameter
+        /// @brief Retrieves a command list's parameter.
+        /// 
+        /// @details
+        ///     - The application may call this function from simultaneous threads.
+        ///     - The implementation of this function should be lock-free.
+        /// 
+        /// @remarks
+        ///   _Analogues_
+        ///     - cuCtxGetCacheConfig
+        ///     - cuCtxGetLimit
+        ///     - cuCtxGetSharedMemConfig
+        ///     - cuCtxGetStreamPriorityRange
         /// @returns
         ///     - uint32_t: value of attribute
         /// 
         /// @throws result_t
         inline uint32_t
         GetParameter(
-            command_list_parameter_t parameter              ///< [in] parameter to retrieve
+            parameter_t parameter                           ///< [in] parameter to retrieve
             );
 
         ///////////////////////////////////////////////////////////////////////////////
-        /// @brief C++ wrapper for ::xeCommandListResetParameters
+        /// @brief Resets all command list parameters to default state.
+        /// 
+        /// @details
+        ///     - The application may **not** call this function from simultaneous
+        ///       threads with the same command list handle.
+        ///     - The implementation of this function should be lock-free.
         /// @throws result_t
         inline void
         ResetParameters(
@@ -251,7 +302,14 @@ namespace xe
             );
 
         ///////////////////////////////////////////////////////////////////////////////
-        /// @brief C++ wrapper for ::xeCommandListReserveSpace
+        /// @brief Reserve a section of contiguous command buffer space within the
+        ///        command list.
+        /// 
+        /// @details
+        ///     - The pointer returned is valid for both Host and device access.
+        ///     - The application may **not** call this function from simultaneous
+        ///       threads with the same command list handle.
+        ///     - The implementation of this function should be lock-free.
         /// @returns
         ///     - void*: pointer to command buffer space reserved
         /// 
@@ -262,85 +320,228 @@ namespace xe
             );
 
         ///////////////////////////////////////////////////////////////////////////////
-        /// @brief C++ wrapper for ::xeCommandListAppendMemoryCopy
+        /// @brief Appends an execution and global memory barrier into a command list.
+        /// 
+        /// @details
+        ///     - If numWaitEvents is zero, then all previous commands are completed
+        ///       prior to the execution of the barrier.
+        ///     - If numWaitEvents is non-zero, then then all phWaitEvents must be
+        ///       signalled prior to the execution of the barrier.
+        ///     - This command blocks all following commands from beginning until the
+        ///       execution of the barrier completes.
+        ///     - Memory and cache hierarchies are flushed and invalidated sufficient
+        ///       for device and host access.
+        ///     - The application may **not** call this function from simultaneous
+        ///       threads with the same command list handle.
+        ///     - The implementation of this function should be lock-free.
+        /// 
+        /// @remarks
+        ///   _Analogues_
+        ///     - **vkCmdPipelineBarrier**
+        ///     - clEnqueueBarrierWithWaitList
+        /// @throws result_t
+        inline void
+        AppendBarrier(
+            Event* hSignalEvent = nullptr,                  ///< [in][optional] handle of the event to signal on completion
+            uint32_t numWaitEvents = 0,                     ///< [in][optional] number of events to wait on before executing barrier
+            Event* phWaitEvents = nullptr                   ///< [in][optional] handle of the events to wait on before executing
+                                                            ///< barrier
+            );
+
+        ///////////////////////////////////////////////////////////////////////////////
+        /// @brief Appends a global memory ranges barrier into a command list.
+        /// 
+        /// @details
+        ///     - If numWaitEvents is zero, then all previous commands are completed
+        ///       prior to the execution of the barrier.
+        ///     - If numWaitEvents is non-zero, then then all phWaitEvents must be
+        ///       signalled prior to the execution of the barrier.
+        ///     - This command blocks all following commands from beginning until the
+        ///       execution of the barrier completes.
+        ///     - Memory and cache hierarchies are flushed and invalidated sufficient
+        ///       for device and host access.
+        ///     - The application may **not** call this function from simultaneous
+        ///       threads with the same command list handle.
+        ///     - The implementation of this function should be lock-free.
+        /// @throws result_t
+        inline void
+        AppendMemoryRangesBarrier(
+            uint32_t numRanges,                             ///< [in] number of memory ranges
+            const size_t* pRangeSizes,                      ///< [in] array of sizes of memory range
+            const void** pRanges,                           ///< [in] array of memory ranges
+            Event* hSignalEvent = nullptr,                  ///< [in][optional] handle of the event to signal on completion
+            uint32_t numWaitEvents = 0,                     ///< [in][optional] number of events to wait on before executing barrier
+            Event* phWaitEvents = nullptr                   ///< [in][optional] handle of the events to wait on before executing
+                                                            ///< barrier
+            );
+
+        ///////////////////////////////////////////////////////////////////////////////
+        /// @brief Copies host, device, or shared memory.
+        /// 
+        /// @details
+        ///     - The memory pointed to by both srcptr and dstptr must be accessible by
+        ///       the device on which the command list is created.
+        ///     - The application may **not** call this function from simultaneous
+        ///       threads with the same command list handle.
+        ///     - The implementation of this function should be lock-free.
+        /// 
+        /// @remarks
+        ///   _Analogues_
+        ///     - **clEnqueueCopyBuffer**
+        ///     - **clEnqueueReadBuffer**
+        ///     - **clEnqueueWriteBuffer**
+        ///     - **clEnqueueSVMMemcpy**
         /// @throws result_t
         inline void
         AppendMemoryCopy(
             void* dstptr,                                   ///< [in] pointer to destination memory to copy to
             const void* srcptr,                             ///< [in] pointer to source memory to copy from
             size_t size,                                    ///< [in] size in bytes to copy
-            event_handle_t hSignalEvent = nullptr,          ///< [in][optional] handle of the event to signal on completion
+            Event* hSignalEvent = nullptr,                  ///< [in][optional] handle of the event to signal on completion
             uint32_t numWaitEvents = 0,                     ///< [in][optional] number of events to wait on before copy
-            event_handle_t* phWaitEvents = nullptr          ///< [in][optional] handle of the events to wait on before copy
+            Event* phWaitEvents = nullptr                   ///< [in][optional] handle of the events to wait on before copy
             );
 
         ///////////////////////////////////////////////////////////////////////////////
-        /// @brief C++ wrapper for ::xeCommandListAppendMemorySet
+        /// @brief Initializes host, device, or shared memory.
+        /// 
+        /// @details
+        ///     - The memory pointed to by dstptr must be accessible by the device on
+        ///       which the command list is created.
+        ///     - The value to initialize memory to is interpreted as an 8-bit unsigned
+        ///       char; the upper 24-bits are ignored.
+        ///     - The application may **not** call this function from simultaneous
+        ///       threads with the same command list handle.
+        ///     - The implementation of this function should be lock-free.
+        /// 
+        /// @remarks
+        ///   _Analogues_
+        ///     - **clEnqueueFillBuffer**
+        ///     - **clEnqueueSVMMemFill**
         /// @throws result_t
         inline void
         AppendMemorySet(
             void* ptr,                                      ///< [in] pointer to memory to initialize
             int value,                                      ///< [in] value to initialize memory to
             size_t size,                                    ///< [in] size in bytes to initailize
-            event_handle_t hSignalEvent = nullptr,          ///< [in][optional] handle of the event to signal on completion
+            Event* hSignalEvent = nullptr,                  ///< [in][optional] handle of the event to signal on completion
             uint32_t numWaitEvents = 0,                     ///< [in][optional] number of events to wait on before copy
-            event_handle_t* phWaitEvents = nullptr          ///< [in][optional] handle of the events to wait on before copy
+            Event* phWaitEvents = nullptr                   ///< [in][optional] handle of the events to wait on before copy
             );
 
         ///////////////////////////////////////////////////////////////////////////////
-        /// @brief C++ wrapper for ::xeCommandListAppendImageCopy
+        /// @brief Copies a image.
+        /// 
+        /// @details
+        ///     - The application may **not** call this function from simultaneous
+        ///       threads with the same command list handle.
+        ///     - The implementation of this function should be lock-free.
+        /// 
+        /// @remarks
+        ///   _Analogues_
+        ///     - **clEnqueueCopyImage**
         /// @throws result_t
         inline void
         AppendImageCopy(
-            image_handle_t hDstImage,                       ///< [in] handle of destination image to copy to
-            image_handle_t hSrcImage,                       ///< [in] handle of source image to copy from
-            event_handle_t hSignalEvent = nullptr,          ///< [in][optional] handle of the event to signal on completion
+            Image* hDstImage,                               ///< [in] handle of destination image to copy to
+            Image* hSrcImage,                               ///< [in] handle of source image to copy from
+            Event* hSignalEvent = nullptr,                  ///< [in][optional] handle of the event to signal on completion
             uint32_t numWaitEvents = 0,                     ///< [in][optional] number of events to wait on before copy
-            event_handle_t* phWaitEvents = nullptr          ///< [in][optional] handle of the events to wait on before copy
+            Event* phWaitEvents = nullptr                   ///< [in][optional] handle of the events to wait on before copy
             );
 
         ///////////////////////////////////////////////////////////////////////////////
-        /// @brief C++ wrapper for ::xeCommandListAppendImageCopyRegion
+        /// @brief Copies a region of a image to another image.
+        /// 
+        /// @details
+        ///     - The application may **not** call this function from simultaneous
+        ///       threads with the same command list handle.
+        ///     - The implementation of this function should be lock-free.
         /// @throws result_t
         inline void
         AppendImageCopyRegion(
-            image_handle_t hDstImage,                       ///< [in] handle of destination image to copy to
-            image_handle_t hSrcImage,                       ///< [in] handle of source image to copy from
+            Image* hDstImage,                               ///< [in] handle of destination image to copy to
+            Image* hSrcImage,                               ///< [in] handle of source image to copy from
             image_region_t* pDstRegion = nullptr,           ///< [in][optional] destination region descriptor
             image_region_t* pSrcRegion = nullptr,           ///< [in][optional] source region descriptor
-            event_handle_t hSignalEvent = nullptr,          ///< [in][optional] handle of the event to signal on completion
+            Event* hSignalEvent = nullptr,                  ///< [in][optional] handle of the event to signal on completion
             uint32_t numWaitEvents = 0,                     ///< [in][optional] number of events to wait on before copy
-            event_handle_t* phWaitEvents = nullptr          ///< [in][optional] handle of the events to wait on before copy
+            Event* phWaitEvents = nullptr                   ///< [in][optional] handle of the events to wait on before copy
             );
 
         ///////////////////////////////////////////////////////////////////////////////
-        /// @brief C++ wrapper for ::xeCommandListAppendImageCopyToMemory
+        /// @brief Copies from a image to device or shared memory.
+        /// 
+        /// @details
+        ///     - The memory pointed to by dstptr must be accessible by the device on
+        ///       which the command list is created.
+        ///     - The application may **not** call this function from simultaneous
+        ///       threads with the same command list handle.
+        ///     - The implementation of this function should be lock-free.
+        /// 
+        /// @remarks
+        ///   _Analogues_
+        ///     - clEnqueueReadImage
         /// @throws result_t
         inline void
         AppendImageCopyToMemory(
             void* dstptr,                                   ///< [in] pointer to destination memory to copy to
-            image_handle_t hSrcImage,                       ///< [in] handle of source image to copy from
+            Image* hSrcImage,                               ///< [in] handle of source image to copy from
             image_region_t* pSrcRegion = nullptr,           ///< [in][optional] source region descriptor
-            event_handle_t hSignalEvent = nullptr,          ///< [in][optional] handle of the event to signal on completion
+            Event* hSignalEvent = nullptr,                  ///< [in][optional] handle of the event to signal on completion
             uint32_t numWaitEvents = 0,                     ///< [in][optional] number of events to wait on before copy
-            event_handle_t* phWaitEvents = nullptr          ///< [in][optional] handle of the events to wait on before copy
+            Event* phWaitEvents = nullptr                   ///< [in][optional] handle of the events to wait on before copy
             );
 
         ///////////////////////////////////////////////////////////////////////////////
-        /// @brief C++ wrapper for ::xeCommandListAppendImageCopyFromMemory
+        /// @brief Copies to a image from device or shared memory.
+        /// 
+        /// @details
+        ///     - The memory pointed to by srcptr must be accessible by the device on
+        ///       which the command list is created.
+        ///     - The application may **not** call this function from simultaneous
+        ///       threads with the same command list handle.
+        ///     - The implementation of this function should be lock-free.
+        /// 
+        /// @remarks
+        ///   _Analogues_
+        ///     - clEnqueueWriteImage
         /// @throws result_t
         inline void
         AppendImageCopyFromMemory(
-            image_handle_t hDstImage,                       ///< [in] handle of destination image to copy to
+            Image* hDstImage,                               ///< [in] handle of destination image to copy to
             const void* srcptr,                             ///< [in] pointer to source memory to copy from
             image_region_t* pDstRegion = nullptr,           ///< [in][optional] destination region descriptor
-            event_handle_t hSignalEvent = nullptr,          ///< [in][optional] handle of the event to signal on completion
+            Event* hSignalEvent = nullptr,                  ///< [in][optional] handle of the event to signal on completion
             uint32_t numWaitEvents = 0,                     ///< [in][optional] number of events to wait on before copy
-            event_handle_t* phWaitEvents = nullptr          ///< [in][optional] handle of the events to wait on before copy
+            Event* phWaitEvents = nullptr                   ///< [in][optional] handle of the events to wait on before copy
             );
 
         ///////////////////////////////////////////////////////////////////////////////
-        /// @brief C++ wrapper for ::xeCommandListAppendMemoryPrefetch
+        /// @brief Asynchronously prefetches shared memory to the device associated with
+        ///        the specified command list
+        /// 
+        /// @details
+        ///     - This is a hint to improve performance only and is not required for
+        ///       correctness.
+        ///     - Only prefetching to the device associated with the specified command
+        ///       list is supported.
+        ///       Prefetching to the host or to a peer device is not supported.
+        ///     - Prefetching may not be supported for all allocation types for all devices.
+        ///       If memory prefetching is not supported for the specified memory range
+        ///       the prefetch hint may be ignored.
+        ///     - Prefetching may only be supported at a device-specific granularity,
+        ///       such as at a page boundary.
+        ///       In this case, the memory range may be expanded such that the start and
+        ///       end of the range satisfy granularity requirements.
+        ///     - The application may **not** call this function from simultaneous
+        ///       threads with the same command list handle.
+        ///     - The implementation of this function should be lock-free.
+        /// 
+        /// @remarks
+        ///   _Analogues_
+        ///     - cudaMemPrefetchAsync
+        ///     - clEnqueueSVMMigrateMem
         /// @throws result_t
         inline void
         AppendMemoryPrefetch(
@@ -349,83 +550,180 @@ namespace xe
             );
 
         ///////////////////////////////////////////////////////////////////////////////
-        /// @brief C++ wrapper for ::xeCommandListAppendMemAdvise
+        /// @brief Provides advice about the use of a shared memory range
+        /// 
+        /// @details
+        ///     - Memory advice is a performance hint only and is not required for
+        ///       functional correctness.
+        ///     - Memory advice can be used to override driver heuristics to explicitly
+        ///       control shared memory behavior.
+        ///     - Not all memory advice hints may be supported for all allocation types
+        ///       for all devices.
+        ///       If a memory advice hint is not supported by the device it will be ignored.
+        ///     - Memory advice may only be supported at a device-specific granularity,
+        ///       such as at a page boundary.
+        ///       In this case, the memory range may be expanded such that the start and
+        ///       end of the range satisfy granularity requirements.
+        ///     - The application may **not** call this function from simultaneous
+        ///       threads with the same command list handle.
+        ///     - The implementation of this function should be lock-free.
+        /// 
+        /// @remarks
+        ///   _Analogues_
+        ///     - **cudaMemAdvise**
         /// @throws result_t
         inline void
         AppendMemAdvise(
-            device_handle_t hDevice,                        ///< [in] device associated with the memory advice
+            Device* hDevice,                                ///< [in] device associated with the memory advice
             const void* ptr,                                ///< [in] Pointer to the start of the memory range
             size_t size,                                    ///< [in] Size in bytes of the memory range
             memory_advice_t advice                          ///< [in] Memory advice for the memory range
             );
 
         ///////////////////////////////////////////////////////////////////////////////
-        /// @brief C++ wrapper for ::xeCommandListAppendSignalEvent
+        /// @brief Appends a signal of the event from the device into a command list.
+        /// 
+        /// @details
+        ///     - The application may **not** call this function from simultaneous
+        ///       threads with the same command list handle.
+        ///     - The implementation of this function should be lock-free.
+        /// 
+        /// @remarks
+        ///   _Analogues_
+        ///     - **clSetUserEventStatus**
+        ///     - cuEventRecord
+        ///     - vkCmdSetEvent
         /// @throws result_t
         inline void
         AppendSignalEvent(
-            event_handle_t hEvent                           ///< [in] handle of the event
+            Event* hEvent                                   ///< [in] handle of the event
             );
 
         ///////////////////////////////////////////////////////////////////////////////
-        /// @brief C++ wrapper for ::xeCommandListAppendWaitOnEvents
+        /// @brief Appends wait on event(s) on the device into a command list.
+        /// 
+        /// @details
+        ///     - The application may **not** call this function from simultaneous
+        ///       threads with the same command list handle.
+        ///     - The implementation of this function should be lock-free.
         /// @throws result_t
         inline void
         AppendWaitOnEvents(
             uint32_t numEvents,                             ///< [in] number of events to wait on before continuing
-            event_handle_t* phEvents                        ///< [in] handle of the events to wait on before continuing
+            Event* phEvents                                 ///< [in] handle of the events to wait on before continuing
             );
 
         ///////////////////////////////////////////////////////////////////////////////
-        /// @brief C++ wrapper for ::xeCommandListAppendEventReset
+        /// @brief Reset an event back to not signaled state
+        /// 
+        /// @details
+        ///     - The application may **not** call this function from simultaneous
+        ///       threads with the same command list handle.
+        ///     - The implementation of this function should be lock-free.
+        /// 
+        /// @remarks
+        ///   _Analogues_
+        ///     - vkResetEvent
         /// @throws result_t
         inline void
         AppendEventReset(
-            event_handle_t hEvent                           ///< [in] handle of the event
+            Event* hEvent                                   ///< [in] handle of the event
             );
 
         ///////////////////////////////////////////////////////////////////////////////
-        /// @brief C++ wrapper for ::xeCommandListAppendLaunchFunction
+        /// @brief Launch function over one or more work groups.
+        /// 
+        /// @details
+        ///     - This may **not** be called for a command list created with
+        ///       ::COMMAND_LIST_FLAG_COPY_ONLY.
+        ///     - This function may **not** be called from simultaneous threads with the
+        ///       same command list handle.
+        ///     - The implementation of this function should be lock-free.
+        /// 
+        /// @remarks
+        ///   _Analogues_
+        ///     - **cuLaunchKernel**
         /// @throws result_t
         inline void
         AppendLaunchFunction(
-            function_handle_t hFunction,                    ///< [in] handle of the function object
+            Function* hFunction,                            ///< [in] handle of the function object
             const thread_group_dimensions_t* pLaunchFuncArgs,   ///< [in] launch function arguments.
-            event_handle_t hSignalEvent = nullptr,          ///< [in][optional] handle of the event to signal on completion
+            Event* hSignalEvent = nullptr,                  ///< [in][optional] handle of the event to signal on completion
             uint32_t numWaitEvents = 0,                     ///< [in][optional] number of events to wait on before launching
-            event_handle_t* phWaitEvents = nullptr          ///< [in][optional] handle of the events to wait on before launching
+            Event* phWaitEvents = nullptr                   ///< [in][optional] handle of the events to wait on before launching
             );
 
         ///////////////////////////////////////////////////////////////////////////////
-        /// @brief C++ wrapper for ::xeCommandListAppendLaunchFunctionIndirect
+        /// @brief Launch function over one or more work groups using indirect arguments.
+        /// 
+        /// @details
+        ///     - The launch arguments need to be device visible.
+        ///     - The launch arguments buffer may not be reusued until the function has
+        ///       completed on the device.
+        ///     - This may **not** be called for a command list created with
+        ///       ::COMMAND_LIST_FLAG_COPY_ONLY.
+        ///     - This function may **not** be called from simultaneous threads with the
+        ///       same command list handle.
+        ///     - The implementation of this function should be lock-free.
+        /// 
+        /// @remarks
+        ///   _Analogues_
+        ///     - **cuLaunchKernel**
         /// @throws result_t
         inline void
         AppendLaunchFunctionIndirect(
-            function_handle_t hFunction,                    ///< [in] handle of the function object
+            Function* hFunction,                            ///< [in] handle of the function object
             const thread_group_dimensions_t* pLaunchArgumentsBuffer,///< [in] pointer to device buffer that will contain launch arguments
-            event_handle_t hSignalEvent = nullptr,          ///< [in][optional] handle of the event to signal on completion
+            Event* hSignalEvent = nullptr,                  ///< [in][optional] handle of the event to signal on completion
             uint32_t numWaitEvents = 0,                     ///< [in][optional] number of events to wait on before launching
-            event_handle_t* phWaitEvents = nullptr          ///< [in][optional] handle of the events to wait on before launching
+            Event* phWaitEvents = nullptr                   ///< [in][optional] handle of the events to wait on before launching
             );
 
         ///////////////////////////////////////////////////////////////////////////////
-        /// @brief C++ wrapper for ::xeCommandListAppendLaunchMultipleFunctionsIndirect
+        /// @brief Launch multiple functions over one or more work groups using an array
+        ///        of indirect arguments.
+        /// 
+        /// @details
+        ///     - The array of launch arguments need to be device visible.
+        ///     - The array of launch arguments buffer may not be reusued until the
+        ///       function has completed on the device.
+        ///     - This may **not** be called for a command list created with
+        ///       ::COMMAND_LIST_FLAG_COPY_ONLY.
+        ///     - This function may **not** be called from simultaneous threads with the
+        ///       same command list handle.
+        ///     - The implementation of this function should be lock-free.
+        /// 
+        /// @remarks
+        ///   _Analogues_
+        ///     - **cuLaunchKernel**
         /// @throws result_t
         inline void
         AppendLaunchMultipleFunctionsIndirect(
             uint32_t numFunctions,                          ///< [in] maximum number of functions to launch
-            const function_handle_t* phFunctions,           ///< [in] handles of the function objects
+            Function* phFunctions,                          ///< [in] handles of the function objects
             const size_t* pNumLaunchArguments,              ///< [in] pointer to device memory location that will contain the actual
                                                             ///< number of launch arguments; must be less-than or equal-to numFunctions
             const thread_group_dimensions_t* pLaunchArgumentsBuffer,///< [in] pointer to device buffer that will contain a contiguous array of
                                                             ///< launch arguments
-            event_handle_t hSignalEvent = nullptr,          ///< [in][optional] handle of the event to signal on completion
+            Event* hSignalEvent = nullptr,                  ///< [in][optional] handle of the event to signal on completion
             uint32_t numWaitEvents = 0,                     ///< [in][optional] number of events to wait on before launching
-            event_handle_t* phWaitEvents = nullptr          ///< [in][optional] handle of the events to wait on before launching
+            Event* phWaitEvents = nullptr                   ///< [in][optional] handle of the events to wait on before launching
             );
 
         ///////////////////////////////////////////////////////////////////////////////
-        /// @brief C++ wrapper for ::xeCommandListAppendLaunchHostFunction
+        /// @brief Launch host function. All work after this command in the command list
+        ///        will block until host function completes.
+        /// 
+        /// @details
+        ///     - This may **not** be called for a command list created with
+        ///       ::COMMAND_LIST_FLAG_COPY_ONLY.
+        ///     - This function may **not** be called from simultaneous threads with the
+        ///       same command list handle.
+        ///     - The implementation of this function should be lock-free.
+        /// 
+        /// @remarks
+        ///   _Analogues_
+        ///     - **cuLaunchHostFunc**
         /// @throws result_t
         inline void
         AppendLaunchHostFunction(

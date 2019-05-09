@@ -28,785 +28,390 @@
 * @endcond
 *
 ******************************************************************************/
-#include "xet_api.h"
 #include "loader.h"
 
-xet_apitable_t xet_apitable = {};
-
-///////////////////////////////////////////////////////////////////////////////
-/// @brief Loads function pointer table for loaded driver
-bool xetLoadExports(
-    void* handle )  ///< [in] driver handle
-{
-    xet_apitable.pfnMetricGroupGetCount                                  = (xet_pfnMetricGroupGetCount_t)LOAD_FUNCTION_PTR(handle, "xetMetricGroupGetCount");
-    xet_apitable.pfnMetricGroupGet                                       = (xet_pfnMetricGroupGet_t)LOAD_FUNCTION_PTR(handle, "xetMetricGroupGet");
-    xet_apitable.pfnMetricGroupGetProperties                             = (xet_pfnMetricGroupGetProperties_t)LOAD_FUNCTION_PTR(handle, "xetMetricGroupGetProperties");
-    xet_apitable.pfnMetricGet                                            = (xet_pfnMetricGet_t)LOAD_FUNCTION_PTR(handle, "xetMetricGet");
-    xet_apitable.pfnMetricGetProperties                                  = (xet_pfnMetricGetProperties_t)LOAD_FUNCTION_PTR(handle, "xetMetricGetProperties");
-    xet_apitable.pfnMetricGroupCalculateData                             = (xet_pfnMetricGroupCalculateData_t)LOAD_FUNCTION_PTR(handle, "xetMetricGroupCalculateData");
-    xet_apitable.pfnDeviceActivateMetricGroups                           = (xet_pfnDeviceActivateMetricGroups_t)LOAD_FUNCTION_PTR(handle, "xetDeviceActivateMetricGroups");
-    xet_apitable.pfnMetricTracerOpen                                     = (xet_pfnMetricTracerOpen_t)LOAD_FUNCTION_PTR(handle, "xetMetricTracerOpen");
-    xet_apitable.pfnCommandListAppendMetricTracerMarker                  = (xet_pfnCommandListAppendMetricTracerMarker_t)LOAD_FUNCTION_PTR(handle, "xetCommandListAppendMetricTracerMarker");
-    xet_apitable.pfnMetricTracerClose                                    = (xet_pfnMetricTracerClose_t)LOAD_FUNCTION_PTR(handle, "xetMetricTracerClose");
-    xet_apitable.pfnMetricTracerReadData                                 = (xet_pfnMetricTracerReadData_t)LOAD_FUNCTION_PTR(handle, "xetMetricTracerReadData");
-    xet_apitable.pfnMetricQueryPoolCreate                                = (xet_pfnMetricQueryPoolCreate_t)LOAD_FUNCTION_PTR(handle, "xetMetricQueryPoolCreate");
-    xet_apitable.pfnMetricQueryPoolDestroy                               = (xet_pfnMetricQueryPoolDestroy_t)LOAD_FUNCTION_PTR(handle, "xetMetricQueryPoolDestroy");
-    xet_apitable.pfnMetricQueryPoolGetMetricQuery                        = (xet_pfnMetricQueryPoolGetMetricQuery_t)LOAD_FUNCTION_PTR(handle, "xetMetricQueryPoolGetMetricQuery");
-    xet_apitable.pfnCommandListAppendMetricQueryBegin                    = (xet_pfnCommandListAppendMetricQueryBegin_t)LOAD_FUNCTION_PTR(handle, "xetCommandListAppendMetricQueryBegin");
-    xet_apitable.pfnCommandListAppendMetricQueryEnd                      = (xet_pfnCommandListAppendMetricQueryEnd_t)LOAD_FUNCTION_PTR(handle, "xetCommandListAppendMetricQueryEnd");
-    xet_apitable.pfnCommandListAppendMetricMemoryBarrier                 = (xet_pfnCommandListAppendMetricMemoryBarrier_t)LOAD_FUNCTION_PTR(handle, "xetCommandListAppendMetricMemoryBarrier");
-    xet_apitable.pfnMetricQueryGetData                                   = (xet_pfnMetricQueryGetData_t)LOAD_FUNCTION_PTR(handle, "xetMetricQueryGetData");
-    xet_apitable.pfnPowerCreate                                          = (xet_pfnPowerCreate_t)LOAD_FUNCTION_PTR(handle, "xetPowerCreate");
-    xet_apitable.pfnPowerDestroy                                         = (xet_pfnPowerDestroy_t)LOAD_FUNCTION_PTR(handle, "xetPowerDestroy");
-    xet_apitable.pfnPowerGetAveragePowerLimit                            = (xet_pfnPowerGetAveragePowerLimit_t)LOAD_FUNCTION_PTR(handle, "xetPowerGetAveragePowerLimit");
-    xet_apitable.pfnPowerGetBurstPowerLimit                              = (xet_pfnPowerGetBurstPowerLimit_t)LOAD_FUNCTION_PTR(handle, "xetPowerGetBurstPowerLimit");
-    xet_apitable.pfnPowerGetPeakPowerLimit                               = (xet_pfnPowerGetPeakPowerLimit_t)LOAD_FUNCTION_PTR(handle, "xetPowerGetPeakPowerLimit");
-    xet_apitable.pfnPowerGetAllPowerLimits                               = (xet_pfnPowerGetAllPowerLimits_t)LOAD_FUNCTION_PTR(handle, "xetPowerGetAllPowerLimits");
-    xet_apitable.pfnPowerGetDefaultPowerLimits                           = (xet_pfnPowerGetDefaultPowerLimits_t)LOAD_FUNCTION_PTR(handle, "xetPowerGetDefaultPowerLimits");
-    xet_apitable.pfnPowerSetAveragePowerLimit                            = (xet_pfnPowerSetAveragePowerLimit_t)LOAD_FUNCTION_PTR(handle, "xetPowerSetAveragePowerLimit");
-    xet_apitable.pfnPowerSetBurstPowerLimit                              = (xet_pfnPowerSetBurstPowerLimit_t)LOAD_FUNCTION_PTR(handle, "xetPowerSetBurstPowerLimit");
-    xet_apitable.pfnPowerSetPeakPowerLimit                               = (xet_pfnPowerSetPeakPowerLimit_t)LOAD_FUNCTION_PTR(handle, "xetPowerSetPeakPowerLimit");
-    xet_apitable.pfnPowerSetPowerLimits                                  = (xet_pfnPowerSetPowerLimits_t)LOAD_FUNCTION_PTR(handle, "xetPowerSetPowerLimits");
-    xet_apitable.pfnPowerGetEnergyCounter                                = (xet_pfnPowerGetEnergyCounter_t)LOAD_FUNCTION_PTR(handle, "xetPowerGetEnergyCounter");
-    xet_apitable.pfnPowerGetTurboMode                                    = (xet_pfnPowerGetTurboMode_t)LOAD_FUNCTION_PTR(handle, "xetPowerGetTurboMode");
-    xet_apitable.pfnPowerSetTurboMode                                    = (xet_pfnPowerSetTurboMode_t)LOAD_FUNCTION_PTR(handle, "xetPowerSetTurboMode");
-    xet_apitable.pfnPowerGetFreqDomainCount                              = (xet_pfnPowerGetFreqDomainCount_t)LOAD_FUNCTION_PTR(handle, "xetPowerGetFreqDomainCount");
-    xet_apitable.pfnPowerGetFreqDomainHandle                             = (xet_pfnPowerGetFreqDomainHandle_t)LOAD_FUNCTION_PTR(handle, "xetPowerGetFreqDomainHandle");
-    xet_apitable.pfnFreqDomainGetProperties                              = (xet_pfnFreqDomainGetProperties_t)LOAD_FUNCTION_PTR(handle, "xetFreqDomainGetProperties");
-    xet_apitable.pfnFreqDomainGetSourceFreqDomain                        = (xet_pfnFreqDomainGetSourceFreqDomain_t)LOAD_FUNCTION_PTR(handle, "xetFreqDomainGetSourceFreqDomain");
-    xet_apitable.pfnFreqDomainGetSupportedClocks                         = (xet_pfnFreqDomainGetSupportedClocks_t)LOAD_FUNCTION_PTR(handle, "xetFreqDomainGetSupportedClocks");
-    xet_apitable.pfnFreqDomainGetSupportedClockDividers                  = (xet_pfnFreqDomainGetSupportedClockDividers_t)LOAD_FUNCTION_PTR(handle, "xetFreqDomainGetSupportedClockDividers");
-    xet_apitable.pfnFreqDomainGetClockRange                              = (xet_pfnFreqDomainGetClockRange_t)LOAD_FUNCTION_PTR(handle, "xetFreqDomainGetClockRange");
-    xet_apitable.pfnFreqDomainSetClockRange                              = (xet_pfnFreqDomainSetClockRange_t)LOAD_FUNCTION_PTR(handle, "xetFreqDomainSetClockRange");
-    xet_apitable.pfnFreqDomainSetClockDivider                            = (xet_pfnFreqDomainSetClockDivider_t)LOAD_FUNCTION_PTR(handle, "xetFreqDomainSetClockDivider");
-    xet_apitable.pfnFreqDomainGetCurrentFrequency                        = (xet_pfnFreqDomainGetCurrentFrequency_t)LOAD_FUNCTION_PTR(handle, "xetFreqDomainGetCurrentFrequency");
-    xet_apitable.pfnPowerFanCount                                        = (xet_pfnPowerFanCount_t)LOAD_FUNCTION_PTR(handle, "xetPowerFanCount");
-    xet_apitable.pfnPowerFanGetProperties                                = (xet_pfnPowerFanGetProperties_t)LOAD_FUNCTION_PTR(handle, "xetPowerFanGetProperties");
-    xet_apitable.pfnPowerFanGetSpeedTable                                = (xet_pfnPowerFanGetSpeedTable_t)LOAD_FUNCTION_PTR(handle, "xetPowerFanGetSpeedTable");
-    xet_apitable.pfnPowerFanSetSpeedTable                                = (xet_pfnPowerFanSetSpeedTable_t)LOAD_FUNCTION_PTR(handle, "xetPowerFanSetSpeedTable");
-    xet_apitable.pfnPowerFanGetSpeed                                     = (xet_pfnPowerFanGetSpeed_t)LOAD_FUNCTION_PTR(handle, "xetPowerFanGetSpeed");
-    xet_apitable.pfnPowerFanSetSpeed                                     = (xet_pfnPowerFanSetSpeed_t)LOAD_FUNCTION_PTR(handle, "xetPowerFanSetSpeed");
-    xet_apitable.pfnPowerTemperatureSensorCount                          = (xet_pfnPowerTemperatureSensorCount_t)LOAD_FUNCTION_PTR(handle, "xetPowerTemperatureSensorCount");
-    xet_apitable.pfnPowerGetTemperatureProperties                        = (xet_pfnPowerGetTemperatureProperties_t)LOAD_FUNCTION_PTR(handle, "xetPowerGetTemperatureProperties");
-    xet_apitable.pfnPowerGetTemperature                                  = (xet_pfnPowerGetTemperature_t)LOAD_FUNCTION_PTR(handle, "xetPowerGetTemperature");
-    xet_apitable.pfnPowerSetTemperatureThreshold                         = (xet_pfnPowerSetTemperatureThreshold_t)LOAD_FUNCTION_PTR(handle, "xetPowerSetTemperatureThreshold");
-    xet_apitable.pfnPowerActivityCount                                   = (xet_pfnPowerActivityCount_t)LOAD_FUNCTION_PTR(handle, "xetPowerActivityCount");
-    xet_apitable.pfnPowerGetActivityProperties                           = (xet_pfnPowerGetActivityProperties_t)LOAD_FUNCTION_PTR(handle, "xetPowerGetActivityProperties");
-    xet_apitable.pfnPowerGetActivityCounters                             = (xet_pfnPowerGetActivityCounters_t)LOAD_FUNCTION_PTR(handle, "xetPowerGetActivityCounters");
-
-    if( nullptr == xet_apitable.pfnMetricGroupGetCount )
-        return false;
-    if( nullptr == xet_apitable.pfnMetricGroupGet )
-        return false;
-    if( nullptr == xet_apitable.pfnMetricGroupGetProperties )
-        return false;
-    if( nullptr == xet_apitable.pfnMetricGet )
-        return false;
-    if( nullptr == xet_apitable.pfnMetricGetProperties )
-        return false;
-    if( nullptr == xet_apitable.pfnMetricGroupCalculateData )
-        return false;
-    if( nullptr == xet_apitable.pfnDeviceActivateMetricGroups )
-        return false;
-    if( nullptr == xet_apitable.pfnMetricTracerOpen )
-        return false;
-    if( nullptr == xet_apitable.pfnCommandListAppendMetricTracerMarker )
-        return false;
-    if( nullptr == xet_apitable.pfnMetricTracerClose )
-        return false;
-    if( nullptr == xet_apitable.pfnMetricTracerReadData )
-        return false;
-    if( nullptr == xet_apitable.pfnMetricQueryPoolCreate )
-        return false;
-    if( nullptr == xet_apitable.pfnMetricQueryPoolDestroy )
-        return false;
-    if( nullptr == xet_apitable.pfnMetricQueryPoolGetMetricQuery )
-        return false;
-    if( nullptr == xet_apitable.pfnCommandListAppendMetricQueryBegin )
-        return false;
-    if( nullptr == xet_apitable.pfnCommandListAppendMetricQueryEnd )
-        return false;
-    if( nullptr == xet_apitable.pfnCommandListAppendMetricMemoryBarrier )
-        return false;
-    if( nullptr == xet_apitable.pfnMetricQueryGetData )
-        return false;
-    if( nullptr == xet_apitable.pfnPowerCreate )
-        return false;
-    if( nullptr == xet_apitable.pfnPowerDestroy )
-        return false;
-    if( nullptr == xet_apitable.pfnPowerGetAveragePowerLimit )
-        return false;
-    if( nullptr == xet_apitable.pfnPowerGetBurstPowerLimit )
-        return false;
-    if( nullptr == xet_apitable.pfnPowerGetPeakPowerLimit )
-        return false;
-    if( nullptr == xet_apitable.pfnPowerGetAllPowerLimits )
-        return false;
-    if( nullptr == xet_apitable.pfnPowerGetDefaultPowerLimits )
-        return false;
-    if( nullptr == xet_apitable.pfnPowerSetAveragePowerLimit )
-        return false;
-    if( nullptr == xet_apitable.pfnPowerSetBurstPowerLimit )
-        return false;
-    if( nullptr == xet_apitable.pfnPowerSetPeakPowerLimit )
-        return false;
-    if( nullptr == xet_apitable.pfnPowerSetPowerLimits )
-        return false;
-    if( nullptr == xet_apitable.pfnPowerGetEnergyCounter )
-        return false;
-    if( nullptr == xet_apitable.pfnPowerGetTurboMode )
-        return false;
-    if( nullptr == xet_apitable.pfnPowerSetTurboMode )
-        return false;
-    if( nullptr == xet_apitable.pfnPowerGetFreqDomainCount )
-        return false;
-    if( nullptr == xet_apitable.pfnPowerGetFreqDomainHandle )
-        return false;
-    if( nullptr == xet_apitable.pfnFreqDomainGetProperties )
-        return false;
-    if( nullptr == xet_apitable.pfnFreqDomainGetSourceFreqDomain )
-        return false;
-    if( nullptr == xet_apitable.pfnFreqDomainGetSupportedClocks )
-        return false;
-    if( nullptr == xet_apitable.pfnFreqDomainGetSupportedClockDividers )
-        return false;
-    if( nullptr == xet_apitable.pfnFreqDomainGetClockRange )
-        return false;
-    if( nullptr == xet_apitable.pfnFreqDomainSetClockRange )
-        return false;
-    if( nullptr == xet_apitable.pfnFreqDomainSetClockDivider )
-        return false;
-    if( nullptr == xet_apitable.pfnFreqDomainGetCurrentFrequency )
-        return false;
-    if( nullptr == xet_apitable.pfnPowerFanCount )
-        return false;
-    if( nullptr == xet_apitable.pfnPowerFanGetProperties )
-        return false;
-    if( nullptr == xet_apitable.pfnPowerFanGetSpeedTable )
-        return false;
-    if( nullptr == xet_apitable.pfnPowerFanSetSpeedTable )
-        return false;
-    if( nullptr == xet_apitable.pfnPowerFanGetSpeed )
-        return false;
-    if( nullptr == xet_apitable.pfnPowerFanSetSpeed )
-        return false;
-    if( nullptr == xet_apitable.pfnPowerTemperatureSensorCount )
-        return false;
-    if( nullptr == xet_apitable.pfnPowerGetTemperatureProperties )
-        return false;
-    if( nullptr == xet_apitable.pfnPowerGetTemperature )
-        return false;
-    if( nullptr == xet_apitable.pfnPowerSetTemperatureThreshold )
-        return false;
-    if( nullptr == xet_apitable.pfnPowerActivityCount )
-        return false;
-    if( nullptr == xet_apitable.pfnPowerGetActivityProperties )
-        return false;
-    if( nullptr == xet_apitable.pfnPowerGetActivityCounters )
-        return false;
-    return true;
-}
-
+extern xe_loader context;
 
 #if defined(__cplusplus)
 extern "C" {
 #endif
 
 ///////////////////////////////////////////////////////////////////////////////
+/// @brief Exported function for filling application's Device table
+///        with current process' addresses
+///
+/// @returns
+///     - ::XE_RESULT_SUCCESS
+///     - ::XE_RESULT_ERROR_INVALID_PARAMETER
+///         + invalid value for version
+///         + nullptr for ptable
+///     - ::XE_RESULT_ERROR_UNSUPPORTED
+///         + version not supported
 __xedllexport xe_result_t __xecall
-xetMetricGroupGetCount(
-    xe_device_handle_t hDevice,                     ///< [in] handle of the device object
-    uint32_t* pCount                                ///< [out] number of metric groups supported by the device
+xetGetDeviceProcAddrTable(
+    uint32_t version,           ///< [in] ::XE_API_HEADER_VERSION
+    xet_device_apitable_t* ptable      ///< [in,out] pointer to table of API function pointers
     )
 {
-    return xet_apitable.pfnMetricGroupGetCount( hDevice, pCount );
+    if( nullptr == ptable )
+        return XE_RESULT_ERROR_INVALID_PARAMETER;
+
+    if( XE_API_HEADER_VERSION < version )
+        return XE_RESULT_ERROR_UNSUPPORTED;
+
+    xe_result_t result = XE_RESULT_SUCCESS;
+
+    if( nullptr != context.commonDriver )
+    {
+        static auto getTable = reinterpret_cast<xet_pfnGetDeviceProcAddrTable_t>(
+            GET_FUNCTION_PTR(context.commonDriver, "xetGetDeviceProcAddrTable") );
+        result = getTable( version, ptable );
+    }
+
+    if(( XE_RESULT_SUCCESS == result ) && ( nullptr != context.validationLayer ))
+    {
+        static auto getTable = reinterpret_cast<xet_pfnGetDeviceProcAddrTable_t>(
+            GET_FUNCTION_PTR(context.validationLayer, "xetGetDeviceProcAddrTable") );
+        result = getTable( version, ptable );
+    }
+
+    return result;
 }
 
 ///////////////////////////////////////////////////////////////////////////////
+/// @brief Exported function for filling application's CommandList table
+///        with current process' addresses
+///
+/// @returns
+///     - ::XE_RESULT_SUCCESS
+///     - ::XE_RESULT_ERROR_INVALID_PARAMETER
+///         + invalid value for version
+///         + nullptr for ptable
+///     - ::XE_RESULT_ERROR_UNSUPPORTED
+///         + version not supported
 __xedllexport xe_result_t __xecall
-xetMetricGroupGet(
-    xe_device_handle_t hDevice,                     ///< [in] handle of the device
-    uint32_t ordinal,                               ///< [in] metric group index
-    xet_metric_group_handle_t* phMetricGroup        ///< [out] metric group handle
+xetGetCommandListProcAddrTable(
+    uint32_t version,           ///< [in] ::XE_API_HEADER_VERSION
+    xet_command_list_apitable_t* ptable      ///< [in,out] pointer to table of API function pointers
     )
 {
-    return xet_apitable.pfnMetricGroupGet( hDevice, ordinal, phMetricGroup );
+    if( nullptr == ptable )
+        return XE_RESULT_ERROR_INVALID_PARAMETER;
+
+    if( XE_API_HEADER_VERSION < version )
+        return XE_RESULT_ERROR_UNSUPPORTED;
+
+    xe_result_t result = XE_RESULT_SUCCESS;
+
+    if( nullptr != context.commonDriver )
+    {
+        static auto getTable = reinterpret_cast<xet_pfnGetCommandListProcAddrTable_t>(
+            GET_FUNCTION_PTR(context.commonDriver, "xetGetCommandListProcAddrTable") );
+        result = getTable( version, ptable );
+    }
+
+    if(( XE_RESULT_SUCCESS == result ) && ( nullptr != context.validationLayer ))
+    {
+        static auto getTable = reinterpret_cast<xet_pfnGetCommandListProcAddrTable_t>(
+            GET_FUNCTION_PTR(context.validationLayer, "xetGetCommandListProcAddrTable") );
+        result = getTable( version, ptable );
+    }
+
+    return result;
 }
 
 ///////////////////////////////////////////////////////////////////////////////
+/// @brief Exported function for filling application's MetricGroup table
+///        with current process' addresses
+///
+/// @returns
+///     - ::XE_RESULT_SUCCESS
+///     - ::XE_RESULT_ERROR_INVALID_PARAMETER
+///         + invalid value for version
+///         + nullptr for ptable
+///     - ::XE_RESULT_ERROR_UNSUPPORTED
+///         + version not supported
 __xedllexport xe_result_t __xecall
-xetMetricGroupGetProperties(
-    xet_metric_group_handle_t hMetricGroup,         ///< [in] handle of the metric group
-    xet_metric_group_properties_t* pProperties      ///< [out] metric group properties
+xetGetMetricGroupProcAddrTable(
+    uint32_t version,           ///< [in] ::XE_API_HEADER_VERSION
+    xet_metric_group_apitable_t* ptable      ///< [in,out] pointer to table of API function pointers
     )
 {
-    return xet_apitable.pfnMetricGroupGetProperties( hMetricGroup, pProperties );
+    if( nullptr == ptable )
+        return XE_RESULT_ERROR_INVALID_PARAMETER;
+
+    if( XE_API_HEADER_VERSION < version )
+        return XE_RESULT_ERROR_UNSUPPORTED;
+
+    xe_result_t result = XE_RESULT_SUCCESS;
+
+    if( nullptr != context.commonDriver )
+    {
+        static auto getTable = reinterpret_cast<xet_pfnGetMetricGroupProcAddrTable_t>(
+            GET_FUNCTION_PTR(context.commonDriver, "xetGetMetricGroupProcAddrTable") );
+        result = getTable( version, ptable );
+    }
+
+    if(( XE_RESULT_SUCCESS == result ) && ( nullptr != context.validationLayer ))
+    {
+        static auto getTable = reinterpret_cast<xet_pfnGetMetricGroupProcAddrTable_t>(
+            GET_FUNCTION_PTR(context.validationLayer, "xetGetMetricGroupProcAddrTable") );
+        result = getTable( version, ptable );
+    }
+
+    return result;
 }
 
 ///////////////////////////////////////////////////////////////////////////////
+/// @brief Exported function for filling application's Metric table
+///        with current process' addresses
+///
+/// @returns
+///     - ::XE_RESULT_SUCCESS
+///     - ::XE_RESULT_ERROR_INVALID_PARAMETER
+///         + invalid value for version
+///         + nullptr for ptable
+///     - ::XE_RESULT_ERROR_UNSUPPORTED
+///         + version not supported
 __xedllexport xe_result_t __xecall
-xetMetricGet(
-    xet_metric_group_handle_t hMetricGroup,         ///< [in] handle of the metric group
-    uint32_t ordinal,                               ///< [in] metric index
-    xet_metric_handle_t* phMetric                   ///< [out] handle of metric
+xetGetMetricProcAddrTable(
+    uint32_t version,           ///< [in] ::XE_API_HEADER_VERSION
+    xet_metric_apitable_t* ptable      ///< [in,out] pointer to table of API function pointers
     )
 {
-    return xet_apitable.pfnMetricGet( hMetricGroup, ordinal, phMetric );
+    if( nullptr == ptable )
+        return XE_RESULT_ERROR_INVALID_PARAMETER;
+
+    if( XE_API_HEADER_VERSION < version )
+        return XE_RESULT_ERROR_UNSUPPORTED;
+
+    xe_result_t result = XE_RESULT_SUCCESS;
+
+    if( nullptr != context.commonDriver )
+    {
+        static auto getTable = reinterpret_cast<xet_pfnGetMetricProcAddrTable_t>(
+            GET_FUNCTION_PTR(context.commonDriver, "xetGetMetricProcAddrTable") );
+        result = getTable( version, ptable );
+    }
+
+    if(( XE_RESULT_SUCCESS == result ) && ( nullptr != context.validationLayer ))
+    {
+        static auto getTable = reinterpret_cast<xet_pfnGetMetricProcAddrTable_t>(
+            GET_FUNCTION_PTR(context.validationLayer, "xetGetMetricProcAddrTable") );
+        result = getTable( version, ptable );
+    }
+
+    return result;
 }
 
 ///////////////////////////////////////////////////////////////////////////////
+/// @brief Exported function for filling application's MetricTracer table
+///        with current process' addresses
+///
+/// @returns
+///     - ::XE_RESULT_SUCCESS
+///     - ::XE_RESULT_ERROR_INVALID_PARAMETER
+///         + invalid value for version
+///         + nullptr for ptable
+///     - ::XE_RESULT_ERROR_UNSUPPORTED
+///         + version not supported
 __xedllexport xe_result_t __xecall
-xetMetricGetProperties(
-    xet_metric_handle_t hMetric,                    ///< [in] handle of the metric
-    xet_metric_properties_t* pProperties            ///< [out] metric properties
+xetGetMetricTracerProcAddrTable(
+    uint32_t version,           ///< [in] ::XE_API_HEADER_VERSION
+    xet_metric_tracer_apitable_t* ptable      ///< [in,out] pointer to table of API function pointers
     )
 {
-    return xet_apitable.pfnMetricGetProperties( hMetric, pProperties );
+    if( nullptr == ptable )
+        return XE_RESULT_ERROR_INVALID_PARAMETER;
+
+    if( XE_API_HEADER_VERSION < version )
+        return XE_RESULT_ERROR_UNSUPPORTED;
+
+    xe_result_t result = XE_RESULT_SUCCESS;
+
+    if( nullptr != context.commonDriver )
+    {
+        static auto getTable = reinterpret_cast<xet_pfnGetMetricTracerProcAddrTable_t>(
+            GET_FUNCTION_PTR(context.commonDriver, "xetGetMetricTracerProcAddrTable") );
+        result = getTable( version, ptable );
+    }
+
+    if(( XE_RESULT_SUCCESS == result ) && ( nullptr != context.validationLayer ))
+    {
+        static auto getTable = reinterpret_cast<xet_pfnGetMetricTracerProcAddrTable_t>(
+            GET_FUNCTION_PTR(context.validationLayer, "xetGetMetricTracerProcAddrTable") );
+        result = getTable( version, ptable );
+    }
+
+    return result;
 }
 
 ///////////////////////////////////////////////////////////////////////////////
+/// @brief Exported function for filling application's MetricQueryPool table
+///        with current process' addresses
+///
+/// @returns
+///     - ::XE_RESULT_SUCCESS
+///     - ::XE_RESULT_ERROR_INVALID_PARAMETER
+///         + invalid value for version
+///         + nullptr for ptable
+///     - ::XE_RESULT_ERROR_UNSUPPORTED
+///         + version not supported
 __xedllexport xe_result_t __xecall
-xetMetricGroupCalculateData(
-    xet_metric_group_handle_t hMetricGroup,         ///< [in] handle of the metric group
-    uint32_t* pReportCount,                         ///< [in,out] report count to calculate
-    uint32_t rawDataSize,                           ///< [in] raw data size
-    uint8_t* pRawData,                              ///< [in] raw data to calculate
-    uint32_t calculatedDataSize,                    ///< [in] calculated data size
-    xet_typed_value_t* pCalculatedData              ///< [in,out] calculated metrics
+xetGetMetricQueryPoolProcAddrTable(
+    uint32_t version,           ///< [in] ::XE_API_HEADER_VERSION
+    xet_metric_query_pool_apitable_t* ptable      ///< [in,out] pointer to table of API function pointers
     )
 {
-    return xet_apitable.pfnMetricGroupCalculateData( hMetricGroup, pReportCount, rawDataSize, pRawData, calculatedDataSize, pCalculatedData );
+    if( nullptr == ptable )
+        return XE_RESULT_ERROR_INVALID_PARAMETER;
+
+    if( XE_API_HEADER_VERSION < version )
+        return XE_RESULT_ERROR_UNSUPPORTED;
+
+    xe_result_t result = XE_RESULT_SUCCESS;
+
+    if( nullptr != context.commonDriver )
+    {
+        static auto getTable = reinterpret_cast<xet_pfnGetMetricQueryPoolProcAddrTable_t>(
+            GET_FUNCTION_PTR(context.commonDriver, "xetGetMetricQueryPoolProcAddrTable") );
+        result = getTable( version, ptable );
+    }
+
+    if(( XE_RESULT_SUCCESS == result ) && ( nullptr != context.validationLayer ))
+    {
+        static auto getTable = reinterpret_cast<xet_pfnGetMetricQueryPoolProcAddrTable_t>(
+            GET_FUNCTION_PTR(context.validationLayer, "xetGetMetricQueryPoolProcAddrTable") );
+        result = getTable( version, ptable );
+    }
+
+    return result;
 }
 
 ///////////////////////////////////////////////////////////////////////////////
+/// @brief Exported function for filling application's MetricQuery table
+///        with current process' addresses
+///
+/// @returns
+///     - ::XE_RESULT_SUCCESS
+///     - ::XE_RESULT_ERROR_INVALID_PARAMETER
+///         + invalid value for version
+///         + nullptr for ptable
+///     - ::XE_RESULT_ERROR_UNSUPPORTED
+///         + version not supported
 __xedllexport xe_result_t __xecall
-xetDeviceActivateMetricGroups(
-    xe_device_handle_t hDevice,                     ///< [in] handle of the device
-    uint32_t count,                                 ///< [in] metric group count to activate. 0 to deactivate.
-    xet_metric_group_handle_t* phMetricGroups       ///< [in] handles of the metric groups to activate. NULL to deactivate.
+xetGetMetricQueryProcAddrTable(
+    uint32_t version,           ///< [in] ::XE_API_HEADER_VERSION
+    xet_metric_query_apitable_t* ptable      ///< [in,out] pointer to table of API function pointers
     )
 {
-    return xet_apitable.pfnDeviceActivateMetricGroups( hDevice, count, phMetricGroups );
+    if( nullptr == ptable )
+        return XE_RESULT_ERROR_INVALID_PARAMETER;
+
+    if( XE_API_HEADER_VERSION < version )
+        return XE_RESULT_ERROR_UNSUPPORTED;
+
+    xe_result_t result = XE_RESULT_SUCCESS;
+
+    if( nullptr != context.commonDriver )
+    {
+        static auto getTable = reinterpret_cast<xet_pfnGetMetricQueryProcAddrTable_t>(
+            GET_FUNCTION_PTR(context.commonDriver, "xetGetMetricQueryProcAddrTable") );
+        result = getTable( version, ptable );
+    }
+
+    if(( XE_RESULT_SUCCESS == result ) && ( nullptr != context.validationLayer ))
+    {
+        static auto getTable = reinterpret_cast<xet_pfnGetMetricQueryProcAddrTable_t>(
+            GET_FUNCTION_PTR(context.validationLayer, "xetGetMetricQueryProcAddrTable") );
+        result = getTable( version, ptable );
+    }
+
+    return result;
 }
 
 ///////////////////////////////////////////////////////////////////////////////
+/// @brief Exported function for filling application's Power table
+///        with current process' addresses
+///
+/// @returns
+///     - ::XE_RESULT_SUCCESS
+///     - ::XE_RESULT_ERROR_INVALID_PARAMETER
+///         + invalid value for version
+///         + nullptr for ptable
+///     - ::XE_RESULT_ERROR_UNSUPPORTED
+///         + version not supported
 __xedllexport xe_result_t __xecall
-xetMetricTracerOpen(
-    xe_device_handle_t hDevice,                     ///< [in] handle of the device
-    xet_metric_tracer_desc_t* pDesc,                ///< [in,out] metric tracer descriptor
-    xe_event_handle_t hNotificationEvent,           ///< [in] event used for report availability notification. Must be device
-                                                    ///< to host type.
-    xet_metric_tracer_handle_t* phMetricTracer      ///< [out] handle of metric tracer
+xetGetPowerProcAddrTable(
+    uint32_t version,           ///< [in] ::XE_API_HEADER_VERSION
+    xet_power_apitable_t* ptable      ///< [in,out] pointer to table of API function pointers
     )
 {
-    return xet_apitable.pfnMetricTracerOpen( hDevice, pDesc, hNotificationEvent, phMetricTracer );
+    if( nullptr == ptable )
+        return XE_RESULT_ERROR_INVALID_PARAMETER;
+
+    if( XE_API_HEADER_VERSION < version )
+        return XE_RESULT_ERROR_UNSUPPORTED;
+
+    xe_result_t result = XE_RESULT_SUCCESS;
+
+    if( nullptr != context.commonDriver )
+    {
+        static auto getTable = reinterpret_cast<xet_pfnGetPowerProcAddrTable_t>(
+            GET_FUNCTION_PTR(context.commonDriver, "xetGetPowerProcAddrTable") );
+        result = getTable( version, ptable );
+    }
+
+    if(( XE_RESULT_SUCCESS == result ) && ( nullptr != context.validationLayer ))
+    {
+        static auto getTable = reinterpret_cast<xet_pfnGetPowerProcAddrTable_t>(
+            GET_FUNCTION_PTR(context.validationLayer, "xetGetPowerProcAddrTable") );
+        result = getTable( version, ptable );
+    }
+
+    return result;
 }
 
 ///////////////////////////////////////////////////////////////////////////////
+/// @brief Exported function for filling application's FreqDomain table
+///        with current process' addresses
+///
+/// @returns
+///     - ::XE_RESULT_SUCCESS
+///     - ::XE_RESULT_ERROR_INVALID_PARAMETER
+///         + invalid value for version
+///         + nullptr for ptable
+///     - ::XE_RESULT_ERROR_UNSUPPORTED
+///         + version not supported
 __xedllexport xe_result_t __xecall
-xetCommandListAppendMetricTracerMarker(
-    xe_command_list_handle_t hCommandList,          ///< [in] handle of the command list
-    xet_metric_tracer_handle_t hMetricTracer,       ///< [in] handle of the metric tracer
-    uint32_t value                                  ///< [in] tracer marker value
+xetGetFreqDomainProcAddrTable(
+    uint32_t version,           ///< [in] ::XE_API_HEADER_VERSION
+    xet_freq_domain_apitable_t* ptable      ///< [in,out] pointer to table of API function pointers
     )
 {
-    return xet_apitable.pfnCommandListAppendMetricTracerMarker( hCommandList, hMetricTracer, value );
-}
+    if( nullptr == ptable )
+        return XE_RESULT_ERROR_INVALID_PARAMETER;
 
-///////////////////////////////////////////////////////////////////////////////
-__xedllexport xe_result_t __xecall
-xetMetricTracerClose(
-    xet_metric_tracer_handle_t hMetricTracer        ///< [in] handle of the metric tracer
-    )
-{
-    return xet_apitable.pfnMetricTracerClose( hMetricTracer );
-}
+    if( XE_API_HEADER_VERSION < version )
+        return XE_RESULT_ERROR_UNSUPPORTED;
 
-///////////////////////////////////////////////////////////////////////////////
-__xedllexport xe_result_t __xecall
-xetMetricTracerReadData(
-    xet_metric_tracer_handle_t hMetricTracer,       ///< [in] handle of the metric tracer
-    uint32_t* pReportCount,                         ///< [in,out] report count to read/returned
-    uint32_t rawDataSize,                           ///< [in] raw data buffer size
-    uint8_t* pRawData                               ///< [in,out] raw data buffer for reports
-    )
-{
-    return xet_apitable.pfnMetricTracerReadData( hMetricTracer, pReportCount, rawDataSize, pRawData );
-}
+    xe_result_t result = XE_RESULT_SUCCESS;
 
-///////////////////////////////////////////////////////////////////////////////
-__xedllexport xe_result_t __xecall
-xetMetricQueryPoolCreate(
-    xe_device_handle_t hDevice,                     ///< [in] handle of the device
-    xet_metric_query_pool_desc_t* pDesc,            ///< [in] metric query pool creation data
-    xet_metric_query_pool_handle_t* phMetricQueryPool   ///< [out] handle of metric query pool
-    )
-{
-    return xet_apitable.pfnMetricQueryPoolCreate( hDevice, pDesc, phMetricQueryPool );
-}
+    if( nullptr != context.commonDriver )
+    {
+        static auto getTable = reinterpret_cast<xet_pfnGetFreqDomainProcAddrTable_t>(
+            GET_FUNCTION_PTR(context.commonDriver, "xetGetFreqDomainProcAddrTable") );
+        result = getTable( version, ptable );
+    }
 
-///////////////////////////////////////////////////////////////////////////////
-__xedllexport xe_result_t __xecall
-xetMetricQueryPoolDestroy(
-    xet_metric_query_pool_handle_t hMetricQueryPool ///< [in] handle of the metric query pool
-    )
-{
-    return xet_apitable.pfnMetricQueryPoolDestroy( hMetricQueryPool );
-}
+    if(( XE_RESULT_SUCCESS == result ) && ( nullptr != context.validationLayer ))
+    {
+        static auto getTable = reinterpret_cast<xet_pfnGetFreqDomainProcAddrTable_t>(
+            GET_FUNCTION_PTR(context.validationLayer, "xetGetFreqDomainProcAddrTable") );
+        result = getTable( version, ptable );
+    }
 
-///////////////////////////////////////////////////////////////////////////////
-__xedllexport xe_result_t __xecall
-xetMetricQueryPoolGetMetricQuery(
-    xet_metric_query_pool_handle_t hMetricQueryPool,///< [in] handle of the metric query pool
-    uint32_t ordinal,                               ///< [in] index of the query within the pool
-    xet_metric_query_handle_t* phMetricQuery        ///< [out] handle of metric query
-    )
-{
-    return xet_apitable.pfnMetricQueryPoolGetMetricQuery( hMetricQueryPool, ordinal, phMetricQuery );
-}
-
-///////////////////////////////////////////////////////////////////////////////
-__xedllexport xe_result_t __xecall
-xetCommandListAppendMetricQueryBegin(
-    xe_command_list_handle_t hCommandList,          ///< [in] handle of the command list
-    xet_metric_query_handle_t hMetricQuery          ///< [in] handle of the metric query
-    )
-{
-    return xet_apitable.pfnCommandListAppendMetricQueryBegin( hCommandList, hMetricQuery );
-}
-
-///////////////////////////////////////////////////////////////////////////////
-__xedllexport xe_result_t __xecall
-xetCommandListAppendMetricQueryEnd(
-    xe_command_list_handle_t hCommandList,          ///< [in] handle of the command list
-    xet_metric_query_handle_t hMetricQuery,         ///< [in] handle of the metric query
-    xe_event_handle_t hCompletionEvent              ///< [in] handle of the completion event to signal
-    )
-{
-    return xet_apitable.pfnCommandListAppendMetricQueryEnd( hCommandList, hMetricQuery, hCompletionEvent );
-}
-
-///////////////////////////////////////////////////////////////////////////////
-__xedllexport xe_result_t __xecall
-xetCommandListAppendMetricMemoryBarrier(
-    xe_command_list_handle_t hCommandList           ///< [in] handle of the command list
-    )
-{
-    return xet_apitable.pfnCommandListAppendMetricMemoryBarrier( hCommandList );
-}
-
-///////////////////////////////////////////////////////////////////////////////
-__xedllexport xe_result_t __xecall
-xetMetricQueryGetData(
-    xet_metric_query_handle_t hMetricQuery,         ///< [in] handle of the metric query
-    uint32_t* pReportCount,                         ///< [in,out] report count to read/returned
-    uint32_t rawDataSize,                           ///< [in] raw data size passed by the user
-    uint8_t* pRawData                               ///< [in,out] query result data in raw format
-    )
-{
-    return xet_apitable.pfnMetricQueryGetData( hMetricQuery, pReportCount, rawDataSize, pRawData );
-}
-
-///////////////////////////////////////////////////////////////////////////////
-__xedllexport xe_result_t __xecall
-xetPowerCreate(
-    xe_device_handle_t hDevice,                     ///< [in] handle of the device object
-    uint32_t flags,                                 ///< [in] bitfield of ::xet_power_init_flags_t
-    xet_power_handle_t* pPowerHandle                ///< [out] handle for accessing power features of the device
-    )
-{
-    return xet_apitable.pfnPowerCreate( hDevice, flags, pPowerHandle );
-}
-
-///////////////////////////////////////////////////////////////////////////////
-__xedllexport xe_result_t __xecall
-xetPowerDestroy(
-    xet_power_handle_t hPower                       ///< [in] handle of the power object to destroy
-    )
-{
-    return xet_apitable.pfnPowerDestroy( hPower );
-}
-
-///////////////////////////////////////////////////////////////////////////////
-__xedllexport xe_result_t __xecall
-xetPowerGetAveragePowerLimit(
-    xet_power_handle_t hPower,                      ///< [in] handle of the power object
-    xet_power_average_limit_t* pLimit               ///< [out] information about the average power limit
-    )
-{
-    return xet_apitable.pfnPowerGetAveragePowerLimit( hPower, pLimit );
-}
-
-///////////////////////////////////////////////////////////////////////////////
-__xedllexport xe_result_t __xecall
-xetPowerGetBurstPowerLimit(
-    xet_power_handle_t hPower,                      ///< [in] handle of the power object
-    xet_power_burst_limit_t* pLimit                 ///< [out] information about the burst power limit
-    )
-{
-    return xet_apitable.pfnPowerGetBurstPowerLimit( hPower, pLimit );
-}
-
-///////////////////////////////////////////////////////////////////////////////
-__xedllexport xe_result_t __xecall
-xetPowerGetPeakPowerLimit(
-    xet_power_handle_t hPower,                      ///< [in] handle of the power object
-    xet_power_peak_limit_t* pLimit                  ///< [out] information about the peak power limit
-    )
-{
-    return xet_apitable.pfnPowerGetPeakPowerLimit( hPower, pLimit );
-}
-
-///////////////////////////////////////////////////////////////////////////////
-__xedllexport xe_result_t __xecall
-xetPowerGetAllPowerLimits(
-    xet_power_handle_t hPower,                      ///< [in] handle of the power object
-    xet_power_limits_t* pLimits                     ///< [out] information about the average/burst/peak power limits
-    )
-{
-    return xet_apitable.pfnPowerGetAllPowerLimits( hPower, pLimits );
-}
-
-///////////////////////////////////////////////////////////////////////////////
-__xedllexport xe_result_t __xecall
-xetPowerGetDefaultPowerLimits(
-    xet_power_handle_t hPower,                      ///< [in] handle of the power object
-    xet_power_limits_t* pLimits                     ///< [out] information about the default average/burst/peak power limits
-    )
-{
-    return xet_apitable.pfnPowerGetDefaultPowerLimits( hPower, pLimits );
-}
-
-///////////////////////////////////////////////////////////////////////////////
-__xedllexport xe_result_t __xecall
-xetPowerSetAveragePowerLimit(
-    xet_power_handle_t hPower,                      ///< [in] handle of the power object
-    xet_power_average_limit_t* pLimit               ///< [in] information about the average power limit
-    )
-{
-    return xet_apitable.pfnPowerSetAveragePowerLimit( hPower, pLimit );
-}
-
-///////////////////////////////////////////////////////////////////////////////
-__xedllexport xe_result_t __xecall
-xetPowerSetBurstPowerLimit(
-    xet_power_handle_t hPower,                      ///< [in] handle of the power object
-    xet_power_burst_limit_t* pLimit                 ///< [in] information about the burst power limit
-    )
-{
-    return xet_apitable.pfnPowerSetBurstPowerLimit( hPower, pLimit );
-}
-
-///////////////////////////////////////////////////////////////////////////////
-__xedllexport xe_result_t __xecall
-xetPowerSetPeakPowerLimit(
-    xet_power_handle_t hPower,                      ///< [in] handle of the power object
-    xet_power_peak_limit_t* pLimit                  ///< [in] information about the peak power limit
-    )
-{
-    return xet_apitable.pfnPowerSetPeakPowerLimit( hPower, pLimit );
-}
-
-///////////////////////////////////////////////////////////////////////////////
-__xedllexport xe_result_t __xecall
-xetPowerSetPowerLimits(
-    xet_power_handle_t hPower,                      ///< [in] handle of the power object
-    xet_power_limits_t* pLimits                     ///< [in] information about the average/burst/peak power limits
-    )
-{
-    return xet_apitable.pfnPowerSetPowerLimits( hPower, pLimits );
-}
-
-///////////////////////////////////////////////////////////////////////////////
-__xedllexport xe_result_t __xecall
-xetPowerGetEnergyCounter(
-    xet_power_handle_t hPower,                      ///< [in] handle of the power object
-    uint64_t* pEnergy                               ///< [out] the energy counter in millijoules
-    )
-{
-    return xet_apitable.pfnPowerGetEnergyCounter( hPower, pEnergy );
-}
-
-///////////////////////////////////////////////////////////////////////////////
-__xedllexport xe_result_t __xecall
-xetPowerGetTurboMode(
-    xet_power_handle_t hPower,                      ///< [in] handle of the power object
-    xet_turbo_mode_t* pTurboMode                    ///< [out] turbo mode currently in effect
-    )
-{
-    return xet_apitable.pfnPowerGetTurboMode( hPower, pTurboMode );
-}
-
-///////////////////////////////////////////////////////////////////////////////
-__xedllexport xe_result_t __xecall
-xetPowerSetTurboMode(
-    xet_power_handle_t hPower,                      ///< [in] handle of the power object
-    xet_turbo_mode_t pTurboMode                     ///< [in] new turbo mode
-    )
-{
-    return xet_apitable.pfnPowerSetTurboMode( hPower, pTurboMode );
-}
-
-///////////////////////////////////////////////////////////////////////////////
-__xedllexport xe_result_t __xecall
-xetPowerGetFreqDomainCount(
-    xet_power_handle_t hPower,                      ///< [in] handle of the power object
-    uint32_t* pNumFreqDomains                       ///< [out] the number of frequency domains
-    )
-{
-    return xet_apitable.pfnPowerGetFreqDomainCount( hPower, pNumFreqDomains );
-}
-
-///////////////////////////////////////////////////////////////////////////////
-__xedllexport xe_result_t __xecall
-xetPowerGetFreqDomainHandle(
-    xet_power_handle_t hPower,                      ///< [in] handle of the power object
-    uint32_t ordinal,                               ///< [in] frequency domain index [0 .. ::xetPowerGetFreqDomainCount - 1]
-    xet_freq_domain_handle_t* phFreqDomain          ///< [out] pointer to handle of frequency domain object
-    )
-{
-    return xet_apitable.pfnPowerGetFreqDomainHandle( hPower, ordinal, phFreqDomain );
-}
-
-///////////////////////////////////////////////////////////////////////////////
-__xedllexport xe_result_t __xecall
-xetFreqDomainGetProperties(
-    xet_freq_domain_handle_t hFreqDomain,           ///< [in] handle of the frequency domain
-    xet_freq_domain_properties_t* pFreqDomainProperties ///< [out] pointer to properties for the frequency domain
-    )
-{
-    return xet_apitable.pfnFreqDomainGetProperties( hFreqDomain, pFreqDomainProperties );
-}
-
-///////////////////////////////////////////////////////////////////////////////
-__xedllexport xe_result_t __xecall
-xetFreqDomainGetSourceFreqDomain(
-    xet_freq_domain_handle_t hFreqDomain,           ///< [in] handle of the frequency domain
-    xet_freq_domain_handle_t* phSrcFreqDomain       ///< [out] pointer to a handle where the source frequency domain handle
-                                                    ///< will be returned
-    )
-{
-    return xet_apitable.pfnFreqDomainGetSourceFreqDomain( hFreqDomain, phSrcFreqDomain );
-}
-
-///////////////////////////////////////////////////////////////////////////////
-__xedllexport xe_result_t __xecall
-xetFreqDomainGetSupportedClocks(
-    xet_freq_domain_handle_t hFreqDomain,           ///< [in] handle of the frequency domain
-    uint32_t numClockPoints,                        ///< [in] number of elements in pClocks
-    uint32_t* pClocks                               ///< [out] pointer to array of frequencies
-    )
-{
-    return xet_apitable.pfnFreqDomainGetSupportedClocks( hFreqDomain, numClockPoints, pClocks );
-}
-
-///////////////////////////////////////////////////////////////////////////////
-__xedllexport xe_result_t __xecall
-xetFreqDomainGetSupportedClockDividers(
-    xet_freq_domain_handle_t hFreqDomain,           ///< [in] handle of the frequency domain
-    uint32_t numClockDividers,                      ///< [in] number of elements in pDividers
-    xet_clock_divider_t* pDividers                  ///< [out] pointer to array of dividers
-    )
-{
-    return xet_apitable.pfnFreqDomainGetSupportedClockDividers( hFreqDomain, numClockDividers, pDividers );
-}
-
-///////////////////////////////////////////////////////////////////////////////
-__xedllexport xe_result_t __xecall
-xetFreqDomainGetClockRange(
-    xet_freq_domain_handle_t hFreqDomain,           ///< [in] handle of the frequency domain
-    uint32_t* pMinClock,                            ///< [out] min clock frequency in units of MHz
-    uint32_t* pMaxClock                             ///< [out] max clock frequency in units of MHz
-    )
-{
-    return xet_apitable.pfnFreqDomainGetClockRange( hFreqDomain, pMinClock, pMaxClock );
-}
-
-///////////////////////////////////////////////////////////////////////////////
-__xedllexport xe_result_t __xecall
-xetFreqDomainSetClockRange(
-    xet_freq_domain_handle_t hFreqDomain,           ///< [in] handle of the frequency domain
-    uint32_t minClock,                              ///< [in] min clock frequency in units of MHz
-    uint32_t maxClock                               ///< [in] max clock frequency in units of MHz
-    )
-{
-    return xet_apitable.pfnFreqDomainSetClockRange( hFreqDomain, minClock, maxClock );
-}
-
-///////////////////////////////////////////////////////////////////////////////
-__xedllexport xe_result_t __xecall
-xetFreqDomainSetClockDivider(
-    xet_freq_domain_handle_t hFreqDomain,           ///< [in] handle of the frequency domain
-    xet_clock_divider_t* pClockDividerRequest       ///< [out] pointer to frequency divider request
-    )
-{
-    return xet_apitable.pfnFreqDomainSetClockDivider( hFreqDomain, pClockDividerRequest );
-}
-
-///////////////////////////////////////////////////////////////////////////////
-__xedllexport xe_result_t __xecall
-xetFreqDomainGetCurrentFrequency(
-    xet_freq_domain_handle_t hFreqDomain,           ///< [in] handle of the frequency domain
-    uint32_t* pFreqRequest,                         ///< [out] current frequency in MHz requested by the driver
-    uint32_t* pFreqResolved,                        ///< [out] the actual frequency in MHz
-    xet_freq_throttle_reasons_t* pFreqThrottleReasons   ///< [out] the reason the resolved frequency is lower than the request
-    )
-{
-    return xet_apitable.pfnFreqDomainGetCurrentFrequency( hFreqDomain, pFreqRequest, pFreqResolved, pFreqThrottleReasons );
-}
-
-///////////////////////////////////////////////////////////////////////////////
-__xedllexport xe_result_t __xecall
-xetPowerFanCount(
-    xet_power_handle_t hPower,                      ///< [in] handle of the power object
-    uint32_t* pFanCount                             ///< [out] the number of fans on the device
-    )
-{
-    return xet_apitable.pfnPowerFanCount( hPower, pFanCount );
-}
-
-///////////////////////////////////////////////////////////////////////////////
-__xedllexport xe_result_t __xecall
-xetPowerFanGetProperties(
-    xet_power_handle_t hPower,                      ///< [in] handle of the power object
-    uint32_t fanIndex,                              ///< [in] fan index [0 .. ::xetPowerFanCount - 1]
-    xet_fan_properties_t* pFanProperties            ///< [out] pointer to storage for fan properties
-    )
-{
-    return xet_apitable.pfnPowerFanGetProperties( hPower, fanIndex, pFanProperties );
-}
-
-///////////////////////////////////////////////////////////////////////////////
-__xedllexport xe_result_t __xecall
-xetPowerFanGetSpeedTable(
-    xet_power_handle_t hPower,                      ///< [in] handle of the power object
-    uint32_t fanIndex,                              ///< [in] fan index [0 .. ::xetPowerFanCount - 1]
-    xe_bool_t fanSpeedInRpm,                        ///< [in] true will request fan speeds in RPM, otherwise in percentage
-    uint32_t* pNumFanPoints,                        ///< [in,out] input number of elements in pFanSpeedTable array; output
-                                                    ///< number of elements returned
-    xet_fan_point_t* pFanPoints                     ///< [out] pointer to an array of temperature/fan-speed points
-    )
-{
-    return xet_apitable.pfnPowerFanGetSpeedTable( hPower, fanIndex, fanSpeedInRpm, pNumFanPoints, pFanPoints );
-}
-
-///////////////////////////////////////////////////////////////////////////////
-__xedllexport xe_result_t __xecall
-xetPowerFanSetSpeedTable(
-    xet_power_handle_t hPower,                      ///< [in] handle of the power object
-    uint32_t fanIndex,                              ///< [in] fan index [0 .. ::xetPowerFanCount - 1]
-    uint32_t numFanPoints,                          ///< [in] number of points in pFanSpeedTable array
-    xet_fan_point_t* pFanPoints                     ///< [in] pointer to an array of temperature/fan-speed points
-    )
-{
-    return xet_apitable.pfnPowerFanSetSpeedTable( hPower, fanIndex, numFanPoints, pFanPoints );
-}
-
-///////////////////////////////////////////////////////////////////////////////
-__xedllexport xe_result_t __xecall
-xetPowerFanGetSpeed(
-    xet_power_handle_t hPower,                      ///< [in] handle of the power object
-    uint32_t startFanIndex,                         ///< [in] fan index [0 .. ::xetPowerFanCount - 1]
-    uint32_t numFans,                               ///< [in] pFanSpeed will contain results for fan index
-                                                    ///< (startFanIndex)..(startFanIndex + numFans - 1)
-    xe_bool_t fanSpeedInRpm,                        ///< [in] true will request fan speeds in RPM, otherwise in percentage
-    xet_fan_speed_info_t* pFanSpeed                 ///< [out] pointer to an array of current fan speeds
-    )
-{
-    return xet_apitable.pfnPowerFanGetSpeed( hPower, startFanIndex, numFans, fanSpeedInRpm, pFanSpeed );
-}
-
-///////////////////////////////////////////////////////////////////////////////
-__xedllexport xe_result_t __xecall
-xetPowerFanSetSpeed(
-    xet_power_handle_t hPower,                      ///< [in] handle of the power object
-    uint32_t startFanIndex,                         ///< [in] fan index [0 .. ::xetPowerFanCount - 1]
-    uint32_t numFans,                               ///< [in] pFanSpeed will contain results for fan index
-                                                    ///< (startFanIndex)..(startFanIndex + numFans - 1)
-    xet_fan_speed_info_t* pFanSpeed                 ///< [in] pointer to an array of current fan speeds
-    )
-{
-    return xet_apitable.pfnPowerFanSetSpeed( hPower, startFanIndex, numFans, pFanSpeed );
-}
-
-///////////////////////////////////////////////////////////////////////////////
-__xedllexport xe_result_t __xecall
-xetPowerTemperatureSensorCount(
-    xet_power_handle_t hPower,                      ///< [in] handle of the power object
-    uint32_t* pSensorCount                          ///< [out] the number of temperature sensors on the device
-    )
-{
-    return xet_apitable.pfnPowerTemperatureSensorCount( hPower, pSensorCount );
-}
-
-///////////////////////////////////////////////////////////////////////////////
-__xedllexport xe_result_t __xecall
-xetPowerGetTemperatureProperties(
-    xet_power_handle_t hPower,                      ///< [in] handle of the power object
-    uint32_t sensorIndex,                           ///< [in] sensor index [0 .. ::xetPowerTemperatureSensorCount]
-    xet_temperature_properties_t* pProperties       ///< [out] pointer to properties for this sensor
-    )
-{
-    return xet_apitable.pfnPowerGetTemperatureProperties( hPower, sensorIndex, pProperties );
-}
-
-///////////////////////////////////////////////////////////////////////////////
-__xedllexport xe_result_t __xecall
-xetPowerGetTemperature(
-    xet_power_handle_t hPower,                      ///< [in] handle of the power object
-    uint32_t startSensorIndex,                      ///< [in] sensor index [0 .. ::xetPowerTemperatureSensorCount]
-    uint32_t numSensors,                            ///< [in] pTemperatures will contain results for sensors index
-                                                    ///< (startSensorIndex)..(startSensorIndex + numSensors - 1)
-    uint16_t* pTemperatures                         ///< [out] pointer to an array of temperatures in units of degrees celsius
-    )
-{
-    return xet_apitable.pfnPowerGetTemperature( hPower, startSensorIndex, numSensors, pTemperatures );
-}
-
-///////////////////////////////////////////////////////////////////////////////
-__xedllexport xe_result_t __xecall
-xetPowerSetTemperatureThreshold(
-    xet_power_handle_t hPower,                      ///< [in] handle of the power object
-    uint32_t sensorIndex,                           ///< [in] sensor index [0 .. ::xetPowerTemperatureSensorCount]
-    uint16_t maxTemperature                         ///< [in] temperature threshold in degrees celsius beyond which frequency
-                                                    ///< will be throttled
-    )
-{
-    return xet_apitable.pfnPowerSetTemperatureThreshold( hPower, sensorIndex, maxTemperature );
-}
-
-///////////////////////////////////////////////////////////////////////////////
-__xedllexport xe_result_t __xecall
-xetPowerActivityCount(
-    xet_power_handle_t hPower,                      ///< [in] handle of the power object
-    uint32_t* pActivityCount                        ///< [out] the number of activity counters on the device
-    )
-{
-    return xet_apitable.pfnPowerActivityCount( hPower, pActivityCount );
-}
-
-///////////////////////////////////////////////////////////////////////////////
-__xedllexport xe_result_t __xecall
-xetPowerGetActivityProperties(
-    xet_power_handle_t hPower,                      ///< [in] handle of the power object
-    uint32_t activityIndex,                         ///< [in] activity counter index [0 .. ::xetPowerActivityCount]
-    xet_activity_properties_t* pProperties          ///< [out] pointer to properties for this activity counter
-    )
-{
-    return xet_apitable.pfnPowerGetActivityProperties( hPower, activityIndex, pProperties );
-}
-
-///////////////////////////////////////////////////////////////////////////////
-__xedllexport xe_result_t __xecall
-xetPowerGetActivityCounters(
-    xet_power_handle_t hPower,                      ///< [in] handle of the power object
-    uint32_t startCounterIndex,                     ///< [in] sensor index [0 .. ::xetPowerActivityCount]
-    uint32_t numCounters,                           ///< [in] pCounters will contain results for activity counter index
-                                                    ///< (startCounterIndex)..(startCounterIndex + numCounters - 1)
-    xet_activity_counters_t* pCounters              ///< [out] pointer to an array of activity counter data
-    )
-{
-    return xet_apitable.pfnPowerGetActivityCounters( hPower, startCounterIndex, numCounters, pCounters );
+    return result;
 }
 
 #if defined(__cplusplus)

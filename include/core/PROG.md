@@ -567,8 +567,8 @@ There are multiple levels of constructs needed for executing functions on the de
 
 The following diagram provides a high level overview of the major parts of the system.
 
-![Driver](../images/module.png?raw=true)  
-@image latex module.png
+![Driver](../images/core_module.png?raw=true)  
+@image latex core_module.png
 
 ## <a name="mod">Modules</a>
 Modules can be created from an IL or directly from native format using ::xeModuleCreate.
@@ -791,7 +791,7 @@ device to generate the parameters.
     xe_thread_group_dimensions_t* pIndirectArgs;
     
     ...
-    xeMemAlloc(hDevice, flags, sizeof(xe_thread_group_dimensions_t), sizeof(uint32_t), &pIndirectArgs);
+    xeDeviceMemAlloc(hDevice, flags, sizeof(xe_thread_group_dimensions_t), sizeof(uint32_t), &pIndirectArgs);
 
     // Append function
     xeCommandListAppendLaunchFunctionIndirect(hCommandList, hFunction, &pIndirectArgs, nullptr, 0, nullptr);
@@ -879,7 +879,7 @@ A 16-byte unique device identifier (uuid) can be obtained for a device or sub-de
     assert(subdeviceProps.subdeviceId == 2);    // Ensure that we have a handle to the sub-device we asked for.
 
     void* pMemForSubDevice2;
-    xeMemAlloc(subDevice, XE_DEVICE_MEM_ALLOC_FLAG_DEFAULT, memSize, sizeof(uint32_t), &pMemForSubDevice2);
+    xeDeviceMemAlloc(subDevice, XE_DEVICE_MEM_ALLOC_FLAG_DEFAULT, memSize, sizeof(uint32_t), &pMemForSubDevice2);
     ...
 
     ...
@@ -1011,7 +1011,7 @@ The following code examples demonstrate how to use the memory IPC APIs:
 1. First, the allocation is made, packaged, and sent on the sending process:
 ```c
     void* dptr = nullptr;
-    xeMemAlloc(hDevice, flags, size, alignment, &dptr);
+    xeDeviceMemAlloc(hDevice, flags, size, alignment, &dptr);
 
     xe_ipc_mem_handle_t hIPC;
     xeIpcGetMemHandle(dptr, &hIPC);

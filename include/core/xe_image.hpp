@@ -34,6 +34,9 @@
 #define _XE_IMAGE_HPP
 #if defined(__cplusplus)
 #pragma once
+#if !defined(_XE_API_HPP)
+#pragma message("warning: this file is not intended to be included directly")
+#endif
 #include "xe_common.hpp"
 
 namespace xe
@@ -42,42 +45,18 @@ namespace xe
     /// @brief C++ wrapper for image
     class Image
     {
-    protected:
-        ::xe_image_handle_t m_handle;                     ///< handle of image object
-        ::xe_image_desc_t m_desc;                         ///< descriptor of the image object
-
-        Image( void ) = delete;
-        Image( 
-                xe_image_handle_t handle,                       ///< handle of image object
-                xe_image_desc_t desc                            ///< descriptor of the image object
-                ) :
-                m_handle( handle ),
-                m_desc( desc )
-            {}
-
-        ~Image( void ) = default;
-
-        Image( Image const& other ) = delete;
-        void operator=( Image const& other ) = delete;
-
-        Image( Image&& other ) = delete;
-        void operator=( Image&& other ) = delete;
-
     public:
-        auto getHandle( void ) const { return m_handle; }
-        auto getDesc( void ) const { return m_desc; }
-
         ///////////////////////////////////////////////////////////////////////////////
-        /// @brief C++ version for ::xe_image_desc_version_t
-        enum class image_desc_version_t
+        /// @brief API version of ::image_desc_t
+        enum class desc_version_t
         {
             CURRENT = XE_MAKE_VERSION( 1, 0 ),              ///< version 1.0
 
         };
 
         ///////////////////////////////////////////////////////////////////////////////
-        /// @brief C++ version for ::xe_image_flag_t
-        enum class image_flag_t
+        /// @brief Supported image creation flags
+        enum class flag_t
         {
             PROGRAM_READ = XE_BIT( 0 ),                     ///< programs will read contents
             PROGRAM_WRITE = XE_BIT( 1 ),                    ///< programs will write contents
@@ -87,8 +66,8 @@ namespace xe
         };
 
         ///////////////////////////////////////////////////////////////////////////////
-        /// @brief C++ version for ::xe_image_type_t
-        enum class image_type_t
+        /// @brief Supported image types
+        enum class type_t
         {
             _1D,                                            ///< 1D
             _1DARRAY,                                       ///< 1D array
@@ -99,8 +78,8 @@ namespace xe
         };
 
         ///////////////////////////////////////////////////////////////////////////////
-        /// @brief C++ version for ::xe_image_format_layout_t
-        enum class image_format_layout_t
+        /// @brief Supported image format layouts
+        enum class format_layout_t
         {
             _8,                                             ///< 8-bit single component layout
             _16,                                            ///< 16-bit single component layout
@@ -136,8 +115,8 @@ namespace xe
         };
 
         ///////////////////////////////////////////////////////////////////////////////
-        /// @brief C++ version for ::xe_image_format_type_t
-        enum class image_format_type_t
+        /// @brief Supported image format types
+        enum class format_type_t
         {
             UINT,                                           ///< Unsigned integer
             SINT,                                           ///< Signed integer
@@ -148,8 +127,8 @@ namespace xe
         };
 
         ///////////////////////////////////////////////////////////////////////////////
-        /// @brief C++ version for ::xe_image_format_swizzle_t
-        enum class image_format_swizzle_t
+        /// @brief Supported image format component swizzle into channel
+        enum class format_swizzle_t
         {
             R,                                              ///< Red component
             G,                                              ///< Green component
@@ -162,42 +141,42 @@ namespace xe
         };
 
         ///////////////////////////////////////////////////////////////////////////////
-        /// @brief C++ version for ::xe_image_properties_version_t
-        enum class image_properties_version_t
+        /// @brief API version of ::image_properties_t
+        enum class properties_version_t
         {
             CURRENT = XE_MAKE_VERSION( 1, 0 ),              ///< version 1.0
 
         };
 
         ///////////////////////////////////////////////////////////////////////////////
-        /// @brief C++ version for ::xe_image_sampler_filter_flags_t
-        enum class image_sampler_filter_flags_t
+        /// @brief Supported sampler filtering flags
+        enum class sampler_filter_flags_t
         {
             LINEAR = XE_BIT(0),                             ///< device supports linear filtering
 
         };
 
         ///////////////////////////////////////////////////////////////////////////////
-        /// @brief C++ version for ::xe_image_format_desc_t
-        struct image_format_desc_t
+        /// @brief Image format descriptor
+        struct format_desc_t
         {
-            image_format_layout_t layout;                   ///< [in] image format component layout
-            image_format_type_t type;                       ///< [in] image format type
-            image_format_swizzle_t x;                       ///< [in] image component swizzle into channel x
-            image_format_swizzle_t y;                       ///< [in] image component swizzle into channel y
-            image_format_swizzle_t z;                       ///< [in] image component swizzle into channel z
-            image_format_swizzle_t w;                       ///< [in] image component swizzle into channel w
+            format_layout_t layout;                         ///< [in] image format component layout
+            format_type_t type;                             ///< [in] image format type
+            format_swizzle_t x;                             ///< [in] image component swizzle into channel x
+            format_swizzle_t y;                             ///< [in] image component swizzle into channel y
+            format_swizzle_t z;                             ///< [in] image component swizzle into channel z
+            format_swizzle_t w;                             ///< [in] image component swizzle into channel w
 
         };
 
         ///////////////////////////////////////////////////////////////////////////////
-        /// @brief C++ version for ::xe_image_desc_t
-        struct image_desc_t
+        /// @brief Image descriptor
+        struct desc_t
         {
-            image_desc_version_t version = image_desc_version_t::CURRENT;   ///< [in] ::IMAGE_DESC_VERSION_CURRENT
-            image_flag_t flags;                             ///< [in] creation flags
-            image_type_t type;                              ///< [in] image type
-            image_format_desc_t format;                     ///< [in] image format
+            desc_version_t version = desc_version_t::CURRENT;   ///< [in] ::IMAGE_DESC_VERSION_CURRENT
+            flag_t flags;                                   ///< [in] creation flags
+            type_t type;                                    ///< [in] image type
+            format_desc_t format;                           ///< [in] image format
             size_t width = 0;                               ///< [in] width in pixels, see
                                                             ///< ::device_memory_properties_t::maxImageDims1D/2D/3D
             size_t height = 0;                              ///< [in] height in pixels (2D or 3D only), see
@@ -211,44 +190,94 @@ namespace xe
         };
 
         ///////////////////////////////////////////////////////////////////////////////
-        /// @brief C++ version for ::xe_image_properties_t
-        struct image_properties_t
+        /// @brief Image properties
+        struct properties_t
         {
-            image_properties_version_t version = image_properties_version_t::CURRENT;   ///< [in] ::IMAGE_PROPERTIES_VERSION_CURRENT
-            image_sampler_filter_flags_t samplerFilterFlags;///< [out] supported sampler filtering
+            properties_version_t version = properties_version_t::CURRENT;   ///< [in] ::IMAGE_PROPERTIES_VERSION_CURRENT
+            sampler_filter_flags_t samplerFilterFlags;      ///< [out] supported sampler filtering
 
         };
 
+
+    protected:
         ///////////////////////////////////////////////////////////////////////////////
-        /// @brief C++ wrapper for ::xeImageGetProperties
+        Device* m_pDevice;                              ///< pointer to parent object
+        image_handle_t m_handle;                        ///< handle of image object
+        desc_t m_desc;                                  ///< descriptor of the image object
+
+        ///////////////////////////////////////////////////////////////////////////////
+        Image( void ) = delete;
+        Image( 
+            Device* pDevice,                                ///< pointer to parent object
+            image_handle_t handle,                          ///< handle of image object
+            desc_t desc                                     ///< descriptor of the image object
+            );
+
+        ~Image( void ) = default;
+
+        Image( Image const& other ) = delete;
+        void operator=( Image const& other ) = delete;
+
+        Image( Image&& other ) = delete;
+        void operator=( Image&& other ) = delete;
+
+    public:
+        ///////////////////////////////////////////////////////////////////////////////
+        auto getDevice( void ) const { return m_pDevice; }
+        auto getHandle( void ) const { return m_handle; }
+        auto getDesc( void ) const { return m_desc; }
+
+        ///////////////////////////////////////////////////////////////////////////////
+        /// @brief Retrieves supported properties of an image.
+        /// 
+        /// @details
+        ///     - The application may call this function from simultaneous threads.
+        ///     - The implementation of this function should be lock-free.
         /// @returns
-        ///     - ::image_properties_t: pointer to image properties
+        ///     - properties_t: pointer to image properties
         /// 
         /// @throws result_t
-        inline static image_properties_t
+        inline static properties_t
         GetProperties(
-            device_handle_t hDevice,                        ///< [in] handle of the device
-            const image_desc_t* desc                        ///< [in] pointer to image descriptor
+            Device* hDevice,                                ///< [in] handle of the device
+            const desc_t* desc                              ///< [in] pointer to image descriptor
             );
 
         ///////////////////////////////////////////////////////////////////////////////
-        /// @brief C++ wrapper for ::xeImageCreate
+        /// @brief Creates a image object on the device.
+        /// 
+        /// @details
+        ///     - The application may call this function from simultaneous threads.
+        ///     - The implementation of this function should be lock-free.
+        /// 
+        /// @remarks
+        ///   _Analogues_
+        ///     - clCreateImage
         /// @returns
-        ///     - ::image_handle_t: pointer to handle of image object created
+        ///     - Image: pointer to handle of image object created
         /// 
         /// @throws result_t
-        inline static image_handle_t
+        inline static Image*
         Create(
-            device_handle_t hDevice,                        ///< [in] handle of the device
-            const image_desc_t* desc                        ///< [in] pointer to image descriptor
+            Device* hDevice,                                ///< [in] handle of the device
+            const desc_t* desc                              ///< [in] pointer to image descriptor
             );
 
         ///////////////////////////////////////////////////////////////////////////////
-        /// @brief C++ wrapper for ::xeImageDestroy
+        /// @brief Deletes a image object.
+        /// 
+        /// @details
+        ///     - The application is responsible for making sure the GPU is not
+        ///       currently referencing the image before it is deleted
+        ///     - The implementation of this function will immediately free all Host and
+        ///       Device allocations associated with this image
+        ///     - The application may **not** call this function from simultaneous
+        ///       threads with the same image handle.
+        ///     - The implementation of this function should be lock-free.
         /// @throws result_t
         inline static void
         Destroy(
-            image_handle_t hImage                           ///< [in] handle of image object to destroy
+            Image* hImage                                   ///< [in] handle of image object to destroy
             );
 
     };

@@ -35,6 +35,9 @@
 #if defined(__cplusplus)
 #pragma once
 #endif
+#if !defined(_XE_API_H)
+#pragma message("warning: this file is not intended to be included directly")
+#endif
 #include "xe_common.h"
 
 #if defined(__cplusplus)
@@ -67,7 +70,7 @@ extern "C" {
 ///         + nullptr == dstptr
 ///         + nullptr == srcptr
 ///     - ::XE_RESULT_ERROR_UNSUPPORTED
-__xedllexport xe_result_t __xecall
+xe_result_t __xecall
 xeCommandListAppendMemoryCopy(
     xe_command_list_handle_t hCommandList,          ///< [in] handle of command list
     void* dstptr,                                   ///< [in] pointer to destination memory to copy to
@@ -115,7 +118,7 @@ typedef xe_result_t (__xecall *xe_pfnCommandListAppendMemoryCopy_t)(
 ///         + nullptr == hCommandList
 ///         + nullptr == ptr
 ///     - ::XE_RESULT_ERROR_UNSUPPORTED
-__xedllexport xe_result_t __xecall
+xe_result_t __xecall
 xeCommandListAppendMemorySet(
     xe_command_list_handle_t hCommandList,          ///< [in] handle of command list
     void* ptr,                                      ///< [in] pointer to memory to initialize
@@ -159,7 +162,7 @@ typedef xe_result_t (__xecall *xe_pfnCommandListAppendMemorySet_t)(
 ///         + nullptr == hDstImage
 ///         + nullptr == hSrcImage
 ///     - ::XE_RESULT_ERROR_UNSUPPORTED
-__xedllexport xe_result_t __xecall
+xe_result_t __xecall
 xeCommandListAppendImageCopy(
     xe_command_list_handle_t hCommandList,          ///< [in] handle of command list
     xe_image_handle_t hDstImage,                    ///< [in] handle of destination image to copy to
@@ -210,7 +213,7 @@ typedef struct _xe_image_region_t
 ///         + nullptr == hDstImage
 ///         + nullptr == hSrcImage
 ///     - ::XE_RESULT_ERROR_UNSUPPORTED
-__xedllexport xe_result_t __xecall
+xe_result_t __xecall
 xeCommandListAppendImageCopyRegion(
     xe_command_list_handle_t hCommandList,          ///< [in] handle of command list
     xe_image_handle_t hDstImage,                    ///< [in] handle of destination image to copy to
@@ -258,7 +261,7 @@ typedef xe_result_t (__xecall *xe_pfnCommandListAppendImageCopyRegion_t)(
 ///         + nullptr == dstptr
 ///         + nullptr == hSrcImage
 ///     - ::XE_RESULT_ERROR_UNSUPPORTED
-__xedllexport xe_result_t __xecall
+xe_result_t __xecall
 xeCommandListAppendImageCopyToMemory(
     xe_command_list_handle_t hCommandList,          ///< [in] handle of command list
     void* dstptr,                                   ///< [in] pointer to destination memory to copy to
@@ -304,7 +307,7 @@ typedef xe_result_t (__xecall *xe_pfnCommandListAppendImageCopyToMemory_t)(
 ///         + nullptr == hDstImage
 ///         + nullptr == srcptr
 ///     - ::XE_RESULT_ERROR_UNSUPPORTED
-__xedllexport xe_result_t __xecall
+xe_result_t __xecall
 xeCommandListAppendImageCopyFromMemory(
     xe_command_list_handle_t hCommandList,          ///< [in] handle of command list
     xe_image_handle_t hDstImage,                    ///< [in] handle of destination image to copy to
@@ -361,7 +364,7 @@ typedef xe_result_t (__xecall *xe_pfnCommandListAppendImageCopyFromMemory_t)(
 ///         + nullptr == hCommandList
 ///         + nullptr == ptr
 ///     - ::XE_RESULT_ERROR_UNSUPPORTED
-__xedllexport xe_result_t __xecall
+xe_result_t __xecall
 xeCommandListAppendMemoryPrefetch(
     xe_command_list_handle_t hCommandList,          ///< [in] handle of command list
     const void* ptr,                                ///< [in] pointer to start of the memory range to prefetch
@@ -426,7 +429,7 @@ typedef enum _xe_memory_advice_t
 ///         + nullptr == ptr
 ///         + invalid value for advice
 ///     - ::XE_RESULT_ERROR_UNSUPPORTED
-__xedllexport xe_result_t __xecall
+xe_result_t __xecall
 xeCommandListAppendMemAdvise(
     xe_command_list_handle_t hCommandList,          ///< [in] handle of command list
     xe_device_handle_t hDevice,                     ///< [in] device associated with the memory advice

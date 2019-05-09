@@ -35,6 +35,9 @@
 #if defined(__cplusplus)
 #pragma once
 #endif
+#if !defined(_XE_API_H)
+#pragma message("warning: this file is not intended to be included directly")
+#endif
 #include "xe_common.h"
 
 #if defined(__cplusplus)
@@ -55,7 +58,7 @@ extern "C" {
 ///     - ::XE_RESULT_ERROR_UNSUPPORTED
 ///     - ::XE_RESULT_ERROR_OUT_OF_HOST_MEMORY
 ///     - ::XE_RESULT_ERROR_OUT_OF_DEVICE_MEMORY
-__xedllexport xe_result_t __xecall
+xe_result_t __xecall
 xeDeviceRegisterCLMemory(
     xe_device_handle_t hDevice,                     ///< [in] handle to the device
     cl_context context,                             ///< [in] the OpenCL context that created the memory
@@ -87,7 +90,7 @@ typedef xe_result_t (__xecall *xe_pfnDeviceRegisterCLMemory_t)(
 ///     - ::XE_RESULT_ERROR_UNSUPPORTED
 ///     - ::XE_RESULT_ERROR_OUT_OF_HOST_MEMORY
 ///     - ::XE_RESULT_ERROR_OUT_OF_DEVICE_MEMORY
-__xedllexport xe_result_t __xecall
+xe_result_t __xecall
 xeDeviceRegisterCLProgram(
     xe_device_handle_t hDevice,                     ///< [in] handle to the device
     cl_context context,                             ///< [in] the OpenCL context that created the program
@@ -119,7 +122,7 @@ typedef xe_result_t (__xecall *xe_pfnDeviceRegisterCLProgram_t)(
 ///     - ::XE_RESULT_ERROR_UNSUPPORTED
 ///     - ::XE_RESULT_ERROR_OUT_OF_HOST_MEMORY
 ///     - ::XE_RESULT_ERROR_OUT_OF_DEVICE_MEMORY
-__xedllexport xe_result_t __xecall
+xe_result_t __xecall
 xeDeviceRegisterCLCommandQueue(
     xe_device_handle_t hDevice,                     ///< [in] handle to the device
     cl_context context,                             ///< [in] the OpenCL context that created the command queue

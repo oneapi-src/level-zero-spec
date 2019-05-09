@@ -34,77 +34,153 @@
 #define _XE_COMMON_HPP
 #if defined(__cplusplus)
 #pragma once
-#include "xe_api.h"
+#if !defined(_XE_API_HPP)
+#pragma message("warning: this file is not intended to be included directly")
+#endif
+#include <stdint.h>
+#include <string.h>
+//#include "xe_api.h"
 #include <tuple>
+
+///////////////////////////////////////////////////////////////////////////////
+#ifndef XE_MAKE_VERSION
+/// @brief Generates generic Xe:: API versions
+#define XE_MAKE_VERSION( _major, _minor )  (( _major << 16 )|( _minor & 0x0000ffff))
+#endif // XE_MAKE_VERSION
+
+///////////////////////////////////////////////////////////////////////////////
+#ifndef XE_MAJOR_VERSION
+/// @brief Extracts Xe:: API major version
+#define XE_MAJOR_VERSION( _ver )  ( _ver >> 16 )
+#endif // XE_MAJOR_VERSION
+
+///////////////////////////////////////////////////////////////////////////////
+#ifndef XE_MINOR_VERSION
+/// @brief Extracts Xe:: API minor version
+#define XE_MINOR_VERSION( _ver )  ( _ver & 0x0000ffff )
+#endif // XE_MINOR_VERSION
+
+///////////////////////////////////////////////////////////////////////////////
+#ifndef XE_API_HEADER_VERSION
+/// @brief Current header file version
+#define XE_API_HEADER_VERSION  XE_MAKE_VERSION( 1, 0 )
+#endif // XE_API_HEADER_VERSION
+
+///////////////////////////////////////////////////////////////////////////////
+#ifndef __xecall
+#if defined(_WIN32)
+/// @brief Calling convention for all API functions
+#define __xecall  __cdecl
+#else
+#define __xecall  
+#endif // defined(_WIN32)
+#endif // __xecall
+
+///////////////////////////////////////////////////////////////////////////////
+#ifndef __xedllexport
+#if defined(_WIN32)
+/// @brief Microsoft-specific dllexport storage-class attribute
+#define __xedllexport  __declspec(dllexport)
+#else
+#define __xedllexport  
+#endif // defined(_WIN32)
+#endif // __xedllexport
+
+///////////////////////////////////////////////////////////////////////////////
+#ifndef XE_ENABLE_OCL_INTEROP
+#if !defined(XE_ENABLE_OCL_INTEROP)
+/// @brief Disable OpenCL interoperability functions if not explicitly defined
+#define XE_ENABLE_OCL_INTEROP  0
+#endif // !defined(XE_ENABLE_OCL_INTEROP)
+#endif // XE_ENABLE_OCL_INTEROP
+
+///////////////////////////////////////////////////////////////////////////////
+#ifndef XE_BIT
+/// @brief Generic macro for enumerator bit masks
+#define XE_BIT( _i )  ( 1 << _i )
+#endif // XE_BIT
 
 namespace xe
 {
     ///////////////////////////////////////////////////////////////////////////////
     /// @brief compiler-independent type
-    using bool_t = ::xe_bool_t;
+    using bool_t = uint8_t;
 
     ///////////////////////////////////////////////////////////////////////////////
     /// @brief Handle of driver's device object
     class Device;
-    using device_handle_t = Device*;
+    struct _device_handle_t;
+    using device_handle_t = _device_handle_t*;
 
     ///////////////////////////////////////////////////////////////////////////////
     /// @brief Handle of driver's command queue object
     class CommandQueue;
-    using command_queue_handle_t = CommandQueue*;
+    struct _command_queue_handle_t;
+    using command_queue_handle_t = _command_queue_handle_t*;
 
     ///////////////////////////////////////////////////////////////////////////////
     /// @brief Handle of driver's command list object
     class CommandList;
-    using command_list_handle_t = CommandList*;
+    struct _command_list_handle_t;
+    using command_list_handle_t = _command_list_handle_t*;
 
     ///////////////////////////////////////////////////////////////////////////////
     /// @brief Handle of driver's fence object
     class Fence;
-    using fence_handle_t = Fence*;
+    struct _fence_handle_t;
+    using fence_handle_t = _fence_handle_t*;
 
     ///////////////////////////////////////////////////////////////////////////////
     /// @brief Handle of driver's event pool object
     class EventPool;
-    using event_pool_handle_t = EventPool*;
+    struct _event_pool_handle_t;
+    using event_pool_handle_t = _event_pool_handle_t*;
 
     ///////////////////////////////////////////////////////////////////////////////
     /// @brief Handle of driver's event object
     class Event;
-    using event_handle_t = Event*;
+    struct _event_handle_t;
+    using event_handle_t = _event_handle_t*;
 
     ///////////////////////////////////////////////////////////////////////////////
     /// @brief Handle of driver's image object
     class Image;
-    using image_handle_t = Image*;
+    struct _image_handle_t;
+    using image_handle_t = _image_handle_t*;
 
     ///////////////////////////////////////////////////////////////////////////////
     /// @brief Handle of driver's module object
     class Module;
-    using module_handle_t = Module*;
+    struct _module_handle_t;
+    using module_handle_t = _module_handle_t*;
 
     ///////////////////////////////////////////////////////////////////////////////
     /// @brief Handle of module's build log object
     class ModuleBuildLog;
-    using module_build_log_handle_t = ModuleBuildLog*;
+    struct _module_build_log_handle_t;
+    using module_build_log_handle_t = _module_build_log_handle_t*;
 
     ///////////////////////////////////////////////////////////////////////////////
     /// @brief Handle of driver's function object
     class Function;
-    using function_handle_t = Function*;
+    struct _function_handle_t;
+    using function_handle_t = _function_handle_t*;
 
     ///////////////////////////////////////////////////////////////////////////////
     /// @brief Handle of driver's sampler object
     class Sampler;
-    using sampler_handle_t = Sampler*;
+    struct _sampler_handle_t;
+    using sampler_handle_t = _sampler_handle_t*;
 
     ///////////////////////////////////////////////////////////////////////////////
     /// @brief IPC handle to a memory allocation
-    using ipc_mem_handle_t = ::xe_ipc_mem_handle_t;
+    struct _ipc_mem_handle_t;
+    using ipc_mem_handle_t = _ipc_mem_handle_t*;
 
     ///////////////////////////////////////////////////////////////////////////////
     /// @brief IPC handle to a event pool allocation
-    using ipc_event_pool_handle_t = ::xe_ipc_event_pool_handle_t;
+    struct _ipc_event_pool_handle_t;
+    using ipc_event_pool_handle_t = _ipc_event_pool_handle_t*;
 
     ///////////////////////////////////////////////////////////////////////////////
     /// @brief Defines Return/Error codes

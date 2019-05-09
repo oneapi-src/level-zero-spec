@@ -34,10 +34,21 @@
 #define _XET_POWER_INL
 #if defined(__cplusplus)
 #pragma once
+#if !defined(_XET_API_HPP)
+#pragma message("warning: this file is not intended to be included directly")
+#endif
 #include "xet_power.hpp"
 
 namespace xet
 {
+    ///////////////////////////////////////////////////////////////////////////////
+    Power::Power( 
+        power_handle_t handle                           ///< handle of power object
+        ) :
+        m_handle( handle )
+    {
+    }
+
     ///////////////////////////////////////////////////////////////////////////////
     /// @brief C++ wrapper for ::xetPowerCreate
     /// 
@@ -52,12 +63,12 @@ namespace xet
     ///     - **rsmi_init**
     /// 
     /// @returns
-    ///     - ::power_handle_t: handle for accessing power features of the device
+    ///     - Power: handle for accessing power features of the device
     /// 
     /// @throws result_t
-    inline power_handle_t 
+    inline Power* 
     Power::Create(
-        xe::device_handle_t hDevice,                    ///< [in] handle of the device object
+        xe::Device* hDevice,                            ///< [in] handle of the device object
         uint32_t flags                                  ///< [in] bitfield of ::power_init_flags_t
         )
     {
@@ -76,7 +87,7 @@ namespace xet
     /// @throws result_t
     inline void 
     Power::Destroy(
-        power_handle_t hPower                           ///< [in] handle of the power object to destroy
+        Power* hPower                                   ///< [in] handle of the power object to destroy
         )
     {
         // auto result = ::xetPowerDestroy( handle, hPower );
@@ -87,10 +98,10 @@ namespace xet
     /// @brief C++ wrapper for ::xetPowerGetAveragePowerLimit
     /// 
     /// @returns
-    ///     - ::power_average_limit_t: information about the average power limit
+    ///     - average_limit_t: information about the average power limit
     /// 
     /// @throws result_t
-    inline Power::power_average_limit_t 
+    inline Power::average_limit_t 
     Power::GetAveragePowerLimit(
         void
         )
@@ -103,10 +114,10 @@ namespace xet
     /// @brief C++ wrapper for ::xetPowerGetBurstPowerLimit
     /// 
     /// @returns
-    ///     - ::power_burst_limit_t: information about the burst power limit
+    ///     - burst_limit_t: information about the burst power limit
     /// 
     /// @throws result_t
-    inline Power::power_burst_limit_t 
+    inline Power::burst_limit_t 
     Power::GetBurstPowerLimit(
         void
         )
@@ -119,10 +130,10 @@ namespace xet
     /// @brief C++ wrapper for ::xetPowerGetPeakPowerLimit
     /// 
     /// @returns
-    ///     - ::power_peak_limit_t: information about the peak power limit
+    ///     - peak_limit_t: information about the peak power limit
     /// 
     /// @throws result_t
-    inline Power::power_peak_limit_t 
+    inline Power::peak_limit_t 
     Power::GetPeakPowerLimit(
         void
         )
@@ -135,10 +146,10 @@ namespace xet
     /// @brief C++ wrapper for ::xetPowerGetAllPowerLimits
     /// 
     /// @returns
-    ///     - ::power_limits_t: information about the average/burst/peak power limits
+    ///     - limits_t: information about the average/burst/peak power limits
     /// 
     /// @throws result_t
-    inline Power::power_limits_t 
+    inline Power::limits_t 
     Power::GetAllPowerLimits(
         void
         )
@@ -151,10 +162,10 @@ namespace xet
     /// @brief C++ wrapper for ::xetPowerGetDefaultPowerLimits
     /// 
     /// @returns
-    ///     - ::power_limits_t: information about the default average/burst/peak power limits
+    ///     - limits_t: information about the default average/burst/peak power limits
     /// 
     /// @throws result_t
-    inline Power::power_limits_t 
+    inline Power::limits_t 
     Power::GetDefaultPowerLimits(
         void
         )
@@ -169,7 +180,7 @@ namespace xet
     /// @throws result_t
     inline void 
     Power::SetAveragePowerLimit(
-        power_average_limit_t* pLimit                   ///< [in] information about the average power limit
+        average_limit_t* pLimit                         ///< [in] information about the average power limit
         )
     {
         // auto result = ::xetPowerSetAveragePowerLimit( handle, pLimit );
@@ -182,7 +193,7 @@ namespace xet
     /// @throws result_t
     inline void 
     Power::SetBurstPowerLimit(
-        power_burst_limit_t* pLimit                     ///< [in] information about the burst power limit
+        burst_limit_t* pLimit                           ///< [in] information about the burst power limit
         )
     {
         // auto result = ::xetPowerSetBurstPowerLimit( handle, pLimit );
@@ -195,7 +206,7 @@ namespace xet
     /// @throws result_t
     inline void 
     Power::SetPeakPowerLimit(
-        power_peak_limit_t* pLimit                      ///< [in] information about the peak power limit
+        peak_limit_t* pLimit                            ///< [in] information about the peak power limit
         )
     {
         // auto result = ::xetPowerSetPeakPowerLimit( handle, pLimit );
@@ -208,7 +219,7 @@ namespace xet
     /// @throws result_t
     inline void 
     Power::SetPowerLimits(
-        power_limits_t* pLimits                         ///< [in] information about the average/burst/peak power limits
+        limits_t* pLimits                               ///< [in] information about the average/burst/peak power limits
         )
     {
         // auto result = ::xetPowerSetPowerLimits( handle, pLimits );
@@ -239,7 +250,7 @@ namespace xet
     /// @brief C++ wrapper for ::xetPowerGetTurboMode
     /// 
     /// @returns
-    ///     - ::turbo_mode_t: turbo mode currently in effect
+    ///     - turbo_mode_t: turbo mode currently in effect
     /// 
     /// @throws result_t
     inline Power::turbo_mode_t 
@@ -284,10 +295,10 @@ namespace xet
     /// @brief C++ wrapper for ::xetPowerGetFreqDomainHandle
     /// 
     /// @returns
-    ///     - ::freq_domain_handle_t: pointer to handle of frequency domain object
+    ///     - FreqDomain: pointer to handle of frequency domain object
     /// 
     /// @throws result_t
-    inline freq_domain_handle_t 
+    inline FreqDomain* 
     Power::GetFreqDomainHandle(
         uint32_t ordinal                                ///< [in] frequency domain index [0 .. ::PowerGetFreqDomainCount - 1]
         )
@@ -316,7 +327,7 @@ namespace xet
     /// @brief C++ wrapper for ::xetPowerFanGetProperties
     /// 
     /// @returns
-    ///     - ::fan_properties_t: pointer to storage for fan properties
+    ///     - fan_properties_t: pointer to storage for fan properties
     /// 
     /// @throws result_t
     inline Power::fan_properties_t 
@@ -336,7 +347,7 @@ namespace xet
     ///       speed points in the table.
     /// 
     /// @returns
-    ///     - ::fan_point_t: pointer to an array of temperature/fan-speed points
+    ///     - fan_point_t: pointer to an array of temperature/fan-speed points
     /// 
     /// @throws result_t
     inline Power::fan_point_t 
@@ -378,7 +389,7 @@ namespace xet
     ///     - The array pFanSpeed must contain at least numFans entries.
     /// 
     /// @returns
-    ///     - ::fan_speed_info_t: pointer to an array of current fan speeds
+    ///     - fan_speed_info_t: pointer to an array of current fan speeds
     /// 
     /// @throws result_t
     inline Power::fan_speed_info_t 
@@ -437,7 +448,7 @@ namespace xet
     ///       temperature across all sensors
     /// 
     /// @returns
-    ///     - ::temperature_properties_t: pointer to properties for this sensor
+    ///     - temperature_properties_t: pointer to properties for this sensor
     /// 
     /// @throws result_t
     inline Power::temperature_properties_t 
@@ -517,7 +528,7 @@ namespace xet
     ///       blocks.
     /// 
     /// @returns
-    ///     - ::activity_properties_t: pointer to properties for this activity counter
+    ///     - activity_properties_t: pointer to properties for this activity counter
     /// 
     /// @throws result_t
     inline Power::activity_properties_t 
@@ -537,7 +548,7 @@ namespace xet
     ///       blocks.
     /// 
     /// @returns
-    ///     - ::activity_counters_t: pointer to an array of activity counter data
+    ///     - activity_counters_t: pointer to an array of activity counter data
     /// 
     /// @throws result_t
     inline Power::activity_counters_t 
@@ -552,13 +563,21 @@ namespace xet
     }
 
     ///////////////////////////////////////////////////////////////////////////////
+    FreqDomain::FreqDomain( 
+        freq_domain_handle_t handle                     ///< handle of frequency domain object
+        ) :
+        m_handle( handle )
+    {
+    }
+
+    ///////////////////////////////////////////////////////////////////////////////
     /// @brief C++ wrapper for ::xetFreqDomainGetProperties
     /// 
     /// @returns
-    ///     - ::freq_domain_properties_t: pointer to properties for the frequency domain
+    ///     - properties_t: pointer to properties for the frequency domain
     /// 
     /// @throws result_t
-    inline FreqDomain::freq_domain_properties_t 
+    inline FreqDomain::properties_t 
     FreqDomain::GetProperties(
         void
         )
@@ -571,10 +590,10 @@ namespace xet
     /// @brief C++ wrapper for ::xetFreqDomainGetSourceFreqDomain
     /// 
     /// @returns
-    ///     - ::freq_domain_handle_t: pointer to a handle where the source frequency domain handle will be returned
+    ///     - FreqDomain: pointer to a handle where the source frequency domain handle will be returned
     /// 
     /// @throws result_t
-    inline freq_domain_handle_t 
+    inline FreqDomain* 
     FreqDomain::GetSourceFreqDomain(
         void
         )
@@ -611,7 +630,7 @@ namespace xet
     ///       ::freq_domain_properties_t.numClockDividers.
     /// 
     /// @returns
-    ///     - ::clock_divider_t: pointer to array of dividers
+    ///     - clock_divider_t: pointer to array of dividers
     /// 
     /// @throws result_t
     inline FreqDomain::clock_divider_t 
@@ -674,7 +693,7 @@ namespace xet
     ///       management.
     /// 
     /// @returns
-    ///     - ::clock_divider_t: pointer to frequency divider request
+    ///     - clock_divider_t: pointer to frequency divider request
     /// 
     /// @throws result_t
     inline FreqDomain::clock_divider_t 
@@ -692,7 +711,7 @@ namespace xet
     /// @returns
     ///     - uint32_t: current frequency in MHz requested by the driver
     ///     - uint32_t: the actual frequency in MHz
-    ///     - ::freq_throttle_reasons_t: the reason the resolved frequency is lower than the request
+    ///     - freq_throttle_reasons_t: the reason the resolved frequency is lower than the request
     /// 
     /// @throws result_t
     inline std::tuple<uint32_t, uint32_t, FreqDomain::freq_throttle_reasons_t> 

@@ -34,6 +34,9 @@
 #define _XET_CMDLIST_HPP
 #if defined(__cplusplus)
 #pragma once
+#if !defined(_XET_API_HPP)
+#pragma message("warning: this file is not intended to be included directly")
+#endif
 #include "xet_common.hpp"
 
 namespace xet
@@ -42,8 +45,12 @@ namespace xet
     /// @brief C++ wrapper for command list
     class CommandList : public xe::CommandList
     {
-    protected:
+    public:
 
+    protected:
+        ///////////////////////////////////////////////////////////////////////////////
+
+        ///////////////////////////////////////////////////////////////////////////////
         CommandList( void ) = delete;
         using xe::CommandList::CommandList;
 
@@ -56,35 +63,52 @@ namespace xet
         void operator=( CommandList&& other ) = delete;
 
     public:
+        ///////////////////////////////////////////////////////////////////////////////
 
         ///////////////////////////////////////////////////////////////////////////////
-        /// @brief C++ wrapper for ::xetCommandListAppendMetricTracerMarker
+        /// @brief Append metric tracer marker to a given command list.
+        /// 
+        /// @details
+        ///     - The application may **not** call this function from simultaneous
+        ///       threads with the same command list handle.
         /// @throws result_t
         inline void
         AppendMetricTracerMarker(
-            metric_tracer_handle_t hMetricTracer,           ///< [in] handle of the metric tracer
+            MetricTracer* hMetricTracer,                    ///< [in] handle of the metric tracer
             uint32_t value                                  ///< [in] tracer marker value
             );
 
         ///////////////////////////////////////////////////////////////////////////////
-        /// @brief C++ wrapper for ::xetCommandListAppendMetricQueryBegin
+        /// @brief Appends metric query begin commands to command list.
+        /// 
+        /// @details
+        ///     - The application may **not** call this function from simultaneous
+        ///       threads with the same command list handle.
         /// @throws result_t
         inline void
         AppendMetricQueryBegin(
-            metric_query_handle_t hMetricQuery              ///< [in] handle of the metric query
+            MetricQuery* hMetricQuery                       ///< [in] handle of the metric query
             );
 
         ///////////////////////////////////////////////////////////////////////////////
-        /// @brief C++ wrapper for ::xetCommandListAppendMetricQueryEnd
+        /// @brief Appends metric query end commands to command list.
+        /// 
+        /// @details
+        ///     - The application may **not** call this function from simultaneous
+        ///       threads with the same command list handle.
         /// @throws result_t
         inline void
         AppendMetricQueryEnd(
-            metric_query_handle_t hMetricQuery,             ///< [in] handle of the metric query
-            xe::event_handle_t hCompletionEvent             ///< [in] handle of the completion event to signal
+            MetricQuery* hMetricQuery,                      ///< [in] handle of the metric query
+            xe::Event* hCompletionEvent                     ///< [in] handle of the completion event to signal
             );
 
         ///////////////////////////////////////////////////////////////////////////////
-        /// @brief C++ wrapper for ::xetCommandListAppendMetricMemoryBarrier
+        /// @brief Appends metric query commands to flush all caches.
+        /// 
+        /// @details
+        ///     - The application may **not** call this function from simultaneous
+        ///       threads with the same command list handle.
         /// @throws result_t
         inline void
         AppendMetricMemoryBarrier(

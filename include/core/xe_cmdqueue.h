@@ -35,6 +35,9 @@
 #if defined(__cplusplus)
 #pragma once
 #endif
+#if !defined(_XE_API_H)
+#pragma message("warning: this file is not intended to be included directly")
+#endif
 #include "xe_common.h"
 
 #if defined(__cplusplus)
@@ -126,7 +129,7 @@ typedef struct _xe_command_queue_desc_t
 ///         + ::XE_COMMAND_QUEUE_DESC_VERSION_CURRENT < desc->version
 ///     - ::XE_RESULT_ERROR_OUT_OF_HOST_MEMORY
 ///     - ::XE_RESULT_ERROR_OUT_OF_DEVICE_MEMORY
-__xedllexport xe_result_t __xecall
+xe_result_t __xecall
 xeCommandQueueCreate(
     xe_device_handle_t hDevice,                     ///< [in] handle of the device object
     const xe_command_queue_desc_t* desc,            ///< [in] pointer to command queue descriptor
@@ -165,7 +168,7 @@ typedef xe_result_t (__xecall *xe_pfnCommandQueueCreate_t)(
 ///     - ::XE_RESULT_ERROR_INVALID_PARAMETER
 ///         + nullptr == hCommandQueue
 ///     - ::XE_RESULT_ERROR_UNSUPPORTED
-__xedllexport xe_result_t __xecall
+xe_result_t __xecall
 xeCommandQueueDestroy(
     xe_command_queue_handle_t hCommandQueue         ///< [in] handle of command queue object to destroy
     );
@@ -197,7 +200,7 @@ typedef xe_result_t (__xecall *xe_pfnCommandQueueDestroy_t)(
 ///         + 0 for numCommandLists
 ///         + hFence is in signaled state
 ///     - ::XE_RESULT_ERROR_UNSUPPORTED
-__xedllexport xe_result_t __xecall
+xe_result_t __xecall
 xeCommandQueueExecuteCommandLists(
     xe_command_queue_handle_t hCommandQueue,        ///< [in] handle of the command queue
     uint32_t numCommandLists,                       ///< [in] number of command lists to execute
@@ -230,7 +233,7 @@ typedef xe_result_t (__xecall *xe_pfnCommandQueueExecuteCommandLists_t)(
 ///     - ::XE_RESULT_ERROR_UNSUPPORTED
 ///     - ::XE_RESULT_NOT_READY
 ///         + timeout expired
-__xedllexport xe_result_t __xecall
+xe_result_t __xecall
 xeCommandQueueSynchronize(
     xe_command_queue_handle_t hCommandQueue,        ///< [in] handle of the command queue
     uint32_t timeout                                ///< [in] if non-zero, then indicates the maximum time to yield before

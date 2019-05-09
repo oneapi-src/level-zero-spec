@@ -35,6 +35,9 @@
 #if defined(__cplusplus)
 #pragma once
 #endif
+#if !defined(_XET_API_H)
+#pragma message("warning: this file is not intended to be included directly")
+#endif
 #include "xet_common.h"
 
 #if defined(__cplusplus)
@@ -71,7 +74,7 @@ typedef enum _xet_power_init_flags_t
 ///         + nullptr == hDevice
 ///         + nullptr == pPowerHandle
 ///     - ::XE_RESULT_ERROR_UNSUPPORTED
-__xedllexport xe_result_t __xecall
+xe_result_t __xecall
 xetPowerCreate(
     xe_device_handle_t hDevice,                     ///< [in] handle of the device object
     uint32_t flags,                                 ///< [in] bitfield of ::xet_power_init_flags_t
@@ -101,7 +104,7 @@ typedef xe_result_t (__xecall *xet_pfnPowerCreate_t)(
 ///     - ::XE_RESULT_ERROR_INVALID_PARAMETER
 ///         + nullptr == hPower
 ///     - ::XE_RESULT_ERROR_UNSUPPORTED
-__xedllexport xe_result_t __xecall
+xe_result_t __xecall
 xetPowerDestroy(
     xet_power_handle_t hPower                       ///< [in] handle of the power object to destroy
     );
@@ -210,7 +213,7 @@ typedef struct _xet_power_limits_t
 ///         + nullptr == hPower
 ///         + nullptr == pLimit
 ///     - ::XE_RESULT_ERROR_UNSUPPORTED
-__xedllexport xe_result_t __xecall
+xe_result_t __xecall
 xetPowerGetAveragePowerLimit(
     xet_power_handle_t hPower,                      ///< [in] handle of the power object
     xet_power_average_limit_t* pLimit               ///< [out] information about the average power limit
@@ -234,7 +237,7 @@ typedef xe_result_t (__xecall *xet_pfnPowerGetAveragePowerLimit_t)(
 ///         + nullptr == hPower
 ///         + nullptr == pLimit
 ///     - ::XE_RESULT_ERROR_UNSUPPORTED
-__xedllexport xe_result_t __xecall
+xe_result_t __xecall
 xetPowerGetBurstPowerLimit(
     xet_power_handle_t hPower,                      ///< [in] handle of the power object
     xet_power_burst_limit_t* pLimit                 ///< [out] information about the burst power limit
@@ -258,7 +261,7 @@ typedef xe_result_t (__xecall *xet_pfnPowerGetBurstPowerLimit_t)(
 ///         + nullptr == hPower
 ///         + nullptr == pLimit
 ///     - ::XE_RESULT_ERROR_UNSUPPORTED
-__xedllexport xe_result_t __xecall
+xe_result_t __xecall
 xetPowerGetPeakPowerLimit(
     xet_power_handle_t hPower,                      ///< [in] handle of the power object
     xet_power_peak_limit_t* pLimit                  ///< [out] information about the peak power limit
@@ -282,7 +285,7 @@ typedef xe_result_t (__xecall *xet_pfnPowerGetPeakPowerLimit_t)(
 ///         + nullptr == hPower
 ///         + nullptr == pLimits
 ///     - ::XE_RESULT_ERROR_UNSUPPORTED
-__xedllexport xe_result_t __xecall
+xe_result_t __xecall
 xetPowerGetAllPowerLimits(
     xet_power_handle_t hPower,                      ///< [in] handle of the power object
     xet_power_limits_t* pLimits                     ///< [out] information about the average/burst/peak power limits
@@ -306,7 +309,7 @@ typedef xe_result_t (__xecall *xet_pfnPowerGetAllPowerLimits_t)(
 ///         + nullptr == hPower
 ///         + nullptr == pLimits
 ///     - ::XE_RESULT_ERROR_UNSUPPORTED
-__xedllexport xe_result_t __xecall
+xe_result_t __xecall
 xetPowerGetDefaultPowerLimits(
     xet_power_handle_t hPower,                      ///< [in] handle of the power object
     xet_power_limits_t* pLimits                     ///< [out] information about the default average/burst/peak power limits
@@ -330,7 +333,7 @@ typedef xe_result_t (__xecall *xet_pfnPowerGetDefaultPowerLimits_t)(
 ///         + nullptr == hPower
 ///         + nullptr == pLimit
 ///     - ::XE_RESULT_ERROR_UNSUPPORTED
-__xedllexport xe_result_t __xecall
+xe_result_t __xecall
 xetPowerSetAveragePowerLimit(
     xet_power_handle_t hPower,                      ///< [in] handle of the power object
     xet_power_average_limit_t* pLimit               ///< [in] information about the average power limit
@@ -354,7 +357,7 @@ typedef xe_result_t (__xecall *xet_pfnPowerSetAveragePowerLimit_t)(
 ///         + nullptr == hPower
 ///         + nullptr == pLimit
 ///     - ::XE_RESULT_ERROR_UNSUPPORTED
-__xedllexport xe_result_t __xecall
+xe_result_t __xecall
 xetPowerSetBurstPowerLimit(
     xet_power_handle_t hPower,                      ///< [in] handle of the power object
     xet_power_burst_limit_t* pLimit                 ///< [in] information about the burst power limit
@@ -378,7 +381,7 @@ typedef xe_result_t (__xecall *xet_pfnPowerSetBurstPowerLimit_t)(
 ///         + nullptr == hPower
 ///         + nullptr == pLimit
 ///     - ::XE_RESULT_ERROR_UNSUPPORTED
-__xedllexport xe_result_t __xecall
+xe_result_t __xecall
 xetPowerSetPeakPowerLimit(
     xet_power_handle_t hPower,                      ///< [in] handle of the power object
     xet_power_peak_limit_t* pLimit                  ///< [in] information about the peak power limit
@@ -402,7 +405,7 @@ typedef xe_result_t (__xecall *xet_pfnPowerSetPeakPowerLimit_t)(
 ///         + nullptr == hPower
 ///         + nullptr == pLimits
 ///     - ::XE_RESULT_ERROR_UNSUPPORTED
-__xedllexport xe_result_t __xecall
+xe_result_t __xecall
 xetPowerSetPowerLimits(
     xet_power_handle_t hPower,                      ///< [in] handle of the power object
     xet_power_limits_t* pLimits                     ///< [in] information about the average/burst/peak power limits
@@ -430,7 +433,7 @@ typedef xe_result_t (__xecall *xet_pfnPowerSetPowerLimits_t)(
 ///         + nullptr == hPower
 ///         + nullptr == pEnergy
 ///     - ::XE_RESULT_ERROR_UNSUPPORTED
-__xedllexport xe_result_t __xecall
+xe_result_t __xecall
 xetPowerGetEnergyCounter(
     xet_power_handle_t hPower,                      ///< [in] handle of the power object
     uint64_t* pEnergy                               ///< [out] the energy counter in millijoules
@@ -467,7 +470,7 @@ typedef enum _xet_turbo_mode_t
 ///         + nullptr == hPower
 ///         + nullptr == pTurboMode
 ///     - ::XE_RESULT_ERROR_UNSUPPORTED
-__xedllexport xe_result_t __xecall
+xe_result_t __xecall
 xetPowerGetTurboMode(
     xet_power_handle_t hPower,                      ///< [in] handle of the power object
     xet_turbo_mode_t* pTurboMode                    ///< [out] turbo mode currently in effect
@@ -490,7 +493,7 @@ typedef xe_result_t (__xecall *xet_pfnPowerGetTurboMode_t)(
 ///     - ::XE_RESULT_ERROR_INVALID_PARAMETER
 ///         + nullptr == hPower
 ///     - ::XE_RESULT_ERROR_UNSUPPORTED
-__xedllexport xe_result_t __xecall
+xe_result_t __xecall
 xetPowerSetTurboMode(
     xet_power_handle_t hPower,                      ///< [in] handle of the power object
     xet_turbo_mode_t pTurboMode                     ///< [in] new turbo mode
@@ -586,7 +589,7 @@ typedef struct _xet_clock_divider_t
 ///         + nullptr == hPower
 ///         + nullptr == pNumFreqDomains
 ///     - ::XE_RESULT_ERROR_UNSUPPORTED
-__xedllexport xe_result_t __xecall
+xe_result_t __xecall
 xetPowerGetFreqDomainCount(
     xet_power_handle_t hPower,                      ///< [in] handle of the power object
     uint32_t* pNumFreqDomains                       ///< [out] the number of frequency domains
@@ -610,7 +613,7 @@ typedef xe_result_t (__xecall *xet_pfnPowerGetFreqDomainCount_t)(
 ///         + nullptr == hPower
 ///         + nullptr == phFreqDomain
 ///     - ::XE_RESULT_ERROR_UNSUPPORTED
-__xedllexport xe_result_t __xecall
+xe_result_t __xecall
 xetPowerGetFreqDomainHandle(
     xet_power_handle_t hPower,                      ///< [in] handle of the power object
     uint32_t ordinal,                               ///< [in] frequency domain index [0 .. ::xetPowerGetFreqDomainCount - 1]
@@ -636,7 +639,7 @@ typedef xe_result_t (__xecall *xet_pfnPowerGetFreqDomainHandle_t)(
 ///         + nullptr == hFreqDomain
 ///         + nullptr == pFreqDomainProperties
 ///     - ::XE_RESULT_ERROR_UNSUPPORTED
-__xedllexport xe_result_t __xecall
+xe_result_t __xecall
 xetFreqDomainGetProperties(
     xet_freq_domain_handle_t hFreqDomain,           ///< [in] handle of the frequency domain
     xet_freq_domain_properties_t* pFreqDomainProperties ///< [out] pointer to properties for the frequency domain
@@ -661,7 +664,7 @@ typedef xe_result_t (__xecall *xet_pfnFreqDomainGetProperties_t)(
 ///         + nullptr == hFreqDomain
 ///         + nullptr == phSrcFreqDomain
 ///     - ::XE_RESULT_ERROR_UNSUPPORTED
-__xedllexport xe_result_t __xecall
+xe_result_t __xecall
 xetFreqDomainGetSourceFreqDomain(
     xet_freq_domain_handle_t hFreqDomain,           ///< [in] handle of the frequency domain
     xet_freq_domain_handle_t* phSrcFreqDomain       ///< [out] pointer to a handle where the source frequency domain handle
@@ -691,7 +694,7 @@ typedef xe_result_t (__xecall *xet_pfnFreqDomainGetSourceFreqDomain_t)(
 ///         + nullptr == hFreqDomain
 ///         + nullptr == pClocks
 ///     - ::XE_RESULT_ERROR_UNSUPPORTED
-__xedllexport xe_result_t __xecall
+xe_result_t __xecall
 xetFreqDomainGetSupportedClocks(
     xet_freq_domain_handle_t hFreqDomain,           ///< [in] handle of the frequency domain
     uint32_t numClockPoints,                        ///< [in] number of elements in pClocks
@@ -722,7 +725,7 @@ typedef xe_result_t (__xecall *xet_pfnFreqDomainGetSupportedClocks_t)(
 ///         + nullptr == hFreqDomain
 ///         + nullptr == pDividers
 ///     - ::XE_RESULT_ERROR_UNSUPPORTED
-__xedllexport xe_result_t __xecall
+xe_result_t __xecall
 xetFreqDomainGetSupportedClockDividers(
     xet_freq_domain_handle_t hFreqDomain,           ///< [in] handle of the frequency domain
     uint32_t numClockDividers,                      ///< [in] number of elements in pDividers
@@ -750,7 +753,7 @@ typedef xe_result_t (__xecall *xet_pfnFreqDomainGetSupportedClockDividers_t)(
 ///         + nullptr == pMinClock
 ///         + nullptr == pMaxClock
 ///     - ::XE_RESULT_ERROR_UNSUPPORTED
-__xedllexport xe_result_t __xecall
+xe_result_t __xecall
 xetFreqDomainGetClockRange(
     xet_freq_domain_handle_t hFreqDomain,           ///< [in] handle of the frequency domain
     uint32_t* pMinClock,                            ///< [out] min clock frequency in units of MHz
@@ -786,7 +789,7 @@ typedef xe_result_t (__xecall *xet_pfnFreqDomainGetClockRange_t)(
 ///     - ::XE_RESULT_ERROR_INVALID_PARAMETER
 ///         + nullptr == hFreqDomain
 ///     - ::XE_RESULT_ERROR_UNSUPPORTED
-__xedllexport xe_result_t __xecall
+xe_result_t __xecall
 xetFreqDomainSetClockRange(
     xet_freq_domain_handle_t hFreqDomain,           ///< [in] handle of the frequency domain
     uint32_t minClock,                              ///< [in] min clock frequency in units of MHz
@@ -819,7 +822,7 @@ typedef xe_result_t (__xecall *xet_pfnFreqDomainSetClockRange_t)(
 ///         + nullptr == hFreqDomain
 ///         + nullptr == pClockDividerRequest
 ///     - ::XE_RESULT_ERROR_UNSUPPORTED
-__xedllexport xe_result_t __xecall
+xe_result_t __xecall
 xetFreqDomainSetClockDivider(
     xet_freq_domain_handle_t hFreqDomain,           ///< [in] handle of the frequency domain
     xet_clock_divider_t* pClockDividerRequest       ///< [out] pointer to frequency divider request
@@ -845,7 +848,7 @@ typedef xe_result_t (__xecall *xet_pfnFreqDomainSetClockDivider_t)(
 ///         + nullptr == pFreqResolved
 ///         + nullptr == pFreqThrottleReasons
 ///     - ::XE_RESULT_ERROR_UNSUPPORTED
-__xedllexport xe_result_t __xecall
+xe_result_t __xecall
 xetFreqDomainGetCurrentFrequency(
     xet_freq_domain_handle_t hFreqDomain,           ///< [in] handle of the frequency domain
     uint32_t* pFreqRequest,                         ///< [out] current frequency in MHz requested by the driver
@@ -930,7 +933,7 @@ typedef struct _xet_fan_speed_info_t
 ///         + nullptr == hPower
 ///         + nullptr == pFanCount
 ///     - ::XE_RESULT_ERROR_UNSUPPORTED
-__xedllexport xe_result_t __xecall
+xe_result_t __xecall
 xetPowerFanCount(
     xet_power_handle_t hPower,                      ///< [in] handle of the power object
     uint32_t* pFanCount                             ///< [out] the number of fans on the device
@@ -954,7 +957,7 @@ typedef xe_result_t (__xecall *xet_pfnPowerFanCount_t)(
 ///         + nullptr == hPower
 ///         + nullptr == pFanProperties
 ///     - ::XE_RESULT_ERROR_UNSUPPORTED
-__xedllexport xe_result_t __xecall
+xe_result_t __xecall
 xetPowerFanGetProperties(
     xet_power_handle_t hPower,                      ///< [in] handle of the power object
     uint32_t fanIndex,                              ///< [in] fan index [0 .. ::xetPowerFanCount - 1]
@@ -985,7 +988,7 @@ typedef xe_result_t (__xecall *xet_pfnPowerFanGetProperties_t)(
 ///         + nullptr == pNumFanPoints
 ///         + nullptr == pFanPoints
 ///     - ::XE_RESULT_ERROR_UNSUPPORTED
-__xedllexport xe_result_t __xecall
+xe_result_t __xecall
 xetPowerFanGetSpeedTable(
     xet_power_handle_t hPower,                      ///< [in] handle of the power object
     uint32_t fanIndex,                              ///< [in] fan index [0 .. ::xetPowerFanCount - 1]
@@ -1021,7 +1024,7 @@ typedef xe_result_t (__xecall *xet_pfnPowerFanGetSpeedTable_t)(
 ///         + nullptr == hPower
 ///         + nullptr == pFanPoints
 ///     - ::XE_RESULT_ERROR_UNSUPPORTED
-__xedllexport xe_result_t __xecall
+xe_result_t __xecall
 xetPowerFanSetSpeedTable(
     xet_power_handle_t hPower,                      ///< [in] handle of the power object
     uint32_t fanIndex,                              ///< [in] fan index [0 .. ::xetPowerFanCount - 1]
@@ -1052,7 +1055,7 @@ typedef xe_result_t (__xecall *xet_pfnPowerFanSetSpeedTable_t)(
 ///         + nullptr == hPower
 ///         + nullptr == pFanSpeed
 ///     - ::XE_RESULT_ERROR_UNSUPPORTED
-__xedllexport xe_result_t __xecall
+xe_result_t __xecall
 xetPowerFanGetSpeed(
     xet_power_handle_t hPower,                      ///< [in] handle of the power object
     uint32_t startFanIndex,                         ///< [in] fan index [0 .. ::xetPowerFanCount - 1]
@@ -1087,7 +1090,7 @@ typedef xe_result_t (__xecall *xet_pfnPowerFanGetSpeed_t)(
 ///         + nullptr == hPower
 ///         + nullptr == pFanSpeed
 ///     - ::XE_RESULT_ERROR_UNSUPPORTED
-__xedllexport xe_result_t __xecall
+xe_result_t __xecall
 xetPowerFanSetSpeed(
     xet_power_handle_t hPower,                      ///< [in] handle of the power object
     uint32_t startFanIndex,                         ///< [in] fan index [0 .. ::xetPowerFanCount - 1]
@@ -1137,7 +1140,7 @@ typedef struct _xet_temperature_properties_t
 ///         + nullptr == hPower
 ///         + nullptr == pSensorCount
 ///     - ::XE_RESULT_ERROR_UNSUPPORTED
-__xedllexport xe_result_t __xecall
+xe_result_t __xecall
 xetPowerTemperatureSensorCount(
     xet_power_handle_t hPower,                      ///< [in] handle of the power object
     uint32_t* pSensorCount                          ///< [out] the number of temperature sensors on the device
@@ -1165,7 +1168,7 @@ typedef xe_result_t (__xecall *xet_pfnPowerTemperatureSensorCount_t)(
 ///         + nullptr == hPower
 ///         + nullptr == pProperties
 ///     - ::XE_RESULT_ERROR_UNSUPPORTED
-__xedllexport xe_result_t __xecall
+xe_result_t __xecall
 xetPowerGetTemperatureProperties(
     xet_power_handle_t hPower,                      ///< [in] handle of the power object
     uint32_t sensorIndex,                           ///< [in] sensor index [0 .. ::xetPowerTemperatureSensorCount]
@@ -1195,7 +1198,7 @@ typedef xe_result_t (__xecall *xet_pfnPowerGetTemperatureProperties_t)(
 ///         + nullptr == hPower
 ///         + nullptr == pTemperatures
 ///     - ::XE_RESULT_ERROR_UNSUPPORTED
-__xedllexport xe_result_t __xecall
+xe_result_t __xecall
 xetPowerGetTemperature(
     xet_power_handle_t hPower,                      ///< [in] handle of the power object
     uint32_t startSensorIndex,                      ///< [in] sensor index [0 .. ::xetPowerTemperatureSensorCount]
@@ -1230,7 +1233,7 @@ typedef xe_result_t (__xecall *xet_pfnPowerGetTemperature_t)(
 ///     - ::XE_RESULT_ERROR_INVALID_PARAMETER
 ///         + nullptr == hPower
 ///     - ::XE_RESULT_ERROR_UNSUPPORTED
-__xedllexport xe_result_t __xecall
+xe_result_t __xecall
 xetPowerSetTemperatureThreshold(
     xet_power_handle_t hPower,                      ///< [in] handle of the power object
     uint32_t sensorIndex,                           ///< [in] sensor index [0 .. ::xetPowerTemperatureSensorCount]
@@ -1289,7 +1292,7 @@ typedef struct _xet_activity_counters_t
 ///         + nullptr == hPower
 ///         + nullptr == pActivityCount
 ///     - ::XE_RESULT_ERROR_UNSUPPORTED
-__xedllexport xe_result_t __xecall
+xe_result_t __xecall
 xetPowerActivityCount(
     xet_power_handle_t hPower,                      ///< [in] handle of the power object
     uint32_t* pActivityCount                        ///< [out] the number of activity counters on the device
@@ -1317,7 +1320,7 @@ typedef xe_result_t (__xecall *xet_pfnPowerActivityCount_t)(
 ///         + nullptr == hPower
 ///         + nullptr == pProperties
 ///     - ::XE_RESULT_ERROR_UNSUPPORTED
-__xedllexport xe_result_t __xecall
+xe_result_t __xecall
 xetPowerGetActivityProperties(
     xet_power_handle_t hPower,                      ///< [in] handle of the power object
     uint32_t activityIndex,                         ///< [in] activity counter index [0 .. ::xetPowerActivityCount]
@@ -1347,7 +1350,7 @@ typedef xe_result_t (__xecall *xet_pfnPowerGetActivityProperties_t)(
 ///         + nullptr == hPower
 ///         + nullptr == pCounters
 ///     - ::XE_RESULT_ERROR_UNSUPPORTED
-__xedllexport xe_result_t __xecall
+xe_result_t __xecall
 xetPowerGetActivityCounters(
     xet_power_handle_t hPower,                      ///< [in] handle of the power object
     uint32_t startCounterIndex,                     ///< [in] sensor index [0 .. ::xetPowerActivityCount]

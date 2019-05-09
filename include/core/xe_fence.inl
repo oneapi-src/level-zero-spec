@@ -34,10 +34,25 @@
 #define _XE_FENCE_INL
 #if defined(__cplusplus)
 #pragma once
+#if !defined(_XE_API_HPP)
+#pragma message("warning: this file is not intended to be included directly")
+#endif
 #include "xe_fence.hpp"
 
 namespace xe
 {
+    ///////////////////////////////////////////////////////////////////////////////
+    Fence::Fence( 
+        CommandQueue* pCommandQueue,                    ///< pointer to parent object
+        fence_handle_t handle,                          ///< handle of fence object
+        desc_t desc                                     ///< descriptor of the fence object
+        ) :
+        m_pCommandQueue( pCommandQueue ),
+        m_handle( handle ),
+        m_desc( desc )
+    {
+    }
+
     ///////////////////////////////////////////////////////////////////////////////
     /// @brief C++ wrapper for ::xeFenceCreate
     /// 
@@ -50,13 +65,13 @@ namespace xe
     ///     - **vkCreateFence**
     /// 
     /// @returns
-    ///     - ::fence_handle_t: pointer to handle of fence object created
+    ///     - Fence: pointer to handle of fence object created
     /// 
     /// @throws result_t
-    inline fence_handle_t 
+    inline Fence* 
     Fence::Create(
-        command_queue_handle_t hCommandQueue,           ///< [in] handle of command queue
-        const fence_desc_t* desc                        ///< [in] pointer to fence descriptor
+        CommandQueue* hCommandQueue,                    ///< [in] handle of command queue
+        const desc_t* desc                              ///< [in] pointer to fence descriptor
         )
     {
         // auto result = ::xeFenceCreate( handle, hCommandQueue, desc );
@@ -82,7 +97,7 @@ namespace xe
     /// @throws result_t
     inline void 
     Fence::Destroy(
-        fence_handle_t hFence                           ///< [in] handle of fence object to destroy
+        Fence* hFence                                   ///< [in] handle of fence object to destroy
         )
     {
         // auto result = ::xeFenceDestroy( handle, hFence );

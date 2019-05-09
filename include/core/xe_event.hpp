@@ -34,6 +34,9 @@
 #define _XE_EVENT_HPP
 #if defined(__cplusplus)
 #pragma once
+#if !defined(_XE_API_HPP)
+#pragma message("warning: this file is not intended to be included directly")
+#endif
 #include "xe_common.hpp"
 
 namespace xe
@@ -42,18 +45,49 @@ namespace xe
     /// @brief C++ wrapper for event pool
     class EventPool
     {
-    protected:
-        ::xe_event_pool_handle_t m_handle;                ///< handle of event pool object
-        ::xe_event_pool_desc_t m_desc;                    ///< descriptor of the event object
+    public:
+        ///////////////////////////////////////////////////////////////////////////////
+        /// @brief API version of ::event_pool_desc_t
+        enum class desc_version_t
+        {
+            CURRENT = XE_MAKE_VERSION( 1, 0 ),              ///< version 1.0
 
+        };
+
+        ///////////////////////////////////////////////////////////////////////////////
+        /// @brief Supported event pool creation flags
+        enum class flag_t
+        {
+            DEFAULT = 0,                                    ///< signals and waits visible to the entire device and peer devices
+            HOST_VISIBLE = XE_BIT(0),                       ///< signals and waits are also visible to host
+            IPC = XE_BIT(1),                                ///< signals and waits may be shared across processes
+
+        };
+
+        ///////////////////////////////////////////////////////////////////////////////
+        /// @brief Event pool descriptor
+        struct desc_t
+        {
+            desc_version_t version = desc_version_t::CURRENT;   ///< [in] ::EVENT_POOL_DESC_VERSION_CURRENT
+            flag_t flags = flag_t::DEFAULT;                 ///< [in] creation flags
+            uint32_t count;                                 ///< [in] number of events within the pool
+
+        };
+
+
+    protected:
+        ///////////////////////////////////////////////////////////////////////////////
+        Device* m_pDevice;                              ///< pointer to parent object
+        event_pool_handle_t m_handle;                   ///< handle of event pool object
+        desc_t m_desc;                                  ///< descriptor of the event object
+
+        ///////////////////////////////////////////////////////////////////////////////
         EventPool( void ) = delete;
         EventPool( 
-                xe_event_pool_handle_t handle,                  ///< handle of event pool object
-                xe_event_pool_desc_t desc                       ///< descriptor of the event object
-                ) :
-                m_handle( handle ),
-                m_desc( desc )
-            {}
+            Device* pDevice,                                ///< pointer to parent object
+            event_pool_handle_t handle,                     ///< handle of event pool object
+            desc_t desc                                     ///< descriptor of the event object
+            );
 
         ~EventPool( void ) = default;
 
@@ -64,61 +98,59 @@ namespace xe
         void operator=( EventPool&& other ) = delete;
 
     public:
+        ///////////////////////////////////////////////////////////////////////////////
+        auto getDevice( void ) const { return m_pDevice; }
         auto getHandle( void ) const { return m_handle; }
         auto getDesc( void ) const { return m_desc; }
 
         ///////////////////////////////////////////////////////////////////////////////
-        /// @brief C++ version for ::xe_event_pool_desc_version_t
-        enum class event_pool_desc_version_t
-        {
-            CURRENT = XE_MAKE_VERSION( 1, 0 ),              ///< version 1.0
-
-        };
-
-        ///////////////////////////////////////////////////////////////////////////////
-        /// @brief C++ version for ::xe_event_pool_flag_t
-        enum class event_pool_flag_t
-        {
-            DEFAULT = 0,                                    ///< signals and waits visible to the entire device and peer devices
-            HOST_VISIBLE = XE_BIT(0),                       ///< signals and waits are also visible to host
-            IPC = XE_BIT(1),                                ///< signals and waits may be shared across processes
-
-        };
-
-        ///////////////////////////////////////////////////////////////////////////////
-        /// @brief C++ version for ::xe_event_pool_desc_t
-        struct event_pool_desc_t
-        {
-            event_pool_desc_version_t version = event_pool_desc_version_t::CURRENT; ///< [in] ::EVENT_POOL_DESC_VERSION_CURRENT
-            event_pool_flag_t flags = event_pool_flag_t::DEFAULT;   ///< [in] creation flags
-            uint32_t count;                                 ///< [in] number of events within the pool
-
-        };
-
-        ///////////////////////////////////////////////////////////////////////////////
-        /// @brief C++ wrapper for ::xeEventPoolCreate
+        /// @brief Creates a pool for a set of event(s) on the device.
+        /// 
+        /// @details
+        ///     - The application may call this function from simultaneous threads.
+        ///     - The implementation of this function should be lock-free.
         /// @returns
-        ///     - ::event_pool_handle_t: pointer handle of event pool object created
+        ///     - EventPool: pointer handle of event pool object created
         /// 
         /// @throws result_t
-        inline static event_pool_handle_t
+        inline static EventPool*
         Create(
-            device_handle_t hDevice,                        ///< [in] handle of the device
-            const event_pool_desc_t* desc                   ///< [in] pointer to event pool descriptor
+            Device* hDevice,                                ///< [in] handle of the device
+            const desc_t* desc                              ///< [in] pointer to event pool descriptor
             );
 
         ///////////////////////////////////////////////////////////////////////////////
-        /// @brief C++ wrapper for ::xeEventPoolDestroy
+        /// @brief Deletes an event pool object.
+        /// 
+        /// @details
+        ///     - The application is responsible for destroying all event handles
+        ///       created from the pool before destroying the pool itself
+        ///     - The application is responsible for making sure the GPU is not
+        ///       currently referencing the any event within the pool before it is
+        ///       deleted
+        ///     - The implementation of this function will immediately free all Host and
+        ///       Device allocations associated with this event pool
+        ///     - The application may **not** call this function from simultaneous
+        ///       threads with the same event pool handle.
+        ///     - The implementation of this function should be lock-free.
         /// @throws result_t
         inline static void
         Destroy(
-            event_pool_handle_t hEventPool                  ///< [in] handle of event pool object to destroy
+            EventPool* hEventPool                           ///< [in] handle of event pool object to destroy
             );
 
         ///////////////////////////////////////////////////////////////////////////////
-        /// @brief C++ wrapper for ::xeEventPoolGetIpcHandle
+        /// @brief Gets an IPC event pool handle for the specified event handle that can
+        ///        be shared with another process.
+        /// 
+        /// @details
+        ///     - The application may call this function from simultaneous threads.
+        /// 
+        /// @remarks
+        ///   _Analogues_
+        ///     - **cuIpcGetEventHandle**
         /// @returns
-        ///     - ::ipc_event_pool_handle_t: Returned IPC event handle
+        ///     - ipc_event_pool_handle_t: Returned IPC event handle
         /// 
         /// @throws result_t
         inline ipc_event_pool_handle_t
@@ -127,19 +159,39 @@ namespace xe
             );
 
         ///////////////////////////////////////////////////////////////////////////////
-        /// @brief C++ wrapper for ::xeEventPoolOpenIpcHandle
+        /// @brief Opens an IPC event pool handle to retrieve an event pool handle from
+        ///        another process.
+        /// 
+        /// @details
+        ///     - The event handle in this process should not be freed with
+        ///       ::EventPoolDestroy, but rather with ::EventPoolCloseIpcHandle.
+        ///     - The application may call this function from simultaneous threads.
+        /// 
+        /// @remarks
+        ///   _Analogues_
+        ///     - **cuIpcOpenMemHandle**
         /// @returns
-        ///     - ::event_pool_handle_t: pointer handle of event pool object created
+        ///     - EventPool: pointer handle of event pool object created
         /// 
         /// @throws result_t
-        inline static event_pool_handle_t
+        inline static EventPool*
         OpenIpcHandle(
-            device_handle_t hDevice,                        ///< [in] handle of the device to associate with the IPC event pool handle
+            Device* hDevice,                                ///< [in] handle of the device to associate with the IPC event pool handle
             ipc_event_pool_handle_t hIpc                    ///< [in] IPC event handle
             );
 
         ///////////////////////////////////////////////////////////////////////////////
-        /// @brief C++ wrapper for ::xeEventPoolCloseIpcHandle
+        /// @brief Closes an IPC event handle in the current process.
+        /// 
+        /// @details
+        ///     - Closes an IPC event handle by destroying events that were opened in
+        ///       this process using ::EventPoolOpenIpcHandle.
+        ///     - The application may **not** call this function from simultaneous
+        ///       threads with the same event pool handle.
+        /// 
+        /// @remarks
+        ///   _Analogues_
+        ///     - **cuIpcCloseMemHandle**
         /// @throws result_t
         inline void
         CloseIpcHandle(
@@ -152,38 +204,18 @@ namespace xe
     /// @brief C++ wrapper for event
     class Event
     {
-    protected:
-        ::xe_event_handle_t m_handle;                     ///< handle of event object
-
-        Event( void ) = delete;
-        Event( 
-                xe_event_handle_t handle                        ///< handle of event object
-                ) :
-                m_handle( handle )
-            {}
-
-        ~Event( void ) = default;
-
-        Event( Event const& other ) = delete;
-        void operator=( Event const& other ) = delete;
-
-        Event( Event&& other ) = delete;
-        void operator=( Event&& other ) = delete;
-
     public:
-        auto getHandle( void ) const { return m_handle; }
-
         ///////////////////////////////////////////////////////////////////////////////
-        /// @brief C++ version for ::xe_event_desc_version_t
-        enum class event_desc_version_t
+        /// @brief API version of ::event_desc_t
+        enum class desc_version_t
         {
             CURRENT = XE_MAKE_VERSION( 1, 0 ),              ///< version 1.0
 
         };
 
         ///////////////////////////////////////////////////////////////////////////////
-        /// @brief C++ version for ::xe_event_scope_flag_t
-        enum class event_scope_flag_t
+        /// @brief Supported event scope flags
+        enum class scope_flag_t
         {
             NONE = 0,                                       ///< execution synchronization only; no cache hierarchies are flushed or
                                                             ///< invalidated
@@ -197,40 +229,102 @@ namespace xe
         };
 
         ///////////////////////////////////////////////////////////////////////////////
-        /// @brief C++ version for ::xe_event_desc_t
-        struct event_desc_t
+        /// @brief Event descriptor
+        struct desc_t
         {
-            event_desc_version_t version = event_desc_version_t::CURRENT;   ///< [in] ::EVENT_DESC_VERSION_CURRENT
-            uint32_t index;                                 ///< [in] index of the event within the pool
-            event_scope_flag_t signal = event_scope_flag_t::NONE;   ///< [in] defines the scope of relevant cache hierarchies to flush on a
+            desc_version_t version = desc_version_t::CURRENT;   ///< [in] ::EVENT_DESC_VERSION_CURRENT
+            uint32_t index;                                 ///< [in] index of the event within the pool; must be less-than the count
+                                                            ///< specified during pool creation
+            scope_flag_t signal = scope_flag_t::NONE;       ///< [in] defines the scope of relevant cache hierarchies to flush on a
                                                             ///< ‘signal’ action before the event is triggered
-            event_scope_flag_t wait = event_scope_flag_t::NONE; ///< [in] defines the scope of relevant cache hierarchies to invalidate on
+            scope_flag_t wait = scope_flag_t::NONE;         ///< [in] defines the scope of relevant cache hierarchies to invalidate on
                                                             ///< a ‘wait’ action after the event is complete
 
         };
 
+
+    protected:
         ///////////////////////////////////////////////////////////////////////////////
-        /// @brief C++ wrapper for ::xeEventCreate
+        EventPool* m_pEventPool;                        ///< pointer to parent object
+        event_handle_t m_handle;                        ///< handle of event object
+
+        ///////////////////////////////////////////////////////////////////////////////
+        Event( void ) = delete;
+        Event( 
+            EventPool* pEventPool,                          ///< pointer to parent object
+            event_handle_t handle                           ///< handle of event object
+            );
+
+        ~Event( void ) = default;
+
+        Event( Event const& other ) = delete;
+        void operator=( Event const& other ) = delete;
+
+        Event( Event&& other ) = delete;
+        void operator=( Event&& other ) = delete;
+
+    public:
+        ///////////////////////////////////////////////////////////////////////////////
+        auto getEventpool( void ) const { return m_pEventPool; }
+        auto getHandle( void ) const { return m_handle; }
+
+        ///////////////////////////////////////////////////////////////////////////////
+        /// @brief Creates an event on the device.
+        /// 
+        /// @details
+        ///     - Multiple events cannot be created using the same location within the
+        ///       same pool.
+        ///     - The application may call this function from simultaneous threads.
+        ///     - The implementation of this function should be lock-free.
+        /// 
+        /// @remarks
+        ///   _Analogues_
+        ///     - **clCreateUserEvent**
+        ///     - vkCreateEvent
+        ///     - cuEventCreate
         /// @returns
-        ///     - ::event_handle_t: pointer to handle of event object created
+        ///     - Event: pointer to handle of event object created
         /// 
         /// @throws result_t
-        inline static event_handle_t
+        inline static Event*
         Create(
-            event_pool_handle_t hEventPool,                 ///< [in] handle of the event pool
-            const event_desc_t* desc                        ///< [in] pointer to event descriptor
+            EventPool* hEventPool,                          ///< [in] handle of the event pool
+            const desc_t* desc                              ///< [in] pointer to event descriptor
             );
 
         ///////////////////////////////////////////////////////////////////////////////
-        /// @brief C++ wrapper for ::xeEventDestroy
+        /// @brief Deletes an event object.
+        /// 
+        /// @details
+        ///     - The application is responsible for making sure the GPU is not
+        ///       currently referencing the event before it is deleted
+        ///     - The implementation of this function will immediately free all Host and
+        ///       Device allocations associated with this event
+        ///     - The application may **not** call this function from simultaneous
+        ///       threads with the same event handle.
+        ///     - The implementation of this function should be lock-free.
+        /// 
+        /// @remarks
+        ///   _Analogues_
+        ///     - **clReleaseEvent**
+        ///     - vkDestroyEvent
+        ///     - cuEventDestroy
         /// @throws result_t
         inline static void
         Destroy(
-            event_handle_t hEvent                           ///< [in] handle of event object to destroy
+            Event* hEvent                                   ///< [in] handle of event object to destroy
             );
 
         ///////////////////////////////////////////////////////////////////////////////
-        /// @brief C++ wrapper for ::xeEventHostSignal
+        /// @brief Signals a event from host.
+        /// 
+        /// @details
+        ///     - The application may call this function from simultaneous threads.
+        ///     - The implementation of this function should be lock-free.
+        /// 
+        /// @remarks
+        ///   _Analogues_
+        ///     - clSetUserEventStatus
         /// @throws result_t
         inline void
         HostSignal(
@@ -238,7 +332,16 @@ namespace xe
             );
 
         ///////////////////////////////////////////////////////////////////////////////
-        /// @brief C++ wrapper for ::xeEventHostSynchronize
+        /// @brief The current host thread waits on an event to be signalled.
+        /// 
+        /// @details
+        ///     - The application may call this function from simultaneous threads.
+        ///     - The implementation of this function should be lock-free.
+        /// 
+        /// @remarks
+        ///   _Analogues_
+        ///     - clWaitForEvents
+        ///     - cuEventSynchronize
         /// @throws result_t
         inline void
         HostSynchronize(
@@ -250,7 +353,17 @@ namespace xe
             );
 
         ///////////////////////////////////////////////////////////////////////////////
-        /// @brief C++ wrapper for ::xeEventQueryStatus
+        /// @brief Queries an event object's status.
+        /// 
+        /// @details
+        ///     - The application may call this function from simultaneous threads.
+        ///     - The implementation of this function should be lock-free.
+        /// 
+        /// @remarks
+        ///   _Analogues_
+        ///     - **clGetEventInfo**
+        ///     - vkGetEventStatus
+        ///     - cuEventQuery
         /// @throws result_t
         inline void
         QueryStatus(
@@ -258,7 +371,15 @@ namespace xe
             );
 
         ///////////////////////////////////////////////////////////////////////////////
-        /// @brief C++ wrapper for ::xeEventReset
+        /// @brief Reset an event back to not signaled state
+        /// 
+        /// @details
+        ///     - The application may call this function from simultaneous threads.
+        ///     - The implementation of this function should be lock-free.
+        /// 
+        /// @remarks
+        ///   _Analogues_
+        ///     - vkResetEvent
         /// @throws result_t
         inline void
         Reset(

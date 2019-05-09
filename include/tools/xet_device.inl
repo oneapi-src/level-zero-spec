@@ -61,30 +61,6 @@ namespace xet
         // if( ::XE_RESULT_SUCCESS != result ) throw exception(result, "xet::Device::ActivateMetricGroups");
     }
 
-    ///////////////////////////////////////////////////////////////////////////////
-    /// @brief C++ wrapper for ::xetDevicePowerInit
-    /// 
-    /// @details
-    ///     - Initializes internal structures to support power management features.
-    /// 
-    /// @remarks
-    ///   _Analogues_
-    ///     - **nvmlInit**
-    ///     - **rsmi_init**
-    /// 
-    /// @returns
-    ///     - Power: handle for accessing power features of the device
-    /// 
-    /// @throws result_t
-    inline Power* 
-    Device::PowerInit(
-        uint32_t flags                                  ///< [in] bitfield of ::power_init_flags_t
-        )
-    {
-        // auto result = ::xetDevicePowerInit( handle, flags );
-        // if( ::XE_RESULT_SUCCESS != result ) throw exception(result, "xet::Device::PowerInit");
-    }
-
 } // namespace xet
 #endif // defined(__cplusplus)
 #endif // _XET_DEVICE_INL

@@ -34,10 +34,21 @@
 #define _XET_SYSMAN_INL
 #if defined(__cplusplus)
 #pragma once
+#if !defined(_XET_API_HPP)
+#pragma message("warning: this file is not intended to be included directly")
+#endif
 #include "xet_sysman.hpp"
 
 namespace xet
 {
+    ///////////////////////////////////////////////////////////////////////////////
+    Sysman::Sysman( 
+        sysman_handle_t handle                          ///< handle of sysman object
+        ) :
+        m_handle( handle )
+    {
+    }
+
 } // namespace xet
 #endif // defined(__cplusplus)
 #endif // _XET_SYSMAN_INL

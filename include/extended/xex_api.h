@@ -36,12 +36,45 @@
 #include "xex_cmdgraph.h"
 #include "xex_device.h"
 
+#if defined(__cplusplus)
+extern "C" {
+#endif
+
 ///////////////////////////////////////////////////////////////////////////////
-typedef struct _xex_apitable_t
+/// @brief Table of CommandGraph functions pointers
+typedef struct _xex_command_graph_apitable_t
 {
-    xex_pfnCommandGraphCreate_t                                 pfnCommandGraphCreate;
-    xex_pfnCommandGraphDestroy_t                                pfnCommandGraphDestroy;
-    xex_pfnCommandGraphClose_t                                  pfnCommandGraphClose;
-} xex_apitable_t;
+    xex_pfnCommandGraphCreate_t                                 pfnCreate;
+    xex_pfnCommandGraphDestroy_t                                pfnDestroy;
+    xex_pfnCommandGraphClose_t                                  pfnClose;
+} xex_command_graph_apitable_t;
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Exported function for filling application's CommandGraph table
+///        with current process' addresses
+///
+/// @returns
+///     - ::XE_RESULT_SUCCESS
+///     - ::XE_RESULT_ERROR_INVALID_PARAMETER
+///         + invalid value for version
+///         + nullptr for ptable
+///     - ::XE_RESULT_ERROR_UNSUPPORTED
+///         + version not supported
+__xedllexport xe_result_t __xecall
+xexGetCommandGraphProcAddrTable(
+    uint32_t version,        ///< [in] ::XE_API_HEADER_VERSION
+    xex_command_graph_apitable_t* ptable   ///< [in,out] pointer to table of API function pointers
+    );
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Function-pointer for xexGetCommandGraphProcAddrTable
+typedef xe_result_t (__xecall *xex_pfnGetCommandGraphProcAddrTable_t)(
+    uint32_t,
+    xex_command_graph_apitable_t*
+    );
+
+#if defined(__cplusplus)
+} // extern "C"
+#endif
 
 #endif // _XEX_API_H

@@ -96,12 +96,14 @@ namespace xet
     ///////////////////////////////////////////////////////////////////////////////
     /// @brief Handle of a frequency domain on a device
     class FreqDomain;
-    using freq_domain_handle_t = FreqDomain*;
+    struct _freq_domain_handle_t;
+    using freq_domain_handle_t = _freq_domain_handle_t*;
 
     ///////////////////////////////////////////////////////////////////////////////
     /// @brief Handle of sysman object
     class Sysman;
-    using sysman_handle_t = Sysman*;
+    struct _sysman_handle_t;
+    using sysman_handle_t = _sysman_handle_t*;
 
 } // namespace xet
 #endif // defined(__cplusplus)

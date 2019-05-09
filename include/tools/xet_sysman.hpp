@@ -34,6 +34,9 @@
 #define _XET_SYSMAN_HPP
 #if defined(__cplusplus)
 #pragma once
+#if !defined(_XET_API_HPP)
+#pragma message("warning: this file is not intended to be included directly")
+#endif
 #include "xet_common.hpp"
 
 namespace xet
@@ -42,15 +45,17 @@ namespace xet
     /// @brief C++ wrapper for sysman
     class Sysman
     {
-    protected:
-        ::xet_sysman_handle_t m_handle;                   ///< handle of sysman object
+    public:
 
+    protected:
+        ///////////////////////////////////////////////////////////////////////////////
+        sysman_handle_t m_handle;                       ///< handle of sysman object
+
+        ///////////////////////////////////////////////////////////////////////////////
         Sysman( void ) = delete;
         Sysman( 
-                xet_sysman_handle_t handle                      ///< handle of sysman object
-                ) :
-                m_handle( handle )
-            {}
+            sysman_handle_t handle                          ///< handle of sysman object
+            );
 
         ~Sysman( void ) = default;
 
@@ -61,6 +66,7 @@ namespace xet
         void operator=( Sysman&& other ) = delete;
 
     public:
+        ///////////////////////////////////////////////////////////////////////////////
         auto getHandle( void ) const { return m_handle; }
 
     };
