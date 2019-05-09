@@ -110,10 +110,9 @@ add_custom_command(
 )
 
 include_directories(${CMAKE_CURRENT_SOURCE_DIR}/include/core)
-include_directories(${CMAKE_CURRENT_SOURCE_DIR}/core/source)
 include_directories("${CMAKE_CURRENT_SOURCE_DIR}")
 
-add_subdirectory(core)
+add_subdirectory(source)
 
 if (${PROJECT_NAME}_BUILD_TESTS)
     add_subdirectory(tests)
@@ -123,8 +122,6 @@ if (${PROJECT_NAME}_BUILD_TESTS)
             VS_STARTUP_PROJECT ${PROJECT_NAME}_unit_tests
     )
 endif()
-
-add_subdirectory(icd_loader)
 
 if(UNIX)
     include(CMakePackageConfigHelpers)

@@ -1,5 +1,5 @@
 add_library(level_zero_icd_loader
-    "${CMAKE_CURRENT_SOURCE_DIR}/icd_loader.cpp"
+    "${CMAKE_CURRENT_SOURCE_DIR}/loader.cpp"
 )
 
 target_include_directories(level_zero_icd_loader
@@ -31,7 +31,7 @@ if(UNIX)
         DESTINATION ${CMAKE_INSTALL_LIBDIR}
         COMPONENT loki-devel
     )
-    install(FILES icd_loader.h
+    install(FILES loader.h
         DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}/level_zero
         COMPONENT loki-devel
     )

@@ -1,7 +1,7 @@
 #include "xello_worlds.h"
 
 #define ENABLE_OCLOC_WRAPPER
-#include "core/source/ocloc_shared.h"
+#include "source/core/ocloc_shared.h"
 
 #include <algorithm>
 #include <iostream>

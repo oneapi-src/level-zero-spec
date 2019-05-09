@@ -75,8 +75,8 @@ target_compile_definitions(${TARGET_NAME}
 target_include_directories(${TARGET_NAME}
     BEFORE
     PRIVATE
-        $<TARGET_PROPERTY:${PROJECT_NAME},SOURCE_DIR>/source
-        $<TARGET_PROPERTY:${PROJECT_NAME},SOURCE_DIR>/source/os_interface
+        $<TARGET_PROPERTY:${PROJECT_NAME},SOURCE_DIR>/core
+        $<TARGET_PROPERTY:${PROJECT_NAME},SOURCE_DIR>/core/os_interface
         ${COMPUTE_RUNTIME_DIR}/unit_tests/mocks/embargo # TODO : Refactor GMM mocking in NEO
 )
 
@@ -84,13 +84,13 @@ if (UNIX)
     target_include_directories(${TARGET_NAME}
         BEFORE
         PRIVATE
-            $<TARGET_PROPERTY:${PROJECT_NAME},SOURCE_DIR>/source/os_interface/linux
+            $<TARGET_PROPERTY:${PROJECT_NAME},SOURCE_DIR>/core/os_interface/linux
     )
 else()
     target_include_directories(${TARGET_NAME}
         BEFORE
         PRIVATE
-            $<TARGET_PROPERTY:${PROJECT_NAME},SOURCE_DIR>/source/os_interface/windows
+            $<TARGET_PROPERTY:${PROJECT_NAME},SOURCE_DIR>/core/os_interface/windows
     )
 endif()
 

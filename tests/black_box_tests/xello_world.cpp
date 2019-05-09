@@ -1,6 +1,6 @@
 #include "xello_worlds.h"
 
-#include "icd_loader/icd_loader.h"
+#include "source/loader/loader.h"
 
 #include "xe_all.h"
 

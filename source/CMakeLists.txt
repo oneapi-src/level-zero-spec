@@ -53,7 +53,7 @@ target_link_libraries(${TARGET_NAME}
     ${OS_SPECIFIC_LIBS}
 )
 
-add_subdirectory(source)
+add_subdirectory(core)
 
 # Recreate ocloc as shared lib
 get_target_property(OCLOC_SOURCES ocloc SOURCES)
@@ -61,7 +61,7 @@ get_target_property(OCLOC_INCLUDES ocloc INCLUDE_DIRECTORIES)
 get_target_property(OCLOC_LIBRARY_DEPENDENCIES ocloc LINK_LIBRARIES)
 get_target_property(OCLOC_COMPILE_DEFINITIONS ocloc COMPILE_DEFINITIONS)
 
-add_library(ocloc_shared SHARED ${OCLOC_SOURCES} ${CMAKE_CURRENT_SOURCE_DIR}/source/ocloc_shared.cpp)
+add_library(ocloc_shared SHARED ${OCLOC_SOURCES} ${CMAKE_CURRENT_SOURCE_DIR}/core/ocloc_shared.cpp)
 target_include_directories(ocloc_shared PRIVATE ${OCLOC_INCLUDES} ${CMAKE_SOURCE_DIR}/include/core)
 target_link_libraries(ocloc_shared ${OCLOC_LIBRARY_DEPENDENCIES})
 target_compile_definitions(ocloc_shared PRIVATE ${OCLOC_COMPILE_DEFINITIONS} -DMOCKABLE_VIRTUAL= CL_USE_DEPRECATED_OPENCL_1_1_APIS CL_USE_DEPRECATED_OPENCL_1_2_APIS CL_USE_DEPRECATED_OPENCL_2_0_APIS CL_TARGET_OPENCL_VERSION=210)
@@ -73,14 +73,14 @@ if(UNIX)
         DESTINATION ${CMAKE_INSTALL_FULL_LIBDIR}/level_zero
         COMPONENT loki-core)
 
-    file(GLOB_RECURSE HEADER_FILES "include/*")
+    file(GLOB_RECURSE HEADER_FILES "${CMAKE_SOURCE_DIR}/include/*")
     list(REMOVE_ITEM HEADER_FILES "${CMAKE_CURRENT_SOURCE_DIR}/include/CMakeLists.txt")
     install(FILES ${HEADER_FILES}
         DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}/level_zero
         COMPONENT loki-devel
     )
 
-    install(FILES source/ocloc_shared.h
+    install(FILES core/ocloc_shared.h
         DESTINATION ${CMAKE_INSTALL_FULL_INCLUDEDIR}
         COMPONENT loki-devel)
     install(TARGETS ocloc_shared
@@ -93,3 +93,5 @@ if(UNIX)
         DESTINATION /etc/intel/level_zero/icd.d
         COMPONENT loki-core)
 endif()
+
+add_subdirectory(loader)

@@ -1,4 +1,4 @@
-#include "core/source/ptr.h"
+#include "ptr.h"
 
 #include "gtest/gtest.h"
 

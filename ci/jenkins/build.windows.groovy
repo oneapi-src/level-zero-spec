@@ -30,17 +30,15 @@
 				bat """\
 call c:\\irepo\\irepo select third_party\\windows_embargo.yml
 
-call c:\\irepo\\irepo ignore-folder extended
 call c:\\irepo\\irepo ignore-folder scripts
 call c:\\irepo\\irepo ignore-folder .git
 call c:\\irepo\\irepo ignore-folder ci
-call c:\\irepo\\irepo ignore-folder icd_loader
 call c:\\irepo\\irepo ignore-folder tests
 call c:\\irepo\\irepo ignore-folder images
-call c:\\irepo\\irepo ignore-folder core
 call c:\\irepo\\irepo ignore-folder samples
 call c:\\irepo\\irepo ignore-folder cmake
 call c:\\irepo\\irepo ignore-folder include
+call c:\\irepo\\irepo ignore-folder source
 
 call c:\\irepo\\irepo sync --clean --delete-unknown-content
 """

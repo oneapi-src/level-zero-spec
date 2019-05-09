@@ -39,17 +39,15 @@
 				sh """\
 ~/irepo/irepo select -d . third_party/linux_embargo.yml
 
-~/irepo/irepo ignore-folder extended
 ~/irepo/irepo ignore-folder scripts
 ~/irepo/irepo ignore-folder .git
 ~/irepo/irepo ignore-folder ci
-~/irepo/irepo ignore-folder icd_loader
 ~/irepo/irepo ignore-folder tests
 ~/irepo/irepo ignore-folder images
-~/irepo/irepo ignore-folder core
 ~/irepo/irepo ignore-folder samples
 ~/irepo/irepo ignore-folder cmake
 ~/irepo/irepo ignore-folder include
+~/irepo/irepo ignore-folder source
 
 ~/irepo/irepo sync --clean --delete-unknown-content
 ls -la

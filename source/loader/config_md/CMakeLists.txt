@@ -5,7 +5,7 @@ if(MSVC)
     string(REPLACE "/MT"  "/MD"  CMAKE_CXX_FLAGS_RELEASEINTERNAL "${CMAKE_CXX_FLAGS_RELEASEINTERNAL}")
     
     add_library(level_zero_icd_loader_MD
-        "${CMAKE_CURRENT_SOURCE_DIR}/../icd_loader.cpp"
+        "${CMAKE_CURRENT_SOURCE_DIR}/../loader.cpp"
     )
 
     target_include_directories(level_zero_icd_loader_MD
