@@ -37,7 +37,7 @@
 #if defined(__linux__)
 #  include <dlfcn.h>
 #  define HMODULE void*
-#  define LOAD_DRIVER_LIBRARY(NAME) dlopen("lib"NAME".so", RTLD_LAZY|RTLD_LOCAL)
+#  define LOAD_DRIVER_LIBRARY(NAME) dlopen("lib##NAME##.so", RTLD_LAZY|RTLD_LOCAL)
 #  define FREE_DRIVER_LIBRARY(LIB)  if(LIB) dlclose(LIB)
 #  define GET_FUNCTION_PTR(LIB, FUNC_NAME) dlsym(LIB, FUNC_NAME)
 #elif defined(_WIN32)
