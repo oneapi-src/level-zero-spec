@@ -49,13 +49,13 @@ namespace xex
     ///     - The implementation of this function should be lock-free.
     /// 
     /// @returns
-    ///     - ::command_graph_handle_t: pointer to handle of command graph object created
+    ///     - CommandGraph: pointer to handle of command graph object created
     /// 
     /// @throws result_t
-    inline command_graph_handle_t 
+    inline CommandGraph* 
     CommandGraph::Create(
-        xe::device_handle_t hDevice,                    ///< [in] handle of the device object
-        const command_graph_desc_t* desc                ///< [in] pointer to command graph descriptor
+        xe::Device* hDevice,                            ///< [in] handle of the device object
+        const desc_t* desc                              ///< [in] pointer to command graph descriptor
         )
     {
         // auto result = ::xexCommandGraphCreate( handle, hDevice, desc );
@@ -75,7 +75,7 @@ namespace xex
     /// @throws result_t
     inline void 
     CommandGraph::Destroy(
-        command_graph_handle_t hCommandGraph            ///< [in] handle of command graph object to destroy
+        CommandGraph* hCommandGraph                     ///< [in] handle of command graph object to destroy
         )
     {
         // auto result = ::xexCommandGraphDestroy( handle, hCommandGraph );

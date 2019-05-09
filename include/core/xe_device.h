@@ -74,8 +74,10 @@ typedef xe_result_t (__xecall *xe_pfnDeviceGetCount_t)(
     );
 
 ///////////////////////////////////////////////////////////////////////////////
+#ifndef XE_MAX_UUID_SIZE
 /// @brief Maximum device uuid size in bytes
 #define XE_MAX_UUID_SIZE  16
+#endif // XE_MAX_UUID_SIZE
 
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Device universal unique id (UUID)
@@ -207,8 +209,10 @@ typedef enum _xe_device_properties_version_t
 } xe_device_properties_version_t;
 
 ///////////////////////////////////////////////////////////////////////////////
+#ifndef XE_MAX_DEVICE_NAME
 /// @brief Maximum device name string size
 #define XE_MAX_DEVICE_NAME  256
+#endif // XE_MAX_DEVICE_NAME
 
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Device properties queried using ::xeDeviceGetProperties
@@ -283,8 +287,10 @@ typedef enum _xe_device_compute_properties_version_t
 } xe_device_compute_properties_version_t;
 
 ///////////////////////////////////////////////////////////////////////////////
+#ifndef XE_SUBGROUPSIZE_COUNT
 /// @brief Maximum number of subgroup sizes supported.
 #define XE_SUBGROUPSIZE_COUNT  8
+#endif // XE_SUBGROUPSIZE_COUNT
 
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Device compute properties queried using ::xeDeviceGetComputeProperties

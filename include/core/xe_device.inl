@@ -88,10 +88,10 @@ namespace xe
     /// @brief C++ wrapper for ::xeDeviceRegisterCLProgram
     /// 
     /// @returns
-    ///     - ::module_handle_t: pointer to handle of module object created
+    ///     - Module: pointer to handle of module object created
     /// 
     /// @throws result_t
-    inline module_handle_t 
+    inline Module* 
     Device::RegisterCLProgram(
         cl_context context,                             ///< [in] the OpenCL context that created the program
         cl_program program                              ///< [in] the OpenCL program to register
@@ -107,10 +107,10 @@ namespace xe
     /// @brief C++ wrapper for ::xeDeviceRegisterCLCommandQueue
     /// 
     /// @returns
-    ///     - ::command_queue_handle_t: pointer to handle of command queue object created
+    ///     - CommandQueue: pointer to handle of command queue object created
     /// 
     /// @throws result_t
-    inline command_queue_handle_t 
+    inline CommandQueue* 
     Device::RegisterCLCommandQueue(
         cl_context context,                             ///< [in] the OpenCL context that created the command queue
         cl_command_queue command_queue                  ///< [in] the OpenCL command queue to register
@@ -158,10 +158,10 @@ namespace xe
     ///     - clGetDeviceIDs
     /// 
     /// @returns
-    ///     - ::device_handle_t: pointer to handle of device object created
+    ///     - Device: pointer to handle of device object created
     /// 
     /// @throws result_t
-    inline device_handle_t 
+    inline Device* 
     Device::Get(
         uint32_t ordinal                                ///< [in] The device index in the range of [0, ::DeviceGetCount]
         )
@@ -183,10 +183,10 @@ namespace xe
     ///     - clGetDeviceIDs
     /// 
     /// @returns
-    ///     - ::device_handle_t: pointer to handle of sub-device object.
+    ///     - Device: pointer to handle of sub-device object.
     /// 
     /// @throws result_t
-    inline device_handle_t 
+    inline Device* 
     Device::GetSubDevice(
         uint32_t ordinal                                ///< [in] ordinal of sub-device to retrieve
         )
@@ -207,7 +207,7 @@ namespace xe
     ///     - **cuCtxGetApiVersion**
     /// 
     /// @returns
-    ///     - ::api_version_t: api version
+    ///     - api_version_t: api version
     /// 
     /// @throws result_t
     inline Device::api_version_t 
@@ -233,10 +233,10 @@ namespace xe
     ///     - clGetDeviceInfo
     /// 
     /// @returns
-    ///     - ::device_properties_t: query result for device properties
+    ///     - properties_t: query result for device properties
     /// 
     /// @throws result_t
-    inline Device::device_properties_t 
+    inline Device::properties_t 
     Device::GetProperties(
         void
         )
@@ -258,10 +258,10 @@ namespace xe
     ///     - clGetDeviceInfo
     /// 
     /// @returns
-    ///     - ::device_compute_properties_t: query result for compute properties
+    ///     - compute_properties_t: query result for compute properties
     /// 
     /// @throws result_t
-    inline Device::device_compute_properties_t 
+    inline Device::compute_properties_t 
     Device::GetComputeProperties(
         void
         )
@@ -284,10 +284,10 @@ namespace xe
     ///     - clGetDeviceInfo
     /// 
     /// @returns
-    ///     - ::device_memory_properties_t: query result for compute properties
+    ///     - memory_properties_t: query result for compute properties
     /// 
     /// @throws result_t
-    inline Device::device_memory_properties_t 
+    inline Device::memory_properties_t 
     Device::GetMemoryProperties(
         void
         )
@@ -308,12 +308,12 @@ namespace xe
     ///     - **cudaDeviceGetP2PAttribute**
     /// 
     /// @returns
-    ///     - ::device_p2p_properties_t: Peer-to-Peer properties between source and peer device
+    ///     - p2p_properties_t: Peer-to-Peer properties between source and peer device
     /// 
     /// @throws result_t
-    inline Device::device_p2p_properties_t 
+    inline Device::p2p_properties_t 
     Device::GetP2PProperties(
-        device_handle_t hPeerDevice                     ///< [in] handle of the peer device with the allocation
+        Device* hPeerDevice                             ///< [in] handle of the peer device with the allocation
         )
     {
         // auto result = ::xeDeviceGetP2PProperties( handle, hPeerDevice );
@@ -332,12 +332,12 @@ namespace xe
     ///     - **cudaDeviceCanAccessPeer**
     /// 
     /// @returns
-    ///     - ::bool_t: returned access capability
+    ///     - bool_t: returned access capability
     /// 
     /// @throws result_t
     inline bool_t 
     Device::CanAccessPeer(
-        device_handle_t hPeerDevice                     ///< [in] handle of the peer device with the allocation
+        Device* hPeerDevice                             ///< [in] handle of the peer device with the allocation
         )
     {
         // auto result = ::xeDeviceCanAccessPeer( handle, hPeerDevice );
@@ -439,7 +439,7 @@ namespace xe
     /// @throws result_t
     inline void 
     Device::MakeImageResident(
-        image_handle_t hImage                           ///< [in] handle of image to make resident
+        Image* hImage                                   ///< [in] handle of image to make resident
         )
     {
         // auto result = ::xeDeviceMakeImageResident( handle, hImage );
@@ -460,7 +460,7 @@ namespace xe
     /// @throws result_t
     inline void 
     Device::EvictImage(
-        image_handle_t hImage                           ///< [in] handle of image to make evict
+        Image* hImage                                   ///< [in] handle of image to make evict
         )
     {
         // auto result = ::xeDeviceEvictImage( handle, hImage );

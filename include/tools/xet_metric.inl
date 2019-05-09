@@ -50,7 +50,7 @@ namespace xet
     /// @throws result_t
     inline uint32_t 
     MetricGroup::GetCount(
-        xe::device_handle_t hDevice                     ///< [in] handle of the device object
+        xe::Device* hDevice                             ///< [in] handle of the device object
         )
     {
         // auto result = ::xetMetricGroupGetCount( handle, hDevice );
@@ -64,12 +64,12 @@ namespace xet
     ///     - The application may call this function from simultaneous threads.
     /// 
     /// @returns
-    ///     - ::metric_group_handle_t: metric group handle
+    ///     - MetricGroup: metric group handle
     /// 
     /// @throws result_t
-    inline metric_group_handle_t 
+    inline MetricGroup* 
     MetricGroup::Get(
-        xe::device_handle_t hDevice,                    ///< [in] handle of the device
+        xe::Device* hDevice,                            ///< [in] handle of the device
         uint32_t ordinal                                ///< [in] metric group index
         )
     {
@@ -84,10 +84,10 @@ namespace xet
     ///     - The application may call this function from simultaneous threads.
     /// 
     /// @returns
-    ///     - ::metric_group_properties_t: metric group properties
+    ///     - properties_t: metric group properties
     /// 
     /// @throws result_t
-    inline MetricGroup::metric_group_properties_t 
+    inline MetricGroup::properties_t 
     MetricGroup::GetProperties(
         void
         )
@@ -124,12 +124,12 @@ namespace xet
     ///     - The application may call this function from simultaneous threads.
     /// 
     /// @returns
-    ///     - ::metric_handle_t: handle of metric
+    ///     - Metric: handle of metric
     /// 
     /// @throws result_t
-    inline metric_handle_t 
+    inline Metric* 
     Metric::Get(
-        metric_group_handle_t hMetricGroup,             ///< [in] handle of the metric group
+        MetricGroup* hMetricGroup,                      ///< [in] handle of the metric group
         uint32_t ordinal                                ///< [in] metric index
         )
     {
@@ -144,10 +144,10 @@ namespace xet
     ///     - The application may call this function from simultaneous threads.
     /// 
     /// @returns
-    ///     - ::metric_properties_t: metric properties
+    ///     - properties_t: metric properties
     /// 
     /// @throws result_t
-    inline Metric::metric_properties_t 
+    inline Metric::properties_t 
     Metric::GetProperties(
         void
         )
@@ -164,14 +164,14 @@ namespace xet
     ///       threads with the same device handle.
     /// 
     /// @returns
-    ///     - ::metric_tracer_handle_t: handle of metric tracer
+    ///     - MetricTracer: handle of metric tracer
     /// 
     /// @throws result_t
-    inline metric_tracer_handle_t 
+    inline MetricTracer* 
     MetricTracer::Open(
-        xe::device_handle_t hDevice,                    ///< [in] handle of the device
-        metric_tracer_desc_t* pDesc,                    ///< [in,out] metric tracer descriptor
-        xe::event_handle_t hNotificationEvent           ///< [in] event used for report availability notification. Must be device
+        xe::Device* hDevice,                            ///< [in] handle of the device
+        desc_t* pDesc,                                  ///< [in,out] metric tracer descriptor
+        xe::Event* hNotificationEvent                   ///< [in] event used for report availability notification. Must be device
                                                         ///< to host type.
         )
     {
@@ -221,13 +221,13 @@ namespace xet
     ///     - The application may call this function from simultaneous threads.
     /// 
     /// @returns
-    ///     - ::metric_query_pool_handle_t: handle of metric query pool
+    ///     - MetricQueryPool: handle of metric query pool
     /// 
     /// @throws result_t
-    inline metric_query_pool_handle_t 
+    inline MetricQueryPool* 
     MetricQueryPool::Create(
-        xe::device_handle_t hDevice,                    ///< [in] handle of the device
-        metric_query_pool_desc_t* pDesc                 ///< [in] metric query pool creation data
+        xe::Device* hDevice,                            ///< [in] handle of the device
+        desc_t* pDesc                                   ///< [in] metric query pool creation data
         )
     {
         // auto result = ::xetMetricQueryPoolCreate( handle, hDevice, pDesc );
@@ -244,7 +244,7 @@ namespace xet
     /// @throws result_t
     inline void 
     MetricQueryPool::Destroy(
-        metric_query_pool_handle_t hMetricQueryPool     ///< [in] handle of the metric query pool
+        MetricQueryPool* hMetricQueryPool               ///< [in] handle of the metric query pool
         )
     {
         // auto result = ::xetMetricQueryPoolDestroy( handle, hMetricQueryPool );
@@ -258,10 +258,10 @@ namespace xet
     ///     - The application may call this function from simultaneous threads.
     /// 
     /// @returns
-    ///     - ::metric_query_handle_t: handle of metric query
+    ///     - MetricQuery: handle of metric query
     /// 
     /// @throws result_t
-    inline metric_query_handle_t 
+    inline MetricQuery* 
     MetricQueryPool::GetMetricQuery(
         uint32_t ordinal                                ///< [in] index of the query within the pool
         )

@@ -39,35 +39,37 @@
 #endif
 #include "xe_common.hpp"
 
+///////////////////////////////////////////////////////////////////////////////
+#ifndef XE_MAX_UUID_SIZE
+/// @brief Maximum device uuid size in bytes
+#define XE_MAX_UUID_SIZE  16
+#endif // XE_MAX_UUID_SIZE
+
+///////////////////////////////////////////////////////////////////////////////
+#ifndef XE_MAX_DEVICE_NAME
+/// @brief Maximum device name string size
+#define XE_MAX_DEVICE_NAME  256
+#endif // XE_MAX_DEVICE_NAME
+
+///////////////////////////////////////////////////////////////////////////////
+#ifndef XE_SUBGROUPSIZE_COUNT
+/// @brief Maximum number of subgroup sizes supported.
+#define XE_SUBGROUPSIZE_COUNT  8
+#endif // XE_SUBGROUPSIZE_COUNT
+
 namespace xe
 {
     ///////////////////////////////////////////////////////////////////////////////
     /// @brief C++ wrapper for device
     class Device
     {
-    protected:
-        ::xe_device_handle_t m_handle;                    ///< handle of device object
-
-        Device( void ) = delete;
-        Device( 
-                xe_device_handle_t handle                       ///< handle of device object
-                ) :
-                m_handle( handle )
-            {}
-
-        ~Device( void ) = default;
-
-        Device( Device const& other ) = delete;
-        void operator=( Device const& other ) = delete;
-
-        Device( Device&& other ) = delete;
-        void operator=( Device&& other ) = delete;
-
     public:
-        auto getHandle( void ) const { return m_handle; }
-
         ///////////////////////////////////////////////////////////////////////////////
-        /// @brief C++ version for ::xe_api_version_t
+        /// @brief Supported API versions
+        /// 
+        /// @details
+        ///     - API versions contain major and minor attributes, use ::MAJOR_VERSION
+        ///       and ::MINOR_VERSION
         enum class api_version_t
         {
             _1_0 = XE_MAKE_VERSION( 1, 0 ),                 ///< 1.0
@@ -75,31 +77,35 @@ namespace xe
         };
 
         ///////////////////////////////////////////////////////////////////////////////
-        /// @brief C++ version for ::xe_device_properties_version_t
-        enum class device_properties_version_t
+        /// @brief API version of ::device_properties_t
+        enum class properties_version_t
         {
             CURRENT = XE_MAKE_VERSION( 1, 0 ),              ///< version 1.0
 
         };
 
         ///////////////////////////////////////////////////////////////////////////////
-        /// @brief C++ version for ::xe_device_compute_properties_version_t
-        enum class device_compute_properties_version_t
+        /// @brief API version of ::device_compute_properties_t
+        enum class compute_properties_version_t
         {
             CURRENT = XE_MAKE_VERSION( 1, 0 ),              ///< version 1.0
 
         };
 
         ///////////////////////////////////////////////////////////////////////////////
-        /// @brief C++ version for ::xe_device_memory_properties_version_t
-        enum class device_memory_properties_version_t
+        /// @brief API version of ::device_memory_properties_t
+        enum class memory_properties_version_t
         {
             CURRENT = XE_MAKE_VERSION( 1, 0 ),              ///< version 1.0
 
         };
 
         ///////////////////////////////////////////////////////////////////////////////
-        /// @brief C++ version for ::xe_memory_access_capabilities_t
+        /// @brief Memory access capabilities
+        /// 
+        /// @details
+        ///     - Supported access capabilities for different types of memory
+        ///       allocations
         enum class memory_access_capabilities_t
         {
             MEMORY_ACCESS = XE_BIT( 0 ),                    ///< Supports load/store access
@@ -110,15 +116,18 @@ namespace xe
         };
 
         ///////////////////////////////////////////////////////////////////////////////
-        /// @brief C++ version for ::xe_device_p2p_properties_version_t
-        enum class device_p2p_properties_version_t
+        /// @brief API version of ::device_p2p_properties_t
+        enum class p2p_properties_version_t
         {
             CURRENT = XE_MAKE_VERSION( 1, 0 ),              ///< version 1.0
 
         };
 
         ///////////////////////////////////////////////////////////////////////////////
-        /// @brief C++ version for ::xe_cache_config_t
+        /// @brief Supported Cache Config
+        /// 
+        /// @details
+        ///     - Supported Cache Config (Default, Large SLM, Large Data Cache)
         enum class cache_config_t
         {
             DEFAULT = XE_BIT( 0 ),                          ///< Default Config
@@ -128,22 +137,22 @@ namespace xe
         };
 
         ///////////////////////////////////////////////////////////////////////////////
-        /// @brief C++ version for ::xe_device_uuid_t
-        struct device_uuid_t
+        /// @brief Device universal unique id (UUID)
+        struct uuid_t
         {
             uint8_t id[XE_MAX_UUID_SIZE];                   ///< [out] device universal unique id
 
         };
 
         ///////////////////////////////////////////////////////////////////////////////
-        /// @brief C++ version for ::xe_device_properties_t
-        struct device_properties_t
+        /// @brief Device properties queried using ::DeviceGetProperties
+        struct properties_t
         {
-            device_properties_version_t version = device_properties_version_t::CURRENT; ///< [in] ::DEVICE_PROPERTIES_VERSION_CURRENT
+            properties_version_t version = properties_version_t::CURRENT;   ///< [in] ::DEVICE_PROPERTIES_VERSION_CURRENT
             uint32_t vendorId;                              ///< [out] vendor id from PCI configuration
             uint32_t deviceId;                              ///< [out] device id from PCI configuration
             uint32_t subdeviceId;                           ///< [out] Subdevice id. Only valid if isSubdevice is true.
-            device_uuid_t uuid;                             ///< [out] unique id for device.
+            uuid_t uuid;                                    ///< [out] unique id for device.
             bool_t isSubdevice;                             ///< [out] Is this a subdevice.
             uint32_t numSubDevices;                         ///< [out] Number of sub-devices.
             uint32_t coreClockRate;                         ///< [out] Clock rate for device core.
@@ -166,10 +175,10 @@ namespace xe
         };
 
         ///////////////////////////////////////////////////////////////////////////////
-        /// @brief C++ version for ::xe_device_compute_properties_t
-        struct device_compute_properties_t
+        /// @brief Device compute properties queried using ::DeviceGetComputeProperties
+        struct compute_properties_t
         {
-            device_compute_properties_version_t version = device_compute_properties_version_t::CURRENT; ///< [in] ::DEVICE_COMPUTE_PROPERTIES_VERSION_CURRENT
+            compute_properties_version_t version = compute_properties_version_t::CURRENT;   ///< [in] ::DEVICE_COMPUTE_PROPERTIES_VERSION_CURRENT
             uint32_t maxTotalGroupSize;                     ///< [out] Maximum items per compute group. (maxGroupSizeX * maxGroupSizeY
                                                             ///< * maxGroupSizeZ) <= maxTotalGroupSize
             uint32_t maxGroupSizeX;                         ///< [out] Maximum items for X dimension in group
@@ -186,10 +195,10 @@ namespace xe
         };
 
         ///////////////////////////////////////////////////////////////////////////////
-        /// @brief C++ version for ::xe_device_memory_properties_t
-        struct device_memory_properties_t
+        /// @brief Device memory properties queried using ::DeviceGetMemoryProperties
+        struct memory_properties_t
         {
-            device_memory_properties_version_t version = device_memory_properties_version_t::CURRENT;   ///< [in] ::DEVICE_MEMORY_PROPERTIES_VERSION_CURRENT
+            memory_properties_version_t version = memory_properties_version_t::CURRENT; ///< [in] ::DEVICE_MEMORY_PROPERTIES_VERSION_CURRENT
             bool_t unifiedMemory;                           ///< [out] Host and device share same physical memory.
             bool_t onDemandPageFaults;                      ///< [out] Device supports on-demand page-faulting.
             uint32_t maxImageDims1D;                        ///< [out] Maximum image dimensions for 1D resources.
@@ -211,17 +220,50 @@ namespace xe
         };
 
         ///////////////////////////////////////////////////////////////////////////////
-        /// @brief C++ version for ::xe_device_p2p_properties_t
-        struct device_p2p_properties_t
+        /// @brief Device properties queried using ::DeviceGetP2PProperties
+        struct p2p_properties_t
         {
-            device_p2p_properties_version_t version = device_p2p_properties_version_t::CURRENT; ///< [in] ::DEVICE_P2P_PROPERTIES_VERSION_CURRENT
+            p2p_properties_version_t version = p2p_properties_version_t::CURRENT;   ///< [in] ::DEVICE_P2P_PROPERTIES_VERSION_CURRENT
             bool_t isP2PSupported;                          ///< [out] Is P2P access supported between two devices
             bool_t isAtomicsSupported;                      ///< [out] Are atomics supported between two devices
 
         };
 
+
+    protected:
         ///////////////////////////////////////////////////////////////////////////////
-        /// @brief C++ wrapper for ::xeDeviceGetCount
+        device_handle_t m_handle;                       ///< handle of device object
+
+        ///////////////////////////////////////////////////////////////////////////////
+        Device( void ) = delete;
+        Device( 
+                device_handle_t handle                          ///< handle of device object
+                ) :
+                m_handle( handle )
+            {}
+
+        ~Device( void ) = default;
+
+        Device( Device const& other ) = delete;
+        void operator=( Device const& other ) = delete;
+
+        Device( Device&& other ) = delete;
+        void operator=( Device&& other ) = delete;
+
+    public:
+        ///////////////////////////////////////////////////////////////////////////////
+        auto getHandle( void ) const { return m_handle; }
+
+        ///////////////////////////////////////////////////////////////////////////////
+        /// @brief Reports the number of devices
+        /// 
+        /// @details
+        ///     - The application may call this function from simultaneous threads.
+        ///     - The implementation of this function should be lock-free.
+        /// 
+        /// @remarks
+        ///   _Analogues_
+        ///     - **cuDeviceGetCount**
         /// @returns
         ///     - uint32_t: number of devices available
         /// 
@@ -232,31 +274,57 @@ namespace xe
             );
 
         ///////////////////////////////////////////////////////////////////////////////
-        /// @brief C++ wrapper for ::xeDeviceGet
+        /// @brief Returns a handle to the device object
+        /// 
+        /// @details
+        ///     - The application may call this function from simultaneous threads.
+        ///     - The implementation of this function should be lock-free.
+        /// 
+        /// @remarks
+        ///   _Analogues_
+        ///     - **cuDeviceGet**
+        ///     - clGetDeviceIDs
         /// @returns
-        ///     - ::device_handle_t: pointer to handle of device object created
+        ///     - Device: pointer to handle of device object created
         /// 
         /// @throws result_t
-        inline static device_handle_t
+        inline static Device*
         Get(
             uint32_t ordinal                                ///< [in] The device index in the range of [0, ::DeviceGetCount]
             );
 
         ///////////////////////////////////////////////////////////////////////////////
-        /// @brief C++ wrapper for ::xeDeviceGetSubDevice
+        /// @brief Returns a handle to the sub-device object
+        /// 
+        /// @details
+        ///     - The application may call this function from simultaneous threads.
+        ///     - The implementation of this function should be lock-free.
+        /// 
+        /// @remarks
+        ///   _Analogues_
+        ///     - **cuDeviceGet**
+        ///     - clGetDeviceIDs
         /// @returns
-        ///     - ::device_handle_t: pointer to handle of sub-device object.
+        ///     - Device: pointer to handle of sub-device object.
         /// 
         /// @throws result_t
-        inline device_handle_t
+        inline Device*
         GetSubDevice(
             uint32_t ordinal                                ///< [in] ordinal of sub-device to retrieve
             );
 
         ///////////////////////////////////////////////////////////////////////////////
-        /// @brief C++ wrapper for ::xeDeviceGetApiVersion
+        /// @brief Returns the API version supported by the device
+        /// 
+        /// @details
+        ///     - The application may call this function from simultaneous threads.
+        ///     - The implementation of this function should be lock-free.
+        /// 
+        /// @remarks
+        ///   _Analogues_
+        ///     - **cuCtxGetApiVersion**
         /// @returns
-        ///     - ::api_version_t: api version
+        ///     - api_version_t: api version
         /// 
         /// @throws result_t
         inline api_version_t
@@ -265,62 +333,116 @@ namespace xe
             );
 
         ///////////////////////////////////////////////////////////////////////////////
-        /// @brief C++ wrapper for ::xeDeviceGetProperties
+        /// @brief Retrieves attributes of the device
+        /// 
+        /// @details
+        ///     - The application may call this function from simultaneous threads.
+        ///     - The implementation of this function should be lock-free.
+        /// 
+        /// @remarks
+        ///   _Analogues_
+        ///     - **cuDeviceGetAttribute**
+        ///     - cuDeviceGetName
+        ///     - clGetDeviceInfo
         /// @returns
-        ///     - ::device_properties_t: query result for device properties
+        ///     - properties_t: query result for device properties
         /// 
         /// @throws result_t
-        inline device_properties_t
+        inline properties_t
         GetProperties(
             void
             );
 
         ///////////////////////////////////////////////////////////////////////////////
-        /// @brief C++ wrapper for ::xeDeviceGetComputeProperties
+        /// @brief Retrieves compute attributes of the device
+        /// 
+        /// @details
+        ///     - The application may call this function from simultaneous threads.
+        ///     - The implementation of this function should be lock-free.
+        /// 
+        /// @remarks
+        ///   _Analogues_
+        ///     - **cuDeviceGetAttribute**
+        ///     - clGetDeviceInfo
         /// @returns
-        ///     - ::device_compute_properties_t: query result for compute properties
+        ///     - compute_properties_t: query result for compute properties
         /// 
         /// @throws result_t
-        inline device_compute_properties_t
+        inline compute_properties_t
         GetComputeProperties(
             void
             );
 
         ///////////////////////////////////////////////////////////////////////////////
-        /// @brief C++ wrapper for ::xeDeviceGetMemoryProperties
+        /// @brief Retrieves memory attributes of the device
+        /// 
+        /// @details
+        ///     - The application may call this function from simultaneous threads.
+        ///     - The implementation of this function should be lock-free.
+        /// 
+        /// @remarks
+        ///   _Analogues_
+        ///     - **cuDeviceGetAttribute**
+        ///     - cuDeviceTotalMem
+        ///     - clGetDeviceInfo
         /// @returns
-        ///     - ::device_memory_properties_t: query result for compute properties
+        ///     - memory_properties_t: query result for compute properties
         /// 
         /// @throws result_t
-        inline device_memory_properties_t
+        inline memory_properties_t
         GetMemoryProperties(
             void
             );
 
         ///////////////////////////////////////////////////////////////////////////////
-        /// @brief C++ wrapper for ::xeDeviceGetP2PProperties
+        /// @brief Retrieves Peer-to-Peer properties between one device and a peer
+        ///        devices
+        /// 
+        /// @details
+        ///     - The application may call this function from simultaneous threads.
+        ///     - The implementation of this function should be lock-free.
+        /// 
+        /// @remarks
+        ///   _Analogues_
+        ///     - **cudaDeviceGetP2PAttribute**
         /// @returns
-        ///     - ::device_p2p_properties_t: Peer-to-Peer properties between source and peer device
+        ///     - p2p_properties_t: Peer-to-Peer properties between source and peer device
         /// 
         /// @throws result_t
-        inline device_p2p_properties_t
+        inline p2p_properties_t
         GetP2PProperties(
-            device_handle_t hPeerDevice                     ///< [in] handle of the peer device with the allocation
+            Device* hPeerDevice                             ///< [in] handle of the peer device with the allocation
             );
 
         ///////////////////////////////////////////////////////////////////////////////
-        /// @brief C++ wrapper for ::xeDeviceCanAccessPeer
+        /// @brief Queries if one device can directly access peer device allocations
+        /// 
+        /// @details
+        ///     - The application may call this function from simultaneous threads.
+        ///     - The implementation of this function should be lock-free.
+        /// 
+        /// @remarks
+        ///   _Analogues_
+        ///     - **cudaDeviceCanAccessPeer**
         /// @returns
-        ///     - ::bool_t: returned access capability
+        ///     - bool_t: returned access capability
         /// 
         /// @throws result_t
         inline bool_t
         CanAccessPeer(
-            device_handle_t hPeerDevice                     ///< [in] handle of the peer device with the allocation
+            Device* hPeerDevice                             ///< [in] handle of the peer device with the allocation
             );
 
         ///////////////////////////////////////////////////////////////////////////////
-        /// @brief C++ wrapper for ::xeDeviceSetIntermediateCacheConfig
+        /// @brief Sets the preferred Intermediate cache configuration for a device.
+        /// 
+        /// @details
+        ///     - The application may **not** call this function from simultaneous
+        ///       threads with the same device handle.
+        /// 
+        /// @remarks
+        ///   _Analogues_
+        ///     - **cudaFuncSetCacheConfig **
         /// @throws result_t
         inline void
         SetIntermediateCacheConfig(
@@ -328,7 +450,15 @@ namespace xe
             );
 
         ///////////////////////////////////////////////////////////////////////////////
-        /// @brief C++ wrapper for ::xeDeviceSetLastLevelCacheConfig
+        /// @brief Sets the preferred Last Level cache configuration for a device.
+        /// 
+        /// @details
+        ///     - The application may **not** call this function from simultaneous
+        ///       threads with the same device handle.
+        /// 
+        /// @remarks
+        ///   _Analogues_
+        ///     - **cudaFuncSetCacheConfig **
         /// @throws result_t
         inline void
         SetLastLevelCacheConfig(
@@ -336,7 +466,17 @@ namespace xe
             );
 
         ///////////////////////////////////////////////////////////////////////////////
-        /// @brief C++ wrapper for ::xeDeviceSystemBarrier
+        /// @brief Ensures in-bound writes to the device are globally observable.
+        /// 
+        /// @details
+        ///     - This is a special-case system level barrier that can be used to ensure
+        ///       global observability of writes; typically needed after a producer
+        ///       (e.g., NIC) performs direct writes to the device's memory (e.g.,
+        ///       Direct RDMA writes).  This is typically required when the memory
+        ///       corresponding to the writes is subsequently accessed from a remote
+        ///       device.
+        ///     - The application may call this function from simultaneous threads.
+        ///     - The implementation of this function should be lock-free.
         /// @throws result_t
         inline void
         SystemBarrier(
@@ -345,7 +485,7 @@ namespace xe
 
 #if XE_ENABLE_OCL_INTEROP
         ///////////////////////////////////////////////////////////////////////////////
-        /// @brief C++ wrapper for ::xeDeviceRegisterCLMemory
+        /// @brief Registers OpenCL memory with Xe::
         /// @returns
         ///     - void*: pointer to device allocation
         /// 
@@ -359,12 +499,12 @@ namespace xe
 
 #if XE_ENABLE_OCL_INTEROP
         ///////////////////////////////////////////////////////////////////////////////
-        /// @brief C++ wrapper for ::xeDeviceRegisterCLProgram
+        /// @brief Registers OpenCL program with Xe::
         /// @returns
-        ///     - ::module_handle_t: pointer to handle of module object created
+        ///     - Module: pointer to handle of module object created
         /// 
         /// @throws result_t
-        inline module_handle_t
+        inline Module*
         RegisterCLProgram(
             cl_context context,                             ///< [in] the OpenCL context that created the program
             cl_program program                              ///< [in] the OpenCL program to register
@@ -373,12 +513,12 @@ namespace xe
 
 #if XE_ENABLE_OCL_INTEROP
         ///////////////////////////////////////////////////////////////////////////////
-        /// @brief C++ wrapper for ::xeDeviceRegisterCLCommandQueue
+        /// @brief Registers OpenCL command queue with Xe::
         /// @returns
-        ///     - ::command_queue_handle_t: pointer to handle of command queue object created
+        ///     - CommandQueue: pointer to handle of command queue object created
         /// 
         /// @throws result_t
-        inline command_queue_handle_t
+        inline CommandQueue*
         RegisterCLCommandQueue(
             cl_context context,                             ///< [in] the OpenCL context that created the command queue
             cl_command_queue command_queue                  ///< [in] the OpenCL command queue to register
@@ -386,7 +526,13 @@ namespace xe
 #endif // XE_ENABLE_OCL_INTEROP
 
         ///////////////////////////////////////////////////////////////////////////////
-        /// @brief C++ wrapper for ::xeDeviceMakeMemoryResident
+        /// @brief Makes memory resident for the device.
+        /// 
+        /// @details
+        ///     - If the application does not properly manage residency then the device
+        ///       may experience unrecoverable page-faults.
+        ///     - The application may call this function from simultaneous threads.
+        ///     - The implementation of this function should be lock-free.
         /// @throws result_t
         inline void
         MakeMemoryResident(
@@ -395,7 +541,14 @@ namespace xe
             );
 
         ///////////////////////////////////////////////////////////////////////////////
-        /// @brief C++ wrapper for ::xeDeviceEvictMemory
+        /// @brief Allows memory to be evicted from the device.
+        /// 
+        /// @details
+        ///     - The application is responsible for making sure the GPU is not
+        ///       currently referencing the memory before it is evicted
+        ///     - Memory is always implicitly evicted if it is resident when freed.
+        ///     - The application may call this function from simultaneous threads.
+        ///     - The implementation of this function should be lock-free.
         /// @throws result_t
         inline void
         EvictMemory(
@@ -404,19 +557,33 @@ namespace xe
             );
 
         ///////////////////////////////////////////////////////////////////////////////
-        /// @brief C++ wrapper for ::xeDeviceMakeImageResident
+        /// @brief Makes image resident for the device.
+        /// 
+        /// @details
+        ///     - If the application does not properly manage residency then the device
+        ///       may experience unrecoverable page-faults.
+        ///     - The application may call this function from simultaneous threads.
+        ///     - The implementation of this function should be lock-free.
         /// @throws result_t
         inline void
         MakeImageResident(
-            image_handle_t hImage                           ///< [in] handle of image to make resident
+            Image* hImage                                   ///< [in] handle of image to make resident
             );
 
         ///////////////////////////////////////////////////////////////////////////////
-        /// @brief C++ wrapper for ::xeDeviceEvictImage
+        /// @brief Allows image to be evicted from the device.
+        /// 
+        /// @details
+        ///     - The application is responsible for making sure the GPU is not
+        ///       currently referencing the memory before it is evicted
+        ///     - An image is always implicitly evicted if it is resident when
+        ///       destroyed.
+        ///     - The application may call this function from simultaneous threads.
+        ///     - The implementation of this function should be lock-free.
         /// @throws result_t
         inline void
         EvictImage(
-            image_handle_t hImage                           ///< [in] handle of image to make evict
+            Image* hImage                                   ///< [in] handle of image to make evict
             );
 
     };

@@ -54,7 +54,7 @@ namespace xet
     inline void 
     Device::ActivateMetricGroups(
         uint32_t count,                                 ///< [in] metric group count to activate. 0 to deactivate.
-        metric_group_handle_t* phMetricGroups           ///< [in] handles of the metric groups to activate. NULL to deactivate.
+        MetricGroup* phMetricGroups                     ///< [in] handles of the metric groups to activate. NULL to deactivate.
         )
     {
         // auto result = ::xetDeviceActivateMetricGroups( handle, count, phMetricGroups );
@@ -73,10 +73,10 @@ namespace xet
     ///     - **rsmi_init**
     /// 
     /// @returns
-    ///     - ::power_handle_t: handle for accessing power features of the device
+    ///     - Power: handle for accessing power features of the device
     /// 
     /// @throws result_t
-    inline power_handle_t 
+    inline Power* 
     Device::PowerInit(
         uint32_t flags                                  ///< [in] bitfield of ::power_init_flags_t
         )

@@ -66,6 +66,10 @@ extern "C" {
 %for obj in objects:
 %if not re.match(r"class", obj['type']):
 ///////////////////////////////////////////////////////////////////////////////
+## CONDITION-START ############################################################
+%if re.match(r"macro", obj['type']):
+#ifndef ${th.make_macro_name(n, tags, obj, params=False)}
+%endif
 %if 'condition' in obj:
 #if ${th.subt(n, tags, obj['condition'])}
 %endif
@@ -77,40 +81,40 @@ extern "C" {
 %endfor
 ## MACRO ######################################################################
 %if re.match(r"macro", obj['type']):
-#define ${th.subt(n, tags, obj['name'])}  ${th.subt(n, tags, obj['value'])}
+#define ${th.make_macro_name(n, tags, obj)}  ${th.subt(n, tags, obj['value'])}
 %if 'altvalue' in obj:
 #else
-#define ${th.subt(n, tags, obj['name'])}  ${th.subt(n, tags, obj['altvalue'])}
+#define ${th.make_macro_name(n, tags, obj)}  ${th.subt(n, tags, obj['altvalue'])}
 %endif
 ## TYPEDEF ####################################################################
 %elif re.match(r"typedef", obj['type']):
 %if 'params' in obj:
-typedef ${obj['returns']}(__${x}call *${th.subt(n, tags, obj['name'])})(
-  %for line in th.make_param_lines(n, tags, obj):
-  ${line}
-  %endfor
-  );
+typedef ${obj['returns']}(__${x}call *${th.make_type_name(n, tags, obj)})(
+    %for line in th.make_param_lines(n, tags, obj):
+    ${line}
+    %endfor
+    );
 %else:
-typedef ${th.subt(n, tags, obj['value'])} ${th.subt(n, tags, obj['name'])};
+typedef ${th.subt(n, tags, obj['value'])} ${th.make_type_name(n, tags, obj)};
 %endif
 ## ENUM #######################################################################
 %elif re.match(r"enum", obj['type']):
-typedef enum _${th.subt(n, tags, obj['name'])}
+typedef enum _${th.make_type_name(n, tags, obj)}
 {
     %for line in th.make_etor_lines(n, tags, obj):
     ${line}
     %endfor
 
-} ${th.subt(n, tags, obj['name'])};
+} ${th.make_type_name(n, tags, obj)};
 ## STRUCT/UNION ###############################################################
-%elif re.match(r"struct", obj['type']) or re.match(r"union", obj['type']):
-typedef ${obj['type']} _${th.subt(n, tags, obj['name'])}
+%elif re.match(r"struct|union", obj['type']):
+typedef ${obj['type']} _${th.make_type_name(n, tags, obj)}
 {
     %for line in th.make_member_lines(n, tags, obj):
     ${line}
     %endfor
 
-} ${th.subt(n, tags, obj['name'])};
+} ${th.make_type_name(n, tags, obj)};
 ## FUNCTION ###################################################################
 %elif re.match(r"function", obj['type']):
 /// 
@@ -135,18 +139,22 @@ typedef ${x}_result_t (__${x}call *${th.make_pfn_type(n, tags, obj)})(
 %elif re.match(r"handle", obj['type']):
 typedef struct _${th.subt(n, tags, obj['name'])} *${th.subt(n, tags, obj['name'])};
 %endif
+## CONDITION-END ##############################################################
 %if 'condition' in obj:
 #endif // ${th.subt(n, tags, obj['condition'])}
 %endif
-
+%if re.match(r"macro", obj['type']):
+#endif // ${th.make_macro_name(n, tags, obj, params=False)}
 %endif
-%endfor
+
+%endif  # not re.match(r"class", obj['type'])
+%endfor # obj in objects
 ## FORWARD-DECLARE STRUCTS ####################################################
 %if re.match(r"common", name):
 %for obj in th.extract_objs(specs, 'struct'):
 ///////////////////////////////////////////////////////////////////////////////
-/// @brief Forward-declare ${th.subt(n, tags, obj['name'])}
-typedef struct _${th.subt(n, tags, obj['name'])} ${th.subt(n, tags, obj['name'])};
+/// @brief Forward-declare ${th.make_type_name(n, tags, obj)}
+typedef struct _${th.make_type_name(n, tags, obj)} ${th.make_type_name(n, tags, obj)};
 
 %endfor
 %endif

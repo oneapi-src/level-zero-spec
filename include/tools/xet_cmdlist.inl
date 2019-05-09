@@ -51,7 +51,7 @@ namespace xet
     /// @throws result_t
     inline void 
     CommandList::AppendMetricTracerMarker(
-        metric_tracer_handle_t hMetricTracer,           ///< [in] handle of the metric tracer
+        MetricTracer* hMetricTracer,                    ///< [in] handle of the metric tracer
         uint32_t value                                  ///< [in] tracer marker value
         )
     {
@@ -69,7 +69,7 @@ namespace xet
     /// @throws result_t
     inline void 
     CommandList::AppendMetricQueryBegin(
-        metric_query_handle_t hMetricQuery              ///< [in] handle of the metric query
+        MetricQuery* hMetricQuery                       ///< [in] handle of the metric query
         )
     {
         // auto result = ::xetCommandListAppendMetricQueryBegin( handle, hMetricQuery );
@@ -86,8 +86,8 @@ namespace xet
     /// @throws result_t
     inline void 
     CommandList::AppendMetricQueryEnd(
-        metric_query_handle_t hMetricQuery,             ///< [in] handle of the metric query
-        xe::event_handle_t hCompletionEvent             ///< [in] handle of the completion event to signal
+        MetricQuery* hMetricQuery,                      ///< [in] handle of the metric query
+        xe::Event* hCompletionEvent                     ///< [in] handle of the completion event to signal
         )
     {
         // auto result = ::xetCommandListAppendMetricQueryEnd( handle, hMetricQuery, hCompletionEvent );

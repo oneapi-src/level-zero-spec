@@ -1,14 +1,6 @@
 <%!
 import re
 from templates import helper as th
-
-def declare_obj(obj, tags):
-    if re.match(r"macro", obj['type']):
-        return False
-    if 'class' not in obj or obj['class'] in tags:
-        return True
-    return re.match(r"handle", obj['type'])
-
 %><%
     n=namespace
     N=n.upper()
@@ -54,7 +46,9 @@ def declare_obj(obj, tags):
 #pragma message("warning: this file is not intended to be included directly")
 #endif
 %if re.match(r"common", name):
-#include "${n}_api.h"
+#include <stdint.h>
+#include <string.h>
+//#include "${n}_api.h"
 #include <tuple>
 %if x != n:
 #include "${x}_api.hpp"
@@ -66,11 +60,38 @@ def declare_obj(obj, tags):
 #include "${re.sub(r"\$h", "hpp", th.subt(n, tags, item))}"
 %endfor
 
+%for obj in th.extract_objs([{'objects': objects}], r"macro"):
+## MACRO ######################################################################
+///////////////////////////////////////////////////////////////////////////////
+## CONDITION-START ############################################################
+#ifndef ${th.make_macro_name(n, tags, obj, params=False)}
+%if 'condition' in obj:
+#if ${th.subt(n, tags, obj['condition'])}
+%endif
+%for line in th.make_desc_lines(n, tags, obj, cpp=True):
+/// ${line}
+%endfor
+%for line in th.make_details_lines(n, tags, obj, cpp=True):
+/// ${line}
+%endfor
+#define ${th.make_macro_name(n, tags, obj)}  ${th.subt(n, tags, obj['value'])}
+%if 'altvalue' in obj:
+#else
+#define ${th.make_macro_name(n, tags, obj)}  ${th.subt(n, tags, obj['altvalue'])}
+%endif
+## CONDITION-END ##############################################################
+%if 'condition' in obj:
+#endif // ${th.subt(n, tags, obj['condition'])}
+%endif
+#endif // ${th.make_macro_name(n, tags, obj, params=False)}
+
+%endfor # obj in th.extract_objs([objects], r"macro")
 namespace ${n}
 {
 %for obj in objects:
-%if declare_obj(obj, tags):
+%if (('class' not in obj) or (obj['class'] in tags) or re.match(r"handle", obj['type'])) and not re.match(r"macro", obj['type']):
     ///////////////////////////////////////////////////////////////////////////////
+    ## CONDITION-START ############################################################
     %if 'condition' in obj:
     #if ${th.subt(n, tags, obj['condition'])}
     %endif
@@ -82,10 +103,18 @@ namespace ${n}
     %endfor
     ## TYPEDEF ####################################################################
     %if re.match(r"typedef", obj['type']):
-    using ${th.subt(n, tags, obj['name'], cpp=True)} = ::${th.subt(n, tags, obj['name'])};
+    %if 'params' in obj:
+    typedef ${obj['returns']}(__${x}call *${th.make_type_name(n, tags, obj, cpp=True)})(
+        %for line in th.make_param_lines(n, tags, obj, cpp=True):
+        ${line}
+        %endfor
+        );
+    %else:
+    using ${th.make_type_name(n, tags, obj, cpp=True)} = ${th.subt(n, tags, obj['value'], cpp=True)};
+    %endif
     ## ENUM #######################################################################
     %elif re.match(r"enum", obj['type']):
-    enum class ${th.subt(n, tags, obj['name'], cpp=True)}
+    enum class ${th.make_type_name(n, tags, obj, cpp=True)}
     {
         %for line in th.make_etor_lines(n, tags, obj, cpp=True, meta=meta):
         ${line}
@@ -93,8 +122,8 @@ namespace ${n}
 
     };
     ## STRUCT/UNION ###############################################################
-    %elif re.match(r"struct", obj['type']) or re.match(r"union", obj['type']):
-    ${obj['type']} ${th.subt(n, tags, obj['name'], cpp=True)}
+    %elif re.match(r"struct|union", obj['type']):
+    ${obj['type']} ${th.make_type_name(n, tags, obj, cpp=True)}
     {
         %for line in th.make_member_lines(n, tags, obj, cpp=True, meta=meta):
         ${line}
@@ -104,7 +133,7 @@ namespace ${n}
     ## FUNCTION ###################################################################
     %elif re.match(r"function", obj['type']):
     /// 
-    %for line in th.make_returns_lines(n, tags, obj, cpp=True):
+    %for line in th.make_returns_lines(n, tags, obj, cpp=True, meta=meta):
     /// ${line}
     %endfor
     inline ${th.make_return_value(n, tags, obj, cpp=True, decl=True, meta=meta)}
@@ -117,17 +146,96 @@ namespace ${n}
     %elif re.match(r"class", obj['type']):
     class ${th.make_class_name(n, tags, obj)}${th.make_baseclass_decl(n, tags, obj)}
     {
-    protected:
-        %for line in th.make_member_lines(n, tags, obj, "m_"):
-        ::${line}
+    public:
+        ## TYPEDEF ####################################################################
+        %for t in th.filter_items(th.extract_objs(specs, r"typedef"), 'class', obj['name']):
+%if 'condition' in t:
+#if ${th.subt(n, tags, t['condition'])}
+%endif
+        ///////////////////////////////////////////////////////////////////////////////
+        %for line in th.make_desc_lines(n, tags, t, cpp=True):
+        /// ${line}
+        %endfor
+        %for line in th.make_details_lines(n, tags, t, cpp=True):
+        /// ${line}
+        %endfor
+        %if 'params' in t:
+        typedef ${t['returns']}(__${x}call *${th.make_type_name(n, tags, t, cpp=True)})(
+            %for line in th.make_param_lines(n, tags, t):
+            ${line}
+            %endfor
+            );
+        %else:
+        using ${th.make_type_name(n, tags, t, cpp=True)} = ${th.subt(n, tags, t['value'], cpp=True)};
+        %endif
+%if 'condition' in t:
+#endif // ${th.subt(n, tags, t['condition'])}
+%endif
+
+        %endfor
+        ## ENUM #######################################################################
+        %for e in th.filter_items(th.extract_objs(specs, r"enum"), 'class', obj['name']):
+%if 'condition' in e:
+#if ${th.subt(n, tags, e['condition'])}
+%endif
+        ///////////////////////////////////////////////////////////////////////////////
+        %for line in th.make_desc_lines(n, tags, e, cpp=True):
+        /// ${line}
+        %endfor
+        %for line in th.make_details_lines(n, tags, e, cpp=True):
+        /// ${line}
+        %endfor
+        enum class ${th.make_type_name(n, tags, e, cpp=True)}
+        {
+            %for line in th.make_etor_lines(n, tags, e, cpp=True, meta=meta):
+            ${line}
+            %endfor
+
+        };
+%if 'condition' in e:
+#endif // ${th.subt(n, tags, e['condition'])}
+%endif
+
+        %endfor
+        ## STRUCT/UNION ###############################################################
+        %for s in th.filter_items(th.extract_objs(specs, r"struct|union"), 'class', obj['name']):
+%if 'condition' in s:
+#if ${th.subt(n, tags, s['condition'])}
+%endif
+        ///////////////////////////////////////////////////////////////////////////////
+        %for line in th.make_desc_lines(n, tags, s, cpp=True):
+        /// ${line}
+        %endfor
+        %for line in th.make_details_lines(n, tags, s, cpp=True):
+        /// ${line}
+        %endfor
+        ${s['type']} ${th.make_type_name(n, tags, s, cpp=True)}
+        {
+            %for line in th.make_member_lines(n, tags, s, cpp=True, meta=meta):
+            ${line}
+            %endfor
+
+        };
+%if 'condition' in s:
+#endif // ${th.subt(n, tags, s['condition'])}
+%endif
+
         %endfor
 
+    protected:
+        ///////////////////////////////////////////////////////////////////////////////
+        %for line in th.make_member_lines(n, tags, obj, "m_", cpp=True, meta=meta):
+        ${line}
+        %endfor
+
+        ## CTORS/DTORS ################################################################
+        ///////////////////////////////////////////////////////////////////////////////
         ${th.make_class_name(n, tags, obj)}( void ) = delete;
         %if 'base' in obj:
         using ${th.make_baseclass_ctor(n, tags, obj)};
         %else:
         ${th.make_class_name(n, tags, obj)}( 
-            %for line in th.make_member_param_lines(n, tags, obj):
+            %for line in th.make_member_param_lines(n, tags, obj, meta=meta):
                 ${line}
             %endfor
                 ) :
@@ -146,65 +254,24 @@ namespace ${n}
         void operator=( ${th.make_class_name(n, tags, obj)}&& other ) = delete;
 
     public:
+        ///////////////////////////////////////////////////////////////////////////////
         %for line in th.make_member_function_lines(n, tags, obj, "m_"):
         ${line}
         %endfor
 
-        %for t in th.filter_items(th.extract_objs(specs, r"typedef"), 'class', obj['name']):
-%if 'condition' in t:
-#if ${th.subt(n, tags, t['condition'])}
-%endif
-        ///////////////////////////////////////////////////////////////////////////////
-        /// @brief C++ version for ::${th.subt(n, tags, t['name'])}
-        using ${th.subt(n, tags, t['name'], cpp=True)} = ::${th.subt(n, tags, t['name'])};
-%if 'condition' in t:
-#endif // ${th.subt(n, tags, t['condition'])}
-%endif
-
-        %endfor
-        %for e in th.filter_items(th.extract_objs(specs, r"enum"), 'class', obj['name']):
-%if 'condition' in e:
-#if ${th.subt(n, tags, e['condition'])}
-%endif
-        ///////////////////////////////////////////////////////////////////////////////
-        /// @brief C++ version for ::${th.subt(n, tags, e['name'])}
-        enum class ${th.subt(n, tags, e['name'], cpp=True)}
-        {
-            %for line in th.make_etor_lines(n, tags, e, cpp=True, meta=meta):
-            ${line}
-            %endfor
-
-        };
-%if 'condition' in e:
-#endif // ${th.subt(n, tags, e['condition'])}
-%endif
-
-        %endfor
-        %for s in th.filter_items(th.extract_objs(specs, r"struct|union"), 'class', obj['name']):
-%if 'condition' in s:
-#if ${th.subt(n, tags, s['condition'])}
-%endif
-        ///////////////////////////////////////////////////////////////////////////////
-        /// @brief C++ version for ::${th.subt(n, tags, s['name'])}
-        ${s['type']} ${th.subt(n, tags, s['name'], cpp=True)}
-        {
-            %for line in th.make_member_lines(n, tags, s, cpp=True, meta=meta):
-            ${line}
-            %endfor
-
-        };
-%if 'condition' in s:
-#endif // ${th.subt(n, tags, s['condition'])}
-%endif
-
-        %endfor
+        ## FUNCTION ###################################################################
         %for f in th.get_class_function_objs(specs, obj['name']):
 %if 'condition' in f:
 #if ${th.subt(n, tags, f['condition'])}
 %endif
         ///////////////////////////////////////////////////////////////////////////////
-        /// @brief C++ wrapper for ::${th.make_func_name(n, tags, f)}
-        %for line in th.make_returns_lines(n, tags, f, cpp=True):
+        %for line in th.make_desc_lines(n, tags, f, cpp=True):
+        /// ${line}
+        %endfor
+        %for line in th.make_details_lines(n, tags, f, cpp=True):
+        /// ${line}
+        %endfor
+        %for line in th.make_returns_lines(n, tags, f, cpp=True, meta=meta):
         /// ${line}
         %endfor
         %if 'tparams' in f:
@@ -226,17 +293,17 @@ namespace ${n}
     %elif re.match(r"handle", obj['type']):
     %if 'class' in obj:
     class ${th.subt(n, tags, obj['class'], cpp=True)};
-    using ${th.subt(n, tags, obj['name'], cpp=True)} = ${th.subt(n, tags, obj['class'], cpp=True)}*;
-    %else:
-    using ${th.subt(n, tags, obj['name'], cpp=True)} = ::${th.subt(n, tags, obj['name'])};
     %endif
+    struct _${th.subt(n, tags, obj['name'], cpp=True)};
+    using ${th.subt(n, tags, obj['name'], cpp=True)} = _${th.subt(n, tags, obj['name'], cpp=True)}*;
     %endif
+    ## CONDITION-END ##############################################################
     %if 'condition' in obj:
     #endif // ${th.subt(n, tags, obj['condition'])}
     %endif
 
-%endif
-%endfor
+%endif  ## (('class' not in obj ...
+%endfor ## obj in objects
 } // namespace ${n}
 #endif // defined(__cplusplus)
 #endif // _${N}_${name.upper()}_HPP

@@ -53,13 +53,13 @@ namespace xe
     ///     - **vkCreateFence**
     /// 
     /// @returns
-    ///     - ::fence_handle_t: pointer to handle of fence object created
+    ///     - Fence: pointer to handle of fence object created
     /// 
     /// @throws result_t
-    inline fence_handle_t 
+    inline Fence* 
     Fence::Create(
-        command_queue_handle_t hCommandQueue,           ///< [in] handle of command queue
-        const fence_desc_t* desc                        ///< [in] pointer to fence descriptor
+        CommandQueue* hCommandQueue,                    ///< [in] handle of command queue
+        const desc_t* desc                              ///< [in] pointer to fence descriptor
         )
     {
         // auto result = ::xeFenceCreate( handle, hCommandQueue, desc );
@@ -85,7 +85,7 @@ namespace xe
     /// @throws result_t
     inline void 
     Fence::Destroy(
-        fence_handle_t hFence                           ///< [in] handle of fence object to destroy
+        Fence* hFence                                   ///< [in] handle of fence object to destroy
         )
     {
         // auto result = ::xeFenceDestroy( handle, hFence );

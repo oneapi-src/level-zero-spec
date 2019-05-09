@@ -44,7 +44,8 @@ namespace xet
     ///////////////////////////////////////////////////////////////////////////////
     /// @brief Handle of a frequency domain on a device
     class Power;
-    using freq_domain_handle_t = Power*;
+    struct _freq_domain_handle_t;
+    using freq_domain_handle_t = _freq_domain_handle_t*;
 
     ///////////////////////////////////////////////////////////////////////////////
     /// @brief Fan capabilities

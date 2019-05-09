@@ -45,8 +45,12 @@ namespace xex
     /// @brief C++ wrapper for device
     class Device : public xe::Device
     {
-    protected:
+    public:
 
+    protected:
+        ///////////////////////////////////////////////////////////////////////////////
+
+        ///////////////////////////////////////////////////////////////////////////////
         Device( void ) = delete;
         using xe::Device::Device;
 
@@ -59,6 +63,7 @@ namespace xex
         void operator=( Device&& other ) = delete;
 
     public:
+        ///////////////////////////////////////////////////////////////////////////////
 
     };
 

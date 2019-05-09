@@ -75,7 +75,7 @@ namespace ${n}
     /// ${line}
     %endfor
     /// 
-    %for line in th.make_returns_lines(n, tags, obj, cpp=True):
+    %for line in th.make_returns_lines(n, tags, obj, cpp=True, meta=meta):
     /// ${line}
     %endfor
     inline ${th.make_return_value(n, tags, obj, cpp=True, meta=meta)} 
@@ -104,7 +104,7 @@ namespace ${n}
     /// ${line}
     %endfor
     /// 
-    %for line in th.make_returns_lines(n, tags, f, cpp=True):
+    %for line in th.make_returns_lines(n, tags, f, cpp=True, meta=meta):
     /// ${line}
     %endfor
     %if 'tparams' in f:

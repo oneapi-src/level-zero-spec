@@ -819,8 +819,8 @@ typedef xe_result_t (__xecall *xe_pfnCommandListAppendLaunchMultipleFunctionsInd
 ///     - The application may call this function from simultaneous threads.
 ///     - The implementation of this function should be lock-free.
 typedef void(__xecall *xe_host_pfn_t)(
-  void* pUserData                                 ///< [in] Pointer to user data to pass to host function.
-  );
+    void* pUserData                                 ///< [in] Pointer to user data to pass to host function.
+    );
 
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Launch host function. All work after this command in the command list

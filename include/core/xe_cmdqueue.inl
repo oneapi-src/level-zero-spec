@@ -55,13 +55,13 @@ namespace xe
     ///     - cuCtxGetCurrent
     /// 
     /// @returns
-    ///     - ::command_queue_handle_t: pointer to handle of command queue object created
+    ///     - CommandQueue: pointer to handle of command queue object created
     /// 
     /// @throws result_t
-    inline command_queue_handle_t 
+    inline CommandQueue* 
     CommandQueue::Create(
-        device_handle_t hDevice,                        ///< [in] handle of the device object
-        const command_queue_desc_t* desc                ///< [in] pointer to command queue descriptor
+        Device* hDevice,                                ///< [in] handle of the device object
+        const desc_t* desc                              ///< [in] pointer to command queue descriptor
         )
     {
         // auto result = ::xeCommandQueueCreate( handle, hDevice, desc );
@@ -88,7 +88,7 @@ namespace xe
     /// @throws result_t
     inline void 
     CommandQueue::Destroy(
-        command_queue_handle_t hCommandQueue            ///< [in] handle of command queue object to destroy
+        CommandQueue* hCommandQueue                     ///< [in] handle of command queue object to destroy
         )
     {
         // auto result = ::xeCommandQueueDestroy( handle, hCommandQueue );
@@ -110,8 +110,8 @@ namespace xe
     inline void 
     CommandQueue::ExecuteCommandLists(
         uint32_t numCommandLists,                       ///< [in] number of command lists to execute
-        command_list_handle_t* phCommandLists,          ///< [in] list of handles of the command lists to execute
-        fence_handle_t hFence                           ///< [in][optional] handle of the fence to signal on completion
+        CommandList* phCommandLists,                    ///< [in] list of handles of the command lists to execute
+        Fence* hFence                                   ///< [in][optional] handle of the fence to signal on completion
         )
     {
         // auto result = ::xeCommandQueueExecuteCommandLists( handle, numCommandLists, phCommandLists, hFence );

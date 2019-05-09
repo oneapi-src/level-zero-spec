@@ -150,6 +150,16 @@ def add_class(type, cls):
     return " ".join(words)
 
 """
+    removes class name from type
+"""
+def remove_class(type, cls):
+    if cls:
+        RE_CLS = r"(.*)(%s_)(\w+)"%camel_to_snake(cls)
+        if re.match(RE_CLS, type):
+            type = re.sub(RE_CLS, r"\1\3", type)
+    return type
+
+"""
     returns the class to which the type belongs, if it is known
 """
 def get_class_of_type(type, meta):
@@ -161,6 +171,26 @@ def get_class_of_type(type, meta):
             if type in meta[group]:
                 return group, meta[group][type]['class']
     return None, None
+
+"""
+    returns the name of macro
+"""
+def make_macro_name(namespace, tags, obj, params=True):
+    if params:
+        return subt(namespace, tags, obj['name'])
+    else:
+        name = re.sub(r"(.*)\(.*", r"\1", obj['name'])
+        return subt(namespace, tags, name)
+
+"""
+    returns the name of enums, structs, unions, typedefs...
+"""
+def make_type_name(namespace, tags, obj, cpp=False):
+    name = subt(namespace, tags, obj['name'], cpp=cpp)
+    if cpp and 'class' in obj:
+        cls = subt(namespace, tags, obj['class'], cpp=cpp)
+        name = remove_class(name, cls)
+    return name
 
 """
     returns proper name of etor
@@ -182,7 +212,12 @@ def make_cpp_value_name(namespace, tags, value, cpp, meta):
     if 'macro' == group:
         value = subt(namespace, tags, value)
     elif 'enum' == group:
-        value = "%s::%s"%(subt(namespace, tags, type, cpp=cpp), make_etor_name(namespace, tags, type, value, cpp))
+        enum = subt(namespace, tags, type, cpp=cpp)
+        if cpp:
+            group, cls = get_class_of_type(type, meta)
+            cls = subt(namespace, tags, cls, cpp=cpp)
+            enum = remove_class(enum, cls)
+        value = "%s::%s"%(enum, make_etor_name(namespace, tags, type, value, cpp))
     else:
         value = subt(namespace, tags, value, cpp=cpp)
     return value
@@ -207,6 +242,36 @@ def make_etor_lines(namespace, tags, obj, cpp=False, meta=None):
     return lines
 
 """
+    returns proper name of member type
+"""
+def make_cpp_type(namespace, tags, obj, item, cpp=False, meta=None):
+    type = subt(namespace, tags, item['type'], cpp=cpp)
+    if cpp:
+        group, cls = get_class_of_type(item['type'], meta)
+        is_namespace = cls in tags and tags[cls] == namespace
+        is_handle = re.match(r".*handle_t", item['type'])
+        is_inscope = False
+
+        if re.match(r"class", obj['type']):
+            is_inscope = cls == obj['name']
+        elif 'class' in obj:
+            is_inscope = cls == obj['class']
+
+        if cls:
+            cls = subt(namespace, tags, cls, cpp=cpp)
+
+            if not (is_namespace or is_handle or is_inscope):
+                type = add_class(type, cls)
+
+            elif is_handle and not re.match(r"class", obj['type']):
+                type = "%s*"%cls
+
+            if not is_handle:
+                type = remove_class(type, cls)
+
+    return type
+
+"""
     returns a list of strings for each member of a structure or class
 """
 def make_member_lines(namespace, tags, obj, prefix="", cpp=False, meta=None):
@@ -219,7 +284,8 @@ def make_member_lines(namespace, tags, obj, prefix="", cpp=False, meta=None):
             name = make_cpp_value_name(namespace, tags, prefix+item['name'], cpp, meta)
         else:
             name = subt(namespace, tags, prefix+item['name'], cpp=cpp)
-        type = subt(namespace, tags, item['type'], cpp=cpp)
+        
+        type = make_cpp_type(namespace, tags, obj, item, cpp, meta)
 
         if cpp and 'init' in item:
             value = make_cpp_value_name(namespace, tags, item['init'], cpp, meta)
@@ -275,17 +341,11 @@ def make_param_lines(namespace, tags, obj, cpp=False, decl=False, meta=None, for
 
     for i, item in enumerate(params):
         name = subt(namespace, tags, item['name'], cpp=cpp)
-        type = subt(namespace, tags, item['type'], cpp=cpp)
+        type = make_cpp_type(namespace, tags, obj, item, cpp, meta)
         init = ""
 
-        is_optional = re.match(r".*\[optional\].*", item['desc'])
         if cpp:
-            group, cls = get_class_of_type(item['type'], meta)
-            is_namespace = cls in tags and tags[cls] == namespace
-            is_handle = re.match(r".*handle_t", item['type'])
-            if cls and cls != obj['class'] and not is_namespace and not is_handle:
-                type = add_class(type, subt(namespace, tags, cls, cpp=cpp))
-
+            is_optional = re.match(r".*\[optional\].*", item['desc'])
             if decl and is_optional:
                 is_pointer = re.match(r".*\w+\*+", item['type'])
                 is_handle = re.match(r".*handle_t", item['type'])
@@ -346,7 +406,7 @@ def make_member_param_lines(namespace, tags, obj, meta=None):
     params = obj['members'] if 'members' in obj else []
     for i, item in enumerate(params):
         name = subt(namespace, tags, item['name'])
-        type = subt(namespace, tags, item['type'])
+        type = make_cpp_type(namespace, tags, obj, item, True, meta)
 
         if i < len(params)-1:
             prologue = "%s %s,"%(type, name)
@@ -454,7 +514,7 @@ def make_param_checks(namespace, tags, obj, comment=False, cpp=False):
 """
     returns a list of strings for possible return values
 """
-def make_returns_lines(namespace, tags, obj, cpp=False):
+def make_returns_lines(namespace, tags, obj, cpp=False, meta=None):
     lines = []
     if cpp:
         params = filter_param_list(obj['params'], "out")
@@ -462,7 +522,7 @@ def make_returns_lines(namespace, tags, obj, cpp=False):
             lines.append("@returns")
             for p in params:
                 desc = re.sub(r"\[.*\](.*)", r"\1", p['desc'])
-                type = remove_const_ptr(p['type'])
+                type = remove_const_ptr(make_cpp_type(namespace, tags, obj, p, cpp, meta))
                 lines.append("    - %s"%subt(namespace, tags, "%s:%s"%(type, desc), True, cpp))
             lines.append("")
         lines.append("@throws result_t")
@@ -513,11 +573,16 @@ def make_return_value(namespace, tags, obj, cpp=False, decl=False, meta=None):
 
     types = []
     for p in params:
-        type = subt(namespace, tags, remove_const_ptr(p['type']), cpp=cpp)
-        if cpp and not decl:
+        type = remove_const_ptr(make_cpp_type(namespace, tags, obj, p, cpp, meta))
+        if cpp:
             group, cls = get_class_of_type(p['type'], meta)
-            if cls and 'handle' != group:
+            is_handle = re.match(r".*handle_t", p['type'])
+
+            if cls and not decl and not is_handle:
                 type = add_class(type, subt(namespace, tags, cls, cpp=cpp))
+
+            elif cls and is_handle:
+                type = remove_const(make_cpp_type(namespace, tags, obj, p, cpp, meta))
 
         types.append(type)
 

@@ -45,8 +45,12 @@ namespace xet
     /// @brief C++ wrapper for device
     class Device : public xe::Device
     {
-    protected:
+    public:
 
+    protected:
+        ///////////////////////////////////////////////////////////////////////////////
+
+        ///////////////////////////////////////////////////////////////////////////////
         Device( void ) = delete;
         using xe::Device::Device;
 
@@ -59,23 +63,38 @@ namespace xet
         void operator=( Device&& other ) = delete;
 
     public:
+        ///////////////////////////////////////////////////////////////////////////////
 
         ///////////////////////////////////////////////////////////////////////////////
-        /// @brief C++ wrapper for ::xetDeviceActivateMetricGroups
+        /// @brief Activates metric groups.
+        /// 
+        /// @details
+        ///     - MetricGroup must be active until MetricQueryGetDeta and
+        ///       ::MetricTracerClose.
+        ///     - Conflicting metric groups cannot be activated, in such case tha call
+        ///       would fail.
         /// @throws result_t
         inline void
         ActivateMetricGroups(
             uint32_t count,                                 ///< [in] metric group count to activate. 0 to deactivate.
-            metric_group_handle_t* phMetricGroups           ///< [in] handles of the metric groups to activate. NULL to deactivate.
+            MetricGroup* phMetricGroups                     ///< [in] handles of the metric groups to activate. NULL to deactivate.
             );
 
         ///////////////////////////////////////////////////////////////////////////////
-        /// @brief C++ wrapper for ::xetDevicePowerInit
+        /// @brief Initialize power management features
+        /// 
+        /// @details
+        ///     - Initializes internal structures to support power management features.
+        /// 
+        /// @remarks
+        ///   _Analogues_
+        ///     - **nvmlInit**
+        ///     - **rsmi_init**
         /// @returns
-        ///     - ::power_handle_t: handle for accessing power features of the device
+        ///     - Power: handle for accessing power features of the device
         /// 
         /// @throws result_t
-        inline power_handle_t
+        inline Power*
         PowerInit(
             uint32_t flags                                  ///< [in] bitfield of ::power_init_flags_t
             );

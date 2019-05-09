@@ -99,12 +99,16 @@ typedef xe_result_t (__xecall *xet_pfnMetricGroupGet_t)(
     );
 
 ///////////////////////////////////////////////////////////////////////////////
+#ifndef XET_MAX_METRIC_GROUP_NAME
 /// @brief Maximum metric group name string size
 #define XET_MAX_METRIC_GROUP_NAME  256
+#endif // XET_MAX_METRIC_GROUP_NAME
 
 ///////////////////////////////////////////////////////////////////////////////
+#ifndef XET_MAX_METRIC_GROUP_DESCRIPTION
 /// @brief Maximum metric group description string size
 #define XET_MAX_METRIC_GROUP_DESCRIPTION  256
+#endif // XET_MAX_METRIC_GROUP_DESCRIPTION
 
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Metric group sampling type
@@ -168,20 +172,28 @@ typedef xe_result_t (__xecall *xet_pfnMetricGroupGetProperties_t)(
     );
 
 ///////////////////////////////////////////////////////////////////////////////
+#ifndef XET_MAX_METRIC_NAME
 /// @brief Maximum metric name string size
 #define XET_MAX_METRIC_NAME  256
+#endif // XET_MAX_METRIC_NAME
 
 ///////////////////////////////////////////////////////////////////////////////
+#ifndef XET_MAX_METRIC_DESCRIPTION
 /// @brief Maximum metric description string size
 #define XET_MAX_METRIC_DESCRIPTION  256
+#endif // XET_MAX_METRIC_DESCRIPTION
 
 ///////////////////////////////////////////////////////////////////////////////
+#ifndef XET_MAX_METRIC_COMPONENT
 /// @brief Maximum metric component string size
 #define XET_MAX_METRIC_COMPONENT  256
+#endif // XET_MAX_METRIC_COMPONENT
 
 ///////////////////////////////////////////////////////////////////////////////
+#ifndef XET_MAX_METRIC_RESULT_UNITS
 /// @brief Maximum metric result units string size
 #define XET_MAX_METRIC_RESULT_UNITS  256
+#endif // XET_MAX_METRIC_RESULT_UNITS
 
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Metric types

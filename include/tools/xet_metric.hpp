@@ -39,6 +39,42 @@
 #endif
 #include "xet_common.hpp"
 
+///////////////////////////////////////////////////////////////////////////////
+#ifndef XET_MAX_METRIC_GROUP_NAME
+/// @brief Maximum metric group name string size
+#define XET_MAX_METRIC_GROUP_NAME  256
+#endif // XET_MAX_METRIC_GROUP_NAME
+
+///////////////////////////////////////////////////////////////////////////////
+#ifndef XET_MAX_METRIC_GROUP_DESCRIPTION
+/// @brief Maximum metric group description string size
+#define XET_MAX_METRIC_GROUP_DESCRIPTION  256
+#endif // XET_MAX_METRIC_GROUP_DESCRIPTION
+
+///////////////////////////////////////////////////////////////////////////////
+#ifndef XET_MAX_METRIC_NAME
+/// @brief Maximum metric name string size
+#define XET_MAX_METRIC_NAME  256
+#endif // XET_MAX_METRIC_NAME
+
+///////////////////////////////////////////////////////////////////////////////
+#ifndef XET_MAX_METRIC_DESCRIPTION
+/// @brief Maximum metric description string size
+#define XET_MAX_METRIC_DESCRIPTION  256
+#endif // XET_MAX_METRIC_DESCRIPTION
+
+///////////////////////////////////////////////////////////////////////////////
+#ifndef XET_MAX_METRIC_COMPONENT
+/// @brief Maximum metric component string size
+#define XET_MAX_METRIC_COMPONENT  256
+#endif // XET_MAX_METRIC_COMPONENT
+
+///////////////////////////////////////////////////////////////////////////////
+#ifndef XET_MAX_METRIC_RESULT_UNITS
+/// @brief Maximum metric result units string size
+#define XET_MAX_METRIC_RESULT_UNITS  256
+#endif // XET_MAX_METRIC_RESULT_UNITS
+
 namespace xet
 {
     ///////////////////////////////////////////////////////////////////////////////
@@ -85,12 +121,49 @@ namespace xet
     /// @brief C++ wrapper for metric group
     class MetricGroup
     {
-    protected:
-        ::xet_metric_group_handle_t m_handle;             ///< handle of metric group object
+    public:
+        ///////////////////////////////////////////////////////////////////////////////
+        /// @brief Metric group sampling type
+        enum class sampling_type
+        {
+            METRIC_GROUP_SAMPLING_TYPE_EVENT_BASED = XE_BIT(0), ///< Event based sampling
+            METRIC_GROUP_SAMPLING_TYPE_TIME_BASED = XE_BIT(1),  ///< Time based sampling
 
+        };
+
+        ///////////////////////////////////////////////////////////////////////////////
+        /// @brief API version of ::metric_group_properties_t
+        enum class properties_version_t
+        {
+            CURRENT = XE_MAKE_VERSION( 1, 0 ),              ///< version 1.0
+
+        };
+
+        ///////////////////////////////////////////////////////////////////////////////
+        /// @brief Metric group properties queried using ::MetricGroupGetProperties
+        struct properties_t
+        {
+            properties_version_t version = properties_version_t::CURRENT;   ///< [in] ::METRIC_GROUP_PROPERTIES_VERSION_CURRENT
+            char name[XET_MAX_METRIC_GROUP_NAME];           ///< [out] metric group name
+            char description[XET_MAX_METRIC_GROUP_DESCRIPTION]; ///< [out] metric group description
+            sampling_type samplingType;                     ///< [out] metric group sampling type
+            uint32_t domain;                                ///< [out] metric group domain number. Cannot use simultaneous metric
+                                                            ///< groups from different domains.
+            uint32_t metricCount;                           ///< [out] metric count belonging to this group
+            uint32_t rawReportSize;                         ///< [out] size of raw report
+            uint32_t calculatedReportSize;                  ///< [out] size of calculated report
+
+        };
+
+
+    protected:
+        ///////////////////////////////////////////////////////////////////////////////
+        metric_group_handle_t m_handle;                 ///< handle of metric group object
+
+        ///////////////////////////////////////////////////////////////////////////////
         MetricGroup( void ) = delete;
         MetricGroup( 
-                xet_metric_group_handle_t handle                ///< handle of metric group object
+                metric_group_handle_t handle                    ///< handle of metric group object
                 ) :
                 m_handle( handle )
             {}
@@ -104,77 +177,55 @@ namespace xet
         void operator=( MetricGroup&& other ) = delete;
 
     public:
+        ///////////////////////////////////////////////////////////////////////////////
         auto getHandle( void ) const { return m_handle; }
 
         ///////////////////////////////////////////////////////////////////////////////
-        /// @brief C++ version for ::xet_metric_group_sampling_type
-        enum class metric_group_sampling_type
-        {
-            METRIC_GROUP_SAMPLING_TYPE_EVENT_BASED = XE_BIT(0), ///< Event based sampling
-            METRIC_GROUP_SAMPLING_TYPE_TIME_BASED = XE_BIT(1),  ///< Time based sampling
-
-        };
-
-        ///////////////////////////////////////////////////////////////////////////////
-        /// @brief C++ version for ::xet_metric_group_properties_version_t
-        enum class metric_group_properties_version_t
-        {
-            CURRENT = XE_MAKE_VERSION( 1, 0 ),              ///< version 1.0
-
-        };
-
-        ///////////////////////////////////////////////////////////////////////////////
-        /// @brief C++ version for ::xet_metric_group_properties_t
-        struct metric_group_properties_t
-        {
-            metric_group_properties_version_t version = metric_group_properties_version_t::CURRENT; ///< [in] ::METRIC_GROUP_PROPERTIES_VERSION_CURRENT
-            char name[XET_MAX_METRIC_GROUP_NAME];           ///< [out] metric group name
-            char description[XET_MAX_METRIC_GROUP_DESCRIPTION]; ///< [out] metric group description
-            metric_group_sampling_type samplingType;        ///< [out] metric group sampling type
-            uint32_t domain;                                ///< [out] metric group domain number. Cannot use simultaneous metric
-                                                            ///< groups from different domains.
-            uint32_t metricCount;                           ///< [out] metric count belonging to this group
-            uint32_t rawReportSize;                         ///< [out] size of raw report
-            uint32_t calculatedReportSize;                  ///< [out] size of calculated report
-
-        };
-
-        ///////////////////////////////////////////////////////////////////////////////
-        /// @brief C++ wrapper for ::xetMetricGroupGetCount
+        /// @brief Returns metric group count for a given device.
         /// @returns
         ///     - uint32_t: number of metric groups supported by the device
         /// 
         /// @throws result_t
         inline static uint32_t
         GetCount(
-            xe::device_handle_t hDevice                     ///< [in] handle of the device object
+            xe::Device* hDevice                             ///< [in] handle of the device object
             );
 
         ///////////////////////////////////////////////////////////////////////////////
-        /// @brief C++ wrapper for ::xetMetricGroupGet
+        /// @brief Returns metric group handle for a device.
+        /// 
+        /// @details
+        ///     - The application may call this function from simultaneous threads.
         /// @returns
-        ///     - ::metric_group_handle_t: metric group handle
+        ///     - MetricGroup: metric group handle
         /// 
         /// @throws result_t
-        inline static metric_group_handle_t
+        inline static MetricGroup*
         Get(
-            xe::device_handle_t hDevice,                    ///< [in] handle of the device
+            xe::Device* hDevice,                            ///< [in] handle of the device
             uint32_t ordinal                                ///< [in] metric group index
             );
 
         ///////////////////////////////////////////////////////////////////////////////
-        /// @brief C++ wrapper for ::xetMetricGroupGetProperties
+        /// @brief Returns properties for a given metric group.
+        /// 
+        /// @details
+        ///     - The application may call this function from simultaneous threads.
         /// @returns
-        ///     - ::metric_group_properties_t: metric group properties
+        ///     - properties_t: metric group properties
         /// 
         /// @throws result_t
-        inline metric_group_properties_t
+        inline properties_t
         GetProperties(
             void
             );
 
         ///////////////////////////////////////////////////////////////////////////////
-        /// @brief C++ wrapper for ::xetMetricGroupCalculateData
+        /// @brief Calculates counter values from raw data.
+        /// 
+        /// @details
+        ///     - The application may **not** call this function from simultaneous
+        ///       threads wth the same metric group handle.
         /// @throws result_t
         inline void
         CalculateData(
@@ -191,30 +242,10 @@ namespace xet
     /// @brief C++ wrapper for metric
     class Metric
     {
-    protected:
-        ::xet_metric_handle_t m_handle;                   ///< handle of metric object
-
-        Metric( void ) = delete;
-        Metric( 
-                xet_metric_handle_t handle                      ///< handle of metric object
-                ) :
-                m_handle( handle )
-            {}
-
-        ~Metric( void ) = default;
-
-        Metric( Metric const& other ) = delete;
-        void operator=( Metric const& other ) = delete;
-
-        Metric( Metric&& other ) = delete;
-        void operator=( Metric&& other ) = delete;
-
     public:
-        auto getHandle( void ) const { return m_handle; }
-
         ///////////////////////////////////////////////////////////////////////////////
-        /// @brief C++ version for ::xet_metric_type_t
-        enum class metric_type_t
+        /// @brief Metric types
+        enum class type_t
         {
             DURATION,                                       ///< Metric type: duration
             EVENT,                                          ///< Metric type: event
@@ -228,47 +259,78 @@ namespace xet
         };
 
         ///////////////////////////////////////////////////////////////////////////////
-        /// @brief C++ version for ::xet_metric_properties_version_t
-        enum class metric_properties_version_t
+        /// @brief API version of ::metric_properties_t
+        enum class properties_version_t
         {
             CURRENT = XE_MAKE_VERSION( 1, 0 ),              ///< version 1.0
 
         };
 
         ///////////////////////////////////////////////////////////////////////////////
-        /// @brief C++ version for ::xet_metric_properties_t
-        struct metric_properties_t
+        /// @brief Metric properties queried using ::MetricGetProperties
+        struct properties_t
         {
-            metric_properties_version_t version = metric_properties_version_t::CURRENT; ///< [in] ::METRIC_PROPERTIES_VERSION_CURRENT
+            properties_version_t version = properties_version_t::CURRENT;   ///< [in] ::METRIC_PROPERTIES_VERSION_CURRENT
             char name[XET_MAX_METRIC_NAME];                 ///< [out] metric name
             char description[XET_MAX_METRIC_DESCRIPTION];   ///< [out] metric description
             char component[XET_MAX_METRIC_COMPONENT];       ///< [out] metric component
             uint32_t tierNumber;                            ///< [out] number of tier
-            metric_type_t metricType;                       ///< [out] metric type
+            type_t metricType;                              ///< [out] metric type
             value_type_t resultType;                        ///< [out] metric result type
             char resultUnits[XET_MAX_METRIC_RESULT_UNITS];  ///< [out] metric result units
 
         };
 
+
+    protected:
         ///////////////////////////////////////////////////////////////////////////////
-        /// @brief C++ wrapper for ::xetMetricGet
+        metric_handle_t m_handle;                       ///< handle of metric object
+
+        ///////////////////////////////////////////////////////////////////////////////
+        Metric( void ) = delete;
+        Metric( 
+                metric_handle_t handle                          ///< handle of metric object
+                ) :
+                m_handle( handle )
+            {}
+
+        ~Metric( void ) = default;
+
+        Metric( Metric const& other ) = delete;
+        void operator=( Metric const& other ) = delete;
+
+        Metric( Metric&& other ) = delete;
+        void operator=( Metric&& other ) = delete;
+
+    public:
+        ///////////////////////////////////////////////////////////////////////////////
+        auto getHandle( void ) const { return m_handle; }
+
+        ///////////////////////////////////////////////////////////////////////////////
+        /// @brief Returns metric from a given metric group.
+        /// 
+        /// @details
+        ///     - The application may call this function from simultaneous threads.
         /// @returns
-        ///     - ::metric_handle_t: handle of metric
+        ///     - Metric: handle of metric
         /// 
         /// @throws result_t
-        inline static metric_handle_t
+        inline static Metric*
         Get(
-            metric_group_handle_t hMetricGroup,             ///< [in] handle of the metric group
+            MetricGroup* hMetricGroup,                      ///< [in] handle of the metric group
             uint32_t ordinal                                ///< [in] metric index
             );
 
         ///////////////////////////////////////////////////////////////////////////////
-        /// @brief C++ wrapper for ::xetMetricGetProperties
+        /// @brief Returns metric properties.
+        /// 
+        /// @details
+        ///     - The application may call this function from simultaneous threads.
         /// @returns
-        ///     - ::metric_properties_t: metric properties
+        ///     - properties_t: metric properties
         /// 
         /// @throws result_t
-        inline metric_properties_t
+        inline properties_t
         GetProperties(
             void
             );
@@ -279,12 +341,36 @@ namespace xet
     /// @brief C++ wrapper for metric tracer
     class MetricTracer
     {
-    protected:
-        ::xet_metric_tracer_handle_t m_handle;            ///< handle of metric tracer object
+    public:
+        ///////////////////////////////////////////////////////////////////////////////
+        /// @brief API version of ::metric_tracer_desc_t
+        enum class desc_version_t
+        {
+            CURRENT = XE_MAKE_VERSION( 1, 0 ),              ///< version 1.0
 
+        };
+
+        ///////////////////////////////////////////////////////////////////////////////
+        /// @brief Metric tracer descriptor
+        struct desc_t
+        {
+            desc_version_t version = desc_version_t::CURRENT;   ///< [in] ::METRIC_TRACER_DESC_VERSION_CURRENT
+            MetricGroup* hMetricGroup;                      ///< [in] handle of the metric group
+            uint32_t notifyEveryNReports;                   ///< [in,out] number of collected reports after which notification event
+                                                            ///< will be signalled
+            uint32_t samplingPeriodNs;                      ///< [in,out] tracer sampling period in nanoseconds
+
+        };
+
+
+    protected:
+        ///////////////////////////////////////////////////////////////////////////////
+        metric_tracer_handle_t m_handle;                ///< handle of metric tracer object
+
+        ///////////////////////////////////////////////////////////////////////////////
         MetricTracer( void ) = delete;
         MetricTracer( 
-                xet_metric_tracer_handle_t handle               ///< handle of metric tracer object
+                metric_tracer_handle_t handle                   ///< handle of metric tracer object
                 ) :
                 m_handle( handle )
             {}
@@ -298,44 +384,33 @@ namespace xet
         void operator=( MetricTracer&& other ) = delete;
 
     public:
+        ///////////////////////////////////////////////////////////////////////////////
         auto getHandle( void ) const { return m_handle; }
 
         ///////////////////////////////////////////////////////////////////////////////
-        /// @brief C++ version for ::xet_metric_tracer_desc_version_t
-        enum class metric_tracer_desc_version_t
-        {
-            CURRENT = XE_MAKE_VERSION( 1, 0 ),              ///< version 1.0
-
-        };
-
-        ///////////////////////////////////////////////////////////////////////////////
-        /// @brief C++ version for ::xet_metric_tracer_desc_t
-        struct metric_tracer_desc_t
-        {
-            metric_tracer_desc_version_t version = metric_tracer_desc_version_t::CURRENT;   ///< [in] ::METRIC_TRACER_DESC_VERSION_CURRENT
-            metric_group_handle_t hMetricGroup;             ///< [in] handle of the metric group
-            uint32_t notifyEveryNReports;                   ///< [in,out] number of collected reports after which notification event
-                                                            ///< will be signalled
-            uint32_t samplingPeriodNs;                      ///< [in,out] tracer sampling period in nanoseconds
-
-        };
-
-        ///////////////////////////////////////////////////////////////////////////////
-        /// @brief C++ wrapper for ::xetMetricTracerOpen
+        /// @brief Opens metric tracer for a given device.
+        /// 
+        /// @details
+        ///     - The application may **not** call this function from simultaneous
+        ///       threads with the same device handle.
         /// @returns
-        ///     - ::metric_tracer_handle_t: handle of metric tracer
+        ///     - MetricTracer: handle of metric tracer
         /// 
         /// @throws result_t
-        inline static metric_tracer_handle_t
+        inline static MetricTracer*
         Open(
-            xe::device_handle_t hDevice,                    ///< [in] handle of the device
-            metric_tracer_desc_t* pDesc,                    ///< [in,out] metric tracer descriptor
-            xe::event_handle_t hNotificationEvent           ///< [in] event used for report availability notification. Must be device
+            xe::Device* hDevice,                            ///< [in] handle of the device
+            desc_t* pDesc,                                  ///< [in,out] metric tracer descriptor
+            xe::Event* hNotificationEvent                   ///< [in] event used for report availability notification. Must be device
                                                             ///< to host type.
             );
 
         ///////////////////////////////////////////////////////////////////////////////
-        /// @brief C++ wrapper for ::xetMetricTracerClose
+        /// @brief Closes metric tracer.
+        /// 
+        /// @details
+        ///     - The application may **not** call this function from simultaneous
+        ///       threads with the same metric tracer handle.
         /// @throws result_t
         inline void
         Close(
@@ -343,7 +418,10 @@ namespace xet
             );
 
         ///////////////////////////////////////////////////////////////////////////////
-        /// @brief C++ wrapper for ::xetMetricTracerReadData
+        /// @brief Reads data from metric tracer.
+        /// 
+        /// @details
+        ///     - The application may call this function from simultaneous threads.
         /// @throws result_t
         inline void
         ReadData(
@@ -358,12 +436,44 @@ namespace xet
     /// @brief C++ wrapper for metric query pool
     class MetricQueryPool
     {
-    protected:
-        ::xet_metric_query_pool_handle_t m_handle;        ///< handle of metric query pool object
+    public:
+        ///////////////////////////////////////////////////////////////////////////////
+        /// @brief Metric query pool types
+        enum class flag_t
+        {
+            PERFORMANCE,                                    ///< Performance metric query pool.
+            SKIP_EXECUTION,                                 ///< Skips workload execution between begin/end calls.
 
+        };
+
+        ///////////////////////////////////////////////////////////////////////////////
+        /// @brief API version of ::metric_query_pool_desc_t
+        enum class desc_version_t
+        {
+            CURRENT = XE_MAKE_VERSION( 1, 0 ),              ///< version 1.0
+
+        };
+
+        ///////////////////////////////////////////////////////////////////////////////
+        /// @brief Metric query pool description
+        struct desc_t
+        {
+            desc_version_t version = desc_version_t::CURRENT;   ///< [in] ::METRIC_QUERY_POOL_DESC_VERSION_CURRENT
+            flag_t flags;                                   ///< [in] Query pool type.
+            MetricGroup* hMetricGroup;                      ///< [in] Metric group associated with the query object.
+            uint32_t count;                                 ///< [in] Internal slots count within query pool object.
+
+        };
+
+
+    protected:
+        ///////////////////////////////////////////////////////////////////////////////
+        metric_query_pool_handle_t m_handle;            ///< handle of metric query pool object
+
+        ///////////////////////////////////////////////////////////////////////////////
         MetricQueryPool( void ) = delete;
         MetricQueryPool( 
-                xet_metric_query_pool_handle_t handle           ///< handle of metric query pool object
+                metric_query_pool_handle_t handle               ///< handle of metric query pool object
                 ) :
                 m_handle( handle )
             {}
@@ -377,63 +487,46 @@ namespace xet
         void operator=( MetricQueryPool&& other ) = delete;
 
     public:
+        ///////////////////////////////////////////////////////////////////////////////
         auto getHandle( void ) const { return m_handle; }
 
         ///////////////////////////////////////////////////////////////////////////////
-        /// @brief C++ version for ::xet_metric_query_pool_flag_t
-        enum class metric_query_pool_flag_t
-        {
-            PERFORMANCE,                                    ///< Performance metric query pool.
-            SKIP_EXECUTION,                                 ///< Skips workload execution between begin/end calls.
-
-        };
-
-        ///////////////////////////////////////////////////////////////////////////////
-        /// @brief C++ version for ::xet_metric_query_pool_desc_version_t
-        enum class metric_query_pool_desc_version_t
-        {
-            CURRENT = XE_MAKE_VERSION( 1, 0 ),              ///< version 1.0
-
-        };
-
-        ///////////////////////////////////////////////////////////////////////////////
-        /// @brief C++ version for ::xet_metric_query_pool_desc_t
-        struct metric_query_pool_desc_t
-        {
-            metric_query_pool_desc_version_t version = metric_query_pool_desc_version_t::CURRENT;   ///< [in] ::METRIC_QUERY_POOL_DESC_VERSION_CURRENT
-            metric_query_pool_flag_t flags;                 ///< [in] Query pool type.
-            metric_group_handle_t hMetricGroup;             ///< [in] Metric group associated with the query object.
-            uint32_t count;                                 ///< [in] Internal slots count within query pool object.
-
-        };
-
-        ///////////////////////////////////////////////////////////////////////////////
-        /// @brief C++ wrapper for ::xetMetricQueryPoolCreate
+        /// @brief Creates metric query pool.
+        /// 
+        /// @details
+        ///     - The application may call this function from simultaneous threads.
         /// @returns
-        ///     - ::metric_query_pool_handle_t: handle of metric query pool
+        ///     - MetricQueryPool: handle of metric query pool
         /// 
         /// @throws result_t
-        inline static metric_query_pool_handle_t
+        inline static MetricQueryPool*
         Create(
-            xe::device_handle_t hDevice,                    ///< [in] handle of the device
-            metric_query_pool_desc_t* pDesc                 ///< [in] metric query pool creation data
+            xe::Device* hDevice,                            ///< [in] handle of the device
+            desc_t* pDesc                                   ///< [in] metric query pool creation data
             );
 
         ///////////////////////////////////////////////////////////////////////////////
-        /// @brief C++ wrapper for ::xetMetricQueryPoolDestroy
+        /// @brief Destroys query pool object.
+        /// 
+        /// @details
+        ///     - The application may **not** call this function from simultaneous
+        ///       threads with the same query pool handle.
         /// @throws result_t
         inline static void
         Destroy(
-            metric_query_pool_handle_t hMetricQueryPool     ///< [in] handle of the metric query pool
+            MetricQueryPool* hMetricQueryPool               ///< [in] handle of the metric query pool
             );
 
         ///////////////////////////////////////////////////////////////////////////////
-        /// @brief C++ wrapper for ::xetMetricQueryPoolGetMetricQuery
+        /// @brief Returns metric query handle from a given metric query pool.
+        /// 
+        /// @details
+        ///     - The application may call this function from simultaneous threads.
         /// @returns
-        ///     - ::metric_query_handle_t: handle of metric query
+        ///     - MetricQuery: handle of metric query
         /// 
         /// @throws result_t
-        inline metric_query_handle_t
+        inline MetricQuery*
         GetMetricQuery(
             uint32_t ordinal                                ///< [in] index of the query within the pool
             );
@@ -444,12 +537,16 @@ namespace xet
     /// @brief C++ wrapper for metric query
     class MetricQuery
     {
-    protected:
-        ::xet_metric_query_handle_t m_handle;             ///< handle of metric query object
+    public:
 
+    protected:
+        ///////////////////////////////////////////////////////////////////////////////
+        metric_query_handle_t m_handle;                 ///< handle of metric query object
+
+        ///////////////////////////////////////////////////////////////////////////////
         MetricQuery( void ) = delete;
         MetricQuery( 
-                xet_metric_query_handle_t handle                ///< handle of metric query object
+                metric_query_handle_t handle                    ///< handle of metric query object
                 ) :
                 m_handle( handle )
             {}
@@ -463,10 +560,14 @@ namespace xet
         void operator=( MetricQuery&& other ) = delete;
 
     public:
+        ///////////////////////////////////////////////////////////////////////////////
         auto getHandle( void ) const { return m_handle; }
 
         ///////////////////////////////////////////////////////////////////////////////
-        /// @brief C++ wrapper for ::xetMetricQueryGetData
+        /// @brief Returns raw data for a given metric query slot.
+        /// 
+        /// @details
+        ///     - The application may call this function from simultaneous threads.
         /// @throws result_t
         inline void
         GetData(

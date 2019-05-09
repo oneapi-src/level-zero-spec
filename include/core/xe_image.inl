@@ -49,13 +49,13 @@ namespace xe
     ///     - The implementation of this function should be lock-free.
     /// 
     /// @returns
-    ///     - ::image_properties_t: pointer to image properties
+    ///     - properties_t: pointer to image properties
     /// 
     /// @throws result_t
-    inline Image::image_properties_t 
+    inline Image::properties_t 
     Image::GetProperties(
-        device_handle_t hDevice,                        ///< [in] handle of the device
-        const image_desc_t* desc                        ///< [in] pointer to image descriptor
+        Device* hDevice,                                ///< [in] handle of the device
+        const desc_t* desc                              ///< [in] pointer to image descriptor
         )
     {
         // auto result = ::xeImageGetProperties( handle, hDevice, desc );
@@ -74,13 +74,13 @@ namespace xe
     ///     - clCreateImage
     /// 
     /// @returns
-    ///     - ::image_handle_t: pointer to handle of image object created
+    ///     - Image: pointer to handle of image object created
     /// 
     /// @throws result_t
-    inline image_handle_t 
+    inline Image* 
     Image::Create(
-        device_handle_t hDevice,                        ///< [in] handle of the device
-        const image_desc_t* desc                        ///< [in] pointer to image descriptor
+        Device* hDevice,                                ///< [in] handle of the device
+        const desc_t* desc                              ///< [in] pointer to image descriptor
         )
     {
         // auto result = ::xeImageCreate( handle, hDevice, desc );
@@ -102,7 +102,7 @@ namespace xe
     /// @throws result_t
     inline void 
     Image::Destroy(
-        image_handle_t hImage                           ///< [in] handle of image object to destroy
+        Image* hImage                                   ///< [in] handle of image object to destroy
         )
     {
         // auto result = ::xeImageDestroy( handle, hImage );

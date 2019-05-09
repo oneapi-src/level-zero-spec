@@ -67,14 +67,14 @@ namespace xe
     ///     - **cuModuleLoad**
     /// 
     /// @returns
-    ///     - ::module_handle_t: pointer to handle of module object created
+    ///     - Module: pointer to handle of module object created
     /// 
     /// @throws result_t
-    inline module_handle_t 
+    inline Module* 
     Module::Create(
-        device_handle_t hDevice,                        ///< [in] handle of the device
-        const module_desc_t* pDesc,                     ///< [in] pointer to module descriptor
-        module_build_log_handle_t* phBuildLog           ///< [in,out][optional] pointer to handle of module's build log.
+        Device* hDevice,                                ///< [in] handle of the device
+        const desc_t* pDesc,                            ///< [in] pointer to module descriptor
+        ModuleBuildLog* phBuildLog                      ///< [in,out][optional] pointer to handle of module's build log.
         )
     {
         // auto result = ::xeModuleCreate( handle, hDevice, pDesc, phBuildLog );
@@ -100,7 +100,7 @@ namespace xe
     /// @throws result_t
     inline void 
     Module::Destroy(
-        module_handle_t hModule                         ///< [in] handle of the module
+        Module* hModule                                 ///< [in] handle of the module
         )
     {
         // auto result = ::xeModuleDestroy( handle, hModule );
@@ -188,13 +188,13 @@ namespace xe
     ///     - **cuModuleGetFunction**
     /// 
     /// @returns
-    ///     - ::function_handle_t: handle of the Function object
+    ///     - Function: handle of the Function object
     /// 
     /// @throws result_t
-    inline function_handle_t 
+    inline Function* 
     Function::Create(
-        module_handle_t hModule,                        ///< [in] handle of the module
-        const function_desc_t* pDesc                    ///< [in] pointer to function descriptor
+        Module* hModule,                                ///< [in] handle of the module
+        const desc_t* pDesc                             ///< [in] pointer to function descriptor
         )
     {
         // auto result = ::xeFunctionCreate( handle, hModule, pDesc );
@@ -216,7 +216,7 @@ namespace xe
     /// @throws result_t
     inline void 
     Function::Destroy(
-        function_handle_t hFunction                     ///< [in] handle of the function object
+        Function* hFunction                             ///< [in] handle of the function object
         )
     {
         // auto result = ::xeFunctionDestroy( handle, hFunction );
@@ -307,7 +307,7 @@ namespace xe
     /// @throws result_t
     inline void 
     Function::SetAttribute(
-        function_set_attribute_t attr,                  ///< [in] attribute to set
+        set_attribute_t attr,                           ///< [in] attribute to set
         uint32_t value                                  ///< [in] attribute value to set
         )
     {
@@ -332,7 +332,7 @@ namespace xe
     /// @throws result_t
     inline uint32_t 
     Function::GetAttribute(
-        function_get_attribute_t attr                   ///< [in] attribute to query
+        get_attribute_t attr                            ///< [in] attribute to query
         )
     {
         // auto result = ::xeFunctionGetAttribute( handle, attr );
