@@ -21,17 +21,17 @@
 * express and approved by Intel in writing.  
 * @endcond
 *
-* @file xet_device.hpp
+* @file xet_sysman.hpp
 *
-* @brief C++ wrapper of Intel Xe Level-Zero Tool APIs for Device
+* @brief C++ wrapper of Intel Xe Level-Zero Tool APIs for System Management
 *
 * @cond DEV
-* DO NOT EDIT: generated from /scripts/tools/device.yml
+* DO NOT EDIT: generated from /scripts/tools/sysman.yml
 * @endcond
 *
 ******************************************************************************/
-#ifndef _XET_DEVICE_HPP
-#define _XET_DEVICE_HPP
+#ifndef _XET_SYSMAN_HPP
+#define _XET_SYSMAN_HPP
 #if defined(__cplusplus)
 #pragma once
 #include "xet_common.hpp"
@@ -39,35 +39,32 @@
 namespace xet
 {
     ///////////////////////////////////////////////////////////////////////////////
-    /// @brief C++ wrapper for device
-    class Device : public xe::Device
+    /// @brief C++ wrapper for sysman
+    class Sysman
     {
     protected:
+        ::xet_sysman_handle_t m_handle;                   ///< handle of sysman object
 
-        Device( void ) = delete;
-        using xe::Device::Device;
+        Sysman( void ) = delete;
+        Sysman( 
+                xet_sysman_handle_t handle                      ///< handle of sysman object
+                ) :
+                m_handle( handle )
+            {}
 
-        ~Device( void ) = default;
+        ~Sysman( void ) = default;
 
-        Device( Device const& other ) = delete;
-        void operator=( Device const& other ) = delete;
+        Sysman( Sysman const& other ) = delete;
+        void operator=( Sysman const& other ) = delete;
 
-        Device( Device&& other ) = delete;
-        void operator=( Device&& other ) = delete;
+        Sysman( Sysman&& other ) = delete;
+        void operator=( Sysman&& other ) = delete;
 
     public:
-
-        ///////////////////////////////////////////////////////////////////////////////
-        /// @brief C++ wrapper for ::xetDeviceActivateMetricGroups
-        /// @throws result_t
-        inline void
-        ActivateMetricGroups(
-            uint32_t count,                                 ///< [in] metric group count to activate. 0 to deactivate.
-            metric_group_handle_t* phMetricGroups           ///< [in] handles of the metric groups to activate. NULL to deactivate.
-            );
+        auto getHandle( void ) const { return m_handle; }
 
     };
 
 } // namespace xet
 #endif // defined(__cplusplus)
-#endif // _XET_DEVICE_HPP
+#endif // _XET_SYSMAN_HPP

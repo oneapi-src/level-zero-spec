@@ -21,53 +21,28 @@
 * express and approved by Intel in writing.  
 * @endcond
 *
-* @file xet_device.hpp
+* @file xet_sysman.h
 *
-* @brief C++ wrapper of Intel Xe Level-Zero Tool APIs for Device
+* @brief Intel Xe Level-Zero Tool APIs for System Management
 *
 * @cond DEV
-* DO NOT EDIT: generated from /scripts/tools/device.yml
+* DO NOT EDIT: generated from /scripts/tools/sysman.yml
 * @endcond
 *
 ******************************************************************************/
-#ifndef _XET_DEVICE_HPP
-#define _XET_DEVICE_HPP
+#ifndef _XET_SYSMAN_H
+#define _XET_SYSMAN_H
 #if defined(__cplusplus)
 #pragma once
-#include "xet_common.hpp"
+#endif
+#include "xet_common.h"
 
-namespace xet
-{
-    ///////////////////////////////////////////////////////////////////////////////
-    /// @brief C++ wrapper for device
-    class Device : public xe::Device
-    {
-    protected:
+#if defined(__cplusplus)
+extern "C" {
+#endif
 
-        Device( void ) = delete;
-        using xe::Device::Device;
+#if defined(__cplusplus)
+} // extern "C"
+#endif
 
-        ~Device( void ) = default;
-
-        Device( Device const& other ) = delete;
-        void operator=( Device const& other ) = delete;
-
-        Device( Device&& other ) = delete;
-        void operator=( Device&& other ) = delete;
-
-    public:
-
-        ///////////////////////////////////////////////////////////////////////////////
-        /// @brief C++ wrapper for ::xetDeviceActivateMetricGroups
-        /// @throws result_t
-        inline void
-        ActivateMetricGroups(
-            uint32_t count,                                 ///< [in] metric group count to activate. 0 to deactivate.
-            metric_group_handle_t* phMetricGroups           ///< [in] handles of the metric groups to activate. NULL to deactivate.
-            );
-
-    };
-
-} // namespace xet
-#endif // defined(__cplusplus)
-#endif // _XET_DEVICE_HPP
+#endif // _XET_SYSMAN_H

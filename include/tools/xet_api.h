@@ -38,6 +38,7 @@
 #include "xet_gtpin.h"
 #include "xet_metric.h"
 #include "xet_power.h"
+#include "xet_sysman.h"
 
 ///////////////////////////////////////////////////////////////////////////////
 typedef struct _xet_apitable_t
@@ -60,8 +61,8 @@ typedef struct _xet_apitable_t
     xet_pfnCommandListAppendMetricQueryEnd_t                    pfnCommandListAppendMetricQueryEnd;
     xet_pfnCommandListAppendMetricMemoryBarrier_t               pfnCommandListAppendMetricMemoryBarrier;
     xet_pfnMetricQueryGetData_t                                 pfnMetricQueryGetData;
-    xet_pfnDevicePowerInit_t                                    pfnDevicePowerInit;
-    xet_pfnPowerShutdown_t                                      pfnPowerShutdown;
+    xet_pfnPowerCreate_t                                        pfnPowerCreate;
+    xet_pfnPowerDestroy_t                                       pfnPowerDestroy;
     xet_pfnPowerGetAveragePowerLimit_t                          pfnPowerGetAveragePowerLimit;
     xet_pfnPowerGetBurstPowerLimit_t                            pfnPowerGetBurstPowerLimit;
     xet_pfnPowerGetPeakPowerLimit_t                             pfnPowerGetPeakPowerLimit;
@@ -74,15 +75,16 @@ typedef struct _xet_apitable_t
     xet_pfnPowerGetEnergyCounter_t                              pfnPowerGetEnergyCounter;
     xet_pfnPowerGetTurboMode_t                                  pfnPowerGetTurboMode;
     xet_pfnPowerSetTurboMode_t                                  pfnPowerSetTurboMode;
-    xet_pfnPowerFreqDomainCount_t                               pfnPowerFreqDomainCount;
-    xet_pfnPowerFreqDomainGetHandle_t                           pfnPowerFreqDomainGetHandle;
-    xet_pfnPowerFreqDomainGetProperties_t                       pfnPowerFreqDomainGetProperties;
-    xet_pfnPowerFreqDomainGetSupportedClocks_t                  pfnPowerFreqDomainGetSupportedClocks;
-    xet_pfnPowerFreqDomainGetSupportedClockDividers_t           pfnPowerFreqDomainGetSupportedClockDividers;
-    xet_pfnPowerpfnPowerFreqDomainGetClockRange_t               pfnPowerpfnPowerFreqDomainGetClockRange;
-    xet_pfnPowerpfnPowerFreqDomainSetClockRange_t               pfnPowerpfnPowerFreqDomainSetClockRange;
-    xet_pfnPowerFreqDomainSetClockDivider_t                     pfnPowerFreqDomainSetClockDivider;
-    xet_pfnPowerGetCurrentFrequency_t                           pfnPowerGetCurrentFrequency;
+    xet_pfnPowerGetFreqDomainCount_t                            pfnPowerGetFreqDomainCount;
+    xet_pfnPowerGetFreqDomainHandle_t                           pfnPowerGetFreqDomainHandle;
+    xet_pfnFreqDomainGetProperties_t                            pfnFreqDomainGetProperties;
+    xet_pfnFreqDomainGetSourceFreqDomain_t                      pfnFreqDomainGetSourceFreqDomain;
+    xet_pfnFreqDomainGetSupportedClocks_t                       pfnFreqDomainGetSupportedClocks;
+    xet_pfnFreqDomainGetSupportedClockDividers_t                pfnFreqDomainGetSupportedClockDividers;
+    xet_pfnFreqDomainGetClockRange_t                            pfnFreqDomainGetClockRange;
+    xet_pfnFreqDomainSetClockRange_t                            pfnFreqDomainSetClockRange;
+    xet_pfnFreqDomainSetClockDivider_t                          pfnFreqDomainSetClockDivider;
+    xet_pfnFreqDomainGetCurrentFrequency_t                      pfnFreqDomainGetCurrentFrequency;
     xet_pfnPowerFanCount_t                                      pfnPowerFanCount;
     xet_pfnPowerFanGetProperties_t                              pfnPowerFanGetProperties;
     xet_pfnPowerFanGetSpeedTable_t                              pfnPowerFanGetSpeedTable;

@@ -1,0 +1,12 @@
+--- #--------------------------------------------------------------------------
+type: header
+desc: "Intel $OneApi Level-Zero Tool APIs for System Management"
+
+--- #--------------------------------------------------------------------------
+type: class
+desc: "C++ wrapper for sysman"
+name: $tSysman
+members:
+    - type: $t_sysman_handle_t
+      name: handle
+      desc: "handle of sysman object"

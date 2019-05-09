@@ -19,6 +19,8 @@ ${"##"} Table of Contents
 * [Program Instrumentation](#pin)
 * [Program Debug](#dbg)
 * [API Tracing](#at)
+* [Power](#pm)
+* [System Management](#sm)
 
 ${"#"} <a name="md">Metrics</a>
 
@@ -367,3 +369,11 @@ for application processing. To calculate metric values use ::${t}MetricGroupCalc
 ```
 
 
+${"#"} <a name="pm">Power</a>
+
+${"##"} Introduction
+
+
+${"#"} <a name="sm">System Management</a>
+
+${"##"} Introduction

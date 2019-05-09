@@ -80,6 +80,16 @@ namespace xet
     class Power;
     using power_handle_t = Power*;
 
+    ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Handle of a frequency domain on a device
+    class FreqDomain;
+    using freq_domain_handle_t = FreqDomain*;
+
+    ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Handle of sysman object
+    class Sysman;
+    using sysman_handle_t = Sysman*;
+
 } // namespace xet
 #endif // defined(__cplusplus)
 #endif // _XET_COMMON_HPP

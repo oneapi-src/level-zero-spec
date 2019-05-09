@@ -51,10 +51,12 @@ typedef enum _xet_power_init_flags_t
 } xet_power_init_flags_t;
 
 ///////////////////////////////////////////////////////////////////////////////
-/// @brief Initialize power management features
+/// @brief Creates an object to access power features on a device
 /// 
 /// @details
 ///     - Initializes internal structures to support power management features.
+///     - Error ::XE_RESULT_ERROR_UNSUPPORTED is returned if the device does not
+///       support access to power management features.
 /// 
 /// @remarks
 ///   _Analogues_
@@ -70,22 +72,22 @@ typedef enum _xet_power_init_flags_t
 ///         + nullptr == pPowerHandle
 ///     - ::XE_RESULT_ERROR_UNSUPPORTED
 __xedllexport xe_result_t __xecall
-xetDevicePowerInit(
+xetPowerCreate(
     xe_device_handle_t hDevice,                     ///< [in] handle of the device object
     uint32_t flags,                                 ///< [in] bitfield of ::xet_power_init_flags_t
     xet_power_handle_t* pPowerHandle                ///< [out] handle for accessing power features of the device
     );
 
 ///////////////////////////////////////////////////////////////////////////////
-/// @brief Function-pointer for xetDevicePowerInit 
-typedef xe_result_t (__xecall *xet_pfnDevicePowerInit_t)(
+/// @brief Function-pointer for xetPowerCreate 
+typedef xe_result_t (__xecall *xet_pfnPowerCreate_t)(
     xe_device_handle_t,
     uint32_t,
     xet_power_handle_t*
     );
 
 ///////////////////////////////////////////////////////////////////////////////
-/// @brief Removes access to power management features
+/// @brief Deletes a power object
 /// 
 /// @remarks
 ///   _Analogues_
@@ -100,15 +102,41 @@ typedef xe_result_t (__xecall *xet_pfnDevicePowerInit_t)(
 ///         + nullptr == hPower
 ///     - ::XE_RESULT_ERROR_UNSUPPORTED
 __xedllexport xe_result_t __xecall
-xetPowerShutdown(
-    xet_power_handle_t hPower                       ///< [in] handle of the power object
+xetPowerDestroy(
+    xet_power_handle_t hPower                       ///< [in] handle of the power object to destroy
     );
 
 ///////////////////////////////////////////////////////////////////////////////
-/// @brief Function-pointer for xetPowerShutdown 
-typedef xe_result_t (__xecall *xet_pfnPowerShutdown_t)(
+/// @brief Function-pointer for xetPowerDestroy 
+typedef xe_result_t (__xecall *xet_pfnPowerDestroy_t)(
     xet_power_handle_t
     );
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief GPU domains
+typedef enum _xet_gpu_domain_t
+{
+    XET_GPU_DOMAIN_BASE = XE_BIT( 0 ),              ///< base die
+    XET_GPU_DOMAIN_VIDEO_DECODE = XE_BIT( 1 ),      ///< video decode engines
+    XET_GPU_DOMAIN_VIDEO_ENCODE = XE_BIT( 2 ),      ///< video encode engines
+    XET_GPU_DOMAIN_VIDEO_PROCESSING = XE_BIT( 3 ),  ///< video processing engines
+    XET_GPU_DOMAIN_3D_FIXED_FUNCTION = XE_BIT( 4 ), ///< 3D fixed-function
+    XET_GPU_DOMAIN_3D_RENDER = XE_BIT( 5 ),         ///< 3D programmable engines
+    XET_GPU_DOMAIN_COMPUTE = XE_BIT( 6 ),           ///< compute engines
+    XET_GPU_DOMAIN_SYSTOLIC_ARRAY = XE_BIT( 7 ),    ///< systolic array engines
+    XET_GPU_DOMAIN_RAYTRACING = XE_BIT( 8 ),        ///< raytracing engines
+    XET_GPU_DOMAIN_LOCAL_MEMORY = XE_BIT( 9 ),      ///< local memory
+    XET_GPU_DOMAIN_BASE_CHIPLET_LINK = XE_BIT( 10 ),///< link between base die and chiplet
+
+} xet_gpu_domain_t;
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief API version of ::xet_power_average_limit_t
+typedef enum _xet_power_average_limit_version_t
+{
+    XET_AVERAGE_POWER_LIMIT_VERSION_CURRENT = XE_MAKE_VERSION( 1, 0 ),  ///< version 1.0
+
+} xet_power_average_limit_version_t;
 
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Average power limit
@@ -119,9 +147,10 @@ typedef xe_result_t (__xecall *xet_pfnPowerShutdown_t)(
 ///       exceeds a limit known as PL1.
 typedef struct _xet_power_average_limit_t
 {
-    xe_bool_t enabled;                              ///< [in/out] indicates if the limit is enabled (true) or ignored (false)
-    uint32_t powerMilliwatts;                       ///< [in/out] power limit in milliwatts
-    uint32_t intervalMilliseconds;                  ///< [in/out] power averaging window (Tau) in milliseconds
+    xet_power_average_limit_version_t version;      ///< [in] ::XET_AVERAGE_POWER_LIMIT_VERSION_CURRENT
+    xe_bool_t enabled;                              ///< [in,out] indicates if the limit is enabled (true) or ignored (false)
+    uint32_t power;                                 ///< [in,out] power limit in milliwatts
+    uint32_t interval;                              ///< [in,out] power averaging window (Tau) in milliseconds
 
 } xet_power_average_limit_t;
 
@@ -136,8 +165,8 @@ typedef struct _xet_power_average_limit_t
 ///       permitted by PL1.
 typedef struct _xet_power_burst_limit_t
 {
-    xe_bool_t enabled;                              ///< [in/out] indicates if the limit is enabled (true) or ignored (false)
-    uint32_t powerMilliwatts;                       ///< [in/out] power limit in milliwatts
+    xe_bool_t enabled;                              ///< [in,out] indicates if the limit is enabled (true) or ignored (false)
+    uint32_t power;                                 ///< [in,out] power limit in milliwatts
 
 } xet_power_burst_limit_t;
 
@@ -156,7 +185,7 @@ typedef struct _xet_power_burst_limit_t
 ///       excursions.
 typedef struct _xet_power_peak_limit_t
 {
-    uint32_t powerMilliwatts;                       ///< [in/out] power limit in milliwatts
+    uint32_t power;                                 ///< [in,out] power limit in milliwatts
 
 } xet_power_peak_limit_t;
 
@@ -164,9 +193,9 @@ typedef struct _xet_power_peak_limit_t
 /// @brief All power limits
 typedef struct _xet_power_limits_t
 {
-    xet_power_average_limit_t averagePowerLimit;    ///< [in/out] average power limit information
-    xet_power_burst_limit_t burstPowerLimit;        ///< [in/out] burst power limit information
-    xet_power_peak_limit_t peakPowerLimit;          ///< [in/out] peak power limit information
+    xet_power_average_limit_t averagePowerLimit;    ///< [in,out] average power limit information
+    xet_power_burst_limit_t burstPowerLimit;        ///< [in,out] burst power limit information
+    xet_power_peak_limit_t peakPowerLimit;          ///< [in,out] peak power limit information
 
 } xet_power_limits_t;
 
@@ -390,7 +419,8 @@ typedef xe_result_t (__xecall *xet_pfnPowerSetPowerLimits_t)(
 /// @brief Get energy counter
 /// 
 /// @details
-///     - Average power = delta(energyMillijoules) / delta(timeMilliseconds)
+///     - Average power = delta(energy counter in millijoules) / delta(time in
+///       milliseconds)
 /// 
 /// @returns
 ///     - ::XE_RESULT_SUCCESS
@@ -398,12 +428,12 @@ typedef xe_result_t (__xecall *xet_pfnPowerSetPowerLimits_t)(
 ///     - ::XE_RESULT_ERROR_DEVICE_LOST
 ///     - ::XE_RESULT_ERROR_INVALID_PARAMETER
 ///         + nullptr == hPower
-///         + nullptr == pEnergyMillijoules
+///         + nullptr == pEnergy
 ///     - ::XE_RESULT_ERROR_UNSUPPORTED
 __xedllexport xe_result_t __xecall
 xetPowerGetEnergyCounter(
     xet_power_handle_t hPower,                      ///< [in] handle of the power object
-    uint64_t* pEnergyMillijoules                    ///< [out] the energy counter in millijoules
+    uint64_t* pEnergy                               ///< [out] the energy counter in millijoules
     );
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -474,24 +504,6 @@ typedef xe_result_t (__xecall *xet_pfnPowerSetTurboMode_t)(
     );
 
 ///////////////////////////////////////////////////////////////////////////////
-/// @brief GPU domains
-typedef enum _xet_gpu_domain_t
-{
-    XET_GPU_DOMAIN_BASE = XE_BIT( 0 ),              ///< base die
-    XET_GPU_DOMAIN_VIDEO_DECODE = XE_BIT( 1 ),      ///< video decode engines
-    XET_GPU_DOMAIN_VIDEO_ENCODE = XE_BIT( 2 ),      ///< video encode engines
-    XET_GPU_DOMAIN_VIDEO_PROCESSING = XE_BIT( 3 ),  ///< video processing engines
-    XET_GPU_DOMAIN_3D_FIXED_FUNCTION = XE_BIT( 4 ), ///< 3D fixed-function
-    XET_GPU_DOMAIN_3D_RENDER = XE_BIT( 5 ),         ///< 3D programmable engines
-    XET_GPU_DOMAIN_COMPUTE = XE_BIT( 6 ),           ///< compute engines
-    XET_GPU_DOMAIN_SYSTOLIC_ARRAY = XE_BIT( 7 ),    ///< systolic array engines
-    XET_GPU_DOMAIN_RAYTRACING = XE_BIT( 8 ),        ///< raytracing engines
-    XET_GPU_DOMAIN_LOCAL_MEMORY = XE_BIT( 9 ),      ///< local memory
-    XET_GPU_DOMAIN_BASE_CHIPLET_LINK = XE_BIT( 10 ),///< link between base die and chiplet
-
-} xet_gpu_domain_t;
-
-///////////////////////////////////////////////////////////////////////////////
 /// @brief Clock types
 typedef enum _xet_clock_type_t
 {
@@ -518,38 +530,32 @@ typedef enum _xet_freq_throttle_reasons_t
 } xet_freq_throttle_reasons_t;
 
 ///////////////////////////////////////////////////////////////////////////////
-/// @brief Handle of a frequency domain on a device
-typedef struct _xet_freq_domain_handle_t *xet_freq_domain_handle_t;
-
-///////////////////////////////////////////////////////////////////////////////
 /// @brief Properties of a frequency domain
 /// 
 /// @details
 ///     - A frequency domain contains one or more GPU functional blocks - see
 ///       ::xet_gpu_domain_t
 ///     - There is more than one type of clock - check clockType
-///     - For clock type ::XET_CLOCK_TYPE_FIXED, minClockMHz and maxClockMHz
-///       will be the same and numClockPoints will be 1.
+///     - For clock type ::XET_CLOCK_TYPE_FIXED, minClock and maxClock will be
+///       the same and numClockPoints will be 1.
 ///     - For clock type ::XET_CLOCK_TYPE_PLL, numClockPoints is given for
 ///       informational purposes. Do not assume the frequency step between
 ///       min/max clocks is (max - min) / (numClockPoints - 1). Instead, use the
-///       function ::xetPowerFreqDomainGetSupportedClocks to get the list of all
+///       function ::xetFreqDomainGetSupportedClocks to get the list of all
 ///       supported clocks between min/max.
 ///     - For clock type ::XET_CLOCK_TYPE_DIVIDER, the frequency of the domain
 ///       is given by multiplying the divider by the frequency of the source
 ///       domain. The possible divider values can be obtained using the function
-///       ::xetPowerFreqDomainGetSupportedClockDividers. For this clock type,
-///       minClockMHz/maxClockMHz specifies the total range of frequencies
-///       whereas the actual range depends on the current divider value.
+///       ::xetFreqDomainGetSupportedClockDividers. For this clock type,
+///       minClock/maxClock specifies the total range of frequencies whereas the
+///       actual range depends on the current divider value.
 typedef struct _xet_freq_domain_properties_t
 {
     uint32_t gpuDomains;                            ///< [in] bitfield of xex_gpu_domain_t
     xet_clock_type_t clockType;                     ///< [in] clock type
-    uint32_t minClockMHz;                           ///< [in] minimum frequency of the domain
-    uint32_t maxClockMHz;                           ///< [in] maximum frequency of the domain
+    uint32_t minClock;                              ///< [in] minimum frequency of the domain
+    uint32_t maxClock;                              ///< [in] maximum frequency of the domain
     uint32_t numClockPoints;                        ///< [in] number of discrete clock points between and including min/max
-    xet_freq_domain_handle_t srcFreqDomain;         ///< [in] for clock type ::XET_CLOCK_TYPE_DIVIDER, this is the handle to
-                                                    ///< the source frequency domain
     uint32_t numClockDividers;                      ///< [in] for clock type ::XET_CLOCK_TYPE_DIVIDER, this gives the number of
                                                     ///< dividers available
 
@@ -561,11 +567,11 @@ typedef struct _xet_freq_domain_properties_t
 /// @details
 ///     - The frequency of a domain of type ::XET_CLOCK_TYPE_DIVIDER is obtained
 ///       by the formula:
-///     - freqMHz = src_domain_freqMHz * numerator / denominator
+///     - freq = source domain freq * numerator / denominator
 typedef struct _xet_clock_divider_t
 {
-    uint16_t numerator;                             ///< [in/out] numerator of the ratio
-    uint16_t denominator;                           ///< [in/out] denominator of the ratio
+    uint16_t numerator;                             ///< [in,out] numerator of the ratio
+    uint16_t denominator;                           ///< [in,out] denominator of the ratio
 
 } xet_clock_divider_t;
 
@@ -581,20 +587,20 @@ typedef struct _xet_clock_divider_t
 ///         + nullptr == pNumFreqDomains
 ///     - ::XE_RESULT_ERROR_UNSUPPORTED
 __xedllexport xe_result_t __xecall
-xetPowerFreqDomainCount(
+xetPowerGetFreqDomainCount(
     xet_power_handle_t hPower,                      ///< [in] handle of the power object
     uint32_t* pNumFreqDomains                       ///< [out] the number of frequency domains
     );
 
 ///////////////////////////////////////////////////////////////////////////////
-/// @brief Function-pointer for xetPowerFreqDomainCount 
-typedef xe_result_t (__xecall *xet_pfnPowerFreqDomainCount_t)(
+/// @brief Function-pointer for xetPowerGetFreqDomainCount 
+typedef xe_result_t (__xecall *xet_pfnPowerGetFreqDomainCount_t)(
     xet_power_handle_t,
     uint32_t*
     );
 
 ///////////////////////////////////////////////////////////////////////////////
-/// @brief Get a handle to a frequency domain
+/// @brief Get an object to a frequency domain on a device
 /// 
 /// @returns
 ///     - ::XE_RESULT_SUCCESS
@@ -605,15 +611,15 @@ typedef xe_result_t (__xecall *xet_pfnPowerFreqDomainCount_t)(
 ///         + nullptr == phFreqDomain
 ///     - ::XE_RESULT_ERROR_UNSUPPORTED
 __xedllexport xe_result_t __xecall
-xetPowerFreqDomainGetHandle(
+xetPowerGetFreqDomainHandle(
     xet_power_handle_t hPower,                      ///< [in] handle of the power object
-    uint32_t ordinal,                               ///< [in] frequency domain index [0 .. ::xetPowerFreqDomainCount - 1]
+    uint32_t ordinal,                               ///< [in] frequency domain index [0 .. ::xetPowerGetFreqDomainCount - 1]
     xet_freq_domain_handle_t* phFreqDomain          ///< [out] pointer to handle of frequency domain object
     );
 
 ///////////////////////////////////////////////////////////////////////////////
-/// @brief Function-pointer for xetPowerFreqDomainGetHandle 
-typedef xe_result_t (__xecall *xet_pfnPowerFreqDomainGetHandle_t)(
+/// @brief Function-pointer for xetPowerGetFreqDomainHandle 
+typedef xe_result_t (__xecall *xet_pfnPowerGetFreqDomainHandle_t)(
     xet_power_handle_t,
     uint32_t,
     xet_freq_domain_handle_t*
@@ -631,16 +637,42 @@ typedef xe_result_t (__xecall *xet_pfnPowerFreqDomainGetHandle_t)(
 ///         + nullptr == pFreqDomainProperties
 ///     - ::XE_RESULT_ERROR_UNSUPPORTED
 __xedllexport xe_result_t __xecall
-xetPowerFreqDomainGetProperties(
+xetFreqDomainGetProperties(
     xet_freq_domain_handle_t hFreqDomain,           ///< [in] handle of the frequency domain
     xet_freq_domain_properties_t* pFreqDomainProperties ///< [out] pointer to properties for the frequency domain
     );
 
 ///////////////////////////////////////////////////////////////////////////////
-/// @brief Function-pointer for xetPowerFreqDomainGetProperties 
-typedef xe_result_t (__xecall *xet_pfnPowerFreqDomainGetProperties_t)(
+/// @brief Function-pointer for xetFreqDomainGetProperties 
+typedef xe_result_t (__xecall *xet_pfnFreqDomainGetProperties_t)(
     xet_freq_domain_handle_t,
     xet_freq_domain_properties_t*
+    );
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Get the source frequency domain handle for a frequency domain of type
+///        ::XET_CLOCK_TYPE_DIVIDER
+/// 
+/// @returns
+///     - ::XE_RESULT_SUCCESS
+///     - ::XE_RESULT_ERROR_UNINITIALIZED
+///     - ::XE_RESULT_ERROR_DEVICE_LOST
+///     - ::XE_RESULT_ERROR_INVALID_PARAMETER
+///         + nullptr == hFreqDomain
+///         + nullptr == phSrcFreqDomain
+///     - ::XE_RESULT_ERROR_UNSUPPORTED
+__xedllexport xe_result_t __xecall
+xetFreqDomainGetSourceFreqDomain(
+    xet_freq_domain_handle_t hFreqDomain,           ///< [in] handle of the frequency domain
+    xet_freq_domain_handle_t* phSrcFreqDomain       ///< [out] pointer to a handle where the source frequency domain handle
+                                                    ///< will be returned
+    );
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Function-pointer for xetFreqDomainGetSourceFreqDomain 
+typedef xe_result_t (__xecall *xet_pfnFreqDomainGetSourceFreqDomain_t)(
+    xet_freq_domain_handle_t,
+    xet_freq_domain_handle_t*
     );
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -657,18 +689,18 @@ typedef xe_result_t (__xecall *xet_pfnPowerFreqDomainGetProperties_t)(
 ///     - ::XE_RESULT_ERROR_DEVICE_LOST
 ///     - ::XE_RESULT_ERROR_INVALID_PARAMETER
 ///         + nullptr == hFreqDomain
-///         + nullptr == pClocksMHz
+///         + nullptr == pClocks
 ///     - ::XE_RESULT_ERROR_UNSUPPORTED
 __xedllexport xe_result_t __xecall
-xetPowerFreqDomainGetSupportedClocks(
+xetFreqDomainGetSupportedClocks(
     xet_freq_domain_handle_t hFreqDomain,           ///< [in] handle of the frequency domain
-    uint32_t numClockPoints,                        ///< [in] number of elements in pClocksMHz
-    uint32_t* pClocksMHz                            ///< [out] pointer to array of frequencies
+    uint32_t numClockPoints,                        ///< [in] number of elements in pClocks
+    uint32_t* pClocks                               ///< [out] pointer to array of frequencies
     );
 
 ///////////////////////////////////////////////////////////////////////////////
-/// @brief Function-pointer for xetPowerFreqDomainGetSupportedClocks 
-typedef xe_result_t (__xecall *xet_pfnPowerFreqDomainGetSupportedClocks_t)(
+/// @brief Function-pointer for xetFreqDomainGetSupportedClocks 
+typedef xe_result_t (__xecall *xet_pfnFreqDomainGetSupportedClocks_t)(
     xet_freq_domain_handle_t,
     uint32_t,
     uint32_t*
@@ -691,15 +723,15 @@ typedef xe_result_t (__xecall *xet_pfnPowerFreqDomainGetSupportedClocks_t)(
 ///         + nullptr == pDividers
 ///     - ::XE_RESULT_ERROR_UNSUPPORTED
 __xedllexport xe_result_t __xecall
-xetPowerFreqDomainGetSupportedClockDividers(
+xetFreqDomainGetSupportedClockDividers(
     xet_freq_domain_handle_t hFreqDomain,           ///< [in] handle of the frequency domain
     uint32_t numClockDividers,                      ///< [in] number of elements in pDividers
     xet_clock_divider_t* pDividers                  ///< [out] pointer to array of dividers
     );
 
 ///////////////////////////////////////////////////////////////////////////////
-/// @brief Function-pointer for xetPowerFreqDomainGetSupportedClockDividers 
-typedef xe_result_t (__xecall *xet_pfnPowerFreqDomainGetSupportedClockDividers_t)(
+/// @brief Function-pointer for xetFreqDomainGetSupportedClockDividers 
+typedef xe_result_t (__xecall *xet_pfnFreqDomainGetSupportedClockDividers_t)(
     xet_freq_domain_handle_t,
     uint32_t,
     xet_clock_divider_t*
@@ -715,19 +747,19 @@ typedef xe_result_t (__xecall *xet_pfnPowerFreqDomainGetSupportedClockDividers_t
 ///     - ::XE_RESULT_ERROR_DEVICE_LOST
 ///     - ::XE_RESULT_ERROR_INVALID_PARAMETER
 ///         + nullptr == hFreqDomain
-///         + nullptr == pMinClockMHz
-///         + nullptr == pMaxClockMHz
+///         + nullptr == pMinClock
+///         + nullptr == pMaxClock
 ///     - ::XE_RESULT_ERROR_UNSUPPORTED
 __xedllexport xe_result_t __xecall
-xetPowerxetPowerFreqDomainGetClockRange(
+xetFreqDomainGetClockRange(
     xet_freq_domain_handle_t hFreqDomain,           ///< [in] handle of the frequency domain
-    uint32_t* pMinClockMHz,                         ///< [out] min clock frequency in units of MHz
-    uint32_t* pMaxClockMHz                          ///< [out] max clock frequency in units of MHz
+    uint32_t* pMinClock,                            ///< [out] min clock frequency in units of MHz
+    uint32_t* pMaxClock                             ///< [out] max clock frequency in units of MHz
     );
 
 ///////////////////////////////////////////////////////////////////////////////
-/// @brief Function-pointer for xetPowerxetPowerFreqDomainGetClockRange 
-typedef xe_result_t (__xecall *xet_pfnPowerpfnPowerFreqDomainGetClockRange_t)(
+/// @brief Function-pointer for xetFreqDomainGetClockRange 
+typedef xe_result_t (__xecall *xet_pfnFreqDomainGetClockRange_t)(
     xet_freq_domain_handle_t,
     uint32_t*,
     uint32_t*
@@ -740,12 +772,12 @@ typedef xe_result_t (__xecall *xet_pfnPowerpfnPowerFreqDomainGetClockRange_t)(
 /// @details
 ///     - Turbo (dynamic hardware frequency management) will select frequencies
 ///       between this range based on the current Turbo mode in effect.
-///     - Setting minClockMHz = maxClockMHz will fix the frequency for that
-///       frequency domain.
-///     - Setting minClockMHz = 0 will instruct the hardware to use the default
-///       min value.
-///     - Setting maxClockMHz = 0 will instruct the hardware to use the default
-///       max value.
+///     - Setting minClock = maxClock will fix the frequency for that frequency
+///       domain.
+///     - Setting minClock = 0 will instruct the hardware to use the default min
+///       value.
+///     - Setting maxClock = 0 will instruct the hardware to use the default max
+///       value.
 /// 
 /// @returns
 ///     - ::XE_RESULT_SUCCESS
@@ -755,15 +787,15 @@ typedef xe_result_t (__xecall *xet_pfnPowerpfnPowerFreqDomainGetClockRange_t)(
 ///         + nullptr == hFreqDomain
 ///     - ::XE_RESULT_ERROR_UNSUPPORTED
 __xedllexport xe_result_t __xecall
-xetPowerxetPowerFreqDomainSetClockRange(
+xetFreqDomainSetClockRange(
     xet_freq_domain_handle_t hFreqDomain,           ///< [in] handle of the frequency domain
-    uint32_t minClockMHz,                           ///< [in] min clock frequency in units of MHz
-    uint32_t maxClockMHz                            ///< [in] max clock frequency in units of MHz
+    uint32_t minClock,                              ///< [in] min clock frequency in units of MHz
+    uint32_t maxClock                               ///< [in] max clock frequency in units of MHz
     );
 
 ///////////////////////////////////////////////////////////////////////////////
-/// @brief Function-pointer for xetPowerxetPowerFreqDomainSetClockRange 
-typedef xe_result_t (__xecall *xet_pfnPowerpfnPowerFreqDomainSetClockRange_t)(
+/// @brief Function-pointer for xetFreqDomainSetClockRange 
+typedef xe_result_t (__xecall *xet_pfnFreqDomainSetClockRange_t)(
     xet_freq_domain_handle_t,
     uint32_t,
     uint32_t
@@ -788,14 +820,14 @@ typedef xe_result_t (__xecall *xet_pfnPowerpfnPowerFreqDomainSetClockRange_t)(
 ///         + nullptr == pClockDividerRequest
 ///     - ::XE_RESULT_ERROR_UNSUPPORTED
 __xedllexport xe_result_t __xecall
-xetPowerFreqDomainSetClockDivider(
+xetFreqDomainSetClockDivider(
     xet_freq_domain_handle_t hFreqDomain,           ///< [in] handle of the frequency domain
     xet_clock_divider_t* pClockDividerRequest       ///< [out] pointer to frequency divider request
     );
 
 ///////////////////////////////////////////////////////////////////////////////
-/// @brief Function-pointer for xetPowerFreqDomainSetClockDivider 
-typedef xe_result_t (__xecall *xet_pfnPowerFreqDomainSetClockDivider_t)(
+/// @brief Function-pointer for xetFreqDomainSetClockDivider 
+typedef xe_result_t (__xecall *xet_pfnFreqDomainSetClockDivider_t)(
     xet_freq_domain_handle_t,
     xet_clock_divider_t*
     );
@@ -809,21 +841,21 @@ typedef xe_result_t (__xecall *xet_pfnPowerFreqDomainSetClockDivider_t)(
 ///     - ::XE_RESULT_ERROR_DEVICE_LOST
 ///     - ::XE_RESULT_ERROR_INVALID_PARAMETER
 ///         + nullptr == hFreqDomain
-///         + nullptr == pFreqRequestMHz
-///         + nullptr == pFreqResolvedMHz
+///         + nullptr == pFreqRequest
+///         + nullptr == pFreqResolved
 ///         + nullptr == pFreqThrottleReasons
 ///     - ::XE_RESULT_ERROR_UNSUPPORTED
 __xedllexport xe_result_t __xecall
-xetPowerGetCurrentFrequency(
+xetFreqDomainGetCurrentFrequency(
     xet_freq_domain_handle_t hFreqDomain,           ///< [in] handle of the frequency domain
-    uint32_t* pFreqRequestMHz,                      ///< [out] current frequency in MHz requested by the driver
-    uint32_t* pFreqResolvedMHz,                     ///< [out] the actual frequency in MHz
+    uint32_t* pFreqRequest,                         ///< [out] current frequency in MHz requested by the driver
+    uint32_t* pFreqResolved,                        ///< [out] the actual frequency in MHz
     xet_freq_throttle_reasons_t* pFreqThrottleReasons   ///< [out] the reason the resolved frequency is lower than the request
     );
 
 ///////////////////////////////////////////////////////////////////////////////
-/// @brief Function-pointer for xetPowerGetCurrentFrequency 
-typedef xe_result_t (__xecall *xet_pfnPowerGetCurrentFrequency_t)(
+/// @brief Function-pointer for xetFreqDomainGetCurrentFrequency 
+typedef xe_result_t (__xecall *xet_pfnFreqDomainGetCurrentFrequency_t)(
     xet_freq_domain_handle_t,
     uint32_t*,
     uint32_t*,
@@ -866,10 +898,10 @@ typedef struct _xet_fan_properties_t
 /// @brief Temperature/fan-speed point
 typedef struct _xet_fan_point_t
 {
-    xe_bool_t fanSpeedInRpm;                        ///< [in/out] false means fanSpeed is in percentage, true means fanSpeed is
+    xe_bool_t fanSpeedInRpm;                        ///< [in,out] false means fanSpeed is in percentage, true means fanSpeed is
                                                     ///< in RPM
-    uint16_t temperatureDegreesCentigrate;          ///< [in/out] temperature in degrees centigrate
-    uint16_t fanSpeed;                              ///< [in/out] the fan speed as a percentage (or RPM if fanSpeedInRpm is
+    uint16_t temperatureDegreesCentigrate;          ///< [in,out] temperature in degrees centigrate
+    uint16_t fanSpeed;                              ///< [in,out] the fan speed as a percentage (or RPM if fanSpeedInRpm is
                                                     ///< true)
 
 } xet_fan_point_t;
@@ -878,11 +910,11 @@ typedef struct _xet_fan_point_t
 /// @brief Fan speed info
 typedef struct _xet_fan_speed_info_t
 {
-    xe_bool_t fanSpeedInRpm;                        ///< [in/out] false means fanSpeed is in percentage, true means fanSpeed is
+    xe_bool_t fanSpeedInRpm;                        ///< [in,out] false means fanSpeed is in percentage, true means fanSpeed is
                                                     ///< in RPM
-    xet_fan_mode_t fanSpeedMode;                    ///< [in/out] whether the fan speed is fixed or being controlled
+    xet_fan_speed_mode_t fanSpeedMode;              ///< [in,out] whether the fan speed is fixed or being controlled
                                                     ///< dynamically
-    uint16_t fanSpeed;                              ///< [in/out] the fan speed as a percentage (or RPM if fanSpeedInRpm is
+    uint16_t fanSpeed;                              ///< [in,out] the fan speed as a percentage (or RPM if fanSpeedInRpm is
                                                     ///< true)
 
 } xet_fan_speed_info_t;
@@ -958,7 +990,7 @@ xetPowerFanGetSpeedTable(
     xet_power_handle_t hPower,                      ///< [in] handle of the power object
     uint32_t fanIndex,                              ///< [in] fan index [0 .. ::xetPowerFanCount - 1]
     xe_bool_t fanSpeedInRpm,                        ///< [in] true will request fan speeds in RPM, otherwise in percentage
-    uint32_t* pNumFanPoints,                        ///< [in/out] input number of elements in pFanSpeedTable array; output
+    uint32_t* pNumFanPoints,                        ///< [in,out] input number of elements in pFanSpeedTable array; output
                                                     ///< number of elements returned
     xet_fan_point_t* pFanPoints                     ///< [out] pointer to an array of temperature/fan-speed points
     );
@@ -1044,8 +1076,8 @@ typedef xe_result_t (__xecall *xet_pfnPowerFanGetSpeed_t)(
 /// @brief Set fan speeds
 /// 
 /// @details
-///     - Use t_fan_speed_info_t.fanSpeedMode to set whether the speed should be
-///       fixed or dynamically controlled
+///     - Use ::xet_fan_speed_info_t.fanSpeedMode to set whether the speed
+///       should be fixed or dynamically controlled
 /// 
 /// @returns
 ///     - ::XE_RESULT_SUCCESS
@@ -1234,15 +1266,15 @@ typedef struct _xet_activity_properties_t
 ///     - Activity counter 0 is a normalized accumulation of activity across all
 ///       blocks.
 ///     - Samples these counters between two points and calculate utilization by
-///       dividing delta(activityCounterUsec) / delta(timeCounterUsec).
-///     - Powered down time is given by timeCounterUsec - activityCounterUsec -
-///       idleCounterUsec.
+///       dividing delta(activityCounter) / delta(timeCounter).
+///     - Powered down time is given by timeCounter - activityCounter -
+///       idleCounter.
 typedef struct _xet_activity_counters_t
 {
-    uint64_t activityCounterUsec;                   ///< [out] Monotonically increasing counter of activity in microseconds
-    uint64_t idleCounterUsec;                       ///< [out] Monotonically increasing counter of time blocks are powered on
+    uint64_t activityCounter;                       ///< [out] Monotonically increasing counter of activity in microseconds
+    uint64_t idleCounter;                           ///< [out] Monotonically increasing counter of time blocks are powered on
                                                     ///< but idle in microseconds
-    uint64_t timeCounterUsec;                       ///< [out] Monotonically increasing counter of time in microseconds
+    uint64_t timeCounter;                           ///< [out] Monotonically increasing counter of time in microseconds
 
 } xet_activity_counters_t;
 

@@ -43,7 +43,7 @@ def generate_meta(d, meta):
         if name not in meta['class'][c][type]:
             meta['class'][c][type].append(name)
         else:
-            print("Error - duplicate entries found!")
+            print("Error - duplicate entries for %s found!"%name)
             raise
 
     if 'class' != type:

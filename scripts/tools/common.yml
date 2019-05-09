@@ -41,3 +41,13 @@ type: handle
 desc: "Handle of power object"
 class: $tPower
 name: "$t_power_handle_t"
+--- #--------------------------------------------------------------------------
+type: handle
+desc: "Handle of a frequency domain on a device"
+class: $tFreqDomain
+name: "$t_freq_domain_handle_t"
+--- #--------------------------------------------------------------------------
+type: handle
+desc: "Handle of sysman object"
+class: $tSysman
+name: "$t_sysman_handle_t"

@@ -56,8 +56,8 @@ bool xetLoadExports(
     xet_apitable.pfnCommandListAppendMetricQueryEnd                      = (xet_pfnCommandListAppendMetricQueryEnd_t)LOAD_FUNCTION_PTR(handle, "xetCommandListAppendMetricQueryEnd");
     xet_apitable.pfnCommandListAppendMetricMemoryBarrier                 = (xet_pfnCommandListAppendMetricMemoryBarrier_t)LOAD_FUNCTION_PTR(handle, "xetCommandListAppendMetricMemoryBarrier");
     xet_apitable.pfnMetricQueryGetData                                   = (xet_pfnMetricQueryGetData_t)LOAD_FUNCTION_PTR(handle, "xetMetricQueryGetData");
-    xet_apitable.pfnDevicePowerInit                                      = (xet_pfnDevicePowerInit_t)LOAD_FUNCTION_PTR(handle, "xetDevicePowerInit");
-    xet_apitable.pfnPowerShutdown                                        = (xet_pfnPowerShutdown_t)LOAD_FUNCTION_PTR(handle, "xetPowerShutdown");
+    xet_apitable.pfnPowerCreate                                          = (xet_pfnPowerCreate_t)LOAD_FUNCTION_PTR(handle, "xetPowerCreate");
+    xet_apitable.pfnPowerDestroy                                         = (xet_pfnPowerDestroy_t)LOAD_FUNCTION_PTR(handle, "xetPowerDestroy");
     xet_apitable.pfnPowerGetAveragePowerLimit                            = (xet_pfnPowerGetAveragePowerLimit_t)LOAD_FUNCTION_PTR(handle, "xetPowerGetAveragePowerLimit");
     xet_apitable.pfnPowerGetBurstPowerLimit                              = (xet_pfnPowerGetBurstPowerLimit_t)LOAD_FUNCTION_PTR(handle, "xetPowerGetBurstPowerLimit");
     xet_apitable.pfnPowerGetPeakPowerLimit                               = (xet_pfnPowerGetPeakPowerLimit_t)LOAD_FUNCTION_PTR(handle, "xetPowerGetPeakPowerLimit");
@@ -70,15 +70,16 @@ bool xetLoadExports(
     xet_apitable.pfnPowerGetEnergyCounter                                = (xet_pfnPowerGetEnergyCounter_t)LOAD_FUNCTION_PTR(handle, "xetPowerGetEnergyCounter");
     xet_apitable.pfnPowerGetTurboMode                                    = (xet_pfnPowerGetTurboMode_t)LOAD_FUNCTION_PTR(handle, "xetPowerGetTurboMode");
     xet_apitable.pfnPowerSetTurboMode                                    = (xet_pfnPowerSetTurboMode_t)LOAD_FUNCTION_PTR(handle, "xetPowerSetTurboMode");
-    xet_apitable.pfnPowerFreqDomainCount                                 = (xet_pfnPowerFreqDomainCount_t)LOAD_FUNCTION_PTR(handle, "xetPowerFreqDomainCount");
-    xet_apitable.pfnPowerFreqDomainGetHandle                             = (xet_pfnPowerFreqDomainGetHandle_t)LOAD_FUNCTION_PTR(handle, "xetPowerFreqDomainGetHandle");
-    xet_apitable.pfnPowerFreqDomainGetProperties                         = (xet_pfnPowerFreqDomainGetProperties_t)LOAD_FUNCTION_PTR(handle, "xetPowerFreqDomainGetProperties");
-    xet_apitable.pfnPowerFreqDomainGetSupportedClocks                    = (xet_pfnPowerFreqDomainGetSupportedClocks_t)LOAD_FUNCTION_PTR(handle, "xetPowerFreqDomainGetSupportedClocks");
-    xet_apitable.pfnPowerFreqDomainGetSupportedClockDividers             = (xet_pfnPowerFreqDomainGetSupportedClockDividers_t)LOAD_FUNCTION_PTR(handle, "xetPowerFreqDomainGetSupportedClockDividers");
-    xet_apitable.pfnPowerpfnPowerFreqDomainGetClockRange                 = (xet_pfnPowerpfnPowerFreqDomainGetClockRange_t)LOAD_FUNCTION_PTR(handle, "xetPowerxetPowerFreqDomainGetClockRange");
-    xet_apitable.pfnPowerpfnPowerFreqDomainSetClockRange                 = (xet_pfnPowerpfnPowerFreqDomainSetClockRange_t)LOAD_FUNCTION_PTR(handle, "xetPowerxetPowerFreqDomainSetClockRange");
-    xet_apitable.pfnPowerFreqDomainSetClockDivider                       = (xet_pfnPowerFreqDomainSetClockDivider_t)LOAD_FUNCTION_PTR(handle, "xetPowerFreqDomainSetClockDivider");
-    xet_apitable.pfnPowerGetCurrentFrequency                             = (xet_pfnPowerGetCurrentFrequency_t)LOAD_FUNCTION_PTR(handle, "xetPowerGetCurrentFrequency");
+    xet_apitable.pfnPowerGetFreqDomainCount                              = (xet_pfnPowerGetFreqDomainCount_t)LOAD_FUNCTION_PTR(handle, "xetPowerGetFreqDomainCount");
+    xet_apitable.pfnPowerGetFreqDomainHandle                             = (xet_pfnPowerGetFreqDomainHandle_t)LOAD_FUNCTION_PTR(handle, "xetPowerGetFreqDomainHandle");
+    xet_apitable.pfnFreqDomainGetProperties                              = (xet_pfnFreqDomainGetProperties_t)LOAD_FUNCTION_PTR(handle, "xetFreqDomainGetProperties");
+    xet_apitable.pfnFreqDomainGetSourceFreqDomain                        = (xet_pfnFreqDomainGetSourceFreqDomain_t)LOAD_FUNCTION_PTR(handle, "xetFreqDomainGetSourceFreqDomain");
+    xet_apitable.pfnFreqDomainGetSupportedClocks                         = (xet_pfnFreqDomainGetSupportedClocks_t)LOAD_FUNCTION_PTR(handle, "xetFreqDomainGetSupportedClocks");
+    xet_apitable.pfnFreqDomainGetSupportedClockDividers                  = (xet_pfnFreqDomainGetSupportedClockDividers_t)LOAD_FUNCTION_PTR(handle, "xetFreqDomainGetSupportedClockDividers");
+    xet_apitable.pfnFreqDomainGetClockRange                              = (xet_pfnFreqDomainGetClockRange_t)LOAD_FUNCTION_PTR(handle, "xetFreqDomainGetClockRange");
+    xet_apitable.pfnFreqDomainSetClockRange                              = (xet_pfnFreqDomainSetClockRange_t)LOAD_FUNCTION_PTR(handle, "xetFreqDomainSetClockRange");
+    xet_apitable.pfnFreqDomainSetClockDivider                            = (xet_pfnFreqDomainSetClockDivider_t)LOAD_FUNCTION_PTR(handle, "xetFreqDomainSetClockDivider");
+    xet_apitable.pfnFreqDomainGetCurrentFrequency                        = (xet_pfnFreqDomainGetCurrentFrequency_t)LOAD_FUNCTION_PTR(handle, "xetFreqDomainGetCurrentFrequency");
     xet_apitable.pfnPowerFanCount                                        = (xet_pfnPowerFanCount_t)LOAD_FUNCTION_PTR(handle, "xetPowerFanCount");
     xet_apitable.pfnPowerFanGetProperties                                = (xet_pfnPowerFanGetProperties_t)LOAD_FUNCTION_PTR(handle, "xetPowerFanGetProperties");
     xet_apitable.pfnPowerFanGetSpeedTable                                = (xet_pfnPowerFanGetSpeedTable_t)LOAD_FUNCTION_PTR(handle, "xetPowerFanGetSpeedTable");
@@ -129,9 +130,9 @@ bool xetLoadExports(
         return false;
     if( nullptr == xet_apitable.pfnMetricQueryGetData )
         return false;
-    if( nullptr == xet_apitable.pfnDevicePowerInit )
+    if( nullptr == xet_apitable.pfnPowerCreate )
         return false;
-    if( nullptr == xet_apitable.pfnPowerShutdown )
+    if( nullptr == xet_apitable.pfnPowerDestroy )
         return false;
     if( nullptr == xet_apitable.pfnPowerGetAveragePowerLimit )
         return false;
@@ -157,23 +158,25 @@ bool xetLoadExports(
         return false;
     if( nullptr == xet_apitable.pfnPowerSetTurboMode )
         return false;
-    if( nullptr == xet_apitable.pfnPowerFreqDomainCount )
+    if( nullptr == xet_apitable.pfnPowerGetFreqDomainCount )
         return false;
-    if( nullptr == xet_apitable.pfnPowerFreqDomainGetHandle )
+    if( nullptr == xet_apitable.pfnPowerGetFreqDomainHandle )
         return false;
-    if( nullptr == xet_apitable.pfnPowerFreqDomainGetProperties )
+    if( nullptr == xet_apitable.pfnFreqDomainGetProperties )
         return false;
-    if( nullptr == xet_apitable.pfnPowerFreqDomainGetSupportedClocks )
+    if( nullptr == xet_apitable.pfnFreqDomainGetSourceFreqDomain )
         return false;
-    if( nullptr == xet_apitable.pfnPowerFreqDomainGetSupportedClockDividers )
+    if( nullptr == xet_apitable.pfnFreqDomainGetSupportedClocks )
         return false;
-    if( nullptr == xet_apitable.pfnPowerpfnPowerFreqDomainGetClockRange )
+    if( nullptr == xet_apitable.pfnFreqDomainGetSupportedClockDividers )
         return false;
-    if( nullptr == xet_apitable.pfnPowerpfnPowerFreqDomainSetClockRange )
+    if( nullptr == xet_apitable.pfnFreqDomainGetClockRange )
         return false;
-    if( nullptr == xet_apitable.pfnPowerFreqDomainSetClockDivider )
+    if( nullptr == xet_apitable.pfnFreqDomainSetClockRange )
         return false;
-    if( nullptr == xet_apitable.pfnPowerGetCurrentFrequency )
+    if( nullptr == xet_apitable.pfnFreqDomainSetClockDivider )
+        return false;
+    if( nullptr == xet_apitable.pfnFreqDomainGetCurrentFrequency )
         return false;
     if( nullptr == xet_apitable.pfnPowerFanCount )
         return false;
@@ -406,22 +409,22 @@ xetMetricQueryGetData(
 
 ///////////////////////////////////////////////////////////////////////////////
 __xedllexport xe_result_t __xecall
-xetDevicePowerInit(
+xetPowerCreate(
     xe_device_handle_t hDevice,                     ///< [in] handle of the device object
     uint32_t flags,                                 ///< [in] bitfield of ::xet_power_init_flags_t
     xet_power_handle_t* pPowerHandle                ///< [out] handle for accessing power features of the device
     )
 {
-    return xet_apitable.pfnDevicePowerInit( hDevice, flags, pPowerHandle );
+    return xet_apitable.pfnPowerCreate( hDevice, flags, pPowerHandle );
 }
 
 ///////////////////////////////////////////////////////////////////////////////
 __xedllexport xe_result_t __xecall
-xetPowerShutdown(
-    xet_power_handle_t hPower                       ///< [in] handle of the power object
+xetPowerDestroy(
+    xet_power_handle_t hPower                       ///< [in] handle of the power object to destroy
     )
 {
-    return xet_apitable.pfnPowerShutdown( hPower );
+    return xet_apitable.pfnPowerDestroy( hPower );
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -518,10 +521,10 @@ xetPowerSetPowerLimits(
 __xedllexport xe_result_t __xecall
 xetPowerGetEnergyCounter(
     xet_power_handle_t hPower,                      ///< [in] handle of the power object
-    uint64_t* pEnergyMillijoules                    ///< [out] the energy counter in millijoules
+    uint64_t* pEnergy                               ///< [out] the energy counter in millijoules
     )
 {
-    return xet_apitable.pfnPowerGetEnergyCounter( hPower, pEnergyMillijoules );
+    return xet_apitable.pfnPowerGetEnergyCounter( hPower, pEnergy );
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -546,99 +549,110 @@ xetPowerSetTurboMode(
 
 ///////////////////////////////////////////////////////////////////////////////
 __xedllexport xe_result_t __xecall
-xetPowerFreqDomainCount(
+xetPowerGetFreqDomainCount(
     xet_power_handle_t hPower,                      ///< [in] handle of the power object
     uint32_t* pNumFreqDomains                       ///< [out] the number of frequency domains
     )
 {
-    return xet_apitable.pfnPowerFreqDomainCount( hPower, pNumFreqDomains );
+    return xet_apitable.pfnPowerGetFreqDomainCount( hPower, pNumFreqDomains );
 }
 
 ///////////////////////////////////////////////////////////////////////////////
 __xedllexport xe_result_t __xecall
-xetPowerFreqDomainGetHandle(
+xetPowerGetFreqDomainHandle(
     xet_power_handle_t hPower,                      ///< [in] handle of the power object
-    uint32_t ordinal,                               ///< [in] frequency domain index [0 .. ::xetPowerFreqDomainCount - 1]
+    uint32_t ordinal,                               ///< [in] frequency domain index [0 .. ::xetPowerGetFreqDomainCount - 1]
     xet_freq_domain_handle_t* phFreqDomain          ///< [out] pointer to handle of frequency domain object
     )
 {
-    return xet_apitable.pfnPowerFreqDomainGetHandle( hPower, ordinal, phFreqDomain );
+    return xet_apitable.pfnPowerGetFreqDomainHandle( hPower, ordinal, phFreqDomain );
 }
 
 ///////////////////////////////////////////////////////////////////////////////
 __xedllexport xe_result_t __xecall
-xetPowerFreqDomainGetProperties(
+xetFreqDomainGetProperties(
     xet_freq_domain_handle_t hFreqDomain,           ///< [in] handle of the frequency domain
     xet_freq_domain_properties_t* pFreqDomainProperties ///< [out] pointer to properties for the frequency domain
     )
 {
-    return xet_apitable.pfnPowerFreqDomainGetProperties( hFreqDomain, pFreqDomainProperties );
+    return xet_apitable.pfnFreqDomainGetProperties( hFreqDomain, pFreqDomainProperties );
 }
 
 ///////////////////////////////////////////////////////////////////////////////
 __xedllexport xe_result_t __xecall
-xetPowerFreqDomainGetSupportedClocks(
+xetFreqDomainGetSourceFreqDomain(
     xet_freq_domain_handle_t hFreqDomain,           ///< [in] handle of the frequency domain
-    uint32_t numClockPoints,                        ///< [in] number of elements in pClocksMHz
-    uint32_t* pClocksMHz                            ///< [out] pointer to array of frequencies
+    xet_freq_domain_handle_t* phSrcFreqDomain       ///< [out] pointer to a handle where the source frequency domain handle
+                                                    ///< will be returned
     )
 {
-    return xet_apitable.pfnPowerFreqDomainGetSupportedClocks( hFreqDomain, numClockPoints, pClocksMHz );
+    return xet_apitable.pfnFreqDomainGetSourceFreqDomain( hFreqDomain, phSrcFreqDomain );
 }
 
 ///////////////////////////////////////////////////////////////////////////////
 __xedllexport xe_result_t __xecall
-xetPowerFreqDomainGetSupportedClockDividers(
+xetFreqDomainGetSupportedClocks(
+    xet_freq_domain_handle_t hFreqDomain,           ///< [in] handle of the frequency domain
+    uint32_t numClockPoints,                        ///< [in] number of elements in pClocks
+    uint32_t* pClocks                               ///< [out] pointer to array of frequencies
+    )
+{
+    return xet_apitable.pfnFreqDomainGetSupportedClocks( hFreqDomain, numClockPoints, pClocks );
+}
+
+///////////////////////////////////////////////////////////////////////////////
+__xedllexport xe_result_t __xecall
+xetFreqDomainGetSupportedClockDividers(
     xet_freq_domain_handle_t hFreqDomain,           ///< [in] handle of the frequency domain
     uint32_t numClockDividers,                      ///< [in] number of elements in pDividers
     xet_clock_divider_t* pDividers                  ///< [out] pointer to array of dividers
     )
 {
-    return xet_apitable.pfnPowerFreqDomainGetSupportedClockDividers( hFreqDomain, numClockDividers, pDividers );
+    return xet_apitable.pfnFreqDomainGetSupportedClockDividers( hFreqDomain, numClockDividers, pDividers );
 }
 
 ///////////////////////////////////////////////////////////////////////////////
 __xedllexport xe_result_t __xecall
-xetPowerxetPowerFreqDomainGetClockRange(
+xetFreqDomainGetClockRange(
     xet_freq_domain_handle_t hFreqDomain,           ///< [in] handle of the frequency domain
-    uint32_t* pMinClockMHz,                         ///< [out] min clock frequency in units of MHz
-    uint32_t* pMaxClockMHz                          ///< [out] max clock frequency in units of MHz
+    uint32_t* pMinClock,                            ///< [out] min clock frequency in units of MHz
+    uint32_t* pMaxClock                             ///< [out] max clock frequency in units of MHz
     )
 {
-    return xet_apitable.pfnPowerpfnPowerFreqDomainGetClockRange( hFreqDomain, pMinClockMHz, pMaxClockMHz );
+    return xet_apitable.pfnFreqDomainGetClockRange( hFreqDomain, pMinClock, pMaxClock );
 }
 
 ///////////////////////////////////////////////////////////////////////////////
 __xedllexport xe_result_t __xecall
-xetPowerxetPowerFreqDomainSetClockRange(
+xetFreqDomainSetClockRange(
     xet_freq_domain_handle_t hFreqDomain,           ///< [in] handle of the frequency domain
-    uint32_t minClockMHz,                           ///< [in] min clock frequency in units of MHz
-    uint32_t maxClockMHz                            ///< [in] max clock frequency in units of MHz
+    uint32_t minClock,                              ///< [in] min clock frequency in units of MHz
+    uint32_t maxClock                               ///< [in] max clock frequency in units of MHz
     )
 {
-    return xet_apitable.pfnPowerpfnPowerFreqDomainSetClockRange( hFreqDomain, minClockMHz, maxClockMHz );
+    return xet_apitable.pfnFreqDomainSetClockRange( hFreqDomain, minClock, maxClock );
 }
 
 ///////////////////////////////////////////////////////////////////////////////
 __xedllexport xe_result_t __xecall
-xetPowerFreqDomainSetClockDivider(
+xetFreqDomainSetClockDivider(
     xet_freq_domain_handle_t hFreqDomain,           ///< [in] handle of the frequency domain
     xet_clock_divider_t* pClockDividerRequest       ///< [out] pointer to frequency divider request
     )
 {
-    return xet_apitable.pfnPowerFreqDomainSetClockDivider( hFreqDomain, pClockDividerRequest );
+    return xet_apitable.pfnFreqDomainSetClockDivider( hFreqDomain, pClockDividerRequest );
 }
 
 ///////////////////////////////////////////////////////////////////////////////
 __xedllexport xe_result_t __xecall
-xetPowerGetCurrentFrequency(
+xetFreqDomainGetCurrentFrequency(
     xet_freq_domain_handle_t hFreqDomain,           ///< [in] handle of the frequency domain
-    uint32_t* pFreqRequestMHz,                      ///< [out] current frequency in MHz requested by the driver
-    uint32_t* pFreqResolvedMHz,                     ///< [out] the actual frequency in MHz
+    uint32_t* pFreqRequest,                         ///< [out] current frequency in MHz requested by the driver
+    uint32_t* pFreqResolved,                        ///< [out] the actual frequency in MHz
     xet_freq_throttle_reasons_t* pFreqThrottleReasons   ///< [out] the reason the resolved frequency is lower than the request
     )
 {
-    return xet_apitable.pfnPowerGetCurrentFrequency( hFreqDomain, pFreqRequestMHz, pFreqResolvedMHz, pFreqThrottleReasons );
+    return xet_apitable.pfnFreqDomainGetCurrentFrequency( hFreqDomain, pFreqRequest, pFreqResolved, pFreqThrottleReasons );
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -668,7 +682,7 @@ xetPowerFanGetSpeedTable(
     xet_power_handle_t hPower,                      ///< [in] handle of the power object
     uint32_t fanIndex,                              ///< [in] fan index [0 .. ::xetPowerFanCount - 1]
     xe_bool_t fanSpeedInRpm,                        ///< [in] true will request fan speeds in RPM, otherwise in percentage
-    uint32_t* pNumFanPoints,                        ///< [in/out] input number of elements in pFanSpeedTable array; output
+    uint32_t* pNumFanPoints,                        ///< [in,out] input number of elements in pFanSpeedTable array; output
                                                     ///< number of elements returned
     xet_fan_point_t* pFanPoints                     ///< [out] pointer to an array of temperature/fan-speed points
     )
